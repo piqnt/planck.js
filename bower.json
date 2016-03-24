@@ -1,0 +1,26 @@
+{
+  "name": "planck-js",
+  "description": "Box2D rewrite for JavaScript",
+  "keywords": [
+    "html5",
+    "javascript",
+    "game",
+    "physics",
+    "engine",
+    "2d",
+    "mobile"
+  ],
+  "license": "zlib",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/shakiba/planck.js.git"
+  },
+  "ignore": [
+    "example/",
+    "test/"
+  ],
+  "dependencies": {
+    "stage-js": "~0.8.4",
+    "font-awesome": "font-awsome#~4.5.0"
+  }
+}

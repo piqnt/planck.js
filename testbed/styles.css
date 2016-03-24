@@ -1,0 +1,196 @@
+body, html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	font-family: sans-serif;
+}
+
+body {
+	background: #ddd;
+	font-family: Ubuntu, Arial, sans-serif;
+}
+
+a {
+	text-decoration: none;
+	color: #1c83eb;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.center {
+	margin: 0 auto;
+	max-width: 900px;
+	position: relative;
+}
+
+.header {
+	padding: 25px 0 15px;
+}
+
+.title {
+	color: #444;
+	font-size: 20px;
+	text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+	margin: 3px 0 0;
+}
+
+.title a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.title a:hover {
+	font-style: italic;
+}
+
+.control {
+	float: right;
+	margin: 0;
+}
+
+.github a {
+	font-size: small;
+	margin-right: 1em;
+	color: #888;
+}
+
+.github iframe {
+	display: block;
+	margin-right: 1.5em;
+}
+
+@media screen and (max-width: 600px) {
+	.github { display: none; }
+}
+
+table.control td {
+	vertical-align: center;
+}
+
+table.control tr, table.control td {
+	margin: 0;
+	padding: 0;
+	border: 0 none;
+	border-spacing: 0;
+}
+
+select {
+	vertical-align: top;
+	line-height: 26px;
+	height: 26px;
+}
+
+select {
+	padding-left: 0.4em;
+}
+
+button {
+	height: 26px;
+	width: 1.7em;
+	padding: 0 0;
+	text-align: center;
+}
+
+button.narrow {
+	width: 1.3em;
+}
+
+button:before {
+	
+}
+
+button.fa-small:before {
+	vertical-align: 20%;
+	font-size: 0.6em;
+}
+
+.links {
+	margin: 1em 0;
+	text-align: justify;
+}
+
+.links a {
+	font-size: 0.8em;
+	margin: 0 0.5em;
+}
+
+#stage {
+	display: block;
+	width: 100%;
+	height: 600px;
+	background: #222;
+	border-radius: 2px;
+}
+
+#stage {
+	background: #222;
+	border-radius: 2px;
+}
+
+#status {
+	font-family: monospace;
+	color: #333;
+	padding: 1em 0;
+}
+
+#code {
+	padding: 9px;
+	border-radius: 2px;
+	background: #f8f8f8;
+	font-family: monospace;
+	font-size: 0.9em;
+}
+
+#stage, #code {
+	display: block;
+	width: 100%;
+	height: 600px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+#stage.hide, #code.hide, .hide {
+	display: none;
+	visibility: collapse;
+}
+
+@media screen and (max-width: 920px) , screen and (max-height: 700px) {
+	.header {
+		padding: 6px 8px 6px;
+		position: absolute;
+		left: 0;
+		right: 0;
+		background: rgba(255, 255, 255, 0.2);
+	}
+	.title {
+		color: #fff;
+		font-size: 18px;
+		font-weight: bold;
+		text-shadow: none;
+	}
+	.center, #code, #stage {
+		height: 100%;
+		border-radius: 0;
+	}
+	.center {
+		max-width: 100%;
+	}
+	select, button {
+		border: 0px solid #666;
+		border-radius: 0px;
+		background: #333;
+		color: #fff;
+	}
+	#status {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		padding: 1em 0.5em;
+		color: #dddddd;
+		pointer-events: none;
+	}
+}

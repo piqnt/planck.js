@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="user-scalable=no, width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+  <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/testbed/styles.css" />
+  <title>Planck.js — 2D physics engine for JavaScript/HTML5 game development</title>
+</head><body>
+  <div class="center">
+    <div class="header">
+      <table class="control">
+        </td><td>
+        <button id="playbtn" class="fa fa-pause fa-small"></button>
+        </td><td>
+        <button id="tickbtn" class="fa fa-next fa-small" style="display: none;"></button>
+        <!--</td><td>-->
+        <!--<button id="reloadbtn" class="fa fa-refresh fa-small"></button>-->
+        <!--</td><td>-->
+        <!--<button id="codebtn" class="fa fa-pencil fa-small"></button>-->
+        </td><td>
+        <select id="dropdown">
+            <option selected disabled hidden value=''>Select...</option>
+            {{#examples}}<option value="{{url}}" {{#selected}}selected{{/selected}}>{{name}}</option>{{/examples}}
+        </select>
+        </td><td>
+        <button id="prevbtn" class="fa fa-chevron-up fa-small narrow"></button>
+        </td><td>
+        <button id="nextbtn" class="fa fa-chevron-down fa-small narrow"></button>
+        </td></tr>
+      </table>
+      <h3 class="title">Planck.js<sup>&alpha;</sup></h3>
+    </div>
+    <canvas id="stage"></canvas>
+    <div id="status"></div>
+  </div>
+  <script src="/dist/planck.js"></script>
+  <script src="/bower_components/stage-js/dist/stage.web.js"></script>
+  <script src="/testbed/stage-viewer.js"></script>
+  <script src="/testbed/client.js"></script>
+  <script src="{{{script}}}"></script>
+</body></html>
