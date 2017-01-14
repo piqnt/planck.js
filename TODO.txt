@@ -1,8 +1,11 @@
 change callbacks to function, events
-change all enums (e_*) to string.
+immutable shapes, no cloning
+
 test TOI
 raycasting
 complete examples and drawing joints, etc.
-immutable shapes?
-remove world from body, use pulling and timestamp to update world?
+more unit test
+
+body/fixture be created without world/body by defualt
+change all enums (e_*) to string.
 move Settings to World's opts?

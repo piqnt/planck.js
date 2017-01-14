@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.0
+ * Planck.js v0.1.1
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -125,60 +125,58 @@ var dynamicBody = Body.DYNAMIC = "dynamic";
 
 /**
  * @typedef {Object} BodyDef
- * 
+ *
  * @prop type Body types are static, kinematic, or dynamic. Note: if a dynamic
  *       body would have zero mass, the mass is set to one.
- * 
+ *
  * @prop position The world position of the body. Avoid creating bodies at the
  *       origin since this can lead to many overlapping shapes.
- * 
+ *
  * @prop angle The world angle of the body in radians.
- * 
+ *
  * @prop linearVelocity The linear velocity of the body's origin in world
  *       co-ordinates.
- * 
+ *
  * @prop linearDamping Linear damping is use to reduce the linear velocity. The
  *       damping parameter can be larger than 1.0 but the damping effect becomes
  *       sensitive to the time step when the damping parameter is large.
- * 
+ *
  * @prop angularDamping Angular damping is use to reduce the angular velocity.
  *       The damping parameter can be larger than 1.0 but the damping effect
  *       becomes sensitive to the time step when the damping parameter is large.
- * 
+ *
  * @prop fixedRotation Should this body be prevented from rotating? Useful for
  *       characters.
- * 
+ *
  * @prop bullet Is this a fast moving body that should be prevented from
  *       tunneling through other moving bodies? Note that all bodies are
  *       prevented from tunneling through kinematic and static bodies. This
  *       setting is only considered on dynamic bodies. Warning: You should use
  *       this flag sparingly since it increases processing time.
- * 
+ *
  * @prop active Does this body start out active?
- * 
+ *
  * @prop awake Is this body initially awake or sleeping?
- * 
+ *
  * @prop allowSleep Set this flag to false if this body should never fall
  *       asleep. Note that this increases CPU usage.
  */
-function BodyDef() {
-    this.type = staticBody;
-    this.position = new Vec2();
-    this.angle = 0;
-    this.linearVelocity = new Vec2();
-    this.angularVelocity = 0;
-    this.linearDamping = 0;
-    this.angularDamping = 0;
-    this.fixedRotation = false;
-    this.bullet = false;
-    this.gravityScale = 1;
-    this.allowSleep = true;
-    this.awake = true;
-    this.active = true;
-    this.userData = null;
-}
-
-BodyDef.DEFULTS = new BodyDef();
+var BodyDef = {
+    type: staticBody,
+    position: new Vec2(),
+    angle: 0,
+    linearVelocity: new Vec2(),
+    angularVelocity: 0,
+    linearDamping: 0,
+    angularDamping: 0,
+    fixedRotation: false,
+    bullet: false,
+    gravityScale: 1,
+    allowSleep: true,
+    awake: true,
+    active: true,
+    userData: null
+};
 
 /**
  * @class
@@ -188,7 +186,7 @@ BodyDef.DEFULTS = new BodyDef();
  * @param {BodyDef} def
  */
 function Body(world, def) {
-    def = options(def, BodyDef.DEFULTS);
+    def = options(def, BodyDef);
     common.assert(Vec2.isValid(def.position));
     common.assert(Vec2.isValid(def.linearVelocity));
     common.assert(Math.isFinite(def.angle));
@@ -2076,6 +2074,8 @@ var Vec2 = require("./common/Vec2");
 var AABB = require("./collision/AABB");
 
 /**
+ * @typedef {Object} FixtureDef
+ *
  * A fixture definition is used to create a fixture. This class defines an
  * abstract fixture definition. You can reuse fixture definitions safely.
  * 
@@ -2093,18 +2093,16 @@ var AABB = require("./collision/AABB");
  * @prop filterMaskBits Collision category bit or bits that this fixture accept for
  *       collision.
  */
-function FixtureDef() {
-    this.userData = null;
-    this.friction = .2;
-    this.restitution = 0;
-    this.density = 0;
-    this.isSensor = false;
-    this.filterGroupIndex = 0;
-    this.filterCategoryBits = 1;
-    this.filterMaskBits = 65535;
-}
-
-FixtureDef.DEFAULTS = new FixtureDef();
+var FixtureDef = {
+    userData: null,
+    friction: .2,
+    restitution: 0,
+    density: 0,
+    isSensor: false,
+    filterGroupIndex: 0,
+    filterCategoryBits: 1,
+    filterMaskBits: 65535
+};
 
 /**
  * This proxy is used internally to connect shape children to the broad-phase.
@@ -2131,7 +2129,7 @@ function Fixture(body, shape, def) {
             density: def
         };
     }
-    def = options(def, FixtureDef.DEFAULTS);
+    def = options(def, FixtureDef);
     this.m_body = body;
     this.m_friction = def.friction;
     this.m_restitution = def.restitution;
@@ -2443,6 +2441,8 @@ function JointEdge() {
 }
 
 /**
+ * @typedef {Object} JointDef
+ *
  * Joint definitions are used to construct joints.
  * 
  * @prop userData Use this to attach application specific data to your joints.
@@ -2450,10 +2450,10 @@ function JointEdge() {
  * @prop {boolean} collideConnected Set this flag to true if the attached bodies
  *       should collide.
  */
-function JointDef() {
-    this.userData = null;
-    this.collideConnected = false;
-}
+var JointDef = {
+    userData: null,
+    collideConnected: false
+};
 
 /**
  * The base joint class. Joints are used to constraint two bodies together in
@@ -3985,6 +3985,8 @@ var Body = require("./Body");
 var Contact = require("./Contact");
 
 /**
+ * @typedef {Object} WorldDef
+ *
  * @prop {Vec2} [gravity = { x : 0, y : 0}]
  * @prop {boolean} [allowSleep = true]
  * @prop {boolean} [warmStarting = false]
@@ -3994,18 +3996,16 @@ var Contact = require("./Contact");
  * @prop {int} [velocityIterations = 8] For the velocity constraint solver.
  * @prop {int} [positionIterations = 3] For the position constraint solver.
  */
-function WorldDef() {
-    this.gravity = new Vec2();
-    this.allowSleep = true;
-    this.warmStarting = true;
-    this.continuousPhysics = true;
-    this.subStepping = false;
-    this.blockSolve = true;
-    this.velocityIterations = 8;
-    this.positionIterations = 3;
-}
-
-WorldDef.DEFAULTS = new WorldDef();
+var WorldDef = {
+    gravity: new Vec2(),
+    allowSleep: true,
+    warmStarting: true,
+    continuousPhysics: true,
+    subStepping: false,
+    blockSolve: true,
+    velocityIterations: 8,
+    positionIterations: 3
+};
 
 /**
  * @param {WordDef|Vec2} def World definition or gravity vector.
@@ -4019,7 +4019,7 @@ function World(def) {
             gravity: def
         };
     }
-    def = options(def, WorldDef.DEFAULTS);
+    def = options(def, WorldDef);
     this.m_solver = new Solver(this);
     this.m_broadPhase = new BroadPhase();
     this.m_contactList = null;
@@ -8527,6 +8527,8 @@ DistanceJoint._super = Joint;
 DistanceJoint.prototype = create(DistanceJoint._super.prototype);
 
 /**
+ * @typedef {Object} DistanceJointDef
+ *
  * Distance joint definition. This requires defining an anchor point on both
  * bodies and the non-zero length of the distance joint. The definition uses
  * local anchor points so that the initial configuration can violate the
@@ -8804,6 +8806,8 @@ FrictionJoint._super = Joint;
 FrictionJoint.prototype = create(FrictionJoint._super.prototype);
 
 /**
+ * @typedef {Object} FrictionJointDef
+ *
  * Friction joint definition.
  * 
  * @prop {float} maxForce The maximum friction force in N.
@@ -9081,6 +9085,8 @@ GearJoint._super = Joint;
 GearJoint.prototype = create(GearJoint._super.prototype);
 
 /**
+ * @typedef {Object} GearJointDef
+ *
  * Gear joint definition.
  * 
  * @prop {float} ratio The gear ratio. See GearJoint for explanation.
@@ -9495,6 +9501,8 @@ MotorJoint._super = Joint;
 MotorJoint.prototype = create(MotorJoint._super.prototype);
 
 /**
+ * @typedef {Object} MotorJointDef
+ *
  * Motor joint definition.
  * 
  * @prop {float} angularOffset The bodyB angle minus bodyA angle in radians.
@@ -9800,6 +9808,8 @@ MouseJoint._super = Joint;
 MouseJoint.prototype = create(MouseJoint._super.prototype);
 
 /**
+ * @typedef {Object} MouseJointDef
+ *
  * Mouse joint definition. This requires a world target point, tuning
  * parameters, and the time step.
  * 
@@ -10053,6 +10063,8 @@ PrismaticJoint._super = Joint;
 PrismaticJoint.prototype = create(PrismaticJoint._super.prototype);
 
 /**
+ * @typedef {Object} PrismaticJointDef
+ *
  * Prismatic joint definition. This requires defining a line of motion using an
  * axis and an anchor point. The definition uses local anchor points and a local
  * axis so that the initial configuration can violate the constraint slightly.
@@ -10680,6 +10692,8 @@ PulleyJoint._super = Joint;
 PulleyJoint.prototype = create(PulleyJoint._super.prototype);
 
 /**
+ * @typedef {Object} PulleyJointDef
+ *
  * Pulley joint definition. This requires two ground anchors, two dynamic body
  * anchor points, and a pulley ratio.
  */
@@ -11021,6 +11035,8 @@ RevoluteJoint._super = Joint;
 RevoluteJoint.prototype = create(RevoluteJoint._super.prototype);
 
 /**
+ * @typedef {Object} RevoluteJointDef
+ *
  * Revolute joint definition. This requires defining an anchor point where the
  * bodies are joined. The definition uses local anchor points so that the
  * initial configuration can violate the constraint slightly. You also need to
@@ -11580,6 +11596,8 @@ RopeJoint._super = Joint;
 RopeJoint.prototype = create(RopeJoint._super.prototype);
 
 /**
+ * @typedef {Object} RopeJointDef
+ *
  * Rope joint definition. This requires two body anchor points and a maximum
  * lengths. Note: by default the connected objects will not collide. see
  * collideConnected in JointDef.
@@ -11865,6 +11883,8 @@ WeldJoint._super = Joint;
 WeldJoint.prototype = create(WeldJoint._super.prototype);
 
 /**
+ * @typedef {Object} WeldJointDef
+ *
  * Weld joint definition. You need to specify local anchor points where they are
  * attached and the relative body angle. The position of the anchor points is
  * important for computing the reaction torque.
@@ -12235,6 +12255,8 @@ WheelJoint._super = Joint;
 WheelJoint.prototype = create(WheelJoint._super.prototype);
 
 /**
+ * @typedef {Object} WheelJointDef
+ *
  * Wheel joint definition. This requires defining a line of motion using an axis
  * and an anchor point. The definition uses local anchor points and a local axis
  * so that the initial configuration can violate the constraint slightly. The
