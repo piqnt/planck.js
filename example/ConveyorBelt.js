@@ -38,7 +38,7 @@ planck.play('ConveyorBelt', function(pl) {
     }).createFixture(pl.Polygon().setAsBox(0.5, 0.5), 20.0);
   }
 
-  world.preSolve = function (contact, oldManifold) {
+  world.on('pre-solve', function(contact, oldManifold) {
     var fixtureA = contact.getFixtureA();
     var fixtureB = contact.getFixtureB();
 
@@ -49,7 +49,7 @@ planck.play('ConveyorBelt', function(pl) {
     if (fixtureB == platform) {
       contact.setTangentSpeed(-5.0);
     }
-  }
+  });
 
   return world;
 });

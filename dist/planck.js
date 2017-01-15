@@ -4346,33 +4346,6 @@ World.prototype.shiftOrigin = function(newOrigin) {
 };
 
 /**
- * Joints and fixtures are destroyed when their associated body is destroyed.
- * Register a destruction listener so that you may nullify references to these
- * joints and shapes.
- * 
- * `listener.sayGoodbye(object)` is called when any joint or fixture is about to
- * be destroyed due to the destruction of one of its attached or parent bodies.
- */
-// World.prototype.setDestructionListener = function(listener) {
-// }
-/**
- * Register a contact filter to provide specific control over collision.
- * Otherwise the default filter is used (defaultFilter). The listener is owned
- * by you and must remain in scope.
- * 
- * @param {ContactFilter} filter
- */
-// World.prototype.setContactFilter = function(filter) {
-// }
-/**
- * Register a contact event listener. The listener is owned by you and must
- * remain in scope.
- * 
- * @param {ContactFilter} listener
- */
-// World.prototype.setContactListener = function(listener) {
-// }
-/**
  * Create a rigid body given a definition. No reference to the definition is
  * retained.
  * 
@@ -4454,7 +4427,7 @@ World.prototype.destroyBody = function(b) {
     while (je) {
         var je0 = je;
         je = je.next;
-        this.sayGoodbye(je0.joint);
+        this.publish("remove-joint", je0.joint);
         this.destroyJoint(je0.joint);
         b.m_jointList = je;
     }
@@ -4473,7 +4446,7 @@ World.prototype.destroyBody = function(b) {
     while (f) {
         var f0 = f;
         f = f.m_next;
-        this.sayGoodbye(f0);
+        this.publish("remove-fixture", f0);
         f0.destroyProxies(this.m_broadPhase);
         b.m_fixtureList = f;
     }
@@ -4610,7 +4583,7 @@ World.prototype.destroyJoint = function(joint) {
             edge = edge.next;
         }
     }
-    this.sayGoodbye(joint);
+    this.publish("remove-joint", joint);
 };
 
 var s_step = new Solver.TimeStep();
@@ -4819,7 +4792,85 @@ World.prototype.destroyContact = function(contact) {
     --this.m_contactCount;
 };
 
+World.prototype._listeners = null;
+
 /**
+ * Register an event listener.
+ *
+ * @param {string} name
+ * @param {function} listener
+ */
+World.prototype.on = function(name, listener) {
+    if (typeof name !== "string" || typeof listener !== "function") {
+        return this;
+    }
+    if (!this._listeners) {
+        this._listeners = {};
+    }
+    if (!this._listeners[name]) {
+        this._listeners[name] = [];
+    }
+    this._listeners[name].push(listener);
+    return this;
+};
+
+/**
+ * Remove an event listener.
+ *
+ * @param {string} name
+ * @param {function} listener
+ */
+World.prototype.off = function(name, listener) {
+    if (typeof name !== "string" || typeof listener !== "function") {
+        return this;
+    }
+    var listeners = this._listeners && this._listeners[name];
+    if (!listeners || !listeners.length) {
+        return this;
+    }
+    var index = listeners.indexOf(listener);
+    if (index >= 0) {
+        listeners.splice(index, 1);
+    }
+    return this;
+};
+
+World.prototype.publish = function(name, arg1, arg2, arg3) {
+    var listeners = this._listeners && this._listeners[name];
+    if (!listeners || !listeners.length) {
+        return 0;
+    }
+    for (var l = 0; l < listeners.length; l++) {
+        listeners[l].call(this, arg1, arg2, arg3);
+    }
+    return listeners.length;
+};
+
+/**
+ * @event World#remove-body
+ * @event World#remove-joint
+ * @event World#remove-fixture
+ *
+ * Joints and fixtures are destroyed when their associated body is destroyed.
+ * Register a destruction listener so that you may nullify references to these
+ * joints and shapes.
+ *
+ * `function(object)` is called when any joint or fixture is about to
+ * be destroyed due to the destruction of one of its attached or parent bodies.
+ */
+/**
+ * @private
+ * @param {Contact} contact
+ */
+World.prototype.beginContact = function(contact) {
+    this.publish("begin-contact", contact);
+};
+
+/**
+ * @event World#begin-contact
+ *
+ * Called when two fixtures begin to touch.
+ *
  * Implement contact callbacks to get contact information. You can use these
  * results for things like sounds and game logic. You can also get contact
  * results by traversing the contact lists after the time step. However, you
@@ -4827,26 +4878,44 @@ World.prototype.destroyContact = function(contact) {
  * Additionally you may receive multiple callbacks for the same contact in a
  * single time step. You should strive to make your callbacks efficient because
  * there may be many callbacks per time step.
+ *
+ * Warning: You cannot create/destroy world entities inside these callbacks.
  */
 /**
- * Called when two fixtures begin to touch.
- * 
- * Warning: You cannot create/destroy world entities inside these callbacks.
- * 
+ * @private
  * @param {Contact} contact
  */
-World.prototype.beginContact = function(contact) {};
+World.prototype.endContact = function(contact) {
+    this.publish("end-contact", contact);
+};
 
 /**
+ * @event World#end-contact
+ *
  * Called when two fixtures cease to touch.
- * 
+ *
+ * Implement contact callbacks to get contact information. You can use these
+ * results for things like sounds and game logic. You can also get contact
+ * results by traversing the contact lists after the time step. However, you
+ * might miss some contacts because continuous physics leads to sub-stepping.
+ * Additionally you may receive multiple callbacks for the same contact in a
+ * single time step. You should strive to make your callbacks efficient because
+ * there may be many callbacks per time step.
+ *
  * Warning: You cannot create/destroy world entities inside these callbacks.
- * 
- * @param {Contact} contact
  */
-World.prototype.endContact = function(contact) {};
+/**
+ * @private
+ * @param {Contact} contact
+ * @param {Manifold} oldManifold
+ */
+World.prototype.preSolve = function(contact, oldManifold) {
+    this.publish("pre-solve", contact, oldManifold);
+};
 
 /**
+ * @event World#pre-solve
+ *
  * This is called after a contact is updated. This allows you to inspect a
  * contact before it goes to the solver. If you are careful, you can modify the
  * contact manifold (e.g. disable contact). A copy of the old manifold is
@@ -4855,37 +4924,17 @@ World.prototype.endContact = function(contact) {};
  * Note: this is not called for sensors. Note: if you set the number of contact
  * points to zero, you will not get an endContact callback. However, you may get
  * a beginContact callback the next step.
- * 
+ *
  * Warning: You cannot create/destroy world entities inside these callbacks.
- * 
- * @param {Contact} contact
- * @param {Manifold} oldManifold
  */
-World.prototype.preSolve = function(contact, oldManifold) {};
-
 /**
- * This lets you inspect a contact after the solver is finished. This is useful
- * for inspecting impulses. Note: the contact manifold does not include time of
- * impact impulses, which can be arbitrarily large if the sub-step is small.
- * Hence the impulse is provided explicitly in a separate data structure. Note:
- * this is only called for contacts that are touching, solid, and awake.
- * 
- * Warning: You cannot create/destroy world entities inside these callbacks.
- * 
+ * @private
  * @param {Contact} contact
  * @param {ContactImpulse} impulse
  */
-World.prototype.postSolve = function(contact, impulse) {};
-
-/**
- * Joints and fixtures are destroyed when their associated body is destroyed.
- * Register a destruction listener so that you may nullify references to these
- * joints and shapes.
- * 
- * This method is called when any joint or fixture is about to be destroyed due
- * to the destruction of one of its attached or parent bodies.
- */
-World.prototype.sayGoodbye = function(object) {};
+World.prototype.postSolve = function(contact, impulse) {
+    this.publish("post-solve", contact, impulse);
+};
 
 
 },{"./Body":2,"./Contact":3,"./Solver":9,"./collision/BroadPhase":12,"./common/Vec2":23,"./util/Timer":47,"./util/common":48,"./util/options":50}],11:[function(require,module,exports){

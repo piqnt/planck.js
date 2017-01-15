@@ -307,7 +307,7 @@ planck.play('Breakout', function(pl, opts) {
     ]);
     miniPaddleShape.paddleWidth = 2.4;
 
-    world.preSolve = function(contact) {
+    world.on('pre-solve', function(contact) {
       var fA = contact.getFixtureA(), bA = fA.getBody();
       var fB = contact.getFixtureB(), bB = fB.getBody();
 
@@ -335,7 +335,7 @@ planck.play('Breakout', function(pl, opts) {
           state.missDrop(drop.getUserData());
         }
       }, 1);
-    };
+    });
 
     function createWorld() {
 

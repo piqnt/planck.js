@@ -23,9 +23,13 @@
       return false;
     }, true);
 
-    world.sayGoodbye = function (obj) {
+    world.on('remove-body', function (obj) {
       obj.ui && obj.ui.remove();
-    }
+    });
+
+    world.on('remove-joint', function (obj) {
+      obj.ui && obj.ui.remove();
+    });
   }
 
   Viewer.prototype.renderWorld = function(world) {

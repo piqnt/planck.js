@@ -55,7 +55,7 @@ planck.play('Asteroid', function(pl, opts) {
   world = pl.World();
 
   // Todo: check if several bullets hit the same asteroid in the same time step
-  world.preSolve = function(contact) {
+  world.on('pre-solve', function(contact) {
     var fixtureA = contact.getFixtureA();
     var fixtureB = contact.getFixtureB();
 
@@ -86,7 +86,7 @@ planck.play('Asteroid', function(pl, opts) {
         hit(bullet, asteroid);
       }, 1);
     }
-  };
+  });
 
   function start() {
     gameover = false;
