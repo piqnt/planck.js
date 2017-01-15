@@ -21,3 +21,5 @@
 * Vec2.Min/Max renamed to Vec2.Upper/Lower and several other methods added
 * Distance method, DistanceInput/Output and SimplexCache merged into a stateful Distance class
 * Fixture.Filter merged with Fixture
+* World listeners changed to events: PostSolve, PreSolve, EndContact, BeginContact, SayGoodby to post-solve, pre-solve, end-contact, begin-contact, remove-body, remove-joint, remove-fixture
+* Callbacks classes changed to functions: DynamicTree.query DynamicTree.rayCast BroadPhase.updatePairs BroadPhase.rayCast BroadPhase.query World.queryAAB World.rayCast

@@ -181,22 +181,20 @@
         return;
       }
       var aabb = new planck.AABB(point, point);
-      world.queryAABB({
-        reportFixture : function(fixture) {
-          if (mouseJoint) {
-            return;
-          }
-          if (!fixture.getBody().isDynamic() || !fixture.testPoint(point)) {
-            return;
-          }
-          var mouseBody = fixture.getBody();
-          mouseJoint = new planck.MouseJoint({
-            maxForce : 1000
-          }, mouseGround, mouseBody, planck.Vec2(point));
-          world.createJoint(mouseJoint);
-          return true;
+      world.queryAABB(aabb, function(fixture) {
+        if (mouseJoint) {
+          return;
         }
-      }, aabb);
+        if (!fixture.getBody().isDynamic() || !fixture.testPoint(point)) {
+          return;
+        }
+        var mouseBody = fixture.getBody();
+        mouseJoint = new planck.MouseJoint({
+          maxForce : 1000
+        }, mouseGround, mouseBody, planck.Vec2(point));
+        world.createJoint(mouseJoint);
+        return true;
+      });
 
     }).on(Stage.Mouse.MOVE, function(point) {
       if (mouseJoint) {

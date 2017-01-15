@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.1
+ * Planck.js v0.1.2
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -2019,13 +2019,13 @@ Contact.create = function(fixtureA, indexA, fixtureB, indexB) {
     return contact;
 };
 
-Contact.destroy = function(contact, callback) {
+Contact.destroy = function(contact, listener) {
     var fixtureA = contact.m_fixtureA;
     var fixtureB = contact.m_fixtureB;
     var bodyA = fixtureA.getBody();
     var bodyB = fixtureB.getBody();
     if (contact.isTouching()) {
-        callback.endContact(contact);
+        listener.endContact(contact);
     }
     // Remove from body 1
     if (contact.m_nodeA.prev) {
@@ -4043,6 +4043,8 @@ function World(def) {
     this.m_positionIterations = def.positionIterations;
     this.m_t = 0;
     this.ni = 0;
+    // Broad-phase callback.
+    this.addPair = this.createContact.bind(this);
 }
 
 /**
@@ -4198,17 +4200,6 @@ World.prototype.clearForces = function() {
     }
 };
 
-function WorldQueryWrapper() {
-    this.broadPhase;
-    this.callback;
-}
-
-WorldQueryWrapper.prototype.queryCallback = function(proxyId) {
-    var proxy = this.broadPhase.getUserData(proxyId);
-    // FixtureProxy
-    return this.callback.reportFixture(proxy.fixture);
-};
-
 /**
  * @function World~rayCastCallback
  * 
@@ -4217,37 +4208,20 @@ WorldQueryWrapper.prototype.queryCallback = function(proxyId) {
 /**
  * Query the world for all fixtures that potentially overlap the provided AABB.
  * 
- * @param {World~queryCallback} callback.queryCallback Called for each fixture
+ * @param {World~queryCallback} queryCallback Called for each fixture
  *          found in the query AABB. It may return `false` to terminate the
  *          query.
  * 
  * @param aabb The query box.
  */
-World.prototype.queryAABB = function(callback, aabb) {
-    var wrapper = new WorldQueryWrapper(callback);
-    wrapper.broadPhase = this.m_broadPhase;
-    wrapper.callback = callback;
-    this.m_broadPhase.query(wrapper, aabb);
-};
-
-function WorldRayCastWrapper() {
-    this.broadPhase;
-    this.callback;
-}
-
-WorldRayCastWrapper.prototype.rayCastCallback = function(input, proxyId) {
-    var proxy = this.broadPhase.getUserData(proxyId);
-    // FixtureProxy
-    var fixture = proxy.fixture;
-    var index = proxy.childIndex;
-    var output = new RayCastOutput();
-    var hit = fixture.rayCast(output, input, index);
-    if (hit) {
-        var fraction = output.fraction;
-        var point = Add(Mul(1 - fraction, input.p1), Mul(fraction, input.p2));
-        return this.callback.reportFixture(fixture, point, output.normal, fraction);
-    }
-    return input.maxFraction;
+World.prototype.queryAABB = function(aabb, queryCallback) {
+    common.assert(typeof queryCallback === "function");
+    var broadPhase = this.m_broadPhase;
+    this.m_broadPhase.query(aabb, function(proxyId) {
+        var proxy = broadPhase.getUserData(proxyId);
+        // FixtureProxy
+        return queryCallback(proxy.fixture);
+    });
 };
 
 /**
@@ -4274,20 +4248,33 @@ WorldRayCastWrapper.prototype.rayCastCallback = function(input, proxyId) {
  * controls whether you get the closest point, any point, or n-points. The
  * ray-cast ignores shapes that contain the starting point.
  * 
- * @param {World~RayCastCallback} callback.reportFixture A user implemented
+ * @param {World~RayCastCallback} reportFixtureCallback A user implemented
  *          callback function.
  * @param point1 The ray starting point
  * @param point2 The ray ending point
  */
-World.prototype.rayCast = function(callback, point1, point2) {
-    var wrapper = new WorldRayCastWrapper();
-    wrapper.broadPhase = this.m_broadPhase;
-    wrapper.callback = callback;
+World.prototype.rayCast = function(point1, point2, reportFixtureCallback) {
+    common.assert(typeof reportFixtureCallback === "function");
+    var broadPhase = this.m_broadPhase;
     var input = new RayCastInput();
     input.maxFraction = 1;
     input.p1 = point1;
     input.p2 = point2;
-    this.m_broadPhase.rayCast(wrapper, input);
+    this.m_broadPhase.rayCast(input, function(input, proxyId) {
+        var proxy = broadPhase.getUserData(proxyId);
+        // FixtureProxy
+        var fixture = proxy.fixture;
+        var index = proxy.childIndex;
+        var output = new RayCastOutput();
+        // TODO GC
+        var hit = fixture.rayCast(output, input, index);
+        if (hit) {
+            var fraction = output.fraction;
+            var point = Add(Mul(1 - fraction, input.p1), Mul(fraction, input.p2));
+            return reportFixtureCallback(fixture, point, output.normal, fraction);
+        }
+        return input.maxFraction;
+    });
 };
 
 /**
@@ -4653,19 +4640,7 @@ World.prototype.step = function(ts, dt) {
  * Call this method to find new contacts.
  */
 World.prototype.findNewContacts = function() {
-    this.m_broadPhase.updatePairs(this);
-};
-
-/**
- * Broad-phase callback.
- * 
- * @private
- * 
- * @param {FixtureProxy} proxyA
- * @param {FixtureProxy} proxyB
- */
-World.prototype.addPair = function(proxyA, proxyB) {
-    return this.createContact(proxyA, proxyB);
+    this.m_broadPhase.updatePairs(this.addPair);
 };
 
 /**
@@ -5141,6 +5116,7 @@ function BroadPhase() {
     this.m_tree = new DynamicTree();
     this.m_proxyCount = 0;
     this.m_moveBuffer = [];
+    this.queryCallback = this.queryCallback.bind(this);
 }
 
 /**
@@ -5198,8 +5174,8 @@ BroadPhase.prototype.getTreeQuality = function() {
  * Query an AABB for overlapping proxies. The callback class is called for each
  * proxy that overlaps the supplied AABB.
  */
-BroadPhase.prototype.query = function(callback, aabb) {
-    this.m_tree.query(callback, aabb);
+BroadPhase.prototype.query = function(aabb, queryCallback) {
+    this.m_tree.query(aabb, queryCallback);
 };
 
 /**
@@ -5209,13 +5185,13 @@ BroadPhase.prototype.query = function(callback, aabb) {
  * roughly equal to k * log(n), where k is the number of collisions and n is the
  * number of proxies in the tree.
  * 
- * @param callback A callback class that is called for each proxy that is hit by
- *          the ray.
  * @param input The ray-cast input data. The ray extends from p1 to p1 +
  *          maxFraction * (p2 - p1).
+ * @param rayCastCallback A function that is called for each proxy that is hit by
+ *          the ray.
  */
-BroadPhase.prototype.rayCast = function(callback, input) {
-    this.m_tree.rayCast(callback, input);
+BroadPhase.prototype.rayCast = function(input, rayCastCallback) {
+    this.m_tree.rayCast(input, rayCastCallback);
 };
 
 /**
@@ -5289,10 +5265,11 @@ BroadPhase.prototype.unbufferMove = function(proxyId) {
 /**
  * Update the pairs. This results in pair callbacks. This can only add pairs.
  * 
- * @param {BroadPhase~AddPair} callback.addPair
+ * @param {BroadPhase~AddPair} addPairCallback
  */
-BroadPhase.prototype.updatePairs = function(callback) {
-    this.m_callback = callback;
+BroadPhase.prototype.updatePairs = function(addPairCallback) {
+    common.assert(typeof addPairCallback === "function");
+    this.m_callback = addPairCallback;
     // Perform tree queries for all moving proxies.
     while (this.m_moveBuffer.length > 0) {
         this.m_queryProxyId = this.m_moveBuffer.pop();
@@ -5303,7 +5280,7 @@ BroadPhase.prototype.updatePairs = function(callback) {
         // we don't fail to create a pair that may touch later.
         var fatAABB = this.m_tree.getFatAABB(this.m_queryProxyId);
         // Query tree, create pairs and add them pair buffer.
-        this.m_tree.query(this, fatAABB);
+        this.m_tree.query(fatAABB, this.queryCallback);
     }
 };
 
@@ -5318,7 +5295,7 @@ BroadPhase.prototype.queryCallback = function(proxyId) {
     var userDataA = this.m_tree.getUserData(proxyIdA);
     var userDataB = this.m_tree.getUserData(proxyIdB);
     // Send the pairs back to the client.
-    this.m_callback.addPair(userDataA, userDataB);
+    this.m_callback(userDataA, userDataB);
     return true;
 };
 
@@ -6564,9 +6541,10 @@ DynamicTree.prototype.shiftOrigin = function(newOrigin) {
  * Query an AABB for overlapping proxies. The callback class is called for each
  * proxy that overlaps the supplied AABB.
  * 
- * @param {DynamicTree~queryCallback} callback.queryCallback
+ * @param {DynamicTree~queryCallback} queryCallback
  */
-DynamicTree.prototype.query = function(callback, aabb) {
+DynamicTree.prototype.query = function(aabb, queryCallback) {
+    common.assert(typeof queryCallback === "function");
     var stack = stackPool.allocate();
     stack.push(this.m_root);
     while (stack.length > 0) {
@@ -6576,7 +6554,7 @@ DynamicTree.prototype.query = function(callback, aabb) {
         }
         if (AABB.testOverlap(node.aabb, aabb)) {
             if (node.isLeaf()) {
-                var proceed = callback.queryCallback(node.id);
+                var proceed = queryCallback(node.id);
                 if (proceed == false) {
                     return;
                 }
@@ -6598,11 +6576,12 @@ DynamicTree.prototype.query = function(callback, aabb) {
  * 
  * @param input The ray-cast input data. The ray extends from p1 to p1 +
  *          maxFraction * (p2 - p1).
- * @param callback A callback class that is called for each proxy that is hit by
+ * @param rayCastCallback A function that is called for each proxy that is hit by
  *          the ray.
  */
-DynamicTree.prototype.rayCast = function(callback, input) {
+DynamicTree.prototype.rayCast = function(input, rayCastCallback) {
     // TODO GC
+    common.assert(typeof rayCastCallback === "function");
     var p1 = input.p1;
     var p2 = input.p2;
     var r = Vec2.sub(p2, p1);
@@ -6641,7 +6620,7 @@ DynamicTree.prototype.rayCast = function(callback, input) {
             Vec2.clone(input.p1, subInput.p1);
             Vec2.clone(input.p2, subInput.p2);
             subInput.maxFraction = maxFraction;
-            var value = callback.rayCastCallback(subInput, node.id);
+            var value = rayCastCallback(subInput, node.id);
             if (value == 0) {
                 // The client has terminated the ray cast.
                 return;
