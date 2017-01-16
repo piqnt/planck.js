@@ -23,7 +23,7 @@
       return false;
     }, true);
 
-    world.on('remove-body', function (obj) {
+    world.on('remove-fixture', function (obj) {
       obj.ui && obj.ui.remove();
     });
 
