@@ -47,13 +47,13 @@ planck.play('MobileBalanced', function(pl) {
       position : p
     });
 
-    body.createFixture(pl.Polygon().setAsBox(0.25 * a, a), DENSITY);
+    body.createFixture(pl.Box(0.25 * a, a), DENSITY);
 
     if (depth == DEPTH) {
       return body;
     }
 
-    body.createFixture(pl.Polygon().setAsBox(offset, 0.25 * a, Vec2(0, -a), 0.0), DENSITY);
+    body.createFixture(pl.Box(offset, 0.25 * a, Vec2(0, -a), 0.0), DENSITY);
 
     var a1 = Vec2(offset, -a);
     var a2 = Vec2(-offset, -a);

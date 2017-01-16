@@ -27,11 +27,11 @@ planck.play('Motor Joint', function(pl, opts) {
   var time = 0;
 
   var ground = world.createBody();
-  ground.createFixture(pl.Edge().set(Vec2(-20.0, 0.0), Vec2(20.0, 0.0)));
+  ground.createFixture(pl.Edge(Vec2(-20.0, 0.0), Vec2(20.0, 0.0)));
 
   // Define motorized body
   var body = world.createDynamicBody(Vec2(0.0, 8.0));
-  body.createFixture(pl.Polygon().setAsBox(2.0, 0.5), {
+  body.createFixture(pl.Box(2.0, 0.5), {
     friction : 0.6,
     density : 2.0
   });

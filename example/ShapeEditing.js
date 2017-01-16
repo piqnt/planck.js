@@ -20,36 +20,23 @@
 planck.play('ShapeEditing', function(pl) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
-  
-  {
-    var /* BodyDef */bd;
-    var /* Body */ground = world.createBody(bd);
 
-    var /* EdgeShape */shape;
-    shape.set(Vec2(-40.0, 0.0), Vec2(40.0, 0.0));
-    ground.createFixture(shape, 0.0);
-  }
+  var m_sensor = false;
 
-  var /* BodyDef */bd;
-  bd.type = 'dynamic';
-  bd.position.set(0.0, 10.0);
-  m_body = world.createBody(bd);
+  var ground = world.createBody();
 
-  var /* PolygonShape */shape;
-  shape.setAsBox(4.0, 4.0, Vec2(0.0, 0.0), 0.0);
-  m_fixture1 = m_body.createFixture(shape, 10.0);
+  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
-  m_fixture2 = null;
+  var m_body = world.createDynamicBody(Vec2(0.0, 10.0));
 
-  m_sensor = false;
+  var m_fixture1 = m_body.createFixture(pl.Box(4.0, 4.0, Vec2(0.0, 0.0), 0.0), 10.0);
+  var m_fixture2 = null;
 
-  function Keyboard( /* int */key) {
+  function Keyboard(key) {
     switch (key) {
     case GLFW_KEY_C:
       if (m_fixture2 == null) {
-        var /* CircleShape */shape;
-        shape.m_radius = 3.0;
-        shape.m_p.set(0.5, -4.0);
+        var shape = pl.Circle(Vec2(0.5, -4.0), 3.0);
         m_fixture2 = m_body.createFixture(shape, 10.0);
         m_body.setAwake(true);
       }
@@ -80,11 +67,6 @@ planck.play('ShapeEditing', function(pl) {
     g_debugDraw.DrawString(5, m_textLine, "sensor = %d", m_sensor);
     m_textLine += DRAW_STRING_NEW_LINE;
   }
-
-  var /* Body */m_body;
-  var /* Fixture */m_fixture1;
-  var /* Fixture */m_fixture2;
-  var /* bool */m_sensor;
 
   return world;
 });

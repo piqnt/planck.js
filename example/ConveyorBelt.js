@@ -28,14 +28,12 @@ planck.play('ConveyorBelt', function(pl) {
   // Platform
   var platform = world
     .createBody(Vec2(-5.0, 5.0))
-    .createFixture(pl.Polygon().setAsBox(10.0, 0.5), {friction : 0.8});
+    .createFixture(pl.Box(10.0, 0.5), {friction : 0.8});
 
   // Boxes
   for (var i = 0; i < 5; ++i) {
-    world.createBody({
-      type : 'dynamic',
-      position : Vec2(-10.0 + 2.0 * i, 7.0)
-    }).createFixture(pl.Polygon().setAsBox(0.5, 0.5), 20.0);
+    world.createDynamicBody(Vec2(-10.0 + 2.0 * i, 7.0))
+      .createFixture(pl.Box(0.5, 0.5), 20.0);
   }
 
   world.on('pre-solve', function(contact, oldManifold) {

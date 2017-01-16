@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.2
+ * Planck.js v0.1.3
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -51,11 +51,7 @@ exports.Polygon = require("./shape/PolygonShape");
 
 exports.Chain = require("./shape/ChainShape");
 
-exports.Box = function(hx, hy, center, angle) {
-    var shape = exports.Polygon();
-    shape.setAsBox(hx, hy, center, angle);
-    return shape;
-};
+exports.Box = require("./shape/BoxShape");
 
 require("./shape/CollideCircle");
 
@@ -92,7 +88,7 @@ exports.WheelJoint = require("./joint/WheelJoint");
 exports.play = function() {
     (console.error || console.log)("Player is not available!");
 };
-},{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Shape":8,"./World":10,"./collision/AABB":11,"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./joint/DistanceJoint":26,"./joint/FrictionJoint":27,"./joint/GearJoint":28,"./joint/MotorJoint":29,"./joint/MouseJoint":30,"./joint/PrismaticJoint":31,"./joint/PulleyJoint":32,"./joint/RevoluteJoint":33,"./joint/RopeJoint":34,"./joint/WeldJoint":35,"./joint/WheelJoint":36,"./shape/ChainShape":37,"./shape/CircleShape":38,"./shape/CollideCircle":39,"./shape/CollideCirclePolygone":40,"./shape/CollideEdgeCircle":41,"./shape/CollideEdgePolygon":42,"./shape/CollidePolygon":43,"./shape/EdgeShape":44,"./shape/PolygonShape":45}],2:[function(require,module,exports){
+},{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Shape":8,"./World":10,"./collision/AABB":11,"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./joint/DistanceJoint":26,"./joint/FrictionJoint":27,"./joint/GearJoint":28,"./joint/MotorJoint":29,"./joint/MouseJoint":30,"./joint/PrismaticJoint":31,"./joint/PulleyJoint":32,"./joint/RevoluteJoint":33,"./joint/RopeJoint":34,"./joint/WeldJoint":35,"./joint/WheelJoint":36,"./shape/BoxShape":37,"./shape/ChainShape":38,"./shape/CircleShape":39,"./shape/CollideCircle":40,"./shape/CollideCirclePolygone":41,"./shape/CollideEdgeCircle":42,"./shape/CollideEdgePolygon":43,"./shape/CollidePolygon":44,"./shape/EdgeShape":45,"./shape/PolygonShape":46}],2:[function(require,module,exports){
 module.exports = Body;
 
 var common = require("./util/common");
@@ -1036,7 +1032,7 @@ Body.prototype.getLocalVector = function(worldVector) {
 };
 
 
-},{"./Fixture":4,"./World":10,"./common/Math":18,"./common/Position":19,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/Velocity":25,"./util/common":48,"./util/options":50}],3:[function(require,module,exports){
+},{"./Fixture":4,"./World":10,"./common/Math":18,"./common/Position":19,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/Velocity":25,"./util/common":49,"./util/options":51}],3:[function(require,module,exports){
 var DEBUG_SOLVER = false;
 
 var common = require("./util/common");
@@ -2062,7 +2058,7 @@ Contact.destroy = function(contact, listener) {
 };
 
 
-},{"./Manifold":6,"./Settings":7,"./common/Mat22":16,"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":48}],4:[function(require,module,exports){
+},{"./Manifold":6,"./Settings":7,"./common/Mat22":16,"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":49}],4:[function(require,module,exports){
 module.exports = Fixture;
 
 var common = require("./util/common");
@@ -2138,7 +2134,8 @@ function Fixture(body, shape, def) {
     this.m_filterGroupIndex = def.filterGroupIndex;
     this.m_filterCategoryBits = def.filterCategoryBits;
     this.m_filterMaskBits = def.filterMaskBits;
-    this.m_shape = shape.clone();
+    this.m_shape = shape;
+    //.clone();
     this.m_next = null;
     this.m_proxies = [];
     this.m_proxyCount = 0;
@@ -2417,7 +2414,7 @@ Fixture.prototype.shouldCollide = function(that) {
 };
 
 
-},{"./collision/AABB":11,"./common/Vec2":23,"./util/common":48,"./util/options":50}],5:[function(require,module,exports){
+},{"./collision/AABB":11,"./common/Vec2":23,"./util/common":49,"./util/options":51}],5:[function(require,module,exports){
 module.exports = Joint;
 
 var common = require("./util/common");
@@ -2597,7 +2594,7 @@ Joint.prototype.solveVelocityConstraints = function(step) {};
 Joint.prototype.solvePositionConstraints = function(step) {};
 
 
-},{"./util/common":48}],6:[function(require,module,exports){
+},{"./util/common":49}],6:[function(require,module,exports){
 var common = require("./util/common");
 
 var Vec2 = require("./common/Vec2");
@@ -2897,7 +2894,7 @@ function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
 }
 
 
-},{"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":48}],7:[function(require,module,exports){
+},{"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":49}],7:[function(require,module,exports){
 var Settings = exports;
 
 /**
@@ -3052,9 +3049,11 @@ Shape.prototype.getType = function() {
 };
 
 /**
+ * @deprecated
+ *
  * clone the concrete shape.
  */
-Shape.prototype.clone = function() {};
+Shape.prototype._clone = function() {};
 
 /**
  * // Get the number of child primitives.
@@ -3965,7 +3964,7 @@ Solver.prototype.postSolveIsland = function() {
 };
 
 
-},{"./Body":2,"./Contact":3,"./Joint":5,"./Settings":7,"./collision/Distance":13,"./collision/TimeOfImpact":15,"./common/Math":18,"./common/Vec2":23,"./util/Timer":47,"./util/common":48}],10:[function(require,module,exports){
+},{"./Body":2,"./Contact":3,"./Joint":5,"./Settings":7,"./collision/Distance":13,"./collision/TimeOfImpact":15,"./common/Math":18,"./common/Vec2":23,"./util/Timer":48,"./util/common":49}],10:[function(require,module,exports){
 module.exports = World;
 
 var options = require("./util/options");
@@ -4218,6 +4217,7 @@ World.prototype.queryAABB = function(aabb, queryCallback) {
     common.assert(typeof queryCallback === "function");
     var broadPhase = this.m_broadPhase;
     this.m_broadPhase.query(aabb, function(proxyId) {
+        //TODO GC
         var proxy = broadPhase.getUserData(proxyId);
         // FixtureProxy
         return queryCallback(proxy.fixture);
@@ -4261,6 +4261,7 @@ World.prototype.rayCast = function(point1, point2, reportFixtureCallback) {
     input.p1 = point1;
     input.p2 = point2;
     this.m_broadPhase.rayCast(input, function(input, proxyId) {
+        // TODO GC
         var proxy = broadPhase.getUserData(proxyId);
         // FixtureProxy
         var fixture = proxy.fixture;
@@ -4912,7 +4913,7 @@ World.prototype.postSolve = function(contact, impulse) {
 };
 
 
-},{"./Body":2,"./Contact":3,"./Solver":9,"./collision/BroadPhase":12,"./common/Vec2":23,"./util/Timer":47,"./util/common":48,"./util/options":50}],11:[function(require,module,exports){
+},{"./Body":2,"./Contact":3,"./Solver":9,"./collision/BroadPhase":12,"./common/Vec2":23,"./util/Timer":48,"./util/common":49,"./util/options":51}],11:[function(require,module,exports){
 var Settings = require("../Settings");
 
 var Math = require("../common/Math");
@@ -5300,7 +5301,7 @@ BroadPhase.prototype.queryCallback = function(proxyId) {
 };
 
 
-},{"../Settings":7,"../common/Math":18,"../util/common":48,"./AABB":11,"./DynamicTree":14}],13:[function(require,module,exports){
+},{"../Settings":7,"../common/Math":18,"../util/common":49,"./AABB":11,"./DynamicTree":14}],13:[function(require,module,exports){
 module.exports = Distance;
 
 module.exports.Input = DistanceInput;
@@ -5930,7 +5931,7 @@ Distance.testOverlap = function(shapeA, indexA, shapeB, indexB, xfA, xfB) {
 };
 
 
-},{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/Timer":47,"../util/common":48}],14:[function(require,module,exports){
+},{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/Timer":48,"../util/common":49}],14:[function(require,module,exports){
 var Settings = require("../Settings");
 
 var common = require("../util/common");
@@ -6711,7 +6712,7 @@ function Iterator() {
 }
 
 
-},{"../Settings":7,"../common/Math":18,"../common/Vec2":23,"../util/Pool":46,"../util/common":48,"./AABB":11}],15:[function(require,module,exports){
+},{"../Settings":7,"../common/Math":18,"../common/Vec2":23,"../util/Pool":47,"../util/common":49,"./AABB":11}],15:[function(require,module,exports){
 module.exports = TimeOfImpact;
 
 module.exports.Input = TOIInput;
@@ -7162,7 +7163,7 @@ SeparationFunction.prototype.evaluate = function(t) {
 };
 
 
-},{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/Timer":47,"../util/common":48,"./Distance":13}],16:[function(require,module,exports){
+},{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/Timer":48,"../util/common":49,"./Distance":13}],16:[function(require,module,exports){
 module.exports = Mat22;
 
 var common = require("../util/common");
@@ -7321,7 +7322,7 @@ Mat22.add = function(mx1, mx2) {
 };
 
 
-},{"../util/common":48,"./Math":18,"./Vec2":23}],17:[function(require,module,exports){
+},{"../util/common":49,"./Math":18,"./Vec2":23}],17:[function(require,module,exports){
 module.exports = Mat33;
 
 var common = require("../util/common");
@@ -7501,7 +7502,7 @@ Mat33.add = function(a, b) {
 };
 
 
-},{"../util/common":48,"./Math":18,"./Vec2":23,"./Vec3":24}],18:[function(require,module,exports){
+},{"../util/common":49,"./Math":18,"./Vec2":23,"./Vec3":24}],18:[function(require,module,exports){
 var common = require("../util/common");
 
 var create = require("../util/create");
@@ -7583,7 +7584,7 @@ math.clamp = function(num, min, max) {
 };
 
 
-},{"../util/common":48,"../util/create":49}],19:[function(require,module,exports){
+},{"../util/common":49,"../util/create":50}],19:[function(require,module,exports){
 module.exports = Position;
 
 var Vec2 = require("./Vec2");
@@ -7746,7 +7747,7 @@ Rot.mulT = function(rot, m) {
 };
 
 
-},{"../util/common":48,"./Math":18,"./Vec2":23}],21:[function(require,module,exports){
+},{"../util/common":49,"./Math":18,"./Vec2":23}],21:[function(require,module,exports){
 module.exports = Sweep;
 
 var common = require("../util/common");
@@ -7859,7 +7860,7 @@ Sweep.prototype.set = function(that) {
 };
 
 
-},{"../util/common":48,"./Math":18,"./Rot":20,"./Transform":22,"./Vec2":23}],22:[function(require,module,exports){
+},{"../util/common":49,"./Math":18,"./Rot":20,"./Transform":22,"./Vec2":23}],22:[function(require,module,exports){
 module.exports = Transform;
 
 var common = require("../util/common");
@@ -7975,7 +7976,7 @@ Transform.mulT = function(a, b) {
 };
 
 
-},{"../util/common":48,"./Rot":20,"./Vec2":23}],23:[function(require,module,exports){
+},{"../util/common":49,"./Rot":20,"./Vec2":23}],23:[function(require,module,exports){
 module.exports = Vec2;
 
 var common = require("../util/common");
@@ -8390,7 +8391,7 @@ Vec2.clamp = function(v, max) {
 };
 
 
-},{"../util/common":48,"./Math":18}],24:[function(require,module,exports){
+},{"../util/common":49,"./Math":18}],24:[function(require,module,exports){
 module.exports = Vec3;
 
 var common = require("../util/common");
@@ -8502,7 +8503,7 @@ Vec3.neg = function(v) {
 };
 
 
-},{"../util/common":48,"./Math":18}],25:[function(require,module,exports){
+},{"../util/common":49,"./Math":18}],25:[function(require,module,exports){
 module.exports = Velocity;
 
 var Vec2 = require("./Vec2");
@@ -8794,7 +8795,7 @@ DistanceJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":49,"../util/options":50}],27:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":50,"../util/options":51}],27:[function(require,module,exports){
 module.exports = FrictionJoint;
 
 var common = require("../util/common");
@@ -9069,7 +9070,7 @@ FrictionJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":48,"../util/create":49,"../util/options":50}],28:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":49,"../util/create":50,"../util/options":51}],28:[function(require,module,exports){
 module.exports = GearJoint;
 
 var common = require("../util/common");
@@ -9489,7 +9490,7 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":48,"../util/create":49,"../util/options":50,"./PrismaticJoint":31,"./RevoluteJoint":33}],29:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":49,"../util/create":50,"../util/options":51,"./PrismaticJoint":31,"./RevoluteJoint":33}],29:[function(require,module,exports){
 module.exports = MotorJoint;
 
 var common = require("../util/common");
@@ -9798,7 +9799,7 @@ MotorJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":48,"../util/create":49,"../util/options":50}],30:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":49,"../util/create":50,"../util/options":51}],30:[function(require,module,exports){
 module.exports = MouseJoint;
 
 var common = require("../util/common");
@@ -10043,7 +10044,7 @@ MouseJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":48,"../util/create":49,"../util/options":50}],31:[function(require,module,exports){
+},{"../Joint":5,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":49,"../util/create":50,"../util/options":51}],31:[function(require,module,exports){
 module.exports = PrismaticJoint;
 
 var common = require("../util/common");
@@ -10677,7 +10678,7 @@ PrismaticJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":48,"../util/create":49,"../util/options":50}],32:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":49,"../util/create":50,"../util/options":51}],32:[function(require,module,exports){
 module.exports = PulleyJoint;
 
 var common = require("../util/common");
@@ -11015,7 +11016,7 @@ PulleyJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":48,"../util/create":49,"../util/options":50}],33:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":49,"../util/create":50,"../util/options":51}],33:[function(require,module,exports){
 module.exports = RevoluteJoint;
 
 var common = require("../util/common");
@@ -11578,7 +11579,7 @@ RevoluteJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":48,"../util/create":49,"../util/options":50}],34:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":49,"../util/create":50,"../util/options":51}],34:[function(require,module,exports){
 module.exports = RopeJoint;
 
 var options = require("../util/options");
@@ -11873,7 +11874,7 @@ RopeJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":49,"../util/options":50}],35:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":50,"../util/options":51}],35:[function(require,module,exports){
 module.exports = WeldJoint;
 
 var options = require("../util/options");
@@ -12245,7 +12246,7 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":49,"../util/options":50}],36:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":50,"../util/options":51}],36:[function(require,module,exports){
 module.exports = WheelJoint;
 
 var options = require("../util/options");
@@ -12736,7 +12737,68 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":49,"../util/options":50}],37:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":50,"../util/options":51}],37:[function(require,module,exports){
+module.exports = BoxShape;
+
+var common = require("../util/common");
+
+var create = require("../util/create");
+
+var options = require("../util/options");
+
+var Math = require("../common/Math");
+
+var Transform = require("../common/Transform");
+
+var Rot = require("../common/Rot");
+
+var Vec2 = require("../common/Vec2");
+
+var AABB = require("../collision/AABB");
+
+var Settings = require("../Settings");
+
+var PolygonShape = require("./PolygonShape");
+
+BoxShape._super = PolygonShape;
+
+BoxShape.prototype = create(BoxShape._super.prototype);
+
+BoxShape.TYPE = "polygon";
+
+/**
+ * A rectangle polygon which extend PolygonShape.
+ */
+function BoxShape(hx, hy, center, angle) {
+    if (!(this instanceof BoxShape)) {
+        return new BoxShape(hx, hy, center, angle);
+    }
+    BoxShape._super.call(this);
+    this.m_vertices[0] = Vec2(-hx, -hy);
+    this.m_vertices[1] = Vec2(hx, -hy);
+    this.m_vertices[2] = Vec2(hx, hy);
+    this.m_vertices[3] = Vec2(-hx, hy);
+    this.m_normals[0] = Vec2(0, -1);
+    this.m_normals[1] = Vec2(1, 0);
+    this.m_normals[2] = Vec2(0, 1);
+    this.m_normals[3] = Vec2(-1, 0);
+    this.m_count = 4;
+    if (center && "x" in center && "y" in center) {
+        angle = angle || 0;
+        this.m_centroid.set(center);
+        var xf = new Transform();
+        xf.p.set(center);
+        xf.q.set(angle);
+        // Transform vertices and normals.
+        for (var i = 0; i < this.m_count; ++i) {
+            this.m_vertices[i] = Transform.mul(xf, this.m_vertices[i]);
+            this.m_normals[i] = Rot.mul(xf.q, this.m_normals[i]);
+        }
+    }
+}
+
+
+},{"../Settings":7,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"../util/create":50,"../util/options":51,"./PolygonShape":46}],38:[function(require,module,exports){
 module.exports = ChainShape;
 
 var common = require("../util/common");
@@ -12790,9 +12852,9 @@ function ChainShape(vertices, loop) {
     this.m_hasNextVertex = false;
     if (vertices && vertices.length) {
         if (loop) {
-            this.createLoop(vertices);
+            this._createLoop(vertices);
         } else {
-            this.createChain(vertices);
+            this._createChain(vertices);
         }
     }
 }
@@ -12807,7 +12869,7 @@ function ChainShape(vertices, loop) {
  * @param vertices an array of vertices, these are copied
  * @param count the vertex count
  */
-ChainShape.prototype.createLoop = function(vertices) {
+ChainShape.prototype._createLoop = function(vertices) {
     common.assert(this.m_vertices.length == 0 && this.m_count == 0);
     common.assert(vertices.length >= 3);
     for (var i = 1; i < vertices.length; ++i) {
@@ -12835,7 +12897,7 @@ ChainShape.prototype.createLoop = function(vertices) {
  * @param vertices an array of vertices, these are copied
  * @param count the vertex count
  */
-ChainShape.prototype.createChain = function(vertices) {
+ChainShape.prototype._createChain = function(vertices) {
     common.assert(this.m_vertices.length == 0 && this.m_count == 0);
     common.assert(vertices.length >= 2);
     for (var i = 1; i < vertices.length; ++i) {
@@ -12859,7 +12921,7 @@ ChainShape.prototype.createChain = function(vertices) {
  * Establish connectivity to a vertex that precedes the first vertex. Don't call
  * this for loops.
  */
-ChainShape.prototype.setPrevVertex = function(prevVertex) {
+ChainShape.prototype._setPrevVertex = function(prevVertex) {
     this.m_prevVertex = prevVertex;
     this.m_hasPrevVertex = true;
 };
@@ -12868,12 +12930,12 @@ ChainShape.prototype.setPrevVertex = function(prevVertex) {
  * Establish connectivity to a vertex that follows the last vertex. Don't call
  * this for loops.
  */
-ChainShape.prototype.setNextVertex = function(nextVertex) {
+ChainShape.prototype._setNextVertex = function(nextVertex) {
     this.m_nextVertex = nextVertex;
     this.m_hasNextVertex = true;
 };
 
-ChainShape.prototype.clone = function() {
+ChainShape.prototype._clone = function() {
     var clone = new ChainShape();
     clone.createChain(this.m_vertices);
     clone.m_type = this.m_type;
@@ -12963,7 +13025,7 @@ ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
 };
 
 
-},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":48,"../util/create":49,"../util/options":50,"./EdgeShape":44}],38:[function(require,module,exports){
+},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"../util/create":50,"../util/options":51,"./EdgeShape":45}],39:[function(require,module,exports){
 module.exports = CircleShape;
 
 var common = require("../util/common");
@@ -13040,7 +13102,7 @@ CircleShape.prototype.getVertexCount = function(index) {
     return 1;
 };
 
-CircleShape.prototype.clone = function() {
+CircleShape.prototype._clone = function() {
     var clone = new CircleShape();
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
@@ -13108,7 +13170,7 @@ CircleShape.prototype.computeDistanceProxy = function(proxy) {
 };
 
 
-},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":48,"../util/create":49,"../util/options":50}],39:[function(require,module,exports){
+},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"../util/create":50,"../util/options":51}],40:[function(require,module,exports){
 var common = require("../util/common");
 
 var create = require("../util/create");
@@ -13157,7 +13219,7 @@ function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
 }
 
 
-},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Transform":22,"../common/Vec2":23,"../util/common":48,"../util/create":49,"./CircleShape":38}],40:[function(require,module,exports){
+},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"../util/create":50,"./CircleShape":39}],41:[function(require,module,exports){
 var common = require("../util/common");
 
 var Math = require("../common/Math");
@@ -13269,7 +13331,7 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 }
 
 
-},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":48,"./CircleShape":38,"./PolygonShape":45}],41:[function(require,module,exports){
+},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"./CircleShape":39,"./PolygonShape":46}],42:[function(require,module,exports){
 var common = require("../util/common");
 
 var create = require("../util/create");
@@ -13421,7 +13483,7 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 }
 
 
-},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":48,"../util/create":49,"./ChainShape":37,"./CircleShape":38,"./EdgeShape":44}],42:[function(require,module,exports){
+},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"../util/create":50,"./ChainShape":38,"./CircleShape":39,"./EdgeShape":45}],43:[function(require,module,exports){
 var common = require("../util/common");
 
 var create = require("../util/create");
@@ -13863,7 +13925,7 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 }
 
 
-},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":48,"../util/create":49,"./ChainShape":37,"./EdgeShape":44,"./PolygonShape":45}],43:[function(require,module,exports){
+},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"../util/create":50,"./ChainShape":38,"./EdgeShape":45,"./PolygonShape":46}],44:[function(require,module,exports){
 var common = require("../util/common");
 
 var Math = require("../common/Math");
@@ -14080,7 +14142,7 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 }
 
 
-},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":48,"./PolygonShape":45}],44:[function(require,module,exports){
+},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"./PolygonShape":46}],45:[function(require,module,exports){
 module.exports = EdgeShape;
 
 var create = require("../util/create");
@@ -14133,7 +14195,7 @@ function EdgeShape(v1, v2) {
 /**
  * Set this as an isolated edge.
  */
-EdgeShape.prototype.set = function(v1, v2) {
+EdgeShape.prototype._set = function(v1, v2) {
     this.m_vertex1.set(v1);
     this.m_vertex2.set(v2);
     this.m_hasVertex0 = false;
@@ -14141,7 +14203,7 @@ EdgeShape.prototype.set = function(v1, v2) {
     return this;
 };
 
-EdgeShape.prototype.clone = function() {
+EdgeShape.prototype._clone = function() {
     var clone = new EdgeShape();
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
@@ -14231,7 +14293,7 @@ EdgeShape.prototype.computeDistanceProxy = function(proxy) {
 };
 
 
-},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/create":49,"../util/options":50}],45:[function(require,module,exports){
+},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/create":50,"../util/options":51}],46:[function(require,module,exports){
 module.exports = PolygonShape;
 
 var common = require("../util/common");
@@ -14280,7 +14342,7 @@ function PolygonShape(vertices) {
     // Vec2[Settings.maxPolygonVertices]
     this.m_count = 0;
     if (vertices && vertices.length) {
-        this.set(vertices);
+        this._set(vertices);
     }
 }
 
@@ -14289,7 +14351,7 @@ PolygonShape.prototype.getVertex = function(index) {
     return this.m_vertices[index];
 };
 
-PolygonShape.prototype.clone = function() {
+PolygonShape.prototype._clone = function() {
     var clone = new PolygonShape();
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
@@ -14302,40 +14364,6 @@ PolygonShape.prototype.clone = function() {
         clone.m_normals.push(this.m_normals[i].clone());
     }
     return clone;
-};
-
-/**
- * Build vertices to represent an axis-aligned box centered on the local origin.
- * Build vertices to represent an oriented box.
- * 
- * @param hx the half-width.
- * @param hy the half-height.
- * @param center the center of the box in local coordinates.
- * @param angle the rotation of the box in local coordinates.
- */
-PolygonShape.prototype.setAsBox = function(hx, hy, center, angle) {
-    this.m_vertices[0] = Vec2(-hx, -hy);
-    this.m_vertices[1] = Vec2(hx, -hy);
-    this.m_vertices[2] = Vec2(hx, hy);
-    this.m_vertices[3] = Vec2(-hx, hy);
-    this.m_normals[0] = Vec2(0, -1);
-    this.m_normals[1] = Vec2(1, 0);
-    this.m_normals[2] = Vec2(0, 1);
-    this.m_normals[3] = Vec2(-1, 0);
-    this.m_count = 4;
-    if (center && "x" in center && "y" in center) {
-        angle = angle || 0;
-        this.m_centroid.set(center);
-        var xf = new Transform();
-        xf.p.set(center);
-        xf.q.set(angle);
-        // Transform vertices and normals.
-        for (var i = 0; i < this.m_count; ++i) {
-            this.m_vertices[i] = Transform.mul(xf, this.m_vertices[i]);
-            this.m_normals[i] = Rot.mul(xf.q, this.m_normals[i]);
-        }
-    }
-    return this;
 };
 
 PolygonShape.prototype.getChildCount = function() {
@@ -14380,7 +14408,8 @@ function ComputeCentroid(vs, count) {
 }
 
 /**
- * 
+ * @private
+ *
  * Create a convex hull from the given array of local points. The count must be
  * in the range [3, Settings.maxPolygonVertices].
  * 
@@ -14388,7 +14417,7 @@ function ComputeCentroid(vs, count) {
  * Warning: collinear points are handled but not removed. Collinear points may
  * lead to poor stacking behavior.
  */
-PolygonShape.prototype.set = function(vertices) {
+PolygonShape.prototype._set = function(vertices) {
     common.assert(3 <= vertices.length && vertices.length <= Settings.maxPolygonVertices);
     if (vertices.length < 3) {
         SetAsBox(1, 1);
@@ -14656,7 +14685,7 @@ PolygonShape.prototype.computeDistanceProxy = function(proxy) {
 };
 
 
-},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":48,"../util/create":49,"../util/options":50}],46:[function(require,module,exports){
+},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"../util/create":50,"../util/options":51}],47:[function(require,module,exports){
 module.exports = Pool;
 
 function Pool(opts) {
@@ -14718,7 +14747,7 @@ function Pool(opts) {
 }
 
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 module.exports.now = function() {
     return Date.now();
 };
@@ -14728,7 +14757,7 @@ module.exports.diff = function(time) {
 };
 
 
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 exports.debug = function() {};
 
 exports.assert = function(statement, err, log) {
@@ -14738,7 +14767,7 @@ exports.assert = function(statement, err, log) {
 };
 
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 if (typeof Object.create == "function") {
     module.exports = function(proto, props) {
         return Object.create.call(Object, proto, props);
@@ -14754,7 +14783,7 @@ if (typeof Object.create == "function") {
 }
 
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
 module.exports = function(to, from) {

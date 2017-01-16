@@ -22,8 +22,7 @@ planck.play('EdgeTest', function(pl) {
   var world = new pl.World(Vec2(0, -10));
 
   {
-    var /* BodyDef */bd;
-    var /* Body */ground = world.createBody(bd);
+    var ground = world.createBody();
 
     var v1 = Vec2(-10.0, 0.0);
     var v2 = Vec2(-7.0, -2.0);
@@ -33,71 +32,61 @@ planck.play('EdgeTest', function(pl) {
     var v6 = Vec2(7.0, 2.0);
     var v7 = Vec2(10.0, 0.0);
 
-    var /* EdgeShape */shape;
-
-    shape.set(v1, v2);
+    var shape = pl.Edge(v1, v2);
     shape.m_hasVertex3 = true;
     shape.m_vertex3 = v3;
     ground.createFixture(shape, 0.0);
 
-    shape.set(v2, v3);
+    var shape = pl.Edge(v2, v3);
     shape.m_hasVertex0 = true;
     shape.m_hasVertex3 = true;
     shape.m_vertex0 = v1;
     shape.m_vertex3 = v4;
     ground.createFixture(shape, 0.0);
 
-    shape.set(v3, v4);
+    var shape = pl.Edge(v3, v4);
     shape.m_hasVertex0 = true;
     shape.m_hasVertex3 = true;
     shape.m_vertex0 = v2;
     shape.m_vertex3 = v5;
     ground.createFixture(shape, 0.0);
 
-    shape.set(v4, v5);
+    var shape = pl.Edge(v4, v5);
     shape.m_hasVertex0 = true;
     shape.m_hasVertex3 = true;
     shape.m_vertex0 = v3;
     shape.m_vertex3 = v6;
     ground.createFixture(shape, 0.0);
 
-    shape.set(v5, v6);
+    var shape = pl.Edge(v5, v6);
     shape.m_hasVertex0 = true;
     shape.m_hasVertex3 = true;
     shape.m_vertex0 = v4;
     shape.m_vertex3 = v7;
     ground.createFixture(shape, 0.0);
 
-    shape.set(v6, v7);
+    var shape = pl.Edge(v6, v7);
     shape.m_hasVertex0 = true;
     shape.m_vertex0 = v5;
     ground.createFixture(shape, 0.0);
   }
 
   {
-    var /* BodyDef */bd;
+    var bd = {};
     bd.type = 'dynamic';
-    bd.position.set(-0.5, 0.6);
+    bd.position = Vec2(-0.5, 0.6);
     bd.allowSleep = false;
-    var /* Body */body = world.createBody(bd);
-
-    var /* CircleShape */shape;
-    shape.m_radius = 0.5;
-
-    body.createFixture(shape, 1.0);
+    world.createBody(bd)
+      .createFixture(pl.Circle(0.5), 1.0);
   }
 
   {
-    var /* BodyDef */bd;
+    var bd = {};
     bd.type = 'dynamic';
-    bd.position.set(1.0, 0.6);
+    bd.position = Vec2(1.0, 0.6);
     bd.allowSleep = false;
-    var /* Body */body = world.createBody(bd);
-
-    var /* PolygonShape */shape;
-    shape.setAsBox(0.5, 0.5);
-
-    body.createFixture(shape, 1.0);
+    world.createBody(bd)
+      .createFixture(pl.Box(0.5, 0.5), 1.0);
   }
 
   return world;

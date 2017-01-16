@@ -20,97 +20,70 @@
 planck.play('OneSidedPlatform', function(pl) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
-  
-  {
-    var e_unknown, e_above, e_below;
-    // Ground
-    {
-      var /* BodyDef */bd;
-      var /* Body */ground = world.createBody(bd);
 
-      var /* EdgeShape */shape;
-      shape.set(Vec2(-20.0, 0.0), Vec2(20.0, 0.0));
-      ground.createFixture(shape, 0.0);
+  var m_radius = 0.5;
+  var m_top = 10.0 + 0.5;
+  var m_bottom = 10.0 - 0.5;
+  var m_state;
+  var m_platform;
+  var m_character;
+
+  var e_unknown, e_above, e_below;
+
+  // Ground
+  var ground = world.createBody();
+  var shape = pl.Edge(Vec2(-20.0, 0.0), Vec2(20.0, 0.0));
+  ground.createFixture(shape, 0.0);
+
+  // Platform
+  var body = world.createBody(Vec2(0.0, 10.0));
+  m_platform = body.createFixture(pl.Box(3.0, 0.5), 0.0);
+
+  // Actor
+  var body = world.createDynamicBody(Vec2(0.0, 12.0));
+  m_character = body.createFixture(pl.Circle(m_radius), 20.0);
+  body.setLinearVelocity(Vec2(0.0, -50.0));
+  m_state = e_unknown;
+
+  function PreSolve(contact, oldManifold) {
+    Test.preSolve(contact, oldManifold);
+
+    var fixtureA = contact.getFixtureA();
+    var fixtureB = contact.getFixtureB();
+
+    if (fixtureA != m_platform && fixtureA != m_character) {
+      return;
     }
 
-    // Platform
-    {
-      var /* BodyDef */bd;
-      bd.position.set(0.0, 10.0);
-      var /* Body */body = world.createBody(bd);
-
-      var /* PolygonShape */shape;
-      shape.setAsBox(3.0, 0.5);
-      m_platform = body.createFixture(shape, 0.0);
-
-      m_bottom = 10.0 - 0.5;
-      m_top = 10.0 + 0.5;
+    if (fixtureB != m_platform && fixtureB != m_character) {
+      return;
     }
 
-    // Actor
-    {
-      var /* BodyDef */bd;
-      bd.type = 'dynamic';
-      bd.position.set(0.0, 12.0);
-      var /* Body */body = world.createBody(bd);
+    if (1) {
+      var position = m_character.getBody().getPosition();
 
-      m_radius = 0.5;
-      var /* CircleShape */shape;
-      shape.m_radius = m_radius;
-      m_character = body.createFixture(shape, 20.0);
-
-      body.setLinearVelocity(Vec2(0.0, -50.0));
-
-      m_state = e_unknown;
-    }
-
-    function PreSolve( /* Contact */contact, /* const *//* Manifold */
-    oldManifold) {
-      Test.preSolve(contact, oldManifold);
-
-      var /* Fixture */fixtureA = contact.getFixtureA();
-      var /* Fixture */fixtureB = contact.getFixtureB();
-
-      if (fixtureA != m_platform && fixtureA != m_character) {
-        return;
+      if (position.y < m_top + m_radius - 3.0 * b2_linearSlop) {
+        contact.setEnabled(false);
       }
-
-      if (fixtureB != m_platform && fixtureB != m_character) {
-        return;
-      }
-
-      if (1) {
-        var /* Vec2 */position = m_character.getBody().getPosition();
-
-        if (position.y < m_top + m_radius - 3.0 * b2_linearSlop) {
-          contact.setEnabled(false);
-        }
-      } else {
-        var /* Vec2 */v = m_character.getBody().getLinearVelocity();
-        if (v.y > 0.0) {
-          contact.setEnabled(false);
-        }
+    } else {
+      var v = m_character.getBody().getLinearVelocity();
+      if (v.y > 0.0) {
+        contact.setEnabled(false);
       }
     }
-
-    function Step(settings) {
-      Test.step(settings);
-      g_debugDraw.DrawString(5, m_textLine,
-          "Press: (c) create a shape, (d) destroy a shape.");
-      m_textLine += DRAW_STRING_NEW_LINE;
-
-      var /* Vec2 */v = m_character.getBody().getLinearVelocity();
-      g_debugDraw.DrawString(5, m_textLine, "Character Linear Velocity: %f",
-          v.y);
-      m_textLine += DRAW_STRING_NEW_LINE;
-    }
-
-    var /* float32 */m_radius, m_top, m_bottom;
-    State
-    m_state;
-    var /* Fixture */m_platform;
-    var /* Fixture */m_character;
-
-    return world;
   }
+
+  function Step(settings) {
+    Test.step(settings);
+    g_debugDraw.DrawString(5, m_textLine,
+        "Press: (c) create a shape, (d) destroy a shape.");
+    m_textLine += DRAW_STRING_NEW_LINE;
+
+    var /* Vec2 */v = m_character.getBody().getLinearVelocity();
+    g_debugDraw.DrawString(5, m_textLine, "Character Linear Velocity: %f",
+        v.y);
+    m_textLine += DRAW_STRING_NEW_LINE;
+  }
+
+  return world;
 });

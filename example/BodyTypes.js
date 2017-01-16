@@ -18,15 +18,13 @@
  */
 
 planck.play('BodyTypes', function(pl) {
-  var /* Body */ground = null;
+  var ground = null;
   {
-    var /* BodyDef */bd;
-    ground = world.createBody(bd);
+    ground = world.createBody();
 
-    var /* EdgeShape */shape;
-    shape.set(Vec2(-20.0, 0.0), Vec2(20.0, 0.0));
+    var shape = pl.Edge(Vec2(-20.0, 0.0), Vec2(20.0, 0.0));
 
-    var /* FixtureDef */fd;
+    var fd = {};
     fd.shape = shape;
 
     ground.createFixture(fd);
@@ -34,27 +32,25 @@ planck.play('BodyTypes', function(pl) {
 
   // Define attachment
   {
-    var /* BodyDef */bd;
+    var bd = {};
     bd.type = 'dynamic';
     bd.position.set(0.0, 3.0);
     m_attachment = world.createBody(bd);
 
-    var /* PolygonShape */shape;
-    shape.setAsBox(0.5, 2.0);
+    var shape = pl.Box(0.5, 2.0);
     m_attachment.createFixture(shape, 2.0);
   }
 
   // Define platform
   {
-    var /* BodyDef */bd;
+    var bd = {};
     bd.type = 'dynamic';
     bd.position.set(-4.0, 5.0);
     m_platform = world.createBody(bd);
 
-    var /* PolygonShape */shape;
-    shape.setAsBox(0.5, 4.0, Vec2(4.0, 0.0), 0.5 * Math.PI);
+    var shape = pl.Box(0.5, 4.0, Vec2(4.0, 0.0), 0.5 * Math.PI);
 
-    var /* FixtureDef */fd;
+    var fd = {};
     fd.shape = shape;
     fd.friction = 0.6;
     fd.density = 2.0;
@@ -87,8 +83,7 @@ planck.play('BodyTypes', function(pl) {
     bd.position.set(0.0, 8.0);
     var /* Body */body = world.createBody(bd);
 
-    var /* PolygonShape */shape;
-    shape.setAsBox(0.75, 0.75);
+    var shape = pl.Box(0.75, 0.75);
 
     var /* FixtureDef */fd;
     fd.shape = shape;

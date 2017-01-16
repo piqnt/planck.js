@@ -79,7 +79,7 @@ planck.play('Apply Force', function(pl, opts) {
   jet.createFixture(poly1, 2.0);
   jet.createFixture(poly2, 2.0);
 
-  var shape = pl.Polygon().setAsBox(0.5, 0.5);
+  var shape = pl.Box(0.5, 0.5);
 
   var fd = {};
   fd.density = 1.0;

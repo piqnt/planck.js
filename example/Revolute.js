@@ -23,8 +23,7 @@ planck.play('Revolute', function(pl) {
 
   var ground = world.createBody();
 
-  var shape = pl.Edge();
-  shape.set(Vec2(-40.0, 0.0), Vec2(40.0, 0.0));
+  var shape = pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0));
 
   var fd = {};
   fd.filterCategoryBits = 2;
@@ -33,8 +32,7 @@ planck.play('Revolute', function(pl) {
 
   ground.createFixture(shape, fd);
 
-  var shape = pl.Circle();
-  shape.m_radius = 0.5;
+  var shape = pl.Circle(0.5);
 
   var bd = {};
   bd.type = 'dynamic';
@@ -56,11 +54,9 @@ planck.play('Revolute', function(pl) {
   rjd.enableLimit = true;
   rjd.collideConnected = true;
 
-  var m_joint = world.createJoint(pl.RevoluteJoint(rjd, ground, body,
-      Vec2(-10.0, 12.0)));
+  var m_joint = world.createJoint(pl.RevoluteJoint(rjd, ground, body, Vec2(-10.0, 12.0)));
 
-  var circle_shape = pl.Circle();
-  circle_shape.m_radius = 3.0;
+  var circle_shape = pl.Circle(3.0);
 
   var circle_bd = {};
   circle_bd.type = 'dynamic';
@@ -73,8 +69,7 @@ planck.play('Revolute', function(pl) {
   var m_ball = world.createBody(circle_bd);
   m_ball.createFixture(circle_shape, fd);
 
-  var polygon_shape = pl.Polygon();
-  polygon_shape.setAsBox(10.0, 0.2, Vec2(-10.0, 0.0), 0.0);
+  var polygon_shape = pl.Box(10.0, 0.2, Vec2(-10.0, 0.0), 0.0);
 
   var polygon_bd = {};
   polygon_bd.position = Vec2(20.0, 10.0);
@@ -87,20 +82,16 @@ planck.play('Revolute', function(pl) {
   rjd.lowerAngle = -0.25 * Math.PI;
   rjd.upperAngle = 0.0 * Math.PI;
   rjd.enableLimit = true;
-  world.createJoint(pl.RevoluteJoint(rjd, ground, polygon_body, Vec2(
-      20.0, 10.0)));
+  world.createJoint(pl.RevoluteJoint(rjd, ground, polygon_body, Vec2(20.0, 10.0)));
 
   // Tests mass computation of a small object far from the origin
-  var bodyDef = {};
-  bodyDef.type = 'dynamic';
-  var body = world.createBody(bodyDef);
+  var body = world.createDynamicBody();
 
-  var polyShape = pl.Polygon();
-  var verts = [];
-  verts[0] = Vec2(17.63, 36.31);
-  verts[1] = Vec2(17.52, 36.69);
-  verts[2] = Vec2(17.19, 36.36);
-  polyShape.set(verts, 3);
+  var polyShape = pl.Polygon([
+    Vec2(17.63, 36.31),
+    Vec2(17.52, 36.69),
+    Vec2(17.19, 36.36)
+  ]);
 
   var polyFixtureDef = {};
   polyFixtureDef.density = 1;
@@ -124,8 +115,7 @@ planck.play('Revolute', function(pl) {
     g_debugDraw.DrawString(5, m_textLine, "Keys: (l) limits, (m) motor");
     m_textLine += DRAW_STRING_NEW_LINE;
 
-    // if (m_stepCount == 360)
-    // {
+    // if (m_stepCount == 360) {
     // m_ball.setTransform(Vec2(0.0, 0.5), 0.0);
     // }
 

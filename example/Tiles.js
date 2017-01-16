@@ -41,8 +41,7 @@ planck.play('Tiles', function(pl) {
     for (var j = 0; j < M; ++j) {
       position.x = -N * a;
       for (var i = 0; i < N; ++i) {
-        var shape = pl.Polygon().setAsBox(a, a, position, 0.0);
-        ground.createFixture(shape, 0.0);
+        ground.createFixture(pl.Box(a, a, position, 0.0), 0.0);
         ++m_fixtureCount;
         position.x += 2.0 * a;
       }
@@ -57,8 +56,7 @@ planck.play('Tiles', function(pl) {
     for (var i = 0; i < N; ++i) {
       position.y = 0.0;
       for (var j = 0; j < M; ++j) {
-        var shape = pl.Polygon().setAsBox(a, a, position, 0.0);
-        ground.createFixture(shape, 0.0);
+        ground.createFixture(pl.Box(a, a, position, 0.0), 0.0);
         position.y -= 2.0 * a;
       }
       position.x += 2.0 * a;
@@ -66,7 +64,7 @@ planck.play('Tiles', function(pl) {
   }
 
   var a = 0.5;
-  var shape = pl.Polygon().setAsBox(a, a);
+  var shape = pl.Box(a, a);
 
   var x = Vec2(-7.0, 0.75);
   var y = Vec2();

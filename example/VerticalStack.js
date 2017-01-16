@@ -41,7 +41,7 @@ planck.play('VerticalStack', function(pl) {
   var bd = {
     type : 'dynamic'
   };
-  var shape = pl.Polygon().setAsBox(0.5, 0.5);
+  var shape = pl.Box(0.5, 0.5);
 
   for (var j = 0; j < columnCount; ++j) {
     for (var i = 0; i < rowCount; ++i) {
@@ -69,8 +69,7 @@ planck.play('VerticalStack', function(pl) {
         bullet = null;
       }
 
-      var shape = pl.Circle();
-      shape.m_radius = 0.25;
+      var shape = pl.Circle(0.25);
 
       var fd = {};
       fd.shape = shape;
@@ -108,15 +107,14 @@ planck.play('VerticalStack', function(pl) {
     // }
 
     // {
-    // var /*CircleShape*/ shape;
-    // shape.m_radius = 0.25;
+    // var shape = pl.Circle(0.25);
 
-    // var /*FixtureDef*/ fd;
+    // var fd = {};
     // fd.shape = shape;
     // fd.density = 20.0;
     // fd.restitution = 0.05;
 
-    // var /*BodyDef*/ bd;
+    // var bd = {};
     // bd.type = 'dynamic';
     // bd.bullet = true;
     // bd.position.set(-31.0, 5.0);

@@ -25,16 +25,12 @@ planck.play('Cantilever', function(pl) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  var e_count = 8
+  var e_count = 8;
 
   var ground = world.createBody();
+  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
-  var shape = pl.Edge();
-  shape.set(Vec2(-40.0, 0.0), Vec2(40.0, 0.0));
-  ground.createFixture(shape, 0.0);
-
-  var shape = pl.Polygon();
-  shape.setAsBox(0.5, 0.125);
+  var shape = pl.Box(0.5, 0.125);
 
   var fd = {};
   fd.density = 20.0;
@@ -55,8 +51,7 @@ planck.play('Cantilever', function(pl) {
     prevBody = body;
   }
 
-  var shape = pl.Polygon();
-  shape.setAsBox(1.0, 0.125);
+  var shape = pl.Box(1.0, 0.125);
 
   var fd;
   fd.density = 20.0;
@@ -79,8 +74,7 @@ planck.play('Cantilever', function(pl) {
     prevBody = body;
   }
 
-  var shape = pl.Polygon();
-  shape.setAsBox(0.5, 0.125);
+  var shape = pl.Box(0.5, 0.125);
 
   var fd = {};
   fd.density = 20.0;
@@ -103,8 +97,7 @@ planck.play('Cantilever', function(pl) {
     prevBody = body;
   }
 
-  var shape = new pl.Polygon();
-  shape.setAsBox(0.5, 0.125);
+  var shape = new pl.Box(0.5, 0.125);
 
   var fd = {};
   fd.shape = shape;
@@ -136,8 +129,7 @@ planck.play('Cantilever', function(pl) {
     vertices[1] = Vec2(0.5, 0.0);
     vertices[2] = Vec2(0.0, 1.5);
 
-    var shape = new pl.Polygon();
-    shape.set(vertices, 3);
+    var shape = new pl.Polygon(vertices);
 
     var fd = {};
     fd.density = 1.0;

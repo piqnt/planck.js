@@ -26,25 +26,25 @@ planck.play('VaryingFriction', function(pl) {
   world.createBody({
     position : Vec2(-4.0, 22.0),
     angle : -0.25
-  }).createFixture(pl.Polygon().setAsBox(13.0, 0.25), 0.0);
+  }).createFixture(pl.Box(13.0, 0.25), 0.0);
 
   world.createBody({
     position : Vec2(10.5, 19.0)
-  }).createFixture(pl.Polygon().setAsBox(0.25, 1.0), 0.0);
+  }).createFixture(pl.Box(0.25, 1.0), 0.0);
 
   world.createBody({
     position : Vec2(4.0, 14.0),
     angle : 0.25
-  }).createFixture(pl.Polygon().setAsBox(13.0, 0.25), 0.0);
+  }).createFixture(pl.Box(13.0, 0.25), 0.0);
 
   world.createBody({
     position : Vec2(-10.5, 11.0)
-  }).createFixture(pl.Polygon().setAsBox(0.25, 1.0), 0.0);
+  }).createFixture(pl.Box(0.25, 1.0), 0.0);
 
   world.createBody({
     position : Vec2(-4.0, 6.0),
     angle : -0.25
-  }).createFixture(pl.Polygon().setAsBox(13.0, 0.25), 0.0);
+  }).createFixture(pl.Box(13.0, 0.25), 0.0);
 
   var friction = [ 0.75, 0.5, 0.35, 0.1, 0.0 ];
 
@@ -54,7 +54,7 @@ planck.play('VaryingFriction', function(pl) {
   var fd = {};
   fd.density = 25.0;
 
-  var circle = pl.Polygon().setAsBox(0.5, 0.5);
+  var circle = pl.Box(0.5, 0.5);
 
   for (var i = 0; i < friction.length; ++i) {
     bd.position = Vec2(-15.0 + 4.0 * i, 28.0);

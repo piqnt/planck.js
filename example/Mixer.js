@@ -23,12 +23,12 @@ planck.play('Mixer', function(pl, opts) {
   opts.pin.handleY = -0.5;
 
   var box = world.createBody().setKinematic();
-  box.createFixture(pl.Edge().set(Vec2(15, -5), Vec2(25, 5)));
+  box.createFixture(pl.Edge(Vec2(15, -5), Vec2(25, 5)));
 
-  box.createFixture(pl.Edge().set(Vec2(-20, -20), Vec2(20, -20)));
-  box.createFixture(pl.Edge().set(Vec2(-20, 20), Vec2(20, 20)));
-  box.createFixture(pl.Edge().set(Vec2(-20, -20), Vec2(-20, 20)));
-  box.createFixture(pl.Edge().set(Vec2(20, -20), Vec2(20, 20)));
+  box.createFixture(pl.Edge(Vec2(-20, -20), Vec2(20, -20)));
+  box.createFixture(pl.Edge(Vec2(-20, 20), Vec2(20, 20)));
+  box.createFixture(pl.Edge(Vec2(-20, -20), Vec2(-20, 20)));
+  box.createFixture(pl.Edge(Vec2(20, -20), Vec2(20, 20)));
 
   for (var i = -5; i <= 5; i++) {
     for (var j = -5; j <= 5; j++) {

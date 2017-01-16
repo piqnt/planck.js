@@ -28,7 +28,7 @@ planck.play('BasicSliderCrank', function(pl) {
 
   // Define crank.
   {
-    var shape = pl.Polygon().setAsBox(4.0, 1.0);
+    var shape = pl.Box(4.0, 1.0);
 
     var body = world.createBody({
       type : 'dynamic',
@@ -43,7 +43,7 @@ planck.play('BasicSliderCrank', function(pl) {
 
   // Define connecting rod
   {
-    var shape = pl.Polygon().setAsBox(8.0, 1.0);
+    var shape = pl.Box(8.0, 1.0);
 
     var body = world.createBody({
       type : 'dynamic',
@@ -58,7 +58,7 @@ planck.play('BasicSliderCrank', function(pl) {
 
   // Define piston
   {
-    var shape = pl.Polygon().setAsBox(3.0, 3.0);
+    var shape = pl.Box(3.0, 3.0);
 
     var body = world.createBody({
       type : 'dynamic',

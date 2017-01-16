@@ -1,5 +1,3 @@
-immutable shapes, no cloning
-
 test TOI
 raycasting
 complete examples and drawing joints, etc.

@@ -33,10 +33,10 @@ planck.play('Tumbler', function(pl) {
 
   var body = world.createBody(bd);
 
-  body.createFixture(pl.Polygon().setAsBox(0.5, 10, Vec2(10, 0), 0), 5);
-  body.createFixture(pl.Polygon().setAsBox(0.5, 10, Vec2(-10, 0), 0), 5);
-  body.createFixture(pl.Polygon().setAsBox(10, 0.5, Vec2(0, 10), 0), 5);
-  body.createFixture(pl.Polygon().setAsBox(10, 0.5, Vec2(0, -10), 0), 5);
+  body.createFixture(pl.Box(0.5, 10, Vec2(10, 0), 0), 5);
+  body.createFixture(pl.Box(0.5, 10, Vec2(-10, 0), 0), 5);
+  body.createFixture(pl.Box(10, 0.5, Vec2(0, 10), 0), 5);
+  body.createFixture(pl.Box(10, 0.5, Vec2(0, -10), 0), 5);
 
   var jd = {};
   jd.motorSpeed = 0.05 * Math.PI;
@@ -46,7 +46,7 @@ planck.play('Tumbler', function(pl) {
 
   var bd = {};
   bd.type = 'dynamic';
-  var shape = pl.Polygon().setAsBox(0.125, 0.125);
+  var shape = pl.Box(0.125, 0.125);
   while (count < COUNT) {
     var body = world.createBody(bd);
     body.setPosition(Vec2(0, 10));

@@ -276,8 +276,8 @@ planck.play('Breakout', function(pl, opts) {
     var dropFix = {filterCategoryBits: DROP, filterMaskBits: PADDLE | WALL};
 
     var ballShape = pl.Circle(0.5);
-    var normalBrickShape = pl.Polygon().setAsBox(1.9 / 2, 1.9 / 2);
-    var smallBrickShape = pl.Polygon().setAsBox(0.9 / 2, 0.9 / 2);
+    var normalBrickShape = pl.Box(1.9 / 2, 1.9 / 2);
+    var smallBrickShape = pl.Box(0.9 / 2, 0.9 / 2);
 
     var fullPaddleShape = pl.Polygon([
       Vec2(1.7, -0.2),
@@ -401,10 +401,10 @@ planck.play('Breakout', function(pl, opts) {
     function createDrop(type) {
       var body = world.createDynamicBody();
       if (type == '+') {
-        body.createFixture(pl.Polygon().setAsBox(0.08, 0.32), dropFix);
-        body.createFixture(pl.Polygon().setAsBox(0.32, 0.08), dropFix);
+        body.createFixture(pl.Box(0.08, 0.32), dropFix);
+        body.createFixture(pl.Box(0.32, 0.08), dropFix);
       } else if (type == '-') {
-        body.createFixture(pl.Polygon().setAsBox(0.3, 0.1), dropFix);
+        body.createFixture(pl.Box(0.3, 0.1), dropFix);
       } else {
         body.createFixture(pl.Circle(0.3), dropFix);
       }

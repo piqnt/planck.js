@@ -48,7 +48,7 @@ planck.play('Theo Jansen\'s Walker', function (pl, opts) {
     type: 'dynamic',
     position: Vec2.add(pivot, offset)
   });
-  chassis.createFixture(pl.Polygon().setAsBox(2.5, 1.0), {
+  chassis.createFixture(pl.Box(2.5, 1.0), {
     density: 1.0,
     filterGroupIndex: -1
   });

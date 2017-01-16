@@ -22,59 +22,47 @@ planck.play('SensorTest', function(pl) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  var e_count = 7
-  {
-    var /* BodyDef */bd;
-    var /* Body */ground = world.createBody(bd);
+  var e_count = 7;
 
-    {
-      var /* EdgeShape */shape;
-      shape.set(Vec2(-40.0, 0.0), Vec2(40.0, 0.0));
-      ground.createFixture(shape, 0.0);
-    }
+  var m_sensor;
+  var m_bodies = []; //[ e_count ];
+  var m_touching = []; //[ e_count ];
 
-    if (0) {
-      {
-        var /* FixtureDef */sd;
-        sd.setAsBox(10.0, 2.0, Vec2(0.0, 20.0), 0.0);
-        sd.isSensor = true;
-        m_sensor = ground.createFixture(sd);
-      }
-    } else {
-      {
-        var /* CircleShape */shape;
-        shape.m_radius = 5.0;
-        shape.m_p.set(0.0, 10.0);
+  var ground = world.createBody(bd);
+  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
-        var /* FixtureDef */fd;
-        fd.shape = shape;
-        fd.isSensor = true;
-        m_sensor = ground.createFixture(fd);
-      }
-    }
+  if (0) {
+    var sd = {};
+    sd.shape = pl.Box(10.0, 2.0, Vec2(0.0, 20.0), 0.0);
+    sd.isSensor = true;
+    m_sensor = ground.createFixture(sd);
+  } else {
+    var shape = pl.Circle(Vec2(0.0, 10.0), 5.0);
+
+    var fd = {};
+    fd.shape = shape;
+    fd.isSensor = true;
+    m_sensor = ground.createFixture(fd);
   }
 
-  {
-    var /* CircleShape */shape;
-    shape.m_radius = 1.0;
+  var shape = pl.Circle(1.0);
 
-    for (var /* int32 */i = 0; i < e_count; ++i) {
-      var /* BodyDef */bd;
-      bd.type = 'dynamic';
-      bd.position.set(-10.0 + 3.0 * i, 20.0);
-      bd.userData = m_touching + i;
+  for (var i = 0; i < e_count; ++i) {
+    var bd = {};
+    bd.type = 'dynamic';
+    bd.position = Vec2(-10.0 + 3.0 * i, 20.0);
+    bd.userData = m_touching + i;
 
-      m_touching[i] = false;
-      m_bodies[i] = world.createBody(bd);
+    m_touching[i] = false;
+    m_bodies[i] = world.createBody(bd);
 
-      m_bodies[i].createFixture(shape, 1.0);
-    }
+    m_bodies[i].createFixture(shape, 1.0);
   }
 
   // Implement contact listener.
-  function BeginContact(/* Contact */contact) {
-    var /* Fixture */fixtureA = contact.getFixtureA();
-    var /* Fixture */fixtureB = contact.getFixtureB();
+  function BeginContact(contact) {
+    var fixtureA = contact.getFixtureA();
+    var fixtureB = contact.getFixtureB();
 
     if (fixtureA == m_sensor) {
       userData = fixtureB.getBody().getUserData();
@@ -98,10 +86,9 @@ planck.play('SensorTest', function(pl) {
   }
 
   // Implement contact listener.
-  EndContact( /* Contact */contact)
-  {
-    var /* Fixture */fixtureA = contact.getFixtureA();
-    var /* Fixture */fixtureB = contact.getFixtureB();
+  function EndContact(contact) {
+    var fixtureA = contact.getFixtureA();
+    var fixtureB = contact.getFixtureB();
 
     if (fixtureA == m_sensor) {
       userData = fixtureB.getBody().getUserData();
@@ -134,13 +121,13 @@ planck.play('SensorTest', function(pl) {
         continue;
       }
 
-      var /* Body */body = m_bodies[i];
-      var /* Body */ground = m_sensor.getBody();
+      var body = m_bodies[i];
+      var ground = m_sensor.getBody();
 
-      var /* CircleShape */circle = /* CircleShape */m_sensor.getShape();
-      var /* Vec2 */center = ground.getWorldPoint(circle.m_p);
+      var circle = m_sensor.getShape();
+      var center = ground.getWorldPoint(circle.m_p);
 
-      var /* Vec2 */position = body.getPosition();
+      var position = body.getPosition();
 
       var /* Vec2 */d = center - position;
       if (d.lengthSquared() < FLT_EPSILON * FLT_EPSILON) {
@@ -152,12 +139,6 @@ planck.play('SensorTest', function(pl) {
       body.applyForce(F, position, false);
     }
   }
-
-  var /* Fixture */m_sensor;
-  var /* Body */m_bodies
-  [ e_count ];
-  var /* bool */m_touching
-  [ e_count ];
 
   return world;
 });

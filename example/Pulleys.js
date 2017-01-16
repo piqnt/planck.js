@@ -28,21 +28,12 @@ planck.play('Pulleys', function(pl) {
 
   var ground = world.createBody();
 
-  var edge = pl.Edge();
-  edge.set(Vec2(-40.0, 0.0), Vec2(40.0, 0.0));
-  // ground.createFixture(shape, 0.0);
+  // ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
-  var circle = pl.Circle();
-  circle.m_radius = 2.0;
+  ground.createFixture(pl.Circle(Vec2(-10.0, y + b + L), 2.0), 0.0);
+  ground.createFixture(pl.Circle(Vec2(10.0, y + b + L), 2.0), 0.0);
 
-  circle.m_p.set(-10.0, y + b + L);
-  ground.createFixture(circle, 0.0);
-
-  circle.m_p.set(10.0, y + b + L);
-  ground.createFixture(circle, 0.0);
-
-  var shape = pl.Polygon();
-  shape.setAsBox(a, b);
+  var shape = pl.Box(a, b);
 
   var bd = {};
   bd.type = 'dynamic';

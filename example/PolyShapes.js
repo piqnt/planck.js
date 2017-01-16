@@ -188,6 +188,11 @@ planck.play('PolyShapes', function(pl) {
   // yellow border.
   function PolyShapesCallback() { // extends queryCallback
 
+    var /* CircleShape */m_circle;
+    var /* Transform */m_transform;
+    var /* Draw */g_debugDraw;
+    var /* int32 */m_count;
+
     var e_maxCount = 4;
     var m_count = 0;
 
@@ -243,11 +248,6 @@ planck.play('PolyShapes', function(pl) {
 
       return true;
     }
-
-    var /* CircleShape */m_circle;
-    var /* Transform */m_transform;
-    var /* Draw */g_debugDraw;
-    var /* int32 */m_count;
   }
 
   return world;

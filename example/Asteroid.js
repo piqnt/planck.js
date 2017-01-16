@@ -197,7 +197,7 @@ planck.play('Asteroid', function(pl, opts) {
   function addAsteroids() {
     while (asteroidBodies.length) {
       var asteroidBody = asteroidBodies.shift();
-      world.removeBody(asteroidBody);
+      world.destroyBody(asteroidBody);
       // asteroidBody.uiRemove();
     }
 
@@ -246,7 +246,7 @@ planck.play('Asteroid', function(pl, opts) {
       path.push(Vec2(x, y));
     }
 
-    asteroidBody.createFixture(pl.Polygon(path),{
+    asteroidBody.createFixture(pl.Polygon(path), {
       filterCategoryBits : ASTEROID,
       filterMaskBits : BULLET | SHIP
     });

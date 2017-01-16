@@ -47,7 +47,7 @@ planck.play('Mobile', function(pl) {
       position : Vec2.add(parent.getPosition(), localAnchor).sub(h)
     });
 
-    body.createFixture(pl.Polygon().setAsBox(0.25 * a, a), DENSITY);
+    body.createFixture(pl.Box(0.25 * a, a), DENSITY);
 
     if (depth == DEPTH) {
       return body;

@@ -31,12 +31,7 @@ planck.play('RopeJoint', function(pl) {
 
   var ground = world.createBody();
 
-  var shape = pl.Edge();
-  shape.set(Vec2(-40.0, 0.0), Vec2(40.0, 0.0));
-  ground.createFixture(shape, 0.0);
-
-  var shape = pl.Polygon();
-  shape.setAsBox(0.5, 0.125);
+  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
   var fd = {};
   fd.density = 20.0;
@@ -52,11 +47,12 @@ planck.play('RopeJoint', function(pl) {
 
   var prevBody = ground;
   for (var i = 0; i < N; ++i) {
+    var shape = pl.Box(0.5, 0.125);
     var bd = {};
     bd.type = 'dynamic';
     bd.position = Vec2(0.5 + 1.0 * i, y);
     if (i == N - 1) {
-      shape.setAsBox(1.5, 1.5);
+      shape = pl.Box(1.5, 1.5);
       fd.density = 100.0;
       fd.filterCategoryBits = 0x0002;
       bd.position = Vec2(1.0 * i, y);

@@ -23,7 +23,7 @@ planck.play('ConvexHull', function(pl) {
 
   var e_count = 8;
   var m_auto = false;
-  var m_points = [];
+  var points = [];
 
   var body = world.createBody();
 
@@ -40,10 +40,10 @@ planck.play('ConvexHull', function(pl) {
       // Clamp onto a square to help create collinearities.
       // This will stress the convex hull algorithm.
       var v = Vec2.clamp(Vec2(x, y), lowerBound, upperBound);
-      m_points.push(v);
+      points.push(v);
     }
 
-    var shape = pl.Polygon(m_points);
+    var shape = pl.Polygon(points);
 
     body.createFixture(shape);
   }
@@ -70,8 +70,8 @@ planck.play('ConvexHull', function(pl) {
         0.9));
 
     for (var i = 0; i < m_count; ++i) {
-      g_debugDraw.DrawPoint(m_points[i], 3.0, Color(0.3, 0.9, 0.3));
-      g_debugDraw.DrawString(m_points[i] + Vec2(0.05, 0.05), "%d", i);
+      g_debugDraw.DrawPoint(points[i], 3.0, Color(0.3, 0.9, 0.3));
+      g_debugDraw.DrawString(points[i] + Vec2(0.05, 0.05), "%d", i);
     }
 
     if (shape.validate() == false) {

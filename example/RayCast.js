@@ -21,15 +21,13 @@
 // NOTE: we are intentionally filtering one of the polygons, therefore
 // the ray will always miss one type of polygon.
 // This callback finds the closest hit. Polygon 0 is filtered.
-function RayCastClosestCallback()// extends rayCastCallback
-{
-  {
-    m_hit = false;
-  }
+function RayCastClosestCallback() { // extends rayCastCallback
+  var m_hit = false;
+  var /* Vec2 */m_point;
+  var /* Vec2 */m_normal;
 
-  function /* float32 */ReportFixture(/* Fixture */fixture, /* const *//* Vec2& */
-  point, /* const *//* Vec2& */normal, /* float32 */fraction) {
-    var /* Body */body = fixture.getBody();
+  function ReportFixture(fixture, /* Vec2& */point, /* Vec2& */normal, fraction) {
+    var body = fixture.getBody();
     userData = body.getUserData();
     if (userData) {
       var /* int32 */index = userData;
@@ -42,7 +40,7 @@ function RayCastClosestCallback()// extends rayCastCallback
     }
 
     m_hit = true;
-    m_povar /* int */= point;
+    m_povar /* int */ = point;
     m_normal = normal;
 
     // By returning the current fraction, we instruct the calling code to clip
@@ -53,25 +51,19 @@ function RayCastClosestCallback()// extends rayCastCallback
     // closest fixture.
     return fraction;
   }
-
-  var /* bool */m_hit;
-  var /* Vec2 */m_point;
-  var /* Vec2 */m_normal;
-};
+}
 
 // This callback finds any hit. Polygon 0 is filtered. For this type of query we
 // are usually
 // just checking for obstruction, so the actual fixture and hit povar /*int*/
 // are irrelevant.
-function RayCastAnyCallback() // extends rayCastCallback
-{
-  {
-    m_hit = false;
-  }
+function RayCastAnyCallback() { // extends rayCastCallback
+  var m_hit = false;
+  var /* Vec2 */m_point;
+  var /* Vec2 */m_normal;
 
-  function /* float32 */ReportFixture(/* Fixture */fixture, /* const *//* Vec2& */
-  point, /* const *//* Vec2& */normal, /* float32 */fraction) {
-    var /* Body */body = fixture.getBody();
+  function ReportFixture(fixture, /* Vec2& */point, /* Vec2& */normal, fraction) {
+    var body = fixture.getBody();
     userData = body.getUserData();
     if (userData) {
       var /* int32 */index = userData;
@@ -83,33 +75,30 @@ function RayCastAnyCallback() // extends rayCastCallback
     }
 
     m_hit = true;
-    m_povar /* int */= point;
+    m_povar /* int */ = point;
     m_normal = normal;
 
     // At this povar /*int*/ we have a hit, so we know the ray is obstructed.
     // By returning 0, we instruct the calling code to terminate the ray-cast.
     return 0.0;
   }
-
-  var /* bool */m_hit;
-  var /* Vec2 */m_point;
-  var /* Vec2 */m_normal;
-};
+}
 
 // This ray cast collects multiple hits along the ray. Polygon 0 is filtered.
 // The fixtures are not necessary reported in order, so we might not capture
 // the closest fixture.
-function RayCastMultipleCallback() // extends rayCastCallback
-{
-  e_maxCount = 3
-  m_count = 0;
+function RayCastMultipleCallback() { // extends rayCastCallback
+  var e_maxCount = 3;
 
-  function /* float32 */ReportFixture(/* Fixture */fixture, /* const *//* Vec2& */
-  point, /* const *//* Vec2& */normal, /* float32 */fraction) {
-    var /* Body */body = fixture.getBody();
+  var m_points = []; //Vec2[e_maxCount]
+  var m_normals = []; //Vec2[e_maxCount]
+  var m_count = 0;
+
+  function ReportFixture(fixture, /* Vec2& */point, /* Vec2& */normal, fraction) {
+    var body = fixture.getBody();
     userData = body.getUserData();
     if (userData) {
-      var /* int32 */index = userData;
+      var index = userData;
       if (index == 0) {
         // By returning -1, we instruct the calling code to ignore this fixture
         // and continue the ray-cast to the next fixture.
@@ -133,292 +122,258 @@ function RayCastMultipleCallback() // extends rayCastCallback
     // ray.
     return 1.0;
   }
+}
 
-  var /* Vec2 */m_points
-  [ e_maxCount ];
-  var /* Vec2 */m_normals
-  [ e_maxCount ];
-  var /* int32 */m_count;
-};
+planck.play('Ray-Cast', function(pl) {
 
-planck.play('Ray-Cast',
-    function(pl) {
+  var e_maxBodies = 256;
 
-      e_maxBodies = 256
+  var e_closest, e_any, e_multiple;
 
-      e_closest, e_any, e_multiple
-      // Ground body
+  var m_bodyIndex;
+  var m_bodies = []; // [ e_maxBodies ];
+  var m_userData = []; //[ e_maxBodies ];
+  var m_polygons = []; // [ 4 ];
+  var m_circle;
+  var m_edge;
 
-      var /* BodyDef */bd;
-      var /* Body */ground = world.createBody(bd);
+  var m_angle;
+  var m_mode;
 
-      var /* EdgeShape */shape;
-      shape.set(Vec2(-40.0, 0.0), Vec2(40.0, 0.0));
-      ground.createFixture(shape, 0.0);
+  // Ground body
+  var ground = world.createBody();
 
-      var /* Vec2 */vertices
-      [ 3 ];
-      vertices[0].set(-0.5, 0.0);
-      vertices[1].set(0.5, 0.0);
-      vertices[2].set(0.0, 1.5);
-      m_polygons[0].set(vertices, 3);
+  var shape = pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0));
+  ground.createFixture(shape, 0.0);
 
-      var /* Vec2 */vertices
-      [ 3 ];
-      vertices[0].set(-0.1, 0.0);
-      vertices[1].set(0.1, 0.0);
-      vertices[2].set(0.0, 1.5);
-      m_polygons[1].set(vertices, 3);
+  var vertices = [];
+  vertices[0] = Vec2(-0.5, 0.0);
+  vertices[1] = Vec2(0.5, 0.0);
+  vertices[2] = Vec2(0.0, 1.5);
+  m_polygons[0] = pl.Polygon(vertices);
 
-      var /* float32 */w = 1.0;
-      var /* float32 */b = w / (2.0 + Sqrt(2.0));
-      var /* float32 */s = Sqrt(2.0) * b;
+  var vertices = [];
+  vertices[0] = Vec2(-0.1, 0.0);
+  vertices[1] = Vec2(0.1, 0.0);
+  vertices[2] = Vec2(0.0, 1.5);
+  m_polygons[1] = pl.Polygon(vertices, 3);
 
-      var /* Vec2 */vertices
-      [ 8 ];
-      vertices[0].set(0.5 * s, 0.0);
-      vertices[1].set(0.5 * w, b);
-      vertices[2].set(0.5 * w, b + s);
-      vertices[3].set(0.5 * s, w);
-      vertices[4].set(-0.5 * s, w);
-      vertices[5].set(-0.5 * w, b + s);
-      vertices[6].set(-0.5 * w, b);
-      vertices[7].set(-0.5 * s, 0.0);
+  var w = 1.0;
+  var b = w / (2.0 + Math.sqrt(2.0));
+  var s = Math.sqrt(2.0) * b;
 
-      m_polygons[2].set(vertices, 8);
+  var vertices = [];
+  vertices[0] = Vec2(0.5 * s, 0.0);
+  vertices[1] = Vec2(0.5 * w, b);
+  vertices[2] = Vec2(0.5 * w, b + s);
+  vertices[3] = Vec2(0.5 * s, w);
+  vertices[4] = Vec2(-0.5 * s, w);
+  vertices[5] = Vec2(-0.5 * w, b + s);
+  vertices[6] = Vec2(-0.5 * w, b);
+  vertices[7] = Vec2(-0.5 * s, 0.0);
 
-      m_polygons[3].setAsBox(0.5, 0.5);
+  m_polygons[2] = pl.Polygon(vertices, 8);
 
-      m_circle.m_radius = 0.5;
+  m_polygons[3] = pl.Box(0.5, 0.5);
 
-      m_edge.set(Vec2(-1.0, 0.0), Vec2(1.0, 0.0));
+  m_circle = pl.Circle(0.5);
 
-      m_bodyIndex = 0;
-      memset(m_bodies, 0, sizeof(m_bodies));
+  m_edge = pl.Edge(Vec2(-1.0, 0.0), Vec2(1.0, 0.0));
 
-      m_angle = 0.0;
+  m_bodyIndex = 0;
 
-      m_mode = e_closest;
+  m_angle = 0.0;
 
-      function Create(/* int32 */index) {
-        if (m_bodies[m_bodyIndex] != null) {
-          world.destroyBody(m_bodies[m_bodyIndex]);
-          m_bodies[m_bodyIndex] = null;
-        }
+  m_mode = e_closest;
 
-        var /* BodyDef */bd;
+  function Create(index) {
+    if (m_bodies[m_bodyIndex] != null) {
+      world.destroyBody(m_bodies[m_bodyIndex]);
+      m_bodies[m_bodyIndex] = null;
+    }
 
-        var /* float32 */x = RandomFloat(-10.0, 10.0);
-        var /* float32 */y = RandomFloat(0.0, 20.0);
-        bd.position.set(x, y);
-        bd.angle = RandomFloat(-Math.PI, Math.PI);
+    var bd = {};
 
-        m_userData[m_bodyIndex] = index;
-        bd.userData = m_userData + m_bodyIndex;
+    var x = RandomFloat(-10.0, 10.0);
+    var y = RandomFloat(0.0, 20.0);
+    bd.position = Vec2(x, y);
+    bd.angle = RandomFloat(-Math.PI, Math.PI);
 
-        if (index == 4) {
-          bd.angularDamping = 0.02;
-        }
+    m_userData[m_bodyIndex] = index;
+    bd.userData = m_userData + m_bodyIndex;
 
-        m_bodies[m_bodyIndex] = world.createBody(bd);
+    if (index == 4) {
+      bd.angularDamping = 0.02;
+    }
 
-        if (index < 4) {
-          var /* FixtureDef */fd;
-          fd.shape = m_polygons + index;
-          fd.friction = 0.3;
-          m_bodies[m_bodyIndex].createFixture(fd);
-        } else if (index < 5) {
-          var /* FixtureDef */fd;
-          fd.shape = m_circle;
-          fd.friction = 0.3;
+    m_bodies[m_bodyIndex] = world.createBody(bd);
 
-          m_bodies[m_bodyIndex].createFixture(fd);
-        } else {
-          var /* FixtureDef */fd;
-          fd.shape = m_edge;
-          fd.friction = 0.3;
+    if (index < 4) {
+      var fd = {};
+      fd.shape = m_polygons + index;
+      fd.friction = 0.3;
+      m_bodies[m_bodyIndex].createFixture(fd);
 
-          m_bodies[m_bodyIndex].createFixture(fd);
-        }
+    } else if (index < 5) {
+      var fd = {};
+      fd.shape = m_circle;
+      fd.friction = 0.3;
+      m_bodies[m_bodyIndex].createFixture(fd);
 
-        m_bodyIndex = (m_bodyIndex + 1) % e_maxBodies;
+    } else {
+      var fd = {};
+      fd.shape = m_edge;
+      fd.friction = 0.3;
+      m_bodies[m_bodyIndex].createFixture(fd);
+    }
+
+    m_bodyIndex = (m_bodyIndex + 1) % e_maxBodies;
+  }
+
+  function DestroyBody() {
+    for (var i = 0; i < e_maxBodies; ++i) {
+      if (m_bodies[i] != null) {
+        world.destroyBody(m_bodies[i]);
+        m_bodies[i] = null;
+        return;
       }
+    }
+  }
 
-      function DestroyBody() {
-        for (var /* int32 */i = 0; i < e_maxBodies; ++i) {
-          if (m_bodies[i] != null) {
-            world.destroyBody(m_bodies[i]);
-            m_bodies[i] = null;
-            return;
-          }
-        }
-      }
+  function Keyboard(key) {
+    switch (key) {
+      case GLFW_KEY_1:
+      case GLFW_KEY_2:
+      case GLFW_KEY_3:
+      case GLFW_KEY_4:
+      case GLFW_KEY_5:
+      case GLFW_KEY_6:
+        Create(key - GLFW_KEY_1);
+        break;
 
-      function Keyboard( /* int */key) {
-        switch (key) {
-        case GLFW_KEY_1:
-        case GLFW_KEY_2:
-        case GLFW_KEY_3:
-        case GLFW_KEY_4:
-        case GLFW_KEY_5:
-        case GLFW_KEY_6:
-          Create(key - GLFW_KEY_1);
-          break;
+      case GLFW_KEY_D:
+        DestroyBody();
+        break;
 
-        case GLFW_KEY_D:
-          DestroyBody();
-          break;
-
-        case GLFW_KEY_M:
-          if (m_mode == e_closest) {
-            m_mode = e_any;
-          } else if (m_mode == e_any) {
-            m_mode = e_multiple;
-          } else if (m_mode == e_multiple) {
-            m_mode = e_closest;
-          }
-        }
-      }
-
-      function Step(settings) {
-        var /* bool */advanceRay = settings.pause == 0 || settings.singleStep;
-
-        Test.step(settings);
-        g_debugDraw.DrawString(5, m_textLine,
-            "Press 1-6 to drop stuff, m to change the mode");
-        m_textLine += DRAW_STRING_NEW_LINE;
-        switch (m_mode) {
-        case e_closest:
-          g_debugDraw.DrawString(5, m_textLine,
-              "Ray-cast mode: closest - find closest fixture along the ray");
-          break;
-
-        case e_any:
-          g_debugDraw.DrawString(5, m_textLine,
-              "Ray-cast mode: any - check for obstruction");
-          break;
-
-        case e_multiple:
-          g_debugDraw.DrawString(5, m_textLine,
-              "Ray-cast mode: multiple - gather multiple fixtures");
-          break;
-        }
-
-        m_textLine += DRAW_STRING_NEW_LINE;
-
-        var /* float32 */L = 11.0;
-        var point1 = Vec2(0.0, 10.0);
-        var d = Vec2(L * cosf(m_angle), L * sinf(m_angle));
-        var point2 = Vec2.add(point1, d);
-
+      case GLFW_KEY_M:
         if (m_mode == e_closest) {
-          RayCastClosestCallback
-          callback;
-          world.rayCast(callback, point1, point2);
-
-          if (callback.m_hit) {
-            g_debugDraw.DrawPoint(callback.m_point, 5.0, Color(0.4, 0.9, 0.4));
-            g_debugDraw.DrawSegment(point1, callback.m_point, Color(0.8, 0.8,
-                0.8));
-            var /* Vec2 */head = callback.m_povar /* int */+ 0.5
-                * callback.m_normal;
-            g_debugDraw.DrawSegment(callback.m_point, head,
-                Color(0.9, 0.9, 0.4));
-          } else {
-            g_debugDraw.DrawSegment(point1, point2, Color(0.8, 0.8, 0.8));
-          }
+          m_mode = e_any;
         } else if (m_mode == e_any) {
-          RayCastAnyCallback
-          callback;
-          world.rayCast(callback, point1, point2);
-
-          if (callback.m_hit) {
-            g_debugDraw.DrawPoint(callback.m_point, 5.0, Color(0.4, 0.9, 0.4));
-            g_debugDraw.DrawSegment(point1, callback.m_point, Color(0.8, 0.8,
-                0.8));
-            var /* Vec2 */head = callback.m_povar /* int */+ 0.5
-                * callback.m_normal;
-            g_debugDraw.DrawSegment(callback.m_point, head,
-                Color(0.9, 0.9, 0.4));
-          } else {
-            g_debugDraw.DrawSegment(point1, point2, Color(0.8, 0.8, 0.8));
-          }
+          m_mode = e_multiple;
         } else if (m_mode == e_multiple) {
-          RayCastMultipleCallback
-          callback;
-          world.rayCast(callback, point1, point2);
-          g_debugDraw.DrawSegment(point1, point2, Color(0.8, 0.8, 0.8));
-
-          for (var /* int32 */i = 0; i < callback.m_count; ++i) {
-            var /* Vec2 */p = callback.m_points[i];
-            var /* Vec2 */n = callback.m_normals[i];
-            g_debugDraw.DrawPoint(p, 5.0, Color(0.4, 0.9, 0.4));
-            g_debugDraw.DrawSegment(point1, p, Color(0.8, 0.8, 0.8));
-            var /* Vec2 */head = p + 0.5 * n;
-            g_debugDraw.DrawSegment(p, head, Color(0.9, 0.9, 0.4));
-          }
+          m_mode = e_closest;
         }
+    }
+  }
 
-        if (advanceRay) {
-          m_angle += 0.25 * Math.PI / 180.0;
-        }
+  function Step(settings) {
+    var /* bool */advanceRay = settings.pause == 0 || settings.singleStep;
 
-        if (0) {
-          // This case was failing.
-          {
-            var /* Vec2 */vertices
-            [ 4 ];
-            // vertices[0].set(-22.875, -3.0);
-            // vertices[1].set(22.875, -3.0);
-            // vertices[2].set(22.875, 3.0);
-            // vertices[3].set(-22.875, 3.0);
+    Test.step(settings);
+    g_debugDraw.DrawString(5, m_textLine,
+      "Press 1-6 to drop stuff, m to change the mode");
+    m_textLine += DRAW_STRING_NEW_LINE;
+    switch (m_mode) {
+      case e_closest:
+        g_debugDraw.DrawString(5, m_textLine,
+          "Ray-cast mode: closest - find closest fixture along the ray");
+        break;
 
-            var /* PolygonShape */shape;
-            // shape.set(vertices, 4);
-            shape.setAsBox(22.875, 3.0);
+      case e_any:
+        g_debugDraw.DrawString(5, m_textLine,
+          "Ray-cast mode: any - check for obstruction");
+        break;
 
-            var /* RayCastInput */input;
-            input.p1.set(10.2725, 1.71372);
-            input.p2.set(10.2353, 2.21807);
-            // input.maxFraction = 0.567623;
-            input.maxFraction = 0.56762173;
+      case e_multiple:
+        g_debugDraw.DrawString(5, m_textLine,
+          "Ray-cast mode: multiple - gather multiple fixtures");
+        break;
+    }
 
-            var /* Transform */xf;
-            xf.setIdentity();
-            xf.position.set(23.0, 5.0);
+    m_textLine += DRAW_STRING_NEW_LINE;
 
-            var /* RayCastOutput */output;
-            var /* bool */hit;
-            hit = shape.rayCast(output, input, xf);
-            hit = false;
+    var L = 11.0;
+    var point1 = Vec2(0.0, 10.0);
+    var d = Vec2(L * cosf(m_angle), L * sinf(m_angle));
+    var point2 = Vec2.add(point1, d);
 
-            var color = Color(1.0, 1.0, 1.0);
-            var /* Vec2 */vs
-            [ 4 ];
-            for (var /* int32 */i = 0; i < 4; ++i) {
-              vs[i] = Mul(xf, shape.m_vertices[i]);
-            }
+    if (m_mode == e_closest) {
+      var callback = RayCastClosestCallback;
+      world.rayCast(callback, point1, point2);
 
-            g_debugDraw.DrawPolygon(vs, 4, color);
-            g_debugDraw.DrawSegment(input.p1, input.p2, color);
-          }
-        }
+      if (callback.m_hit) {
+        g_debugDraw.DrawPoint(callback.m_point, 5.0, Color(0.4, 0.9, 0.4));
+        g_debugDraw.DrawSegment(point1, callback.m_point, Color(0.8, 0.8,
+          0.8));
+        var /* Vec2 */head = callback.m_povar /* int */ + 0.5
+          * callback.m_normal;
+        g_debugDraw.DrawSegment(callback.m_point, head,
+          Color(0.9, 0.9, 0.4));
+      } else {
+        g_debugDraw.DrawSegment(point1, point2, Color(0.8, 0.8, 0.8));
+      }
+    } else if (m_mode == e_any) {
+      var callback = RayCastAnyCallback;
+      world.rayCast(callback, point1, point2);
+
+      if (callback.m_hit) {
+        g_debugDraw.DrawPoint(callback.m_point, 5.0, Color(0.4, 0.9, 0.4));
+        g_debugDraw.DrawSegment(point1, callback.m_point, Color(0.8, 0.8,
+          0.8));
+        var /* Vec2 */head = callback.m_povar /* int */ + 0.5
+          * callback.m_normal;
+        g_debugDraw.DrawSegment(callback.m_point, head,
+          Color(0.9, 0.9, 0.4));
+      } else {
+        g_debugDraw.DrawSegment(point1, point2, Color(0.8, 0.8, 0.8));
+      }
+    } else if (m_mode == e_multiple) {
+      var callback = RayCastMultipleCallback;
+      world.rayCast(callback, point1, point2);
+      g_debugDraw.DrawSegment(point1, point2, Color(0.8, 0.8, 0.8));
+
+      for (var i = 0; i < callback.m_count; ++i) {
+        var /* Vec2 */p = callback.m_points[i];
+        var /* Vec2 */n = callback.m_normals[i];
+        g_debugDraw.DrawPoint(p, 5.0, Color(0.4, 0.9, 0.4));
+        g_debugDraw.DrawSegment(point1, p, Color(0.8, 0.8, 0.8));
+        var /* Vec2 */head = p + 0.5 * n;
+        g_debugDraw.DrawSegment(p, head, Color(0.9, 0.9, 0.4));
+      }
+    }
+
+    if (advanceRay) {
+      m_angle += 0.25 * Math.PI / 180.0;
+    }
+
+    if (0) {
+      // This case was failing.
+      var shape = pl.Box(22.875, 3.0);
+
+      var input = new RayCastInput();
+      input.p1.set(10.2725, 1.71372);
+      input.p2.set(10.2353, 2.21807);
+      // input.maxFraction = 0.567623;
+      input.maxFraction = 0.56762173;
+
+      var xf = pl.Transform();
+      xf.setIdentity();
+      xf.position.set(23.0, 5.0);
+
+      var output = new RayCastOutput();
+      var hit = shape.rayCast(output, input, xf);
+      hit = false;
+
+      var color = Color(1.0, 1.0, 1.0);
+      var vs = [];
+      for (var i = 0; i < 4; ++i) {
+        vs[i] = Mul(xf, shape.m_vertices[i]);
       }
 
-      var /* int32 */m_bodyIndex;
-      var /* Body */m_bodies
-      [ e_maxBodies ];
-      var /* int32 */m_userData
-      [ e_maxBodies ];
-      var /* PolygonShape */m_polygons
-      [ 4 ];
-      var /* CircleShape */m_circle;
-      var /* EdgeShape */m_edge;
+      g_debugDraw.DrawPolygon(vs, 4, color);
+      g_debugDraw.DrawSegment(input.p1, input.p2, color);
+    }
+  }
 
-      var /* float32 */m_angle;
-
-      var /* Mode */m_mode;
-
-      return world;
-
-    });
+  return world;
+});

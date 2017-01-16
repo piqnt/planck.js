@@ -24,9 +24,10 @@ planck.play('Gears', function(pl) {
   var ground = world.createBody();
   ground.createFixture(pl.Edge(Vec2(50.0, 0.0), Vec2(-50.0, 0.0)));
 
-  var circle1 = pl.Circle(1.0);
-  var circle2 = pl.Circle(2.0);
-  var box = pl.Polygon().setAsBox(0.5, 5.0);
+  var radius1 = 1.0, radius2 = 2.0;
+  var circle1 = pl.Circle(radius1);
+  var circle2 = pl.Circle(radius2);
+  var box = pl.Box(0.5, 5.0);
 
   var bd1 = {};
   bd1.type = 'static';
@@ -46,18 +47,14 @@ planck.play('Gears', function(pl) {
   var body3 = world.createBody(bd3);
   body3.createFixture(circle2, 5.0);
 
-  var joint1 = world.createJoint(pl.RevoluteJoint({}, body2, body1,
-      bd1.position));
+  var joint1 = world.createJoint(pl.RevoluteJoint({}, body2, body1, bd1.position));
+  var joint2 = world.createJoint(pl.RevoluteJoint({}, body2, body3, bd3.position));
 
-  var joint2 = world.createJoint(pl.RevoluteJoint({}, body2, body3,
-      bd3.position));
-
-  world.createJoint(pl.GearJoint({}, body1, body3, joint1, joint2,
-      circle2.m_radius / circle1.m_radius));
+  world.createJoint(pl.GearJoint({}, body1, body3, joint1, joint2, radius2 / radius1));
 
   var circle1 = pl.Circle(1.0);
   var circle2 = pl.Circle(2.0);
-  var box = pl.Polygon().setAsBox(0.5, 5.0);
+  var box = pl.Box(0.5, 5.0);
 
   var bd1 = {};
   bd1.type = 'dynamic';
@@ -65,8 +62,7 @@ planck.play('Gears', function(pl) {
   var body1 = world.createBody(bd1);
   body1.createFixture(circle1, 5.0);
 
-  var joint1 = world.createJoint(pl.RevoluteJoint({}, ground, body1,
-      bd1.position));
+  var joint1 = world.createJoint(pl.RevoluteJoint({}, ground, body1, bd1.position));
 
   var bd2 = {};
   bd2.type = 'dynamic';
@@ -74,8 +70,7 @@ planck.play('Gears', function(pl) {
   var body2 = world.createBody(bd2);
   body2.createFixture(circle2, 5.0);
 
-  var joint2 = world.createJoint(pl.RevoluteJoint({}, ground, body2,
-      bd2.position));
+  var joint2 = world.createJoint(pl.RevoluteJoint({}, ground, body2, bd2.position));
 
   var bd3 = {};
   bd3.type = 'dynamic';
@@ -88,14 +83,9 @@ planck.play('Gears', function(pl) {
   jd3.upperTranslation = 5.0;
   jd3.enableLimit = true;
 
-  var joint3 = world.createJoint(pl.PrismaticJoint(jd3, ground, body3,
-      bd3.position, Vec2(0.0, 1.0)));
-
-  var joint4 = world.createJoint(pl.GearJoint({}, body1, body2, joint1, joint2,
-      circle2.m_radius / circle1.m_radius));
-
-  var joint5 = world.createJoint(pl.GearJoint({}, body2, body3, joint2, joint3,
-      -1.0 / circle2.m_radius));
+  var joint3 = world.createJoint(pl.PrismaticJoint(jd3, ground, body3, bd3.position, Vec2(0.0, 1.0)));
+  var joint4 = world.createJoint(pl.GearJoint({}, body1, body2, joint1, joint2, radius2 / radius1));
+  var joint5 = world.createJoint(pl.GearJoint({}, body2, body3, joint2, joint3, -1.0 / radius2));
 
   function Step(settings) {
     Test.step(settings);

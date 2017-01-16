@@ -23,14 +23,12 @@ planck.play('Web', function(pl) {
   var world = new pl.World(Vec2(0, -10));
 
   var ground = world.createBody();
-  var shape = pl.Edge().set(Vec2(-40.0, 0.0), Vec2(40.0, 0.0));
-  ground.createFixture(shape, 0.0);
+  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
   var bodies = [];
   var joints = [];
 
-  var shape = pl.Polygon();
-  shape.setAsBox(0.5, 0.5);
+  var shape = pl.Box(0.5, 0.5);
 
   var bd = {};
   bd.type = 'dynamic';

@@ -42,8 +42,7 @@ planck.play('AddPair', function(pl) {
   bd.bullet = true;
   var body = world.createBody(bd);
 
-  var shape = pl.Polygon();
-  shape.setAsBox(1.5, 1.5);
+  var shape = pl.Box(1.5, 1.5);
   body.createFixture(shape, 1.0);
   body.setLinearVelocity(Vec2(150.0, 0.0));
 

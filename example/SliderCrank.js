@@ -23,7 +23,7 @@ planck.play('SliderCrank', function (pl) {
   var world = new pl.World(Vec2(0, -10));
 
   var ground = world.createBody();
-  ground.createFixture(pl.Edge().set(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
+  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
 
   // Define crank.
@@ -31,7 +31,7 @@ planck.play('SliderCrank', function (pl) {
     type: 'dynamic',
     position: Vec2(0.0, 7.0)
   });
-  crank.createFixture(pl.Polygon().setAsBox(0.5, 2.0), 2.0);
+  crank.createFixture(pl.Box(0.5, 2.0), 2.0);
 
   var joint1 = world.createJoint(pl.RevoluteJoint({
     motorSpeed: Math.PI,
@@ -45,7 +45,7 @@ planck.play('SliderCrank', function (pl) {
     type: 'dynamic',
     position: Vec2(0.0, 13.0)
   });
-  follower.createFixture(pl.Polygon().setAsBox(0.5, 4.0), 2.0);
+  follower.createFixture(pl.Box(0.5, 4.0), 2.0);
 
   world.createJoint(pl.RevoluteJoint({enableMotor: false}, crank, follower, Vec2(0.0, 9.0)));
 
@@ -56,7 +56,7 @@ planck.play('SliderCrank', function (pl) {
     fixedRotation: true,
     position: Vec2(0.0, 17.0)
   });
-  piston.createFixture(pl.Polygon().setAsBox(1.5, 1.5), 2.0);
+  piston.createFixture(pl.Box(1.5, 1.5), 2.0);
 
   world.createJoint(pl.RevoluteJoint({}, follower, piston, Vec2(0.0, 17.0)));
 
@@ -71,7 +71,7 @@ planck.play('SliderCrank', function (pl) {
     type: 'dynamic',
     position: Vec2(0.0, 23.0)
   });
-  payload.createFixture(pl.Polygon().setAsBox(1.5, 1.5), 2.0);
+  payload.createFixture(pl.Box(1.5, 1.5), 2.0);
 
 
   function Keyboard(key) {

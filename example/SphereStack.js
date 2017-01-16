@@ -24,15 +24,10 @@ planck.play('SphereStack', function(pl) {
   var e_count = 10
   var m_bodies = [];// [ e_count ];
 
-  var bd = {};
-  var ground = world.createBody(bd);
+  var ground = world.createBody();
+  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
-  var shape = pl.Edge();
-  shape.set(Vec2(-40.0, 0.0), Vec2(40.0, 0.0));
-  ground.createFixture(shape, 0.0);
-
-  var shape = pl.Circle();
-  shape.m_radius = 1.0;
+  var shape = pl.Circle(1.0);
 
   var bd = {};
   bd.type = 'dynamic';

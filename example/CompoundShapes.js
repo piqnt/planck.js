@@ -19,107 +19,79 @@
 
 // TODO_ERIN test joints on compounds.
 planck.play('CompoundShapes', function(pl) {
-  {
-    var /* BodyDef */bd;
-    bd.position.set(0.0, 0.0);
-    var /* Body */body = world.createBody(bd);
+  world.createBody(Vec2(0.0, 0.0))
+    .createFixture(pl.Edge(Vec2(50.0, 0.0), Vec2(-50.0, 0.0)), 0.0);
 
-    var /* EdgeShape */shape;
-    shape.set(Vec2(50.0, 0.0), Vec2(-50.0, 0.0));
+  var circle1 = pl.Circle(Vec2(-0.5, 0.5), 0.5);
+  var circle2 = pl.Circle(Vec2(0.5, 0.5), 0.5);
 
-    body.createFixture(shape, 0.0);
+  for (var i = 0; i < 10; ++i) {
+    var x = RandomFloat(-0.1, 0.1);
+    var bd = {};
+    bd.type = 'dynamic';
+    bd.position = Vec2(x + 5.0, 1.05 + 2.5 * i);
+    bd.angle = Math.random() * 2 * Math.PI - Math.PI;
+    var body = world.createBody(bd);
+    body.createFixture(circle1, 2.0);
+    body.createFixture(circle2, 0.0);
+  }
+
+  var polygon1 = pl.Box(0.25, 0.5);
+  var polygon2 = pl.Box(0.25, 0.5, Vec2(0.0, -0.5), 0.5 * Math.PI);
+
+  for (var i = 0; i < 10; ++i) {
+    var x = RandomFloat(-0.1, 0.1);
+    var bd = {};
+    bd.type = 'dynamic';
+    bd.position = Vec2(x - 5.0, 1.05 + 2.5 * i);
+    bd.angle = RandomFloat(-Math.PI, Math.PI);
+    var body = world.createBody(bd);
+    body.createFixture(polygon1, 2.0);
+    body.createFixture(polygon2, 2.0);
   }
 
   {
-    var /* CircleShape */circle1;
-    circle1.m_radius = 0.5;
-    circle1.m_p.set(-0.5, 0.5);
-
-    var /* CircleShape */circle2;
-    circle2.m_radius = 0.5;
-    circle2.m_p.set(0.5, 0.5);
-
-    for (var /* int */i = 0; i < 10; ++i) {
-      var /* float32 */x = RandomFloat(-0.1, 0.1);
-      var /* BodyDef */bd;
-      bd.type = 'dynamic';
-      bd.position.set(x + 5.0, 1.05 + 2.5 * i);
-      bd.angle = RandomFloat(-Math.PI, Math.PI);
-      var /* Body */body = world.createBody(bd);
-      body.createFixture(circle1, 2.0);
-      body.createFixture(circle2, 0.0);
-    }
-  }
-
-  {
-    var /* PolygonShape */polygon1;
-    polygon1.setAsBox(0.25, 0.5);
-
-    var /* PolygonShape */polygon2;
-    polygon2.setAsBox(0.25, 0.5, Vec2(0.0, -0.5), 0.5 * Math.PI);
-
-    for (var /* int */i = 0; i < 10; ++i) {
-      var /* float32 */x = RandomFloat(-0.1, 0.1);
-      var /* BodyDef */bd;
-      bd.type = 'dynamic';
-      bd.position.set(x - 5.0, 1.05 + 2.5 * i);
-      bd.angle = RandomFloat(-Math.PI, Math.PI);
-      var /* Body */body = world.createBody(bd);
-      body.createFixture(polygon1, 2.0);
-      body.createFixture(polygon2, 2.0);
-    }
-  }
-
-  {
-    var /* Transform */xf1;
+    var xf1 = pl.Transform();
     xf1.q.set(0.3524 * Math.PI);
     xf1.p = xf1.q.getXAxis();
 
-    var /* Vec2 */vertices
-    [ 3 ];
+    var triangle1 = pl.Polygon([
+      Mul(xf1, Vec2(-1.0, 0.0)),
+      Mul(xf1, Vec2(1.0, 0.0)),
+      Mul(xf1, Vec2(0.0, 0.5))
+    ]);
 
-    var /* PolygonShape */triangle1;
-    vertices[0] = Mul(xf1, Vec2(-1.0, 0.0));
-    vertices[1] = Mul(xf1, Vec2(1.0, 0.0));
-    vertices[2] = Mul(xf1, Vec2(0.0, 0.5));
-    triangle1.set(vertices, 3);
-
-    var /* Transform */xf2;
+    var xf2 = pl.Transform();
     xf2.q.set(-0.3524 * Math.PI);
     xf2.p = -xf2.q.getXAxis();
 
-    var /* PolygonShape */triangle2;
-    vertices[0] = Mul(xf2, Vec2(-1.0, 0.0));
-    vertices[1] = Mul(xf2, Vec2(1.0, 0.0));
-    vertices[2] = Mul(xf2, Vec2(0.0, 0.5));
-    triangle2.set(vertices, 3);
+    var triangle2 = pl.Polygon([
+      Mul(xf2, Vec2(-1.0, 0.0)),
+      Mul(xf2, Vec2(1.0, 0.0)),
+      Mul(xf2, Vec2(0.0, 0.5))
+    ]);
 
-    for (var /* int32 */i = 0; i < 10; ++i) {
-      var /* float32 */x = RandomFloat(-0.1, 0.1);
-      var /* BodyDef */bd;
+    for (var i = 0; i < 10; ++i) {
+      var x = RandomFloat(-0.1, 0.1);
+      var bd = {};
       bd.type = 'dynamic';
-      bd.position.set(x, 2.05 + 2.5 * i);
+      bd.position = Vec2(x, 2.05 + 2.5 * i);
       bd.angle = 0.0;
-      var /* Body */body = world.createBody(bd);
+      var body = world.createBody(bd);
       body.createFixture(triangle1, 2.0);
       body.createFixture(triangle2, 2.0);
     }
   }
 
   {
-    var /* PolygonShape */bottom;
-    bottom.setAsBox(1.5, 0.15);
+    var bottom = pl.Box(1.5, 0.15);
+    var left = pl.Box(0.15, 2.7, Vec2(-1.45, 2.35), 0.2);
+    var right = pl.Box(0.15, 2.7, Vec2(1.45, 2.35), -0.2);
 
-    var /* PolygonShape */left;
-    left.setAsBox(0.15, 2.7, Vec2(-1.45, 2.35), 0.2);
-
-    var /* PolygonShape */right;
-    right.setAsBox(0.15, 2.7, Vec2(1.45, 2.35), -0.2);
-
-    var /* BodyDef */bd;
+    var bd = {};
     bd.type = 'dynamic';
-    bd.position.set(0.0, 2.0);
-    var /* Body */body = world.createBody(bd);
+    bd.position = Vec2(0.0, 2.0);
+    var body = world.createBody(bd);
     body.createFixture(bottom, 4.0);
     body.createFixture(left, 4.0);
     body.createFixture(right, 4.0);

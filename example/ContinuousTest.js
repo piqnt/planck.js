@@ -18,50 +18,34 @@
  */
 
 planck.play('ContinuousTest', function(pl) {
-  {
-    var /* BodyDef */bd;
-    bd.position.set(0.0, 0.0);
-    var /* Body */body = world.createBody(bd);
+  var body = world.createBody(Vec2(0.0, 0.0));
 
-    var /* EdgeShape */edge;
-
-    edge.set(Vec2(-10.0, 0.0), Vec2(10.0, 0.0));
-    body.createFixture(edge, 0.0);
-
-    var /* PolygonShape */shape;
-    shape.setAsBox(0.2, 1.0, Vec2(0.5, 1.0), 0.0);
-    body.createFixture(shape, 0.0);
-  }
+  body.createFixture(pl.Edge(Vec2(-10.0, 0.0), Vec2(10.0, 0.0)), 0.0);
+  body.createFixture(pl.Box(0.2, 1.0, Vec2(0.5, 1.0), 0.0), 0.0);
 
   if (1) {
-    var /* BodyDef */bd;
-    bd.type = 'dynamic';
-    bd.position.set(0.0, 20.0);
+    var bd = {};
+    bd.position = Vec2(0.0, 20.0);
     // bd.angle = 0.1;
 
-    var /* PolygonShape */shape;
-    shape.setAsBox(2.0, 0.1);
-
-    m_body = world.createBody(bd);
-    m_body.createFixture(shape, 1.0);
+    m_body = world.createDynamicBody(bd);
+    m_body.createFixture(pl.Box(2.0, 0.1), 1.0);
 
     m_angularVelocity = RandomFloat(-50.0, 50.0);
     // m_angularVelocity = 46.661274;
     m_body.setLinearVelocity(Vec2(0.0, -100.0));
     m_body.setAngularVelocity(m_angularVelocity);
-  } else {
-    var /* BodyDef */bd;
-    bd.type = 'dynamic';
-    bd.position.set(0.0, 2.0);
-    var /* Body */body = world.createBody(bd);
 
-    var /* CircleShape */shape;
-    shape.m_p.setZero();
-    shape.m_radius = 0.5;
+  } else {
+    var bd = {};
+    bd.position = Vec2(0.0, 2.0);
+    var body = world.createDynamicBody(bd);
+
+    var shape = pl.Circle(0.5);
     body.createFixture(shape, 1.0);
 
     bd.bullet = true;
-    bd.position.set(0.0, 10.0);
+    bd.position = Vec2(0.0, 10.0);
     body = world.createBody(bd);
     body.createFixture(shape, 1.0);
     body.setLinearVelocity(Vec2(0.0, -100.0));

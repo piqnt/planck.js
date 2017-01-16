@@ -21,11 +21,8 @@ planck.play('TimeOfImpact', function(pl, stage) {
   var Vec2 = pl.Vec2, Transform = pl.Transform;
   var world = new pl.World();
 
-  var m_shapeA = pl.Polygon();
-  m_shapeA.setAsBox(25.0, 5.0);
-
-  var m_shapeB = pl.Polygon();
-  m_shapeB.setAsBox(2.5, 2.5);
+  var m_shapeA = pl.Box(25.0, 5.0);
+  var m_shapeB = pl.Box(2.5, 2.5);
 
   function Step(settings) {
     Test.step(settings);

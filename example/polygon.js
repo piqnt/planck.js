@@ -21,7 +21,7 @@ planck.play('Polygon', function(pl) {
   var world = new pl.World();
 
   var box = world.createBody().setKinematic();
-  box.createFixture(pl.Polygon().setAsBox(4, 4));
+  box.createFixture(pl.Box(4, 4));
   // box.setAngle(0.11);
   box.setAngularVelocity(0.1);
 
@@ -36,10 +36,8 @@ planck.play('Polygon', function(pl) {
   })
   ball.applyForceToCenter(Vec2(32, 0));
 
-  var ball = world.createBody({
-    position : Vec2(40, 0)
-  }).setDynamic();
-  ball.createFixture(pl.Polygon().setAsBox(2, 2));
+  var ball = world.createDynamicBody(Vec2(40, 0));
+  ball.createFixture(pl.Box(2, 2));
   ball.setMassData({
     mass : 0.1,
     center : Vec2(),

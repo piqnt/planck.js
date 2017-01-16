@@ -71,8 +71,7 @@ planck.play('Car', function(pl, opts) {
   // Teeter
   var body = world.createDynamicBody(Vec2(140.0, 1.0));
 
-  var box = pl.Polygon().setAsBox(10.0, 0.25);
-  body.createFixture(box, 1.0);
+  body.createFixture(pl.Box(10.0, 0.25), 1.0);
 
   var jd = {};
   jd.lowerAngle = -8.0 * Math.PI / 180.0;
@@ -95,7 +94,7 @@ planck.play('Car', function(pl, opts) {
     bd.type = 'dynamic';
     bd.position = Vec2(161.0 + 2.0 * i, -0.125);
     var body = world.createBody(bd);
-    body.createFixture(pl.Polygon().setAsBox(1.0, 0.125), fd);
+    body.createFixture(pl.Box(1.0, 0.125), fd);
 
     var anchor = Vec2(160.0 + 2.0 * i, -0.125);
     world.createJoint(pl.RevoluteJoint({}, prevBody, body, anchor));
@@ -107,8 +106,7 @@ planck.play('Car', function(pl, opts) {
   world.createJoint(pl.RevoluteJoint({}, prevBody, ground, anchor));
 
   // Boxes
-  var box = pl.Polygon();
-  box.setAsBox(0.5, 0.5);
+  var box = pl.Box(0.5, 0.5);
 
   var body = null;
   var bd = {};
@@ -135,7 +133,6 @@ planck.play('Car', function(pl, opts) {
   body.createFixture(box, 0.5);
 
   // Car
-  var chassis = pl.Polygon();
   var vertices = [];
   vertices[0] = Vec2(-1.5, -0.5);
   vertices[1] = Vec2(1.5, -0.5);
@@ -143,7 +140,7 @@ planck.play('Car', function(pl, opts) {
   vertices[3] = Vec2(0.0, 0.9);
   vertices[4] = Vec2(-1.15, 0.9);
   vertices[5] = Vec2(-1.5, 0.2);
-  chassis.set(vertices, 6);
+  var chassis = pl.Polygon(vertices);
 
   var circle = pl.Circle(0.4);
 
