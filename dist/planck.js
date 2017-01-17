@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.3
+ * Planck.js v0.1.4
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -110,6 +110,8 @@ var Velocity = require("./common/Velocity");
 var Position = require("./common/Position");
 
 var Fixture = require("./Fixture");
+
+var Shape = require("./Shape");
 
 var World = require("./World");
 
@@ -310,7 +312,7 @@ Body.prototype.getType = function() {
  * @private
  */
 Body.prototype.setType = function(type) {
-    // TODO assert type
+    common.assert(type === staticBody || type === kinematicBody || type === dynamicBody);
     common.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
         return;
@@ -926,7 +928,7 @@ Body.prototype.shouldCollide = function(that) {
  * @param density the shape density (set to zero for static bodies).
  */
 Body.prototype.createFixture = function(shape, fixdef) {
-    common.assert(!!shape && typeof shape.clone === "function");
+    common.assert(shape && Shape.isValid(shape));
     common.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
         return null;
@@ -1032,7 +1034,7 @@ Body.prototype.getLocalVector = function(worldVector) {
 };
 
 
-},{"./Fixture":4,"./World":10,"./common/Math":18,"./common/Position":19,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/Velocity":25,"./util/common":49,"./util/options":51}],3:[function(require,module,exports){
+},{"./Fixture":4,"./Shape":8,"./World":10,"./common/Math":18,"./common/Position":19,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/Velocity":25,"./util/common":49,"./util/options":51}],3:[function(require,module,exports){
 var DEBUG_SOLVER = false;
 
 var common = require("./util/common");
@@ -3037,6 +3039,10 @@ function Shape() {
     this.m_type;
     this.m_radius;
 }
+
+Shape.isValid = function(shape) {
+    return !!shape;
+};
 
 /**
  * Get the type of this shape. You can use this to down cast to the concrete
@@ -7826,7 +7832,7 @@ Sweep.prototype.advance = function(alpha) {
 };
 
 Sweep.prototype.forward = function() {
-    this.a0.set(this.a);
+    this.a0 = this.a;
     this.c0.set(this.c);
 };
 
