@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.4
+ * Planck.js v0.1.5
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -4262,22 +4262,22 @@ World.prototype.queryAABB = function(aabb, queryCallback) {
 World.prototype.rayCast = function(point1, point2, reportFixtureCallback) {
     common.assert(typeof reportFixtureCallback === "function");
     var broadPhase = this.m_broadPhase;
-    var input = new RayCastInput();
-    input.maxFraction = 1;
-    input.p1 = point1;
-    input.p2 = point2;
-    this.m_broadPhase.rayCast(input, function(input, proxyId) {
+    this.m_broadPhase.rayCast({
+        maxFraction: 1,
+        p1: point1,
+        p2: point2
+    }, function(input, proxyId) {
         // TODO GC
         var proxy = broadPhase.getUserData(proxyId);
         // FixtureProxy
         var fixture = proxy.fixture;
         var index = proxy.childIndex;
-        var output = new RayCastOutput();
+        var output = {};
         // TODO GC
         var hit = fixture.rayCast(output, input, index);
         if (hit) {
             var fraction = output.fraction;
-            var point = Add(Mul(1 - fraction, input.p1), Mul(fraction, input.p2));
+            var point = Vec2.add(Vec2.mul(1 - fraction, input.p1), Vec2.mul(fraction, input.p2));
             return reportFixtureCallback(fixture, point, output.normal, fraction);
         }
         return input.maxFraction;
@@ -5042,6 +5042,24 @@ AABB.diff = function(a, b) {
 
 var XY = [ "x", "y" ];
 
+/**
+ * @typedef RayCastInput
+ *
+ * Ray-cast input data. The ray extends from p1 to p1 + maxFraction * (p2 - p1).
+ *
+ * @prop {Vec2} p1
+ * @prop {Vec2} p2
+ * @prop {number} maxFraction
+ */
+/**
+ * @typedef RayCastInput
+ *
+ * Ray-cast output data. The ray hits at p1 + fraction * (p2 - p1), where p1 and
+ * p2 come from RayCastInput.
+ *
+ * @prop {Vec2} normal
+ * @prop {number} fraction
+ */
 /**
  * @param {RayCastOutput} output
  * @param {RayCastInput} input
@@ -6624,8 +6642,8 @@ DynamicTree.prototype.rayCast = function(input, rayCastCallback) {
             continue;
         }
         if (node.isLeaf()) {
-            Vec2.clone(input.p1, subInput.p1);
-            Vec2.clone(input.p2, subInput.p2);
+            subInput.p1 = Vec2(input.p1);
+            subInput.p2 = Vec2(input.p2);
             subInput.maxFraction = maxFraction;
             var value = rayCastCallback(subInput, node.id);
             if (value == 0) {
@@ -6649,7 +6667,7 @@ DynamicTree.prototype.rayCast = function(input, rayCastCallback) {
 
 var inputPool = new Pool({
     create: function() {
-        return new RayCastInput();
+        return {};
     },
     release: function(stack) {}
 });
@@ -13131,7 +13149,7 @@ CircleShape.prototype.testPoint = function(xf, p) {
 // x = s + a * r
 // norm(x) = radius
 CircleShape.prototype.rayCast = function(output, input, xf, childIndex) {
-    var position = Vec2.add(xf.p, Vec2.mul(xf.q, this.m_p));
+    var position = Vec2.add(xf.p, Rot.mul(xf.q, this.m_p));
     var s = Vec2.sub(input.p1, position);
     var b = Vec2.dot(s, s) - this.m_radius * this.m_radius;
     // Solve quadratic equation.
@@ -14237,8 +14255,8 @@ EdgeShape.prototype.testPoint = function(xf, p) {
 EdgeShape.prototype.rayCast = function(output, input, xf, childIndex) {
     // NOT_USED(childIndex);
     // Put the ray into the edge's frame of reference.
-    var p1 = Vec2.mulT(xf.q, Vec2.sub(input.p1, xf.p));
-    var p2 = Vec2.mulT(xf.q, Vec2.sub(input.p2, xf.p));
+    var p1 = Rot.mulT(xf.q, Vec2.sub(input.p1, xf.p));
+    var p2 = Rot.mulT(xf.q, Vec2.sub(input.p2, xf.p));
     var d = Vec2.sub(p2, p1);
     var v1 = this.m_vertex1;
     var v2 = this.m_vertex2;
@@ -14265,15 +14283,15 @@ EdgeShape.prototype.rayCast = function(output, input, xf, childIndex) {
     if (rr == 0) {
         return false;
     }
-    var s = Vec2.dot(Vec2.sub(q - v1), r) / rr;
+    var s = Vec2.dot(Vec2.sub(q, v1), r) / rr;
     if (s < 0 || 1 < s) {
         return false;
     }
     output.fraction = t;
     if (numerator > 0) {
-        output.normal = -Vec2.mul(xf.q, normal);
+        output.normal = Rot.mul(xf.q, normal).neg();
     } else {
-        output.normal = Vec2.mul(xf.q, normal);
+        output.normal = Rot.mul(xf.q, normal);
     }
     return true;
 };
@@ -14532,9 +14550,9 @@ PolygonShape.prototype.testPoint = function(xf, p) {
 
 PolygonShape.prototype.rayCast = function(output, input, xf, childIndex) {
     // Put the ray into the polygon's frame of reference.
-    var p1 = MulT(xf.q, Sub(input.p1, xf.p));
-    var p2 = MulT(xf.q, Sub(input.p2, xf.p));
-    var d = p2 - p1;
+    var p1 = Rot.mulT(xf.q, Vec2.sub(input.p1, xf.p));
+    var p2 = Rot.mulT(xf.q, Vec2.sub(input.p2, xf.p));
+    var d = Vec2.sub(p2, p1);
     var lower = 0;
     var upper = input.maxFraction;
     var index = -1;
@@ -14542,8 +14560,8 @@ PolygonShape.prototype.rayCast = function(output, input, xf, childIndex) {
         // p = p1 + a * d
         // dot(normal, p - v) = 0
         // dot(normal, p1 - v) + a * dot(normal, d) = 0
-        var numerator = Dot(this.m_normals[i], this.m_vertices[i] - p1);
-        var denominator = Dot(this.m_normals[i], d);
+        var numerator = Vec2.dot(this.m_normals[i], Vec2.sub(this.m_vertices[i], p1));
+        var denominator = Vec2.dot(this.m_normals[i], d);
         if (denominator == 0) {
             if (numerator < 0) {
                 return false;
@@ -14575,7 +14593,7 @@ PolygonShape.prototype.rayCast = function(output, input, xf, childIndex) {
     common.assert(0 <= lower && lower <= input.maxFraction);
     if (index >= 0) {
         output.fraction = lower;
-        output.normal = Mul(xf.q, this.m_normals[index]);
+        output.normal = Rot.mul(xf.q, this.m_normals[index]);
         return true;
     }
     return false;

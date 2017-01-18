@@ -1,8 +1,0 @@
-test TOI
-raycasting
-complete examples and drawing joints, etc.
-more unit test
-
-body/fixture be created without world/body by defualt
-change all enums (e_*) to string.
-move Settings to World's opts?
