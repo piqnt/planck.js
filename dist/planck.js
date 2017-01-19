@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.5
+ * Planck.js v0.1.6
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -85,10 +85,10 @@ exports.WeldJoint = require("./joint/WeldJoint");
 
 exports.WheelJoint = require("./joint/WheelJoint");
 
-exports.play = function() {
-    (console.error || console.log)("Player is not available!");
-};
-},{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Shape":8,"./World":10,"./collision/AABB":11,"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./joint/DistanceJoint":26,"./joint/FrictionJoint":27,"./joint/GearJoint":28,"./joint/MotorJoint":29,"./joint/MouseJoint":30,"./joint/PrismaticJoint":31,"./joint/PulleyJoint":32,"./joint/RevoluteJoint":33,"./joint/RopeJoint":34,"./joint/WeldJoint":35,"./joint/WheelJoint":36,"./shape/BoxShape":37,"./shape/ChainShape":38,"./shape/CircleShape":39,"./shape/CollideCircle":40,"./shape/CollideCirclePolygone":41,"./shape/CollideEdgeCircle":42,"./shape/CollideEdgePolygon":43,"./shape/CollidePolygon":44,"./shape/EdgeShape":45,"./shape/PolygonShape":46}],2:[function(require,module,exports){
+exports.internal = {};
+
+exports.internal.Distance = require("./collision/Distance");
+},{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Shape":8,"./World":10,"./collision/AABB":11,"./collision/Distance":13,"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./joint/DistanceJoint":26,"./joint/FrictionJoint":27,"./joint/GearJoint":28,"./joint/MotorJoint":29,"./joint/MouseJoint":30,"./joint/PrismaticJoint":31,"./joint/PulleyJoint":32,"./joint/RevoluteJoint":33,"./joint/RopeJoint":34,"./joint/WeldJoint":35,"./joint/WheelJoint":36,"./shape/BoxShape":37,"./shape/ChainShape":38,"./shape/CircleShape":39,"./shape/CollideCircle":40,"./shape/CollideCirclePolygone":41,"./shape/CollideEdgeCircle":42,"./shape/CollideEdgePolygon":43,"./shape/CollidePolygon":44,"./shape/EdgeShape":45,"./shape/PolygonShape":46}],2:[function(require,module,exports){
 module.exports = Body;
 
 var common = require("./util/common");
@@ -478,8 +478,7 @@ Body.prototype.setTransform = function(position, angle) {
     if (this.isWorldLocked() == true) {
         return;
     }
-    this.m_xf.q.set(angle);
-    this.m_xf.p.set(position);
+    this.m_xf.set(position, angle);
     this.m_sweep.setTransform(this.m_xf);
     var broadPhase = this.m_world.m_broadPhase;
     for (var f = this.m_fixtureList; f; f = f.m_next) {
@@ -3879,7 +3878,6 @@ Solver.prototype.solveIslandTOI = function(subStep, toiA, toiB) {
             input.useRadii = false;
             var output = new DistanceOutput();
             var cache = new SimplexCache();
-            cache.count = 0;
             Distance(output, cache, input);
             if (output.distance == 0 || cache.count == 3) {
                 cache.count += 0;
@@ -5328,6 +5326,7 @@ BroadPhase.prototype.queryCallback = function(proxyId) {
 },{"../Settings":7,"../common/Math":18,"../util/common":49,"./AABB":11,"./DynamicTree":14}],13:[function(require,module,exports){
 module.exports = Distance;
 
+// TODO do not expose internals?
 module.exports.Input = DistanceInput;
 
 module.exports.Output = DistanceOutput;
@@ -5375,34 +5374,37 @@ function DistanceInput() {
     this.proxyA = new DistanceProxy();
     this.proxyB = new DistanceProxy();
     this.transformA = null;
-    // Transform
     this.transformB = null;
-    // Transform
     this.useRadii = false;
 }
 
 /**
  * Output for Distance.
+ *
+ * @prop {Vec2} pointA closest point on shapeA
+ * @prop {Vec2} pointB closest point on shapeB
+ * @prop distance
+ * @prop iterations number of GJK iterations used
  */
 function DistanceOutput() {
     this.pointA = Vec2();
-    // closest point on shapeA
     this.pointB = Vec2();
-    // closest point on shapeB
     this.distance;
     this.iterations;
 }
 
 /**
  * Used to warm start Distance. Set count to zero on first call.
+ *
+ * @prop {number} metric length or area
+ * @prop {array} indexA vertices on shape A
+ * @prop {array} indexB vertices on shape B
+ * @prop {number} count
  */
 function SimplexCache() {
     this.metric;
-    // length or area
     this.indexA = [];
-    // vertices on shape A
     this.indexB = [];
-    // vertices on shape B
     this.count = 0;
 }
 
@@ -5410,9 +5412,13 @@ function SimplexCache() {
  * Compute the closest points between two shapes. Supports any combination of:
  * CircleShape, PolygonShape, EdgeShape. The simplex cache is input/output. On
  * the first call set SimplexCache.count to zero.
+ *
+ * @param {DistanceOutput} output
+ * @param {SimplexCache} cache
+ * @param {DistanceInput} input
  */
-// (DistanceOutput , SimplexCache , DistanceInput )
 function Distance(output, cache, input) {
+    // TODO GC input objects
     ++gjkCalls;
     var proxyA = input.proxyA;
     var proxyB = input.proxyB;
@@ -7904,7 +7910,7 @@ var Rot = require("./Rot");
  */
 function Transform(position, rotation) {
     if (!(this instanceof Transform)) {
-        return new Vec2(position, rotation);
+        return new Transform(position, rotation);
     }
     this.p = new Vec2();
     this.q = new Rot();
@@ -7928,8 +7934,13 @@ Transform.prototype.setIdentity = function() {
  * Set this based on the position and angle.
  */
 Transform.prototype.set = function(position, angle) {
-    this.p.set(position);
-    this.q.set(angle);
+    if (Transform.isValid(position)) {
+        this.p.set(position.p);
+        this.q.set(position.q);
+    } else {
+        this.p.set(position);
+        this.q.set(angle);
+    }
 };
 
 Transform.isValid = function(o) {
