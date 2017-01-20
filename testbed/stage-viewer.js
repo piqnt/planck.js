@@ -155,8 +155,9 @@
       ctx.strokeStyle = options.strokeStyle;
       ctx.stroke();
     });
-
-    var node = Stage.image(texture).pin('handle', 0.5);
+    var image = Stage.image(texture)
+      .offset(shape.m_p.x - cx, shape.m_p.y - cy);
+    var node = Stage.create().append(image);
     return node;
   };
 
@@ -190,10 +191,10 @@
     var minX = Math.min(v1.x, v2.x);
     var minY = Math.min(v1.y, v2.y);
 
-    var inner = Stage.image(texture);
-    inner.rotate(Math.atan2(dy, dx));
-    inner.offset(minX - lw, minY - lw);
-    var node = Stage.create().append(inner);
+    var image = Stage.image(texture);
+    image.rotate(Math.atan2(dy, dx));
+    image.offset(minX - lw, minY - lw);
+    var node = Stage.create().append(image);
     return node;
   };
 
@@ -252,9 +253,9 @@
       ctx.stroke();
     });
 
-    var inner = Stage.image(texture);
-    inner.offset(minX - lw, minY - lw);
-    var node = Stage.create().append(inner);
+    var image = Stage.image(texture);
+    image.offset(minX - lw, minY - lw);
+    var node = Stage.create().append(image);
     return node;
   };
 
@@ -314,9 +315,9 @@
       ctx.stroke();
     });
 
-    var inner = Stage.image(texture);
-    inner.offset(minX - lw, minY - lw);
-    var node = Stage.create().append(inner);
+    var image = Stage.image(texture);
+    image.offset(minX - lw, minY - lw);
+    var node = Stage.create().append(image);
     return node;
   };
 

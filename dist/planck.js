@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.6
+ * Planck.js v0.1.7
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -902,9 +902,7 @@ Body.prototype.shouldCollide = function(that) {
 };
 
 /**
- * Creates a fixture and attach it to this body. Use this function if you need
- * to set some fixture parameters, like friction. Otherwise you can create the
- * fixture directly from a shape.
+ * Creates a fixture and attach it to this body.
  * 
  * If the density is non-zero, this function automatically updates the mass of
  * the body.
@@ -912,22 +910,11 @@ Body.prototype.shouldCollide = function(that) {
  * Contacts are not created until the next time step.
  * 
  * Warning: This function is locked during callbacks.
- * 
- * @param def the fixture definition.
- * 
- * Creates a fixture from a shape and attach it to this body.
- * 
- * This is a convenience function. Use b2FixtureDef if you need to set
- * parameters like friction, restitution, user data, or filtering.
- * 
- * If the density is non-zero, this function automatically updates the mass of
- * the body.
- * 
- * @param shape the shape to be cloned.
- * @param density the shape density (set to zero for static bodies).
+
+ * @param {Shape|FixtureDef} shape Shape or fixture definition.
+ * @param {FixtureDef|number} fixdef Fixture definition or just density.
  */
 Body.prototype.createFixture = function(shape, fixdef) {
-    common.assert(shape && Shape.isValid(shape));
     common.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
         return null;
@@ -996,9 +983,9 @@ Body.prototype.destroyFixture = function(fixture) {
         var broadPhase = this.m_world.m_broadPhase;
         fixture.destroyProxies(broadPhase);
     }
-    fixture.destroy();
     fixture.m_body = null;
     fixture.m_next = null;
+    this.m_world.publish("remove-fixture", fixture);
     // Reset the mass data.
     this.resetMassData();
 };
@@ -2117,11 +2104,14 @@ function FixtureProxy(fixture, childIndex) {
  * non-geometric data such as friction, collision filters, etc. Fixtures are
  * created via Body.createFixture.
  * 
- * @param {Shape} The shape will be cloned, so you can reuse it.
- * @param {def} density The shape density (set to zero for static bodies).
+ * @param {Shape|FixtureDef} shape Shape of fixture definition.
+ * @param {FixtureDef|number} def Fixture definition or number.
  */
 function Fixture(body, shape, def) {
-    if (typeof def === "number") {
+    if (shape.shape) {
+        def = shape;
+        shape = shape.shape;
+    } else if (typeof def === "number") {
         def = {
             density: def
         };
@@ -3949,19 +3939,16 @@ Solver.prototype.solveIslandTOI = function(subStep, toiA, toiB) {
 function ContactImpulse() {
     this.normalImpulses = [];
     this.tangentImpulses = [];
-    this.count = 0;
 }
 
 Solver.prototype.postSolveIsland = function() {
-    return;
     // TODO: report contact.v_points instead of new object?
     var impulse = new ContactImpulse();
     for (var c = 0; c < this.m_contacts.length; ++c) {
         var contact = this.m_contacts[c];
-        impulse.count = contact.v_point.length;
-        for (var p = 0; p < contact.v_point.length; ++p) {
-            impulse.normalImpulses[p] = contact.v_points[p].normalImpulse;
-            impulse.tangentImpulses[p] = contact.v_points[p].tangentImpulse;
+        for (var p = 0; p < contact.v_points.length; ++p) {
+            impulse.normalImpulses.push(contact.v_points[p].normalImpulse);
+            impulse.tangentImpulses.push(contact.v_points[p].tangentImpulse);
         }
         this.m_world.postSolve(contact, impulse);
     }
@@ -4045,7 +4032,6 @@ function World(def) {
     this.m_velocityIterations = def.velocityIterations;
     this.m_positionIterations = def.positionIterations;
     this.m_t = 0;
-    this.ni = 0;
     // Broad-phase callback.
     this.addPair = this.createContact.bind(this);
 }
@@ -4591,15 +4577,15 @@ var s_step = new Solver.TimeStep();
  * @param {float} dt Elapsed time, since last call.
  */
 World.prototype.step = function(ts, dt) {
-    // todo split to .setTimeStep() and .tick()
+    // TODO split to .setTimeStep() and .tick()
     if (typeof dt === "number") {
         this.m_t += dt;
         while (this.m_t > ts) {
             this.step(ts);
             this.m_t -= ts;
         }
+        return;
     }
-    common.debug("======================================= " + this.ni++);
     // If new fixtures were added, we need to find the new contacts.
     if (this.m_newFixture) {
         this.findNewContacts();
@@ -8239,12 +8225,6 @@ Vec2.distanceSquared = function(v, w) {
 Vec2.areEqual = function(v, w) {
     Vec2.assert(v);
     Vec2.assert(w);
-    return Vec2.areEqual(v, w);
-};
-
-Vec2.areEqual = function(v, w) {
-    Vec2.assert(v);
-    Vec2.assert(w);
     return v == w || typeof w === "object" && w !== null && v.x == w.x && v.y == w.y;
 };
 
@@ -8333,6 +8313,7 @@ Vec2.mul = function(a, b) {
 Vec2.prototype.neg = function() {
     this.x = -this.x;
     this.y = -this.y;
+    return this;
 };
 
 Vec2.neg = function(v) {
@@ -10173,9 +10154,9 @@ function PrismaticJoint(def, bodyA, bodyB, anchor, axis) {
     def = options(def, PrismaticJointDef);
     Joint.call(this, def, bodyA, bodyB);
     this.m_type = PrismaticJoint.TYPE;
-    this.m_localAnchorA = bodyA.getLocalPoint(anchor);
-    this.m_localAnchorB = bodyB.getLocalPoint(anchor);
-    this.m_localXAxisA = bodyA.getLocalVector(axis);
+    this.m_localAnchorA = def.localAnchorA || bodyA.getLocalPoint(anchor);
+    this.m_localAnchorB = def.localAnchorB || bodyB.getLocalPoint(anchor);
+    this.m_localXAxisA = def.localAxisA || bodyA.getLocalVector(axis);
     this.m_localXAxisA.normalize();
     this.m_localYAxisA = Vec2.cross(1, this.m_localXAxisA);
     this.m_referenceAngle = bodyB.getAngle() - bodyA.getAngle();
@@ -13089,20 +13070,22 @@ CircleShape.prototype = create(CircleShape._super.prototype);
 
 CircleShape.TYPE = "circle";
 
-function CircleShape(p, r) {
+function CircleShape(a, b) {
     if (!(this instanceof CircleShape)) {
-        return new CircleShape(p, r);
+        return new CircleShape(a, b);
     }
     CircleShape._super.call(this);
     this.m_type = CircleShape.TYPE;
     this.m_p = Vec2();
     this.m_radius = 1;
-    if (typeof p === "object" && Vec2.isValid(p)) {
-        this.m_p.set(p);
-    } else if (typeof p === "number") {
-        this.m_radius = p;
-    } else if (typeof r === "number") {
-        this.m_radius = r;
+    console.log(a, b);
+    if (typeof a === "object" && Vec2.isValid(a)) {
+        this.m_p.set(a);
+        if (typeof b === "number") {
+            this.m_radius = b;
+        }
+    } else if (typeof a === "number") {
+        this.m_radius = a;
     }
 }
 
