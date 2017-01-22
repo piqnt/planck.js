@@ -17,11 +17,11 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('EdgeShapes', function(pl) {
+planck.play('EdgeShapes', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  var e_maxBodies = 256
+  var e_maxBodies = 256;
 
   var m_bodyIndex;
   var m_bodies = [];
@@ -29,8 +29,7 @@ planck.play('EdgeShapes', function(pl) {
 
   // Ground body
   {
-    var bd = {};
-    var ground = world.createBody(bd);
+    var ground = world.createBody();
 
     var x1 = -20.0;
     var y1 = 2.0 * Math.cos(x1 / 10.0 * Math.PI);
@@ -51,7 +50,7 @@ planck.play('EdgeShapes', function(pl) {
     vertices[0] = Vec2(-0.5, 0.0);
     vertices[1] = Vec2(0.5, 0.0);
     vertices[2] = Vec2(0.0, 1.5);
-    m_polygons[0] = pl.Polygon(vertices, 3);
+    m_polygons[0] = pl.Polygon(vertices);
   }
 
   {
@@ -59,7 +58,7 @@ planck.play('EdgeShapes', function(pl) {
     vertices[0] = Vec2(-0.1, 0.0);
     vertices[1] = Vec2(0.1, 0.0);
     vertices[2] = Vec2(0.0, 1.5);
-    m_polygons[1] = pl.Polygon(vertices, 3);
+    m_polygons[1] = pl.Polygon(vertices);
   }
 
   {
@@ -80,13 +79,9 @@ planck.play('EdgeShapes', function(pl) {
     m_polygons[2] = pl.Polygon(vertices, 8);
   }
 
-  {
-    m_polygons[3] = pl.Box(0.5, 0.5);
-  }
+  m_polygons[3] = pl.Box(0.5, 0.5);
 
-  {
-    var m_circle = pl.Circle(0.5);
-  }
+  var m_circle = pl.Circle(0.5);
 
   m_bodyIndex = 0;
 
@@ -100,11 +95,11 @@ planck.play('EdgeShapes', function(pl) {
 
     var bd = {};
 
-    var /* float32 */x = RandomFloat(-10.0, 10.0);
-    var /* float32 */y = RandomFloat(10.0, 20.0);
+    var x = pl.Math.random(-10.0, 10.0);
+    var y = pl.Math.random(10.0, 20.0);
 
     bd.position = Vec2(x, y);
-    bd.angle = RandomFloat(-Math.PI, Math.PI);
+    bd.angle = pl.Math.random(-Math.PI, Math.PI);
     bd.type = 'dynamic';
 
     if (index == 4) {
@@ -114,13 +109,13 @@ planck.play('EdgeShapes', function(pl) {
     m_bodies[m_bodyIndex] = world.createBody(bd);
 
     if (index < 4) {
-      var /* FixtureDef */fd;
-      fd.shape = m_polygons + index;
+      var fd = {};
+      fd.shape = m_polygons[index];
       fd.friction = 0.3;
       fd.density = 20.0;
       m_bodies[m_bodyIndex].createFixture(fd);
     } else {
-      var /* FixtureDef */fd;
+      var fd = {};
       fd.shape = m_circle;
       fd.friction = 0.3;
       fd.density = 20.0;
@@ -140,75 +135,70 @@ planck.play('EdgeShapes', function(pl) {
     }
   }
 
-  function Keyboard(key) {
-    switch (key) {
-    case GLFW_KEY_1:
-    case GLFW_KEY_2:
-    case GLFW_KEY_3:
-    case GLFW_KEY_4:
-    case GLFW_KEY_5:
-      Create(key - GLFW_KEY_1);
+  testbed.keydown = function(code, char) {
+    switch (char) {
+    case '1':
+      Create(0);
       break;
-
-    case GLFW_KEY_D:
+    case '2':
+      Create(1);
+      break;
+    case '3':
+      Create(2);
+      break;
+    case '4':
+      Create(3);
+      break;
+    case '5':
+      Create(4);
+      break;
+    case 'D':
       DestroyBody();
       break;
     }
-  }
+  };
 
-  function Step(settings) {
-    var advanceRay = settings.pause == 0 || settings.singleStep;
+  testbed.status('1-5: Drop stuff, D: Destroy');
 
-    Test.step(settings);
-    g_debugDraw.DrawString(5, m_textLine, "Press 1-5 to drop stuff");
-    m_textLine += DRAW_STRING_NEW_LINE;
+  testbed.step = function() {
+    var advanceRay = true; // settings.pause == 0 || settings.singleStep;
 
     var L = 25.0;
     var point1 = Vec2(0.0, 10.0);
-    var d = Vec2(L * cosf(m_angle), -L * Abs(sinf(m_angle)));
-    var /* Vec2 */point2 = point1 + d;
+    var d = Vec2(L * Math.cos(m_angle), -L * Math.abs(Math.sin(m_angle)));
+    var point2 = Vec2.add(point1, d);
 
-    var callback = new EdgeShapesCallback();
+    world.rayCast(point1, point2, EdgeShapesCallback.ReportFixture);
 
-    world.rayCast(callback, point1, point2);
+    if (EdgeShapesCallback.fixture) {
+      // g_debugDraw.DrawPoint(callback.m_point, 5.0, Color(0.4, 0.9, 0.4));
+      // g_debugDraw.DrawSegment(point1, callback.m_point, Color(0.8, 0.8, 0.8));
 
-    if (callback.m_fixture) {
-      g_debugDraw.DrawPoint(callback.m_point, 5.0, Color(0.4, 0.9, 0.4));
-
-      g_debugDraw.DrawSegment(point1, callback.m_point, Color(0.8, 0.8, 0.8));
-
-      var /* Vec2 */head = callback.m_povar /* int */+ 0.5
-          * callback.m_normal;
-      g_debugDraw.DrawSegment(callback.m_point, head, Color(0.9, 0.9, 0.4));
+      var head = Vec2.wAdd(1, EdgeShapesCallback.point, 0.5, EdgeShapesCallback.normal);
+      // g_debugDraw.DrawSegment(callback.m_point, head, Color(0.9, 0.9, 0.4));
     } else {
-      g_debugDraw.DrawSegment(point1, point2, Color(0.8, 0.8, 0.8));
+      // g_debugDraw.DrawSegment(point1, point2, Color(0.8, 0.8, 0.8));
     }
 
     if (advanceRay) {
       m_angle += 0.25 * Math.PI / 180.0;
     }
-  }
+  };
 
-  function EdgeShapesCallback() {
-    /* extends rayCastCallback */
-    {
-      m_fixture = null;
-    }
+  var EdgeShapesCallback = (function() {
+    this.init = function() {
+      this.fixture = null;
+      this.point = null;
+      this.normal = null;
+    };
 
-    function /* float32 */ReportFixture(/* Fixture */fixture, /* const *//* Vec2& */
-    point,
-    /* const *//* Vec2& */normal, /* float32 */fraction) {
-      m_fixture = fixture;
-      m_povar /* int */= point;
-      m_normal = normal;
-
+    this.ReportFixture = function(fixture, point, normal, fraction) {
+      this.fixture = fixture;
+      this.point = point;
+      this.normal = normal;
       return fraction;
-    }
-
-    var /* Fixture */m_fixture;
-    var /* Vec2 */m_point;
-    var /* Vec2 */m_normal;
-  }
+    }.bind(this);
+  })();
 
   return world;
 });

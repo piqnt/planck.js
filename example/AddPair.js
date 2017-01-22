@@ -17,7 +17,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('AddPair', function(pl) {
+planck.play('AddPair', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, 0));
 
@@ -31,7 +31,7 @@ planck.play('AddPair', function(pl) {
   for (var i = 0; i < /* 400 */100; ++i) {
     var bd = {};
     bd.type = 'dynamic';
-    bd.position = Vec2(randomFloat(minX, maxX), randomFloat(minY, maxY));
+    bd.position = Vec2(pl.Math.random(minX, maxX), pl.Math.random(minY, maxY));
     var body = world.createBody(bd);
     body.createFixture(shape, 0.01);
   }
@@ -45,10 +45,6 @@ planck.play('AddPair', function(pl) {
   var shape = pl.Box(1.5, 1.5);
   body.createFixture(shape, 1.0);
   body.setLinearVelocity(Vec2(150.0, 0.0));
-
-  function randomFloat(min, max) {
-    return Math.random() * (max - min) + min;
-  }
 
   return world;
 });

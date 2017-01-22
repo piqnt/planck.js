@@ -17,8 +17,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Apply Force', function(pl, opts) {
-  opts.pin.alignY = -0.8;
+planck.play('Apply Force', function(pl, testbed) {
+  testbed.pin.alignY = -0.8;
 
   var Vec2 = pl.Vec2;
   var Transform = pl.Transform;
@@ -107,15 +107,15 @@ planck.play('Apply Force', function(pl, opts) {
     world.createJoint(pl.FrictionJoint(jd, ground, body));
   }
 
-  opts.step = function() {
-    if (opts.activeKeys.right && !opts.activeKeys.left) {
+  testbed.step = function() {
+    if (testbed.activeKeys.right && !testbed.activeKeys.left) {
       jet.applyAngularImpulse(-0.2, true);
 
-    } else if (opts.activeKeys.left && !opts.activeKeys.right) {
+    } else if (testbed.activeKeys.left && !testbed.activeKeys.right) {
       jet.applyAngularImpulse(+0.2, true);
     }
 
-    if (opts.activeKeys.up) {
+    if (testbed.activeKeys.up) {
       var f = jet.getWorldVector(Vec2(0.0, -1.0));
       var p = jet.getWorldPoint(Vec2(0.0, 2.0));
       jet.applyLinearImpulse(f, p, true);

@@ -17,77 +17,71 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('EdgeTest', function(pl) {
+planck.play('EdgeTest', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  {
-    var ground = world.createBody();
+  var ground = world.createBody();
 
-    var v1 = Vec2(-10.0, 0.0);
-    var v2 = Vec2(-7.0, -2.0);
-    var v3 = Vec2(-4.0, 0.0);
-    var v4 = Vec2(0.0, 0.0);
-    var v5 = Vec2(4.0, 0.0);
-    var v6 = Vec2(7.0, 2.0);
-    var v7 = Vec2(10.0, 0.0);
+  var v1 = Vec2(-10.0, 0.0);
+  var v2 = Vec2(-7.0, -2.0);
+  var v3 = Vec2(-4.0, 0.0);
+  var v4 = Vec2(0.0, 0.0);
+  var v5 = Vec2(4.0, 0.0);
+  var v6 = Vec2(7.0, 2.0);
+  var v7 = Vec2(10.0, 0.0);
 
-    var shape = pl.Edge(v1, v2);
-    shape.m_hasVertex3 = true;
-    shape.m_vertex3 = v3;
-    ground.createFixture(shape, 0.0);
+  var shape = pl.Edge(v1, v2);
+  shape.m_hasVertex3 = true;
+  shape.m_vertex3 = v3;
+  ground.createFixture(shape, 0.0);
 
-    var shape = pl.Edge(v2, v3);
-    shape.m_hasVertex0 = true;
-    shape.m_hasVertex3 = true;
-    shape.m_vertex0 = v1;
-    shape.m_vertex3 = v4;
-    ground.createFixture(shape, 0.0);
+  var shape = pl.Edge(v2, v3);
+  shape.m_hasVertex0 = true;
+  shape.m_hasVertex3 = true;
+  shape.m_vertex0 = v1;
+  shape.m_vertex3 = v4;
+  ground.createFixture(shape, 0.0);
 
-    var shape = pl.Edge(v3, v4);
-    shape.m_hasVertex0 = true;
-    shape.m_hasVertex3 = true;
-    shape.m_vertex0 = v2;
-    shape.m_vertex3 = v5;
-    ground.createFixture(shape, 0.0);
+  var shape = pl.Edge(v3, v4);
+  shape.m_hasVertex0 = true;
+  shape.m_hasVertex3 = true;
+  shape.m_vertex0 = v2;
+  shape.m_vertex3 = v5;
+  ground.createFixture(shape, 0.0);
 
-    var shape = pl.Edge(v4, v5);
-    shape.m_hasVertex0 = true;
-    shape.m_hasVertex3 = true;
-    shape.m_vertex0 = v3;
-    shape.m_vertex3 = v6;
-    ground.createFixture(shape, 0.0);
+  var shape = pl.Edge(v4, v5);
+  shape.m_hasVertex0 = true;
+  shape.m_hasVertex3 = true;
+  shape.m_vertex0 = v3;
+  shape.m_vertex3 = v6;
+  ground.createFixture(shape, 0.0);
 
-    var shape = pl.Edge(v5, v6);
-    shape.m_hasVertex0 = true;
-    shape.m_hasVertex3 = true;
-    shape.m_vertex0 = v4;
-    shape.m_vertex3 = v7;
-    ground.createFixture(shape, 0.0);
+  var shape = pl.Edge(v5, v6);
+  shape.m_hasVertex0 = true;
+  shape.m_hasVertex3 = true;
+  shape.m_vertex0 = v4;
+  shape.m_vertex3 = v7;
+  ground.createFixture(shape, 0.0);
 
-    var shape = pl.Edge(v6, v7);
-    shape.m_hasVertex0 = true;
-    shape.m_vertex0 = v5;
-    ground.createFixture(shape, 0.0);
-  }
+  var shape = pl.Edge(v6, v7);
+  shape.m_hasVertex0 = true;
+  shape.m_vertex0 = v5;
+  ground.createFixture(shape, 0.0);
 
-  {
-    var bd = {};
-    bd.type = 'dynamic';
-    bd.position = Vec2(-0.5, 0.6);
-    bd.allowSleep = false;
-    world.createBody(bd)
-      .createFixture(pl.Circle(0.5), 1.0);
-  }
+  var bd = {};
+  bd.type = 'dynamic';
+  bd.position = Vec2(-0.5, 0.6);
+  bd.allowSleep = false;
+  world.createBody(bd)
+    .createFixture(pl.Circle(0.5), 1.0);
 
-  {
-    var bd = {};
-    bd.type = 'dynamic';
-    bd.position = Vec2(1.0, 0.6);
-    bd.allowSleep = false;
-    world.createBody(bd)
-      .createFixture(pl.Box(0.5, 0.5), 1.0);
-  }
+  var bd = {};
+  bd.type = 'dynamic';
+  bd.position = Vec2(1.0, 0.6);
+  bd.allowSleep = false;
+  world.createBody(bd)
+    .createFixture(pl.Box(0.5, 0.5), 1.0);
 
   return world;
 });

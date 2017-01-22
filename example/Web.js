@@ -18,7 +18,7 @@
  */
 
 // This tests distance joints, body destruction, and joint destruction.
-planck.play('Web', function(pl) {
+planck.play('Web', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
@@ -93,9 +93,9 @@ planck.play('Web', function(pl) {
     bodies[0], bodies[0].getWorldPoint(Vec2(0.0, 0.5))
   ));
 
-  function Keyboard(key) {
-    switch (key) {
-    case GLFW_KEY_B:
+  testbed.keydown = function(code, char) {
+    switch (char) {
+    case 'B':
       for (var i = 0; i < 4; ++i) {
         if (bodies[i]) {
           world.destroyBody(bodies[i]);
@@ -105,7 +105,7 @@ planck.play('Web', function(pl) {
       }
       break;
 
-    case GLFW_KEY_J:
+    case 'J':
       for (var i = 0; i < 8; ++i) {
         if (joints[i]) {
           world.destroyJoint(joints[i]);
@@ -115,17 +115,9 @@ planck.play('Web', function(pl) {
       }
       break;
     }
-  }
+  };
 
-  function Step(settings) {
-    Test.step(settings);
-    g_debugDraw.DrawString(5, m_textLine,
-        "This demonstrates a soft distance joint.");
-    m_textLine += DRAW_STRING_NEW_LINE;
-    g_debugDraw.DrawString(5, m_textLine,
-        "Press: (b) to delete a body, (j) to delete a joint");
-    m_textLine += DRAW_STRING_NEW_LINE;
-  }
+  testbed.status('This demonstrates a soft distance joint.\nB: Delete a body, J: Delete a joint');
 
   function JointDestroyed(joint) {
     for (var i = 0; i < 8; ++i) {
@@ -135,6 +127,8 @@ planck.play('Web', function(pl) {
       }
     }
   }
+
+  // TODO: BBJJJJ -> Error
 
   return world;
 });

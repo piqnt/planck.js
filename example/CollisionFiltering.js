@@ -17,129 +17,113 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-// This is a test of collision filtering.
-// There is a triangle, a box, and a circle.
-// There are 6 shapes. 3 large and 3 small.
-// The 3 small ones always collide.
-// The 3 large ones never collide.
-// The boxes don't collide with triangles (except if both are small).
-/*const*//*int16*/k_smallGroup = 1;
-/* const *//* int16 */k_largeGroup = -1;
+planck.play('CollisionFiltering', function(pl, testbed) {
+  // This is a test of collision filtering.
+  // There is a triangle, a box, and a circle.
+  // There are 6 shapes. 3 large and 3 small.
+  // The 3 small ones always collide.
+  // The 3 large ones never collide.
+  // The boxes don't collide with triangles (except if both are small).
+  var SMALL_GROUP = 1;
+  var LARGE_GROUP = -1;
 
-/* const *//* uint16 */k_defaultCategory = 0x0001;
-/* const *//* uint16 */k_triangleCategory = 0x0002;
-/* const *//* uint16 */k_boxCategory = 0x0004;
-/* const *//* uint16 */k_circleCategory = 0x0008;
+  var TRIANGLE_CATEGORY = 0x0002;
+  var BOX_Category = 0x0004;
+  var CIRCLE_CATEGORY = 0x0008;
 
-/* const *//* uint16 */k_triangleMask = 0xFFFF;
-/* const *//* uint16 */k_boxMask = 0xFFFF ^ k_triangleCategory;
-/* const *//* uint16 */k_circleMask = 0xFFFF;
+  var TRIANGLE_MASK = 0xFFFF;
+  var BOX_MASK = 0xFFFF ^ TRIANGLE_CATEGORY;
+  var CIRCLE_MAX = 0xFFFF;
 
-planck.play('CollisionFiltering', function(pl) {
+  var Vec2 = pl.Vec2;
+  var world = pl.World(Vec2(0, -10));
+
   // Ground body
-  var ground = world.createBody();
-  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), {friction : 0.3});
-
-  // Small triangle
-  var vertices = [];
-  vertices[0].set(-1.0, 0.0);
-  vertices[1].set(1.0, 0.0);
-  vertices[2].set(0.0, 2.0);
+  world.createBody().createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), {friction : 0.3});
 
   var triangleShapeDef = {};
-  triangleShapeDef.shape = pl.Polygon(vertices);
   triangleShapeDef.density = 1.0;
 
-  triangleShapeDef.filterGroupIndex = k_smallGroup;
-  triangleShapeDef.filterCategoryBits = k_triangleCategory;
-  triangleShapeDef.filterMaskBits = k_triangleMask;
+  // Small triangle
+  triangleShapeDef.filterGroupIndex = SMALL_GROUP;
+  triangleShapeDef.filterCategoryBits = TRIANGLE_CATEGORY;
+  triangleShapeDef.filterMaskBits = TRIANGLE_MASK;
 
-  var triangleBodyDef = {};
-  triangleBodyDef.type = 'dynamic';
-  triangleBodyDef.position = Vec2(-5.0, 2.0);
-
-  var body1 = world.createBody(triangleBodyDef);
-  body1.createFixture(triangleShapeDef);
+  var body1 = world.createBody({
+    type : 'dynamic',
+    position : Vec2(-5.0, 2.0)
+  });
+  body1.createFixture(pl.Polygon([
+    Vec2(-1.0, 0.0),
+    Vec2(1.0, 0.0),
+    Vec2(0.0, 2.0)
+  ]), triangleShapeDef);
 
   // Large triangle (recycle definitions)
-  vertices[0] *= 2.0;
-  vertices[1] *= 2.0;
-  vertices[2] *= 2.0;
-  triangleShapeDef.shape = pl.Polygon(vertices);
-  triangleShapeDef.filterGroupIndex = k_largeGroup;
-  triangleBodyDef.position = Vec2(-5.0, 6.0);
-  triangleBodyDef.fixedRotation = true; // look at me!
+  triangleShapeDef.filterGroupIndex = LARGE_GROUP;
 
-  var body2 = world.createBody(triangleBodyDef);
-  body2.createFixture(triangleShapeDef);
+  var body2 = world.createBody({
+    type : 'dynamic',
+    position : Vec2(-5.0, 6.0),
+    fixedRotation : true // look at me!
+  });
+  body2.createFixture(pl.Polygon([
+    Vec2(-2.0, 0.0),
+    Vec2(2.0, 0.0),
+    Vec2(0.0, 4.0)
+  ]), triangleShapeDef);
 
-  {
-    var body = world.createDynamicBody(Vec2(-5.0, 10.0));
+  var body = world.createDynamicBody(Vec2(-5.0, 10.0));
+  body.createFixture(pl.Box(0.5, 1.0), 1.0);
+  world.createJoint(pl.PrismaticJoint({
+    enableLimit : true,
+    localAnchorA : Vec2(0.0, 4.0),
+    localAnchorB : Vec2(),
+    localAxisA : Vec2(0.0, 1.0),
+    lowerTranslation : -1.0,
+    upperTranslation : 1.0
+  }, body2, body));
 
-    body.createFixture(pl.Box(0.5, 1.0), 1.0);
-
-    var /* PrismaticJointDef */jd;
-    jd.bodyA = body2;
-    jd.bodyB = body;
-    jd.enableLimit = true;
-    jd.localAnchorA.set(0.0, 4.0);
-    jd.localAnchorB.setZero();
-    jd.localAxisA.set(0.0, 1.0);
-    jd.lowerTranslation = -1.0;
-    jd.upperTranslation = 1.0;
-
-    world.createJoint(jd);
-  }
-
-  // Small box
   var boxShapeDef = {};
-  boxShapeDef.shape = pl.Box(1.0, 0.5);
   boxShapeDef.density = 1.0;
   boxShapeDef.restitution = 0.1;
 
-  boxShapeDef.filterGroupIndex = k_smallGroup;
-  boxShapeDef.filterCategoryBits = k_boxCategory;
-  boxShapeDef.filterMaskBits = k_boxMask;
+  // Small box
+  boxShapeDef.filterGroupIndex = SMALL_GROUP;
+  boxShapeDef.filterCategoryBits = BOX_Category;
+  boxShapeDef.filterMaskBits = BOX_MASK;
 
-  var boxBodyDef = {};
-  boxBodyDef.type = 'dynamic';
-  boxBodyDef.position.set(0.0, 2.0);
-
-  var body3 = world.createBody(boxBodyDef);
-  body3.createFixture(boxShapeDef);
+  var body3 = world.createDynamicBody(Vec2(0.0, 2.0));
+  body3.createFixture(pl.Box(1.0, 0.5), boxShapeDef);
 
   // Large box (recycle definitions)
-  boxShapeDef.shape = pl.Box(2.0, 1.0);
-  boxShapeDef.filterGroupIndex = k_largeGroup;
-  boxBodyDef.position.set(0.0, 6.0);
+  boxShapeDef.filterGroupIndex = LARGE_GROUP;
 
-  var body4 = world.createBody(boxBodyDef);
-  body4.createFixture(boxShapeDef);
+  var body4 = world.createDynamicBody(Vec2(0.0, 6.0));
+  body4.createFixture(pl.Box(2.0, 1.0), boxShapeDef);
 
   var circleShapeDef = {};
 
   // Small circle
-  circleShapeDef.shape = pl.Circle(1.0);
   circleShapeDef.density = 1.0;
 
-  circleShapeDef.filterGroupIndex = k_smallGroup;
-  circleShapeDef.filterCategoryBits = k_circleCategory;
-  circleShapeDef.filterMaskBits = k_circleMask;
+  circleShapeDef.filterGroupIndex = SMALL_GROUP;
+  circleShapeDef.filterCategoryBits = CIRCLE_CATEGORY;
+  circleShapeDef.filterMaskBits = CIRCLE_MAX;
 
   var circleBodyDef = {};
   circleBodyDef.type = 'dynamic';
   circleBodyDef.position = Vec2(5.0, 2.0);
 
   var body5 = world.createBody(circleBodyDef);
-  body5.createFixture(circleShapeDef);
+  body5.createFixture(pl.Circle(1.0), circleShapeDef);
 
   // Large circle
-  circleShapeDef.shape = pl.Circle(2.0);
-  circleShapeDef.filterGroupIndex = k_largeGroup;
+  circleShapeDef.filterGroupIndex = LARGE_GROUP;
   circleBodyDef.position = Vec2(5.0, 6.0);
 
   var body6 = world.createBody(circleBodyDef);
-  body6.createFixture(circleShapeDef);
+  body6.createFixture(pl.Circle(2.0), circleShapeDef);
 
   return world;
 });

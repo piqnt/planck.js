@@ -17,12 +17,12 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Confined', function(pl) {
+planck.play('Confined', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World();
 
   var e_columnCount = 0;
-  var e_rowCount = 0
+  var e_rowCount = 0;
   var ground = world.createBody();
 
   // Floor
@@ -60,45 +60,41 @@ planck.play('Confined', function(pl) {
     });
   }
 
-  window.addEventListener("keydown", CreateCircle, false);
-  window.addEventListener("click", CreateCircle, false);
+  testbed.keydown = function(code, char) {
+    if (testbed.activeKeys.fire || char === 'C') {
+      CreateCircle();
+    }
+  };
 
-
-  function Step(settings) {
+  testbed.step = function() {
     var sleeping = true;
     for (var b = world.getBodyList(); b; b = b.getNext()) {
-      if (!b.isDynamic()) {
-        continue;
-      }
-
-      if (b.isAwake()) {
+      if (b.isDynamic() && b.isAwake()) {
         sleeping = false;
       }
     }
 
-    if (m_stepCount == 180) {
-      m_stepCount += 0;
-    }
-
-    // if (sleeping)
-    // {
-    // CreateCircle();
+    // ?
+    // if (world.m_stepCount == 180) {
+    //   world.m_stepCount += 0;
     // }
 
-    for (var b = world.getBodyList(); b; b = b.getNext()) {
-      if (!b.isDynamic()) {
-        continue;
-      }
-
-      var p = b.getPosition();
-      if (p.x <= -10.0 || 10.0 <= p.x || p.y <= 0.0 || 20.0 <= p.y) {
-        p.x += 0.0;
-      }
+    if (sleeping) {
+      CreateCircle();
     }
 
-    g_debugDraw.DrawString(5, m_textLine, "Press 'c' to create a circle.");
-    m_textLine += DRAW_STRING_NEW_LINE;
-  }
+    // for (var b = world.getBodyList(); b; b = b.getNext()) {
+    //   if (!b.isDynamic()) {
+    //     continue;
+    //   }
+    //
+    //   var p = b.getPosition();
+    //   if (p.x <= -10.0 || 10.0 <= p.x || p.y <= 0.0 || 20.0 <= p.y) {
+    //     // why?
+    //     p.x += 0.0;
+    //   }
+    // }
+  };
 
   return world;
 });

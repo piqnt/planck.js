@@ -18,7 +18,7 @@
  */
 
 // This is a fun demo that shows off the wheel joint
-planck.play('Car', function(pl, opts) {
+planck.play('Car', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World({
     gravity : Vec2(0, -10)
@@ -179,29 +179,29 @@ planck.play('Car', function(pl, opts) {
   jd.dampingRatio = m_zeta;
   var m_spring2 = world.createJoint(pl.WheelJoint(jd, m_car, m_wheel2, m_wheel2.getPosition(), axis))
 
-  opts.keydown = function() {
-    if (opts.activeKeys.down) {
+  testbed.keydown = function() {
+    if (testbed.activeKeys.down) {
       m_hz = Math.max(0.0, m_hz - 1.0);
       m_spring1.setSpringFrequencyHz(m_hz);
       m_spring2.setSpringFrequencyHz(m_hz);
 
-    } else if (opts.activeKeys.up) {
+    } else if (testbed.activeKeys.up) {
       m_hz += 1.0;
       m_spring1.setSpringFrequencyHz(m_hz);
       m_spring2.setSpringFrequencyHz(m_hz);
     }
   };
 
-  opts.step = function() {
-    if (opts.activeKeys.right && opts.activeKeys.left) {
+  testbed.step = function() {
+    if (testbed.activeKeys.right && testbed.activeKeys.left) {
       m_spring1.setMotorSpeed(0);
       m_spring1.enableMotor(true);
 
-    } else if (opts.activeKeys.right) {
+    } else if (testbed.activeKeys.right) {
       m_spring1.setMotorSpeed(-m_speed);
       m_spring1.enableMotor(true);
 
-    } else if (opts.activeKeys.left) {
+    } else if (testbed.activeKeys.left) {
       m_spring1.setMotorSpeed(+m_speed);
       m_spring1.enableMotor(true);
 
@@ -219,7 +219,7 @@ planck.play('Car', function(pl, opts) {
     }
   };
 
-  opts.status('Use ←/→ to accelerate car and ↑/↓ to change spring frequency!');
+  testbed.status('←/→: Accelerate car, ↑/↓: Change spring frequency');
 
   return world;
 });

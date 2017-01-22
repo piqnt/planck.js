@@ -19,7 +19,7 @@
 
 // Inspired by a contribution by roman_m
 // Dimensions scooped from APE (http://www.cove.org/ape/index.htm)
-planck.play('Theo Jansen\'s Walker', function (pl, opts) {
+planck.play('Theo Jansen\'s Walker', function (pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
@@ -136,17 +136,17 @@ planck.play('Theo Jansen\'s Walker', function (pl, opts) {
     world.createJoint(pl.RevoluteJoint({}, body2, chassis, Vec2.add(p4, offset)));
   }
 
-  opts.step = function() {
+  testbed.step = function() {
 
-    if (opts.activeKeys.right && opts.activeKeys.left) {
+    if (testbed.activeKeys.right && testbed.activeKeys.left) {
       motorjoint.setMotorSpeed(0.0);
       motorjoint.enableMotor(false);
 
-    } else if (opts.activeKeys.right) {
+    } else if (testbed.activeKeys.right) {
       motorjoint.setMotorSpeed(motorSpeed);
       motorjoint.enableMotor(true);
 
-    } else if (opts.activeKeys.left) {
+    } else if (testbed.activeKeys.left) {
       motorjoint.setMotorSpeed(-motorSpeed);
       motorjoint.enableMotor(true);
 

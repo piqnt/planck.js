@@ -18,21 +18,21 @@
 
 "use strict";
 
-planck.play('Breakout', function(pl, opts) {
+planck.play('Breakout', function(pl, testbed) {
 
   var WIDTH = 20;
   var HEIGHT = 26;
 
-  opts.width = WIDTH;
-  opts.height = HEIGHT * 1.12;
-  opts.ratio = 32;
-  opts.pin = {
+  testbed.width = WIDTH;
+  testbed.height = HEIGHT * 1.12;
+  testbed.ratio = 32;
+  testbed.pin = {
     'offsetY': -HEIGHT * 0.04 * 16,
     'align': -0.5
   };
 
-  opts.keydown = function() {
-    if (opts.activeKeys.fire) {
+  testbed.keydown = function() {
+    if (testbed.activeKeys.fire) {
       if(state.state == 'gameover') {
         state.initGame();
       } else if (state.state == 'ready') {
@@ -60,13 +60,13 @@ planck.play('Breakout', function(pl, opts) {
 
     function updateStatus() {
       if (state.state == 'gameover') {
-        opts.status('Gameover! Score: ' + _score);
+        testbed.status('Gameover! Score: ' + _score);
 
       } else if (state.state == 'ready') {
-        opts.status('Ready!');
+        testbed.status('Ready!');
 
       } else {
-        opts.status('Score: ' + _score);
+        testbed.status('Score: ' + _score);
       }
     }
 
@@ -153,7 +153,7 @@ planck.play('Breakout', function(pl, opts) {
       }
     }
 
-    opts.step = function(t) {
+    testbed.step = function(t) {
       _time += t = Math.min(t, 50);
 
 
@@ -161,10 +161,10 @@ planck.play('Breakout', function(pl, opts) {
         return;
       }
 
-      if (opts.activeKeys.left && !opts.activeKeys.right) {
+      if (testbed.activeKeys.left && !testbed.activeKeys.right) {
         physics.movePaddle(-paddleSpeed() * t / 1000);
 
-      } else if (!opts.activeKeys.left && opts.activeKeys.right) {
+      } else if (!testbed.activeKeys.left && testbed.activeKeys.right) {
         physics.movePaddle(+paddleSpeed() * t / 1000);
       }
 

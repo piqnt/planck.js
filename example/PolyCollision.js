@@ -17,91 +17,73 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('PolyCollision', function(pl) {
-  {
-    var Vec2 = pl.Vec2;
-    var world = new pl.World(Vec2(0, -10));
+planck.play('PolyCollision', function(pl, testbed) {
+  var Vec2 = pl.Vec2, Transform = pl.Transform;
+  var world = new pl.World(Vec2(0, -10));
 
-    m_polygonA.setAsBox(0.2, 0.4);
-    m_transformA.set(Vec2(0.0, 0.0), 0.0);
+  var m_polygonA = pl.Box(0.2, 0.4);
+  var m_transformA = pl.Transform(Vec2(0.0, 0.0), 0.0);
 
-    m_polygonB.setAsBox(0.5, 0.5);
-    m_positionB.set(19.345284, 1.5632932);
-    m_angleB = 1.9160721;
+  var m_polygonB = pl.Box(0.5, 0.5);
+  var m_positionB = Vec2(19.345284, 1.5632932);
+  var m_angleB = 1.9160721;
+  var m_transformB = pl.Transform(m_positionB, m_angleB);
+
+  testbed.step = function() {
+    return;
+
+    var manifold = new pl.internal.Manifold();
+    CollidePolygons(manifold, m_polygonA, m_transformA, m_polygonB, m_transformB);
+
+    var worldManifold = manifold.getWorldManifold(null, m_transformA, m_polygonA.getRadius(), m_transformB, m_polygonB.getRadius());
+
+    g_debugDraw.DrawString(5, m_textLine, "point count = %d", manifold.pointCount);
+
+    var v = [];
+    for (var i = 0; i < m_polygonA.m_count; ++i) {
+      v[i] = Transform.mul(m_transformA, m_polygonA.m_vertices[i]);
+    }
+    // g_debugDraw.DrawPolygon(v, m_polygonA.m_count, Color(0.9, 0.9, 0.9));
+
+    for (var i = 0; i < m_polygonB.m_count; ++i) {
+      v[i] = Transform.mul(m_transformB, m_polygonB.m_vertices[i]);
+    }
+    // g_debugDraw.DrawPolygon(v, m_polygonB.m_count, Color(0.9, 0.9, 0.9));
+
+    for (var i = 0; i < manifold.pointCount; ++i) {
+      // g_debugDraw.DrawPoint(worldManifold.points[i], 4.0, Color(0.9, 0.3, 0.3));
+    }
+  };
+
+  testbed.keydown = function(code, char) {
+    switch (char) {
+    case 'A':
+      m_positionB.x -= 0.1;
+      break;
+
+    case 'D':
+      m_positionB.x += 0.1;
+      break;
+
+    case 'S':
+      m_positionB.y -= 0.1;
+      break;
+
+    case 'W':
+      m_positionB.y += 0.1;
+      break;
+
+    case 'Q':
+      m_angleB += 0.1 * Math.PI;
+      break;
+
+    case 'E':
+      m_angleB -= 0.1 * Math.PI;
+      break;
+    }
+
     m_transformB.set(m_positionB, m_angleB);
+  };
 
-    function Step(settings) {
-      B2_NOT_USED(settings);
-
-      var /* Manifold */manifold;
-      CollidePolygons(manifold, m_polygonA, m_transformA, m_polygonB,
-          m_transformB);
-
-      var /* WorldManifold */worldManifold;
-      worldManifold.initialize(manifold, m_transformA, m_polygonA.m_radius,
-          m_transformB, m_polygonB.m_radius);
-
-      g_debugDraw.DrawString(5, m_textLine, "povar /*int*/ count = %d",
-          manifold.pointCount);
-      m_textLine += DRAW_STRING_NEW_LINE;
-
-      var color = Color(0.9, 0.9, 0.9);
-      var /* Vec2 */v = []// [b2_maxPolygonVertices];
-      for (var /* int32 */i = 0; i < m_polygonA.m_count; ++i) {
-        v[i] = Mul(m_transformA, m_polygonA.m_vertices[i]);
-      }
-      g_debugDraw.DrawPolygon(v, m_polygonA.m_count, color);
-
-      for (var /* int32 */i = 0; i < m_polygonB.m_count; ++i) {
-        v[i] = Mul(m_transformB, m_polygonB.m_vertices[i]);
-      }
-      g_debugDraw.DrawPolygon(v, m_polygonB.m_count, color);
-
-      for (var /* int32 */i = 0; i < manifold.pointCount; ++i) {
-        g_debugDraw.DrawPoint(worldManifold.points[i], 4.0,
-            Color(0.9, 0.3, 0.3));
-      }
-    }
-
-    function Keyboard( /* int */key) {
-      switch (key) {
-      case GLFW_KEY_A:
-        m_positionB.x -= 0.1;
-        break;
-
-      case GLFW_KEY_D:
-        m_positionB.x += 0.1;
-        break;
-
-      case GLFW_KEY_S:
-        m_positionB.y -= 0.1;
-        break;
-
-      case GLFW_KEY_W:
-        m_positionB.y += 0.1;
-        break;
-
-      case GLFW_KEY_Q:
-        m_angleB += 0.1 * Math.PI;
-        break;
-
-      case GLFW_KEY_E:
-        m_angleB -= 0.1 * Math.PI;
-        break;
-      }
-
-      m_transformB.set(m_positionB, m_angleB);
-    }
-
-    var /* PolygonShape */m_polygonA;
-    var /* PolygonShape */m_polygonB;
-
-    var /* Transform */m_transformA;
-    var /* Transform */m_transformB;
-
-    var /* Vec2 */m_positionB;
-    var /* float32 */m_angleB;
-
-    return world;
-  }
+  return world;
 });

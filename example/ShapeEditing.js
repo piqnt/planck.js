@@ -17,14 +17,13 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('ShapeEditing', function(pl) {
+planck.play('ShapeEditing', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  var m_sensor = false;
+  var m_sensor = true;
 
   var ground = world.createBody();
-
   ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
   var m_body = world.createDynamicBody(Vec2(0.0, 10.0));
@@ -32,17 +31,18 @@ planck.play('ShapeEditing', function(pl) {
   var m_fixture1 = m_body.createFixture(pl.Box(4.0, 4.0, Vec2(0.0, 0.0), 0.0), 10.0);
   var m_fixture2 = null;
 
-  function Keyboard(key) {
-    switch (key) {
-    case GLFW_KEY_C:
+  testbed.keydown = function(code, char) {
+    switch (char) {
+    case 'C':
       if (m_fixture2 == null) {
         var shape = pl.Circle(Vec2(0.5, -4.0), 3.0);
         m_fixture2 = m_body.createFixture(shape, 10.0);
         m_body.setAwake(true);
+        m_fixture2.setSensor(m_sensor);
       }
       break;
 
-    case GLFW_KEY_D:
+    case 'D':
       if (m_fixture2 != null) {
         m_body.destroyFixture(m_fixture2);
         m_fixture2 = null;
@@ -50,23 +50,22 @@ planck.play('ShapeEditing', function(pl) {
       }
       break;
 
-    case GLFW_KEY_S:
+    case 'S':
       if (m_fixture2 != null) {
         m_sensor = !m_sensor;
         m_fixture2.setSensor(m_sensor);
       }
       break;
     }
+
+    updateStatus();
+  };
+
+  function updateStatus() {
+    testbed.status('C: Create a shape, D: Destroy a shape, S: Sensor = ' + m_sensor);
   }
 
-  function Step(settings) {
-    Test.step(settings);
-    g_debugDraw.DrawString(5, m_textLine,
-        "Press: (c) create a shape, (d) destroy a shape.");
-    m_textLine += DRAW_STRING_NEW_LINE;
-    g_debugDraw.DrawString(5, m_textLine, "sensor = %d", m_sensor);
-    m_textLine += DRAW_STRING_NEW_LINE;
-  }
+  updateStatus();
 
   return world;
 });

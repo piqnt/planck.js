@@ -74,29 +74,24 @@ planck.play('SliderCrank', function (pl) {
   payload.createFixture(pl.Box(1.5, 1.5), 2.0);
 
 
-  function Keyboard(key) {
-    switch (key) {
-      case GLFW_KEY_F:
+  testbed.keydown = function(code, char) {
+    switch (char) {
+      case 'F':
         joint2.enableMotor(!joint2.isMotorEnabled());
         joint2.getBodyB().setAwake(true);
         break;
 
-      case GLFW_KEY_M:
+      case 'M':
         joint1.enableMotor(!joint1.isMotorEnabled());
         joint1.getBodyB().setAwake(true);
         break;
     }
-  }
+  };
 
-  function Step(settings) {
-    Test.step(settings);
-    g_debugDraw.DrawString(5, m_textLine,
-      "Keys: (f) toggle friction, (m) toggle motor");
-    m_textLine += DRAW_STRING_NEW_LINE;
-    var /* float32 */torque = joint1.getMotorTorque(settings.hz);
-    g_debugDraw.DrawString(5, m_textLine, "Motor Torque = %5.0", torque);
-    m_textLine += DRAW_STRING_NEW_LINE;
-  }
+  testbed.step = function() {
+    var torque = joint1.getMotorTorque(1 / 60);
+    testbed.status("Motor Torque = " + torque + "\nF: Toggle friction, M: Toggle motor");
+  };
 
   return world;
 });

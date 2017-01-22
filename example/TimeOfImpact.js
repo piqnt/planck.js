@@ -25,16 +25,15 @@ planck.play('TimeOfImpact', function(pl, stage) {
   var m_shapeB = pl.Box(2.5, 2.5);
 
   function Step(settings) {
-    Test.step(settings);
 
-    var sweepA = new pl.Sweep();
+    var sweepA = new pl.internal.Sweep();
     sweepA.c0.set(24.0, -60.0);
     sweepA.a0 = 2.95;
     sweepA.c = sweepA.c0;
     sweepA.a = sweepA.a0;
     sweepA.localCenter.setZero();
 
-    var sweepB = new pl.Sweep();
+    var sweepB = new pl.internal.Sweep();
     sweepB.c0.set(53.474274, -50.252514);
     sweepB.a0 = 513.36676; // - 162.0 * Math.PI;
     sweepB.c.set(54.595478, -51.083473);

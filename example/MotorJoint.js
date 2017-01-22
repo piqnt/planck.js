@@ -17,10 +17,10 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-/// This test shows how to use a motor joint. A motor joint
-/// can be used to animate a dynamic body. With finite motor forces
-/// the body can be blocked by collision with other bodies.
-planck.play('Motor Joint', function(pl, opts) {
+// This test shows how to use a motor joint. A motor joint
+// can be used to animate a dynamic body. With finite motor forces
+// the body can be blocked by collision with other bodies.
+planck.play('Motor Joint', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
@@ -41,7 +41,10 @@ planck.play('Motor Joint', function(pl, opts) {
     maxTorque : 1000.0
   }, ground, body));
 
-  opts.step = function (dt) {
+  testbed.step = function (dt) {
+    // if (m_go && settings.hz > 0.0) {
+    //   time += 1.0 / settings.hz;
+    // }
     time += Math.min(dt, 100) / 1000;
 
     var linearOffset = Vec2();
@@ -52,28 +55,8 @@ planck.play('Motor Joint', function(pl, opts) {
 
     joint.setLinearOffset(linearOffset);
     joint.setAngularOffset(angularOffset);
+
   };
-
-  function Step(settings) {
-    if (m_go && settings.hz > 0.0) {
-      time += 1.0 / settings.hz;
-    }
-
-    var linearOffset = Vec2();
-    linearOffset.x = 6.0 * Math.sin(2.0 * time);
-    linearOffset.y = 8.0 + 4.0 * Math.sin(1.0 * time);
-
-    var angularOffset = 4.0 * time;
-
-    joint.setLinearOffset(linearOffset);
-    joint.setAngularOffset(angularOffset);
-
-    g_debugDraw.DrawPoint(linearOffset, 4.0, Color(0.9, 0.9, 0.9));
-
-    Test.step(settings);
-    g_debugDraw.DrawString(5, m_textLine, "Keys: (s) pause");
-    m_textLine += 15;
-  }
 
   return world;
 });

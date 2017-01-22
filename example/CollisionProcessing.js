@@ -19,95 +19,82 @@
 
 // This test shows collision processing and tests
 // deferred body destruction.
-planck.play('CollisionProcessing', function(pl) {
+planck.play('CollisionProcessing', function(pl, testbed) {
+  var Vec2 = pl.Vec2;
+  var world = pl.World(Vec2(0, -10));
+
   // Ground body
-  world.createBody()
-    .createFixture(pl.Edge(Vec2(-50.0, 0.0), Vec2(50.0, 0.0)));
+  world.createBody().createFixture(pl.Edge(Vec2(-50.0, 0.0), Vec2(50.0, 0.0)));
 
   var xLo = -5.0, xHi = 5.0;
   var yLo = 2.0, yHi = 35.0;
 
   // Small triangle
-  var vertices = [];
-  vertices[0].set(-1.0, 0.0);
-  vertices[1].set(1.0, 0.0);
-  vertices[2].set(0.0, 2.0);
-
-  var triangleShapeDef = {};
-  triangleShapeDef.shape = pl.Polygon(vertices);
-  triangleShapeDef.density = 1.0;
-
-  var triangleBodyDef = {};
-  triangleBodyDef.type = 'dynamic';
-  triangleBodyDef.position = Vec2(RandomFloat(xLo, xHi), RandomFloat(yLo, yHi));
-
-  var body1 = world.createBody(triangleBodyDef);
-  body1.createFixture(triangleShapeDef);
+  var body1 = world.createDynamicBody(Vec2(pl.Math.random(xLo, xHi), pl.Math.random(yLo, yHi)));
+  body1.createFixture(pl.Polygon([Vec2(-1.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 2.0)]), 1.0);
 
   // Large triangle (recycle definitions)
-  vertices[0] *= 2.0;
-  vertices[1] *= 2.0;
-  vertices[2] *= 2.0;
-  triangleShapeDef.shape = pl.Polygon(vertices);
-
-  triangleBodyDef.position = Vec2(RandomFloat(xLo, xHi), RandomFloat(yLo, yHi));
-
-  var body2 = world.createBody(triangleBodyDef);
-  body2.createFixture(triangleShapeDef);
+  var body2 = world.createDynamicBody(Vec2(pl.Math.random(xLo, xHi), pl.Math.random(yLo, yHi)));
+  body2.createFixture(pl.Polygon([Vec2(-1.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 2.0)]), 1.0);
 
   // Small box
-
-  var boxShapeDef = {};
-  boxShapeDef.shape = pl.Box(1.0, 0.5);
-  boxShapeDef.density = 1.0;
-
-  var boxBodyDef = {};
-  boxBodyDef.type = 'dynamic';
-  boxBodyDef.position.set(RandomFloat(xLo, xHi), RandomFloat(yLo, yHi));
-
-  var body3 = world.createBody(boxBodyDef);
-  body3.createFixture(boxShapeDef);
+  var body3 = world.createDynamicBody(Vec2(pl.Math.random(xLo, xHi), pl.Math.random(yLo, yHi)));
+  body3.createFixture(pl.Box(1.0, 0.5), 1.0);
 
   // Large box (recycle definitions)
-  boxShapeDef.shape = pl.Box(2.0, 1.0);
-  boxBodyDef.position.set(RandomFloat(xLo, xHi), RandomFloat(yLo, yHi));
-
-  var body4 = world.createBody(boxBodyDef);
-  body4.createFixture(boxShapeDef);
+  var body4 = world.createDynamicBody(Vec2(pl.Math.random(xLo, xHi), pl.Math.random(yLo, yHi)));
+  body4.createFixture(pl.Box(2.0, 1.0), 1.0);
 
   // Small circle
-  var circleShapeDef = {};
-  circleShapeDef.shape = pl.Circle(1.0);
-  circleShapeDef.density = 1.0;
-
-  var circleBodyDef = {};
-  circleBodyDef.type = 'dynamic';
-  circleBodyDef.position = Vec2(RandomFloat(xLo, xHi), RandomFloat(yLo, yHi));
-
-  var body5 = world.createBody(circleBodyDef);
-  body5.createFixture(circleShapeDef);
+  var body5 = world.createDynamicBody(Vec2(pl.Math.random(xLo, xHi), pl.Math.random(yLo, yHi)));
+  body5.createFixture(pl.Circle(1.0), 1.0);
 
   // Large circle
-  circleShapeDef.shape = pl.Circle(2.0);
-  circleBodyDef.position = Vec2(RandomFloat(xLo, xHi), RandomFloat(yLo, yHi));
+  var body6 = world.createDynamicBody(Vec2(pl.Math.random(xLo, xHi), pl.Math.random(yLo, yHi)));
+  body6.createFixture(pl.Circle(2.0), 1.0);
 
-  var body6 = world.createBody(circleBodyDef);
-  body6.createFixture(circleShapeDef);
+  var m_points = [];
 
-  function Step(settings) {
-    Test.step(settings);
+  world.on('pre-solve', function(contact, oldManifold) {
+    var manifold = contact.getManifold();
+
+    if (manifold.pointCount == 0) {
+      return;
+    }
+
+    var fixtureA = contact.getFixtureA();
+    var fixtureB = contact.getFixtureB();
+
+    var worldManifold = contact.getWorldManifold();
+
+    for (var i = 0; i < manifold.pointCount; ++i) {
+      var cp = {};
+      cp.fixtureA = fixtureA;
+      cp.fixtureB = fixtureB;
+      cp.position = worldManifold.points[i];
+      cp.normal = worldManifold.normal;
+      // cp.state = state2[i];
+      cp.normalImpulse = manifold.points[i].normalImpulse;
+      cp.tangentImpulse = manifold.points[i].tangentImpulse;
+      cp.separation = worldManifold.separations[i];
+      m_points.push(cp);
+    }
+  });
+
+  var m_bomb = null;
+  var MAX_NUKE = 6;
+
+  testbed.step = function() {
 
     // We are going to destroy some bodies according to contact
     // points. We must buffer the bodies that should be destroyed
     // because they may belong to multiple contact points.
-    var k_maxNuke = 6;
-    var nuke = []; // Body[ k_maxNuke ]
-    var nukeCount = 0;
+    var nuke = [];
 
     // Traverse the contact results. Destroy bodies that
     // are touching heavier bodies.
-    for (var i = 0; i < m_pointCount; ++i) {
-      var /* ContactPovar */ povar = m_points + i;
+    for (var i = 0; i < m_points.length && nuke.length < MAX_NUKE; ++i) {
+      var point = m_points[i];
 
       var body1 = point.fixtureA.getBody();
       var body2 = point.fixtureB.getBody();
@@ -116,33 +103,22 @@ planck.play('CollisionProcessing', function(pl) {
 
       if (mass1 > 0.0 && mass2 > 0.0) {
         if (mass2 > mass1) {
-          nuke[nukeCount++] = body1;
+          nuke.push(body1);
         } else {
-          nuke[nukeCount++] = body2;
-        }
-
-        if (nukeCount == k_maxNuke) {
-          break;
+          nuke.push(body2);
         }
       }
     }
 
-    // Sort the nuke array to group duplicates.
-    std.sort(nuke, nuke + nukeCount);
-
-    // Destroy the bodies, skipping duplicates.
-    var i = 0;
-    while (i < nukeCount) {
-      var /* Body */b = nuke[i++];
-      while (i < nukeCount && nuke[i] == b) {
-        ++i;
-      }
-
+    for (var i = 0; i < nuke.length; i++) {
+      var b = nuke[i];
       if (b != m_bomb) {
         world.destroyBody(b);
       }
     }
-  }
+
+    m_points.length = 0;
+  };
 
   return world;
 });

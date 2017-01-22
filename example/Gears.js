@@ -17,7 +17,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Gears', function(pl) {
+planck.play('Gears', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
@@ -87,23 +87,19 @@ planck.play('Gears', function(pl) {
   var joint4 = world.createJoint(pl.GearJoint({}, body1, body2, joint1, joint2, radius2 / radius1));
   var joint5 = world.createJoint(pl.GearJoint({}, body2, body3, joint2, joint3, -1.0 / radius2));
 
-  function Step(settings) {
-    Test.step(settings);
-
-    var ratio, value; // float
+  testbed.step = function Step(settings) {
+    var ratio, value, status = "";
 
     ratio = joint4.setRatio();
     value = joint1.getJointAngle() + ratio * joint2.getJointAngle();
-    g_debugDraw.DrawString(5, m_textLine, "theta1 + %4.2 * theta2 = %4.2",
-        ratio, value);
-    m_textLine += DRAW_STRING_NEW_LINE;
+    status += "theta1 + " + ratio + " * theta2 = " + value;
 
     ratio = joint5.setRatio();
     value = joint2.getJointAngle() + ratio * joint3.getJointTranslation();
-    g_debugDraw.DrawString(5, m_textLine, "theta2 + %4.2 * delta = %4.2",
-        ratio, value);
-    m_textLine += DRAW_STRING_NEW_LINE;
-  }
+    status += "theta2 + " + ratio + " * delta = " + value;
+
+    testbed.status(status);
+  };
 
   return world;
 });

@@ -17,105 +17,93 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('DistanceTest', function(pl) {
-  {
-    {
-      m_transformA.setIdentity();
-      m_transformA.p.set(0.0, -0.2);
-      m_polygonA.setAsBox(10.0, 0.2);
+planck.play('DistanceTest', function(pl, testbed) {
+  var Distance = pl.internal.Distance;
+  var DistanceInput = Distance.Input;
+  var DistanceOutput = Distance.Output;
+  var DistanceProxy = Distance.Proxy;
+  var SimplexCache = Distance.Cache;
+
+  var Vec2 = pl.Vec2, Transform = pl.Transform;
+  var world = pl.World(Vec2(0, -10));
+
+  var m_transformA = pl.Transform();
+  m_transformA.p.set(0.0, -0.2);
+  var m_polygonA = pl.Box(10.0, 0.2);
+
+  var m_positionB = Vec2(12.017401, 0.13678508);
+  var m_angleB = -0.0109265;
+  var m_transformB = pl.Transform(m_positionB, m_angleB);
+
+  var m_polygonB = pl.Box(2.0, 0.1);
+
+  var bodyA = world.createBody();
+  var fixA = bodyA.createFixture(m_polygonA);
+
+  var bodyB = world.createBody();
+  var fixB = bodyB.createFixture(m_polygonB);
+
+  testbed.step = function() {
+    var input = new DistanceInput();
+    input.proxyA.set(m_polygonA, 0);
+    input.proxyB.set(m_polygonB, 0);
+    input.transformA = m_transformA;
+    input.transformB = m_transformB;
+    input.useRadii = true;
+
+    var cache = new SimplexCache();
+
+    var output = new DistanceOutput();
+
+    Distance(output, cache, input);
+
+    testbed.status("distance = " + output.distance + " iterations = " + output.iterations);
+
+    bodyA.setTransform(m_transformA);
+    bodyB.setTransform(m_transformB);
+
+    // TODO do drawing
+
+    // var v = []; //Vec2[b2_maxPolygonVertices];
+    // for (var i = 0; i < m_polygonA.m_count; ++i) {
+    //   v[i] = Transform.mul(m_transformA, m_polygonA.m_vertices[i]);
+    // }
+    // g_debugDraw.DrawPolygon(v, m_polygonA.m_count, Color(0.9, 0.9, 0.9));
+
+    // for (var i = 0; i < m_polygonB.m_count; ++i) {
+    //   v[i] = Transform.mul(m_transformB, m_polygonB.m_vertices[i]);
+    // }
+    // g_debugDraw.DrawPolygon(v, m_polygonB.m_count, Color(0.9, 0.9, 0.9));
+
+    var x1 = output.pointA;
+    var x2 = output.pointB;
+
+    // g_debugDraw.DrawPoint(x1, 4.0, Color(1.0, 0.0, 0.0));
+    // g_debugDraw.DrawPoint(x2, 4.0, Color(1.0, 1.0, 0.0));
+  };
+
+  testbed.keydown = function() {
+    if (testbed.activeKeys['left']) {
+      m_positionB.x -= 0.1;
+
+    } else if (testbed.activeKeys['right']) {
+      m_positionB.x += 0.1;
+
+    } else if (testbed.activeKeys['down']) {
+      m_positionB.y -= 0.1;
+
+    } else if (testbed.activeKeys['up']) {
+      m_positionB.y += 0.1;
+
+    } else if (testbed.activeKeys['Q']) {
+      m_angleB += 0.1 * Math.PI;
+
+    } else if (testbed.activeKeys['E']) {
+      m_angleB -= 0.1 * Math.PI;
     }
 
-    {
-      m_positionB.set(12.017401, 0.13678508);
-      m_angleB = -0.0109265;
-      m_transformB.set(m_positionB, m_angleB);
+    m_transformB.set(m_positionB, m_angleB);
+  };
 
-      m_polygonB.setAsBox(2.0, 0.1);
-    }
-
-    function Step(settings) {
-      Test.step(settings);
-
-      var /* DistanceInput */input;
-      input.proxyA.set(m_polygonA, 0);
-      input.proxyB.set(m_polygonB, 0);
-      input.transformA = m_transformA;
-      input.transformB = m_transformB;
-      input.useRadii = true;
-      var /* SimplexCache */cache;
-      cache.count = 0;
-      var /* DistanceOutput */output;
-      Distance(output, cache, input);
-
-      g_debugDraw.DrawString(5, m_textLine, "distance = %g", output.distance);
-      m_textLine += DRAW_STRING_NEW_LINE;
-
-      g_debugDraw.DrawString(5, m_textLine, "iterations = %d",
-          output.iterations);
-      m_textLine += DRAW_STRING_NEW_LINE;
-
-      {
-        var color = Color(0.9, 0.9, 0.9);
-        var /* Vec2 */v = [];// [b2_maxPolygonVertices];
-        for (var /* int32 */i = 0; i < m_polygonA.m_count; ++i) {
-          v[i] = Mul(m_transformA, m_polygonA.m_vertices[i]);
-        }
-        g_debugDraw.DrawPolygon(v, m_polygonA.m_count, color);
-
-        for (var /* int32 */i = 0; i < m_polygonB.m_count; ++i) {
-          v[i] = Mul(m_transformB, m_polygonB.m_vertices[i]);
-        }
-        g_debugDraw.DrawPolygon(v, m_polygonB.m_count, color);
-      }
-
-      var /* Vec2 */x1 = output.pointA;
-      var /* Vec2 */x2 = output.pointB;
-
-      var c1 = Color(1.0, 0.0, 0.0);
-      g_debugDraw.DrawPoint(x1, 4.0, c1);
-
-      var c2 = Color(1.0, 1.0, 0.0);
-      g_debugDraw.DrawPoint(x2, 4.0, c2);
-    }
-
-    function Keyboard( /* int */key) {
-      switch (key) {
-      case GLFW_KEY_A:
-        m_positionB.x -= 0.1;
-        break;
-
-      case GLFW_KEY_D:
-        m_positionB.x += 0.1;
-        break;
-
-      case GLFW_KEY_S:
-        m_positionB.y -= 0.1;
-        break;
-
-      case GLFW_KEY_W:
-        m_positionB.y += 0.1;
-        break;
-
-      case GLFW_KEY_Q:
-        m_angleB += 0.1 * Math.PI;
-        break;
-
-      case GLFW_KEY_E:
-        m_angleB -= 0.1 * Math.PI;
-        break;
-      }
-
-      m_transformB.set(m_positionB, m_angleB);
-    }
-
-    var /* Vec2 */m_positionB;
-    var /* float32 */m_angleB;
-
-    var /* Transform */m_transformA;
-    var /* Transform */m_transformB;
-    var /* PolygonShape */m_polygonA;
-    var /* PolygonShape */m_polygonB;
-
-    return world;
-  }
+  return world;
 });

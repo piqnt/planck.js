@@ -17,7 +17,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Revolute', function(pl) {
+planck.play('Revolute', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
@@ -98,32 +98,26 @@ planck.play('Revolute', function(pl) {
 
   body.createFixture(polyShape, polyFixtureDef); // assertion hits inside here
 
-  function Keyboard(key) {
-    switch (key) {
-    case GLFW_KEY_L:
+  testbed.keydown = function(code, char) {
+    switch (char) {
+    case 'L':
       m_joint.enableLimit(!m_joint.isLimitEnabled());
       break;
 
-    case GLFW_KEY_M:
+    case 'M':
       m_joint.enableMotor(!m_joint.isMotorEnabled());
       break;
     }
-  }
+  };
 
-  function Step(settings) {
-    Test.step(settings);
-    g_debugDraw.DrawString(5, m_textLine, "Keys: (l) limits, (m) motor");
-    m_textLine += DRAW_STRING_NEW_LINE;
-
-    // if (m_stepCount == 360) {
+  testbed.step = function(settings) {
+    // if (world.m_stepCount == 360) {
     // m_ball.setTransform(Vec2(0.0, 0.5), 0.0);
     // }
 
-    // var /*float32*/ torque1 = m_joint1.getMotorTorque();
-    // g_debugDraw.DrawString(5, m_textLine, "Motor Torque = %4.0, %4.0 : Motor
-    // Force = %4.0", (float) torque1, (float) torque2, (float) force3);
-    // m_textLine += DRAW_STRING_NEW_LINE;
-  }
+    var torque1 = m_joint1.getMotorTorque();
+    testbed.status('Motor Torque = ' + torque1 + ', ' + torque2 + ', Motor Force = force3' + '\nL: limits, M: motor');
+  };
 
   return world;
 });

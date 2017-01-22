@@ -18,7 +18,7 @@
  */
 
 // The motor in this test gets smoother with higher velocity iterations.
-planck.play('Prismatic', function(pl, opts) {
+planck.play('Prismatic', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
@@ -52,23 +52,23 @@ planck.play('Prismatic', function(pl, opts) {
 
   world.createJoint(joint);
 
-  opts.step = function() {
-    if (opts.activeKeys.right && !opts.activeKeys.left) {
+  testbed.step = function() {
+    if (testbed.activeKeys.right && !testbed.activeKeys.left) {
       joint.enableLimit(true);
       joint.enableMotor(true);
       joint.setMotorSpeed(+MOTOR_SPEED);
 
-    } else if (opts.activeKeys.left && !opts.activeKeys.right) {
+    } else if (testbed.activeKeys.left && !testbed.activeKeys.right) {
       joint.enableLimit(true);
       joint.enableMotor(true);
       joint.setMotorSpeed(-MOTOR_SPEED);
 
-    } else if (opts.activeKeys.up && !opts.activeKeys.down) {
+    } else if (testbed.activeKeys.up && !testbed.activeKeys.down) {
       joint.enableLimit(false);
       joint.enableMotor(true);
       joint.setMotorSpeed(+MOTOR_SPEED);
 
-    } else if (opts.activeKeys.down && !opts.activeKeys.up) {
+    } else if (testbed.activeKeys.down && !testbed.activeKeys.up) {
       joint.enableLimit(false);
       joint.enableMotor(true);
       joint.setMotorSpeed(-MOTOR_SPEED);
@@ -77,10 +77,10 @@ planck.play('Prismatic', function(pl, opts) {
       joint.enableLimit(true);
       joint.enableMotor(false);
     }
-  };
 
-  // var force = m_joint.getMotorForce(settings.hz);
-  // g_debugDraw.DrawString(5, m_textLine, "Motor Force = %4.0", force);
+    var force = m_joint.getMotorForce(1 / 60);
+    testbed.status('Motor Force = ' + force);
+  };
 
   return world;
 });

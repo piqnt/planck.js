@@ -25,7 +25,7 @@
 /// densities, time step, and iterations to see how they affect stability.
 /// This test also shows how to use contact filtering. Filtering is configured
 /// so that the payload does not collide with the chain.
-planck.play('RopeJoint', function(pl) {
+planck.play('RopeJoint', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
@@ -75,31 +75,24 @@ planck.play('RopeJoint', function(pl) {
   m_ropeDef.localAnchorB = Vec2(0, 0);
   var m_rope = world.createJoint(pl.RopeJoint(m_ropeDef, ground, prevBody));
 
-  function Keyboard(key) {
-    switch (key) {
-    case GLFW_KEY_J:
+  testbed.keydown = function(code, char) {
+    if (testbed.activeKeys.fire) {
       if (m_rope) {
         world.destroyJoint(m_rope);
         m_rope = null;
       } else {
         m_rope = world.createJoint(pl.RopeJoint(m_ropeDef, ground, prevBody));
       }
-      break;
     }
+
+    updateStatus();
+  };
+
+  function updateStatus() {
+    testbed.status('Press space to toggle the rope joint. Rope: ' + !!m_rope);
   }
 
-  function Step(settings) {
-    Test.step(settings);
-    g_debugDraw
-        .DrawString(5, m_textLine, "Press (j) to toggle the rope joint.");
-    m_textLine += DRAW_STRING_NEW_LINE;
-    if (m_rope) {
-      g_debugDraw.DrawString(5, m_textLine, "Rope ON");
-    } else {
-      g_debugDraw.DrawString(5, m_textLine, "Rope OFF");
-    }
-    m_textLine += DRAW_STRING_NEW_LINE;
-  }
+  updateStatus();
 
   return world;
 });

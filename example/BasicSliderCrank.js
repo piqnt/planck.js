@@ -18,7 +18,7 @@
  */
 
 // A basic slider crank created for GDC tutorial: Understanding Constraints
-planck.play('BasicSliderCrank', function(pl) {
+planck.play('BasicSliderCrank', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
@@ -27,50 +27,25 @@ planck.play('BasicSliderCrank', function(pl) {
   var prevBody = ground;
 
   // Define crank.
-  {
-    var shape = pl.Box(4.0, 1.0);
-
-    var body = world.createBody({
-      type : 'dynamic',
-      position : Vec2(-8.0, 20.0)
-    });
-    body.createFixture(shape, 2.0);
-
-    world.createJoint(pl.RevoluteJoint({}, prevBody, body, Vec2(-12.0, 20.0)));
-
-    prevBody = body;
-  }
+  var crank = world.createDynamicBody(Vec2(-8.0, 20.0));
+  crank.createFixture(pl.Box(4.0, 1.0), 2.0);
+  world.createJoint(pl.RevoluteJoint({}, prevBody, crank, Vec2(-12.0, 20.0)));
+  prevBody = crank;
 
   // Define connecting rod
-  {
-    var shape = pl.Box(8.0, 1.0);
-
-    var body = world.createBody({
-      type : 'dynamic',
-      position : Vec2(4.0, 20.0)
-    });
-    body.createFixture(shape, 2.0);
-
-    world.createJoint(pl.RevoluteJoint({}, prevBody, body, Vec2(-4.0, 20.0)));
-
-    prevBody = body;
-  }
+  var rod = world.createDynamicBody(Vec2(4.0, 20.0));
+  rod.createFixture(pl.Box(8.0, 1.0), 2.0);
+  world.createJoint(pl.RevoluteJoint({}, prevBody, rod, Vec2(-4.0, 20.0)));
+  prevBody = rod;
 
   // Define piston
-  {
-    var shape = pl.Box(3.0, 3.0);
-
-    var body = world.createBody({
-      type : 'dynamic',
-      fixedRotation : true,
-      position : Vec2(12.0, 20.0)
-    });
-    body.createFixture(shape, 2.0);
-
-    world.createJoint(pl.RevoluteJoint({}, prevBody, body, Vec2(12.0, 20.0)));
-
-    world.createJoint(pl.PrismaticJoint({}, ground, body, Vec2(12.0, 17.0), Vec2(1.0, 0.0)));
-  }
+  var piston = world.createDynamicBody({
+    fixedRotation : true,
+    position : Vec2(12.0, 20.0)
+  });
+  piston.createFixture(pl.Box(3.0, 3.0), 2.0);
+  world.createJoint(pl.RevoluteJoint({}, prevBody, piston, Vec2(12.0, 20.0)));
+  world.createJoint(pl.PrismaticJoint({}, ground, piston, Vec2(12.0, 17.0), Vec2(1.0, 0.0)));
 
   return world;
 });

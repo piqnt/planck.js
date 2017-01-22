@@ -19,19 +19,16 @@
 
 // This stress tests the dynamic tree broad-phase. This also shows that tile
 // based collision is _not_ smooth due to Box2D not knowing about adjacency.
-planck.play('Tiles', function(pl) {
+planck.play('Tiles', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = pl.World(Vec2(0, -10));
 
-  var e_count = 20
+  var e_count = 20;
 
   var m_fixtureCount = 0;
 
   var a = 0.5;
-  var bd = {};
-  bd.position = Vec2();
-  bd.position.y = -a;
-  var ground = world.createBody(bd);
+  var ground = world.createBody(Vec2(0, -a));
 
   if (1) {
     var N = 200;
@@ -90,33 +87,22 @@ planck.play('Tiles', function(pl) {
     x.add(deltaX);
   }
 
-  // var m_createTime = timer.GetMilliseconds();
+  var m_createTime = Date.now();
 
-  function Step(settings) {
-    var cm = world.GetContactManager();
-    var height = cm.m_broadPhase.getTreeHeight();
-    var leafCount = cm.m_broadPhase.getProxyCount();
+  testbed.step = function() {
+    var height = world.getTreeHeight();
+    var leafCount = world.getProxyCount();
     var minimumNodeCount = 2 * leafCount - 1;
-    var minimumHeight = ceilf(logf(float32(minimumNodeCount)) / logf(2.0));
-    g_debugDraw.DrawString(5, m_textLine, "dynamic tree height = %d, min = %d",
-        height, int32(minimumHeight));
-    m_textLine += DRAW_STRING_NEW_LINE;
+    var minimumHeight = Math.ceil(Math.log(minimumNodeCount) / Math.log(2.0));
 
-    Test.step(settings);
+    testbed.status("dynamic tree height = " + height + ", min = " + minimumHeight +
+      "\ncreate time = " + m_createTime + " ms, fixture count = " + m_fixtureCount);
 
-    g_debugDraw.DrawString(5, m_textLine,
-        "create time = %6.2 ms, fixture count = %d", m_createTime,
-        m_fixtureCount);
-    m_textLine += DRAW_STRING_NEW_LINE;
-
-    // var /*DynamicTree*/ tree =
-    // world.m_contactManager.m_broadPhase.m_tree;
-
-    // if (m_stepCount == 400)
-    // {
+    // var tree = world.m_broadPhase.m_tree;
+    // if (world.m_stepCount == 400) {
     // tree.rebuildBottomUp();
     // }
-  }
+  };
 
   return world;
 });

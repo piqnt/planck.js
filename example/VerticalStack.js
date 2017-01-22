@@ -17,12 +17,15 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('VerticalStack', function(pl) {
+planck.play('VerticalStack', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  var columnCount = 1;
-  var rowCount = 15
+  // TODO
+  var g_blockSolve = true;
+
+  var columnCount = 2;
+  var rowCount = 15;
 
   var bullet;
   var bodies = [];
@@ -50,7 +53,7 @@ planck.play('VerticalStack', function(pl) {
       bd.userData = indices[n];
 
       var x = 0.0;
-      // var x = RandomFloat(-0.02, 0.02);
+      // var x = pl.Math.random(-0.02, 0.02);
       // var x = i % 2 == 0 ? -0.01 : 0.01;
 
       var body = world.createBody(bd);
@@ -61,9 +64,9 @@ planck.play('VerticalStack', function(pl) {
     }
   }
 
-  function Keyboard(key) {
-    switch (key) {
-    case GLFW_KEY_COMMA:
+  testbed.keydown = function(code, char) {
+    switch (char) {
+    case 'X':
       if (bullet != null) {
         world.destroyBody(bullet);
         bullet = null;
@@ -79,7 +82,7 @@ planck.play('VerticalStack', function(pl) {
       var bd = {};
       bd.type = 'dynamic';
       bd.bullet = true;
-      bd.position.set(-31.0, 5.0);
+      bd.position = Vec2(-31.0, 5.0);
 
       bullet = world.createBody(bd);
       bullet.createFixture(fd);
@@ -87,19 +90,16 @@ planck.play('VerticalStack', function(pl) {
       bullet.setLinearVelocity(Vec2(400.0, 0.0));
       break;
 
-    case GLFW_KEY_B:
+    case 'B':
       g_blockSolve = !g_blockSolve;
       break;
     }
-  }
+  };
 
-  function Step(settings) {
-    Test.step(settings);
-    g_debugDraw.DrawString(5, m_textLine, "Press: (,) to launch a bullet.");
-    m_textLine += DRAW_STRING_NEW_LINE;
-    g_debugDraw.DrawString(5, m_textLine, "Blocksolve = %d", g_blockSolve);
-    // if (m_stepCount == 300)
-    // {
+  testbed.step = function() {
+    testbed.status("Blocksolve = " + g_blockSolve + "\nX: Launch a bullet");
+
+    // if (world.m_stepCount == 300) {
     // if (m_bullet != null)
     // {
     // world.destroyBody(m_bullet);
@@ -125,7 +125,7 @@ planck.play('VerticalStack', function(pl) {
     // m_bullet.setLinearVelocity(Vec2(400.0, 0.0));
     // }
     // }
-  }
+  };
 
   return world;
 });

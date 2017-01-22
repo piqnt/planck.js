@@ -19,7 +19,7 @@
 
 // Note: even with a restitution of 1.0, there is some energy change
 // due to position correction.
-planck.play('VaryingRestitution', function(pl) {
+planck.play('VaryingRestitution', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10))
 

@@ -16,7 +16,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Asteroid', function(pl, opts) {
+planck.play('Asteroid', function(pl, testbed) {
   var pl = planck, Vec2 = pl.Vec2;
 
   var Math = Stage.Math;
@@ -132,21 +132,21 @@ planck.play('Asteroid', function(pl, opts) {
     if (shipBody) {
 
       // Set velocities
-      if (opts.activeKeys.left && !opts.activeKeys.right) {
+      if (testbed.activeKeys.left && !testbed.activeKeys.right) {
         shipBody.applyAngularImpulse(0.1, true);
-      } else if (opts.activeKeys.right && !opts.activeKeys.left) {
+      } else if (testbed.activeKeys.right && !testbed.activeKeys.left) {
         shipBody.applyAngularImpulse(-0.1, true);
       }
 
       // Thrust: add some force in the ship direction
-      if (opts.activeKeys.up) {
+      if (testbed.activeKeys.up) {
         var f = shipBody.getWorldVector(Vec2(0.0, 1.0));
         var p = shipBody.getWorldPoint(Vec2(0.0, 2.0));
         shipBody.applyLinearImpulse(f, p, true);
       }
 
       // Fire
-      if (opts.activeKeys.fire && globalTime > allowFireTime) {
+      if (testbed.activeKeys.fire && globalTime > allowFireTime) {
 
         var magnitude = 2, angle = shipBody.Getangle + Math.PI / 2;
 
@@ -335,11 +335,11 @@ planck.play('Asteroid', function(pl, opts) {
 
   var ui = {};
 
-  opts.width = SPACE_WIDTH;
-  opts.height = SPACE_HEIGHT;
-  opts.step = tick;
-  opts.ratio = 64;
-  opts.pin = {handle : -0.5};
+  testbed.width = SPACE_WIDTH;
+  testbed.height = SPACE_HEIGHT;
+  testbed.step = tick;
+  testbed.ratio = 64;
+  testbed.pin = {handle : -0.5};
 
   function uiStart() {
     console.log('Game started');
@@ -347,12 +347,12 @@ planck.play('Asteroid', function(pl, opts) {
 
   function uiEnd() {
     console.log('Game over');
-    opts.status('Game Over!');
+    testbed.status('Game Over!');
   }
 
   function uiStatus() {
     console.log('Level: ' + level + ' Lives: ' + lives);
-    opts.status('Level: ' + level + ' Lives: ' + lives);
+    testbed.status('Level: ' + level + ' Lives: ' + lives);
   }
 
   start();

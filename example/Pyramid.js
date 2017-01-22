@@ -17,11 +17,11 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Pyramid', function(pl) {
+planck.play('Pyramid', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  var e_count = 20
+  var e_count = 20;
 
   var ground = world.createBody();
   ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
@@ -46,12 +46,12 @@ planck.play('Pyramid', function(pl) {
     x.add(deltaX);
   }
 
-  function Step(settings) {
-    // var /*DynamicTree*/ tree = world.m_contactManager.m_broadPhase.m_tree;
-    // if (m_stepCount == 400)
-    // {
+  testbed.step = function() {
+    // var tree = world.m_broadPhase.m_tree;
+    // if (world.m_stepCount == 400) {
     // tree.rebuildBottomUp();
     // }
-  }
+  };
+
   return world;
 });

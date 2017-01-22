@@ -18,15 +18,15 @@
  */
 
 // This is used to test sensor shapes.
-planck.play('SensorTest', function(pl) {
+planck.play('SensorTest', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
   var e_count = 7;
 
   var m_sensor;
-  var m_bodies = []; //[ e_count ];
-  var m_touching = []; //[ e_count ];
+  var m_bodies = [];
+  var m_touching = [];
 
   var ground = world.createBody(bd);
   ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
@@ -36,11 +36,10 @@ planck.play('SensorTest', function(pl) {
     sd.shape = pl.Box(10.0, 2.0, Vec2(0.0, 20.0), 0.0);
     sd.isSensor = true;
     m_sensor = ground.createFixture(sd);
-  } else {
-    var shape = pl.Circle(Vec2(0.0, 10.0), 5.0);
 
+  } else {
     var fd = {};
-    fd.shape = shape;
+    fd.shape = pl.Circle(Vec2(0.0, 10.0), 5.0);
     fd.isSensor = true;
     m_sensor = ground.createFixture(fd);
   }
@@ -48,76 +47,62 @@ planck.play('SensorTest', function(pl) {
   var shape = pl.Circle(1.0);
 
   for (var i = 0; i < e_count; ++i) {
+    m_touching[i] = {touching : false};
+
     var bd = {};
     bd.type = 'dynamic';
     bd.position = Vec2(-10.0 + 3.0 * i, 20.0);
-    bd.userData = m_touching + i;
+    bd.userData = m_touching[i];
 
-    m_touching[i] = false;
     m_bodies[i] = world.createBody(bd);
-
     m_bodies[i].createFixture(shape, 1.0);
   }
 
   // Implement contact listener.
-  function BeginContact(contact) {
+  world.on('begin-contact', function(contact) {
     var fixtureA = contact.getFixtureA();
     var fixtureB = contact.getFixtureB();
 
     if (fixtureA == m_sensor) {
-      userData = fixtureB.getBody().getUserData();
+      var userData = fixtureB.getBody().getUserData();
       if (userData) {
-        var /* bool */touching = (bool)
-        userData;
-        /***/
-        touching = true;
+        userData.touching = true;
       }
     }
 
     if (fixtureB == m_sensor) {
-      userData = fixtureA.getBody().getUserData();
+      var userData = fixtureA.getBody().getUserData();
       if (userData) {
-        var /* bool */touching = (bool)
-        userData;
-        /***/
-        touching = true;
+        userData.touching = true;
       }
     }
-  }
+  });
 
   // Implement contact listener.
-  function EndContact(contact) {
+  world.on('end-contact', function(contact) {
     var fixtureA = contact.getFixtureA();
     var fixtureB = contact.getFixtureB();
 
     if (fixtureA == m_sensor) {
-      userData = fixtureB.getBody().getUserData();
+      var userData = fixtureB.getBody().getUserData();
       if (userData) {
-        var /* bool */touching = (bool)
-        userData;
-        /***/
-        touching = false;
+        userData.touching = false;
       }
     }
 
     if (fixtureB == m_sensor) {
-      userData = fixtureA.getBody().getUserData();
+      var userData = fixtureA.getBody().getUserData();
       if (userData) {
-        var /* bool */touching = (bool)
-        userData;
-        /***/
-        touching = false;
+        userData.touching = false;
       }
     }
-  }
+  });
 
-  function Step(settings) {
-    Test.step(settings);
-
+  testbed.step = function() {
     // Traverse the contact results. Apply a force on shapes
     // that overlap the sensor.
-    for (var /* int32 */i = 0; i < e_count; ++i) {
-      if (m_touching[i] == false) {
+    for (var i = 0; i < e_count; ++i) {
+      if (m_touching[i].touching == false) {
         continue;
       }
 
@@ -125,20 +110,20 @@ planck.play('SensorTest', function(pl) {
       var ground = m_sensor.getBody();
 
       var circle = m_sensor.getShape();
-      var center = ground.getWorldPoint(circle.m_p);
+      var center = ground.getWorldPoint(circle.getCenter());
 
       var position = body.getPosition();
 
-      var /* Vec2 */d = center - position;
-      if (d.lengthSquared() < FLT_EPSILON * FLT_EPSILON) {
+      var d = Vec2(center, position);
+      if (d.lengthSquared() < pl.Math.EPSILON * pl.Math.EPSILON) {
         continue;
       }
 
       d.normalize();
-      var /* Vec2 */F = 100.0 * d;
+      var F = Vec2.mul(d, 100.0);
       body.applyForce(F, position, false);
     }
-  }
+  };
 
   return world;
 });

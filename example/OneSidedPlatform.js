@@ -17,52 +17,46 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('OneSidedPlatform', function(pl) {
+planck.play('OneSidedPlatform', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
   var m_radius = 0.5;
   var m_top = 10.0 + 0.5;
   var m_bottom = 10.0 - 0.5;
-  var m_state;
-  var m_platform;
-  var m_character;
 
-  var e_unknown, e_above, e_below;
+  var m_state, e_unknown = 0, e_above = +1, e_below = -1;
 
   // Ground
   var ground = world.createBody();
-  var shape = pl.Edge(Vec2(-20.0, 0.0), Vec2(20.0, 0.0));
-  ground.createFixture(shape, 0.0);
+  ground.createFixture(pl.Edge(Vec2(-20.0, 0.0), Vec2(20.0, 0.0)), 0.0);
 
   // Platform
   var body = world.createBody(Vec2(0.0, 10.0));
-  m_platform = body.createFixture(pl.Box(3.0, 0.5), 0.0);
+  var m_platform = body.createFixture(pl.Box(3.0, 0.5), 0.0);
 
   // Actor
   var body = world.createDynamicBody(Vec2(0.0, 12.0));
-  m_character = body.createFixture(pl.Circle(m_radius), 20.0);
+  var m_character = body.createFixture(pl.Circle(m_radius), 20.0);
   body.setLinearVelocity(Vec2(0.0, -50.0));
+
   m_state = e_unknown;
 
-  function PreSolve(contact, oldManifold) {
-    Test.preSolve(contact, oldManifold);
-
+  world.on('pre-solve', function(contact, oldManifold) {
     var fixtureA = contact.getFixtureA();
     var fixtureB = contact.getFixtureB();
 
-    if (fixtureA != m_platform && fixtureA != m_character) {
+    if (fixtureA == m_platform && fixtureB == m_character
+      || fixtureB == m_platform && fixtureA == m_character) {
+    } else {
       return;
     }
 
-    if (fixtureB != m_platform && fixtureB != m_character) {
-      return;
-    }
 
-    if (1) {
+    if (0) {
       var position = m_character.getBody().getPosition();
 
-      if (position.y < m_top + m_radius - 3.0 * b2_linearSlop) {
+      if (position.y < m_top + m_radius - 3.0 * /*linearSlop*/ 0.005) {
         contact.setEnabled(false);
       }
     } else {
@@ -71,19 +65,12 @@ planck.play('OneSidedPlatform', function(pl) {
         contact.setEnabled(false);
       }
     }
-  }
+  });
 
-  function Step(settings) {
-    Test.step(settings);
-    g_debugDraw.DrawString(5, m_textLine,
-        "Press: (c) create a shape, (d) destroy a shape.");
-    m_textLine += DRAW_STRING_NEW_LINE;
-
-    var /* Vec2 */v = m_character.getBody().getLinearVelocity();
-    g_debugDraw.DrawString(5, m_textLine, "Character Linear Velocity: %f",
-        v.y);
-    m_textLine += DRAW_STRING_NEW_LINE;
-  }
+  testbed.step = function(settings) {
+    var v = m_character.getBody().getLinearVelocity();
+    testbed.status("Character Linear Velocity: " + v.y);
+  };
 
   return world;
 });

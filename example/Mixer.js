@@ -16,11 +16,11 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Mixer', function(pl, opts) {
+planck.play('Mixer', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World();
 
-  opts.pin.handleY = -0.5;
+  testbed.pin.handleY = -0.5;
 
   var box = world.createBody().setKinematic();
   box.createFixture(pl.Edge(Vec2(15, -5), Vec2(25, 5)));

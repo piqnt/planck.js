@@ -17,41 +17,22 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('SphereStack', function(pl) {
+planck.play('SphereStack', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  var e_count = 10
-  var m_bodies = [];// [ e_count ];
+  var e_count = 10;
+  var m_bodies = [];
 
   var ground = world.createBody();
   ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
   var shape = pl.Circle(1.0);
 
-  var bd = {};
-  bd.type = 'dynamic';
   for (var i = 0; i < e_count; ++i) {
-    bd.position = Vec2(0.0, 4.0 + 3.0 * i);
-    m_bodies[i] = world.createBody(bd);
+    m_bodies[i] = world.createDynamicBody(Vec2(0.0, 4.0 + 3.0 * i));
     m_bodies[i].createFixture(shape, 1.0);
     m_bodies[i].setLinearVelocity(Vec2(0.0, -50.0));
-  }
-
-  function Step(settings) {
-    Test.step(settings);
-
-    // for (var /*int32*/ i = 0; i < e_count; ++i)
-    // {
-    // printf("%g ", m_bodies[i].getWorldCenter().y);
-    // }
-
-    // for (var /*int32*/ i = 0; i < e_count; ++i)
-    // {
-    // printf("%g ", m_bodies[i].getLinearVelocity().y);
-    // }
-
-    // printf("\n");
   }
 
   return world;

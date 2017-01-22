@@ -17,12 +17,11 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Tumbler', function(pl) {
+planck.play('Tumbler', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = pl.World(Vec2(0, -10));
 
   var COUNT = 20; // 800
-  var count = 0;
 
   var ground = world.createBody();
 
@@ -44,11 +43,10 @@ planck.play('Tumbler', function(pl) {
   jd.enableMotor = true;
   world.createJoint(pl.RevoluteJoint(jd, ground, body, Vec2(0, 10)));
 
-  var bd = {};
-  bd.type = 'dynamic';
   var shape = pl.Box(0.125, 0.125);
+  var count = 0;
   while (count < COUNT) {
-    var body = world.createBody(bd);
+    var body = world.createDynamicBody();
     body.setPosition(Vec2(0, 10));
     body.createFixture(shape, 1);
     ++count;

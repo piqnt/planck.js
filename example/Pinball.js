@@ -19,7 +19,7 @@
 
 // This tests bullet collision and provides an example of a gameplay scenario.
 // This also uses a loop shape.
-planck.play('Pinball', function(pl, opts) {
+planck.play('Pinball', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
@@ -67,14 +67,14 @@ planck.play('Pinball', function(pl, opts) {
   });
   ball.createFixture(pl.Circle(0.2), 1.0);
 
-  opts.step = function() {
-    if (opts.activeKeys.right) {
+  testbed.step = function() {
+    if (testbed.activeKeys.right) {
       rightJoint.setMotorSpeed(-20.0);
     } else {
       rightJoint.setMotorSpeed(10.0);
     }
 
-    if (opts.activeKeys.left) {
+    if (testbed.activeKeys.left) {
       leftJoint.setMotorSpeed(20.0);
     } else {
       leftJoint.setMotorSpeed(-10.0);

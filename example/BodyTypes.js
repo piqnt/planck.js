@@ -17,121 +17,73 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('BodyTypes', function(pl) {
-  var ground = null;
-  {
-    ground = world.createBody();
+planck.play('BodyTypes', function(pl, testbed) {
+  var Vec2 = pl.Vec2;
+  var world = new pl.World(Vec2(0, -10));
 
-    var shape = pl.Edge(Vec2(-20.0, 0.0), Vec2(20.0, 0.0));
+  var m_attachment;
+  var m_platform;
+  var m_speed = 3.0;
 
-    var fd = {};
-    fd.shape = shape;
-
-    ground.createFixture(fd);
-  }
+  var ground = world.createBody();
+  ground.createFixture(pl.Edge(Vec2(-20.0, 0.0), Vec2(20.0, 0.0)));
 
   // Define attachment
-  {
-    var bd = {};
-    bd.type = 'dynamic';
-    bd.position.set(0.0, 3.0);
-    m_attachment = world.createBody(bd);
-
-    var shape = pl.Box(0.5, 2.0);
-    m_attachment.createFixture(shape, 2.0);
-  }
+  m_attachment = world.createDynamicBody(Vec2(0.0, 3.0));
+  m_attachment.createFixture(pl.Box(0.5, 2.0), 2.0);
 
   // Define platform
-  {
-    var bd = {};
-    bd.type = 'dynamic';
-    bd.position.set(-4.0, 5.0);
-    m_platform = world.createBody(bd);
+  m_platform = world.createDynamicBody(Vec2(-4.0, 5.0));
 
-    var shape = pl.Box(0.5, 4.0, Vec2(4.0, 0.0), 0.5 * Math.PI);
+  m_platform.createFixture(pl.Box(0.5, 4.0, Vec2(4.0, 0.0), 0.5 * Math.PI), {
+    friction : 0.6,
+    density : 2.0
+  });
 
-    var fd = {};
-    fd.shape = shape;
-    fd.friction = 0.6;
-    fd.density = 2.0;
-    m_platform.createFixture(fd);
+  world.createJoint(pl.RevoluteJoint({
+    maxMotorTorque : 50.0,
+    enableMotor : true
+  }, m_attachment, m_platform, Vec2(0.0, 5.0)));
 
-    var /* RevoluteJointDef */rjd;
-    rjd.initialize(m_attachment, m_platform, Vec2(0.0, 5.0));
-    rjd.maxMotorTorque = 50.0;
-    rjd.enableMotor = true;
-    world.createJoint(rjd);
-
-    var /* PrismaticJointDef */pjd;
-    pjd.initialize(ground, m_platform, Vec2(0.0, 5.0), Vec2(1.0, 0.0));
-
-    pjd.maxMotorForce = 1000.0;
-    pjd.enableMotor = true;
-    pjd.lowerTranslation = -10.0;
-    pjd.upperTranslation = 10.0;
-    pjd.enableLimit = true;
-
-    world.createJoint(pjd);
-
-    m_speed = 3.0;
-  }
+  world.createJoint(pl.PrismaticJoint({
+    maxMotorForce : 1000.0,
+    enableMotor : true,
+    lowerTranslation : -10.0,
+    upperTranslation : 10.0,
+    enableLimit : true
+  }, ground, m_platform, Vec2(0.0, 5.0), Vec2(1.0, 0.0)));
 
   // Create a payload
-  {
-    var /* BodyDef */bd;
-    bd.type = 'dynamic';
-    bd.position.set(0.0, 8.0);
-    var /* Body */body = world.createBody(bd);
+  var body = world.createDynamicBody(Vec2(0.0, 8.0));
+  body.createFixture(pl.Box(0.75, 0.75), {friction : 0.6, density : 2.0});
 
-    var shape = pl.Box(0.75, 0.75);
-
-    var /* FixtureDef */fd;
-    fd.shape = shape;
-    fd.friction = 0.6;
-    fd.density = 2.0;
-
-    body.createFixture(fd);
-  }
-
-  function Keyboard(/* int */key) {
-    switch (key) {
-    case GLFW_KEY_D:
+  testbed.keydown = function() {
+    if (testbed.activeKeys['D']) {
       m_platform.setType('dynamic');
-      break;
 
-    case GLFW_KEY_S:
+    } else if (testbed.activeKeys['S']) {
       m_platform.setType('static');
-      break;
 
-    case GLFW_KEY_K:
+    } else if (testbed.activeKeys['K']) {
       m_platform.setType('kinematic');
       m_platform.setLinearVelocity(Vec2(-m_speed, 0.0));
       m_platform.setAngularVelocity(0.0);
-      break;
     }
-  }
+  };
 
-  function Step(settings) {
+  testbed.step = function(settings) {
     // Drive the kinematic body.
     if (m_platform.getType() == 'kinematic') {
-      var /* Vec2 */p = m_platform.getTransform().p;
-      var /* Vec2 */v = m_platform.getLinearVelocity();
+      var p = m_platform.getTransform().p;
+      var v = m_platform.getLinearVelocity();
 
       if ((p.x < -10.0 && v.x < 0.0) || (p.x > 10.0 && v.x > 0.0)) {
         v.x = -v.x;
         m_platform.setLinearVelocity(v);
       }
     }
+  };
 
-    Test.step(settings);
-    g_debugDraw.DrawString(5, m_textLine,
-        "Keys: (d) dynamic, (s) static, (k) kinematic");
-    m_textLine += DRAW_STRING_NEW_LINE;
-  }
-
-  var /* Body */m_attachment;
-  var /* Body */m_platform;
-  var /* float32 */m_speed;
-
+  testbed.status('D: Dynamic, S: Static, K: Kinematic');
   return world;
 });

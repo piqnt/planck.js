@@ -17,7 +17,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Pulleys', function(pl) {
+planck.play('Pulleys', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
@@ -57,15 +57,11 @@ planck.play('Pulleys', function(pl) {
   var m_joint1 = world.createJoint(pl.PulleyJoint(pjd, body1, body2,
       groundAnchor1, groundAnchor2, anchor1, anchor2, 1.5));
 
-  function Step(settings) {
-    Test.step(settings);
-
-    var /* float32 */ratio = m_joint1.setRatio();
-    var /* float32 */L = m_joint1.getCurrentLengthA() + ratio
-        * m_joint1.getCurrentLengthB();
-    g_debugDraw.DrawString(5, m_textLine, "L1 + %4.2 * L2 = %4.2", ratio, L);
-    m_textLine += DRAW_STRING_NEW_LINE;
-  }
+  testbed.step = function() {
+    var ratio = m_joint1.setRatio();
+    var L = m_joint1.getCurrentLengthA() + ratio * m_joint1.getCurrentLengthB();
+    testbed.status('L1 + ' + ratio + ' * L2 = ' + L);
+  };
 
   return world;
 });

@@ -17,7 +17,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('HeavyOnLightTwo', function(pl) {
+planck.play('HeavyOnLightTwo', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
@@ -49,13 +49,13 @@ planck.play('HeavyOnLightTwo', function(pl) {
     }
   }
 
-  function Keyboard(key) {
-    switch (key) {
-    case GLFW_KEY_H:
+  testbed.keydown = function(code, char) {
+    switch (char) {
+    case 'H':
       ToggleHeavy();
       break;
     }
-  }
+  };
 
   return world;
 });

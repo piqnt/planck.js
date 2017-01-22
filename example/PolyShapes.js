@@ -17,7 +17,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('PolyShapes', function(pl) {
+planck.play('PolyShapes', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
@@ -26,26 +26,20 @@ planck.play('PolyShapes', function(pl) {
   var bodyIndex = 0;
   var polygons = [];
 
-  {
-    var ground = world.createBody();
-    ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
-  }
+  var ground = world.createBody();
+  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
-  {
-    var vertices = [];
-    vertices[0] = Vec2(-0.5, 0.0);
-    vertices[1] = Vec2(0.5, 0.0);
-    vertices[2] = Vec2(0.0, 1.5);
-    polygons[0] = pl.Polygon(vertices);
-  }
+  polygons[0] = pl.Polygon([
+    Vec2(-0.5, 0.0),
+    Vec2(0.5, 0.0),
+    Vec2(0.0, 1.5)
+  ]);
 
-  {
-    var vertices = [];
-    vertices[0] = Vec2(-0.1, 0.0);
-    vertices[1] = Vec2(0.1, 0.0);
-    vertices[2] = Vec2(0.0, 1.5);
-    polygons[1] = pl.Polygon(vertices);
-  }
+  polygons[1] = pl.Polygon([
+    Vec2(-0.1, 0.0),
+    Vec2(0.1, 0.0),
+    Vec2(0.0, 1.5)
+  ]);
 
   {
     var w = 1.0;
@@ -65,9 +59,7 @@ planck.play('PolyShapes', function(pl) {
     polygons[2] = pl.Polygon(vertices);
   }
 
-  {
-    polygons[3] = pl.Box(0.5, 0.5);
-  }
+  polygons[3] = pl.Box(0.5, 0.5);
 
   var circle = pl.Circle(0.5);
 
@@ -116,29 +108,29 @@ planck.play('PolyShapes', function(pl) {
     }
   }
 
-  window.addEventListener("keydown", function(e) {
-    switch (e.keyCode) {
-    case '1'.charCodeAt(0):
+  testbed.keydown = function(code, char) {
+    switch (char) {
+    case '1':
       Create(1);
       break;
 
-    case '2'.charCodeAt(0):
+    case '2':
       Create(2);
       break;
 
-    case '3'.charCodeAt(0):
+    case '3':
       Create(3);
       break;
 
-    case '4'.charCodeAt(0):
+    case '4':
       Create(4);
       break;
 
-    case '5'.charCodeAt(0):
+    case '5':
       Create(5);
       break;
 
-    case 'A'.charCodeAt(0):
+    case 'A':
       for (var i = 0; i < e_maxBodies; i += 2) {
         if (bodies[i]) {
           var active = bodies[i].isActive();
@@ -147,54 +139,38 @@ planck.play('PolyShapes', function(pl) {
       }
       break;
 
-    case 'D'.charCodeAt(0):
+    case 'D':
       DestroyBody();
       break;
     }
-  }, false);
+  };
 
   function Step(settings) {
-    Test.step(settings);
-
     var callback = new PolyShapesCallback();
-    callback.m_circle.m_radius = 2.0;
-    callback.m_circle.m_p.set(0.0, 1.1);
-    callback.m_transform.setIdentity();
-    callback.g_debugDraw = g_debugDraw;
 
-    var /* AABB */aabb;
+    var aabb = pl.AABB();
     callback.m_circle.computeAABB(aabb, callback.m_transform, 0);
 
     world.queryAABB(callback, aabb);
 
-    var color = Color(0.4, 0.7, 0.8);
-    g_debugDraw.DrawCircle(callback.m_circle.m_p, callback.m_circle.m_radius,
-        color);
-
-    g_debugDraw.DrawString(5, m_textLine, "Press 1-5 to drop stuff");
-    m_textLine += DRAW_STRING_NEW_LINE;
-    g_debugDraw.DrawString(5, m_textLine,
-        "Press 'a' to (de)activate some bodies");
-    m_textLine += DRAW_STRING_NEW_LINE;
-    g_debugDraw.DrawString(5, m_textLine, "Press 'd' to destroy a body");
-    m_textLine += DRAW_STRING_NEW_LINE;
+    // g_debugDraw.DrawCircle(callback.m_circle.m_p, callback.m_circle.m_radius, Color(0.4, 0.7, 0.8));
   }
+
+  testbed.status("1-5: Drop stuff, A: (De)Activate some bodies, D: Destroy a body");
 
   // This tests stacking. It also shows how to use World.query and TestOverlap.
   // This callback is called by World.queryAABB. We find all the fixtures
-  // that overlap an AABB. Of those, we use TestOverlap to determine which
-  // fixtures
+  // that overlap an AABB. Of those, we use TestOverlap to determine which fixtures
   // overlap a circle. Up to 4 overlapped fixtures will be highlighted with a
   // yellow border.
-  function PolyShapesCallback() { // extends queryCallback
+  function PolyShapesCallback() {
 
-    var /* CircleShape */m_circle;
-    var /* Transform */m_transform;
+    var m_circle = pl.Circle(Vec2(0.0, 1.1), 2.0);
+    var m_transform = pl.Transform();
     var /* Draw */g_debugDraw;
-    var /* int32 */m_count;
+    var m_count = 0;
 
     var e_maxCount = 4;
-    var m_count = 0;
 
     function DrawFixture(fixture) {
       var color = Color(0.95, 0.95, 0.6);
@@ -204,7 +180,7 @@ planck.play('PolyShapes', function(pl) {
       case 'circle': {
         var circle = fixture.getShape();
 
-        var center = Transform.mul(xf, circle.m_p);
+        var center = Transform.mul(xf, circle.getCenter());
         var radius = circle.getRadius();
 
         g_debugDraw.DrawCircle(center, radius, color);
@@ -238,8 +214,7 @@ planck.play('PolyShapes', function(pl) {
       var body = fixture.getBody();
       var shape = fixture.getShape();
 
-      var overlap = TestOverlap(shape, 0, m_circle, 0, body.getTransform(),
-          m_transform);
+      var overlap = TestOverlap(shape, 0, m_circle, 0, body.getTransform(), m_transform);
 
       if (overlap) {
         DrawFixture(fixture);

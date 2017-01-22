@@ -17,7 +17,15 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('ContinuousTest', function(pl) {
+planck.play('ContinuousTest', function(pl, testbed) {
+  var Vec2 = pl.Vec2;
+  var world = pl.World(Vec2(0, -10));
+  
+  var stats = pl.internal.stats;
+
+  var m_body;
+  var m_angularVelocity;
+
   var body = world.createBody(Vec2(0.0, 0.0));
 
   body.createFixture(pl.Edge(Vec2(-10.0, 0.0), Vec2(10.0, 0.0)), 0.0);
@@ -31,7 +39,7 @@ planck.play('ContinuousTest', function(pl) {
     m_body = world.createDynamicBody(bd);
     m_body.createFixture(pl.Box(2.0, 0.1), 1.0);
 
-    m_angularVelocity = RandomFloat(-50.0, 50.0);
+    m_angularVelocity = pl.Math.random(-50.0, 50.0);
     // m_angularVelocity = 46.661274;
     m_body.setLinearVelocity(Vec2(0.0, -100.0));
     m_body.setAngularVelocity(m_angularVelocity);
@@ -51,91 +59,52 @@ planck.play('ContinuousTest', function(pl) {
     body.setLinearVelocity(Vec2(0.0, -100.0));
   }
 
-  /* extern */var /* int32 */b2_gjkCalls, b2_gjkIters, b2_gjkMaxIters;
-  /* extern */var /* int32 */b2_toiCalls, b2_toiIters;
-  /* extern */var /* int32 */b2_toiRootIters, b2_toiMaxRootIters;
-  /* extern */var /* float32 */b2_toiTime, b2_toiMaxTime;
+  stats.gjkCalls = 0;
+  stats.gjkIters = 0;
+  stats.gjkMaxIters = 0;
 
-  b2_gjkCalls = 0;
-  b2_gjkIters = 0;
-  b2_gjkMaxIters = 0;
-  b2_toiCalls = 0;
-  b2_toiIters = 0;
-  b2_toiRootIters = 0;
-  b2_toiMaxRootIters = 0;
-  b2_toiTime = 0.0;
-  b2_toiMaxTime = 0.0;
+  stats.toiCalls = 0;
+  stats.toiIters = 0;
+  stats.toiRootIters = 0;
+  stats.toiMaxRootIters = 0;
+  stats.toiTime = 0.0;
+  stats.toiMaxTime = 0.0;
 
   function Launch() {
-    extern
-    var /* int32 */b2_gjkCalls, b2_gjkIters, b2_gjkMaxIters;
-    extern
-    var /* int32 */b2_toiCalls, b2_toiIters;
-    extern
-    var /* int32 */b2_toiRootIters, b2_toiMaxRootIters;
-    extern
-    var /* float32 */b2_toiTime, b2_toiMaxTime;
+    stats.gjkCalls = 0;
+    stats.gjkIters = 0;
+    stats.gjkMaxIters = 0;
 
-    b2_gjkCalls = 0;
-    b2_gjkIters = 0;
-    b2_gjkMaxIters = 0;
-    b2_toiCalls = 0;
-    b2_toiIters = 0;
-    b2_toiRootIters = 0;
-    b2_toiMaxRootIters = 0;
-    b2_toiTime = 0.0;
-    b2_toiMaxTime = 0.0;
+    stats.toiCalls = 0;
+    stats.toiIters = 0;
+    stats.toiRootIters = 0;
+    stats.toiMaxRootIters = 0;
+    stats.toiTime = 0.0;
+    stats.toiMaxTime = 0.0;
 
     m_body.setTransform(Vec2(0.0, 20.0), 0.0);
-    m_angularVelocity = RandomFloat(-50.0, 50.0);
+    m_angularVelocity = pl.Math.random(-50.0, 50.0);
     m_body.setLinearVelocity(Vec2(0.0, -100.0));
     m_body.setAngularVelocity(m_angularVelocity);
   }
 
-  function Step(settings) {
-    Test.step(settings);
+  testbed.step = function() {
+    testbed.status(stats.toString('\n'));
 
-    extern
-    var /* int32 */b2_gjkCalls, b2_gjkIters, b2_gjkMaxIters;
-
-    if (b2_gjkCalls > 0) {
-      g_debugDraw.DrawString(5, m_textLine,
-          "gjk calls = %d, ave gjk iters = %3.1, max gjk iters = %d",
-          b2_gjkCalls, b2_gjkIters / float32(b2_gjkCalls), b2_gjkMaxIters);
-      m_textLine += DRAW_STRING_NEW_LINE;
+    if (stats.gjkCalls > 0) {
+      // "gjk calls = %d, ave gjk iters = %3.1, max gjk iters = %d", stats.gjkCalls, stats.gjkIters / float32(stats.gjkCalls), stats.gjkMaxIters
     }
 
-    extern
-    var /* int32 */b2_toiCalls, b2_toiIters;
-    extern
-    var /* int32 */b2_toiRootIters, b2_toiMaxRootIters;
-    extern
-    var /* float32 */b2_toiTime, b2_toiMaxTime;
-
-    if (b2_toiCalls > 0) {
-      g_debugDraw.DrawString(5, m_textLine,
-          "toi calls = %d, ave [max] toi iters = %3.1 [%d]", b2_toiCalls,
-          b2_toiIters / float32(b2_toiCalls), b2_toiMaxRootIters);
-      m_textLine += DRAW_STRING_NEW_LINE;
-
-      g_debugDraw.DrawString(5, m_textLine,
-          "ave [max] toi root iters = %3.1 [%d]", b2_toiRootIters
-              / float32(b2_toiCalls), b2_toiMaxRootIters);
-      m_textLine += DRAW_STRING_NEW_LINE;
-
-      g_debugDraw.DrawString(5, m_textLine,
-          "ave [max] toi time = %.1 [%.1] (microseconds)", 1000.0 * b2_toiTime
-              / float32(b2_toiCalls), 1000.0 * b2_toiMaxTime);
-      m_textLine += DRAW_STRING_NEW_LINE;
+    if (stats.toiCalls > 0) {
+      // "toi calls = %d, ave [max] toi iters = %3.1 [%d]", stats.toiCalls, stats.toiIters / float32(stats.toiCalls), stats.toiMaxRootIters
+      // "ave [max] toi root iters = %3.1 [%d]", stats.toiRootIters / float32(stats.toiCalls), stats.toiMaxRootIters
+      // "ave [max] toi time = %.1 [%.1] (microseconds)", 1000.0 * stats.toiTime / float32(stats.toiCalls), 1000.0 * stats.toiMaxTime
     }
 
-    if (m_stepCount % 60 == 0) {
-      // Launch();
+    if (world.m_stepCount % 60 == 0) {
+      Launch();
     }
-  }
-
-  var /* Body */m_body;
-  var /* float32 */m_angularVelocity;
+  };
 
   return world;
 });

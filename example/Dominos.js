@@ -17,12 +17,12 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Dominos', function(pl, opts) {
+planck.play('Dominos', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  opts.width = 40;
-  opts.height = 40;
+  testbed.width = 40;
+  testbed.height = 40;
 
   var b1 = world.createBody();
   b1.createFixture(pl.Edge(Vec2(-40, 0), Vec2(40, 0)), 0);
