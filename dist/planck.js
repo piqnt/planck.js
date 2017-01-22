@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.8
+ * Planck.js v0.1.9
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -87,12 +87,14 @@ exports.WheelJoint = require("./joint/WheelJoint");
 
 exports.internal = {};
 
+exports.internal.Manifold = require("./Manifold");
+
 exports.internal.Sweep = require("./common/Sweep");
 
 exports.internal.Distance = require("./collision/Distance");
 
 exports.internal.stats = require("./common/stats");
-},{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Shape":8,"./World":10,"./collision/AABB":11,"./collision/Distance":13,"./common/Math":18,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/stats":26,"./joint/DistanceJoint":27,"./joint/FrictionJoint":28,"./joint/GearJoint":29,"./joint/MotorJoint":30,"./joint/MouseJoint":31,"./joint/PrismaticJoint":32,"./joint/PulleyJoint":33,"./joint/RevoluteJoint":34,"./joint/RopeJoint":35,"./joint/WeldJoint":36,"./joint/WheelJoint":37,"./shape/BoxShape":38,"./shape/ChainShape":39,"./shape/CircleShape":40,"./shape/CollideCircle":41,"./shape/CollideCirclePolygone":42,"./shape/CollideEdgeCircle":43,"./shape/CollideEdgePolygon":44,"./shape/CollidePolygon":45,"./shape/EdgeShape":46,"./shape/PolygonShape":47}],2:[function(require,module,exports){
+},{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Manifold":6,"./Shape":8,"./World":10,"./collision/AABB":11,"./collision/Distance":13,"./common/Math":18,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/stats":26,"./joint/DistanceJoint":27,"./joint/FrictionJoint":28,"./joint/GearJoint":29,"./joint/MotorJoint":30,"./joint/MouseJoint":31,"./joint/PrismaticJoint":32,"./joint/PulleyJoint":33,"./joint/RevoluteJoint":34,"./joint/RopeJoint":35,"./joint/WeldJoint":36,"./joint/WheelJoint":37,"./shape/BoxShape":38,"./shape/ChainShape":39,"./shape/CircleShape":40,"./shape/CollideCircle":41,"./shape/CollideCirclePolygone":42,"./shape/CollideEdgeCircle":43,"./shape/CollideEdgePolygon":44,"./shape/CollidePolygon":45,"./shape/EdgeShape":46,"./shape/PolygonShape":47}],2:[function(require,module,exports){
 module.exports = Body;
 
 var common = require("./util/common");
@@ -3041,6 +3043,10 @@ Shape.isValid = function(shape) {
     return !!shape;
 };
 
+Shape.getRadius = function() {
+    return this.m_radius;
+};
+
 /**
  * Get the type of this shape. You can use this to down cast to the concrete
  * shape.
@@ -4040,6 +4046,7 @@ function World(def) {
     this.m_velocityIterations = def.velocityIterations;
     this.m_positionIterations = def.positionIterations;
     this.m_t = 0;
+    this.m_stepCount = 0;
     // Broad-phase callback.
     this.addPair = this.createContact.bind(this);
 }
@@ -4594,6 +4601,7 @@ World.prototype.step = function(ts, dt) {
         }
         return;
     }
+    this.m_stepCount++;
     // If new fixtures were added, we need to find the new contacts.
     if (this.m_newFixture) {
         this.findNewContacts();
@@ -8576,7 +8584,14 @@ function Velocity() {
 
 
 },{"./Vec2":23}],26:[function(require,module,exports){
-
+exports.toString = function(delimiter) {
+    delimiter = typeof delimiter === "string" ? delimiter : "\n";
+    var string = "";
+    for (var name in stats) {
+        string += name + ": " + stats[name] + delimiter;
+    }
+    return string;
+};
 
 
 },{}],27:[function(require,module,exports){
