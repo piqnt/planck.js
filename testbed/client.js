@@ -112,13 +112,13 @@
     var keyCode = e.keyCode;
     downKeys[keyCode] = true;
     updateActiveKeys(keyCode, true);
-    opts.keydown && opts.keydown();
+    opts.keydown && opts.keydown(keyCode, String.fromCharCode(keyCode));
   });
   window.addEventListener("keyup", function(e) {
     var keyCode = e.keyCode;
     downKeys[keyCode] = false;
     updateActiveKeys(keyCode, false);
-    opts.keyup && opts.keyup();
+    opts.keyup && opts.keyup(keyCode, String.fromCharCode(keyCode));
   });
 
   var activeKeys = {};
