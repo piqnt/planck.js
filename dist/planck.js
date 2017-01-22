@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.7
+ * Planck.js v0.1.8
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -87,8 +87,12 @@ exports.WheelJoint = require("./joint/WheelJoint");
 
 exports.internal = {};
 
+exports.internal.Sweep = require("./common/Sweep");
+
 exports.internal.Distance = require("./collision/Distance");
-},{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Shape":8,"./World":10,"./collision/AABB":11,"./collision/Distance":13,"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./joint/DistanceJoint":26,"./joint/FrictionJoint":27,"./joint/GearJoint":28,"./joint/MotorJoint":29,"./joint/MouseJoint":30,"./joint/PrismaticJoint":31,"./joint/PulleyJoint":32,"./joint/RevoluteJoint":33,"./joint/RopeJoint":34,"./joint/WeldJoint":35,"./joint/WheelJoint":36,"./shape/BoxShape":37,"./shape/ChainShape":38,"./shape/CircleShape":39,"./shape/CollideCircle":40,"./shape/CollideCirclePolygone":41,"./shape/CollideEdgeCircle":42,"./shape/CollideEdgePolygon":43,"./shape/CollidePolygon":44,"./shape/EdgeShape":45,"./shape/PolygonShape":46}],2:[function(require,module,exports){
+
+exports.internal.stats = require("./common/stats");
+},{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Shape":8,"./World":10,"./collision/AABB":11,"./collision/Distance":13,"./common/Math":18,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/stats":26,"./joint/DistanceJoint":27,"./joint/FrictionJoint":28,"./joint/GearJoint":29,"./joint/MotorJoint":30,"./joint/MouseJoint":31,"./joint/PrismaticJoint":32,"./joint/PulleyJoint":33,"./joint/RevoluteJoint":34,"./joint/RopeJoint":35,"./joint/WeldJoint":36,"./joint/WheelJoint":37,"./shape/BoxShape":38,"./shape/ChainShape":39,"./shape/CircleShape":40,"./shape/CollideCircle":41,"./shape/CollideCirclePolygone":42,"./shape/CollideEdgeCircle":43,"./shape/CollideEdgePolygon":44,"./shape/CollidePolygon":45,"./shape/EdgeShape":46,"./shape/PolygonShape":47}],2:[function(require,module,exports){
 module.exports = Body;
 
 var common = require("./util/common");
@@ -1020,7 +1024,7 @@ Body.prototype.getLocalVector = function(worldVector) {
 };
 
 
-},{"./Fixture":4,"./Shape":8,"./World":10,"./common/Math":18,"./common/Position":19,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/Velocity":25,"./util/common":49,"./util/options":51}],3:[function(require,module,exports){
+},{"./Fixture":4,"./Shape":8,"./World":10,"./common/Math":18,"./common/Position":19,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/Velocity":25,"./util/common":50,"./util/options":52}],3:[function(require,module,exports){
 var DEBUG_SOLVER = false;
 
 var common = require("./util/common");
@@ -1038,6 +1042,8 @@ var Rot = require("./common/Rot");
 var Settings = require("./Settings");
 
 var Manifold = require("./Manifold");
+
+var Distance = require("./collision/Distance");
 
 module.exports = Contact;
 
@@ -2046,7 +2052,7 @@ Contact.destroy = function(contact, listener) {
 };
 
 
-},{"./Manifold":6,"./Settings":7,"./common/Mat22":16,"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":49}],4:[function(require,module,exports){
+},{"./Manifold":6,"./Settings":7,"./collision/Distance":13,"./common/Mat22":16,"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":50}],4:[function(require,module,exports){
 module.exports = Fixture;
 
 var common = require("./util/common");
@@ -2125,6 +2131,7 @@ function Fixture(body, shape, def) {
     this.m_filterGroupIndex = def.filterGroupIndex;
     this.m_filterCategoryBits = def.filterCategoryBits;
     this.m_filterMaskBits = def.filterMaskBits;
+    // TODO validate shape
     this.m_shape = shape;
     //.clone();
     this.m_next = null;
@@ -2405,7 +2412,7 @@ Fixture.prototype.shouldCollide = function(that) {
 };
 
 
-},{"./collision/AABB":11,"./common/Vec2":23,"./util/common":49,"./util/options":51}],5:[function(require,module,exports){
+},{"./collision/AABB":11,"./common/Vec2":23,"./util/common":50,"./util/options":52}],5:[function(require,module,exports){
 module.exports = Joint;
 
 var common = require("./util/common");
@@ -2585,7 +2592,7 @@ Joint.prototype.solveVelocityConstraints = function(step) {};
 Joint.prototype.solvePositionConstraints = function(step) {};
 
 
-},{"./util/common":49}],6:[function(require,module,exports){
+},{"./util/common":50}],6:[function(require,module,exports){
 var common = require("./util/common");
 
 var Vec2 = require("./common/Vec2");
@@ -2885,7 +2892,8 @@ function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
 }
 
 
-},{"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":49}],7:[function(require,module,exports){
+},{"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":50}],7:[function(require,module,exports){
+// TODO merge with World options?
 var Settings = exports;
 
 /**
@@ -3955,7 +3963,7 @@ Solver.prototype.postSolveIsland = function() {
 };
 
 
-},{"./Body":2,"./Contact":3,"./Joint":5,"./Settings":7,"./collision/Distance":13,"./collision/TimeOfImpact":15,"./common/Math":18,"./common/Vec2":23,"./util/Timer":48,"./util/common":49}],10:[function(require,module,exports){
+},{"./Body":2,"./Contact":3,"./Joint":5,"./Settings":7,"./collision/Distance":13,"./collision/TimeOfImpact":15,"./common/Math":18,"./common/Vec2":23,"./util/Timer":49,"./util/common":50}],10:[function(require,module,exports){
 module.exports = World;
 
 var options = require("./util/options");
@@ -4903,7 +4911,7 @@ World.prototype.postSolve = function(contact, impulse) {
 };
 
 
-},{"./Body":2,"./Contact":3,"./Solver":9,"./collision/BroadPhase":12,"./common/Vec2":23,"./util/Timer":48,"./util/common":49,"./util/options":51}],11:[function(require,module,exports){
+},{"./Body":2,"./Contact":3,"./Solver":9,"./collision/BroadPhase":12,"./common/Vec2":23,"./util/Timer":49,"./util/common":50,"./util/options":52}],11:[function(require,module,exports){
 var Settings = require("../Settings");
 
 var Math = require("../common/Math");
@@ -5309,7 +5317,7 @@ BroadPhase.prototype.queryCallback = function(proxyId) {
 };
 
 
-},{"../Settings":7,"../common/Math":18,"../util/common":49,"./AABB":11,"./DynamicTree":14}],13:[function(require,module,exports){
+},{"../Settings":7,"../common/Math":18,"../util/common":50,"./AABB":11,"./DynamicTree":14}],13:[function(require,module,exports){
 module.exports = Distance;
 
 // TODO do not expose internals?
@@ -5326,6 +5334,8 @@ var Settings = require("../Settings");
 var common = require("../util/common");
 
 var Timer = require("../util/Timer");
+
+var stats = require("../common/stats");
 
 var Math = require("../common/Math");
 
@@ -5350,7 +5360,11 @@ var Position = require("../common/Position");
 /**
  * GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
  */
-var gjkCalls, gjkIters, gjkMaxIters;
+stats.gjkCalls = 0;
+
+stats.gjkIters = 0;
+
+stats.gjkMaxIters = 0;
 
 /**
  * Input for Distance. You have to option to use the shape radii in the
@@ -5405,7 +5419,7 @@ function SimplexCache() {
  */
 function Distance(output, cache, input) {
     // TODO GC input objects
-    ++gjkCalls;
+    ++stats.gjkCalls;
     var proxyA = input.proxyA;
     var proxyB = input.proxyB;
     var xfA = input.transformA;
@@ -5474,7 +5488,7 @@ function Distance(output, cache, input) {
         vertex.w = Vec2.sub(vertex.wB, vertex.wA);
         // Iteration count is equated to the number of support point calls.
         ++iter;
-        ++gjkIters;
+        ++stats.gjkIters;
         // Check for duplicate support points. This is the main termination
         // criteria.
         var duplicate = false;
@@ -5491,7 +5505,7 @@ function Distance(output, cache, input) {
         // New vertex is ok and needed.
         ++simplex.m_count;
     }
-    gjkMaxIters = Math.max(gjkMaxIters, iter);
+    stats.gjkMaxIters = Math.max(stats.gjkMaxIters, iter);
     // Prepare output.
     simplex.getWitnessPoints(output.pointA, output.pointB);
     output.distance = Vec2.distance(output.pointA, output.pointB);
@@ -5947,7 +5961,7 @@ Distance.testOverlap = function(shapeA, indexA, shapeB, indexB, xfA, xfB) {
 };
 
 
-},{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/Timer":48,"../util/common":49}],14:[function(require,module,exports){
+},{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../common/stats":26,"../util/Timer":49,"../util/common":50}],14:[function(require,module,exports){
 var Settings = require("../Settings");
 
 var common = require("../util/common");
@@ -6728,7 +6742,7 @@ function Iterator() {
 }
 
 
-},{"../Settings":7,"../common/Math":18,"../common/Vec2":23,"../util/Pool":47,"../util/common":49,"./AABB":11}],15:[function(require,module,exports){
+},{"../Settings":7,"../common/Math":18,"../common/Vec2":23,"../util/Pool":48,"../util/common":50,"./AABB":11}],15:[function(require,module,exports){
 module.exports = TimeOfImpact;
 
 module.exports.Input = TOIInput;
@@ -6740,6 +6754,8 @@ var Settings = require("../Settings");
 var common = require("../util/common");
 
 var Timer = require("../util/Timer");
+
+var stats = require("../common/stats");
 
 var Math = require("../common/Math");
 
@@ -6810,11 +6826,19 @@ function TOIOutput() {
     this.t;
 }
 
-var toiTime = 0, toiMaxTime = 0;
+stats.toiTime = 0;
 
-var toiCalls = 0, toiIters = 0, toiMaxIters = 0;
+stats.toiMaxTime = 0;
 
-var toiRootIters = 0, toiMaxRootIters = 0;
+stats.toiCalls = 0;
+
+stats.toiIters = 0;
+
+stats.toiMaxIters = 0;
+
+stats.toiRootIters = 0;
+
+stats.toiMaxRootIters = 0;
 
 /**
  * Compute the upper bound on time before two shapes penetrate. Time is
@@ -6830,7 +6854,7 @@ var toiRootIters = 0, toiMaxRootIters = 0;
  */
 function TimeOfImpact(output, input) {
     var timer = Timer.now();
-    ++toiCalls;
+    ++stats.toiCalls;
     output.state = TOIOutput.e_unknown;
     output.t = input.tMax;
     var proxyA = input.proxyA;
@@ -6971,7 +6995,7 @@ function TimeOfImpact(output, input) {
                     t = .5 * (a1 + a2);
                 }
                 ++rootIterCount;
-                ++toiRootIters;
+                ++stats.toiRootIters;
                 var s = fcn.evaluate(t);
                 var indexA = fcn.indexA;
                 var indexB = fcn.indexB;
@@ -6992,14 +7016,14 @@ function TimeOfImpact(output, input) {
                     break;
                 }
             }
-            toiMaxRootIters = Math.max(toiMaxRootIters, rootIterCount);
+            stats.toiMaxRootIters = Math.max(stats.toiMaxRootIters, rootIterCount);
             ++pushBackIter;
             if (pushBackIter == Settings.maxPolygonVertices) {
                 break;
             }
         }
         ++iter;
-        ++toiIters;
+        ++stats.toiIters;
         if (done) {
             break;
         }
@@ -7010,10 +7034,10 @@ function TimeOfImpact(output, input) {
             break;
         }
     }
-    toiMaxIters = Math.max(toiMaxIters, iter);
+    stats.toiMaxIters = Math.max(stats.toiMaxIters, iter);
     var time = Timer.diff(timer);
-    toiMaxTime = Math.max(toiMaxTime, time);
-    toiTime += time;
+    stats.toiMaxTime = Math.max(stats.toiMaxTime, time);
+    stats.toiTime += time;
 }
 
 // SeparationFunction Type
@@ -7179,7 +7203,7 @@ SeparationFunction.prototype.evaluate = function(t) {
 };
 
 
-},{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/Timer":48,"../util/common":49,"./Distance":13}],16:[function(require,module,exports){
+},{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../common/stats":26,"../util/Timer":49,"../util/common":50,"./Distance":13}],16:[function(require,module,exports){
 module.exports = Mat22;
 
 var common = require("../util/common");
@@ -7338,7 +7362,7 @@ Mat22.add = function(mx1, mx2) {
 };
 
 
-},{"../util/common":49,"./Math":18,"./Vec2":23}],17:[function(require,module,exports){
+},{"../util/common":50,"./Math":18,"./Vec2":23}],17:[function(require,module,exports){
 module.exports = Mat33;
 
 var common = require("../util/common");
@@ -7518,7 +7542,7 @@ Mat33.add = function(a, b) {
 };
 
 
-},{"../util/common":49,"./Math":18,"./Vec2":23,"./Vec3":24}],18:[function(require,module,exports){
+},{"../util/common":50,"./Math":18,"./Vec2":23,"./Vec3":24}],18:[function(require,module,exports){
 var common = require("../util/common");
 
 var create = require("../util/create");
@@ -7599,8 +7623,19 @@ math.clamp = function(num, min, max) {
     }
 };
 
+math.random = function(min, max) {
+    if (typeof min === "undefined") {
+        max = 1;
+        min = 0;
+    } else if (typeof max === "undefined") {
+        max = min;
+        min = 0;
+    }
+    return min == max ? min : native.random() * (max - min) + min;
+};
 
-},{"../util/common":49,"../util/create":50}],19:[function(require,module,exports){
+
+},{"../util/common":50,"../util/create":51}],19:[function(require,module,exports){
 module.exports = Position;
 
 var Vec2 = require("./Vec2");
@@ -7763,7 +7798,7 @@ Rot.mulT = function(rot, m) {
 };
 
 
-},{"../util/common":49,"./Math":18,"./Vec2":23}],21:[function(require,module,exports){
+},{"../util/common":50,"./Math":18,"./Vec2":23}],21:[function(require,module,exports){
 module.exports = Sweep;
 
 var common = require("../util/common");
@@ -7876,7 +7911,7 @@ Sweep.prototype.set = function(that) {
 };
 
 
-},{"../util/common":49,"./Math":18,"./Rot":20,"./Transform":22,"./Vec2":23}],22:[function(require,module,exports){
+},{"../util/common":50,"./Math":18,"./Rot":20,"./Transform":22,"./Vec2":23}],22:[function(require,module,exports){
 module.exports = Transform;
 
 var common = require("../util/common");
@@ -7951,7 +7986,13 @@ Transform.assert = function(o) {
  */
 Transform.mul = function(a, b) {
     Transform.assert(a);
-    if ("x" in b && "y" in b) {
+    if (Array.isArray(b)) {
+        var arr = [];
+        for (var i = 0; i < b.length; i++) {
+            arr[i] = Transform.mul(a, b[i]);
+        }
+        return arr;
+    } else if ("x" in b && "y" in b) {
         Vec2.assert(b);
         var x = a.q.c * b.x - a.q.s * b.y + a.p.x;
         var y = a.q.s * b.x + a.q.c * b.y + a.p.y;
@@ -7997,7 +8038,7 @@ Transform.mulT = function(a, b) {
 };
 
 
-},{"../util/common":49,"./Rot":20,"./Vec2":23}],23:[function(require,module,exports){
+},{"../util/common":50,"./Rot":20,"./Vec2":23}],23:[function(require,module,exports){
 module.exports = Vec2;
 
 var common = require("../util/common");
@@ -8407,7 +8448,7 @@ Vec2.clamp = function(v, max) {
 };
 
 
-},{"../util/common":49,"./Math":18}],24:[function(require,module,exports){
+},{"../util/common":50,"./Math":18}],24:[function(require,module,exports){
 module.exports = Vec3;
 
 var common = require("../util/common");
@@ -8519,7 +8560,7 @@ Vec3.neg = function(v) {
 };
 
 
-},{"../util/common":49,"./Math":18}],25:[function(require,module,exports){
+},{"../util/common":50,"./Math":18}],25:[function(require,module,exports){
 module.exports = Velocity;
 
 var Vec2 = require("./Vec2");
@@ -8535,6 +8576,10 @@ function Velocity() {
 
 
 },{"./Vec2":23}],26:[function(require,module,exports){
+
+
+
+},{}],27:[function(require,module,exports){
 module.exports = DistanceJoint;
 
 var options = require("../util/options");
@@ -8811,7 +8856,7 @@ DistanceJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":50,"../util/options":51}],27:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":51,"../util/options":52}],28:[function(require,module,exports){
 module.exports = FrictionJoint;
 
 var common = require("../util/common");
@@ -9086,7 +9131,7 @@ FrictionJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":49,"../util/create":50,"../util/options":51}],28:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],29:[function(require,module,exports){
 module.exports = GearJoint;
 
 var common = require("../util/common");
@@ -9506,7 +9551,7 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":49,"../util/create":50,"../util/options":51,"./PrismaticJoint":31,"./RevoluteJoint":33}],29:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52,"./PrismaticJoint":32,"./RevoluteJoint":34}],30:[function(require,module,exports){
 module.exports = MotorJoint;
 
 var common = require("../util/common");
@@ -9815,7 +9860,7 @@ MotorJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":49,"../util/create":50,"../util/options":51}],30:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],31:[function(require,module,exports){
 module.exports = MouseJoint;
 
 var common = require("../util/common");
@@ -10060,7 +10105,7 @@ MouseJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":49,"../util/create":50,"../util/options":51}],31:[function(require,module,exports){
+},{"../Joint":5,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],32:[function(require,module,exports){
 module.exports = PrismaticJoint;
 
 var common = require("../util/common");
@@ -10694,7 +10739,7 @@ PrismaticJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":49,"../util/create":50,"../util/options":51}],32:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],33:[function(require,module,exports){
 module.exports = PulleyJoint;
 
 var common = require("../util/common");
@@ -11032,7 +11077,7 @@ PulleyJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":49,"../util/create":50,"../util/options":51}],33:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],34:[function(require,module,exports){
 module.exports = RevoluteJoint;
 
 var common = require("../util/common");
@@ -11595,7 +11640,7 @@ RevoluteJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":49,"../util/create":50,"../util/options":51}],34:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],35:[function(require,module,exports){
 module.exports = RopeJoint;
 
 var options = require("../util/options");
@@ -11648,7 +11693,7 @@ RopeJoint.prototype = create(RopeJoint._super.prototype);
  * collideConnected in JointDef.
  * 
  * @prop {float} maxLength The maximum length of the rope. Warning: this must be
- *       larger than b2_linearSlop or the joint will have no effect.
+ *       larger than linearSlop or the joint will have no effect.
  */
 var RopeJointDef = {
     maxLength: 0
@@ -11890,7 +11935,7 @@ RopeJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":50,"../util/options":51}],35:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":51,"../util/options":52}],36:[function(require,module,exports){
 module.exports = WeldJoint;
 
 var options = require("../util/options");
@@ -12262,7 +12307,7 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":50,"../util/options":51}],36:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":51,"../util/options":52}],37:[function(require,module,exports){
 module.exports = WheelJoint;
 
 var options = require("../util/options");
@@ -12753,7 +12798,7 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
 };
 
 
-},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":50,"../util/options":51}],37:[function(require,module,exports){
+},{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":51,"../util/options":52}],38:[function(require,module,exports){
 module.exports = BoxShape;
 
 var common = require("../util/common");
@@ -12814,7 +12859,7 @@ function BoxShape(hx, hy, center, angle) {
 }
 
 
-},{"../Settings":7,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"../util/create":50,"../util/options":51,"./PolygonShape":46}],38:[function(require,module,exports){
+},{"../Settings":7,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"../util/options":52,"./PolygonShape":47}],39:[function(require,module,exports){
 module.exports = ChainShape;
 
 var common = require("../util/common");
@@ -13041,7 +13086,7 @@ ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
 };
 
 
-},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"../util/create":50,"../util/options":51,"./EdgeShape":45}],39:[function(require,module,exports){
+},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"../util/options":52,"./EdgeShape":46}],40:[function(require,module,exports){
 module.exports = CircleShape;
 
 var common = require("../util/common");
@@ -13078,7 +13123,6 @@ function CircleShape(a, b) {
     this.m_type = CircleShape.TYPE;
     this.m_p = Vec2();
     this.m_radius = 1;
-    console.log(a, b);
     if (typeof a === "object" && Vec2.isValid(a)) {
         this.m_p.set(a);
         if (typeof b === "number") {
@@ -13188,7 +13232,7 @@ CircleShape.prototype.computeDistanceProxy = function(proxy) {
 };
 
 
-},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"../util/create":50,"../util/options":51}],40:[function(require,module,exports){
+},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"../util/options":52}],41:[function(require,module,exports){
 var common = require("../util/common");
 
 var create = require("../util/create");
@@ -13237,7 +13281,7 @@ function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
 }
 
 
-},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"../util/create":50,"./CircleShape":39}],41:[function(require,module,exports){
+},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"./CircleShape":40}],42:[function(require,module,exports){
 var common = require("../util/common");
 
 var Math = require("../common/Math");
@@ -13349,7 +13393,7 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 }
 
 
-},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"./CircleShape":39,"./PolygonShape":46}],42:[function(require,module,exports){
+},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"./CircleShape":40,"./PolygonShape":47}],43:[function(require,module,exports){
 var common = require("../util/common");
 
 var create = require("../util/create");
@@ -13501,7 +13545,7 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 }
 
 
-},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"../util/create":50,"./ChainShape":38,"./CircleShape":39,"./EdgeShape":45}],43:[function(require,module,exports){
+},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"./ChainShape":39,"./CircleShape":40,"./EdgeShape":46}],44:[function(require,module,exports){
 var common = require("../util/common");
 
 var create = require("../util/create");
@@ -13943,7 +13987,7 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 }
 
 
-},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"../util/create":50,"./ChainShape":38,"./EdgeShape":45,"./PolygonShape":46}],44:[function(require,module,exports){
+},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"./ChainShape":39,"./EdgeShape":46,"./PolygonShape":47}],45:[function(require,module,exports){
 var common = require("../util/common");
 
 var Math = require("../common/Math");
@@ -14160,7 +14204,7 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 }
 
 
-},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"./PolygonShape":46}],45:[function(require,module,exports){
+},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"./PolygonShape":47}],46:[function(require,module,exports){
 module.exports = EdgeShape;
 
 var create = require("../util/create");
@@ -14311,7 +14355,7 @@ EdgeShape.prototype.computeDistanceProxy = function(proxy) {
 };
 
 
-},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/create":50,"../util/options":51}],46:[function(require,module,exports){
+},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/create":51,"../util/options":52}],47:[function(require,module,exports){
 module.exports = PolygonShape;
 
 var common = require("../util/common");
@@ -14703,7 +14747,7 @@ PolygonShape.prototype.computeDistanceProxy = function(proxy) {
 };
 
 
-},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":49,"../util/create":50,"../util/options":51}],47:[function(require,module,exports){
+},{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"../util/options":52}],48:[function(require,module,exports){
 module.exports = Pool;
 
 function Pool(opts) {
@@ -14765,7 +14809,7 @@ function Pool(opts) {
 }
 
 
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 module.exports.now = function() {
     return Date.now();
 };
@@ -14775,7 +14819,7 @@ module.exports.diff = function(time) {
 };
 
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 exports.debug = function() {};
 
 exports.assert = function(statement, err, log) {
@@ -14785,7 +14829,7 @@ exports.assert = function(statement, err, log) {
 };
 
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 if (typeof Object.create == "function") {
     module.exports = function(proto, props) {
         return Object.create.call(Object, proto, props);
@@ -14801,7 +14845,7 @@ if (typeof Object.create == "function") {
 }
 
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
 module.exports = function(to, from) {
