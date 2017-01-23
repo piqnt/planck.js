@@ -115,8 +115,8 @@ planck.play('Revolute', function(pl, testbed) {
     // m_ball.setTransform(Vec2(0.0, 0.5), 0.0);
     // }
 
-    var torque1 = m_joint1.getMotorTorque();
-    testbed.status('Motor Torque = ' + torque1 + ', ' + torque2 + ', Motor Force = force3' + '\nL: limits, M: motor');
+    var torque1 = m_joint.getMotorTorque();
+    testbed.status('Motor Torque = ' + torque1 + ', Motor Force = force3' + '\nL: limits, M: motor');
   };
 
   return world;
