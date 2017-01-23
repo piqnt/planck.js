@@ -211,11 +211,11 @@ planck.play('Car', function(pl, testbed) {
     }
 
     var cp = m_car.getPosition();
-    if (-cp.x + 10 < this.pin('offsetX')) {
-      this.pin('offsetX', -cp.x + 10);
+    if (cp.x > testbed.x + 10) {
+      testbed.x = cp.x - 10;
 
-    } else if (-cp.x - 10 > this.pin('offsetX')) {
-      this.pin('offsetX', -cp.x - 10);
+    } else if (cp.x < testbed.x - 10) {
+      testbed.x = cp.x + 10;
     }
   };
 

@@ -168,16 +168,16 @@ planck.play('EdgeShapes', function(pl, testbed) {
     var d = Vec2(L * Math.cos(m_angle), -L * Math.abs(Math.sin(m_angle)));
     var point2 = Vec2.add(point1, d);
 
-    world.rayCast(point1, point2, EdgeShapesCallback.ReportFixture);
+    world.rayCast(point1, point2, EdgeShapesCallback.initCallback());
 
-    if (EdgeShapesCallback.fixture) {
-      // g_debugDraw.DrawPoint(callback.m_point, 5.0, Color(0.4, 0.9, 0.4));
-      // g_debugDraw.DrawSegment(point1, callback.m_point, Color(0.8, 0.8, 0.8));
+    if (EdgeShapesCallback.m_fixture) {
+      testbed.drawPoint(EdgeShapesCallback.m_point, 5.0, testbed.color(0.4, 0.9, 0.4));
+      testbed.drawSegment(point1, EdgeShapesCallback.m_point, testbed.color(0.8, 0.8, 0.8));
 
-      var head = Vec2.wAdd(1, EdgeShapesCallback.point, 0.5, EdgeShapesCallback.normal);
-      // g_debugDraw.DrawSegment(callback.m_point, head, Color(0.9, 0.9, 0.4));
+      var head = Vec2.wAdd(1, EdgeShapesCallback.m_point, 0.5, EdgeShapesCallback.m_normal);
+      testbed.drawSegment(EdgeShapesCallback.m_point, head, testbed.color(0.9, 0.9, 0.4));
     } else {
-      // g_debugDraw.DrawSegment(point1, point2, Color(0.8, 0.8, 0.8));
+      testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));
     }
 
     if (advanceRay) {
@@ -186,18 +186,23 @@ planck.play('EdgeShapes', function(pl, testbed) {
   };
 
   var EdgeShapesCallback = (function() {
-    this.init = function() {
-      this.fixture = null;
-      this.point = null;
-      this.normal = null;
+    var def = {};
+
+    function reportFixture(fixture, point, normal, fraction) {
+      def.m_fixture = fixture;
+      def.m_point = point;
+      def.m_normal = normal;
+      return fraction;
+    }
+
+    def.initCallback = function () {
+      def.m_fixture = null;
+      def.m_point = null;
+      def.m_normal = null;
+      return reportFixture;
     };
 
-    this.ReportFixture = function(fixture, point, normal, fraction) {
-      this.fixture = fixture;
-      this.point = point;
-      this.normal = normal;
-      return fraction;
-    }.bind(this);
+    return def;
   })();
 
   return world;

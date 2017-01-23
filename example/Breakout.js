@@ -26,10 +26,7 @@ planck.play('Breakout', function(pl, testbed) {
   testbed.width = WIDTH;
   testbed.height = HEIGHT * 1.12;
   testbed.ratio = 32;
-  testbed.pin = {
-    'offsetY': -HEIGHT * 0.04 * 16,
-    'align': -0.5
-  };
+  testbed.y = 0;
 
   testbed.keydown = function() {
     if (testbed.activeKeys.fire) {

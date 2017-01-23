@@ -23,8 +23,8 @@ planck.play('DynamicTreeTest', function(pl, testbed) {
   var worldExtent = 15.0;
   var m_proxyExtent = 0.5;
 
-  var /* DynamicTree */m_tree;
-  var m_queryAABB = pl.AABB;
+  var m_tree = new pl.internal.DynamicTree();
+  var m_queryAABB = pl.AABB();
   var m_rayCastInput = {};
   var m_rayCastOutput = {};
   var m_rayActor;
@@ -34,7 +34,7 @@ planck.play('DynamicTreeTest', function(pl, testbed) {
 
 
   for (var i = 0; i < e_actorCount; ++i) {
-    var actor = m_actors[i];
+    var actor = m_actors[i] = new Actor();
     GetRandomAABB(actor.aabb);
     actor.proxyId = m_tree.createProxy(actor.aabb, actor);
   }
@@ -43,10 +43,10 @@ planck.play('DynamicTreeTest', function(pl, testbed) {
   m_queryAABB.lowerBound.set(-3.0, -4.0 + h);
   m_queryAABB.upperBound.set(5.0, 6.0 + h);
 
-  m_rayCastInput.p1.set(-5.0, 5.0 + h);
-  m_rayCastInput.p2.set(7.0, -4.0 + h);
-  // m_rayCastInput.p1.set(0.0, 2.0 + h);
-  // m_rayCastInput.p2.set(0.0, -2.0 + h);
+  m_rayCastInput.p1 = Vec2(-5.0, 5.0 + h);
+  m_rayCastInput.p2 = Vec2(7.0, -4.0 + h);
+  // m_rayCastInput.p1 = Vec2(0.0, 2.0 + h);
+  // m_rayCastInput.p2 = Vec2(0.0, -2.0 + h);
   m_rayCastInput.maxFraction = 1.0;
 
   testbed.step = function() {
@@ -57,7 +57,7 @@ planck.play('DynamicTreeTest', function(pl, testbed) {
     }
 
     if (m_automated == true) {
-      var actionCount = Max(1, e_actorCount >> 2);
+      var actionCount = Math.max(1, e_actorCount >> 2);
 
       for (var i = 0; i < actionCount; ++i) {
         Action();
@@ -68,36 +68,35 @@ planck.play('DynamicTreeTest', function(pl, testbed) {
     RayCast();
 
     for (var i = 0; i < e_actorCount; ++i) {
-      var actor = m_actors[i]; // Actor
+      var actor = m_actors[i];
       if (actor.proxyId == b2_nullNode)
         continue;
 
-      var c = Color(0.9, 0.9, 0.9);
+      var c = testbed.color(0.9, 0.9, 0.9);
       if (actor == m_rayActor && actor.overlap) {
-        c.set(0.9, 0.6, 0.6);
+        c = testbed.color(0.9, 0.6, 0.6);
       } else if (actor == m_rayActor) {
-        c.set(0.6, 0.9, 0.6);
+        c = testbed.color(0.6, 0.9, 0.6);
       } else if (actor.overlap) {
-        c.set(0.6, 0.6, 0.9);
+        c = testbed.color(0.6, 0.6, 0.9);
       }
 
-      g_debugDraw.DrawAABB(actor.aabb, c);
+      testbed.drawAABB(actor.aabb, c);
     }
 
-    g_debugDraw.DrawAABB(m_queryAABB, Color(0.7, 0.7, 0.7));
-    g_debugDraw.DrawSegment(m_rayCastInput.p1, m_rayCastInput.p2, c);
-    g_debugDraw.DrawPoint(m_rayCastInput.p1, 6.0, Color(0.2, 0.9, 0.2));
-    g_debugDraw.DrawPoint(m_rayCastInput.p2, 6.0, Color(0.9, 0.2, 0.2));
+    testbed.drawAABB(m_queryAABB, testbed.color(0.7, 0.7, 0.7));
+    testbed.drawSegment(m_rayCastInput.p1, m_rayCastInput.p2, c);
+    testbed.drawPoint(m_rayCastInput.p1, 6.0, testbed.color(0.2, 0.9, 0.2));
+    testbed.drawPoint(m_rayCastInput.p2, 6.0, testbed.color(0.9, 0.2, 0.2));
 
     if (m_rayActor) {
       var p = Vec2.wAdd(1 - m_rayActor.fraction, m_rayCastInput.p1, m_rayActor.fraction, m_rayCastInput.p2);
-      g_debugDraw.DrawPoint(p, 6.0, Color(0.2, 0.2, 0.9));
+      testbed.drawPoint(p, 6.0, testbed.color(0.2, 0.2, 0.9));
     }
 
     {
       var height = m_tree.getHeight();
       g_debugDraw.DrawString(5, m_textLine, "dynamic tree height = %d", height);
-      m_textLine += DRAW_STRING_NEW_LINE;
     }
 
     ++m_stepCount;
@@ -146,10 +145,10 @@ planck.play('DynamicTreeTest', function(pl, testbed) {
   }
 
   function Actor() {
-    var /* AABB */aabb;
-    var /* float32 */fraction;
-    var /* bool */overlap;
-    var /* int32 */proxyId;
+    var aabb = pl.AABB();
+    var fraction;
+    var overlap;
+    var proxyId;
   }
 
   function GetRandomAABB(aabb) {
@@ -158,7 +157,7 @@ planck.play('DynamicTreeTest', function(pl, testbed) {
     // aabb.lowerBound.y = -m_proxyExtent + worldExtent;
     aabb.lowerBound.x = pl.Math.random(-worldExtent, worldExtent);
     aabb.lowerBound.y = pl.Math.random(0.0, 2.0 * worldExtent);
-    aabb.upperBound = aabb.lowerBound + w;
+    aabb.upperBound = w.add(aabb.lowerBound);
   }
 
   function MoveAABB(aabb) {
@@ -181,8 +180,8 @@ planck.play('DynamicTreeTest', function(pl, testbed) {
 
   function CreateProxy() {
     for (var i = 0; i < e_actorCount; ++i) {
-      var j = rand() % e_actorCount;
-      var actor = m_actors[j]; // Actor
+      var j = Math.random() * e_actorCount | 0;
+      var actor = m_actors[j];
       if (actor.proxyId == b2_nullNode) {
         GetRandomAABB(actor.aabb);
         actor.proxyId = m_tree.createProxy(actor.aabb, actor);
@@ -193,8 +192,8 @@ planck.play('DynamicTreeTest', function(pl, testbed) {
 
   function DestroyProxy() {
     for (var i = 0; i < e_actorCount; ++i) {
-      var j = rand() % e_actorCount;
-      var actor = m_actors[j]; // Actor
+      var j = Math.random() * e_actorCount | 0;
+      var actor = m_actors[j];
       if (actor.proxyId != b2_nullNode) {
         m_tree.destroyProxy(actor.proxyId);
         actor.proxyId = b2_nullNode;
@@ -205,8 +204,8 @@ planck.play('DynamicTreeTest', function(pl, testbed) {
 
   function MoveProxy() {
     for (var i = 0; i < e_actorCount; ++i) {
-      var j = rand() % e_actorCount;
-      actor = m_actors[j]; // Actor
+      var j = Math.random() * e_actorCount | 0;
+      actor = m_actors[j];
       if (actor.proxyId == b2_nullNode) {
         continue;
       }
@@ -237,14 +236,14 @@ planck.play('DynamicTreeTest', function(pl, testbed) {
   }
 
   function Query() {
-    m_tree.query(this, m_queryAABB);
+    m_tree.query(m_queryAABB, QueryCallback);
 
     for (var i = 0; i < e_actorCount; ++i) {
       if (m_actors[i].proxyId == b2_nullNode) {
         continue;
       }
 
-      var overlap = TestOverlap(m_queryAABB, m_actors[i].aabb);
+      var overlap = pl.internal.Distance.TestOverlap(m_queryAABB, m_actors[i].aabb);
       // assert(overlap == m_actors[i].overlap);
     }
   }
@@ -255,7 +254,7 @@ planck.play('DynamicTreeTest', function(pl, testbed) {
     var input = m_rayCastInput; // RayCastInput
 
     // Ray cast against the dynamic tree.
-    m_tree.rayCast(this, input);
+    m_tree.rayCast(input, RayCastCallback);
 
     // Brute force ray cast.
     var bruteActor = null; // Actor

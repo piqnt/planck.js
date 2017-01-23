@@ -145,45 +145,31 @@ planck.play('PolyShapes', function(pl, testbed) {
     }
   };
 
-  function Step(settings) {
-    var callback = new PolyShapesCallback();
+  testbed.status("1-5: Drop stuff, A: (De)Activate some bodies, D: Destroy a body");
+
+  testbed.step = function() {
+    var callback = PolyShapesCallback();
 
     var aabb = pl.AABB();
     callback.m_circle.computeAABB(aabb, callback.m_transform, 0);
 
-    world.queryAABB(callback, aabb);
+    world.queryAABB(aabb, callback.ReportFixture);
 
-    // g_debugDraw.DrawCircle(callback.m_circle.m_p, callback.m_circle.m_radius, Color(0.4, 0.7, 0.8));
-  }
+    testbed.drawCircle(callback.m_circle.m_p, callback.m_circle.m_radius, testbed.color(0.4, 0.7, 0.8));
+  };
 
-  testbed.status("1-5: Drop stuff, A: (De)Activate some bodies, D: Destroy a body");
+  function drawFixture(fixture) {
+    var color = testbed.color(0.95, 0.95, 0.6);
+    var xf = fixture.getBody().getTransform();
 
-  // This tests stacking. It also shows how to use World.query and TestOverlap.
-  // This callback is called by World.queryAABB. We find all the fixtures
-  // that overlap an AABB. Of those, we use TestOverlap to determine which fixtures
-  // overlap a circle. Up to 4 overlapped fixtures will be highlighted with a
-  // yellow border.
-  function PolyShapesCallback() {
-
-    var m_circle = pl.Circle(Vec2(0.0, 1.1), 2.0);
-    var m_transform = pl.Transform();
-    var /* Draw */g_debugDraw;
-    var m_count = 0;
-
-    var e_maxCount = 4;
-
-    function DrawFixture(fixture) {
-      var color = Color(0.95, 0.95, 0.6);
-      var xf = fixture.getBody().getTransform();
-
-      switch (fixture.getType()) {
+    switch (fixture.getType()) {
       case 'circle': {
         var circle = fixture.getShape();
 
-        var center = Transform.mul(xf, circle.getCenter());
+        var center = pl.Transform.mul(xf, circle.getCenter());
         var radius = circle.getRadius();
 
-        g_debugDraw.DrawCircle(center, radius, color);
+        testbed.drawCircle(center, radius, color);
       }
         break;
 
@@ -191,22 +177,33 @@ planck.play('PolyShapes', function(pl, testbed) {
         var poly = fixture.getShape();
         var vertexCount = poly.m_count;
         // assert(vertexCount <= b2_maxPolygonVertices);
-        var vertices = [];
-        for (var i = 0; i < vertexCount; ++i) {
-          vertices[i] = Mul(xf, poly.m_vertices[i]);
-        }
-        g_debugDraw.DrawPolygon(vertices, vertexCount, color);
+        var vertices = pl.Transform.mul(xf, poly.m_vertices);
+        testbed.drawPolygon(vertices, color);
       }
         break;
 
       default:
         break;
-      }
     }
+  }
+
+  // This tests stacking. It also shows how to use World.query and TestOverlap.
+  // This callback is called by World.queryAABB. We find all the fixtures
+  // that overlap an AABB. Of those, we use TestOverlap to determine which fixtures
+  // overlap a circle. Up to 4 overlapped fixtures will be highlighted with a
+  // yellow border.
+  function PolyShapesCallback() {
+    var def = {};
+
+    def.m_circle = pl.Circle(Vec2(0.0, 1.1), 2.0);
+    def.m_transform = pl.Transform();
+    var m_count = 0;
+
+    var e_maxCount = 40;
 
     // Called for each fixture found in the query AABB.
-    // @return false to terminate the query.
-    function ReportFixture(fixture) {
+    // return false to terminate the query.
+    def.ReportFixture = function(fixture) {
       if (m_count == e_maxCount) {
         return false;
       }
@@ -214,15 +211,17 @@ planck.play('PolyShapes', function(pl, testbed) {
       var body = fixture.getBody();
       var shape = fixture.getShape();
 
-      var overlap = TestOverlap(shape, 0, m_circle, 0, body.getTransform(), m_transform);
+      var overlap = pl.internal.Distance.testOverlap(shape, 0, def.m_circle, 0, body.getTransform(), def.m_transform);
 
       if (overlap) {
-        DrawFixture(fixture);
+        drawFixture(fixture);
         ++m_count;
       }
 
       return true;
     }
+
+    return def;
   }
 
   return world;

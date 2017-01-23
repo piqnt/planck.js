@@ -20,7 +20,7 @@ planck.play('Mixer', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World();
 
-  testbed.pin.handleY = -0.5;
+  testbed.y = 0;
 
   var box = world.createBody().setKinematic();
   box.createFixture(pl.Edge(Vec2(15, -5), Vec2(25, 5)));
@@ -41,8 +41,7 @@ planck.play('Mixer', function(pl, testbed) {
         center : Vec2(),
         I : 0.4
       })
-      a.applyForceToCenter(Vec2(Math.random() * 200 - 100,
-          Math.random() * 200 - 100));
+      a.applyForceToCenter(Vec2(pl.Math.random(-100, 100), pl.Math.random(-100, 100)));
     }
   }
 

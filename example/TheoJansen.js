@@ -155,11 +155,11 @@ planck.play('Theo Jansen\'s Walker', function (pl, testbed) {
       motorjoint.enableMotor(true);
     }
 
-    if (-wheel.getPosition().x + 10 < this.pin('offsetX')) {
-      this.offset(-wheel.getPosition().x + 10, 0);
+    if (wheel.getPosition().x > testbed.x + 10) {
+      testbed.x = wheel.getPosition().x - 10;
 
-    } else if (-wheel.getPosition().x - 10 > this.pin('offsetX')) {
-      this.offset(-wheel.getPosition().x - 10, 0);
+    } else if (wheel.getPosition().x < testbed.x - 10) {
+      testbed.x = wheel.getPosition().x + 10;
     }
 
   };

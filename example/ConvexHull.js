@@ -25,15 +25,11 @@ planck.play('ConvexHull', function(pl, testbed) {
   var m_auto = false;
   var points = [];
 
-  var body = world.createBody();
-  var fixture;
+  var shape;
 
   Generate();
 
   function Generate() {
-    if (fixture) {
-      body.destroyFixture(fixture);
-    }
 
     var lowerBound = Vec2(-8.0, -8.0);
     var upperBound = Vec2(8.0, 8.0);
@@ -49,9 +45,7 @@ planck.play('ConvexHull', function(pl, testbed) {
       points.push(v);
     }
 
-    var shape = pl.Polygon(points);
-
-    fixture = body.createFixture(shape);
+    shape = pl.Polygon(points);
   }
 
   testbed.keydown = function(code, char) {
@@ -69,12 +63,12 @@ planck.play('ConvexHull', function(pl, testbed) {
   testbed.status('G: Generate a new random convex hull');
 
   testbed.step = function() {
-    // g_debugDraw.DrawPolygon(shape.m_vertices, shape.m_count, Color(0.9, 0.9, 0.9));
+    testbed.drawPolygon(shape.m_vertices, testbed.color(0.9, 0.9, 0.9));
 
-    // for (var i = 0; i < m_count; ++i) {
-    //   g_debugDraw.DrawPoint(points[i], 3.0, Color(0.3, 0.9, 0.3));
-    //   g_debugDraw.DrawString(points[i] + Vec2(0.05, 0.05), "%d", i);
-    // }
+    for (var i = 0; i < points.length; ++i) {
+      testbed.drawPoint(points[i], 3.0, testbed.color(0.3, 0.9, 0.3));
+      // testbed.drawString(points[i] + Vec2(0.05, 0.05), "%d", i);
+    }
 
     // if (shape.validate() == false) {
     //   m_textLine += 0;

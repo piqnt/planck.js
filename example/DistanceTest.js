@@ -21,7 +21,6 @@ planck.play('DistanceTest', function(pl, testbed) {
   var Distance = pl.internal.Distance;
   var DistanceInput = Distance.Input;
   var DistanceOutput = Distance.Output;
-  var DistanceProxy = Distance.Proxy;
   var SimplexCache = Distance.Cache;
 
   var Vec2 = pl.Vec2, Transform = pl.Transform;
@@ -62,24 +61,11 @@ planck.play('DistanceTest', function(pl, testbed) {
     bodyA.setTransform(m_transformA);
     bodyB.setTransform(m_transformB);
 
-    // TODO do drawing
-
-    // var v = []; //Vec2[b2_maxPolygonVertices];
-    // for (var i = 0; i < m_polygonA.m_count; ++i) {
-    //   v[i] = Transform.mul(m_transformA, m_polygonA.m_vertices[i]);
-    // }
-    // g_debugDraw.DrawPolygon(v, m_polygonA.m_count, Color(0.9, 0.9, 0.9));
-
-    // for (var i = 0; i < m_polygonB.m_count; ++i) {
-    //   v[i] = Transform.mul(m_transformB, m_polygonB.m_vertices[i]);
-    // }
-    // g_debugDraw.DrawPolygon(v, m_polygonB.m_count, Color(0.9, 0.9, 0.9));
-
     var x1 = output.pointA;
     var x2 = output.pointB;
 
-    // g_debugDraw.DrawPoint(x1, 4.0, Color(1.0, 0.0, 0.0));
-    // g_debugDraw.DrawPoint(x2, 4.0, Color(1.0, 1.0, 0.0));
+    testbed.drawPoint(x1, 4.0, testbed.color(1.0, 0.0, 0.0));
+    testbed.drawPoint(x2, 4.0, testbed.color(1.0, 1.0, 0.0));
   };
 
   testbed.keydown = function() {

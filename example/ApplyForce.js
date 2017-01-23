@@ -18,7 +18,7 @@
  */
 
 planck.play('Apply Force', function(pl, testbed) {
-  testbed.pin.alignY = -0.8;
+  testbed.y = -20;
 
   var Vec2 = pl.Vec2;
   var Transform = pl.Transform;

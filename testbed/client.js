@@ -112,13 +112,13 @@
     var keyCode = e.keyCode;
     downKeys[keyCode] = true;
     updateActiveKeys(keyCode, true);
-    opts.keydown && opts.keydown(keyCode, String.fromCharCode(keyCode));
+    testbed.keydown && testbed.keydown(keyCode, String.fromCharCode(keyCode));
   });
   window.addEventListener("keyup", function(e) {
     var keyCode = e.keyCode;
     downKeys[keyCode] = false;
     updateActiveKeys(keyCode, false);
-    opts.keyup && opts.keyup(keyCode, String.fromCharCode(keyCode));
+    testbed.keyup && testbed.keyup(keyCode, String.fromCharCode(keyCode));
   });
 
   var activeKeys = {};
@@ -134,7 +134,7 @@
     activeKeys.fire = downKeys[32] || downKeys[13] ;
   }
 
-  var opts = {};
+  var testbed = {};
   function run(fn) {
     if (!fn) {
       return;
@@ -148,31 +148,129 @@
     // codefld.innerHTML = fn + "";
     status.innerText = '';
 
-    opts = {};
-    opts.debug = debug;
-    opts.width = 80;
-    opts.height = 60;
-    opts.pin = {};
-    opts.activeKeys = activeKeys;
+    testbed = {};
+    testbed.debug = debug;
+    testbed.width = 80;
+    testbed.height = 60;
+    testbed.x = 0;
+    testbed.y = -10;
+    testbed.ratio = 16;
+    testbed.activeKeys = activeKeys;
 
-    opts.status = function(text) {
+    testbed.status = function(text) {
       status.innerText = text;
-    }
+    };
 
-    world = fn(planck, opts);
-    stage.viewbox(opts.width, opts.height);
-    stage.pin('alignX', -0.5);
-    stage.pin('alignY', -0.7);
-    stage.pin(opts.pin);
+    world = fn(planck, testbed);
+    stage.viewbox(testbed.width, testbed.height);
+    stage.pin('alignX', - 0.5);
+    stage.pin('alignY', - 0.5);
 
-    viewer = new Stage.Planck(world, opts);
-    if (opts.step) {
-      viewer.tick(opts.step);
+    viewer = new Stage.Planck(world, testbed);
+    if (testbed.step) {
+      viewer.tick(testbed.step);
     }
     viewer.scale(1, -1);
     stage.append(viewer);
 
+
     // viewer.timeout(pausePlay, 20000);
+
+    (function(){
+      stage.tick(function() {
+        viewer.offset(-testbed.x, -testbed.y);
+        image.offset(-testbed.x, -testbed.y);
+      });
+
+      var canvas = document.createElement('canvas');
+      var context = canvas.getContext('2d');
+      canvas.width = testbed.width * testbed.ratio * 2;
+      canvas.height = testbed.height * testbed.ratio * 2;
+
+      var image = Stage
+        .image(new Stage.Texture(canvas, testbed.ratio))
+        .pin('handle', 0.5)
+        .scale(1, -1)
+        .appendTo(stage);
+
+      function getX(x) {
+        return (x + testbed.width) * testbed.ratio;
+      }
+
+      function getY(y) {
+        return (y + testbed.height) * testbed.ratio;
+      }
+
+      testbed.drawPoint = function(p, r, color) {
+        context.beginPath();
+        context.arc(getX(p.x), getY(p.y), r, 0, 2 * Math.PI);
+        context.strokeStyle = color;
+        context.lineWidth = 2;
+        context.stroke();
+        image.touch();
+      };
+
+      testbed.drawCircle = function(p, r, color) {
+        context.beginPath();
+        context.arc(getX(p.x), getY(p.y), r * testbed.ratio, 0, 2 * Math.PI);
+        context.strokeStyle = color;
+        context.lineWidth = 2;
+        context.stroke();
+        image.touch();
+      };
+
+      testbed.drawSegment = function(a, b, color) {
+        context.beginPath();
+        context.moveTo(getX(a.x), getY(a.y));
+        context.lineTo(getX(b.x), getY(b.y));
+        context.strokeStyle = color;
+        context.lineCap = 'round';
+        context.lineWidth = 2;
+        context.stroke();
+        image.touch();
+      };
+
+      testbed.drawPolygon = function(points, color) {
+        if (!points || !points.length) {
+          return;
+        }
+        context.beginPath();
+        context.moveTo(getX(points[0].x), getY(points[0].y));
+        for (var i = 1; i < points.length; i++) {
+          context.lineTo(getX(points[i].x), getY(points[i].y));
+        }
+        context.strokeStyle = color;
+        context.lineWidth = 2;
+        context.closePath();
+        context.stroke();
+        image.touch();
+      };
+
+      testbed.drawAABB = function(aabb) {
+        context.beginPath();
+        context.moveTo(getX(aabb.lowerBound.x), getY(aabb.lowerBound.y));
+        context.lineTo(getX(aabb.upperBound.x), getY(aabb.lowerBound.y));
+        context.lineTo(getX(aabb.upperBound.x), getY(aabb.upperBound.y));
+        context.lineTo(getX(aabb.lowerBound.x), getY(aabb.upperBound.y));
+        context.strokeStyle = color;
+        context.lineWidth = 2;
+        context.closePath();
+        context.stroke();
+        image.touch();
+      };
+
+      testbed.color = function(r, g, b) {
+        return 'rgb(' + (r * 256 | 0) + ', ' + (g * 256 | 0) + ', ' + (b * 256 | 0) + ')'
+      };
+
+      stage.tick(function() {
+        context.save();
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.restore();
+      }, true)
+    })();
+
 
     var mouseGround = world.createBody();
     var mouseJoint;

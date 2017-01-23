@@ -59,17 +59,6 @@ planck.play('ContinuousTest', function(pl, testbed) {
     body.setLinearVelocity(Vec2(0.0, -100.0));
   }
 
-  stats.gjkCalls = 0;
-  stats.gjkIters = 0;
-  stats.gjkMaxIters = 0;
-
-  stats.toiCalls = 0;
-  stats.toiIters = 0;
-  stats.toiRootIters = 0;
-  stats.toiMaxRootIters = 0;
-  stats.toiTime = 0.0;
-  stats.toiMaxTime = 0.0;
-
   function Launch() {
     stats.gjkCalls = 0;
     stats.gjkIters = 0;
@@ -87,6 +76,8 @@ planck.play('ContinuousTest', function(pl, testbed) {
     m_body.setLinearVelocity(Vec2(0.0, -100.0));
     m_body.setAngularVelocity(m_angularVelocity);
   }
+
+  Launch();
 
   testbed.step = function() {
     testbed.status(stats.toString('\n'));

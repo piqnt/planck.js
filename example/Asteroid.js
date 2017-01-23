@@ -339,7 +339,7 @@ planck.play('Asteroid', function(pl, testbed) {
   testbed.height = SPACE_HEIGHT;
   testbed.step = tick;
   testbed.ratio = 64;
-  testbed.pin = {handle : -0.5};
+  testbed.y = 0;
 
   function uiStart() {
     console.log('Game started');

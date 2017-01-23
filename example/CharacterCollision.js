@@ -139,9 +139,11 @@ planck.play('CharacterCollision', function(pl, testbed) {
     character.setLinearVelocity(v);
   };
 
-  // 'This tests various character collision shapes.'
-  // 'Limitation: square and hexagon can snag on aligned boxes.'
-  // 'Feature: edge chains have smooth collision inside and out.'
+  testbed.status(
+    'This tests various character collision shapes.' +
+    '\nLimitation: square and hexagon can snag on aligned boxes.' +
+    '\nFeature: edge chains have smooth collision inside and out.'
+  );
 
   return world;
 });

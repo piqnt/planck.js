@@ -30,28 +30,21 @@ planck.play('PolyCollision', function(pl, testbed) {
   var m_transformB = pl.Transform(m_positionB, m_angleB);
 
   testbed.step = function() {
-    return;
-
     var manifold = new pl.internal.Manifold();
-    CollidePolygons(manifold, m_polygonA, m_transformA, m_polygonB, m_transformB);
+    pl.internal.CollidePolygons(manifold, m_polygonA, m_transformA, m_polygonB, m_transformB);
 
     var worldManifold = manifold.getWorldManifold(null, m_transformA, m_polygonA.getRadius(), m_transformB, m_polygonB.getRadius());
 
-    g_debugDraw.DrawString(5, m_textLine, "point count = %d", manifold.pointCount);
+    testbed.status("point count = " + manifold.pointCount);
 
-    var v = [];
-    for (var i = 0; i < m_polygonA.m_count; ++i) {
-      v[i] = Transform.mul(m_transformA, m_polygonA.m_vertices[i]);
-    }
-    // g_debugDraw.DrawPolygon(v, m_polygonA.m_count, Color(0.9, 0.9, 0.9));
+    var vA = Transform.mul(m_transformA, m_polygonA.m_vertices);
+    testbed.drawPolygon(vA, testbed.color(0.9, 0.9, 0.9));
 
-    for (var i = 0; i < m_polygonB.m_count; ++i) {
-      v[i] = Transform.mul(m_transformB, m_polygonB.m_vertices[i]);
-    }
-    // g_debugDraw.DrawPolygon(v, m_polygonB.m_count, Color(0.9, 0.9, 0.9));
+    var vB = Transform.mul(m_transformB, m_polygonB.m_vertices);
+    testbed.drawPolygon(vB, testbed.color(0.9, 0.9, 0.9));
 
     for (var i = 0; i < manifold.pointCount; ++i) {
-      // g_debugDraw.DrawPoint(worldManifold.points[i], 4.0, Color(0.9, 0.3, 0.3));
+      testbed.drawPoint(worldManifold.points[i], 4.0, testbed.color(0.9, 0.3, 0.3));
     }
   };
 
