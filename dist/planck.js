@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.9
+ * Planck.js v0.1.10
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -21,6 +21,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.planck=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+exports.internal = {};
+
 exports.Math = require("./common/Math");
 
 exports.Vec2 = require("./common/Vec2");
@@ -57,7 +59,7 @@ require("./shape/CollideCircle");
 
 require("./shape/CollideEdgeCircle");
 
-require("./shape/CollidePolygon");
+exports.internal.CollidePolygons = require("./shape/CollidePolygon");
 
 require("./shape/CollideCirclePolygone");
 
@@ -85,16 +87,18 @@ exports.WeldJoint = require("./joint/WeldJoint");
 
 exports.WheelJoint = require("./joint/WheelJoint");
 
-exports.internal = {};
+exports.internal.Sweep = require("./common/Sweep");
+
+exports.internal.stats = require("./common/stats");
 
 exports.internal.Manifold = require("./Manifold");
 
-exports.internal.Sweep = require("./common/Sweep");
-
 exports.internal.Distance = require("./collision/Distance");
 
-exports.internal.stats = require("./common/stats");
-},{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Manifold":6,"./Shape":8,"./World":10,"./collision/AABB":11,"./collision/Distance":13,"./common/Math":18,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/stats":26,"./joint/DistanceJoint":27,"./joint/FrictionJoint":28,"./joint/GearJoint":29,"./joint/MotorJoint":30,"./joint/MouseJoint":31,"./joint/PrismaticJoint":32,"./joint/PulleyJoint":33,"./joint/RevoluteJoint":34,"./joint/RopeJoint":35,"./joint/WeldJoint":36,"./joint/WheelJoint":37,"./shape/BoxShape":38,"./shape/ChainShape":39,"./shape/CircleShape":40,"./shape/CollideCircle":41,"./shape/CollideCirclePolygone":42,"./shape/CollideEdgeCircle":43,"./shape/CollideEdgePolygon":44,"./shape/CollidePolygon":45,"./shape/EdgeShape":46,"./shape/PolygonShape":47}],2:[function(require,module,exports){
+exports.internal.TimeOfImpact = require("./collision/TimeOfImpact");
+
+exports.internal.DynamicTree = require("./collision/DynamicTree");
+},{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Manifold":6,"./Shape":8,"./World":10,"./collision/AABB":11,"./collision/Distance":13,"./collision/DynamicTree":14,"./collision/TimeOfImpact":15,"./common/Math":18,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/stats":26,"./joint/DistanceJoint":27,"./joint/FrictionJoint":28,"./joint/GearJoint":29,"./joint/MotorJoint":30,"./joint/MouseJoint":31,"./joint/PrismaticJoint":32,"./joint/PulleyJoint":33,"./joint/RevoluteJoint":34,"./joint/RopeJoint":35,"./joint/WeldJoint":36,"./joint/WheelJoint":37,"./shape/BoxShape":38,"./shape/ChainShape":39,"./shape/CircleShape":40,"./shape/CollideCircle":41,"./shape/CollideCirclePolygone":42,"./shape/CollideEdgeCircle":43,"./shape/CollideEdgePolygon":44,"./shape/CollidePolygon":45,"./shape/EdgeShape":46,"./shape/PolygonShape":47}],2:[function(require,module,exports){
 module.exports = Body;
 
 var common = require("./util/common");
@@ -3043,7 +3047,7 @@ Shape.isValid = function(shape) {
     return !!shape;
 };
 
-Shape.getRadius = function() {
+Shape.prototype.getRadius = function() {
     return this.m_radius;
 };
 
@@ -8584,11 +8588,13 @@ function Velocity() {
 
 
 },{"./Vec2":23}],26:[function(require,module,exports){
-exports.toString = function(delimiter) {
-    delimiter = typeof delimiter === "string" ? delimiter : "\n";
+exports.toString = function(newline) {
+    newline = typeof newline === "string" ? newline : "\n";
     var string = "";
-    for (var name in stats) {
-        string += name + ": " + stats[name] + delimiter;
+    for (var name in this) {
+        if (typeof this[name] !== "function" && typeof this[name] !== "object") {
+            string += name + ": " + this[name] + newline;
+        }
     }
     return string;
 };
@@ -13295,6 +13301,8 @@ function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
     manifold.points[0].id.key = 0;
 }
 
+exports.CollideCircles = CollideCircles;
+
 
 },{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"./CircleShape":40}],42:[function(require,module,exports){
 var common = require("../util/common");
@@ -14024,6 +14032,8 @@ var Contact = require("../Contact");
 var Shape = require("../Shape");
 
 var PolygonShape = require("./PolygonShape");
+
+module.exports = CollidePolygons;
 
 Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
 
