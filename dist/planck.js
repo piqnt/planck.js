@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.10
+ * Planck.js v0.1.11
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -2965,6 +2965,11 @@ Settings.maxSubSteps = 8;
 Settings.maxTOIContacts = 32;
 
 /**
+ * Maximum iterations to solve a TOI.
+ */
+Settings.maxTOIIterations = 20;
+
+/**
  * A velocity threshold for elastic collisions. Any collision with a relative
  * linear velocity below this threshold will be treated as inelastic.
  */
@@ -3173,7 +3178,6 @@ function TimeStep(dt) {
     this.warmStarting = false;
     this.blockSolve = true;
     // timestep ratio for variable timestep
-    // TODO: why? only used inwarm starting
     this.inv_dt0 = 0;
     this.dtRatio = 1;
 }
@@ -5332,7 +5336,6 @@ BroadPhase.prototype.queryCallback = function(proxyId) {
 },{"../Settings":7,"../common/Math":18,"../util/common":50,"./AABB":11,"./DynamicTree":14}],13:[function(require,module,exports){
 module.exports = Distance;
 
-// TODO do not expose internals?
 module.exports.Input = DistanceInput;
 
 module.exports.Output = DistanceOutput;
@@ -5414,7 +5417,7 @@ function DistanceOutput() {
  * @prop {number} count
  */
 function SimplexCache() {
-    this.metric;
+    this.metric = 0;
     this.indexA = [];
     this.indexB = [];
     this.count = 0;
@@ -5430,7 +5433,6 @@ function SimplexCache() {
  * @param {DistanceInput} input
  */
 function Distance(output, cache, input) {
-    // TODO GC input objects
     ++stats.gjkCalls;
     var proxyA = input.proxyA;
     var proxyB = input.proxyB;
@@ -5621,6 +5623,15 @@ function SimplexVertex() {
     // wB - wA
     this.a;
 }
+
+SimplexVertex.prototype.set = function(v) {
+    this.indexA = v.indexA;
+    this.indexB = v.indexB;
+    this.wA = new Vec2(v.wA);
+    this.wB = new Vec2(v.wB);
+    this.w = new Vec2(v.w);
+    this.a = v.a;
+};
 
 function Simplex() {
     this.m_v1 = new SimplexVertex();
@@ -5922,21 +5933,21 @@ Simplex.prototype.solve3 = function() {
         this.m_v1.a = d13_1 * inv_d13;
         this.m_v3.a = d13_2 * inv_d13;
         this.m_count = 2;
-        this.m_v2 = this.m_v3;
+        this.m_v2.set(this.m_v3);
         return;
     }
     // w2 region
     if (d12_1 <= 0 && d23_2 <= 0) {
         this.m_v2.a = 1;
         this.m_count = 1;
-        this.m_v1 = this.m_v2;
+        this.m_v1.set(this.m_v2);
         return;
     }
     // w3 region
     if (d13_1 <= 0 && d23_1 <= 0) {
         this.m_v3.a = 1;
         this.m_count = 1;
-        this.m_v1 = this.m_v3;
+        this.m_v1.set(this.m_v3);
         return;
     }
     // e23
@@ -5945,7 +5956,7 @@ Simplex.prototype.solve3 = function() {
         this.m_v2.a = d23_1 * inv_d23;
         this.m_v3.a = d23_2 * inv_d23;
         this.m_count = 2;
-        this.m_v1 = this.m_v3;
+        this.m_v1.set(this.m_v3);
         return;
     }
     // Must be in triangle123
@@ -6889,8 +6900,7 @@ function TimeOfImpact(output, input) {
     var tolerance = .25 * Settings.linearSlop;
     common.assert(target > tolerance);
     var t1 = 0;
-    var k_maxIterations = 20;
-    // TODO_ERIN Settings
+    var k_maxIterations = Settings.maxTOIIterations;
     var iter = 0;
     // Prepare input for distance query.
     var cache = new SimplexCache();
@@ -6905,6 +6915,8 @@ function TimeOfImpact(output, input) {
         var xfB = new Transform();
         sweepA.getTransform(xfA, t1);
         sweepB.getTransform(xfB, t1);
+        common.debug("xfA:", xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s);
+        common.debug("xfB:", xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
         // Get the distance between shapes. We can also use the results
         // to get a separating axis.
         distanceInput.transformA = xfA;
@@ -14483,7 +14495,6 @@ function ComputeCentroid(vs, count) {
         var triangleArea = .5 * D;
         area += triangleArea;
         // Area weighted centroid
-        // TODO
         c.wAdd(triangleArea * inv3, p1);
         c.wAdd(triangleArea * inv3, p2);
         c.wAdd(triangleArea * inv3, p3);

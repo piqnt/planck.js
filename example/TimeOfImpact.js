@@ -19,47 +19,49 @@
 
 planck.play('TimeOfImpact', function(pl, testbed) {
   var Vec2 = pl.Vec2, Transform = pl.Transform;
+
+  var Sweep = pl.internal.Sweep;
+  var TimeOfImpact = pl.internal.TimeOfImpact;
+  var TOIInput = TimeOfImpact.Input;
+  var TOIOutput = TimeOfImpact.Output;
+
   var world = new pl.World();
 
   testbed.width = 150;
   testbed.height = 100;
-  testbed.x = 30;
-  testbed.y = 60;
+  testbed.x = 0;
+  testbed.y = 0;
 
-  var m_shapeA = pl.Box(25.0, 5.0);
-  var m_shapeB = pl.Box(2.5, 2.5);
-
-  var sweepA = new pl.internal.Sweep();
-  sweepA.c0.set(24.0, -60.0);
-  sweepA.a0 = 2.95;
+  var shapeA = pl.Box(25.0, 5.0);
+  var sweepA = new Sweep();
+  sweepA.c0.set(0, 0);
+  sweepA.a0 = 0.1;
   sweepA.c.set(sweepA.c0);
   sweepA.a = sweepA.a0;
   sweepA.localCenter.setZero();
 
-  var sweepB = new pl.internal.Sweep();
-  sweepB.c0.set(53.474274, -50.252514);
-  sweepB.a0 = 513.36676; // - 162.0 * Math.PI;
-  sweepB.c.set(54.595478, -51.083473);
-  sweepB.a = 513.62781; // - 162.0 * Math.PI;
+  var shapeB = pl.Box(2.5, 2.5);
+  var sweepB = new Sweep();
+  sweepB.c0.set(20, 20);
+  sweepB.a0 = 0.1; // - 162.0 * Math.PI;
+  sweepB.c.set(-20, -20);
+  sweepB.a = 3.1; // - 162.0 * Math.PI;
   sweepB.localCenter.setZero();
 
   // sweepB.a0 -= 300.0 * Math.PI;
   // sweepB.a -= 300.0 * Math.PI;
 
-  var input = new pl.internal.TimeOfImpact.Input();
-  input.proxyA.set(m_shapeA, 0);
-  input.proxyB.set(m_shapeB, 0);
+  var input = new TOIInput();
+  input.proxyA.set(shapeA, 0);
   input.sweepA.set(sweepA);
+  input.proxyB.set(shapeB, 0);
   input.sweepB.set(sweepB);
   input.tMax = 1.0;
 
-  var output = new pl.internal.TimeOfImpact.Output();
+  var output = new TOIOutput();
 
-  pl.internal.TimeOfImpact(output, input);
+  TimeOfImpact(output, input);
 
-  var transformA = new Transform();
-  sweepA.getTransform(transformA, 0.0);
-  console.log(Transform.mul(transformA, m_shapeA.m_vertices));
 
   testbed.step = function() {
 
@@ -72,32 +74,29 @@ planck.play('TimeOfImpact', function(pl, testbed) {
 
     var transformA = new Transform();
     sweepA.getTransform(transformA, 0.0);
-    vertices = Transform.mul(transformA, m_shapeA.m_vertices);
+    vertices = Transform.mul(transformA, shapeA.m_vertices);
     testbed.drawPolygon(vertices, testbed.color(0.9, 0.9, 0.9));
 
     var transformB = new Transform();
+
+    for (var t = 0.1; t < 1.0; t += 0.1) {
+      sweepB.getTransform(transformB, t);
+      vertices = Transform.mul(transformB, shapeB.m_vertices);
+      testbed.drawPolygon(vertices, testbed.color(0.9, 0.5, 0.5));
+    }
+
     sweepB.getTransform(transformB, 0.0);
-
-    var localPoint = Vec2(2.0, -0.1);
-
-    vertices = Transform.mul(transformB, m_shapeB.m_vertices);
+    vertices = Transform.mul(transformB, shapeB.m_vertices);
     testbed.drawPolygon(vertices, testbed.color(0.5, 0.9, 0.5));
 
     sweepB.getTransform(transformB, output.t);
-    vertices = Transform.mul(transformB, m_shapeB.m_vertices);
+    vertices = Transform.mul(transformB, shapeB.m_vertices);
     testbed.drawPolygon(vertices, testbed.color(0.5, 0.7, 0.9));
 
     sweepB.getTransform(transformB, 1.0);
-    vertices = Transform.mul(transformB, m_shapeB.m_vertices);
-    testbed.drawPolygon(vertices, testbed.color(0.9, 0.5, 0.5));
+    vertices = Transform.mul(transformB, shapeB.m_vertices);
+    testbed.drawPolygon(vertices, testbed.color(0.9, 0.1, 0.1));
 
-    if (0) {
-      for (var t = 0.0; t < 1.0; t += 0.1) {
-        sweepB.getTransform(transformB, t);
-        vertices = Transform.mul(transformB, m_shapeB.m_vertices);
-        testbed.drawPolygon(vertices, testbed.color(0.9, 0.5, 0.5));
-      }
-    }
   };
 
   return world;
