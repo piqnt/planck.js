@@ -20,7 +20,7 @@
 // TODO_ERIN test joints on compounds.
 planck.play('CompoundShapes', function(pl, testbed) {
   var Vec2 = pl.Vec2, Transform = pl.Transform;
-  var world = new pl.World();
+  var world = new pl.World(Vec2(0, -10));
 
   world.createBody(Vec2(0.0, 0.0)).createFixture(pl.Edge(Vec2(50.0, 0.0), Vec2(-50.0, 0.0)), 0.0);
 

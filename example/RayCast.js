@@ -224,7 +224,7 @@ planck.play('Ray-Cast', function(pl, testbed) {
 
   testbed.keydown = function(code, char) {
     switch (char){
-      case 'M':
+      case 'Z':
         if (m_mode == e_closest) {
           m_mode = e_any;
         } else if (m_mode == e_any) {
@@ -233,7 +233,7 @@ planck.play('Ray-Cast', function(pl, testbed) {
           m_mode = e_closest;
         }
         break;
-      case 'D':
+      case 'X':
         DestroyBody();
         break;
       case '1':
@@ -259,19 +259,20 @@ planck.play('Ray-Cast', function(pl, testbed) {
   function updateStatus() {
     switch (m_mode) {
       case e_closest:
-        testbed.status("Ray-cast mode: closest - find closest fixture along the ray");
+        testbed.status("Ray-cast mode", "closest - find closest fixture along the ray");
         break;
 
       case e_any:
-        testbed.status("Ray-cast mode: any - check for obstruction");
+        testbed.status("Ray-cast mode", "any - check for obstruction");
         break;
 
       case e_multiple:
-        testbed.status("Ray-cast mode: multiple - gather multiple fixtures");
+        testbed.status("Ray-cast mode", "multiple - gather multiple fixtures");
         break;
     }
-    testbed.status("Press 1-6 to drop stuff, m to change the mode");
   }
+
+  testbed.info("1-6: Drop stuff, Z: Change mode, X: Destroy Body");
 
   testbed.step = function() {
     var advanceRay = true;

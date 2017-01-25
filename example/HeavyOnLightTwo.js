@@ -51,11 +51,14 @@ planck.play('HeavyOnLightTwo', function(pl, testbed) {
 
   testbed.keydown = function(code, char) {
     switch (char) {
-    case 'H':
+    case 'X':
       ToggleHeavy();
       break;
     }
   };
+
+
+  testbed.info('X: Add/Remove heavy circle');
 
   return world;
 });

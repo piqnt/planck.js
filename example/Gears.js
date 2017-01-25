@@ -88,17 +88,18 @@ planck.play('Gears', function(pl, testbed) {
   var joint5 = world.createJoint(pl.GearJoint({}, body2, body3, joint2, joint3, -1.0 / radius2));
 
   testbed.step = function Step(settings) {
-    var ratio, value, status = "";
+    var ratio, value;
 
     ratio = joint4.setRatio();
     value = joint1.getJointAngle() + ratio * joint2.getJointAngle();
-    status += "theta1 + " + ratio + " * theta2 = " + value;
+    testbed.status("ratio1", ratio);
+    testbed.status("theta1 + ratio * delta", value);
 
     ratio = joint5.setRatio();
     value = joint2.getJointAngle() + ratio * joint3.getJointTranslation();
-    status += "theta2 + " + ratio + " * delta = " + value;
 
-    testbed.status(status);
+    testbed.status("ratio2", ratio);
+    testbed.status("theta2 + ratio * delta", value);
   };
 
   return world;

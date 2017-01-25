@@ -152,13 +152,13 @@ planck.play('EdgeShapes', function(pl, testbed) {
     case '5':
       Create(4);
       break;
-    case 'D':
+    case 'X':
       DestroyBody();
       break;
     }
   };
 
-  testbed.status('1-5: Drop stuff, D: Destroy');
+  testbed.info('1-5: Drop stuff, X: Destroy');
 
   testbed.step = function() {
     var advanceRay = true; // settings.pause == 0 || settings.singleStep;

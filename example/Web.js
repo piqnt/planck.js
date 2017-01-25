@@ -95,7 +95,7 @@ planck.play('Web', function(pl, testbed) {
 
   testbed.keydown = function(code, char) {
     switch (char) {
-    case 'B':
+    case 'X':
       for (var i = 0; i < 4; ++i) {
         if (bodies[i]) {
           world.destroyBody(bodies[i]);
@@ -105,7 +105,7 @@ planck.play('Web', function(pl, testbed) {
       }
       break;
 
-    case 'J':
+    case 'Z':
       for (var i = 0; i < 8; ++i) {
         if (joints[i]) {
           world.destroyJoint(joints[i]);
@@ -117,7 +117,7 @@ planck.play('Web', function(pl, testbed) {
     }
   };
 
-  testbed.status('This demonstrates a soft distance joint.\nB: Delete a body, J: Delete a joint');
+  testbed.info('This demonstrates a soft distance joint.\nX: Delete a body, Z: Delete a joint');
 
   function JointDestroyed(joint) {
     for (var i = 0; i < 8; ++i) {

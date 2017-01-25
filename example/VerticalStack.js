@@ -90,14 +90,16 @@ planck.play('VerticalStack', function(pl, testbed) {
       bullet.setLinearVelocity(Vec2(400.0, 0.0));
       break;
 
-    case 'B':
+    case 'Z':
       g_blockSolve = !g_blockSolve;
       break;
     }
   };
 
+  testbed.info("X: Launch a bullet");
+
   testbed.step = function() {
-    testbed.status("Blocksolve = " + g_blockSolve + "\nX: Launch a bullet");
+    testbed.status("Blocksolve", g_blockSolve);
 
     // if (world.m_stepCount == 300) {
     // if (m_bullet != null)

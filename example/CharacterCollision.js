@@ -139,7 +139,7 @@ planck.play('CharacterCollision', function(pl, testbed) {
     character.setLinearVelocity(v);
   };
 
-  testbed.status(
+  testbed.info(
     'This tests various character collision shapes.' +
     '\nLimitation: square and hexagon can snag on aligned boxes.' +
     '\nFeature: edge chains have smooth collision inside and out.'

@@ -219,7 +219,7 @@ planck.play('Car', function(pl, testbed) {
     }
   };
 
-  testbed.status('←/→: Accelerate car, ↑/↓: Change spring frequency');
+  testbed.info('←/→: Accelerate car, ↑/↓: Change spring frequency');
 
   return world;
 });

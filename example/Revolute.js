@@ -48,10 +48,10 @@ planck.play('Revolute', function(pl, testbed) {
   var rjd = {};
   rjd.motorSpeed = 1.0 * Math.PI;
   rjd.maxMotorTorque = 10000.0;
-  rjd.enableMotor = false;
+  rjd.enableMotor = true;
   rjd.lowerAngle = -0.25 * Math.PI;
   rjd.upperAngle = 0.5 * Math.PI;
-  rjd.enableLimit = true;
+  rjd.enableLimit = false;
   rjd.collideConnected = true;
 
   var m_joint = world.createJoint(pl.RevoluteJoint(rjd, ground, body, Vec2(-10.0, 12.0)));
@@ -100,11 +100,11 @@ planck.play('Revolute', function(pl, testbed) {
 
   testbed.keydown = function(code, char) {
     switch (char) {
-    case 'L':
+    case 'Z':
       m_joint.enableLimit(!m_joint.isLimitEnabled());
       break;
 
-    case 'M':
+    case 'X':
       m_joint.enableMotor(!m_joint.isMotorEnabled());
       break;
     }
@@ -115,9 +115,11 @@ planck.play('Revolute', function(pl, testbed) {
     // m_ball.setTransform(Vec2(0.0, 0.5), 0.0);
     // }
 
-    var torque1 = m_joint.getMotorTorque();
-    testbed.status('Motor Torque = ' + torque1 + ', Motor Force = force3' + '\nL: limits, M: motor');
+    testbed.status('Motor Torque', m_joint.getMotorTorque(testbed.hz));
+    // testbed.status('Motor Force', m_joint.getMaxForce());
   };
+
+  testbed.info('Z: Limits, X: Motor');
 
   return world;
 });

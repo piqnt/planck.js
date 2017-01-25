@@ -130,7 +130,7 @@ planck.play('PolyShapes', function(pl, testbed) {
       Create(5);
       break;
 
-    case 'A':
+    case 'Z':
       for (var i = 0; i < e_maxBodies; i += 2) {
         if (bodies[i]) {
           var active = bodies[i].isActive();
@@ -139,13 +139,13 @@ planck.play('PolyShapes', function(pl, testbed) {
       }
       break;
 
-    case 'D':
+    case 'X':
       DestroyBody();
       break;
     }
   };
 
-  testbed.status("1-5: Drop stuff, A: (De)Activate some bodies, D: Destroy a body");
+  testbed.info("1-5: Drop stuff, Z: (De)Activate some bodies, X: Destroy a body");
 
   testbed.step = function() {
     var callback = PolyShapesCallback();

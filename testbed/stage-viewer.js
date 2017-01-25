@@ -12,13 +12,15 @@
     opts = opts || {};
 
     this._options = {};
+    this._options.speed = opts.speed || 1;
+    this._options.hz = opts.hz || (1 / 60);
     this._options.ratio = opts.ratio || 16;
     this._options.lineWidth = 2 / this._options.ratio;
 
     this._world = world;
 
     !opts.debug && this.tick(function(dt) {
-      world.step(1 / 60, dt / 1000);
+      world.step(this._options.hz, dt / 1000 * this._options.speed);
       this.renderWorld();
       return false;
     }, true);

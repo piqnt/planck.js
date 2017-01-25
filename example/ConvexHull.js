@@ -60,7 +60,7 @@ planck.play('ConvexHull', function(pl, testbed) {
     }
   };
 
-  testbed.status('G: Generate a new random convex hull');
+  testbed.info('G: Generate a new random convex hull');
 
   testbed.step = function() {
     testbed.drawPolygon(shape.m_vertices, testbed.color(0.9, 0.9, 0.9));

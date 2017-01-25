@@ -35,7 +35,7 @@ planck.play('PolyCollision', function(pl, testbed) {
 
     var worldManifold = manifold.getWorldManifold(null, m_transformA, m_polygonA.getRadius(), m_transformB, m_polygonB.getRadius());
 
-    testbed.status("point count = " + manifold.pointCount);
+    testbed.status('point count', manifold.pointCount);
 
     var vA = Transform.mul(m_transformA, m_polygonA.m_vertices);
     testbed.drawPolygon(vA, testbed.color(0.9, 0.9, 0.9));
@@ -49,30 +49,28 @@ planck.play('PolyCollision', function(pl, testbed) {
   };
 
   testbed.keydown = function(code, char) {
-    switch (char) {
-    case 'A':
+    if (testbed.activeKeys['left']) {
       m_positionB.x -= 0.1;
-      break;
+    }
 
-    case 'D':
+    if (testbed.activeKeys['right']) {
       m_positionB.x += 0.1;
-      break;
+    }
 
-    case 'S':
+    if (testbed.activeKeys['down']) {
       m_positionB.y -= 0.1;
-      break;
+    }
 
-    case 'W':
+    if (testbed.activeKeys['up']) {
       m_positionB.y += 0.1;
-      break;
+    }
 
-    case 'Q':
-      m_angleB += 0.1 * Math.PI;
-      break;
+    if (testbed.activeKeys['Z']) {
+      m_angleB += 0.1;
+    }
 
-    case 'E':
-      m_angleB -= 0.1 * Math.PI;
-      break;
+    if (testbed.activeKeys['X']) {
+      m_angleB -= 0.1;
     }
 
     m_transformB.set(m_positionB, m_angleB);

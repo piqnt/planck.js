@@ -79,7 +79,7 @@ planck.play('Prismatic', function(pl, testbed) {
     }
 
     var force = joint.getMotorForce(1 / 60);
-    testbed.status('Motor Force = ' + force);
+    testbed.status('Motor Force', force);
   };
 
   return world;

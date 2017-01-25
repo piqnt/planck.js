@@ -80,7 +80,7 @@ planck.play('ContinuousTest', function(pl, testbed) {
   Launch();
 
   testbed.step = function() {
-    testbed.status(stats.toString('\n'));
+    testbed.status(stats);
 
     if (stats.gjkCalls > 0) {
       // "gjk calls = %d, ave gjk iters = %3.1, max gjk iters = %d", stats.gjkCalls, stats.gjkIters / float32(stats.gjkCalls), stats.gjkMaxIters

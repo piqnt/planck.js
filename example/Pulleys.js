@@ -60,7 +60,8 @@ planck.play('Pulleys', function(pl, testbed) {
   testbed.step = function() {
     var ratio = m_joint1.setRatio();
     var L = m_joint1.getCurrentLengthA() + ratio * m_joint1.getCurrentLengthB();
-    testbed.status('L1 + ' + ratio + ' * L2 = ' + L);
+    testbed.status('ratio', ratio);
+    testbed.status('L (L1 * ratio + L2)', L);
   };
 
   return world;

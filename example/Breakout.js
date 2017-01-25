@@ -57,13 +57,16 @@ planck.play('Breakout', function(pl, testbed) {
 
     function updateStatus() {
       if (state.state == 'gameover') {
-        testbed.status('Gameover! Score: ' + _score);
+        testbed.status('Gameover!');
+        testbed.status('Score', _score);
 
       } else if (state.state == 'ready') {
         testbed.status('Ready!');
+        testbed.status('Score', _score);
 
       } else {
-        testbed.status('Score: ' + _score);
+        testbed.status('');
+        testbed.status('Score', _score);
       }
     }
 

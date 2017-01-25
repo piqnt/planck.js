@@ -18,6 +18,8 @@
  */
 
 planck.play('ShapeEditing', function(pl, testbed) {
+  testbed.info('C: Create a shape, X: Destroy a shape, Z: Sensor');
+
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
@@ -31,6 +33,7 @@ planck.play('ShapeEditing', function(pl, testbed) {
   var m_fixture1 = m_body.createFixture(pl.Box(4.0, 4.0, Vec2(0.0, 0.0), 0.0), 10.0);
   var m_fixture2 = null;
 
+
   testbed.keydown = function(code, char) {
     switch (char) {
     case 'C':
@@ -42,7 +45,7 @@ planck.play('ShapeEditing', function(pl, testbed) {
       }
       break;
 
-    case 'D':
+    case 'X':
       if (m_fixture2 != null) {
         m_body.destroyFixture(m_fixture2);
         m_fixture2 = null;
@@ -50,7 +53,7 @@ planck.play('ShapeEditing', function(pl, testbed) {
       }
       break;
 
-    case 'S':
+    case 'Z':
       if (m_fixture2 != null) {
         m_sensor = !m_sensor;
         m_fixture2.setSensor(m_sensor);
@@ -62,7 +65,7 @@ planck.play('ShapeEditing', function(pl, testbed) {
   };
 
   function updateStatus() {
-    testbed.status('C: Create a shape, D: Destroy a shape, S: Sensor = ' + m_sensor);
+    testbed.status('Sensor', m_sensor);
   }
 
   updateStatus();

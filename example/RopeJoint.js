@@ -75,8 +75,10 @@ planck.play('RopeJoint', function(pl, testbed) {
   m_ropeDef.localAnchorB = Vec2(0, 0);
   var m_rope = world.createJoint(pl.RopeJoint(m_ropeDef, ground, prevBody));
 
+  testbed.info('X: Toggle the rope joint');
+
   testbed.keydown = function(code, char) {
-    if (testbed.activeKeys.fire) {
+    if (char === 'X') {
       if (m_rope) {
         world.destroyJoint(m_rope);
         m_rope = null;
@@ -89,7 +91,7 @@ planck.play('RopeJoint', function(pl, testbed) {
   };
 
   function updateStatus() {
-    testbed.status('Press space to toggle the rope joint. Rope: ' + !!m_rope);
+    testbed.status('Rope', !!m_rope);
   }
 
   updateStatus();

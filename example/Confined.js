@@ -61,7 +61,7 @@ planck.play('Confined', function(pl, testbed) {
   }
 
   testbed.keydown = function(code, char) {
-    if (testbed.activeKeys.fire || char === 'C') {
+    if (testbed.activeKeys.fire) {
       CreateCircle();
     }
   };

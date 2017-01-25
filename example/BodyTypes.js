@@ -57,14 +57,14 @@ planck.play('BodyTypes', function(pl, testbed) {
   var body = world.createDynamicBody(Vec2(0.0, 8.0));
   body.createFixture(pl.Box(0.75, 0.75), {friction : 0.6, density : 2.0});
 
-  testbed.keydown = function() {
-    if (testbed.activeKeys['D']) {
+  testbed.keydown = function(code, char) {
+    if (char === 'Z') {
       m_platform.setType('dynamic');
 
-    } else if (testbed.activeKeys['S']) {
+    } else if (char === 'X') {
       m_platform.setType('static');
 
-    } else if (testbed.activeKeys['K']) {
+    } else if (char === 'C') {
       m_platform.setType('kinematic');
       m_platform.setLinearVelocity(Vec2(-m_speed, 0.0));
       m_platform.setAngularVelocity(0.0);
@@ -84,6 +84,6 @@ planck.play('BodyTypes', function(pl, testbed) {
     }
   };
 
-  testbed.status('D: Dynamic, S: Static, K: Kinematic');
+  testbed.info('Z: Dynamic, X: Static, C: Kinematic');
   return world;
 });

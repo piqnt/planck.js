@@ -69,7 +69,7 @@ planck.play('OneSidedPlatform', function(pl, testbed) {
 
   testbed.step = function(settings) {
     var v = m_character.getBody().getLinearVelocity();
-    testbed.status("Character Linear Velocity: " + v.y);
+    testbed.status("Character Linear Velocity", v.y);
   };
 
   return world;

@@ -23,12 +23,14 @@ planck.play('AddPair', function(pl, testbed) {
 
   var shape = pl.Circle(0.1);
 
+  testbed.speed = 0.2
+
   var minX = -6.0;
   var maxX = 0.0;
   var minY = 4.0;
   var maxY = 6.0;
 
-  for (var i = 0; i < /* 400 */100; ++i) {
+  for (var i = 0; i < /* 400 */50; ++i) {
     var bd = {};
     bd.type = 'dynamic';
     bd.position = Vec2(pl.Math.random(minX, maxX), pl.Math.random(minY, maxY));

@@ -95,8 +95,10 @@ planck.play('Tiles', function(pl, testbed) {
     var minimumNodeCount = 2 * leafCount - 1;
     var minimumHeight = Math.ceil(Math.log(minimumNodeCount) / Math.log(2.0));
 
-    testbed.status("dynamic tree height = " + height + ", min = " + minimumHeight +
-      "\ncreate time = " + m_createTime + " ms, fixture count = " + m_fixtureCount);
+    testbed.status("dynamic tree height", height);
+    testbed.status("min", minimumHeight);
+    testbed.status("create time", m_createTime + "ms");
+    testbed.status("fixture count", m_fixtureCount);
 
     // var tree = world.m_broadPhase.m_tree;
     // if (world.m_stepCount == 400) {

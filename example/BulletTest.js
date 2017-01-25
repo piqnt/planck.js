@@ -68,7 +68,7 @@ planck.play('BulletTest', function(pl, testbed) {
   }
 
   testbed.step = function() {
-    testbed.status(stats.toString('\n'));
+    testbed.status(stats);
 
     // if (stats.gjkCalls > 0) {
     //   "gjk calls = %d, ave gjk iters = %3.1, max gjk iters = %d",

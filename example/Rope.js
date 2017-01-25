@@ -22,7 +22,7 @@ planck.play('Rope', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  testbed.status('Not implemented!');
+  testbed.info('Not implemented!');
   return world;
 
   var /* Rope */m_rope;
@@ -55,12 +55,12 @@ planck.play('Rope', function(pl, testbed) {
 
   testbed.keydown = function(code, char) {
     switch (char) {
-    case 'Q':
+    case 'Z':
       m_angle = Math.max(-Math.PI, m_angle - 0.05 * Math.PI);
       m_rope.setAngle(m_angle);
       break;
 
-    case 'E':
+    case 'X':
       m_angle = Math.min(Math.PI, m_angle + 0.05 * Math.PI);
       m_rope.setAngle(m_angle);
       break;
@@ -76,15 +76,9 @@ planck.play('Rope', function(pl, testbed) {
 
     m_rope.step(dt, 1);
 
-    m_rope.Draw(m_debugDraw);
-
-    m_debugDraw.DrawString(5, m_textLine,
-        "Press (q,e) to adjust target angle");
-    m_textLine += DRAW_STRING_NEW_LINE;
-    m_debugDraw.DrawString(5, m_textLine, "Target angle = %g degrees",
-        m_angle * 180.0 / Math.PI);
-    m_textLine += DRAW_STRING_NEW_LINE;
+    testbed.status('Target angle', (m_angle * 180.0 / Math.PI) + degrees );
   };
+  testbed.info("Z/X to adjust target angle");
 
   return world;
 });

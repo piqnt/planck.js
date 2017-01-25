@@ -48,8 +48,10 @@ planck.play('Asteroid', function(pl, testbed) {
   var bulletBodies = [];
   var shipBody;
 
-  document.onkeydown = function(evt) {
-    gameover && start();
+  testbed.keydown = function(code, char) {
+    if (testbed.activeKeys.fire) {
+      gameover && start();
+    }
   };
 
   world = pl.World();
@@ -352,7 +354,8 @@ planck.play('Asteroid', function(pl, testbed) {
 
   function uiStatus() {
     console.log('Level: ' + level + ' Lives: ' + lives);
-    testbed.status('Level: ' + level + ' Lives: ' + lives);
+    testbed.status('Level', level);
+    testbed.status('Lives', lives);
   }
 
   start();

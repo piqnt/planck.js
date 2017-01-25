@@ -76,12 +76,12 @@ planck.play('SliderCrank', function (pl, testbed) {
 
   testbed.keydown = function(code, char) {
     switch (char) {
-      case 'F':
+      case 'Z':
         joint2.enableMotor(!joint2.isMotorEnabled());
         joint2.getBodyB().setAwake(true);
         break;
 
-      case 'M':
+      case 'X':
         joint1.enableMotor(!joint1.isMotorEnabled());
         joint1.getBodyB().setAwake(true);
         break;
@@ -90,8 +90,10 @@ planck.play('SliderCrank', function (pl, testbed) {
 
   testbed.step = function() {
     var torque = joint1.getMotorTorque(1 / 60);
-    testbed.status("Motor Torque = " + torque + "\nF: Toggle friction, M: Toggle motor");
+    testbed.status("Motor Torque", torque);
   };
+
+  testbed.info('Z: Toggle friction, X: Toggle motor');
 
   return world;
 });

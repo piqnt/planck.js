@@ -27,8 +27,8 @@ planck.play('TimeOfImpact', function(pl, testbed) {
 
   var world = new pl.World();
 
-  testbed.width = 150;
-  testbed.height = 100;
+  testbed.width = 80;
+  testbed.height = 60;
   testbed.x = 0;
   testbed.y = 0;
 
@@ -62,40 +62,40 @@ planck.play('TimeOfImpact', function(pl, testbed) {
 
   TimeOfImpact(output, input);
 
-
   testbed.step = function() {
 
     // "toi = %g", output.t
     // "max toi iters = %d, max root iters = %d", b2_toiMaxIters, b2_toiMaxRootIters
 
-    testbed.status('toi = ' + output.t + '\n' + pl.internal.stats.toString('\n'));
+    testbed.status('toi', output.t);
+    testbed.status(pl.internal.stats);
 
     var vertices = [];
-
-    var transformA = new Transform();
-    sweepA.getTransform(transformA, 0.0);
-    vertices = Transform.mul(transformA, shapeA.m_vertices);
-    testbed.drawPolygon(vertices, testbed.color(0.9, 0.9, 0.9));
 
     var transformB = new Transform();
 
     for (var t = 0.1; t < 1.0; t += 0.1) {
       sweepB.getTransform(transformB, t);
       vertices = Transform.mul(transformB, shapeB.m_vertices);
-      testbed.drawPolygon(vertices, testbed.color(0.9, 0.5, 0.5));
+      testbed.drawPolygon(vertices, testbed.color(0.2, 0.2, 0.2));
     }
+
+    var transformA = new Transform();
+    sweepA.getTransform(transformA, 0.0);
+    vertices = Transform.mul(transformA, shapeA.m_vertices);
+    testbed.drawPolygon(vertices, testbed.color(0.7, 0.7, 0.7));
 
     sweepB.getTransform(transformB, 0.0);
     vertices = Transform.mul(transformB, shapeB.m_vertices);
-    testbed.drawPolygon(vertices, testbed.color(0.5, 0.9, 0.5));
+    testbed.drawPolygon(vertices, testbed.color(1, 1, 1));
 
     sweepB.getTransform(transformB, output.t);
     vertices = Transform.mul(transformB, shapeB.m_vertices);
-    testbed.drawPolygon(vertices, testbed.color(0.5, 0.7, 0.9));
+    testbed.drawPolygon(vertices, testbed.color(1, 0, 0));
 
     sweepB.getTransform(transformB, 1.0);
     vertices = Transform.mul(transformB, shapeB.m_vertices);
-    testbed.drawPolygon(vertices, testbed.color(0.9, 0.1, 0.1));
+    testbed.drawPolygon(vertices, testbed.color(1, 1, 1));
 
   };
 

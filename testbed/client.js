@@ -54,6 +54,7 @@
   };
 
   var status = document.getElementById('status');
+  var info = document.getElementById('info');
 
   // window.addEventListener("hashchange", function() {
   //   select();
@@ -147,6 +148,7 @@
 
     // codefld.innerHTML = fn + "";
     status.innerText = '';
+    info.innerText = '';
 
     testbed = {};
     testbed.debug = debug;
@@ -156,9 +158,49 @@
     testbed.y = -10;
     testbed.ratio = 16;
     testbed.activeKeys = activeKeys;
+    testbed.hz = 1 / 60;
+    testbed.speed = 1;
 
-    testbed.status = function(text) {
-      status.innerText = text;
+    var statusText = '', statusMap = {
+      setValue : function(name, value) {
+        if (typeof value !== 'function' && typeof value !== 'object') {
+          this[name] =  value;
+        }
+      },
+      mergeObject : function(obj) {
+        for (var name in obj) {
+          this.setValue(name, obj[name]);
+        }
+      },
+      toString : function(newline) {
+        newline = typeof newline === 'string' ? newline : '\n';
+        var string = '';
+        var first = true;
+        for (var name in this) {
+          var value = this[name];
+          if (typeof value !== 'function') {
+            string += (!first ? newline : '') + name + ': ' + value;
+            first = false;
+          }
+        }
+        return string;
+      }
+    };
+
+    testbed.status = function(a, b) {
+      if (typeof b !== 'undefined') {
+        statusMap.setValue(a, b)
+      } else if (a && typeof a === 'object') {
+        statusMap.mergeObject(a)
+      } else if (typeof a === 'string') {
+        statusText = a;
+      }
+
+      status.innerText = (statusText ? statusText + '\n' : '') + statusMap;
+    };
+
+    testbed.info = function(text) {
+      info.innerText = text;
     };
 
     world = fn(planck, testbed);
@@ -271,7 +313,6 @@
       }, true)
     })();
 
-
     var mouseGround = world.createBody();
     var mouseJoint;
     viewer.attr('spy', true).on(Stage.Mouse.START, function(point) {
@@ -316,7 +357,6 @@
   //   script.src = url;
   //   parent.appendChild(script);
   // }
-
 
   planck.play = function(name, fn) {
     Stage(function(root) {

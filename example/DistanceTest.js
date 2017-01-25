@@ -56,7 +56,8 @@ planck.play('DistanceTest', function(pl, testbed) {
 
     Distance(output, cache, input);
 
-    testbed.status("distance = " + output.distance + " iterations = " + output.iterations);
+    testbed.status("Distance", output.distance);
+    testbed.status("Iterations", output.iterations);
 
     bodyA.setTransform(m_transformA);
     bodyB.setTransform(m_transformB);
@@ -71,21 +72,26 @@ planck.play('DistanceTest', function(pl, testbed) {
   testbed.keydown = function() {
     if (testbed.activeKeys['left']) {
       m_positionB.x -= 0.1;
+    }
 
-    } else if (testbed.activeKeys['right']) {
+    if (testbed.activeKeys['right']) {
       m_positionB.x += 0.1;
+    }
 
-    } else if (testbed.activeKeys['down']) {
+    if (testbed.activeKeys['down']) {
       m_positionB.y -= 0.1;
+    }
 
-    } else if (testbed.activeKeys['up']) {
+    if (testbed.activeKeys['up']) {
       m_positionB.y += 0.1;
+    }
 
-    } else if (testbed.activeKeys['Q']) {
-      m_angleB += 0.1 * Math.PI;
+    if (testbed.activeKeys['Z']) {
+      m_angleB += 0.1;
+    }
 
-    } else if (testbed.activeKeys['E']) {
-      m_angleB -= 0.1 * Math.PI;
+    if (testbed.activeKeys['X']) {
+      m_angleB -= 0.1;
     }
 
     m_transformB.set(m_positionB, m_angleB);

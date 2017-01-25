@@ -133,7 +133,13 @@ button.fa-small:before {
 #status {
 	font-family: monospace;
 	color: #333;
-	padding: 1em 0;
+	margin: 1em 0;
+}
+
+#info {
+	font-family: monospace;
+	color: #333;
+	margin: 1em 0;
 }
 
 #code {
