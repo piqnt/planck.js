@@ -14,7 +14,7 @@ Key motivations in development of this project are:
 - Optimizing the library for web and mobile platforms
 - Providing a JavaScrip-friendly API
 
-### Usage
+### Install
 
 
 ### Examples
@@ -45,4 +45,11 @@ Try examples with live build (see command-line output for URL to open):
 
 ### References
 
-[**Box2D**](http://box2d.org/) is a popular C++ 2D rigid-body physics engine created by Erin Catto. Box2D is used in several popular games, such as Angry Birds, Limbo and Crayon Physics, as well as game development tools and libraries.
+[**Box2D**](http://box2d.org/) is a popular C++ 2D rigid-body physics engine created by [Erin Catto](https://twitter.com/erin_catto). Box2D is used in several popular games, such as Angry Birds, Limbo and Crayon Physics, as well as game development tools and libraries.
+
+[iforce2d](https://www.iforce2d.net/b2dtut/) website includes a collection of helpful tutorials and resources to learn Box2D.
+
+
+### License
+
+Planck.js is [available under the zlib license](./LICENSE.txt).
