@@ -16,6 +16,18 @@ Key motivations in development of this project are:
 
 ### Install
 
+##### Download
+
+Latest builds are available on project [releases page](https://github.com/shakiba/planck.js/releases).
+
+##### NPM
+
+    npm install stage-js --save
+
+##### Bower
+
+    bower install stage-js --save
+
 
 ### Examples
 
@@ -23,6 +35,11 @@ Examples can be found in [`example`](/example/) directory.
 
 
 ### API
+
+Planck.js public API closely follows Box2D API, with following differences:
+
+- Method names are converted from UpperCamelCase to lowerCamelCase.
+- Definition classes/objects (BodyDef, FixtureDef, etc.) are replaced by simple JavaScript objects.
 
 
 ### Architecture
