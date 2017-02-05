@@ -31,7 +31,7 @@ Latest builds are available on project [releases page](https://github.com/shakib
 
 ## Usage
 
-Planck.js does not uses any renderer by default, so you need to either use a renderer 
+Planck.js does not use any renderer by default, so you need to either use a renderer 
 or manually call `world.step(hz, dt)` in each frame and then iterate over physics entities to draw or update them.
 
 The [rendered](./testbed/stage-viewer.js) which is used in testbed is based on [Stage.js](https://github.com/shakiba/stage.js/).
