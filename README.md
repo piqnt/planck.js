@@ -47,6 +47,7 @@ Planck.js public API closely follows Box2D API, with following differences:
 
 - Method names are converted from UpperCamelCase to lowerCamelCase.
 - Definition classes/objects (BodyDef, FixtureDef, etc.) are replaced by inline JavaScript objects (`{}`).
+- `World#on(eventName, listenerFn)` and `World#off(listenerFn)` methods are added to register and remove event listeners. Currently supported events are `'pre-solve'`, `'post-solve'`, `'joint-removed'`, `'fixture-removed'` and `'body-removed'`.
 
 
 ## Architecture
@@ -69,7 +70,7 @@ Try examples with live build (see command-line output for URL to open):
 
 ## References
 
-[**Box2D**](http://box2d.org/) is a popular C++ 2D rigid-body physics engine created by [Erin Catto](https://twitter.com/erin_catto). Box2D is used in several popular games, such as Angry Birds, Limbo and Crayon Physics, as well as game development tools and libraries.
+[**Box2D**](http://box2d.org/) is a popular C++ 2D rigid-body physics engine created by [Erin Catto](https://twitter.com/erin_catto). Box2D is used in several popular games, such as Angry Birds, Limbo and Crayon Physics, as well as game development tools and libraries such as Apple's SpriteKit.
 
 [iforce2d](https://www.iforce2d.net/b2dtut/) website includes a collection of helpful tutorials and resources to learn Box2D.
 
