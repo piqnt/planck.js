@@ -47,7 +47,14 @@ Planck.js public API closely follows Box2D API, with following differences:
 
 - Method names are converted from UpperCamelCase to lowerCamelCase.
 - Definition classes/objects (BodyDef, FixtureDef, etc.) are replaced by inline JavaScript objects (`{}`).
-- `World#on(eventName, listenerFn)` and `World#off(listenerFn)` methods are added to register and remove event listeners. Currently supported events are `'pre-solve'`, `'post-solve'`, `'joint-removed'`, `'fixture-removed'` and `'body-removed'`.
+- `World#on(eventName, listenerFn)` and `World#off(eventName, listenerFn)` are added to add and remove event listeners. Currently supported events are:
+    - `'contact-begin'`
+    - `'contact-end'`
+    - `'pre-solve'`
+    - `'post-solve'`
+    - `'joint-removed'`
+    - `'fixture-removed'`
+    - `'body-removed'`
 
 
 ## Architecture
