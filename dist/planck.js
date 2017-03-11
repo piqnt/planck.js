@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.11
+ * Planck.js v0.1.12
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -98,7 +98,13 @@ exports.internal.Distance = require("./collision/Distance");
 exports.internal.TimeOfImpact = require("./collision/TimeOfImpact");
 
 exports.internal.DynamicTree = require("./collision/DynamicTree");
-},{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Manifold":6,"./Shape":8,"./World":10,"./collision/AABB":11,"./collision/Distance":13,"./collision/DynamicTree":14,"./collision/TimeOfImpact":15,"./common/Math":18,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/stats":26,"./joint/DistanceJoint":27,"./joint/FrictionJoint":28,"./joint/GearJoint":29,"./joint/MotorJoint":30,"./joint/MouseJoint":31,"./joint/PrismaticJoint":32,"./joint/PulleyJoint":33,"./joint/RevoluteJoint":34,"./joint/RopeJoint":35,"./joint/WeldJoint":36,"./joint/WheelJoint":37,"./shape/BoxShape":38,"./shape/ChainShape":39,"./shape/CircleShape":40,"./shape/CollideCircle":41,"./shape/CollideCirclePolygone":42,"./shape/CollideEdgeCircle":43,"./shape/CollideEdgePolygon":44,"./shape/CollidePolygon":45,"./shape/EdgeShape":46,"./shape/PolygonShape":47}],2:[function(require,module,exports){
+
+exports.internal.Settings = require("./Settings");
+},{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Manifold":6,"./Settings":7,"./Shape":8,"./World":10,"./collision/AABB":11,"./collision/Distance":13,"./collision/DynamicTree":14,"./collision/TimeOfImpact":15,"./common/Math":18,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/stats":26,"./joint/DistanceJoint":27,"./joint/FrictionJoint":28,"./joint/GearJoint":29,"./joint/MotorJoint":30,"./joint/MouseJoint":31,"./joint/PrismaticJoint":32,"./joint/PulleyJoint":33,"./joint/RevoluteJoint":34,"./joint/RopeJoint":35,"./joint/WeldJoint":36,"./joint/WheelJoint":37,"./shape/BoxShape":38,"./shape/ChainShape":39,"./shape/CircleShape":40,"./shape/CollideCircle":41,"./shape/CollideCirclePolygone":42,"./shape/CollideEdgeCircle":43,"./shape/CollideEdgePolygon":44,"./shape/CollidePolygon":45,"./shape/EdgeShape":46,"./shape/PolygonShape":47}],2:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = Body;
 
 var common = require("./util/common");
@@ -171,9 +177,9 @@ var dynamicBody = Body.DYNAMIC = "dynamic";
  */
 var BodyDef = {
     type: staticBody,
-    position: new Vec2(),
+    position: Vec2.zero(),
     angle: 0,
-    linearVelocity: new Vec2(),
+    linearVelocity: Vec2.zero(),
     angularVelocity: 0,
     linearDamping: 0,
     angularDamping: 0,
@@ -195,12 +201,12 @@ var BodyDef = {
  */
 function Body(world, def) {
     def = options(def, BodyDef);
-    common.assert(Vec2.isValid(def.position));
-    common.assert(Vec2.isValid(def.linearVelocity));
-    common.assert(Math.isFinite(def.angle));
-    common.assert(Math.isFinite(def.angularVelocity));
-    common.assert(Math.isFinite(def.angularDamping) && def.angularDamping >= 0);
-    common.assert(Math.isFinite(def.linearDamping) && def.linearDamping >= 0);
+    ASSERT && common.assert(Vec2.isValid(def.position));
+    ASSERT && common.assert(Vec2.isValid(def.linearVelocity));
+    ASSERT && common.assert(Math.isFinite(def.angle));
+    ASSERT && common.assert(Math.isFinite(def.angularVelocity));
+    ASSERT && common.assert(Math.isFinite(def.angularDamping) && def.angularDamping >= 0);
+    ASSERT && common.assert(Math.isFinite(def.linearDamping) && def.linearDamping >= 0);
     this.m_world = world;
     this.m_awakeFlag = def.awake;
     this.m_autoSleepFlag = def.allowSleep;
@@ -222,16 +228,18 @@ function Body(world, def) {
     this.m_I = 0;
     this.m_invI = 0;
     // the body origin transform
-    this.m_xf = new Transform(def.position, def.angle);
+    this.m_xf = Transform.identity();
+    this.m_xf.p = Vec2.clone(def.position);
+    this.m_xf.q.setAngle(def.angle);
     // the swept motion for CCD
     this.m_sweep = new Sweep();
     this.m_sweep.setTransform(this.m_xf);
     // position and velocity correction
     this.c_velocity = new Velocity();
     this.c_position = new Position();
-    this.m_force = new Vec2();
+    this.m_force = Vec2.zero();
     this.m_torque = 0;
-    this.m_linearVelocity = Vec2(def.linearVelocity);
+    this.m_linearVelocity = Vec2.clone(def.linearVelocity);
     this.m_angularVelocity = def.angularVelocity;
     this.m_linearDamping = def.linearDamping;
     this.m_angularDamping = def.angularDamping;
@@ -322,8 +330,8 @@ Body.prototype.getType = function() {
  * @private
  */
 Body.prototype.setType = function(type) {
-    common.assert(type === staticBody || type === kinematicBody || type === dynamicBody);
-    common.assert(this.isWorldLocked() == false);
+    ASSERT && common.assert(type === staticBody || type === kinematicBody || type === dynamicBody);
+    ASSERT && common.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
         return;
     }
@@ -424,7 +432,7 @@ Body.prototype.isActive = function() {
  * and remains
  */
 Body.prototype.setActive = function(flag) {
-    common.assert(this.isWorldLocked() == false);
+    ASSERT && common.assert(this.isWorldLocked() == false);
     if (flag == this.m_activeFlag) {
         return;
     }
@@ -484,7 +492,7 @@ Body.prototype.getTransform = function() {
  * @param angle The world rotation in radians.
  */
 Body.prototype.setTransform = function(position, angle) {
-    common.assert(this.isWorldLocked() == false);
+    ASSERT && common.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
         return;
     }
@@ -504,7 +512,7 @@ Body.prototype.synchronizeTransform = function() {
  * Update fixtures in broad-phase.
  */
 Body.prototype.synchronizeFixtures = function() {
-    var xf = new Transform();
+    var xf = Transform.identity();
     this.m_sweep.getTransform(xf, 0);
     var broadPhase = this.m_world.m_broadPhase;
     for (var f = this.m_fixtureList; f; f = f.m_next) {
@@ -681,7 +689,7 @@ Body.prototype.getInertia = function() {
  */
 function MassData() {
     this.mass = 0;
-    this.center = Vec2();
+    this.center = Vec2.zero();
     this.I = 0;
 }
 
@@ -713,9 +721,9 @@ Body.prototype.resetMassData = function() {
         this.m_sweep.a0 = this.m_sweep.a;
         return;
     }
-    common.assert(this.isDynamic());
+    ASSERT && common.assert(this.isDynamic());
     // Accumulate mass over all fixtures.
-    var localCenter = Vec2();
+    var localCenter = Vec2.zero();
     for (var f = this.m_fixtureList; f; f = f.m_next) {
         if (f.m_density == 0) {
             continue;
@@ -738,14 +746,14 @@ Body.prototype.resetMassData = function() {
     if (this.m_I > 0 && this.m_fixedRotationFlag == false) {
         // Center the inertia about the center of mass.
         this.m_I -= this.m_mass * Vec2.dot(localCenter, localCenter);
-        common.assert(this.m_I > 0);
+        ASSERT && common.assert(this.m_I > 0);
         this.m_invI = 1 / this.m_I;
     } else {
         this.m_I = 0;
         this.m_invI = 0;
     }
     // Move center of mass.
-    var oldCenter = Vec2(this.m_sweep.c);
+    var oldCenter = Vec2.clone(this.m_sweep.c);
     this.m_sweep.setLocalCenter(localCenter, this.m_xf);
     // Update center of mass velocity.
     this.m_linearVelocity.add(Vec2.cross(this.m_angularVelocity, Vec2.sub(this.m_sweep.c, oldCenter)));
@@ -760,7 +768,7 @@ Body.prototype.resetMassData = function() {
  * @param massData The mass properties.
  */
 Body.prototype.setMassData = function(massData) {
-    common.assert(this.isWorldLocked() == false);
+    ASSERT && common.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
         return;
     }
@@ -777,11 +785,11 @@ Body.prototype.setMassData = function(massData) {
     this.m_invMass = 1 / this.m_mass;
     if (massData.I > 0 && this.m_fixedRotationFlag == false) {
         this.m_I = massData.I - this.m_mass * Vec2.dot(massData.center, massData.center);
-        common.assert(this.m_I > 0);
+        ASSERT && common.assert(this.m_I > 0);
         this.m_invI = 1 / this.m_I;
     }
     // Move center of mass.
-    var oldCenter = Vec2(this.m_sweep.c);
+    var oldCenter = Vec2.clone(this.m_sweep.c);
     this.m_sweep.setLocalCenter(massData.center, this.m_xf);
     // Update center of mass velocity.
     this.m_linearVelocity.add(Vec2.cross(this.m_angularVelocity, Vec2.sub(this.m_sweep.c, oldCenter)));
@@ -925,7 +933,7 @@ Body.prototype.shouldCollide = function(that) {
  * @param {FixtureDef|number} fixdef Fixture definition or just density.
  */
 Body.prototype.createFixture = function(shape, fixdef) {
-    common.assert(this.isWorldLocked() == false);
+    ASSERT && common.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
         return null;
     }
@@ -958,11 +966,11 @@ Body.prototype.createFixture = function(shape, fixdef) {
  * @param fixture The fixture to be removed.
  */
 Body.prototype.destroyFixture = function(fixture) {
-    common.assert(this.isWorldLocked() == false);
+    ASSERT && common.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
         return;
     }
-    common.assert(fixture.m_body == this);
+    ASSERT && common.assert(fixture.m_body == this);
     // Remove the fixture from this body's singly linked list.
     var node = this.m_fixtureList;
     var found = false;
@@ -975,7 +983,7 @@ Body.prototype.destroyFixture = function(fixture) {
         node = node.m_next;
     }
     // You tried to remove a shape that is not attached to this body.
-    common.assert(found);
+    ASSERT && common.assert(found);
     // Destroy any contacts associated with the fixture.
     var edge = this.m_contactList;
     while (edge) {
@@ -1031,6 +1039,10 @@ Body.prototype.getLocalVector = function(worldVector) {
 
 
 },{"./Fixture":4,"./Shape":8,"./World":10,"./common/Math":18,"./common/Position":19,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/Velocity":25,"./util/common":50,"./util/options":52}],3:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 var DEBUG_SOLVER = false;
 
 var common = require("./util/common");
@@ -1124,7 +1136,7 @@ function Contact(fA, indexA, fB, indexB, evaluateFcn) {
     this.m_bulletHitFlag = false;
     this.v_points = [];
     // VelocityConstraintPoint[maxManifoldPoints]
-    this.v_normal = new Vec2();
+    this.v_normal = Vec2.zero();
     this.v_normalMass = new Mat22();
     this.v_K = new Mat22();
     this.v_pointCount;
@@ -1137,10 +1149,10 @@ function Contact(fA, indexA, fB, indexB, evaluateFcn) {
     this.v_invIB;
     this.p_localPoints = [];
     // Vec2[maxManifoldPoints];
-    this.p_localNormal = Vec2();
-    this.p_localPoint = Vec2();
-    this.p_localCenterA = Vec2();
-    this.p_localCenterB = Vec2();
+    this.p_localNormal = Vec2.zero();
+    this.p_localPoint = Vec2.zero();
+    this.p_localCenterA = Vec2.zero();
+    this.p_localCenterB = Vec2.zero();
     this.p_type;
     // Manifold.Type
     this.p_radiusA;
@@ -1161,7 +1173,7 @@ Contact.prototype.initConstraint = function(step) {
     var bodyB = fixtureB.getBody();
     var manifold = this.getManifold();
     var pointCount = manifold.pointCount;
-    common.assert(pointCount > 0);
+    ASSERT && common.assert(pointCount > 0);
     this.v_invMassA = bodyA.m_invMass;
     this.v_invMassB = bodyB.m_invMass;
     this.v_invIA = bodyA.m_invI;
@@ -1170,20 +1182,20 @@ Contact.prototype.initConstraint = function(step) {
     this.v_restitution = this.m_restitution;
     this.v_tangentSpeed = this.m_tangentSpeed;
     this.v_pointCount = pointCount;
-    common.debug("pc", this.v_pointCount, pointCount);
+    DEBUG && common.debug("pc", this.v_pointCount, pointCount);
     this.v_K.setZero();
     this.v_normalMass.setZero();
     this.p_invMassA = bodyA.m_invMass;
     this.p_invMassB = bodyB.m_invMass;
     this.p_invIA = bodyA.m_invI;
     this.p_invIB = bodyB.m_invI;
-    this.p_localCenterA = Vec2(bodyA.m_sweep.localCenter);
-    this.p_localCenterB = Vec2(bodyB.m_sweep.localCenter);
+    this.p_localCenterA = Vec2.clone(bodyA.m_sweep.localCenter);
+    this.p_localCenterB = Vec2.clone(bodyB.m_sweep.localCenter);
     this.p_radiusA = shapeA.m_radius;
     this.p_radiusB = shapeB.m_radius;
     this.p_type = manifold.type;
-    this.p_localNormal = Vec2(manifold.localNormal);
-    this.p_localPoint = Vec2(manifold.localPoint);
+    this.p_localNormal = Vec2.clone(manifold.localNormal);
+    this.p_localPoint = Vec2.clone(manifold.localPoint);
     this.p_pointCount = pointCount;
     for (var j = 0; j < pointCount; ++j) {
         var cp = manifold.points[j];
@@ -1201,7 +1213,7 @@ Contact.prototype.initConstraint = function(step) {
         vcp.normalMass = 0;
         vcp.tangentMass = 0;
         vcp.velocityBias = 0;
-        this.p_localPoints[j] = Vec2(cp.localPoint);
+        this.p_localPoints[j] = Vec2.clone(cp.localPoint);
     }
 };
 
@@ -1441,8 +1453,8 @@ Contact.prototype._solvePositionConstraint = function(step, toi, toiA, toiB) {
     var velocityB = bodyB.c_velocity;
     var positionA = bodyA.c_position;
     var positionB = bodyB.c_position;
-    var localCenterA = Vec2(this.p_localCenterA);
-    var localCenterB = Vec2(this.p_localCenterB);
+    var localCenterA = Vec2.clone(this.p_localCenterA);
+    var localCenterB = Vec2.clone(this.p_localCenterB);
     var mA = 0;
     var iA = 0;
     if (!toi || (bodyA == toiA || bodyA == toiB)) {
@@ -1455,15 +1467,15 @@ Contact.prototype._solvePositionConstraint = function(step, toi, toiA, toiB) {
         mB = this.p_invMassB;
         iB = this.p_invIB;
     }
-    var cA = Vec2(positionA.c);
+    var cA = Vec2.clone(positionA.c);
     var aA = positionA.a;
-    var cB = Vec2(positionB.c);
+    var cB = Vec2.clone(positionB.c);
     var aB = positionB.a;
     var minSeparation = 0;
     // Solve normal constraints
     for (var j = 0; j < this.p_pointCount; ++j) {
-        var xfA = new Transform();
-        var xfB = new Transform();
+        var xfA = Transform.identity();
+        var xfB = Transform.identity();
         xfA.q.set(aA);
         xfB.q.set(aB);
         xfA.p = Vec2.sub(cA, Rot.mul(xfA.q, localCenterA));
@@ -1528,8 +1540,8 @@ Contact.prototype._solvePositionConstraint = function(step, toi, toiA, toiB) {
 
 // TODO merge with ManifoldPoint
 function VelocityConstraintPoint() {
-    this.rA = Vec2();
-    this.rB = Vec2();
+    this.rA = Vec2.zero();
+    this.rB = Vec2.zero();
     this.normalImpulse = 0;
     this.tangentImpulse = 0;
     this.normalMass = 0;
@@ -1553,19 +1565,19 @@ Contact.prototype.initVelocityConstraint = function(step) {
     var mB = this.v_invMassB;
     var iA = this.v_invIA;
     var iB = this.v_invIB;
-    var localCenterA = Vec2(this.p_localCenterA);
-    var localCenterB = Vec2(this.p_localCenterB);
-    var cA = Vec2(positionA.c);
+    var localCenterA = Vec2.clone(this.p_localCenterA);
+    var localCenterB = Vec2.clone(this.p_localCenterB);
+    var cA = Vec2.clone(positionA.c);
     var aA = positionA.a;
-    var vA = Vec2(velocityA.v);
+    var vA = Vec2.clone(velocityA.v);
     var wA = velocityA.w;
-    var cB = Vec2(positionB.c);
+    var cB = Vec2.clone(positionB.c);
     var aB = positionB.a;
-    var vB = Vec2(velocityB.v);
+    var vB = Vec2.clone(velocityB.v);
     var wB = velocityB.w;
-    common.assert(manifold.pointCount > 0);
-    var xfA = new Transform();
-    var xfB = new Transform();
+    ASSERT && common.assert(manifold.pointCount > 0);
+    var xfA = Transform.identity();
+    var xfB = Transform.identity();
     xfA.q.set(aA);
     xfB.q.set(aB);
     xfA.p.wSet(1, cA, -1, Rot.mul(xfA.q, localCenterA));
@@ -1577,7 +1589,7 @@ Contact.prototype.initVelocityConstraint = function(step) {
         // VelocityConstraintPoint
         vcp.rA.set(Vec2.sub(worldManifold.points[j], cA));
         vcp.rB.set(Vec2.sub(worldManifold.points[j], cB));
-        common.debug("vcp.rA", worldManifold.points[j].x, worldManifold.points[j].y, cA.x, cA.y, vcp.rA.x, vcp.rA.y);
+        DEBUG && common.debug("vcp.rA", worldManifold.points[j].x, worldManifold.points[j].y, cA.x, cA.y, vcp.rA.x, vcp.rA.y);
         var rnA = Vec2.cross(vcp.rA, this.v_normal);
         var rnB = Vec2.cross(vcp.rB, this.v_normal);
         var kNormal = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
@@ -1609,7 +1621,7 @@ Contact.prototype.initVelocityConstraint = function(step) {
         var k12 = mA + mB + iA * rn1A * rn2A + iB * rn1B * rn2B;
         // Ensure a reasonable condition number.
         var k_maxConditionNumber = 1e3;
-        common.debug("k1x2: ", k11, k22, k12, mA, mB, iA, rn1A, rn2A, iB, rn1B, rn2B);
+        DEBUG && common.debug("k1x2: ", k11, k22, k12, mA, mB, iA, rn1A, rn2A, iB, rn1B, rn2B);
         if (k11 * k11 < k_maxConditionNumber * (k11 * k22 - k12 * k12)) {
             // K is safe to invert.
             this.v_K.ex.set(k11, k12);
@@ -1644,9 +1656,9 @@ Contact.prototype.warmStartConstraint = function(step) {
     var iA = this.v_invIA;
     var mB = this.v_invMassB;
     var iB = this.v_invIB;
-    var vA = Vec2(velocityA.v);
+    var vA = Vec2.clone(velocityA.v);
     var wA = velocityA.w;
-    var vB = Vec2(velocityB.v);
+    var vB = Vec2.clone(velocityB.v);
     var wB = velocityB.w;
     var normal = this.v_normal;
     var tangent = Vec2.cross(normal, 1);
@@ -1654,7 +1666,7 @@ Contact.prototype.warmStartConstraint = function(step) {
         var vcp = this.v_points[j];
         // VelocityConstraintPoint
         var P = Vec2.wAdd(vcp.normalImpulse, normal, vcp.tangentImpulse, tangent);
-        common.debug(iA, iB, vcp.rA.x, vcp.rA.y, vcp.rB.x, vcp.rB.y, P.x, P.y);
+        DEBUG && common.debug(iA, iB, vcp.rA.x, vcp.rA.y, vcp.rB.x, vcp.rB.y, P.x, P.y);
         wA -= iA * Vec2.cross(vcp.rA, P);
         vA.wSub(mA, P);
         wB += iB * Vec2.cross(vcp.rB, P);
@@ -1685,21 +1697,21 @@ Contact.prototype.solveVelocityConstraint = function(step) {
     var iA = this.v_invIA;
     var mB = this.v_invMassB;
     var iB = this.v_invIB;
-    var vA = Vec2(velocityA.v);
+    var vA = Vec2.clone(velocityA.v);
     var wA = velocityA.w;
-    var vB = Vec2(velocityB.v);
+    var vB = Vec2.clone(velocityB.v);
     var wB = velocityB.w;
     var normal = this.v_normal;
     var tangent = Vec2.cross(normal, 1);
     var friction = this.v_friction;
-    common.assert(this.v_pointCount == 1 || this.v_pointCount == 2);
+    ASSERT && common.assert(this.v_pointCount == 1 || this.v_pointCount == 2);
     // Solve tangent constraints first because non-penetration is more important
     // than friction.
     for (var j = 0; j < this.v_pointCount; ++j) {
         var vcp = this.v_points[j];
         // VelocityConstraintPoint
         // Relative velocity at contact
-        var dv = Vec2();
+        var dv = Vec2.zero();
         dv.wAdd(1, vB, 1, Vec2.cross(wB, vcp.rB));
         dv.wSub(1, vA, 1, Vec2.cross(wA, vcp.rA));
         // Compute tangent force
@@ -1723,7 +1735,7 @@ Contact.prototype.solveVelocityConstraint = function(step) {
             var vcp = this.v_points[i];
             // VelocityConstraintPoint
             // Relative velocity at contact
-            var dv = Vec2();
+            var dv = Vec2.zero();
             dv.wAdd(1, vB, 1, Vec2.cross(wB, vcp.rB));
             dv.wSub(1, vA, 1, Vec2.cross(wA, vcp.rA));
             // Compute normal impulse
@@ -1785,19 +1797,15 @@ Contact.prototype.solveVelocityConstraint = function(step) {
         // VelocityConstraintPoint
         var vcp2 = this.v_points[1];
         // VelocityConstraintPoint
-        var a = Vec2(vcp1.normalImpulse, vcp2.normalImpulse);
-        common.assert(a.x >= 0 && a.y >= 0);
+        var a = Vec2.neo(vcp1.normalImpulse, vcp2.normalImpulse);
+        ASSERT && common.assert(a.x >= 0 && a.y >= 0);
         // Relative velocity at contact
-        var dv1 = Vec2();
-        dv1.wAdd(1, vB, 1, Vec2.cross(wB, vcp1.rB));
-        dv1.wSub(1, vA, 1, Vec2.cross(wA, vcp1.rA));
-        var dv2 = Vec2();
-        dv2.wAdd(1, vB, 1, Vec2.cross(wB, vcp2.rB));
-        dv2.wSub(1, vA, 1, Vec2.cross(wA, vcp2.rA));
+        var dv1 = Vec2.zero().add(vB).add(Vec2.cross(wB, vcp1.rB)).sub(vA).sub(Vec2.cross(wA, vcp1.rA));
+        var dv2 = Vec2.zero().add(vB).add(Vec2.cross(wB, vcp2.rB)).sub(vA).sub(Vec2.cross(wA, vcp2.rA));
         // Compute normal velocity
         var vn1 = Vec2.dot(dv1, normal);
         var vn2 = Vec2.dot(dv2, normal);
-        var b = Vec2(vn1 - vcp1.velocityBias, vn2 - vcp2.velocityBias);
+        var b = Vec2.neo(vn1 - vcp1.velocityBias, vn2 - vcp2.velocityBias);
         // Compute b'
         b.sub(Mat22.mul(this.v_K, a));
         var k_errorTol = .001;
@@ -1833,8 +1841,8 @@ Contact.prototype.solveVelocityConstraint = function(step) {
                     // Compute normal velocity
                     vn1 = Dot(dv1, normal);
                     vn2 = Dot(dv2, normal);
-                    common.assert(Abs(vn1 - vcp1.velocityBias) < k_errorTol);
-                    common.assert(Abs(vn2 - vcp2.velocityBias) < k_errorTol);
+                    ASSERT && common.assert(Abs(vn1 - vcp1.velocityBias) < k_errorTol);
+                    ASSERT && common.assert(Abs(vn2 - vcp2.velocityBias) < k_errorTol);
                 }
                 break;
             }
@@ -1868,7 +1876,7 @@ Contact.prototype.solveVelocityConstraint = function(step) {
                     var dv1 = Vec2.sub(dv1B, dv1A);
                     // Compute normal velocity
                     vn1 = Vec2.dot(dv1, normal);
-                    common.assert(Math.abs(vn1 - vcp1.velocityBias) < k_errorTol);
+                    ASSERT && common.assert(Math.abs(vn1 - vcp1.velocityBias) < k_errorTol);
                 }
                 break;
             }
@@ -1902,7 +1910,7 @@ Contact.prototype.solveVelocityConstraint = function(step) {
                     var dv1 = Vec2.sub(dv2B, dv2A);
                     // Compute normal velocity
                     vn2 = Vec2.dot(dv2, normal);
-                    common.assert(Math.abs(vn2 - vcp2.velocityBias) < k_errorTol);
+                    ASSERT && common.assert(Math.abs(vn2 - vcp2.velocityBias) < k_errorTol);
                 }
                 break;
             }
@@ -2059,6 +2067,10 @@ Contact.destroy = function(contact, listener) {
 
 
 },{"./Manifold":6,"./Settings":7,"./collision/Distance":13,"./common/Mat22":16,"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":50}],4:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = Fixture;
 
 var common = require("./util/common");
@@ -2233,7 +2245,7 @@ Fixture.prototype.getDensity = function() {
  * mass of the body. You must call Body.resetMassData to update the body's mass.
  */
 Fixture.prototype.setDensity = function(density) {
-    common.assert(Math.isFinite(density) && density >= 0);
+    ASSERT && common.assert(Math.isFinite(density) && density >= 0);
     this.m_density = density;
 };
 
@@ -2295,7 +2307,7 @@ Fixture.prototype.getMassData = function(massData) {
  * more accurate AABB, compute it using the shape and the body transform.
  */
 Fixture.prototype.getAABB = function(childIndex) {
-    common.assert(0 <= childIndex && childIndex < this.m_proxyCount);
+    ASSERT && common.assert(0 <= childIndex && childIndex < this.m_proxyCount);
     return this.m_proxies[childIndex].aabb;
 };
 
@@ -2303,7 +2315,7 @@ Fixture.prototype.getAABB = function(childIndex) {
  * These support body activation/deactivation.
  */
 Fixture.prototype.createProxies = function(broadPhase, xf) {
-    common.assert(this.m_proxyCount == 0);
+    ASSERT && common.assert(this.m_proxyCount == 0);
     // Create proxies in the broad-phase.
     this.m_proxyCount = this.m_shape.getChildCount();
     for (var i = 0; i < this.m_proxyCount; ++i) {
@@ -2419,6 +2431,10 @@ Fixture.prototype.shouldCollide = function(that) {
 
 
 },{"./collision/AABB":11,"./common/Vec2":23,"./util/common":50,"./util/options":52}],5:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = Joint;
 
 var common = require("./util/common");
@@ -2467,9 +2483,9 @@ var JointDef = {
 function Joint(def, bodyA, bodyB) {
     bodyA = def.bodyA || bodyA;
     bodyB = def.bodyB || bodyB;
-    common.assert(bodyA);
-    common.assert(bodyB);
-    common.assert(bodyA != bodyB);
+    ASSERT && common.assert(bodyA);
+    ASSERT && common.assert(bodyB);
+    ASSERT && common.assert(bodyA != bodyB);
     this.m_type = "unknown-joint";
     this.m_bodyA = bodyA;
     this.m_bodyB = bodyB;
@@ -2599,6 +2615,10 @@ Joint.prototype.solvePositionConstraints = function(step) {};
 
 
 },{"./util/common":50}],6:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 var common = require("./util/common");
 
 var Vec2 = require("./common/Vec2");
@@ -2657,8 +2677,8 @@ Manifold.e_face = 1;
  */
 function Manifold() {
     this.type;
-    this.localNormal = Vec2();
-    this.localPoint = Vec2();
+    this.localNormal = Vec2.zero();
+    this.localPoint = Vec2.zero();
     this.points = [ new ManifoldPoint(), new ManifoldPoint() ];
     this.pointCount = 0;
 }
@@ -2682,7 +2702,7 @@ function Manifold() {
  *       to facilatate warm starting
  */
 function ManifoldPoint() {
-    this.localPoint = Vec2();
+    this.localPoint = Vec2.zero();
     this.normalImpulse = 0;
     this.tangentImpulse = 0;
     this.id = new ContactID();
@@ -2701,6 +2721,11 @@ function ContactID() {
     this.key;
 }
 
+ContactID.prototype.set = function(o) {
+    this.key = o.key;
+    this.cf.set(o.cf);
+};
+
 /**
  * The features that intersect to form the contact point.
  * 
@@ -2716,6 +2741,13 @@ function ContactFeature() {
     this.typeA;
     this.typeB;
 }
+
+ContactFeature.prototype.set = function(o) {
+    this.indexA = o.indexA;
+    this.indexB = o.indexB;
+    this.typeA = o.typeA;
+    this.typeB = o.typeB;
+};
 
 /**
  * This is used to compute the current state of a contact manifold.
@@ -2749,7 +2781,7 @@ Manifold.prototype.getWorldManifold = function(wm, xfA, radiusA, xfB, radiusB) {
     // TODO: improve
     switch (this.type) {
       case Manifold.e_circles:
-        normal = Vec2(1, 0);
+        normal = Vec2.neo(1, 0);
         var pointA = Transform.mul(xfA, this.localPoint);
         var pointB = Transform.mul(xfB, this.points[0].localPoint);
         var dist = Vec2.sub(pointB, pointA);
@@ -2766,14 +2798,14 @@ Manifold.prototype.getWorldManifold = function(wm, xfA, radiusA, xfB, radiusB) {
       case Manifold.e_faceA:
         normal = Rot.mul(xfA.q, this.localNormal);
         var planePoint = Transform.mul(xfA, this.localPoint);
-        common.debug("faceA", this.localPoint.x, this.localPoint.y, this.localNormal.x, this.localNormal.y, normal.x, normal.y);
+        DEBUG && common.debug("faceA", this.localPoint.x, this.localPoint.y, this.localNormal.x, this.localNormal.y, normal.x, normal.y);
         for (var i = 0; i < this.pointCount; ++i) {
             var clipPoint = Transform.mul(xfB, this.points[i].localPoint);
-            var cA = Vec2(clipPoint).wAdd(radiusA - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
-            var cB = Vec2(clipPoint).wSub(radiusB, normal);
+            var cA = Vec2.clone(clipPoint).wAdd(radiusA - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
+            var cB = Vec2.clone(clipPoint).wSub(radiusB, normal);
             points[i] = Vec2.mid(cA, cB);
             separations[i] = Vec2.dot(Vec2.sub(cB, cA), normal);
-            common.debug(i, this.points[i].localPoint.x, this.points[i].localPoint.y, planePoint.x, planePoint.y, xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s, xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s, radiusA, radiusB, clipPoint.x, clipPoint.y, cA.x, cA.y, cB.x, cB.y, separations[i], points[i].x, points[i].y);
+            DEBUG && common.debug(i, this.points[i].localPoint.x, this.points[i].localPoint.y, planePoint.x, planePoint.y, xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s, xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s, radiusA, radiusB, clipPoint.x, clipPoint.y, cA.x, cA.y, cB.x, cB.y, separations[i], points[i].x, points[i].y);
         }
         points.length = this.pointCount;
         separations.length = this.pointCount;
@@ -2784,8 +2816,8 @@ Manifold.prototype.getWorldManifold = function(wm, xfA, radiusA, xfB, radiusB) {
         var planePoint = Transform.mul(xfB, this.localPoint);
         for (var i = 0; i < this.pointCount; ++i) {
             var clipPoint = Transform.mul(xfA, this.points[i].localPoint);
-            var cB = Vec2().wSet(1, clipPoint, radiusB - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
-            var cA = Vec2().wSet(1, clipPoint, -radiusA, normal);
+            var cB = Vec2.zero().wSet(1, clipPoint, radiusB - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
+            var cA = Vec2.zero().wSet(1, clipPoint, -radiusA, normal);
             points[i] = Vec2.mid(cA, cB);
             separations[i] = Vec2.dot(Vec2.sub(cA, cB), normal);
         }
@@ -2863,9 +2895,14 @@ function getPointStates(state1, state2, manifold1, manifold2) {
  * @prop {ContactID} id
  */
 function ClipVertex() {
-    this.v = Vec2();
+    this.v = Vec2.zero();
     this.id = new ContactID();
 }
+
+ClipVertex.prototype.set = function(o) {
+    this.v.set(o.v);
+    this.id.set(o.id);
+};
 
 /**
  * Clipping for contact manifolds. Sutherland-Hodgman clipping.
@@ -2880,8 +2917,8 @@ function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
     var distance0 = Vec2.dot(normal, vIn[0].v) - offset;
     var distance1 = Vec2.dot(normal, vIn[1].v) - offset;
     // If the points are behind the plane
-    if (distance0 <= 0) vOut[numOut++] = vIn[0];
-    if (distance1 <= 0) vOut[numOut++] = vIn[1];
+    if (distance0 <= 0) vOut[numOut++].set(vIn[0]);
+    if (distance1 <= 0) vOut[numOut++].set(vIn[1]);
     // If the points are on different sides of the plane
     if (distance0 * distance1 < 0) {
         // Find intersection point of edge and plane
@@ -2899,6 +2936,10 @@ function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
 
 
 },{"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":50}],7:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 // TODO merge with World options?
 var Settings = exports;
 
@@ -2970,6 +3011,11 @@ Settings.maxTOIContacts = 32;
 Settings.maxTOIIterations = 20;
 
 /**
+ * Maximum iterations to find Distance.
+ */
+Settings.maxDistnceIterations = 20;
+
+/**
  * A velocity threshold for elastic collisions. Any collision with a relative
  * linear velocity below this threshold will be treated as inelastic.
  */
@@ -3034,6 +3080,10 @@ Settings.angularSleepToleranceSqr = Math.pow(Settings.angularSleepTolerance, 2);
 
 
 },{}],8:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = Shape;
 
 var Math = require("./common/Math");
@@ -3123,6 +3173,10 @@ Shape.prototype.computeDistanceProxy = function(proxy) {};
 
 
 },{"./common/Math":18}],9:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = Solver;
 
 module.exports.TimeStep = TimeStep;
@@ -3214,17 +3268,17 @@ Solver.prototype.clear = function() {
 };
 
 Solver.prototype.addBody = function(body) {
-    common.assert(body instanceof Body, "Not a Body!", body);
+    ASSERT && common.assert(body instanceof Body, "Not a Body!", body);
     this.m_bodies.push(body);
 };
 
 Solver.prototype.addContact = function(contact) {
-    common.assert(contact instanceof Contact, "Not a Contact!", contact);
+    ASSERT && common.assert(contact instanceof Contact, "Not a Contact!", contact);
     this.m_contacts.push(contact);
 };
 
 Solver.prototype.addJoint = function(joint) {
-    common.assert(joint instanceof Joint, "Not a Joint!", joint);
+    ASSERT && common.assert(joint instanceof Joint, "Not a Joint!", joint);
     this.m_joints.push(joint);
 };
 
@@ -3270,7 +3324,7 @@ Solver.prototype.solveWorld = function(step) {
         while (stack.length > 0) {
             // Grab the next body off the stack and add it to the island.
             var b = stack.pop();
-            common.assert(b.isActive() == true);
+            ASSERT && common.assert(b.isActive() == true);
             this.addBody(b);
             // Make sure the body is awake.
             b.setAwake(true);
@@ -3303,7 +3357,7 @@ Solver.prototype.solveWorld = function(step) {
                 if (other.m_islandFlag) {
                     continue;
                 }
-                // common.assert(stack.length < world.m_bodyCount);
+                // ASSERT && common.assert(stack.length < world.m_bodyCount);
                 stack.push(other);
                 other.m_islandFlag = true;
             }
@@ -3322,7 +3376,7 @@ Solver.prototype.solveWorld = function(step) {
                 if (other.m_islandFlag) {
                     continue;
                 }
-                // common.assert(stack.length < world.m_bodyCount);
+                // ASSERT && common.assert(stack.length < world.m_bodyCount);
                 stack.push(other);
                 other.m_islandFlag = true;
             }
@@ -3353,20 +3407,20 @@ Solver.prototype.solveIsland = function(step) {
     // Integrate velocities and apply damping. Initialize the body state.
     for (var i = 0; i < this.m_bodies.length; ++i) {
         var body = this.m_bodies[i];
-        var c = Vec2(body.m_sweep.c);
+        var c = Vec2.clone(body.m_sweep.c);
         var a = body.m_sweep.a;
-        var v = Vec2(body.m_linearVelocity);
+        var v = Vec2.clone(body.m_linearVelocity);
         var w = body.m_angularVelocity;
         // Store positions for continuous collision.
         body.m_sweep.c0.set(body.m_sweep.c);
         body.m_sweep.a0 = body.m_sweep.a;
-        common.debug("P: ", a, c.x, c.y, w, v.x, v.y);
+        DEBUG && common.debug("P: ", a, c.x, c.y, w, v.x, v.y);
         if (body.isDynamic()) {
             // Integrate velocities.
             v.wAdd(h * body.m_gravityScale, gravity);
             v.wAdd(h * body.m_invMass, body.m_force);
             w += h * body.m_invI * body.m_torque;
-            common.debug("N: " + h, body.m_gravityScale, gravity.x, gravity.y, body.m_invMass, body.m_force.x, body.m_force.y);
+            DEBUG && common.debug("N: " + h, body.m_gravityScale, gravity.x, gravity.y, body.m_invMass, body.m_force.x, body.m_force.y);
             /**
        * <pre>
        * Apply damping.
@@ -3392,26 +3446,12 @@ Solver.prototype.solveIsland = function(step) {
         var contact = this.m_contacts[i];
         contact.initConstraint(step);
     }
-    for (var i = 0; i < this.m_bodies.length; ++i) {
-        var body = this.m_bodies[i];
-        var c = Vec2(body.c_position.c);
-        var a = body.c_position.a;
-        var v = Vec2(body.c_velocity.v);
-        var w = body.c_velocity.w;
-        common.debug("M: ", a, c.x, c.y, w, v.x, v.y);
-    }
+    DEBUG && this.printBodies("M: ");
     for (var i = 0; i < this.m_contacts.length; ++i) {
         var contact = this.m_contacts[i];
         contact.initVelocityConstraint(step);
     }
-    for (var i = 0; i < this.m_bodies.length; ++i) {
-        var body = this.m_bodies[i];
-        var c = Vec2(body.c_position.c);
-        var a = body.c_position.a;
-        var v = Vec2(body.c_velocity.v);
-        var w = body.c_velocity.w;
-        common.debug("R: ", a, c.x, c.y, w, v.x, v.y);
-    }
+    DEBUG && this.printBodies("R: ");
     if (step.warmStarting) {
         // Warm start.
         for (var i = 0; i < this.m_contacts.length; ++i) {
@@ -3419,31 +3459,17 @@ Solver.prototype.solveIsland = function(step) {
             contact.warmStartConstraint(step);
         }
     }
-    for (var i = 0; i < this.m_bodies.length; ++i) {
-        var body = this.m_bodies[i];
-        var c = Vec2(body.c_position.c);
-        var a = body.c_position.a;
-        var v = Vec2(body.c_velocity.v);
-        var w = body.c_velocity.w;
-        common.debug("Q: ", a, c.x, c.y, w, v.x, v.y);
-    }
+    DEBUG && this.printBodies("Q: ");
     for (var i = 0; i < this.m_joints.length; ++i) {
         var joint = this.m_joints[i];
         joint.initVelocityConstraints(step);
     }
-    for (var i = 0; i < this.m_bodies.length; ++i) {
-        var body = this.m_bodies[i];
-        var c = Vec2(body.c_position.c);
-        var a = body.c_position.a;
-        var v = Vec2(body.c_velocity.v);
-        var w = body.c_velocity.w;
-        common.debug("E: ", a, c.x, c.y, w, v.x, v.y);
-    }
+    DEBUG && this.printBodies("E: ");
     profile.solveInit = Timer.diff(timer);
     // Solve velocity constraints
     timer = Timer.now();
     for (var i = 0; i < step.velocityIterations; ++i) {
-        common.debug("--", i);
+        DEBUG && common.debug("--", i);
         for (var j = 0; j < this.m_joints.length; ++j) {
             var joint = this.m_joints[j];
             joint.solveVelocityConstraints(step);
@@ -3453,34 +3479,20 @@ Solver.prototype.solveIsland = function(step) {
             contact.solveVelocityConstraint(step);
         }
     }
-    for (var i = 0; i < this.m_bodies.length; ++i) {
-        var body = this.m_bodies[i];
-        var c = Vec2(body.c_position.c);
-        var a = body.c_position.a;
-        var v = Vec2(body.c_velocity.v);
-        var w = body.c_velocity.w;
-        common.debug("D: ", a, c.x, c.y, w, v.x, v.y);
-    }
+    DEBUG && this.printBodies("D: ");
     // Store impulses for warm starting
     for (var i = 0; i < this.m_contacts.length; ++i) {
         var contact = this.m_contacts[i];
         contact.storeConstraintImpulses(step);
     }
     profile.solveVelocity = Timer.diff(timer);
-    for (var i = 0; i < this.m_bodies.length; ++i) {
-        var body = this.m_bodies[i];
-        var c = Vec2(body.c_position.c);
-        var a = body.c_position.a;
-        var v = Vec2(body.c_velocity.v);
-        var w = body.c_velocity.w;
-        common.debug("C: ", a, c.x, c.y, w, v.x, v.y);
-    }
+    DEBUG && this.printBodies("C: ");
     // Integrate positions
     for (var i = 0; i < this.m_bodies.length; ++i) {
         var body = this.m_bodies[i];
-        var c = Vec2(body.c_position.c);
+        var c = Vec2.clone(body.c_position.c);
         var a = body.c_position.a;
-        var v = Vec2(body.c_velocity.v);
+        var v = Vec2.clone(body.c_velocity.v);
         var w = body.c_velocity.w;
         // Check for large velocities
         var translation = Vec2.mul(h, v);
@@ -3501,14 +3513,7 @@ Solver.prototype.solveIsland = function(step) {
         body.c_velocity.v.set(v);
         body.c_velocity.w = w;
     }
-    for (var i = 0; i < this.m_bodies.length; ++i) {
-        var body = this.m_bodies[i];
-        var c = Vec2(body.c_position.c);
-        var a = body.c_position.a;
-        var v = Vec2(body.c_velocity.v);
-        var w = body.c_velocity.w;
-        common.debug("B: ", a, c.x, c.y, w, v.x, v.y);
-    }
+    DEBUG && this.printBodies("B: ");
     // Solve position constraints
     timer = Timer.now();
     var positionSolved = false;
@@ -3534,14 +3539,10 @@ Solver.prototype.solveIsland = function(step) {
             break;
         }
     }
+    DEBUG && this.printBodies("L: ");
     // Copy state buffers back to the bodies
     for (var i = 0; i < this.m_bodies.length; ++i) {
         var body = this.m_bodies[i];
-        var c = Vec2(body.c_position.c);
-        var a = body.c_position.a;
-        var v = Vec2(body.c_velocity.v);
-        var w = body.c_velocity.w;
-        common.debug("L: ", a, c.x, c.y, w, v.x, v.y);
         body.m_sweep.c.set(body.c_position.c);
         body.m_sweep.a = body.c_position.a;
         body.m_linearVelocity.set(body.c_velocity.v);
@@ -3576,24 +3577,31 @@ Solver.prototype.solveIsland = function(step) {
     }
 };
 
+Solver.prototype.printBodies = function(tag) {
+    for (var i = 0; i < this.m_bodies.length; ++i) {
+        var b = this.m_bodies[i];
+        common.debug(tag, b.c_position.a, b.c_position.c.x, b.c_position.c.y, b.c_velocity.w, b.c_velocity.v.x, b.c_velocity.v.y);
+    }
+};
+
 var s_subStep = new TimeStep();
 
 // reuse
 /**
  * Find TOI contacts and solve them.
- * 
+ *
  * @param {TimeStep} step
  */
 Solver.prototype.solveWorldTOI = function(step) {
-    common.debug("TOI++++++World");
+    DEBUG && common.debug("TOI++++++World");
     var world = this.m_world;
     var profile = this.m_profile;
-    common.debug("Z:", world.m_stepComplete);
+    DEBUG && common.debug("Z:", world.m_stepComplete);
     if (world.m_stepComplete) {
         for (var b = world.m_bodyList; b; b = b.m_next) {
             b.m_islandFlag = false;
             b.m_sweep.alpha0 = 0;
-            common.debug("b.alpha0:", b.m_sweep.alpha0);
+            DEBUG && common.debug("b.alpha0:", b.m_sweep.alpha0);
         }
         for (var c = world.m_contactList; c; c = c.m_next) {
             // Invalidate TOI
@@ -3603,28 +3611,28 @@ Solver.prototype.solveWorldTOI = function(step) {
             c.m_toi = 1;
         }
     }
-    for (var c = world.m_contactList; c; c = c.m_next) {
-        common.debug("X:", c.m_toiFlag);
+    if (DEBUG) for (var c = world.m_contactList; c; c = c.m_next) {
+        DEBUG && common.debug("X:", c.m_toiFlag);
     }
     // Find TOI events and solve them.
     for (;;) {
-        common.debug(";;");
+        DEBUG && common.debug(";;");
         // Find the first TOI.
         var minContact = null;
         // Contact
         var minAlpha = 1;
         for (var c = world.m_contactList; c; c = c.m_next) {
-            common.debug("alpha0::", c.getFixtureA().getBody().m_sweep.alpha0, c.getFixtureB().getBody().m_sweep.alpha0);
+            DEBUG && common.debug("alpha0::", c.getFixtureA().getBody().m_sweep.alpha0, c.getFixtureB().getBody().m_sweep.alpha0);
             // Is this contact disabled?
             if (c.isEnabled() == false) {
                 continue;
             }
-            common.debug("toiCount:", c.m_toiCount, Settings.maxSubSteps);
+            DEBUG && common.debug("toiCount:", c.m_toiCount, Settings.maxSubSteps);
             // Prevent excessive sub-stepping.
             if (c.m_toiCount > Settings.maxSubSteps) {
                 continue;
             }
-            common.debug("toiFlag:", c.m_toiFlag);
+            DEBUG && common.debug("toiFlag:", c.m_toiFlag);
             var alpha = 1;
             if (c.m_toiFlag) {
                 // This contact has a valid cached TOI.
@@ -3632,27 +3640,27 @@ Solver.prototype.solveWorldTOI = function(step) {
             } else {
                 var fA = c.getFixtureA();
                 var fB = c.getFixtureB();
-                common.debug("sensor:", fA.isSensor(), fB.isSensor());
+                DEBUG && common.debug("sensor:", fA.isSensor(), fB.isSensor());
                 // Is there a sensor?
                 if (fA.isSensor() || fB.isSensor()) {
                     continue;
                 }
                 var bA = fA.getBody();
                 var bB = fB.getBody();
-                common.assert(bA.isDynamic() || bB.isDynamic());
+                ASSERT && common.assert(bA.isDynamic() || bB.isDynamic());
                 var activeA = bA.isAwake() && !bA.isStatic();
                 var activeB = bB.isAwake() && !bB.isStatic();
-                common.debug("awakestatic:", bA.isAwake(), bA.isStatic());
-                common.debug("awakestatic:", bB.isAwake(), bB.isStatic());
-                common.debug("active:", activeA, activeB);
+                DEBUG && common.debug("awakestatic:", bA.isAwake(), bA.isStatic());
+                DEBUG && common.debug("awakestatic:", bB.isAwake(), bB.isStatic());
+                DEBUG && common.debug("active:", activeA, activeB);
                 // Is at least one body active (awake and dynamic or kinematic)?
                 if (activeA == false && activeB == false) {
                     continue;
                 }
-                common.debug("alpha:", alpha, bA.m_sweep.alpha0, bB.m_sweep.alpha0);
+                DEBUG && common.debug("alpha:", alpha, bA.m_sweep.alpha0, bB.m_sweep.alpha0);
                 var collideA = bA.isBullet() || !bA.isDynamic();
                 var collideB = bB.isBullet() || !bB.isDynamic();
-                common.debug("collide:", collideA, collideB);
+                DEBUG && common.debug("collide:", collideA, collideB);
                 // Are these two non-bullet dynamic bodies?
                 if (collideA == false && collideB == false) {
                     continue;
@@ -3667,14 +3675,14 @@ Solver.prototype.solveWorldTOI = function(step) {
                     alpha0 = bA.m_sweep.alpha0;
                     bB.m_sweep.advance(alpha0);
                 }
-                common.debug("alpha0:", alpha0, bA.m_sweep.alpha0, bB.m_sweep.alpha0);
-                common.assert(alpha0 < 1);
+                DEBUG && common.debug("alpha0:", alpha0, bA.m_sweep.alpha0, bB.m_sweep.alpha0);
+                ASSERT && common.assert(alpha0 < 1);
                 var indexA = c.getChildIndexA();
                 var indexB = c.getChildIndexB();
                 var sweepA = bA.m_sweep;
                 var sweepB = bB.m_sweep;
-                common.debug("sweepA", sweepA.localCenter.x, sweepA.localCenter.y, sweepA.c.x, sweepA.c.y, sweepA.a, sweepA.alpha0, sweepA.c0.x, sweepA.c0.y, sweepA.a0);
-                common.debug("sweepB", sweepB.localCenter.x, sweepB.localCenter.y, sweepB.c.x, sweepB.c.y, sweepB.a, sweepB.alpha0, sweepB.c0.x, sweepB.c0.y, sweepB.a0);
+                DEBUG && common.debug("sweepA", sweepA.localCenter.x, sweepA.localCenter.y, sweepA.c.x, sweepA.c.y, sweepA.a, sweepA.alpha0, sweepA.c0.x, sweepA.c0.y, sweepA.a0);
+                DEBUG && common.debug("sweepB", sweepB.localCenter.x, sweepB.localCenter.y, sweepB.c.x, sweepB.c.y, sweepB.a, sweepB.alpha0, sweepB.c0.x, sweepB.c0.y, sweepB.a0);
                 // Compute the time of impact in interval [0, minTOI]
                 var input = new TOIInput();
                 // TODO: reuse
@@ -3686,10 +3694,10 @@ Solver.prototype.solveWorldTOI = function(step) {
                 var output = new TOIOutput();
                 // TODO: reuse
                 TimeOfImpact(output, input);
-                // common.debug(output.t, output.state);
+                // DEBUG && common.debug(output.t, output.state);
                 // Beta is the fraction of the remaining portion of the [time?].
                 var beta = output.t;
-                common.debug("state:", output.state, TOIOutput.e_touching);
+                DEBUG && common.debug("state:", output.state, TOIOutput.e_touching);
                 if (output.state == TOIOutput.e_touching) {
                     alpha = Math.min(alpha0 + (1 - alpha0) * beta, 1);
                 } else {
@@ -3698,14 +3706,14 @@ Solver.prototype.solveWorldTOI = function(step) {
                 c.m_toi = alpha;
                 c.m_toiFlag = true;
             }
-            common.debug("minAlpha:", minAlpha, alpha);
+            DEBUG && common.debug("minAlpha:", minAlpha, alpha);
             if (alpha < minAlpha) {
                 // This is the minimum TOI found so far.
                 minContact = c;
                 minAlpha = alpha;
             }
         }
-        common.debug("minContact:", minContact == null, 1 - 10 * Math.EPSILON < minAlpha, minAlpha);
+        DEBUG && common.debug("minContact:", minContact == null, 1 - 10 * Math.EPSILON < minAlpha, minAlpha);
         if (minContact == null || 1 - 10 * Math.EPSILON < minAlpha) {
             // No more TOI events. Done!
             world.m_stepComplete = true;
@@ -3827,12 +3835,12 @@ Solver.prototype.solveWorldTOI = function(step) {
             break;
         }
     }
-    for (var b = world.m_bodyList; b; b = b.m_next) {
-        var c = Vec2(b.m_sweep.c);
+    if (DEBUG) for (var b = world.m_bodyList; b; b = b.m_next) {
+        var c = b.m_sweep.c;
         var a = b.m_sweep.a;
-        var v = Vec2(b.m_linearVelocity);
+        var v = b.m_linearVelocity;
         var w = b.m_angularVelocity;
-        common.debug("== ", a, c.x, c.y, w, v.x, v.y);
+        DEBUG && common.debug("== ", a, c.x, c.y, w, v.x, v.y);
     }
 };
 
@@ -3842,7 +3850,7 @@ Solver.prototype.solveWorldTOI = function(step) {
  * @param toiB
  */
 Solver.prototype.solveIslandTOI = function(subStep, toiA, toiB) {
-    common.debug("TOI++++++Island");
+    DEBUG && common.debug("TOI++++++Island");
     var world = this.m_world;
     var profile = this.m_profile;
     // Initialize the body state.
@@ -3920,9 +3928,9 @@ Solver.prototype.solveIslandTOI = function(subStep, toiA, toiB) {
     // Integrate positions
     for (var i = 0; i < this.m_bodies.length; ++i) {
         var body = this.m_bodies[i];
-        var c = Vec2(body.c_position.c);
+        var c = Vec2.clone(body.c_position.c);
         var a = body.c_position.a;
-        var v = Vec2(body.c_velocity.v);
+        var v = Vec2.clone(body.c_velocity.v);
         var w = body.c_velocity.w;
         // Check for large velocities
         var translation = Vec2.mul(h, v);
@@ -3950,7 +3958,7 @@ Solver.prototype.solveIslandTOI = function(subStep, toiA, toiB) {
         body.synchronizeTransform();
     }
     this.postSolveIsland();
-    common.debug("TOI------Island");
+    DEBUG && common.debug("TOI------Island");
 };
 
 /**
@@ -3978,6 +3986,10 @@ Solver.prototype.postSolveIsland = function() {
 
 
 },{"./Body":2,"./Contact":3,"./Joint":5,"./Settings":7,"./collision/Distance":13,"./collision/TimeOfImpact":15,"./common/Math":18,"./common/Vec2":23,"./util/Timer":49,"./util/common":50}],10:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = World;
 
 var options = require("./util/options");
@@ -4009,7 +4021,7 @@ var Contact = require("./Contact");
  * @prop {int} [positionIterations = 3] For the position constraint solver.
  */
 var WorldDef = {
-    gravity: new Vec2(),
+    gravity: Vec2.zero(),
     allowSleep: true,
     warmStarting: true,
     continuousPhysics: true,
@@ -4227,7 +4239,7 @@ World.prototype.clearForces = function() {
  * @param aabb The query box.
  */
 World.prototype.queryAABB = function(aabb, queryCallback) {
-    common.assert(typeof queryCallback === "function");
+    ASSERT && common.assert(typeof queryCallback === "function");
     var broadPhase = this.m_broadPhase;
     this.m_broadPhase.query(aabb, function(proxyId) {
         //TODO GC
@@ -4267,7 +4279,7 @@ World.prototype.queryAABB = function(aabb, queryCallback) {
  * @param point2 The ray ending point
  */
 World.prototype.rayCast = function(point1, point2, reportFixtureCallback) {
-    common.assert(typeof reportFixtureCallback === "function");
+    ASSERT && common.assert(typeof reportFixtureCallback === "function");
     var broadPhase = this.m_broadPhase;
     this.m_broadPhase.rayCast({
         maxFraction: 1,
@@ -4331,7 +4343,7 @@ World.prototype.getTreeQuality = function() {
  * @param {Vec2} newOrigin The new origin with respect to the old origin
  */
 World.prototype.shiftOrigin = function(newOrigin) {
-    common.assert(this.m_locked == false);
+    ASSERT && common.assert(this.m_locked == false);
     if (this.m_locked) {
         return;
     }
@@ -4356,7 +4368,7 @@ World.prototype.shiftOrigin = function(newOrigin) {
  * @param {float} angle Body angle if def is position.
  */
 World.prototype.createBody = function(def, angle) {
-    common.assert(this.isLocked() == false);
+    ASSERT && common.assert(this.isLocked() == false);
     if (this.isLocked()) {
         return null;
     }
@@ -4415,8 +4427,8 @@ World.prototype.createKinematicBody = function(def, angle) {
  * @param {Body} b
  */
 World.prototype.destroyBody = function(b) {
-    common.assert(this.m_bodyCount > 0);
-    common.assert(this.isLocked() == false);
+    ASSERT && common.assert(this.m_bodyCount > 0);
+    ASSERT && common.assert(this.isLocked() == false);
     if (this.isLocked()) {
         return;
     }
@@ -4478,9 +4490,9 @@ World.prototype.destroyBody = function(b) {
  * @param {Body} bodyA
  */
 World.prototype.createJoint = function(joint) {
-    common.assert(!!joint.m_bodyA);
-    common.assert(!!joint.m_bodyB);
-    common.assert(this.isLocked() == false);
+    ASSERT && common.assert(!!joint.m_bodyA);
+    ASSERT && common.assert(!!joint.m_bodyB);
+    ASSERT && common.assert(this.isLocked() == false);
     if (this.isLocked()) {
         return null;
     }
@@ -4526,7 +4538,7 @@ World.prototype.createJoint = function(joint) {
  * @param {Joint} join
  */
 World.prototype.destroyJoint = function(joint) {
-    common.assert(this.isLocked() == false);
+    ASSERT && common.assert(this.isLocked() == false);
     if (this.isLocked()) {
         return;
     }
@@ -4570,7 +4582,7 @@ World.prototype.destroyJoint = function(joint) {
     }
     joint.m_edgeB.prev = null;
     joint.m_edgeB.next = null;
-    common.assert(this.m_jointCount > 0);
+    ASSERT && common.assert(this.m_jointCount > 0);
     --this.m_jointCount;
     // If the joint prevents collisions, then flag any contacts for filtering.
     if (joint.m_collideConnected == false) {
@@ -4928,6 +4940,10 @@ World.prototype.postSolve = function(contact, impulse) {
 
 
 },{"./Body":2,"./Contact":3,"./Solver":9,"./collision/BroadPhase":12,"./common/Vec2":23,"./util/Timer":49,"./util/common":50,"./util/options":52}],11:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 var Settings = require("../Settings");
 
 var Math = require("../common/Math");
@@ -4940,8 +4956,8 @@ function AABB(lower, upper) {
     if (!(this instanceof AABB)) {
         return new AABB(lower, upper);
     }
-    this.lowerBound = Vec2();
-    this.upperBound = Vec2();
+    this.lowerBound = Vec2.zero();
+    this.upperBound = Vec2.zero();
     if (typeof lower === "object") {
         this.lowerBound.set(lower);
     }
@@ -4967,14 +4983,14 @@ AABB.isValid = function(aabb) {
  * Get the center of the AABB.
  */
 AABB.prototype.getCenter = function() {
-    return Vec2((this.lowerBound.x + this.upperBound.x) * .5, (this.lowerBound.y + this.upperBound.y) * .5);
+    return Vec2.neo((this.lowerBound.x + this.upperBound.x) * .5, (this.lowerBound.y + this.upperBound.y) * .5);
 };
 
 /**
  * Get the extents of the AABB (half-widths).
  */
 AABB.prototype.getExtents = function() {
-    return Vec2((this.upperBound.x - this.lowerBound.x) * .5, (this.upperBound.y - this.lowerBound.y) * .5);
+    return Vec2.neo((this.upperBound.x - this.lowerBound.x) * .5, (this.upperBound.y - this.lowerBound.y) * .5);
 };
 
 /**
@@ -5080,7 +5096,7 @@ AABB.prototype.rayCast = function(output, input) {
     var p = input.p1;
     var d = Sub(input.p2, input.p1);
     var absD = Abs(d);
-    var normal = Vec2();
+    var normal = Vec2.zero();
     for (var i = 0; i < 2; ++i) {
         var field = XY[i];
         if (absD.x < Math.EPSILON) {
@@ -5129,6 +5145,10 @@ AABB.prototype.toString = function() {
 
 
 },{"../Settings":7,"../common/Math":18,"../common/Vec2":23}],12:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 var Settings = require("../Settings");
 
 var common = require("../util/common");
@@ -5242,7 +5262,7 @@ BroadPhase.prototype.shiftOrigin = function(newOrigin) {
  * is called.
  */
 BroadPhase.prototype.createProxy = function(aabb, userData) {
-    common.assert(AABB.isValid(aabb));
+    ASSERT && common.assert(AABB.isValid(aabb));
     var proxyId = this.m_tree.createProxy(aabb, userData);
     this.m_proxyCount++;
     this.bufferMove(proxyId);
@@ -5263,7 +5283,7 @@ BroadPhase.prototype.destroyProxy = function(proxyId) {
  * UpdatePairs to finalized the proxy pairs (for your time step).
  */
 BroadPhase.prototype.moveProxy = function(proxyId, aabb, displacement) {
-    common.assert(AABB.isValid(aabb));
+    ASSERT && common.assert(AABB.isValid(aabb));
     var changed = this.m_tree.moveProxy(proxyId, aabb, displacement);
     if (changed) {
         this.bufferMove(proxyId);
@@ -5301,7 +5321,7 @@ BroadPhase.prototype.unbufferMove = function(proxyId) {
  * @param {BroadPhase~AddPair} addPairCallback
  */
 BroadPhase.prototype.updatePairs = function(addPairCallback) {
-    common.assert(typeof addPairCallback === "function");
+    ASSERT && common.assert(typeof addPairCallback === "function");
     this.m_callback = addPairCallback;
     // Perform tree queries for all moving proxies.
     while (this.m_moveBuffer.length > 0) {
@@ -5334,6 +5354,10 @@ BroadPhase.prototype.queryCallback = function(proxyId) {
 
 
 },{"../Settings":7,"../common/Math":18,"../util/common":50,"./AABB":11,"./DynamicTree":14}],13:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = Distance;
 
 module.exports.Input = DistanceInput;
@@ -5402,8 +5426,8 @@ function DistanceInput() {
  * @prop iterations number of GJK iterations used
  */
 function DistanceOutput() {
-    this.pointA = Vec2();
-    this.pointB = Vec2();
+    this.pointA = Vec2.zero();
+    this.pointB = Vec2.zero();
     this.distance;
     this.iterations;
 }
@@ -5438,11 +5462,11 @@ function Distance(output, cache, input) {
     var proxyB = input.proxyB;
     var xfA = input.transformA;
     var xfB = input.transformB;
-    common.debug("cahce:", cache.metric, cache.count);
-    common.debug("proxyA:", proxyA.m_count);
-    common.debug("proxyB:", proxyB.m_count);
-    common.debug("xfA:", xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s);
-    common.debug("xfB:", xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
+    DEBUG && common.debug("cahce:", cache.metric, cache.count);
+    DEBUG && common.debug("proxyA:", proxyA.m_count);
+    DEBUG && common.debug("proxyB:", proxyB.m_count);
+    DEBUG && common.debug("xfA:", xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s);
+    DEBUG && common.debug("xfB:", xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
     // Initialize the simplex.
     var simplex = new Simplex();
     simplex.readCache(cache, proxyA, xfA, proxyB, xfB);
@@ -5450,7 +5474,7 @@ function Distance(output, cache, input) {
     // Get simplex vertices as an array.
     var vertices = simplex.m_v;
     // SimplexVertex
-    var k_maxIters = 20;
+    var k_maxIters = Settings.maxDistnceIterations;
     // These store the vertices of the last simplex so that we
     // can check for duplicates and prevent cycling.
     var saveA = [];
@@ -5495,8 +5519,6 @@ function Distance(output, cache, input) {
         // SimplexVertex
         vertex.indexA = proxyA.getSupport(Rot.mulT(xfA.q, Vec2.neg(d)));
         vertex.wA = Transform.mul(xfA, proxyA.getVertex(vertex.indexA));
-        var wBLocal = new Vec2();
-        // TODO what is this!
         vertex.indexB = proxyB.getSupport(Rot.mulT(xfB.q, d));
         vertex.wB = Transform.mul(xfB, proxyB.getVertex(vertex.indexB));
         vertex.w = Vec2.sub(vertex.wB, vertex.wA);
@@ -5524,7 +5546,7 @@ function Distance(output, cache, input) {
     simplex.getWitnessPoints(output.pointA, output.pointB);
     output.distance = Vec2.distance(output.pointA, output.pointB);
     output.iterations = iter;
-    common.debug("Distance:", output.distance, output.pointA.x, output.pointA.y, output.pointB.x, output.pointB.y);
+    DEBUG && common.debug("Distance:", output.distance, output.pointA.x, output.pointA.y, output.pointB.x, output.pointB.y);
     // Cache the simplex.
     simplex.writeCache(cache);
     // Apply radii if requested.
@@ -5543,8 +5565,8 @@ function Distance(output, cache, input) {
             // Shapes are overlapped when radii are considered.
             // Move the witness points to the middle.
             var p = Vec2.mid(output.pointA, output.pointB);
-            output.pointA = p;
-            output.pointB = p;
+            output.pointA.set(p);
+            output.pointB.set(p);
             output.distance = 0;
         }
     }
@@ -5573,7 +5595,7 @@ DistanceProxy.prototype.getVertexCount = function() {
  * Get a vertex by index. Used by Distance.
  */
 DistanceProxy.prototype.getVertex = function(index) {
-    common.assert(0 <= index && index < this.m_count);
+    ASSERT && common.assert(0 <= index && index < this.m_count);
     return this.m_vertices[index];
 };
 
@@ -5606,7 +5628,7 @@ DistanceProxy.prototype.getSupportVertex = function(d) {
  */
 DistanceProxy.prototype.set = function(shape, index) {
     // TODO remove, use shape instead
-    common.assert(typeof shape.computeDistanceProxy === "function");
+    ASSERT && common.assert(typeof shape.computeDistanceProxy === "function");
     shape.computeDistanceProxy(this, index);
 };
 
@@ -5615,11 +5637,11 @@ function SimplexVertex() {
     // wA index
     this.indexB;
     // wB index
-    this.wA = new Vec2();
+    this.wA = Vec2.zero();
     // support point in proxyA
-    this.wB = new Vec2();
+    this.wB = Vec2.zero();
     // support point in proxyB
-    this.w = new Vec2();
+    this.w = Vec2.zero();
     // wB - wA
     this.a;
 }
@@ -5627,9 +5649,9 @@ function SimplexVertex() {
 SimplexVertex.prototype.set = function(v) {
     this.indexA = v.indexA;
     this.indexB = v.indexB;
-    this.wA = new Vec2(v.wA);
-    this.wB = new Vec2(v.wB);
-    this.w = new Vec2(v.w);
+    this.wA = Vec2.clone(v.wA);
+    this.wB = Vec2.clone(v.wB);
+    this.w = Vec2.clone(v.w);
     this.a = v.a;
 };
 
@@ -5643,19 +5665,19 @@ function Simplex() {
 
 Simplex.prototype.print = function(tag) {
     if (this.m_count == 3) {
-        common.debug(tag, "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y, this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y, this.m_v3.a, this.m_v3.wA.x, this.m_v3.wA.y, this.m_v3.wB.x, this.m_v3.wB.y);
+        DEBUG && common.debug(tag, "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y, this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y, this.m_v3.a, this.m_v3.wA.x, this.m_v3.wA.y, this.m_v3.wB.x, this.m_v3.wB.y);
     } else if (this.m_count == 2) {
-        common.debug(tag, "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y, this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y);
+        DEBUG && common.debug(tag, "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y, this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y);
     } else if (this.m_count == 1) {
-        common.debug(tag, "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y);
+        DEBUG && common.debug(tag, "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y);
     } else {
-        common.debug(tag, "+" + this.m_count);
+        DEBUG && common.debug(tag, "+" + this.m_count);
     }
 };
 
 // (SimplexCache, DistanceProxy, ...)
 Simplex.prototype.readCache = function(cache, proxyA, transformA, proxyB, transformB) {
-    common.assert(cache.count <= 3);
+    ASSERT && common.assert(cache.count <= 3);
     // Copy data from cache.
     this.m_count = cache.count;
     for (var i = 0; i < this.m_count; ++i) {
@@ -5724,36 +5746,36 @@ Simplex.prototype.getSearchDirection = function() {
         }
 
       default:
-        common.assert(false);
-        return Vec2();
+        ASSERT && common.assert(false);
+        return Vec2.zero();
     }
 };
 
 Simplex.prototype.getClosestPoint = function() {
     switch (this.m_count) {
       case 0:
-        common.assert(false);
-        return Vec2();
+        ASSERT && common.assert(false);
+        return Vec2.zero();
 
       case 1:
-        return this.m_v1.w;
+        return Vec2.clone(this.m_v1.w);
 
       case 2:
         return Vec2.wAdd(this.m_v1.a, this.m_v1.w, this.m_v2.a, this.m_v2.w);
 
       case 3:
-        return Vec2();
+        return Vec2.zero();
 
       default:
-        common.assert(false);
-        return Vec2();
+        ASSERT && common.assert(false);
+        return Vec2.zero();
     }
 };
 
 Simplex.prototype.getWitnessPoints = function(pA, pB) {
     switch (this.m_count) {
       case 0:
-        common.assert(false);
+        ASSERT && common.assert(false);
         break;
 
       case 1:
@@ -5776,7 +5798,7 @@ Simplex.prototype.getWitnessPoints = function(pA, pB) {
         break;
 
       default:
-        common.assert(false);
+        ASSERT && common.assert(false);
         break;
     }
 };
@@ -5784,7 +5806,7 @@ Simplex.prototype.getWitnessPoints = function(pA, pB) {
 Simplex.prototype.getMetric = function() {
     switch (this.m_count) {
       case 0:
-        common.assert(false);
+        ASSERT && common.assert(false);
         return 0;
 
       case 1:
@@ -5797,7 +5819,7 @@ Simplex.prototype.getMetric = function() {
         return Vec2.cross(Vec2.sub(this.m_v2.w, this.m_v1.w), Vec2.sub(this.m_v3.w, this.m_v1.w));
 
       default:
-        common.assert(false);
+        ASSERT && common.assert(false);
         return 0;
     }
 };
@@ -5816,7 +5838,7 @@ Simplex.prototype.solve = function() {
         break;
 
       default:
-        common.assert(false);
+        ASSERT && common.assert(false);
     }
 };
 
@@ -5861,7 +5883,7 @@ Simplex.prototype.solve2 = function() {
         // a1 <= 0, so we clamp it to 0
         this.m_v2.a = 1;
         this.m_count = 1;
-        this.m_v1 = this.m_v2;
+        this.m_v1.set(this.m_v2);
         return;
     }
     // Must be in e12 region.
@@ -5985,6 +6007,10 @@ Distance.testOverlap = function(shapeA, indexA, shapeB, indexB, xfA, xfB) {
 
 
 },{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../common/stats":26,"../util/Timer":49,"../util/common":50}],14:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 var Settings = require("../Settings");
 
 var common = require("../util/common");
@@ -6051,7 +6077,7 @@ function DynamicTree() {
  */
 DynamicTree.prototype.getUserData = function(id) {
     var node = this.m_nodes[id];
-    common.assert(!!node);
+    ASSERT && common.assert(!!node);
     return node.userData;
 };
 
@@ -6062,7 +6088,7 @@ DynamicTree.prototype.getUserData = function(id) {
  */
 DynamicTree.prototype.getFatAABB = function(id) {
     var node = this.m_nodes[id];
-    common.assert(!!node);
+    ASSERT && common.assert(!!node);
     return node.aabb;
 };
 
@@ -6091,7 +6117,7 @@ DynamicTree.prototype.freeNode = function(node) {
  * Create a proxy. Provide a tight fitting AABB and a userData pointer.
  */
 DynamicTree.prototype.createProxy = function(aabb, userData) {
-    common.assert(AABB.isValid(aabb));
+    ASSERT && common.assert(AABB.isValid(aabb));
     var node = this.allocateNode();
     node.aabb.set(aabb);
     // Fatten the aabb.
@@ -6107,8 +6133,8 @@ DynamicTree.prototype.createProxy = function(aabb, userData) {
  */
 DynamicTree.prototype.destroyProxy = function(id) {
     var node = this.m_nodes[id];
-    common.assert(!!node);
-    common.assert(node.isLeaf());
+    ASSERT && common.assert(!!node);
+    ASSERT && common.assert(node.isLeaf());
     this.removeLeaf(node);
     this.freeNode(node);
 };
@@ -6125,11 +6151,11 @@ DynamicTree.prototype.destroyProxy = function(id) {
  * @return true if the proxy was re-inserted.
  */
 DynamicTree.prototype.moveProxy = function(id, aabb, d) {
-    common.assert(AABB.isValid(aabb));
-    common.assert(!d || Vec2.isValid(d));
+    ASSERT && common.assert(AABB.isValid(aabb));
+    ASSERT && common.assert(!d || Vec2.isValid(d));
     var node = this.m_nodes[id];
-    common.assert(!!node);
-    common.assert(node.isLeaf());
+    ASSERT && common.assert(!!node);
+    ASSERT && common.assert(node.isLeaf());
     if (node.aabb.contains(aabb)) {
         return false;
     }
@@ -6155,7 +6181,7 @@ DynamicTree.prototype.moveProxy = function(id, aabb, d) {
 };
 
 DynamicTree.prototype.insertLeaf = function(leaf) {
-    common.assert(AABB.isValid(leaf.aabb));
+    ASSERT && common.assert(AABB.isValid(leaf.aabb));
     if (this.m_root == null) {
         this.m_root = leaf;
         this.m_root.parent = null;
@@ -6245,8 +6271,8 @@ DynamicTree.prototype.insertLeaf = function(leaf) {
         index = this.balance(index);
         var child1 = index.child1;
         var child2 = index.child2;
-        common.assert(child1 != null);
-        common.assert(child2 != null);
+        ASSERT && common.assert(child1 != null);
+        ASSERT && common.assert(child2 != null);
         index.height = 1 + Math.max(child1.height, child2.height);
         index.aabb.combine(child1.aabb, child2.aabb);
         index = index.parent;
@@ -6297,7 +6323,7 @@ DynamicTree.prototype.removeLeaf = function(leaf) {
  * root index.
  */
 DynamicTree.prototype.balance = function(iA) {
-    common.assert(iA != null);
+    ASSERT && common.assert(iA != null);
     var A = iA;
     if (A.isLeaf() || A.height < 2) {
         return iA;
@@ -6427,7 +6453,7 @@ DynamicTree.prototype.computeHeight = function(id) {
     } else {
         node = this.m_root;
     }
-    // common.assert(0 <= id && id < this.m_nodeCapacity);
+    // ASSERT && common.assert(0 <= id && id < this.m_nodeCapacity);
     if (node.isLeaf()) {
         return 0;
     }
@@ -6441,20 +6467,20 @@ DynamicTree.prototype.validateStructure = function(node) {
         return;
     }
     if (node == this.m_root) {
-        common.assert(node.parent == null);
+        ASSERT && common.assert(node.parent == null);
     }
     var child1 = node.child1;
     var child2 = node.child2;
     if (node.isLeaf()) {
-        common.assert(child1 == null);
-        common.assert(child2 == null);
-        common.assert(node.height == 0);
+        ASSERT && common.assert(child1 == null);
+        ASSERT && common.assert(child2 == null);
+        ASSERT && common.assert(node.height == 0);
         return;
     }
-    // common.assert(0 <= child1 && child1 < this.m_nodeCapacity);
-    // common.assert(0 <= child2 && child2 < this.m_nodeCapacity);
-    common.assert(child1.parent == node);
-    common.assert(child2.parent == node);
+    // ASSERT && common.assert(0 <= child1 && child1 < this.m_nodeCapacity);
+    // ASSERT && common.assert(0 <= child2 && child2 < this.m_nodeCapacity);
+    ASSERT && common.assert(child1.parent == node);
+    ASSERT && common.assert(child2.parent == node);
     this.validateStructure(child1);
     this.validateStructure(child2);
 };
@@ -6466,20 +6492,20 @@ DynamicTree.prototype.validateMetrics = function(node) {
     var child1 = node.child1;
     var child2 = node.child2;
     if (node.isLeaf()) {
-        common.assert(child1 == null);
-        common.assert(child2 == null);
-        common.assert(node.height == 0);
+        ASSERT && common.assert(child1 == null);
+        ASSERT && common.assert(child2 == null);
+        ASSERT && common.assert(node.height == 0);
         return;
     }
-    // common.assert(0 <= child1 && child1 < this.m_nodeCapacity);
-    // common.assert(0 <= child2 && child2 < this.m_nodeCapacity);
+    // ASSERT && common.assert(0 <= child1 && child1 < this.m_nodeCapacity);
+    // ASSERT && common.assert(0 <= child2 && child2 < this.m_nodeCapacity);
     var height1 = this.m_nodes[child1].height;
     var height2 = this.m_nodes[child2].height;
     var height = 1 + Math.max(height1, height2);
-    common.assert(node.height == height);
+    ASSERT && common.assert(node.height == height);
     var aabb = new AABB();
     aabb.combine(child1.aabb, child2.aabb);
-    common.assert(AABB.areEqual(aabb, node.aabb));
+    ASSERT && common.assert(AABB.areEqual(aabb, node.aabb));
     this.validateMetrics(child1);
     this.validateMetrics(child2);
 };
@@ -6488,7 +6514,7 @@ DynamicTree.prototype.validateMetrics = function(node) {
 DynamicTree.prototype.validate = function() {
     ValidateStructure(this.m_root);
     ValidateMetrics(this.m_root);
-    common.assert(this.getHeight() == this.computeHeight());
+    ASSERT && common.assert(this.getHeight() == this.computeHeight());
 };
 
 /**
@@ -6502,7 +6528,7 @@ DynamicTree.prototype.getMaxBalance = function() {
         if (node.height <= 1) {
             continue;
         }
-        common.assert(node.isLeaf() == false);
+        ASSERT && common.assert(node.isLeaf() == false);
         var balance = Abs(node.child2.height - node.child1.height);
         maxBalance = Math.max(maxBalance, balance);
     }
@@ -6598,7 +6624,7 @@ DynamicTree.prototype.shiftOrigin = function(newOrigin) {
  * @param {DynamicTree~queryCallback} queryCallback
  */
 DynamicTree.prototype.query = function(aabb, queryCallback) {
-    common.assert(typeof queryCallback === "function");
+    ASSERT && common.assert(typeof queryCallback === "function");
     var stack = stackPool.allocate();
     stack.push(this.m_root);
     while (stack.length > 0) {
@@ -6635,11 +6661,11 @@ DynamicTree.prototype.query = function(aabb, queryCallback) {
  */
 DynamicTree.prototype.rayCast = function(input, rayCastCallback) {
     // TODO GC
-    common.assert(typeof rayCastCallback === "function");
+    ASSERT && common.assert(typeof rayCastCallback === "function");
     var p1 = input.p1;
     var p2 = input.p2;
     var r = Vec2.sub(p2, p1);
-    common.assert(r.lengthSquared() > 0);
+    ASSERT && common.assert(r.lengthSquared() > 0);
     r.normalize();
     // v is perpendicular to the segment.
     var v = Vec2.cross(1, r);
@@ -6671,8 +6697,8 @@ DynamicTree.prototype.rayCast = function(input, rayCastCallback) {
             continue;
         }
         if (node.isLeaf()) {
-            subInput.p1 = Vec2(input.p1);
-            subInput.p2 = Vec2(input.p2);
+            subInput.p1 = Vec2.clone(input.p1);
+            subInput.p2 = Vec2.clone(input.p2);
             subInput.maxFraction = maxFraction;
             var value = rayCastCallback(subInput, node.id);
             if (value == 0) {
@@ -6766,6 +6792,10 @@ function Iterator() {
 
 
 },{"../Settings":7,"../common/Math":18,"../common/Vec2":23,"../util/Pool":48,"../util/common":50,"./AABB":11}],15:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = TimeOfImpact;
 
 module.exports.Input = TOIInput;
@@ -6888,8 +6918,8 @@ function TimeOfImpact(output, input) {
     // Sweep
     var sweepB = input.sweepB;
     // Sweep
-    common.debug("sweepA", sweepA.localCenter.x, sweepA.localCenter.y, sweepA.c.x, sweepA.c.y, sweepA.a, sweepA.alpha0, sweepA.c0.x, sweepA.c0.y, sweepA.a0);
-    common.debug("sweepB", sweepB.localCenter.x, sweepB.localCenter.y, sweepB.c.x, sweepB.c.y, sweepB.a, sweepB.alpha0, sweepB.c0.x, sweepB.c0.y, sweepB.a0);
+    DEBUG && common.debug("sweepA", sweepA.localCenter.x, sweepA.localCenter.y, sweepA.c.x, sweepA.c.y, sweepA.a, sweepA.alpha0, sweepA.c0.x, sweepA.c0.y, sweepA.a0);
+    DEBUG && common.debug("sweepB", sweepB.localCenter.x, sweepB.localCenter.y, sweepB.c.x, sweepB.c.y, sweepB.a, sweepB.alpha0, sweepB.c0.x, sweepB.c0.y, sweepB.a0);
     // Large rotations can make the root finder fail, so we normalize the
     // sweep angles.
     sweepA.normalize();
@@ -6898,7 +6928,7 @@ function TimeOfImpact(output, input) {
     var totalRadius = proxyA.m_radius + proxyB.m_radius;
     var target = Math.max(Settings.linearSlop, totalRadius - 3 * Settings.linearSlop);
     var tolerance = .25 * Settings.linearSlop;
-    common.assert(target > tolerance);
+    ASSERT && common.assert(target > tolerance);
     var t1 = 0;
     var k_maxIterations = Settings.maxTOIIterations;
     var iter = 0;
@@ -6911,19 +6941,19 @@ function TimeOfImpact(output, input) {
     // The outer loop progressively attempts to compute new separating axes.
     // This loop terminates when an axis is repeated (no progress is made).
     for (;;) {
-        var xfA = new Transform();
-        var xfB = new Transform();
+        var xfA = Transform.identity();
+        var xfB = Transform.identity();
         sweepA.getTransform(xfA, t1);
         sweepB.getTransform(xfB, t1);
-        common.debug("xfA:", xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s);
-        common.debug("xfB:", xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
+        DEBUG && common.debug("xfA:", xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s);
+        DEBUG && common.debug("xfB:", xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
         // Get the distance between shapes. We can also use the results
         // to get a separating axis.
         distanceInput.transformA = xfA;
         distanceInput.transformB = xfB;
         var distanceOutput = new DistanceOutput();
         Distance(distanceOutput, cache, distanceInput);
-        common.debug("distance:", distanceOutput.distance);
+        DEBUG && common.debug("distance:", distanceOutput.distance);
         // If the shapes are overlapped, we give up on continuous collision.
         if (distanceOutput.distance <= 0) {
             // Failure!
@@ -6988,7 +7018,7 @@ function TimeOfImpact(output, input) {
             var s1 = fcn.evaluate(t1);
             var indexA = fcn.indexA;
             var indexB = fcn.indexB;
-            common.debug("s1:", s1, target, tolerance, t1);
+            DEBUG && common.debug("s1:", s1, target, tolerance, t1);
             // Check for initial overlap. This might happen if the root finder
             // runs out of iterations.
             if (s1 < target - tolerance) {
@@ -7079,8 +7109,8 @@ function SeparationFunction() {
     this.m_sweepB;
     // Sweep
     this.m_type;
-    this.m_localPoint = Vec2();
-    this.m_axis = Vec2();
+    this.m_localPoint = Vec2.zero();
+    this.m_axis = Vec2.zero();
 }
 
 // TODO_ERIN might not need to return the separation
@@ -7096,11 +7126,11 @@ SeparationFunction.prototype.initialize = function(cache, proxyA, sweepA, proxyB
     this.m_proxyA = proxyA;
     this.m_proxyB = proxyB;
     var count = cache.count;
-    common.assert(0 < count && count < 3);
+    ASSERT && common.assert(0 < count && count < 3);
     this.m_sweepA = sweepA;
     this.m_sweepB = sweepB;
-    var xfA = new Transform();
-    var xfB = new Transform();
+    var xfA = Transform.identity();
+    var xfB = Transform.identity();
     this.m_sweepA.getTransform(xfA, t1);
     this.m_sweepB.getTransform(xfB, t1);
     if (count == 1) {
@@ -7153,11 +7183,11 @@ SeparationFunction.prototype.initialize = function(cache, proxyA, sweepA, proxyB
 
 SeparationFunction.prototype.compute = function(find, t) {
     // It was findMinSeparation and evaluate
-    var xfA = new Transform();
-    var xfB = new Transform();
+    var xfA = Transform.identity();
+    var xfB = Transform.identity();
     this.m_sweepA.getTransform(xfA, t);
     this.m_sweepB.getTransform(xfB, t);
-    // common.debug('xfB', t, this.m_sweepB.localCenter.x,
+    // DEBUG && common.debug('xfB', t, this.m_sweepB.localCenter.x,
     // this.m_sweepB.localCenter.y, this.m_sweepB.c.x, this.m_sweepB.c.y,
     // this.m_sweepB.a, this.m_sweepB.alpha0, this.m_sweepB.c0.x,
     // this.m_sweepB.c0.y, this.m_sweepB.a0, xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
@@ -7209,7 +7239,7 @@ SeparationFunction.prototype.compute = function(find, t) {
         }
 
       default:
-        common.assert(false);
+        ASSERT && common.assert(false);
         if (find) {
             this.indexA = -1;
             this.indexB = -1;
@@ -7228,6 +7258,10 @@ SeparationFunction.prototype.evaluate = function(t) {
 
 
 },{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../common/stats":26,"../util/Timer":49,"../util/common":50,"./Distance":13}],16:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = Mat22;
 
 var common = require("../util/common");
@@ -7244,11 +7278,11 @@ function Mat22(a, b, c, d) {
         this.ex = Vec2.clone(a);
         this.ey = Vec2.clone(b);
     } else if (typeof a === "number") {
-        this.ex = Vec2(a, c);
-        this.ey = Vec2(b, d);
+        this.ex = Vec2.neo(a, c);
+        this.ey = Vec2.neo(b, d);
     } else {
-        this.ex = Vec2();
-        this.ey = Vec2();
+        this.ex = Vec2.zero();
+        this.ey = Vec2.zero();
     }
 }
 
@@ -7261,8 +7295,9 @@ Mat22.isValid = function(o) {
 };
 
 Mat22.assert = function(o) {
+    if (!ASSERT) return;
     if (!Mat22.isValid(o)) {
-        common.debug(o);
+        DEBUG && common.debug(o);
         throw new Error("Invalid Mat22!");
     }
 };
@@ -7275,11 +7310,11 @@ Mat22.prototype.set = function(a, b, c, d) {
         this.ex.set(a);
         this.ey.set(b);
     } else if (typeof a === "object") {
-        Mat22.assert(a);
+        ASSERT && Mat22.assert(a);
         this.ex.set(a.ex);
         this.ey.set(a.ey);
     } else {
-        common.assert(false);
+        ASSERT && common.assert(false);
     }
 };
 
@@ -7319,7 +7354,7 @@ Mat22.prototype.getInverse = function() {
  * computing the inverse in one-shot cases.
  */
 Mat22.prototype.solve = function(v) {
-    Vec2.assert(v);
+    ASSERT && Vec2.assert(v);
     var a = this.ex.x;
     var b = this.ey.x;
     var c = this.ex.y;
@@ -7328,7 +7363,7 @@ Mat22.prototype.solve = function(v) {
     if (det != 0) {
         det = 1 / det;
     }
-    var w = new Vec2();
+    var w = Vec2.zero();
     w.x = det * (d * v.x - b * v.y);
     w.y = det * (a * v.y - c * v.x);
     return w;
@@ -7341,16 +7376,16 @@ Mat22.prototype.solve = function(v) {
 Mat22.mul = function(mx, v) {
     if (v && "x" in v && "y" in v) {
         // Vec2
-        Vec2.assert(v);
+        ASSERT && Vec2.assert(v);
         var x = mx.ex.x * v.x + mx.ey.x * v.y;
         var y = mx.ex.y * v.x + mx.ey.y * v.y;
-        return new Vec2(x, y);
+        return Vec2.neo(x, y);
     } else if (v && "ex" in v && "ey" in v) {
         // Mat22
-        Mat22.assert(v);
+        ASSERT && Mat22.assert(v);
         return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
     }
-    common.assert(false);
+    ASSERT && common.assert(false);
 };
 
 /**
@@ -7362,31 +7397,35 @@ Mat22.mul = function(mx, v) {
 Mat22.mulT = function(mx, v) {
     if (v && "x" in v && "y" in v) {
         // Vec2
-        Vec2.assert(v);
-        return new Vec2(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
+        ASSERT && Vec2.assert(v);
+        return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
     } else if (v && "ex" in v && "ey" in v) {
         // Mat22
-        Mat22.assert(v);
-        var c1 = new Vec2(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
-        var c2 = new Vec2(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
+        ASSERT && Mat22.assert(v);
+        var c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
+        var c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
         return new Mat22(c1, c2);
     }
-    common.assert(false);
+    ASSERT && common.assert(false);
 };
 
 Mat22.abs = function(mx) {
-    Mat22.assert(mx);
+    ASSERT && Mat22.assert(mx);
     return new Mat22(Vec2.abs(mx.ex), Vec2.abs(mx.ey));
 };
 
 Mat22.add = function(mx1, mx2) {
-    Mat22.assert(mx1);
-    Mat22.assert(mx2);
+    ASSERT && Mat22.assert(mx1);
+    ASSERT && Mat22.assert(mx2);
     return new Mat22(Vec2.add(mx1.ex + mx2.ex), Vec2.add(mx1.ey + mx2.ey));
 };
 
 
 },{"../util/common":50,"./Math":18,"./Vec2":23}],17:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = Mat33;
 
 var common = require("../util/common");
@@ -7421,8 +7460,9 @@ Mat33.isValid = function(o) {
 };
 
 Mat33.assert = function(o) {
+    if (!ASSERT) return;
     if (!Mat33.isValid(o)) {
-        common.debug(o);
+        DEBUG && common.debug(o);
         throw new Error("Invalid Mat33!");
     }
 };
@@ -7474,7 +7514,7 @@ Mat33.prototype.solve22 = function(v) {
     if (det != 0) {
         det = 1 / det;
     }
-    var r = new Vec2();
+    var r = Vec2.zero();
     r.x = det * (a22 * v.x - a12 * v.y);
     r.y = det * (a11 * v.y - a21 * v.x);
     return r;
@@ -7543,30 +7583,34 @@ Mat33.prototype.getSymInverse33 = function(M) {
  * @returns {Vec3|Vec2}
  */
 Mat33.mul = function(a, b) {
-    Mat33.assert(a);
+    ASSERT && Mat33.assert(a);
     if (b && "z" in b && "y" in b && "x" in b) {
-        Vec3.assert(b);
+        ASSERT && Vec3.assert(b);
         var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
         var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
         var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
         return new Vec3(x, y, z);
     } else if (b && "y" in b && "x" in b) {
-        Vec2.assert(b);
+        ASSERT && Vec2.assert(b);
         var x = a.ex.x * b.x + a.ey.x * b.y;
         var y = a.ex.y * b.x + a.ey.y * b.y;
-        return new Vec2(x, y);
+        return Vec2.neo(x, y);
     }
-    common.assert(false);
+    ASSERT && common.assert(false);
 };
 
 Mat33.add = function(a, b) {
-    Mat33.assert(a);
-    Mat33.assert(b);
+    ASSERT && Mat33.assert(a);
+    ASSERT && Mat33.assert(b);
     return new Vec3(a.x + b.x, a.y + b.y, a.z + b.z);
 };
 
 
 },{"../util/common":50,"./Math":18,"./Vec2":23,"./Vec3":24}],18:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 var common = require("../util/common");
 
 var create = require("../util/create");
@@ -7587,8 +7631,9 @@ math.isFinite = function(x) {
 };
 
 math.assert = function(x) {
+    if (!ASSERT) return;
     if (!math.isFinite(x)) {
-        common.debug(x);
+        DEBUG && common.debug(x);
         throw new Error("Invalid Number!");
     }
 };
@@ -7660,6 +7705,10 @@ math.random = function(min, max) {
 
 
 },{"../util/common":50,"../util/create":51}],19:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = Position;
 
 var Vec2 = require("./Vec2");
@@ -7671,7 +7720,7 @@ var Rot = require("./Rot");
  * @prop {float} a angle
  */
 function Position() {
-    this.c = new Vec2();
+    this.c = Vec2.zero();
     this.a = 0;
 }
 
@@ -7683,6 +7732,10 @@ Position.prototype.getTransform = function(xf, p) {
 
 
 },{"./Rot":20,"./Vec2":23}],20:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = Rot;
 
 var common = require("../util/common");
@@ -7700,19 +7753,44 @@ function Rot(angle) {
         return new Rot(angle);
     }
     if (typeof angle === "number") {
+        this.setAngle(angle);
+    } else if (typeof angle === "object") {
         this.set(angle);
     } else {
         this.setIdentity();
     }
 }
 
+Rot.neo = function(angle) {
+    var obj = Object.create(Rot.prototype);
+    obj.setAngle(angle);
+    return obj;
+};
+
+Rot.clone = function(rot) {
+    ASSERT && Rot.assert(rot);
+    var obj = Object.create(Rot.prototype);
+    ojb.s = rot.s;
+    ojb.c = rot.c;
+    return ojb;
+};
+
+Rot.identity = function(rot) {
+    ASSERT && Rot.assert(rot);
+    var obj = Object.create(Rot.prototype);
+    obj.s = 0;
+    obj.c = 1;
+    return obj;
+};
+
 Rot.isValid = function(o) {
     return o && Math.isFinite(o.s) && Math.isFinite(o.c);
 };
 
 Rot.assert = function(o) {
+    if (!ASSERT) return;
     if (!Rot.isValid(o)) {
-        common.debug(o);
+        DEBUG && common.debug(o);
         throw new Error("Invalid Rot!");
     }
 };
@@ -7725,20 +7803,27 @@ Rot.prototype.setIdentity = function() {
     this.c = 1;
 };
 
-/**
- * Set using an angle in radians.
- */
 Rot.prototype.set = function(angle) {
     if (typeof angle === "object") {
-        Rot.assert(angle);
+        ASSERT && Rot.assert(angle);
         this.s = angle.s;
         this.c = angle.c;
     } else {
-        Math.assert(angle);
+        ASSERT && Math.assert(angle);
         // TODO_ERIN optimize
         this.s = Math.sin(angle);
         this.c = Math.cos(angle);
     }
+};
+
+/**
+ * Set using an angle in radians.
+ */
+Rot.prototype.setAngle = function(angle) {
+    ASSERT && Math.assert(angle);
+    // TODO_ERIN optimize
+    this.s = Math.sin(angle);
+    this.c = Math.cos(angle);
 };
 
 /**
@@ -7752,14 +7837,14 @@ Rot.prototype.getAngle = function() {
  * Get the x-axis.
  */
 Rot.prototype.getXAxis = function() {
-    return new Vec2(this.c, this.s);
+    return Vec2.neo(this.c, this.s);
 };
 
 /**
  * Get the u-axis.
  */
 Rot.prototype.getYAxis = function() {
-    return new Vec2(-this.s, this.c);
+    return Vec2.neo(-this.s, this.c);
 };
 
 /**
@@ -7772,27 +7857,27 @@ Rot.prototype.getYAxis = function() {
  * @returns Vec2
  */
 Rot.mul = function(rot, m) {
-    Rot.assert(rot);
+    ASSERT && Rot.assert(rot);
     if ("c" in m && "s" in m) {
-        Rot.assert(m);
+        ASSERT && Rot.assert(m);
         // [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
         // [qs qc] [rs rc] [qs*rc+qc*rs -qs*rs+qc*rc]
         // s = qs * rc + qc * rs
         // c = qc * rc - qs * rs
-        var qr = new Rot();
+        var qr = Rot.identity();
         qr.s = rot.s * m.c + rot.c * m.s;
         qr.c = rot.c * m.c - rot.s * m.s;
         return qr;
     } else if ("x" in m && "y" in m) {
-        Vec2.assert(m);
-        return Vec2(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
+        ASSERT && Vec2.assert(m);
+        return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
     }
 };
 
 Rot.mulSub = function(rot, v, w) {
     var x = rot.c * (v.x - w.x) - rot.s * (v.y - w.y);
     var y = rot.s * (v.x - w.y) + rot.c * (v.y - w.y);
-    return Vec2(x, y);
+    return Vec2.neo(x, y);
 };
 
 /**
@@ -7806,23 +7891,27 @@ Rot.mulSub = function(rot, v, w) {
  */
 Rot.mulT = function(rot, m) {
     if ("c" in m && "s" in m) {
-        Rot.assert(m);
+        ASSERT && Rot.assert(m);
         // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
         // [-qs qc] [rs rc] [-qs*rc+qc*rs qs*rs+qc*rc]
         // s = qc * rs - qs * rc
         // c = qc * rc + qs * rs
-        var qr = new Rot();
+        var qr = Rot.identity();
         qr.s = rot.c * m.s - rot.s * m.c;
         qr.c = rot.c * m.c + rot.s * m.s;
         return qr;
     } else if ("x" in m && "y" in m) {
-        Vec2.assert(m);
-        return Vec2(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
+        ASSERT && Vec2.assert(m);
+        return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
     }
 };
 
 
 },{"../util/common":50,"./Math":18,"./Vec2":23}],21:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = Sweep;
 
 var common = require("../util/common");
@@ -7848,13 +7937,13 @@ var Transform = require("./Transform");
  *       and a0 are c and a at alpha0.
  */
 function Sweep(c, a) {
-    common.assert(typeof c === "undefined");
-    common.assert(typeof a === "undefined");
-    this.localCenter = new Vec2();
-    this.c = Vec2();
+    ASSERT && common.assert(typeof c === "undefined");
+    ASSERT && common.assert(typeof a === "undefined");
+    this.localCenter = Vec2.zero();
+    this.c = Vec2.zero();
     this.a = 0;
     this.alpha0 = 0;
-    this.c0 = Vec2();
+    this.c0 = Vec2.zero();
     this.a0 = 0;
 }
 
@@ -7881,7 +7970,7 @@ Sweep.prototype.setLocalCenter = function(localCenter, xf) {
  */
 Sweep.prototype.getTransform = function(xf, beta) {
     beta = typeof beta === "undefined" ? 0 : beta;
-    xf.q.set((1 - beta) * this.a0 + beta * this.a);
+    xf.q.setAngle((1 - beta) * this.a0 + beta * this.a);
     xf.p.wSet(1 - beta, this.c0, beta, this.c);
     // shift to origin
     xf.p.sub(Rot.mul(xf.q, this.localCenter));
@@ -7893,7 +7982,7 @@ Sweep.prototype.getTransform = function(xf, beta) {
  * @param {float} alpha The new initial time
  */
 Sweep.prototype.advance = function(alpha) {
-    common.assert(this.alpha0 < 1);
+    ASSERT && common.assert(this.alpha0 < 1);
     var beta = (alpha - this.alpha0) / (1 - this.alpha0);
     this.c0.wSet(beta, this.c, 1 - beta, this.c0);
     this.a0 = beta * this.a + (1 - beta) * this.a0;
@@ -7936,6 +8025,10 @@ Sweep.prototype.set = function(that) {
 
 
 },{"../util/common":50,"./Math":18,"./Rot":20,"./Transform":22,"./Vec2":23}],22:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = Transform;
 
 var common = require("../util/common");
@@ -7957,8 +8050,8 @@ function Transform(position, rotation) {
     if (!(this instanceof Transform)) {
         return new Transform(position, rotation);
     }
-    this.p = new Vec2();
-    this.q = new Rot();
+    this.p = Vec2.zero();
+    this.q = Rot.identity();
     if (typeof position !== "undefined") {
         this.p.set(position);
     }
@@ -7966,6 +8059,27 @@ function Transform(position, rotation) {
         this.q.set(rotation);
     }
 }
+
+Transform.clone = function(xf) {
+    var obj = Object.create(Transform.prototype);
+    obj.p = Vec2.clone(xf.p);
+    obj.q = Rot.clone(xf.q);
+    return obj;
+};
+
+Transform.neo = function(position, rotation) {
+    var obj = Object.create(Transform.prototype);
+    obj.p = Vec2.clone(position);
+    obj.q = Rot.clone(rotation);
+    return obj;
+};
+
+Transform.identity = function() {
+    var obj = Object.create(Transform.prototype);
+    obj.p = Vec2.zero();
+    obj.q = Rot.identity();
+    return obj;
+};
 
 /**
  * Set this to the identity transform.
@@ -7978,13 +8092,13 @@ Transform.prototype.setIdentity = function() {
 /**
  * Set this based on the position and angle.
  */
-Transform.prototype.set = function(position, angle) {
-    if (Transform.isValid(position)) {
-        this.p.set(position.p);
-        this.q.set(position.q);
+Transform.prototype.set = function(a, b) {
+    if (Transform.isValid(a)) {
+        this.p.set(a.p);
+        this.q.set(a.q);
     } else {
-        this.p.set(position);
-        this.q.set(angle);
+        this.p.set(a);
+        this.q.set(b);
     }
 };
 
@@ -7993,8 +8107,9 @@ Transform.isValid = function(o) {
 };
 
 Transform.assert = function(o) {
+    if (!ASSERT) return;
     if (!Transform.isValid(o)) {
-        common.debug(o);
+        DEBUG && common.debug(o);
         throw new Error("Invalid Transform!");
     }
 };
@@ -8009,7 +8124,7 @@ Transform.assert = function(o) {
  * @returns {Transform}
  */
 Transform.mul = function(a, b) {
-    Transform.assert(a);
+    ASSERT && Transform.assert(a);
     if (Array.isArray(b)) {
         var arr = [];
         for (var i = 0; i < b.length; i++) {
@@ -8017,15 +8132,15 @@ Transform.mul = function(a, b) {
         }
         return arr;
     } else if ("x" in b && "y" in b) {
-        Vec2.assert(b);
+        ASSERT && Vec2.assert(b);
         var x = a.q.c * b.x - a.q.s * b.y + a.p.x;
         var y = a.q.s * b.x + a.q.c * b.y + a.p.y;
-        return Vec2(x, y);
+        return Vec2.neo(x, y);
     } else if ("p" in b && "q" in b) {
-        Transform.assert(b);
+        ASSERT && Transform.assert(b);
         // v2 = A.q.Rot(B.q.Rot(v1) + B.p) + A.p
         // = (A.q * B.q).Rot(v1) + A.q.Rot(B.p) + A.p
-        var xf = new Transform();
+        var xf = Transform.identity();
         xf.q = Rot.mul(a.q, b.q);
         xf.p = Vec2.add(Rot.mul(a.q, b.p), a.p);
         return xf;
@@ -8042,19 +8157,19 @@ Transform.mul = function(a, b) {
  * @returns {Transform}
  */
 Transform.mulT = function(a, b) {
-    Transform.assert(a);
+    ASSERT && Transform.assert(a);
     if ("x" in b && "y" in b) {
-        Vec2.assert(b);
+        ASSERT && Vec2.assert(b);
         var px = b.x - a.p.x;
         var py = b.y - a.p.y;
         var x = a.q.c * px + a.q.s * py;
         var y = -a.q.s * px + a.q.c * py;
-        return Vec2(x, y);
+        return Vec2.neo(x, y);
     } else if ("p" in b && "q" in b) {
-        Transform.assert(b);
+        ASSERT && Transform.assert(b);
         // v2 = A.q' * (B.q * v1 + B.p - A.p)
         // = A.q' * B.q * v1 + A.q' * (B.p - A.p)
-        var xf = new Transform();
+        var xf = Transform.identity();
         xf.q.set(Rot.mulT(a.q, b.q));
         xf.p.set(Rot.mulT(a.q, Vec2.sub(b.p, a.p)));
         return xf;
@@ -8063,6 +8178,10 @@ Transform.mulT = function(a, b) {
 
 
 },{"../util/common":50,"./Rot":20,"./Vec2":23}],23:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = Vec2;
 
 var common = require("../util/common");
@@ -8080,8 +8199,28 @@ function Vec2(x, y) {
     } else {
         this.x = x, this.y = y;
     }
-    Vec2.assert(this);
+    ASSERT && Vec2.assert(this);
 }
+
+Vec2.zero = function() {
+    var obj = Object.create(Vec2.prototype);
+    obj.x = 0;
+    obj.y = 0;
+    return obj;
+};
+
+Vec2.neo = function(x, y) {
+    var obj = Object.create(Vec2.prototype);
+    obj.x = x;
+    obj.y = y;
+    return obj;
+};
+
+Vec2.clone = function(v, depricated) {
+    ASSERT && Vec2.assert(v);
+    ASSERT && common.assert(!depricated);
+    return Vec2.neo(v.x, v.y);
+};
 
 Vec2.prototype.toString = function() {
     return JSON.stringify(this);
@@ -8095,14 +8234,15 @@ Vec2.isValid = function(v) {
 };
 
 Vec2.assert = function(o) {
+    if (!ASSERT) return;
     if (!Vec2.isValid(o)) {
-        common.debug(o);
+        DEBUG && common.debug(o);
         throw new Error("Invalid Vec2!");
     }
 };
 
-Vec2.prototype.clone = function(clone) {
-    return Vec2.clone(this, clone);
+Vec2.prototype.clone = function(depricated) {
+    return Vec2.clone(this, depricated);
 };
 
 /**
@@ -8122,18 +8262,27 @@ Vec2.prototype.setZero = function() {
  * @returns this
  */
 Vec2.prototype.set = function(x, y) {
-    Vec2.set(this, x, y);
+    if (typeof x === "object") {
+        ASSERT && Vec2.assert(x);
+        this.x = x.x;
+        this.y = x.y;
+    } else {
+        ASSERT && Math.assert(x);
+        ASSERT && Math.assert(y);
+        this.x = x;
+        this.y = y;
+    }
     return this;
 };
 
 Vec2.prototype.wSet = function(a, v, b, w) {
-    Math.assert(a);
-    Vec2.assert(v);
+    ASSERT && Math.assert(a);
+    ASSERT && Vec2.assert(v);
     var x = a * v.x;
     var y = a * v.y;
     if (typeof b !== "undefined" || typeof w !== "undefined") {
-        Math.assert(b);
-        Vec2.assert(w);
+        ASSERT && Math.assert(b);
+        ASSERT && Vec2.assert(w);
         x += b * w.x;
         y += b * w.y;
     }
@@ -8149,20 +8298,20 @@ Vec2.prototype.wSet = function(a, v, b, w) {
  * @returns this
  */
 Vec2.prototype.add = function(w) {
-    Vec2.assert(w);
+    ASSERT && Vec2.assert(w);
     this.x += w.x;
     this.y += w.y;
     return this;
 };
 
 Vec2.prototype.wAdd = function(a, v, b, w) {
-    Math.assert(a);
-    Vec2.assert(v);
+    ASSERT && Math.assert(a);
+    ASSERT && Vec2.assert(v);
     var x = a * v.x;
     var y = a * v.y;
     if (typeof b !== "undefined" || typeof w !== "undefined") {
-        Math.assert(b);
-        Vec2.assert(w);
+        ASSERT && Math.assert(b);
+        ASSERT && Vec2.assert(w);
         x += b * w.x;
         y += b * w.y;
     }
@@ -8173,13 +8322,13 @@ Vec2.prototype.wAdd = function(a, v, b, w) {
 };
 
 Vec2.prototype.wSub = function(a, v, b, w) {
-    Math.assert(a);
-    Vec2.assert(v);
+    ASSERT && Math.assert(a);
+    ASSERT && Vec2.assert(v);
     var x = a * v.x;
     var y = a * v.y;
     if (typeof b !== "undefined" || typeof w !== "undefined") {
-        Math.assert(b);
-        Vec2.assert(w);
+        ASSERT && Math.assert(b);
+        ASSERT && Vec2.assert(w);
         x += b * w.x;
         y += b * w.y;
     }
@@ -8195,7 +8344,7 @@ Vec2.prototype.wSub = function(a, v, b, w) {
  * @returns this
  */
 Vec2.prototype.sub = function(w) {
-    Vec2.assert(w);
+    ASSERT && Vec2.assert(w);
     this.x -= w.x;
     this.y -= w.y;
     return this;
@@ -8207,7 +8356,7 @@ Vec2.prototype.sub = function(w) {
  * @returns this
  */
 Vec2.prototype.mul = function(m) {
-    Math.assert(m);
+    ASSERT && Math.assert(m);
     this.x *= m;
     this.y *= m;
     return this;
@@ -8245,23 +8394,13 @@ Vec2.prototype.normalize = function() {
     return length;
 };
 
-Vec2.clone = function(v, w) {
-    Vec2.assert(v);
-    if (typeof w !== "object") {
-        return new Vec2(v.x, v.y);
-    }
-    w.x = v.x;
-    w.y = v.y;
-    return w;
-};
-
 /**
  * Get the length of this vector (the norm).
  *
  * For performance, use this instead of lengthSquared (if possible).
  */
 Vec2.lengthOf = function(v) {
-    Vec2.assert(v);
+    ASSERT && Vec2.assert(v);
     return Math.sqrt(v.x * v.x + v.y * v.y);
 };
 
@@ -8269,27 +8408,27 @@ Vec2.lengthOf = function(v) {
  * Get the length squared.
  */
 Vec2.lengthSquared = function(v) {
-    Vec2.assert(v);
+    ASSERT && Vec2.assert(v);
     return v.x * v.x + v.y * v.y;
 };
 
 Vec2.distance = function(v, w) {
-    Vec2.assert(v);
-    Vec2.assert(w);
+    ASSERT && Vec2.assert(v);
+    ASSERT && Vec2.assert(w);
     var dx = v.x - w.x, dy = v.y - w.y;
     return Math.sqrt(dx * dx + dy * dy);
 };
 
 Vec2.distanceSquared = function(v, w) {
-    Vec2.assert(v);
-    Vec2.assert(w);
+    ASSERT && Vec2.assert(v);
+    ASSERT && Vec2.assert(w);
     var dx = v.x - w.x, dy = v.y - w.y;
     return dx * dx + dy * dy;
 };
 
 Vec2.areEqual = function(v, w) {
-    Vec2.assert(v);
-    Vec2.assert(w);
+    ASSERT && Vec2.assert(v);
+    ASSERT && Vec2.assert(w);
     return v == w || typeof w === "object" && w !== null && v.x == w.x && v.y == w.y;
 };
 
@@ -8297,16 +8436,16 @@ Vec2.areEqual = function(v, w) {
  * Get the skew vector such that dot(skew_vec, other) == cross(vec, other)
  */
 Vec2.skew = function(v) {
-    Vec2.assert(v);
-    return new Vec2(-v.y, v.x);
+    ASSERT && Vec2.assert(v);
+    return Vec2.neo(-v.y, v.x);
 };
 
 /**
  * Perform the dot product on two vectors.
  */
 Vec2.dot = function(v, w) {
-    Vec2.assert(v);
-    Vec2.assert(w);
+    ASSERT && Vec2.assert(v);
+    ASSERT && Vec2.assert(w);
     return v.x * w.x + v.y * w.y;
 };
 
@@ -8318,60 +8457,60 @@ Vec2.dot = function(v, w) {
  */
 Vec2.cross = function(v, w) {
     if (typeof w === "number") {
-        Vec2.assert(v);
-        Math.assert(w);
-        return new Vec2(w * v.y, -w * v.x);
+        ASSERT && Vec2.assert(v);
+        ASSERT && Math.assert(w);
+        return Vec2.neo(w * v.y, -w * v.x);
     } else if (typeof v === "number") {
-        Math.assert(v);
-        Vec2.assert(w);
-        return new Vec2(-v * w.y, v * w.x);
+        ASSERT && Math.assert(v);
+        ASSERT && Vec2.assert(w);
+        return Vec2.neo(-v * w.y, v * w.x);
     } else {
-        Vec2.assert(v);
-        Vec2.assert(w);
+        ASSERT && Vec2.assert(v);
+        ASSERT && Vec2.assert(w);
         return v.x * w.y - v.y * w.x;
     }
 };
 
 Vec2.addCross = function(a, v, w) {
     if (typeof w === "number") {
-        Vec2.assert(v);
-        Math.assert(w);
-        return new Vec2(w * v.y + a.x, -w * v.x + a.y);
+        ASSERT && Vec2.assert(v);
+        ASSERT && Math.assert(w);
+        return Vec2.neo(w * v.y + a.x, -w * v.x + a.y);
     } else if (typeof v === "number") {
-        Math.assert(v);
-        Vec2.assert(w);
-        return new Vec2(-v * w.y + a.x, v * w.x + a.y);
+        ASSERT && Math.assert(v);
+        ASSERT && Vec2.assert(w);
+        return Vec2.neo(-v * w.y + a.x, v * w.x + a.y);
     }
-    common.assert(false);
+    ASSERT && common.assert(false);
 };
 
 Vec2.add = function(v, w) {
-    Vec2.assert(v);
-    Vec2.assert(w);
-    return new Vec2(v.x + w.x, v.y + w.y);
+    ASSERT && Vec2.assert(v);
+    ASSERT && Vec2.assert(w);
+    return Vec2.neo(v.x + w.x, v.y + w.y);
 };
 
 Vec2.wAdd = function(a, v, b, w) {
-    var r = Vec2();
+    var r = Vec2.zero();
     r.wAdd(a, v, b, w);
     return r;
 };
 
 Vec2.sub = function(v, w) {
-    Vec2.assert(v);
-    Vec2.assert(w);
-    return new Vec2(v.x - w.x, v.y - w.y);
+    ASSERT && Vec2.assert(v);
+    ASSERT && Vec2.assert(w);
+    return Vec2.neo(v.x - w.x, v.y - w.y);
 };
 
 Vec2.mul = function(a, b) {
     if (typeof a === "object") {
-        Vec2.assert(a);
-        Math.assert(b);
-        return Vec2(a.x * b, a.y * b);
+        ASSERT && Vec2.assert(a);
+        ASSERT && Math.assert(b);
+        return Vec2.neo(a.x * b, a.y * b);
     } else if (typeof b === "object") {
-        Math.assert(a);
-        Vec2.assert(b);
-        return Vec2(a * b.x, a * b.y);
+        ASSERT && Math.assert(a);
+        ASSERT && Vec2.assert(b);
+        return Vec2.neo(a * b.x, a * b.y);
     }
 };
 
@@ -8382,77 +8521,31 @@ Vec2.prototype.neg = function() {
 };
 
 Vec2.neg = function(v) {
-    Vec2.assert(v);
-    return new Vec2(-v.x, -v.y);
+    ASSERT && Vec2.assert(v);
+    return Vec2.neo(-v.x, -v.y);
 };
 
 Vec2.abs = function(v) {
-    Vec2.assert(v);
-    return new Vec2(Math.abs(v.x), Math.abs(v.y));
+    ASSERT && Vec2.assert(v);
+    return Vec2.neo(Math.abs(v.x), Math.abs(v.y));
 };
 
 Vec2.mid = function(v, w) {
-    Vec2.assert(v);
-    Vec2.assert(w);
-    return new Vec2((v.x + w.x) * .5, (v.y + w.y) * .5);
-};
-
-Vec2.setZero = function(v) {
-    Vec2.assert(v);
-    v.x = 0;
-    v.y = 0;
-    return v;
-};
-
-Vec2.set = function(v, x, y) {
-    Vec2.assert(v);
-    if (typeof x === "object") {
-        Vec2.assert(x);
-        v.x = x.x;
-        v.y = x.y;
-    } else {
-        Math.assert(x);
-        Math.assert(y);
-        v.x = x;
-        v.y = y;
-    }
-    return v;
-};
-
-Vec2.addSet = function(v, w) {
-    Vec2.assert(v);
-    Vec2.assert(w);
-    this.x += w.x;
-    this.y += w.y;
-    return v;
-};
-
-Vec2.subSet = function(v, w) {
-    Vec2.assert(v);
-    Vec2.assert(w);
-    v.x -= w.x;
-    v.y -= w.y;
-    return v;
-};
-
-Vec2.mulSet = function(v, m) {
-    Vec2.assert(v);
-    Math.assert(m);
-    v.x *= m.x;
-    v.y *= m.y;
-    return v;
+    ASSERT && Vec2.assert(v);
+    ASSERT && Vec2.assert(w);
+    return Vec2.neo((v.x + w.x) * .5, (v.y + w.y) * .5);
 };
 
 Vec2.upper = function(v, w) {
-    Vec2.assert(v);
-    Vec2.assert(w);
-    return new Vec2(Math.max(v.x, w.x), Math.max(v.y, w.y));
+    ASSERT && Vec2.assert(v);
+    ASSERT && Vec2.assert(w);
+    return Vec2.neo(Math.max(v.x, w.x), Math.max(v.y, w.y));
 };
 
 Vec2.lower = function(v, w) {
-    Vec2.assert(v);
-    Vec2.assert(w);
-    return new Vec2(Math.min(v.x, w.x), Math.min(v.y, w.y));
+    ASSERT && Vec2.assert(v);
+    ASSERT && Vec2.assert(w);
+    return Vec2.neo(Math.min(v.x, w.x), Math.min(v.y, w.y));
 };
 
 Vec2.prototype.clamp = function(max) {
@@ -8466,13 +8559,17 @@ Vec2.prototype.clamp = function(max) {
 };
 
 Vec2.clamp = function(v, max) {
-    v = new Vec2(v.x, v.y);
+    v = Vec2.neo(v.x, v.y);
     v.clamp(max);
     return v;
 };
 
 
 },{"../util/common":50,"./Math":18}],24:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = Vec3;
 
 var common = require("../util/common");
@@ -8490,7 +8587,7 @@ function Vec3(x, y, z) {
     } else {
         this.x = x, this.y = y, this.z = z;
     }
-    Vec3.assert(this);
+    ASSERT && Vec3.assert(this);
 }
 
 Vec3.prototype.toString = function() {
@@ -8505,8 +8602,9 @@ Vec3.isValid = function(v) {
 };
 
 Vec3.assert = function(o) {
+    if (!ASSERT) return;
     if (!Vec3.isValid(o)) {
-        common.debug(o);
+        DEBUG && common.debug(o);
         throw new Error("Invalid Vec3!");
     }
 };
@@ -8585,6 +8683,10 @@ Vec3.neg = function(v) {
 
 
 },{"../util/common":50,"./Math":18}],25:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = Velocity;
 
 var Vec2 = require("./Vec2");
@@ -8594,12 +8696,16 @@ var Vec2 = require("./Vec2");
  * @prop {float} w angular
  */
 function Velocity() {
-    this.v = new Vec2();
+    this.v = Vec2.zero();
     this.w = 0;
 }
 
 
 },{"./Vec2":23}],26:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 exports.toString = function(newline) {
     newline = typeof newline === "string" ? newline : "\n";
     var string = "";
@@ -8613,6 +8719,10 @@ exports.toString = function(newline) {
 
 
 },{}],27:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = DistanceJoint;
 
 var options = require("../util/options");
@@ -8783,8 +8893,8 @@ DistanceJoint.prototype.initVelocityConstraints = function(step) {
     var aB = this.m_bodyB.c_position.a;
     var vB = this.m_bodyB.c_velocity.v;
     var wB = this.m_bodyB.c_velocity.w;
-    var qA = Rot(aA);
-    var qB = Rot(aB);
+    var qA = Rot.neo(aA);
+    var qB = Rot.neo(aB);
     this.m_rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
     this.m_rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     this.m_u = Vec2.sub(Vec2.add(cB, this.m_rB), Vec2.add(cA, this.m_rA));
@@ -8867,8 +8977,8 @@ DistanceJoint.prototype.solvePositionConstraints = function(step) {
     var aA = this.m_bodyA.c_position.a;
     var cB = this.m_bodyB.c_position.c;
     var aB = this.m_bodyB.c_position.a;
-    var qA = Rot(aA);
-    var qB = Rot(aB);
+    var qA = Rot.neo(aA);
+    var qB = Rot.neo(aB);
     var rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_localCenterA);
     var rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
     var u = Vec2.sub(Vec2.add(cB, rB), Vec2.add(cA, rA));
@@ -8890,6 +9000,10 @@ DistanceJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":51,"../util/options":52}],28:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = FrictionJoint;
 
 var common = require("../util/common");
@@ -8959,11 +9073,11 @@ function FrictionJoint(def, bodyA, bodyB, anchor) {
         this.m_localAnchorA = bodyA.getLocalPoint(anchor);
         this.m_localAnchorB = bodyB.getLocalPoint(anchor);
     } else {
-        this.m_localAnchorA = Vec2();
-        this.m_localAnchorB = Vec2();
+        this.m_localAnchorA = Vec2.zero();
+        this.m_localAnchorB = Vec2.zero();
     }
     // Solver shared
-    this.m_linearImpulse = Vec2();
+    this.m_linearImpulse = Vec2.zero();
     this.m_angularImpulse = 0;
     this.m_maxForce = def.maxForce;
     this.m_maxTorque = def.maxTorque;
@@ -9007,7 +9121,7 @@ FrictionJoint.prototype.getLocalAnchorB = function() {
  * Set the maximum friction force in N.
  */
 FrictionJoint.prototype.setMaxForce = function(force) {
-    common.assert(IsValid(force) && force >= 0);
+    ASSERT && common.assert(IsValid(force) && force >= 0);
     this.m_maxForce = force;
 };
 
@@ -9022,7 +9136,7 @@ FrictionJoint.prototype.getMaxForce = function() {
  * Set the maximum friction torque in N*m.
  */
 FrictionJoint.prototype.setMaxTorque = function(torque) {
-    common.assert(IsValid(torque) && torque >= 0);
+    ASSERT && common.assert(IsValid(torque) && torque >= 0);
     this.m_maxTorque = torque;
 };
 
@@ -9062,7 +9176,7 @@ FrictionJoint.prototype.initVelocityConstraints = function(step) {
     var aB = this.m_bodyB.c_position.a;
     var vB = this.m_bodyB.c_velocity.v;
     var wB = this.m_bodyB.c_velocity.w;
-    var qA = Rot(aA), qB = Rot(aB);
+    var qA = Rot.neo(aA), qB = Rot.neo(aB);
     // Compute the effective mass matrix.
     this.m_rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
     this.m_rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
@@ -9091,7 +9205,7 @@ FrictionJoint.prototype.initVelocityConstraints = function(step) {
         // Scale impulses to support a variable time step.
         this.m_linearImpulse.mul(step.dtRatio);
         this.m_angularImpulse *= step.dtRatio;
-        var P = Vec2(this.m_linearImpulse.x, this.m_linearImpulse.y);
+        var P = Vec2.neo(this.m_linearImpulse.x, this.m_linearImpulse.y);
         vA.wSub(mA, P);
         wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_angularImpulse);
         vB.wAdd(mB, P);
@@ -9165,6 +9279,10 @@ FrictionJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],29:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = GearJoint;
 
 var common = require("../util/common");
@@ -9243,8 +9361,8 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
     def = options(def, GearJointDef);
     Joint.call(this, def, bodyA, bodyB);
     this.m_type = GearJoint.TYPE;
-    common.assert(joint1.m_type == RevoluteJoint.TYPE || joint1.m_type == PrismaticJoint.TYPE);
-    common.assert(joint2.m_type == RevoluteJoint.TYPE || joint2.m_type == PrismaticJoint.TYPE);
+    ASSERT && common.assert(joint1.m_type == RevoluteJoint.TYPE || joint1.m_type == PrismaticJoint.TYPE);
+    ASSERT && common.assert(joint2.m_type == RevoluteJoint.TYPE || joint2.m_type == PrismaticJoint.TYPE);
     this.m_joint1 = joint1;
     this.m_joint2 = joint2;
     this.m_type1 = this.m_joint1.getType();
@@ -9267,7 +9385,7 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
         this.m_localAnchorC = revolute.m_localAnchorA;
         this.m_localAnchorA = revolute.m_localAnchorB;
         this.m_referenceAngleA = revolute.m_referenceAngle;
-        this.m_localAxisC = Vec2();
+        this.m_localAxisC = Vec2.zero();
         coordinateA = aA - aC - this.m_referenceAngleA;
     } else {
         var prismatic = joint1;
@@ -9293,7 +9411,7 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
         this.m_localAnchorD = revolute.m_localAnchorA;
         this.m_localAnchorB = revolute.m_localAnchorB;
         this.m_referenceAngleB = revolute.m_referenceAngle;
-        this.m_localAxisD = Vec2();
+        this.m_localAxisD = Vec2.zero();
         coordinateB = aB - aD - this.m_referenceAngleB;
     } else {
         var prismatic = joint2;
@@ -9341,7 +9459,7 @@ GearJoint.prototype.getJoint2 = function() {
  * Set/Get the gear ratio.
  */
 GearJoint.prototype.setRatio = function(ratio) {
-    common.assert(IsValid(ratio));
+    ASSERT && common.assert(IsValid(ratio));
     this.m_ratio = ratio;
 };
 
@@ -9394,13 +9512,13 @@ GearJoint.prototype.initVelocityConstraints = function(step) {
     var aD = this.m_bodyD.c_position.a;
     var vD = this.m_bodyD.c_velocity.v;
     var wD = this.m_bodyD.c_velocity.w;
-    var qA = Rot(aA);
-    var qB = Rot(aB);
-    var qC = Rot(aC);
-    var qD = Rot(aD);
+    var qA = Rot.neo(aA);
+    var qB = Rot.neo(aB);
+    var qC = Rot.neo(aC);
+    var qD = Rot.neo(aD);
     this.m_mass = 0;
     if (this.m_type1 == RevoluteJoint.TYPE) {
-        this.m_JvAC = Vec2();
+        this.m_JvAC = Vec2.zero();
         this.m_JwA = 1;
         this.m_JwC = 1;
         this.m_mass += this.m_iA + this.m_iC;
@@ -9417,7 +9535,7 @@ GearJoint.prototype.initVelocityConstraints = function(step) {
         this.m_mass += this.m_mC + this.m_mA + this.m_iC * this.m_JwC * this.m_JwC + this.m_iA * this.m_JwA * this.m_JwA;
     }
     if (this.m_type2 == RevoluteJoint.TYPE) {
-        this.m_JvBD = Vec2();
+        this.m_JvBD = Vec2.zero();
         this.m_JwB = this.m_ratio;
         this.m_JwD = this.m_ratio;
         this.m_mass += this.m_ratio * this.m_ratio * (this.m_iB + this.m_iD);
@@ -9499,10 +9617,10 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
     var aC = this.m_bodyC.c_position.a;
     var cD = this.m_bodyD.c_position.c;
     var aD = this.m_bodyD.c_position.a;
-    var qA = Rot(aA);
-    var qB = Rot(aB);
-    var qC = Rot(aC);
-    var qD = Rot(aD);
+    var qA = Rot.neo(aA);
+    var qB = Rot.neo(aB);
+    var qC = Rot.neo(aC);
+    var qD = Rot.neo(aD);
     var linearError = 0;
     // float
     var coordinateA, coordinateB;
@@ -9514,7 +9632,7 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
     var mass = 0;
     // float
     if (this.m_type1 == RevoluteJoint.TYPE) {
-        JvAC = Vec2();
+        JvAC = Vec2.zero();
         JwA = 1;
         JwC = 1;
         mass += this.m_iA + this.m_iC;
@@ -9537,7 +9655,7 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
         coordinateA = Dot(pA - pC, this.m_localAxisC);
     }
     if (this.m_type2 == RevoluteJoint.TYPE) {
-        JvBD = Vec2();
+        JvBD = Vec2.zero();
         JwB = this.m_ratio;
         JwD = this.m_ratio;
         mass += this.m_ratio * this.m_ratio * (this.m_iB + this.m_iD);
@@ -9585,6 +9703,10 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52,"./PrismaticJoint":32,"./RevoluteJoint":34}],30:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = MotorJoint;
 
 var common = require("../util/common");
@@ -9659,7 +9781,7 @@ function MotorJoint(def, bodyA, bodyB) {
     var angleA = bodyA.getAngle();
     var angleB = bodyB.getAngle();
     this.m_angularOffset = angleB - angleA;
-    this.m_linearImpulse = Vec2();
+    this.m_linearImpulse = Vec2.zero();
     this.m_angularImpulse = 0;
     this.m_maxForce = def.maxForce;
     this.m_maxTorque = def.maxTorque;
@@ -9694,7 +9816,7 @@ function MotorJoint(def, bodyA, bodyB) {
  * Set the maximum friction force in N.
  */
 MotorJoint.prototype.setMaxForce = function(force) {
-    common.assert(IsValid(force) && force >= 0);
+    ASSERT && common.assert(IsValid(force) && force >= 0);
     this.m_maxForce = force;
 };
 
@@ -9709,7 +9831,7 @@ MotorJoint.prototype.getMaxForce = function() {
  * Set the maximum friction torque in N*m.
  */
 MotorJoint.prototype.setMaxTorque = function(torque) {
-    common.assert(IsValid(torque) && torque >= 0);
+    ASSERT && common.assert(IsValid(torque) && torque >= 0);
     this.m_maxTorque = torque;
 };
 
@@ -9724,7 +9846,7 @@ MotorJoint.prototype.getMaxTorque = function() {
  * Set the position correction factor in the range [0,1].
  */
 MotorJoint.prototype.setCorrectionFactor = function(factor) {
-    common.assert(IsValid(factor) && 0 <= factor && factor <= 1);
+    ASSERT && common.assert(IsValid(factor) && 0 <= factor && factor <= 1);
     this.m_correctionFactor = factor;
 };
 
@@ -9796,7 +9918,7 @@ MotorJoint.prototype.initVelocityConstraints = function(step) {
     var aB = this.m_bodyB.c_position.a;
     var vB = this.m_bodyB.c_velocity.v;
     var wB = this.m_bodyB.c_velocity.w;
-    var qA = Rot(aA), qB = Rot(aB);
+    var qA = Rot.neo(aA), qB = Rot.neo(aB);
     // Compute the effective mass matrix.
     this.m_rA = Rot.mul(qA, Vec2.neg(this.m_localCenterA));
     this.m_rB = Rot.mul(qB, Vec2.neg(this.m_localCenterB));
@@ -9821,7 +9943,7 @@ MotorJoint.prototype.initVelocityConstraints = function(step) {
     if (this.m_angularMass > 0) {
         this.m_angularMass = 1 / this.m_angularMass;
     }
-    this.m_linearError = Vec2();
+    this.m_linearError = Vec2.zero();
     this.m_linearError.wAdd(1, cB, 1, this.m_rB);
     this.m_linearError.wSub(1, cA, 1, this.m_rA);
     this.m_linearError.sub(Rot.mul(qA, this.m_linearOffset));
@@ -9830,7 +9952,7 @@ MotorJoint.prototype.initVelocityConstraints = function(step) {
         // Scale impulses to support a variable time step.
         this.m_linearImpulse.mul(step.dtRatio);
         this.m_angularImpulse *= step.dtRatio;
-        var P = Vec2(this.m_linearImpulse.x, this.m_linearImpulse.y);
+        var P = Vec2.neo(this.m_linearImpulse.x, this.m_linearImpulse.y);
         vA.wSub(mA, P);
         wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_angularImpulse);
         vB.wAdd(mB, P);
@@ -9867,12 +9989,12 @@ MotorJoint.prototype.solveVelocityConstraints = function(step) {
     }
     // Solve linear friction
     {
-        var Cdot = Vec2();
+        var Cdot = Vec2.zero();
         Cdot.wAdd(1, vB, 1, Vec2.cross(wB, this.m_rB));
         Cdot.wSub(1, vA, 1, Vec2.cross(wA, this.m_rA));
         Cdot.wAdd(inv_h * this.m_correctionFactor, this.m_linearError);
         var impulse = Vec2.neg(Mat22.mul(this.m_linearMass, Cdot));
-        var oldImpulse = Vec2(this.m_linearImpulse);
+        var oldImpulse = Vec2.clone(this.m_linearImpulse);
         this.m_linearImpulse.add(impulse);
         var maxImpulse = h * this.m_maxForce;
         this.m_linearImpulse.clamp(maxImpulse);
@@ -9894,6 +10016,10 @@ MotorJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],31:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = MouseJoint;
 
 var common = require("../util/common");
@@ -9968,24 +10094,24 @@ function MouseJoint(def, bodyA, bodyB, target) {
     def = options(def, MouseJointDef);
     Joint.call(this, def, bodyA, bodyB);
     this.m_type = MouseJoint.TYPE;
-    common.assert(Math.isFinite(def.maxForce) && def.maxForce >= 0);
-    common.assert(Math.isFinite(def.frequencyHz) && def.frequencyHz >= 0);
-    common.assert(Math.isFinite(def.dampingRatio) && def.dampingRatio >= 0);
-    this.m_targetA = Vec2(target);
+    ASSERT && common.assert(Math.isFinite(def.maxForce) && def.maxForce >= 0);
+    ASSERT && common.assert(Math.isFinite(def.frequencyHz) && def.frequencyHz >= 0);
+    ASSERT && common.assert(Math.isFinite(def.dampingRatio) && def.dampingRatio >= 0);
+    this.m_targetA = Vec2.clone(target);
     this.m_localAnchorB = Transform.mulT(this.m_bodyB.getTransform(), this.m_targetA);
     this.m_maxForce = def.maxForce;
-    this.m_impulse = Vec2();
+    this.m_impulse = Vec2.zero();
     this.m_frequencyHz = def.frequencyHz;
     this.m_dampingRatio = def.dampingRatio;
     this.m_beta = 0;
     this.m_gamma = 0;
     // Solver temp
-    this.m_rB = Vec2();
-    this.m_localCenterB = Vec2();
+    this.m_rB = Vec2.zero();
+    this.m_localCenterB = Vec2.zero();
     this.m_invMassB = 0;
     this.m_invIB = 0;
     this.mass = new Mat22();
-    this.m_C = Vec2();
+    this.m_C = Vec2.zero();
 }
 
 /**
@@ -9995,7 +10121,7 @@ MouseJoint.prototype.setTarget = function(target) {
     if (this.m_bodyB.isAwake() == false) {
         this.m_bodyB.setAwake(true);
     }
-    this.m_targetA = Vec2(target);
+    this.m_targetA = Vec2.clone(target);
 };
 
 MouseJoint.prototype.getTarget = function() {
@@ -10036,7 +10162,7 @@ MouseJoint.prototype.getDampingRatio = function() {
 };
 
 MouseJoint.prototype.getAnchorA = function() {
-    return Vec2(this.m_targetA);
+    return Vec2.clone(this.m_targetA);
 };
 
 MouseJoint.prototype.getAnchorB = function() {
@@ -10065,7 +10191,7 @@ MouseJoint.prototype.initVelocityConstraints = function(step) {
     var aB = position.a;
     var vB = velocity.v;
     var wB = velocity.w;
-    var qB = new Rot(aB);
+    var qB = Rot.neo(aB);
     var mass = this.m_bodyB.getMass();
     // Frequency
     var omega = 2 * Math.PI * this.m_frequencyHz;
@@ -10077,7 +10203,7 @@ MouseJoint.prototype.initVelocityConstraints = function(step) {
     // gamma has units of inverse mass.
     // beta has units of inverse time.
     var h = step.dt;
-    common.assert(d + h * k > Math.EPSILON);
+    ASSERT && common.assert(d + h * k > Math.EPSILON);
     this.m_gamma = h * (d + h * k);
     if (this.m_gamma != 0) {
         this.m_gamma = 1 / this.m_gamma;
@@ -10114,7 +10240,7 @@ MouseJoint.prototype.initVelocityConstraints = function(step) {
 
 MouseJoint.prototype.solveVelocityConstraints = function(step) {
     var velocity = this.m_bodyB.c_velocity;
-    var vB = Vec2(velocity.v);
+    var vB = Vec2.clone(velocity.v);
     var wB = velocity.w;
     // Cdot = v + cross(w, r)
     var Cdot = Vec2.cross(wB, this.m_rB);
@@ -10122,7 +10248,7 @@ MouseJoint.prototype.solveVelocityConstraints = function(step) {
     Cdot.wAdd(1, this.m_C, this.m_gamma, this.m_impulse);
     Cdot.neg();
     var impulse = Mat22.mul(this.m_mass, Cdot);
-    var oldImpulse = Vec2(this.m_impulse);
+    var oldImpulse = Vec2.clone(this.m_impulse);
     this.m_impulse.add(impulse);
     var maxImpulse = step.dt * this.m_maxForce;
     this.m_impulse.clamp(maxImpulse);
@@ -10139,6 +10265,10 @@ MouseJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],32:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = PrismaticJoint;
 
 var common = require("../util/common");
@@ -10248,8 +10378,8 @@ function PrismaticJoint(def, bodyA, bodyB, anchor, axis) {
     this.m_enableLimit = def.enableLimit;
     this.m_enableMotor = def.enableMotor;
     this.m_limitState = inactiveLimit;
-    this.m_axis = Vec2();
-    this.m_perp = Vec2();
+    this.m_axis = Vec2.zero();
+    this.m_perp = Vec2.zero();
     // Solver temp
     this.m_localCenterA;
     // Vec2
@@ -10381,7 +10511,7 @@ PrismaticJoint.prototype.getUpperLimit = function() {
  * Set the joint limits, usually in meters.
  */
 PrismaticJoint.prototype.setLimits = function(lower, upper) {
-    common.assert(lower <= upper);
+    ASSERT && common.assert(lower <= upper);
     if (lower != this.m_lowerTranslation || upper != this.m_upperTranslation) {
         this.m_bodyA.setAwake(true);
         this.m_bodyB.setAwake(true);
@@ -10470,12 +10600,12 @@ PrismaticJoint.prototype.initVelocityConstraints = function(step) {
     var aB = this.m_bodyB.c_position.a;
     var vB = this.m_bodyB.c_velocity.v;
     var wB = this.m_bodyB.c_velocity.w;
-    var qA = Rot(aA);
-    var qB = Rot(aB);
+    var qA = Rot.neo(aA);
+    var qB = Rot.neo(aB);
     // Compute the effective masses.
     var rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
     var rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
-    var d = Vec2();
+    var d = Vec2.zero();
     d.wAdd(1, cB, 1, rB);
     d.wSub(1, cA, 1, rA);
     var mA = this.m_invMassA, mB = this.m_invMassB;
@@ -10575,7 +10705,7 @@ PrismaticJoint.prototype.solveVelocityConstraints = function(step) {
         var maxImpulse = step.dt * this.m_maxMotorForce;
         this.m_motorImpulse = Math.clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
         impulse = this.m_motorImpulse - oldImpulse;
-        var P = Vec2().wSet(impulse, this.m_axis);
+        var P = Vec2.zero().wSet(impulse, this.m_axis);
         var LA = impulse * this.m_a1;
         var LB = impulse * this.m_a2;
         vA.wSub(mA, P);
@@ -10583,7 +10713,7 @@ PrismaticJoint.prototype.solveVelocityConstraints = function(step) {
         vB.wAdd(mB, P);
         wB += iB * LB;
     }
-    var Cdot1 = Vec2();
+    var Cdot1 = Vec2.zero();
     Cdot1.x += Vec2.dot(this.m_perp, vB) + this.m_s2 * wB;
     Cdot1.x -= Vec2.dot(this.m_perp, vA) + this.m_s1 * wA;
     Cdot1.y = wB - wA;
@@ -10604,9 +10734,9 @@ PrismaticJoint.prototype.solveVelocityConstraints = function(step) {
         }
         // f2(1:2) = invK(1:2,1:2) * (-Cdot(1:2) - K(1:2,3) * (f2(3) - f1(3))) +
         // f1(1:2)
-        var b = Vec2.wAdd(-1, Cdot1, -(this.m_impulse.z - f1.z), Vec2(this.m_K.ez.x, this.m_K.ez.y));
+        var b = Vec2.wAdd(-1, Cdot1, -(this.m_impulse.z - f1.z), Vec2.neo(this.m_K.ez.x, this.m_K.ez.y));
         // Vec2
-        var f2r = Vec2.add(this.m_K.solve22(b), Vec2(f1.x, f1.y));
+        var f2r = Vec2.add(this.m_K.solve22(b), Vec2.neo(f1.x, f1.y));
         // Vec2
         this.m_impulse.x = f2r.x;
         this.m_impulse.y = f2r.y;
@@ -10627,7 +10757,7 @@ PrismaticJoint.prototype.solveVelocityConstraints = function(step) {
         // Vec2
         this.m_impulse.x += df.x;
         this.m_impulse.y += df.y;
-        var P = Vec2().wAdd(df.x, this.m_perp);
+        var P = Vec2.zero().wAdd(df.x, this.m_perp);
         // Vec2
         var LA = df.x * this.m_s1 + df.y;
         // float
@@ -10649,8 +10779,8 @@ PrismaticJoint.prototype.solvePositionConstraints = function(step) {
     var aA = this.m_bodyA.c_position.a;
     var cB = this.m_bodyB.c_position.c;
     var aB = this.m_bodyB.c_position.a;
-    var qA = Rot(aA);
-    var qB = Rot(aB);
+    var qA = Rot.neo(aA);
+    var qB = Rot.neo(aB);
     var mA = this.m_invMassA;
     var mB = this.m_invMassB;
     var iA = this.m_invIA;
@@ -10675,7 +10805,7 @@ PrismaticJoint.prototype.solvePositionConstraints = function(step) {
     var s2 = Vec2.cross(rB, perp);
     // float
     var impulse = Vec3();
-    var C1 = Vec2();
+    var C1 = Vec2.zero();
     // Vec2
     C1.x = Vec2.dot(perp, d);
     C1.y = aB - aA - this.m_referenceAngle;
@@ -10773,6 +10903,10 @@ PrismaticJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],33:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = PulleyJoint;
 
 var common = require("../util/common");
@@ -10860,7 +10994,7 @@ function PulleyJoint(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, rati
     this.m_lengthA = Vec2.distance(anchorA, groundA);
     this.m_lengthB = Vec2.distance(anchorB, groundB);
     this.m_ratio = def.ratio || ratio;
-    common.assert(ratio > Math.EPSILON);
+    ASSERT && common.assert(ratio > Math.EPSILON);
     this.m_constant = this.m_lengthA + this.m_ratio * this.m_lengthB;
     this.m_impulse = 0;
     // Solver temp
@@ -10976,8 +11110,8 @@ PulleyJoint.prototype.initVelocityConstraints = function(step) {
     var aB = this.m_bodyB.c_position.a;
     var vB = this.m_bodyB.c_velocity.v;
     var wB = this.m_bodyB.c_velocity.w;
-    var qA = Rot(aA);
-    var qB = Rot(aB);
+    var qA = Rot.neo(aA);
+    var qB = Rot.neo(aB);
     this.m_rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
     this.m_rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     // Get the pulley axes.
@@ -11039,9 +11173,9 @@ PulleyJoint.prototype.solveVelocityConstraints = function(step) {
     var impulse = -this.m_mass * Cdot;
     // float
     this.m_impulse += impulse;
-    var PA = Vec2().wSet(-impulse, this.m_uA);
+    var PA = Vec2.zero().wSet(-impulse, this.m_uA);
     // Vec2
-    var PB = Vec2().wSet(-this.m_ratio * impulse, this.m_uB);
+    var PB = Vec2.zero().wSet(-this.m_ratio * impulse, this.m_uB);
     // Vec2
     vA.wAdd(this.m_invMassA, PA);
     wA += this.m_invIA * Vec2.cross(this.m_rA, PA);
@@ -11058,7 +11192,7 @@ PulleyJoint.prototype.solvePositionConstraints = function(step) {
     var aA = this.m_bodyA.c_position.a;
     var cB = this.m_bodyB.c_position.c;
     var aB = this.m_bodyB.c_position.a;
-    var qA = Rot(aA), qB = Rot(aB);
+    var qA = Rot.neo(aA), qB = Rot.neo(aB);
     var rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
     var rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     // Get the pulley axes.
@@ -11094,9 +11228,9 @@ PulleyJoint.prototype.solvePositionConstraints = function(step) {
     // float
     var impulse = -mass * C;
     // float
-    var PA = Vec2().wSet(-impulse, uA);
+    var PA = Vec2.zero().wSet(-impulse, uA);
     // Vec2
-    var PB = Vec2().wSet(-this.m_ratio * impulse, uB);
+    var PB = Vec2.zero().wSet(-this.m_ratio * impulse, uB);
     // Vec2
     cA.wAdd(this.m_invMassA, PA);
     aA += this.m_invIA * Vec2.cross(rA, PA);
@@ -11111,6 +11245,10 @@ PulleyJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],34:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = RevoluteJoint;
 
 var common = require("../util/common");
@@ -11369,7 +11507,7 @@ RevoluteJoint.prototype.getUpperLimit = function() {
  * Set the joint limits in radians.
  */
 RevoluteJoint.prototype.setLimits = function(lower, upper) {
-    common.assert(lower <= upper);
+    ASSERT && common.assert(lower <= upper);
     if (lower != this.m_lowerAngle || upper != this.m_upperAngle) {
         this.m_bodyA.setAwake(true);
         this.m_bodyB.setAwake(true);
@@ -11391,7 +11529,7 @@ RevoluteJoint.prototype.getAnchorB = function() {
  * Get the reaction force given the inverse time step. Unit is N.
  */
 RevoluteJoint.prototype.getReactionForce = function(inv_dt) {
-    var P = Vec2(this.m_impulse.x, this.m_impulse.y);
+    var P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
     return inv_dt * P;
 };
 
@@ -11416,8 +11554,8 @@ RevoluteJoint.prototype.initVelocityConstraints = function(step) {
     var aB = this.m_bodyB.c_position.a;
     var vB = this.m_bodyB.c_velocity.v;
     var wB = this.m_bodyB.c_velocity.w;
-    var qA = Rot(aA);
-    var qB = Rot(aB);
+    var qA = Rot.neo(aA);
+    var qB = Rot.neo(aB);
     this.m_rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
     this.m_rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     // J = [-I -r1_skew I r2_skew]
@@ -11477,7 +11615,7 @@ RevoluteJoint.prototype.initVelocityConstraints = function(step) {
         // Scale impulses to support a variable time step.
         this.m_impulse.mul(step.dtRatio);
         this.m_motorImpulse *= step.dtRatio;
-        var P = Vec2(this.m_impulse.x, this.m_impulse.y);
+        var P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
         vA.wSub(mA, P);
         wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_motorImpulse + this.m_impulse.z);
         vB.wAdd(mB, P);
@@ -11522,7 +11660,7 @@ RevoluteJoint.prototype.solveVelocityConstraints = function(step) {
     }
     // Solve limit constraint.
     if (this.m_enableLimit && this.m_limitState != inactiveLimit && fixedRotation == false) {
-        var Cdot1 = Vec2();
+        var Cdot1 = Vec2.zero();
         Cdot1.wAdd(1, vB, 1, Vec2.cross(wB, this.m_rB));
         Cdot1.wSub(1, vA, 1, Vec2.cross(wA, this.m_rA));
         var Cdot2 = wB - wA;
@@ -11536,7 +11674,7 @@ RevoluteJoint.prototype.solveVelocityConstraints = function(step) {
             var newImpulse = this.m_impulse.z + impulse.z;
             // float
             if (newImpulse < 0) {
-                var rhs = Vec2().wSet(-1, Cdot1, this.m_impulse.z, Vec2(this.m_mass.ez.x, this.m_mass.ez.y));
+                var rhs = Vec2.wAdd(-1, Cdot1, this.m_impulse.z, Vec2.neo(this.m_mass.ez.x, this.m_mass.ez.y));
                 // Vec2
                 var reduced = this.m_mass.solve22(rhs);
                 // Vec2
@@ -11553,7 +11691,7 @@ RevoluteJoint.prototype.solveVelocityConstraints = function(step) {
             var newImpulse = this.m_impulse.z + impulse.z;
             // float
             if (newImpulse > 0) {
-                var rhs = Vec2().wSet(-1, Cdot1, this.m_impulse.z, Vec2(this.m_mass.ez.x, this.m_mass.ez.y));
+                var rhs = Vec2.wAdd(-1, Cdot1, this.m_impulse.z, Vec2.neo(this.m_mass.ez.x, this.m_mass.ez.y));
                 // Vec2
                 var reduced = this.m_mass.solve22(rhs);
                 // Vec2
@@ -11567,14 +11705,14 @@ RevoluteJoint.prototype.solveVelocityConstraints = function(step) {
                 this.m_impulse.add(impulse);
             }
         }
-        var P = Vec2(impulse.x, impulse.y);
+        var P = Vec2.neo(impulse.x, impulse.y);
         vA.wSub(mA, P);
         wA -= iA * (Vec2.cross(this.m_rA, P) + impulse.z);
         vB.wAdd(mB, P);
         wB += iB * (Vec2.cross(this.m_rB, P) + impulse.z);
     } else {
         // Solve point-to-point constraint
-        var Cdot = Vec2();
+        var Cdot = Vec2.zero();
         Cdot.wAdd(1, vB, 1, Vec2.cross(wB, this.m_rB));
         Cdot.wSub(1, vA, 1, Vec2.cross(wA, this.m_rA));
         var impulse = this.m_mass.solve22(Vec2.neg(Cdot));
@@ -11597,8 +11735,8 @@ RevoluteJoint.prototype.solvePositionConstraints = function(step) {
     var aA = this.m_bodyA.c_position.a;
     var cB = this.m_bodyB.c_position.c;
     var aB = this.m_bodyB.c_position.a;
-    var qA = Rot(aA);
-    var qB = Rot(aB);
+    var qA = Rot.neo(aA);
+    var qB = Rot.neo(aB);
     var angularError = 0;
     // float
     var positionError = 0;
@@ -11643,7 +11781,7 @@ RevoluteJoint.prototype.solvePositionConstraints = function(step) {
         // Vec2
         var rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
         // Vec2
-        var C = Vec2();
+        var C = Vec2.zero();
         C.wAdd(1, cB, 1, rB);
         C.wSub(1, cA, 1, rA);
         positionError = C.length();
@@ -11674,6 +11812,10 @@ RevoluteJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],35:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = RopeJoint;
 
 var options = require("../util/options");
@@ -11845,11 +11987,11 @@ RopeJoint.prototype.initVelocityConstraints = function(step) {
     var aB = this.m_bodyB.c_position.a;
     var vB = this.m_bodyB.c_velocity.v;
     var wB = this.m_bodyB.c_velocity.w;
-    var qA = Rot(aA);
-    var qB = Rot(aB);
+    var qA = Rot.neo(aA);
+    var qB = Rot.neo(aB);
     this.m_rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_localCenterA);
     this.m_rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
-    this.m_u = Vec2();
+    this.m_u = Vec2.zero();
     this.m_u.wAdd(1, cB, 1, this.m_rB);
     this.m_u.wSub(1, cA, 1, this.m_rA);
     // Vec2
@@ -11939,11 +12081,11 @@ RopeJoint.prototype.solvePositionConstraints = function(step) {
     // Vec2
     var aB = this.m_bodyB.c_position.a;
     // float
-    var qA = Rot(aA);
-    var qB = Rot(aB);
+    var qA = Rot.neo(aA);
+    var qB = Rot.neo(aB);
     var rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_localCenterA);
     var rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
-    var u = Vec2();
+    var u = Vec2.zero();
     u.wAdd(1, cB, 1, rB);
     u.wSub(1, cA, 1, rA);
     // Vec2
@@ -11969,6 +12111,10 @@ RopeJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":51,"../util/options":52}],36:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = WeldJoint;
 
 var options = require("../util/options");
@@ -12118,7 +12264,7 @@ WeldJoint.prototype.getAnchorB = function() {
 };
 
 WeldJoint.prototype.getReactionForce = function(inv_dt) {
-    var P = Vec2(this.m_impulse.x, this.m_impulse.y);
+    var P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
     return inv_dt * P;
 };
 
@@ -12139,7 +12285,7 @@ WeldJoint.prototype.initVelocityConstraints = function(step) {
     var aB = this.m_bodyB.c_position.a;
     var vB = this.m_bodyB.c_velocity.v;
     var wB = this.m_bodyB.c_velocity.w;
-    var qA = Rot(aA), qB = Rot(aB);
+    var qA = Rot.neo(aA), qB = Rot.neo(aB);
     this.m_rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
     this.m_rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     // J = [-I -r1_skew I r2_skew]
@@ -12202,7 +12348,7 @@ WeldJoint.prototype.initVelocityConstraints = function(step) {
     if (step.warmStarting) {
         // Scale impulses to support a variable time step.
         this.m_impulse.mul(step.dtRatio);
-        var P = Vec2(this.m_impulse.x, this.m_impulse.y);
+        var P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
         vA.wSub(mA, P);
         wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_impulse.z);
         vB.wAdd(mB, P);
@@ -12235,7 +12381,7 @@ WeldJoint.prototype.solveVelocityConstraints = function(step) {
         this.m_impulse.z += impulse2;
         wA -= iA * impulse2;
         wB += iB * impulse2;
-        var Cdot1 = Vec2();
+        var Cdot1 = Vec2.zero();
         Cdot1.wAdd(1, vB, 1, Vec2.cross(wB, this.m_rB));
         Cdot1.wSub(1, vA, 1, Vec2.cross(wA, this.m_rA));
         // Vec2
@@ -12243,14 +12389,14 @@ WeldJoint.prototype.solveVelocityConstraints = function(step) {
         // Vec2
         this.m_impulse.x += impulse1.x;
         this.m_impulse.y += impulse1.y;
-        var P = Vec2(impulse1);
+        var P = Vec2.clone(impulse1);
         // Vec2
         vA.wSub(mA, P);
         wA -= iA * Vec2.cross(this.m_rA, P);
         vB.wAdd(mB, P);
         wB += iB * Vec2.cross(this.m_rB, P);
     } else {
-        var Cdot1 = Vec2();
+        var Cdot1 = Vec2.zero();
         Cdot1.wAdd(1, vB, 1, Vec2.cross(wB, this.m_rB));
         Cdot1.wSub(1, vA, 1, Vec2.cross(wA, this.m_rA));
         // Vec2
@@ -12261,7 +12407,7 @@ WeldJoint.prototype.solveVelocityConstraints = function(step) {
         var impulse = Vec3.neg(Mat33.mul(this.m_mass, Cdot));
         // Vec3
         this.m_impulse.add(impulse);
-        var P = Vec2(impulse.x, impulse.y);
+        var P = Vec2.neo(impulse.x, impulse.y);
         vA.wSub(mA, P);
         wA -= iA * (Vec2.cross(this.m_rA, P) + impulse.z);
         vB.wAdd(mB, P);
@@ -12278,7 +12424,7 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
     var aA = this.m_bodyA.c_position.a;
     var cB = this.m_bodyB.c_position.c;
     var aB = this.m_bodyB.c_position.a;
-    var qA = Rot(aA), qB = Rot(aB);
+    var qA = Rot.neo(aA), qB = Rot.neo(aB);
     var mA = this.m_invMassA, mB = this.m_invMassB;
     // float
     var iA = this.m_invIA, iB = this.m_invIB;
@@ -12298,7 +12444,7 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
     K.ey.z = K.ez.y;
     K.ez.z = iA + iB;
     if (this.m_frequencyHz > 0) {
-        var C1 = Vec2();
+        var C1 = Vec2.zero();
         C1.wAdd(1, cB, 1, rB);
         C1.wSub(1, cA, 1, rA);
         // Vec2
@@ -12311,7 +12457,7 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
         cB.wAdd(mB, P);
         aB += iB * Vec2.cross(rB, P);
     } else {
-        var C1 = Vec2();
+        var C1 = Vec2.zero();
         C1.wAdd(1, cB, 1, rB);
         C1.wSub(1, cA, 1, rA);
         var C2 = aB - aA - this.m_referenceAngle;
@@ -12326,7 +12472,7 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
             var impulse2 = Vec2.neg(K.solve22(C1));
             impulse.set(impulse2.x, impulse2.y, 0);
         }
-        var P = Vec2(impulse.x, impulse.y);
+        var P = Vec2.neo(impulse.x, impulse.y);
         cA.wSub(mA, P);
         aA -= iA * (Vec2.cross(rA, P) + impulse.z);
         cB.wAdd(mB, P);
@@ -12341,6 +12487,10 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":51,"../util/options":52}],37:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = WheelJoint;
 
 var options = require("../util/options");
@@ -12421,7 +12571,7 @@ function WheelJoint(def, bodyA, bodyB, anchor, axis) {
     this.m_type = WheelJoint.TYPE;
     this.m_localAnchorA = bodyA.getLocalPoint(anchor);
     this.m_localAnchorB = bodyB.getLocalPoint(anchor);
-    this.m_localXAxisA = bodyA.getLocalVector(axis || Vec2(1, 0));
+    this.m_localXAxisA = bodyA.getLocalVector(axis || Vec2.neo(1, 0));
     this.m_localYAxisA = Vec2.cross(1, this.m_localXAxisA);
     this.m_mass = 0;
     this.m_impulse = 0;
@@ -12449,8 +12599,8 @@ function WheelJoint(def, bodyA, bodyB, anchor, axis) {
     // float
     this.m_invIB;
     // float
-    this.m_ax = Vec2();
-    this.m_ay = Vec2();
+    this.m_ax = Vec2.zero();
+    this.m_ay = Vec2.zero();
     // Vec2
     this.m_sAx;
     this.m_sBx;
@@ -12620,14 +12770,14 @@ WheelJoint.prototype.initVelocityConstraints = function(step) {
     var aB = this.m_bodyB.c_position.a;
     var vB = this.m_bodyB.c_velocity.v;
     var wB = this.m_bodyB.c_velocity.w;
-    var qA = Rot(aA);
-    var qB = Rot(aB);
+    var qA = Rot.neo(aA);
+    var qB = Rot.neo(aB);
     // Compute the effective masses.
     var rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
     // Vec2
     var rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     // Vec2
-    var d = Vec2();
+    var d = Vec2.zero();
     d.wAdd(1, cB, 1, rB);
     d.wSub(1, cA, 1, rA);
     // Vec2
@@ -12731,7 +12881,7 @@ WheelJoint.prototype.solveVelocityConstraints = function(step) {
         var impulse = -this.m_springMass * (Cdot + this.m_bias + this.m_gamma * this.m_springImpulse);
         // float
         this.m_springImpulse += impulse;
-        var P = Vec2().wSet(impulse, this.m_ax);
+        var P = Vec2.zero().wSet(impulse, this.m_ax);
         // Vec2
         var LA = impulse * this.m_sAx;
         // float
@@ -12764,7 +12914,7 @@ WheelJoint.prototype.solveVelocityConstraints = function(step) {
         var impulse = -this.m_mass * Cdot;
         // float
         this.m_impulse += impulse;
-        var P = Vec2().wSet(impulse, this.m_ay);
+        var P = Vec2.zero().wSet(impulse, this.m_ay);
         // Vec2
         var LA = impulse * this.m_sAy;
         // float
@@ -12786,13 +12936,13 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
     var aA = this.m_bodyA.c_position.a;
     var cB = this.m_bodyB.c_position.c;
     var aB = this.m_bodyB.c_position.a;
-    var qA = Rot(aA);
-    var qB = Rot(aB);
+    var qA = Rot.neo(aA);
+    var qB = Rot.neo(aB);
     var rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
     // Vec2
     var rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     // Vec2
-    var d = Vec2();
+    var d = Vec2.zero();
     d.wAdd(1, cB, 1, rB);
     d.wSub(1, cA, 1, rA);
     // Vec2
@@ -12813,7 +12963,7 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
     } else {
         impulse = 0;
     }
-    var P = Vec2().wSet(impulse, ay);
+    var P = Vec2.zero().wSet(impulse, ay);
     // Vec2
     var LA = impulse * sAy;
     // float
@@ -12832,6 +12982,10 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":51,"../util/options":52}],38:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = BoxShape;
 
 var common = require("../util/common");
@@ -12868,19 +13022,19 @@ function BoxShape(hx, hy, center, angle) {
         return new BoxShape(hx, hy, center, angle);
     }
     BoxShape._super.call(this);
-    this.m_vertices[0] = Vec2(-hx, -hy);
-    this.m_vertices[1] = Vec2(hx, -hy);
-    this.m_vertices[2] = Vec2(hx, hy);
-    this.m_vertices[3] = Vec2(-hx, hy);
-    this.m_normals[0] = Vec2(0, -1);
-    this.m_normals[1] = Vec2(1, 0);
-    this.m_normals[2] = Vec2(0, 1);
-    this.m_normals[3] = Vec2(-1, 0);
+    this.m_vertices[0] = Vec2.neo(-hx, -hy);
+    this.m_vertices[1] = Vec2.neo(hx, -hy);
+    this.m_vertices[2] = Vec2.neo(hx, hy);
+    this.m_vertices[3] = Vec2.neo(-hx, hy);
+    this.m_normals[0] = Vec2.neo(0, -1);
+    this.m_normals[1] = Vec2.neo(1, 0);
+    this.m_normals[2] = Vec2.neo(0, 1);
+    this.m_normals[3] = Vec2.neo(-1, 0);
     this.m_count = 4;
     if (center && "x" in center && "y" in center) {
         angle = angle || 0;
         this.m_centroid.set(center);
-        var xf = new Transform();
+        var xf = Transform.identity();
         xf.p.set(center);
         xf.q.set(angle);
         // Transform vertices and normals.
@@ -12893,6 +13047,10 @@ function BoxShape(hx, hy, center, angle) {
 
 
 },{"../Settings":7,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"../util/options":52,"./PolygonShape":47}],39:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = ChainShape;
 
 var common = require("../util/common");
@@ -12964,13 +13122,13 @@ function ChainShape(vertices, loop) {
  * @param count the vertex count
  */
 ChainShape.prototype._createLoop = function(vertices) {
-    common.assert(this.m_vertices.length == 0 && this.m_count == 0);
-    common.assert(vertices.length >= 3);
+    ASSERT && common.assert(this.m_vertices.length == 0 && this.m_count == 0);
+    ASSERT && common.assert(vertices.length >= 3);
     for (var i = 1; i < vertices.length; ++i) {
         var v1 = vertices[i - 1];
         var v2 = vertices[i];
         // If the code crashes here, it means your vertices are too close together.
-        common.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
+        ASSERT && common.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
     }
     this.m_vertices.length = 0;
     this.m_count = vertices.length + 1;
@@ -12992,13 +13150,13 @@ ChainShape.prototype._createLoop = function(vertices) {
  * @param count the vertex count
  */
 ChainShape.prototype._createChain = function(vertices) {
-    common.assert(this.m_vertices.length == 0 && this.m_count == 0);
-    common.assert(vertices.length >= 2);
+    ASSERT && common.assert(this.m_vertices.length == 0 && this.m_count == 0);
+    ASSERT && common.assert(vertices.length >= 2);
     for (var i = 1; i < vertices.length; ++i) {
         // If the code crashes here, it means your vertices are too close together.
         var v1 = vertices[i - 1];
         var v2 = vertices[i];
-        common.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
+        ASSERT && common.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
     }
     this.m_count = vertices.length;
     for (var i = 0; i < vertices.length; ++i) {
@@ -13048,7 +13206,7 @@ ChainShape.prototype.getChildCount = function() {
 
 // Get a child edge.
 ChainShape.prototype.getChildEdge = function(edge, childIndex) {
-    common.assert(0 <= childIndex && childIndex < this.m_count - 1);
+    ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count - 1);
     edge.m_type = EdgeShape.TYPE;
     edge.m_radius = this.m_radius;
     edge.m_vertex1 = this.m_vertices[childIndex];
@@ -13070,7 +13228,7 @@ ChainShape.prototype.getChildEdge = function(edge, childIndex) {
 };
 
 ChainShape.prototype.getVertex = function(index) {
-    common.assert(0 <= index && index <= this.m_count);
+    ASSERT && common.assert(0 <= index && index <= this.m_count);
     if (index < this.m_count) {
         return this.m_vertices[index];
     } else {
@@ -13086,15 +13244,13 @@ ChainShape.prototype.testPoint = function(xf, p) {
 };
 
 ChainShape.prototype.rayCast = function(output, input, xf, childIndex) {
-    common.assert(0 <= childIndex && childIndex < this.m_count);
-    var edgeShape = new EdgeShape();
-    edgeShape.m_vertex1 = this.getVertex(childIndex);
-    edgeShape.m_vertex2 = this.getVertex(childIndex + 1);
+    ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
+    var edgeShape = new EdgeShape(this.getVertex(childIndex), this.getVertex(childIndex + 1));
     return edgeShape.rayCast(output, input, xf, 0);
 };
 
 ChainShape.prototype.computeAABB = function(aabb, xf, childIndex) {
-    common.assert(0 <= childIndex && childIndex < this.m_count);
+    ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
     var v1 = Transform.mul(xf, this.getVertex(childIndex));
     var v2 = Transform.mul(xf, this.getVertex(childIndex + 1));
     aabb.combinePoints(v1, v2);
@@ -13110,7 +13266,7 @@ ChainShape.prototype.computeMass = function(massData, density) {
 };
 
 ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
-    common.assert(0 <= childIndex && childIndex < this.m_count);
+    ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
     proxy.m_buffer[0] = this.getVertex(childIndex);
     proxy.m_buffer[1] = this.getVertex(childIndex + 1);
     proxy.m_vertices = proxy.m_buffer;
@@ -13120,6 +13276,10 @@ ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
 
 
 },{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"../util/options":52,"./EdgeShape":46}],40:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = CircleShape;
 
 var common = require("../util/common");
@@ -13154,7 +13314,7 @@ function CircleShape(a, b) {
     }
     CircleShape._super.call(this);
     this.m_type = CircleShape.TYPE;
-    this.m_p = Vec2();
+    this.m_p = Vec2.zero();
     this.m_radius = 1;
     if (typeof a === "object" && Vec2.isValid(a)) {
         this.m_p.set(a);
@@ -13189,7 +13349,7 @@ CircleShape.prototype.getSupportVertex = function(d) {
 };
 
 CircleShape.prototype.getVertex = function(index) {
-    common.assert(index == 0);
+    ASSERT && common.assert(index == 0);
     return this.m_p;
 };
 
@@ -13266,6 +13426,10 @@ CircleShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 },{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"../util/options":52}],41:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 var common = require("../util/common");
 
 var create = require("../util/create");
@@ -13289,8 +13453,8 @@ var CircleShape = require("./CircleShape");
 Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
 
 function CircleCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-    common.assert(fixtureA.getType() == CircleShape.TYPE);
-    common.assert(fixtureB.getType() == CircleShape.TYPE);
+    ASSERT && common.assert(fixtureA.getType() == CircleShape.TYPE);
+    ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
     CollideCircles(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
 }
 
@@ -13317,6 +13481,10 @@ exports.CollideCircles = CollideCircles;
 
 
 },{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"./CircleShape":40}],42:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 var common = require("../util/common");
 
 var Math = require("../common/Math");
@@ -13344,8 +13512,8 @@ var PolygonShape = require("./PolygonShape");
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
 
 function PolygonCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-    common.assert(fixtureA.getType() == PolygonShape.TYPE);
-    common.assert(fixtureB.getType() == CircleShape.TYPE);
+    ASSERT && common.assert(fixtureA.getType() == PolygonShape.TYPE);
+    ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
     CollidePolygonCircle(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
 }
 
@@ -13429,6 +13597,10 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 
 
 },{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"./CircleShape":40,"./PolygonShape":47}],43:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 var common = require("../util/common");
 
 var create = require("../util/create");
@@ -13460,16 +13632,16 @@ Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
 
 function EdgeCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-    common.assert(fixtureA.getType() == EdgeShape.TYPE);
-    common.assert(fixtureB.getType() == CircleShape.TYPE);
+    ASSERT && common.assert(fixtureA.getType() == EdgeShape.TYPE);
+    ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
     var shapeA = fixtureA.getShape();
     var shapeB = fixtureB.getShape();
     CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
 }
 
 function ChainCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-    common.assert(fixtureA.getType() == ChainShape.TYPE);
-    common.assert(fixtureB.getType() == CircleShape.TYPE);
+    ASSERT && common.assert(fixtureA.getType() == ChainShape.TYPE);
+    ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
     var chain = fixtureA.getShape();
     var edge = new EdgeShape();
     chain.getChildEdge(edge, indexA);
@@ -13493,7 +13665,7 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
     var radius = edgeA.m_radius + circleB.m_radius;
     // Region A
     if (v <= 0) {
-        var P = Vec2(A);
+        var P = Vec2.clone(A);
         var d = Vec2.sub(Q, P);
         var dd = Vec2.dot(d, d);
         if (dd > radius * radius) {
@@ -13524,7 +13696,7 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
     }
     // Region B
     if (u <= 0) {
-        var P = Vec2(B);
+        var P = Vec2.clone(B);
         var d = Vec2.sub(Q, P);
         var dd = Vec2.dot(d, d);
         if (dd > radius * radius) {
@@ -13555,14 +13727,14 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
     }
     // Region AB
     var den = Vec2.dot(e, e);
-    common.assert(den > 0);
+    ASSERT && common.assert(den > 0);
     var P = Vec2.wAdd(u / den, A, v / den, B);
     var d = Vec2.sub(Q, P);
     var dd = Vec2.dot(d, d);
     if (dd > radius * radius) {
         return;
     }
-    var n = Vec2(-e.y, e.x);
+    var n = Vec2.neo(-e.y, e.x);
     if (Vec2.dot(n, Vec2.sub(Q, A)) < 0) {
         n.set(-n.x, -n.y);
     }
@@ -13581,6 +13753,10 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 
 
 },{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"./ChainShape":39,"./CircleShape":40,"./EdgeShape":46}],44:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 var common = require("../util/common");
 
 var create = require("../util/create");
@@ -13612,14 +13788,14 @@ Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
 
 function EdgePolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
-    common.assert(fA.getType() == EdgeShape.TYPE);
-    common.assert(fB.getType() == PolygonShape.TYPE);
+    ASSERT && common.assert(fA.getType() == EdgeShape.TYPE);
+    ASSERT && common.assert(fB.getType() == PolygonShape.TYPE);
     CollideEdgePolygon(manifold, fA.getShape(), xfA, fB.getShape(), xfB);
 }
 
 function ChainPolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
-    common.assert(fA.getType() == ChainShape.TYPE);
-    common.assert(fB.getType() == PolygonShape.TYPE);
+    ASSERT && common.assert(fA.getType() == ChainShape.TYPE);
+    ASSERT && common.assert(fB.getType() == PolygonShape.TYPE);
     var chain = fA.getShape();
     var edge = new EdgeShape();
     chain.getChildEdge(edge, indexA);
@@ -13663,11 +13839,11 @@ function ReferenceFace() {
     // int
     this.v1, this.v2;
     // v
-    this.normal = Vec2();
-    this.sideNormal1 = Vec2();
+    this.normal = Vec2.zero();
+    this.sideNormal1 = Vec2.zero();
     this.sideOffset1;
     // float
-    this.sideNormal2 = Vec2();
+    this.sideNormal2 = Vec2.zero();
     this.sideOffset2;
 }
 
@@ -13685,7 +13861,7 @@ var rf = new ReferenceFace();
  * adjacency.
  */
 function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
-    common.debug("CollideEdgePolygon");
+    DEBUG && common.debug("CollideEdgePolygon");
     // Algorithm:
     // 1. Classify v1 and v2
     // 2. Classify polygon centroid as front or back
@@ -13707,7 +13883,7 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
     var hasVertex3 = edgeA.m_hasVertex3;
     var edge1 = Vec2.sub(v2, v1);
     edge1.normalize();
-    var normal1 = Vec2(edge1.y, -edge1.x);
+    var normal1 = Vec2.neo(edge1.y, -edge1.x);
     var offset1 = Vec2.dot(normal1, Vec2.sub(centroidB, v1));
     var offset0 = 0;
     var offset2 = 0;
@@ -13717,7 +13893,7 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
     if (hasVertex0) {
         var edge0 = Vec2.sub(v1, v0);
         edge0.normalize();
-        var normal0 = Vec2(edge0.y, -edge0.x);
+        var normal0 = Vec2.neo(edge0.y, -edge0.x);
         convex1 = Vec2.cross(edge0, edge1) >= 0;
         offset0 = Vec2.dot(normal0, centroidB) - Vec2.dot(normal0, v0);
     }
@@ -13725,14 +13901,14 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
     if (hasVertex3) {
         var edge2 = Vec2.sub(v3, v2);
         edge2.normalize();
-        var normal2 = Vec2(edge2.y, -edge2.x);
+        var normal2 = Vec2.neo(edge2.y, -edge2.x);
         convex2 = Vec2.cross(edge1, edge2) > 0;
         offset2 = Vec2.dot(normal2, centroidB) - Vec2.dot(normal2, v2);
     }
     var front;
-    var normal = Vec2();
-    var lowerLimit = Vec2();
-    var upperLimit = Vec2();
+    var normal = Vec2.zero();
+    var lowerLimit = Vec2.zero();
+    var upperLimit = Vec2.zero();
     // Determine front or back collision. Determine collision normal limits.
     if (hasVertex0 && hasVertex3) {
         if (convex1 && convex2) {
@@ -13872,7 +14048,7 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
         polygonAxis.type = e_unknown;
         polygonAxis.index = -1;
         polygonAxis.separation = -Infinity;
-        var perp = new Vec2(-normal.y, normal.x);
+        var perp = Vec2.neo(-normal.y, normal.x);
         for (var i = 0; i < polygonBA.count; ++i) {
             var n = Vec2.neg(polygonBA.normals[i]);
             var s1 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v1));
@@ -13993,11 +14169,11 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
     }
     // Now clipPoints2 contains the clipped points.
     if (primaryAxis.type == e_edgeA) {
-        manifold.localNormal = Vec2(rf.normal);
-        manifold.localPoint = Vec2(rf.v1);
+        manifold.localNormal = Vec2.clone(rf.normal);
+        manifold.localPoint = Vec2.clone(rf.v1);
     } else {
-        manifold.localNormal = Vec2(polygonB.m_normals[rf.i1]);
-        manifold.localPoint = Vec2(polygonB.m_vertices[rf.i1]);
+        manifold.localNormal = Vec2.clone(polygonB.m_normals[rf.i1]);
+        manifold.localPoint = Vec2.clone(polygonB.m_vertices[rf.i1]);
     }
     var pointCount = 0;
     for (var i = 0; i < Settings.maxManifoldPoints; ++i) {
@@ -14023,6 +14199,10 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 
 
 },{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"./ChainShape":39,"./EdgeShape":46,"./PolygonShape":47}],45:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 var common = require("../util/common");
 
 var Math = require("../common/Math");
@@ -14050,8 +14230,8 @@ module.exports = CollidePolygons;
 Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
 
 function PolygonContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-    common.assert(fixtureA.getType() == PolygonShape.TYPE);
-    common.assert(fixtureB.getType() == PolygonShape.TYPE);
+    ASSERT && common.assert(fixtureA.getType() == PolygonShape.TYPE);
+    ASSERT && common.assert(fixtureB.getType() == PolygonShape.TYPE);
     CollidePolygons(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
 }
 
@@ -14099,7 +14279,7 @@ function FindIncidentEdge(c, poly1, xf1, edge1, poly2, xf2) {
     var count2 = poly2.m_count;
     var vertices2 = poly2.m_vertices;
     var normals2 = poly2.m_normals;
-    common.assert(0 <= edge1 && edge1 < poly1.m_count);
+    ASSERT && common.assert(0 <= edge1 && edge1 < poly1.m_count);
     // Get the normal of the reference edge in poly2's frame.
     var normal1 = Rot.mulT(xf2.q, Rot.mul(xf1.q, normals1[edge1]));
     // Find the incident edge on poly2.
@@ -14242,6 +14422,10 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 
 
 },{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"./PolygonShape":47}],46:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = EdgeShape;
 
 var create = require("../util/create");
@@ -14281,12 +14465,12 @@ function EdgeShape(v1, v2) {
     this.m_type = EdgeShape.TYPE;
     this.m_radius = Settings.polygonRadius;
     // These are the edge vertices
-    this.m_vertex1 = Vec2(v1);
-    this.m_vertex2 = Vec2(v2);
+    this.m_vertex1 = v1 ? Vec2.clone(v1) : Vec2.zero();
+    this.m_vertex2 = v2 ? Vec2.clone(v2) : Vec2.zero();
     // Optional adjacent vertices. These are used for smooth collision.
     // Used by chain shape.
-    this.m_vertex0 = Vec2();
-    this.m_vertex3 = Vec2();
+    this.m_vertex0 = Vec2.zero();
+    this.m_vertex3 = Vec2.zero();
     this.m_hasVertex0 = false;
     this.m_hasVertex3 = false;
 }
@@ -14336,7 +14520,7 @@ EdgeShape.prototype.rayCast = function(output, input, xf, childIndex) {
     var v1 = this.m_vertex1;
     var v2 = this.m_vertex2;
     var e = Vec2.sub(v2, v1);
-    var normal = Vec2(e.y, -e.x);
+    var normal = Vec2.neo(e.y, -e.x);
     normal.normalize();
     // q = p1 + t * d
     // dot(normal, q - v1) = 0
@@ -14393,6 +14577,10 @@ EdgeShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 },{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/create":51,"../util/options":52}],47:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = PolygonShape;
 
 var common = require("../util/common");
@@ -14434,7 +14622,7 @@ function PolygonShape(vertices) {
     PolygonShape._super.call(this);
     this.m_type = PolygonShape.TYPE;
     this.m_radius = Settings.polygonRadius;
-    this.m_centroid = Vec2();
+    this.m_centroid = Vec2.zero();
     this.m_vertices = [];
     // Vec2[Settings.maxPolygonVertices]
     this.m_normals = [];
@@ -14446,7 +14634,7 @@ function PolygonShape(vertices) {
 }
 
 PolygonShape.prototype.getVertex = function(index) {
-    common.assert(0 <= index && index < this.m_count);
+    ASSERT && common.assert(0 <= index && index < this.m_count);
     return this.m_vertices[index];
 };
 
@@ -14470,12 +14658,12 @@ PolygonShape.prototype.getChildCount = function() {
 };
 
 function ComputeCentroid(vs, count) {
-    common.assert(count >= 3);
-    var c = new Vec2();
+    ASSERT && common.assert(count >= 3);
+    var c = Vec2.zero();
     var area = 0;
     // pRef is the reference point for forming triangles.
     // It's location doesn't change the result (except for rounding error).
-    var pRef = Vec2();
+    var pRef = Vec2.zero();
     if (false) {
         // This code would put the reference point inside the polygon.
         for (var i = 0; i < count; ++i) {
@@ -14500,7 +14688,7 @@ function ComputeCentroid(vs, count) {
         c.wAdd(triangleArea * inv3, p3);
     }
     // Centroid
-    common.assert(area > Math.EPSILON);
+    ASSERT && common.assert(area > Math.EPSILON);
     c.mul(1 / area);
     return c;
 }
@@ -14516,7 +14704,7 @@ function ComputeCentroid(vs, count) {
  * lead to poor stacking behavior.
  */
 PolygonShape.prototype._set = function(vertices) {
-    common.assert(3 <= vertices.length && vertices.length <= Settings.maxPolygonVertices);
+    ASSERT && common.assert(3 <= vertices.length && vertices.length <= Settings.maxPolygonVertices);
     if (vertices.length < 3) {
         SetAsBox(1, 1);
         return;
@@ -14542,7 +14730,7 @@ PolygonShape.prototype._set = function(vertices) {
     n = tempCount;
     if (n < 3) {
         // Polygon is degenerate.
-        common.assert(false);
+        ASSERT && common.assert(false);
         SetAsBox(1, 1);
         return;
     }
@@ -14589,7 +14777,7 @@ PolygonShape.prototype._set = function(vertices) {
     }
     if (m < 3) {
         // Polygon is degenerate.
-        common.assert(false);
+        ASSERT && common.assert(false);
         SetAsBox(1, 1);
         return;
     }
@@ -14603,7 +14791,7 @@ PolygonShape.prototype._set = function(vertices) {
         var i1 = i;
         var i2 = i + 1 < m ? i + 1 : 0;
         var edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
-        common.assert(edge.lengthSquared() > Math.EPSILON * Math.EPSILON);
+        ASSERT && common.assert(edge.lengthSquared() > Math.EPSILON * Math.EPSILON);
         this.m_normals[i] = Vec2.cross(edge, 1);
         this.m_normals[i].normalize();
     }
@@ -14664,7 +14852,7 @@ PolygonShape.prototype.rayCast = function(output, input, xf, childIndex) {
             return false;
         }
     }
-    common.assert(0 <= lower && lower <= input.maxFraction);
+    ASSERT && common.assert(0 <= lower && lower <= input.maxFraction);
     if (index >= 0) {
         output.fraction = lower;
         output.normal = Rot.mul(xf.q, this.m_normals[index]);
@@ -14712,13 +14900,13 @@ PolygonShape.prototype.computeMass = function(massData, density) {
     // Simplification: triangle centroid = (1/3) * (p1 + p2 + p3)
     //
     // The rest of the derivation is handled by computer algebra.
-    common.assert(this.m_count >= 3);
-    var center = new Vec2();
+    ASSERT && common.assert(this.m_count >= 3);
+    var center = Vec2.zero();
     var area = 0;
     var I = 0;
     // s is the reference point for forming triangles.
     // It's location doesn't change the result (except for rounding error).
-    var s = new Vec2();
+    var s = Vec2.zero();
     // This code would put the reference point inside the polygon.
     for (var i = 0; i < this.m_count; ++i) {
         s.add(this.m_vertices[i]);
@@ -14745,7 +14933,7 @@ PolygonShape.prototype.computeMass = function(massData, density) {
     // Total mass
     massData.mass = density * area;
     // Center of mass
-    common.assert(area > Math.EPSILON);
+    ASSERT && common.assert(area > Math.EPSILON);
     center.mul(1 / area);
     massData.center.wSet(1, center, 1, s);
     // Inertia tensor relative to the local origin (point s).
@@ -14784,6 +14972,10 @@ PolygonShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 },{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"../util/options":52}],48:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports = Pool;
 
 function Pool(opts) {
@@ -14846,6 +15038,10 @@ function Pool(opts) {
 
 
 },{}],49:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 module.exports.now = function() {
     return Date.now();
 };
@@ -14856,9 +15052,17 @@ module.exports.diff = function(time) {
 
 
 },{}],50:[function(require,module,exports){
-exports.debug = function() {};
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
+exports.debug = function() {
+    if (!DEBUG) return;
+    console.log.apply(console, arguments);
+};
 
 exports.assert = function(statement, err, log) {
+    if (!ASSERT) return;
     if (statement) return;
     log && console.log(log);
     throw new Error(err);
@@ -14882,6 +15086,10 @@ if (typeof Object.create == "function") {
 
 
 },{}],52:[function(require,module,exports){
+DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+
+ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
 module.exports = function(to, from) {

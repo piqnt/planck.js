@@ -1,6 +1,6 @@
 {
   "name": "planck-js",
-  "description": "Box2D rewrite for JavaScript",
+  "description": "2D JavaScript physics engine for cross-platform HTML5 game development",
   "keywords": [
     "html5",
     "javascript",
@@ -19,8 +19,8 @@
     "example/",
     "test/"
   ],
-  "dependencies": {
-    "stage-js": "~0.8.4",
+  "devDependencies": {
+    "stage-js": "^0.8.4",
     "font-awesome": "font-awsome#~4.5.0"
   }
 }
