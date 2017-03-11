@@ -35,7 +35,7 @@ gulp.task('default', function() {
   task = task.pipe(header(fs.readFileSync('lib/license.js'), { pkg : pkg }));
   task = task.pipe(gulp.dest('dist'));
   task = task.pipe(rename('planck.min.js'));
-  task = task.pipe(uglify({}));
+  task = task.pipe(uglify({compress: {dead_code: true, global_defs: {DEBUG: false, ASSERT: false}}}));
   task = task.pipe(header(fs.readFileSync('lib/license.js'), { pkg : pkg }));
   task = task.pipe(gulp.dest('dist'));
   return task;
