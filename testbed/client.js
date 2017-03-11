@@ -1,5 +1,7 @@
 (function() {
 
+  var Vec2 = planck.Vec2;
+
   var world, viewer;
   var stage, paused = false;
   var debug = false;
@@ -12,10 +14,10 @@
   var tickbtn = document.getElementById('tickbtn');
   tickbtn.onclick = tickPlay;
 
-  // var reloadbtn = document.getElementById('reloadbtn');
-  // reloadbtn.onclick = function() {
-  //   select();
-  // };
+  var reloadbtn = document.getElementById('reloadbtn');
+  reloadbtn.onclick = function() {
+    window.location.reload(false);
+  };
 
   // var codefld = document.getElementById('code');
   // var codebtn = document.getElementById('codebtn');
@@ -28,30 +30,37 @@
   //   pausePlay();
   // };
 
+  var dropdown = document.getElementById('dropdown');
+  dropdown.onchange = function() {
+    window.location = this.options[dropdown.selectedIndex].value;
+    // var option = this.options[dropdown.selectedIndex];
+    // var script = option.getAttribute('data-script');
+    // window.location.hash = option.value;
+    // loadScript(option.getAttribute('data-script'));
+  };
+
   var nextbtn = document.getElementById('nextbtn');
   nextbtn.onclick = function() {
-    var index = dropdown.selectedIndex + 1;
-    var option = dropdown.options[index % dropdown.options.length];
-    window.location = option.value;
-    // window.location.hash = option.value;
+    playNext(+1);
   };
 
   var prevbtn = document.getElementById('prevbtn');
   prevbtn.onclick = function() {
-    var index = dropdown.selectedIndex + dropdown.options.length - 1;
-    var option = dropdown.options[index % dropdown.options.length];
-    window.location = option.value;
-    // window.location.hash = option.value;
+    playNext(-1);
   };
 
-  var dropdown = document.getElementById('dropdown');
-  dropdown.onchange = function() {
-    var option = this.options[this.selectedIndex];
-    var script = option.getAttribute('data-script');
-    window.location = option.value;
+  function playNext(step) {
+    for (var i = 0; i < dropdown.options.length; i++) {
+      var index = (dropdown.selectedIndex + (1 + i) * step + dropdown.options.length) % dropdown.options.length;
+
+      var option = dropdown.options[index];
+      if (option && option.value) {
+        window.location = option.value;
+        break;
+      }
+    }
     // window.location.hash = option.value;
-    // loadScript(option.getAttribute('data-script'));
-  };
+  }
 
   var status = document.getElementById('status');
   var info = document.getElementById('info');
@@ -62,9 +71,9 @@
 
   window.addEventListener("keydown", function(e) {
     switch (e.keyCode) {
-    case 'P'.charCodeAt(0):
-      togglePlay();
-      break;
+      case 'P'.charCodeAt(0):
+        togglePlay();
+        break;
     }
   }, false);
 
@@ -313,27 +322,44 @@
       }, true)
     })();
 
-    var mouseGround = world.createBody();
-    var mouseJoint;
-    viewer.attr('spy', true).on(Stage.Mouse.START, function(point) {
-      if (mouseJoint) {
-        return;
-      }
-      var aabb = new planck.AABB(point, point);
+    function findBody(point) {
+      var body;
+      var aabb = planck.AABB(point, point);
       world.queryAABB(aabb, function(fixture) {
-        if (mouseJoint) {
+        if (body) {
           return;
         }
         if (!fixture.getBody().isDynamic() || !fixture.testPoint(point)) {
           return;
         }
-        var mouseBody = fixture.getBody();
-        mouseJoint = new planck.MouseJoint({
-          maxForce : 1000
-        }, mouseGround, mouseBody, planck.Vec2(point));
-        world.createJoint(mouseJoint);
+        body = fixture.getBody();
         return true;
       });
+      return body;
+    }
+
+    var mouseGround = world.createBody();
+    var mouseJoint;
+    var targetBody;
+    viewer.attr('spy', true).on(Stage.Mouse.START, function(point) {
+      if (targetBody) {
+        return;
+      }
+
+      var body = findBody(point);
+      if (!body) {
+        return;
+      }
+
+      if (testbed.mouseForce) {
+        targetBody = body;
+
+      } else {
+        mouseJoint = planck.MouseJoint({
+          maxForce : 1000
+        }, mouseGround, body, Vec2(point));
+        world.createJoint(mouseJoint);
+      }
 
     }).on(Stage.Mouse.MOVE, function(point) {
       if (mouseJoint) {
@@ -344,6 +370,11 @@
       if (mouseJoint) {
         world.destroyJoint(mouseJoint);
         mouseJoint = null;
+      }
+      if (targetBody) {
+        var force = Vec2.sub(point, targetBody.getPosition());
+        targetBody.applyForceToCenter(force.mul(testbed.mouseForce), true);
+        targetBody = null;
       }
     });
 

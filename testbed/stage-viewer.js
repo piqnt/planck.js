@@ -42,7 +42,9 @@
       for (var f = b.getFixtureList(); f; f = f.getNext()) {
 
         if (!f.ui) {
-          if (b.isDynamic()) {
+          if (b.render && b.render.stroke) {
+            this._options.strokeStyle = b.render.stroke;
+          } else if (b.isDynamic()) {
             this._options.strokeStyle = 'rgba(255,255,255,0.9)';
           } else if (b.isKinematic()) {
             this._options.strokeStyle = 'rgba(255,255,255,0.7)';

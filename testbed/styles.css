@@ -125,11 +125,6 @@ button.fa-small:before {
 	border-radius: 2px;
 }
 
-#stage {
-	background: #222;
-	border-radius: 2px;
-}
-
 #status {
 	font-family: monospace;
 	color: #333;
