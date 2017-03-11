@@ -114,7 +114,7 @@ planck.play('SensorTest', function(pl, testbed) {
 
       var position = body.getPosition();
 
-      var d = Vec2(center, position);
+      var d = Vec2.sub(center, position);
       if (d.lengthSquared() < pl.Math.EPSILON * pl.Math.EPSILON) {
         continue;
       }

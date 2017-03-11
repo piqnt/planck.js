@@ -21,7 +21,7 @@ planck.play('Tumbler', function(pl, testbed) {
   var Vec2 = pl.Vec2;
   var world = pl.World(Vec2(0, -10));
 
-  var COUNT = 20; // 800
+  var COUNT = 100; // 800
 
   var ground = world.createBody();
 
@@ -47,7 +47,7 @@ planck.play('Tumbler', function(pl, testbed) {
   var count = 0;
   while (count < COUNT) {
     var body = world.createDynamicBody();
-    body.setPosition(Vec2(0, 10));
+    body.setPosition(Vec2(0 + pl.Math.random(-2, 2), 10 + pl.Math.random(-2, 2)));
     body.createFixture(shape, 1);
     ++count;
   }
