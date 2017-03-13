@@ -45,8 +45,10 @@ Examples can be found in [`example`](/example/) directory.
 
 Planck.js public API closely follows Box2D API, with following differences:
 
+- `b2` prefix is dropped from class names, for example `b2World` is now available as `planck.World`.
 - Method names are converted from UpperCamelCase to lowerCamelCase.
 - Definition classes/objects (BodyDef, FixtureDef, etc.) are replaced by inline JavaScript objects (`{}`).
+- Shapes are made immutable and are not cloned when used to create fixtures.
 - `World#on(eventName, listenerFn)` and `World#off(eventName, listenerFn)` are added to add and remove event listeners. Currently supported events are:
     - `'contact-begin'`
     - `'contact-end'`
