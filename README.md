@@ -22,11 +22,11 @@ Latest builds are available on project [releases page](https://github.com/shakib
 
 #### NPM
 
-    npm install stage-js --save
+    npm install planck-js --save
 
 #### Bower
 
-    bower install stage-js --save
+    bower install planck-js --save
 
 
 ## Usage
