@@ -1,4 +1,4 @@
-*This project is under active development and is not stable yet.*
+*This project is under active development and is not stable yet.*  
 
 # Planck.js<sup>&alpha;</sup>
 
@@ -29,19 +29,39 @@ Latest builds are available on project [releases page](https://github.com/shakib
     bower install planck-js --save
 
 
-## Usage
-
-Planck.js does not use any renderer by default, so you need to either use a renderer 
-or manually call `world.step(hz, dt)` in each frame and then iterate over physics entities to draw or update them.
-
-The [renderer](./testbed/stage-viewer.js) which is used in testbed is based on [Stage.js](https://github.com/shakiba/stage.js/).
-
 ## Examples
 
 Examples can be found in [`example`](/example/) directory.
 
 
-## API
+## Getting Started
+
+Planck.js is a physics engine and does not include any renderer by default, however this repository includes a testbed with a HTML5 Canvas renderer (based on [Stage.js](https://github.com/shakiba/stage.js/)).
+If you like to try or learn Planck.js, you can just add your code as an example or start from one of available examples.
+
+In order to do that (assuming you have `git`, `npm` and `bower` installed) follow these steps:
+
+1. Clone or download this repository
+
+
+2. Install npm and bower dependencies:
+
+
+    npm install
+    bower install
+
+3. Run testbed and open it in your web browser (see command-line output for URL to open):
+
+
+    npm run testbed
+
+
+You are all set! You can try available examples or add your own example in `example` directory.
+
+Alternatively, to write and use your own renderer, all you need to do is calling `world.step(hz, dt)` in each frame and then iterating over world entities to draw or update them. You may also want to listen to world events to remove objects which are removed from the world.
+
+
+## Usage Manual
 
 Planck.js public API closely follows Box2D API, with following differences:
 
@@ -59,22 +79,12 @@ Planck.js public API closely follows Box2D API, with following differences:
     - `'body-removed'`
 
 
+To learn Box2D please see Box2D <a href="http://box2d.org/documentation/" target="_blank">Manual</a> and <a href="https://github.com/erincatto/Box2D/wiki/FAQ" target="_blank">FAQ</a>.
+
 ## Architecture
 
 Planck.js includes Box2D algorithms without modification and its internal architecture and public API are very similar to Box2D.
 However some [changes](./CHANGES.md) and refactoring are made during rewrite to address differences between C++ and JavaScript.
-
-
-## Development
-
-Install development dependencies:
-
-    npm install
-    bower install
-
-Try examples with live build (see command-line output for URL to open):
-
-    npm run testbed
 
 
 ## References
