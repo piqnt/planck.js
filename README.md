@@ -44,16 +44,14 @@ In order to do that (assuming you have `git`, `npm` and `bower` installed) follo
 1. Clone or download this repository
 
 
-2. Install npm and bower dependencies:
+1. Install npm and bower dependencies:
 
+        npm install
+        bower install
 
-    npm install
-    bower install
+1. Run testbed and open it in your web browser (see command-line output for URL to open):
 
-3. Run testbed and open it in your web browser (see command-line output for URL to open):
-
-
-    npm run testbed
+        npm run testbed
 
 
 You are all set! You can try available examples or add your own example in `example` directory.
