@@ -18,8 +18,8 @@
  */
 
 // This is used to test sensor shapes.
-planck.play('Breakable', function(pl, testbed) {
-  var Vec2 = pl.Vec2;
+planck.testbed('Breakable', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
   var m_velocity;

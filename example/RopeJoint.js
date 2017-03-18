@@ -25,8 +25,8 @@
 /// densities, time step, and iterations to see how they affect stability.
 /// This test also shows how to use contact filtering. Filtering is configured
 /// so that the payload does not collide with the chain.
-planck.play('RopeJoint', function(pl, testbed) {
-  var Vec2 = pl.Vec2;
+planck.testbed('RopeJoint', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
   var ground = world.createBody();

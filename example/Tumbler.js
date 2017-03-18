@@ -17,11 +17,11 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Tumbler', function(pl, testbed) {
-  var Vec2 = pl.Vec2;
+planck.testbed('Tumbler', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2;
   var world = pl.World(Vec2(0, -10));
 
-  var COUNT = 100; // 800
+  var COUNT = 200; // 800
 
   var ground = world.createBody();
 
@@ -38,7 +38,7 @@ planck.play('Tumbler', function(pl, testbed) {
   body.createFixture(pl.Box(10, 0.5, Vec2(0, -10), 0), 5);
 
   var jd = {};
-  jd.motorSpeed = 0.05 * Math.PI;
+  jd.motorSpeed = 0.12 * Math.PI;
   jd.maxMotorTorque = 1e8;
   jd.enableMotor = true;
   world.createJoint(pl.RevoluteJoint(jd, ground, body, Vec2(0, 10)));

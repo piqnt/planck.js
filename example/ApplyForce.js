@@ -17,10 +17,10 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Apply Force', function(pl, testbed) {
+planck.testbed('Apply Force', function(testbed) {
   testbed.y = -20;
 
-  var Vec2 = pl.Vec2;
+  var pl = planck, Vec2 = pl.Vec2;
   var Transform = pl.Transform;
 
   var world = new pl.World();

@@ -17,8 +17,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('OneSidedPlatform', function(pl, testbed) {
-  var Vec2 = pl.Vec2;
+planck.testbed('OneSidedPlatform', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
   var m_radius = 0.5;

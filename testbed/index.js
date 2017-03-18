@@ -3,13 +3,12 @@ var Stage = require('stage-js/platform/web');
 
 module.exports = planck;
 
-planck.play = function(name, callback) {
-  planck.testbed(name, function(testbed) {
-    return callback(planck, testbed);
-  });
-};
+planck.testbed = function(opts, callback) {
+  if (typeof opts === 'function') {
+    callback = opts;
+    opts = null;
+  }
 
-planck.testbed = function(name, callback) {
   Stage(function(stage, canvas) {
     stage.MAX_ELAPSE = 1000 / 30;
     var Vec2 = planck.Vec2;
@@ -163,11 +162,11 @@ planck.testbed = function(name, callback) {
 
     viewer.scale(1, -1);
 
-    stage.empty();
+    // stage.empty();
     stage.viewbox(testbed.width, testbed.height);
     stage.pin('alignX', -0.5);
     stage.pin('alignY', -0.5);
-    stage.append(viewer);
+    stage.prepend(viewer);
 
     function findBody(point) {
       var body;

@@ -17,7 +17,10 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('DynamicTreeTest', function(pl, testbed) {
+planck.testbed('DynamicTreeTest', function(testbed) {
+  throw 'Not ready!';
+
+  var pl = planck, Vec2 = pl.Vec2;
 
   var e_actorCount = 128;
   var worldExtent = 15.0;

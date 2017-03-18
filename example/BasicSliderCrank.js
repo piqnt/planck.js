@@ -18,8 +18,8 @@
  */
 
 // A basic slider crank created for GDC tutorial: Understanding Constraints
-planck.play('BasicSliderCrank', function(pl, testbed) {
-  var Vec2 = pl.Vec2;
+planck.testbed('BasicSliderCrank', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
   var ground = world.createBody(Vec2(0.0, 17.0));

@@ -17,8 +17,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('PolyCollision', function(pl, testbed) {
-  var Vec2 = pl.Vec2, Transform = pl.Transform;
+planck.testbed('PolyCollision', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2, Transform = pl.Transform;
   var world = new pl.World(Vec2(0, -10));
 
   var m_polygonA = pl.Box(0.2, 0.4);

@@ -1,5 +1,5 @@
-planck.play('8 Ball', function(pl, testbed) {
-  var Vec2 = pl.Vec2, Math = pl.Math;
+planck.testbed('8 Ball', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2, Math = pl.Math;
 
   var SPI4 = Math.sin(Math.PI / 4), SPI3 = Math.sin(Math.PI / 3);
 

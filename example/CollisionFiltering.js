@@ -17,7 +17,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('CollisionFiltering', function(pl, testbed) {
+planck.testbed('CollisionFiltering', function(testbed) {
   // This is a test of collision filtering.
   // There is a triangle, a box, and a circle.
   // There are 6 shapes. 3 large and 3 small.
@@ -35,7 +35,7 @@ planck.play('CollisionFiltering', function(pl, testbed) {
   var BOX_MASK = 0xFFFF ^ TRIANGLE_CATEGORY;
   var CIRCLE_MAX = 0xFFFF;
 
-  var Vec2 = pl.Vec2;
+  var pl = planck, Vec2 = pl.Vec2;
   var world = pl.World(Vec2(0, -10));
 
   // Ground body

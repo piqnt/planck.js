@@ -17,8 +17,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('TimeOfImpact', function(pl, testbed) {
-  var Vec2 = pl.Vec2, Transform = pl.Transform;
+planck.testbed('TimeOfImpact', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2, Transform = pl.Transform;
 
   var Sweep = pl.internal.Sweep;
   var TimeOfImpact = pl.internal.TimeOfImpact;

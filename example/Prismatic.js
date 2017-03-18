@@ -18,8 +18,8 @@
  */
 
 // The motor in this test gets smoother with higher velocity iterations.
-planck.play('Prismatic', function(pl, testbed) {
-  var Vec2 = pl.Vec2;
+planck.testbed('Prismatic', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
   var MOTOR_SPEED = 10;

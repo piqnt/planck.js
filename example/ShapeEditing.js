@@ -17,10 +17,10 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('ShapeEditing', function(pl, testbed) {
+planck.testbed('ShapeEditing', function(testbed) {
   testbed.info('C: Create a shape, X: Destroy a shape, Z: Sensor');
 
-  var Vec2 = pl.Vec2;
+  var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
   var m_sensor = true;

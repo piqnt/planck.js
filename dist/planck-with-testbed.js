@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.15
+ * Planck.js v0.1.16
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -33,14 +33,11 @@ var Stage = require("stage-js/platform/web");
 
 module.exports = planck;
 
-planck.play = function(name, callback) {
-    planck.testbed(name, function(testbed) {
-        console.log(planck);
-        return callback(planck, testbed);
-    });
-};
-
-planck.testbed = function(name, callback) {
+planck.testbed = function(opts, callback) {
+    if (typeof opts === "function") {
+        callback = opts;
+        opts = null;
+    }
     Stage(function(stage, canvas) {
         stage.MAX_ELAPSE = 1e3 / 30;
         var Vec2 = planck.Vec2;
@@ -168,11 +165,10 @@ planck.testbed = function(name, callback) {
             testbed.step && testbed.step(dt, t);
         });
         viewer.scale(1, -1);
-        stage.empty();
         stage.viewbox(testbed.width, testbed.height);
         stage.pin("alignX", -.5);
         stage.pin("alignY", -.5);
-        stage.append(viewer);
+        stage.prepend(viewer);
         function findBody(point) {
             var body;
             var aabb = planck.AABB(point, point);
@@ -239,14 +235,14 @@ planck.testbed = function(name, callback) {
         }
         function statusMerge(obj) {
             for (var key in obj) {
-                statusMap.statusSet(key, obj[key]);
+                statusSet(key, obj[key]);
             }
         }
         testbed.status = function(a, b) {
             if (typeof b !== "undefined") {
-                statusMap.statusSet(a, b);
+                statusSet(a, b);
             } else if (a && typeof a === "object") {
-                statusMap.statusMerge(a);
+                statusMerge(a);
             } else if (typeof a === "string") {
                 statusText = a;
             }

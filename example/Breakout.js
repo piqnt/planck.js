@@ -18,7 +18,7 @@
 
 "use strict";
 
-planck.play('Breakout', function(pl, testbed) {
+planck.testbed('Breakout', function(testbed) {
 
   var WIDTH = 20;
   var HEIGHT = 26;
@@ -255,7 +255,7 @@ planck.play('Breakout', function(pl, testbed) {
   }
 
   function Physics() {
-    var Vec2 = pl.Vec2;
+    var pl = planck, Vec2 = pl.Vec2;
 
     var world = this.world = new pl.World();
 

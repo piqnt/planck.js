@@ -20,8 +20,8 @@
 // This test shows how to use a motor joint. A motor joint
 // can be used to animate a dynamic body. With finite motor forces
 // the body can be blocked by collision with other bodies.
-planck.play('Motor Joint', function(pl, testbed) {
-  var Vec2 = pl.Vec2;
+planck.testbed('Motor Joint', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
   var time = 0;

@@ -17,9 +17,12 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('ConvexHull', function(pl, testbed) {
-  var Vec2 = pl.Vec2;
+planck.testbed('ConvexHull', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World();
+
+  testbed.x = 0;
+  testbed.y = 0;
 
   var e_count = 8;
   var m_auto = false;
@@ -36,13 +39,13 @@ planck.play('ConvexHull', function(pl, testbed) {
 
     points.length = 0;
     for (var i = 0; i < e_count; ++i) {
-      var x = 10.0 * Math.random();
-      var y = 10.0 * Math.random();
+      var x = 10.0 * Math.random() - 5;
+      var y = 10.0 * Math.random() - 5;
 
       // Clamp onto a square to help create collinearities.
       // This will stress the convex hull algorithm.
       var v = Vec2.clamp(Vec2(x, y), lowerBound, upperBound);
-      points.push(v);
+      points.push(Vec2(x, y));
     }
 
     shape = pl.Polygon(points);

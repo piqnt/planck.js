@@ -18,8 +18,8 @@
  */
 
 // A motor driven slider crank with joint friction.
-planck.play('SliderCrank', function (pl, testbed) {
-  var Vec2 = pl.Vec2;
+planck.testbed('SliderCrank', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
   var ground = world.createBody();

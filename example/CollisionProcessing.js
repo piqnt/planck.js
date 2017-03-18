@@ -19,8 +19,8 @@
 
 // This test shows collision processing and tests
 // deferred body destruction.
-planck.play('CollisionProcessing', function(pl, testbed) {
-  var Vec2 = pl.Vec2;
+planck.testbed('CollisionProcessing', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2;
   var world = pl.World(Vec2(0, -10));
 
   // Ground body

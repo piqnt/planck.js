@@ -38,8 +38,8 @@
 
   // wrap testbed and ui
   var _testbed = planck.testbed;
-  planck.testbed = function(name, callback) {
-    _testbed(name, function() {
+  planck.testbed = function(opts, callback) {
+    _testbed(opts, function() {
       var world = callback.apply(null, arguments);
       init(arguments[0]);
       return world;

@@ -18,12 +18,12 @@
  */
 
 // This is a fun demo that shows off the wheel joint
-planck.play('Car', function(pl, testbed) {
+planck.testbed('Car', function(testbed) {
 
   testbed.speed = 1.3;
   testbed.hz = 1/50;
 
-  var Vec2 = pl.Vec2;
+  var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World({
     gravity : Vec2(0, -10)
   });

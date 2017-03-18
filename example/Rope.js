@@ -17,9 +17,9 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Rope', function(pl, testbed) {
+planck.testbed('Rope', function(testbed) {
 
-  var Vec2 = pl.Vec2;
+  var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
   testbed.info('Not implemented!');

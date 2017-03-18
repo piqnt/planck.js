@@ -17,10 +17,15 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Mobile', function(pl, testbed) {
-  var Vec2 = pl.Vec2;
+planck.testbed('Mobile', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -1));
-  
+
+  testbed.y = -15;
+  testbed.width = 20;
+  testbed.height = 20;
+  testbed.ratio = 40;
+
   var DEPTH = 4;
   var DENSITY = 20.0;
 

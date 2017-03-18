@@ -16,10 +16,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Asteroid', function(pl, testbed) {
+planck.testbed('Asteroid', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
-
-  var Math = Stage.Math;
 
   var SHIP = 2;
   var BULLET = 4;
@@ -325,9 +323,24 @@ planck.play('Asteroid', function(pl, testbed) {
   // If the body is out of space bounds, wrap it to the other side
   function wrap(body) {
     var p = body.getPosition();
-    p.x = Math.rotate(p.x, -SPACE_WIDTH / 2, SPACE_WIDTH / 2);
-    p.y = Math.rotate(p.y, -SPACE_HEIGHT / 2, SPACE_HEIGHT / 2);
+    p.x = wrapNumber(p.x, -SPACE_WIDTH / 2, SPACE_WIDTH / 2);
+    p.y = wrapNumber(p.y, -SPACE_HEIGHT / 2, SPACE_HEIGHT / 2);
     body.setPosition(p);
+  }
+
+  function wrapNumber(num, min, max) {
+    if (typeof min === 'undefined') {
+      max = 1, min = 0;
+    } else if (typeof max === 'undefined') {
+      max = min, min = 0;
+    }
+    if (max > min) {
+      num = (num - min) % (max - min);
+      return num + (num < 0 ? max : min);
+    } else {
+      num = (num - max) % (min - max);
+      return num + (num <= 0 ? min : max);
+    }
   }
 
   // Returns a random number between -0.5 and 0.5

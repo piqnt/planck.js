@@ -17,8 +17,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Chain', function(pl, testbed) {
-  var Vec2 = pl.Vec2;
+planck.testbed('Chain', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2;
   var world = pl.World(Vec2(0, -10));
 
   var ground = world.createBody();

@@ -19,8 +19,8 @@
 
 // Inspired by a contribution by roman_m
 // Dimensions scooped from APE (http://www.cove.org/ape/index.htm)
-planck.play('Theo Jansen\'s Walker', function (pl, testbed) {
-  var Vec2 = pl.Vec2;
+planck.testbed('Theo Jansen\'s Walker', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
   var motorSpeed = 2.0;

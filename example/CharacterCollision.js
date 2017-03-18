@@ -20,8 +20,8 @@
 // This is a test of typical character collision scenarios. This does not
 // show how you should implement a character in your application.
 // Instead this is used to test smooth collision on edge chains.
-planck.play('CharacterCollision', function(pl, testbed) {
-  var Vec2 = pl.Vec2;
+planck.testbed('CharacterCollision', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
   // Ground body

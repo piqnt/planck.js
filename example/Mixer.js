@@ -16,8 +16,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('Mixer', function(pl, testbed) {
-  var Vec2 = pl.Vec2;
+planck.testbed('Mixer', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World();
 
   testbed.y = 0;
@@ -35,7 +35,7 @@ planck.play('Mixer', function(pl, testbed) {
       var a = world.createBody({
         position : Vec2(i * 2, j * 2)
       }).setDynamic();
-      a.createFixture(pl.Circle().setRadius(0.6));
+      a.createFixture(pl.Circle(0.6));
       a.setMassData({
         mass : 2,
         center : Vec2(),

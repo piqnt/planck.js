@@ -17,13 +17,14 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-planck.play('DistanceTest', function(pl, testbed) {
+planck.testbed('DistanceTest', function(testbed) {
+  var pl = planck;
   var Distance = pl.internal.Distance;
   var DistanceInput = Distance.Input;
   var DistanceOutput = Distance.Output;
   var SimplexCache = Distance.Cache;
 
-  var Vec2 = pl.Vec2, Transform = pl.Transform;
+  var pl = planck, Vec2 = pl.Vec2, Transform = pl.Transform;
   var world = pl.World(Vec2(0, -10));
 
   var m_transformA = pl.Transform();
