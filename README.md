@@ -2,7 +2,7 @@
 
 # Planck.js<sup>&alpha;</sup>
 
-Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5 game development.
+Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5 game and interactive application development.
 
 **[Check out demos!](http://piqnt.com/planck.js/)**
 
@@ -29,20 +29,40 @@ Latest builds are available on project [releases page](https://github.com/shakib
     bower install planck-js --save
 
 
-## Examples
-
-Examples can be found in [`example`](/example/) directory.
-
-
 ## Getting Started
 
-Planck.js is a physics engine and does not include any renderer by default, however this repository includes a testbed with a HTML5 Canvas renderer (based on [Stage.js](https://github.com/shakiba/stage.js/)).
-If you like to try or learn Planck.js, you can just add your code as an example or start from one of available examples.
+Planck.js is a physics engine and does not include any renderer by default,
+however to try or learn it you could use the testebed included in this repository.
 
-In order to do that (assuming you have `git`, `npm` and `bower` installed) follow these steps:
+There are three ways to get started with Planck.js.
+
+#### Easy: Use Testbed Renderer
+
+To try your code simply add `planck-with-testbed.js` script to your HTML code and call `planck.testbed(callback)`, for example:
+
+```html
+<script src="./path/to/planck-with-testbed.js"></script>
+<script>
+  planck.testbed(function(testbed) {
+    var world = planck.World();
+    
+    // rest of your code
+    
+    return world; // make sure you return the world
+  });
+</script>
+
+```
+
+See [`example`](/example/) directory for testbed usage examples.
+
+#### Advanced: Run Testbed with Live Build and Examples
+
+Another way to use testbed and try included examples (in [`example`](/example/) directory) is running testbed with live build locally:
+
+1. Install `git`, `npm` and `bower`
 
 1. Clone or download this repository
-
 
 1. Install npm and bower dependencies:
 
@@ -54,10 +74,30 @@ In order to do that (assuming you have `git`, `npm` and `bower` installed) follo
         npm run testbed
 
 
-You are all set! You can try available examples or add your own example in `example` directory.
 
-Alternatively, to write and use your own renderer, all you need to do is calling `world.step(hz, dt)` in each frame and then iterating over world entities to draw or update them. You may also want to listen to world events to remove objects which are removed from the world.
+#### Advanced: Use Your Own Renderer
 
+To write and use your own renderer, all you need to do is calling `world.step(hz)` in each frame and then iterating over world entities to draw or update them.
+You may also want to listen to world events to remove objects which are removed from the world.
+
+```javascript
+
+var world = planck.World();
+
+world.on('remove-fixture', function(fixture) {
+  // remove fixture from ui
+});
+
+window.requestAnimationFrame(function() {
+  world.step(1 / 60);
+  for (var body = world.getBodyList(); body; body = body.getNext()) {
+    for (var fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
+      // add or update fixture
+    }
+  }
+});
+
+```
 
 ## Usage Manual
 
