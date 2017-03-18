@@ -10,6 +10,7 @@ var app = Express();
 app.set('port', process.env.PORT || 6587);
 
 app.use('/dist/planck.js', Browserify('./lib/index.js', {standalone : 'planck'}));
+app.use('/dist/planck-with-testbed.js', Browserify('./testbed/index.js', {standalone : 'planck'}));
 
 app.use(Express.static(Path.resolve(__dirname, '..')));
 
