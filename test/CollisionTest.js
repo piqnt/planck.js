@@ -66,31 +66,27 @@ describe('Collision', function() {
     expect(tree.getFatAABB(foo).lowerBound.y).be.below(0);
 
     var QueryCallback = sinon.spy();
-    var callback = {
-      queryCallback : QueryCallback
-    };
+    var callback = QueryCallback;
 
-    tree.query(callback, AABB(Vec2(1, 1), Vec2(2, 2)));
+    tree.query(AABB(Vec2(1, 1), Vec2(2, 2)), callback);
     expect(QueryCallback.calledWith(foo)).be(true);
     expect(QueryCallback.calledWith(bar)).be(true);
     expect(QueryCallback.calledWith(baz)).be(true);
 
-    tree.query(callback, AABB(Vec2(0.3, 0.3), Vec2(0.7, 0.7)));
+    tree.query(AABB(Vec2(0.3, 0.3), Vec2(0.7, 0.7)),callback);
     expect(QueryCallback.lastCall.calledWith(foo)).be(true);
 
-    tree.query(callback, AABB(Vec2(1.3, 1.3), Vec2(1.7, 1.7)));
+    tree.query(AABB(Vec2(1.3, 1.3), Vec2(1.7, 1.7)), callback);
     expect(QueryCallback.lastCall.calledWith(bar)).be(true);
 
-    tree.query(callback, AABB(Vec2(2.3, 2.3), Vec2(2.7, 2.7)));
+    tree.query(AABB(Vec2(2.3, 2.3), Vec2(2.7, 2.7)), callback);
     expect(QueryCallback.lastCall.calledWith(baz)).be(true);
 
-    expect(tree.moveProxy(foo, AABB(Vec2(0, 0), Vec2(1, 1)), Vec2(0.01, 0.01)))
-        .be(false);
+    expect(tree.moveProxy(foo, AABB(Vec2(0, 0), Vec2(1, 1)), Vec2(0.01, 0.01))).be(false);
 
-    expect(tree.moveProxy(baz, AABB(Vec2(3, 3), Vec2(4, 4)), Vec2(0, 0))).be(
-        true);
+    expect(tree.moveProxy(baz, AABB(Vec2(3, 3), Vec2(4, 4)), Vec2(0, 0))).be(true);
 
-    tree.query(callback, AABB(Vec2(3.3, 3.3), Vec2(3.7, 3.7)));
+    tree.query(AABB(Vec2(3.3, 3.3), Vec2(3.7, 3.7)), callback);
     expect(QueryCallback.lastCall.calledWith(baz)).be(true);
 
     tree.destroyProxy(foo);
@@ -108,9 +104,7 @@ describe('Collision', function() {
     var bp = new BroadPhase();
 
     var AddPair = sinon.spy();
-    var callback = {
-      addPair : AddPair
-    };
+    var callback = AddPair;
 
     var foo = bp.createProxy(AABB(Vec2(0, 0), Vec2(1, 1)), 'foo');
     var bar = bp.createProxy(AABB(Vec2(2, 2), Vec2(3, 3)), 'bar');

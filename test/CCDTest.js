@@ -24,7 +24,7 @@ var SimplexCache = Distance.Cache;
 describe('CCD', function() {
 
   it('Distance', function() {
-    var c1 = Circle().setRadius(1);
+    var c1 = Circle(1);
 
     var input = new DistanceInput();
     input.proxyA.set(c1, 0);
@@ -54,7 +54,7 @@ describe('CCD', function() {
   });
 
   it('TimeOfImpact', function() {
-    var c1 = Circle().setRadius(1);
+    var c1 = Circle(1);
 
     var input = new TOIInput();
     input.proxyA.set(c1, 0);

@@ -14,7 +14,6 @@ describe('Basic', function() {
     var world = new World();
 
     var circle = new Circle(1);
-    circle.setRadius(1);
 
     var b1 = world.createBody({
       position : Vec2(0, 0),
@@ -32,7 +31,7 @@ describe('Basic', function() {
     var b2 = world.createBody({
       position : Vec2(2, 0),
       type : 'dynamic'
-    })
+    });
     b2.createFixture(circle);
     b2.applyForceToCenter(Vec2(-1, 0), true);
 
@@ -41,7 +40,7 @@ describe('Basic', function() {
     // console.log(b2.getPosition());
 
     var p = b1.getPosition();
-    expect(p.x).near(0.0025);
+    expect(p.x).near(0.0);
     expect(p.y).near(0.0);
   });
 
