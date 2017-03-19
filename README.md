@@ -6,7 +6,7 @@ Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5
 
 **[Check out demos!](http://piqnt.com/planck.js/)**
 
-[![Car](/doc/img/screenshot.png "Play")](http://piqnt.com/planck.js/Car)
+[![Car](./doc/img/screenshot.png "Play")](http://piqnt.com/planck.js/Car)
 
 Key motivations in development of this project are:
 - Taking advantage of Box2D's efforts and achievements
@@ -54,11 +54,11 @@ To try your code simply add `planck-with-testbed.js` script to your HTML code an
 
 ```
 
-See [`example`](/example/) directory for testbed usage examples.
+Check out [Car example on CodePen](https://codepen.io/ashakiba/pen/yMpvrX?editors=0010) to try this approach. See [`example`](./example/) directory for more testbed usage examples.
 
 #### Advanced: Run Testbed with Live Build and Examples
 
-Another way to use testbed and try included examples (in [`example`](/example/) directory) is running testbed with live build locally:
+Another way to use testbed and try included examples (in [`example`](./example/) directory) is running testbed with live build locally:
 
 1. Install `git`, `npm` and `bower`
 
