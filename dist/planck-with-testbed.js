@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.16
+ * Planck.js v0.1.18
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -39,6 +39,11 @@ planck.testbed = function(opts, callback) {
         opts = null;
     }
     Stage(function(stage, canvas) {
+        stage.on(Stage.Mouse.START, function() {
+            window.focus();
+            document.activeElement && document.activeElement.blur();
+            canvas.focus();
+        });
         stage.MAX_ELAPSE = 1e3 / 30;
         var Vec2 = planck.Vec2;
         var testbed = {};

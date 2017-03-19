@@ -10,6 +10,13 @@ planck.testbed = function(opts, callback) {
   }
 
   Stage(function(stage, canvas) {
+
+    stage.on(Stage.Mouse.START, function() {
+      window.focus();
+      document.activeElement && document.activeElement.blur();
+      canvas.focus();
+    });
+
     stage.MAX_ELAPSE = 1000 / 30;
     var Vec2 = planck.Vec2;
 
