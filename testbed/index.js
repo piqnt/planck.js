@@ -57,6 +57,7 @@ planck.testbed = function(opts, callback) {
     testbed.hz = 1 / 60;
     testbed.speed = 1;
     testbed.activeKeys = {};
+    testbed.background = '#222222';
 
     testbed.keydown = function() {};
     testbed.keyup = function() {};
@@ -170,6 +171,7 @@ planck.testbed = function(opts, callback) {
     viewer.scale(1, -1);
 
     // stage.empty();
+    stage.background(testbed.background);
     stage.viewbox(testbed.width, testbed.height);
     stage.pin('alignX', -0.5);
     stage.pin('alignY', -0.5);
@@ -351,8 +353,10 @@ Viewer.prototype.renderWorld = function(world) {
     for (var f = b.getFixtureList(); f; f = f.getNext()) {
 
       if (!f.ui) {
-        if (b.render && b.render.stroke) {
-          this._options.strokeStyle = b.render.stroke;
+        if (f.render && f.render.stroke) {
+          this._options.strokeStyle = f.render.stroke;
+        } else if (b.render && b.render.stroke) {
+            this._options.strokeStyle = b.render.stroke;
         } else if (b.isDynamic()) {
           this._options.strokeStyle = 'rgba(255,255,255,0.9)';
         } else if (b.isKinematic()) {
