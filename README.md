@@ -12,7 +12,7 @@ Key motivations in development of this project are:
 - Taking advantage of Box2D's efforts and achievements
 - Developing readable and maintainable JavaScript code
 - Optimizing the library for web and mobile platforms
-- Providing a JavaScrip-friendly API
+- Providing a JavaScript-friendly API
 
 ## Try it
 
