@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.18
+ * Planck.js v0.1.20
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -5470,7 +5470,7 @@ function Distance(output, cache, input) {
     // Initialize the simplex.
     var simplex = new Simplex();
     simplex.readCache(cache, proxyA, xfA, proxyB, xfB);
-    simplex.print("cache");
+    DEBUG && common.debug("cache", simplex.print());
     // Get simplex vertices as an array.
     var vertices = simplex.m_v;
     // SimplexVertex
@@ -5603,8 +5603,8 @@ DistanceProxy.prototype.getVertex = function(index) {
  * Get the supporting vertex index in the given direction.
  */
 DistanceProxy.prototype.getSupport = function(d) {
-    var bestIndex = -1;
-    var bestValue = -Infinity;
+    var bestIndex = 0;
+    var bestValue = Vec2.dot(this.m_vertices[0], d);
     for (var i = 0; i < this.m_count; ++i) {
         var value = Vec2.dot(this.m_vertices[i], d);
         if (value > bestValue) {
@@ -5663,15 +5663,15 @@ function Simplex() {
     this.m_count;
 }
 
-Simplex.prototype.print = function(tag) {
+Simplex.prototype.print = function() {
     if (this.m_count == 3) {
-        DEBUG && common.debug(tag, "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y, this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y, this.m_v3.a, this.m_v3.wA.x, this.m_v3.wA.y, this.m_v3.wB.x, this.m_v3.wB.y);
+        return [ "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y, this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y, this.m_v3.a, this.m_v3.wA.x, this.m_v3.wA.y, this.m_v3.wB.x, this.m_v3.wB.y ].toString();
     } else if (this.m_count == 2) {
-        DEBUG && common.debug(tag, "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y, this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y);
+        return [ "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y, this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y ].toString();
     } else if (this.m_count == 1) {
-        DEBUG && common.debug(tag, "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y);
+        return [ "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y ].toString();
     } else {
-        DEBUG && common.debug(tag, "+" + this.m_count);
+        return "+" + this.m_count;
     }
 };
 
@@ -5779,19 +5779,19 @@ Simplex.prototype.getWitnessPoints = function(pA, pB) {
         break;
 
       case 1:
-        this.print("case1");
+        DEBUG && common.debug("case1", this.print());
         pA.set(this.m_v1.wA);
         pB.set(this.m_v1.wB);
         break;
 
       case 2:
-        this.print("case2");
+        DEBUG && common.debug("case2", this.print());
         pA.wSet(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
         pB.wSet(this.m_v1.a, this.m_v1.wB, this.m_v2.a, this.m_v2.wB);
         break;
 
       case 3:
-        this.print("case3");
+        DEBUG && common.debug("case3", this.print());
         pA.wSet(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
         pA.wAdd(this.m_v3.a, this.m_v3.wA);
         pB.set(pA);
@@ -13261,7 +13261,7 @@ ChainShape.prototype.computeAABB = function(aabb, xf, childIndex) {
  */
 ChainShape.prototype.computeMass = function(massData, density) {
     massData.mass = 0;
-    massData.center = Vec();
+    massData.center = Vec2.neo();
     massData.I = 0;
 };
 

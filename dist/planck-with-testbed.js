@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.18
+ * Planck.js v0.1.20
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -81,6 +81,7 @@ planck.testbed = function(opts, callback) {
         testbed.hz = 1 / 60;
         testbed.speed = 1;
         testbed.activeKeys = {};
+        testbed.background = "#222222";
         testbed.keydown = function() {};
         testbed.keyup = function() {};
         testbed.status = function() {};
@@ -170,6 +171,7 @@ planck.testbed = function(opts, callback) {
             testbed.step && testbed.step(dt, t);
         });
         viewer.scale(1, -1);
+        stage.background(testbed.background);
         stage.viewbox(testbed.width, testbed.height);
         stage.pin("alignX", -.5);
         stage.pin("alignY", -.5);
@@ -324,7 +326,9 @@ Viewer.prototype.renderWorld = function(world) {
     for (var b = world.getBodyList(); b; b = b.getNext()) {
         for (var f = b.getFixtureList(); f; f = f.getNext()) {
             if (!f.ui) {
-                if (b.render && b.render.stroke) {
+                if (f.render && f.render.stroke) {
+                    this._options.strokeStyle = f.render.stroke;
+                } else if (b.render && b.render.stroke) {
                     this._options.strokeStyle = b.render.stroke;
                 } else if (b.isDynamic()) {
                     this._options.strokeStyle = "rgba(255,255,255,0.9)";
@@ -4220,7 +4224,7 @@ function Distance(output, cache, input) {
     DEBUG && common.debug("xfB:", xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
     var simplex = new Simplex();
     simplex.readCache(cache, proxyA, xfA, proxyB, xfB);
-    simplex.print("cache");
+    DEBUG && common.debug("cache", simplex.print());
     var vertices = simplex.m_v;
     var k_maxIters = Settings.maxDistnceIterations;
     var saveA = [];
@@ -4308,8 +4312,8 @@ DistanceProxy.prototype.getVertex = function(index) {
 };
 
 DistanceProxy.prototype.getSupport = function(d) {
-    var bestIndex = -1;
-    var bestValue = -Infinity;
+    var bestIndex = 0;
+    var bestValue = Vec2.dot(this.m_vertices[0], d);
     for (var i = 0; i < this.m_count; ++i) {
         var value = Vec2.dot(this.m_vertices[i], d);
         if (value > bestValue) {
@@ -4355,15 +4359,15 @@ function Simplex() {
     this.m_count;
 }
 
-Simplex.prototype.print = function(tag) {
+Simplex.prototype.print = function() {
     if (this.m_count == 3) {
-        DEBUG && common.debug(tag, "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y, this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y, this.m_v3.a, this.m_v3.wA.x, this.m_v3.wA.y, this.m_v3.wB.x, this.m_v3.wB.y);
+        return [ "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y, this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y, this.m_v3.a, this.m_v3.wA.x, this.m_v3.wA.y, this.m_v3.wB.x, this.m_v3.wB.y ].toString();
     } else if (this.m_count == 2) {
-        DEBUG && common.debug(tag, "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y, this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y);
+        return [ "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y, this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y ].toString();
     } else if (this.m_count == 1) {
-        DEBUG && common.debug(tag, "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y);
+        return [ "+" + this.m_count, this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y ].toString();
     } else {
-        DEBUG && common.debug(tag, "+" + this.m_count);
+        return "+" + this.m_count;
     }
 };
 
@@ -4461,19 +4465,19 @@ Simplex.prototype.getWitnessPoints = function(pA, pB) {
         break;
 
       case 1:
-        this.print("case1");
+        DEBUG && common.debug("case1", this.print());
         pA.set(this.m_v1.wA);
         pB.set(this.m_v1.wB);
         break;
 
       case 2:
-        this.print("case2");
+        DEBUG && common.debug("case2", this.print());
         pA.wSet(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
         pB.wSet(this.m_v1.a, this.m_v1.wB, this.m_v2.a, this.m_v2.wB);
         break;
 
       case 3:
-        this.print("case3");
+        DEBUG && common.debug("case3", this.print());
         pA.wSet(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
         pA.wAdd(this.m_v3.a, this.m_v3.wA);
         pB.set(pA);
@@ -10442,7 +10446,7 @@ ChainShape.prototype.computeAABB = function(aabb, xf, childIndex) {
 
 ChainShape.prototype.computeMass = function(massData, density) {
     massData.mass = 0;
-    massData.center = Vec();
+    massData.center = Vec2.neo();
     massData.I = 0;
 };
 
