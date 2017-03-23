@@ -21,24 +21,26 @@
 planck.testbed('Car', function(testbed) {
 
   testbed.speed = 1.3;
-  testbed.hz = 1/50;
+  testbed.hz = 1 / 50;
 
   var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World({
     gravity : Vec2(0, -10)
   });
 
-  var m_hz = 4.0;
-  var m_zeta = 0.7;
-  var m_speed = 50.0;
+  // wheel spring settings
+  var HZ = 4.0;
+  var ZETA = 0.7;
+  var SPEED = 50.0;
 
   var ground = world.createBody();
 
-  var fd = {
+  var groundFD = {
     density : 0.0,
     friction : 0.6
   };
-  ground.createFixture(pl.Edge(Vec2(-20.0, 0.0), Vec2(20.0, 0.0)), fd);
+
+  ground.createFixture(pl.Edge(Vec2(-20.0, 0.0), Vec2(20.0, 0.0)), groundFD);
 
   var hs = [ 0.25, 1.0, 4.0, 0.0, 0.0, -1.0, -2.0, -2.0, -1.25, 0.0 ];
 
@@ -46,175 +48,148 @@ planck.testbed('Car', function(testbed) {
 
   for (var i = 0; i < 10; ++i) {
     var y2 = hs[i];
-    ground.createFixture(pl.Edge(Vec2(x, y1), Vec2(x + dx, y2)), fd);
+    ground.createFixture(pl.Edge(Vec2(x, y1), Vec2(x + dx, y2)), groundFD);
     y1 = y2;
     x += dx;
   }
 
   for (var i = 0; i < 10; ++i) {
     var y2 = hs[i];
-    ground.createFixture(pl.Edge(Vec2(x, y1), Vec2(x + dx, y2)), fd);
+    ground.createFixture(pl.Edge(Vec2(x, y1), Vec2(x + dx, y2)), groundFD);
     y1 = y2;
     x += dx;
   }
 
-  ground.createFixture(  pl.Edge(Vec2(x, 0.0), Vec2(x + 40.0, 0.0)), fd);
+  ground.createFixture(pl.Edge(Vec2(x, 0.0), Vec2(x + 40.0, 0.0)), groundFD);
 
   x += 80.0;
-  ground.createFixture(pl.Edge(Vec2(x, 0.0), Vec2(x + 40.0, 0.0)), fd);
+  ground.createFixture(pl.Edge(Vec2(x, 0.0), Vec2(x + 40.0, 0.0)), groundFD);
 
   x += 40.0;
-  ground.createFixture(pl.Edge(Vec2(x, 0.0), Vec2(x + 10.0, 5.0)), fd);
+  ground.createFixture(pl.Edge(Vec2(x, 0.0), Vec2(x + 10.0, 5.0)), groundFD);
 
   x += 20.0;
-  ground.createFixture(pl.Edge(Vec2(x, 0.0), Vec2(x + 40.0, 0.0)), fd);
+  ground.createFixture(pl.Edge(Vec2(x, 0.0), Vec2(x + 40.0, 0.0)), groundFD);
 
   x += 40.0;
-  ground.createFixture(pl.Edge(Vec2(x, 0.0), Vec2(x, 20.0)), fd);
+  ground.createFixture(pl.Edge(Vec2(x, 0.0), Vec2(x, 20.0)), groundFD);
 
   // Teeter
-  var body = world.createDynamicBody(Vec2(140.0, 1.0));
+  var teeter = world.createDynamicBody(Vec2(140.0, 1.0));
+  teeter.createFixture(pl.Box(10.0, 0.25), 1.0);
+  world.createJoint(pl.RevoluteJoint({
+    lowerAngle : -8.0 * Math.PI / 180.0,
+    upperAngle : 8.0 * Math.PI / 180.0,
+    enableLimit : true
+  }, ground, teeter, teeter.getPosition()));
 
-  body.createFixture(pl.Box(10.0, 0.25), 1.0);
-
-  var jd = {};
-  jd.lowerAngle = -8.0 * Math.PI / 180.0;
-  jd.upperAngle = 8.0 * Math.PI / 180.0;
-  jd.enableLimit = true;
-  world.createJoint(pl.RevoluteJoint(jd, ground, body, body.getPosition()));
-
-  body.applyAngularImpulse(100.0, true);
+  teeter.applyAngularImpulse(100.0, true);
 
   // Bridge
-  var N = 20;
-
-  var fd = {};
-  fd.density = 1.0;
-  fd.friction = 0.6;
+  var bridgeFD = {};
+  bridgeFD.density = 1.0;
+  bridgeFD.friction = 0.6;
 
   var prevBody = ground;
-  for (var i = 0; i < N; ++i) {
-    var bd = {};
-    bd.type = 'dynamic';
-    bd.position = Vec2(161.0 + 2.0 * i, -0.125);
-    var body = world.createBody(bd);
-    body.createFixture(pl.Box(1.0, 0.125), fd);
+  for (var i = 0; i < 20; ++i) {
+    var bridgeBlock = world.createDynamicBody(Vec2(161.0 + 2.0 * i, -0.125));
+    bridgeBlock.createFixture(pl.Box(1.0, 0.125), bridgeFD);
 
-    var anchor = Vec2(160.0 + 2.0 * i, -0.125);
-    world.createJoint(pl.RevoluteJoint({}, prevBody, body, anchor));
+    world.createJoint(pl.RevoluteJoint({}, prevBody, bridgeBlock, Vec2(160.0 + 2.0 * i, -0.125)));
 
-    prevBody = body;
+    prevBody = bridgeBlock;
   }
 
-  var anchor = Vec2(160.0 + 2.0 * N, -0.125);
-  world.createJoint(pl.RevoluteJoint({}, prevBody, ground, anchor));
+  world.createJoint(pl.RevoluteJoint({}, prevBody, ground, Vec2(160.0 + 2.0 * i, -0.125)));
 
   // Boxes
   var box = pl.Box(0.5, 0.5);
 
-  var body = null;
-  var bd = {};
-  bd.type = 'dynamic';
+  world.createDynamicBody(Vec2(230.0, 0.5))
+    .createFixture(box, 0.5);
 
-  bd.position = Vec2(230.0, 0.5);
-  body = world.createBody(bd);
-  body.createFixture(box, 0.5);
+  world.createDynamicBody(Vec2(230.0, 1.5))
+    .createFixture(box, 0.5);
 
-  bd.position = Vec2(230.0, 1.5);
-  body = world.createBody(bd);
-  body.createFixture(box, 0.5);
+  world.createDynamicBody(Vec2(230.0, 2.5))
+    .createFixture(box, 0.5);
 
-  bd.position = Vec2(230.0, 2.5);
-  body = world.createBody(bd);
-  body.createFixture(box, 0.5);
+  world.createDynamicBody(Vec2(230.0, 3.5))
+    .createFixture(box, 0.5);
 
-  bd.position = Vec2(230.0, 3.5);
-  body = world.createBody(bd);
-  body.createFixture(box, 0.5);
-
-  bd.position = Vec2(230.0, 4.5);
-  body = world.createBody(bd);
-  body.createFixture(box, 0.5);
+  world.createDynamicBody(Vec2(230.0, 4.5))
+    .createFixture(box, 0.5);
 
   // Car
-  var vertices = [];
-  vertices[0] = Vec2(-1.5, -0.5);
-  vertices[1] = Vec2(1.5, -0.5);
-  vertices[2] = Vec2(1.5, 0.0);
-  vertices[3] = Vec2(0.0, 0.9);
-  vertices[4] = Vec2(-1.15, 0.9);
-  vertices[5] = Vec2(-1.5, 0.2);
-  var chassis = pl.Polygon(vertices);
+  var car = world.createDynamicBody(Vec2(0.0, 1.0));
+  car.createFixture(pl.Polygon([
+    Vec2(-1.5, -0.5),
+    Vec2(1.5, -0.5),
+    Vec2(1.5, 0.0),
+    Vec2(0.0, 0.9),
+    Vec2(-1.15, 0.9),
+    Vec2(-1.5, 0.2)
+  ]), 1.0);
 
-  var circle = pl.Circle(0.4);
+  var wheelFD = {};
+  wheelFD.density = 1.0;
+  wheelFD.friction = 0.9;
 
-  var bd = {};
-  bd.type = 'dynamic';
-  bd.position = Vec2(0.0, 1.0);
-  var m_car = world.createBody(bd);
-  m_car.createFixture(chassis, 1.0);
+  var wheelBack = world.createDynamicBody(Vec2(-1.0, 0.35));
+  wheelBack.createFixture(pl.Circle(0.4), wheelFD);
 
-  var fd = {};
-  fd.density = 1.0;
-  fd.friction = 0.9;
+  var wheelFront = world.createDynamicBody(Vec2(1.0, 0.4));
+  wheelFront.createFixture(pl.Circle(0.4), wheelFD);
 
-  bd.position = Vec2(-1.0, 0.35);
-  var m_wheel1 = world.createBody(bd);
-  m_wheel1.createFixture(circle, fd);
+  var springBack = world.createJoint(pl.WheelJoint({
+    motorSpeed : 0.0,
+    maxMotorTorque : 20.0,
+    enableMotor : true,
+    frequencyHz : HZ,
+    dampingRatio : ZETA
+  }, car, wheelBack, wheelBack.getPosition(), Vec2(0.0, 1.0)));
 
-  bd.position = Vec2(1.0, 0.4);
-  var m_wheel2 = world.createBody(bd);
-  m_wheel2.createFixture(circle, fd);
-
-  var jd = {};
-  jd.motorSpeed = 0.0;
-  jd.maxMotorTorque = 20.0;
-  jd.enableMotor = true;
-  jd.frequencyHz = m_hz;
-  jd.dampingRatio = m_zeta;
-  var axis = Vec2(0.0, 1.0);
-  var m_spring1 = world.createJoint(pl.WheelJoint(jd, m_car, m_wheel1, m_wheel1.getPosition(), axis));
-
-  var jd = {};
-  jd.motorSpeed = 0.0;
-  jd.maxMotorTorque = 10.0;
-  jd.enableMotor = false;
-  jd.frequencyHz = m_hz;
-  jd.dampingRatio = m_zeta;
-  var m_spring2 = world.createJoint(pl.WheelJoint(jd, m_car, m_wheel2, m_wheel2.getPosition(), axis))
+  var springFront = world.createJoint(pl.WheelJoint({
+    motorSpeed : 0.0,
+    maxMotorTorque : 10.0,
+    enableMotor : false,
+    frequencyHz : HZ,
+    dampingRatio : ZETA
+  }, car, wheelFront, wheelFront.getPosition(), Vec2(0.0, 1.0)));
 
   testbed.keydown = function() {
     if (testbed.activeKeys.down) {
-      m_hz = Math.max(0.0, m_hz - 1.0);
-      m_spring1.setSpringFrequencyHz(m_hz);
-      m_spring2.setSpringFrequencyHz(m_hz);
+      HZ = Math.max(0.0, HZ - 1.0);
+      springBack.setSpringFrequencyHz(HZ);
+      springFront.setSpringFrequencyHz(HZ);
 
     } else if (testbed.activeKeys.up) {
-      m_hz += 1.0;
-      m_spring1.setSpringFrequencyHz(m_hz);
-      m_spring2.setSpringFrequencyHz(m_hz);
+      HZ += 1.0;
+      springBack.setSpringFrequencyHz(HZ);
+      springFront.setSpringFrequencyHz(HZ);
     }
   };
 
   testbed.step = function() {
+    // testbed.drawPolygon(points, 'red');
     if (testbed.activeKeys.right && testbed.activeKeys.left) {
-      m_spring1.setMotorSpeed(0);
-      m_spring1.enableMotor(true);
+      springBack.setMotorSpeed(0);
+      springBack.enableMotor(true);
 
     } else if (testbed.activeKeys.right) {
-      m_spring1.setMotorSpeed(-m_speed);
-      m_spring1.enableMotor(true);
+      springBack.setMotorSpeed(-SPEED);
+      springBack.enableMotor(true);
 
     } else if (testbed.activeKeys.left) {
-      m_spring1.setMotorSpeed(+m_speed);
-      m_spring1.enableMotor(true);
+      springBack.setMotorSpeed(+SPEED);
+      springBack.enableMotor(true);
 
     } else {
-      m_spring1.setMotorSpeed(0);
-      m_spring1.enableMotor(false);
+      springBack.setMotorSpeed(0);
+      springBack.enableMotor(false);
     }
 
-    var cp = m_car.getPosition();
+    var cp = car.getPosition();
     if (cp.x > testbed.x + 10) {
       testbed.x = cp.x - 10;
 

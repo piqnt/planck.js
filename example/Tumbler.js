@@ -21,7 +21,9 @@ planck.testbed('Tumbler', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
   var world = pl.World(Vec2(0, -10));
 
-  var COUNT = 200; // 800
+  testbed.hz = 1 / 40;
+
+  var COUNT = 150;
 
   var ground = world.createBody();
 
@@ -38,7 +40,7 @@ planck.testbed('Tumbler', function(testbed) {
   body.createFixture(pl.Box(10, 0.5, Vec2(0, -10), 0), 5);
 
   var jd = {};
-  jd.motorSpeed = 0.12 * Math.PI;
+  jd.motorSpeed = 0.08 * Math.PI;
   jd.maxMotorTorque = 1e8;
   jd.enableMotor = true;
   world.createJoint(pl.RevoluteJoint(jd, ground, body, Vec2(0, 10)));

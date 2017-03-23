@@ -22,7 +22,7 @@ planck.testbed('Mixer', function(testbed) {
 
   testbed.y = 0;
 
-  var box = world.createBody().setKinematic();
+  var box = world.createKinematicBody();
   box.createFixture(pl.Edge(Vec2(15, -5), Vec2(25, 5)));
 
   box.createFixture(pl.Edge(Vec2(-20, -20), Vec2(20, -20)));
@@ -32,9 +32,7 @@ planck.testbed('Mixer', function(testbed) {
 
   for (var i = -5; i <= 5; i++) {
     for (var j = -5; j <= 5; j++) {
-      var a = world.createBody({
-        position : Vec2(i * 2, j * 2)
-      }).setDynamic();
+      var a = world.createDynamicBody(Vec2(i * 2, j * 2));
       a.createFixture(pl.Circle(0.6));
       a.setMassData({
         mass : 2,
