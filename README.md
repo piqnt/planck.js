@@ -2,11 +2,11 @@
 
 # Planck.js<sup>&alpha;</sup>
 
-Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5 game development.
-
-**[Check out demos!](http://piqnt.com/planck.js/)**
+Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5 game development. **[Check out demos!](http://piqnt.com/planck.js/)**
 
 [![Car](./doc/img/screenshot.png "Play")](http://piqnt.com/planck.js/Car)
+
+## Motivations
 
 Key motivations in development of this project are:
 - Taking advantage of Box2D's efforts and achievements
@@ -19,17 +19,16 @@ Key motivations in development of this project are:
 To try Planck.js, simply add `planck-with-testbed.js` script to your HTML code and call `planck.testbed(callback)` with your code in callback. For example:
 
 ```html
-<script src="https://cdn.jsdelivr.net/planck/0.1/planck-with-testbed.js"></script>
-<script>
-  planck.testbed(function(testbed) {
-    var world = planck.World();
-    
-    // rest of your code
-    
-    return world; // make sure you return the world
-  });
-</script>
-
+<html><body>
+  <script src="https://cdn.jsdelivr.net/planck/0.1/planck-with-testbed.js"></script>
+  <script>
+    planck.testbed(function(testbed) {
+      var world = planck.World();
+      // rest of your code
+      return world; // make sure you return the world
+    });
+  </script>
+</body></html>
 ```
 
 Check out [Car example on CodePen](https://codepen.io/ashakiba/pen/yMpvrX?editors=001) to see it in practice.
@@ -58,8 +57,8 @@ Planck.js is [available on jsDelivr](https://www.jsdelivr.com/projects/planck).
 
 ## Usage
 
-Planck.js does not use any renderer by default, to integrate it with a rendering library all you need to do 
-is calling `world.step(hz)` in each frame and then iterating over world entities to draw or update them.
+Planck.js does not use any renderer by default. To use or integrate it with a rendering library all you need to do 
+is calling `world.step(hz)` in each frame, and then iterating over world entities to draw or update them.
 You may also want to listen to world events to remove objects which are removed from the world. For example:
 
 ```html
@@ -68,7 +67,9 @@ You may also want to listen to world events to remove objects which are removed 
   var world = planck.World();
 
   window.requestAnimationFrame(function() {
+    // in each frame call word.step(hz) with fixed frequency
     world.step(1 / 60);
+    // iterate over bodies and fixtures
     for (var body = world.getBodyList(); body; body = body.getNext()) {
       for (var fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
         // draw or update fixture
@@ -76,10 +77,9 @@ You may also want to listen to world events to remove objects which are removed 
     }
   });
 
-  world.on('remove-fixture', function(fixture) {
+   world.on('remove-fixture', function(fixture) {
     // remove fixture from ui
   });
-
 </script>
 ```
 
@@ -106,13 +106,13 @@ Planck.js public API closely follows Box2D API (see [Resources](#Resources)), wi
 - <a href="http://box2d.org/documentation/" target="_blank">Box2D Manual</a> and <a href="https://github.com/erincatto/Box2D/wiki/FAQ" target="_blank">FAQ</a> are highly recommended to get started.
 - [iforce2d](https://www.iforce2d.net/b2dtut/) website includes a collection of helpful tutorials and resources to learn Box2D.
 
-Following technical documents are recommend if you are interested in Box2D/Planck.js's internal details.
+Following technical documents are recommend if you are interested in learning about Box2D/Planck.js's internal details.
 
 - [Continuous Collision](http://twvideo01.ubm-us.net/o1/vault/gdc2013/slides/824737Catto_Erin_PhysicsForGame.pdf) by Erin Catto
 - [Solving Rigid Body Contacts](http://www.richardtonge.com/presentations/Tonge-2012-GDC-solvingRigidBodyContacts.pdf) by Richard Tonge
 
 
-*If you you know any other useful resource, please add it or submit an issue about it.*
+*If you know any other useful resource, please add it or submit an issue about it.*
 
 ## Testbed
 
