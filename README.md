@@ -106,13 +106,14 @@ Planck.js public API closely follows Box2D API (see [Resources](#Resources)), wi
 - <a href="http://box2d.org/documentation/" target="_blank">Box2D Manual</a> and <a href="https://github.com/erincatto/Box2D/wiki/FAQ" target="_blank">FAQ</a> are highly recommended to get started.
 - [iforce2d](https://www.iforce2d.net/b2dtut/) website includes a collection of helpful tutorials and resources to learn Box2D.
 
-Following technical documents are recommend if you are interested in learning about Box2D/Planck.js's internal details.
+Following resources are recommended if you are interested in learning about Box2D/Planck.js's internal details.
 
-- [Continuous Collision](http://twvideo01.ubm-us.net/o1/vault/gdc2013/slides/824737Catto_Erin_PhysicsForGame.pdf) by Erin Catto
-- [Solving Rigid Body Contacts](http://www.richardtonge.com/presentations/Tonge-2012-GDC-solvingRigidBodyContacts.pdf) by Richard Tonge
+- [Continuous Collision](http://twvideo01.ubm-us.net/o1/vault/gdc2013/slides/824737Catto_Erin_PhysicsForGame.pdf) by Erin Catto (slides)
+- [Solving Rigid Body Contacts](http://www.richardtonge.com/presentations/Tonge-2012-GDC-solvingRigidBodyContacts.pdf) by Richard Tonge (slides)
+- [dyn4j Blog Posts](http://www.dyn4j.org/category/gamedev/) by William Bittle
 
 
-*If you know any other useful resource, please add it or submit an issue about it.*
+*If you know any other useful resource, please add it or submit an issue.*
 
 ## Testbed
 
