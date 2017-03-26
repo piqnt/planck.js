@@ -161,7 +161,7 @@ planck.testbed = function(opts, callback) {
         drawingImage.touch();
       };
 
-      testbed.drawAABB = function(aabb) {
+      testbed.drawAABB = function(aabb, color) {
         drawingContext.beginPath();
         drawingContext.moveTo(drawX(aabb.lowerBound.x), drawY(aabb.lowerBound.y));
         drawingContext.lineTo(drawX(aabb.upperBound.x), drawY(aabb.lowerBound.y));

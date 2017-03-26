@@ -36,7 +36,7 @@
   var status = document.getElementById('status');
   var info = document.getElementById('info');
 
-  // wrap testbed and ui
+  // wrap testbed with ui
   var _testbed = planck.testbed;
   planck.testbed = function(opts, callback) {
     _testbed(opts, function(testbed) {

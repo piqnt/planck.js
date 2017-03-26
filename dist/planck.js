@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.24
+ * Planck.js v0.1.26
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -4621,6 +4621,7 @@ World.prototype.step = function(ts, dt) {
         }
         return;
     }
+    // TODO: move this to testbed
     this.m_stepCount++;
     // If new fixtures were added, we need to find the new contacts.
     if (this.m_newFixture) {
@@ -5064,8 +5065,6 @@ AABB.diff = function(a, b) {
     return wA * hA + wB * hB - wD * hD;
 };
 
-var XY = [ "x", "y" ];
-
 /**
  * @typedef RayCastInput
  *
@@ -5094,20 +5093,20 @@ AABB.prototype.rayCast = function(output, input) {
     var tmin = -Infinity;
     var tmax = Infinity;
     var p = input.p1;
-    var d = Sub(input.p2, input.p1);
-    var absD = Abs(d);
+    var d = Vec2.sub(input.p2, input.p1);
+    var absD = Vec2.abs(d);
     var normal = Vec2.zero();
-    for (var i = 0; i < 2; ++i) {
-        var field = XY[i];
+    for (var f = "x"; f !== null; f = f === "x" ? "y" : null) {
+        console.log(f);
         if (absD.x < Math.EPSILON) {
             // Parallel.
-            if (p[field] < lowerBound[field] || upperBound[field] < p[field]) {
+            if (p[f] < this.lowerBound[f] || this.upperBound[f] < p[f]) {
                 return false;
             }
         } else {
-            var inv_d = 1 / d[field];
-            var t1 = (lowerBound[field] - p[field]) * inv_d;
-            var t2 = (upperBound[field] - p[field]) * inv_d;
+            var inv_d = 1 / d[f];
+            var t1 = (this.lowerBound[f] - p[f]) * inv_d;
+            var t2 = (this.upperBound[f] - p[f]) * inv_d;
             // Sign of the normal vector.
             var s = -1;
             if (t1 > t2) {
@@ -5118,11 +5117,11 @@ AABB.prototype.rayCast = function(output, input) {
             // Push the min up
             if (t1 > tmin) {
                 normal.setZero();
-                normal[field] = s;
+                normal[f] = s;
                 tmin = t1;
             }
             // Pull the max down
-            tmax = Min(tmax, t2);
+            tmax = Math.min(tmax, t2);
             if (tmin > tmax) {
                 return false;
             }
@@ -14464,6 +14463,28 @@ function EdgeShape(v1, v2) {
     this.m_hasVertex0 = false;
     this.m_hasVertex3 = false;
 }
+
+EdgeShape.prototype.setNext = function(v3) {
+    if (v3) {
+        this.m_vertex3.set(v3);
+        this.m_hasVertex3 = true;
+    } else {
+        this.m_vertex3.setZero();
+        this.m_hasVertex3 = false;
+    }
+    return this;
+};
+
+EdgeShape.prototype.setPrev = function(v0) {
+    if (v0) {
+        this.m_vertex0.set(v0);
+        this.m_hasVertex0 = true;
+    } else {
+        this.m_vertex0.setZero();
+        this.m_hasVertex0 = false;
+    }
+    return this;
+};
 
 /**
  * Set this as an isolated edge.
