@@ -37,6 +37,8 @@ Also see [`example`](./example/) directory for more testbed usage examples.
 
 ## Install
 
+*To receive updates about changes and progress follow [@piqnt on twitter](https://twitter.com/piqnt).*
+
 #### Download
 
 Latest builds are available on [releases page](https://github.com/shakiba/planck.js/releases).
