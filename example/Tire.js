@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2017 Ilya Kolpakov
  * Copyright (c) 2014 Chris Cambell http://www.iforce2d.net
  * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
@@ -24,132 +23,136 @@
 // http://www.iforce2d.net/b2dtut/top-down-car
 // http://www.iforce2d.net/src/iforce2d_TopdownCar.h
 // Adapted to planck.js by Ilya Kolpakov
-planck.play('Tire', function(pl, testbed) {
-  var Vec2 = pl.Vec2;
+planck.testbed('Tire', function(testbed) {
+  var pl = planck, Vec2 = pl.Vec2;
+
+  Vec2.prototype.projectOn = function(other) {
+    return Vec2.mul(other, Vec2.dot(this, other));
+  };
 
   var world = new pl.World({
-    gravity : Vec2(0, 0)
+    gravity: Vec2(0, 0)
   });
 
-  function Tire(
-      world,
-      maxForwardSpeed=50,
-      maxBackwardSpeed=-40,
-      maxDriveForce=300,
-      maxLateralImpulse=7.5, // 8.5 originally
-      angularImpulseDampingFactor=0.1,
-      dragForceFactor=2,
-      discreteTurningTorqueMagnitude=20 // 15 originally
-  ){
+  function Tire(world) {
+    // todo: make option without es6
+    var maxForwardSpeed = 50;
+    var maxBackwardSpeed = -40;
+    var maxDriveForce = 300;
+    var maxLateralImpulse = 7.5; // 8.5 originally
+    var angularImpulseDampingFactor = 0.1;
+    var dragForceFactor = 2;
+    var discreteTurningTorqueMagnitude = 20; // 15 originally
+
     this.m_body = world.createDynamicBody();
     this.m_body.createFixture(pl.Box(0.5, 1.25), 1); // (shape, density)
     this.m_currentTraction = 1;
 
     // Get local vector in world coordinates
     this.getWorldVector = function(x, y) {
-      return this.m_body.getWorldVector( Vec2(x, y) );
-    }
-    this.getRightNormal = function() { return this.getWorldVector(1, 0); } 
-    this.getForwardNormal = function() { return this.getWorldVector(0, 1); }
+      return this.m_body.getWorldVector(Vec2(x, y));
+    };
+
+    this.getRightNormal = function() {
+      return this.getWorldVector(1, 0);
+    };
+
+    this.getForwardNormal = function() {
+      return this.getWorldVector(0, 1);
+    };
+
     this.getLateralVelocity = function() {
-      return this.m_body.getLinearVelocity().projectOn(
-	  this.getRightNormal()
-      );
-    }
+      return this.m_body.getLinearVelocity()
+        .projectOn(this.getRightNormal());
+    };
+
     this.getForwardVelocity = function() {
-      return this.m_body.getLinearVelocity().projectOn(
-	  this.getForwardNormal()
-      );
-    }
+      return this.m_body.getLinearVelocity()
+        .projectOn(this.getForwardNormal());
+    };
 
     this.updateFriction = function() {
       // lateral velocity
-      var impulse = this.getLateralVelocity().neg().mul(
-	  this.m_body.getMass()
-      );
-      if ( Vec2.lengthOf(impulse) > maxLateralImpulse ) {
-	impulse = impulse.mul( maxLateralImpulse / Vec2.lengthOf(impulse) );
+      var impulse = this.getLateralVelocity().neg().mul(this.m_body.getMass());
+      if (Vec2.lengthOf(impulse) > maxLateralImpulse) {
+        impulse = impulse.mul(maxLateralImpulse / Vec2.lengthOf(impulse));
       }
       this.m_body.applyLinearImpulse(
-	  impulse.mul(this.m_currentTraction),
-	  this.m_body.getWorldCenter()
+        impulse.mul(this.m_currentTraction),
+        this.m_body.getWorldCenter()
       );
       // angular velocity
       this.m_body.applyAngularImpulse(
-	  this.m_currentTraction
-	  * angularImpulseDampingFactor
-	  * this.m_body.getInertia()
-	  * (-this.m_body.getAngularVelocity())
+        this.m_currentTraction
+        * angularImpulseDampingFactor
+        * this.m_body.getInertia()
+        * (-this.m_body.getAngularVelocity())
       );
       // forward linear velocity
       var currentForwardNormal = this.getForwardVelocity();
       var currentForwardSpeed = currentForwardNormal.normalize();
       var dragForceMagnitude = -dragForceFactor * currentForwardSpeed;
       this.m_body.applyForce(
-	  currentForwardNormal.mul(
-	    this.m_currentTraction * dragForceMagnitude
-	  ),
-	  this.m_body.getWorldCenter()
+        currentForwardNormal.mul(
+          this.m_currentTraction * dragForceMagnitude
+        ),
+        this.m_body.getWorldCenter()
       );
-    }
+    };
 
     this.updateDrive = function() {
       var desiredSpeed = 0;
       if (testbed.activeKeys.up) {
-	desiredSpeed = maxForwardSpeed;
-      }
-      else if (testbed.activeKeys.down) {
-	desiredSpeed = maxBackwardSpeed;
+        desiredSpeed = maxForwardSpeed;
+      } else if (testbed.activeKeys.down) {
+        desiredSpeed = maxBackwardSpeed;
       }
       else {
-	return ;
+        return;
       }
-      var forwardNormal =  this.getForwardNormal();
+      var forwardNormal = this.getForwardNormal();
       var currentSpeed = Vec2.dot(this.getForwardVelocity(), forwardNormal);
       var force = 0;
       if (desiredSpeed > currentSpeed) {
-	force = maxDriveForce;
+        force = maxDriveForce;
       } else if (desiredSpeed < currentSpeed) {
-	force = -maxDriveForce;
+        force = -maxDriveForce;
       } else {
-	return ;
+        return;
       }
       this.m_body.applyForce(
-	  Vec2.mul(forwardNormal, this.m_currentTraction * force),
-	  this.m_body.getWorldCenter(),
-	  true // fucking wake up if "sleeping"
+        Vec2.mul(forwardNormal, this.m_currentTraction * force),
+        this.m_body.getWorldCenter(),
+        true // fucking wake up if "sleeping"
       );
-    }
+    };
 
     this.xor = function(a, b) {
       return (!a ^ !b);
-    }
+    };
 
     this.updateTurn = function() {
       var anyTurn = this.xor(
-	  testbed.activeKeys.left,
-	  testbed.activeKeys.right
+        testbed.activeKeys.left,
+        testbed.activeKeys.right
       );
-      var desiredTorque = anyTurn
-	? discreteTurningTorqueMagnitude
-	: 0;
+      var desiredTorque = anyTurn ? discreteTurningTorqueMagnitude : 0;
       if (testbed.activeKeys.right) {
-	desiredTorque *= -1;
+        desiredTorque *= -1;
       }
       this.m_body.applyTorque(desiredTorque);
     }
   }
 
-  tire = new Tire(world);
+  var tire = new Tire(world);
 
   testbed.step = function() {
     tire.updateFriction();
     tire.updateDrive();
     tire.updateTurn();
     pos = tire.m_body.getPosition();
-    testbed.info('←/→: Rotate, ↑/↓: Accelerate forward/backward\n' + 
-	"pos: [" + pos.x.toFixed(0) + ", " + pos.y.toFixed(0) + "]");
-  }
+    testbed.info('←/→: Rotate, ↑/↓: Accelerate forward/backward\n' + "pos: [" + pos.x.toFixed(0) + ", " + pos.y.toFixed(0) + "]");
+  };
 
   testbed.x = 0;
   testbed.y = 0;
