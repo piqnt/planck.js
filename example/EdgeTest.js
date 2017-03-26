@@ -32,56 +32,44 @@ planck.testbed('EdgeTest', function(testbed) {
   var v7 = Vec2(10.0, 0.0);
 
   var shape = pl.Edge(v1, v2);
-  shape.m_hasVertex3 = true;
-  shape.m_vertex3 = v3;
+  shape.setNext(v3);
   ground.createFixture(shape, 0.0);
 
   var shape = pl.Edge(v2, v3);
-  shape.m_hasVertex0 = true;
-  shape.m_hasVertex3 = true;
-  shape.m_vertex0 = v1;
-  shape.m_vertex3 = v4;
+  shape.setPrev(v1);
+  shape.setNext(v4);
   ground.createFixture(shape, 0.0);
 
   var shape = pl.Edge(v3, v4);
-  shape.m_hasVertex0 = true;
-  shape.m_hasVertex3 = true;
-  shape.m_vertex0 = v2;
-  shape.m_vertex3 = v5;
+  shape.setPrev(v2);
+  shape.setNext(v5);
   ground.createFixture(shape, 0.0);
 
   var shape = pl.Edge(v4, v5);
-  shape.m_hasVertex0 = true;
-  shape.m_hasVertex3 = true;
-  shape.m_vertex0 = v3;
-  shape.m_vertex3 = v6;
+  shape.setPrev(v3);
+  shape.setNext(v6);
   ground.createFixture(shape, 0.0);
 
   var shape = pl.Edge(v5, v6);
-  shape.m_hasVertex0 = true;
-  shape.m_hasVertex3 = true;
-  shape.m_vertex0 = v4;
-  shape.m_vertex3 = v7;
+  shape.setPrev(v4);
+  shape.setNext(v7);
   ground.createFixture(shape, 0.0);
 
   var shape = pl.Edge(v6, v7);
-  shape.m_hasVertex0 = true;
-  shape.m_vertex0 = v5;
+  shape.setPrev(v5);
   ground.createFixture(shape, 0.0);
 
-  var bd = {};
-  bd.type = 'dynamic';
-  bd.position = Vec2(-0.5, 0.6);
-  bd.allowSleep = false;
-  world.createBody(bd)
-    .createFixture(pl.Circle(0.5), 1.0);
+  world.createBody({
+    type : 'dynamic',
+    position : Vec2(-0.5, 0.6),
+    allowSleep : false
+  }).createFixture(pl.Circle(0.5), 1.0);
 
-  var bd = {};
-  bd.type = 'dynamic';
-  bd.position = Vec2(1.0, 0.6);
-  bd.allowSleep = false;
-  world.createBody(bd)
-    .createFixture(pl.Box(0.5, 0.5), 1.0);
+  world.createBody({
+    type : 'dynamic',
+    position : Vec2(1.0, 0.6),
+    allowSleep : false
+  }).createFixture(pl.Box(0.5, 0.5), 1.0);
 
   return world;
 });

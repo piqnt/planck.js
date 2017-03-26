@@ -45,21 +45,9 @@ planck.testbed('EdgeShapes', function(testbed) {
     }
   }
 
-  {
-    var vertices = [];
-    vertices[0] = Vec2(-0.5, 0.0);
-    vertices[1] = Vec2(0.5, 0.0);
-    vertices[2] = Vec2(0.0, 1.5);
-    m_polygons[0] = pl.Polygon(vertices);
-  }
+  m_polygons[0] = pl.Polygon([Vec2(-0.5, 0.0), Vec2(0.5, 0.0), Vec2(0.0, 1.5)]);
 
-  {
-    var vertices = [];
-    vertices[0] = Vec2(-0.1, 0.0);
-    vertices[1] = Vec2(0.1, 0.0);
-    vertices[2] = Vec2(0.0, 1.5);
-    m_polygons[1] = pl.Polygon(vertices);
-  }
+  m_polygons[1] = pl.Polygon([Vec2(-0.1, 0.0), Vec2(0.1, 0.0), Vec2(0.0, 1.5)]);
 
   {
     var w = 1.0;
