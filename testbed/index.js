@@ -59,10 +59,36 @@ planck.testbed = function(opts, callback) {
     testbed.activeKeys = {};
     testbed.background = '#222222';
 
-    testbed.keydown = function() {};
-    testbed.keyup = function() {};
-    testbed.status = function() {};
-    testbed.info = function() {};
+    var statusText = '';
+    var statusMap = {};
+
+    function statusSet(name, value) {
+      if (typeof value !== 'function' && typeof value !== 'object') {
+        statusMap[name] = value;
+      }
+    }
+
+    function statusMerge(obj) {
+      for (var key in obj) {
+        statusSet(key, obj[key]);
+      }
+    }
+
+    testbed.status = function(a, b) {
+      if (typeof b !== 'undefined') {
+        statusSet(a, b);
+      } else if (a && typeof a === 'object') {
+        statusMerge(a);
+      } else if (typeof a === 'string') {
+        statusText = a;
+      }
+
+      testbed._status && testbed._status(statusText, statusMap);
+    };
+
+    testbed.info = function(text) {
+      testbed._info && testbed._info(text);
+    };
 
     (function() {
       stage.tick(function() {
@@ -240,39 +266,6 @@ planck.testbed = function(opts, callback) {
         targetBody = null;
       }
     });
-
-
-
-    var statusText = '';
-    var statusMap = {};
-
-    function statusSet(name, value) {
-      if (typeof value !== 'function' && typeof value !== 'object') {
-        statusMap[name] = value;
-      }
-    }
-
-    function statusMerge(obj) {
-      for (var key in obj) {
-        statusSet(key, obj[key]);
-      }
-    }
-
-    testbed.status = function(a, b) {
-      if (typeof b !== 'undefined') {
-        statusSet(a, b);
-      } else if (a && typeof a === 'object') {
-        statusMerge(a);
-      } else if (typeof a === 'string') {
-        statusText = a;
-      }
-
-      testbed._status(statusText, statusMap);
-    };
-
-    testbed.info = function(text) {
-      testbed._info(text);
-    };
 
     window.addEventListener("keydown", function(e) {
       switch (e.keyCode) {

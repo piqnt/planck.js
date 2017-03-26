@@ -39,48 +39,45 @@
   // wrap testbed and ui
   var _testbed = planck.testbed;
   planck.testbed = function(opts, callback) {
-    _testbed(opts, function() {
+    _testbed(opts, function(testbed) {
+
+      playbtn.onclick = function() {
+        testbed.isPaused() ? testbed.resume() : testbed.pause();
+      };
+
+      testbed._pause = function() {
+        playbtn.className = playbtn.className.replace('fa-pause', 'fa-play');
+      };
+
+      testbed._resume = function() {
+        playbtn.className = playbtn.className.replace('fa-play', 'fa-pause');
+      };
+
+      status.innerText = '';
+      info.innerText = '';
+
+      testbed._status = function(statusText, statusMap) {
+        var newline = '\n';
+        var string = statusText || '';
+        for (var key in statusMap) {
+          var value = statusMap[key];
+          if (typeof value === 'function') continue;
+          string += (string && newline) + key + ': ' + value;
+        }
+
+        status.innerText = string;
+      };
+
+      testbed._info = function(text) {
+        info.innerText = text;
+      };
+
       var world = callback.apply(null, arguments);
-      init(arguments[0]);
+
+      testbed.resume();
+
       return world;
     });
   };
-
-  function init(testbed) {
-    playbtn.onclick = function() {
-      testbed.isPaused() ? testbed.resume() : testbed.pause();
-    };
-
-    testbed._pause = function() {
-      playbtn.className = playbtn.className.replace('fa-pause', 'fa-play');
-    };
-
-    testbed._resume = function() {
-      playbtn.className = playbtn.className.replace('fa-play', 'fa-pause');
-    };
-
-    status.innerText = '';
-    info.innerText = '';
-
-    testbed._status = function(statusText, statusMap) {
-      var newline = '\n';
-      var string = statusText || '';
-      for (var key in statusMap) {
-        var value = statusMap[key];
-        if (typeof value === 'function') continue;
-        string += (string && newline) + key + ': ' + value;
-      }
-
-      status.innerText = string;
-    };
-
-    testbed._info = function(text) {
-      info.innerText = text;
-    };
-
-    // viewer.timeout(pausePlay, 20000);
-
-    testbed.resume();
-  }
 
 })();
