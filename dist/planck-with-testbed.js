@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.26
+ * Planck.js v0.1.29
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -5055,7 +5055,7 @@ DynamicTree.prototype.getMaxBalance = function() {
             continue;
         }
         ASSERT && common.assert(node.isLeaf() == false);
-        var balance = Abs(node.child2.height - node.child1.height);
+        var balance = Math.abs(node.child2.height - node.child1.height);
         maxBalance = Math.max(maxBalance, balance);
     }
     iteratorPool.release(it);
@@ -9274,7 +9274,7 @@ RevoluteJoint.prototype.solvePositionConstraints = function(step) {
         if (this.m_limitState == equalLimits) {
             var C = Math.clamp(angle - this.m_lowerAngle, -Settings.maxAngularCorrection, Settings.maxAngularCorrection);
             limitImpulse = -this.m_motorMass * C;
-            angularError = Abs(C);
+            angularError = Math.abs(C);
         } else if (this.m_limitState == atLowerLimit) {
             var C = angle - this.m_lowerAngle;
             angularError = -C;
