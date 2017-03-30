@@ -31,7 +31,7 @@ To try Planck.js, simply add `planck-with-testbed.js` script to your HTML code a
 </body></html>
 ```
 
-Check out [Car example on CodePen](https://codepen.io/ashakiba/pen/yMpvrX?editors=001) to see it in practice.
+Check out [Car example on JS Bin](http://jsbin.com/nujuxik/edit?html,output) to try it in practice.
 Also see [`example`](./example/) directory for more testbed usage examples.
 
 
