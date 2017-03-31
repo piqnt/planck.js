@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.29
+ * Planck.js v0.1.30
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -5097,7 +5097,6 @@ AABB.prototype.rayCast = function(output, input) {
     var absD = Vec2.abs(d);
     var normal = Vec2.zero();
     for (var f = "x"; f !== null; f = f === "x" ? "y" : null) {
-        console.log(f);
         if (absD.x < Math.EPSILON) {
             // Parallel.
             if (p[f] < this.lowerBound[f] || this.upperBound[f] < p[f]) {
