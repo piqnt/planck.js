@@ -90,100 +90,99 @@ planck.testbed = function(opts, callback) {
       testbed._info && testbed._info(text);
     };
 
-    (function() {
-      stage.tick(function() {
+
+    var lastX = null, lastY = null;
+    stage.tick(function() {
+      if (lastX !== testbed.x || lastY !== testbed.y) {
         viewer.offset(-testbed.x, -testbed.y);
-        drawingImage.offset(-testbed.x, -testbed.y);
-      });
-
-      var drawingCanvas = document.createElement('canvas');
-      var drawingContext = drawingCanvas.getContext('2d');
-
-      drawingCanvas.width = testbed.width * testbed.ratio * 2;
-      drawingCanvas.height = testbed.height * testbed.ratio * 2;
-
-      var drawingImage = Stage
-        .image(new Stage.Texture(drawingCanvas, testbed.ratio))
-        .pin('handle', 0.5)
-        .scale(1, -1)
-        .appendTo(stage);
-
-      function drawX(x) {
-        return (x + testbed.width) * testbed.ratio;
+        lastX = testbed.x, lastY = testbed.y;
       }
+    });
 
-      function drawY(y) {
-        return (y + testbed.height) * testbed.ratio;
-      }
+    (function() {
+      var drawingTexture = new Stage.Texture();
+      stage.append(Stage.image(drawingTexture));
+
+      var buffer = [];
+      stage.tick(function() {
+        buffer.length = 0;
+      }, true);
+
+      drawingTexture.draw = function(ctx) {
+        ctx.save();
+        ctx.transform(1, 0, 0, -1, -testbed.x, -testbed.y);
+        ctx.lineWidth = 2  / testbed.ratio;
+        ctx.lineCap = 'round';
+        for (var drawing = buffer.shift(); drawing; drawing = buffer.shift()) {
+          drawing(ctx, testbed.ratio);
+        }
+        ctx.restore();
+      };
 
       testbed.drawPoint = function(p, r, color) {
-        drawingContext.beginPath();
-        drawingContext.arc(drawX(p.x), drawY(p.y), r, 0, 2 * Math.PI);
-        drawingContext.strokeStyle = color;
-        drawingContext.lineWidth = 2;
-        drawingContext.stroke();
-        drawingImage.touch();
+        buffer.push(function (ctx, ratio) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 5  / ratio, 0, 2 * Math.PI);
+          ctx.strokeStyle = color;
+          ctx.stroke();
+        });
       };
 
       testbed.drawCircle = function(p, r, color) {
-        drawingContext.beginPath();
-        drawingContext.arc(drawX(p.x), drawY(p.y), r * testbed.ratio, 0, 2 * Math.PI);
-        drawingContext.strokeStyle = color;
-        drawingContext.lineWidth = 2;
-        drawingContext.stroke();
-        drawingImage.touch();
+        buffer.push(function (ctx) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, r, 0, 2 * Math.PI);
+          ctx.strokeStyle = color;
+          ctx.stroke();
+        });
       };
 
       testbed.drawSegment = function(a, b, color) {
-        drawingContext.beginPath();
-        drawingContext.moveTo(drawX(a.x), drawY(a.y));
-        drawingContext.lineTo(drawX(b.x), drawY(b.y));
-        drawingContext.strokeStyle = color;
-        drawingContext.lineCap = 'round';
-        drawingContext.lineWidth = 2;
-        drawingContext.stroke();
-        drawingImage.touch();
+        buffer.push(function (ctx) {
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = color;
+          ctx.stroke();
+        });
       };
 
       testbed.drawPolygon = function(points, color) {
-        if (!points || !points.length) {
-          return;
-        }
-        drawingContext.beginPath();
-        drawingContext.moveTo(drawX(points[0].x), drawY(points[0].y));
-        for (var i = 1; i < points.length; i++) {
-          drawingContext.lineTo(drawX(points[i].x), drawY(points[i].y));
-        }
-        drawingContext.strokeStyle = color;
-        drawingContext.lineWidth = 2;
-        drawingContext.closePath();
-        drawingContext.stroke();
-        drawingImage.touch();
+        buffer.push(function (ctx) {
+          if (!points || !points.length) {
+            return;
+          }
+          ctx.beginPath();
+          ctx.moveTo(points[0].x, points[0].y);
+          for (var i = 1; i < points.length; i++) {
+            ctx.lineTo(points[i].x, points[i].y);
+          }
+          ctx.strokeStyle = color;
+          ctx.closePath();
+          ctx.stroke();
+        });
       };
 
       testbed.drawAABB = function(aabb, color) {
-        drawingContext.beginPath();
-        drawingContext.moveTo(drawX(aabb.lowerBound.x), drawY(aabb.lowerBound.y));
-        drawingContext.lineTo(drawX(aabb.upperBound.x), drawY(aabb.lowerBound.y));
-        drawingContext.lineTo(drawX(aabb.upperBound.x), drawY(aabb.upperBound.y));
-        drawingContext.lineTo(drawX(aabb.lowerBound.x), drawY(aabb.upperBound.y));
-        drawingContext.strokeStyle = color;
-        drawingContext.lineWidth = 2;
-        drawingContext.closePath();
-        drawingContext.stroke();
-        drawingImage.touch();
+        buffer.push(function (ctx) {
+          ctx.beginPath();
+          ctx.moveTo(aabb.lowerBound.x, aabb.lowerBound.y);
+          ctx.lineTo(aabb.upperBound.x, aabb.lowerBound.y);
+          ctx.lineTo(aabb.upperBound.x, aabb.upperBound.y);
+          ctx.lineTo(aabb.lowerBound.x, aabb.upperBound.y);
+          ctx.strokeStyle = color;
+          ctx.closePath();
+          ctx.stroke();
+        });
       };
 
       testbed.color = function(r, g, b) {
-        return 'rgb(' + (r * 256 | 0) + ', ' + (g * 256 | 0) + ', ' + (b * 256 | 0) + ')'
+        r = r * 256 | 0;
+        g = g * 256 | 0;
+        b = b * 256 | 0;
+        return 'rgb(' + r + ', ' + g + ', ' + b + ')'
       };
 
-      stage.tick(function() {
-        drawingContext.save();
-        drawingContext.setTransform(1, 0, 0, 1, 0, 0);
-        drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
-        drawingContext.restore();
-      }, true);
     })();
 
     var world = callback(testbed);
