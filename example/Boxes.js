@@ -19,9 +19,9 @@
 planck.testbed('Boxes', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
 
-  var world = new pl.World(Vec2(0, -10));
+  var world = pl.World(Vec2(0, -10));
 
-  var bar = world.createBody().setStatic();
+  var bar = world.createBody();
   bar.createFixture(pl.Edge(Vec2(-20, 5), Vec2(20, 5)));
   bar.setAngle(0.2);
 

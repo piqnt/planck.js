@@ -24,31 +24,24 @@ planck.testbed('AddPair', function(testbed) {
   var shape = pl.Circle(0.1);
 
   testbed.y = 0;
-  testbed.hz = 1/600;
-  testbed.speed = 0.1;
+  testbed.hz = 1 / 30;
 
-  var minX = -6.0;
-  var maxX = 0.0;
-  var minY = 4.0;
-  var maxY = 6.0;
-
-  for (var i = 0; i < /* 400 */100; ++i) {
-    var bd = {};
-    bd.type = 'dynamic';
-    bd.position = Vec2(pl.Math.random(minX, maxX), pl.Math.random(minY, maxY));
-    var body = world.createBody(bd);
+  for (var i = 0; i < 100; ++i) {
+    var body = world.createBody({
+      type : 'dynamic',
+      position : Vec2(pl.Math.random(0.0, -6.0), pl.Math.random(-1.0, 1.0))
+    });
     body.createFixture(shape, 0.01);
   }
 
-  var bd = {};
-  bd.type = 'dynamic';
-  bd.position = Vec2(-40.0, 5.0);
-  bd.bullet = true;
-  var body = world.createBody(bd);
+  var box = world.createBody({
+    type : 'dynamic',
+    position : Vec2(-40.0, 0.0),
+    bullet : true
+  });
 
-  var shape = pl.Box(1.5, 1.5);
-  body.createFixture(shape, 1.0);
-  body.setLinearVelocity(Vec2(150.0, 0.0));
+  box.createFixture(pl.Box(1.5, 1.5), 1.0);
+  box.setLinearVelocity(Vec2(10.0, 0.0));
 
   return world;
 });

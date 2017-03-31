@@ -24,19 +24,15 @@ planck.testbed('BasicSliderCrank', function(testbed) {
 
   var ground = world.createBody(Vec2(0.0, 17.0));
 
-  var prevBody = ground;
-
   // Define crank.
   var crank = world.createDynamicBody(Vec2(-8.0, 20.0));
   crank.createFixture(pl.Box(4.0, 1.0), 2.0);
-  world.createJoint(pl.RevoluteJoint({}, prevBody, crank, Vec2(-12.0, 20.0)));
-  prevBody = crank;
+  world.createJoint(pl.RevoluteJoint({}, ground, crank, Vec2(-12.0, 20.0)));
 
   // Define connecting rod
   var rod = world.createDynamicBody(Vec2(4.0, 20.0));
   rod.createFixture(pl.Box(8.0, 1.0), 2.0);
-  world.createJoint(pl.RevoluteJoint({}, prevBody, rod, Vec2(-4.0, 20.0)));
-  prevBody = rod;
+  world.createJoint(pl.RevoluteJoint({}, crank, rod, Vec2(-4.0, 20.0)));
 
   // Define piston
   var piston = world.createDynamicBody({
@@ -44,7 +40,7 @@ planck.testbed('BasicSliderCrank', function(testbed) {
     position : Vec2(12.0, 20.0)
   });
   piston.createFixture(pl.Box(3.0, 3.0), 2.0);
-  world.createJoint(pl.RevoluteJoint({}, prevBody, piston, Vec2(12.0, 20.0)));
+  world.createJoint(pl.RevoluteJoint({}, rod, piston, Vec2(12.0, 20.0)));
   world.createJoint(pl.PrismaticJoint({}, ground, piston, Vec2(12.0, 17.0), Vec2(1.0, 0.0)));
 
   return world;

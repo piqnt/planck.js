@@ -19,11 +19,12 @@
 
 planck.testbed('BodyTypes', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, -10));
+  var world = pl.World(Vec2(0, -10));
+
+  var SPEED = 3.0;
 
   var m_attachment;
   var m_platform;
-  var m_speed = 3.0;
 
   var ground = world.createBody();
   ground.createFixture(pl.Edge(Vec2(-20.0, 0.0), Vec2(20.0, 0.0)));
@@ -54,26 +55,26 @@ planck.testbed('BodyTypes', function(testbed) {
   }, ground, m_platform, Vec2(0.0, 5.0), Vec2(1.0, 0.0)));
 
   // Create a payload
-  var body = world.createDynamicBody(Vec2(0.0, 8.0));
-  body.createFixture(pl.Box(0.75, 0.75), {friction : 0.6, density : 2.0});
+  var payload = world.createDynamicBody(Vec2(0.0, 8.0));
+  payload.createFixture(pl.Box(0.75, 0.75), {friction : 0.6, density : 2.0});
 
   testbed.keydown = function(code, char) {
     if (char === 'Z') {
-      m_platform.setType('dynamic');
+      m_platform.setDynamic();
 
     } else if (char === 'X') {
-      m_platform.setType('static');
+      m_platform.setStatic();
 
     } else if (char === 'C') {
-      m_platform.setType('kinematic');
-      m_platform.setLinearVelocity(Vec2(-m_speed, 0.0));
+      m_platform.setKinematic();
+      m_platform.setLinearVelocity(Vec2(-SPEED, 0.0));
       m_platform.setAngularVelocity(0.0);
     }
   };
 
   testbed.step = function(settings) {
     // Drive the kinematic body.
-    if (m_platform.getType() == 'kinematic') {
+    if (m_platform.isKinematic()) {
       var p = m_platform.getTransform().p;
       var v = m_platform.getLinearVelocity();
 
