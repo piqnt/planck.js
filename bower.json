@@ -17,10 +17,10 @@
   },
   "ignore": [
     "example/",
+    "ignore/",
     "test/"
   ],
   "devDependencies": {
-    "stage-js": "^0.8.4",
     "font-awesome": "font-awsome#~4.5.0"
   }
 }
