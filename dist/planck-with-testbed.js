@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.30
+ * Planck.js v0.1.31
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -107,13 +107,7 @@ planck.testbed = function(opts, callback) {
         testbed.info = function(text) {
             testbed._info && testbed._info(text);
         };
-        var lastX = null, lastY = null;
-        stage.tick(function() {
-            if (lastX !== testbed.x || lastY !== testbed.y) {
-                viewer.offset(-testbed.x, -testbed.y);
-                lastX = testbed.x, lastY = testbed.y;
-            }
-        });
+        var lastDrawHash = "", drawHash = "";
         (function() {
             var drawingTexture = new Stage.Texture();
             stage.append(Stage.image(drawingTexture));
@@ -138,6 +132,7 @@ planck.testbed = function(opts, callback) {
                     ctx.strokeStyle = color;
                     ctx.stroke();
                 });
+                drawHash += "point" + p.x + "," + p.y + "," + r + "," + color;
             };
             testbed.drawCircle = function(p, r, color) {
                 buffer.push(function(ctx) {
@@ -146,6 +141,7 @@ planck.testbed = function(opts, callback) {
                     ctx.strokeStyle = color;
                     ctx.stroke();
                 });
+                drawHash += "circle" + p.x + "," + p.y + "," + r + "," + color;
             };
             testbed.drawSegment = function(a, b, color) {
                 buffer.push(function(ctx) {
@@ -155,12 +151,13 @@ planck.testbed = function(opts, callback) {
                     ctx.strokeStyle = color;
                     ctx.stroke();
                 });
+                drawHash += "segment" + a.x + "," + a.y + "," + b.x + "," + b.y + "," + color;
             };
             testbed.drawPolygon = function(points, color) {
+                if (!points || !points.length) {
+                    return;
+                }
                 buffer.push(function(ctx) {
-                    if (!points || !points.length) {
-                        return;
-                    }
                     ctx.beginPath();
                     ctx.moveTo(points[0].x, points[0].y);
                     for (var i = 1; i < points.length; i++) {
@@ -170,6 +167,11 @@ planck.testbed = function(opts, callback) {
                     ctx.closePath();
                     ctx.stroke();
                 });
+                drawHash += "segment";
+                for (var i = 1; i < points.length; i++) {
+                    drawHash += points[i].x + "," + points[i].y + ",";
+                }
+                drawHash += color;
             };
             testbed.drawAABB = function(aabb, color) {
                 buffer.push(function(ctx) {
@@ -182,6 +184,10 @@ planck.testbed = function(opts, callback) {
                     ctx.closePath();
                     ctx.stroke();
                 });
+                drawHash += "aabb";
+                drawHash += aabb.lowerBound.x + "," + aabb.lowerBound.y + ",";
+                drawHash += aabb.upperBound.x + "," + aabb.upperBound.y + ",";
+                drawHash += color;
             };
             testbed.color = function(r, g, b) {
                 r = r * 256 | 0;
@@ -192,8 +198,21 @@ planck.testbed = function(opts, callback) {
         })();
         var world = callback(testbed);
         var viewer = new Viewer(world, testbed);
+        var lastX = 0, lastY = 0;
         viewer.tick(function(dt, t) {
-            testbed.step && testbed.step(dt, t);
+            if (lastX !== testbed.x || lastY !== testbed.y) {
+                viewer.offset(-testbed.x, -testbed.y);
+                lastX = testbed.x, lastY = testbed.y;
+            }
+            if (typeof testbed.step === "function") {
+                testbed.step(dt, t);
+            }
+            if (lastDrawHash !== drawHash) {
+                lastDrawHash = drawHash;
+                stage.touch();
+            }
+            drawHash = "";
+            return true;
         });
         viewer.scale(1, -1);
         stage.background(testbed.background);
@@ -307,10 +326,10 @@ function Viewer(world, opts) {
     this._options.ratio = opts.ratio || 16;
     this._options.lineWidth = 2 / this._options.ratio;
     this._world = world;
-    !opts.debug && this.tick(function(dt) {
+    this.tick(function(dt) {
         world.step(this._options.hz, dt / 1e3 * this._options.speed);
         this.renderWorld();
-        return false;
+        return true;
     }, true);
     world.on("remove-fixture", function(obj) {
         obj.ui && obj.ui.remove();
@@ -356,8 +375,14 @@ Viewer.prototype.renderWorld = function(world) {
                 }
             }
             if (f.ui) {
-                f.ui.offset(b.getPosition());
-                f.ui.rotate(b.getAngle());
+                var p = b.getPosition(), r = b.getAngle();
+                if (f.ui.__lastX !== p.x || f.ui.__lastY !== p.y || f.ui.__lastR !== r) {
+                    f.ui.__lastX = p.x;
+                    f.ui.__lastY = p.y;
+                    f.ui.__lastR = r;
+                    f.ui.offset(p.x, p.y);
+                    f.ui.rotate(r);
+                }
             }
         }
     }
@@ -14881,7 +14906,6 @@ Texture.prototype.dest = function(x, y, w, h) {
   }
   return this;
 };
-
 
 Texture.prototype.draw = function(context, x1, y1, x2, y2, x3, y3, x4, y4) {
   var image = this._image;

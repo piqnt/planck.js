@@ -56,6 +56,9 @@
       status.innerText = '';
       info.innerText = '';
 
+      var _lastStatus = '';
+      var _lastInfo = '';
+
       testbed._status = function(statusText, statusMap) {
         var newline = '\n';
         var string = statusText || '';
@@ -65,11 +68,15 @@
           string += (string && newline) + key + ': ' + value;
         }
 
-        status.innerText = string;
+        if (_lastStatus !== string) {
+          status.innerText = _lastStatus = string;
+        }
       };
 
       testbed._info = function(text) {
-        info.innerText = text;
+        if (_lastInfo !== text) {
+          info.innerText = _lastInfo = text;
+        }
       };
 
       var world = callback.apply(null, arguments);
