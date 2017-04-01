@@ -29,26 +29,32 @@ planck.testbed = function(opts, callback) {
     var testbed = {};
 
     var paused = false;
+    stage.on('resume', function() {
+      paused = false;
+      testbed._resume && testbed._resume();
+    });
+    stage.on('pause', function() {
+      paused = true;
+      testbed._pause && testbed._pause();
+    });
     testbed.isPaused = function() {
       return paused;
     };
     testbed.togglePause = function() {
       paused ? testbed.play() : testbed.pause();
-      stage.pause();
-      paused = true;
-      testbed._pause();
     };
     testbed.pause = function() {
       stage.pause();
-      paused = true;
-      testbed._pause();
     };
     testbed.resume = function() {
-      paused = false;
       stage.resume();
       testbed.focus();
-      testbed._resume();
     };
+    testbed.focus = function() {
+      document.activeElement && document.activeElement.blur();
+      canvas.focus();
+    };
+
     testbed.focus = function() {
       document.activeElement && document.activeElement.blur();
       canvas.focus();
