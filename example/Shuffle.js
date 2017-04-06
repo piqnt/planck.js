@@ -48,14 +48,14 @@ planck.testbed('Shuffle', function(testbed) {
     ball.setPosition(p);
     ball.setAngle(Math.PI);
     ball.createFixture(pl.Circle(BALL_R), ballFixDef);
-    ball.render = {stroke : 'blue'};
+    ball.render = {fill : '#ff411a', stroke: 'black'};
   });
 
   row(1, 8, BALL_R, BALL_D).map(translate(-height * 0.4, 0)).forEach(function(p) {
     var ball = world.createDynamicBody(ballBodyDef);
     ball.setPosition(p);
     ball.createFixture(pl.Circle(BALL_R), ballFixDef);
-    ball.render = {stroke : 'red'};
+    ball.render = {fill : '#0077ff', stroke: 'black'};
   });
 
   world.on('post-solve', function(contact) {

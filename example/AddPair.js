@@ -24,9 +24,10 @@ planck.testbed('AddPair', function(testbed) {
   var shape = pl.Circle(0.1);
 
   testbed.y = 0;
-  testbed.hz = 1 / 30;
+  testbed.hz = 1 / 60;
+  testbed.speed = 0.5;
 
-  for (var i = 0; i < 100; ++i) {
+  for (var i = 0; i < 50; ++i) {
     var body = world.createBody({
       type : 'dynamic',
       position : Vec2(pl.Math.random(0.0, -6.0), pl.Math.random(-1.0, 1.0))
@@ -41,7 +42,7 @@ planck.testbed('AddPair', function(testbed) {
   });
 
   box.createFixture(pl.Box(1.5, 1.5), 1.0);
-  box.setLinearVelocity(Vec2(10.0, 0.0));
+  box.setLinearVelocity(Vec2(100.0, 0.0));
 
   return world;
 });

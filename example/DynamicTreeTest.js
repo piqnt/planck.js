@@ -32,7 +32,6 @@ planck.testbed('DynamicTreeTest', function(testbed) {
   var m_rayCastOutput = {};
   var m_rayActor;
   var m_actors = []; // Actor[e_actorCount];
-  var m_stepCount = 0;
   var m_automated = false;
 
   for (var i = 0; i < e_actorCount; ++i) {
@@ -98,8 +97,6 @@ planck.testbed('DynamicTreeTest', function(testbed) {
 
     var height = m_tree.getHeight();
     testbed.status("dynamic tree height", height);
-
-    ++m_stepCount;
   };
 
   testbed.keydown = function(code, char) {

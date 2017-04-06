@@ -53,17 +53,17 @@ planck.testbed('ConvexHull', function(testbed) {
 
   testbed.keydown = function(code, char) {
     switch (char) {
-    case 'A':
+    case 'Z':
       m_auto = !m_auto;
       break;
 
-    case 'G':
+    case 'X':
       Generate();
       break;
     }
   };
 
-  testbed.info('G: Generate a new random convex hull');
+  testbed.info('X: Generate a new random convex hull');
 
   testbed.step = function() {
     testbed.drawPolygon(shape.m_vertices, testbed.color(0.9, 0.9, 0.9));

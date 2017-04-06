@@ -6,7 +6,7 @@ planck.testbed('Soccer', function(testbed) {
   var width = 10.00, height = 6.00;
 
   var PLAYER_R = 0.35;
-  var BALL_R = 0.2;
+  var BALL_R = 0.23;
 
   testbed.x = 0;
   testbed.y = 0;
@@ -85,13 +85,13 @@ planck.testbed('Soccer', function(testbed) {
 
   var ball = world.createDynamicBody(ballBodyDef);
   ball.createFixture(pl.Circle(BALL_R), ballFixDef);
-  ball.render = {stroke : 'white'};
+  ball.render = {fill: 'white', stroke : 'black'};
 
   row().forEach(function(p) {
     var player = world.createDynamicBody(playerBodyDef);
     player.setPosition(p);
     player.createFixture(pl.Circle(PLAYER_R), playerFixDef);
-    player.render = {stroke : 'blue'};
+    player.render = {fill : '#0077ff', stroke: 'black'};
   });
 
   row().map(scale(-1, 1)).forEach(function(p) {
@@ -99,7 +99,7 @@ planck.testbed('Soccer', function(testbed) {
     player.setPosition(p);
     player.setAngle(Math.PI);
     player.createFixture(pl.Circle(PLAYER_R), playerFixDef);
-    player.render = {stroke : 'red'};
+    player.render = {fill : '#ff411a', stroke: 'black'};
   });
 
   world.on('post-solve', function(contact) {

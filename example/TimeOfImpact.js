@@ -64,7 +64,6 @@ planck.testbed('TimeOfImpact', function(testbed) {
 
   testbed.step = function() {
 
-    // "toi = %g", output.t
     // "max toi iters = %d, max root iters = %d", b2_toiMaxIters, b2_toiMaxRootIters
 
     testbed.status('toi', output.t);

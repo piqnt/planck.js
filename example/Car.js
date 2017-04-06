@@ -171,7 +171,6 @@ planck.testbed('Car', function(testbed) {
   };
 
   testbed.step = function() {
-    // testbed.drawPolygon(points, 'red');
     if (testbed.activeKeys.right && testbed.activeKeys.left) {
       springBack.setMotorSpeed(0);
       springBack.enableMotor(true);
