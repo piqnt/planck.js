@@ -120,7 +120,7 @@ function RayCastMultipleCallback() {
     return 1.0;
   }.bind(this);
 
-  return {};
+  return def;
 }
 
 planck.testbed('Ray-Cast', function(testbed) {
@@ -311,7 +311,7 @@ planck.testbed('Ray-Cast', function(testbed) {
       world.rayCast(point1, point2, callback.ReportFixture);
       testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));
 
-      for (var i = 0; i < callback.m_count; ++i) {
+      for (var i = 0; i < callback.m_points.length; ++i) {
         var p = callback.m_points[i];
         var n = callback.m_normals[i];
         testbed.drawPoint(p, 5.0, testbed.color(0.4, 0.9, 0.4));
