@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.31
+ * Planck.js v0.1.32
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com

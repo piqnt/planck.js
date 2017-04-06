@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.31
+ * Planck.js v0.1.32
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -48,25 +48,30 @@ planck.testbed = function(opts, callback) {
         var Vec2 = planck.Vec2;
         var testbed = {};
         var paused = false;
+        stage.on("resume", function() {
+            paused = false;
+            testbed._resume && testbed._resume();
+        });
+        stage.on("pause", function() {
+            paused = true;
+            testbed._pause && testbed._pause();
+        });
         testbed.isPaused = function() {
             return paused;
         };
         testbed.togglePause = function() {
             paused ? testbed.play() : testbed.pause();
-            stage.pause();
-            paused = true;
-            testbed._pause();
         };
         testbed.pause = function() {
             stage.pause();
-            paused = true;
-            testbed._pause();
         };
         testbed.resume = function() {
-            paused = false;
             stage.resume();
             testbed.focus();
-            testbed._resume();
+        };
+        testbed.focus = function() {
+            document.activeElement && document.activeElement.blur();
+            canvas.focus();
         };
         testbed.focus = function() {
             document.activeElement && document.activeElement.blur();
@@ -207,6 +212,9 @@ planck.testbed = function(opts, callback) {
             if (typeof testbed.step === "function") {
                 testbed.step(dt, t);
             }
+            if (targetBody) {
+                testbed.drawSegment(targetBody.getPosition(), mouseMove, "rgba(255,255,255,0.2)");
+            }
             if (lastDrawHash !== drawHash) {
                 lastDrawHash = drawHash;
                 stage.touch();
@@ -238,6 +246,10 @@ planck.testbed = function(opts, callback) {
         var mouseGround = world.createBody();
         var mouseJoint;
         var targetBody;
+        var mouseMove = {
+            x: 0,
+            y: 0
+        };
         viewer.attr("spy", true).on(Stage.Mouse.START, function(point) {
             if (targetBody) {
                 return;
@@ -258,6 +270,8 @@ planck.testbed = function(opts, callback) {
             if (mouseJoint) {
                 mouseJoint.setTarget(point);
             }
+            mouseMove.x = point.x;
+            mouseMove.y = point.y;
         }).on(Stage.Mouse.END, function(point) {
             if (mouseJoint) {
                 world.destroyJoint(mouseJoint);
@@ -355,6 +369,13 @@ Viewer.prototype.renderWorld = function(world) {
                     this._options.strokeStyle = "rgba(255,255,255,0.7)";
                 } else if (b.isStatic()) {
                     this._options.strokeStyle = "rgba(255,255,255,0.5)";
+                }
+                if (f.render && f.render.fill) {
+                    this._options.fillStyle = f.render.fill;
+                } else if (b.render && b.render.fill) {
+                    this._options.fillStyle = b.render.fill;
+                } else {
+                    this._options.fillStyle = "";
                 }
                 var type = f.getType();
                 var shape = f.getShape();
@@ -14691,6 +14712,7 @@ function Root(request, render) {
 
   this.resume = function() {
     if (paused) {
+      this.publish('resume');
       paused = false;
       request(loop);
     }
@@ -14698,6 +14720,9 @@ function Root(request, render) {
   };
 
   this.pause = function() {
+    if (!paused) {
+      this.publish('pause');
+    }
     paused = true;
     return this;
   };
