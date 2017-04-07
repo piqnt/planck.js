@@ -146,7 +146,7 @@ planck.testbed('EdgeShapes', function(testbed) {
     }
   };
 
-  testbed.info('1-5: Drop stuff, X: Destroy');
+  testbed.info('1-5: Drop new object, X: Destroy an object');
 
   testbed.step = function() {
     var advanceRay = true; // settings.pause == 0 || settings.singleStep;

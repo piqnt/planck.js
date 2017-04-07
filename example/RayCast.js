@@ -272,7 +272,7 @@ planck.testbed('Ray-Cast', function(testbed) {
     }
   }
 
-  testbed.info("1-6: Drop stuff, Z: Change mode, X: Destroy Body");
+  testbed.info("1-5: Drop new objects, Z: Change mode, X: Destroy an object");
 
   testbed.step = function() {
     var advanceRay = true;

@@ -145,7 +145,7 @@ planck.testbed('PolyShapes', function(testbed) {
     }
   };
 
-  testbed.info("1-5: Drop stuff, Z: (De)Activate some bodies, X: Destroy a body");
+  testbed.info("1-5: Drop new objects, Z: Activate/deactivate some bodies, X: Destroy an object");
 
   testbed.step = function() {
     var callback = PolyShapesCallback();
