@@ -60,7 +60,7 @@ Planck.js is [available on jsDelivr](https://www.jsdelivr.com/projects/planck).
 ## Usage
 
 Planck.js does not use any renderer by default. To use or integrate it with a rendering library all you need to do 
-is calling `world.step(hz)` in each frame, and then iterating over world entities to draw or update them.
+is calling `world.step(1/hz)` in each frame, and then iterating over world entities to draw or update them.
 You may also want to listen to world events to remove objects which are removed from the world. For example:
 
 ```html

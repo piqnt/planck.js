@@ -24,7 +24,7 @@ planck.testbed('AddPair', function(testbed) {
   var shape = pl.Circle(0.1);
 
   testbed.y = 0;
-  testbed.hz = 1 / 60;
+  testbed.hz = 60;
   testbed.speed = 0.5;
 
   for (var i = 0; i < 50; ++i) {

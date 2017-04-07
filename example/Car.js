@@ -21,7 +21,7 @@
 planck.testbed('Car', function(testbed) {
 
   testbed.speed = 1.3;
-  testbed.hz = 1 / 50;
+  testbed.hz = 50;
 
   var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World({

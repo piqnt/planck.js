@@ -21,7 +21,7 @@ planck.testbed('Tumbler', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
   var world = pl.World(Vec2(0, -10));
 
-  testbed.hz = 1 / 40;
+  testbed.hz = 40;
 
   var COUNT = 150;
 
