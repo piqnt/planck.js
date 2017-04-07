@@ -69,7 +69,7 @@ You may also want to listen to world events to remove objects which are removed 
   var world = planck.World();
 
   window.requestAnimationFrame(function() {
-    // in each frame call word.step(hz) with fixed frequency
+    // in each frame call word.step(1/hz) with fixed frequency
     world.step(1 / 60);
     // iterate over bodies and fixtures
     for (var body = world.getBodyList(); body; body = body.getNext()) {
