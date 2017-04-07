@@ -105,7 +105,7 @@ planck.testbed('8 Ball', function(testbed) {
 
   for (i = 0; i < balls.length; i++) {
     var ball = world.createDynamicBody(ballBodyDef);
-    if (i == balls.length - 1) ball.setBullet(true);
+    ball.setBullet(true);
     ball.setPosition(balls[i]);
     ball.createFixture(pl.Circle(BALL_R), ballFixDef);
     ball.render = balls[i].render;
