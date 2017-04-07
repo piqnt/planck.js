@@ -207,13 +207,15 @@ planck.testbed = function(opts, callback) {
     var viewer = new Viewer(world, testbed);
 
     var lastX = 0, lastY = 0;
-    viewer.tick(function(dt, t) {
+    stage.tick(function(dt, t) {
       // update camera position
       if (lastX !== testbed.x || lastY !== testbed.y) {
         viewer.offset(-testbed.x, -testbed.y);
         lastX = testbed.x, lastY = testbed.y;
       }
+    });
 
+    viewer.tick(function(dt, t) {
       // call testbed step, if provided
       if (typeof testbed.step === 'function') {
         testbed.step(dt, t);
