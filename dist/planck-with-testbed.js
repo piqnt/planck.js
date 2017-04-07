@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.32
+ * Planck.js v0.1.33
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -83,7 +83,7 @@ planck.testbed = function(opts, callback) {
         testbed.x = 0;
         testbed.y = -10;
         testbed.ratio = 16;
-        testbed.hz = 1 / 60;
+        testbed.hz = 60;
         testbed.speed = 1;
         testbed.activeKeys = {};
         testbed.background = "#222222";
@@ -204,11 +204,13 @@ planck.testbed = function(opts, callback) {
         var world = callback(testbed);
         var viewer = new Viewer(world, testbed);
         var lastX = 0, lastY = 0;
-        viewer.tick(function(dt, t) {
+        stage.tick(function(dt, t) {
             if (lastX !== testbed.x || lastY !== testbed.y) {
                 viewer.offset(-testbed.x, -testbed.y);
                 lastX = testbed.x, lastY = testbed.y;
             }
+        });
+        viewer.tick(function(dt, t) {
             if (typeof testbed.step === "function") {
                 testbed.step(dt, t);
             }
@@ -336,12 +338,15 @@ function Viewer(world, opts) {
     opts = opts || {};
     this._options = {};
     this._options.speed = opts.speed || 1;
-    this._options.hz = opts.hz || 1 / 60;
+    this._options.hz = opts.hz || 60;
+    if (Math.abs(this._options.hz) < 1) {
+        this._options.hz = 1 / this._options.hz;
+    }
     this._options.ratio = opts.ratio || 16;
     this._options.lineWidth = 2 / this._options.ratio;
     this._world = world;
     this.tick(function(dt) {
-        world.step(this._options.hz, dt / 1e3 * this._options.speed);
+        world.step(1 / this._options.hz, dt / 1e3 * this._options.speed);
         this.renderWorld();
         return true;
     }, true);
