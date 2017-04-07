@@ -2,13 +2,13 @@
 
 # Planck.js<sup>&alpha;</sup>
 
-Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5 game development. **[Check out demos!](http://piqnt.com/planck.js/)**
+Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5 game development. **[Check out some demos!](http://piqnt.com/planck.js/)**
 
 [![Car](./doc/img/screenshot.png "Play")](http://piqnt.com/planck.js/Car)
 
 ## Motivations
 
-Key motivations in development of this project are:
+Key motivations for the development of this project are:
 - Taking advantage of Box2D's efforts and achievements
 - Developing readable and maintainable JavaScript code
 - Optimizing the library for web and mobile platforms
@@ -60,7 +60,7 @@ Planck.js is [available on jsDelivr](https://www.jsdelivr.com/projects/planck).
 ## Usage
 
 Planck.js does not use any renderer by default. To use or integrate it with a rendering library all you need to do 
-is calling `world.step(1/hz)` in each frame, and then iterating over world entities to draw or update them.
+is call `world.step(1/hz)` in each frame, and then iterate over world entities to draw or update them.
 You may also want to listen to world events to remove objects which are removed from the world. For example:
 
 ```html
@@ -87,7 +87,7 @@ You may also want to listen to world events to remove objects which are removed 
 
 ## API
 
-Planck.js public API closely follows Box2D API (see [Resources](#Resources)), with following differences:
+Planck.js public API closely follows Box2D API (see [Resources](#Resources)), with the following differences:
 
 - `b2` prefix is dropped from class names, for example `b2World` is now available as `planck.World`.
 - Method names are converted from UpperCamelCase to lowerCamelCase.
