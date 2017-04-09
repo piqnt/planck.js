@@ -121,14 +121,13 @@ Following resources are recommended if you are interested in learning about Box2
 
 Another way to use testbed and try included examples (in [`example`](./example/) directory) is running testbed with live build locally:
 
-1. Install `git`, `npm` and `bower`
+1. Install `git` and `npm`
 
 1. Clone or download this repository
 
 1. Install npm and bower dependencies:
 
         npm install
-        bower install
 
 1. Run testbed and open it in your web browser (see command-line output for URL to open):
 

@@ -19,8 +19,5 @@
     "example/",
     "ignore/",
     "test/"
-  ],
-  "devDependencies": {
-    "font-awesome": "font-awsome#~4.5.0"
-  }
+  ]
 }

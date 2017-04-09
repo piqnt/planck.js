@@ -46,11 +46,11 @@
       };
 
       testbed._pause = function() {
-        playbtn.className = playbtn.className.replace('fa-pause', 'fa-play');
+        playbtn.className = playbtn.className.replace('pause', 'play');
       };
 
       testbed._resume = function() {
-        playbtn.className = playbtn.className.replace('fa-play', 'fa-pause');
+        playbtn.className = playbtn.className.replace('play', 'pause');
       };
 
       status.innerText = '';
