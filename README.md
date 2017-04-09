@@ -60,7 +60,7 @@ Planck.js is [available on jsDelivr](https://www.jsdelivr.com/projects/planck).
 ## Usage
 
 Planck.js does not use any renderer by default. To use or integrate it with a rendering library all you need to do 
-is call `world.step(1/hz)` in each frame, and then iterate over world entities to draw or update them.
+is call `world.step(timeStep)` in each frame, and then iterate over world entities to draw or update them.
 You may also want to listen to world events to remove objects which are removed from the world. For example:
 
 ```html
@@ -69,7 +69,7 @@ You may also want to listen to world events to remove objects which are removed 
   var world = planck.World();
 
   window.requestAnimationFrame(function() {
-    // in each frame call word.step(1/hz) with fixed frequency
+    // in each frame call word.step(timeStep) with fixed timeStep
     world.step(1 / 60);
     // iterate over bodies and fixtures
     for (var body = world.getBodyList(); body; body = body.getNext()) {

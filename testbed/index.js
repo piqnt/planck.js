@@ -359,7 +359,7 @@ function Viewer(world, opts) {
 
   opts = opts || {};
 
-  this._options = {};
+  var options = this._options = {};
   this._options.speed = opts.speed || 1;
   this._options.hz = opts.hz || 60;
   if (Math.abs(this._options.hz) < 1) {
@@ -370,8 +370,15 @@ function Viewer(world, opts) {
 
   this._world = world;
 
+  var timeStep = 1 / this._options.hz;
+  var elapsedTime = 0;
   this.tick(function(dt) {
-    world.step(1 / this._options.hz, dt / 1000 * this._options.speed);
+    dt = dt * 0.001 * options.speed;
+    elapsedTime += dt;
+    while (elapsedTime > timeStep) {
+      world.step(timeStep);
+      elapsedTime -= timeStep;
+    }
     this.renderWorld();
     return true;
   }, true);
