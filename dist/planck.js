@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.33
+ * Planck.js v0.1.34
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -4605,22 +4605,20 @@ var s_step = new Solver.TimeStep();
 /**
  * Take a time step. This performs collision detection, integration, and
  * constraint solution.
- * 
+ *
  * Broad-phase, narrow-phase, solve and solve time of impacts.
- * 
- * @param {float} ts Time step, this should not vary.
- * @param {float} dt Elapsed time, since last call.
+ *
+ * @param {float} timeStep Time step, this should not vary.
+ * @param {int} velocityIterations
+ * @param {int} positionIterations
  */
-World.prototype.step = function(ts, dt) {
-    // TODO split to .setTimeStep() and .tick()
-    if (typeof dt === "number") {
-        this.m_t += dt;
-        while (this.m_t > ts) {
-            this.step(ts);
-            this.m_t -= ts;
-        }
-        return;
+World.prototype.step = function(timeStep, velocityIterations, positionIterations) {
+    if ((velocityIterations | 0) !== velocityIterations) {
+        // TODO: remove this in future
+        velocityIterations = 0;
     }
+    velocityIterations = velocityIterations || this.m_velocityIterations;
+    positionIterations = positionIterations || this.m_positionIterations;
     // TODO: move this to testbed
     this.m_stepCount++;
     // If new fixtures were added, we need to find the new contacts.
@@ -4629,15 +4627,15 @@ World.prototype.step = function(ts, dt) {
         this.m_newFixture = false;
     }
     this.m_locked = true;
-    s_step.reset(ts);
-    s_step.velocityIterations = this.m_velocityIterations;
-    s_step.positionIterations = this.m_positionIterations;
+    s_step.reset(timeStep);
+    s_step.velocityIterations = velocityIterations;
+    s_step.positionIterations = positionIterations;
     s_step.warmStarting = this.m_warmStarting;
     s_step.blockSolve = this.m_blockSolve;
     // Update contacts. This is where some contacts are destroyed.
     this.updateContacts();
     // Integrate velocities, solve velocity constraints, and integrate positions.
-    if (this.m_stepComplete && ts > 0) {
+    if (this.m_stepComplete && timeStep > 0) {
         this.m_solver.solveWorld(s_step);
         // Synchronize fixtures, check for out of range bodies.
         for (var b = this.m_bodyList; b; b = b.getNext()) {
@@ -4655,7 +4653,7 @@ World.prototype.step = function(ts, dt) {
         this.findNewContacts();
     }
     // Handle TOI events.
-    if (this.m_continuousPhysics && ts > 0) {
+    if (this.m_continuousPhysics && timeStep > 0) {
         this.m_solver.solveWorldTOI(s_step);
     }
     if (this.m_clearForces) {

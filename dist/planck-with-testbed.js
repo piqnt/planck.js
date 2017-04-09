@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.33
+ * Planck.js v0.1.34
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -336,7 +336,7 @@ function Viewer(world, opts) {
     Viewer._super.call(this);
     this.label("Planck");
     opts = opts || {};
-    this._options = {};
+    var options = this._options = {};
     this._options.speed = opts.speed || 1;
     this._options.hz = opts.hz || 60;
     if (Math.abs(this._options.hz) < 1) {
@@ -345,8 +345,15 @@ function Viewer(world, opts) {
     this._options.ratio = opts.ratio || 16;
     this._options.lineWidth = 2 / this._options.ratio;
     this._world = world;
+    var timeStep = 1 / this._options.hz;
+    var elapsedTime = 0;
     this.tick(function(dt) {
-        world.step(1 / this._options.hz, dt / 1e3 * this._options.speed);
+        dt = dt * .001 * options.speed;
+        elapsedTime += dt;
+        while (elapsedTime > timeStep) {
+            world.step(timeStep);
+            elapsedTime -= timeStep;
+        }
         this.renderWorld();
         return true;
     }, true);
@@ -3700,28 +3707,25 @@ World.prototype.destroyJoint = function(joint) {
 
 var s_step = new Solver.TimeStep();
 
-World.prototype.step = function(ts, dt) {
-    if (typeof dt === "number") {
-        this.m_t += dt;
-        while (this.m_t > ts) {
-            this.step(ts);
-            this.m_t -= ts;
-        }
-        return;
+World.prototype.step = function(timeStep, velocityIterations, positionIterations) {
+    if ((velocityIterations | 0) !== velocityIterations) {
+        velocityIterations = 0;
     }
+    velocityIterations = velocityIterations || this.m_velocityIterations;
+    positionIterations = positionIterations || this.m_positionIterations;
     this.m_stepCount++;
     if (this.m_newFixture) {
         this.findNewContacts();
         this.m_newFixture = false;
     }
     this.m_locked = true;
-    s_step.reset(ts);
-    s_step.velocityIterations = this.m_velocityIterations;
-    s_step.positionIterations = this.m_positionIterations;
+    s_step.reset(timeStep);
+    s_step.velocityIterations = velocityIterations;
+    s_step.positionIterations = positionIterations;
     s_step.warmStarting = this.m_warmStarting;
     s_step.blockSolve = this.m_blockSolve;
     this.updateContacts();
-    if (this.m_stepComplete && ts > 0) {
+    if (this.m_stepComplete && timeStep > 0) {
         this.m_solver.solveWorld(s_step);
         for (var b = this.m_bodyList; b; b = b.getNext()) {
             if (b.m_islandFlag == false) {
@@ -3734,7 +3738,7 @@ World.prototype.step = function(ts, dt) {
         }
         this.findNewContacts();
     }
-    if (this.m_continuousPhysics && ts > 0) {
+    if (this.m_continuousPhysics && timeStep > 0) {
         this.m_solver.solveWorldTOI(s_step);
     }
     if (this.m_clearForces) {
