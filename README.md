@@ -94,8 +94,8 @@ Planck.js public API closely follows Box2D API (see [Resources](#Resources)), wi
 - Definition classes/objects (BodyDef, FixtureDef, etc.) are replaced by inline JavaScript objects (`{}`).
 - Shapes are made immutable and are not cloned when used to create fixtures.
 - `World#on(eventName, listenerFn)` and `World#off(eventName, listenerFn)` are added to add and remove event listeners. Currently supported events are:
-    - `'contact-begin'`
-    - `'contact-end'`
+    - `'begin-contact'`
+    - `'end-contact'`
     - `'pre-solve'`
     - `'post-solve'`
     - `'joint-removed'`
