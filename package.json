@@ -20,10 +20,11 @@
   },
   "main": "lib/index.js",
   "files": [
+    "dist/",
     "doc/",
     "lib/",
     "test/",
-    "testbed/"
+    "testbed/"   
   ],
   "author": "Ali Shakiba",
   "contributors": [{
