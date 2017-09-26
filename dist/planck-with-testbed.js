@@ -4011,7 +4011,7 @@ AABB.diff = function(a, b) {
     var hD = Math.max(0, Math.min(a.upperBound.y, b.upperBound.y) - Math.max(b.lowerBound.y, a.lowerBound.y));
     var wA = a.upperBound.x - a.lowerBound.x;
     var hA = a.upperBound.y - a.lowerBound.y;
-    var hB = b.upperBound.y - b.lowerBound.y;
+    var wB = b.upperBound.x - b.lowerBound.x;
     var hB = b.upperBound.y - b.lowerBound.y;
     return wA * hA + wB * hB - wD * hD;
 };
@@ -6137,9 +6137,9 @@ Rot.neo = function(angle) {
 Rot.clone = function(rot) {
     ASSERT && Rot.assert(rot);
     var obj = Object.create(Rot.prototype);
-    ojb.s = rot.s;
-    ojb.c = rot.c;
-    return ojb;
+    obj.s = rot.s;
+    obj.c = rot.c;
+    return obj;
 };
 
 Rot.identity = function(rot) {
@@ -7030,7 +7030,8 @@ DistanceJoint.prototype = create(DistanceJoint._super.prototype);
 
 var DistanceJointDef = {
     frequencyHz: 0,
-    dampingRatio: 0
+    dampingRatio: 0,
+    length: 0
 };
 
 function DistanceJoint(def, bodyA, anchorA, bodyB, anchorB) {
@@ -7042,7 +7043,7 @@ function DistanceJoint(def, bodyA, anchorA, bodyB, anchorB) {
     this.m_type = DistanceJoint.TYPE;
     this.m_localAnchorA = def.localAnchorA || bodyA.getLocalPoint(anchorA);
     this.m_localAnchorB = def.localAnchorB || bodyB.getLocalPoint(anchorB);
-    this.m_length = Vec2.distance(anchorB, anchorA);
+    this.m_length = def.length;
     this.m_frequencyHz = def.frequencyHz;
     this.m_dampingRatio = def.dampingRatio;
     this.m_impulse = 0;
