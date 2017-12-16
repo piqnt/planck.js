@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.34
+ * Planck.js v0.1.35
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -4011,7 +4011,7 @@ AABB.diff = function(a, b) {
     var hD = Math.max(0, Math.min(a.upperBound.y, b.upperBound.y) - Math.max(b.lowerBound.y, a.lowerBound.y));
     var wA = a.upperBound.x - a.lowerBound.x;
     var hA = a.upperBound.y - a.lowerBound.y;
-    var hB = b.upperBound.y - b.lowerBound.y;
+    var wB = b.upperBound.x - b.lowerBound.x;
     var hB = b.upperBound.y - b.lowerBound.y;
     return wA * hA + wB * hB - wD * hD;
 };
@@ -6137,9 +6137,9 @@ Rot.neo = function(angle) {
 Rot.clone = function(rot) {
     ASSERT && Rot.assert(rot);
     var obj = Object.create(Rot.prototype);
-    ojb.s = rot.s;
-    ojb.c = rot.c;
-    return ojb;
+    obj.s = rot.s;
+    obj.c = rot.c;
+    return obj;
 };
 
 Rot.identity = function(rot) {
@@ -12573,9 +12573,20 @@ Class.prototype.tween = function(duration, delay, append) {
         return true;
       }
 
-      var next = this._tweens[0].tick(this, elapsed, now, last);
-      if (next) {
+      var head = this._tweens[0];
+
+      var next = head.tick(this, elapsed, now, last);
+
+      if (next && head === this._tweens[0]) {
         this._tweens.shift();
+      }
+
+      if (typeof next === 'function') {
+        try {
+          next.call(this);
+        } catch (e) {
+          console.log(e);
+        }
       }
 
       if (typeof next === 'object') {
@@ -12622,11 +12633,16 @@ Tween.prototype.tick = function(node, elapsed, now, last) {
 
   var p, over;
   if (time < this._duration) {
-    p = time / this._duration, over = false;
+    p = time / this._duration;
+    over = false;
   } else {
-    p = 1, over = true;
+    p = 1;
+    over = true;
   }
-  p = typeof this._easing == 'function' ? this._easing(p) : p;
+
+  if (typeof this._easing == 'function') {
+    p = this._easing(p);
+  }
 
   var q = 1 - p;
 
@@ -12635,12 +12651,7 @@ Tween.prototype.tick = function(node, elapsed, now, last) {
   }
 
   if (over) {
-    try {
-      this._done && this._done.call(this._owner);
-    } catch (e) {
-      console.log(e);
-    }
-    return this._next || true;
+    return this._next || this._done || true;
   }
 };
 
@@ -12704,14 +12715,6 @@ function pinning(node, map, key, value) {
 }
 
 Pin._add_shortcuts(Tween);
-
-/**
- * @deprecated Use .done(fn) instead.
- */
-Tween.prototype.then = function(fn) {
-  this.done(fn);
-  return this;
-};
 
 /**
  * @deprecated Use .done(fn) instead.
@@ -13397,6 +13400,8 @@ require('./loop');
 var repeat = require('./util/repeat');
 var create = require('./util/create');
 
+module.exports = Image;
+
 Class.image = function(image) {
   var img = new Image();
   image && img.image(image);
@@ -13807,10 +13812,10 @@ Class.prototype._tick = function(elapsed, now, last) {
   var ticked = false;
 
   if (this._tickBefore !== null) {
-    for (var i = 0, n = this._tickBefore.length; i < n; i++) {
+    for (var i = 0; i < this._tickBefore.length; i++) {
       stats.tick++;
-      ticked = this._tickBefore[i].call(this, elapsed, now, last) === true
-          || ticked;
+      var tickFn = this._tickBefore[i];
+      ticked = tickFn.call(this, elapsed, now, last) === true || ticked;
     }
   }
 
@@ -13823,10 +13828,10 @@ Class.prototype._tick = function(elapsed, now, last) {
   }
 
   if (this._tickAfter !== null) {
-    for (var i = 0, n = this._tickAfter.length; i < n; i++) {
+    for (var i = 0; i < this._tickAfter.length; i++) {
       stats.tick++;
-      ticked = this._tickAfter[i].call(this, elapsed, now, last) === true
-          || ticked;
+      var tickFn = this._tickAfter[i];
+      ticked = tickFn.call(this, elapsed, now, last) === true || ticked;
     }
   }
 
@@ -13866,15 +13871,26 @@ Class.prototype.untick = function(ticker) {
 };
 
 Class.prototype.timeout = function(fn, time) {
-  this.tick(function timer(t) {
+  this.setTimeout(fn, time);
+};
+
+Class.prototype.setTimeout = function(fn, time) {
+  function timer(t) {
     if ((time -= t) < 0) {
       this.untick(timer);
       fn.call(this);
     } else {
       return true;
     }
-  });
+  }
+  this.tick(timer);
+  return timer;
 };
+
+Class.prototype.clearTimeout = function(timer) {
+  this.untick(timer);
+};
+
 
 },{"./core":60,"./pin":68,"./util/stats":80}],67:[function(require,module,exports){
 function Matrix(a, b, c, d, e, f) {
@@ -15831,8 +15847,10 @@ module.exports.startsWith = function(str, sub) {
 },{}],82:[function(require,module,exports){
 module.exports = require('../lib/');
 
+module.exports.internal = {};
+
 require('../lib/canvas');
-require('../lib/image');
+module.exports.internal.Image = require('../lib/image');
 require('../lib/anim');
 require('../lib/str');
 require('../lib/layout');

@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.34
+ * Planck.js v0.1.35
  * 
  * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -5058,7 +5058,7 @@ AABB.diff = function(a, b) {
     var hD = Math.max(0, Math.min(a.upperBound.y, b.upperBound.y) - Math.max(b.lowerBound.y, a.lowerBound.y));
     var wA = a.upperBound.x - a.lowerBound.x;
     var hA = a.upperBound.y - a.lowerBound.y;
-    var hB = b.upperBound.y - b.lowerBound.y;
+    var wB = b.upperBound.x - b.lowerBound.x;
     var hB = b.upperBound.y - b.lowerBound.y;
     return wA * hA + wB * hB - wD * hD;
 };
@@ -7766,9 +7766,9 @@ Rot.neo = function(angle) {
 Rot.clone = function(rot) {
     ASSERT && Rot.assert(rot);
     var obj = Object.create(Rot.prototype);
-    ojb.s = rot.s;
-    ojb.c = rot.c;
-    return ojb;
+    obj.s = rot.s;
+    obj.c = rot.c;
+    return obj;
 };
 
 Rot.identity = function(rot) {
