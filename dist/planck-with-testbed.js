@@ -1,7 +1,7 @@
 /*
- * Planck.js v0.1.36
+ * Planck.js v0.1.37
  * 
- * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
  * 
  * This software is provided 'as-is', without any express or implied
@@ -609,9 +609,9 @@ Viewer.prototype.drawChain = function(shape, options) {
     return node;
 };
 },{"../lib/":27,"stage-js/platform/web":82}],2:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = Body;
 
@@ -1254,9 +1254,9 @@ Body.prototype.getLocalVector = function(worldVector) {
 
 
 },{"./Fixture":4,"./Shape":8,"./World":10,"./common/Math":18,"./common/Position":19,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/Velocity":25,"./util/common":51,"./util/options":53}],3:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 var DEBUG_SOLVER = false;
 
@@ -2008,9 +2008,9 @@ Contact.destroy = function(contact, listener) {
 
 
 },{"./Manifold":6,"./Settings":7,"./collision/Distance":13,"./common/Mat22":16,"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":51}],4:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = Fixture;
 
@@ -2231,9 +2231,9 @@ Fixture.prototype.shouldCollide = function(that) {
 
 
 },{"./collision/AABB":11,"./common/Vec2":23,"./util/common":51,"./util/options":53}],5:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = Joint;
 
@@ -2320,9 +2320,9 @@ Joint.prototype.solvePositionConstraints = function(step) {};
 
 
 },{"./util/common":51}],6:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 var common = require("./util/common");
 
@@ -2520,9 +2520,9 @@ function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
 
 
 },{"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":51}],7:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 var Settings = exports;
 
@@ -2580,9 +2580,9 @@ Settings.angularSleepToleranceSqr = Math.pow(Settings.angularSleepTolerance, 2);
 
 
 },{}],8:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = Shape;
 
@@ -2621,9 +2621,9 @@ Shape.prototype.computeDistanceProxy = function(proxy) {};
 
 
 },{"./common/Math":18}],9:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = Solver;
 
@@ -3296,9 +3296,9 @@ Solver.prototype.postSolveIsland = function() {
 
 
 },{"./Body":2,"./Contact":3,"./Joint":5,"./Settings":7,"./collision/Distance":13,"./collision/TimeOfImpact":15,"./common/Math":18,"./common/Vec2":23,"./util/Timer":50,"./util/common":51}],10:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = World;
 
@@ -3907,9 +3907,9 @@ World.prototype.postSolve = function(contact, impulse) {
 
 
 },{"./Body":2,"./Contact":3,"./Solver":9,"./collision/BroadPhase":12,"./common/Vec2":23,"./util/Timer":50,"./util/common":51,"./util/options":53}],11:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 var Settings = require("../Settings");
 
@@ -4063,9 +4063,9 @@ AABB.prototype.toString = function() {
 
 
 },{"../Settings":7,"../common/Math":18,"../common/Vec2":23}],12:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 var Settings = require("../Settings");
 
@@ -4193,9 +4193,9 @@ BroadPhase.prototype.queryCallback = function(proxyId) {
 
 
 },{"../Settings":7,"../common/Math":18,"../util/common":51,"./AABB":11,"./DynamicTree":14}],13:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = Distance;
 
@@ -4688,9 +4688,9 @@ Distance.testOverlap = function(shapeA, indexA, shapeB, indexB, xfA, xfB) {
 
 
 },{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../common/stats":26,"../util/Timer":50,"../util/common":51}],14:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 var Settings = require("../Settings");
 
@@ -5332,9 +5332,9 @@ function Iterator() {
 
 
 },{"../Settings":7,"../common/Math":18,"../common/Vec2":23,"../util/Pool":49,"../util/common":51,"./AABB":11}],15:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = TimeOfImpact;
 
@@ -5713,9 +5713,9 @@ SeparationFunction.prototype.evaluate = function(t) {
 
 
 },{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../common/stats":26,"../util/Timer":50,"../util/common":51,"./Distance":13}],16:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = Mat22;
 
@@ -5856,9 +5856,9 @@ Mat22.add = function(mx1, mx2) {
 
 
 },{"../util/common":51,"./Math":18,"./Vec2":23}],17:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = Mat33;
 
@@ -5999,9 +5999,9 @@ Mat33.add = function(a, b) {
 
 
 },{"../util/common":51,"./Math":18,"./Vec2":23,"./Vec3":24}],18:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 var common = require("../util/common");
 
@@ -6080,9 +6080,9 @@ math.random = function(min, max) {
 
 
 },{"../util/common":51,"../util/create":52}],19:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = Position;
 
@@ -6103,9 +6103,9 @@ Position.prototype.getTransform = function(xf, p) {
 
 
 },{"./Rot":20,"./Vec2":23}],20:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = Rot;
 
@@ -6232,9 +6232,9 @@ Rot.mulT = function(rot, m) {
 
 
 },{"../util/common":51,"./Math":18,"./Vec2":23}],21:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = Sweep;
 
@@ -6322,9 +6322,9 @@ Sweep.prototype.set = function(that) {
 
 
 },{"../util/common":51,"./Math":18,"./Rot":20,"./Transform":22,"./Vec2":23}],22:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = Transform;
 
@@ -6438,9 +6438,9 @@ Transform.mulT = function(a, b) {
 
 
 },{"../util/common":51,"./Rot":20,"./Vec2":23}],23:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = Vec2;
 
@@ -6762,9 +6762,9 @@ Vec2.clamp = function(v, max) {
 
 
 },{"../util/common":51,"./Math":18}],24:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = Vec3;
 
@@ -6874,9 +6874,9 @@ Vec3.neg = function(v) {
 
 
 },{"../util/common":51,"./Math":18}],25:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = Velocity;
 
@@ -6889,9 +6889,9 @@ function Velocity() {
 
 
 },{"./Vec2":23}],26:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 exports.toString = function(newline) {
     newline = typeof newline === "string" ? newline : "\n";
@@ -6988,9 +6988,9 @@ exports.internal.Settings = require("./Settings");
 
 
 },{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Manifold":6,"./Settings":7,"./Shape":8,"./World":10,"./collision/AABB":11,"./collision/Distance":13,"./collision/DynamicTree":14,"./collision/TimeOfImpact":15,"./common/Math":18,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/stats":26,"./joint/DistanceJoint":28,"./joint/FrictionJoint":29,"./joint/GearJoint":30,"./joint/MotorJoint":31,"./joint/MouseJoint":32,"./joint/PrismaticJoint":33,"./joint/PulleyJoint":34,"./joint/RevoluteJoint":35,"./joint/RopeJoint":36,"./joint/WeldJoint":37,"./joint/WheelJoint":38,"./shape/BoxShape":39,"./shape/ChainShape":40,"./shape/CircleShape":41,"./shape/CollideCircle":42,"./shape/CollideCirclePolygone":43,"./shape/CollideEdgeCircle":44,"./shape/CollideEdgePolygon":45,"./shape/CollidePolygon":46,"./shape/EdgeShape":47,"./shape/PolygonShape":48}],28:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = DistanceJoint;
 
@@ -7222,9 +7222,9 @@ DistanceJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":52,"../util/options":53}],29:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = FrictionJoint;
 
@@ -7433,9 +7433,9 @@ FrictionJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":51,"../util/create":52,"../util/options":53}],30:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = GearJoint;
 
@@ -7781,9 +7781,9 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":51,"../util/create":52,"../util/options":53,"./PrismaticJoint":33,"./RevoluteJoint":35}],31:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = MotorJoint;
 
@@ -8029,9 +8029,9 @@ MotorJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":51,"../util/create":52,"../util/options":53}],32:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = MouseJoint;
 
@@ -8226,9 +8226,9 @@ MouseJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":51,"../util/create":52,"../util/options":53}],33:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = PrismaticJoint;
 
@@ -8706,9 +8706,9 @@ PrismaticJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":51,"../util/create":52,"../util/options":53}],34:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = PulleyJoint;
 
@@ -8965,9 +8965,9 @@ PulleyJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":51,"../util/create":52,"../util/options":53}],35:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = RevoluteJoint;
 
@@ -9380,9 +9380,9 @@ RevoluteJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":51,"../util/create":52,"../util/options":53}],36:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = RopeJoint;
 
@@ -9609,9 +9609,9 @@ RopeJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":52,"../util/options":53}],37:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = WeldJoint;
 
@@ -9902,9 +9902,9 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":52,"../util/options":53}],38:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = WheelJoint;
 
@@ -10265,9 +10265,9 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":52,"../util/options":53}],39:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = BoxShape;
 
@@ -10326,9 +10326,9 @@ function BoxShape(hx, hy, center, angle) {
 
 
 },{"../Settings":7,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":51,"../util/create":52,"../util/options":53,"./PolygonShape":48}],40:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = ChainShape;
 
@@ -10513,9 +10513,9 @@ ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
 
 
 },{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":51,"../util/create":52,"../util/options":53,"./EdgeShape":47}],41:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = CircleShape;
 
@@ -10644,9 +10644,9 @@ CircleShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 },{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":51,"../util/create":52,"../util/options":53}],42:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 var common = require("../util/common");
 
@@ -10699,9 +10699,9 @@ exports.CollideCircles = CollideCircles;
 
 
 },{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Transform":22,"../common/Vec2":23,"../util/common":51,"../util/create":52,"./CircleShape":41}],43:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 var common = require("../util/common");
 
@@ -10809,9 +10809,9 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 
 
 },{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":51,"./CircleShape":41,"./PolygonShape":48}],44:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 var common = require("../util/common");
 
@@ -10954,9 +10954,9 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 
 
 },{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":51,"../util/create":52,"./ChainShape":40,"./CircleShape":41,"./EdgeShape":47}],45:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 var common = require("../util/common");
 
@@ -11357,9 +11357,9 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 
 
 },{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":51,"../util/create":52,"./ChainShape":40,"./EdgeShape":47,"./PolygonShape":48}],46:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 var common = require("../util/common");
 
@@ -11544,9 +11544,9 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 
 
 },{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":51,"./PolygonShape":48}],47:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = EdgeShape;
 
@@ -11699,9 +11699,9 @@ EdgeShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 },{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/create":52,"../util/options":53}],48:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = PolygonShape;
 
@@ -12008,9 +12008,9 @@ PolygonShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 },{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":51,"../util/create":52,"../util/options":53}],49:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports = Pool;
 
@@ -12074,9 +12074,9 @@ function Pool(opts) {
 
 
 },{}],50:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 module.exports.now = function() {
     return Date.now();
@@ -12088,9 +12088,9 @@ module.exports.diff = function(time) {
 
 
 },{}],51:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 exports.debug = function() {
     if (!DEBUG) return;
@@ -12122,9 +12122,9 @@ if (typeof Object.create == "function") {
 
 
 },{}],53:[function(require,module,exports){
-DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
+if (typeof DEBUG === "undefined") var DEBUG = false;
 
-ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+if (typeof ASSERT === "undefined") var ASSERT = false;
 
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
