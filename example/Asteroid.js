@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the authors be held liable for any damages
