@@ -41,7 +41,7 @@ planck.testbed = function(opts, callback) {
       return paused;
     };
     testbed.togglePause = function() {
-      paused ? testbed.play() : testbed.pause();
+      paused ? testbed.resume() : testbed.pause();
     };
     testbed.pause = function() {
       stage.pause();
