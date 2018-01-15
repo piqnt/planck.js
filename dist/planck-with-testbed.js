@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.37
+ * Planck.js v0.1.38
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -60,7 +60,7 @@ planck.testbed = function(opts, callback) {
             return paused;
         };
         testbed.togglePause = function() {
-            paused ? testbed.play() : testbed.pause();
+            paused ? testbed.resume() : testbed.pause();
         };
         testbed.pause = function() {
             stage.pause();
@@ -1205,15 +1205,20 @@ Body.prototype.destroyFixture = function(fixture) {
         return;
     }
     ASSERT && common.assert(fixture.m_body == this);
-    var node = this.m_fixtureList;
     var found = false;
-    while (node != null) {
-        if (node == fixture) {
-            node = fixture.m_next;
-            found = true;
-            break;
+    if (this.m_fixtureList === fixture) {
+        this.m_fixtureList = fixture.m_next;
+        found = true;
+    } else {
+        var node = this.m_fixtureList;
+        while (node != null) {
+            if (node.m_next === fixture) {
+                node.m_next = fixture.m_next;
+                found = true;
+                break;
+            }
+            node = node.m_next;
         }
-        node = node.m_next;
     }
     ASSERT && common.assert(found);
     var edge = this.m_contactList;
@@ -10275,20 +10280,6 @@ var common = require("../util/common");
 
 var create = require("../util/create");
 
-var options = require("../util/options");
-
-var Math = require("../common/Math");
-
-var Transform = require("../common/Transform");
-
-var Rot = require("../common/Rot");
-
-var Vec2 = require("../common/Vec2");
-
-var AABB = require("../collision/AABB");
-
-var Settings = require("../Settings");
-
 var PolygonShape = require("./PolygonShape");
 
 BoxShape._super = PolygonShape;
@@ -10302,30 +10293,11 @@ function BoxShape(hx, hy, center, angle) {
         return new BoxShape(hx, hy, center, angle);
     }
     BoxShape._super.call(this);
-    this.m_vertices[0] = Vec2.neo(-hx, -hy);
-    this.m_vertices[1] = Vec2.neo(hx, -hy);
-    this.m_vertices[2] = Vec2.neo(hx, hy);
-    this.m_vertices[3] = Vec2.neo(-hx, hy);
-    this.m_normals[0] = Vec2.neo(0, -1);
-    this.m_normals[1] = Vec2.neo(1, 0);
-    this.m_normals[2] = Vec2.neo(0, 1);
-    this.m_normals[3] = Vec2.neo(-1, 0);
-    this.m_count = 4;
-    if (center && "x" in center && "y" in center) {
-        angle = angle || 0;
-        this.m_centroid.set(center);
-        var xf = Transform.identity();
-        xf.p.set(center);
-        xf.q.set(angle);
-        for (var i = 0; i < this.m_count; ++i) {
-            this.m_vertices[i] = Transform.mul(xf, this.m_vertices[i]);
-            this.m_normals[i] = Rot.mul(xf.q, this.m_normals[i]);
-        }
-    }
+    this._setAsBox(hx, hy, center, angle);
 }
 
 
-},{"../Settings":7,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":51,"../util/create":52,"../util/options":53,"./PolygonShape":48}],40:[function(require,module,exports){
+},{"../util/common":51,"../util/create":52,"./PolygonShape":48}],40:[function(require,module,exports){
 if (typeof DEBUG === "undefined") var DEBUG = false;
 
 if (typeof ASSERT === "undefined") var ASSERT = false;
@@ -11804,7 +11776,7 @@ function ComputeCentroid(vs, count) {
 PolygonShape.prototype._set = function(vertices) {
     ASSERT && common.assert(3 <= vertices.length && vertices.length <= Settings.maxPolygonVertices);
     if (vertices.length < 3) {
-        SetAsBox(1, 1);
+        this._setAsBox(1, 1);
         return;
     }
     var n = Math.min(vertices.length, Settings.maxPolygonVertices);
@@ -11826,7 +11798,7 @@ PolygonShape.prototype._set = function(vertices) {
     n = tempCount;
     if (n < 3) {
         ASSERT && common.assert(false);
-        SetAsBox(1, 1);
+        this._setAsBox(1, 1);
         return;
     }
     var i0 = 0;
@@ -11867,7 +11839,7 @@ PolygonShape.prototype._set = function(vertices) {
     }
     if (m < 3) {
         ASSERT && common.assert(false);
-        SetAsBox(1, 1);
+        this._setAsBox(1, 1);
         return;
     }
     this.m_count = m;
@@ -11883,6 +11855,29 @@ PolygonShape.prototype._set = function(vertices) {
         this.m_normals[i].normalize();
     }
     this.m_centroid = ComputeCentroid(this.m_vertices, m);
+};
+
+PolygonShape.prototype._setAsBox = function(hx, hy, center, angle) {
+    this.m_vertices[0] = Vec2.neo(-hx, -hy);
+    this.m_vertices[1] = Vec2.neo(hx, -hy);
+    this.m_vertices[2] = Vec2.neo(hx, hy);
+    this.m_vertices[3] = Vec2.neo(-hx, hy);
+    this.m_normals[0] = Vec2.neo(0, -1);
+    this.m_normals[1] = Vec2.neo(1, 0);
+    this.m_normals[2] = Vec2.neo(0, 1);
+    this.m_normals[3] = Vec2.neo(-1, 0);
+    this.m_count = 4;
+    if (Vec2.isValid(center)) {
+        angle = angle || 0;
+        this.m_centroid.set(center);
+        var xf = Transform.identity();
+        xf.p.set(center);
+        xf.q.set(angle);
+        for (var i = 0; i < this.m_count; ++i) {
+            this.m_vertices[i] = Transform.mul(xf, this.m_vertices[i]);
+            this.m_normals[i] = Rot.mul(xf.q, this.m_normals[i]);
+        }
+    }
 };
 
 PolygonShape.prototype.testPoint = function(xf, p) {
