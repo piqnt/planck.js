@@ -1,5 +1,3 @@
-*This project is under active development and is not stable yet.*  
-
 # Planck.js<sup>&alpha;</sup>
 
 Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5 game development. **[Check out demos!](http://piqnt.com/planck.js/)**
