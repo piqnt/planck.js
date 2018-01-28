@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.38
+ * Planck.js v0.1.39
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -101,9 +101,9 @@ exports.internal.DynamicTree = require("./collision/DynamicTree");
 
 exports.internal.Settings = require("./Settings");
 },{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Manifold":6,"./Settings":7,"./Shape":8,"./World":10,"./collision/AABB":11,"./collision/Distance":13,"./collision/DynamicTree":14,"./collision/TimeOfImpact":15,"./common/Math":18,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/stats":26,"./joint/DistanceJoint":27,"./joint/FrictionJoint":28,"./joint/GearJoint":29,"./joint/MotorJoint":30,"./joint/MouseJoint":31,"./joint/PrismaticJoint":32,"./joint/PulleyJoint":33,"./joint/RevoluteJoint":34,"./joint/RopeJoint":35,"./joint/WeldJoint":36,"./joint/WheelJoint":37,"./shape/BoxShape":38,"./shape/ChainShape":39,"./shape/CircleShape":40,"./shape/CollideCircle":41,"./shape/CollideCirclePolygone":42,"./shape/CollideEdgeCircle":43,"./shape/CollideEdgePolygon":44,"./shape/CollidePolygon":45,"./shape/EdgeShape":46,"./shape/PolygonShape":47}],2:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = Body;
 
@@ -201,12 +201,12 @@ var BodyDef = {
  */
 function Body(world, def) {
     def = options(def, BodyDef);
-    ASSERT && common.assert(Vec2.isValid(def.position));
-    ASSERT && common.assert(Vec2.isValid(def.linearVelocity));
-    ASSERT && common.assert(Math.isFinite(def.angle));
-    ASSERT && common.assert(Math.isFinite(def.angularVelocity));
-    ASSERT && common.assert(Math.isFinite(def.angularDamping) && def.angularDamping >= 0);
-    ASSERT && common.assert(Math.isFinite(def.linearDamping) && def.linearDamping >= 0);
+    _ASSERT && common.assert(Vec2.isValid(def.position));
+    _ASSERT && common.assert(Vec2.isValid(def.linearVelocity));
+    _ASSERT && common.assert(Math.isFinite(def.angle));
+    _ASSERT && common.assert(Math.isFinite(def.angularVelocity));
+    _ASSERT && common.assert(Math.isFinite(def.angularDamping) && def.angularDamping >= 0);
+    _ASSERT && common.assert(Math.isFinite(def.linearDamping) && def.linearDamping >= 0);
     this.m_world = world;
     this.m_awakeFlag = def.awake;
     this.m_autoSleepFlag = def.allowSleep;
@@ -330,8 +330,8 @@ Body.prototype.getType = function() {
  * @private
  */
 Body.prototype.setType = function(type) {
-    ASSERT && common.assert(type === staticBody || type === kinematicBody || type === dynamicBody);
-    ASSERT && common.assert(this.isWorldLocked() == false);
+    _ASSERT && common.assert(type === staticBody || type === kinematicBody || type === dynamicBody);
+    _ASSERT && common.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
         return;
     }
@@ -432,7 +432,7 @@ Body.prototype.isActive = function() {
  * and remains
  */
 Body.prototype.setActive = function(flag) {
-    ASSERT && common.assert(this.isWorldLocked() == false);
+    _ASSERT && common.assert(this.isWorldLocked() == false);
     if (flag == this.m_activeFlag) {
         return;
     }
@@ -492,7 +492,7 @@ Body.prototype.getTransform = function() {
  * @param angle The world rotation in radians.
  */
 Body.prototype.setTransform = function(position, angle) {
-    ASSERT && common.assert(this.isWorldLocked() == false);
+    _ASSERT && common.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
         return;
     }
@@ -721,7 +721,7 @@ Body.prototype.resetMassData = function() {
         this.m_sweep.a0 = this.m_sweep.a;
         return;
     }
-    ASSERT && common.assert(this.isDynamic());
+    _ASSERT && common.assert(this.isDynamic());
     // Accumulate mass over all fixtures.
     var localCenter = Vec2.zero();
     for (var f = this.m_fixtureList; f; f = f.m_next) {
@@ -746,7 +746,7 @@ Body.prototype.resetMassData = function() {
     if (this.m_I > 0 && this.m_fixedRotationFlag == false) {
         // Center the inertia about the center of mass.
         this.m_I -= this.m_mass * Vec2.dot(localCenter, localCenter);
-        ASSERT && common.assert(this.m_I > 0);
+        _ASSERT && common.assert(this.m_I > 0);
         this.m_invI = 1 / this.m_I;
     } else {
         this.m_I = 0;
@@ -768,7 +768,7 @@ Body.prototype.resetMassData = function() {
  * @param massData The mass properties.
  */
 Body.prototype.setMassData = function(massData) {
-    ASSERT && common.assert(this.isWorldLocked() == false);
+    _ASSERT && common.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
         return;
     }
@@ -785,7 +785,7 @@ Body.prototype.setMassData = function(massData) {
     this.m_invMass = 1 / this.m_mass;
     if (massData.I > 0 && this.m_fixedRotationFlag == false) {
         this.m_I = massData.I - this.m_mass * Vec2.dot(massData.center, massData.center);
-        ASSERT && common.assert(this.m_I > 0);
+        _ASSERT && common.assert(this.m_I > 0);
         this.m_invI = 1 / this.m_I;
     }
     // Move center of mass.
@@ -933,7 +933,7 @@ Body.prototype.shouldCollide = function(that) {
  * @param {FixtureDef|number} fixdef Fixture definition or just density.
  */
 Body.prototype.createFixture = function(shape, fixdef) {
-    ASSERT && common.assert(this.isWorldLocked() == false);
+    _ASSERT && common.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
         return null;
     }
@@ -966,11 +966,11 @@ Body.prototype.createFixture = function(shape, fixdef) {
  * @param fixture The fixture to be removed.
  */
 Body.prototype.destroyFixture = function(fixture) {
-    ASSERT && common.assert(this.isWorldLocked() == false);
+    _ASSERT && common.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
         return;
     }
-    ASSERT && common.assert(fixture.m_body == this);
+    _ASSERT && common.assert(fixture.m_body == this);
     // Remove the fixture from this body's singly linked list.
     var found = false;
     if (this.m_fixtureList === fixture) {
@@ -988,7 +988,7 @@ Body.prototype.destroyFixture = function(fixture) {
         }
     }
     // You tried to remove a shape that is not attached to this body.
-    ASSERT && common.assert(found);
+    _ASSERT && common.assert(found);
     // Destroy any contacts associated with the fixture.
     var edge = this.m_contactList;
     while (edge) {
@@ -1044,9 +1044,9 @@ Body.prototype.getLocalVector = function(worldVector) {
 
 
 },{"./Fixture":4,"./Shape":8,"./World":10,"./common/Math":18,"./common/Position":19,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/Velocity":25,"./util/common":50,"./util/options":52}],3:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 var DEBUG_SOLVER = false;
 
@@ -1178,7 +1178,7 @@ Contact.prototype.initConstraint = function(step) {
     var bodyB = fixtureB.getBody();
     var manifold = this.getManifold();
     var pointCount = manifold.pointCount;
-    ASSERT && common.assert(pointCount > 0);
+    _ASSERT && common.assert(pointCount > 0);
     this.v_invMassA = bodyA.m_invMass;
     this.v_invMassB = bodyB.m_invMass;
     this.v_invIA = bodyA.m_invI;
@@ -1187,7 +1187,7 @@ Contact.prototype.initConstraint = function(step) {
     this.v_restitution = this.m_restitution;
     this.v_tangentSpeed = this.m_tangentSpeed;
     this.v_pointCount = pointCount;
-    DEBUG && common.debug("pc", this.v_pointCount, pointCount);
+    _DEBUG && common.debug("pc", this.v_pointCount, pointCount);
     this.v_K.setZero();
     this.v_normalMass.setZero();
     this.p_invMassA = bodyA.m_invMass;
@@ -1580,7 +1580,7 @@ Contact.prototype.initVelocityConstraint = function(step) {
     var aB = positionB.a;
     var vB = Vec2.clone(velocityB.v);
     var wB = velocityB.w;
-    ASSERT && common.assert(manifold.pointCount > 0);
+    _ASSERT && common.assert(manifold.pointCount > 0);
     var xfA = Transform.identity();
     var xfB = Transform.identity();
     xfA.q.set(aA);
@@ -1594,7 +1594,7 @@ Contact.prototype.initVelocityConstraint = function(step) {
         // VelocityConstraintPoint
         vcp.rA.set(Vec2.sub(worldManifold.points[j], cA));
         vcp.rB.set(Vec2.sub(worldManifold.points[j], cB));
-        DEBUG && common.debug("vcp.rA", worldManifold.points[j].x, worldManifold.points[j].y, cA.x, cA.y, vcp.rA.x, vcp.rA.y);
+        _DEBUG && common.debug("vcp.rA", worldManifold.points[j].x, worldManifold.points[j].y, cA.x, cA.y, vcp.rA.x, vcp.rA.y);
         var rnA = Vec2.cross(vcp.rA, this.v_normal);
         var rnB = Vec2.cross(vcp.rB, this.v_normal);
         var kNormal = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
@@ -1626,7 +1626,7 @@ Contact.prototype.initVelocityConstraint = function(step) {
         var k12 = mA + mB + iA * rn1A * rn2A + iB * rn1B * rn2B;
         // Ensure a reasonable condition number.
         var k_maxConditionNumber = 1e3;
-        DEBUG && common.debug("k1x2: ", k11, k22, k12, mA, mB, iA, rn1A, rn2A, iB, rn1B, rn2B);
+        _DEBUG && common.debug("k1x2: ", k11, k22, k12, mA, mB, iA, rn1A, rn2A, iB, rn1B, rn2B);
         if (k11 * k11 < k_maxConditionNumber * (k11 * k22 - k12 * k12)) {
             // K is safe to invert.
             this.v_K.ex.set(k11, k12);
@@ -1671,7 +1671,7 @@ Contact.prototype.warmStartConstraint = function(step) {
         var vcp = this.v_points[j];
         // VelocityConstraintPoint
         var P = Vec2.wAdd(vcp.normalImpulse, normal, vcp.tangentImpulse, tangent);
-        DEBUG && common.debug(iA, iB, vcp.rA.x, vcp.rA.y, vcp.rB.x, vcp.rB.y, P.x, P.y);
+        _DEBUG && common.debug(iA, iB, vcp.rA.x, vcp.rA.y, vcp.rB.x, vcp.rB.y, P.x, P.y);
         wA -= iA * Vec2.cross(vcp.rA, P);
         vA.wSub(mA, P);
         wB += iB * Vec2.cross(vcp.rB, P);
@@ -1709,7 +1709,7 @@ Contact.prototype.solveVelocityConstraint = function(step) {
     var normal = this.v_normal;
     var tangent = Vec2.cross(normal, 1);
     var friction = this.v_friction;
-    ASSERT && common.assert(this.v_pointCount == 1 || this.v_pointCount == 2);
+    _ASSERT && common.assert(this.v_pointCount == 1 || this.v_pointCount == 2);
     // Solve tangent constraints first because non-penetration is more important
     // than friction.
     for (var j = 0; j < this.v_pointCount; ++j) {
@@ -1803,7 +1803,7 @@ Contact.prototype.solveVelocityConstraint = function(step) {
         var vcp2 = this.v_points[1];
         // VelocityConstraintPoint
         var a = Vec2.neo(vcp1.normalImpulse, vcp2.normalImpulse);
-        ASSERT && common.assert(a.x >= 0 && a.y >= 0);
+        _ASSERT && common.assert(a.x >= 0 && a.y >= 0);
         // Relative velocity at contact
         var dv1 = Vec2.zero().add(vB).add(Vec2.cross(wB, vcp1.rB)).sub(vA).sub(Vec2.cross(wA, vcp1.rA));
         var dv2 = Vec2.zero().add(vB).add(Vec2.cross(wB, vcp2.rB)).sub(vA).sub(Vec2.cross(wA, vcp2.rA));
@@ -1846,8 +1846,8 @@ Contact.prototype.solveVelocityConstraint = function(step) {
                     // Compute normal velocity
                     vn1 = Dot(dv1, normal);
                     vn2 = Dot(dv2, normal);
-                    ASSERT && common.assert(Abs(vn1 - vcp1.velocityBias) < k_errorTol);
-                    ASSERT && common.assert(Abs(vn2 - vcp2.velocityBias) < k_errorTol);
+                    _ASSERT && common.assert(Abs(vn1 - vcp1.velocityBias) < k_errorTol);
+                    _ASSERT && common.assert(Abs(vn2 - vcp2.velocityBias) < k_errorTol);
                 }
                 break;
             }
@@ -1881,7 +1881,7 @@ Contact.prototype.solveVelocityConstraint = function(step) {
                     var dv1 = Vec2.sub(dv1B, dv1A);
                     // Compute normal velocity
                     vn1 = Vec2.dot(dv1, normal);
-                    ASSERT && common.assert(Math.abs(vn1 - vcp1.velocityBias) < k_errorTol);
+                    _ASSERT && common.assert(Math.abs(vn1 - vcp1.velocityBias) < k_errorTol);
                 }
                 break;
             }
@@ -1915,7 +1915,7 @@ Contact.prototype.solveVelocityConstraint = function(step) {
                     var dv1 = Vec2.sub(dv2B, dv2A);
                     // Compute normal velocity
                     vn2 = Vec2.dot(dv2, normal);
-                    ASSERT && common.assert(Math.abs(vn2 - vcp2.velocityBias) < k_errorTol);
+                    _ASSERT && common.assert(Math.abs(vn2 - vcp2.velocityBias) < k_errorTol);
                 }
                 break;
             }
@@ -2072,9 +2072,9 @@ Contact.destroy = function(contact, listener) {
 
 
 },{"./Manifold":6,"./Settings":7,"./collision/Distance":13,"./common/Mat22":16,"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":50}],4:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = Fixture;
 
@@ -2250,7 +2250,7 @@ Fixture.prototype.getDensity = function() {
  * mass of the body. You must call Body.resetMassData to update the body's mass.
  */
 Fixture.prototype.setDensity = function(density) {
-    ASSERT && common.assert(Math.isFinite(density) && density >= 0);
+    _ASSERT && common.assert(Math.isFinite(density) && density >= 0);
     this.m_density = density;
 };
 
@@ -2312,7 +2312,7 @@ Fixture.prototype.getMassData = function(massData) {
  * more accurate AABB, compute it using the shape and the body transform.
  */
 Fixture.prototype.getAABB = function(childIndex) {
-    ASSERT && common.assert(0 <= childIndex && childIndex < this.m_proxyCount);
+    _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_proxyCount);
     return this.m_proxies[childIndex].aabb;
 };
 
@@ -2320,7 +2320,7 @@ Fixture.prototype.getAABB = function(childIndex) {
  * These support body activation/deactivation.
  */
 Fixture.prototype.createProxies = function(broadPhase, xf) {
-    ASSERT && common.assert(this.m_proxyCount == 0);
+    _ASSERT && common.assert(this.m_proxyCount == 0);
     // Create proxies in the broad-phase.
     this.m_proxyCount = this.m_shape.getChildCount();
     for (var i = 0; i < this.m_proxyCount; ++i) {
@@ -2436,9 +2436,9 @@ Fixture.prototype.shouldCollide = function(that) {
 
 
 },{"./collision/AABB":11,"./common/Vec2":23,"./util/common":50,"./util/options":52}],5:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = Joint;
 
@@ -2488,9 +2488,9 @@ var JointDef = {
 function Joint(def, bodyA, bodyB) {
     bodyA = def.bodyA || bodyA;
     bodyB = def.bodyB || bodyB;
-    ASSERT && common.assert(bodyA);
-    ASSERT && common.assert(bodyB);
-    ASSERT && common.assert(bodyA != bodyB);
+    _ASSERT && common.assert(bodyA);
+    _ASSERT && common.assert(bodyB);
+    _ASSERT && common.assert(bodyA != bodyB);
     this.m_type = "unknown-joint";
     this.m_bodyA = bodyA;
     this.m_bodyB = bodyB;
@@ -2620,9 +2620,9 @@ Joint.prototype.solvePositionConstraints = function(step) {};
 
 
 },{"./util/common":50}],6:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 var common = require("./util/common");
 
@@ -2721,13 +2721,19 @@ function ManifoldPoint() {
  * 
  */
 function ContactID() {
-    // TODO merge with ManifoldPoint?
     this.cf = new ContactFeature();
-    this.key;
+    var key = "";
+    Object.defineProperty(this, "key", {
+        get: function() {
+            return this.cf.indexA + this.cf.indexB * 4 + this.cf.typeA * 16 + this.cf.typeB * 64;
+        },
+        enumerable: true,
+        configurable: true
+    });
 }
 
 ContactID.prototype.set = function(o) {
-    this.key = o.key;
+    // this.key = o.key;
     this.cf.set(o.cf);
 };
 
@@ -2740,7 +2746,6 @@ ContactID.prototype.set = function(o) {
  * @prop typeB The feature type on shapeB
  */
 function ContactFeature() {
-    // TODO merge with ContactID?
     this.indexA;
     this.indexB;
     this.typeA;
@@ -2803,14 +2808,14 @@ Manifold.prototype.getWorldManifold = function(wm, xfA, radiusA, xfB, radiusB) {
       case Manifold.e_faceA:
         normal = Rot.mul(xfA.q, this.localNormal);
         var planePoint = Transform.mul(xfA, this.localPoint);
-        DEBUG && common.debug("faceA", this.localPoint.x, this.localPoint.y, this.localNormal.x, this.localNormal.y, normal.x, normal.y);
+        _DEBUG && common.debug("faceA", this.localPoint.x, this.localPoint.y, this.localNormal.x, this.localNormal.y, normal.x, normal.y);
         for (var i = 0; i < this.pointCount; ++i) {
             var clipPoint = Transform.mul(xfB, this.points[i].localPoint);
             var cA = Vec2.clone(clipPoint).wAdd(radiusA - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
             var cB = Vec2.clone(clipPoint).wSub(radiusB, normal);
             points[i] = Vec2.mid(cA, cB);
             separations[i] = Vec2.dot(Vec2.sub(cB, cA), normal);
-            DEBUG && common.debug(i, this.points[i].localPoint.x, this.points[i].localPoint.y, planePoint.x, planePoint.y, xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s, xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s, radiusA, radiusB, clipPoint.x, clipPoint.y, cA.x, cA.y, cB.x, cB.y, separations[i], points[i].x, points[i].y);
+            _DEBUG && common.debug(i, this.points[i].localPoint.x, this.points[i].localPoint.y, planePoint.x, planePoint.y, xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s, xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s, radiusA, radiusB, clipPoint.x, clipPoint.y, cA.x, cA.y, cB.x, cB.y, separations[i], points[i].x, points[i].y);
         }
         points.length = this.pointCount;
         separations.length = this.pointCount;
@@ -2932,8 +2937,8 @@ function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
         // VertexA is hitting edgeB.
         vOut[numOut].id.cf.indexA = vertexIndexA;
         vOut[numOut].id.cf.indexB = vIn[0].id.cf.indexB;
-        vOut[numOut].id.cf.typeA = ContactFeature.e_vertex;
-        vOut[numOut].id.cf.typeB = ContactFeature.e_face;
+        vOut[numOut].id.cf.typeA = Manifold.e_vertex;
+        vOut[numOut].id.cf.typeB = Manifold.e_face;
         ++numOut;
     }
     return numOut;
@@ -2941,9 +2946,9 @@ function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
 
 
 },{"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":50}],7:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 // TODO merge with World options?
 var Settings = exports;
@@ -3085,9 +3090,9 @@ Settings.angularSleepToleranceSqr = Math.pow(Settings.angularSleepTolerance, 2);
 
 
 },{}],8:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = Shape;
 
@@ -3178,9 +3183,9 @@ Shape.prototype.computeDistanceProxy = function(proxy) {};
 
 
 },{"./common/Math":18}],9:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = Solver;
 
@@ -3189,8 +3194,6 @@ module.exports.TimeStep = TimeStep;
 var Settings = require("./Settings");
 
 var common = require("./util/common");
-
-var Timer = require("./util/Timer");
 
 var Vec2 = require("./common/Vec2");
 
@@ -3217,15 +3220,6 @@ var DistanceOutput = Distance.Output;
 var DistanceProxy = Distance.Proxy;
 
 var SimplexCache = Distance.Cache;
-
-/**
- * Profiling data. Times are in milliseconds.
- */
-function Profile() {
-    this.solveInit;
-    this.solveVelocity;
-    this.solvePosition;
-}
 
 function TimeStep(dt) {
     this.dt = 0;
@@ -3254,11 +3248,9 @@ TimeStep.prototype.reset = function(dt) {
  * Finds and solves islands. An island is a connected subset of the world.
  * 
  * @param {World} world
- * @param {Profile} profile
  */
 function Solver(world) {
     this.m_world = world;
-    this.m_profile = new Profile();
     this.m_stack = [];
     this.m_bodies = [];
     this.m_contacts = [];
@@ -3273,17 +3265,17 @@ Solver.prototype.clear = function() {
 };
 
 Solver.prototype.addBody = function(body) {
-    ASSERT && common.assert(body instanceof Body, "Not a Body!", body);
+    _ASSERT && common.assert(body instanceof Body, "Not a Body!", body);
     this.m_bodies.push(body);
 };
 
 Solver.prototype.addContact = function(contact) {
-    ASSERT && common.assert(contact instanceof Contact, "Not a Contact!", contact);
+    _ASSERT && common.assert(contact instanceof Contact, "Not a Contact!", contact);
     this.m_contacts.push(contact);
 };
 
 Solver.prototype.addJoint = function(joint) {
-    ASSERT && common.assert(joint instanceof Joint, "Not a Joint!", joint);
+    _ASSERT && common.assert(joint instanceof Joint, "Not a Joint!", joint);
     this.m_joints.push(joint);
 };
 
@@ -3292,10 +3284,6 @@ Solver.prototype.addJoint = function(joint) {
  */
 Solver.prototype.solveWorld = function(step) {
     var world = this.m_world;
-    var profile = this.m_profile;
-    profile.solveInit = 0;
-    profile.solveVelocity = 0;
-    profile.solvePosition = 0;
     // Clear all the island flags.
     for (var b = world.m_bodyList; b; b = b.m_next) {
         b.m_islandFlag = false;
@@ -3329,7 +3317,7 @@ Solver.prototype.solveWorld = function(step) {
         while (stack.length > 0) {
             // Grab the next body off the stack and add it to the island.
             var b = stack.pop();
-            ASSERT && common.assert(b.isActive() == true);
+            _ASSERT && common.assert(b.isActive() == true);
             this.addBody(b);
             // Make sure the body is awake.
             b.setAwake(true);
@@ -3362,7 +3350,7 @@ Solver.prototype.solveWorld = function(step) {
                 if (other.m_islandFlag) {
                     continue;
                 }
-                // ASSERT && common.assert(stack.length < world.m_bodyCount);
+                // _ASSERT && common.assert(stack.length < world.m_bodyCount);
                 stack.push(other);
                 other.m_islandFlag = true;
             }
@@ -3381,7 +3369,7 @@ Solver.prototype.solveWorld = function(step) {
                 if (other.m_islandFlag) {
                     continue;
                 }
-                // ASSERT && common.assert(stack.length < world.m_bodyCount);
+                // _ASSERT && common.assert(stack.length < world.m_bodyCount);
                 stack.push(other);
                 other.m_islandFlag = true;
             }
@@ -3403,11 +3391,10 @@ Solver.prototype.solveWorld = function(step) {
  * @param {TimeStep} step
  */
 Solver.prototype.solveIsland = function(step) {
+    // B2: Island Solve
     var world = this.m_world;
-    var profile = this.m_profile;
     var gravity = world.m_gravity;
     var allowSleep = world.m_allowSleep;
-    var timer = Timer.now();
     var h = step.dt;
     // Integrate velocities and apply damping. Initialize the body state.
     for (var i = 0; i < this.m_bodies.length; ++i) {
@@ -3419,13 +3406,13 @@ Solver.prototype.solveIsland = function(step) {
         // Store positions for continuous collision.
         body.m_sweep.c0.set(body.m_sweep.c);
         body.m_sweep.a0 = body.m_sweep.a;
-        DEBUG && common.debug("P: ", a, c.x, c.y, w, v.x, v.y);
+        _DEBUG && common.debug("P: ", a, c.x, c.y, w, v.x, v.y);
         if (body.isDynamic()) {
             // Integrate velocities.
             v.wAdd(h * body.m_gravityScale, gravity);
             v.wAdd(h * body.m_invMass, body.m_force);
             w += h * body.m_invI * body.m_torque;
-            DEBUG && common.debug("N: " + h, body.m_gravityScale, gravity.x, gravity.y, body.m_invMass, body.m_force.x, body.m_force.y);
+            _DEBUG && common.debug("N: " + h, body.m_gravityScale, gravity.x, gravity.y, body.m_invMass, body.m_force.x, body.m_force.y);
             /**
        * <pre>
        * Apply damping.
@@ -3446,17 +3433,16 @@ Solver.prototype.solveIsland = function(step) {
         body.c_velocity.v = v;
         body.c_velocity.w = w;
     }
-    timer = Timer.now();
     for (var i = 0; i < this.m_contacts.length; ++i) {
         var contact = this.m_contacts[i];
         contact.initConstraint(step);
     }
-    DEBUG && this.printBodies("M: ");
+    _DEBUG && this.printBodies("M: ");
     for (var i = 0; i < this.m_contacts.length; ++i) {
         var contact = this.m_contacts[i];
         contact.initVelocityConstraint(step);
     }
-    DEBUG && this.printBodies("R: ");
+    _DEBUG && this.printBodies("R: ");
     if (step.warmStarting) {
         // Warm start.
         for (var i = 0; i < this.m_contacts.length; ++i) {
@@ -3464,17 +3450,15 @@ Solver.prototype.solveIsland = function(step) {
             contact.warmStartConstraint(step);
         }
     }
-    DEBUG && this.printBodies("Q: ");
+    _DEBUG && this.printBodies("Q: ");
     for (var i = 0; i < this.m_joints.length; ++i) {
         var joint = this.m_joints[i];
         joint.initVelocityConstraints(step);
     }
-    DEBUG && this.printBodies("E: ");
-    profile.solveInit = Timer.diff(timer);
+    _DEBUG && this.printBodies("E: ");
     // Solve velocity constraints
-    timer = Timer.now();
     for (var i = 0; i < step.velocityIterations; ++i) {
-        DEBUG && common.debug("--", i);
+        _DEBUG && common.debug("--", i);
         for (var j = 0; j < this.m_joints.length; ++j) {
             var joint = this.m_joints[j];
             joint.solveVelocityConstraints(step);
@@ -3484,14 +3468,13 @@ Solver.prototype.solveIsland = function(step) {
             contact.solveVelocityConstraint(step);
         }
     }
-    DEBUG && this.printBodies("D: ");
+    _DEBUG && this.printBodies("D: ");
     // Store impulses for warm starting
     for (var i = 0; i < this.m_contacts.length; ++i) {
         var contact = this.m_contacts[i];
         contact.storeConstraintImpulses(step);
     }
-    profile.solveVelocity = Timer.diff(timer);
-    DEBUG && this.printBodies("C: ");
+    _DEBUG && this.printBodies("C: ");
     // Integrate positions
     for (var i = 0; i < this.m_bodies.length; ++i) {
         var body = this.m_bodies[i];
@@ -3518,9 +3501,8 @@ Solver.prototype.solveIsland = function(step) {
         body.c_velocity.v.set(v);
         body.c_velocity.w = w;
     }
-    DEBUG && this.printBodies("B: ");
+    _DEBUG && this.printBodies("B: ");
     // Solve position constraints
-    timer = Timer.now();
     var positionSolved = false;
     for (var i = 0; i < step.positionIterations; ++i) {
         var minSeparation = 0;
@@ -3544,7 +3526,7 @@ Solver.prototype.solveIsland = function(step) {
             break;
         }
     }
-    DEBUG && this.printBodies("L: ");
+    _DEBUG && this.printBodies("L: ");
     // Copy state buffers back to the bodies
     for (var i = 0; i < this.m_bodies.length; ++i) {
         var body = this.m_bodies[i];
@@ -3554,7 +3536,6 @@ Solver.prototype.solveIsland = function(step) {
         body.m_angularVelocity = body.c_velocity.w;
         body.synchronizeTransform();
     }
-    profile.solvePosition = Timer.diff(timer);
     this.postSolveIsland();
     if (allowSleep) {
         var minSleepTime = Infinity;
@@ -3598,15 +3579,14 @@ var s_subStep = new TimeStep();
  * @param {TimeStep} step
  */
 Solver.prototype.solveWorldTOI = function(step) {
-    DEBUG && common.debug("TOI++++++World");
+    _DEBUG && common.debug("TOI++++++World");
     var world = this.m_world;
-    var profile = this.m_profile;
-    DEBUG && common.debug("Z:", world.m_stepComplete);
+    _DEBUG && common.debug("Z:", world.m_stepComplete);
     if (world.m_stepComplete) {
         for (var b = world.m_bodyList; b; b = b.m_next) {
             b.m_islandFlag = false;
             b.m_sweep.alpha0 = 0;
-            DEBUG && common.debug("b.alpha0:", b.m_sweep.alpha0);
+            _DEBUG && common.debug("b.alpha0:", b.m_sweep.alpha0);
         }
         for (var c = world.m_contactList; c; c = c.m_next) {
             // Invalidate TOI
@@ -3616,28 +3596,28 @@ Solver.prototype.solveWorldTOI = function(step) {
             c.m_toi = 1;
         }
     }
-    if (DEBUG) for (var c = world.m_contactList; c; c = c.m_next) {
-        DEBUG && common.debug("X:", c.m_toiFlag);
+    if (_DEBUG) for (var c = world.m_contactList; c; c = c.m_next) {
+        _DEBUG && common.debug("X:", c.m_toiFlag);
     }
     // Find TOI events and solve them.
     for (;;) {
-        DEBUG && common.debug(";;");
+        _DEBUG && common.debug(";;");
         // Find the first TOI.
         var minContact = null;
         // Contact
         var minAlpha = 1;
         for (var c = world.m_contactList; c; c = c.m_next) {
-            DEBUG && common.debug("alpha0::", c.getFixtureA().getBody().m_sweep.alpha0, c.getFixtureB().getBody().m_sweep.alpha0);
+            _DEBUG && common.debug("alpha0::", c.getFixtureA().getBody().m_sweep.alpha0, c.getFixtureB().getBody().m_sweep.alpha0);
             // Is this contact disabled?
             if (c.isEnabled() == false) {
                 continue;
             }
-            DEBUG && common.debug("toiCount:", c.m_toiCount, Settings.maxSubSteps);
+            _DEBUG && common.debug("toiCount:", c.m_toiCount, Settings.maxSubSteps);
             // Prevent excessive sub-stepping.
             if (c.m_toiCount > Settings.maxSubSteps) {
                 continue;
             }
-            DEBUG && common.debug("toiFlag:", c.m_toiFlag);
+            _DEBUG && common.debug("toiFlag:", c.m_toiFlag);
             var alpha = 1;
             if (c.m_toiFlag) {
                 // This contact has a valid cached TOI.
@@ -3645,27 +3625,27 @@ Solver.prototype.solveWorldTOI = function(step) {
             } else {
                 var fA = c.getFixtureA();
                 var fB = c.getFixtureB();
-                DEBUG && common.debug("sensor:", fA.isSensor(), fB.isSensor());
+                _DEBUG && common.debug("sensor:", fA.isSensor(), fB.isSensor());
                 // Is there a sensor?
                 if (fA.isSensor() || fB.isSensor()) {
                     continue;
                 }
                 var bA = fA.getBody();
                 var bB = fB.getBody();
-                ASSERT && common.assert(bA.isDynamic() || bB.isDynamic());
+                _ASSERT && common.assert(bA.isDynamic() || bB.isDynamic());
                 var activeA = bA.isAwake() && !bA.isStatic();
                 var activeB = bB.isAwake() && !bB.isStatic();
-                DEBUG && common.debug("awakestatic:", bA.isAwake(), bA.isStatic());
-                DEBUG && common.debug("awakestatic:", bB.isAwake(), bB.isStatic());
-                DEBUG && common.debug("active:", activeA, activeB);
+                _DEBUG && common.debug("awakestatic:", bA.isAwake(), bA.isStatic());
+                _DEBUG && common.debug("awakestatic:", bB.isAwake(), bB.isStatic());
+                _DEBUG && common.debug("active:", activeA, activeB);
                 // Is at least one body active (awake and dynamic or kinematic)?
                 if (activeA == false && activeB == false) {
                     continue;
                 }
-                DEBUG && common.debug("alpha:", alpha, bA.m_sweep.alpha0, bB.m_sweep.alpha0);
+                _DEBUG && common.debug("alpha:", alpha, bA.m_sweep.alpha0, bB.m_sweep.alpha0);
                 var collideA = bA.isBullet() || !bA.isDynamic();
                 var collideB = bB.isBullet() || !bB.isDynamic();
-                DEBUG && common.debug("collide:", collideA, collideB);
+                _DEBUG && common.debug("collide:", collideA, collideB);
                 // Are these two non-bullet dynamic bodies?
                 if (collideA == false && collideB == false) {
                     continue;
@@ -3680,14 +3660,14 @@ Solver.prototype.solveWorldTOI = function(step) {
                     alpha0 = bA.m_sweep.alpha0;
                     bB.m_sweep.advance(alpha0);
                 }
-                DEBUG && common.debug("alpha0:", alpha0, bA.m_sweep.alpha0, bB.m_sweep.alpha0);
-                ASSERT && common.assert(alpha0 < 1);
+                _DEBUG && common.debug("alpha0:", alpha0, bA.m_sweep.alpha0, bB.m_sweep.alpha0);
+                _ASSERT && common.assert(alpha0 < 1);
                 var indexA = c.getChildIndexA();
                 var indexB = c.getChildIndexB();
                 var sweepA = bA.m_sweep;
                 var sweepB = bB.m_sweep;
-                DEBUG && common.debug("sweepA", sweepA.localCenter.x, sweepA.localCenter.y, sweepA.c.x, sweepA.c.y, sweepA.a, sweepA.alpha0, sweepA.c0.x, sweepA.c0.y, sweepA.a0);
-                DEBUG && common.debug("sweepB", sweepB.localCenter.x, sweepB.localCenter.y, sweepB.c.x, sweepB.c.y, sweepB.a, sweepB.alpha0, sweepB.c0.x, sweepB.c0.y, sweepB.a0);
+                _DEBUG && common.debug("sweepA", sweepA.localCenter.x, sweepA.localCenter.y, sweepA.c.x, sweepA.c.y, sweepA.a, sweepA.alpha0, sweepA.c0.x, sweepA.c0.y, sweepA.a0);
+                _DEBUG && common.debug("sweepB", sweepB.localCenter.x, sweepB.localCenter.y, sweepB.c.x, sweepB.c.y, sweepB.a, sweepB.alpha0, sweepB.c0.x, sweepB.c0.y, sweepB.a0);
                 // Compute the time of impact in interval [0, minTOI]
                 var input = new TOIInput();
                 // TODO: reuse
@@ -3699,10 +3679,10 @@ Solver.prototype.solveWorldTOI = function(step) {
                 var output = new TOIOutput();
                 // TODO: reuse
                 TimeOfImpact(output, input);
-                // DEBUG && common.debug(output.t, output.state);
+                // _DEBUG && common.debug(output.t, output.state);
                 // Beta is the fraction of the remaining portion of the [time?].
                 var beta = output.t;
-                DEBUG && common.debug("state:", output.state, TOIOutput.e_touching);
+                _DEBUG && common.debug("state:", output.state, TOIOutput.e_touching);
                 if (output.state == TOIOutput.e_touching) {
                     alpha = Math.min(alpha0 + (1 - alpha0) * beta, 1);
                 } else {
@@ -3711,14 +3691,14 @@ Solver.prototype.solveWorldTOI = function(step) {
                 c.m_toi = alpha;
                 c.m_toiFlag = true;
             }
-            DEBUG && common.debug("minAlpha:", minAlpha, alpha);
+            _DEBUG && common.debug("minAlpha:", minAlpha, alpha);
             if (alpha < minAlpha) {
                 // This is the minimum TOI found so far.
                 minContact = c;
                 minAlpha = alpha;
             }
         }
-        DEBUG && common.debug("minContact:", minContact == null, 1 - 10 * Math.EPSILON < minAlpha, minAlpha);
+        _DEBUG && common.debug("minContact:", minContact == null, 1 - 10 * Math.EPSILON < minAlpha, minAlpha);
         if (minContact == null || 1 - 10 * Math.EPSILON < minAlpha) {
             // No more TOI events. Done!
             world.m_stepComplete = true;
@@ -3840,12 +3820,12 @@ Solver.prototype.solveWorldTOI = function(step) {
             break;
         }
     }
-    if (DEBUG) for (var b = world.m_bodyList; b; b = b.m_next) {
+    if (_DEBUG) for (var b = world.m_bodyList; b; b = b.m_next) {
         var c = b.m_sweep.c;
         var a = b.m_sweep.a;
         var v = b.m_linearVelocity;
         var w = b.m_angularVelocity;
-        DEBUG && common.debug("== ", a, c.x, c.y, w, v.x, v.y);
+        _DEBUG && common.debug("== ", a, c.x, c.y, w, v.x, v.y);
     }
 };
 
@@ -3855,9 +3835,8 @@ Solver.prototype.solveWorldTOI = function(step) {
  * @param toiB
  */
 Solver.prototype.solveIslandTOI = function(subStep, toiA, toiB) {
-    DEBUG && common.debug("TOI++++++Island");
+    _DEBUG && common.debug("TOI++++++Island");
     var world = this.m_world;
-    var profile = this.m_profile;
     // Initialize the body state.
     for (var i = 0; i < this.m_bodies.length; ++i) {
         var body = this.m_bodies[i];
@@ -3963,7 +3942,7 @@ Solver.prototype.solveIslandTOI = function(subStep, toiA, toiB) {
         body.synchronizeTransform();
     }
     this.postSolveIsland();
-    DEBUG && common.debug("TOI------Island");
+    _DEBUG && common.debug("TOI------Island");
 };
 
 /**
@@ -3990,18 +3969,16 @@ Solver.prototype.postSolveIsland = function() {
 };
 
 
-},{"./Body":2,"./Contact":3,"./Joint":5,"./Settings":7,"./collision/Distance":13,"./collision/TimeOfImpact":15,"./common/Math":18,"./common/Vec2":23,"./util/Timer":49,"./util/common":50}],10:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+},{"./Body":2,"./Contact":3,"./Joint":5,"./Settings":7,"./collision/Distance":13,"./collision/TimeOfImpact":15,"./common/Math":18,"./common/Vec2":23,"./util/common":50}],10:[function(require,module,exports){
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = World;
 
 var options = require("./util/options");
 
 var common = require("./util/common");
-
-var Timer = require("./util/Timer");
 
 var Vec2 = require("./common/Vec2");
 
@@ -4244,7 +4221,7 @@ World.prototype.clearForces = function() {
  * @param aabb The query box.
  */
 World.prototype.queryAABB = function(aabb, queryCallback) {
-    ASSERT && common.assert(typeof queryCallback === "function");
+    _ASSERT && common.assert(typeof queryCallback === "function");
     var broadPhase = this.m_broadPhase;
     this.m_broadPhase.query(aabb, function(proxyId) {
         //TODO GC
@@ -4284,7 +4261,7 @@ World.prototype.queryAABB = function(aabb, queryCallback) {
  * @param point2 The ray ending point
  */
 World.prototype.rayCast = function(point1, point2, reportFixtureCallback) {
-    ASSERT && common.assert(typeof reportFixtureCallback === "function");
+    _ASSERT && common.assert(typeof reportFixtureCallback === "function");
     var broadPhase = this.m_broadPhase;
     this.m_broadPhase.rayCast({
         maxFraction: 1,
@@ -4348,7 +4325,7 @@ World.prototype.getTreeQuality = function() {
  * @param {Vec2} newOrigin The new origin with respect to the old origin
  */
 World.prototype.shiftOrigin = function(newOrigin) {
-    ASSERT && common.assert(this.m_locked == false);
+    _ASSERT && common.assert(this.m_locked == false);
     if (this.m_locked) {
         return;
     }
@@ -4373,7 +4350,7 @@ World.prototype.shiftOrigin = function(newOrigin) {
  * @param {float} angle Body angle if def is position.
  */
 World.prototype.createBody = function(def, angle) {
-    ASSERT && common.assert(this.isLocked() == false);
+    _ASSERT && common.assert(this.isLocked() == false);
     if (this.isLocked()) {
         return null;
     }
@@ -4432,8 +4409,8 @@ World.prototype.createKinematicBody = function(def, angle) {
  * @param {Body} b
  */
 World.prototype.destroyBody = function(b) {
-    ASSERT && common.assert(this.m_bodyCount > 0);
-    ASSERT && common.assert(this.isLocked() == false);
+    _ASSERT && common.assert(this.m_bodyCount > 0);
+    _ASSERT && common.assert(this.isLocked() == false);
     if (this.isLocked()) {
         return;
     }
@@ -4495,9 +4472,9 @@ World.prototype.destroyBody = function(b) {
  * @param {Body} bodyA
  */
 World.prototype.createJoint = function(joint) {
-    ASSERT && common.assert(!!joint.m_bodyA);
-    ASSERT && common.assert(!!joint.m_bodyB);
-    ASSERT && common.assert(this.isLocked() == false);
+    _ASSERT && common.assert(!!joint.m_bodyA);
+    _ASSERT && common.assert(!!joint.m_bodyB);
+    _ASSERT && common.assert(this.isLocked() == false);
     if (this.isLocked()) {
         return null;
     }
@@ -4543,7 +4520,7 @@ World.prototype.createJoint = function(joint) {
  * @param {Joint} join
  */
 World.prototype.destroyJoint = function(joint) {
-    ASSERT && common.assert(this.isLocked() == false);
+    _ASSERT && common.assert(this.isLocked() == false);
     if (this.isLocked()) {
         return;
     }
@@ -4587,7 +4564,7 @@ World.prototype.destroyJoint = function(joint) {
     }
     joint.m_edgeB.prev = null;
     joint.m_edgeB.next = null;
-    ASSERT && common.assert(this.m_jointCount > 0);
+    _ASSERT && common.assert(this.m_jointCount > 0);
     --this.m_jointCount;
     // If the joint prevents collisions, then flag any contacts for filtering.
     if (joint.m_collideConnected == false) {
@@ -4943,10 +4920,10 @@ World.prototype.postSolve = function(contact, impulse) {
 };
 
 
-},{"./Body":2,"./Contact":3,"./Solver":9,"./collision/BroadPhase":12,"./common/Vec2":23,"./util/Timer":49,"./util/common":50,"./util/options":52}],11:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+},{"./Body":2,"./Contact":3,"./Solver":9,"./collision/BroadPhase":12,"./common/Vec2":23,"./util/common":50,"./util/options":52}],11:[function(require,module,exports){
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 var Settings = require("../Settings");
 
@@ -5146,9 +5123,9 @@ AABB.prototype.toString = function() {
 
 
 },{"../Settings":7,"../common/Math":18,"../common/Vec2":23}],12:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 var Settings = require("../Settings");
 
@@ -5263,7 +5240,7 @@ BroadPhase.prototype.shiftOrigin = function(newOrigin) {
  * is called.
  */
 BroadPhase.prototype.createProxy = function(aabb, userData) {
-    ASSERT && common.assert(AABB.isValid(aabb));
+    _ASSERT && common.assert(AABB.isValid(aabb));
     var proxyId = this.m_tree.createProxy(aabb, userData);
     this.m_proxyCount++;
     this.bufferMove(proxyId);
@@ -5284,7 +5261,7 @@ BroadPhase.prototype.destroyProxy = function(proxyId) {
  * UpdatePairs to finalized the proxy pairs (for your time step).
  */
 BroadPhase.prototype.moveProxy = function(proxyId, aabb, displacement) {
-    ASSERT && common.assert(AABB.isValid(aabb));
+    _ASSERT && common.assert(AABB.isValid(aabb));
     var changed = this.m_tree.moveProxy(proxyId, aabb, displacement);
     if (changed) {
         this.bufferMove(proxyId);
@@ -5322,7 +5299,7 @@ BroadPhase.prototype.unbufferMove = function(proxyId) {
  * @param {BroadPhase~AddPair} addPairCallback
  */
 BroadPhase.prototype.updatePairs = function(addPairCallback) {
-    ASSERT && common.assert(typeof addPairCallback === "function");
+    _ASSERT && common.assert(typeof addPairCallback === "function");
     this.m_callback = addPairCallback;
     // Perform tree queries for all moving proxies.
     while (this.m_moveBuffer.length > 0) {
@@ -5355,9 +5332,9 @@ BroadPhase.prototype.queryCallback = function(proxyId) {
 
 
 },{"../Settings":7,"../common/Math":18,"../util/common":50,"./AABB":11,"./DynamicTree":14}],13:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = Distance;
 
@@ -5372,8 +5349,6 @@ module.exports.Cache = SimplexCache;
 var Settings = require("../Settings");
 
 var common = require("../util/common");
-
-var Timer = require("../util/Timer");
 
 var stats = require("../common/stats");
 
@@ -5463,15 +5438,15 @@ function Distance(output, cache, input) {
     var proxyB = input.proxyB;
     var xfA = input.transformA;
     var xfB = input.transformB;
-    DEBUG && common.debug("cahce:", cache.metric, cache.count);
-    DEBUG && common.debug("proxyA:", proxyA.m_count);
-    DEBUG && common.debug("proxyB:", proxyB.m_count);
-    DEBUG && common.debug("xfA:", xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s);
-    DEBUG && common.debug("xfB:", xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
+    _DEBUG && common.debug("cahce:", cache.metric, cache.count);
+    _DEBUG && common.debug("proxyA:", proxyA.m_count);
+    _DEBUG && common.debug("proxyB:", proxyB.m_count);
+    _DEBUG && common.debug("xfA:", xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s);
+    _DEBUG && common.debug("xfB:", xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
     // Initialize the simplex.
     var simplex = new Simplex();
     simplex.readCache(cache, proxyA, xfA, proxyB, xfB);
-    DEBUG && common.debug("cache", simplex.print());
+    _DEBUG && common.debug("cache", simplex.print());
     // Get simplex vertices as an array.
     var vertices = simplex.m_v;
     // SimplexVertex
@@ -5547,7 +5522,7 @@ function Distance(output, cache, input) {
     simplex.getWitnessPoints(output.pointA, output.pointB);
     output.distance = Vec2.distance(output.pointA, output.pointB);
     output.iterations = iter;
-    DEBUG && common.debug("Distance:", output.distance, output.pointA.x, output.pointA.y, output.pointB.x, output.pointB.y);
+    _DEBUG && common.debug("Distance:", output.distance, output.pointA.x, output.pointA.y, output.pointB.x, output.pointB.y);
     // Cache the simplex.
     simplex.writeCache(cache);
     // Apply radii if requested.
@@ -5596,7 +5571,7 @@ DistanceProxy.prototype.getVertexCount = function() {
  * Get a vertex by index. Used by Distance.
  */
 DistanceProxy.prototype.getVertex = function(index) {
-    ASSERT && common.assert(0 <= index && index < this.m_count);
+    _ASSERT && common.assert(0 <= index && index < this.m_count);
     return this.m_vertices[index];
 };
 
@@ -5629,7 +5604,7 @@ DistanceProxy.prototype.getSupportVertex = function(d) {
  */
 DistanceProxy.prototype.set = function(shape, index) {
     // TODO remove, use shape instead
-    ASSERT && common.assert(typeof shape.computeDistanceProxy === "function");
+    _ASSERT && common.assert(typeof shape.computeDistanceProxy === "function");
     shape.computeDistanceProxy(this, index);
 };
 
@@ -5678,7 +5653,7 @@ Simplex.prototype.print = function() {
 
 // (SimplexCache, DistanceProxy, ...)
 Simplex.prototype.readCache = function(cache, proxyA, transformA, proxyB, transformB) {
-    ASSERT && common.assert(cache.count <= 3);
+    _ASSERT && common.assert(cache.count <= 3);
     // Copy data from cache.
     this.m_count = cache.count;
     for (var i = 0; i < this.m_count; ++i) {
@@ -5747,7 +5722,7 @@ Simplex.prototype.getSearchDirection = function() {
         }
 
       default:
-        ASSERT && common.assert(false);
+        _ASSERT && common.assert(false);
         return Vec2.zero();
     }
 };
@@ -5755,7 +5730,7 @@ Simplex.prototype.getSearchDirection = function() {
 Simplex.prototype.getClosestPoint = function() {
     switch (this.m_count) {
       case 0:
-        ASSERT && common.assert(false);
+        _ASSERT && common.assert(false);
         return Vec2.zero();
 
       case 1:
@@ -5768,7 +5743,7 @@ Simplex.prototype.getClosestPoint = function() {
         return Vec2.zero();
 
       default:
-        ASSERT && common.assert(false);
+        _ASSERT && common.assert(false);
         return Vec2.zero();
     }
 };
@@ -5776,30 +5751,30 @@ Simplex.prototype.getClosestPoint = function() {
 Simplex.prototype.getWitnessPoints = function(pA, pB) {
     switch (this.m_count) {
       case 0:
-        ASSERT && common.assert(false);
+        _ASSERT && common.assert(false);
         break;
 
       case 1:
-        DEBUG && common.debug("case1", this.print());
+        _DEBUG && common.debug("case1", this.print());
         pA.set(this.m_v1.wA);
         pB.set(this.m_v1.wB);
         break;
 
       case 2:
-        DEBUG && common.debug("case2", this.print());
+        _DEBUG && common.debug("case2", this.print());
         pA.wSet(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
         pB.wSet(this.m_v1.a, this.m_v1.wB, this.m_v2.a, this.m_v2.wB);
         break;
 
       case 3:
-        DEBUG && common.debug("case3", this.print());
+        _DEBUG && common.debug("case3", this.print());
         pA.wSet(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
         pA.wAdd(this.m_v3.a, this.m_v3.wA);
         pB.set(pA);
         break;
 
       default:
-        ASSERT && common.assert(false);
+        _ASSERT && common.assert(false);
         break;
     }
 };
@@ -5807,7 +5782,7 @@ Simplex.prototype.getWitnessPoints = function(pA, pB) {
 Simplex.prototype.getMetric = function() {
     switch (this.m_count) {
       case 0:
-        ASSERT && common.assert(false);
+        _ASSERT && common.assert(false);
         return 0;
 
       case 1:
@@ -5820,7 +5795,7 @@ Simplex.prototype.getMetric = function() {
         return Vec2.cross(Vec2.sub(this.m_v2.w, this.m_v1.w), Vec2.sub(this.m_v3.w, this.m_v1.w));
 
       default:
-        ASSERT && common.assert(false);
+        _ASSERT && common.assert(false);
         return 0;
     }
 };
@@ -5839,7 +5814,7 @@ Simplex.prototype.solve = function() {
         break;
 
       default:
-        ASSERT && common.assert(false);
+        _ASSERT && common.assert(false);
     }
 };
 
@@ -6007,10 +5982,10 @@ Distance.testOverlap = function(shapeA, indexA, shapeB, indexB, xfA, xfB) {
 };
 
 
-},{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../common/stats":26,"../util/Timer":49,"../util/common":50}],14:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+},{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../common/stats":26,"../util/common":50}],14:[function(require,module,exports){
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 var Settings = require("../Settings");
 
@@ -6078,7 +6053,7 @@ function DynamicTree() {
  */
 DynamicTree.prototype.getUserData = function(id) {
     var node = this.m_nodes[id];
-    ASSERT && common.assert(!!node);
+    _ASSERT && common.assert(!!node);
     return node.userData;
 };
 
@@ -6089,7 +6064,7 @@ DynamicTree.prototype.getUserData = function(id) {
  */
 DynamicTree.prototype.getFatAABB = function(id) {
     var node = this.m_nodes[id];
-    ASSERT && common.assert(!!node);
+    _ASSERT && common.assert(!!node);
     return node.aabb;
 };
 
@@ -6118,7 +6093,7 @@ DynamicTree.prototype.freeNode = function(node) {
  * Create a proxy. Provide a tight fitting AABB and a userData pointer.
  */
 DynamicTree.prototype.createProxy = function(aabb, userData) {
-    ASSERT && common.assert(AABB.isValid(aabb));
+    _ASSERT && common.assert(AABB.isValid(aabb));
     var node = this.allocateNode();
     node.aabb.set(aabb);
     // Fatten the aabb.
@@ -6134,8 +6109,8 @@ DynamicTree.prototype.createProxy = function(aabb, userData) {
  */
 DynamicTree.prototype.destroyProxy = function(id) {
     var node = this.m_nodes[id];
-    ASSERT && common.assert(!!node);
-    ASSERT && common.assert(node.isLeaf());
+    _ASSERT && common.assert(!!node);
+    _ASSERT && common.assert(node.isLeaf());
     this.removeLeaf(node);
     this.freeNode(node);
 };
@@ -6152,11 +6127,11 @@ DynamicTree.prototype.destroyProxy = function(id) {
  * @return true if the proxy was re-inserted.
  */
 DynamicTree.prototype.moveProxy = function(id, aabb, d) {
-    ASSERT && common.assert(AABB.isValid(aabb));
-    ASSERT && common.assert(!d || Vec2.isValid(d));
+    _ASSERT && common.assert(AABB.isValid(aabb));
+    _ASSERT && common.assert(!d || Vec2.isValid(d));
     var node = this.m_nodes[id];
-    ASSERT && common.assert(!!node);
-    ASSERT && common.assert(node.isLeaf());
+    _ASSERT && common.assert(!!node);
+    _ASSERT && common.assert(node.isLeaf());
     if (node.aabb.contains(aabb)) {
         return false;
     }
@@ -6182,7 +6157,7 @@ DynamicTree.prototype.moveProxy = function(id, aabb, d) {
 };
 
 DynamicTree.prototype.insertLeaf = function(leaf) {
-    ASSERT && common.assert(AABB.isValid(leaf.aabb));
+    _ASSERT && common.assert(AABB.isValid(leaf.aabb));
     if (this.m_root == null) {
         this.m_root = leaf;
         this.m_root.parent = null;
@@ -6272,8 +6247,8 @@ DynamicTree.prototype.insertLeaf = function(leaf) {
         index = this.balance(index);
         var child1 = index.child1;
         var child2 = index.child2;
-        ASSERT && common.assert(child1 != null);
-        ASSERT && common.assert(child2 != null);
+        _ASSERT && common.assert(child1 != null);
+        _ASSERT && common.assert(child2 != null);
         index.height = 1 + Math.max(child1.height, child2.height);
         index.aabb.combine(child1.aabb, child2.aabb);
         index = index.parent;
@@ -6324,7 +6299,7 @@ DynamicTree.prototype.removeLeaf = function(leaf) {
  * root index.
  */
 DynamicTree.prototype.balance = function(iA) {
-    ASSERT && common.assert(iA != null);
+    _ASSERT && common.assert(iA != null);
     var A = iA;
     if (A.isLeaf() || A.height < 2) {
         return iA;
@@ -6454,7 +6429,7 @@ DynamicTree.prototype.computeHeight = function(id) {
     } else {
         node = this.m_root;
     }
-    // ASSERT && common.assert(0 <= id && id < this.m_nodeCapacity);
+    // _ASSERT && common.assert(0 <= id && id < this.m_nodeCapacity);
     if (node.isLeaf()) {
         return 0;
     }
@@ -6468,20 +6443,20 @@ DynamicTree.prototype.validateStructure = function(node) {
         return;
     }
     if (node == this.m_root) {
-        ASSERT && common.assert(node.parent == null);
+        _ASSERT && common.assert(node.parent == null);
     }
     var child1 = node.child1;
     var child2 = node.child2;
     if (node.isLeaf()) {
-        ASSERT && common.assert(child1 == null);
-        ASSERT && common.assert(child2 == null);
-        ASSERT && common.assert(node.height == 0);
+        _ASSERT && common.assert(child1 == null);
+        _ASSERT && common.assert(child2 == null);
+        _ASSERT && common.assert(node.height == 0);
         return;
     }
-    // ASSERT && common.assert(0 <= child1 && child1 < this.m_nodeCapacity);
-    // ASSERT && common.assert(0 <= child2 && child2 < this.m_nodeCapacity);
-    ASSERT && common.assert(child1.parent == node);
-    ASSERT && common.assert(child2.parent == node);
+    // _ASSERT && common.assert(0 <= child1 && child1 < this.m_nodeCapacity);
+    // _ASSERT && common.assert(0 <= child2 && child2 < this.m_nodeCapacity);
+    _ASSERT && common.assert(child1.parent == node);
+    _ASSERT && common.assert(child2.parent == node);
     this.validateStructure(child1);
     this.validateStructure(child2);
 };
@@ -6493,20 +6468,20 @@ DynamicTree.prototype.validateMetrics = function(node) {
     var child1 = node.child1;
     var child2 = node.child2;
     if (node.isLeaf()) {
-        ASSERT && common.assert(child1 == null);
-        ASSERT && common.assert(child2 == null);
-        ASSERT && common.assert(node.height == 0);
+        _ASSERT && common.assert(child1 == null);
+        _ASSERT && common.assert(child2 == null);
+        _ASSERT && common.assert(node.height == 0);
         return;
     }
-    // ASSERT && common.assert(0 <= child1 && child1 < this.m_nodeCapacity);
-    // ASSERT && common.assert(0 <= child2 && child2 < this.m_nodeCapacity);
+    // _ASSERT && common.assert(0 <= child1 && child1 < this.m_nodeCapacity);
+    // _ASSERT && common.assert(0 <= child2 && child2 < this.m_nodeCapacity);
     var height1 = this.m_nodes[child1].height;
     var height2 = this.m_nodes[child2].height;
     var height = 1 + Math.max(height1, height2);
-    ASSERT && common.assert(node.height == height);
+    _ASSERT && common.assert(node.height == height);
     var aabb = new AABB();
     aabb.combine(child1.aabb, child2.aabb);
-    ASSERT && common.assert(AABB.areEqual(aabb, node.aabb));
+    _ASSERT && common.assert(AABB.areEqual(aabb, node.aabb));
     this.validateMetrics(child1);
     this.validateMetrics(child2);
 };
@@ -6515,7 +6490,7 @@ DynamicTree.prototype.validateMetrics = function(node) {
 DynamicTree.prototype.validate = function() {
     ValidateStructure(this.m_root);
     ValidateMetrics(this.m_root);
-    ASSERT && common.assert(this.getHeight() == this.computeHeight());
+    _ASSERT && common.assert(this.getHeight() == this.computeHeight());
 };
 
 /**
@@ -6529,7 +6504,7 @@ DynamicTree.prototype.getMaxBalance = function() {
         if (node.height <= 1) {
             continue;
         }
-        ASSERT && common.assert(node.isLeaf() == false);
+        _ASSERT && common.assert(node.isLeaf() == false);
         var balance = Math.abs(node.child2.height - node.child1.height);
         maxBalance = Math.max(maxBalance, balance);
     }
@@ -6625,7 +6600,7 @@ DynamicTree.prototype.shiftOrigin = function(newOrigin) {
  * @param {DynamicTree~queryCallback} queryCallback
  */
 DynamicTree.prototype.query = function(aabb, queryCallback) {
-    ASSERT && common.assert(typeof queryCallback === "function");
+    _ASSERT && common.assert(typeof queryCallback === "function");
     var stack = stackPool.allocate();
     stack.push(this.m_root);
     while (stack.length > 0) {
@@ -6662,11 +6637,11 @@ DynamicTree.prototype.query = function(aabb, queryCallback) {
  */
 DynamicTree.prototype.rayCast = function(input, rayCastCallback) {
     // TODO GC
-    ASSERT && common.assert(typeof rayCastCallback === "function");
+    _ASSERT && common.assert(typeof rayCastCallback === "function");
     var p1 = input.p1;
     var p2 = input.p2;
     var r = Vec2.sub(p2, p1);
-    ASSERT && common.assert(r.lengthSquared() > 0);
+    _ASSERT && common.assert(r.lengthSquared() > 0);
     r.normalize();
     // v is perpendicular to the segment.
     var v = Vec2.cross(1, r);
@@ -6793,9 +6768,9 @@ function Iterator() {
 
 
 },{"../Settings":7,"../common/Math":18,"../common/Vec2":23,"../util/Pool":48,"../util/common":50,"./AABB":11}],15:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = TimeOfImpact;
 
@@ -6919,8 +6894,8 @@ function TimeOfImpact(output, input) {
     // Sweep
     var sweepB = input.sweepB;
     // Sweep
-    DEBUG && common.debug("sweepA", sweepA.localCenter.x, sweepA.localCenter.y, sweepA.c.x, sweepA.c.y, sweepA.a, sweepA.alpha0, sweepA.c0.x, sweepA.c0.y, sweepA.a0);
-    DEBUG && common.debug("sweepB", sweepB.localCenter.x, sweepB.localCenter.y, sweepB.c.x, sweepB.c.y, sweepB.a, sweepB.alpha0, sweepB.c0.x, sweepB.c0.y, sweepB.a0);
+    _DEBUG && common.debug("sweepA", sweepA.localCenter.x, sweepA.localCenter.y, sweepA.c.x, sweepA.c.y, sweepA.a, sweepA.alpha0, sweepA.c0.x, sweepA.c0.y, sweepA.a0);
+    _DEBUG && common.debug("sweepB", sweepB.localCenter.x, sweepB.localCenter.y, sweepB.c.x, sweepB.c.y, sweepB.a, sweepB.alpha0, sweepB.c0.x, sweepB.c0.y, sweepB.a0);
     // Large rotations can make the root finder fail, so we normalize the
     // sweep angles.
     sweepA.normalize();
@@ -6929,7 +6904,7 @@ function TimeOfImpact(output, input) {
     var totalRadius = proxyA.m_radius + proxyB.m_radius;
     var target = Math.max(Settings.linearSlop, totalRadius - 3 * Settings.linearSlop);
     var tolerance = .25 * Settings.linearSlop;
-    ASSERT && common.assert(target > tolerance);
+    _ASSERT && common.assert(target > tolerance);
     var t1 = 0;
     var k_maxIterations = Settings.maxTOIIterations;
     var iter = 0;
@@ -6946,15 +6921,15 @@ function TimeOfImpact(output, input) {
         var xfB = Transform.identity();
         sweepA.getTransform(xfA, t1);
         sweepB.getTransform(xfB, t1);
-        DEBUG && common.debug("xfA:", xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s);
-        DEBUG && common.debug("xfB:", xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
+        _DEBUG && common.debug("xfA:", xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s);
+        _DEBUG && common.debug("xfB:", xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
         // Get the distance between shapes. We can also use the results
         // to get a separating axis.
         distanceInput.transformA = xfA;
         distanceInput.transformB = xfB;
         var distanceOutput = new DistanceOutput();
         Distance(distanceOutput, cache, distanceInput);
-        DEBUG && common.debug("distance:", distanceOutput.distance);
+        _DEBUG && common.debug("distance:", distanceOutput.distance);
         // If the shapes are overlapped, we give up on continuous collision.
         if (distanceOutput.distance <= 0) {
             // Failure!
@@ -7019,7 +6994,7 @@ function TimeOfImpact(output, input) {
             var s1 = fcn.evaluate(t1);
             var indexA = fcn.indexA;
             var indexB = fcn.indexB;
-            DEBUG && common.debug("s1:", s1, target, tolerance, t1);
+            _DEBUG && common.debug("s1:", s1, target, tolerance, t1);
             // Check for initial overlap. This might happen if the root finder
             // runs out of iterations.
             if (s1 < target - tolerance) {
@@ -7127,7 +7102,7 @@ SeparationFunction.prototype.initialize = function(cache, proxyA, sweepA, proxyB
     this.m_proxyA = proxyA;
     this.m_proxyB = proxyB;
     var count = cache.count;
-    ASSERT && common.assert(0 < count && count < 3);
+    _ASSERT && common.assert(0 < count && count < 3);
     this.m_sweepA = sweepA;
     this.m_sweepB = sweepB;
     var xfA = Transform.identity();
@@ -7188,7 +7163,7 @@ SeparationFunction.prototype.compute = function(find, t) {
     var xfB = Transform.identity();
     this.m_sweepA.getTransform(xfA, t);
     this.m_sweepB.getTransform(xfB, t);
-    // DEBUG && common.debug('xfB', t, this.m_sweepB.localCenter.x,
+    // _DEBUG && common.debug('xfB', t, this.m_sweepB.localCenter.x,
     // this.m_sweepB.localCenter.y, this.m_sweepB.c.x, this.m_sweepB.c.y,
     // this.m_sweepB.a, this.m_sweepB.alpha0, this.m_sweepB.c0.x,
     // this.m_sweepB.c0.y, this.m_sweepB.a0, xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
@@ -7240,7 +7215,7 @@ SeparationFunction.prototype.compute = function(find, t) {
         }
 
       default:
-        ASSERT && common.assert(false);
+        _ASSERT && common.assert(false);
         if (find) {
             this.indexA = -1;
             this.indexB = -1;
@@ -7259,9 +7234,9 @@ SeparationFunction.prototype.evaluate = function(t) {
 
 
 },{"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../common/stats":26,"../util/Timer":49,"../util/common":50,"./Distance":13}],16:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = Mat22;
 
@@ -7296,9 +7271,9 @@ Mat22.isValid = function(o) {
 };
 
 Mat22.assert = function(o) {
-    if (!ASSERT) return;
+    if (!_ASSERT) return;
     if (!Mat22.isValid(o)) {
-        DEBUG && common.debug(o);
+        _DEBUG && common.debug(o);
         throw new Error("Invalid Mat22!");
     }
 };
@@ -7311,11 +7286,11 @@ Mat22.prototype.set = function(a, b, c, d) {
         this.ex.set(a);
         this.ey.set(b);
     } else if (typeof a === "object") {
-        ASSERT && Mat22.assert(a);
+        _ASSERT && Mat22.assert(a);
         this.ex.set(a.ex);
         this.ey.set(a.ey);
     } else {
-        ASSERT && common.assert(false);
+        _ASSERT && common.assert(false);
     }
 };
 
@@ -7355,7 +7330,7 @@ Mat22.prototype.getInverse = function() {
  * computing the inverse in one-shot cases.
  */
 Mat22.prototype.solve = function(v) {
-    ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(v);
     var a = this.ex.x;
     var b = this.ey.x;
     var c = this.ex.y;
@@ -7377,16 +7352,16 @@ Mat22.prototype.solve = function(v) {
 Mat22.mul = function(mx, v) {
     if (v && "x" in v && "y" in v) {
         // Vec2
-        ASSERT && Vec2.assert(v);
+        _ASSERT && Vec2.assert(v);
         var x = mx.ex.x * v.x + mx.ey.x * v.y;
         var y = mx.ex.y * v.x + mx.ey.y * v.y;
         return Vec2.neo(x, y);
     } else if (v && "ex" in v && "ey" in v) {
         // Mat22
-        ASSERT && Mat22.assert(v);
+        _ASSERT && Mat22.assert(v);
         return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
     }
-    ASSERT && common.assert(false);
+    _ASSERT && common.assert(false);
 };
 
 /**
@@ -7398,34 +7373,34 @@ Mat22.mul = function(mx, v) {
 Mat22.mulT = function(mx, v) {
     if (v && "x" in v && "y" in v) {
         // Vec2
-        ASSERT && Vec2.assert(v);
+        _ASSERT && Vec2.assert(v);
         return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
     } else if (v && "ex" in v && "ey" in v) {
         // Mat22
-        ASSERT && Mat22.assert(v);
+        _ASSERT && Mat22.assert(v);
         var c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
         var c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
         return new Mat22(c1, c2);
     }
-    ASSERT && common.assert(false);
+    _ASSERT && common.assert(false);
 };
 
 Mat22.abs = function(mx) {
-    ASSERT && Mat22.assert(mx);
+    _ASSERT && Mat22.assert(mx);
     return new Mat22(Vec2.abs(mx.ex), Vec2.abs(mx.ey));
 };
 
 Mat22.add = function(mx1, mx2) {
-    ASSERT && Mat22.assert(mx1);
-    ASSERT && Mat22.assert(mx2);
+    _ASSERT && Mat22.assert(mx1);
+    _ASSERT && Mat22.assert(mx2);
     return new Mat22(Vec2.add(mx1.ex + mx2.ex), Vec2.add(mx1.ey + mx2.ey));
 };
 
 
 },{"../util/common":50,"./Math":18,"./Vec2":23}],17:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = Mat33;
 
@@ -7461,9 +7436,9 @@ Mat33.isValid = function(o) {
 };
 
 Mat33.assert = function(o) {
-    if (!ASSERT) return;
+    if (!_ASSERT) return;
     if (!Mat33.isValid(o)) {
-        DEBUG && common.debug(o);
+        _DEBUG && common.debug(o);
         throw new Error("Invalid Mat33!");
     }
 };
@@ -7584,33 +7559,33 @@ Mat33.prototype.getSymInverse33 = function(M) {
  * @returns {Vec3|Vec2}
  */
 Mat33.mul = function(a, b) {
-    ASSERT && Mat33.assert(a);
+    _ASSERT && Mat33.assert(a);
     if (b && "z" in b && "y" in b && "x" in b) {
-        ASSERT && Vec3.assert(b);
+        _ASSERT && Vec3.assert(b);
         var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
         var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
         var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
         return new Vec3(x, y, z);
     } else if (b && "y" in b && "x" in b) {
-        ASSERT && Vec2.assert(b);
+        _ASSERT && Vec2.assert(b);
         var x = a.ex.x * b.x + a.ey.x * b.y;
         var y = a.ex.y * b.x + a.ey.y * b.y;
         return Vec2.neo(x, y);
     }
-    ASSERT && common.assert(false);
+    _ASSERT && common.assert(false);
 };
 
 Mat33.add = function(a, b) {
-    ASSERT && Mat33.assert(a);
-    ASSERT && Mat33.assert(b);
+    _ASSERT && Mat33.assert(a);
+    _ASSERT && Mat33.assert(b);
     return new Vec3(a.x + b.x, a.y + b.y, a.z + b.z);
 };
 
 
 },{"../util/common":50,"./Math":18,"./Vec2":23,"./Vec3":24}],18:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 var common = require("../util/common");
 
@@ -7632,9 +7607,9 @@ math.isFinite = function(x) {
 };
 
 math.assert = function(x) {
-    if (!ASSERT) return;
+    if (!_ASSERT) return;
     if (!math.isFinite(x)) {
-        DEBUG && common.debug(x);
+        _DEBUG && common.debug(x);
         throw new Error("Invalid Number!");
     }
 };
@@ -7706,9 +7681,9 @@ math.random = function(min, max) {
 
 
 },{"../util/common":50,"../util/create":51}],19:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = Position;
 
@@ -7733,9 +7708,9 @@ Position.prototype.getTransform = function(xf, p) {
 
 
 },{"./Rot":20,"./Vec2":23}],20:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = Rot;
 
@@ -7769,7 +7744,7 @@ Rot.neo = function(angle) {
 };
 
 Rot.clone = function(rot) {
-    ASSERT && Rot.assert(rot);
+    _ASSERT && Rot.assert(rot);
     var obj = Object.create(Rot.prototype);
     obj.s = rot.s;
     obj.c = rot.c;
@@ -7777,7 +7752,7 @@ Rot.clone = function(rot) {
 };
 
 Rot.identity = function(rot) {
-    ASSERT && Rot.assert(rot);
+    _ASSERT && Rot.assert(rot);
     var obj = Object.create(Rot.prototype);
     obj.s = 0;
     obj.c = 1;
@@ -7789,9 +7764,9 @@ Rot.isValid = function(o) {
 };
 
 Rot.assert = function(o) {
-    if (!ASSERT) return;
+    if (!_ASSERT) return;
     if (!Rot.isValid(o)) {
-        DEBUG && common.debug(o);
+        _DEBUG && common.debug(o);
         throw new Error("Invalid Rot!");
     }
 };
@@ -7806,11 +7781,11 @@ Rot.prototype.setIdentity = function() {
 
 Rot.prototype.set = function(angle) {
     if (typeof angle === "object") {
-        ASSERT && Rot.assert(angle);
+        _ASSERT && Rot.assert(angle);
         this.s = angle.s;
         this.c = angle.c;
     } else {
-        ASSERT && Math.assert(angle);
+        _ASSERT && Math.assert(angle);
         // TODO_ERIN optimize
         this.s = Math.sin(angle);
         this.c = Math.cos(angle);
@@ -7821,7 +7796,7 @@ Rot.prototype.set = function(angle) {
  * Set using an angle in radians.
  */
 Rot.prototype.setAngle = function(angle) {
-    ASSERT && Math.assert(angle);
+    _ASSERT && Math.assert(angle);
     // TODO_ERIN optimize
     this.s = Math.sin(angle);
     this.c = Math.cos(angle);
@@ -7858,9 +7833,9 @@ Rot.prototype.getYAxis = function() {
  * @returns Vec2
  */
 Rot.mul = function(rot, m) {
-    ASSERT && Rot.assert(rot);
+    _ASSERT && Rot.assert(rot);
     if ("c" in m && "s" in m) {
-        ASSERT && Rot.assert(m);
+        _ASSERT && Rot.assert(m);
         // [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
         // [qs qc] [rs rc] [qs*rc+qc*rs -qs*rs+qc*rc]
         // s = qs * rc + qc * rs
@@ -7870,7 +7845,7 @@ Rot.mul = function(rot, m) {
         qr.c = rot.c * m.c - rot.s * m.s;
         return qr;
     } else if ("x" in m && "y" in m) {
-        ASSERT && Vec2.assert(m);
+        _ASSERT && Vec2.assert(m);
         return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
     }
 };
@@ -7892,7 +7867,7 @@ Rot.mulSub = function(rot, v, w) {
  */
 Rot.mulT = function(rot, m) {
     if ("c" in m && "s" in m) {
-        ASSERT && Rot.assert(m);
+        _ASSERT && Rot.assert(m);
         // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
         // [-qs qc] [rs rc] [-qs*rc+qc*rs qs*rs+qc*rc]
         // s = qc * rs - qs * rc
@@ -7902,16 +7877,16 @@ Rot.mulT = function(rot, m) {
         qr.c = rot.c * m.c + rot.s * m.s;
         return qr;
     } else if ("x" in m && "y" in m) {
-        ASSERT && Vec2.assert(m);
+        _ASSERT && Vec2.assert(m);
         return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
     }
 };
 
 
 },{"../util/common":50,"./Math":18,"./Vec2":23}],21:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = Sweep;
 
@@ -7938,8 +7913,8 @@ var Transform = require("./Transform");
  *       and a0 are c and a at alpha0.
  */
 function Sweep(c, a) {
-    ASSERT && common.assert(typeof c === "undefined");
-    ASSERT && common.assert(typeof a === "undefined");
+    _ASSERT && common.assert(typeof c === "undefined");
+    _ASSERT && common.assert(typeof a === "undefined");
     this.localCenter = Vec2.zero();
     this.c = Vec2.zero();
     this.a = 0;
@@ -7983,7 +7958,7 @@ Sweep.prototype.getTransform = function(xf, beta) {
  * @param {float} alpha The new initial time
  */
 Sweep.prototype.advance = function(alpha) {
-    ASSERT && common.assert(this.alpha0 < 1);
+    _ASSERT && common.assert(this.alpha0 < 1);
     var beta = (alpha - this.alpha0) / (1 - this.alpha0);
     this.c0.wSet(beta, this.c, 1 - beta, this.c0);
     this.a0 = beta * this.a + (1 - beta) * this.a0;
@@ -8026,9 +8001,9 @@ Sweep.prototype.set = function(that) {
 
 
 },{"../util/common":50,"./Math":18,"./Rot":20,"./Transform":22,"./Vec2":23}],22:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = Transform;
 
@@ -8108,9 +8083,9 @@ Transform.isValid = function(o) {
 };
 
 Transform.assert = function(o) {
-    if (!ASSERT) return;
+    if (!_ASSERT) return;
     if (!Transform.isValid(o)) {
-        DEBUG && common.debug(o);
+        _DEBUG && common.debug(o);
         throw new Error("Invalid Transform!");
     }
 };
@@ -8125,7 +8100,7 @@ Transform.assert = function(o) {
  * @returns {Transform}
  */
 Transform.mul = function(a, b) {
-    ASSERT && Transform.assert(a);
+    _ASSERT && Transform.assert(a);
     if (Array.isArray(b)) {
         var arr = [];
         for (var i = 0; i < b.length; i++) {
@@ -8133,12 +8108,12 @@ Transform.mul = function(a, b) {
         }
         return arr;
     } else if ("x" in b && "y" in b) {
-        ASSERT && Vec2.assert(b);
+        _ASSERT && Vec2.assert(b);
         var x = a.q.c * b.x - a.q.s * b.y + a.p.x;
         var y = a.q.s * b.x + a.q.c * b.y + a.p.y;
         return Vec2.neo(x, y);
     } else if ("p" in b && "q" in b) {
-        ASSERT && Transform.assert(b);
+        _ASSERT && Transform.assert(b);
         // v2 = A.q.Rot(B.q.Rot(v1) + B.p) + A.p
         // = (A.q * B.q).Rot(v1) + A.q.Rot(B.p) + A.p
         var xf = Transform.identity();
@@ -8158,16 +8133,16 @@ Transform.mul = function(a, b) {
  * @returns {Transform}
  */
 Transform.mulT = function(a, b) {
-    ASSERT && Transform.assert(a);
+    _ASSERT && Transform.assert(a);
     if ("x" in b && "y" in b) {
-        ASSERT && Vec2.assert(b);
+        _ASSERT && Vec2.assert(b);
         var px = b.x - a.p.x;
         var py = b.y - a.p.y;
         var x = a.q.c * px + a.q.s * py;
         var y = -a.q.s * px + a.q.c * py;
         return Vec2.neo(x, y);
     } else if ("p" in b && "q" in b) {
-        ASSERT && Transform.assert(b);
+        _ASSERT && Transform.assert(b);
         // v2 = A.q' * (B.q * v1 + B.p - A.p)
         // = A.q' * B.q * v1 + A.q' * (B.p - A.p)
         var xf = Transform.identity();
@@ -8179,9 +8154,9 @@ Transform.mulT = function(a, b) {
 
 
 },{"../util/common":50,"./Rot":20,"./Vec2":23}],23:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = Vec2;
 
@@ -8200,7 +8175,7 @@ function Vec2(x, y) {
     } else {
         this.x = x, this.y = y;
     }
-    ASSERT && Vec2.assert(this);
+    _ASSERT && Vec2.assert(this);
 }
 
 Vec2.zero = function() {
@@ -8218,8 +8193,8 @@ Vec2.neo = function(x, y) {
 };
 
 Vec2.clone = function(v, depricated) {
-    ASSERT && Vec2.assert(v);
-    ASSERT && common.assert(!depricated);
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && common.assert(!depricated);
     return Vec2.neo(v.x, v.y);
 };
 
@@ -8235,9 +8210,9 @@ Vec2.isValid = function(v) {
 };
 
 Vec2.assert = function(o) {
-    if (!ASSERT) return;
+    if (!_ASSERT) return;
     if (!Vec2.isValid(o)) {
-        DEBUG && common.debug(o);
+        _DEBUG && common.debug(o);
         throw new Error("Invalid Vec2!");
     }
 };
@@ -8264,12 +8239,12 @@ Vec2.prototype.setZero = function() {
  */
 Vec2.prototype.set = function(x, y) {
     if (typeof x === "object") {
-        ASSERT && Vec2.assert(x);
+        _ASSERT && Vec2.assert(x);
         this.x = x.x;
         this.y = x.y;
     } else {
-        ASSERT && Math.assert(x);
-        ASSERT && Math.assert(y);
+        _ASSERT && Math.assert(x);
+        _ASSERT && Math.assert(y);
         this.x = x;
         this.y = y;
     }
@@ -8277,13 +8252,13 @@ Vec2.prototype.set = function(x, y) {
 };
 
 Vec2.prototype.wSet = function(a, v, b, w) {
-    ASSERT && Math.assert(a);
-    ASSERT && Vec2.assert(v);
+    _ASSERT && Math.assert(a);
+    _ASSERT && Vec2.assert(v);
     var x = a * v.x;
     var y = a * v.y;
     if (typeof b !== "undefined" || typeof w !== "undefined") {
-        ASSERT && Math.assert(b);
-        ASSERT && Vec2.assert(w);
+        _ASSERT && Math.assert(b);
+        _ASSERT && Vec2.assert(w);
         x += b * w.x;
         y += b * w.y;
     }
@@ -8299,20 +8274,20 @@ Vec2.prototype.wSet = function(a, v, b, w) {
  * @returns this
  */
 Vec2.prototype.add = function(w) {
-    ASSERT && Vec2.assert(w);
+    _ASSERT && Vec2.assert(w);
     this.x += w.x;
     this.y += w.y;
     return this;
 };
 
 Vec2.prototype.wAdd = function(a, v, b, w) {
-    ASSERT && Math.assert(a);
-    ASSERT && Vec2.assert(v);
+    _ASSERT && Math.assert(a);
+    _ASSERT && Vec2.assert(v);
     var x = a * v.x;
     var y = a * v.y;
     if (typeof b !== "undefined" || typeof w !== "undefined") {
-        ASSERT && Math.assert(b);
-        ASSERT && Vec2.assert(w);
+        _ASSERT && Math.assert(b);
+        _ASSERT && Vec2.assert(w);
         x += b * w.x;
         y += b * w.y;
     }
@@ -8323,13 +8298,13 @@ Vec2.prototype.wAdd = function(a, v, b, w) {
 };
 
 Vec2.prototype.wSub = function(a, v, b, w) {
-    ASSERT && Math.assert(a);
-    ASSERT && Vec2.assert(v);
+    _ASSERT && Math.assert(a);
+    _ASSERT && Vec2.assert(v);
     var x = a * v.x;
     var y = a * v.y;
     if (typeof b !== "undefined" || typeof w !== "undefined") {
-        ASSERT && Math.assert(b);
-        ASSERT && Vec2.assert(w);
+        _ASSERT && Math.assert(b);
+        _ASSERT && Vec2.assert(w);
         x += b * w.x;
         y += b * w.y;
     }
@@ -8345,7 +8320,7 @@ Vec2.prototype.wSub = function(a, v, b, w) {
  * @returns this
  */
 Vec2.prototype.sub = function(w) {
-    ASSERT && Vec2.assert(w);
+    _ASSERT && Vec2.assert(w);
     this.x -= w.x;
     this.y -= w.y;
     return this;
@@ -8357,7 +8332,7 @@ Vec2.prototype.sub = function(w) {
  * @returns this
  */
 Vec2.prototype.mul = function(m) {
-    ASSERT && Math.assert(m);
+    _ASSERT && Math.assert(m);
     this.x *= m;
     this.y *= m;
     return this;
@@ -8401,7 +8376,7 @@ Vec2.prototype.normalize = function() {
  * For performance, use this instead of lengthSquared (if possible).
  */
 Vec2.lengthOf = function(v) {
-    ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(v);
     return Math.sqrt(v.x * v.x + v.y * v.y);
 };
 
@@ -8409,27 +8384,27 @@ Vec2.lengthOf = function(v) {
  * Get the length squared.
  */
 Vec2.lengthSquared = function(v) {
-    ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(v);
     return v.x * v.x + v.y * v.y;
 };
 
 Vec2.distance = function(v, w) {
-    ASSERT && Vec2.assert(v);
-    ASSERT && Vec2.assert(w);
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(w);
     var dx = v.x - w.x, dy = v.y - w.y;
     return Math.sqrt(dx * dx + dy * dy);
 };
 
 Vec2.distanceSquared = function(v, w) {
-    ASSERT && Vec2.assert(v);
-    ASSERT && Vec2.assert(w);
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(w);
     var dx = v.x - w.x, dy = v.y - w.y;
     return dx * dx + dy * dy;
 };
 
 Vec2.areEqual = function(v, w) {
-    ASSERT && Vec2.assert(v);
-    ASSERT && Vec2.assert(w);
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(w);
     return v == w || typeof w === "object" && w !== null && v.x == w.x && v.y == w.y;
 };
 
@@ -8437,7 +8412,7 @@ Vec2.areEqual = function(v, w) {
  * Get the skew vector such that dot(skew_vec, other) == cross(vec, other)
  */
 Vec2.skew = function(v) {
-    ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(v);
     return Vec2.neo(-v.y, v.x);
 };
 
@@ -8445,8 +8420,8 @@ Vec2.skew = function(v) {
  * Perform the dot product on two vectors.
  */
 Vec2.dot = function(v, w) {
-    ASSERT && Vec2.assert(v);
-    ASSERT && Vec2.assert(w);
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(w);
     return v.x * w.x + v.y * w.y;
 };
 
@@ -8458,36 +8433,36 @@ Vec2.dot = function(v, w) {
  */
 Vec2.cross = function(v, w) {
     if (typeof w === "number") {
-        ASSERT && Vec2.assert(v);
-        ASSERT && Math.assert(w);
+        _ASSERT && Vec2.assert(v);
+        _ASSERT && Math.assert(w);
         return Vec2.neo(w * v.y, -w * v.x);
     } else if (typeof v === "number") {
-        ASSERT && Math.assert(v);
-        ASSERT && Vec2.assert(w);
+        _ASSERT && Math.assert(v);
+        _ASSERT && Vec2.assert(w);
         return Vec2.neo(-v * w.y, v * w.x);
     } else {
-        ASSERT && Vec2.assert(v);
-        ASSERT && Vec2.assert(w);
+        _ASSERT && Vec2.assert(v);
+        _ASSERT && Vec2.assert(w);
         return v.x * w.y - v.y * w.x;
     }
 };
 
 Vec2.addCross = function(a, v, w) {
     if (typeof w === "number") {
-        ASSERT && Vec2.assert(v);
-        ASSERT && Math.assert(w);
+        _ASSERT && Vec2.assert(v);
+        _ASSERT && Math.assert(w);
         return Vec2.neo(w * v.y + a.x, -w * v.x + a.y);
     } else if (typeof v === "number") {
-        ASSERT && Math.assert(v);
-        ASSERT && Vec2.assert(w);
+        _ASSERT && Math.assert(v);
+        _ASSERT && Vec2.assert(w);
         return Vec2.neo(-v * w.y + a.x, v * w.x + a.y);
     }
-    ASSERT && common.assert(false);
+    _ASSERT && common.assert(false);
 };
 
 Vec2.add = function(v, w) {
-    ASSERT && Vec2.assert(v);
-    ASSERT && Vec2.assert(w);
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(w);
     return Vec2.neo(v.x + w.x, v.y + w.y);
 };
 
@@ -8498,19 +8473,19 @@ Vec2.wAdd = function(a, v, b, w) {
 };
 
 Vec2.sub = function(v, w) {
-    ASSERT && Vec2.assert(v);
-    ASSERT && Vec2.assert(w);
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(w);
     return Vec2.neo(v.x - w.x, v.y - w.y);
 };
 
 Vec2.mul = function(a, b) {
     if (typeof a === "object") {
-        ASSERT && Vec2.assert(a);
-        ASSERT && Math.assert(b);
+        _ASSERT && Vec2.assert(a);
+        _ASSERT && Math.assert(b);
         return Vec2.neo(a.x * b, a.y * b);
     } else if (typeof b === "object") {
-        ASSERT && Math.assert(a);
-        ASSERT && Vec2.assert(b);
+        _ASSERT && Math.assert(a);
+        _ASSERT && Vec2.assert(b);
         return Vec2.neo(a * b.x, a * b.y);
     }
 };
@@ -8522,30 +8497,30 @@ Vec2.prototype.neg = function() {
 };
 
 Vec2.neg = function(v) {
-    ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(v);
     return Vec2.neo(-v.x, -v.y);
 };
 
 Vec2.abs = function(v) {
-    ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(v);
     return Vec2.neo(Math.abs(v.x), Math.abs(v.y));
 };
 
 Vec2.mid = function(v, w) {
-    ASSERT && Vec2.assert(v);
-    ASSERT && Vec2.assert(w);
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(w);
     return Vec2.neo((v.x + w.x) * .5, (v.y + w.y) * .5);
 };
 
 Vec2.upper = function(v, w) {
-    ASSERT && Vec2.assert(v);
-    ASSERT && Vec2.assert(w);
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(w);
     return Vec2.neo(Math.max(v.x, w.x), Math.max(v.y, w.y));
 };
 
 Vec2.lower = function(v, w) {
-    ASSERT && Vec2.assert(v);
-    ASSERT && Vec2.assert(w);
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(w);
     return Vec2.neo(Math.min(v.x, w.x), Math.min(v.y, w.y));
 };
 
@@ -8567,9 +8542,9 @@ Vec2.clamp = function(v, max) {
 
 
 },{"../util/common":50,"./Math":18}],24:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = Vec3;
 
@@ -8588,7 +8563,7 @@ function Vec3(x, y, z) {
     } else {
         this.x = x, this.y = y, this.z = z;
     }
-    ASSERT && Vec3.assert(this);
+    _ASSERT && Vec3.assert(this);
 }
 
 Vec3.prototype.toString = function() {
@@ -8603,9 +8578,9 @@ Vec3.isValid = function(v) {
 };
 
 Vec3.assert = function(o) {
-    if (!ASSERT) return;
+    if (!_ASSERT) return;
     if (!Vec3.isValid(o)) {
-        DEBUG && common.debug(o);
+        _DEBUG && common.debug(o);
         throw new Error("Invalid Vec3!");
     }
 };
@@ -8684,9 +8659,9 @@ Vec3.neg = function(v) {
 
 
 },{"../util/common":50,"./Math":18}],25:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = Velocity;
 
@@ -8703,9 +8678,9 @@ function Velocity() {
 
 
 },{"./Vec2":23}],26:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 exports.toString = function(newline) {
     newline = typeof newline === "string" ? newline : "\n";
@@ -8720,9 +8695,9 @@ exports.toString = function(newline) {
 
 
 },{}],27:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = DistanceJoint;
 
@@ -9001,9 +8976,9 @@ DistanceJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":51,"../util/options":52}],28:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = FrictionJoint;
 
@@ -9122,7 +9097,7 @@ FrictionJoint.prototype.getLocalAnchorB = function() {
  * Set the maximum friction force in N.
  */
 FrictionJoint.prototype.setMaxForce = function(force) {
-    ASSERT && common.assert(IsValid(force) && force >= 0);
+    _ASSERT && common.assert(IsValid(force) && force >= 0);
     this.m_maxForce = force;
 };
 
@@ -9137,7 +9112,7 @@ FrictionJoint.prototype.getMaxForce = function() {
  * Set the maximum friction torque in N*m.
  */
 FrictionJoint.prototype.setMaxTorque = function(torque) {
-    ASSERT && common.assert(IsValid(torque) && torque >= 0);
+    _ASSERT && common.assert(IsValid(torque) && torque >= 0);
     this.m_maxTorque = torque;
 };
 
@@ -9280,9 +9255,9 @@ FrictionJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],29:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = GearJoint;
 
@@ -9362,8 +9337,8 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
     def = options(def, GearJointDef);
     Joint.call(this, def, bodyA, bodyB);
     this.m_type = GearJoint.TYPE;
-    ASSERT && common.assert(joint1.m_type == RevoluteJoint.TYPE || joint1.m_type == PrismaticJoint.TYPE);
-    ASSERT && common.assert(joint2.m_type == RevoluteJoint.TYPE || joint2.m_type == PrismaticJoint.TYPE);
+    _ASSERT && common.assert(joint1.m_type == RevoluteJoint.TYPE || joint1.m_type == PrismaticJoint.TYPE);
+    _ASSERT && common.assert(joint2.m_type == RevoluteJoint.TYPE || joint2.m_type == PrismaticJoint.TYPE);
     this.m_joint1 = joint1;
     this.m_joint2 = joint2;
     this.m_type1 = this.m_joint1.getType();
@@ -9460,7 +9435,7 @@ GearJoint.prototype.getJoint2 = function() {
  * Set/Get the gear ratio.
  */
 GearJoint.prototype.setRatio = function(ratio) {
-    ASSERT && common.assert(IsValid(ratio));
+    _ASSERT && common.assert(IsValid(ratio));
     this.m_ratio = ratio;
 };
 
@@ -9704,9 +9679,9 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52,"./PrismaticJoint":32,"./RevoluteJoint":34}],30:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = MotorJoint;
 
@@ -9817,7 +9792,7 @@ function MotorJoint(def, bodyA, bodyB) {
  * Set the maximum friction force in N.
  */
 MotorJoint.prototype.setMaxForce = function(force) {
-    ASSERT && common.assert(IsValid(force) && force >= 0);
+    _ASSERT && common.assert(IsValid(force) && force >= 0);
     this.m_maxForce = force;
 };
 
@@ -9832,7 +9807,7 @@ MotorJoint.prototype.getMaxForce = function() {
  * Set the maximum friction torque in N*m.
  */
 MotorJoint.prototype.setMaxTorque = function(torque) {
-    ASSERT && common.assert(IsValid(torque) && torque >= 0);
+    _ASSERT && common.assert(IsValid(torque) && torque >= 0);
     this.m_maxTorque = torque;
 };
 
@@ -9847,7 +9822,7 @@ MotorJoint.prototype.getMaxTorque = function() {
  * Set the position correction factor in the range [0,1].
  */
 MotorJoint.prototype.setCorrectionFactor = function(factor) {
-    ASSERT && common.assert(IsValid(factor) && 0 <= factor && factor <= 1);
+    _ASSERT && common.assert(IsValid(factor) && 0 <= factor && factor <= 1);
     this.m_correctionFactor = factor;
 };
 
@@ -10017,9 +9992,9 @@ MotorJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],31:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = MouseJoint;
 
@@ -10095,9 +10070,9 @@ function MouseJoint(def, bodyA, bodyB, target) {
     def = options(def, MouseJointDef);
     Joint.call(this, def, bodyA, bodyB);
     this.m_type = MouseJoint.TYPE;
-    ASSERT && common.assert(Math.isFinite(def.maxForce) && def.maxForce >= 0);
-    ASSERT && common.assert(Math.isFinite(def.frequencyHz) && def.frequencyHz >= 0);
-    ASSERT && common.assert(Math.isFinite(def.dampingRatio) && def.dampingRatio >= 0);
+    _ASSERT && common.assert(Math.isFinite(def.maxForce) && def.maxForce >= 0);
+    _ASSERT && common.assert(Math.isFinite(def.frequencyHz) && def.frequencyHz >= 0);
+    _ASSERT && common.assert(Math.isFinite(def.dampingRatio) && def.dampingRatio >= 0);
     this.m_targetA = Vec2.clone(target);
     this.m_localAnchorB = Transform.mulT(this.m_bodyB.getTransform(), this.m_targetA);
     this.m_maxForce = def.maxForce;
@@ -10204,7 +10179,7 @@ MouseJoint.prototype.initVelocityConstraints = function(step) {
     // gamma has units of inverse mass.
     // beta has units of inverse time.
     var h = step.dt;
-    ASSERT && common.assert(d + h * k > Math.EPSILON);
+    _ASSERT && common.assert(d + h * k > Math.EPSILON);
     this.m_gamma = h * (d + h * k);
     if (this.m_gamma != 0) {
         this.m_gamma = 1 / this.m_gamma;
@@ -10266,9 +10241,9 @@ MouseJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],32:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = PrismaticJoint;
 
@@ -10512,7 +10487,7 @@ PrismaticJoint.prototype.getUpperLimit = function() {
  * Set the joint limits, usually in meters.
  */
 PrismaticJoint.prototype.setLimits = function(lower, upper) {
-    ASSERT && common.assert(lower <= upper);
+    _ASSERT && common.assert(lower <= upper);
     if (lower != this.m_lowerTranslation || upper != this.m_upperTranslation) {
         this.m_bodyA.setAwake(true);
         this.m_bodyB.setAwake(true);
@@ -10904,9 +10879,9 @@ PrismaticJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],33:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = PulleyJoint;
 
@@ -10995,7 +10970,7 @@ function PulleyJoint(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, rati
     this.m_lengthA = Vec2.distance(anchorA, groundA);
     this.m_lengthB = Vec2.distance(anchorB, groundB);
     this.m_ratio = def.ratio || ratio;
-    ASSERT && common.assert(ratio > Math.EPSILON);
+    _ASSERT && common.assert(ratio > Math.EPSILON);
     this.m_constant = this.m_lengthA + this.m_ratio * this.m_lengthB;
     this.m_impulse = 0;
     // Solver temp
@@ -11246,9 +11221,9 @@ PulleyJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],34:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = RevoluteJoint;
 
@@ -11508,7 +11483,7 @@ RevoluteJoint.prototype.getUpperLimit = function() {
  * Set the joint limits in radians.
  */
 RevoluteJoint.prototype.setLimits = function(lower, upper) {
-    ASSERT && common.assert(lower <= upper);
+    _ASSERT && common.assert(lower <= upper);
     if (lower != this.m_lowerAngle || upper != this.m_upperAngle) {
         this.m_bodyA.setAwake(true);
         this.m_bodyB.setAwake(true);
@@ -11813,9 +11788,9 @@ RevoluteJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/common":50,"../util/create":51,"../util/options":52}],35:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = RopeJoint;
 
@@ -12112,9 +12087,9 @@ RopeJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":51,"../util/options":52}],36:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = WeldJoint;
 
@@ -12488,9 +12463,9 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":51,"../util/options":52}],37:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = WheelJoint;
 
@@ -12983,9 +12958,9 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
 
 
 },{"../Joint":5,"../Settings":7,"../common/Mat22":16,"../common/Mat33":17,"../common/Math":18,"../common/Position":19,"../common/Rot":20,"../common/Sweep":21,"../common/Transform":22,"../common/Vec2":23,"../common/Vec3":24,"../common/Velocity":25,"../util/create":51,"../util/options":52}],38:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = BoxShape;
 
@@ -13014,9 +12989,9 @@ function BoxShape(hx, hy, center, angle) {
 
 
 },{"../util/common":50,"../util/create":51,"./PolygonShape":47}],39:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = ChainShape;
 
@@ -13089,13 +13064,13 @@ function ChainShape(vertices, loop) {
  * @param count the vertex count
  */
 ChainShape.prototype._createLoop = function(vertices) {
-    ASSERT && common.assert(this.m_vertices.length == 0 && this.m_count == 0);
-    ASSERT && common.assert(vertices.length >= 3);
+    _ASSERT && common.assert(this.m_vertices.length == 0 && this.m_count == 0);
+    _ASSERT && common.assert(vertices.length >= 3);
     for (var i = 1; i < vertices.length; ++i) {
         var v1 = vertices[i - 1];
         var v2 = vertices[i];
         // If the code crashes here, it means your vertices are too close together.
-        ASSERT && common.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
+        _ASSERT && common.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
     }
     this.m_vertices.length = 0;
     this.m_count = vertices.length + 1;
@@ -13117,13 +13092,13 @@ ChainShape.prototype._createLoop = function(vertices) {
  * @param count the vertex count
  */
 ChainShape.prototype._createChain = function(vertices) {
-    ASSERT && common.assert(this.m_vertices.length == 0 && this.m_count == 0);
-    ASSERT && common.assert(vertices.length >= 2);
+    _ASSERT && common.assert(this.m_vertices.length == 0 && this.m_count == 0);
+    _ASSERT && common.assert(vertices.length >= 2);
     for (var i = 1; i < vertices.length; ++i) {
         // If the code crashes here, it means your vertices are too close together.
         var v1 = vertices[i - 1];
         var v2 = vertices[i];
-        ASSERT && common.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
+        _ASSERT && common.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
     }
     this.m_count = vertices.length;
     for (var i = 0; i < vertices.length; ++i) {
@@ -13173,7 +13148,7 @@ ChainShape.prototype.getChildCount = function() {
 
 // Get a child edge.
 ChainShape.prototype.getChildEdge = function(edge, childIndex) {
-    ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count - 1);
+    _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count - 1);
     edge.m_type = EdgeShape.TYPE;
     edge.m_radius = this.m_radius;
     edge.m_vertex1 = this.m_vertices[childIndex];
@@ -13195,7 +13170,7 @@ ChainShape.prototype.getChildEdge = function(edge, childIndex) {
 };
 
 ChainShape.prototype.getVertex = function(index) {
-    ASSERT && common.assert(0 <= index && index <= this.m_count);
+    _ASSERT && common.assert(0 <= index && index <= this.m_count);
     if (index < this.m_count) {
         return this.m_vertices[index];
     } else {
@@ -13211,13 +13186,13 @@ ChainShape.prototype.testPoint = function(xf, p) {
 };
 
 ChainShape.prototype.rayCast = function(output, input, xf, childIndex) {
-    ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
+    _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
     var edgeShape = new EdgeShape(this.getVertex(childIndex), this.getVertex(childIndex + 1));
     return edgeShape.rayCast(output, input, xf, 0);
 };
 
 ChainShape.prototype.computeAABB = function(aabb, xf, childIndex) {
-    ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
+    _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
     var v1 = Transform.mul(xf, this.getVertex(childIndex));
     var v2 = Transform.mul(xf, this.getVertex(childIndex + 1));
     aabb.combinePoints(v1, v2);
@@ -13233,7 +13208,7 @@ ChainShape.prototype.computeMass = function(massData, density) {
 };
 
 ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
-    ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
+    _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
     proxy.m_buffer[0] = this.getVertex(childIndex);
     proxy.m_buffer[1] = this.getVertex(childIndex + 1);
     proxy.m_vertices = proxy.m_buffer;
@@ -13243,9 +13218,9 @@ ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
 
 
 },{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"../util/options":52,"./EdgeShape":46}],40:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = CircleShape;
 
@@ -13306,7 +13281,7 @@ CircleShape.prototype.getSupportVertex = function(d) {
 };
 
 CircleShape.prototype.getVertex = function(index) {
-    ASSERT && common.assert(index == 0);
+    _ASSERT && common.assert(index == 0);
     return this.m_p;
 };
 
@@ -13383,9 +13358,9 @@ CircleShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 },{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"../util/options":52}],41:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 var common = require("../util/common");
 
@@ -13410,8 +13385,8 @@ var CircleShape = require("./CircleShape");
 Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
 
 function CircleCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-    ASSERT && common.assert(fixtureA.getType() == CircleShape.TYPE);
-    ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
+    _ASSERT && common.assert(fixtureA.getType() == CircleShape.TYPE);
+    _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
     CollideCircles(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
 }
 
@@ -13438,9 +13413,9 @@ exports.CollideCircles = CollideCircles;
 
 
 },{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"./CircleShape":40}],42:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 var common = require("../util/common");
 
@@ -13469,8 +13444,8 @@ var PolygonShape = require("./PolygonShape");
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
 
 function PolygonCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-    ASSERT && common.assert(fixtureA.getType() == PolygonShape.TYPE);
-    ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
+    _ASSERT && common.assert(fixtureA.getType() == PolygonShape.TYPE);
+    _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
     CollidePolygonCircle(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
 }
 
@@ -13554,9 +13529,9 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 
 
 },{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"./CircleShape":40,"./PolygonShape":47}],43:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 var common = require("../util/common");
 
@@ -13589,16 +13564,16 @@ Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
 
 function EdgeCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-    ASSERT && common.assert(fixtureA.getType() == EdgeShape.TYPE);
-    ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
+    _ASSERT && common.assert(fixtureA.getType() == EdgeShape.TYPE);
+    _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
     var shapeA = fixtureA.getShape();
     var shapeB = fixtureB.getShape();
     CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
 }
 
 function ChainCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-    ASSERT && common.assert(fixtureA.getType() == ChainShape.TYPE);
-    ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
+    _ASSERT && common.assert(fixtureA.getType() == ChainShape.TYPE);
+    _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
     var chain = fixtureA.getShape();
     var edge = new EdgeShape();
     chain.getChildEdge(edge, indexA);
@@ -13684,7 +13659,7 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
     }
     // Region AB
     var den = Vec2.dot(e, e);
-    ASSERT && common.assert(den > 0);
+    _ASSERT && common.assert(den > 0);
     var P = Vec2.wAdd(u / den, A, v / den, B);
     var d = Vec2.sub(Q, P);
     var dd = Vec2.dot(d, d);
@@ -13710,9 +13685,9 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 
 
 },{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"./ChainShape":39,"./CircleShape":40,"./EdgeShape":46}],44:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 var common = require("../util/common");
 
@@ -13745,14 +13720,14 @@ Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
 
 function EdgePolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
-    ASSERT && common.assert(fA.getType() == EdgeShape.TYPE);
-    ASSERT && common.assert(fB.getType() == PolygonShape.TYPE);
+    _ASSERT && common.assert(fA.getType() == EdgeShape.TYPE);
+    _ASSERT && common.assert(fB.getType() == PolygonShape.TYPE);
     CollideEdgePolygon(manifold, fA.getShape(), xfA, fB.getShape(), xfB);
 }
 
 function ChainPolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
-    ASSERT && common.assert(fA.getType() == ChainShape.TYPE);
-    ASSERT && common.assert(fB.getType() == PolygonShape.TYPE);
+    _ASSERT && common.assert(fA.getType() == ChainShape.TYPE);
+    _ASSERT && common.assert(fB.getType() == PolygonShape.TYPE);
     var chain = fA.getShape();
     var edge = new EdgeShape();
     chain.getChildEdge(edge, indexA);
@@ -13818,7 +13793,7 @@ var rf = new ReferenceFace();
  * adjacency.
  */
 function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
-    DEBUG && common.debug("CollideEdgePolygon");
+    _DEBUG && common.debug("CollideEdgePolygon");
     // Algorithm:
     // 1. Classify v1 and v2
     // 2. Classify polygon centroid as front or back
@@ -14156,9 +14131,9 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 
 
 },{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"./ChainShape":39,"./EdgeShape":46,"./PolygonShape":47}],45:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 var common = require("../util/common");
 
@@ -14187,8 +14162,8 @@ module.exports = CollidePolygons;
 Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
 
 function PolygonContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-    ASSERT && common.assert(fixtureA.getType() == PolygonShape.TYPE);
-    ASSERT && common.assert(fixtureB.getType() == PolygonShape.TYPE);
+    _ASSERT && common.assert(fixtureA.getType() == PolygonShape.TYPE);
+    _ASSERT && common.assert(fixtureB.getType() == PolygonShape.TYPE);
     CollidePolygons(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
 }
 
@@ -14236,7 +14211,7 @@ function FindIncidentEdge(c, poly1, xf1, edge1, poly2, xf2) {
     var count2 = poly2.m_count;
     var vertices2 = poly2.m_vertices;
     var normals2 = poly2.m_normals;
-    ASSERT && common.assert(0 <= edge1 && edge1 < poly1.m_count);
+    _ASSERT && common.assert(0 <= edge1 && edge1 < poly1.m_count);
     // Get the normal of the reference edge in poly2's frame.
     var normal1 = Rot.mulT(xf2.q, Rot.mul(xf1.q, normals1[edge1]));
     // Find the incident edge on poly2.
@@ -14379,9 +14354,9 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 
 
 },{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"./PolygonShape":47}],46:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = EdgeShape;
 
@@ -14556,9 +14531,9 @@ EdgeShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 },{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/create":51,"../util/options":52}],47:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = PolygonShape;
 
@@ -14613,7 +14588,7 @@ function PolygonShape(vertices) {
 }
 
 PolygonShape.prototype.getVertex = function(index) {
-    ASSERT && common.assert(0 <= index && index < this.m_count);
+    _ASSERT && common.assert(0 <= index && index < this.m_count);
     return this.m_vertices[index];
 };
 
@@ -14637,7 +14612,7 @@ PolygonShape.prototype.getChildCount = function() {
 };
 
 function ComputeCentroid(vs, count) {
-    ASSERT && common.assert(count >= 3);
+    _ASSERT && common.assert(count >= 3);
     var c = Vec2.zero();
     var area = 0;
     // pRef is the reference point for forming triangles.
@@ -14667,7 +14642,7 @@ function ComputeCentroid(vs, count) {
         c.wAdd(triangleArea * inv3, p3);
     }
     // Centroid
-    ASSERT && common.assert(area > Math.EPSILON);
+    _ASSERT && common.assert(area > Math.EPSILON);
     c.mul(1 / area);
     return c;
 }
@@ -14683,7 +14658,7 @@ function ComputeCentroid(vs, count) {
  * lead to poor stacking behavior.
  */
 PolygonShape.prototype._set = function(vertices) {
-    ASSERT && common.assert(3 <= vertices.length && vertices.length <= Settings.maxPolygonVertices);
+    _ASSERT && common.assert(3 <= vertices.length && vertices.length <= Settings.maxPolygonVertices);
     if (vertices.length < 3) {
         this._setAsBox(1, 1);
         return;
@@ -14709,7 +14684,7 @@ PolygonShape.prototype._set = function(vertices) {
     n = tempCount;
     if (n < 3) {
         // Polygon is degenerate.
-        ASSERT && common.assert(false);
+        _ASSERT && common.assert(false);
         this._setAsBox(1, 1);
         return;
     }
@@ -14756,7 +14731,7 @@ PolygonShape.prototype._set = function(vertices) {
     }
     if (m < 3) {
         // Polygon is degenerate.
-        ASSERT && common.assert(false);
+        _ASSERT && common.assert(false);
         this._setAsBox(1, 1);
         return;
     }
@@ -14770,7 +14745,7 @@ PolygonShape.prototype._set = function(vertices) {
         var i1 = i;
         var i2 = i + 1 < m ? i + 1 : 0;
         var edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
-        ASSERT && common.assert(edge.lengthSquared() > Math.EPSILON * Math.EPSILON);
+        _ASSERT && common.assert(edge.lengthSquared() > Math.EPSILON * Math.EPSILON);
         this.m_normals[i] = Vec2.cross(edge, 1);
         this.m_normals[i].normalize();
     }
@@ -14858,7 +14833,7 @@ PolygonShape.prototype.rayCast = function(output, input, xf, childIndex) {
             return false;
         }
     }
-    ASSERT && common.assert(0 <= lower && lower <= input.maxFraction);
+    _ASSERT && common.assert(0 <= lower && lower <= input.maxFraction);
     if (index >= 0) {
         output.fraction = lower;
         output.normal = Rot.mul(xf.q, this.m_normals[index]);
@@ -14906,7 +14881,7 @@ PolygonShape.prototype.computeMass = function(massData, density) {
     // Simplification: triangle centroid = (1/3) * (p1 + p2 + p3)
     //
     // The rest of the derivation is handled by computer algebra.
-    ASSERT && common.assert(this.m_count >= 3);
+    _ASSERT && common.assert(this.m_count >= 3);
     var center = Vec2.zero();
     var area = 0;
     var I = 0;
@@ -14939,7 +14914,7 @@ PolygonShape.prototype.computeMass = function(massData, density) {
     // Total mass
     massData.mass = density * area;
     // Center of mass
-    ASSERT && common.assert(area > Math.EPSILON);
+    _ASSERT && common.assert(area > Math.EPSILON);
     center.mul(1 / area);
     massData.center.wSet(1, center, 1, s);
     // Inertia tensor relative to the local origin (point s).
@@ -14978,9 +14953,9 @@ PolygonShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 },{"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"../util/options":52}],48:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports = Pool;
 
@@ -15044,9 +15019,9 @@ function Pool(opts) {
 
 
 },{}],49:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 module.exports.now = function() {
     return Date.now();
@@ -15058,17 +15033,17 @@ module.exports.diff = function(time) {
 
 
 },{}],50:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 exports.debug = function() {
-    if (!DEBUG) return;
+    if (!_DEBUG) return;
     console.log.apply(console, arguments);
 };
 
 exports.assert = function(statement, err, log) {
-    if (!ASSERT) return;
+    if (!_ASSERT) return;
     if (statement) return;
     log && console.log(log);
     throw new Error(err);
@@ -15092,9 +15067,9 @@ if (typeof Object.create == "function") {
 
 
 },{}],52:[function(require,module,exports){
-if (typeof DEBUG === "undefined") var DEBUG = false;
+var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
-if (typeof ASSERT === "undefined") var ASSERT = false;
+var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
