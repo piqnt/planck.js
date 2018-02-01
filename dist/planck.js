@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.40
+ * Planck.js v0.1.41
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -12867,7 +12867,7 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
     // Vec2
     var ay = Rot.mul(qA, this.m_localYAxisA);
     // Vec2
-    var sAy = Vec2.cross(Vec2.sub(d, rA), ay);
+    var sAy = Vec2.cross(Vec2.add(d, rA), ay);
     // float
     var sBy = Vec2.cross(rB, ay);
     // float
