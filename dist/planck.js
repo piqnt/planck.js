@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.39
+ * Planck.js v0.1.40
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -1187,7 +1187,6 @@ Contact.prototype.initConstraint = function(step) {
     this.v_restitution = this.m_restitution;
     this.v_tangentSpeed = this.m_tangentSpeed;
     this.v_pointCount = pointCount;
-    _DEBUG && common.debug("pc", this.v_pointCount, pointCount);
     this.v_K.setZero();
     this.v_normalMass.setZero();
     this.p_invMassA = bodyA.m_invMass;
@@ -1594,7 +1593,6 @@ Contact.prototype.initVelocityConstraint = function(step) {
         // VelocityConstraintPoint
         vcp.rA.set(Vec2.sub(worldManifold.points[j], cA));
         vcp.rB.set(Vec2.sub(worldManifold.points[j], cB));
-        _DEBUG && common.debug("vcp.rA", worldManifold.points[j].x, worldManifold.points[j].y, cA.x, cA.y, vcp.rA.x, vcp.rA.y);
         var rnA = Vec2.cross(vcp.rA, this.v_normal);
         var rnB = Vec2.cross(vcp.rB, this.v_normal);
         var kNormal = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
@@ -1626,7 +1624,6 @@ Contact.prototype.initVelocityConstraint = function(step) {
         var k12 = mA + mB + iA * rn1A * rn2A + iB * rn1B * rn2B;
         // Ensure a reasonable condition number.
         var k_maxConditionNumber = 1e3;
-        _DEBUG && common.debug("k1x2: ", k11, k22, k12, mA, mB, iA, rn1A, rn2A, iB, rn1B, rn2B);
         if (k11 * k11 < k_maxConditionNumber * (k11 * k22 - k12 * k12)) {
             // K is safe to invert.
             this.v_K.ex.set(k11, k12);
@@ -1671,7 +1668,6 @@ Contact.prototype.warmStartConstraint = function(step) {
         var vcp = this.v_points[j];
         // VelocityConstraintPoint
         var P = Vec2.wAdd(vcp.normalImpulse, normal, vcp.tangentImpulse, tangent);
-        _DEBUG && common.debug(iA, iB, vcp.rA.x, vcp.rA.y, vcp.rB.x, vcp.rB.y, P.x, P.y);
         wA -= iA * Vec2.cross(vcp.rA, P);
         vA.wSub(mA, P);
         wB += iB * Vec2.cross(vcp.rB, P);
@@ -2091,7 +2087,7 @@ var AABB = require("./collision/AABB");
  *
  * A fixture definition is used to create a fixture. This class defines an
  * abstract fixture definition. You can reuse fixture definitions safely.
- * 
+ *
  * @prop friction The friction coefficient, usually in the range [0,1]
  * @prop restitution The restitution (elasticity) usually in the range [0,1]
  * @prop density The density, usually in kg/m^2
@@ -2099,10 +2095,10 @@ var AABB = require("./collision/AABB");
  *       generates a collision response
  * @prop userData
  * @prop filterGroupIndex Zero, positive or negative collision group. Fixtures with same positive groupIndex always collide and fixtures with same
- * negative groupIndex never collide.
+ *       negative groupIndex never collide.
  * @prop filterCategoryBits Collision category bit or bits that this fixture belongs
  *       to. If groupIndex is zero or not matching, then at least one bit in this fixture
- * categoryBits should match other fixture maskBits and vice versa.
+ *       categoryBits should match other fixture maskBits and vice versa.
  * @prop filterMaskBits Collision category bit or bits that this fixture accept for
  *       collision.
  */
@@ -2132,7 +2128,7 @@ function FixtureProxy(fixture, childIndex) {
  * fixture inherits its transform from its parent. Fixtures hold additional
  * non-geometric data such as friction, collision filters, etc. Fixtures are
  * created via Body.createFixture.
- * 
+ *
  * @param {Shape|FixtureDef} shape Shape of fixture definition.
  * @param {FixtureDef|number} def Fixture definition or number.
  */
@@ -2416,13 +2412,13 @@ Fixture.prototype.refilter = function() {
 /**
  * Implement this method to provide collision filtering, if you want finer
  * control over contact creation.
- * 
+ *
  * Return true if contact calculations should be performed between these two
  * fixtures.
- * 
+ *
  * Warning: for performance reasons this is only called when the AABBs begin to
  * overlap.
- * 
+ *
  * @param {Fixture} fixtureA
  * @param {Fixture} fixtureB
  */
@@ -2808,14 +2804,12 @@ Manifold.prototype.getWorldManifold = function(wm, xfA, radiusA, xfB, radiusB) {
       case Manifold.e_faceA:
         normal = Rot.mul(xfA.q, this.localNormal);
         var planePoint = Transform.mul(xfA, this.localPoint);
-        _DEBUG && common.debug("faceA", this.localPoint.x, this.localPoint.y, this.localNormal.x, this.localNormal.y, normal.x, normal.y);
         for (var i = 0; i < this.pointCount; ++i) {
             var clipPoint = Transform.mul(xfB, this.points[i].localPoint);
             var cA = Vec2.clone(clipPoint).wAdd(radiusA - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
             var cB = Vec2.clone(clipPoint).wSub(radiusB, normal);
             points[i] = Vec2.mid(cA, cB);
             separations[i] = Vec2.dot(Vec2.sub(cB, cA), normal);
-            _DEBUG && common.debug(i, this.points[i].localPoint.x, this.points[i].localPoint.y, planePoint.x, planePoint.y, xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s, xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s, radiusA, radiusB, clipPoint.x, clipPoint.y, cA.x, cA.y, cB.x, cB.y, separations[i], points[i].x, points[i].y);
         }
         points.length = this.pointCount;
         separations.length = this.pointCount;
@@ -3406,13 +3400,11 @@ Solver.prototype.solveIsland = function(step) {
         // Store positions for continuous collision.
         body.m_sweep.c0.set(body.m_sweep.c);
         body.m_sweep.a0 = body.m_sweep.a;
-        _DEBUG && common.debug("P: ", a, c.x, c.y, w, v.x, v.y);
         if (body.isDynamic()) {
             // Integrate velocities.
             v.wAdd(h * body.m_gravityScale, gravity);
             v.wAdd(h * body.m_invMass, body.m_force);
             w += h * body.m_invI * body.m_torque;
-            _DEBUG && common.debug("N: " + h, body.m_gravityScale, gravity.x, gravity.y, body.m_invMass, body.m_force.x, body.m_force.y);
             /**
        * <pre>
        * Apply damping.
@@ -3427,7 +3419,6 @@ Solver.prototype.solveIsland = function(step) {
             v.mul(1 / (1 + h * body.m_linearDamping));
             w *= 1 / (1 + h * body.m_angularDamping);
         }
-        common.debug("A: ", a, c.x, c.y, w, v.x, v.y);
         body.c_position.c = c;
         body.c_position.a = a;
         body.c_velocity.v = v;
@@ -3458,7 +3449,6 @@ Solver.prototype.solveIsland = function(step) {
     _DEBUG && this.printBodies("E: ");
     // Solve velocity constraints
     for (var i = 0; i < step.velocityIterations; ++i) {
-        _DEBUG && common.debug("--", i);
         for (var j = 0; j < this.m_joints.length; ++j) {
             var joint = this.m_joints[j];
             joint.solveVelocityConstraints(step);
@@ -3579,14 +3569,11 @@ var s_subStep = new TimeStep();
  * @param {TimeStep} step
  */
 Solver.prototype.solveWorldTOI = function(step) {
-    _DEBUG && common.debug("TOI++++++World");
     var world = this.m_world;
-    _DEBUG && common.debug("Z:", world.m_stepComplete);
     if (world.m_stepComplete) {
         for (var b = world.m_bodyList; b; b = b.m_next) {
             b.m_islandFlag = false;
             b.m_sweep.alpha0 = 0;
-            _DEBUG && common.debug("b.alpha0:", b.m_sweep.alpha0);
         }
         for (var c = world.m_contactList; c; c = c.m_next) {
             // Invalidate TOI
@@ -3596,28 +3583,21 @@ Solver.prototype.solveWorldTOI = function(step) {
             c.m_toi = 1;
         }
     }
-    if (_DEBUG) for (var c = world.m_contactList; c; c = c.m_next) {
-        _DEBUG && common.debug("X:", c.m_toiFlag);
-    }
     // Find TOI events and solve them.
     for (;;) {
-        _DEBUG && common.debug(";;");
         // Find the first TOI.
         var minContact = null;
         // Contact
         var minAlpha = 1;
         for (var c = world.m_contactList; c; c = c.m_next) {
-            _DEBUG && common.debug("alpha0::", c.getFixtureA().getBody().m_sweep.alpha0, c.getFixtureB().getBody().m_sweep.alpha0);
             // Is this contact disabled?
             if (c.isEnabled() == false) {
                 continue;
             }
-            _DEBUG && common.debug("toiCount:", c.m_toiCount, Settings.maxSubSteps);
             // Prevent excessive sub-stepping.
             if (c.m_toiCount > Settings.maxSubSteps) {
                 continue;
             }
-            _DEBUG && common.debug("toiFlag:", c.m_toiFlag);
             var alpha = 1;
             if (c.m_toiFlag) {
                 // This contact has a valid cached TOI.
@@ -3625,7 +3605,6 @@ Solver.prototype.solveWorldTOI = function(step) {
             } else {
                 var fA = c.getFixtureA();
                 var fB = c.getFixtureB();
-                _DEBUG && common.debug("sensor:", fA.isSensor(), fB.isSensor());
                 // Is there a sensor?
                 if (fA.isSensor() || fB.isSensor()) {
                     continue;
@@ -3635,17 +3614,12 @@ Solver.prototype.solveWorldTOI = function(step) {
                 _ASSERT && common.assert(bA.isDynamic() || bB.isDynamic());
                 var activeA = bA.isAwake() && !bA.isStatic();
                 var activeB = bB.isAwake() && !bB.isStatic();
-                _DEBUG && common.debug("awakestatic:", bA.isAwake(), bA.isStatic());
-                _DEBUG && common.debug("awakestatic:", bB.isAwake(), bB.isStatic());
-                _DEBUG && common.debug("active:", activeA, activeB);
                 // Is at least one body active (awake and dynamic or kinematic)?
                 if (activeA == false && activeB == false) {
                     continue;
                 }
-                _DEBUG && common.debug("alpha:", alpha, bA.m_sweep.alpha0, bB.m_sweep.alpha0);
                 var collideA = bA.isBullet() || !bA.isDynamic();
                 var collideB = bB.isBullet() || !bB.isDynamic();
-                _DEBUG && common.debug("collide:", collideA, collideB);
                 // Are these two non-bullet dynamic bodies?
                 if (collideA == false && collideB == false) {
                     continue;
@@ -3660,14 +3634,11 @@ Solver.prototype.solveWorldTOI = function(step) {
                     alpha0 = bA.m_sweep.alpha0;
                     bB.m_sweep.advance(alpha0);
                 }
-                _DEBUG && common.debug("alpha0:", alpha0, bA.m_sweep.alpha0, bB.m_sweep.alpha0);
                 _ASSERT && common.assert(alpha0 < 1);
                 var indexA = c.getChildIndexA();
                 var indexB = c.getChildIndexB();
                 var sweepA = bA.m_sweep;
                 var sweepB = bB.m_sweep;
-                _DEBUG && common.debug("sweepA", sweepA.localCenter.x, sweepA.localCenter.y, sweepA.c.x, sweepA.c.y, sweepA.a, sweepA.alpha0, sweepA.c0.x, sweepA.c0.y, sweepA.a0);
-                _DEBUG && common.debug("sweepB", sweepB.localCenter.x, sweepB.localCenter.y, sweepB.c.x, sweepB.c.y, sweepB.a, sweepB.alpha0, sweepB.c0.x, sweepB.c0.y, sweepB.a0);
                 // Compute the time of impact in interval [0, minTOI]
                 var input = new TOIInput();
                 // TODO: reuse
@@ -3679,10 +3650,8 @@ Solver.prototype.solveWorldTOI = function(step) {
                 var output = new TOIOutput();
                 // TODO: reuse
                 TimeOfImpact(output, input);
-                // _DEBUG && common.debug(output.t, output.state);
                 // Beta is the fraction of the remaining portion of the [time?].
                 var beta = output.t;
-                _DEBUG && common.debug("state:", output.state, TOIOutput.e_touching);
                 if (output.state == TOIOutput.e_touching) {
                     alpha = Math.min(alpha0 + (1 - alpha0) * beta, 1);
                 } else {
@@ -3691,14 +3660,12 @@ Solver.prototype.solveWorldTOI = function(step) {
                 c.m_toi = alpha;
                 c.m_toiFlag = true;
             }
-            _DEBUG && common.debug("minAlpha:", minAlpha, alpha);
             if (alpha < minAlpha) {
                 // This is the minimum TOI found so far.
                 minContact = c;
                 minAlpha = alpha;
             }
         }
-        _DEBUG && common.debug("minContact:", minContact == null, 1 - 10 * Math.EPSILON < minAlpha, minAlpha);
         if (minContact == null || 1 - 10 * Math.EPSILON < minAlpha) {
             // No more TOI events. Done!
             world.m_stepComplete = true;
@@ -3825,7 +3792,6 @@ Solver.prototype.solveWorldTOI = function(step) {
         var a = b.m_sweep.a;
         var v = b.m_linearVelocity;
         var w = b.m_angularVelocity;
-        _DEBUG && common.debug("== ", a, c.x, c.y, w, v.x, v.y);
     }
 };
 
@@ -3835,7 +3801,6 @@ Solver.prototype.solveWorldTOI = function(step) {
  * @param toiB
  */
 Solver.prototype.solveIslandTOI = function(subStep, toiA, toiB) {
-    _DEBUG && common.debug("TOI++++++Island");
     var world = this.m_world;
     // Initialize the body state.
     for (var i = 0; i < this.m_bodies.length; ++i) {
@@ -3942,7 +3907,6 @@ Solver.prototype.solveIslandTOI = function(subStep, toiA, toiB) {
         body.synchronizeTransform();
     }
     this.postSolveIsland();
-    _DEBUG && common.debug("TOI------Island");
 };
 
 /**
@@ -5438,15 +5402,9 @@ function Distance(output, cache, input) {
     var proxyB = input.proxyB;
     var xfA = input.transformA;
     var xfB = input.transformB;
-    _DEBUG && common.debug("cahce:", cache.metric, cache.count);
-    _DEBUG && common.debug("proxyA:", proxyA.m_count);
-    _DEBUG && common.debug("proxyB:", proxyB.m_count);
-    _DEBUG && common.debug("xfA:", xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s);
-    _DEBUG && common.debug("xfB:", xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
     // Initialize the simplex.
     var simplex = new Simplex();
     simplex.readCache(cache, proxyA, xfA, proxyB, xfB);
-    _DEBUG && common.debug("cache", simplex.print());
     // Get simplex vertices as an array.
     var vertices = simplex.m_v;
     // SimplexVertex
@@ -5522,7 +5480,6 @@ function Distance(output, cache, input) {
     simplex.getWitnessPoints(output.pointA, output.pointB);
     output.distance = Vec2.distance(output.pointA, output.pointB);
     output.iterations = iter;
-    _DEBUG && common.debug("Distance:", output.distance, output.pointA.x, output.pointA.y, output.pointB.x, output.pointB.y);
     // Cache the simplex.
     simplex.writeCache(cache);
     // Apply radii if requested.
@@ -5755,19 +5712,16 @@ Simplex.prototype.getWitnessPoints = function(pA, pB) {
         break;
 
       case 1:
-        _DEBUG && common.debug("case1", this.print());
         pA.set(this.m_v1.wA);
         pB.set(this.m_v1.wB);
         break;
 
       case 2:
-        _DEBUG && common.debug("case2", this.print());
         pA.wSet(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
         pB.wSet(this.m_v1.a, this.m_v1.wB, this.m_v2.a, this.m_v2.wB);
         break;
 
       case 3:
-        _DEBUG && common.debug("case3", this.print());
         pA.wSet(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
         pA.wAdd(this.m_v3.a, this.m_v3.wA);
         pB.set(pA);
@@ -6894,8 +6848,6 @@ function TimeOfImpact(output, input) {
     // Sweep
     var sweepB = input.sweepB;
     // Sweep
-    _DEBUG && common.debug("sweepA", sweepA.localCenter.x, sweepA.localCenter.y, sweepA.c.x, sweepA.c.y, sweepA.a, sweepA.alpha0, sweepA.c0.x, sweepA.c0.y, sweepA.a0);
-    _DEBUG && common.debug("sweepB", sweepB.localCenter.x, sweepB.localCenter.y, sweepB.c.x, sweepB.c.y, sweepB.a, sweepB.alpha0, sweepB.c0.x, sweepB.c0.y, sweepB.a0);
     // Large rotations can make the root finder fail, so we normalize the
     // sweep angles.
     sweepA.normalize();
@@ -6921,15 +6873,12 @@ function TimeOfImpact(output, input) {
         var xfB = Transform.identity();
         sweepA.getTransform(xfA, t1);
         sweepB.getTransform(xfB, t1);
-        _DEBUG && common.debug("xfA:", xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s);
-        _DEBUG && common.debug("xfB:", xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
         // Get the distance between shapes. We can also use the results
         // to get a separating axis.
         distanceInput.transformA = xfA;
         distanceInput.transformB = xfB;
         var distanceOutput = new DistanceOutput();
         Distance(distanceOutput, cache, distanceInput);
-        _DEBUG && common.debug("distance:", distanceOutput.distance);
         // If the shapes are overlapped, we give up on continuous collision.
         if (distanceOutput.distance <= 0) {
             // Failure!
@@ -6994,7 +6943,6 @@ function TimeOfImpact(output, input) {
             var s1 = fcn.evaluate(t1);
             var indexA = fcn.indexA;
             var indexB = fcn.indexB;
-            _DEBUG && common.debug("s1:", s1, target, tolerance, t1);
             // Check for initial overlap. This might happen if the root finder
             // runs out of iterations.
             if (s1 < target - tolerance) {
@@ -7163,10 +7111,6 @@ SeparationFunction.prototype.compute = function(find, t) {
     var xfB = Transform.identity();
     this.m_sweepA.getTransform(xfA, t);
     this.m_sweepB.getTransform(xfB, t);
-    // _DEBUG && common.debug('xfB', t, this.m_sweepB.localCenter.x,
-    // this.m_sweepB.localCenter.y, this.m_sweepB.c.x, this.m_sweepB.c.y,
-    // this.m_sweepB.a, this.m_sweepB.alpha0, this.m_sweepB.c0.x,
-    // this.m_sweepB.c0.y, this.m_sweepB.a0, xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
     switch (this.m_type) {
       case e_points:
         {
@@ -7752,7 +7696,6 @@ Rot.clone = function(rot) {
 };
 
 Rot.identity = function(rot) {
-    _ASSERT && Rot.assert(rot);
     var obj = Object.create(Rot.prototype);
     obj.s = 0;
     obj.c = 1;
@@ -9624,11 +9567,11 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
         JwC = Vec2.cross(rC, u);
         JwA = Vec2.cross(rA, u);
         mass += this.m_mC + this.m_mA + this.m_iC * JwC * JwC + this.m_iA * JwA * JwA;
-        var pC = this.m_localAnchorC - this.m_lcC;
+        var pC = Vec2.sub(this.m_localAnchorC, this.m_lcC);
         // Vec2
         var pA = Rot.mulT(qC, Vec2.add(rA, Vec2.sub(cA, cC)));
         // Vec2
-        coordinateA = Dot(pA - pC, this.m_localAxisC);
+        coordinateA = Vec2.dot(Vec2.sub(pA, pC), this.m_localAxisC);
     }
     if (this.m_type2 == RevoluteJoint.TYPE) {
         JvBD = Vec2.zero();
@@ -9661,9 +9604,9 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
     aA += this.m_iA * impulse * JwA;
     cB.wAdd(this.m_mB * impulse, JvBD);
     aB += this.m_iB * impulse * JwB;
-    cC.wAdd(this.m_mC * impulse, JvAC);
+    cC.wSub(this.m_mC * impulse, JvAC);
     aC -= this.m_iC * impulse * JwC;
-    cD.wAdd(this.m_mD * impulse, JvBD);
+    cD.wSub(this.m_mD * impulse, JvBD);
     aD -= this.m_iD * impulse * JwD;
     this.m_bodyA.c_position.c.set(cA);
     this.m_bodyA.c_position.a = aA;
@@ -13793,7 +13736,6 @@ var rf = new ReferenceFace();
  * adjacency.
  */
 function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
-    _DEBUG && common.debug("CollideEdgePolygon");
     // Algorithm:
     // 1. Classify v1 and v2
     // 2. Classify polygon centroid as front or back

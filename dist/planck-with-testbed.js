@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.39
+ * Planck.js v0.1.40
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -29,7 +29,7 @@
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.planck=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var planck = require("../lib/");
 
-var Stage = require("stage-js/platform/web");
+var Stage = window.Stage || require("stage-js/platform/web");
 
 module.exports = planck;
 
@@ -327,6 +327,8 @@ planck.testbed = function(opts, callback) {
         }
     });
 };
+
+Stage.Planck = Viewer;
 
 Viewer._super = Stage;
 
@@ -1359,7 +1361,6 @@ Contact.prototype.initConstraint = function(step) {
     this.v_restitution = this.m_restitution;
     this.v_tangentSpeed = this.m_tangentSpeed;
     this.v_pointCount = pointCount;
-    _DEBUG && common.debug("pc", this.v_pointCount, pointCount);
     this.v_K.setZero();
     this.v_normalMass.setZero();
     this.p_invMassA = bodyA.m_invMass;
@@ -1672,7 +1673,6 @@ Contact.prototype.initVelocityConstraint = function(step) {
         var vcp = this.v_points[j];
         vcp.rA.set(Vec2.sub(worldManifold.points[j], cA));
         vcp.rB.set(Vec2.sub(worldManifold.points[j], cB));
-        _DEBUG && common.debug("vcp.rA", worldManifold.points[j].x, worldManifold.points[j].y, cA.x, cA.y, vcp.rA.x, vcp.rA.y);
         var rnA = Vec2.cross(vcp.rA, this.v_normal);
         var rnB = Vec2.cross(vcp.rB, this.v_normal);
         var kNormal = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
@@ -1699,7 +1699,6 @@ Contact.prototype.initVelocityConstraint = function(step) {
         var k22 = mA + mB + iA * rn2A * rn2A + iB * rn2B * rn2B;
         var k12 = mA + mB + iA * rn1A * rn2A + iB * rn1B * rn2B;
         var k_maxConditionNumber = 1e3;
-        _DEBUG && common.debug("k1x2: ", k11, k22, k12, mA, mB, iA, rn1A, rn2A, iB, rn1B, rn2B);
         if (k11 * k11 < k_maxConditionNumber * (k11 * k22 - k12 * k12)) {
             this.v_K.ex.set(k11, k12);
             this.v_K.ey.set(k12, k22);
@@ -1740,7 +1739,6 @@ Contact.prototype.warmStartConstraint = function(step) {
     for (var j = 0; j < this.v_pointCount; ++j) {
         var vcp = this.v_points[j];
         var P = Vec2.wAdd(vcp.normalImpulse, normal, vcp.tangentImpulse, tangent);
-        _DEBUG && common.debug(iA, iB, vcp.rA.x, vcp.rA.y, vcp.rB.x, vcp.rB.y, P.x, P.y);
         wA -= iA * Vec2.cross(vcp.rA, P);
         vA.wSub(mA, P);
         wB += iB * Vec2.cross(vcp.rB, P);
@@ -2437,14 +2435,12 @@ Manifold.prototype.getWorldManifold = function(wm, xfA, radiusA, xfB, radiusB) {
       case Manifold.e_faceA:
         normal = Rot.mul(xfA.q, this.localNormal);
         var planePoint = Transform.mul(xfA, this.localPoint);
-        _DEBUG && common.debug("faceA", this.localPoint.x, this.localPoint.y, this.localNormal.x, this.localNormal.y, normal.x, normal.y);
         for (var i = 0; i < this.pointCount; ++i) {
             var clipPoint = Transform.mul(xfB, this.points[i].localPoint);
             var cA = Vec2.clone(clipPoint).wAdd(radiusA - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
             var cB = Vec2.clone(clipPoint).wSub(radiusB, normal);
             points[i] = Vec2.mid(cA, cB);
             separations[i] = Vec2.dot(Vec2.sub(cB, cA), normal);
-            _DEBUG && common.debug(i, this.points[i].localPoint.x, this.points[i].localPoint.y, planePoint.x, planePoint.y, xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s, xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s, radiusA, radiusB, clipPoint.x, clipPoint.y, cA.x, cA.y, cB.x, cB.y, separations[i], points[i].x, points[i].y);
         }
         points.length = this.pointCount;
         separations.length = this.pointCount;
@@ -2817,16 +2813,13 @@ Solver.prototype.solveIsland = function(step) {
         var w = body.m_angularVelocity;
         body.m_sweep.c0.set(body.m_sweep.c);
         body.m_sweep.a0 = body.m_sweep.a;
-        _DEBUG && common.debug("P: ", a, c.x, c.y, w, v.x, v.y);
         if (body.isDynamic()) {
             v.wAdd(h * body.m_gravityScale, gravity);
             v.wAdd(h * body.m_invMass, body.m_force);
             w += h * body.m_invI * body.m_torque;
-            _DEBUG && common.debug("N: " + h, body.m_gravityScale, gravity.x, gravity.y, body.m_invMass, body.m_force.x, body.m_force.y);
             v.mul(1 / (1 + h * body.m_linearDamping));
             w *= 1 / (1 + h * body.m_angularDamping);
         }
-        common.debug("A: ", a, c.x, c.y, w, v.x, v.y);
         body.c_position.c = c;
         body.c_position.a = a;
         body.c_velocity.v = v;
@@ -2855,7 +2848,6 @@ Solver.prototype.solveIsland = function(step) {
     }
     _DEBUG && this.printBodies("E: ");
     for (var i = 0; i < step.velocityIterations; ++i) {
-        _DEBUG && common.debug("--", i);
         for (var j = 0; j < this.m_joints.length; ++j) {
             var joint = this.m_joints[j];
             joint.solveVelocityConstraints(step);
@@ -2961,14 +2953,11 @@ Solver.prototype.printBodies = function(tag) {
 var s_subStep = new TimeStep();
 
 Solver.prototype.solveWorldTOI = function(step) {
-    _DEBUG && common.debug("TOI++++++World");
     var world = this.m_world;
-    _DEBUG && common.debug("Z:", world.m_stepComplete);
     if (world.m_stepComplete) {
         for (var b = world.m_bodyList; b; b = b.m_next) {
             b.m_islandFlag = false;
             b.m_sweep.alpha0 = 0;
-            _DEBUG && common.debug("b.alpha0:", b.m_sweep.alpha0);
         }
         for (var c = world.m_contactList; c; c = c.m_next) {
             c.m_toiFlag = false;
@@ -2977,30 +2966,22 @@ Solver.prototype.solveWorldTOI = function(step) {
             c.m_toi = 1;
         }
     }
-    if (_DEBUG) for (var c = world.m_contactList; c; c = c.m_next) {
-        _DEBUG && common.debug("X:", c.m_toiFlag);
-    }
     for (;;) {
-        _DEBUG && common.debug(";;");
         var minContact = null;
         var minAlpha = 1;
         for (var c = world.m_contactList; c; c = c.m_next) {
-            _DEBUG && common.debug("alpha0::", c.getFixtureA().getBody().m_sweep.alpha0, c.getFixtureB().getBody().m_sweep.alpha0);
             if (c.isEnabled() == false) {
                 continue;
             }
-            _DEBUG && common.debug("toiCount:", c.m_toiCount, Settings.maxSubSteps);
             if (c.m_toiCount > Settings.maxSubSteps) {
                 continue;
             }
-            _DEBUG && common.debug("toiFlag:", c.m_toiFlag);
             var alpha = 1;
             if (c.m_toiFlag) {
                 alpha = c.m_toi;
             } else {
                 var fA = c.getFixtureA();
                 var fB = c.getFixtureB();
-                _DEBUG && common.debug("sensor:", fA.isSensor(), fB.isSensor());
                 if (fA.isSensor() || fB.isSensor()) {
                     continue;
                 }
@@ -3009,16 +2990,11 @@ Solver.prototype.solveWorldTOI = function(step) {
                 _ASSERT && common.assert(bA.isDynamic() || bB.isDynamic());
                 var activeA = bA.isAwake() && !bA.isStatic();
                 var activeB = bB.isAwake() && !bB.isStatic();
-                _DEBUG && common.debug("awakestatic:", bA.isAwake(), bA.isStatic());
-                _DEBUG && common.debug("awakestatic:", bB.isAwake(), bB.isStatic());
-                _DEBUG && common.debug("active:", activeA, activeB);
                 if (activeA == false && activeB == false) {
                     continue;
                 }
-                _DEBUG && common.debug("alpha:", alpha, bA.m_sweep.alpha0, bB.m_sweep.alpha0);
                 var collideA = bA.isBullet() || !bA.isDynamic();
                 var collideB = bB.isBullet() || !bB.isDynamic();
-                _DEBUG && common.debug("collide:", collideA, collideB);
                 if (collideA == false && collideB == false) {
                     continue;
                 }
@@ -3030,14 +3006,11 @@ Solver.prototype.solveWorldTOI = function(step) {
                     alpha0 = bA.m_sweep.alpha0;
                     bB.m_sweep.advance(alpha0);
                 }
-                _DEBUG && common.debug("alpha0:", alpha0, bA.m_sweep.alpha0, bB.m_sweep.alpha0);
                 _ASSERT && common.assert(alpha0 < 1);
                 var indexA = c.getChildIndexA();
                 var indexB = c.getChildIndexB();
                 var sweepA = bA.m_sweep;
                 var sweepB = bB.m_sweep;
-                _DEBUG && common.debug("sweepA", sweepA.localCenter.x, sweepA.localCenter.y, sweepA.c.x, sweepA.c.y, sweepA.a, sweepA.alpha0, sweepA.c0.x, sweepA.c0.y, sweepA.a0);
-                _DEBUG && common.debug("sweepB", sweepB.localCenter.x, sweepB.localCenter.y, sweepB.c.x, sweepB.c.y, sweepB.a, sweepB.alpha0, sweepB.c0.x, sweepB.c0.y, sweepB.a0);
                 var input = new TOIInput();
                 input.proxyA.set(fA.getShape(), indexA);
                 input.proxyB.set(fB.getShape(), indexB);
@@ -3047,7 +3020,6 @@ Solver.prototype.solveWorldTOI = function(step) {
                 var output = new TOIOutput();
                 TimeOfImpact(output, input);
                 var beta = output.t;
-                _DEBUG && common.debug("state:", output.state, TOIOutput.e_touching);
                 if (output.state == TOIOutput.e_touching) {
                     alpha = Math.min(alpha0 + (1 - alpha0) * beta, 1);
                 } else {
@@ -3056,13 +3028,11 @@ Solver.prototype.solveWorldTOI = function(step) {
                 c.m_toi = alpha;
                 c.m_toiFlag = true;
             }
-            _DEBUG && common.debug("minAlpha:", minAlpha, alpha);
             if (alpha < minAlpha) {
                 minContact = c;
                 minAlpha = alpha;
             }
         }
-        _DEBUG && common.debug("minContact:", minContact == null, 1 - 10 * Math.EPSILON < minAlpha, minAlpha);
         if (minContact == null || 1 - 10 * Math.EPSILON < minAlpha) {
             world.m_stepComplete = true;
             break;
@@ -3165,12 +3135,10 @@ Solver.prototype.solveWorldTOI = function(step) {
         var a = b.m_sweep.a;
         var v = b.m_linearVelocity;
         var w = b.m_angularVelocity;
-        _DEBUG && common.debug("== ", a, c.x, c.y, w, v.x, v.y);
     }
 };
 
 Solver.prototype.solveIslandTOI = function(subStep, toiA, toiB) {
-    _DEBUG && common.debug("TOI++++++Island");
     var world = this.m_world;
     for (var i = 0; i < this.m_bodies.length; ++i) {
         var body = this.m_bodies[i];
@@ -3262,7 +3230,6 @@ Solver.prototype.solveIslandTOI = function(subStep, toiA, toiB) {
         body.synchronizeTransform();
     }
     this.postSolveIsland();
-    _DEBUG && common.debug("TOI------Island");
 };
 
 function ContactImpulse() {
@@ -4253,14 +4220,8 @@ function Distance(output, cache, input) {
     var proxyB = input.proxyB;
     var xfA = input.transformA;
     var xfB = input.transformB;
-    _DEBUG && common.debug("cahce:", cache.metric, cache.count);
-    _DEBUG && common.debug("proxyA:", proxyA.m_count);
-    _DEBUG && common.debug("proxyB:", proxyB.m_count);
-    _DEBUG && common.debug("xfA:", xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s);
-    _DEBUG && common.debug("xfB:", xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
     var simplex = new Simplex();
     simplex.readCache(cache, proxyA, xfA, proxyB, xfB);
-    _DEBUG && common.debug("cache", simplex.print());
     var vertices = simplex.m_v;
     var k_maxIters = Settings.maxDistnceIterations;
     var saveA = [];
@@ -4311,7 +4272,6 @@ function Distance(output, cache, input) {
     simplex.getWitnessPoints(output.pointA, output.pointB);
     output.distance = Vec2.distance(output.pointA, output.pointB);
     output.iterations = iter;
-    _DEBUG && common.debug("Distance:", output.distance, output.pointA.x, output.pointA.y, output.pointB.x, output.pointB.y);
     simplex.writeCache(cache);
     if (input.useRadii) {
         var rA = proxyA.m_radius;
@@ -4501,19 +4461,16 @@ Simplex.prototype.getWitnessPoints = function(pA, pB) {
         break;
 
       case 1:
-        _DEBUG && common.debug("case1", this.print());
         pA.set(this.m_v1.wA);
         pB.set(this.m_v1.wB);
         break;
 
       case 2:
-        _DEBUG && common.debug("case2", this.print());
         pA.wSet(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
         pB.wSet(this.m_v1.a, this.m_v1.wB, this.m_v2.a, this.m_v2.wB);
         break;
 
       case 3:
-        _DEBUG && common.debug("case3", this.print());
         pA.wSet(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
         pA.wAdd(this.m_v3.a, this.m_v3.wA);
         pB.set(pA);
@@ -5410,8 +5367,6 @@ function TimeOfImpact(output, input) {
     var proxyB = input.proxyB;
     var sweepA = input.sweepA;
     var sweepB = input.sweepB;
-    _DEBUG && common.debug("sweepA", sweepA.localCenter.x, sweepA.localCenter.y, sweepA.c.x, sweepA.c.y, sweepA.a, sweepA.alpha0, sweepA.c0.x, sweepA.c0.y, sweepA.a0);
-    _DEBUG && common.debug("sweepB", sweepB.localCenter.x, sweepB.localCenter.y, sweepB.c.x, sweepB.c.y, sweepB.a, sweepB.alpha0, sweepB.c0.x, sweepB.c0.y, sweepB.a0);
     sweepA.normalize();
     sweepB.normalize();
     var tMax = input.tMax;
@@ -5432,13 +5387,10 @@ function TimeOfImpact(output, input) {
         var xfB = Transform.identity();
         sweepA.getTransform(xfA, t1);
         sweepB.getTransform(xfB, t1);
-        _DEBUG && common.debug("xfA:", xfA.p.x, xfA.p.y, xfA.q.c, xfA.q.s);
-        _DEBUG && common.debug("xfB:", xfB.p.x, xfB.p.y, xfB.q.c, xfB.q.s);
         distanceInput.transformA = xfA;
         distanceInput.transformB = xfB;
         var distanceOutput = new DistanceOutput();
         Distance(distanceOutput, cache, distanceInput);
-        _DEBUG && common.debug("distance:", distanceOutput.distance);
         if (distanceOutput.distance <= 0) {
             output.state = TOIOutput.e_overlapped;
             output.t = 0;
@@ -5487,7 +5439,6 @@ function TimeOfImpact(output, input) {
             var s1 = fcn.evaluate(t1);
             var indexA = fcn.indexA;
             var indexB = fcn.indexB;
-            _DEBUG && common.debug("s1:", s1, target, tolerance, t1);
             if (s1 < target - tolerance) {
                 output.state = TOIOutput.e_failed;
                 output.t = t1;
@@ -6127,7 +6078,6 @@ Rot.clone = function(rot) {
 };
 
 Rot.identity = function(rot) {
-    _ASSERT && Rot.assert(rot);
     var obj = Object.create(Rot.prototype);
     obj.s = 0;
     obj.c = 1;
@@ -7717,9 +7667,9 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
         JwC = Vec2.cross(rC, u);
         JwA = Vec2.cross(rA, u);
         mass += this.m_mC + this.m_mA + this.m_iC * JwC * JwC + this.m_iA * JwA * JwA;
-        var pC = this.m_localAnchorC - this.m_lcC;
+        var pC = Vec2.sub(this.m_localAnchorC, this.m_lcC);
         var pA = Rot.mulT(qC, Vec2.add(rA, Vec2.sub(cA, cC)));
-        coordinateA = Dot(pA - pC, this.m_localAxisC);
+        coordinateA = Vec2.dot(Vec2.sub(pA, pC), this.m_localAxisC);
     }
     if (this.m_type2 == RevoluteJoint.TYPE) {
         JvBD = Vec2.zero();
@@ -7748,9 +7698,9 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
     aA += this.m_iA * impulse * JwA;
     cB.wAdd(this.m_mB * impulse, JvBD);
     aB += this.m_iB * impulse * JwB;
-    cC.wAdd(this.m_mC * impulse, JvAC);
+    cC.wSub(this.m_mC * impulse, JvAC);
     aC -= this.m_iC * impulse * JwC;
-    cD.wAdd(this.m_mD * impulse, JvBD);
+    cD.wSub(this.m_mD * impulse, JvBD);
     aD -= this.m_iD * impulse * JwD;
     this.m_bodyA.c_position.c.set(cA);
     this.m_bodyA.c_position.a = aA;
@@ -10997,7 +10947,6 @@ var polygonBA = new TempPolygon();
 var rf = new ReferenceFace();
 
 function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
-    _DEBUG && common.debug("CollideEdgePolygon");
     var m_type1, m_type2;
     var xf = Transform.mulT(xfA, xfB);
     var centroidB = Transform.mul(xf, polygonB.m_centroid);
