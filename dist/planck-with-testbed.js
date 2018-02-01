@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.41
+ * Planck.js v0.1.42
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -7501,7 +7501,7 @@ GearJoint.prototype.setRatio = function(ratio) {
     this.m_ratio = ratio;
 };
 
-GearJoint.prototype.setRatio = function() {
+GearJoint.prototype.getRatio = function() {
     return this.m_ratio;
 };
 
