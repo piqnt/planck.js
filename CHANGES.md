@@ -2,7 +2,7 @@
 ## 0.1
 * source code directory layout changed, classes moved around!
 * b2Class renamed to Class
-* Dumping is removed, Drawing is moved to Stage viewer
+* Dumping is removed, Drawing is moved to tesbed
 * GrowableStack replaced with native array, Timer is changed
 * Math is changed and split
 * Contact and Collide classes merged, Contact registration/creation is changes
