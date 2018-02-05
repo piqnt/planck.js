@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.42
+ * Planck.js v0.1.43
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -9378,7 +9378,7 @@ GearJoint.prototype.getJoint2 = function() {
  * Set/Get the gear ratio.
  */
 GearJoint.prototype.setRatio = function(ratio) {
-    _ASSERT && common.assert(IsValid(ratio));
+    _ASSERT && common.assert(Math.isFinite(ratio));
     this.m_ratio = ratio;
 };
 
@@ -10971,7 +10971,7 @@ PulleyJoint.prototype.getLengthB = function() {
 /**
  * Get the pulley ratio.
  */
-PulleyJoint.prototype.setRatio = function() {
+PulleyJoint.prototype.getRatio = function() {
     return this.m_ratio;
 };
 
