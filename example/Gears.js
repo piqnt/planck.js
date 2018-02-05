@@ -90,12 +90,12 @@ planck.testbed('Gears', function(testbed) {
   testbed.step = function Step(settings) {
     var ratio, value;
 
-    ratio = joint4.setRatio();
+    ratio = joint4.getRatio();
     value = joint1.getJointAngle() + ratio * joint2.getJointAngle();
     testbed.status("ratio1", ratio);
     testbed.status("theta1 + ratio * delta", value);
 
-    ratio = joint5.setRatio();
+    ratio = joint5.getRatio();
     value = joint2.getJointAngle() + ratio * joint3.getJointTranslation();
 
     testbed.status("ratio2", ratio);

@@ -58,7 +58,7 @@ planck.testbed('Pulleys', function(testbed) {
       groundAnchor1, groundAnchor2, anchor1, anchor2, 1.5));
 
   testbed.step = function() {
-    var ratio = m_joint1.setRatio();
+    var ratio = m_joint1.getRatio();
     var L = m_joint1.getCurrentLengthA() + ratio * m_joint1.getCurrentLengthB();
     testbed.status('ratio', ratio);
     testbed.status('L (L1 * ratio + L2)', L);
