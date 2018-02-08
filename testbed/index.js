@@ -234,8 +234,6 @@ planck.testbed = function(opts, callback) {
       return true;
     });
 
-    viewer.scale(1, -1);
-
     // stage.empty();
     stage.background(testbed.background);
     stage.viewbox(testbed.width, testbed.height);
@@ -266,6 +264,7 @@ planck.testbed = function(opts, callback) {
     var mouseMove = {x:0, y:0};
 
     viewer.attr('spy', true).on(Stage.Mouse.START, function(point) {
+      point = { x: point.x, y: -point.y };
       if (targetBody) {
         return;
       }
@@ -284,6 +283,7 @@ planck.testbed = function(opts, callback) {
       }
 
     }).on(Stage.Mouse.MOVE, function(point) {
+      point = { x: point.x, y: -point.y };
       if (mouseJoint) {
         mouseJoint.setTarget(point);
       }
@@ -291,6 +291,7 @@ planck.testbed = function(opts, callback) {
       mouseMove.x = point.x;
       mouseMove.y = point.y;
     }).on(Stage.Mouse.END, function(point) {
+      point = { x: point.x, y: -point.y };
       if (mouseJoint) {
         world.destroyJoint(mouseJoint);
         mouseJoint = null;
@@ -302,6 +303,7 @@ planck.testbed = function(opts, callback) {
       }
 
     }).on(Stage.Mouse.CANCEL, function(point) {
+      point = { x: point.x, y: -point.y };
       if (mouseJoint) {
         world.destroyJoint(mouseJoint);
         mouseJoint = null;
@@ -403,7 +405,7 @@ Viewer.prototype.renderWorld = function(world) {
         if (f.render && f.render.stroke) {
           this._options.strokeStyle = f.render.stroke;
         } else if (b.render && b.render.stroke) {
-            this._options.strokeStyle = b.render.stroke;
+          this._options.strokeStyle = b.render.stroke;
         } else if (b.isDynamic()) {
           this._options.strokeStyle = 'rgba(255,255,255,0.9)';
         } else if (b.isKinematic()) {
@@ -446,8 +448,8 @@ Viewer.prototype.renderWorld = function(world) {
           f.ui.__lastX = p.x;
           f.ui.__lastY = p.y;
           f.ui.__lastR = r;
-          f.ui.offset(p.x, p.y);
-          f.ui.rotate(r);
+          f.ui.offset(p.x, -p.y);
+          f.ui.rotate(-r);
         }
       }
 
@@ -471,11 +473,11 @@ Viewer.prototype.renderWorld = function(world) {
 
     if (j.ui) {
       var cx = (a.x + b.x) * 0.5;
-      var cy = (a.y + b.y) * 0.5;
+      var cy = (-a.y + -b.y) * 0.5;
       var dx = a.x - b.x;
-      var dy = a.y - b.y;
+      var dy = -a.y - -b.y;
       var d = Math.sqrt(dx * dx + dy * dy);
-      j.ui.width(d)
+      j.ui.width(d);
       j.ui.rotate(Math.atan2(dy, dx));
       j.ui.offset(cx, cy);
     }
@@ -534,7 +536,7 @@ Viewer.prototype.drawCircle = function(shape, options) {
     ctx.stroke();
   });
   var image = Stage.image(texture)
-    .offset(shape.m_p.x - cx, shape.m_p.y - cy);
+    .offset(shape.m_p.x - cx, -shape.m_p.y - cy);
   var node = Stage.create().append(image);
   return node;
 };
@@ -567,10 +569,11 @@ Viewer.prototype.drawEdge = function(edge, options) {
   });
 
   var minX = Math.min(v1.x, v2.x);
-  var minY = Math.min(v1.y, v2.y);
+  var minY = Math.min(-v1.y, -v2.y);
 
   var image = Stage.image(texture);
-  image.rotate(Math.atan2(dy, dx));
+  console.log(-Math.atan2(dy, dx))
+  image.rotate(-Math.atan2(dy, dx));
   image.offset(minX - lw, minY - lw);
   var node = Stage.create().append(image);
   return node;
@@ -592,8 +595,8 @@ Viewer.prototype.drawPolygon = function(shape, options) {
     var v = vertices[i];
     minX = Math.min(minX, v.x);
     maxX = Math.max(maxX, v.x);
-    minY = Math.min(minY, v.y);
-    maxY = Math.max(maxY, v.y);
+    minY = Math.min(minY, -v.y);
+    maxY = Math.max(maxY, -v.y);
   }
 
   var width = maxX - minX;
@@ -608,7 +611,7 @@ Viewer.prototype.drawPolygon = function(shape, options) {
     for (var i = 0; i < vertices.length; ++i) {
       var v = vertices[i];
       var x = v.x - minX + lw;
-      var y = v.y - minY + lw;
+      var y = -v.y - minY + lw;
       if (i == 0)
         ctx.moveTo(x, y);
       else
@@ -653,8 +656,8 @@ Viewer.prototype.drawChain = function(shape, options) {
     var v = vertices[i];
     minX = Math.min(minX, v.x);
     maxX = Math.max(maxX, v.x);
-    minY = Math.min(minY, v.y);
-    maxY = Math.max(maxY, v.y);
+    minY = Math.min(minY, -v.y);
+    maxY = Math.max(maxY, -v.y);
   }
 
   var width = maxX - minX;
@@ -669,7 +672,7 @@ Viewer.prototype.drawChain = function(shape, options) {
     for (var i = 0; i < vertices.length; ++i) {
       var v = vertices[i];
       var x = v.x - minX + lw;
-      var y = v.y - minY + lw;
+      var y = -v.y - minY + lw;
       if (i == 0)
         ctx.moveTo(x, y);
       else
