@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.43
+ * Planck.js v0.1.44
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -29,7 +29,7 @@
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.planck=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var planck = require("../lib/");
 
-var Stage = window.Stage || require("stage-js/platform/web");
+var Stage = require("stage-js/platform/web");
 
 module.exports = planck;
 
@@ -327,8 +327,6 @@ planck.testbed = function(opts, callback) {
         }
     });
 };
-
-Stage.Planck = Viewer;
 
 Viewer._super = Stage;
 
@@ -2021,6 +2019,8 @@ var common = require("./util/common");
 
 var options = require("./util/options");
 
+var Math = require("./common/Math");
+
 var Vec2 = require("./common/Vec2");
 
 var AABB = require("./collision/AABB");
@@ -2233,7 +2233,7 @@ Fixture.prototype.shouldCollide = function(that) {
 };
 
 
-},{"./collision/AABB":11,"./common/Vec2":23,"./util/common":51,"./util/options":53}],5:[function(require,module,exports){
+},{"./collision/AABB":11,"./common/Math":18,"./common/Vec2":23,"./util/common":51,"./util/options":53}],5:[function(require,module,exports){
 var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
 var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;

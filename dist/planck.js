@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.43
+ * Planck.js v0.1.44
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -2078,6 +2078,8 @@ var common = require("./util/common");
 
 var options = require("./util/options");
 
+var Math = require("./common/Math");
+
 var Vec2 = require("./common/Vec2");
 
 var AABB = require("./collision/AABB");
@@ -2087,7 +2089,7 @@ var AABB = require("./collision/AABB");
  *
  * A fixture definition is used to create a fixture. This class defines an
  * abstract fixture definition. You can reuse fixture definitions safely.
- *
+ * 
  * @prop friction The friction coefficient, usually in the range [0,1]
  * @prop restitution The restitution (elasticity) usually in the range [0,1]
  * @prop density The density, usually in kg/m^2
@@ -2095,10 +2097,10 @@ var AABB = require("./collision/AABB");
  *       generates a collision response
  * @prop userData
  * @prop filterGroupIndex Zero, positive or negative collision group. Fixtures with same positive groupIndex always collide and fixtures with same
- *       negative groupIndex never collide.
+ * negative groupIndex never collide.
  * @prop filterCategoryBits Collision category bit or bits that this fixture belongs
  *       to. If groupIndex is zero or not matching, then at least one bit in this fixture
- *       categoryBits should match other fixture maskBits and vice versa.
+ * categoryBits should match other fixture maskBits and vice versa.
  * @prop filterMaskBits Collision category bit or bits that this fixture accept for
  *       collision.
  */
@@ -2128,7 +2130,7 @@ function FixtureProxy(fixture, childIndex) {
  * fixture inherits its transform from its parent. Fixtures hold additional
  * non-geometric data such as friction, collision filters, etc. Fixtures are
  * created via Body.createFixture.
- *
+ * 
  * @param {Shape|FixtureDef} shape Shape of fixture definition.
  * @param {FixtureDef|number} def Fixture definition or number.
  */
@@ -2412,13 +2414,13 @@ Fixture.prototype.refilter = function() {
 /**
  * Implement this method to provide collision filtering, if you want finer
  * control over contact creation.
- *
+ * 
  * Return true if contact calculations should be performed between these two
  * fixtures.
- *
+ * 
  * Warning: for performance reasons this is only called when the AABBs begin to
  * overlap.
- *
+ * 
  * @param {Fixture} fixtureA
  * @param {Fixture} fixtureB
  */
@@ -2431,7 +2433,7 @@ Fixture.prototype.shouldCollide = function(that) {
 };
 
 
-},{"./collision/AABB":11,"./common/Vec2":23,"./util/common":50,"./util/options":52}],5:[function(require,module,exports){
+},{"./collision/AABB":11,"./common/Math":18,"./common/Vec2":23,"./util/common":50,"./util/options":52}],5:[function(require,module,exports){
 var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
 var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
