@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.1.44
+ * Planck.js v0.1.45
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -8791,8 +8791,7 @@ DistanceJoint.prototype.getAnchorB = function() {
 };
 
 DistanceJoint.prototype.getReactionForce = function(inv_dt) {
-    var F = Vec2.mul(inv_dt * this.m_impulse, this.m_u);
-    return F;
+    return Vec2.mul(this.m_impulse, this.m_u).mul(inv_dt);
 };
 
 DistanceJoint.prototype.getReactionTorque = function(inv_dt) {
@@ -9077,7 +9076,7 @@ FrictionJoint.prototype.getAnchorB = function() {
 };
 
 FrictionJoint.prototype.getReactionForce = function(inv_dt) {
-    return inv_dt * this.m_linearImpulse;
+    return Vec2.mul(inv_dt, this.m_linearImpulse);
 };
 
 FrictionJoint.prototype.getReactionTorque = function(inv_dt) {
@@ -9397,9 +9396,7 @@ GearJoint.prototype.getAnchorB = function() {
 };
 
 GearJoint.prototype.getReactionForce = function(inv_dt) {
-    var P = this.m_impulse * this.m_JvAC;
-    // Vec2
-    return inv_dt * P;
+    return Vec2.mul(this.m_impulse, this.m_JvAC).mul(inv_dt);
 };
 
 GearJoint.prototype.getReactionTorque = function(inv_dt) {
@@ -9817,7 +9814,7 @@ MotorJoint.prototype.getAnchorB = function() {
 };
 
 MotorJoint.prototype.getReactionForce = function(inv_dt) {
-    return inv_dt * this.m_linearImpulse;
+    return Vec2.mul(inv_dt, this.m_linearImpulse);
 };
 
 MotorJoint.prototype.getReactionTorque = function(inv_dt) {
@@ -10499,7 +10496,7 @@ PrismaticJoint.prototype.getAnchorB = function() {
 };
 
 PrismaticJoint.prototype.getReactionForce = function(inv_dt) {
-    return inv_dt * (this.m_impulse.x * this.m_perp + (this.m_motorImpulse + this.m_impulse.z) * this.m_axis);
+    return Vec2.wAdd(this.m_impulse.x, this.m_perp, this.m_motorImpulse + this.m_impulse.z, this.m_axis).mul(inv_dt);
 };
 
 PrismaticJoint.prototype.getReactionTorque = function(inv_dt) {
@@ -11009,7 +11006,7 @@ PulleyJoint.prototype.getAnchorB = function() {
 };
 
 PulleyJoint.prototype.getReactionForce = function(inv_dt) {
-    return Vec3.mul(inv_dt * this.m_impulse, this.m_uB);
+    return Vec3.mul(this.m_impulse, this.m_uB).mul(inv_dt);
 };
 
 PulleyJoint.prototype.getReactionTorque = function(inv_dt) {
@@ -11450,8 +11447,7 @@ RevoluteJoint.prototype.getAnchorB = function() {
  * Get the reaction force given the inverse time step. Unit is N.
  */
 RevoluteJoint.prototype.getReactionForce = function(inv_dt) {
-    var P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
-    return inv_dt * P;
+    return Vec2.neo(this.m_impulse.x, this.m_impulse.y).mul(inv_dt);
 };
 
 /**
@@ -11884,9 +11880,7 @@ RopeJoint.prototype.getAnchorB = function() {
 };
 
 RopeJoint.prototype.getReactionForce = function(inv_dt) {
-    var F = inv_dt * this.m_impulse * this.m_u;
-    // Vec2
-    return F;
+    return Vec2.mul(this.m_impulse, this.m_u).mul(inv_dt);
 };
 
 RopeJoint.prototype.getReactionTorque = function(inv_dt) {
@@ -12185,8 +12179,7 @@ WeldJoint.prototype.getAnchorB = function() {
 };
 
 WeldJoint.prototype.getReactionForce = function(inv_dt) {
-    var P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
-    return inv_dt * P;
+    return Vec2.neo(this.m_impulse.x, this.m_impulse.y).mul(inv_dt);
 };
 
 WeldJoint.prototype.getReactionTorque = function(inv_dt) {
@@ -12663,7 +12656,7 @@ WheelJoint.prototype.getAnchorB = function() {
 };
 
 WheelJoint.prototype.getReactionForce = function(inv_dt) {
-    return inv_dt * (this.m_impulse * this.m_ay + this.m_springImpulse * this.m_ax);
+    return Vec2.wAdd(this.m_impulse, this.m_ay, this.m_springImpulse, this.m_ax).mul(inv_dt);
 };
 
 WheelJoint.prototype.getReactionTorque = function(inv_dt) {
