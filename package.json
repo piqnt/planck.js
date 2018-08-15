@@ -19,6 +19,7 @@
     "url": "git://github.com/shakiba/planck.js.git"
   },
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
     "dist/",
     "doc/",
