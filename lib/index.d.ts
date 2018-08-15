@@ -300,7 +300,7 @@ declare namespace planck {
         applyAngularImpulse(impulse: number, wake?: boolean): void;
         shouldCollide(that: Body): boolean;
         createFixture(shape: Shape, def?: FixtureDef | number | null): Fixture;
-        createFixture(def: FixtureDef & { shape: Shape }): Fixture;
+        createFixture(def: FixtureDefWithShape): Fixture;
         destroyFixture(fixture: Fixture): void;
         getWorldPoint(localPoint: Vec2): Vec2;
         getWorldVector(localVector: Vec2): Vec2;
