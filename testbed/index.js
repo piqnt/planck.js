@@ -55,11 +55,6 @@ planck.testbed = function(opts, callback) {
       canvas.focus();
     };
 
-    testbed.focus = function() {
-      document.activeElement && document.activeElement.blur();
-      canvas.focus();
-    };
-
     testbed.debug = false;
     testbed.width = 80;
     testbed.height = 60;
