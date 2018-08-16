@@ -142,7 +142,7 @@ However some [changes](./CHANGES.md) and refactoring are made during rewrite to 
 
 [Box2D](http://box2d.org/) is a popular C++ 2D rigid-body physics engine created by [Erin Catto](https://twitter.com/erin_catto). Box2D is used in several popular games, such as Angry Birds, Limbo and Crayon Physics, as well as game development tools and libraries such as Apple's SpriteKit.
 
-[Planck.js](https://github.com/shakiba/planck.js) is developed and maintained by Ali Shakiba.
+[Planck.js](https://github.com/shakiba/planck.js) is developed and maintained by [Ali Shakiba](https://github.com/shakiba/).
 
 TypeScript definitions for planck.js are developed by [Oliver Zell](https://github.com/zOadT).
 
