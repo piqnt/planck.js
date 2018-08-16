@@ -144,6 +144,8 @@ However some [changes](./CHANGES.md) and refactoring are made during rewrite to 
 
 [Planck.js](https://github.com/shakiba/planck.js) is developed and maintained by Ali Shakiba.
 
+TypeScript definitions for planck.js are developed by [Oliver Zell](https://github.com/zOadT).
+
 ## License
 
 Planck.js is [available under the zlib license](./LICENSE.txt).
