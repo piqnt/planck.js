@@ -48,7 +48,6 @@ declare namespace planck {
         toString(): string;
         setZero(): Vec3;
         set(x: number, y: number, z: number): Vec3;
-
         add(w: Vec3): Vec3;
         sub(w: Vec3): Vec3;
         mul(m: number): Vec3;
@@ -560,7 +559,7 @@ declare namespace planck {
         computeMass(massData: MassData, density?: number): void;
         computeDistanceProxy(proxy: DistanceProxy): void;
     }
-    interface CircleShape {
+    interface CircleShape extends Shape {
         m_type: 'circle';
         m_radius: number;
         m_p: Vec2;
@@ -584,7 +583,7 @@ declare namespace planck {
         // @private @internal
         // _set(v1: Vec2, v2: Vec2): EdgeShape;
     }
-    interface PolygonShape {
+    interface PolygonShape extends Shape {
         m_type: 'polygon';
         m_radius: number;
         m_centroid: Vec2;
@@ -600,7 +599,7 @@ declare namespace planck {
         // _setAsBox(hx: number, hy: number, center: Vec2, angle?: number): void;
         // _setAsBox(hx: number, hy: number): void;
     }
-    interface ChainShape {
+    interface ChainShape extends Shape {
         m_type: 'chain';
         m_radius: number;
         m_vertices: Vec2[];
