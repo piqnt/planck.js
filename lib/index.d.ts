@@ -119,6 +119,7 @@ declare namespace planck {
         childIndex: number;
         proxyId: number;
     }
+    type ShapeType = "circle" | "edge" | "polygon" | "chain";
     interface Fixture {
         m_body: Body;
         m_friction: number;
@@ -134,7 +135,7 @@ declare namespace planck {
         m_proxyCount: number;
         m_userData: any;
 
-        getType(): "circle" | "edge" | "polygon" | "chain";
+        getType(): ShapeType;
         getShape(): Shape;
         isSensor(): boolean;
         setSensor(sensor: boolean): void;
@@ -162,8 +163,9 @@ declare namespace planck {
         refilter(): void;
         shouldCollide(that: Fixture): boolean;
     }
+    type BodyType = 'static' | 'kinematic' | 'dynamic';
     type BodyDef = Partial<{
-        type: 'static' | 'kinematic' | 'dynamic',
+        type: BodyType,
         position: Vec2,
         angle: number,
         linearVelocity: Vec2,
@@ -197,7 +199,7 @@ declare namespace planck {
         m_islandFlag: boolean;
         m_toiFlag: boolean;
         m_userData: any;
-        m_type: 'static' | 'kinematic' | 'dynamic';
+        m_type: BodyType;
         m_mass: number;
         m_invMass: number;
         // Rotational inertia about the center of mass.
@@ -248,11 +250,11 @@ declare namespace planck {
         /**
          * @private
          */
-        getType(): 'static' | 'kinematic' | 'dynamic';
+        getType(): BodyType;
         /**
          * @private
          */
-        setType(type: 'static' | 'kinematic' | 'dynamic'): void;
+        setType(type: BodyType): void;
         isBullet(): boolean;
         setBullet(flag: boolean): void;
         isSleepingAllowed(): boolean;
@@ -549,9 +551,12 @@ declare namespace planck {
         set(shape: Shape, index: number): void;//TODO index is only used by Chain
     }
     interface Shape {
+        m_type: ShapeType;
+        m_radius: number;
+
         isValid(shape: any): boolean;
         getRadius(): number;
-        getType(): string;
+        getType(): ShapeType;
         getChildCount(): number;
         testPoint(xf: Transform, p: Vec2): false;
         rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex?: number): boolean;
@@ -561,7 +566,7 @@ declare namespace planck {
     }
     interface CircleShape extends Shape {
         m_type: 'circle';
-        m_radius: number;
+
         m_p: Vec2;
 
         getCenter(): Vec2;
@@ -570,7 +575,7 @@ declare namespace planck {
     }
     interface EdgeShape extends Shape {
         m_type: 'edge';
-        m_radius: number;
+
         m_vertex1: Vec2;
         m_vertex2: Vec2;
         m_vertex0: Vec2;
@@ -585,7 +590,7 @@ declare namespace planck {
     }
     interface PolygonShape extends Shape {
         m_type: 'polygon';
-        m_radius: number;
+
         m_centroid: Vec2;
         m_vertices: Vec2[];
         m_normals: Vec2[];
@@ -601,7 +606,7 @@ declare namespace planck {
     }
     interface ChainShape extends Shape {
         m_type: 'chain';
-        m_radius: number;
+
         m_vertices: Vec2[];
         m_count: number;
         m_prevVertex: Vec2 | null;
@@ -1244,7 +1249,7 @@ declare namespace planck {
         new(fA: Fixture, indexA: number, fB: Fixture, indexB: number,
             evaluateFcn: (manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) => void): Contact;
 
-        addType(type1: "circle" | "edge" | "polygon" | "chain", type2: "circle" | "edge" | "polygon" | "chain",
+        addType(type1: ShapeType, type2: ShapeType,
             callback: (manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) => void &
                 { destroyFcn?: (contact: Contact) => void }): void;
         create(fixtureA: Fixture, indexA: number, fixtureB: Fixture, indexB: number): Contact | null;
@@ -1462,7 +1467,7 @@ declare namespace planck {
         
         mouseForce?: number;
         
-        status(name: string | number, value: boolean | number | string | Symbol): void;
+        status(name: string, value: any): void;
         status(a: object): void;
         status(a: string): void;
         info(text: string): void;
