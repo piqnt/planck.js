@@ -32,6 +32,8 @@ declare namespace planck {
         add(w: Vec2): Vec2;
         wAdd(a: number, v: Vec2, b: number, w: Vec2): Vec2;
         wAdd(a: number, v: Vec2): Vec2;
+        wSub(a: number, v: Vec2, b: number, w: Vec2): Vec2;
+        wSub(a: number, v: Vec2): Vec2;
         sub(w: Vec2): Vec2;
         mul(m: number): Vec2;
         length(): number;
@@ -89,8 +91,7 @@ declare namespace planck {
         getCenter(): Vec2;
         getExtents(): Vec2;
         getPerimeter(): number;
-        combine(a: AABB, b: AABB): void;
-        combine(a: Vec2, b: Vec2): void;
+        combine(a: AABB | Vec2, b: AABB | Vec2): void;
         set(aabb: AABB): void;
         contains(aabb: AABB): boolean;
         extend(value: number): void;
@@ -133,13 +134,13 @@ declare namespace planck {
         m_next: Fixture | null;
         m_proxies: FixtureProxy[];
         m_proxyCount: number;
-        m_userData: any;
+        m_userData: unknown;
 
         getType(): ShapeType;
         getShape(): Shape;
         isSensor(): boolean;
         setSensor(sensor: boolean): void;
-        getUserData(): any;
+        getUserData(): unknown;
         setUserData(data: any): void;
         getBody(): Body;
         getNext(): Fixture | null;
@@ -198,7 +199,7 @@ declare namespace planck {
         m_activeFlag: boolean;
         m_islandFlag: boolean;
         m_toiFlag: boolean;
-        m_userData: any;
+        m_userData: unknown;
         m_type: BodyType;
         m_mass: number;
         m_invMass: number;
@@ -230,7 +231,7 @@ declare namespace planck {
         getWorld(): World;
         getNext(): Body | null;
         setUserData(data: any): void
-        getUserData(): any;
+        getUserData(): unknown;
         getFixtureList(): Fixture | null;
         getJointList(): Joint | null;
         /**
@@ -641,14 +642,14 @@ declare namespace planck {
         m_edgeA: JointEdge;
         m_edgeB: JointEdge;
         m_islandFlag: boolean;
-        m_userData: any;
+        m_userData: unknown;
 
         isActive(): boolean;
         getType(): string;
         getBodyA(): Body;
         getBodyB(): Body;
         getNext(): Joint | null;
-        getUserData(): any;
+        getUserData(): unknown;
         setUserData(data: any): void;
         getCollideConnected(): boolean;
         getAnchorA(): Vec2;
