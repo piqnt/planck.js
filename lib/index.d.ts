@@ -23,7 +23,7 @@ declare namespace planck {
         y: number;
 
         toString(): string;
-        clone(depricated: any): Vec2;//TODO depricated?
+        clone(): Vec2;
         setZero(): Vec2;
         set(x: number, y: number): Vec2;
         set(value: Vec2): Vec2;
@@ -49,11 +49,11 @@ declare namespace planck {
 
         toString(): string;
         setZero(): Vec3;
-        set(x: Vec3, y: Vec3, z: Vec3): Vec3;
+        set(x: number, y: number, z: number): Vec3;
         add(w: Vec3): Vec3;
         sub(w: Vec3): Vec3;
         mul(m: number): Vec3;
-        neg(/*m*/): Vec3;
+        neg(): Vec3;
     }
     interface Transform {
         p: Vec2;
@@ -91,10 +91,9 @@ declare namespace planck {
         getCenter(): Vec2;
         getExtents(): Vec2;
         getPerimeter(): number;
-        combine(a: Vec2, b?: Vec2): void;
-        combinePoints(a: Vec2, b: Vec2): void;
+        combine(a: AABB | Vec2, b: AABB | Vec2): void;
         set(aabb: AABB): void;
-        constains(aabb: AABB): boolean;
+        contains(aabb: AABB): boolean;
         extend(value: number): void;
         rayCast(output: RayCastOutput, input: RayCastInput): boolean;
         toString(): string;
@@ -121,6 +120,7 @@ declare namespace planck {
         childIndex: number;
         proxyId: number;
     }
+    type ShapeType = "circle" | "edge" | "polygon" | "chain";
     interface Fixture {
         m_body: Body;
         m_friction: number;
@@ -136,7 +136,7 @@ declare namespace planck {
         m_proxyCount: number;
         m_userData: unknown;
 
-        getType(): "circle" | "edge" | "polygon" | "chain";
+        getType(): ShapeType;
         getShape(): Shape;
         isSensor(): boolean;
         setSensor(sensor: boolean): void;
@@ -164,8 +164,9 @@ declare namespace planck {
         refilter(): void;
         shouldCollide(that: Fixture): boolean;
     }
+    type BodyType = 'static' | 'kinematic' | 'dynamic';
     type BodyDef = Partial<{
-        type: 'static' | 'kinematic' | 'dynamic',
+        type: BodyType,
         position: Vec2,
         angle: number,
         linearVelocity: Vec2,
@@ -199,7 +200,7 @@ declare namespace planck {
         m_islandFlag: boolean;
         m_toiFlag: boolean;
         m_userData: unknown;
-        m_type: 'static' | 'kinematic' | 'dynamic';
+        m_type: BodyType;
         m_mass: number;
         m_invMass: number;
         // Rotational inertia about the center of mass.
@@ -250,11 +251,11 @@ declare namespace planck {
         /**
          * @private
          */
-        getType(): 'static' | 'kinematic' | 'dynamic';
+        getType(): BodyType;
         /**
          * @private
          */
-        setType(type: 'static' | 'kinematic' | 'dynamic'): void;
+        setType(type: BodyType): void;
         isBullet(): boolean;
         setBullet(flag: boolean): void;
         isSleepingAllowed(): boolean;
@@ -550,33 +551,32 @@ declare namespace planck {
         getSupportVertex(d: Vec2): Vec2;
         set(shape: Shape, index: number): void;//TODO index is only used by Chain
     }
-    type Shape = CircleShape | EdgeShape | PolygonShape | ChainShape;
-    interface CircleShape {
-        m_type: 'circle';
+    interface Shape {
+        m_type: ShapeType;
         m_radius: number;
+
+        isValid(shape: any): boolean;
+        getRadius(): number;
+        getType(): ShapeType;
+        getChildCount(): number;
+        testPoint(xf: Transform, p: Vec2): false;
+        rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex?: number): boolean;
+        computeAABB(aabb: AABB, xf: Transform, childIndex?: number): void;
+        computeMass(massData: MassData, density?: number): void;
+        computeDistanceProxy(proxy: DistanceProxy): void;
+    }
+    interface CircleShape extends Shape {
+        m_type: 'circle';
+
         m_p: Vec2;
 
         getCenter(): Vec2;
-        getSupportVertex(/*d*/): Vec2;
         getVertex(index?: number): Vec2;
         getVertexCount(index?: number): 1;
-
-        getRadius(): number;
-        getType(): 'circle';
-        /**
-         * @deprecated
-         */
-        _clone(): CircleShape;
-        getChildCount(): 1;
-        testPoint(xf: Transform, p: Vec2): boolean;
-        rayCast(output: RayCastOutput, input: RayCastInput, transform: Transform, childIndex?: number): boolean;
-        computeAABB(aabb: AABB, xf: Transform, childIndex?: number): void;
-        computeMass(massData: MassData, density: number): void;
-        computeDistanceProxy(proxy: DistanceProxy): void;
     }
-    interface EdgeShape {
+    interface EdgeShape extends Shape {
         m_type: 'edge';
-        m_radius: number;
+
         m_vertex1: Vec2;
         m_vertex2: Vec2;
         m_vertex0: Vec2;
@@ -586,50 +586,28 @@ declare namespace planck {
 
         setNext(v3?: Vec2): EdgeShape;
         setPrev(v0?: Vec2): EdgeShape;
-        _set(v1: Vec2, v2: Vec2): EdgeShape;
-
-        getRadius(): number;
-        getType(): 'edge';
-        _clone(): EdgeShape;
-        getChildCount(): 1;
-        testPoint(xf: Transform, p: Vec2): false;
-        rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex?: number): boolean;
-        computeAABB(aabb: AABB, xf: Transform, childIndex?: number): void;
-        computeMass(massData: MassData, density?: number): void;
-        computeDistanceProxy(proxy: DistanceProxy): void;
+        // @private @internal
+        // _set(v1: Vec2, v2: Vec2): EdgeShape;
     }
-    interface PolygonShape {
+    interface PolygonShape extends Shape {
         m_type: 'polygon';
-        m_radius: number;
+
         m_centroid: Vec2;
         m_vertices: Vec2[];
         m_normals: Vec2[];
         m_count: number;
 
         getVertex(index: number): Vec2;
-        getRadius(): number;
-        getType(): 'polygon';
-        _clone(): PolygonShape;
-        getChildCount(): 1;
-        /**
-         * @private
-         */
-        _set(vertices: Vec2[]): void;
-        /**
-         * @private
-         */
-        _setAsBox(hx: number, hy: number, center: Vec2, angle?: number): void;
-        _setAsBox(hx: number, hy: number): void;
-        testPoint(xf: Transform, p: Vec2): boolean;
-        rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex?: number): boolean;
-        computeAABB(aabb: AABB, xf: Transform, childIndex?: number): void;
-        computeMass(massData: MassData, density: number): void;
         validate(): void;
-        computeDistanceProxy(proxy: DistanceProxy): void;
+
+        // @private @internal
+        // _set(vertices: Vec2[]): void;
+        // _setAsBox(hx: number, hy: number, center: Vec2, angle?: number): void;
+        // _setAsBox(hx: number, hy: number): void;
     }
-    interface ChainShape {
+    interface ChainShape extends Shape {
         m_type: 'chain';
-        m_radius: number;
+
         m_vertices: Vec2[];
         m_count: number;
         m_prevVertex: Vec2 | null;
@@ -637,21 +615,13 @@ declare namespace planck {
         m_hasPrevVertex: boolean;
         m_hasNextVertex: boolean;
 
-        _createLoop(vertices: Vec2[]): ChainShape;
-        _createChain(vertices: Vec2[]): ChainShape;
-        _setPrevVertex(prevVertex: Vec2): void;
-        _setNextVertex(nextVertex: Vec2): void;
-        getRadius(): number;
-        getType(): 'chain';
-        _clone(): ChainShape;
-        getChildCount(): number;
+        // @private @internal
+        // _createLoop(vertices: Vec2[]): ChainShape;
+        // _createChain(vertices: Vec2[]): ChainShape;
+        // _setPrevVertex(prevVertex: Vec2): void;
+        // _setNextVertex(nextVertex: Vec2): void;
         getChildEdge(edge: EdgeShape, childIndex: number): void;
         getVertex(index: number): Vec2;
-        testPoint(xf: Transform, p: Vec2): false;
-        rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;
-        computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
-        computeMass(massData: MassData, density?: number): void;
-        computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
     }
     
     enum LIMIT_STATE {
@@ -661,9 +631,8 @@ declare namespace planck {
         EQUAL_LIMITS,
     }
 
-    interface DistanceJoint {
-        // from Joint:
-        m_type: 'distance-joint';
+    interface Joint {
+        m_type: string;
         m_bodyA: Body;
         m_bodyB: Body;
         m_index: number;
@@ -674,6 +643,28 @@ declare namespace planck {
         m_edgeB: JointEdge;
         m_islandFlag: boolean;
         m_userData: unknown;
+
+        isActive(): boolean;
+        getType(): string;
+        getBodyA(): Body;
+        getBodyB(): Body;
+        getNext(): Joint | null;
+        getUserData(): unknown;
+        setUserData(data: any): void;
+        getCollideConnected(): boolean;
+        getAnchorA(): Vec2;
+        getAnchorB(): Vec2;
+        getReactionForce(inv_dt: number): Vec2;
+        getReactionTorque(inv_dt: number): number;
+        shiftOrigin(newOrigin: Vec2): void;
+        initVelocityConstraints(step): void;
+        solveVelocityConstraints(step): void;
+        solvePositionConstraints(step): boolean;
+    }
+
+    interface DistanceJoint extends Joint {
+        m_type: 'distance-joint';
+
         // Solver shared
         m_localAnchorA: Vec2;
         m_localAnchorB: Vec2;
@@ -694,17 +685,6 @@ declare namespace planck {
         //this.m_invIA;
         //this.m_invIB;
         //this.m_mass;
-        
-        // From Joint:
-        isActive(): boolean;
-        getType(): 'distance-joint';
-        getBodyA(): Body;
-        getBodyB(): Body;
-        getNext(): Joint | null;
-        getUserData(): unknown;
-        setUserData(data: any): void;
-        getCollideConnected(): boolean;
-        shiftOrigin(newOrigin: Vec2): void;//does nothing?
 
         getLocalAnchorA(): Vec2;
         getLocalAnchorB(): Vec2;
@@ -714,31 +694,13 @@ declare namespace planck {
         getFrequency(): number;
         setDampingRatio(ratio: number): void;
         getDampingRatio(): number;
-        getAnchorA(): Vec2;
-        getAnchorB(): Vec2;
-        getReactionForce(inv_dt: number): Vec2;
-        getReactionTorque(inv_dt: number): 0.0;//not implemented?
-        initVelocityConstraints(step: { dt: number, warmStarting: boolean, dtRatio: number }): void;
-        solveVelocityConstraints(step?: any): void;//TODO
-        solvePositionConstraints(step?: any): boolean;//TODO
     }
     type DistanceJointDef = JointDef & Partial<{
         frequencyHz: number,
         dampingRatio: number,
     }>;
-    interface FrictionJoint {
-        // from Joint:
+    interface FrictionJoint extends Joint {
         m_type: 'friction-joint';
-        m_bodyA: Body;
-        m_bodyB: Body;
-        m_index: number;
-        m_collideConnected: boolean;
-        m_prev: Joint | null;
-        m_next: Joint | null;
-        m_edgeA: JointEdge;
-        m_edgeB: JointEdge;
-        m_islandFlag: boolean;
-        m_userData: unknown;
 
         m_localAnchorA: Vec2;
         m_localAnchorB: Vec2;
@@ -759,48 +721,19 @@ declare namespace planck {
         //m_linearMass; // Mat22
         //m_angularMass; // float
 
-        // From Joint:
-        isActive(): boolean;
-        getType(): 'distance-joint';
-        getBodyA(): Body;
-        getBodyB(): Body;
-        getNext(): Joint | null;
-        getUserData(): unknown;
-        setUserData(data: any): void;
-        getCollideConnected(): boolean;
-        shiftOrigin(newOrigin: Vec2): void;//does nothing
-
         getLocalAnchorA(): Vec2;
         getLocalAnchorB(): Vec2
         setMaxForce(force: number): void;
         getMaxForce(): number;
         setMaxTorque(torque: number): void;
         getMaxTorque(): number;
-        getAnchorA(): Vec2
-        getAnchorB(): Vec2
-        getReactionForce(inv_dt: number): Vec2;
-        getReactionTorque(inv_dt: number): number;
-        initVelocityConstraints(step: {warmStarting: boolean, dtRatio: number}): void;
-        solveVelocityConstraints(step: {dt: number}): void;
-        solvePositionConstraints(step?: any): true;//TODO
     }
     type FrictionJointDef = JointDef & Partial<{
         maxForce: number,
         maxTorque: number,
     }>;
-    interface GearJoint {
-        // from Joint:
+    interface GearJoint extends Joint {
         m_type: 'gear-joint';
-        m_bodyA: Body;
-        m_bodyB: Body;
-        m_index: number;
-        m_collideConnected: boolean;
-        m_prev: Joint | null;
-        m_next: Joint | null;
-        m_edgeA: JointEdge;
-        m_edgeB: JointEdge;
-        m_islandFlag: boolean;
-        m_userData: unknown;
 
         m_joint1: RevoluteJoint | PrismaticJoint;
         m_joint2: RevoluteJoint | PrismaticJoint;
@@ -827,45 +760,16 @@ declare namespace planck {
         //this.m_JwA, this.m_JwB, this.m_JwC, this.m_JwD; // float
         //this.m_mass; // float
 
-        // From Joint:
-        isActive(): boolean;
-        getType(): 'gear-joint';
-        getBodyA(): Body;
-        getBodyB(): Body;
-        getNext(): Joint | null;
-        getUserData(): unknown;
-        setUserData(data: any): void;
-        getCollideConnected(): boolean;
-        shiftOrigin(newOrigin: Vec2): void;//does nothing
-
         getJoint1(): RevoluteJoint | PrismaticJoint;
         getJoint2(): RevoluteJoint | PrismaticJoint;
         setRatio(ratio: number): void;
         getRatio(): number;
-        getAnchorA(): Vec2;
-        getAnchorB (): Vec2;
-        getReactionForce(inv_dt: number): Vec2;
-        getReactionTorque(inv_dt: number): number;
-        initVelocityConstraints(step: {warmStarting: boolean}): void;
-        solveVelocityConstraints(step?: any): void;//TODO
-        solvePositionConstraints(step?: any): boolean;//TODO
     }
     type GearJointDef = JointDef & Partial<{
         ratio: number,
     }>;
-    interface MotorJoint {
-        // from Joint:
+    interface MotorJoint extends Joint {
         m_type: 'motor-joint';
-        m_bodyA: Body;
-        m_bodyB: Body;
-        m_index: number;
-        m_collideConnected: boolean;
-        m_prev: Joint | null;
-        m_next: Joint | null;
-        m_edgeA: JointEdge;
-        m_edgeB: JointEdge;
-        m_islandFlag: boolean;
-        m_userData: unknown;
 
         m_linearOffset: Vec2;
         m_angularOffset: number;
@@ -888,17 +792,6 @@ declare namespace planck {
         //m_linearMass; // Mat22
         //m_angularMass; // float
 
-        // From Joint:
-        isActive(): boolean;
-        getType(): 'motor-joint';
-        getBodyA(): Body;
-        getBodyB(): Body;
-        getNext(): Joint | null;
-        getUserData(): unknown;
-        setUserData(data: any): void;
-        getCollideConnected(): boolean;
-        shiftOrigin(newOrigin: Vec2): void;//does nothing
-
         setMaxForce(force: number): void;
         getMaxForce(): number;
         setMaxTorque(torque: number): void;
@@ -909,32 +802,14 @@ declare namespace planck {
         getLinearOffset(): Vec2;
         setAngularOffset(angularOffset: number): void;
         getAngularOffset(): number;
-        getAnchorA(): Vec2;
-        getAnchorB(): Vec2;
-        getReactionForce(inv_dt: number): Vec2;
-        getReactionTorque(inv_dt: number): number;
-        initVelocityConstraints(step: {warmStarting: boolean, dtRatio: number}): void;
-        solveVelocityConstraints(step: {dt: number, inv_dt: number}): void;
-        solvePositionConstraints(step?: any): true;//TODO
     }
     type MotorJointDef = JointDef & Partial<{
         maxForce: number,
         maxTorque: number,
         correctionFactor: number,
     }>;
-    interface MouseJoint {
-        // from Joint:
+    interface MouseJoint extends Joint {
         m_type: 'mouse-joint';
-        m_bodyA: Body;
-        m_bodyB: Body;
-        m_index: number;
-        m_collideConnected: boolean;
-        m_prev: Joint | null;
-        m_next: Joint | null;
-        m_edgeA: JointEdge;
-        m_edgeB: JointEdge;
-        m_islandFlag: boolean;
-        m_userData: unknown;
 
         m_targetA: Vec2;
         m_localAnchorB: Vec2;
@@ -952,17 +827,6 @@ declare namespace planck {
         //mass: Mat22;
         //m_C: Vec2;
 
-        // From Joint:
-        isActive(): boolean;
-        getType(): 'mouse-joint';
-        getBodyA(): Body;
-        getBodyB(): Body;
-        getNext(): Joint | null;
-        getUserData(): unknown;
-        setUserData(data: any): void;
-        getCollideConnected(): boolean;
-        shiftOrigin(newOrigin: Vec2): void;
-
         setTarget(target: Vec2): void;
         getTarget(): Vec2
         setMaxForce(force: number): void;
@@ -971,33 +835,14 @@ declare namespace planck {
         getFrequency(): number;
         setDampingRatio(ratio: number): void;
         getDampingRatio(): number;
-        getAnchorA(): Vec2;
-        getAnchorB(): Vec2;
-        getReactionForce(inv_dt: number): Vec2;
-        getReactionTorque(inv_dt: number): 0.0;//BUG?
-        shiftOrigin(newOrigin: Vec2): void;
-        initVelocityConstraints(step: {dt: number, warmStarting: boolean, dtRatio: number}): void;
-        solveVelocityConstraints(step: {dt: number}): void;
-        solvePositionConstraints(step?: any): true;//TODO
     }
     type MouseJointDef = JointDef & Partial<{
         maxForce: number,
         frequencyHz: number,
         dampingRatio: number,
     }>;
-    interface PrismaticJoint {
-        // from Joint:
+    interface PrismaticJoint extends Joint {
         m_type: 'prismatic-joint';
-        m_bodyA: Body;
-        m_bodyB: Body;
-        m_index: number;
-        m_collideConnected: boolean;
-        m_prev: Joint | null;
-        m_next: Joint | null;
-        m_edgeA: JointEdge;
-        m_edgeB: JointEdge;
-        m_islandFlag: boolean;
-        m_userData: unknown;
 
         m_localAnchorA: Vec2;
         m_localAnchorB: Vec2;
@@ -1029,17 +874,6 @@ declare namespace planck {
         //this.m_K = new Mat33();
         //this.m_motorMass; // float
 
-        // From Joint:
-        isActive(): boolean;
-        getType(): 'prismatic-joint';
-        getBodyA(): Body;
-        getBodyB(): Body;
-        getNext(): Joint | null;
-        getUserData(): unknown;
-        setUserData(data: any): void;
-        getCollideConnected(): boolean;
-        shiftOrigin(newOrigin: Vec2): void;//does nothing
-
         getLocalAnchorA(): Vec2;
         getLocalAnchorB(): Vec2
         getLocalAxisA(): Vec2;
@@ -1057,13 +891,6 @@ declare namespace planck {
         setMaxMotorForce(force: number): void;
         getMotorSpeed(): number;
         getMotorForce(inv_dt: number): number;
-        getAnchorA(): Vec2;
-        getAnchorB(): Vec2;
-        getReactionForce(inv_dt: number): Vec2;
-        getReactionTorque(inv_dt: number): number;
-        initVelocityConstraints(step: {warmStarting: boolean, dtRatio: number}): void;
-        solveVelocityConstraints(step: {dt: number}): void;
-        solvePositionConstraints(step?: any): boolean;//TODO
     }
     type PrismaticJointDef = JointDef & Partial<{
         enableLimit: boolean,
@@ -1073,19 +900,8 @@ declare namespace planck {
         maxMotorForce: number,
         motorSpeed: number,
     }>;
-    interface PulleyJoint {
-        // from Joint:
+    interface PulleyJoint extends Joint {
         m_type: 'pulley-joint';
-        m_bodyA: Body;
-        m_bodyB: Body;
-        m_index: number;
-        m_collideConnected: boolean;
-        m_prev: Joint | null;
-        m_next: Joint | null;
-        m_edgeA: JointEdge;
-        m_edgeB: JointEdge;
-        m_islandFlag: boolean;
-        m_userData: unknown;
 
         m_groundAnchorA: Vec2;
         m_groundAnchorB: Vec2;
@@ -1109,17 +925,6 @@ declare namespace planck {
         //this.m_invIB; // float
         //this.m_mass; // float
 
-        // From Joint:
-        isActive(): boolean;
-        getType(): 'pulley-joint';
-        getBodyA(): Body;
-        getBodyB(): Body;
-        getNext(): Joint | null;
-        getUserData(): unknown;
-        setUserData(data: any): void;
-        getCollideConnected(): boolean;
-        shiftOrigin(newOrigin: Vec2): void;
-
         getGroundAnchorA(): Vec2
         getGroundAnchorB(): Vec2
         getLengthA(): number;
@@ -1127,30 +932,12 @@ declare namespace planck {
         getRatio(): number;
         getCurrentLengthA(): number;
         getCurrentLengthB(): number;
-        getAnchorA(): Vec2;
-        getAnchorB(): Vec2;
-        getReactionForce(inv_dt: number): Vec2;
-        getReactionTorque(inv_dt: number): 0.0;//not implemented or intended?
-        initVelocityConstraints(step: {warmStarting: boolean, dtRatio: number}): void;
-        solveVelocityConstraints(step?: any): void;//TODO
-        solvePositionConstraints(step?: any): boolean;//TODO
     }
     type PulleyJointDef = JointDef & Partial<{
         collideConnected: boolean,
     }>;
-    interface RevoluteJoint {
-        // from Joint:
+    interface RevoluteJoint extends Joint {
         m_type: 'revolute-joint';
-        m_bodyA: Body;
-        m_bodyB: Body;
-        m_index: number;
-        m_collideConnected: boolean;
-        m_prev: Joint | null;
-        m_next: Joint | null;
-        m_edgeA: JointEdge;
-        m_edgeB: JointEdge;
-        m_islandFlag: boolean;
-        m_userData: unknown;
 
         m_localAnchorA: Vec2;
         m_localAnchorB: Vec2;
@@ -1179,16 +966,6 @@ declare namespace planck {
         //this.m_limitState = inactiveLimit;//enum
 
         // From Joint:
-        isActive(): boolean;
-        getType(): 'revolute-joint';
-        getBodyA(): Body;
-        getBodyB(): Body;
-        getNext(): Joint | null;
-        getUserData(): unknown;
-        setUserData(data: any): void;
-        getCollideConnected(): boolean;
-        shiftOrigin(newOrigin: Vec2): void;//does nothing
-
         getLocalAnchorA(): Vec2;
         getLocalAnchorB(): Vec2
         getReferenceAngle(): number
@@ -1205,13 +982,6 @@ declare namespace planck {
         getLowerLimit(): number;
         getUpperLimit(): number;
         setLimits(lower: number, upper: number): void;
-        getAnchorA(): Vec2;
-        getAnchorB(): Vec2;
-        getReactionForce(inv_dt: number): Vec2;
-        getReactionTorque(inv_dt: number): number;
-        initVelocityConstraints(step: {warmStarting: boolean, dtRatio: number}): void;
-        solveVelocityConstraints(step: {dt: number}): void;
-        solvePositionConstraints(step?: any): boolean;//TODO
     }
     type RevoluteJointDef = JointDef & Partial<{
         lowerAngle: number,
@@ -1221,19 +991,8 @@ declare namespace planck {
         enableLimit: boolean,
         enableMotor: boolean,
     }>;
-    interface RopeJoint {
-        // from Joint:
+    interface RopeJoint extends Joint {
         m_type: 'rope-joint';
-        m_bodyA: Body;
-        m_bodyB: Body;
-        m_index: number;
-        m_collideConnected: boolean;
-        m_prev: Joint | null;
-        m_next: Joint | null;
-        m_edgeA: JointEdge;
-        m_edgeB: JointEdge;
-        m_islandFlag: boolean;
-        m_userData: unknown;
 
         m_localAnchorA: Vec2;
         m_localAnchorB: Vec2;
@@ -1255,46 +1014,17 @@ declare namespace planck {
         //m_invIB; // float
         //m_mass; // float
 
-        // From Joint:
-        isActive(): boolean;
-        getType(): 'rope-joint';
-        getBodyA(): Body;
-        getBodyB(): Body;
-        getNext(): Joint | null;
-        getUserData(): unknown;
-        setUserData(data: any): void;
-        getCollideConnected(): boolean;
-        shiftOrigin(newOrigin: Vec2): void;//does nothing
-
         getLocalAnchorA (): Vec2;
         getLocalAnchorB(): Vec2;
         setMaxLength(length: number): void;
         getMaxLength(): number;
         getLimitState(): LIMIT_STATE;
-        getAnchorA(): Vec2;
-        getAnchorB(): Vec2;
-        getReactionForce(inv_dt: number): Vec2;
-        getReactionTorque(inv_dt: number): 0.0;//not implemented or intended?
-        initVelocityConstraints(step: {warmStarting: boolean, dtRatio: number}): void;
-        solveVelocityConstraints(step: {inv_dt: number}): void;
-        solvePositionConstraints(step?: any): boolean;//TODO
     }
     type RopeJointDef = JointDef & Partial<{
         maxLength: number,
     }>;
-    interface WeldJoint {
-        // from Joint:
+    interface WeldJoint extends Joint {
         m_type: 'weld-joint';
-        m_bodyA: Body;
-        m_bodyB: Body;
-        m_index: number;
-        m_collideConnected: boolean;
-        m_prev: Joint | null;
-        m_next: Joint | null;
-        m_edgeA: JointEdge;
-        m_edgeB: JointEdge;
-        m_islandFlag: boolean;
-        m_userData: unknown;
 
         m_localAnchorA: Vec2;
         m_localAnchorB: Vec2;
@@ -1315,17 +1045,6 @@ declare namespace planck {
         //this.m_invIB; // float
         //this.m_mass = new Mat33();
 
-        // From Joint:
-        isActive(): boolean;
-        getType(): 'weld-joint';
-        getBodyA(): Body;
-        getBodyB(): Body;
-        getNext(): Joint | null;
-        getUserData(): unknown;
-        setUserData(data: any): void;
-        getCollideConnected(): boolean;
-        shiftOrigin(newOrigin: Vec2): void;//does nothing
-
         getLocalAnchorA(): Vec2;
         getLocalAnchorB(): Vec2;
         getReferenceAngle(): number;
@@ -1333,31 +1052,13 @@ declare namespace planck {
         getFrequency(): number;
         setDampingRatio(ratio: number): void;
         getDampingRatio(): number;
-        getAnchorA(): Vec2
-        getAnchorB(): Vec2;
-        getReactionForce(inv_dt: number): Vec2;
-        getReactionTorque(inv_dt: number): number;
-        initVelocityConstraints(step: {warmStarting: boolean, dt: number, dtRatio: number}): void;
-        solveVelocityConstraints(step?: any): void;//TODO
-        solvePositionConstraints(step?: any): boolean;//TODO
     }
     type WeldJointDef = JointDef & Partial<{
         frequencyHz: number,
         dampingRatio: number,
     }>;
-    interface WheelJoint {
-        // from Joint:
+    interface WheelJoint extends Joint {
         m_type: 'wheel-joint';
-        m_bodyA: Body;
-        m_bodyB: Body;
-        m_index: number;
-        m_collideConnected: boolean;
-        m_prev: Joint | null;
-        m_next: Joint | null;
-        m_edgeA: JointEdge;
-        m_edgeB: JointEdge;
-        m_islandFlag: boolean;
-        m_userData: unknown;
 
         m_localAnchorA: Vec2;
         m_localAnchorB: Vec2;
@@ -1390,17 +1091,6 @@ declare namespace planck {
         //this.m_sAy;
         //this.m_sBy; // float
 
-        // From Joint:
-        isActive(): boolean;
-        getType(): 'wheel-joint';
-        getBodyA(): Body;
-        getBodyB(): Body;
-        getNext(): Joint | null;
-        getUserData(): unknown;
-        setUserData(data: any): void;
-        getCollideConnected(): boolean;
-        shiftOrigin(newOrigin: Vec2): void;//does nothing
-
         getLocalAnchorA(): Vec2;
         getLocalAnchorB(): Vec2;
         getLocalAxisA(): Vec2;
@@ -1417,13 +1107,6 @@ declare namespace planck {
         getSpringFrequencyHz(): number;
         setSpringDampingRatio(ratio: number): void;
         getSpringDampingRatio(): number;
-        getAnchorA(): Vec2;
-        getAnchorB(): Vec2;
-        getReactionForce(inv_dt: number): Vec2;
-        getReactionTorque(inv_dt: number): number;
-        initVelocityConstraints(step: {warmStarting: boolean, dt: number, dtRatio: number}): void;
-        solveVelocityConstraints(step: {dt: number}): void;
-        solvePositionConstraints(step?: any): boolean;//TODO
     }
     type WheelJointDef = JointDef & Partial<{
         enableMotor: boolean,
@@ -1442,7 +1125,7 @@ declare namespace planck {
          * infinity.
          */
         isFinite(x: any): boolean;
-        //assert(x: any): void;
+        assert(x: any): void;
         invSqrt(x: number): number;
         nextPowerOfTwo(x: number): number;
         isPowerOfTwo(x: number): boolean;
@@ -1452,7 +1135,7 @@ declare namespace planck {
         random(min: number, max: number): number;
         random(max?: number): number;
     }
-    
+
     let Vec2: {
         new(x: number, y: number): Vec2;
         new(obj: { x: number, y: number }): Vec2;
@@ -1463,14 +1146,14 @@ declare namespace planck {
 
         zero(): Vec2;
         neo(x: number, y: number): Vec2;
-        clone(v: Vec2/*, depricated*/): Vec2;//depricated?
-        isValid(v: any): v is { x: number, y: number };
-        //asssert(o: Vec2): void;
+        clone(v: Vec2): Vec2;
+        isValid(v: any): boolean;
+        assert(o: any): void;
         lengthOf(v: Vec2): number;
         lengthSquared(v: Vec2): number;
         distance(v: Vec2, w: Vec2): number;
         distanceSquared(v: Vec2, w: Vec2): number;
-        areEqual(v: Vec2, w: Vec2 | null): boolean;
+        areEqual(v: Vec2, w: Vec2): boolean;
         skew(v: Vec2): Vec2;
         dot(v: Vec2, w: Vec2): number;
         cross(v: Vec2, w: Vec2): number;
@@ -1491,6 +1174,25 @@ declare namespace planck {
         lower(v: Vec2, w: Vec2): Vec2;
         clamp(v: Vec2, max: number): Vec2;
     }
+    let Vec3: {
+        new(x: number, y: number, z: number): Vec3;
+        new(obj: { x: number, y: number, z: number }): Vec3;
+        new(): Vec3;
+        (x: number, y: number, z: number): Vec3;
+        (obj: { x: number, y: number, z: number }): Vec3;
+        (): Vec3;
+
+        areEqual(v: Vec3, w: Vec3): boolean;
+        dot(v: Vec3, w: Vec3): number;
+        cross(v: Vec3, w: Vec3): Vec3;
+        add(v: Vec3, w: Vec3): Vec3;
+        sub(v: Vec3, w: Vec3): Vec3;
+        mul(v: Vec3, m: number): Vec3;
+        neg(v: Vec3): Vec3;
+
+        isValid(v: any): void;
+        assert(o: any): void;
+    }
     let Transform: {
         new(position: Vec2, rotation: number): Transform;
         (position: Vec2, rotation: number): Transform;
@@ -1498,8 +1200,8 @@ declare namespace planck {
         clone(xf: Transform): Transform;
         neo(position: Vec2, rotation: number): Transform;
         identity(): Transform;
-        isValid(o: any): o is { p: { x: number, y: number }, q: { s: number, c: number } };
-        //assert(o: Transform): void;
+        isValid(o: any): boolean;
+        assert(o: any): void;
         mul(a: Transform, b: Vec2): Vec2;
         mul(a: Transform, b: Transform): Transform;
         mul(a: Transform, b: Vec2[]): Vec2[];
@@ -1513,9 +1215,9 @@ declare namespace planck {
 
         neo(angle: number): Rot;
         clone(rot: Rot): Rot;
-        identity(/*rot*/): Rot;
-        isValid(o: any): o is { s: number, c: number };
-        //assert(o: Rot): void;
+        identity(): Rot;
+        isValid(o: any): boolean;
+        assert(o: any): void;
         mul(rot: Rot, m: Rot): Rot;
         mul(rot: Rot, m: Vec2): Vec2;
         mulSub(rot: Rot, v: Vec2, w: Vec2): Vec2;
@@ -1526,14 +1228,12 @@ declare namespace planck {
         new(lower?: Vec2, upper?: Vec2): AABB;
         (lower?: Vec2, upper?: Vec2): AABB;
 
-        isValid(aabb: AABB): boolean;
+        isValid(o: any): boolean;
+        assert(o: any): void;
         extend(aabb: AABB, value: number): void;
         testOverlap(a: AABB, b: AABB): boolean;
         areEqual(a: AABB, b: AABB): boolean;
         diff(a: AABB, b: AABB): number;
-    }
-    let Shape: {
-        isValid(shape: Shape | null | undefined): shape is Shape;
     }
     let Fixture: {
         new(body: Body, shape: Shape, def?: FixtureDef | number | null): Fixture;
@@ -1549,15 +1249,14 @@ declare namespace planck {
     let Contact: {
         new(fA: Fixture, indexA: number, fB: Fixture, indexB: number,
             evaluateFcn: (manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) => void): Contact;
-        
-        addType(type1: "circle" | "edge" | "polygon" | "chain", type2: "circle" | "edge" | "polygon" | "chain",
+
+        addType(type1: ShapeType, type2: ShapeType,
             callback: (manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) => void &
                 { destroyFcn?: (contact: Contact) => void }): void;
         create(fixtureA: Fixture, indexA: number, fixtureB: Fixture, indexB: number): Contact | null;
         destroy(contact: Contact, listener: { endContact: (contact: Contact) => void }): void;
     }
 
-    let Joint: {}
     let World: {
         new(def?: WorldDef | Vec2 | null): World;
         (def?: WorldDef | Vec2| null): World;
@@ -1769,7 +1468,7 @@ declare namespace planck {
         
         mouseForce?: number;
         
-        status(name: string | number, value: boolean | number | string | Symbol): void;
+        status(name: string, value: any): void;
         status(a: object): void;
         status(a: string): void;
         info(text: string): void;
