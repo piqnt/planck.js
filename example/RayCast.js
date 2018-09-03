@@ -289,7 +289,7 @@ planck.testbed('Ray-Cast', function(testbed) {
       if (callback.m_hit) {
         testbed.drawPoint(callback.m_point, 5.0, testbed.color(0.4, 0.9, 0.4));
         testbed.drawSegment(point1, callback.m_point, testbed.color(0.8, 0.8, 0.8));
-        var head = Vec2.wAdd(1, callback.m_point, 0.5, callback.m_normal);
+        var head = Vec2.combine(1, callback.m_point, 0.5, callback.m_normal);
         testbed.drawSegment(callback.m_point, head, testbed.color(0.9, 0.9, 0.4));
       } else {
         testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));
@@ -301,7 +301,7 @@ planck.testbed('Ray-Cast', function(testbed) {
       if (callback.m_hit) {
         testbed.drawPoint(callback.m_point, 5.0, testbed.color(0.4, 0.9, 0.4));
         testbed.drawSegment(point1, callback.m_point, testbed.color(0.8, 0.8, 0.8));
-        var head = Vec2.wAdd(1, callback.m_point, 0.5, callback.m_normal);
+        var head = Vec2.combine(1, callback.m_point, 0.5, callback.m_normal);
         testbed.drawSegment(callback.m_point, head, testbed.color(0.9, 0.9, 0.4));
       } else {
         testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));
@@ -316,7 +316,7 @@ planck.testbed('Ray-Cast', function(testbed) {
         var n = callback.m_normals[i];
         testbed.drawPoint(p, 5.0, testbed.color(0.4, 0.9, 0.4));
         testbed.drawSegment(point1, p, testbed.color(0.8, 0.8, 0.8));
-        var head = Vec2.wAdd(1, p, 0.5, n);
+        var head = Vec2.combine(1, p, 0.5, n);
         testbed.drawSegment(p, head, testbed.color(0.9, 0.9, 0.4));
       }
     }

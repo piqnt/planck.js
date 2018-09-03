@@ -91,7 +91,7 @@ planck.testbed('DynamicTreeTest', function(testbed) {
     testbed.drawPoint(m_rayCastInput.p2, 6.0, testbed.color(0.9, 0.2, 0.2));
 
     if (m_rayActor) {
-      var p = Vec2.wAdd(1 - m_rayActor.fraction, m_rayCastInput.p1, m_rayActor.fraction, m_rayCastInput.p2);
+      var p = Vec2.combine(1 - m_rayActor.fraction, m_rayCastInput.p1, m_rayActor.fraction, m_rayCastInput.p2);
       testbed.drawPoint(p, 6.0, testbed.color(0.2, 0.2, 0.9));
     }
 

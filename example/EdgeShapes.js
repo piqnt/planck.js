@@ -162,7 +162,7 @@ planck.testbed('EdgeShapes', function(testbed) {
       testbed.drawPoint(EdgeShapesCallback.m_point, 5.0, testbed.color(0.4, 0.9, 0.4));
       testbed.drawSegment(point1, EdgeShapesCallback.m_point, testbed.color(0.8, 0.8, 0.8));
 
-      var head = Vec2.wAdd(1, EdgeShapesCallback.m_point, 0.5, EdgeShapesCallback.m_normal);
+      var head = Vec2.combine(1, EdgeShapesCallback.m_point, 0.5, EdgeShapesCallback.m_normal);
       testbed.drawSegment(EdgeShapesCallback.m_point, head, testbed.color(0.9, 0.9, 0.4));
     } else {
       testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));
