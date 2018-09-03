@@ -416,22 +416,7 @@ declare namespace planck {
     interface JointEdge {
         //TODO
     }
-    type JointDef = Partial<{
-        userData: any,
-        collideConnected: boolean,
-    }>;
-    type Joint =
-        DistanceJoint |
-        FrictionJoint |
-        GearJoint |
-        MotorJoint |
-        MouseJoint |
-        PrismaticJoint |
-        PulleyJoint |
-        RevoluteJoint |
-        RopeJoint |
-        WeldJoint |
-        WheelJoint;
+
     type WorldDef = Partial<{
         gravity: Vec2,
         allowSleep: boolean,
@@ -661,6 +646,13 @@ declare namespace planck {
         solveVelocityConstraints(step): void;
         solvePositionConstraints(step): boolean;
     }
+    type JointDef = Partial<{
+        userData: any,
+        collideConnected: boolean,
+
+        bodyA?: Body,
+        bodyB?: Body,
+    }>;
 
     interface DistanceJoint extends Joint {
         m_type: 'distance-joint';
@@ -698,6 +690,10 @@ declare namespace planck {
     type DistanceJointDef = JointDef & Partial<{
         frequencyHz: number,
         dampingRatio: number,
+
+        localAnchorA?: Vec2,
+        localAnchorB?: Vec2,
+        length?: number,
     }>;
     interface FrictionJoint extends Joint {
         m_type: 'friction-joint';
@@ -731,6 +727,9 @@ declare namespace planck {
     type FrictionJointDef = JointDef & Partial<{
         maxForce: number,
         maxTorque: number,
+
+        localAnchorA?: Vec2,
+        localAnchorB?: Vec2,
     }>;
     interface GearJoint extends Joint {
         m_type: 'gear-joint';
@@ -767,6 +766,9 @@ declare namespace planck {
     }
     type GearJointDef = JointDef & Partial<{
         ratio: number,
+
+        joint1?: RevoluteJoint | PrismaticJoint,
+        joint2?: RevoluteJoint | PrismaticJoint,
     }>;
     interface MotorJoint extends Joint {
         m_type: 'motor-joint';
@@ -807,6 +809,8 @@ declare namespace planck {
         maxForce: number,
         maxTorque: number,
         correctionFactor: number,
+
+        linearOffset?: Vec2,
     }>;
     interface MouseJoint extends Joint {
         m_type: 'mouse-joint';
@@ -840,6 +844,8 @@ declare namespace planck {
         maxForce: number,
         frequencyHz: number,
         dampingRatio: number,
+
+        target?: Vec2,
     }>;
     interface PrismaticJoint extends Joint {
         m_type: 'prismatic-joint';
@@ -899,6 +905,11 @@ declare namespace planck {
         enableMotor: boolean,
         maxMotorForce: number,
         motorSpeed: number,
+
+        localAnchorA?: Vec2,
+        localAnchorB?: Vec2,
+        localAxisA?: Vec2,
+        referenceAngle?: number,
     }>;
     interface PulleyJoint extends Joint {
         m_type: 'pulley-joint';
@@ -935,6 +946,14 @@ declare namespace planck {
     }
     type PulleyJointDef = JointDef & Partial<{
         collideConnected: boolean,
+
+        groundAnchorA?: Vec2,
+        groundAnchorB?: Vec2,
+        localAnchorA?: Vec2,
+        localAnchorB?: Vec2,
+        lengthA?: number,
+        lengthB?: number,
+        ratio?: number,
     }>;
     interface RevoluteJoint extends Joint {
         m_type: 'revolute-joint';
@@ -990,6 +1009,10 @@ declare namespace planck {
         motorSpeed: number,
         enableLimit: boolean,
         enableMotor: boolean,
+
+        localAnchorA?: Vec2,
+        localAnchorB?: Vec2,
+        referenceAngle?: number,
     }>;
     interface RopeJoint extends Joint {
         m_type: 'rope-joint';
@@ -1022,6 +1045,9 @@ declare namespace planck {
     }
     type RopeJointDef = JointDef & Partial<{
         maxLength: number,
+
+        localAnchorA?: Vec2,
+        localAnchorB?: Vec2,
     }>;
     interface WeldJoint extends Joint {
         m_type: 'weld-joint';
@@ -1056,6 +1082,10 @@ declare namespace planck {
     type WeldJointDef = JointDef & Partial<{
         frequencyHz: number,
         dampingRatio: number,
+
+        localAnchorA?: Vec2,
+        localAnchorB?: Vec2,
+        referenceAngle?: number,
     }>;
     interface WheelJoint extends Joint {
         m_type: 'wheel-joint';
@@ -1114,6 +1144,10 @@ declare namespace planck {
         motorSpeed: number,
         frequencyHz: number,
         dampingRatio: number,
+
+        localAnchorA?: Vec2,
+        localAnchorB?: Vec2,
+        localAxisA?: Vec2,
     }>;
     
     // API
@@ -1300,105 +1334,69 @@ declare namespace planck {
     }
 
     let DistanceJoint: {
-        new(def: DistanceJointDef & {
-            bodyA: Body,
-            bodyB: Body,
-            localAnchorA: Vec2,
-            localAnchorB: Vec2,
-        }): DistanceJoint;
-        new(def: DistanceJointDef | null | undefined, bodyA: Body, anchorA: Vec2,
-            bodyB: Body, anchorB: Vec2): DistanceJoint;
-        (def: DistanceJointDef & {
-            bodyA: Body,
-            bodyB: Body,
-            localAnchorA: Vec2,
-            localAnchorB: Vec2,
-        }): DistanceJoint;
-        (def: DistanceJointDef | null | undefined, bodyA: Body, anchorA: Vec2,
-            bodyB: Body, anchorB: Vec2): DistanceJoint;
+        new(def: DistanceJointDef, bodyA: Body, bodyB: Body, anchorA?: Vec2, anchorB?: Vec2): DistanceJoint;
+           (def: DistanceJointDef, bodyA: Body, bodyB: Body, anchorA?: Vec2, anchorB?: Vec2): DistanceJoint;
 
         TYPE: 'distance-joint';
     }
     let FrictionJoint: {
-        new(def: FrictionJointDef & {
-            bodyA: Body,
-            bodyB: Body,
-        }): FrictionJoint;
-        new(def: FrictionJointDef | null | undefined, bodyA: Body, bodyB: Body, anchor?: Vec2): FrictionJoint;
-        (def: FrictionJointDef & {
-            bodyA: Body,
-            bodyB: Body,
-        }): FrictionJoint;
-        (def: FrictionJointDef | null | undefined, bodyA: Body, bodyB: Body, anchor?: Vec2): FrictionJoint;
+        new(def: FrictionJointDef, bodyA: Body, bodyB: Body, anchor?: Vec2): FrictionJoint;
+           (def: FrictionJointDef, bodyA: Body, bodyB: Body, anchor?: Vec2): FrictionJoint;
 
         TYPE: 'friction-joint';
     }
     let GearJoint: {
-        new(def: GearJointDef | null | undefined, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
-        new(def: {} | null | undefined, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio: number): GearJoint;
-        (def: GearJointDef | null | undefined, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
-        (def: {} | null | undefined, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio: number): GearJoint;
+        new(def: GearJointDef, bodyA: Body, bodyB: Body, joint1?: RevoluteJoint | PrismaticJoint, joint2?: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
+           (def: GearJointDef, bodyA: Body, bodyB: Body, joint1?: RevoluteJoint | PrismaticJoint, joint2?: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
 
         TYPE: 'gear-joint';
     }
     let MotorJoint: {
-        new(def: MotorJointDef | null | undefined, bodyA: Body, bodyB: Body): MotorJoint;
-        (def: MotorJointDef | null | undefined, bodyA: Body, bodyB: Body): MotorJoint;
+        new(def: MotorJointDef, bodyA: Body, bodyB: Body): MotorJoint;
+           (def: MotorJointDef, bodyA: Body, bodyB: Body): MotorJoint;
 
         TYPE: 'motor-joint';
     }
     let MouseJoint: {
-        new(def: MouseJointDef | null | undefined, bodyA: Body, bodyB: Body, target: Vec2): MouseJoint;
-        (def: MouseJointDef | null | undefined, bodyA: Body, bodyB: Body, target: Vec2): MouseJoint;
+        new(def: MouseJointDef, bodyA: Body, bodyB: Body, target?: Vec2): MouseJoint;
+           (def: MouseJointDef, bodyA: Body, bodyB: Body, target?: Vec2): MouseJoint;
 
         TYPE: 'mouse-joint';
     }
     let PrismaticJoint: {
-        new(def: PrismaticJointDef & {localAnchorA: Vec2, localAnchorB: Vec2, localAxisA: Vec2}, bodyA: Body, bodyB: Body): PrismaticJoint;
-        new(def: PrismaticJointDef & {localAxisA: Vec2}, bodyA: Body, bodyB: Body, anchor: Vec2): PrismaticJoint;
-        new(def: PrismaticJointDef | null | undefined, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): PrismaticJoint;
-        (def: PrismaticJointDef & {localAnchorA: Vec2, localAnchorB: Vec2, localAxisA: Vec2}, bodyA: Body, bodyB: Body): PrismaticJoint;
-        (def: PrismaticJointDef & {localAxisA: Vec2}, bodyA: Body, bodyB: Body, anchor: Vec2): PrismaticJoint;
-        (def: PrismaticJointDef | null | undefined, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): PrismaticJoint;
+        new(def: PrismaticJointDef, bodyA: Body, bodyB: Body, anchor?: Vec2, axis?: Vec2): PrismaticJoint;
+           (def: PrismaticJointDef, bodyA: Body, bodyB: Body, anchor?: Vec2, axis?: Vec2): PrismaticJoint;
 
         TYPE: 'prismatic-joint';
     }
     let PulleyJoint: {
-        new(def: PulleyJointDef & {ratio: number}, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2): PulleyJoint;
-        new(def: PulleyJointDef | null | undefined, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number): PulleyJoint;
-        (def: PulleyJointDef & {ratio: number}, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2): PulleyJoint;
-        (def: PulleyJointDef | null | undefined, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number): PulleyJoint;
+        new(def: PulleyJointDef, bodyA: Body, bodyB: Body, groundA?: Vec2, groundB?: Vec2, anchorA?: Vec2, anchorB?: Vec2, ratio?: number): PulleyJoint;
+           (def: PulleyJointDef, bodyA: Body, bodyB: Body, groundA?: Vec2, groundB?: Vec2, anchorA?: Vec2, anchorB?: Vec2, ratio?: number): PulleyJoint;
 
         TYPE: 'pulley-joint';
         MIN_PULLEY_LENGTH: number;
     }
     let RevoluteJoint: {
-        new(def: RevoluteJointDef & {localAnchorA: Vec2, localAnchorB: Vec2}, bodyA: Body, bodyB: Body): RevoluteJoint;
-        new(def: RevoluteJointDef | null | undefined, bodyA: Body, bodyB: Body, anchor: Vec2): RevoluteJoint;
-        (def: RevoluteJointDef & {localAnchorA: Vec2, localAnchorB: Vec2}, bodyA: Body, bodyB: Body): RevoluteJoint;
-        (def: RevoluteJointDef | null | undefined, bodyA: Body, bodyB: Body, anchor: Vec2): RevoluteJoint;
+        new(def: RevoluteJointDef, bodyA: Body, bodyB: Body, anchor?: Vec2): RevoluteJoint;
+           (def: RevoluteJointDef, bodyA: Body, bodyB: Body, anchor?: Vec2): RevoluteJoint;
 
         TYPE: 'revolute-joint';
     }
     let RopeJoint: {
-        new(def: RopeJointDef & {localAnchorA: Vec2, localAnchorB: Vec2, bodyA: Body, bodyB: Body}): RopeJoint;
-        new(def: RopeJointDef & {localAnchorA: Vec2, localAnchorB: Vec2}, bodyA: Body, bodyB: Body): RopeJoint;
-        new(def: RopeJointDef | null | undefined, bodyA: Body, bodyB: Body, anchor: Vec2): RopeJoint;
-        (def: RopeJointDef & {localAnchorA: Vec2, localAnchorB: Vec2, bodyA: Body, bodyB: Body}): RopeJoint;
-        (def: RopeJointDef & {localAnchorA: Vec2, localAnchorB: Vec2}, bodyA: Body, bodyB: Body): RopeJoint;
-        (def: RopeJointDef | null | undefined, bodyA: Body, bodyB: Body, anchor: Vec2): RopeJoint;
+        new(def: RopeJointDef, bodyA: Body, bodyB: Body, anchor?: Vec2): RopeJoint;
+           (def: RopeJointDef, bodyA: Body, bodyB: Body, anchor?: Vec2): RopeJoint;
 
         TYPE: 'rope-joint';
     }
     let WeldJoint: {
-        new(def: WeldJointDef | null | undefined, bodyA: Body, bodyB: Body, anchor: Vec2): WeldJoint;
-        (def: WeldJointDef | null | undefined, bodyA: Body, bodyB: Body, anchor: Vec2): WeldJoint;
+        new(def: WeldJointDef, bodyA: Body, bodyB: Body, anchor?: Vec2): WeldJoint;
+           (def: WeldJointDef, bodyA: Body, bodyB: Body, anchor?: Vec2): WeldJoint;
 
         TYPE: 'weld-joint';
     }
     let WheelJoint: {
-        new(def: WheelJointDef | null | undefined, bodyA: Body, bodyB: Body, anchor: Vec2, axis?: Vec2): WheelJoint;
-        (def: WheelJointDef | null | undefined, bodyA: Body, bodyB: Body, anchor: Vec2, axis?: Vec2): WheelJoint;
+        new(def: WheelJointDef, bodyA: Body, bodyB: Body, anchor?: Vec2, axis?: Vec2): WheelJoint;
+           (def: WheelJointDef, bodyA: Body, bodyB: Body, anchor?: Vec2, axis?: Vec2): WheelJoint;
 
         TYPE: 'wheel-joint';
     }
