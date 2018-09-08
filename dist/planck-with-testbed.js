@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.2.0
+ * Planck.js v0.2.1
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -2261,7 +2261,7 @@ function JointEdge() {
     this.next = null;
 }
 
-var JointDef = {
+var DEFAULTS = {
     userData: null,
     collideConnected: false
 };
@@ -6455,9 +6455,8 @@ Vec2.neo = function(x, y) {
     return obj;
 };
 
-Vec2.clone = function(v, depricated) {
+Vec2.clone = function(v) {
     _ASSERT && Vec2.assert(v);
-    _ASSERT && common.assert(!depricated);
     return Vec2.neo(v.x, v.y);
 };
 
@@ -6477,8 +6476,8 @@ Vec2.assert = function(o) {
     }
 };
 
-Vec2.prototype.clone = function(depricated) {
-    return Vec2.clone(this, depricated);
+Vec2.prototype.clone = function() {
+    return Vec2.clone(this);
 };
 
 Vec2.prototype.setZero = function() {
@@ -7059,21 +7058,28 @@ DistanceJoint._super = Joint;
 
 DistanceJoint.prototype = create(DistanceJoint._super.prototype);
 
-var DistanceJointDef = {
+var DEFAULTS = {
     frequencyHz: 0,
     dampingRatio: 0
 };
 
-function DistanceJoint(def, bodyA, anchorA, bodyB, anchorB) {
+function DistanceJoint(def, bodyA, bodyB, anchorA, anchorB) {
     if (!(this instanceof DistanceJoint)) {
-        return new DistanceJoint(def, bodyA, anchorA, bodyB, anchorB);
+        return new DistanceJoint(def, bodyA, bodyB, anchorA, anchorB);
     }
-    def = options(def, DistanceJointDef);
+    if (bodyB && anchorA && "m_type" in anchorA && "x" in bodyB && "y" in bodyB) {
+        var temp = bodyB;
+        bodyB = anchorA;
+        anchorA = temp;
+    }
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = DistanceJoint.TYPE;
-    this.m_localAnchorA = def.localAnchorA || bodyA.getLocalPoint(anchorA);
-    this.m_localAnchorB = def.localAnchorB || bodyB.getLocalPoint(anchorB);
-    this.m_length = Vec2.distance(anchorB, anchorA);
+    this.m_localAnchorA = anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.zero();
+    this.m_localAnchorB = anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.zero();
+    this.m_length = Math.isFinite(def.length) ? def.length : Vec2.distance(bodyA.getWorldPoint(this.m_localAnchorA), bodyB.getWorldPoint(this.m_localAnchorB));
     this.m_frequencyHz = def.frequencyHz;
     this.m_dampingRatio = def.dampingRatio;
     this.m_impulse = 0;
@@ -7294,7 +7300,7 @@ FrictionJoint._super = Joint;
 
 FrictionJoint.prototype = create(FrictionJoint._super.prototype);
 
-var FrictionJointDef = {
+var DEFAULTS = {
     maxForce: 0,
     maxTorque: 0
 };
@@ -7303,16 +7309,13 @@ function FrictionJoint(def, bodyA, bodyB, anchor) {
     if (!(this instanceof FrictionJoint)) {
         return new FrictionJoint(def, bodyA, bodyB, anchor);
     }
-    def = options(def, FrictionJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = FrictionJoint.TYPE;
-    if (anchor) {
-        this.m_localAnchorA = bodyA.getLocalPoint(anchor);
-        this.m_localAnchorB = bodyB.getLocalPoint(anchor);
-    } else {
-        this.m_localAnchorA = Vec2.zero();
-        this.m_localAnchorB = Vec2.zero();
-    }
+    this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
+    this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
     this.m_linearImpulse = Vec2.zero();
     this.m_angularImpulse = 0;
     this.m_maxForce = def.maxForce;
@@ -7338,7 +7341,7 @@ FrictionJoint.prototype.getLocalAnchorB = function() {
 };
 
 FrictionJoint.prototype.setMaxForce = function(force) {
-    _ASSERT && common.assert(IsValid(force) && force >= 0);
+    _ASSERT && common.assert(Math.isFinite(force) && force >= 0);
     this.m_maxForce = force;
 };
 
@@ -7347,7 +7350,7 @@ FrictionJoint.prototype.getMaxForce = function() {
 };
 
 FrictionJoint.prototype.setMaxTorque = function(torque) {
-    _ASSERT && common.assert(IsValid(torque) && torque >= 0);
+    _ASSERT && common.assert(Math.isFinite(torque) && torque >= 0);
     this.m_maxTorque = torque;
 };
 
@@ -7509,7 +7512,7 @@ GearJoint._super = Joint;
 
 GearJoint.prototype = create(GearJoint._super.prototype);
 
-var GearJointDef = {
+var DEFAULTS = {
     ratio: 1
 };
 
@@ -7517,13 +7520,16 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
     if (!(this instanceof GearJoint)) {
         return new GearJoint(def, bodyA, bodyB, joint1, joint2, ratio);
     }
-    def = options(def, GearJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = GearJoint.TYPE;
-    _ASSERT && common.assert(joint1.m_type == RevoluteJoint.TYPE || joint1.m_type == PrismaticJoint.TYPE);
-    _ASSERT && common.assert(joint2.m_type == RevoluteJoint.TYPE || joint2.m_type == PrismaticJoint.TYPE);
-    this.m_joint1 = joint1;
-    this.m_joint2 = joint2;
+    _ASSERT && common.assert(joint1.m_type === RevoluteJoint.TYPE || joint1.m_type === PrismaticJoint.TYPE);
+    _ASSERT && common.assert(joint2.m_type === RevoluteJoint.TYPE || joint2.m_type === PrismaticJoint.TYPE);
+    this.m_joint1 = joint1 ? joint1 : def.joint1;
+    this.m_joint2 = joint2 ? joint2 : def.joint2;
+    this.m_ratio = Math.isFinite(ratio) ? ratio : def.ratio;
     this.m_type1 = this.m_joint1.getType();
     this.m_type2 = this.m_joint2.getType();
     var coordinateA, coordinateB;
@@ -7533,15 +7539,15 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
     var aA = this.m_bodyA.m_sweep.a;
     var xfC = this.m_bodyC.m_xf;
     var aC = this.m_bodyC.m_sweep.a;
-    if (this.m_type1 == RevoluteJoint.TYPE) {
-        var revolute = joint1;
+    if (this.m_type1 === RevoluteJoint.TYPE) {
+        var revolute = this.m_joint1;
         this.m_localAnchorC = revolute.m_localAnchorA;
         this.m_localAnchorA = revolute.m_localAnchorB;
         this.m_referenceAngleA = revolute.m_referenceAngle;
         this.m_localAxisC = Vec2.zero();
         coordinateA = aA - aC - this.m_referenceAngleA;
     } else {
-        var prismatic = joint1;
+        var prismatic = this.m_joint1;
         this.m_localAnchorC = prismatic.m_localAnchorA;
         this.m_localAnchorA = prismatic.m_localAnchorB;
         this.m_referenceAngleA = prismatic.m_referenceAngle;
@@ -7556,15 +7562,15 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
     var aB = this.m_bodyB.m_sweep.a;
     var xfD = this.m_bodyD.m_xf;
     var aD = this.m_bodyD.m_sweep.a;
-    if (this.m_type2 == RevoluteJoint.TYPE) {
-        var revolute = joint2;
+    if (this.m_type2 === RevoluteJoint.TYPE) {
+        var revolute = this.m_joint2;
         this.m_localAnchorD = revolute.m_localAnchorA;
         this.m_localAnchorB = revolute.m_localAnchorB;
         this.m_referenceAngleB = revolute.m_referenceAngle;
         this.m_localAxisD = Vec2.zero();
         coordinateB = aB - aD - this.m_referenceAngleB;
     } else {
-        var prismatic = joint2;
+        var prismatic = this.m_joint2;
         this.m_localAnchorD = prismatic.m_localAnchorA;
         this.m_localAnchorB = prismatic.m_localAnchorB;
         this.m_referenceAngleB = prismatic.m_referenceAngle;
@@ -7573,7 +7579,6 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
         var pB = Rot.mulT(xfD.q, Vec2.add(Rot.mul(xfB.q, this.m_localAnchorB), Vec2.sub(xfB.p, xfD.p)));
         coordinateB = Vec2.dot(pB, this.m_localAxisD) - Vec2.dot(pD, this.m_localAxisD);
     }
-    this.m_ratio = ratio || def.ratio;
     this.m_constant = coordinateA + this.m_ratio * coordinateB;
     this.m_impulse = 0;
     this.m_lcA, this.m_lcB, this.m_lcC, this.m_lcD;
@@ -7852,7 +7857,7 @@ MotorJoint._super = Joint;
 
 MotorJoint.prototype = create(MotorJoint._super.prototype);
 
-var MotorJointDef = {
+var DEFAULTS = {
     maxForce: 1,
     maxTorque: 1,
     correctionFactor: .3
@@ -7862,11 +7867,12 @@ function MotorJoint(def, bodyA, bodyB) {
     if (!(this instanceof MotorJoint)) {
         return new MotorJoint(def, bodyA, bodyB);
     }
-    def = options(def, MotorJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = MotorJoint.TYPE;
-    var xB = bodyB.getPosition();
-    this.m_linearOffset = bodyA.getLocalPoint(xB);
+    this.m_linearOffset = def.linearOffset ? def.linearOffset : bodyA.getLocalPoint(bodyB.getPosition());
     var angleA = bodyA.getAngle();
     var angleB = bodyB.getAngle();
     this.m_angularOffset = angleB - angleA;
@@ -7890,7 +7896,7 @@ function MotorJoint(def, bodyA, bodyB) {
 }
 
 MotorJoint.prototype.setMaxForce = function(force) {
-    _ASSERT && common.assert(IsValid(force) && force >= 0);
+    _ASSERT && common.assert(Math.isFinite(force) && force >= 0);
     this.m_maxForce = force;
 };
 
@@ -7899,7 +7905,7 @@ MotorJoint.prototype.getMaxForce = function() {
 };
 
 MotorJoint.prototype.setMaxTorque = function(torque) {
-    _ASSERT && common.assert(IsValid(torque) && torque >= 0);
+    _ASSERT && common.assert(Math.isFinite(torque) && torque >= 0);
     this.m_maxTorque = torque;
 };
 
@@ -7908,7 +7914,7 @@ MotorJoint.prototype.getMaxTorque = function() {
 };
 
 MotorJoint.prototype.setCorrectionFactor = function(factor) {
-    _ASSERT && common.assert(IsValid(factor) && 0 <= factor && factor <= 1);
+    _ASSERT && common.assert(Math.isFinite(factor) && 0 <= factor && factor <= 1);
     this.m_correctionFactor = factor;
 };
 
@@ -8098,7 +8104,7 @@ MouseJoint._super = Joint;
 
 MouseJoint.prototype = create(MouseJoint._super.prototype);
 
-var MouseJointDef = {
+var DEFAULTS = {
     maxForce: 0,
     frequencyHz: 5,
     dampingRatio: .7
@@ -8108,14 +8114,16 @@ function MouseJoint(def, bodyA, bodyB, target) {
     if (!(this instanceof MouseJoint)) {
         return new MouseJoint(def, bodyA, bodyB, target);
     }
-    def = options(def, MouseJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = MouseJoint.TYPE;
     _ASSERT && common.assert(Math.isFinite(def.maxForce) && def.maxForce >= 0);
     _ASSERT && common.assert(Math.isFinite(def.frequencyHz) && def.frequencyHz >= 0);
     _ASSERT && common.assert(Math.isFinite(def.dampingRatio) && def.dampingRatio >= 0);
-    this.m_targetA = Vec2.clone(target);
-    this.m_localAnchorB = Transform.mulT(this.m_bodyB.getTransform(), this.m_targetA);
+    this.m_targetA = target ? Vec2.clone(target) : def.target || Vec2.zero();
+    this.m_localAnchorB = Transform.mulT(bodyB.getTransform(), this.m_targetA);
     this.m_maxForce = def.maxForce;
     this.m_impulse = Vec2.zero();
     this.m_frequencyHz = def.frequencyHz;
@@ -8305,7 +8313,7 @@ PrismaticJoint._super = Joint;
 
 PrismaticJoint.prototype = create(PrismaticJoint._super.prototype);
 
-var PrismaticJointDef = {
+var DEFAULTS = {
     enableLimit: false,
     lowerTranslation: 0,
     upperTranslation: 0,
@@ -8318,15 +8326,17 @@ function PrismaticJoint(def, bodyA, bodyB, anchor, axis) {
     if (!(this instanceof PrismaticJoint)) {
         return new PrismaticJoint(def, bodyA, bodyB, anchor, axis);
     }
-    def = options(def, PrismaticJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = PrismaticJoint.TYPE;
-    this.m_localAnchorA = def.localAnchorA || bodyA.getLocalPoint(anchor);
-    this.m_localAnchorB = def.localAnchorB || bodyB.getLocalPoint(anchor);
-    this.m_localXAxisA = def.localAxisA || bodyA.getLocalVector(axis);
+    this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
+    this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+    this.m_localXAxisA = axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1, 0);
     this.m_localXAxisA.normalize();
     this.m_localYAxisA = Vec2.cross(1, this.m_localXAxisA);
-    this.m_referenceAngle = bodyB.getAngle() - bodyA.getAngle();
+    this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
     this.m_impulse = Vec3();
     this.m_motorMass = 0;
     this.m_motorImpulse = 0;
@@ -8789,14 +8799,16 @@ function PulleyJoint(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, rati
     }
     def = options(def, PulleyJointDef);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = PulleyJoint.TYPE;
-    this.m_groundAnchorA = groundA;
-    this.m_groundAnchorB = groundB;
-    this.m_localAnchorA = bodyA.getLocalPoint(anchorA);
-    this.m_localAnchorB = bodyB.getLocalPoint(anchorB);
-    this.m_lengthA = Vec2.distance(anchorA, groundA);
-    this.m_lengthB = Vec2.distance(anchorB, groundB);
-    this.m_ratio = def.ratio || ratio;
+    this.m_groundAnchorA = groundA ? groundA : def.groundAnchorA || Vec2.neo(-1, 1);
+    this.m_groundAnchorB = groundB ? groundB : def.groundAnchorB || Vec2.neo(1, 1);
+    this.m_localAnchorA = anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.neo(-1, 0);
+    this.m_localAnchorB = anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.neo(1, 0);
+    this.m_lengthA = Math.isFinite(def.lengthA) ? def.lengthA : Vec2.distance(anchorA, groundA);
+    this.m_lengthB = Math.isFinite(def.lengthB) ? def.lengthB : Vec2.distance(anchorB, groundB);
+    this.m_ratio = Math.isFinite(ratio) ? ratio : def.ratio;
     _ASSERT && common.assert(ratio > Math.EPSILON);
     this.m_constant = this.m_lengthA + this.m_ratio * this.m_lengthB;
     this.m_impulse = 0;
@@ -9044,7 +9056,7 @@ RevoluteJoint._super = Joint;
 
 RevoluteJoint.prototype = create(RevoluteJoint._super.prototype);
 
-var RevoluteJointDef = {
+var DEFAULTS = {
     lowerAngle: 0,
     upperAngle: 0,
     maxMotorTorque: 0,
@@ -9057,12 +9069,14 @@ function RevoluteJoint(def, bodyA, bodyB, anchor) {
     if (!(this instanceof RevoluteJoint)) {
         return new RevoluteJoint(def, bodyA, bodyB, anchor);
     }
-    def = options(def, RevoluteJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = RevoluteJoint.TYPE;
-    this.m_localAnchorA = def.localAnchorA || bodyA.getLocalPoint(anchor);
-    this.m_localAnchorB = def.localAnchorB || bodyB.getLocalPoint(anchor);
-    this.m_referenceAngle = bodyB.getAngle() - bodyA.getAngle();
+    this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
+    this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+    this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
     this.m_impulse = Vec3();
     this.m_motorImpulse = 0;
     this.m_lowerAngle = def.lowerAngle;
@@ -9456,7 +9470,7 @@ RopeJoint._super = Joint;
 
 RopeJoint.prototype = create(RopeJoint._super.prototype);
 
-var RopeJointDef = {
+var DEFAULTS = {
     maxLength: 0
 };
 
@@ -9464,11 +9478,13 @@ function RopeJoint(def, bodyA, bodyB, anchor) {
     if (!(this instanceof RopeJoint)) {
         return new RopeJoint(def, bodyA, bodyB, anchor);
     }
-    def = options(def, RopeJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = RopeJoint.TYPE;
-    this.m_localAnchorA = def.localAnchorA || bodyA.getLocalPoint(anchor);
-    this.m_localAnchorB = def.localAnchorB || bodyB.getLocalPoint(anchor);
+    this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.neo(-1, 0);
+    this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.neo(1, 0);
     this.m_maxLength = def.maxLength;
     this.m_mass = 0;
     this.m_impulse = 0;
@@ -9676,7 +9692,7 @@ WeldJoint._super = Joint;
 
 WeldJoint.prototype = create(WeldJoint._super.prototype);
 
-var WeldJointDef = {
+var DEFAULTS = {
     frequencyHz: 0,
     dampingRatio: 0
 };
@@ -9685,12 +9701,14 @@ function WeldJoint(def, bodyA, bodyB, anchor) {
     if (!(this instanceof WeldJoint)) {
         return new WeldJoint(def, bodyA, bodyB, anchor);
     }
-    def = options(def, WeldJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = WeldJoint.TYPE;
-    this.m_localAnchorA = bodyA.getLocalPoint(anchor);
-    this.m_localAnchorB = bodyB.getLocalPoint(anchor);
-    this.m_referenceAngle = bodyB.getAngle() - bodyA.getAngle();
+    this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
+    this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+    this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
     this.m_frequencyHz = def.frequencyHz;
     this.m_dampingRatio = def.dampingRatio;
     this.m_impulse = Vec3();
@@ -9968,7 +9986,7 @@ WheelJoint._super = Joint;
 
 WheelJoint.prototype = create(WheelJoint._super.prototype);
 
-var WheelJointDef = {
+var DEFAULTS = {
     enableMotor: false,
     maxMotorTorque: 0,
     motorSpeed: 0,
@@ -9980,12 +9998,15 @@ function WheelJoint(def, bodyA, bodyB, anchor, axis) {
     if (!(this instanceof WheelJoint)) {
         return new WheelJoint(def, bodyA, bodyB, anchor, axis);
     }
-    def = options(def, WheelJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = WheelJoint.TYPE;
-    this.m_localAnchorA = bodyA.getLocalPoint(anchor);
-    this.m_localAnchorB = bodyB.getLocalPoint(anchor);
-    this.m_localXAxisA = bodyA.getLocalVector(axis || Vec2.neo(1, 0));
+    this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
+    this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+    this.m_localAxis = axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1, 0);
+    this.m_localXAxisA = this.m_localAxis;
     this.m_localYAxisA = Vec2.cross(1, this.m_localXAxisA);
     this.m_mass = 0;
     this.m_impulse = 0;

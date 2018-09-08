@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.2.0
+ * Planck.js v0.2.1
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -2471,8 +2471,11 @@ function JointEdge() {
  *       void userData;
  * @prop {boolean} collideConnected Set this flag to true if the attached bodies
  *       should collide.
+ *
+ * @prop {Body} bodyA The first attached body.
+ * @prop {Body} bodyB The second attached body.
  */
-var JointDef = {
+var DEFAULTS = {
     userData: null,
     collideConnected: false
 };
@@ -2482,8 +2485,6 @@ var JointDef = {
  * various fashions. Some joints also feature limits and motors.
  * 
  * @param {JointDef} def
- * @param {Body} bodyA first attached body.
- * @param {Body} bodyB The second attached body.
  */
 function Joint(def, bodyA, bodyB) {
     bodyA = def.bodyA || bodyA;
@@ -8175,9 +8176,8 @@ Vec2.neo = function(x, y) {
     return obj;
 };
 
-Vec2.clone = function(v, depricated) {
+Vec2.clone = function(v) {
     _ASSERT && Vec2.assert(v);
-    _ASSERT && common.assert(!depricated);
     return Vec2.neo(v.x, v.y);
 };
 
@@ -8200,8 +8200,8 @@ Vec2.assert = function(o) {
     }
 };
 
-Vec2.prototype.clone = function(depricated) {
-    return Vec2.clone(this, depricated);
+Vec2.prototype.clone = function() {
+    return Vec2.clone(this);
 };
 
 /**
@@ -8809,8 +8809,12 @@ DistanceJoint.prototype = create(DistanceJoint._super.prototype);
  *       of 0 disables softness.
  * @prop {float} dampingRatio The damping ratio. 0 = no damping, 1 = critical
  *       damping.
+ *
+ * @prop {Vec2} def.localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} def.localAnchorB The local anchor point relative to bodyB's origin.
+ * @prop {number} def.length Distance length.
  */
-var DistanceJointDef = {
+var DEFAULTS = {
     frequencyHz: 0,
     dampingRatio: 0
 };
@@ -8818,21 +8822,32 @@ var DistanceJointDef = {
 /**
  * A distance joint constrains two points on two bodies to remain at a fixed
  * distance from each other. You can view this as a massless, rigid rod.
- * 
- * @param {Vec2} def.localAnchorA The local anchor point relative to bodyA's origin.
- * @param {Vec2} def.localAnchorB The local anchor point relative to bodyB's origin.
+ *
+ * @param {DistanceJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
+ * @param {Vec2} anchorA Anchor A in global coordination.
+ * @param {Vec2} anchorB Anchor B in global coordination.
  */
-function DistanceJoint(def, bodyA, anchorA, bodyB, anchorB) {
+function DistanceJoint(def, bodyA, bodyB, anchorA, anchorB) {
     if (!(this instanceof DistanceJoint)) {
-        return new DistanceJoint(def, bodyA, anchorA, bodyB, anchorB);
+        return new DistanceJoint(def, bodyA, bodyB, anchorA, anchorB);
     }
-    def = options(def, DistanceJointDef);
+    // order of constructor arguments is changed in v0.2
+    if (bodyB && anchorA && "m_type" in anchorA && "x" in bodyB && "y" in bodyB) {
+        var temp = bodyB;
+        bodyB = anchorA;
+        anchorA = temp;
+    }
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = DistanceJoint.TYPE;
     // Solver shared
-    this.m_localAnchorA = def.localAnchorA || bodyA.getLocalPoint(anchorA);
-    this.m_localAnchorB = def.localAnchorB || bodyB.getLocalPoint(anchorB);
-    this.m_length = Vec2.distance(anchorB, anchorA);
+    this.m_localAnchorA = anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.zero();
+    this.m_localAnchorB = anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.zero();
+    this.m_length = Math.isFinite(def.length) ? def.length : Vec2.distance(bodyA.getWorldPoint(this.m_localAnchorA), bodyB.getWorldPoint(this.m_localAnchorB));
     this.m_frequencyHz = def.frequencyHz;
     this.m_dampingRatio = def.dampingRatio;
     this.m_impulse = 0;
@@ -9085,8 +9100,11 @@ FrictionJoint.prototype = create(FrictionJoint._super.prototype);
  * 
  * @prop {float} maxForce The maximum friction force in N.
  * @prop {float} maxTorque The maximum friction torque in N-m.
+ *
+ * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
  */
-var FrictionJointDef = {
+var DEFAULTS = {
     maxForce: 0,
     maxTorque: 0
 };
@@ -9094,24 +9112,23 @@ var FrictionJointDef = {
 /**
  * Friction joint. This is used for top-down friction. It provides 2D
  * translational friction and angular friction.
- * 
- * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
- * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
+ *
+ * @param {FrictionJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
+ * @param {Vec2} anchor Anchor in global coordination.
  */
 function FrictionJoint(def, bodyA, bodyB, anchor) {
     if (!(this instanceof FrictionJoint)) {
         return new FrictionJoint(def, bodyA, bodyB, anchor);
     }
-    def = options(def, FrictionJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = FrictionJoint.TYPE;
-    if (anchor) {
-        this.m_localAnchorA = bodyA.getLocalPoint(anchor);
-        this.m_localAnchorB = bodyB.getLocalPoint(anchor);
-    } else {
-        this.m_localAnchorA = Vec2.zero();
-        this.m_localAnchorB = Vec2.zero();
-    }
+    this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
+    this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
     // Solver shared
     this.m_linearImpulse = Vec2.zero();
     this.m_angularImpulse = 0;
@@ -9157,7 +9174,7 @@ FrictionJoint.prototype.getLocalAnchorB = function() {
  * Set the maximum friction force in N.
  */
 FrictionJoint.prototype.setMaxForce = function(force) {
-    _ASSERT && common.assert(IsValid(force) && force >= 0);
+    _ASSERT && common.assert(Math.isFinite(force) && force >= 0);
     this.m_maxForce = force;
 };
 
@@ -9172,7 +9189,7 @@ FrictionJoint.prototype.getMaxForce = function() {
  * Set the maximum friction torque in N*m.
  */
 FrictionJoint.prototype.setMaxTorque = function(torque) {
-    _ASSERT && common.assert(IsValid(torque) && torque >= 0);
+    _ASSERT && common.assert(Math.isFinite(torque) && torque >= 0);
     this.m_maxTorque = torque;
 };
 
@@ -9365,10 +9382,15 @@ GearJoint.prototype = create(GearJoint._super.prototype);
  * @typedef {Object} GearJointDef
  *
  * Gear joint definition.
- * 
+ *
  * @prop {float} ratio The gear ratio. See GearJoint for explanation.
+ *
+ * @prop {RevoluteJoint|PrismaticJoint} joint1 The first revolute/prismatic
+ *          joint attached to the gear joint.
+ * @prop {PrismaticJoint|RevoluteJoint} joint2 The second prismatic/revolute
+ *          joint attached to the gear joint.
  */
-var GearJointDef = {
+var DEFAULTS = {
     ratio: 1
 };
 
@@ -9384,23 +9406,25 @@ var GearJointDef = {
  * 
  * This definition requires two existing revolute or prismatic joints (any
  * combination will work).
- * 
- * @param {RevoluteJoint|PrismaticJoint} joint1 The first revolute/prismatic
- *          joint attached to the gear joint.
- * @param {PrismaticJoint|RevoluteJoint} joint2 The second prismatic/revolute
- *          joint attached to the gear joint.
+ *
+ * @param {GearJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
  */
 function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
     if (!(this instanceof GearJoint)) {
         return new GearJoint(def, bodyA, bodyB, joint1, joint2, ratio);
     }
-    def = options(def, GearJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = GearJoint.TYPE;
-    _ASSERT && common.assert(joint1.m_type == RevoluteJoint.TYPE || joint1.m_type == PrismaticJoint.TYPE);
-    _ASSERT && common.assert(joint2.m_type == RevoluteJoint.TYPE || joint2.m_type == PrismaticJoint.TYPE);
-    this.m_joint1 = joint1;
-    this.m_joint2 = joint2;
+    _ASSERT && common.assert(joint1.m_type === RevoluteJoint.TYPE || joint1.m_type === PrismaticJoint.TYPE);
+    _ASSERT && common.assert(joint2.m_type === RevoluteJoint.TYPE || joint2.m_type === PrismaticJoint.TYPE);
+    this.m_joint1 = joint1 ? joint1 : def.joint1;
+    this.m_joint2 = joint2 ? joint2 : def.joint2;
+    this.m_ratio = Math.isFinite(ratio) ? ratio : def.ratio;
     this.m_type1 = this.m_joint1.getType();
     this.m_type2 = this.m_joint2.getType();
     // joint1 connects body A to body C
@@ -9415,8 +9439,8 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
     var aA = this.m_bodyA.m_sweep.a;
     var xfC = this.m_bodyC.m_xf;
     var aC = this.m_bodyC.m_sweep.a;
-    if (this.m_type1 == RevoluteJoint.TYPE) {
-        var revolute = joint1;
+    if (this.m_type1 === RevoluteJoint.TYPE) {
+        var revolute = this.m_joint1;
         // RevoluteJoint
         this.m_localAnchorC = revolute.m_localAnchorA;
         this.m_localAnchorA = revolute.m_localAnchorB;
@@ -9424,7 +9448,7 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
         this.m_localAxisC = Vec2.zero();
         coordinateA = aA - aC - this.m_referenceAngleA;
     } else {
-        var prismatic = joint1;
+        var prismatic = this.m_joint1;
         // PrismaticJoint
         this.m_localAnchorC = prismatic.m_localAnchorA;
         this.m_localAnchorA = prismatic.m_localAnchorB;
@@ -9441,8 +9465,8 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
     var aB = this.m_bodyB.m_sweep.a;
     var xfD = this.m_bodyD.m_xf;
     var aD = this.m_bodyD.m_sweep.a;
-    if (this.m_type2 == RevoluteJoint.TYPE) {
-        var revolute = joint2;
+    if (this.m_type2 === RevoluteJoint.TYPE) {
+        var revolute = this.m_joint2;
         // RevoluteJoint
         this.m_localAnchorD = revolute.m_localAnchorA;
         this.m_localAnchorB = revolute.m_localAnchorB;
@@ -9450,7 +9474,7 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
         this.m_localAxisD = Vec2.zero();
         coordinateB = aB - aD - this.m_referenceAngleB;
     } else {
-        var prismatic = joint2;
+        var prismatic = this.m_joint2;
         // PrismaticJoint
         this.m_localAnchorD = prismatic.m_localAnchorA;
         this.m_localAnchorB = prismatic.m_localAnchorB;
@@ -9460,7 +9484,6 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
         var pB = Rot.mulT(xfD.q, Vec2.add(Rot.mul(xfB.q, this.m_localAnchorB), Vec2.sub(xfB.p, xfD.p)));
         coordinateB = Vec2.dot(pB, this.m_localAxisD) - Vec2.dot(pD, this.m_localAxisD);
     }
-    this.m_ratio = ratio || def.ratio;
     this.m_constant = coordinateA + this.m_ratio * coordinateB;
     this.m_impulse = 0;
     // Solver temp
@@ -9788,8 +9811,10 @@ MotorJoint.prototype = create(MotorJoint._super.prototype);
  * @prop {float} maxForce The maximum motor force in N.
  * @prop {float} maxTorque The maximum motor torque in N-m.
  * @prop {float} correctionFactor Position correction factor in the range [0,1].
+ * @prop {Vec2} linearOffset Position of bodyB minus the position of bodyA, in
+ *       bodyA's frame, in meters.
  */
-var MotorJointDef = {
+var DEFAULTS = {
     maxForce: 1,
     maxTorque: 1,
     correctionFactor: .3
@@ -9799,19 +9824,21 @@ var MotorJointDef = {
  * A motor joint is used to control the relative motion between two bodies. A
  * typical usage is to control the movement of a dynamic body with respect to
  * the ground.
- * 
- * @prop {Vec2} linearOffset Position of bodyB minus the position of bodyA, in
- *       bodyA's frame, in meters.
+ *
+ * @param {MotorJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
  */
 function MotorJoint(def, bodyA, bodyB) {
     if (!(this instanceof MotorJoint)) {
         return new MotorJoint(def, bodyA, bodyB);
     }
-    def = options(def, MotorJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = MotorJoint.TYPE;
-    var xB = bodyB.getPosition();
-    this.m_linearOffset = bodyA.getLocalPoint(xB);
+    this.m_linearOffset = def.linearOffset ? def.linearOffset : bodyA.getLocalPoint(bodyB.getPosition());
     var angleA = bodyA.getAngle();
     var angleB = bodyB.getAngle();
     this.m_angularOffset = angleB - angleA;
@@ -9850,7 +9877,7 @@ function MotorJoint(def, bodyA, bodyB) {
  * Set the maximum friction force in N.
  */
 MotorJoint.prototype.setMaxForce = function(force) {
-    _ASSERT && common.assert(IsValid(force) && force >= 0);
+    _ASSERT && common.assert(Math.isFinite(force) && force >= 0);
     this.m_maxForce = force;
 };
 
@@ -9865,7 +9892,7 @@ MotorJoint.prototype.getMaxForce = function() {
  * Set the maximum friction torque in N*m.
  */
 MotorJoint.prototype.setMaxTorque = function(torque) {
-    _ASSERT && common.assert(IsValid(torque) && torque >= 0);
+    _ASSERT && common.assert(Math.isFinite(torque) && torque >= 0);
     this.m_maxTorque = torque;
 };
 
@@ -9880,7 +9907,7 @@ MotorJoint.prototype.getMaxTorque = function() {
  * Set the position correction factor in the range [0,1].
  */
 MotorJoint.prototype.setCorrectionFactor = function(factor) {
-    _ASSERT && common.assert(IsValid(factor) && 0 <= factor && factor <= 1);
+    _ASSERT && common.assert(Math.isFinite(factor) && 0 <= factor && factor <= 1);
     this.m_correctionFactor = factor;
 };
 
@@ -9894,7 +9921,7 @@ MotorJoint.prototype.getCorrectionFactor = function() {
 /**
  * Set/get the target linear offset, in frame A, in meters.
  */
-MotorJoint.prototype.setLinearOffset = function(/* Vec2& */ linearOffset) {
+MotorJoint.prototype.setLinearOffset = function(linearOffset) {
     if (linearOffset.x != this.m_linearOffset.x || linearOffset.y != this.m_linearOffset.y) {
         this.m_bodyA.setAwake(true);
         this.m_bodyB.setAwake(true);
@@ -10102,8 +10129,11 @@ MouseJoint.prototype = create(MouseJoint._super.prototype);
  * @prop [frequencyHz = 5.0] The response speed.
  * @prop [dampingRatio = 0.7] The damping ratio. 0 = no damping, 1 = critical
  *       damping.
+ *
+ * @prop {Vec2} target The initial world target point. This is assumed to
+ *       coincide with the body anchor initially.
  */
-var MouseJointDef = {
+var DEFAULTS = {
     maxForce: 0,
     frequencyHz: 5,
     dampingRatio: .7
@@ -10117,22 +10147,25 @@ var MouseJointDef = {
  * NOTE: this joint is not documented in the manual because it was developed to
  * be used in the testbed. If you want to learn how to use the mouse joint, look
  * at the testbed.
- * 
- * @prop {Vec2} target The initial world target point. This is assumed to
- *       coincide with the body anchor initially.
+ *
+ * @param {MouseJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
  */
 function MouseJoint(def, bodyA, bodyB, target) {
     if (!(this instanceof MouseJoint)) {
         return new MouseJoint(def, bodyA, bodyB, target);
     }
-    def = options(def, MouseJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = MouseJoint.TYPE;
     _ASSERT && common.assert(Math.isFinite(def.maxForce) && def.maxForce >= 0);
     _ASSERT && common.assert(Math.isFinite(def.frequencyHz) && def.frequencyHz >= 0);
     _ASSERT && common.assert(Math.isFinite(def.dampingRatio) && def.dampingRatio >= 0);
-    this.m_targetA = Vec2.clone(target);
-    this.m_localAnchorB = Transform.mulT(this.m_bodyB.getTransform(), this.m_targetA);
+    this.m_targetA = target ? Vec2.clone(target) : def.target || Vec2.zero();
+    this.m_localAnchorB = Transform.mulT(bodyB.getTransform(), this.m_targetA);
     this.m_maxForce = def.maxForce;
     this.m_impulse = Vec2.zero();
     this.m_frequencyHz = def.frequencyHz;
@@ -10367,8 +10400,14 @@ PrismaticJoint.prototype = create(PrismaticJoint._super.prototype);
  * @prop {boolean} enableMotor Enable/disable the joint motor.
  * @prop {float} maxMotorForce The maximum motor torque, usually in N-m.
  * @prop {float} motorSpeed The desired motor speed in radians per second.
+ *
+ * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
+ * @prop {Vec2} localAxisA The local translation unit axis in bodyA.
+ * @prop {float} referenceAngle The constrained angle between the bodies:
+ *       bodyB_angle - bodyA_angle.
  */
-var PrismaticJointDef = {
+var DEFAULTS = {
     enableLimit: false,
     lowerTranslation: 0,
     upperTranslation: 0,
@@ -10382,26 +10421,26 @@ var PrismaticJointDef = {
  * along an axis fixed in bodyA. Relative rotation is prevented. You can use a
  * joint limit to restrict the range of motion and a joint motor to drive the
  * motion or to model joint friction.
- * 
- * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
- * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
- * @prop {Vec2} localAxisA The local translation unit axis in bodyA.
- * @prop {float} referenceAngle The constrained angle between the bodies:
- *       bodyB_angle - bodyA_angle.
+ *
+ * @param {PrismaticJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
  */
 function PrismaticJoint(def, bodyA, bodyB, anchor, axis) {
     if (!(this instanceof PrismaticJoint)) {
         return new PrismaticJoint(def, bodyA, bodyB, anchor, axis);
     }
-    def = options(def, PrismaticJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = PrismaticJoint.TYPE;
-    this.m_localAnchorA = def.localAnchorA || bodyA.getLocalPoint(anchor);
-    this.m_localAnchorB = def.localAnchorB || bodyB.getLocalPoint(anchor);
-    this.m_localXAxisA = def.localAxisA || bodyA.getLocalVector(axis);
+    this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
+    this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+    this.m_localXAxisA = axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1, 0);
     this.m_localXAxisA.normalize();
     this.m_localYAxisA = Vec2.cross(1, this.m_localXAxisA);
-    this.m_referenceAngle = bodyB.getAngle() - bodyA.getAngle();
+    this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
     this.m_impulse = Vec3();
     this.m_motorMass = 0;
     this.m_motorImpulse = 0;
@@ -10987,6 +11026,16 @@ PulleyJoint.prototype = create(PulleyJoint._super.prototype);
  *
  * Pulley joint definition. This requires two ground anchors, two dynamic body
  * anchor points, and a pulley ratio.
+ *
+ * @prop {Vec2} groundAnchorA The first ground anchor in world coordinates.
+ *          This point never moves.
+ * @prop {Vec2} groundAnchorB The second ground anchor in world coordinates.
+ *          This point never moves.
+ * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
+ * @prop {float} ratio The pulley ratio, used to simulate a block-and-tackle.
+ * @prop {float} lengthA The reference length for the segment attached to bodyA.
+ * @prop {float} lengthB The reference length for the segment attached to bodyB.
  */
 var PulleyJointDef = {
     collideConnected: true
@@ -11002,17 +11051,10 @@ var PulleyJointDef = {
  * better when combined with prismatic joints. You should also cover the the
  * anchor points with static shapes to prevent one side from going to zero
  * length.
- * 
- * @param {Vec2} groundAnchorA The first ground anchor in world coordinates.
- *          This point never moves.
- * @param {Vec2} groundAnchorB The second ground anchor in world coordinates.
- *          This point never moves.
- * @param {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
- * @param {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
- * @param {float} ratio The pulley ratio, used to simulate a block-and-tackle.
- * 
- * @prop {float} lengthA The reference length for the segment attached to bodyA.
- * @prop {float} lengthB The reference length for the segment attached to bodyB.
+ *
+ * @param {PulleyJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
  */
 function PulleyJoint(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, ratio) {
     if (!(this instanceof PulleyJoint)) {
@@ -11020,14 +11062,16 @@ function PulleyJoint(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, rati
     }
     def = options(def, PulleyJointDef);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = PulleyJoint.TYPE;
-    this.m_groundAnchorA = groundA;
-    this.m_groundAnchorB = groundB;
-    this.m_localAnchorA = bodyA.getLocalPoint(anchorA);
-    this.m_localAnchorB = bodyB.getLocalPoint(anchorB);
-    this.m_lengthA = Vec2.distance(anchorA, groundA);
-    this.m_lengthB = Vec2.distance(anchorB, groundB);
-    this.m_ratio = def.ratio || ratio;
+    this.m_groundAnchorA = groundA ? groundA : def.groundAnchorA || Vec2.neo(-1, 1);
+    this.m_groundAnchorB = groundB ? groundB : def.groundAnchorB || Vec2.neo(1, 1);
+    this.m_localAnchorA = anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.neo(-1, 0);
+    this.m_localAnchorB = anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.neo(1, 0);
+    this.m_lengthA = Math.isFinite(def.lengthA) ? def.lengthA : Vec2.distance(anchorA, groundA);
+    this.m_lengthB = Math.isFinite(def.lengthB) ? def.lengthB : Vec2.distance(anchorB, groundB);
+    this.m_ratio = Math.isFinite(ratio) ? ratio : def.ratio;
     _ASSERT && common.assert(ratio > Math.EPSILON);
     this.m_constant = this.m_lengthA + this.m_ratio * this.m_lengthB;
     this.m_impulse = 0;
@@ -11351,8 +11395,13 @@ RevoluteJoint.prototype = create(RevoluteJoint._super.prototype);
  *       second.
  * @prop {float} maxMotorTorque The maximum motor torque used to achieve the
  *       desired motor speed. Usually in N-m.
+ *
+ * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
+ * @prop {float} referenceAngle The bodyB angle minus bodyA angle in the
+ *       reference state (radians).
  */
-var RevoluteJointDef = {
+var DEFAULTS = {
     lowerAngle: 0,
     upperAngle: 0,
     maxMotorTorque: 0,
@@ -11368,22 +11417,23 @@ var RevoluteJointDef = {
  * that specifies a lower and upper angle. You can use a motor to drive the
  * relative rotation about the shared point. A maximum motor torque is provided
  * so that infinite forces are not generated.
- * 
- * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
- * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
- * @prop {float} referenceAngle The bodyB angle minus bodyA angle in the
- *       reference state (radians).
+ *
+ * @param {RevoluteJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
  */
 function RevoluteJoint(def, bodyA, bodyB, anchor) {
     if (!(this instanceof RevoluteJoint)) {
         return new RevoluteJoint(def, bodyA, bodyB, anchor);
     }
-    def = options(def, RevoluteJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = RevoluteJoint.TYPE;
-    this.m_localAnchorA = def.localAnchorA || bodyA.getLocalPoint(anchor);
-    this.m_localAnchorB = def.localAnchorB || bodyB.getLocalPoint(anchor);
-    this.m_referenceAngle = bodyB.getAngle() - bodyA.getAngle();
+    this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
+    this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+    this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
     this.m_impulse = Vec3();
     this.m_motorImpulse = 0;
     this.m_lowerAngle = def.lowerAngle;
@@ -11899,11 +11949,14 @@ RopeJoint.prototype = create(RopeJoint._super.prototype);
  * Rope joint definition. This requires two body anchor points and a maximum
  * lengths. Note: by default the connected objects will not collide. see
  * collideConnected in JointDef.
- * 
+ *
  * @prop {float} maxLength The maximum length of the rope. Warning: this must be
  *       larger than linearSlop or the joint will have no effect.
+ *
+ * @prop {Vec2} def.localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} def.localAnchorB The local anchor point relative to bodyB's origin.
  */
-var RopeJointDef = {
+var DEFAULTS = {
     maxLength: 0
 };
 
@@ -11917,19 +11970,22 @@ var RopeJointDef = {
  * A model that would allow you to dynamically modify the length would have some
  * sponginess, so I chose not to implement it that way. See DistanceJoint if you
  * want to dynamically control length.
- * 
- * @prop {Vec2} def.localAnchorA The local anchor point relative to bodyA's origin.
- * @prop {Vec2} def.localAnchorB The local anchor point relative to bodyB's origin.
+ *
+ * @param {RopeJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
  */
 function RopeJoint(def, bodyA, bodyB, anchor) {
     if (!(this instanceof RopeJoint)) {
         return new RopeJoint(def, bodyA, bodyB, anchor);
     }
-    def = options(def, RopeJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = RopeJoint.TYPE;
-    this.m_localAnchorA = def.localAnchorA || bodyA.getLocalPoint(anchor);
-    this.m_localAnchorB = def.localAnchorB || bodyB.getLocalPoint(anchor);
+    this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.neo(-1, 0);
+    this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.neo(1, 0);
     this.m_maxLength = def.maxLength;
     this.m_mass = 0;
     this.m_impulse = 0;
@@ -12193,8 +12249,13 @@ WeldJoint.prototype = create(WeldJoint._super.prototype);
  *       only. Disable softness with a value of 0.
  * @prop {float} dampingRatio The damping ratio. 0 = no damping, 1 = critical
  *       damping.
+ *
+ * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
+ * @prop {float} referenceAngle The bodyB angle minus bodyA angle in the
+ *       reference state (radians).
  */
-var WeldJointDef = {
+var DEFAULTS = {
     frequencyHz: 0,
     dampingRatio: 0
 };
@@ -12202,22 +12263,23 @@ var WeldJointDef = {
 /**
  * A weld joint essentially glues two bodies together. A weld joint may distort
  * somewhat because the island constraint solver is approximate.
- * 
- * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
- * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
- * @prop {float} referenceAngle The bodyB angle minus bodyA angle in the
- *       reference state (radians).
+ *
+ * @param {WeldJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
  */
 function WeldJoint(def, bodyA, bodyB, anchor) {
     if (!(this instanceof WeldJoint)) {
         return new WeldJoint(def, bodyA, bodyB, anchor);
     }
-    def = options(def, WeldJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = WeldJoint.TYPE;
-    this.m_localAnchorA = bodyA.getLocalPoint(anchor);
-    this.m_localAnchorB = bodyB.getLocalPoint(anchor);
-    this.m_referenceAngle = bodyB.getAngle() - bodyA.getAngle();
+    this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
+    this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+    this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
     this.m_frequencyHz = def.frequencyHz;
     this.m_dampingRatio = def.dampingRatio;
     this.m_impulse = Vec3();
@@ -12570,11 +12632,15 @@ WheelJoint.prototype = create(WheelJoint._super.prototype);
  * @prop {boolean} enableMotor Enable/disable the joint motor.
  * @prop {float} maxMotorTorque The maximum motor torque, usually in N-m.
  * @prop {float} motorSpeed The desired motor speed in radians per second.
- * @prop {float} frequencyHz Suspension frequency, zero indicates no suspension
+ * @prop {float} frequencyHz Suspension frequency, zero indicates no suspension.
  * @prop {float} dampingRatio Suspension damping ratio, one indicates critical
- *       damping
+ *       damping.
+ *
+ * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
+ * @prop {Vec2} localAxisA The local translation axis in bodyA.
  */
-var WheelJointDef = {
+var DEFAULTS = {
     enableMotor: false,
     maxMotorTorque: 0,
     motorSpeed: 0,
@@ -12587,21 +12653,24 @@ var WheelJointDef = {
  * an axis fixed in bodyA and rotation in the plane. In other words, it is a
  * point to line constraint with a rotational motor and a linear spring/damper.
  * This joint is designed for vehicle suspensions.
- * 
- * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
- * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
- * @prop {Vec2} localAxisA The local translation axis in bodyA.
+ *
+ * @param {WheelJointDef} def
+ * @param {Body} bodyA
+ * @param {Body} bodyB
  */
 function WheelJoint(def, bodyA, bodyB, anchor, axis) {
     if (!(this instanceof WheelJoint)) {
         return new WheelJoint(def, bodyA, bodyB, anchor, axis);
     }
-    def = options(def, WheelJointDef);
+    def = options(def, DEFAULTS);
     Joint.call(this, def, bodyA, bodyB);
+    bodyA = this.m_bodyA;
+    bodyB = this.m_bodyB;
     this.m_type = WheelJoint.TYPE;
-    this.m_localAnchorA = bodyA.getLocalPoint(anchor);
-    this.m_localAnchorB = bodyB.getLocalPoint(anchor);
-    this.m_localXAxisA = bodyA.getLocalVector(axis || Vec2.neo(1, 0));
+    this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
+    this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+    this.m_localAxis = axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1, 0);
+    this.m_localXAxisA = this.m_localAxis;
     this.m_localYAxisA = Vec2.cross(1, this.m_localXAxisA);
     this.m_mass = 0;
     this.m_impulse = 0;
