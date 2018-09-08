@@ -816,9 +816,9 @@ declare namespace planck {
         maxForce: number,
         maxTorque: number,
         correctionFactor: number,
+        linearOffset: Vec2,
     }>;
     type MotorJointDef = JointDef & MotorJointOpt & {
-        linearOffset: Vec2,
     };
 
     interface MouseJoint extends Joint {
@@ -1100,11 +1100,11 @@ declare namespace planck {
     type WeldJointOpt = JointOpt & Partial<{
         frequencyHz: number,
         dampingRatio: number,
+        referenceAngle: number,
     }>;
     type WeldJointDef = JointDef & WeldJointOpt & {
         localAnchorA: Vec2,
         localAnchorB: Vec2,
-        referenceAngle: number,
     };
 
     interface WheelJoint extends Joint {
@@ -1376,8 +1376,8 @@ declare namespace planck {
         new(def: GearJointDef): GearJoint;
            (def: GearJointDef): GearJoint;
 
-        new(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio: number): GearJoint;
-           (def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio: number): GearJoint;
+        new(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
+           (def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
 
         TYPE: 'gear-joint';
     }
