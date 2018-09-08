@@ -103,7 +103,7 @@ declare namespace planck {
         center: Vec2;
         I: number;
     }
-    type FixtureDef = Partial<{
+    type FixtureOpt = Partial<{
         userData: any,
         friction: number,
         restitution: number,
@@ -113,7 +113,9 @@ declare namespace planck {
         filterCategoryBits: number,
         filterMaskBits: number,
     }>
-    type FixtureDefWithShape = FixtureDef & { shape: Shape };//debatable
+    type FixtureDef = FixtureOpt & {
+        shape: Shape
+    };
     interface FixtureProxy {
         aabb: AABB;
         fixture: Fixture;
@@ -300,8 +302,9 @@ declare namespace planck {
         applyLinearImpulse(impulse: Vec2, point: Vec2, wake?: boolean): void;
         applyAngularImpulse(impulse: number, wake?: boolean): void;
         shouldCollide(that: Body): boolean;
-        createFixture(shape: Shape, def?: FixtureDef | number | null): Fixture;
-        createFixture(def: FixtureDefWithShape): Fixture;
+        createFixture(def: FixtureDef): Fixture;
+        createFixture(shape: Shape, opt?: FixtureOpt): Fixture;
+        createFixture(shape: Shape, density?: number): Fixture;
         destroyFixture(fixture: Fixture): void;
         getWorldPoint(localPoint: Vec2): Vec2;
         getWorldVector(localVector: Vec2): Vec2;
@@ -479,12 +482,13 @@ declare namespace planck {
         getTreeBalance(): number;
         getTreeQuality(): number;
         shiftOrigin(newOrigin: Vec2): void;
-        createBody(def?: BodyDef | null): Body;
+        createBody(def: BodyDef): Body;
         createBody(position: Vec2, angle?: number): Body;
-        createDynamicBody(def?: BodyDef | null): Body;
+        createBody(): Body;
+        createDynamicBody(def: BodyDef): Body;
         createDynamicBody(position: Vec2, angle?: number): Body;
         createDynamicBody(): Body;
-        createKinematicBody(def?: BodyDef | null): Body;
+        createKinematicBody(def: BodyDef): Body;
         createKinematicBody(position: Vec2, angle?: number): Body;
         createKinematicBody(): Body;
         destroyBody(b: Body): boolean;//m_destroyed not in Body but used!?
@@ -1193,11 +1197,13 @@ declare namespace planck {
 
     let Vec2: {
         new(x: number, y: number): Vec2;
+           (x: number, y: number): Vec2;
+
         new(obj: { x: number, y: number }): Vec2;
+           (obj: { x: number, y: number }): Vec2;
+
         new(): Vec2;
-        (x: number, y: number): Vec2;
-        (obj: { x: number, y: number }): Vec2;
-        (): Vec2;
+           (): Vec2;
 
         zero(): Vec2;
         // neo(x: number, y: number): Vec2; internal
@@ -1231,11 +1237,13 @@ declare namespace planck {
     }
     let Vec3: {
         new(x: number, y: number, z: number): Vec3;
+           (x: number, y: number, z: number): Vec3;
+
         new(obj: { x: number, y: number, z: number }): Vec3;
+           (obj: { x: number, y: number, z: number }): Vec3;
+
         new(): Vec3;
-        (x: number, y: number, z: number): Vec3;
-        (obj: { x: number, y: number, z: number }): Vec3;
-        (): Vec3;
+           (): Vec3;
 
         areEqual(v: Vec3, w: Vec3): boolean;
         dot(v: Vec3, w: Vec3): number;
@@ -1250,7 +1258,10 @@ declare namespace planck {
     }
     let Transform: {
         new(position: Vec2, rotation: number): Transform;
-        (position: Vec2, rotation: number): Transform;
+           (position: Vec2, rotation: number): Transform;
+
+        new(): Transform;
+           (): Transform;
 
         clone(xf: Transform): Transform;
         // neo(position: Vec2, rotation: number): Transform; internal
@@ -1265,8 +1276,14 @@ declare namespace planck {
         mulT(a: Transform, b: Transform): Transform;
     }
     let Rot: {
-        new(angle?: number | Rot): Rot;
-        (angle?: number | Rot): Rot;
+        new(angle: number): Rot;
+           (angle: number): Rot;
+
+        new(rot: Rot): Rot;
+           (rot: Rot): Rot;
+
+        new(): Rot;
+           (): Rot;
 
         // neo(angle: number): Rot; internal
         clone(rot: Rot): Rot;
@@ -1280,8 +1297,8 @@ declare namespace planck {
         mulT(rot: Rot, m: Vec2): Vec2;
     }
     let AABB: {
-        new(lower?: Vec2, upper?: Vec2): AABB;
-        (lower?: Vec2, upper?: Vec2): AABB;
+        new(lower: Vec2, upper: Vec2): AABB;
+           (lower: Vec2, upper: Vec2): AABB;
 
         isValid(o: any): boolean;
         assert(o: any): void;
@@ -1291,11 +1308,12 @@ declare namespace planck {
         diff(a: AABB, b: AABB): number;
     }
     let Fixture: {
-        new(body: Body, shape: Shape, def?: FixtureDef | number | null): Fixture;
-        new(body: Body, def: FixtureDefWithShape): Fixture;
+        new(body: Body, def: FixtureDef): Fixture;
+        new(body: Body, shape: Shape, def?: FixtureOpt): Fixture;
+        new(body: Body, shape: Shape, density?: number): Fixture;
     }
     let Body: {
-        new(world: World, def?: BodyDef | null): Body;
+        new(world: World, def?: BodyDef): Body;
 
         STATIC: 'static';
         KINEMATIC: 'kinematic';
@@ -1313,43 +1331,46 @@ declare namespace planck {
     }
 
     let World: {
-        new(def?: WorldDef | Vec2 | null): World;
-        (def?: WorldDef | Vec2| null): World;
+        new(def: WorldDef): World;
+           (def: WorldDef): World;
+
+        new(gravity: Vec2): World;
+           (gravity: Vec2): World;
+
+        new(): World;
+           (): World;
     }
 
     let Circle: {
         new(position: Vec2, radius?: number): CircleShape;
+           (position: Vec2, radius?: number): CircleShape;
+
         new(radius?: number): CircleShape;
-        (position: Vec2, radius?: number): CircleShape;
-        (radius?: number): CircleShape;
+           (radius?: number): CircleShape;
 
         TYPE: 'circle';
     }
     let Edge: {
-        new(v1?: Vec2, v2?: Vec2): EdgeShape;
-        (v1?: Vec2, v2?: Vec2): EdgeShape;
+        new(v1: Vec2, v2: Vec2): EdgeShape;
+           (v1: Vec2, v2: Vec2): EdgeShape;
 
         TYPE: 'edge';
     }
     let Polygon: {
         new(vertices: Vec2[]): PolygonShape;
-        (vertices: Vec2[]): PolygonShape;
+           (vertices: Vec2[]): PolygonShape;
 
         TYPE: 'polygon';
     }
     let Chain: {
         new(vertices: Vec2[], loop?: boolean): ChainShape;
-        new(): ChainShape;
-        (vertices: Vec2[], loop?: boolean): ChainShape;
-        (): ChainShape;
+           (vertices: Vec2[], loop?: boolean): ChainShape;
 
         TYPE: 'chain';
     }
     let Box: {
-        new(hx: number, hy: number, center: Vec2, angle?: number): PolygonShape;
-        new(hx: number, hy: number): PolygonShape;
-        (hx: number, hy: number, center: Vec2, angle?: number): PolygonShape;
-        (hx: number, hy: number): PolygonShape;
+        new(hx: number, hy: number, center?: Vec2, angle?: number): PolygonShape;
+           (hx: number, hy: number, center?: Vec2, angle?: number): PolygonShape;
 
         TYPE: 'polygon';
     }
