@@ -128,10 +128,10 @@ planck.testbed('Theo Jansen\'s Walker', function(testbed) {
       dampingRatio: 0.5,
       frequencyHz: 10.0
     };
-    world.createJoint(pl.DistanceJoint(djd, body1, Vec2.add(p2, offset), body2, Vec2.add(p5, offset)));
-    world.createJoint(pl.DistanceJoint(djd, body1, Vec2.add(p3, offset), body2, Vec2.add(p4, offset)));
-    world.createJoint(pl.DistanceJoint(djd, body1, Vec2.add(p3, offset), wheel, Vec2.add(wheelAnchor, offset)));
-    world.createJoint(pl.DistanceJoint(djd, body2, Vec2.add(p6, offset), wheel, Vec2.add(wheelAnchor, offset)));
+    world.createJoint(pl.DistanceJoint(djd, body1, body2, Vec2.add(p2, offset), Vec2.add(p5, offset)));
+    world.createJoint(pl.DistanceJoint(djd, body1, body2, Vec2.add(p3, offset), Vec2.add(p4, offset)));
+    world.createJoint(pl.DistanceJoint(djd, body1, wheel, Vec2.add(p3, offset), Vec2.add(wheelAnchor, offset)));
+    world.createJoint(pl.DistanceJoint(djd, body2, wheel, Vec2.add(p6, offset), Vec2.add(wheelAnchor, offset)));
 
     world.createJoint(pl.RevoluteJoint({}, body2, chassis, Vec2.add(p4, offset)));
   }
