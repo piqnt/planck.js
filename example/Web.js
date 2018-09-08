@@ -53,45 +53,61 @@ planck.testbed('Web', function(testbed) {
   jd.frequencyHz = 2.0;
   jd.dampingRatio = 0.0;
 
-  world.createJoint(joints[0] = pl.DistanceJoint(jd,
-    ground, Vec2(-10.0, 0.0),
-    bodies[0], bodies[0].getWorldPoint(Vec2(-0.5, -0.5))
-  ));
+  world.createJoint(joints[0] = pl.DistanceJoint({
+    bodyA: ground,
+    localAnchorA: Vec2(-10.0, 0.0),
+    bodyB: bodies[0],
+    localAnchorB: Vec2(-0.5, -0.5)
+  }));
 
-  world.createJoint(joints[1] = pl.DistanceJoint(jd,
-    ground, Vec2(10.0, 0.0),
-    bodies[1], bodies[1].getWorldPoint(Vec2(0.5, -0.5))
-  ));
+  world.createJoint(joints[1] = pl.DistanceJoint({
+    bodyA: ground,
+    localAnchorA: Vec2(10.0, 0.0),
+    bodyB: bodies[1],
+    localAnchorB: Vec2(0.5, -0.5)
+  }));
 
-  world.createJoint(joints[2] = pl.DistanceJoint(jd,
-    ground, Vec2(10.0, 20.0),
-    bodies[2], bodies[2].getWorldPoint(Vec2(0.5, 0.5))
-  ));
+  world.createJoint(joints[2] = pl.DistanceJoint({
+    bodyA: ground,
+    localAnchorA: Vec2(10.0, 20.0),
+    bodyB: bodies[2],
+    localAnchorB: Vec2(0.5, 0.5)
+  }));
 
-  world.createJoint(joints[3] = pl.DistanceJoint(jd,
-    ground, Vec2(-10.0, 20.0),
-    bodies[3], bodies[3].getWorldPoint(Vec2(-0.5, 0.5))
-  ));
+  world.createJoint(joints[3] = pl.DistanceJoint({
+    bodyA: ground,
+    localAnchorA: Vec2(-10.0, 20.0),
+    bodyB: bodies[3],
+    localAnchorB: Vec2(-0.5, 0.5)
+  }));
 
-  world.createJoint(joints[4] = pl.DistanceJoint(jd,
-    bodies[0], bodies[0].getWorldPoint(Vec2(0.5, 0.0)),
-    bodies[1], bodies[1].getWorldPoint(Vec2(-0.5, 0.0))
-  ));
+  world.createJoint(joints[4] = pl.DistanceJoint({
+    bodyA: bodies[0],
+    localAnchorA: Vec2(0.5, 0.0),
+    bodyB: bodies[1],
+    localAnchorB: Vec2(-0.5, 0.0)
+  }));
 
-  world.createJoint(joints[5] = pl.DistanceJoint(jd,
-    bodies[1], bodies[1].getWorldPoint(Vec2(0.0, 0.5)),
-    bodies[2], bodies[2].getWorldPoint(Vec2(0.0, -0.5))
-  ));
+  world.createJoint(joints[5] = pl.DistanceJoint({
+    bodyA: bodies[1],
+    localAnchorA: Vec2(0.0, 0.5),
+    bodyB: bodies[2],
+    localAnchorB: Vec2(0.0, -0.5)
+  }));
 
-  world.createJoint(joints[6] = pl.DistanceJoint(jd,
-    bodies[2], bodies[2].getWorldPoint(Vec2(-0.5, 0.0)),
-    bodies[3], bodies[3].getWorldPoint(Vec2(0.5, 0.0))
-  ));
+  world.createJoint(joints[6] = pl.DistanceJoint({
+    bodyA: bodies[2],
+    localAnchorA: Vec2(-0.5, 0.0),
+    bodyB: bodies[3],
+    localAnchorB: Vec2(0.5, 0.0)
+  }));
 
-  world.createJoint(joints[7] = pl.DistanceJoint(jd,
-    bodies[3], bodies[3].getWorldPoint(Vec2(0.0, -0.5)),
-    bodies[0], bodies[0].getWorldPoint(Vec2(0.0, 0.5))
-  ));
+  world.createJoint(joints[7] = pl.DistanceJoint({
+    bodyA: bodies[3],
+    localAnchorA: Vec2(0.0, -0.5),
+    bodyB: bodies[0],
+    localAnchorB: Vec2(0.0, 0.5)
+  }));
 
   testbed.keydown = function(code, char) {
     switch (char) {

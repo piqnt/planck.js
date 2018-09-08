@@ -79,7 +79,12 @@ planck.testbed('Dominos', function(testbed) {
   var b7 = world.createDynamicBody(Vec2(7.4, 1));
   b7.createFixture(pl.Box(0.1, 1), 10);
 
-  world.createJoint(pl.DistanceJoint({}, b3, b3.getWorldPoint(Vec2(6, 0)), b7, b7.getWorldPoint(Vec2(0, -1))));
+  world.createJoint(pl.DistanceJoint({
+    bodyA: b3,
+    localAnchorA: Vec2(6, 0),
+    bodyB: b7,
+    localAnchorB: Vec2(0, -1)
+  }));
 
   var radius = 0.2;
   var circleShape = pl.Circle(radius);
