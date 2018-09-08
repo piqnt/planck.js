@@ -1200,7 +1200,7 @@ declare namespace planck {
         (): Vec2;
 
         zero(): Vec2;
-        neo(x: number, y: number): Vec2;
+        // neo(x: number, y: number): Vec2; internal
         clone(v: Vec2): Vec2;
         isValid(v: any): boolean;
         assert(o: any): void;
@@ -1253,7 +1253,7 @@ declare namespace planck {
         (position: Vec2, rotation: number): Transform;
 
         clone(xf: Transform): Transform;
-        neo(position: Vec2, rotation: number): Transform;
+        // neo(position: Vec2, rotation: number): Transform; internal
         identity(): Transform;
         isValid(o: any): boolean;
         assert(o: any): void;
@@ -1268,7 +1268,7 @@ declare namespace planck {
         new(angle?: number | Rot): Rot;
         (angle?: number | Rot): Rot;
 
-        neo(angle: number): Rot;
+        // neo(angle: number): Rot; internal
         clone(rot: Rot): Rot;
         identity(): Rot;
         isValid(o: any): boolean;
