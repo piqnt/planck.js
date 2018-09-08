@@ -2,6 +2,7 @@
 * TypeScript definitions added
 * wSet/wAdd/wSub(a, v, b, w) replaced with combine/setCombine/addCombine/subCombine(a, v, b, w)
 * wSet/wAdd/wSub(a, v) replaced with mul/setMul/addMul/subMul(a, v)
+* Joints constructors cleanup
 
 ## 0.1
 * source code directory layout changed, classes moved around!

@@ -18,7 +18,7 @@ To try Planck.js, simply add `planck-with-testbed.js` script to your HTML code a
 
 ```html
 <html><body>
-  <script src="https://cdn.jsdelivr.net/npm/planck-js@0.1/dist/planck-with-testbed.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/planck-js@0.2/dist/planck-with-testbed.js"></script>
   <script>
     planck.testbed(function(testbed) {
       var world = planck.World();
