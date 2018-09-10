@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.2.1
+ * Planck.js v0.2.2
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -721,6 +721,7 @@ function Body(world, def) {
     this.m_fixtureList = null;
     this.m_prev = null;
     this.m_next = null;
+    this.m_destroyed = false;
 }
 
 Body.prototype.isWorldLocked = function() {
@@ -3577,6 +3578,7 @@ World.prototype.destroyBody = function(b) {
     }
     b.m_destroyed = true;
     --this.m_bodyCount;
+    this.publish("remove-body", b);
     return true;
 };
 
