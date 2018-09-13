@@ -91,7 +91,8 @@ declare namespace planck {
         getCenter(): Vec2;
         getExtents(): Vec2;
         getPerimeter(): number;
-        combine(a: AABB | Vec2, b: AABB | Vec2): void;
+        combine(a: AABB , b?: AABB): void;
+        combinePoints(a: Vec2, b: Vec2): void;
         set(aabb: AABB): void;
         contains(aabb: AABB): boolean;
         extend(value: number): void;
