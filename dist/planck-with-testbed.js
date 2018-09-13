@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.2.2
+ * Planck.js v0.2.3
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -3931,25 +3931,10 @@ AABB.prototype.getPerimeter = function() {
 };
 
 AABB.prototype.combine = function(a, b) {
-    var lowerA, upperA, lowerB, upperB;
-    if ("x" in a && "y" in a) {
-        lowerA = a;
-        upperA = a;
-    } else if ("lowerBound" in a && "upperBound" in a) {
-        lowerA = a.lowerBound;
-        upperA = a.upperBound;
-    } else if (_ASSERT) {
-        throw new Error("Invalid param!");
-    }
-    if ("x" in b && "y" in b) {
-        lowerB = b;
-        upperB = b;
-    } else if ("lowerBound" in b && "upperBound" in b) {
-        lowerB = b.lowerBound;
-        upperB = b.upperBound;
-    } else if (_ASSERT) {
-        throw new Error("Invalid param!");
-    }
+    var lowerA = a.lowerBound;
+    var upperA = a.upperBound;
+    var lowerB = b.lowerBound;
+    var upperB = b.upperBound;
     var lowerX = Math.min(lowerA.x, lowerB.x);
     var lowerY = Math.min(lowerA.y, lowerB.y);
     var upperX = Math.max(upperB.x, upperA.x);
@@ -5205,7 +5190,7 @@ DynamicTree.prototype.rayCast = function(input, rayCastCallback) {
     var maxFraction = input.maxFraction;
     var segmentAABB = new AABB();
     var t = Vec2.combine(1 - maxFraction, p1, maxFraction, p2);
-    segmentAABB.combine(p1, t);
+    segmentAABB.combinePoints(p1, t);
     var stack = stackPool.allocate();
     var subInput = inputPool.allocate();
     stack.push(this.m_root);
@@ -5234,7 +5219,7 @@ DynamicTree.prototype.rayCast = function(input, rayCastCallback) {
             if (value > 0) {
                 maxFraction = value;
                 t = Vec2.combine(1 - maxFraction, p1, maxFraction, p2);
-                segmentAABB.combine(p1, t);
+                segmentAABB.combinePoints(p1, t);
             }
         } else {
             stack.push(node.child1);
@@ -10509,7 +10494,7 @@ ChainShape.prototype.computeAABB = function(aabb, xf, childIndex) {
     _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
     var v1 = Transform.mul(xf, this.getVertex(childIndex));
     var v2 = Transform.mul(xf, this.getVertex(childIndex + 1));
-    aabb.combine(v1, v2);
+    aabb.combinePoints(v1, v2);
 };
 
 ChainShape.prototype.computeMass = function(massData, density) {
@@ -11691,7 +11676,7 @@ EdgeShape.prototype.rayCast = function(output, input, xf, childIndex) {
 EdgeShape.prototype.computeAABB = function(aabb, xf, childIndex) {
     var v1 = Transform.mul(xf, this.m_vertex1);
     var v2 = Transform.mul(xf, this.m_vertex2);
-    aabb.combine(v1, v2);
+    aabb.combinePoints(v1, v2);
     aabb.extend(this.m_radius);
 };
 
