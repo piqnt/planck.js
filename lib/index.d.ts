@@ -444,14 +444,14 @@ declare namespace planck {
     on(name: 'end-contact', listener: (contact: Contact) => void): World;
     on(name: 'pre-solve', listener: (contact: Contact, oldManifold: Manifold) => void): World;
     on(name: 'post-solve', listener: (contact: Contact, impulse: ContactImpulse) => void): World;
-    on(name: 'remove-body', listener: (body: Body) => void): World; // never gets called?
+    on(name: 'remove-body', listener: (body: Body) => void): World;
     on(name: 'remove-joint', listener: (joint: Joint) => void): World;
     on(name: 'remove-fixture', listener: (fixture: Fixture) => void): World;
     off(name: 'begin-contact', listener: (contact: Contact) => void): World;
     off(name: 'end-contact', listener: (contact: Contact) => void): World;
     off(name: 'pre-solve', listener: (contact: Contact, oldManifold: Manifold) => void): World;
     off(name: 'post-solve', listener: (contact: Contact, impulse: ContactImpulse) => void): World;
-    off(name: 'remove-body', listener: (body: Body) => void): World; // never gets called?
+    off(name: 'remove-body', listener: (body: Body) => void): World;
     off(name: 'remove-joint', listener: (joint: Joint) => void): World;
     off(name: 'remove-fixture', listener: (fixture: Fixture) => void): World;
 
