@@ -6,6 +6,7 @@
 /// <reference path="common/index.d.ts" />
 /// <reference path="joint/index.d.ts" />
 /// <reference path="shape/index.d.ts" />
+/// <reference path="../testbed/index.d.ts" />
 
 declare namespace planck {
 
