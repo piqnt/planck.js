@@ -156,8 +156,14 @@ declare namespace planck {
     mul(a: Transform, b: Transform): Transform;
     mul(a: Transform, b: Vec2[]): Vec2[];
     mul(a: Transform, b: Transform[]): Transform[];
+    mulAll(a: Transform, b: Vec2[]): Vec2[];
+    mulAll(a: Transform, b: Transform[]): Transform[];
+    mulVec2(a: Transform, b: Vec2): Vec2;
+    mulXf(a: Transform, b: Transform): Transform;
     mulT(a: Transform, b: Vec2): Vec2;
     mulT(a: Transform, b: Transform): Transform;
+    mulTVec2(a: Transform, b: Vec2): Vec2;
+    mulTXf(a: Transform, b: Transform): Transform;
   };
 
   interface Rot {
@@ -189,9 +195,13 @@ declare namespace planck {
     assert(o: any): void;
     mul(rot: Rot, m: Rot): Rot;
     mul(rot: Rot, m: Vec2): Vec2;
+    mulRot(rot: Rot, m: Rot): Rot;
+    mulVec2(rot: Rot, m: Vec2): Vec2;
     mulSub(rot: Rot, v: Vec2, w: Vec2): Vec2;
     mulT(rot: Rot, m: Rot): Rot;
     mulT(rot: Rot, m: Vec2): Vec2;
+    mulTRot(rot: Rot, m: Rot): Rot;
+    mulTVec2(rot: Rot, m: Vec2): Vec2;
   };
 
   interface Mat22 {
