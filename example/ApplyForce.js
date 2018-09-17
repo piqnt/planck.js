@@ -48,13 +48,13 @@ planck.testbed('Apply Force', function(testbed) {
   xf1.q.set(0.3524 * Math.PI);
   xf1.p.set(xf1.q.getXAxis());
 
-  var poly1 = pl.Polygon(Transform.mul(xf1, [Vec2(-1.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 0.5)]));
+  var poly1 = pl.Polygon(Transform.mulAll(xf1, [Vec2(-1.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 0.5)]));
 
   var xf2 = new Transform();
   xf2.q.set(-0.3524 * Math.PI);
   xf2.p.set(Vec2.neg(xf2.q.getXAxis()));
 
-  var poly2 = pl.Polygon(Transform.mul(xf2, [Vec2(-1.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 0.5)]));
+  var poly2 = pl.Polygon(Transform.mulAll(xf2, [Vec2(-1.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 0.5)]));
 
   var jet = world.createBody({
     type : 'dynamic',

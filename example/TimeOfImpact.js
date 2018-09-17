@@ -75,25 +75,25 @@ planck.testbed('TimeOfImpact', function(testbed) {
 
     for (var t = 0.1; t < 1.0; t += 0.1) {
       sweepB.getTransform(transformB, t);
-      vertices = Transform.mul(transformB, shapeB.m_vertices);
+      vertices = Transform.mulAll(transformB, shapeB.m_vertices);
       testbed.drawPolygon(vertices, testbed.color(0.2, 0.2, 0.2));
     }
 
     var transformA = new Transform();
     sweepA.getTransform(transformA, 0.0);
-    vertices = Transform.mul(transformA, shapeA.m_vertices);
+    vertices = Transform.mulAll(transformA, shapeA.m_vertices);
     testbed.drawPolygon(vertices, testbed.color(0.7, 0.7, 0.7));
 
     sweepB.getTransform(transformB, 0.0);
-    vertices = Transform.mul(transformB, shapeB.m_vertices);
+    vertices = Transform.mulAll(transformB, shapeB.m_vertices);
     testbed.drawPolygon(vertices, testbed.color(1, 1, 1));
 
     sweepB.getTransform(transformB, output.t);
-    vertices = Transform.mul(transformB, shapeB.m_vertices);
+    vertices = Transform.mulAll(transformB, shapeB.m_vertices);
     testbed.drawPolygon(vertices, testbed.color(1, 0, 0));
 
     sweepB.getTransform(transformB, 1.0);
-    vertices = Transform.mul(transformB, shapeB.m_vertices);
+    vertices = Transform.mulAll(transformB, shapeB.m_vertices);
     testbed.drawPolygon(vertices, testbed.color(1, 1, 1));
 
   };

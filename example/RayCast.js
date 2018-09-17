@@ -344,7 +344,7 @@ planck.testbed('Ray-Cast', function(testbed) {
       hit = false;
 
       var color = testbed.color(1.0, 1.0, 1.0);
-      var vs = Transform.mul(xf, shape.m_vertices);
+      var vs = Transform.mulAll(xf, shape.m_vertices);
 
       testbed.drawPolygon(vs, color);
       testbed.drawSegment(input.p1, input.p2, color);

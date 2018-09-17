@@ -177,7 +177,7 @@ planck.testbed('PolyShapes', function(testbed) {
         var poly = fixture.getShape();
         var vertexCount = poly.m_count;
         // assert(vertexCount <= b2_maxPolygonVertices);
-        var vertices = pl.Transform.mul(xf, poly.m_vertices);
+        var vertices = pl.Transform.mulAll(xf, poly.m_vertices);
         testbed.drawPolygon(vertices, color);
       }
         break;
