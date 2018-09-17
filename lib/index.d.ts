@@ -2,7 +2,13 @@
  * @author Oliver Zell <https://github.com/zOadT>
  */
 
-declare namespace plancck {
+/// <reference path="collision/index.d.ts" />
+/// <reference path="common/index.d.ts" />
+/// <reference path="joint/index.d.ts" />
+/// <reference path="shape/index.d.ts" />
+/// <reference path="util/index.d.ts" />
+
+declare namespace planck {
 
   type Manifold = any; // TODO
 
