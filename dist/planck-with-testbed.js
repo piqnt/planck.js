@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.2.3
+ * Planck.js v0.2.4
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -1255,19 +1255,19 @@ Body.prototype.destroyFixture = function(fixture) {
 };
 
 Body.prototype.getWorldPoint = function(localPoint) {
-    return Transform.mul(this.m_xf, localPoint);
+    return Transform.mulVec2(this.m_xf, localPoint);
 };
 
 Body.prototype.getWorldVector = function(localVector) {
-    return Rot.mul(this.m_xf.q, localVector);
+    return Rot.mulVec2(this.m_xf.q, localVector);
 };
 
 Body.prototype.getLocalPoint = function(worldPoint) {
-    return Transform.mulT(this.m_xf, worldPoint);
+    return Transform.mulTVec2(this.m_xf, worldPoint);
 };
 
 Body.prototype.getLocalVector = function(worldVector) {
-    return Rot.mulT(this.m_xf.q, worldVector);
+    return Rot.mulTVec2(this.m_xf.q, worldVector);
 };
 
 
@@ -1581,13 +1581,13 @@ Contact.prototype._solvePositionConstraint = function(step, toi, toiA, toiB) {
         var xfB = Transform.identity();
         xfA.q.set(aA);
         xfB.q.set(aB);
-        xfA.p = Vec2.sub(cA, Rot.mul(xfA.q, localCenterA));
-        xfB.p = Vec2.sub(cB, Rot.mul(xfB.q, localCenterB));
+        xfA.p = Vec2.sub(cA, Rot.mulVec2(xfA.q, localCenterA));
+        xfB.p = Vec2.sub(cB, Rot.mulVec2(xfB.q, localCenterB));
         var normal, point, separation;
         switch (this.p_type) {
           case Manifold.e_circles:
-            var pointA = Transform.mul(xfA, this.p_localPoint);
-            var pointB = Transform.mul(xfB, this.p_localPoints[0]);
+            var pointA = Transform.mulVec2(xfA, this.p_localPoint);
+            var pointB = Transform.mulVec2(xfB, this.p_localPoints[0]);
             normal = Vec2.sub(pointB, pointA);
             normal.normalize();
             point = Vec2.combine(.5, pointA, .5, pointB);
@@ -1595,17 +1595,17 @@ Contact.prototype._solvePositionConstraint = function(step, toi, toiA, toiB) {
             break;
 
           case Manifold.e_faceA:
-            normal = Rot.mul(xfA.q, this.p_localNormal);
-            var planePoint = Transform.mul(xfA, this.p_localPoint);
-            var clipPoint = Transform.mul(xfB, this.p_localPoints[j]);
+            normal = Rot.mulVec2(xfA.q, this.p_localNormal);
+            var planePoint = Transform.mulVec2(xfA, this.p_localPoint);
+            var clipPoint = Transform.mulVec2(xfB, this.p_localPoints[j]);
             separation = Vec2.dot(Vec2.sub(clipPoint, planePoint), normal) - this.p_radiusA - this.p_radiusB;
             point = clipPoint;
             break;
 
           case Manifold.e_faceB:
-            normal = Rot.mul(xfB.q, this.p_localNormal);
-            var planePoint = Transform.mul(xfB, this.p_localPoint);
-            var clipPoint = Transform.mul(xfA, this.p_localPoints[j]);
+            normal = Rot.mulVec2(xfB.q, this.p_localNormal);
+            var planePoint = Transform.mulVec2(xfB, this.p_localPoint);
+            var clipPoint = Transform.mulVec2(xfA, this.p_localPoints[j]);
             separation = Vec2.dot(Vec2.sub(clipPoint, planePoint), normal) - this.p_radiusA - this.p_radiusB;
             point = clipPoint;
             normal.mul(-1);
@@ -1676,8 +1676,8 @@ Contact.prototype.initVelocityConstraint = function(step) {
     var xfB = Transform.identity();
     xfA.q.set(aA);
     xfB.q.set(aB);
-    xfA.p.setCombine(1, cA, -1, Rot.mul(xfA.q, localCenterA));
-    xfB.p.setCombine(1, cB, -1, Rot.mul(xfB.q, localCenterB));
+    xfA.p.setCombine(1, cA, -1, Rot.mulVec2(xfA.q, localCenterA));
+    xfB.p.setCombine(1, cB, -1, Rot.mulVec2(xfB.q, localCenterB));
     var worldManifold = manifold.getWorldManifold(null, xfA, radiusA, xfB, radiusB);
     this.v_normal.set(worldManifold.normal);
     for (var j = 0; j < this.v_pointCount; ++j) {
@@ -1832,10 +1832,10 @@ Contact.prototype.solveVelocityConstraint = function(step) {
         var vn1 = Vec2.dot(dv1, normal);
         var vn2 = Vec2.dot(dv2, normal);
         var b = Vec2.neo(vn1 - vcp1.velocityBias, vn2 - vcp2.velocityBias);
-        b.sub(Mat22.mul(this.v_K, a));
+        b.sub(Mat22.mulVec2(this.v_K, a));
         var k_errorTol = .001;
         for (;;) {
-            var x = Vec2.neg(Mat22.mul(this.v_normalMass, b));
+            var x = Mat22.mulVec2(this.v_normalMass, b).neg();
             if (x.x >= 0 && x.y >= 0) {
                 var d = Vec2.sub(x, a);
                 var P1 = Vec2.mul(d.x, normal);
@@ -2432,8 +2432,8 @@ Manifold.prototype.getWorldManifold = function(wm, xfA, radiusA, xfB, radiusB) {
     switch (this.type) {
       case Manifold.e_circles:
         normal = Vec2.neo(1, 0);
-        var pointA = Transform.mul(xfA, this.localPoint);
-        var pointB = Transform.mul(xfB, this.points[0].localPoint);
+        var pointA = Transform.mulVec2(xfA, this.localPoint);
+        var pointB = Transform.mulVec2(xfB, this.points[0].localPoint);
         var dist = Vec2.sub(pointB, pointA);
         if (Vec2.lengthSquared(dist) > Math.EPSILON * Math.EPSILON) {
             normal.set(dist);
@@ -2446,10 +2446,10 @@ Manifold.prototype.getWorldManifold = function(wm, xfA, radiusA, xfB, radiusB) {
         break;
 
       case Manifold.e_faceA:
-        normal = Rot.mul(xfA.q, this.localNormal);
-        var planePoint = Transform.mul(xfA, this.localPoint);
+        normal = Rot.mulVec2(xfA.q, this.localNormal);
+        var planePoint = Transform.mulVec2(xfA, this.localPoint);
         for (var i = 0; i < this.pointCount; ++i) {
-            var clipPoint = Transform.mul(xfB, this.points[i].localPoint);
+            var clipPoint = Transform.mulVec2(xfB, this.points[i].localPoint);
             var cA = Vec2.clone(clipPoint).addMul(radiusA - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
             var cB = Vec2.clone(clipPoint).subMul(radiusB, normal);
             points[i] = Vec2.mid(cA, cB);
@@ -2460,10 +2460,10 @@ Manifold.prototype.getWorldManifold = function(wm, xfA, radiusA, xfB, radiusB) {
         break;
 
       case Manifold.e_faceB:
-        normal = Rot.mul(xfB.q, this.localNormal);
-        var planePoint = Transform.mul(xfB, this.localPoint);
+        normal = Rot.mulVec2(xfB.q, this.localNormal);
+        var planePoint = Transform.mulVec2(xfB, this.localPoint);
         for (var i = 0; i < this.pointCount; ++i) {
-            var clipPoint = Transform.mul(xfA, this.points[i].localPoint);
+            var clipPoint = Transform.mulVec2(xfA, this.points[i].localPoint);
             var cB = Vec2.combine(1, clipPoint, radiusB - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
             var cA = Vec2.combine(1, clipPoint, -radiusA, normal);
             points[i] = Vec2.mid(cA, cB);
@@ -4278,10 +4278,10 @@ function Distance(output, cache, input) {
             break;
         }
         var vertex = vertices[simplex.m_count];
-        vertex.indexA = proxyA.getSupport(Rot.mulT(xfA.q, Vec2.neg(d)));
-        vertex.wA = Transform.mul(xfA, proxyA.getVertex(vertex.indexA));
-        vertex.indexB = proxyB.getSupport(Rot.mulT(xfB.q, d));
-        vertex.wB = Transform.mul(xfB, proxyB.getVertex(vertex.indexB));
+        vertex.indexA = proxyA.getSupport(Rot.mulTVec2(xfA.q, Vec2.neg(d)));
+        vertex.wA = Transform.mulVec2(xfA, proxyA.getVertex(vertex.indexA));
+        vertex.indexB = proxyB.getSupport(Rot.mulTVec2(xfB.q, d));
+        vertex.wB = Transform.mulVec2(xfB, proxyB.getVertex(vertex.indexB));
         vertex.w = Vec2.sub(vertex.wB, vertex.wA);
         ++iter;
         ++stats.gjkIters;
@@ -4405,8 +4405,8 @@ Simplex.prototype.readCache = function(cache, proxyA, transformA, proxyB, transf
         v.indexB = cache.indexB[i];
         var wALocal = proxyA.getVertex(v.indexA);
         var wBLocal = proxyB.getVertex(v.indexB);
-        v.wA = Transform.mul(transformA, wALocal);
-        v.wB = Transform.mul(transformB, wBLocal);
+        v.wA = Transform.mulVec2(transformA, wALocal);
+        v.wB = Transform.mulVec2(transformB, wBLocal);
         v.w = Vec2.sub(v.wB, v.wA);
         v.a = 0;
     }
@@ -4423,8 +4423,8 @@ Simplex.prototype.readCache = function(cache, proxyA, transformA, proxyB, transf
         v.indexB = 0;
         var wALocal = proxyA.getVertex(0);
         var wBLocal = proxyB.getVertex(0);
-        v.wA = Transform.mul(transformA, wALocal);
-        v.wB = Transform.mul(transformB, wBLocal);
+        v.wA = Transform.mulVec2(transformA, wALocal);
+        v.wB = Transform.mulVec2(transformB, wBLocal);
         v.w = Vec2.sub(v.wB, v.wA);
         v.a = 1;
         this.m_count = 1;
@@ -5563,8 +5563,8 @@ SeparationFunction.prototype.initialize = function(cache, proxyA, sweepA, proxyB
         this.m_type = e_points;
         var localPointA = this.m_proxyA.getVertex(cache.indexA[0]);
         var localPointB = this.m_proxyB.getVertex(cache.indexB[0]);
-        var pointA = Transform.mul(xfA, localPointA);
-        var pointB = Transform.mul(xfB, localPointB);
+        var pointA = Transform.mulVec2(xfA, localPointA);
+        var pointB = Transform.mulVec2(xfB, localPointB);
         this.m_axis.setCombine(1, pointB, -1, pointA);
         var s = this.m_axis.normalize();
         return s;
@@ -5574,11 +5574,11 @@ SeparationFunction.prototype.initialize = function(cache, proxyA, sweepA, proxyB
         var localPointB2 = proxyB.getVertex(cache.indexB[1]);
         this.m_axis = Vec2.cross(Vec2.sub(localPointB2, localPointB1), 1);
         this.m_axis.normalize();
-        var normal = Rot.mul(xfB.q, this.m_axis);
+        var normal = Rot.mulVec2(xfB.q, this.m_axis);
         this.m_localPoint = Vec2.mid(localPointB1, localPointB2);
-        var pointB = Transform.mul(xfB, this.m_localPoint);
+        var pointB = Transform.mulVec2(xfB, this.m_localPoint);
         var localPointA = proxyA.getVertex(cache.indexA[0]);
-        var pointA = Transform.mul(xfA, localPointA);
+        var pointA = Transform.mulVec2(xfA, localPointA);
         var s = Vec2.dot(pointA, normal) - Vec2.dot(pointB, normal);
         if (s < 0) {
             this.m_axis = Vec2.neg(this.m_axis);
@@ -5591,11 +5591,11 @@ SeparationFunction.prototype.initialize = function(cache, proxyA, sweepA, proxyB
         var localPointA2 = this.m_proxyA.getVertex(cache.indexA[1]);
         this.m_axis = Vec2.cross(Vec2.sub(localPointA2, localPointA1), 1);
         this.m_axis.normalize();
-        var normal = Rot.mul(xfA.q, this.m_axis);
+        var normal = Rot.mulVec2(xfA.q, this.m_axis);
         this.m_localPoint = Vec2.mid(localPointA1, localPointA2);
-        var pointA = Transform.mul(xfA, this.m_localPoint);
+        var pointA = Transform.mulVec2(xfA, this.m_localPoint);
         var localPointB = this.m_proxyB.getVertex(cache.indexB[0]);
-        var pointB = Transform.mul(xfB, localPointB);
+        var pointB = Transform.mulVec2(xfB, localPointB);
         var s = Vec2.dot(pointB, normal) - Vec2.dot(pointA, normal);
         if (s < 0) {
             this.m_axis = Vec2.neg(this.m_axis);
@@ -5614,45 +5614,45 @@ SeparationFunction.prototype.compute = function(find, t) {
       case e_points:
         {
             if (find) {
-                var axisA = Rot.mulT(xfA.q, this.m_axis);
-                var axisB = Rot.mulT(xfB.q, Vec2.neg(this.m_axis));
+                var axisA = Rot.mulTVec2(xfA.q, this.m_axis);
+                var axisB = Rot.mulTVec2(xfB.q, Vec2.neg(this.m_axis));
                 this.indexA = this.m_proxyA.getSupport(axisA);
                 this.indexB = this.m_proxyB.getSupport(axisB);
             }
             var localPointA = this.m_proxyA.getVertex(this.indexA);
             var localPointB = this.m_proxyB.getVertex(this.indexB);
-            var pointA = Transform.mul(xfA, localPointA);
-            var pointB = Transform.mul(xfB, localPointB);
+            var pointA = Transform.mulVec2(xfA, localPointA);
+            var pointB = Transform.mulVec2(xfB, localPointB);
             var sep = Vec2.dot(pointB, this.m_axis) - Vec2.dot(pointA, this.m_axis);
             return sep;
         }
 
       case e_faceA:
         {
-            var normal = Rot.mul(xfA.q, this.m_axis);
-            var pointA = Transform.mul(xfA, this.m_localPoint);
+            var normal = Rot.mulVec2(xfA.q, this.m_axis);
+            var pointA = Transform.mulVec2(xfA, this.m_localPoint);
             if (find) {
-                var axisB = Rot.mulT(xfB.q, Vec2.neg(normal));
+                var axisB = Rot.mulTVec2(xfB.q, Vec2.neg(normal));
                 this.indexA = -1;
                 this.indexB = this.m_proxyB.getSupport(axisB);
             }
             var localPointB = this.m_proxyB.getVertex(this.indexB);
-            var pointB = Transform.mul(xfB, localPointB);
+            var pointB = Transform.mulVec2(xfB, localPointB);
             var sep = Vec2.dot(pointB, normal) - Vec2.dot(pointA, normal);
             return sep;
         }
 
       case e_faceB:
         {
-            var normal = Rot.mul(xfB.q, this.m_axis);
-            var pointB = Transform.mul(xfB, this.m_localPoint);
+            var normal = Rot.mulVec2(xfB.q, this.m_axis);
+            var pointB = Transform.mulVec2(xfB, this.m_localPoint);
             if (find) {
-                var axisA = Rot.mulT(xfA.q, Vec2.neg(normal));
+                var axisA = Rot.mulTVec2(xfA.q, Vec2.neg(normal));
                 this.indexB = -1;
                 this.indexA = this.m_proxyA.getSupport(axisA);
             }
             var localPointA = this.m_proxyA.getVertex(this.indexA);
-            var pointA = Transform.mul(xfA, localPointA);
+            var pointA = Transform.mulVec2(xfA, localPointA);
             var sep = Vec2.dot(pointA, normal) - Vec2.dot(pointB, normal);
             return sep;
         }
@@ -5794,6 +5794,19 @@ Mat22.mul = function(mx, v) {
     _ASSERT && common.assert(false);
 };
 
+Mat22.mulVec2 = function(mx, v) {
+    _ASSERT && Vec2.assert(v);
+    var x = mx.ex.x * v.x + mx.ey.x * v.y;
+    var y = mx.ex.y * v.x + mx.ey.y * v.y;
+    return Vec2.neo(x, y);
+};
+
+Mat22.mulMat22 = function(mx, v) {
+    _ASSERT && Mat22.assert(v);
+    return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+    _ASSERT && common.assert(false);
+};
+
 Mat22.mulT = function(mx, v) {
     if (v && "x" in v && "y" in v) {
         _ASSERT && Vec2.assert(v);
@@ -5805,6 +5818,20 @@ Mat22.mulT = function(mx, v) {
         return new Mat22(c1, c2);
     }
     _ASSERT && common.assert(false);
+};
+
+Mat22.mulTVec2 = function(mx, v) {
+    _ASSERT && Mat22.assert(mx);
+    _ASSERT && Vec2.assert(v);
+    return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
+};
+
+Mat22.mulTMat22 = function(mx, v) {
+    _ASSERT && Mat22.assert(mx);
+    _ASSERT && Mat22.assert(v);
+    var c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
+    var c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
+    return new Mat22(c1, c2);
 };
 
 Mat22.abs = function(mx) {
@@ -5955,6 +5982,23 @@ Mat33.mul = function(a, b) {
     _ASSERT && common.assert(false);
 };
 
+Mat33.mulVec3 = function(a, b) {
+    _ASSERT && Mat33.assert(a);
+    _ASSERT && Vec3.assert(b);
+    var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
+    var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
+    var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
+    return new Vec3(x, y, z);
+};
+
+Mat33.mulVec2 = function(a, b) {
+    _ASSERT && Mat33.assert(a);
+    _ASSERT && Vec2.assert(b);
+    var x = a.ex.x * b.x + a.ey.x * b.y;
+    var y = a.ex.y * b.x + a.ey.y * b.y;
+    return Vec2.neo(x, y);
+};
+
 Mat33.add = function(a, b) {
     _ASSERT && Mat33.assert(a);
     _ASSERT && Mat33.assert(b);
@@ -6061,7 +6105,7 @@ function Position() {
 
 Position.prototype.getTransform = function(xf, p) {
     xf.q.set(this.a);
-    xf.p.set(Vec2.sub(this.c, Rot.mul(xf.q, p)));
+    xf.p.set(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
     return xf;
 };
 
@@ -6174,6 +6218,21 @@ Rot.mul = function(rot, m) {
     }
 };
 
+Rot.mulRot = function(rot, m) {
+    _ASSERT && Rot.assert(rot);
+    _ASSERT && Rot.assert(m);
+    var qr = Rot.identity();
+    qr.s = rot.s * m.c + rot.c * m.s;
+    qr.c = rot.c * m.c - rot.s * m.s;
+    return qr;
+};
+
+Rot.mulVec2 = function(rot, m) {
+    _ASSERT && Rot.assert(rot);
+    _ASSERT && Vec2.assert(m);
+    return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
+};
+
 Rot.mulSub = function(rot, v, w) {
     var x = rot.c * (v.x - w.x) - rot.s * (v.y - w.y);
     var y = rot.s * (v.x - w.y) + rot.c * (v.y - w.y);
@@ -6191,6 +6250,19 @@ Rot.mulT = function(rot, m) {
         _ASSERT && Vec2.assert(m);
         return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
     }
+};
+
+Rot.mulTRot = function(rot, m) {
+    _ASSERT && Rot.assert(m);
+    var qr = Rot.identity();
+    qr.s = rot.c * m.s - rot.s * m.c;
+    qr.c = rot.c * m.c + rot.s * m.s;
+    return qr;
+};
+
+Rot.mulTVec2 = function(rot, m) {
+    _ASSERT && Vec2.assert(m);
+    return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
 };
 
 
@@ -6223,7 +6295,7 @@ function Sweep(c, a) {
 }
 
 Sweep.prototype.setTransform = function(xf) {
-    var c = Transform.mul(xf, this.localCenter);
+    var c = Transform.mulVec2(xf, this.localCenter);
     this.c.set(c);
     this.c0.set(c);
     this.a = xf.q.getAngle();
@@ -6232,7 +6304,7 @@ Sweep.prototype.setTransform = function(xf) {
 
 Sweep.prototype.setLocalCenter = function(localCenter, xf) {
     this.localCenter.set(localCenter);
-    var c = Transform.mul(xf, this.localCenter);
+    var c = Transform.mulVec2(xf, this.localCenter);
     this.c.set(c);
     this.c0.set(c);
 };
@@ -6241,7 +6313,7 @@ Sweep.prototype.getTransform = function(xf, beta) {
     beta = typeof beta === "undefined" ? 0 : beta;
     xf.q.setAngle((1 - beta) * this.a0 + beta * this.a);
     xf.p.setCombine(1 - beta, this.c0, beta, this.c);
-    xf.p.sub(Rot.mul(xf.q, this.localCenter));
+    xf.p.sub(Rot.mulVec2(xf.q, this.localCenter));
 };
 
 Sweep.prototype.advance = function(alpha) {
@@ -6338,7 +6410,7 @@ Transform.prototype.setIdentity = function() {
 };
 
 Transform.prototype.set = function(a, b) {
-    if (Transform.isValid(a)) {
+    if (typeof b === "undefined") {
         this.p.set(a.p);
         this.q.set(a.q);
     } else {
@@ -6375,10 +6447,36 @@ Transform.mul = function(a, b) {
     } else if ("p" in b && "q" in b) {
         _ASSERT && Transform.assert(b);
         var xf = Transform.identity();
-        xf.q = Rot.mul(a.q, b.q);
-        xf.p = Vec2.add(Rot.mul(a.q, b.p), a.p);
+        xf.q = Rot.mulRot(a.q, b.q);
+        xf.p = Vec2.add(Rot.mulVec2(a.q, b.p), a.p);
         return xf;
     }
+};
+
+Transform.mulAll = function(a, b) {
+    _ASSERT && Transform.assert(a);
+    var arr = [];
+    for (var i = 0; i < b.length; i++) {
+        arr[i] = Transform.mul(a, b[i]);
+    }
+    return arr;
+};
+
+Transform.mulVec2 = function(a, b) {
+    _ASSERT && Transform.assert(a);
+    _ASSERT && Vec2.assert(b);
+    var x = a.q.c * b.x - a.q.s * b.y + a.p.x;
+    var y = a.q.s * b.x + a.q.c * b.y + a.p.y;
+    return Vec2.neo(x, y);
+};
+
+Transform.mulXf = function(a, b) {
+    _ASSERT && Transform.assert(a);
+    _ASSERT && Transform.assert(b);
+    var xf = Transform.identity();
+    xf.q = Rot.mulRot(a.q, b.q);
+    xf.p = Vec2.add(Rot.mulVec2(a.q, b.p), a.p);
+    return xf;
 };
 
 Transform.mulT = function(a, b) {
@@ -6393,10 +6491,29 @@ Transform.mulT = function(a, b) {
     } else if ("p" in b && "q" in b) {
         _ASSERT && Transform.assert(b);
         var xf = Transform.identity();
-        xf.q.set(Rot.mulT(a.q, b.q));
-        xf.p.set(Rot.mulT(a.q, Vec2.sub(b.p, a.p)));
+        xf.q.set(Rot.mulTRot(a.q, b.q));
+        xf.p.set(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
         return xf;
     }
+};
+
+Transform.mulTVec2 = function(a, b) {
+    _ASSERT && Transform.assert(a);
+    _ASSERT && Vec2.assert(b);
+    var px = b.x - a.p.x;
+    var py = b.y - a.p.y;
+    var x = a.q.c * px + a.q.s * py;
+    var y = -a.q.s * px + a.q.c * py;
+    return Vec2.neo(x, y);
+};
+
+Transform.mulTXf = function(a, b) {
+    _ASSERT && Transform.assert(a);
+    _ASSERT && Transform.assert(b);
+    var xf = Transform.identity();
+    xf.q.set(Rot.mulTRot(a.q, b.q));
+    xf.p.set(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
+    return xf;
 };
 
 
@@ -7149,8 +7266,8 @@ DistanceJoint.prototype.initVelocityConstraints = function(step) {
     var wB = this.m_bodyB.c_velocity.w;
     var qA = Rot.neo(aA);
     var qB = Rot.neo(aB);
-    this.m_rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    this.m_rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+    this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     this.m_u = Vec2.sub(Vec2.add(cB, this.m_rB), Vec2.add(cA, this.m_rA));
     var length = this.m_u.length();
     if (length > Settings.linearSlop) {
@@ -7375,8 +7492,8 @@ FrictionJoint.prototype.initVelocityConstraints = function(step) {
     var vB = this.m_bodyB.c_velocity.v;
     var wB = this.m_bodyB.c_velocity.w;
     var qA = Rot.neo(aA), qB = Rot.neo(aB);
-    this.m_rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    this.m_rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+    this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     var mA = this.m_invMassA, mB = this.m_invMassB;
     var iA = this.m_invIA, iB = this.m_invIB;
     var K = new Mat22();
@@ -7427,7 +7544,7 @@ FrictionJoint.prototype.solveVelocityConstraints = function(step) {
     }
     {
         var Cdot = Vec2.sub(Vec2.add(vB, Vec2.cross(wB, this.m_rB)), Vec2.add(vA, Vec2.cross(wA, this.m_rA)));
-        var impulse = Vec2.neg(Mat22.mul(this.m_linearMass, Cdot));
+        var impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
         var oldImpulse = this.m_linearImpulse;
         this.m_linearImpulse.add(impulse);
         var maxImpulse = h * this.m_maxForce;
@@ -7540,7 +7657,7 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
         this.m_referenceAngleA = prismatic.m_referenceAngle;
         this.m_localAxisC = prismatic.m_localXAxisA;
         var pC = this.m_localAnchorC;
-        var pA = Rot.mulT(xfC.q, Vec2.add(Rot.mul(xfA.q, this.m_localAnchorA), Vec2.sub(xfA.p, xfC.p)));
+        var pA = Rot.mulTVec2(xfC.q, Vec2.add(Rot.mul(xfA.q, this.m_localAnchorA), Vec2.sub(xfA.p, xfC.p)));
         coordinateA = Vec2.dot(pA, this.m_localAxisC) - Vec2.dot(pC, this.m_localAxisC);
     }
     this.m_bodyD = this.m_joint2.getBodyA();
@@ -7563,7 +7680,7 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
         this.m_referenceAngleB = prismatic.m_referenceAngle;
         this.m_localAxisD = prismatic.m_localXAxisA;
         var pD = this.m_localAnchorD;
-        var pB = Rot.mulT(xfD.q, Vec2.add(Rot.mul(xfB.q, this.m_localAnchorB), Vec2.sub(xfB.p, xfD.p)));
+        var pB = Rot.mulTVec2(xfD.q, Vec2.add(Rot.mul(xfB.q, this.m_localAnchorB), Vec2.sub(xfB.p, xfD.p)));
         coordinateB = Vec2.dot(pB, this.m_localAxisD) - Vec2.dot(pD, this.m_localAxisD);
     }
     this.m_constant = coordinateA + this.m_ratio * coordinateB;
@@ -7646,7 +7763,7 @@ GearJoint.prototype.initVelocityConstraints = function(step) {
         this.m_JwC = 1;
         this.m_mass += this.m_iA + this.m_iC;
     } else {
-        var u = Rot.mul(qC, this.m_localAxisC);
+        var u = Rot.mulVec2(qC, this.m_localAxisC);
         var rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC);
         var rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA);
         this.m_JvAC = u;
@@ -7660,7 +7777,7 @@ GearJoint.prototype.initVelocityConstraints = function(step) {
         this.m_JwD = this.m_ratio;
         this.m_mass += this.m_ratio * this.m_ratio * (this.m_iB + this.m_iD);
     } else {
-        var u = Rot.mul(qD, this.m_localAxisD);
+        var u = Rot.mulVec2(qD, this.m_localAxisD);
         var rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD);
         var rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB);
         this.m_JvBD = Vec2.mul(this.m_ratio, u);
@@ -7747,7 +7864,7 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
         mass += this.m_iA + this.m_iC;
         coordinateA = aA - aC - this.m_referenceAngleA;
     } else {
-        var u = Rot.mul(qC, this.m_localAxisC);
+        var u = Rot.mulVec2(qC, this.m_localAxisC);
         var rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC);
         var rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA);
         JvAC = u;
@@ -7755,7 +7872,7 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
         JwA = Vec2.cross(rA, u);
         mass += this.m_mC + this.m_mA + this.m_iC * JwC * JwC + this.m_iA * JwA * JwA;
         var pC = Vec2.sub(this.m_localAnchorC, this.m_lcC);
-        var pA = Rot.mulT(qC, Vec2.add(rA, Vec2.sub(cA, cC)));
+        var pA = Rot.mulTVec2(qC, Vec2.add(rA, Vec2.sub(cA, cC)));
         coordinateA = Vec2.dot(Vec2.sub(pA, pC), this.m_localAxisC);
     }
     if (this.m_type2 == RevoluteJoint.TYPE) {
@@ -7765,7 +7882,7 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
         mass += this.m_ratio * this.m_ratio * (this.m_iB + this.m_iD);
         coordinateB = aB - aD - this.m_referenceAngleB;
     } else {
-        var u = Rot.mul(qD, this.m_localAxisD);
+        var u = Rot.mulVec2(qD, this.m_localAxisD);
         var rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD);
         var rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB);
         JvBD = Vec2.mul(this.m_ratio, u);
@@ -7773,7 +7890,7 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
         JwB = this.m_ratio * Vec2.cross(rB, u);
         mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD * JwD * JwD + this.m_iB * JwB * JwB;
         var pD = Vec2.sub(this.m_localAnchorD, this.m_lcD);
-        var pB = Rot.mulT(qD, Vec2.add(rB, Vec2.sub(cB, cD)));
+        var pB = Rot.mulTVec2(qD, Vec2.add(rB, Vec2.sub(cB, cD)));
         coordinateB = Vec2.dot(pB, this.m_localAxisD) - Vec2.dot(pD, this.m_localAxisD);
     }
     var C = coordinateA + this.m_ratio * coordinateB - this.m_constant;
@@ -7965,8 +8082,8 @@ MotorJoint.prototype.initVelocityConstraints = function(step) {
     var vB = this.m_bodyB.c_velocity.v;
     var wB = this.m_bodyB.c_velocity.w;
     var qA = Rot.neo(aA), qB = Rot.neo(aB);
-    this.m_rA = Rot.mul(qA, Vec2.neg(this.m_localCenterA));
-    this.m_rB = Rot.mul(qB, Vec2.neg(this.m_localCenterB));
+    this.m_rA = Rot.mulVec2(qA, Vec2.neg(this.m_localCenterA));
+    this.m_rB = Rot.mulVec2(qB, Vec2.neg(this.m_localCenterB));
     var mA = this.m_invMassA;
     var mB = this.m_invMassB;
     var iA = this.m_invIA;
@@ -7984,7 +8101,7 @@ MotorJoint.prototype.initVelocityConstraints = function(step) {
     this.m_linearError = Vec2.zero();
     this.m_linearError.addCombine(1, cB, 1, this.m_rB);
     this.m_linearError.subCombine(1, cA, 1, this.m_rA);
-    this.m_linearError.sub(Rot.mul(qA, this.m_linearOffset));
+    this.m_linearError.sub(Rot.mulVec2(qA, this.m_linearOffset));
     this.m_angularError = aB - aA - this.m_angularOffset;
     if (step.warmStarting) {
         this.m_linearImpulse.mul(step.dtRatio);
@@ -8028,7 +8145,7 @@ MotorJoint.prototype.solveVelocityConstraints = function(step) {
         Cdot.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
         Cdot.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA));
         Cdot.addMul(inv_h * this.m_correctionFactor, this.m_linearError);
-        var impulse = Vec2.neg(Mat22.mul(this.m_linearMass, Cdot));
+        var impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
         var oldImpulse = Vec2.clone(this.m_linearImpulse);
         this.m_linearImpulse.add(impulse);
         var maxImpulse = h * this.m_maxForce;
@@ -8110,7 +8227,7 @@ function MouseJoint(def, bodyA, bodyB, target) {
     _ASSERT && common.assert(Math.isFinite(def.frequencyHz) && def.frequencyHz >= 0);
     _ASSERT && common.assert(Math.isFinite(def.dampingRatio) && def.dampingRatio >= 0);
     this.m_targetA = target ? Vec2.clone(target) : def.target || Vec2.zero();
-    this.m_localAnchorB = Transform.mulT(bodyB.getTransform(), this.m_targetA);
+    this.m_localAnchorB = Transform.mulTVec2(bodyB.getTransform(), this.m_targetA);
     this.m_maxForce = def.maxForce;
     this.m_impulse = Vec2.zero();
     this.m_frequencyHz = def.frequencyHz;
@@ -8202,7 +8319,7 @@ MouseJoint.prototype.initVelocityConstraints = function(step) {
         this.m_gamma = 1 / this.m_gamma;
     }
     this.m_beta = h * k * this.m_gamma;
-    this.m_rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     var K = new Mat22();
     K.ex.x = this.m_invMassB + this.m_invIB * this.m_rB.y * this.m_rB.y + this.m_gamma;
     K.ex.y = -this.m_invIB * this.m_rB.x * this.m_rB.y;
@@ -8232,7 +8349,7 @@ MouseJoint.prototype.solveVelocityConstraints = function(step) {
     Cdot.add(vB);
     Cdot.addCombine(1, this.m_C, this.m_gamma, this.m_impulse);
     Cdot.neg();
-    var impulse = Mat22.mul(this.m_mass, Cdot);
+    var impulse = Mat22.mulVec2(this.m_mass, Cdot);
     var oldImpulse = Vec2.clone(this.m_impulse);
     this.m_impulse.add(impulse);
     var maxImpulse = step.dt * this.m_maxForce;
@@ -8377,12 +8494,12 @@ PrismaticJoint.prototype.getJointTranslation = function() {
 PrismaticJoint.prototype.getJointSpeed = function() {
     var bA = this.m_bodyA;
     var bB = this.m_bodyB;
-    var rA = Rot.mul(bA.m_xf.q, Vec2.sub(this.m_localAnchorA, bA.m_sweep.localCenter));
-    var rB = Rot.mul(bB.m_xf.q, Vec2.sub(this.m_localAnchorB, bB.m_sweep.localCenter));
+    var rA = Rot.mulVec2(bA.m_xf.q, Vec2.sub(this.m_localAnchorA, bA.m_sweep.localCenter));
+    var rB = Rot.mulVec2(bB.m_xf.q, Vec2.sub(this.m_localAnchorB, bB.m_sweep.localCenter));
     var p1 = Vec2.add(bA.m_sweep.c, rA);
     var p2 = Vec2.add(bB.m_sweep.c, rB);
     var d = Vec2.sub(p2, p1);
-    var axis = Rot.mul(bA.m_xf.q, this.m_localXAxisA);
+    var axis = Rot.mulVec2(bA.m_xf.q, this.m_localXAxisA);
     var vA = bA.m_linearVelocity;
     var vB = bB.m_linearVelocity;
     var wA = bA.m_angularVelocity;
@@ -8486,15 +8603,15 @@ PrismaticJoint.prototype.initVelocityConstraints = function(step) {
     var wB = this.m_bodyB.c_velocity.w;
     var qA = Rot.neo(aA);
     var qB = Rot.neo(aB);
-    var rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    var rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+    var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     var d = Vec2.zero();
     d.addCombine(1, cB, 1, rB);
     d.subCombine(1, cA, 1, rA);
     var mA = this.m_invMassA, mB = this.m_invMassB;
     var iA = this.m_invIA, iB = this.m_invIB;
     {
-        this.m_axis = Rot.mul(qA, this.m_localXAxisA);
+        this.m_axis = Rot.mulVec2(qA, this.m_localXAxisA);
         this.m_a1 = Vec2.cross(Vec2.add(d, rA), this.m_axis);
         this.m_a2 = Vec2.cross(rB, this.m_axis);
         this.m_motorMass = mA + mB + iA * this.m_a1 * this.m_a1 + iB * this.m_a2 * this.m_a2;
@@ -8503,7 +8620,7 @@ PrismaticJoint.prototype.initVelocityConstraints = function(step) {
         }
     }
     {
-        this.m_perp = Rot.mul(qA, this.m_localYAxisA);
+        this.m_perp = Rot.mulVec2(qA, this.m_localYAxisA);
         this.m_s1 = Vec2.cross(Vec2.add(d, rA), this.m_perp);
         this.m_s2 = Vec2.cross(rB, this.m_perp);
         var s1test = Vec2.cross(rA, this.m_perp);
@@ -8647,13 +8764,13 @@ PrismaticJoint.prototype.solvePositionConstraints = function(step) {
     var mB = this.m_invMassB;
     var iA = this.m_invIA;
     var iB = this.m_invIB;
-    var rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    var rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+    var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     var d = Vec2.sub(Vec2.add(cB, rB), Vec2.add(cA, rA));
-    var axis = Rot.mul(qA, this.m_localXAxisA);
+    var axis = Rot.mulVec2(qA, this.m_localXAxisA);
     var a1 = Vec2.cross(Vec2.add(d, rA), axis);
     var a2 = Vec2.cross(rB, axis);
-    var perp = Rot.mul(qA, this.m_localYAxisA);
+    var perp = Rot.mulVec2(qA, this.m_localYAxisA);
     var s1 = Vec2.cross(Vec2.add(d, rA), perp);
     var s2 = Vec2.cross(rB, perp);
     var impulse = Vec3();
@@ -8882,8 +8999,8 @@ PulleyJoint.prototype.initVelocityConstraints = function(step) {
     var wB = this.m_bodyB.c_velocity.w;
     var qA = Rot.neo(aA);
     var qB = Rot.neo(aB);
-    this.m_rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    this.m_rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+    this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     this.m_uA = Vec2.sub(Vec2.add(cA, this.m_rA), this.m_groundAnchorA);
     this.m_uB = Vec2.sub(Vec2.add(cB, this.m_rB), this.m_groundAnchorB);
     var lengthA = this.m_uA.length();
@@ -8951,8 +9068,8 @@ PulleyJoint.prototype.solvePositionConstraints = function(step) {
     var cB = this.m_bodyB.c_position.c;
     var aB = this.m_bodyB.c_position.a;
     var qA = Rot.neo(aA), qB = Rot.neo(aB);
-    var rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    var rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+    var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     var uA = Vec2.sub(Vec2.add(cA, this.m_rA), this.m_groundAnchorA);
     var uB = Vec2.sub(Vec2.add(cB, this.m_rB), this.m_groundAnchorB);
     var lengthA = uA.length();
@@ -9202,13 +9319,13 @@ RevoluteJoint.prototype.initVelocityConstraints = function(step) {
     var wB = this.m_bodyB.c_velocity.w;
     var qA = Rot.neo(aA);
     var qB = Rot.neo(aB);
-    this.m_rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    this.m_rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+    this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     var mA = this.m_invMassA;
     var mB = this.m_invMassB;
     var iA = this.m_invIA;
     var iB = this.m_invIB;
-    var fixedRotation = iA + iB == 0;
+    var fixedRotation = iA + iB === 0;
     this.m_mass.ex.x = mA + mB + this.m_rA.y * this.m_rA.y * iA + this.m_rB.y * this.m_rB.y * iB;
     this.m_mass.ey.x = -this.m_rA.y * this.m_rA.x * iA - this.m_rB.y * this.m_rB.x * iB;
     this.m_mass.ez.x = -this.m_rA.y * iA - this.m_rB.y * iB;
@@ -9273,7 +9390,7 @@ RevoluteJoint.prototype.solveVelocityConstraints = function(step) {
     var mB = this.m_invMassB;
     var iA = this.m_invIA;
     var iB = this.m_invIB;
-    var fixedRotation = iA + iB == 0;
+    var fixedRotation = iA + iB === 0;
     if (this.m_enableMotor && this.m_limitState != equalLimits && fixedRotation == false) {
         var Cdot = wB - wA - this.m_motorSpeed;
         var impulse = -this.m_motorMass * Cdot;
@@ -9379,8 +9496,8 @@ RevoluteJoint.prototype.solvePositionConstraints = function(step) {
     {
         qA.set(aA);
         qB.set(aB);
-        var rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-        var rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+        var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+        var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
         var C = Vec2.zero();
         C.addCombine(1, cB, 1, rB);
         C.subCombine(1, cA, 1, rA);
@@ -9770,8 +9887,8 @@ WeldJoint.prototype.initVelocityConstraints = function(step) {
     var vB = this.m_bodyB.c_velocity.v;
     var wB = this.m_bodyB.c_velocity.w;
     var qA = Rot.neo(aA), qB = Rot.neo(aB);
-    this.m_rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    this.m_rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+    this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     var mA = this.m_invMassA;
     var mB = this.m_invMassB;
     var iA = this.m_invIA;
@@ -9843,7 +9960,7 @@ WeldJoint.prototype.solveVelocityConstraints = function(step) {
         var Cdot1 = Vec2.zero();
         Cdot1.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
         Cdot1.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA));
-        var impulse1 = Vec2.neg(Mat33.mul(this.m_mass, Cdot1));
+        var impulse1 = Vec2.neg(Mat33.mulVec2(this.m_mass, Cdot1));
         this.m_impulse.x += impulse1.x;
         this.m_impulse.y += impulse1.y;
         var P = Vec2.clone(impulse1);
@@ -9857,7 +9974,7 @@ WeldJoint.prototype.solveVelocityConstraints = function(step) {
         Cdot1.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA));
         var Cdot2 = wB - wA;
         var Cdot = Vec3(Cdot1.x, Cdot1.y, Cdot2);
-        var impulse = Vec3.neg(Mat33.mul(this.m_mass, Cdot));
+        var impulse = Vec3.neg(Mat33.mulVec3(this.m_mass, Cdot));
         this.m_impulse.add(impulse);
         var P = Vec2.neo(impulse.x, impulse.y);
         vA.subMul(mA, P);
@@ -9879,8 +9996,8 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
     var qA = Rot.neo(aA), qB = Rot.neo(aB);
     var mA = this.m_invMassA, mB = this.m_invMassB;
     var iA = this.m_invIA, iB = this.m_invIB;
-    var rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    var rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+    var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     var positionError, angularError;
     var K = new Mat33();
     K.ex.x = mA + mB + rA.y * rA.y * iA + rB.y * rB.y * iB;
@@ -10138,13 +10255,13 @@ WheelJoint.prototype.initVelocityConstraints = function(step) {
     var wB = this.m_bodyB.c_velocity.w;
     var qA = Rot.neo(aA);
     var qB = Rot.neo(aB);
-    var rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    var rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+    var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     var d = Vec2.zero();
     d.addCombine(1, cB, 1, rB);
     d.subCombine(1, cA, 1, rA);
     {
-        this.m_ay = Rot.mul(qA, this.m_localYAxisA);
+        this.m_ay = Rot.mulVec2(qA, this.m_localYAxisA);
         this.m_sAy = Vec2.cross(Vec2.add(d, rA), this.m_ay);
         this.m_sBy = Vec2.cross(rB, this.m_ay);
         this.m_mass = mA + mB + iA * this.m_sAy * this.m_sAy + iB * this.m_sBy * this.m_sBy;
@@ -10156,7 +10273,7 @@ WheelJoint.prototype.initVelocityConstraints = function(step) {
     this.m_bias = 0;
     this.m_gamma = 0;
     if (this.m_frequencyHz > 0) {
-        this.m_ax = Rot.mul(qA, this.m_localXAxisA);
+        this.m_ax = Rot.mulVec2(qA, this.m_localXAxisA);
         this.m_sAx = Vec2.cross(Vec2.add(d, rA), this.m_ax);
         this.m_sBx = Vec2.cross(rB, this.m_ax);
         var invMass = mA + mB + iA * this.m_sAx * this.m_sAx + iB * this.m_sBx * this.m_sBx;
@@ -10267,12 +10384,12 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
     var aB = this.m_bodyB.c_position.a;
     var qA = Rot.neo(aA);
     var qB = Rot.neo(aB);
-    var rA = Rot.mul(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    var rB = Rot.mul(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+    var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     var d = Vec2.zero();
     d.addCombine(1, cB, 1, rB);
     d.subCombine(1, cA, 1, rA);
-    var ay = Rot.mul(qA, this.m_localYAxisA);
+    var ay = Rot.mulVec2(qA, this.m_localYAxisA);
     var sAy = Vec2.cross(Vec2.add(d, rA), ay);
     var sBy = Vec2.cross(rB, ay);
     var C = Vec2.dot(d, ay);
@@ -10492,8 +10609,8 @@ ChainShape.prototype.rayCast = function(output, input, xf, childIndex) {
 
 ChainShape.prototype.computeAABB = function(aabb, xf, childIndex) {
     _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
-    var v1 = Transform.mul(xf, this.getVertex(childIndex));
-    var v2 = Transform.mul(xf, this.getVertex(childIndex + 1));
+    var v1 = Transform.mulVec2(xf, this.getVertex(childIndex));
+    var v2 = Transform.mulVec2(xf, this.getVertex(childIndex + 1));
     aabb.combinePoints(v1, v2);
 };
 
@@ -10594,13 +10711,13 @@ CircleShape.prototype.getChildCount = function() {
 };
 
 CircleShape.prototype.testPoint = function(xf, p) {
-    var center = Vec2.add(xf.p, Rot.mul(xf.q, this.m_p));
+    var center = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
     var d = Vec2.sub(p, center);
     return Vec2.dot(d, d) <= this.m_radius * this.m_radius;
 };
 
 CircleShape.prototype.rayCast = function(output, input, xf, childIndex) {
-    var position = Vec2.add(xf.p, Rot.mul(xf.q, this.m_p));
+    var position = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
     var s = Vec2.sub(input.p1, position);
     var b = Vec2.dot(s, s) - this.m_radius * this.m_radius;
     var r = Vec2.sub(input.p2, input.p1);
@@ -10622,7 +10739,7 @@ CircleShape.prototype.rayCast = function(output, input, xf, childIndex) {
 };
 
 CircleShape.prototype.computeAABB = function(aabb, xf, childIndex) {
-    var p = Vec2.add(xf.p, Rot.mul(xf.q, this.m_p));
+    var p = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
     aabb.lowerBound.set(p.x - this.m_radius, p.y - this.m_radius);
     aabb.upperBound.set(p.x + this.m_radius, p.y + this.m_radius);
 };
@@ -10675,8 +10792,8 @@ function CircleCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, ind
 
 function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
     manifold.pointCount = 0;
-    var pA = Transform.mul(xfA, circleA.m_p);
-    var pB = Transform.mul(xfB, circleB.m_p);
+    var pA = Transform.mulVec2(xfA, circleA.m_p);
+    var pB = Transform.mulVec2(xfB, circleB.m_p);
     var distSqr = Vec2.distanceSquared(pB, pA);
     var rA = circleA.m_radius;
     var rB = circleB.m_radius;
@@ -10734,8 +10851,8 @@ function PolygonCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, in
 
 function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
     manifold.pointCount = 0;
-    var c = Transform.mul(xfB, circleB.m_p);
-    var cLocal = Transform.mulT(xfA, c);
+    var c = Transform.mulVec2(xfB, circleB.m_p);
+    var cLocal = Transform.mulTVec2(xfA, c);
     var normalIndex = 0;
     var separation = -Infinity;
     var radius = polygonA.m_radius + circleB.m_radius;
@@ -10861,7 +10978,7 @@ function ChainCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, inde
 
 function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
     manifold.pointCount = 0;
-    var Q = Transform.mulT(xfA, Transform.mul(xfB, circleB.m_p));
+    var Q = Transform.mulTVec2(xfA, Transform.mulVec2(xfB, circleB.m_p));
     var A = edgeA.m_vertex1;
     var B = edgeA.m_vertex2;
     var e = Vec2.sub(B, A);
@@ -11044,8 +11161,8 @@ var rf = new ReferenceFace();
 
 function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
     var m_type1, m_type2;
-    var xf = Transform.mulT(xfA, xfB);
-    var centroidB = Transform.mul(xf, polygonB.m_centroid);
+    var xf = Transform.mulTXf(xfA, xfB);
+    var centroidB = Transform.mulVec2(xf, polygonB.m_centroid);
     var v0 = edgeA.m_vertex0;
     var v1 = edgeA.m_vertex1;
     var v2 = edgeA.m_vertex2;
@@ -11186,8 +11303,8 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
     }
     polygonBA.count = polygonB.m_count;
     for (var i = 0; i < polygonB.m_count; ++i) {
-        polygonBA.vertices[i] = Transform.mul(xf, polygonB.m_vertices[i]);
-        polygonBA.normals[i] = Rot.mul(xf.q, polygonB.m_normals[i]);
+        polygonBA.vertices[i] = Transform.mulVec2(xf, polygonB.m_vertices[i]);
+        polygonBA.normals[i] = Rot.mulVec2(xf.q, polygonB.m_normals[i]);
     }
     var radius = 2 * Settings.polygonRadius;
     manifold.pointCount = 0;
@@ -11395,12 +11512,12 @@ function FindMaxSeparation(poly1, xf1, poly2, xf2) {
     var n1s = poly1.m_normals;
     var v1s = poly1.m_vertices;
     var v2s = poly2.m_vertices;
-    var xf = Transform.mulT(xf2, xf1);
+    var xf = Transform.mulTXf(xf2, xf1);
     var bestIndex = 0;
     var maxSeparation = -Infinity;
     for (var i = 0; i < count1; ++i) {
-        var n = Rot.mul(xf.q, n1s[i]);
-        var v1 = Transform.mul(xf, v1s[i]);
+        var n = Rot.mulVec2(xf.q, n1s[i]);
+        var v1 = Transform.mulVec2(xf, v1s[i]);
         var si = Infinity;
         for (var j = 0; j < count2; ++j) {
             var sij = Vec2.dot(n, v2s[j]) - Vec2.dot(n, v1);
@@ -11423,7 +11540,7 @@ function FindIncidentEdge(c, poly1, xf1, edge1, poly2, xf2) {
     var vertices2 = poly2.m_vertices;
     var normals2 = poly2.m_normals;
     _ASSERT && common.assert(0 <= edge1 && edge1 < poly1.m_count);
-    var normal1 = Rot.mulT(xf2.q, Rot.mul(xf1.q, normals1[edge1]));
+    var normal1 = Rot.mulT(xf2.q, Rot.mulVec2(xf1.q, normals1[edge1]));
     var index = 0;
     var minDot = Infinity;
     for (var i = 0; i < count2; ++i) {
@@ -11435,12 +11552,12 @@ function FindIncidentEdge(c, poly1, xf1, edge1, poly2, xf2) {
     }
     var i1 = index;
     var i2 = i1 + 1 < count2 ? i1 + 1 : 0;
-    c[0].v = Transform.mul(xf2, vertices2[i1]);
+    c[0].v = Transform.mulVec2(xf2, vertices2[i1]);
     c[0].id.cf.indexA = edge1;
     c[0].id.cf.indexB = i1;
     c[0].id.cf.typeA = Manifold.e_face;
     c[0].id.cf.typeB = Manifold.e_vertex;
-    c[1].v = Transform.mul(xf2, vertices2[i2]);
+    c[1].v = Transform.mulVec2(xf2, vertices2[i2]);
     c[1].id.cf.indexA = edge1;
     c[1].id.cf.indexB = i2;
     c[1].id.cf.typeA = Manifold.e_face;
@@ -11494,10 +11611,10 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
     localTangent.normalize();
     var localNormal = Vec2.cross(localTangent, 1);
     var planePoint = Vec2.combine(.5, v11, .5, v12);
-    var tangent = Rot.mul(xf1.q, localTangent);
+    var tangent = Rot.mulVec2(xf1.q, localTangent);
     var normal = Vec2.cross(tangent, 1);
-    v11 = Transform.mul(xf1, v11);
-    v12 = Transform.mul(xf1, v12);
+    v11 = Transform.mulVec2(xf1, v11);
+    v12 = Transform.mulVec2(xf1, v12);
     var frontOffset = Vec2.dot(normal, v11);
     var sideOffset1 = -Vec2.dot(tangent, v11) + totalRadius;
     var sideOffset2 = Vec2.dot(tangent, v12) + totalRadius;
@@ -11519,7 +11636,7 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
         var separation = Vec2.dot(normal, clipPoints2[i].v) - frontOffset;
         if (separation <= totalRadius) {
             var cp = manifold.points[pointCount];
-            cp.localPoint.set(Transform.mulT(xf2, clipPoints2[i].v));
+            cp.localPoint.set(Transform.mulTVec2(xf2, clipPoints2[i].v));
             cp.id = clipPoints2[i].id;
             if (flip) {
                 var cf = cp.id.cf;
@@ -11637,8 +11754,8 @@ EdgeShape.prototype.testPoint = function(xf, p) {
 };
 
 EdgeShape.prototype.rayCast = function(output, input, xf, childIndex) {
-    var p1 = Rot.mulT(xf.q, Vec2.sub(input.p1, xf.p));
-    var p2 = Rot.mulT(xf.q, Vec2.sub(input.p2, xf.p));
+    var p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
+    var p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
     var d = Vec2.sub(p2, p1);
     var v1 = this.m_vertex1;
     var v2 = this.m_vertex2;
@@ -11666,16 +11783,16 @@ EdgeShape.prototype.rayCast = function(output, input, xf, childIndex) {
     }
     output.fraction = t;
     if (numerator > 0) {
-        output.normal = Rot.mul(xf.q, normal).neg();
+        output.normal = Rot.mulVec2(xf.q, normal).neg();
     } else {
-        output.normal = Rot.mul(xf.q, normal);
+        output.normal = Rot.mulVec2(xf.q, normal);
     }
     return true;
 };
 
 EdgeShape.prototype.computeAABB = function(aabb, xf, childIndex) {
-    var v1 = Transform.mul(xf, this.m_vertex1);
-    var v2 = Transform.mul(xf, this.m_vertex2);
+    var v1 = Transform.mulVec2(xf, this.m_vertex1);
+    var v2 = Transform.mulVec2(xf, this.m_vertex2);
     aabb.combinePoints(v1, v2);
     aabb.extend(this.m_radius);
 };
@@ -11898,14 +12015,14 @@ PolygonShape.prototype._setAsBox = function(hx, hy, center, angle) {
         xf.p.set(center);
         xf.q.set(angle);
         for (var i = 0; i < this.m_count; ++i) {
-            this.m_vertices[i] = Transform.mul(xf, this.m_vertices[i]);
-            this.m_normals[i] = Rot.mul(xf.q, this.m_normals[i]);
+            this.m_vertices[i] = Transform.mulVec2(xf, this.m_vertices[i]);
+            this.m_normals[i] = Rot.mulVec2(xf.q, this.m_normals[i]);
         }
     }
 };
 
 PolygonShape.prototype.testPoint = function(xf, p) {
-    var pLocal = Rot.mulT(xf.q, Vec2.sub(p, xf.p));
+    var pLocal = Rot.mulTVec2(xf.q, Vec2.sub(p, xf.p));
     for (var i = 0; i < this.m_count; ++i) {
         var dot = Vec2.dot(this.m_normals[i], Vec2.sub(pLocal, this.m_vertices[i]));
         if (dot > 0) {
@@ -11916,8 +12033,8 @@ PolygonShape.prototype.testPoint = function(xf, p) {
 };
 
 PolygonShape.prototype.rayCast = function(output, input, xf, childIndex) {
-    var p1 = Rot.mulT(xf.q, Vec2.sub(input.p1, xf.p));
-    var p2 = Rot.mulT(xf.q, Vec2.sub(input.p2, xf.p));
+    var p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
+    var p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
     var d = Vec2.sub(p2, p1);
     var lower = 0;
     var upper = input.maxFraction;
@@ -11944,7 +12061,7 @@ PolygonShape.prototype.rayCast = function(output, input, xf, childIndex) {
     _ASSERT && common.assert(0 <= lower && lower <= input.maxFraction);
     if (index >= 0) {
         output.fraction = lower;
-        output.normal = Rot.mul(xf.q, this.m_normals[index]);
+        output.normal = Rot.mulVec2(xf.q, this.m_normals[index]);
         return true;
     }
     return false;
@@ -11954,7 +12071,7 @@ PolygonShape.prototype.computeAABB = function(aabb, xf, childIndex) {
     var minX = Infinity, minY = Infinity;
     var maxX = -Infinity, maxY = -Infinity;
     for (var i = 0; i < this.m_count; ++i) {
-        var v = Transform.mul(xf, this.m_vertices[i]);
+        var v = Transform.mulVec2(xf, this.m_vertices[i]);
         minX = Math.min(minX, v.x);
         maxX = Math.max(maxX, v.x);
         minY = Math.min(minY, v.y);
