@@ -1,7 +1,3 @@
-/**
- * @author Oliver Zell <https://github.com/zOadT>
- */
-
 declare namespace planck {
   let Math: Math & {
     readonly EPSILON: number;

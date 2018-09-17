@@ -1,6 +1,3 @@
-// Definitions by: Oliver Zell <https://github.com/zOadT>
-// TypeScript Version: 3.0
-
 declare namespace planck {
 
   interface Testbed {
