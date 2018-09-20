@@ -1,0 +1,8 @@
+{
+  "extends": "dtslint/dt.json",
+  "rules": {
+    "indent": [true, "spaces", 2],
+    "adjacent-overload-signatures": false,
+    "unified-signatures": false
+  }
+}
