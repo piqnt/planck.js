@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.2.4
+ * Planck.js v0.2.5
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -6558,8 +6558,8 @@ DynamicTree.prototype.shiftOrigin = function(newOrigin) {
         var aabb = node.aabb;
         aabb.lowerBound.x -= newOrigin.x;
         aabb.lowerBound.y -= newOrigin.y;
-        aabb.lowerBound.x -= newOrigin.x;
-        aabb.lowerBound.y -= newOrigin.y;
+        aabb.upperBound.x -= newOrigin.x;
+        aabb.upperBound.y -= newOrigin.y;
     }
     iteratorPool.release(it);
 };
@@ -8372,7 +8372,7 @@ Vec2.prototype.setCombine = function(a, v, b, w) {
     return this;
 };
 
-Vec2.prototype.setMul = function(a, v, b, w) {
+Vec2.prototype.setMul = function(a, v) {
     _ASSERT && Math.assert(a);
     _ASSERT && Vec2.assert(v);
     var x = a * v.x;
