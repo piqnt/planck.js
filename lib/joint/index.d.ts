@@ -9,7 +9,10 @@ declare namespace planck {
   }
 
   interface JointEdge {
-    // TODO
+    other: Body;  // < provides quick access to the other body attached.
+    joint: Joint;  // < the joint
+    prev: JointEdge | null;  // < the previous joint edge in the body's joint list
+    next: JointEdge | null;  // < the next joint edge in the body's joint list
   }
 
   interface Joint {
