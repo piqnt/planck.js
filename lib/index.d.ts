@@ -133,8 +133,8 @@ declare namespace planck {
     m_angularDamping: number;
     m_gravityScale: number;
     m_sleepTime: number;
-    m_jointList: Joint | null;
-    m_contactList: Contact | null;
+    m_jointList: JointEdge | null;
+    m_contactList: ContactEdge | null;
     m_fixtureList: Fixture | null;
     m_prev: Body | null;
     m_next: Body | null;
@@ -145,12 +145,12 @@ declare namespace planck {
     setUserData(data: any): void
     getUserData(): unknown;
     getFixtureList(): Fixture | null;
-    getJointList(): Joint | null;
+    getJointList(): JointEdge | null;
     /**
      * Warning: this list changes during the time step and you may miss some
      * collisions if you don't use ContactListener.
      */
-    getContactList(): Contact | null;
+    getContactList(): ContactEdge | null;
     isStatic(): boolean;
     isDynamic(): boolean;
     isKinematic(): boolean;
