@@ -120,6 +120,8 @@ declare namespace planck {
     new(): Vec3;
     (): Vec3;
 
+    // neo(x: number, y: number, z: number): Vec3; internal
+    clone(v: Vec3): Vec3;
     areEqual(v: Vec3, w: Vec3): boolean;
     dot(v: Vec3, w: Vec3): number;
     cross(v: Vec3, w: Vec3): Vec3;
@@ -216,4 +218,60 @@ declare namespace planck {
     getInverse(): Mat22;
     solve(v: Vec2): Vec2;
   }
+
+  let Mat22: {
+    new(a: number, b: number, c: number, d: number): Mat22;
+    (a: number, b: number, c: number, d: number): Mat22;
+
+    new(a: { x: number; y: number }, b: { x: number; y: number }): Mat22;
+    (a: { x: number; y: number }, b: { x: number; y: number }): Mat22;
+
+    new(): Mat22;
+    (): Mat22;
+
+    isValid(o: any): boolean;
+    assert(o: any): void;
+
+    mul(mx: Mat22, my: Mat22): Mat22;
+    mul(mx: Mat22, v: Vec2): Vec2;
+    mulVec2(mx: Mat22, v: Vec2): Vec2;
+    mulMat22(mx: Mat22, my: Mat22): Mat22;
+    mulT(mx: Mat22, my: Mat22): Mat22;
+    mulT(mx: Mat22, v: Vec2): Vec2;
+    abs(mx): Mat22;
+    add(mx1, mx2): Mat22;
+  };
+
+  interface Mat33 {
+    ex: Vec3;
+    ey: Vec3;
+    ez: Vec3;
+
+    toString(): string;
+    setZero(): Mat33;
+    solve33(v: Vec3): Vec3;
+    solve22(v: Vec2): Vec2;
+    getInverse22(M: Mat33): void;
+    getSymInverse33(M: Mat33): void;
+  }
+
+  let Mat33: {
+    new(a: Vec3, b: Vec3, c: Vec3): Mat33;
+    (a: any, b: any, c: any): Mat33;
+
+    new(a: any, b: any, c: any): Mat33;
+    (a: any, b: any, c: any): Mat33;
+
+    new(): Mat33;
+    (): Mat33;
+
+    isValid(o: any): boolean;
+    assert(o: any): void;
+
+    mul(a: Mat33, b: Vec2): Vec2;
+    mul(a: Mat33, b: Vec3): Vec3;
+    mulVec3(a: Mat33, b: Vec3): Vec3;
+    mulVec2(a: Mat33, b: Vec2): Vec2;
+    add(a: Mat33, b: Mat33): Vec3;
+  };
 }
