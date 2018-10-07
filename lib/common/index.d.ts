@@ -272,6 +272,6 @@ declare namespace planck {
     mul(a: Mat33, b: Vec3): Vec3;
     mulVec3(a: Mat33, b: Vec3): Vec3;
     mulVec2(a: Mat33, b: Vec2): Vec2;
-    add(a: Mat33, b: Mat33): Vec3;
+    add(a: Mat33, b: Mat33): Mat33;
   };
 }
