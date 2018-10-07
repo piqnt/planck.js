@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.2.5
+ * Planck.js v0.2.6
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -28,6 +28,10 @@ exports.Math = require("./common/Math");
 exports.Vec2 = require("./common/Vec2");
 
 exports.Vec3 = require("./common/Vec3");
+
+exports.Mat22 = require("./common/Mat22");
+
+exports.Mat33 = require("./common/Mat33");
 
 exports.Transform = require("./common/Transform");
 
@@ -102,7 +106,7 @@ exports.internal.TimeOfImpact = require("./collision/TimeOfImpact");
 exports.internal.DynamicTree = require("./collision/DynamicTree");
 
 exports.internal.Settings = require("./Settings");
-},{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Manifold":6,"./Settings":7,"./Shape":8,"./World":10,"./collision/AABB":11,"./collision/Distance":13,"./collision/DynamicTree":14,"./collision/TimeOfImpact":15,"./common/Math":18,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/Vec3":24,"./common/stats":26,"./joint/DistanceJoint":27,"./joint/FrictionJoint":28,"./joint/GearJoint":29,"./joint/MotorJoint":30,"./joint/MouseJoint":31,"./joint/PrismaticJoint":32,"./joint/PulleyJoint":33,"./joint/RevoluteJoint":34,"./joint/RopeJoint":35,"./joint/WeldJoint":36,"./joint/WheelJoint":37,"./shape/BoxShape":38,"./shape/ChainShape":39,"./shape/CircleShape":40,"./shape/CollideCircle":41,"./shape/CollideCirclePolygone":42,"./shape/CollideEdgeCircle":43,"./shape/CollideEdgePolygon":44,"./shape/CollidePolygon":45,"./shape/EdgeShape":46,"./shape/PolygonShape":47}],2:[function(require,module,exports){
+},{"./Body":2,"./Contact":3,"./Fixture":4,"./Joint":5,"./Manifold":6,"./Settings":7,"./Shape":8,"./World":10,"./collision/AABB":11,"./collision/Distance":13,"./collision/DynamicTree":14,"./collision/TimeOfImpact":15,"./common/Mat22":16,"./common/Mat33":17,"./common/Math":18,"./common/Rot":20,"./common/Sweep":21,"./common/Transform":22,"./common/Vec2":23,"./common/Vec3":24,"./common/stats":26,"./joint/DistanceJoint":27,"./joint/FrictionJoint":28,"./joint/GearJoint":29,"./joint/MotorJoint":30,"./joint/MouseJoint":31,"./joint/PrismaticJoint":32,"./joint/PulleyJoint":33,"./joint/RevoluteJoint":34,"./joint/RopeJoint":35,"./joint/WeldJoint":36,"./joint/WheelJoint":37,"./shape/BoxShape":38,"./shape/ChainShape":39,"./shape/CircleShape":40,"./shape/CollideCircle":41,"./shape/CollideCirclePolygone":42,"./shape/CollideEdgeCircle":43,"./shape/CollideEdgePolygon":44,"./shape/CollidePolygon":45,"./shape/EdgeShape":46,"./shape/PolygonShape":47}],2:[function(require,module,exports){
 var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
 var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
@@ -2724,15 +2728,15 @@ function ManifoldPoint() {
  */
 function ContactID() {
     this.cf = new ContactFeature();
-    var key = "";
-    Object.defineProperty(this, "key", {
-        get: function() {
-            return this.cf.indexA + this.cf.indexB * 4 + this.cf.typeA * 16 + this.cf.typeB * 64;
-        },
-        enumerable: true,
-        configurable: true
-    });
 }
+
+Object.defineProperty(ContactID.prototype, "key", {
+    get: function() {
+        return this.cf.indexA + this.cf.indexB * 4 + this.cf.typeA * 16 + this.cf.typeB * 64;
+    },
+    enumerable: true,
+    configurable: true
+});
 
 ContactID.prototype.set = function(o) {
     // this.key = o.key;
@@ -7586,7 +7590,7 @@ Mat33.mulVec2 = function(a, b) {
 Mat33.add = function(a, b) {
     _ASSERT && Mat33.assert(a);
     _ASSERT && Mat33.assert(b);
-    return new Vec3(a.x + b.x, a.y + b.y, a.z + b.z);
+    return new Mat33(Vec3.add(a.ex + b.ex), Vec3.add(a.ey + b.ey), Vec3.add(a.ez + b.ez));
 };
 
 
@@ -8731,6 +8735,19 @@ function Vec3(x, y, z) {
     }
     _ASSERT && Vec3.assert(this);
 }
+
+Vec3.neo = function(x, y, z) {
+    var obj = Object.create(Vec3.prototype);
+    obj.x = x;
+    obj.y = y;
+    obj.z = z;
+    return obj;
+};
+
+Vec3.clone = function(v) {
+    _ASSERT && Vec3.assert(v);
+    return Vec3.neo(v.x, v.y, v.z);
+};
 
 Vec3.prototype.toString = function() {
     return JSON.stringify(this);
@@ -13636,7 +13653,11 @@ function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
     manifold.localNormal.setZero();
     manifold.pointCount = 1;
     manifold.points[0].localPoint.set(circleB.m_p);
-    manifold.points[0].id.key = 0;
+    // manifold.points[0].id.key = 0;
+    manifold.points[0].id.cf.indexA = 0;
+    manifold.points[0].id.cf.typeA = Manifold.e_vertex;
+    manifold.points[0].id.cf.indexB = 0;
+    manifold.points[0].id.cf.typeB = Manifold.e_vertex;
 }
 
 exports.CollideCircles = CollideCircles;
@@ -13714,7 +13735,11 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
         manifold.localNormal.set(normals[normalIndex]);
         manifold.localPoint.setCombine(.5, v1, .5, v2);
         manifold.points[0].localPoint = circleB.m_p;
-        manifold.points[0].id.key = 0;
+        // manifold.points[0].id.key = 0;
+        manifold.points[0].id.cf.indexA = 0;
+        manifold.points[0].id.cf.typeA = Manifold.e_vertex;
+        manifold.points[0].id.cf.indexB = 0;
+        manifold.points[0].id.cf.typeB = Manifold.e_vertex;
         return;
     }
     // Compute barycentric coordinates
@@ -13730,7 +13755,11 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
         manifold.localNormal.normalize();
         manifold.localPoint = v1;
         manifold.points[0].localPoint.set(circleB.m_p);
-        manifold.points[0].id.key = 0;
+        // manifold.points[0].id.key = 0;
+        manifold.points[0].id.cf.indexA = 0;
+        manifold.points[0].id.cf.typeA = Manifold.e_vertex;
+        manifold.points[0].id.cf.indexB = 0;
+        manifold.points[0].id.cf.typeB = Manifold.e_vertex;
     } else if (u2 <= 0) {
         if (Vec2.distanceSquared(cLocal, v2) > radius * radius) {
             return;
@@ -13741,7 +13770,11 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
         manifold.localNormal.normalize();
         manifold.localPoint.set(v2);
         manifold.points[0].localPoint.set(circleB.m_p);
-        manifold.points[0].id.key = 0;
+        // manifold.points[0].id.key = 0;
+        manifold.points[0].id.cf.indexA = 0;
+        manifold.points[0].id.cf.typeA = Manifold.e_vertex;
+        manifold.points[0].id.cf.indexB = 0;
+        manifold.points[0].id.cf.typeB = Manifold.e_vertex;
     } else {
         var faceCenter = Vec2.mid(v1, v2);
         var separation = Vec2.dot(cLocal, normals[vertIndex1]) - Vec2.dot(faceCenter, normals[vertIndex1]);
@@ -13753,7 +13786,11 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
         manifold.localNormal.set(normals[vertIndex1]);
         manifold.localPoint.set(faceCenter);
         manifold.points[0].localPoint.set(circleB.m_p);
-        manifold.points[0].id.key = 0;
+        // manifold.points[0].id.key = 0;
+        manifold.points[0].id.cf.indexA = 0;
+        manifold.points[0].id.cf.typeA = Manifold.e_vertex;
+        manifold.points[0].id.cf.indexB = 0;
+        manifold.points[0].id.cf.typeB = Manifold.e_vertex;
     }
 }
 
@@ -13849,7 +13886,7 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
         manifold.localPoint.set(P);
         manifold.pointCount = 1;
         manifold.points[0].localPoint.set(circleB.m_p);
-        manifold.points[0].id.key = 0;
+        // manifold.points[0].id.key = 0;
         manifold.points[0].id.cf.indexA = 0;
         manifold.points[0].id.cf.typeA = Manifold.e_vertex;
         manifold.points[0].id.cf.indexB = 0;
@@ -13880,7 +13917,7 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
         manifold.localPoint.set(P);
         manifold.pointCount = 1;
         manifold.points[0].localPoint.set(circleB.m_p);
-        manifold.points[0].id.key = 0;
+        // manifold.points[0].id.key = 0;
         manifold.points[0].id.cf.indexA = 1;
         manifold.points[0].id.cf.typeA = Manifold.e_vertex;
         manifold.points[0].id.cf.indexB = 0;
@@ -13906,7 +13943,7 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
     manifold.localPoint.set(A);
     manifold.pointCount = 1;
     manifold.points[0].localPoint.set(circleB.m_p);
-    manifold.points[0].id.key = 0;
+    // manifold.points[0].id.key = 0;
     manifold.points[0].id.cf.indexA = 0;
     manifold.points[0].id.cf.typeA = Manifold.e_face;
     manifold.points[0].id.cf.indexB = 0;
