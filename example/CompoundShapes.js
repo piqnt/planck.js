@@ -52,13 +52,13 @@ planck.testbed('CompoundShapes', function(testbed) {
   xf1.q.set(0.3524 * Math.PI);
   xf1.p = xf1.q.getXAxis();
 
-  var triangle1 = pl.Polygon(Transform.mulAll(xf1, [Vec2(-1.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 0.5)]));
+  var triangle1 = pl.Polygon([Vec2(-1.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 0.5)].map(Transform.mulFn(xf1)));
 
   var xf2 = pl.Transform();
   xf2.q.set(-0.3524 * Math.PI);
   xf2.p = Vec2.neg(xf2.q.getXAxis());
 
-  var triangle2 = pl.Polygon(Transform.mulAll(xf2, [Vec2(-1.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 0.5)]));
+  var triangle2 = pl.Polygon([Vec2(-1.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 0.5)].map(Transform.mulFn(xf2)));
 
   for (var i = 0; i < 10; ++i) {
     var body = world.createDynamicBody({

@@ -37,10 +37,10 @@ planck.testbed('PolyCollision', function(testbed) {
 
     testbed.status('point count', manifold.pointCount);
 
-    var vA = Transform.mulAll(transformA, polygonA.m_vertices);
+    var vA = polygonA.m_vertices.map(Transform.mulFn(transformA));
     testbed.drawPolygon(vA, testbed.color(0.9, 0.9, 0.9));
 
-    var vB = Transform.mulAll(transformB, polygonB.m_vertices);
+    var vB = polygonB.m_vertices.map(Transform.mulFn(transformB));
     testbed.drawPolygon(vB, testbed.color(0.9, 0.9, 0.9));
 
     for (var i = 0; i < manifold.pointCount; ++i) {

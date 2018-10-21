@@ -158,8 +158,9 @@ declare namespace planck {
     mul(a: Transform, b: Transform): Transform;
     mul(a: Transform, b: Vec2[]): Vec2[];
     mul(a: Transform, b: Transform[]): Transform[];
-    mulAll(a: Transform, b: Vec2[]): Vec2[];
-    mulAll(a: Transform, b: Transform[]): Transform[];
+    // deprecated
+    // mulAll(a: Transform, b: Vec2[]): Vec2[];
+    // mulAll(a: Transform, b: Transform[]): Transform[];
     mulVec2(a: Transform, b: Vec2): Vec2;
     mulXf(a: Transform, b: Transform): Transform;
     mulT(a: Transform, b: Vec2): Vec2;
