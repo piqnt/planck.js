@@ -72,13 +72,13 @@ planck.testbed('8 Ball', function(testbed) {
     angularDamping: 1
   };
 
-  world.createBody().createFixture(pl.Polygon(railV.map(scale(+1, +1))), railFixDef);
-  world.createBody().createFixture(pl.Polygon(railV.map(scale(-1, +1))), railFixDef);
+  world.createBody().createFixture(pl.Polygon(railV.map(Vec2.scaleFn(+1, +1))), railFixDef);
+  world.createBody().createFixture(pl.Polygon(railV.map(Vec2.scaleFn(-1, +1))), railFixDef);
 
-  world.createBody().createFixture(pl.Polygon(railH.map(scale(+1, +1))), railFixDef);
-  world.createBody().createFixture(pl.Polygon(railH.map(scale(-1, +1))), railFixDef);
-  world.createBody().createFixture(pl.Polygon(railH.map(scale(+1, -1))), railFixDef);
-  world.createBody().createFixture(pl.Polygon(railH.map(scale(-1, -1))), railFixDef);
+  world.createBody().createFixture(pl.Polygon(railH.map(Vec2.scaleFn(+1, +1))), railFixDef);
+  world.createBody().createFixture(pl.Polygon(railH.map(Vec2.scaleFn(-1, +1))), railFixDef);
+  world.createBody().createFixture(pl.Polygon(railH.map(Vec2.scaleFn(+1, -1))), railFixDef);
+  world.createBody().createFixture(pl.Polygon(railH.map(Vec2.scaleFn(-1, -1))), railFixDef);
 
   world.createBody().createFixture(pl.Circle(Vec2(0, -height * .5 - POCKET_R * 1.5), POCKET_R), pocketFixDef);
   world.createBody().createFixture(pl.Circle(Vec2(0, +height * .5 + POCKET_R * 1.5), POCKET_R), pocketFixDef);
@@ -89,7 +89,7 @@ planck.testbed('8 Ball', function(testbed) {
   world.createBody().createFixture(pl.Circle(Vec2(+width * .5 + POCKET_R * .7, -height * .5 - POCKET_R * .7), POCKET_R), pocketFixDef);
   world.createBody().createFixture(pl.Circle(Vec2(-width * .5 - POCKET_R * .7, -height * .5 - POCKET_R * .7), POCKET_R), pocketFixDef);
 
-  var balls = rack(BALL_R).map(translate(width / 4, 0));
+  var balls = rack(BALL_R).map(Vec2.translateFn(width / 4, 0));
 
   balls.push({x: -width / 4, y: 0});
 
@@ -115,8 +115,8 @@ planck.testbed('8 Ball', function(testbed) {
     var fA = contact.getFixtureA(), bA = fA.getBody();
     var fB = contact.getFixtureB(), bB = fB.getBody();
 
-    var pocket = fA.getUserData() == pocketFixDef.userData && bA || fB.getUserData() == pocketFixDef.userData && bB;
-    var ball = fA.getUserData() == ballFixDef.userData && bA || fB.getUserData() == ballFixDef.userData && bB;
+    var pocket = fA.getUserData() === pocketFixDef.userData && bA || fB.getUserData() === pocketFixDef.userData && bB;
+    var ball = fA.getUserData() === ballFixDef.userData && bA || fB.getUserData() === ballFixDef.userData && bB;
 
     // do not change world immediately
     setTimeout(function() {
@@ -141,18 +141,6 @@ planck.testbed('8 Ball', function(testbed) {
       }
     }
     return balls;
-  }
-
-  function scale(x, y) {
-    return function(v) {
-      return pl.Vec2(v.x * x, v.y * y);
-    };
-  }
-
-  function translate(x, y) {
-    return function(v) {
-      return pl.Vec2(v.x + x, v.y + y);
-    };
   }
 
   function shuffleArray(array) {

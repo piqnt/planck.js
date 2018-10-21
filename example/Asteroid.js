@@ -30,6 +30,12 @@ planck.testbed('Asteroid', function(testbed) {
   var FIRE_RELOAD_TIME = 100;
   var BULLET_LIFE_TIME = 2000;
 
+  testbed.width = SPACE_WIDTH;
+  testbed.height = SPACE_HEIGHT;
+  testbed.step = tick;
+  testbed.ratio = 64;
+  testbed.y = 0;
+
   var asteroidRadius = 0.9;
   var asteroidSpeed = 2;
   var asteroidLevels = 4;
@@ -41,7 +47,8 @@ planck.testbed('Asteroid', function(testbed) {
   var allowCrashTime = 0;
   var allowFireTime = 0;
 
-  var world;
+  var world = pl.World();
+
   var asteroidBodies = [];
   var bulletBodies = [];
   var shipBody;
@@ -52,8 +59,6 @@ planck.testbed('Asteroid', function(testbed) {
     }
   };
 
-  world = pl.World();
-
   // Todo: check if several bullets hit the same asteroid in the same time step
   world.on('pre-solve', function(contact) {
     var fixtureA = contact.getFixtureA();
@@ -62,8 +67,8 @@ planck.testbed('Asteroid', function(testbed) {
     var bodyA = contact.getFixtureA().getBody();
     var bodyB = contact.getFixtureB().getBody();
 
-    var aship = bodyA == shipBody;
-    var bship = bodyB == shipBody;
+    var aship = bodyA === shipBody;
+    var bship = bodyB === shipBody;
     var abullet = fixtureA.getFilterCategoryBits() & BULLET;
     var bbullet = fixtureB.getFilterCategoryBits() & BULLET;
 
@@ -347,14 +352,6 @@ planck.testbed('Asteroid', function(testbed) {
   function rand(value) {
     return (Math.random() - 0.5) * (value || 1);
   }
-
-  var ui = {};
-
-  testbed.width = SPACE_WIDTH;
-  testbed.height = SPACE_HEIGHT;
-  testbed.step = tick;
-  testbed.ratio = 64;
-  testbed.y = 0;
 
   function uiStart() {
     console.log('Game started');

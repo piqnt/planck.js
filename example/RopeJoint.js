@@ -33,14 +33,14 @@ planck.testbed('RopeJoint', function(testbed) {
 
   ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
-  var fd = {};
-  fd.density = 20.0;
-  fd.friction = 0.2;
-  fd.filterCategoryBits = 0x0001;
-  fd.filterMaskBits = 0xFFFF & ~0x0002;
+  var segmentDef = {};
+  segmentDef.density = 20.0;
+  segmentDef.friction = 0.2;
+  segmentDef.filterCategoryBits = 0x0001;
+  segmentDef.filterMaskBits = 0xFFFF & ~0x0002;
 
-  var jd = {};
-  jd.collideConnected = false;
+  var segmentJointDef = {};
+  segmentJointDef.collideConnected = false;
 
   var N = 10;
   var y = 15.0;
@@ -51,39 +51,39 @@ planck.testbed('RopeJoint', function(testbed) {
     var bd = {};
     bd.type = 'dynamic';
     bd.position = Vec2(0.5 + 1.0 * i, y);
-    if (i == N - 1) {
+    if (i === N - 1) {
       shape = pl.Box(1.5, 1.5);
-      fd.density = 100.0;
-      fd.filterCategoryBits = 0x0002;
+      segmentDef.density = 100.0;
+      segmentDef.filterCategoryBits = 0x0002;
       bd.position = Vec2(1.0 * i, y);
       bd.angularDamping = 0.4;
     }
 
     var body = world.createBody(bd);
 
-    body.createFixture(shape, fd);
+    body.createFixture(shape, segmentDef);
 
     var anchor = Vec2(i, y);
-    world.createJoint(pl.RevoluteJoint(jd, prevBody, body, anchor));
+    world.createJoint(pl.RevoluteJoint(segmentJointDef, prevBody, body, anchor));
 
     prevBody = body;
   }
 
-  var m_ropeDef = {};
-  m_ropeDef.maxLength = N - 1.0 + 0.01;
-  m_ropeDef.localAnchorA = Vec2(0.0, y);
-  m_ropeDef.localAnchorB = Vec2(0, 0);
-  var m_rope = world.createJoint(pl.RopeJoint(m_ropeDef, ground, prevBody));
+  var ropeJointDef = {};
+  ropeJointDef.maxLength = N - 1.0 + 0.01;
+  ropeJointDef.localAnchorA = Vec2(0.0, y);
+  ropeJointDef.localAnchorB = Vec2(0, 0);
+  var rope = world.createJoint(pl.RopeJoint(ropeJointDef, ground, prevBody));
 
   testbed.info('X: Toggle the rope joint');
 
   testbed.keydown = function(code, char) {
     if (char === 'X') {
-      if (m_rope) {
-        world.destroyJoint(m_rope);
-        m_rope = null;
+      if (rope) {
+        world.destroyJoint(rope);
+        rope = null;
       } else {
-        m_rope = world.createJoint(pl.RopeJoint(m_ropeDef, ground, prevBody));
+        rope = world.createJoint(pl.RopeJoint(ropeJointDef, ground, prevBody));
       }
     }
 
@@ -91,7 +91,7 @@ planck.testbed('RopeJoint', function(testbed) {
   };
 
   function updateStatus() {
-    testbed.status('Rope', !!m_rope);
+    testbed.status('Rope', !!rope);
   }
 
   updateStatus();

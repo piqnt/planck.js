@@ -22,43 +22,43 @@ planck.testbed('DynamicTreeTest', function(testbed) {
 
   var world = new pl.World();
 
-  var e_actorCount = 128;
+  var ACTOR_COUNT = 128;
   var worldExtent = 15.0;
-  var m_proxyExtent = 0.5;
+  var proxyExtent = 0.5;
 
-  var m_tree = new pl.internal.DynamicTree();
-  var m_queryAABB = pl.AABB();
-  var m_rayCastInput = {};
-  var m_rayCastOutput = {};
-  var m_rayActor;
-  var m_actors = []; // Actor[e_actorCount];
-  var m_automated = false;
+  var tree = new pl.internal.DynamicTree();
+  var queryAABB = pl.AABB();
+  var rayCastInput = {};
+  var rayCastOutput = {};
+  var rayActor;
+  var actors = []; // Actor[e_actorCount];
+  var automated = false;
 
-  for (var i = 0; i < e_actorCount; ++i) {
-    var actor = m_actors[i] = new Actor();
-    GetRandomAABB(actor.aabb);
-    actor.proxyId = m_tree.createProxy(actor.aabb, actor);
+  for (var i = 0; i < ACTOR_COUNT; ++i) {
+    var actor = actors[i] = new Actor();
+    getRandomAABB(actor.aabb);
+    actor.proxyId = tree.createProxy(actor.aabb, actor);
   }
 
   var h = worldExtent;
-  m_queryAABB.lowerBound.set(-3.0, -4.0 + h);
-  m_queryAABB.upperBound.set(5.0, 6.0 + h);
+  queryAABB.lowerBound.set(-3.0, -4.0 + h);
+  queryAABB.upperBound.set(5.0, 6.0 + h);
 
-  m_rayCastInput.p1 = Vec2(-5.0, 5.0 + h);
-  m_rayCastInput.p2 = Vec2(7.0, -4.0 + h);
-  // m_rayCastInput.p1 = Vec2(0.0, 2.0 + h);
-  // m_rayCastInput.p2 = Vec2(0.0, -2.0 + h);
-  m_rayCastInput.maxFraction = 1.0;
+  rayCastInput.p1 = Vec2(-5.0, 5.0 + h);
+  rayCastInput.p2 = Vec2(7.0, -4.0 + h);
+  // rayCastInput.p1 = Vec2(0.0, 2.0 + h);
+  // rayCastInput.p2 = Vec2(0.0, -2.0 + h);
+  rayCastInput.maxFraction = 1.0;
 
   testbed.step = function() {
-    m_rayActor = null;
-    for (var i = 0; i < e_actorCount; ++i) {
-      m_actors[i].fraction = 1.0;
-      m_actors[i].overlap = false;
+    rayActor = null;
+    for (var i = 0; i < ACTOR_COUNT; ++i) {
+      actors[i].fraction = 1.0;
+      actors[i].overlap = false;
     }
 
-    if (m_automated == true) {
-      var actionCount = Math.max(1, e_actorCount >> 2);
+    if (automated == true) {
+      var actionCount = Math.max(1, ACTOR_COUNT >> 2);
 
       for (var i = 0; i < actionCount; ++i) {
         Action();
@@ -66,17 +66,17 @@ planck.testbed('DynamicTreeTest', function(testbed) {
     }
 
     Query();
-    RayCast();
+    rayCast();
 
-    for (var i = 0; i < e_actorCount; ++i) {
-      var actor = m_actors[i];
+    for (var i = 0; i < ACTOR_COUNT; ++i) {
+      var actor = actors[i];
       if (actor.proxyId == null)
         continue;
 
       var c = testbed.color(0.9, 0.9, 0.9);
-      if (actor == m_rayActor && actor.overlap) {
+      if (actor == rayActor && actor.overlap) {
         c = testbed.color(0.9, 0.6, 0.6);
-      } else if (actor == m_rayActor) {
+      } else if (actor == rayActor) {
         c = testbed.color(0.6, 0.9, 0.6);
       } else if (actor.overlap) {
         c = testbed.color(0.6, 0.6, 0.9);
@@ -85,56 +85,56 @@ planck.testbed('DynamicTreeTest', function(testbed) {
       testbed.drawAABB(actor.aabb, c);
     }
 
-    testbed.drawAABB(m_queryAABB, testbed.color(0.7, 0.7, 0.7));
-    testbed.drawSegment(m_rayCastInput.p1, m_rayCastInput.p2, c);
-    testbed.drawPoint(m_rayCastInput.p1, 6.0, testbed.color(0.2, 0.9, 0.2));
-    testbed.drawPoint(m_rayCastInput.p2, 6.0, testbed.color(0.9, 0.2, 0.2));
+    testbed.drawAABB(queryAABB, testbed.color(0.7, 0.7, 0.7));
+    testbed.drawSegment(rayCastInput.p1, rayCastInput.p2, c);
+    testbed.drawPoint(rayCastInput.p1, 6.0, testbed.color(0.2, 0.9, 0.2));
+    testbed.drawPoint(rayCastInput.p2, 6.0, testbed.color(0.9, 0.2, 0.2));
 
-    if (m_rayActor) {
-      var p = Vec2.combine(1 - m_rayActor.fraction, m_rayCastInput.p1, m_rayActor.fraction, m_rayCastInput.p2);
+    if (rayActor) {
+      var p = Vec2.combine(1 - rayActor.fraction, rayCastInput.p1, rayActor.fraction, rayCastInput.p2);
       testbed.drawPoint(p, 6.0, testbed.color(0.2, 0.2, 0.9));
     }
 
-    var height = m_tree.getHeight();
+    var height = tree.getHeight();
     testbed.status("dynamic tree height", height);
   };
 
   testbed.keydown = function(code, char) {
     switch (char) {
-    case 'A':
-      m_automated = !m_automated;
+    case 'Z':
+      automated = !automated;
       break;
 
     case 'C':
-      CreateProxy();
+      createProxy();
       break;
 
-    case 'D':
-      DestroyProxy();
+    case 'X':
+      destroyProxy();
       break;
 
     case 'M':
-      MoveProxy();
+      moveProxy();
       break;
     }
   };
 
-  function QueryCallback(proxyId) {
-    var actor = m_tree.getUserData(proxyId); // Actor
-    actor.overlap = pl.AABB.testOverlap(m_queryAABB, actor.aabb);
+  function queryCallback(proxyId) {
+    var actor = tree.getUserData(proxyId); // Actor
+    actor.overlap = pl.AABB.testOverlap(queryAABB, actor.aabb);
     return true;
   }
 
-  function RayCastCallback(input, proxyId) {
-    var actor = m_tree.getUserData(proxyId);
+  function rayCastCallback(input, proxyId) {
+    var actor = tree.getUserData(proxyId);
 
     var output = {}; // RayCastOutput
     var hit = actor.aabb.rayCast(output, input);
 
     if (hit) {
-      m_rayCastOutput = output;
-      m_rayActor = actor;
-      m_rayActor.fraction = output.fraction;
+      rayCastOutput = output;
+      rayActor = actor;
+      rayActor.fraction = output.fraction;
       return output.fraction;
     }
 
@@ -148,16 +148,16 @@ planck.testbed('DynamicTreeTest', function(testbed) {
     this.proxyId;
   }
 
-  function GetRandomAABB(aabb) {
-    var w = Vec2(2.0 * m_proxyExtent, 2.0 * m_proxyExtent);
-    // aabb.lowerBound.x = -m_proxyExtent;
-    // aabb.lowerBound.y = -m_proxyExtent + worldExtent;
+  function getRandomAABB(aabb) {
+    var w = Vec2(2.0 * proxyExtent, 2.0 * proxyExtent);
+    // aabb.lowerBound.x = -proxyExtent;
+    // aabb.lowerBound.y = -proxyExtent + worldExtent;
     aabb.lowerBound.x = pl.Math.random(-worldExtent, worldExtent);
     aabb.lowerBound.y = pl.Math.random(0.0, 2.0 * worldExtent);
     aabb.upperBound = w.add(aabb.lowerBound);
   }
 
-  function MoveAABB(aabb) {
+  function moveAABB(aabb) {
     var d = Vec2();
     d.x = pl.Math.random(-0.5, 0.5);
     d.y = pl.Math.random(-0.5, 0.5);
@@ -175,42 +175,42 @@ planck.testbed('DynamicTreeTest', function(testbed) {
     aabb.upperBound.add(c).sub(c0);
   }
 
-  function CreateProxy() {
-    for (var i = 0; i < e_actorCount; ++i) {
-      var j = Math.random() * e_actorCount | 0;
-      var actor = m_actors[j];
+  function createProxy() {
+    for (var i = 0; i < ACTOR_COUNT; ++i) {
+      var j = Math.random() * ACTOR_COUNT | 0;
+      var actor = actors[j];
       if (actor.proxyId == null) {
-        GetRandomAABB(actor.aabb);
-        actor.proxyId = m_tree.createProxy(actor.aabb, actor);
+        getRandomAABB(actor.aabb);
+        actor.proxyId = tree.createProxy(actor.aabb, actor);
         return;
       }
     }
   }
 
-  function DestroyProxy() {
-    for (var i = 0; i < e_actorCount; ++i) {
-      var j = Math.random() * e_actorCount | 0;
-      var actor = m_actors[j];
+  function destroyProxy() {
+    for (var i = 0; i < ACTOR_COUNT; ++i) {
+      var j = Math.random() * ACTOR_COUNT | 0;
+      var actor = actors[j];
       if (actor.proxyId != null) {
-        m_tree.destroyProxy(actor.proxyId);
+        tree.destroyProxy(actor.proxyId);
         actor.proxyId = null;
         return;
       }
     }
   }
 
-  function MoveProxy() {
-    for (var i = 0; i < e_actorCount; ++i) {
-      var j = Math.random() * e_actorCount | 0;
-      actor = m_actors[j];
+  function moveProxy() {
+    for (var i = 0; i < ACTOR_COUNT; ++i) {
+      var j = Math.random() * ACTOR_COUNT | 0;
+      actor = actors[j];
       if (actor.proxyId == null) {
         continue;
       }
 
       var aabb0 = actor.aabb;
-      MoveAABB(actor.aabb);
+      moveAABB(actor.aabb);
       var displacement = Vec2.sub(actor.aabb.getCenter(), aabb0.getCenter());
-      m_tree.moveProxy(actor.proxyId, actor.aabb, displacement);
+      tree.moveProxy(actor.proxyId, actor.aabb, displacement);
       return;
     }
   }
@@ -220,58 +220,58 @@ planck.testbed('DynamicTreeTest', function(testbed) {
 
     switch (choice) {
     case 0:
-      CreateProxy();
+      createProxy();
       break;
 
     case 1:
-      DestroyProxy();
+      destroyProxy();
       break;
 
     default:
-      MoveProxy();
+      moveProxy();
     }
   }
 
   function Query() {
-    m_tree.query(m_queryAABB, QueryCallback);
+    tree.query(queryAABB, queryCallback);
 
-    for (var i = 0; i < e_actorCount; ++i) {
-      if (m_actors[i].proxyId == null) {
+    for (var i = 0; i < ACTOR_COUNT; ++i) {
+      if (actors[i].proxyId == null) {
         continue;
       }
 
-      var overlap = pl.AABB.testOverlap(m_queryAABB, m_actors[i].aabb);
-      // assert(overlap == m_actors[i].overlap);
+      var overlap = pl.AABB.testOverlap(queryAABB, actors[i].aabb);
+      // assert(overlap == actors[i].overlap);
     }
   }
 
-  function RayCast() {
-    m_rayActor = null;
+  function rayCast() {
+    rayActor = null;
 
-    var input = m_rayCastInput; // RayCastInput
+    var input = rayCastInput; // RayCastInput
 
     // Ray cast against the dynamic tree.
-    m_tree.rayCast(input, RayCastCallback);
+    tree.rayCast(input, rayCastCallback);
 
     // Brute force ray cast.
     var bruteActor = null; // Actor
     var bruteOutput = {}; // RayCastOutput
-    for (var i = 0; i < e_actorCount; ++i) {
-      if (m_actors[i].proxyId == null) {
+    for (var i = 0; i < ACTOR_COUNT; ++i) {
+      if (actors[i].proxyId == null) {
         continue;
       }
 
       var output = {}; // RayCastOutput
-      var hit = m_actors[i].aabb.rayCast(output, input);
+      var hit = actors[i].aabb.rayCast(output, input);
       if (hit) {
-        bruteActor = m_actors[i];
+        bruteActor = actors[i];
         bruteOutput = output;
         input.maxFraction = output.fraction;
       }
     }
 
     if (bruteActor != null) {
-      // Assert(bruteOutput.fraction == m_rayCastOutput.fraction);
+      // Assert(bruteOutput.fraction == rayCastOutput.fraction);
     }
   }
 

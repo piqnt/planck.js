@@ -23,28 +23,25 @@ planck.testbed('BodyTypes', function(testbed) {
 
   var SPEED = 3.0;
 
-  var m_attachment;
-  var m_platform;
-
   var ground = world.createBody();
   ground.createFixture(pl.Edge(Vec2(-20.0, 0.0), Vec2(20.0, 0.0)));
 
   // Define attachment
-  m_attachment = world.createDynamicBody(Vec2(0.0, 3.0));
-  m_attachment.createFixture(pl.Box(0.5, 2.0), 2.0);
+  var attachment = world.createDynamicBody(Vec2(0.0, 3.0));
+  attachment.createFixture(pl.Box(0.5, 2.0), 2.0);
 
   // Define platform
-  m_platform = world.createDynamicBody(Vec2(-4.0, 5.0));
+  var platform = world.createDynamicBody(Vec2(-4.0, 5.0));
 
-  m_platform.createFixture(pl.Box(0.5, 4.0, Vec2(4.0, 0.0), 0.5 * Math.PI), {
-    friction : 0.6,
-    density : 2.0
-  });
+  platform.createFixture(
+    pl.Box(0.5, 4.0, Vec2(4.0, 0.0), 0.5 * Math.PI),
+    { friction : 0.6, density : 2.0 }
+  );
 
   world.createJoint(pl.RevoluteJoint({
     maxMotorTorque : 50.0,
     enableMotor : true
-  }, m_attachment, m_platform, Vec2(0.0, 5.0)));
+  }, attachment, platform, Vec2(0.0, 5.0)));
 
   world.createJoint(pl.PrismaticJoint({
     maxMotorForce : 1000.0,
@@ -52,35 +49,38 @@ planck.testbed('BodyTypes', function(testbed) {
     lowerTranslation : -10.0,
     upperTranslation : 10.0,
     enableLimit : true
-  }, ground, m_platform, Vec2(0.0, 5.0), Vec2(1.0, 0.0)));
+  }, ground, platform, Vec2(0.0, 5.0), Vec2(1.0, 0.0)));
 
   // Create a payload
   var payload = world.createDynamicBody(Vec2(0.0, 8.0));
-  payload.createFixture(pl.Box(0.75, 0.75), {friction : 0.6, density : 2.0});
+  payload.createFixture(
+    pl.Box(0.75, 0.75),
+    { friction : 0.6, density : 2.0 }
+  );
 
   testbed.keydown = function(code, char) {
     if (char === 'Z') {
-      m_platform.setDynamic();
+      platform.setDynamic();
 
     } else if (char === 'X') {
-      m_platform.setStatic();
+      platform.setStatic();
 
     } else if (char === 'C') {
-      m_platform.setKinematic();
-      m_platform.setLinearVelocity(Vec2(-SPEED, 0.0));
-      m_platform.setAngularVelocity(0.0);
+      platform.setKinematic();
+      platform.setLinearVelocity(Vec2(-SPEED, 0.0));
+      platform.setAngularVelocity(0.0);
     }
   };
 
   testbed.step = function(settings) {
     // Drive the kinematic body.
-    if (m_platform.isKinematic()) {
-      var p = m_platform.getTransform().p;
-      var v = m_platform.getLinearVelocity();
+    if (platform.isKinematic()) {
+      var p = platform.getTransform().p;
+      var v = platform.getLinearVelocity();
 
       if ((p.x < -10.0 && v.x < 0.0) || (p.x > 10.0 && v.x > 0.0)) {
         v.x = -v.x;
-        m_platform.setLinearVelocity(v);
+        platform.setLinearVelocity(v);
       }
     }
   };

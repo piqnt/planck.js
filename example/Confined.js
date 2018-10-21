@@ -66,6 +66,7 @@ planck.testbed('Confined', function(testbed) {
     }
   };
 
+  var stepCount = 0;
   testbed.step = function() {
     var sleeping = true;
     for (var b = world.getBodyList(); b; b = b.getNext()) {
@@ -75,8 +76,8 @@ planck.testbed('Confined', function(testbed) {
     }
 
     // ?
-    // if (world.m_stepCount == 180) {
-    //   world.m_stepCount += 0;
+    // if (stepCount++ == 180) {
+    //   stepCount += 0;
     // }
 
     if (sleeping) {

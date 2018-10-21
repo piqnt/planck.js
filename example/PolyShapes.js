@@ -21,21 +21,22 @@ planck.testbed('PolyShapes', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  var e_maxBodies = 256;
+  var MAX_BODIES = 256;
+
   var bodies = [];
-  var bodyIndex = 0;
-  var polygons = [];
+
+  var shapes = [];
 
   var ground = world.createBody();
   ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
-  polygons[0] = pl.Polygon([
+  shapes[0] = pl.Polygon([
     Vec2(-0.5, 0.0),
     Vec2(0.5, 0.0),
     Vec2(0.0, 1.5)
   ]);
 
-  polygons[1] = pl.Polygon([
+  shapes[1] = pl.Polygon([
     Vec2(-0.1, 0.0),
     Vec2(0.1, 0.0),
     Vec2(0.0, 1.5)
@@ -46,27 +47,25 @@ planck.testbed('PolyShapes', function(testbed) {
     var b = w / (2.0 + Math.sqrt(2.0));
     var s = Math.sqrt(2.0) * b;
 
-    var vertices = [];
-    vertices[0] = Vec2(0.5 * s, 0.0);
-    vertices[1] = Vec2(0.5 * w, b);
-    vertices[2] = Vec2(0.5 * w, b + s);
-    vertices[3] = Vec2(0.5 * s, w);
-    vertices[4] = Vec2(-0.5 * s, w);
-    vertices[5] = Vec2(-0.5 * w, b + s);
-    vertices[6] = Vec2(-0.5 * w, b);
-    vertices[7] = Vec2(-0.5 * s, 0.0);
-
-    polygons[2] = pl.Polygon(vertices);
+    shapes[2] = pl.Polygon([
+      Vec2(0.5 * s, 0.0),
+      Vec2(0.5 * w, b),
+      Vec2(0.5 * w, b + s),
+      Vec2(0.5 * s, w),
+      Vec2(-0.5 * s, w),
+      Vec2(-0.5 * w, b + s),
+      Vec2(-0.5 * w, b),
+      Vec2(-0.5 * s, 0.0),
+    ]);
   }
 
-  polygons[3] = pl.Box(0.5, 0.5);
+  shapes[3] = pl.Box(0.5, 0.5);
 
-  var circle = pl.Circle(0.5);
+  shapes[4] = pl.Circle(0.5);
 
-  function Create(index) {
-    if (bodies[bodyIndex] != null) {
-      world.destroyBody(bodies[bodyIndex]);
-      bodies[bodyIndex] = null;
+  function createBody(index) {
+    if (bodies.length > MAX_BODIES) {
+      world.destroyBody(bodies.shift());
     }
 
     var bd = {};
@@ -76,71 +75,55 @@ planck.testbed('PolyShapes', function(testbed) {
     bd.position = Vec2(x, 10.0);
     bd.angle = Math.random() * 2 * Math.PI - Math.PI;
 
-    if (index == 4) {
+    if (index === 4) {
       bd.angularDamping = 0.02;
     }
 
-    bodies[bodyIndex] = world.createBody(bd);
+    var body = world.createBody(bd);
 
-    if (index < 4) {
-      var fd = {};
-      fd.density = 1.0;
-      fd.friction = 0.3;
-      bodies[bodyIndex].createFixture(polygons[index], fd);
-    } else {
-      var fd = {};
-      fd.density = 1.0;
-      fd.friction = 0.3;
+    body.createFixture(shapes[index % shapes.length], {
+      density: 1.0,
+      friction: 0.3,
+    });
 
-      bodies[bodyIndex].createFixture(circle, fd);
-    }
-
-    bodyIndex = (bodyIndex + 1) % e_maxBodies;
+    bodies.push(body);
   }
 
-  function DestroyBody() {
-    for (var i = 0; i < e_maxBodies; ++i) {
-      if (bodies[i] != null) {
-        world.destroyBody(bodies[i]);
-        bodies[i] = null;
-        return;
-      }
-    }
+  function destroyBody() {
+    world.destroyBody(bodies.shift());
   }
 
   testbed.keydown = function(code, char) {
     switch (char) {
     case '1':
-      Create(1);
+      createBody(1);
       break;
 
     case '2':
-      Create(2);
+      createBody(2);
       break;
 
     case '3':
-      Create(3);
+      createBody(3);
       break;
 
     case '4':
-      Create(4);
+      createBody(4);
       break;
 
     case '5':
-      Create(5);
+      createBody(5);
       break;
 
     case 'Z':
-      for (var i = 0; i < e_maxBodies; i += 2) {
-        if (bodies[i]) {
-          var active = bodies[i].isActive();
-          bodies[i].setActive(!active);
-        }
+      for (var i = 0; i < bodies.length; i += 2) {
+        var body = bodies[i];
+        body.setActive(!body.isActive());
       }
       break;
 
     case 'X':
-      DestroyBody();
+      destroyBody();
       break;
     }
   };
@@ -148,14 +131,13 @@ planck.testbed('PolyShapes', function(testbed) {
   testbed.info("1-5: Drop new objects, Z: Activate/deactivate some bodies, X: Destroy an object");
 
   testbed.step = function() {
-    var callback = PolyShapesCallback();
-
+    AABBQueryListener.reset();
     var aabb = pl.AABB();
-    callback.m_circle.computeAABB(aabb, callback.m_transform, 0);
+    AABBQueryListener.circle.computeAABB(aabb, AABBQueryListener.transform, 0);
 
-    world.queryAABB(aabb, callback.ReportFixture);
+    world.queryAABB(aabb, AABBQueryListener.callback);
 
-    testbed.drawCircle(callback.m_circle.m_p, callback.m_circle.m_radius, testbed.color(0.4, 0.7, 0.8));
+    testbed.drawCircle(AABBQueryListener.circle.m_p, AABBQueryListener.circle.m_radius, testbed.color(0.4, 0.7, 0.8));
   };
 
   function drawFixture(fixture) {
@@ -192,37 +174,40 @@ planck.testbed('PolyShapes', function(testbed) {
   // that overlap an AABB. Of those, we use TestOverlap to determine which fixtures
   // overlap a circle. Up to 4 overlapped fixtures will be highlighted with a
   // yellow border.
-  function PolyShapesCallback() {
+  var AABBQueryListener = (function() {
     var def = {};
 
-    def.m_circle = pl.Circle(Vec2(0.0, 1.1), 2.0);
-    def.m_transform = pl.Transform();
-    var m_count = 0;
+    def.circle = pl.Circle(Vec2(0.0, 1.1), 2.0);
+    def.transform = pl.Transform();
+    var count = 0;
 
-    var e_maxCount = 40;
+    var MAX_COUNT = 40;
 
-    // Called for each fixture found in the query AABB.
+    def.reset = function() {
+      count = 0;
+    };
+      // Called for each fixture found in the query AABB.
     // return false to terminate the query.
-    def.ReportFixture = function(fixture) {
-      if (m_count == e_maxCount) {
+    def.callback = function(fixture) {
+      if (count === MAX_COUNT) {
         return false;
       }
 
       var body = fixture.getBody();
       var shape = fixture.getShape();
 
-      var overlap = pl.internal.Distance.testOverlap(shape, 0, def.m_circle, 0, body.getTransform(), def.m_transform);
+      var overlap = pl.internal.Distance.testOverlap(shape, 0, def.circle, 0, body.getTransform(), def.transform);
 
       if (overlap) {
         drawFixture(fixture);
-        ++m_count;
+        ++count;
       }
 
       return true;
-    }
+    };
 
     return def;
-  }
+  })();
 
   return world;
 });

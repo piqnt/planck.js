@@ -34,47 +34,51 @@ planck.testbed('MobileBalanced', function(testbed) {
   var a = 0.5;
   var h = Vec2(0.0, a);
 
-  var root = AddNode(ground, Vec2(), 0, 3.0, a);
+  var root = addNode(ground, Vec2(), 0, 3.0, a);
 
   world.createJoint(pl.RevoluteJoint({
+    bodyA: ground,
+    bodyB: root,
     localAnchorA : Vec2(),
     localAnchorB : h
-  }, ground, root));
+  }));
 
-  function AddNode(parent, localAnchor, depth, offset, a) {
+  function addNode(parent, localAnchor, depth, offset, a) {
 
     var h = Vec2(0.0, a);
 
     var p = Vec2().add(parent.getPosition()).add(localAnchor).sub(h);
 
-    var body = world.createBody({
-      type : 'dynamic',
-      position : p
-    });
+    var parent = world.createDynamicBody(p);
 
-    body.createFixture(pl.Box(0.25 * a, a), DENSITY);
+    parent.createFixture(pl.Box(0.25 * a, a), DENSITY);
 
-    if (depth == DEPTH) {
-      return body;
+    if (depth === DEPTH) {
+      return parent;
     }
 
-    body.createFixture(pl.Box(offset, 0.25 * a, Vec2(0, -a), 0.0), DENSITY);
+    parent.createFixture(pl.Box(offset, 0.25 * a, Vec2(0, -a), 0.0), DENSITY);
 
-    var a1 = Vec2(offset, -a);
-    var a2 = Vec2(-offset, -a);
-    var body1 = AddNode(body, a1, depth + 1, 0.5 * offset, a);
-    var body2 = AddNode(body, a2, depth + 1, 0.5 * offset, a);
+    var right = Vec2(offset, -a);
+    var left = Vec2(-offset, -a);
+    var rightChild = addNode(parent, right, depth + 1, 0.5 * offset, a);
+    var leftChild = addNode(parent, left, depth + 1, 0.5 * offset, a);
 
-    var jointDef = {};
-    jointDef.localAnchorB = h;
+    world.createJoint(pl.RevoluteJoint({
+      bodyA: parent,
+      bodyB: rightChild,
+      localAnchorA: right,
+      localAnchorB: h,
+    }));
 
-    jointDef.localAnchorA = a1;
-    world.createJoint(pl.RevoluteJoint(jointDef, body, body1));
+    world.createJoint(pl.RevoluteJoint({
+      bodyA: parent,
+      bodyB: leftChild,
+      localAnchorA: left,
+      localAnchorB: h,
+    }));
 
-    jointDef.localAnchorA = a2;
-    world.createJoint(pl.RevoluteJoint(jointDef, body, body2));
-
-    return body;
+    return parent;
   }
 
   return world;

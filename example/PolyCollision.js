@@ -21,26 +21,26 @@ planck.testbed('PolyCollision', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2, Transform = pl.Transform;
   var world = new pl.World(Vec2(0, -10));
 
-  var m_polygonA = pl.Box(0.2, 0.4);
-  var m_transformA = pl.Transform(Vec2(0.0, 0.0), 0.0);
+  var polygonA = pl.Box(2, 4);
+  var transformA = pl.Transform(Vec2(0.0, 0.0), 0.0);
 
-  var m_polygonB = pl.Box(0.5, 0.5);
-  var m_positionB = Vec2(19.345284, 1.5632932);
-  var m_angleB = 1.9160721;
-  var m_transformB = pl.Transform(m_positionB, m_angleB);
+  var polygonB = pl.Box(5, 5);
+  var positionB = Vec2(5, 4);
+  var angleB = 1.9160721;
+  var transformB = pl.Transform(positionB, angleB);
 
   testbed.step = function() {
     var manifold = new pl.internal.Manifold();
-    pl.internal.CollidePolygons(manifold, m_polygonA, m_transformA, m_polygonB, m_transformB);
+    pl.internal.CollidePolygons(manifold, polygonA, transformA, polygonB, transformB);
 
-    var worldManifold = manifold.getWorldManifold(null, m_transformA, m_polygonA.getRadius(), m_transformB, m_polygonB.getRadius());
+    var worldManifold = manifold.getWorldManifold(null, transformA, polygonA.getRadius(), transformB, polygonB.getRadius());
 
     testbed.status('point count', manifold.pointCount);
 
-    var vA = Transform.mulAll(m_transformA, m_polygonA.m_vertices);
+    var vA = Transform.mulAll(transformA, polygonA.m_vertices);
     testbed.drawPolygon(vA, testbed.color(0.9, 0.9, 0.9));
 
-    var vB = Transform.mulAll(m_transformB, m_polygonB.m_vertices);
+    var vB = Transform.mulAll(transformB, polygonB.m_vertices);
     testbed.drawPolygon(vB, testbed.color(0.9, 0.9, 0.9));
 
     for (var i = 0; i < manifold.pointCount; ++i) {
@@ -48,33 +48,34 @@ planck.testbed('PolyCollision', function(testbed) {
     }
   };
 
-  testbed.keydown = function(code, char) {
+  testbed.keydown = function() {
     if (testbed.activeKeys['left']) {
-      m_positionB.x -= 0.1;
+      positionB.x -= 0.2;
     }
 
     if (testbed.activeKeys['right']) {
-      m_positionB.x += 0.1;
+      positionB.x += 0.2;
     }
 
     if (testbed.activeKeys['down']) {
-      m_positionB.y -= 0.1;
+      positionB.y -= 0.2;
     }
 
     if (testbed.activeKeys['up']) {
-      m_positionB.y += 0.1;
+      positionB.y += 0.2;
     }
 
     if (testbed.activeKeys['Z']) {
-      m_angleB += 0.1;
+      angleB += 0.2;
     }
 
     if (testbed.activeKeys['X']) {
-      m_angleB -= 0.1;
+      angleB -= 0.2;
     }
 
-    m_transformB.set(m_positionB, m_angleB);
+    transformB.set(positionB, angleB);
   };
 
+  testbed.info('Use arrow keys to move and Z or X to rotate.')
   return world;
 });

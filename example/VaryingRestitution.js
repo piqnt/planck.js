@@ -21,24 +21,21 @@
 // due to position correction.
 planck.testbed('VaryingRestitution', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, -10))
+  var world = new pl.World(Vec2(0, -10));
 
-  world.createBody().createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)));
+  var ground = world.createBody();
+  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)));
 
   var restitution = [ 0.0, 0.1, 0.3, 0.5, 0.75, 0.9, 1.0 ];
 
   var circle = pl.Circle(1.0);
 
-  var fd = {};
-  fd.density = 1.0;
-
-  var bd = {};
-  bd.type = 'dynamic';
-
   for (var i = 0; i < restitution.length; ++i) {
-    bd.position = Vec2(-10.0 + 3.0 * i, 20.0);
-    fd.restitution = restitution[i];
-    world.createBody(bd).createFixture(circle, fd);
+    var ball = world.createDynamicBody(Vec2(-10.0 + 3.0 * i, 20.0));
+    ball.createFixture(circle, {
+      density: 1.0,
+      restitution: restitution[i]
+    });
   }
 
   return world;

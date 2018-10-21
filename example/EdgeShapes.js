@@ -21,13 +21,13 @@ planck.testbed('EdgeShapes', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  var e_maxBodies = 256;
+  var pause = false;
 
-  var m_bodyIndex;
-  var m_bodies = [];
-  var m_polygons = [];
+  var MAX_BODIES = 256;
 
-  // Ground body
+  var bodies = [];
+  var shapes = [];
+
   {
     var ground = world.createBody();
 
@@ -37,17 +37,16 @@ planck.testbed('EdgeShapes', function(testbed) {
       var x2 = x1 + 0.5;
       var y2 = 2.0 * Math.cos(x2 / 10.0 * Math.PI);
 
-      var shape = pl.Edge(Vec2(x1, y1), Vec2(x2, y2));
-      ground.createFixture(shape, 0.0);
+      ground.createFixture(pl.Edge(Vec2(x1, y1), Vec2(x2, y2)), 0.0);
 
       x1 = x2;
       y1 = y2;
     }
   }
 
-  m_polygons[0] = pl.Polygon([Vec2(-0.5, 0.0), Vec2(0.5, 0.0), Vec2(0.0, 1.5)]);
+  shapes[0] = pl.Polygon([Vec2(-0.5, 0.0), Vec2(0.5, 0.0), Vec2(0.0, 1.5)]);
 
-  m_polygons[1] = pl.Polygon([Vec2(-0.1, 0.0), Vec2(0.1, 0.0), Vec2(0.0, 1.5)]);
+  shapes[1] = pl.Polygon([Vec2(-0.1, 0.0), Vec2(0.1, 0.0), Vec2(0.0, 1.5)]);
 
   {
     var w = 1.0;
@@ -64,21 +63,18 @@ planck.testbed('EdgeShapes', function(testbed) {
     vertices[6] = Vec2(-0.5 * w, b);
     vertices[7] = Vec2(-0.5 * s, 0.0);
 
-    m_polygons[2] = pl.Polygon(vertices, 8);
+    shapes[2] = pl.Polygon(vertices);
   }
 
-  m_polygons[3] = pl.Box(0.5, 0.5);
+  shapes[3] = pl.Box(0.5, 0.5);
 
-  var m_circle = pl.Circle(0.5);
+  shapes[4] = pl.Circle(0.5);
 
-  m_bodyIndex = 0;
+  var angle = 0.0;
 
-  var m_angle = 0.0;
-
-  function Create(index) {
-    if (m_bodies[m_bodyIndex] != null) {
-      world.destroyBody(m_bodies[m_bodyIndex]);
-      m_bodies[m_bodyIndex] = null;
+  function createItem(index) {
+    if (bodies.length > MAX_BODIES) {
+      world.destroyBody(bodies.shift());
     }
 
     var bd = {};
@@ -90,108 +86,98 @@ planck.testbed('EdgeShapes', function(testbed) {
     bd.angle = pl.Math.random(-Math.PI, Math.PI);
     bd.type = 'dynamic';
 
-    if (index == 4) {
+    if (index === 4) {
       bd.angularDamping = 0.02;
     }
 
-    m_bodies[m_bodyIndex] = world.createBody(bd);
+    var body = world.createBody(bd);
 
-    if (index < 4) {
-      var fd = {};
-      fd.shape = m_polygons[index];
-      fd.friction = 0.3;
-      fd.density = 20.0;
-      m_bodies[m_bodyIndex].createFixture(fd);
-    } else {
-      var fd = {};
-      fd.shape = m_circle;
-      fd.friction = 0.3;
-      fd.density = 20.0;
-      m_bodies[m_bodyIndex].createFixture(fd);
-    }
+    var fd = {};
+    fd.shape = shapes[index];
+    fd.friction = 0.3;
+    fd.density = 20.0;
+    body.createFixture(fd);
 
-    m_bodyIndex = (m_bodyIndex + 1) % e_maxBodies;
+    bodies.push(body);
   }
 
-  function DestroyBody() {
-    for (var i = 0; i < e_maxBodies; ++i) {
-      if (m_bodies[i] != null) {
-        world.destroyBody(m_bodies[i]);
-        m_bodies[i] = null;
-        return;
-      }
-    }
+  function destroyBody() {
+    world.destroyBody(bodies.shift());
   }
 
   testbed.keydown = function(code, char) {
     switch (char) {
     case '1':
-      Create(0);
+      createItem(0);
       break;
     case '2':
-      Create(1);
+      createItem(1);
       break;
     case '3':
-      Create(2);
+      createItem(2);
       break;
     case '4':
-      Create(3);
+      createItem(3);
       break;
     case '5':
-      Create(4);
+      createItem(4);
       break;
     case 'X':
-      DestroyBody();
+      destroyBody();
+      break;
+    case 'Z':
+      pause = !pause;
       break;
     }
   };
 
   testbed.info('1-5: Drop new object, X: Destroy an object');
 
+  var RayCastListener = (function() {
+    var def = {};
+
+    def.callback = function(fixture, point, normal, fraction) {
+      def.fixture = fixture;
+      def.point = point;
+      def.normal = normal;
+      return fraction;
+    };
+
+    def.reset = function() {
+      def.fixture = null;
+      def.point = null;
+      def.normal = null;
+    };
+
+    return def;
+  })();
+
   testbed.step = function() {
-    var advanceRay = true; // settings.pause == 0 || settings.singleStep;
+    var advanceRay = !pause; // settings.pause == 0 || settings.singleStep;
 
     var L = 25.0;
     var point1 = Vec2(0.0, 10.0);
-    var d = Vec2(L * Math.cos(m_angle), -L * Math.abs(Math.sin(m_angle)));
+    var d = Vec2(L * Math.cos(angle), -L * Math.abs(Math.sin(angle)));
     var point2 = Vec2.add(point1, d);
 
-    world.rayCast(point1, point2, EdgeShapesCallback.initCallback());
+    RayCastListener.reset();
 
-    if (EdgeShapesCallback.m_fixture) {
-      testbed.drawPoint(EdgeShapesCallback.m_point, 5.0, testbed.color(0.4, 0.9, 0.4));
-      testbed.drawSegment(point1, EdgeShapesCallback.m_point, testbed.color(0.8, 0.8, 0.8));
+    world.rayCast(point1, point2, RayCastListener.callback);
 
-      var head = Vec2.combine(1, EdgeShapesCallback.m_point, 0.5, EdgeShapesCallback.m_normal);
-      testbed.drawSegment(EdgeShapesCallback.m_point, head, testbed.color(0.9, 0.9, 0.4));
+    if (RayCastListener.fixture) {
+      testbed.drawPoint(RayCastListener.point, 5.0, testbed.color(0.4, 0.9, 0.4));
+      testbed.drawSegment(point1, RayCastListener.point, testbed.color(0.8, 0.8, 0.8));
+
+      var head = Vec2.combine(1, RayCastListener.point, 0.5, RayCastListener.normal);
+      testbed.drawSegment(RayCastListener.point, head, testbed.color(0.9, 0.9, 0.4));
     } else {
       testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));
     }
 
     if (advanceRay) {
-      m_angle += 0.25 * Math.PI / 180.0;
+      angle += 0.25 * Math.PI / 180.0;
     }
   };
-
-  var EdgeShapesCallback = (function() {
-    var def = {};
-
-    function reportFixture(fixture, point, normal, fraction) {
-      def.m_fixture = fixture;
-      def.m_point = point;
-      def.m_normal = normal;
-      return fraction;
-    }
-
-    def.initCallback = function () {
-      def.m_fixture = null;
-      def.m_point = null;
-      def.m_normal = null;
-      return reportFixture;
-    };
-
-    return def;
-  })();
 
   return world;
 });

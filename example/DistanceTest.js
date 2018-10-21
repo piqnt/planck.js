@@ -27,28 +27,29 @@ planck.testbed('DistanceTest', function(testbed) {
 
   var world = pl.World();
 
-  var m_transformA = pl.Transform();
-  m_transformA.p.set(0.0, -0.2);
-  var m_polygonA = pl.Box(10.0, 0.2);
+  var transformA = pl.Transform();
+  transformA.p.set(0.0, -0.2);
 
-  var m_positionB = Vec2(12.017401, 0.13678508);
-  var m_angleB = -0.0109265;
-  var m_transformB = pl.Transform(m_positionB, m_angleB);
+  var polygonA = pl.Box(10.0, 0.2);
 
-  var m_polygonB = pl.Box(2.0, 0.1);
+  var positionB = Vec2(12.017401, 0.13678508);
+  var angleB = -0.0109265;
+  var transformB = pl.Transform(positionB, angleB);
+
+  var polygonB = pl.Box(2.0, 0.1);
 
   var bodyA = world.createBody();
-  var fixA = bodyA.createFixture(m_polygonA);
+  var fixA = bodyA.createFixture(polygonA);
 
   var bodyB = world.createBody();
-  var fixB = bodyB.createFixture(m_polygonB);
+  var fixB = bodyB.createFixture(polygonB);
 
   testbed.step = function() {
     var input = new DistanceInput();
-    input.proxyA.set(m_polygonA, 0);
-    input.proxyB.set(m_polygonB, 0);
-    input.transformA = m_transformA;
-    input.transformB = m_transformB;
+    input.proxyA.set(polygonA, 0);
+    input.proxyB.set(polygonB, 0);
+    input.transformA = transformA;
+    input.transformB = transformB;
     input.useRadii = true;
 
     var cache = new SimplexCache();
@@ -60,8 +61,8 @@ planck.testbed('DistanceTest', function(testbed) {
     testbed.status("Distance", output.distance);
     testbed.status("Iterations", output.iterations);
 
-    bodyA.setTransform(m_transformA);
-    bodyB.setTransform(m_transformB);
+    bodyA.setTransform(transformA);
+    bodyB.setTransform(transformB);
 
     var x1 = output.pointA;
     var x2 = output.pointB;
@@ -72,30 +73,30 @@ planck.testbed('DistanceTest', function(testbed) {
 
   testbed.keydown = function() {
     if (testbed.activeKeys['left']) {
-      m_positionB.x -= 0.1;
+      positionB.x -= 0.1;
     }
 
     if (testbed.activeKeys['right']) {
-      m_positionB.x += 0.1;
+      positionB.x += 0.1;
     }
 
     if (testbed.activeKeys['down']) {
-      m_positionB.y -= 0.1;
+      positionB.y -= 0.1;
     }
 
     if (testbed.activeKeys['up']) {
-      m_positionB.y += 0.1;
+      positionB.y += 0.1;
     }
 
     if (testbed.activeKeys['Z']) {
-      m_angleB += 0.1;
+      angleB += 0.1;
     }
 
     if (testbed.activeKeys['X']) {
-      m_angleB -= 0.1;
+      angleB -= 0.1;
     }
 
-    m_transformB.set(m_positionB, m_angleB);
+    transformB.set(positionB, angleB);
   };
 
   return world;

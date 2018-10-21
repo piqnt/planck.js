@@ -35,31 +35,23 @@ planck.testbed('Pulleys', function(testbed) {
 
   var shape = pl.Box(a, b);
 
-  var bd = {};
-  bd.type = 'dynamic';
-
   // bd.fixedRotation = true;
-  bd.position = Vec2(-10.0, y);
-  var body1 = world.createBody(bd);
-  body1.createFixture(shape, 5.0);
+  var box1 = world.createDynamicBody(Vec2(-10.0, y));
+  box1.createFixture(shape, 5.0);
 
-  bd.position = Vec2(10.0, y);
-  var body2 = world.createBody(bd);
-  body2.createFixture(shape, 5.0);
-
-  var pjd = {};
+  var box2 = world.createDynamicBody(Vec2(10.0, y));
+  box2.createFixture(shape, 5.0);
 
   var anchor1 = Vec2(-10.0, y + b);
   var anchor2 = Vec2(10.0, y + b);
   var groundAnchor1 = Vec2(-10.0, y + b + L);
   var groundAnchor2 = Vec2(10.0, y + b + L);
 
-  var m_joint1 = world.createJoint(pl.PulleyJoint(pjd, body1, body2,
-      groundAnchor1, groundAnchor2, anchor1, anchor2, 1.5));
+  var joint1 = world.createJoint(pl.PulleyJoint({}, box1, box2, groundAnchor1, groundAnchor2, anchor1, anchor2, 1.5));
 
   testbed.step = function() {
-    var ratio = m_joint1.getRatio();
-    var L = m_joint1.getCurrentLengthA() + ratio * m_joint1.getCurrentLengthB();
+    var ratio = joint1.getRatio();
+    var L = joint1.getCurrentLengthA() + ratio * joint1.getCurrentLengthB();
     testbed.status('ratio', ratio);
     testbed.status('L (L1 * ratio + L2)', L);
   };

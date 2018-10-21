@@ -23,38 +23,34 @@ planck.testbed('ContinuousTest', function(testbed) {
   
   var stats = pl.internal.stats;
 
-  var m_body;
-  var m_angularVelocity;
+  var bullet;
+  var angularVelocity;
 
-  var body = world.createBody(Vec2(0.0, 0.0));
+  var ground = world.createBody(Vec2(0.0, 0.0));
 
-  body.createFixture(pl.Edge(Vec2(-10.0, 0.0), Vec2(10.0, 0.0)), 0.0);
-  body.createFixture(pl.Box(0.2, 1.0, Vec2(0.5, 1.0), 0.0), 0.0);
+  ground.createFixture(pl.Edge(Vec2(-10.0, 0.0), Vec2(10.0, 0.0)), 0.0);
+  ground.createFixture(pl.Box(0.2, 1.0, Vec2(0.5, 1.0), 0.0), 0.0);
 
   if (1) {
-    var bd = {};
-    bd.position = Vec2(0.0, 20.0);
-    // bd.angle = 0.1;
+    // angle = 0.1;
+    bullet = world.createDynamicBody(Vec2(0.0, 20.0));
+    bullet.createFixture(pl.Box(2.0, 0.1), 1.0);
 
-    m_body = world.createDynamicBody(bd);
-    m_body.createFixture(pl.Box(2.0, 0.1), 1.0);
-
-    m_angularVelocity = pl.Math.random(-50.0, 50.0);
-    // m_angularVelocity = 46.661274;
-    m_body.setLinearVelocity(Vec2(0.0, -100.0));
-    m_body.setAngularVelocity(m_angularVelocity);
+    angularVelocity = pl.Math.random(-50.0, 50.0);
+    // angularVelocity = 46.661274;
+    bullet.setLinearVelocity(Vec2(0.0, -100.0));
+    bullet.setAngularVelocity(angularVelocity);
 
   } else {
-    var bd = {};
-    bd.position = Vec2(0.0, 2.0);
-    var body = world.createDynamicBody(bd);
-
     var shape = pl.Circle(0.5);
+
+    var body = world.createDynamicBody(Vec2(0.0, 2.0));
     body.createFixture(shape, 1.0);
 
-    bd.bullet = true;
-    bd.position = Vec2(0.0, 10.0);
-    body = world.createBody(bd);
+    var body = world.createDynamicBody({
+      bullet: true,
+      position: Vec2(0.0, 2.0),
+    });
     body.createFixture(shape, 1.0);
     body.setLinearVelocity(Vec2(0.0, -100.0));
   }
@@ -71,14 +67,15 @@ planck.testbed('ContinuousTest', function(testbed) {
     stats.toiTime = 0.0;
     stats.toiMaxTime = 0.0;
 
-    m_body.setTransform(Vec2(0.0, 20.0), 0.0);
-    m_angularVelocity = pl.Math.random(-50.0, 50.0);
-    m_body.setLinearVelocity(Vec2(0.0, -100.0));
-    m_body.setAngularVelocity(m_angularVelocity);
+    bullet.setTransform(Vec2(0.0, 20.0), 0.0);
+    angularVelocity = pl.Math.random(-50.0, 50.0);
+    bullet.setLinearVelocity(Vec2(0.0, -100.0));
+    bullet.setAngularVelocity(angularVelocity);
   }
 
   Launch();
 
+  var stepCount = 0;
   testbed.step = function() {
     testbed.status(stats);
 
@@ -92,7 +89,7 @@ planck.testbed('ContinuousTest', function(testbed) {
       // "ave [max] toi time = %.1 [%.1] (microseconds)", 1000.0 * stats.toiTime / float32(stats.toiCalls), 1000.0 * stats.toiMaxTime
     }
 
-    if (world.m_stepCount % 60 == 0) {
+    if (stepCount++ % 60 == 0) {
       Launch();
     }
   };

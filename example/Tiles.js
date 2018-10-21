@@ -23,9 +23,9 @@ planck.testbed('Tiles', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
   var world = pl.World(Vec2(0, -10));
 
-  var e_count = 20;
+  var COUNT = 20;
 
-  var m_fixtureCount = 0;
+  var fixtureCount = 0;
 
   var a = 0.5;
   var ground = world.createBody(Vec2(0, -a));
@@ -39,7 +39,7 @@ planck.testbed('Tiles', function(testbed) {
       position.x = -N * a;
       for (var i = 0; i < N; ++i) {
         ground.createFixture(pl.Box(a, a, position, 0.0), 0.0);
-        ++m_fixtureCount;
+        ++fixtureCount;
         position.x += 2.0 * a;
       }
       position.y -= 2.0 * a;
@@ -68,26 +68,23 @@ planck.testbed('Tiles', function(testbed) {
   var deltaX = Vec2(0.5625, 1.25);
   var deltaY = Vec2(1.125, 0.0);
 
-  var bd = {};
-  bd.type = 'dynamic';
-  for (var i = 0; i < e_count; ++i) {
-    y = x;
+  for (var i = 0; i < COUNT; ++i) {
+    y.set(x);
 
-    for (var j = i; j < e_count; ++j) {
-      bd.position = y;
+    for (var j = i; j < COUNT; ++j) {
 
       // bd.allowSleep = !(i == 0 && j == 0)
 
-      var body = world.createBody(bd);
+      var body = world.createDynamicBody(y);
       body.createFixture(shape, 5.0);
-      ++m_fixtureCount;
+      ++fixtureCount;
       y.add(deltaY);
     }
 
     x.add(deltaX);
   }
 
-  var m_createTime = Date.now();
+  var createTime = Date.now();
 
   testbed.step = function() {
     var height = world.getTreeHeight();
@@ -97,11 +94,11 @@ planck.testbed('Tiles', function(testbed) {
 
     testbed.status("dynamic tree height", height);
     testbed.status("min", minimumHeight);
-    testbed.status("create time", m_createTime + "ms");
-    testbed.status("fixture count", m_fixtureCount);
+    testbed.status("create time", createTime + "ms");
+    testbed.status("fixture count", fixtureCount);
 
     // var tree = world.m_broadPhase.m_tree;
-    // if (world.m_stepCount == 400) {
+    // if (stepCount++ == 400) {
     // tree.rebuildBottomUp();
     // }
   };

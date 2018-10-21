@@ -21,17 +21,11 @@ planck.testbed('HeavyOnLight', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  world.createBody().createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)))
+  world.createBody().createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)));
 
-  world.createBody({
-    type : 'dynamic',
-    position : Vec2(0.0, 4.5)
-  }).createFixture(pl.Circle(0.5), 10.0);
+  world.createDynamicBody(Vec2(0.0, 4.5)).createFixture(pl.Circle(0.5), 10.0);
 
-  world.createBody({
-    type : 'dynamic',
-    position : Vec2(0.0, 10.0)
-  }).createFixture(pl.Circle(5.0), 10.0);
+  world.createDynamicBody(Vec2(0.0, 10.0)).createFixture(pl.Circle(5.0), 10.0);
 
   return world;
 });

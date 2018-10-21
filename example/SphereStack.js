@@ -21,18 +21,18 @@ planck.testbed('SphereStack', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  var e_count = 10;
-  var m_bodies = [];
+  var COUNT = 10;
+  var bodies = [];
 
   var ground = world.createBody();
   ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
-  var shape = pl.Circle(1.0);
+  var circle = pl.Circle(1.0);
 
-  for (var i = 0; i < e_count; ++i) {
-    m_bodies[i] = world.createDynamicBody(Vec2(0.0, 4.0 + 3.0 * i));
-    m_bodies[i].createFixture(shape, 1.0);
-    m_bodies[i].setLinearVelocity(Vec2(0.0, -50.0));
+  for (var i = 0; i < COUNT; ++i) {
+    bodies[i] = world.createDynamicBody(Vec2(0.0, 4.0 + 3.0 * i));
+    bodies[i].createFixture(circle, 1.0);
+    bodies[i].setLinearVelocity(Vec2(0.0, -50.0));
   }
 
   return world;

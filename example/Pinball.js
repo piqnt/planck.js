@@ -37,8 +37,8 @@ planck.testbed('Pinball', function(testbed) {
   var pLeft = Vec2(-2.0, 0.0);
   var pRight = Vec2(2.0, 0.0);
 
-  var leftFlipper = world.createDynamicBody(pLeft);
-  var rightFlipper = world.createDynamicBody(pRight);
+  var leftFlipper = world.createDynamicBody(Vec2(-2.0, 0.0));
+  var rightFlipper = world.createDynamicBody(Vec2(2.0, 0.0));
 
   leftFlipper.createFixture(pl.Box(1.75, 0.1), 1.0);
   rightFlipper.createFixture(pl.Box(1.75, 0.1), 1.0);
@@ -51,12 +51,12 @@ planck.testbed('Pinball', function(testbed) {
 
   jd.lowerAngle = -30.0 * Math.PI / 180.0;
   jd.upperAngle = 5.0 * Math.PI / 180.0;
-  var leftJoint = pl.RevoluteJoint(jd, ground, leftFlipper, pLeft);
+  var leftJoint = pl.RevoluteJoint(jd, ground, leftFlipper, leftFlipper.getPosition());
   world.createJoint(leftJoint);
 
   jd.lowerAngle = -5.0 * Math.PI / 180.0;
   jd.upperAngle = 30.0 * Math.PI / 180.0;
-  var rightJoint = pl.RevoluteJoint(jd, ground, rightFlipper, pRight);
+  var rightJoint = pl.RevoluteJoint(jd, ground, rightFlipper, rightFlipper.getPosition());
   world.createJoint(rightJoint);
 
   // Circle character

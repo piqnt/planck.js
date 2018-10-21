@@ -27,10 +27,7 @@ planck.testbed('SliderCrank', function(testbed) {
 
 
   // Define crank.
-  var crank = world.createBody({
-    type: 'dynamic',
-    position: Vec2(0.0, 7.0)
-  });
+  var crank = world.createDynamicBody(Vec2(0.0, 7.0));
   crank.createFixture(pl.Box(0.5, 2.0), 2.0);
 
   var joint1 = world.createJoint(pl.RevoluteJoint({
@@ -41,10 +38,7 @@ planck.testbed('SliderCrank', function(testbed) {
 
 
   // Define follower.
-  var follower = world.createBody({
-    type: 'dynamic',
-    position: Vec2(0.0, 13.0)
-  });
+  var follower = world.createDynamicBody(Vec2(0.0, 13.0));
   follower.createFixture(pl.Box(0.5, 4.0), 2.0);
 
   world.createJoint(pl.RevoluteJoint({enableMotor: false}, crank, follower, Vec2(0.0, 9.0)));
@@ -67,10 +61,7 @@ planck.testbed('SliderCrank', function(testbed) {
 
 
   // Create a payload
-  var payload = world.createBody({
-    type: 'dynamic',
-    position: Vec2(0.0, 23.0)
-  });
+  var payload = world.createDynamicBody(Vec2(0.0, 23.0));
   payload.createFixture(pl.Box(1.5, 1.5), 2.0);
 
 

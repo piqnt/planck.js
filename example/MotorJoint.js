@@ -55,7 +55,6 @@ planck.testbed('Motor Joint', function(testbed) {
 
     joint.setLinearOffset(linearOffset);
     joint.setAngularOffset(angularOffset);
-
   };
 
   return world;

@@ -25,99 +25,60 @@ planck.testbed('Cantilever', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  var e_count = 8;
+  var COUNT = 8;
 
   var ground = world.createBody();
   ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
-  var shape = pl.Box(0.5, 0.125);
-
-  var fd = {};
-  fd.density = 20.0;
-
-  var jd = {};
-
   var prevBody = ground;
-  for (var i = 0; i < e_count; ++i) {
-    var bd = {};
-    bd.type = 'dynamic';
-    bd.position = Vec2(-14.5 + 1.0 * i, 5.0);
-    var body = world.createBody(bd);
-    body.createFixture(shape, fd);
+  for (var i = 0; i < COUNT; ++i) {
+    var body = world.createDynamicBody(Vec2(-14.5 + 1.0 * i, 5.0));
+    body.createFixture(pl.Box(0.5, 0.125), 20.0);
 
     var anchor = Vec2(-15.0 + 1.0 * i, 5.0);
-    world.createJoint(pl.WeldJoint(jd, prevBody, body, anchor));
+    world.createJoint(pl.WeldJoint({}, prevBody, body, anchor));
 
     prevBody = body;
   }
-
-  var shape = pl.Box(1.0, 0.125);
-
-  var fd;
-  fd.density = 20.0;
-
-  var jd = {};
-  jd.frequencyHz = 5.0;
-  jd.dampingRatio = 0.7;
 
   var prevBody = ground;
   for (var i = 0; i < 3; ++i) {
-    var bd = {};
-    bd.type = 'dynamic';
-    bd.position = Vec2(-14.0 + 2.0 * i, 15.0);
-    var body = world.createBody(bd);
-    body.createFixture(shape, fd);
+    var body = world.createDynamicBody(Vec2(-14.0 + 2.0 * i, 15.0));
+    body.createFixture(pl.Box(1.0, 0.125), 20.0);
 
     var anchor = Vec2(-15.0 + 2.0 * i, 15.0);
-    world.createJoint(pl.WeldJoint(jd, prevBody, body, anchor));
+    world.createJoint(pl.WeldJoint({
+      frequencyHz: 5.0,
+      dampingRatio: 0.7,
+    }, prevBody, body, anchor));
 
     prevBody = body;
   }
 
-  var shape = pl.Box(0.5, 0.125);
-
-  var fd = {};
-  fd.density = 20.0;
-
-  var jd = {};
-
   var prevBody = ground;
-  for (var i = 0; i < e_count; ++i) {
-    var bd;
-    bd.type = 'dynamic';
-    bd.position = Vec2(-4.5 + 1.0 * i, 5.0);
-    var body = world.createBody(bd);
-    body.createFixture(shape, fd);
+  for (var i = 0; i < COUNT; ++i) {
+    var body = world.createDynamicBody(Vec2(-4.5 + 1.0 * i, 5.0));
+    body.createFixture(pl.Box(0.5, 0.125), 20.0);
 
     if (i > 0) {
       var anchor = Vec2(-5.0 + 1.0 * i, 5.0);
-      world.createJoint(pl.WeldJoint(jd, prevBody, body, anchor));
+      world.createJoint(pl.WeldJoint({}, prevBody, body, anchor));
     }
 
     prevBody = body;
   }
 
-  var shape = new pl.Box(0.5, 0.125);
-
-  var fd = {};
-  fd.shape = shape;
-  fd.density = 20.0;
-
-  var jd = {};
-  jd.frequencyHz = 8.0;
-  jd.dampingRatio = 0.7;
-
   var prevBody = ground;
-  for (var i = 0; i < e_count; ++i) {
-    var bd = {};
-    bd.type = 'dynamic';
-    bd.position = Vec2(5.5 + 1.0 * i, 10.0);
-    var body = world.createBody(bd);
-    body.createFixture(shape, fd);
+  for (var i = 0; i < COUNT; ++i) {
+    var body = world.createDynamicBody(Vec2(5.5 + 1.0 * i, 10.0));
+    body.createFixture(pl.Box(0.5, 0.125), 20.0);
 
     if (i > 0) {
       var anchor = Vec2(5.0 + 1.0 * i, 10.0);
-      world.createJoint(pl.WeldJoint(jd, prevBody, body, anchor));
+      world.createJoint(pl.WeldJoint({
+        frequencyHz: 8.0,
+        dampingRatio: 0.7,
+      }, prevBody, body, anchor));
     }
 
     prevBody = body;
@@ -129,29 +90,13 @@ planck.testbed('Cantilever', function(testbed) {
     vertices[1] = Vec2(0.5, 0.0);
     vertices[2] = Vec2(0.0, 1.5);
 
-    var shape = new pl.Polygon(vertices);
-
-    var fd = {};
-    fd.density = 1.0;
-
-    var bd = {};
-    bd.type = 'dynamic';
-    bd.position = Vec2(-8.0 + 8.0 * i, 12.0);
-    var body = world.createBody(bd);
-    body.createFixture(shape, fd);
+    var body = world.createDynamicBody(Vec2(-8.0 + 8.0 * i, 12.0));
+    body.createFixture(pl.Polygon(vertices), 1.0);
   }
 
   for (var i = 0; i < 2; ++i) {
-    var shape = pl.Circle(0.5);
-
-    var fd = {};
-    fd.density = 1.0;
-
-    var bd = {};
-    bd.type = 'dynamic';
-    bd.position = Vec2(-6.0 + 6.0 * i, 10.0);
-    var body = world.createBody(bd);
-    body.createFixture(shape, fd);
+    var body = world.createDynamicBody(Vec2(-6.0 + 6.0 * i, 10.0));
+    body.createFixture(pl.Circle(0.5), 1.0);
   }
 
   return world;

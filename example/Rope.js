@@ -25,8 +25,8 @@ planck.testbed('Rope', function(testbed) {
   testbed.info('Not implemented!');
   return world;
 
-  var /* Rope */m_rope;
-  var /* float32 */m_angle;
+  var /* Rope */rope;
+  var /* float32 */angle;
 
   var N = 40;
   var vertices = [];
@@ -48,21 +48,21 @@ planck.testbed('Rope', function(testbed) {
   def.k2 = 1.0;
   def.k3 = 0.5;
 
-  m_rope.initialize(def);
+  rope.initialize(def);
 
-  m_angle = 0.0;
-  m_rope.setAngle(m_angle);
+  angle = 0.0;
+  rope.setAngle(angle);
 
   testbed.keydown = function(code, char) {
     switch (char) {
     case 'Z':
-      m_angle = Math.max(-Math.PI, m_angle - 0.05 * Math.PI);
-      m_rope.setAngle(m_angle);
+      angle = Math.max(-Math.PI, angle - 0.05 * Math.PI);
+      rope.setAngle(angle);
       break;
 
     case 'X':
-      m_angle = Math.min(Math.PI, m_angle + 0.05 * Math.PI);
-      m_rope.setAngle(m_angle);
+      angle = Math.min(Math.PI, angle + 0.05 * Math.PI);
+      rope.setAngle(angle);
       break;
     }
   };
@@ -74,9 +74,9 @@ planck.testbed('Rope', function(testbed) {
       dt = 0.0;
     }
 
-    m_rope.step(dt, 1);
+    rope.step(dt, 1);
 
-    testbed.status('Target angle', (m_angle * 180.0 / Math.PI) + degrees );
+    testbed.status('Target angle', (angle * 180.0 / Math.PI) + degrees );
   };
   testbed.info("Z/X to adjust target angle");
 

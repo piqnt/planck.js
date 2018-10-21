@@ -23,36 +23,32 @@ planck.testbed('BulletTest', function(testbed) {
   
   var stats = pl.internal.stats;
 
-  var m_body;
-  var m_x;
-
   var ground = world.createBody();
   ground.createFixture(pl.Edge(Vec2(-10.0, 0.0), Vec2(10.0, 0.0)), 0.0);
   ground.createFixture(pl.Box(0.2, 1.0, Vec2(0.5, 1.0), 0.0), 0.0);
 
-  m_body = world.createDynamicBody(Vec2(0.0, 4.0));
-  m_body.createFixture(pl.Box(2.0, 0.1), 1.0);
+  var body = world.createDynamicBody(Vec2(0.0, 4.0));
+  body.createFixture(pl.Box(2.0, 0.1), 1.0);
 
-  // m_x = pl.Math.random(-1.0, 1.0);
-  m_x = 0.20352793;
+  // x = pl.Math.random(-1.0, 1.0);
+  var x = 0.20352793;
 
-  var bd = {};
-  bd.type = 'dynamic';
-  bd.position = Vec2(m_x, 10.0);
-  bd.bullet = true;
-
-  var bullet = world.createBody(bd);
+  var bullet = world.createBody({
+    type: 'dynamic',
+    position: Vec2(x, 10.0),
+    bullet: true,
+  });
   bullet.createFixture(pl.Box(0.25, 0.25), 100.0);
 
   bullet.setLinearVelocity(Vec2(0.0, -50.0));
 
   function Launch() {
-    m_body.setTransform(Vec2(0.0, 4.0), 0.0);
-    m_body.setLinearVelocity(Vec2());
-    m_body.setAngularVelocity(0.0);
+    body.setTransform(Vec2(0.0, 4.0), 0.0);
+    body.setLinearVelocity(Vec2());
+    body.setAngularVelocity(0.0);
 
-    m_x = pl.Math.random(-1.0, 1.0);
-    bullet.setTransform(Vec2(m_x, 10.0), 0.0);
+    x = pl.Math.random(-1.0, 1.0);
+    bullet.setTransform(Vec2(x, 10.0), 0.0);
     bullet.setLinearVelocity(Vec2(0.0, -50.0));
     bullet.setAngularVelocity(0.0);
 
@@ -67,6 +63,7 @@ planck.testbed('BulletTest', function(testbed) {
     stats.toiMaxRootIters = 0;
   }
 
+  var stepCount = 0;
   testbed.step = function() {
     testbed.status(stats);
 
@@ -83,7 +80,7 @@ planck.testbed('BulletTest', function(testbed) {
     //       / float32(stats.toiCalls), stats.toiMaxRootIters);
     // }
 
-    if (world.m_stepCount % 60 == 0) {
+    if (stepCount++ % 60 === 0) {
       Launch();
     }
   };

@@ -20,17 +20,16 @@
 planck.testbed('Apply Force', function(testbed) {
   testbed.y = -20;
 
-  var pl = planck, Vec2 = pl.Vec2, Transform = pl.Transform;
+  var pl = planck, Vec2 = pl.Vec2;
 
-  var world = new pl.World();
-
-  world.setGravity(Vec2(0.0, 0.0));
+  var world = pl.World();
 
   var ground = world.createBody(Vec2(0.0, 20.0));
 
-  var wallFD = {};
-  wallFD.density = 0.0;
-  wallFD.restitution = 0.4;
+  var wallFD = {
+    density: 0.0,
+    restitution: 0.4,
+  };
 
   // Left vertical
   ground.createFixture(pl.Edge(Vec2(-20.0, -20.0), Vec2(-20.0, 20.0)), wallFD);
@@ -44,17 +43,17 @@ planck.testbed('Apply Force', function(testbed) {
   // Bottom horizontal
   ground.createFixture(pl.Edge(Vec2(-20.0, -20.0), Vec2(20.0, -20.0)), wallFD);
 
-  var xf1 = new Transform();
+  var xf1 = pl.Transform();
   xf1.q.set(0.3524 * Math.PI);
   xf1.p.set(xf1.q.getXAxis());
 
-  var poly1 = pl.Polygon(Transform.mulAll(xf1, [Vec2(-1.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 0.5)]));
+  var poly1 = pl.Polygon(pl.Transform.mulAll(xf1, [Vec2(-1.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 0.5)]));
 
-  var xf2 = new Transform();
+  var xf2 = pl.Transform();
   xf2.q.set(-0.3524 * Math.PI);
   xf2.p.set(Vec2.neg(xf2.q.getXAxis()));
 
-  var poly2 = pl.Polygon(Transform.mulAll(xf2, [Vec2(-1.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 0.5)]));
+  var poly2 = pl.Polygon(pl.Transform.mulAll(xf2, [Vec2(-1.0, 0.0), Vec2(1.0, 0.0), Vec2(0.0, 0.5)]));
 
   var jet = world.createBody({
     type : 'dynamic',
@@ -68,15 +67,13 @@ planck.testbed('Apply Force', function(testbed) {
   jet.createFixture(poly1, 2.0);
   jet.createFixture(poly2, 2.0);
 
-  var boxFD = {};
-  boxFD.density = 1.0;
-  boxFD.friction = 0.3;
+  var boxFD = {
+    density: 1.0,
+    friction: 0.3,
+  };
 
   for (var i = 0; i < 10; ++i) {
-    var box = world.createBody({
-      type : 'dynamic',
-      position : Vec2(0.0, 5.0 + 1.54 * i)
-    });
+    var box = world.createDynamicBody(Vec2(0.0, 5.0 + 1.54 * i));
 
     box.createFixture(pl.Box(0.5, 0.5), boxFD);
 

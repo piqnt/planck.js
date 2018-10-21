@@ -387,7 +387,6 @@ declare namespace planck {
     m_velocityIterations: number;
     m_positionIterations: number;
     m_t: number;
-    m_stepCount: number;
     addPair: (proxyA: FixtureProxy, proxyB: FixtureProxy) => void;
 
     getBodyList(): Body | null;

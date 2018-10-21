@@ -21,45 +21,41 @@ planck.testbed('Bridge', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -4));
 
-  var e_count = 30
+  var COUNT = 30;
 
   var middle;
 
   var ground = world.createBody();
   ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
-  var shape = pl.Box(0.5, 0.125);
+  var bridgeRect = pl.Box(0.5, 0.125);
 
-  var fd = {};
-  fd.density = 20.0;
-  fd.friction = 0.2;
-
-  var jd = {};
+  var bridgeFD = {
+    density: 20.0,
+    friction: 0.2
+  };
 
   var prevBody = ground;
-  for (var i = 0; i < e_count; ++i) {
+  for (var i = 0; i < COUNT; ++i) {
     var body = world.createDynamicBody(Vec2(-14.5 + 1.0 * i, 5.0));
-    body.createFixture(shape, fd);
+    body.createFixture(bridgeRect, bridgeFD);
 
     var anchor = Vec2(-15.0 + 1.0 * i, 5.0);
-    world.createJoint(pl.RevoluteJoint(jd, prevBody, body, anchor));
+    world.createJoint(pl.RevoluteJoint({}, prevBody, body, anchor));
 
-    if (i == (e_count >> 1)) {
+    if (i * 2 === COUNT) {
       middle = body;
     }
     prevBody = body;
   }
 
-  var anchor = Vec2(-15.0 + 1.0 * e_count, 5.0);
-  world.createJoint(pl.RevoluteJoint(jd, prevBody, ground, anchor));
+  var anchor = Vec2(-15.0 + 1.0 * COUNT, 5.0);
+  world.createJoint(pl.RevoluteJoint({}, prevBody, ground, anchor));
 
   for (var i = 0; i < 2; ++i) {
     var body = world.createDynamicBody(Vec2(-8.0 + 8.0 * i, 12.0));
 
-    var vertices = [];
-    vertices[0] = Vec2(-0.5, 0.0);
-    vertices[1] = Vec2(0.5, 0.0);
-    vertices[2] = Vec2(0.0, 1.5);
+    var vertices = [Vec2(-0.5, 0.0), Vec2(0.5, 0.0), Vec2(0.0, 1.5)];
     body.createFixture(pl.Polygon(vertices), 1.0);
   }
 

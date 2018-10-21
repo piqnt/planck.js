@@ -37,26 +37,17 @@ planck.testbed('Theo Jansen\'s Walker', function(testbed) {
 
   // Balls
   for (var i = 0; i < 40; ++i) {
-    world.createBody({
-      type: 'dynamic',
-      position: Vec2(-40.0 + 2.0 * i, 0.5)
-    }).createFixture(pl.Circle(0.25), 1.0);
+    world.createDynamicBody(Vec2(-40.0 + 2.0 * i, 0.5)).createFixture(pl.Circle(0.25), 1.0);
   }
 
   // Chassis
-  var chassis = world.createBody({
-    type: 'dynamic',
-    position: Vec2.add(pivot, offset)
-  });
+  var chassis = world.createDynamicBody(Vec2.add(pivot, offset));
   chassis.createFixture(pl.Box(2.5, 1.0), {
     density: 1.0,
     filterGroupIndex: -1
   });
 
-  var wheel = world.createBody({
-    type: 'dynamic',
-    position: Vec2.add(pivot, offset)
-  });
+  var wheel = world.createDynamicBody(Vec2.add(pivot, offset));
   wheel.createFixture(pl.Circle(1.6), {
     density: 1.0,
     filterGroupIndex: -1
@@ -101,8 +92,7 @@ planck.testbed('Theo Jansen\'s Walker', function(testbed) {
       poly2 = pl.Polygon([Vec2(), Vec2.sub(p6, p4), Vec2.sub(p5, p4)]);
     }
 
-    var body1 = world.createBody({
-      type: 'dynamic',
+    var body1 = world.createDynamicBody({
       position: offset,
       angularDamping: 10.0
     });
@@ -111,8 +101,7 @@ planck.testbed('Theo Jansen\'s Walker', function(testbed) {
       filterGroupIndex: -1
     });
 
-    var body2 = world.createBody({
-      type: 'dynamic',
+    var body2 = world.createDynamicBody({
       position: Vec2.add(p4, offset),
       angularDamping: 10.0
     });
@@ -121,7 +110,7 @@ planck.testbed('Theo Jansen\'s Walker', function(testbed) {
       filterGroupIndex: -1
     });
 
-    // Using a soft distance constravar integer can reduce some jitter.
+    // Using a soft distance constraint can reduce some jitter.
     // It also makes the structure seem a bit more fluid by
     // acting like a suspension system.
     var djd = {
@@ -161,9 +150,7 @@ planck.testbed('Theo Jansen\'s Walker', function(testbed) {
     } else if (wheel.getPosition().x < testbed.x - 10) {
       testbed.x = wheel.getPosition().x + 10;
     }
-
   };
-
 
   return world;
 });

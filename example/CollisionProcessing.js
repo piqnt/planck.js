@@ -53,7 +53,7 @@ planck.testbed('CollisionProcessing', function(testbed) {
   var body6 = world.createDynamicBody(Vec2(pl.Math.random(xLo, xHi), pl.Math.random(yLo, yHi)));
   body6.createFixture(pl.Circle(2.0), 1.0);
 
-  var m_points = [];
+  var points = [];
 
   world.on('pre-solve', function(contact, oldManifold) {
     var manifold = contact.getManifold();
@@ -77,11 +77,11 @@ planck.testbed('CollisionProcessing', function(testbed) {
       cp.normalImpulse = manifold.points[i].normalImpulse;
       cp.tangentImpulse = manifold.points[i].tangentImpulse;
       cp.separation = worldManifold.separations[i];
-      m_points.push(cp);
+      points.push(cp);
     }
   });
 
-  var m_bomb = null;
+  var bomb = null;
   var MAX_NUKE = 6;
 
   testbed.step = function() {
@@ -93,8 +93,8 @@ planck.testbed('CollisionProcessing', function(testbed) {
 
     // Traverse the contact results. Destroy bodies that
     // are touching heavier bodies.
-    for (var i = 0; i < m_points.length && nuke.length < MAX_NUKE; ++i) {
-      var point = m_points[i];
+    for (var i = 0; i < points.length && nuke.length < MAX_NUKE; ++i) {
+      var point = points[i];
 
       var body1 = point.fixtureA.getBody();
       var body2 = point.fixtureB.getBody();
@@ -112,12 +112,12 @@ planck.testbed('CollisionProcessing', function(testbed) {
 
     for (var i = 0; i < nuke.length; i++) {
       var b = nuke[i];
-      if (b != m_bomb) {
+      if (b != bomb) {
         world.destroyBody(b);
       }
     }
 
-    m_points.length = 0;
+    points.length = 0;
   };
 
   return world;

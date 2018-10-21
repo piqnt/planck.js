@@ -22,40 +22,36 @@ planck.testbed('SensorTest', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  var e_count = 7;
+  var COUNT = 7;
 
-  var m_sensor;
-  var m_bodies = [];
-  var m_touching = [];
+  var sensor;
+  var bodies = [];
+  var touching = [];
 
-  var ground = world.createBody(bd);
+  var ground = world.createBody();
   ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
   if (0) {
-    var sd = {};
-    sd.shape = pl.Box(10.0, 2.0, Vec2(0.0, 20.0), 0.0);
-    sd.isSensor = true;
-    m_sensor = ground.createFixture(sd);
+    sensor = ground.createFixture({
+      shape: pl.Box(10.0, 2.0, Vec2(0.0, 20.0), 0.0),
+      isSensor: true,
+    });
 
   } else {
-    var fd = {};
-    fd.shape = pl.Circle(Vec2(0.0, 10.0), 5.0);
-    fd.isSensor = true;
-    m_sensor = ground.createFixture(fd);
+    sensor = ground.createFixture({
+      shape: pl.Circle(Vec2(0.0, 10.0), 5.0),
+      isSensor: true,
+    });
   }
 
-  var shape = pl.Circle(1.0);
+  var circle = pl.Circle(1.0);
 
-  for (var i = 0; i < e_count; ++i) {
-    m_touching[i] = {touching : false};
+  for (var i = 0; i < COUNT; ++i) {
+    touching[i] = { touching : false };
 
-    var bd = {};
-    bd.type = 'dynamic';
-    bd.position = Vec2(-10.0 + 3.0 * i, 20.0);
-    bd.userData = m_touching[i];
-
-    m_bodies[i] = world.createBody(bd);
-    m_bodies[i].createFixture(shape, 1.0);
+    bodies[i] = world.createDynamicBody(Vec2(-10.0 + 3.0 * i, 20.0));
+    bodies[i].setUserData(touching[i])
+    bodies[i].createFixture(circle, 1.0);
   }
 
   // Implement contact listener.
@@ -63,14 +59,14 @@ planck.testbed('SensorTest', function(testbed) {
     var fixtureA = contact.getFixtureA();
     var fixtureB = contact.getFixtureB();
 
-    if (fixtureA == m_sensor) {
+    if (fixtureA === sensor) {
       var userData = fixtureB.getBody().getUserData();
       if (userData) {
         userData.touching = true;
       }
     }
 
-    if (fixtureB == m_sensor) {
+    if (fixtureB === sensor) {
       var userData = fixtureA.getBody().getUserData();
       if (userData) {
         userData.touching = true;
@@ -83,14 +79,14 @@ planck.testbed('SensorTest', function(testbed) {
     var fixtureA = contact.getFixtureA();
     var fixtureB = contact.getFixtureB();
 
-    if (fixtureA == m_sensor) {
+    if (fixtureA === sensor) {
       var userData = fixtureB.getBody().getUserData();
       if (userData) {
         userData.touching = false;
       }
     }
 
-    if (fixtureB == m_sensor) {
+    if (fixtureB === sensor) {
       var userData = fixtureA.getBody().getUserData();
       if (userData) {
         userData.touching = false;
@@ -101,15 +97,15 @@ planck.testbed('SensorTest', function(testbed) {
   testbed.step = function() {
     // Traverse the contact results. Apply a force on shapes
     // that overlap the sensor.
-    for (var i = 0; i < e_count; ++i) {
-      if (m_touching[i].touching == false) {
+    for (var i = 0; i < COUNT; ++i) {
+      if (!touching[i].touching) {
         continue;
       }
 
-      var body = m_bodies[i];
-      var ground = m_sensor.getBody();
+      var body = bodies[i];
+      var ground = sensor.getBody();
 
-      var circle = m_sensor.getShape();
+      var circle = sensor.getShape();
       var center = ground.getWorldPoint(circle.getCenter());
 
       var position = body.getPosition();

@@ -23,100 +23,77 @@ planck.testbed('Revolute', function(testbed) {
 
   var ground = world.createBody();
 
-  var shape = pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0));
+  var groundFD = {
+    filterCategoryBits: 2,
+    filterMaskBits: 0xFFFF,
+    filterGroupIndex: 0,
+  };
+  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), groundFD);
 
-  var fd = {};
-  fd.filterCategoryBits = 2;
-  fd.filterMaskBits = 0xFFFF;
-  fd.filterGroupIndex = 0;
-
-  ground.createFixture(shape, fd);
-
-  var shape = pl.Circle(0.5);
-
-  var bd = {};
-  bd.type = 'dynamic';
-
-  bd.position = Vec2(-10.0, 20.0);
-  var body = world.createBody(bd);
-  body.createFixture(shape, 5.0);
+  var rotator = world.createDynamicBody(Vec2(-10.0, 20.0));
+  rotator.createFixture(pl.Circle(0.5), 5.0);
 
   var w = 100.0;
-  body.setAngularVelocity(w);
-  body.setLinearVelocity(Vec2(-8.0 * w, 0.0));
+  rotator.setAngularVelocity(w);
+  rotator.setLinearVelocity(Vec2(-8.0 * w, 0.0));
 
-  var rjd = {};
-  rjd.motorSpeed = 1.0 * Math.PI;
-  rjd.maxMotorTorque = 10000.0;
-  rjd.enableMotor = true;
-  rjd.lowerAngle = -0.25 * Math.PI;
-  rjd.upperAngle = 0.5 * Math.PI;
-  rjd.enableLimit = false;
-  rjd.collideConnected = true;
+  var joint = world.createJoint(pl.RevoluteJoint({
+    motorSpeed: 1.0 * Math.PI,
+    maxMotorTorque: 10000.0,
+    enableMotor: true,
+    lowerAngle: -0.25 * Math.PI,
+    upperAngle: 0.5 * Math.PI,
+    enableLimit: false,
+    collideConnected: true,
+  }, ground, rotator, Vec2(-10.0, 12.0)));
 
-  var m_joint = world.createJoint(pl.RevoluteJoint(rjd, ground, body, Vec2(-10.0, 12.0)));
+  var ball = world.createDynamicBody(Vec2(5.0, 30.0));
+  ball.createFixture(pl.Circle(3.0), {
+    density: 5.0,
+    // filterMaskBits: 1,
+  });
 
-  var circle_shape = pl.Circle(3.0);
+  var platform = world.createBody({
+    position: Vec2(20.0, 10.0),
+    type: 'dynamic',
+    bullet: true,
+  });
+  platform.createFixture(pl.Box(10.0, 0.2, Vec2(-10.0, 0.0), 0.0), 2.0);
 
-  var circle_bd = {};
-  circle_bd.type = 'dynamic';
-  circle_bd.position = Vec2(5.0, 30.0);
-
-  var fd = {};
-  fd.density = 5.0;
-  // fd.filterMaskBits = 1;
-
-  var m_ball = world.createBody(circle_bd);
-  m_ball.createFixture(circle_shape, fd);
-
-  var polygon_shape = pl.Box(10.0, 0.2, Vec2(-10.0, 0.0), 0.0);
-
-  var polygon_bd = {};
-  polygon_bd.position = Vec2(20.0, 10.0);
-  polygon_bd.type = 'dynamic';
-  polygon_bd.bullet = true;
-  var polygon_body = world.createBody(polygon_bd);
-  polygon_body.createFixture(polygon_shape, 2.0);
-
-  var rjd = {};
-  rjd.lowerAngle = -0.25 * Math.PI;
-  rjd.upperAngle = 0.0 * Math.PI;
-  rjd.enableLimit = true;
-  world.createJoint(pl.RevoluteJoint(rjd, ground, polygon_body, Vec2(20.0, 10.0)));
+  world.createJoint(pl.RevoluteJoint({
+    lowerAngle: -0.25 * Math.PI,
+    upperAngle: 0.0 * Math.PI,
+    enableLimit: true,
+  }, ground, platform, Vec2(20.0, 10.0)));
 
   // Tests mass computation of a small object far from the origin
-  var body = world.createDynamicBody();
+  var triangle = world.createDynamicBody();
 
-  var polyShape = pl.Polygon([
+  triangle.createFixture(pl.Polygon([
     Vec2(17.63, 36.31),
     Vec2(17.52, 36.69),
     Vec2(17.19, 36.36)
-  ]);
-
-  var polyFixtureDef = {};
-  polyFixtureDef.density = 1;
-
-  body.createFixture(polyShape, polyFixtureDef); // assertion hits inside here
+  ]), 1); // assertion hits inside here
 
   testbed.keydown = function(code, char) {
     switch (char) {
     case 'Z':
-      m_joint.enableLimit(!m_joint.isLimitEnabled());
+      joint.enableLimit(!joint.isLimitEnabled());
       break;
 
     case 'X':
-      m_joint.enableMotor(!m_joint.isMotorEnabled());
+      joint.enableMotor(!joint.isMotorEnabled());
       break;
     }
   };
 
   testbed.step = function(settings) {
-    // if (world.m_stepCount == 360) {
-    // m_ball.setTransform(Vec2(0.0, 0.5), 0.0);
+    // if (stepCount++ == 360) {
+    //   ball.setTransform(Vec2(0.0, 0.5), 0.0);
     // }
 
-    testbed.status('Motor Torque', m_joint.getMotorTorque(testbed.hz));
-    // testbed.status('Motor Force', m_joint.getMaxForce());
+    testbed.status('Motor Torque', joint.getMotorTorque(testbed.hz));
+    // testbed.status('Motor Force', joint.getMaxForce());
   };
 
   testbed.info('Z: Limits, X: Motor');

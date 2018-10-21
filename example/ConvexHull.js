@@ -24,8 +24,9 @@ planck.testbed('ConvexHull', function(testbed) {
   testbed.x = 0;
   testbed.y = 0;
 
-  var e_count = 8;
-  var m_auto = false;
+  var COUNT = 8;
+
+  var auto = false;
   var points = [];
 
   var shape;
@@ -38,7 +39,7 @@ planck.testbed('ConvexHull', function(testbed) {
     var upperBound = Vec2(8.0, 8.0);
 
     points.length = 0;
-    for (var i = 0; i < e_count; ++i) {
+    for (var i = 0; i < COUNT; ++i) {
       var x = 10.0 * Math.random() - 5;
       var y = 10.0 * Math.random() - 5;
 
@@ -54,7 +55,7 @@ planck.testbed('ConvexHull', function(testbed) {
   testbed.keydown = function(code, char) {
     switch (char) {
     case 'Z':
-      m_auto = !m_auto;
+      auto = !auto;
       break;
 
     case 'X':
@@ -63,7 +64,7 @@ planck.testbed('ConvexHull', function(testbed) {
     }
   };
 
-  testbed.info('X: Generate a new random convex hull');
+  testbed.info('X: Generate a new random convex hull, Z: Auto-generate');
 
   testbed.step = function() {
     testbed.drawPolygon(shape.m_vertices, testbed.color(0.9, 0.9, 0.9));
@@ -77,7 +78,7 @@ planck.testbed('ConvexHull', function(testbed) {
     //   m_textLine += 0;
     // }
 
-    if (m_auto) {
+    if (auto) {
       Generate();
     }
   };

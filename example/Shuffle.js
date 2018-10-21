@@ -43,7 +43,7 @@ planck.testbed('Shuffle', function(testbed) {
 
   world.createBody().createFixture(pl.Chain(walls, true), wallFixDef);
 
-  row(1, 8, BALL_R, BALL_D).map(translate(height * 0.4, 0)).forEach(function(p) {
+  row(1, 8, BALL_R, BALL_D).map(Vec2.translateFn(height * 0.4, 0)).forEach(function(p) {
     var ball = world.createDynamicBody(ballBodyDef);
     ball.setPosition(p);
     ball.setAngle(Math.PI);
@@ -51,7 +51,7 @@ planck.testbed('Shuffle', function(testbed) {
     ball.render = {fill : '#ff411a', stroke: 'black'};
   });
 
-  row(1, 8, BALL_R, BALL_D).map(translate(-height * 0.4, 0)).forEach(function(p) {
+  row(1, 8, BALL_R, BALL_D).map(Vec2.translateFn(-height * 0.4, 0)).forEach(function(p) {
     var ball = world.createDynamicBody(ballBodyDef);
     ball.setPosition(p);
     ball.createFixture(pl.Circle(BALL_R), ballFixDef);
@@ -62,8 +62,8 @@ planck.testbed('Shuffle', function(testbed) {
     var fA = contact.getFixtureA(), bA = fA.getBody();
     var fB = contact.getFixtureB(), bB = fB.getBody();
 
-    var wall = fA.getUserData() == wallFixDef.userData && bA || fB.getUserData() == wallFixDef.userData && bB;
-    var ball = fA.getUserData() == ballFixDef.userData && bA || fB.getUserData() == ballFixDef.userData && bB;
+    var wall = fA.getUserData() === wallFixDef.userData ? bA : fB.getUserData() === wallFixDef.userData ? bB : null;
+    var ball = fA.getUserData() === ballFixDef.userData ? bA : fB.getUserData() === ballFixDef.userData ? bB : null;
 
     // do not change world immediately
     setTimeout(function() {
@@ -85,17 +85,4 @@ planck.testbed('Shuffle', function(testbed) {
     }
     return balls;
   }
-
-  function scale(x, y) {
-    return function (v) {
-      return pl.Vec2(v.x * x, v.y * y);
-    };
-  }
-
-  function translate(x, y) {
-    return function (v) {
-      return pl.Vec2(v.x + x, v.y + y);
-    };
-  }
-
 });

@@ -28,26 +28,19 @@ planck.testbed('Web', function(testbed) {
   var bodies = [];
   var joints = [];
 
-  var shape = pl.Box(0.5, 0.5);
+  var box = pl.Box(0.5, 0.5);
 
-  var bd = {};
-  bd.type = 'dynamic';
+  bodies[0] = world.createDynamicBody(Vec2(-5.0, 5.0));
+  bodies[0].createFixture(box, 5.0);
 
-  bd.position = Vec2(-5.0, 5.0);
-  bodies[0] = world.createBody(bd);
-  bodies[0].createFixture(shape, 5.0);
+  bodies[1] = world.createDynamicBody(Vec2(5.0, 5.0));
+  bodies[1].createFixture(box, 5.0);
 
-  bd.position = Vec2(5.0, 5.0);
-  bodies[1] = world.createBody(bd);
-  bodies[1].createFixture(shape, 5.0);
+  bodies[2] = world.createDynamicBody(Vec2(5.0, 15.0));
+  bodies[2].createFixture(box, 5.0);
 
-  bd.position = Vec2(5.0, 15.0);
-  bodies[2] = world.createBody(bd);
-  bodies[2].createFixture(shape, 5.0);
-
-  bd.position = Vec2(-5.0, 15.0);
-  bodies[3] = world.createBody(bd);
-  bodies[3].createFixture(shape, 5.0);
+  bodies[3] = world.createDynamicBody(Vec2(-5.0, 15.0));
+  bodies[3].createFixture(box, 5.0);
 
   var jd = {};
   jd.frequencyHz = 2.0;
@@ -112,22 +105,14 @@ planck.testbed('Web', function(testbed) {
   testbed.keydown = function(code, char) {
     switch (char) {
     case 'X':
-      for (var i = 0; i < 4; ++i) {
-        if (bodies[i]) {
-          world.destroyBody(bodies[i]);
-          bodies[i] = null;
-          break;
-        }
+      if (bodies.length) {
+        world.destroyBody(bodies.pop());
       }
       break;
 
     case 'Z':
-      for (var i = 0; i < 8; ++i) {
-        if (joints[i]) {
-          world.destroyJoint(joints[i]);
-          joints[i] = null;
-          break;
-        }
+      if (joints.length) {
+        world.destroyJoint(joints.pop());
       }
       break;
     }
@@ -135,16 +120,13 @@ planck.testbed('Web', function(testbed) {
 
   testbed.info('This demonstrates a soft distance joint.\nX: Delete a body, Z: Delete a joint');
 
-  function JointDestroyed(joint) {
+  world.on('remove-joint', function(joint) {
     for (var i = 0; i < 8; ++i) {
-      if (joints[i] == joint) {
-        joints[i] = null;
-        break;
-      }
+      joints = joints.filter(function(j) {
+        return j !== joint;
+      });
     }
-  }
-
-  // TODO: BBJJJJ -> Error
+  });
 
   return world;
 });

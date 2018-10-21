@@ -21,30 +21,20 @@ planck.testbed('HeavyOnLightTwo', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  world.createBody().createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)),
-      0.0);
+  world.createBody().createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
-  world.createBody({
-    type : 'dynamic',
-    position : Vec2(0.0, 2.5)
-  }).createFixture(pl.Circle(0.5), 10.0);
+  world.createDynamicBody(Vec2(0.0, 2.5)).createFixture(pl.Circle(0.5), 10.0);
 
-  world.createBody({
-    type : 'dynamic',
-    position : Vec2(0.0, 3.5)
-  }).createFixture(pl.Circle(0.5), 10.0);
+  world.createDynamicBody(Vec2(0.0, 3.5)).createFixture(pl.Circle(0.5), 10.0);
 
   var heavy = null;
 
-  function ToggleHeavy() {
+  function toggleHeavy() {
     if (heavy) {
       world.destroyBody(heavy);
       heavy = null;
     } else {
-      heavy = world.createBody({
-        type : 'dynamic',
-        position : Vec2(0.0, 9.0)
-      });
+      heavy = world.createDynamicBody(Vec2(0.0, 9.0));
       heavy.createFixture(pl.Circle(5.0), 10.0);
     }
   }
@@ -52,7 +42,7 @@ planck.testbed('HeavyOnLightTwo', function(testbed) {
   testbed.keydown = function(code, char) {
     switch (char) {
     case 'X':
-      ToggleHeavy();
+      toggleHeavy();
       break;
     }
   };

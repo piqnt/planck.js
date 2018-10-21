@@ -39,7 +39,8 @@ planck.testbed('CollisionFiltering', function(testbed) {
   var world = pl.World(Vec2(0, -10));
 
   // Ground body
-  world.createBody().createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), {friction : 0.3});
+  var ground = world.createBody();
+  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), {friction : 0.3});
 
   var triangleShapeDef = {};
   triangleShapeDef.density = 1.0;
@@ -75,6 +76,7 @@ planck.testbed('CollisionFiltering', function(testbed) {
 
   var body = world.createDynamicBody(Vec2(-5.0, 10.0));
   body.createFixture(pl.Box(0.5, 1.0), 1.0);
+
   world.createJoint(pl.PrismaticJoint({
     enableLimit : true,
     localAnchorA : Vec2(0.0, 4.0),
@@ -111,18 +113,13 @@ planck.testbed('CollisionFiltering', function(testbed) {
   circleShapeDef.filterCategoryBits = CIRCLE_CATEGORY;
   circleShapeDef.filterMaskBits = CIRCLE_MAX;
 
-  var circleBodyDef = {};
-  circleBodyDef.type = 'dynamic';
-  circleBodyDef.position = Vec2(5.0, 2.0);
-
-  var body5 = world.createBody(circleBodyDef);
+  var body5 = world.createDynamicBody(Vec2(5.0, 2.0));
   body5.createFixture(pl.Circle(1.0), circleShapeDef);
 
   // Large circle
   circleShapeDef.filterGroupIndex = LARGE_GROUP;
-  circleBodyDef.position = Vec2(5.0, 6.0);
 
-  var body6 = world.createBody(circleBodyDef);
+  var body6 = world.createDynamicBody(Vec2(5.0, 6.0));
   body6.createFixture(pl.Circle(2.0), circleShapeDef);
 
   return world;

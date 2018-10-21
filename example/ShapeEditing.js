@@ -23,40 +23,39 @@ planck.testbed('ShapeEditing', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
 
-  var m_sensor = true;
+  var sensor = true;
 
   var ground = world.createBody();
   ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
 
-  var m_body = world.createDynamicBody(Vec2(0.0, 10.0));
+  var body = world.createDynamicBody(Vec2(0.0, 10.0));
 
-  var m_fixture1 = m_body.createFixture(pl.Box(4.0, 4.0, Vec2(0.0, 0.0), 0.0), 10.0);
-  var m_fixture2 = null;
-
+  var fixture1 = body.createFixture(pl.Box(4.0, 4.0, Vec2(0.0, 0.0), 0.0), 10.0);
+  var fixture2 = null;
 
   testbed.keydown = function(code, char) {
     switch (char) {
     case 'C':
-      if (m_fixture2 == null) {
+      if (fixture2 == null) {
         var shape = pl.Circle(Vec2(0.5, -4.0), 3.0);
-        m_fixture2 = m_body.createFixture(shape, 10.0);
-        m_body.setAwake(true);
-        m_fixture2.setSensor(m_sensor);
+        fixture2 = body.createFixture(shape, 10.0);
+        body.setAwake(true);
+        fixture2.setSensor(sensor);
       }
       break;
 
     case 'X':
-      if (m_fixture2 != null) {
-        m_body.destroyFixture(m_fixture2);
-        m_fixture2 = null;
-        m_body.setAwake(true);
+      if (fixture2 != null) {
+        body.destroyFixture(fixture2);
+        fixture2 = null;
+        body.setAwake(true);
       }
       break;
 
     case 'Z':
-      if (m_fixture2 != null) {
-        m_sensor = !m_sensor;
-        m_fixture2.setSensor(m_sensor);
+      if (fixture2 != null) {
+        sensor = !sensor;
+        fixture2.setSensor(sensor);
       }
       break;
     }
@@ -65,7 +64,7 @@ planck.testbed('ShapeEditing', function(testbed) {
   };
 
   function updateStatus() {
-    testbed.status('Sensor', m_sensor);
+    testbed.status('Sensor', sensor);
   }
 
   updateStatus();

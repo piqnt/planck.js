@@ -22,28 +22,28 @@ planck.testbed('Mixer', function(testbed) {
 
   testbed.y = 0;
 
-  var box = world.createKinematicBody();
-  box.createFixture(pl.Edge(Vec2(15, -5), Vec2(25, 5)));
+  var container = world.createKinematicBody();
+  container.createFixture(pl.Edge(Vec2(15, -5), Vec2(25, 5)));
 
-  box.createFixture(pl.Edge(Vec2(-20, -20), Vec2(20, -20)));
-  box.createFixture(pl.Edge(Vec2(-20, 20), Vec2(20, 20)));
-  box.createFixture(pl.Edge(Vec2(-20, -20), Vec2(-20, 20)));
-  box.createFixture(pl.Edge(Vec2(20, -20), Vec2(20, 20)));
+  container.createFixture(pl.Edge(Vec2(-20, -20), Vec2(20, -20)));
+  container.createFixture(pl.Edge(Vec2(-20, 20), Vec2(20, 20)));
+  container.createFixture(pl.Edge(Vec2(-20, -20), Vec2(-20, 20)));
+  container.createFixture(pl.Edge(Vec2(20, -20), Vec2(20, 20)));
 
   for (var i = -5; i <= 5; i++) {
     for (var j = -5; j <= 5; j++) {
-      var a = world.createDynamicBody(Vec2(i * 2, j * 2));
-      a.createFixture(pl.Circle(0.6));
-      a.setMassData({
+      var particle = world.createDynamicBody(Vec2(i * 2, j * 2));
+      particle.createFixture(pl.Circle(0.6));
+      particle.setMassData({
         mass : 2,
         center : Vec2(),
         I : 0.4
-      })
-      a.applyForceToCenter(Vec2(pl.Math.random(-100, 100), pl.Math.random(-100, 100)));
+      });
+      particle.applyForceToCenter(Vec2(pl.Math.random(-100, 100), pl.Math.random(-100, 100)));
     }
   }
 
-  box.setAngularVelocity(0.3);
+  container.setAngularVelocity(0.3);
 
   return world
 });

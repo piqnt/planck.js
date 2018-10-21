@@ -24,79 +24,55 @@ planck.testbed('Gears', function(testbed) {
   var ground = world.createBody();
   ground.createFixture(pl.Edge(Vec2(50.0, 0.0), Vec2(-50.0, 0.0)));
 
-  var radius1 = 1.0, radius2 = 2.0;
-  var circle1 = pl.Circle(radius1);
-  var circle2 = pl.Circle(radius2);
-  var box = pl.Box(0.5, 5.0);
+  var radius1 = 1.0;
+  var radius2 = 2.0;
 
-  var bd1 = {};
-  bd1.type = 'static';
-  bd1.position = Vec2(10.0, 9.0);
-  var body1 = world.createBody(bd1);
-  body1.createFixture(circle1, 5.0);
+  var gearA1 = world.createBody(Vec2(10.0, 9.0));
+  gearA1.createFixture(pl.Circle(radius1), 5.0);
 
-  var bd2 = {};
-  bd2.type = 'dynamic';
-  bd2.position = Vec2(10.0, 8.0);
-  var body2 = world.createBody(bd2);
-  body2.createFixture(box, 5.0);
+  var plankA1 = world.createDynamicBody(Vec2(10.0, 8.0));
+  plankA1.createFixture(pl.Box(0.5, 5.0), 5.0);
 
-  var bd3 = {};
-  bd3.type = 'dynamic';
-  bd3.position = Vec2(10.0, 6.0);
-  var body3 = world.createBody(bd3);
-  body3.createFixture(circle2, 5.0);
+  var gearA2 = world.createDynamicBody(Vec2(10.0, 6.0));
+  gearA2.createFixture(pl.Circle(radius2), 5.0);
 
-  var joint1 = world.createJoint(pl.RevoluteJoint({}, body2, body1, bd1.position));
-  var joint2 = world.createJoint(pl.RevoluteJoint({}, body2, body3, bd3.position));
+  var jointA1 = world.createJoint(pl.RevoluteJoint({}, plankA1, gearA1, gearA1.getPosition()));
+  var jointA2 = world.createJoint(pl.RevoluteJoint({}, plankA1, gearA2, gearA2.getPosition()));
 
-  world.createJoint(pl.GearJoint({}, body1, body3, joint1, joint2, radius2 / radius1));
+  world.createJoint(pl.GearJoint({}, gearA1, gearA2, jointA1, jointA2, radius2 / radius1));
 
-  var circle1 = pl.Circle(1.0);
-  var circle2 = pl.Circle(2.0);
-  var box = pl.Box(0.5, 5.0);
+  var gearB1 = world.createDynamicBody(Vec2(-3.0, 12.0));
+  gearB1.createFixture(pl.Circle(1.0), 5.0);
 
-  var bd1 = {};
-  bd1.type = 'dynamic';
-  bd1.position = Vec2(-3.0, 12.0);
-  var body1 = world.createBody(bd1);
-  body1.createFixture(circle1, 5.0);
+  var jointB1 = world.createJoint(pl.RevoluteJoint({}, ground, gearB1, gearB1.getPosition()));
 
-  var joint1 = world.createJoint(pl.RevoluteJoint({}, ground, body1, bd1.position));
+  var gearB2 = world.createDynamicBody(Vec2(0.0, 12.0));
+  gearB2.createFixture(pl.Circle(2.0), 5.0);
 
-  var bd2 = {};
-  bd2.type = 'dynamic';
-  bd2.position = Vec2(0.0, 12.0);
-  var body2 = world.createBody(bd2);
-  body2.createFixture(circle2, 5.0);
+  var jointB2 = world.createJoint(pl.RevoluteJoint({}, ground, gearB2, gearB2.getPosition()));
 
-  var joint2 = world.createJoint(pl.RevoluteJoint({}, ground, body2, bd2.position));
+  var plankB1 = world.createDynamicBody(Vec2(2.5, 12.0));
+  plankB1.createFixture(pl.Box(0.5, 5.0), 5.0);
 
-  var bd3 = {};
-  bd3.type = 'dynamic';
-  bd3.position = Vec2(2.5, 12.0);
-  var body3 = world.createBody(bd3);
-  body3.createFixture(box, 5.0);
+  var jointB3 = world.createJoint(pl.PrismaticJoint({
+    lowerTranslation: -5.0,
+    upperTranslation: 5.0,
+    enableLimit: true,
+  }, ground, plankB1, plankB1.getPosition(), Vec2(0.0, 1.0)));
 
-  var jd3 = {};
-  jd3.lowerTranslation = -5.0;
-  jd3.upperTranslation = 5.0;
-  jd3.enableLimit = true;
-
-  var joint3 = world.createJoint(pl.PrismaticJoint(jd3, ground, body3, bd3.position, Vec2(0.0, 1.0)));
-  var joint4 = world.createJoint(pl.GearJoint({}, body1, body2, joint1, joint2, radius2 / radius1));
-  var joint5 = world.createJoint(pl.GearJoint({}, body2, body3, joint2, joint3, -1.0 / radius2));
+  var jointB4 = world.createJoint(pl.GearJoint({}, gearB1, gearB2, jointB1, jointB2, radius2 / radius1));
+  var jointB5 = world.createJoint(pl.GearJoint({}, gearB2, plankB1, jointB2, jointB3, -1.0 / radius2));
 
   testbed.step = function Step(settings) {
     var ratio, value;
 
-    ratio = joint4.getRatio();
-    value = joint1.getJointAngle() + ratio * joint2.getJointAngle();
+    ratio = jointB4.getRatio();
+    value = jointB1.getJointAngle() + ratio * jointB2.getJointAngle();
     testbed.status("ratio1", ratio);
     testbed.status("theta1 + ratio * delta", value);
 
-    ratio = joint5.getRatio();
-    value = joint2.getJointAngle() + ratio * joint3.getJointTranslation();
+    ratio = jointB5.getRatio();
+    value = jointB2.getJointAngle() + ratio * jointB3.getJointTranslation();
 
     testbed.status("ratio2", ratio);
     testbed.status("theta2 + ratio * delta", value);

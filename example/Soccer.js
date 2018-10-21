@@ -19,25 +19,6 @@ planck.testbed('Soccer', function(testbed) {
 
   var world = pl.World({});
 
-  var walls = [
-    Vec2(-width * .5 +0.2, -height * .5),
-    Vec2(-width * .5, -height * .5 +0.2),
-    Vec2(-width * .5, -height * .2),
-    Vec2(-width * .6, -height * .2),
-    Vec2(-width * .6, +height * .2),
-    Vec2(-width * .5, +height * .2),
-    Vec2(-width * .5, +height * .5 -.2),
-    Vec2(-width * .5 +.2, +height * .5),
-    Vec2(+width * .5 -.2, +height * .5),
-    Vec2(+width * .5, +height * .5 -.2),
-    Vec2(+width * .5, +height * .2),
-    Vec2(+width * .6, +height * .2),
-    Vec2(+width * .6, -height * .2),
-    Vec2(+width * .5, -height * .2),
-    Vec2(+width * .5, -height * .5 +.2),
-    Vec2(+width * .5 -.2, -height * .5)
-  ];
-
   var goal = [
     Vec2(0, -height * 0.2),
     Vec2(0, +height * 0.2)
@@ -78,7 +59,7 @@ planck.testbed('Soccer', function(testbed) {
     angularDamping : 1.6
   };
 
-  world.createBody().createFixture(pl.Chain(walls, true), wallFixDef);
+  world.createBody().createFixture(pl.Chain(walls(), true), wallFixDef);
 
   world.createBody(Vec2(-width * 0.5 - BALL_R, 0)).createFixture(pl.Chain(goal), goalFixDef);
   world.createBody(Vec2(+width * 0.5 + BALL_R, 0)).createFixture(pl.Chain(goal), goalFixDef);
@@ -87,14 +68,14 @@ planck.testbed('Soccer', function(testbed) {
   ball.createFixture(pl.Circle(BALL_R), ballFixDef);
   ball.render = {fill: 'white', stroke : 'black'};
 
-  row().forEach(function(p) {
+  team().forEach(function(p) {
     var player = world.createDynamicBody(playerBodyDef);
     player.setPosition(p);
     player.createFixture(pl.Circle(PLAYER_R), playerFixDef);
     player.render = {fill : '#0077ff', stroke: 'black'};
   });
 
-  row().map(scale(-1, 1)).forEach(function(p) {
+  team().map(Vec2.scaleFn(-1, 1)).forEach(function(p) {
     var player = world.createDynamicBody(playerBodyDef);
     player.setPosition(p);
     player.setAngle(Math.PI);
@@ -106,9 +87,9 @@ planck.testbed('Soccer', function(testbed) {
     var fA = contact.getFixtureA(), bA = fA.getBody();
     var fB = contact.getFixtureB(), bB = fB.getBody();
 
-    var wall = fA.getUserData() == wallFixDef.userData && bA || fB.getUserData() == wallFixDef.userData && bB;
-    var ball = fA.getUserData() == ballFixDef.userData && bA || fB.getUserData() == ballFixDef.userData && bB;
-    var goal = fA.getUserData() == goalFixDef.userData && bA || fB.getUserData() == goalFixDef.userData && bB;
+    var wall = fA.getUserData() === wallFixDef.userData ? bA : fB.getUserData() === wallFixDef.userData ? bB : null;
+    var ball = fA.getUserData() === ballFixDef.userData ? bA : fB.getUserData() === ballFixDef.userData ? bB : null;
+    var goal = fA.getUserData() === goalFixDef.userData ? bA : fB.getUserData() === goalFixDef.userData ? bB : null;
 
     // do not change world immediately
     setTimeout(function() {
@@ -122,26 +103,35 @@ planck.testbed('Soccer', function(testbed) {
 
   return world;
 
-  function row() {
-    var balls = [];
-    balls.push(Vec2(-width * .45, 0));
-    balls.push(Vec2(-width * .3, -height * 0.2));
-    balls.push(Vec2(-width * .3, +height * 0.2));
-    balls.push(Vec2(-width * .1, -height * 0.1));
-    balls.push(Vec2(-width * .1, +height * 0.1));
-    return balls;
+  function team() {
+    var positions = [];
+    positions.push(Vec2(-width * .45, 0));
+    positions.push(Vec2(-width * .3, -height * 0.2));
+    positions.push(Vec2(-width * .3, +height * 0.2));
+    positions.push(Vec2(-width * .1, -height * 0.1));
+    positions.push(Vec2(-width * .1, +height * 0.1));
+    return positions;
   }
 
-  function scale(x, y) {
-    return function (v) {
-      return pl.Vec2(v.x * x, v.y * y);
-    };
+  function walls() {
+    var chain = [
+      Vec2(-width * .5 +0.2, -height * .5),
+      Vec2(-width * .5, -height * .5 +0.2),
+      Vec2(-width * .5, -height * .2),
+      Vec2(-width * .6, -height * .2),
+      Vec2(-width * .6, +height * .2),
+      Vec2(-width * .5, +height * .2),
+      Vec2(-width * .5, +height * .5 -.2),
+      Vec2(-width * .5 +.2, +height * .5),
+      Vec2(+width * .5 -.2, +height * .5),
+      Vec2(+width * .5, +height * .5 -.2),
+      Vec2(+width * .5, +height * .2),
+      Vec2(+width * .6, +height * .2),
+      Vec2(+width * .6, -height * .2),
+      Vec2(+width * .5, -height * .2),
+      Vec2(+width * .5, -height * .5 +.2),
+      Vec2(+width * .5 -.2, -height * .5)
+    ];
+    return chain;
   }
-
-  function translate(x, y) {
-    return function (v) {
-      return pl.Vec2(v.x + x, v.y + y);
-    };
-  }
-
 });

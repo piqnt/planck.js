@@ -29,50 +29,55 @@ planck.testbed('Mobile', function(testbed) {
   var DEPTH = 4;
   var DENSITY = 20.0;
 
-  var bodyDef = {};
-  bodyDef.position = Vec2(0.0, 20.0);
-  var ground = world.createBody(bodyDef);
+  var ground = world.createBody(Vec2(0.0, 20.0));
 
   var a = 0.5;
   var h = Vec2(0.0, a);
 
-  var root = AddNode(ground, Vec2(), 0, 3.0, a);
+  var root = addNode(ground, Vec2(), 0, 3.0, a);
 
-  var jointDef = {};
-  jointDef.localAnchorA = Vec2();
-  jointDef.localAnchorB = h;
-  world.createJoint(pl.RevoluteJoint(jointDef, ground, root));
+  world.createJoint(pl.RevoluteJoint({
+    bodyA: ground,
+    bodyB: root,
+    localAnchorA: Vec2(),
+    localAnchorB: h,
+  }, ground, root));
 
-  function AddNode(parent, localAnchor, depth, offset, a) {
+  function addNode(parent, localAnchor, depth, offset, a) {
 
     var h = Vec2(0.0, a);
 
-    var body = world.createBody({
+    var parent = world.createBody({
       type : 'dynamic',
       position : Vec2.add(parent.getPosition(), localAnchor).sub(h)
     });
 
-    body.createFixture(pl.Box(0.25 * a, a), DENSITY);
+    parent.createFixture(pl.Box(0.25 * a, a), DENSITY);
 
-    if (depth == DEPTH) {
-      return body;
+    if (depth === DEPTH) {
+      return parent;
     }
 
-    var a1 = Vec2(offset, -a);
-    var a2 = Vec2(-offset, -a);
-    var body1 = AddNode(body, a1, depth + 1, 0.5 * offset, a);
-    var body2 = AddNode(body, a2, depth + 1, 0.5 * offset, a);
+    var left = Vec2(offset, -a);
+    var right = Vec2(-offset, -a);
+    var leftChild = addNode(parent, left, depth + 1, 0.5 * offset, a);
+    var rightChild = addNode(parent, right, depth + 1, 0.5 * offset, a);
 
-    var jointDef = {};
-    jointDef.localAnchorB = h;
+    world.createJoint(pl.RevoluteJoint({
+      bodyA: parent,
+      bodyB: leftChild,
+      localAnchorA: left,
+      localAnchorB: h,
+    }, parent, leftChild));
 
-    jointDef.localAnchorA = a1;
-    world.createJoint(pl.RevoluteJoint(jointDef, body, body1));
+    world.createJoint(pl.RevoluteJoint({
+      bodyA: parent,
+      bodyB: rightChild,
+      localAnchorA: right,
+      localAnchorB: h,
+    }, parent, rightChild));
 
-    jointDef.localAnchorA = a2;
-    world.createJoint(pl.RevoluteJoint(jointDef, body, body2));
-
-    return body;
+    return parent;
   }
 
   return world;

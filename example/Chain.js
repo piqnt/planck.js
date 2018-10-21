@@ -26,21 +26,19 @@ planck.testbed('Chain', function(testbed) {
 
   var shape = pl.Box(0.6, 0.125);
 
-  var fd = {};
-  fd.density = 20.0;
-  fd.friction = 0.2;
-
-  var jd = {};
-  jd.collideConnected = false;
-
   var y = 25.0;
   var prevBody = ground;
   for (var i = 0; i < 30; ++i) {
     var body = world.createDynamicBody(Vec2(0.5 + i, y));
-    body.createFixture(shape, fd);
+    body.createFixture(shape, {
+      density: 20.0,
+      friction: 0.2,
+    });
 
     var anchor = Vec2(i, y);
-    world.createJoint(pl.RevoluteJoint(jd, prevBody, body, anchor));
+    world.createJoint(pl.RevoluteJoint({
+      collideConnected: false,
+    }, prevBody, body, anchor));
 
     prevBody = body;
   }
