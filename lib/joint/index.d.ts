@@ -240,7 +240,7 @@ declare namespace planck {
     // m_C: Vec2;
 
     setTarget(target: Vec2): void;
-    getTarget(): Vec2
+    getTarget(): Vec2;
     setMaxForce(force: number): void;
     getMaxForce(): number;
     setFrequency(hz: number): void;
@@ -291,7 +291,7 @@ declare namespace planck {
     // this.m_motorMass; // float
 
     getLocalAnchorA(): Vec2;
-    getLocalAnchorB(): Vec2
+    getLocalAnchorB(): Vec2;
     getLocalAxisA(): Vec2;
     getReferenceAngle(): number;
     getJointTranslation(): number;
@@ -348,8 +348,8 @@ declare namespace planck {
     // this.m_invIB; // float
     // this.m_mass; // float
 
-    getGroundAnchorA(): Vec2
-    getGroundAnchorB(): Vec2
+    getGroundAnchorA(): Vec2;
+    getGroundAnchorB(): Vec2;
     getLengthA(): number;
     getLengthB(): number;
     getRatio(): number;
@@ -399,13 +399,13 @@ declare namespace planck {
 
     // From Joint:
     getLocalAnchorA(): Vec2;
-    getLocalAnchorB(): Vec2
-    getReferenceAngle(): number
+    getLocalAnchorB(): Vec2;
+    getReferenceAngle(): number;
     getJointAngle(): number;
-    getJointSpeed (): number;
+    getJointSpeed(): number;
     isMotorEnabled(): boolean;
     enableMotor(flag: boolean): void;
-    getMotorTorque(inv_dt: number): number
+    getMotorTorque(inv_dt: number): number;
     setMotorSpeed(speed: number): void;
     getMotorSpeed(): number;
     setMaxMotorTorque(torque: number): void;
@@ -452,7 +452,7 @@ declare namespace planck {
     // m_invIB; // float
     // m_mass; // float
 
-    getLocalAnchorA (): Vec2;
+    getLocalAnchorA(): Vec2;
     getLocalAnchorB(): Vec2;
     setMaxLength(length: number): void;
     getMaxLength(): number;

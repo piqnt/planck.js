@@ -1,5 +1,4 @@
 declare namespace planck {
-
   // Types
   type ShapeType = "circle" | "edge" | "polygon" | "chain";
 
