@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.2.6
+ * Planck.js v0.2.7
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -6462,6 +6462,13 @@ Transform.mulAll = function(a, b) {
     return arr;
 };
 
+Transform.mulFn = function(a) {
+    _ASSERT && Transform.assert(a);
+    return function(b) {
+        return Transform.mul(a, b);
+    };
+};
+
 Transform.mulVec2 = function(a, b) {
     _ASSERT && Transform.assert(a);
     _ASSERT && Vec2.assert(b);
@@ -6888,6 +6895,18 @@ Vec2.clamp = function(v, max) {
     v = Vec2.neo(v.x, v.y);
     v.clamp(max);
     return v;
+};
+
+Vec2.scaleFn = function(x, y) {
+    return function(v) {
+        return Vec2.neo(v.x * x, v.y * y);
+    };
+};
+
+Vec2.translateFn = function(x, y) {
+    return function(v) {
+        return Vec2.neo(v.x + x, v.y + y);
+    };
 };
 
 
