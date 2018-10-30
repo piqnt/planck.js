@@ -54,33 +54,6 @@ Planck.js is [available on jsDelivr](https://www.jsdelivr.com/projects/planck).
 
     bower install planck-js --save
 
-## Usage
-
-Planck.js does not use any renderer by default. To use or integrate it with a rendering library all you need to do 
-is call `world.step(timeStep)` in each frame, and then iterate over world entities to draw or update them.
-You may also want to listen to world events to remove objects which are removed from the world. For example:
-
-```html
-<script src="./path/to/planck.min.js"></script>
-<script>
-  var world = planck.World();
-
-  window.requestAnimationFrame(function() {
-    // in each frame call world.step(timeStep) with fixed timeStep
-    world.step(1 / 60);
-    // iterate over bodies and fixtures
-    for (var body = world.getBodyList(); body; body = body.getNext()) {
-      for (var fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
-        // draw or update fixture
-      }
-    }
-  });
-
-   world.on('remove-fixture', function(fixture) {
-    // remove fixture from ui
-  });
-</script>
-```
 
 ## API
 
@@ -110,6 +83,36 @@ Following resources are recommended if you are interested in learning about Box2
 - [Continuous Collision](http://twvideo01.ubm-us.net/o1/vault/gdc2013/slides/824737Catto_Erin_PhysicsForGame.pdf) by Erin Catto (slides)
 - [Solving Rigid Body Contacts](http://www.richardtonge.com/presentations/Tonge-2012-GDC-solvingRigidBodyContacts.pdf) by Richard Tonge (slides)
 - [dyn4j Blog Posts](http://www.dyn4j.org/category/gamedev/) by William Bittle
+
+
+## Rendering and Integration
+
+Planck.js does not use any renderer by default. To use or integrate it with a rendering library all you need to do 
+is call `world.step(timeStep)` in each frame, and then iterate over world entities to draw or update them.
+You may also want to listen to world events to remove objects which are removed from the world. For example:
+
+```html
+<script src="./path/to/planck.min.js"></script>
+<script>
+  var world = planck.World();
+
+  window.requestAnimationFrame(function() {
+    // in each frame call world.step(timeStep) with fixed timeStep
+    world.step(1 / 60);
+    // iterate over bodies and fixtures
+    for (var body = world.getBodyList(); body; body = body.getNext()) {
+      for (var fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
+        // draw or update fixture
+      }
+    }
+  });
+
+   world.on('remove-fixture', function(fixture) {
+    // remove fixture from ui
+  });
+</script>
+```
+
 
 ## Testbed
 
