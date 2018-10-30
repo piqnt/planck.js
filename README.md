@@ -171,7 +171,7 @@ Another way to use testbed and try included examples (in [`example`](./example/)
 
 1. Clone or download this repository
 
-1. Install npm and bower dependencies:
+1. Install npm dependencies:
 
         npm install
 
