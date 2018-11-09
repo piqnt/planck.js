@@ -567,7 +567,6 @@ Viewer.prototype.drawEdge = function(edge, options) {
   var minY = Math.min(-v1.y, -v2.y);
 
   var image = Stage.image(texture);
-  console.log(-Math.atan2(dy, dx))
   image.rotate(-Math.atan2(dy, dx));
   image.offset(minX - lw, minY - lw);
   var node = Stage.create().append(image);
