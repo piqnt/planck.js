@@ -90,7 +90,7 @@ _This tutorial is under development, please feel free to edit, comment or ask fo
 
 Before writing code there are a number of key concepts to learn:
 
-- **Shape** - A shape contains geometrical information and is user in collision detections.
+- **Shape** - A shape contains geometrical information and is used in collision detections.
 - **Fixture** - A fixture consists of a shape and physical properties such as density.
 - **Body** - Each body is composed of a number of fixtures which are fixed together, that is a body is a set of shapes with physical properties. Bodies have position, angle, linear velocity, angular velocity, etc. which can be changed by applying linear and angular forces or impulses. Bodies represent rigid objects in the world, such as ground, a box or a car.
 - **Joint** - Joints are constraints on bodies position or velocity.
