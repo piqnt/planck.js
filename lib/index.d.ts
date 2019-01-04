@@ -473,3 +473,4 @@ declare namespace planck {
     (): World;
   };
 }
+declare module "planck-js";
