@@ -1,10 +1,10 @@
-var Path = require('path');
-var FS = require('fs');
-var Express = require('express');
+const Path = require('path');
+const FS = require('fs');
+const Express = require('express');
 // var ServeIndex = require('serve-index');
 const Webpack = require('webpack');
 const WebpackMiddleware = require('webpack-dev-middleware');
-var Handlebars = require('handlebars');
+const Handlebars = require('handlebars');
 
 const compiler = Webpack([
   {
@@ -13,6 +13,12 @@ const compiler = Webpack([
       library: 'planck',
       filename: 'planck.js',
     },
+    plugins: [
+      new Webpack.DefinePlugin({
+        DEBUG: JSON.stringify(false),
+        ASSERT: JSON.stringify(false),
+      }),
+    ],
   },
   {
     entry: './testbed/index.js',
@@ -20,16 +26,22 @@ const compiler = Webpack([
       library: 'planck',
       filename: 'planck-with-testbed.js',
     },
+    plugins: [
+      new Webpack.DefinePlugin({
+        DEBUG: JSON.stringify(false),
+        ASSERT: JSON.stringify(false),
+      }),
+    ],
   }
 ]);
 var app = Express();
 
 app.set('port', process.env.PORT || 6587);
 
-// app.use(WebpackMiddleware(compiler, {
-//   publicPath: '/dist/',
-//   compress: false,
-// }));
+app.use(WebpackMiddleware(compiler, {
+  publicPath: '/dist/',
+  compress: false,
+}));
 
 app.use(Express.static(Path.resolve(__dirname, '..')));
 
