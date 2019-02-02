@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.0
+ * Planck.js v0.3.1
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -106,7 +106,7 @@ var planck =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 62);
+/******/ 	return __webpack_require__(__webpack_require__.s = 63);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -135,125 +135,10 @@ var planck =
 var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
-var common = __webpack_require__(2);
-var create = __webpack_require__(6);
-var native = Math;
-var math = module.exports = create(native);
-
-math.EPSILON = 1e-9; // TODO
-
-/**
- * This function is used to ensure that a floating point number is not a NaN or
- * infinity.
- */
-math.isFinite = function(x) {
-  return (typeof x === 'number') && isFinite(x) && !isNaN(x);
-}
-
-math.assert = function(x) {
-  if (!_ASSERT) return;
-  if (!math.isFinite(x)) {
-    _DEBUG && common.debug(x);
-    throw new Error('Invalid Number!');
-  }
-}
-
-/**
- * TODO: This is a approximate yet fast inverse square-root.
- */
-math.invSqrt = function(x) {
-  // TODO
-  return 1 / native.sqrt(x);
-}
-
-/**
- * Next Largest Power of 2 Given a binary integer value x, the next largest
- * power of 2 can be computed by a SWAR algorithm that recursively "folds" the
- * upper bits into the lower bits. This process yields a bit vector with the
- * same most significant 1 as x, but all 1's below it. Adding 1 to that value
- * yields the next largest power of 2. For a 32-bit value:
- */
-math.nextPowerOfTwo = function(x) {
-  // TODO
-  x |= (x >> 1);
-  x |= (x >> 2);
-  x |= (x >> 4);
-  x |= (x >> 8);
-  x |= (x >> 16);
-  return x + 1;
-}
-
-math.isPowerOfTwo = function(x) {
-  return x > 0 && (x & (x - 1)) == 0;
-}
-
-math.mod = function(num, min, max) {
-  if (typeof min === 'undefined') {
-    max = 1, min = 0;
-  } else if (typeof max === 'undefined') {
-    max = min, min = 0;
-  }
-  if (max > min) {
-    num = (num - min) % (max - min);
-    return num + (num < 0 ? max : min);
-  } else {
-    num = (num - max) % (min - max);
-    return num + (num <= 0 ? min : max);
-  }
-};
-
-math.clamp = function(num, min, max) {
-  if (num < min) {
-    return min;
-  } else if (num > max) {
-    return max;
-  } else {
-    return num;
-  }
-};
-
-math.random = function(min, max) {
-  if (typeof min === 'undefined') {
-    max = 1;
-    min = 0;
-  } else if (typeof max === 'undefined') {
-    max = min;
-    min = 0;
-  }
-  return min == max ? min : native.random() * (max - min) + min;
-};
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
- *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- */
-
-var _DEBUG =  false ? undefined : false;
-var _ASSERT =  false ? undefined : false;
-
 module.exports = Vec2;
 
 var common = __webpack_require__(2);
-var Math = __webpack_require__(0);
+var Math = __webpack_require__(1);
 
 function Vec2(x, y) {
   if (!(this instanceof Vec2)) {
@@ -271,6 +156,20 @@ function Vec2(x, y) {
   }
   _ASSERT && Vec2.assert(this);
 }
+
+Vec2.prototype._serialize = function() {
+  return {
+    x: this.x,
+    y: this.y
+  };
+};
+
+Vec2._deserialize = function(data) {
+  var obj = Object.create(Vec2.prototype);
+  obj.x = data.x;
+  obj.y = data.y;
+  return obj;
+};
 
 Vec2.zero = function() {
   var obj = Object.create(Vec2.prototype);
@@ -736,6 +635,121 @@ Vec2.translateFn = function(x, y) {
 
 
 /***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG =  false ? undefined : false;
+var _ASSERT =  false ? undefined : false;
+
+var common = __webpack_require__(2);
+var create = __webpack_require__(6);
+var native = Math;
+var math = module.exports = create(native);
+
+math.EPSILON = 1e-9; // TODO
+
+/**
+ * This function is used to ensure that a floating point number is not a NaN or
+ * infinity.
+ */
+math.isFinite = function(x) {
+  return (typeof x === 'number') && isFinite(x) && !isNaN(x);
+}
+
+math.assert = function(x) {
+  if (!_ASSERT) return;
+  if (!math.isFinite(x)) {
+    _DEBUG && common.debug(x);
+    throw new Error('Invalid Number!');
+  }
+}
+
+/**
+ * TODO: This is a approximate yet fast inverse square-root.
+ */
+math.invSqrt = function(x) {
+  // TODO
+  return 1 / native.sqrt(x);
+}
+
+/**
+ * Next Largest Power of 2 Given a binary integer value x, the next largest
+ * power of 2 can be computed by a SWAR algorithm that recursively "folds" the
+ * upper bits into the lower bits. This process yields a bit vector with the
+ * same most significant 1 as x, but all 1's below it. Adding 1 to that value
+ * yields the next largest power of 2. For a 32-bit value:
+ */
+math.nextPowerOfTwo = function(x) {
+  // TODO
+  x |= (x >> 1);
+  x |= (x >> 2);
+  x |= (x >> 4);
+  x |= (x >> 8);
+  x |= (x >> 16);
+  return x + 1;
+}
+
+math.isPowerOfTwo = function(x) {
+  return x > 0 && (x & (x - 1)) == 0;
+}
+
+math.mod = function(num, min, max) {
+  if (typeof min === 'undefined') {
+    max = 1, min = 0;
+  } else if (typeof max === 'undefined') {
+    max = min, min = 0;
+  }
+  if (max > min) {
+    num = (num - min) % (max - min);
+    return num + (num < 0 ? max : min);
+  } else {
+    num = (num - max) % (min - max);
+    return num + (num <= 0 ? min : max);
+  }
+};
+
+math.clamp = function(num, min, max) {
+  if (num < min) {
+    return min;
+  } else if (num > max) {
+    return max;
+  } else {
+    return num;
+  }
+};
+
+math.random = function(min, max) {
+  if (typeof min === 'undefined') {
+    max = 1;
+    min = 0;
+  } else if (typeof max === 'undefined') {
+    max = min;
+    min = 0;
+  }
+  return min == max ? min : native.random() * (max - min) + min;
+};
+
+
+/***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -783,8 +797,8 @@ var _ASSERT =  false ? undefined : false;
 module.exports = Rot;
 
 var common = __webpack_require__(2);
-var Vec2 = __webpack_require__(1);
-var Math = __webpack_require__(0);
+var Vec2 = __webpack_require__(0);
+var Math = __webpack_require__(1);
 
 // TODO merge with Transform
 
@@ -1014,10 +1028,176 @@ Rot.mulTVec2 = function(rot, m) {
 var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
+// TODO merge with World options?
+
+var Settings = exports;
+
+/**
+ * Tuning constants based on meters-kilograms-seconds (MKS) units.
+ */
+
+// Collision
+/**
+ * The maximum number of contact points between two convex shapes. Do not change
+ * this value.
+ */
+Settings.maxManifoldPoints = 2;
+
+/**
+ * The maximum number of vertices on a convex polygon. You cannot increase this
+ * too much because BlockAllocator has a maximum object size.
+ */
+Settings.maxPolygonVertices = 12;
+
+/**
+ * This is used to fatten AABBs in the dynamic tree. This allows proxies to move
+ * by a small amount without triggering a tree adjustment. This is in meters.
+ */
+Settings.aabbExtension = 0.1;
+
+/**
+ * This is used to fatten AABBs in the dynamic tree. This is used to predict the
+ * future position based on the current displacement. This is a dimensionless
+ * multiplier.
+ */
+Settings.aabbMultiplier = 2.0;
+
+/**
+ * A small length used as a collision and constraint tolerance. Usually it is
+ * chosen to be numerically significant, but visually insignificant.
+ */
+Settings.linearSlop = 0.005;
+Settings.linearSlopSquared = Settings.linearSlop * Settings.linearSlop;
+
+/**
+ * A small angle used as a collision and constraint tolerance. Usually it is
+ * chosen to be numerically significant, but visually insignificant.
+ */
+Settings.angularSlop = (2.0 / 180.0 * Math.PI);
+
+/**
+ * The radius of the polygon/edge shape skin. This should not be modified.
+ * Making this smaller means polygons will have an insufficient buffer for
+ * continuous collision. Making it larger may create artifacts for vertex
+ * collision.
+ */
+Settings.polygonRadius = (2.0 * Settings.linearSlop);
+
+/**
+ * Maximum number of sub-steps per contact in continuous physics simulation.
+ */
+Settings.maxSubSteps = 8;
+
+// Dynamics
+
+/**
+ * Maximum number of contacts to be handled to solve a TOI impact.
+ */
+Settings.maxTOIContacts = 32;
+
+/**
+ * Maximum iterations to solve a TOI.
+ */
+Settings.maxTOIIterations = 20;
+
+/**
+ * Maximum iterations to find Distance.
+ */
+Settings.maxDistnceIterations = 20;
+
+/**
+ * A velocity threshold for elastic collisions. Any collision with a relative
+ * linear velocity below this threshold will be treated as inelastic.
+ */
+Settings.velocityThreshold = 1.0;
+
+/**
+ * The maximum linear position correction used when solving constraints. This
+ * helps to prevent overshoot.
+ */
+Settings.maxLinearCorrection = 0.2;
+
+/**
+ * The maximum angular position correction used when solving constraints. This
+ * helps to prevent overshoot.
+ */
+Settings.maxAngularCorrection = (8.0 / 180.0 * Math.PI);
+
+/**
+ * The maximum linear velocity of a body. This limit is very large and is used
+ * to prevent numerical problems. You shouldn't need to adjust this.
+ */
+Settings.maxTranslation = 2.0;
+Settings.maxTranslationSquared = (Settings.maxTranslation * Settings.maxTranslation);
+
+/**
+ * The maximum angular velocity of a body. This limit is very large and is used
+ * to prevent numerical problems. You shouldn't need to adjust this.
+ */
+Settings.maxRotation = (0.5 * Math.PI)
+Settings.maxRotationSquared = (Settings.maxRotation * Settings.maxRotation)
+
+/**
+ * This scale factor controls how fast overlap is resolved. Ideally this would
+ * be 1 so that overlap is removed in one time step. However using values close
+ * to 1 often lead to overshoot.
+ */
+Settings.baumgarte = 0.2;
+Settings.toiBaugarte = 0.75;
+
+// Sleep
+
+/**
+ * The time that a body must be still before it will go to sleep.
+ */
+Settings.timeToSleep = 0.5;
+
+/**
+ * A body cannot sleep if its linear velocity is above this tolerance.
+ */
+Settings.linearSleepTolerance = 0.01;
+
+Settings.linearSleepToleranceSqr = Math.pow(Settings.linearSleepTolerance, 2);
+
+/**
+ * A body cannot sleep if its angular velocity is above this tolerance.
+ */
+Settings.angularSleepTolerance = (2.0 / 180.0 * Math.PI);
+
+Settings.angularSleepToleranceSqr = Math.pow(Settings.angularSleepTolerance, 2);
+
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG =  false ? undefined : false;
+var _ASSERT =  false ? undefined : false;
+
 module.exports = Transform;
 
 var common = __webpack_require__(2);
-var Vec2 = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
 var Rot = __webpack_require__(3);
 
 // TODO merge with Rot
@@ -1227,172 +1407,6 @@ Transform.mulTXf = function(a, b) {
 
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
- *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- */
-
-var _DEBUG =  false ? undefined : false;
-var _ASSERT =  false ? undefined : false;
-
-// TODO merge with World options?
-
-var Settings = exports;
-
-/**
- * Tuning constants based on meters-kilograms-seconds (MKS) units.
- */
-
-// Collision
-/**
- * The maximum number of contact points between two convex shapes. Do not change
- * this value.
- */
-Settings.maxManifoldPoints = 2;
-
-/**
- * The maximum number of vertices on a convex polygon. You cannot increase this
- * too much because BlockAllocator has a maximum object size.
- */
-Settings.maxPolygonVertices = 12;
-
-/**
- * This is used to fatten AABBs in the dynamic tree. This allows proxies to move
- * by a small amount without triggering a tree adjustment. This is in meters.
- */
-Settings.aabbExtension = 0.1;
-
-/**
- * This is used to fatten AABBs in the dynamic tree. This is used to predict the
- * future position based on the current displacement. This is a dimensionless
- * multiplier.
- */
-Settings.aabbMultiplier = 2.0;
-
-/**
- * A small length used as a collision and constraint tolerance. Usually it is
- * chosen to be numerically significant, but visually insignificant.
- */
-Settings.linearSlop = 0.005;
-Settings.linearSlopSquared = Settings.linearSlop * Settings.linearSlop;
-
-/**
- * A small angle used as a collision and constraint tolerance. Usually it is
- * chosen to be numerically significant, but visually insignificant.
- */
-Settings.angularSlop = (2.0 / 180.0 * Math.PI);
-
-/**
- * The radius of the polygon/edge shape skin. This should not be modified.
- * Making this smaller means polygons will have an insufficient buffer for
- * continuous collision. Making it larger may create artifacts for vertex
- * collision.
- */
-Settings.polygonRadius = (2.0 * Settings.linearSlop);
-
-/**
- * Maximum number of sub-steps per contact in continuous physics simulation.
- */
-Settings.maxSubSteps = 8;
-
-// Dynamics
-
-/**
- * Maximum number of contacts to be handled to solve a TOI impact.
- */
-Settings.maxTOIContacts = 32;
-
-/**
- * Maximum iterations to solve a TOI.
- */
-Settings.maxTOIIterations = 20;
-
-/**
- * Maximum iterations to find Distance.
- */
-Settings.maxDistnceIterations = 20;
-
-/**
- * A velocity threshold for elastic collisions. Any collision with a relative
- * linear velocity below this threshold will be treated as inelastic.
- */
-Settings.velocityThreshold = 1.0;
-
-/**
- * The maximum linear position correction used when solving constraints. This
- * helps to prevent overshoot.
- */
-Settings.maxLinearCorrection = 0.2;
-
-/**
- * The maximum angular position correction used when solving constraints. This
- * helps to prevent overshoot.
- */
-Settings.maxAngularCorrection = (8.0 / 180.0 * Math.PI);
-
-/**
- * The maximum linear velocity of a body. This limit is very large and is used
- * to prevent numerical problems. You shouldn't need to adjust this.
- */
-Settings.maxTranslation = 2.0;
-Settings.maxTranslationSquared = (Settings.maxTranslation * Settings.maxTranslation);
-
-/**
- * The maximum angular velocity of a body. This limit is very large and is used
- * to prevent numerical problems. You shouldn't need to adjust this.
- */
-Settings.maxRotation = (0.5 * Math.PI)
-Settings.maxRotationSquared = (Settings.maxRotation * Settings.maxRotation)
-
-/**
- * This scale factor controls how fast overlap is resolved. Ideally this would
- * be 1 so that overlap is removed in one time step. However using values close
- * to 1 often lead to overshoot.
- */
-Settings.baumgarte = 0.2;
-Settings.toiBaugarte = 0.75;
-
-// Sleep
-
-/**
- * The time that a body must be still before it will go to sleep.
- */
-Settings.timeToSleep = 0.5;
-
-/**
- * A body cannot sleep if its linear velocity is above this tolerance.
- */
-Settings.linearSleepTolerance = 0.01;
-
-Settings.linearSleepToleranceSqr = Math.pow(Settings.linearSleepTolerance, 2);
-
-/**
- * A body cannot sleep if its angular velocity is above this tolerance.
- */
-Settings.angularSleepTolerance = (2.0 / 180.0 * Math.PI);
-
-Settings.angularSleepToleranceSqr = Math.pow(Settings.angularSleepTolerance, 2);
-
-
-
-/***/ }),
 /* 6 */
 /***/ (function(module, exports) {
 
@@ -1473,141 +1487,115 @@ module.exports = function(to, from) {
 var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
-module.exports = Vec3;
+module.exports = Sweep;
 
 var common = __webpack_require__(2);
-var Math = __webpack_require__(0);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Rot = __webpack_require__(3);
+var Transform = __webpack_require__(5);
 
-function Vec3(x, y, z) {
-  if (!(this instanceof Vec3)) {
-    return new Vec3(x, y, z);
-  }
-  if (typeof x === 'undefined') {
-    this.x = 0, this.y = 0, this.z = 0;
-  } else if (typeof x === 'object') {
-    this.x = x.x, this.y = x.y, this.z = x.z;
-  } else {
-    this.x = x, this.y = y, this.z = z;
-  }
-  _ASSERT && Vec3.assert(this);
+/**
+ * This describes the motion of a body/shape for TOI computation. Shapes are
+ * defined with respect to the body origin, which may not coincide with the
+ * center of mass. However, to support dynamics we must interpolate the center
+ * of mass position.
+ * 
+ * @prop {Vec2} localCenter Local center of mass position
+ * @prop {Vec2} c World center position
+ * @prop {float} a World angle
+ * @prop {float} alpha0 Fraction of the current time step in the range [0,1], c0
+ *       and a0 are c and a at alpha0.
+ */
+function Sweep(c, a) {
+  _ASSERT && common.assert(typeof c === 'undefined');
+  _ASSERT && common.assert(typeof a === 'undefined');
+  this.localCenter = Vec2.zero();
+  this.c = Vec2.zero();
+  this.a = 0;
+  this.alpha0 = 0;
+  this.c0 = Vec2.zero();
+  this.a0 = 0;
+}
+
+Sweep.prototype.setTransform = function(xf) {
+  var c = Transform.mulVec2(xf, this.localCenter);
+  this.c.set(c);
+  this.c0.set(c);
+
+  this.a = xf.q.getAngle();
+  this.a0 = xf.q.getAngle();
 };
 
-Vec3.neo = function(x, y, z) {
-  var obj = Object.create(Vec3.prototype);
-  obj.x = x;
-  obj.y = y;
-  obj.z = z;
-  return obj;
-};
+Sweep.prototype.setLocalCenter = function(localCenter, xf) {
+  this.localCenter.set(localCenter);
 
-Vec3.clone = function(v) {
-  _ASSERT && Vec3.assert(v);
-  return Vec3.neo(v.x, v.y, v.z);
-};
-
-Vec3.prototype.toString = function() {
-  return JSON.stringify(this);
+  var c = Transform.mulVec2(xf, this.localCenter);
+  this.c.set(c);
+  this.c0.set(c);
 };
 
 /**
- * Does this vector contain finite coordinates?
+ * Get the interpolated transform at a specific time.
+ * 
+ * @param xf
+ * @param beta A factor in [0,1], where 0 indicates alpha0
  */
-Vec3.isValid = function(v) {
-  return v && Math.isFinite(v.x) && Math.isFinite(v.y) && Math.isFinite(v.z);
-}
+Sweep.prototype.getTransform = function(xf, beta) {
+  beta = typeof beta === 'undefined' ? 0 : beta;
+  xf.q.setAngle((1.0 - beta) * this.a0 + beta * this.a);
+  xf.p.setCombine((1.0 - beta), this.c0, beta, this.c);
 
-Vec3.assert = function(o) {
-  if (!_ASSERT) return;
-  if (!Vec3.isValid(o)) {
-    _DEBUG && common.debug(o);
-    throw new Error('Invalid Vec3!');
-  }
-}
-
-Vec3.prototype.setZero = function() {
-  this.x = 0.0;
-  this.y = 0.0;
-  this.z = 0.0;
-  return this;
-}
-
-Vec3.prototype.set = function(x, y, z) {
-  this.x = x;
-  this.y = y;
-  this.z = z;
-  return this;
-}
-
-Vec3.prototype.add = function(w) {
-  this.x += w.x;
-  this.y += w.y;
-  this.z += w.z;
-  return this;
-}
-
-Vec3.prototype.sub = function(w) {
-  this.x -= w.x;
-  this.y -= w.y;
-  this.z -= w.z;
-  return this;
-}
-
-Vec3.prototype.mul = function(m) {
-  this.x *= m;
-  this.y *= m;
-  this.z *= m;
-  return this;
-}
-
-Vec3.areEqual = function(v, w) {
-  _ASSERT && Vec3.assert(v);
-  _ASSERT && Vec3.assert(w);
-  return v == w ||
-    typeof v === 'object' && v !== null &&
-    typeof w === 'object' && w !== null &&
-    v.x === w.x && v.y === w.y && v.z === w.z;
-}
+  // shift to origin
+  xf.p.sub(Rot.mulVec2(xf.q, this.localCenter));
+};
 
 /**
- * Perform the dot product on two vectors.
+ * Advance the sweep forward, yielding a new initial state.
+ * 
+ * @param {float} alpha The new initial time
  */
-Vec3.dot = function(v, w) {
-  return v.x * w.x + v.y * w.y + v.z * w.z;
-}
+Sweep.prototype.advance = function(alpha) {
+  _ASSERT && common.assert(this.alpha0 < 1.0);
+  var beta = (alpha - this.alpha0) / (1.0 - this.alpha0);
+  this.c0.setCombine(beta, this.c, 1 - beta, this.c0);
+  this.a0 = beta * this.a + (1 - beta) * this.a0;
+  this.alpha0 = alpha;
+};
+
+Sweep.prototype.forward = function() {
+  this.a0 = this.a;
+  this.c0.set(this.c);
+};
 
 /**
- * Perform the cross product on two vectors. In 2D this produces a scalar.
+ * normalize the angles in radians to be between -pi and pi.
  */
-Vec3.cross = function(v, w) {
-  return new Vec3(
-    v.y * w.z - v.z * w.y,
-    v.z * w.x - v.x * w.z,
-    v.x * w.y - v.y * w.x
-  );
-}
+Sweep.prototype.normalize = function() {
+  var a0 = Math.mod(this.a0, -Math.PI, +Math.PI);
+  this.a -= this.a0 - a0;
+  this.a0 = a0;
+};
 
-Vec3.add = function(v, w) {
-  return new Vec3(v.x + w.x, v.y + w.y, v.z + w.z);
-}
+Sweep.prototype.clone = function() {
+  var clone = new Sweep();
+  clone.localCenter.set(this.localCenter);
+  clone.alpha0 = this.alpha0;
+  clone.a0 = this.a0;
+  clone.a = this.a;
+  clone.c0.set(this.c0);
+  clone.c.set(this.c);
+  return clone;
+};
 
-Vec3.sub = function(v, w) {
-  return new Vec3(v.x - w.x, v.y - w.y, v.z - w.z);
-}
-
-Vec3.mul = function(v, m) {
-  return new Vec3(m * v.x, m * v.y, m * v.z);
-}
-
-Vec3.prototype.neg = function() {
-  this.x = -this.x;
-  this.y = -this.y;
-  this.z = -this.z;
-  return this;
-}
-
-Vec3.neg = function(v) {
-  return new Vec3(-v.x, -v.y, -v.z);
-}
+Sweep.prototype.set = function(that) {
+  this.localCenter.set(that.localCenter);
+  this.alpha0 = that.alpha0;
+  this.a0 = that.a0;
+  this.a = that.a;
+  this.c0.set(that.c0);
+  this.c.set(that.c);
+};
 
 
 /***/ }),
@@ -1639,8 +1627,8 @@ var _ASSERT =  false ? undefined : false;
 module.exports = Mat22;
 
 var common = __webpack_require__(2);
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
 
 /**
  * A 2-by-2 matrix. Stored in column-major order.
@@ -1849,115 +1837,157 @@ Mat22.add = function(mx1, mx2) {
 var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
-module.exports = Sweep;
+module.exports = Vec3;
 
 var common = __webpack_require__(2);
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-var Rot = __webpack_require__(3);
-var Transform = __webpack_require__(4);
+var Math = __webpack_require__(1);
+
+function Vec3(x, y, z) {
+  if (!(this instanceof Vec3)) {
+    return new Vec3(x, y, z);
+  }
+  if (typeof x === 'undefined') {
+    this.x = 0, this.y = 0, this.z = 0;
+  } else if (typeof x === 'object') {
+    this.x = x.x, this.y = x.y, this.z = x.z;
+  } else {
+    this.x = x, this.y = y, this.z = z;
+  }
+  _ASSERT && Vec3.assert(this);
+};
+
+Vec3.prototype._serialize = function() {
+  return {
+    x: this.x,
+    y: this.y,
+    z: this.z
+  };
+};
+
+Vec3._deserialize = function(data) {
+  var obj = Object.create(Vec3.prototype);
+  obj.x = data.x;
+  obj.y = data.y;
+  obj.z = data.z;
+  return obj;
+};
+
+Vec3.neo = function(x, y, z) {
+  var obj = Object.create(Vec3.prototype);
+  obj.x = x;
+  obj.y = y;
+  obj.z = z;
+  return obj;
+};
+
+Vec3.clone = function(v) {
+  _ASSERT && Vec3.assert(v);
+  return Vec3.neo(v.x, v.y, v.z);
+};
+
+Vec3.prototype.toString = function() {
+  return JSON.stringify(this);
+};
 
 /**
- * This describes the motion of a body/shape for TOI computation. Shapes are
- * defined with respect to the body origin, which may not coincide with the
- * center of mass. However, to support dynamics we must interpolate the center
- * of mass position.
- * 
- * @prop {Vec2} localCenter Local center of mass position
- * @prop {Vec2} c World center position
- * @prop {float} a World angle
- * @prop {float} alpha0 Fraction of the current time step in the range [0,1], c0
- *       and a0 are c and a at alpha0.
+ * Does this vector contain finite coordinates?
  */
-function Sweep(c, a) {
-  _ASSERT && common.assert(typeof c === 'undefined');
-  _ASSERT && common.assert(typeof a === 'undefined');
-  this.localCenter = Vec2.zero();
-  this.c = Vec2.zero();
-  this.a = 0;
-  this.alpha0 = 0;
-  this.c0 = Vec2.zero();
-  this.a0 = 0;
+Vec3.isValid = function(v) {
+  return v && Math.isFinite(v.x) && Math.isFinite(v.y) && Math.isFinite(v.z);
 }
 
-Sweep.prototype.setTransform = function(xf) {
-  var c = Transform.mulVec2(xf, this.localCenter);
-  this.c.set(c);
-  this.c0.set(c);
+Vec3.assert = function(o) {
+  if (!_ASSERT) return;
+  if (!Vec3.isValid(o)) {
+    _DEBUG && common.debug(o);
+    throw new Error('Invalid Vec3!');
+  }
+}
 
-  this.a = xf.q.getAngle();
-  this.a0 = xf.q.getAngle();
-};
+Vec3.prototype.setZero = function() {
+  this.x = 0.0;
+  this.y = 0.0;
+  this.z = 0.0;
+  return this;
+}
 
-Sweep.prototype.setLocalCenter = function(localCenter, xf) {
-  this.localCenter.set(localCenter);
+Vec3.prototype.set = function(x, y, z) {
+  this.x = x;
+  this.y = y;
+  this.z = z;
+  return this;
+}
 
-  var c = Transform.mulVec2(xf, this.localCenter);
-  this.c.set(c);
-  this.c0.set(c);
-};
+Vec3.prototype.add = function(w) {
+  this.x += w.x;
+  this.y += w.y;
+  this.z += w.z;
+  return this;
+}
+
+Vec3.prototype.sub = function(w) {
+  this.x -= w.x;
+  this.y -= w.y;
+  this.z -= w.z;
+  return this;
+}
+
+Vec3.prototype.mul = function(m) {
+  this.x *= m;
+  this.y *= m;
+  this.z *= m;
+  return this;
+}
+
+Vec3.areEqual = function(v, w) {
+  _ASSERT && Vec3.assert(v);
+  _ASSERT && Vec3.assert(w);
+  return v == w ||
+    typeof v === 'object' && v !== null &&
+    typeof w === 'object' && w !== null &&
+    v.x === w.x && v.y === w.y && v.z === w.z;
+}
 
 /**
- * Get the interpolated transform at a specific time.
- * 
- * @param xf
- * @param beta A factor in [0,1], where 0 indicates alpha0
+ * Perform the dot product on two vectors.
  */
-Sweep.prototype.getTransform = function(xf, beta) {
-  beta = typeof beta === 'undefined' ? 0 : beta;
-  xf.q.setAngle((1.0 - beta) * this.a0 + beta * this.a);
-  xf.p.setCombine((1.0 - beta), this.c0, beta, this.c);
-
-  // shift to origin
-  xf.p.sub(Rot.mulVec2(xf.q, this.localCenter));
-};
+Vec3.dot = function(v, w) {
+  return v.x * w.x + v.y * w.y + v.z * w.z;
+}
 
 /**
- * Advance the sweep forward, yielding a new initial state.
- * 
- * @param {float} alpha The new initial time
+ * Perform the cross product on two vectors. In 2D this produces a scalar.
  */
-Sweep.prototype.advance = function(alpha) {
-  _ASSERT && common.assert(this.alpha0 < 1.0);
-  var beta = (alpha - this.alpha0) / (1.0 - this.alpha0);
-  this.c0.setCombine(beta, this.c, 1 - beta, this.c0);
-  this.a0 = beta * this.a + (1 - beta) * this.a0;
-  this.alpha0 = alpha;
-};
+Vec3.cross = function(v, w) {
+  return new Vec3(
+    v.y * w.z - v.z * w.y,
+    v.z * w.x - v.x * w.z,
+    v.x * w.y - v.y * w.x
+  );
+}
 
-Sweep.prototype.forward = function() {
-  this.a0 = this.a;
-  this.c0.set(this.c);
-};
+Vec3.add = function(v, w) {
+  return new Vec3(v.x + w.x, v.y + w.y, v.z + w.z);
+}
 
-/**
- * normalize the angles in radians to be between -pi and pi.
- */
-Sweep.prototype.normalize = function() {
-  var a0 = Math.mod(this.a0, -Math.PI, +Math.PI);
-  this.a -= this.a0 - a0;
-  this.a0 = a0;
-};
+Vec3.sub = function(v, w) {
+  return new Vec3(v.x - w.x, v.y - w.y, v.z - w.z);
+}
 
-Sweep.prototype.clone = function() {
-  var clone = new Sweep();
-  clone.localCenter.set(this.localCenter);
-  clone.alpha0 = this.alpha0;
-  clone.a0 = this.a0;
-  clone.a = this.a;
-  clone.c0.set(this.c0);
-  clone.c.set(this.c);
-  return clone;
-};
+Vec3.mul = function(v, m) {
+  return new Vec3(m * v.x, m * v.y, m * v.z);
+}
 
-Sweep.prototype.set = function(that) {
-  this.localCenter.set(that.localCenter);
-  this.alpha0 = that.alpha0;
-  this.a0 = that.a0;
-  this.a = that.a;
-  this.c0.set(that.c0);
-  this.c.set(that.c);
-};
+Vec3.prototype.neg = function() {
+  this.x = -this.x;
+  this.y = -this.y;
+  this.z = -this.z;
+  return this;
+}
+
+Vec3.neg = function(v) {
+  return new Vec3(-v.x, -v.y, -v.z);
+}
 
 
 /***/ }),
@@ -1986,12 +2016,97 @@ Sweep.prototype.set = function(that) {
 var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
+module.exports = Velocity;
+
+var Vec2 = __webpack_require__(0);
+
+/**
+ * @prop {Vec2} v linear
+ * @prop {float} w angular
+ */
+function Velocity() {
+  this.v = Vec2.zero();
+  this.w = 0;
+}
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG =  false ? undefined : false;
+var _ASSERT =  false ? undefined : false;
+
+module.exports = Position;
+
+var Vec2 = __webpack_require__(0);
+var Rot = __webpack_require__(3);
+
+/**
+ * @prop {Vec2} c location
+ * @prop {float} a angle
+ */
+function Position() {
+  this.c = Vec2.zero();
+  this.a = 0;
+}
+
+Position.prototype.getTransform = function(xf, p) {
+  xf.q.set(this.a);
+  xf.p.set(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
+  return xf;
+}
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG =  false ? undefined : false;
+var _ASSERT =  false ? undefined : false;
+
 module.exports = Mat33;
 
 var common = __webpack_require__(2);
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-var Vec3 = __webpack_require__(8);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Vec3 = __webpack_require__(10);
 
 /**
  * A 3-by-3 matrix. Stored in column-major order.
@@ -2188,91 +2303,6 @@ Mat33.add = function(a, b) {
   );
 }
 
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
- *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- */
-
-var _DEBUG =  false ? undefined : false;
-var _ASSERT =  false ? undefined : false;
-
-module.exports = Velocity;
-
-var Vec2 = __webpack_require__(1);
-
-/**
- * @prop {Vec2} v linear
- * @prop {float} w angular
- */
-function Velocity() {
-  this.v = Vec2.zero();
-  this.w = 0;
-}
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
- *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- */
-
-var _DEBUG =  false ? undefined : false;
-var _ASSERT =  false ? undefined : false;
-
-module.exports = Position;
-
-var Vec2 = __webpack_require__(1);
-var Rot = __webpack_require__(3);
-
-/**
- * @prop {Vec2} c location
- * @prop {float} a angle
- */
-function Position() {
-  this.c = Vec2.zero();
-  this.a = 0;
-}
-
-Position.prototype.getTransform = function(xf, p) {
-  xf.q.set(this.a);
-  xf.p.set(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
-  return xf;
-}
 
 /***/ }),
 /* 14 */
@@ -2523,7 +2553,7 @@ var _ASSERT =  false ? undefined : false;
 
 module.exports = Shape;
 
-var Math = __webpack_require__(0);
+var Math = __webpack_require__(1);
 
 /**
  * A shape is used for collision detection. You can create a shape however you
@@ -2534,6 +2564,17 @@ function Shape() {
   this.m_type;
   this.m_radius;
 }
+
+Shape.prototype._serialize = function() {
+  return {};
+};
+
+Shape.TYPES = {};
+
+Shape._deserialize = function(data) {
+  var clazz = Shape.TYPES[data.type];
+  return clazz && clazz._deserialize && clazz._deserialize(data);
+};
 
 Shape.isValid = function(shape) {
   return !!shape;
@@ -2642,9 +2683,9 @@ Shape.prototype.computeDistanceProxy = function(proxy) {
 var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
-var Settings = __webpack_require__(5);
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
+var Settings = __webpack_require__(4);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
 
 module.exports = AABB;
 
@@ -2710,6 +2751,8 @@ AABB.prototype.getPerimeter = function() {
  * Combine one or two AABB into this one.
  */
 AABB.prototype.combine = function(a, b) {
+  b = b || this;
+
   var lowerA = a.lowerBound;
   var upperA = a.upperBound;
   var lowerB = b.lowerBound;
@@ -2903,13 +2946,13 @@ var DEBUG_SOLVER = false;
 
 var common = __webpack_require__(2);
 
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-var Transform = __webpack_require__(4);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Transform = __webpack_require__(5);
 var Mat22 = __webpack_require__(9);
 var Rot = __webpack_require__(3);
 
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 var Manifold = __webpack_require__(18);
 var Distance = __webpack_require__(21);
 
@@ -4131,9 +4174,9 @@ var _ASSERT =  false ? undefined : false;
 
 var common = __webpack_require__(2);
 
-var Vec2 = __webpack_require__(1);
-var Transform = __webpack_require__(4);
-var Math = __webpack_require__(0);
+var Vec2 = __webpack_require__(0);
+var Transform = __webpack_require__(5);
+var Math = __webpack_require__(1);
 var Rot = __webpack_require__(3);
 
 module.exports = Manifold;
@@ -4464,7 +4507,7 @@ if (false)
 var stats = __webpack_require__(36);
 var extend = __webpack_require__(37);
 var is = __webpack_require__(38);
-var _await = __webpack_require__(65);
+var _await = __webpack_require__(67);
 
 stats.create = 0;
 
@@ -4712,18 +4755,19 @@ module.exports = PolygonShape;
 var common = __webpack_require__(2);
 var create = __webpack_require__(6);
 var options = __webpack_require__(7);
-var Math = __webpack_require__(0);
-var Transform = __webpack_require__(4);
+var Math = __webpack_require__(1);
+var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
-var Vec2 = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
 var AABB = __webpack_require__(16);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 var Shape = __webpack_require__(15);
 
 PolygonShape._super = Shape;
 PolygonShape.prototype = create(PolygonShape._super.prototype);
 
 PolygonShape.TYPE = 'polygon';
+Shape.TYPES[PolygonShape.TYPE] = PolygonShape;
 
 /**
  * A convex polygon. It is assumed that the interior of the polygon is to the
@@ -4749,6 +4793,23 @@ function PolygonShape(vertices) {
     this._set(vertices);
   }
 }
+
+PolygonShape.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+
+    centroid: this.m_centroid,
+
+    vertices: this.m_vertices,
+    normals: this.m_normals,
+    count: this.m_count,
+  };
+};
+
+PolygonShape._deserialize = function(data) {
+  var shape = new PolygonShape(data.vertices);
+  return shape;
+};
 
 PolygonShape.prototype.getVertex = function(index) {
   _ASSERT && common.assert(0 <= index && index < this.m_count);
@@ -5209,21 +5270,21 @@ module.exports.Output = DistanceOutput;
 module.exports.Proxy = DistanceProxy;
 module.exports.Cache = SimplexCache;
 
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 var common = __webpack_require__(2);
 
-var stats = __webpack_require__(27);
+var stats = __webpack_require__(28);
 
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-var Vec3 = __webpack_require__(8);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(11);
+var Mat33 = __webpack_require__(13);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
-var Transform = __webpack_require__(4);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Sweep = __webpack_require__(8);
+var Transform = __webpack_require__(5);
+var Velocity = __webpack_require__(11);
+var Position = __webpack_require__(12);
 
 /**
  * GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
@@ -5904,18 +5965,19 @@ module.exports = CircleShape;
 var common = __webpack_require__(2);
 var create = __webpack_require__(6);
 var options = __webpack_require__(7);
-var Math = __webpack_require__(0);
-var Transform = __webpack_require__(4);
+var Math = __webpack_require__(1);
+var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
-var Vec2 = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
 var AABB = __webpack_require__(16);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 var Shape = __webpack_require__(15);
 
 CircleShape._super = Shape;
 CircleShape.prototype = create(CircleShape._super.prototype);
 
 CircleShape.TYPE = 'circle';
+Shape.TYPES[CircleShape.TYPE] = CircleShape;
 
 function CircleShape(a, b) {
   if (!(this instanceof CircleShape)) {
@@ -5939,6 +6001,19 @@ function CircleShape(a, b) {
     this.m_radius = a;
   }
 }
+
+CircleShape.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+
+    p: this.m_p,
+    radius: this.m_radius,
+  };
+};
+
+CircleShape._deserialize = function(data) {
+  return new CircleShape(data.p, data.radius);
+};
 
 CircleShape.prototype.getRadius = function() {
   return this.m_radius;
@@ -6065,18 +6140,19 @@ module.exports = EdgeShape;
 
 var create = __webpack_require__(6);
 var options = __webpack_require__(7);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 var Shape = __webpack_require__(15);
-var Math = __webpack_require__(0);
-var Transform = __webpack_require__(4);
+var Math = __webpack_require__(1);
+var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
-var Vec2 = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
 var AABB = __webpack_require__(16);
 
 EdgeShape._super = Shape;
 EdgeShape.prototype = create(EdgeShape._super.prototype);
 
 EdgeShape.TYPE = 'edge';
+Shape.TYPES[EdgeShape.TYPE] = EdgeShape;
 
 /**
  * A line segment (edge) shape. These can be connected in chains or loops to
@@ -6104,6 +6180,31 @@ function EdgeShape(v1, v2) {
   this.m_hasVertex0 = false;
   this.m_hasVertex3 = false;
 }
+
+EdgeShape.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+
+    vertex1: this.m_vertex1,
+    vertex2: this.m_vertex2,
+
+    vertex0: this.m_vertex0,
+    vertex3: this.m_vertex3,
+    hasVertex0: this.m_hasVertex0,
+    hasVertex3: this.m_hasVertex3,
+  };
+};
+
+EdgeShape._deserialize = function(data) {
+  var shape = new EdgeShape(data.vertex1, data.vertex2);
+  if (shape.hasVertex0) {
+    shape.setPrev(data.vertex0);
+  }
+  if (shape.hasVertex3) {
+    shape.setNext(data.vertex3);
+  }
+  return shape;
+};
 
 EdgeShape.prototype.setNext = function(v3) {
   if (v3) {
@@ -6268,7 +6369,7 @@ if (typeof Object.create == 'function') {
 /***/ (function(module, exports, __webpack_require__) {
 
 var Class = __webpack_require__(19);
-var Matrix = __webpack_require__(61);
+var Matrix = __webpack_require__(62);
 
 var iid = 0;
 
@@ -6912,22 +7013,1143 @@ module.exports = Pin;
 var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
+module.exports = World;
+
+var options = __webpack_require__(7);
+var common = __webpack_require__(2);
+var Vec2 = __webpack_require__(0);
+var BroadPhase = __webpack_require__(41);
+var Solver = __webpack_require__(43);
+var Body = __webpack_require__(27);
+var Contact = __webpack_require__(17);
+
+/**
+ * @typedef {Object} WorldDef
+ *
+ * @prop {Vec2} [gravity = { x : 0, y : 0}]
+ * @prop {boolean} [allowSleep = true]
+ * @prop {boolean} [warmStarting = false]
+ * @prop {boolean} [continuousPhysics = false]
+ * @prop {boolean} [subStepping = false]
+ * @prop {boolean} [blockSolve = true]
+ * @prop {int} [velocityIterations = 8] For the velocity constraint solver.
+ * @prop {int} [positionIterations = 3] For the position constraint solver.
+ */
+var WorldDef = {
+  gravity : Vec2.zero(),
+  allowSleep : true,
+  warmStarting : true,
+  continuousPhysics : true,
+  subStepping : false,
+  blockSolve : true,
+  velocityIterations : 8,
+  positionIterations : 3
+};
+
+/**
+ * @param {WordDef|Vec2} def World definition or gravity vector.
+ */
+function World(def) {
+  if (!(this instanceof World)) {
+    return new World(def);
+  }
+
+  if (def && Vec2.isValid(def)) {
+    def = {gravity : def};
+  }
+
+  def = options(def, WorldDef);
+
+  this.m_solver = new Solver(this);
+
+  this.m_broadPhase = new BroadPhase();
+
+  this.m_contactList = null;
+  this.m_contactCount = 0;
+
+  this.m_bodyList = null;
+  this.m_bodyCount = 0;
+
+  this.m_jointList = null;
+  this.m_jointCount = 0;
+
+  this.m_stepComplete = true;
+
+  this.m_allowSleep = def.allowSleep;
+  this.m_gravity = Vec2.clone(def.gravity);
+
+  this.m_clearForces = true;
+  this.m_newFixture = false;
+  this.m_locked = false;
+
+  // These are for debugging the solver.
+  this.m_warmStarting = def.warmStarting;
+  this.m_continuousPhysics = def.continuousPhysics;
+  this.m_subStepping = def.subStepping;
+
+  this.m_blockSolve = def.blockSolve;
+  this.m_velocityIterations = def.velocityIterations;
+  this.m_positionIterations = def.positionIterations;
+
+  this.m_t = 0;
+
+  this.m_stepCount = 0;
+
+  // Broad-phase callback.
+  this.addPair = this.createContact.bind(this);
+}
+
+World.prototype._serialize = function() {
+  var bodies = [];
+  var joints = [];
+
+  for (var b = this.getBodyList(); b; b = b.getNext()) {
+    bodies.push(b);
+  }
+
+  // for (var j = this.getJointList(); j; j = j.getNext()) {
+  //   joints.push(j);
+  // }
+
+  return {
+    gravity: this.m_gravity,
+    bodies: bodies,
+    // joints: joints,
+  };
+};
+
+World._deserialize = function(data) {
+  var world = new World(data.gravity);
+  data.bodies.reverse().forEach(function(data) {
+    world._addBody(Body._deserialize(world, data));
+  });
+
+  return world;
+};
+
+/**
+ * Get the world body list. With the returned body, use Body.getNext to get the
+ * next body in the world list. A null body indicates the end of the list.
+ *
+ * @return the head of the world body list.
+ */
+World.prototype.getBodyList = function() {
+  return this.m_bodyList;
+}
+
+/**
+ * Get the world joint list. With the returned joint, use Joint.getNext to get
+ * the next joint in the world list. A null joint indicates the end of the list.
+ *
+ * @return the head of the world joint list.
+ */
+World.prototype.getJointList = function() {
+  return this.m_jointList;
+}
+
+/**
+ * Get the world contact list. With the returned contact, use Contact.getNext to
+ * get the next contact in the world list. A null contact indicates the end of
+ * the list.
+ *
+ * @return the head of the world contact list. Warning: contacts are created and
+ *         destroyed in the middle of a time step. Use ContactListener to avoid
+ *         missing contacts.
+ */
+World.prototype.getContactList = function() {
+  return this.m_contactList;
+}
+
+World.prototype.getBodyCount = function() {
+  return this.m_bodyCount;
+}
+
+World.prototype.getJointCount = function() {
+  return this.m_jointCount;
+}
+
+/**
+ * Get the number of contacts (each may have 0 or more contact points).
+ */
+World.prototype.getContactCount = function() {
+  return this.m_contactCount;
+}
+
+/**
+ * Change the global gravity vector.
+ */
+World.prototype.setGravity = function(gravity) {
+  this.m_gravity = gravity;
+}
+
+/**
+ * Get the global gravity vector.
+ */
+World.prototype.getGravity = function() {
+  return this.m_gravity;
+}
+
+/**
+ * Is the world locked (in the middle of a time step).
+ */
+World.prototype.isLocked = function() {
+  return this.m_locked;
+}
+
+/**
+ * Enable/disable sleep.
+ */
+World.prototype.setAllowSleeping = function(flag) {
+  if (flag == this.m_allowSleep) {
+    return;
+  }
+
+  this.m_allowSleep = flag;
+  if (this.m_allowSleep == false) {
+    for (var b = this.m_bodyList; b; b = b.m_next) {
+      b.setAwake(true);
+    }
+  }
+}
+
+World.prototype.getAllowSleeping = function() {
+  return this.m_allowSleep;
+}
+
+/**
+ * Enable/disable warm starting. For testing.
+ */
+World.prototype.setWarmStarting = function(flag) {
+  this.m_warmStarting = flag;
+}
+
+World.prototype.getWarmStarting = function() {
+  return this.m_warmStarting;
+}
+
+/**
+ * Enable/disable continuous physics. For testing.
+ */
+World.prototype.setContinuousPhysics = function(flag) {
+  this.m_continuousPhysics = flag;
+}
+
+World.prototype.getContinuousPhysics = function() {
+  return this.m_continuousPhysics;
+}
+
+/**
+ * Enable/disable single stepped continuous physics. For testing.
+ */
+World.prototype.setSubStepping = function(flag) {
+  this.m_subStepping = flag;
+}
+
+World.prototype.getSubStepping = function() {
+  return this.m_subStepping;
+}
+
+/**
+ * Set flag to control automatic clearing of forces after each time step.
+ */
+World.prototype.setAutoClearForces = function(flag) {
+  this.m_clearForces = flag;
+}
+
+/**
+ * Get the flag that controls automatic clearing of forces after each time step.
+ */
+World.prototype.getAutoClearForces = function() {
+  return this.m_clearForces;
+}
+
+/**
+ * Manually clear the force buffer on all bodies. By default, forces are cleared
+ * automatically after each call to step. The default behavior is modified by
+ * calling setAutoClearForces. The purpose of this function is to support
+ * sub-stepping. Sub-stepping is often used to maintain a fixed sized time step
+ * under a variable frame-rate. When you perform sub-stepping you will disable
+ * auto clearing of forces and instead call clearForces after all sub-steps are
+ * complete in one pass of your game loop.
+ *
+ * @see setAutoClearForces
+ */
+World.prototype.clearForces = function() {
+  for (var body = this.m_bodyList; body; body = body.getNext()) {
+    body.m_force.setZero();
+    body.m_torque = 0.0;
+  }
+}
+
+/**
+ * @function World~rayCastCallback
+ *
+ * @param fixture
+ */
+
+/**
+ * Query the world for all fixtures that potentially overlap the provided AABB.
+ *
+ * @param {World~queryCallback} queryCallback Called for each fixture
+ *          found in the query AABB. It may return `false` to terminate the
+ *          query.
+ *
+ * @param aabb The query box.
+ */
+World.prototype.queryAABB = function(aabb, queryCallback) {
+  _ASSERT && common.assert(typeof queryCallback === 'function');
+  var broadPhase = this.m_broadPhase;
+  this.m_broadPhase.query(aabb, function(proxyId) { //TODO GC
+    var proxy = broadPhase.getUserData(proxyId); // FixtureProxy
+    return queryCallback(proxy.fixture);
+  });
+}
+
+/**
+ * @function World~rayCastCallback
+ *
+ * Callback class for ray casts. See World.rayCast
+ *
+ * Called for each fixture found in the query. You control how the ray cast
+ * proceeds by returning a float: return -1: ignore this fixture and continue
+ * return 0: terminate the ray cast return fraction: clip the ray to this point
+ * return 1: don't clip the ray and continue
+ *
+ * @param fixture The fixture hit by the ray
+ * @param point The point of initial intersection
+ * @param normal The normal vector at the point of intersection
+ * @param fraction
+ *
+ * @return {float} -1 to filter, 0 to terminate, fraction to clip the ray for
+ *         closest hit, 1 to continue
+ */
+
+/**
+ *
+ * Ray-cast the world for all fixtures in the path of the ray. Your callback
+ * controls whether you get the closest point, any point, or n-points. The
+ * ray-cast ignores shapes that contain the starting point.
+ *
+ * @param {World~RayCastCallback} reportFixtureCallback A user implemented
+ *          callback function.
+ * @param point1 The ray starting point
+ * @param point2 The ray ending point
+ */
+World.prototype.rayCast = function(point1, point2, reportFixtureCallback) {
+  _ASSERT && common.assert(typeof reportFixtureCallback === 'function');
+  var broadPhase = this.m_broadPhase;
+
+  this.m_broadPhase.rayCast({
+    maxFraction : 1.0,
+    p1 : point1,
+    p2 : point2
+  }, function(input, proxyId) { // TODO GC
+    var proxy = broadPhase.getUserData(proxyId); // FixtureProxy
+    var fixture = proxy.fixture;
+    var index = proxy.childIndex;
+    var output = {}; // TODO GC
+    var hit = fixture.rayCast(output, input, index);
+    if (hit) {
+      var fraction = output.fraction;
+      var point = Vec2.add(Vec2.mul((1.0 - fraction), input.p1), Vec2.mul(fraction, input.p2));
+      return reportFixtureCallback(fixture, point, output.normal, fraction);
+    }
+    return input.maxFraction;
+  });
+}
+
+/**
+ * Get the number of broad-phase proxies.
+ */
+World.prototype.getProxyCount = function() {
+  return this.m_broadPhase.getProxyCount();
+}
+
+/**
+ * Get the height of broad-phase dynamic tree.
+ */
+World.prototype.getTreeHeight = function() {
+  return this.m_broadPhase.getTreeHeight();
+}
+
+/**
+ * Get the balance of broad-phase dynamic tree.
+ *
+ * @returns {int}
+ */
+World.prototype.getTreeBalance = function() {
+  return this.m_broadPhase.getTreeBalance();
+}
+
+/**
+ * Get the quality metric of broad-phase dynamic tree. The smaller the better.
+ * The minimum is 1.
+ *
+ * @returns {float}
+ */
+World.prototype.getTreeQuality = function() {
+  return this.m_broadPhase.getTreeQuality();
+}
+
+/**
+ * Shift the world origin. Useful for large worlds. The body shift formula is:
+ * position -= newOrigin
+ *
+ * @param {Vec2} newOrigin The new origin with respect to the old origin
+ */
+World.prototype.shiftOrigin = function(newOrigin) {
+  _ASSERT && common.assert(this.m_locked == false);
+  if (this.m_locked) {
+    return;
+  }
+
+  for (var b = this.m_bodyList; b; b = b.m_next) {
+    b.m_xf.p.sub(newOrigin);
+    b.m_sweep.c0.sub(newOrigin);
+    b.m_sweep.c.sub(newOrigin);
+  }
+
+  for (var j = this.m_jointList; j; j = j.m_next) {
+    j.shiftOrigin(newOrigin);
+  }
+
+  this.m_broadPhase.shiftOrigin(newOrigin);
+}
+
+/**
+ * Warning: This function is locked during callbacks.
+ *
+ * @param {Body} body
+ */
+World.prototype._addBody = function(body) {
+  _ASSERT && common.assert(this.isLocked() === false);
+  if (this.isLocked()) {
+    return;
+  }
+
+  // Add to world doubly linked list.
+  body.m_prev = null;
+  body.m_next = this.m_bodyList;
+  if (this.m_bodyList) {
+    this.m_bodyList.m_prev = body;
+  }
+  this.m_bodyList = body;
+  ++this.m_bodyCount;
+}
+
+/**
+ * Create a rigid body given a definition. No reference to the definition is
+ * retained.
+ *
+ * Warning: This function is locked during callbacks.
+ *
+ * @param {BodyDef|Vec2} def Body definition or position.
+ * @param {float} angle Body angle if def is position.
+ */
+World.prototype.createBody = function(def, angle) {
+  _ASSERT && common.assert(this.isLocked() == false);
+  if (this.isLocked()) {
+    return null;
+  }
+
+  if (def && Vec2.isValid(def)) {
+    def = {
+      position : def,
+      angle : angle
+    };
+  }
+
+  var body = new Body(this, def);
+
+  this._addBody(body);
+
+  return body;
+}
+
+World.prototype.createDynamicBody = function(def, angle) {
+  if (!def) {
+    def = {};
+  } else if (Vec2.isValid(def)) {
+    def = { position : def, angle : angle };
+  }
+  def.type = 'dynamic';
+  return this.createBody(def);
+}
+
+World.prototype.createKinematicBody = function(def, angle) {
+  if (!def) {
+    def = {};
+  } else if (Vec2.isValid(def)) {
+    def = { position : def, angle : angle };
+  }
+  def.type = 'kinematic';
+  return this.createBody(def);
+}
+
+/**
+ * Destroy a rigid body given a definition. No reference to the definition is
+ * retained.
+ *
+ * Warning: This automatically deletes all associated shapes and joints.
+ *
+ * Warning: This function is locked during callbacks.
+ *
+ * @param {Body} b
+ */
+World.prototype.destroyBody = function(b) {
+  _ASSERT && common.assert(this.m_bodyCount > 0);
+  _ASSERT && common.assert(this.isLocked() == false);
+  if (this.isLocked()) {
+    return;
+  }
+
+  if (b.m_destroyed) {
+    return false;
+  }
+
+  // Delete the attached joints.
+  var je = b.m_jointList;
+  while (je) {
+    var je0 = je;
+    je = je.next;
+
+    this.publish('remove-joint', je0.joint);
+    this.destroyJoint(je0.joint);
+
+    b.m_jointList = je;
+  }
+  b.m_jointList = null;
+
+  // Delete the attached contacts.
+  var ce = b.m_contactList;
+  while (ce) {
+    var ce0 = ce;
+    ce = ce.next;
+
+    this.destroyContact(ce0.contact);
+
+    b.m_contactList = ce;
+  }
+  b.m_contactList = null;
+
+  // Delete the attached fixtures. This destroys broad-phase proxies.
+  var f = b.m_fixtureList;
+  while (f) {
+    var f0 = f;
+    f = f.m_next;
+
+    this.publish('remove-fixture', f0);
+    f0.destroyProxies(this.m_broadPhase);
+
+    b.m_fixtureList = f;
+  }
+  b.m_fixtureList = null;
+
+  // Remove world body list.
+  if (b.m_prev) {
+    b.m_prev.m_next = b.m_next;
+  }
+
+  if (b.m_next) {
+    b.m_next.m_prev = b.m_prev;
+  }
+
+  if (b == this.m_bodyList) {
+    this.m_bodyList = b.m_next;
+  }
+
+  b.m_destroyed = true;
+
+  --this.m_bodyCount;
+
+  this.publish('remove-body', b);
+
+  return true;
+}
+
+/**
+ * Create a joint to constrain bodies together. No reference to the definition
+ * is retained. This may cause the connected bodies to cease colliding.
+ *
+ * Warning: This function is locked during callbacks.
+ *
+ * @param {Joint} join
+ * @param {Body} bodyB
+ * @param {Body} bodyA
+ */
+World.prototype.createJoint = function(joint) {
+  _ASSERT && common.assert(!!joint.m_bodyA);
+  _ASSERT && common.assert(!!joint.m_bodyB);
+  _ASSERT && common.assert(this.isLocked() == false);
+  if (this.isLocked()) {
+    return null;
+  }
+
+  // Connect to the world list.
+  joint.m_prev = null;
+  joint.m_next = this.m_jointList;
+  if (this.m_jointList) {
+    this.m_jointList.m_prev = joint;
+  }
+  this.m_jointList = joint;
+  ++this.m_jointCount;
+
+  // Connect to the bodies' doubly linked lists.
+  joint.m_edgeA.joint = joint;
+  joint.m_edgeA.other = joint.m_bodyB;
+  joint.m_edgeA.prev = null;
+  joint.m_edgeA.next = joint.m_bodyA.m_jointList;
+  if (joint.m_bodyA.m_jointList)
+    joint.m_bodyA.m_jointList.prev = joint.m_edgeA;
+  joint.m_bodyA.m_jointList = joint.m_edgeA;
+
+  joint.m_edgeB.joint = joint;
+  joint.m_edgeB.other = joint.m_bodyA;
+  joint.m_edgeB.prev = null;
+  joint.m_edgeB.next = joint.m_bodyB.m_jointList;
+  if (joint.m_bodyB.m_jointList)
+    joint.m_bodyB.m_jointList.prev = joint.m_edgeB;
+  joint.m_bodyB.m_jointList = joint.m_edgeB;
+
+  // If the joint prevents collisions, then flag any contacts for filtering.
+  if (joint.m_collideConnected == false) {
+    for (var edge = joint.m_bodyB.getContactList(); edge; edge = edge.next) {
+      if (edge.other == joint.m_bodyA) {
+        // Flag the contact for filtering at the next time step (where either
+        // body is awake).
+        edge.contact.flagForFiltering();
+      }
+    }
+  }
+
+  // Note: creating a joint doesn't wake the bodies.
+
+  return joint;
+}
+
+/**
+ * Destroy a joint. This may cause the connected bodies to begin colliding.
+ * Warning: This function is locked during callbacks.
+ *
+ * @param {Joint} join
+ */
+World.prototype.destroyJoint = function(joint) {
+  _ASSERT && common.assert(this.isLocked() == false);
+  if (this.isLocked()) {
+    return;
+  }
+
+  // Remove from the doubly linked list.
+  if (joint.m_prev) {
+    joint.m_prev.m_next = joint.m_next;
+  }
+
+  if (joint.m_next) {
+    joint.m_next.m_prev = joint.m_prev;
+  }
+
+  if (joint == this.m_jointList) {
+    this.m_jointList = joint.m_next;
+  }
+
+  // Disconnect from bodies.
+  var bodyA = joint.m_bodyA;
+  var bodyB = joint.m_bodyB;
+
+  // Wake up connected bodies.
+  bodyA.setAwake(true);
+  bodyB.setAwake(true);
+
+  // Remove from body 1.
+  if (joint.m_edgeA.prev) {
+    joint.m_edgeA.prev.next = joint.m_edgeA.next;
+  }
+
+  if (joint.m_edgeA.next) {
+    joint.m_edgeA.next.prev = joint.m_edgeA.prev;
+  }
+
+  if (joint.m_edgeA == bodyA.m_jointList) {
+    bodyA.m_jointList = joint.m_edgeA.next;
+  }
+
+  joint.m_edgeA.prev = null;
+  joint.m_edgeA.next = null;
+
+  // Remove from body 2
+  if (joint.m_edgeB.prev) {
+    joint.m_edgeB.prev.next = joint.m_edgeB.next;
+  }
+
+  if (joint.m_edgeB.next) {
+    joint.m_edgeB.next.prev = joint.m_edgeB.prev;
+  }
+
+  if (joint.m_edgeB == bodyB.m_jointList) {
+    bodyB.m_jointList = joint.m_edgeB.next;
+  }
+
+  joint.m_edgeB.prev = null;
+  joint.m_edgeB.next = null;
+
+  _ASSERT && common.assert(this.m_jointCount > 0);
+  --this.m_jointCount;
+
+  // If the joint prevents collisions, then flag any contacts for filtering.
+  if (joint.m_collideConnected == false) {
+    var edge = bodyB.getContactList();
+    while (edge) {
+      if (edge.other == bodyA) {
+        // Flag the contact for filtering at the next time step (where either
+        // body is awake).
+        edge.contact.flagForFiltering();
+      }
+
+      edge = edge.next;
+    }
+  }
+
+  this.publish('remove-joint', joint);
+}
+
+var s_step = new Solver.TimeStep(); // reuse
+
+/**
+ * Take a time step. This performs collision detection, integration, and
+ * constraint solution.
+ *
+ * Broad-phase, narrow-phase, solve and solve time of impacts.
+ *
+ * @param {float} timeStep Time step, this should not vary.
+ * @param {int} velocityIterations
+ * @param {int} positionIterations
+ */
+World.prototype.step = function(timeStep, velocityIterations, positionIterations) {
+
+  if ((velocityIterations | 0) !== velocityIterations) {
+    // TODO: remove this in future
+    velocityIterations = 0;
+  }
+
+  velocityIterations = velocityIterations || this.m_velocityIterations;
+  positionIterations = positionIterations || this.m_positionIterations;
+
+  // TODO: move this to testbed
+  this.m_stepCount++;
+
+  // If new fixtures were added, we need to find the new contacts.
+  if (this.m_newFixture) {
+    this.findNewContacts();
+    this.m_newFixture = false;
+  }
+
+  this.m_locked = true;
+
+  s_step.reset(timeStep);
+  s_step.velocityIterations = velocityIterations;
+  s_step.positionIterations = positionIterations;
+  s_step.warmStarting = this.m_warmStarting;
+  s_step.blockSolve = this.m_blockSolve;
+
+  // Update contacts. This is where some contacts are destroyed.
+  this.updateContacts();
+
+  // Integrate velocities, solve velocity constraints, and integrate positions.
+  if (this.m_stepComplete && timeStep > 0.0) {
+    this.m_solver.solveWorld(s_step);
+
+    // Synchronize fixtures, check for out of range bodies.
+    for (var b = this.m_bodyList; b; b = b.getNext()) {
+      // If a body was not in an island then it did not move.
+      if (b.m_islandFlag == false) {
+        continue;
+      }
+
+      if (b.isStatic()) {
+        continue;
+      }
+
+      // Update fixtures (for broad-phase).
+      b.synchronizeFixtures();
+    }
+    // Look for new contacts.
+    this.findNewContacts();
+  }
+
+  // Handle TOI events.
+  if (this.m_continuousPhysics && timeStep > 0.0) {
+    this.m_solver.solveWorldTOI(s_step);
+  }
+
+  if (this.m_clearForces) {
+    this.clearForces();
+  }
+
+  this.m_locked = false;
+}
+
+/**
+ * Call this method to find new contacts.
+ */
+World.prototype.findNewContacts = function() {
+  this.m_broadPhase.updatePairs(this.addPair);
+}
+
+/**
+ * @private
+ *
+ * @param {FixtureProxy} proxyA
+ * @param {FixtureProxy} proxyB
+ */
+World.prototype.createContact = function(proxyA, proxyB) {
+  var fixtureA = proxyA.fixture;
+  var fixtureB = proxyB.fixture;
+
+  var indexA = proxyA.childIndex;
+  var indexB = proxyB.childIndex;
+
+  var bodyA = fixtureA.getBody();
+  var bodyB = fixtureB.getBody();
+
+  // Are the fixtures on the same body?
+  if (bodyA == bodyB) {
+    return;
+  }
+
+  // TODO_ERIN use a hash table to remove a potential bottleneck when both
+  // bodies have a lot of contacts.
+  // Does a contact already exist?
+  var edge = bodyB.getContactList(); // ContactEdge
+  while (edge) {
+    if (edge.other == bodyA) {
+      var fA = edge.contact.getFixtureA();
+      var fB = edge.contact.getFixtureB();
+      var iA = edge.contact.getChildIndexA();
+      var iB = edge.contact.getChildIndexB();
+
+      if (fA == fixtureA && fB == fixtureB && iA == indexA && iB == indexB) {
+        // A contact already exists.
+        return;
+      }
+
+      if (fA == fixtureB && fB == fixtureA && iA == indexB && iB == indexA) {
+        // A contact already exists.
+        return;
+      }
+    }
+
+    edge = edge.next;
+  }
+
+  if (bodyB.shouldCollide(bodyA) == false) {
+    return;
+  }
+  if (fixtureB.shouldCollide(fixtureA) == false) {
+    return;
+  }
+
+  // Call the factory.
+  var contact = Contact.create(fixtureA, indexA, fixtureB, indexB);
+  if (contact == null) {
+    return;
+  }
+
+  // Insert into the world.
+  contact.m_prev = null;
+  if (this.m_contactList != null) {
+    contact.m_next = this.m_contactList;
+    this.m_contactList.m_prev = contact;
+  }
+  this.m_contactList = contact;
+
+  ++this.m_contactCount;
+}
+
+/**
+ * Removes old non-overlapping contacts, applies filters and updates contacts.
+ */
+World.prototype.updateContacts = function() {
+  // Update awake contacts.
+  var c, next_c = this.m_contactList;
+  while (c = next_c) {
+    next_c = c.getNext()
+    var fixtureA = c.getFixtureA();
+    var fixtureB = c.getFixtureB();
+    var indexA = c.getChildIndexA();
+    var indexB = c.getChildIndexB();
+    var bodyA = fixtureA.getBody();
+    var bodyB = fixtureB.getBody();
+
+    // Is this contact flagged for filtering?
+    if (c.m_filterFlag) {
+      if (bodyB.shouldCollide(bodyA) == false) {
+        this.destroyContact(c);
+        continue;
+      }
+
+      if (fixtureB.shouldCollide(fixtureA) == false) {
+        this.destroyContact(c);
+        continue;
+      }
+
+      // Clear the filtering flag.
+      c.m_filterFlag = false;
+    }
+
+    var activeA = bodyA.isAwake() && !bodyA.isStatic();
+    var activeB = bodyB.isAwake() && !bodyB.isStatic();
+
+    // At least one body must be awake and it must be dynamic or kinematic.
+    if (activeA == false && activeB == false) {
+      continue;
+    }
+
+    var proxyIdA = fixtureA.m_proxies[indexA].proxyId;
+    var proxyIdB = fixtureB.m_proxies[indexB].proxyId;
+    var overlap = this.m_broadPhase.testOverlap(proxyIdA, proxyIdB);
+
+    // Here we destroy contacts that cease to overlap in the broad-phase.
+    if (overlap == false) {
+      this.destroyContact(c);
+      continue;
+    }
+
+    // The contact persists.
+    c.update(this);
+  }
+}
+
+/**
+ * @param {Contact} contact
+ */
+World.prototype.destroyContact = function(contact) {
+  Contact.destroy(contact, this);
+
+  // Remove from the world.
+  if (contact.m_prev) {
+    contact.m_prev.m_next = contact.m_next;
+  }
+  if (contact.m_next) {
+    contact.m_next.m_prev = contact.m_prev;
+  }
+  if (contact == this.m_contactList) {
+    this.m_contactList = contact.m_next;
+  }
+
+  --this.m_contactCount;
+}
+
+World.prototype._listeners = null;
+
+/**
+ * Register an event listener.
+ *
+ * @param {string} name
+ * @param {function} listener
+ */
+World.prototype.on = function(name, listener) {
+  if (typeof name !== 'string' || typeof listener !== 'function') {
+    return this;
+  }
+  if (!this._listeners) {
+    this._listeners = {};
+  }
+  if (!this._listeners[name]) {
+    this._listeners[name] = [];
+  }
+  this._listeners[name].push(listener);
+  return this;
+};
+
+/**
+ * Remove an event listener.
+ *
+ * @param {string} name
+ * @param {function} listener
+ */
+World.prototype.off = function(name, listener) {
+  if (typeof name !== 'string' || typeof listener !== 'function') {
+    return this;
+  }
+  var listeners = this._listeners && this._listeners[name];
+  if (!listeners || !listeners.length) {
+    return this;
+  }
+  var index = listeners.indexOf(listener);
+  if (index >= 0) {
+    listeners.splice(index, 1);
+  }
+  return this;
+};
+
+World.prototype.publish = function(name, arg1, arg2, arg3) {
+  var listeners = this._listeners && this._listeners[name];
+  if (!listeners || !listeners.length) {
+    return 0;
+  }
+  for (var l = 0; l < listeners.length; l++) {
+    listeners[l].call(this, arg1, arg2, arg3);
+  }
+  return listeners.length;
+};
+
+/**
+ * @event World#remove-body
+ * @event World#remove-joint
+ * @event World#remove-fixture
+ *
+ * Joints and fixtures are destroyed when their associated body is destroyed.
+ * Register a destruction listener so that you may nullify references to these
+ * joints and shapes.
+ *
+ * `function(object)` is called when any joint or fixture is about to
+ * be destroyed due to the destruction of one of its attached or parent bodies.
+ */
+
+/**
+ * @private
+ * @param {Contact} contact
+ */
+World.prototype.beginContact = function(contact) {
+  this.publish('begin-contact', contact);
+};
+
+/**
+ * @event World#begin-contact
+ *
+ * Called when two fixtures begin to touch.
+ *
+ * Implement contact callbacks to get contact information. You can use these
+ * results for things like sounds and game logic. You can also get contact
+ * results by traversing the contact lists after the time step. However, you
+ * might miss some contacts because continuous physics leads to sub-stepping.
+ * Additionally you may receive multiple callbacks for the same contact in a
+ * single time step. You should strive to make your callbacks efficient because
+ * there may be many callbacks per time step.
+ *
+ * Warning: You cannot create/destroy world entities inside these callbacks.
+ */
+
+/**
+ * @private
+ * @param {Contact} contact
+ */
+World.prototype.endContact = function(contact) {
+  this.publish('end-contact', contact);
+};
+
+/**
+ * @event World#end-contact
+ *
+ * Called when two fixtures cease to touch.
+ *
+ * Implement contact callbacks to get contact information. You can use these
+ * results for things like sounds and game logic. You can also get contact
+ * results by traversing the contact lists after the time step. However, you
+ * might miss some contacts because continuous physics leads to sub-stepping.
+ * Additionally you may receive multiple callbacks for the same contact in a
+ * single time step. You should strive to make your callbacks efficient because
+ * there may be many callbacks per time step.
+ *
+ * Warning: You cannot create/destroy world entities inside these callbacks.
+ */
+
+/**
+ * @private
+ * @param {Contact} contact
+ * @param {Manifold} oldManifold
+ */
+World.prototype.preSolve = function(contact, oldManifold) {
+  this.publish('pre-solve', contact, oldManifold);
+};
+
+/**
+ * @event World#pre-solve
+ *
+ * This is called after a contact is updated. This allows you to inspect a
+ * contact before it goes to the solver. If you are careful, you can modify the
+ * contact manifold (e.g. disable contact). A copy of the old manifold is
+ * provided so that you can detect changes. Note: this is called only for awake
+ * bodies. Note: this is called even when the number of contact points is zero.
+ * Note: this is not called for sensors. Note: if you set the number of contact
+ * points to zero, you will not get an endContact callback. However, you may get
+ * a beginContact callback the next step.
+ *
+ * Warning: You cannot create/destroy world entities inside these callbacks.
+ */
+
+/**
+ * @private
+ * @param {Contact} contact
+ * @param {ContactImpulse} impulse
+ */
+World.prototype.postSolve = function(contact, impulse) {
+  this.publish('post-solve', contact, impulse);
+};
+
+/**
+ * @event World#post-solve
+ *
+ * This lets you inspect a contact after the solver is finished. This is useful
+ * for inspecting impulses. Note: the contact manifold does not include time of
+ * impact impulses, which can be arbitrarily large if the sub-step is small.
+ * Hence the impulse is provided explicitly in a separate data structure. Note:
+ * this is only called for contacts that are touching, solid, and awake.
+ *
+ * Warning: You cannot create/destroy world entities inside these callbacks.
+ */
+
+/**
+ * Register a contact filter to provide specific control over collision.
+ * Otherwise the default filter is used (defaultFilter). The listener is owned
+ * by you and must remain in scope.
+ *
+ * Moved to Fixture.
+ */
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG =  false ? undefined : false;
+var _ASSERT =  false ? undefined : false;
+
 module.exports = Body;
 
 var common = __webpack_require__(2);
 var options = __webpack_require__(7);
 
-var Vec2 = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
 var Rot = __webpack_require__(3);
-var Math = __webpack_require__(0);
-var Sweep = __webpack_require__(10);
-var Transform = __webpack_require__(4);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Math = __webpack_require__(1);
+var Sweep = __webpack_require__(8);
+var Transform = __webpack_require__(5);
+var Velocity = __webpack_require__(11);
+var Position = __webpack_require__(12);
 
-var Fixture = __webpack_require__(30);
+var Fixture = __webpack_require__(32);
 var Shape = __webpack_require__(15);
-var World = __webpack_require__(31);
+var World = __webpack_require__(26);
 
 var staticBody = Body.STATIC = 'static';
 var kinematicBody = Body.KINEMATIC = 'kinematic';
@@ -6946,6 +8168,8 @@ var dynamicBody = Body.DYNAMIC = 'dynamic';
  *
  * @prop linearVelocity The linear velocity of the body's origin in world
  *       co-ordinates.
+ *
+ * @prop angularVelocity
  *
  * @prop linearDamping Linear damping is use to reduce the linear velocity. The
  *       damping parameter can be larger than 1.0 but the damping effect becomes
@@ -6998,6 +8222,7 @@ var BodyDef = {
  * 
  * A rigid body composed of one or more fixtures.
  * 
+ * @param {World} world
  * @param {BodyDef} def
  */
 function Body(world, def) {
@@ -7071,6 +8296,32 @@ function Body(world, def) {
 
   this.m_destroyed = false;
 }
+
+Body.prototype._serialize = function() {
+  var fixtures = [];
+  for (var f = this.m_fixtureList; f; f = f.m_next) {
+    fixtures.push(f);
+  }
+  return {
+    type: this.m_type,
+    position: this.m_xf.p,
+    angle: this.m_xf.q.getAngle(),
+    linearVelocity: this.m_linearVelocity,
+    angularVelocity: this.m_angularVelocity,
+    fixtures: fixtures,
+  };
+};
+
+Body._deserialize = function(world, data) {
+  var body = new Body(world, data);
+
+  data.fixtures.forEach(function(data) {
+    var fixture = Fixture._deserialize(body, data);
+    body._addFixture(fixture);
+  });
+
+  return body;
+};
 
 Body.prototype.isWorldLocked = function() {
   return this.m_world && this.m_world.isLocked() ? true : false;
@@ -7785,6 +9036,33 @@ Body.prototype.shouldCollide = function(that) {
   return true;
 };
 
+Body.prototype._addFixture = function(fixture) {
+  _ASSERT && common.assert(this.isWorldLocked() == false);
+
+  if (this.isWorldLocked() == true) {
+    return null;
+  }
+
+  if (this.m_activeFlag) {
+    var broadPhase = this.m_world.m_broadPhase;
+    fixture.createProxies(broadPhase, this.m_xf);
+  }
+
+  fixture.m_next = this.m_fixtureList;
+  this.m_fixtureList = fixture;
+
+  // Adjust mass properties if needed.
+  if (fixture.m_density > 0.0) {
+    this.resetMassData();
+  }
+
+  // Let the world know we have a new fixture. This will cause new contacts
+  // to be created at the beginning of the next time step.
+  this.m_world.m_newFixture = true;
+
+  return fixture
+};
+
 /**
  * Creates a fixture and attach it to this body.
  * 
@@ -7806,24 +9084,7 @@ Body.prototype.createFixture = function(shape, fixdef) {
   }
 
   var fixture = new Fixture(this, shape, fixdef);
-
-  if (this.m_activeFlag) {
-    var broadPhase = this.m_world.m_broadPhase;
-    fixture.createProxies(broadPhase, this.m_xf);
-  }
-
-  fixture.m_next = this.m_fixtureList;
-  this.m_fixtureList = fixture;
-
-  // Adjust mass properties if needed.
-  if (fixture.m_density > 0.0) {
-    this.resetMassData();
-  }
-
-  // Let the world know we have a new fixture. This will cause new contacts
-  // to be created at the beginning of the next time step.
-  this.m_world.m_newFixture = true;
-
+  this._addFixture(fixture);
   return fixture
 };
 
@@ -7929,7 +9190,7 @@ Body.prototype.getLocalVector = function(worldVector) {
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _DEBUG =  false ? undefined : false;
@@ -7947,7 +9208,7 @@ exports.toString = function(newline) {
 };
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -7977,12 +9238,12 @@ module.exports = ChainShape;
 var common = __webpack_require__(2);
 var create = __webpack_require__(6);
 var options = __webpack_require__(7);
-var Math = __webpack_require__(0);
-var Transform = __webpack_require__(4);
+var Math = __webpack_require__(1);
+var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
-var Vec2 = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
 var AABB = __webpack_require__(16);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 var Shape = __webpack_require__(15);
 var EdgeShape = __webpack_require__(23);
 
@@ -7990,6 +9251,7 @@ ChainShape._super = Shape;
 ChainShape.prototype = create(ChainShape._super.prototype);
 
 ChainShape.TYPE = 'chain';
+Shape.TYPES[ChainShape.TYPE] = ChainShape;
 
 /**
  * A chain shape is a free form sequence of line segments. The chain has
@@ -8015,6 +9277,8 @@ function ChainShape(vertices, loop) {
   this.m_hasPrevVertex = false;
   this.m_hasNextVertex = false;
 
+  this.m_isLoop = loop;
+
   if (vertices && vertices.length) {
     if (loop) {
       this._createLoop(vertices);
@@ -8023,6 +9287,24 @@ function ChainShape(vertices, loop) {
     }
   }
 }
+
+ChainShape.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+
+    vertices: this.m_vertices,
+    isLoop: this.m_isLoop,
+    prevVertex: this.m_prevVertex,
+    nextVertex: this.m_nextVertex,
+    hasPrevVertex: this.m_hasPrevVertex,
+    hasNextVertex: this.m_hasNextVertex,
+  };
+};
+
+ChainShape._deserialize = function(data) {
+  var shape = new ChainShape(data.vertices.map(Vec2._deserialize), data.isLoop);
+  return shape;
+};
 
 // ChainShape.clear = function() {
 // this.m_vertices.length = 0;
@@ -8202,7 +9484,7 @@ ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
 };
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Class = __webpack_require__(19);
@@ -8344,413 +9626,6 @@ Class.prototype.clearTimeout = function(timer) {
 
 
 /***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
- *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- */
-
-var _DEBUG =  false ? undefined : false;
-var _ASSERT =  false ? undefined : false;
-
-module.exports = Fixture;
-
-var common = __webpack_require__(2);
-var options = __webpack_require__(7);
-
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-
-var AABB = __webpack_require__(16);
-
-/**
- * @typedef {Object} FixtureDef
- *
- * A fixture definition is used to create a fixture. This class defines an
- * abstract fixture definition. You can reuse fixture definitions safely.
- * 
- * @prop friction The friction coefficient, usually in the range [0,1]
- * @prop restitution The restitution (elasticity) usually in the range [0,1]
- * @prop density The density, usually in kg/m^2
- * @prop isSensor A sensor shape collects contact information but never
- *       generates a collision response
- * @prop userData
- * @prop filterGroupIndex Zero, positive or negative collision group. Fixtures with same positive groupIndex always collide and fixtures with same
- * negative groupIndex never collide.
- * @prop filterCategoryBits Collision category bit or bits that this fixture belongs
- *       to. If groupIndex is zero or not matching, then at least one bit in this fixture
- * categoryBits should match other fixture maskBits and vice versa.
- * @prop filterMaskBits Collision category bit or bits that this fixture accept for
- *       collision.
- */
-var FixtureDef = {
-  userData : null,
-  friction : 0.2,
-  restitution : 0.0,
-  density : 0.0,
-  isSensor : false,
-
-  filterGroupIndex : 0,
-  filterCategoryBits : 0x0001,
-  filterMaskBits : 0xFFFF
-};
-
-/**
- * This proxy is used internally to connect shape children to the broad-phase.
- */
-function FixtureProxy(fixture, childIndex) {
-  this.aabb = new AABB();
-  this.fixture = fixture;
-  this.childIndex = childIndex;
-  this.proxyId;
-};
-
-/**
- * A fixture is used to attach a shape to a body for collision detection. A
- * fixture inherits its transform from its parent. Fixtures hold additional
- * non-geometric data such as friction, collision filters, etc. Fixtures are
- * created via Body.createFixture.
- * 
- * @param {Shape|FixtureDef} shape Shape of fixture definition.
- * @param {FixtureDef|number} def Fixture definition or number.
- */
-function Fixture(body, shape, def) {
-  if (shape.shape) {
-    def = shape;
-    shape = shape.shape;
-
-  } else if (typeof def === 'number') {
-    def = {density : def};
-  }
-
-  def = options(def, FixtureDef);
-
-  this.m_body = body;
-
-  this.m_friction = def.friction;
-  this.m_restitution = def.restitution;
-  this.m_density = def.density;
-  this.m_isSensor = def.isSensor;
-
-  this.m_filterGroupIndex = def.filterGroupIndex;
-  this.m_filterCategoryBits = def.filterCategoryBits;
-  this.m_filterMaskBits = def.filterMaskBits;
-
-  // TODO validate shape
-  this.m_shape = shape; //.clone();
-
-  this.m_next = null;
-
-  this.m_proxies = [];
-  this.m_proxyCount = 0;
-
-  var childCount = this.m_shape.getChildCount();
-  for (var i = 0; i < childCount; ++i) {
-    this.m_proxies[i] = new FixtureProxy(this, i);
-  }
-
-  this.m_userData = def.userData;
-};
-
-/**
- * Get the type of the child shape. You can use this to down cast to the
- * concrete shape.
- */
-Fixture.prototype.getType = function() {
-  return this.m_shape.getType();
-}
-
-/**
- * Get the child shape. You can modify the child shape, however you should not
- * change the number of vertices because this will crash some collision caching
- * mechanisms. Manipulating the shape may lead to non-physical behavior.
- */
-Fixture.prototype.getShape = function() {
-  return this.m_shape;
-}
-/**
- * A sensor shape collects contact information but never generates a collision
- * response.
- */
-Fixture.prototype.isSensor = function() {
-  return this.m_isSensor;
-}
-
-/**
- * Set if this fixture is a sensor.
- */
-Fixture.prototype.setSensor = function(sensor) {
-  if (sensor != this.m_isSensor) {
-    this.m_body.setAwake(true);
-    this.m_isSensor = sensor;
-  }
-}
-
-/**
- * Get the contact filtering data.
- */
-// Fixture.prototype.getFilterData = function() {
-//   return this.m_filter;
-// }
-
-/**
- * Get the user data that was assigned in the fixture definition. Use this to
- * store your application specific data.
- */
-Fixture.prototype.getUserData = function() {
-  return this.m_userData;
-}
-
-/**
- * Set the user data. Use this to store your application specific data.
- */
-Fixture.prototype.setUserData = function(data) {
-  this.m_userData = data;
-}
-
-/**
- * Get the parent body of this fixture. This is null if the fixture is not
- * attached.
- */
-Fixture.prototype.getBody = function() {
-  return this.m_body;
-}
-
-/**
- * Get the next fixture in the parent body's fixture list.
- */
-Fixture.prototype.getNext = function() {
-  return this.m_next;
-}
-
-/**
- * Get the density of this fixture.
- */
-Fixture.prototype.getDensity = function() {
-  return this.m_density;
-}
-
-/**
- * Set the density of this fixture. This will _not_ automatically adjust the
- * mass of the body. You must call Body.resetMassData to update the body's mass.
- */
-Fixture.prototype.setDensity = function(density) {
-  _ASSERT && common.assert(Math.isFinite(density) && density >= 0.0);
-  this.m_density = density;
-}
-
-/**
- * Get the coefficient of friction, usually in the range [0,1].
- */
-Fixture.prototype.getFriction = function() {
-  return this.m_friction;
-}
-
-/**
- * Set the coefficient of friction. This will not change the friction of
- * existing contacts.
- */
-Fixture.prototype.setFriction = function(friction) {
-  this.m_friction = friction;
-}
-
-/**
- * Get the coefficient of restitution.
- */
-Fixture.prototype.getRestitution = function() {
-  return this.m_restitution;
-}
-
-/**
- * Set the coefficient of restitution. This will not change the restitution of
- * existing contacts.
- */
-Fixture.prototype.setRestitution = function(restitution) {
-  this.m_restitution = restitution;
-}
-
-/**
- * Test a point in world coordinates for containment in this fixture.
- */
-Fixture.prototype.testPoint = function(p) {
-  return this.m_shape.testPoint(this.m_body.getTransform(), p);
-}
-
-/**
- * Cast a ray against this shape.
- */
-Fixture.prototype.rayCast = function(output, input, childIndex) {
-  return this.m_shape.rayCast(output, input, this.m_body.getTransform(), childIndex);
-}
-
-/**
- * Get the mass data for this fixture. The mass data is based on the density and
- * the shape. The rotational inertia is about the shape's origin. This operation
- * may be expensive.
- */
-Fixture.prototype.getMassData = function(massData) {
-  this.m_shape.computeMass(massData, this.m_density);
-}
-
-/**
- * Get the fixture's AABB. This AABB may be enlarge and/or stale. If you need a
- * more accurate AABB, compute it using the shape and the body transform.
- */
-Fixture.prototype.getAABB = function(childIndex) {
-  _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_proxyCount);
-  return this.m_proxies[childIndex].aabb;
-}
-
-/**
- * These support body activation/deactivation.
- */
-Fixture.prototype.createProxies = function(broadPhase, xf) {
-  _ASSERT && common.assert(this.m_proxyCount == 0);
-
-  // Create proxies in the broad-phase.
-  this.m_proxyCount = this.m_shape.getChildCount();
-
-  for (var i = 0; i < this.m_proxyCount; ++i) {
-    var proxy = this.m_proxies[i];
-    this.m_shape.computeAABB(proxy.aabb, xf, i);
-    proxy.proxyId = broadPhase.createProxy(proxy.aabb, proxy);
-  }
-}
-
-Fixture.prototype.destroyProxies = function(broadPhase) {
-  // Destroy proxies in the broad-phase.
-  for (var i = 0; i < this.m_proxyCount; ++i) {
-    var proxy = this.m_proxies[i];
-    broadPhase.destroyProxy(proxy.proxyId);
-    proxy.proxyId = null;
-  }
-
-  this.m_proxyCount = 0;
-}
-
-/**
- * Updates this fixture proxy in broad-phase (with combined AABB of current and
- * next transformation).
- */
-Fixture.prototype.synchronize = function(broadPhase, xf1, xf2) {
-  for (var i = 0; i < this.m_proxyCount; ++i) {
-    var proxy = this.m_proxies[i];
-    // Compute an AABB that covers the swept shape (may miss some rotation
-    // effect).
-    var aabb1 = new AABB();
-    var aabb2 = new AABB();
-    this.m_shape.computeAABB(aabb1, xf1, proxy.childIndex);
-    this.m_shape.computeAABB(aabb2, xf2, proxy.childIndex);
-
-    proxy.aabb.combine(aabb1, aabb2);
-
-    var displacement = Vec2.sub(xf2.p, xf1.p);
-
-    broadPhase.moveProxy(proxy.proxyId, proxy.aabb, displacement);
-  }
-}
-
-/**
- * Set the contact filtering data. This will not update contacts until the next
- * time step when either parent body is active and awake. This automatically
- * calls refilter.
- */
-Fixture.prototype.setFilterData = function(filter) {
-  this.m_filterGroupIndex = filter.groupIndex;
-  this.m_filterCategoryBits = filter.categoryBits;
-  this.m_filterMaskBits = filter.maskBits;
-  this.refilter();
-}
-
-Fixture.prototype.getFilterGroupIndex = function() {
-  return this.m_filterGroupIndex;
-}
-
-Fixture.prototype.getFilterCategoryBits = function() {
-  return this.m_filterCategoryBits;
-}
-
-Fixture.prototype.getFilterMaskBits = function() {
-  return this.m_filterMaskBits;
-}
-
-/**
- * Call this if you want to establish collision that was previously disabled by
- * ContactFilter.
- */
-Fixture.prototype.refilter = function() {
-  if (this.m_body == null) {
-    return;
-  }
-
-  // Flag associated contacts for filtering.
-  var edge = this.m_body.getContactList();
-  while (edge) {
-    var contact = edge.contact;
-    var fixtureA = contact.getFixtureA();
-    var fixtureB = contact.getFixtureB();
-    if (fixtureA == this || fixtureB == this) {
-      contact.flagForFiltering();
-    }
-
-    edge = edge.next;
-  }
-
-  var world = this.m_body.getWorld();
-
-  if (world == null) {
-    return;
-  }
-
-  // Touch each proxy so that new pairs may be created
-  var broadPhase = world.m_broadPhase;
-  for (var i = 0; i < this.m_proxyCount; ++i) {
-    broadPhase.touchProxy(this.m_proxies[i].proxyId);
-  }
-}
-
-/**
- * Implement this method to provide collision filtering, if you want finer
- * control over contact creation.
- * 
- * Return true if contact calculations should be performed between these two
- * fixtures.
- * 
- * Warning: for performance reasons this is only called when the AABBs begin to
- * overlap.
- * 
- * @param {Fixture} fixtureA
- * @param {Fixture} fixtureB
- */
-Fixture.prototype.shouldCollide = function(that) {
-
-  if (that.m_filterGroupIndex == this.m_filterGroupIndex && that.m_filterGroupIndex != 0) {
-    return that.m_filterGroupIndex > 0;
-  }
-
-  var collide = (that.m_filterMaskBits & this.m_filterCategoryBits) != 0
-      && (that.m_filterCategoryBits & this.m_filterMaskBits) != 0;
-  return collide;
-}
-
-
-/***/ }),
 /* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8776,1090 +9651,11 @@ Fixture.prototype.shouldCollide = function(that) {
 var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
-module.exports = World;
-
-var options = __webpack_require__(7);
+var Settings = __webpack_require__(4);
 var common = __webpack_require__(2);
-var Vec2 = __webpack_require__(1);
-var BroadPhase = __webpack_require__(40);
-var Solver = __webpack_require__(42);
-var Body = __webpack_require__(26);
-var Contact = __webpack_require__(17);
-
-/**
- * @typedef {Object} WorldDef
- *
- * @prop {Vec2} [gravity = { x : 0, y : 0}]
- * @prop {boolean} [allowSleep = true]
- * @prop {boolean} [warmStarting = false]
- * @prop {boolean} [continuousPhysics = false]
- * @prop {boolean} [subStepping = false]
- * @prop {boolean} [blockSolve = true]
- * @prop {int} [velocityIterations = 8] For the velocity constraint solver.
- * @prop {int} [positionIterations = 3] For the position constraint solver.
- */
-var WorldDef = {
-  gravity : Vec2.zero(),
-  allowSleep : true,
-  warmStarting : true,
-  continuousPhysics : true,
-  subStepping : false,
-  blockSolve : true,
-  velocityIterations : 8,
-  positionIterations : 3
-};
-
-/**
- * @param {WordDef|Vec2} def World definition or gravity vector.
- */
-function World(def) {
-  if (!(this instanceof World)) {
-    return new World(def);
-  }
-
-  if (def && Vec2.isValid(def)) {
-    def = {gravity : def};
-  }
-
-  def = options(def, WorldDef);
-
-  this.m_solver = new Solver(this);
-
-  this.m_broadPhase = new BroadPhase();
-
-  this.m_contactList = null;
-  this.m_contactCount = 0;
-
-  this.m_bodyList = null;
-  this.m_bodyCount = 0;
-
-  this.m_jointList = null;
-  this.m_jointCount = 0;
-
-  this.m_stepComplete = true;
-
-  this.m_allowSleep = def.allowSleep;
-  this.m_gravity = Vec2.clone(def.gravity);
-
-  this.m_clearForces = true;
-  this.m_newFixture = false;
-  this.m_locked = false;
-
-  // These are for debugging the solver.
-  this.m_warmStarting = def.warmStarting;
-  this.m_continuousPhysics = def.continuousPhysics;
-  this.m_subStepping = def.subStepping;
-
-  this.m_blockSolve = def.blockSolve;
-  this.m_velocityIterations = def.velocityIterations;
-  this.m_positionIterations = def.positionIterations;
-
-  this.m_t = 0;
-
-  this.m_stepCount = 0;
-
-  // Broad-phase callback.
-  this.addPair = this.createContact.bind(this);
-}
-
-/**
- * Get the world body list. With the returned body, use Body.getNext to get the
- * next body in the world list. A null body indicates the end of the list.
- *
- * @return the head of the world body list.
- */
-World.prototype.getBodyList = function() {
-  return this.m_bodyList;
-}
-
-/**
- * Get the world joint list. With the returned joint, use Joint.getNext to get
- * the next joint in the world list. A null joint indicates the end of the list.
- *
- * @return the head of the world joint list.
- */
-World.prototype.getJointList = function() {
-  return this.m_jointList;
-}
-
-/**
- * Get the world contact list. With the returned contact, use Contact.getNext to
- * get the next contact in the world list. A null contact indicates the end of
- * the list.
- *
- * @return the head of the world contact list. Warning: contacts are created and
- *         destroyed in the middle of a time step. Use ContactListener to avoid
- *         missing contacts.
- */
-World.prototype.getContactList = function() {
-  return this.m_contactList;
-}
-
-World.prototype.getBodyCount = function() {
-  return this.m_bodyCount;
-}
-
-World.prototype.getJointCount = function() {
-  return this.m_jointCount;
-}
-
-/**
- * Get the number of contacts (each may have 0 or more contact points).
- */
-World.prototype.getContactCount = function() {
-  return this.m_contactCount;
-}
-
-/**
- * Change the global gravity vector.
- */
-World.prototype.setGravity = function(gravity) {
-  this.m_gravity = gravity;
-}
-
-/**
- * Get the global gravity vector.
- */
-World.prototype.getGravity = function() {
-  return this.m_gravity;
-}
-
-/**
- * Is the world locked (in the middle of a time step).
- */
-World.prototype.isLocked = function() {
-  return this.m_locked;
-}
-
-/**
- * Enable/disable sleep.
- */
-World.prototype.setAllowSleeping = function(flag) {
-  if (flag == this.m_allowSleep) {
-    return;
-  }
-
-  this.m_allowSleep = flag;
-  if (this.m_allowSleep == false) {
-    for (var b = this.m_bodyList; b; b = b.m_next) {
-      b.setAwake(true);
-    }
-  }
-}
-
-World.prototype.getAllowSleeping = function() {
-  return this.m_allowSleep;
-}
-
-/**
- * Enable/disable warm starting. For testing.
- */
-World.prototype.setWarmStarting = function(flag) {
-  this.m_warmStarting = flag;
-}
-
-World.prototype.getWarmStarting = function() {
-  return this.m_warmStarting;
-}
-
-/**
- * Enable/disable continuous physics. For testing.
- */
-World.prototype.setContinuousPhysics = function(flag) {
-  this.m_continuousPhysics = flag;
-}
-
-World.prototype.getContinuousPhysics = function() {
-  return this.m_continuousPhysics;
-}
-
-/**
- * Enable/disable single stepped continuous physics. For testing.
- */
-World.prototype.setSubStepping = function(flag) {
-  this.m_subStepping = flag;
-}
-
-World.prototype.getSubStepping = function() {
-  return this.m_subStepping;
-}
-
-/**
- * Set flag to control automatic clearing of forces after each time step.
- */
-World.prototype.setAutoClearForces = function(flag) {
-  this.m_clearForces = flag;
-}
-
-/**
- * Get the flag that controls automatic clearing of forces after each time step.
- */
-World.prototype.getAutoClearForces = function() {
-  return this.m_clearForces;
-}
-
-/**
- * Manually clear the force buffer on all bodies. By default, forces are cleared
- * automatically after each call to step. The default behavior is modified by
- * calling setAutoClearForces. The purpose of this function is to support
- * sub-stepping. Sub-stepping is often used to maintain a fixed sized time step
- * under a variable frame-rate. When you perform sub-stepping you will disable
- * auto clearing of forces and instead call clearForces after all sub-steps are
- * complete in one pass of your game loop.
- *
- * @see setAutoClearForces
- */
-World.prototype.clearForces = function() {
-  for (var body = this.m_bodyList; body; body = body.getNext()) {
-    body.m_force.setZero();
-    body.m_torque = 0.0;
-  }
-}
-
-/**
- * @function World~rayCastCallback
- *
- * @param fixture
- */
-
-/**
- * Query the world for all fixtures that potentially overlap the provided AABB.
- *
- * @param {World~queryCallback} queryCallback Called for each fixture
- *          found in the query AABB. It may return `false` to terminate the
- *          query.
- *
- * @param aabb The query box.
- */
-World.prototype.queryAABB = function(aabb, queryCallback) {
-  _ASSERT && common.assert(typeof queryCallback === 'function');
-  var broadPhase = this.m_broadPhase;
-  this.m_broadPhase.query(aabb, function(proxyId) { //TODO GC
-    var proxy = broadPhase.getUserData(proxyId); // FixtureProxy
-    return queryCallback(proxy.fixture);
-  });
-}
-
-/**
- * @function World~rayCastCallback
- *
- * Callback class for ray casts. See World.rayCast
- *
- * Called for each fixture found in the query. You control how the ray cast
- * proceeds by returning a float: return -1: ignore this fixture and continue
- * return 0: terminate the ray cast return fraction: clip the ray to this point
- * return 1: don't clip the ray and continue
- *
- * @param fixture The fixture hit by the ray
- * @param point The point of initial intersection
- * @param normal The normal vector at the point of intersection
- * @param fraction
- *
- * @return {float} -1 to filter, 0 to terminate, fraction to clip the ray for
- *         closest hit, 1 to continue
- */
-
-/**
- *
- * Ray-cast the world for all fixtures in the path of the ray. Your callback
- * controls whether you get the closest point, any point, or n-points. The
- * ray-cast ignores shapes that contain the starting point.
- *
- * @param {World~RayCastCallback} reportFixtureCallback A user implemented
- *          callback function.
- * @param point1 The ray starting point
- * @param point2 The ray ending point
- */
-World.prototype.rayCast = function(point1, point2, reportFixtureCallback) {
-  _ASSERT && common.assert(typeof reportFixtureCallback === 'function');
-  var broadPhase = this.m_broadPhase;
-
-  this.m_broadPhase.rayCast({
-    maxFraction : 1.0,
-    p1 : point1,
-    p2 : point2
-  }, function(input, proxyId) { // TODO GC
-    var proxy = broadPhase.getUserData(proxyId); // FixtureProxy
-    var fixture = proxy.fixture;
-    var index = proxy.childIndex;
-    var output = {}; // TODO GC
-    var hit = fixture.rayCast(output, input, index);
-    if (hit) {
-      var fraction = output.fraction;
-      var point = Vec2.add(Vec2.mul((1.0 - fraction), input.p1), Vec2.mul(fraction, input.p2));
-      return reportFixtureCallback(fixture, point, output.normal, fraction);
-    }
-    return input.maxFraction;
-  });
-}
-
-/**
- * Get the number of broad-phase proxies.
- */
-World.prototype.getProxyCount = function() {
-  return this.m_broadPhase.getProxyCount();
-}
-
-/**
- * Get the height of broad-phase dynamic tree.
- */
-World.prototype.getTreeHeight = function() {
-  return this.m_broadPhase.getTreeHeight();
-}
-
-/**
- * Get the balance of broad-phase dynamic tree.
- *
- * @returns {int}
- */
-World.prototype.getTreeBalance = function() {
-  return this.m_broadPhase.getTreeBalance();
-}
-
-/**
- * Get the quality metric of broad-phase dynamic tree. The smaller the better.
- * The minimum is 1.
- *
- * @returns {float}
- */
-World.prototype.getTreeQuality = function() {
-  return this.m_broadPhase.getTreeQuality();
-}
-
-/**
- * Shift the world origin. Useful for large worlds. The body shift formula is:
- * position -= newOrigin
- *
- * @param {Vec2} newOrigin The new origin with respect to the old origin
- */
-World.prototype.shiftOrigin = function(newOrigin) {
-  _ASSERT && common.assert(this.m_locked == false);
-  if (this.m_locked) {
-    return;
-  }
-
-  for (var b = this.m_bodyList; b; b = b.m_next) {
-    b.m_xf.p.sub(newOrigin);
-    b.m_sweep.c0.sub(newOrigin);
-    b.m_sweep.c.sub(newOrigin);
-  }
-
-  for (var j = this.m_jointList; j; j = j.m_next) {
-    j.shiftOrigin(newOrigin);
-  }
-
-  this.m_broadPhase.shiftOrigin(newOrigin);
-}
-
-/**
- * Create a rigid body given a definition. No reference to the definition is
- * retained.
- *
- * Warning: This function is locked during callbacks.
- *
- * @param {BodyDef|Vec2} def Body definition or position.
- * @param {float} angle Body angle if def is position.
- */
-World.prototype.createBody = function(def, angle) {
-  _ASSERT && common.assert(this.isLocked() == false);
-  if (this.isLocked()) {
-    return null;
-  }
-
-  if (def && Vec2.isValid(def)) {
-    def = {
-      position : def,
-      angle : angle
-    };
-  }
-
-  var body = new Body(this, def);
-
-  // Add to world doubly linked list.
-  body.m_prev = null;
-  body.m_next = this.m_bodyList;
-  if (this.m_bodyList) {
-    this.m_bodyList.m_prev = body;
-  }
-  this.m_bodyList = body;
-  ++this.m_bodyCount;
-
-  return body;
-}
-
-World.prototype.createDynamicBody = function(def, angle) {
-  if (!def) {
-    def = {};
-  } else if (Vec2.isValid(def)) {
-    def = { position : def, angle : angle };
-  }
-  def.type = 'dynamic';
-  return this.createBody(def);
-}
-
-World.prototype.createKinematicBody = function(def, angle) {
-  if (!def) {
-    def = {};
-  } else if (Vec2.isValid(def)) {
-    def = { position : def, angle : angle };
-  }
-  def.type = 'kinematic';
-  return this.createBody(def);
-}
-
-/**
- * Destroy a rigid body given a definition. No reference to the definition is
- * retained.
- *
- * Warning: This automatically deletes all associated shapes and joints.
- *
- * Warning: This function is locked during callbacks.
- *
- * @param {Body} b
- */
-World.prototype.destroyBody = function(b) {
-  _ASSERT && common.assert(this.m_bodyCount > 0);
-  _ASSERT && common.assert(this.isLocked() == false);
-  if (this.isLocked()) {
-    return;
-  }
-
-  if (b.m_destroyed) {
-    return false;
-  }
-
-  // Delete the attached joints.
-  var je = b.m_jointList;
-  while (je) {
-    var je0 = je;
-    je = je.next;
-
-    this.publish('remove-joint', je0.joint);
-    this.destroyJoint(je0.joint);
-
-    b.m_jointList = je;
-  }
-  b.m_jointList = null;
-
-  // Delete the attached contacts.
-  var ce = b.m_contactList;
-  while (ce) {
-    var ce0 = ce;
-    ce = ce.next;
-
-    this.destroyContact(ce0.contact);
-
-    b.m_contactList = ce;
-  }
-  b.m_contactList = null;
-
-  // Delete the attached fixtures. This destroys broad-phase proxies.
-  var f = b.m_fixtureList;
-  while (f) {
-    var f0 = f;
-    f = f.m_next;
-
-    this.publish('remove-fixture', f0);
-    f0.destroyProxies(this.m_broadPhase);
-
-    b.m_fixtureList = f;
-  }
-  b.m_fixtureList = null;
-
-  // Remove world body list.
-  if (b.m_prev) {
-    b.m_prev.m_next = b.m_next;
-  }
-
-  if (b.m_next) {
-    b.m_next.m_prev = b.m_prev;
-  }
-
-  if (b == this.m_bodyList) {
-    this.m_bodyList = b.m_next;
-  }
-
-  b.m_destroyed = true;
-
-  --this.m_bodyCount;
-
-  this.publish('remove-body', b);
-
-  return true;
-}
-
-/**
- * Create a joint to constrain bodies together. No reference to the definition
- * is retained. This may cause the connected bodies to cease colliding.
- *
- * Warning: This function is locked during callbacks.
- *
- * @param {Joint} join
- * @param {Body} bodyB
- * @param {Body} bodyA
- */
-World.prototype.createJoint = function(joint) {
-  _ASSERT && common.assert(!!joint.m_bodyA);
-  _ASSERT && common.assert(!!joint.m_bodyB);
-  _ASSERT && common.assert(this.isLocked() == false);
-  if (this.isLocked()) {
-    return null;
-  }
-
-  // Connect to the world list.
-  joint.m_prev = null;
-  joint.m_next = this.m_jointList;
-  if (this.m_jointList) {
-    this.m_jointList.m_prev = joint;
-  }
-  this.m_jointList = joint;
-  ++this.m_jointCount;
-
-  // Connect to the bodies' doubly linked lists.
-  joint.m_edgeA.joint = joint;
-  joint.m_edgeA.other = joint.m_bodyB;
-  joint.m_edgeA.prev = null;
-  joint.m_edgeA.next = joint.m_bodyA.m_jointList;
-  if (joint.m_bodyA.m_jointList)
-    joint.m_bodyA.m_jointList.prev = joint.m_edgeA;
-  joint.m_bodyA.m_jointList = joint.m_edgeA;
-
-  joint.m_edgeB.joint = joint;
-  joint.m_edgeB.other = joint.m_bodyA;
-  joint.m_edgeB.prev = null;
-  joint.m_edgeB.next = joint.m_bodyB.m_jointList;
-  if (joint.m_bodyB.m_jointList)
-    joint.m_bodyB.m_jointList.prev = joint.m_edgeB;
-  joint.m_bodyB.m_jointList = joint.m_edgeB;
-
-  // If the joint prevents collisions, then flag any contacts for filtering.
-  if (joint.m_collideConnected == false) {
-    for (var edge = joint.m_bodyB.getContactList(); edge; edge = edge.next) {
-      if (edge.other == joint.m_bodyA) {
-        // Flag the contact for filtering at the next time step (where either
-        // body is awake).
-        edge.contact.flagForFiltering();
-      }
-    }
-  }
-
-  // Note: creating a joint doesn't wake the bodies.
-
-  return joint;
-}
-
-/**
- * Destroy a joint. This may cause the connected bodies to begin colliding.
- * Warning: This function is locked during callbacks.
- *
- * @param {Joint} join
- */
-World.prototype.destroyJoint = function(joint) {
-  _ASSERT && common.assert(this.isLocked() == false);
-  if (this.isLocked()) {
-    return;
-  }
-
-  // Remove from the doubly linked list.
-  if (joint.m_prev) {
-    joint.m_prev.m_next = joint.m_next;
-  }
-
-  if (joint.m_next) {
-    joint.m_next.m_prev = joint.m_prev;
-  }
-
-  if (joint == this.m_jointList) {
-    this.m_jointList = joint.m_next;
-  }
-
-  // Disconnect from bodies.
-  var bodyA = joint.m_bodyA;
-  var bodyB = joint.m_bodyB;
-
-  // Wake up connected bodies.
-  bodyA.setAwake(true);
-  bodyB.setAwake(true);
-
-  // Remove from body 1.
-  if (joint.m_edgeA.prev) {
-    joint.m_edgeA.prev.next = joint.m_edgeA.next;
-  }
-
-  if (joint.m_edgeA.next) {
-    joint.m_edgeA.next.prev = joint.m_edgeA.prev;
-  }
-
-  if (joint.m_edgeA == bodyA.m_jointList) {
-    bodyA.m_jointList = joint.m_edgeA.next;
-  }
-
-  joint.m_edgeA.prev = null;
-  joint.m_edgeA.next = null;
-
-  // Remove from body 2
-  if (joint.m_edgeB.prev) {
-    joint.m_edgeB.prev.next = joint.m_edgeB.next;
-  }
-
-  if (joint.m_edgeB.next) {
-    joint.m_edgeB.next.prev = joint.m_edgeB.prev;
-  }
-
-  if (joint.m_edgeB == bodyB.m_jointList) {
-    bodyB.m_jointList = joint.m_edgeB.next;
-  }
-
-  joint.m_edgeB.prev = null;
-  joint.m_edgeB.next = null;
-
-  _ASSERT && common.assert(this.m_jointCount > 0);
-  --this.m_jointCount;
-
-  // If the joint prevents collisions, then flag any contacts for filtering.
-  if (joint.m_collideConnected == false) {
-    var edge = bodyB.getContactList();
-    while (edge) {
-      if (edge.other == bodyA) {
-        // Flag the contact for filtering at the next time step (where either
-        // body is awake).
-        edge.contact.flagForFiltering();
-      }
-
-      edge = edge.next;
-    }
-  }
-
-  this.publish('remove-joint', joint);
-}
-
-var s_step = new Solver.TimeStep(); // reuse
-
-/**
- * Take a time step. This performs collision detection, integration, and
- * constraint solution.
- *
- * Broad-phase, narrow-phase, solve and solve time of impacts.
- *
- * @param {float} timeStep Time step, this should not vary.
- * @param {int} velocityIterations
- * @param {int} positionIterations
- */
-World.prototype.step = function(timeStep, velocityIterations, positionIterations) {
-
-  if ((velocityIterations | 0) !== velocityIterations) {
-    // TODO: remove this in future
-    velocityIterations = 0;
-  }
-
-  velocityIterations = velocityIterations || this.m_velocityIterations;
-  positionIterations = positionIterations || this.m_positionIterations;
-
-  // TODO: move this to testbed
-  this.m_stepCount++;
-
-  // If new fixtures were added, we need to find the new contacts.
-  if (this.m_newFixture) {
-    this.findNewContacts();
-    this.m_newFixture = false;
-  }
-
-  this.m_locked = true;
-
-  s_step.reset(timeStep);
-  s_step.velocityIterations = velocityIterations;
-  s_step.positionIterations = positionIterations;
-  s_step.warmStarting = this.m_warmStarting;
-  s_step.blockSolve = this.m_blockSolve;
-
-  // Update contacts. This is where some contacts are destroyed.
-  this.updateContacts();
-
-  // Integrate velocities, solve velocity constraints, and integrate positions.
-  if (this.m_stepComplete && timeStep > 0.0) {
-    this.m_solver.solveWorld(s_step);
-
-    // Synchronize fixtures, check for out of range bodies.
-    for (var b = this.m_bodyList; b; b = b.getNext()) {
-      // If a body was not in an island then it did not move.
-      if (b.m_islandFlag == false) {
-        continue;
-      }
-
-      if (b.isStatic()) {
-        continue;
-      }
-
-      // Update fixtures (for broad-phase).
-      b.synchronizeFixtures();
-    }
-    // Look for new contacts.
-    this.findNewContacts();
-  }
-
-  // Handle TOI events.
-  if (this.m_continuousPhysics && timeStep > 0.0) {
-    this.m_solver.solveWorldTOI(s_step);
-  }
-
-  if (this.m_clearForces) {
-    this.clearForces();
-  }
-
-  this.m_locked = false;
-}
-
-/**
- * Call this method to find new contacts.
- */
-World.prototype.findNewContacts = function() {
-  this.m_broadPhase.updatePairs(this.addPair);
-}
-
-/**
- * @private
- *
- * @param {FixtureProxy} proxyA
- * @param {FixtureProxy} proxyB
- */
-World.prototype.createContact = function(proxyA, proxyB) {
-  var fixtureA = proxyA.fixture;
-  var fixtureB = proxyB.fixture;
-
-  var indexA = proxyA.childIndex;
-  var indexB = proxyB.childIndex;
-
-  var bodyA = fixtureA.getBody();
-  var bodyB = fixtureB.getBody();
-
-  // Are the fixtures on the same body?
-  if (bodyA == bodyB) {
-    return;
-  }
-
-  // TODO_ERIN use a hash table to remove a potential bottleneck when both
-  // bodies have a lot of contacts.
-  // Does a contact already exist?
-  var edge = bodyB.getContactList(); // ContactEdge
-  while (edge) {
-    if (edge.other == bodyA) {
-      var fA = edge.contact.getFixtureA();
-      var fB = edge.contact.getFixtureB();
-      var iA = edge.contact.getChildIndexA();
-      var iB = edge.contact.getChildIndexB();
-
-      if (fA == fixtureA && fB == fixtureB && iA == indexA && iB == indexB) {
-        // A contact already exists.
-        return;
-      }
-
-      if (fA == fixtureB && fB == fixtureA && iA == indexB && iB == indexA) {
-        // A contact already exists.
-        return;
-      }
-    }
-
-    edge = edge.next;
-  }
-
-  if (bodyB.shouldCollide(bodyA) == false) {
-    return;
-  }
-  if (fixtureB.shouldCollide(fixtureA) == false) {
-    return;
-  }
-
-  // Call the factory.
-  var contact = Contact.create(fixtureA, indexA, fixtureB, indexB);
-  if (contact == null) {
-    return;
-  }
-
-  // Insert into the world.
-  contact.m_prev = null;
-  if (this.m_contactList != null) {
-    contact.m_next = this.m_contactList;
-    this.m_contactList.m_prev = contact;
-  }
-  this.m_contactList = contact;
-
-  ++this.m_contactCount;
-}
-
-/**
- * Removes old non-overlapping contacts, applies filters and updates contacts.
- */
-World.prototype.updateContacts = function() {
-  // Update awake contacts.
-  var c, next_c = this.m_contactList;
-  while (c = next_c) {
-    next_c = c.getNext()
-    var fixtureA = c.getFixtureA();
-    var fixtureB = c.getFixtureB();
-    var indexA = c.getChildIndexA();
-    var indexB = c.getChildIndexB();
-    var bodyA = fixtureA.getBody();
-    var bodyB = fixtureB.getBody();
-
-    // Is this contact flagged for filtering?
-    if (c.m_filterFlag) {
-      if (bodyB.shouldCollide(bodyA) == false) {
-        this.destroyContact(c);
-        continue;
-      }
-
-      if (fixtureB.shouldCollide(fixtureA) == false) {
-        this.destroyContact(c);
-        continue;
-      }
-
-      // Clear the filtering flag.
-      c.m_filterFlag = false;
-    }
-
-    var activeA = bodyA.isAwake() && !bodyA.isStatic();
-    var activeB = bodyB.isAwake() && !bodyB.isStatic();
-
-    // At least one body must be awake and it must be dynamic or kinematic.
-    if (activeA == false && activeB == false) {
-      continue;
-    }
-
-    var proxyIdA = fixtureA.m_proxies[indexA].proxyId;
-    var proxyIdB = fixtureB.m_proxies[indexB].proxyId;
-    var overlap = this.m_broadPhase.testOverlap(proxyIdA, proxyIdB);
-
-    // Here we destroy contacts that cease to overlap in the broad-phase.
-    if (overlap == false) {
-      this.destroyContact(c);
-      continue;
-    }
-
-    // The contact persists.
-    c.update(this);
-  }
-}
-
-/**
- * @param {Contact} contact
- */
-World.prototype.destroyContact = function(contact) {
-  Contact.destroy(contact, this);
-
-  // Remove from the world.
-  if (contact.m_prev) {
-    contact.m_prev.m_next = contact.m_next;
-  }
-  if (contact.m_next) {
-    contact.m_next.m_prev = contact.m_prev;
-  }
-  if (contact == this.m_contactList) {
-    this.m_contactList = contact.m_next;
-  }
-
-  --this.m_contactCount;
-}
-
-World.prototype._listeners = null;
-
-/**
- * Register an event listener.
- *
- * @param {string} name
- * @param {function} listener
- */
-World.prototype.on = function(name, listener) {
-  if (typeof name !== 'string' || typeof listener !== 'function') {
-    return this;
-  }
-  if (!this._listeners) {
-    this._listeners = {};
-  }
-  if (!this._listeners[name]) {
-    this._listeners[name] = [];
-  }
-  this._listeners[name].push(listener);
-  return this;
-};
-
-/**
- * Remove an event listener.
- *
- * @param {string} name
- * @param {function} listener
- */
-World.prototype.off = function(name, listener) {
-  if (typeof name !== 'string' || typeof listener !== 'function') {
-    return this;
-  }
-  var listeners = this._listeners && this._listeners[name];
-  if (!listeners || !listeners.length) {
-    return this;
-  }
-  var index = listeners.indexOf(listener);
-  if (index >= 0) {
-    listeners.splice(index, 1);
-  }
-  return this;
-};
-
-World.prototype.publish = function(name, arg1, arg2, arg3) {
-  var listeners = this._listeners && this._listeners[name];
-  if (!listeners || !listeners.length) {
-    return 0;
-  }
-  for (var l = 0; l < listeners.length; l++) {
-    listeners[l].call(this, arg1, arg2, arg3);
-  }
-  return listeners.length;
-};
-
-/**
- * @event World#remove-body
- * @event World#remove-joint
- * @event World#remove-fixture
- *
- * Joints and fixtures are destroyed when their associated body is destroyed.
- * Register a destruction listener so that you may nullify references to these
- * joints and shapes.
- *
- * `function(object)` is called when any joint or fixture is about to
- * be destroyed due to the destruction of one of its attached or parent bodies.
- */
-
-/**
- * @private
- * @param {Contact} contact
- */
-World.prototype.beginContact = function(contact) {
-  this.publish('begin-contact', contact);
-};
-
-/**
- * @event World#begin-contact
- *
- * Called when two fixtures begin to touch.
- *
- * Implement contact callbacks to get contact information. You can use these
- * results for things like sounds and game logic. You can also get contact
- * results by traversing the contact lists after the time step. However, you
- * might miss some contacts because continuous physics leads to sub-stepping.
- * Additionally you may receive multiple callbacks for the same contact in a
- * single time step. You should strive to make your callbacks efficient because
- * there may be many callbacks per time step.
- *
- * Warning: You cannot create/destroy world entities inside these callbacks.
- */
-
-/**
- * @private
- * @param {Contact} contact
- */
-World.prototype.endContact = function(contact) {
-  this.publish('end-contact', contact);
-};
-
-/**
- * @event World#end-contact
- *
- * Called when two fixtures cease to touch.
- *
- * Implement contact callbacks to get contact information. You can use these
- * results for things like sounds and game logic. You can also get contact
- * results by traversing the contact lists after the time step. However, you
- * might miss some contacts because continuous physics leads to sub-stepping.
- * Additionally you may receive multiple callbacks for the same contact in a
- * single time step. You should strive to make your callbacks efficient because
- * there may be many callbacks per time step.
- *
- * Warning: You cannot create/destroy world entities inside these callbacks.
- */
-
-/**
- * @private
- * @param {Contact} contact
- * @param {Manifold} oldManifold
- */
-World.prototype.preSolve = function(contact, oldManifold) {
-  this.publish('pre-solve', contact, oldManifold);
-};
-
-/**
- * @event World#pre-solve
- *
- * This is called after a contact is updated. This allows you to inspect a
- * contact before it goes to the solver. If you are careful, you can modify the
- * contact manifold (e.g. disable contact). A copy of the old manifold is
- * provided so that you can detect changes. Note: this is called only for awake
- * bodies. Note: this is called even when the number of contact points is zero.
- * Note: this is not called for sensors. Note: if you set the number of contact
- * points to zero, you will not get an endContact callback. However, you may get
- * a beginContact callback the next step.
- *
- * Warning: You cannot create/destroy world entities inside these callbacks.
- */
-
-/**
- * @private
- * @param {Contact} contact
- * @param {ContactImpulse} impulse
- */
-World.prototype.postSolve = function(contact, impulse) {
-  this.publish('post-solve', contact, impulse);
-};
-
-/**
- * @event World#post-solve
- *
- * This lets you inspect a contact after the solver is finished. This is useful
- * for inspecting impulses. Note: the contact manifold does not include time of
- * impact impulses, which can be arbitrarily large if the sub-step is small.
- * Hence the impulse is provided explicitly in a separate data structure. Note:
- * this is only called for contacts that are touching, solid, and awake.
- *
- * Warning: You cannot create/destroy world entities inside these callbacks.
- */
-
-/**
- * Register a contact filter to provide specific control over collision.
- * Otherwise the default filter is used (defaultFilter). The listener is owned
- * by you and must remain in scope.
- *
- * Moved to Fixture.
- */
-
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
- *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- */
-
-var _DEBUG =  false ? undefined : false;
-var _ASSERT =  false ? undefined : false;
-
-var Settings = __webpack_require__(5);
-var common = __webpack_require__(2);
-var Pool = __webpack_require__(41);
-var Vec2 = __webpack_require__(1);
-var Math = __webpack_require__(0);
+var Pool = __webpack_require__(42);
+var Vec2 = __webpack_require__(0);
+var Math = __webpack_require__(1);
 var AABB = __webpack_require__(16);
 
 module.exports = DynamicTree;
@@ -10751,6 +10547,440 @@ function Iterator() {
 
 
 /***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG =  false ? undefined : false;
+var _ASSERT =  false ? undefined : false;
+
+module.exports = Fixture;
+
+var common = __webpack_require__(2);
+var options = __webpack_require__(7);
+
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+
+var AABB = __webpack_require__(16);
+
+var Shape = __webpack_require__(15);
+
+/**
+ * @typedef {Object} FixtureDef
+ *
+ * A fixture definition is used to create a fixture. This class defines an
+ * abstract fixture definition. You can reuse fixture definitions safely.
+ * 
+ * @prop friction The friction coefficient, usually in the range [0,1]
+ * @prop restitution The restitution (elasticity) usually in the range [0,1]
+ * @prop density The density, usually in kg/m^2
+ * @prop isSensor A sensor shape collects contact information but never
+ *       generates a collision response
+ * @prop userData
+ * @prop filterGroupIndex Zero, positive or negative collision group. Fixtures with same positive groupIndex always collide and fixtures with same
+ * negative groupIndex never collide.
+ * @prop filterCategoryBits Collision category bit or bits that this fixture belongs
+ *       to. If groupIndex is zero or not matching, then at least one bit in this fixture
+ * categoryBits should match other fixture maskBits and vice versa.
+ * @prop filterMaskBits Collision category bit or bits that this fixture accept for
+ *       collision.
+ */
+var FixtureDef = {
+  userData : null,
+  friction : 0.2,
+  restitution : 0.0,
+  density : 0.0,
+  isSensor : false,
+
+  filterGroupIndex : 0,
+  filterCategoryBits : 0x0001,
+  filterMaskBits : 0xFFFF
+};
+
+/**
+ * This proxy is used internally to connect shape children to the broad-phase.
+ */
+function FixtureProxy(fixture, childIndex) {
+  this.aabb = new AABB();
+  this.fixture = fixture;
+  this.childIndex = childIndex;
+  this.proxyId;
+};
+
+/**
+ * A fixture is used to attach a shape to a body for collision detection. A
+ * fixture inherits its transform from its parent. Fixtures hold additional
+ * non-geometric data such as friction, collision filters, etc. Fixtures are
+ * created via Body.createFixture.
+ * 
+ * @param {Body} body
+ * @param {Shape|FixtureDef} shape Shape of fixture definition.
+ * @param {FixtureDef|number} def Fixture definition or number.
+ */
+function Fixture(body, shape, def) {
+  if (shape.shape) {
+    def = shape;
+    shape = shape.shape;
+
+  } else if (typeof def === 'number') {
+    def = {density : def};
+  }
+
+  def = options(def, FixtureDef);
+
+  this.m_body = body;
+
+  this.m_friction = def.friction;
+  this.m_restitution = def.restitution;
+  this.m_density = def.density;
+  this.m_isSensor = def.isSensor;
+
+  this.m_filterGroupIndex = def.filterGroupIndex;
+  this.m_filterCategoryBits = def.filterCategoryBits;
+  this.m_filterMaskBits = def.filterMaskBits;
+
+  // TODO validate shape
+  this.m_shape = shape; //.clone();
+
+  this.m_next = null;
+
+  this.m_proxies = [];
+  this.m_proxyCount = 0;
+
+  var childCount = this.m_shape.getChildCount();
+  for (var i = 0; i < childCount; ++i) {
+    this.m_proxies[i] = new FixtureProxy(this, i);
+  }
+
+  this.m_userData = def.userData;
+};
+
+Fixture.prototype._serialize = function() {
+  return {
+    friction: this.m_friction,
+    restitution: this.m_restitution,
+    density: this.m_density,
+    isSensor: this.m_isSensor,
+
+    filterGroupIndex: this.m_filterGroupIndex,
+    filterCategoryBits: this.m_filterCategoryBits,
+    filterMaskBits: this.m_filterMaskBits,
+
+    shape: this.m_shape,
+
+    userData: this.m_userData,
+  };
+};
+
+Fixture._deserialize = function(body, data) {
+  console.log(data);
+  var shape = Shape._deserialize(data.shape);
+  var fixture = shape && new Fixture(body, shape, data);
+  return fixture;
+};
+
+/**
+ * Get the type of the child shape. You can use this to down cast to the
+ * concrete shape.
+ */
+Fixture.prototype.getType = function() {
+  return this.m_shape.getType();
+}
+
+/**
+ * Get the child shape. You can modify the child shape, however you should not
+ * change the number of vertices because this will crash some collision caching
+ * mechanisms. Manipulating the shape may lead to non-physical behavior.
+ */
+Fixture.prototype.getShape = function() {
+  return this.m_shape;
+}
+/**
+ * A sensor shape collects contact information but never generates a collision
+ * response.
+ */
+Fixture.prototype.isSensor = function() {
+  return this.m_isSensor;
+}
+
+/**
+ * Set if this fixture is a sensor.
+ */
+Fixture.prototype.setSensor = function(sensor) {
+  if (sensor != this.m_isSensor) {
+    this.m_body.setAwake(true);
+    this.m_isSensor = sensor;
+  }
+}
+
+/**
+ * Get the contact filtering data.
+ */
+// Fixture.prototype.getFilterData = function() {
+//   return this.m_filter;
+// }
+
+/**
+ * Get the user data that was assigned in the fixture definition. Use this to
+ * store your application specific data.
+ */
+Fixture.prototype.getUserData = function() {
+  return this.m_userData;
+}
+
+/**
+ * Set the user data. Use this to store your application specific data.
+ */
+Fixture.prototype.setUserData = function(data) {
+  this.m_userData = data;
+}
+
+/**
+ * Get the parent body of this fixture. This is null if the fixture is not
+ * attached.
+ */
+Fixture.prototype.getBody = function() {
+  return this.m_body;
+}
+
+/**
+ * Get the next fixture in the parent body's fixture list.
+ */
+Fixture.prototype.getNext = function() {
+  return this.m_next;
+}
+
+/**
+ * Get the density of this fixture.
+ */
+Fixture.prototype.getDensity = function() {
+  return this.m_density;
+}
+
+/**
+ * Set the density of this fixture. This will _not_ automatically adjust the
+ * mass of the body. You must call Body.resetMassData to update the body's mass.
+ */
+Fixture.prototype.setDensity = function(density) {
+  _ASSERT && common.assert(Math.isFinite(density) && density >= 0.0);
+  this.m_density = density;
+}
+
+/**
+ * Get the coefficient of friction, usually in the range [0,1].
+ */
+Fixture.prototype.getFriction = function() {
+  return this.m_friction;
+}
+
+/**
+ * Set the coefficient of friction. This will not change the friction of
+ * existing contacts.
+ */
+Fixture.prototype.setFriction = function(friction) {
+  this.m_friction = friction;
+}
+
+/**
+ * Get the coefficient of restitution.
+ */
+Fixture.prototype.getRestitution = function() {
+  return this.m_restitution;
+}
+
+/**
+ * Set the coefficient of restitution. This will not change the restitution of
+ * existing contacts.
+ */
+Fixture.prototype.setRestitution = function(restitution) {
+  this.m_restitution = restitution;
+}
+
+/**
+ * Test a point in world coordinates for containment in this fixture.
+ */
+Fixture.prototype.testPoint = function(p) {
+  return this.m_shape.testPoint(this.m_body.getTransform(), p);
+}
+
+/**
+ * Cast a ray against this shape.
+ */
+Fixture.prototype.rayCast = function(output, input, childIndex) {
+  return this.m_shape.rayCast(output, input, this.m_body.getTransform(), childIndex);
+}
+
+/**
+ * Get the mass data for this fixture. The mass data is based on the density and
+ * the shape. The rotational inertia is about the shape's origin. This operation
+ * may be expensive.
+ */
+Fixture.prototype.getMassData = function(massData) {
+  this.m_shape.computeMass(massData, this.m_density);
+}
+
+/**
+ * Get the fixture's AABB. This AABB may be enlarge and/or stale. If you need a
+ * more accurate AABB, compute it using the shape and the body transform.
+ */
+Fixture.prototype.getAABB = function(childIndex) {
+  _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_proxyCount);
+  return this.m_proxies[childIndex].aabb;
+}
+
+/**
+ * These support body activation/deactivation.
+ */
+Fixture.prototype.createProxies = function(broadPhase, xf) {
+  _ASSERT && common.assert(this.m_proxyCount == 0);
+
+  // Create proxies in the broad-phase.
+  this.m_proxyCount = this.m_shape.getChildCount();
+
+  for (var i = 0; i < this.m_proxyCount; ++i) {
+    var proxy = this.m_proxies[i];
+    this.m_shape.computeAABB(proxy.aabb, xf, i);
+    proxy.proxyId = broadPhase.createProxy(proxy.aabb, proxy);
+  }
+}
+
+Fixture.prototype.destroyProxies = function(broadPhase) {
+  // Destroy proxies in the broad-phase.
+  for (var i = 0; i < this.m_proxyCount; ++i) {
+    var proxy = this.m_proxies[i];
+    broadPhase.destroyProxy(proxy.proxyId);
+    proxy.proxyId = null;
+  }
+
+  this.m_proxyCount = 0;
+}
+
+/**
+ * Updates this fixture proxy in broad-phase (with combined AABB of current and
+ * next transformation).
+ */
+Fixture.prototype.synchronize = function(broadPhase, xf1, xf2) {
+  for (var i = 0; i < this.m_proxyCount; ++i) {
+    var proxy = this.m_proxies[i];
+    // Compute an AABB that covers the swept shape (may miss some rotation
+    // effect).
+    var aabb1 = new AABB();
+    var aabb2 = new AABB();
+    this.m_shape.computeAABB(aabb1, xf1, proxy.childIndex);
+    this.m_shape.computeAABB(aabb2, xf2, proxy.childIndex);
+
+    proxy.aabb.combine(aabb1, aabb2);
+
+    var displacement = Vec2.sub(xf2.p, xf1.p);
+
+    broadPhase.moveProxy(proxy.proxyId, proxy.aabb, displacement);
+  }
+}
+
+/**
+ * Set the contact filtering data. This will not update contacts until the next
+ * time step when either parent body is active and awake. This automatically
+ * calls refilter.
+ */
+Fixture.prototype.setFilterData = function(filter) {
+  this.m_filterGroupIndex = filter.groupIndex;
+  this.m_filterCategoryBits = filter.categoryBits;
+  this.m_filterMaskBits = filter.maskBits;
+  this.refilter();
+}
+
+Fixture.prototype.getFilterGroupIndex = function() {
+  return this.m_filterGroupIndex;
+}
+
+Fixture.prototype.getFilterCategoryBits = function() {
+  return this.m_filterCategoryBits;
+}
+
+Fixture.prototype.getFilterMaskBits = function() {
+  return this.m_filterMaskBits;
+}
+
+/**
+ * Call this if you want to establish collision that was previously disabled by
+ * ContactFilter.
+ */
+Fixture.prototype.refilter = function() {
+  if (this.m_body == null) {
+    return;
+  }
+
+  // Flag associated contacts for filtering.
+  var edge = this.m_body.getContactList();
+  while (edge) {
+    var contact = edge.contact;
+    var fixtureA = contact.getFixtureA();
+    var fixtureB = contact.getFixtureB();
+    if (fixtureA == this || fixtureB == this) {
+      contact.flagForFiltering();
+    }
+
+    edge = edge.next;
+  }
+
+  var world = this.m_body.getWorld();
+
+  if (world == null) {
+    return;
+  }
+
+  // Touch each proxy so that new pairs may be created
+  var broadPhase = world.m_broadPhase;
+  for (var i = 0; i < this.m_proxyCount; ++i) {
+    broadPhase.touchProxy(this.m_proxies[i].proxyId);
+  }
+}
+
+/**
+ * Implement this method to provide collision filtering, if you want finer
+ * control over contact creation.
+ * 
+ * Return true if contact calculations should be performed between these two
+ * fixtures.
+ * 
+ * Warning: for performance reasons this is only called when the AABBs begin to
+ * overlap.
+ * 
+ * @param {Fixture} fixtureA
+ * @param {Fixture} fixtureB
+ */
+Fixture.prototype.shouldCollide = function(that) {
+
+  if (that.m_filterGroupIndex == this.m_filterGroupIndex && that.m_filterGroupIndex != 0) {
+    return that.m_filterGroupIndex > 0;
+  }
+
+  var collide = (that.m_filterMaskBits & this.m_filterCategoryBits) != 0
+      && (that.m_filterCategoryBits & this.m_filterMaskBits) != 0;
+  return collide;
+}
+
+
+/***/ }),
 /* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10780,23 +11010,23 @@ module.exports = TimeOfImpact;
 module.exports.Input = TOIInput;
 module.exports.Output = TOIOutput;
 
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 
 var common = __webpack_require__(2);
-var Timer = __webpack_require__(43);
+var Timer = __webpack_require__(44);
 
-var stats = __webpack_require__(27);
+var stats = __webpack_require__(28);
 
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-var Vec3 = __webpack_require__(8);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(11);
+var Mat33 = __webpack_require__(13);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
-var Transform = __webpack_require__(4);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Sweep = __webpack_require__(8);
+var Transform = __webpack_require__(5);
+var Velocity = __webpack_require__(11);
+var Position = __webpack_require__(12);
 
 var Distance = __webpack_require__(21);
 var DistanceInput = Distance.Input;
@@ -11266,18 +11496,18 @@ module.exports = RevoluteJoint;
 var common = __webpack_require__(2);
 var options = __webpack_require__(7);
 var create = __webpack_require__(6);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-var Vec3 = __webpack_require__(8);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(11);
+var Mat33 = __webpack_require__(13);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
-var Transform = __webpack_require__(4);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Sweep = __webpack_require__(8);
+var Transform = __webpack_require__(5);
+var Velocity = __webpack_require__(11);
+var Position = __webpack_require__(12);
 
 var Joint = __webpack_require__(14);
 
@@ -11896,18 +12126,18 @@ module.exports = PrismaticJoint;
 var common = __webpack_require__(2);
 var options = __webpack_require__(7);
 var create = __webpack_require__(6);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-var Vec3 = __webpack_require__(8);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(11);
+var Mat33 = __webpack_require__(13);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
-var Transform = __webpack_require__(4);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Sweep = __webpack_require__(8);
+var Transform = __webpack_require__(5);
+var Velocity = __webpack_require__(11);
+var Position = __webpack_require__(12);
 
 var Joint = __webpack_require__(14);
 
@@ -12820,58 +13050,84 @@ is.hex = function(value) {
 
 exports.internal = {};
 
-exports.Math = __webpack_require__(0);
-exports.Vec2 = __webpack_require__(1);
-exports.Vec3 = __webpack_require__(8);
+exports.Serializer = __webpack_require__(40);
+
+exports.Math = __webpack_require__(1);
+exports.Vec2 = __webpack_require__(0);
+exports.Vec3 = __webpack_require__(10);
 exports.Mat22 = __webpack_require__(9);
-exports.Mat33 = __webpack_require__(11);
-exports.Transform = __webpack_require__(4);
+exports.Mat33 = __webpack_require__(13);
+exports.Transform = __webpack_require__(5);
 exports.Rot = __webpack_require__(3);
 
 exports.AABB = __webpack_require__(16);
 
 exports.Shape = __webpack_require__(15);
-exports.Fixture = __webpack_require__(30);
-exports.Body = __webpack_require__(26);
+exports.Fixture = __webpack_require__(32);
+exports.Body = __webpack_require__(27);
 exports.Contact = __webpack_require__(17);
 exports.Joint = __webpack_require__(14);
-exports.World = __webpack_require__(31);
+exports.World = __webpack_require__(26);
 
 exports.Circle = __webpack_require__(22);
 exports.Edge = __webpack_require__(23);
 exports.Polygon = __webpack_require__(20);
-exports.Chain = __webpack_require__(28);
-exports.Box = __webpack_require__(44);
+exports.Chain = __webpack_require__(29);
+exports.Box = __webpack_require__(45);
 
-__webpack_require__(45);
 __webpack_require__(46);
-exports.internal.CollidePolygons = __webpack_require__(47);
-__webpack_require__(48);
+__webpack_require__(47);
+exports.internal.CollidePolygons = __webpack_require__(48);
 __webpack_require__(49);
+__webpack_require__(50);
 
-exports.DistanceJoint = __webpack_require__(50);
-exports.FrictionJoint = __webpack_require__(51);
-exports.GearJoint = __webpack_require__(52);
-exports.MotorJoint = __webpack_require__(53);
-exports.MouseJoint = __webpack_require__(54);
+exports.DistanceJoint = __webpack_require__(51);
+exports.FrictionJoint = __webpack_require__(52);
+exports.GearJoint = __webpack_require__(53);
+exports.MotorJoint = __webpack_require__(54);
+exports.MouseJoint = __webpack_require__(55);
 exports.PrismaticJoint = __webpack_require__(35);
-exports.PulleyJoint = __webpack_require__(55);
+exports.PulleyJoint = __webpack_require__(56);
 exports.RevoluteJoint = __webpack_require__(34);
-exports.RopeJoint = __webpack_require__(56);
-exports.WeldJoint = __webpack_require__(57);
-exports.WheelJoint = __webpack_require__(58);
+exports.RopeJoint = __webpack_require__(57);
+exports.WeldJoint = __webpack_require__(58);
+exports.WheelJoint = __webpack_require__(59);
 
-exports.internal.Sweep= __webpack_require__(10);
-exports.internal.stats = __webpack_require__(27);
+exports.internal.Sweep= __webpack_require__(8);
+exports.internal.stats = __webpack_require__(28);
 exports.internal.Manifold = __webpack_require__(18);
 exports.internal.Distance = __webpack_require__(21);
 exports.internal.TimeOfImpact = __webpack_require__(33);
-exports.internal.DynamicTree = __webpack_require__(32);
-exports.internal.Settings = __webpack_require__(5);
+exports.internal.DynamicTree = __webpack_require__(31);
+exports.internal.Settings = __webpack_require__(4);
 
 
 /***/ }),
 /* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var World = __webpack_require__(26);
+
+exports.toJson = function(world) {
+  return JSON.stringify(world._serialize(), function(key, value) {
+    if (typeof value === 'object') {
+      if (value !== null) {
+        if (typeof value._serialize === 'function') {
+          value = value._serialize();
+        }
+      }
+    }
+    return value;
+  }, '  ');
+};
+
+exports.fromJson = function(string) {
+  return World._deserialize(JSON.parse(string));
+};
+
+
+/***/ }),
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -12896,16 +13152,16 @@ exports.internal.Settings = __webpack_require__(5);
 var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 var common = __webpack_require__(2);
-var Math = __webpack_require__(0);
+var Math = __webpack_require__(1);
 var AABB = __webpack_require__(16);
-var DynamicTree = __webpack_require__(32);
+var DynamicTree = __webpack_require__(31);
 
 module.exports = BroadPhase;
 
 /**
- * The broad-phase wraps and extends a dynamic-tree keep to track of moved
+ * The broad-phase wraps and extends a dynamic-tree to keep track of moved
  * objects and query them on update.
  */
 function BroadPhase() {
@@ -13109,7 +13365,7 @@ BroadPhase.prototype.queryCallback = function(proxyId) {
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -13202,7 +13458,7 @@ function Pool(opts) {
 }
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -13230,13 +13486,13 @@ var _ASSERT =  false ? undefined : false;
 module.exports = Solver;
 module.exports.TimeStep = TimeStep;
 
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 var common = __webpack_require__(2);
 
-var Vec2 = __webpack_require__(1);
-var Math = __webpack_require__(0);
+var Vec2 = __webpack_require__(0);
+var Math = __webpack_require__(1);
 
-var Body = __webpack_require__(26);
+var Body = __webpack_require__(27);
 var Contact = __webpack_require__(17);
 var Joint = __webpack_require__(14);
 
@@ -14083,7 +14339,7 @@ Solver.prototype.postSolveIsland = function() {
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _DEBUG =  false ? undefined : false;
@@ -14099,7 +14355,7 @@ module.exports.diff = function(time) {
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -14151,7 +14407,7 @@ function BoxShape(hx, hy, center, angle) {
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -14178,10 +14434,10 @@ var _ASSERT =  false ? undefined : false;
 
 var common = __webpack_require__(2);
 var create = __webpack_require__(6);
-var Math = __webpack_require__(0);
-var Transform = __webpack_require__(4);
-var Vec2 = __webpack_require__(1);
-var Settings = __webpack_require__(5);
+var Math = __webpack_require__(1);
+var Transform = __webpack_require__(5);
+var Vec2 = __webpack_require__(0);
+var Settings = __webpack_require__(4);
 var Shape = __webpack_require__(15);
 var Contact = __webpack_require__(17);
 var Manifold = __webpack_require__(18);
@@ -14225,7 +14481,7 @@ function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
 exports.CollideCircles = CollideCircles;
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -14252,16 +14508,16 @@ var _ASSERT =  false ? undefined : false;
 
 var common = __webpack_require__(2);
 var create = __webpack_require__(6);
-var Math = __webpack_require__(0);
-var Transform = __webpack_require__(4);
-var Vec2 = __webpack_require__(1);
+var Math = __webpack_require__(1);
+var Transform = __webpack_require__(5);
+var Vec2 = __webpack_require__(0);
 var Rot = __webpack_require__(3);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 var Shape = __webpack_require__(15);
 var Contact = __webpack_require__(17);
 var Manifold = __webpack_require__(18);
 var EdgeShape = __webpack_require__(23);
-var ChainShape = __webpack_require__(28);
+var ChainShape = __webpack_require__(29);
 var CircleShape = __webpack_require__(22);
 
 Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
@@ -14414,7 +14670,7 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -14440,12 +14696,12 @@ var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
 var common = __webpack_require__(2);
-var Math = __webpack_require__(0);
-var Transform = __webpack_require__(4);
+var Math = __webpack_require__(1);
+var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
-var Vec2 = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
 var AABB = __webpack_require__(16);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 var Manifold = __webpack_require__(18);
 var Contact = __webpack_require__(17);
 var Shape = __webpack_require__(15);
@@ -14681,7 +14937,7 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -14707,12 +14963,12 @@ var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
 var common = __webpack_require__(2);
-var Math = __webpack_require__(0);
-var Transform = __webpack_require__(4);
+var Math = __webpack_require__(1);
+var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
-var Vec2 = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
 var AABB = __webpack_require__(16);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 var Manifold = __webpack_require__(18);
 var Contact = __webpack_require__(17);
 var Shape = __webpack_require__(15);
@@ -14840,7 +15096,7 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -14867,16 +15123,16 @@ var _ASSERT =  false ? undefined : false;
 
 var common = __webpack_require__(2);
 var create = __webpack_require__(6);
-var Math = __webpack_require__(0);
-var Transform = __webpack_require__(4);
-var Vec2 = __webpack_require__(1);
+var Math = __webpack_require__(1);
+var Transform = __webpack_require__(5);
+var Vec2 = __webpack_require__(0);
 var Rot = __webpack_require__(3);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 var Shape = __webpack_require__(15);
 var Contact = __webpack_require__(17);
 var Manifold = __webpack_require__(18);
 var EdgeShape = __webpack_require__(23);
-var ChainShape = __webpack_require__(28);
+var ChainShape = __webpack_require__(29);
 var PolygonShape = __webpack_require__(20);
 
 Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
@@ -15329,7 +15585,7 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -15358,18 +15614,18 @@ module.exports = DistanceJoint;
 
 var options = __webpack_require__(7);
 var create = __webpack_require__(6);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-var Vec3 = __webpack_require__(8);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(11);
+var Mat33 = __webpack_require__(13);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
-var Transform = __webpack_require__(4);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Sweep = __webpack_require__(8);
+var Transform = __webpack_require__(5);
+var Velocity = __webpack_require__(11);
+var Position = __webpack_require__(12);
 
 var Joint = __webpack_require__(14);
 
@@ -15684,7 +15940,7 @@ DistanceJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -15714,18 +15970,18 @@ module.exports = FrictionJoint;
 var common = __webpack_require__(2);
 var options = __webpack_require__(7);
 var create = __webpack_require__(6);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-var Vec3 = __webpack_require__(8);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(11);
+var Mat33 = __webpack_require__(13);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
-var Transform = __webpack_require__(4);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Sweep = __webpack_require__(8);
+var Transform = __webpack_require__(5);
+var Velocity = __webpack_require__(11);
+var Position = __webpack_require__(12);
 
 var Joint = __webpack_require__(14);
 
@@ -16002,7 +16258,7 @@ FrictionJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -16032,18 +16288,18 @@ module.exports = GearJoint;
 var common = __webpack_require__(2);
 var options = __webpack_require__(7);
 var create = __webpack_require__(6);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-var Vec3 = __webpack_require__(8);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(11);
+var Mat33 = __webpack_require__(13);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
-var Transform = __webpack_require__(4);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Sweep = __webpack_require__(8);
+var Transform = __webpack_require__(5);
+var Velocity = __webpack_require__(11);
+var Position = __webpack_require__(12);
 
 var Joint = __webpack_require__(14);
 
@@ -16485,7 +16741,7 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -16515,18 +16771,18 @@ module.exports = MotorJoint;
 var common = __webpack_require__(2);
 var options = __webpack_require__(7);
 var create = __webpack_require__(6);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-var Vec3 = __webpack_require__(8);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(11);
+var Mat33 = __webpack_require__(13);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
-var Transform = __webpack_require__(4);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Sweep = __webpack_require__(8);
+var Transform = __webpack_require__(5);
+var Velocity = __webpack_require__(11);
+var Position = __webpack_require__(12);
 
 var Joint = __webpack_require__(14);
 
@@ -16854,7 +17110,7 @@ MotorJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -16885,16 +17141,16 @@ var common = __webpack_require__(2);
 var options = __webpack_require__(7);
 var create = __webpack_require__(6);
 
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-var Vec3 = __webpack_require__(8);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(11);
+var Mat33 = __webpack_require__(13);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
-var Transform = __webpack_require__(4);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Sweep = __webpack_require__(8);
+var Transform = __webpack_require__(5);
+var Velocity = __webpack_require__(11);
+var Position = __webpack_require__(12);
 
 var Joint = __webpack_require__(14);
 
@@ -17160,7 +17416,7 @@ MouseJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -17190,18 +17446,18 @@ module.exports = PulleyJoint;
 var common = __webpack_require__(2);
 var options = __webpack_require__(7);
 var create = __webpack_require__(6);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-var Vec3 = __webpack_require__(8);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(11);
+var Mat33 = __webpack_require__(13);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
-var Transform = __webpack_require__(4);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Sweep = __webpack_require__(8);
+var Transform = __webpack_require__(5);
+var Velocity = __webpack_require__(11);
+var Position = __webpack_require__(12);
 
 var Joint = __webpack_require__(14);
 
@@ -17545,7 +17801,7 @@ PulleyJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -17574,18 +17830,18 @@ module.exports = RopeJoint;
 
 var options = __webpack_require__(7);
 var create = __webpack_require__(6);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-var Vec3 = __webpack_require__(8);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(11);
+var Mat33 = __webpack_require__(13);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
-var Transform = __webpack_require__(4);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Sweep = __webpack_require__(8);
+var Transform = __webpack_require__(5);
+var Velocity = __webpack_require__(11);
+var Position = __webpack_require__(12);
 
 var Joint = __webpack_require__(14);
 
@@ -17867,7 +18123,7 @@ RopeJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -17896,18 +18152,18 @@ module.exports = WeldJoint;
 
 var options = __webpack_require__(7);
 var create = __webpack_require__(6);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-var Vec3 = __webpack_require__(8);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(11);
+var Mat33 = __webpack_require__(13);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
-var Transform = __webpack_require__(4);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Sweep = __webpack_require__(8);
+var Transform = __webpack_require__(5);
+var Velocity = __webpack_require__(11);
+var Position = __webpack_require__(12);
 
 var Joint = __webpack_require__(14);
 
@@ -18303,7 +18559,7 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -18332,18 +18588,18 @@ module.exports = WheelJoint;
 
 var options = __webpack_require__(7);
 var create = __webpack_require__(6);
-var Settings = __webpack_require__(5);
+var Settings = __webpack_require__(4);
 
-var Math = __webpack_require__(0);
-var Vec2 = __webpack_require__(1);
-var Vec3 = __webpack_require__(8);
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(11);
+var Mat33 = __webpack_require__(13);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
-var Transform = __webpack_require__(4);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Sweep = __webpack_require__(8);
+var Transform = __webpack_require__(5);
+var Velocity = __webpack_require__(11);
+var Position = __webpack_require__(12);
 
 var Joint = __webpack_require__(14);
 
@@ -18849,11 +19105,11 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var stats = __webpack_require__(36);
-var math = __webpack_require__(60);
+var math = __webpack_require__(61);
 
 function Texture(image, ratio) {
   if (typeof image === 'object') {
@@ -18958,7 +19214,7 @@ module.exports = Texture;
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var create = __webpack_require__(24);
@@ -19005,7 +19261,7 @@ module.exports.length = function(x, y) {
 };
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports) {
 
 function Matrix(a, b, c, d, e, f) {
@@ -19180,11 +19436,12 @@ module.exports = Matrix;
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var diff = __webpack_require__(64);
 var planck = __webpack_require__(39);
-var Stage = __webpack_require__(63);
+var Stage = __webpack_require__(65);
 
 module.exports = planck;
 
@@ -19384,6 +19641,14 @@ planck.testbed = function(opts, callback) {
     })();
 
     var world = callback(testbed);
+    var text = planck.Serializer.toJson(world);
+    world = planck.Serializer.fromJson(text);
+    var text2 = planck.Serializer.toJson(world);
+    // var d =  diff.diffLines(text, text2);
+    //
+    console.log(text);
+    console.log(text2);
+    // console.log(d);
 
     var viewer = new Viewer(world, testbed);
 
@@ -19884,43 +20149,1633 @@ Viewer.prototype.drawChain = function(shape, options) {
 
 
 /***/ }),
-/* 63 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(64);
-
-module.exports.internal = {};
-
-__webpack_require__(72);
-module.exports.internal.Image = __webpack_require__(73);
-__webpack_require__(75);
-__webpack_require__(76);
-__webpack_require__(77);
-__webpack_require__(78);
-module.exports.Mouse = __webpack_require__(80);
-module.exports.Math = __webpack_require__(60);
-module.exports._extend = __webpack_require__(37);
-module.exports._create = __webpack_require__(24);
-
-__webpack_require__(81);
-
-/***/ }),
 /* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(19);
-module.exports.Matrix = __webpack_require__(61);
-module.exports.Texture = __webpack_require__(59);
-__webpack_require__(66);
-__webpack_require__(68);
-__webpack_require__(69);
-__webpack_require__(25);
+/*!
 
-__webpack_require__(29);
-__webpack_require__(71);
+ diff v4.0.1
+
+Software License Agreement (BSD License)
+
+Copyright (c) 2009-2015, Kevin Decker <kpdecker@gmail.com>
+
+All rights reserved.
+
+Redistribution and use of this software in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above
+  copyright notice, this list of conditions and the
+  following disclaimer.
+
+* Redistributions in binary form must reproduce the above
+  copyright notice, this list of conditions and the
+  following disclaimer in the documentation and/or other
+  materials provided with the distribution.
+
+* Neither the name of Kevin Decker nor the names of its
+  contributors may be used to endorse or promote products
+  derived from this software without specific prior
+  written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+@license
+*/
+(function (global, factory) {
+   true ? factory(exports) :
+  undefined;
+}(this, function (exports) { 'use strict';
+
+  function Diff() {}
+  Diff.prototype = {
+    diff: function diff(oldString, newString) {
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+      var callback = options.callback;
+
+      if (typeof options === 'function') {
+        callback = options;
+        options = {};
+      }
+
+      this.options = options;
+      var self = this;
+
+      function done(value) {
+        if (callback) {
+          setTimeout(function () {
+            callback(undefined, value);
+          }, 0);
+          return true;
+        } else {
+          return value;
+        }
+      } // Allow subclasses to massage the input prior to running
+
+
+      oldString = this.castInput(oldString);
+      newString = this.castInput(newString);
+      oldString = this.removeEmpty(this.tokenize(oldString));
+      newString = this.removeEmpty(this.tokenize(newString));
+      var newLen = newString.length,
+          oldLen = oldString.length;
+      var editLength = 1;
+      var maxEditLength = newLen + oldLen;
+      var bestPath = [{
+        newPos: -1,
+        components: []
+      }]; // Seed editLength = 0, i.e. the content starts with the same values
+
+      var oldPos = this.extractCommon(bestPath[0], newString, oldString, 0);
+
+      if (bestPath[0].newPos + 1 >= newLen && oldPos + 1 >= oldLen) {
+        // Identity per the equality and tokenizer
+        return done([{
+          value: this.join(newString),
+          count: newString.length
+        }]);
+      } // Main worker method. checks all permutations of a given edit length for acceptance.
+
+
+      function execEditLength() {
+        for (var diagonalPath = -1 * editLength; diagonalPath <= editLength; diagonalPath += 2) {
+          var basePath = void 0;
+
+          var addPath = bestPath[diagonalPath - 1],
+              removePath = bestPath[diagonalPath + 1],
+              _oldPos = (removePath ? removePath.newPos : 0) - diagonalPath;
+
+          if (addPath) {
+            // No one else is going to attempt to use this value, clear it
+            bestPath[diagonalPath - 1] = undefined;
+          }
+
+          var canAdd = addPath && addPath.newPos + 1 < newLen,
+              canRemove = removePath && 0 <= _oldPos && _oldPos < oldLen;
+
+          if (!canAdd && !canRemove) {
+            // If this path is a terminal then prune
+            bestPath[diagonalPath] = undefined;
+            continue;
+          } // Select the diagonal that we want to branch from. We select the prior
+          // path whose position in the new string is the farthest from the origin
+          // and does not pass the bounds of the diff graph
+
+
+          if (!canAdd || canRemove && addPath.newPos < removePath.newPos) {
+            basePath = clonePath(removePath);
+            self.pushComponent(basePath.components, undefined, true);
+          } else {
+            basePath = addPath; // No need to clone, we've pulled it from the list
+
+            basePath.newPos++;
+            self.pushComponent(basePath.components, true, undefined);
+          }
+
+          _oldPos = self.extractCommon(basePath, newString, oldString, diagonalPath); // If we have hit the end of both strings, then we are done
+
+          if (basePath.newPos + 1 >= newLen && _oldPos + 1 >= oldLen) {
+            return done(buildValues(self, basePath.components, newString, oldString, self.useLongestToken));
+          } else {
+            // Otherwise track this path as a potential candidate and continue.
+            bestPath[diagonalPath] = basePath;
+          }
+        }
+
+        editLength++;
+      } // Performs the length of edit iteration. Is a bit fugly as this has to support the
+      // sync and async mode which is never fun. Loops over execEditLength until a value
+      // is produced.
+
+
+      if (callback) {
+        (function exec() {
+          setTimeout(function () {
+            // This should not happen, but we want to be safe.
+
+            /* istanbul ignore next */
+            if (editLength > maxEditLength) {
+              return callback();
+            }
+
+            if (!execEditLength()) {
+              exec();
+            }
+          }, 0);
+        })();
+      } else {
+        while (editLength <= maxEditLength) {
+          var ret = execEditLength();
+
+          if (ret) {
+            return ret;
+          }
+        }
+      }
+    },
+    pushComponent: function pushComponent(components, added, removed) {
+      var last = components[components.length - 1];
+
+      if (last && last.added === added && last.removed === removed) {
+        // We need to clone here as the component clone operation is just
+        // as shallow array clone
+        components[components.length - 1] = {
+          count: last.count + 1,
+          added: added,
+          removed: removed
+        };
+      } else {
+        components.push({
+          count: 1,
+          added: added,
+          removed: removed
+        });
+      }
+    },
+    extractCommon: function extractCommon(basePath, newString, oldString, diagonalPath) {
+      var newLen = newString.length,
+          oldLen = oldString.length,
+          newPos = basePath.newPos,
+          oldPos = newPos - diagonalPath,
+          commonCount = 0;
+
+      while (newPos + 1 < newLen && oldPos + 1 < oldLen && this.equals(newString[newPos + 1], oldString[oldPos + 1])) {
+        newPos++;
+        oldPos++;
+        commonCount++;
+      }
+
+      if (commonCount) {
+        basePath.components.push({
+          count: commonCount
+        });
+      }
+
+      basePath.newPos = newPos;
+      return oldPos;
+    },
+    equals: function equals(left, right) {
+      if (this.options.comparator) {
+        return this.options.comparator(left, right);
+      } else {
+        return left === right || this.options.ignoreCase && left.toLowerCase() === right.toLowerCase();
+      }
+    },
+    removeEmpty: function removeEmpty(array) {
+      var ret = [];
+
+      for (var i = 0; i < array.length; i++) {
+        if (array[i]) {
+          ret.push(array[i]);
+        }
+      }
+
+      return ret;
+    },
+    castInput: function castInput(value) {
+      return value;
+    },
+    tokenize: function tokenize(value) {
+      return value.split('');
+    },
+    join: function join(chars) {
+      return chars.join('');
+    }
+  };
+
+  function buildValues(diff, components, newString, oldString, useLongestToken) {
+    var componentPos = 0,
+        componentLen = components.length,
+        newPos = 0,
+        oldPos = 0;
+
+    for (; componentPos < componentLen; componentPos++) {
+      var component = components[componentPos];
+
+      if (!component.removed) {
+        if (!component.added && useLongestToken) {
+          var value = newString.slice(newPos, newPos + component.count);
+          value = value.map(function (value, i) {
+            var oldValue = oldString[oldPos + i];
+            return oldValue.length > value.length ? oldValue : value;
+          });
+          component.value = diff.join(value);
+        } else {
+          component.value = diff.join(newString.slice(newPos, newPos + component.count));
+        }
+
+        newPos += component.count; // Common case
+
+        if (!component.added) {
+          oldPos += component.count;
+        }
+      } else {
+        component.value = diff.join(oldString.slice(oldPos, oldPos + component.count));
+        oldPos += component.count; // Reverse add and remove so removes are output first to match common convention
+        // The diffing algorithm is tied to add then remove output and this is the simplest
+        // route to get the desired output with minimal overhead.
+
+        if (componentPos && components[componentPos - 1].added) {
+          var tmp = components[componentPos - 1];
+          components[componentPos - 1] = components[componentPos];
+          components[componentPos] = tmp;
+        }
+      }
+    } // Special case handle for when one terminal is ignored (i.e. whitespace).
+    // For this case we merge the terminal into the prior string and drop the change.
+    // This is only available for string mode.
+
+
+    var lastComponent = components[componentLen - 1];
+
+    if (componentLen > 1 && typeof lastComponent.value === 'string' && (lastComponent.added || lastComponent.removed) && diff.equals('', lastComponent.value)) {
+      components[componentLen - 2].value += lastComponent.value;
+      components.pop();
+    }
+
+    return components;
+  }
+
+  function clonePath(path) {
+    return {
+      newPos: path.newPos,
+      components: path.components.slice(0)
+    };
+  }
+
+  var characterDiff = new Diff();
+  function diffChars(oldStr, newStr, options) {
+    return characterDiff.diff(oldStr, newStr, options);
+  }
+
+  function generateOptions(options, defaults) {
+    if (typeof options === 'function') {
+      defaults.callback = options;
+    } else if (options) {
+      for (var name in options) {
+        /* istanbul ignore else */
+        if (options.hasOwnProperty(name)) {
+          defaults[name] = options[name];
+        }
+      }
+    }
+
+    return defaults;
+  }
+
+  //
+  // Ranges and exceptions:
+  // Latin-1 Supplement, 0080–00FF
+  //  - U+00D7  × Multiplication sign
+  //  - U+00F7  ÷ Division sign
+  // Latin Extended-A, 0100–017F
+  // Latin Extended-B, 0180–024F
+  // IPA Extensions, 0250–02AF
+  // Spacing Modifier Letters, 02B0–02FF
+  //  - U+02C7  ˇ &#711;  Caron
+  //  - U+02D8  ˘ &#728;  Breve
+  //  - U+02D9  ˙ &#729;  Dot Above
+  //  - U+02DA  ˚ &#730;  Ring Above
+  //  - U+02DB  ˛ &#731;  Ogonek
+  //  - U+02DC  ˜ &#732;  Small Tilde
+  //  - U+02DD  ˝ &#733;  Double Acute Accent
+  // Latin Extended Additional, 1E00–1EFF
+
+  var extendedWordChars = /^[A-Za-z\xC0-\u02C6\u02C8-\u02D7\u02DE-\u02FF\u1E00-\u1EFF]+$/;
+  var reWhitespace = /\S/;
+  var wordDiff = new Diff();
+
+  wordDiff.equals = function (left, right) {
+    if (this.options.ignoreCase) {
+      left = left.toLowerCase();
+      right = right.toLowerCase();
+    }
+
+    return left === right || this.options.ignoreWhitespace && !reWhitespace.test(left) && !reWhitespace.test(right);
+  };
+
+  wordDiff.tokenize = function (value) {
+    var tokens = value.split(/(\s+|[()[\]{}'"]|\b)/); // Join the boundary splits that we do not consider to be boundaries. This is primarily the extended Latin character set.
+
+    for (var i = 0; i < tokens.length - 1; i++) {
+      // If we have an empty string in the next field and we have only word chars before and after, merge
+      if (!tokens[i + 1] && tokens[i + 2] && extendedWordChars.test(tokens[i]) && extendedWordChars.test(tokens[i + 2])) {
+        tokens[i] += tokens[i + 2];
+        tokens.splice(i + 1, 2);
+        i--;
+      }
+    }
+
+    return tokens;
+  };
+
+  function diffWords(oldStr, newStr, options) {
+    options = generateOptions(options, {
+      ignoreWhitespace: true
+    });
+    return wordDiff.diff(oldStr, newStr, options);
+  }
+  function diffWordsWithSpace(oldStr, newStr, options) {
+    return wordDiff.diff(oldStr, newStr, options);
+  }
+
+  var lineDiff = new Diff();
+
+  lineDiff.tokenize = function (value) {
+    var retLines = [],
+        linesAndNewlines = value.split(/(\n|\r\n)/); // Ignore the final empty token that occurs if the string ends with a new line
+
+    if (!linesAndNewlines[linesAndNewlines.length - 1]) {
+      linesAndNewlines.pop();
+    } // Merge the content and line separators into single tokens
+
+
+    for (var i = 0; i < linesAndNewlines.length; i++) {
+      var line = linesAndNewlines[i];
+
+      if (i % 2 && !this.options.newlineIsToken) {
+        retLines[retLines.length - 1] += line;
+      } else {
+        if (this.options.ignoreWhitespace) {
+          line = line.trim();
+        }
+
+        retLines.push(line);
+      }
+    }
+
+    return retLines;
+  };
+
+  function diffLines(oldStr, newStr, callback) {
+    return lineDiff.diff(oldStr, newStr, callback);
+  }
+  function diffTrimmedLines(oldStr, newStr, callback) {
+    var options = generateOptions(callback, {
+      ignoreWhitespace: true
+    });
+    return lineDiff.diff(oldStr, newStr, options);
+  }
+
+  var sentenceDiff = new Diff();
+
+  sentenceDiff.tokenize = function (value) {
+    return value.split(/(\S.+?[.!?])(?=\s+|$)/);
+  };
+
+  function diffSentences(oldStr, newStr, callback) {
+    return sentenceDiff.diff(oldStr, newStr, callback);
+  }
+
+  var cssDiff = new Diff();
+
+  cssDiff.tokenize = function (value) {
+    return value.split(/([{}:;,]|\s+)/);
+  };
+
+  function diffCss(oldStr, newStr, callback) {
+    return cssDiff.diff(oldStr, newStr, callback);
+  }
+
+  function _typeof(obj) {
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof = function (obj) {
+        return typeof obj;
+      };
+    } else {
+      _typeof = function (obj) {
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+      };
+    }
+
+    return _typeof(obj);
+  }
+
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+  }
+
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr)) {
+      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+      return arr2;
+    }
+  }
+
+  function _iterableToArray(iter) {
+    if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+  }
+
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance");
+  }
+
+  var objectPrototypeToString = Object.prototype.toString;
+  var jsonDiff = new Diff(); // Discriminate between two lines of pretty-printed, serialized JSON where one of them has a
+  // dangling comma and the other doesn't. Turns out including the dangling comma yields the nicest output:
+
+  jsonDiff.useLongestToken = true;
+  jsonDiff.tokenize = lineDiff.tokenize;
+
+  jsonDiff.castInput = function (value) {
+    var _this$options = this.options,
+        undefinedReplacement = _this$options.undefinedReplacement,
+        _this$options$stringi = _this$options.stringifyReplacer,
+        stringifyReplacer = _this$options$stringi === void 0 ? function (k, v) {
+      return typeof v === 'undefined' ? undefinedReplacement : v;
+    } : _this$options$stringi;
+    return typeof value === 'string' ? value : JSON.stringify(canonicalize(value, null, null, stringifyReplacer), stringifyReplacer, '  ');
+  };
+
+  jsonDiff.equals = function (left, right) {
+    return Diff.prototype.equals.call(jsonDiff, left.replace(/,([\r\n])/g, '$1'), right.replace(/,([\r\n])/g, '$1'));
+  };
+
+  function diffJson(oldObj, newObj, options) {
+    return jsonDiff.diff(oldObj, newObj, options);
+  } // This function handles the presence of circular references by bailing out when encountering an
+  // object that is already on the "stack" of items being processed. Accepts an optional replacer
+
+  function canonicalize(obj, stack, replacementStack, replacer, key) {
+    stack = stack || [];
+    replacementStack = replacementStack || [];
+
+    if (replacer) {
+      obj = replacer(key, obj);
+    }
+
+    var i;
+
+    for (i = 0; i < stack.length; i += 1) {
+      if (stack[i] === obj) {
+        return replacementStack[i];
+      }
+    }
+
+    var canonicalizedObj;
+
+    if ('[object Array]' === objectPrototypeToString.call(obj)) {
+      stack.push(obj);
+      canonicalizedObj = new Array(obj.length);
+      replacementStack.push(canonicalizedObj);
+
+      for (i = 0; i < obj.length; i += 1) {
+        canonicalizedObj[i] = canonicalize(obj[i], stack, replacementStack, replacer, key);
+      }
+
+      stack.pop();
+      replacementStack.pop();
+      return canonicalizedObj;
+    }
+
+    if (obj && obj.toJSON) {
+      obj = obj.toJSON();
+    }
+
+    if (_typeof(obj) === 'object' && obj !== null) {
+      stack.push(obj);
+      canonicalizedObj = {};
+      replacementStack.push(canonicalizedObj);
+
+      var sortedKeys = [],
+          _key;
+
+      for (_key in obj) {
+        /* istanbul ignore else */
+        if (obj.hasOwnProperty(_key)) {
+          sortedKeys.push(_key);
+        }
+      }
+
+      sortedKeys.sort();
+
+      for (i = 0; i < sortedKeys.length; i += 1) {
+        _key = sortedKeys[i];
+        canonicalizedObj[_key] = canonicalize(obj[_key], stack, replacementStack, replacer, _key);
+      }
+
+      stack.pop();
+      replacementStack.pop();
+    } else {
+      canonicalizedObj = obj;
+    }
+
+    return canonicalizedObj;
+  }
+
+  var arrayDiff = new Diff();
+
+  arrayDiff.tokenize = function (value) {
+    return value.slice();
+  };
+
+  arrayDiff.join = arrayDiff.removeEmpty = function (value) {
+    return value;
+  };
+
+  function diffArrays(oldArr, newArr, callback) {
+    return arrayDiff.diff(oldArr, newArr, callback);
+  }
+
+  function parsePatch(uniDiff) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var diffstr = uniDiff.split(/\r\n|[\n\v\f\r\x85]/),
+        delimiters = uniDiff.match(/\r\n|[\n\v\f\r\x85]/g) || [],
+        list = [],
+        i = 0;
+
+    function parseIndex() {
+      var index = {};
+      list.push(index); // Parse diff metadata
+
+      while (i < diffstr.length) {
+        var line = diffstr[i]; // File header found, end parsing diff metadata
+
+        if (/^(\-\-\-|\+\+\+|@@)\s/.test(line)) {
+          break;
+        } // Diff index
+
+
+        var header = /^(?:Index:|diff(?: -r \w+)+)\s+(.+?)\s*$/.exec(line);
+
+        if (header) {
+          index.index = header[1];
+        }
+
+        i++;
+      } // Parse file headers if they are defined. Unified diff requires them, but
+      // there's no technical issues to have an isolated hunk without file header
+
+
+      parseFileHeader(index);
+      parseFileHeader(index); // Parse hunks
+
+      index.hunks = [];
+
+      while (i < diffstr.length) {
+        var _line = diffstr[i];
+
+        if (/^(Index:|diff|\-\-\-|\+\+\+)\s/.test(_line)) {
+          break;
+        } else if (/^@@/.test(_line)) {
+          index.hunks.push(parseHunk());
+        } else if (_line && options.strict) {
+          // Ignore unexpected content unless in strict mode
+          throw new Error('Unknown line ' + (i + 1) + ' ' + JSON.stringify(_line));
+        } else {
+          i++;
+        }
+      }
+    } // Parses the --- and +++ headers, if none are found, no lines
+    // are consumed.
+
+
+    function parseFileHeader(index) {
+      var fileHeader = /^(---|\+\+\+)\s+(.*)$/.exec(diffstr[i]);
+
+      if (fileHeader) {
+        var keyPrefix = fileHeader[1] === '---' ? 'old' : 'new';
+        var data = fileHeader[2].split('\t', 2);
+        var fileName = data[0].replace(/\\\\/g, '\\');
+
+        if (/^".*"$/.test(fileName)) {
+          fileName = fileName.substr(1, fileName.length - 2);
+        }
+
+        index[keyPrefix + 'FileName'] = fileName;
+        index[keyPrefix + 'Header'] = (data[1] || '').trim();
+        i++;
+      }
+    } // Parses a hunk
+    // This assumes that we are at the start of a hunk.
+
+
+    function parseHunk() {
+      var chunkHeaderIndex = i,
+          chunkHeaderLine = diffstr[i++],
+          chunkHeader = chunkHeaderLine.split(/@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@/);
+      var hunk = {
+        oldStart: +chunkHeader[1],
+        oldLines: +chunkHeader[2] || 1,
+        newStart: +chunkHeader[3],
+        newLines: +chunkHeader[4] || 1,
+        lines: [],
+        linedelimiters: []
+      };
+      var addCount = 0,
+          removeCount = 0;
+
+      for (; i < diffstr.length; i++) {
+        // Lines starting with '---' could be mistaken for the "remove line" operation
+        // But they could be the header for the next file. Therefore prune such cases out.
+        if (diffstr[i].indexOf('--- ') === 0 && i + 2 < diffstr.length && diffstr[i + 1].indexOf('+++ ') === 0 && diffstr[i + 2].indexOf('@@') === 0) {
+          break;
+        }
+
+        var operation = diffstr[i].length == 0 && i != diffstr.length - 1 ? ' ' : diffstr[i][0];
+
+        if (operation === '+' || operation === '-' || operation === ' ' || operation === '\\') {
+          hunk.lines.push(diffstr[i]);
+          hunk.linedelimiters.push(delimiters[i] || '\n');
+
+          if (operation === '+') {
+            addCount++;
+          } else if (operation === '-') {
+            removeCount++;
+          } else if (operation === ' ') {
+            addCount++;
+            removeCount++;
+          }
+        } else {
+          break;
+        }
+      } // Handle the empty block count case
+
+
+      if (!addCount && hunk.newLines === 1) {
+        hunk.newLines = 0;
+      }
+
+      if (!removeCount && hunk.oldLines === 1) {
+        hunk.oldLines = 0;
+      } // Perform optional sanity checking
+
+
+      if (options.strict) {
+        if (addCount !== hunk.newLines) {
+          throw new Error('Added line count did not match for hunk at line ' + (chunkHeaderIndex + 1));
+        }
+
+        if (removeCount !== hunk.oldLines) {
+          throw new Error('Removed line count did not match for hunk at line ' + (chunkHeaderIndex + 1));
+        }
+      }
+
+      return hunk;
+    }
+
+    while (i < diffstr.length) {
+      parseIndex();
+    }
+
+    return list;
+  }
+
+  // Iterator that traverses in the range of [min, max], stepping
+  // by distance from a given start position. I.e. for [0, 4], with
+  // start of 2, this will iterate 2, 3, 1, 4, 0.
+  function distanceIterator (start, minLine, maxLine) {
+    var wantForward = true,
+        backwardExhausted = false,
+        forwardExhausted = false,
+        localOffset = 1;
+    return function iterator() {
+      if (wantForward && !forwardExhausted) {
+        if (backwardExhausted) {
+          localOffset++;
+        } else {
+          wantForward = false;
+        } // Check if trying to fit beyond text length, and if not, check it fits
+        // after offset location (or desired location on first iteration)
+
+
+        if (start + localOffset <= maxLine) {
+          return localOffset;
+        }
+
+        forwardExhausted = true;
+      }
+
+      if (!backwardExhausted) {
+        if (!forwardExhausted) {
+          wantForward = true;
+        } // Check if trying to fit before text beginning, and if not, check it fits
+        // before offset location
+
+
+        if (minLine <= start - localOffset) {
+          return -localOffset++;
+        }
+
+        backwardExhausted = true;
+        return iterator();
+      } // We tried to fit hunk before text beginning and beyond text length, then
+      // hunk can't fit on the text. Return undefined
+
+    };
+  }
+
+  function applyPatch(source, uniDiff) {
+    var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+    if (typeof uniDiff === 'string') {
+      uniDiff = parsePatch(uniDiff);
+    }
+
+    if (Array.isArray(uniDiff)) {
+      if (uniDiff.length > 1) {
+        throw new Error('applyPatch only works with a single input.');
+      }
+
+      uniDiff = uniDiff[0];
+    } // Apply the diff to the input
+
+
+    var lines = source.split(/\r\n|[\n\v\f\r\x85]/),
+        delimiters = source.match(/\r\n|[\n\v\f\r\x85]/g) || [],
+        hunks = uniDiff.hunks,
+        compareLine = options.compareLine || function (lineNumber, line, operation, patchContent) {
+      return line === patchContent;
+    },
+        errorCount = 0,
+        fuzzFactor = options.fuzzFactor || 0,
+        minLine = 0,
+        offset = 0,
+        removeEOFNL,
+        addEOFNL;
+    /**
+     * Checks if the hunk exactly fits on the provided location
+     */
+
+
+    function hunkFits(hunk, toPos) {
+      for (var j = 0; j < hunk.lines.length; j++) {
+        var line = hunk.lines[j],
+            operation = line.length > 0 ? line[0] : ' ',
+            content = line.length > 0 ? line.substr(1) : line;
+
+        if (operation === ' ' || operation === '-') {
+          // Context sanity check
+          if (!compareLine(toPos + 1, lines[toPos], operation, content)) {
+            errorCount++;
+
+            if (errorCount > fuzzFactor) {
+              return false;
+            }
+          }
+
+          toPos++;
+        }
+      }
+
+      return true;
+    } // Search best fit offsets for each hunk based on the previous ones
+
+
+    for (var i = 0; i < hunks.length; i++) {
+      var hunk = hunks[i],
+          maxLine = lines.length - hunk.oldLines,
+          localOffset = 0,
+          toPos = offset + hunk.oldStart - 1;
+      var iterator = distanceIterator(toPos, minLine, maxLine);
+
+      for (; localOffset !== undefined; localOffset = iterator()) {
+        if (hunkFits(hunk, toPos + localOffset)) {
+          hunk.offset = offset += localOffset;
+          break;
+        }
+      }
+
+      if (localOffset === undefined) {
+        return false;
+      } // Set lower text limit to end of the current hunk, so next ones don't try
+      // to fit over already patched text
+
+
+      minLine = hunk.offset + hunk.oldStart + hunk.oldLines;
+    } // Apply patch hunks
+
+
+    var diffOffset = 0;
+
+    for (var _i = 0; _i < hunks.length; _i++) {
+      var _hunk = hunks[_i],
+          _toPos = _hunk.oldStart + _hunk.offset + diffOffset - 1;
+
+      diffOffset += _hunk.newLines - _hunk.oldLines;
+
+      if (_toPos < 0) {
+        // Creating a new file
+        _toPos = 0;
+      }
+
+      for (var j = 0; j < _hunk.lines.length; j++) {
+        var line = _hunk.lines[j],
+            operation = line.length > 0 ? line[0] : ' ',
+            content = line.length > 0 ? line.substr(1) : line,
+            delimiter = _hunk.linedelimiters[j];
+
+        if (operation === ' ') {
+          _toPos++;
+        } else if (operation === '-') {
+          lines.splice(_toPos, 1);
+          delimiters.splice(_toPos, 1);
+          /* istanbul ignore else */
+        } else if (operation === '+') {
+          lines.splice(_toPos, 0, content);
+          delimiters.splice(_toPos, 0, delimiter);
+          _toPos++;
+        } else if (operation === '\\') {
+          var previousOperation = _hunk.lines[j - 1] ? _hunk.lines[j - 1][0] : null;
+
+          if (previousOperation === '+') {
+            removeEOFNL = true;
+          } else if (previousOperation === '-') {
+            addEOFNL = true;
+          }
+        }
+      }
+    } // Handle EOFNL insertion/removal
+
+
+    if (removeEOFNL) {
+      while (!lines[lines.length - 1]) {
+        lines.pop();
+        delimiters.pop();
+      }
+    } else if (addEOFNL) {
+      lines.push('');
+      delimiters.push('\n');
+    }
+
+    for (var _k = 0; _k < lines.length - 1; _k++) {
+      lines[_k] = lines[_k] + delimiters[_k];
+    }
+
+    return lines.join('');
+  } // Wrapper that supports multiple file patches via callbacks.
+
+  function applyPatches(uniDiff, options) {
+    if (typeof uniDiff === 'string') {
+      uniDiff = parsePatch(uniDiff);
+    }
+
+    var currentIndex = 0;
+
+    function processIndex() {
+      var index = uniDiff[currentIndex++];
+
+      if (!index) {
+        return options.complete();
+      }
+
+      options.loadFile(index, function (err, data) {
+        if (err) {
+          return options.complete(err);
+        }
+
+        var updatedContent = applyPatch(data, index, options);
+        options.patched(index, updatedContent, function (err) {
+          if (err) {
+            return options.complete(err);
+          }
+
+          processIndex();
+        });
+      });
+    }
+
+    processIndex();
+  }
+
+  function structuredPatch(oldFileName, newFileName, oldStr, newStr, oldHeader, newHeader, options) {
+    if (!options) {
+      options = {};
+    }
+
+    if (typeof options.context === 'undefined') {
+      options.context = 4;
+    }
+
+    var diff = diffLines(oldStr, newStr, options);
+    diff.push({
+      value: '',
+      lines: []
+    }); // Append an empty value to make cleanup easier
+
+    function contextLines(lines) {
+      return lines.map(function (entry) {
+        return ' ' + entry;
+      });
+    }
+
+    var hunks = [];
+    var oldRangeStart = 0,
+        newRangeStart = 0,
+        curRange = [],
+        oldLine = 1,
+        newLine = 1;
+
+    var _loop = function _loop(i) {
+      var current = diff[i],
+          lines = current.lines || current.value.replace(/\n$/, '').split('\n');
+      current.lines = lines;
+
+      if (current.added || current.removed) {
+        var _curRange;
+
+        // If we have previous context, start with that
+        if (!oldRangeStart) {
+          var prev = diff[i - 1];
+          oldRangeStart = oldLine;
+          newRangeStart = newLine;
+
+          if (prev) {
+            curRange = options.context > 0 ? contextLines(prev.lines.slice(-options.context)) : [];
+            oldRangeStart -= curRange.length;
+            newRangeStart -= curRange.length;
+          }
+        } // Output our changes
+
+
+        (_curRange = curRange).push.apply(_curRange, _toConsumableArray(lines.map(function (entry) {
+          return (current.added ? '+' : '-') + entry;
+        }))); // Track the updated file position
+
+
+        if (current.added) {
+          newLine += lines.length;
+        } else {
+          oldLine += lines.length;
+        }
+      } else {
+        // Identical context lines. Track line changes
+        if (oldRangeStart) {
+          // Close out any changes that have been output (or join overlapping)
+          if (lines.length <= options.context * 2 && i < diff.length - 2) {
+            var _curRange2;
+
+            // Overlapping
+            (_curRange2 = curRange).push.apply(_curRange2, _toConsumableArray(contextLines(lines)));
+          } else {
+            var _curRange3;
+
+            // end the range and output
+            var contextSize = Math.min(lines.length, options.context);
+
+            (_curRange3 = curRange).push.apply(_curRange3, _toConsumableArray(contextLines(lines.slice(0, contextSize))));
+
+            var hunk = {
+              oldStart: oldRangeStart,
+              oldLines: oldLine - oldRangeStart + contextSize,
+              newStart: newRangeStart,
+              newLines: newLine - newRangeStart + contextSize,
+              lines: curRange
+            };
+
+            if (i >= diff.length - 2 && lines.length <= options.context) {
+              // EOF is inside this hunk
+              var oldEOFNewline = /\n$/.test(oldStr);
+              var newEOFNewline = /\n$/.test(newStr);
+              var noNlBeforeAdds = lines.length == 0 && curRange.length > hunk.oldLines;
+
+              if (!oldEOFNewline && noNlBeforeAdds) {
+                // special case: old has no eol and no trailing context; no-nl can end up before adds
+                curRange.splice(hunk.oldLines, 0, '\\ No newline at end of file');
+              }
+
+              if (!oldEOFNewline && !noNlBeforeAdds || !newEOFNewline) {
+                curRange.push('\\ No newline at end of file');
+              }
+            }
+
+            hunks.push(hunk);
+            oldRangeStart = 0;
+            newRangeStart = 0;
+            curRange = [];
+          }
+        }
+
+        oldLine += lines.length;
+        newLine += lines.length;
+      }
+    };
+
+    for (var i = 0; i < diff.length; i++) {
+      _loop(i);
+    }
+
+    return {
+      oldFileName: oldFileName,
+      newFileName: newFileName,
+      oldHeader: oldHeader,
+      newHeader: newHeader,
+      hunks: hunks
+    };
+  }
+  function createTwoFilesPatch(oldFileName, newFileName, oldStr, newStr, oldHeader, newHeader, options) {
+    var diff = structuredPatch(oldFileName, newFileName, oldStr, newStr, oldHeader, newHeader, options);
+    var ret = [];
+
+    if (oldFileName == newFileName) {
+      ret.push('Index: ' + oldFileName);
+    }
+
+    ret.push('===================================================================');
+    ret.push('--- ' + diff.oldFileName + (typeof diff.oldHeader === 'undefined' ? '' : '\t' + diff.oldHeader));
+    ret.push('+++ ' + diff.newFileName + (typeof diff.newHeader === 'undefined' ? '' : '\t' + diff.newHeader));
+
+    for (var i = 0; i < diff.hunks.length; i++) {
+      var hunk = diff.hunks[i];
+      ret.push('@@ -' + hunk.oldStart + ',' + hunk.oldLines + ' +' + hunk.newStart + ',' + hunk.newLines + ' @@');
+      ret.push.apply(ret, hunk.lines);
+    }
+
+    return ret.join('\n') + '\n';
+  }
+  function createPatch(fileName, oldStr, newStr, oldHeader, newHeader, options) {
+    return createTwoFilesPatch(fileName, fileName, oldStr, newStr, oldHeader, newHeader, options);
+  }
+
+  function arrayEqual(a, b) {
+    if (a.length !== b.length) {
+      return false;
+    }
+
+    return arrayStartsWith(a, b);
+  }
+  function arrayStartsWith(array, start) {
+    if (start.length > array.length) {
+      return false;
+    }
+
+    for (var i = 0; i < start.length; i++) {
+      if (start[i] !== array[i]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  function calcLineCount(hunk) {
+    var _calcOldNewLineCount = calcOldNewLineCount(hunk.lines),
+        oldLines = _calcOldNewLineCount.oldLines,
+        newLines = _calcOldNewLineCount.newLines;
+
+    if (oldLines !== undefined) {
+      hunk.oldLines = oldLines;
+    } else {
+      delete hunk.oldLines;
+    }
+
+    if (newLines !== undefined) {
+      hunk.newLines = newLines;
+    } else {
+      delete hunk.newLines;
+    }
+  }
+  function merge(mine, theirs, base) {
+    mine = loadPatch(mine, base);
+    theirs = loadPatch(theirs, base);
+    var ret = {}; // For index we just let it pass through as it doesn't have any necessary meaning.
+    // Leaving sanity checks on this to the API consumer that may know more about the
+    // meaning in their own context.
+
+    if (mine.index || theirs.index) {
+      ret.index = mine.index || theirs.index;
+    }
+
+    if (mine.newFileName || theirs.newFileName) {
+      if (!fileNameChanged(mine)) {
+        // No header or no change in ours, use theirs (and ours if theirs does not exist)
+        ret.oldFileName = theirs.oldFileName || mine.oldFileName;
+        ret.newFileName = theirs.newFileName || mine.newFileName;
+        ret.oldHeader = theirs.oldHeader || mine.oldHeader;
+        ret.newHeader = theirs.newHeader || mine.newHeader;
+      } else if (!fileNameChanged(theirs)) {
+        // No header or no change in theirs, use ours
+        ret.oldFileName = mine.oldFileName;
+        ret.newFileName = mine.newFileName;
+        ret.oldHeader = mine.oldHeader;
+        ret.newHeader = mine.newHeader;
+      } else {
+        // Both changed... figure it out
+        ret.oldFileName = selectField(ret, mine.oldFileName, theirs.oldFileName);
+        ret.newFileName = selectField(ret, mine.newFileName, theirs.newFileName);
+        ret.oldHeader = selectField(ret, mine.oldHeader, theirs.oldHeader);
+        ret.newHeader = selectField(ret, mine.newHeader, theirs.newHeader);
+      }
+    }
+
+    ret.hunks = [];
+    var mineIndex = 0,
+        theirsIndex = 0,
+        mineOffset = 0,
+        theirsOffset = 0;
+
+    while (mineIndex < mine.hunks.length || theirsIndex < theirs.hunks.length) {
+      var mineCurrent = mine.hunks[mineIndex] || {
+        oldStart: Infinity
+      },
+          theirsCurrent = theirs.hunks[theirsIndex] || {
+        oldStart: Infinity
+      };
+
+      if (hunkBefore(mineCurrent, theirsCurrent)) {
+        // This patch does not overlap with any of the others, yay.
+        ret.hunks.push(cloneHunk(mineCurrent, mineOffset));
+        mineIndex++;
+        theirsOffset += mineCurrent.newLines - mineCurrent.oldLines;
+      } else if (hunkBefore(theirsCurrent, mineCurrent)) {
+        // This patch does not overlap with any of the others, yay.
+        ret.hunks.push(cloneHunk(theirsCurrent, theirsOffset));
+        theirsIndex++;
+        mineOffset += theirsCurrent.newLines - theirsCurrent.oldLines;
+      } else {
+        // Overlap, merge as best we can
+        var mergedHunk = {
+          oldStart: Math.min(mineCurrent.oldStart, theirsCurrent.oldStart),
+          oldLines: 0,
+          newStart: Math.min(mineCurrent.newStart + mineOffset, theirsCurrent.oldStart + theirsOffset),
+          newLines: 0,
+          lines: []
+        };
+        mergeLines(mergedHunk, mineCurrent.oldStart, mineCurrent.lines, theirsCurrent.oldStart, theirsCurrent.lines);
+        theirsIndex++;
+        mineIndex++;
+        ret.hunks.push(mergedHunk);
+      }
+    }
+
+    return ret;
+  }
+
+  function loadPatch(param, base) {
+    if (typeof param === 'string') {
+      if (/^@@/m.test(param) || /^Index:/m.test(param)) {
+        return parsePatch(param)[0];
+      }
+
+      if (!base) {
+        throw new Error('Must provide a base reference or pass in a patch');
+      }
+
+      return structuredPatch(undefined, undefined, base, param);
+    }
+
+    return param;
+  }
+
+  function fileNameChanged(patch) {
+    return patch.newFileName && patch.newFileName !== patch.oldFileName;
+  }
+
+  function selectField(index, mine, theirs) {
+    if (mine === theirs) {
+      return mine;
+    } else {
+      index.conflict = true;
+      return {
+        mine: mine,
+        theirs: theirs
+      };
+    }
+  }
+
+  function hunkBefore(test, check) {
+    return test.oldStart < check.oldStart && test.oldStart + test.oldLines < check.oldStart;
+  }
+
+  function cloneHunk(hunk, offset) {
+    return {
+      oldStart: hunk.oldStart,
+      oldLines: hunk.oldLines,
+      newStart: hunk.newStart + offset,
+      newLines: hunk.newLines,
+      lines: hunk.lines
+    };
+  }
+
+  function mergeLines(hunk, mineOffset, mineLines, theirOffset, theirLines) {
+    // This will generally result in a conflicted hunk, but there are cases where the context
+    // is the only overlap where we can successfully merge the content here.
+    var mine = {
+      offset: mineOffset,
+      lines: mineLines,
+      index: 0
+    },
+        their = {
+      offset: theirOffset,
+      lines: theirLines,
+      index: 0
+    }; // Handle any leading content
+
+    insertLeading(hunk, mine, their);
+    insertLeading(hunk, their, mine); // Now in the overlap content. Scan through and select the best changes from each.
+
+    while (mine.index < mine.lines.length && their.index < their.lines.length) {
+      var mineCurrent = mine.lines[mine.index],
+          theirCurrent = their.lines[their.index];
+
+      if ((mineCurrent[0] === '-' || mineCurrent[0] === '+') && (theirCurrent[0] === '-' || theirCurrent[0] === '+')) {
+        // Both modified ...
+        mutualChange(hunk, mine, their);
+      } else if (mineCurrent[0] === '+' && theirCurrent[0] === ' ') {
+        var _hunk$lines;
+
+        // Mine inserted
+        (_hunk$lines = hunk.lines).push.apply(_hunk$lines, _toConsumableArray(collectChange(mine)));
+      } else if (theirCurrent[0] === '+' && mineCurrent[0] === ' ') {
+        var _hunk$lines2;
+
+        // Theirs inserted
+        (_hunk$lines2 = hunk.lines).push.apply(_hunk$lines2, _toConsumableArray(collectChange(their)));
+      } else if (mineCurrent[0] === '-' && theirCurrent[0] === ' ') {
+        // Mine removed or edited
+        removal(hunk, mine, their);
+      } else if (theirCurrent[0] === '-' && mineCurrent[0] === ' ') {
+        // Their removed or edited
+        removal(hunk, their, mine, true);
+      } else if (mineCurrent === theirCurrent) {
+        // Context identity
+        hunk.lines.push(mineCurrent);
+        mine.index++;
+        their.index++;
+      } else {
+        // Context mismatch
+        conflict(hunk, collectChange(mine), collectChange(their));
+      }
+    } // Now push anything that may be remaining
+
+
+    insertTrailing(hunk, mine);
+    insertTrailing(hunk, their);
+    calcLineCount(hunk);
+  }
+
+  function mutualChange(hunk, mine, their) {
+    var myChanges = collectChange(mine),
+        theirChanges = collectChange(their);
+
+    if (allRemoves(myChanges) && allRemoves(theirChanges)) {
+      // Special case for remove changes that are supersets of one another
+      if (arrayStartsWith(myChanges, theirChanges) && skipRemoveSuperset(their, myChanges, myChanges.length - theirChanges.length)) {
+        var _hunk$lines3;
+
+        (_hunk$lines3 = hunk.lines).push.apply(_hunk$lines3, _toConsumableArray(myChanges));
+
+        return;
+      } else if (arrayStartsWith(theirChanges, myChanges) && skipRemoveSuperset(mine, theirChanges, theirChanges.length - myChanges.length)) {
+        var _hunk$lines4;
+
+        (_hunk$lines4 = hunk.lines).push.apply(_hunk$lines4, _toConsumableArray(theirChanges));
+
+        return;
+      }
+    } else if (arrayEqual(myChanges, theirChanges)) {
+      var _hunk$lines5;
+
+      (_hunk$lines5 = hunk.lines).push.apply(_hunk$lines5, _toConsumableArray(myChanges));
+
+      return;
+    }
+
+    conflict(hunk, myChanges, theirChanges);
+  }
+
+  function removal(hunk, mine, their, swap) {
+    var myChanges = collectChange(mine),
+        theirChanges = collectContext(their, myChanges);
+
+    if (theirChanges.merged) {
+      var _hunk$lines6;
+
+      (_hunk$lines6 = hunk.lines).push.apply(_hunk$lines6, _toConsumableArray(theirChanges.merged));
+    } else {
+      conflict(hunk, swap ? theirChanges : myChanges, swap ? myChanges : theirChanges);
+    }
+  }
+
+  function conflict(hunk, mine, their) {
+    hunk.conflict = true;
+    hunk.lines.push({
+      conflict: true,
+      mine: mine,
+      theirs: their
+    });
+  }
+
+  function insertLeading(hunk, insert, their) {
+    while (insert.offset < their.offset && insert.index < insert.lines.length) {
+      var line = insert.lines[insert.index++];
+      hunk.lines.push(line);
+      insert.offset++;
+    }
+  }
+
+  function insertTrailing(hunk, insert) {
+    while (insert.index < insert.lines.length) {
+      var line = insert.lines[insert.index++];
+      hunk.lines.push(line);
+    }
+  }
+
+  function collectChange(state) {
+    var ret = [],
+        operation = state.lines[state.index][0];
+
+    while (state.index < state.lines.length) {
+      var line = state.lines[state.index]; // Group additions that are immediately after subtractions and treat them as one "atomic" modify change.
+
+      if (operation === '-' && line[0] === '+') {
+        operation = '+';
+      }
+
+      if (operation === line[0]) {
+        ret.push(line);
+        state.index++;
+      } else {
+        break;
+      }
+    }
+
+    return ret;
+  }
+
+  function collectContext(state, matchChanges) {
+    var changes = [],
+        merged = [],
+        matchIndex = 0,
+        contextChanges = false,
+        conflicted = false;
+
+    while (matchIndex < matchChanges.length && state.index < state.lines.length) {
+      var change = state.lines[state.index],
+          match = matchChanges[matchIndex]; // Once we've hit our add, then we are done
+
+      if (match[0] === '+') {
+        break;
+      }
+
+      contextChanges = contextChanges || change[0] !== ' ';
+      merged.push(match);
+      matchIndex++; // Consume any additions in the other block as a conflict to attempt
+      // to pull in the remaining context after this
+
+      if (change[0] === '+') {
+        conflicted = true;
+
+        while (change[0] === '+') {
+          changes.push(change);
+          change = state.lines[++state.index];
+        }
+      }
+
+      if (match.substr(1) === change.substr(1)) {
+        changes.push(change);
+        state.index++;
+      } else {
+        conflicted = true;
+      }
+    }
+
+    if ((matchChanges[matchIndex] || '')[0] === '+' && contextChanges) {
+      conflicted = true;
+    }
+
+    if (conflicted) {
+      return changes;
+    }
+
+    while (matchIndex < matchChanges.length) {
+      merged.push(matchChanges[matchIndex++]);
+    }
+
+    return {
+      merged: merged,
+      changes: changes
+    };
+  }
+
+  function allRemoves(changes) {
+    return changes.reduce(function (prev, change) {
+      return prev && change[0] === '-';
+    }, true);
+  }
+
+  function skipRemoveSuperset(state, removeChanges, delta) {
+    for (var i = 0; i < delta; i++) {
+      var changeContent = removeChanges[removeChanges.length - delta + i].substr(1);
+
+      if (state.lines[state.index + i] !== ' ' + changeContent) {
+        return false;
+      }
+    }
+
+    state.index += delta;
+    return true;
+  }
+
+  function calcOldNewLineCount(lines) {
+    var oldLines = 0;
+    var newLines = 0;
+    lines.forEach(function (line) {
+      if (typeof line !== 'string') {
+        var myCount = calcOldNewLineCount(line.mine);
+        var theirCount = calcOldNewLineCount(line.theirs);
+
+        if (oldLines !== undefined) {
+          if (myCount.oldLines === theirCount.oldLines) {
+            oldLines += myCount.oldLines;
+          } else {
+            oldLines = undefined;
+          }
+        }
+
+        if (newLines !== undefined) {
+          if (myCount.newLines === theirCount.newLines) {
+            newLines += myCount.newLines;
+          } else {
+            newLines = undefined;
+          }
+        }
+      } else {
+        if (newLines !== undefined && (line[0] === '+' || line[0] === ' ')) {
+          newLines++;
+        }
+
+        if (oldLines !== undefined && (line[0] === '-' || line[0] === ' ')) {
+          oldLines++;
+        }
+      }
+    });
+    return {
+      oldLines: oldLines,
+      newLines: newLines
+    };
+  }
+
+  // See: http://code.google.com/p/google-diff-match-patch/wiki/API
+  function convertChangesToDMP(changes) {
+    var ret = [],
+        change,
+        operation;
+
+    for (var i = 0; i < changes.length; i++) {
+      change = changes[i];
+
+      if (change.added) {
+        operation = 1;
+      } else if (change.removed) {
+        operation = -1;
+      } else {
+        operation = 0;
+      }
+
+      ret.push([operation, change.value]);
+    }
+
+    return ret;
+  }
+
+  function convertChangesToXML(changes) {
+    var ret = [];
+
+    for (var i = 0; i < changes.length; i++) {
+      var change = changes[i];
+
+      if (change.added) {
+        ret.push('<ins>');
+      } else if (change.removed) {
+        ret.push('<del>');
+      }
+
+      ret.push(escapeHTML(change.value));
+
+      if (change.added) {
+        ret.push('</ins>');
+      } else if (change.removed) {
+        ret.push('</del>');
+      }
+    }
+
+    return ret.join('');
+  }
+
+  function escapeHTML(s) {
+    var n = s;
+    n = n.replace(/&/g, '&amp;');
+    n = n.replace(/</g, '&lt;');
+    n = n.replace(/>/g, '&gt;');
+    n = n.replace(/"/g, '&quot;');
+    return n;
+  }
+
+  /* See LICENSE file for terms of use */
+
+  exports.Diff = Diff;
+  exports.diffChars = diffChars;
+  exports.diffWords = diffWords;
+  exports.diffWordsWithSpace = diffWordsWithSpace;
+  exports.diffLines = diffLines;
+  exports.diffTrimmedLines = diffTrimmedLines;
+  exports.diffSentences = diffSentences;
+  exports.diffCss = diffCss;
+  exports.diffJson = diffJson;
+  exports.diffArrays = diffArrays;
+  exports.structuredPatch = structuredPatch;
+  exports.createTwoFilesPatch = createTwoFilesPatch;
+  exports.createPatch = createPatch;
+  exports.applyPatch = applyPatch;
+  exports.applyPatches = applyPatches;
+  exports.parsePatch = parsePatch;
+  exports.merge = merge;
+  exports.convertChangesToDMP = convertChangesToDMP;
+  exports.convertChangesToXML = convertChangesToXML;
+  exports.canonicalize = canonicalize;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
+
+}));
+
 
 /***/ }),
 /* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(66);
+
+module.exports.internal = {};
+
+__webpack_require__(74);
+module.exports.internal.Image = __webpack_require__(75);
+__webpack_require__(77);
+__webpack_require__(78);
+__webpack_require__(79);
+__webpack_require__(80);
+module.exports.Mouse = __webpack_require__(82);
+module.exports.Math = __webpack_require__(61);
+module.exports._extend = __webpack_require__(37);
+module.exports._create = __webpack_require__(24);
+
+__webpack_require__(83);
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(19);
+module.exports.Matrix = __webpack_require__(62);
+module.exports.Texture = __webpack_require__(60);
+__webpack_require__(68);
+__webpack_require__(70);
+__webpack_require__(71);
+__webpack_require__(25);
+
+__webpack_require__(30);
+__webpack_require__(73);
+
+/***/ }),
+/* 67 */
 /***/ (function(module, exports) {
 
 module.exports = function() {
@@ -19953,20 +21808,20 @@ module.exports = function() {
 };
 
 /***/ }),
-/* 66 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 if (false)
   {}
 
 var Class = __webpack_require__(19);
-var Texture = __webpack_require__(59);
+var Texture = __webpack_require__(60);
 
 var extend = __webpack_require__(37);
 var create = __webpack_require__(24);
 var is = __webpack_require__(38);
 
-var string = __webpack_require__(67);
+var string = __webpack_require__(69);
 
 // name : atlas
 var _atlases_map = {};
@@ -20200,7 +22055,7 @@ module.exports = Atlas;
 
 
 /***/ }),
-/* 67 */
+/* 69 */
 /***/ (function(module, exports) {
 
 module.exports.startsWith = function(str, sub) {
@@ -20209,7 +22064,7 @@ module.exports.startsWith = function(str, sub) {
 };
 
 /***/ }),
-/* 68 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Class = __webpack_require__(19);
@@ -20627,16 +22482,16 @@ module.exports = Class;
 
 
 /***/ }),
-/* 69 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(70)(__webpack_require__(19).prototype, function(obj, name, on) {
+__webpack_require__(72)(__webpack_require__(19).prototype, function(obj, name, on) {
   obj._flag(name, on);
 });
 
 
 /***/ }),
-/* 70 */
+/* 72 */
 /***/ (function(module, exports) {
 
 module.exports = function(prototype, callback) {
@@ -20713,12 +22568,12 @@ module.exports = function(prototype, callback) {
 
 
 /***/ }),
-/* 71 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Class = __webpack_require__(19);
 __webpack_require__(25);
-__webpack_require__(29);
+__webpack_require__(30);
 
 var stats = __webpack_require__(36);
 var create = __webpack_require__(24);
@@ -20849,11 +22704,11 @@ Root.prototype.viewbox = function(width, height, mode) {
 
 
 /***/ }),
-/* 72 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Class = __webpack_require__(19);
-var Texture = __webpack_require__(59);
+var Texture = __webpack_require__(60);
 
 Class.canvas = function(type, attributes, callback) {
   if (typeof type === 'string') {
@@ -20905,14 +22760,14 @@ Class.canvas = function(type, attributes, callback) {
 };
 
 /***/ }),
-/* 73 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Class = __webpack_require__(19);
 __webpack_require__(25);
-__webpack_require__(29);
+__webpack_require__(30);
 
-var repeat = __webpack_require__(74);
+var repeat = __webpack_require__(76);
 var create = __webpack_require__(24);
 
 module.exports = Image;
@@ -20983,7 +22838,7 @@ Image.prototype._repeat = function(stretch, inner) {
 
 
 /***/ }),
-/* 74 */
+/* 76 */
 /***/ (function(module, exports) {
 
 module.exports = function(img, owidth, oheight, stretch, inner, insert) {
@@ -21062,15 +22917,15 @@ module.exports = function(img, owidth, oheight, stretch, inner, insert) {
 };
 
 /***/ }),
-/* 75 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Class = __webpack_require__(19);
 __webpack_require__(25);
-__webpack_require__(29);
+__webpack_require__(30);
 
 var create = __webpack_require__(24);
-var math = __webpack_require__(60);
+var math = __webpack_require__(61);
 
 Class.anim = function(frames, fps) {
   var anim = new Anim();
@@ -21203,12 +23058,12 @@ Anim.prototype.stop = function(frame) {
 
 
 /***/ }),
-/* 76 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Class = __webpack_require__(19);
 __webpack_require__(25);
-__webpack_require__(29);
+__webpack_require__(30);
 
 var create = __webpack_require__(24);
 var is = __webpack_require__(38);
@@ -21290,12 +23145,12 @@ Str.prototype.value = function(value) {
 
 
 /***/ }),
-/* 77 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Class = __webpack_require__(19);
 __webpack_require__(25);
-__webpack_require__(29);
+__webpack_require__(30);
 
 var create = __webpack_require__(24);
 
@@ -21439,10 +23294,10 @@ Class.prototype.spacing = function(space) {
 
 
 /***/ }),
-/* 78 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Easing = __webpack_require__(79);
+var Easing = __webpack_require__(81);
 var Class = __webpack_require__(19);
 var Pin = __webpack_require__(25);
 
@@ -21629,7 +23484,7 @@ Tween.prototype.clear = function(forward) {
 module.exports = Tween;
 
 /***/ }),
-/* 79 */
+/* 81 */
 /***/ (function(module, exports) {
 
 function _identity(x) {
@@ -21820,7 +23675,7 @@ module.exports = Easing;
 
 
 /***/ }),
-/* 80 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 if (false)
@@ -22033,7 +23888,7 @@ module.exports = Mouse;
 
 
 /***/ }),
-/* 81 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
