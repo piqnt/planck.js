@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.1
+ * Planck.js v0.3.2
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -953,7 +953,7 @@ Rot.mulVec2 = function(rot, m) {
 
 Rot.mulSub = function(rot, v, w) {
   var x = rot.c * (v.x - w.x) - rot.s * (v.y - w.y);
-  var y = rot.s * (v.x - w.y) + rot.c * (v.y - w.y);
+  var y = rot.s * (v.x - w.x) + rot.c * (v.y - w.y);
   return Vec2.neo(x, y);
 }
 
