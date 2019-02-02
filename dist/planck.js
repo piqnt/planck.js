@@ -1,5 +1,5 @@
 /*
- * Planck.js v0.3.0-rc.2
+ * Planck.js v0.2.7
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -1059,8 +1059,6 @@ var DEBUG_SOLVER = false;
 
 var common = require("./util/common");
 
-var Pool = require("./util/Pool");
-
 var Math = require("./common/Math");
 
 var Vec2 = require("./common/Vec2");
@@ -1092,9 +1090,9 @@ module.exports = Contact;
  */
 function ContactEdge(contact) {
     this.contact = contact;
-    this.prev = null;
-    this.next = null;
-    this.other = null;
+    this.prev;
+    this.next;
+    this.other;
 }
 
 /**
@@ -1112,43 +1110,23 @@ function ContactEdge(contact) {
  * The class manages contact between two shapes. A contact exists for each
  * overlapping AABB in the broad-phase (except if filtered). Therefore a contact
  * object may exist that has no contact points.
- */
-function Contact() {
-    // Nodes for connecting bodies.
-    this.m_nodeA = new ContactEdge(this);
-    this.m_nodeB = new ContactEdge(this);
-    this.m_manifold = new Manifold();
-    this.v_points_cache = [ new VelocityConstraintPoint(), new VelocityConstraintPoint() ];
-    this.v_points = [];
-    // VelocityConstraintPoint[maxManifoldPoints]
-    this.v_normal = Vec2.zero();
-    this.v_normalMass = new Mat22();
-    this.v_K = new Mat22();
-    this.p_localPoints_cache = [ Vec2.zero(), Vec2.zero() ];
-    this.p_localPoints = [];
-    // Vec2[maxManifoldPoints];
-    this.p_localNormal = Vec2.zero();
-    this.p_localPoint = Vec2.zero();
-    this.p_localCenterA = Vec2.zero();
-    this.p_localCenterB = Vec2.zero();
-}
-
-/**
- * Initialize a Contact.
- *
+ * 
  * @param {Fixture} fA
  * @param {int} indexA
  * @param {Fixture} fB
  * @param {int} indexB
  * @param {Contact~evaluate} evaluateFcn
  */
-Contact.prototype.init = function(fA, indexA, fB, indexB, evaluateFcn) {
+function Contact(fA, indexA, fB, indexB, evaluateFcn) {
+    // Nodes for connecting bodies.
+    this.m_nodeA = new ContactEdge(this);
+    this.m_nodeB = new ContactEdge(this);
     this.m_fixtureA = fA;
     this.m_fixtureB = fB;
     this.m_indexA = indexA;
     this.m_indexB = indexB;
     this.m_evaluateFcn = evaluateFcn;
-    this.m_manifold.init();
+    this.m_manifold = new Manifold();
     this.m_prev = null;
     this.m_next = null;
     this.m_toi = 1;
@@ -1168,33 +1146,35 @@ Contact.prototype.init = function(fA, indexA, fB, indexB, evaluateFcn) {
     this.m_filterFlag = false;
     // This bullet contact had a TOI event
     this.m_bulletHitFlag = false;
-    this.v_points.length = 0;
-    this.v_normal.setZero();
-    this.v_normalMass.setZero();
-    this.v_K.setZero();
-    this.v_pointCount = null;
-    this.v_tangentSpeed = null;
-    this.v_friction = null;
-    this.v_restitution = null;
-    this.v_invMassA = null;
-    this.v_invMassB = null;
-    this.v_invIA = null;
-    this.v_invIB = null;
-    this.p_localPoints.length = 0;
-    this.p_localNormal.setZero();
-    this.p_localPoint.setZero();
-    this.p_localCenterA.setZero();
-    this.p_localCenterB.setZero();
-    this.p_type = null;
+    this.v_points = [];
+    // VelocityConstraintPoint[maxManifoldPoints]
+    this.v_normal = Vec2.zero();
+    this.v_normalMass = new Mat22();
+    this.v_K = new Mat22();
+    this.v_pointCount;
+    this.v_tangentSpeed;
+    this.v_friction;
+    this.v_restitution;
+    this.v_invMassA;
+    this.v_invMassB;
+    this.v_invIA;
+    this.v_invIB;
+    this.p_localPoints = [];
+    // Vec2[maxManifoldPoints];
+    this.p_localNormal = Vec2.zero();
+    this.p_localPoint = Vec2.zero();
+    this.p_localCenterA = Vec2.zero();
+    this.p_localCenterB = Vec2.zero();
+    this.p_type;
     // Manifold.Type
-    this.p_radiusA = null;
-    this.p_radiusB = null;
-    this.p_pointCount = null;
-    this.p_invMassA = null;
-    this.p_invMassB = null;
-    this.p_invIA = null;
-    this.p_invIB = null;
-};
+    this.p_radiusA;
+    this.p_radiusB;
+    this.p_pointCount;
+    this.p_invMassA;
+    this.p_invMassB;
+    this.p_invIA;
+    this.p_invIB;
+}
 
 Contact.prototype.initConstraint = function(step) {
     var fixtureA = this.m_fixtureA;
@@ -1203,7 +1183,7 @@ Contact.prototype.initConstraint = function(step) {
     var shapeB = fixtureB.getShape();
     var bodyA = fixtureA.getBody();
     var bodyB = fixtureB.getBody();
-    var manifold = this.m_manifold;
+    var manifold = this.getManifold();
     var pointCount = manifold.pointCount;
     _ASSERT && common.assert(pointCount > 0);
     this.v_invMassA = bodyA.m_invMass;
@@ -1220,18 +1200,18 @@ Contact.prototype.initConstraint = function(step) {
     this.p_invMassB = bodyB.m_invMass;
     this.p_invIA = bodyA.m_invI;
     this.p_invIB = bodyB.m_invI;
-    this.p_localCenterA.setVec2(bodyA.m_sweep.localCenter);
-    this.p_localCenterB.setVec2(bodyB.m_sweep.localCenter);
+    this.p_localCenterA = Vec2.clone(bodyA.m_sweep.localCenter);
+    this.p_localCenterB = Vec2.clone(bodyB.m_sweep.localCenter);
     this.p_radiusA = shapeA.m_radius;
     this.p_radiusB = shapeB.m_radius;
     this.p_type = manifold.type;
-    this.p_localNormal.setVec2(manifold.localNormal);
-    this.p_localPoint.setVec2(manifold.localPoint);
+    this.p_localNormal = Vec2.clone(manifold.localNormal);
+    this.p_localPoint = Vec2.clone(manifold.localPoint);
     this.p_pointCount = pointCount;
     for (var j = 0; j < pointCount; ++j) {
         var cp = manifold.points[j];
         // ManifoldPoint
-        var vcp = this.v_points[j] = this.v_points_cache[j].init();
+        var vcp = this.v_points[j] = new VelocityConstraintPoint();
         if (step.warmStarting) {
             vcp.normalImpulse = step.dtRatio * cp.normalImpulse;
             vcp.tangentImpulse = step.dtRatio * cp.tangentImpulse;
@@ -1244,7 +1224,7 @@ Contact.prototype.initConstraint = function(step) {
         vcp.normalMass = 0;
         vcp.tangentMass = 0;
         vcp.velocityBias = 0;
-        this.p_localPoints[j] = this.p_localPoints_cache[j].setVec2(cp.localPoint);
+        this.p_localPoints[j] = Vec2.clone(cp.localPoint);
     }
 };
 
@@ -1266,8 +1246,7 @@ Contact.prototype.getWorldManifold = function(worldManifold) {
     var bodyB = this.m_fixtureB.getBody();
     var shapeA = this.m_fixtureA.getShape();
     var shapeB = this.m_fixtureB.getShape();
-    var manifold = this.m_manifold.getWorldManifold(worldManifold, bodyA.getTransform(), shapeA.m_radius, bodyB.getTransform(), shapeB.m_radius);
-    return manifold;
+    return this.m_manifold.getWorldManifold(worldManifold, bodyA.getTransform(), shapeA.m_radius, bodyB.getTransform(), shapeB.m_radius);
 };
 
 /**
@@ -1401,8 +1380,6 @@ Contact.prototype.evaluate = function(manifold, xfA, xfB) {
     this.m_evaluateFcn(manifold, xfA, this.m_fixtureA, this.m_indexA, xfB, this.m_fixtureB, this.m_indexB);
 };
 
-var cup_manifold = new Manifold();
-
 /**
  * Updates the contact manifold and touching status.
  * 
@@ -1432,17 +1409,17 @@ Contact.prototype.update = function(listener) {
         // Sensors don't generate manifolds.
         this.m_manifold.pointCount = 0;
     } else {
+        // TODO reuse manifold
         var oldManifold = this.m_manifold;
-        this.m_manifold = cup_manifold.init();
-        cup_manifold = oldManifold;
+        this.m_manifold = new Manifold();
         this.evaluate(this.m_manifold, xfA, xfB);
         touching = this.m_manifold.pointCount > 0;
+        // Match old contact ids to new contact ids and copy the
+        // stored impulses to warm start the solver.
         for (var i = 0; i < this.m_manifold.pointCount; ++i) {
             var nmp = this.m_manifold.points[i];
             nmp.normalImpulse = 0;
             nmp.tangentImpulse = 0;
-            // Match old contact ids to new contact ids and copy the
-            // stored impulses to warm start the solver.
             for (var j = 0; j < oldManifold.pointCount; ++j) {
                 var omp = oldManifold.points[j];
                 if (omp.id.key == nmp.id.key) {
@@ -1453,19 +1430,19 @@ Contact.prototype.update = function(listener) {
                 }
             }
         }
-        if (touching !== wasTouching) {
+        if (touching != wasTouching) {
             bodyA.setAwake(true);
             bodyB.setAwake(true);
         }
     }
     this.m_touchingFlag = touching;
-    if (!wasTouching && touching && listener) {
+    if (wasTouching == false && touching == true && listener) {
         listener.beginContact(this);
     }
-    if (wasTouching && !touching && listener) {
+    if (wasTouching == true && touching == false && listener) {
         listener.endContact(this);
     }
-    if (!sensor && touching && listener) {
+    if (sensor == false && touching && listener) {
         listener.preSolve(this, oldManifold);
     }
 };
@@ -1478,40 +1455,6 @@ Contact.prototype.solvePositionConstraintTOI = function(step, toiA, toiB) {
     return this._solvePositionConstraint(step, true, toiA, toiB);
 };
 
-var spc_localCenterA = Vec2.zero();
-
-var spc_localCenterB = Vec2.zero();
-
-var spc_cA = Vec2.zero();
-
-var spc_cB = Vec2.zero();
-
-var spc_xfA = Transform.identity();
-
-var spc_xfB = Transform.identity();
-
-var spc_t1 = Vec2.zero();
-
-var spc_t2 = Vec2.zero();
-
-var spc_normal = Vec2.zero();
-
-var spc_point = Vec2.zero();
-
-var spc_pointA = Vec2.zero();
-
-var spc_pointB = Vec2.zero();
-
-var spc_planePoint = Vec2.zero();
-
-var spc_clipPoint = Vec2.zero();
-
-var spc_rA = Vec2.zero();
-
-var spc_rB = Vec2.zero();
-
-var spc_P = Vec2.zero();
-
 Contact.prototype._solvePositionConstraint = function(step, toi, toiA, toiB) {
     var fixtureA = this.m_fixtureA;
     var fixtureB = this.m_fixtureB;
@@ -1521,65 +1464,65 @@ Contact.prototype._solvePositionConstraint = function(step, toi, toiA, toiB) {
     var velocityB = bodyB.c_velocity;
     var positionA = bodyA.c_position;
     var positionB = bodyB.c_position;
-    var localCenterA = spc_localCenterA.setVec2(this.p_localCenterA);
-    var localCenterB = spc_localCenterB.setVec2(this.p_localCenterB);
+    var localCenterA = Vec2.clone(this.p_localCenterA);
+    var localCenterB = Vec2.clone(this.p_localCenterB);
     var mA = 0;
     var iA = 0;
-    if (!toi || (bodyA === toiA || bodyA === toiB)) {
+    if (!toi || (bodyA == toiA || bodyA == toiB)) {
         mA = this.p_invMassA;
         iA = this.p_invIA;
     }
     var mB = 0;
     var iB = 0;
-    if (!toi || (bodyB === toiA || bodyB === toiB)) {
+    if (!toi || (bodyB == toiA || bodyB == toiB)) {
         mB = this.p_invMassB;
         iB = this.p_invIB;
     }
-    var cA = spc_cA.setVec2(positionA.c);
+    var cA = Vec2.clone(positionA.c);
     var aA = positionA.a;
-    var cB = spc_cB.setVec2(positionB.c);
+    var cB = Vec2.clone(positionB.c);
     var aB = positionB.a;
     var minSeparation = 0;
     // Solve normal constraints
     for (var j = 0; j < this.p_pointCount; ++j) {
-        var xfA = spc_xfA.setIdentity();
-        var xfB = spc_xfB.setIdentity();
+        var xfA = Transform.identity();
+        var xfB = Transform.identity();
         xfA.q.set(aA);
         xfB.q.set(aB);
-        xfA.p.setVec2(Vec2.sub_(cA, Rot.mulVec2_(xfA.q, localCenterA, spc_t1), spc_t2));
-        xfB.p.setVec2(Vec2.sub_(cB, Rot.mulVec2_(xfB.q, localCenterB, spc_t1), spc_t2));
+        xfA.p = Vec2.sub(cA, Rot.mulVec2(xfA.q, localCenterA));
+        xfB.p = Vec2.sub(cB, Rot.mulVec2(xfB.q, localCenterB));
         // PositionSolverManifold
         var normal, point, separation;
         switch (this.p_type) {
           case Manifold.e_circles:
-            var pointA = Transform.mulVec2_(xfA, this.p_localPoint, spc_pointA);
-            var pointB = Transform.mulVec2_(xfB, this.p_localPoints[0], spc_pointB);
-            normal = Vec2.sub_(pointB, pointA, spc_normal);
+            var pointA = Transform.mulVec2(xfA, this.p_localPoint);
+            var pointB = Transform.mulVec2(xfB, this.p_localPoints[0]);
+            normal = Vec2.sub(pointB, pointA);
             normal.normalize();
-            point = Vec2.combine_(.5, pointA, .5, pointB, spc_point);
+            point = Vec2.combine(.5, pointA, .5, pointB);
             separation = Vec2.dot(Vec2.sub(pointB, pointA), normal) - this.p_radiusA - this.p_radiusB;
             break;
 
           case Manifold.e_faceA:
-            normal = Rot.mulVec2_(xfA.q, this.p_localNormal, spc_normal);
-            var planePoint = Transform.mulVec2_(xfA, this.p_localPoint, spc_planePoint);
-            var clipPoint = Transform.mulVec2_(xfB, this.p_localPoints[j], spc_clipPoint);
-            separation = Vec2.dot(Vec2.sub_(clipPoint, planePoint, spc_t1), normal) - this.p_radiusA - this.p_radiusB;
-            point = spc_point.setVec2(clipPoint);
+            normal = Rot.mulVec2(xfA.q, this.p_localNormal);
+            var planePoint = Transform.mulVec2(xfA, this.p_localPoint);
+            var clipPoint = Transform.mulVec2(xfB, this.p_localPoints[j]);
+            separation = Vec2.dot(Vec2.sub(clipPoint, planePoint), normal) - this.p_radiusA - this.p_radiusB;
+            point = clipPoint;
             break;
 
           case Manifold.e_faceB:
-            normal = Rot.mulVec2_(xfB.q, this.p_localNormal, spc_normal);
-            var planePoint = Transform.mulVec2_(xfB, this.p_localPoint, spc_planePoint);
-            var clipPoint = Transform.mulVec2_(xfA, this.p_localPoints[j], spc_clipPoint);
-            separation = Vec2.dot(Vec2.sub_(clipPoint, planePoint, spc_t1), normal) - this.p_radiusA - this.p_radiusB;
-            point = spc_point.setVec2(clipPoint);
+            normal = Rot.mulVec2(xfB.q, this.p_localNormal);
+            var planePoint = Transform.mulVec2(xfB, this.p_localPoint);
+            var clipPoint = Transform.mulVec2(xfA, this.p_localPoints[j]);
+            separation = Vec2.dot(Vec2.sub(clipPoint, planePoint), normal) - this.p_radiusA - this.p_radiusB;
+            point = clipPoint;
             // Ensure normal points from A to B
             normal.mul(-1);
             break;
         }
-        var rA = Vec2.sub_(point, cA, spc_rA);
-        var rB = Vec2.sub_(point, cB, spc_rB);
+        var rA = Vec2.sub(point, cA);
+        var rB = Vec2.sub(point, cB);
         // Track max constraint error.
         minSeparation = Math.min(minSeparation, separation);
         var baumgarte = toi ? Settings.toiBaugarte : Settings.baumgarte;
@@ -1588,24 +1531,25 @@ Contact.prototype._solvePositionConstraint = function(step, toi, toiA, toiB) {
         // Prevent large corrections and allow slop.
         var C = Math.clamp(baumgarte * (separation + linearSlop), -maxLinearCorrection, 0);
         // Compute the effective mass.
-        var rnA = Vec2.crossVec2Vec2(rA, normal);
-        var rnB = Vec2.crossVec2Vec2(rB, normal);
+        var rnA = Vec2.cross(rA, normal);
+        var rnB = Vec2.cross(rB, normal);
         var K = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
         // Compute normal impulse
         var impulse = K > 0 ? -C / K : 0;
-        var P = Vec2.mulNumVec2_(impulse, normal, spc_P);
+        var P = Vec2.mul(impulse, normal);
         cA.subMul(mA, P);
-        aA -= iA * Vec2.crossVec2Vec2(rA, P);
+        aA -= iA * Vec2.cross(rA, P);
         cB.addMul(mB, P);
-        aB += iB * Vec2.crossVec2Vec2(rB, P);
+        aB += iB * Vec2.cross(rB, P);
     }
-    positionA.c.setVec2(cA);
+    positionA.c.set(cA);
     positionA.a = aA;
-    positionB.c.setVec2(cB);
+    positionB.c.set(cB);
     positionB.a = aB;
     return minSeparation;
 };
 
+// TODO merge with ManifoldPoint
 function VelocityConstraintPoint() {
     this.rA = Vec2.zero();
     this.rB = Vec2.zero();
@@ -1615,39 +1559,6 @@ function VelocityConstraintPoint() {
     this.tangentMass = 0;
     this.velocityBias = 0;
 }
-
-VelocityConstraintPoint.prototype.init = function() {
-    this.rA.setZero();
-    this.rB.setZero();
-    this.normalImpulse = 0;
-    this.tangentImpulse = 0;
-    this.normalMass = 0;
-    this.tangentMass = 0;
-    this.velocityBias = 0;
-    return this;
-};
-
-var ivc_localCenterA = Vec2.zero();
-
-var ivc_localCenterB = Vec2.zero();
-
-var ivc_normal = Vec2.zero();
-
-var ivc_cA = Vec2.zero();
-
-var ivc_cB = Vec2.zero();
-
-var ivc_vA = Vec2.zero();
-
-var ivc_vB = Vec2.zero();
-
-var ivc_t1 = Vec2.zero();
-
-var ivc_t2 = Vec2.zero();
-
-var ivc_xfA = Transform.identity();
-
-var ivc_xfB = Transform.identity();
 
 Contact.prototype.initVelocityConstraint = function(step) {
     var fixtureA = this.m_fixtureA;
@@ -1660,24 +1571,24 @@ Contact.prototype.initVelocityConstraint = function(step) {
     var positionB = bodyB.c_position;
     var radiusA = this.p_radiusA;
     var radiusB = this.p_radiusB;
-    var manifold = this.m_manifold;
+    var manifold = this.getManifold();
     var mA = this.v_invMassA;
     var mB = this.v_invMassB;
     var iA = this.v_invIA;
     var iB = this.v_invIB;
-    var localCenterA = ivc_localCenterA.setVec2(this.p_localCenterA);
-    var localCenterB = ivc_localCenterB.setVec2(this.p_localCenterB);
-    var cA = ivc_cA.setVec2(positionA.c);
+    var localCenterA = Vec2.clone(this.p_localCenterA);
+    var localCenterB = Vec2.clone(this.p_localCenterB);
+    var cA = Vec2.clone(positionA.c);
     var aA = positionA.a;
-    var vA = ivc_vA.setVec2(velocityA.v);
+    var vA = Vec2.clone(velocityA.v);
     var wA = velocityA.w;
-    var cB = ivc_cB.set(positionB.c);
+    var cB = Vec2.clone(positionB.c);
     var aB = positionB.a;
-    var vB = ivc_vB.set(velocityB.v);
+    var vB = Vec2.clone(velocityB.v);
     var wB = velocityB.w;
     _ASSERT && common.assert(manifold.pointCount > 0);
-    var xfA = ivc_xfA.setIdentity();
-    var xfB = ivc_xfB.setIdentity();
+    var xfA = Transform.identity();
+    var xfB = Transform.identity();
     xfA.q.set(aA);
     xfB.q.set(aB);
     xfA.p.setCombine(1, cA, -1, Rot.mulVec2(xfA.q, localCenterA));
@@ -1687,34 +1598,34 @@ Contact.prototype.initVelocityConstraint = function(step) {
     for (var j = 0; j < this.v_pointCount; ++j) {
         var vcp = this.v_points[j];
         // VelocityConstraintPoint
-        vcp.rA.setCombine(1, worldManifold.points[j], -1, cA);
-        vcp.rB.setCombine(1, worldManifold.points[j], -1, cB);
-        var rnA = Vec2.crossVec2Vec2(vcp.rA, this.v_normal);
-        var rnB = Vec2.crossVec2Vec2(vcp.rB, this.v_normal);
+        vcp.rA.set(Vec2.sub(worldManifold.points[j], cA));
+        vcp.rB.set(Vec2.sub(worldManifold.points[j], cB));
+        var rnA = Vec2.cross(vcp.rA, this.v_normal);
+        var rnB = Vec2.cross(vcp.rB, this.v_normal);
         var kNormal = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
         vcp.normalMass = kNormal > 0 ? 1 / kNormal : 0;
-        var tangent = Vec2.crossVec2Num_(this.v_normal, 1, ivc_normal);
-        var rtA = Vec2.crossVec2Vec2(vcp.rA, tangent);
-        var rtB = Vec2.crossVec2Vec2(vcp.rB, tangent);
+        var tangent = Vec2.cross(this.v_normal, 1);
+        var rtA = Vec2.cross(vcp.rA, tangent);
+        var rtB = Vec2.cross(vcp.rB, tangent);
         var kTangent = mA + mB + iA * rtA * rtA + iB * rtB * rtB;
         vcp.tangentMass = kTangent > 0 ? 1 / kTangent : 0;
         // Setup a velocity bias for restitution.
         vcp.velocityBias = 0;
-        var vRel = Vec2.dot(this.v_normal, vB) + Vec2.dot(this.v_normal, Vec2.crossNumVec2_(wB, vcp.rB, ivc_t1)) - Vec2.dot(this.v_normal, vA) - Vec2.dot(this.v_normal, Vec2.crossNumVec2_(wA, vcp.rA, ivc_t2));
+        var vRel = Vec2.dot(this.v_normal, vB) + Vec2.dot(this.v_normal, Vec2.cross(wB, vcp.rB)) - Vec2.dot(this.v_normal, vA) - Vec2.dot(this.v_normal, Vec2.cross(wA, vcp.rA));
         if (vRel < -Settings.velocityThreshold) {
             vcp.velocityBias = -this.v_restitution * vRel;
         }
     }
     // If we have two points, then prepare the block solver.
-    if (this.v_pointCount === 2 && step.blockSolve) {
+    if (this.v_pointCount == 2 && step.blockSolve) {
         var vcp1 = this.v_points[0];
         // VelocityConstraintPoint
         var vcp2 = this.v_points[1];
         // VelocityConstraintPoint
-        var rn1A = Vec2.crossVec2Vec2(vcp1.rA, this.v_normal);
-        var rn1B = Vec2.crossVec2Vec2(vcp1.rB, this.v_normal);
-        var rn2A = Vec2.crossVec2Vec2(vcp2.rA, this.v_normal);
-        var rn2B = Vec2.crossVec2Vec2(vcp2.rB, this.v_normal);
+        var rn1A = Vec2.cross(vcp1.rA, this.v_normal);
+        var rn1B = Vec2.cross(vcp1.rB, this.v_normal);
+        var rn2A = Vec2.cross(vcp2.rA, this.v_normal);
+        var rn2B = Vec2.cross(vcp2.rB, this.v_normal);
         var k11 = mA + mB + iA * rn1A * rn1A + iB * rn1B * rn1B;
         var k22 = mA + mB + iA * rn2A * rn2A + iB * rn2B * rn2B;
         var k12 = mA + mB + iA * rn1A * rn2A + iB * rn1B * rn2B;
@@ -1741,14 +1652,6 @@ Contact.prototype.initVelocityConstraint = function(step) {
     velocityB.w = wB;
 };
 
-var wsc_vA = Vec2.zero();
-
-var wsc_vB = Vec2.zero();
-
-var wsc_normal = Vec2.zero();
-
-var wsc_P = Vec2.zero();
-
 Contact.prototype.warmStartConstraint = function(step) {
     var fixtureA = this.m_fixtureA;
     var fixtureB = this.m_fixtureB;
@@ -1762,19 +1665,19 @@ Contact.prototype.warmStartConstraint = function(step) {
     var iA = this.v_invIA;
     var mB = this.v_invMassB;
     var iB = this.v_invIB;
-    var vA = wsc_vA.set(velocityA.v);
+    var vA = Vec2.clone(velocityA.v);
     var wA = velocityA.w;
-    var vB = wsc_vB.set(velocityB.v);
+    var vB = Vec2.clone(velocityB.v);
     var wB = velocityB.w;
     var normal = this.v_normal;
-    var tangent = Vec2.crossVec2Num_(normal, 1, wsc_normal);
+    var tangent = Vec2.cross(normal, 1);
     for (var j = 0; j < this.v_pointCount; ++j) {
         var vcp = this.v_points[j];
         // VelocityConstraintPoint
-        var P = wsc_P.setCombine(vcp.normalImpulse, normal, vcp.tangentImpulse, tangent);
-        wA -= iA * Vec2.crossVec2Vec2(vcp.rA, P);
+        var P = Vec2.combine(vcp.normalImpulse, normal, vcp.tangentImpulse, tangent);
+        wA -= iA * Vec2.cross(vcp.rA, P);
         vA.subMul(mA, P);
-        wB += iB * Vec2.crossVec2Vec2(vcp.rB, P);
+        wB += iB * Vec2.cross(vcp.rB, P);
         vB.addMul(mB, P);
     }
     velocityA.v.set(vA);
@@ -1791,36 +1694,6 @@ Contact.prototype.storeConstraintImpulses = function(step) {
     }
 };
 
-var svc_vA = Vec2.zero();
-
-var svc_vB = Vec2.zero();
-
-var svc_dv = Vec2.zero();
-
-var svc_P = Vec2.zero();
-
-var svc_tangent = Vec2.zero();
-
-var svc_a = Vec2.zero();
-
-var svc_b = Vec2.zero();
-
-var svc_d = Vec2.zero();
-
-var svc_x = Vec2.zero();
-
-var svc_dv1 = Vec2.zero();
-
-var svc_dv2 = Vec2.zero();
-
-var svc_P1 = Vec2.zero();
-
-var svc_P2 = Vec2.zero();
-
-var svc_t1 = Vec2.zero();
-
-var svc_t2 = Vec2.zero();
-
 Contact.prototype.solveVelocityConstraint = function(step) {
     var bodyA = this.m_fixtureA.m_body;
     var bodyB = this.m_fixtureB.m_body;
@@ -1832,36 +1705,25 @@ Contact.prototype.solveVelocityConstraint = function(step) {
     var iA = this.v_invIA;
     var mB = this.v_invMassB;
     var iB = this.v_invIB;
-    // var vA = svc_vA.setVec2(velocityA.v);
-    var vAX = velocityA.v.x;
-    var vAY = velocityA.v.y;
+    var vA = Vec2.clone(velocityA.v);
     var wA = velocityA.w;
-    // var vB = svc_vB.setVec2(velocityB.v);
-    var vBX = velocityB.v.x;
-    var vBY = velocityB.v.y;
+    var vB = Vec2.clone(velocityB.v);
     var wB = velocityB.w;
     var normal = this.v_normal;
-    var tangent = Vec2.crossVec2Num_(normal, 1, svc_tangent);
+    var tangent = Vec2.cross(normal, 1);
     var friction = this.v_friction;
-    _ASSERT && common.assert(this.v_pointCount === 1 || this.v_pointCount === 2);
+    _ASSERT && common.assert(this.v_pointCount == 1 || this.v_pointCount == 2);
     // Solve tangent constraints first because non-penetration is more important
     // than friction.
     for (var j = 0; j < this.v_pointCount; ++j) {
         var vcp = this.v_points[j];
         // VelocityConstraintPoint
         // Relative velocity at contact
-        // var dv = Vec2.zero();
-        var dvX = 0;
-        var dvY = 0;
-        // dv.addCombine(1, vB, 1, Vec2.cross(wB, vcp.rB));
-        dvX += vBX + -wB * vcp.rB.y;
-        dvY += vBY + wB * vcp.rB.x;
-        // dv.subCombine(1, vA, 1, Vec2.cross(wA, vcp.rA));
-        dvX -= vAX + -wA * vcp.rA.y;
-        dvY -= vAY + wA * vcp.rA.x;
+        var dv = Vec2.zero();
+        dv.addCombine(1, vB, 1, Vec2.cross(wB, vcp.rB));
+        dv.subCombine(1, vA, 1, Vec2.cross(wA, vcp.rA));
         // Compute tangent force
-        // var vt = Vec2.dot(dv, tangent) - this.v_tangentSpeed;
-        var vt = dvX * tangent.x + dvY * tangent.y - this.v_tangentSpeed;
+        var vt = Vec2.dot(dv, tangent) - this.v_tangentSpeed;
         var lambda = vcp.tangentMass * -vt;
         // Clamp the accumulated force
         var maxFriction = friction * vcp.normalImpulse;
@@ -1869,57 +1731,34 @@ Contact.prototype.solveVelocityConstraint = function(step) {
         lambda = newImpulse - vcp.tangentImpulse;
         vcp.tangentImpulse = newImpulse;
         // Apply contact impulse
-        // var P = Vec2.mul(lambda, tangent);
-        var PX = lambda * tangent.x;
-        var PY = lambda * tangent.y;
-        // vA.subMul(mA, P);
-        vAX -= mA * PX;
-        vAX -= mA * PY;
-        // wA -= iA * Vec2.cross(vcp.rA, P);
-        wA -= iA * (vcp.rA.x * PY - vcp.rA.y * PX);
-        // vB.addMul(mB, P);
-        vBX += mB * PX;
-        vBY += mB * PY;
-        // wB += iB * Vec2.cross(vcp.rB, P);
-        wB += iB * (vcp.rB.x * PY - vcp.rB.y * PX);
+        var P = Vec2.mul(lambda, tangent);
+        vA.subMul(mA, P);
+        wA -= iA * Vec2.cross(vcp.rA, P);
+        vB.addMul(mB, P);
+        wB += iB * Vec2.cross(vcp.rB, P);
     }
     // Solve normal constraints
-    if (this.v_pointCount === 1 || step.blockSolve === false) {
+    if (this.v_pointCount == 1 || step.blockSolve == false) {
         for (var i = 0; i < this.v_pointCount; ++i) {
             var vcp = this.v_points[i];
             // VelocityConstraintPoint
             // Relative velocity at contact
-            // var dv = Vec2.zero();
-            var dvX = 0;
-            var dvY = 0;
-            // dv.addCombine(1, vB, 1, Vec2.cross(wB, vcp.rB));
-            dvX += vBX + -wB * vcp.rB.y;
-            dvY += vBY + wB * vcp.rB.x;
-            // dv.subCombine(1, vA, 1, Vec2.cross(wA, vcp.rA));
-            dvX -= vAX + -wA * vcp.rA.y;
-            dvY -= vAY + wA * vcp.rA.x;
+            var dv = Vec2.zero();
+            dv.addCombine(1, vB, 1, Vec2.cross(wB, vcp.rB));
+            dv.subCombine(1, vA, 1, Vec2.cross(wA, vcp.rA));
             // Compute normal impulse
-            // var vn = Vec2.dot(dv, normal);
-            var vn = dvX * normal.x + dvY * normal.y;
+            var vn = Vec2.dot(dv, normal);
             var lambda = -vcp.normalMass * (vn - vcp.velocityBias);
             // Clamp the accumulated impulse
             var newImpulse = Math.max(vcp.normalImpulse + lambda, 0);
             lambda = newImpulse - vcp.normalImpulse;
             vcp.normalImpulse = newImpulse;
             // Apply contact impulse
-            // var P = Vec2.mul(lambda, normal);
-            var PX = lambda * normal.x;
-            var PY = lambda * normal.y;
-            // vA.subMul(mA, P);
-            vAX -= mA * PX;
-            vAY -= mA * PY;
-            // wA -= iA * Vec2.cross(vcp.rA, P);
-            wA -= iA * (vcp.rA.x * PY - vcp.rA.y * PX);
-            // vB.addMul(mB, P);
-            vBX += mB * PX;
-            vBY += mB * PY;
-            // wB += iB * Vec2.cross(vcp.rB, P);
-            wB += iB * (vcp.rB.x * PY - vcp.rB.y * PX);
+            var P = Vec2.mul(lambda, normal);
+            vA.subMul(mA, P);
+            wA -= iA * Vec2.cross(vcp.rA, P);
+            vB.addMul(mB, P);
+            wB += iB * Vec2.cross(vcp.rB, P);
         }
     } else {
         // Block solver developed in collaboration with Dirk Gregorius (back in
@@ -1966,27 +1805,17 @@ Contact.prototype.solveVelocityConstraint = function(step) {
         // VelocityConstraintPoint
         var vcp2 = this.v_points[1];
         // VelocityConstraintPoint
-        // var a = Vec2.neo(vcp1.normalImpulse, vcp2.normalImpulse);
-        var aX = vcp1.normalImpulse;
-        var aY = vcp2.normalImpulse;
-        _ASSERT && common.assert(aX >= 0 && aY >= 0);
+        var a = Vec2.neo(vcp1.normalImpulse, vcp2.normalImpulse);
+        _ASSERT && common.assert(a.x >= 0 && a.y >= 0);
         // Relative velocity at contact
-        // var dv1 = svc_dv1.setZero().add(vB).add(Vec2.crossNumVec2_(wB, vcp1.rB, svc_t1)).sub(vA).sub(Vec2.crossNumVec2_(wA, vcp1.rA, svc_t2));
-        var dv1X = vBX + -wB * vcp1.rB.y - (vAX + -wA * vcp1.rA.y);
-        var dv1Y = vBY + wB * vcp1.rB.x - (vAY + wA * vcp1.rA.x);
-        // var dv2 = svc_dv2.setZero().add(vB).add(Vec2.crossNumVec2_(wB, vcp2.rB, svc_t1)).sub(vA).sub(Vec2.crossNumVec2_(wA, vcp2.rA, svc_t2));
-        var dv2X = vBX + -wB * vcp2.rB.y - (vAX + -wA * vcp2.rA.y);
-        var dv2Y = vBY + wB * vcp2.rB.x - (vAY + wA * vcp2.rA.x);
+        var dv1 = Vec2.zero().add(vB).add(Vec2.cross(wB, vcp1.rB)).sub(vA).sub(Vec2.cross(wA, vcp1.rA));
+        var dv2 = Vec2.zero().add(vB).add(Vec2.cross(wB, vcp2.rB)).sub(vA).sub(Vec2.cross(wA, vcp2.rA));
         // Compute normal velocity
-        var vn1 = dv1X * normal.x + dv1Y * normal.y;
-        var vn2 = dv2X * normal.x + dv2Y * normal.y;
-        // var b = Vec2.neo(vn1 - vcp1.velocityBias, vn2 - vcp2.velocityBias);
-        var bX = vn1 - vcp1.velocityBias;
-        var bY = vn2 - vcp2.velocityBias;
+        var vn1 = Vec2.dot(dv1, normal);
+        var vn2 = Vec2.dot(dv2, normal);
+        var b = Vec2.neo(vn1 - vcp1.velocityBias, vn2 - vcp2.velocityBias);
         // Compute b'
-        // b.sub(Mat22.mulVec2(this.v_K, a));
-        bX -= this.v_K.ex.x * aX + this.v_K.ey.x * aY;
-        bY -= this.v_K.ex.y * aX + this.v_K.ey.y * aY;
+        b.sub(Mat22.mulVec2(this.v_K, a));
         var k_errorTol = .001;
         // NOT_USED(k_errorTol);
         for (;;) {
@@ -1999,44 +1828,29 @@ Contact.prototype.solveVelocityConstraint = function(step) {
             //
             // x = - inv(A) * b'
             //
-            // var x = Mat22.mulVec2(this.v_normalMass, b).neg();
-            var xX = -(this.v_normalMass.ex.x * bX + this.v_normalMass.ey.x * bY);
-            var xY = -(this.v_normalMass.ex.y * bX + this.v_normalMass.ey.y * bY);
-            if (xX >= 0 && xY >= 0) {
+            var x = Mat22.mulVec2(this.v_normalMass, b).neg();
+            if (x.x >= 0 && x.y >= 0) {
                 // Get the incremental impulse
-                var dX = xX - aX;
-                var dY = xY - aY;
+                var d = Vec2.sub(x, a);
                 // Apply incremental impulse
-                // var P1 = Vec2.mul(d.x, normal);
-                var P1X = dX * normal.x;
-                var P1Y = dX * normal.y;
-                // var P2 = Vec2.mul(d.y, normal);
-                var P2X = dY * normal.x;
-                var P2Y = dY * normal.y;
-                // vA.subCombine(mA, P1, mA, P2);
-                vAX -= mA * P1X + mA * P2X;
-                vAY -= mA * P1Y + mA * P2Y;
-                // wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
-                wA -= iA * (vcp1.rA.x * P1Y - vcp1.rA.y * P1X + vcp2.rA.x * P2Y - vcp2.rA.y * P2X);
-                // vB.addCombine(mB, P1, mB, P2);
-                vBX += mB * P1X + mB * P2X;
-                vBY += mB * P1Y + mB * P2Y;
-                // wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
-                wB += iB * (vcp1.rB.x * P1Y - vcp1.rB.y * P1X + vcp2.rB.x * P2Y - vcp2.rB.y * P2X);
+                var P1 = Vec2.mul(d.x, normal);
+                var P2 = Vec2.mul(d.y, normal);
+                vA.subCombine(mA, P1, mA, P2);
+                wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
+                vB.addCombine(mB, P1, mB, P2);
+                wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
                 // Accumulate
-                vcp1.normalImpulse = xX;
-                vcp2.normalImpulse = xY;
+                vcp1.normalImpulse = x.x;
+                vcp2.normalImpulse = x.y;
                 if (DEBUG_SOLVER) {
-                    // // Postconditions
-                    // dv1 = vB + Vec2.cross(wB, vcp1.rB) - vA - Vec2.cross(wA, vcp1.rA);
-                    // dv2 = vB + Vec2.cross(wB, vcp2.rB) - vA - Vec2.cross(wA, vcp2.rA);
-                    //
-                    // // Compute normal velocity
-                    // vn1 = Vec2.dot(dv1, normal);
-                    // vn2 = Vec2.dot(dv2, normal);
-                    //
-                    _ASSERT && common.assert(Math.abs(vn1 - vcp1.velocityBias) < k_errorTol);
-                    _ASSERT && common.assert(Math.abs(vn2 - vcp2.velocityBias) < k_errorTol);
+                    // Postconditions
+                    dv1 = vB + Vec2.cross(wB, vcp1.rB) - vA - Vec2.cross(wA, vcp1.rA);
+                    dv2 = vB + Vec2.cross(wB, vcp2.rB) - vA - Vec2.cross(wA, vcp2.rA);
+                    // Compute normal velocity
+                    vn1 = Dot(dv1, normal);
+                    vn2 = Dot(dv2, normal);
+                    _ASSERT && common.assert(Abs(vn1 - vcp1.velocityBias) < k_errorTol);
+                    _ASSERT && common.assert(Abs(vn2 - vcp2.velocityBias) < k_errorTol);
                 }
                 break;
             }
@@ -2046,46 +1860,30 @@ Contact.prototype.solveVelocityConstraint = function(step) {
             // 0 = a11 * x1 + a12 * 0 + b1'
             // vn2 = a21 * x1 + a22 * 0 + b2'
             //
-            xX = -vcp1.normalMass * bX;
-            xY = 0;
+            x.x = -vcp1.normalMass * b.x;
+            x.y = 0;
             vn1 = 0;
-            vn2 = this.v_K.ex.y * xX + bY;
-            if (xX >= 0 && vn2 >= 0) {
+            vn2 = this.v_K.ex.y * x.x + b.y;
+            if (x.x >= 0 && vn2 >= 0) {
                 // Get the incremental impulse
-                var dX = xX - aX;
-                var dY = xY - aY;
+                var d = Vec2.sub(x, a);
                 // Apply incremental impulse
-                // var P1 = Vec2.mul(d.x, normal);
-                var P1X = dX * normal.x;
-                var P1Y = dX * normal.y;
-                // var P2 = Vec2.mul(d.y, normal);
-                var P2X = dY * normal.x;
-                var P2Y = dY * normal.y;
-                // vA.subCombine(mA, P1, mA, P2);
-                vAX -= mA * P1X + mA * P2X;
-                vAY -= mA * P1Y + mA * P2Y;
-                // wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
-                wA -= iA * (vcp1.rA.x * P1Y - vcp1.rA.y * P1X + vcp2.rA.x * P2Y - vcp2.rA.y * P2X);
-                // vB.addCombine(mB, P1, mB, P2);
-                vBX += mB * P1X + mB * P2X;
-                vBY += mB * P1Y + mB * P2Y;
-                // wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
-                wB += iB * (vcp1.rB.x * P1Y - vcp1.rB.y * P1X + vcp2.rB.x * P2Y - vcp2.rB.y * P2X);
+                var P1 = Vec2.mul(d.x, normal);
+                var P2 = Vec2.mul(d.y, normal);
+                vA.subCombine(mA, P1, mA, P2);
+                wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
+                vB.addCombine(mB, P1, mB, P2);
+                wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
                 // Accumulate
-                vcp1.normalImpulse = xX;
-                vcp2.normalImpulse = xY;
+                vcp1.normalImpulse = x.x;
+                vcp2.normalImpulse = x.y;
                 if (DEBUG_SOLVER) {
-                    // // Postconditions
-                    // var dv1B = Vec2.add(vB, Vec2.cross(wB, vcp1.rB));
-                    // var dv1A = Vec2.add(vA, Vec2.cross(wA, vcp1.rA));
-                    // // var dv1 = Vec2.sub(dv1B, dv1A);
-                    // var dv1X = dv1B.x - dv1A.x;
-                    // var dv1Y = dv1B.y - dv1A.y;
-                    //
-                    // // Compute normal velocity
-                    // // vn1 = Vec2.dot(dv1, normal);
-                    // vn1 = dv1X * normal.x + dv1Y * normal.y;
-                    //
+                    // Postconditions
+                    var dv1B = Vec2.add(vB, Vec2.cross(wB, vcp1.rB));
+                    var dv1A = Vec2.add(vA, Vec2.cross(wA, vcp1.rA));
+                    var dv1 = Vec2.sub(dv1B, dv1A);
+                    // Compute normal velocity
+                    vn1 = Vec2.dot(dv1, normal);
                     _ASSERT && common.assert(Math.abs(vn1 - vcp1.velocityBias) < k_errorTol);
                 }
                 break;
@@ -2096,44 +1894,30 @@ Contact.prototype.solveVelocityConstraint = function(step) {
             // vn1 = a11 * 0 + a12 * x2 + b1'
             // 0 = a21 * 0 + a22 * x2 + b2'
             //
-            xX = 0;
-            xY = -vcp2.normalMass * bY;
-            vn1 = this.v_K.ey.x * xY + bX;
+            x.x = 0;
+            x.y = -vcp2.normalMass * b.y;
+            vn1 = this.v_K.ey.x * x.y + b.x;
             vn2 = 0;
-            if (xY >= 0 && vn1 >= 0) {
+            if (x.y >= 0 && vn1 >= 0) {
                 // Resubstitute for the incremental impulse
-                // var d = Vec2.sub(x, a);
-                var dX = xX - aX;
-                var dY = xY - aY;
+                var d = Vec2.sub(x, a);
                 // Apply incremental impulse
-                // var P1 = Vec2.mul(d.x, normal);
-                var P1X = dX * normal.x;
-                var P1Y = dX * normal.y;
-                // var P2 = Vec2.mul(d.y, normal);
-                var P2X = dY * normal.x;
-                var P2Y = dY * normal.y;
-                // vA.subCombine(mA, P1, mA, P2);
-                vAX -= mA * P1X + mA * P2X;
-                vAY -= mA * P1Y + mA * P2Y;
-                // wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
-                wA -= iA * (vcp1.rA.x * P1Y - vcp1.rA.y * P1X + vcp2.rA.x * P2Y - vcp2.rA.y * P2X);
-                // vB.addCombine(mB, P1, mB, P2);
-                vBX += mB * P1X + mB * P2X;
-                vBY += mB * P1Y + mB * P2Y;
-                // wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
-                wB += iB * (vcp1.rB.x * P1Y - vcp1.rB.y * P1X + vcp2.rB.x * P2Y - vcp2.rB.y * P2X);
+                var P1 = Vec2.mul(d.x, normal);
+                var P2 = Vec2.mul(d.y, normal);
+                vA.subCombine(mA, P1, mA, P2);
+                wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
+                vB.addCombine(mB, P1, mB, P2);
+                wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
                 // Accumulate
-                vcp1.normalImpulse = xX;
-                vcp2.normalImpulse = xY;
+                vcp1.normalImpulse = x.x;
+                vcp2.normalImpulse = x.y;
                 if (DEBUG_SOLVER) {
-                    // // Postconditions
-                    // var dv2B = Vec2.add(vB, Vec2.cross(wB, vcp2.rB));
-                    // var dv2A = Vec2.add(vA, Vec2.cross(wA, vcp2.rA));
-                    // var dv1 = Vec2.sub(dv2B, dv2A);
-                    //
-                    // // Compute normal velocity
-                    // vn2 = Vec2.dot(dv2, normal);
-                    //
+                    // Postconditions
+                    var dv2B = Vec2.add(vB, Vec2.cross(wB, vcp2.rB));
+                    var dv2A = Vec2.add(vA, Vec2.cross(wA, vcp2.rA));
+                    var dv1 = Vec2.sub(dv2B, dv2A);
+                    // Compute normal velocity
+                    vn2 = Vec2.dot(dv2, normal);
                     _ASSERT && common.assert(Math.abs(vn2 - vcp2.velocityBias) < k_errorTol);
                 }
                 break;
@@ -2144,35 +1928,23 @@ Contact.prototype.solveVelocityConstraint = function(step) {
             // vn1 = b1
             // vn2 = b2;
             //
-            xX = 0;
-            xY = 0;
-            vn1 = bX;
-            vn2 = bY;
+            x.x = 0;
+            x.y = 0;
+            vn1 = b.x;
+            vn2 = b.y;
             if (vn1 >= 0 && vn2 >= 0) {
                 // Resubstitute for the incremental impulse
-                // var d = Vec2.sub(x, a);
-                var dX = xX - aX;
-                var dY = xY - aY;
+                var d = Vec2.sub(x, a);
                 // Apply incremental impulse
-                // var P1 = Vec2.mul(d.x, normal);
-                var P1X = dX * normal.x;
-                var P1Y = dX * normal.y;
-                // var P2 = Vec2.mul(d.y, normal);
-                var P2X = dY * normal.x;
-                var P2Y = dY * normal.y;
-                // vA.subCombine(mA, P1, mA, P2);
-                vAX -= mA * P1X + mA * P2X;
-                vAY -= mA * P1Y + mA * P2Y;
-                // wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
-                wA -= iA * (vcp1.rA.x * P1Y - vcp1.rA.y * P1X + vcp2.rA.x * P2Y - vcp2.rA.y * P2X);
-                // vB.addCombine(mB, P1, mB, P2);
-                vBX += mB * P1X + mB * P2X;
-                vBY += mB * P1Y + mB * P2Y;
-                // wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
-                wB += iB * (vcp1.rB.x * P1Y - vcp1.rB.y * P1X + vcp2.rB.x * P2Y - vcp2.rB.y * P2X);
+                var P1 = Vec2.mul(d.x, normal);
+                var P2 = Vec2.mul(d.y, normal);
+                vA.subCombine(mA, P1, mA, P2);
+                wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
+                vB.addCombine(mB, P1, mB, P2);
+                wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
                 // Accumulate
-                vcp1.normalImpulse = xX;
-                vcp2.normalImpulse = xY;
+                vcp1.normalImpulse = x.x;
+                vcp2.normalImpulse = x.y;
                 break;
             }
             // No solution, give up. This is hit sometimes, but it doesn't seem to
@@ -2180,13 +1952,9 @@ Contact.prototype.solveVelocityConstraint = function(step) {
             break;
         }
     }
-    // velocityA.v.set(vA);
-    velocityA.v.x = vAX;
-    velocityA.v.y = vAY;
+    velocityA.v.set(vA);
     velocityA.w = wA;
-    // velocityB.v.set(vB);
-    velocityB.v.x = vBX;
-    velocityB.v.y = vBY;
+    velocityB.v.set(vB);
     velocityB.w = wB;
 };
 
@@ -2208,12 +1976,6 @@ function mixRestitution(restitution1, restitution2) {
 
 var s_registers = [];
 
-var contactPool = new Pool({
-    create: function() {
-        return new Contact();
-    }
-});
-
 /**
  * @param fn function(fixtureA, indexA, fixtureB, indexB) Contact
  */
@@ -2230,11 +1992,9 @@ Contact.create = function(fixtureA, indexA, fixtureB, indexB) {
     // TODO: pool contacts
     var contact, evaluateFcn;
     if (evaluateFcn = s_registers[typeA] && s_registers[typeA][typeB]) {
-        contact = contactPool.allocate();
-        contact.init(fixtureA, indexA, fixtureB, indexB, evaluateFcn);
+        contact = new Contact(fixtureA, indexA, fixtureB, indexB, evaluateFcn);
     } else if (evaluateFcn = s_registers[typeB] && s_registers[typeB][typeA]) {
-        contact = contactPool.allocate();
-        contact.init(fixtureB, indexB, fixtureA, indexA, evaluateFcn);
+        contact = new Contact(fixtureB, indexB, fixtureA, indexA, evaluateFcn);
     } else {
         return null;
     }
@@ -2264,7 +2024,7 @@ Contact.create = function(fixtureA, indexA, fixtureB, indexB) {
     }
     bodyB.m_contactList = contact.m_nodeB;
     // Wake up the bodies
-    if (!fixtureA.isSensor() && !fixtureB.isSensor()) {
+    if (fixtureA.isSensor() == false && fixtureB.isSensor() == false) {
         bodyA.setAwake(true);
         bodyB.setAwake(true);
     }
@@ -2286,7 +2046,7 @@ Contact.destroy = function(contact, listener) {
     if (contact.m_nodeA.next) {
         contact.m_nodeA.next.prev = contact.m_nodeA.prev;
     }
-    if (contact.m_nodeA === bodyA.m_contactList) {
+    if (contact.m_nodeA == bodyA.m_contactList) {
         bodyA.m_contactList = contact.m_nodeA.next;
     }
     // Remove from body 2
@@ -2296,10 +2056,10 @@ Contact.destroy = function(contact, listener) {
     if (contact.m_nodeB.next) {
         contact.m_nodeB.next.prev = contact.m_nodeB.prev;
     }
-    if (contact.m_nodeB === bodyB.m_contactList) {
+    if (contact.m_nodeB == bodyB.m_contactList) {
         bodyB.m_contactList = contact.m_nodeB.next;
     }
-    if (contact.m_manifold.pointCount > 0 && !fixtureA.isSensor() && !fixtureB.isSensor()) {
+    if (contact.m_manifold.pointCount > 0 && fixtureA.isSensor() == false && fixtureB.isSensor() == false) {
         bodyA.setAwake(true);
         bodyB.setAwake(true);
     }
@@ -2311,11 +2071,10 @@ Contact.destroy = function(contact, listener) {
     if (typeof destroyFcn === "function") {
         destroyFcn(contact);
     }
-    contactPool.release(contact);
 };
 
 
-},{"./Manifold":6,"./Settings":7,"./collision/Distance":13,"./common/Mat22":16,"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/Pool":48,"./util/common":50}],4:[function(require,module,exports){
+},{"./Manifold":6,"./Settings":7,"./collision/Distance":13,"./common/Mat22":16,"./common/Math":18,"./common/Rot":20,"./common/Transform":22,"./common/Vec2":23,"./util/common":50}],4:[function(require,module,exports){
 var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
 var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
@@ -2928,22 +2687,12 @@ Manifold.e_face = 1;
  * @prop pointCount The number of manifold points
  */
 function Manifold() {
-    this.type = -1;
+    this.type;
     this.localNormal = Vec2.zero();
     this.localPoint = Vec2.zero();
     this.points = [ new ManifoldPoint(), new ManifoldPoint() ];
     this.pointCount = 0;
 }
-
-Manifold.prototype.init = function() {
-    this.type = -1;
-    this.localNormal.setZero();
-    this.localPoint.setZero();
-    this.points[0].init();
-    this.points[1].init();
-    this.pointCount = 0;
-    return this;
-};
 
 /**
  * A manifold point is a contact point belonging to a contact manifold. It holds
@@ -2970,13 +2719,6 @@ function ManifoldPoint() {
     this.id = new ContactID();
 }
 
-ManifoldPoint.prototype.init = function() {
-    this.localPoint.setZero();
-    this.normalImpulse = 0;
-    this.tangentImpulse = 0;
-    this.id.init();
-};
-
 /**
  * Contact ids to facilitate warm starting.
  * 
@@ -2987,10 +2729,6 @@ ManifoldPoint.prototype.init = function() {
 function ContactID() {
     this.cf = new ContactFeature();
 }
-
-ContactID.prototype.init = function() {
-    this.cf.init();
-};
 
 Object.defineProperty(ContactID.prototype, "key", {
     get: function() {
@@ -3019,13 +2757,6 @@ function ContactFeature() {
     this.typeA;
     this.typeB;
 }
-
-ContactFeature.prototype.init = function() {
-    this.indexA = 0;
-    this.indexB = 0;
-    this.typeA = 0;
-    this.typeB = 0;
-};
 
 ContactFeature.prototype.set = function(o) {
     this.indexA = o.indexA;
@@ -3185,11 +2916,6 @@ function ClipVertex() {
 ClipVertex.prototype.set = function(o) {
     this.v.set(o.v);
     this.id.set(o.id);
-};
-
-ClipVertex.prototype.init = function() {
-    this.v.setZero();
-    this.id.init();
 };
 
 /**
@@ -4914,7 +4640,7 @@ World.prototype.createContact = function(proxyA, proxyB) {
     var bodyA = fixtureA.getBody();
     var bodyB = fixtureB.getBody();
     // Are the fixtures on the same body?
-    if (bodyA === bodyB) {
+    if (bodyA == bodyB) {
         return;
     }
     // TODO_ERIN use a hash table to remove a potential bottleneck when both
@@ -4923,26 +4649,26 @@ World.prototype.createContact = function(proxyA, proxyB) {
     var edge = bodyB.getContactList();
     // ContactEdge
     while (edge) {
-        if (edge.other === bodyA) {
+        if (edge.other == bodyA) {
             var fA = edge.contact.getFixtureA();
             var fB = edge.contact.getFixtureB();
             var iA = edge.contact.getChildIndexA();
             var iB = edge.contact.getChildIndexB();
-            if (fA === fixtureA && fB === fixtureB && iA === indexA && iB === indexB) {
+            if (fA == fixtureA && fB == fixtureB && iA == indexA && iB == indexB) {
                 // A contact already exists.
                 return;
             }
-            if (fA === fixtureB && fB === fixtureA && iA === indexB && iB === indexA) {
+            if (fA == fixtureB && fB == fixtureA && iA == indexB && iB == indexA) {
                 // A contact already exists.
                 return;
             }
         }
         edge = edge.next;
     }
-    if (bodyB.shouldCollide(bodyA) === false) {
+    if (bodyB.shouldCollide(bodyA) == false) {
         return;
     }
-    if (fixtureB.shouldCollide(fixtureA) === false) {
+    if (fixtureB.shouldCollide(fixtureA) == false) {
         return;
     }
     // Call the factory.
@@ -5404,7 +5130,7 @@ var DynamicTree = require("./DynamicTree");
 module.exports = BroadPhase;
 
 /**
- * The broad-phase wraps and extends a dynamic-tree to keep track of moved
+ * The broad-phase wraps and extends a dynamic-tree keep to track of moved
  * objects and query them on update.
  */
 function BroadPhase() {
@@ -6255,22 +5981,6 @@ var AABB = require("./AABB");
 
 module.exports = DynamicTree;
 
-var aabbPool = new Pool({
-    create: function() {
-        return new AABB();
-    },
-    release: function(aabb) {
-        aabb.lowerBound.setZero();
-        aabb.upperBound.setZero();
-    }
-});
-
-var nodePool = new Pool({
-    create: function() {
-        return new TreeNode();
-    }
-});
-
 /**
  * A node in the dynamic tree. The client does not interact with this directly.
  * 
@@ -6309,6 +6019,11 @@ function DynamicTree() {
     this.m_root = null;
     this.m_nodes = {};
     this.m_lastProxyId = 0;
+    this.m_pool = new Pool({
+        create: function() {
+            return new TreeNode();
+        }
+    });
 }
 
 /**
@@ -6334,7 +6049,7 @@ DynamicTree.prototype.getFatAABB = function(id) {
 };
 
 DynamicTree.prototype.allocateNode = function() {
-    var node = nodePool.allocate();
+    var node = this.m_pool.allocate();
     node.id = ++this.m_lastProxyId;
     node.userData = null;
     node.parent = null;
@@ -6346,7 +6061,7 @@ DynamicTree.prototype.allocateNode = function() {
 };
 
 DynamicTree.prototype.freeNode = function(node) {
-    nodePool.release(node);
+    this.m_pool.release(node);
     node.height = -1;
     delete this.m_nodes[node.id];
 };
@@ -6362,7 +6077,7 @@ DynamicTree.prototype.createProxy = function(aabb, userData) {
     var node = this.allocateNode();
     node.aabb.set(aabb);
     // Fatten the aabb.
-    node.aabb.extend(Settings.aabbExtension);
+    AABB.extend(node.aabb, Settings.aabbExtension);
     node.userData = userData;
     node.height = 0;
     this.insertLeaf(node);
@@ -6435,10 +6150,9 @@ DynamicTree.prototype.insertLeaf = function(leaf) {
         var child1 = index.child1;
         var child2 = index.child2;
         var area = index.aabb.getPerimeter();
-        var combinedAABB = aabbPool.allocate();
+        var combinedAABB = new AABB();
         combinedAABB.combine(index.aabb, leafAABB);
         var combinedArea = combinedAABB.getPerimeter();
-        aabbPool.release(combinedAABB);
         // Cost of creating a new parent for this node and the new leaf
         var cost = 2 * combinedArea;
         // Minimum cost of pushing the leaf further down the tree
@@ -6446,32 +6160,28 @@ DynamicTree.prototype.insertLeaf = function(leaf) {
         // Cost of descending into child1
         var cost1;
         if (child1.isLeaf()) {
-            var aabb = aabbPool.allocate();
+            var aabb = new AABB();
             aabb.combine(leafAABB, child1.aabb);
             cost1 = aabb.getPerimeter() + inheritanceCost;
-            aabbPool.release(aabb);
         } else {
-            var aabb = aabbPool.allocate();
+            var aabb = new AABB();
             aabb.combine(leafAABB, child1.aabb);
             var oldArea = child1.aabb.getPerimeter();
             var newArea = aabb.getPerimeter();
             cost1 = newArea - oldArea + inheritanceCost;
-            aabbPool.release(aabb);
         }
         // Cost of descending into child2
         var cost2;
         if (child2.isLeaf()) {
-            var aabb = aabbPool.allocate();
+            var aabb = new AABB();
             aabb.combine(leafAABB, child2.aabb);
             cost2 = aabb.getPerimeter() + inheritanceCost;
-            aabbPool.release(aabb);
         } else {
-            var aabb = aabbPool.allocate();
+            var aabb = new AABB();
             aabb.combine(leafAABB, child2.aabb);
             var oldArea = child2.aabb.getPerimeter();
             var newArea = aabb.getPerimeter();
             cost2 = newArea - oldArea + inheritanceCost;
-            aabbPool.release(aabb);
         }
         // Descend according to the minimum cost.
         if (cost < cost1 && cost < cost2) {
@@ -6749,7 +6459,9 @@ DynamicTree.prototype.validateMetrics = function(node) {
     var height2 = this.m_nodes[child2].height;
     var height = 1 + Math.max(height1, height2);
     _ASSERT && common.assert(node.height == height);
-    _ASSERT && common.assert(AABB.areEqual(new AABB().combine(child1.aabb, child2.aabb), node.aabb));
+    var aabb = new AABB();
+    aabb.combine(child1.aabb, child2.aabb);
+    _ASSERT && common.assert(AABB.areEqual(aabb, node.aabb));
     this.validateMetrics(child1);
     this.validateMetrics(child2);
 };
@@ -6809,7 +6521,7 @@ DynamicTree.prototype.rebuildBottomUp = function() {
             var aabbi = nodes[i].aabb;
             for (var j = i + 1; j < count; ++j) {
                 var aabbj = nodes[j].aabb;
-                var b = aabbPool.allocate();
+                var b = new AABB();
                 b.combine(aabbi, aabbj);
                 var cost = b.getPerimeter();
                 if (cost < minCost) {
@@ -6817,7 +6529,6 @@ DynamicTree.prototype.rebuildBottomUp = function() {
                     jMin = j;
                     minCost = cost;
                 }
-                aabbPool.release(b);
             }
         }
         var child1 = nodes[iMin];
@@ -7629,13 +7340,6 @@ Mat22.mulVec2 = function(mx, v) {
     return Vec2.neo(x, y);
 };
 
-Mat22.mulVec2_ = function(mx, v, _) {
-    _ASSERT && Vec2.assert(v);
-    var x = mx.ex.x * v.x + mx.ey.x * v.y;
-    var y = mx.ex.y * v.x + mx.ey.y * v.y;
-    return _.set(x, y);
-};
-
 Mat22.mulMat22 = function(mx, v) {
     _ASSERT && Mat22.assert(v);
     return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
@@ -8084,7 +7788,6 @@ Rot.assert = function(o) {
 Rot.prototype.setIdentity = function() {
     this.s = 0;
     this.c = 1;
-    return this;
 };
 
 Rot.prototype.set = function(angle) {
@@ -8177,12 +7880,6 @@ Rot.mulVec2 = function(rot, m) {
     return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
 };
 
-Rot.mulVec2_ = function(rot, m, _) {
-    _ASSERT && Rot.assert(rot);
-    _ASSERT && Vec2.assert(m);
-    return _.set(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
-};
-
 Rot.mulSub = function(rot, v, w) {
     var x = rot.c * (v.x - w.x) - rot.s * (v.y - w.y);
     var y = rot.s * (v.x - w.y) + rot.c * (v.y - w.y);
@@ -8227,26 +7924,9 @@ Rot.mulTRot = function(rot, m) {
     return qr;
 };
 
-Rot.mulTRot_ = function(rot, m, _) {
-    _ASSERT && Rot.assert(m);
-    // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
-    // [-qs qc] [rs rc] [-qs*rc+qc*rs qs*rs+qc*rc]
-    // s = qc * rs - qs * rc
-    // c = qc * rc + qs * rs
-    var qr = _.setIdentity();
-    qr.s = rot.c * m.s - rot.s * m.c;
-    qr.c = rot.c * m.c + rot.s * m.s;
-    return qr;
-};
-
 Rot.mulTVec2 = function(rot, m) {
     _ASSERT && Vec2.assert(m);
     return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
-};
-
-Rot.mulTVec2_ = function(rot, m, _) {
-    _ASSERT && Vec2.assert(m);
-    return _.set(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
 };
 
 
@@ -8430,7 +8110,6 @@ Transform.identity = function() {
 Transform.prototype.setIdentity = function() {
     this.p.setZero();
     this.q.setIdentity();
-    return this;
 };
 
 /**
@@ -8521,14 +8200,6 @@ Transform.mulVec2 = function(a, b) {
     return Vec2.neo(x, y);
 };
 
-Transform.mulVec2_ = function(a, b, _) {
-    _ASSERT && Transform.assert(a);
-    _ASSERT && Vec2.assert(b);
-    var x = a.q.c * b.x - a.q.s * b.y + a.p.x;
-    var y = a.q.s * b.x + a.q.c * b.y + a.p.y;
-    return _.set(x, y);
-};
-
 Transform.mulXf = function(a, b) {
     _ASSERT && Transform.assert(a);
     _ASSERT && Transform.assert(b);
@@ -8579,16 +8250,6 @@ Transform.mulTVec2 = function(a, b) {
     return Vec2.neo(x, y);
 };
 
-Transform.mulTVec2_ = function(a, b, _) {
-    _ASSERT && Transform.assert(a);
-    _ASSERT && Vec2.assert(b);
-    var px = b.x - a.p.x;
-    var py = b.y - a.p.y;
-    var x = a.q.c * px + a.q.s * py;
-    var y = -a.q.s * px + a.q.c * py;
-    return _.set(x, y);
-};
-
 Transform.mulTXf = function(a, b) {
     _ASSERT && Transform.assert(a);
     _ASSERT && Transform.assert(b);
@@ -8598,18 +8259,6 @@ Transform.mulTXf = function(a, b) {
     xf.q.set(Rot.mulTRot(a.q, b.q));
     xf.p.set(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
     return xf;
-};
-
-var _vt1 = Vec2.zero();
-
-Transform.mulTXf_ = function(a, b, _) {
-    _ASSERT && Transform.assert(a);
-    _ASSERT && Transform.assert(b);
-    // v2 = A.q' * (B.q * v1 + B.p - A.p)
-    // = A.q' * B.q * v1 + A.q' * (B.p - A.p)
-    Rot.mulTRot_(a.q, b.q, _.q);
-    Rot.mulTVec2_(a.q, Vec2.sub(b.p, a.p, _vt1), _.p);
-    return _;
 };
 
 
@@ -8710,18 +8359,6 @@ Vec2.prototype.set = function(x, y) {
         this.x = x;
         this.y = y;
     }
-    return this;
-};
-
-Vec2.prototype.setXY = function(x, y) {
-    this.x = x;
-    this.y = y;
-    return this;
-};
-
-Vec2.prototype.setVec2 = function(x) {
-    this.x = x.x;
-    this.y = x.y;
     return this;
 };
 
@@ -8981,18 +8618,6 @@ Vec2.cross = function(v, w) {
     }
 };
 
-Vec2.crossVec2Vec2 = function(v, w) {
-    return v.x * w.y - v.y * w.x;
-};
-
-Vec2.crossNumVec2_ = function(v, w, _) {
-    return _.setXY(-v * w.y, v * w.x);
-};
-
-Vec2.crossVec2Num_ = function(v, w, _) {
-    return _.setXY(w * v.y, -w * v.x);
-};
-
 /**
  * Returns `a + (v x w)`
  */
@@ -9030,20 +8655,10 @@ Vec2.combine = function(a, v, b, w) {
     return Vec2.zero().setCombine(a, v, b, w);
 };
 
-Vec2.combine_ = function(a, v, b, w, _) {
-    return _.setCombine(a, v, b, w);
-};
-
 Vec2.sub = function(v, w) {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
     return Vec2.neo(v.x - w.x, v.y - w.y);
-};
-
-Vec2.sub_ = function(v, w, _) {
-    _ASSERT && Vec2.assert(v);
-    _ASSERT && Vec2.assert(w);
-    return _.setXY(v.x - w.x, v.y - w.y);
 };
 
 Vec2.mul = function(a, b) {
@@ -9058,14 +8673,6 @@ Vec2.mul = function(a, b) {
     }
 };
 
-Vec2.mulVec2Num_ = function(a, b, _) {
-    return _.setXY(a.x * b, a.y * b);
-};
-
-Vec2.mulNumVec2_ = function(a, b, _) {
-    return _.setXY(a * b.x, a * b.y);
-};
-
 Vec2.prototype.neg = function() {
     this.x = -this.x;
     this.y = -this.y;
@@ -9075,11 +8682,6 @@ Vec2.prototype.neg = function() {
 Vec2.neg = function(v) {
     _ASSERT && Vec2.assert(v);
     return Vec2.neo(-v.x, -v.y);
-};
-
-Vec2.neg_ = function(v, _) {
-    _ASSERT && Vec2.assert(v);
-    return _.setXY(-v.x, -v.y);
 };
 
 Vec2.abs = function(v) {
@@ -14040,9 +13642,17 @@ var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 var common = require("../util/common");
 
+var create = require("../util/create");
+
+var Math = require("../common/Math");
+
 var Transform = require("../common/Transform");
 
 var Vec2 = require("../common/Vec2");
+
+var Settings = require("../Settings");
+
+var Shape = require("../Shape");
 
 var Contact = require("../Contact");
 
@@ -14058,14 +13668,10 @@ function CircleCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, ind
     CollideCircles(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
 }
 
-var cc_pA = Vec2.zero();
-
-var cc_pB = Vec2.zero();
-
 function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
     manifold.pointCount = 0;
-    var pA = Transform.mulVec2_(xfA, circleA.m_p, cc_pA);
-    var pB = Transform.mulVec2_(xfB, circleB.m_p, cc_pB);
+    var pA = Transform.mulVec2(xfA, circleA.m_p);
+    var pB = Transform.mulVec2(xfB, circleB.m_p);
     var distSqr = Vec2.distanceSquared(pB, pA);
     var rA = circleA.m_radius;
     var rB = circleB.m_radius;
@@ -14088,7 +13694,7 @@ function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
 exports.CollideCircles = CollideCircles;
 
 
-},{"../Contact":3,"../Manifold":6,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"./CircleShape":40}],42:[function(require,module,exports){
+},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"./CircleShape":40}],42:[function(require,module,exports){
 var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
 var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
@@ -14099,11 +13705,19 @@ var Math = require("../common/Math");
 
 var Transform = require("../common/Transform");
 
+var Rot = require("../common/Rot");
+
 var Vec2 = require("../common/Vec2");
+
+var AABB = require("../collision/AABB");
+
+var Settings = require("../Settings");
 
 var Manifold = require("../Manifold");
 
 var Contact = require("../Contact");
+
+var Shape = require("../Shape");
 
 var CircleShape = require("./CircleShape");
 
@@ -14112,24 +13726,16 @@ var PolygonShape = require("./PolygonShape");
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
 
 function PolygonCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-    _ASSERT && common.assert(fixtureA.getType() === PolygonShape.TYPE);
-    _ASSERT && common.assert(fixtureB.getType() === CircleShape.TYPE);
+    _ASSERT && common.assert(fixtureA.getType() == PolygonShape.TYPE);
+    _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
     CollidePolygonCircle(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
 }
-
-var cpc_c = Vec2.zero();
-
-var cpc_cLocal = Vec2.zero();
-
-var cpc_t1 = Vec2.zero();
-
-var cpc_t2 = Vec2.zero();
 
 function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
     manifold.pointCount = 0;
     // Compute circle position in the frame of the polygon.
-    var c = Transform.mulVec2_(xfB, circleB.m_p, cpc_c);
-    var cLocal = Transform.mulTVec2_(xfA, c, cpc_cLocal);
+    var c = Transform.mulVec2(xfB, circleB.m_p);
+    var cLocal = Transform.mulTVec2(xfA, c);
     // Find the min separating edge.
     var normalIndex = 0;
     var separation = -Infinity;
@@ -14138,7 +13744,7 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
     var vertices = polygonA.m_vertices;
     var normals = polygonA.m_normals;
     for (var i = 0; i < vertexCount; ++i) {
-        var s = Vec2.dot(normals[i], Vec2.sub_(cLocal, vertices[i], cpc_t1));
+        var s = Vec2.dot(normals[i], Vec2.sub(cLocal, vertices[i]));
         if (s > radius) {
             // Early out.
             return;
@@ -14159,7 +13765,7 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
         manifold.type = Manifold.e_faceA;
         manifold.localNormal.set(normals[normalIndex]);
         manifold.localPoint.setCombine(.5, v1, .5, v2);
-        manifold.points[0].localPoint.set(circleB.m_p);
+        manifold.points[0].localPoint = circleB.m_p;
         // manifold.points[0].id.key = 0;
         manifold.points[0].id.cf.indexA = 0;
         manifold.points[0].id.cf.typeA = Manifold.e_vertex;
@@ -14168,8 +13774,8 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
         return;
     }
     // Compute barycentric coordinates
-    var u1 = Vec2.dot(Vec2.sub_(cLocal, v1, cpc_t1), Vec2.sub_(v2, v1, cpc_t2));
-    var u2 = Vec2.dot(Vec2.sub_(cLocal, v2, cpc_t1), Vec2.sub_(v1, v2, cpc_t2));
+    var u1 = Vec2.dot(Vec2.sub(cLocal, v1), Vec2.sub(v2, v1));
+    var u2 = Vec2.dot(Vec2.sub(cLocal, v2), Vec2.sub(v1, v2));
     if (u1 <= 0) {
         if (Vec2.distanceSquared(cLocal, v1) > radius * radius) {
             return;
@@ -14178,7 +13784,7 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
         manifold.type = Manifold.e_faceA;
         manifold.localNormal.setCombine(1, cLocal, -1, v1);
         manifold.localNormal.normalize();
-        manifold.localPoint.set(v1);
+        manifold.localPoint = v1;
         manifold.points[0].localPoint.set(circleB.m_p);
         // manifold.points[0].id.key = 0;
         manifold.points[0].id.cf.indexA = 0;
@@ -14220,16 +13826,26 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 }
 
 
-},{"../Contact":3,"../Manifold":6,"../common/Math":18,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"./CircleShape":40,"./PolygonShape":47}],43:[function(require,module,exports){
+},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"./CircleShape":40,"./PolygonShape":47}],43:[function(require,module,exports){
 var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
 var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 var common = require("../util/common");
 
+var create = require("../util/create");
+
+var Math = require("../common/Math");
+
 var Transform = require("../common/Transform");
 
 var Vec2 = require("../common/Vec2");
+
+var Rot = require("../common/Rot");
+
+var Settings = require("../Settings");
+
+var Shape = require("../Shape");
 
 var Contact = require("../Contact");
 
@@ -14253,52 +13869,34 @@ function EdgeCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, index
     CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
 }
 
-var ccc_edge = new EdgeShape();
-
 function ChainCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-    _ASSERT && common.assert(fixtureA.getType() === ChainShape.TYPE);
-    _ASSERT && common.assert(fixtureB.getType() === CircleShape.TYPE);
+    _ASSERT && common.assert(fixtureA.getType() == ChainShape.TYPE);
+    _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
     var chain = fixtureA.getShape();
-    var edge = ccc_edge;
-    chain.getChildEdge(ccc_edge, indexA);
-    var shapeA = ccc_edge;
+    var edge = new EdgeShape();
+    chain.getChildEdge(edge, indexA);
+    var shapeA = edge;
     var shapeB = fixtureB.getShape();
     CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
 }
-
-var cec_e = Vec2.zero();
-
-var cec_Q = Vec2.zero();
-
-var cec_P = Vec2.zero();
-
-var cec_d = Vec2.zero();
-
-var cec_n = Vec2.zero();
-
-var cec_e1 = Vec2.zero();
-
-var cec_e2 = Vec2.zero();
-
-var cec_t1 = Vec2.zero();
 
 // Compute contact points for edge versus circle.
 // This accounts for edge connectivity.
 function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
     manifold.pointCount = 0;
     // Compute circle in frame of edge
-    var Q = Transform.mulTVec2_(xfA, Transform.mulVec2_(xfB, circleB.m_p, cec_t1), cec_Q);
+    var Q = Transform.mulTVec2(xfA, Transform.mulVec2(xfB, circleB.m_p));
     var A = edgeA.m_vertex1;
     var B = edgeA.m_vertex2;
-    var e = Vec2.sub_(B, A, cec_e);
+    var e = Vec2.sub(B, A);
     // Barycentric coordinates
-    var u = Vec2.dot(e, Vec2.sub_(B, Q, cec_t1));
-    var v = Vec2.dot(e, Vec2.sub_(Q, A, cec_t1));
+    var u = Vec2.dot(e, Vec2.sub(B, Q));
+    var v = Vec2.dot(e, Vec2.sub(Q, A));
     var radius = edgeA.m_radius + circleB.m_radius;
     // Region A
     if (v <= 0) {
-        var P = cec_P.setVec2(A);
-        var d = Vec2.sub(Q, P, cec_d);
+        var P = Vec2.clone(A);
+        var d = Vec2.sub(Q, P);
         var dd = Vec2.dot(d, d);
         if (dd > radius * radius) {
             return;
@@ -14307,8 +13905,8 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
         if (edgeA.m_hasVertex0) {
             var A1 = edgeA.m_vertex0;
             var B1 = A;
-            var e1 = Vec2.sub_(B1, A1, cec_e1);
-            var u1 = Vec2.dot(e1, Vec2.sub(B1, Q, cec_t1));
+            var e1 = Vec2.sub(B1, A1);
+            var u1 = Vec2.dot(e1, Vec2.sub(B1, Q));
             // Is the circle in Region AB of the previous edge?
             if (u1 > 0) {
                 return;
@@ -14328,8 +13926,8 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
     }
     // Region B
     if (u <= 0) {
-        var P = cec_P.setVec2(B);
-        var d = Vec2.sub_(Q, P, cec_d);
+        var P = Vec2.clone(B);
+        var d = Vec2.sub(Q, P);
         var dd = Vec2.dot(d, d);
         if (dd > radius * radius) {
             return;
@@ -14338,8 +13936,8 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
         if (edgeA.m_hasVertex3) {
             var B2 = edgeA.m_vertex3;
             var A2 = B;
-            var e2 = Vec2.sub_(B2, A2, cec_e2);
-            var v2 = Vec2.dot(e2, Vec2.sub_(Q, A2, cec_t1));
+            var e2 = Vec2.sub(B2, A2);
+            var v2 = Vec2.dot(e2, Vec2.sub(Q, A2));
             // Is the circle in Region AB of the next edge?
             if (v2 > 0) {
                 return;
@@ -14360,19 +13958,19 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
     // Region AB
     var den = Vec2.dot(e, e);
     _ASSERT && common.assert(den > 0);
-    var P = cec_P.setCombine(u / den, A, v / den, B);
-    var d = Vec2.sub_(Q, P, cec_d);
+    var P = Vec2.combine(u / den, A, v / den, B);
+    var d = Vec2.sub(Q, P);
     var dd = Vec2.dot(d, d);
     if (dd > radius * radius) {
         return;
     }
-    var n = cec_n.setXY(-e.y, e.x);
-    if (Vec2.dot(n, Vec2.sub_(Q, A, cec_t1)) < 0) {
+    var n = Vec2.neo(-e.y, e.x);
+    if (Vec2.dot(n, Vec2.sub(Q, A)) < 0) {
         n.set(-n.x, -n.y);
     }
     n.normalize();
     manifold.type = Manifold.e_faceA;
-    manifold.localNormal.set(n);
+    manifold.localNormal = n;
     manifold.localPoint.set(A);
     manifold.pointCount = 1;
     manifold.points[0].localPoint.set(circleB.m_p);
@@ -14384,12 +13982,14 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 }
 
 
-},{"../Contact":3,"../Manifold":6,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"./ChainShape":39,"./CircleShape":40,"./EdgeShape":46}],44:[function(require,module,exports){
+},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"./ChainShape":39,"./CircleShape":40,"./EdgeShape":46}],44:[function(require,module,exports){
 var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
 var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 var common = require("../util/common");
+
+var create = require("../util/create");
 
 var Math = require("../common/Math");
 
@@ -14400,6 +14000,8 @@ var Vec2 = require("../common/Vec2");
 var Rot = require("../common/Rot");
 
 var Settings = require("../Settings");
+
+var Shape = require("../Shape");
 
 var Contact = require("../Contact");
 
@@ -14416,18 +14018,16 @@ Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
 
 function EdgePolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
-    _ASSERT && common.assert(fA.getType() === EdgeShape.TYPE);
-    _ASSERT && common.assert(fB.getType() === PolygonShape.TYPE);
+    _ASSERT && common.assert(fA.getType() == EdgeShape.TYPE);
+    _ASSERT && common.assert(fB.getType() == PolygonShape.TYPE);
     CollideEdgePolygon(manifold, fA.getShape(), xfA, fB.getShape(), xfB);
 }
 
-var cpc_edge = new EdgeShape();
-
 function ChainPolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
-    _ASSERT && common.assert(fA.getType() === ChainShape.TYPE);
-    _ASSERT && common.assert(fB.getType() === PolygonShape.TYPE);
+    _ASSERT && common.assert(fA.getType() == ChainShape.TYPE);
+    _ASSERT && common.assert(fB.getType() == PolygonShape.TYPE);
     var chain = fA.getShape();
-    var edge = cpc_edge;
+    var edge = new EdgeShape();
     chain.getChildEdge(edge, indexA);
     CollideEdgePolygon(manifold, edge, xfA, fB.getShape(), xfB);
 }
@@ -14461,23 +14061,20 @@ function TempPolygon() {
     this.normals = [];
     // Vec2[Settings.maxPolygonVertices];
     this.count = 0;
-    for (var i = 0; i < Settings.maxPolygonVertices; i++) {
-        this.vertices.push(Vec2.zero());
-        this.normals.push(Vec2.zero());
-    }
 }
 
 // Reference face used for clipping
 function ReferenceFace() {
-    this.i1 = -1;
-    this.i2 = -1;
-    this.v1 = Vec2.zero();
-    this.v2 = Vec2.zero();
+    this.i1, this.i2;
+    // int
+    this.v1, this.v2;
+    // v
     this.normal = Vec2.zero();
     this.sideNormal1 = Vec2.zero();
-    this.sideOffset1 = 0;
+    this.sideOffset1;
+    // float
     this.sideNormal2 = Vec2.zero();
-    this.sideOffset2 = 0;
+    this.sideOffset2;
 }
 
 // reused
@@ -14488,42 +14085,6 @@ var polygonAxis = new EPAxis();
 var polygonBA = new TempPolygon();
 
 var rf = new ReferenceFace();
-
-var cep_t1 = Vec2.zero();
-
-var cep_t2 = Vec2.zero();
-
-var cep_n = Vec2.zero();
-
-var cep_perp = Vec2.zero();
-
-var cep_centroidB = Vec2.zero();
-
-var cep_edge1 = Vec2.zero();
-
-var cep_normal1 = Vec2.zero();
-
-var cep_edge0 = Vec2.zero();
-
-var cep_normal0 = Vec2.zero();
-
-var cep_edge2 = Vec2.zero();
-
-var cep_normal2 = Vec2.zero();
-
-var cep_normal = Vec2.zero();
-
-var cep_lowerLimit = Vec2.zero();
-
-var cep_upperLimit = Vec2.zero();
-
-var cep_xf = Transform.identity();
-
-var cep_clipPoints1 = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
-
-var cep_clipPoints2 = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
-
-var cep_ie = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
 
 /**
  * This function collides and edge and a polygon, taking into account edge
@@ -14541,42 +14102,42 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
     // 8. Clip
     var m_type1, m_type2;
     // VertexType unused?
-    var xf = Transform.mulTXf_(xfA, xfB, cep_xf);
-    var centroidB = Transform.mulVec2_(xf, polygonB.m_centroid, cep_centroidB);
+    var xf = Transform.mulTXf(xfA, xfB);
+    var centroidB = Transform.mulVec2(xf, polygonB.m_centroid);
     var v0 = edgeA.m_vertex0;
     var v1 = edgeA.m_vertex1;
     var v2 = edgeA.m_vertex2;
     var v3 = edgeA.m_vertex3;
     var hasVertex0 = edgeA.m_hasVertex0;
     var hasVertex3 = edgeA.m_hasVertex3;
-    var edge1 = Vec2.sub_(v2, v1, cep_edge1);
+    var edge1 = Vec2.sub(v2, v1);
     edge1.normalize();
-    var normal1 = cep_normal1.setXY(edge1.y, -edge1.x);
-    var offset1 = Vec2.dot(normal1, Vec2.sub_(centroidB, v1, cep_t1));
+    var normal1 = Vec2.neo(edge1.y, -edge1.x);
+    var offset1 = Vec2.dot(normal1, Vec2.sub(centroidB, v1));
     var offset0 = 0;
     var offset2 = 0;
     var convex1 = false;
     var convex2 = false;
     // Is there a preceding edge?
     if (hasVertex0) {
-        var edge0 = Vec2.sub_(v1, v0, cep_edge0);
+        var edge0 = Vec2.sub(v1, v0);
         edge0.normalize();
-        var normal0 = cep_normal0.setXY(edge0.y, -edge0.x);
+        var normal0 = Vec2.neo(edge0.y, -edge0.x);
         convex1 = Vec2.cross(edge0, edge1) >= 0;
         offset0 = Vec2.dot(normal0, centroidB) - Vec2.dot(normal0, v0);
     }
     // Is there a following edge?
     if (hasVertex3) {
-        var edge2 = Vec2.sub_(v3, v2, cep_edge2);
+        var edge2 = Vec2.sub(v3, v2);
         edge2.normalize();
-        var normal2 = cep_normal2.set(edge2.y, -edge2.x);
+        var normal2 = Vec2.neo(edge2.y, -edge2.x);
         convex2 = Vec2.cross(edge1, edge2) > 0;
         offset2 = Vec2.dot(normal2, centroidB) - Vec2.dot(normal2, v2);
     }
-    var front = 0;
-    var normal = cep_normal.setZero();
-    var lowerLimit = cep_lowerLimit.setZero();
-    var upperLimit = cep_upperLimit.setZero();
+    var front;
+    var normal = Vec2.zero();
+    var lowerLimit = Vec2.zero();
+    var upperLimit = Vec2.zero();
     // Determine front or back collision. Determine collision normal limits.
     if (hasVertex0 && hasVertex3) {
         if (convex1 && convex2) {
@@ -14687,8 +14248,8 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
     // Get polygonB in frameA
     polygonBA.count = polygonB.m_count;
     for (var i = 0; i < polygonB.m_count; ++i) {
-        polygonBA.vertices[i] = Transform.mulVec2_(xf, polygonB.m_vertices[i], polygonBA.vertices[i]);
-        polygonBA.normals[i] = Rot.mulVec2_(xf.q, polygonB.m_normals[i], polygonBA.normals[i]);
+        polygonBA.vertices[i] = Transform.mulVec2(xf, polygonB.m_vertices[i]);
+        polygonBA.normals[i] = Rot.mulVec2(xf.q, polygonB.m_normals[i]);
     }
     var radius = 2 * Settings.polygonRadius;
     manifold.pointCount = 0;
@@ -14698,14 +14259,14 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
         edgeAxis.index = front ? 0 : 1;
         edgeAxis.separation = Infinity;
         for (var i = 0; i < polygonBA.count; ++i) {
-            var s = Vec2.dot(normal, Vec2.sub(polygonBA.vertices[i], v1, cep_t1));
+            var s = Vec2.dot(normal, Vec2.sub(polygonBA.vertices[i], v1));
             if (s < edgeAxis.separation) {
                 edgeAxis.separation = s;
             }
         }
     }
     // If no valid normal can be found than this edge should not collide.
-    if (edgeAxis.type === e_unknown) {
+    if (edgeAxis.type == e_unknown) {
         return;
     }
     if (edgeAxis.separation > radius) {
@@ -14716,11 +14277,11 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
         polygonAxis.type = e_unknown;
         polygonAxis.index = -1;
         polygonAxis.separation = -Infinity;
-        var perp = cep_perp.set(-normal.y, normal.x);
+        var perp = Vec2.neo(-normal.y, normal.x);
         for (var i = 0; i < polygonBA.count; ++i) {
-            var n = cep_n.set(polygonBA.normals[i]).neg();
-            var s1 = Vec2.dot(n, Vec2.sub_(polygonBA.vertices[i], v1, cep_t1));
-            var s2 = Vec2.dot(n, Vec2.sub_(polygonBA.vertices[i], v2, cep_t1));
+            var n = Vec2.neg(polygonBA.normals[i]);
+            var s1 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v1));
+            var s2 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v2));
             var s = Math.min(s1, s2);
             if (s > radius) {
                 // No collision
@@ -14731,11 +14292,11 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
             }
             // Adjacency
             if (Vec2.dot(n, perp) >= 0) {
-                if (Vec2.dot(Vec2.sub_(n, upperLimit, cep_t1), normal) < -Settings.angularSlop) {
+                if (Vec2.dot(Vec2.sub(n, upperLimit), normal) < -Settings.angularSlop) {
                     continue;
                 }
             } else {
-                if (Vec2.dot(Vec2.sub_(n, lowerLimit, cep_t1), normal) < -Settings.angularSlop) {
+                if (Vec2.dot(Vec2.sub(n, lowerLimit), normal) < -Settings.angularSlop) {
                     continue;
                 }
             }
@@ -14746,24 +14307,22 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
             }
         }
     }
-    if (polygonAxis.type !== e_unknown && polygonAxis.separation > radius) {
+    if (polygonAxis.type != e_unknown && polygonAxis.separation > radius) {
         return;
     }
     // Use hysteresis for jitter reduction.
     var k_relativeTol = .98;
     var k_absoluteTol = .001;
     var primaryAxis;
-    if (polygonAxis.type === e_unknown) {
+    if (polygonAxis.type == e_unknown) {
         primaryAxis = edgeAxis;
     } else if (polygonAxis.separation > k_relativeTol * edgeAxis.separation + k_absoluteTol) {
         primaryAxis = polygonAxis;
     } else {
         primaryAxis = edgeAxis;
     }
-    cep_ie[0].init();
-    cep_ie[1].init();
-    var ie = cep_ie;
-    if (primaryAxis.type === e_edgeA) {
+    var ie = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
+    if (primaryAxis.type == e_edgeA) {
         manifold.type = Manifold.e_faceA;
         // Search for the polygon normal that is most anti-parallel to the edge
         // normal.
@@ -14778,12 +14337,12 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
         }
         var i1 = bestIndex;
         var i2 = i1 + 1 < polygonBA.count ? i1 + 1 : 0;
-        ie[0].v.set(polygonBA.vertices[i1]);
+        ie[0].v = polygonBA.vertices[i1];
         ie[0].id.cf.indexA = 0;
         ie[0].id.cf.indexB = i1;
         ie[0].id.cf.typeA = Manifold.e_face;
         ie[0].id.cf.typeB = Manifold.e_vertex;
-        ie[1].v.set(polygonBA.vertices[i2]);
+        ie[1].v = polygonBA.vertices[i2];
         ie[1].id.cf.indexA = 0;
         ie[1].id.cf.indexB = i2;
         ie[1].id.cf.typeA = Manifold.e_face;
@@ -14791,32 +14350,32 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
         if (front) {
             rf.i1 = 0;
             rf.i2 = 1;
-            rf.v1.set(v1);
-            rf.v2.set(v2);
+            rf.v1 = v1;
+            rf.v2 = v2;
             rf.normal.set(normal1);
         } else {
             rf.i1 = 1;
             rf.i2 = 0;
-            rf.v1.set(v2);
-            rf.v2.set(v1);
-            rf.normal.set(normal1).neg();
+            rf.v1 = v2;
+            rf.v2 = v1;
+            rf.normal.setMul(-1, normal1);
         }
     } else {
         manifold.type = Manifold.e_faceB;
-        ie[0].v.set(v1);
+        ie[0].v = v1;
         ie[0].id.cf.indexA = 0;
         ie[0].id.cf.indexB = primaryAxis.index;
         ie[0].id.cf.typeA = Manifold.e_vertex;
         ie[0].id.cf.typeB = Manifold.e_face;
-        ie[1].v.set(v2);
+        ie[1].v = v2;
         ie[1].id.cf.indexA = 0;
         ie[1].id.cf.indexB = primaryAxis.index;
         ie[1].id.cf.typeA = Manifold.e_vertex;
         ie[1].id.cf.typeB = Manifold.e_face;
         rf.i1 = primaryAxis.index;
         rf.i2 = rf.i1 + 1 < polygonBA.count ? rf.i1 + 1 : 0;
-        rf.v1.set(polygonBA.vertices[rf.i1]);
-        rf.v2.set(polygonBA.vertices[rf.i2]);
+        rf.v1 = polygonBA.vertices[rf.i1];
+        rf.v2 = polygonBA.vertices[rf.i2];
         rf.normal.set(polygonBA.normals[rf.i1]);
     }
     rf.sideNormal1.set(rf.normal.y, -rf.normal.x);
@@ -14824,12 +14383,8 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
     rf.sideOffset1 = Vec2.dot(rf.sideNormal1, rf.v1);
     rf.sideOffset2 = Vec2.dot(rf.sideNormal2, rf.v2);
     // Clip incident edge against extruded edge1 side edges.
-    cep_clipPoints1[0].init();
-    cep_clipPoints1[1].init();
-    cep_clipPoints2[0].init();
-    cep_clipPoints2[1].init();
-    var clipPoints1 = cep_clipPoints1;
-    var clipPoints2 = cep_clipPoints2;
+    var clipPoints1 = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
+    var clipPoints2 = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
     var np;
     // Clip to box side 1
     np = Manifold.clipSegmentToLine(clipPoints1, ie, rf.sideNormal1, rf.sideOffset1, rf.i1);
@@ -14842,24 +14397,24 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
         return;
     }
     // Now clipPoints2 contains the clipped points.
-    if (primaryAxis.type === e_edgeA) {
-        manifold.localNormal.set(rf.normal);
-        manifold.localPoint.set(rf.v1);
+    if (primaryAxis.type == e_edgeA) {
+        manifold.localNormal = Vec2.clone(rf.normal);
+        manifold.localPoint = Vec2.clone(rf.v1);
     } else {
-        manifold.localNormal.set(polygonB.m_normals[rf.i1]);
-        manifold.localPoint.set(polygonB.m_vertices[rf.i1]);
+        manifold.localNormal = Vec2.clone(polygonB.m_normals[rf.i1]);
+        manifold.localPoint = Vec2.clone(polygonB.m_vertices[rf.i1]);
     }
     var pointCount = 0;
     for (var i = 0; i < Settings.maxManifoldPoints; ++i) {
-        var separation = Vec2.dot(rf.normal, Vec2.sub_(clipPoints2[i].v, rf.v1, cep_t1));
+        var separation = Vec2.dot(rf.normal, Vec2.sub(clipPoints2[i].v, rf.v1));
         if (separation <= radius) {
             var cp = manifold.points[pointCount];
             // ManifoldPoint
-            if (primaryAxis.type === e_edgeA) {
-                cp.localPoint = Transform.mulTVec2_(xf, clipPoints2[i].v, cp.localPoint);
-                cp.id.set(clipPoints2[i].id);
+            if (primaryAxis.type == e_edgeA) {
+                cp.localPoint = Transform.mulT(xf, clipPoints2[i].v);
+                cp.id = clipPoints2[i].id;
             } else {
-                cp.localPoint.set(clipPoints2[i].v);
+                cp.localPoint = clipPoints2[i].v;
                 cp.id.cf.typeA = clipPoints2[i].id.cf.typeB;
                 cp.id.cf.typeB = clipPoints2[i].id.cf.typeA;
                 cp.id.cf.indexA = clipPoints2[i].id.cf.indexB;
@@ -14872,12 +14427,14 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 }
 
 
-},{"../Contact":3,"../Manifold":6,"../Settings":7,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"./ChainShape":39,"./EdgeShape":46,"./PolygonShape":47}],45:[function(require,module,exports){
+},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"../util/create":51,"./ChainShape":39,"./EdgeShape":46,"./PolygonShape":47}],45:[function(require,module,exports){
 var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
 var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 var common = require("../util/common");
+
+var Math = require("../common/Math");
 
 var Transform = require("../common/Transform");
 
@@ -14885,11 +14442,15 @@ var Rot = require("../common/Rot");
 
 var Vec2 = require("../common/Vec2");
 
+var AABB = require("../collision/AABB");
+
 var Settings = require("../Settings");
 
 var Manifold = require("../Manifold");
 
 var Contact = require("../Contact");
+
+var Shape = require("../Shape");
 
 var PolygonShape = require("./PolygonShape");
 
@@ -14903,16 +14464,6 @@ function PolygonContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) 
     CollidePolygons(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
 }
 
-var fms_v1 = Vec2.zero();
-
-var fms_n = Vec2.zero();
-
-var fms_xf = Transform.identity();
-
-var fms_maxSeparation;
-
-var fms_bestIndex;
-
 /**
  * Find the max separation between poly1 and poly2 using edge normals from
  * poly1.
@@ -14923,13 +14474,13 @@ function FindMaxSeparation(poly1, xf1, poly2, xf2) {
     var n1s = poly1.m_normals;
     var v1s = poly1.m_vertices;
     var v2s = poly2.m_vertices;
-    var xf = Transform.mulTXf_(xf2, xf1, fms_xf);
+    var xf = Transform.mulTXf(xf2, xf1);
     var bestIndex = 0;
     var maxSeparation = -Infinity;
     for (var i = 0; i < count1; ++i) {
         // Get poly1 normal in frame2.
-        var n = Rot.mulVec2_(xf.q, n1s[i], fms_n);
-        var v1 = Transform.mulVec2_(xf, v1s[i], fms_v1);
+        var n = Rot.mulVec2(xf.q, n1s[i]);
+        var v1 = Transform.mulVec2(xf, v1s[i]);
         // Find deepest point for normal i.
         var si = Infinity;
         for (var j = 0; j < count2; ++j) {
@@ -14944,13 +14495,9 @@ function FindMaxSeparation(poly1, xf1, poly2, xf2) {
         }
     }
     // used to keep last FindMaxSeparation call values
-    fms_maxSeparation = maxSeparation;
-    fms_bestIndex = bestIndex;
+    FindMaxSeparation._maxSeparation = maxSeparation;
+    FindMaxSeparation._bestIndex = bestIndex;
 }
-
-var fie_t1 = Vec2.zero();
-
-var fie_normal1 = Vec2.zero();
 
 /**
  * @param {ClipVertex[2]} c
@@ -14963,7 +14510,7 @@ function FindIncidentEdge(c, poly1, xf1, edge1, poly2, xf2) {
     var normals2 = poly2.m_normals;
     _ASSERT && common.assert(0 <= edge1 && edge1 < poly1.m_count);
     // Get the normal of the reference edge in poly2's frame.
-    var normal1 = Rot.mulTVec2_(xf2.q, Rot.mulVec2_(xf1.q, normals1[edge1], fie_t1), fie_normal1);
+    var normal1 = Rot.mulT(xf2.q, Rot.mulVec2(xf1.q, normals1[edge1]));
     // Find the incident edge on poly2.
     var index = 0;
     var minDot = Infinity;
@@ -14989,28 +14536,6 @@ function FindIncidentEdge(c, poly1, xf1, edge1, poly2, xf2) {
     c[1].id.cf.typeB = Manifold.e_vertex;
 }
 
-var cpg_planePoint = Vec2.zero();
-
-var cpg_tangent = Vec2.zero();
-
-var cpg_normal = Vec2.zero();
-
-var cpg_localTangent = Vec2.zero();
-
-var cpg_localNormal = Vec2.zero();
-
-var cpg_v11 = Vec2.zero();
-
-var cpg_v12 = Vec2.zero();
-
-var cpg_t1 = Vec2.zero();
-
-var cpg_clipPoints1 = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
-
-var cpg_clipPoints2 = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
-
-var cpg_incidentEdge = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
-
 /**
  * 
  * Find edge normal of max separation on A - return if separating axis is found<br>
@@ -15025,12 +14550,12 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
     manifold.pointCount = 0;
     var totalRadius = polyA.m_radius + polyB.m_radius;
     FindMaxSeparation(polyA, xfA, polyB, xfB);
-    var edgeA = fms_bestIndex;
-    var separationA = fms_maxSeparation;
+    var edgeA = FindMaxSeparation._bestIndex;
+    var separationA = FindMaxSeparation._maxSeparation;
     if (separationA > totalRadius) return;
     FindMaxSeparation(polyB, xfB, polyA, xfA);
-    var edgeB = fms_bestIndex;
-    var separationB = fms_maxSeparation;
+    var edgeB = FindMaxSeparation._bestIndex;
+    var separationB = FindMaxSeparation._maxSeparation;
     if (separationB > totalRadius) return;
     var poly1;
     // reference polygon
@@ -15059,59 +14584,52 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
         manifold.type = Manifold.e_faceA;
         flip = 0;
     }
-    var incidentEdge = cpg_incidentEdge;
-    cpg_incidentEdge[0].init();
-    cpg_incidentEdge[1].init();
+    var incidentEdge = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
     FindIncidentEdge(incidentEdge, poly1, xf1, edge1, poly2, xf2);
     var count1 = poly1.m_count;
     var vertices1 = poly1.m_vertices;
     var iv1 = edge1;
     var iv2 = edge1 + 1 < count1 ? edge1 + 1 : 0;
-    var v11 = cpg_v11.set(vertices1[iv1]);
-    var v12 = cpg_v12.set(vertices1[iv2]);
-    var localTangent = Vec2.sub_(v12, v11, cpg_localTangent);
+    var v11 = vertices1[iv1];
+    var v12 = vertices1[iv2];
+    var localTangent = Vec2.sub(v12, v11);
     localTangent.normalize();
-    var localNormal = Vec2.crossVec2Num_(localTangent, 1, cpg_localNormal);
-    var planePoint = Vec2.combine_(.5, v11, .5, v12, cpg_planePoint);
-    var tangent = Rot.mulVec2_(xf1.q, localTangent, cpg_tangent);
-    var normal = Vec2.crossVec2Num_(tangent, 1, cpg_normal);
-    v11 = Transform.mulVec2_(xf1, v11, v11);
-    v12 = Transform.mulVec2_(xf1, v12, v12);
+    var localNormal = Vec2.cross(localTangent, 1);
+    var planePoint = Vec2.combine(.5, v11, .5, v12);
+    var tangent = Rot.mulVec2(xf1.q, localTangent);
+    var normal = Vec2.cross(tangent, 1);
+    v11 = Transform.mulVec2(xf1, v11);
+    v12 = Transform.mulVec2(xf1, v12);
     // Face offset.
     var frontOffset = Vec2.dot(normal, v11);
     // Side offsets, extended by polytope skin thickness.
     var sideOffset1 = -Vec2.dot(tangent, v11) + totalRadius;
     var sideOffset2 = Vec2.dot(tangent, v12) + totalRadius;
     // Clip incident edge against extruded edge1 side edges.
-    cpg_clipPoints1[0].init();
-    cpg_clipPoints1[1].init();
-    cpg_clipPoints2[0].init();
-    cpg_clipPoints2[1].init();
-    var clipPoints1 = cpg_clipPoints1;
-    var clipPoints2 = cpg_clipPoints2;
+    var clipPoints1 = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
+    var clipPoints2 = [ new Manifold.clipVertex(), new Manifold.clipVertex() ];
     var np;
     // Clip to box side 1
-    np = Manifold.clipSegmentToLine(clipPoints1, incidentEdge, Vec2.neg_(tangent, cpg_t1), sideOffset1, iv1);
-    if (np < Settings.maxManifoldPoints) {
+    np = Manifold.clipSegmentToLine(clipPoints1, incidentEdge, Vec2.neg(tangent), sideOffset1, iv1);
+    if (np < 2) {
         return;
     }
     // Clip to negative box side 1
     np = Manifold.clipSegmentToLine(clipPoints2, clipPoints1, tangent, sideOffset2, iv2);
-    if (np < Settings.maxManifoldPoints) {
+    if (np < 2) {
         return;
     }
     // Now clipPoints2 contains the clipped points.
-    manifold.localNormal.set(localNormal);
-    manifold.localPoint.set(planePoint);
+    manifold.localNormal = localNormal;
+    manifold.localPoint = planePoint;
     var pointCount = 0;
-    for (var i = 0; i < Settings.maxManifoldPoints; ++i) {
+    for (var i = 0; i < clipPoints2.length; ++i) {
         var separation = Vec2.dot(normal, clipPoints2[i].v) - frontOffset;
         if (separation <= totalRadius) {
-            var cp = manifold.points[i];
+            var cp = manifold.points[pointCount];
             // ManifoldPoint
-            cp.init();
-            cp.localPoint.set(Transform.mulTVec2(xf2, clipPoints2[i].v, cpg_t1));
-            cp.id.set(clipPoints2[i].id);
+            cp.localPoint.set(Transform.mulTVec2(xf2, clipPoints2[i].v));
+            cp.id = clipPoints2[i].id;
             if (flip) {
                 // Swap features
                 var cf = cp.id.cf;
@@ -15132,7 +14650,7 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 }
 
 
-},{"../Contact":3,"../Manifold":6,"../Settings":7,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"./PolygonShape":47}],46:[function(require,module,exports){
+},{"../Contact":3,"../Manifold":6,"../Settings":7,"../Shape":8,"../collision/AABB":11,"../common/Math":18,"../common/Rot":20,"../common/Transform":22,"../common/Vec2":23,"../util/common":50,"./PolygonShape":47}],46:[function(require,module,exports){
 var _DEBUG = typeof DEBUG === "undefined" ? false : DEBUG;
 
 var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
@@ -15745,14 +15263,12 @@ var _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 module.exports = Pool;
 
 function Pool(opts) {
-    var _queue = [];
+    var _list = [];
     var _max = opts.max || Infinity;
-    var _createFn = opts.create || function() {
-        return {};
-    };
-    var _outFn = opts.allocate || function() {};
-    var _inFn = opts.release || function() {};
-    var _discardFn = opts.discard || function() {};
+    var _createFn = opts.create;
+    var _outFn = opts.allocate;
+    var _inFn = opts.release;
+    var _discardFn = opts.discard;
     var _createCount = 0;
     var _outCount = 0;
     var _inCount = 0;
@@ -15765,32 +15281,42 @@ function Pool(opts) {
         return _max;
     };
     this.size = function() {
-        return _queue.length;
+        return _list.length;
     };
     this.allocate = function() {
-        var obj;
-        if (_queue.length > 0) {
-            obj = _queue.shift();
+        var item;
+        if (_list.length > 0) {
+            item = _list.shift();
         } else {
             _createCount++;
-            obj = _createFn();
+            if (typeof _createFn === "function") {
+                item = _createFn();
+            } else {
+                item = {};
+            }
         }
         _outCount++;
-        _outFn(obj);
-        return obj;
+        if (typeof _outFn === "function") {
+            _outFn(item);
+        }
+        return item;
     };
-    this.release = function(obj) {
-        if (_queue.length < _max) {
+    this.release = function(item) {
+        if (_list.length < _max) {
             _inCount++;
-            _inFn(obj);
-            _queue.push(obj);
+            if (typeof _inFn === "function") {
+                _inFn(item);
+            }
+            _list.push(item);
         } else {
             _discardCount++;
-            _discardFn(obj);
+            if (typeof _discardFn === "function") {
+                item = _discardFn(item);
+            }
         }
     };
     this.toString = function() {
-        return " +" + _createCount + " >" + _outCount + " <" + _inCount + " -" + _discardCount + " =" + _queue.length + "/" + _max;
+        return " +" + _createCount + " >" + _outCount + " <" + _inCount + " -" + _discardCount + " =" + _list.length + "/" + _max;
     };
 }
 
