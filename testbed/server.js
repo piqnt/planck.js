@@ -8,28 +8,21 @@ const Handlebars = require('handlebars');
 
 const compiler = Webpack([
   {
-    entry: './lib/index.js',
+    entry: {
+      'planck': './lib/index.js',
+      'planck-with-testbed': './testbed/index.js',
+    },
     output: {
       library: 'planck',
-      filename: 'planck.js',
+      filename: '[name].js',
+    },
+    optimization: {
+      minimize: false
     },
     plugins: [
       new Webpack.DefinePlugin({
         DEBUG: JSON.stringify(false),
-        ASSERT: JSON.stringify(false),
-      }),
-    ],
-  },
-  {
-    entry: './testbed/index.js',
-    output: {
-      library: 'planck',
-      filename: 'planck-with-testbed.js',
-    },
-    plugins: [
-      new Webpack.DefinePlugin({
-        DEBUG: JSON.stringify(false),
-        ASSERT: JSON.stringify(false),
+        ASSERT: JSON.stringify(true),
       }),
     ],
   }
