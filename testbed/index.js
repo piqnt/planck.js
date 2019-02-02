@@ -27,6 +27,7 @@ planck.testbed = function(opts, callback) {
     var Vec2 = planck.Vec2;
 
     var testbed = {};
+    testbed.canvas = canvas;
 
     var paused = false;
     stage.on('resume', function() {

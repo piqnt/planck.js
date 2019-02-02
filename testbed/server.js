@@ -1,16 +1,47 @@
-var Path = require('path');
-var FS = require('fs');
-var Express = require('express');
-var Browserify = require('browserify-middleware');
+const Path = require('path');
+const FS = require('fs');
+const Express = require('express');
 // var ServeIndex = require('serve-index');
-var Handlebars = require('handlebars');
+const Webpack = require('webpack');
+const WebpackMiddleware = require('webpack-dev-middleware');
+const Handlebars = require('handlebars');
 
+const compiler = Webpack([
+  {
+    entry: './lib/index.js',
+    output: {
+      library: 'planck',
+      filename: 'planck.js',
+    },
+    plugins: [
+      new Webpack.DefinePlugin({
+        DEBUG: JSON.stringify(false),
+        ASSERT: JSON.stringify(false),
+      }),
+    ],
+  },
+  {
+    entry: './testbed/index.js',
+    output: {
+      library: 'planck',
+      filename: 'planck-with-testbed.js',
+    },
+    plugins: [
+      new Webpack.DefinePlugin({
+        DEBUG: JSON.stringify(false),
+        ASSERT: JSON.stringify(false),
+      }),
+    ],
+  }
+]);
 var app = Express();
 
 app.set('port', process.env.PORT || 6587);
 
-app.use('/dist/planck.js', Browserify('./lib/index.js', {standalone : 'planck'}));
-app.use('/dist/planck-with-testbed.js', Browserify('./testbed/index.js', {standalone : 'planck'}));
+app.use(WebpackMiddleware(compiler, {
+  publicPath: '/dist/',
+  compress: false,
+}));
 
 app.use(Express.static(Path.resolve(__dirname, '..')));
 
