@@ -56,7 +56,8 @@
   },
   "scripts": {
     "test": "mocha test/*.js",
-    "dist": "webpack -p",
+    "build": "webpack -p",
+    "watch": "webpack --watch",
     "testbed": "nodemon testbed/server.js"
   }
 }
