@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.2
+ * Planck.js v0.3.3
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -6251,7 +6251,7 @@ World.prototype._serialize = function() {
 
 World._deserialize = function(data) {
   var world = new World(data.gravity);
-  data.bodies.reverse().forEach(function(data) {
+  data.bodies && data.bodies.reverse().forEach(function(data) {
     world._addBody(Body._deserialize(world, data));
   });
 
