@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.4
+ * Planck.js v0.3.5
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -2565,6 +2565,9 @@ function Shape() {
   this.m_radius;
 }
 
+Shape.prototype._reset = function() {
+};
+
 Shape.prototype._serialize = function() {
   return {};
 };
@@ -4877,12 +4880,16 @@ function ComputeCentroid(vs, count) {
   return c;
 }
 
+PolygonShape.prototype._reset = function() {
+  this._set(this.m_vertices)
+}
+
 /**
  * @private
  *
  * Create a convex hull from the given array of local points. The count must be
  * in the range [3, Settings.maxPolygonVertices].
- * 
+ *
  * Warning: the points may be re-ordered, even if they form a convex polygon
  * Warning: collinear points are handled but not removed. Collinear points may
  * lead to poor stacking behavior.
@@ -10672,6 +10679,25 @@ function Fixture(body, shape, def) {
   }
 
   this.m_userData = def.userData;
+};
+
+/**
+ * Re-setup fixture.
+ * @private
+ */
+Fixture.prototype._reset = function() {
+  var body = this.getBody();
+  var broadPhase = body.m_world.m_broadPhase;
+  this.destroyProxies(broadPhase);
+  if (this.m_shape._reset) {
+    this.m_shape._reset();
+  }
+  var childCount = this.m_shape.getChildCount();
+  for (var i = 0; i < childCount; ++i) {
+    this.m_proxies[i] = new FixtureProxy(this, i);
+  }
+  this.createProxies(broadPhase, body.m_xf);
+  body.resetMassData();
 };
 
 Fixture.prototype._serialize = function() {
