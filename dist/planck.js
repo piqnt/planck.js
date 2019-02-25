@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.3
+ * Planck.js v0.3.4
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -9682,7 +9682,6 @@ Fixture.prototype._serialize = function() {
 };
 
 Fixture._deserialize = function(body, data) {
-  console.log(data);
   var shape = Shape._deserialize(data.shape);
   var fixture = shape && new Fixture(body, shape, data);
   return fixture;
