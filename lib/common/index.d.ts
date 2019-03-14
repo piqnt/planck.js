@@ -1,4 +1,4 @@
-declare namespace planck {
+declare module "planck-js" {
   let Math: Math & {
     readonly EPSILON: number;
     /**

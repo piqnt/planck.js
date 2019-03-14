@@ -1,4 +1,4 @@
-declare namespace planck {
+declare module "planck-js" {
   type BroadPhase = any; // TODO
 
   type RayCastInput = { // TODO interface?

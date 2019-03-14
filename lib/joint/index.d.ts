@@ -1,4 +1,4 @@
-declare namespace planck {
+declare module "planck-js" {
   // Types
 
   enum LIMIT_STATE {

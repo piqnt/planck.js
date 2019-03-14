@@ -8,7 +8,7 @@
 /// <reference path="shape/index.d.ts" />
 /// <reference path="../testbed/index.d.ts" />
 
-declare namespace planck {
+declare module "planck-js" {
 
   type Manifold = any; // TODO
 
