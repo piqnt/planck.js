@@ -239,8 +239,8 @@ declare module "planck-js" {
     mulMat22(mx: Mat22, my: Mat22): Mat22;
     mulT(mx: Mat22, my: Mat22): Mat22;
     mulT(mx: Mat22, v: Vec2): Vec2;
-    abs(mx): Mat22;
-    add(mx1, mx2): Mat22;
+    abs(mx: Mat22): Mat22;
+    add(mx1: Mat22, mx2: Mat22): Mat22;
   };
 
   interface Mat33 {

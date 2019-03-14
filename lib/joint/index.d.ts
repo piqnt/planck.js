@@ -41,9 +41,9 @@ declare module "planck-js" {
     getReactionForce(inv_dt: number): Vec2;
     getReactionTorque(inv_dt: number): number;
     shiftOrigin(newOrigin: Vec2): void;
-    initVelocityConstraints(step): void;
-    solveVelocityConstraints(step): void;
-    solvePositionConstraints(step): boolean;
+    initVelocityConstraints(step: any): void;
+    solveVelocityConstraints(step: any): void;
+    solvePositionConstraints(step: any): boolean;
   }
   type JointOpt = Partial<{
     userData: any,
