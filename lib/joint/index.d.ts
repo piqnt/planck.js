@@ -40,9 +40,9 @@ export interface Joint {
   getReactionForce(inv_dt: number): planck.Vec2;
   getReactionTorque(inv_dt: number): number;
   shiftOrigin(newOrigin: planck.Vec2): void;
-  initVelocityConstraints(step): void;
-  solveVelocityConstraints(step): void;
-  solvePositionConstraints(step): boolean;
+  initVelocityConstraints(step: any): void;
+  solveVelocityConstraints(step: any): void;
+  solvePositionConstraints(step: any): boolean;
 }
 export type JointOpt = Partial<{
   userData: any,
