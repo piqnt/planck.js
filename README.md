@@ -68,9 +68,9 @@ Planck.js public API closely follows Box2D API (see [Resources](#Resources)), wi
     - `'end-contact'`
     - `'pre-solve'`
     - `'post-solve'`
-    - `'joint-removed'`
-    - `'fixture-removed'`
-    - `'body-removed'`
+    - `'remove-joint'`
+    - `'remove-fixture'`
+    - `'remove-body'`
 
 
 ## Resources and References
