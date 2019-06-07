@@ -59,4 +59,27 @@ module.exports = [
       }),
     ],
   },
+  {
+    entry: {
+      'planck': './lib/index.js',
+      'planck-with-testbed': './testbed/index.js',
+    },
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: '[name].commonjs.js',
+      library: 'planck',
+      libraryTarget: 'commonjs'
+    },
+    devtool: 'source-map',
+    optimization: {
+      minimize: false
+    },
+    plugins: [
+      new webpack.BannerPlugin(licenseBanner),
+      new webpack.DefinePlugin({
+        DEBUG: JSON.stringify(false),
+        ASSERT: JSON.stringify(false),
+      }),
+    ],
+  }
 ];
