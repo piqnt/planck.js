@@ -9,75 +9,75 @@ export interface Shape {
   getRadius(): number;
   getType(): ShapeType;
   getChildCount(): number;
-  testPoint(xf: Transform, p: Vec2): false;
-  rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex?: number): boolean;
-  computeAABB(aabb: AABB, xf: Transform, childIndex?: number): void;
-  computeMass(massData: MassData, density?: number): void;
-  computeDistanceProxy(proxy: DistanceProxy): void;
+  testPoint(xf: planck.Transform, p: planck.Vec2): false;
+  rayCast(output: planck.RayCastOutput, input: planck.RayCastInput, xf: planck.Transform, childIndex?: number): boolean;
+  computeAABB(aabb: planck.AABB, xf: planck.Transform, childIndex?: number): void;
+  computeMass(massData: planck.MassData, density?: number): void;
+  computeDistanceProxy(proxy: planck.DistanceProxy): void;
 }
 export interface CircleShape extends Shape {
   m_type: 'circle';
 
-  m_p: Vec2;
+  m_p: planck.Vec2;
 
-  getCenter(): Vec2;
-  getVertex(index?: number): Vec2;
+  getCenter(): planck.Vec2;
+  getVertex(index?: number): planck.Vec2;
   getVertexCount(index?: number): 1;
 }
 export interface EdgeShape extends Shape {
   m_type: 'edge';
 
-  m_vertex1: Vec2;
-  m_vertex2: Vec2;
-  m_vertex0: Vec2;
-  m_vertex3: Vec2;
+  m_vertex1: planck.Vec2;
+  m_vertex2: planck.Vec2;
+  m_vertex0: planck.Vec2;
+  m_vertex3: planck.Vec2;
   m_hasVertex0: boolean;
   m_hasVertex3: boolean;
 
-  setNext(v3?: Vec2): EdgeShape;
-  setPrev(v0?: Vec2): EdgeShape;
+  setNext(v3?: planck.Vec2): EdgeShape;
+  setPrev(v0?: planck.Vec2): EdgeShape;
   // @private @internal
-  // _set(v1: Vec2, v2: Vec2): EdgeShape;
+  // _set(v1: planck.Vec2, v2: planck.Vec2): EdgeShape;
 }
 export interface PolygonShape extends Shape {
   m_type: 'polygon';
 
-  m_centroid: Vec2;
-  m_vertices: Vec2[];
-  m_normals: Vec2[];
+  m_centroid: planck.Vec2;
+  m_vertices: planck.Vec2[];
+  m_normals: planck.Vec2[];
   m_count: number;
 
-  getVertex(index: number): Vec2;
+  getVertex(index: number): planck.Vec2;
   validate(): void;
 
   // @private @internal
-  // _set(vertices: Vec2[]): void;
-  // _setAsBox(hx: number, hy: number, center: Vec2, angle?: number): void;
+  // _set(vertices: planck.Vec2[]): void;
+  // _setAsBox(hx: number, hy: number, center: planck.Vec2, angle?: number): void;
   // _setAsBox(hx: number, hy: number): void;
 }
 export interface ChainShape extends Shape {
   m_type: 'chain';
 
-  m_vertices: Vec2[];
+  m_vertices: planck.Vec2[];
   m_count: number;
-  m_prevVertex: Vec2 | null;
-  m_nextVertex: Vec2 | null;
+  m_prevVertex: planck.Vec2 | null;
+  m_nextVertex: planck.Vec2 | null;
   m_hasPrevVertex: boolean;
   m_hasNextVertex: boolean;
 
   // @private @internal
-  // _createLoop(vertices: Vec2[]): ChainShape;
-  // _createChain(vertices: Vec2[]): ChainShape;
-  // _setPrevVertex(prevVertex: Vec2): void;
-  // _setNextVertex(nextVertex: Vec2): void;
+  // _createLoop(vertices: planck.Vec2[]): ChainShape;
+  // _createChain(vertices: planck.Vec2[]): ChainShape;
+  // _setPrevVertex(prevVertex: planck.Vec2): void;
+  // _setNextVertex(nextVertex: planck.Vec2): void;
   getChildEdge(edge: EdgeShape, childIndex: number): void;
-  getVertex(index: number): Vec2;
+  getVertex(index: number): planck.Vec2;
 }
 
 // API
 export let Circle: {
-  new(position: Vec2, radius?: number): CircleShape;
-     (position: Vec2, radius?: number): CircleShape;
+  new(position: planck.Vec2, radius?: number): CircleShape;
+     (position: planck.Vec2, radius?: number): CircleShape;
 
   new(radius?: number): CircleShape;
      (radius?: number): CircleShape;
@@ -85,26 +85,26 @@ export let Circle: {
   TYPE: 'circle';
 };
 export let Edge: {
-  new(v1: Vec2, v2: Vec2): EdgeShape;
-     (v1: Vec2, v2: Vec2): EdgeShape;
+  new(v1: planck.Vec2, v2: planck.Vec2): EdgeShape;
+     (v1: planck.Vec2, v2: planck.Vec2): EdgeShape;
 
   TYPE: 'edge';
 };
 export let Polygon: {
-  new(vertices: Vec2[]): PolygonShape;
-     (vertices: Vec2[]): PolygonShape;
+  new(vertices: planck.Vec2[]): PolygonShape;
+     (vertices: planck.Vec2[]): PolygonShape;
 
   TYPE: 'polygon';
 };
 export let Chain: {
-  new(vertices: Vec2[], loop?: boolean): ChainShape;
-  (vertices: Vec2[], loop?: boolean): ChainShape;
+  new(vertices: planck.Vec2[], loop?: boolean): ChainShape;
+  (vertices: planck.Vec2[], loop?: boolean): ChainShape;
 
   TYPE: 'chain';
 };
 export let Box: {
-  new(hx: number, hy: number, center?: Vec2, angle?: number): PolygonShape;
-     (hx: number, hy: number, center?: Vec2, angle?: number): PolygonShape;
+  new(hx: number, hy: number, center?: planck.Vec2, angle?: number): PolygonShape;
+     (hx: number, hy: number, center?: planck.Vec2, angle?: number): PolygonShape;
 
   TYPE: 'polygon';
 };

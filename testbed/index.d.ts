@@ -68,7 +68,7 @@ export interface Testbed {
   drawCircle(p: {x: number, y: number}, r: number, color: string): void;
   drawSegment(a: {x: number, y: number}, b: {x: number, y: number}, color: string): void;
   drawPolygon(points: {x: number, y: number}[], color: string): void;
-  drawAABB(aabb: AABB, color: string): void;
+  drawAABB(aabb: planck.AABB, color: string): void;
   color(r: number, g: number, b: number): string;
   //callbacks
   _resume?: () => void;
@@ -79,5 +79,5 @@ export interface Testbed {
   keyup?: (keyCode: number, label: string) => void;
 }
 
-export function testbed(opts: any, callback: (testbed: Testbed) => World): Testbed;//opts is never used, bug?
-export function testbed(callback: (testbed: Testbed) => World): Testbed;
+export function testbed(opts: any, callback: (testbed: Testbed) => planck.World): Testbed;//opts is never used, bug?
+export function testbed(callback: (testbed: Testbed) => planck.World): Testbed;
