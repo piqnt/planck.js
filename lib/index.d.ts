@@ -222,7 +222,7 @@ export interface Body {
   getLocalVector(worldVector: planck.Vec2): planck.Vec2;
 }
 
-type BodyDef = Partial<{
+export type BodyDef = Partial<{
   type: BodyType,
   position: planck.Vec2,
   angle: number,
