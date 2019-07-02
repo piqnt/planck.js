@@ -1,39 +1,42 @@
+import { Vec2 } from "../common";
+import { Shape } from "../shape";
+
 export type BroadPhase = any; // TODO
 
 export type RayCastInput = { // TODO interface?
-  p1: planck.Vec2,
-  p2: planck.Vec2,
+  p1: Vec2,
+  p2: Vec2,
   maxFraction: number,
 };
 
 export type RayCastOutput = {
-  normal: planck.Vec2,
+  normal: Vec2,
   fraction: number,
 };
 
 export interface DistanceProxy {
-  m_buffer: planck.Vec2[];
-  m_vertices: planck.Vec2[];
+  m_buffer: Vec2[];
+  m_vertices: Vec2[];
   m_count: number;
   m_radius: number;
 
   getVertexCount(): number;
-  getVertex(index: number): planck.Vec2;
-  getSupport(d: planck.Vec2): number;
-  getSupportVertex(d: planck.Vec2): planck.Vec2;
-  set(shape: planck.Shape, index: number): void; // TODO index is only used by Chain
+  getVertex(index: number): Vec2;
+  getSupport(d: Vec2): number;
+  getSupportVertex(d: Vec2): Vec2;
+  set(shape: Shape, index: number): void; // TODO index is only used by Chain
 }
 
 export interface AABB {
-  lowerBound: planck.Vec2;
-  upperBound: planck.Vec2;
+  lowerBound: Vec2;
+  upperBound: Vec2;
 
   isValid(): boolean;
-  getCenter(): planck.Vec2;
-  getExtents(): planck.Vec2;
+  getCenter(): Vec2;
+  getExtents(): Vec2;
   getPerimeter(): number;
   combine(a: AABB, b: AABB): void;
-  combinePoints(a: planck.Vec2, b: planck.Vec2): void;
+  combinePoints(a: Vec2, b: Vec2): void;
   set(aabb: AABB): void;
   contains(aabb: AABB): boolean;
   extend(value: number): void;
@@ -42,8 +45,8 @@ export interface AABB {
 }
 
 export let AABB: {
-  new(lower: planck.Vec2, upper: planck.Vec2): AABB;
-     (lower: planck.Vec2, upper: planck.Vec2): AABB;
+  new(lower: Vec2, upper: Vec2): AABB;
+     (lower: Vec2, upper: Vec2): AABB;
 
   isValid(o: any): boolean;
   assert(o: any): void;
