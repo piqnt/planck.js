@@ -4,7 +4,7 @@
 
 export as namespace planck;
 
-import { Sweep, Velocity, Vec2, Transform, Mat22 } from "./common";
+import { Sweep, Velocity, Position, Vec2, Transform, Mat22 } from "./common";
 import { BroadPhase, RayCastInput, RayCastOutput, AABB } from "./collision";
 import { JointEdge, Joint } from "./joint";
 import { ShapeType, Shape } from "./shape";
