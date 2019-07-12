@@ -22,7 +22,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  * 
  */
-var planck =
+exports["planck"] =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -22452,4 +22452,4 @@ function ImageLoader(src, success, error) {
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=planck-with-testbed.js.map
+//# sourceMappingURL=planck-with-testbed.commonjs.js.map

@@ -22,7 +22,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  * 
  */
-var planck =
+exports["planck"] =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -17928,4 +17928,4 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=planck.js.map
+//# sourceMappingURL=planck.commonjs.js.map
