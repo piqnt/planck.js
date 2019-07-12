@@ -43,7 +43,7 @@ Also see [`example`](./example/) directory for more testbed usage examples.
 
 
 ## Community
-Twitter: [@piqnt on twitter](https://twitter.com/piqnt)  
+Twitter: [@piqnt](https://twitter.com/piqnt)  
 Discord:  https://discord.gg/znjh6J7
 
 
