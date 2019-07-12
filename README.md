@@ -12,6 +12,15 @@ Key motivations for the development of this project are:
 - Optimizing the library for web and mobile platforms
 - Providing a JavaScript-friendly API
 
+## Made with Planck.js
+
+#### Games
+- [Acolyte Fight](https://acolytefight.io/)
+- [Nitro Clash](http://nitroclash.io/)
+
+#### Game Development
+- [Modd.io](https://www.modd.io/)
+
 ## Try it
 
 To try Planck.js, simply add `planck-with-testbed.js` script to your HTML code and call `planck.testbed(callback)` with your code in callback. For example:
