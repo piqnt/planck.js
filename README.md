@@ -83,7 +83,7 @@ Following resources are recommended if you are interested in learning about Box2
 - [Solving Rigid Body Contacts](http://www.richardtonge.com/presentations/Tonge-2012-GDC-solvingRigidBodyContacts.pdf) by Richard Tonge (slides)
 - [dyn4j Blog Posts](http://www.dyn4j.org/category/gamedev/) by William Bittle
 
-Please feel free to join Plankc.js's *[Discord](https://discord.gg/znjh6J7)) for Q/A and other discussions.
+Please feel free to join Plankc.js's [*Discord*](https://discord.gg/znjh6J7) for Q/A and other discussions.
 
 ## Tutorial
 
