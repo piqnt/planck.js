@@ -42,9 +42,12 @@ Check out [Car example on JS Bin](http://jsbin.com/nujuxik/edit?html,output) to 
 Also see [`example`](./example/) directory for more testbed usage examples.
 
 
-## Install
+## Community
+Twitter: [@piqnt on twitter](https://twitter.com/piqnt)  
+Discord:  https://discord.gg/znjh6J7
 
-*To receive updates about changes and progress follow [@piqnt on twitter](https://twitter.com/piqnt).*
+
+## Install
 
 #### Download
 
@@ -92,7 +95,6 @@ Following resources are recommended if you are interested in learning about Box2
 - [Solving Rigid Body Contacts](http://www.richardtonge.com/presentations/Tonge-2012-GDC-solvingRigidBodyContacts.pdf) by Richard Tonge (slides)
 - [dyn4j Blog Posts](http://www.dyn4j.org/category/gamedev/) by William Bittle
 
-Please feel free to join Plankc.js's [**Discord**](https://discord.gg/znjh6J7) for Q/A and other discussions.
 
 ## Tutorial
 
