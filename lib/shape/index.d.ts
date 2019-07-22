@@ -1,6 +1,6 @@
 import { Vec2, Transform } from "../common";
 import { RayCastInput, RayCastOutput, DistanceProxy, AABB } from "../collision";
-import { MassData } from "../"
+import { MassData } from "../";
 
 // Types
 export type ShapeType = "circle" | "edge" | "polygon" | "chain";
