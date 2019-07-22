@@ -70,10 +70,10 @@ export interface Fixture {
   getRestitution(): number;
   setRestitution(restitution: number): void;
   testPoint(p: Vec2): boolean;
-  rayCast(output: RayCastOutput, input: RayCastInput, childIndex: number): boolean;// is childIndex optional?
+  rayCast(output: RayCastOutput, input: RayCastInput, childIndex: number): boolean; // is childIndex optional?
   getMassData(massData: MassData): void;
   getAABB(childIndex: number): AABB;
-  createProxies(broadPhase: BroadPhase, xf: Transform): void;//TODO
+  createProxies(broadPhase: BroadPhase, xf: Transform): void; // TODO
   destroyProxies(broadPhase: BroadPhase): void;
   synchronize(broadPhase: BroadPhase, xf1: Transform, xf2: Transform): void;
   setFilterData(filter: { groupIndex: number, categoryBits: number, maskBits: number }): void;
@@ -147,7 +147,7 @@ export interface Body {
   isWorldLocked(): boolean;
   getWorld(): World;
   getNext(): Body | null;
-  setUserData(data: any): void
+  setUserData(data: any): void;
   getUserData(): unknown;
   getFixtureList(): Fixture | null;
   getJointList(): JointEdge | null;
@@ -250,7 +250,7 @@ export let Body: {
   STATIC: 'static';
   KINEMATIC: 'kinematic';
   DYNAMIC: 'dynamic';
-}
+};
 
 export interface ContactEdge {
   contact: Contact;
