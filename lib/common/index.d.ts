@@ -16,8 +16,6 @@ export let Math: Math & {
   random(max?: number): number;
 };
 
-export type Sweep = any; // TODO
-
 export interface Velocity {
   v: Vec2;
   w: number;
@@ -273,4 +271,26 @@ export let Mat33: {
   mulVec3(a: Mat33, b: Vec3): Vec3;
   mulVec2(a: Mat33, b: Vec2): Vec2;
   add(a: Mat33, b: Mat33): Mat33;
+};
+
+export interface Sweep {
+  localCenter: Vec2;
+  c: Vec2;
+  a: number;
+  alpha0: number;
+  c0: Vec2;
+  a0: number;
+
+  setTransform(xf): void;
+  setLocalCenter(localCenter, xf): void;
+  getTransform(xf, beta): void;
+  advance(alpha): void;
+  forward(): void;
+  normalize(): void;
+  clone(): Sweep;
+  set(that): void;
+}
+
+export let Sweep: {
+    new (c, a): Sweep;
 };

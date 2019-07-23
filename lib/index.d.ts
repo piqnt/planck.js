@@ -613,8 +613,8 @@ export interface Settings {
 
 export let internal: {
     Settings: Settings;
-    Sweep: any;
-    Manifold: any;
+    Sweep: Sweep;
+    Manifold: Manifold;
     Distance: any;
     TimeOfImpact: any;
     DynamicTree: any;
