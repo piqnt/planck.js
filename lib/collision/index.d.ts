@@ -45,12 +45,12 @@ export interface AABB {
 }
 
 export let AABB: {
-  new(lower: Vec2, upper: Vec2): AABB;
-     (lower: Vec2, upper: Vec2): AABB;
+  new(lower?: Vec2, upper?: Vec2): AABB;
+     (lower?: Vec2, upper?: Vec2): AABB;
 
   isValid(o: any): boolean;
   assert(o: any): void;
-  extend(aabb: AABB, value: number): void;
+  extend(aabb: AABB, value: number): AABB;
   testOverlap(a: AABB, b: AABB): boolean;
   areEqual(a: AABB, b: AABB): boolean;
   diff(a: AABB, b: AABB): number;
