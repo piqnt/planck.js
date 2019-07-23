@@ -55,3 +55,42 @@ export let AABB: {
   areEqual(a: AABB, b: AABB): boolean;
   diff(a: AABB, b: AABB): number;
 };
+
+export interface TreeNode {
+  id: string;
+  aabb: AABB;
+  userData: unknown;
+  parent: TreeNode;
+  child1: TreeNode;
+  child2: TreeNode;
+  height: number;
+}
+
+export interface DynamicTree {
+}
+
+export let DynamicTree: {
+  new(): DynamicTree;
+
+  getUserData(id: string): unknown;
+  getFatAABB(id: string): AABB;
+  allocateNode(): TreeNode;
+  freeNode(node: TreeNode): void;
+  createProxy(aabb: AABB, userData: unknown): string;
+  destroyProxy(id: string): void;
+  moveProxy(id: string, aabb: AABB, d: Vec2): boolean;
+  insertLeaf(leaf: TreeNode): void;
+  removeLeaf(leaf: TreeNode): void;
+  balance(iA: TreeNode): TreeNode;
+  getHeight(): number;
+  getAreaRatio(): number;
+  computeHeight(id: string): number;
+  validateStructure(node: TreeNode): void;
+  validateMetrics(node: TreeNode): void;
+  validate(): void;
+  getMaxBalance(): number;
+  rebuildBottomUp(): void;
+  shiftOrigin(newOrigin: Vec2): void;
+  query(aabb: AABB, queryCallback: (id: string) => boolean): void;
+  rayCast(input: RayCastInput, rayCastCallback: (subInput: RayCastInput, id: string) => number): void;
+};
