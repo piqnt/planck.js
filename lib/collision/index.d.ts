@@ -39,7 +39,7 @@ export interface AABB {
   combinePoints(a: Vec2, b: Vec2): void;
   set(aabb: AABB): void;
   contains(aabb: AABB): boolean;
-  extend(value: number): void;
+  extend(value: number): AABB;
   rayCast(output: RayCastOutput, input: RayCastInput): boolean;
   toString(): string;
 }
@@ -50,7 +50,7 @@ export let AABB: {
 
   isValid(o: any): boolean;
   assert(o: any): void;
-  extend(aabb: AABB, value: number): AABB;
+  extend(aabb: AABB, value: number): void;
   testOverlap(a: AABB, b: AABB): boolean;
   areEqual(a: AABB, b: AABB): boolean;
   diff(a: AABB, b: AABB): number;
@@ -59,7 +59,7 @@ export let AABB: {
 export interface TreeNode {
   id: string;
   aabb: AABB;
-  userData: unknown;
+  userData: any;
   parent: TreeNode;
   child1: TreeNode;
   child2: TreeNode;
@@ -67,30 +67,29 @@ export interface TreeNode {
 }
 
 export interface DynamicTree {
+    getUserData(id: string): unknown;
+    getFatAABB(id: string): AABB;
+    allocateNode(): TreeNode;
+    freeNode(node: TreeNode): void;
+    createProxy(aabb: AABB, userData: any): string;
+    destroyProxy(id: string): void;
+    moveProxy(id: string, aabb: AABB, d: Vec2): boolean;
+    insertLeaf(leaf: TreeNode): void;
+    removeLeaf(leaf: TreeNode): void;
+    balance(iA: TreeNode): TreeNode;
+    getHeight(): number;
+    getAreaRatio(): number;
+    computeHeight(id: string): number;
+    validateStructure(node: TreeNode): void;
+    validateMetrics(node: TreeNode): void;
+    validate(): void;
+    getMaxBalance(): number;
+    rebuildBottomUp(): void;
+    shiftOrigin(newOrigin: Vec2): void;
+    query(aabb: AABB, queryCallback: (id: string) => boolean): void;
+    rayCast(input: RayCastInput, rayCastCallback: (subInput: RayCastInput, id: string) => number): void;
 }
 
 export let DynamicTree: {
   new(): DynamicTree;
-
-  getUserData(id: string): unknown;
-  getFatAABB(id: string): AABB;
-  allocateNode(): TreeNode;
-  freeNode(node: TreeNode): void;
-  createProxy(aabb: AABB, userData: unknown): string;
-  destroyProxy(id: string): void;
-  moveProxy(id: string, aabb: AABB, d: Vec2): boolean;
-  insertLeaf(leaf: TreeNode): void;
-  removeLeaf(leaf: TreeNode): void;
-  balance(iA: TreeNode): TreeNode;
-  getHeight(): number;
-  getAreaRatio(): number;
-  computeHeight(id: string): number;
-  validateStructure(node: TreeNode): void;
-  validateMetrics(node: TreeNode): void;
-  validate(): void;
-  getMaxBalance(): number;
-  rebuildBottomUp(): void;
-  shiftOrigin(newOrigin: Vec2): void;
-  query(aabb: AABB, queryCallback: (id: string) => boolean): void;
-  rayCast(input: RayCastInput, rayCastCallback: (subInput: RayCastInput, id: string) => number): void;
 };
