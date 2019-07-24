@@ -292,5 +292,5 @@ export interface Sweep {
 }
 
 export let Sweep: {
-    new (c, a): Sweep;
+    new(c, a): Sweep;
 };
