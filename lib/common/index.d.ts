@@ -281,14 +281,14 @@ export interface Sweep {
   c0: Vec2;
   a0: number;
 
-  setTransform(xf): void;
-  setLocalCenter(localCenter, xf): void;
-  getTransform(xf, beta): void;
-  advance(alpha): void;
+  setTransform(xf: Transform): void;
+  setLocalCenter(localCenter: Vec2, xf: Transform): void;
+  getTransform(xf: Transform, beta: number): void;
+  advance(alpha: number): void;
   forward(): void;
   normalize(): void;
   clone(): Sweep;
-  set(that): void;
+  set(sweep: Sweep): void;
 }
 
 export let Sweep: {
