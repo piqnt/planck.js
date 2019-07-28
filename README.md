@@ -31,6 +31,12 @@ Key motivations for the development of this project are:
  - [Walking EA](https://matsemann.github.io/walkingea/)
 
 
+## Community
+Updates and news: [Twitter @Piqnt](https://twitter.com/piqnt)  
+Issues and questions: [GitHub](https://github.com/shakiba/planck.js/)  
+Community discussions: [Discord](https://discord.gg/znjh6J7)
+
+
 ## Try it
 
 To try Planck.js, simply add `planck-with-testbed.js` script to your HTML code and call `planck.testbed(callback)` with your code in callback. For example:
@@ -50,11 +56,6 @@ To try Planck.js, simply add `planck-with-testbed.js` script to your HTML code a
 
 Check out [Car example on JS Bin](http://jsbin.com/nujuxik/edit?html,output) to try it in practice.
 Also see [`example`](./example/) directory for more testbed usage examples.
-
-
-## Community
-Twitter: [@piqnt](https://twitter.com/piqnt)  
-Discord:  https://discord.gg/znjh6J7
 
 
 ## Install
