@@ -17,9 +17,17 @@ Key motivations for the development of this project are:
 #### Games
 - [Acolyte Fight](https://acolytefight.io/)
 - [Nitro Clash](http://nitroclash.io/)
+- [Astray 2](https://github.com/wwwtyro/astray-2) ([source](https://github.com/wwwtyro/astray-2))
+- [Air Hockey](https://github.com/Steveeeie/webgl-air-hockey-server)
 
 #### Game Development
 - [Modd.io](https://www.modd.io/)
+
+#### Other Projects
+ - [Flag in the Wind](https://codepen.io/unframework/pen/OrOMBg)
+ - [Prototype](https://twitter.com/paramaterialist/status/1106971890533523457)
+ - [Neuroevolution Bots](https://twitter.com/mishig25/status/1077672181503590400)
+ - [Walking EA](https://matsemann.github.io/walkingea/)
 
 ## Try it
 
