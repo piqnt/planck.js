@@ -17,7 +17,7 @@ Key motivations for the development of this project are:
 #### Games
 - [Acolyte Fight](https://acolytefight.io/)
 - [Nitro Clash](http://nitroclash.io/)
-- [Astray 2](https://github.com/wwwtyro/astray-2) ([source](https://github.com/wwwtyro/astray-2))
+- [Astray 2](https://wwwtyro.github.io/astray-2/) ([source](https://github.com/wwwtyro/astray-2))
 - [Air Hockey](https://github.com/Steveeeie/webgl-air-hockey-server)
 
 #### Game Development
