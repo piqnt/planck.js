@@ -4,6 +4,7 @@ Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5
 
 [![Car](./doc/img/screenshot.png "Play")](http://piqnt.com/planck.js/Car)
 
+
 ## Motivations
 
 Key motivations for the development of this project are:
@@ -14,6 +15,8 @@ Key motivations for the development of this project are:
 
 
 ## Made with Planck.js
+
+Testebd [examples and demos](http://piqnt.com/planck.js/).
 
 #### Games
 - [Acolyte Fight](https://acolytefight.io/)
