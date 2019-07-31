@@ -59,5 +59,8 @@
     "build": "webpack -p",
     "watch": "webpack --watch",
     "testbed": "nodemon testbed/server.js"
+  },
+  "dependencies": {
+    "flatted": "^2.0.1"
   }
 }
