@@ -35,6 +35,7 @@ Testebd [examples and demos](http://piqnt.com/planck.js/).
 
 
 ## Community
+
 Updates and news: [Twitter @Piqnt](https://twitter.com/piqnt)  
 Issues and questions: [GitHub](https://github.com/shakiba/planck.js/)  
 Community discussions: [Discord](https://discord.gg/znjh6J7)
@@ -81,14 +82,18 @@ Planck.js is [available on jsDelivr](https://www.jsdelivr.com/projects/planck).
     bower install planck-js --save
 
 
-## API
+## API and Architecture
 
-Planck.js public API closely follows Box2D API (see [Resources](#Resources)), with the following differences:
+Planck.js includes Box2D algorithms without modification and its architecture is very similar to Box2D.
+However some internal [changes](./CHANGES.md) and refactoring are made during rewrite to address differences between C++ and JavaScript.
+
+Planck.js public API closely follows Box2D API (see [Resources](##resources-and-references)), with the following differences:
 
 - `b2` prefix is dropped from class names, for example `b2World` is now available as `planck.World`.
 - Method names are converted from UpperCamelCase to lowerCamelCase.
 - Definition classes/objects (BodyDef, FixtureDef, etc.) are replaced by inline JavaScript objects (`{}`).
 - Shapes are made immutable and are not cloned when used to create fixtures.
+- Listener classes are replaced with simple functions.
 - `World#on(eventName, listenerFn)` and `World#off(eventName, listenerFn)` are added to add and remove event listeners. Currently supported events are:
     - `'begin-contact'`
     - `'end-contact'`
@@ -133,7 +138,7 @@ This will create a world with default options. You can pass a definition object 
 
 ```js
 var world = planck.World({
-  gravity: Vec2(0, -10)
+  gravity: planck.Vec2(0, -10)
 });
 ```
 Bodies are directly created and added to world:
@@ -147,7 +152,7 @@ This will create a body with default options, which means a ‘static’ body at
 ```js
 var ground = world.createBody({
   type: 'static',
-  position: Vec2(2, 5),
+  position: planck.Vec2(2, 5),
 });
 ```
 
@@ -189,9 +194,9 @@ You may also want to listen to world events to remove objects which are removed 
 ```
 
 
-## Testbed
+## Development
 
-Another way to use testbed and try included examples (in [`example`](./example/) directory) is running testbed with live build locally:
+For development, you can run testbed locally with a live build and try examples in [`example`](./example/) directory.
 
 1. Install `git` and `npm`
 
@@ -206,12 +211,6 @@ Another way to use testbed and try included examples (in [`example`](./example/)
         npm run testbed
 
 
-## Architecture
-
-Planck.js includes Box2D algorithms without modification and its internal architecture and public API are very similar to Box2D.
-However some [changes](./CHANGES.md) and refactoring are made during rewrite to address differences between C++ and JavaScript.
-
-
 ## Credits
 
 [Box2D](http://box2d.org/) is a popular C++ 2D rigid-body physics engine created by [Erin Catto](https://twitter.com/erin_catto). Box2D is used in several popular games, such as Angry Birds, Limbo and Crayon Physics, as well as game development tools and libraries such as Apple's SpriteKit.
@@ -219,6 +218,7 @@ However some [changes](./CHANGES.md) and refactoring are made during rewrite to 
 [Planck.js](https://github.com/shakiba/planck.js) is developed and maintained by [Ali Shakiba](https://github.com/shakiba/).
 
 TypeScript definitions for planck.js are developed by [Oliver Zell](https://github.com/zOadT).
+
 
 ## License
 
