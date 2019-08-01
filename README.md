@@ -29,6 +29,7 @@ Testebd [examples and demos](http://piqnt.com/planck.js/).
 - [Modd.io](https://www.modd.io/)
 
 #### Other Projects
+ - [1000 Unique Postcards](https://twitter.com/andreasgysin/status/956131218386509824)
  - [Flag in the Wind](https://codepen.io/unframework/pen/OrOMBg)
  - [Neuroevolution Bots](https://twitter.com/mishig25/status/1077672181503590400)
  - [Walking EA](https://matsemann.github.io/walkingea/)
