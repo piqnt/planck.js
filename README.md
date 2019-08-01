@@ -21,18 +21,18 @@ Testebd [examples and demos](http://piqnt.com/planck.js/).
 #### Games
 - [Acolyte Fight](https://acolytefight.io/)
 - [Nitro Clash](http://nitroclash.io/)
-- [Astray 2](https://wwwtyro.github.io/astray-2/) ([source](https://github.com/wwwtyro/astray-2))
-- [Air Hockey](https://github.com/Steveeeie/webgl-air-hockey-server)
+- [Astray 2](https://wwwtyro.github.io/astray-2/) ([source](https://github.com/wwwtyro/astray-2)) by Rye Terrell
+- [Air Hockey](https://github.com/Steveeeie/webgl-air-hockey-server) by Steve Meredith
 - [Coined](https://coined--parameterized.repl.co/) ([source](https://repl.it/talk/challenge/Coined/13314))
 
 #### Game Development
 - [Modd.io](https://www.modd.io/)
 
 #### Other Projects
- - [1000 Unique Postcards](https://twitter.com/andreasgysin/status/956131218386509824)
- - [Flag in the Wind](https://codepen.io/unframework/pen/OrOMBg)
- - [Neuroevolution Bots](https://twitter.com/mishig25/status/1077672181503590400)
- - [Walking EA](https://matsemann.github.io/walkingea/)
+ - [1000 Unique Postcards](https://twitter.com/andreasgysin/status/956131218386509824) by Andreas Gysin
+ - [Flag in the Wind](https://codepen.io/unframework/pen/OrOMBg) by Nick Matantsev
+ - [Neuroevolution Bots](https://twitter.com/mishig25/status/1077672181503590400) by Mishig Davaadorj
+ - [Walking EA](https://matsemann.github.io/walkingea/) by Mats Krüger Svensson
 
 
 ## Community
