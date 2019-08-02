@@ -23,7 +23,7 @@ Testebd [examples and demos](http://piqnt.com/planck.js/).
 - [Nitro Clash](http://nitroclash.io/)
 - [Astray 2](https://wwwtyro.github.io/astray-2/) ([source](https://github.com/wwwtyro/astray-2)) by Rye Terrell
 - Air Hockey ([source](https://github.com/Steveeeie/webgl-air-hockey-server)) by Steve Meredith
-- [Coined(alepha)](https://coined--parameterized.repl.co/) ([source](https://repl.it/talk/challenge/Coined/13314))
+- [Coined](https://coined--parameterized.repl.co/) ([source](https://repl.it/talk/challenge/Coined/13314))
 
 #### Game Development
 - [Modd.io](https://www.modd.io/)
