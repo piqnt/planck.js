@@ -19,9 +19,9 @@ Key motivations for the development of this project are:
 Testebd [examples and demos](http://piqnt.com/planck.js/).
 
 #### Games
+- [Astray 2](https://wwwtyro.github.io/astray-2/) ([source](https://github.com/wwwtyro/astray-2)) by Rye Terrell
 - [Acolyte Fight](https://acolytefight.io/)
 - [Nitro Clash](http://nitroclash.io/)
-- [Astray 2](https://wwwtyro.github.io/astray-2/) ([source](https://github.com/wwwtyro/astray-2)) by Rye Terrell
 - Air Hockey ([source](https://github.com/Steveeeie/webgl-air-hockey-server)) by Steve Meredith
 - [Coined](https://coined--parameterized.repl.co/) ([source](https://repl.it/talk/challenge/Coined/13314))
 
@@ -93,7 +93,7 @@ Planck.js public API closely follows Box2D API (see [Resources](##resources-and-
 - `b2` prefix is dropped from class names, for example `b2World` is now available as `planck.World`.
 - Method names are converted from UpperCamelCase to lowerCamelCase.
 - Definition classes/objects (BodyDef, FixtureDef, etc.) are replaced by inline JavaScript objects (`{}`).
-- Shapes are made immutable and are not cloned when used to create fixtures.
+- Shapes are considered immutable and are not cloned when used to create fixtures.
 - Listener classes are replaced with simple functions.
 - `World#on(eventName, listenerFn)` and `World#off(eventName, listenerFn)` are added to add and remove event listeners. Currently supported events are:
     - `'begin-contact'`
