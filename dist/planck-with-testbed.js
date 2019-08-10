@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.7
+ * Planck.js v0.3.8
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -19535,7 +19535,7 @@ planck.testbed = function(opts, callback) {
     testbed.height = 60;
     testbed.x = 0;
     testbed.y = -10;
-    testbed.scaleY = 1;
+    testbed.scaleY = -1;
     testbed.ratio = 16;
     testbed.hz = 60;
     testbed.speed = 1;
