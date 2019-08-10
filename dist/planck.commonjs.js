@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.6
+ * Planck.js v0.3.7
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -2705,6 +2705,8 @@ function AABB(lower, upper) {
   }
   if (typeof upper === 'object') {
     this.upperBound.set(upper);
+  } else if (typeof lower === 'object') {
+    this.upperBound.set(lower);
   }
 };
 
@@ -2791,6 +2793,7 @@ AABB.prototype.contains = function(aabb) {
 
 AABB.prototype.extend = function(value) {
   AABB.extend(this, value);
+  return this;
 }
 
 AABB.extend = function(aabb, value) {
@@ -11915,7 +11918,7 @@ exports.RopeJoint = __webpack_require__(57);
 exports.WeldJoint = __webpack_require__(58);
 exports.WheelJoint = __webpack_require__(59);
 
-exports.internal.Sweep= __webpack_require__(8);
+exports.internal.Sweep = __webpack_require__(8);
 exports.internal.stats = __webpack_require__(27);
 exports.internal.Manifold = __webpack_require__(18);
 exports.internal.Distance = __webpack_require__(21);
@@ -11930,21 +11933,25 @@ exports.internal.Settings = __webpack_require__(4);
 
 var World = __webpack_require__(30);
 
-exports.toJson = function(world) {
-  return JSON.stringify(world._serialize(), function(key, value) {
-    if (typeof value === 'object') {
-      if (value !== null) {
-        if (typeof value._serialize === 'function') {
-          value = value._serialize();
-        }
+exports.toJson = function(world, stringify) {
+  stringify = stringify || JSON.stringify;
+  var dump = world._serialize();
+  var string = stringify(dump, function(key, value) {
+    if (typeof value === 'object' && value !== null) {
+      if (typeof value._serialize === 'function') {
+        value = value._serialize();
       }
     }
     return value;
   }, '  ');
+  return string;
 };
 
-exports.fromJson = function(string) {
-  return World._deserialize(JSON.parse(string));
+exports.fromJson = function(string, parse) {
+  parse = parse || JSON.parse;
+  var dump = parse(string);
+  var world = World._deserialize(dump);
+  return world;
 };
 
 
