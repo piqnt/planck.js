@@ -12,6 +12,7 @@ export interface Testbed {
   height: number;
   x: number;
   y: number;
+  scaleY: number;
   ratio: number;
   hz: number;
   speed: number;
