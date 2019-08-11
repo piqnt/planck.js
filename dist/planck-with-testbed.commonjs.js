@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.8
+ * Planck.js v0.3.9
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -19735,7 +19735,7 @@ planck.testbed = function(opts, callback) {
     var mouseMove = {x:0, y:0};
 
     viewer.attr('spy', true).on(Stage.Mouse.START, function(point) {
-      point = { x: point.x, y: -point.y };
+      point = { x: point.x, y: testbed.scaleY * point.y };
       if (targetBody) {
         return;
       }
@@ -19754,7 +19754,7 @@ planck.testbed = function(opts, callback) {
       }
 
     }).on(Stage.Mouse.MOVE, function(point) {
-      point = { x: point.x, y: -point.y };
+      point = { x: point.x, y: testbed.scaleY * point.y };
       if (mouseJoint) {
         mouseJoint.setTarget(point);
       }
@@ -19762,7 +19762,7 @@ planck.testbed = function(opts, callback) {
       mouseMove.x = point.x;
       mouseMove.y = point.y;
     }).on(Stage.Mouse.END, function(point) {
-      point = { x: point.x, y: -point.y };
+      point = { x: point.x, y: testbed.scaleY * point.y };
       if (mouseJoint) {
         world.destroyJoint(mouseJoint);
         mouseJoint = null;
@@ -19774,7 +19774,7 @@ planck.testbed = function(opts, callback) {
       }
 
     }).on(Stage.Mouse.CANCEL, function(point) {
-      point = { x: point.x, y: -point.y };
+      point = { x: point.x, y: testbed.scaleY * point.y };
       if (mouseJoint) {
         world.destroyJoint(mouseJoint);
         mouseJoint = null;
