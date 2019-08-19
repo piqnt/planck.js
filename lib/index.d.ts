@@ -15,12 +15,49 @@ export * from "./joint";
 export * from "./shape";
 export * from "../testbed";
 
-export type Manifold = any; // TODO
+export const enum ContactFeatureType {
+  Vertex = 0,
+  Face = 1
+}
 
-export type WorldManifold = any; // TODO
+export interface ContactFeature {
+  indexA: number;
+  indexB: number;
+  typeA: ContactFeatureType;
+  typeB: ContactFeatureType;
+}
 
-export namespace Manifold {
-  type Type = any;
+export interface ContactID {
+  cf: ContactFeature;
+}
+
+export const enum ManifoldType {
+  Circles = 0,
+  FaceA = 1,
+  FaceB = 2
+}
+
+export interface ManifoldPoint {
+  localPoint: Vec2;
+  normalImpulse: number;
+  tangentImpulse: number;
+  id: ContactID;
+}
+  
+export interface Manifold {
+  type: ManifoldType;
+  localNormal: Vec2;
+  localPoint: Vec2;
+  points: ManifoldPoint[];
+  pointCount: number;
+
+  getWorldManifold(wm: WorldManifold | undefined, xfA: Transform, radiusA: number, xfB: Transform, radiusB: number): WorldManifold | undefined;
+}
+
+export interface WorldManifold {
+  normal: Vec2;
+  points: Vec2[];
+  separations: number[];
 }
 
 export type Solver = any; // TODO
@@ -319,7 +356,7 @@ export interface Contact {
 
   initConstraint(step: {warmStarting: boolean, dtRatio: number}): void;
   getManifold(): Manifold;
-  getWorldManifold(worldManifold: WorldManifold | null | undefined): WorldManifold;
+  getWorldManifold(worldManifold: WorldManifold | null | undefined): WorldManifold | undefined;
   setEnabled(flag: boolean): void;
   isEnabled(): boolean;
   isTouching(): boolean;
