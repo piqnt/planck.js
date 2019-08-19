@@ -14,10 +14,20 @@ export * from "./common";
 export * from "./joint";
 export * from "./shape";
 export * from "../testbed";
+  
+export interface Manifold {
+  type: number;
+  localNormal: Vec2;
+  localPoint: Vec2;
+  points: Vec2[];
+  pointCount: number;
+}
 
-export type Manifold = any; // TODO
-
-export type WorldManifold = any; // TODO
+export interface WorldManifold {
+  normal: Vec2;
+  points: Vec2[];
+  separations: number[];
+}
 
 export namespace Manifold {
   type Type = any;
