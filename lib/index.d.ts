@@ -23,6 +23,10 @@ export interface Manifold {
   pointCount: number;
 }
 
+export let Manifold: {
+  new(): Manifold;
+};
+
 export interface WorldManifold {
   normal: Vec2;
   points: Vec2[];
