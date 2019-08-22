@@ -648,11 +648,13 @@ export interface Settings {
   angularSleepToleranceSqr: number;
 }
 
-export let internal: {
-  Settings: Settings;
-  Sweep: Sweep;
-  Manifold: Manifold;
-  Distance: any;
-  TimeOfImpact: any;
-  DynamicTree: DynamicTree;
-};
+export namespace internal {
+  export let Settings: Settings;
+  let Sweep: Sweep;
+  export let Manifold: {
+    new(): Manifold;
+  };
+  export let Distance: any;
+  export let TimeOfImpact: any;
+  let DynamicTree: DynamicTree;
+}
