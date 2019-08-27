@@ -29,6 +29,7 @@ export interface ContactFeature {
 
 export interface ContactID {
   cf: ContactFeature;
+  readonly key: number;
 }
 
 export const enum ManifoldType {
