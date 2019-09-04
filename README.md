@@ -177,7 +177,8 @@ You may also want to listen to world events to remove objects which are removed 
 <script>
   var world = planck.World();
 
-  window.requestAnimationFrame(function() {
+  // rendering loop
+  (function loop() {
     // in each frame call world.step(timeStep) with fixed timeStep
     world.step(1 / 60);
     // iterate over bodies and fixtures
@@ -186,9 +187,11 @@ You may also want to listen to world events to remove objects which are removed 
         // draw or update fixture
       }
     }
-  });
+    // request a new frame
+    window.requestAnimationFrame(loop);
+  })();
 
-   world.on('remove-fixture', function(fixture) {
+  world.on('remove-fixture', function(fixture) {
     // remove fixture from ui
   });
 </script>
