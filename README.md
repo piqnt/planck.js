@@ -24,6 +24,7 @@ Testebd [examples and demos](http://piqnt.com/planck.js/).
 - [Nitro Clash](http://nitroclash.io/)
 - Air Hockey ([source](https://github.com/Steveeeie/webgl-air-hockey-server)) by Steve Meredith
 - [Coined](https://coined--parameterized.repl.co/) ([source](https://repl.it/talk/challenge/Coined/13314))
+- [Hoverator](https://vgel.me/hoverator/) by Jonathon Vogel
 
 #### Game Development
 - [Modd.io](https://www.modd.io/)
