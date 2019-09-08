@@ -104,6 +104,13 @@ Planck.js public API closely follows Box2D API (see [Resources](##resources-and-
     - `'remove-fixture'`
     - `'remove-body'`
 
+### Rendering
+
+Planck.js does not include rendering and graphics by default, however you can use one of these options:
+
+- For testing and development use testbed as explained in [Try it](#try-it) and [Development](#development) sections
+- Develop a [renderer or integrate](#rendering-and-integration) with an existing graphics library
+- Use an existing renderer such as [RealPeha/planck-renderer](https://github.com/RealPeha/planck-renderer)
 
 ## Resources and References
 - <a href="http://box2d.org/documentation/" target="_blank">Box2D Manual</a> and <a href="https://github.com/erincatto/Box2D/wiki/FAQ" target="_blank">FAQ</a> are highly recommended to get started.
