@@ -34,6 +34,7 @@ Testebd [examples and demos](http://piqnt.com/planck.js/).
  - [Flag in the Wind](https://codepen.io/unframework/pen/OrOMBg) by Nick Matantsev
  - [Neuroevolution Bots](https://twitter.com/mishig25/status/1077672181503590400) by Mishig Davaadorj
  - [Walking EA](https://matsemann.github.io/walkingea/) by Mats Krüger Svensson
+ - [Chaotic Water Wheel](https://john-hearn.info/articles/simulate-chaotic-water-wheel-with-planck) by John Hearn
 
 
 ## Community
