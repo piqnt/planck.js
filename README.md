@@ -16,7 +16,7 @@ Key motivations for the development of this project are:
 
 ## Made with Planck.js
 
-Testebd [examples and demos](http://piqnt.com/planck.js/).
+Testbed [examples and demos](http://piqnt.com/planck.js/).
 
 #### Games
 - [Astray 2](https://wwwtyro.github.io/astray-2/) ([source](https://github.com/wwwtyro/astray-2)) by Rye Terrell
