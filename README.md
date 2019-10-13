@@ -37,6 +37,8 @@ Testbed [examples and demos](http://piqnt.com/planck.js/).
  - [Chaotic Water Wheel](https://john-hearn.info/articles/simulate-chaotic-water-wheel-with-planck) by John Hearn
  - [Dynamic Convex Hull](https://codepen.io/bozheng-stokes/pen/abormNX) by Bo Zheng
 
+#### Articles and Tutorials
+ - [Phaser 3 with Planck.js](https://www.emanueleferonato.com/2019/10/12/use-box2d-physics-in-your-phaser-3-projects-with-planck-js-javascript-physics-engine/) by Emanuele Feronato
 
 ## Community
 
