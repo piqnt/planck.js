@@ -61,6 +61,6 @@
     "testbed": "nodemon testbed/server.js"
   },
   "dependencies": {
-    "flatted": "^2.0.1"
+    "mocha": "^6.2.2"
   }
 }
