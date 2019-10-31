@@ -5,8 +5,11 @@ var expect = require('./testutil/expect');
 
 var Vec2 = require('../lib/common/Vec2');
 var Circle = require('../lib/shape/CircleShape');
+var DistanceJoint = require('../lib/joint/DistanceJoint');
 var World = require('../lib/World');
-var Serializer = require('../lib/util/Serializer');
+var Serializer = require('../lib/Serializer');
+
+var serializer = Serializer;
 
 describe('Serializer', function() {
   it('Serializer', function() {
@@ -28,16 +31,22 @@ describe('Serializer', function() {
     });
     b2.createFixture(circle);
 
-    var text = Serializer.toJson(world);
-    world = Serializer.fromJson(text);
-    var text2 = Serializer.toJson(world);
-    var d =  diff.diffLines(text, text2);
+    world.createJoint(new DistanceJoint({
+      bodyA: b1,
+      localAnchorA: Vec2(6, 0),
+      bodyB: b2,
+      localAnchorB: Vec2(0, -1)
+    }));
 
+    var text = serializer.toJson(world);
     console.log(text);
-    console.log(text2);
-    console.log(d);
 
-    // expect(p.x).near(0.0);
-    // expect(p.y).near(0.0);
+    world = serializer.fromJson(text);
+    var text2 = serializer.toJson(world);
+    console.log(text2);
+
+    var d =  diff.diffLines(text, text2);
+    console.log(d);
+    expect(d.length).be(1);
   });
 });
