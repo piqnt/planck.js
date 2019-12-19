@@ -290,7 +290,3 @@ export interface Sweep {
   clone(): Sweep;
   set(sweep: Sweep): void;
 }
-
-export let Sweep: {
-    new(c, a): Sweep;
-};
