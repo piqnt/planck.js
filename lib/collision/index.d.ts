@@ -89,7 +89,3 @@ export interface DynamicTree {
     query(aabb: AABB, queryCallback: (id: string) => boolean): void;
     rayCast(input: RayCastInput, rayCastCallback: (subInput: RayCastInput, id: string) => number): void;
 }
-
-export let DynamicTree: {
-  new(): DynamicTree;
-};

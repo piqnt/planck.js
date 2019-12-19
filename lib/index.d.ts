@@ -5,7 +5,7 @@
 export as namespace planck;
 
 import { Sweep, Velocity, Position, Vec2, Transform, Mat22 } from "./common";
-import { BroadPhase, RayCastInput, RayCastOutput, AABB, DynamicTree } from "./collision";
+import { BroadPhase, RayCastInput, RayCastOutput, AABB, DynamicTree, DistanceProxy } from "./collision";
 import { JointEdge, Joint } from "./joint";
 import { ShapeType, Shape } from "./shape";
 
@@ -346,7 +346,7 @@ export interface Contact {
   p_localPoint: Vec2;
   p_localCenterA: Vec2;
   p_localCenterB: Vec2;
-  p_type: Manifold.Type;
+  p_type: ManifoldType | undefined;
   p_radiusA: number | undefined;
   p_radiusB: number | undefined;
   p_pointCount: number | undefined;
@@ -519,7 +519,7 @@ export let World: {
 /**
  * Tuning constants based on meters-kilograms-seconds (MKS) units.
  */
-export interface Settings {
+interface Settings {
   // Collision
   /**
    * The maximum number of contact points between two convex shapes. Do not change
@@ -649,13 +649,64 @@ export interface Settings {
   angularSleepToleranceSqr: number;
 }
 
+declare enum TOIOutputState { }
+
 export namespace internal {
-  export let Settings: Settings;
-  let Sweep: Sweep;
-  export let Manifold: {
-    new(): Manifold;
+  let Settings: Settings;
+  let Sweep: {
+    new(): Sweep;
   };
-  export let Distance: any;
-  export let TimeOfImpact: any;
-  let DynamicTree: DynamicTree;
+  let Manifold: {
+    new(): Manifold;
+    // TODO
+  };
+  function Distance(output: Distance.Input, cache: Distance.Cache, input: Distance.Input): void;
+  namespace Distance {
+    class Input {
+      proxyA: DistanceProxy;
+      proxyB: DistanceProxy;
+      transformA: Transform | null;
+      transformB: Transform | null;
+      useRadii: boolean;
+    }
+    class Output {
+      pointA: Vec2;
+      pointB: Vec2;
+      distance: number;
+      iterations: number;
+    }
+    let Proxy: {
+      new(): DistanceProxy;
+    }
+    class Cache {
+      metric: number;
+      indexA: number[];
+      indexB: number[];
+      count: number;
+    }
+    function testOverlap(shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: Transform, xfB: Transform): boolean;
+  }
+  function TimeOfImpact(output: TimeOfImpact.Output, input: TimeOfImpact.Input): void;
+  namespace TimeOfImpact {
+    class Input {
+      proxyA: DistanceProxy;
+      proxyB: DistanceProxy;
+      sweepA: Sweep;
+      sweepB: Sweep;
+      tMax: number | undefined;
+    }
+    class Output {
+      state: TOIOutputState | undefined;
+      t: number | undefined;
+      
+      static e_unknown: TOIOutputState;
+      static e_failed: TOIOutputState;
+      static e_overlapped: TOIOutputState;
+      static e_touching: TOIOutputState;
+      static e_separated: TOIOutputState;
+    }
+  }
+  let DynamicTree: {
+    new(): DynamicTree;
+  };
 }
