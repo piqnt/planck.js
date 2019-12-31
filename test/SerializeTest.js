@@ -5,6 +5,7 @@ var expect = require('./testutil/expect');
 
 var Vec2 = require('../lib/common/Vec2');
 var Circle = require('../lib/shape/CircleShape');
+var Box = require('../lib/shape/BoxShape');
 var DistanceJoint = require('../lib/joint/DistanceJoint');
 var World = require('../lib/World');
 var Serializer = require('../lib/Serializer');
@@ -17,6 +18,7 @@ describe('Serializer', function() {
     var world = new World();
 
     var circle = new Circle(1);
+    var box = new Box(1, 1);
 
     var b1 = world.createBody({
       position : Vec2(0, 0),
@@ -29,7 +31,7 @@ describe('Serializer', function() {
       position : Vec2(2, 0),
       type : 'dynamic'
     });
-    b2.createFixture(circle);
+    b2.createFixture(box);
 
     world.createJoint(new DistanceJoint({
       bodyA: b1,
