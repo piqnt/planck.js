@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.10
+ * Planck.js v0.3.11
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -2016,6 +2016,234 @@ Vec3.neg = function(v) {
 var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
+module.exports = Joint;
+
+var common = __webpack_require__(2);
+
+/**
+ * A joint edge is used to connect bodies and joints together in a joint graph
+ * where each body is a node and each joint is an edge. A joint edge belongs to
+ * a doubly linked list maintained in each attached body. Each joint has two
+ * joint nodes, one for each attached body.
+ * 
+ * @prop {Body} other provides quick access to the other body attached.
+ * @prop {Joint} joint the joint
+ * @prop {JointEdge} prev the previous joint edge in the body's joint list
+ * @prop {JointEdge} next the next joint edge in the body's joint list
+ */
+function JointEdge() {
+  this.other = null;
+  this.joint = null;
+  this.prev = null;
+  this.next = null;
+};
+
+/**
+ * @typedef {Object} JointDef
+ *
+ * Joint definitions are used to construct joints.
+ * 
+ * @prop userData Use this to attach application specific data to your joints.
+ *       void userData;
+ * @prop {boolean} collideConnected Set this flag to true if the attached bodies
+ *       should collide.
+ *
+ * @prop {Body} bodyA The first attached body.
+ * @prop {Body} bodyB The second attached body.
+ */
+
+var DEFAULTS = {
+  userData : null,
+  collideConnected : false
+};
+
+/**
+ * The base joint class. Joints are used to constraint two bodies together in
+ * various fashions. Some joints also feature limits and motors.
+ * 
+ * @param {JointDef} def
+ */
+function Joint(def, bodyA, bodyB) {
+  bodyA = def.bodyA || bodyA;
+  bodyB = def.bodyB || bodyB;
+
+  _ASSERT && common.assert(bodyA);
+  _ASSERT && common.assert(bodyB);
+  _ASSERT && common.assert(bodyA != bodyB);
+
+  this.m_type = 'unknown-joint';
+
+  this.m_bodyA = bodyA;
+  this.m_bodyB = bodyB;
+
+  this.m_index = 0;
+  this.m_collideConnected = !!def.collideConnected;
+
+  this.m_prev = null;
+  this.m_next = null;
+
+  this.m_edgeA = new JointEdge();
+  this.m_edgeB = new JointEdge();
+
+  this.m_islandFlag = false;
+  this.m_userData = def.userData;
+};
+
+Joint.TYPES = {};
+
+Joint._deserialize = function(data, context, restore) {
+  var clazz = Joint.TYPES[data.type];
+  return clazz && restore(clazz, data);
+};
+
+/**
+ * Short-cut function to determine if either body is inactive.
+ * 
+ * @returns {boolean}
+ */
+Joint.prototype.isActive = function() {
+  return this.m_bodyA.isActive() && this.m_bodyB.isActive();
+}
+
+/**
+ * Get the type of the concrete joint.
+ * 
+ * @returns JointType
+ */
+Joint.prototype.getType = function() {
+  return this.m_type;
+}
+
+/**
+ * Get the first body attached to this joint.
+ * 
+ * @returns Body
+ */
+Joint.prototype.getBodyA = function() {
+  return this.m_bodyA;
+}
+
+/**
+ * Get the second body attached to this joint.
+ * 
+ * @returns Body
+ */
+Joint.prototype.getBodyB = function() {
+  return this.m_bodyB;
+}
+
+/**
+ * Get the next joint the world joint list.
+ * 
+ * @returns Joint
+ */
+Joint.prototype.getNext = function() {
+  return this.m_next;
+}
+
+Joint.prototype.getUserData = function() {
+  return this.m_userData;
+}
+
+Joint.prototype.setUserData = function(data) {
+  this.m_userData = data;
+}
+
+/**
+ * Get collide connected. Note: modifying the collide connect flag won't work
+ * correctly because the flag is only checked when fixture AABBs begin to
+ * overlap.
+ * 
+ * @returns {boolean}
+ */
+Joint.prototype.getCollideConnected = function() {
+  return this.m_collideConnected;
+};
+
+/**
+ * Get the anchor point on bodyA in world coordinates.
+ * 
+ * @return {Vec2}
+ */
+Joint.prototype.getAnchorA = function() {
+};
+
+/**
+ * Get the anchor point on bodyB in world coordinates.
+ * 
+ * @return {Vec2}
+ */
+Joint.prototype.getAnchorB = function() {
+};
+
+/**
+ * Get the reaction force on bodyB at the joint anchor in Newtons.
+ * 
+ * @param {float} inv_dt
+ * @return {Vec2}
+ */
+Joint.prototype.getReactionForce = function(inv_dt) {
+};
+
+/**
+ * Get the reaction torque on bodyB in N*m.
+ * 
+ * @param {float} inv_dt
+ * @return {float}
+ */
+Joint.prototype.getReactionTorque = function(inv_dt) {
+};
+
+/**
+ * Shift the origin for any points stored in world coordinates.
+ * 
+ * @param {Vec2} newOrigin
+ */
+Joint.prototype.shiftOrigin = function(newOrigin) {
+};
+
+/**
+ */
+Joint.prototype.initVelocityConstraints = function(step) {
+};
+
+/**
+ */
+Joint.prototype.solveVelocityConstraints = function(step) {
+};
+
+/**
+ * This returns true if the position errors are within tolerance.
+ */
+Joint.prototype.solvePositionConstraints = function(step) {
+};
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG =  false ? undefined : false;
+var _ASSERT =  false ? undefined : false;
+
 module.exports = Velocity;
 
 var Vec2 = __webpack_require__(0);
@@ -2030,7 +2258,7 @@ function Velocity() {
 }
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2076,7 +2304,7 @@ Position.prototype.getTransform = function(xf, p) {
 }
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2305,227 +2533,6 @@ Mat33.add = function(a, b) {
 
 
 /***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
- *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- */
-
-var _DEBUG =  false ? undefined : false;
-var _ASSERT =  false ? undefined : false;
-
-module.exports = Joint;
-
-var common = __webpack_require__(2);
-
-/**
- * A joint edge is used to connect bodies and joints together in a joint graph
- * where each body is a node and each joint is an edge. A joint edge belongs to
- * a doubly linked list maintained in each attached body. Each joint has two
- * joint nodes, one for each attached body.
- * 
- * @prop {Body} other provides quick access to the other body attached.
- * @prop {Joint} joint the joint
- * @prop {JointEdge} prev the previous joint edge in the body's joint list
- * @prop {JointEdge} next the next joint edge in the body's joint list
- */
-function JointEdge() {
-  this.other = null;
-  this.joint = null;
-  this.prev = null;
-  this.next = null;
-};
-
-/**
- * @typedef {Object} JointDef
- *
- * Joint definitions are used to construct joints.
- * 
- * @prop userData Use this to attach application specific data to your joints.
- *       void userData;
- * @prop {boolean} collideConnected Set this flag to true if the attached bodies
- *       should collide.
- *
- * @prop {Body} bodyA The first attached body.
- * @prop {Body} bodyB The second attached body.
- */
-
-var DEFAULTS = {
-  userData : null,
-  collideConnected : false
-};
-
-/**
- * The base joint class. Joints are used to constraint two bodies together in
- * various fashions. Some joints also feature limits and motors.
- * 
- * @param {JointDef} def
- */
-function Joint(def, bodyA, bodyB) {
-  bodyA = def.bodyA || bodyA;
-  bodyB = def.bodyB || bodyB;
-
-  _ASSERT && common.assert(bodyA);
-  _ASSERT && common.assert(bodyB);
-  _ASSERT && common.assert(bodyA != bodyB);
-
-  this.m_type = 'unknown-joint';
-
-  this.m_bodyA = bodyA;
-  this.m_bodyB = bodyB;
-
-  this.m_index = 0;
-  this.m_collideConnected = !!def.collideConnected;
-
-  this.m_prev = null;
-  this.m_next = null;
-
-  this.m_edgeA = new JointEdge();
-  this.m_edgeB = new JointEdge();
-
-  this.m_islandFlag = false;
-  this.m_userData = def.userData;
-};
-
-/**
- * Short-cut function to determine if either body is inactive.
- * 
- * @returns {boolean}
- */
-Joint.prototype.isActive = function() {
-  return this.m_bodyA.isActive() && this.m_bodyB.isActive();
-}
-
-/**
- * Get the type of the concrete joint.
- * 
- * @returns JointType
- */
-Joint.prototype.getType = function() {
-  return this.m_type;
-}
-
-/**
- * Get the first body attached to this joint.
- * 
- * @returns Body
- */
-Joint.prototype.getBodyA = function() {
-  return this.m_bodyA;
-}
-
-/**
- * Get the second body attached to this joint.
- * 
- * @returns Body
- */
-Joint.prototype.getBodyB = function() {
-  return this.m_bodyB;
-}
-
-/**
- * Get the next joint the world joint list.
- * 
- * @returns Joint
- */
-Joint.prototype.getNext = function() {
-  return this.m_next;
-}
-
-Joint.prototype.getUserData = function() {
-  return this.m_userData;
-}
-
-Joint.prototype.setUserData = function(data) {
-  this.m_userData = data;
-}
-
-/**
- * Get collide connected. Note: modifying the collide connect flag won't work
- * correctly because the flag is only checked when fixture AABBs begin to
- * overlap.
- * 
- * @returns {boolean}
- */
-Joint.prototype.getCollideConnected = function() {
-  return this.m_collideConnected;
-};
-
-/**
- * Get the anchor point on bodyA in world coordinates.
- * 
- * @return {Vec2}
- */
-Joint.prototype.getAnchorA = function() {
-};
-
-/**
- * Get the anchor point on bodyB in world coordinates.
- * 
- * @return {Vec2}
- */
-Joint.prototype.getAnchorB = function() {
-};
-
-/**
- * Get the reaction force on bodyB at the joint anchor in Newtons.
- * 
- * @param {float} inv_dt
- * @return {Vec2}
- */
-Joint.prototype.getReactionForce = function(inv_dt) {
-};
-
-/**
- * Get the reaction torque on bodyB in N*m.
- * 
- * @param {float} inv_dt
- * @return {float}
- */
-Joint.prototype.getReactionTorque = function(inv_dt) {
-};
-
-/**
- * Shift the origin for any points stored in world coordinates.
- * 
- * @param {Vec2} newOrigin
- */
-Joint.prototype.shiftOrigin = function(newOrigin) {
-};
-
-/**
- */
-Joint.prototype.initVelocityConstraints = function(step) {
-};
-
-/**
- */
-Joint.prototype.solveVelocityConstraints = function(step) {
-};
-
-/**
- * This returns true if the position errors are within tolerance.
- */
-Joint.prototype.solvePositionConstraints = function(step) {
-};
-
-/***/ }),
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2574,9 +2581,9 @@ Shape.prototype._serialize = function() {
 
 Shape.TYPES = {};
 
-Shape._deserialize = function(data) {
+Shape._deserialize = function(data, context, restore) {
   var clazz = Shape.TYPES[data.type];
-  return clazz && clazz._deserialize && clazz._deserialize(data);
+  return clazz && restore(clazz, data);
 };
 
 Shape.isValid = function(shape) {
@@ -2960,7 +2967,7 @@ var Rot = __webpack_require__(3);
 
 var Settings = __webpack_require__(4);
 var Manifold = __webpack_require__(18);
-var Distance = __webpack_require__(21);
+var Distance = __webpack_require__(22);
 
 module.exports = Contact;
 
@@ -4532,1630 +4539,6 @@ function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
 var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
-module.exports = PolygonShape;
-
-var common = __webpack_require__(2);
-var create = __webpack_require__(6);
-var options = __webpack_require__(7);
-var Math = __webpack_require__(1);
-var Transform = __webpack_require__(5);
-var Rot = __webpack_require__(3);
-var Vec2 = __webpack_require__(0);
-var AABB = __webpack_require__(16);
-var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(15);
-
-PolygonShape._super = Shape;
-PolygonShape.prototype = create(PolygonShape._super.prototype);
-
-PolygonShape.TYPE = 'polygon';
-Shape.TYPES[PolygonShape.TYPE] = PolygonShape;
-
-/**
- * A convex polygon. It is assumed that the interior of the polygon is to the
- * left of each edge. Polygons have a maximum number of vertices equal to
- * Settings.maxPolygonVertices. In most cases you should not need many vertices
- * for a convex polygon. extends Shape
- */
-function PolygonShape(vertices) {
-  if (!(this instanceof PolygonShape)) {
-    return new PolygonShape(vertices);
-  }
-
-  PolygonShape._super.call(this);
-
-  this.m_type = PolygonShape.TYPE;
-  this.m_radius = Settings.polygonRadius;
-  this.m_centroid = Vec2.zero();
-  this.m_vertices = []; // Vec2[Settings.maxPolygonVertices]
-  this.m_normals = []; // Vec2[Settings.maxPolygonVertices]
-  this.m_count = 0;
-
-  if (vertices && vertices.length) {
-    this._set(vertices);
-  }
-}
-
-PolygonShape.prototype._serialize = function() {
-  return {
-    type: this.m_type,
-
-    centroid: this.m_centroid,
-
-    vertices: this.m_vertices,
-    normals: this.m_normals,
-    count: this.m_count,
-  };
-};
-
-PolygonShape._deserialize = function(data) {
-  var shape = new PolygonShape(data.vertices);
-  return shape;
-};
-
-PolygonShape.prototype.getVertex = function(index) {
-  _ASSERT && common.assert(0 <= index && index < this.m_count);
-  return this.m_vertices[index];
-}
-
-/**
- * @deprecated
- */
-PolygonShape.prototype._clone = function() {
-  var clone = new PolygonShape();
-  clone.m_type = this.m_type;
-  clone.m_radius = this.m_radius;
-  clone.m_count = this.m_count;
-  clone.m_centroid.set(this.m_centroid);
-  for (var i = 0; i < this.m_count; i++) {
-    clone.m_vertices.push(this.m_vertices[i].clone());
-  }
-  for (var i = 0; i < this.m_normals.length; i++) {
-    clone.m_normals.push(this.m_normals[i].clone());
-  }
-  return clone;
-}
-
-PolygonShape.prototype.getChildCount = function() {
-  return 1;
-}
-
-function ComputeCentroid(vs, count) {
-  _ASSERT && common.assert(count >= 3);
-
-  var c = Vec2.zero();
-  var area = 0.0;
-
-  // pRef is the reference point for forming triangles.
-  // It's location doesn't change the result (except for rounding error).
-  var pRef = Vec2.zero();
-  if (false) { var i; }
-
-  var inv3 = 1.0 / 3.0;
-
-  for (var i = 0; i < count; ++i) {
-    // Triangle vertices.
-    var p1 = pRef;
-    var p2 = vs[i];
-    var p3 = i + 1 < count ? vs[i + 1] : vs[0];
-
-    var e1 = Vec2.sub(p2, p1);
-    var e2 = Vec2.sub(p3, p1);
-
-    var D = Vec2.cross(e1, e2);
-
-    var triangleArea = 0.5 * D;
-    area += triangleArea;
-
-    // Area weighted centroid
-    c.addMul(triangleArea * inv3, p1);
-    c.addMul(triangleArea * inv3, p2);
-    c.addMul(triangleArea * inv3, p3);
-  }
-
-  // Centroid
-  _ASSERT && common.assert(area > Math.EPSILON);
-  c.mul(1.0 / area);
-  return c;
-}
-
-PolygonShape.prototype._reset = function() {
-  this._set(this.m_vertices)
-}
-
-/**
- * @private
- *
- * Create a convex hull from the given array of local points. The count must be
- * in the range [3, Settings.maxPolygonVertices].
- *
- * Warning: the points may be re-ordered, even if they form a convex polygon
- * Warning: collinear points are handled but not removed. Collinear points may
- * lead to poor stacking behavior.
- */
-PolygonShape.prototype._set = function(vertices) {
-  _ASSERT && common.assert(3 <= vertices.length && vertices.length <= Settings.maxPolygonVertices);
-  if (vertices.length < 3) {
-    this._setAsBox(1.0, 1.0);
-    return;
-  }
-
-  var n = Math.min(vertices.length, Settings.maxPolygonVertices);
-
-  // Perform welding and copy vertices into local buffer.
-  var ps = [];// [Settings.maxPolygonVertices];
-  var tempCount = 0;
-  for (var i = 0; i < n; ++i) {
-    var v = vertices[i];
-
-    var unique = true;
-    for (var j = 0; j < tempCount; ++j) {
-      if (Vec2.distanceSquared(v, ps[j]) < 0.25 * Settings.linearSlopSquared) {
-        unique = false;
-        break;
-      }
-    }
-
-    if (unique) {
-      ps[tempCount++] = v;
-    }
-  }
-
-  n = tempCount;
-  if (n < 3) {
-    // Polygon is degenerate.
-    _ASSERT && common.assert(false);
-    this._setAsBox(1.0, 1.0);
-    return;
-  }
-
-  // Create the convex hull using the Gift wrapping algorithm
-  // http://en.wikipedia.org/wiki/Gift_wrapping_algorithm
-
-  // Find the right most point on the hull
-  var i0 = 0;
-  var x0 = ps[0].x;
-  for (var i = 1; i < n; ++i) {
-    var x = ps[i].x;
-    if (x > x0 || (x == x0 && ps[i].y < ps[i0].y)) {
-      i0 = i;
-      x0 = x;
-    }
-  }
-
-  var hull = [];// [Settings.maxPolygonVertices];
-  var m = 0;
-  var ih = i0;
-
-  for (;;) {
-    hull[m] = ih;
-
-    var ie = 0;
-    for (var j = 1; j < n; ++j) {
-      if (ie == ih) {
-        ie = j;
-        continue;
-      }
-
-      var r = Vec2.sub(ps[ie], ps[hull[m]]);
-      var v = Vec2.sub(ps[j], ps[hull[m]]);
-      var c = Vec2.cross(r, v);
-      if (c < 0.0) {
-        ie = j;
-      }
-
-      // Collinearity check
-      if (c == 0.0 && v.lengthSquared() > r.lengthSquared()) {
-        ie = j;
-      }
-    }
-
-    ++m;
-    ih = ie;
-
-    if (ie == i0) {
-      break;
-    }
-  }
-
-  if (m < 3) {
-    // Polygon is degenerate.
-    _ASSERT && common.assert(false);
-    this._setAsBox(1.0, 1.0);
-    return;
-  }
-
-  this.m_count = m;
-
-  // Copy vertices.
-  for (var i = 0; i < m; ++i) {
-    this.m_vertices[i] = ps[hull[i]];
-  }
-
-  // Compute normals. Ensure the edges have non-zero length.
-  for (var i = 0; i < m; ++i) {
-    var i1 = i;
-    var i2 = i + 1 < m ? i + 1 : 0;
-    var edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
-    _ASSERT && common.assert(edge.lengthSquared() > Math.EPSILON * Math.EPSILON);
-    this.m_normals[i] = Vec2.cross(edge, 1.0);
-    this.m_normals[i].normalize();
-  }
-
-  // Compute the polygon centroid.
-  this.m_centroid = ComputeCentroid(this.m_vertices, m);
-}
-
-/**
- * @private
- */
-PolygonShape.prototype._setAsBox = function(hx, hy, center, angle) {
-  this.m_vertices[0] = Vec2.neo(-hx, -hy);
-  this.m_vertices[1] = Vec2.neo(hx, -hy);
-  this.m_vertices[2] = Vec2.neo(hx, hy);
-  this.m_vertices[3] = Vec2.neo(-hx, hy);
-
-  this.m_normals[0] = Vec2.neo(0.0, -1.0);
-  this.m_normals[1] = Vec2.neo(1.0, 0.0);
-  this.m_normals[2] = Vec2.neo(0.0, 1.0);
-  this.m_normals[3] = Vec2.neo(-1.0, 0.0);
-
-  this.m_count = 4;
-
-  if (Vec2.isValid(center)) {
-    angle = angle || 0;
-
-    this.m_centroid.set(center);
-
-    var xf = Transform.identity();
-    xf.p.set(center);
-    xf.q.set(angle);
-
-    // Transform vertices and normals.
-    for (var i = 0; i < this.m_count; ++i) {
-      this.m_vertices[i] = Transform.mulVec2(xf, this.m_vertices[i]);
-      this.m_normals[i] = Rot.mulVec2(xf.q, this.m_normals[i]);
-    }
-  }
-}
-
-PolygonShape.prototype.testPoint = function(xf, p) {
-  var pLocal = Rot.mulTVec2(xf.q, Vec2.sub(p, xf.p));
-
-  for (var i = 0; i < this.m_count; ++i) {
-    var dot = Vec2.dot(this.m_normals[i], Vec2.sub(pLocal, this.m_vertices[i]));
-    if (dot > 0.0) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-PolygonShape.prototype.rayCast = function(output, input, xf, childIndex) {
-
-  // Put the ray into the polygon's frame of reference.
-  var p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
-  var p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
-  var d = Vec2.sub(p2, p1);
-
-  var lower = 0.0;
-  var upper = input.maxFraction;
-
-  var index = -1;
-
-  for (var i = 0; i < this.m_count; ++i) {
-    // p = p1 + a * d
-    // dot(normal, p - v) = 0
-    // dot(normal, p1 - v) + a * dot(normal, d) = 0
-    var numerator = Vec2.dot(this.m_normals[i], Vec2.sub(this.m_vertices[i], p1));
-    var denominator = Vec2.dot(this.m_normals[i], d);
-
-    if (denominator == 0.0) {
-      if (numerator < 0.0) {
-        return false;
-      }
-    } else {
-      // Note: we want this predicate without division:
-      // lower < numerator / denominator, where denominator < 0
-      // Since denominator < 0, we have to flip the inequality:
-      // lower < numerator / denominator <==> denominator * lower > numerator.
-      if (denominator < 0.0 && numerator < lower * denominator) {
-        // Increase lower.
-        // The segment enters this half-space.
-        lower = numerator / denominator;
-        index = i;
-      } else if (denominator > 0.0 && numerator < upper * denominator) {
-        // Decrease upper.
-        // The segment exits this half-space.
-        upper = numerator / denominator;
-      }
-    }
-
-    // The use of epsilon here causes the assert on lower to trip
-    // in some cases. Apparently the use of epsilon was to make edge
-    // shapes work, but now those are handled separately.
-    // if (upper < lower - Math.EPSILON)
-    if (upper < lower) {
-      return false;
-    }
-  }
-
-  _ASSERT && common.assert(0.0 <= lower && lower <= input.maxFraction);
-
-  if (index >= 0) {
-    output.fraction = lower;
-    output.normal = Rot.mulVec2(xf.q, this.m_normals[index]);
-    return true;
-  }
-
-  return false;
-};
-
-PolygonShape.prototype.computeAABB = function(aabb, xf, childIndex) {
-  var minX = Infinity, minY = Infinity;
-  var maxX = -Infinity, maxY = -Infinity;
-  for (var i = 0; i < this.m_count; ++i) {
-    var v = Transform.mulVec2(xf, this.m_vertices[i]);
-    minX = Math.min(minX, v.x);
-    maxX = Math.max(maxX, v.x);
-    minY = Math.min(minY, v.y);
-    maxY = Math.max(maxY, v.y);
-  }
-
-  aabb.lowerBound.set(minX, minY);
-  aabb.upperBound.set(maxX, maxY);
-  aabb.extend(this.m_radius);
-}
-
-PolygonShape.prototype.computeMass = function(massData, density) {
-  // Polygon mass, centroid, and inertia.
-  // Let rho be the polygon density in mass per unit area.
-  // Then:
-  // mass = rho * int(dA)
-  // centroid.x = (1/mass) * rho * int(x * dA)
-  // centroid.y = (1/mass) * rho * int(y * dA)
-  // I = rho * int((x*x + y*y) * dA)
-  //
-  // We can compute these integrals by summing all the integrals
-  // for each triangle of the polygon. To evaluate the integral
-  // for a single triangle, we make a change of variables to
-  // the (u,v) coordinates of the triangle:
-  // x = x0 + e1x * u + e2x * v
-  // y = y0 + e1y * u + e2y * v
-  // where 0 <= u && 0 <= v && u + v <= 1.
-  //
-  // We integrate u from [0,1-v] and then v from [0,1].
-  // We also need to use the Jacobian of the transformation:
-  // D = cross(e1, e2)
-  //
-  // Simplification: triangle centroid = (1/3) * (p1 + p2 + p3)
-  //
-  // The rest of the derivation is handled by computer algebra.
-
-  _ASSERT && common.assert(this.m_count >= 3);
-
-  var center = Vec2.zero();
-  var area = 0.0;
-  var I = 0.0;
-
-  // s is the reference point for forming triangles.
-  // It's location doesn't change the result (except for rounding error).
-  var s = Vec2.zero();
-
-  // This code would put the reference point inside the polygon.
-  for (var i = 0; i < this.m_count; ++i) {
-    s.add(this.m_vertices[i]);
-  }
-  s.mul(1.0 / this.m_count);
-
-  var k_inv3 = 1.0 / 3.0;
-
-  for (var i = 0; i < this.m_count; ++i) {
-    // Triangle vertices.
-    var e1 = Vec2.sub(this.m_vertices[i], s);
-    var e2 = i + 1 < this.m_count ? Vec2.sub(this.m_vertices[i + 1], s) : Vec2
-        .sub(this.m_vertices[0], s);
-
-    var D = Vec2.cross(e1, e2);
-
-    var triangleArea = 0.5 * D;
-    area += triangleArea;
-
-    // Area weighted centroid
-    center.addCombine(triangleArea * k_inv3, e1, triangleArea * k_inv3, e2);
-
-    var ex1 = e1.x;
-    var ey1 = e1.y;
-    var ex2 = e2.x;
-    var ey2 = e2.y;
-
-    var intx2 = ex1 * ex1 + ex2 * ex1 + ex2 * ex2;
-    var inty2 = ey1 * ey1 + ey2 * ey1 + ey2 * ey2;
-
-    I += (0.25 * k_inv3 * D) * (intx2 + inty2);
-  }
-
-  // Total mass
-  massData.mass = density * area;
-
-  // Center of mass
-  _ASSERT && common.assert(area > Math.EPSILON);
-  center.mul(1.0 / area);
-  massData.center.setCombine(1, center, 1, s);
-
-  // Inertia tensor relative to the local origin (point s).
-  massData.I = density * I;
-
-  // Shift to center of mass then to original body origin.
-  massData.I += massData.mass
-      * (Vec2.dot(massData.center, massData.center) - Vec2.dot(center, center));
-}
-
-// Validate convexity. This is a very time consuming operation.
-// @returns true if valid
-PolygonShape.prototype.validate = function() {
-  for (var i = 0; i < this.m_count; ++i) {
-    var i1 = i;
-    var i2 = i < this.m_count - 1 ? i1 + 1 : 0;
-    var p = this.m_vertices[i1];
-    var e = Vec2.sub(this.m_vertices[i2], p);
-
-    for (var j = 0; j < this.m_count; ++j) {
-      if (j == i1 || j == i2) {
-        continue;
-      }
-
-      var v = Vec2.sub(this.m_vertices[j], p);
-      var c = Vec2.cross(e, v);
-      if (c < 0.0) {
-        return false;
-      }
-    }
-  }
-
-  return true;
-}
-
-PolygonShape.prototype.computeDistanceProxy = function(proxy) {
-  proxy.m_vertices = this.m_vertices;
-  proxy.m_count = this.m_count;
-  proxy.m_radius = this.m_radius;
-};
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
- *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- */
-
-var _DEBUG =  false ? undefined : false;
-var _ASSERT =  false ? undefined : false;
-
-module.exports = Distance;
-
-module.exports.Input = DistanceInput;
-module.exports.Output = DistanceOutput;
-module.exports.Proxy = DistanceProxy;
-module.exports.Cache = SimplexCache;
-
-var Settings = __webpack_require__(4);
-var common = __webpack_require__(2);
-
-var stats = __webpack_require__(27);
-
-var Math = __webpack_require__(1);
-var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(10);
-var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(13);
-var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(8);
-var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(11);
-var Position = __webpack_require__(12);
-
-/**
- * GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
- */
-
-stats.gjkCalls = 0;
-stats.gjkIters = 0;
-stats.gjkMaxIters = 0;
-
-/**
- * Input for Distance. You have to option to use the shape radii in the
- * computation. Even
- */
-function DistanceInput() {
-  this.proxyA = new DistanceProxy();
-  this.proxyB = new DistanceProxy();
-  this.transformA = null;
-  this.transformB = null;
-  this.useRadii = false;
-};
-
-/**
- * Output for Distance.
- *
- * @prop {Vec2} pointA closest point on shapeA
- * @prop {Vec2} pointB closest point on shapeB
- * @prop distance
- * @prop iterations number of GJK iterations used
- */
-function DistanceOutput() {
-  this.pointA = Vec2.zero();
-  this.pointB = Vec2.zero();
-  this.distance;
-  this.iterations;
-}
-
-/**
- * Used to warm start Distance. Set count to zero on first call.
- *
- * @prop {number} metric length or area
- * @prop {array} indexA vertices on shape A
- * @prop {array} indexB vertices on shape B
- * @prop {number} count
- */
-function SimplexCache() {
-  this.metric = 0;
-  this.indexA = [];
-  this.indexB = [];
-  this.count = 0;
-};
-
-/**
- * Compute the closest points between two shapes. Supports any combination of:
- * CircleShape, PolygonShape, EdgeShape. The simplex cache is input/output. On
- * the first call set SimplexCache.count to zero.
- *
- * @param {DistanceOutput} output
- * @param {SimplexCache} cache
- * @param {DistanceInput} input
- */
-function Distance(output, cache, input) {
-  ++stats.gjkCalls;
-
-  var proxyA = input.proxyA;
-  var proxyB = input.proxyB;
-  var xfA = input.transformA;
-  var xfB = input.transformB;
-
-  // Initialize the simplex.
-  var simplex = new Simplex();
-  simplex.readCache(cache, proxyA, xfA, proxyB, xfB);
-
-  // Get simplex vertices as an array.
-  var vertices = simplex.m_v;// SimplexVertex
-  var k_maxIters = Settings.maxDistnceIterations;
-
-  // These store the vertices of the last simplex so that we
-  // can check for duplicates and prevent cycling.
-  var saveA = [];
-  var saveB = []; // int[3]
-  var saveCount = 0;
-
-  var distanceSqr1 = Infinity;
-  var distanceSqr2 = Infinity;
-
-  // Main iteration loop.
-  var iter = 0;
-  while (iter < k_maxIters) {
-    // Copy simplex so we can identify duplicates.
-    saveCount = simplex.m_count;
-    for (var i = 0; i < saveCount; ++i) {
-      saveA[i] = vertices[i].indexA;
-      saveB[i] = vertices[i].indexB;
-    }
-
-    simplex.solve();
-
-    // If we have 3 points, then the origin is in the corresponding triangle.
-    if (simplex.m_count == 3) {
-      break;
-    }
-
-    // Compute closest point.
-    var p = simplex.getClosestPoint();
-    distanceSqr2 = p.lengthSquared();
-
-    // Ensure progress
-    if (distanceSqr2 >= distanceSqr1) {
-      // break;
-    }
-    distanceSqr1 = distanceSqr2;
-
-    // Get search direction.
-    var d = simplex.getSearchDirection();
-
-    // Ensure the search direction is numerically fit.
-    if (d.lengthSquared() < Math.EPSILON * Math.EPSILON) {
-      // The origin is probably contained by a line segment
-      // or triangle. Thus the shapes are overlapped.
-
-      // We can't return zero here even though there may be overlap.
-      // In case the simplex is a point, segment, or triangle it is difficult
-      // to determine if the origin is contained in the CSO or very close to it.
-      break;
-    }
-
-    // Compute a tentative new simplex vertex using support points.
-    var vertex = vertices[simplex.m_count]; // SimplexVertex
-
-    vertex.indexA = proxyA.getSupport(Rot.mulTVec2(xfA.q, Vec2.neg(d)));
-    vertex.wA = Transform.mulVec2(xfA, proxyA.getVertex(vertex.indexA));
-
-    vertex.indexB = proxyB.getSupport(Rot.mulTVec2(xfB.q, d));
-    vertex.wB = Transform.mulVec2(xfB, proxyB.getVertex(vertex.indexB));
-
-    vertex.w = Vec2.sub(vertex.wB, vertex.wA);
-
-    // Iteration count is equated to the number of support point calls.
-    ++iter;
-    ++stats.gjkIters;
-
-    // Check for duplicate support points. This is the main termination
-    // criteria.
-    var duplicate = false;
-    for (var i = 0; i < saveCount; ++i) {
-      if (vertex.indexA == saveA[i] && vertex.indexB == saveB[i]) {
-        duplicate = true;
-        break;
-      }
-    }
-
-    // If we found a duplicate support point we must exit to avoid cycling.
-    if (duplicate) {
-      break;
-    }
-
-    // New vertex is ok and needed.
-    ++simplex.m_count;
-  }
-
-  stats.gjkMaxIters = Math.max(stats.gjkMaxIters, iter);
-
-  // Prepare output.
-  simplex.getWitnessPoints(output.pointA, output.pointB);
-  output.distance = Vec2.distance(output.pointA, output.pointB);
-  output.iterations = iter;
-
-  // Cache the simplex.
-  simplex.writeCache(cache);
-
-  // Apply radii if requested.
-  if (input.useRadii) {
-    var rA = proxyA.m_radius;
-    var rB = proxyB.m_radius;
-
-    if (output.distance > rA + rB && output.distance > Math.EPSILON) {
-      // Shapes are still no overlapped.
-      // Move the witness points to the outer surface.
-      output.distance -= rA + rB;
-      var normal = Vec2.sub(output.pointB, output.pointA);
-      normal.normalize();
-      output.pointA.addMul(rA, normal);
-      output.pointB.subMul(rB, normal);
-    } else {
-      // Shapes are overlapped when radii are considered.
-      // Move the witness points to the middle.
-      var p = Vec2.mid(output.pointA, output.pointB);
-      output.pointA.set(p);
-      output.pointB.set(p);
-      output.distance = 0.0;
-    }
-  }
-}
-
-/**
- * A distance proxy is used by the GJK algorithm. It encapsulates any shape.
- */
-function DistanceProxy() {
-  this.m_buffer = []; // Vec2[2]
-  this.m_vertices = []; // Vec2[]
-  this.m_count = 0;
-  this.m_radius = 0;
-};
-
-/**
- * Get the vertex count.
- */
-DistanceProxy.prototype.getVertexCount = function() {
-  return this.m_count;
-}
-
-/**
- * Get a vertex by index. Used by Distance.
- */
-DistanceProxy.prototype.getVertex = function(index) {
-  _ASSERT && common.assert(0 <= index && index < this.m_count);
-  return this.m_vertices[index];
-}
-
-/**
- * Get the supporting vertex index in the given direction.
- */
-DistanceProxy.prototype.getSupport = function(d) {
-  var bestIndex = 0;
-  var bestValue = Vec2.dot(this.m_vertices[0], d);
-  for (var i = 0; i < this.m_count; ++i) {
-    var value = Vec2.dot(this.m_vertices[i], d);
-    if (value > bestValue) {
-      bestIndex = i;
-      bestValue = value;
-    }
-  }
-  return bestIndex;
-}
-
-/**
- * Get the supporting vertex in the given direction.
- */
-DistanceProxy.prototype.getSupportVertex = function(d) {
-  return this.m_vertices[this.getSupport(d)];
-}
-
-/**
- * Initialize the proxy using the given shape. The shape must remain in scope
- * while the proxy is in use.
- */
-DistanceProxy.prototype.set = function(shape, index) {
-  // TODO remove, use shape instead
-  _ASSERT && common.assert(typeof shape.computeDistanceProxy === 'function');
-  shape.computeDistanceProxy(this, index);
-}
-
-function SimplexVertex() {
-  this.indexA; // wA index
-  this.indexB; // wB index
-  this.wA = Vec2.zero(); // support point in proxyA
-  this.wB = Vec2.zero(); // support point in proxyB
-  this.w = Vec2.zero(); // wB - wA
-  this.a; // barycentric coordinate for closest point
-};
-
-SimplexVertex.prototype.set = function(v) {
-  this.indexA = v.indexA;
-  this.indexB = v.indexB;
-  this.wA = Vec2.clone(v.wA);
-  this.wB = Vec2.clone(v.wB);
-  this.w = Vec2.clone(v.w);
-  this.a = v.a;
-};
-
-function Simplex() {
-  this.m_v1 = new SimplexVertex();
-  this.m_v2 = new SimplexVertex();
-  this.m_v3 = new SimplexVertex();
-  this.m_v = [ this.m_v1, this.m_v2, this.m_v3 ];
-  this.m_count;
-};
-
-Simplex.prototype.print = function() {
-  if (this.m_count == 3) {
-    return ["+" + this.m_count,
-      this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y,
-      this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y,
-      this.m_v3.a, this.m_v3.wA.x, this.m_v3.wA.y, this.m_v3.wB.x, this.m_v3.wB.y
-    ].toString();
-
-  } else if (this.m_count == 2) {
-    return ["+" + this.m_count,
-      this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y,
-      this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y
-    ].toString();
-
-  } else if (this.m_count == 1) {
-    return ["+" + this.m_count,
-      this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y
-    ].toString();
-
-  } else {
-    return "+" + this.m_count;
-  }
-};
-
-// (SimplexCache, DistanceProxy, ...)
-Simplex.prototype.readCache = function(cache, proxyA, transformA, proxyB, transformB) {
-  _ASSERT && common.assert(cache.count <= 3);
-
-  // Copy data from cache.
-  this.m_count = cache.count;
-  for (var i = 0; i < this.m_count; ++i) {
-    var v = this.m_v[i];
-    v.indexA = cache.indexA[i];
-    v.indexB = cache.indexB[i];
-    var wALocal = proxyA.getVertex(v.indexA);
-    var wBLocal = proxyB.getVertex(v.indexB);
-    v.wA = Transform.mulVec2(transformA, wALocal);
-    v.wB = Transform.mulVec2(transformB, wBLocal);
-    v.w = Vec2.sub(v.wB, v.wA);
-    v.a = 0.0;
-  }
-
-  // Compute the new simplex metric, if it is substantially different than
-  // old metric then flush the simplex.
-  if (this.m_count > 1) {
-    var metric1 = cache.metric;
-    var metric2 = this.getMetric();
-    if (metric2 < 0.5 * metric1 || 2.0 * metric1 < metric2
-        || metric2 < Math.EPSILON) {
-      // Reset the simplex.
-      this.m_count = 0;
-    }
-  }
-
-  // If the cache is empty or invalid...
-  if (this.m_count == 0) {
-    var v = this.m_v[0];// SimplexVertex
-    v.indexA = 0;
-    v.indexB = 0;
-    var wALocal = proxyA.getVertex(0);
-    var wBLocal = proxyB.getVertex(0);
-    v.wA = Transform.mulVec2(transformA, wALocal);
-    v.wB = Transform.mulVec2(transformB, wBLocal);
-    v.w = Vec2.sub(v.wB, v.wA);
-    v.a = 1.0;
-    this.m_count = 1;
-  }
-}
-
-// (SimplexCache)
-Simplex.prototype.writeCache = function(cache) {
-  cache.metric = this.getMetric();
-  cache.count = this.m_count;
-  for (var i = 0; i < this.m_count; ++i) {
-    cache.indexA[i] = this.m_v[i].indexA;
-    cache.indexB[i] = this.m_v[i].indexB;
-  }
-}
-
-Simplex.prototype.getSearchDirection = function() {
-  switch (this.m_count) {
-  case 1:
-    return Vec2.neg(this.m_v1.w);
-
-  case 2: {
-    var e12 = Vec2.sub(this.m_v2.w, this.m_v1.w);
-    var sgn = Vec2.cross(e12, Vec2.neg(this.m_v1.w));
-    if (sgn > 0.0) {
-      // Origin is left of e12.
-      return Vec2.cross(1.0, e12);
-    } else {
-      // Origin is right of e12.
-      return Vec2.cross(e12, 1.0);
-    }
-  }
-
-  default:
-    _ASSERT && common.assert(false);
-    return Vec2.zero();
-  }
-}
-
-Simplex.prototype.getClosestPoint = function() {
-  switch (this.m_count) {
-  case 0:
-    _ASSERT && common.assert(false);
-    return Vec2.zero();
-
-  case 1:
-    return Vec2.clone(this.m_v1.w);
-
-  case 2:
-    return Vec2.combine(this.m_v1.a, this.m_v1.w, this.m_v2.a, this.m_v2.w);
-
-  case 3:
-    return Vec2.zero();
-
-  default:
-    _ASSERT && common.assert(false);
-    return Vec2.zero();
-  }
-}
-
-Simplex.prototype.getWitnessPoints = function(pA, pB) {
-  switch (this.m_count) {
-  case 0:
-    _ASSERT && common.assert(false);
-    break;
-
-  case 1:
-    pA.set(this.m_v1.wA);
-    pB.set(this.m_v1.wB);
-    break;
-
-  case 2:
-    pA.setCombine(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
-    pB.setCombine(this.m_v1.a, this.m_v1.wB, this.m_v2.a, this.m_v2.wB);
-    break;
-
-  case 3:
-    pA.setCombine(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
-    pA.addMul(this.m_v3.a, this.m_v3.wA);
-    pB.set(pA);
-    break;
-
-  default:
-    _ASSERT && common.assert(false);
-    break;
-  }
-}
-
-Simplex.prototype.getMetric = function() {
-  switch (this.m_count) {
-  case 0:
-    _ASSERT && common.assert(false);
-    return 0.0;
-
-  case 1:
-    return 0.0;
-
-  case 2:
-    return Vec2.distance(this.m_v1.w, this.m_v2.w);
-
-  case 3:
-    return Vec2.cross(Vec2.sub(this.m_v2.w, this.m_v1.w), Vec2.sub(this.m_v3.w,
-        this.m_v1.w));
-
-  default:
-    _ASSERT && common.assert(false);
-    return 0.0;
-  }
-}
-
-Simplex.prototype.solve = function() {
-  switch (this.m_count) {
-  case 1:
-    break;
-
-  case 2:
-    this.solve2();
-    break;
-
-  case 3:
-    this.solve3();
-    break;
-
-  default:
-    _ASSERT && common.assert(false);
-  }
-}
-
-// Solve a line segment using barycentric coordinates.
-//
-// p = a1 * w1 + a2 * w2
-// a1 + a2 = 1
-//
-// The vector from the origin to the closest point on the line is
-// perpendicular to the line.
-// e12 = w2 - w1
-// dot(p, e) = 0
-// a1 * dot(w1, e) + a2 * dot(w2, e) = 0
-//
-// 2-by-2 linear system
-// [1 1 ][a1] = [1]
-// [w1.e12 w2.e12][a2] = [0]
-//
-// Define
-// d12_1 = dot(w2, e12)
-// d12_2 = -dot(w1, e12)
-// d12 = d12_1 + d12_2
-//
-// Solution
-// a1 = d12_1 / d12
-// a2 = d12_2 / d12
-Simplex.prototype.solve2 = function() {
-  var w1 = this.m_v1.w;
-  var w2 = this.m_v2.w;
-  var e12 = Vec2.sub(w2, w1);
-
-  // w1 region
-  var d12_2 = -Vec2.dot(w1, e12);
-  if (d12_2 <= 0.0) {
-    // a2 <= 0, so we clamp it to 0
-    this.m_v1.a = 1.0;
-    this.m_count = 1;
-    return;
-  }
-
-  // w2 region
-  var d12_1 = Vec2.dot(w2, e12);
-  if (d12_1 <= 0.0) {
-    // a1 <= 0, so we clamp it to 0
-    this.m_v2.a = 1.0;
-    this.m_count = 1;
-    this.m_v1.set(this.m_v2);
-    return;
-  }
-
-  // Must be in e12 region.
-  var inv_d12 = 1.0 / (d12_1 + d12_2);
-  this.m_v1.a = d12_1 * inv_d12;
-  this.m_v2.a = d12_2 * inv_d12;
-  this.m_count = 2;
-}
-
-// Possible regions:
-// - points[2]
-// - edge points[0]-points[2]
-// - edge points[1]-points[2]
-// - inside the triangle
-Simplex.prototype.solve3 = function() {
-  var w1 = this.m_v1.w;
-  var w2 = this.m_v2.w;
-  var w3 = this.m_v3.w;
-
-  // Edge12
-  // [1 1 ][a1] = [1]
-  // [w1.e12 w2.e12][a2] = [0]
-  // a3 = 0
-  var e12 = Vec2.sub(w2, w1);
-  var w1e12 = Vec2.dot(w1, e12);
-  var w2e12 = Vec2.dot(w2, e12);
-  var d12_1 = w2e12;
-  var d12_2 = -w1e12;
-
-  // Edge13
-  // [1 1 ][a1] = [1]
-  // [w1.e13 w3.e13][a3] = [0]
-  // a2 = 0
-  var e13 = Vec2.sub(w3, w1);
-  var w1e13 = Vec2.dot(w1, e13);
-  var w3e13 = Vec2.dot(w3, e13);
-  var d13_1 = w3e13;
-  var d13_2 = -w1e13;
-
-  // Edge23
-  // [1 1 ][a2] = [1]
-  // [w2.e23 w3.e23][a3] = [0]
-  // a1 = 0
-  var e23 = Vec2.sub(w3, w2);// Vec2
-  var w2e23 = Vec2.dot(w2, e23);
-  var w3e23 = Vec2.dot(w3, e23);
-  var d23_1 = w3e23;
-  var d23_2 = -w2e23;
-
-  // Triangle123
-  var n123 = Vec2.cross(e12, e13);
-
-  var d123_1 = n123 * Vec2.cross(w2, w3);
-  var d123_2 = n123 * Vec2.cross(w3, w1);
-  var d123_3 = n123 * Vec2.cross(w1, w2);
-
-  // w1 region
-  if (d12_2 <= 0.0 && d13_2 <= 0.0) {
-    this.m_v1.a = 1.0;
-    this.m_count = 1;
-    return;
-  }
-
-  // e12
-  if (d12_1 > 0.0 && d12_2 > 0.0 && d123_3 <= 0.0) {
-    var inv_d12 = 1.0 / (d12_1 + d12_2);
-    this.m_v1.a = d12_1 * inv_d12;
-    this.m_v2.a = d12_2 * inv_d12;
-    this.m_count = 2;
-    return;
-  }
-
-  // e13
-  if (d13_1 > 0.0 && d13_2 > 0.0 && d123_2 <= 0.0) {
-    var inv_d13 = 1.0 / (d13_1 + d13_2);
-    this.m_v1.a = d13_1 * inv_d13;
-    this.m_v3.a = d13_2 * inv_d13;
-    this.m_count = 2;
-    this.m_v2.set(this.m_v3);
-    return;
-  }
-
-  // w2 region
-  if (d12_1 <= 0.0 && d23_2 <= 0.0) {
-    this.m_v2.a = 1.0;
-    this.m_count = 1;
-    this.m_v1.set(this.m_v2);
-    return;
-  }
-
-  // w3 region
-  if (d13_1 <= 0.0 && d23_1 <= 0.0) {
-    this.m_v3.a = 1.0;
-    this.m_count = 1;
-    this.m_v1.set(this.m_v3);
-    return;
-  }
-
-  // e23
-  if (d23_1 > 0.0 && d23_2 > 0.0 && d123_1 <= 0.0) {
-    var inv_d23 = 1.0 / (d23_1 + d23_2);
-    this.m_v2.a = d23_1 * inv_d23;
-    this.m_v3.a = d23_2 * inv_d23;
-    this.m_count = 2;
-    this.m_v1.set(this.m_v3);
-    return;
-  }
-
-  // Must be in triangle123
-  var inv_d123 = 1.0 / (d123_1 + d123_2 + d123_3);
-  this.m_v1.a = d123_1 * inv_d123;
-  this.m_v2.a = d123_2 * inv_d123;
-  this.m_v3.a = d123_3 * inv_d123;
-  this.m_count = 3;
-}
-
-/**
- * Determine if two generic shapes overlap.
- */
-Distance.testOverlap = function(shapeA, indexA, shapeB, indexB, xfA, xfB) {
-  var input = new DistanceInput();
-  input.proxyA.set(shapeA, indexA);
-  input.proxyB.set(shapeB, indexB);
-  input.transformA = xfA;
-  input.transformB = xfB;
-  input.useRadii = true;
-
-  var cache = new SimplexCache();
-
-  var output = new DistanceOutput();
-  Distance(output, cache, input);
-
-  return output.distance < 10.0 * Math.EPSILON;
-}
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
- *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- */
-
-var _DEBUG =  false ? undefined : false;
-var _ASSERT =  false ? undefined : false;
-
-module.exports = CircleShape;
-
-var common = __webpack_require__(2);
-var create = __webpack_require__(6);
-var options = __webpack_require__(7);
-var Math = __webpack_require__(1);
-var Transform = __webpack_require__(5);
-var Rot = __webpack_require__(3);
-var Vec2 = __webpack_require__(0);
-var AABB = __webpack_require__(16);
-var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(15);
-
-CircleShape._super = Shape;
-CircleShape.prototype = create(CircleShape._super.prototype);
-
-CircleShape.TYPE = 'circle';
-Shape.TYPES[CircleShape.TYPE] = CircleShape;
-
-function CircleShape(a, b) {
-  if (!(this instanceof CircleShape)) {
-    return new CircleShape(a, b);
-  }
-
-  CircleShape._super.call(this);
-
-  this.m_type = CircleShape.TYPE;
-  this.m_p = Vec2.zero();
-  this.m_radius = 1;
-
-  if (typeof a === 'object' && Vec2.isValid(a)) {
-    this.m_p.set(a);
-
-    if (typeof b === 'number') {
-      this.m_radius = b;
-    }
-
-  } else if (typeof a === 'number') {
-    this.m_radius = a;
-  }
-}
-
-CircleShape.prototype._serialize = function() {
-  return {
-    type: this.m_type,
-
-    p: this.m_p,
-    radius: this.m_radius,
-  };
-};
-
-CircleShape._deserialize = function(data) {
-  return new CircleShape(data.p, data.radius);
-};
-
-CircleShape.prototype.getRadius = function() {
-  return this.m_radius;
-}
-
-CircleShape.prototype.getCenter = function() {
-  return this.m_p;
-}
-
-CircleShape.prototype.getVertex = function(index) {
-  _ASSERT && common.assert(index == 0);
-  return this.m_p;
-}
-
-CircleShape.prototype.getVertexCount = function(index) {
-  return 1;
-}
-
-/**
- * @deprecated
- */
-CircleShape.prototype._clone = function() {
-  var clone = new CircleShape();
-  clone.m_type = this.m_type;
-  clone.m_radius = this.m_radius;
-  clone.m_p = this.m_p.clone();
-  return clone;
-}
-
-CircleShape.prototype.getChildCount = function() {
-  return 1;
-}
-
-CircleShape.prototype.testPoint = function(xf, p) {
-  var center = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
-  var d = Vec2.sub(p, center);
-  return Vec2.dot(d, d) <= this.m_radius * this.m_radius;
-}
-
-// Collision Detection in Interactive 3D Environments by Gino van den Bergen
-// From Section 3.1.2
-// x = s + a * r
-// norm(x) = radius
-CircleShape.prototype.rayCast = function(output, input, xf, childIndex) {
-
-  var position = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
-  var s = Vec2.sub(input.p1, position);
-  var b = Vec2.dot(s, s) - this.m_radius * this.m_radius;
-
-  // Solve quadratic equation.
-  var r = Vec2.sub(input.p2, input.p1);
-  var c = Vec2.dot(s, r);
-  var rr = Vec2.dot(r, r);
-  var sigma = c * c - rr * b;
-
-  // Check for negative discriminant and short segment.
-  if (sigma < 0.0 || rr < Math.EPSILON) {
-    return false;
-  }
-
-  // Find the point of intersection of the line with the circle.
-  var a = -(c + Math.sqrt(sigma));
-
-  // Is the intersection point on the segment?
-  if (0.0 <= a && a <= input.maxFraction * rr) {
-    a /= rr;
-    output.fraction = a;
-    output.normal = Vec2.add(s, Vec2.mul(a, r));
-    output.normal.normalize();
-    return true;
-  }
-
-  return false;
-}
-
-CircleShape.prototype.computeAABB = function(aabb, xf, childIndex) {
-  var p = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
-  aabb.lowerBound.set(p.x - this.m_radius, p.y - this.m_radius);
-  aabb.upperBound.set(p.x + this.m_radius, p.y + this.m_radius);
-}
-
-CircleShape.prototype.computeMass = function(massData, density) {
-  massData.mass = density * Math.PI * this.m_radius * this.m_radius;
-  massData.center = this.m_p;
-  // inertia about the local origin
-  massData.I = massData.mass
-      * (0.5 * this.m_radius * this.m_radius + Vec2.dot(this.m_p, this.m_p));
-}
-
-CircleShape.prototype.computeDistanceProxy = function(proxy) {
-  proxy.m_vertices.push(this.m_p);
-  proxy.m_count = 1;
-  proxy.m_radius = this.m_radius;
-};
-
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
- *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- */
-
-var _DEBUG =  false ? undefined : false;
-var _ASSERT =  false ? undefined : false;
-
-module.exports = EdgeShape;
-
-var create = __webpack_require__(6);
-var options = __webpack_require__(7);
-var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(15);
-var Math = __webpack_require__(1);
-var Transform = __webpack_require__(5);
-var Rot = __webpack_require__(3);
-var Vec2 = __webpack_require__(0);
-var AABB = __webpack_require__(16);
-
-EdgeShape._super = Shape;
-EdgeShape.prototype = create(EdgeShape._super.prototype);
-
-EdgeShape.TYPE = 'edge';
-Shape.TYPES[EdgeShape.TYPE] = EdgeShape;
-
-/**
- * A line segment (edge) shape. These can be connected in chains or loops to
- * other edge shapes. The connectivity information is used to ensure correct
- * contact normals.
- */
-function EdgeShape(v1, v2) {
-  if (!(this instanceof EdgeShape)) {
-    return new EdgeShape(v1, v2);
-  }
-
-  EdgeShape._super.call(this);
-
-  this.m_type = EdgeShape.TYPE;
-  this.m_radius = Settings.polygonRadius;
-
-  // These are the edge vertices
-  this.m_vertex1 = v1 ? Vec2.clone(v1) : Vec2.zero();
-  this.m_vertex2 = v2 ? Vec2.clone(v2) : Vec2.zero();
-
-  // Optional adjacent vertices. These are used for smooth collision.
-  // Used by chain shape.
-  this.m_vertex0 = Vec2.zero();
-  this.m_vertex3 = Vec2.zero();
-  this.m_hasVertex0 = false;
-  this.m_hasVertex3 = false;
-}
-
-EdgeShape.prototype._serialize = function() {
-  return {
-    type: this.m_type,
-
-    vertex1: this.m_vertex1,
-    vertex2: this.m_vertex2,
-
-    vertex0: this.m_vertex0,
-    vertex3: this.m_vertex3,
-    hasVertex0: this.m_hasVertex0,
-    hasVertex3: this.m_hasVertex3,
-  };
-};
-
-EdgeShape._deserialize = function(data) {
-  var shape = new EdgeShape(data.vertex1, data.vertex2);
-  if (shape.hasVertex0) {
-    shape.setPrev(data.vertex0);
-  }
-  if (shape.hasVertex3) {
-    shape.setNext(data.vertex3);
-  }
-  return shape;
-};
-
-EdgeShape.prototype.setNext = function(v3) {
-  if (v3) {
-    this.m_vertex3.set(v3);
-    this.m_hasVertex3 = true;
-  } else {
-    this.m_vertex3.setZero();
-    this.m_hasVertex3 = false;
-  }
-  return this;
-};
-
-EdgeShape.prototype.setPrev = function(v0) {
-  if (v0) {
-    this.m_vertex0.set(v0);
-    this.m_hasVertex0 = true;
-  } else {
-    this.m_vertex0.setZero();
-    this.m_hasVertex0 = false;
-  }
-  return this;
-};
-
-/**
- * Set this as an isolated edge.
- */
-EdgeShape.prototype._set = function(v1, v2) {
-  this.m_vertex1.set(v1);
-  this.m_vertex2.set(v2);
-  this.m_hasVertex0 = false;
-  this.m_hasVertex3 = false;
-  return this;
-}
-
-/**
- * @deprecated
- */
-EdgeShape.prototype._clone = function() {
-  var clone = new EdgeShape();
-  clone.m_type = this.m_type;
-  clone.m_radius = this.m_radius;
-  clone.m_vertex1.set(this.m_vertex1);
-  clone.m_vertex2.set(this.m_vertex2);
-  clone.m_vertex0.set(this.m_vertex0);
-  clone.m_vertex3.set(this.m_vertex3);
-  clone.m_hasVertex0 = this.m_hasVertex0;
-  clone.m_hasVertex3 = this.m_hasVertex3;
-  return clone;
-}
-
-EdgeShape.prototype.getChildCount = function() {
-  return 1;
-}
-
-EdgeShape.prototype.testPoint = function(xf, p) {
-  return false;
-}
-
-// p = p1 + t * d
-// v = v1 + s * e
-// p1 + t * d = v1 + s * e
-// s * e - t * d = p1 - v1
-EdgeShape.prototype.rayCast = function(output, input, xf, childIndex) {
-  // NOT_USED(childIndex);
-
-  // Put the ray into the edge's frame of reference.
-  var p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
-  var p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
-  var d = Vec2.sub(p2, p1);
-
-  var v1 = this.m_vertex1;
-  var v2 = this.m_vertex2;
-  var e = Vec2.sub(v2, v1);
-  var normal = Vec2.neo(e.y, -e.x);
-  normal.normalize();
-
-  // q = p1 + t * d
-  // dot(normal, q - v1) = 0
-  // dot(normal, p1 - v1) + t * dot(normal, d) = 0
-  var numerator = Vec2.dot(normal, Vec2.sub(v1, p1));
-  var denominator = Vec2.dot(normal, d);
-
-  if (denominator == 0.0) {
-    return false;
-  }
-
-  var t = numerator / denominator;
-  if (t < 0.0 || input.maxFraction < t) {
-    return false;
-  }
-
-  var q = Vec2.add(p1, Vec2.mul(t, d));
-
-  // q = v1 + s * r
-  // s = dot(q - v1, r) / dot(r, r)
-  var r = Vec2.sub(v2, v1);
-  var rr = Vec2.dot(r, r);
-  if (rr == 0.0) {
-    return false;
-  }
-
-  var s = Vec2.dot(Vec2.sub(q, v1), r) / rr;
-  if (s < 0.0 || 1.0 < s) {
-    return false;
-  }
-
-  output.fraction = t;
-  if (numerator > 0.0) {
-    output.normal = Rot.mulVec2(xf.q, normal).neg();
-  } else {
-    output.normal = Rot.mulVec2(xf.q, normal);
-  }
-  return true;
-}
-
-EdgeShape.prototype.computeAABB = function(aabb, xf, childIndex) {
-  var v1 = Transform.mulVec2(xf, this.m_vertex1);
-  var v2 = Transform.mulVec2(xf, this.m_vertex2);
-
-  aabb.combinePoints(v1, v2);
-  aabb.extend(this.m_radius)
-}
-
-EdgeShape.prototype.computeMass = function(massData, density) {
-  massData.mass = 0.0;
-  massData.center.setCombine(0.5, this.m_vertex1, 0.5, this.m_vertex2);
-  massData.I = 0.0;
-}
-
-EdgeShape.prototype.computeDistanceProxy = function(proxy) {
-  proxy.m_vertices.push(this.m_vertex1);
-  proxy.m_vertices.push(this.m_vertex2);
-  proxy.m_count = 2;
-  proxy.m_radius = this.m_radius;
-};
-
-
-/***/ }),
-/* 24 */,
-/* 25 */,
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
- *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- */
-
-var _DEBUG =  false ? undefined : false;
-var _ASSERT =  false ? undefined : false;
-
 module.exports = Body;
 
 var common = __webpack_require__(2);
@@ -6166,8 +4549,8 @@ var Rot = __webpack_require__(3);
 var Math = __webpack_require__(1);
 var Sweep = __webpack_require__(8);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(11);
-var Position = __webpack_require__(12);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
 var Fixture = __webpack_require__(32);
 var Shape = __webpack_require__(15);
@@ -6333,11 +4716,11 @@ Body.prototype._serialize = function() {
   };
 };
 
-Body._deserialize = function(world, data) {
+Body._deserialize = function(data, world, restore) {
   var body = new Body(world, data);
 
   data.fixtures.forEach(function(data) {
-    var fixture = Fixture._deserialize(body, data);
+    var fixture = restore(Fixture, data, body);
     body._addFixture(fixture);
   });
 
@@ -7211,6 +5594,1630 @@ Body.prototype.getLocalVector = function(worldVector) {
 
 
 /***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG =  false ? undefined : false;
+var _ASSERT =  false ? undefined : false;
+
+module.exports = PolygonShape;
+
+var common = __webpack_require__(2);
+var create = __webpack_require__(6);
+var options = __webpack_require__(7);
+var Math = __webpack_require__(1);
+var Transform = __webpack_require__(5);
+var Rot = __webpack_require__(3);
+var Vec2 = __webpack_require__(0);
+var AABB = __webpack_require__(16);
+var Settings = __webpack_require__(4);
+var Shape = __webpack_require__(15);
+
+PolygonShape._super = Shape;
+PolygonShape.prototype = create(PolygonShape._super.prototype);
+
+PolygonShape.TYPE = 'polygon';
+Shape.TYPES[PolygonShape.TYPE] = PolygonShape;
+
+/**
+ * A convex polygon. It is assumed that the interior of the polygon is to the
+ * left of each edge. Polygons have a maximum number of vertices equal to
+ * Settings.maxPolygonVertices. In most cases you should not need many vertices
+ * for a convex polygon. extends Shape
+ */
+function PolygonShape(vertices) {
+  if (!(this instanceof PolygonShape)) {
+    return new PolygonShape(vertices);
+  }
+
+  PolygonShape._super.call(this);
+
+  this.m_type = PolygonShape.TYPE;
+  this.m_radius = Settings.polygonRadius;
+  this.m_centroid = Vec2.zero();
+  this.m_vertices = []; // Vec2[Settings.maxPolygonVertices]
+  this.m_normals = []; // Vec2[Settings.maxPolygonVertices]
+  this.m_count = 0;
+
+  if (vertices && vertices.length) {
+    this._set(vertices);
+  }
+}
+
+PolygonShape.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+
+    centroid: this.m_centroid,
+
+    vertices: this.m_vertices,
+    normals: this.m_normals,
+    count: this.m_count,
+  };
+};
+
+PolygonShape._deserialize = function(data) {
+  var shape = new PolygonShape(data.vertices);
+  return shape;
+};
+
+PolygonShape.prototype.getVertex = function(index) {
+  _ASSERT && common.assert(0 <= index && index < this.m_count);
+  return this.m_vertices[index];
+}
+
+/**
+ * @deprecated
+ */
+PolygonShape.prototype._clone = function() {
+  var clone = new PolygonShape();
+  clone.m_type = this.m_type;
+  clone.m_radius = this.m_radius;
+  clone.m_count = this.m_count;
+  clone.m_centroid.set(this.m_centroid);
+  for (var i = 0; i < this.m_count; i++) {
+    clone.m_vertices.push(this.m_vertices[i].clone());
+  }
+  for (var i = 0; i < this.m_normals.length; i++) {
+    clone.m_normals.push(this.m_normals[i].clone());
+  }
+  return clone;
+}
+
+PolygonShape.prototype.getChildCount = function() {
+  return 1;
+}
+
+function ComputeCentroid(vs, count) {
+  _ASSERT && common.assert(count >= 3);
+
+  var c = Vec2.zero();
+  var area = 0.0;
+
+  // pRef is the reference point for forming triangles.
+  // It's location doesn't change the result (except for rounding error).
+  var pRef = Vec2.zero();
+  if (false) { var i; }
+
+  var inv3 = 1.0 / 3.0;
+
+  for (var i = 0; i < count; ++i) {
+    // Triangle vertices.
+    var p1 = pRef;
+    var p2 = vs[i];
+    var p3 = i + 1 < count ? vs[i + 1] : vs[0];
+
+    var e1 = Vec2.sub(p2, p1);
+    var e2 = Vec2.sub(p3, p1);
+
+    var D = Vec2.cross(e1, e2);
+
+    var triangleArea = 0.5 * D;
+    area += triangleArea;
+
+    // Area weighted centroid
+    c.addMul(triangleArea * inv3, p1);
+    c.addMul(triangleArea * inv3, p2);
+    c.addMul(triangleArea * inv3, p3);
+  }
+
+  // Centroid
+  _ASSERT && common.assert(area > Math.EPSILON);
+  c.mul(1.0 / area);
+  return c;
+}
+
+PolygonShape.prototype._reset = function() {
+  this._set(this.m_vertices)
+}
+
+/**
+ * @private
+ *
+ * Create a convex hull from the given array of local points. The count must be
+ * in the range [3, Settings.maxPolygonVertices].
+ *
+ * Warning: the points may be re-ordered, even if they form a convex polygon
+ * Warning: collinear points are handled but not removed. Collinear points may
+ * lead to poor stacking behavior.
+ */
+PolygonShape.prototype._set = function(vertices) {
+  _ASSERT && common.assert(3 <= vertices.length && vertices.length <= Settings.maxPolygonVertices);
+  if (vertices.length < 3) {
+    this._setAsBox(1.0, 1.0);
+    return;
+  }
+
+  var n = Math.min(vertices.length, Settings.maxPolygonVertices);
+
+  // Perform welding and copy vertices into local buffer.
+  var ps = [];// [Settings.maxPolygonVertices];
+  var tempCount = 0;
+  for (var i = 0; i < n; ++i) {
+    var v = vertices[i];
+
+    var unique = true;
+    for (var j = 0; j < tempCount; ++j) {
+      if (Vec2.distanceSquared(v, ps[j]) < 0.25 * Settings.linearSlopSquared) {
+        unique = false;
+        break;
+      }
+    }
+
+    if (unique) {
+      ps[tempCount++] = v;
+    }
+  }
+
+  n = tempCount;
+  if (n < 3) {
+    // Polygon is degenerate.
+    _ASSERT && common.assert(false);
+    this._setAsBox(1.0, 1.0);
+    return;
+  }
+
+  // Create the convex hull using the Gift wrapping algorithm
+  // http://en.wikipedia.org/wiki/Gift_wrapping_algorithm
+
+  // Find the right most point on the hull
+  var i0 = 0;
+  var x0 = ps[0].x;
+  for (var i = 1; i < n; ++i) {
+    var x = ps[i].x;
+    if (x > x0 || (x == x0 && ps[i].y < ps[i0].y)) {
+      i0 = i;
+      x0 = x;
+    }
+  }
+
+  var hull = [];// [Settings.maxPolygonVertices];
+  var m = 0;
+  var ih = i0;
+
+  for (;;) {
+    hull[m] = ih;
+
+    var ie = 0;
+    for (var j = 1; j < n; ++j) {
+      if (ie == ih) {
+        ie = j;
+        continue;
+      }
+
+      var r = Vec2.sub(ps[ie], ps[hull[m]]);
+      var v = Vec2.sub(ps[j], ps[hull[m]]);
+      var c = Vec2.cross(r, v);
+      if (c < 0.0) {
+        ie = j;
+      }
+
+      // Collinearity check
+      if (c == 0.0 && v.lengthSquared() > r.lengthSquared()) {
+        ie = j;
+      }
+    }
+
+    ++m;
+    ih = ie;
+
+    if (ie == i0) {
+      break;
+    }
+  }
+
+  if (m < 3) {
+    // Polygon is degenerate.
+    _ASSERT && common.assert(false);
+    this._setAsBox(1.0, 1.0);
+    return;
+  }
+
+  this.m_count = m;
+
+  // Copy vertices.
+  for (var i = 0; i < m; ++i) {
+    this.m_vertices[i] = ps[hull[i]];
+  }
+
+  // Compute normals. Ensure the edges have non-zero length.
+  for (var i = 0; i < m; ++i) {
+    var i1 = i;
+    var i2 = i + 1 < m ? i + 1 : 0;
+    var edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
+    _ASSERT && common.assert(edge.lengthSquared() > Math.EPSILON * Math.EPSILON);
+    this.m_normals[i] = Vec2.cross(edge, 1.0);
+    this.m_normals[i].normalize();
+  }
+
+  // Compute the polygon centroid.
+  this.m_centroid = ComputeCentroid(this.m_vertices, m);
+}
+
+/**
+ * @private
+ */
+PolygonShape.prototype._setAsBox = function(hx, hy, center, angle) {
+  this.m_vertices[0] = Vec2.neo(-hx, -hy);
+  this.m_vertices[1] = Vec2.neo(hx, -hy);
+  this.m_vertices[2] = Vec2.neo(hx, hy);
+  this.m_vertices[3] = Vec2.neo(-hx, hy);
+
+  this.m_normals[0] = Vec2.neo(0.0, -1.0);
+  this.m_normals[1] = Vec2.neo(1.0, 0.0);
+  this.m_normals[2] = Vec2.neo(0.0, 1.0);
+  this.m_normals[3] = Vec2.neo(-1.0, 0.0);
+
+  this.m_count = 4;
+
+  if (Vec2.isValid(center)) {
+    angle = angle || 0;
+
+    this.m_centroid.set(center);
+
+    var xf = Transform.identity();
+    xf.p.set(center);
+    xf.q.set(angle);
+
+    // Transform vertices and normals.
+    for (var i = 0; i < this.m_count; ++i) {
+      this.m_vertices[i] = Transform.mulVec2(xf, this.m_vertices[i]);
+      this.m_normals[i] = Rot.mulVec2(xf.q, this.m_normals[i]);
+    }
+  }
+}
+
+PolygonShape.prototype.testPoint = function(xf, p) {
+  var pLocal = Rot.mulTVec2(xf.q, Vec2.sub(p, xf.p));
+
+  for (var i = 0; i < this.m_count; ++i) {
+    var dot = Vec2.dot(this.m_normals[i], Vec2.sub(pLocal, this.m_vertices[i]));
+    if (dot > 0.0) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+PolygonShape.prototype.rayCast = function(output, input, xf, childIndex) {
+
+  // Put the ray into the polygon's frame of reference.
+  var p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
+  var p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
+  var d = Vec2.sub(p2, p1);
+
+  var lower = 0.0;
+  var upper = input.maxFraction;
+
+  var index = -1;
+
+  for (var i = 0; i < this.m_count; ++i) {
+    // p = p1 + a * d
+    // dot(normal, p - v) = 0
+    // dot(normal, p1 - v) + a * dot(normal, d) = 0
+    var numerator = Vec2.dot(this.m_normals[i], Vec2.sub(this.m_vertices[i], p1));
+    var denominator = Vec2.dot(this.m_normals[i], d);
+
+    if (denominator == 0.0) {
+      if (numerator < 0.0) {
+        return false;
+      }
+    } else {
+      // Note: we want this predicate without division:
+      // lower < numerator / denominator, where denominator < 0
+      // Since denominator < 0, we have to flip the inequality:
+      // lower < numerator / denominator <==> denominator * lower > numerator.
+      if (denominator < 0.0 && numerator < lower * denominator) {
+        // Increase lower.
+        // The segment enters this half-space.
+        lower = numerator / denominator;
+        index = i;
+      } else if (denominator > 0.0 && numerator < upper * denominator) {
+        // Decrease upper.
+        // The segment exits this half-space.
+        upper = numerator / denominator;
+      }
+    }
+
+    // The use of epsilon here causes the assert on lower to trip
+    // in some cases. Apparently the use of epsilon was to make edge
+    // shapes work, but now those are handled separately.
+    // if (upper < lower - Math.EPSILON)
+    if (upper < lower) {
+      return false;
+    }
+  }
+
+  _ASSERT && common.assert(0.0 <= lower && lower <= input.maxFraction);
+
+  if (index >= 0) {
+    output.fraction = lower;
+    output.normal = Rot.mulVec2(xf.q, this.m_normals[index]);
+    return true;
+  }
+
+  return false;
+};
+
+PolygonShape.prototype.computeAABB = function(aabb, xf, childIndex) {
+  var minX = Infinity, minY = Infinity;
+  var maxX = -Infinity, maxY = -Infinity;
+  for (var i = 0; i < this.m_count; ++i) {
+    var v = Transform.mulVec2(xf, this.m_vertices[i]);
+    minX = Math.min(minX, v.x);
+    maxX = Math.max(maxX, v.x);
+    minY = Math.min(minY, v.y);
+    maxY = Math.max(maxY, v.y);
+  }
+
+  aabb.lowerBound.set(minX, minY);
+  aabb.upperBound.set(maxX, maxY);
+  aabb.extend(this.m_radius);
+}
+
+PolygonShape.prototype.computeMass = function(massData, density) {
+  // Polygon mass, centroid, and inertia.
+  // Let rho be the polygon density in mass per unit area.
+  // Then:
+  // mass = rho * int(dA)
+  // centroid.x = (1/mass) * rho * int(x * dA)
+  // centroid.y = (1/mass) * rho * int(y * dA)
+  // I = rho * int((x*x + y*y) * dA)
+  //
+  // We can compute these integrals by summing all the integrals
+  // for each triangle of the polygon. To evaluate the integral
+  // for a single triangle, we make a change of variables to
+  // the (u,v) coordinates of the triangle:
+  // x = x0 + e1x * u + e2x * v
+  // y = y0 + e1y * u + e2y * v
+  // where 0 <= u && 0 <= v && u + v <= 1.
+  //
+  // We integrate u from [0,1-v] and then v from [0,1].
+  // We also need to use the Jacobian of the transformation:
+  // D = cross(e1, e2)
+  //
+  // Simplification: triangle centroid = (1/3) * (p1 + p2 + p3)
+  //
+  // The rest of the derivation is handled by computer algebra.
+
+  _ASSERT && common.assert(this.m_count >= 3);
+
+  var center = Vec2.zero();
+  var area = 0.0;
+  var I = 0.0;
+
+  // s is the reference point for forming triangles.
+  // It's location doesn't change the result (except for rounding error).
+  var s = Vec2.zero();
+
+  // This code would put the reference point inside the polygon.
+  for (var i = 0; i < this.m_count; ++i) {
+    s.add(this.m_vertices[i]);
+  }
+  s.mul(1.0 / this.m_count);
+
+  var k_inv3 = 1.0 / 3.0;
+
+  for (var i = 0; i < this.m_count; ++i) {
+    // Triangle vertices.
+    var e1 = Vec2.sub(this.m_vertices[i], s);
+    var e2 = i + 1 < this.m_count ? Vec2.sub(this.m_vertices[i + 1], s) : Vec2
+        .sub(this.m_vertices[0], s);
+
+    var D = Vec2.cross(e1, e2);
+
+    var triangleArea = 0.5 * D;
+    area += triangleArea;
+
+    // Area weighted centroid
+    center.addCombine(triangleArea * k_inv3, e1, triangleArea * k_inv3, e2);
+
+    var ex1 = e1.x;
+    var ey1 = e1.y;
+    var ex2 = e2.x;
+    var ey2 = e2.y;
+
+    var intx2 = ex1 * ex1 + ex2 * ex1 + ex2 * ex2;
+    var inty2 = ey1 * ey1 + ey2 * ey1 + ey2 * ey2;
+
+    I += (0.25 * k_inv3 * D) * (intx2 + inty2);
+  }
+
+  // Total mass
+  massData.mass = density * area;
+
+  // Center of mass
+  _ASSERT && common.assert(area > Math.EPSILON);
+  center.mul(1.0 / area);
+  massData.center.setCombine(1, center, 1, s);
+
+  // Inertia tensor relative to the local origin (point s).
+  massData.I = density * I;
+
+  // Shift to center of mass then to original body origin.
+  massData.I += massData.mass
+      * (Vec2.dot(massData.center, massData.center) - Vec2.dot(center, center));
+}
+
+// Validate convexity. This is a very time consuming operation.
+// @returns true if valid
+PolygonShape.prototype.validate = function() {
+  for (var i = 0; i < this.m_count; ++i) {
+    var i1 = i;
+    var i2 = i < this.m_count - 1 ? i1 + 1 : 0;
+    var p = this.m_vertices[i1];
+    var e = Vec2.sub(this.m_vertices[i2], p);
+
+    for (var j = 0; j < this.m_count; ++j) {
+      if (j == i1 || j == i2) {
+        continue;
+      }
+
+      var v = Vec2.sub(this.m_vertices[j], p);
+      var c = Vec2.cross(e, v);
+      if (c < 0.0) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+PolygonShape.prototype.computeDistanceProxy = function(proxy) {
+  proxy.m_vertices = this.m_vertices;
+  proxy.m_count = this.m_count;
+  proxy.m_radius = this.m_radius;
+};
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG =  false ? undefined : false;
+var _ASSERT =  false ? undefined : false;
+
+module.exports = Distance;
+
+module.exports.Input = DistanceInput;
+module.exports.Output = DistanceOutput;
+module.exports.Proxy = DistanceProxy;
+module.exports.Cache = SimplexCache;
+
+var Settings = __webpack_require__(4);
+var common = __webpack_require__(2);
+
+var stats = __webpack_require__(27);
+
+var Math = __webpack_require__(1);
+var Vec2 = __webpack_require__(0);
+var Vec3 = __webpack_require__(10);
+var Mat22 = __webpack_require__(9);
+var Mat33 = __webpack_require__(14);
+var Rot = __webpack_require__(3);
+var Sweep = __webpack_require__(8);
+var Transform = __webpack_require__(5);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
+
+/**
+ * GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
+ */
+
+stats.gjkCalls = 0;
+stats.gjkIters = 0;
+stats.gjkMaxIters = 0;
+
+/**
+ * Input for Distance. You have to option to use the shape radii in the
+ * computation. Even
+ */
+function DistanceInput() {
+  this.proxyA = new DistanceProxy();
+  this.proxyB = new DistanceProxy();
+  this.transformA = null;
+  this.transformB = null;
+  this.useRadii = false;
+};
+
+/**
+ * Output for Distance.
+ *
+ * @prop {Vec2} pointA closest point on shapeA
+ * @prop {Vec2} pointB closest point on shapeB
+ * @prop distance
+ * @prop iterations number of GJK iterations used
+ */
+function DistanceOutput() {
+  this.pointA = Vec2.zero();
+  this.pointB = Vec2.zero();
+  this.distance;
+  this.iterations;
+}
+
+/**
+ * Used to warm start Distance. Set count to zero on first call.
+ *
+ * @prop {number} metric length or area
+ * @prop {array} indexA vertices on shape A
+ * @prop {array} indexB vertices on shape B
+ * @prop {number} count
+ */
+function SimplexCache() {
+  this.metric = 0;
+  this.indexA = [];
+  this.indexB = [];
+  this.count = 0;
+};
+
+/**
+ * Compute the closest points between two shapes. Supports any combination of:
+ * CircleShape, PolygonShape, EdgeShape. The simplex cache is input/output. On
+ * the first call set SimplexCache.count to zero.
+ *
+ * @param {DistanceOutput} output
+ * @param {SimplexCache} cache
+ * @param {DistanceInput} input
+ */
+function Distance(output, cache, input) {
+  ++stats.gjkCalls;
+
+  var proxyA = input.proxyA;
+  var proxyB = input.proxyB;
+  var xfA = input.transformA;
+  var xfB = input.transformB;
+
+  // Initialize the simplex.
+  var simplex = new Simplex();
+  simplex.readCache(cache, proxyA, xfA, proxyB, xfB);
+
+  // Get simplex vertices as an array.
+  var vertices = simplex.m_v;// SimplexVertex
+  var k_maxIters = Settings.maxDistnceIterations;
+
+  // These store the vertices of the last simplex so that we
+  // can check for duplicates and prevent cycling.
+  var saveA = [];
+  var saveB = []; // int[3]
+  var saveCount = 0;
+
+  var distanceSqr1 = Infinity;
+  var distanceSqr2 = Infinity;
+
+  // Main iteration loop.
+  var iter = 0;
+  while (iter < k_maxIters) {
+    // Copy simplex so we can identify duplicates.
+    saveCount = simplex.m_count;
+    for (var i = 0; i < saveCount; ++i) {
+      saveA[i] = vertices[i].indexA;
+      saveB[i] = vertices[i].indexB;
+    }
+
+    simplex.solve();
+
+    // If we have 3 points, then the origin is in the corresponding triangle.
+    if (simplex.m_count == 3) {
+      break;
+    }
+
+    // Compute closest point.
+    var p = simplex.getClosestPoint();
+    distanceSqr2 = p.lengthSquared();
+
+    // Ensure progress
+    if (distanceSqr2 >= distanceSqr1) {
+      // break;
+    }
+    distanceSqr1 = distanceSqr2;
+
+    // Get search direction.
+    var d = simplex.getSearchDirection();
+
+    // Ensure the search direction is numerically fit.
+    if (d.lengthSquared() < Math.EPSILON * Math.EPSILON) {
+      // The origin is probably contained by a line segment
+      // or triangle. Thus the shapes are overlapped.
+
+      // We can't return zero here even though there may be overlap.
+      // In case the simplex is a point, segment, or triangle it is difficult
+      // to determine if the origin is contained in the CSO or very close to it.
+      break;
+    }
+
+    // Compute a tentative new simplex vertex using support points.
+    var vertex = vertices[simplex.m_count]; // SimplexVertex
+
+    vertex.indexA = proxyA.getSupport(Rot.mulTVec2(xfA.q, Vec2.neg(d)));
+    vertex.wA = Transform.mulVec2(xfA, proxyA.getVertex(vertex.indexA));
+
+    vertex.indexB = proxyB.getSupport(Rot.mulTVec2(xfB.q, d));
+    vertex.wB = Transform.mulVec2(xfB, proxyB.getVertex(vertex.indexB));
+
+    vertex.w = Vec2.sub(vertex.wB, vertex.wA);
+
+    // Iteration count is equated to the number of support point calls.
+    ++iter;
+    ++stats.gjkIters;
+
+    // Check for duplicate support points. This is the main termination
+    // criteria.
+    var duplicate = false;
+    for (var i = 0; i < saveCount; ++i) {
+      if (vertex.indexA == saveA[i] && vertex.indexB == saveB[i]) {
+        duplicate = true;
+        break;
+      }
+    }
+
+    // If we found a duplicate support point we must exit to avoid cycling.
+    if (duplicate) {
+      break;
+    }
+
+    // New vertex is ok and needed.
+    ++simplex.m_count;
+  }
+
+  stats.gjkMaxIters = Math.max(stats.gjkMaxIters, iter);
+
+  // Prepare output.
+  simplex.getWitnessPoints(output.pointA, output.pointB);
+  output.distance = Vec2.distance(output.pointA, output.pointB);
+  output.iterations = iter;
+
+  // Cache the simplex.
+  simplex.writeCache(cache);
+
+  // Apply radii if requested.
+  if (input.useRadii) {
+    var rA = proxyA.m_radius;
+    var rB = proxyB.m_radius;
+
+    if (output.distance > rA + rB && output.distance > Math.EPSILON) {
+      // Shapes are still no overlapped.
+      // Move the witness points to the outer surface.
+      output.distance -= rA + rB;
+      var normal = Vec2.sub(output.pointB, output.pointA);
+      normal.normalize();
+      output.pointA.addMul(rA, normal);
+      output.pointB.subMul(rB, normal);
+    } else {
+      // Shapes are overlapped when radii are considered.
+      // Move the witness points to the middle.
+      var p = Vec2.mid(output.pointA, output.pointB);
+      output.pointA.set(p);
+      output.pointB.set(p);
+      output.distance = 0.0;
+    }
+  }
+}
+
+/**
+ * A distance proxy is used by the GJK algorithm. It encapsulates any shape.
+ */
+function DistanceProxy() {
+  this.m_buffer = []; // Vec2[2]
+  this.m_vertices = []; // Vec2[]
+  this.m_count = 0;
+  this.m_radius = 0;
+};
+
+/**
+ * Get the vertex count.
+ */
+DistanceProxy.prototype.getVertexCount = function() {
+  return this.m_count;
+}
+
+/**
+ * Get a vertex by index. Used by Distance.
+ */
+DistanceProxy.prototype.getVertex = function(index) {
+  _ASSERT && common.assert(0 <= index && index < this.m_count);
+  return this.m_vertices[index];
+}
+
+/**
+ * Get the supporting vertex index in the given direction.
+ */
+DistanceProxy.prototype.getSupport = function(d) {
+  var bestIndex = 0;
+  var bestValue = Vec2.dot(this.m_vertices[0], d);
+  for (var i = 0; i < this.m_count; ++i) {
+    var value = Vec2.dot(this.m_vertices[i], d);
+    if (value > bestValue) {
+      bestIndex = i;
+      bestValue = value;
+    }
+  }
+  return bestIndex;
+}
+
+/**
+ * Get the supporting vertex in the given direction.
+ */
+DistanceProxy.prototype.getSupportVertex = function(d) {
+  return this.m_vertices[this.getSupport(d)];
+}
+
+/**
+ * Initialize the proxy using the given shape. The shape must remain in scope
+ * while the proxy is in use.
+ */
+DistanceProxy.prototype.set = function(shape, index) {
+  // TODO remove, use shape instead
+  _ASSERT && common.assert(typeof shape.computeDistanceProxy === 'function');
+  shape.computeDistanceProxy(this, index);
+}
+
+function SimplexVertex() {
+  this.indexA; // wA index
+  this.indexB; // wB index
+  this.wA = Vec2.zero(); // support point in proxyA
+  this.wB = Vec2.zero(); // support point in proxyB
+  this.w = Vec2.zero(); // wB - wA
+  this.a; // barycentric coordinate for closest point
+};
+
+SimplexVertex.prototype.set = function(v) {
+  this.indexA = v.indexA;
+  this.indexB = v.indexB;
+  this.wA = Vec2.clone(v.wA);
+  this.wB = Vec2.clone(v.wB);
+  this.w = Vec2.clone(v.w);
+  this.a = v.a;
+};
+
+function Simplex() {
+  this.m_v1 = new SimplexVertex();
+  this.m_v2 = new SimplexVertex();
+  this.m_v3 = new SimplexVertex();
+  this.m_v = [ this.m_v1, this.m_v2, this.m_v3 ];
+  this.m_count;
+};
+
+Simplex.prototype.print = function() {
+  if (this.m_count == 3) {
+    return ["+" + this.m_count,
+      this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y,
+      this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y,
+      this.m_v3.a, this.m_v3.wA.x, this.m_v3.wA.y, this.m_v3.wB.x, this.m_v3.wB.y
+    ].toString();
+
+  } else if (this.m_count == 2) {
+    return ["+" + this.m_count,
+      this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y,
+      this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y
+    ].toString();
+
+  } else if (this.m_count == 1) {
+    return ["+" + this.m_count,
+      this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y
+    ].toString();
+
+  } else {
+    return "+" + this.m_count;
+  }
+};
+
+// (SimplexCache, DistanceProxy, ...)
+Simplex.prototype.readCache = function(cache, proxyA, transformA, proxyB, transformB) {
+  _ASSERT && common.assert(cache.count <= 3);
+
+  // Copy data from cache.
+  this.m_count = cache.count;
+  for (var i = 0; i < this.m_count; ++i) {
+    var v = this.m_v[i];
+    v.indexA = cache.indexA[i];
+    v.indexB = cache.indexB[i];
+    var wALocal = proxyA.getVertex(v.indexA);
+    var wBLocal = proxyB.getVertex(v.indexB);
+    v.wA = Transform.mulVec2(transformA, wALocal);
+    v.wB = Transform.mulVec2(transformB, wBLocal);
+    v.w = Vec2.sub(v.wB, v.wA);
+    v.a = 0.0;
+  }
+
+  // Compute the new simplex metric, if it is substantially different than
+  // old metric then flush the simplex.
+  if (this.m_count > 1) {
+    var metric1 = cache.metric;
+    var metric2 = this.getMetric();
+    if (metric2 < 0.5 * metric1 || 2.0 * metric1 < metric2
+        || metric2 < Math.EPSILON) {
+      // Reset the simplex.
+      this.m_count = 0;
+    }
+  }
+
+  // If the cache is empty or invalid...
+  if (this.m_count == 0) {
+    var v = this.m_v[0];// SimplexVertex
+    v.indexA = 0;
+    v.indexB = 0;
+    var wALocal = proxyA.getVertex(0);
+    var wBLocal = proxyB.getVertex(0);
+    v.wA = Transform.mulVec2(transformA, wALocal);
+    v.wB = Transform.mulVec2(transformB, wBLocal);
+    v.w = Vec2.sub(v.wB, v.wA);
+    v.a = 1.0;
+    this.m_count = 1;
+  }
+}
+
+// (SimplexCache)
+Simplex.prototype.writeCache = function(cache) {
+  cache.metric = this.getMetric();
+  cache.count = this.m_count;
+  for (var i = 0; i < this.m_count; ++i) {
+    cache.indexA[i] = this.m_v[i].indexA;
+    cache.indexB[i] = this.m_v[i].indexB;
+  }
+}
+
+Simplex.prototype.getSearchDirection = function() {
+  switch (this.m_count) {
+  case 1:
+    return Vec2.neg(this.m_v1.w);
+
+  case 2: {
+    var e12 = Vec2.sub(this.m_v2.w, this.m_v1.w);
+    var sgn = Vec2.cross(e12, Vec2.neg(this.m_v1.w));
+    if (sgn > 0.0) {
+      // Origin is left of e12.
+      return Vec2.cross(1.0, e12);
+    } else {
+      // Origin is right of e12.
+      return Vec2.cross(e12, 1.0);
+    }
+  }
+
+  default:
+    _ASSERT && common.assert(false);
+    return Vec2.zero();
+  }
+}
+
+Simplex.prototype.getClosestPoint = function() {
+  switch (this.m_count) {
+  case 0:
+    _ASSERT && common.assert(false);
+    return Vec2.zero();
+
+  case 1:
+    return Vec2.clone(this.m_v1.w);
+
+  case 2:
+    return Vec2.combine(this.m_v1.a, this.m_v1.w, this.m_v2.a, this.m_v2.w);
+
+  case 3:
+    return Vec2.zero();
+
+  default:
+    _ASSERT && common.assert(false);
+    return Vec2.zero();
+  }
+}
+
+Simplex.prototype.getWitnessPoints = function(pA, pB) {
+  switch (this.m_count) {
+  case 0:
+    _ASSERT && common.assert(false);
+    break;
+
+  case 1:
+    pA.set(this.m_v1.wA);
+    pB.set(this.m_v1.wB);
+    break;
+
+  case 2:
+    pA.setCombine(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
+    pB.setCombine(this.m_v1.a, this.m_v1.wB, this.m_v2.a, this.m_v2.wB);
+    break;
+
+  case 3:
+    pA.setCombine(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
+    pA.addMul(this.m_v3.a, this.m_v3.wA);
+    pB.set(pA);
+    break;
+
+  default:
+    _ASSERT && common.assert(false);
+    break;
+  }
+}
+
+Simplex.prototype.getMetric = function() {
+  switch (this.m_count) {
+  case 0:
+    _ASSERT && common.assert(false);
+    return 0.0;
+
+  case 1:
+    return 0.0;
+
+  case 2:
+    return Vec2.distance(this.m_v1.w, this.m_v2.w);
+
+  case 3:
+    return Vec2.cross(Vec2.sub(this.m_v2.w, this.m_v1.w), Vec2.sub(this.m_v3.w,
+        this.m_v1.w));
+
+  default:
+    _ASSERT && common.assert(false);
+    return 0.0;
+  }
+}
+
+Simplex.prototype.solve = function() {
+  switch (this.m_count) {
+  case 1:
+    break;
+
+  case 2:
+    this.solve2();
+    break;
+
+  case 3:
+    this.solve3();
+    break;
+
+  default:
+    _ASSERT && common.assert(false);
+  }
+}
+
+// Solve a line segment using barycentric coordinates.
+//
+// p = a1 * w1 + a2 * w2
+// a1 + a2 = 1
+//
+// The vector from the origin to the closest point on the line is
+// perpendicular to the line.
+// e12 = w2 - w1
+// dot(p, e) = 0
+// a1 * dot(w1, e) + a2 * dot(w2, e) = 0
+//
+// 2-by-2 linear system
+// [1 1 ][a1] = [1]
+// [w1.e12 w2.e12][a2] = [0]
+//
+// Define
+// d12_1 = dot(w2, e12)
+// d12_2 = -dot(w1, e12)
+// d12 = d12_1 + d12_2
+//
+// Solution
+// a1 = d12_1 / d12
+// a2 = d12_2 / d12
+Simplex.prototype.solve2 = function() {
+  var w1 = this.m_v1.w;
+  var w2 = this.m_v2.w;
+  var e12 = Vec2.sub(w2, w1);
+
+  // w1 region
+  var d12_2 = -Vec2.dot(w1, e12);
+  if (d12_2 <= 0.0) {
+    // a2 <= 0, so we clamp it to 0
+    this.m_v1.a = 1.0;
+    this.m_count = 1;
+    return;
+  }
+
+  // w2 region
+  var d12_1 = Vec2.dot(w2, e12);
+  if (d12_1 <= 0.0) {
+    // a1 <= 0, so we clamp it to 0
+    this.m_v2.a = 1.0;
+    this.m_count = 1;
+    this.m_v1.set(this.m_v2);
+    return;
+  }
+
+  // Must be in e12 region.
+  var inv_d12 = 1.0 / (d12_1 + d12_2);
+  this.m_v1.a = d12_1 * inv_d12;
+  this.m_v2.a = d12_2 * inv_d12;
+  this.m_count = 2;
+}
+
+// Possible regions:
+// - points[2]
+// - edge points[0]-points[2]
+// - edge points[1]-points[2]
+// - inside the triangle
+Simplex.prototype.solve3 = function() {
+  var w1 = this.m_v1.w;
+  var w2 = this.m_v2.w;
+  var w3 = this.m_v3.w;
+
+  // Edge12
+  // [1 1 ][a1] = [1]
+  // [w1.e12 w2.e12][a2] = [0]
+  // a3 = 0
+  var e12 = Vec2.sub(w2, w1);
+  var w1e12 = Vec2.dot(w1, e12);
+  var w2e12 = Vec2.dot(w2, e12);
+  var d12_1 = w2e12;
+  var d12_2 = -w1e12;
+
+  // Edge13
+  // [1 1 ][a1] = [1]
+  // [w1.e13 w3.e13][a3] = [0]
+  // a2 = 0
+  var e13 = Vec2.sub(w3, w1);
+  var w1e13 = Vec2.dot(w1, e13);
+  var w3e13 = Vec2.dot(w3, e13);
+  var d13_1 = w3e13;
+  var d13_2 = -w1e13;
+
+  // Edge23
+  // [1 1 ][a2] = [1]
+  // [w2.e23 w3.e23][a3] = [0]
+  // a1 = 0
+  var e23 = Vec2.sub(w3, w2);// Vec2
+  var w2e23 = Vec2.dot(w2, e23);
+  var w3e23 = Vec2.dot(w3, e23);
+  var d23_1 = w3e23;
+  var d23_2 = -w2e23;
+
+  // Triangle123
+  var n123 = Vec2.cross(e12, e13);
+
+  var d123_1 = n123 * Vec2.cross(w2, w3);
+  var d123_2 = n123 * Vec2.cross(w3, w1);
+  var d123_3 = n123 * Vec2.cross(w1, w2);
+
+  // w1 region
+  if (d12_2 <= 0.0 && d13_2 <= 0.0) {
+    this.m_v1.a = 1.0;
+    this.m_count = 1;
+    return;
+  }
+
+  // e12
+  if (d12_1 > 0.0 && d12_2 > 0.0 && d123_3 <= 0.0) {
+    var inv_d12 = 1.0 / (d12_1 + d12_2);
+    this.m_v1.a = d12_1 * inv_d12;
+    this.m_v2.a = d12_2 * inv_d12;
+    this.m_count = 2;
+    return;
+  }
+
+  // e13
+  if (d13_1 > 0.0 && d13_2 > 0.0 && d123_2 <= 0.0) {
+    var inv_d13 = 1.0 / (d13_1 + d13_2);
+    this.m_v1.a = d13_1 * inv_d13;
+    this.m_v3.a = d13_2 * inv_d13;
+    this.m_count = 2;
+    this.m_v2.set(this.m_v3);
+    return;
+  }
+
+  // w2 region
+  if (d12_1 <= 0.0 && d23_2 <= 0.0) {
+    this.m_v2.a = 1.0;
+    this.m_count = 1;
+    this.m_v1.set(this.m_v2);
+    return;
+  }
+
+  // w3 region
+  if (d13_1 <= 0.0 && d23_1 <= 0.0) {
+    this.m_v3.a = 1.0;
+    this.m_count = 1;
+    this.m_v1.set(this.m_v3);
+    return;
+  }
+
+  // e23
+  if (d23_1 > 0.0 && d23_2 > 0.0 && d123_1 <= 0.0) {
+    var inv_d23 = 1.0 / (d23_1 + d23_2);
+    this.m_v2.a = d23_1 * inv_d23;
+    this.m_v3.a = d23_2 * inv_d23;
+    this.m_count = 2;
+    this.m_v1.set(this.m_v3);
+    return;
+  }
+
+  // Must be in triangle123
+  var inv_d123 = 1.0 / (d123_1 + d123_2 + d123_3);
+  this.m_v1.a = d123_1 * inv_d123;
+  this.m_v2.a = d123_2 * inv_d123;
+  this.m_v3.a = d123_3 * inv_d123;
+  this.m_count = 3;
+}
+
+/**
+ * Determine if two generic shapes overlap.
+ */
+Distance.testOverlap = function(shapeA, indexA, shapeB, indexB, xfA, xfB) {
+  var input = new DistanceInput();
+  input.proxyA.set(shapeA, indexA);
+  input.proxyB.set(shapeB, indexB);
+  input.transformA = xfA;
+  input.transformB = xfB;
+  input.useRadii = true;
+
+  var cache = new SimplexCache();
+
+  var output = new DistanceOutput();
+  Distance(output, cache, input);
+
+  return output.distance < 10.0 * Math.EPSILON;
+}
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG =  false ? undefined : false;
+var _ASSERT =  false ? undefined : false;
+
+module.exports = CircleShape;
+
+var common = __webpack_require__(2);
+var create = __webpack_require__(6);
+var options = __webpack_require__(7);
+var Math = __webpack_require__(1);
+var Transform = __webpack_require__(5);
+var Rot = __webpack_require__(3);
+var Vec2 = __webpack_require__(0);
+var AABB = __webpack_require__(16);
+var Settings = __webpack_require__(4);
+var Shape = __webpack_require__(15);
+
+CircleShape._super = Shape;
+CircleShape.prototype = create(CircleShape._super.prototype);
+
+CircleShape.TYPE = 'circle';
+Shape.TYPES[CircleShape.TYPE] = CircleShape;
+
+function CircleShape(a, b) {
+  if (!(this instanceof CircleShape)) {
+    return new CircleShape(a, b);
+  }
+
+  CircleShape._super.call(this);
+
+  this.m_type = CircleShape.TYPE;
+  this.m_p = Vec2.zero();
+  this.m_radius = 1;
+
+  if (typeof a === 'object' && Vec2.isValid(a)) {
+    this.m_p.set(a);
+
+    if (typeof b === 'number') {
+      this.m_radius = b;
+    }
+
+  } else if (typeof a === 'number') {
+    this.m_radius = a;
+  }
+}
+
+CircleShape.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+
+    p: this.m_p,
+    radius: this.m_radius,
+  };
+};
+
+CircleShape._deserialize = function(data) {
+  return new CircleShape(data.p, data.radius);
+};
+
+CircleShape.prototype.getRadius = function() {
+  return this.m_radius;
+}
+
+CircleShape.prototype.getCenter = function() {
+  return this.m_p;
+}
+
+CircleShape.prototype.getVertex = function(index) {
+  _ASSERT && common.assert(index == 0);
+  return this.m_p;
+}
+
+CircleShape.prototype.getVertexCount = function(index) {
+  return 1;
+}
+
+/**
+ * @deprecated
+ */
+CircleShape.prototype._clone = function() {
+  var clone = new CircleShape();
+  clone.m_type = this.m_type;
+  clone.m_radius = this.m_radius;
+  clone.m_p = this.m_p.clone();
+  return clone;
+}
+
+CircleShape.prototype.getChildCount = function() {
+  return 1;
+}
+
+CircleShape.prototype.testPoint = function(xf, p) {
+  var center = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
+  var d = Vec2.sub(p, center);
+  return Vec2.dot(d, d) <= this.m_radius * this.m_radius;
+}
+
+// Collision Detection in Interactive 3D Environments by Gino van den Bergen
+// From Section 3.1.2
+// x = s + a * r
+// norm(x) = radius
+CircleShape.prototype.rayCast = function(output, input, xf, childIndex) {
+
+  var position = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
+  var s = Vec2.sub(input.p1, position);
+  var b = Vec2.dot(s, s) - this.m_radius * this.m_radius;
+
+  // Solve quadratic equation.
+  var r = Vec2.sub(input.p2, input.p1);
+  var c = Vec2.dot(s, r);
+  var rr = Vec2.dot(r, r);
+  var sigma = c * c - rr * b;
+
+  // Check for negative discriminant and short segment.
+  if (sigma < 0.0 || rr < Math.EPSILON) {
+    return false;
+  }
+
+  // Find the point of intersection of the line with the circle.
+  var a = -(c + Math.sqrt(sigma));
+
+  // Is the intersection point on the segment?
+  if (0.0 <= a && a <= input.maxFraction * rr) {
+    a /= rr;
+    output.fraction = a;
+    output.normal = Vec2.add(s, Vec2.mul(a, r));
+    output.normal.normalize();
+    return true;
+  }
+
+  return false;
+}
+
+CircleShape.prototype.computeAABB = function(aabb, xf, childIndex) {
+  var p = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
+  aabb.lowerBound.set(p.x - this.m_radius, p.y - this.m_radius);
+  aabb.upperBound.set(p.x + this.m_radius, p.y + this.m_radius);
+}
+
+CircleShape.prototype.computeMass = function(massData, density) {
+  massData.mass = density * Math.PI * this.m_radius * this.m_radius;
+  massData.center = this.m_p;
+  // inertia about the local origin
+  massData.I = massData.mass
+      * (0.5 * this.m_radius * this.m_radius + Vec2.dot(this.m_p, this.m_p));
+}
+
+CircleShape.prototype.computeDistanceProxy = function(proxy) {
+  proxy.m_vertices.push(this.m_p);
+  proxy.m_count = 1;
+  proxy.m_radius = this.m_radius;
+};
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG =  false ? undefined : false;
+var _ASSERT =  false ? undefined : false;
+
+module.exports = EdgeShape;
+
+var create = __webpack_require__(6);
+var options = __webpack_require__(7);
+var Settings = __webpack_require__(4);
+var Shape = __webpack_require__(15);
+var Math = __webpack_require__(1);
+var Transform = __webpack_require__(5);
+var Rot = __webpack_require__(3);
+var Vec2 = __webpack_require__(0);
+var AABB = __webpack_require__(16);
+
+EdgeShape._super = Shape;
+EdgeShape.prototype = create(EdgeShape._super.prototype);
+
+EdgeShape.TYPE = 'edge';
+Shape.TYPES[EdgeShape.TYPE] = EdgeShape;
+
+/**
+ * A line segment (edge) shape. These can be connected in chains or loops to
+ * other edge shapes. The connectivity information is used to ensure correct
+ * contact normals.
+ */
+function EdgeShape(v1, v2) {
+  if (!(this instanceof EdgeShape)) {
+    return new EdgeShape(v1, v2);
+  }
+
+  EdgeShape._super.call(this);
+
+  this.m_type = EdgeShape.TYPE;
+  this.m_radius = Settings.polygonRadius;
+
+  // These are the edge vertices
+  this.m_vertex1 = v1 ? Vec2.clone(v1) : Vec2.zero();
+  this.m_vertex2 = v2 ? Vec2.clone(v2) : Vec2.zero();
+
+  // Optional adjacent vertices. These are used for smooth collision.
+  // Used by chain shape.
+  this.m_vertex0 = Vec2.zero();
+  this.m_vertex3 = Vec2.zero();
+  this.m_hasVertex0 = false;
+  this.m_hasVertex3 = false;
+}
+
+EdgeShape.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+
+    vertex1: this.m_vertex1,
+    vertex2: this.m_vertex2,
+
+    vertex0: this.m_vertex0,
+    vertex3: this.m_vertex3,
+    hasVertex0: this.m_hasVertex0,
+    hasVertex3: this.m_hasVertex3,
+  };
+};
+
+EdgeShape._deserialize = function(data) {
+  var shape = new EdgeShape(data.vertex1, data.vertex2);
+  if (shape.hasVertex0) {
+    shape.setPrev(data.vertex0);
+  }
+  if (shape.hasVertex3) {
+    shape.setNext(data.vertex3);
+  }
+  return shape;
+};
+
+EdgeShape.prototype.setNext = function(v3) {
+  if (v3) {
+    this.m_vertex3.set(v3);
+    this.m_hasVertex3 = true;
+  } else {
+    this.m_vertex3.setZero();
+    this.m_hasVertex3 = false;
+  }
+  return this;
+};
+
+EdgeShape.prototype.setPrev = function(v0) {
+  if (v0) {
+    this.m_vertex0.set(v0);
+    this.m_hasVertex0 = true;
+  } else {
+    this.m_vertex0.setZero();
+    this.m_hasVertex0 = false;
+  }
+  return this;
+};
+
+/**
+ * Set this as an isolated edge.
+ */
+EdgeShape.prototype._set = function(v1, v2) {
+  this.m_vertex1.set(v1);
+  this.m_vertex2.set(v2);
+  this.m_hasVertex0 = false;
+  this.m_hasVertex3 = false;
+  return this;
+}
+
+/**
+ * @deprecated
+ */
+EdgeShape.prototype._clone = function() {
+  var clone = new EdgeShape();
+  clone.m_type = this.m_type;
+  clone.m_radius = this.m_radius;
+  clone.m_vertex1.set(this.m_vertex1);
+  clone.m_vertex2.set(this.m_vertex2);
+  clone.m_vertex0.set(this.m_vertex0);
+  clone.m_vertex3.set(this.m_vertex3);
+  clone.m_hasVertex0 = this.m_hasVertex0;
+  clone.m_hasVertex3 = this.m_hasVertex3;
+  return clone;
+}
+
+EdgeShape.prototype.getChildCount = function() {
+  return 1;
+}
+
+EdgeShape.prototype.testPoint = function(xf, p) {
+  return false;
+}
+
+// p = p1 + t * d
+// v = v1 + s * e
+// p1 + t * d = v1 + s * e
+// s * e - t * d = p1 - v1
+EdgeShape.prototype.rayCast = function(output, input, xf, childIndex) {
+  // NOT_USED(childIndex);
+
+  // Put the ray into the edge's frame of reference.
+  var p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
+  var p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
+  var d = Vec2.sub(p2, p1);
+
+  var v1 = this.m_vertex1;
+  var v2 = this.m_vertex2;
+  var e = Vec2.sub(v2, v1);
+  var normal = Vec2.neo(e.y, -e.x);
+  normal.normalize();
+
+  // q = p1 + t * d
+  // dot(normal, q - v1) = 0
+  // dot(normal, p1 - v1) + t * dot(normal, d) = 0
+  var numerator = Vec2.dot(normal, Vec2.sub(v1, p1));
+  var denominator = Vec2.dot(normal, d);
+
+  if (denominator == 0.0) {
+    return false;
+  }
+
+  var t = numerator / denominator;
+  if (t < 0.0 || input.maxFraction < t) {
+    return false;
+  }
+
+  var q = Vec2.add(p1, Vec2.mul(t, d));
+
+  // q = v1 + s * r
+  // s = dot(q - v1, r) / dot(r, r)
+  var r = Vec2.sub(v2, v1);
+  var rr = Vec2.dot(r, r);
+  if (rr == 0.0) {
+    return false;
+  }
+
+  var s = Vec2.dot(Vec2.sub(q, v1), r) / rr;
+  if (s < 0.0 || 1.0 < s) {
+    return false;
+  }
+
+  output.fraction = t;
+  if (numerator > 0.0) {
+    output.normal = Rot.mulVec2(xf.q, normal).neg();
+  } else {
+    output.normal = Rot.mulVec2(xf.q, normal);
+  }
+  return true;
+}
+
+EdgeShape.prototype.computeAABB = function(aabb, xf, childIndex) {
+  var v1 = Transform.mulVec2(xf, this.m_vertex1);
+  var v2 = Transform.mulVec2(xf, this.m_vertex2);
+
+  aabb.combinePoints(v1, v2);
+  aabb.extend(this.m_radius)
+}
+
+EdgeShape.prototype.computeMass = function(massData, density) {
+  massData.mass = 0.0;
+  massData.center.setCombine(0.5, this.m_vertex1, 0.5, this.m_vertex2);
+  massData.I = 0.0;
+}
+
+EdgeShape.prototype.computeDistanceProxy = function(proxy) {
+  proxy.m_vertices.push(this.m_vertex1);
+  proxy.m_vertices.push(this.m_vertex2);
+  proxy.m_count = 2;
+  proxy.m_radius = this.m_radius;
+};
+
+
+/***/ }),
+/* 25 */,
+/* 26 */,
 /* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7266,7 +7273,7 @@ var Vec2 = __webpack_require__(0);
 var AABB = __webpack_require__(16);
 var Settings = __webpack_require__(4);
 var Shape = __webpack_require__(15);
-var EdgeShape = __webpack_require__(23);
+var EdgeShape = __webpack_require__(24);
 
 ChainShape._super = Shape;
 ChainShape.prototype = create(ChainShape._super.prototype);
@@ -7538,7 +7545,8 @@ var common = __webpack_require__(2);
 var Vec2 = __webpack_require__(0);
 var BroadPhase = __webpack_require__(41);
 var Solver = __webpack_require__(43);
-var Body = __webpack_require__(26);
+var Body = __webpack_require__(20);
+var Joint = __webpack_require__(11);
 var Contact = __webpack_require__(17);
 
 /**
@@ -7625,21 +7633,32 @@ World.prototype._serialize = function() {
     bodies.push(b);
   }
 
-  // for (var j = this.getJointList(); j; j = j.getNext()) {
-  //   joints.push(j);
-  // }
+  for (var j = this.getJointList(); j; j = j.getNext()) {
+    if (typeof j._serialize === 'function') {
+      joints.push(j);
+    }
+  }
 
   return {
     gravity: this.m_gravity,
     bodies: bodies,
-    // joints: joints,
+    joints: joints,
   };
 };
 
-World._deserialize = function(data) {
+World._deserialize = function(data, context, restore) {
+  if (!data) {
+    return new World();
+  }
+
   var world = new World(data.gravity);
+
   data.bodies && data.bodies.reverse().forEach(function(data) {
-    world._addBody(Body._deserialize(world, data));
+    world._addBody(restore(Body, data, world));
+  });
+
+  data.joints && data.joints.reverse().forEach(function(data) {
+    world.createJoint(restore(Joint, data, world));
   });
 
   return world;
@@ -9711,8 +9730,8 @@ Fixture.prototype._serialize = function() {
   };
 };
 
-Fixture._deserialize = function(body, data) {
-  var shape = Shape._deserialize(data.shape);
+Fixture._deserialize = function(data, body, restore) {
+  var shape = restore(Shape, data.shape);
   var fixture = shape && new Fixture(body, shape, data);
   return fixture;
 };
@@ -10040,14 +10059,14 @@ var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(13);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
 var Sweep = __webpack_require__(8);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(11);
-var Position = __webpack_require__(12);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Distance = __webpack_require__(21);
+var Distance = __webpack_require__(22);
 var DistanceInput = Distance.Input;
 var DistanceOutput = Distance.Output;
 var DistanceProxy = Distance.Proxy;
@@ -10521,14 +10540,14 @@ var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(13);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
 var Sweep = __webpack_require__(8);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(11);
-var Position = __webpack_require__(12);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(14);
+var Joint = __webpack_require__(11);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -11151,14 +11170,14 @@ var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(13);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
 var Sweep = __webpack_require__(8);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(11);
-var Position = __webpack_require__(12);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(14);
+var Joint = __webpack_require__(11);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -11881,7 +11900,7 @@ exports.Math = __webpack_require__(1);
 exports.Vec2 = __webpack_require__(0);
 exports.Vec3 = __webpack_require__(10);
 exports.Mat22 = __webpack_require__(9);
-exports.Mat33 = __webpack_require__(13);
+exports.Mat33 = __webpack_require__(14);
 exports.Transform = __webpack_require__(5);
 exports.Rot = __webpack_require__(3);
 
@@ -11889,14 +11908,14 @@ exports.AABB = __webpack_require__(16);
 
 exports.Shape = __webpack_require__(15);
 exports.Fixture = __webpack_require__(32);
-exports.Body = __webpack_require__(26);
+exports.Body = __webpack_require__(20);
 exports.Contact = __webpack_require__(17);
-exports.Joint = __webpack_require__(14);
+exports.Joint = __webpack_require__(11);
 exports.World = __webpack_require__(30);
 
-exports.Circle = __webpack_require__(22);
-exports.Edge = __webpack_require__(23);
-exports.Polygon = __webpack_require__(20);
+exports.Circle = __webpack_require__(23);
+exports.Edge = __webpack_require__(24);
+exports.Polygon = __webpack_require__(21);
 exports.Chain = __webpack_require__(28);
 exports.Box = __webpack_require__(45);
 
@@ -11921,7 +11940,7 @@ exports.WheelJoint = __webpack_require__(59);
 exports.internal.Sweep = __webpack_require__(8);
 exports.internal.stats = __webpack_require__(27);
 exports.internal.Manifold = __webpack_require__(18);
-exports.internal.Distance = __webpack_require__(21);
+exports.internal.Distance = __webpack_require__(22);
 exports.internal.TimeOfImpact = __webpack_require__(33);
 exports.internal.DynamicTree = __webpack_require__(31);
 exports.internal.Settings = __webpack_require__(4);
@@ -11932,25 +11951,77 @@ exports.internal.Settings = __webpack_require__(4);
 /***/ (function(module, exports, __webpack_require__) {
 
 var World = __webpack_require__(30);
+var Body = __webpack_require__(20);
+var Joint = __webpack_require__(11);
+var Shape = __webpack_require__(15);
+
+var SID = 0;
+
+var CLASSES = {
+  'Body': Body,
+  'Joint': Joint,
+};
 
 exports.toJson = function(world, stringify) {
   stringify = stringify || JSON.stringify;
-  var dump = world._serialize();
-  var string = stringify(dump, function(key, value) {
-    if (typeof value === 'object' && value !== null) {
-      if (typeof value._serialize === 'function') {
-        value = value._serialize();
-      }
+  var flat = [];
+  var queue = [world];
+  var map = {};
+
+  var store = function(value, cls) {
+    value.__sid = value.__sid || ++SID;
+    if (map[value.__sid]) {
+      return map[value.__sid];
     }
-    return value;
-  }, '  ');
-  return string;
+    queue.push(value);
+    var index = flat.length + queue.length;
+    var ref = {
+      'refIndex': index,
+      'refType': cls
+    };
+    return map[value.__sid] = ref;
+  };
+
+  while (queue.length) {
+    var obj = queue.shift();
+    var str = stringify(obj, function(key, value) {
+      if (typeof value === 'object' && value !== null) {
+        if (typeof value._serialize === 'function') {
+          if (value !== obj && value instanceof Body) {
+            value = store(value, 'Body');
+          } else if (value !== obj && value instanceof Joint) {
+            value = store(value, 'Joint');
+          } else {
+            value = value._serialize();
+          }
+        }
+      }
+      return value;
+    }, '  ');
+    flat.push(str);
+  }
+
+  var result = '[' + flat.join(',') + ']';
+  return result;
 };
 
 exports.fromJson = function(string, parse) {
   parse = parse || JSON.parse;
   var dump = parse(string);
-  var world = World._deserialize(dump);
+  var map = {};
+  function restore(cls, ref, ctx) {
+    if (!ref.refIndex) {
+      return cls && cls._deserialize && cls._deserialize(ref, ctx, restore);
+    }
+    var index = ref.refIndex;
+    cls = CLASSES[ref.refType] || cls;
+    if (map[index]) {
+      return map[index];
+    }
+    var data = dump[index];
+    return map[index] = cls._deserialize(data, ctx, restore);
+  }
+  var world = World._deserialize(dump[0], null, restore);
   return world;
 };
 
@@ -12321,15 +12392,15 @@ var common = __webpack_require__(2);
 var Vec2 = __webpack_require__(0);
 var Math = __webpack_require__(1);
 
-var Body = __webpack_require__(26);
+var Body = __webpack_require__(20);
 var Contact = __webpack_require__(17);
-var Joint = __webpack_require__(14);
+var Joint = __webpack_require__(11);
 
 var TimeOfImpact = __webpack_require__(33);
 var TOIInput = TimeOfImpact.Input;
 var TOIOutput = TimeOfImpact.Output;
 
-var Distance = __webpack_require__(21);
+var Distance = __webpack_require__(22);
 var DistanceInput = Distance.Input;
 var DistanceOutput = Distance.Output;
 var DistanceProxy = Distance.Proxy;
@@ -13213,7 +13284,7 @@ module.exports = BoxShape;
 
 var common = __webpack_require__(2);
 var create = __webpack_require__(6);
-var PolygonShape = __webpack_require__(20);
+var PolygonShape = __webpack_require__(21);
 
 BoxShape._super = PolygonShape;
 BoxShape.prototype = create(BoxShape._super.prototype);
@@ -13270,7 +13341,7 @@ var Settings = __webpack_require__(4);
 var Shape = __webpack_require__(15);
 var Contact = __webpack_require__(17);
 var Manifold = __webpack_require__(18);
-var CircleShape = __webpack_require__(22);
+var CircleShape = __webpack_require__(23);
 
 Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
 
@@ -13345,9 +13416,9 @@ var Settings = __webpack_require__(4);
 var Shape = __webpack_require__(15);
 var Contact = __webpack_require__(17);
 var Manifold = __webpack_require__(18);
-var EdgeShape = __webpack_require__(23);
+var EdgeShape = __webpack_require__(24);
 var ChainShape = __webpack_require__(28);
-var CircleShape = __webpack_require__(22);
+var CircleShape = __webpack_require__(23);
 
 Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
@@ -13534,7 +13605,7 @@ var Settings = __webpack_require__(4);
 var Manifold = __webpack_require__(18);
 var Contact = __webpack_require__(17);
 var Shape = __webpack_require__(15);
-var PolygonShape = __webpack_require__(20);
+var PolygonShape = __webpack_require__(21);
 
 module.exports = CollidePolygons;
 
@@ -13801,8 +13872,8 @@ var Settings = __webpack_require__(4);
 var Manifold = __webpack_require__(18);
 var Contact = __webpack_require__(17);
 var Shape = __webpack_require__(15);
-var CircleShape = __webpack_require__(22);
-var PolygonShape = __webpack_require__(20);
+var CircleShape = __webpack_require__(23);
+var PolygonShape = __webpack_require__(21);
 
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
 
@@ -13960,9 +14031,9 @@ var Settings = __webpack_require__(4);
 var Shape = __webpack_require__(15);
 var Contact = __webpack_require__(17);
 var Manifold = __webpack_require__(18);
-var EdgeShape = __webpack_require__(23);
+var EdgeShape = __webpack_require__(24);
 var ChainShape = __webpack_require__(28);
-var PolygonShape = __webpack_require__(20);
+var PolygonShape = __webpack_require__(21);
 
 Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
@@ -14449,16 +14520,18 @@ var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(13);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
 var Sweep = __webpack_require__(8);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(11);
-var Position = __webpack_require__(12);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(14);
+var Joint = __webpack_require__(11);
+var Body = __webpack_require__(20);
 
 DistanceJoint.TYPE = 'distance-joint';
+Joint.TYPES[DistanceJoint.TYPE] = DistanceJoint;
 
 DistanceJoint._super = Joint;
 DistanceJoint.prototype = create(DistanceJoint._super.prototype);
@@ -14553,6 +14626,33 @@ function DistanceJoint(def, bodyA, bodyB, anchorA, anchorB) {
   // J = [-u -cross(r1, u) u cross(r2, u)]
   // K = J * invM * JT
   // = invMass1 + invI1 * cross(r1, u)^2 + invMass2 + invI2 * cross(r2, u)^2
+};
+
+DistanceJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    frequencyHz: this.m_frequencyHz,
+    dampingRatio: this.m_dampingRatio,
+
+    localAnchorA: this.m_localAnchorA,
+    localAnchorB: this.m_localAnchorB,
+    length: this.m_length,
+
+    impulse: this.m_impulse,
+    gamma: this.m_gamma,
+    bias: this.m_bias,
+  };
+};
+
+DistanceJoint._deserialize = function(data, world, restore) {
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  var joint = new DistanceJoint(data);
+  return joint;
 };
 
 /**
@@ -14805,14 +14905,14 @@ var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(13);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
 var Sweep = __webpack_require__(8);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(11);
-var Position = __webpack_require__(12);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(14);
+var Joint = __webpack_require__(11);
 
 FrictionJoint.TYPE = 'friction-joint';
 
@@ -15123,14 +15223,14 @@ var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(13);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
 var Sweep = __webpack_require__(8);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(11);
-var Position = __webpack_require__(12);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(14);
+var Joint = __webpack_require__(11);
 
 var RevoluteJoint = __webpack_require__(34);
 var PrismaticJoint = __webpack_require__(35);
@@ -15606,14 +15706,14 @@ var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(13);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
 var Sweep = __webpack_require__(8);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(11);
-var Position = __webpack_require__(12);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(14);
+var Joint = __webpack_require__(11);
 
 MotorJoint.TYPE = 'motor-joint';
 
@@ -15974,14 +16074,14 @@ var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(13);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
 var Sweep = __webpack_require__(8);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(11);
-var Position = __webpack_require__(12);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(14);
+var Joint = __webpack_require__(11);
 
 MouseJoint.TYPE = 'mouse-joint';
 
@@ -16281,14 +16381,14 @@ var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(13);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
 var Sweep = __webpack_require__(8);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(11);
-var Position = __webpack_require__(12);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(14);
+var Joint = __webpack_require__(11);
 
 PulleyJoint.TYPE = 'pulley-joint';
 PulleyJoint.MIN_PULLEY_LENGTH = 2.0; // minPulleyLength
@@ -16665,14 +16765,14 @@ var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(13);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
 var Sweep = __webpack_require__(8);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(11);
-var Position = __webpack_require__(12);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(14);
+var Joint = __webpack_require__(11);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -16987,14 +17087,14 @@ var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(13);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
 var Sweep = __webpack_require__(8);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(11);
-var Position = __webpack_require__(12);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(14);
+var Joint = __webpack_require__(11);
 
 WeldJoint.TYPE = 'weld-joint';
 
@@ -17423,14 +17523,14 @@ var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 var Vec3 = __webpack_require__(10);
 var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(13);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
 var Sweep = __webpack_require__(8);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(11);
-var Position = __webpack_require__(12);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(14);
+var Joint = __webpack_require__(11);
 
 WheelJoint.TYPE = 'wheel-joint';
 
