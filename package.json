@@ -39,6 +39,7 @@
     }
   ],
   "devDependencies": {
+    "ajv": "^6.10.2",
     "closure-webpack-plugin": "^2.0.1",
     "dtslint": "^0.7.8",
     "expect.js": "*",

@@ -1,0 +1,127 @@
+{
+  "definitions": {
+    "ref": {
+      "$id": "#Ref",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["refIndex", "refType"],
+      "properties": {
+        "refIndex": { "type": "number" },
+        "refType": { "type": "string", "enum": ["Body", "Joint"] }
+      }
+    },
+    "Vec2": {
+      "$id": "#Vec2",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" }
+      }
+    },
+    "Shape": {
+      "$id": "#Shape",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string", "enum": ["edge", "circle", "polygon", "chain", "box"] },
+        "vertices": {
+          "type": "array",
+          "items": { "$ref": "#Vec2" }
+        },
+        "isLoop": { "type": "boolean" },
+        "prevVertex": { "$ref": "#Vec2" },
+        "nextVertex": { "$ref": "#Vec2" },
+        "hasPrevVertex": { "type": "boolean" },
+        "hasNextVertex": { "type": "boolean" },
+        "vertex1": { "$ref": "#Vec2" },
+        "vertex2": { "$ref": "#Vec2" },
+        "vertex0": { "$ref": "#Vec2" },
+        "vertex3": { "$ref": "#Vec2" },
+        "hasVertex0": { "type": "boolean" },
+        "hasVertex3": { "type": "boolean" },
+        "p": { "$ref": "#Vec2" },
+        "radius": { "type": "number" }
+      }
+    },
+    "Fixture": {
+      "$id": "#Fixture",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "friction": { "type": "number" },
+        "restitution": { "type": "number" },
+        "density": { "type": "number" },
+        "isSensor": { "type": "boolean" },
+        "filterGroupIndex": { "type": "number" },
+        "filterCategoryBits": { "type": "number" },
+        "filterMaskBits": { "type": "number" },
+        "shape": { "$ref": "#Shape" },
+        "userData": { "type": "object" }
+      }
+    },
+    "Body": {
+      "$id": "#Body",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string", "enum": ["static", "dynamic", "kinematic"] },
+        "position": { "$ref": "#Vec2" },
+        "angle": { "type": "number" },
+        "linearVelocity": { "$ref": "#Vec2" },
+        "angularVelocity": { "type": "number" },
+        "fixtures": {
+          "type": "array",
+          "items": { "$ref": "#Fixture" }
+        }
+      }
+    },
+    "Joint": {
+      "$id": "#Joint",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string", "enum": ["distance-joint"] },
+        "bodyA": { "$ref": "#Ref" },
+        "bodyB": { "$ref": "#Ref" },
+        "collideConnected": { "type": "boolean" },
+        "frequencyHz": { "type": "number" },
+        "dampingRatio": { "type": "number" },
+        "localAnchorA": { "$ref": "#Vec2" },
+        "localAnchorB": { "$ref": "#Vec2" },
+        "length": { "type": "number" },
+        "impulse": { "type": "number" },
+        "gamma": { "type": "number" },
+        "bias": { "type": "number" }
+      }
+    },
+    "World": {
+      "$id": "#World",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "gravity": { "$ref": "#Vec2" },
+        "bodies": {
+          "type": "array",
+          "items": { "$ref": "#Ref" }
+        },
+        "joints": {
+          "type": "array",
+          "items": { "$ref": "#Ref" }
+        }
+      }
+    }
+  },
+  "type": "array",
+  "additionalProperties": false,
+  "items": [
+    { "$ref": "#World" }
+  ],
+  "additionalItems": {
+    "anyOf": [
+      { "$ref": "#Body" },
+      { "$ref": "#Joint" }
+    ]
+  }
+}
