@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.11
+ * Planck.js v0.3.12
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -5667,11 +5667,7 @@ PolygonShape.prototype._serialize = function() {
   return {
     type: this.m_type,
 
-    centroid: this.m_centroid,
-
     vertices: this.m_vertices,
-    normals: this.m_normals,
-    count: this.m_count,
   };
 };
 
@@ -9725,8 +9721,6 @@ Fixture.prototype._serialize = function() {
     filterMaskBits: this.m_filterMaskBits,
 
     shape: this.m_shape,
-
-    userData: this.m_userData,
   };
 };
 
