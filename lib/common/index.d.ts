@@ -219,13 +219,8 @@ export interface Mat22 {
 
 export let Mat22: {
   new(a: number, b: number, c: number, d: number): Mat22;
-  (a: number, b: number, c: number, d: number): Mat22;
-
   new(a: { x: number; y: number }, b: { x: number; y: number }): Mat22;
-  (a: { x: number; y: number }, b: { x: number; y: number }): Mat22;
-
   new(): Mat22;
-  (): Mat22;
 
   isValid(o: any): boolean;
   assert(o: any): void;
@@ -255,13 +250,8 @@ export interface Mat33 {
 
 export let Mat33: {
   new(a: Vec3, b: Vec3, c: Vec3): Mat33;
-  (a: any, b: any, c: any): Mat33;
-
   new(a: any, b: any, c: any): Mat33;
-  (a: any, b: any, c: any): Mat33;
-
   new(): Mat33;
-  (): Mat33;
 
   isValid(o: any): boolean;
   assert(o: any): void;
