@@ -57,7 +57,7 @@ export let AABB: {
 };
 
 export interface TreeNode {
-  id: string;
+  id: number;
   aabb: AABB;
   userData: any;
   parent: TreeNode;
@@ -67,25 +67,25 @@ export interface TreeNode {
 }
 
 export interface DynamicTree {
-    getUserData(id: string): unknown;
-    getFatAABB(id: string): AABB;
+    getUserData(id: number): unknown;
+    getFatAABB(id: number): AABB;
     allocateNode(): TreeNode;
     freeNode(node: TreeNode): void;
     createProxy(aabb: AABB, userData: any): string;
-    destroyProxy(id: string): void;
-    moveProxy(id: string, aabb: AABB, d: Vec2): boolean;
+    destroyProxy(id: number): void;
+    moveProxy(id: number, aabb: AABB, d: Vec2): boolean;
     insertLeaf(leaf: TreeNode): void;
     removeLeaf(leaf: TreeNode): void;
     balance(iA: TreeNode): TreeNode;
     getHeight(): number;
     getAreaRatio(): number;
-    computeHeight(id: string): number;
+    computeHeight(node?: TreeNode): number;
     validateStructure(node: TreeNode): void;
     validateMetrics(node: TreeNode): void;
     validate(): void;
     getMaxBalance(): number;
     rebuildBottomUp(): void;
     shiftOrigin(newOrigin: Vec2): void;
-    query(aabb: AABB, queryCallback: (id: string) => boolean): void;
-    rayCast(input: RayCastInput, rayCastCallback: (subInput: RayCastInput, id: string) => number): void;
+    query(aabb: AABB, queryCallback: (id: number) => boolean): void;
+    rayCast(input: RayCastInput, rayCastCallback: (subInput: RayCastInput, id: number) => number): void;
 }
