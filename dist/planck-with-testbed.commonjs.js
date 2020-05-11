@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.12
+ * Planck.js v0.3.13
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -1746,7 +1746,12 @@ Mat22.mul = function(mx, v) {
 
   } else if (v && 'ex' in v && 'ey' in v) { // Mat22
     _ASSERT && Mat22.assert(v);
-    return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+    // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+    var a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
+    var b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
+    var c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;
+    var d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
+    return new Mat22(a, b, c, d);
   }
 
   _ASSERT && common.assert(false);
@@ -1761,7 +1766,12 @@ Mat22.mulVec2 = function(mx, v) {
 
 Mat22.mulMat22 = function(mx, v) {
   _ASSERT && Mat22.assert(v);
-  return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+  // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+  var a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
+  var b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
+  var c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;
+  var d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
+  return new Mat22(a, b, c, d);
   _ASSERT && common.assert(false);
 }
 
@@ -1807,7 +1817,7 @@ Mat22.abs = function(mx) {
 Mat22.add = function(mx1, mx2) {
   _ASSERT && Mat22.assert(mx1);
   _ASSERT && Mat22.assert(mx2);
-  return new Mat22(Vec2.add(mx1.ex + mx2.ex), Vec2.add(mx1.ey + mx2.ey));
+  return new Mat22(Vec2.add(mx1.ex, mx2.ex), Vec2.add(mx1.ey, mx2.ey));
 }
 
 
@@ -2525,9 +2535,9 @@ Mat33.add = function(a, b) {
   _ASSERT && Mat33.assert(a);
   _ASSERT && Mat33.assert(b);
   return new Mat33(
-    Vec3.add(a.ex + b.ex),
-    Vec3.add(a.ey + b.ey),
-    Vec3.add(a.ez + b.ez)
+    Vec3.add(a.ex, b.ex),
+    Vec3.add(a.ey, b.ey),
+    Vec3.add(a.ez, b.ez)
   );
 }
 
@@ -2694,6 +2704,7 @@ var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
 var Settings = __webpack_require__(4);
+var common = __webpack_require__(2);
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 
@@ -10162,7 +10173,7 @@ DynamicTree.prototype.getAreaRatio = function() {
   var rootArea = root.aabb.getPerimeter();
 
   var totalArea = 0.0;
-  var node, it = iteratorPool.allocate().preorder();
+  var node, it = iteratorPool.allocate().preorder(this.m_root);
   while (node = it.next()) {
     if (node.height < 0) {
       // Free node in pool
@@ -10194,8 +10205,8 @@ DynamicTree.prototype.computeHeight = function(id) {
     return 0;
   }
 
-  var height1 = ComputeHeight(node.child1);
-  var height2 = ComputeHeight(node.child2);
+  var height1 = this.computeHeight(node.child1.id);
+  var height2 = this.computeHeight(node.child2.id);
   return 1 + Math.max(height1, height2);
 }
 
@@ -10246,8 +10257,8 @@ DynamicTree.prototype.validateMetrics = function(node) {
   // _ASSERT && common.assert(0 <= child1 && child1 < this.m_nodeCapacity);
   // _ASSERT && common.assert(0 <= child2 && child2 < this.m_nodeCapacity);
 
-  var height1 = this.m_nodes[child1].height;
-  var height2 = this.m_nodes[child2].height;
+  var height1 = child1.height;
+  var height2 = child2.height;
   var height = 1 + Math.max(height1, height2);
   _ASSERT && common.assert(node.height == height);
 
@@ -10262,8 +10273,8 @@ DynamicTree.prototype.validateMetrics = function(node) {
 
 // Validate this tree. For testing.
 DynamicTree.prototype.validate = function() {
-  ValidateStructure(this.m_root);
-  ValidateMetrics(this.m_root);
+  this.validateStructure(this.m_root);
+  this.validateMetrics(this.m_root);
 
   _ASSERT && common.assert(this.getHeight() == this.computeHeight());
 }
@@ -10274,7 +10285,7 @@ DynamicTree.prototype.validate = function() {
  */
 DynamicTree.prototype.getMaxBalance = function() {
   var maxBalance = 0;
-  var node, it = iteratorPool.allocate().preorder();
+  var node, it = iteratorPool.allocate().preorder(this.m_root);
   while (node = it.next()) {
     if (node.height <= 1) {
       continue;
@@ -10298,7 +10309,7 @@ DynamicTree.prototype.rebuildBottomUp = function() {
   var count = 0;
 
   // Build array of leaves. Free the rest.
-  var node, it = iteratorPool.allocate().preorder();
+  var node, it = iteratorPool.allocate().preorder(this.m_root);
   while (node = it.next()) {
     if (node.height < 0) {
       // free node in pool
@@ -10364,7 +10375,7 @@ DynamicTree.prototype.rebuildBottomUp = function() {
  */
 DynamicTree.prototype.shiftOrigin = function(newOrigin) {
   // Build array of leaves. Free the rest.
-  var node, it = iteratorPool.allocate().preorder();
+  var node, it = iteratorPool.allocate().preorder(this.m_root);
   while (node = it.next()) {
     var aabb = node.aabb;
     aabb.lowerBound.x -= newOrigin.x;
@@ -11203,7 +11214,23 @@ function TimeOfImpact(output, input) {
     var fcn = new SeparationFunction();
     fcn.initialize(cache, proxyA, sweepA, proxyB, sweepB, t1);
 
-    if (false) { var f, i, x, fs, xs, dx, N; }
+    // if (false) {
+    //   // Dump the curve seen by the root finder
+    //   var N = 100;
+    //   var dx = 1.0 / N;
+    //   var xs = []; // [ N + 1 ];
+    //   var fs = []; // [ N + 1 ];
+    //   var x = 0.0;
+    //   for (var i = 0; i <= N; ++i) {
+    //     sweepA.getTransform(xfA, x);
+    //     sweepB.getTransform(xfB, x);
+    //     var f = fcn.evaluate(xfA, xfB) - target;
+    //     printf("%g %g\n", x, f);
+    //     xs[i] = x;
+    //     fs[i] = f;
+    //     x += dx;
+    //   }
+    // }
 
     // Compute the TOI on the separating axis. We do this by successively
     // resolving the deepest point. This loop is bounded by the number of
@@ -11338,6 +11365,8 @@ function SeparationFunction() {
   this.m_proxyB = new DistanceProxy();
   this.m_sweepA;// Sweep
   this.m_sweepB;// Sweep
+  this.indexA;// integer
+  this.indexB;// integer
   this.m_type;
   this.m_localPoint = Vec2.zero();
   this.m_axis = Vec2.zero();
