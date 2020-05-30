@@ -7,7 +7,7 @@
       "required": ["refIndex", "refType"],
       "properties": {
         "refIndex": { "type": "number" },
-        "refType": { "type": "string", "enum": ["Body", "Joint"] }
+        "refType": { "type": "string", "enum": ["World", "Body", "Joint"] }
       }
     },
     "Vec2": {
@@ -111,15 +111,24 @@
           "items": { "$ref": "#Ref" }
         }
       }
+    },
+    "Document": {
+      "$id": "#Document",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "world": { "$ref": "#Ref" }
+      }
     }
   },
   "type": "array",
   "additionalProperties": false,
   "items": [
-    { "$ref": "#World" }
+    { "$ref": "#Document" }
   ],
   "additionalItems": {
     "anyOf": [
+      { "$ref": "#World" },
       { "$ref": "#Body" },
       { "$ref": "#Joint" }
     ]
