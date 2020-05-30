@@ -40,11 +40,12 @@
   ],
   "devDependencies": {
     "ajv": "^6.10.2",
+    "chai": "^4.2.0",
     "closure-webpack-plugin": "^2.0.1",
     "dtslint": "^0.7.8",
-    "expect.js": "*",
     "express": "^4.17.1",
     "handlebars": "^4.1.2",
+    "mocha": "^6.2.3",
     "nodemon": "^1.19.1",
     "serve-index": "^1.9.1",
     "sinon": "*",
@@ -61,7 +62,5 @@
     "watch": "webpack --watch",
     "testbed": "nodemon testbed/server.js"
   },
-  "dependencies": {
-    "mocha": "^6.2.2"
-  }
+  "dependencies": {}
 }

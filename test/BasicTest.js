@@ -1,4 +1,4 @@
-var expect = require('./testutil/expect');
+var expect = require('chai').expect;
 var sinon = require('sinon');
 
 var Vec2 = require('../lib/common/Vec2');
@@ -22,9 +22,9 @@ describe('Basic', function() {
 
     b1.createFixture(circle);
 
-    expect(b1.getFixtureList().getType()).be('circle');
-    expect(b1.getWorld()).be(world);
-    expect(world.getBodyList()).be(b1);
+    expect(b1.getFixtureList().getType()).equal('circle');
+    expect(b1.getWorld()).equal(world);
+    expect(world.getBodyList()).equal(b1);
 
     b1.applyForceToCenter(Vec2(1, 0), true);
 
@@ -40,8 +40,8 @@ describe('Basic', function() {
     // console.log(b2.getPosition());
 
     var p = b1.getPosition();
-    expect(p.x).near(0.0);
-    expect(p.y).near(0.0);
+    expect(p.x).closeTo(0.0, 1e-12);
+    expect(p.y).closeTo(0.0, 1e-12);
   });
 
 });

@@ -1,4 +1,4 @@
-var expect = require('./testutil/expect');
+var expect = require('chai').expect;
 
 var Pool = require('../lib/util/Pool');
 

@@ -1,4 +1,4 @@
-var expect = require('./testutil/expect');
+var expect = require('chai').expect;
 var sinon = require('sinon');
 
 var Vec2 = require('../lib/common/Vec2');
@@ -36,7 +36,7 @@ describe('CCD', function() {
     var output = new DistanceOutput();
     Distance(output, cache, input);
 
-    expect(output.distance).be(0);
+    expect(output.distance).equal(0);
     console.log(output);
 
     var input = new DistanceInput();
@@ -49,7 +49,7 @@ describe('CCD', function() {
     var output = new DistanceOutput();
     Distance(output, cache, input);
 
-    expect(output.distance).near(0.1)
+    expect(output.distance).closeTo(0.1, 1e-12)
     console.log(output);
   });
 
