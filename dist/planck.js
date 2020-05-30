@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.13
+ * Planck.js v0.3.14
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -11981,14 +11981,35 @@ var Shape = __webpack_require__(15);
 var SID = 0;
 
 var CLASSES = {
+  'World': World,
   'Body': Body,
   'Joint': Joint,
 };
 
+function Document(world) {
+  this.world = world;
+}
+
+Document.prototype._serialize = function() {
+  return {
+    world: this.world,
+  };
+};
+
+Document._deserialize = function(data, context, restore) {
+  if (!data) {
+    return new Document();
+  }
+  var doc = new Document(restore(World, data.world));
+  return doc;
+};
+
+
 exports.toJson = function(world, stringify) {
   stringify = stringify || JSON.stringify;
   var flat = [];
-  var queue = [world];
+  var doc = new Document(world);
+  var queue = [doc];
   var map = {};
 
   var store = function(value, cls) {
@@ -12008,16 +12029,22 @@ exports.toJson = function(world, stringify) {
   while (queue.length) {
     var obj = queue.shift();
     var str = stringify(obj, function(key, value) {
-      if (typeof value === 'object' && value !== null) {
-        if (typeof value._serialize === 'function') {
-          if (value !== obj && value instanceof Body) {
-            value = store(value, 'Body');
-          } else if (value !== obj && value instanceof Joint) {
-            value = store(value, 'Joint');
-          } else {
-            value = value._serialize();
-          }
-        }
+      if (typeof value !== 'object' || value === null) {
+        return value;
+      }
+      if (typeof value._serialize !== 'function') {
+        return value;
+      }
+      if (value === obj) {
+        value = value._serialize();
+      } else if (value instanceof Body) {
+        value = store(value, 'Body');
+      } else if (value instanceof Joint) {
+        value = store(value, 'Joint');
+      } else if (value instanceof World) {
+        value = store(value, 'World');
+      } else {
+        value = value._serialize();
       }
       return value;
     }, '  ');
@@ -12044,8 +12071,8 @@ exports.fromJson = function(string, parse) {
     var data = dump[index];
     return map[index] = cls._deserialize(data, ctx, restore);
   }
-  var world = World._deserialize(dump[0], null, restore);
-  return world;
+  var doc = Document._deserialize(dump[0], null, restore);
+  return doc.world;
 };
 
 
