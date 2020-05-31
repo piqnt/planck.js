@@ -48,7 +48,7 @@
     "mocha": "^6.2.3",
     "nodemon": "^1.19.1",
     "serve-index": "^1.9.1",
-    "sinon": "*",
+    "sinon": "^9.0.2",
     "stage-js": "^0.8.11",
     "tslint": "^5.17.0",
     "typescript": "^3.5.1",
