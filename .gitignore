@@ -1,9 +1,5 @@
-.settings
-.project
 node_modules/
-bower_components/
 .idea
-package-lock.json
 
 **/ignore
 **/ignore.*
