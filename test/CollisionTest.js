@@ -114,7 +114,7 @@ describe('Collision', function() {
 
     var baz = bp.createProxy(AABB(Vec2(1, 1), Vec2(2, 2)), 'baz');
 
-    AddPair.reset();
+    AddPair.resetHistory();
     bp.updatePairs(callback);
     expect(AddPair.callCount).equal(2);
     expect(AddPair.calledWith('bar', 'baz')).equal(true);
@@ -122,7 +122,7 @@ describe('Collision', function() {
 
     bp.moveProxy(baz, AABB(Vec2(0.5, 0.5), Vec2(1.5, 1.5)), Vec2());
 
-    AddPair.reset();
+    AddPair.resetHistory();
     bp.updatePairs(callback);
     expect(AddPair.callCount).equal(1);
     expect(AddPair.calledWith('foo', 'baz')).equal(true);
