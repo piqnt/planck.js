@@ -1,13 +1,13 @@
 var expect = require('chai').expect;
 var sinon = require('sinon');
 
-var Vec2 = require('../../common/Vec2');
-var Circle = require('../../shape/CircleShape');
-var Box = require('../../shape/BoxShape');
-var DistanceJoint = require('../../joint/DistanceJoint');
-var World = require('../../World');
+var Vec2 = require('../lib/common/Vec2');
+var Circle = require('../lib/shape/CircleShape');
+var Box = require('../lib/shape/BoxShape');
+var DistanceJoint = require('../lib/joint/DistanceJoint');
+var World = require('../lib/World');
 
-var Serializer = require('../');
+var Serializer = require('../lib/serializer');
 
 describe('serializer', function() {
   it('works', function() {
@@ -38,11 +38,11 @@ describe('serializer', function() {
     }));
 
     var text = Serializer.toJson(world);
-    console.log(text);
+    // console.log(text);
 
     world = Serializer.fromJson(text);
     var text2 = Serializer.toJson(world);
-    console.log(text2);
+    // console.log(text2);
 
     expect(text.split('\n')).to.deep.equal(text2.split('\n'));
   });

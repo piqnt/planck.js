@@ -3,14 +3,14 @@ var sinon = require('sinon');
 
 var Ajv = require('ajv');
 
-var Vec2 = require('../../common/Vec2');
-var Circle = require('../../shape/CircleShape');
-var Box = require('../../shape/BoxShape');
-var DistanceJoint = require('../../joint/DistanceJoint');
-var World = require('../../World');
+var Vec2 = require('../lib/common/Vec2');
+var Circle = require('../lib/shape/CircleShape');
+var Box = require('../lib/shape/BoxShape');
+var DistanceJoint = require('../lib/joint/DistanceJoint');
+var World = require('../lib/World');
 
-var Serializer = require('../');
-var schema = require('../schema.json');
+var Serializer = require('../lib/serializer');
+var schema = require('../lib/serializer/schema.json');
 
 describe('validator', function() {
   var ajv = new Ajv();
@@ -44,9 +44,9 @@ describe('validator', function() {
 
     var data = JSON.parse(Serializer.toJson(world));
 
-    console.log(data);
+    // console.log(data);
     var valid = validate(data);
     console.log(valid || validate.errors);
-    expect(valid).be.ok
+    expect(valid).be.true;
   });
 });

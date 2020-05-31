@@ -28,16 +28,16 @@ describe('Pool', function() {
     var a = pool.allocate();
     var b = pool.allocate();
 
-    expect(a.created).be.ok;
-    expect(a.busy).be.ok;
-    expect(a.discarded).not.be.ok;
+    expect(a.created).be.true;
+    expect(a.busy).be.true;
+    expect(a.discarded).be.false;
 
     pool.release(a);
-    expect(a.busy).not.be.ok;
-    expect(a.discarded).not.be.ok;
+    expect(a.busy).be.false;
+    expect(a.discarded).be.false;
 
     pool.release(b);
-    expect(b.discarded).be.ok;
+    expect(b.discarded).be.true;
 
   });
 });
