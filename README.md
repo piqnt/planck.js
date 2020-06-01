@@ -31,16 +31,23 @@ Testbed [examples and demos](http://piqnt.com/planck.js/).
 - [Modd.io](https://www.modd.io/)
 
 #### Other Projects
+ - [Fall / Fill](https://twitter.com/jezzamonn/status/1246212104593403905) by Jez Swanson
  - [1000 Unique Postcards](https://twitter.com/andreasgysin/status/956131218386509824) by Andreas Gysin
  - [Flag in the Wind](https://codepen.io/unframework/pen/OrOMBg) by Nick Matantsev
- - [Neuroevolution Bots](https://twitter.com/mishig25/status/1077672181503590400) by Mishig Davaadorj
- - [Walking EA](https://matsemann.github.io/walkingea/) by Mats Krüger Svensson
- - [Chaotic Water Wheel](https://john-hearn.info/articles/simulate-chaotic-water-wheel-with-planck) by John Hearn
- - [Dynamic Convex Hull](https://codepen.io/bozheng-stokes/pen/abormNX) by Bo Zheng
+ - [Handle](https://twitter.com/marurur/status/1240141036606947329) by Ichiro Maruta
  - [Q-Learning Ragdoll](https://codepen.io/mikkokam/pen/EGEjYe) by Mikko Kämäräinen
+ - [Dynamic Convex Hull](https://codepen.io/bozheng-stokes/pen/abormNX) by Bo Zheng
+ - [Chaotic Water Wheel](https://john-hearn.info/articles/simulate-chaotic-water-wheel-with-planck) by John Hearn
+ - [Walking EA](https://matsemann.github.io/walkingea/) by Mats Krüger Svensson
+ - [Neuroevolution Bots](https://twitter.com/mishig25/status/1077672181503590400) by Mishig Davaadorj
 
 #### Articles and Tutorials
  - [Phaser 3 with Planck.js](https://www.emanueleferonato.com/2019/10/12/use-box2d-physics-in-your-phaser-3-projects-with-planck-js-javascript-physics-engine/) by Emanuele Feronato
+
+#### Integration
+ - [notchris/phaser3-planck](https://github.com/notchris/phaser3-planck) Phaser 3 Planck.js Plugin by Chris McGrane
+ - [RealPeha/planck-renderer](https://github.com/RealPeha/planck-renderer)
+
 
 ## Community
 
@@ -55,7 +62,7 @@ To try Planck.js, simply add `planck-with-testbed.js` script to your HTML code a
 
 ```html
 <html><body>
-  <script src="https://cdn.jsdelivr.net/npm/planck-js@0.2/dist/planck-with-testbed.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/planck-js@latest/dist/planck-with-testbed.js"></script>
   <script>
     planck.testbed(function(testbed) {
       var world = planck.World();
@@ -72,22 +79,15 @@ Also see [`example`](./example/) directory for more testbed usage examples.
 
 ## Install
 
-#### Download
-
-Latest builds are available on [releases page](https://github.com/shakiba/planck.js/releases).
 
 #### CDN
 
-Planck.js is [available on jsDelivr](https://www.jsdelivr.com/projects/planck).
+Planck.js is [available on jsDelivr](https://www.jsdelivr.com/package/npm/planck-js).
 
 
 #### NPM
 
     npm install planck-js --save
-
-#### Bower
-
-    bower install planck-js --save
 
 
 ## API and Architecture
@@ -111,13 +111,8 @@ Planck.js public API closely follows Box2D API (see [Resources](##resources-and-
     - `'remove-fixture'`
     - `'remove-body'`
 
-### Rendering
-
-Planck.js does not include rendering and graphics by default, however you can use one of these options:
-
-- For testing and development use testbed, see [Try it](#try-it) and [Development](#development) sections
-- Develop a renderer or integrate with an existing graphics library, see [Rendering and Integration](#rendering-and-integration) section
-- Use an existing renderer, such as [RealPeha/planck-renderer](https://github.com/RealPeha/planck-renderer)
+#### Rendering
+Planck.js core library does not include any graphics by default, see [Rendering and Integration](#rendering-and-integration) section for more info and available options.
 
 ## Resources and References
 - <a href="http://box2d.org/documentation/" target="_blank">Box2D Manual</a> and <a href="https://github.com/erincatto/Box2D/wiki/FAQ" target="_blank">FAQ</a> are highly recommended to get started.
@@ -182,7 +177,13 @@ ground.createFixture({
 
 ## Rendering and Integration
 
-Planck.js does not use any renderer by default. To use or integrate it with a rendering library all you need to do 
+Planck.js core library does not include any graphics by default, which means you have several options:
+
+- Use Testbed, see [Try it](#try-it) section to run release files in a web browser (or [Development](#development) to debug testbed locally).
+- Use an existing renderer, see [Integration](#integration) examples.
+- Develop a renderer or integrate with a rendering library.
+
+To create a renderer or integrate with a rendering library all you need to do 
 is call `world.step(timeStep)` in each frame, and then iterate over world entities to draw or update them.
 You may also want to listen to world events to remove objects which are removed from the world. For example:
 
@@ -210,7 +211,6 @@ You may also want to listen to world events to remove objects which are removed 
   });
 </script>
 ```
-
 
 ## Development
 
