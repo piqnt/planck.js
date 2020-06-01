@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.15
+ * Planck.js v0.3.16
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -6032,7 +6032,7 @@ PolygonShape.prototype._set = function(vertices) {
   // Create the convex hull using the Gift wrapping algorithm
   // http://en.wikipedia.org/wiki/Gift_wrapping_algorithm
 
-  // Find the right most point on the hull
+  // Find the right most point on the hull (in case of multiple points bottom most is used)
   var i0 = 0;
   var x0 = ps[0].x;
   for (var i = 1; i < n; ++i) {
@@ -6060,6 +6060,7 @@ PolygonShape.prototype._set = function(vertices) {
       var r = Vec2.sub(ps[ie], ps[hull[m]]);
       var v = Vec2.sub(ps[j], ps[hull[m]]);
       var c = Vec2.cross(r, v);
+      // c < 0 means counter-clockwise wrapping, c > 0 means clockwise wrapping
       if (c < 0.0) {
         ie = j;
       }
@@ -6110,15 +6111,16 @@ PolygonShape.prototype._set = function(vertices) {
  * @private
  */
 PolygonShape.prototype._setAsBox = function(hx, hy, center, angle) {
-  this.m_vertices[0] = Vec2.neo(-hx, -hy);
-  this.m_vertices[1] = Vec2.neo(hx, -hy);
-  this.m_vertices[2] = Vec2.neo(hx, hy);
-  this.m_vertices[3] = Vec2.neo(-hx, hy);
+  // start with right-bottom, counter-clockwise, as in Gift wrapping algorithm in PolygonShape._set()
+  this.m_vertices[0] = Vec2.neo(hx, -hy);
+  this.m_vertices[1] = Vec2.neo(hx, hy);
+  this.m_vertices[2] = Vec2.neo(-hx, hy);
+  this.m_vertices[3] = Vec2.neo(-hx, -hy);
 
-  this.m_normals[0] = Vec2.neo(0.0, -1.0);
-  this.m_normals[1] = Vec2.neo(1.0, 0.0);
-  this.m_normals[2] = Vec2.neo(0.0, 1.0);
-  this.m_normals[3] = Vec2.neo(-1.0, 0.0);
+  this.m_normals[0] = Vec2.neo(1.0, 0.0);
+  this.m_normals[1] = Vec2.neo(0.0, 1.0);
+  this.m_normals[2] = Vec2.neo(-1.0, 0.0);
+  this.m_normals[3] = Vec2.neo(0.0, -1.0);
 
   this.m_count = 4;
 
