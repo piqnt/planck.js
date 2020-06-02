@@ -57,7 +57,7 @@
     "webpack-dev-middleware": "^3.7.0"
   },
   "scripts": {
-    "test": "mocha **/__test/*.js",
+    "test": "mocha 'lib/**/__test/*.js'",
     "build": "webpack -p",
     "watch": "webpack --watch",
     "testbed": "nodemon testbed/server.js"
