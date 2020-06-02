@@ -41,12 +41,13 @@
   "devDependencies": {
     "ajv": "^6.10.2",
     "chai": "^4.2.0",
-    "closure-webpack-plugin": "^2.0.1",
-    "dtslint": "^0.7.8",
+    "closure-webpack-plugin": "^2.3.0",
+    "dtslint": "^3.6.9",
     "express": "^4.17.1",
-    "handlebars": "^4.1.2",
+    "handlebars": "^4.7.6",
     "mocha": "^6.2.3",
     "nodemon": "^1.19.1",
+    "nyc": "^15.1.0",
     "serve-index": "^1.9.1",
     "sinon": "^9.0.2",
     "stage-js": "^0.8.11",
@@ -58,6 +59,8 @@
   },
   "scripts": {
     "test": "mocha 'lib/**/__test/*.js'",
+    "test:coverage": "nyc --reporter=text mocha 'lib/**/__test/*.js'",
+    "test:coverage:html": "nyc --reporter=html mocha 'lib/**/__test/*.js'",
     "build": "webpack -p",
     "watch": "webpack --watch",
     "testbed": "nodemon testbed/server.js"

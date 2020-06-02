@@ -3,3 +3,5 @@ node_modules/
 
 **/ignore
 **/ignore.*
+/coverage
+/.nyc_output
