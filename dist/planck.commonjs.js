@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.16
+ * Planck.js v0.3.17
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -10573,6 +10573,7 @@ var Velocity = __webpack_require__(12);
 var Position = __webpack_require__(13);
 
 var Joint = __webpack_require__(11);
+var Body = __webpack_require__(20);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -10580,6 +10581,7 @@ var atUpperLimit = 2;
 var equalLimits = 3;
 
 RevoluteJoint.TYPE = 'revolute-joint';
+Joint.TYPES[RevoluteJoint.TYPE] = RevoluteJoint;
 
 RevoluteJoint._super = Joint;
 RevoluteJoint.prototype = create(RevoluteJoint._super.prototype);
@@ -10592,12 +10594,12 @@ RevoluteJoint.prototype = create(RevoluteJoint._super.prototype);
  * initial configuration can violate the constraint slightly. You also need to
  * specify the initial relative angle for joint limits. This helps when saving
  * and loading a game.
- * 
+ *
  * The local anchor points are measured from the body's origin rather than the
  * center of mass because: 1. you might not know where the center of mass will
  * be. 2. if you add/remove shapes from a body and recompute the mass, the
  * joints will be broken.
- * 
+ *
  * @prop {bool} enableLimit A flag to enable joint limits.
  * @prop {bool} enableMotor A flag to enable the joint motor.
  * @prop {float} lowerAngle The lower angle for the joint limit (radians).
@@ -10688,6 +10690,33 @@ function RevoluteJoint(def, bodyA, bodyB, anchor) {
   // J = [0 0 -1 0 0 1]
   // K = invI1 + invI2
 }
+
+RevoluteJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    lowerAngle: this.m_lowerAngle,
+    upperAngle: this.m_upperAngle,
+    maxMotorTorque: this.m_maxMotorTorque,
+    motorSpeed: this.m_motorSpeed,
+    enableLimit: this.m_enableLimit,
+    enableMotor: this.m_enableMotor,
+
+    localAnchorA: this.m_localAnchorA,
+    localAnchorB: this.m_localAnchorB,
+    referenceAngle: this.m_referenceAngle,
+  };
+};
+
+RevoluteJoint._deserialize = function(data, world, restore) {
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  var joint = new RevoluteJoint(data);
+  return joint;
+};
 
 /**
  * The local anchor point relative to bodyA's origin.
