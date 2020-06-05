@@ -84,7 +84,8 @@
       "properties": {
         "type": { "type": "string", "enum": [
           "distance-joint",
-          "revolute-joint"
+          "revolute-joint",
+          "wheel-joint"
         ] },
         "bodyA": { "$ref": "#Ref" },
         "bodyB": { "$ref": "#Ref" },
@@ -93,6 +94,7 @@
         "dampingRatio": { "type": "number" },
         "localAnchorA": { "$ref": "#Vec2" },
         "localAnchorB": { "$ref": "#Vec2" },
+        "localAxis": { "$ref": "#Vec2" },
         "length": { "type": "number" },
         "impulse": { "type": "number" },
         "gamma": { "type": "number" },
