@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.17
+ * Planck.js v0.3.18
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -2977,7 +2977,7 @@ var Mat22 = __webpack_require__(9);
 var Rot = __webpack_require__(3);
 
 var Settings = __webpack_require__(4);
-var Manifold = __webpack_require__(18);
+var Manifold = __webpack_require__(19);
 var Distance = __webpack_require__(22);
 
 module.exports = Contact;
@@ -4196,586 +4196,6 @@ Contact.destroy = function(contact, listener) {
 var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
-var common = __webpack_require__(2);
-
-var Vec2 = __webpack_require__(0);
-var Transform = __webpack_require__(5);
-var Math = __webpack_require__(1);
-var Rot = __webpack_require__(3);
-
-module.exports = Manifold;
-module.exports.clipSegmentToLine = clipSegmentToLine;
-module.exports.clipVertex = ClipVertex;
-module.exports.getPointStates = getPointStates;
-module.exports.PointState = PointState;
-
-// Manifold Type
-Manifold.e_circles = 0;
-Manifold.e_faceA = 1;
-Manifold.e_faceB = 2;
-
-// ContactFeature Type
-Manifold.e_vertex = 0;
-Manifold.e_face = 1;
-
-/**
- * A manifold for two touching convex shapes. Manifolds are created in `evaluate`
- * method of Contact subclasses.
- * 
- * Supported manifold types are e_faceA or e_faceB for clip point versus plane
- * with radius and e_circles point versus point with radius.
- * 
- * We store contacts in this way so that position correction can account for
- * movement, which is critical for continuous physics. All contact scenarios
- * must be expressed in one of these types. This structure is stored across time
- * steps, so we keep it small.
- * 
- * @prop type e_circle, e_faceA, e_faceB
- * @prop localPoint Usage depends on manifold type:<br>
- *       e_circles: the local center of circleA <br>
- *       e_faceA: the center of faceA <br>
- *       e_faceB: the center of faceB
- * @prop localNormal Usage depends on manifold type:<br>
- *       e_circles: not used <br>
- *       e_faceA: the normal on polygonA <br>
- *       e_faceB: the normal on polygonB
- * @prop points The points of contact {ManifoldPoint[]}
- * @prop pointCount The number of manifold points
- */
-function Manifold() {
-  this.type;
-  this.localNormal = Vec2.zero();
-  this.localPoint = Vec2.zero();
-  this.points = [ new ManifoldPoint(), new ManifoldPoint() ];
-  this.pointCount = 0;
-};
-
-/**
- * A manifold point is a contact point belonging to a contact manifold. It holds
- * details related to the geometry and dynamics of the contact points.
- * 
- * This structure is stored across time steps, so we keep it small.
- * 
- * Note: impulses are used for internal caching and may not provide reliable
- * contact forces, especially for high speed collisions.
- * 
- * @prop {Vec2} localPoint Usage depends on manifold type:<br>
- *       e_circles: the local center of circleB<br>
- *       e_faceA: the local center of cirlceB or the clip point of polygonB<br>
- *       e_faceB: the clip point of polygonA.
- * @prop normalImpulse The non-penetration impulse
- * @prop tangentImpulse The friction impulse
- * @prop {ContactID} id Uniquely identifies a contact point between two shapes
- *       to facilatate warm starting
- */
-function ManifoldPoint() {
-  this.localPoint = Vec2.zero();
-  this.normalImpulse = 0;
-  this.tangentImpulse = 0;
-  this.id = new ContactID();
-};
-
-/**
- * Contact ids to facilitate warm starting.
- * 
- * @prop {ContactFeature} cf
- * @prop key Used to quickly compare contact ids.
- * 
- */
-function ContactID() {
-  this.cf = new ContactFeature();
-};
-
-Object.defineProperty(ContactID.prototype, 'key', {
-  get: function() {
-    return this.cf.indexA + this.cf.indexB * 4 + this.cf.typeA * 16 + this.cf.typeB * 64;
-  },
-  enumerable: true,
-  configurable: true
-});
-
-ContactID.prototype.set = function(o) {
-  // this.key = o.key;
-  this.cf.set(o.cf);
-};
-
-/**
- * The features that intersect to form the contact point.
- * 
- * @prop indexA Feature index on shapeA
- * @prop indexB Feature index on shapeB
- * @prop typeA The feature type on shapeA
- * @prop typeB The feature type on shapeB
- */
-function ContactFeature() {
-  this.indexA;
-  this.indexB;
-  this.typeA;
-  this.typeB;
-};
-
-ContactFeature.prototype.set = function(o) {
-  this.indexA = o.indexA;
-  this.indexB = o.indexB;
-  this.typeA = o.typeA;
-  this.typeB = o.typeB;
-};
-
-/**
- * This is used to compute the current state of a contact manifold.
- * 
- * @prop normal World vector pointing from A to B
- * @prop points World contact point (point of intersection)
- * @prop separations A negative value indicates overlap, in meters
- */
-function WorldManifold() {
-  this.normal;
-  this.points = []; // [maxManifoldPoints]
-  this.separations = []; // float[maxManifoldPoints]
-};
-
-/**
- * Evaluate the manifold with supplied transforms. This assumes modest motion
- * from the original state. This does not change the point count, impulses, etc.
- * The radii must come from the shapes that generated the manifold.
- * 
- * @param {WorldManifold} [wm]
- */
-Manifold.prototype.getWorldManifold = function(wm, xfA, radiusA, xfB, radiusB) {
-  if (this.pointCount == 0) {
-    return;
-  }
-
-  wm = wm || new WorldManifold();
-
-  var normal = wm.normal;
-  var points = wm.points;
-  var separations = wm.separations;
-
-  // TODO: improve
-  switch (this.type) {
-  case Manifold.e_circles:
-    normal = Vec2.neo(1.0, 0.0);
-    var pointA = Transform.mulVec2(xfA, this.localPoint);
-    var pointB = Transform.mulVec2(xfB, this.points[0].localPoint);
-    var dist = Vec2.sub(pointB, pointA);
-    if (Vec2.lengthSquared(dist) > Math.EPSILON * Math.EPSILON) {
-      normal.set(dist);
-      normal.normalize();
-    }
-    var cA = pointA.clone().addMul(radiusA, normal);
-    var cB = pointB.clone().addMul(-radiusB, normal);
-    points[0] = Vec2.mid(cA, cB);
-    separations[0] = Vec2.dot(Vec2.sub(cB, cA), normal);
-    points.length = 1;
-    separations.length = 1;
-    break;
-
-  case Manifold.e_faceA:
-    normal = Rot.mulVec2(xfA.q, this.localNormal);
-    var planePoint = Transform.mulVec2(xfA, this.localPoint);
-
-    for (var i = 0; i < this.pointCount; ++i) {
-      var clipPoint = Transform.mulVec2(xfB, this.points[i].localPoint);
-      var cA = Vec2.clone(clipPoint).addMul(radiusA - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
-      var cB = Vec2.clone(clipPoint).subMul(radiusB, normal);
-      points[i] = Vec2.mid(cA, cB);
-      separations[i] = Vec2.dot(Vec2.sub(cB, cA), normal);
-    }
-    points.length = this.pointCount;
-    separations.length = this.pointCount;
-    break;
-
-  case Manifold.e_faceB:
-    normal = Rot.mulVec2(xfB.q, this.localNormal);
-    var planePoint = Transform.mulVec2(xfB, this.localPoint);
-
-    for (var i = 0; i < this.pointCount; ++i) {
-      var clipPoint = Transform.mulVec2(xfA, this.points[i].localPoint);
-      var cB = Vec2.combine(1, clipPoint, radiusB - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
-      var cA = Vec2.combine(1, clipPoint, -radiusA, normal);
-      points[i] = Vec2.mid(cA, cB);
-      separations[i] = Vec2.dot(Vec2.sub(cA, cB), normal);
-    }
-    points.length = this.pointCount;
-    separations.length = this.pointCount;
-    // Ensure normal points from A to B.
-    normal.mul(-1);
-    break;
-  }
-
-  wm.normal = normal;
-  wm.points = points;
-  wm.separations = separations;
-  return wm;
-}
-
-/**
- * This is used for determining the state of contact points.
- * 
- * @prop {0} nullState Point does not exist
- * @prop {1} addState Point was added in the update
- * @prop {2} persistState Point persisted across the update
- * @prop {3} removeState Point was removed in the update
- */
-var PointState = {
-  // TODO: use constants
-  nullState : 0,
-  addState : 1,
-  persistState : 2,
-  removeState : 3
-};
-
-/**
- * Compute the point states given two manifolds. The states pertain to the
- * transition from manifold1 to manifold2. So state1 is either persist or remove
- * while state2 is either add or persist.
- * 
- * @param {PointState[Settings.maxManifoldPoints]} state1
- * @param {PointState[Settings.maxManifoldPoints]} state2
- */
-function getPointStates(state1, state2, manifold1, manifold2) {
-  // for (var i = 0; i < Settings.maxManifoldPoints; ++i) {
-  // state1[i] = PointState.nullState;
-  // state2[i] = PointState.nullState;
-  // }
-
-  // Detect persists and removes.
-  for (var i = 0; i < manifold1.pointCount; ++i) {
-    var id = manifold1.points[i].id;// ContactID
-
-    state1[i] = PointState.removeState;
-
-    for (var j = 0; j < manifold2.pointCount; ++j) {
-      if (manifold2.points[j].id.key == id.key) {
-        state1[i] = PointState.persistState;
-        break;
-      }
-    }
-  }
-
-  // Detect persists and adds.
-  for (var i = 0; i < manifold2.pointCount; ++i) {
-    var id = manifold2.points[i].id;// ContactID
-
-    state2[i] = PointState.addState;
-
-    for (var j = 0; j < manifold1.pointCount; ++j) {
-      if (manifold1.points[j].id.key == id.key) {
-        state2[i] = PointState.persistState;
-        break;
-      }
-    }
-  }
-}
-
-/**
- * Used for computing contact manifolds.
- * 
- * @prop {Vec2} v
- * @prop {ContactID} id
- */
-function ClipVertex() {
-  this.v = Vec2.zero();
-  this.id = new ContactID();
-};
-
-ClipVertex.prototype.set = function(o) {
-  this.v.set(o.v);
-  this.id.set(o.id);
-};
-
-/**
- * Clipping for contact manifolds. Sutherland-Hodgman clipping.
- * 
- * @param {ClipVertex[2]} vOut
- * @param {ClipVertex[2]} vIn
- */
-function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
-  // Start with no output points
-  var numOut = 0;
-
-  // Calculate the distance of end points to the line
-  var distance0 = Vec2.dot(normal, vIn[0].v) - offset;
-  var distance1 = Vec2.dot(normal, vIn[1].v) - offset;
-
-  // If the points are behind the plane
-  if (distance0 <= 0.0)
-    vOut[numOut++].set(vIn[0]);
-  if (distance1 <= 0.0)
-    vOut[numOut++].set(vIn[1]);
-
-  // If the points are on different sides of the plane
-  if (distance0 * distance1 < 0.0) {
-    // Find intersection point of edge and plane
-    var interp = distance0 / (distance0 - distance1);
-    vOut[numOut].v.setCombine(1 - interp, vIn[0].v, interp, vIn[1].v);
-
-    // VertexA is hitting edgeB.
-    vOut[numOut].id.cf.indexA = vertexIndexA;
-    vOut[numOut].id.cf.indexB = vIn[0].id.cf.indexB;
-    vOut[numOut].id.cf.typeA = Manifold.e_vertex;
-    vOut[numOut].id.cf.typeB = Manifold.e_face;
-    ++numOut;
-  }
-
-  return numOut;
-}
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-if (false)
-  {}
-
-var stats = __webpack_require__(36);
-var extend = __webpack_require__(37);
-var is = __webpack_require__(38);
-var _await = __webpack_require__(66);
-
-stats.create = 0;
-
-function Class(arg) {
-  if (!(this instanceof Class)) {
-    if (is.fn(arg)) {
-      return Class.app.apply(Class, arguments);
-    } else if (is.object(arg)) {
-      return Class.atlas.apply(Class, arguments);
-    } else {
-      return arg;
-    }
-  }
-
-  stats.create++;
-
-  for (var i = 0; i < _init.length; i++) {
-    _init[i].call(this);
-  }
-}
-
-var _init = [];
-
-Class._init = function(fn) {
-  _init.push(fn);
-};
-
-var _load = [];
-
-Class._load = function(fn) {
-  _load.push(fn);
-};
-
-var _config = {};
-
-Class.config = function() {
-  if (arguments.length === 1 && is.string(arguments[0])) {
-    return _config[arguments[0]];
-  }
-  if (arguments.length === 1 && is.object(arguments[0])) {
-    extend(_config, arguments[0]);
-  }
-  if (arguments.length === 2 && is.string(arguments[0])) {
-    _config[arguments[0], arguments[1]];
-  }
-};
-
-var _app_queue = [];
-var _preload_queue = [];
-var _stages = [];
-var _loaded = false;
-var _paused = false;
-
-Class.app = function(app, opts) {
-  if (!_loaded) {
-    _app_queue.push(arguments);
-    return;
-  }
-   false && false;
-  var loader = Class.config('app-loader');
-  loader(function(stage, canvas) {
-     false && false;
-    for (var i = 0; i < _load.length; i++) {
-      _load[i].call(this, stage, canvas);
-    }
-    app(stage, canvas);
-    _stages.push(stage);
-     false && false;
-    stage.start();
-  }, opts);
-};
-
-var loading = _await();
-
-Class.preload = function(load) {
-  if (typeof load === 'string') {
-    var url = Class.resolve(load);
-    if (/\.js($|\?|\#)/.test(url)) {
-       false && false;
-      load = function(callback) {
-        loadScript(url, callback);
-      };
-    }
-  }
-  if (typeof load !== 'function') {
-    return;
-  }
-  // if (!_started) {
-  // _preload_queue.push(load);
-  // return;
-  // }
-  load(loading());
-};
-
-Class.start = function(config) {
-   false && false;
-
-  Class.config(config);
-
-  // DEBUG && console.log('Preloading...');
-  // _started = true;
-  // while (_preload_queue.length) {
-  // var load = _preload_queue.shift();
-  // load(loading());
-  // }
-
-  loading.then(function() {
-     false && false;
-    _loaded = true;
-    while (_app_queue.length) {
-      var args = _app_queue.shift();
-      Class.app.apply(Class, args);
-    }
-  });
-};
-
-Class.pause = function() {
-  if (!_paused) {
-    _paused = true;
-    for (var i = _stages.length - 1; i >= 0; i--) {
-      _stages[i].pause();
-    }
-  }
-};
-
-Class.resume = function() {
-  if (_paused) {
-    _paused = false;
-    for (var i = _stages.length - 1; i >= 0; i--) {
-      _stages[i].resume();
-    }
-  }
-};
-
-Class.create = function() {
-  return new Class();
-};
-
-Class.resolve = (function() {
-
-  if (typeof window === 'undefined' || typeof document === 'undefined') {
-    return function(url) {
-      return url;
-    };
-  }
-
-  var scripts = document.getElementsByTagName('script');
-
-  function getScriptSrc() {
-    // HTML5
-    if (document.currentScript) {
-      return document.currentScript.src;
-    }
-
-    // IE>=10
-    var stack;
-    try {
-      var err = new Error();
-      if (err.stack) {
-        stack = err.stack;
-      } else {
-        throw err;
-      }
-    } catch (err) {
-      stack = err.stack;
-    }
-    if (typeof stack === 'string') {
-      stack = stack.split('\n');
-      // Uses the last line, where the call started
-      for (var i = stack.length; i--;) {
-        var url = stack[i].match(/(\w+\:\/\/[^/]*?\/.+?)(:\d+)(:\d+)?/);
-        if (url) {
-          return url[1];
-        }
-      }
-    }
-
-    // IE<11
-    if (scripts.length && 'readyState' in scripts[0]) {
-      for (var i = scripts.length; i--;) {
-        if (scripts[i].readyState === 'interactive') {
-          return scripts[i].src;
-        }
-      }
-    }
-
-    return location.href;
-  }
-
-  return function(url) {
-    if (/^\.\//.test(url)) {
-      var src = getScriptSrc();
-      var base = src.substring(0, src.lastIndexOf('/') + 1);
-      url = base + url.substring(2);
-      // } else if (/^\.\.\//.test(url)) {
-      // url = base + url;
-    }
-    return url;
-  };
-})();
-
-module.exports = Class;
-
-function loadScript(src, callback) {
-  var el = document.createElement('script');
-  el.addEventListener('load', function() {
-    callback();
-  });
-  el.addEventListener('error', function(err) {
-    callback(err || 'Error loading script: ' + src);
-  });
-  el.src = src;
-  el.id = 'preload-' + Date.now();
-  document.body.appendChild(el);
-};
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
- *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- */
-
-var _DEBUG =  false ? undefined : false;
-var _ASSERT =  false ? undefined : false;
-
 module.exports = Body;
 
 var common = __webpack_require__(2);
@@ -5829,6 +5249,586 @@ Body.prototype.getLocalVector = function(worldVector) {
   return Rot.mulTVec2(this.m_xf.q, worldVector);
 };
 
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG =  false ? undefined : false;
+var _ASSERT =  false ? undefined : false;
+
+var common = __webpack_require__(2);
+
+var Vec2 = __webpack_require__(0);
+var Transform = __webpack_require__(5);
+var Math = __webpack_require__(1);
+var Rot = __webpack_require__(3);
+
+module.exports = Manifold;
+module.exports.clipSegmentToLine = clipSegmentToLine;
+module.exports.clipVertex = ClipVertex;
+module.exports.getPointStates = getPointStates;
+module.exports.PointState = PointState;
+
+// Manifold Type
+Manifold.e_circles = 0;
+Manifold.e_faceA = 1;
+Manifold.e_faceB = 2;
+
+// ContactFeature Type
+Manifold.e_vertex = 0;
+Manifold.e_face = 1;
+
+/**
+ * A manifold for two touching convex shapes. Manifolds are created in `evaluate`
+ * method of Contact subclasses.
+ * 
+ * Supported manifold types are e_faceA or e_faceB for clip point versus plane
+ * with radius and e_circles point versus point with radius.
+ * 
+ * We store contacts in this way so that position correction can account for
+ * movement, which is critical for continuous physics. All contact scenarios
+ * must be expressed in one of these types. This structure is stored across time
+ * steps, so we keep it small.
+ * 
+ * @prop type e_circle, e_faceA, e_faceB
+ * @prop localPoint Usage depends on manifold type:<br>
+ *       e_circles: the local center of circleA <br>
+ *       e_faceA: the center of faceA <br>
+ *       e_faceB: the center of faceB
+ * @prop localNormal Usage depends on manifold type:<br>
+ *       e_circles: not used <br>
+ *       e_faceA: the normal on polygonA <br>
+ *       e_faceB: the normal on polygonB
+ * @prop points The points of contact {ManifoldPoint[]}
+ * @prop pointCount The number of manifold points
+ */
+function Manifold() {
+  this.type;
+  this.localNormal = Vec2.zero();
+  this.localPoint = Vec2.zero();
+  this.points = [ new ManifoldPoint(), new ManifoldPoint() ];
+  this.pointCount = 0;
+};
+
+/**
+ * A manifold point is a contact point belonging to a contact manifold. It holds
+ * details related to the geometry and dynamics of the contact points.
+ * 
+ * This structure is stored across time steps, so we keep it small.
+ * 
+ * Note: impulses are used for internal caching and may not provide reliable
+ * contact forces, especially for high speed collisions.
+ * 
+ * @prop {Vec2} localPoint Usage depends on manifold type:<br>
+ *       e_circles: the local center of circleB<br>
+ *       e_faceA: the local center of cirlceB or the clip point of polygonB<br>
+ *       e_faceB: the clip point of polygonA.
+ * @prop normalImpulse The non-penetration impulse
+ * @prop tangentImpulse The friction impulse
+ * @prop {ContactID} id Uniquely identifies a contact point between two shapes
+ *       to facilatate warm starting
+ */
+function ManifoldPoint() {
+  this.localPoint = Vec2.zero();
+  this.normalImpulse = 0;
+  this.tangentImpulse = 0;
+  this.id = new ContactID();
+};
+
+/**
+ * Contact ids to facilitate warm starting.
+ * 
+ * @prop {ContactFeature} cf
+ * @prop key Used to quickly compare contact ids.
+ * 
+ */
+function ContactID() {
+  this.cf = new ContactFeature();
+};
+
+Object.defineProperty(ContactID.prototype, 'key', {
+  get: function() {
+    return this.cf.indexA + this.cf.indexB * 4 + this.cf.typeA * 16 + this.cf.typeB * 64;
+  },
+  enumerable: true,
+  configurable: true
+});
+
+ContactID.prototype.set = function(o) {
+  // this.key = o.key;
+  this.cf.set(o.cf);
+};
+
+/**
+ * The features that intersect to form the contact point.
+ * 
+ * @prop indexA Feature index on shapeA
+ * @prop indexB Feature index on shapeB
+ * @prop typeA The feature type on shapeA
+ * @prop typeB The feature type on shapeB
+ */
+function ContactFeature() {
+  this.indexA;
+  this.indexB;
+  this.typeA;
+  this.typeB;
+};
+
+ContactFeature.prototype.set = function(o) {
+  this.indexA = o.indexA;
+  this.indexB = o.indexB;
+  this.typeA = o.typeA;
+  this.typeB = o.typeB;
+};
+
+/**
+ * This is used to compute the current state of a contact manifold.
+ * 
+ * @prop normal World vector pointing from A to B
+ * @prop points World contact point (point of intersection)
+ * @prop separations A negative value indicates overlap, in meters
+ */
+function WorldManifold() {
+  this.normal;
+  this.points = []; // [maxManifoldPoints]
+  this.separations = []; // float[maxManifoldPoints]
+};
+
+/**
+ * Evaluate the manifold with supplied transforms. This assumes modest motion
+ * from the original state. This does not change the point count, impulses, etc.
+ * The radii must come from the shapes that generated the manifold.
+ * 
+ * @param {WorldManifold} [wm]
+ */
+Manifold.prototype.getWorldManifold = function(wm, xfA, radiusA, xfB, radiusB) {
+  if (this.pointCount == 0) {
+    return;
+  }
+
+  wm = wm || new WorldManifold();
+
+  var normal = wm.normal;
+  var points = wm.points;
+  var separations = wm.separations;
+
+  // TODO: improve
+  switch (this.type) {
+  case Manifold.e_circles:
+    normal = Vec2.neo(1.0, 0.0);
+    var pointA = Transform.mulVec2(xfA, this.localPoint);
+    var pointB = Transform.mulVec2(xfB, this.points[0].localPoint);
+    var dist = Vec2.sub(pointB, pointA);
+    if (Vec2.lengthSquared(dist) > Math.EPSILON * Math.EPSILON) {
+      normal.set(dist);
+      normal.normalize();
+    }
+    var cA = pointA.clone().addMul(radiusA, normal);
+    var cB = pointB.clone().addMul(-radiusB, normal);
+    points[0] = Vec2.mid(cA, cB);
+    separations[0] = Vec2.dot(Vec2.sub(cB, cA), normal);
+    points.length = 1;
+    separations.length = 1;
+    break;
+
+  case Manifold.e_faceA:
+    normal = Rot.mulVec2(xfA.q, this.localNormal);
+    var planePoint = Transform.mulVec2(xfA, this.localPoint);
+
+    for (var i = 0; i < this.pointCount; ++i) {
+      var clipPoint = Transform.mulVec2(xfB, this.points[i].localPoint);
+      var cA = Vec2.clone(clipPoint).addMul(radiusA - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
+      var cB = Vec2.clone(clipPoint).subMul(radiusB, normal);
+      points[i] = Vec2.mid(cA, cB);
+      separations[i] = Vec2.dot(Vec2.sub(cB, cA), normal);
+    }
+    points.length = this.pointCount;
+    separations.length = this.pointCount;
+    break;
+
+  case Manifold.e_faceB:
+    normal = Rot.mulVec2(xfB.q, this.localNormal);
+    var planePoint = Transform.mulVec2(xfB, this.localPoint);
+
+    for (var i = 0; i < this.pointCount; ++i) {
+      var clipPoint = Transform.mulVec2(xfA, this.points[i].localPoint);
+      var cB = Vec2.combine(1, clipPoint, radiusB - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
+      var cA = Vec2.combine(1, clipPoint, -radiusA, normal);
+      points[i] = Vec2.mid(cA, cB);
+      separations[i] = Vec2.dot(Vec2.sub(cA, cB), normal);
+    }
+    points.length = this.pointCount;
+    separations.length = this.pointCount;
+    // Ensure normal points from A to B.
+    normal.mul(-1);
+    break;
+  }
+
+  wm.normal = normal;
+  wm.points = points;
+  wm.separations = separations;
+  return wm;
+}
+
+/**
+ * This is used for determining the state of contact points.
+ * 
+ * @prop {0} nullState Point does not exist
+ * @prop {1} addState Point was added in the update
+ * @prop {2} persistState Point persisted across the update
+ * @prop {3} removeState Point was removed in the update
+ */
+var PointState = {
+  // TODO: use constants
+  nullState : 0,
+  addState : 1,
+  persistState : 2,
+  removeState : 3
+};
+
+/**
+ * Compute the point states given two manifolds. The states pertain to the
+ * transition from manifold1 to manifold2. So state1 is either persist or remove
+ * while state2 is either add or persist.
+ * 
+ * @param {PointState[Settings.maxManifoldPoints]} state1
+ * @param {PointState[Settings.maxManifoldPoints]} state2
+ */
+function getPointStates(state1, state2, manifold1, manifold2) {
+  // for (var i = 0; i < Settings.maxManifoldPoints; ++i) {
+  // state1[i] = PointState.nullState;
+  // state2[i] = PointState.nullState;
+  // }
+
+  // Detect persists and removes.
+  for (var i = 0; i < manifold1.pointCount; ++i) {
+    var id = manifold1.points[i].id;// ContactID
+
+    state1[i] = PointState.removeState;
+
+    for (var j = 0; j < manifold2.pointCount; ++j) {
+      if (manifold2.points[j].id.key == id.key) {
+        state1[i] = PointState.persistState;
+        break;
+      }
+    }
+  }
+
+  // Detect persists and adds.
+  for (var i = 0; i < manifold2.pointCount; ++i) {
+    var id = manifold2.points[i].id;// ContactID
+
+    state2[i] = PointState.addState;
+
+    for (var j = 0; j < manifold1.pointCount; ++j) {
+      if (manifold1.points[j].id.key == id.key) {
+        state2[i] = PointState.persistState;
+        break;
+      }
+    }
+  }
+}
+
+/**
+ * Used for computing contact manifolds.
+ * 
+ * @prop {Vec2} v
+ * @prop {ContactID} id
+ */
+function ClipVertex() {
+  this.v = Vec2.zero();
+  this.id = new ContactID();
+};
+
+ClipVertex.prototype.set = function(o) {
+  this.v.set(o.v);
+  this.id.set(o.id);
+};
+
+/**
+ * Clipping for contact manifolds. Sutherland-Hodgman clipping.
+ * 
+ * @param {ClipVertex[2]} vOut
+ * @param {ClipVertex[2]} vIn
+ */
+function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
+  // Start with no output points
+  var numOut = 0;
+
+  // Calculate the distance of end points to the line
+  var distance0 = Vec2.dot(normal, vIn[0].v) - offset;
+  var distance1 = Vec2.dot(normal, vIn[1].v) - offset;
+
+  // If the points are behind the plane
+  if (distance0 <= 0.0)
+    vOut[numOut++].set(vIn[0]);
+  if (distance1 <= 0.0)
+    vOut[numOut++].set(vIn[1]);
+
+  // If the points are on different sides of the plane
+  if (distance0 * distance1 < 0.0) {
+    // Find intersection point of edge and plane
+    var interp = distance0 / (distance0 - distance1);
+    vOut[numOut].v.setCombine(1 - interp, vIn[0].v, interp, vIn[1].v);
+
+    // VertexA is hitting edgeB.
+    vOut[numOut].id.cf.indexA = vertexIndexA;
+    vOut[numOut].id.cf.indexB = vIn[0].id.cf.indexB;
+    vOut[numOut].id.cf.typeA = Manifold.e_vertex;
+    vOut[numOut].id.cf.typeB = Manifold.e_face;
+    ++numOut;
+  }
+
+  return numOut;
+}
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+if (false)
+  {}
+
+var stats = __webpack_require__(36);
+var extend = __webpack_require__(37);
+var is = __webpack_require__(38);
+var _await = __webpack_require__(66);
+
+stats.create = 0;
+
+function Class(arg) {
+  if (!(this instanceof Class)) {
+    if (is.fn(arg)) {
+      return Class.app.apply(Class, arguments);
+    } else if (is.object(arg)) {
+      return Class.atlas.apply(Class, arguments);
+    } else {
+      return arg;
+    }
+  }
+
+  stats.create++;
+
+  for (var i = 0; i < _init.length; i++) {
+    _init[i].call(this);
+  }
+}
+
+var _init = [];
+
+Class._init = function(fn) {
+  _init.push(fn);
+};
+
+var _load = [];
+
+Class._load = function(fn) {
+  _load.push(fn);
+};
+
+var _config = {};
+
+Class.config = function() {
+  if (arguments.length === 1 && is.string(arguments[0])) {
+    return _config[arguments[0]];
+  }
+  if (arguments.length === 1 && is.object(arguments[0])) {
+    extend(_config, arguments[0]);
+  }
+  if (arguments.length === 2 && is.string(arguments[0])) {
+    _config[arguments[0], arguments[1]];
+  }
+};
+
+var _app_queue = [];
+var _preload_queue = [];
+var _stages = [];
+var _loaded = false;
+var _paused = false;
+
+Class.app = function(app, opts) {
+  if (!_loaded) {
+    _app_queue.push(arguments);
+    return;
+  }
+   false && false;
+  var loader = Class.config('app-loader');
+  loader(function(stage, canvas) {
+     false && false;
+    for (var i = 0; i < _load.length; i++) {
+      _load[i].call(this, stage, canvas);
+    }
+    app(stage, canvas);
+    _stages.push(stage);
+     false && false;
+    stage.start();
+  }, opts);
+};
+
+var loading = _await();
+
+Class.preload = function(load) {
+  if (typeof load === 'string') {
+    var url = Class.resolve(load);
+    if (/\.js($|\?|\#)/.test(url)) {
+       false && false;
+      load = function(callback) {
+        loadScript(url, callback);
+      };
+    }
+  }
+  if (typeof load !== 'function') {
+    return;
+  }
+  // if (!_started) {
+  // _preload_queue.push(load);
+  // return;
+  // }
+  load(loading());
+};
+
+Class.start = function(config) {
+   false && false;
+
+  Class.config(config);
+
+  // DEBUG && console.log('Preloading...');
+  // _started = true;
+  // while (_preload_queue.length) {
+  // var load = _preload_queue.shift();
+  // load(loading());
+  // }
+
+  loading.then(function() {
+     false && false;
+    _loaded = true;
+    while (_app_queue.length) {
+      var args = _app_queue.shift();
+      Class.app.apply(Class, args);
+    }
+  });
+};
+
+Class.pause = function() {
+  if (!_paused) {
+    _paused = true;
+    for (var i = _stages.length - 1; i >= 0; i--) {
+      _stages[i].pause();
+    }
+  }
+};
+
+Class.resume = function() {
+  if (_paused) {
+    _paused = false;
+    for (var i = _stages.length - 1; i >= 0; i--) {
+      _stages[i].resume();
+    }
+  }
+};
+
+Class.create = function() {
+  return new Class();
+};
+
+Class.resolve = (function() {
+
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return function(url) {
+      return url;
+    };
+  }
+
+  var scripts = document.getElementsByTagName('script');
+
+  function getScriptSrc() {
+    // HTML5
+    if (document.currentScript) {
+      return document.currentScript.src;
+    }
+
+    // IE>=10
+    var stack;
+    try {
+      var err = new Error();
+      if (err.stack) {
+        stack = err.stack;
+      } else {
+        throw err;
+      }
+    } catch (err) {
+      stack = err.stack;
+    }
+    if (typeof stack === 'string') {
+      stack = stack.split('\n');
+      // Uses the last line, where the call started
+      for (var i = stack.length; i--;) {
+        var url = stack[i].match(/(\w+\:\/\/[^/]*?\/.+?)(:\d+)(:\d+)?/);
+        if (url) {
+          return url[1];
+        }
+      }
+    }
+
+    // IE<11
+    if (scripts.length && 'readyState' in scripts[0]) {
+      for (var i = scripts.length; i--;) {
+        if (scripts[i].readyState === 'interactive') {
+          return scripts[i].src;
+        }
+      }
+    }
+
+    return location.href;
+  }
+
+  return function(url) {
+    if (/^\.\//.test(url)) {
+      var src = getScriptSrc();
+      var base = src.substring(0, src.lastIndexOf('/') + 1);
+      url = base + url.substring(2);
+      // } else if (/^\.\.\//.test(url)) {
+      // url = base + url;
+    }
+    return url;
+  };
+})();
+
+module.exports = Class;
+
+function loadScript(src, callback) {
+  var el = document.createElement('script');
+  el.addEventListener('load', function() {
+    callback();
+  });
+  el.addEventListener('error', function(err) {
+    callback(err || 'Error loading script: ' + src);
+  });
+  el.src = src;
+  el.id = 'preload-' + Date.now();
+  document.body.appendChild(el);
+};
 
 /***/ }),
 /* 21 */
@@ -7476,7 +7476,7 @@ if (typeof Object.create == 'function') {
 /* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(19);
+var Class = __webpack_require__(20);
 var Matrix = __webpack_require__(62);
 
 var iid = 0;
@@ -8393,7 +8393,7 @@ ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
 /* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(19);
+var Class = __webpack_require__(20);
 __webpack_require__(26);
 var stats = __webpack_require__(36);
 
@@ -8564,7 +8564,7 @@ var common = __webpack_require__(2);
 var Vec2 = __webpack_require__(0);
 var BroadPhase = __webpack_require__(41);
 var Solver = __webpack_require__(43);
-var Body = __webpack_require__(20);
+var Body = __webpack_require__(18);
 var Joint = __webpack_require__(11);
 var Contact = __webpack_require__(17);
 
@@ -11583,7 +11583,7 @@ var Velocity = __webpack_require__(12);
 var Position = __webpack_require__(13);
 
 var Joint = __webpack_require__(11);
-var Body = __webpack_require__(20);
+var Body = __webpack_require__(18);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -13166,7 +13166,7 @@ exports.AABB = __webpack_require__(16);
 
 exports.Shape = __webpack_require__(15);
 exports.Fixture = __webpack_require__(32);
-exports.Body = __webpack_require__(20);
+exports.Body = __webpack_require__(18);
 exports.Contact = __webpack_require__(17);
 exports.Joint = __webpack_require__(11);
 exports.World = __webpack_require__(30);
@@ -13197,7 +13197,7 @@ exports.WheelJoint = __webpack_require__(59);
 
 exports.internal.Sweep = __webpack_require__(8);
 exports.internal.stats = __webpack_require__(27);
-exports.internal.Manifold = __webpack_require__(18);
+exports.internal.Manifold = __webpack_require__(19);
 exports.internal.Distance = __webpack_require__(22);
 exports.internal.TimeOfImpact = __webpack_require__(33);
 exports.internal.DynamicTree = __webpack_require__(31);
@@ -13209,7 +13209,7 @@ exports.internal.Settings = __webpack_require__(4);
 /***/ (function(module, exports, __webpack_require__) {
 
 var World = __webpack_require__(30);
-var Body = __webpack_require__(20);
+var Body = __webpack_require__(18);
 var Joint = __webpack_require__(11);
 var Shape = __webpack_require__(15);
 
@@ -13677,7 +13677,7 @@ var common = __webpack_require__(2);
 var Vec2 = __webpack_require__(0);
 var Math = __webpack_require__(1);
 
-var Body = __webpack_require__(20);
+var Body = __webpack_require__(18);
 var Contact = __webpack_require__(17);
 var Joint = __webpack_require__(11);
 
@@ -14625,7 +14625,7 @@ var Vec2 = __webpack_require__(0);
 var Settings = __webpack_require__(4);
 var Shape = __webpack_require__(15);
 var Contact = __webpack_require__(17);
-var Manifold = __webpack_require__(18);
+var Manifold = __webpack_require__(19);
 var CircleShape = __webpack_require__(23);
 
 Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
@@ -14700,7 +14700,7 @@ var Rot = __webpack_require__(3);
 var Settings = __webpack_require__(4);
 var Shape = __webpack_require__(15);
 var Contact = __webpack_require__(17);
-var Manifold = __webpack_require__(18);
+var Manifold = __webpack_require__(19);
 var EdgeShape = __webpack_require__(24);
 var ChainShape = __webpack_require__(28);
 var CircleShape = __webpack_require__(23);
@@ -14887,7 +14887,7 @@ var Rot = __webpack_require__(3);
 var Vec2 = __webpack_require__(0);
 var AABB = __webpack_require__(16);
 var Settings = __webpack_require__(4);
-var Manifold = __webpack_require__(18);
+var Manifold = __webpack_require__(19);
 var Contact = __webpack_require__(17);
 var Shape = __webpack_require__(15);
 var PolygonShape = __webpack_require__(21);
@@ -15154,7 +15154,7 @@ var Rot = __webpack_require__(3);
 var Vec2 = __webpack_require__(0);
 var AABB = __webpack_require__(16);
 var Settings = __webpack_require__(4);
-var Manifold = __webpack_require__(18);
+var Manifold = __webpack_require__(19);
 var Contact = __webpack_require__(17);
 var Shape = __webpack_require__(15);
 var CircleShape = __webpack_require__(23);
@@ -15315,7 +15315,7 @@ var Rot = __webpack_require__(3);
 var Settings = __webpack_require__(4);
 var Shape = __webpack_require__(15);
 var Contact = __webpack_require__(17);
-var Manifold = __webpack_require__(18);
+var Manifold = __webpack_require__(19);
 var EdgeShape = __webpack_require__(24);
 var ChainShape = __webpack_require__(28);
 var PolygonShape = __webpack_require__(21);
@@ -15813,7 +15813,7 @@ var Velocity = __webpack_require__(12);
 var Position = __webpack_require__(13);
 
 var Joint = __webpack_require__(11);
-var Body = __webpack_require__(20);
+var Body = __webpack_require__(18);
 
 DistanceJoint.TYPE = 'distance-joint';
 Joint.TYPES[DistanceJoint.TYPE] = DistanceJoint;
@@ -18816,8 +18816,10 @@ var Velocity = __webpack_require__(12);
 var Position = __webpack_require__(13);
 
 var Joint = __webpack_require__(11);
+var Body = __webpack_require__(18);
 
 WheelJoint.TYPE = 'wheel-joint';
+Joint.TYPES[WheelJoint.TYPE] = WheelJoint;
 
 WheelJoint._super = Joint;
 WheelJoint.prototype = create(WheelJoint._super.prototype);
@@ -18831,7 +18833,7 @@ WheelJoint.prototype = create(WheelJoint._super.prototype);
  * joint translation is zero when the local anchor points coincide in world
  * space. Using local anchors and a local axis helps when saving and loading a
  * game.
- * 
+ *
  * @prop {boolean} enableMotor Enable/disable the joint motor.
  * @prop {float} maxMotorTorque The maximum motor torque, usually in N-m.
  * @prop {float} motorSpeed The desired motor speed in radians per second.
@@ -18931,6 +18933,32 @@ function WheelJoint(def, bodyA, bodyB, anchor, axis) {
   // Cdot = wB - wA
   // J = [0 0 -1 0 0 1]
 }
+
+WheelJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    enableMotor: this.m_enableMotor,
+    maxMotorTorque: this.m_maxMotorTorque,
+    motorSpeed: this.m_motorSpeed,
+    frequencyHz: this.m_frequencyHz,
+    dampingRatio: this.m_dampingRatio,
+
+    localAnchorA: this.m_localAnchorA,
+    localAnchorB: this.m_localAnchorB,
+    localAxis: this.m_localAxis,
+  };
+};
+
+WheelJoint._deserialize = function(data, world, restore) {
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  var joint = new WheelJoint(data);
+  return joint;
+};
 
 /**
  * The local anchor point relative to bodyA's origin.
@@ -20381,7 +20409,7 @@ __webpack_require__(82);
 /* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(19);
+module.exports = __webpack_require__(20);
 module.exports.Matrix = __webpack_require__(62);
 module.exports.Texture = __webpack_require__(60);
 __webpack_require__(67);
@@ -20432,7 +20460,7 @@ module.exports = function() {
 if (false)
   {}
 
-var Class = __webpack_require__(19);
+var Class = __webpack_require__(20);
 var Texture = __webpack_require__(60);
 
 var extend = __webpack_require__(37);
@@ -20685,7 +20713,7 @@ module.exports.startsWith = function(str, sub) {
 /* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(19);
+var Class = __webpack_require__(20);
 var is = __webpack_require__(38);
 
 var iid = 0;
@@ -21103,7 +21131,7 @@ module.exports = Class;
 /* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(71)(__webpack_require__(19).prototype, function(obj, name, on) {
+__webpack_require__(71)(__webpack_require__(20).prototype, function(obj, name, on) {
   obj._flag(name, on);
 });
 
@@ -21189,7 +21217,7 @@ module.exports = function(prototype, callback) {
 /* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(19);
+var Class = __webpack_require__(20);
 __webpack_require__(26);
 __webpack_require__(29);
 
@@ -21325,7 +21353,7 @@ Root.prototype.viewbox = function(width, height, mode) {
 /* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(19);
+var Class = __webpack_require__(20);
 var Texture = __webpack_require__(60);
 
 Class.canvas = function(type, attributes, callback) {
@@ -21381,7 +21409,7 @@ Class.canvas = function(type, attributes, callback) {
 /* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(19);
+var Class = __webpack_require__(20);
 __webpack_require__(26);
 __webpack_require__(29);
 
@@ -21538,7 +21566,7 @@ module.exports = function(img, owidth, oheight, stretch, inner, insert) {
 /* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(19);
+var Class = __webpack_require__(20);
 __webpack_require__(26);
 __webpack_require__(29);
 
@@ -21679,7 +21707,7 @@ Anim.prototype.stop = function(frame) {
 /* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(19);
+var Class = __webpack_require__(20);
 __webpack_require__(26);
 __webpack_require__(29);
 
@@ -21766,7 +21794,7 @@ Str.prototype.value = function(value) {
 /* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(19);
+var Class = __webpack_require__(20);
 __webpack_require__(26);
 __webpack_require__(29);
 
@@ -21916,7 +21944,7 @@ Class.prototype.spacing = function(space) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var Easing = __webpack_require__(80);
-var Class = __webpack_require__(19);
+var Class = __webpack_require__(20);
 var Pin = __webpack_require__(26);
 
 Class.prototype.tween = function(duration, delay, append) {
@@ -22299,7 +22327,7 @@ module.exports = Easing;
 if (false)
   {}
 
-__webpack_require__(19)._load(function(stage, elem) {
+__webpack_require__(20)._load(function(stage, elem) {
   Mouse.subscribe(stage, elem);
 });
 
@@ -22516,7 +22544,7 @@ module.exports = Mouse;
 if (false)
   {}
 
-var Class = __webpack_require__(19);
+var Class = __webpack_require__(20);
 
 Class._supported = (function() {
   var elem = document.createElement('canvas');
