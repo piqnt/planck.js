@@ -1,4 +1,17 @@
 {
+  "type": "array",
+  "additionalProperties": false,
+  "items": [
+    { "$ref": "#Document" }
+  ],
+  "additionalItems": {
+    "anyOf": [
+      { "$ref": "#World" },
+      { "$ref": "#Body" },
+      { "$ref": "#Shape" },
+      { "$ref": "#Joint" }
+    ]
+  },
   "definitions": {
     "ref": {
       "$id": "#Ref",
@@ -10,14 +23,60 @@
         "refType": { "type": "string", "enum": ["World", "Body", "Joint"] }
       }
     },
-    "Vec2": {
-      "$id": "#Vec2",
+    "Document": {
+      "$id": "#Document",
       "type": "object",
       "additionalProperties": false,
-      "required": ["x", "y"],
       "properties": {
-        "x": { "type": "number" },
-        "y": { "type": "number" }
+        "world": { "$ref": "#Ref" }
+      }
+    },
+    "World": {
+      "$id": "#World",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "gravity": { "$ref": "#Vec2" },
+        "bodies": {
+          "type": "array",
+          "items": { "$ref": "#Ref" }
+        },
+        "joints": {
+          "type": "array",
+          "items": { "$ref": "#Ref" }
+        }
+      }
+    },
+    "Body": {
+      "$id": "#Body",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string", "enum": ["static", "dynamic", "kinematic"] },
+        "position": { "$ref": "#Vec2" },
+        "angle": { "type": "number" },
+        "linearVelocity": { "$ref": "#Vec2" },
+        "angularVelocity": { "type": "number" },
+        "fixtures": {
+          "type": "array",
+          "items": { "$ref": "#Fixture" }
+        }
+      }
+    },
+    "Fixture": {
+      "$id": "#Fixture",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "friction": { "type": "number" },
+        "restitution": { "type": "number" },
+        "density": { "type": "number" },
+        "isSensor": { "type": "boolean" },
+        "filterGroupIndex": { "type": "number" },
+        "filterCategoryBits": { "type": "number" },
+        "filterMaskBits": { "type": "number" },
+        "shape": { "$ref": "#Shape" },
+        "userData": { "type": "object" }
       }
     },
     "Shape": {
@@ -43,38 +102,6 @@
         "hasVertex3": { "type": "boolean" },
         "p": { "$ref": "#Vec2" },
         "radius": { "type": "number" }
-      }
-    },
-    "Fixture": {
-      "$id": "#Fixture",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "friction": { "type": "number" },
-        "restitution": { "type": "number" },
-        "density": { "type": "number" },
-        "isSensor": { "type": "boolean" },
-        "filterGroupIndex": { "type": "number" },
-        "filterCategoryBits": { "type": "number" },
-        "filterMaskBits": { "type": "number" },
-        "shape": { "$ref": "#Shape" },
-        "userData": { "type": "object" }
-      }
-    },
-    "Body": {
-      "$id": "#Body",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "type": { "type": "string", "enum": ["static", "dynamic", "kinematic"] },
-        "position": { "$ref": "#Vec2" },
-        "angle": { "type": "number" },
-        "linearVelocity": { "$ref": "#Vec2" },
-        "angularVelocity": { "type": "number" },
-        "fixtures": {
-          "type": "array",
-          "items": { "$ref": "#Fixture" }
-        }
       }
     },
     "Joint": {
@@ -108,41 +135,15 @@
         "referenceAngle": { "type": "number" }
       }
     },
-    "World": {
-      "$id": "#World",
+    "Vec2": {
+      "$id": "#Vec2",
       "type": "object",
       "additionalProperties": false,
+      "required": ["x", "y"],
       "properties": {
-        "gravity": { "$ref": "#Vec2" },
-        "bodies": {
-          "type": "array",
-          "items": { "$ref": "#Ref" }
-        },
-        "joints": {
-          "type": "array",
-          "items": { "$ref": "#Ref" }
-        }
-      }
-    },
-    "Document": {
-      "$id": "#Document",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "world": { "$ref": "#Ref" }
+        "x": { "type": "number" },
+        "y": { "type": "number" }
       }
     }
-  },
-  "type": "array",
-  "additionalProperties": false,
-  "items": [
-    { "$ref": "#Document" }
-  ],
-  "additionalItems": {
-    "anyOf": [
-      { "$ref": "#World" },
-      { "$ref": "#Body" },
-      { "$ref": "#Joint" }
-    ]
   }
 }
