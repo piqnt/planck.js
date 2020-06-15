@@ -52,7 +52,7 @@ Testbed [examples and demos](http://piqnt.com/planck.js/).
 ## Community
 
 Updates and news: [Twitter @Piqnt](https://twitter.com/piqnt)  
-Issues and questions: [GitHub](https://github.com/shakiba/planck.js/)  
+Source code and issues: [GitHub](https://github.com/shakiba/planck.js/)  
 Community discussions: [Discord](https://discord.gg/znjh6J7)
 
 
