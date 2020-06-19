@@ -90,8 +90,8 @@
           "items": { "$ref": "#Vec2" }
         },
         "isLoop": { "type": "boolean" },
-        "prevVertex": { "$ref": "#Vec2" },
-        "nextVertex": { "$ref": "#Vec2" },
+        "prevVertex": { "anyOf": [{ "$ref": "#Vec2" }, { "type": "null" }] },
+        "nextVertex": { "anyOf": [{ "$ref": "#Vec2" }, { "type": "null" }] },
         "hasPrevVertex": { "type": "boolean" },
         "hasNextVertex": { "type": "boolean" },
         "vertex1": { "$ref": "#Vec2" },
@@ -122,6 +122,7 @@
         "localAnchorA": { "$ref": "#Vec2" },
         "localAnchorB": { "$ref": "#Vec2" },
         "localAxis": { "$ref": "#Vec2" },
+        "localAxisA": { "$ref": "#Vec2" },
         "length": { "type": "number" },
         "impulse": { "type": "number" },
         "gamma": { "type": "number" },
