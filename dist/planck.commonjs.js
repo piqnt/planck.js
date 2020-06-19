@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.18
+ * Planck.js v0.3.19
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -7295,7 +7295,7 @@ Shape.TYPES[ChainShape.TYPE] = ChainShape;
  * two-sided collision, so you can use inside and outside collision. Therefore,
  * you may use any winding order. Connectivity information is used to create
  * smooth collisions.
- * 
+ *
  * WARNING: The chain will not collide properly if there are self-intersections.
  */
 function ChainShape(vertices, loop) {
@@ -7331,8 +7331,8 @@ ChainShape.prototype._serialize = function() {
 
     vertices: this.m_vertices,
     isLoop: this.m_isLoop,
-    prevVertex: this.m_prevVertex,
-    nextVertex: this.m_nextVertex,
+    ...(this.m_prevVertex ? {prevVertex: this.m_prevVertex} : undefined),
+    ...(this.m_nextVertex ? {nextVertex: this.m_nextVertex} : undefined),
     hasPrevVertex: this.m_hasPrevVertex,
     hasNextVertex: this.m_hasNextVertex,
   };
@@ -7340,6 +7340,12 @@ ChainShape.prototype._serialize = function() {
 
 ChainShape._deserialize = function(data) {
   var shape = new ChainShape(data.vertices.map(Vec2._deserialize), data.isLoop);
+  if (data.prevVertex) {
+    shape._setPrevVertex(data.prevVertex);
+  }
+  if (data.nextVertex) {
+    shape._setNextVertex(data.nextVertex);
+  }
   return shape;
 };
 
@@ -7350,7 +7356,7 @@ ChainShape._deserialize = function(data) {
 
 /**
  * Create a loop. This automatically adjusts connectivity.
- * 
+ *
  * @param vertices an array of vertices, these are copied
  * @param count the vertex count
  */
@@ -7380,7 +7386,7 @@ ChainShape.prototype._createLoop = function(vertices) {
 
 /**
  * Create a chain with isolated end vertices.
- * 
+ *
  * @param vertices an array of vertices, these are copied
  * @param count the vertex count
  */
@@ -7519,6 +7525,7 @@ ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
   proxy.m_count = 2;
   proxy.m_radius = this.m_radius;
 };
+
 
 /***/ }),
 /* 29 */,
@@ -17673,9 +17680,7 @@ function WheelJoint(def, bodyA, bodyB, anchor, axis) {
 
   this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
   this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
-  this.m_localAxis = axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0);
-
-  this.m_localXAxisA = this.m_localAxis;
+  this.m_localXAxisA = axis ? bodyA.getLocalVector(axis) : def.localAxisA || def.localAxis || Vec2.neo(1.0, 0.0);
   this.m_localYAxisA = Vec2.cross(1.0, this.m_localXAxisA);
 
   this.m_mass = 0.0;
@@ -17745,7 +17750,7 @@ WheelJoint.prototype._serialize = function() {
 
     localAnchorA: this.m_localAnchorA,
     localAnchorB: this.m_localAnchorB,
-    localAxis: this.m_localAxis,
+    localAxisA: this.m_localXAxisA,
   };
 };
 
