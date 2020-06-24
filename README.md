@@ -20,12 +20,13 @@ Testbed [examples and demos](http://piqnt.com/planck.js/).
 
 #### Games
 - [Astray 2](https://wwwtyro.github.io/astray-2/) ([source](https://github.com/wwwtyro/astray-2)) by Rye Terrell
+- [Hoverator](https://vgel.me/hoverator/) by Jonathon Vogel
 - [Acolyte Fight](https://acolytefight.io/)
 - [Nitro Clash](http://nitroclash.io/)
 - Air Hockey ([source](https://github.com/Steveeeie/webgl-air-hockey-server)) by Steve Meredith
 - [Coined](https://coined--parameterized.repl.co/) ([source](https://repl.it/talk/challenge/Coined/13314))
-- [Hoverator](https://vgel.me/hoverator/) by Jonathon Vogel
 - [Zzzone!](https://www.engehausen.de/jan/zzz.html) ([source](https://github.com/smurf667/zzzone)) by Jan Engehausen
+- [Space Rage 2](https://space-rage-2-bad-prospects-dev.netlify.app/) by Hendrik Mans
 
 #### Game Development
 - [Modd.io](https://www.modd.io/)
