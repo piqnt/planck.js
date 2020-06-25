@@ -23,10 +23,11 @@ Testbed [examples and demos](http://piqnt.com/planck.js/).
 - [Hoverator](https://vgel.me/hoverator/) by Jonathon Vogel
 - [Acolyte Fight](https://acolytefight.io/)
 - [Nitro Clash](http://nitroclash.io/)
+- [I have to flap](https://ihavetoflap.web.app/) by Elias Ku
+- [Space Rage 2](https://space-rage-2-bad-prospects-dev.netlify.app/) by Hendrik Mans
 - Air Hockey ([source](https://github.com/Steveeeie/webgl-air-hockey-server)) by Steve Meredith
 - [Coined](https://coined--parameterized.repl.co/) ([source](https://repl.it/talk/challenge/Coined/13314))
 - [Zzzone!](https://www.engehausen.de/jan/zzz.html) ([source](https://github.com/smurf667/zzzone)) by Jan Engehausen
-- [Space Rage 2](https://space-rage-2-bad-prospects-dev.netlify.app/) by Hendrik Mans
 
 #### Game Development
 - [Modd.io](https://www.modd.io/)
