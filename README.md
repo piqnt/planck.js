@@ -1,9 +1,6 @@
 # Planck.js
 
-Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5 game development. **[Check out demos!](http://piqnt.com/planck.js/)**
-
-[![Car](./doc/img/screenshot.png "Play")](http://piqnt.com/planck.js/Car)
-
+Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5 game development.
 
 ## Motivations
 
@@ -14,9 +11,7 @@ Key motivations for the development of this project are:
 - Providing a JavaScript-friendly API
 
 
-## Made with Planck.js
-
-Testbed [examples and demos](http://piqnt.com/planck.js/).
+## Projects
 
 #### Games
 - [Astray 2](https://wwwtyro.github.io/astray-2/) ([source](https://github.com/wwwtyro/astray-2)) by Rye Terrell
@@ -49,6 +44,9 @@ Testbed [examples and demos](http://piqnt.com/planck.js/).
 #### Integration
  - [notchris/phaser3-planck](https://github.com/notchris/phaser3-planck) Phaser 3 Planck.js Plugin by Chris McGrane
  - [RealPeha/planck-renderer](https://github.com/RealPeha/planck-renderer)
+
+#### Testbed Examples
+[See here](http://piqnt.com/planck.js/) for testbed examples.
 
 
 ## Community
