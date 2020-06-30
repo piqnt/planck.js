@@ -15,10 +15,10 @@ Key motivations for the development of this project are:
 
 #### Games
 - [Astray 2](https://wwwtyro.github.io/astray-2/) ([source](https://github.com/wwwtyro/astray-2)) by Rye Terrell
+- [I have to flap](https://ihavetoflap.web.app/) by Elias Ku
 - [Hoverator](https://vgel.me/hoverator/) by Jonathon Vogel
 - [Acolyte Fight](https://acolytefight.io/)
 - [Nitro Clash](http://nitroclash.io/)
-- [I have to flap](https://ihavetoflap.web.app/) by Elias Ku
 - [Space Rage 2](https://space-rage-2-bad-prospects-dev.netlify.app/) by Hendrik Mans
 - Air Hockey ([source](https://github.com/Steveeeie/webgl-air-hockey-server)) by Steve Meredith
 - [Coined](https://coined--parameterized.repl.co/) ([source](https://repl.it/talk/challenge/Coined/13314))
