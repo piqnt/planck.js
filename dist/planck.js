@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.19
+ * Planck.js v0.3.20
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -5097,6 +5097,9 @@ Body.prototype.shouldCollide = function(that) {
   return true;
 };
 
+/**
+ * @internal Used for deserialize.
+ */
 Body.prototype._addFixture = function(fixture) {
   _ASSERT && common.assert(this.isWorldLocked() == false);
 
@@ -5682,8 +5685,9 @@ PolygonShape.prototype._serialize = function() {
   };
 };
 
-PolygonShape._deserialize = function(data) {
-  var shape = new PolygonShape(data.vertices);
+PolygonShape._deserialize = function(data, fixture, restore) {
+  var vertices = data.vertices && data.vertices.map(v => Vec2._deserialize(v));
+  var shape = new PolygonShape(vertices);
   return shape;
 };
 
@@ -5777,13 +5781,12 @@ PolygonShape.prototype._set = function(vertices) {
   var n = Math.min(vertices.length, Settings.maxPolygonVertices);
 
   // Perform welding and copy vertices into local buffer.
-  var ps = [];// [Settings.maxPolygonVertices];
-  var tempCount = 0;
+  var ps = []; // [Settings.maxPolygonVertices];
   for (var i = 0; i < n; ++i) {
     var v = vertices[i];
 
     var unique = true;
-    for (var j = 0; j < tempCount; ++j) {
+    for (var j = 0; j < ps.length; ++j) {
       if (Vec2.distanceSquared(v, ps[j]) < 0.25 * Settings.linearSlopSquared) {
         unique = false;
         break;
@@ -5791,11 +5794,11 @@ PolygonShape.prototype._set = function(vertices) {
     }
 
     if (unique) {
-      ps[tempCount++] = v;
+      ps.push(v);
     }
   }
 
-  n = tempCount;
+  n = ps.length;
   if (n < 3) {
     // Polygon is degenerate.
     _ASSERT && common.assert(false);
@@ -5811,13 +5814,13 @@ PolygonShape.prototype._set = function(vertices) {
   var x0 = ps[0].x;
   for (var i = 1; i < n; ++i) {
     var x = ps[i].x;
-    if (x > x0 || (x == x0 && ps[i].y < ps[i0].y)) {
+    if (x > x0 || (x === x0 && ps[i].y < ps[i0].y)) {
       i0 = i;
       x0 = x;
     }
   }
 
-  var hull = [];// [Settings.maxPolygonVertices];
+  var hull = []; // [Settings.maxPolygonVertices];
   var m = 0;
   var ih = i0;
 
@@ -5826,7 +5829,7 @@ PolygonShape.prototype._set = function(vertices) {
 
     var ie = 0;
     for (var j = 1; j < n; ++j) {
-      if (ie == ih) {
+      if (ie === ih) {
         ie = j;
         continue;
       }
@@ -5840,7 +5843,7 @@ PolygonShape.prototype._set = function(vertices) {
       }
 
       // Collinearity check
-      if (c == 0.0 && v.lengthSquared() > r.lengthSquared()) {
+      if (c === 0.0 && v.lengthSquared() > r.lengthSquared()) {
         ie = j;
       }
     }
@@ -5848,7 +5851,7 @@ PolygonShape.prototype._set = function(vertices) {
     ++m;
     ih = ie;
 
-    if (ie == i0) {
+    if (ie === i0) {
       break;
     }
   }
@@ -5863,6 +5866,7 @@ PolygonShape.prototype._set = function(vertices) {
   this.m_count = m;
 
   // Copy vertices.
+  this.m_vertices = [];
   for (var i = 0; i < m; ++i) {
     this.m_vertices[i] = ps[hull[i]];
   }
@@ -6118,6 +6122,7 @@ PolygonShape.prototype.computeDistanceProxy = function(proxy) {
   proxy.m_count = this.m_count;
   proxy.m_radius = this.m_radius;
 };
+
 
 /***/ }),
 /* 22 */
@@ -7326,16 +7331,20 @@ function ChainShape(vertices, loop) {
 }
 
 ChainShape.prototype._serialize = function() {
-  return {
+  const data = {
     type: this.m_type,
-
     vertices: this.m_vertices,
     isLoop: this.m_isLoop,
-    ...(this.m_prevVertex ? {prevVertex: this.m_prevVertex} : undefined),
-    ...(this.m_nextVertex ? {nextVertex: this.m_nextVertex} : undefined),
     hasPrevVertex: this.m_hasPrevVertex,
     hasNextVertex: this.m_hasNextVertex,
   };
+  if (this.m_prevVertex) {
+    data.prevVertex = this.m_prevVertex;
+  }
+  if (this.m_nextVertex) {
+    data.nextVertex = this.m_nextVertex;
+  }
+  return data;
 };
 
 ChainShape._deserialize = function(data) {
@@ -7570,8 +7579,8 @@ var Contact = __webpack_require__(17);
  *
  * @prop {Vec2} [gravity = { x : 0, y : 0}]
  * @prop {boolean} [allowSleep = true]
- * @prop {boolean} [warmStarting = false]
- * @prop {boolean} [continuousPhysics = false]
+ * @prop {boolean} [warmStarting = true]
+ * @prop {boolean} [continuousPhysics = true]
  * @prop {boolean} [subStepping = false]
  * @prop {boolean} [blockSolve = true]
  * @prop {int} [velocityIterations = 8] For the velocity constraint solver.
@@ -7970,9 +7979,7 @@ World.prototype.shiftOrigin = function(newOrigin) {
 }
 
 /**
- * Warning: This function is locked during callbacks.
- *
- * @param {Body} body
+ * @internal Used for deserialize.
  */
 World.prototype._addBody = function(body) {
   _ASSERT && common.assert(this.isLocked() === false);
@@ -10655,8 +10662,8 @@ function RevoluteJoint(def, bodyA, bodyB, anchor) {
 
   this.m_type = RevoluteJoint.TYPE;
 
-  this.m_localAnchorA =  anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
-  this.m_localAnchorB =  anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+  this.m_localAnchorA =  Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
+  this.m_localAnchorB =  Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
   this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
 
   this.m_impulse = Vec3();
@@ -10724,6 +10731,23 @@ RevoluteJoint._deserialize = function(data, world, restore) {
   var joint = new RevoluteJoint(data);
   return joint;
 };
+
+/**
+ * @internal
+ */
+RevoluteJoint.prototype._setAnchors = function(def) {
+  if (def.anchorA) {
+    this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+  } else if (def.localAnchorA) {
+    this.m_localAnchorA.set(def.localAnchorA);
+  }
+
+  if (def.anchorB) {
+    this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+  } else if (def.localAnchorB) {
+    this.m_localAnchorB.set(def.localAnchorB);
+  }
+}
 
 /**
  * The local anchor point relative to bodyA's origin.
@@ -10810,6 +10834,10 @@ RevoluteJoint.prototype.setMaxMotorTorque = function(torque) {
   this.m_bodyA.setAwake(true);
   this.m_bodyB.setAwake(true);
   this.m_maxMotorTorque = torque;
+}
+
+RevoluteJoint.prototype.getMaxMotorTorque = function() {
+  return this.m_maxMotorTorque;
 }
 
 /**
@@ -14678,8 +14706,8 @@ function DistanceJoint(def, bodyA, bodyB, anchorA, anchorB) {
   this.m_type = DistanceJoint.TYPE;
 
   // Solver shared
-  this.m_localAnchorA = anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.zero();
-  this.m_localAnchorB = anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.zero();
+  this.m_localAnchorA = Vec2.clone(anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.zero());
+  this.m_localAnchorB = Vec2.clone(anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.zero());
   this.m_length = Math.isFinite(def.length) ? def.length :
     Vec2.distance(bodyA.getWorldPoint(this.m_localAnchorA), bodyB.getWorldPoint(this.m_localAnchorB));
   this.m_frequencyHz = def.frequencyHz;
@@ -14742,6 +14770,33 @@ DistanceJoint._deserialize = function(data, world, restore) {
   var joint = new DistanceJoint(data);
   return joint;
 };
+
+/**
+ * @internal
+ */
+DistanceJoint.prototype._setAnchors = function(def) {
+  if (def.anchorA) {
+    this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+  } else if (def.localAnchorA) {
+    this.m_localAnchorA.set(def.localAnchorA);
+  }
+
+  if (def.anchorB) {
+    this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+  } else if (def.localAnchorB) {
+    this.m_localAnchorB.set(def.localAnchorB);
+  }
+
+  if (def.length > 0) {
+    this.m_length = +def.length;
+  } else if (def.length < 0) { // don't change length
+  } else if (def.anchorA || def.anchorA || def.anchorA || def.anchorA) {
+    this.m_length = Vec2.distance(
+        this.m_bodyA.getWorldPoint(this.m_localAnchorA),
+        this.m_bodyB.getWorldPoint(this.m_localAnchorB)
+    );
+  }
+}
 
 /**
  * The local anchor point relative to bodyA's origin.
@@ -17678,9 +17733,9 @@ function WheelJoint(def, bodyA, bodyB, anchor, axis) {
 
   this.m_type = WheelJoint.TYPE;
 
-  this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
-  this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
-  this.m_localXAxisA = axis ? bodyA.getLocalVector(axis) : def.localAxisA || def.localAxis || Vec2.neo(1.0, 0.0);
+  this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
+  this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
+  this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || def.localAxis || Vec2.neo(1.0, 0.0));
   this.m_localYAxisA = Vec2.cross(1.0, this.m_localXAxisA);
 
   this.m_mass = 0.0;
@@ -17760,6 +17815,28 @@ WheelJoint._deserialize = function(data, world, restore) {
   var joint = new WheelJoint(data);
   return joint;
 };
+
+/**
+ * @internal
+ */
+WheelJoint.prototype._setAnchors = function(def) {
+  if (def.anchorA) {
+    this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+  } else if (def.localAnchorA) {
+    this.m_localAnchorA.set(def.localAnchorA);
+  }
+
+  if (def.anchorB) {
+    this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+  } else if (def.localAnchorB) {
+    this.m_localAnchorB.set(def.localAnchorB);
+  }
+
+  if (def.localAxisA) {
+    this.m_localXAxisA.set(def.localAxisA);
+    this.m_localYAxisA.set(Vec2.cross(1.0, def.localAxisA));
+  }
+}
 
 /**
  * The local anchor point relative to bodyA's origin.

@@ -1,6 +1,6 @@
 {
   "name": "planck-js",
-  "version": "0.3.19",
+  "version": "0.3.20",
   "description": "2D JavaScript physics engine for cross-platform HTML5 game development",
   "homepage": "http://shakiba.me/planck.js",
   "keywords": [
@@ -27,16 +27,10 @@
     "test/",
     "testbed/"
   ],
-  "author": "Ali Shakiba",
+  "author": "Ali Shakiba (http://shakiba.me/planck.js)",
   "contributors": [
-    {
-      "name": "Ali Shakiba",
-      "url": "http://shakiba.me/planck.js"
-    },
-    {
-      "name": "Erin Catto",
-      "url": "http://box2d.org/"
-    }
+    "Ali Shakiba (http://shakiba.me/planck.js)",
+    "Erin Catto (http://box2d.org/)"
   ],
   "devDependencies": {
     "ajv": "^6.10.2",
