@@ -2,9 +2,8 @@
 
 Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5 game development.
 
-## Motivations
+#### Motivations
 
-Key motivations for the development of this project are:
 - Taking advantage of Box2D's efforts and achievements
 - Developing readable and maintainable JavaScript code
 - Optimizing the library for web and mobile platforms
