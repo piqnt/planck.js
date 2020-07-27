@@ -94,7 +94,7 @@ Planck.js is [available on jsDelivr](https://www.jsdelivr.com/package/npm/planck
 Planck.js includes Box2D algorithms without modification and its architecture is very similar to Box2D.
 However some internal [changes](./CHANGES.md) and refactoring are made during rewrite to address differences between C++ and JavaScript.
 
-Planck.js public API closely follows Box2D API (see [Resources](##resources-and-references)), with the following differences:
+Planck.js public API (see [API Doc](./docs)) closely follows Box2D API (see [Resources](##resources-and-references)), with the following differences:
 
 - `b2` prefix is dropped from class names, for example `b2World` is now available as `planck.World`.
 - Method names are converted from UpperCamelCase to lowerCamelCase.
@@ -114,7 +114,7 @@ Planck.js public API closely follows Box2D API (see [Resources](##resources-and-
 Planck.js core library does not include any graphics by default, see [Rendering and Integration](#rendering-and-integration) section for more info and available options.
 
 ## Resources and References
-- <a href="http://box2d.org/documentation/" target="_blank">Box2D Manual</a> and <a href="https://github.com/erincatto/Box2D/wiki/FAQ" target="_blank">FAQ</a> are highly recommended to get started.
+- <a href="http://box2d.org/documentation/" target="_blank">Box2D Manual</a> and <a href="https://github.com/erincatto/box2d/blob/master/docs/FAQ.md" target="_blank">FAQ</a> are highly recommended to get started.
 - [iforce2d](https://www.iforce2d.net/b2dtut/) website includes a collection of helpful tutorials and resources to learn Box2D.
 
 Following resources are recommended if you are interested in learning about Box2D/Planck.js's internal details.
