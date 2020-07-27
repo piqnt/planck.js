@@ -46,6 +46,8 @@
     "sinon": "^9.0.2",
     "stage-js": "^0.8.11",
     "tslint": "^5.17.0",
+    "typedoc": "^0.17.8",
+    "typedoc-plugin-markdown": "^2.3.1",
     "typescript": "^3.5.1",
     "webpack": "^4.33.0",
     "webpack-cli": "^3.3.3",
@@ -57,7 +59,8 @@
     "test:coverage:html": "nyc --reporter=html mocha 'lib/**/__test/*.js'",
     "build": "webpack -p",
     "watch": "webpack --watch",
-    "testbed": "nodemon testbed/server.js"
+    "testbed": "nodemon testbed/server.js",
+    "typedoc": "typedoc --options typedoc.json"
   },
   "dependencies": {}
 }

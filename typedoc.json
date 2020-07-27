@@ -1,0 +1,8 @@
+{
+  "name": "API Doc",
+  "readme": "none",
+  "inputFiles": ["./lib"],
+  "mode": "file",
+  "includeDeclarations": true,
+  "excludeExternals": true
+}
