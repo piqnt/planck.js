@@ -12,7 +12,7 @@
 
 ▸ **BoxShape**(`hx`: number, `hy`: number, `center?`: [Vec2](vec2.md), `angle?`: number): *[BoxShape](boxshape.md)*
 
-*Defined in [shape/index.d.ts:80](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L80)*
+*Defined in [shape/index.d.ts:80](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L80)*
 
 **Parameters:**
 
@@ -37,7 +37,7 @@ Name | Type |
 
 \+ **new BoxShape**(`hx`: number, `hy`: number, `center?`: [Vec2](vec2.md), `angle?`: number): *[BoxShape](boxshape.md)*
 
-*Defined in [shape/index.d.ts:81](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L81)*
+*Defined in [shape/index.d.ts:81](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L81)*
 
 **Parameters:**
 

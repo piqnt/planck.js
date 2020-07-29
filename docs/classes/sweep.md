@@ -34,7 +34,7 @@
 
 • **a**: *number*
 
-*Defined in [common/index.d.ts:251](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L251)*
+*Defined in [common/index.d.ts:251](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L251)*
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 • **a0**: *number*
 
-*Defined in [common/index.d.ts:254](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L254)*
+*Defined in [common/index.d.ts:254](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L254)*
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 • **alpha0**: *number*
 
-*Defined in [common/index.d.ts:252](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L252)*
+*Defined in [common/index.d.ts:252](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L252)*
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 • **c**: *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:250](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L250)*
+*Defined in [common/index.d.ts:250](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L250)*
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 • **c0**: *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:253](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L253)*
+*Defined in [common/index.d.ts:253](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L253)*
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 • **localCenter**: *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:249](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L249)*
+*Defined in [common/index.d.ts:249](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L249)*
 
 ## Methods
 
@@ -82,7 +82,7 @@ ___
 
 ▸ **advance**(`alpha`: number): *void*
 
-*Defined in [common/index.d.ts:259](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L259)*
+*Defined in [common/index.d.ts:259](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L259)*
 
 **Parameters:**
 
@@ -98,7 +98,7 @@ ___
 
 ▸ **clone**(): *[Sweep](sweep.md)*
 
-*Defined in [common/index.d.ts:262](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L262)*
+*Defined in [common/index.d.ts:262](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L262)*
 
 **Returns:** *[Sweep](sweep.md)*
 
@@ -108,7 +108,7 @@ ___
 
 ▸ **forward**(): *void*
 
-*Defined in [common/index.d.ts:260](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L260)*
+*Defined in [common/index.d.ts:260](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L260)*
 
 **Returns:** *void*
 
@@ -118,7 +118,7 @@ ___
 
 ▸ **getTransform**(`xf`: [Transform](transform.md), `beta`: number): *void*
 
-*Defined in [common/index.d.ts:258](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L258)*
+*Defined in [common/index.d.ts:258](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L258)*
 
 **Parameters:**
 
@@ -135,7 +135,7 @@ ___
 
 ▸ **normalize**(): *void*
 
-*Defined in [common/index.d.ts:261](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L261)*
+*Defined in [common/index.d.ts:261](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L261)*
 
 **Returns:** *void*
 
@@ -145,7 +145,7 @@ ___
 
 ▸ **set**(`sweep`: [Sweep](sweep.md)): *void*
 
-*Defined in [common/index.d.ts:263](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L263)*
+*Defined in [common/index.d.ts:263](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L263)*
 
 **Parameters:**
 
@@ -161,7 +161,7 @@ ___
 
 ▸ **setLocalCenter**(`localCenter`: [Vec2](vec2.md), `xf`: [Transform](transform.md)): *void*
 
-*Defined in [common/index.d.ts:257](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L257)*
+*Defined in [common/index.d.ts:257](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L257)*
 
 **Parameters:**
 
@@ -178,7 +178,7 @@ ___
 
 ▸ **setTransform**(`xf`: [Transform](transform.md)): *void*
 
-*Defined in [common/index.d.ts:256](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L256)*
+*Defined in [common/index.d.ts:256](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L256)*
 
 **Parameters:**
 

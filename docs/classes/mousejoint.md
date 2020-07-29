@@ -12,7 +12,7 @@
 
 ▸ **MouseJoint**(`def`: [MouseJointDef](../interfaces/mousejointdef.md)): *[MouseJoint](mousejoint.md)*
 
-*Defined in [joint/index.d.ts:258](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L258)*
+*Defined in [joint/index.d.ts:258](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L258)*
 
 **Parameters:**
 
@@ -24,7 +24,7 @@ Name | Type |
 
 ▸ **MouseJoint**(`def`: [MouseJointOpt](../interfaces/mousejointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `target`: [Vec2](vec2.md)): *[MouseJoint](mousejoint.md)*
 
-*Defined in [joint/index.d.ts:259](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L259)*
+*Defined in [joint/index.d.ts:259](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L259)*
 
 **Parameters:**
 
@@ -73,7 +73,7 @@ Name | Type |
 
 \+ **new MouseJoint**(`def`: [MouseJointDef](../interfaces/mousejointdef.md)): *[MouseJoint](mousejoint.md)*
 
-*Defined in [joint/index.d.ts:261](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L261)*
+*Defined in [joint/index.d.ts:261](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L261)*
 
 **Parameters:**
 
@@ -85,7 +85,7 @@ Name | Type |
 
 \+ **new MouseJoint**(`def`: [MouseJointOpt](../interfaces/mousejointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `target`: [Vec2](vec2.md)): *[MouseJoint](mousejoint.md)*
 
-*Defined in [joint/index.d.ts:263](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L263)*
+*Defined in [joint/index.d.ts:263](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L263)*
 
 **Parameters:**
 
@@ -104,7 +104,7 @@ Name | Type |
 
 • **m_beta**: *number*
 
-*Defined in [joint/index.d.ts:273](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L273)*
+*Defined in [joint/index.d.ts:273](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L273)*
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 • **m_dampingRatio**: *number*
 
-*Defined in [joint/index.d.ts:272](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L272)*
+*Defined in [joint/index.d.ts:272](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L272)*
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 • **m_frequencyHz**: *number*
 
-*Defined in [joint/index.d.ts:271](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L271)*
+*Defined in [joint/index.d.ts:271](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L271)*
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 • **m_gamma**: *number*
 
-*Defined in [joint/index.d.ts:274](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L274)*
+*Defined in [joint/index.d.ts:274](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L274)*
 
 ___
 
@@ -136,7 +136,7 @@ ___
 
 • **m_impulse**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:270](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L270)*
+*Defined in [joint/index.d.ts:270](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L270)*
 
 ___
 
@@ -144,7 +144,7 @@ ___
 
 • **m_localAnchorB**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:268](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L268)*
+*Defined in [joint/index.d.ts:268](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L268)*
 
 ___
 
@@ -152,7 +152,7 @@ ___
 
 • **m_maxForce**: *number*
 
-*Defined in [joint/index.d.ts:269](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L269)*
+*Defined in [joint/index.d.ts:269](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L269)*
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 • **m_targetA**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:267](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L267)*
+*Defined in [joint/index.d.ts:267](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L267)*
 
 ___
 
@@ -168,7 +168,7 @@ ___
 
 • **m_type**: *"mouse-joint"*
 
-*Defined in [joint/index.d.ts:266](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L266)*
+*Defined in [joint/index.d.ts:266](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L266)*
 
 ___
 
@@ -176,7 +176,7 @@ ___
 
 ▪ **TYPE**: *"mouse-joint"*
 
-*Defined in [joint/index.d.ts:261](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L261)*
+*Defined in [joint/index.d.ts:261](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L261)*
 
 ## Methods
 
@@ -184,7 +184,7 @@ ___
 
 ▸ **getDampingRatio**(): *number*
 
-*Defined in [joint/index.d.ts:290](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L290)*
+*Defined in [joint/index.d.ts:290](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L290)*
 
 **Returns:** *number*
 
@@ -194,7 +194,7 @@ ___
 
 ▸ **getFrequency**(): *number*
 
-*Defined in [joint/index.d.ts:288](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L288)*
+*Defined in [joint/index.d.ts:288](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L288)*
 
 **Returns:** *number*
 
@@ -204,7 +204,7 @@ ___
 
 ▸ **getMaxForce**(): *number*
 
-*Defined in [joint/index.d.ts:286](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L286)*
+*Defined in [joint/index.d.ts:286](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L286)*
 
 **Returns:** *number*
 
@@ -214,7 +214,7 @@ ___
 
 ▸ **getTarget**(): *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:284](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L284)*
+*Defined in [joint/index.d.ts:284](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L284)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -224,7 +224,7 @@ ___
 
 ▸ **setDampingRatio**(`ratio`: number): *void*
 
-*Defined in [joint/index.d.ts:289](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L289)*
+*Defined in [joint/index.d.ts:289](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L289)*
 
 **Parameters:**
 
@@ -240,7 +240,7 @@ ___
 
 ▸ **setFrequency**(`hz`: number): *void*
 
-*Defined in [joint/index.d.ts:287](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L287)*
+*Defined in [joint/index.d.ts:287](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L287)*
 
 **Parameters:**
 
@@ -256,7 +256,7 @@ ___
 
 ▸ **setMaxForce**(`force`: number): *void*
 
-*Defined in [joint/index.d.ts:285](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L285)*
+*Defined in [joint/index.d.ts:285](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L285)*
 
 **Parameters:**
 
@@ -272,7 +272,7 @@ ___
 
 ▸ **setTarget**(`target`: [Vec2](vec2.md)): *void*
 
-*Defined in [joint/index.d.ts:283](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L283)*
+*Defined in [joint/index.d.ts:283](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L283)*
 
 **Parameters:**
 

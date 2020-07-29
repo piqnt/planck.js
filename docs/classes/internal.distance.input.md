@@ -22,7 +22,7 @@
 
 • **proxyA**: *[DistanceProxy](distanceproxy.md)*
 
-*Defined in [index.d.ts:681](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L681)*
+*Defined in [index.d.ts:681](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L681)*
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 • **proxyB**: *[DistanceProxy](distanceproxy.md)*
 
-*Defined in [index.d.ts:682](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L682)*
+*Defined in [index.d.ts:682](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L682)*
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 • **transformA**: *[Transform](transform.md) | null*
 
-*Defined in [index.d.ts:683](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L683)*
+*Defined in [index.d.ts:683](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L683)*
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 • **transformB**: *[Transform](transform.md) | null*
 
-*Defined in [index.d.ts:684](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L684)*
+*Defined in [index.d.ts:684](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L684)*
 
 ___
 
@@ -54,4 +54,4 @@ ___
 
 • **useRadii**: *boolean*
 
-*Defined in [index.d.ts:685](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L685)*
+*Defined in [index.d.ts:685](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L685)*

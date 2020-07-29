@@ -102,7 +102,7 @@
 
 \+ **new Contact**(`fA`: [Fixture](fixture.md), `indexA`: number, `fB`: [Fixture](fixture.md), `indexB`: number, `evaluateFcn`: [EvaluateFunction](../globals.md#evaluatefunction)): *[Contact](contact.md)*
 
-*Defined in [index.d.ts:331](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L331)*
+*Defined in [index.d.ts:331](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L331)*
 
 **Parameters:**
 
@@ -122,7 +122,7 @@ Name | Type |
 
 • **m_bulletHitFlag**: *boolean*
 
-*Defined in [index.d.ts:364](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L364)*
+*Defined in [index.d.ts:364](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L364)*
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 • **m_enabledFlag**: *boolean*
 
-*Defined in [index.d.ts:360](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L360)*
+*Defined in [index.d.ts:360](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L360)*
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 • **m_evaluateFcn**: *[EvaluateFunction](../globals.md#evaluatefunction)*
 
-*Defined in [index.d.ts:350](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L350)*
+*Defined in [index.d.ts:350](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L350)*
 
 ___
 
@@ -146,7 +146,7 @@ ___
 
 • **m_filterFlag**: *boolean*
 
-*Defined in [index.d.ts:363](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L363)*
+*Defined in [index.d.ts:363](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L363)*
 
 ___
 
@@ -154,7 +154,7 @@ ___
 
 • **m_fixtureA**: *[Fixture](fixture.md)*
 
-*Defined in [index.d.ts:346](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L346)*
+*Defined in [index.d.ts:346](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L346)*
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 • **m_fixtureB**: *[Fixture](fixture.md)*
 
-*Defined in [index.d.ts:347](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L347)*
+*Defined in [index.d.ts:347](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L347)*
 
 ___
 
@@ -170,7 +170,7 @@ ___
 
 • **m_friction**: *number*
 
-*Defined in [index.d.ts:357](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L357)*
+*Defined in [index.d.ts:357](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L357)*
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 • **m_indexA**: *number*
 
-*Defined in [index.d.ts:348](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L348)*
+*Defined in [index.d.ts:348](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L348)*
 
 ___
 
@@ -186,7 +186,7 @@ ___
 
 • **m_indexB**: *number*
 
-*Defined in [index.d.ts:349](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L349)*
+*Defined in [index.d.ts:349](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L349)*
 
 ___
 
@@ -194,7 +194,7 @@ ___
 
 • **m_islandFlag**: *boolean*
 
-*Defined in [index.d.ts:361](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L361)*
+*Defined in [index.d.ts:361](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L361)*
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 • **m_manifold**: *[Manifold](../interfaces/manifold.md)*
 
-*Defined in [index.d.ts:351](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L351)*
+*Defined in [index.d.ts:351](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L351)*
 
 ___
 
@@ -210,7 +210,7 @@ ___
 
 • **m_next**: *[Contact](contact.md) | null*
 
-*Defined in [index.d.ts:353](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L353)*
+*Defined in [index.d.ts:353](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L353)*
 
 ___
 
@@ -218,7 +218,7 @@ ___
 
 • **m_nodeA**: *[ContactEdge](contactedge.md)*
 
-*Defined in [index.d.ts:344](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L344)*
+*Defined in [index.d.ts:344](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L344)*
 
 ___
 
@@ -226,7 +226,7 @@ ___
 
 • **m_nodeB**: *[ContactEdge](contactedge.md)*
 
-*Defined in [index.d.ts:345](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L345)*
+*Defined in [index.d.ts:345](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L345)*
 
 ___
 
@@ -234,7 +234,7 @@ ___
 
 • **m_prev**: *[Contact](contact.md) | null*
 
-*Defined in [index.d.ts:352](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L352)*
+*Defined in [index.d.ts:352](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L352)*
 
 ___
 
@@ -242,7 +242,7 @@ ___
 
 • **m_restitution**: *number*
 
-*Defined in [index.d.ts:358](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L358)*
+*Defined in [index.d.ts:358](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L358)*
 
 ___
 
@@ -250,7 +250,7 @@ ___
 
 • **m_tangentSpeed**: *number*
 
-*Defined in [index.d.ts:359](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L359)*
+*Defined in [index.d.ts:359](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L359)*
 
 ___
 
@@ -258,7 +258,7 @@ ___
 
 • **m_toi**: *number*
 
-*Defined in [index.d.ts:354](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L354)*
+*Defined in [index.d.ts:354](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L354)*
 
 ___
 
@@ -266,7 +266,7 @@ ___
 
 • **m_toiCount**: *number*
 
-*Defined in [index.d.ts:355](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L355)*
+*Defined in [index.d.ts:355](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L355)*
 
 ___
 
@@ -274,7 +274,7 @@ ___
 
 • **m_toiFlag**: *boolean*
 
-*Defined in [index.d.ts:356](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L356)*
+*Defined in [index.d.ts:356](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L356)*
 
 ___
 
@@ -282,7 +282,7 @@ ___
 
 • **m_touchingFlag**: *boolean*
 
-*Defined in [index.d.ts:362](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L362)*
+*Defined in [index.d.ts:362](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L362)*
 
 ___
 
@@ -290,7 +290,7 @@ ___
 
 • **p_invIA**: *number | undefined*
 
-*Defined in [index.d.ts:388](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L388)*
+*Defined in [index.d.ts:388](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L388)*
 
 ___
 
@@ -298,7 +298,7 @@ ___
 
 • **p_invIB**: *number | undefined*
 
-*Defined in [index.d.ts:389](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L389)*
+*Defined in [index.d.ts:389](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L389)*
 
 ___
 
@@ -306,7 +306,7 @@ ___
 
 • **p_invMassA**: *number | undefined*
 
-*Defined in [index.d.ts:386](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L386)*
+*Defined in [index.d.ts:386](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L386)*
 
 ___
 
@@ -314,7 +314,7 @@ ___
 
 • **p_invMassB**: *number | undefined*
 
-*Defined in [index.d.ts:387](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L387)*
+*Defined in [index.d.ts:387](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L387)*
 
 ___
 
@@ -322,7 +322,7 @@ ___
 
 • **p_localCenterA**: *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:380](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L380)*
+*Defined in [index.d.ts:380](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L380)*
 
 ___
 
@@ -330,7 +330,7 @@ ___
 
 • **p_localCenterB**: *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:381](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L381)*
+*Defined in [index.d.ts:381](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L381)*
 
 ___
 
@@ -338,7 +338,7 @@ ___
 
 • **p_localNormal**: *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:378](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L378)*
+*Defined in [index.d.ts:378](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L378)*
 
 ___
 
@@ -346,7 +346,7 @@ ___
 
 • **p_localPoint**: *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:379](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L379)*
+*Defined in [index.d.ts:379](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L379)*
 
 ___
 
@@ -354,7 +354,7 @@ ___
 
 • **p_localPoints**: *[Vec2](vec2.md)[]*
 
-*Defined in [index.d.ts:377](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L377)*
+*Defined in [index.d.ts:377](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L377)*
 
 ___
 
@@ -362,7 +362,7 @@ ___
 
 • **p_pointCount**: *number | undefined*
 
-*Defined in [index.d.ts:385](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L385)*
+*Defined in [index.d.ts:385](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L385)*
 
 ___
 
@@ -370,7 +370,7 @@ ___
 
 • **p_radiusA**: *number | undefined*
 
-*Defined in [index.d.ts:383](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L383)*
+*Defined in [index.d.ts:383](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L383)*
 
 ___
 
@@ -378,7 +378,7 @@ ___
 
 • **p_radiusB**: *number | undefined*
 
-*Defined in [index.d.ts:384](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L384)*
+*Defined in [index.d.ts:384](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L384)*
 
 ___
 
@@ -386,7 +386,7 @@ ___
 
 • **p_type**: *[ManifoldType](../enums/manifoldtype.md) | undefined*
 
-*Defined in [index.d.ts:382](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L382)*
+*Defined in [index.d.ts:382](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L382)*
 
 ___
 
@@ -394,7 +394,7 @@ ___
 
 • **v_K**: *[Mat22](mat22.md)*
 
-*Defined in [index.d.ts:368](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L368)*
+*Defined in [index.d.ts:368](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L368)*
 
 ___
 
@@ -402,7 +402,7 @@ ___
 
 • **v_friction**: *number | undefined*
 
-*Defined in [index.d.ts:371](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L371)*
+*Defined in [index.d.ts:371](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L371)*
 
 ___
 
@@ -410,7 +410,7 @@ ___
 
 • **v_invIA**: *number | undefined*
 
-*Defined in [index.d.ts:375](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L375)*
+*Defined in [index.d.ts:375](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L375)*
 
 ___
 
@@ -418,7 +418,7 @@ ___
 
 • **v_invIB**: *number | undefined*
 
-*Defined in [index.d.ts:376](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L376)*
+*Defined in [index.d.ts:376](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L376)*
 
 ___
 
@@ -426,7 +426,7 @@ ___
 
 • **v_invMassA**: *number | undefined*
 
-*Defined in [index.d.ts:373](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L373)*
+*Defined in [index.d.ts:373](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L373)*
 
 ___
 
@@ -434,7 +434,7 @@ ___
 
 • **v_invMassB**: *number | undefined*
 
-*Defined in [index.d.ts:374](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L374)*
+*Defined in [index.d.ts:374](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L374)*
 
 ___
 
@@ -442,7 +442,7 @@ ___
 
 • **v_normal**: *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:366](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L366)*
+*Defined in [index.d.ts:366](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L366)*
 
 ___
 
@@ -450,7 +450,7 @@ ___
 
 • **v_normalMass**: *[Mat22](mat22.md)*
 
-*Defined in [index.d.ts:367](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L367)*
+*Defined in [index.d.ts:367](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L367)*
 
 ___
 
@@ -458,7 +458,7 @@ ___
 
 • **v_pointCount**: *number*
 
-*Defined in [index.d.ts:369](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L369)*
+*Defined in [index.d.ts:369](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L369)*
 
 ___
 
@@ -466,7 +466,7 @@ ___
 
 • **v_points**: *[VelocityConstraintPoint](velocityconstraintpoint.md)[]*
 
-*Defined in [index.d.ts:365](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L365)*
+*Defined in [index.d.ts:365](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L365)*
 
 ___
 
@@ -474,7 +474,7 @@ ___
 
 • **v_restitution**: *number | undefined*
 
-*Defined in [index.d.ts:372](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L372)*
+*Defined in [index.d.ts:372](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L372)*
 
 ___
 
@@ -482,7 +482,7 @@ ___
 
 • **v_tangentSpeed**: *number | undefined*
 
-*Defined in [index.d.ts:370](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L370)*
+*Defined in [index.d.ts:370](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L370)*
 
 ## Methods
 
@@ -490,7 +490,7 @@ ___
 
 ▸ **_solvePositionConstraint**(`step`: any, `toi`: boolean, `toiA?`: [Body](body.md) | null, `toiB?`: [Body](body.md) | null): *number*
 
-*Defined in [index.d.ts:415](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L415)*
+*Defined in [index.d.ts:415](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L415)*
 
 **Parameters:**
 
@@ -509,7 +509,7 @@ ___
 
 ▸ **evaluate**(`manifold`: [Manifold](../interfaces/manifold.md), `xfA`: [Transform](transform.md), `xfB`: [Transform](transform.md)): *void*
 
-*Defined in [index.d.ts:411](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L411)*
+*Defined in [index.d.ts:411](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L411)*
 
 **Parameters:**
 
@@ -527,7 +527,7 @@ ___
 
 ▸ **flagForFiltering**(): *void*
 
-*Defined in [index.d.ts:402](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L402)*
+*Defined in [index.d.ts:402](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L402)*
 
 **Returns:** *void*
 
@@ -537,7 +537,7 @@ ___
 
 ▸ **getChildIndexA**(): *number*
 
-*Defined in [index.d.ts:400](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L400)*
+*Defined in [index.d.ts:400](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L400)*
 
 **Returns:** *number*
 
@@ -547,7 +547,7 @@ ___
 
 ▸ **getChildIndexB**(): *number*
 
-*Defined in [index.d.ts:401](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L401)*
+*Defined in [index.d.ts:401](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L401)*
 
 **Returns:** *number*
 
@@ -557,7 +557,7 @@ ___
 
 ▸ **getFixtureA**(): *[Fixture](fixture.md)*
 
-*Defined in [index.d.ts:398](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L398)*
+*Defined in [index.d.ts:398](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L398)*
 
 **Returns:** *[Fixture](fixture.md)*
 
@@ -567,7 +567,7 @@ ___
 
 ▸ **getFixtureB**(): *[Fixture](fixture.md)*
 
-*Defined in [index.d.ts:399](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L399)*
+*Defined in [index.d.ts:399](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L399)*
 
 **Returns:** *[Fixture](fixture.md)*
 
@@ -577,7 +577,7 @@ ___
 
 ▸ **getFriction**(): *number*
 
-*Defined in [index.d.ts:404](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L404)*
+*Defined in [index.d.ts:404](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L404)*
 
 **Returns:** *number*
 
@@ -587,7 +587,7 @@ ___
 
 ▸ **getManifold**(): *[Manifold](../interfaces/manifold.md)*
 
-*Defined in [index.d.ts:392](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L392)*
+*Defined in [index.d.ts:392](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L392)*
 
 **Returns:** *[Manifold](../interfaces/manifold.md)*
 
@@ -597,7 +597,7 @@ ___
 
 ▸ **getNext**(): *[Contact](contact.md) | null*
 
-*Defined in [index.d.ts:397](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L397)*
+*Defined in [index.d.ts:397](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L397)*
 
 **Returns:** *[Contact](contact.md) | null*
 
@@ -607,7 +607,7 @@ ___
 
 ▸ **getRestitution**(): *number*
 
-*Defined in [index.d.ts:407](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L407)*
+*Defined in [index.d.ts:407](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L407)*
 
 **Returns:** *number*
 
@@ -617,7 +617,7 @@ ___
 
 ▸ **getTangentSpeed**(): *number*
 
-*Defined in [index.d.ts:410](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L410)*
+*Defined in [index.d.ts:410](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L410)*
 
 **Returns:** *number*
 
@@ -627,7 +627,7 @@ ___
 
 ▸ **getWorldManifold**(`worldManifold`: [WorldManifold](../interfaces/worldmanifold.md) | null | undefined): *[WorldManifold](../interfaces/worldmanifold.md) | undefined*
 
-*Defined in [index.d.ts:393](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L393)*
+*Defined in [index.d.ts:393](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L393)*
 
 **Parameters:**
 
@@ -643,7 +643,7 @@ ___
 
 ▸ **initConstraint**(`step`: object): *void*
 
-*Defined in [index.d.ts:391](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L391)*
+*Defined in [index.d.ts:391](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L391)*
 
 **Parameters:**
 
@@ -662,7 +662,7 @@ ___
 
 ▸ **initVelocityConstraint**(`step`: object): *void*
 
-*Defined in [index.d.ts:416](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L416)*
+*Defined in [index.d.ts:416](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L416)*
 
 **Parameters:**
 
@@ -680,7 +680,7 @@ ___
 
 ▸ **isEnabled**(): *boolean*
 
-*Defined in [index.d.ts:395](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L395)*
+*Defined in [index.d.ts:395](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L395)*
 
 **Returns:** *boolean*
 
@@ -690,7 +690,7 @@ ___
 
 ▸ **isTouching**(): *boolean*
 
-*Defined in [index.d.ts:396](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L396)*
+*Defined in [index.d.ts:396](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L396)*
 
 **Returns:** *boolean*
 
@@ -700,7 +700,7 @@ ___
 
 ▸ **resetFriction**(): *void*
 
-*Defined in [index.d.ts:405](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L405)*
+*Defined in [index.d.ts:405](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L405)*
 
 **Returns:** *void*
 
@@ -710,7 +710,7 @@ ___
 
 ▸ **resetRestitution**(): *void*
 
-*Defined in [index.d.ts:408](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L408)*
+*Defined in [index.d.ts:408](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L408)*
 
 **Returns:** *void*
 
@@ -720,7 +720,7 @@ ___
 
 ▸ **setEnabled**(`flag`: boolean): *void*
 
-*Defined in [index.d.ts:394](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L394)*
+*Defined in [index.d.ts:394](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L394)*
 
 **Parameters:**
 
@@ -736,7 +736,7 @@ ___
 
 ▸ **setFriction**(`friction`: number): *void*
 
-*Defined in [index.d.ts:403](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L403)*
+*Defined in [index.d.ts:403](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L403)*
 
 **Parameters:**
 
@@ -752,7 +752,7 @@ ___
 
 ▸ **setRestitution**(`restitution`: number): *void*
 
-*Defined in [index.d.ts:406](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L406)*
+*Defined in [index.d.ts:406](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L406)*
 
 **Parameters:**
 
@@ -768,7 +768,7 @@ ___
 
 ▸ **setTangentSpeed**(`speed`: number): *void*
 
-*Defined in [index.d.ts:409](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L409)*
+*Defined in [index.d.ts:409](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L409)*
 
 **Parameters:**
 
@@ -784,7 +784,7 @@ ___
 
 ▸ **solvePositionConstraint**(`step`: any): *number*
 
-*Defined in [index.d.ts:413](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L413)*
+*Defined in [index.d.ts:413](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L413)*
 
 **Parameters:**
 
@@ -800,7 +800,7 @@ ___
 
 ▸ **solvePositionConstraintTOI**(`step`: any, `toiA?`: [Body](body.md) | null, `toiB?`: [Body](body.md) | null): *number*
 
-*Defined in [index.d.ts:414](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L414)*
+*Defined in [index.d.ts:414](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L414)*
 
 **Parameters:**
 
@@ -818,7 +818,7 @@ ___
 
 ▸ **solveVelocityConstraint**(`step`: object): *void*
 
-*Defined in [index.d.ts:419](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L419)*
+*Defined in [index.d.ts:419](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L419)*
 
 **Parameters:**
 
@@ -836,7 +836,7 @@ ___
 
 ▸ **storeConstraintImpulses**(`step?`: any): *void*
 
-*Defined in [index.d.ts:418](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L418)*
+*Defined in [index.d.ts:418](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L418)*
 
 **Parameters:**
 
@@ -852,7 +852,7 @@ ___
 
 ▸ **update**(`listener?`: object): *void*
 
-*Defined in [index.d.ts:412](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L412)*
+*Defined in [index.d.ts:412](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L412)*
 
 **Parameters:**
 
@@ -872,7 +872,7 @@ ___
 
 ▸ **warmStartConstraint**(`step?`: any): *void*
 
-*Defined in [index.d.ts:417](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L417)*
+*Defined in [index.d.ts:417](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L417)*
 
 **Parameters:**
 
@@ -888,7 +888,7 @@ ___
 
 ▸ **addType**(`type1`: [ShapeType](../globals.md#shapetype), `type2`: [ShapeType](../globals.md#shapetype), `callback`: [ContactCallack](../globals.md#contactcallack)): *void*
 
-*Defined in [index.d.ts:340](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L340)*
+*Defined in [index.d.ts:340](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L340)*
 
 **Parameters:**
 
@@ -906,7 +906,7 @@ ___
 
 ▸ **create**(`fixtureA`: [Fixture](fixture.md), `indexA`: number, `fixtureB`: [Fixture](fixture.md), `indexB`: number): *[Contact](contact.md) | null*
 
-*Defined in [index.d.ts:341](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L341)*
+*Defined in [index.d.ts:341](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L341)*
 
 **Parameters:**
 
@@ -925,7 +925,7 @@ ___
 
 ▸ **destroy**(`contact`: [Contact](contact.md), `listener`: object): *void*
 
-*Defined in [index.d.ts:342](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L342)*
+*Defined in [index.d.ts:342](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L342)*
 
 **Parameters:**
 

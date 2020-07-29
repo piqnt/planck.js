@@ -47,7 +47,7 @@
 
 • **m_bodyA**: *[Body](body.md)*
 
-*Defined in [joint/index.d.ts:22](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L22)*
+*Defined in [joint/index.d.ts:22](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L22)*
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 • **m_bodyB**: *[Body](body.md)*
 
-*Defined in [joint/index.d.ts:23](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L23)*
+*Defined in [joint/index.d.ts:23](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L23)*
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 • **m_collideConnected**: *boolean*
 
-*Defined in [joint/index.d.ts:25](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L25)*
+*Defined in [joint/index.d.ts:25](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L25)*
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 • **m_edgeA**: *[JointEdge](../interfaces/jointedge.md)*
 
-*Defined in [joint/index.d.ts:28](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L28)*
+*Defined in [joint/index.d.ts:28](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L28)*
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 • **m_edgeB**: *[JointEdge](../interfaces/jointedge.md)*
 
-*Defined in [joint/index.d.ts:29](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L29)*
+*Defined in [joint/index.d.ts:29](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L29)*
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 • **m_index**: *number*
 
-*Defined in [joint/index.d.ts:24](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L24)*
+*Defined in [joint/index.d.ts:24](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L24)*
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 • **m_islandFlag**: *boolean*
 
-*Defined in [joint/index.d.ts:30](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L30)*
+*Defined in [joint/index.d.ts:30](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L30)*
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 • **m_next**: *[Joint](joint.md) | null*
 
-*Defined in [joint/index.d.ts:27](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L27)*
+*Defined in [joint/index.d.ts:27](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L27)*
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 • **m_prev**: *[Joint](joint.md) | null*
 
-*Defined in [joint/index.d.ts:26](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L26)*
+*Defined in [joint/index.d.ts:26](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L26)*
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 • **m_type**: *string*
 
-*Defined in [joint/index.d.ts:21](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L21)*
+*Defined in [joint/index.d.ts:21](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L21)*
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 • **m_userData**: *unknown*
 
-*Defined in [joint/index.d.ts:31](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L31)*
+*Defined in [joint/index.d.ts:31](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L31)*
 
 ## Methods
 
@@ -135,7 +135,7 @@ ___
 
 ▸ **getAnchorA**(): *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:41](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L41)*
+*Defined in [joint/index.d.ts:41](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L41)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -145,7 +145,7 @@ ___
 
 ▸ **getAnchorB**(): *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:42](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L42)*
+*Defined in [joint/index.d.ts:42](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L42)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -155,7 +155,7 @@ ___
 
 ▸ **getBodyA**(): *[Body](body.md)*
 
-*Defined in [joint/index.d.ts:35](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L35)*
+*Defined in [joint/index.d.ts:35](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L35)*
 
 **Returns:** *[Body](body.md)*
 
@@ -165,7 +165,7 @@ ___
 
 ▸ **getBodyB**(): *[Body](body.md)*
 
-*Defined in [joint/index.d.ts:36](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L36)*
+*Defined in [joint/index.d.ts:36](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L36)*
 
 **Returns:** *[Body](body.md)*
 
@@ -175,7 +175,7 @@ ___
 
 ▸ **getCollideConnected**(): *boolean*
 
-*Defined in [joint/index.d.ts:40](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L40)*
+*Defined in [joint/index.d.ts:40](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L40)*
 
 **Returns:** *boolean*
 
@@ -185,7 +185,7 @@ ___
 
 ▸ **getNext**(): *[Joint](joint.md) | null*
 
-*Defined in [joint/index.d.ts:37](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L37)*
+*Defined in [joint/index.d.ts:37](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L37)*
 
 **Returns:** *[Joint](joint.md) | null*
 
@@ -195,7 +195,7 @@ ___
 
 ▸ **getReactionForce**(`inv_dt`: number): *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:43](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L43)*
+*Defined in [joint/index.d.ts:43](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L43)*
 
 **Parameters:**
 
@@ -211,7 +211,7 @@ ___
 
 ▸ **getReactionTorque**(`inv_dt`: number): *number*
 
-*Defined in [joint/index.d.ts:44](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L44)*
+*Defined in [joint/index.d.ts:44](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L44)*
 
 **Parameters:**
 
@@ -227,7 +227,7 @@ ___
 
 ▸ **getType**(): *string*
 
-*Defined in [joint/index.d.ts:34](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L34)*
+*Defined in [joint/index.d.ts:34](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L34)*
 
 **Returns:** *string*
 
@@ -237,7 +237,7 @@ ___
 
 ▸ **getUserData**(): *unknown*
 
-*Defined in [joint/index.d.ts:38](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L38)*
+*Defined in [joint/index.d.ts:38](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L38)*
 
 **Returns:** *unknown*
 
@@ -247,7 +247,7 @@ ___
 
 ▸ **initVelocityConstraints**(`step`: any): *void*
 
-*Defined in [joint/index.d.ts:46](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L46)*
+*Defined in [joint/index.d.ts:46](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L46)*
 
 **Parameters:**
 
@@ -263,7 +263,7 @@ ___
 
 ▸ **isActive**(): *boolean*
 
-*Defined in [joint/index.d.ts:33](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L33)*
+*Defined in [joint/index.d.ts:33](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L33)*
 
 **Returns:** *boolean*
 
@@ -273,7 +273,7 @@ ___
 
 ▸ **setUserData**(`data`: any): *void*
 
-*Defined in [joint/index.d.ts:39](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L39)*
+*Defined in [joint/index.d.ts:39](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L39)*
 
 **Parameters:**
 
@@ -289,7 +289,7 @@ ___
 
 ▸ **shiftOrigin**(`newOrigin`: [Vec2](vec2.md)): *void*
 
-*Defined in [joint/index.d.ts:45](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L45)*
+*Defined in [joint/index.d.ts:45](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L45)*
 
 **Parameters:**
 
@@ -305,7 +305,7 @@ ___
 
 ▸ **solvePositionConstraints**(`step`: any): *boolean*
 
-*Defined in [joint/index.d.ts:48](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L48)*
+*Defined in [joint/index.d.ts:48](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L48)*
 
 **Parameters:**
 
@@ -321,7 +321,7 @@ ___
 
 ▸ **solveVelocityConstraints**(`step`: any): *void*
 
-*Defined in [joint/index.d.ts:47](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L47)*
+*Defined in [joint/index.d.ts:47](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L47)*
 
 **Parameters:**
 

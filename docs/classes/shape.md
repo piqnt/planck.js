@@ -31,7 +31,7 @@
 
 • **m_radius**: *number*
 
-*Defined in [shape/index.d.ts:10](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L10)*
+*Defined in [shape/index.d.ts:10](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L10)*
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 • **m_type**: *[ShapeType](../globals.md#shapetype)*
 
-*Defined in [shape/index.d.ts:9](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L9)*
+*Defined in [shape/index.d.ts:9](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L9)*
 
 ## Methods
 
@@ -47,7 +47,7 @@ ___
 
 ▸ **computeAABB**(`aabb`: [AABB](aabb.md), `xf`: [Transform](transform.md), `childIndex?`: number): *void*
 
-*Defined in [shape/index.d.ts:18](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L18)*
+*Defined in [shape/index.d.ts:18](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L18)*
 
 **Parameters:**
 
@@ -65,7 +65,7 @@ ___
 
 ▸ **computeDistanceProxy**(`proxy`: [DistanceProxy](distanceproxy.md)): *void*
 
-*Defined in [shape/index.d.ts:20](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L20)*
+*Defined in [shape/index.d.ts:20](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L20)*
 
 **Parameters:**
 
@@ -81,7 +81,7 @@ ___
 
 ▸ **computeMass**(`massData`: [MassData](../interfaces/massdata.md), `density?`: number): *void*
 
-*Defined in [shape/index.d.ts:19](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L19)*
+*Defined in [shape/index.d.ts:19](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L19)*
 
 **Parameters:**
 
@@ -98,7 +98,7 @@ ___
 
 ▸ **getChildCount**(): *number*
 
-*Defined in [shape/index.d.ts:15](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L15)*
+*Defined in [shape/index.d.ts:15](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L15)*
 
 **Returns:** *number*
 
@@ -108,7 +108,7 @@ ___
 
 ▸ **getRadius**(): *number*
 
-*Defined in [shape/index.d.ts:13](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L13)*
+*Defined in [shape/index.d.ts:13](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L13)*
 
 **Returns:** *number*
 
@@ -118,7 +118,7 @@ ___
 
 ▸ **getType**(): *[ShapeType](../globals.md#shapetype)*
 
-*Defined in [shape/index.d.ts:14](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L14)*
+*Defined in [shape/index.d.ts:14](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L14)*
 
 **Returns:** *[ShapeType](../globals.md#shapetype)*
 
@@ -128,7 +128,7 @@ ___
 
 ▸ **isValid**(`shape`: any): *boolean*
 
-*Defined in [shape/index.d.ts:12](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L12)*
+*Defined in [shape/index.d.ts:12](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L12)*
 
 **Parameters:**
 
@@ -144,7 +144,7 @@ ___
 
 ▸ **rayCast**(`output`: [RayCastOutput](../interfaces/raycastoutput.md), `input`: [RayCastInput](../interfaces/raycastinput.md), `xf`: [Transform](transform.md), `childIndex?`: number): *boolean*
 
-*Defined in [shape/index.d.ts:17](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L17)*
+*Defined in [shape/index.d.ts:17](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L17)*
 
 **Parameters:**
 
@@ -163,7 +163,7 @@ ___
 
 ▸ **testPoint**(`xf`: [Transform](transform.md), `p`: [Vec2](vec2.md)): *false*
 
-*Defined in [shape/index.d.ts:16](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L16)*
+*Defined in [shape/index.d.ts:16](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L16)*
 
 **Parameters:**
 

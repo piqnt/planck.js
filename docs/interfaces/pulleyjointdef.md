@@ -34,7 +34,7 @@
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L56)*
+*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L56)*
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L57)*
+*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L57)*
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L52)*
+*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L52)*
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 • **groundAnchorA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:423](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L423)*
+*Defined in [joint/index.d.ts:423](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L423)*
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 • **groundAnchorB**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:424](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L424)*
+*Defined in [joint/index.d.ts:424](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L424)*
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 • **lengthA**: *number*
 
-*Defined in [joint/index.d.ts:427](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L427)*
+*Defined in [joint/index.d.ts:427](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L427)*
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 • **lengthB**: *number*
 
-*Defined in [joint/index.d.ts:428](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L428)*
+*Defined in [joint/index.d.ts:428](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L428)*
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 • **localAnchorA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:425](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L425)*
+*Defined in [joint/index.d.ts:425](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L425)*
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 • **localAnchorB**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:426](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L426)*
+*Defined in [joint/index.d.ts:426](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L426)*
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 • **ratio**: *number*
 
-*Defined in [joint/index.d.ts:429](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L429)*
+*Defined in [joint/index.d.ts:429](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L429)*
 
 ___
 
@@ -124,4 +124,4 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L51)*
+*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L51)*

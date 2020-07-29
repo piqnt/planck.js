@@ -24,7 +24,7 @@
 
 • **normalImpulse**: *number*
 
-*Defined in [index.d.ts:304](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L304)*
+*Defined in [index.d.ts:304](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L304)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **normalMass**: *number*
 
-*Defined in [index.d.ts:306](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L306)*
+*Defined in [index.d.ts:306](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L306)*
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 • **rA**: *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:302](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L302)*
+*Defined in [index.d.ts:302](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L302)*
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 • **rB**: *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:303](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L303)*
+*Defined in [index.d.ts:303](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L303)*
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 • **tangentImpulse**: *number*
 
-*Defined in [index.d.ts:305](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L305)*
+*Defined in [index.d.ts:305](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L305)*
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 • **tangentMass**: *number*
 
-*Defined in [index.d.ts:307](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L307)*
+*Defined in [index.d.ts:307](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L307)*
 
 ___
 
@@ -72,4 +72,4 @@ ___
 
 • **velocityBias**: *number*
 
-*Defined in [index.d.ts:308](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L308)*
+*Defined in [index.d.ts:308](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L308)*

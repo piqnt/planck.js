@@ -30,7 +30,7 @@
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L56)*
+*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L56)*
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L57)*
+*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L57)*
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L52)*
+*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L52)*
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 • **joint1**: *[RevoluteJoint](../classes/revolutejoint.md) | [PrismaticJoint](../classes/prismaticjoint.md)*
 
-*Defined in [joint/index.d.ts:202](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L202)*
+*Defined in [joint/index.d.ts:202](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L202)*
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 • **joint2**: *[RevoluteJoint](../classes/revolutejoint.md) | [PrismaticJoint](../classes/prismaticjoint.md)*
 
-*Defined in [joint/index.d.ts:203](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L203)*
+*Defined in [joint/index.d.ts:203](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L203)*
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 *Inherited from [GearJointOpt](gearjointopt.md).[ratio](gearjointopt.md#ratio)*
 
-*Defined in [joint/index.d.ts:198](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L198)*
+*Defined in [joint/index.d.ts:198](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L198)*
 
 ___
 
@@ -90,4 +90,4 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L51)*
+*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L51)*

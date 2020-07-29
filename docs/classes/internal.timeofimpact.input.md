@@ -22,7 +22,7 @@
 
 • **proxyA**: *[DistanceProxy](distanceproxy.md)*
 
-*Defined in [index.d.ts:704](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L704)*
+*Defined in [index.d.ts:704](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L704)*
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 • **proxyB**: *[DistanceProxy](distanceproxy.md)*
 
-*Defined in [index.d.ts:705](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L705)*
+*Defined in [index.d.ts:705](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L705)*
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 • **sweepA**: *[Sweep](sweep.md)*
 
-*Defined in [index.d.ts:706](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L706)*
+*Defined in [index.d.ts:706](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L706)*
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 • **sweepB**: *[Sweep](sweep.md)*
 
-*Defined in [index.d.ts:707](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L707)*
+*Defined in [index.d.ts:707](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L707)*
 
 ___
 
@@ -54,4 +54,4 @@ ___
 
 • **tMax**: *number | undefined*
 
-*Defined in [index.d.ts:708](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L708)*
+*Defined in [index.d.ts:708](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L708)*

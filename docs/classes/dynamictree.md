@@ -38,7 +38,7 @@
 
 ▸ **allocateNode**(): *[TreeNode](treenode.md)*
 
-*Defined in [collision/index.d.ts:74](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L74)*
+*Defined in [collision/index.d.ts:74](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L74)*
 
 **Returns:** *[TreeNode](treenode.md)*
 
@@ -48,7 +48,7 @@ ___
 
 ▸ **balance**(`iA`: [TreeNode](treenode.md)): *[TreeNode](treenode.md)*
 
-*Defined in [collision/index.d.ts:81](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L81)*
+*Defined in [collision/index.d.ts:81](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L81)*
 
 **Parameters:**
 
@@ -64,7 +64,7 @@ ___
 
 ▸ **computeHeight**(`node?`: [TreeNode](treenode.md)): *number*
 
-*Defined in [collision/index.d.ts:84](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L84)*
+*Defined in [collision/index.d.ts:84](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L84)*
 
 **Parameters:**
 
@@ -80,7 +80,7 @@ ___
 
 ▸ **createProxy**(`aabb`: [AABB](aabb.md), `userData`: any): *string*
 
-*Defined in [collision/index.d.ts:76](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L76)*
+*Defined in [collision/index.d.ts:76](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L76)*
 
 **Parameters:**
 
@@ -97,7 +97,7 @@ ___
 
 ▸ **destroyProxy**(`id`: number): *void*
 
-*Defined in [collision/index.d.ts:77](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L77)*
+*Defined in [collision/index.d.ts:77](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L77)*
 
 **Parameters:**
 
@@ -113,7 +113,7 @@ ___
 
 ▸ **freeNode**(`node`: [TreeNode](treenode.md)): *void*
 
-*Defined in [collision/index.d.ts:75](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L75)*
+*Defined in [collision/index.d.ts:75](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L75)*
 
 **Parameters:**
 
@@ -129,7 +129,7 @@ ___
 
 ▸ **getAreaRatio**(): *number*
 
-*Defined in [collision/index.d.ts:83](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L83)*
+*Defined in [collision/index.d.ts:83](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L83)*
 
 **Returns:** *number*
 
@@ -139,7 +139,7 @@ ___
 
 ▸ **getFatAABB**(`id`: number): *[AABB](aabb.md)*
 
-*Defined in [collision/index.d.ts:73](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L73)*
+*Defined in [collision/index.d.ts:73](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L73)*
 
 **Parameters:**
 
@@ -155,7 +155,7 @@ ___
 
 ▸ **getHeight**(): *number*
 
-*Defined in [collision/index.d.ts:82](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L82)*
+*Defined in [collision/index.d.ts:82](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L82)*
 
 **Returns:** *number*
 
@@ -165,7 +165,7 @@ ___
 
 ▸ **getMaxBalance**(): *number*
 
-*Defined in [collision/index.d.ts:88](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L88)*
+*Defined in [collision/index.d.ts:88](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L88)*
 
 **Returns:** *number*
 
@@ -175,7 +175,7 @@ ___
 
 ▸ **getUserData**(`id`: number): *unknown*
 
-*Defined in [collision/index.d.ts:72](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L72)*
+*Defined in [collision/index.d.ts:72](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L72)*
 
 **Parameters:**
 
@@ -191,7 +191,7 @@ ___
 
 ▸ **insertLeaf**(`leaf`: [TreeNode](treenode.md)): *void*
 
-*Defined in [collision/index.d.ts:79](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L79)*
+*Defined in [collision/index.d.ts:79](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L79)*
 
 **Parameters:**
 
@@ -207,7 +207,7 @@ ___
 
 ▸ **moveProxy**(`id`: number, `aabb`: [AABB](aabb.md), `d`: [Vec2](vec2.md)): *boolean*
 
-*Defined in [collision/index.d.ts:78](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L78)*
+*Defined in [collision/index.d.ts:78](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L78)*
 
 **Parameters:**
 
@@ -225,7 +225,7 @@ ___
 
 ▸ **query**(`aabb`: [AABB](aabb.md), `queryCallback`: function): *void*
 
-*Defined in [collision/index.d.ts:91](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L91)*
+*Defined in [collision/index.d.ts:91](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L91)*
 
 **Parameters:**
 
@@ -249,7 +249,7 @@ ___
 
 ▸ **rayCast**(`input`: [RayCastInput](../interfaces/raycastinput.md), `rayCastCallback`: function): *void*
 
-*Defined in [collision/index.d.ts:92](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L92)*
+*Defined in [collision/index.d.ts:92](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L92)*
 
 **Parameters:**
 
@@ -274,7 +274,7 @@ ___
 
 ▸ **rebuildBottomUp**(): *void*
 
-*Defined in [collision/index.d.ts:89](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L89)*
+*Defined in [collision/index.d.ts:89](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L89)*
 
 **Returns:** *void*
 
@@ -284,7 +284,7 @@ ___
 
 ▸ **removeLeaf**(`leaf`: [TreeNode](treenode.md)): *void*
 
-*Defined in [collision/index.d.ts:80](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L80)*
+*Defined in [collision/index.d.ts:80](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L80)*
 
 **Parameters:**
 
@@ -300,7 +300,7 @@ ___
 
 ▸ **shiftOrigin**(`newOrigin`: [Vec2](vec2.md)): *void*
 
-*Defined in [collision/index.d.ts:90](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L90)*
+*Defined in [collision/index.d.ts:90](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L90)*
 
 **Parameters:**
 
@@ -316,7 +316,7 @@ ___
 
 ▸ **validate**(): *void*
 
-*Defined in [collision/index.d.ts:87](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L87)*
+*Defined in [collision/index.d.ts:87](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L87)*
 
 **Returns:** *void*
 
@@ -326,7 +326,7 @@ ___
 
 ▸ **validateMetrics**(`node`: [TreeNode](treenode.md)): *void*
 
-*Defined in [collision/index.d.ts:86](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L86)*
+*Defined in [collision/index.d.ts:86](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L86)*
 
 **Parameters:**
 
@@ -342,7 +342,7 @@ ___
 
 ▸ **validateStructure**(`node`: [TreeNode](treenode.md)): *void*
 
-*Defined in [collision/index.d.ts:85](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L85)*
+*Defined in [collision/index.d.ts:85](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L85)*
 
 **Parameters:**
 

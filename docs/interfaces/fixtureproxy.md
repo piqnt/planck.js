@@ -21,7 +21,7 @@
 
 • **aabb**: *[AABB](../classes/aabb.md)*
 
-*Defined in [index.d.ts:79](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L79)*
+*Defined in [index.d.ts:79](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L79)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **childIndex**: *number*
 
-*Defined in [index.d.ts:81](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L81)*
+*Defined in [index.d.ts:81](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L81)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **fixture**: *[Fixture](../classes/fixture.md)*
 
-*Defined in [index.d.ts:80](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L80)*
+*Defined in [index.d.ts:80](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L80)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **proxyId**: *number*
 
-*Defined in [index.d.ts:82](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L82)*
+*Defined in [index.d.ts:82](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L82)*

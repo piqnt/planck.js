@@ -35,7 +35,7 @@
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L56)*
+*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L56)*
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L57)*
+*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L57)*
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L52)*
+*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L52)*
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 *Inherited from [WheelJointOpt](wheeljointopt.md).[dampingRatio](wheeljointopt.md#dampingratio)*
 
-*Defined in [joint/index.d.ts:659](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L659)*
+*Defined in [joint/index.d.ts:659](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L659)*
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 *Inherited from [WheelJointOpt](wheeljointopt.md).[enableMotor](wheeljointopt.md#enablemotor)*
 
-*Defined in [joint/index.d.ts:655](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L655)*
+*Defined in [joint/index.d.ts:655](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L655)*
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 *Inherited from [WheelJointOpt](wheeljointopt.md).[frequencyHz](wheeljointopt.md#frequencyhz)*
 
-*Defined in [joint/index.d.ts:658](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L658)*
+*Defined in [joint/index.d.ts:658](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L658)*
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 • **localAnchorA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:663](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L663)*
+*Defined in [joint/index.d.ts:663](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L663)*
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 • **localAnchorB**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:664](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L664)*
+*Defined in [joint/index.d.ts:664](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L664)*
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 • **localAxisA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:665](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L665)*
+*Defined in [joint/index.d.ts:665](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L665)*
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 *Inherited from [WheelJointOpt](wheeljointopt.md).[maxMotorTorque](wheeljointopt.md#maxmotortorque)*
 
-*Defined in [joint/index.d.ts:656](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L656)*
+*Defined in [joint/index.d.ts:656](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L656)*
 
 ___
 
@@ -131,7 +131,7 @@ ___
 
 *Inherited from [WheelJointOpt](wheeljointopt.md).[motorSpeed](wheeljointopt.md#motorspeed)*
 
-*Defined in [joint/index.d.ts:657](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L657)*
+*Defined in [joint/index.d.ts:657](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L657)*
 
 ___
 
@@ -143,4 +143,4 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L51)*
+*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L51)*

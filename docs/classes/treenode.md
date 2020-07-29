@@ -24,7 +24,7 @@
 
 • **aabb**: *[AABB](aabb.md)*
 
-*Defined in [collision/index.d.ts:63](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L63)*
+*Defined in [collision/index.d.ts:63](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L63)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **child1**: *[TreeNode](treenode.md)*
 
-*Defined in [collision/index.d.ts:66](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L66)*
+*Defined in [collision/index.d.ts:66](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L66)*
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 • **child2**: *[TreeNode](treenode.md)*
 
-*Defined in [collision/index.d.ts:67](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L67)*
+*Defined in [collision/index.d.ts:67](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L67)*
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 • **height**: *number*
 
-*Defined in [collision/index.d.ts:68](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L68)*
+*Defined in [collision/index.d.ts:68](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L68)*
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 • **id**: *number*
 
-*Defined in [collision/index.d.ts:62](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L62)*
+*Defined in [collision/index.d.ts:62](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L62)*
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 • **parent**: *[TreeNode](treenode.md)*
 
-*Defined in [collision/index.d.ts:65](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L65)*
+*Defined in [collision/index.d.ts:65](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L65)*
 
 ___
 
@@ -72,4 +72,4 @@ ___
 
 • **userData**: *any*
 
-*Defined in [collision/index.d.ts:64](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L64)*
+*Defined in [collision/index.d.ts:64](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L64)*

@@ -12,7 +12,7 @@
 
 ▸ **ChainShape**(`vertices`: [Vec2](vec2.md)[], `loop?`: boolean): *[ChainShape](chainshape.md)*
 
-*Defined in [shape/index.d.ts:85](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L85)*
+*Defined in [shape/index.d.ts:85](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L85)*
 
 **Parameters:**
 
@@ -51,7 +51,7 @@ Name | Type |
 
 \+ **new ChainShape**(`vertices`: [Vec2](vec2.md)[], `loop?`: boolean): *[ChainShape](chainshape.md)*
 
-*Defined in [shape/index.d.ts:87](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L87)*
+*Defined in [shape/index.d.ts:87](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L87)*
 
 **Parameters:**
 
@@ -68,7 +68,7 @@ Name | Type |
 
 • **m_count**: *number*
 
-*Defined in [shape/index.d.ts:93](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L93)*
+*Defined in [shape/index.d.ts:93](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L93)*
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 • **m_hasNextVertex**: *boolean*
 
-*Defined in [shape/index.d.ts:97](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L97)*
+*Defined in [shape/index.d.ts:97](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L97)*
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 • **m_hasPrevVertex**: *boolean*
 
-*Defined in [shape/index.d.ts:96](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L96)*
+*Defined in [shape/index.d.ts:96](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L96)*
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 • **m_nextVertex**: *[Vec2](vec2.md) | null*
 
-*Defined in [shape/index.d.ts:95](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L95)*
+*Defined in [shape/index.d.ts:95](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L95)*
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 • **m_prevVertex**: *[Vec2](vec2.md) | null*
 
-*Defined in [shape/index.d.ts:94](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L94)*
+*Defined in [shape/index.d.ts:94](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L94)*
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 • **m_type**: *"chain"*
 
-*Defined in [shape/index.d.ts:91](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L91)*
+*Defined in [shape/index.d.ts:91](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L91)*
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 • **m_vertices**: *[Vec2](vec2.md)[]*
 
-*Defined in [shape/index.d.ts:92](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L92)*
+*Defined in [shape/index.d.ts:92](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L92)*
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 ▪ **TYPE**: *"chain"*
 
-*Defined in [shape/index.d.ts:87](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L87)*
+*Defined in [shape/index.d.ts:87](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L87)*
 
 ## Methods
 
@@ -132,7 +132,7 @@ ___
 
 ▸ **getChildEdge**(`edge`: [EdgeShape](edgeshape.md), `childIndex`: number): *void*
 
-*Defined in [shape/index.d.ts:104](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L104)*
+*Defined in [shape/index.d.ts:104](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L104)*
 
 **Parameters:**
 
@@ -149,7 +149,7 @@ ___
 
 ▸ **getVertex**(`index`: number): *[Vec2](vec2.md)*
 
-*Defined in [shape/index.d.ts:105](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L105)*
+*Defined in [shape/index.d.ts:105](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L105)*
 
 **Parameters:**
 

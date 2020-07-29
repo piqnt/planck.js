@@ -21,7 +21,7 @@
 
 • **count**: *number*
 
-*Defined in [index.d.ts:697](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L697)*
+*Defined in [index.d.ts:697](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L697)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **indexA**: *number[]*
 
-*Defined in [index.d.ts:695](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L695)*
+*Defined in [index.d.ts:695](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L695)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **indexB**: *number[]*
 
-*Defined in [index.d.ts:696](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L696)*
+*Defined in [index.d.ts:696](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L696)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **metric**: *number*
 
-*Defined in [index.d.ts:694](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L694)*
+*Defined in [index.d.ts:694](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L694)*

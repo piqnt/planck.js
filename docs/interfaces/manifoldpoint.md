@@ -21,7 +21,7 @@
 
 • **id**: *[ContactID](contactid.md)*
 
-*Defined in [index.d.ts:45](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L45)*
+*Defined in [index.d.ts:45](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L45)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **localPoint**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [index.d.ts:42](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L42)*
+*Defined in [index.d.ts:42](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L42)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **normalImpulse**: *number*
 
-*Defined in [index.d.ts:43](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L43)*
+*Defined in [index.d.ts:43](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L43)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **tangentImpulse**: *number*
 
-*Defined in [index.d.ts:44](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L44)*
+*Defined in [index.d.ts:44](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L44)*

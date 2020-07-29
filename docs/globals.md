@@ -114,7 +114,7 @@
 
 Ƭ **BodyType**: *"static" | "kinematic" | "dynamic"*
 
-*Defined in [index.d.ts:148](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L148)*
+*Defined in [index.d.ts:148](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L148)*
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 Ƭ **ContactCallack**: *function*
 
-*Defined in [index.d.ts:311](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L311)*
+*Defined in [index.d.ts:311](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L311)*
 
 #### Type declaration:
 
@@ -146,7 +146,7 @@ ___
 
 Ƭ **EvaluateFunction**: *function*
 
-*Defined in [index.d.ts:321](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L321)*
+*Defined in [index.d.ts:321](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L321)*
 
 #### Type declaration:
 
@@ -170,4 +170,4 @@ ___
 
 Ƭ **ShapeType**: *"circle" | "edge" | "polygon" | "chain"*
 
-*Defined in [shape/index.d.ts:6](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L6)*
+*Defined in [shape/index.d.ts:6](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L6)*

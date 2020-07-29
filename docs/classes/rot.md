@@ -10,7 +10,7 @@
 
 ▸ **Rot**(`angle`: number): *[Rot](rot.md)*
 
-*Defined in [common/index.d.ts:159](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L159)*
+*Defined in [common/index.d.ts:159](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L159)*
 
 **Parameters:**
 
@@ -22,7 +22,7 @@ Name | Type |
 
 ▸ **Rot**(`rot`: [Rot](rot.md)): *[Rot](rot.md)*
 
-*Defined in [common/index.d.ts:160](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L160)*
+*Defined in [common/index.d.ts:160](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L160)*
 
 **Parameters:**
 
@@ -34,7 +34,7 @@ Name | Type |
 
 ▸ **Rot**(): *[Rot](rot.md)*
 
-*Defined in [common/index.d.ts:161](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L161)*
+*Defined in [common/index.d.ts:161](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L161)*
 
 **Returns:** *[Rot](rot.md)*
 
@@ -75,7 +75,7 @@ Name | Type |
 
 \+ **new Rot**(`angle`: number): *[Rot](rot.md)*
 
-*Defined in [common/index.d.ts:171](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L171)*
+*Defined in [common/index.d.ts:171](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L171)*
 
 **Parameters:**
 
@@ -87,7 +87,7 @@ Name | Type |
 
 \+ **new Rot**(`rot`: [Rot](rot.md)): *[Rot](rot.md)*
 
-*Defined in [common/index.d.ts:173](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L173)*
+*Defined in [common/index.d.ts:173](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L173)*
 
 **Parameters:**
 
@@ -99,7 +99,7 @@ Name | Type |
 
 \+ **new Rot**(): *[Rot](rot.md)*
 
-*Defined in [common/index.d.ts:174](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L174)*
+*Defined in [common/index.d.ts:174](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L174)*
 
 **Returns:** *[Rot](rot.md)*
 
@@ -109,7 +109,7 @@ Name | Type |
 
 • **c**: *number*
 
-*Defined in [common/index.d.ts:164](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L164)*
+*Defined in [common/index.d.ts:164](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L164)*
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 • **s**: *number*
 
-*Defined in [common/index.d.ts:163](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L163)*
+*Defined in [common/index.d.ts:163](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L163)*
 
 ## Methods
 
@@ -125,7 +125,7 @@ ___
 
 ▸ **getAngle**(): *number*
 
-*Defined in [common/index.d.ts:169](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L169)*
+*Defined in [common/index.d.ts:169](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L169)*
 
 **Returns:** *number*
 
@@ -135,7 +135,7 @@ ___
 
 ▸ **getXAxis**(): *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:170](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L170)*
+*Defined in [common/index.d.ts:170](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L170)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -145,7 +145,7 @@ ___
 
 ▸ **getYAxis**(): *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:171](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L171)*
+*Defined in [common/index.d.ts:171](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L171)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -155,7 +155,7 @@ ___
 
 ▸ **set**(`angle`: number | [Rot](rot.md)): *void*
 
-*Defined in [common/index.d.ts:167](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L167)*
+*Defined in [common/index.d.ts:167](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L167)*
 
 **Parameters:**
 
@@ -171,7 +171,7 @@ ___
 
 ▸ **setAngle**(`angle`: number): *void*
 
-*Defined in [common/index.d.ts:168](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L168)*
+*Defined in [common/index.d.ts:168](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L168)*
 
 **Parameters:**
 
@@ -187,7 +187,7 @@ ___
 
 ▸ **setIdentity**(): *void*
 
-*Defined in [common/index.d.ts:166](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L166)*
+*Defined in [common/index.d.ts:166](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L166)*
 
 **Returns:** *void*
 
@@ -197,7 +197,7 @@ ___
 
 ▸ **assert**(`o`: any): *void*
 
-*Defined in [common/index.d.ts:181](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L181)*
+*Defined in [common/index.d.ts:181](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L181)*
 
 **Parameters:**
 
@@ -213,7 +213,7 @@ ___
 
 ▸ **clone**(`rot`: [Rot](rot.md)): *[Rot](rot.md)*
 
-*Defined in [common/index.d.ts:178](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L178)*
+*Defined in [common/index.d.ts:178](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L178)*
 
 **Parameters:**
 
@@ -229,7 +229,7 @@ ___
 
 ▸ **identity**(): *[Rot](rot.md)*
 
-*Defined in [common/index.d.ts:179](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L179)*
+*Defined in [common/index.d.ts:179](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L179)*
 
 **Returns:** *[Rot](rot.md)*
 
@@ -239,7 +239,7 @@ ___
 
 ▸ **isValid**(`o`: any): *boolean*
 
-*Defined in [common/index.d.ts:180](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L180)*
+*Defined in [common/index.d.ts:180](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L180)*
 
 **Parameters:**
 
@@ -255,7 +255,7 @@ ___
 
 ▸ **mul**(`rot`: [Rot](rot.md), `m`: [Rot](rot.md)): *[Rot](rot.md)*
 
-*Defined in [common/index.d.ts:182](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L182)*
+*Defined in [common/index.d.ts:182](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L182)*
 
 **Parameters:**
 
@@ -268,7 +268,7 @@ Name | Type |
 
 ▸ **mul**(`rot`: [Rot](rot.md), `m`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:183](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L183)*
+*Defined in [common/index.d.ts:183](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L183)*
 
 **Parameters:**
 
@@ -285,7 +285,7 @@ ___
 
 ▸ **mulRot**(`rot`: [Rot](rot.md), `m`: [Rot](rot.md)): *[Rot](rot.md)*
 
-*Defined in [common/index.d.ts:184](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L184)*
+*Defined in [common/index.d.ts:184](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L184)*
 
 **Parameters:**
 
@@ -302,7 +302,7 @@ ___
 
 ▸ **mulSub**(`rot`: [Rot](rot.md), `v`: [Vec2](vec2.md), `w`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:186](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L186)*
+*Defined in [common/index.d.ts:186](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L186)*
 
 **Parameters:**
 
@@ -320,7 +320,7 @@ ___
 
 ▸ **mulT**(`rot`: [Rot](rot.md), `m`: [Rot](rot.md)): *[Rot](rot.md)*
 
-*Defined in [common/index.d.ts:187](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L187)*
+*Defined in [common/index.d.ts:187](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L187)*
 
 **Parameters:**
 
@@ -333,7 +333,7 @@ Name | Type |
 
 ▸ **mulT**(`rot`: [Rot](rot.md), `m`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:188](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L188)*
+*Defined in [common/index.d.ts:188](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L188)*
 
 **Parameters:**
 
@@ -350,7 +350,7 @@ ___
 
 ▸ **mulTRot**(`rot`: [Rot](rot.md), `m`: [Rot](rot.md)): *[Rot](rot.md)*
 
-*Defined in [common/index.d.ts:189](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L189)*
+*Defined in [common/index.d.ts:189](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L189)*
 
 **Parameters:**
 
@@ -367,7 +367,7 @@ ___
 
 ▸ **mulTVec2**(`rot`: [Rot](rot.md), `m`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:190](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L190)*
+*Defined in [common/index.d.ts:190](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L190)*
 
 **Parameters:**
 
@@ -384,7 +384,7 @@ ___
 
 ▸ **mulVec2**(`rot`: [Rot](rot.md), `m`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:185](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L185)*
+*Defined in [common/index.d.ts:185](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L185)*
 
 **Parameters:**
 

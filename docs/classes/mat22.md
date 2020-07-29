@@ -40,7 +40,7 @@
 
 \+ **new Mat22**(`a`: number, `b`: number, `c`: number, `d`: number): *[Mat22](mat22.md)*
 
-*Defined in [common/index.d.ts:193](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L193)*
+*Defined in [common/index.d.ts:193](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L193)*
 
 **Parameters:**
 
@@ -55,7 +55,7 @@ Name | Type |
 
 \+ **new Mat22**(`a`: object, `b`: object): *[Mat22](mat22.md)*
 
-*Defined in [common/index.d.ts:194](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L194)*
+*Defined in [common/index.d.ts:194](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L194)*
 
 **Parameters:**
 
@@ -77,7 +77,7 @@ Name | Type |
 
 \+ **new Mat22**(): *[Mat22](mat22.md)*
 
-*Defined in [common/index.d.ts:195](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L195)*
+*Defined in [common/index.d.ts:195](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L195)*
 
 **Returns:** *[Mat22](mat22.md)*
 
@@ -87,7 +87,7 @@ Name | Type |
 
 • **ex**: *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:210](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L210)*
+*Defined in [common/index.d.ts:210](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L210)*
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 • **ey**: *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:211](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L211)*
+*Defined in [common/index.d.ts:211](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L211)*
 
 ## Methods
 
@@ -103,7 +103,7 @@ ___
 
 ▸ **getInverse**(): *[Mat22](mat22.md)*
 
-*Defined in [common/index.d.ts:218](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L218)*
+*Defined in [common/index.d.ts:218](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L218)*
 
 **Returns:** *[Mat22](mat22.md)*
 
@@ -113,7 +113,7 @@ ___
 
 ▸ **set**(`a`: [Mat22](mat22.md)): *void*
 
-*Defined in [common/index.d.ts:213](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L213)*
+*Defined in [common/index.d.ts:213](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L213)*
 
 **Parameters:**
 
@@ -125,7 +125,7 @@ Name | Type |
 
 ▸ **set**(`a`: [Vec2](vec2.md), `b`: [Vec2](vec2.md)): *void*
 
-*Defined in [common/index.d.ts:214](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L214)*
+*Defined in [common/index.d.ts:214](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L214)*
 
 **Parameters:**
 
@@ -138,7 +138,7 @@ Name | Type |
 
 ▸ **set**(`a`: number, `b`: number, `c`: number, `d`: number): *void*
 
-*Defined in [common/index.d.ts:215](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L215)*
+*Defined in [common/index.d.ts:215](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L215)*
 
 **Parameters:**
 
@@ -157,7 +157,7 @@ ___
 
 ▸ **setIdentity**(): *void*
 
-*Defined in [common/index.d.ts:216](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L216)*
+*Defined in [common/index.d.ts:216](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L216)*
 
 **Returns:** *void*
 
@@ -167,7 +167,7 @@ ___
 
 ▸ **setZero**(): *void*
 
-*Defined in [common/index.d.ts:217](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L217)*
+*Defined in [common/index.d.ts:217](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L217)*
 
 **Returns:** *void*
 
@@ -177,7 +177,7 @@ ___
 
 ▸ **solve**(`v`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:219](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L219)*
+*Defined in [common/index.d.ts:219](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L219)*
 
 **Parameters:**
 
@@ -193,7 +193,7 @@ ___
 
 ▸ **toString**(): *string*
 
-*Defined in [common/index.d.ts:212](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L212)*
+*Defined in [common/index.d.ts:212](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L212)*
 
 **Returns:** *string*
 
@@ -203,7 +203,7 @@ ___
 
 ▸ **abs**(`mx`: [Mat22](mat22.md)): *[Mat22](mat22.md)*
 
-*Defined in [common/index.d.ts:207](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L207)*
+*Defined in [common/index.d.ts:207](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L207)*
 
 **Parameters:**
 
@@ -219,7 +219,7 @@ ___
 
 ▸ **add**(`mx1`: [Mat22](mat22.md), `mx2`: [Mat22](mat22.md)): *[Mat22](mat22.md)*
 
-*Defined in [common/index.d.ts:208](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L208)*
+*Defined in [common/index.d.ts:208](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L208)*
 
 **Parameters:**
 
@@ -236,7 +236,7 @@ ___
 
 ▸ **assert**(`o`: any): *void*
 
-*Defined in [common/index.d.ts:199](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L199)*
+*Defined in [common/index.d.ts:199](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L199)*
 
 **Parameters:**
 
@@ -252,7 +252,7 @@ ___
 
 ▸ **isValid**(`o`: any): *boolean*
 
-*Defined in [common/index.d.ts:198](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L198)*
+*Defined in [common/index.d.ts:198](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L198)*
 
 **Parameters:**
 
@@ -268,7 +268,7 @@ ___
 
 ▸ **mul**(`mx`: [Mat22](mat22.md), `my`: [Mat22](mat22.md)): *[Mat22](mat22.md)*
 
-*Defined in [common/index.d.ts:201](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L201)*
+*Defined in [common/index.d.ts:201](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L201)*
 
 **Parameters:**
 
@@ -281,7 +281,7 @@ Name | Type |
 
 ▸ **mul**(`mx`: [Mat22](mat22.md), `v`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:202](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L202)*
+*Defined in [common/index.d.ts:202](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L202)*
 
 **Parameters:**
 
@@ -298,7 +298,7 @@ ___
 
 ▸ **mulMat22**(`mx`: [Mat22](mat22.md), `my`: [Mat22](mat22.md)): *[Mat22](mat22.md)*
 
-*Defined in [common/index.d.ts:204](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L204)*
+*Defined in [common/index.d.ts:204](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L204)*
 
 **Parameters:**
 
@@ -315,7 +315,7 @@ ___
 
 ▸ **mulT**(`mx`: [Mat22](mat22.md), `my`: [Mat22](mat22.md)): *[Mat22](mat22.md)*
 
-*Defined in [common/index.d.ts:205](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L205)*
+*Defined in [common/index.d.ts:205](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L205)*
 
 **Parameters:**
 
@@ -328,7 +328,7 @@ Name | Type |
 
 ▸ **mulT**(`mx`: [Mat22](mat22.md), `v`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:206](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L206)*
+*Defined in [common/index.d.ts:206](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L206)*
 
 **Parameters:**
 
@@ -345,7 +345,7 @@ ___
 
 ▸ **mulVec2**(`mx`: [Mat22](mat22.md), `v`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:203](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L203)*
+*Defined in [common/index.d.ts:203](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L203)*
 
 **Parameters:**
 

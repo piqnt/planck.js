@@ -37,7 +37,7 @@
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L56)*
+*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L56)*
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L57)*
+*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L57)*
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L52)*
+*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L52)*
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[enableLimit](prismaticjointopt.md#enablelimit)*
 
-*Defined in [joint/index.d.ts:362](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L362)*
+*Defined in [joint/index.d.ts:362](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L362)*
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[enableMotor](prismaticjointopt.md#enablemotor)*
 
-*Defined in [joint/index.d.ts:365](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L365)*
+*Defined in [joint/index.d.ts:365](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L365)*
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 • **localAnchorA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:371](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L371)*
+*Defined in [joint/index.d.ts:371](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L371)*
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 • **localAnchorB**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:372](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L372)*
+*Defined in [joint/index.d.ts:372](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L372)*
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 • **localAxisA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:373](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L373)*
+*Defined in [joint/index.d.ts:373](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L373)*
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[lowerTranslation](prismaticjointopt.md#lowertranslation)*
 
-*Defined in [joint/index.d.ts:363](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L363)*
+*Defined in [joint/index.d.ts:363](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L363)*
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[maxMotorForce](prismaticjointopt.md#maxmotorforce)*
 
-*Defined in [joint/index.d.ts:366](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L366)*
+*Defined in [joint/index.d.ts:366](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L366)*
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[motorSpeed](prismaticjointopt.md#motorspeed)*
 
-*Defined in [joint/index.d.ts:367](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L367)*
+*Defined in [joint/index.d.ts:367](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L367)*
 
 ___
 
@@ -141,7 +141,7 @@ ___
 
 • **referenceAngle**: *number*
 
-*Defined in [joint/index.d.ts:374](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L374)*
+*Defined in [joint/index.d.ts:374](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L374)*
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[upperTranslation](prismaticjointopt.md#uppertranslation)*
 
-*Defined in [joint/index.d.ts:364](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L364)*
+*Defined in [joint/index.d.ts:364](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L364)*
 
 ___
 
@@ -163,4 +163,4 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L51)*
+*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L51)*

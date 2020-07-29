@@ -21,7 +21,7 @@
 
 • **contact**: *[Contact](contact.md)*
 
-*Defined in [index.d.ts:295](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L295)*
+*Defined in [index.d.ts:295](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L295)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **next**: *[ContactEdge](contactedge.md) | undefined*
 
-*Defined in [index.d.ts:297](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L297)*
+*Defined in [index.d.ts:297](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L297)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **other**: *[Body](body.md) | undefined*
 
-*Defined in [index.d.ts:298](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L298)*
+*Defined in [index.d.ts:298](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L298)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **prev**: *[ContactEdge](contactedge.md) | undefined*
 
-*Defined in [index.d.ts:296](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L296)*
+*Defined in [index.d.ts:296](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L296)*

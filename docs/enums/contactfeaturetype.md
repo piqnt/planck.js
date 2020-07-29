@@ -15,7 +15,7 @@
 
 • **Face**: = 1
 
-*Defined in [index.d.ts:20](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L20)*
+*Defined in [index.d.ts:20](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L20)*
 
 ___
 
@@ -23,4 +23,4 @@ ___
 
 • **Vertex**: = 0
 
-*Defined in [index.d.ts:19](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L19)*
+*Defined in [index.d.ts:19](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L19)*

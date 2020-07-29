@@ -17,7 +17,7 @@
 
 • **AT_LOWER_LIMIT**:
 
-*Defined in [joint/index.d.ts:8](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L8)*
+*Defined in [joint/index.d.ts:8](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L8)*
 
 ___
 
@@ -25,7 +25,7 @@ ___
 
 • **AT_UPPER_LIMIT**:
 
-*Defined in [joint/index.d.ts:9](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L9)*
+*Defined in [joint/index.d.ts:9](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L9)*
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **EQUAL_LIMITS**:
 
-*Defined in [joint/index.d.ts:10](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L10)*
+*Defined in [joint/index.d.ts:10](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L10)*
 
 ___
 
@@ -41,4 +41,4 @@ ___
 
 • **INACTIVE_LIMIT**:
 
-*Defined in [joint/index.d.ts:7](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L7)*
+*Defined in [joint/index.d.ts:7](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L7)*

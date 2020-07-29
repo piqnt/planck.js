@@ -12,7 +12,7 @@
 
 ▸ **CircleShape**(`position`: [Vec2](vec2.md), `radius?`: number): *[CircleShape](circleshape.md)*
 
-*Defined in [shape/index.d.ts:23](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L23)*
+*Defined in [shape/index.d.ts:23](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L23)*
 
 **Parameters:**
 
@@ -25,7 +25,7 @@ Name | Type |
 
 ▸ **CircleShape**(`radius?`: number): *[CircleShape](circleshape.md)*
 
-*Defined in [shape/index.d.ts:24](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L24)*
+*Defined in [shape/index.d.ts:24](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L24)*
 
 **Parameters:**
 
@@ -59,7 +59,7 @@ Name | Type |
 
 \+ **new CircleShape**(`position`: [Vec2](vec2.md), `radius?`: number): *[CircleShape](circleshape.md)*
 
-*Defined in [shape/index.d.ts:26](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L26)*
+*Defined in [shape/index.d.ts:26](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L26)*
 
 **Parameters:**
 
@@ -72,7 +72,7 @@ Name | Type |
 
 \+ **new CircleShape**(`radius?`: number): *[CircleShape](circleshape.md)*
 
-*Defined in [shape/index.d.ts:28](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L28)*
+*Defined in [shape/index.d.ts:28](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L28)*
 
 **Parameters:**
 
@@ -88,7 +88,7 @@ Name | Type |
 
 • **m_p**: *[Vec2](vec2.md)*
 
-*Defined in [shape/index.d.ts:32](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L32)*
+*Defined in [shape/index.d.ts:32](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L32)*
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 • **m_type**: *"circle"*
 
-*Defined in [shape/index.d.ts:31](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L31)*
+*Defined in [shape/index.d.ts:31](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L31)*
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 ▪ **TYPE**: *"circle"*
 
-*Defined in [shape/index.d.ts:26](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L26)*
+*Defined in [shape/index.d.ts:26](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L26)*
 
 ## Methods
 
@@ -112,7 +112,7 @@ ___
 
 ▸ **getCenter**(): *[Vec2](vec2.md)*
 
-*Defined in [shape/index.d.ts:34](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L34)*
+*Defined in [shape/index.d.ts:34](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L34)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -122,7 +122,7 @@ ___
 
 ▸ **getVertex**(`index?`: number): *[Vec2](vec2.md)*
 
-*Defined in [shape/index.d.ts:35](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L35)*
+*Defined in [shape/index.d.ts:35](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L35)*
 
 **Parameters:**
 
@@ -138,7 +138,7 @@ ___
 
 ▸ **getVertexCount**(`index?`: number): *1*
 
-*Defined in [shape/index.d.ts:36](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L36)*
+*Defined in [shape/index.d.ts:36](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L36)*
 
 **Parameters:**
 

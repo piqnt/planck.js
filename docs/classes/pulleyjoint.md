@@ -12,7 +12,7 @@
 
 ▸ **PulleyJoint**(`def`: [PulleyJointDef](../interfaces/pulleyjointdef.md)): *[PulleyJoint](pulleyjoint.md)*
 
-*Defined in [joint/index.d.ts:377](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L377)*
+*Defined in [joint/index.d.ts:377](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L377)*
 
 **Parameters:**
 
@@ -24,7 +24,7 @@ Name | Type |
 
 ▸ **PulleyJoint**(`def`: [PulleyJointOpt](../interfaces/pulleyjointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `groundA`: [Vec2](vec2.md), `groundB`: [Vec2](vec2.md), `anchorA`: [Vec2](vec2.md), `anchorB`: [Vec2](vec2.md), `ratio`: number): *[PulleyJoint](pulleyjoint.md)*
 
-*Defined in [joint/index.d.ts:378](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L378)*
+*Defined in [joint/index.d.ts:378](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L378)*
 
 **Parameters:**
 
@@ -78,7 +78,7 @@ Name | Type |
 
 \+ **new PulleyJoint**(`def`: [PulleyJointDef](../interfaces/pulleyjointdef.md)): *[PulleyJoint](pulleyjoint.md)*
 
-*Defined in [joint/index.d.ts:381](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L381)*
+*Defined in [joint/index.d.ts:381](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L381)*
 
 **Parameters:**
 
@@ -90,7 +90,7 @@ Name | Type |
 
 \+ **new PulleyJoint**(`def`: [PulleyJointOpt](../interfaces/pulleyjointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `groundA`: [Vec2](vec2.md), `groundB`: [Vec2](vec2.md), `anchorA`: [Vec2](vec2.md), `anchorB`: [Vec2](vec2.md), `ratio`: number): *[PulleyJoint](pulleyjoint.md)*
 
-*Defined in [joint/index.d.ts:383](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L383)*
+*Defined in [joint/index.d.ts:383](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L383)*
 
 **Parameters:**
 
@@ -113,7 +113,7 @@ Name | Type |
 
 • **m_constant**: *number*
 
-*Defined in [joint/index.d.ts:394](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L394)*
+*Defined in [joint/index.d.ts:394](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L394)*
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 • **m_groundAnchorA**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:387](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L387)*
+*Defined in [joint/index.d.ts:387](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L387)*
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 • **m_groundAnchorB**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:388](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L388)*
+*Defined in [joint/index.d.ts:388](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L388)*
 
 ___
 
@@ -137,7 +137,7 @@ ___
 
 • **m_impulse**: *number*
 
-*Defined in [joint/index.d.ts:395](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L395)*
+*Defined in [joint/index.d.ts:395](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L395)*
 
 ___
 
@@ -145,7 +145,7 @@ ___
 
 • **m_lengthA**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:391](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L391)*
+*Defined in [joint/index.d.ts:391](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L391)*
 
 ___
 
@@ -153,7 +153,7 @@ ___
 
 • **m_lengthB**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:392](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L392)*
+*Defined in [joint/index.d.ts:392](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L392)*
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 • **m_localAnchorA**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:389](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L389)*
+*Defined in [joint/index.d.ts:389](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L389)*
 
 ___
 
@@ -169,7 +169,7 @@ ___
 
 • **m_localAnchorB**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:390](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L390)*
+*Defined in [joint/index.d.ts:390](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L390)*
 
 ___
 
@@ -177,7 +177,7 @@ ___
 
 • **m_ratio**: *number*
 
-*Defined in [joint/index.d.ts:393](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L393)*
+*Defined in [joint/index.d.ts:393](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L393)*
 
 ___
 
@@ -185,7 +185,7 @@ ___
 
 • **m_type**: *"pulley-joint"*
 
-*Defined in [joint/index.d.ts:386](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L386)*
+*Defined in [joint/index.d.ts:386](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L386)*
 
 ___
 
@@ -193,7 +193,7 @@ ___
 
 ▪ **MIN_PULLEY_LENGTH**: *number*
 
-*Defined in [joint/index.d.ts:381](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L381)*
+*Defined in [joint/index.d.ts:381](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L381)*
 
 ___
 
@@ -201,7 +201,7 @@ ___
 
 ▪ **TYPE**: *"pulley-joint"*
 
-*Defined in [joint/index.d.ts:380](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L380)*
+*Defined in [joint/index.d.ts:380](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L380)*
 
 ## Methods
 
@@ -209,7 +209,7 @@ ___
 
 ▸ **getCurrentLengthA**(): *number*
 
-*Defined in [joint/index.d.ts:414](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L414)*
+*Defined in [joint/index.d.ts:414](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L414)*
 
 **Returns:** *number*
 
@@ -219,7 +219,7 @@ ___
 
 ▸ **getCurrentLengthB**(): *number*
 
-*Defined in [joint/index.d.ts:415](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L415)*
+*Defined in [joint/index.d.ts:415](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L415)*
 
 **Returns:** *number*
 
@@ -229,7 +229,7 @@ ___
 
 ▸ **getGroundAnchorA**(): *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:409](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L409)*
+*Defined in [joint/index.d.ts:409](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L409)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -239,7 +239,7 @@ ___
 
 ▸ **getGroundAnchorB**(): *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:410](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L410)*
+*Defined in [joint/index.d.ts:410](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L410)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -249,7 +249,7 @@ ___
 
 ▸ **getLengthA**(): *number*
 
-*Defined in [joint/index.d.ts:411](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L411)*
+*Defined in [joint/index.d.ts:411](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L411)*
 
 **Returns:** *number*
 
@@ -259,7 +259,7 @@ ___
 
 ▸ **getLengthB**(): *number*
 
-*Defined in [joint/index.d.ts:412](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L412)*
+*Defined in [joint/index.d.ts:412](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L412)*
 
 **Returns:** *number*
 
@@ -269,6 +269,6 @@ ___
 
 ▸ **getRatio**(): *number*
 
-*Defined in [joint/index.d.ts:413](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L413)*
+*Defined in [joint/index.d.ts:413](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L413)*
 
 **Returns:** *number*

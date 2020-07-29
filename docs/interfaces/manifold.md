@@ -26,7 +26,7 @@
 
 • **localNormal**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [index.d.ts:50](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L50)*
+*Defined in [index.d.ts:50](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L50)*
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 • **localPoint**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [index.d.ts:51](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L51)*
+*Defined in [index.d.ts:51](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L51)*
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 • **pointCount**: *number*
 
-*Defined in [index.d.ts:53](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L53)*
+*Defined in [index.d.ts:53](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L53)*
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 • **points**: *[ManifoldPoint](manifoldpoint.md)[]*
 
-*Defined in [index.d.ts:52](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L52)*
+*Defined in [index.d.ts:52](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L52)*
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 • **type**: *[ManifoldType](../enums/manifoldtype.md)*
 
-*Defined in [index.d.ts:49](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L49)*
+*Defined in [index.d.ts:49](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L49)*
 
 ## Methods
 
@@ -66,7 +66,7 @@ ___
 
 ▸ **getWorldManifold**(`wm`: [WorldManifold](worldmanifold.md) | undefined, `xfA`: [Transform](../classes/transform.md), `radiusA`: number, `xfB`: [Transform](../classes/transform.md), `radiusB`: number): *[WorldManifold](worldmanifold.md) | undefined*
 
-*Defined in [index.d.ts:55](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L55)*
+*Defined in [index.d.ts:55](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L55)*
 
 **Parameters:**
 

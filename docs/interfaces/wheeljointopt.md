@@ -30,7 +30,7 @@
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L52)*
+*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L52)*
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 • **dampingRatio**: *number*
 
-*Defined in [joint/index.d.ts:659](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L659)*
+*Defined in [joint/index.d.ts:659](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L659)*
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 • **enableMotor**: *boolean*
 
-*Defined in [joint/index.d.ts:655](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L655)*
+*Defined in [joint/index.d.ts:655](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L655)*
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 • **frequencyHz**: *number*
 
-*Defined in [joint/index.d.ts:658](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L658)*
+*Defined in [joint/index.d.ts:658](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L658)*
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 • **maxMotorTorque**: *number*
 
-*Defined in [joint/index.d.ts:656](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L656)*
+*Defined in [joint/index.d.ts:656](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L656)*
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 • **motorSpeed**: *number*
 
-*Defined in [joint/index.d.ts:657](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L657)*
+*Defined in [joint/index.d.ts:657](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L657)*
 
 ___
 
@@ -80,4 +80,4 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L51)*
+*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L51)*

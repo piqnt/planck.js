@@ -19,7 +19,7 @@
 
 • **v**: *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:20](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L20)*
+*Defined in [common/index.d.ts:20](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L20)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **w**: *number*
 
-*Defined in [common/index.d.ts:21](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/common/index.d.ts#L21)*
+*Defined in [common/index.d.ts:21](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L21)*

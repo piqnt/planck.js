@@ -12,7 +12,7 @@
 
 ▸ **EdgeShape**(`v1`: [Vec2](vec2.md), `v2`: [Vec2](vec2.md)): *[EdgeShape](edgeshape.md)*
 
-*Defined in [shape/index.d.ts:39](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L39)*
+*Defined in [shape/index.d.ts:39](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L39)*
 
 **Parameters:**
 
@@ -51,7 +51,7 @@ Name | Type |
 
 \+ **new EdgeShape**(`v1`: [Vec2](vec2.md), `v2`: [Vec2](vec2.md)): *[EdgeShape](edgeshape.md)*
 
-*Defined in [shape/index.d.ts:41](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L41)*
+*Defined in [shape/index.d.ts:41](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L41)*
 
 **Parameters:**
 
@@ -68,7 +68,7 @@ Name | Type |
 
 • **m_hasVertex0**: *boolean*
 
-*Defined in [shape/index.d.ts:50](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L50)*
+*Defined in [shape/index.d.ts:50](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L50)*
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 • **m_hasVertex3**: *boolean*
 
-*Defined in [shape/index.d.ts:51](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L51)*
+*Defined in [shape/index.d.ts:51](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L51)*
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 • **m_type**: *"edge"*
 
-*Defined in [shape/index.d.ts:45](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L45)*
+*Defined in [shape/index.d.ts:45](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L45)*
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 • **m_vertex0**: *[Vec2](vec2.md)*
 
-*Defined in [shape/index.d.ts:48](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L48)*
+*Defined in [shape/index.d.ts:48](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L48)*
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 • **m_vertex1**: *[Vec2](vec2.md)*
 
-*Defined in [shape/index.d.ts:46](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L46)*
+*Defined in [shape/index.d.ts:46](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L46)*
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 • **m_vertex2**: *[Vec2](vec2.md)*
 
-*Defined in [shape/index.d.ts:47](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L47)*
+*Defined in [shape/index.d.ts:47](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L47)*
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 • **m_vertex3**: *[Vec2](vec2.md)*
 
-*Defined in [shape/index.d.ts:49](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L49)*
+*Defined in [shape/index.d.ts:49](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L49)*
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 ▪ **TYPE**: *"edge"*
 
-*Defined in [shape/index.d.ts:41](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L41)*
+*Defined in [shape/index.d.ts:41](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L41)*
 
 ## Methods
 
@@ -132,7 +132,7 @@ ___
 
 ▸ **setNext**(`v3?`: [Vec2](vec2.md)): *[EdgeShape](edgeshape.md)*
 
-*Defined in [shape/index.d.ts:53](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L53)*
+*Defined in [shape/index.d.ts:53](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L53)*
 
 **Parameters:**
 
@@ -148,7 +148,7 @@ ___
 
 ▸ **setPrev**(`v0?`: [Vec2](vec2.md)): *[EdgeShape](edgeshape.md)*
 
-*Defined in [shape/index.d.ts:54](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/shape/index.d.ts#L54)*
+*Defined in [shape/index.d.ts:54](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L54)*
 
 **Parameters:**
 

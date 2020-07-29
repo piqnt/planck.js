@@ -12,7 +12,7 @@
 
 ▸ **RopeJoint**(`def`: [RopeJointDef](../interfaces/ropejointdef.md)): *[RopeJoint](ropejoint.md)*
 
-*Defined in [joint/index.d.ts:502](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L502)*
+*Defined in [joint/index.d.ts:502](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L502)*
 
 **Parameters:**
 
@@ -24,7 +24,7 @@ Name | Type |
 
 ▸ **RopeJoint**(`def`: [RopeJointOpt](../interfaces/ropejointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `anchor`: [Vec2](vec2.md)): *[RopeJoint](ropejoint.md)*
 
-*Defined in [joint/index.d.ts:503](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L503)*
+*Defined in [joint/index.d.ts:503](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L503)*
 
 **Parameters:**
 
@@ -69,7 +69,7 @@ Name | Type |
 
 \+ **new RopeJoint**(`def`: [RopeJointDef](../interfaces/ropejointdef.md)): *[RopeJoint](ropejoint.md)*
 
-*Defined in [joint/index.d.ts:505](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L505)*
+*Defined in [joint/index.d.ts:505](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L505)*
 
 **Parameters:**
 
@@ -81,7 +81,7 @@ Name | Type |
 
 \+ **new RopeJoint**(`def`: [RopeJointOpt](../interfaces/ropejointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `anchor`: [Vec2](vec2.md)): *[RopeJoint](ropejoint.md)*
 
-*Defined in [joint/index.d.ts:507](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L507)*
+*Defined in [joint/index.d.ts:507](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L507)*
 
 **Parameters:**
 
@@ -100,7 +100,7 @@ Name | Type |
 
 • **m_impulse**: *number*
 
-*Defined in [joint/index.d.ts:515](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L515)*
+*Defined in [joint/index.d.ts:515](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L515)*
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 • **m_length**: *number*
 
-*Defined in [joint/index.d.ts:516](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L516)*
+*Defined in [joint/index.d.ts:516](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L516)*
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 • **m_localAnchorA**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:511](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L511)*
+*Defined in [joint/index.d.ts:511](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L511)*
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 • **m_localAnchorB**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:512](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L512)*
+*Defined in [joint/index.d.ts:512](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L512)*
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 • **m_mass**: *number*
 
-*Defined in [joint/index.d.ts:514](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L514)*
+*Defined in [joint/index.d.ts:514](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L514)*
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 • **m_maxLength**: *number*
 
-*Defined in [joint/index.d.ts:513](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L513)*
+*Defined in [joint/index.d.ts:513](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L513)*
 
 ___
 
@@ -148,7 +148,7 @@ ___
 
 • **m_state**: *[LIMIT_STATE](../enums/limit_state.md)*
 
-*Defined in [joint/index.d.ts:517](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L517)*
+*Defined in [joint/index.d.ts:517](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L517)*
 
 ___
 
@@ -156,7 +156,7 @@ ___
 
 • **m_type**: *"rope-joint"*
 
-*Defined in [joint/index.d.ts:510](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L510)*
+*Defined in [joint/index.d.ts:510](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L510)*
 
 ___
 
@@ -164,7 +164,7 @@ ___
 
 ▪ **TYPE**: *"rope-joint"*
 
-*Defined in [joint/index.d.ts:505](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L505)*
+*Defined in [joint/index.d.ts:505](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L505)*
 
 ## Methods
 
@@ -172,7 +172,7 @@ ___
 
 ▸ **getLimitState**(): *[LIMIT_STATE](../enums/limit_state.md)*
 
-*Defined in [joint/index.d.ts:535](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L535)*
+*Defined in [joint/index.d.ts:535](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L535)*
 
 **Returns:** *[LIMIT_STATE](../enums/limit_state.md)*
 
@@ -182,7 +182,7 @@ ___
 
 ▸ **getLocalAnchorA**(): *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:531](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L531)*
+*Defined in [joint/index.d.ts:531](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L531)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -192,7 +192,7 @@ ___
 
 ▸ **getLocalAnchorB**(): *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:532](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L532)*
+*Defined in [joint/index.d.ts:532](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L532)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -202,7 +202,7 @@ ___
 
 ▸ **getMaxLength**(): *number*
 
-*Defined in [joint/index.d.ts:534](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L534)*
+*Defined in [joint/index.d.ts:534](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L534)*
 
 **Returns:** *number*
 
@@ -212,7 +212,7 @@ ___
 
 ▸ **setMaxLength**(`length`: number): *void*
 
-*Defined in [joint/index.d.ts:533](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L533)*
+*Defined in [joint/index.d.ts:533](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L533)*
 
 **Parameters:**
 

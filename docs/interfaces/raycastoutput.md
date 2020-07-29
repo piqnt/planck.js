@@ -19,7 +19,7 @@
 
 • **fraction**: *number*
 
-*Defined in [collision/index.d.ts:16](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L16)*
+*Defined in [collision/index.d.ts:16](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L16)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **normal**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [collision/index.d.ts:15](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/collision/index.d.ts#L15)*
+*Defined in [collision/index.d.ts:15](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L15)*

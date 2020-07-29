@@ -12,7 +12,7 @@
 
 ▸ **PrismaticJoint**(`def`: [PrismaticJointDef](../interfaces/prismaticjointdef.md)): *[PrismaticJoint](prismaticjoint.md)*
 
-*Defined in [joint/index.d.ts:303](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L303)*
+*Defined in [joint/index.d.ts:303](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L303)*
 
 **Parameters:**
 
@@ -24,7 +24,7 @@ Name | Type |
 
 ▸ **PrismaticJoint**(`def`: [PrismaticJointOpt](../interfaces/prismaticjointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `anchor`: [Vec2](vec2.md), `axis`: [Vec2](vec2.md)): *[PrismaticJoint](prismaticjoint.md)*
 
-*Defined in [joint/index.d.ts:304](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L304)*
+*Defined in [joint/index.d.ts:304](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L304)*
 
 **Parameters:**
 
@@ -92,7 +92,7 @@ Name | Type |
 
 \+ **new PrismaticJoint**(`def`: [PrismaticJointDef](../interfaces/prismaticjointdef.md)): *[PrismaticJoint](prismaticjoint.md)*
 
-*Defined in [joint/index.d.ts:306](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L306)*
+*Defined in [joint/index.d.ts:306](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L306)*
 
 **Parameters:**
 
@@ -104,7 +104,7 @@ Name | Type |
 
 \+ **new PrismaticJoint**(`def`: [PrismaticJointOpt](../interfaces/prismaticjointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `anchor`: [Vec2](vec2.md), `axis`: [Vec2](vec2.md)): *[PrismaticJoint](prismaticjoint.md)*
 
-*Defined in [joint/index.d.ts:308](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L308)*
+*Defined in [joint/index.d.ts:308](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L308)*
 
 **Parameters:**
 
@@ -124,7 +124,7 @@ Name | Type |
 
 • **m_axis**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:327](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L327)*
+*Defined in [joint/index.d.ts:327](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L327)*
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 • **m_enableLimit**: *boolean*
 
-*Defined in [joint/index.d.ts:324](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L324)*
+*Defined in [joint/index.d.ts:324](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L324)*
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 • **m_enableMotor**: *boolean*
 
-*Defined in [joint/index.d.ts:325](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L325)*
+*Defined in [joint/index.d.ts:325](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L325)*
 
 ___
 
@@ -148,7 +148,7 @@ ___
 
 • **m_impulse**: *[Vec3](vec3.md)*
 
-*Defined in [joint/index.d.ts:317](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L317)*
+*Defined in [joint/index.d.ts:317](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L317)*
 
 ___
 
@@ -156,7 +156,7 @@ ___
 
 • **m_limitState**: *[LIMIT_STATE](../enums/limit_state.md)*
 
-*Defined in [joint/index.d.ts:326](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L326)*
+*Defined in [joint/index.d.ts:326](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L326)*
 
 ___
 
@@ -164,7 +164,7 @@ ___
 
 • **m_localAnchorA**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:312](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L312)*
+*Defined in [joint/index.d.ts:312](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L312)*
 
 ___
 
@@ -172,7 +172,7 @@ ___
 
 • **m_localAnchorB**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:313](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L313)*
+*Defined in [joint/index.d.ts:313](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L313)*
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 • **m_localXAxisA**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:314](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L314)*
+*Defined in [joint/index.d.ts:314](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L314)*
 
 ___
 
@@ -188,7 +188,7 @@ ___
 
 • **m_localYAxisA**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:315](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L315)*
+*Defined in [joint/index.d.ts:315](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L315)*
 
 ___
 
@@ -196,7 +196,7 @@ ___
 
 • **m_lowerTranslation**: *number*
 
-*Defined in [joint/index.d.ts:320](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L320)*
+*Defined in [joint/index.d.ts:320](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L320)*
 
 ___
 
@@ -204,7 +204,7 @@ ___
 
 • **m_maxMotorForce**: *number*
 
-*Defined in [joint/index.d.ts:322](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L322)*
+*Defined in [joint/index.d.ts:322](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L322)*
 
 ___
 
@@ -212,7 +212,7 @@ ___
 
 • **m_motorImpulse**: *number*
 
-*Defined in [joint/index.d.ts:319](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L319)*
+*Defined in [joint/index.d.ts:319](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L319)*
 
 ___
 
@@ -220,7 +220,7 @@ ___
 
 • **m_motorMass**: *number*
 
-*Defined in [joint/index.d.ts:318](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L318)*
+*Defined in [joint/index.d.ts:318](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L318)*
 
 ___
 
@@ -228,7 +228,7 @@ ___
 
 • **m_motorSpeed**: *number*
 
-*Defined in [joint/index.d.ts:323](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L323)*
+*Defined in [joint/index.d.ts:323](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L323)*
 
 ___
 
@@ -236,7 +236,7 @@ ___
 
 • **m_perp**: *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:328](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L328)*
+*Defined in [joint/index.d.ts:328](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L328)*
 
 ___
 
@@ -244,7 +244,7 @@ ___
 
 • **m_referenceAngle**: *number*
 
-*Defined in [joint/index.d.ts:316](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L316)*
+*Defined in [joint/index.d.ts:316](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L316)*
 
 ___
 
@@ -252,7 +252,7 @@ ___
 
 • **m_type**: *"prismatic-joint"*
 
-*Defined in [joint/index.d.ts:311](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L311)*
+*Defined in [joint/index.d.ts:311](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L311)*
 
 ___
 
@@ -260,7 +260,7 @@ ___
 
 • **m_upperTranslation**: *number*
 
-*Defined in [joint/index.d.ts:321](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L321)*
+*Defined in [joint/index.d.ts:321](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L321)*
 
 ___
 
@@ -268,7 +268,7 @@ ___
 
 ▪ **TYPE**: *"prismatic-joint"*
 
-*Defined in [joint/index.d.ts:306](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L306)*
+*Defined in [joint/index.d.ts:306](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L306)*
 
 ## Methods
 
@@ -276,7 +276,7 @@ ___
 
 ▸ **enableLimit**(`flag`: boolean): *void*
 
-*Defined in [joint/index.d.ts:349](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L349)*
+*Defined in [joint/index.d.ts:349](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L349)*
 
 **Parameters:**
 
@@ -292,7 +292,7 @@ ___
 
 ▸ **enableMotor**(`flag`: boolean): *void*
 
-*Defined in [joint/index.d.ts:354](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L354)*
+*Defined in [joint/index.d.ts:354](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L354)*
 
 **Parameters:**
 
@@ -308,7 +308,7 @@ ___
 
 ▸ **getJointSpeed**(): *number*
 
-*Defined in [joint/index.d.ts:347](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L347)*
+*Defined in [joint/index.d.ts:347](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L347)*
 
 **Returns:** *number*
 
@@ -318,7 +318,7 @@ ___
 
 ▸ **getJointTranslation**(): *number*
 
-*Defined in [joint/index.d.ts:346](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L346)*
+*Defined in [joint/index.d.ts:346](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L346)*
 
 **Returns:** *number*
 
@@ -328,7 +328,7 @@ ___
 
 ▸ **getLocalAnchorA**(): *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:342](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L342)*
+*Defined in [joint/index.d.ts:342](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L342)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -338,7 +338,7 @@ ___
 
 ▸ **getLocalAnchorB**(): *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:343](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L343)*
+*Defined in [joint/index.d.ts:343](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L343)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -348,7 +348,7 @@ ___
 
 ▸ **getLocalAxisA**(): *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:344](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L344)*
+*Defined in [joint/index.d.ts:344](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L344)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -358,7 +358,7 @@ ___
 
 ▸ **getLowerLimit**(): *number*
 
-*Defined in [joint/index.d.ts:350](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L350)*
+*Defined in [joint/index.d.ts:350](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L350)*
 
 **Returns:** *number*
 
@@ -368,7 +368,7 @@ ___
 
 ▸ **getMotorForce**(`inv_dt`: number): *number*
 
-*Defined in [joint/index.d.ts:358](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L358)*
+*Defined in [joint/index.d.ts:358](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L358)*
 
 **Parameters:**
 
@@ -384,7 +384,7 @@ ___
 
 ▸ **getMotorSpeed**(): *number*
 
-*Defined in [joint/index.d.ts:357](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L357)*
+*Defined in [joint/index.d.ts:357](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L357)*
 
 **Returns:** *number*
 
@@ -394,7 +394,7 @@ ___
 
 ▸ **getReferenceAngle**(): *number*
 
-*Defined in [joint/index.d.ts:345](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L345)*
+*Defined in [joint/index.d.ts:345](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L345)*
 
 **Returns:** *number*
 
@@ -404,7 +404,7 @@ ___
 
 ▸ **getUpperLimit**(): *number*
 
-*Defined in [joint/index.d.ts:351](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L351)*
+*Defined in [joint/index.d.ts:351](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L351)*
 
 **Returns:** *number*
 
@@ -414,7 +414,7 @@ ___
 
 ▸ **isLimitEnabled**(): *boolean*
 
-*Defined in [joint/index.d.ts:348](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L348)*
+*Defined in [joint/index.d.ts:348](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L348)*
 
 **Returns:** *boolean*
 
@@ -424,7 +424,7 @@ ___
 
 ▸ **isMotorEnabled**(): *boolean*
 
-*Defined in [joint/index.d.ts:353](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L353)*
+*Defined in [joint/index.d.ts:353](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L353)*
 
 **Returns:** *boolean*
 
@@ -434,7 +434,7 @@ ___
 
 ▸ **setLimits**(`lower`: number, `upper`: number): *void*
 
-*Defined in [joint/index.d.ts:352](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L352)*
+*Defined in [joint/index.d.ts:352](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L352)*
 
 **Parameters:**
 
@@ -451,7 +451,7 @@ ___
 
 ▸ **setMaxMotorForce**(`force`: number): *void*
 
-*Defined in [joint/index.d.ts:356](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L356)*
+*Defined in [joint/index.d.ts:356](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L356)*
 
 **Parameters:**
 
@@ -467,7 +467,7 @@ ___
 
 ▸ **setMotorSpeed**(`speed`: number): *void*
 
-*Defined in [joint/index.d.ts:355](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L355)*
+*Defined in [joint/index.d.ts:355](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L355)*
 
 **Parameters:**
 

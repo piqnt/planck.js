@@ -3,7 +3,7 @@
 # Planck.js API Doc
 
 A physics simulation in Planck starts by creating a World and adding Bodies and Joints.
-A world is composed of a number of bodies and joints interacting with each other. Every time world’s step() function is called, world solver will detect any contact between bodies and then change bodies position and velocity according to velocity, forces, contacts, and joints constraints.
+A world is composed of a number of bodies and joints interacting with each other. Every time world’s step() function is called, world solver will advance world time and update bodies position and velocity based on velocities, forces, contacts (collisions), and joints constraints. It also detects any contact between objects and updates them if required.
 Let’s create a world:
 
 ```js
@@ -50,64 +50,64 @@ Joints are constraints on bodies position or velocity.
 
 #### Core
 
-* [World](docs/classes/world.md)
-* [Body](docs/classes/body.md)
-* [Fixture](docs/classes/fixture.md)
-* [Settings](docs/classes/settings.md)
+* [World](/docs/classes/world.md)
+* [Body](/docs/classes/body.md)
+* [Fixture](/docs/classes/fixture.md)
+* [Settings](/docs/classes/settings.md)
 
 #### Shapes
 
-* [BoxShape](docs/classes/boxshape.md)
-* [ChainShape](docs/classes/chainshape.md)
-* [CircleShape](docs/classes/circleshape.md)
-* [EdgeShape](docs/classes/edgeshape.md)
-* [PolygonShape](docs/classes/polygonshape.md)
+* [BoxShape](/docs/classes/boxshape.md)
+* [ChainShape](/docs/classes/chainshape.md)
+* [CircleShape](/docs/classes/circleshape.md)
+* [EdgeShape](/docs/classes/edgeshape.md)
+* [PolygonShape](/docs/classes/polygonshape.md)
 
 #### Joints
 
-* [FrictionJoint](docs/classes/frictionjoint.md)
-* [DistanceJoint](docs/classes/distancejoint.md)
-* [GearJoint](docs/classes/gearjoint.md)
-* [MotorJoint](docs/classes/motorjoint.md)
-* [MouseJoint](docs/classes/mousejoint.md)
-* [PrismaticJoint](docs/classes/prismaticjoint.md)
-* [PulleyJoint](docs/classes/pulleyjoint.md)
-* [RevoluteJoint](docs/classes/revolutejoint.md)
-* [RopeJoint](docs/classes/ropejoint.md)
-* [WeldJoint](docs/classes/weldjoint.md)
-* [WheelJoint](docs/classes/wheeljoint.md)
+* [FrictionJoint](/docs/classes/frictionjoint.md)
+* [DistanceJoint](/docs/classes/distancejoint.md)
+* [GearJoint](/docs/classes/gearjoint.md)
+* [MotorJoint](/docs/classes/motorjoint.md)
+* [MouseJoint](/docs/classes/mousejoint.md)
+* [PrismaticJoint](/docs/classes/prismaticjoint.md)
+* [PulleyJoint](/docs/classes/pulleyjoint.md)
+* [RevoluteJoint](/docs/classes/revolutejoint.md)
+* [RopeJoint](/docs/classes/ropejoint.md)
+* [WeldJoint](/docs/classes/weldjoint.md)
+* [WheelJoint](/docs/classes/wheeljoint.md)
 
 #### Math
 
-* [Math](docs/classes/math.md)
-* [Vec2](docs/classes/vec2.md)
-* [Vec3](docs/classes/vec3.md)
-* [Transform](docs/classes/transform.md)
-* [Rot](docs/classes/rot.md)
-* [Mat22](docs/classes/mat22.md)
-* [Mat33](docs/classes/mat33.md)
+* [Math](/docs/classes/math.md)
+* [Vec2](/docs/classes/vec2.md)
+* [Vec3](/docs/classes/vec3.md)
+* [Transform](/docs/classes/transform.md)
+* [Rot](/docs/classes/rot.md)
+* [Mat22](/docs/classes/mat22.md)
+* [Mat33](/docs/classes/mat33.md)
 
 #### Internal
 
-* [Solver](docs/classes/solver.md)
-* [Contact](docs/classes/contact.md)
-* [ContactEdge](docs/classes/contactedge.md)
-* [BroadPhase](docs/classes/broadphase.md)
-* [AABB](docs/classes/aabb.md)
-* [DynamicTree](docs/classes/dynamictree.md)
-* [TreeNode](docs/classes/treenode.md)
-* [ContactImpulse](docs/classes/contactimpulse.md)
-* [DistanceProxy](docs/classes/distanceproxy.md)
-* [ContactFeatureType](docs/enums/contactfeaturetype.md)
-* [ManifoldType](docs/enums/manifoldtype.md)
-* [TOIOutputState](docs/enums/toioutputstate.md)
-* [ContactFeature](docs/interfaces/contactfeature.md)
-* [ContactID](docs/interfaces/contactid.md)
-* [FixtureProxy](docs/interfaces/fixtureproxy.md)
-* [Manifold](docs/interfaces/manifold.md)
-* [ManifoldPoint](docs/interfaces/manifoldpoint.md)
-* [WorldManifold](docs/interfaces/worldmanifold.md)
-* [Position](docs/classes/position.md)
-* [Velocity](docs/classes/velocity.md)
-* [Sweep](docs/classes/sweep.md)
-* [VelocityConstraintPoint](docs/classes/velocityconstraintpoint.md)
+* [Solver](/docs/classes/solver.md)
+* [Contact](/docs/classes/contact.md)
+* [ContactEdge](/docs/classes/contactedge.md)
+* [BroadPhase](/docs/classes/broadphase.md)
+* [AABB](/docs/classes/aabb.md)
+* [DynamicTree](/docs/classes/dynamictree.md)
+* [TreeNode](/docs/classes/treenode.md)
+* [ContactImpulse](/docs/classes/contactimpulse.md)
+* [DistanceProxy](/docs/classes/distanceproxy.md)
+* [ContactFeatureType](/docs/enums/contactfeaturetype.md)
+* [ManifoldType](/docs/enums/manifoldtype.md)
+* [TOIOutputState](/docs/enums/toioutputstate.md)
+* [ContactFeature](/docs/interfaces/contactfeature.md)
+* [ContactID](/docs/interfaces/contactid.md)
+* [FixtureProxy](/docs/interfaces/fixtureproxy.md)
+* [Manifold](/docs/interfaces/manifold.md)
+* [ManifoldPoint](/docs/interfaces/manifoldpoint.md)
+* [WorldManifold](/docs/interfaces/worldmanifold.md)
+* [Position](/docs/classes/position.md)
+* [Velocity](/docs/classes/velocity.md)
+* [Sweep](/docs/classes/sweep.md)
+* [VelocityConstraintPoint](/docs/classes/velocityconstraintpoint.md)

@@ -31,7 +31,7 @@
 
 • **active**? : *boolean*
 
-*Defined in [index.d.ts:290](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L290)*
+*Defined in [index.d.ts:290](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L290)*
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 • **allowSleep**? : *boolean*
 
-*Defined in [index.d.ts:288](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L288)*
+*Defined in [index.d.ts:288](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L288)*
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 • **angle**? : *number*
 
-*Defined in [index.d.ts:280](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L280)*
+*Defined in [index.d.ts:280](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L280)*
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 • **angularDamping**? : *number*
 
-*Defined in [index.d.ts:284](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L284)*
+*Defined in [index.d.ts:284](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L284)*
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 • **angularVelocity**? : *number*
 
-*Defined in [index.d.ts:282](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L282)*
+*Defined in [index.d.ts:282](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L282)*
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 • **awake**? : *boolean*
 
-*Defined in [index.d.ts:289](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L289)*
+*Defined in [index.d.ts:289](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L289)*
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 • **bullet**? : *boolean*
 
-*Defined in [index.d.ts:286](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L286)*
+*Defined in [index.d.ts:286](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L286)*
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 • **fixedRotation**? : *boolean*
 
-*Defined in [index.d.ts:285](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L285)*
+*Defined in [index.d.ts:285](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L285)*
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 • **gravityScale**? : *number*
 
-*Defined in [index.d.ts:287](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L287)*
+*Defined in [index.d.ts:287](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L287)*
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 • **linearDamping**? : *number*
 
-*Defined in [index.d.ts:283](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L283)*
+*Defined in [index.d.ts:283](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L283)*
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 • **linearVelocity**? : *[Vec2](../classes/vec2.md)*
 
-*Defined in [index.d.ts:281](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L281)*
+*Defined in [index.d.ts:281](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L281)*
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 • **position**? : *[Vec2](../classes/vec2.md)*
 
-*Defined in [index.d.ts:279](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L279)*
+*Defined in [index.d.ts:279](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L279)*
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 • **type**? : *[BodyType](../globals.md#bodytype)*
 
-*Defined in [index.d.ts:278](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L278)*
+*Defined in [index.d.ts:278](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L278)*
 
 ___
 
@@ -135,4 +135,4 @@ ___
 
 • **userData**? : *any*
 
-*Defined in [index.d.ts:291](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L291)*
+*Defined in [index.d.ts:291](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L291)*

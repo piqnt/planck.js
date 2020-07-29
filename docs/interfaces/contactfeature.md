@@ -21,7 +21,7 @@
 
 • **indexA**: *number*
 
-*Defined in [index.d.ts:24](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L24)*
+*Defined in [index.d.ts:24](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L24)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **indexB**: *number*
 
-*Defined in [index.d.ts:25](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L25)*
+*Defined in [index.d.ts:25](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L25)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **typeA**: *[ContactFeatureType](../enums/contactfeaturetype.md)*
 
-*Defined in [index.d.ts:26](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L26)*
+*Defined in [index.d.ts:26](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L26)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **typeB**: *[ContactFeatureType](../enums/contactfeaturetype.md)*
 
-*Defined in [index.d.ts:27](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L27)*
+*Defined in [index.d.ts:27](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L27)*
