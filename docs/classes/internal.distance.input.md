@@ -1,4 +1,4 @@
-[API Doc](../README.md) › [internal](../modules/internal.md) › [Distance](../modules/internal.distance.md) › [Input](internal.distance.input.md)
+[Planck.js API Doc](../README.md) › [Globals](../globals.md) › [internal](../modules/internal.md) › [Distance](../modules/internal.distance.md) › [Input](internal.distance.input.md)
 
 # Class: Input
 
@@ -20,33 +20,33 @@
 
 ###  proxyA
 
-• **proxyA**: *[DistanceProxy](../interfaces/distanceproxy.md)*
+• **proxyA**: *[DistanceProxy](distanceproxy.md)*
 
-*Defined in [index.d.ts:666](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L666)*
+*Defined in [index.d.ts:681](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L681)*
 
 ___
 
 ###  proxyB
 
-• **proxyB**: *[DistanceProxy](../interfaces/distanceproxy.md)*
+• **proxyB**: *[DistanceProxy](distanceproxy.md)*
 
-*Defined in [index.d.ts:667](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L667)*
+*Defined in [index.d.ts:682](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L682)*
 
 ___
 
 ###  transformA
 
-• **transformA**: *[Transform](../interfaces/transform.md) | null*
+• **transformA**: *[Transform](transform.md) | null*
 
-*Defined in [index.d.ts:668](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L668)*
+*Defined in [index.d.ts:683](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L683)*
 
 ___
 
 ###  transformB
 
-• **transformB**: *[Transform](../interfaces/transform.md) | null*
+• **transformB**: *[Transform](transform.md) | null*
 
-*Defined in [index.d.ts:669](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L669)*
+*Defined in [index.d.ts:684](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L684)*
 
 ___
 
@@ -54,4 +54,4 @@ ___
 
 • **useRadii**: *boolean*
 
-*Defined in [index.d.ts:670](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L670)*
+*Defined in [index.d.ts:685](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L685)*

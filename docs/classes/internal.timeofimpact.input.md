@@ -1,4 +1,4 @@
-[API Doc](../README.md) › [internal](../modules/internal.md) › [TimeOfImpact](../modules/internal.timeofimpact.md) › [Input](internal.timeofimpact.input.md)
+[Planck.js API Doc](../README.md) › [Globals](../globals.md) › [internal](../modules/internal.md) › [TimeOfImpact](../modules/internal.timeofimpact.md) › [Input](internal.timeofimpact.input.md)
 
 # Class: Input
 
@@ -20,33 +20,33 @@
 
 ###  proxyA
 
-• **proxyA**: *[DistanceProxy](../interfaces/distanceproxy.md)*
+• **proxyA**: *[DistanceProxy](distanceproxy.md)*
 
-*Defined in [index.d.ts:692](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L692)*
+*Defined in [index.d.ts:704](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L704)*
 
 ___
 
 ###  proxyB
 
-• **proxyB**: *[DistanceProxy](../interfaces/distanceproxy.md)*
+• **proxyB**: *[DistanceProxy](distanceproxy.md)*
 
-*Defined in [index.d.ts:693](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L693)*
+*Defined in [index.d.ts:705](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L705)*
 
 ___
 
 ###  sweepA
 
-• **sweepA**: *[Sweep](../interfaces/sweep.md)*
+• **sweepA**: *[Sweep](sweep.md)*
 
-*Defined in [index.d.ts:694](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L694)*
+*Defined in [index.d.ts:706](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L706)*
 
 ___
 
 ###  sweepB
 
-• **sweepB**: *[Sweep](../interfaces/sweep.md)*
+• **sweepB**: *[Sweep](sweep.md)*
 
-*Defined in [index.d.ts:695](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L695)*
+*Defined in [index.d.ts:707](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L707)*
 
 ___
 
@@ -54,4 +54,4 @@ ___
 
 • **tMax**: *number | undefined*
 
-*Defined in [index.d.ts:696](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L696)*
+*Defined in [index.d.ts:708](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L708)*

@@ -1,4 +1,4 @@
-[API Doc](../README.md) › [FixtureProxy](fixtureproxy.md)
+[Planck.js API Doc](../README.md) › [Globals](../globals.md) › [FixtureProxy](fixtureproxy.md)
 
 # Interface: FixtureProxy
 
@@ -19,9 +19,9 @@
 
 ###  aabb
 
-• **aabb**: *[AABB](aabb.md)*
+• **aabb**: *[AABB](../classes/aabb.md)*
 
-*Defined in [index.d.ts:75](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L75)*
+*Defined in [index.d.ts:79](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L79)*
 
 ___
 
@@ -29,15 +29,15 @@ ___
 
 • **childIndex**: *number*
 
-*Defined in [index.d.ts:77](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L77)*
+*Defined in [index.d.ts:81](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L81)*
 
 ___
 
 ###  fixture
 
-• **fixture**: *[Fixture](fixture.md)*
+• **fixture**: *[Fixture](../classes/fixture.md)*
 
-*Defined in [index.d.ts:76](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L76)*
+*Defined in [index.d.ts:80](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L80)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **proxyId**: *number*
 
-*Defined in [index.d.ts:78](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L78)*
+*Defined in [index.d.ts:82](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L82)*
