@@ -92,7 +92,7 @@ Planck.js is [available on jsDelivr](https://www.jsdelivr.com/package/npm/planck
 ## API and Architecture
 
 Planck.js includes Box2D algorithms without modification and its architecture is very similar to Box2D.
-However some internal [changes](./CHANGES.md) and refactoring are made during rewrite to address differences between C++ and JavaScript.
+However some internal changes and refactoring are made during rewrite to address differences between C++ and JavaScript.
 
 Planck.js public API (see [API Doc](./docs)) closely follows Box2D API (see [Resources](##resources-and-references)), with the following differences:
 
