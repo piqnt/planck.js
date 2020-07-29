@@ -5,7 +5,7 @@ import { MassData } from "../";
 // Types
 export type ShapeType = "circle" | "edge" | "polygon" | "chain";
 
-export interface Shape {
+export class Shape {
   m_type: ShapeType;
   m_radius: number;
 
@@ -19,18 +19,30 @@ export interface Shape {
   computeMass(massData: MassData, density?: number): void;
   computeDistanceProxy(proxy: DistanceProxy): void;
 }
-export interface CircleShape extends Shape {
-  m_type: 'circle';
 
+export function CircleShape(position: Vec2, radius?: number): CircleShape;
+export function CircleShape(radius?: number): CircleShape;
+export class CircleShape extends Shape {
+  static TYPE: 'circle';
+
+  constructor(position: Vec2, radius?: number);
+  constructor(radius?: number);
+
+  m_type: 'circle';
   m_p: Vec2;
 
   getCenter(): Vec2;
   getVertex(index?: number): Vec2;
   getVertexCount(index?: number): 1;
 }
-export interface EdgeShape extends Shape {
-  m_type: 'edge';
 
+export function EdgeShape(v1: Vec2, v2: Vec2): EdgeShape;
+export class EdgeShape extends Shape {
+  static TYPE: 'edge';
+
+  constructor(v1: Vec2, v2: Vec2);
+
+  m_type: 'edge';
   m_vertex1: Vec2;
   m_vertex2: Vec2;
   m_vertex0: Vec2;
@@ -43,9 +55,14 @@ export interface EdgeShape extends Shape {
   // @private @internal
   // _set(v1: Vec2, v2: Vec2): EdgeShape;
 }
-export interface PolygonShape extends Shape {
-  m_type: 'polygon';
 
+export function PolygonShape(vertices: Vec2[]): PolygonShape;
+export class PolygonShape extends Shape {
+  static TYPE: 'polygon';
+
+  constructor(vertices: Vec2[]);
+
+  m_type: 'polygon';
   m_centroid: Vec2;
   m_vertices: Vec2[];
   m_normals: Vec2[];
@@ -59,9 +76,19 @@ export interface PolygonShape extends Shape {
   // _setAsBox(hx: number, hy: number, center: Vec2, angle?: number): void;
   // _setAsBox(hx: number, hy: number): void;
 }
-export interface ChainShape extends Shape {
-  m_type: 'chain';
 
+export function BoxShape(hx: number, hy: number, center?: Vec2, angle?: number): BoxShape;
+export class BoxShape extends PolygonShape {
+  constructor(hx: number, hy: number, center?: Vec2, angle?: number);
+}
+
+export function ChainShape(vertices: Vec2[], loop?: boolean): ChainShape;
+export class ChainShape extends Shape {
+  static TYPE: 'chain';
+
+  constructor(vertices: Vec2[], loop?: boolean);
+
+  m_type: 'chain';
   m_vertices: Vec2[];
   m_count: number;
   m_prevVertex: Vec2 | null;
@@ -77,38 +104,3 @@ export interface ChainShape extends Shape {
   getChildEdge(edge: EdgeShape, childIndex: number): void;
   getVertex(index: number): Vec2;
 }
-
-// API
-export let Circle: {
-  new(position: Vec2, radius?: number): CircleShape;
-     (position: Vec2, radius?: number): CircleShape;
-
-  new(radius?: number): CircleShape;
-     (radius?: number): CircleShape;
-
-  TYPE: 'circle';
-};
-export let Edge: {
-  new(v1: Vec2, v2: Vec2): EdgeShape;
-     (v1: Vec2, v2: Vec2): EdgeShape;
-
-  TYPE: 'edge';
-};
-export let Polygon: {
-  new(vertices: Vec2[]): PolygonShape;
-     (vertices: Vec2[]): PolygonShape;
-
-  TYPE: 'polygon';
-};
-export let Chain: {
-  new(vertices: Vec2[], loop?: boolean): ChainShape;
-  (vertices: Vec2[], loop?: boolean): ChainShape;
-
-  TYPE: 'chain';
-};
-export let Box: {
-  new(hx: number, hy: number, center?: Vec2, angle?: number): PolygonShape;
-     (hx: number, hy: number, center?: Vec2, angle?: number): PolygonShape;
-
-  TYPE: 'polygon';
-};

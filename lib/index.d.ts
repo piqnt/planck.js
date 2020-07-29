@@ -44,7 +44,7 @@ export interface ManifoldPoint {
   tangentImpulse: number;
   id: ContactID;
 }
-  
+
 export interface Manifold {
   type: ManifoldType;
   localNormal: Vec2;
@@ -61,9 +61,13 @@ export interface WorldManifold {
   separations: number[];
 }
 
-export type Solver = any; // TODO
+export class Solver {
+  // TODO
+}
 
-export type ContactImpulse = any; // TODO
+export class ContactImpulse {
+  // TODO
+}
 
 export interface MassData {
   mass: number;
@@ -78,7 +82,11 @@ export interface FixtureProxy {
   proxyId: number;
 }
 
-export interface Fixture {
+export class Fixture {
+  constructor(body: Body, def: FixtureDef);
+  constructor(body: Body, shape: Shape, def?: FixtureOpt);
+  constructor(body: Body, shape: Shape, density?: number);
+
   m_body: Body;
   m_friction: number;
   m_restitution: number;
@@ -122,30 +130,31 @@ export interface Fixture {
   shouldCollide(that: Fixture): boolean;
 }
 
-export type FixtureOpt = Partial<{
-  userData: any,
-  friction: number,
-  restitution: number,
-  density: number,
-  isSensor: boolean,
-  filterGroupIndex: number,
-  filterCategoryBits: number,
-  filterMaskBits: number,
-}>;
+export interface FixtureOpt {
+  userData: any;
+  friction: number;
+  restitution: number;
+  density: number;
+  isSensor: boolean;
+  filterGroupIndex: number;
+  filterCategoryBits: number;
+  filterMaskBits: number;
+}
 
-export type FixtureDef = FixtureOpt & {
-  shape: Shape
-};
-
-export let Fixture: {
-  new(body: Body, def: FixtureDef): Fixture;
-  new(body: Body, shape: Shape, def?: FixtureOpt): Fixture;
-  new(body: Body, shape: Shape, density?: number): Fixture;
-};
+export interface FixtureDef extends FixtureOpt {
+  shape: Shape;
+}
 
 export type BodyType = 'static' | 'kinematic' | 'dynamic';
 
-export interface Body {
+export function Body(world: World, def?: BodyDef): Body;
+export class Body {
+  constructor(world: World, def?: BodyDef);
+
+  static STATIC: 'static';
+  static KINEMATIC: 'kinematic';
+  static DYNAMIC: 'dynamic';
+
   m_world: World;
   m_awakeFlag: boolean;
   m_autoSleepFlag: boolean;
@@ -265,39 +274,31 @@ export interface Body {
   getLocalVector(worldVector: Vec2): Vec2;
 }
 
-export type BodyDef = Partial<{
-  type: BodyType,
-  position: Vec2,
-  angle: number,
-  linearVelocity: Vec2,
-  angularVelocity: number,
-  linearDamping: number,
-  angularDamping: number,
-  fixedRotation: boolean,
-  bullet: boolean,
-  gravityScale: number,
-  allowSleep: boolean,
-  awake: boolean,
-  active: boolean,
-  userData: any,
-}>;
+export interface BodyDef {
+  type?: BodyType;
+  position?: Vec2;
+  angle?: number;
+  linearVelocity?: Vec2;
+  angularVelocity?: number;
+  linearDamping?: number;
+  angularDamping?: number;
+  fixedRotation?: boolean;
+  bullet?: boolean;
+  gravityScale?: number;
+  allowSleep?: boolean;
+  awake?: boolean;
+  active?: boolean;
+  userData?: any;
+}
 
-export let Body: {
-  new(world: World, def?: BodyDef): Body;
-
-  STATIC: 'static';
-  KINEMATIC: 'kinematic';
-  DYNAMIC: 'dynamic';
-};
-
-export interface ContactEdge {
+export class ContactEdge {
   contact: Contact;
   prev: ContactEdge | undefined;
   next: ContactEdge | undefined;
   other: Body | undefined;
 }
 
-export interface VelocityConstraintPoint {
+export class VelocityConstraintPoint {
   rA: Vec2;
   rB: Vec2;
   normalImpulse: number;
@@ -307,14 +308,46 @@ export interface VelocityConstraintPoint {
   velocityBias: number;
 }
 
-export interface Contact {
+type ContactCallack = (
+  manifold: Manifold,
+  xfA: Transform,
+  fixtureA: Fixture,
+  indexA: number,
+  xfB: Transform,
+  fixtureB: Fixture,
+  indexB: number
+) => void & { destroyFcn?: (contact: Contact) => void };
+
+type EvaluateFunction = (
+  manifold: Manifold,
+  xfA: Transform,
+  fixtureA: Fixture,
+  indexA: number,
+  xfB: Transform,
+  fixtureB: Fixture,
+  indexB: number
+) => void;
+
+export class Contact {
+  constructor(
+    fA: Fixture,
+    indexA: number,
+    fB: Fixture,
+    indexB: number,
+    evaluateFcn: EvaluateFunction
+  );
+
+  static addType(type1: ShapeType, type2: ShapeType, callback: ContactCallack): void;
+  static create(fixtureA: Fixture, indexA: number, fixtureB: Fixture, indexB: number): Contact | null;
+  static destroy(contact: Contact, listener: { endContact: (contact: Contact) => void }): void;
+
   m_nodeA: ContactEdge;
   m_nodeB: ContactEdge;
   m_fixtureA: Fixture;
   m_fixtureB: Fixture;
   m_indexA: number;
   m_indexB: number;
-  m_evaluateFcn: (manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) => void;
+  m_evaluateFcn: EvaluateFunction;
   m_manifold: Manifold;
   m_prev: Contact | null;
   m_next: Contact | null;
@@ -386,29 +419,21 @@ export interface Contact {
   solveVelocityConstraint(step: {blockSolve: boolean}): void;
 }
 
-export let Contact: {
-  new(fA: Fixture, indexA: number, fB: Fixture, indexB: number,
-    evaluateFcn: (manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) => void): Contact;
+export interface WorldDef {
+  gravity?: Vec2;
+  allowSleep?: boolean;
+  warmStarting?: boolean;
+  continuousPhysics?: boolean;
+  subStepping?: boolean;
+  blockSolve?: boolean;
+  velocityIterations?: number;
+  positionIterations?: number;
+}
 
-  addType(type1: ShapeType, type2: ShapeType,
-      callback: (manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) => void &
-        { destroyFcn?: (contact: Contact) => void }): void;
-  create(fixtureA: Fixture, indexA: number, fixtureB: Fixture, indexB: number): Contact | null;
-  destroy(contact: Contact, listener: { endContact: (contact: Contact) => void }): void;
-};
+export function World(def?: WorldDef): World;
+export class World {
+  constructor(def?: WorldDef);
 
-export type WorldDef = Partial<{
-  gravity: Vec2,
-  allowSleep: boolean,
-  warmStarting: boolean,
-  continuousPhysics: boolean,
-  subStepping: boolean,
-  blockSolve: boolean,
-  velocityIterations: number,
-  positionIterations: number,
-}>;
-
-export interface World {
   m_solver: Solver;
   m_broadPhase: BroadPhase;
   m_contactList: Contact | null;
@@ -430,6 +455,7 @@ export interface World {
   m_velocityIterations: number;
   m_positionIterations: number;
   m_t: number;
+
   addPair: (proxyA: FixtureProxy, proxyB: FixtureProxy) => void;
 
   getBodyList(): Body | null;
@@ -505,21 +531,10 @@ export interface World {
   postSolve(contact: Contact, impulse: ContactImpulse): void;
 }
 
-export let World: {
-  new(def: WorldDef): World;
-  (def: WorldDef): World;
-
-  new(gravity: Vec2): World;
-  (gravity: Vec2): World;
-
-  new(): World;
-  (): World;
-};
-
 /**
  * Tuning constants based on meters-kilograms-seconds (MKS) units.
  */
-interface Settings {
+export class Settings {
   // Collision
   /**
    * The maximum number of contact points between two convex shapes. Do not change
@@ -675,9 +690,6 @@ export namespace internal {
       distance: number;
       iterations: number;
     }
-    let Proxy: {
-      new(): DistanceProxy;
-    }
     class Cache {
       metric: number;
       indexA: number[];
@@ -698,7 +710,7 @@ export namespace internal {
     class Output {
       state: TOIOutputState | undefined;
       t: number | undefined;
-      
+
       static e_unknown: TOIOutputState;
       static e_failed: TOIOutputState;
       static e_overlapped: TOIOutputState;
