@@ -1,4 +1,4 @@
-[API Doc](../README.md) › [Manifold](manifold.md)
+[Planck.js API Doc](../README.md) › [Globals](../globals.md) › [Manifold](manifold.md)
 
 # Interface: Manifold
 
@@ -24,17 +24,17 @@
 
 ###  localNormal
 
-• **localNormal**: *[Vec2](vec2.md)*
+• **localNormal**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [index.d.ts:50](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L50)*
+*Defined in [index.d.ts:50](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L50)*
 
 ___
 
 ###  localPoint
 
-• **localPoint**: *[Vec2](vec2.md)*
+• **localPoint**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [index.d.ts:51](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L51)*
+*Defined in [index.d.ts:51](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L51)*
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 • **pointCount**: *number*
 
-*Defined in [index.d.ts:53](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L53)*
+*Defined in [index.d.ts:53](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L53)*
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 • **points**: *[ManifoldPoint](manifoldpoint.md)[]*
 
-*Defined in [index.d.ts:52](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L52)*
+*Defined in [index.d.ts:52](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L52)*
 
 ___
 
@@ -58,24 +58,24 @@ ___
 
 • **type**: *[ManifoldType](../enums/manifoldtype.md)*
 
-*Defined in [index.d.ts:49](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L49)*
+*Defined in [index.d.ts:49](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L49)*
 
 ## Methods
 
 ###  getWorldManifold
 
-▸ **getWorldManifold**(`wm`: [WorldManifold](worldmanifold.md) | undefined, `xfA`: [Transform](transform.md), `radiusA`: number, `xfB`: [Transform](transform.md), `radiusB`: number): *[WorldManifold](worldmanifold.md) | undefined*
+▸ **getWorldManifold**(`wm`: [WorldManifold](worldmanifold.md) | undefined, `xfA`: [Transform](../classes/transform.md), `radiusA`: number, `xfB`: [Transform](../classes/transform.md), `radiusB`: number): *[WorldManifold](worldmanifold.md) | undefined*
 
-*Defined in [index.d.ts:55](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L55)*
+*Defined in [index.d.ts:55](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L55)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `wm` | [WorldManifold](worldmanifold.md) &#124; undefined |
-`xfA` | [Transform](transform.md) |
+`xfA` | [Transform](../classes/transform.md) |
 `radiusA` | number |
-`xfB` | [Transform](transform.md) |
+`xfB` | [Transform](../classes/transform.md) |
 `radiusB` | number |
 
 **Returns:** *[WorldManifold](worldmanifold.md) | undefined*

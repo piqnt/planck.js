@@ -1,4 +1,4 @@
-[API Doc](../README.md) › [internal](../modules/internal.md) › [Distance](../modules/internal.distance.md) › [Cache](internal.distance.cache.md)
+[Planck.js API Doc](../README.md) › [Globals](../globals.md) › [internal](../modules/internal.md) › [Distance](../modules/internal.distance.md) › [Cache](internal.distance.cache.md)
 
 # Class: Cache
 
@@ -21,7 +21,7 @@
 
 • **count**: *number*
 
-*Defined in [index.d.ts:685](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L685)*
+*Defined in [index.d.ts:697](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L697)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **indexA**: *number[]*
 
-*Defined in [index.d.ts:683](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L683)*
+*Defined in [index.d.ts:695](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L695)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **indexB**: *number[]*
 
-*Defined in [index.d.ts:684](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L684)*
+*Defined in [index.d.ts:696](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L696)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **metric**: *number*
 
-*Defined in [index.d.ts:682](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L682)*
+*Defined in [index.d.ts:694](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L694)*

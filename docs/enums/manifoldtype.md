@@ -1,4 +1,4 @@
-[API Doc](../README.md) › [ManifoldType](manifoldtype.md)
+[Planck.js API Doc](../README.md) › [Globals](../globals.md) › [ManifoldType](manifoldtype.md)
 
 # Enumeration: ManifoldType
 
@@ -16,7 +16,7 @@
 
 • **Circles**: = 0
 
-*Defined in [index.d.ts:36](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L36)*
+*Defined in [index.d.ts:36](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L36)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **FaceA**: = 1
 
-*Defined in [index.d.ts:37](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L37)*
+*Defined in [index.d.ts:37](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L37)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **FaceB**: = 2
 
-*Defined in [index.d.ts:38](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L38)*
+*Defined in [index.d.ts:38](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L38)*

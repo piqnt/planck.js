@@ -1,4 +1,4 @@
-[API Doc](../README.md) › [internal](../modules/internal.md) › [Distance](../modules/internal.distance.md) › [Output](internal.distance.output.md)
+[Planck.js API Doc](../README.md) › [Globals](../globals.md) › [internal](../modules/internal.md) › [Distance](../modules/internal.distance.md) › [Output](internal.distance.output.md)
 
 # Class: Output
 
@@ -21,7 +21,7 @@
 
 • **distance**: *number*
 
-*Defined in [index.d.ts:675](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L675)*
+*Defined in [index.d.ts:690](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L690)*
 
 ___
 
@@ -29,20 +29,20 @@ ___
 
 • **iterations**: *number*
 
-*Defined in [index.d.ts:676](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L676)*
+*Defined in [index.d.ts:691](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L691)*
 
 ___
 
 ###  pointA
 
-• **pointA**: *[Vec2](../interfaces/vec2.md)*
+• **pointA**: *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:673](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L673)*
+*Defined in [index.d.ts:688](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L688)*
 
 ___
 
 ###  pointB
 
-• **pointB**: *[Vec2](../interfaces/vec2.md)*
+• **pointB**: *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:674](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L674)*
+*Defined in [index.d.ts:689](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L689)*

@@ -1,4 +1,4 @@
-[API Doc](../README.md) › [WorldManifold](worldmanifold.md)
+[Planck.js API Doc](../README.md) › [Globals](../globals.md) › [WorldManifold](worldmanifold.md)
 
 # Interface: WorldManifold
 
@@ -18,17 +18,17 @@
 
 ###  normal
 
-• **normal**: *[Vec2](vec2.md)*
+• **normal**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [index.d.ts:59](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L59)*
+*Defined in [index.d.ts:59](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L59)*
 
 ___
 
 ###  points
 
-• **points**: *[Vec2](vec2.md)[]*
+• **points**: *[Vec2](../classes/vec2.md)[]*
 
-*Defined in [index.d.ts:60](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L60)*
+*Defined in [index.d.ts:60](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L60)*
 
 ___
 
@@ -36,4 +36,4 @@ ___
 
 • **separations**: *number[]*
 
-*Defined in [index.d.ts:61](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L61)*
+*Defined in [index.d.ts:61](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L61)*

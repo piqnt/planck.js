@@ -1,4 +1,4 @@
-[API Doc](../README.md) › [JointEdge](jointedge.md)
+[Planck.js API Doc](../README.md) › [Globals](../globals.md) › [JointEdge](jointedge.md)
 
 # Interface: JointEdge
 
@@ -19,9 +19,9 @@
 
 ###  joint
 
-• **joint**: *[Joint](joint.md)*
+• **joint**: *[Joint](../classes/joint.md)*
 
-*Defined in [joint/index.d.ts:15](https://github.com/shakiba/planck.js/blob/49dcd19/lib/joint/index.d.ts#L15)*
+*Defined in [joint/index.d.ts:15](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L15)*
 
 ___
 
@@ -29,15 +29,15 @@ ___
 
 • **next**: *[JointEdge](jointedge.md) | null*
 
-*Defined in [joint/index.d.ts:17](https://github.com/shakiba/planck.js/blob/49dcd19/lib/joint/index.d.ts#L17)*
+*Defined in [joint/index.d.ts:17](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L17)*
 
 ___
 
 ###  other
 
-• **other**: *[Body](body.md)*
+• **other**: *[Body](../classes/body.md)*
 
-*Defined in [joint/index.d.ts:14](https://github.com/shakiba/planck.js/blob/49dcd19/lib/joint/index.d.ts#L14)*
+*Defined in [joint/index.d.ts:14](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L14)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **prev**: *[JointEdge](jointedge.md) | null*
 
-*Defined in [joint/index.d.ts:16](https://github.com/shakiba/planck.js/blob/49dcd19/lib/joint/index.d.ts#L16)*
+*Defined in [joint/index.d.ts:16](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/joint/index.d.ts#L16)*

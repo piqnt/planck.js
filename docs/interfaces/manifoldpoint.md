@@ -1,4 +1,4 @@
-[API Doc](../README.md) › [ManifoldPoint](manifoldpoint.md)
+[Planck.js API Doc](../README.md) › [Globals](../globals.md) › [ManifoldPoint](manifoldpoint.md)
 
 # Interface: ManifoldPoint
 
@@ -21,15 +21,15 @@
 
 • **id**: *[ContactID](contactid.md)*
 
-*Defined in [index.d.ts:45](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L45)*
+*Defined in [index.d.ts:45](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L45)*
 
 ___
 
 ###  localPoint
 
-• **localPoint**: *[Vec2](vec2.md)*
+• **localPoint**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [index.d.ts:42](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L42)*
+*Defined in [index.d.ts:42](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L42)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **normalImpulse**: *number*
 
-*Defined in [index.d.ts:43](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L43)*
+*Defined in [index.d.ts:43](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L43)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **tangentImpulse**: *number*
 
-*Defined in [index.d.ts:44](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L44)*
+*Defined in [index.d.ts:44](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L44)*

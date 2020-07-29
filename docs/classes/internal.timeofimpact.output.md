@@ -1,4 +1,4 @@
-[API Doc](../README.md) › [internal](../modules/internal.md) › [TimeOfImpact](../modules/internal.timeofimpact.md) › [Output](internal.timeofimpact.output.md)
+[Planck.js API Doc](../README.md) › [Globals](../globals.md) › [internal](../modules/internal.md) › [TimeOfImpact](../modules/internal.timeofimpact.md) › [Output](internal.timeofimpact.output.md)
 
 # Class: Output
 
@@ -24,7 +24,7 @@
 
 • **state**: *[TOIOutputState](../enums/toioutputstate.md) | undefined*
 
-*Defined in [index.d.ts:699](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L699)*
+*Defined in [index.d.ts:711](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L711)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **t**: *number | undefined*
 
-*Defined in [index.d.ts:700](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L700)*
+*Defined in [index.d.ts:712](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L712)*
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 ▪ **e_failed**: *[TOIOutputState](../enums/toioutputstate.md)*
 
-*Defined in [index.d.ts:703](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L703)*
+*Defined in [index.d.ts:715](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L715)*
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 ▪ **e_overlapped**: *[TOIOutputState](../enums/toioutputstate.md)*
 
-*Defined in [index.d.ts:704](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L704)*
+*Defined in [index.d.ts:716](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L716)*
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 ▪ **e_separated**: *[TOIOutputState](../enums/toioutputstate.md)*
 
-*Defined in [index.d.ts:706](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L706)*
+*Defined in [index.d.ts:718](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L718)*
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 ▪ **e_touching**: *[TOIOutputState](../enums/toioutputstate.md)*
 
-*Defined in [index.d.ts:705](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L705)*
+*Defined in [index.d.ts:717](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L717)*
 
 ___
 
@@ -72,4 +72,4 @@ ___
 
 ▪ **e_unknown**: *[TOIOutputState](../enums/toioutputstate.md)*
 
-*Defined in [index.d.ts:702](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L702)*
+*Defined in [index.d.ts:714](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L714)*

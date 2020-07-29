@@ -1,4 +1,4 @@
-[API Doc](../README.md) › [MassData](massdata.md)
+[Planck.js API Doc](../README.md) › [Globals](../globals.md) › [MassData](massdata.md)
 
 # Interface: MassData
 
@@ -20,15 +20,15 @@
 
 • **I**: *number*
 
-*Defined in [index.d.ts:71](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L71)*
+*Defined in [index.d.ts:75](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L75)*
 
 ___
 
 ###  center
 
-• **center**: *[Vec2](vec2.md)*
+• **center**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [index.d.ts:70](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L70)*
+*Defined in [index.d.ts:74](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L74)*
 
 ___
 
@@ -36,4 +36,4 @@ ___
 
 • **mass**: *number*
 
-*Defined in [index.d.ts:69](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L69)*
+*Defined in [index.d.ts:73](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L73)*

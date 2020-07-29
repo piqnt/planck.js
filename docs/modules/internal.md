@@ -1,4 +1,4 @@
-[API Doc](../README.md) › [internal](internal.md)
+[Planck.js API Doc](../README.md) › [Globals](../globals.md) › [internal](internal.md)
 
 # Namespace: internal
 
@@ -22,11 +22,11 @@
 
 • **DynamicTree**: *object*
 
-*Defined in [index.d.ts:709](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L709)*
+*Defined in [index.d.ts:721](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L721)*
 
 #### Type declaration:
 
-* **new __type**(): *[DynamicTree](../interfaces/dynamictree.md)*
+* **new __type**(): *[DynamicTree](../classes/dynamictree.md)*
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 • **Manifold**: *object*
 
-*Defined in [index.d.ts:659](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L659)*
+*Defined in [index.d.ts:674](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L674)*
 
 #### Type declaration:
 
@@ -44,9 +44,9 @@ ___
 
 ### `Let` Settings
 
-• **Settings**: *[Settings](../interfaces/settings.md)*
+• **Settings**: *[Settings](../classes/settings.md)*
 
-*Defined in [index.d.ts:655](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L655)*
+*Defined in [index.d.ts:670](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L670)*
 
 ___
 
@@ -54,8 +54,8 @@ ___
 
 • **Sweep**: *object*
 
-*Defined in [index.d.ts:656](https://github.com/shakiba/planck.js/blob/49dcd19/lib/index.d.ts#L656)*
+*Defined in [index.d.ts:671](https://github.com/shakiba/planck.js/blob/b7f66f1/lib/index.d.ts#L671)*
 
 #### Type declaration:
 
-* **new __type**(): *[Sweep](../interfaces/sweep.md)*
+* **new __type**(): *[Sweep](../classes/sweep.md)*
