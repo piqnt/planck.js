@@ -2,16 +2,15 @@
   "type": "array",
   "additionalProperties": false,
   "items": [
-    { "$ref": "#Document" }
+    {
+      "anyOf": [
+        { "$ref": "#World" },
+        { "$ref": "#Body" },
+        { "$ref": "#Shape" },
+        { "$ref": "#Joint" }
+      ]
+    }
   ],
-  "additionalItems": {
-    "anyOf": [
-      { "$ref": "#World" },
-      { "$ref": "#Body" },
-      { "$ref": "#Shape" },
-      { "$ref": "#Joint" }
-    ]
-  },
   "definitions": {
     "ref": {
       "$id": "#Ref",
@@ -21,14 +20,6 @@
       "properties": {
         "refIndex": { "type": "number" },
         "refType": { "type": "string", "enum": ["World", "Body", "Joint"] }
-      }
-    },
-    "Document": {
-      "$id": "#Document",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "world": { "$ref": "#Ref" }
       }
     },
     "World": {
