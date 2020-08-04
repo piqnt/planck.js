@@ -10,7 +10,7 @@
 
 ▸ **AABB**(`lower?`: [Vec2](vec2.md), `upper?`: [Vec2](vec2.md)): *[AABB](aabb.md)*
 
-*Defined in [collision/index.d.ts:34](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L34)*
+*Defined in [collision/index.d.ts:34](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L34)*
 
 **Parameters:**
 
@@ -53,7 +53,7 @@ Name | Type |
 
 • **lowerBound**: *[Vec2](vec2.md)*
 
-*Defined in [collision/index.d.ts:45](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L45)*
+*Defined in [collision/index.d.ts:45](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L45)*
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 • **upperBound**: *[Vec2](vec2.md)*
 
-*Defined in [collision/index.d.ts:46](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L46)*
+*Defined in [collision/index.d.ts:46](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L46)*
 
 ## Methods
 
@@ -69,7 +69,7 @@ ___
 
 ▸ **areEqual**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *boolean*
 
-*Defined in [collision/index.d.ts:42](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L42)*
+*Defined in [collision/index.d.ts:42](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L42)*
 
 **Parameters:**
 
@@ -86,7 +86,7 @@ ___
 
 ▸ **assert**(`o`: any): *void*
 
-*Defined in [collision/index.d.ts:39](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L39)*
+*Defined in [collision/index.d.ts:39](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L39)*
 
 **Parameters:**
 
@@ -102,7 +102,7 @@ ___
 
 ▸ **combine**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *void*
 
-*Defined in [collision/index.d.ts:52](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L52)*
+*Defined in [collision/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L52)*
 
 **Parameters:**
 
@@ -119,7 +119,7 @@ ___
 
 ▸ **combinePoints**(`a`: [Vec2](vec2.md), `b`: [Vec2](vec2.md)): *void*
 
-*Defined in [collision/index.d.ts:53](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L53)*
+*Defined in [collision/index.d.ts:53](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L53)*
 
 **Parameters:**
 
@@ -136,7 +136,7 @@ ___
 
 ▸ **constroctor**(`lower?`: [Vec2](vec2.md), `upper?`: [Vec2](vec2.md)): *any*
 
-*Defined in [collision/index.d.ts:36](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L36)*
+*Defined in [collision/index.d.ts:36](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L36)*
 
 **Parameters:**
 
@@ -153,7 +153,7 @@ ___
 
 ▸ **contains**(`aabb`: [AABB](aabb.md)): *boolean*
 
-*Defined in [collision/index.d.ts:55](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L55)*
+*Defined in [collision/index.d.ts:55](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L55)*
 
 **Parameters:**
 
@@ -169,7 +169,7 @@ ___
 
 ▸ **diff**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *number*
 
-*Defined in [collision/index.d.ts:43](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L43)*
+*Defined in [collision/index.d.ts:43](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L43)*
 
 **Parameters:**
 
@@ -186,7 +186,7 @@ ___
 
 ▸ **extend**(`aabb`: [AABB](aabb.md), `value`: number): *void*
 
-*Defined in [collision/index.d.ts:40](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L40)*
+*Defined in [collision/index.d.ts:40](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L40)*
 
 **Parameters:**
 
@@ -199,7 +199,7 @@ Name | Type |
 
 ▸ **extend**(`value`: number): *[AABB](aabb.md)*
 
-*Defined in [collision/index.d.ts:56](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L56)*
+*Defined in [collision/index.d.ts:56](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L56)*
 
 **Parameters:**
 
@@ -215,7 +215,7 @@ ___
 
 ▸ **getCenter**(): *[Vec2](vec2.md)*
 
-*Defined in [collision/index.d.ts:49](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L49)*
+*Defined in [collision/index.d.ts:49](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L49)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -225,7 +225,7 @@ ___
 
 ▸ **getExtents**(): *[Vec2](vec2.md)*
 
-*Defined in [collision/index.d.ts:50](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L50)*
+*Defined in [collision/index.d.ts:50](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L50)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -235,7 +235,7 @@ ___
 
 ▸ **getPerimeter**(): *number*
 
-*Defined in [collision/index.d.ts:51](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L51)*
+*Defined in [collision/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L51)*
 
 **Returns:** *number*
 
@@ -245,7 +245,7 @@ ___
 
 ▸ **isValid**(`o`: any): *boolean*
 
-*Defined in [collision/index.d.ts:38](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L38)*
+*Defined in [collision/index.d.ts:38](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L38)*
 
 **Parameters:**
 
@@ -257,7 +257,7 @@ Name | Type |
 
 ▸ **isValid**(): *boolean*
 
-*Defined in [collision/index.d.ts:48](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L48)*
+*Defined in [collision/index.d.ts:48](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L48)*
 
 **Returns:** *boolean*
 
@@ -267,7 +267,7 @@ ___
 
 ▸ **rayCast**(`output`: [RayCastOutput](../interfaces/raycastoutput.md), `input`: [RayCastInput](../interfaces/raycastinput.md)): *boolean*
 
-*Defined in [collision/index.d.ts:57](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L57)*
+*Defined in [collision/index.d.ts:57](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L57)*
 
 **Parameters:**
 
@@ -284,7 +284,7 @@ ___
 
 ▸ **set**(`aabb`: [AABB](aabb.md)): *void*
 
-*Defined in [collision/index.d.ts:54](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L54)*
+*Defined in [collision/index.d.ts:54](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L54)*
 
 **Parameters:**
 
@@ -300,7 +300,7 @@ ___
 
 ▸ **testOverlap**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *boolean*
 
-*Defined in [collision/index.d.ts:41](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L41)*
+*Defined in [collision/index.d.ts:41](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L41)*
 
 **Parameters:**
 
@@ -317,6 +317,6 @@ ___
 
 ▸ **toString**(): *string*
 
-*Defined in [collision/index.d.ts:58](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L58)*
+*Defined in [collision/index.d.ts:58](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L58)*
 
 **Returns:** *string*

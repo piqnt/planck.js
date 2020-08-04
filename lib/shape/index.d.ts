@@ -6,8 +6,8 @@ import { MassData } from "../";
 export type ShapeType = "circle" | "edge" | "polygon" | "chain";
 
 export class Shape {
-  m_type: ShapeType;
-  m_radius: number;
+  /** @internal */ m_type: ShapeType;
+  /** @internal */ m_radius: number;
 
   isValid(shape: any): boolean;
   getRadius(): number;
@@ -28,8 +28,8 @@ export class CircleShape extends Shape {
   constructor(position: Vec2, radius?: number);
   constructor(radius?: number);
 
-  m_type: 'circle';
-  m_p: Vec2;
+  /** @internal */ m_type: 'circle';
+  /** @internal */ m_p: Vec2;
 
   getCenter(): Vec2;
   getVertex(index?: number): Vec2;
@@ -42,18 +42,17 @@ export class EdgeShape extends Shape {
 
   constructor(v1: Vec2, v2: Vec2);
 
-  m_type: 'edge';
-  m_vertex1: Vec2;
-  m_vertex2: Vec2;
-  m_vertex0: Vec2;
-  m_vertex3: Vec2;
-  m_hasVertex0: boolean;
-  m_hasVertex3: boolean;
+  /** @internal */ m_type: 'edge';
+  /** @internal */ m_vertex1: Vec2;
+  /** @internal */ m_vertex2: Vec2;
+  /** @internal */ m_vertex0: Vec2;
+  /** @internal */ m_vertex3: Vec2;
+  /** @internal */ m_hasVertex0: boolean;
+  /** @internal */ m_hasVertex3: boolean;
 
   setNext(v3?: Vec2): EdgeShape;
   setPrev(v0?: Vec2): EdgeShape;
-  // @private @internal
-  // _set(v1: Vec2, v2: Vec2): EdgeShape;
+  /** @internal */ _set(v1: Vec2, v2: Vec2): EdgeShape;
 }
 
 export function PolygonShape(vertices: Vec2[]): PolygonShape;
@@ -62,19 +61,18 @@ export class PolygonShape extends Shape {
 
   constructor(vertices: Vec2[]);
 
-  m_type: 'polygon';
-  m_centroid: Vec2;
-  m_vertices: Vec2[];
-  m_normals: Vec2[];
-  m_count: number;
+  /** @internal */ m_type: 'polygon';
+  /** @internal */ m_centroid: Vec2;
+  /** @internal */ m_vertices: Vec2[];
+  /** @internal */ m_normals: Vec2[];
+  /** @internal */ m_count: number;
 
   getVertex(index: number): Vec2;
   validate(): void;
 
-  // @private @internal
-  // _set(vertices: Vec2[]): void;
-  // _setAsBox(hx: number, hy: number, center: Vec2, angle?: number): void;
-  // _setAsBox(hx: number, hy: number): void;
+  /** @internal */ _set(vertices: Vec2[]): void;
+  /** @internal */ _setAsBox(hx: number, hy: number, center: Vec2, angle?: number): void;
+  /** @internal */ _setAsBox(hx: number, hy: number): void;
 }
 
 export function BoxShape(hx: number, hy: number, center?: Vec2, angle?: number): BoxShape;
@@ -88,19 +86,19 @@ export class ChainShape extends Shape {
 
   constructor(vertices: Vec2[], loop?: boolean);
 
-  m_type: 'chain';
-  m_vertices: Vec2[];
-  m_count: number;
-  m_prevVertex: Vec2 | null;
-  m_nextVertex: Vec2 | null;
-  m_hasPrevVertex: boolean;
-  m_hasNextVertex: boolean;
+  /** @internal */ m_type: 'chain';
+  /** @internal */ m_vertices: Vec2[];
+  /** @internal */ m_count: number;
+  /** @internal */ m_prevVertex: Vec2 | null;
+  /** @internal */ m_nextVertex: Vec2 | null;
+  /** @internal */ m_hasPrevVertex: boolean;
+  /** @internal */ m_hasNextVertex: boolean;
 
-  // @private @internal
-  // _createLoop(vertices: Vec2[]): ChainShape;
-  // _createChain(vertices: Vec2[]): ChainShape;
-  // _setPrevVertex(prevVertex: Vec2): void;
-  // _setNextVertex(nextVertex: Vec2): void;
   getChildEdge(edge: EdgeShape, childIndex: number): void;
   getVertex(index: number): Vec2;
+
+  /** @internal */ _createLoop(vertices: Vec2[]): ChainShape;
+  /** @internal */ _createChain(vertices: Vec2[]): ChainShape;
+  /** @internal */ _setPrevVertex(prevVertex: Vec2): void;
+  /** @internal */ _setNextVertex(nextVertex: Vec2): void;
 }

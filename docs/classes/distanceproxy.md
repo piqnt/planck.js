@@ -33,7 +33,7 @@
 
 \+ **new DistanceProxy**(): *[DistanceProxy](distanceproxy.md)*
 
-*Defined in [collision/index.d.ts:19](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L19)*
+*Defined in [collision/index.d.ts:19](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L19)*
 
 **Returns:** *[DistanceProxy](distanceproxy.md)*
 
@@ -43,7 +43,9 @@
 
 • **m_buffer**: *[Vec2](vec2.md)[]*
 
-*Defined in [collision/index.d.ts:22](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L22)*
+*Defined in [collision/index.d.ts:22](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L22)*
+
+internal
 
 ___
 
@@ -51,7 +53,9 @@ ___
 
 • **m_count**: *number*
 
-*Defined in [collision/index.d.ts:24](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L24)*
+*Defined in [collision/index.d.ts:24](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L24)*
+
+internal
 
 ___
 
@@ -59,7 +63,9 @@ ___
 
 • **m_radius**: *number*
 
-*Defined in [collision/index.d.ts:25](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L25)*
+*Defined in [collision/index.d.ts:25](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L25)*
+
+internal
 
 ___
 
@@ -67,7 +73,9 @@ ___
 
 • **m_vertices**: *[Vec2](vec2.md)[]*
 
-*Defined in [collision/index.d.ts:23](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L23)*
+*Defined in [collision/index.d.ts:23](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L23)*
+
+internal
 
 ## Methods
 
@@ -75,7 +83,7 @@ ___
 
 ▸ **getSupport**(`d`: [Vec2](vec2.md)): *number*
 
-*Defined in [collision/index.d.ts:29](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L29)*
+*Defined in [collision/index.d.ts:29](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L29)*
 
 **Parameters:**
 
@@ -91,7 +99,7 @@ ___
 
 ▸ **getSupportVertex**(`d`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [collision/index.d.ts:30](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L30)*
+*Defined in [collision/index.d.ts:30](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L30)*
 
 **Parameters:**
 
@@ -107,7 +115,7 @@ ___
 
 ▸ **getVertex**(`index`: number): *[Vec2](vec2.md)*
 
-*Defined in [collision/index.d.ts:28](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L28)*
+*Defined in [collision/index.d.ts:28](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L28)*
 
 **Parameters:**
 
@@ -123,7 +131,7 @@ ___
 
 ▸ **getVertexCount**(): *number*
 
-*Defined in [collision/index.d.ts:27](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L27)*
+*Defined in [collision/index.d.ts:27](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L27)*
 
 **Returns:** *number*
 
@@ -133,7 +141,7 @@ ___
 
 ▸ **set**(`shape`: [Shape](shape.md), `index`: number): *void*
 
-*Defined in [collision/index.d.ts:31](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L31)*
+*Defined in [collision/index.d.ts:31](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L31)*
 
 **Parameters:**
 

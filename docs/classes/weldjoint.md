@@ -12,7 +12,7 @@
 
 ▸ **WeldJoint**(`def`: [WeldJointDef](../interfaces/weldjointdef.md)): *[WeldJoint](weldjoint.md)*
 
-*Defined in [joint/index.d.ts:547](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L547)*
+*Defined in [joint/index.d.ts:547](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L547)*
 
 **Parameters:**
 
@@ -24,7 +24,7 @@ Name | Type |
 
 ▸ **WeldJoint**(`def`: [WeldJointOpt](../interfaces/weldjointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `anchor`: [Vec2](vec2.md)): *[WeldJoint](weldjoint.md)*
 
-*Defined in [joint/index.d.ts:548](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L548)*
+*Defined in [joint/index.d.ts:548](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L548)*
 
 **Parameters:**
 
@@ -45,15 +45,6 @@ Name | Type |
 
 ### Properties
 
-* [m_bias](weldjoint.md#m_bias)
-* [m_dampingRatio](weldjoint.md#m_dampingratio)
-* [m_frequencyHz](weldjoint.md#m_frequencyhz)
-* [m_gamma](weldjoint.md#m_gamma)
-* [m_impulse](weldjoint.md#m_impulse)
-* [m_localAnchorA](weldjoint.md#m_localanchora)
-* [m_localAnchorB](weldjoint.md#m_localanchorb)
-* [m_referenceAngle](weldjoint.md#m_referenceangle)
-* [m_type](weldjoint.md#m_type)
 * [TYPE](weldjoint.md#static-type)
 
 ### Methods
@@ -72,7 +63,7 @@ Name | Type |
 
 \+ **new WeldJoint**(`def`: [WeldJointDef](../interfaces/weldjointdef.md)): *[WeldJoint](weldjoint.md)*
 
-*Defined in [joint/index.d.ts:550](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L550)*
+*Defined in [joint/index.d.ts:550](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L550)*
 
 **Parameters:**
 
@@ -84,7 +75,7 @@ Name | Type |
 
 \+ **new WeldJoint**(`def`: [WeldJointOpt](../interfaces/weldjointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `anchor`: [Vec2](vec2.md)): *[WeldJoint](weldjoint.md)*
 
-*Defined in [joint/index.d.ts:552](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L552)*
+*Defined in [joint/index.d.ts:552](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L552)*
 
 **Parameters:**
 
@@ -99,83 +90,11 @@ Name | Type |
 
 ## Properties
 
-###  m_bias
-
-• **m_bias**: *number*
-
-*Defined in [joint/index.d.ts:562](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L562)*
-
-___
-
-###  m_dampingRatio
-
-• **m_dampingRatio**: *number*
-
-*Defined in [joint/index.d.ts:560](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L560)*
-
-___
-
-###  m_frequencyHz
-
-• **m_frequencyHz**: *number*
-
-*Defined in [joint/index.d.ts:559](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L559)*
-
-___
-
-###  m_gamma
-
-• **m_gamma**: *number*
-
-*Defined in [joint/index.d.ts:563](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L563)*
-
-___
-
-###  m_impulse
-
-• **m_impulse**: *[Vec3](vec3.md)*
-
-*Defined in [joint/index.d.ts:561](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L561)*
-
-___
-
-###  m_localAnchorA
-
-• **m_localAnchorA**: *[Vec2](vec2.md)*
-
-*Defined in [joint/index.d.ts:556](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L556)*
-
-___
-
-###  m_localAnchorB
-
-• **m_localAnchorB**: *[Vec2](vec2.md)*
-
-*Defined in [joint/index.d.ts:557](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L557)*
-
-___
-
-###  m_referenceAngle
-
-• **m_referenceAngle**: *number*
-
-*Defined in [joint/index.d.ts:558](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L558)*
-
-___
-
-###  m_type
-
-• **m_type**: *"weld-joint"*
-
-*Defined in [joint/index.d.ts:555](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L555)*
-
-___
-
 ### `Static` TYPE
 
 ▪ **TYPE**: *"weld-joint"*
 
-*Defined in [joint/index.d.ts:550](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L550)*
+*Defined in [joint/index.d.ts:550](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L550)*
 
 ## Methods
 
@@ -183,7 +102,7 @@ ___
 
 ▸ **getDampingRatio**(): *number*
 
-*Defined in [joint/index.d.ts:581](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L581)*
+*Defined in [joint/index.d.ts:581](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L581)*
 
 **Returns:** *number*
 
@@ -193,7 +112,7 @@ ___
 
 ▸ **getFrequency**(): *number*
 
-*Defined in [joint/index.d.ts:579](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L579)*
+*Defined in [joint/index.d.ts:579](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L579)*
 
 **Returns:** *number*
 
@@ -203,7 +122,7 @@ ___
 
 ▸ **getLocalAnchorA**(): *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:575](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L575)*
+*Defined in [joint/index.d.ts:575](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L575)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -213,7 +132,7 @@ ___
 
 ▸ **getLocalAnchorB**(): *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:576](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L576)*
+*Defined in [joint/index.d.ts:576](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L576)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -223,7 +142,7 @@ ___
 
 ▸ **getReferenceAngle**(): *number*
 
-*Defined in [joint/index.d.ts:577](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L577)*
+*Defined in [joint/index.d.ts:577](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L577)*
 
 **Returns:** *number*
 
@@ -233,7 +152,7 @@ ___
 
 ▸ **setDampingRatio**(`ratio`: number): *void*
 
-*Defined in [joint/index.d.ts:580](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L580)*
+*Defined in [joint/index.d.ts:580](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L580)*
 
 **Parameters:**
 
@@ -249,7 +168,7 @@ ___
 
 ▸ **setFrequency**(`hz`: number): *void*
 
-*Defined in [joint/index.d.ts:578](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L578)*
+*Defined in [joint/index.d.ts:578](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L578)*
 
 **Parameters:**
 

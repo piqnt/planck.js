@@ -36,7 +36,7 @@
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L56)*
+*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L56)*
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L57)*
+*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L57)*
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L52)*
+*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 *Inherited from [RevoluteJointOpt](revolutejointopt.md).[enableLimit](revolutejointopt.md#enablelimit)*
 
-*Defined in [joint/index.d.ts:492](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L492)*
+*Defined in [joint/index.d.ts:492](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L492)*
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 *Inherited from [RevoluteJointOpt](revolutejointopt.md).[enableMotor](revolutejointopt.md#enablemotor)*
 
-*Defined in [joint/index.d.ts:493](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L493)*
+*Defined in [joint/index.d.ts:493](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L493)*
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 • **localAnchorA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:497](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L497)*
+*Defined in [joint/index.d.ts:497](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L497)*
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 • **localAnchorB**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:498](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L498)*
+*Defined in [joint/index.d.ts:498](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L498)*
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 *Inherited from [RevoluteJointOpt](revolutejointopt.md).[lowerAngle](revolutejointopt.md#lowerangle)*
 
-*Defined in [joint/index.d.ts:488](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L488)*
+*Defined in [joint/index.d.ts:488](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L488)*
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 *Inherited from [RevoluteJointOpt](revolutejointopt.md).[maxMotorTorque](revolutejointopt.md#maxmotortorque)*
 
-*Defined in [joint/index.d.ts:490](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L490)*
+*Defined in [joint/index.d.ts:490](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L490)*
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 *Inherited from [RevoluteJointOpt](revolutejointopt.md).[motorSpeed](revolutejointopt.md#motorspeed)*
 
-*Defined in [joint/index.d.ts:491](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L491)*
+*Defined in [joint/index.d.ts:491](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L491)*
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 • **referenceAngle**: *number*
 
-*Defined in [joint/index.d.ts:499](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L499)*
+*Defined in [joint/index.d.ts:499](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L499)*
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 *Inherited from [RevoluteJointOpt](revolutejointopt.md).[upperAngle](revolutejointopt.md#upperangle)*
 
-*Defined in [joint/index.d.ts:489](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L489)*
+*Defined in [joint/index.d.ts:489](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L489)*
 
 ___
 
@@ -154,4 +154,4 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L51)*
+*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*

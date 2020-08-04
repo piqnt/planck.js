@@ -28,7 +28,7 @@
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L52)*
+*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 • **dampingRatio**: *number*
 
-*Defined in [joint/index.d.ts:586](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L586)*
+*Defined in [joint/index.d.ts:586](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L586)*
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 • **frequencyHz**: *number*
 
-*Defined in [joint/index.d.ts:585](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L585)*
+*Defined in [joint/index.d.ts:585](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L585)*
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 • **referenceAngle**: *number*
 
-*Defined in [joint/index.d.ts:587](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L587)*
+*Defined in [joint/index.d.ts:587](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L587)*
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L51)*
+*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*

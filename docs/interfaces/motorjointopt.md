@@ -29,7 +29,7 @@
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L52)*
+*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **correctionFactor**: *number*
 
-*Defined in [joint/index.d.ts:251](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L251)*
+*Defined in [joint/index.d.ts:251](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L251)*
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 • **linearOffset**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:252](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L252)*
+*Defined in [joint/index.d.ts:252](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L252)*
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 • **maxForce**: *number*
 
-*Defined in [joint/index.d.ts:249](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L249)*
+*Defined in [joint/index.d.ts:249](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L249)*
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 • **maxTorque**: *number*
 
-*Defined in [joint/index.d.ts:250](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L250)*
+*Defined in [joint/index.d.ts:250](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L250)*
 
 ___
 
@@ -71,4 +71,4 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L51)*
+*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*

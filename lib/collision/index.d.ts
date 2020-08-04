@@ -19,10 +19,10 @@ export interface RayCastOutput {
 export class DistanceProxy {
   constructor();
 
-  m_buffer: Vec2[];
-  m_vertices: Vec2[];
-  m_count: number;
-  m_radius: number;
+  /** internal */ m_buffer: Vec2[];
+  /** internal */ m_vertices: Vec2[];
+  /** internal */ m_count: number;
+  /** internal */ m_radius: number;
 
   getVertexCount(): number;
   getVertex(index: number): Vec2;

@@ -45,7 +45,7 @@
 
 • **bodyA**: *[Body](../classes/body.md)*
 
-*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L56)*
+*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L56)*
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 • **bodyB**: *[Body](../classes/body.md)*
 
-*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L57)*
+*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L57)*
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L52)*
+*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L51)*
+*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*

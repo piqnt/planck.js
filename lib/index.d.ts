@@ -87,19 +87,19 @@ export class Fixture {
   constructor(body: Body, shape: Shape, def?: FixtureOpt);
   constructor(body: Body, shape: Shape, density?: number);
 
-  m_body: Body;
-  m_friction: number;
-  m_restitution: number;
-  m_density: number;
-  m_isSensor: boolean;
-  m_filterGroupIndex: number;
-  m_filterCategoryBits: number;
-  m_filterMaskBits: number;
-  m_shape: Shape;
-  m_next: Fixture | null;
-  m_proxies: FixtureProxy[];
-  m_proxyCount: number;
-  m_userData: unknown;
+  /** @internal */ m_body: Body;
+  /** @internal */ m_friction: number;
+  /** @internal */ m_restitution: number;
+  /** @internal */ m_density: number;
+  /** @internal */ m_isSensor: boolean;
+  /** @internal */ m_filterGroupIndex: number;
+  /** @internal */ m_filterCategoryBits: number;
+  /** @internal */ m_filterMaskBits: number;
+  /** @internal */ m_shape: Shape;
+  /** @internal */ m_next: Fixture | null;
+  /** @internal */ m_proxies: FixtureProxy[];
+  /** @internal */ m_proxyCount: number;
+  /** @internal */ m_userData: unknown;
 
   getType(): ShapeType;
   getShape(): Shape;
@@ -155,41 +155,41 @@ export class Body {
   static KINEMATIC: 'kinematic';
   static DYNAMIC: 'dynamic';
 
-  m_world: World;
-  m_awakeFlag: boolean;
-  m_autoSleepFlag: boolean;
-  m_bulletFlag: boolean;
-  m_fixedRotationFlag: boolean;
-  m_activeFlag: boolean;
-  m_islandFlag: boolean;
-  m_toiFlag: boolean;
-  m_userData: unknown;
-  m_type: BodyType;
-  m_mass: number;
-  m_invMass: number;
+  /** @internal */ m_world: World;
+  /** @internal */ m_awakeFlag: boolean;
+  /** @internal */ m_autoSleepFlag: boolean;
+  /** @internal */ m_bulletFlag: boolean;
+  /** @internal */ m_fixedRotationFlag: boolean;
+  /** @internal */ m_activeFlag: boolean;
+  /** @internal */ m_islandFlag: boolean;
+  /** @internal */ m_toiFlag: boolean;
+  /** @internal */ m_userData: unknown;
+  /** @internal */ m_type: BodyType;
+  /** @internal */ m_mass: number;
+  /** @internal */ m_invMass: number;
   // Rotational inertia about the center of mass.
-  m_I: number;
-  m_invI: number;
+  /** @internal */ m_I: number;
+  /** @internal */ m_invI: number;
   // the body origin transform
-  m_xf: Transform;
+  /** @internal */ m_xf: Transform;
   // the swept motion for CCD
-  m_sweep: Sweep;
+  /** @internal */ m_sweep: Sweep;
   // position and velocity correction
-  c_velocity: Velocity;
-  c_position: Position;
-  m_force: Vec2;
-  m_torque: number;
-  m_linearVelocity: Vec2;
-  m_angularVelocity: number;
-  m_linearDamping: number;
-  m_angularDamping: number;
-  m_gravityScale: number;
-  m_sleepTime: number;
-  m_jointList: JointEdge | null;
-  m_contactList: ContactEdge | null;
-  m_fixtureList: Fixture | null;
-  m_prev: Body | null;
-  m_next: Body | null;
+  /** @internal */ c_velocity: Velocity;
+  /** @internal */ c_position: Position;
+  /** @internal */ m_force: Vec2;
+  /** @internal */ m_torque: number;
+  /** @internal */ m_linearVelocity: Vec2;
+  /** @internal */ m_angularVelocity: number;
+  /** @internal */ m_linearDamping: number;
+  /** @internal */ m_angularDamping: number;
+  /** @internal */ m_gravityScale: number;
+  /** @internal */ m_sleepTime: number;
+  /** @internal */ m_jointList: JointEdge | null;
+  /** @internal */ m_contactList: ContactEdge | null;
+  /** @internal */ m_fixtureList: Fixture | null;
+  /** @internal */ m_prev: Body | null;
+  /** @internal */ m_next: Body | null;
 
   isWorldLocked(): boolean;
   getWorld(): World;
@@ -337,56 +337,56 @@ export class Contact {
     evaluateFcn: EvaluateFunction
   );
 
-  static addType(type1: ShapeType, type2: ShapeType, callback: ContactCallack): void;
-  static create(fixtureA: Fixture, indexA: number, fixtureB: Fixture, indexB: number): Contact | null;
-  static destroy(contact: Contact, listener: { endContact: (contact: Contact) => void }): void;
+  /** @internal */ static addType(type1: ShapeType, type2: ShapeType, callback: ContactCallack): void;
+  /** @internal */ static create(fixtureA: Fixture, indexA: number, fixtureB: Fixture, indexB: number): Contact | null;
+  /** @internal */ static destroy(contact: Contact, listener: { endContact: (contact: Contact) => void }): void;
 
-  m_nodeA: ContactEdge;
-  m_nodeB: ContactEdge;
-  m_fixtureA: Fixture;
-  m_fixtureB: Fixture;
-  m_indexA: number;
-  m_indexB: number;
-  m_evaluateFcn: EvaluateFunction;
-  m_manifold: Manifold;
-  m_prev: Contact | null;
-  m_next: Contact | null;
-  m_toi: number;
-  m_toiCount: number;
-  m_toiFlag: boolean;
-  m_friction: number;
-  m_restitution: number;
-  m_tangentSpeed: number;
-  m_enabledFlag: boolean;
-  m_islandFlag: boolean;
-  m_touchingFlag: boolean;
-  m_filterFlag: boolean;
-  m_bulletHitFlag: boolean;
-  v_points: VelocityConstraintPoint[];
-  v_normal: Vec2;
-  v_normalMass: Mat22;
-  v_K: Mat22;
-  v_pointCount: number;
-  v_tangentSpeed: number | undefined;
-  v_friction: number | undefined;
-  v_restitution: number | undefined;
-  v_invMassA: number | undefined;
-  v_invMassB: number | undefined;
-  v_invIA: number | undefined;
-  v_invIB: number | undefined;
-  p_localPoints: Vec2[];
-  p_localNormal: Vec2;
-  p_localPoint: Vec2;
-  p_localCenterA: Vec2;
-  p_localCenterB: Vec2;
-  p_type: ManifoldType | undefined;
-  p_radiusA: number | undefined;
-  p_radiusB: number | undefined;
-  p_pointCount: number | undefined;
-  p_invMassA: number | undefined;
-  p_invMassB: number | undefined;
-  p_invIA: number | undefined;
-  p_invIB: number | undefined;
+  /** @internal */ m_nodeA: ContactEdge;
+  /** @internal */ m_nodeB: ContactEdge;
+  /** @internal */ m_fixtureA: Fixture;
+  /** @internal */ m_fixtureB: Fixture;
+  /** @internal */ m_indexA: number;
+  /** @internal */ m_indexB: number;
+  /** @internal */ m_evaluateFcn: EvaluateFunction;
+  /** @internal */ m_manifold: Manifold;
+  /** @internal */ m_prev: Contact | null;
+  /** @internal */ m_next: Contact | null;
+  /** @internal */ m_toi: number;
+  /** @internal */ m_toiCount: number;
+  /** @internal */ m_toiFlag: boolean;
+  /** @internal */ m_friction: number;
+  /** @internal */ m_restitution: number;
+  /** @internal */ m_tangentSpeed: number;
+  /** @internal */ m_enabledFlag: boolean;
+  /** @internal */ m_islandFlag: boolean;
+  /** @internal */ m_touchingFlag: boolean;
+  /** @internal */ m_filterFlag: boolean;
+  /** @internal */ m_bulletHitFlag: boolean;
+  /** @internal */ v_points: VelocityConstraintPoint[];
+  /** @internal */ v_normal: Vec2;
+  /** @internal */ v_normalMass: Mat22;
+  /** @internal */ v_K: Mat22;
+  /** @internal */ v_pointCount: number;
+  /** @internal */ v_tangentSpeed: number | undefined;
+  /** @internal */ v_friction: number | undefined;
+  /** @internal */ v_restitution: number | undefined;
+  /** @internal */ v_invMassA: number | undefined;
+  /** @internal */ v_invMassB: number | undefined;
+  /** @internal */ v_invIA: number | undefined;
+  /** @internal */ v_invIB: number | undefined;
+  /** @internal */ p_localPoints: Vec2[];
+  /** @internal */ p_localNormal: Vec2;
+  /** @internal */ p_localPoint: Vec2;
+  /** @internal */ p_localCenterA: Vec2;
+  /** @internal */ p_localCenterB: Vec2;
+  /** @internal */ p_type: ManifoldType | undefined;
+  /** @internal */ p_radiusA: number | undefined;
+  /** @internal */ p_radiusB: number | undefined;
+  /** @internal */ p_pointCount: number | undefined;
+  /** @internal */ p_invMassA: number | undefined;
+  /** @internal */ p_invMassB: number | undefined;
+  /** @internal */ p_invIA: number | undefined;
+  /** @internal */ p_invIB: number | undefined;
 
   initConstraint(step: {warmStarting: boolean, dtRatio: number}): void;
   getManifold(): Manifold;
@@ -434,29 +434,29 @@ export function World(def?: WorldDef): World;
 export class World {
   constructor(def?: WorldDef);
 
-  m_solver: Solver;
-  m_broadPhase: BroadPhase;
-  m_contactList: Contact | null;
-  m_contactCount: number;
-  m_bodyList: Body | null;
-  m_bodyCount: number;
-  m_jointList: Joint | null;
-  m_jointCount: number;
-  m_stepComplete: boolean;
-  m_allowSleep: boolean;
-  m_gravity: Vec2;
-  m_clearForces: boolean;
-  m_newFixture: boolean;
-  m_locked: boolean;
-  m_warmStarting: boolean;
-  m_continuousPhysics: boolean;
-  m_subStepping: boolean;
-  m_blockSolve: boolean;
-  m_velocityIterations: number;
-  m_positionIterations: number;
-  m_t: number;
+  /** @internal */ m_solver: Solver;
+  /** @internal */ m_broadPhase: BroadPhase;
+  /** @internal */ m_contactList: Contact | null;
+  /** @internal */ m_contactCount: number;
+  /** @internal */ m_bodyList: Body | null;
+  /** @internal */ m_bodyCount: number;
+  /** @internal */ m_jointList: Joint | null;
+  /** @internal */ m_jointCount: number;
+  /** @internal */ m_stepComplete: boolean;
+  /** @internal */ m_allowSleep: boolean;
+  /** @internal */ m_gravity: Vec2;
+  /** @internal */ m_clearForces: boolean;
+  /** @internal */ m_newFixture: boolean;
+  /** @internal */ m_locked: boolean;
+  /** @internal */ m_warmStarting: boolean;
+  /** @internal */ m_continuousPhysics: boolean;
+  /** @internal */ m_subStepping: boolean;
+  /** @internal */ m_blockSolve: boolean;
+  /** @internal */ m_velocityIterations: number;
+  /** @internal */ m_positionIterations: number;
+  /** @internal */ m_t: number;
 
-  addPair: (proxyA: FixtureProxy, proxyB: FixtureProxy) => void;
+  /** @internal */ addPair: (proxyA: FixtureProxy, proxyB: FixtureProxy) => void;
 
   getBodyList(): Body | null;
   getJointList(): Joint | null;
@@ -498,15 +498,13 @@ export class World {
   createJoint<T extends Joint>(joint: T): T | null;
   destroyJoint(joint: Joint): void;
   step(timeStep: number, velocityIterations?: number, positionIterations?: number): void;
-  findNewContacts(): void;
-  /**
-   * @private
-   */
-  createContact(proxyA: FixtureProxy, proxyB: FixtureProxy): void;
-  updateContacts(): void;
-  destroyContact(contact: Contact): void;
 
-  _listeners: any; // TODO
+  /** @internal */ findNewContacts(): void;
+  /** @internal */ createContact(proxyA: FixtureProxy, proxyB: FixtureProxy): void;
+  /** @internal */ updateContacts(): void;
+  /** @internal */ destroyContact(contact: Contact): void;
+
+  /** @internal */ _listeners: any; // TODO
 
   on(name: 'begin-contact', listener: (contact: Contact) => void): World;
   on(name: 'end-contact', listener: (contact: Contact) => void): World;
@@ -525,10 +523,10 @@ export class World {
 
   publish(name: string, arg1: any, arg2: any, arg3: any): number;
 
-  beginContact(contact: Contact): void;
-  endContact(contact: Contact): void;
-  preSolve(contact: Contact, oldManifold: Manifold): void;
-  postSolve(contact: Contact, impulse: ContactImpulse): void;
+  /** @internal */ beginContact(contact: Contact): void;
+  /** @internal */ endContact(contact: Contact): void;
+  /** @internal */ preSolve(contact: Contact, oldManifold: Manifold): void;
+  /** @internal */ postSolve(contact: Contact, impulse: ContactImpulse): void;
 }
 
 /**

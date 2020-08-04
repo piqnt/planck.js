@@ -23,7 +23,7 @@
 
 • **a**: *number*
 
-*Defined in [common/index.d.ts:26](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L26)*
+*Defined in [common/index.d.ts:26](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L26)*
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 • **c**: *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:25](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L25)*
+*Defined in [common/index.d.ts:25](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L25)*
 
 ## Methods
 
@@ -39,7 +39,7 @@ ___
 
 ▸ **getTransform**(`xf`: [Transform](transform.md), `p`: [Vec2](vec2.md)): *[Transform](transform.md)*
 
-*Defined in [common/index.d.ts:27](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L27)*
+*Defined in [common/index.d.ts:27](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L27)*
 
 **Parameters:**
 

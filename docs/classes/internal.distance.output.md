@@ -21,7 +21,7 @@
 
 • **distance**: *number*
 
-*Defined in [index.d.ts:690](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L690)*
+*Defined in [index.d.ts:688](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L688)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **iterations**: *number*
 
-*Defined in [index.d.ts:691](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L691)*
+*Defined in [index.d.ts:689](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L689)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **pointA**: *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:688](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L688)*
+*Defined in [index.d.ts:686](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L686)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **pointB**: *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:689](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L689)*
+*Defined in [index.d.ts:687](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L687)*

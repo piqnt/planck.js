@@ -4,5 +4,7 @@
   "inputFiles": ["./lib"],
   "mode": "file",
   "includeDeclarations": true,
-  "excludeExternals": true
+  "excludeExternals": true,
+  "excludePrivate": true,
+  "stripInternal": true
 }

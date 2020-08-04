@@ -20,7 +20,7 @@
 
 • **maxFraction**: *number*
 
-*Defined in [collision/index.d.ts:11](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L11)*
+*Defined in [collision/index.d.ts:11](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L11)*
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 • **p1**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [collision/index.d.ts:9](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L9)*
+*Defined in [collision/index.d.ts:9](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L9)*
 
 ___
 
@@ -36,4 +36,4 @@ ___
 
 • **p2**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [collision/index.d.ts:10](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/collision/index.d.ts#L10)*
+*Defined in [collision/index.d.ts:10](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L10)*

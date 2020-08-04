@@ -12,7 +12,7 @@
 
 ▸ **PolygonShape**(`vertices`: [Vec2](vec2.md)[]): *[PolygonShape](polygonshape.md)*
 
-*Defined in [shape/index.d.ts:59](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L59)*
+*Defined in [shape/index.d.ts:58](https://github.com/shakiba/planck.js/blob/038d425/lib/shape/index.d.ts#L58)*
 
 **Parameters:**
 
@@ -30,11 +30,6 @@ Name | Type |
 
 ### Properties
 
-* [m_centroid](polygonshape.md#m_centroid)
-* [m_count](polygonshape.md#m_count)
-* [m_normals](polygonshape.md#m_normals)
-* [m_type](polygonshape.md#m_type)
-* [m_vertices](polygonshape.md#m_vertices)
 * [TYPE](polygonshape.md#static-type)
 
 ### Methods
@@ -48,7 +43,7 @@ Name | Type |
 
 \+ **new PolygonShape**(`vertices`: [Vec2](vec2.md)[]): *[PolygonShape](polygonshape.md)*
 
-*Defined in [shape/index.d.ts:61](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L61)*
+*Defined in [shape/index.d.ts:60](https://github.com/shakiba/planck.js/blob/038d425/lib/shape/index.d.ts#L60)*
 
 **Parameters:**
 
@@ -60,51 +55,11 @@ Name | Type |
 
 ## Properties
 
-###  m_centroid
-
-• **m_centroid**: *[Vec2](vec2.md)*
-
-*Defined in [shape/index.d.ts:66](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L66)*
-
-___
-
-###  m_count
-
-• **m_count**: *number*
-
-*Defined in [shape/index.d.ts:69](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L69)*
-
-___
-
-###  m_normals
-
-• **m_normals**: *[Vec2](vec2.md)[]*
-
-*Defined in [shape/index.d.ts:68](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L68)*
-
-___
-
-###  m_type
-
-• **m_type**: *"polygon"*
-
-*Defined in [shape/index.d.ts:65](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L65)*
-
-___
-
-###  m_vertices
-
-• **m_vertices**: *[Vec2](vec2.md)[]*
-
-*Defined in [shape/index.d.ts:67](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L67)*
-
-___
-
 ### `Static` TYPE
 
 ▪ **TYPE**: *"polygon"*
 
-*Defined in [shape/index.d.ts:61](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L61)*
+*Defined in [shape/index.d.ts:60](https://github.com/shakiba/planck.js/blob/038d425/lib/shape/index.d.ts#L60)*
 
 ## Methods
 
@@ -112,7 +67,7 @@ ___
 
 ▸ **getVertex**(`index`: number): *[Vec2](vec2.md)*
 
-*Defined in [shape/index.d.ts:71](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L71)*
+*Defined in [shape/index.d.ts:70](https://github.com/shakiba/planck.js/blob/038d425/lib/shape/index.d.ts#L70)*
 
 **Parameters:**
 
@@ -128,6 +83,6 @@ ___
 
 ▸ **validate**(): *void*
 
-*Defined in [shape/index.d.ts:72](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/shape/index.d.ts#L72)*
+*Defined in [shape/index.d.ts:71](https://github.com/shakiba/planck.js/blob/038d425/lib/shape/index.d.ts#L71)*
 
 **Returns:** *void*

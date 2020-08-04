@@ -30,7 +30,7 @@
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L56)*
+*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L56)*
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L57)*
+*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L57)*
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L52)*
+*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 • **localAnchorA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:543](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L543)*
+*Defined in [joint/index.d.ts:543](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L543)*
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 • **localAnchorB**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:544](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L544)*
+*Defined in [joint/index.d.ts:544](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L544)*
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 *Inherited from [RopeJointOpt](ropejointopt.md).[maxLength](ropejointopt.md#maxlength)*
 
-*Defined in [joint/index.d.ts:539](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L539)*
+*Defined in [joint/index.d.ts:539](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L539)*
 
 ___
 
@@ -90,4 +90,4 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L51)*
+*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*

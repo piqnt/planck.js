@@ -31,7 +31,7 @@
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L52)*
+*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 • **enableLimit**: *boolean*
 
-*Defined in [joint/index.d.ts:492](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L492)*
+*Defined in [joint/index.d.ts:492](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L492)*
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 • **enableMotor**: *boolean*
 
-*Defined in [joint/index.d.ts:493](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L493)*
+*Defined in [joint/index.d.ts:493](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L493)*
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 • **lowerAngle**: *number*
 
-*Defined in [joint/index.d.ts:488](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L488)*
+*Defined in [joint/index.d.ts:488](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L488)*
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 • **maxMotorTorque**: *number*
 
-*Defined in [joint/index.d.ts:490](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L490)*
+*Defined in [joint/index.d.ts:490](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L490)*
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 • **motorSpeed**: *number*
 
-*Defined in [joint/index.d.ts:491](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L491)*
+*Defined in [joint/index.d.ts:491](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L491)*
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 • **upperAngle**: *number*
 
-*Defined in [joint/index.d.ts:489](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L489)*
+*Defined in [joint/index.d.ts:489](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L489)*
 
 ___
 
@@ -89,4 +89,4 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L51)*
+*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*

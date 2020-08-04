@@ -19,7 +19,7 @@
 
 • **cf**: *[ContactFeature](contactfeature.md)*
 
-*Defined in [index.d.ts:31](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L31)*
+*Defined in [index.d.ts:31](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L31)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **key**: *number*
 
-*Defined in [index.d.ts:32](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L32)*
+*Defined in [index.d.ts:32](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L32)*

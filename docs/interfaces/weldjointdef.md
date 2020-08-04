@@ -33,7 +33,7 @@
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L56)*
+*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L56)*
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L57)*
+*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L57)*
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L52)*
+*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 *Inherited from [WeldJointOpt](weldjointopt.md).[dampingRatio](weldjointopt.md#dampingratio)*
 
-*Defined in [joint/index.d.ts:586](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L586)*
+*Defined in [joint/index.d.ts:586](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L586)*
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 *Inherited from [WeldJointOpt](weldjointopt.md).[frequencyHz](weldjointopt.md#frequencyhz)*
 
-*Defined in [joint/index.d.ts:585](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L585)*
+*Defined in [joint/index.d.ts:585](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L585)*
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 • **localAnchorA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:591](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L591)*
+*Defined in [joint/index.d.ts:591](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L591)*
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 • **localAnchorB**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:592](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L592)*
+*Defined in [joint/index.d.ts:592](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L592)*
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 • **localAxisA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:593](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L593)*
+*Defined in [joint/index.d.ts:593](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L593)*
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 *Inherited from [WeldJointOpt](weldjointopt.md).[referenceAngle](weldjointopt.md#referenceangle)*
 
-*Defined in [joint/index.d.ts:587](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L587)*
+*Defined in [joint/index.d.ts:587](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L587)*
 
 ___
 
@@ -121,4 +121,4 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L51)*
+*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*

@@ -2,6 +2,7 @@
 
 # Planck.js API Doc
 
+### Tutorial
 A physics simulation in Planck starts by creating a World and adding Bodies and Joints.
 A world is composed of a number of bodies and joints interacting with each other. Every time world’s step() function is called, world solver will advance world time and update bodies position and velocity based on velocities, forces, contacts (collisions), and joints constraints. It also detects any contact between objects and updates them if required.
 Let’s create a world:
@@ -47,6 +48,8 @@ ground.createFixture({
 ```
 
 Joints are constraints on bodies position or velocity.
+
+### API Doc
 
 #### Core
 

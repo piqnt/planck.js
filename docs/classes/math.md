@@ -29,7 +29,7 @@
 
 • **EPSILON**: *number*
 
-*Defined in [common/index.d.ts:2](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L2)*
+*Defined in [common/index.d.ts:2](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L2)*
 
 ## Methods
 
@@ -37,7 +37,7 @@
 
 ▸ **assert**(`x`: any): *void*
 
-*Defined in [common/index.d.ts:8](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L8)*
+*Defined in [common/index.d.ts:8](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L8)*
 
 **Parameters:**
 
@@ -53,7 +53,7 @@ ___
 
 ▸ **clamp**(`num`: number, `min`: number, `max`: number): *number*
 
-*Defined in [common/index.d.ts:14](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L14)*
+*Defined in [common/index.d.ts:14](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L14)*
 
 **Parameters:**
 
@@ -71,7 +71,7 @@ ___
 
 ▸ **invSqrt**(`x`: number): *number*
 
-*Defined in [common/index.d.ts:9](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L9)*
+*Defined in [common/index.d.ts:9](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L9)*
 
 **Parameters:**
 
@@ -87,7 +87,7 @@ ___
 
 ▸ **isFinite**(`x`: any): *boolean*
 
-*Defined in [common/index.d.ts:7](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L7)*
+*Defined in [common/index.d.ts:7](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L7)*
 
 This function is used to ensure that a floating point number is not a NaN or
 infinity.
@@ -106,7 +106,7 @@ ___
 
 ▸ **isPowerOfTwo**(`x`: number): *boolean*
 
-*Defined in [common/index.d.ts:11](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L11)*
+*Defined in [common/index.d.ts:11](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L11)*
 
 **Parameters:**
 
@@ -122,7 +122,7 @@ ___
 
 ▸ **mod**(`num`: number, `min`: number, `max`: number): *number*
 
-*Defined in [common/index.d.ts:12](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L12)*
+*Defined in [common/index.d.ts:12](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L12)*
 
 **Parameters:**
 
@@ -136,7 +136,7 @@ Name | Type |
 
 ▸ **mod**(`num`: number, `max?`: number): *number*
 
-*Defined in [common/index.d.ts:13](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L13)*
+*Defined in [common/index.d.ts:13](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L13)*
 
 **Parameters:**
 
@@ -153,7 +153,7 @@ ___
 
 ▸ **nextPowerOfTwo**(`x`: number): *number*
 
-*Defined in [common/index.d.ts:10](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L10)*
+*Defined in [common/index.d.ts:10](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L10)*
 
 **Parameters:**
 
@@ -169,7 +169,7 @@ ___
 
 ▸ **random**(`min`: number, `max`: number): *number*
 
-*Defined in [common/index.d.ts:15](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L15)*
+*Defined in [common/index.d.ts:15](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L15)*
 
 **Parameters:**
 
@@ -182,7 +182,7 @@ Name | Type |
 
 ▸ **random**(`max?`: number): *number*
 
-*Defined in [common/index.d.ts:16](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/common/index.d.ts#L16)*
+*Defined in [common/index.d.ts:16](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L16)*
 
 **Parameters:**
 

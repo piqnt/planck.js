@@ -18,17 +18,17 @@ export interface JointEdge {
 }
 
 export class Joint {
-  m_type: string;
-  m_bodyA: Body;
-  m_bodyB: Body;
-  m_index: number;
-  m_collideConnected: boolean;
-  m_prev: Joint | null;
-  m_next: Joint | null;
-  m_edgeA: JointEdge;
-  m_edgeB: JointEdge;
-  m_islandFlag: boolean;
-  m_userData: unknown;
+  /** @internal */ m_type: string;
+  /** @internal */ m_bodyA: Body;
+  /** @internal */ m_bodyB: Body;
+  /** @internal */ m_index: number;
+  /** @internal */ m_collideConnected: boolean;
+  /** @internal */ m_prev: Joint | null;
+  /** @internal */ m_next: Joint | null;
+  /** @internal */ m_edgeA: JointEdge;
+  /** @internal */ m_edgeB: JointEdge;
+  /** @internal */ m_islandFlag: boolean;
+  /** @internal */ m_userData: unknown;
 
   isActive(): boolean;
   getType(): string;
@@ -65,16 +65,16 @@ export class DistanceJoint extends Joint {
   constructor(def: DistanceJointDef);
   constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2);
 
-  m_type: 'distance-joint';
+  /** @internal */ m_type: 'distance-joint';
   // Solver shared
-  m_localAnchorA: Vec2;
-  m_localAnchorB: Vec2;
-  m_length: Vec2;
-  m_frequencyHz: number;
-  m_dampingRatio: number;
-  m_impulse: number;
-  m_gamma: number;
-  m_bias: number;
+  /** @internal */ m_localAnchorA: Vec2;
+  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_length: Vec2;
+  /** @internal */ m_frequencyHz: number;
+  /** @internal */ m_dampingRatio: number;
+  /** @internal */ m_impulse: number;
+  /** @internal */ m_gamma: number;
+  /** @internal */ m_bias: number;
   // Solver temp
   // this.m_u; // Vec2
   // this.m_rA; // Vec2
@@ -115,15 +115,15 @@ export class FrictionJoint extends Joint {
   constructor(def: FrictionJointDef);
   constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
 
-  m_type: 'friction-joint';
+  /** @internal */ m_type: 'friction-joint';
 
-  m_localAnchorA: Vec2;
-  m_localAnchorB: Vec2;
+  /** @internal */ m_localAnchorA: Vec2;
+  /** @internal */ m_localAnchorB: Vec2;
   // Solver shared
-  m_linearImpulse: Vec2;
-  m_angularImpulse: number;
-  m_maxForce: number;
-  m_maxTorque: number;
+  /** @internal */ m_linearImpulse: Vec2;
+  /** @internal */ m_angularImpulse: number;
+  /** @internal */ m_maxForce: number;
+  /** @internal */ m_maxTorque: number;
   // Solver temp
   // m_rA; // Vec2
   // m_rB; // Vec2
@@ -162,24 +162,24 @@ export class GearJoint extends Joint {
   constructor(def: GearJointDef);
   constructor(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number);
 
-  m_type: 'gear-joint';
-  m_joint1: RevoluteJoint | PrismaticJoint;
-  m_joint2: RevoluteJoint | PrismaticJoint;
-  m_type1: 'revolute-joint' | 'prismatic-joint';
-  m_type2: 'revolute-joint' | 'prismatic-joint';
-  m_bodyC: Body;
-  m_localAnchorC: Vec2;
-  m_localAnchorA: Vec2;
-  m_referenceAngleA: number;
-  m_localAxisC: Vec2;
-  m_bodyD: Body;
-  m_localAnchorD: Vec2;
-  m_localAnchorB: Vec2;
-  m_referenceAngleB: number;
-  m_localAxisD: Vec2;
-  m_ratio: number;
-  m_constant: number;
-  m_impulse: number;
+  /** @internal */ m_type: 'gear-joint';
+  /** @internal */ m_joint1: RevoluteJoint | PrismaticJoint;
+  /** @internal */ m_joint2: RevoluteJoint | PrismaticJoint;
+  /** @internal */ m_type1: 'revolute-joint' | 'prismatic-joint';
+  /** @internal */ m_type2: 'revolute-joint' | 'prismatic-joint';
+  /** @internal */ m_bodyC: Body;
+  /** @internal */ m_localAnchorC: Vec2;
+  /** @internal */ m_localAnchorA: Vec2;
+  /** @internal */ m_referenceAngleA: number;
+  /** @internal */ m_localAxisC: Vec2;
+  /** @internal */ m_bodyD: Body;
+  /** @internal */ m_localAnchorD: Vec2;
+  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_referenceAngleB: number;
+  /** @internal */ m_localAxisD: Vec2;
+  /** @internal */ m_ratio: number;
+  /** @internal */ m_constant: number;
+  /** @internal */ m_impulse: number;
   // Solver temp
   // this.m_lcA, this.m_lcB, this.m_lcC, this.m_lcD; // Vec2
   // this.m_mA, this.m_mB, this.m_mC, this.m_mD; // float
@@ -211,14 +211,14 @@ export class MotorJoint extends Joint {
   constructor(def: MotorJointDef);
   constructor(def: MotorJointOpt, bodyA: Body, bodyB: Body);
 
-  m_type: 'motor-joint';
-  m_linearOffset: Vec2;
-  m_angularOffset: number;
-  m_linearImpulse: Vec2;
-  m_angularImpulse: number;
-  m_maxForce: number;
-  m_maxTorque: number;
-  m_correctionFactor: number;
+  /** @internal */ m_type: 'motor-joint';
+  /** @internal */ m_linearOffset: Vec2;
+  /** @internal */ m_angularOffset: number;
+  /** @internal */ m_linearImpulse: Vec2;
+  /** @internal */ m_angularImpulse: number;
+  /** @internal */ m_maxForce: number;
+  /** @internal */ m_maxTorque: number;
+  /** @internal */ m_correctionFactor: number;
   // Solver temp
   // m_rA; // Vec2
   // m_rB; // Vec2
@@ -263,15 +263,15 @@ export class MouseJoint extends Joint {
   constructor(def: MouseJointDef);
   constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2);
 
-  m_type: 'mouse-joint';
-  m_targetA: Vec2;
-  m_localAnchorB: Vec2;
-  m_maxForce: number;
-  m_impulse: Vec2;
-  m_frequencyHz: number;
-  m_dampingRatio: number;
-  m_beta: number;
-  m_gamma: number;
+  /** @internal */ m_type: 'mouse-joint';
+  /** @internal */ m_targetA: Vec2;
+  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_maxForce: number;
+  /** @internal */ m_impulse: Vec2;
+  /** @internal */ m_frequencyHz: number;
+  /** @internal */ m_dampingRatio: number;
+  /** @internal */ m_beta: number;
+  /** @internal */ m_gamma: number;
   // Solver temp
   // m_rB: Vec2;
   // m_localCenterB: Vec2;
@@ -308,24 +308,24 @@ export class PrismaticJoint extends Joint {
   constructor(def: PrismaticJointDef);
   constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
 
-  m_type: 'prismatic-joint';
-  m_localAnchorA: Vec2;
-  m_localAnchorB: Vec2;
-  m_localXAxisA: Vec2;
-  m_localYAxisA: Vec2;
-  m_referenceAngle: number;
-  m_impulse: Vec3;
-  m_motorMass: number;
-  m_motorImpulse: number;
-  m_lowerTranslation: number;
-  m_upperTranslation: number;
-  m_maxMotorForce: number;
-  m_motorSpeed: number;
-  m_enableLimit: boolean;
-  m_enableMotor: boolean;
-  m_limitState: LIMIT_STATE;
-  m_axis: Vec2;
-  m_perp: Vec2;
+  /** @internal */ m_type: 'prismatic-joint';
+  /** @internal */ m_localAnchorA: Vec2;
+  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_localXAxisA: Vec2;
+  /** @internal */ m_localYAxisA: Vec2;
+  /** @internal */ m_referenceAngle: number;
+  /** @internal */ m_impulse: Vec3;
+  /** @internal */ m_motorMass: number;
+  /** @internal */ m_motorImpulse: number;
+  /** @internal */ m_lowerTranslation: number;
+  /** @internal */ m_upperTranslation: number;
+  /** @internal */ m_maxMotorForce: number;
+  /** @internal */ m_motorSpeed: number;
+  /** @internal */ m_enableLimit: boolean;
+  /** @internal */ m_enableMotor: boolean;
+  /** @internal */ m_limitState: LIMIT_STATE;
+  /** @internal */ m_axis: Vec2;
+  /** @internal */ m_perp: Vec2;
   // Solver temp
   // this.m_localCenterA; // Vec2
   // this.m_localCenterB; // Vec2
@@ -383,16 +383,16 @@ export class PulleyJoint extends Joint {
   constructor(def: PulleyJointDef);
   constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number);
 
-  m_type: 'pulley-joint';
-  m_groundAnchorA: Vec2;
-  m_groundAnchorB: Vec2;
-  m_localAnchorA: Vec2;
-  m_localAnchorB: Vec2;
-  m_lengthA: Vec2;
-  m_lengthB: Vec2;
-  m_ratio: number;
-  m_constant: number;
-  m_impulse: number;
+  /** @internal */ m_type: 'pulley-joint';
+  /** @internal */ m_groundAnchorA: Vec2;
+  /** @internal */ m_groundAnchorB: Vec2;
+  /** @internal */ m_localAnchorA: Vec2;
+  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_lengthA: Vec2;
+  /** @internal */ m_lengthB: Vec2;
+  /** @internal */ m_ratio: number;
+  /** @internal */ m_constant: number;
+  /** @internal */ m_impulse: number;
   // Solver temp
   // this.m_uA; // Vec2
   // this.m_uB; // Vec2
@@ -437,18 +437,18 @@ export class RevoluteJoint extends Joint {
   constructor(def: RevoluteJointDef);
   constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
 
-  m_type: 'revolute-joint';
-  m_localAnchorA: Vec2;
-  m_localAnchorB: Vec2;
-  m_referenceAngle: number;
-  m_impulse: Vec3;
-  m_motorImpulse: number;
-  m_lowerAngle: number;
-  m_upperAngle: number;
-  m_maxMotorTorque: number;
-  m_motorSpeed: number;
-  m_enableLimit: boolean;
-  m_enableMotor: boolean;
+  /** @internal */ m_type: 'revolute-joint';
+  /** @internal */ m_localAnchorA: Vec2;
+  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_referenceAngle: number;
+  /** @internal */ m_impulse: Vec3;
+  /** @internal */ m_motorImpulse: number;
+  /** @internal */ m_lowerAngle: number;
+  /** @internal */ m_upperAngle: number;
+  /** @internal */ m_maxMotorTorque: number;
+  /** @internal */ m_motorSpeed: number;
+  /** @internal */ m_enableLimit: boolean;
+  /** @internal */ m_enableMotor: boolean;
   // Solver temp
   // this.m_rA; // Vec2
   // this.m_rB; // Vec2
@@ -507,14 +507,14 @@ export class RopeJoint extends Joint {
   constructor(def: RopeJointDef);
   constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
 
-  m_type: 'rope-joint';
-  m_localAnchorA: Vec2;
-  m_localAnchorB: Vec2;
-  m_maxLength: number;
-  m_mass: number;
-  m_impulse: number;
-  m_length: number;
-  m_state: LIMIT_STATE;
+  /** @internal */ m_type: 'rope-joint';
+  /** @internal */ m_localAnchorA: Vec2;
+  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_maxLength: number;
+  /** @internal */ m_mass: number;
+  /** @internal */ m_impulse: number;
+  /** @internal */ m_length: number;
+  /** @internal */ m_state: LIMIT_STATE;
 
   // Solver temp
   // m_u; // Vec2
@@ -552,15 +552,15 @@ export class WeldJoint extends Joint {
   constructor(def: WeldJointDef);
   constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
 
-  m_type: 'weld-joint';
-  m_localAnchorA: Vec2;
-  m_localAnchorB: Vec2;
-  m_referenceAngle: number;
-  m_frequencyHz: number;
-  m_dampingRatio: number;
-  m_impulse: Vec3;
-  m_bias: number;
-  m_gamma: number;
+  /** @internal */ m_type: 'weld-joint';
+  /** @internal */ m_localAnchorA: Vec2;
+  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_referenceAngle: number;
+  /** @internal */ m_frequencyHz: number;
+  /** @internal */ m_dampingRatio: number;
+  /** @internal */ m_impulse: Vec3;
+  /** @internal */ m_bias: number;
+  /** @internal */ m_gamma: number;
   // Solver temp
   // this.m_rA; // Vec2
   // this.m_rB; // Vec2
@@ -601,24 +601,24 @@ export class WheelJoint extends Joint {
   constructor(def: WheelJointDef);
   constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
 
-  m_type: 'wheel-joint';
-  m_localAnchorA: Vec2;
-  m_localAnchorB: Vec2;
-  m_localXAxisA: Vec2;
-  m_localYAxisA: Vec2;
-  m_mass: number;
-  m_impulse: number;
-  m_motorMass: number;
-  m_motorImpulse: number;
-  m_springMass: number;
-  m_springImpulse: number;
-  m_maxMotorTorque: number;
-  m_motorSpeed: number;
-  m_enableMotor: boolean;
-  m_frequencyHz: number;
-  m_dampingRatio: number;
-  m_bias: number;
-  m_gamma: number;
+  /** @internal */ m_type: 'wheel-joint';
+  /** @internal */ m_localAnchorA: Vec2;
+  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_localXAxisA: Vec2;
+  /** @internal */ m_localYAxisA: Vec2;
+  /** @internal */ m_mass: number;
+  /** @internal */ m_impulse: number;
+  /** @internal */ m_motorMass: number;
+  /** @internal */ m_motorImpulse: number;
+  /** @internal */ m_springMass: number;
+  /** @internal */ m_springImpulse: number;
+  /** @internal */ m_maxMotorTorque: number;
+  /** @internal */ m_motorSpeed: number;
+  /** @internal */ m_enableMotor: boolean;
+  /** @internal */ m_frequencyHz: number;
+  /** @internal */ m_dampingRatio: number;
+  /** @internal */ m_bias: number;
+  /** @internal */ m_gamma: number;
   // Solver temp
   // this.m_localCenterA; // Vec2
   // this.m_localCenterB; // Vec2

@@ -20,7 +20,7 @@
 
 • **normal**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [index.d.ts:59](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L59)*
+*Defined in [index.d.ts:59](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L59)*
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 • **points**: *[Vec2](../classes/vec2.md)[]*
 
-*Defined in [index.d.ts:60](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L60)*
+*Defined in [index.d.ts:60](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L60)*
 
 ___
 
@@ -36,4 +36,4 @@ ___
 
 • **separations**: *number[]*
 
-*Defined in [index.d.ts:61](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L61)*
+*Defined in [index.d.ts:61](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L61)*

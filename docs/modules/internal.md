@@ -22,7 +22,7 @@
 
 • **DynamicTree**: *object*
 
-*Defined in [index.d.ts:721](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L721)*
+*Defined in [index.d.ts:719](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L719)*
 
 #### Type declaration:
 
@@ -34,7 +34,7 @@ ___
 
 • **Manifold**: *object*
 
-*Defined in [index.d.ts:674](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L674)*
+*Defined in [index.d.ts:672](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L672)*
 
 #### Type declaration:
 
@@ -46,7 +46,7 @@ ___
 
 • **Settings**: *[Settings](../classes/settings.md)*
 
-*Defined in [index.d.ts:670](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L670)*
+*Defined in [index.d.ts:668](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L668)*
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 • **Sweep**: *object*
 
-*Defined in [index.d.ts:671](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L671)*
+*Defined in [index.d.ts:669](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L669)*
 
 #### Type declaration:
 

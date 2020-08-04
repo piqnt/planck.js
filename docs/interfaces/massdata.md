@@ -20,7 +20,7 @@
 
 • **I**: *number*
 
-*Defined in [index.d.ts:75](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L75)*
+*Defined in [index.d.ts:75](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L75)*
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 • **center**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [index.d.ts:74](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L74)*
+*Defined in [index.d.ts:74](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L74)*
 
 ___
 
@@ -36,4 +36,4 @@ ___
 
 • **mass**: *number*
 
-*Defined in [index.d.ts:73](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L73)*
+*Defined in [index.d.ts:73](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L73)*

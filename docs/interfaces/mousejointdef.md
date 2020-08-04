@@ -31,7 +31,7 @@
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L56)*
+*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L56)*
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L57)*
+*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L57)*
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L52)*
+*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 *Inherited from [MouseJointOpt](mousejointopt.md).[dampingRatio](mousejointopt.md#dampingratio)*
 
-*Defined in [joint/index.d.ts:296](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L296)*
+*Defined in [joint/index.d.ts:296](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L296)*
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 *Inherited from [MouseJointOpt](mousejointopt.md).[frequencyHz](mousejointopt.md#frequencyhz)*
 
-*Defined in [joint/index.d.ts:295](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L295)*
+*Defined in [joint/index.d.ts:295](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L295)*
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 *Inherited from [MouseJointOpt](mousejointopt.md).[maxForce](mousejointopt.md#maxforce)*
 
-*Defined in [joint/index.d.ts:294](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L294)*
+*Defined in [joint/index.d.ts:294](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L294)*
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 • **target**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [joint/index.d.ts:300](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L300)*
+*Defined in [joint/index.d.ts:300](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L300)*
 
 ___
 
@@ -103,4 +103,4 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/joint/index.d.ts#L51)*
+*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*

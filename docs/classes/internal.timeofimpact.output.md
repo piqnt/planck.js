@@ -24,7 +24,7 @@
 
 • **state**: *[TOIOutputState](../enums/toioutputstate.md) | undefined*
 
-*Defined in [index.d.ts:711](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L711)*
+*Defined in [index.d.ts:709](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L709)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **t**: *number | undefined*
 
-*Defined in [index.d.ts:712](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L712)*
+*Defined in [index.d.ts:710](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L710)*
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 ▪ **e_failed**: *[TOIOutputState](../enums/toioutputstate.md)*
 
-*Defined in [index.d.ts:715](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L715)*
+*Defined in [index.d.ts:713](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L713)*
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 ▪ **e_overlapped**: *[TOIOutputState](../enums/toioutputstate.md)*
 
-*Defined in [index.d.ts:716](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L716)*
+*Defined in [index.d.ts:714](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L714)*
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 ▪ **e_separated**: *[TOIOutputState](../enums/toioutputstate.md)*
 
-*Defined in [index.d.ts:718](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L718)*
+*Defined in [index.d.ts:716](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L716)*
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 ▪ **e_touching**: *[TOIOutputState](../enums/toioutputstate.md)*
 
-*Defined in [index.d.ts:717](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L717)*
+*Defined in [index.d.ts:715](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L715)*
 
 ___
 
@@ -72,4 +72,4 @@ ___
 
 ▪ **e_unknown**: *[TOIOutputState](../enums/toioutputstate.md)*
 
-*Defined in [index.d.ts:714](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L714)*
+*Defined in [index.d.ts:712](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L712)*

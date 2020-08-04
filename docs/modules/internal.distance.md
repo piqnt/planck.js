@@ -6,7 +6,7 @@
 
 ▸ **Distance**(`output`: [Input](../classes/internal.distance.input.md), `cache`: [Cache](../classes/internal.distance.cache.md), `input`: [Input](../classes/internal.distance.input.md)): *void*
 
-*Defined in [index.d.ts:678](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L678)*
+*Defined in [index.d.ts:676](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L676)*
 
 **Parameters:**
 
@@ -36,7 +36,7 @@ Name | Type |
 
 ▸ **testOverlap**(`shapeA`: [Shape](../classes/shape.md), `indexA`: number, `shapeB`: [Shape](../classes/shape.md), `indexB`: number, `xfA`: [Transform](../classes/transform.md), `xfB`: [Transform](../classes/transform.md)): *boolean*
 
-*Defined in [index.d.ts:699](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L699)*
+*Defined in [index.d.ts:697](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L697)*
 
 **Parameters:**
 

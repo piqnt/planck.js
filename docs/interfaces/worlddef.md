@@ -25,7 +25,7 @@
 
 • **allowSleep**? : *boolean*
 
-*Defined in [index.d.ts:424](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L424)*
+*Defined in [index.d.ts:424](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L424)*
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **blockSolve**? : *boolean*
 
-*Defined in [index.d.ts:428](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L428)*
+*Defined in [index.d.ts:428](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L428)*
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 • **continuousPhysics**? : *boolean*
 
-*Defined in [index.d.ts:426](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L426)*
+*Defined in [index.d.ts:426](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L426)*
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 • **gravity**? : *[Vec2](../classes/vec2.md)*
 
-*Defined in [index.d.ts:423](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L423)*
+*Defined in [index.d.ts:423](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L423)*
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 • **positionIterations**? : *number*
 
-*Defined in [index.d.ts:430](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L430)*
+*Defined in [index.d.ts:430](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L430)*
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 • **subStepping**? : *boolean*
 
-*Defined in [index.d.ts:427](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L427)*
+*Defined in [index.d.ts:427](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L427)*
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 • **velocityIterations**? : *number*
 
-*Defined in [index.d.ts:429](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L429)*
+*Defined in [index.d.ts:429](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L429)*
 
 ___
 
@@ -81,4 +81,4 @@ ___
 
 • **warmStarting**? : *boolean*
 
-*Defined in [index.d.ts:425](https://github.com/shakiba/planck.js/blob/9a1fbe4/lib/index.d.ts#L425)*
+*Defined in [index.d.ts:425](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L425)*
