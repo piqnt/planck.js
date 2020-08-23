@@ -33,7 +33,7 @@ export class DistanceProxy {
 
 export function AABB(lower?: Vec2, upper?: Vec2): AABB;
 export class AABB {
-  constroctor(lower?: Vec2, upper?: Vec2);
+  constructor(lower?: Vec2, upper?: Vec2);
 
   isValid(o: any): boolean;
   assert(o: any): void;
