@@ -20,8 +20,8 @@ export class Shape {
   computeDistanceProxy(proxy: DistanceProxy): void;
 }
 
-export function Circle(position: Vec2, radius?: number): CircleShape;
-export function Circle(radius?: number): CircleShape;
+export function CircleShape(position: Vec2, radius?: number): CircleShape;
+export function CircleShape(radius?: number): CircleShape;
 export class CircleShape extends Shape {
   static TYPE: 'circle';
 
@@ -36,7 +36,7 @@ export class CircleShape extends Shape {
   getVertexCount(index?: number): 1;
 }
 
-export function Edge(v1: Vec2, v2: Vec2): EdgeShape;
+export function EdgeShape(v1: Vec2, v2: Vec2): EdgeShape;
 export class EdgeShape extends Shape {
   static TYPE: 'edge';
 
@@ -55,7 +55,7 @@ export class EdgeShape extends Shape {
   /** @internal */ _set(v1: Vec2, v2: Vec2): EdgeShape;
 }
 
-export function Polygon(vertices: Vec2[]): PolygonShape;
+export function PolygonShape(vertices: Vec2[]): PolygonShape;
 export class PolygonShape extends Shape {
   static TYPE: 'polygon';
 
@@ -75,12 +75,12 @@ export class PolygonShape extends Shape {
   /** @internal */ _setAsBox(hx: number, hy: number): void;
 }
 
-export function Box(hx: number, hy: number, center?: Vec2, angle?: number): BoxShape;
+export function BoxShape(hx: number, hy: number, center?: Vec2, angle?: number): BoxShape;
 export class BoxShape extends PolygonShape {
   constructor(hx: number, hy: number, center?: Vec2, angle?: number);
 }
 
-export function Chain(vertices: Vec2[], loop?: boolean): ChainShape;
+export function ChainShape(vertices: Vec2[], loop?: boolean): ChainShape;
 export class ChainShape extends Shape {
   static TYPE: 'chain';
 

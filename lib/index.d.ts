@@ -12,7 +12,13 @@ import { ShapeType, Shape } from "./shape";
 export * from "./collision";
 export * from "./common";
 export * from "./joint";
-export * from "./shape";
+export {
+  CircleShape as Circle,
+  BoxShape as Box,
+  EdgeShape as Edge,
+  PolygonShape as Polygon,
+  ChainShape as Chain,
+} from "./shape";
 export * from "../testbed";
 
 export const enum ContactFeatureType {
