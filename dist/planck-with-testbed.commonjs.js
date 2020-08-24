@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.21
+ * Planck.js v0.3.22
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -1487,6 +1487,1089 @@ module.exports = function(to, from) {
 var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
+module.exports = Body;
+
+var common = __webpack_require__(2);
+var options = __webpack_require__(7);
+
+var Vec2 = __webpack_require__(0);
+var Rot = __webpack_require__(3);
+var Math = __webpack_require__(1);
+var Sweep = __webpack_require__(9);
+var Transform = __webpack_require__(5);
+var Velocity = __webpack_require__(13);
+var Position = __webpack_require__(14);
+
+var Fixture = __webpack_require__(32);
+var Shape = __webpack_require__(16);
+
+var staticBody = Body.STATIC = 'static';
+var kinematicBody = Body.KINEMATIC = 'kinematic';
+var dynamicBody = Body.DYNAMIC = 'dynamic';
+
+/**
+ * @typedef {Object} BodyDef
+ *
+ * @prop type Body types are static, kinematic, or dynamic. Note: if a dynamic
+ *       body would have zero mass, the mass is set to one.
+ *
+ * @prop position The world position of the body. Avoid creating bodies at the
+ *       origin since this can lead to many overlapping shapes.
+ *
+ * @prop angle The world angle of the body in radians.
+ *
+ * @prop linearVelocity The linear velocity of the body's origin in world
+ *       co-ordinates.
+ *
+ * @prop angularVelocity
+ *
+ * @prop linearDamping Linear damping is use to reduce the linear velocity. The
+ *       damping parameter can be larger than 1.0 but the damping effect becomes
+ *       sensitive to the time step when the damping parameter is large.
+ *
+ * @prop angularDamping Angular damping is use to reduce the angular velocity.
+ *       The damping parameter can be larger than 1.0 but the damping effect
+ *       becomes sensitive to the time step when the damping parameter is large.
+ *
+ * @prop fixedRotation Should this body be prevented from rotating? Useful for
+ *       characters.
+ *
+ * @prop bullet Is this a fast moving body that should be prevented from
+ *       tunneling through other moving bodies? Note that all bodies are
+ *       prevented from tunneling through kinematic and static bodies. This
+ *       setting is only considered on dynamic bodies. Warning: You should use
+ *       this flag sparingly since it increases processing time.
+ *
+ * @prop active Does this body start out active?
+ *
+ * @prop awake Is this body initially awake or sleeping?
+ *
+ * @prop allowSleep Set this flag to false if this body should never fall
+ *       asleep. Note that this increases CPU usage.
+ */
+var BodyDef = {
+  type : staticBody,
+  position : Vec2.zero(),
+  angle : 0.0,
+
+  linearVelocity : Vec2.zero(),
+  angularVelocity : 0.0,
+
+  linearDamping : 0.0,
+  angularDamping : 0.0,
+
+  fixedRotation : false,
+  bullet : false,
+  gravityScale : 1.0,
+
+  allowSleep : true,
+  awake : true,
+  active : true,
+
+  userData : null
+};
+
+/**
+ * @class
+ * 
+ * A rigid body composed of one or more fixtures.
+ * 
+ * @param {World} world
+ * @param {BodyDef} def
+ */
+function Body(world, def) {
+
+  def = options(def, BodyDef);
+
+  _ASSERT && common.assert(Vec2.isValid(def.position));
+  _ASSERT && common.assert(Vec2.isValid(def.linearVelocity));
+  _ASSERT && common.assert(Math.isFinite(def.angle));
+  _ASSERT && common.assert(Math.isFinite(def.angularVelocity));
+  _ASSERT && common.assert(Math.isFinite(def.angularDamping) && def.angularDamping >= 0.0);
+  _ASSERT && common.assert(Math.isFinite(def.linearDamping) && def.linearDamping >= 0.0);
+
+  this.m_world = world;
+
+  this.m_awakeFlag = def.awake;
+  this.m_autoSleepFlag = def.allowSleep;
+  this.m_bulletFlag = def.bullet;
+  this.m_fixedRotationFlag = def.fixedRotation;
+  this.m_activeFlag = def.active;
+
+  this.m_islandFlag = false;
+  this.m_toiFlag = false;
+
+  this.m_userData = def.userData;
+  this.m_type = def.type;
+
+  if (this.m_type == dynamicBody) {
+    this.m_mass = 1.0;
+    this.m_invMass = 1.0;
+  } else {
+    this.m_mass = 0.0;
+    this.m_invMass = 0.0;
+  }
+
+  // Rotational inertia about the center of mass.
+  this.m_I = 0.0;
+  this.m_invI = 0.0;
+
+  // the body origin transform
+  this.m_xf = Transform.identity();
+  this.m_xf.p = Vec2.clone(def.position);
+  this.m_xf.q.setAngle(def.angle);
+
+  // the swept motion for CCD
+  this.m_sweep = new Sweep();
+  this.m_sweep.setTransform(this.m_xf);
+
+  // position and velocity correction
+  this.c_velocity = new Velocity();
+  this.c_position = new Position();
+
+  this.m_force = Vec2.zero();
+  this.m_torque = 0.0;
+
+  this.m_linearVelocity = Vec2.clone(def.linearVelocity);
+  this.m_angularVelocity = def.angularVelocity;
+
+  this.m_linearDamping = def.linearDamping;
+  this.m_angularDamping = def.angularDamping;
+  this.m_gravityScale = def.gravityScale;
+
+  this.m_sleepTime = 0.0;
+
+  this.m_jointList = null;
+  this.m_contactList = null;
+  this.m_fixtureList = null;
+
+  this.m_prev = null;
+  this.m_next = null;
+
+  this.m_destroyed = false;
+}
+
+Body.prototype._serialize = function() {
+  var fixtures = [];
+  for (var f = this.m_fixtureList; f; f = f.m_next) {
+    fixtures.push(f);
+  }
+  return {
+    type: this.m_type,
+    position: this.m_xf.p,
+    angle: this.m_xf.q.getAngle(),
+    linearVelocity: this.m_linearVelocity,
+    angularVelocity: this.m_angularVelocity,
+    fixtures: fixtures,
+  };
+};
+
+Body._deserialize = function(data, world, restore) {
+  var body = new Body(world, data);
+
+  data.fixtures.forEach(function(data) {
+    var fixture = restore(Fixture, data, body);
+    body._addFixture(fixture);
+  });
+
+  return body;
+};
+
+Body.prototype.isWorldLocked = function() {
+  return this.m_world && this.m_world.isLocked() ? true : false;
+};
+
+Body.prototype.getWorld = function() {
+  return this.m_world;
+};
+
+Body.prototype.getNext = function() {
+  return this.m_next;
+};
+
+Body.prototype.setUserData = function(data) {
+  this.m_userData = data;
+};
+
+Body.prototype.getUserData = function() {
+  return this.m_userData;
+};
+
+Body.prototype.getFixtureList = function() {
+  return this.m_fixtureList;
+};
+
+Body.prototype.getJointList = function() {
+  return this.m_jointList;
+};
+
+/**
+ * Warning: this list changes during the time step and you may miss some
+ * collisions if you don't use ContactListener.
+ */
+Body.prototype.getContactList = function() {
+  return this.m_contactList;
+};
+
+Body.prototype.isStatic = function() {
+  return this.m_type == staticBody;
+};
+
+Body.prototype.isDynamic = function() {
+  return this.m_type == dynamicBody;
+};
+
+Body.prototype.isKinematic = function() {
+  return this.m_type == kinematicBody;
+};
+
+/**
+ * This will alter the mass and velocity.
+ */
+Body.prototype.setStatic = function() {
+  this.setType(staticBody);
+  return this;
+};
+
+Body.prototype.setDynamic = function() {
+  this.setType(dynamicBody);
+  return this;
+};
+
+Body.prototype.setKinematic = function() {
+  this.setType(kinematicBody);
+  return this;
+};
+
+/**
+ * @private
+ */
+Body.prototype.getType = function() {
+  return this.m_type;
+};
+
+/**
+ * 
+ * @private
+ */
+Body.prototype.setType = function(type) {
+  _ASSERT && common.assert(type === staticBody || type === kinematicBody || type === dynamicBody);
+  _ASSERT && common.assert(this.isWorldLocked() == false);
+
+  if (this.isWorldLocked() == true) {
+    return;
+  }
+
+  if (this.m_type == type) {
+    return;
+  }
+
+  this.m_type = type;
+
+  this.resetMassData();
+
+  if (this.m_type == staticBody) {
+    this.m_linearVelocity.setZero();
+    this.m_angularVelocity = 0.0;
+    this.m_sweep.forward();
+    this.synchronizeFixtures();
+  }
+
+  this.setAwake(true);
+
+  this.m_force.setZero();
+  this.m_torque = 0.0;
+
+  // Delete the attached contacts.
+  var ce = this.m_contactList;
+  while (ce) {
+    var ce0 = ce;
+    ce = ce.next;
+    this.m_world.destroyContact(ce0.contact);
+  }
+  this.m_contactList = null;
+
+  // Touch the proxies so that new contacts will be created (when appropriate)
+  var broadPhase = this.m_world.m_broadPhase;
+  for (var f = this.m_fixtureList; f; f = f.m_next) {
+    var proxyCount = f.m_proxyCount;
+    for (var i = 0; i < proxyCount; ++i) {
+      broadPhase.touchProxy(f.m_proxies[i].proxyId);
+    }
+  }
+};
+
+Body.prototype.isBullet = function() {
+  return this.m_bulletFlag;
+};
+
+/**
+ * Should this body be treated like a bullet for continuous collision detection?
+ */
+Body.prototype.setBullet = function(flag) {
+  this.m_bulletFlag = !!flag;
+};
+
+Body.prototype.isSleepingAllowed = function() {
+  return this.m_autoSleepFlag;
+};
+
+Body.prototype.setSleepingAllowed = function(flag) {
+  this.m_autoSleepFlag = !!flag;
+  if (this.m_autoSleepFlag == false) {
+    this.setAwake(true);
+  }
+};
+
+Body.prototype.isAwake = function() {
+  return this.m_awakeFlag;
+};
+
+/**
+ * Set the sleep state of the body. A sleeping body has very low CPU cost.
+ * 
+ * @param flag Set to true to wake the body, false to put it to sleep.
+ */
+Body.prototype.setAwake = function(flag) {
+  if (flag) {
+    if (this.m_awakeFlag == false) {
+      this.m_awakeFlag = true;
+      this.m_sleepTime = 0.0;
+    }
+  } else {
+    this.m_awakeFlag = false;
+    this.m_sleepTime = 0.0;
+    this.m_linearVelocity.setZero();
+    this.m_angularVelocity = 0.0;
+    this.m_force.setZero();
+    this.m_torque = 0.0;
+  }
+};
+
+Body.prototype.isActive = function() {
+  return this.m_activeFlag;
+};
+
+/**
+ * Set the active state of the body. An inactive body is not simulated and
+ * cannot be collided with or woken up. If you pass a flag of true, all fixtures
+ * will be added to the broad-phase. If you pass a flag of false, all fixtures
+ * will be removed from the broad-phase and all contacts will be destroyed.
+ * Fixtures and joints are otherwise unaffected.
+ * 
+ * You may continue to create/destroy fixtures and joints on inactive bodies.
+ * Fixtures on an inactive body are implicitly inactive and will not participate
+ * in collisions, ray-casts, or queries. Joints connected to an inactive body
+ * are implicitly inactive. An inactive body is still owned by a World object
+ * and remains
+ */
+Body.prototype.setActive = function(flag) {
+  _ASSERT && common.assert(this.isWorldLocked() == false);
+
+  if (flag == this.m_activeFlag) {
+    return;
+  }
+
+  this.m_activeFlag = !!flag;
+
+  if (this.m_activeFlag) {
+    // Create all proxies.
+    var broadPhase = this.m_world.m_broadPhase;
+    for (var f = this.m_fixtureList; f; f = f.m_next) {
+      f.createProxies(broadPhase, this.m_xf);
+    }
+    // Contacts are created the next time step.
+
+  } else {
+    // Destroy all proxies.
+    var broadPhase = this.m_world.m_broadPhase;
+    for (var f = this.m_fixtureList; f; f = f.m_next) {
+      f.destroyProxies(broadPhase);
+    }
+
+    // Destroy the attached contacts.
+    var ce = this.m_contactList;
+    while (ce) {
+      var ce0 = ce;
+      ce = ce.next;
+      this.m_world.destroyContact(ce0.contact);
+    }
+    this.m_contactList = null;
+  }
+};
+
+Body.prototype.isFixedRotation = function() {
+  return this.m_fixedRotationFlag;
+};
+
+/**
+ * Set this body to have fixed rotation. This causes the mass to be reset.
+ */
+Body.prototype.setFixedRotation = function(flag) {
+  if (this.m_fixedRotationFlag == flag) {
+    return;
+  }
+
+  this.m_fixedRotationFlag = !!flag;
+
+  this.m_angularVelocity = 0.0;
+
+  this.resetMassData();
+};
+
+/**
+ * Get the world transform for the body's origin.
+ */
+Body.prototype.getTransform = function() {
+  return this.m_xf;
+};
+
+/**
+ * Set the position of the body's origin and rotation. Manipulating a body's
+ * transform may cause non-physical behavior. Note: contacts are updated on the
+ * next call to World.step.
+ * 
+ * @param position The world position of the body's local origin.
+ * @param angle The world rotation in radians.
+ */
+Body.prototype.setTransform = function(position, angle) {
+  _ASSERT && common.assert(this.isWorldLocked() == false);
+  if (this.isWorldLocked() == true) {
+    return;
+  }
+
+  this.m_xf.set(position, angle);
+  this.m_sweep.setTransform(this.m_xf);
+
+  var broadPhase = this.m_world.m_broadPhase;
+  for (var f = this.m_fixtureList; f; f = f.m_next) {
+    f.synchronize(broadPhase, this.m_xf, this.m_xf);
+  }
+};
+
+Body.prototype.synchronizeTransform = function() {
+  this.m_sweep.getTransform(this.m_xf, 1);
+};
+
+/**
+ * Update fixtures in broad-phase.
+ */
+Body.prototype.synchronizeFixtures = function() {
+  var xf = Transform.identity();
+
+  this.m_sweep.getTransform(xf, 0);
+
+  var broadPhase = this.m_world.m_broadPhase;
+  for (var f = this.m_fixtureList; f; f = f.m_next) {
+    f.synchronize(broadPhase, xf, this.m_xf);
+  }
+};
+
+/**
+ * Used in TOI.
+ */
+Body.prototype.advance = function(alpha) {
+  // Advance to the new safe time. This doesn't sync the broad-phase.
+  this.m_sweep.advance(alpha);
+  this.m_sweep.c.set(this.m_sweep.c0);
+  this.m_sweep.a = this.m_sweep.a0;
+  this.m_sweep.getTransform(this.m_xf, 1);
+};
+
+/**
+ * Get the world position for the body's origin.
+ */
+Body.prototype.getPosition = function() {
+  return this.m_xf.p;
+};
+
+Body.prototype.setPosition = function(p) {
+  this.setTransform(p, this.m_sweep.a);
+};
+
+/**
+ * Get the current world rotation angle in radians.
+ */
+Body.prototype.getAngle = function() {
+  return this.m_sweep.a;
+};
+
+Body.prototype.setAngle = function(angle) {
+  this.setTransform(this.m_xf.p, angle);
+};
+
+/**
+ * Get the world position of the center of mass.
+ */
+Body.prototype.getWorldCenter = function() {
+  return this.m_sweep.c;
+};
+
+/**
+ * Get the local position of the center of mass.
+ */
+Body.prototype.getLocalCenter = function() {
+  return this.m_sweep.localCenter;
+};
+
+/**
+ * Get the linear velocity of the center of mass.
+ * 
+ * @return the linear velocity of the center of mass.
+ */
+Body.prototype.getLinearVelocity = function() {
+  return this.m_linearVelocity;
+};
+
+/**
+ * Get the world linear velocity of a world point attached to this body.
+ * 
+ * @param worldPoint A point in world coordinates.
+ */
+Body.prototype.getLinearVelocityFromWorldPoint = function(worldPoint) {
+  var localCenter = Vec2.sub(worldPoint, this.m_sweep.c);
+  return Vec2.add(this.m_linearVelocity, Vec2.cross(this.m_angularVelocity,
+      localCenter));
+};
+
+/**
+ * Get the world velocity of a local point.
+ * 
+ * @param localPoint A point in local coordinates.
+ */
+Body.prototype.getLinearVelocityFromLocalPoint = function(localPoint) {
+  return this.getLinearVelocityFromWorldPoint(this.getWorldPoint(localPoint));
+};
+
+/**
+ * Set the linear velocity of the center of mass.
+ * 
+ * @param v The new linear velocity of the center of mass.
+ */
+Body.prototype.setLinearVelocity = function(v) {
+  if (this.m_type == staticBody) {
+    return;
+  }
+  if (Vec2.dot(v, v) > 0.0) {
+    this.setAwake(true);
+  }
+  this.m_linearVelocity.set(v);
+};
+
+/**
+ * Get the angular velocity.
+ * 
+ * @returns the angular velocity in radians/second.
+ */
+Body.prototype.getAngularVelocity = function() {
+  return this.m_angularVelocity;
+};
+
+/**
+ * Set the angular velocity.
+ * 
+ * @param omega The new angular velocity in radians/second.
+ */
+Body.prototype.setAngularVelocity = function(w) {
+  if (this.m_type == staticBody) {
+    return;
+  }
+  if (w * w > 0.0) {
+    this.setAwake(true);
+  }
+  this.m_angularVelocity = w;
+};
+
+Body.prototype.getLinearDamping = function() {
+  return this.m_linearDamping;
+};
+
+Body.prototype.setLinearDamping = function(linearDamping) {
+  this.m_linearDamping = linearDamping;
+};
+
+Body.prototype.getAngularDamping = function() {
+  return this.m_angularDamping;
+};
+
+Body.prototype.setAngularDamping = function(angularDamping) {
+  this.m_angularDamping = angularDamping;
+};
+
+Body.prototype.getGravityScale = function() {
+  return this.m_gravityScale;
+};
+
+/**
+ * Scale the gravity applied to this body.
+ */
+Body.prototype.setGravityScale = function(scale) {
+  this.m_gravityScale = scale;
+};
+
+/**
+ * Get the total mass of the body.
+ * 
+ * @returns The mass, usually in kilograms (kg).
+ */
+Body.prototype.getMass = function() {
+  return this.m_mass;
+};
+
+/**
+ * Get the rotational inertia of the body about the local origin.
+ * 
+ * @return the rotational inertia, usually in kg-m^2.
+ */
+Body.prototype.getInertia = function() {
+  return this.m_I + this.m_mass
+      * Vec2.dot(this.m_sweep.localCenter, this.m_sweep.localCenter);
+};
+
+/**
+ * @typedef {Object} MassData This holds the mass data computed for a shape.
+ * 
+ * @prop mass The mass of the shape, usually in kilograms.
+ * @prop center The position of the shape's centroid relative to the shape's
+ *       origin.
+ * @prop I The rotational inertia of the shape about the local origin.
+ */
+function MassData() {
+  this.mass = 0;
+  this.center = Vec2.zero();
+  this.I = 0;
+};
+
+/**
+ * Copy the mass data of the body to data.
+ */
+Body.prototype.getMassData = function(data) {
+  data.mass = this.m_mass;
+  data.I = this.getInertia();
+  data.center.set(this.m_sweep.localCenter);
+};
+
+/**
+ * This resets the mass properties to the sum of the mass properties of the
+ * fixtures. This normally does not need to be called unless you called
+ * SetMassData to override the mass and you later want to reset the mass.
+ */
+Body.prototype.resetMassData = function() {
+  // Compute mass data from shapes. Each shape has its own density.
+  this.m_mass = 0.0;
+  this.m_invMass = 0.0;
+  this.m_I = 0.0;
+  this.m_invI = 0.0;
+  this.m_sweep.localCenter.setZero();
+
+  // Static and kinematic bodies have zero mass.
+  if (this.isStatic() || this.isKinematic()) {
+    this.m_sweep.c0.set(this.m_xf.p);
+    this.m_sweep.c.set(this.m_xf.p);
+    this.m_sweep.a0 = this.m_sweep.a;
+    return;
+  }
+
+  _ASSERT && common.assert(this.isDynamic());
+
+  // Accumulate mass over all fixtures.
+  var localCenter = Vec2.zero();
+  for (var f = this.m_fixtureList; f; f = f.m_next) {
+    if (f.m_density == 0.0) {
+      continue;
+    }
+
+    var massData = new MassData();
+    f.getMassData(massData);
+    this.m_mass += massData.mass;
+    localCenter.addMul(massData.mass, massData.center);
+    this.m_I += massData.I;
+  }
+
+  // Compute center of mass.
+  if (this.m_mass > 0.0) {
+    this.m_invMass = 1.0 / this.m_mass;
+    localCenter.mul(this.m_invMass);
+
+  } else {
+    // Force all dynamic bodies to have a positive mass.
+    this.m_mass = 1.0;
+    this.m_invMass = 1.0;
+  }
+
+  if (this.m_I > 0.0 && this.m_fixedRotationFlag == false) {
+    // Center the inertia about the center of mass.
+    this.m_I -= this.m_mass * Vec2.dot(localCenter, localCenter);
+    _ASSERT && common.assert(this.m_I > 0.0);
+    this.m_invI = 1.0 / this.m_I;
+
+  } else {
+    this.m_I = 0.0;
+    this.m_invI = 0.0;
+  }
+
+  // Move center of mass.
+  var oldCenter = Vec2.clone(this.m_sweep.c);
+  this.m_sweep.setLocalCenter(localCenter, this.m_xf);
+
+  // Update center of mass velocity.
+  this.m_linearVelocity.add(Vec2.cross(this.m_angularVelocity, Vec2.sub(
+      this.m_sweep.c, oldCenter)));
+};
+
+/**
+ * Set the mass properties to override the mass properties of the fixtures. Note
+ * that this changes the center of mass position. Note that creating or
+ * destroying fixtures can also alter the mass. This function has no effect if
+ * the body isn't dynamic.
+ * 
+ * @param massData The mass properties.
+ */
+Body.prototype.setMassData = function(massData) {
+  _ASSERT && common.assert(this.isWorldLocked() == false);
+  if (this.isWorldLocked() == true) {
+    return;
+  }
+
+  if (this.m_type != dynamicBody) {
+    return;
+  }
+
+  this.m_invMass = 0.0;
+  this.m_I = 0.0;
+  this.m_invI = 0.0;
+
+  this.m_mass = massData.mass;
+  if (this.m_mass <= 0.0) {
+    this.m_mass = 1.0;
+  }
+
+  this.m_invMass = 1.0 / this.m_mass;
+
+  if (massData.I > 0.0 && this.m_fixedRotationFlag == false) {
+    this.m_I = massData.I - this.m_mass
+        * Vec2.dot(massData.center, massData.center);
+    _ASSERT && common.assert(this.m_I > 0.0);
+    this.m_invI = 1.0 / this.m_I;
+  }
+
+  // Move center of mass.
+  var oldCenter = Vec2.clone(this.m_sweep.c);
+  this.m_sweep.setLocalCenter(massData.center, this.m_xf);
+
+  // Update center of mass velocity.
+  this.m_linearVelocity.add(Vec2.cross(this.m_angularVelocity, Vec2.sub(
+      this.m_sweep.c, oldCenter)));
+};
+
+/**
+ * Apply a force at a world point. If the force is not applied at the center of
+ * mass, it will generate a torque and affect the angular velocity. This wakes
+ * up the body.
+ * 
+ * @param force The world force vector, usually in Newtons (N).
+ * @param point The world position of the point of application.
+ * @param wake Also wake up the body
+ */
+Body.prototype.applyForce = function(force, point, wake) {
+  if (this.m_type != dynamicBody) {
+    return;
+  }
+  if (wake && this.m_awakeFlag == false) {
+    this.setAwake(true);
+  }
+  // Don't accumulate a force if the body is sleeping.
+  if (this.m_awakeFlag) {
+    this.m_force.add(force);
+    this.m_torque += Vec2.cross(Vec2.sub(point, this.m_sweep.c), force);
+  }
+};
+
+/**
+ * Apply a force to the center of mass. This wakes up the body.
+ * 
+ * @param force The world force vector, usually in Newtons (N).
+ * @param wake Also wake up the body
+ */
+Body.prototype.applyForceToCenter = function(force, wake) {
+  if (this.m_type != dynamicBody) {
+    return;
+  }
+  if (wake && this.m_awakeFlag == false) {
+    this.setAwake(true);
+  }
+  // Don't accumulate a force if the body is sleeping
+  if (this.m_awakeFlag) {
+    this.m_force.add(force);
+  }
+};
+
+/**
+ * Apply a torque. This affects the angular velocity without affecting the
+ * linear velocity of the center of mass. This wakes up the body.
+ * 
+ * @param torque About the z-axis (out of the screen), usually in N-m.
+ * @param wake Also wake up the body
+ */
+Body.prototype.applyTorque = function(torque, wake) {
+  if (this.m_type != dynamicBody) {
+    return;
+  }
+  if (wake && this.m_awakeFlag == false) {
+    this.setAwake(true);
+  }
+  // Don't accumulate a force if the body is sleeping
+  if (this.m_awakeFlag) {
+    this.m_torque += torque;
+  }
+};
+
+/**
+ * Apply an impulse at a point. This immediately modifies the velocity. It also
+ * modifies the angular velocity if the point of application is not at the
+ * center of mass. This wakes up the body.
+ * 
+ * @param impulse The world impulse vector, usually in N-seconds or kg-m/s.
+ * @param point The world position of the point of application.
+ * @param wake Also wake up the body
+ */
+Body.prototype.applyLinearImpulse = function(impulse, point, wake) {
+  if (this.m_type != dynamicBody) {
+    return;
+  }
+  if (wake && this.m_awakeFlag == false) {
+    this.setAwake(true);
+  }
+
+  // Don't accumulate velocity if the body is sleeping
+  if (this.m_awakeFlag) {
+    this.m_linearVelocity.addMul(this.m_invMass, impulse);
+    this.m_angularVelocity += this.m_invI * Vec2.cross(Vec2.sub(point, this.m_sweep.c), impulse);
+  }
+};
+
+/**
+ * Apply an angular impulse.
+ * 
+ * @param impulse The angular impulse in units of kg*m*m/s
+ * @param wake Also wake up the body
+ */
+Body.prototype.applyAngularImpulse = function(impulse, wake) {
+  if (this.m_type != dynamicBody) {
+    return;
+  }
+
+  if (wake && this.m_awakeFlag == false) {
+    this.setAwake(true);
+  }
+  // Don't accumulate velocity if the body is sleeping
+  if (this.m_awakeFlag) {
+    this.m_angularVelocity += this.m_invI * impulse;
+  }
+};
+
+/**
+ * This is used to prevent connected bodies (by joints) from colliding,
+ * depending on the joint's collideConnected flag.
+ */
+Body.prototype.shouldCollide = function(that) {
+  // At least one body should be dynamic.
+  if (this.m_type != dynamicBody && that.m_type != dynamicBody) {
+    return false;
+  }
+  // Does a joint prevent collision?
+  for (var jn = this.m_jointList; jn; jn = jn.next) {
+    if (jn.other == that) {
+      if (jn.joint.m_collideConnected == false) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+/**
+ * @internal Used for deserialize.
+ */
+Body.prototype._addFixture = function(fixture) {
+  _ASSERT && common.assert(this.isWorldLocked() == false);
+
+  if (this.isWorldLocked() == true) {
+    return null;
+  }
+
+  if (this.m_activeFlag) {
+    var broadPhase = this.m_world.m_broadPhase;
+    fixture.createProxies(broadPhase, this.m_xf);
+  }
+
+  fixture.m_next = this.m_fixtureList;
+  this.m_fixtureList = fixture;
+
+  // Adjust mass properties if needed.
+  if (fixture.m_density > 0.0) {
+    this.resetMassData();
+  }
+
+  // Let the world know we have a new fixture. This will cause new contacts
+  // to be created at the beginning of the next time step.
+  this.m_world.m_newFixture = true;
+
+  return fixture
+};
+
+/**
+ * Creates a fixture and attach it to this body.
+ * 
+ * If the density is non-zero, this function automatically updates the mass of
+ * the body.
+ * 
+ * Contacts are not created until the next time step.
+ * 
+ * Warning: This function is locked during callbacks.
+
+ * @param {Shape|FixtureDef} shape Shape or fixture definition.
+ * @param {FixtureDef|number} fixdef Fixture definition or just density.
+ */
+Body.prototype.createFixture = function(shape, fixdef) {
+  _ASSERT && common.assert(this.isWorldLocked() == false);
+
+  if (this.isWorldLocked() == true) {
+    return null;
+  }
+
+  var fixture = new Fixture(this, shape, fixdef);
+  this._addFixture(fixture);
+  return fixture
+};
+
+/**
+ * Destroy a fixture. This removes the fixture from the broad-phase and destroys
+ * all contacts associated with this fixture. This will automatically adjust the
+ * mass of the body if the body is dynamic and the fixture has positive density.
+ * All fixtures attached to a body are implicitly destroyed when the body is
+ * destroyed.
+ * 
+ * Warning: This function is locked during callbacks.
+ * 
+ * @param fixture The fixture to be removed.
+ */
+Body.prototype.destroyFixture = function(fixture) {
+  _ASSERT && common.assert(this.isWorldLocked() == false);
+
+  if (this.isWorldLocked() == true) {
+    return;
+  }
+
+  _ASSERT && common.assert(fixture.m_body == this);
+
+  // Remove the fixture from this body's singly linked list.
+  var found = false;
+  if (this.m_fixtureList === fixture) {
+    this.m_fixtureList = fixture.m_next;
+    found = true;
+
+  } else {
+    var node = this.m_fixtureList;
+    while (node != null) {
+      if (node.m_next === fixture) {
+        node.m_next = fixture.m_next;
+        found = true;
+        break;
+      }
+      node = node.m_next;
+    }
+  }
+
+  // You tried to remove a shape that is not attached to this body.
+  _ASSERT && common.assert(found);
+
+  // Destroy any contacts associated with the fixture.
+  var edge = this.m_contactList;
+  while (edge) {
+    var c = edge.contact;
+    edge = edge.next;
+
+    var fixtureA = c.getFixtureA();
+    var fixtureB = c.getFixtureB();
+
+    if (fixture == fixtureA || fixture == fixtureB) {
+      // This destroys the contact and removes it from
+      // this body's contact list.
+      this.m_world.destroyContact(c);
+    }
+  }
+
+  if (this.m_activeFlag) {
+    var broadPhase = this.m_world.m_broadPhase;
+    fixture.destroyProxies(broadPhase);
+  }
+
+  fixture.m_body = null;
+  fixture.m_next = null;
+
+  this.m_world.publish('remove-fixture', fixture);
+
+  // Reset the mass data.
+  this.resetMassData();
+};
+
+/**
+ * Get the corresponding world point of a local point.
+ */
+Body.prototype.getWorldPoint = function(localPoint) {
+  return Transform.mulVec2(this.m_xf, localPoint);
+};
+
+/**
+ * Get the corresponding world vector of a local vector.
+ */
+Body.prototype.getWorldVector = function(localVector) {
+  return Rot.mulVec2(this.m_xf.q, localVector);
+};
+
+/**
+ * Gets the corresponding local point of a world point.
+ */
+Body.prototype.getLocalPoint = function(worldPoint) {
+  return Transform.mulTVec2(this.m_xf, worldPoint);
+};
+
+/**
+ * 
+ * Gets the corresponding local vector of a world vector.
+ */
+Body.prototype.getLocalVector = function(worldVector) {
+  return Rot.mulTVec2(this.m_xf.q, worldVector);
+};
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
+ * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty.  In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 1. The origin of this software must not be misrepresented; you must not
+ * claim that you wrote the original software. If you use this software
+ * in a product, an acknowledgment in the product documentation would be
+ * appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ * misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
+var _DEBUG =  false ? undefined : false;
+var _ASSERT =  false ? undefined : false;
+
 module.exports = Sweep;
 
 var common = __webpack_require__(2);
@@ -1599,7 +2682,7 @@ Sweep.prototype.set = function(that) {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -1822,7 +2905,7 @@ Mat22.add = function(mx1, mx2) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2001,7 +3084,7 @@ Vec3.neg = function(v) {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2229,7 +3312,7 @@ Joint.prototype.solvePositionConstraints = function(step) {
 };
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2268,7 +3351,7 @@ function Velocity() {
 }
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2314,7 +3397,7 @@ Position.prototype.getTransform = function(xf, p) {
 }
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2344,7 +3427,7 @@ module.exports = Mat33;
 var common = __webpack_require__(2);
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(10);
+var Vec3 = __webpack_require__(11);
 
 /**
  * A 3-by-3 matrix. Stored in column-major order.
@@ -2543,7 +3626,7 @@ Mat33.add = function(a, b) {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2678,7 +3761,7 @@ Shape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2941,7 +4024,7 @@ AABB.prototype.toString = function() {
 }
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2973,7 +4056,7 @@ var common = __webpack_require__(2);
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 var Transform = __webpack_require__(5);
-var Mat22 = __webpack_require__(9);
+var Mat22 = __webpack_require__(10);
 var Rot = __webpack_require__(3);
 
 var Settings = __webpack_require__(4);
@@ -4171,1089 +5254,6 @@ Contact.destroy = function(contact, listener) {
 
 
 /***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
- * Copyright (c) 2006-2011 Erin Catto  http://www.box2d.org
- *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- * 1. The origin of this software must not be misrepresented; you must not
- * claim that you wrote the original software. If you use this software
- * in a product, an acknowledgment in the product documentation would be
- * appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- * misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- */
-
-var _DEBUG =  false ? undefined : false;
-var _ASSERT =  false ? undefined : false;
-
-module.exports = Body;
-
-var common = __webpack_require__(2);
-var options = __webpack_require__(7);
-
-var Vec2 = __webpack_require__(0);
-var Rot = __webpack_require__(3);
-var Math = __webpack_require__(1);
-var Sweep = __webpack_require__(8);
-var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
-
-var Fixture = __webpack_require__(32);
-var Shape = __webpack_require__(15);
-
-var staticBody = Body.STATIC = 'static';
-var kinematicBody = Body.KINEMATIC = 'kinematic';
-var dynamicBody = Body.DYNAMIC = 'dynamic';
-
-/**
- * @typedef {Object} BodyDef
- *
- * @prop type Body types are static, kinematic, or dynamic. Note: if a dynamic
- *       body would have zero mass, the mass is set to one.
- *
- * @prop position The world position of the body. Avoid creating bodies at the
- *       origin since this can lead to many overlapping shapes.
- *
- * @prop angle The world angle of the body in radians.
- *
- * @prop linearVelocity The linear velocity of the body's origin in world
- *       co-ordinates.
- *
- * @prop angularVelocity
- *
- * @prop linearDamping Linear damping is use to reduce the linear velocity. The
- *       damping parameter can be larger than 1.0 but the damping effect becomes
- *       sensitive to the time step when the damping parameter is large.
- *
- * @prop angularDamping Angular damping is use to reduce the angular velocity.
- *       The damping parameter can be larger than 1.0 but the damping effect
- *       becomes sensitive to the time step when the damping parameter is large.
- *
- * @prop fixedRotation Should this body be prevented from rotating? Useful for
- *       characters.
- *
- * @prop bullet Is this a fast moving body that should be prevented from
- *       tunneling through other moving bodies? Note that all bodies are
- *       prevented from tunneling through kinematic and static bodies. This
- *       setting is only considered on dynamic bodies. Warning: You should use
- *       this flag sparingly since it increases processing time.
- *
- * @prop active Does this body start out active?
- *
- * @prop awake Is this body initially awake or sleeping?
- *
- * @prop allowSleep Set this flag to false if this body should never fall
- *       asleep. Note that this increases CPU usage.
- */
-var BodyDef = {
-  type : staticBody,
-  position : Vec2.zero(),
-  angle : 0.0,
-
-  linearVelocity : Vec2.zero(),
-  angularVelocity : 0.0,
-
-  linearDamping : 0.0,
-  angularDamping : 0.0,
-
-  fixedRotation : false,
-  bullet : false,
-  gravityScale : 1.0,
-
-  allowSleep : true,
-  awake : true,
-  active : true,
-
-  userData : null
-};
-
-/**
- * @class
- * 
- * A rigid body composed of one or more fixtures.
- * 
- * @param {World} world
- * @param {BodyDef} def
- */
-function Body(world, def) {
-
-  def = options(def, BodyDef);
-
-  _ASSERT && common.assert(Vec2.isValid(def.position));
-  _ASSERT && common.assert(Vec2.isValid(def.linearVelocity));
-  _ASSERT && common.assert(Math.isFinite(def.angle));
-  _ASSERT && common.assert(Math.isFinite(def.angularVelocity));
-  _ASSERT && common.assert(Math.isFinite(def.angularDamping) && def.angularDamping >= 0.0);
-  _ASSERT && common.assert(Math.isFinite(def.linearDamping) && def.linearDamping >= 0.0);
-
-  this.m_world = world;
-
-  this.m_awakeFlag = def.awake;
-  this.m_autoSleepFlag = def.allowSleep;
-  this.m_bulletFlag = def.bullet;
-  this.m_fixedRotationFlag = def.fixedRotation;
-  this.m_activeFlag = def.active;
-
-  this.m_islandFlag = false;
-  this.m_toiFlag = false;
-
-  this.m_userData = def.userData;
-  this.m_type = def.type;
-
-  if (this.m_type == dynamicBody) {
-    this.m_mass = 1.0;
-    this.m_invMass = 1.0;
-  } else {
-    this.m_mass = 0.0;
-    this.m_invMass = 0.0;
-  }
-
-  // Rotational inertia about the center of mass.
-  this.m_I = 0.0;
-  this.m_invI = 0.0;
-
-  // the body origin transform
-  this.m_xf = Transform.identity();
-  this.m_xf.p = Vec2.clone(def.position);
-  this.m_xf.q.setAngle(def.angle);
-
-  // the swept motion for CCD
-  this.m_sweep = new Sweep();
-  this.m_sweep.setTransform(this.m_xf);
-
-  // position and velocity correction
-  this.c_velocity = new Velocity();
-  this.c_position = new Position();
-
-  this.m_force = Vec2.zero();
-  this.m_torque = 0.0;
-
-  this.m_linearVelocity = Vec2.clone(def.linearVelocity);
-  this.m_angularVelocity = def.angularVelocity;
-
-  this.m_linearDamping = def.linearDamping;
-  this.m_angularDamping = def.angularDamping;
-  this.m_gravityScale = def.gravityScale;
-
-  this.m_sleepTime = 0.0;
-
-  this.m_jointList = null;
-  this.m_contactList = null;
-  this.m_fixtureList = null;
-
-  this.m_prev = null;
-  this.m_next = null;
-
-  this.m_destroyed = false;
-}
-
-Body.prototype._serialize = function() {
-  var fixtures = [];
-  for (var f = this.m_fixtureList; f; f = f.m_next) {
-    fixtures.push(f);
-  }
-  return {
-    type: this.m_type,
-    position: this.m_xf.p,
-    angle: this.m_xf.q.getAngle(),
-    linearVelocity: this.m_linearVelocity,
-    angularVelocity: this.m_angularVelocity,
-    fixtures: fixtures,
-  };
-};
-
-Body._deserialize = function(data, world, restore) {
-  var body = new Body(world, data);
-
-  data.fixtures.forEach(function(data) {
-    var fixture = restore(Fixture, data, body);
-    body._addFixture(fixture);
-  });
-
-  return body;
-};
-
-Body.prototype.isWorldLocked = function() {
-  return this.m_world && this.m_world.isLocked() ? true : false;
-};
-
-Body.prototype.getWorld = function() {
-  return this.m_world;
-};
-
-Body.prototype.getNext = function() {
-  return this.m_next;
-};
-
-Body.prototype.setUserData = function(data) {
-  this.m_userData = data;
-};
-
-Body.prototype.getUserData = function() {
-  return this.m_userData;
-};
-
-Body.prototype.getFixtureList = function() {
-  return this.m_fixtureList;
-};
-
-Body.prototype.getJointList = function() {
-  return this.m_jointList;
-};
-
-/**
- * Warning: this list changes during the time step and you may miss some
- * collisions if you don't use ContactListener.
- */
-Body.prototype.getContactList = function() {
-  return this.m_contactList;
-};
-
-Body.prototype.isStatic = function() {
-  return this.m_type == staticBody;
-};
-
-Body.prototype.isDynamic = function() {
-  return this.m_type == dynamicBody;
-};
-
-Body.prototype.isKinematic = function() {
-  return this.m_type == kinematicBody;
-};
-
-/**
- * This will alter the mass and velocity.
- */
-Body.prototype.setStatic = function() {
-  this.setType(staticBody);
-  return this;
-};
-
-Body.prototype.setDynamic = function() {
-  this.setType(dynamicBody);
-  return this;
-};
-
-Body.prototype.setKinematic = function() {
-  this.setType(kinematicBody);
-  return this;
-};
-
-/**
- * @private
- */
-Body.prototype.getType = function() {
-  return this.m_type;
-};
-
-/**
- * 
- * @private
- */
-Body.prototype.setType = function(type) {
-  _ASSERT && common.assert(type === staticBody || type === kinematicBody || type === dynamicBody);
-  _ASSERT && common.assert(this.isWorldLocked() == false);
-
-  if (this.isWorldLocked() == true) {
-    return;
-  }
-
-  if (this.m_type == type) {
-    return;
-  }
-
-  this.m_type = type;
-
-  this.resetMassData();
-
-  if (this.m_type == staticBody) {
-    this.m_linearVelocity.setZero();
-    this.m_angularVelocity = 0.0;
-    this.m_sweep.forward();
-    this.synchronizeFixtures();
-  }
-
-  this.setAwake(true);
-
-  this.m_force.setZero();
-  this.m_torque = 0.0;
-
-  // Delete the attached contacts.
-  var ce = this.m_contactList;
-  while (ce) {
-    var ce0 = ce;
-    ce = ce.next;
-    this.m_world.destroyContact(ce0.contact);
-  }
-  this.m_contactList = null;
-
-  // Touch the proxies so that new contacts will be created (when appropriate)
-  var broadPhase = this.m_world.m_broadPhase;
-  for (var f = this.m_fixtureList; f; f = f.m_next) {
-    var proxyCount = f.m_proxyCount;
-    for (var i = 0; i < proxyCount; ++i) {
-      broadPhase.touchProxy(f.m_proxies[i].proxyId);
-    }
-  }
-};
-
-Body.prototype.isBullet = function() {
-  return this.m_bulletFlag;
-};
-
-/**
- * Should this body be treated like a bullet for continuous collision detection?
- */
-Body.prototype.setBullet = function(flag) {
-  this.m_bulletFlag = !!flag;
-};
-
-Body.prototype.isSleepingAllowed = function() {
-  return this.m_autoSleepFlag;
-};
-
-Body.prototype.setSleepingAllowed = function(flag) {
-  this.m_autoSleepFlag = !!flag;
-  if (this.m_autoSleepFlag == false) {
-    this.setAwake(true);
-  }
-};
-
-Body.prototype.isAwake = function() {
-  return this.m_awakeFlag;
-};
-
-/**
- * Set the sleep state of the body. A sleeping body has very low CPU cost.
- * 
- * @param flag Set to true to wake the body, false to put it to sleep.
- */
-Body.prototype.setAwake = function(flag) {
-  if (flag) {
-    if (this.m_awakeFlag == false) {
-      this.m_awakeFlag = true;
-      this.m_sleepTime = 0.0;
-    }
-  } else {
-    this.m_awakeFlag = false;
-    this.m_sleepTime = 0.0;
-    this.m_linearVelocity.setZero();
-    this.m_angularVelocity = 0.0;
-    this.m_force.setZero();
-    this.m_torque = 0.0;
-  }
-};
-
-Body.prototype.isActive = function() {
-  return this.m_activeFlag;
-};
-
-/**
- * Set the active state of the body. An inactive body is not simulated and
- * cannot be collided with or woken up. If you pass a flag of true, all fixtures
- * will be added to the broad-phase. If you pass a flag of false, all fixtures
- * will be removed from the broad-phase and all contacts will be destroyed.
- * Fixtures and joints are otherwise unaffected.
- * 
- * You may continue to create/destroy fixtures and joints on inactive bodies.
- * Fixtures on an inactive body are implicitly inactive and will not participate
- * in collisions, ray-casts, or queries. Joints connected to an inactive body
- * are implicitly inactive. An inactive body is still owned by a World object
- * and remains
- */
-Body.prototype.setActive = function(flag) {
-  _ASSERT && common.assert(this.isWorldLocked() == false);
-
-  if (flag == this.m_activeFlag) {
-    return;
-  }
-
-  this.m_activeFlag = !!flag;
-
-  if (this.m_activeFlag) {
-    // Create all proxies.
-    var broadPhase = this.m_world.m_broadPhase;
-    for (var f = this.m_fixtureList; f; f = f.m_next) {
-      f.createProxies(broadPhase, this.m_xf);
-    }
-    // Contacts are created the next time step.
-
-  } else {
-    // Destroy all proxies.
-    var broadPhase = this.m_world.m_broadPhase;
-    for (var f = this.m_fixtureList; f; f = f.m_next) {
-      f.destroyProxies(broadPhase);
-    }
-
-    // Destroy the attached contacts.
-    var ce = this.m_contactList;
-    while (ce) {
-      var ce0 = ce;
-      ce = ce.next;
-      this.m_world.destroyContact(ce0.contact);
-    }
-    this.m_contactList = null;
-  }
-};
-
-Body.prototype.isFixedRotation = function() {
-  return this.m_fixedRotationFlag;
-};
-
-/**
- * Set this body to have fixed rotation. This causes the mass to be reset.
- */
-Body.prototype.setFixedRotation = function(flag) {
-  if (this.m_fixedRotationFlag == flag) {
-    return;
-  }
-
-  this.m_fixedRotationFlag = !!flag;
-
-  this.m_angularVelocity = 0.0;
-
-  this.resetMassData();
-};
-
-/**
- * Get the world transform for the body's origin.
- */
-Body.prototype.getTransform = function() {
-  return this.m_xf;
-};
-
-/**
- * Set the position of the body's origin and rotation. Manipulating a body's
- * transform may cause non-physical behavior. Note: contacts are updated on the
- * next call to World.step.
- * 
- * @param position The world position of the body's local origin.
- * @param angle The world rotation in radians.
- */
-Body.prototype.setTransform = function(position, angle) {
-  _ASSERT && common.assert(this.isWorldLocked() == false);
-  if (this.isWorldLocked() == true) {
-    return;
-  }
-
-  this.m_xf.set(position, angle);
-  this.m_sweep.setTransform(this.m_xf);
-
-  var broadPhase = this.m_world.m_broadPhase;
-  for (var f = this.m_fixtureList; f; f = f.m_next) {
-    f.synchronize(broadPhase, this.m_xf, this.m_xf);
-  }
-};
-
-Body.prototype.synchronizeTransform = function() {
-  this.m_sweep.getTransform(this.m_xf, 1);
-};
-
-/**
- * Update fixtures in broad-phase.
- */
-Body.prototype.synchronizeFixtures = function() {
-  var xf = Transform.identity();
-
-  this.m_sweep.getTransform(xf, 0);
-
-  var broadPhase = this.m_world.m_broadPhase;
-  for (var f = this.m_fixtureList; f; f = f.m_next) {
-    f.synchronize(broadPhase, xf, this.m_xf);
-  }
-};
-
-/**
- * Used in TOI.
- */
-Body.prototype.advance = function(alpha) {
-  // Advance to the new safe time. This doesn't sync the broad-phase.
-  this.m_sweep.advance(alpha);
-  this.m_sweep.c.set(this.m_sweep.c0);
-  this.m_sweep.a = this.m_sweep.a0;
-  this.m_sweep.getTransform(this.m_xf, 1);
-};
-
-/**
- * Get the world position for the body's origin.
- */
-Body.prototype.getPosition = function() {
-  return this.m_xf.p;
-};
-
-Body.prototype.setPosition = function(p) {
-  this.setTransform(p, this.m_sweep.a);
-};
-
-/**
- * Get the current world rotation angle in radians.
- */
-Body.prototype.getAngle = function() {
-  return this.m_sweep.a;
-};
-
-Body.prototype.setAngle = function(angle) {
-  this.setTransform(this.m_xf.p, angle);
-};
-
-/**
- * Get the world position of the center of mass.
- */
-Body.prototype.getWorldCenter = function() {
-  return this.m_sweep.c;
-};
-
-/**
- * Get the local position of the center of mass.
- */
-Body.prototype.getLocalCenter = function() {
-  return this.m_sweep.localCenter;
-};
-
-/**
- * Get the linear velocity of the center of mass.
- * 
- * @return the linear velocity of the center of mass.
- */
-Body.prototype.getLinearVelocity = function() {
-  return this.m_linearVelocity;
-};
-
-/**
- * Get the world linear velocity of a world point attached to this body.
- * 
- * @param worldPoint A point in world coordinates.
- */
-Body.prototype.getLinearVelocityFromWorldPoint = function(worldPoint) {
-  var localCenter = Vec2.sub(worldPoint, this.m_sweep.c);
-  return Vec2.add(this.m_linearVelocity, Vec2.cross(this.m_angularVelocity,
-      localCenter));
-};
-
-/**
- * Get the world velocity of a local point.
- * 
- * @param localPoint A point in local coordinates.
- */
-Body.prototype.getLinearVelocityFromLocalPoint = function(localPoint) {
-  return this.getLinearVelocityFromWorldPoint(this.getWorldPoint(localPoint));
-};
-
-/**
- * Set the linear velocity of the center of mass.
- * 
- * @param v The new linear velocity of the center of mass.
- */
-Body.prototype.setLinearVelocity = function(v) {
-  if (this.m_type == staticBody) {
-    return;
-  }
-  if (Vec2.dot(v, v) > 0.0) {
-    this.setAwake(true);
-  }
-  this.m_linearVelocity.set(v);
-};
-
-/**
- * Get the angular velocity.
- * 
- * @returns the angular velocity in radians/second.
- */
-Body.prototype.getAngularVelocity = function() {
-  return this.m_angularVelocity;
-};
-
-/**
- * Set the angular velocity.
- * 
- * @param omega The new angular velocity in radians/second.
- */
-Body.prototype.setAngularVelocity = function(w) {
-  if (this.m_type == staticBody) {
-    return;
-  }
-  if (w * w > 0.0) {
-    this.setAwake(true);
-  }
-  this.m_angularVelocity = w;
-};
-
-Body.prototype.getLinearDamping = function() {
-  return this.m_linearDamping;
-};
-
-Body.prototype.setLinearDamping = function(linearDamping) {
-  this.m_linearDamping = linearDamping;
-};
-
-Body.prototype.getAngularDamping = function() {
-  return this.m_angularDamping;
-};
-
-Body.prototype.setAngularDamping = function(angularDamping) {
-  this.m_angularDamping = angularDamping;
-};
-
-Body.prototype.getGravityScale = function() {
-  return this.m_gravityScale;
-};
-
-/**
- * Scale the gravity applied to this body.
- */
-Body.prototype.setGravityScale = function(scale) {
-  this.m_gravityScale = scale;
-};
-
-/**
- * Get the total mass of the body.
- * 
- * @returns The mass, usually in kilograms (kg).
- */
-Body.prototype.getMass = function() {
-  return this.m_mass;
-};
-
-/**
- * Get the rotational inertia of the body about the local origin.
- * 
- * @return the rotational inertia, usually in kg-m^2.
- */
-Body.prototype.getInertia = function() {
-  return this.m_I + this.m_mass
-      * Vec2.dot(this.m_sweep.localCenter, this.m_sweep.localCenter);
-};
-
-/**
- * @typedef {Object} MassData This holds the mass data computed for a shape.
- * 
- * @prop mass The mass of the shape, usually in kilograms.
- * @prop center The position of the shape's centroid relative to the shape's
- *       origin.
- * @prop I The rotational inertia of the shape about the local origin.
- */
-function MassData() {
-  this.mass = 0;
-  this.center = Vec2.zero();
-  this.I = 0;
-};
-
-/**
- * Copy the mass data of the body to data.
- */
-Body.prototype.getMassData = function(data) {
-  data.mass = this.m_mass;
-  data.I = this.getInertia();
-  data.center.set(this.m_sweep.localCenter);
-};
-
-/**
- * This resets the mass properties to the sum of the mass properties of the
- * fixtures. This normally does not need to be called unless you called
- * SetMassData to override the mass and you later want to reset the mass.
- */
-Body.prototype.resetMassData = function() {
-  // Compute mass data from shapes. Each shape has its own density.
-  this.m_mass = 0.0;
-  this.m_invMass = 0.0;
-  this.m_I = 0.0;
-  this.m_invI = 0.0;
-  this.m_sweep.localCenter.setZero();
-
-  // Static and kinematic bodies have zero mass.
-  if (this.isStatic() || this.isKinematic()) {
-    this.m_sweep.c0.set(this.m_xf.p);
-    this.m_sweep.c.set(this.m_xf.p);
-    this.m_sweep.a0 = this.m_sweep.a;
-    return;
-  }
-
-  _ASSERT && common.assert(this.isDynamic());
-
-  // Accumulate mass over all fixtures.
-  var localCenter = Vec2.zero();
-  for (var f = this.m_fixtureList; f; f = f.m_next) {
-    if (f.m_density == 0.0) {
-      continue;
-    }
-
-    var massData = new MassData();
-    f.getMassData(massData);
-    this.m_mass += massData.mass;
-    localCenter.addMul(massData.mass, massData.center);
-    this.m_I += massData.I;
-  }
-
-  // Compute center of mass.
-  if (this.m_mass > 0.0) {
-    this.m_invMass = 1.0 / this.m_mass;
-    localCenter.mul(this.m_invMass);
-
-  } else {
-    // Force all dynamic bodies to have a positive mass.
-    this.m_mass = 1.0;
-    this.m_invMass = 1.0;
-  }
-
-  if (this.m_I > 0.0 && this.m_fixedRotationFlag == false) {
-    // Center the inertia about the center of mass.
-    this.m_I -= this.m_mass * Vec2.dot(localCenter, localCenter);
-    _ASSERT && common.assert(this.m_I > 0.0);
-    this.m_invI = 1.0 / this.m_I;
-
-  } else {
-    this.m_I = 0.0;
-    this.m_invI = 0.0;
-  }
-
-  // Move center of mass.
-  var oldCenter = Vec2.clone(this.m_sweep.c);
-  this.m_sweep.setLocalCenter(localCenter, this.m_xf);
-
-  // Update center of mass velocity.
-  this.m_linearVelocity.add(Vec2.cross(this.m_angularVelocity, Vec2.sub(
-      this.m_sweep.c, oldCenter)));
-};
-
-/**
- * Set the mass properties to override the mass properties of the fixtures. Note
- * that this changes the center of mass position. Note that creating or
- * destroying fixtures can also alter the mass. This function has no effect if
- * the body isn't dynamic.
- * 
- * @param massData The mass properties.
- */
-Body.prototype.setMassData = function(massData) {
-  _ASSERT && common.assert(this.isWorldLocked() == false);
-  if (this.isWorldLocked() == true) {
-    return;
-  }
-
-  if (this.m_type != dynamicBody) {
-    return;
-  }
-
-  this.m_invMass = 0.0;
-  this.m_I = 0.0;
-  this.m_invI = 0.0;
-
-  this.m_mass = massData.mass;
-  if (this.m_mass <= 0.0) {
-    this.m_mass = 1.0;
-  }
-
-  this.m_invMass = 1.0 / this.m_mass;
-
-  if (massData.I > 0.0 && this.m_fixedRotationFlag == false) {
-    this.m_I = massData.I - this.m_mass
-        * Vec2.dot(massData.center, massData.center);
-    _ASSERT && common.assert(this.m_I > 0.0);
-    this.m_invI = 1.0 / this.m_I;
-  }
-
-  // Move center of mass.
-  var oldCenter = Vec2.clone(this.m_sweep.c);
-  this.m_sweep.setLocalCenter(massData.center, this.m_xf);
-
-  // Update center of mass velocity.
-  this.m_linearVelocity.add(Vec2.cross(this.m_angularVelocity, Vec2.sub(
-      this.m_sweep.c, oldCenter)));
-};
-
-/**
- * Apply a force at a world point. If the force is not applied at the center of
- * mass, it will generate a torque and affect the angular velocity. This wakes
- * up the body.
- * 
- * @param force The world force vector, usually in Newtons (N).
- * @param point The world position of the point of application.
- * @param wake Also wake up the body
- */
-Body.prototype.applyForce = function(force, point, wake) {
-  if (this.m_type != dynamicBody) {
-    return;
-  }
-  if (wake && this.m_awakeFlag == false) {
-    this.setAwake(true);
-  }
-  // Don't accumulate a force if the body is sleeping.
-  if (this.m_awakeFlag) {
-    this.m_force.add(force);
-    this.m_torque += Vec2.cross(Vec2.sub(point, this.m_sweep.c), force);
-  }
-};
-
-/**
- * Apply a force to the center of mass. This wakes up the body.
- * 
- * @param force The world force vector, usually in Newtons (N).
- * @param wake Also wake up the body
- */
-Body.prototype.applyForceToCenter = function(force, wake) {
-  if (this.m_type != dynamicBody) {
-    return;
-  }
-  if (wake && this.m_awakeFlag == false) {
-    this.setAwake(true);
-  }
-  // Don't accumulate a force if the body is sleeping
-  if (this.m_awakeFlag) {
-    this.m_force.add(force);
-  }
-};
-
-/**
- * Apply a torque. This affects the angular velocity without affecting the
- * linear velocity of the center of mass. This wakes up the body.
- * 
- * @param torque About the z-axis (out of the screen), usually in N-m.
- * @param wake Also wake up the body
- */
-Body.prototype.applyTorque = function(torque, wake) {
-  if (this.m_type != dynamicBody) {
-    return;
-  }
-  if (wake && this.m_awakeFlag == false) {
-    this.setAwake(true);
-  }
-  // Don't accumulate a force if the body is sleeping
-  if (this.m_awakeFlag) {
-    this.m_torque += torque;
-  }
-};
-
-/**
- * Apply an impulse at a point. This immediately modifies the velocity. It also
- * modifies the angular velocity if the point of application is not at the
- * center of mass. This wakes up the body.
- * 
- * @param impulse The world impulse vector, usually in N-seconds or kg-m/s.
- * @param point The world position of the point of application.
- * @param wake Also wake up the body
- */
-Body.prototype.applyLinearImpulse = function(impulse, point, wake) {
-  if (this.m_type != dynamicBody) {
-    return;
-  }
-  if (wake && this.m_awakeFlag == false) {
-    this.setAwake(true);
-  }
-
-  // Don't accumulate velocity if the body is sleeping
-  if (this.m_awakeFlag) {
-    this.m_linearVelocity.addMul(this.m_invMass, impulse);
-    this.m_angularVelocity += this.m_invI * Vec2.cross(Vec2.sub(point, this.m_sweep.c), impulse);
-  }
-};
-
-/**
- * Apply an angular impulse.
- * 
- * @param impulse The angular impulse in units of kg*m*m/s
- * @param wake Also wake up the body
- */
-Body.prototype.applyAngularImpulse = function(impulse, wake) {
-  if (this.m_type != dynamicBody) {
-    return;
-  }
-
-  if (wake && this.m_awakeFlag == false) {
-    this.setAwake(true);
-  }
-  // Don't accumulate velocity if the body is sleeping
-  if (this.m_awakeFlag) {
-    this.m_angularVelocity += this.m_invI * impulse;
-  }
-};
-
-/**
- * This is used to prevent connected bodies (by joints) from colliding,
- * depending on the joint's collideConnected flag.
- */
-Body.prototype.shouldCollide = function(that) {
-  // At least one body should be dynamic.
-  if (this.m_type != dynamicBody && that.m_type != dynamicBody) {
-    return false;
-  }
-  // Does a joint prevent collision?
-  for (var jn = this.m_jointList; jn; jn = jn.next) {
-    if (jn.other == that) {
-      if (jn.joint.m_collideConnected == false) {
-        return false;
-      }
-    }
-  }
-  return true;
-};
-
-/**
- * @internal Used for deserialize.
- */
-Body.prototype._addFixture = function(fixture) {
-  _ASSERT && common.assert(this.isWorldLocked() == false);
-
-  if (this.isWorldLocked() == true) {
-    return null;
-  }
-
-  if (this.m_activeFlag) {
-    var broadPhase = this.m_world.m_broadPhase;
-    fixture.createProxies(broadPhase, this.m_xf);
-  }
-
-  fixture.m_next = this.m_fixtureList;
-  this.m_fixtureList = fixture;
-
-  // Adjust mass properties if needed.
-  if (fixture.m_density > 0.0) {
-    this.resetMassData();
-  }
-
-  // Let the world know we have a new fixture. This will cause new contacts
-  // to be created at the beginning of the next time step.
-  this.m_world.m_newFixture = true;
-
-  return fixture
-};
-
-/**
- * Creates a fixture and attach it to this body.
- * 
- * If the density is non-zero, this function automatically updates the mass of
- * the body.
- * 
- * Contacts are not created until the next time step.
- * 
- * Warning: This function is locked during callbacks.
-
- * @param {Shape|FixtureDef} shape Shape or fixture definition.
- * @param {FixtureDef|number} fixdef Fixture definition or just density.
- */
-Body.prototype.createFixture = function(shape, fixdef) {
-  _ASSERT && common.assert(this.isWorldLocked() == false);
-
-  if (this.isWorldLocked() == true) {
-    return null;
-  }
-
-  var fixture = new Fixture(this, shape, fixdef);
-  this._addFixture(fixture);
-  return fixture
-};
-
-/**
- * Destroy a fixture. This removes the fixture from the broad-phase and destroys
- * all contacts associated with this fixture. This will automatically adjust the
- * mass of the body if the body is dynamic and the fixture has positive density.
- * All fixtures attached to a body are implicitly destroyed when the body is
- * destroyed.
- * 
- * Warning: This function is locked during callbacks.
- * 
- * @param fixture The fixture to be removed.
- */
-Body.prototype.destroyFixture = function(fixture) {
-  _ASSERT && common.assert(this.isWorldLocked() == false);
-
-  if (this.isWorldLocked() == true) {
-    return;
-  }
-
-  _ASSERT && common.assert(fixture.m_body == this);
-
-  // Remove the fixture from this body's singly linked list.
-  var found = false;
-  if (this.m_fixtureList === fixture) {
-    this.m_fixtureList = fixture.m_next;
-    found = true;
-
-  } else {
-    var node = this.m_fixtureList;
-    while (node != null) {
-      if (node.m_next === fixture) {
-        node.m_next = fixture.m_next;
-        found = true;
-        break;
-      }
-      node = node.m_next;
-    }
-  }
-
-  // You tried to remove a shape that is not attached to this body.
-  _ASSERT && common.assert(found);
-
-  // Destroy any contacts associated with the fixture.
-  var edge = this.m_contactList;
-  while (edge) {
-    var c = edge.contact;
-    edge = edge.next;
-
-    var fixtureA = c.getFixtureA();
-    var fixtureB = c.getFixtureB();
-
-    if (fixture == fixtureA || fixture == fixtureB) {
-      // This destroys the contact and removes it from
-      // this body's contact list.
-      this.m_world.destroyContact(c);
-    }
-  }
-
-  if (this.m_activeFlag) {
-    var broadPhase = this.m_world.m_broadPhase;
-    fixture.destroyProxies(broadPhase);
-  }
-
-  fixture.m_body = null;
-  fixture.m_next = null;
-
-  this.m_world.publish('remove-fixture', fixture);
-
-  // Reset the mass data.
-  this.resetMassData();
-};
-
-/**
- * Get the corresponding world point of a local point.
- */
-Body.prototype.getWorldPoint = function(localPoint) {
-  return Transform.mulVec2(this.m_xf, localPoint);
-};
-
-/**
- * Get the corresponding world vector of a local vector.
- */
-Body.prototype.getWorldVector = function(localVector) {
-  return Rot.mulVec2(this.m_xf.q, localVector);
-};
-
-/**
- * Gets the corresponding local point of a world point.
- */
-Body.prototype.getLocalPoint = function(worldPoint) {
-  return Transform.mulTVec2(this.m_xf, worldPoint);
-};
-
-/**
- * 
- * Gets the corresponding local vector of a world vector.
- */
-Body.prototype.getLocalVector = function(worldVector) {
-  return Rot.mulTVec2(this.m_xf.q, worldVector);
-};
-
-
-/***/ }),
 /* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5868,9 +5868,9 @@ var Math = __webpack_require__(1);
 var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
 var Vec2 = __webpack_require__(0);
-var AABB = __webpack_require__(16);
+var AABB = __webpack_require__(17);
 var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(15);
+var Shape = __webpack_require__(16);
 
 PolygonShape._super = Shape;
 PolygonShape.prototype = create(PolygonShape._super.prototype);
@@ -6390,14 +6390,14 @@ var stats = __webpack_require__(27);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(10);
-var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(14);
+var Vec3 = __webpack_require__(11);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(8);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Velocity = __webpack_require__(13);
+var Position = __webpack_require__(14);
 
 /**
  * GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
@@ -7082,9 +7082,9 @@ var Math = __webpack_require__(1);
 var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
 var Vec2 = __webpack_require__(0);
-var AABB = __webpack_require__(16);
+var AABB = __webpack_require__(17);
 var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(15);
+var Shape = __webpack_require__(16);
 
 CircleShape._super = Shape;
 CircleShape.prototype = create(CircleShape._super.prototype);
@@ -7254,12 +7254,12 @@ module.exports = EdgeShape;
 var create = __webpack_require__(6);
 var options = __webpack_require__(7);
 var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(15);
+var Shape = __webpack_require__(16);
 var Math = __webpack_require__(1);
 var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
 var Vec2 = __webpack_require__(0);
-var AABB = __webpack_require__(16);
+var AABB = __webpack_require__(17);
 
 EdgeShape._super = Shape;
 EdgeShape.prototype = create(EdgeShape._super.prototype);
@@ -8153,9 +8153,9 @@ var Math = __webpack_require__(1);
 var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
 var Vec2 = __webpack_require__(0);
-var AABB = __webpack_require__(16);
+var AABB = __webpack_require__(17);
 var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(15);
+var Shape = __webpack_require__(16);
 var EdgeShape = __webpack_require__(24);
 
 ChainShape._super = Shape;
@@ -8580,9 +8580,9 @@ var common = __webpack_require__(2);
 var Vec2 = __webpack_require__(0);
 var BroadPhase = __webpack_require__(41);
 var Solver = __webpack_require__(43);
-var Body = __webpack_require__(18);
-var Joint = __webpack_require__(11);
-var Contact = __webpack_require__(17);
+var Body = __webpack_require__(8);
+var Joint = __webpack_require__(12);
+var Contact = __webpack_require__(18);
 
 /**
  * @typedef {Object} WorldDef
@@ -9709,7 +9709,7 @@ var common = __webpack_require__(2);
 var Pool = __webpack_require__(42);
 var Vec2 = __webpack_require__(0);
 var Math = __webpack_require__(1);
-var AABB = __webpack_require__(16);
+var AABB = __webpack_require__(17);
 
 module.exports = DynamicTree;
 
@@ -10633,9 +10633,9 @@ var options = __webpack_require__(7);
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 
-var AABB = __webpack_require__(16);
+var AABB = __webpack_require__(17);
 
-var Shape = __webpack_require__(15);
+var Shape = __webpack_require__(16);
 
 /**
  * @typedef {Object} FixtureDef
@@ -11100,14 +11100,14 @@ var stats = __webpack_require__(27);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(10);
-var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(14);
+var Vec3 = __webpack_require__(11);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(8);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Velocity = __webpack_require__(13);
+var Position = __webpack_require__(14);
 
 var Distance = __webpack_require__(22);
 var DistanceInput = Distance.Input;
@@ -11599,17 +11599,17 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(10);
-var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(14);
+var Vec3 = __webpack_require__(11);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(8);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Velocity = __webpack_require__(13);
+var Position = __webpack_require__(14);
 
-var Joint = __webpack_require__(11);
-var Body = __webpack_require__(18);
+var Joint = __webpack_require__(12);
+var Body = __webpack_require__(8);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -12279,16 +12279,17 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(10);
-var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(14);
+var Vec3 = __webpack_require__(11);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(8);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Velocity = __webpack_require__(13);
+var Position = __webpack_require__(14);
 
-var Joint = __webpack_require__(11);
+var Joint = __webpack_require__(12);
+var Body = __webpack_require__(8);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -12296,6 +12297,7 @@ var atUpperLimit = 2;
 var equalLimits = 3;
 
 PrismaticJoint.TYPE = 'prismatic-joint';
+Joint.TYPES[PrismaticJoint.TYPE] = PrismaticJoint;
 
 PrismaticJoint._super = Joint;
 PrismaticJoint.prototype = create(PrismaticJoint._super.prototype);
@@ -12465,6 +12467,35 @@ function PrismaticJoint(def, bodyA, bodyB, anchor, axis) {
   // Now compute impulse to be applied:
   // df = f2 - f1
 }
+
+PrismaticJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    lowerTranslation: this.m_lowerTranslation,
+    upperTranslation: this.m_upperTranslation,
+    maxMotorForce: this.m_maxMotorForce,
+    motorSpeed: this.m_motorSpeed,
+    enableLimit: this.m_enableLimit,
+    enableMotor: this.m_enableMotor,
+
+    localAnchorA: this.m_localAnchorA,
+    localAnchorB: this.m_localAnchorB,
+    localAxisA: this.m_localXAxisA,
+    referenceAngle: this.m_referenceAngle,
+  };
+};
+
+PrismaticJoint._deserialize = function(data, world, restore) {
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  data.localAxisA = Vec2(data.localAxisA);
+  var joint = new PrismaticJoint(data);
+  return joint;
+};
 
 /**
  * The local anchor point relative to bodyA's origin.
@@ -13203,19 +13234,19 @@ exports.Serializer = __webpack_require__(40);
 
 exports.Math = __webpack_require__(1);
 exports.Vec2 = __webpack_require__(0);
-exports.Vec3 = __webpack_require__(10);
-exports.Mat22 = __webpack_require__(9);
-exports.Mat33 = __webpack_require__(14);
+exports.Vec3 = __webpack_require__(11);
+exports.Mat22 = __webpack_require__(10);
+exports.Mat33 = __webpack_require__(15);
 exports.Transform = __webpack_require__(5);
 exports.Rot = __webpack_require__(3);
 
-exports.AABB = __webpack_require__(16);
+exports.AABB = __webpack_require__(17);
 
-exports.Shape = __webpack_require__(15);
+exports.Shape = __webpack_require__(16);
 exports.Fixture = __webpack_require__(32);
-exports.Body = __webpack_require__(18);
-exports.Contact = __webpack_require__(17);
-exports.Joint = __webpack_require__(11);
+exports.Body = __webpack_require__(8);
+exports.Contact = __webpack_require__(18);
+exports.Joint = __webpack_require__(12);
 exports.World = __webpack_require__(30);
 
 exports.Circle = __webpack_require__(23);
@@ -13242,7 +13273,7 @@ exports.RopeJoint = __webpack_require__(57);
 exports.WeldJoint = __webpack_require__(58);
 exports.WheelJoint = __webpack_require__(59);
 
-exports.internal.Sweep = __webpack_require__(8);
+exports.internal.Sweep = __webpack_require__(9);
 exports.internal.stats = __webpack_require__(27);
 exports.internal.Manifold = __webpack_require__(19);
 exports.internal.Distance = __webpack_require__(22);
@@ -13256,9 +13287,9 @@ exports.internal.Settings = __webpack_require__(4);
 /***/ (function(module, exports, __webpack_require__) {
 
 var World = __webpack_require__(30);
-var Body = __webpack_require__(18);
-var Joint = __webpack_require__(11);
-var Shape = __webpack_require__(15);
+var Body = __webpack_require__(8);
+var Joint = __webpack_require__(12);
+var Shape = __webpack_require__(16);
 
 var SID = 0;
 
@@ -13401,7 +13432,7 @@ var _ASSERT =  false ? undefined : false;
 var Settings = __webpack_require__(4);
 var common = __webpack_require__(2);
 var Math = __webpack_require__(1);
-var AABB = __webpack_require__(16);
+var AABB = __webpack_require__(17);
 var DynamicTree = __webpack_require__(31);
 
 module.exports = BroadPhase;
@@ -13738,9 +13769,9 @@ var common = __webpack_require__(2);
 var Vec2 = __webpack_require__(0);
 var Math = __webpack_require__(1);
 
-var Body = __webpack_require__(18);
-var Contact = __webpack_require__(17);
-var Joint = __webpack_require__(11);
+var Body = __webpack_require__(8);
+var Contact = __webpack_require__(18);
+var Joint = __webpack_require__(12);
 
 var TimeOfImpact = __webpack_require__(33);
 var TOIInput = TimeOfImpact.Input;
@@ -14684,8 +14715,8 @@ var Math = __webpack_require__(1);
 var Transform = __webpack_require__(5);
 var Vec2 = __webpack_require__(0);
 var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(15);
-var Contact = __webpack_require__(17);
+var Shape = __webpack_require__(16);
+var Contact = __webpack_require__(18);
 var Manifold = __webpack_require__(19);
 var CircleShape = __webpack_require__(23);
 
@@ -14759,8 +14790,8 @@ var Transform = __webpack_require__(5);
 var Vec2 = __webpack_require__(0);
 var Rot = __webpack_require__(3);
 var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(15);
-var Contact = __webpack_require__(17);
+var Shape = __webpack_require__(16);
+var Contact = __webpack_require__(18);
 var Manifold = __webpack_require__(19);
 var EdgeShape = __webpack_require__(24);
 var ChainShape = __webpack_require__(28);
@@ -14946,11 +14977,11 @@ var Math = __webpack_require__(1);
 var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
 var Vec2 = __webpack_require__(0);
-var AABB = __webpack_require__(16);
+var AABB = __webpack_require__(17);
 var Settings = __webpack_require__(4);
 var Manifold = __webpack_require__(19);
-var Contact = __webpack_require__(17);
-var Shape = __webpack_require__(15);
+var Contact = __webpack_require__(18);
+var Shape = __webpack_require__(16);
 var PolygonShape = __webpack_require__(21);
 
 module.exports = CollidePolygons;
@@ -15213,11 +15244,11 @@ var Math = __webpack_require__(1);
 var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
 var Vec2 = __webpack_require__(0);
-var AABB = __webpack_require__(16);
+var AABB = __webpack_require__(17);
 var Settings = __webpack_require__(4);
 var Manifold = __webpack_require__(19);
-var Contact = __webpack_require__(17);
-var Shape = __webpack_require__(15);
+var Contact = __webpack_require__(18);
+var Shape = __webpack_require__(16);
 var CircleShape = __webpack_require__(23);
 var PolygonShape = __webpack_require__(21);
 
@@ -15374,8 +15405,8 @@ var Transform = __webpack_require__(5);
 var Vec2 = __webpack_require__(0);
 var Rot = __webpack_require__(3);
 var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(15);
-var Contact = __webpack_require__(17);
+var Shape = __webpack_require__(16);
+var Contact = __webpack_require__(18);
 var Manifold = __webpack_require__(19);
 var EdgeShape = __webpack_require__(24);
 var ChainShape = __webpack_require__(28);
@@ -15864,17 +15895,17 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(10);
-var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(14);
+var Vec3 = __webpack_require__(11);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(8);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Velocity = __webpack_require__(13);
+var Position = __webpack_require__(14);
 
-var Joint = __webpack_require__(11);
-var Body = __webpack_require__(18);
+var Joint = __webpack_require__(12);
+var Body = __webpack_require__(8);
 
 DistanceJoint.TYPE = 'distance-joint';
 Joint.TYPES[DistanceJoint.TYPE] = DistanceJoint;
@@ -16276,18 +16307,20 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(10);
-var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(14);
+var Vec3 = __webpack_require__(11);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(8);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Velocity = __webpack_require__(13);
+var Position = __webpack_require__(14);
 
-var Joint = __webpack_require__(11);
+var Joint = __webpack_require__(12);
+var Body = __webpack_require__(8);
 
 FrictionJoint.TYPE = 'friction-joint';
+Joint.TYPES[FrictionJoint.TYPE] = FrictionJoint;
 
 FrictionJoint._super = Joint;
 FrictionJoint.prototype = create(FrictionJoint._super.prototype);
@@ -16363,6 +16396,28 @@ function FrictionJoint(def, bodyA, bodyB, anchor) {
   // J = [0 0 -1 0 0 1]
   // K = invI1 + invI2
 }
+
+FrictionJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    maxForce: this.m_maxForce,
+    maxTorque: this.m_maxTorque,
+
+    localAnchorA: this.m_localAnchorA,
+    localAnchorB: this.m_localAnchorB,
+  };
+};
+
+FrictionJoint._deserialize = function(data, world, restore) {
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  var joint = new FrictionJoint(data);
+  return joint;
+};
 
 /**
  * The local anchor point relative to bodyA's origin.
@@ -16594,21 +16649,23 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(10);
-var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(14);
+var Vec3 = __webpack_require__(11);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(8);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Velocity = __webpack_require__(13);
+var Position = __webpack_require__(14);
 
-var Joint = __webpack_require__(11);
+var Joint = __webpack_require__(12);
+var Body = __webpack_require__(8);
 
 var RevoluteJoint = __webpack_require__(34);
 var PrismaticJoint = __webpack_require__(35);
 
 GearJoint.TYPE = 'gear-joint';
+Joint.TYPES[GearJoint.TYPE] = GearJoint;
 
 GearJoint._super = Joint;
 GearJoint.prototype = create(GearJoint._super.prototype);
@@ -16766,6 +16823,31 @@ function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
   // Cdot = dot(v + cross(w, r), ug)
   // J = [ug cross(r, ug)]
   // K = J * invM * JT = invMass + invI * cross(r, ug)^2
+};
+
+GearJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    joint1: this.m_joint1,
+    joint2: this.m_joint2,
+    ratio: this.m_ratio,
+
+    _constant: this.m_constant,
+  };
+};
+
+GearJoint._deserialize = function(data, world, restore) {
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  data.joint1 = restore(Joint, data.joint1, world);
+  data.joint2 = restore(Joint, data.joint2, world);
+  var joint = new GearJoint(data);
+  if(data._constant) joint.m_constant = data._constant;
+  return joint;
 };
 
 /**
@@ -17077,18 +17159,20 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(10);
-var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(14);
+var Vec3 = __webpack_require__(11);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(8);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Velocity = __webpack_require__(13);
+var Position = __webpack_require__(14);
 
-var Joint = __webpack_require__(11);
+var Joint = __webpack_require__(12);
+var Body = __webpack_require__(8);
 
 MotorJoint.TYPE = 'motor-joint';
+Joint.TYPES[MotorJoint.TYPE] = MotorJoint;
 
 MotorJoint._super = Joint;
 MotorJoint.prototype = create(MotorJoint._super.prototype);
@@ -17172,6 +17256,30 @@ function MotorJoint(def, bodyA, bodyB) {
   // J = [0 0 -1 0 0 1]
   // K = invI1 + invI2
 }
+
+MotorJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    linearOffset: this.m_linearOffset,
+    maxForce: this.m_maxForce,
+    maxTorque: this.m_maxTorque,
+    correctionFactor: this.m_correctionFactor,
+
+    _angularOffset: this.m_angularOffset,
+  };
+};
+
+MotorJoint._deserialize = function(data, world, restore) {
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  var joint = new MotorJoint(data);
+  if(data._angularOffset) joint.m_angularOffset = data._angularOffset;
+  return joint;
+};
 
 /**
  * Set the maximum friction force in N.
@@ -17445,18 +17553,20 @@ var create = __webpack_require__(6);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(10);
-var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(14);
+var Vec3 = __webpack_require__(11);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(8);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Velocity = __webpack_require__(13);
+var Position = __webpack_require__(14);
 
-var Joint = __webpack_require__(11);
+var Joint = __webpack_require__(12);
+var Body = __webpack_require__(8);
 
 MouseJoint.TYPE = 'mouse-joint';
+Joint.TYPES[MouseJoint.TYPE] = MouseJoint;
 
 MouseJoint._super = Joint;
 MouseJoint.prototype = create(MouseJoint._super.prototype);
@@ -17541,6 +17651,31 @@ function MouseJoint(def, bodyA, bodyB, target) {
   // Identity used:
   // w k % (rx i + ry j) = w * (-ry i + rx j)
 }
+
+MouseJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    target: this.m_targetA,
+    maxForce: this.m_maxForce,
+    frequencyHz: this.m_frequencyHz,
+    dampingRatio: this.m_dampingRatio,
+
+    _localAnchorB: this.m_localAnchorB,
+  };
+};
+
+MouseJoint._deserialize = function(data, world, restore) {
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  data.target = Vec2(data.target)
+  var joint = new MouseJoint(data);
+  if(data._localAnchorB) joint.m_localAnchorB = data._localAnchorB;
+  return joint;
+};
 
 /**
  * Use this to update the target point.
@@ -17752,19 +17887,21 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(10);
-var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(14);
+var Vec3 = __webpack_require__(11);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(8);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Velocity = __webpack_require__(13);
+var Position = __webpack_require__(14);
 
-var Joint = __webpack_require__(11);
+var Joint = __webpack_require__(12);
+var Body = __webpack_require__(8);
 
 PulleyJoint.TYPE = 'pulley-joint';
 PulleyJoint.MIN_PULLEY_LENGTH = 2.0; // minPulleyLength
+Joint.TYPES[PulleyJoint.TYPE] = PulleyJoint;
 
 PulleyJoint._super = Joint;
 PulleyJoint.prototype = create(PulleyJoint._super.prototype);
@@ -17855,6 +17992,30 @@ function PulleyJoint(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, rati
   // = invMass1 + invI1 * cross(r1, u1)^2 + ratio^2 * (invMass2 + invI2 *
   // cross(r2, u2)^2)
 }
+
+PulleyJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    groundAnchorA: this.m_groundAnchorA,
+    groundAnchorB: this.m_groundAnchorB,
+    localAnchorA: this.m_localAnchorA,
+    localAnchorB: this.m_localAnchorB,
+    lengthA: this.m_lengthA,
+    lengthB: this.m_lengthB,
+    ratio: this.m_ratio,
+  };
+};
+
+PulleyJoint._deserialize = function(data, world, restore) {
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  var joint = new PulleyJoint(data);
+  return joint;
+};
 
 /**
  * Get the first ground anchor.
@@ -18136,16 +18297,17 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(10);
-var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(14);
+var Vec3 = __webpack_require__(11);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(8);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Velocity = __webpack_require__(13);
+var Position = __webpack_require__(14);
 
-var Joint = __webpack_require__(11);
+var Joint = __webpack_require__(12);
+var Body = __webpack_require__(8);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -18153,6 +18315,7 @@ var atUpperLimit = 2;
 var equalLimits = 3;
 
 RopeJoint.TYPE = 'rope-joint';
+Joint.TYPES[RopeJoint.TYPE] = RopeJoint;
 
 RopeJoint._super = Joint;
 RopeJoint.prototype = create(RopeJoint._super.prototype);
@@ -18230,6 +18393,26 @@ function RopeJoint(def, bodyA, bodyB, anchor) {
   // J = [-u -cross(rA, u) u cross(rB, u)]
   // K = J * invM * JT
   // = invMassA + invIA * cross(rA, u)^2 + invMassB + invIB * cross(rB, u)^2
+};
+
+RopeJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+
+    localAnchorA: this.m_localAnchorA,
+    localAnchorB: this.m_localAnchorB,
+    maxLength: this.m_maxLength,
+  };
+};
+
+RopeJoint._deserialize = function(data, world, restore) {
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  var joint = new RopeJoint(data);
+  return joint;
 };
 
 /**
@@ -18458,18 +18641,20 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(10);
-var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(14);
+var Vec3 = __webpack_require__(11);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(8);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Velocity = __webpack_require__(13);
+var Position = __webpack_require__(14);
 
-var Joint = __webpack_require__(11);
+var Joint = __webpack_require__(12);
+var Body = __webpack_require__(8);
 
 WeldJoint.TYPE = 'weld-joint';
+Joint.TYPES[WeldJoint.TYPE] = WeldJoint;
 
 WeldJoint._super = Joint;
 WeldJoint.prototype = create(WeldJoint._super.prototype);
@@ -18553,6 +18738,29 @@ function WeldJoint(def, bodyA, bodyB, anchor) {
   // J = [0 0 -1 0 0 1]
   // K = invI1 + invI2
 }
+
+WeldJoint.prototype._serialize = function() {
+  return {
+    type: this.m_type,
+    bodyA: this.m_bodyA,
+    bodyB: this.m_bodyB,
+    collideConnected: this.m_collideConnected,
+    
+    frequencyHz: this.m_frequencyHz,
+    dampingRatio: this.m_dampingRatio,
+
+    localAnchorA: this.m_localAnchorA,
+    localAnchorB: this.m_localAnchorB,
+    referenceAngle: this.m_referenceAngle,
+  };
+};
+
+WeldJoint._deserialize = function(data, world, restore) {
+  data.bodyA = restore(Body, data.bodyA, world);
+  data.bodyB = restore(Body, data.bodyB, world);
+  var joint = new WeldJoint(data);
+  return joint;
+};
 
 /**
  * The local anchor point relative to bodyA's origin.
@@ -18894,17 +19102,17 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(10);
-var Mat22 = __webpack_require__(9);
-var Mat33 = __webpack_require__(14);
+var Vec3 = __webpack_require__(11);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(8);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(12);
-var Position = __webpack_require__(13);
+var Velocity = __webpack_require__(13);
+var Position = __webpack_require__(14);
 
-var Joint = __webpack_require__(11);
-var Body = __webpack_require__(18);
+var Joint = __webpack_require__(12);
+var Body = __webpack_require__(8);
 
 WheelJoint.TYPE = 'wheel-joint';
 Joint.TYPES[WheelJoint.TYPE] = WheelJoint;
