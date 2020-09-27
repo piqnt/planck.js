@@ -1,33 +1,36 @@
-export let Math: Math & {
+export class Math {
   readonly EPSILON: number;
   /**
    * This function is used to ensure that a floating point number is not a NaN or
    * infinity.
    */
-  isFinite(x: any): boolean;
-  assert(x: any): void;
-  invSqrt(x: number): number;
-  nextPowerOfTwo(x: number): number;
-  isPowerOfTwo(x: number): boolean;
-  mod(num: number, min: number, max: number): number;
-  mod(num: number, max?: number): number;
-  clamp(num: number, min: number, max: number): number;
-  random(min: number, max: number): number;
-  random(max?: number): number;
-};
+  static isFinite(x: any): boolean;
+  static assert(x: any): void;
+  static invSqrt(x: number): number;
+  static nextPowerOfTwo(x: number): number;
+  static isPowerOfTwo(x: number): boolean;
+  static mod(num: number, min: number, max: number): number;
+  static mod(num: number, max?: number): number;
+  static clamp(num: number, min: number, max: number): number;
+  static random(min: number, max: number): number;
+  static random(max?: number): number;
+}
 
-export interface Velocity {
+export class Velocity {
   v: Vec2;
   w: number;
 }
 
-export interface Position {
+export class Position {
   c: Vec2;
   a: number;
   getTransform(xf: Transform, p: Vec2): Transform;
 }
 
-export interface Vec2 {
+export function Vec2(x: number, y: number): Vec2;
+export function Vec2(obj: { x: number, y: number }): Vec2;
+export function Vec2(): Vec2;
+export class Vec2 {
   x: number;
   y: number;
 
@@ -50,50 +53,46 @@ export interface Vec2 {
   normalize(): number;
   neg(): Vec2;
   clamp(max: number): Vec2;
+
+  constructor(x: number, y: number);
+  constructor(obj: { x: number, y: number });
+  constructor();
+
+  static zero(): Vec2;
+  // static neo(x: number, y: number): Vec2; internal
+  static clone(v: Vec2): Vec2;
+  static isValid(v: any): boolean;
+  static assert(o: any): void;
+  static lengthOf(v: Vec2): number;
+  static lengthSquared(v: Vec2): number;
+  static distance(v: Vec2, w: Vec2): number;
+  static distanceSquared(v: Vec2, w: Vec2): number;
+  static areEqual(v: Vec2, w: Vec2): boolean;
+  static skew(v: Vec2): Vec2;
+  static dot(v: Vec2, w: Vec2): number;
+  static cross(v: Vec2, w: Vec2): number;
+  static cross(v: Vec2, w: number): Vec2;
+  static cross(v: number, w: Vec2): Vec2;
+  static addCross(a: Vec2, v: Vec2, w: number): Vec2;
+  static addCross(a: Vec2, v: number, w: Vec2): Vec2;
+  static add(v: Vec2, w: Vec2): Vec2;
+  static combine(a: number, v: Vec2, b: number, w: Vec2): Vec2;
+  // static combine(a: number, v: Vec2): Vec2;
+  static sub(v: Vec2, w: Vec2): Vec2;
+  static mul(a: Vec2, b: number): Vec2;
+  static mul(a: number, b: Vec2): Vec2;
+  static neg(v: Vec2): Vec2;
+  static abs(v: Vec2): Vec2;
+  static mid(v: Vec2, w: Vec2): Vec2;
+  static upper(v: Vec2, w: Vec2): Vec2;
+  static lower(v: Vec2, w: Vec2): Vec2;
+  static clamp(v: Vec2, max: number): Vec2;
 }
 
-export let Vec2: {
-  new(x: number, y: number): Vec2;
-  (x: number, y: number): Vec2;
-
-  new(obj: { x: number, y: number }): Vec2;
-  (obj: { x: number, y: number }): Vec2;
-
-  new(): Vec2;
-  (): Vec2;
-
-  zero(): Vec2;
-  // neo(x: number, y: number): Vec2; internal
-  clone(v: Vec2): Vec2;
-  isValid(v: any): boolean;
-  assert(o: any): void;
-  lengthOf(v: Vec2): number;
-  lengthSquared(v: Vec2): number;
-  distance(v: Vec2, w: Vec2): number;
-  distanceSquared(v: Vec2, w: Vec2): number;
-  areEqual(v: Vec2, w: Vec2): boolean;
-  skew(v: Vec2): Vec2;
-  dot(v: Vec2, w: Vec2): number;
-  cross(v: Vec2, w: Vec2): number;
-  cross(v: Vec2, w: number): Vec2;
-  cross(v: number, w: Vec2): Vec2;
-  addCross(a: Vec2, v: Vec2, w: number): Vec2;
-  addCross(a: Vec2, v: number, w: Vec2): Vec2;
-  add(v: Vec2, w: Vec2): Vec2;
-  combine(a: number, v: Vec2, b: number, w: Vec2): Vec2;
-  // combine(a: number, v: Vec2): Vec2;
-  sub(v: Vec2, w: Vec2): Vec2;
-  mul(a: Vec2, b: number): Vec2;
-  mul(a: number, b: Vec2): Vec2;
-  neg(v: Vec2): Vec2;
-  abs(v: Vec2): Vec2;
-  mid(v: Vec2, w: Vec2): Vec2;
-  upper(v: Vec2, w: Vec2): Vec2;
-  lower(v: Vec2, w: Vec2): Vec2;
-  clamp(v: Vec2, max: number): Vec2;
-};
-
-export interface Vec3 {
+export function Vec3(x: number, y: number, z: number): Vec3;
+export function Vec3(obj: { x: number, y: number, z: number }): Vec3;
+export function Vec3(): Vec3;
+export class Vec3 {
   x: number;
   y: number;
   z: number;
@@ -105,68 +104,62 @@ export interface Vec3 {
   sub(w: Vec3): Vec3;
   mul(m: number): Vec3;
   neg(): Vec3;
+
+  constructor(x: number, y: number, z: number);
+  constructor(obj: { x: number, y: number, z: number });
+  constructor();
+
+  // static neo(x: number, y: number, z: number): Vec3; internal
+  static clone(v: Vec3): Vec3;
+  static areEqual(v: Vec3, w: Vec3): boolean;
+  static dot(v: Vec3, w: Vec3): number;
+  static cross(v: Vec3, w: Vec3): Vec3;
+  static add(v: Vec3, w: Vec3): Vec3;
+  static sub(v: Vec3, w: Vec3): Vec3;
+  static mul(v: Vec3, m: number): Vec3;
+  static neg(v: Vec3): Vec3;
+
+  static isValid(v: any): void;
+  static assert(o: any): void;
 }
 
-export let Vec3: {
-  new(x: number, y: number, z: number): Vec3;
-  (x: number, y: number, z: number): Vec3;
-
-  new(obj: { x: number, y: number, z: number }): Vec3;
-  (obj: { x: number, y: number, z: number }): Vec3;
-
-  new(): Vec3;
-  (): Vec3;
-
-  // neo(x: number, y: number, z: number): Vec3; internal
-  clone(v: Vec3): Vec3;
-  areEqual(v: Vec3, w: Vec3): boolean;
-  dot(v: Vec3, w: Vec3): number;
-  cross(v: Vec3, w: Vec3): Vec3;
-  add(v: Vec3, w: Vec3): Vec3;
-  sub(v: Vec3, w: Vec3): Vec3;
-  mul(v: Vec3, m: number): Vec3;
-  neg(v: Vec3): Vec3;
-
-  isValid(v: any): void;
-  assert(o: any): void;
-};
-
-export interface Transform {
+export function Transform(position: Vec2, rotation: number): Transform;
+export function Transform(): Transform;
+export class Transform {
   p: Vec2;
   q: Rot;
 
   setIdentity(): void;
   set(position: Vec2, rotation: number): void;
   set(xf: Transform): void;
-}
-export let Transform: {
-  new(position: Vec2, rotation: number): Transform;
-  (position: Vec2, rotation: number): Transform;
 
-  new(): Transform;
-  (): Transform;
+  constructor(position: Vec2, rotation: number);
+  constructor();
 
-  clone(xf: Transform): Transform;
-  // neo(position: Vec2, rotation: number): Transform; internal
-  identity(): Transform;
-  isValid(o: any): boolean;
-  assert(o: any): void;
-  mul(a: Transform, b: Vec2): Vec2;
-  mul(a: Transform, b: Transform): Transform;
-  mul(a: Transform, b: Vec2[]): Vec2[];
-  mul(a: Transform, b: Transform[]): Transform[];
+  static clone(xf: Transform): Transform;
+  // static neo(position: Vec2, rotation: number): Transform; internal
+  static identity(): Transform;
+  static isValid(o: any): boolean;
+  static assert(o: any): void;
+  static mul(a: Transform, b: Vec2): Vec2;
+  static mul(a: Transform, b: Transform): Transform;
+  static mul(a: Transform, b: Vec2[]): Vec2[];
+  static mul(a: Transform, b: Transform[]): Transform[];
   // deprecated
   // mulAll(a: Transform, b: Vec2[]): Vec2[];
   // mulAll(a: Transform, b: Transform[]): Transform[];
-  mulVec2(a: Transform, b: Vec2): Vec2;
-  mulXf(a: Transform, b: Transform): Transform;
-  mulT(a: Transform, b: Vec2): Vec2;
-  mulT(a: Transform, b: Transform): Transform;
-  mulTVec2(a: Transform, b: Vec2): Vec2;
-  mulTXf(a: Transform, b: Transform): Transform;
-};
+  static mulVec2(a: Transform, b: Vec2): Vec2;
+  static mulXf(a: Transform, b: Transform): Transform;
+  static mulT(a: Transform, b: Vec2): Vec2;
+  static mulT(a: Transform, b: Transform): Transform;
+  static mulTVec2(a: Transform, b: Vec2): Vec2;
+  static mulTXf(a: Transform, b: Transform): Transform;
+}
 
-export interface Rot {
+export function Rot(angle: number): Rot;
+export function Rot(rot: Rot): Rot;
+export function Rot(): Rot;
+export class Rot {
   s: number;
   c: number;
 
@@ -176,35 +169,44 @@ export interface Rot {
   getAngle(): number;
   getXAxis(): Vec2;
   getYAxis(): Vec2;
+
+  constructor(angle: number);
+  constructor(rot: Rot);
+  constructor();
+
+  // static neo(angle: number): Rot; internal
+  static clone(rot: Rot): Rot;
+  static identity(): Rot;
+  static isValid(o: any): boolean;
+  static assert(o: any): void;
+  static mul(rot: Rot, m: Rot): Rot;
+  static mul(rot: Rot, m: Vec2): Vec2;
+  static mulRot(rot: Rot, m: Rot): Rot;
+  static mulVec2(rot: Rot, m: Vec2): Vec2;
+  static mulSub(rot: Rot, v: Vec2, w: Vec2): Vec2;
+  static mulT(rot: Rot, m: Rot): Rot;
+  static mulT(rot: Rot, m: Vec2): Vec2;
+  static mulTRot(rot: Rot, m: Rot): Rot;
+  static mulTVec2(rot: Rot, m: Vec2): Vec2;
 }
 
-export let Rot: {
-  new(angle: number): Rot;
-  (angle: number): Rot;
+export class Mat22 {
+  constructor(a: number, b: number, c: number, d: number);
+  constructor(a: { x: number; y: number }, b: { x: number; y: number });
+  constructor();
 
-  new(rot: Rot): Rot;
-  (rot: Rot): Rot;
+  static isValid(o: any): boolean;
+  static assert(o: any): void;
 
-  new(): Rot;
-  (): Rot;
+  static mul(mx: Mat22, my: Mat22): Mat22;
+  static mul(mx: Mat22, v: Vec2): Vec2;
+  static mulVec2(mx: Mat22, v: Vec2): Vec2;
+  static mulMat22(mx: Mat22, my: Mat22): Mat22;
+  static mulT(mx: Mat22, my: Mat22): Mat22;
+  static mulT(mx: Mat22, v: Vec2): Vec2;
+  static abs(mx: Mat22): Mat22;
+  static add(mx1: Mat22, mx2: Mat22): Mat22;
 
-  // neo(angle: number): Rot; internal
-  clone(rot: Rot): Rot;
-  identity(): Rot;
-  isValid(o: any): boolean;
-  assert(o: any): void;
-  mul(rot: Rot, m: Rot): Rot;
-  mul(rot: Rot, m: Vec2): Vec2;
-  mulRot(rot: Rot, m: Rot): Rot;
-  mulVec2(rot: Rot, m: Vec2): Vec2;
-  mulSub(rot: Rot, v: Vec2, w: Vec2): Vec2;
-  mulT(rot: Rot, m: Rot): Rot;
-  mulT(rot: Rot, m: Vec2): Vec2;
-  mulTRot(rot: Rot, m: Rot): Rot;
-  mulTVec2(rot: Rot, m: Vec2): Vec2;
-};
-
-export interface Mat22 {
   ex: Vec2;
   ey: Vec2;
   toString(): string;
@@ -217,25 +219,20 @@ export interface Mat22 {
   solve(v: Vec2): Vec2;
 }
 
-export let Mat22: {
-  new(a: number, b: number, c: number, d: number): Mat22;
-  new(a: { x: number; y: number }, b: { x: number; y: number }): Mat22;
-  new(): Mat22;
+export class Mat33 {
+  constructor(a: Vec3, b: Vec3, c: Vec3);
+  constructor(a: any, b: any, c: any);
+  constructor();
 
-  isValid(o: any): boolean;
-  assert(o: any): void;
+  static isValid(o: any): boolean;
+  static assert(o: any): void;
 
-  mul(mx: Mat22, my: Mat22): Mat22;
-  mul(mx: Mat22, v: Vec2): Vec2;
-  mulVec2(mx: Mat22, v: Vec2): Vec2;
-  mulMat22(mx: Mat22, my: Mat22): Mat22;
-  mulT(mx: Mat22, my: Mat22): Mat22;
-  mulT(mx: Mat22, v: Vec2): Vec2;
-  abs(mx: Mat22): Mat22;
-  add(mx1: Mat22, mx2: Mat22): Mat22;
-};
+  static mul(a: Mat33, b: Vec2): Vec2;
+  static mul(a: Mat33, b: Vec3): Vec3;
+  static mulVec3(a: Mat33, b: Vec3): Vec3;
+  static mulVec2(a: Mat33, b: Vec2): Vec2;
+  static add(a: Mat33, b: Mat33): Mat33;
 
-export interface Mat33 {
   ex: Vec3;
   ey: Vec3;
   ez: Vec3;
@@ -248,22 +245,7 @@ export interface Mat33 {
   getSymInverse33(M: Mat33): void;
 }
 
-export let Mat33: {
-  new(a: Vec3, b: Vec3, c: Vec3): Mat33;
-  new(a: any, b: any, c: any): Mat33;
-  new(): Mat33;
-
-  isValid(o: any): boolean;
-  assert(o: any): void;
-
-  mul(a: Mat33, b: Vec2): Vec2;
-  mul(a: Mat33, b: Vec3): Vec3;
-  mulVec3(a: Mat33, b: Vec3): Vec3;
-  mulVec2(a: Mat33, b: Vec2): Vec2;
-  add(a: Mat33, b: Mat33): Mat33;
-};
-
-export interface Sweep {
+export class Sweep {
   localCenter: Vec2;
   c: Vec2;
   a: number;

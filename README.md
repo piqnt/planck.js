@@ -2,9 +2,8 @@
 
 Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5 game development.
 
-## Motivations
+#### Motivations
 
-Key motivations for the development of this project are:
 - Taking advantage of Box2D's efforts and achievements
 - Developing readable and maintainable JavaScript code
 - Optimizing the library for web and mobile platforms
@@ -12,6 +11,8 @@ Key motivations for the development of this project are:
 
 
 ## Projects
+
+[See here](http://piqnt.com/planck.js/) for project examples.
 
 #### Games
 - [Astray 2](https://wwwtyro.github.io/astray-2/) ([source](https://github.com/wwwtyro/astray-2)) by Rye Terrell
@@ -44,9 +45,6 @@ Key motivations for the development of this project are:
 #### Integration
  - [notchris/phaser3-planck](https://github.com/notchris/phaser3-planck) Phaser 3 Planck.js Plugin by Chris McGrane
  - [RealPeha/planck-renderer](https://github.com/RealPeha/planck-renderer)
-
-#### Testbed Examples
-[See here](http://piqnt.com/planck.js/) for testbed examples.
 
 
 ## Community
@@ -93,9 +91,9 @@ Planck.js is [available on jsDelivr](https://www.jsdelivr.com/package/npm/planck
 ## API and Architecture
 
 Planck.js includes Box2D algorithms without modification and its architecture is very similar to Box2D.
-However some internal [changes](./CHANGES.md) and refactoring are made during rewrite to address differences between C++ and JavaScript.
+However some internal changes and refactoring are made during rewrite to address differences between C++ and JavaScript.
 
-Planck.js public API closely follows Box2D API (see [Resources](##resources-and-references)), with the following differences:
+Planck.js public API (see [API Doc](./docs)) closely follows Box2D API (see [Resources](##resources-and-references)), with the following differences:
 
 - `b2` prefix is dropped from class names, for example `b2World` is now available as `planck.World`.
 - Method names are converted from UpperCamelCase to lowerCamelCase.
@@ -111,11 +109,9 @@ Planck.js public API closely follows Box2D API (see [Resources](##resources-and-
     - `'remove-fixture'`
     - `'remove-body'`
 
-#### Rendering
-Planck.js core library does not include any graphics by default, see [Rendering and Integration](#rendering-and-integration) section for more info and available options.
-
 ## Resources and References
-- <a href="http://box2d.org/documentation/" target="_blank">Box2D Manual</a> and <a href="https://github.com/erincatto/Box2D/wiki/FAQ" target="_blank">FAQ</a> are highly recommended to get started.
+- [Plankc.js API Doc](./docs)
+- <a href="http://box2d.org/documentation/" target="_blank">Box2D Manual</a> and <a href="https://github.com/erincatto/box2d/blob/master/docs/FAQ.md" target="_blank">FAQ</a> are highly recommended to learn how the library works.
 - [iforce2d](https://www.iforce2d.net/b2dtut/) website includes a collection of helpful tutorials and resources to learn Box2D.
 
 Following resources are recommended if you are interested in learning about Box2D/Planck.js's internal details.
@@ -123,56 +119,6 @@ Following resources are recommended if you are interested in learning about Box2
 - [Continuous Collision](http://twvideo01.ubm-us.net/o1/vault/gdc2013/slides/824737Catto_Erin_PhysicsForGame.pdf) by Erin Catto (slides)
 - [Solving Rigid Body Contacts](http://www.richardtonge.com/presentations/Tonge-2012-GDC-solvingRigidBodyContacts.pdf) by Richard Tonge (slides)
 - [dyn4j Blog Posts](http://www.dyn4j.org/category/gamedev/) by William Bittle
-
-
-## Tutorial
-
-_This tutorial is under development, please feel free to edit, comment or ask for new sections._
-
-Before writing code there are a number of key concepts to learn:
-
-- **Shape** - A shape contains geometrical information and is used in collision detections.
-- **Fixture** - A fixture consists of a shape and physical properties such as density.
-- **Body** - Each body is composed of a number of fixtures which are fixed together, that is a body is a set of shapes with physical properties. Bodies have position, angle, linear velocity, angular velocity, etc. which can be changed by applying linear and angular forces or impulses. Bodies represent rigid objects in the world, such as ground, a box or a car.
-- **Joint** - Joints are constraints on bodies position or velocity.
-- **Contact** - When two bodies touch each other (are colliding) a contact between them is created.
-- **World** - A world is composed of a number of bodies and joints interacting with each other. Every time world’s step() function is called, world solver will detect any contact between bodies and then change bodies position and velocity according to velocity, forces, contacts, and joints constraints.
-
-A physics simulation in Planck starts by creating a World and adding Bodies and Joints. So let’s create our world:
-
-```js
-var world = planck.World();
-```
-
-This will create a world with default options. You can pass a definition object as first argument to World constructor, for example:
-
-```js
-var world = planck.World({
-  gravity: planck.Vec2(0, -10)
-});
-```
-Bodies are directly created and added to world:
-
-```js
-var ground = world.createBody();
-```
-
-This will create a body with default options, which means a ‘static’ body at position 0, 0 with no velocity. You can pass a body definition object to change it:
-
-```js
-var ground = world.createBody({
-  type: 'static',
-  position: planck.Vec2(2, 5),
-});
-```
-
-After creating a body, you can create a fixture using a shape:
-
-```js
-ground.createFixture({
-  shape: planck.Edge(Vec2(-40.0, 0.0),Vec2(40.0, 0.0))
-});
-```
 
 
 ## Rendering and Integration

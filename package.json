@@ -1,6 +1,6 @@
 {
   "name": "planck-js",
-  "version": "0.3.19",
+  "version": "0.3.22",
   "description": "2D JavaScript physics engine for cross-platform HTML5 game development",
   "homepage": "http://shakiba.me/planck.js",
   "keywords": [
@@ -27,16 +27,10 @@
     "test/",
     "testbed/"
   ],
-  "author": "Ali Shakiba",
+  "author": "Ali Shakiba (http://shakiba.me/planck.js)",
   "contributors": [
-    {
-      "name": "Ali Shakiba",
-      "url": "http://shakiba.me/planck.js"
-    },
-    {
-      "name": "Erin Catto",
-      "url": "http://box2d.org/"
-    }
+    "Ali Shakiba (http://shakiba.me/planck.js)",
+    "Erin Catto (http://box2d.org/)"
   ],
   "devDependencies": {
     "ajv": "^6.10.2",
@@ -52,7 +46,9 @@
     "sinon": "^9.0.2",
     "stage-js": "^0.8.11",
     "tslint": "^5.17.0",
-    "typescript": "^3.5.1",
+    "typedoc": "^0.17.8",
+    "typedoc-plugin-markdown": "^2.3.1",
+    "typescript": "^4.0.0-beta",
     "webpack": "^4.33.0",
     "webpack-cli": "^3.3.3",
     "webpack-dev-middleware": "^3.7.0"
@@ -63,7 +59,8 @@
     "test:coverage:html": "nyc --reporter=html mocha 'lib/**/__test/*.js'",
     "build": "webpack -p",
     "watch": "webpack --watch",
-    "testbed": "nodemon testbed/server.js"
+    "testbed": "nodemon testbed/server.js",
+    "typedoc": "typedoc --options typedoc.json"
   },
   "dependencies": {}
 }

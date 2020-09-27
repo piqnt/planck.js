@@ -1,0 +1,10 @@
+{
+  "name": "Planck.js API Doc",
+  "readme": "./API.md",
+  "inputFiles": ["./lib"],
+  "mode": "file",
+  "includeDeclarations": true,
+  "excludeExternals": true,
+  "excludePrivate": true,
+  "stripInternal": true
+}
