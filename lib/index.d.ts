@@ -137,14 +137,14 @@ export class Fixture {
 }
 
 export interface FixtureOpt {
-  userData: any;
-  friction: number;
-  restitution: number;
-  density: number;
-  isSensor: boolean;
-  filterGroupIndex: number;
-  filterCategoryBits: number;
-  filterMaskBits: number;
+  userData?: any;
+  friction?: number;
+  restitution?: number;
+  density?: number;
+  isSensor?: boolean;
+  filterGroupIndex?: number;
+  filterCategoryBits?: number;
+  filterMaskBits?: number;
 }
 
 export interface FixtureDef extends FixtureOpt {
