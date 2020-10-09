@@ -98,9 +98,9 @@ export class DistanceJoint extends Joint {
 }
 
 export interface DistanceJointOpt extends JointOpt {
-  frequencyHz: number;
-  dampingRatio: number;
-  length: number;
+  frequencyHz?: number;
+  dampingRatio?: number;
+  length?: number;
 }
 
 export interface DistanceJointDef extends JointDef, DistanceJointOpt {
@@ -145,8 +145,8 @@ export class FrictionJoint extends Joint {
 }
 
 export interface FrictionJointOpt extends JointOpt {
-  maxForce: number;
-  maxTorque: number;
+  maxForce?: number;
+  maxTorque?: number;
 }
 
 export interface FrictionJointDef extends JointDef, FrictionJointOpt {
@@ -195,7 +195,7 @@ export class GearJoint extends Joint {
 }
 
 export interface GearJointOpt extends JointOpt {
-  ratio: number;
+  ratio?: number;
 }
 
 export interface GearJointDef extends JointDef, GearJointOpt {
@@ -246,10 +246,10 @@ export class MotorJoint extends Joint {
 }
 
 export interface MotorJointOpt extends JointOpt {
-  maxForce: number;
-  maxTorque: number;
-  correctionFactor: number;
-  linearOffset: Vec2;
+  maxForce?: number;
+  maxTorque?: number;
+  correctionFactor?: number;
+  linearOffset?: Vec2;
 }
 
 export interface MotorJointDef extends JointDef, MotorJointOpt {
@@ -291,9 +291,9 @@ export class MouseJoint extends Joint {
 }
 
 export interface MouseJointOpt extends JointOpt {
-  maxForce: number;
-  frequencyHz: number;
-  dampingRatio: number;
+  maxForce?: number;
+  frequencyHz?: number;
+  dampingRatio?: number;
 }
 
 export interface MouseJointDef extends JointDef, MouseJointOpt {
@@ -359,12 +359,12 @@ export class PrismaticJoint extends Joint {
 }
 
 export interface PrismaticJointOpt extends JointOpt {
-  enableLimit: boolean;
-  lowerTranslation: number;
-  upperTranslation: number;
-  enableMotor: boolean;
-  maxMotorForce: number;
-  motorSpeed: number;
+  enableLimit?: boolean;
+  lowerTranslation?: number;
+  upperTranslation?: number;
+  enableMotor?: boolean;
+  maxMotorForce?: number;
+  motorSpeed?: number;
 }
 
 export interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
@@ -485,12 +485,12 @@ export class RevoluteJoint extends Joint {
 }
 
 export interface RevoluteJointOpt extends JointOpt {
-  lowerAngle: number;
-  upperAngle: number;
-  maxMotorTorque: number;
-  motorSpeed: number;
-  enableLimit: boolean;
-  enableMotor: boolean;
+  lowerAngle?: number;
+  upperAngle?: number;
+  maxMotorTorque?: number;
+  motorSpeed?: number;
+  enableLimit?: boolean;
+  enableMotor?: boolean;
 }
 
 export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
@@ -536,7 +536,7 @@ export class RopeJoint extends Joint {
 }
 
 export interface RopeJointOpt extends JointOpt {
-  maxLength: number;
+  maxLength?: number;
 }
 
 export interface RopeJointDef extends JointDef, RopeJointOpt {
@@ -582,9 +582,9 @@ export class WeldJoint extends Joint {
 }
 
 export interface WeldJointOpt extends JointOpt {
-  frequencyHz: number;
-  dampingRatio: number;
-  referenceAngle: number;
+  frequencyHz?: number;
+  dampingRatio?: number;
+  referenceAngle?: number;
 }
 
 export interface WeldJointDef extends JointDef, WeldJointOpt {
@@ -652,11 +652,11 @@ export class WheelJoint extends Joint {
 }
 
 export interface WheelJointOpt extends JointOpt {
-  enableMotor: boolean;
-  maxMotorTorque: number;
-  motorSpeed: number;
-  frequencyHz: number;
-  dampingRatio: number;
+  enableMotor?: boolean;
+  maxMotorTorque?: number;
+  motorSpeed?: number;
+  frequencyHz?: number;
+  dampingRatio?: number;
 }
 
 export interface WheelJointDef extends JointDef, WheelJointOpt {
