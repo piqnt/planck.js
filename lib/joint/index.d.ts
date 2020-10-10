@@ -17,7 +17,7 @@ export interface JointEdge {
   next: JointEdge | null;  // < the next joint edge in the body's joint list
 }
 
-export class Joint {
+export interface Joint {
   /** @internal */ m_type: string;
   /** @internal */ m_bodyA: Body;
   /** @internal */ m_bodyB: Body;
@@ -57,14 +57,15 @@ export interface JointDef extends JointOpt {
   bodyB: Body;
 }
 
-export function DistanceJoint(def: DistanceJointDef): DistanceJoint;
-export function DistanceJoint(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2): DistanceJoint;
-export class DistanceJoint extends Joint {
-  static TYPE: 'distance-joint';
+export let DistanceJoint: {
+  TYPE: 'distance-joint';
 
-  constructor(def: DistanceJointDef);
-  constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2);
-
+  new (def: DistanceJointDef): DistanceJoint;
+      (def: DistanceJointDef): DistanceJoint;
+  new (def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2): DistanceJoint;
+      (def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2): DistanceJoint;
+}
+export interface DistanceJoint extends Joint {
   /** @internal */ m_type: 'distance-joint';
   // Solver shared
   /** @internal */ m_localAnchorA: Vec2;
@@ -98,9 +99,9 @@ export class DistanceJoint extends Joint {
 }
 
 export interface DistanceJointOpt extends JointOpt {
-  frequencyHz: number;
-  dampingRatio: number;
-  length: number;
+  frequencyHz?: number;
+  dampingRatio?: number;
+  length?: number;
 }
 
 export interface DistanceJointDef extends JointDef, DistanceJointOpt {
@@ -108,13 +109,15 @@ export interface DistanceJointDef extends JointDef, DistanceJointOpt {
   localAnchorB: Vec2;
 }
 
-export function FrictionJoint(def: FrictionJointDef): FrictionJoint;
-export function FrictionJoint(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): FrictionJoint;
-export class FrictionJoint extends Joint {
-  static TYPE: 'friction-joint';
-  constructor(def: FrictionJointDef);
-  constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+export let FrictionJoint: {
+  TYPE: 'friction-joint';
 
+  new (def: FrictionJointDef): FrictionJoint;
+      (def: FrictionJointDef): FrictionJoint;
+  new (def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): FrictionJoint;
+      (def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): FrictionJoint;
+}
+export interface FrictionJoint extends Joint {
   /** @internal */ m_type: 'friction-joint';
 
   /** @internal */ m_localAnchorA: Vec2;
@@ -145,8 +148,8 @@ export class FrictionJoint extends Joint {
 }
 
 export interface FrictionJointOpt extends JointOpt {
-  maxForce: number;
-  maxTorque: number;
+  maxForce?: number;
+  maxTorque?: number;
 }
 
 export interface FrictionJointDef extends JointDef, FrictionJointOpt {
@@ -154,14 +157,15 @@ export interface FrictionJointDef extends JointDef, FrictionJointOpt {
   localAnchorB: Vec2;
 }
 
-export function GearJoint(def: GearJointDef): GearJoint;
-export function GearJoint(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
-export class GearJoint extends Joint {
-  static TYPE: 'gear-joint';
+export let GearJoint: {
+  TYPE: 'gear-joint';
 
-  constructor(def: GearJointDef);
-  constructor(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number);
-
+  new (def: GearJointDef): GearJoint;
+      (def: GearJointDef): GearJoint;
+  new (def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
+      (def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
+}
+export interface GearJoint extends Joint {
   /** @internal */ m_type: 'gear-joint';
   /** @internal */ m_joint1: RevoluteJoint | PrismaticJoint;
   /** @internal */ m_joint2: RevoluteJoint | PrismaticJoint;
@@ -195,7 +199,7 @@ export class GearJoint extends Joint {
 }
 
 export interface GearJointOpt extends JointOpt {
-  ratio: number;
+  ratio?: number;
 }
 
 export interface GearJointDef extends JointDef, GearJointOpt {
@@ -203,14 +207,15 @@ export interface GearJointDef extends JointDef, GearJointOpt {
   joint2: RevoluteJoint | PrismaticJoint;
 }
 
-export function MotorJoint(def: MotorJointDef): MotorJoint;
-export function MotorJoint(def: MotorJointOpt, bodyA: Body, bodyB: Body): MotorJoint;
-export class MotorJoint extends Joint {
-  static TYPE: 'motor-joint';
+export let MotorJoint: {
+  TYPE: 'motor-joint';
 
-  constructor(def: MotorJointDef);
-  constructor(def: MotorJointOpt, bodyA: Body, bodyB: Body);
-
+  new (def: MotorJointDef): MotorJoint;
+      (def: MotorJointDef): MotorJoint;
+  new (def: MotorJointOpt, bodyA: Body, bodyB: Body): MotorJoint;
+      (def: MotorJointOpt, bodyA: Body, bodyB: Body): MotorJoint;
+}
+export interface MotorJoint extends Joint {
   /** @internal */ m_type: 'motor-joint';
   /** @internal */ m_linearOffset: Vec2;
   /** @internal */ m_angularOffset: number;
@@ -246,23 +251,24 @@ export class MotorJoint extends Joint {
 }
 
 export interface MotorJointOpt extends JointOpt {
-  maxForce: number;
-  maxTorque: number;
-  correctionFactor: number;
-  linearOffset: Vec2;
+  maxForce?: number;
+  maxTorque?: number;
+  correctionFactor?: number;
+  linearOffset?: Vec2;
 }
 
 export interface MotorJointDef extends JointDef, MotorJointOpt {
 }
 
-export function MouseJoint(def: MouseJointDef): MouseJoint;
-export function MouseJoint(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2): MouseJoint;
-export class MouseJoint extends Joint {
-  static TYPE: 'mouse-joint';
+export let MouseJoint: {
+  TYPE: 'mouse-joint';
 
-  constructor(def: MouseJointDef);
-  constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2);
-
+  new (def: MouseJointDef): MouseJoint;
+      (def: MouseJointDef): MouseJoint;
+  new (def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2): MouseJoint;
+      (def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2): MouseJoint;
+}
+export interface MouseJoint extends Joint {
   /** @internal */ m_type: 'mouse-joint';
   /** @internal */ m_targetA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
@@ -291,23 +297,24 @@ export class MouseJoint extends Joint {
 }
 
 export interface MouseJointOpt extends JointOpt {
-  maxForce: number;
-  frequencyHz: number;
-  dampingRatio: number;
+  maxForce?: number;
+  frequencyHz?: number;
+  dampingRatio?: number;
 }
 
 export interface MouseJointDef extends JointDef, MouseJointOpt {
   target: Vec2;
 }
 
-export function PrismaticJoint(def: PrismaticJointDef): PrismaticJoint;
-export function PrismaticJoint(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): PrismaticJoint;
-export class PrismaticJoint extends Joint {
-  static TYPE: 'prismatic-joint';
+export let PrismaticJoint: {
+  TYPE: 'prismatic-joint';
 
-  constructor(def: PrismaticJointDef);
-  constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
-
+  new (def: PrismaticJointDef): PrismaticJoint;
+      (def: PrismaticJointDef): PrismaticJoint;
+  new (def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): PrismaticJoint;
+      (def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): PrismaticJoint;
+}
+export interface PrismaticJoint extends Joint {
   /** @internal */ m_type: 'prismatic-joint';
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
@@ -359,12 +366,12 @@ export class PrismaticJoint extends Joint {
 }
 
 export interface PrismaticJointOpt extends JointOpt {
-  enableLimit: boolean;
-  lowerTranslation: number;
-  upperTranslation: number;
-  enableMotor: boolean;
-  maxMotorForce: number;
-  motorSpeed: number;
+  enableLimit?: boolean;
+  lowerTranslation?: number;
+  upperTranslation?: number;
+  enableMotor?: boolean;
+  maxMotorForce?: number;
+  motorSpeed?: number;
 }
 
 export interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
@@ -374,15 +381,16 @@ export interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
   referenceAngle: number;
 }
 
-export function PulleyJoint(def: PulleyJointDef): PulleyJoint;
-export function PulleyJoint(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number): PulleyJoint;
-export class PulleyJoint extends Joint {
-  static TYPE: 'pulley-joint';
-  static MIN_PULLEY_LENGTH: number;
+export let PulleyJoint: {
+  TYPE: 'pulley-joint';
+  MIN_PULLEY_LENGTH: number;
 
-  constructor(def: PulleyJointDef);
-  constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number);
-
+  new (def: PulleyJointDef): PulleyJoint;
+      (def: PulleyJointDef): PulleyJoint;
+  new (def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number): PulleyJoint;
+      (def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number): PulleyJoint;
+}
+export interface PulleyJoint extends Joint {
   /** @internal */ m_type: 'pulley-joint';
   /** @internal */ m_groundAnchorA: Vec2;
   /** @internal */ m_groundAnchorB: Vec2;
@@ -429,14 +437,15 @@ export interface PulleyJointDef extends JointDef, PulleyJointOpt {
   ratio: number;
 }
 
-export function RevoluteJoint(def: RevoluteJointDef): RevoluteJoint;
-export function RevoluteJoint(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RevoluteJoint;
-export class RevoluteJoint extends Joint {
-  static TYPE: 'revolute-joint';
+export let RevoluteJoint: {
+  TYPE: 'revolute-joint';
 
-  constructor(def: RevoluteJointDef);
-  constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
-
+  new (def: RevoluteJointDef): RevoluteJoint;
+      (def: RevoluteJointDef): RevoluteJoint;
+  new (def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RevoluteJoint;
+      (def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RevoluteJoint;
+}
+export interface RevoluteJoint extends Joint {
   /** @internal */ m_type: 'revolute-joint';
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
@@ -485,12 +494,12 @@ export class RevoluteJoint extends Joint {
 }
 
 export interface RevoluteJointOpt extends JointOpt {
-  lowerAngle: number;
-  upperAngle: number;
-  maxMotorTorque: number;
-  motorSpeed: number;
-  enableLimit: boolean;
-  enableMotor: boolean;
+  lowerAngle?: number;
+  upperAngle?: number;
+  maxMotorTorque?: number;
+  motorSpeed?: number;
+  enableLimit?: boolean;
+  enableMotor?: boolean;
 }
 
 export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
@@ -499,14 +508,15 @@ export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
   referenceAngle: number;
 }
 
-export function RopeJoint(def: RopeJointDef): RopeJoint;
-export function RopeJoint(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RopeJoint;
-export class RopeJoint extends Joint {
-  static TYPE: 'rope-joint';
+export let RopeJoint: {
+  TYPE: 'rope-joint';
 
-  constructor(def: RopeJointDef);
-  constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
-
+  new (def: RopeJointDef): RopeJoint;
+      (def: RopeJointDef): RopeJoint;
+  new (def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RopeJoint;
+      (def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RopeJoint;
+}
+export interface RopeJoint extends Joint {
   /** @internal */ m_type: 'rope-joint';
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
@@ -536,7 +546,7 @@ export class RopeJoint extends Joint {
 }
 
 export interface RopeJointOpt extends JointOpt {
-  maxLength: number;
+  maxLength?: number;
 }
 
 export interface RopeJointDef extends JointDef, RopeJointOpt {
@@ -544,14 +554,15 @@ export interface RopeJointDef extends JointDef, RopeJointOpt {
   localAnchorB: Vec2;
 }
 
-export function WeldJoint(def: WeldJointDef): WeldJoint;
-export function WeldJoint(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): WeldJoint;
-export class WeldJoint extends Joint {
-  static TYPE: 'weld-joint';
+export let WeldJoint: {
+  TYPE: 'weld-joint';
 
-  constructor(def: WeldJointDef);
-  constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
-
+  new (def: WeldJointDef): WeldJoint;
+      (def: WeldJointDef): WeldJoint;
+  new (def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): WeldJoint;
+      (def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): WeldJoint;
+}
+export interface WeldJoint extends Joint {
   /** @internal */ m_type: 'weld-joint';
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
@@ -582,9 +593,9 @@ export class WeldJoint extends Joint {
 }
 
 export interface WeldJointOpt extends JointOpt {
-  frequencyHz: number;
-  dampingRatio: number;
-  referenceAngle: number;
+  frequencyHz?: number;
+  dampingRatio?: number;
+  referenceAngle?: number;
 }
 
 export interface WeldJointDef extends JointDef, WeldJointOpt {
@@ -593,14 +604,15 @@ export interface WeldJointDef extends JointDef, WeldJointOpt {
   localAxisA: Vec2;
 }
 
-export function WheelJoint(def: WheelJointDef): WheelJoint;
-export function WheelJoint(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): WheelJoint;
-export class WheelJoint extends Joint {
-  static TYPE: 'wheel-joint';
+export let WheelJoint: {
+  TYPE: 'wheel-joint';
 
-  constructor(def: WheelJointDef);
-  constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
-
+  new (def: WheelJointDef): WheelJoint;
+      (def: WheelJointDef): WheelJoint;
+  new (def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): WheelJoint;
+      (def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): WheelJoint;
+}
+export interface WheelJoint extends Joint {
   /** @internal */ m_type: 'wheel-joint';
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
@@ -652,11 +664,11 @@ export class WheelJoint extends Joint {
 }
 
 export interface WheelJointOpt extends JointOpt {
-  enableMotor: boolean;
-  maxMotorTorque: number;
-  motorSpeed: number;
-  frequencyHz: number;
-  dampingRatio: number;
+  enableMotor?: boolean;
+  maxMotorTorque?: number;
+  motorSpeed?: number;
+  frequencyHz?: number;
+  dampingRatio?: number;
 }
 
 export interface WheelJointDef extends JointDef, WheelJointOpt {
