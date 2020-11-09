@@ -13,6 +13,7 @@ export * from "./collision";
 export * from "./common";
 export * from "./joint";
 export {
+  Shape,
   CircleShape as Circle,
   BoxShape as Box,
   EdgeShape as Edge,
