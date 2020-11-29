@@ -22,8 +22,17 @@
  * 3. This notice may not be removed or altered from any source distribution.
  * 
  */
-var planck =
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["planck"] = factory();
+	else
+		root["planck"] = factory();
+})(window, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -426,6 +435,11 @@ Vec2.prototype.normalize = function() {
   this.x *= invLength;
   this.y *= invLength;
   return length;
+}
+
+Vec2.prototype.normalized = function() {
+  this.normalize();
+  return this;
 }
 
 /**
@@ -8248,12 +8262,12 @@ ChainShape.prototype._createLoop = function(vertices) {
     _ASSERT && common.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
   }
 
-  this.m_vertices.length = 0;
+  this.m_vertices = [];
   this.m_count = vertices.length + 1;
   for (var i = 0; i < vertices.length; ++i) {
-    this.m_vertices[i] = vertices[i].clone();
+    this.m_vertices[i] = Vec2.clone(vertices[i]);
   }
-  this.m_vertices[vertices.length] = vertices[0].clone();
+  this.m_vertices[vertices.length] = Vec2.clone(vertices[0]);
 
   this.m_prevVertex = this.m_vertices[this.m_count - 2];
   this.m_nextVertex = this.m_vertices[1];
@@ -8280,7 +8294,7 @@ ChainShape.prototype._createChain = function(vertices) {
 
   this.m_count = vertices.length;
   for (var i = 0; i < vertices.length; ++i) {
-    this.m_vertices[i] = vertices[i].clone();
+    this.m_vertices[i] = Vec2.clone(vertices[i]);
   }
 
   this.m_hasPrevVertex = false;
@@ -8288,6 +8302,14 @@ ChainShape.prototype._createChain = function(vertices) {
   this.m_prevVertex = null;
   this.m_nextVertex = null;
   return this;
+}
+
+ChainShape.prototype._reset = function() {
+  if (this.m_isLoop) {
+    this._createLoop(this.m_vertices);
+  } else {
+    this._createChain(this.m_vertices);
+  }
 }
 
 /**
@@ -12359,9 +12381,9 @@ function PrismaticJoint(def, bodyA, bodyB, anchor, axis) {
 
   this.m_type = PrismaticJoint.TYPE;
 
-  this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
-  this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
-  this.m_localXAxisA = axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0);
+  this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
+  this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
+  this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0));
   this.m_localXAxisA.normalize();
   this.m_localYAxisA = Vec2.cross(1.0, this.m_localXAxisA);
   this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
@@ -12496,6 +12518,28 @@ PrismaticJoint._deserialize = function(data, world, restore) {
   var joint = new PrismaticJoint(data);
   return joint;
 };
+
+/**
+ * @internal
+ */
+PrismaticJoint.prototype._setAnchors = function(def) {
+  if (def.anchorA) {
+    this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+  } else if (def.localAnchorA) {
+    this.m_localAnchorA.set(def.localAnchorA);
+  }
+
+  if (def.anchorB) {
+    this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+  } else if (def.localAnchorB) {
+    this.m_localAnchorB.set(def.localAnchorB);
+  }
+
+  if (def.localAxisA) {
+    this.m_localXAxisA.set(def.localAxisA);
+    this.m_localYAxisA.set(Vec2.cross(1.0, def.localAxisA));
+  }
+}
 
 /**
  * The local anchor point relative to bodyA's origin.
@@ -12641,6 +12685,10 @@ PrismaticJoint.prototype.setMaxMotorForce = function(force) {
   this.m_bodyA.setAwake(true);
   this.m_bodyB.setAwake(true);
   this.m_maxMotorForce = force;
+}
+
+PrismaticJoint.prototype.getMaxMotorForce = function() {
+  return this.m_maxMotorForce;
 }
 
 /**
@@ -15927,9 +15975,9 @@ DistanceJoint.prototype = create(DistanceJoint._super.prototype);
  * @prop {float} dampingRatio The damping ratio. 0 = no damping, 1 = critical
  *       damping.
  *
- * @prop {Vec2} def.localAnchorA The local anchor point relative to bodyA's origin.
- * @prop {Vec2} def.localAnchorB The local anchor point relative to bodyB's origin.
- * @prop {number} def.length Distance length.
+ * @prop {Vec2} localAnchorA The local anchor point relative to bodyA's origin.
+ * @prop {Vec2} localAnchorB The local anchor point relative to bodyB's origin.
+ * @prop {number} length Distance length.
  */
 
 var DEFAULTS = {
@@ -16363,8 +16411,8 @@ function FrictionJoint(def, bodyA, bodyB, anchor) {
 
   this.m_type = FrictionJoint.TYPE;
 
-  this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
-  this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+  this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
+  this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
 
   // Solver shared
   this.m_linearImpulse = Vec2.zero();
@@ -16418,6 +16466,24 @@ FrictionJoint._deserialize = function(data, world, restore) {
   var joint = new FrictionJoint(data);
   return joint;
 };
+
+/**
+ * @internal
+ */
+FrictionJoint.prototype._setAnchors = function(def) {
+  if (def.anchorA) {
+    this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+  } else if (def.localAnchorA) {
+    this.m_localAnchorA.set(def.localAnchorA);
+  }
+
+  if (def.anchorB) {
+    this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+  } else if (def.localAnchorB) {
+    this.m_localAnchorB.set(def.localAnchorB);
+  }
+}
+
 
 /**
  * The local anchor point relative to bodyA's origin.
@@ -16836,7 +16902,7 @@ GearJoint.prototype._serialize = function() {
     joint2: this.m_joint2,
     ratio: this.m_ratio,
 
-    _constant: this.m_constant,
+    // _constant: this.m_constant,
   };
 };
 
@@ -16846,7 +16912,7 @@ GearJoint._deserialize = function(data, world, restore) {
   data.joint1 = restore(Joint, data.joint1, world);
   data.joint2 = restore(Joint, data.joint2, world);
   var joint = new GearJoint(data);
-  if(data._constant) joint.m_constant = data._constant;
+  // if (data._constant) joint.m_constant = data._constant;
   return joint;
 };
 
@@ -17217,11 +17283,8 @@ function MotorJoint(def, bodyA, bodyB) {
 
   this.m_type = MotorJoint.TYPE;
 
-  this.m_linearOffset = def.linearOffset ? def.linearOffset : bodyA.getLocalPoint(bodyB.getPosition());
-
-  var angleA = bodyA.getAngle();
-  var angleB = bodyB.getAngle();
-  this.m_angularOffset = angleB - angleA;
+  this.m_linearOffset = Math.isFinite(def.linearOffset) ? def.linearOffset : bodyA.getLocalPoint(bodyB.getPosition());
+  this.m_angularOffset = Math.isFinite(def.angularOffset) ? def.angularOffset : bodyB.getAngle() - bodyA.getAngle();
 
   this.m_linearImpulse = Vec2.zero();
   this.m_angularImpulse = 0.0;
@@ -17264,12 +17327,12 @@ MotorJoint.prototype._serialize = function() {
     bodyB: this.m_bodyB,
     collideConnected: this.m_collideConnected,
 
-    linearOffset: this.m_linearOffset,
     maxForce: this.m_maxForce,
     maxTorque: this.m_maxTorque,
     correctionFactor: this.m_correctionFactor,
 
-    _angularOffset: this.m_angularOffset,
+    linearOffset: this.m_linearOffset,
+    angularOffset: this.m_angularOffset,
   };
 };
 
@@ -17277,9 +17340,25 @@ MotorJoint._deserialize = function(data, world, restore) {
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new MotorJoint(data);
-  if(data._angularOffset) joint.m_angularOffset = data._angularOffset;
   return joint;
 };
+
+/**
+ * @internal
+ */
+MotorJoint.prototype._setAnchors = function(def) {
+  if (def.anchorA) {
+    this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+  } else if (def.localAnchorA) {
+    this.m_localAnchorA.set(def.localAnchorA);
+  }
+
+  if (def.anchorB) {
+    this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+  } else if (def.localAnchorB) {
+    this.m_localAnchorB.set(def.localAnchorB);
+  }
+}
 
 /**
  * Set the maximum friction force in N.
@@ -18701,8 +18780,8 @@ function WeldJoint(def, bodyA, bodyB, anchor) {
 
   this.m_type = WeldJoint.TYPE;
 
-  this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero();
-  this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero();
+  this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
+  this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
   this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
 
   this.m_frequencyHz = def.frequencyHz;
@@ -18761,6 +18840,23 @@ WeldJoint._deserialize = function(data, world, restore) {
   var joint = new WeldJoint(data);
   return joint;
 };
+
+/**
+ * @internal
+ */
+WeldJoint.prototype._setAnchors = function(def) {
+  if (def.anchorA) {
+    this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+  } else if (def.localAnchorA) {
+    this.m_localAnchorA.set(def.localAnchorA);
+  }
+
+  if (def.anchorB) {
+    this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+  } else if (def.localAnchorB) {
+    this.m_localAnchorB.set(def.localAnchorB);
+  }
+}
 
 /**
  * The local anchor point relative to bodyA's origin.
@@ -22987,4 +23083,5 @@ function ImageLoader(src, success, error) {
 
 /***/ })
 /******/ ]);
+});
 //# sourceMappingURL=planck-with-testbed.js.map
