@@ -102,29 +102,51 @@
       "properties": {
         "type": { "type": "string", "enum": [
           "distance-joint",
+          "friction-joint",
+          "motor-joint",
+          "prismatic-joint",
           "revolute-joint",
+          "weld-joint",
           "wheel-joint"
         ] },
         "bodyA": { "$ref": "#Ref" },
         "bodyB": { "$ref": "#Ref" },
         "collideConnected": { "type": "boolean" },
-        "frequencyHz": { "type": "number" },
-        "dampingRatio": { "type": "number" },
         "localAnchorA": { "$ref": "#Vec2" },
         "localAnchorB": { "$ref": "#Vec2" },
         "localAxis": { "$ref": "#Vec2" },
         "localAxisA": { "$ref": "#Vec2" },
+
+        "frequencyHz": { "type": "number" },
+        "dampingRatio": { "type": "number" },
+
         "length": { "type": "number" },
-        "impulse": { "type": "number" },
-        "gamma": { "type": "number" },
-        "bias": { "type": "number" },
+
+        "enableLimit": { "type": "boolean" },
         "lowerAngle": { "type": "number" },
         "upperAngle": { "type": "number" },
+        "lowerTranslation": { "type": "number" },
+        "upperTranslation": { "type": "number" },
+
+        "enableMotor": { "type": "boolean" },
         "maxMotorTorque": { "type": "number" },
         "motorSpeed": { "type": "number" },
-        "enableLimit": { "type": "boolean" },
-        "enableMotor": { "type": "boolean" },
-        "referenceAngle": { "type": "number" }
+
+        "referenceAngle": { "type": "number" },
+
+        "angularOffset": { "type": "number" },
+        "linearOffset": { "type": "#Vec2" },
+
+        "correctionFactor": { "type": "number" },
+        "maxForce": { "type": "number" },
+        "maxTorque": { "type": "number" },
+
+        "groundAnchorA": { "$ref": "#Vec2" },
+        "groundAnchorB": { "$ref": "#Vec2" },
+        "lengthA": { "type": "number" },
+        "lengthB": { "type": "number" },
+        "maxLength": { "type": "number" },
+        "ratio": { "type": "number" }
       }
     },
     "Vec2": {
