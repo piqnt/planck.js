@@ -19,6 +19,7 @@ Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5
 - [I have to flap](https://ihavetoflap.web.app/) by Elias Ku
 - [Hoverator](https://vgel.me/hoverator/) by Jonathon Vogel
 - [Acolyte Fight](https://acolytefight.io/)
+- [Comeback](http://romainclement.eu/Comeback/) by Romain Clément
 - [Nitro Clash](http://nitroclash.io/)
 - [Space Rage 2](https://space-rage-2-bad-prospects-dev.netlify.app/) by Hendrik Mans
 - Air Hockey ([source](https://github.com/Steveeeie/webgl-air-hockey-server)) by Steve Meredith
