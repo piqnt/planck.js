@@ -44,6 +44,7 @@
       "additionalProperties": false,
       "properties": {
         "type": { "type": "string", "enum": ["static", "dynamic", "kinematic"] },
+        "bullet": { "type": "boolean" },
         "position": { "$ref": "#Vec2" },
         "angle": { "type": "number" },
         "linearVelocity": { "$ref": "#Vec2" },
