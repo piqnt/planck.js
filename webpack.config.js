@@ -23,6 +23,7 @@ module.exports = [
       path: path.resolve(__dirname, 'dist'),
       filename: '[name].min.js',
       library: 'planck',
+      libraryTarget: 'umd',
     },
     devtool: 'source-map',
     optimization: {
@@ -45,6 +46,7 @@ module.exports = [
       path: path.resolve(__dirname, 'dist'),
       filename: '[name].js',
       library: 'planck',
+      libraryTarget: 'umd',
     },
     devtool: 'source-map',
     optimization: {
@@ -59,7 +61,7 @@ module.exports = [
       }),
     ],
   },
-  {
+  { // todo: remove this, added umd to others instead
     entry: {
       'planck': './lib/index.js',
       'planck-with-testbed': './testbed/index.js',
