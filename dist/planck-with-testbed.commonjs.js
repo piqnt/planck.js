@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.22
+ * Planck.js v0.3.23
  * 
  * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
  * Copyright (c) 2006-2013 Erin Catto  http://www.gphysics.com
@@ -426,11 +426,6 @@ Vec2.prototype.normalize = function() {
   this.x *= invLength;
   this.y *= invLength;
   return length;
-}
-
-Vec2.prototype.normalized = function() {
-  this.normalize();
-  return this;
 }
 
 /**
@@ -1442,27 +1437,30 @@ var _ASSERT =  false ? undefined : false;
 
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
-module.exports = function(to, from) {
-  if (to === null || typeof to === 'undefined') {
-    to = {};
+module.exports = function(input, defaults) {
+  if (input === null || typeof input === 'undefined') {
+    input = {};
   }
 
-  for ( var key in from) {
-    if (from.hasOwnProperty(key) && typeof to[key] === 'undefined') {
-      to[key] = from[key];
+  var output = Object.assign({}, input);
+
+  for ( var key in defaults) {
+    if (defaults.hasOwnProperty(key) && typeof input[key] === 'undefined') {
+      output[key] = defaults[key];
     }
   }
 
   if (typeof Object.getOwnPropertySymbols === 'function') {
-    var symbols = Object.getOwnPropertySymbols(from);
+    var symbols = Object.getOwnPropertySymbols(defaults);
     for (var i = 0; i < symbols.length; i++) {
       var symbol = symbols[i];
-      if (from.propertyIsEnumerable(symbol) && typeof to[key] === 'undefined') {
-        to[symbol] = from[symbol];
+      if (defaults.propertyIsEnumerable(symbol) && typeof input[key] === 'undefined') {
+        output[symbol] = defaults[symbol];
       }
     }
   }
-  return to;
+
+  return output;
 };
 
 
@@ -1661,6 +1659,7 @@ Body.prototype._serialize = function() {
   }
   return {
     type: this.m_type,
+    bullet: this.m_bulletFlag,
     position: this.m_xf.p,
     angle: this.m_xf.q.getAngle(),
     linearVelocity: this.m_linearVelocity,
@@ -8701,13 +8700,17 @@ World._deserialize = function(data, context, restore) {
 
   var world = new World(data.gravity);
 
-  data.bodies && data.bodies.reverse().forEach(function(data) {
-    world._addBody(restore(Body, data, world));
-  });
+  if (data.bodies) {
+    for(var i = data.bodies.length - 1; i >= 0; i -= 1) {
+      world._addBody(restore(Body, data.bodies[i], world));
+    }
+  }
 
-  data.joints && data.joints.reverse().forEach(function(data) {
-    world.createJoint(restore(Joint, data, world));
-  });
+  if (data.joints) {
+    for(var i = data.joints.length - 1; i >= 0; i--) {
+      world.createJoint(restore(Joint, data.joints[i], world));
+    }
+  }
 
   return world;
 };
@@ -11761,6 +11764,7 @@ RevoluteJoint.prototype._serialize = function() {
 };
 
 RevoluteJoint._deserialize = function(data, world, restore) {
+  data = {...data};
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new RevoluteJoint(data);
@@ -12503,6 +12507,7 @@ PrismaticJoint.prototype._serialize = function() {
 };
 
 PrismaticJoint._deserialize = function(data, world, restore) {
+  data = {...data};
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   data.localAxisA = Vec2(data.localAxisA);
@@ -13335,9 +13340,6 @@ var SID = 0;
 function Serializer(opts) {
   opts = opts || {};
 
-  var stringify = opts.stringify || JSON.stringify;
-  var parse = opts.parse || JSON.parse;
-
   var rootClass = opts.rootClass || World;
 
   var preSerialize = opts.preSerialize || function (obj) { return obj; };
@@ -13350,10 +13352,12 @@ function Serializer(opts) {
     'World': World,
     'Body': Body,
     'Joint': Joint,
+    'Shape': Shape,
   };
 
   this.toJson = function (root) {
-    var flat = [];
+    var json = [];
+
     var queue = [root];
     var refMap = {};
 
@@ -13361,7 +13365,7 @@ function Serializer(opts) {
       value.__sid = value.__sid || ++SID;
       if (!refMap[value.__sid]) {
         queue.push(value);
-        var index = flat.length + queue.length;
+        var index = json.length + queue.length;
         var ref = {
           refIndex: index,
           refType: typeName
@@ -13378,34 +13382,49 @@ function Serializer(opts) {
       return data;
     }
 
-    while (queue.length) {
-      var obj = queue.shift();
-      var str = stringify(obj, function(key, value) {
-        if (typeof value !== 'object' || value === null) {
-          return value;
-        }
-        if (typeof value._serialize !== 'function') {
-          return value;
-        }
-        if (value === obj) {
-          return serialize(value);
-        }
-        for (var typeName in refTypes) {
-          if (value instanceof refTypes[typeName]) {
-            return storeRef(value, typeName);
+    function toJson(value, top) {
+      if (typeof value !== 'object' || value === null) {
+        return value;
+      }
+      if (typeof value._serialize === 'function') {
+        if (value !== top) {
+          for (var typeName in refTypes) {
+            if (value instanceof refTypes[typeName]) {
+              return storeRef(value, typeName);
+            }
           }
         }
-        return serialize(value);
-      }, '  ');
-      flat.push(str);
+        value = serialize(value);
+      }
+      if (Array.isArray(value)) {
+        var newValue = [];
+        for (var key = 0; key < value.length; key++) {
+          newValue[key] = toJson(value[key]);
+        }
+        value = newValue;
+
+      } else {
+        var newValue = {};
+        for (var key in value) {
+          if (value.hasOwnProperty(key)) {
+            newValue[key] = toJson(value[key]);
+          }
+        }
+        value = newValue;
+      }
+      return value;
     }
 
-    var result = '[' + flat.join(',') + ']';
-    return result;
+    while (queue.length) {
+      var obj = queue.shift();
+      var str = toJson(obj, obj);
+      json.push(str);
+    }
+
+    return json;
   };
 
-  this.fromJson = function (string) {
-    var flat = parse(string);
+  this.fromJson = function (json) {
     var refMap = {};
 
     function deserialize(cls, data, ctx) {
@@ -13422,14 +13441,14 @@ function Serializer(opts) {
       cls = refTypes[ref.refType] || cls;
       var index = ref.refIndex;
       if (!refMap[index]) {
-        var data = flat[index];
+        var data = json[index];
         var obj = deserialize(cls, data, ctx);
         refMap[index] = obj;
       }
       return refMap[index];
     }
 
-    var root = rootClass._deserialize(flat[0], null, restoreRef);
+    var root = rootClass._deserialize(json[0], null, restoreRef);
 
     return root;
   }
@@ -16065,6 +16084,7 @@ DistanceJoint.prototype._serialize = function() {
 };
 
 DistanceJoint._deserialize = function(data, world, restore) {
+  data = {...data};
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new DistanceJoint(data);
@@ -16452,6 +16472,7 @@ FrictionJoint.prototype._serialize = function() {
 };
 
 FrictionJoint._deserialize = function(data, world, restore) {
+  data = {...data};
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new FrictionJoint(data);
@@ -16898,6 +16919,7 @@ GearJoint.prototype._serialize = function() {
 };
 
 GearJoint._deserialize = function(data, world, restore) {
+  data = {...data};
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   data.joint1 = restore(Joint, data.joint1, world);
@@ -17328,6 +17350,7 @@ MotorJoint.prototype._serialize = function() {
 };
 
 MotorJoint._deserialize = function(data, world, restore) {
+  data = {...data};
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new MotorJoint(data);
@@ -17739,11 +17762,14 @@ MouseJoint.prototype._serialize = function() {
 };
 
 MouseJoint._deserialize = function(data, world, restore) {
+  data = {...data};
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
-  data.target = Vec2(data.target)
+  data.target = Vec2(data.target);
   var joint = new MouseJoint(data);
-  if(data._localAnchorB) joint.m_localAnchorB = data._localAnchorB;
+  if (data._localAnchorB) {
+    joint.m_localAnchorB = data._localAnchorB;
+  }
   return joint;
 };
 
@@ -18081,6 +18107,7 @@ PulleyJoint.prototype._serialize = function() {
 };
 
 PulleyJoint._deserialize = function(data, world, restore) {
+  data = {...data};
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new PulleyJoint(data);
@@ -18479,6 +18506,7 @@ RopeJoint.prototype._serialize = function() {
 };
 
 RopeJoint._deserialize = function(data, world, restore) {
+  data = {...data};
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new RopeJoint(data);
@@ -18826,6 +18854,7 @@ WeldJoint.prototype._serialize = function() {
 };
 
 WeldJoint._deserialize = function(data, world, restore) {
+  data = {...data};
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new WeldJoint(data);
@@ -19335,6 +19364,7 @@ WheelJoint.prototype._serialize = function() {
 };
 
 WheelJoint._deserialize = function(data, world, restore) {
+  data = {...data};
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new WheelJoint(data);
