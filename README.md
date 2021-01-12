@@ -10,9 +10,13 @@ Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5
 - Providing a JavaScript-friendly API
 
 
-## Projects
+## Documentation
 
-[See here](http://piqnt.com/planck.js/) for project examples.
+- [User Manual](https://github.com/shakiba/planck.js/wiki/)
+- [API Doc](./docs/api)
+- [Examples](https://piqnt.com/planck.js/)
+
+## Projects
 
 #### Games
 - [Astray 2](https://wwwtyro.github.io/astray-2/) ([source](https://github.com/wwwtyro/astray-2)) by Rye Terrell
@@ -94,12 +98,13 @@ Planck.js is [available on jsDelivr](https://www.jsdelivr.com/package/npm/planck
 Planck.js includes Box2D algorithms without modification and its architecture is very similar to Box2D.
 However some internal changes and refactoring are made during rewrite to address differences between C++ and JavaScript.
 
-Planck.js public API (see [API Doc](./docs)) closely follows Box2D API (see [Resources](##resources-and-references)), with the following differences:
+Planck.js public API closely follows Box2D API (see [Resources](##resources-and-references)), with the following differences:
 
 - `b2` prefix is dropped from class names, for example `b2World` is now available as `planck.World`.
 - Method names are converted from UpperCamelCase to lowerCamelCase.
 - Definition classes/objects (BodyDef, FixtureDef, etc.) are replaced by inline JavaScript objects (`{}`).
 - Shapes are considered immutable and are not cloned when used to create fixtures.
+- Contact filtering can be customized by overriding shouldCollide method of Fixture.
 - Listener classes are replaced with simple functions.
 - `World#on(eventName, listenerFn)` and `World#off(eventName, listenerFn)` are added to add and remove event listeners. Currently supported events are:
     - `'begin-contact'`
@@ -110,54 +115,16 @@ Planck.js public API (see [API Doc](./docs)) closely follows Box2D API (see [Res
     - `'remove-fixture'`
     - `'remove-body'`
 
-## Resources and References
-- [Plankc.js API Doc](./docs)
-- <a href="http://box2d.org/documentation/" target="_blank">Box2D Manual</a> and <a href="https://github.com/erincatto/box2d/blob/master/docs/FAQ.md" target="_blank">FAQ</a> are highly recommended to learn how the library works.
-- [iforce2d](https://www.iforce2d.net/b2dtut/) website includes a collection of helpful tutorials and resources to learn Box2D.
+## Resources
+- Planck.js [User Manual](https://github.com/shakiba/planck.js/wiki/) and [API Doc](./docs/api)
+- [Box2D Documentation](http://box2d.org/documentation/)
+- [iforce2d](https://www.iforce2d.net/b2dtut/) - A collection of helpful tutorials and resources to learn Box2D.
 
-Following resources are recommended if you are interested in learning about Box2D/Planck.js's internal details.
+Following resources are recommended if you are interested in understanding algorithms used in Box2D/Planck.js.
 
-- [Continuous Collision](http://twvideo01.ubm-us.net/o1/vault/gdc2013/slides/824737Catto_Erin_PhysicsForGame.pdf) by Erin Catto (slides)
-- [Solving Rigid Body Contacts](http://www.richardtonge.com/presentations/Tonge-2012-GDC-solvingRigidBodyContacts.pdf) by Richard Tonge (slides)
+- [Erin Catto's Publications](https://box2d.org/publications/)
 - [dyn4j Blog Posts](http://www.dyn4j.org/category/gamedev/) by William Bittle
-
-
-## Rendering and Integration
-
-Planck.js core library does not include any graphics by default, which means you have several options:
-
-- Use Testbed, see [Try it](#try-it) section to run release files in a web browser (or [Development](#development) to debug testbed locally).
-- Use an existing renderer, see [Integration](#integration) examples.
-- Develop a renderer or integrate with a rendering library.
-
-To create a renderer or integrate with a rendering library all you need to do 
-is call `world.step(timeStep)` in each frame, and then iterate over world entities to draw or update them.
-You may also want to listen to world events to remove objects which are removed from the world. For example:
-
-```html
-<script src="./path/to/planck.min.js"></script>
-<script>
-  var world = planck.World();
-
-  // rendering loop
-  (function loop() {
-    // in each frame call world.step(timeStep) with fixed timeStep
-    world.step(1 / 60);
-    // iterate over bodies and fixtures
-    for (var body = world.getBodyList(); body; body = body.getNext()) {
-      for (var fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
-        // draw or update fixture
-      }
-    }
-    // request a new frame
-    window.requestAnimationFrame(loop);
-  })();
-
-  world.on('remove-fixture', function(fixture) {
-    // remove fixture from ui
-  });
-</script>
-```
+- [Solving Rigid Body Contacts](http://www.richardtonge.com/presentations/Tonge-2012-GDC-solvingRigidBodyContacts.pdf) by Richard Tonge (slides)
 
 ## Development
 
