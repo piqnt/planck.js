@@ -108,6 +108,6 @@ export interface ChainShape extends Shape {
 
   /** @internal */ _createLoop(vertices: Vec2[]): ChainShape;
   /** @internal */ _createChain(vertices: Vec2[]): ChainShape;
-  /** @internal */ _setPrevVertex(prevVertex: Vec2): void;
-  /** @internal */ _setNextVertex(nextVertex: Vec2): void;
+  setPrevVertex(prevVertex: Vec2): void;
+  setNextVertex(nextVertex: Vec2): void;
 }
