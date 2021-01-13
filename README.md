@@ -14,7 +14,7 @@ Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5
 
 - [User Manual](https://github.com/shakiba/planck.js/wiki/)
 - [API Doc](./docs/api)
-- [Examples](https://piqnt.com/planck.js/)
+- [Examples](https://piqnt.com/planck.js/) with editable code
 
 ## Projects
 
@@ -58,30 +58,7 @@ Updates and news: [Twitter @Piqnt](https://twitter.com/piqnt)
 Source code and issues: [GitHub](https://github.com/shakiba/planck.js/)  
 Community discussions: [Discord](https://discord.gg/znjh6J7)
 
-
-## Try it
-
-To try Planck.js, simply add `planck-with-testbed.js` script to your HTML code and call `planck.testbed(callback)` with your code in callback. For example:
-
-```html
-<html><body>
-  <script src="//cdn.jsdelivr.net/npm/planck-js@latest/dist/planck-with-testbed.js"></script>
-  <script>
-    planck.testbed(function(testbed) {
-      var world = planck.World();
-      // rest of your code
-      return world; // make sure you return the world
-    });
-  </script>
-</body></html>
-```
-
-Check out [Car example on JS Bin](http://jsbin.com/nujuxik/edit?html,output) to try it in practice.
-Also see [`example`](./example/) directory for more testbed usage examples.
-
-
 ## Install
-
 
 #### CDN
 
@@ -125,23 +102,6 @@ Following resources are recommended if you are interested in understanding algor
 - [Erin Catto's Publications](https://box2d.org/publications/)
 - [dyn4j Blog Posts](http://www.dyn4j.org/category/gamedev/) by William Bittle
 - [Solving Rigid Body Contacts](http://www.richardtonge.com/presentations/Tonge-2012-GDC-solvingRigidBodyContacts.pdf) by Richard Tonge (slides)
-
-## Development
-
-For development, you can run testbed locally with a live build and try examples in [`example`](./example/) directory.
-
-1. Install `git` and `npm`
-
-1. Clone or download this repository
-
-1. Install npm dependencies:
-
-        npm install
-
-1. Run testbed and open it in your web browser (see command-line output for URL to open):
-
-        npm run testbed
-
 
 ## Credits
 
