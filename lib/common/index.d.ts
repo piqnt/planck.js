@@ -1,19 +1,19 @@
-export class Math {
+export let Math: Math & {
   readonly EPSILON: number;
   /**
    * This function is used to ensure that a floating point number is not a NaN or
    * infinity.
    */
-  static isFinite(x: any): boolean;
-  static assert(x: any): void;
-  static invSqrt(x: number): number;
-  static nextPowerOfTwo(x: number): number;
-  static isPowerOfTwo(x: number): boolean;
-  static mod(num: number, min: number, max: number): number;
-  static mod(num: number, max?: number): number;
-  static clamp(num: number, min: number, max: number): number;
-  static random(min: number, max: number): number;
-  static random(max?: number): number;
+  isFinite(x: any): boolean;
+  assert(x: any): void;
+  invSqrt(x: number): number;
+  nextPowerOfTwo(x: number): number;
+  isPowerOfTwo(x: number): boolean;
+  mod(num: number, min: number, max: number): number;
+  mod(num: number, max?: number): number;
+  clamp(num: number, min: number, max: number): number;
+  random(min: number, max: number): number;
+  random(max?: number): number;
 }
 
 export class Velocity {
