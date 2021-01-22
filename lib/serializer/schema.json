@@ -1,16 +1,15 @@
 {
   "type": "array",
   "additionalProperties": false,
-  "items": [
-    {
-      "anyOf": [
-        { "$ref": "#World" },
-        { "$ref": "#Body" },
-        { "$ref": "#Shape" },
-        { "$ref": "#Joint" }
-      ]
-    }
-  ],
+  "items": {
+    "oneOf": [
+      { "$ref": "#World" },
+      { "$ref": "#Body" },
+      { "$ref": "#Fixture" },
+      { "$ref": "#Shape" },
+      { "$ref": "#Joint" }
+    ]
+  },
   "definitions": {
     "ref": {
       "$id": "#Ref",
@@ -19,7 +18,7 @@
       "required": ["refIndex", "refType"],
       "properties": {
         "refIndex": { "type": "number" },
-        "refType": { "type": "string", "enum": ["World", "Body", "Joint"] }
+        "refType": { "type": "string", "enum": ["World", "Body", "Fixture", "Shape", "Joint"] }
       }
     },
     "World": {
@@ -51,7 +50,7 @@
         "angularVelocity": { "type": "number" },
         "fixtures": {
           "type": "array",
-          "items": { "$ref": "#Fixture" }
+          "items": { "$ref": "#Ref" }
         }
       }
     },
@@ -67,7 +66,7 @@
         "filterGroupIndex": { "type": "number" },
         "filterCategoryBits": { "type": "number" },
         "filterMaskBits": { "type": "number" },
-        "shape": { "$ref": "#Shape" },
+        "shape": { "$ref": "#Ref" },
         "userData": { "type": "object" }
       }
     },
@@ -136,7 +135,7 @@
         "referenceAngle": { "type": "number" },
 
         "angularOffset": { "type": "number" },
-        "linearOffset": { "type": "#Vec2" },
+        "linearOffset": { "$ref": "#Vec2" },
 
         "correctionFactor": { "type": "number" },
         "maxForce": { "type": "number" },
