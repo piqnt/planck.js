@@ -1,13 +1,7 @@
 import { AABB } from "../lib/collision";
-import { World } from "../lib";
+import { Body, Fixture, Joint, World } from "../lib";
 
 export interface Testbed {
-  isPaused(): boolean;
-  togglePause(): void;
-  pause(): void;
-  resume(): void;
-  focus(): void;
-  debug: boolean;
   width: number;
   height: number;
   x: number;
@@ -74,14 +68,12 @@ export interface Testbed {
   drawPolygon(points: {x: number, y: number}[], color: string): void;
   drawAABB(aabb: AABB, color: string): void;
   color(r: number, g: number, b: number): string;
-  //callbacks
-  _resume?: () => void;
-  _pause?: () => void;
-  _info?: (text: string) => void;
+
+  // callbacks
   step?: (dt: number, t: number) => void;
   keydown?: (keyCode: number, label: string) => void;
   keyup?: (keyCode: number, label: string) => void;
 }
 
-export function testbed(opts: any, callback: (testbed: Testbed) => World): Testbed;//opts is never used, bug?
+export function testbed(opts: any, callback: (testbed: Testbed) => World): Testbed;
 export function testbed(callback: (testbed: Testbed) => World): Testbed;
