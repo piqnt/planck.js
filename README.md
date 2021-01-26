@@ -108,4 +108,4 @@ TypeScript definitions for planck.js are developed by [Oliver Zell](https://gith
 
 ## License
 
-Planck.js is [available under the zlib license](./LICENSE.txt).
+Planck.js is [available under the MIT license](./LICENSE.txt).
