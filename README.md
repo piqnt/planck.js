@@ -54,9 +54,9 @@ Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5
 
 ## Community
 
-Updates and news: [Twitter @Piqnt](https://twitter.com/piqnt)  
-Source code and issues: [GitHub](https://github.com/shakiba/planck.js/)  
-Community discussions: [Discord](https://discord.gg/znjh6J7)
+- [Discord](https://discord.gg/znjh6J7) - Community discussions and Q/A
+- [Twitter @Piqnt](https://twitter.com/piqnt) - Updates and news
+- [GitHub](https://github.com/shakiba/planck.js/) - Source code and issues
 
 ## Install
 
@@ -84,13 +84,7 @@ Planck.js public API closely follows Box2D API (see [Resources](##resources-and-
 - Contact filtering can be customized by overriding shouldCollide method of Fixture.
 - Listener classes are replaced with simple functions.
 - `World#on(eventName, listenerFn)` and `World#off(eventName, listenerFn)` are added to add and remove event listeners. Currently supported events are:
-    - `'begin-contact'`
-    - `'end-contact'`
-    - `'pre-solve'`
-    - `'post-solve'`
-    - `'remove-joint'`
-    - `'remove-fixture'`
-    - `'remove-body'`
+`'begin-contact'`, `'end-contact'`, `'pre-solve'`, `'post-solve'`, `'remove-joint'`, `'remove-fixture'`, `'remove-body'`
 
 ## Resources
 - Planck.js [User Manual](https://github.com/shakiba/planck.js/wiki/) and [API Doc](./docs/api)
