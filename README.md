@@ -28,6 +28,23 @@ Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5
 - [GitHub](https://github.com/shakiba/planck.js/) - Source code and issues
 
 
+## API and Architecture
+
+Planck.js includes Box2D algorithms without modification and its architecture is very similar to Box2D.
+However some internal changes and refactoring are made during rewrite to address differences between C++ and JavaScript.
+
+Planck.js public API closely follows Box2D API, with the following differences:
+
+- `b2` prefix is dropped from class names, for example `b2World` is now available as `planck.World`.
+- Method names are converted from UpperCamelCase to lowerCamelCase.
+- Definition classes/objects (BodyDef, FixtureDef, etc.) are replaced by inline JavaScript objects (`{}`).
+- Shapes are considered immutable and are not cloned when used to create fixtures.
+- Contact filtering can be customized by overriding shouldCollide method of Fixture.
+- Listener classes are replaced with simple functions.
+- `World#on(eventName, listenerFn)` and `World#off(eventName, listenerFn)` are added to add and remove event listeners. Currently supported events are:
+`'begin-contact'`, `'end-contact'`, `'pre-solve'`, `'post-solve'`, `'remove-joint'`, `'remove-fixture'`, `'remove-body'`
+
+
 ## Projects
 
 #### Games
@@ -42,9 +59,6 @@ Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5
 - [Coined](https://coined--parameterized.repl.co/) ([source](https://repl.it/talk/challenge/Coined/13314))
 - [Zzzone!](https://www.engehausen.de/jan/zzz.html) ([source](https://github.com/smurf667/zzzone)) by Jan Engehausen
 
-#### Game Development
-- [Modd.io](https://www.modd.io/)
-
 #### Other Projects
  - [Fall / Fill](https://twitter.com/jezzamonn/status/1246212104593403905) by Jez Swanson
  - [1000 Unique Postcards](https://twitter.com/andreasgysin/status/956131218386509824) by Andreas Gysin
@@ -56,8 +70,10 @@ Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5
  - [Walking EA](https://matsemann.github.io/walkingea/) by Mats Krüger Svensson
  - [Neuroevolution Bots](https://twitter.com/mishig25/status/1077672181503590400) by Mishig Davaadorj
 
-#### Articles and Tutorials
- - [Phaser 3 with Planck.js](https://www.emanueleferonato.com/2019/10/12/use-box2d-physics-in-your-phaser-3-projects-with-planck-js-javascript-physics-engine/) by Emanuele Feronato
+#### Game Development
+- [Space](https://piqnt.com/space/)
+- [Modd.io](https://www.modd.io/)
+
 
 ## Install
 
@@ -70,22 +86,6 @@ Planck.js is [available on jsDelivr](https://www.jsdelivr.com/package/npm/planck
 
     npm install planck-js --save
 
-
-## API and Architecture
-
-Planck.js includes Box2D algorithms without modification and its architecture is very similar to Box2D.
-However some internal changes and refactoring are made during rewrite to address differences between C++ and JavaScript.
-
-Planck.js public API closely follows Box2D API (see [Resources](##resources-and-references)), with the following differences:
-
-- `b2` prefix is dropped from class names, for example `b2World` is now available as `planck.World`.
-- Method names are converted from UpperCamelCase to lowerCamelCase.
-- Definition classes/objects (BodyDef, FixtureDef, etc.) are replaced by inline JavaScript objects (`{}`).
-- Shapes are considered immutable and are not cloned when used to create fixtures.
-- Contact filtering can be customized by overriding shouldCollide method of Fixture.
-- Listener classes are replaced with simple functions.
-- `World#on(eventName, listenerFn)` and `World#off(eventName, listenerFn)` are added to add and remove event listeners. Currently supported events are:
-`'begin-contact'`, `'end-contact'`, `'pre-solve'`, `'post-solve'`, `'remove-joint'`, `'remove-fixture'`, `'remove-body'`
 
 ## Credits
 
