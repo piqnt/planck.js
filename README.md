@@ -12,9 +12,21 @@ Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5
 
 ## Documentation
 
+#### Planck.js
 - [User Manual](https://github.com/shakiba/planck.js/wiki/)
 - [API Doc](./docs/api)
 - [Examples](https://piqnt.com/planck.js/) with editable code
+
+#### Tutorials
+- [iforce2d](https://www.iforce2d.net/b2dtut/) - A collection of helpful tutorials and resources to learn Box2D
+
+
+## Community
+
+- [Discord](https://discord.gg/znjh6J7) - Community discussions and Q/A
+- [Twitter @Piqnt](https://twitter.com/piqnt) - Updates and news
+- [GitHub](https://github.com/shakiba/planck.js/) - Source code and issues
+
 
 ## Projects
 
@@ -47,17 +59,6 @@ Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5
 #### Articles and Tutorials
  - [Phaser 3 with Planck.js](https://www.emanueleferonato.com/2019/10/12/use-box2d-physics-in-your-phaser-3-projects-with-planck-js-javascript-physics-engine/) by Emanuele Feronato
 
-#### Integration
- - [notchris/phaser3-planck](https://github.com/notchris/phaser3-planck) Phaser 3 Planck.js Plugin by Chris McGrane
- - [RealPeha/planck-renderer](https://github.com/RealPeha/planck-renderer)
-
-
-## Community
-
-- [Discord](https://discord.gg/znjh6J7) - Community discussions and Q/A
-- [Twitter @Piqnt](https://twitter.com/piqnt) - Updates and news
-- [GitHub](https://github.com/shakiba/planck.js/) - Source code and issues
-
 ## Install
 
 #### CDN
@@ -85,17 +86,6 @@ Planck.js public API closely follows Box2D API (see [Resources](##resources-and-
 - Listener classes are replaced with simple functions.
 - `World#on(eventName, listenerFn)` and `World#off(eventName, listenerFn)` are added to add and remove event listeners. Currently supported events are:
 `'begin-contact'`, `'end-contact'`, `'pre-solve'`, `'post-solve'`, `'remove-joint'`, `'remove-fixture'`, `'remove-body'`
-
-## Resources
-- Planck.js [User Manual](https://github.com/shakiba/planck.js/wiki/) and [API Doc](./docs/api)
-- [Box2D Documentation](http://box2d.org/documentation/)
-- [iforce2d](https://www.iforce2d.net/b2dtut/) - A collection of helpful tutorials and resources to learn Box2D.
-
-Following resources are recommended if you are interested in understanding algorithms used in Box2D/Planck.js.
-
-- [Erin Catto's Publications](https://box2d.org/publications/)
-- [dyn4j Blog Posts](http://www.dyn4j.org/category/gamedev/) by William Bittle
-- [Solving Rigid Body Contacts](http://www.richardtonge.com/presentations/Tonge-2012-GDC-solvingRigidBodyContacts.pdf) by Richard Tonge (slides)
 
 ## Credits
 
