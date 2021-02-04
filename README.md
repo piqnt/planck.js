@@ -12,12 +12,8 @@ Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5
 
 ## Documentation
 
-- [User Manual](https://github.com/shakiba/planck.js/wiki/) - This is the best place to start and learn basics before writing code
+- [Documentations Wiki](https://github.com/shakiba/planck.js/wiki/) - This is the best place to start, and find other resources
 - [Examples](https://piqnt.com/planck.js/) - Online examples with editable code
-- [API Doc](./docs/api)
-
-#### Tutorials
-- [iforce2d](https://www.iforce2d.net/b2dtut/) - A collection of helpful articles to learn Box2D advanced usage
 
 
 ## Community
