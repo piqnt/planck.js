@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.24
+ * Planck.js v0.3.25
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  * 
@@ -1530,6 +1530,190 @@ module.exports = function(input, defaults) {
 var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
+module.exports = Vec3;
+
+var common = __webpack_require__(2);
+var Math = __webpack_require__(1);
+
+function Vec3(x, y, z) {
+  if (!(this instanceof Vec3)) {
+    return new Vec3(x, y, z);
+  }
+  if (typeof x === 'undefined') {
+    this.x = 0, this.y = 0, this.z = 0;
+  } else if (typeof x === 'object') {
+    this.x = x.x, this.y = x.y, this.z = x.z;
+  } else {
+    this.x = x, this.y = y, this.z = z;
+  }
+  _ASSERT && Vec3.assert(this);
+};
+
+Vec3.prototype._serialize = function() {
+  return {
+    x: this.x,
+    y: this.y,
+    z: this.z
+  };
+};
+
+Vec3._deserialize = function(data) {
+  var obj = Object.create(Vec3.prototype);
+  obj.x = data.x;
+  obj.y = data.y;
+  obj.z = data.z;
+  return obj;
+};
+
+Vec3.neo = function(x, y, z) {
+  var obj = Object.create(Vec3.prototype);
+  obj.x = x;
+  obj.y = y;
+  obj.z = z;
+  return obj;
+};
+
+Vec3.clone = function(v) {
+  _ASSERT && Vec3.assert(v);
+  return Vec3.neo(v.x, v.y, v.z);
+};
+
+Vec3.prototype.toString = function() {
+  return JSON.stringify(this);
+};
+
+/**
+ * Does this vector contain finite coordinates?
+ */
+Vec3.isValid = function(v) {
+  return v && Math.isFinite(v.x) && Math.isFinite(v.y) && Math.isFinite(v.z);
+}
+
+Vec3.assert = function(o) {
+  if (!_ASSERT) return;
+  if (!Vec3.isValid(o)) {
+    _DEBUG && common.debug(o);
+    throw new Error('Invalid Vec3!');
+  }
+}
+
+Vec3.prototype.setZero = function() {
+  this.x = 0.0;
+  this.y = 0.0;
+  this.z = 0.0;
+  return this;
+}
+
+Vec3.prototype.set = function(x, y, z) {
+  this.x = x;
+  this.y = y;
+  this.z = z;
+  return this;
+}
+
+Vec3.prototype.add = function(w) {
+  this.x += w.x;
+  this.y += w.y;
+  this.z += w.z;
+  return this;
+}
+
+Vec3.prototype.sub = function(w) {
+  this.x -= w.x;
+  this.y -= w.y;
+  this.z -= w.z;
+  return this;
+}
+
+Vec3.prototype.mul = function(m) {
+  this.x *= m;
+  this.y *= m;
+  this.z *= m;
+  return this;
+}
+
+Vec3.areEqual = function(v, w) {
+  _ASSERT && Vec3.assert(v);
+  _ASSERT && Vec3.assert(w);
+  return v == w ||
+    typeof v === 'object' && v !== null &&
+    typeof w === 'object' && w !== null &&
+    v.x === w.x && v.y === w.y && v.z === w.z;
+}
+
+/**
+ * Perform the dot product on two vectors.
+ */
+Vec3.dot = function(v, w) {
+  return v.x * w.x + v.y * w.y + v.z * w.z;
+}
+
+/**
+ * Perform the cross product on two vectors. In 2D this produces a scalar.
+ */
+Vec3.cross = function(v, w) {
+  return new Vec3(
+    v.y * w.z - v.z * w.y,
+    v.z * w.x - v.x * w.z,
+    v.x * w.y - v.y * w.x
+  );
+}
+
+Vec3.add = function(v, w) {
+  return new Vec3(v.x + w.x, v.y + w.y, v.z + w.z);
+}
+
+Vec3.sub = function(v, w) {
+  return new Vec3(v.x - w.x, v.y - w.y, v.z - w.z);
+}
+
+Vec3.mul = function(v, m) {
+  return new Vec3(m * v.x, m * v.y, m * v.z);
+}
+
+Vec3.prototype.neg = function() {
+  this.x = -this.x;
+  this.y = -this.y;
+  this.z = -this.z;
+  return this;
+}
+
+Vec3.neg = function(v) {
+  return new Vec3(-v.x, -v.y, -v.z);
+}
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+var _DEBUG =  false ? undefined : false;
+var _ASSERT =  false ? undefined : false;
+
 module.exports = Body;
 
 var common = __webpack_require__(2);
@@ -1538,7 +1722,7 @@ var options = __webpack_require__(7);
 var Vec2 = __webpack_require__(0);
 var Rot = __webpack_require__(3);
 var Math = __webpack_require__(1);
-var Sweep = __webpack_require__(9);
+var Sweep = __webpack_require__(10);
 var Transform = __webpack_require__(5);
 var Velocity = __webpack_require__(13);
 var Position = __webpack_require__(14);
@@ -1711,11 +1895,12 @@ Body.prototype._serialize = function() {
 Body._deserialize = function(data, world, restore) {
   var body = new Body(world, data);
 
-  data.fixtures.forEach(function(data) {
-    var fixture = restore(Fixture, data, body);
-    body._addFixture(fixture);
-  });
-
+  if (data.fixtures) {
+    for (var i = data.fixtures.length - 1; i >= 0; i--) {
+      var fixture = restore(Fixture, data.fixtures[i], body);
+      body._addFixture(fixture);
+    }
+  }
   return body;
 };
 
@@ -2589,7 +2774,7 @@ Body.prototype.getLocalVector = function(worldVector) {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2731,7 +2916,7 @@ Sweep.prototype.set = function(that) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2955,190 +3140,6 @@ Mat22.add = function(mx1, mx2) {
   _ASSERT && Mat22.assert(mx1);
   _ASSERT && Mat22.assert(mx2);
   return new Mat22(Vec2.add(mx1.ex, mx2.ex), Vec2.add(mx1.ey, mx2.ey));
-}
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
-var _DEBUG =  false ? undefined : false;
-var _ASSERT =  false ? undefined : false;
-
-module.exports = Vec3;
-
-var common = __webpack_require__(2);
-var Math = __webpack_require__(1);
-
-function Vec3(x, y, z) {
-  if (!(this instanceof Vec3)) {
-    return new Vec3(x, y, z);
-  }
-  if (typeof x === 'undefined') {
-    this.x = 0, this.y = 0, this.z = 0;
-  } else if (typeof x === 'object') {
-    this.x = x.x, this.y = x.y, this.z = x.z;
-  } else {
-    this.x = x, this.y = y, this.z = z;
-  }
-  _ASSERT && Vec3.assert(this);
-};
-
-Vec3.prototype._serialize = function() {
-  return {
-    x: this.x,
-    y: this.y,
-    z: this.z
-  };
-};
-
-Vec3._deserialize = function(data) {
-  var obj = Object.create(Vec3.prototype);
-  obj.x = data.x;
-  obj.y = data.y;
-  obj.z = data.z;
-  return obj;
-};
-
-Vec3.neo = function(x, y, z) {
-  var obj = Object.create(Vec3.prototype);
-  obj.x = x;
-  obj.y = y;
-  obj.z = z;
-  return obj;
-};
-
-Vec3.clone = function(v) {
-  _ASSERT && Vec3.assert(v);
-  return Vec3.neo(v.x, v.y, v.z);
-};
-
-Vec3.prototype.toString = function() {
-  return JSON.stringify(this);
-};
-
-/**
- * Does this vector contain finite coordinates?
- */
-Vec3.isValid = function(v) {
-  return v && Math.isFinite(v.x) && Math.isFinite(v.y) && Math.isFinite(v.z);
-}
-
-Vec3.assert = function(o) {
-  if (!_ASSERT) return;
-  if (!Vec3.isValid(o)) {
-    _DEBUG && common.debug(o);
-    throw new Error('Invalid Vec3!');
-  }
-}
-
-Vec3.prototype.setZero = function() {
-  this.x = 0.0;
-  this.y = 0.0;
-  this.z = 0.0;
-  return this;
-}
-
-Vec3.prototype.set = function(x, y, z) {
-  this.x = x;
-  this.y = y;
-  this.z = z;
-  return this;
-}
-
-Vec3.prototype.add = function(w) {
-  this.x += w.x;
-  this.y += w.y;
-  this.z += w.z;
-  return this;
-}
-
-Vec3.prototype.sub = function(w) {
-  this.x -= w.x;
-  this.y -= w.y;
-  this.z -= w.z;
-  return this;
-}
-
-Vec3.prototype.mul = function(m) {
-  this.x *= m;
-  this.y *= m;
-  this.z *= m;
-  return this;
-}
-
-Vec3.areEqual = function(v, w) {
-  _ASSERT && Vec3.assert(v);
-  _ASSERT && Vec3.assert(w);
-  return v == w ||
-    typeof v === 'object' && v !== null &&
-    typeof w === 'object' && w !== null &&
-    v.x === w.x && v.y === w.y && v.z === w.z;
-}
-
-/**
- * Perform the dot product on two vectors.
- */
-Vec3.dot = function(v, w) {
-  return v.x * w.x + v.y * w.y + v.z * w.z;
-}
-
-/**
- * Perform the cross product on two vectors. In 2D this produces a scalar.
- */
-Vec3.cross = function(v, w) {
-  return new Vec3(
-    v.y * w.z - v.z * w.y,
-    v.z * w.x - v.x * w.z,
-    v.x * w.y - v.y * w.x
-  );
-}
-
-Vec3.add = function(v, w) {
-  return new Vec3(v.x + w.x, v.y + w.y, v.z + w.z);
-}
-
-Vec3.sub = function(v, w) {
-  return new Vec3(v.x - w.x, v.y - w.y, v.z - w.z);
-}
-
-Vec3.mul = function(v, m) {
-  return new Vec3(m * v.x, m * v.y, m * v.z);
-}
-
-Vec3.prototype.neg = function() {
-  this.x = -this.x;
-  this.y = -this.y;
-  this.z = -this.z;
-  return this;
-}
-
-Vec3.neg = function(v) {
-  return new Vec3(-v.x, -v.y, -v.z);
 }
 
 
@@ -3509,7 +3510,7 @@ module.exports = Mat33;
 var common = __webpack_require__(2);
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(11);
+var Vec3 = __webpack_require__(8);
 
 /**
  * A 3-by-3 matrix. Stored in column-major order.
@@ -4154,7 +4155,7 @@ var common = __webpack_require__(2);
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 var Transform = __webpack_require__(5);
-var Mat22 = __webpack_require__(10);
+var Mat22 = __webpack_require__(11);
 var Rot = __webpack_require__(3);
 
 var Settings = __webpack_require__(4);
@@ -6020,7 +6021,13 @@ PolygonShape.prototype._serialize = function() {
 };
 
 PolygonShape._deserialize = function(data, fixture, restore) {
-  var vertices = data.vertices && data.vertices.map(v => Vec2._deserialize(v));
+  var vertices = [];
+  if (data.vertices) {
+    for (var i = 0; i < data.vertices.length; i++) {
+      vertices.push(restore(Vec2, data.vertices[i]));
+    }
+  }
+
   var shape = new PolygonShape(vertices);
   return shape;
 };
@@ -6503,11 +6510,11 @@ var stats = __webpack_require__(28);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(11);
-var Mat22 = __webpack_require__(10);
+var Vec3 = __webpack_require__(8);
+var Mat22 = __webpack_require__(11);
 var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(9);
+var Sweep = __webpack_require__(10);
 var Transform = __webpack_require__(5);
 var Velocity = __webpack_require__(13);
 var Position = __webpack_require__(14);
@@ -8812,8 +8819,14 @@ ChainShape.prototype._serialize = function() {
   return data;
 };
 
-ChainShape._deserialize = function(data) {
-  var shape = new ChainShape(data.vertices.map(Vec2._deserialize), data.isLoop);
+ChainShape._deserialize = function(data, fixture, restore) {
+  var vertices = [];
+  if (data.vertices) {
+    for (var i = 0; i < data.vertices.length; i++) {
+      vertices.push(restore(Vec2, data.vertices[i]));
+    }
+  }
+  var shape = new ChainShape(vertices, data.isLoop);
   if (data.prevVertex) {
     shape._setPrevVertex(data.prevVertex);
   }
@@ -9189,7 +9202,7 @@ var common = __webpack_require__(2);
 var Vec2 = __webpack_require__(0);
 var BroadPhase = __webpack_require__(41);
 var Solver = __webpack_require__(43);
-var Body = __webpack_require__(8);
+var Body = __webpack_require__(9);
 var Joint = __webpack_require__(12);
 var Contact = __webpack_require__(18);
 
@@ -9217,7 +9230,7 @@ var WorldDef = {
 };
 
 /**
- * @param {WordDef|Vec2} def World definition or gravity vector.
+ * @param {WorldDef|Vec2} def World definition or gravity vector.
  */
 function World(def) {
   if (!(this instanceof World)) {
@@ -11256,11 +11269,11 @@ var stats = __webpack_require__(28);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(11);
-var Mat22 = __webpack_require__(10);
+var Vec3 = __webpack_require__(8);
+var Mat22 = __webpack_require__(11);
 var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(9);
+var Sweep = __webpack_require__(10);
 var Transform = __webpack_require__(5);
 var Velocity = __webpack_require__(13);
 var Position = __webpack_require__(14);
@@ -11760,17 +11773,17 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(11);
-var Mat22 = __webpack_require__(10);
+var Vec3 = __webpack_require__(8);
+var Mat22 = __webpack_require__(11);
 var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(9);
+var Sweep = __webpack_require__(10);
 var Transform = __webpack_require__(5);
 var Velocity = __webpack_require__(13);
 var Position = __webpack_require__(14);
 
 var Joint = __webpack_require__(12);
-var Body = __webpack_require__(8);
+var Body = __webpack_require__(9);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -11909,7 +11922,7 @@ RevoluteJoint.prototype._serialize = function() {
 };
 
 RevoluteJoint._deserialize = function(data, world, restore) {
-  data = {...data};
+  data = Object.assign({}, data);
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new RevoluteJoint(data);
@@ -12446,17 +12459,17 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(11);
-var Mat22 = __webpack_require__(10);
+var Vec3 = __webpack_require__(8);
+var Mat22 = __webpack_require__(11);
 var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(9);
+var Sweep = __webpack_require__(10);
 var Transform = __webpack_require__(5);
 var Velocity = __webpack_require__(13);
 var Position = __webpack_require__(14);
 
 var Joint = __webpack_require__(12);
-var Body = __webpack_require__(8);
+var Body = __webpack_require__(9);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -12657,7 +12670,7 @@ PrismaticJoint.prototype._serialize = function() {
 };
 
 PrismaticJoint._deserialize = function(data, world, restore) {
-  data = {...data};
+  data = Object.assign({}, data);
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   data.localAxisA = Vec2(data.localAxisA);
@@ -13428,8 +13441,8 @@ exports.Serializer = __webpack_require__(40);
 
 exports.Math = __webpack_require__(1);
 exports.Vec2 = __webpack_require__(0);
-exports.Vec3 = __webpack_require__(11);
-exports.Mat22 = __webpack_require__(10);
+exports.Vec3 = __webpack_require__(8);
+exports.Mat22 = __webpack_require__(11);
 exports.Mat33 = __webpack_require__(15);
 exports.Transform = __webpack_require__(5);
 exports.Rot = __webpack_require__(3);
@@ -13438,7 +13451,7 @@ exports.AABB = __webpack_require__(17);
 
 exports.Shape = __webpack_require__(16);
 exports.Fixture = __webpack_require__(27);
-exports.Body = __webpack_require__(8);
+exports.Body = __webpack_require__(9);
 exports.Contact = __webpack_require__(18);
 exports.Joint = __webpack_require__(12);
 exports.World = __webpack_require__(31);
@@ -13467,7 +13480,7 @@ exports.RopeJoint = __webpack_require__(57);
 exports.WeldJoint = __webpack_require__(58);
 exports.WheelJoint = __webpack_require__(59);
 
-exports.internal.Sweep = __webpack_require__(9);
+exports.internal.Sweep = __webpack_require__(10);
 exports.internal.stats = __webpack_require__(28);
 exports.internal.Manifold = __webpack_require__(19);
 exports.internal.Distance = __webpack_require__(22);
@@ -13481,10 +13494,12 @@ exports.internal.Settings = __webpack_require__(4);
 /***/ (function(module, exports, __webpack_require__) {
 
 var World = __webpack_require__(31);
-var Body = __webpack_require__(8);
+var Body = __webpack_require__(9);
 var Joint = __webpack_require__(12);
 var Fixture = __webpack_require__(27);
 var Shape = __webpack_require__(16);
+var Vec2 = __webpack_require__(0);
+var Vec3 = __webpack_require__(8);
 
 var SID = 0;
 
@@ -13499,6 +13514,7 @@ function Serializer(opts) {
   var preDeserialize = opts.preDeserialize || function (data) { return data; };
   var postDeserialize = opts.postDeserialize || function (obj, data) { return obj; };
 
+  // This is used to create ref objects during serialize
   var refTypes = {
     'World': World,
     'Body': Body,
@@ -13506,6 +13522,12 @@ function Serializer(opts) {
     'Fixture': Fixture,
     'Shape': Shape,
   };
+
+  // This is used by restore to deserialize objects and refs
+  var restoreTypes = Object.assign({
+    'Vec2': Vec2,
+    'Vec3': Vec3,
+  }, refTypes);
 
   this.toJson = function (root) {
     var json = [];
@@ -13590,7 +13612,7 @@ function Serializer(opts) {
       if (!ref.refIndex) {
         return cls && cls._deserialize && deserialize(cls, ref, ctx);
       }
-      cls = refTypes[ref.refType] || cls;
+      cls = restoreTypes[ref.refType] || cls;
       var index = ref.refIndex;
       if (!refMap[index]) {
         var data = json[index];
@@ -13989,7 +14011,7 @@ var common = __webpack_require__(2);
 var Vec2 = __webpack_require__(0);
 var Math = __webpack_require__(1);
 
-var Body = __webpack_require__(8);
+var Body = __webpack_require__(9);
 var Contact = __webpack_require__(18);
 var Joint = __webpack_require__(12);
 
@@ -16151,17 +16173,17 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(11);
-var Mat22 = __webpack_require__(10);
+var Vec3 = __webpack_require__(8);
+var Mat22 = __webpack_require__(11);
 var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(9);
+var Sweep = __webpack_require__(10);
 var Transform = __webpack_require__(5);
 var Velocity = __webpack_require__(13);
 var Position = __webpack_require__(14);
 
 var Joint = __webpack_require__(12);
-var Body = __webpack_require__(8);
+var Body = __webpack_require__(9);
 
 DistanceJoint.TYPE = 'distance-joint';
 Joint.TYPES[DistanceJoint.TYPE] = DistanceJoint;
@@ -16282,7 +16304,7 @@ DistanceJoint.prototype._serialize = function() {
 };
 
 DistanceJoint._deserialize = function(data, world, restore) {
-  data = {...data};
+  data = Object.assign({}, data);
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new DistanceJoint(data);
@@ -16569,17 +16591,17 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(11);
-var Mat22 = __webpack_require__(10);
+var Vec3 = __webpack_require__(8);
+var Mat22 = __webpack_require__(11);
 var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(9);
+var Sweep = __webpack_require__(10);
 var Transform = __webpack_require__(5);
 var Velocity = __webpack_require__(13);
 var Position = __webpack_require__(14);
 
 var Joint = __webpack_require__(12);
-var Body = __webpack_require__(8);
+var Body = __webpack_require__(9);
 
 FrictionJoint.TYPE = 'friction-joint';
 Joint.TYPES[FrictionJoint.TYPE] = FrictionJoint;
@@ -16675,7 +16697,7 @@ FrictionJoint.prototype._serialize = function() {
 };
 
 FrictionJoint._deserialize = function(data, world, restore) {
-  data = {...data};
+  data = Object.assign({}, data);
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new FrictionJoint(data);
@@ -16935,17 +16957,17 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(11);
-var Mat22 = __webpack_require__(10);
+var Vec3 = __webpack_require__(8);
+var Mat22 = __webpack_require__(11);
 var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(9);
+var Sweep = __webpack_require__(10);
 var Transform = __webpack_require__(5);
 var Velocity = __webpack_require__(13);
 var Position = __webpack_require__(14);
 
 var Joint = __webpack_require__(12);
-var Body = __webpack_require__(8);
+var Body = __webpack_require__(9);
 
 var RevoluteJoint = __webpack_require__(34);
 var PrismaticJoint = __webpack_require__(35);
@@ -17127,7 +17149,7 @@ GearJoint.prototype._serialize = function() {
 };
 
 GearJoint._deserialize = function(data, world, restore) {
-  data = {...data};
+  data = Object.assign({}, data);
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   data.joint1 = restore(Joint, data.joint1, world);
@@ -17451,17 +17473,17 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(11);
-var Mat22 = __webpack_require__(10);
+var Vec3 = __webpack_require__(8);
+var Mat22 = __webpack_require__(11);
 var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(9);
+var Sweep = __webpack_require__(10);
 var Transform = __webpack_require__(5);
 var Velocity = __webpack_require__(13);
 var Position = __webpack_require__(14);
 
 var Joint = __webpack_require__(12);
-var Body = __webpack_require__(8);
+var Body = __webpack_require__(9);
 
 MotorJoint.TYPE = 'motor-joint';
 Joint.TYPES[MotorJoint.TYPE] = MotorJoint;
@@ -17563,7 +17585,7 @@ MotorJoint.prototype._serialize = function() {
 };
 
 MotorJoint._deserialize = function(data, world, restore) {
-  data = {...data};
+  data = Object.assign({}, data);
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new MotorJoint(data);
@@ -17864,17 +17886,17 @@ var create = __webpack_require__(6);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(11);
-var Mat22 = __webpack_require__(10);
+var Vec3 = __webpack_require__(8);
+var Mat22 = __webpack_require__(11);
 var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(9);
+var Sweep = __webpack_require__(10);
 var Transform = __webpack_require__(5);
 var Velocity = __webpack_require__(13);
 var Position = __webpack_require__(14);
 
 var Joint = __webpack_require__(12);
-var Body = __webpack_require__(8);
+var Body = __webpack_require__(9);
 
 MouseJoint.TYPE = 'mouse-joint';
 Joint.TYPES[MouseJoint.TYPE] = MouseJoint;
@@ -17980,7 +18002,7 @@ MouseJoint.prototype._serialize = function() {
 };
 
 MouseJoint._deserialize = function(data, world, restore) {
-  data = {...data};
+  data = Object.assign({}, data);
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   data.target = Vec2(data.target);
@@ -18206,17 +18228,17 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(11);
-var Mat22 = __webpack_require__(10);
+var Vec3 = __webpack_require__(8);
+var Mat22 = __webpack_require__(11);
 var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(9);
+var Sweep = __webpack_require__(10);
 var Transform = __webpack_require__(5);
 var Velocity = __webpack_require__(13);
 var Position = __webpack_require__(14);
 
 var Joint = __webpack_require__(12);
-var Body = __webpack_require__(8);
+var Body = __webpack_require__(9);
 
 PulleyJoint.TYPE = 'pulley-joint';
 PulleyJoint.MIN_PULLEY_LENGTH = 2.0; // minPulleyLength
@@ -18330,7 +18352,7 @@ PulleyJoint.prototype._serialize = function() {
 };
 
 PulleyJoint._deserialize = function(data, world, restore) {
-  data = {...data};
+  data = Object.assign({}, data);
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new PulleyJoint(data);
@@ -18622,17 +18644,17 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(11);
-var Mat22 = __webpack_require__(10);
+var Vec3 = __webpack_require__(8);
+var Mat22 = __webpack_require__(11);
 var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(9);
+var Sweep = __webpack_require__(10);
 var Transform = __webpack_require__(5);
 var Velocity = __webpack_require__(13);
 var Position = __webpack_require__(14);
 
 var Joint = __webpack_require__(12);
-var Body = __webpack_require__(8);
+var Body = __webpack_require__(9);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -18734,7 +18756,7 @@ RopeJoint.prototype._serialize = function() {
 };
 
 RopeJoint._deserialize = function(data, world, restore) {
-  data = {...data};
+  data = Object.assign({}, data);
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new RopeJoint(data);
@@ -18972,17 +18994,17 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(11);
-var Mat22 = __webpack_require__(10);
+var Vec3 = __webpack_require__(8);
+var Mat22 = __webpack_require__(11);
 var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(9);
+var Sweep = __webpack_require__(10);
 var Transform = __webpack_require__(5);
 var Velocity = __webpack_require__(13);
 var Position = __webpack_require__(14);
 
 var Joint = __webpack_require__(12);
-var Body = __webpack_require__(8);
+var Body = __webpack_require__(9);
 
 WeldJoint.TYPE = 'weld-joint';
 Joint.TYPES[WeldJoint.TYPE] = WeldJoint;
@@ -19087,7 +19109,7 @@ WeldJoint.prototype._serialize = function() {
 };
 
 WeldJoint._deserialize = function(data, world, restore) {
-  data = {...data};
+  data = Object.assign({}, data);
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new WeldJoint(data);
@@ -19456,17 +19478,17 @@ var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(11);
-var Mat22 = __webpack_require__(10);
+var Vec3 = __webpack_require__(8);
+var Mat22 = __webpack_require__(11);
 var Mat33 = __webpack_require__(15);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(9);
+var Sweep = __webpack_require__(10);
 var Transform = __webpack_require__(5);
 var Velocity = __webpack_require__(13);
 var Position = __webpack_require__(14);
 
 var Joint = __webpack_require__(12);
-var Body = __webpack_require__(8);
+var Body = __webpack_require__(9);
 
 WheelJoint.TYPE = 'wheel-joint';
 Joint.TYPES[WheelJoint.TYPE] = WheelJoint;
@@ -19602,7 +19624,7 @@ WheelJoint.prototype._serialize = function() {
 };
 
 WheelJoint._deserialize = function(data, world, restore) {
-  data = {...data};
+  data = Object.assign({}, data);
   data.bodyA = restore(Body, data.bodyA, world);
   data.bodyB = restore(Body, data.bodyB, world);
   var joint = new WheelJoint(data);
