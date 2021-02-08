@@ -73,6 +73,9 @@ export interface Testbed {
   step?: (dt: number, t: number) => void;
   keydown?: (keyCode: number, label: string) => void;
   keyup?: (keyCode: number, label: string) => void;
+
+  findOne: (query: string) => Body | Joint | Fixture | null;
+  findAll: (query: string) => Body[] | Joint[] | Fixture[];
 }
 
 export function testbed(opts: any, callback: (testbed: Testbed) => World): Testbed;

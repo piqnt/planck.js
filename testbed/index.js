@@ -68,6 +68,16 @@ planck.testbed = function(opts, callback) {
     testbed.activeKeys = {};
     testbed.background = '#222222';
 
+    testbed.findOne = function() {
+      // todo: implement
+      return null;
+    }
+
+    testbed.findAll = function() {
+      // todo: implement
+      return [];
+    }
+
     var statusText = '';
     var statusMap = {};
 
