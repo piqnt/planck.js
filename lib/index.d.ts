@@ -437,9 +437,9 @@ export interface WorldDef {
   positionIterations?: number;
 }
 
-export function World(def?: WorldDef): World;
+export function World(def?: WorldDef | Vec2 | null): World;
 export class World {
-  constructor(def?: WorldDef);
+  constructor(def?: WorldDef | Vec2 | null);
 
   /** @internal */ m_solver: Solver;
   /** @internal */ m_broadPhase: BroadPhase;
