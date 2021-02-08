@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.25
+ * Planck.js v0.3.26
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  * 
@@ -8909,6 +8909,7 @@ var s_step = new Solver.TimeStep(); // reuse
  * @param {int} positionIterations
  */
 World.prototype.step = function(timeStep, velocityIterations, positionIterations) {
+  this.publish('pre-step', timeStep);
 
   if ((velocityIterations | 0) !== velocityIterations) {
     // TODO: remove this in future
@@ -8967,6 +8968,8 @@ World.prototype.step = function(timeStep, velocityIterations, positionIterations
   }
 
   this.m_locked = false;
+
+  this.publish('post-step', timeStep);
 }
 
 /**
