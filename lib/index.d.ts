@@ -2,25 +2,10 @@
  * @author Oliver Zell <https://github.com/zOadT>
  */
 
-export as namespace planck;
-
 import { Sweep, Velocity, Position, Vec2, Transform, Mat22 } from "./common";
 import { BroadPhase, RayCastInput, RayCastOutput, AABB, DynamicTree, DistanceProxy } from "./collision";
 import { JointEdge, Joint } from "./joint";
 import { ShapeType, Shape } from "./shape";
-
-export * from "./collision";
-export * from "./common";
-export * from "./joint";
-export {
-  Shape,
-  CircleShape as Circle,
-  BoxShape as Box,
-  EdgeShape as Edge,
-  PolygonShape as Polygon,
-  ChainShape as Chain,
-} from "./shape";
-export * from "../testbed";
 
 export const enum ContactFeatureType {
   Vertex = 0,
