@@ -35,7 +35,7 @@ planck.testbed('8 Ball', function(testbed) {
   testbed.ratio = 100;
   testbed.mouseForce = -30;
 
-  pl.internal.Settings.velocityThreshold = 0;
+  pl.Settings.velocityThreshold = 0;
 
   var world = pl.World({});
 

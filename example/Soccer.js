@@ -15,7 +15,7 @@ planck.testbed('Soccer', function(testbed) {
   testbed.ratio = 60;
   testbed.mouseForce = -120;
 
-  pl.internal.Settings.velocityThreshold = 0;
+  pl.Settings.velocityThreshold = 0;
 
   var world = pl.World({});
 
