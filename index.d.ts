@@ -1,8 +1,8 @@
 export as namespace planck;
 
-export * from "./lib/collision";
 export * from "./lib/common";
-export * from "./lib/Joint";
+export * from "./lib/collision";
+export * from "./lib/joint";
 export {
   Shape,
   CircleShape as Circle,
@@ -10,6 +10,7 @@ export {
   EdgeShape as Edge,
   PolygonShape as Polygon,
   ChainShape as Chain,
-} from "./lib/Shape";
+} from "./lib/shape";
 export * from "./lib";
+
 export * from "./testbed";
