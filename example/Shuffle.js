@@ -15,7 +15,7 @@ planck.testbed('Shuffle', function(testbed) {
   testbed.ratio = 50;
   testbed.mouseForce = -100;
 
-  pl.internal.Settings.velocityThreshold = 0;
+  pl.Settings.velocityThreshold = 0;
 
   var world = pl.World({});
 

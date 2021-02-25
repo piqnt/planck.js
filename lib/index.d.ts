@@ -657,7 +657,6 @@ export class Settings {
 declare enum TOIOutputState { }
 
 export namespace internal {
-  let Settings: Settings;
   let Sweep: {
     new(): Sweep;
   };
