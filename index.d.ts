@@ -11,6 +11,7 @@ export {
   PolygonShape as Polygon,
   ChainShape as Chain,
 } from "./lib/shape";
+export * from "./lib/serializer";
 export * from "./lib";
 
 export * from "./testbed";
