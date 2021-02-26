@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.26
+ * Planck.js v0.3.27
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  * 
@@ -8828,10 +8828,10 @@ ChainShape._deserialize = function(data, fixture, restore) {
   }
   var shape = new ChainShape(vertices, data.isLoop);
   if (data.prevVertex) {
-    shape._setPrevVertex(data.prevVertex);
+    shape.setPrevVertex(data.prevVertex);
   }
   if (data.nextVertex) {
-    shape._setNextVertex(data.nextVertex);
+    shape.setNextVertex(data.nextVertex);
   }
   return shape;
 };
@@ -13483,13 +13483,15 @@ exports.RopeJoint = __webpack_require__(57);
 exports.WeldJoint = __webpack_require__(58);
 exports.WheelJoint = __webpack_require__(59);
 
+exports.Settings = __webpack_require__(4);
+
 exports.internal.Sweep = __webpack_require__(10);
-exports.internal.stats = __webpack_require__(28);
+exports.internal.stats = __webpack_require__(28); // todo: remove this
 exports.internal.Manifold = __webpack_require__(19);
 exports.internal.Distance = __webpack_require__(22);
 exports.internal.TimeOfImpact = __webpack_require__(33);
 exports.internal.DynamicTree = __webpack_require__(32);
-exports.internal.Settings = __webpack_require__(4);
+exports.internal.Settings = exports.Settings;
 
 
 /***/ }),
