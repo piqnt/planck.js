@@ -20,13 +20,6 @@
   },
   "main": "lib/index.js",
   "types": "index.d.ts",
-  "files": [
-    "dist/",
-    "doc/",
-    "lib/",
-    "test/",
-    "testbed/"
-  ],
   "author": "Ali Shakiba (http://shakiba.me/planck.js)",
   "contributors": [
     "Ali Shakiba (http://shakiba.me/planck.js)",
