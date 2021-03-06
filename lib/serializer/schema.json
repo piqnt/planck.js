@@ -146,7 +146,11 @@
         "lengthA": { "type": "number" },
         "lengthB": { "type": "number" },
         "maxLength": { "type": "number" },
-        "ratio": { "type": "number" }
+        "ratio": { "type": "number" },
+
+        "impulse": { "type": "number" },
+        "gamma": { "type": "number" },
+        "bias": { "type": "number" }
       }
     },
     "Vec2": {
