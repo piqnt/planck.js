@@ -1,4 +1,4 @@
-var planck = require('../lib/');
+import planck  from '../lib/';
 var Stage = require('stage-js/platform/web');
 
 module.exports = planck;
