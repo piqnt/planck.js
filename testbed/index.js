@@ -1,5 +1,5 @@
 import planck from '../lib/index';
-import Stage from 'stage-js/platform/web';
+import { default as Stage } from 'stage-js/platform/web';
 
 export default planck;
 

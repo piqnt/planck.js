@@ -3,6 +3,8 @@ import { terser } from "rollup-plugin-terser";
 import license from 'rollup-plugin-license';
 import replace from '@rollup/plugin-replace';
 import filesize from 'rollup-plugin-filesize';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 
 import licenseBanner from './license';
 
@@ -44,6 +46,10 @@ export default [
           'DEBUG': JSON.stringify(false),
           'ASSERT': JSON.stringify(false),
         },
+      }),
+      nodeResolve(),
+      commonjs({
+        include: ['node_modules/stage-js/**']
       }),
       babel({
         runtimeHelpers: true,
