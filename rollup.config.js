@@ -9,38 +9,33 @@ import licenseBanner from './license';
 
 export default [
   {
-    input: 'lib/index.js',
-    output: {
-      name: 'planck',
-      file: 'dist/planck.js',
-      format: 'umd',
-      sourcemap: true
-    },
-    plugins: [
-      replace({
-        preventAssignment: true,
-        values: {
-          'DEBUG': JSON.stringify(false),
-          'ASSERT': JSON.stringify(false),
-        },
-      }),
-      babel({
-        runtimeHelpers: true,
-        exclude: 'node_modules/**',
-      }),
-      license({
-        banner: licenseBanner,
-      }),
-      filesize()
-    ]
+    src: 'lib/index.js',
+    dest: 'dist/planck.js',
+    minimize: false,
   },
   {
-    input: 'lib/index.js',
+    src: 'lib/index.js',
+    dest: 'dist/planck.min.js',
+    minimize: true,
+  },
+  {
+    src: 'testbed/index.js',
+    dest: 'dist/planck-with-testbed.js',
+    minimize: false,
+  },
+  {
+    src: 'testbed/index.js',
+    dest: 'dist/planck-with-testbed.min.js',
+    minimize: true,
+  }
+].map(options => {
+  const config = {
+    input: options.src,
     output: {
       name: 'planck',
-      file: 'dist/planck.min.js',
+      file: options.dest,
       format: 'umd',
-      sourcemap: true
+      sourcemap: true,
     },
     plugins: [
       replace({
@@ -57,8 +52,9 @@ export default [
       license({
         banner: licenseBanner,
       }),
-      terser(),
-      filesize()
+      {...(options.minimize ? terser() : null)},
+      filesize(),
     ]
-  }
-];
+  };
+  return config;
+})
