@@ -1,6 +1,6 @@
 {
   "name": "planck-js",
-  "version": "0.3.28",
+  "version": "0.4.0-alpha.1",
   "description": "2D JavaScript physics engine for cross-platform HTML5 game development",
   "homepage": "http://shakiba.me/planck.js",
   "keywords": [
@@ -18,8 +18,8 @@
     "type": "git",
     "url": "git://github.com/shakiba/planck.js.git"
   },
-  "main": "lib/index.js",
-  "types": "index.d.ts",
+  "main": "dist/planck.js",
+  "types": "dist/planck.d.ts",
   "author": "Ali Shakiba (http://shakiba.me/planck.js)",
   "contributors": [
     "Ali Shakiba (http://shakiba.me/planck.js)",
