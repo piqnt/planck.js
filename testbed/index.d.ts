@@ -1,3 +1,5 @@
+export * from "../lib";
+
 import { AABB } from "../lib/collision";
 import { Body, Fixture, Joint, World } from "../lib";
 

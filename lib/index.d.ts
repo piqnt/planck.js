@@ -2,6 +2,18 @@
  * @author Oliver Zell <https://github.com/zOadT>
  */
 
+export * from "./common";
+export * from "./collision";
+export * from "./joint";
+export {
+  Shape,
+  CircleShape as Circle,
+  BoxShape as Box,
+  EdgeShape as Edge,
+  PolygonShape as Polygon,
+  ChainShape as Chain,
+} from "./shape";
+
 import { Sweep, Velocity, Position, Vec2, Transform, Mat22 } from "./common";
 import { BroadPhase, RayCastInput, RayCastOutput, AABB, DynamicTree, DistanceProxy } from "./collision";
 import { JointEdge, Joint } from "./joint";
