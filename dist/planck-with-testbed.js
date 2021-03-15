@@ -23,10 +23,10 @@
  */
 
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.planck = factory());
-}(this, (function () { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.planck = {}));
+}(this, (function (exports) { 'use strict';
 
   function _typeof(obj) {
     "@babel/helpers - typeof";
@@ -16840,41 +16840,6 @@
     return math$1.abs(C) <= Settings.linearSlop;
   };
 
-  var planck = {
-    Serializer: Serializer,
-    Math: math$1,
-    Vec2: Vec2,
-    Vec3: Vec3,
-    Mat22: Mat22,
-    Mat33: Mat33,
-    Transform: Transform,
-    Rot: Rot,
-    AABB: AABB,
-    Shape: Shape,
-    Fixture: Fixture,
-    Body: Body,
-    Contact: Contact,
-    Joint: Joint,
-    World: World,
-    Circle: CircleShape,
-    Edge: EdgeShape,
-    Polygon: PolygonShape,
-    Chain: ChainShape,
-    Box: BoxShape,
-    DistanceJoint: DistanceJoint,
-    FrictionJoint: FrictionJoint,
-    GearJoint: GearJoint,
-    MotorJoint: MotorJoint,
-    MouseJoint: MouseJoint,
-    PrismaticJoint: PrismaticJoint,
-    PulleyJoint: PulleyJoint,
-    RevoluteJoint: RevoluteJoint,
-    RopeJoint: RopeJoint,
-    WeldJoint: WeldJoint,
-    WheelJoint: WheelJoint,
-    Settings: Settings
-  };
-
   function createCommonjsModule(fn) {
     var module = { exports: {} };
   	return fn(module, module.exports), module.exports;
@@ -20447,7 +20412,7 @@
   // step: function, is always called
   // paint: function, is called only after repaint
 
-  planck.testbed = function (opts, callback) {
+  function testbed(opts, callback) {
     if (typeof opts === 'function') {
       callback = opts;
       opts = null;
@@ -20460,7 +20425,6 @@
         canvas.focus();
       });
       stage.MAX_ELAPSE = 1000 / 30;
-      var Vec2 = planck.Vec2;
       var testbed = {};
       testbed.canvas = canvas;
       var paused = false;
@@ -20692,7 +20656,7 @@
 
       function findBody(point) {
         var body;
-        var aabb = planck.AABB(point, point);
+        var aabb = AABB(point, point);
         world.queryAABB(aabb, function (fixture) {
           if (body) {
             return;
@@ -20734,7 +20698,7 @@
         if (testbed.mouseForce) {
           targetBody = body;
         } else {
-          mouseJoint = planck.MouseJoint({
+          mouseJoint = MouseJoint({
             maxForce: 1000
           }, mouseGround, body, Vec2(point));
           world.createJoint(mouseJoint);
@@ -20818,8 +20782,7 @@
         activeKeys.fire = downKeys[32] || downKeys[13];
       }
     });
-  };
-
+  }
   Viewer._super = web;
   Viewer.prototype = web._create(Viewer._super.prototype);
 
@@ -21145,7 +21108,51 @@
     return node;
   };
 
-  return planck;
+  exports.AABB = AABB;
+  exports.Body = Body;
+  exports.Box = BoxShape;
+  exports.Chain = ChainShape;
+  exports.Circle = CircleShape;
+  exports.CollideCircles = CollideCircles;
+  exports.CollideEdgeCircle = CollideEdgeCircle;
+  exports.CollideEdgePolygon = CollideEdgePolygon;
+  exports.CollidePolygonCircle = CollidePolygonCircle;
+  exports.CollidePolygons = CollidePolygons;
+  exports.Contact = Contact;
+  exports.Distance = Distance;
+  exports.DistanceJoint = DistanceJoint;
+  exports.DynamicTree = DynamicTree;
+  exports.Edge = EdgeShape;
+  exports.Fixture = Fixture;
+  exports.FrictionJoint = FrictionJoint;
+  exports.GearJoint = GearJoint;
+  exports.Joint = Joint;
+  exports.Manifold = Manifold;
+  exports.Mat22 = Mat22;
+  exports.Mat33 = Mat33;
+  exports.Math = math$1;
+  exports.MotorJoint = MotorJoint;
+  exports.MouseJoint = MouseJoint;
+  exports.Polygon = PolygonShape;
+  exports.PrismaticJoint = PrismaticJoint;
+  exports.PulleyJoint = PulleyJoint;
+  exports.RevoluteJoint = RevoluteJoint;
+  exports.RopeJoint = RopeJoint;
+  exports.Rot = Rot;
+  exports.Serializer = Serializer;
+  exports.Settings = Settings;
+  exports.Shape = Shape;
+  exports.Sweep = Sweep;
+  exports.TimeOfImpact = TimeOfImpact;
+  exports.Transform = Transform;
+  exports.Vec2 = Vec2;
+  exports.Vec3 = Vec3;
+  exports.WeldJoint = WeldJoint;
+  exports.WheelJoint = WheelJoint;
+  exports.World = World;
+  exports.testbed = testbed;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 //# sourceMappingURL=planck-with-testbed.js.map

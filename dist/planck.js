@@ -16840,56 +16840,48 @@
     return math.abs(C) <= Settings.linearSlop;
   };
 
-  var index = {
-    Serializer: Serializer,
-    Math: math,
-    Vec2: Vec2,
-    Vec3: Vec3,
-    Mat22: Mat22,
-    Mat33: Mat33,
-    Transform: Transform,
-    Rot: Rot,
-    AABB: AABB,
-    Shape: Shape,
-    Fixture: Fixture,
-    Body: Body,
-    Contact: Contact,
-    Joint: Joint,
-    World: World,
-    Circle: CircleShape,
-    Edge: EdgeShape,
-    Polygon: PolygonShape,
-    Chain: ChainShape,
-    Box: BoxShape,
-    DistanceJoint: DistanceJoint,
-    FrictionJoint: FrictionJoint,
-    GearJoint: GearJoint,
-    MotorJoint: MotorJoint,
-    MouseJoint: MouseJoint,
-    PrismaticJoint: PrismaticJoint,
-    PulleyJoint: PulleyJoint,
-    RevoluteJoint: RevoluteJoint,
-    RopeJoint: RopeJoint,
-    WeldJoint: WeldJoint,
-    WheelJoint: WheelJoint,
-    Settings: Settings
-  };
-  var internal = {
-    Settings: Settings,
-    Sweep: Sweep,
-    Manifold: Manifold,
-    Distance: Distance,
-    TimeOfImpact: TimeOfImpact,
-    DynamicTree: DynamicTree,
-    CollideCircles: CollideCircles,
-    CollideEdgeCircle: CollideEdgeCircle,
-    CollidePolygons: CollidePolygons,
-    CollidePolygonCircle: CollidePolygonCircle,
-    CollideEdgePolygon: CollideEdgePolygon
-  };
-
-  exports.default = index;
-  exports.internal = internal;
+  exports.AABB = AABB;
+  exports.Body = Body;
+  exports.Box = BoxShape;
+  exports.Chain = ChainShape;
+  exports.Circle = CircleShape;
+  exports.CollideCircles = CollideCircles;
+  exports.CollideEdgeCircle = CollideEdgeCircle;
+  exports.CollideEdgePolygon = CollideEdgePolygon;
+  exports.CollidePolygonCircle = CollidePolygonCircle;
+  exports.CollidePolygons = CollidePolygons;
+  exports.Contact = Contact;
+  exports.Distance = Distance;
+  exports.DistanceJoint = DistanceJoint;
+  exports.DynamicTree = DynamicTree;
+  exports.Edge = EdgeShape;
+  exports.Fixture = Fixture;
+  exports.FrictionJoint = FrictionJoint;
+  exports.GearJoint = GearJoint;
+  exports.Joint = Joint;
+  exports.Manifold = Manifold;
+  exports.Mat22 = Mat22;
+  exports.Mat33 = Mat33;
+  exports.Math = math;
+  exports.MotorJoint = MotorJoint;
+  exports.MouseJoint = MouseJoint;
+  exports.Polygon = PolygonShape;
+  exports.PrismaticJoint = PrismaticJoint;
+  exports.PulleyJoint = PulleyJoint;
+  exports.RevoluteJoint = RevoluteJoint;
+  exports.RopeJoint = RopeJoint;
+  exports.Rot = Rot;
+  exports.Serializer = Serializer;
+  exports.Settings = Settings;
+  exports.Shape = Shape;
+  exports.Sweep = Sweep;
+  exports.TimeOfImpact = TimeOfImpact;
+  exports.Transform = Transform;
+  exports.Vec2 = Vec2;
+  exports.Vec3 = Vec3;
+  exports.WeldJoint = WeldJoint;
+  exports.WheelJoint = WheelJoint;
+  exports.World = World;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
