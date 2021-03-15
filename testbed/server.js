@@ -52,14 +52,14 @@ app.listen(app.get('port'), function() {
 
 const loadConfigFile = require('rollup/dist/loadConfigFile');
 
-loadConfigFile(path.resolve(__dirname, '../rollup.config.js'), { format: 'es' }).then(
+loadConfigFile(path.resolve(__dirname, '../rollup.config.js')).then(
   async ({ options, warnings }) => {
     console.log(`We currently have ${warnings.count} warnings`);
     warnings.flush();
 
     options = options
       .filter(opt => opt.output[0].file.indexOf('.min.js') === -1)
-      .map(opt => ({...opt, watch: {}, treeshake: false }));
+      .map(opt => ({...opt, treeshake: false }));
 
     const watcher = rollup.watch(options);
 
@@ -97,7 +97,7 @@ loadConfigFile(path.resolve(__dirname, '../rollup.config.js'), { format: 'es' })
 
           console.log('End bundle', event);
 
-          // This will make sure that bundles are properly closed after each run
+          event.result && event.result.close();
           break;
 
         case 'END': // finished building all bundles
