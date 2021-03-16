@@ -24,8 +24,8 @@
 planck.testbed('TimeOfImpact', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2, Transform = pl.Transform;
 
-  var Sweep = pl.internal.Sweep;
-  var TimeOfImpact = pl.internal.TimeOfImpact;
+  var Sweep = pl.Sweep;
+  var TimeOfImpact = pl.TimeOfImpact;
   var TOIInput = TimeOfImpact.Input;
   var TOIOutput = TimeOfImpact.Output;
 
@@ -71,7 +71,7 @@ planck.testbed('TimeOfImpact', function(testbed) {
     // "max toi iters = %d, max root iters = %d", b2_toiMaxIters, b2_toiMaxRootIters
 
     testbed.status('toi', output.t);
-    testbed.status(pl.internal.stats);
+    testbed.status(pl.stats);
 
     var vertices = [];
 

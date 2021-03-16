@@ -200,7 +200,7 @@ planck.testbed('PolyShapes', function(testbed) {
       var body = fixture.getBody();
       var shape = fixture.getShape();
 
-      var overlap = pl.internal.Distance.testOverlap(shape, 0, def.circle, 0, body.getTransform(), def.transform);
+      var overlap = pl.Distance.testOverlap(shape, 0, def.circle, 0, body.getTransform(), def.transform);
 
       if (overlap) {
         drawFixture(fixture);
