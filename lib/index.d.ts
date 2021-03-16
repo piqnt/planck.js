@@ -15,7 +15,7 @@ export {
 } from "./shape";
 
 import { Sweep, Velocity, Position, Vec2, Transform, Mat22 } from "./common";
-import { BroadPhase, RayCastInput, RayCastOutput, AABB, DynamicTree, DistanceProxy } from "./collision";
+import { BroadPhase, RayCastInput, RayCastOutput, AABB, DynamicTree, DistanceProxy, Distance, TimeOfImpact } from "./collision";
 import { JointEdge, Joint } from "./joint";
 import { ShapeType, Shape } from "./shape";
 
@@ -665,3 +665,8 @@ let Settings: {
   angularSleepTolerance: number;
   angularSleepToleranceSqr: number;
 };
+
+/**
+ * @deprecated Merged with main namespace.
+ */
+let internal: any;
