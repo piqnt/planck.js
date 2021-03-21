@@ -40,6 +40,44 @@ Planck.js public API closely follows Box2D API, with the following differences:
 `'begin-contact'`, `'end-contact'`, `'pre-solve'`, `'post-solve'`, `'remove-joint'`, `'remove-fixture'`, `'remove-body'`
 
 
+
+## Install
+
+#### CDN
+
+Planck.js is [available on jsDelivr](https://www.jsdelivr.com/package/npm/planck-js).
+
+#### NPM
+
+Install:
+```sh
+npm install planck-js --save
+```
+
+Core library:
+```js
+const planck = require('planck-js');
+```
+
+With testbed:
+
+```js
+const planck = require('planck-js/dist/planck-with-testbed');
+
+planck.testbed(function() {
+  ...
+});
+
+```
+
+## Updates
+
+#### v0.4.0
+- Migrated to ESM and Rollup
+- `package.json` `main` file now points to UMD build file under `/dist`
+- `planck.internal` namespace is deprecated and merged with `planck` (except `planck.internal.stats`)
+
+
 ## Projects
 
 #### Games
