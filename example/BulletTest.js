@@ -25,7 +25,7 @@ planck.testbed('BulletTest', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
   var world = new pl.World(Vec2(0, -10));
   
-  var stats = pl.stats;
+  var stats = pl.internal.stats;
 
   var ground = world.createBody();
   ground.createFixture(pl.Edge(Vec2(-10.0, 0.0), Vec2(10.0, 0.0)), 0.0);

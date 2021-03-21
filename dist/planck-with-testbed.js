@@ -4961,6 +4961,21 @@
     return numOut;
   }
 
+  var stats$1 = {
+    toString: function toString(newline) {
+      newline = typeof newline === 'string' ? newline : '\n';
+      var string = "";
+
+      for (var name in this) {
+        if (typeof this[name] !== 'function' && _typeof(this[name]) !== 'object') {
+          string += name + ': ' + this[name] + newline;
+        }
+      }
+
+      return string;
+    }
+  };
+
   function Vec3(x, y, z) {
     if (!(this instanceof Vec3)) {
       return new Vec3(x, y, z);
@@ -5316,10 +5331,9 @@
    * GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
    */
 
-  var stats$2 = {};
-  stats$2.gjkCalls = 0;
-  stats$2.gjkIters = 0;
-  stats$2.gjkMaxIters = 0;
+  stats$1.gjkCalls = 0;
+  stats$1.gjkIters = 0;
+  stats$1.gjkMaxIters = 0;
   /**
    * Input for Distance. You have to option to use the shape radii in the
    * computation. Even
@@ -5374,7 +5388,7 @@
    */
 
   function Distance(output, cache, input) {
-    ++stats$2.gjkCalls;
+    ++stats$1.gjkCalls;
     var proxyA = input.proxyA;
     var proxyB = input.proxyB;
     var xfA = input.transformA;
@@ -5435,7 +5449,7 @@
       vertex.w = Vec2.sub(vertex.wB, vertex.wA); // Iteration count is equated to the number of support point calls.
 
       ++iter;
-      ++stats$2.gjkIters; // Check for duplicate support points. This is the main termination
+      ++stats$1.gjkIters; // Check for duplicate support points. This is the main termination
       // criteria.
 
       var duplicate = false;
@@ -5456,7 +5470,7 @@
       ++simplex.m_count;
     }
 
-    stats$2.gjkMaxIters = math$1.max(stats$2.gjkMaxIters, iter); // Prepare output.
+    stats$1.gjkMaxIters = math$1.max(stats$1.gjkMaxIters, iter); // Prepare output.
 
     simplex.getWitnessPoints(output.pointA, output.pointB);
     output.distance = Vec2.distance(output.pointA, output.pointB);
@@ -7267,7 +7281,6 @@
     this.state;
     this.t;
   }
-  var stats$1 = {};
   stats$1.toiTime = 0;
   stats$1.toiMaxTime = 0;
   stats$1.toiCalls = 0;
@@ -16849,7 +16862,8 @@
     Manifold: Manifold,
     Distance: Distance,
     TimeOfImpact: TimeOfImpact,
-    DynamicTree: DynamicTree
+    DynamicTree: DynamicTree,
+    stats: stats$1
   };
 
   function createCommonjsModule(fn) {

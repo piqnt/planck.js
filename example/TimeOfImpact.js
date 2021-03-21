@@ -71,7 +71,7 @@ planck.testbed('TimeOfImpact', function(testbed) {
     // "max toi iters = %d, max root iters = %d", b2_toiMaxIters, b2_toiMaxRootIters
 
     testbed.status('toi', output.t);
-    testbed.status(pl.stats);
+    testbed.status(pl.internal.stats);
 
     var vertices = [];
 
