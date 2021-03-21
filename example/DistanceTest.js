@@ -24,7 +24,7 @@
 planck.testbed('DistanceTest', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2, Transform = pl.Transform;
 
-  var Distance = pl.internal.Distance;
+  var Distance = pl.Distance;
   var DistanceInput = Distance.Input;
   var DistanceOutput = Distance.Output;
   var SimplexCache = Distance.Cache;

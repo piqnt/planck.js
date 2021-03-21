@@ -1,4 +1,4 @@
-import { Vec2 } from "../common";
+import { Sweep, Transform, Vec2 } from "../common";
 import { Shape } from "../shape";
 
 export class BroadPhase {
@@ -90,4 +90,53 @@ export class DynamicTree {
   shiftOrigin(newOrigin: Vec2): void;
   query(aabb: AABB, queryCallback: (id: number) => boolean): void;
   rayCast(input: RayCastInput, rayCastCallback: (subInput: RayCastInput, id: number) => number): void;
+}
+
+declare enum TOIOutputState { }
+
+export function Distance(output: Distance.Input, cache: Distance.Cache, input: Distance.Input): void;
+
+export namespace Distance {
+  class Input {
+    proxyA: DistanceProxy;
+    proxyB: DistanceProxy;
+    transformA: Transform | null;
+    transformB: Transform | null;
+    useRadii: boolean;
+  }
+  class Output {
+    pointA: Vec2;
+    pointB: Vec2;
+    distance: number;
+    iterations: number;
+  }
+  class Cache {
+    metric: number;
+    indexA: number[];
+    indexB: number[];
+    count: number;
+  }
+  function testOverlap(shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: Transform, xfB: Transform): boolean;
+}
+
+export function TimeOfImpact(output: TimeOfImpact.Output, input: TimeOfImpact.Input): void;
+
+export namespace TimeOfImpact {
+  class Input {
+    proxyA: DistanceProxy;
+    proxyB: DistanceProxy;
+    sweepA: Sweep;
+    sweepB: Sweep;
+    tMax: number | undefined;
+  }
+  class Output {
+    state: TOIOutputState | undefined;
+    t: number | undefined;
+
+    static e_unknown: TOIOutputState;
+    static e_failed: TOIOutputState;
+    static e_overlapped: TOIOutputState;
+    static e_touching: TOIOutputState;
+    static e_separated: TOIOutputState;
+  }
 }

@@ -30,7 +30,7 @@ planck.testbed('DynamicTreeTest', function(testbed) {
   var worldExtent = 15.0;
   var proxyExtent = 0.5;
 
-  var tree = new pl.internal.DynamicTree();
+  var tree = new pl.DynamicTree();
   var queryAABB = pl.AABB();
   var rayCastInput = {};
   var rayCastOutput = {};

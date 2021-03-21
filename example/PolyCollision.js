@@ -34,8 +34,8 @@ planck.testbed('PolyCollision', function(testbed) {
   var transformB = pl.Transform(positionB, angleB);
 
   testbed.step = function() {
-    var manifold = new pl.internal.Manifold();
-    pl.internal.CollidePolygons(manifold, polygonA, transformA, polygonB, transformB);
+    var manifold = new pl.Manifold();
+    pl.CollidePolygons(manifold, polygonA, transformA, polygonB, transformB);
 
     var worldManifold = manifold.getWorldManifold(null, transformA, polygonA.getRadius(), transformB, polygonB.getRadius());
 
