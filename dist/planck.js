@@ -16840,6 +16840,18 @@
     return math.abs(C) <= Settings.linearSlop;
   };
 
+  /** @deprecated Merged with main namespace */
+
+  var internal = {
+    CollidePolygons: CollidePolygons,
+    Settings: Settings,
+    Sweep: Sweep,
+    Manifold: Manifold,
+    Distance: Distance,
+    TimeOfImpact: TimeOfImpact,
+    DynamicTree: DynamicTree
+  };
+
   exports.AABB = AABB;
   exports.Body = Body;
   exports.Box = BoxShape;
@@ -16882,6 +16894,7 @@
   exports.WeldJoint = WeldJoint;
   exports.WheelJoint = WheelJoint;
   exports.World = World;
+  exports.internal = internal;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
