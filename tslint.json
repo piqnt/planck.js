@@ -6,6 +6,7 @@
     "unified-signatures": false,
     "no-consecutive-blank-lines": false,
     "ban-ts-ignore": false,
-    "no-padding": false
+    "no-padding": false,
+    "only-arrow-functions": false
   }
 }

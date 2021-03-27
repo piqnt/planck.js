@@ -22,25 +22,26 @@
  * SOFTWARE.
  */
 
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
-export default Position;
-
 import Vec2 from './Vec2';
 import Rot from './Rot';
+import Transform from './Transform';
 
-/**
- * @prop {Vec2} c location
- * @prop {float} a angle
- */
-function Position() {
-  this.c = Vec2.zero();
-  this.a = 0;
-}
 
-Position.prototype.getTransform = function(xf, p) {
-  xf.q.set(this.a);
-  xf.p.set(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
-  return xf;
+export default class Position {
+  /** location */
+  c: Vec2;
+
+  /** angle */
+  a: number;
+
+  constructor() {
+    this.c = Vec2.zero();
+    this.a = 0;
+  }
+
+  getTransform(xf: Transform, p: Vec2): Transform {
+    xf.q.set(this.a);
+    xf.p.set(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
+    return xf;
+  }
 }

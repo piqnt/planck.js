@@ -22,18 +22,10 @@
  * SOFTWARE.
  */
 
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
-export default Velocity;
-
 import Vec2 from './Vec2';
 
-/**
- * @prop {Vec2} v linear
- * @prop {float} w angular
- */
-function Velocity() {
-  this.v = Vec2.zero();
-  this.w = 0;
+export default class Jacobian {
+  linear: Vec2;
+  angularA: number;
+  angularB: number;
 }

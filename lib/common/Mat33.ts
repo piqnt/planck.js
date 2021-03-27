@@ -48,9 +48,9 @@ export default class Mat33 {
       this.ey = Vec3.clone(b);
       this.ez = Vec3.clone(c);
     } else {
-      this.ex = Vec3();
-      this.ey = Vec3();
-      this.ez = Vec3();
+      this.ex = Vec3.zero();
+      this.ey = Vec3.zero();
+      this.ez = Vec3.zero();
     }
   }
 

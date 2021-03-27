@@ -22,13 +22,15 @@
  * SOFTWARE.
  */
 
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+// @ts-ignore
+const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+// @ts-ignore
+const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 import common from '../util/common';
 
-var native = Math;
-var math = Object.create(native);
+const native = Math;
+const math = Object.create(native);
 
 export default math;
 
@@ -40,7 +42,7 @@ math.EPSILON = 1e-9; // TODO
  */
 math.isFinite = function(x) {
   return (typeof x === 'number') && isFinite(x) && !isNaN(x);
-}
+};
 
 math.assert = function(x) {
   if (!_ASSERT) return;
@@ -48,15 +50,15 @@ math.assert = function(x) {
     _DEBUG && common.debug(x);
     throw new Error('Invalid Number!');
   }
-}
+};
 
 /**
- * TODO: This is a approximate yet fast inverse square-root.
+ * This is a approximate yet fast inverse square-root (todo).
  */
 math.invSqrt = function(x) {
-  // TODO
+  // TODO:
   return 1 / native.sqrt(x);
-}
+};
 
 /**
  * Next Largest Power of 2 Given a binary integer value x, the next largest
@@ -73,17 +75,19 @@ math.nextPowerOfTwo = function(x) {
   x |= (x >> 8);
   x |= (x >> 16);
   return x + 1;
-}
+};
 
 math.isPowerOfTwo = function(x) {
-  return x > 0 && (x & (x - 1)) == 0;
-}
+  return x > 0 && (x & (x - 1)) === 0;
+};
 
 math.mod = function(num, min, max) {
   if (typeof min === 'undefined') {
-    max = 1, min = 0;
+    max = 1;
+    min = 0;
   } else if (typeof max === 'undefined') {
-    max = min, min = 0;
+    max = min;
+    min = 0;
   }
   if (max > min) {
     num = (num - min) % (max - min);
@@ -112,5 +116,5 @@ math.random = function(min, max) {
     max = min;
     min = 0;
   }
-  return min == max ? min : native.random() * (max - min) + min;
+  return min === max ? min : native.random() * (max - min) + min;
 };

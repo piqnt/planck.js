@@ -2,7 +2,6 @@
  * @author Oliver Zell <https://github.com/zOadT>
  */
 
-export * from "./common";
 export * from "./collision";
 export * from "./joint";
 export {
@@ -14,9 +13,13 @@ export {
   ChainShape as Chain,
 } from "./shape";
 
-export { default as Settings } from "./Settings";
+import Sweep from './common/Sweep';
+import Velocity from './common/Velocity';
+import Position from './common/Position';
+import Vec2 from './common/Vec2';
+import Transform from './common/Transform';
+import Mat22 from './common/Mat22';
 
-import { Sweep, Velocity, Position, Vec2, Transform, Mat22 } from "./common";
 import { BroadPhase, RayCastInput, RayCastOutput, AABB, DynamicTree, DistanceProxy, Distance, TimeOfImpact } from "./collision";
 import { JointEdge, Joint } from "./joint";
 import { ShapeType, Shape } from "./shape";

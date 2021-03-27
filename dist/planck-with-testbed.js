@@ -106,30 +106,25 @@
    * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    * SOFTWARE.
    */
-  var _native = Math;
-  var math$1 = Object.create(_native);
+  var native$1 = Math;
+  var math$1 = Object.create(native$1);
   math$1.EPSILON = 1e-9; // TODO
-
   /**
    * This function is used to ensure that a floating point number is not a NaN or
    * infinity.
    */
-
   math$1.isFinite = function (x) {
-    return typeof x === 'number' && isFinite(x) && !isNaN(x);
+      return (typeof x === 'number') && isFinite(x) && !isNaN(x);
   };
-
   math$1.assert = function (x) {
-    return;
+      return;
   };
   /**
-   * TODO: This is a approximate yet fast inverse square-root.
+   * This is a approximate yet fast inverse square-root (todo).
    */
-
-
   math$1.invSqrt = function (x) {
-    // TODO
-    return 1 / _native.sqrt(x);
+      // TODO:
+      return 1 / native$1.sqrt(x);
   };
   /**
    * Next Largest Power of 2 Given a binary integer value x, the next largest
@@ -138,505 +133,462 @@
    * same most significant 1 as x, but all 1's below it. Adding 1 to that value
    * yields the next largest power of 2. For a 32-bit value:
    */
-
-
   math$1.nextPowerOfTwo = function (x) {
-    // TODO
-    x |= x >> 1;
-    x |= x >> 2;
-    x |= x >> 4;
-    x |= x >> 8;
-    x |= x >> 16;
-    return x + 1;
+      // TODO
+      x |= (x >> 1);
+      x |= (x >> 2);
+      x |= (x >> 4);
+      x |= (x >> 8);
+      x |= (x >> 16);
+      return x + 1;
   };
-
   math$1.isPowerOfTwo = function (x) {
-    return x > 0 && (x & x - 1) == 0;
+      return x > 0 && (x & (x - 1)) === 0;
   };
-
   math$1.mod = function (num, min, max) {
-    if (typeof min === 'undefined') {
-      max = 1, min = 0;
-    } else if (typeof max === 'undefined') {
-      max = min, min = 0;
-    }
-
-    if (max > min) {
-      num = (num - min) % (max - min);
-      return num + (num < 0 ? max : min);
-    } else {
-      num = (num - max) % (min - max);
-      return num + (num <= 0 ? min : max);
-    }
+      if (typeof min === 'undefined') {
+          max = 1;
+          min = 0;
+      }
+      else if (typeof max === 'undefined') {
+          max = min;
+          min = 0;
+      }
+      if (max > min) {
+          num = (num - min) % (max - min);
+          return num + (num < 0 ? max : min);
+      }
+      else {
+          num = (num - max) % (min - max);
+          return num + (num <= 0 ? min : max);
+      }
   };
-
   math$1.clamp = function (num, min, max) {
-    if (num < min) {
-      return min;
-    } else if (num > max) {
-      return max;
-    } else {
-      return num;
-    }
+      if (num < min) {
+          return min;
+      }
+      else if (num > max) {
+          return max;
+      }
+      else {
+          return num;
+      }
   };
-
   math$1.random = function (min, max) {
-    if (typeof min === 'undefined') {
-      max = 1;
-      min = 0;
-    } else if (typeof max === 'undefined') {
-      max = min;
-      min = 0;
-    }
-
-    return min == max ? min : _native.random() * (max - min) + min;
+      if (typeof min === 'undefined') {
+          max = 1;
+          min = 0;
+      }
+      else if (typeof max === 'undefined') {
+          max = min;
+          min = 0;
+      }
+      return min === max ? min : native$1.random() * (max - min) + min;
   };
 
-  function Vec2(x, y) {
-    if (!(this instanceof Vec2)) {
-      return new Vec2(x, y);
-    }
-
-    if (typeof x === 'undefined') {
-      this.x = 0;
-      this.y = 0;
-    } else if (_typeof(x) === 'object') {
-      this.x = x.x;
-      this.y = x.y;
-    } else {
-      this.x = x;
-      this.y = y;
-    }
-  }
-
-  Vec2.prototype._serialize = function () {
-    return {
-      x: this.x,
-      y: this.y
-    };
-  };
-
-  Vec2._deserialize = function (data) {
-    var obj = Object.create(Vec2.prototype);
-    obj.x = data.x;
-    obj.y = data.y;
-    return obj;
-  };
-
-  Vec2.zero = function () {
-    var obj = Object.create(Vec2.prototype);
-    obj.x = 0;
-    obj.y = 0;
-    return obj;
-  };
-
-  Vec2.neo = function (x, y) {
-    var obj = Object.create(Vec2.prototype);
-    obj.x = x;
-    obj.y = y;
-    return obj;
-  };
-
-  Vec2.clone = function (v) {
-    return Vec2.neo(v.x, v.y);
-  };
-
-  Vec2.prototype.toString = function () {
-    return JSON.stringify(this);
-  };
-  /**
-   * Does this vector contain finite coordinates?
-   */
-
-
-  Vec2.isValid = function (v) {
-    return v && math$1.isFinite(v.x) && math$1.isFinite(v.y);
-  };
-
-  Vec2.assert = function (o) {
-    return;
-  };
-
-  Vec2.prototype.clone = function () {
-    return Vec2.clone(this);
-  };
-  /**
-   * Set this vector to all zeros.
-   * 
-   * @returns this
-   */
-
-
-  Vec2.prototype.setZero = function () {
-    this.x = 0.0;
-    this.y = 0.0;
-    return this;
-  };
-  /**
-   * Set this vector to some specified coordinates.
-   * 
-   * @returns this
-   */
-
-
-  Vec2.prototype.set = function (x, y) {
-    if (_typeof(x) === 'object') {
-      this.x = x.x;
-      this.y = x.y;
-    } else {
-      this.x = x;
-      this.y = y;
-    }
-
-    return this;
-  };
-  /**
-   * @deprecated Use setCombine or setMul
-   */
-
-
-  Vec2.prototype.wSet = function (a, v, b, w) {
-    if (typeof b !== 'undefined' || typeof w !== 'undefined') {
-      return this.setCombine(a, v, b, w);
-    } else {
-      return this.setMul(a, v);
-    }
-  };
-  /**
-   * Set linear combination of v and w: `a * v + b * w`
-   */
-
-
-  Vec2.prototype.setCombine = function (a, v, b, w) {
-    var x = a * v.x + b * w.x;
-    var y = a * v.y + b * w.y; // `this` may be `w`
-
-    this.x = x;
-    this.y = y;
-    return this;
-  };
-
-  Vec2.prototype.setMul = function (a, v) {
-    var x = a * v.x;
-    var y = a * v.y;
-    this.x = x;
-    this.y = y;
-    return this;
-  };
-  /**
-   * Add a vector to this vector.
-   * 
-   * @returns this
-   */
-
-
-  Vec2.prototype.add = function (w) {
-    this.x += w.x;
-    this.y += w.y;
-    return this;
-  };
-  /**
-   * @deprecated Use addCombine or addMul
-   */
-
-
-  Vec2.prototype.wAdd = function (a, v, b, w) {
-    if (typeof b !== 'undefined' || typeof w !== 'undefined') {
-      return this.addCombine(a, v, b, w);
-    } else {
-      return this.addMul(a, v);
-    }
-  };
-  /**
-   * Add linear combination of v and w: `a * v + b * w`
-   */
-
-
-  Vec2.prototype.addCombine = function (a, v, b, w) {
-    var x = a * v.x + b * w.x;
-    var y = a * v.y + b * w.y; // `this` may be `w`
-
-    this.x += x;
-    this.y += y;
-    return this;
-  };
-
-  Vec2.prototype.addMul = function (a, v) {
-    var x = a * v.x;
-    var y = a * v.y;
-    this.x += x;
-    this.y += y;
-    return this;
-  };
-  /**
-   * @deprecated Use subCombine or subMul
-   */
-
-
-  Vec2.prototype.wSub = function (a, v, b, w) {
-    if (typeof b !== 'undefined' || typeof w !== 'undefined') {
-      return this.subCombine(a, v, b, w);
-    } else {
-      return this.subMul(a, v);
-    }
-  };
-  /**
-   * Subtract linear combination of v and w: `a * v + b * w`
-   */
-
-
-  Vec2.prototype.subCombine = function (a, v, b, w) {
-    var x = a * v.x + b * w.x;
-    var y = a * v.y + b * w.y; // `this` may be `w`
-
-    this.x -= x;
-    this.y -= y;
-    return this;
-  };
-
-  Vec2.prototype.subMul = function (a, v) {
-    var x = a * v.x;
-    var y = a * v.y;
-    this.x -= x;
-    this.y -= y;
-    return this;
-  };
-  /**
-   * Subtract a vector from this vector
-   * 
-   * @returns this
-   */
-
-
-  Vec2.prototype.sub = function (w) {
-    this.x -= w.x;
-    this.y -= w.y;
-    return this;
-  };
-  /**
-   * Multiply this vector by a scalar.
-   * 
-   * @returns this
-   */
-
-
-  Vec2.prototype.mul = function (m) {
-    this.x *= m;
-    this.y *= m;
-    return this;
-  };
-  /**
-   * Get the length of this vector (the norm).
-   * 
-   * For performance, use this instead of lengthSquared (if possible).
-   */
-
-
-  Vec2.prototype.length = function () {
-    return Vec2.lengthOf(this);
-  };
-  /**
-   * Get the length squared.
-   */
-
-
-  Vec2.prototype.lengthSquared = function () {
-    return Vec2.lengthSquared(this);
-  };
-  /**
-   * Convert this vector into a unit vector.
-   * 
-   * @returns old length
-   */
-
-
-  Vec2.prototype.normalize = function () {
-    var length = this.length();
-
-    if (length < math$1.EPSILON) {
-      return 0.0;
-    }
-
-    var invLength = 1.0 / length;
-    this.x *= invLength;
-    this.y *= invLength;
-    return length;
-  };
-  /**
-   * Get the length of this vector (the norm).
+  /*
+   * Planck.js
+   * The MIT License
+   * Copyright (c) 2021 Erin Catto, Ali Shakiba
    *
-   * For performance, use this instead of lengthSquared (if possible).
+   * Permission is hereby granted, free of charge, to any person obtaining a copy
+   * of this software and associated documentation files (the "Software"), to deal
+   * in the Software without restriction, including without limitation the rights
+   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   * copies of the Software, and to permit persons to whom the Software is
+   * furnished to do so, subject to the following conditions:
+   *
+   * The above copyright notice and this permission notice shall be included in all
+   * copies or substantial portions of the Software.
+   *
+   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   * SOFTWARE.
    */
-
-
-  Vec2.lengthOf = function (v) {
-    return math$1.sqrt(v.x * v.x + v.y * v.y);
-  };
-  /**
-   * Get the length squared.
-   */
-
-
-  Vec2.lengthSquared = function (v) {
-    return v.x * v.x + v.y * v.y;
-  };
-
-  Vec2.distance = function (v, w) {
-    var dx = v.x - w.x,
-        dy = v.y - w.y;
-    return math$1.sqrt(dx * dx + dy * dy);
-  };
-
-  Vec2.distanceSquared = function (v, w) {
-    var dx = v.x - w.x,
-        dy = v.y - w.y;
-    return dx * dx + dy * dy;
-  };
-
-  Vec2.areEqual = function (v, w) {
-    return v == w || _typeof(w) === 'object' && w !== null && v.x === w.x && v.y === w.y;
-  };
-  /**
-   * Get the skew vector such that dot(skew_vec, other) == cross(vec, other)
-   */
-
-
-  Vec2.skew = function (v) {
-    return Vec2.neo(-v.y, v.x);
-  };
-  /**
-   * Perform the dot product on two vectors.
-   */
-
-
-  Vec2.dot = function (v, w) {
-    return v.x * w.x + v.y * w.y;
-  };
-  /**
-   * Perform the cross product on two vectors. In 2D this produces a scalar.
-   * 
-   * Perform the cross product on a vector and a scalar. In 2D this produces a
-   * vector.
-   */
-
-
-  Vec2.cross = function (v, w) {
-    if (typeof w === 'number') {
-      return Vec2.neo(w * v.y, -w * v.x);
-    } else if (typeof v === 'number') {
-      return Vec2.neo(-v * w.y, v * w.x);
-    } else {
-      return v.x * w.y - v.y * w.x;
-    }
-  };
-  /**
-   * Returns `a + (v x w)`
-   */
-
-
-  Vec2.addCross = function (a, v, w) {
-    if (typeof w === 'number') {
-      return Vec2.neo(w * v.y + a.x, -w * v.x + a.y);
-    } else if (typeof v === 'number') {
-      return Vec2.neo(-v * w.y + a.x, v * w.x + a.y);
-    }
-  };
-
-  Vec2.add = function (v, w) {
-    return Vec2.neo(v.x + w.x, v.y + w.y);
-  };
-  /**
-   * @deprecated Use combine
-   */
-
-
-  Vec2.wAdd = function (a, v, b, w) {
-    if (typeof b !== 'undefined' || typeof w !== 'undefined') {
-      return Vec2.combine(a, v, b, w);
-    } else {
-      return Vec2.mul(a, v);
-    }
-  };
-
-  Vec2.combine = function (a, v, b, w) {
-    return Vec2.zero().setCombine(a, v, b, w);
-  };
-
-  Vec2.sub = function (v, w) {
-    return Vec2.neo(v.x - w.x, v.y - w.y);
-  };
-
-  Vec2.mul = function (a, b) {
-    if (_typeof(a) === 'object') {
-      return Vec2.neo(a.x * b, a.y * b);
-    } else if (_typeof(b) === 'object') {
-      return Vec2.neo(a * b.x, a * b.y);
-    }
-  };
-
-  Vec2.prototype.neg = function () {
-    this.x = -this.x;
-    this.y = -this.y;
-    return this;
-  };
-
-  Vec2.neg = function (v) {
-    return Vec2.neo(-v.x, -v.y);
-  };
-
-  Vec2.abs = function (v) {
-    return Vec2.neo(math$1.abs(v.x), math$1.abs(v.y));
-  };
-
-  Vec2.mid = function (v, w) {
-    return Vec2.neo((v.x + w.x) * 0.5, (v.y + w.y) * 0.5);
-  };
-
-  Vec2.upper = function (v, w) {
-    return Vec2.neo(math$1.max(v.x, w.x), math$1.max(v.y, w.y));
-  };
-
-  Vec2.lower = function (v, w) {
-    return Vec2.neo(math$1.min(v.x, w.x), math$1.min(v.y, w.y));
-  };
-
-  Vec2.prototype.clamp = function (max) {
-    var lengthSqr = this.x * this.x + this.y * this.y;
-
-    if (lengthSqr > max * max) {
-      var invLength = math$1.invSqrt(lengthSqr);
-      this.x *= invLength * max;
-      this.y *= invLength * max;
-    }
-
-    return this;
-  };
-
-  Vec2.clamp = function (v, max) {
-    v = Vec2.neo(v.x, v.y);
-    v.clamp(max);
-    return v;
-  };
-  /**
-   * @experimental
-   */
-
-
-  Vec2.scaleFn = function (x, y) {
-    return function (v) {
-      return Vec2.neo(v.x * x, v.y * y);
-    };
-  };
-  /**
-   * @experimental
-   */
-
-
-  Vec2.translateFn = function (x, y) {
-    return function (v) {
-      return Vec2.neo(v.x + x, v.y + y);
-    };
-  };
+  var Vec2 = /** @class */ (function () {
+      function Vec2(x, y) {
+          if (!(this instanceof Vec2)) {
+              return new Vec2(x, y);
+          }
+          if (typeof x === 'undefined') {
+              this.x = 0;
+              this.y = 0;
+          }
+          else if (typeof x === 'object') {
+              this.x = x.x;
+              this.y = x.y;
+          }
+          else {
+              this.x = x;
+              this.y = y;
+          }
+      }
+      Vec2.prototype._serialize = function () {
+          return {
+              x: this.x,
+              y: this.y
+          };
+      };
+      Vec2._deserialize = function (data) {
+          var obj = Object.create(Vec2.prototype);
+          obj.x = data.x;
+          obj.y = data.y;
+          return obj;
+      };
+      Vec2.zero = function () {
+          var obj = Object.create(Vec2.prototype);
+          obj.x = 0;
+          obj.y = 0;
+          return obj;
+      };
+      /** @internal */
+      Vec2.neo = function (x, y) {
+          var obj = Object.create(Vec2.prototype);
+          obj.x = x;
+          obj.y = y;
+          return obj;
+      };
+      Vec2.clone = function (v) {
+          return Vec2.neo(v.x, v.y);
+      };
+      Vec2.prototype.toString = function () {
+          return JSON.stringify(this);
+      };
+      /**
+       * Does this vector contain finite coordinates?
+       */
+      Vec2.isValid = function (v) {
+          return v && math$1.isFinite(v.x) && math$1.isFinite(v.y);
+      };
+      Vec2.assert = function (o) {
+          return;
+      };
+      Vec2.prototype.clone = function () {
+          return Vec2.clone(this);
+      };
+      /**
+       * Set this vector to all zeros.
+       *
+       * @returns this
+       */
+      Vec2.prototype.setZero = function () {
+          this.x = 0.0;
+          this.y = 0.0;
+          return this;
+      };
+      /**
+       * Set this vector to some specified coordinates.
+       *
+       * @returns this
+       */
+      Vec2.prototype.set = function (x, y) {
+          if (typeof x === 'object') {
+              this.x = x.x;
+              this.y = x.y;
+          }
+          else {
+              this.x = x;
+              this.y = y;
+          }
+          return this;
+      };
+      /**
+       * @deprecated Use setCombine or setMul
+       */
+      Vec2.prototype.wSet = function (a, v, b, w) {
+          if (typeof b !== 'undefined' || typeof w !== 'undefined') {
+              return this.setCombine(a, v, b, w);
+          }
+          else {
+              return this.setMul(a, v);
+          }
+      };
+      /**
+       * Set linear combination of v and w: `a * v + b * w`
+       */
+      Vec2.prototype.setCombine = function (a, v, b, w) {
+          var x = a * v.x + b * w.x;
+          var y = a * v.y + b * w.y;
+          // `this` may be `w`
+          this.x = x;
+          this.y = y;
+          return this;
+      };
+      Vec2.prototype.setMul = function (a, v) {
+          var x = a * v.x;
+          var y = a * v.y;
+          this.x = x;
+          this.y = y;
+          return this;
+      };
+      /**
+       * Add a vector to this vector.
+       *
+       * @returns this
+       */
+      Vec2.prototype.add = function (w) {
+          this.x += w.x;
+          this.y += w.y;
+          return this;
+      };
+      /**
+       * @deprecated Use addCombine or addMul
+       */
+      Vec2.prototype.wAdd = function (a, v, b, w) {
+          if (typeof b !== 'undefined' || typeof w !== 'undefined') {
+              return this.addCombine(a, v, b, w);
+          }
+          else {
+              return this.addMul(a, v);
+          }
+      };
+      /**
+       * Add linear combination of v and w: `a * v + b * w`
+       */
+      Vec2.prototype.addCombine = function (a, v, b, w) {
+          var x = a * v.x + b * w.x;
+          var y = a * v.y + b * w.y;
+          // `this` may be `w`
+          this.x += x;
+          this.y += y;
+          return this;
+      };
+      Vec2.prototype.addMul = function (a, v) {
+          var x = a * v.x;
+          var y = a * v.y;
+          this.x += x;
+          this.y += y;
+          return this;
+      };
+      /**
+       * @deprecated Use subCombine or subMul
+       */
+      Vec2.prototype.wSub = function (a, v, b, w) {
+          if (typeof b !== 'undefined' || typeof w !== 'undefined') {
+              return this.subCombine(a, v, b, w);
+          }
+          else {
+              return this.subMul(a, v);
+          }
+      };
+      /**
+       * Subtract linear combination of v and w: `a * v + b * w`
+       */
+      Vec2.prototype.subCombine = function (a, v, b, w) {
+          var x = a * v.x + b * w.x;
+          var y = a * v.y + b * w.y;
+          // `this` may be `w`
+          this.x -= x;
+          this.y -= y;
+          return this;
+      };
+      Vec2.prototype.subMul = function (a, v) {
+          var x = a * v.x;
+          var y = a * v.y;
+          this.x -= x;
+          this.y -= y;
+          return this;
+      };
+      /**
+       * Subtract a vector from this vector
+       *
+       * @returns this
+       */
+      Vec2.prototype.sub = function (w) {
+          this.x -= w.x;
+          this.y -= w.y;
+          return this;
+      };
+      /**
+       * Multiply this vector by a scalar.
+       *
+       * @returns this
+       */
+      Vec2.prototype.mul = function (m) {
+          this.x *= m;
+          this.y *= m;
+          return this;
+      };
+      /**
+       * Get the length of this vector (the norm).
+       *
+       * For performance, use this instead of lengthSquared (if possible).
+       */
+      Vec2.prototype.length = function () {
+          return Vec2.lengthOf(this);
+      };
+      /**
+       * Get the length squared.
+       */
+      Vec2.prototype.lengthSquared = function () {
+          return Vec2.lengthSquared(this);
+      };
+      /**
+       * Convert this vector into a unit vector.
+       *
+       * @returns old length
+       */
+      Vec2.prototype.normalize = function () {
+          var length = this.length();
+          if (length < math$1.EPSILON) {
+              return 0.0;
+          }
+          var invLength = 1.0 / length;
+          this.x *= invLength;
+          this.y *= invLength;
+          return length;
+      };
+      /**
+       * Get the length of this vector (the norm).
+       *
+       * For performance, use this instead of lengthSquared (if possible).
+       */
+      Vec2.lengthOf = function (v) {
+          return math$1.sqrt(v.x * v.x + v.y * v.y);
+      };
+      /**
+       * Get the length squared.
+       */
+      Vec2.lengthSquared = function (v) {
+          return v.x * v.x + v.y * v.y;
+      };
+      Vec2.distance = function (v, w) {
+          var dx = v.x - w.x;
+          var dy = v.y - w.y;
+          return math$1.sqrt(dx * dx + dy * dy);
+      };
+      Vec2.distanceSquared = function (v, w) {
+          var dx = v.x - w.x;
+          var dy = v.y - w.y;
+          return dx * dx + dy * dy;
+      };
+      Vec2.areEqual = function (v, w) {
+          return v === w || typeof w === 'object' && w !== null && v.x === w.x && v.y === w.y;
+      };
+      /**
+       * Get the skew vector such that dot(skew_vec, other) == cross(vec, other)
+       */
+      Vec2.skew = function (v) {
+          return Vec2.neo(-v.y, v.x);
+      };
+      /**
+       * Perform the dot product on two vectors.
+       */
+      Vec2.dot = function (v, w) {
+          return v.x * w.x + v.y * w.y;
+      };
+      /**
+       * Perform the cross product on two vectors. In 2D this produces a scalar.
+       *
+       * Perform the cross product on a vector and a scalar. In 2D this produces a
+       * vector.
+       */
+      Vec2.cross = function (v, w) {
+          if (typeof w === 'number') {
+              return Vec2.neo(w * v.y, -w * v.x);
+          }
+          else if (typeof v === 'number') {
+              return Vec2.neo(-v * w.y, v * w.x);
+          }
+          else {
+              return v.x * w.y - v.y * w.x;
+          }
+      };
+      /**
+       * Returns `a + (v x w)`
+       */
+      Vec2.addCross = function (a, v, w) {
+          if (typeof w === 'number') {
+              return Vec2.neo(w * v.y + a.x, -w * v.x + a.y);
+          }
+          else if (typeof v === 'number') {
+              return Vec2.neo(-v * w.y + a.x, v * w.x + a.y);
+          }
+      };
+      Vec2.add = function (v, w) {
+          return Vec2.neo(v.x + w.x, v.y + w.y);
+      };
+      /**
+       * @deprecated Use combine
+       */
+      Vec2.wAdd = function (a, v, b, w) {
+          if (typeof b !== 'undefined' || typeof w !== 'undefined') {
+              return Vec2.combine(a, v, b, w);
+          }
+          else {
+              return Vec2.mul(a, v);
+          }
+      };
+      Vec2.combine = function (a, v, b, w) {
+          return Vec2.zero().setCombine(a, v, b, w);
+      };
+      Vec2.sub = function (v, w) {
+          return Vec2.neo(v.x - w.x, v.y - w.y);
+      };
+      Vec2.mul = function (a, b) {
+          if (typeof a === 'object') {
+              return Vec2.neo(a.x * b, a.y * b);
+          }
+          else if (typeof b === 'object') {
+              return Vec2.neo(a * b.x, a * b.y);
+          }
+      };
+      Vec2.prototype.neg = function () {
+          this.x = -this.x;
+          this.y = -this.y;
+          return this;
+      };
+      Vec2.neg = function (v) {
+          return Vec2.neo(-v.x, -v.y);
+      };
+      Vec2.abs = function (v) {
+          return Vec2.neo(math$1.abs(v.x), math$1.abs(v.y));
+      };
+      Vec2.mid = function (v, w) {
+          return Vec2.neo((v.x + w.x) * 0.5, (v.y + w.y) * 0.5);
+      };
+      Vec2.upper = function (v, w) {
+          return Vec2.neo(math$1.max(v.x, w.x), math$1.max(v.y, w.y));
+      };
+      Vec2.lower = function (v, w) {
+          return Vec2.neo(math$1.min(v.x, w.x), math$1.min(v.y, w.y));
+      };
+      Vec2.prototype.clamp = function (max) {
+          var lengthSqr = this.x * this.x + this.y * this.y;
+          if (lengthSqr > max * max) {
+              var invLength = math$1.invSqrt(lengthSqr);
+              this.x *= invLength * max;
+              this.y *= invLength * max;
+          }
+          return this;
+      };
+      Vec2.clamp = function (v, max) {
+          v = Vec2.neo(v.x, v.y);
+          v.clamp(max);
+          return v;
+      };
+      /**
+       * @deprecated
+       */
+      Vec2.scaleFn = function (x, y) {
+          return function (v) {
+              return Vec2.neo(v.x * x, v.y * y);
+          };
+      };
+      /**
+       * @deprecated
+       */
+      Vec2.translateFn = function (x, y) {
+          return function (v) {
+              return Vec2.neo(v.x + x, v.y + y);
+          };
+      };
+      return Vec2;
+  }());
 
   /*
    * Planck.js
@@ -2175,192 +2127,166 @@
     return true;
   };
 
-  /**
-   * Initialize from an angle in radians.
+  /*
+   * Planck.js
+   * The MIT License
+   * Copyright (c) 2021 Erin Catto, Ali Shakiba
+   *
+   * Permission is hereby granted, free of charge, to any person obtaining a copy
+   * of this software and associated documentation files (the "Software"), to deal
+   * in the Software without restriction, including without limitation the rights
+   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   * copies of the Software, and to permit persons to whom the Software is
+   * furnished to do so, subject to the following conditions:
+   *
+   * The above copyright notice and this permission notice shall be included in all
+   * copies or substantial portions of the Software.
+   *
+   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   * SOFTWARE.
    */
-
-  function Rot(angle) {
-    if (!(this instanceof Rot)) {
-      return new Rot(angle);
-    }
-
-    if (typeof angle === 'number') {
-      this.setAngle(angle);
-    } else if (_typeof(angle) === 'object') {
-      this.set(angle);
-    } else {
-      this.setIdentity();
-    }
-  }
-
-  Rot.neo = function (angle) {
-    var obj = Object.create(Rot.prototype);
-    obj.setAngle(angle);
-    return obj;
-  };
-
-  Rot.clone = function (rot) {
-    var obj = Object.create(Rot.prototype);
-    obj.s = rot.s;
-    obj.c = rot.c;
-    return obj;
-  };
-
-  Rot.identity = function () {
-    var obj = Object.create(Rot.prototype);
-    obj.s = 0.0;
-    obj.c = 1.0;
-    return obj;
-  };
-
-  Rot.isValid = function (o) {
-    return o && math$1.isFinite(o.s) && math$1.isFinite(o.c);
-  };
-
-  Rot.assert = function (o) {
-    return;
-  };
-  /**
-   * Set to the identity rotation.
-   */
-
-
-  Rot.prototype.setIdentity = function () {
-    this.s = 0.0;
-    this.c = 1.0;
-  };
-
-  Rot.prototype.set = function (angle) {
-    if (_typeof(angle) === 'object') {
-      this.s = angle.s;
-      this.c = angle.c;
-    } else {
-
-      this.s = math$1.sin(angle);
-      this.c = math$1.cos(angle);
-    }
-  };
-  /**
-   * Set using an angle in radians.
-   */
-
-
-  Rot.prototype.setAngle = function (angle) {
-
-    this.s = math$1.sin(angle);
-    this.c = math$1.cos(angle);
-  };
-  /**
-   * Get the angle in radians.
-   */
-
-
-  Rot.prototype.getAngle = function () {
-    return math$1.atan2(this.s, this.c);
-  };
-  /**
-   * Get the x-axis.
-   */
-
-
-  Rot.prototype.getXAxis = function () {
-    return Vec2.neo(this.c, this.s);
-  };
-  /**
-   * Get the u-axis.
-   */
-
-
-  Rot.prototype.getYAxis = function () {
-    return Vec2.neo(-this.s, this.c);
-  };
-  /**
-   * Multiply two rotations: q * r
-   * 
-   * @returns Rot
-   * 
-   * Rotate a vector
-   * 
-   * @returns Vec2
-   */
-
-
-  Rot.mul = function (rot, m) {
-
-    if ('c' in m && 's' in m) {
-      // [qs qc] [rs rc] [qs*rc+qc*rs -qs*rs+qc*rc]
-      // s = qs * rc + qc * rs
-      // c = qc * rc - qs * rs
-
-      var qr = Rot.identity();
-      qr.s = rot.s * m.c + rot.c * m.s;
-      qr.c = rot.c * m.c - rot.s * m.s;
-      return qr;
-    } else if ('x' in m && 'y' in m) {
-      return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
-    }
-  };
-
-  Rot.mulRot = function (rot, m) {
-    // [qs qc] [rs rc] [qs*rc+qc*rs -qs*rs+qc*rc]
-    // s = qs * rc + qc * rs
-    // c = qc * rc - qs * rs
-
-    var qr = Rot.identity();
-    qr.s = rot.s * m.c + rot.c * m.s;
-    qr.c = rot.c * m.c - rot.s * m.s;
-    return qr;
-  };
-
-  Rot.mulVec2 = function (rot, m) {
-    return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
-  };
-
-  Rot.mulSub = function (rot, v, w) {
-    var x = rot.c * (v.x - w.x) - rot.s * (v.y - w.y);
-    var y = rot.s * (v.x - w.x) + rot.c * (v.y - w.y);
-    return Vec2.neo(x, y);
-  };
-  /**
-   * Transpose multiply two rotations: qT * r
-   * 
-   * @returns Rot
-   * 
-   * Inverse rotate a vector
-   * 
-   * @returns Vec2
-   */
-
-
-  Rot.mulT = function (rot, m) {
-    if ('c' in m && 's' in m) {
-      // [-qs qc] [rs rc] [-qs*rc+qc*rs qs*rs+qc*rc]
-      // s = qc * rs - qs * rc
-      // c = qc * rc + qs * rs
-
-      var qr = Rot.identity();
-      qr.s = rot.c * m.s - rot.s * m.c;
-      qr.c = rot.c * m.c + rot.s * m.s;
-      return qr;
-    } else if ('x' in m && 'y' in m) {
-      return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
-    }
-  };
-
-  Rot.mulTRot = function (rot, m) {
-    // [-qs qc] [rs rc] [-qs*rc+qc*rs qs*rs+qc*rc]
-    // s = qc * rs - qs * rc
-    // c = qc * rc + qs * rs
-
-    var qr = Rot.identity();
-    qr.s = rot.c * m.s - rot.s * m.c;
-    qr.c = rot.c * m.c + rot.s * m.s;
-    return qr;
-  };
-
-  Rot.mulTVec2 = function (rot, m) {
-    return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
-  };
+  var Rot = /** @class */ (function () {
+      /** Initialize from an angle in radians. */
+      function Rot(angle) {
+          if (!(this instanceof Rot)) {
+              return new Rot(angle);
+          }
+          if (typeof angle === 'number') {
+              this.setAngle(angle);
+          }
+          else if (typeof angle === 'object') {
+              this.set(angle);
+          }
+          else {
+              this.setIdentity();
+          }
+      }
+      /** @internal */
+      Rot.neo = function (angle) {
+          var obj = Object.create(Rot.prototype);
+          obj.setAngle(angle);
+          return obj;
+      };
+      Rot.clone = function (rot) {
+          var obj = Object.create(Rot.prototype);
+          obj.s = rot.s;
+          obj.c = rot.c;
+          return obj;
+      };
+      Rot.identity = function () {
+          var obj = Object.create(Rot.prototype);
+          obj.s = 0.0;
+          obj.c = 1.0;
+          return obj;
+      };
+      Rot.isValid = function (o) {
+          return o && math$1.isFinite(o.s) && math$1.isFinite(o.c);
+      };
+      Rot.assert = function (o) {
+          return;
+      };
+      /** Set to the identity rotation. */
+      Rot.prototype.setIdentity = function () {
+          this.s = 0.0;
+          this.c = 1.0;
+      };
+      Rot.prototype.set = function (angle) {
+          if (typeof angle === 'object') {
+              this.s = angle.s;
+              this.c = angle.c;
+          }
+          else {
+              // TODO_ERIN optimize
+              this.s = math$1.sin(angle);
+              this.c = math$1.cos(angle);
+          }
+      };
+      /** Set using an angle in radians. */
+      Rot.prototype.setAngle = function (angle) {
+          // TODO_ERIN optimize
+          this.s = math$1.sin(angle);
+          this.c = math$1.cos(angle);
+      };
+      /** Get the angle in radians. */
+      Rot.prototype.getAngle = function () {
+          return math$1.atan2(this.s, this.c);
+      };
+      /** Get the x-axis. */
+      Rot.prototype.getXAxis = function () {
+          return Vec2.neo(this.c, this.s);
+      };
+      /** Get the u-axis. */
+      Rot.prototype.getYAxis = function () {
+          return Vec2.neo(-this.s, this.c);
+      };
+      Rot.mul = function (rot, m) {
+          if ('c' in m && 's' in m) {
+              // [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
+              // [qs qc] [rs rc] [qs*rc+qc*rs -qs*rs+qc*rc]
+              // s = qs * rc + qc * rs
+              // c = qc * rc - qs * rs
+              var qr = Rot.identity();
+              qr.s = rot.s * m.c + rot.c * m.s;
+              qr.c = rot.c * m.c - rot.s * m.s;
+              return qr;
+          }
+          else if ('x' in m && 'y' in m) {
+              return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
+          }
+      };
+      Rot.mulRot = function (rot, m) {
+          // [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
+          // [qs qc] [rs rc] [qs*rc+qc*rs -qs*rs+qc*rc]
+          // s = qs * rc + qc * rs
+          // c = qc * rc - qs * rs
+          var qr = Rot.identity();
+          qr.s = rot.s * m.c + rot.c * m.s;
+          qr.c = rot.c * m.c - rot.s * m.s;
+          return qr;
+      };
+      Rot.mulVec2 = function (rot, m) {
+          return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
+      };
+      Rot.mulSub = function (rot, v, w) {
+          var x = rot.c * (v.x - w.x) - rot.s * (v.y - w.y);
+          var y = rot.s * (v.x - w.x) + rot.c * (v.y - w.y);
+          return Vec2.neo(x, y);
+      };
+      Rot.mulT = function (rot, m) {
+          if ('c' in m && 's' in m) {
+              // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
+              // [-qs qc] [rs rc] [-qs*rc+qc*rs qs*rs+qc*rc]
+              // s = qc * rs - qs * rc
+              // c = qc * rc + qs * rs
+              var qr = Rot.identity();
+              qr.s = rot.c * m.s - rot.s * m.c;
+              qr.c = rot.c * m.c + rot.s * m.s;
+              return qr;
+          }
+          else if ('x' in m && 'y' in m) {
+              return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
+          }
+      };
+      Rot.mulTRot = function (rot, m) {
+          // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
+          // [-qs qc] [rs rc] [-qs*rc+qc*rs qs*rs+qc*rc]
+          // s = qc * rs - qs * rc
+          // c = qc * rc + qs * rs
+          var qr = Rot.identity();
+          qr.s = rot.c * m.s - rot.s * m.c;
+          qr.c = rot.c * m.c + rot.s * m.s;
+          return qr;
+      };
+      Rot.mulTVec2 = function (rot, m) {
+          return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
+      };
+      return Rot;
+  }());
 
   /*
    * Planck.js
@@ -2385,202 +2311,177 @@
    * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    * SOFTWARE.
    */
-
   /**
    * A transform contains translation and rotation. It is used to represent the
    * position and orientation of rigid frames. Initialize using a position vector
    * and a rotation.
-   *
-   * @prop {Vec2} position
-   * @prop {Rot} rotation
    */
-
-  function Transform(position, rotation) {
-    if (!(this instanceof Transform)) {
-      return new Transform(position, rotation);
-    }
-
-    this.p = Vec2.zero();
-    this.q = Rot.identity();
-
-    if (typeof position !== 'undefined') {
-      this.p.set(position);
-    }
-
-    if (typeof rotation !== 'undefined') {
-      this.q.set(rotation);
-    }
-  }
-
-  Transform.clone = function (xf) {
-    var obj = Object.create(Transform.prototype);
-    obj.p = Vec2.clone(xf.p);
-    obj.q = Rot.clone(xf.q);
-    return obj;
-  };
-
-  Transform.neo = function (position, rotation) {
-    var obj = Object.create(Transform.prototype);
-    obj.p = Vec2.clone(position);
-    obj.q = Rot.clone(rotation);
-    return obj;
-  };
-
-  Transform.identity = function () {
-    var obj = Object.create(Transform.prototype);
-    obj.p = Vec2.zero();
-    obj.q = Rot.identity();
-    return obj;
-  };
-  /**
-   * Set this to the identity transform.
-   */
-
-
-  Transform.prototype.setIdentity = function () {
-    this.p.setZero();
-    this.q.setIdentity();
-  };
-  /**
-   * Set this based on the position and angle.
-   */
-
-
-  Transform.prototype.set = function (a, b) {
-    if (typeof b === 'undefined') {
-      this.p.set(a.p);
-      this.q.set(a.q);
-    } else {
-      this.p.set(a);
-      this.q.set(b);
-    }
-  };
-
-  Transform.isValid = function (o) {
-    return o && Vec2.isValid(o.p) && Rot.isValid(o.q);
-  };
-
-  Transform.assert = function (o) {
-    return;
-  };
-  /**
-   * @param {Transform} a
-   * @param {Vec2} b
-   * @returns {Vec2}
-   *
-   * @param {Transform} a
-   * @param {Transform} b
-   * @returns {Transform}
-   */
-
-
-  Transform.mul = function (a, b) {
-
-    if (Array.isArray(b)) {
-      var arr = [];
-
-      for (var i = 0; i < b.length; i++) {
-        arr[i] = Transform.mul(a, b[i]);
+  var Transform = /** @class */ (function () {
+      function Transform(position, rotation) {
+          if (!(this instanceof Transform)) {
+              return new Transform(position, rotation);
+          }
+          this.p = Vec2.zero();
+          this.q = Rot.identity();
+          if (typeof position !== 'undefined') {
+              this.p.set(position);
+          }
+          if (typeof rotation !== 'undefined') {
+              this.q.set(rotation);
+          }
       }
-
-      return arr;
-    } else if ('x' in b && 'y' in b) {
-      var x = a.q.c * b.x - a.q.s * b.y + a.p.x;
-      var y = a.q.s * b.x + a.q.c * b.y + a.p.y;
-      return Vec2.neo(x, y);
-    } else if ('p' in b && 'q' in b) {
-      // = (A.q * B.q).Rot(v1) + A.q.Rot(B.p) + A.p
-
-      var xf = Transform.identity();
-      xf.q = Rot.mulRot(a.q, b.q);
-      xf.p = Vec2.add(Rot.mulVec2(a.q, b.p), a.p);
-      return xf;
-    }
-  };
-  /**
-   * @deprecated Use mulFn instead.
-   */
-
-
-  Transform.mulAll = function (a, b) {
-    var arr = [];
-
-    for (var i = 0; i < b.length; i++) {
-      arr[i] = Transform.mul(a, b[i]);
-    }
-
-    return arr;
-  };
-  /**
-   * @experimental
-   */
-
-
-  Transform.mulFn = function (a) {
-    return function (b) {
-      return Transform.mul(a, b);
-    };
-  };
-
-  Transform.mulVec2 = function (a, b) {
-    var x = a.q.c * b.x - a.q.s * b.y + a.p.x;
-    var y = a.q.s * b.x + a.q.c * b.y + a.p.y;
-    return Vec2.neo(x, y);
-  };
-
-  Transform.mulXf = function (a, b) {
-    // = (A.q * B.q).Rot(v1) + A.q.Rot(B.p) + A.p
-
-    var xf = Transform.identity();
-    xf.q = Rot.mulRot(a.q, b.q);
-    xf.p = Vec2.add(Rot.mulVec2(a.q, b.p), a.p);
-    return xf;
-  };
-  /**
-   * @param {Transform} a
-   * @param {Vec2} b
-   * @returns {Vec2}
-   *
-   * @param {Transform} a
-   * @param {Transform} b
-   * @returns {Transform}
-   */
-
-
-  Transform.mulT = function (a, b) {
-
-    if ('x' in b && 'y' in b) {
-      var px = b.x - a.p.x;
-      var py = b.y - a.p.y;
-      var x = a.q.c * px + a.q.s * py;
-      var y = -a.q.s * px + a.q.c * py;
-      return Vec2.neo(x, y);
-    } else if ('p' in b && 'q' in b) {
-      // = A.q' * B.q * v1 + A.q' * (B.p - A.p)
-
-      var xf = Transform.identity();
-      xf.q.set(Rot.mulTRot(a.q, b.q));
-      xf.p.set(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
-      return xf;
-    }
-  };
-
-  Transform.mulTVec2 = function (a, b) {
-    var px = b.x - a.p.x;
-    var py = b.y - a.p.y;
-    var x = a.q.c * px + a.q.s * py;
-    var y = -a.q.s * px + a.q.c * py;
-    return Vec2.neo(x, y);
-  };
-
-  Transform.mulTXf = function (a, b) {
-    // = A.q' * B.q * v1 + A.q' * (B.p - A.p)
-
-    var xf = Transform.identity();
-    xf.q.set(Rot.mulTRot(a.q, b.q));
-    xf.p.set(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
-    return xf;
-  };
+      Transform.clone = function (xf) {
+          var obj = Object.create(Transform.prototype);
+          obj.p = Vec2.clone(xf.p);
+          obj.q = Rot.clone(xf.q);
+          return obj;
+      };
+      /** @internal */
+      Transform.neo = function (position, rotation) {
+          var obj = Object.create(Transform.prototype);
+          obj.p = Vec2.clone(position);
+          obj.q = Rot.clone(rotation);
+          return obj;
+      };
+      Transform.identity = function () {
+          var obj = Object.create(Transform.prototype);
+          obj.p = Vec2.zero();
+          obj.q = Rot.identity();
+          return obj;
+      };
+      /**
+       * Set this to the identity transform.
+       */
+      Transform.prototype.setIdentity = function () {
+          this.p.setZero();
+          this.q.setIdentity();
+      };
+      /**
+       * Set this based on the position and angle.
+       */
+      Transform.prototype.set = function (a, b) {
+          if (typeof b === 'undefined') {
+              this.p.set(a.p);
+              this.q.set(a.q);
+          }
+          else {
+              this.p.set(a);
+              this.q.set(b);
+          }
+      };
+      Transform.isValid = function (o) {
+          return o && Vec2.isValid(o.p) && Rot.isValid(o.q);
+      };
+      Transform.assert = function (o) {
+          return;
+      };
+      /**
+       * @param {Transform} a
+       * @param {Vec2} b
+       * @returns {Vec2}
+       *
+       * @param {Transform} a
+       * @param {Transform} b
+       * @returns {Transform}
+       */
+      Transform.mul = function (a, b) {
+          if (Array.isArray(b)) {
+              var arr = [];
+              for (var i = 0; i < b.length; i++) {
+                  arr[i] = Transform.mul(a, b[i]);
+              }
+              return arr;
+          }
+          else if ('x' in b && 'y' in b) {
+              var x = (a.q.c * b.x - a.q.s * b.y) + a.p.x;
+              var y = (a.q.s * b.x + a.q.c * b.y) + a.p.y;
+              return Vec2.neo(x, y);
+          }
+          else if ('p' in b && 'q' in b) {
+              // v2 = A.q.Rot(B.q.Rot(v1) + B.p) + A.p
+              // = (A.q * B.q).Rot(v1) + A.q.Rot(B.p) + A.p
+              var xf = Transform.identity();
+              xf.q = Rot.mulRot(a.q, b.q);
+              xf.p = Vec2.add(Rot.mulVec2(a.q, b.p), a.p);
+              return xf;
+          }
+      };
+      // mulAll(a: Transform, b: Vec2[]): Vec2[];
+      // mulAll(a: Transform, b: Transform[]): Transform[];
+      /** @deprecated Use mulFn instead. */
+      Transform.mulAll = function (a, b) {
+          var arr = [];
+          for (var i = 0; i < b.length; i++) {
+              arr[i] = Transform.mul(a, b[i]);
+          }
+          return arr;
+      };
+      /**
+       * @experimental
+       */
+      Transform.mulFn = function (a) {
+          return function (b) {
+              return Transform.mul(a, b);
+          };
+      };
+      Transform.mulVec2 = function (a, b) {
+          var x = (a.q.c * b.x - a.q.s * b.y) + a.p.x;
+          var y = (a.q.s * b.x + a.q.c * b.y) + a.p.y;
+          return Vec2.neo(x, y);
+      };
+      // static mulVec2(a: Transform, b: Vec2): Vec2;
+      // static mulXf(a: Transform, b: Transform): Transform;
+      Transform.mulXf = function (a, b) {
+          // v2 = A.q.Rot(B.q.Rot(v1) + B.p) + A.p
+          // = (A.q * B.q).Rot(v1) + A.q.Rot(B.p) + A.p
+          var xf = Transform.identity();
+          xf.q = Rot.mulRot(a.q, b.q);
+          xf.p = Vec2.add(Rot.mulVec2(a.q, b.p), a.p);
+          return xf;
+      };
+      /**
+       * @param {Transform} a
+       * @param {Vec2} b
+       * @returns {Vec2}
+       *
+       * @param {Transform} a
+       * @param {Transform} b
+       * @returns {Transform}
+       */
+      Transform.mulT = function (a, b) {
+          if ('x' in b && 'y' in b) {
+              var px = b.x - a.p.x;
+              var py = b.y - a.p.y;
+              var x = (a.q.c * px + a.q.s * py);
+              var y = (-a.q.s * px + a.q.c * py);
+              return Vec2.neo(x, y);
+          }
+          else if ('p' in b && 'q' in b) {
+              // v2 = A.q' * (B.q * v1 + B.p - A.p)
+              // = A.q' * B.q * v1 + A.q' * (B.p - A.p)
+              var xf = Transform.identity();
+              xf.q.set(Rot.mulTRot(a.q, b.q));
+              xf.p.set(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
+              return xf;
+          }
+      };
+      Transform.mulTVec2 = function (a, b) {
+          var px = b.x - a.p.x;
+          var py = b.y - a.p.y;
+          var x = (a.q.c * px + a.q.s * py);
+          var y = (-a.q.s * px + a.q.c * py);
+          return Vec2.neo(x, y);
+      };
+      Transform.mulTXf = function (a, b) {
+          // v2 = A.q' * (B.q * v1 + B.p - A.p)
+          // = A.q' * B.q * v1 + A.q' * (B.p - A.p)
+          var xf = Transform.identity();
+          xf.q.set(Rot.mulTRot(a.q, b.q));
+          xf.p.set(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
+          return xf;
+      };
+      return Transform;
+  }());
 
   /*
    * Planck.js
@@ -2713,15 +2614,13 @@
    * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    * SOFTWARE.
    */
-  /**
-   * @prop {Vec2} v linear
-   * @prop {float} w angular
-   */
-
-  function Velocity() {
-    this.v = Vec2.zero();
-    this.w = 0;
-  }
+  var Velocity = /** @class */ (function () {
+      function Velocity() {
+          this.v = Vec2.zero();
+          this.w = 0;
+      }
+      return Velocity;
+  }());
 
   /*
    * Planck.js
@@ -2746,21 +2645,18 @@
    * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
    * SOFTWARE.
    */
-  /**
-   * @prop {Vec2} c location
-   * @prop {float} a angle
-   */
-
-  function Position() {
-    this.c = Vec2.zero();
-    this.a = 0;
-  }
-
-  Position.prototype.getTransform = function (xf, p) {
-    xf.q.set(this.a);
-    xf.p.set(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
-    return xf;
-  };
+  var Position = /** @class */ (function () {
+      function Position() {
+          this.c = Vec2.zero();
+          this.a = 0;
+      }
+      Position.prototype.getTransform = function (xf, p) {
+          xf.q.set(this.a);
+          xf.p.set(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
+          return xf;
+      };
+      return Position;
+  }());
 
   /*
    * Planck.js
@@ -4944,141 +4840,162 @@
     }
   };
 
-  function Vec3(x, y, z) {
-    if (!(this instanceof Vec3)) {
-      return new Vec3(x, y, z);
-    }
-
-    if (typeof x === 'undefined') {
-      this.x = 0, this.y = 0, this.z = 0;
-    } else if (_typeof(x) === 'object') {
-      this.x = x.x, this.y = x.y, this.z = x.z;
-    } else {
-      this.x = x, this.y = y, this.z = z;
-    }
-  }
-
-  Vec3.prototype._serialize = function () {
-    return {
-      x: this.x,
-      y: this.y,
-      z: this.z
-    };
-  };
-
-  Vec3._deserialize = function (data) {
-    var obj = Object.create(Vec3.prototype);
-    obj.x = data.x;
-    obj.y = data.y;
-    obj.z = data.z;
-    return obj;
-  };
-
-  Vec3.neo = function (x, y, z) {
-    var obj = Object.create(Vec3.prototype);
-    obj.x = x;
-    obj.y = y;
-    obj.z = z;
-    return obj;
-  };
-
-  Vec3.clone = function (v) {
-    return Vec3.neo(v.x, v.y, v.z);
-  };
-
-  Vec3.prototype.toString = function () {
-    return JSON.stringify(this);
-  };
-  /**
-   * Does this vector contain finite coordinates?
+  /*
+   * Planck.js
+   * The MIT License
+   * Copyright (c) 2021 Erin Catto, Ali Shakiba
+   *
+   * Permission is hereby granted, free of charge, to any person obtaining a copy
+   * of this software and associated documentation files (the "Software"), to deal
+   * in the Software without restriction, including without limitation the rights
+   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   * copies of the Software, and to permit persons to whom the Software is
+   * furnished to do so, subject to the following conditions:
+   *
+   * The above copyright notice and this permission notice shall be included in all
+   * copies or substantial portions of the Software.
+   *
+   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   * SOFTWARE.
    */
-
-
-  Vec3.isValid = function (v) {
-    return v && math$1.isFinite(v.x) && math$1.isFinite(v.y) && math$1.isFinite(v.z);
-  };
-
-  Vec3.assert = function (o) {
-    return;
-  };
-
-  Vec3.prototype.setZero = function () {
-    this.x = 0.0;
-    this.y = 0.0;
-    this.z = 0.0;
-    return this;
-  };
-
-  Vec3.prototype.set = function (x, y, z) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    return this;
-  };
-
-  Vec3.prototype.add = function (w) {
-    this.x += w.x;
-    this.y += w.y;
-    this.z += w.z;
-    return this;
-  };
-
-  Vec3.prototype.sub = function (w) {
-    this.x -= w.x;
-    this.y -= w.y;
-    this.z -= w.z;
-    return this;
-  };
-
-  Vec3.prototype.mul = function (m) {
-    this.x *= m;
-    this.y *= m;
-    this.z *= m;
-    return this;
-  };
-
-  Vec3.areEqual = function (v, w) {
-    return v == w || _typeof(v) === 'object' && v !== null && _typeof(w) === 'object' && w !== null && v.x === w.x && v.y === w.y && v.z === w.z;
-  };
-  /**
-   * Perform the dot product on two vectors.
-   */
-
-
-  Vec3.dot = function (v, w) {
-    return v.x * w.x + v.y * w.y + v.z * w.z;
-  };
-  /**
-   * Perform the cross product on two vectors. In 2D this produces a scalar.
-   */
-
-
-  Vec3.cross = function (v, w) {
-    return new Vec3(v.y * w.z - v.z * w.y, v.z * w.x - v.x * w.z, v.x * w.y - v.y * w.x);
-  };
-
-  Vec3.add = function (v, w) {
-    return new Vec3(v.x + w.x, v.y + w.y, v.z + w.z);
-  };
-
-  Vec3.sub = function (v, w) {
-    return new Vec3(v.x - w.x, v.y - w.y, v.z - w.z);
-  };
-
-  Vec3.mul = function (v, m) {
-    return new Vec3(m * v.x, m * v.y, m * v.z);
-  };
-
-  Vec3.prototype.neg = function () {
-    this.x = -this.x;
-    this.y = -this.y;
-    this.z = -this.z;
-    return this;
-  };
-
-  Vec3.neg = function (v) {
-    return new Vec3(-v.x, -v.y, -v.z);
-  };
+  var Vec3 = /** @class */ (function () {
+      function Vec3(x, y, z) {
+          if (!(this instanceof Vec3)) {
+              return new Vec3(x, y, z);
+          }
+          if (typeof x === 'undefined') {
+              this.x = 0;
+              this.y = 0;
+              this.z = 0;
+          }
+          else if (typeof x === 'object') {
+              this.x = x.x;
+              this.y = x.y;
+              this.z = x.z;
+          }
+          else {
+              this.x = x;
+              this.y = y;
+              this.z = z;
+          }
+      }
+      Vec3.prototype._serialize = function () {
+          return {
+              x: this.x,
+              y: this.y,
+              z: this.z
+          };
+      };
+      Vec3._deserialize = function (data) {
+          var obj = Object.create(Vec3.prototype);
+          obj.x = data.x;
+          obj.y = data.y;
+          obj.z = data.z;
+          return obj;
+      };
+      /** @internal */
+      Vec3.neo = function (x, y, z) {
+          var obj = Object.create(Vec3.prototype);
+          obj.x = x;
+          obj.y = y;
+          obj.z = z;
+          return obj;
+      };
+      Vec3.zero = function () {
+          var obj = Object.create(Vec3.prototype);
+          obj.x = 0;
+          obj.y = 0;
+          obj.z = 0;
+          return obj;
+      };
+      Vec3.clone = function (v) {
+          return Vec3.neo(v.x, v.y, v.z);
+      };
+      Vec3.prototype.toString = function () {
+          return JSON.stringify(this);
+      };
+      /**
+       * Does this vector contain finite coordinates?
+       */
+      Vec3.isValid = function (v) {
+          return v && math$1.isFinite(v.x) && math$1.isFinite(v.y) && math$1.isFinite(v.z);
+      };
+      Vec3.assert = function (o) {
+          return;
+      };
+      Vec3.prototype.setZero = function () {
+          this.x = 0.0;
+          this.y = 0.0;
+          this.z = 0.0;
+          return this;
+      };
+      Vec3.prototype.set = function (x, y, z) {
+          this.x = x;
+          this.y = y;
+          this.z = z;
+          return this;
+      };
+      Vec3.prototype.add = function (w) {
+          this.x += w.x;
+          this.y += w.y;
+          this.z += w.z;
+          return this;
+      };
+      Vec3.prototype.sub = function (w) {
+          this.x -= w.x;
+          this.y -= w.y;
+          this.z -= w.z;
+          return this;
+      };
+      Vec3.prototype.mul = function (m) {
+          this.x *= m;
+          this.y *= m;
+          this.z *= m;
+          return this;
+      };
+      Vec3.areEqual = function (v, w) {
+          return v === w ||
+              typeof v === 'object' && v !== null &&
+                  typeof w === 'object' && w !== null &&
+                  v.x === w.x && v.y === w.y && v.z === w.z;
+      };
+      /**
+       * Perform the dot product on two vectors.
+       */
+      Vec3.dot = function (v, w) {
+          return v.x * w.x + v.y * w.y + v.z * w.z;
+      };
+      /**
+       * Perform the cross product on two vectors. In 2D this produces a scalar.
+       */
+      Vec3.cross = function (v, w) {
+          return new Vec3(v.y * w.z - v.z * w.y, v.z * w.x - v.x * w.z, v.x * w.y - v.y * w.x);
+      };
+      Vec3.add = function (v, w) {
+          return new Vec3(v.x + w.x, v.y + w.y, v.z + w.z);
+      };
+      Vec3.sub = function (v, w) {
+          return new Vec3(v.x - w.x, v.y - w.y, v.z - w.z);
+      };
+      Vec3.mul = function (v, m) {
+          return new Vec3(m * v.x, m * v.y, m * v.z);
+      };
+      Vec3.prototype.neg = function () {
+          this.x = -this.x;
+          this.y = -this.y;
+          this.z = -this.z;
+          return this;
+      };
+      Vec3.neg = function (v) {
+          return new Vec3(-v.x, -v.y, -v.z);
+      };
+      return Vec3;
+  }());
 
   /*
    * Planck.js
@@ -5114,9 +5031,9 @@
               this.ez = Vec3.clone(c);
           }
           else {
-              this.ex = Vec3();
-              this.ey = Vec3();
-              this.ez = Vec3();
+              this.ex = Vec3.zero();
+              this.ey = Vec3.zero();
+              this.ez = Vec3.zero();
           }
       }
       Mat33.prototype.toString = function () {
