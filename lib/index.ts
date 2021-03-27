@@ -49,7 +49,6 @@ export { default as Distance } from './collision/Distance';
 export { default as TimeOfImpact } from './collision/TimeOfImpact';
 export { default as DynamicTree } from './collision/DynamicTree';
 
-
 import { CollidePolygons } from './shape/CollidePolygon';
 import { default as Settings } from './Settings';
 import { default as Sweep } from './common/Sweep';

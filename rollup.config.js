@@ -12,12 +12,12 @@ import licenseBanner from './license';
 
 export default [
   {
-    src: 'lib/index.js',
+    src: 'lib/index.ts',
     dest: 'dist/planck.js',
     minimize: false,
   },
   {
-    src: 'lib/index.js',
+    src: 'lib/index.ts',
     dest: 'dist/planck.min.js',
     minimize: true,
   },
