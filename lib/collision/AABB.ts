@@ -27,9 +27,7 @@ import Math from '../common/Math';
 import Vec2 from '../common/Vec2';
 
 
-// @ts-ignore
 const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-// @ts-ignore
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 

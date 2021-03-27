@@ -30,7 +30,6 @@ import Math from '../common/Math';
 import AABB, { RayCastInput } from './AABB';
 
 
-// @ts-ignore
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 

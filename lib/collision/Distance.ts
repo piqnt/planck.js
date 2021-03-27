@@ -33,7 +33,6 @@ import Rot from '../common/Rot';
 import Transform from '../common/Transform';
 
 
-// @ts-ignore
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 

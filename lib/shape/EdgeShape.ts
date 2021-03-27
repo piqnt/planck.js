@@ -22,11 +22,6 @@
  * SOFTWARE.
  */
 
-// @ts-ignore
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-// @ts-ignore
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 import Settings from '../Settings';
 import Shape from '../Shape';
 import Transform from '../common/Transform';

@@ -33,7 +33,6 @@ import Shape from '../Shape';
 import EdgeShape from './EdgeShape';
 
 
-// @ts-ignore
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 

@@ -37,7 +37,6 @@ import Transform from '../common/Transform';
 import Distance, { DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from './Distance';
 
 
-// @ts-ignore
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 

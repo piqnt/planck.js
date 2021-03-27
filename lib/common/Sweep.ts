@@ -22,16 +22,14 @@
  * SOFTWARE.
  */
 
-// @ts-ignore
-const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-// @ts-ignore
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 import common from '../util/common';
 import Math from './Math';
 import Vec2 from './Vec2';
 import Rot from './Rot';
 import Transform from './Transform';
+
+
+const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
 /**

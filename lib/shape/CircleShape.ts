@@ -22,16 +22,15 @@
  * SOFTWARE.
  */
 
-// @ts-ignore
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-// @ts-ignore
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 import common from '../util/common';
 import Math from '../common/Math';
 import Rot from '../common/Rot';
 import Vec2 from '../common/Vec2';
 import Shape from '../Shape';
+
+
+const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
 
 export default class CircleShape extends Shape {
   static TYPE = 'circle';

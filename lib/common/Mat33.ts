@@ -22,14 +22,13 @@
  * SOFTWARE.
  */
 
-// @ts-ignore
-const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-// @ts-ignore
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 import common from '../util/common';
 import Vec2 from './Vec2';
 import Vec3 from './Vec3';
+
+
+const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
 /**

@@ -22,11 +22,6 @@
  * SOFTWARE.
  */
 
-// @ts-ignore
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-// @ts-ignore
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 import type Vec2 from '../common/Vec2';
 import PolygonShape from './PolygonShape';
 

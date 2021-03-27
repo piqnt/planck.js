@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-// @ts-ignore
+import common from '../util/common';
+
+
 const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-// @ts-ignore
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-import common from '../util/common';
 
 const native = Math;
 const math = Object.create(native);

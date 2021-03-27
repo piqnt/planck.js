@@ -29,7 +29,6 @@ import AABB from './AABB';
 import DynamicTree from './DynamicTree';
 
 
-// @ts-ignore
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 

@@ -34,7 +34,6 @@ import Settings from '../Settings';
 import Shape from '../Shape';
 
 
-// @ts-ignore
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
