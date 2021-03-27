@@ -2610,100 +2610,85 @@
    * defined with respect to the body origin, which may not coincide with the
    * center of mass. However, to support dynamics we must interpolate the center
    * of mass position.
-   * 
-   * @prop {Vec2} localCenter Local center of mass position
-   * @prop {Vec2} c World center position
-   * @prop {float} a World angle
-   * @prop {float} alpha0 Fraction of the current time step in the range [0,1], c0
-   *       and a0 are c and a at alpha0.
    */
-
-  function Sweep(c, a) {
-    this.localCenter = Vec2.zero();
-    this.c = Vec2.zero();
-    this.a = 0;
-    this.alpha0 = 0;
-    this.c0 = Vec2.zero();
-    this.a0 = 0;
-  }
-
-  Sweep.prototype.setTransform = function (xf) {
-    var c = Transform.mulVec2(xf, this.localCenter);
-    this.c.set(c);
-    this.c0.set(c);
-    this.a = xf.q.getAngle();
-    this.a0 = xf.q.getAngle();
-  };
-
-  Sweep.prototype.setLocalCenter = function (localCenter, xf) {
-    this.localCenter.set(localCenter);
-    var c = Transform.mulVec2(xf, this.localCenter);
-    this.c.set(c);
-    this.c0.set(c);
-  };
-  /**
-   * Get the interpolated transform at a specific time.
-   * 
-   * @param xf
-   * @param beta A factor in [0,1], where 0 indicates alpha0
-   */
-
-
-  Sweep.prototype.getTransform = function (xf, beta) {
-    beta = typeof beta === 'undefined' ? 0 : beta;
-    xf.q.setAngle((1.0 - beta) * this.a0 + beta * this.a);
-    xf.p.setCombine(1.0 - beta, this.c0, beta, this.c); // shift to origin
-
-    xf.p.sub(Rot.mulVec2(xf.q, this.localCenter));
-  };
-  /**
-   * Advance the sweep forward, yielding a new initial state.
-   * 
-   * @param {float} alpha The new initial time
-   */
-
-
-  Sweep.prototype.advance = function (alpha) {
-    var beta = (alpha - this.alpha0) / (1.0 - this.alpha0);
-    this.c0.setCombine(beta, this.c, 1 - beta, this.c0);
-    this.a0 = beta * this.a + (1 - beta) * this.a0;
-    this.alpha0 = alpha;
-  };
-
-  Sweep.prototype.forward = function () {
-    this.a0 = this.a;
-    this.c0.set(this.c);
-  };
-  /**
-   * normalize the angles in radians to be between -pi and pi.
-   */
-
-
-  Sweep.prototype.normalize = function () {
-    var a0 = math.mod(this.a0, -math.PI, +math.PI);
-    this.a -= this.a0 - a0;
-    this.a0 = a0;
-  };
-
-  Sweep.prototype.clone = function () {
-    var clone = new Sweep();
-    clone.localCenter.set(this.localCenter);
-    clone.alpha0 = this.alpha0;
-    clone.a0 = this.a0;
-    clone.a = this.a;
-    clone.c0.set(this.c0);
-    clone.c.set(this.c);
-    return clone;
-  };
-
-  Sweep.prototype.set = function (that) {
-    this.localCenter.set(that.localCenter);
-    this.alpha0 = that.alpha0;
-    this.a0 = that.a0;
-    this.a = that.a;
-    this.c0.set(that.c0);
-    this.c.set(that.c);
-  };
+  var Sweep = /** @class */ (function () {
+      function Sweep(c, a) {
+          this.localCenter = Vec2.zero();
+          this.c = Vec2.zero();
+          this.a = 0;
+          this.alpha0 = 0;
+          this.c0 = Vec2.zero();
+          this.a0 = 0;
+      }
+      Sweep.prototype.setTransform = function (xf) {
+          var c = Transform.mulVec2(xf, this.localCenter);
+          this.c.set(c);
+          this.c0.set(c);
+          this.a = xf.q.getAngle();
+          this.a0 = xf.q.getAngle();
+      };
+      Sweep.prototype.setLocalCenter = function (localCenter, xf) {
+          this.localCenter.set(localCenter);
+          var c = Transform.mulVec2(xf, this.localCenter);
+          this.c.set(c);
+          this.c0.set(c);
+      };
+      /**
+       * Get the interpolated transform at a specific time.
+       *
+       * @param xf
+       * @param beta A factor in [0,1], where 0 indicates alpha0
+       */
+      Sweep.prototype.getTransform = function (xf, beta) {
+          beta = typeof beta === 'undefined' ? 0 : beta;
+          xf.q.setAngle((1.0 - beta) * this.a0 + beta * this.a);
+          xf.p.setCombine((1.0 - beta), this.c0, beta, this.c);
+          // shift to origin
+          xf.p.sub(Rot.mulVec2(xf.q, this.localCenter));
+      };
+      /**
+       * Advance the sweep forward, yielding a new initial state.
+       *
+       * @param alpha The new initial time
+       */
+      Sweep.prototype.advance = function (alpha) {
+          var beta = (alpha - this.alpha0) / (1.0 - this.alpha0);
+          this.c0.setCombine(beta, this.c, 1 - beta, this.c0);
+          this.a0 = beta * this.a + (1 - beta) * this.a0;
+          this.alpha0 = alpha;
+      };
+      Sweep.prototype.forward = function () {
+          this.a0 = this.a;
+          this.c0.set(this.c);
+      };
+      /**
+       * normalize the angles in radians to be between -pi and pi.
+       */
+      Sweep.prototype.normalize = function () {
+          var a0 = math.mod(this.a0, -math.PI, +math.PI);
+          this.a -= this.a0 - a0;
+          this.a0 = a0;
+      };
+      Sweep.prototype.clone = function () {
+          var clone = new Sweep();
+          clone.localCenter.set(this.localCenter);
+          clone.alpha0 = this.alpha0;
+          clone.a0 = this.a0;
+          clone.a = this.a;
+          clone.c0.set(this.c0);
+          clone.c.set(this.c);
+          return clone;
+      };
+      Sweep.prototype.set = function (that) {
+          this.localCenter.set(that.localCenter);
+          this.alpha0 = that.alpha0;
+          this.a0 = that.a0;
+          this.a = that.a;
+          this.c0.set(that.c0);
+          this.c.set(that.c);
+      };
+      return Sweep;
+  }());
 
   /*
    * Planck.js
@@ -4435,171 +4420,175 @@
     return Rot.mulTVec2(this.m_xf.q, worldVector);
   };
 
+  /*
+   * Planck.js
+   * The MIT License
+   * Copyright (c) 2021 Erin Catto, Ali Shakiba
+   *
+   * Permission is hereby granted, free of charge, to any person obtaining a copy
+   * of this software and associated documentation files (the "Software"), to deal
+   * in the Software without restriction, including without limitation the rights
+   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   * copies of the Software, and to permit persons to whom the Software is
+   * furnished to do so, subject to the following conditions:
+   *
+   * The above copyright notice and this permission notice shall be included in all
+   * copies or substantial portions of the Software.
+   *
+   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   * SOFTWARE.
+   */
   /**
    * A 2-by-2 matrix. Stored in column-major order.
    */
-
-  function Mat22(a, b, c, d) {
-    if (_typeof(a) === 'object' && a !== null) {
-      this.ex = Vec2.clone(a);
-      this.ey = Vec2.clone(b);
-    } else if (typeof a === 'number') {
-      this.ex = Vec2.neo(a, c);
-      this.ey = Vec2.neo(b, d);
-    } else {
-      this.ex = Vec2.zero();
-      this.ey = Vec2.zero();
-    }
-  }
-
-  Mat22.prototype.toString = function () {
-    return JSON.stringify(this);
-  };
-
-  Mat22.isValid = function (o) {
-    return o && Vec2.isValid(o.ex) && Vec2.isValid(o.ey);
-  };
-
-  Mat22.assert = function (o) {
-    return;
-  };
-
-  Mat22.prototype.set = function (a, b, c, d) {
-    if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number' && typeof d === 'number') {
-      this.ex.set(a, c);
-      this.ey.set(b, d);
-    } else if (_typeof(a) === 'object' && _typeof(b) === 'object') {
-      this.ex.set(a);
-      this.ey.set(b);
-    } else if (_typeof(a) === 'object') {
-      this.ex.set(a.ex);
-      this.ey.set(a.ey);
-    } else ;
-  };
-
-  Mat22.prototype.setIdentity = function () {
-    this.ex.x = 1.0;
-    this.ey.x = 0.0;
-    this.ex.y = 0.0;
-    this.ey.y = 1.0;
-  };
-
-  Mat22.prototype.setZero = function () {
-    this.ex.x = 0.0;
-    this.ey.x = 0.0;
-    this.ex.y = 0.0;
-    this.ey.y = 0.0;
-  };
-
-  Mat22.prototype.getInverse = function () {
-    var a = this.ex.x;
-    var b = this.ey.x;
-    var c = this.ex.y;
-    var d = this.ey.y;
-    var det = a * d - b * c;
-
-    if (det != 0.0) {
-      det = 1.0 / det;
-    }
-
-    var imx = new Mat22();
-    imx.ex.x = det * d;
-    imx.ey.x = -det * b;
-    imx.ex.y = -det * c;
-    imx.ey.y = det * a;
-    return imx;
-  };
-  /**
-   * Solve A * x = b, where b is a column vector. This is more efficient than
-   * computing the inverse in one-shot cases.
-   */
-
-
-  Mat22.prototype.solve = function (v) {
-    var a = this.ex.x;
-    var b = this.ey.x;
-    var c = this.ex.y;
-    var d = this.ey.y;
-    var det = a * d - b * c;
-
-    if (det != 0.0) {
-      det = 1.0 / det;
-    }
-
-    var w = Vec2.zero();
-    w.x = det * (d * v.x - b * v.y);
-    w.y = det * (a * v.y - c * v.x);
-    return w;
-  };
-  /**
-   * Multiply a matrix times a vector. If a rotation matrix is provided, then this
-   * transforms the vector from one frame to another.
-   */
-
-
-  Mat22.mul = function (mx, v) {
-    if (v && 'x' in v && 'y' in v) {
-      var x = mx.ex.x * v.x + mx.ey.x * v.y;
-      var y = mx.ex.y * v.x + mx.ey.y * v.y;
-      return Vec2.neo(x, y);
-    } else if (v && 'ex' in v && 'ey' in v) {
-
-      var a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
-      var b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
-      var c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;
-      var d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
-      return new Mat22(a, b, c, d);
-    }
-  };
-
-  Mat22.mulVec2 = function (mx, v) {
-    var x = mx.ex.x * v.x + mx.ey.x * v.y;
-    var y = mx.ex.y * v.x + mx.ey.y * v.y;
-    return Vec2.neo(x, y);
-  };
-
-  Mat22.mulMat22 = function (mx, v) {
-
-    var a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
-    var b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
-    var c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;
-    var d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
-    return new Mat22(a, b, c, d);
-  };
-  /**
-   * Multiply a matrix transpose times a vector. If a rotation matrix is provided,
-   * then this transforms the vector from one frame to another (inverse
-   * transform).
-   */
-
-
-  Mat22.mulT = function (mx, v) {
-    if (v && 'x' in v && 'y' in v) {
-      return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
-    } else if (v && 'ex' in v && 'ey' in v) {
-      var c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
-      var c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
-      return new Mat22(c1, c2);
-    }
-  };
-
-  Mat22.mulTVec2 = function (mx, v) {
-    return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
-  };
-
-  Mat22.mulTMat22 = function (mx, v) {
-    var c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
-    var c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
-    return new Mat22(c1, c2);
-  };
-
-  Mat22.abs = function (mx) {
-    return new Mat22(Vec2.abs(mx.ex), Vec2.abs(mx.ey));
-  };
-
-  Mat22.add = function (mx1, mx2) {
-    return new Mat22(Vec2.add(mx1.ex, mx2.ex), Vec2.add(mx1.ey, mx2.ey));
-  };
+  var Mat22 = /** @class */ (function () {
+      function Mat22(a, b, c, d) {
+          if (typeof a === 'object' && a !== null) {
+              this.ex = Vec2.clone(a);
+              this.ey = Vec2.clone(b);
+          }
+          else if (typeof a === 'number') {
+              this.ex = Vec2.neo(a, c);
+              this.ey = Vec2.neo(b, d);
+          }
+          else {
+              this.ex = Vec2.zero();
+              this.ey = Vec2.zero();
+          }
+      }
+      Mat22.prototype.toString = function () {
+          return JSON.stringify(this);
+      };
+      Mat22.isValid = function (o) {
+          return o && Vec2.isValid(o.ex) && Vec2.isValid(o.ey);
+      };
+      Mat22.assert = function (o) {
+          return;
+      };
+      // set(a: Mat22): void;
+      // set(a: Vec2, b: Vec2): void;
+      // set(a: number, b: number, c: number, d: number): void;
+      Mat22.prototype.set = function (a, b, c, d) {
+          if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
+              && typeof d === 'number') {
+              this.ex.set(a, c);
+              this.ey.set(b, d);
+          }
+          else if (typeof a === 'object' && typeof b === 'object') {
+              this.ex.set(a);
+              this.ey.set(b);
+          }
+          else if (typeof a === 'object') {
+              this.ex.set(a.ex);
+              this.ey.set(a.ey);
+          }
+          else ;
+      };
+      Mat22.prototype.setIdentity = function () {
+          this.ex.x = 1.0;
+          this.ey.x = 0.0;
+          this.ex.y = 0.0;
+          this.ey.y = 1.0;
+      };
+      Mat22.prototype.setZero = function () {
+          this.ex.x = 0.0;
+          this.ey.x = 0.0;
+          this.ex.y = 0.0;
+          this.ey.y = 0.0;
+      };
+      Mat22.prototype.getInverse = function () {
+          var a = this.ex.x;
+          var b = this.ey.x;
+          var c = this.ex.y;
+          var d = this.ey.y;
+          var det = a * d - b * c;
+          if (det !== 0.0) {
+              det = 1.0 / det;
+          }
+          var imx = new Mat22();
+          imx.ex.x = det * d;
+          imx.ey.x = -det * b;
+          imx.ex.y = -det * c;
+          imx.ey.y = det * a;
+          return imx;
+      };
+      /**
+       * Solve A * x = b, where b is a column vector. This is more efficient than
+       * computing the inverse in one-shot cases.
+       */
+      Mat22.prototype.solve = function (v) {
+          var a = this.ex.x;
+          var b = this.ey.x;
+          var c = this.ex.y;
+          var d = this.ey.y;
+          var det = a * d - b * c;
+          if (det !== 0.0) {
+              det = 1.0 / det;
+          }
+          var w = Vec2.zero();
+          w.x = det * (d * v.x - b * v.y);
+          w.y = det * (a * v.y - c * v.x);
+          return w;
+      };
+      Mat22.mul = function (mx, v) {
+          if (v && 'x' in v && 'y' in v) {
+              var x = mx.ex.x * v.x + mx.ey.x * v.y;
+              var y = mx.ex.y * v.x + mx.ey.y * v.y;
+              return Vec2.neo(x, y);
+          }
+          else if (v && 'ex' in v && 'ey' in v) { // Mat22
+              // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+              var a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
+              var b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
+              var c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;
+              var d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
+              return new Mat22(a, b, c, d);
+          }
+      };
+      Mat22.mulVec2 = function (mx, v) {
+          var x = mx.ex.x * v.x + mx.ey.x * v.y;
+          var y = mx.ex.y * v.x + mx.ey.y * v.y;
+          return Vec2.neo(x, y);
+      };
+      Mat22.mulMat22 = function (mx, v) {
+          // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+          var a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
+          var b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
+          var c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;
+          var d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
+          return new Mat22(a, b, c, d);
+      };
+      Mat22.mulT = function (mx, v) {
+          if (v && 'x' in v && 'y' in v) { // Vec2
+              return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
+          }
+          else if (v && 'ex' in v && 'ey' in v) { // Mat22
+              var c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
+              var c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
+              return new Mat22(c1, c2);
+          }
+      };
+      Mat22.mulTVec2 = function (mx, v) {
+          return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
+      };
+      Mat22.mulTMat22 = function (mx, v) {
+          var c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
+          var c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
+          return new Mat22(c1, c2);
+      };
+      Mat22.abs = function (mx) {
+          return new Mat22(Vec2.abs(mx.ex), Vec2.abs(mx.ey));
+      };
+      Mat22.add = function (mx1, mx2) {
+          return new Mat22(Vec2.add(mx1.ex, mx2.ex), Vec2.add(mx1.ey, mx2.ey));
+      };
+      return Mat22;
+  }());
 
   /*
    * Planck.js
@@ -5091,193 +5080,174 @@
     return new Vec3(-v.x, -v.y, -v.z);
   };
 
+  /*
+   * Planck.js
+   * The MIT License
+   * Copyright (c) 2021 Erin Catto, Ali Shakiba
+   *
+   * Permission is hereby granted, free of charge, to any person obtaining a copy
+   * of this software and associated documentation files (the "Software"), to deal
+   * in the Software without restriction, including without limitation the rights
+   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   * copies of the Software, and to permit persons to whom the Software is
+   * furnished to do so, subject to the following conditions:
+   *
+   * The above copyright notice and this permission notice shall be included in all
+   * copies or substantial portions of the Software.
+   *
+   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   * SOFTWARE.
+   */
   /**
    * A 3-by-3 matrix. Stored in column-major order.
    */
-
-  function Mat33(a, b, c) {
-    if (_typeof(a) === 'object' && a !== null) {
-      this.ex = Vec3.clone(a);
-      this.ey = Vec3.clone(b);
-      this.ez = Vec3.clone(c);
-    } else {
-      this.ex = Vec3();
-      this.ey = Vec3();
-      this.ez = Vec3();
-    }
-  }
-
-  Mat33.prototype.toString = function () {
-    return JSON.stringify(this);
-  };
-
-  Mat33.isValid = function (o) {
-    return o && Vec3.isValid(o.ex) && Vec3.isValid(o.ey) && Vec3.isValid(o.ez);
-  };
-
-  Mat33.assert = function (o) {
-    return;
-  };
-  /**
-   * Set this matrix to all zeros.
-   */
-
-
-  Mat33.prototype.setZero = function () {
-    this.ex.setZero();
-    this.ey.setZero();
-    this.ez.setZero();
-    return this;
-  };
-  /**
-   * Solve A * x = b, where b is a column vector. This is more efficient than
-   * computing the inverse in one-shot cases.
-   * 
-   * @param {Vec3} v
-   * @returns {Vec3}
-   */
-
-
-  Mat33.prototype.solve33 = function (v) {
-    var det = Vec3.dot(this.ex, Vec3.cross(this.ey, this.ez));
-
-    if (det != 0.0) {
-      det = 1.0 / det;
-    }
-
-    var r = new Vec3();
-    r.x = det * Vec3.dot(v, Vec3.cross(this.ey, this.ez));
-    r.y = det * Vec3.dot(this.ex, Vec3.cross(v, this.ez));
-    r.z = det * Vec3.dot(this.ex, Vec3.cross(this.ey, v));
-    return r;
-  };
-  /**
-   * Solve A * x = b, where b is a column vector. This is more efficient than
-   * computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
-   * equation.
-   * 
-   * @param {Vec2} v
-   * 
-   * @returns {Vec2}
-   */
-
-
-  Mat33.prototype.solve22 = function (v) {
-    var a11 = this.ex.x;
-    var a12 = this.ey.x;
-    var a21 = this.ex.y;
-    var a22 = this.ey.y;
-    var det = a11 * a22 - a12 * a21;
-
-    if (det != 0.0) {
-      det = 1.0 / det;
-    }
-
-    var r = Vec2.zero();
-    r.x = det * (a22 * v.x - a12 * v.y);
-    r.y = det * (a11 * v.y - a21 * v.x);
-    return r;
-  };
-  /**
-   * Get the inverse of this matrix as a 2-by-2. Returns the zero matrix if
-   * singular.
-   * 
-   * @param {Mat33} M
-   */
-
-
-  Mat33.prototype.getInverse22 = function (M) {
-    var a = this.ex.x;
-    var b = this.ey.x;
-    var c = this.ex.y;
-    var d = this.ey.y;
-    var det = a * d - b * c;
-
-    if (det != 0.0) {
-      det = 1.0 / det;
-    }
-
-    M.ex.x = det * d;
-    M.ey.x = -det * b;
-    M.ex.z = 0.0;
-    M.ex.y = -det * c;
-    M.ey.y = det * a;
-    M.ey.z = 0.0;
-    M.ez.x = 0.0;
-    M.ez.y = 0.0;
-    M.ez.z = 0.0;
-  };
-  /**
-   * Get the symmetric inverse of this matrix as a 3-by-3. Returns the zero matrix
-   * if singular.
-   * 
-   * @param {Mat33} M
-   */
-
-
-  Mat33.prototype.getSymInverse33 = function (M) {
-    var det = Vec3.dot(this.ex, Vec3.cross(this.ey, this.ez));
-
-    if (det != 0.0) {
-      det = 1.0 / det;
-    }
-
-    var a11 = this.ex.x;
-    var a12 = this.ey.x;
-    var a13 = this.ez.x;
-    var a22 = this.ey.y;
-    var a23 = this.ez.y;
-    var a33 = this.ez.z;
-    M.ex.x = det * (a22 * a33 - a23 * a23);
-    M.ex.y = det * (a13 * a23 - a12 * a33);
-    M.ex.z = det * (a12 * a23 - a13 * a22);
-    M.ey.x = M.ex.y;
-    M.ey.y = det * (a11 * a33 - a13 * a13);
-    M.ey.z = det * (a13 * a12 - a11 * a23);
-    M.ez.x = M.ex.z;
-    M.ez.y = M.ey.z;
-    M.ez.z = det * (a11 * a22 - a12 * a12);
-  };
-  /**
-   * Multiply a matrix times a vector.
-   * 
-   * @param {Mat33} a
-   * @param {Vec3|Vec2} b
-   * 
-   * @returns {Vec3|Vec2}
-   */
-
-
-  Mat33.mul = function (a, b) {
-
-    if (b && 'z' in b && 'y' in b && 'x' in b) {
-      var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
-      var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
-      var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
-      return new Vec3(x, y, z);
-    } else if (b && 'y' in b && 'x' in b) {
-      var x = a.ex.x * b.x + a.ey.x * b.y;
-      var y = a.ex.y * b.x + a.ey.y * b.y;
-      return Vec2.neo(x, y);
-    }
-  };
-
-  Mat33.mulVec3 = function (a, b) {
-    var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
-    var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
-    var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
-    return new Vec3(x, y, z);
-  };
-
-  Mat33.mulVec2 = function (a, b) {
-    var x = a.ex.x * b.x + a.ey.x * b.y;
-    var y = a.ex.y * b.x + a.ey.y * b.y;
-    return Vec2.neo(x, y);
-  };
-
-  Mat33.add = function (a, b) {
-    return new Mat33(Vec3.add(a.ex, b.ex), Vec3.add(a.ey, b.ey), Vec3.add(a.ez, b.ez));
-  };
+  var Mat33 = /** @class */ (function () {
+      function Mat33(a, b, c) {
+          if (typeof a === 'object' && a !== null) {
+              this.ex = Vec3.clone(a);
+              this.ey = Vec3.clone(b);
+              this.ez = Vec3.clone(c);
+          }
+          else {
+              this.ex = Vec3();
+              this.ey = Vec3();
+              this.ez = Vec3();
+          }
+      }
+      Mat33.prototype.toString = function () {
+          return JSON.stringify(this);
+      };
+      Mat33.isValid = function (o) {
+          return o && Vec3.isValid(o.ex) && Vec3.isValid(o.ey) && Vec3.isValid(o.ez);
+      };
+      Mat33.assert = function (o) {
+          return;
+      };
+      /**
+       * Set this matrix to all zeros.
+       */
+      Mat33.prototype.setZero = function () {
+          this.ex.setZero();
+          this.ey.setZero();
+          this.ez.setZero();
+          return this;
+      };
+      /**
+       * Solve A * x = b, where b is a column vector. This is more efficient than
+       * computing the inverse in one-shot cases.
+       */
+      Mat33.prototype.solve33 = function (v) {
+          var det = Vec3.dot(this.ex, Vec3.cross(this.ey, this.ez));
+          if (det !== 0.0) {
+              det = 1.0 / det;
+          }
+          var r = new Vec3();
+          r.x = det * Vec3.dot(v, Vec3.cross(this.ey, this.ez));
+          r.y = det * Vec3.dot(this.ex, Vec3.cross(v, this.ez));
+          r.z = det * Vec3.dot(this.ex, Vec3.cross(this.ey, v));
+          return r;
+      };
+      /**
+       * Solve A * x = b, where b is a column vector. This is more efficient than
+       * computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
+       * equation.
+       */
+      Mat33.prototype.solve22 = function (v) {
+          var a11 = this.ex.x;
+          var a12 = this.ey.x;
+          var a21 = this.ex.y;
+          var a22 = this.ey.y;
+          var det = a11 * a22 - a12 * a21;
+          if (det !== 0.0) {
+              det = 1.0 / det;
+          }
+          var r = Vec2.zero();
+          r.x = det * (a22 * v.x - a12 * v.y);
+          r.y = det * (a11 * v.y - a21 * v.x);
+          return r;
+      };
+      /**
+       * Get the inverse of this matrix as a 2-by-2. Returns the zero matrix if
+       * singular.
+       */
+      Mat33.prototype.getInverse22 = function (M) {
+          var a = this.ex.x;
+          var b = this.ey.x;
+          var c = this.ex.y;
+          var d = this.ey.y;
+          var det = a * d - b * c;
+          if (det !== 0.0) {
+              det = 1.0 / det;
+          }
+          M.ex.x = det * d;
+          M.ey.x = -det * b;
+          M.ex.z = 0.0;
+          M.ex.y = -det * c;
+          M.ey.y = det * a;
+          M.ey.z = 0.0;
+          M.ez.x = 0.0;
+          M.ez.y = 0.0;
+          M.ez.z = 0.0;
+      };
+      /**
+       * Get the symmetric inverse of this matrix as a 3-by-3. Returns the zero matrix
+       * if singular.
+       */
+      Mat33.prototype.getSymInverse33 = function (M) {
+          var det = Vec3.dot(this.ex, Vec3.cross(this.ey, this.ez));
+          if (det !== 0.0) {
+              det = 1.0 / det;
+          }
+          var a11 = this.ex.x;
+          var a12 = this.ey.x;
+          var a13 = this.ez.x;
+          var a22 = this.ey.y;
+          var a23 = this.ez.y;
+          var a33 = this.ez.z;
+          M.ex.x = det * (a22 * a33 - a23 * a23);
+          M.ex.y = det * (a13 * a23 - a12 * a33);
+          M.ex.z = det * (a12 * a23 - a13 * a22);
+          M.ey.x = M.ex.y;
+          M.ey.y = det * (a11 * a33 - a13 * a13);
+          M.ey.z = det * (a13 * a12 - a11 * a23);
+          M.ez.x = M.ex.z;
+          M.ez.y = M.ey.z;
+          M.ez.z = det * (a11 * a22 - a12 * a12);
+      };
+      Mat33.mul = function (a, b) {
+          if (b && 'z' in b && 'y' in b && 'x' in b) {
+              var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
+              var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
+              var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
+              return new Vec3(x, y, z);
+          }
+          else if (b && 'y' in b && 'x' in b) {
+              var x = a.ex.x * b.x + a.ey.x * b.y;
+              var y = a.ex.y * b.x + a.ey.y * b.y;
+              return Vec2.neo(x, y);
+          }
+      };
+      Mat33.mulVec3 = function (a, b) {
+          var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
+          var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
+          var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
+          return new Vec3(x, y, z);
+      };
+      Mat33.mulVec2 = function (a, b) {
+          var x = a.ex.x * b.x + a.ey.x * b.y;
+          var y = a.ex.y * b.x + a.ey.y * b.y;
+          return Vec2.neo(x, y);
+      };
+      Mat33.add = function (a, b) {
+          return new Mat33(Vec3.add(a.ex, b.ex), Vec3.add(a.ey, b.ey), Vec3.add(a.ez, b.ez));
+      };
+      return Mat33;
+  }());
 
   /*
    * Planck.js

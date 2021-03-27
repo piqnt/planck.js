@@ -3,6 +3,9 @@
   "rules": {
     "indent": [true, "spaces", 2],
     "adjacent-overload-signatures": false,
-    "unified-signatures": false
+    "unified-signatures": false,
+    "no-consecutive-blank-lines": false,
+    "ban-ts-ignore": false,
+    "no-padding": false
   }
 }
