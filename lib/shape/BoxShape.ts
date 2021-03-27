@@ -22,29 +22,28 @@
  * SOFTWARE.
  */
 
+// @ts-ignore
 var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+// @ts-ignore
 var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-export default BoxShape;
-
-import common from '../util/common';
+import type Vec2 from '../common/Vec2';
 import PolygonShape from './PolygonShape';
-
-BoxShape._super = PolygonShape;
-BoxShape.prototype = Object.create(BoxShape._super.prototype);
-
-BoxShape.TYPE = 'polygon';
 
 /**
  * A rectangle polygon which extend PolygonShape.
  */
-function BoxShape(hx, hy, center, angle) {
-  if (!(this instanceof BoxShape)) {
-    return new BoxShape(hx, hy, center, angle);
+export default class BoxShape extends PolygonShape {
+  static TYPE = 'polygon';
+
+  constructor(hx: number, hy: number, center?: Vec2, angle?: number) {
+    // @ts-ignore
+    if (!(this instanceof BoxShape)) {
+      return new BoxShape(hx, hy, center, angle);
+    }
+
+    super();
+
+    this._setAsBox(hx, hy, center, angle);
   }
-
-  BoxShape._super.call(this);
-
-  this._setAsBox(hx, hy, center, angle);
 }
-

@@ -4,14 +4,13 @@
 
 export * from "./collision";
 export * from "./joint";
-export {
-  Shape,
-  CircleShape as Circle,
-  BoxShape as Box,
-  EdgeShape as Edge,
-  PolygonShape as Polygon,
-  ChainShape as Chain,
-} from "./shape";
+
+export { default as Shape } from "./Shape";
+export { default as Circle } from "./shape/CircleShape";
+export { default as Box } from "./shape/BoxShape";
+export { default as Edge } from "./shape/EdgeShape";
+export { default as Polygon } from "./shape/PolygonShape";
+export { default as Chain } from "./shape/ChainShape";
 
 import Sweep from './common/Sweep';
 import Velocity from './common/Velocity';
@@ -22,7 +21,7 @@ import Mat22 from './common/Mat22';
 
 import { BroadPhase, RayCastInput, RayCastOutput, AABB, DynamicTree, DistanceProxy, Distance, TimeOfImpact } from "./collision";
 import { JointEdge, Joint } from "./joint";
-import { ShapeType, Shape } from "./shape";
+import { ShapeType, default as Shape } from "./Shape";
 
 export const enum ContactFeatureType {
   Vertex = 0,
