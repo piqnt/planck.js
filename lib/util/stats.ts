@@ -1,10 +1,7 @@
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 export default {
-  toString: function(newline) {
+  toString(newline) {
     newline = typeof newline === 'string' ? newline : '\n';
-    var string = "";
+    let string = "";
     for (var name in this) {
       if (typeof this[name] !== 'function' && typeof this[name] !== 'object') {
         string += name + ': ' + this[name] + newline;

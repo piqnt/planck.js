@@ -2,7 +2,6 @@
  * @author Oliver Zell <https://github.com/zOadT>
  */
 
-export * from "./collision";
 export * from "./joint";
 
 export { default as Shape } from "./Shape";

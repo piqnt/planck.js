@@ -22,13 +22,9 @@
  * SOFTWARE.
  */
 
-// @ts-ignore
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-// @ts-ignore
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 import type { MassData } from '../Body';
-import type { AABB, RayCastOutput, RayCastInput, DistanceProxy } from '../collision';
+import AABB, { RayCastOutput, RayCastInput } from '../collision/AABB';
+import { DistanceProxy } from '../collision/Distance';
 import common from '../util/common';
 import Math from '../common/Math';
 import Transform from '../common/Transform';
@@ -36,6 +32,11 @@ import Rot from '../common/Rot';
 import Vec2 from '../common/Vec2';
 import Settings from '../Settings';
 import Shape from '../Shape';
+
+
+// @ts-ignore
+const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
 
 /**
  * A convex polygon. It is assumed that the interior of the polygon is to the

@@ -22,15 +22,12 @@
  * SOFTWARE.
  */
 
-// @ts-ignore
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-// @ts-ignore
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 import type { MassData } from './Body';
-import type { AABB, RayCastOutput, RayCastInput, DistanceProxy } from './collision';
-import type Transform from './common/Transform'
+import AABB, { RayCastOutput, RayCastInput } from './collision/AABB';
+import { DistanceProxy } from './collision/Distance';
+import type Transform from './common/Transform';
 import type Vec2 from './common/Vec2';
+
 
 /**
  * A shape is used for collision detection. You can create a shape however you

@@ -7,6 +7,9 @@
     "no-consecutive-blank-lines": false,
     "ban-ts-ignore": false,
     "no-padding": false,
-    "only-arrow-functions": false
+    "only-arrow-functions": false,
+    "prefer-conditional-expression": false,
+    "prefer-template": false,
+    "no-conditional-assignment": false
   }
 }

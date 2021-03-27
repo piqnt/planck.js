@@ -1,5 +1,7 @@
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+// @ts-ignore
+const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+// @ts-ignore
+const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 export const debug = function() {
   if (!_DEBUG) return;

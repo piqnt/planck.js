@@ -1,6 +1,6 @@
 export * from "../lib";
 
-import { AABB } from "../lib/collision";
+import AABB from "../lib/collision/AABB";
 import { Body, Fixture, Joint, World } from "../lib";
 
 export interface Testbed {

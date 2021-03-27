@@ -70,10 +70,10 @@ export default class Mat22 {
     }
   }
 
-  // set(a: Mat22): void;
-  // set(a: Vec2, b: Vec2): void;
-  // set(a: number, b: number, c: number, d: number): void;
-  set(a, b, c, d): void {
+  set(a: Mat22): void;
+  set(a: Vec2, b: Vec2): void;
+  set(a: number, b: number, c: number, d: number): void;
+  set(a, b?, c?, d?): void {
     if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
       && typeof d === 'number') {
       this.ex.set(a, c);
