@@ -3,6 +3,7 @@ import { terser } from "rollup-plugin-terser";
 import license from 'rollup-plugin-license';
 import replace from '@rollup/plugin-replace';
 import filesize from 'rollup-plugin-filesize';
+import typescript from '@rollup/plugin-typescript';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 
@@ -51,6 +52,7 @@ export default [
       commonjs({
         include: ['node_modules/stage-js/**']
       }),
+      typescript({ target: "es5" }),
       babel({
         runtimeHelpers: true,
         exclude: 'node_modules/**',
