@@ -59,39 +59,50 @@ function ChainPolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
   CollideEdgePolygon(manifold, edge, xfA, fB.getShape(), xfB);
 }
 
-// EPAxis Type
-const e_unknown = -1;
-const e_edgeA = 1;
-const e_edgeB = 2;
-
-// VertexType unused?
-const e_isolated = 0;
-const e_concave = 1;
-const e_convex = 2;
-
-// This structure is used to keep track of the best separating axis.
-function EPAxis() {
-  this.type; // Type
-  this.index;
-  this.separation;
+enum EPAxisType {
+  e_unknown = -1,
+  e_edgeA = 1,
+  e_edgeB = 2,
 }
 
-// This holds polygon B expressed in frame A.
-function TempPolygon() {
-  this.vertices = []; // Vec2[Settings.maxPolygonVertices]
-  this.normals = []; // Vec2[Settings.maxPolygonVertices];
-  this.count = 0;
+// unused?
+enum VertexType {
+ e_isolated = 0,
+ e_concave = 1,
+ e_convex = 2,
 }
 
-// Reference face used for clipping
-function ReferenceFace() {
-  this.i1; this.i2; // int
-  this.v1, this.v2; // v
-  this.normal = Vec2.zero();
-  this.sideNormal1 = Vec2.zero();
-  this.sideOffset1; // float
-  this.sideNormal2 = Vec2.zero();
-  this.sideOffset2; // float
+/**
+ * This structure is used to keep track of the best separating axis.
+ */
+class EPAxis {
+  type: EPAxisType;
+  index: number;
+  separation: number;
+}
+
+/**
+ * This holds polygon B expressed in frame A.
+ */
+class TempPolygon {
+  vertices: Vec2[] = []; // [Settings.maxPolygonVertices]
+  normals: Vec2[] = []; // [Settings.maxPolygonVertices];
+  count = 0;
+}
+
+/**
+ * Reference face used for clipping
+ */
+class ReferenceFace {
+  i1: number;
+  i2: number;
+  v1: Vec2;
+  v2: Vec2;
+  normal = Vec2.zero();
+  sideNormal1 = Vec2.zero();
+  sideOffset1: number;
+  sideNormal2 = Vec2.zero();
+  sideOffset2: number;
 }
 
 // reused
@@ -115,7 +126,8 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
   // 7. Return if _any_ axis indicates separation
   // 8. Clip
 
-  let m_type1, m_type2; // VertexType unused?
+  let m_type1: VertexType;
+  let m_type2: VertexType; // unused?
 
   const xf = Transform.mulTXf(xfA, xfB);
 
@@ -284,7 +296,7 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
   manifold.pointCount = 0;
 
   { // ComputeEdgeSeparation
-    edgeAxis.type = e_edgeA;
+    edgeAxis.type = EPAxisType.e_edgeA;
     edgeAxis.index = front ? 0 : 1;
     edgeAxis.separation = Infinity;
 
@@ -297,7 +309,7 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
   }
 
   // If no valid normal can be found than this edge should not collide.
-  if (edgeAxis.type == e_unknown) {
+  if (edgeAxis.type == EPAxisType.e_unknown) {
     return;
   }
 
@@ -306,7 +318,7 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
   }
 
   { // ComputePolygonSeparation
-    polygonAxis.type = e_unknown;
+    polygonAxis.type = EPAxisType.e_unknown;
     polygonAxis.index = -1;
     polygonAxis.separation = -Infinity;
 
@@ -321,7 +333,7 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 
       if (s > radius) {
         // No collision
-        polygonAxis.type = e_edgeB;
+        polygonAxis.type = EPAxisType.e_edgeB;
         polygonAxis.index = i;
         polygonAxis.separation = s;
         break;
@@ -339,14 +351,14 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
       }
 
       if (s > polygonAxis.separation) {
-        polygonAxis.type = e_edgeB;
+        polygonAxis.type = EPAxisType.e_edgeB;
         polygonAxis.index = i;
         polygonAxis.separation = s;
       }
     }
   }
 
-  if (polygonAxis.type != e_unknown && polygonAxis.separation > radius) {
+  if (polygonAxis.type != EPAxisType.e_unknown && polygonAxis.separation > radius) {
     return;
   }
 
@@ -355,7 +367,7 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
   const k_absoluteTol = 0.001;
 
   let primaryAxis;
-  if (polygonAxis.type == e_unknown) {
+  if (polygonAxis.type == EPAxisType.e_unknown) {
     primaryAxis = edgeAxis;
   } else if (polygonAxis.separation > k_relativeTol * edgeAxis.separation + k_absoluteTol) {
     primaryAxis = polygonAxis;
@@ -365,7 +377,7 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 
   const ie = [ new ClipVertex(), new ClipVertex() ];
 
-  if (primaryAxis.type == e_edgeA) {
+  if (primaryAxis.type == EPAxisType.e_edgeA) {
     manifold.type = ManifoldType.e_faceA;
 
     // Search for the polygon normal that is most anti-parallel to the edge
@@ -456,7 +468,7 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
   }
 
   // Now clipPoints2 contains the clipped points.
-  if (primaryAxis.type == e_edgeA) {
+  if (primaryAxis.type == EPAxisType.e_edgeA) {
     manifold.localNormal = Vec2.clone(rf.normal);
     manifold.localPoint = Vec2.clone(rf.v1);
   } else {
@@ -471,7 +483,7 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
     if (separation <= radius) {
       const cp = manifold.points[pointCount]; // ManifoldPoint
 
-      if (primaryAxis.type == e_edgeA) {
+      if (primaryAxis.type == EPAxisType.e_edgeA) {
         cp.localPoint = Transform.mulT(xf, clipPoints2[i].v);
         cp.id = clipPoints2[i].id;
       } else {
