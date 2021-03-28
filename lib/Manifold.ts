@@ -67,7 +67,7 @@ export default class Manifold {
   localNormal: Vec2 = Vec2.zero();
   localPoint: Vec2 = Vec2.zero();
   points: ManifoldPoint[] = [ new ManifoldPoint(), new ManifoldPoint() ];
-  pointCount: number = 0;
+  pointCount = 0;
 
   /**
    * Evaluate the manifold with supplied transforms. This assumes modest motion
@@ -81,52 +81,54 @@ export default class Manifold {
 
     wm = wm || new WorldManifold();
 
-    var normal = wm.normal;
-    var points = wm.points;
-    var separations = wm.separations;
+    let normal = wm.normal;
+    const points = wm.points;
+    const separations = wm.separations;
 
     // TODO: improve
     switch (this.type) {
-      case ManifoldType.e_circles:
+      case ManifoldType.e_circles: {
         normal = Vec2.neo(1.0, 0.0);
-        var pointA = Transform.mulVec2(xfA, this.localPoint);
-        var pointB = Transform.mulVec2(xfB, this.points[0].localPoint);
-        var dist = Vec2.sub(pointB, pointA);
+        const pointA = Transform.mulVec2(xfA, this.localPoint);
+        const pointB = Transform.mulVec2(xfB, this.points[0].localPoint);
+        const dist = Vec2.sub(pointB, pointA);
         if (Vec2.lengthSquared(dist) > Math.EPSILON * Math.EPSILON) {
           normal.set(dist);
           normal.normalize();
         }
-        var cA = pointA.clone().addMul(radiusA, normal);
-        var cB = pointB.clone().addMul(-radiusB, normal);
+        const cA = pointA.clone().addMul(radiusA, normal);
+        const cB = pointB.clone().addMul(-radiusB, normal);
         points[0] = Vec2.mid(cA, cB);
         separations[0] = Vec2.dot(Vec2.sub(cB, cA), normal);
         points.length = 1;
         separations.length = 1;
         break;
+      }
 
-      case ManifoldType.e_faceA:
+      case ManifoldType.e_faceA: {
         normal = Rot.mulVec2(xfA.q, this.localNormal);
-        var planePoint = Transform.mulVec2(xfA, this.localPoint);
+        const planePoint = Transform.mulVec2(xfA, this.localPoint);
 
-        for (var i = 0; i < this.pointCount; ++i) {
-          var clipPoint = Transform.mulVec2(xfB, this.points[i].localPoint);
-          var cA = Vec2.clone(clipPoint).addMul(radiusA - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
-          var cB = Vec2.clone(clipPoint).subMul(radiusB, normal);
+        for (let i = 0; i < this.pointCount; ++i) {
+          const clipPoint = Transform.mulVec2(xfB, this.points[i].localPoint);
+          const cA = Vec2.clone(clipPoint).addMul(radiusA - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
+          const cB = Vec2.clone(clipPoint).subMul(radiusB, normal);
           points[i] = Vec2.mid(cA, cB);
           separations[i] = Vec2.dot(Vec2.sub(cB, cA), normal);
         }
         points.length = this.pointCount;
         separations.length = this.pointCount;
         break;
+      }
 
-      case ManifoldType.e_faceB:
+      case ManifoldType.e_faceB: {
         normal = Rot.mulVec2(xfB.q, this.localNormal);
-        var planePoint = Transform.mulVec2(xfB, this.localPoint);
+        const planePoint = Transform.mulVec2(xfB, this.localPoint);
 
-        for (var i = 0; i < this.pointCount; ++i) {
-          var clipPoint = Transform.mulVec2(xfA, this.points[i].localPoint);
-          var cB = Vec2.combine(1, clipPoint, radiusB - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
-          var cA = Vec2.combine(1, clipPoint, -radiusA, normal);
+        for (let i = 0; i < this.pointCount; ++i) {
+          const clipPoint = Transform.mulVec2(xfA, this.points[i].localPoint);
+          const cB = Vec2.combine(1, clipPoint, radiusB - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
+          const cA = Vec2.combine(1, clipPoint, -radiusA, normal);
           points[i] = Vec2.mid(cA, cB);
           separations[i] = Vec2.dot(Vec2.sub(cA, cB), normal);
         }
@@ -135,6 +137,7 @@ export default class Manifold {
         // Ensure normal points from A to B.
         normal.mul(-1);
         break;
+      }
     }
 
     wm.normal = normal;
@@ -273,12 +276,12 @@ export function getPointStates(
   // }
 
   // Detect persists and removes.
-  for (var i = 0; i < manifold1.pointCount; ++i) {
-    var id = manifold1.points[i].id;
+  for (let i = 0; i < manifold1.pointCount; ++i) {
+    const id = manifold1.points[i].id;
 
     state1[i] = PointState.removeState;
 
-    for (var j = 0; j < manifold2.pointCount; ++j) {
+    for (let j = 0; j < manifold2.pointCount; ++j) {
       if (manifold2.points[j].id.key == id.key) {
         state1[i] = PointState.persistState;
         break;
@@ -287,12 +290,12 @@ export function getPointStates(
   }
 
   // Detect persists and adds.
-  for (var i = 0; i < manifold2.pointCount; ++i) {
-    var id = manifold2.points[i].id;
+  for (let i = 0; i < manifold2.pointCount; ++i) {
+    const id = manifold2.points[i].id;
 
     state2[i] = PointState.addState;
 
-    for (var j = 0; j < manifold1.pointCount; ++j) {
+    for (let j = 0; j < manifold1.pointCount; ++j) {
       if (manifold1.points[j].id.key == id.key) {
         state2[i] = PointState.persistState;
         break;
@@ -325,11 +328,11 @@ export function clipSegmentToLine(
   vertexIndexA: number
 ) {
   // Start with no output points
-  var numOut = 0;
+  let numOut = 0;
 
   // Calculate the distance of end points to the line
-  var distance0 = Vec2.dot(normal, vIn[0].v) - offset;
-  var distance1 = Vec2.dot(normal, vIn[1].v) - offset;
+  const distance0 = Vec2.dot(normal, vIn[0].v) - offset;
+  const distance1 = Vec2.dot(normal, vIn[1].v) - offset;
 
   // If the points are behind the plane
   if (distance0 <= 0.0)
@@ -340,7 +343,7 @@ export function clipSegmentToLine(
   // If the points are on different sides of the plane
   if (distance0 * distance1 < 0.0) {
     // Find intersection point of edge and plane
-    var interp = distance0 / (distance0 - distance1);
+    const interp = distance0 / (distance0 - distance1);
     vOut[numOut].v.setCombine(1 - interp, vIn[0].v, interp, vIn[1].v);
 
     // VertexA is hitting edgeB.

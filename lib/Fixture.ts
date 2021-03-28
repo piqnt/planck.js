@@ -173,15 +173,15 @@ export default class Fixture {
     this.m_filterMaskBits = def.filterMaskBits;
 
     // TODO validate shape
-    this.m_shape = shape; //.clone();
+    this.m_shape = shape; // .clone();
 
     this.m_next = null;
 
     this.m_proxies = [];
     this.m_proxyCount = 0;
 
-    var childCount = this.m_shape.getChildCount();
-    for (var i = 0; i < childCount; ++i) {
+    const childCount = this.m_shape.getChildCount();
+    for (let i = 0; i < childCount; ++i) {
       this.m_proxies[i] = new FixtureProxy(this, i);
     }
 
@@ -193,19 +193,19 @@ export default class Fixture {
    * @private
    */
   _reset() {
-    var body = this.getBody();
-    var broadPhase = body.m_world.m_broadPhase;
+    const body = this.getBody();
+    const broadPhase = body.m_world.m_broadPhase;
     this.destroyProxies(broadPhase);
     if (this.m_shape._reset) {
       this.m_shape._reset();
     }
-    var childCount = this.m_shape.getChildCount();
-    for (var i = 0; i < childCount; ++i) {
+    const childCount = this.m_shape.getChildCount();
+    for (let i = 0; i < childCount; ++i) {
       this.m_proxies[i] = new FixtureProxy(this, i);
     }
     this.createProxies(broadPhase, body.m_xf);
     body.resetMassData();
-  };
+  }
 
   _serialize() {
     return {
@@ -220,13 +220,13 @@ export default class Fixture {
 
       shape: this.m_shape,
     };
-  };
+  }
 
   static _deserialize(data, body, restore) {
-    var shape = restore(Shape, data.shape);
-    var fixture = shape && new Fixture(body, shape, data);
+    const shape = restore(Shape, data.shape);
+    const fixture = shape && new Fixture(body, shape, data);
     return fixture;
-  };
+  }
 
   /**
    * Get the type of the child shape. You can use this to down cast to the
@@ -386,8 +386,8 @@ export default class Fixture {
     // Create proxies in the broad-phase.
     this.m_proxyCount = this.m_shape.getChildCount();
 
-    for (var i = 0; i < this.m_proxyCount; ++i) {
-      var proxy = this.m_proxies[i];
+    for (let i = 0; i < this.m_proxyCount; ++i) {
+      const proxy = this.m_proxies[i];
       this.m_shape.computeAABB(proxy.aabb, xf, i);
       proxy.proxyId = broadPhase.createProxy(proxy.aabb, proxy);
     }
@@ -395,8 +395,8 @@ export default class Fixture {
 
   destroyProxies(broadPhase) {
     // Destroy proxies in the broad-phase.
-    for (var i = 0; i < this.m_proxyCount; ++i) {
-      var proxy = this.m_proxies[i];
+    for (let i = 0; i < this.m_proxyCount; ++i) {
+      const proxy = this.m_proxies[i];
       broadPhase.destroyProxy(proxy.proxyId);
       proxy.proxyId = null;
     }
@@ -409,18 +409,18 @@ export default class Fixture {
    * next transformation).
    */
   synchronize(broadPhase, xf1, xf2) {
-    for (var i = 0; i < this.m_proxyCount; ++i) {
-      var proxy = this.m_proxies[i];
+    for (let i = 0; i < this.m_proxyCount; ++i) {
+      const proxy = this.m_proxies[i];
       // Compute an AABB that covers the swept shape (may miss some rotation
       // effect).
-      var aabb1 = new AABB();
-      var aabb2 = new AABB();
+      const aabb1 = new AABB();
+      const aabb2 = new AABB();
       this.m_shape.computeAABB(aabb1, xf1, proxy.childIndex);
       this.m_shape.computeAABB(aabb2, xf2, proxy.childIndex);
 
       proxy.aabb.combine(aabb1, aabb2);
 
-      var displacement = Vec2.sub(xf2.p, xf1.p);
+      const displacement = Vec2.sub(xf2.p, xf1.p);
 
       broadPhase.moveProxy(proxy.proxyId, proxy.aabb, displacement);
     }
@@ -472,11 +472,11 @@ export default class Fixture {
     }
 
     // Flag associated contacts for filtering.
-    var edge = this.m_body.getContactList();
+    let edge = this.m_body.getContactList();
     while (edge) {
-      var contact = edge.contact;
-      var fixtureA = contact.getFixtureA();
-      var fixtureB = contact.getFixtureB();
+      const contact = edge.contact;
+      const fixtureA = contact.getFixtureA();
+      const fixtureB = contact.getFixtureB();
       if (fixtureA == this || fixtureB == this) {
         contact.flagForFiltering();
       }
@@ -484,15 +484,15 @@ export default class Fixture {
       edge = edge.next;
     }
 
-    var world = this.m_body.getWorld();
+    const world = this.m_body.getWorld();
 
     if (world == null) {
       return;
     }
 
     // Touch each proxy so that new pairs may be created
-    var broadPhase = world.m_broadPhase;
-    for (var i = 0; i < this.m_proxyCount; ++i) {
+    const broadPhase = world.m_broadPhase;
+    for (let i = 0; i < this.m_proxyCount; ++i) {
       broadPhase.touchProxy(this.m_proxies[i].proxyId);
     }
   }
@@ -515,9 +515,9 @@ export default class Fixture {
       return that.m_filterGroupIndex > 0;
     }
 
-    var collideA = (that.m_filterMaskBits & this.m_filterCategoryBits) !== 0;
-    var collideB = (that.m_filterCategoryBits & this.m_filterMaskBits) !== 0;
-    var collide = collideA && collideB;
+    const collideA = (that.m_filterMaskBits & this.m_filterCategoryBits) !== 0;
+    const collideB = (that.m_filterCategoryBits & this.m_filterMaskBits) !== 0;
+    const collide = collideA && collideB;
     return collide;
   }
 }

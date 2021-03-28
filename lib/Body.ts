@@ -340,8 +340,8 @@ export default class Body {
   }
 
   _serialize() {
-    var fixtures = [];
-    for (var f = this.m_fixtureList; f; f = f.m_next) {
+    const fixtures = [];
+    for (let f = this.m_fixtureList; f; f = f.m_next) {
       fixtures.push(f);
     }
     return {
@@ -351,49 +351,49 @@ export default class Body {
       angle: this.m_xf.q.getAngle(),
       linearVelocity: this.m_linearVelocity,
       angularVelocity: this.m_angularVelocity,
-      fixtures: fixtures,
+      fixtures,
     };
-  };
+  }
 
   static _deserialize(data, world, restore) {
-    var body = new Body(world, data);
+    const body = new Body(world, data);
 
     if (data.fixtures) {
-      for (var i = data.fixtures.length - 1; i >= 0; i--) {
-        var fixture = restore(Fixture, data.fixtures[i], body);
+      for (let i = data.fixtures.length - 1; i >= 0; i--) {
+        const fixture = restore(Fixture, data.fixtures[i], body);
         body._addFixture(fixture);
       }
     }
     return body;
-  };
+  }
 
   isWorldLocked() {
     return this.m_world && this.m_world.isLocked() ? true : false;
-  };
+  }
 
   getWorld() {
     return this.m_world;
-  };
+  }
 
   getNext() {
     return this.m_next;
-  };
+  }
 
   setUserData(data) {
     this.m_userData = data;
-  };
+  }
 
   getUserData() {
     return this.m_userData;
-  };
+  }
 
   getFixtureList() {
     return this.m_fixtureList;
-  };
+  }
 
   getJointList() {
     return this.m_jointList;
-  };
+  }
 
   /**
    * Warning: this list changes during the time step and you may miss some
@@ -401,19 +401,19 @@ export default class Body {
    */
   getContactList() {
     return this.m_contactList;
-  };
+  }
 
   isStatic() {
     return this.m_type == staticBody;
-  };
+  }
 
   isDynamic() {
     return this.m_type == dynamicBody;
-  };
+  }
 
   isKinematic() {
     return this.m_type == kinematicBody;
-  };
+  }
 
   /**
    * This will alter the mass and velocity.
@@ -421,24 +421,24 @@ export default class Body {
   setStatic() {
     this.setType(staticBody);
     return this;
-  };
+  }
 
   setDynamic() {
     this.setType(dynamicBody);
     return this;
-  };
+  }
 
   setKinematic() {
     this.setType(kinematicBody);
     return this;
-  };
+  }
 
   /**
    * @private
    */
   getType() {
     return this.m_type;
-  };
+  }
 
   /**
    *
@@ -473,49 +473,49 @@ export default class Body {
     this.m_torque = 0.0;
 
     // Delete the attached contacts.
-    var ce = this.m_contactList;
+    let ce = this.m_contactList;
     while (ce) {
-      var ce0 = ce;
+      const ce0 = ce;
       ce = ce.next;
       this.m_world.destroyContact(ce0.contact);
     }
     this.m_contactList = null;
 
     // Touch the proxies so that new contacts will be created (when appropriate)
-    var broadPhase = this.m_world.m_broadPhase;
-    for (var f = this.m_fixtureList; f; f = f.m_next) {
-      var proxyCount = f.m_proxyCount;
-      for (var i = 0; i < proxyCount; ++i) {
+    const broadPhase = this.m_world.m_broadPhase;
+    for (let f = this.m_fixtureList; f; f = f.m_next) {
+      const proxyCount = f.m_proxyCount;
+      for (let i = 0; i < proxyCount; ++i) {
         broadPhase.touchProxy(f.m_proxies[i].proxyId);
       }
     }
-  };
+  }
 
   isBullet() {
     return this.m_bulletFlag;
-  };
+  }
 
   /**
    * Should this body be treated like a bullet for continuous collision detection?
    */
   setBullet(flag) {
     this.m_bulletFlag = !!flag;
-  };
+  }
 
   isSleepingAllowed() {
     return this.m_autoSleepFlag;
-  };
+  }
 
   setSleepingAllowed(flag) {
     this.m_autoSleepFlag = !!flag;
     if (this.m_autoSleepFlag == false) {
       this.setAwake(true);
     }
-  };
+  }
 
   isAwake() {
     return this.m_awakeFlag;
-  };
+  }
 
   /**
    * Set the sleep state of the body. A sleeping body has very low CPU cost.
@@ -536,11 +536,11 @@ export default class Body {
       this.m_force.setZero();
       this.m_torque = 0.0;
     }
-  };
+  }
 
   isActive() {
     return this.m_activeFlag;
-  };
+  }
 
   /**
    * Set the active state of the body. An inactive body is not simulated and
@@ -566,33 +566,33 @@ export default class Body {
 
     if (this.m_activeFlag) {
       // Create all proxies.
-      var broadPhase = this.m_world.m_broadPhase;
-      for (var f = this.m_fixtureList; f; f = f.m_next) {
+      const broadPhase = this.m_world.m_broadPhase;
+      for (let f = this.m_fixtureList; f; f = f.m_next) {
         f.createProxies(broadPhase, this.m_xf);
       }
       // Contacts are created the next time step.
 
     } else {
       // Destroy all proxies.
-      var broadPhase = this.m_world.m_broadPhase;
-      for (var f = this.m_fixtureList; f; f = f.m_next) {
+      const broadPhase = this.m_world.m_broadPhase;
+      for (let f = this.m_fixtureList; f; f = f.m_next) {
         f.destroyProxies(broadPhase);
       }
 
       // Destroy the attached contacts.
-      var ce = this.m_contactList;
+      let ce = this.m_contactList;
       while (ce) {
-        var ce0 = ce;
+        const ce0 = ce;
         ce = ce.next;
         this.m_world.destroyContact(ce0.contact);
       }
       this.m_contactList = null;
     }
-  };
+  }
 
   isFixedRotation() {
     return this.m_fixedRotationFlag;
-  };
+  }
 
   /**
    * Set this body to have fixed rotation. This causes the mass to be reset.
@@ -607,14 +607,14 @@ export default class Body {
     this.m_angularVelocity = 0.0;
 
     this.resetMassData();
-  };
+  }
 
   /**
    * Get the world transform for the body's origin.
    */
   getTransform() {
     return this.m_xf;
-  };
+  }
 
   /**
    * Set the position of the body's origin and rotation. Manipulating a body's
@@ -633,29 +633,29 @@ export default class Body {
     this.m_xf.set(position, angle);
     this.m_sweep.setTransform(this.m_xf);
 
-    var broadPhase = this.m_world.m_broadPhase;
-    for (var f = this.m_fixtureList; f; f = f.m_next) {
+    const broadPhase = this.m_world.m_broadPhase;
+    for (let f = this.m_fixtureList; f; f = f.m_next) {
       f.synchronize(broadPhase, this.m_xf, this.m_xf);
     }
-  };
+  }
 
   synchronizeTransform() {
     this.m_sweep.getTransform(this.m_xf, 1);
-  };
+  }
 
   /**
    * Update fixtures in broad-phase.
    */
   synchronizeFixtures() {
-    var xf = Transform.identity();
+    const xf = Transform.identity();
 
     this.m_sweep.getTransform(xf, 0);
 
-    var broadPhase = this.m_world.m_broadPhase;
-    for (var f = this.m_fixtureList; f; f = f.m_next) {
+    const broadPhase = this.m_world.m_broadPhase;
+    for (let f = this.m_fixtureList; f; f = f.m_next) {
       f.synchronize(broadPhase, xf, this.m_xf);
     }
-  };
+  }
 
   /**
    * Used in TOI.
@@ -666,43 +666,43 @@ export default class Body {
     this.m_sweep.c.set(this.m_sweep.c0);
     this.m_sweep.a = this.m_sweep.a0;
     this.m_sweep.getTransform(this.m_xf, 1);
-  };
+  }
 
   /**
    * Get the world position for the body's origin.
    */
   getPosition() {
     return this.m_xf.p;
-  };
+  }
 
   setPosition(p) {
     this.setTransform(p, this.m_sweep.a);
-  };
+  }
 
   /**
    * Get the current world rotation angle in radians.
    */
   getAngle() {
     return this.m_sweep.a;
-  };
+  }
 
   setAngle(angle) {
     this.setTransform(this.m_xf.p, angle);
-  };
+  }
 
   /**
    * Get the world position of the center of mass.
    */
   getWorldCenter() {
     return this.m_sweep.c;
-  };
+  }
 
   /**
    * Get the local position of the center of mass.
    */
   getLocalCenter() {
     return this.m_sweep.localCenter;
-  };
+  }
 
   /**
    * Get the linear velocity of the center of mass.
@@ -711,7 +711,7 @@ export default class Body {
    */
   getLinearVelocity() {
     return this.m_linearVelocity;
-  };
+  }
 
   /**
    * Get the world linear velocity of a world point attached to this body.
@@ -719,10 +719,10 @@ export default class Body {
    * @param worldPoint A point in world coordinates.
    */
   getLinearVelocityFromWorldPoint(worldPoint) {
-    var localCenter = Vec2.sub(worldPoint, this.m_sweep.c);
+    const localCenter = Vec2.sub(worldPoint, this.m_sweep.c);
     return Vec2.add(this.m_linearVelocity, Vec2.cross(this.m_angularVelocity,
       localCenter));
-  };
+  }
 
   /**
    * Get the world velocity of a local point.
@@ -731,7 +731,7 @@ export default class Body {
    */
   getLinearVelocityFromLocalPoint(localPoint) {
     return this.getLinearVelocityFromWorldPoint(this.getWorldPoint(localPoint));
-  };
+  }
 
   /**
    * Set the linear velocity of the center of mass.
@@ -746,7 +746,7 @@ export default class Body {
       this.setAwake(true);
     }
     this.m_linearVelocity.set(v);
-  };
+  }
 
   /**
    * Get the angular velocity.
@@ -755,7 +755,7 @@ export default class Body {
    */
   getAngularVelocity() {
     return this.m_angularVelocity;
-  };
+  }
 
   /**
    * Set the angular velocity.
@@ -770,34 +770,34 @@ export default class Body {
       this.setAwake(true);
     }
     this.m_angularVelocity = w;
-  };
+  }
 
   getLinearDamping() {
     return this.m_linearDamping;
-  };
+  }
 
   setLinearDamping(linearDamping) {
     this.m_linearDamping = linearDamping;
-  };
+  }
 
   getAngularDamping() {
     return this.m_angularDamping;
-  };
+  }
 
   setAngularDamping(angularDamping) {
     this.m_angularDamping = angularDamping;
-  };
+  }
 
   getGravityScale() {
     return this.m_gravityScale;
-  };
+  }
 
   /**
    * Scale the gravity applied to this body.
    */
   setGravityScale(scale) {
     this.m_gravityScale = scale;
-  };
+  }
 
   /**
    * Get the total mass of the body.
@@ -806,7 +806,7 @@ export default class Body {
    */
   getMass() {
     return this.m_mass;
-  };
+  }
 
   /**
    * Get the rotational inertia of the body about the local origin.
@@ -816,7 +816,7 @@ export default class Body {
   getInertia() {
     return this.m_I + this.m_mass
       * Vec2.dot(this.m_sweep.localCenter, this.m_sweep.localCenter);
-  };
+  }
 
   /**
    * Copy the mass data of the body to data.
@@ -825,7 +825,7 @@ export default class Body {
     data.mass = this.m_mass;
     data.I = this.getInertia();
     data.center.set(this.m_sweep.localCenter);
-  };
+  }
 
   /**
    * This resets the mass properties to the sum of the mass properties of the
@@ -851,13 +851,13 @@ export default class Body {
     _ASSERT && common.assert(this.isDynamic());
 
     // Accumulate mass over all fixtures.
-    var localCenter = Vec2.zero();
-    for (var f = this.m_fixtureList; f; f = f.m_next) {
+    const localCenter = Vec2.zero();
+    for (let f = this.m_fixtureList; f; f = f.m_next) {
       if (f.m_density == 0.0) {
         continue;
       }
 
-      var massData = new MassData();
+      const massData = new MassData();
       f.getMassData(massData);
       this.m_mass += massData.mass;
       localCenter.addMul(massData.mass, massData.center);
@@ -887,13 +887,13 @@ export default class Body {
     }
 
     // Move center of mass.
-    var oldCenter = Vec2.clone(this.m_sweep.c);
+    const oldCenter = Vec2.clone(this.m_sweep.c);
     this.m_sweep.setLocalCenter(localCenter, this.m_xf);
 
     // Update center of mass velocity.
     this.m_linearVelocity.add(Vec2.cross(this.m_angularVelocity, Vec2.sub(
       this.m_sweep.c, oldCenter)));
-  };
+  }
 
   /**
    * Set the mass properties to override the mass properties of the fixtures. Note
@@ -932,13 +932,13 @@ export default class Body {
     }
 
     // Move center of mass.
-    var oldCenter = Vec2.clone(this.m_sweep.c);
+    const oldCenter = Vec2.clone(this.m_sweep.c);
     this.m_sweep.setLocalCenter(massData.center, this.m_xf);
 
     // Update center of mass velocity.
     this.m_linearVelocity.add(Vec2.cross(this.m_angularVelocity, Vec2.sub(
       this.m_sweep.c, oldCenter)));
-  };
+  }
 
   /**
    * Apply a force at a world point. If the force is not applied at the center of
@@ -961,7 +961,7 @@ export default class Body {
       this.m_force.add(force);
       this.m_torque += Vec2.cross(Vec2.sub(point, this.m_sweep.c), force);
     }
-  };
+  }
 
   /**
    * Apply a force to the center of mass. This wakes up the body.
@@ -980,7 +980,7 @@ export default class Body {
     if (this.m_awakeFlag) {
       this.m_force.add(force);
     }
-  };
+  }
 
   /**
    * Apply a torque. This affects the angular velocity without affecting the
@@ -1000,7 +1000,7 @@ export default class Body {
     if (this.m_awakeFlag) {
       this.m_torque += torque;
     }
-  };
+  }
 
   /**
    * Apply an impulse at a point. This immediately modifies the velocity. It also
@@ -1024,7 +1024,7 @@ export default class Body {
       this.m_linearVelocity.addMul(this.m_invMass, impulse);
       this.m_angularVelocity += this.m_invI * Vec2.cross(Vec2.sub(point, this.m_sweep.c), impulse);
     }
-  };
+  }
 
   /**
    * Apply an angular impulse.
@@ -1044,7 +1044,7 @@ export default class Body {
     if (this.m_awakeFlag) {
       this.m_angularVelocity += this.m_invI * impulse;
     }
-  };
+  }
 
   /**
    * This is used to prevent connected bodies (by joints) from colliding,
@@ -1056,7 +1056,7 @@ export default class Body {
       return false;
     }
     // Does a joint prevent collision?
-    for (var jn = this.m_jointList; jn; jn = jn.next) {
+    for (let jn = this.m_jointList; jn; jn = jn.next) {
       if (jn.other == that) {
         if (jn.joint.m_collideConnected == false) {
           return false;
@@ -1064,7 +1064,7 @@ export default class Body {
       }
     }
     return true;
-  };
+  }
 
   /**
    * @internal Used for deserialize.
@@ -1077,7 +1077,7 @@ export default class Body {
     }
 
     if (this.m_activeFlag) {
-      var broadPhase = this.m_world.m_broadPhase;
+      const broadPhase = this.m_world.m_broadPhase;
       fixture.createProxies(broadPhase, this.m_xf);
     }
 
@@ -1093,8 +1093,8 @@ export default class Body {
     // to be created at the beginning of the next time step.
     this.m_world.m_newFixture = true;
 
-    return fixture
-  };
+    return fixture;
+  }
 
   /**
    * Creates a fixture and attach it to this body.
@@ -1116,10 +1116,10 @@ export default class Body {
       return null;
     }
 
-    var fixture = new Fixture(this, shape, fixdef);
+    const fixture = new Fixture(this, shape, fixdef);
     this._addFixture(fixture);
-    return fixture
-  };
+    return fixture;
+  }
 
   /**
    * Destroy a fixture. This removes the fixture from the broad-phase and destroys
@@ -1142,13 +1142,13 @@ export default class Body {
     _ASSERT && common.assert(fixture.m_body == this);
 
     // Remove the fixture from this body's singly linked list.
-    var found = false;
+    let found = false;
     if (this.m_fixtureList === fixture) {
       this.m_fixtureList = fixture.m_next;
       found = true;
 
     } else {
-      var node = this.m_fixtureList;
+      let node = this.m_fixtureList;
       while (node != null) {
         if (node.m_next === fixture) {
           node.m_next = fixture.m_next;
@@ -1163,13 +1163,13 @@ export default class Body {
     _ASSERT && common.assert(found);
 
     // Destroy any contacts associated with the fixture.
-    var edge = this.m_contactList;
+    let edge = this.m_contactList;
     while (edge) {
-      var c = edge.contact;
+      const c = edge.contact;
       edge = edge.next;
 
-      var fixtureA = c.getFixtureA();
-      var fixtureB = c.getFixtureB();
+      const fixtureA = c.getFixtureA();
+      const fixtureB = c.getFixtureB();
 
       if (fixture == fixtureA || fixture == fixtureB) {
         // This destroys the contact and removes it from
@@ -1179,7 +1179,7 @@ export default class Body {
     }
 
     if (this.m_activeFlag) {
-      var broadPhase = this.m_world.m_broadPhase;
+      const broadPhase = this.m_world.m_broadPhase;
       fixture.destroyProxies(broadPhase);
     }
 
@@ -1190,28 +1190,28 @@ export default class Body {
 
     // Reset the mass data.
     this.resetMassData();
-  };
+  }
 
   /**
    * Get the corresponding world point of a local point.
    */
   getWorldPoint(localPoint) {
     return Transform.mulVec2(this.m_xf, localPoint);
-  };
+  }
 
   /**
    * Get the corresponding world vector of a local vector.
    */
   getWorldVector(localVector) {
     return Rot.mulVec2(this.m_xf.q, localVector);
-  };
+  }
 
   /**
    * Gets the corresponding local point of a world point.
    */
   getLocalPoint(worldPoint) {
     return Transform.mulTVec2(this.m_xf, worldPoint);
-  };
+  }
 
   /**
    *
@@ -1219,5 +1219,5 @@ export default class Body {
    */
   getLocalVector(worldVector) {
     return Rot.mulTVec2(this.m_xf.q, worldVector);
-  };
+  }
 }

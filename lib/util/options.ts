@@ -3,9 +3,9 @@ export default function(input, defaults) {
     input = {};
   }
 
-  const output = Object.assign({}, input);
+  const output = {...input};
 
-  for (var key in defaults) {
+  for (let key in defaults) {
     if (defaults.hasOwnProperty(key) && typeof input[key] === 'undefined') {
       output[key] = defaults[key];
     }

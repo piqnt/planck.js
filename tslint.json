@@ -10,6 +10,7 @@
     "only-arrow-functions": false,
     "prefer-conditional-expression": false,
     "prefer-template": false,
-    "no-conditional-assignment": false
+    "no-conditional-assignment": false,
+    "triple-equals": false
   }
 }

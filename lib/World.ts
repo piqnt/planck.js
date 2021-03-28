@@ -205,11 +205,11 @@ export default class World {
     const bodies = [];
     const joints = [];
 
-    for (var b = this.getBodyList(); b; b = b.getNext()) {
+    for (let b = this.getBodyList(); b; b = b.getNext()) {
       bodies.push(b);
     }
 
-    for (var j = this.getJointList(); j; j = j.getNext()) {
+    for (let j = this.getJointList(); j; j = j.getNext()) {
       if (typeof j._serialize === 'function') {
         joints.push(j);
       }
@@ -217,8 +217,8 @@ export default class World {
 
     return {
       gravity: this.m_gravity,
-      bodies: bodies,
-      joints: joints,
+      bodies,
+      joints,
     };
   }
 
@@ -227,16 +227,16 @@ export default class World {
       return new World();
     }
 
-    var world = new World(data.gravity);
+    const world = new World(data.gravity);
 
     if (data.bodies) {
-      for(var i = data.bodies.length - 1; i >= 0; i -= 1) {
+      for (let i = data.bodies.length - 1; i >= 0; i -= 1) {
         world._addBody(restore(Body, data.bodies[i], world));
       }
     }
 
     if (data.joints) {
-      for(var i = data.joints.length - 1; i >= 0; i--) {
+      for (let i = data.joints.length - 1; i >= 0; i--) {
         world.createJoint(restore(Joint, data.joints[i], world));
       }
     }
@@ -323,7 +323,7 @@ export default class World {
 
     this.m_allowSleep = flag;
     if (this.m_allowSleep == false) {
-      for (var b = this.m_bodyList; b; b = b.m_next) {
+      for (let b = this.m_bodyList; b; b = b.m_next) {
         b.setAwake(true);
       }
     }
@@ -392,7 +392,7 @@ export default class World {
    * @see setAutoClearForces
    */
   clearForces() {
-    for (var body = this.m_bodyList; body; body = body.getNext()) {
+    for (let body = this.m_bodyList; body; body = body.getNext()) {
       body.m_force.setZero();
       body.m_torque = 0.0;
     }
@@ -406,9 +406,9 @@ export default class World {
    */
   queryAABB(aabb: AABB, queryCallback: (fixture: Fixture) => boolean): void {
     _ASSERT && common.assert(typeof queryCallback === 'function');
-    var broadPhase = this.m_broadPhase;
-    this.m_broadPhase.query(aabb, function(proxyId) { //TODO GC
-      var proxy = broadPhase.getUserData(proxyId); // FixtureProxy
+    const broadPhase = this.m_broadPhase;
+    this.m_broadPhase.query(aabb, function(proxyId) { // TODO GC
+      const proxy = broadPhase.getUserData(proxyId); // FixtureProxy
       return queryCallback(proxy.fixture);
     });
   }
@@ -425,21 +425,21 @@ export default class World {
    */
   rayCast(point1: Vec2, point2: Vec2, reportFixtureCallback: (fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) => number): void {
     _ASSERT && common.assert(typeof reportFixtureCallback === 'function');
-    var broadPhase = this.m_broadPhase;
+    const broadPhase = this.m_broadPhase;
 
     this.m_broadPhase.rayCast({
       maxFraction : 1.0,
       p1 : point1,
       p2 : point2
     }, function(input, proxyId) { // TODO GC
-      var proxy = broadPhase.getUserData(proxyId); // FixtureProxy
-      var fixture = proxy.fixture;
-      var index = proxy.childIndex;
-      var output = {}; // TODO GC
-      var hit = fixture.rayCast(output, input, index);
+      const proxy = broadPhase.getUserData(proxyId); // FixtureProxy
+      const fixture = proxy.fixture;
+      const index = proxy.childIndex;
+      const output = {}; // TODO GC
+      const hit = fixture.rayCast(output, input, index);
       if (hit) {
-        var fraction = output.fraction;
-        var point = Vec2.add(Vec2.mul((1.0 - fraction), input.p1), Vec2.mul(fraction, input.p2));
+        const fraction = output.fraction;
+        const point = Vec2.add(Vec2.mul((1.0 - fraction), input.p1), Vec2.mul(fraction, input.p2));
         return reportFixtureCallback(fixture, point, output.normal, fraction);
       }
       return input.maxFraction;
@@ -491,13 +491,13 @@ export default class World {
       return;
     }
 
-    for (var b = this.m_bodyList; b; b = b.m_next) {
+    for (let b = this.m_bodyList; b; b = b.m_next) {
       b.m_xf.p.sub(newOrigin);
       b.m_sweep.c0.sub(newOrigin);
       b.m_sweep.c.sub(newOrigin);
     }
 
-    for (var j = this.m_jointList; j; j = j.m_next) {
+    for (let j = this.m_jointList; j; j = j.m_next) {
       j.shiftOrigin(newOrigin);
     }
 
@@ -541,11 +541,11 @@ export default class World {
     if (def && Vec2.isValid(def)) {
       def = {
         position : def,
-        angle : angle
+        angle
       };
     }
 
-    var body = new Body(this, def);
+    const body = new Body(this, def);
 
     this._addBody(body);
 
@@ -556,7 +556,7 @@ export default class World {
     if (!def) {
       def = {};
     } else if (Vec2.isValid(def)) {
-      def = { position : def, angle : angle };
+      def = { position : def, angle };
     }
     def.type = 'dynamic';
     return this.createBody(def);
@@ -566,7 +566,7 @@ export default class World {
     if (!def) {
       def = {};
     } else if (Vec2.isValid(def)) {
-      def = { position : def, angle : angle };
+      def = { position : def, angle };
     }
     def.type = 'kinematic';
     return this.createBody(def);
@@ -594,9 +594,9 @@ export default class World {
     }
 
     // Delete the attached joints.
-    var je = b.m_jointList;
+    let je = b.m_jointList;
     while (je) {
-      var je0 = je;
+      const je0 = je;
       je = je.next;
 
       this.publish('remove-joint', je0.joint);
@@ -607,9 +607,9 @@ export default class World {
     b.m_jointList = null;
 
     // Delete the attached contacts.
-    var ce = b.m_contactList;
+    let ce = b.m_contactList;
     while (ce) {
-      var ce0 = ce;
+      const ce0 = ce;
       ce = ce.next;
 
       this.destroyContact(ce0.contact);
@@ -619,9 +619,9 @@ export default class World {
     b.m_contactList = null;
 
     // Delete the attached fixtures. This destroys broad-phase proxies.
-    var f = b.m_fixtureList;
+    let f = b.m_fixtureList;
     while (f) {
-      var f0 = f;
+      const f0 = f;
       f = f.m_next;
 
       this.publish('remove-fixture', f0);
@@ -699,7 +699,7 @@ export default class World {
 
     // If the joint prevents collisions, then flag any contacts for filtering.
     if (joint.m_collideConnected == false) {
-      for (var edge = joint.m_bodyB.getContactList(); edge; edge = edge.next) {
+      for (let edge = joint.m_bodyB.getContactList(); edge; edge = edge.next) {
         if (edge.other == joint.m_bodyA) {
           // Flag the contact for filtering at the next time step (where either
           // body is awake).
@@ -739,8 +739,8 @@ export default class World {
     }
 
     // Disconnect from bodies.
-    var bodyA = joint.m_bodyA;
-    var bodyB = joint.m_bodyB;
+    const bodyA = joint.m_bodyA;
+    const bodyB = joint.m_bodyB;
 
     // Wake up connected bodies.
     bodyA.setAwake(true);
@@ -783,7 +783,7 @@ export default class World {
 
     // If the joint prevents collisions, then flag any contacts for filtering.
     if (joint.m_collideConnected == false) {
-      var edge = bodyB.getContactList();
+      let edge = bodyB.getContactList();
       while (edge) {
         if (edge.other == bodyA) {
           // Flag the contact for filtering at the next time step (where either
@@ -843,7 +843,7 @@ export default class World {
       this.m_solver.solveWorld(this.s_step);
 
       // Synchronize fixtures, check for out of range bodies.
-      for (var b = this.m_bodyList; b; b = b.getNext()) {
+      for (let b = this.m_bodyList; b; b = b.getNext()) {
         // If a body was not in an island then it did not move.
         if (b.m_islandFlag == false) {
           continue;
@@ -887,14 +887,14 @@ export default class World {
    * Callback for broad-phase.
    */
   createContact(proxyA: FixtureProxy, proxyB: FixtureProxy): void {
-    var fixtureA = proxyA.fixture;
-    var fixtureB = proxyB.fixture;
+    const fixtureA = proxyA.fixture;
+    const fixtureB = proxyB.fixture;
 
-    var indexA = proxyA.childIndex;
-    var indexB = proxyB.childIndex;
+    const indexA = proxyA.childIndex;
+    const indexB = proxyB.childIndex;
 
-    var bodyA = fixtureA.getBody();
-    var bodyB = fixtureB.getBody();
+    const bodyA = fixtureA.getBody();
+    const bodyB = fixtureB.getBody();
 
     // Are the fixtures on the same body?
     if (bodyA == bodyB) {
@@ -904,13 +904,13 @@ export default class World {
     // TODO_ERIN use a hash table to remove a potential bottleneck when both
     // bodies have a lot of contacts.
     // Does a contact already exist?
-    var edge = bodyB.getContactList(); // ContactEdge
+    let edge = bodyB.getContactList(); // ContactEdge
     while (edge) {
       if (edge.other == bodyA) {
-        var fA = edge.contact.getFixtureA();
-        var fB = edge.contact.getFixtureB();
-        var iA = edge.contact.getChildIndexA();
-        var iB = edge.contact.getChildIndexB();
+        const fA = edge.contact.getFixtureA();
+        const fB = edge.contact.getFixtureB();
+        const iA = edge.contact.getChildIndexA();
+        const iB = edge.contact.getChildIndexB();
 
         if (fA == fixtureA && fB == fixtureB && iA == indexA && iB == indexB) {
           // A contact already exists.
@@ -934,7 +934,7 @@ export default class World {
     }
 
     // Call the factory.
-    var contact = Contact.create(fixtureA, indexA, fixtureB, indexB);
+    const contact = Contact.create(fixtureA, indexA, fixtureB, indexB);
     if (contact == null) {
       return;
     }
@@ -956,15 +956,15 @@ export default class World {
    */
   updateContacts(): void {
     // Update awake contacts.
-    var c, next_c = this.m_contactList;
+    let c, next_c = this.m_contactList;
     while (c = next_c) {
       next_c = c.getNext();
-      var fixtureA = c.getFixtureA();
-      var fixtureB = c.getFixtureB();
-      var indexA = c.getChildIndexA();
-      var indexB = c.getChildIndexB();
-      var bodyA = fixtureA.getBody();
-      var bodyB = fixtureB.getBody();
+      const fixtureA = c.getFixtureA();
+      const fixtureB = c.getFixtureB();
+      const indexA = c.getChildIndexA();
+      const indexB = c.getChildIndexB();
+      const bodyA = fixtureA.getBody();
+      const bodyB = fixtureB.getBody();
 
       // Is this contact flagged for filtering?
       if (c.m_filterFlag) {
@@ -982,17 +982,17 @@ export default class World {
         c.m_filterFlag = false;
       }
 
-      var activeA = bodyA.isAwake() && !bodyA.isStatic();
-      var activeB = bodyB.isAwake() && !bodyB.isStatic();
+      const activeA = bodyA.isAwake() && !bodyA.isStatic();
+      const activeB = bodyB.isAwake() && !bodyB.isStatic();
 
       // At least one body must be awake and it must be dynamic or kinematic.
       if (activeA == false && activeB == false) {
         continue;
       }
 
-      var proxyIdA = fixtureA.m_proxies[indexA].proxyId;
-      var proxyIdB = fixtureB.m_proxies[indexB].proxyId;
-      var overlap = this.m_broadPhase.testOverlap(proxyIdA, proxyIdB);
+      const proxyIdA = fixtureA.m_proxies[indexA].proxyId;
+      const proxyIdB = fixtureB.m_proxies[indexB].proxyId;
+      const overlap = this.m_broadPhase.testOverlap(proxyIdA, proxyIdB);
 
       // Here we destroy contacts that cease to overlap in the broad-phase.
       if (overlap == false) {
@@ -1071,11 +1071,11 @@ export default class World {
     if (typeof name !== 'string' || typeof listener !== 'function') {
       return this;
     }
-    var listeners = this._listeners && this._listeners[name];
+    const listeners = this._listeners && this._listeners[name];
     if (!listeners || !listeners.length) {
       return this;
     }
-    var index = listeners.indexOf(listener);
+    const index = listeners.indexOf(listener);
     if (index >= 0) {
       listeners.splice(index, 1);
     }
@@ -1083,11 +1083,11 @@ export default class World {
   }
 
   publish(name: string, arg1?: any, arg2?: any, arg3?: any): number {
-    var listeners = this._listeners && this._listeners[name];
+    const listeners = this._listeners && this._listeners[name];
     if (!listeners || !listeners.length) {
       return 0;
     }
-    for (var l = 0; l < listeners.length; l++) {
+    for (let l = 0; l < listeners.length; l++) {
       listeners[l].call(this, arg1, arg2, arg3);
     }
     return listeners.length;
