@@ -27,6 +27,9 @@ import Shape from '../Shape';
 import Transform from '../common/Transform';
 import Rot from '../common/Rot';
 import Vec2 from '../common/Vec2';
+import AABB, { RayCastInput, RayCastOutput } from '../collision/AABB';
+import { MassData } from '../Body';
+import { DistanceProxy } from '../collision/Distance';
 
 /**
  * A line segment (edge) shape. These can be connected in chains or loops to
@@ -34,7 +37,7 @@ import Vec2 from '../common/Vec2';
  * contact normals.
  */
 export default class EdgeShape extends Shape {
-  static TYPE = 'edge';
+  static TYPE = 'edge' as 'edge';
 
   // These are the edge vertices
   m_vertex1: Vec2;
@@ -82,7 +85,7 @@ export default class EdgeShape extends Shape {
     };
   }
 
-  _deserialize(data) {
+  static _deserialize(data) {
     var shape = new EdgeShape(data.vertex1, data.vertex2);
     if (shape.m_hasVertex0) {
       shape.setPrev(data.vertex0);

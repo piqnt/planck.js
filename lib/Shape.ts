@@ -116,7 +116,7 @@ export default abstract class Shape {
    * @param {MassData} massData Returns the mass data for this shape.
    * @param density The density in kilograms per meter squared.
    */
-  abstract computeMass(massData: MassData, density?: number): void;
+  abstract computeMass(massData: MassData, density: number): void;
 
   /**
    * @param {DistanceProxy} proxy

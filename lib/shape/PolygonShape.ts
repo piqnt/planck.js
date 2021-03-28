@@ -44,7 +44,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * for a convex polygon. extends Shape
  */
 export default class PolygonShape extends Shape {
-  static TYPE = 'polygon';
+  static TYPE = 'polygon' as 'polygon';
 
   m_centroid: Vec2;
   m_vertices: Vec2[]; // Vec2[Settings.maxPolygonVertices]
@@ -406,7 +406,7 @@ export default class PolygonShape extends Shape {
    * @param {MassData} massData Returns the mass data for this shape.
    * @param density The density in kilograms per meter squared.
    */
-  computeMass = function(massData: MassData, density?: number) {
+  computeMass = function(massData: MassData, density: number) {
     // Polygon mass, centroid, and inertia.
     // Let rho be the polygon density in mass per unit area.
     // Then:

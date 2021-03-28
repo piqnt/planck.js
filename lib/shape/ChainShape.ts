@@ -45,7 +45,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * WARNING: The chain will not collide properly if there are self-intersections.
  */
 export default class ChainShape extends Shape {
-  static TYPE = 'chain';
+  static TYPE = 'chain' as 'chain';
 
   m_vertices: Vec2[];
   m_count: number;

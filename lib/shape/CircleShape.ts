@@ -27,13 +27,17 @@ import Math from '../common/Math';
 import Rot from '../common/Rot';
 import Vec2 from '../common/Vec2';
 import Shape from '../Shape';
+import AABB, { RayCastInput, RayCastOutput } from '../collision/AABB';
+import Transform from '../common/Transform';
+import { MassData } from '../Body';
+import { DistanceProxy } from '../collision/Distance';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
 export default class CircleShape extends Shape {
-  static TYPE = 'circle';
+  static TYPE = 'circle' as 'circle';
 
   private m_p: Vec2;
 
@@ -76,6 +80,7 @@ export default class CircleShape extends Shape {
     return new CircleShape(data.p, data.radius);
   }
 
+  // TODO: already defined in Shape
   getRadius() {
     return this.m_radius;
   }
@@ -87,10 +92,6 @@ export default class CircleShape extends Shape {
   getVertex(index: 0) {
     _ASSERT && common.assert(index == 0);
     return this.m_p;
-  }
-
-  getVertexCount(index): 1 {
-    return 1;
   }
 
   /**
@@ -191,7 +192,7 @@ export default class CircleShape extends Shape {
    * @param {MassData} massData Returns the mass data for this shape.
    * @param density The density in kilograms per meter squared.
    */
-  computeMass(massData: MassData, density?: number) {
+  computeMass(massData: MassData, density: number) {
     massData.mass = density * Math.PI * this.m_radius * this.m_radius;
     massData.center = this.m_p;
     // inertia about the local origin
