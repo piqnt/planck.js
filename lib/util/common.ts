@@ -1,7 +1,7 @@
 const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-export const debug = function() {
+export const debug = function(...rest: any[]) {
   if (!_DEBUG) return;
   console.log.apply(console, arguments);
 };

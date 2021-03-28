@@ -78,33 +78,11 @@ export class TreeNode {
  * Nodes are pooled and relocatable, so we use node indices rather than
  * pointers.
  */
-export default class DynamicTree {
+export default class DynamicTree<T> {
   m_root: TreeNode;
   m_lastProxyId: number;
   m_nodes: object;
   m_pool: Pool<TreeNode>;
-
-  // getUserData(id: number): unknown;
-  // getFatAABB(id: number): AABB;
-  // allocateNode(): TreeNode;
-  // freeNode(node: TreeNode): void;
-  // createProxy(aabb: AABB, userData: any): string;
-  // destroyProxy(id: number): void;
-  // moveProxy(id: number, aabb: AABB, d: Vec2): boolean;
-  // insertLeaf(leaf: TreeNode): void;
-  // removeLeaf(leaf: TreeNode): void;
-  // balance(iA: TreeNode): TreeNode;
-  // getHeight(): number;
-  // getAreaRatio(): number;
-  // computeHeight(node?: TreeNode): number;
-  // validateStructure(node: TreeNode): void;
-  // validateMetrics(node: TreeNode): void;
-  // validate(): void;
-  // getMaxBalance(): number;
-  // rebuildBottomUp(): void;
-  // shiftOrigin(newOrigin: Vec2): void;
-  // query(aabb: AABB, queryCallback: (id: number) => boolean): void;
-
 
   constructor() {
     this.m_root = null;
@@ -123,7 +101,7 @@ export default class DynamicTree {
    *
    * @return the proxy user data or 0 if the id is invalid.
    */
-  getUserData(id) {
+  getUserData(id: number): T {
     const node = this.m_nodes[id];
     _ASSERT && common.assert(!!node);
     return node.userData;
@@ -134,13 +112,13 @@ export default class DynamicTree {
    *
    * @return the proxy user data or 0 if the id is invalid.
    */
-  getFatAABB(id) {
+  getFatAABB(id: number): AABB {
     const node = this.m_nodes[id];
     _ASSERT && common.assert(!!node);
     return node.aabb;
   }
 
-  allocateNode() {
+  allocateNode(): TreeNode {
     const node = this.m_pool.allocate();
     node.id = ++this.m_lastProxyId;
     node.userData = null;
@@ -152,7 +130,7 @@ export default class DynamicTree {
     return node;
   }
 
-  freeNode(node) {
+  freeNode(node: TreeNode): void {
     this.m_pool.release(node);
     node.height = -1;
     // tslint:disable-next-line:no-dynamic-delete
@@ -165,7 +143,7 @@ export default class DynamicTree {
    *
    * Create a proxy. Provide a tight fitting AABB and a userData pointer.
    */
-  createProxy(aabb, userData) {
+  createProxy(aabb: AABB, userData: T): number {
     _ASSERT && common.assert(AABB.isValid(aabb));
 
     const node = this.allocateNode();
@@ -186,7 +164,7 @@ export default class DynamicTree {
   /**
    * Destroy a proxy. This asserts if the id is invalid.
    */
-  destroyProxy(id) {
+  destroyProxy(id: number): void {
     const node = this.m_nodes[id];
 
     _ASSERT && common.assert(!!node);
@@ -205,7 +183,7 @@ export default class DynamicTree {
    *
    * @return true if the proxy was re-inserted.
    */
-  moveProxy(id, aabb, d) {
+  moveProxy(id: number, aabb: AABB, d: Vec2): boolean {
     _ASSERT && common.assert(AABB.isValid(aabb));
     _ASSERT && common.assert(!d || Vec2.isValid(d));
 
@@ -246,7 +224,7 @@ export default class DynamicTree {
     return true;
   }
 
-  insertLeaf(leaf) {
+  insertLeaf(leaf: TreeNode): void {
     _ASSERT && common.assert(AABB.isValid(leaf.aabb));
 
     if (this.m_root == null) {
@@ -366,7 +344,7 @@ export default class DynamicTree {
     // validate();
   }
 
-  removeLeaf(leaf) {
+  removeLeaf(leaf: TreeNode): void {
     if (leaf === this.m_root) {
       this.m_root = null;
       return;
@@ -417,7 +395,7 @@ export default class DynamicTree {
    * Perform a left or right rotation if node A is imbalanced. Returns the new
    * root index.
    */
-  balance(iA) {
+  balance(iA: TreeNode): TreeNode {
     _ASSERT && common.assert(iA != null);
 
     const A = iA;
@@ -527,7 +505,7 @@ export default class DynamicTree {
    * Compute the height of the binary tree in O(N) time. Should not be called
    * often.
    */
-  getHeight() {
+  getHeight(): number {
     if (this.m_root == null) {
       return 0;
     }
@@ -538,7 +516,7 @@ export default class DynamicTree {
   /**
    * Get the ratio of the sum of the node areas to the root area.
    */
-  getAreaRatio() {
+  getAreaRatio(): number {
     if (this.m_root == null) {
       return 0.0;
     }
@@ -566,7 +544,7 @@ export default class DynamicTree {
   /**
    * Compute the height of a sub-tree.
    */
-  computeHeight(id?): number {
+  computeHeight(id?: number): number {
     let node;
     if (typeof id !== 'undefined') {
       node = this.m_nodes[id];
@@ -585,7 +563,7 @@ export default class DynamicTree {
     return 1 + Math.max(height1, height2);
   }
 
-  validateStructure(node) {
+  validateStructure(node: TreeNode): void {
     if (node == null) {
       return;
     }
@@ -614,7 +592,7 @@ export default class DynamicTree {
     this.validateStructure(child2);
   }
 
-  validateMetrics(node) {
+  validateMetrics(node: TreeNode): void {
     if (node == null) {
       return;
     }
@@ -646,8 +624,10 @@ export default class DynamicTree {
     this.validateMetrics(child2);
   }
 
-// Validate this tree. For testing.
-  validate() {
+  /**
+   * Validate this tree. For testing.
+   */
+  validate(): void {
     this.validateStructure(this.m_root);
     this.validateMetrics(this.m_root);
 
@@ -658,7 +638,7 @@ export default class DynamicTree {
    * Get the maximum balance of an node in the tree. The balance is the difference
    * in height of the two children of a node.
    */
-  getMaxBalance() {
+  getMaxBalance(): number {
     let maxBalance = 0;
     let node;
     const it = iteratorPool.allocate().preorder(this.m_root);
@@ -680,7 +660,7 @@ export default class DynamicTree {
   /**
    * Build an optimal tree. Very expensive. For testing.
    */
-  rebuildBottomUp() {
+  rebuildBottomUp(): void {
     const nodes = [];
     let count = 0;
 
@@ -751,7 +731,7 @@ export default class DynamicTree {
    *
    * @param newOrigin The new origin with respect to the old origin
    */
-  shiftOrigin(newOrigin) {
+  shiftOrigin(newOrigin: Vec2): void {
     // Build array of leaves. Free the rest.
     let node;
     const it = iteratorPool.allocate().preorder(this.m_root);
@@ -769,7 +749,7 @@ export default class DynamicTree {
    * Query an AABB for overlapping proxies. The callback class is called for each
    * proxy that overlaps the supplied AABB.
    */
-  query(aabb, queryCallback: (nodeId: string) => boolean) {
+  query(aabb: AABB, queryCallback: (nodeId: number) => boolean): void {
     _ASSERT && common.assert(typeof queryCallback === 'function');
     const stack = stackPool.allocate();
 
@@ -883,7 +863,7 @@ export default class DynamicTree {
 }
 
 
-const inputPool = new Pool({
+const inputPool = new Pool<RayCastInput>({
   create() {
     return {};
   },
@@ -891,7 +871,7 @@ const inputPool = new Pool({
   }
 });
 
-const stackPool = new Pool({
+const stackPool = new Pool<TreeNode[]>({
   create() {
     return [];
   },
@@ -900,7 +880,7 @@ const stackPool = new Pool({
   }
 });
 
-const iteratorPool = new Pool({
+const iteratorPool = new Pool<Iterator>({
   create() {
     return new Iterator();
   },

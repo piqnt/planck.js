@@ -26,25 +26,27 @@ import options from './util/options';
 import common from './util/common';
 import Vec2 from './common/Vec2';
 import BroadPhase from './collision/BroadPhase';
-import Solver from './Solver';
-import Body from './Body';
+import Solver, { ContactImpulse, TimeStep } from './Solver';
+import Body, { BodyDef } from './Body';
 import Joint from './Joint';
 import Contact from './Contact';
-import AABB from "./collision/AABB";
+import AABB, { RayCastOutput } from "./collision/AABB";
+import Fixture, { FixtureProxy } from "./Fixture";
+import Manifold from "./Manifold";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
 /**
- * @prop [gravity = { x : 0, y : 0}]
- * @prop [allowSleep = true]
- * @prop [warmStarting = true]
- * @prop [continuousPhysics = true]
- * @prop [subStepping = false]
- * @prop [blockSolve = true]
- * @prop [velocityIterations = 8] For the velocity constraint solver.
- * @prop [positionIterations = 3] For the position constraint solver.
+ * @prop gravity [{ x : 0, y : 0}]
+ * @prop allowSleep [true]
+ * @prop warmStarting [true]
+ * @prop continuousPhysics [true]
+ * @prop subStepping [false]
+ * @prop blockSolve [true]
+ * @prop velocityIterations [8] For the velocity constraint solver.
+ * @prop positionIterations [3] For the position constraint solver.
  */
 export interface WorldDef {
   gravity?: Vec2;
@@ -69,9 +71,7 @@ const WorldDefDefault: WorldDef = {
 };
 
 /**
- * @function World~rayCastCallback
- *
- * Callback class for ray casts. See World.rayCast
+ * Callback function for ray casts, see World.rayCast().
  *
  * Called for each fixture found in the query. You control how the ray cast
  * proceeds by returning a float: return -1: ignore this fixture and continue
@@ -83,9 +83,9 @@ const WorldDefDefault: WorldDef = {
  * @param normal The normal vector at the point of intersection
  * @param fraction
  *
- * @return {float} -1 to filter, 0 to terminate, fraction to clip the ray for
- *         closest hit, 1 to continue
+ * @return -1 to filter, 0 to terminate, fraction to clip the ray for closest hit, 1 to continue
  */
+type RayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) => number;
 
 export default class World {
   /** @internal */ m_solver: Solver;
@@ -111,47 +111,9 @@ export default class World {
   /** @internal */ m_t: number;
 
   // TODO
-  /** @internal */ _listeners: object = {};
-
-  // getBodyList(): Body | null;
-  // getJointList(): Joint | null;
-  // getContactList(): Contact | null;
-  // getBodyCount(): number;
-  // getJointCount(): number;
-  // getContactCount(): number;
-  // setGravity(gravity: Vec2): void;
-  // getGravity(): Vec2;
-  // isLocked(): boolean;
-  // setAllowSleeping(flag: boolean): void;
-  // getAllowSleeping(): boolean;
-  // setWarmStarting(flag: boolean): void;
-  // getWarmStarting(): boolean;
-  // setContinuousPhysics(flag: boolean): void;
-  // getContinuousPhysics(): boolean;
-  // setSubStepping(flag: boolean): void;
-  // getSubStepping(): boolean;
-  // setAutoClearForces(flag: boolean): void;
-  // getAutoClearForces(): boolean;
-  // clearForces(): void;
-  // getProxyCount(): number;
-  // getTreeHeight(): number;
-  // getTreeBalance(): number;
-  // getTreeQuality(): number;
-  // shiftOrigin(newOrigin: Vec2): void;
-  // createBody(def: BodyDef): Body;
-  // createBody(position: Vec2, angle?: number): Body;
-  // createBody(): Body;
-  // createDynamicBody(def: BodyDef): Body;
-  // createDynamicBody(position: Vec2, angle?: number): Body;
-  // createDynamicBody(): Body;
-  // createKinematicBody(def: BodyDef): Body;
-  // createKinematicBody(position: Vec2, angle?: number): Body;
-  // createKinematicBody(): Body;
-  // destroyBody(b: Body): boolean;
-  // createJoint<T extends Joint>(joint: T): T | null;
-  // destroyJoint(joint: Joint): void;
-  // step(timeStep: number, velocityIterations?: number, positionIterations?: number): void;
-
+  /** @internal */ _listeners: {
+    [key: string]: any[]
+  };
 
   /**
    * @param def World definition or gravity vector.
@@ -250,7 +212,7 @@ export default class World {
    *
    * @return the head of the world body list.
    */
-  getBodyList() {
+  getBodyList(): Body | null {
     return this.m_bodyList;
   }
 
@@ -260,7 +222,7 @@ export default class World {
    *
    * @return the head of the world joint list.
    */
-  getJointList() {
+  getJointList(): Joint | null {
     return this.m_jointList;
   }
 
@@ -269,54 +231,55 @@ export default class World {
    * get the next contact in the world list. A null contact indicates the end of
    * the list.
    *
-   * @return the head of the world contact list. Warning: contacts are created and
-   *         destroyed in the middle of a time step. Use ContactListener to avoid
-   *         missing contacts.
+   * Warning: contacts are created and destroyed in the middle of a time step.
+   * Use ContactListener to avoid missing contacts.
+   *
+   * @return the head of the world contact list.
    */
-  getContactList() {
+  getContactList(): Contact | null {
     return this.m_contactList;
   }
 
-  getBodyCount() {
+  getBodyCount(): number {
     return this.m_bodyCount;
   }
 
-  getJointCount() {
+  getJointCount(): number {
     return this.m_jointCount;
   }
 
   /**
    * Get the number of contacts (each may have 0 or more contact points).
    */
-  getContactCount() {
+  getContactCount(): number {
     return this.m_contactCount;
   }
 
   /**
    * Change the global gravity vector.
    */
-  setGravity(gravity) {
+  setGravity(gravity: Vec2): void {
     this.m_gravity = gravity;
   }
 
   /**
    * Get the global gravity vector.
    */
-  getGravity() {
+  getGravity(): Vec2 {
     return this.m_gravity;
   }
 
   /**
    * Is the world locked (in the middle of a time step).
    */
-  isLocked() {
+  isLocked(): boolean {
     return this.m_locked;
   }
 
   /**
    * Enable/disable sleep.
    */
-  setAllowSleeping(flag) {
+  setAllowSleeping(flag: boolean): void {
     if (flag == this.m_allowSleep) {
       return;
     }
@@ -329,54 +292,54 @@ export default class World {
     }
   }
 
-  getAllowSleeping() {
+  getAllowSleeping(): boolean {
     return this.m_allowSleep;
   }
 
   /**
    * Enable/disable warm starting. For testing.
    */
-  setWarmStarting(flag) {
+  setWarmStarting(flag: boolean): void {
     this.m_warmStarting = flag;
   }
 
-  getWarmStarting() {
+  getWarmStarting(): boolean {
     return this.m_warmStarting;
   }
 
   /**
    * Enable/disable continuous physics. For testing.
    */
-  setContinuousPhysics(flag) {
+  setContinuousPhysics(flag: boolean): void {
     this.m_continuousPhysics = flag;
   }
 
-  getContinuousPhysics() {
+  getContinuousPhysics(): boolean {
     return this.m_continuousPhysics;
   }
 
   /**
    * Enable/disable single stepped continuous physics. For testing.
    */
-  setSubStepping(flag) {
+  setSubStepping(flag: boolean): void {
     this.m_subStepping = flag;
   }
 
-  getSubStepping() {
+  getSubStepping(): boolean {
     return this.m_subStepping;
   }
 
   /**
    * Set flag to control automatic clearing of forces after each time step.
    */
-  setAutoClearForces(flag) {
+  setAutoClearForces(flag: boolean): void {
     this.m_clearForces = flag;
   }
 
   /**
    * Get the flag that controls automatic clearing of forces after each time step.
    */
-  getAutoClearForces() {
+  getAutoClearForces(): boolean {
     return this.m_clearForces;
   }
 
@@ -391,7 +354,7 @@ export default class World {
    *
    * @see setAutoClearForces
    */
-  clearForces() {
+  clearForces(): void {
     for (let body = this.m_bodyList; body; body = body.getNext()) {
       body.m_force.setZero();
       body.m_torque = 0.0;
@@ -421,10 +384,10 @@ export default class World {
    *
    * @param point1 The ray starting point
    * @param point2 The ray ending point
-   * @param reportFixtureCallback A user implemented callback function.
+   * @param callback A user implemented callback function.
    */
-  rayCast(point1: Vec2, point2: Vec2, reportFixtureCallback: (fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) => number): void {
-    _ASSERT && common.assert(typeof reportFixtureCallback === 'function');
+  rayCast(point1: Vec2, point2: Vec2, callback: RayCastCallback): void {
+    _ASSERT && common.assert(typeof callback === 'function');
     const broadPhase = this.m_broadPhase;
 
     this.m_broadPhase.rayCast({
@@ -435,12 +398,12 @@ export default class World {
       const proxy = broadPhase.getUserData(proxyId); // FixtureProxy
       const fixture = proxy.fixture;
       const index = proxy.childIndex;
-      const output = {}; // TODO GC
+      const output: RayCastOutput = {}; // TODO GC
       const hit = fixture.rayCast(output, input, index);
       if (hit) {
         const fraction = output.fraction;
         const point = Vec2.add(Vec2.mul((1.0 - fraction), input.p1), Vec2.mul(fraction, input.p2));
-        return reportFixtureCallback(fixture, point, output.normal, fraction);
+        return callback(fixture, point, output.normal, fraction);
       }
       return input.maxFraction;
     });
@@ -449,33 +412,29 @@ export default class World {
   /**
    * Get the number of broad-phase proxies.
    */
-  getProxyCount() {
+  getProxyCount(): number {
     return this.m_broadPhase.getProxyCount();
   }
 
   /**
    * Get the height of broad-phase dynamic tree.
    */
-  getTreeHeight() {
+  getTreeHeight(): number {
     return this.m_broadPhase.getTreeHeight();
   }
 
   /**
    * Get the balance of broad-phase dynamic tree.
-   *
-   * @returns {int}
    */
-  getTreeBalance() {
+  getTreeBalance(): number {
     return this.m_broadPhase.getTreeBalance();
   }
 
   /**
    * Get the quality metric of broad-phase dynamic tree. The smaller the better.
    * The minimum is 1.
-   *
-   * @returns {float}
    */
-  getTreeQuality() {
+  getTreeQuality(): number {
     return this.m_broadPhase.getTreeQuality();
   }
 
@@ -483,9 +442,9 @@ export default class World {
    * Shift the world origin. Useful for large worlds. The body shift formula is:
    * position -= newOrigin
    *
-   * @param {Vec2} newOrigin The new origin with respect to the old origin
+   * @param newOrigin The new origin with respect to the old origin
    */
-  shiftOrigin(newOrigin) {
+  shiftOrigin(newOrigin: Vec2): void {
     _ASSERT && common.assert(this.m_locked == false);
     if (this.m_locked) {
       return;
@@ -528,11 +487,11 @@ export default class World {
    * retained.
    *
    * Warning: This function is locked during callbacks.
-   *
-   * @param {BodyDef|Vec2} def Body definition or position.
-   * @param {float} angle Body angle if def is position.
    */
-  createBody(def, angle) {
+  createBody(def: BodyDef): Body;
+  createBody(position: Vec2, angle?: number): Body;
+  createBody(): Body;
+  createBody(def?, angle?) {
     _ASSERT && common.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return null;
@@ -552,7 +511,10 @@ export default class World {
     return body;
   }
 
-  createDynamicBody(def, angle) {
+  createDynamicBody(def: BodyDef): Body;
+  createDynamicBody(position: Vec2, angle?: number): Body;
+  createDynamicBody(): Body;
+  createDynamicBody(def?, angle?) {
     if (!def) {
       def = {};
     } else if (Vec2.isValid(def)) {
@@ -562,7 +524,10 @@ export default class World {
     return this.createBody(def);
   }
 
-  createKinematicBody(def, angle) {
+  createKinematicBody(def: BodyDef): Body;
+  createKinematicBody(position: Vec2, angle?: number): Body;
+  createKinematicBody(): Body;
+  createKinematicBody(def?, angle?) {
     if (!def) {
       def = {};
     } else if (Vec2.isValid(def)) {
@@ -579,10 +544,8 @@ export default class World {
    * Warning: This automatically deletes all associated shapes and joints.
    *
    * Warning: This function is locked during callbacks.
-   *
-   * @param {Body} b
    */
-  destroyBody(b) {
+  destroyBody(b: Body): boolean {
     _ASSERT && common.assert(this.m_bodyCount > 0);
     _ASSERT && common.assert(this.isLocked() == false);
     if (this.isLocked()) {
@@ -658,12 +621,8 @@ export default class World {
    * is retained. This may cause the connected bodies to cease colliding.
    *
    * Warning: This function is locked during callbacks.
-   *
-   * @param {Joint} join
-   * @param {Body} bodyB
-   * @param {Body} bodyA
    */
-  createJoint(joint) {
+  createJoint<T extends Joint>(joint: T): T | null {
     _ASSERT && common.assert(!!joint.m_bodyA);
     _ASSERT && common.assert(!!joint.m_bodyB);
     _ASSERT && common.assert(this.isLocked() == false);
@@ -716,10 +675,8 @@ export default class World {
   /**
    * Destroy a joint. This may cause the connected bodies to begin colliding.
    * Warning: This function is locked during callbacks.
-   *
-   * @param {Joint} join
    */
-  destroyJoint(joint) {
+  destroyJoint(joint: Joint): void {
     _ASSERT && common.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return;
@@ -798,7 +755,7 @@ export default class World {
     this.publish('remove-joint', joint);
   }
 
-  s_step = new Solver.TimeStep(); // reuse
+  s_step = new TimeStep(); // reuse
 
   /**
    * Take a time step. This performs collision detection, integration, and
@@ -806,11 +763,9 @@ export default class World {
    *
    * Broad-phase, narrow-phase, solve and solve time of impacts.
    *
-   * @param {float} timeStep Time step, this should not vary.
-   * @param {int} velocityIterations
-   * @param {int} positionIterations
+   * @param timeStep Time step, this should not vary.
    */
-  step(timeStep, velocityIterations, positionIterations) {
+  step(timeStep: number, velocityIterations?: number, positionIterations?: number): void {
     this.publish('pre-step', timeStep);
 
     if ((velocityIterations | 0) !== velocityIterations) {
@@ -956,7 +911,8 @@ export default class World {
    */
   updateContacts(): void {
     // Update awake contacts.
-    let c, next_c = this.m_contactList;
+    let c;
+    let next_c = this.m_contactList;
     while (c = next_c) {
       next_c = c.getNext();
       const fixtureA = c.getFixtureA();
@@ -1007,7 +963,6 @@ export default class World {
 
   /**
    * @internal
-   * @param {Contact} contact
    */
   destroyContact(contact: Contact): void {
     Contact.destroy(contact, this);
@@ -1036,9 +991,6 @@ export default class World {
   on(name: 'remove-fixture', listener: (fixture: Fixture) => void): World;
   /**
    * Register an event listener.
-   *
-   * @param {string} name
-   * @param {function} listener
    */
   on(name, listener) {
     if (typeof name !== 'string' || typeof listener !== 'function') {
@@ -1063,9 +1015,6 @@ export default class World {
   off(name: 'remove-fixture', listener: (fixture: Fixture) => void): World;
   /**
    * Remove an event listener.
-   *
-   * @param {string} name
-   * @param {function} listener
    */
   off(name, listener) {
     if (typeof name !== 'string' || typeof listener !== 'function') {
@@ -1107,11 +1056,9 @@ export default class World {
    */
 
   /**
-   * @private
    * @internal
    */
-  beginContact(contact: Contact): void;
-  beginContact(contact) {
+  beginContact(contact: Contact): void {
     this.publish('begin-contact', contact);
   }
 
@@ -1132,7 +1079,6 @@ export default class World {
    */
 
   /**
-   * @private
    * @internal
    */
   endContact(contact: Contact): void {
@@ -1156,7 +1102,6 @@ export default class World {
    */
 
   /**
-   * @private
    * @internal
    */
   preSolve(contact: Contact, oldManifold: Manifold): void {
@@ -1179,7 +1124,6 @@ export default class World {
    */
 
   /**
-   * @private
    * @internal
    */
   postSolve(contact: Contact, impulse: ContactImpulse): void {

@@ -34,17 +34,19 @@ import Transform from './common/Transform';
 import Velocity from './common/Velocity';
 import Position from './common/Position';
 
-import Fixture from './Fixture';
+import Fixture, { FixtureDef, FixtureOpt } from './Fixture';
 import Shape from './Shape';
 import { JointEdge } from "./joint";
+import World from "./World";
+import { ContactEdge } from "./Contact";
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 export type BodyType = 'static' | 'kinematic' | 'dynamic';
 
-const staticBody = 'static';
-const kinematicBody = 'kinematic';
-const dynamicBody = 'dynamic';
+const STATIC = 'static';
+const KINEMATIC = 'kinematic';
+const DYNAMIC = 'dynamic';
 
 /**
  * @prop type Body types are static, kinematic, or dynamic. Note: if a dynamic
@@ -103,7 +105,7 @@ export interface BodyDef {
 }
 
 const BodyDefDefault: BodyDef = {
-  type : staticBody,
+  type : STATIC,
   position : Vec2.zero(),
   angle : 0.0,
 
@@ -142,9 +144,9 @@ export class MassData {
  * A rigid body composed of one or more fixtures.
  */
 export default class Body {
-  STATIC = staticBody;
-  KINEMATIC = kinematicBody;
-  DYNAMIC = dynamicBody;
+  STATIC = STATIC;
+  KINEMATIC = KINEMATIC;
+  DYNAMIC = DYNAMIC;
 
   static STATIC: 'static';
   static KINEMATIC: 'kinematic';
@@ -162,13 +164,13 @@ export default class Body {
   /** @internal */ m_type: BodyType;
   /** @internal */ m_mass: number;
   /** @internal */ m_invMass: number;
-  // Rotational inertia about the center of mass.
-  /** @internal */ m_I: number;
+  /** @internal Rotational inertia about the center of mass. */
+  m_I: number;
   /** @internal */ m_invI: number;
-  // the body origin transform
-  /** @internal */ m_xf: Transform;
-  // the swept motion for CCD
-  /** @internal */ m_sweep: Sweep;
+  /** @internal the body origin transform */
+  m_xf: Transform;
+  /** @internal the swept motion for CCD */
+  m_sweep: Sweep;
   // position and velocity correction
   /** @internal */ c_velocity: Velocity;
   /** @internal */ c_position: Position;
@@ -185,88 +187,7 @@ export default class Body {
   /** @internal */ m_fixtureList: Fixture | null;
   /** @internal */ m_prev: Body | null;
   /** @internal */ m_next: Body | null;
-
-  // isWorldLocked(): boolean;
-  // getWorld(): World;
-  // getNext(): Body | null;
-  // setUserData(data: any): void;
-  // getUserData(): unknown;
-  // getFixtureList(): Fixture | null;
-  // getJointList(): JointEdge | null;
-  // /**
-  //  * Warning: this list changes during the time step and you may miss some
-  //  * collisions if you don't use ContactListener.
-  //  */
-  // getContactList(): ContactEdge | null;
-  // isStatic(): boolean;
-  // isDynamic(): boolean;
-  // isKinematic(): boolean;
-  // /**
-  //  * This will alter the mass and velocity.
-  //  */
-  // setStatic(): Body;
-  // setDynamic(): Body;
-  // setKinematic(): Body;
-  // /**
-  //  * @private
-  //  */
-  // getType(): BodyType;
-  // /**
-  //  * @private
-  //  */
-  // setType(type: BodyType): void;
-  // isBullet(): boolean;
-  // setBullet(flag: boolean): void;
-  // isSleepingAllowed(): boolean;
-  // setSleepingAllowed(flag: boolean): void;
-  // isAwake(): boolean;
-  // setAwake(flag: boolean): void;
-  // isActive(): boolean;
-  // setActive(flag: boolean): void;
-  // isFixedRotation(): boolean;
-  // setFixedRotation(flag: boolean): void;
-  // getTransform(): Transform;
-  // setTransform(position: Vec2, angle: number): void;
-  // synchronizeTransform(): void;
-  // synchronizeFixtures(): void;
-  // advance(alpha: number): void;
-  // getPosition(): Vec2;
-  // setPosition(p: Vec2): void;
-  // getAngle(): number;
-  // setAngle(angle: number): void;
-  // getWorldCenter(): Vec2;
-  // getLocalCenter(): Vec2;
-  // getLinearVelocity(): Vec2;
-  // getLinearVelocityFromWorldPoint(worldPoint: Vec2): Vec2;
-  // getLinearVelocityFromLocalPoint(localPoint: Vec2): Vec2;
-  // setLinearVelocity(v: Vec2): void;
-  // getAngularVelocity(): number;
-  // setAngularVelocity(w: number): void;
-  // getLinearDamping(): number;
-  // setLinearDamping(linearDamping: number): void;
-  // getAngularDamping(): number;
-  // setAngularDamping(angularDamping: number): void;
-  // getGravityScale(): number;
-  // setGravityScale(scale: number): void;
-  // getMass(): number;
-  // getInertia(): number;
-  // getMassData(data: MassData): void;
-  // resetMassData(): void;
-  // setMassData(massData: MassData): void;
-  // applyForce(force: Vec2, point: Vec2, wake?: boolean): void;
-  // applyForceToCenter(force: Vec2, wake?: boolean): void;
-  // applyTorque(torque: number, wake?: boolean): void;
-  // applyLinearImpulse(impulse: Vec2, point: Vec2, wake?: boolean): void;
-  // applyAngularImpulse(impulse: number, wake?: boolean): void;
-  // shouldCollide(that: Body): boolean;
-  // createFixture(def: FixtureDef): Fixture;
-  // createFixture(shape: Shape, opt?: FixtureOpt): Fixture;
-  // createFixture(shape: Shape, density?: number): Fixture;
-  // destroyFixture(fixture: Fixture): void;
-  // getWorldPoint(localPoint: Vec2): Vec2;
-  // getWorldVector(localVector: Vec2): Vec2;
-  // getLocalPoint(worldPoint: Vec2): Vec2;
-  // getLocalVector(worldVector: Vec2): Vec2;
+  /** @internal */ m_destroyed: boolean;
 
   constructor(world, def) {
     def = options(def, BodyDefDefault);
@@ -292,7 +213,7 @@ export default class Body {
     this.m_userData = def.userData;
     this.m_type = def.type;
 
-    if (this.m_type == dynamicBody) {
+    if (this.m_type == DYNAMIC) {
       this.m_mass = 1.0;
       this.m_invMass = 1.0;
     } else {
@@ -367,31 +288,31 @@ export default class Body {
     return body;
   }
 
-  isWorldLocked() {
+  isWorldLocked(): boolean {
     return this.m_world && this.m_world.isLocked() ? true : false;
   }
 
-  getWorld() {
+  getWorld(): World {
     return this.m_world;
   }
 
-  getNext() {
+  getNext(): Body | null {
     return this.m_next;
   }
 
-  setUserData(data) {
+  setUserData(data: any): void {
     this.m_userData = data;
   }
 
-  getUserData() {
+  getUserData(): unknown {
     return this.m_userData;
   }
 
-  getFixtureList() {
+  getFixtureList(): Fixture | null {
     return this.m_fixtureList;
   }
 
-  getJointList() {
+  getJointList(): JointEdge | null {
     return this.m_jointList;
   }
 
@@ -399,53 +320,52 @@ export default class Body {
    * Warning: this list changes during the time step and you may miss some
    * collisions if you don't use ContactListener.
    */
-  getContactList() {
+  getContactList(): ContactEdge | null {
     return this.m_contactList;
   }
 
-  isStatic() {
-    return this.m_type == staticBody;
+  isStatic(): boolean {
+    return this.m_type == STATIC;
   }
 
-  isDynamic() {
-    return this.m_type == dynamicBody;
+  isDynamic(): boolean {
+    return this.m_type == DYNAMIC;
   }
 
-  isKinematic() {
-    return this.m_type == kinematicBody;
+  isKinematic(): boolean {
+    return this.m_type == KINEMATIC;
   }
 
   /**
    * This will alter the mass and velocity.
    */
-  setStatic() {
-    this.setType(staticBody);
+  setStatic(): Body {
+    this.setType(STATIC);
     return this;
   }
 
-  setDynamic() {
-    this.setType(dynamicBody);
+  setDynamic(): Body {
+    this.setType(DYNAMIC);
     return this;
   }
 
-  setKinematic() {
-    this.setType(kinematicBody);
+  setKinematic(): Body {
+    this.setType(KINEMATIC);
     return this;
   }
 
   /**
-   * @private
+   * @internal
    */
-  getType() {
+  getType(): BodyType {
     return this.m_type;
   }
 
   /**
-   *
-   * @private
+   * @internal
    */
-  setType(type) {
-    _ASSERT && common.assert(type === staticBody || type === kinematicBody || type === dynamicBody);
+  setType(type: BodyType): void {
+    _ASSERT && common.assert(type === STATIC || type === KINEMATIC || type === DYNAMIC);
     _ASSERT && common.assert(this.isWorldLocked() == false);
 
     if (this.isWorldLocked() == true) {
@@ -460,7 +380,7 @@ export default class Body {
 
     this.resetMassData();
 
-    if (this.m_type == staticBody) {
+    if (this.m_type == STATIC) {
       this.m_linearVelocity.setZero();
       this.m_angularVelocity = 0.0;
       this.m_sweep.forward();
@@ -491,29 +411,29 @@ export default class Body {
     }
   }
 
-  isBullet() {
+  isBullet(): boolean {
     return this.m_bulletFlag;
   }
 
   /**
    * Should this body be treated like a bullet for continuous collision detection?
    */
-  setBullet(flag) {
+  setBullet(flag: boolean): void {
     this.m_bulletFlag = !!flag;
   }
 
-  isSleepingAllowed() {
+  isSleepingAllowed(): boolean {
     return this.m_autoSleepFlag;
   }
 
-  setSleepingAllowed(flag) {
+  setSleepingAllowed(flag: boolean): void {
     this.m_autoSleepFlag = !!flag;
     if (this.m_autoSleepFlag == false) {
       this.setAwake(true);
     }
   }
 
-  isAwake() {
+  isAwake(): boolean {
     return this.m_awakeFlag;
   }
 
@@ -522,7 +442,7 @@ export default class Body {
    *
    * @param flag Set to true to wake the body, false to put it to sleep.
    */
-  setAwake(flag) {
+  setAwake(flag: boolean): void {
     if (flag) {
       if (this.m_awakeFlag == false) {
         this.m_awakeFlag = true;
@@ -538,7 +458,7 @@ export default class Body {
     }
   }
 
-  isActive() {
+  isActive(): boolean {
     return this.m_activeFlag;
   }
 
@@ -555,7 +475,7 @@ export default class Body {
    * are implicitly inactive. An inactive body is still owned by a World object
    * and remains
    */
-  setActive(flag) {
+  setActive(flag: boolean): void {
     _ASSERT && common.assert(this.isWorldLocked() == false);
 
     if (flag == this.m_activeFlag) {
@@ -590,14 +510,14 @@ export default class Body {
     }
   }
 
-  isFixedRotation() {
+  isFixedRotation(): boolean {
     return this.m_fixedRotationFlag;
   }
 
   /**
    * Set this body to have fixed rotation. This causes the mass to be reset.
    */
-  setFixedRotation(flag) {
+  setFixedRotation(flag: boolean): void {
     if (this.m_fixedRotationFlag == flag) {
       return;
     }
@@ -612,7 +532,7 @@ export default class Body {
   /**
    * Get the world transform for the body's origin.
    */
-  getTransform() {
+  getTransform(): Transform {
     return this.m_xf;
   }
 
@@ -624,7 +544,7 @@ export default class Body {
    * @param position The world position of the body's local origin.
    * @param angle The world rotation in radians.
    */
-  setTransform(position, angle) {
+  setTransform(position: Vec2, angle: number): void {
     _ASSERT && common.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
       return;
@@ -639,14 +559,14 @@ export default class Body {
     }
   }
 
-  synchronizeTransform() {
+  synchronizeTransform(): void {
     this.m_sweep.getTransform(this.m_xf, 1);
   }
 
   /**
    * Update fixtures in broad-phase.
    */
-  synchronizeFixtures() {
+  synchronizeFixtures(): void {
     const xf = Transform.identity();
 
     this.m_sweep.getTransform(xf, 0);
@@ -660,7 +580,7 @@ export default class Body {
   /**
    * Used in TOI.
    */
-  advance(alpha) {
+  advance(alpha: number): void {
     // Advance to the new safe time. This doesn't sync the broad-phase.
     this.m_sweep.advance(alpha);
     this.m_sweep.c.set(this.m_sweep.c0);
@@ -671,36 +591,36 @@ export default class Body {
   /**
    * Get the world position for the body's origin.
    */
-  getPosition() {
+  getPosition(): Vec2 {
     return this.m_xf.p;
   }
 
-  setPosition(p) {
+  setPosition(p: Vec2): void {
     this.setTransform(p, this.m_sweep.a);
   }
 
   /**
    * Get the current world rotation angle in radians.
    */
-  getAngle() {
+  getAngle(): number {
     return this.m_sweep.a;
   }
 
-  setAngle(angle) {
+  setAngle(angle: number): void {
     this.setTransform(this.m_xf.p, angle);
   }
 
   /**
    * Get the world position of the center of mass.
    */
-  getWorldCenter() {
+  getWorldCenter(): Vec2 {
     return this.m_sweep.c;
   }
 
   /**
    * Get the local position of the center of mass.
    */
-  getLocalCenter() {
+  getLocalCenter(): Vec2 {
     return this.m_sweep.localCenter;
   }
 
@@ -709,7 +629,7 @@ export default class Body {
    *
    * @return the linear velocity of the center of mass.
    */
-  getLinearVelocity() {
+  getLinearVelocity(): Vec2 {
     return this.m_linearVelocity;
   }
 
@@ -718,7 +638,7 @@ export default class Body {
    *
    * @param worldPoint A point in world coordinates.
    */
-  getLinearVelocityFromWorldPoint(worldPoint) {
+  getLinearVelocityFromWorldPoint(worldPoint: Vec2): Vec2 {
     const localCenter = Vec2.sub(worldPoint, this.m_sweep.c);
     return Vec2.add(this.m_linearVelocity, Vec2.cross(this.m_angularVelocity,
       localCenter));
@@ -729,7 +649,7 @@ export default class Body {
    *
    * @param localPoint A point in local coordinates.
    */
-  getLinearVelocityFromLocalPoint(localPoint) {
+  getLinearVelocityFromLocalPoint(localPoint: Vec2): Vec2 {
     return this.getLinearVelocityFromWorldPoint(this.getWorldPoint(localPoint));
   }
 
@@ -738,8 +658,8 @@ export default class Body {
    *
    * @param v The new linear velocity of the center of mass.
    */
-  setLinearVelocity(v) {
-    if (this.m_type == staticBody) {
+  setLinearVelocity(v: Vec2): void {
+    if (this.m_type == STATIC) {
       return;
     }
     if (Vec2.dot(v, v) > 0.0) {
@@ -753,7 +673,7 @@ export default class Body {
    *
    * @returns the angular velocity in radians/second.
    */
-  getAngularVelocity() {
+  getAngularVelocity(): number {
     return this.m_angularVelocity;
   }
 
@@ -762,8 +682,8 @@ export default class Body {
    *
    * @param omega The new angular velocity in radians/second.
    */
-  setAngularVelocity(w) {
-    if (this.m_type == staticBody) {
+  setAngularVelocity(w: number): void {
+    if (this.m_type == STATIC) {
       return;
     }
     if (w * w > 0.0) {
@@ -772,30 +692,30 @@ export default class Body {
     this.m_angularVelocity = w;
   }
 
-  getLinearDamping() {
+  getLinearDamping(): number {
     return this.m_linearDamping;
   }
 
-  setLinearDamping(linearDamping) {
+  setLinearDamping(linearDamping: number): void {
     this.m_linearDamping = linearDamping;
   }
 
-  getAngularDamping() {
+  getAngularDamping(): number {
     return this.m_angularDamping;
   }
 
-  setAngularDamping(angularDamping) {
+  setAngularDamping(angularDamping: number): void {
     this.m_angularDamping = angularDamping;
   }
 
-  getGravityScale() {
+  getGravityScale(): number {
     return this.m_gravityScale;
   }
 
   /**
    * Scale the gravity applied to this body.
    */
-  setGravityScale(scale) {
+  setGravityScale(scale: number): void {
     this.m_gravityScale = scale;
   }
 
@@ -804,7 +724,7 @@ export default class Body {
    *
    * @returns The mass, usually in kilograms (kg).
    */
-  getMass() {
+  getMass(): number {
     return this.m_mass;
   }
 
@@ -813,7 +733,7 @@ export default class Body {
    *
    * @return the rotational inertia, usually in kg-m^2.
    */
-  getInertia() {
+  getInertia(): number {
     return this.m_I + this.m_mass
       * Vec2.dot(this.m_sweep.localCenter, this.m_sweep.localCenter);
   }
@@ -821,7 +741,7 @@ export default class Body {
   /**
    * Copy the mass data of the body to data.
    */
-  getMassData(data) {
+  getMassData(data: MassData): void {
     data.mass = this.m_mass;
     data.I = this.getInertia();
     data.center.set(this.m_sweep.localCenter);
@@ -832,7 +752,7 @@ export default class Body {
    * fixtures. This normally does not need to be called unless you called
    * SetMassData to override the mass and you later want to reset the mass.
    */
-  resetMassData() {
+  resetMassData(): void {
     // Compute mass data from shapes. Each shape has its own density.
     this.m_mass = 0.0;
     this.m_invMass = 0.0;
@@ -903,13 +823,13 @@ export default class Body {
    *
    * @param massData The mass properties.
    */
-  setMassData(massData) {
+  setMassData(massData: MassData): void {
     _ASSERT && common.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
       return;
     }
 
-    if (this.m_type != dynamicBody) {
+    if (this.m_type != DYNAMIC) {
       return;
     }
 
@@ -949,8 +869,8 @@ export default class Body {
    * @param point The world position of the point of application.
    * @param wake Also wake up the body
    */
-  applyForce(force, point, wake) {
-    if (this.m_type != dynamicBody) {
+  applyForce(force: Vec2, point: Vec2, wake?: boolean): void {
+    if (this.m_type != DYNAMIC) {
       return;
     }
     if (wake && this.m_awakeFlag == false) {
@@ -969,8 +889,8 @@ export default class Body {
    * @param force The world force vector, usually in Newtons (N).
    * @param wake Also wake up the body
    */
-  applyForceToCenter(force, wake) {
-    if (this.m_type != dynamicBody) {
+  applyForceToCenter(force: Vec2, wake?: boolean): void {
+    if (this.m_type != DYNAMIC) {
       return;
     }
     if (wake && this.m_awakeFlag == false) {
@@ -989,8 +909,8 @@ export default class Body {
    * @param torque About the z-axis (out of the screen), usually in N-m.
    * @param wake Also wake up the body
    */
-  applyTorque(torque, wake) {
-    if (this.m_type != dynamicBody) {
+  applyTorque(torque: number, wake?: boolean): void {
+    if (this.m_type != DYNAMIC) {
       return;
     }
     if (wake && this.m_awakeFlag == false) {
@@ -1011,8 +931,8 @@ export default class Body {
    * @param point The world position of the point of application.
    * @param wake Also wake up the body
    */
-  applyLinearImpulse(impulse, point, wake) {
-    if (this.m_type != dynamicBody) {
+  applyLinearImpulse(impulse: Vec2, point: Vec2, wake?: boolean): void {
+    if (this.m_type != DYNAMIC) {
       return;
     }
     if (wake && this.m_awakeFlag == false) {
@@ -1032,8 +952,8 @@ export default class Body {
    * @param impulse The angular impulse in units of kg*m*m/s
    * @param wake Also wake up the body
    */
-  applyAngularImpulse(impulse, wake) {
-    if (this.m_type != dynamicBody) {
+  applyAngularImpulse(impulse: number, wake?: boolean): void {
+    if (this.m_type != DYNAMIC) {
       return;
     }
 
@@ -1050,9 +970,9 @@ export default class Body {
    * This is used to prevent connected bodies (by joints) from colliding,
    * depending on the joint's collideConnected flag.
    */
-  shouldCollide(that) {
+  shouldCollide(that: Body): boolean {
     // At least one body should be dynamic.
-    if (this.m_type != dynamicBody && that.m_type != dynamicBody) {
+    if (this.m_type != DYNAMIC && that.m_type != DYNAMIC) {
       return false;
     }
     // Does a joint prevent collision?
@@ -1105,11 +1025,11 @@ export default class Body {
    * Contacts are not created until the next time step.
    *
    * Warning: This function is locked during callbacks.
-
-   * @param {Shape|FixtureDef} shape Shape or fixture definition.
-   * @param {FixtureDef|number} fixdef Fixture definition or just density.
    */
-  createFixture(shape, fixdef) {
+  createFixture(def: FixtureDef): Fixture;
+  createFixture(shape: Shape, opt?: FixtureOpt): Fixture;
+  createFixture(shape: Shape, density?: number): Fixture;
+  createFixture(shape, fixdef?) {
     _ASSERT && common.assert(this.isWorldLocked() == false);
 
     if (this.isWorldLocked() == true) {
@@ -1132,7 +1052,7 @@ export default class Body {
    *
    * @param fixture The fixture to be removed.
    */
-  destroyFixture(fixture) {
+  destroyFixture(fixture: Fixture): void {
     _ASSERT && common.assert(this.isWorldLocked() == false);
 
     if (this.isWorldLocked() == true) {
@@ -1195,29 +1115,28 @@ export default class Body {
   /**
    * Get the corresponding world point of a local point.
    */
-  getWorldPoint(localPoint) {
+  getWorldPoint(localPoint: Vec2): Vec2 {
     return Transform.mulVec2(this.m_xf, localPoint);
   }
 
   /**
    * Get the corresponding world vector of a local vector.
    */
-  getWorldVector(localVector) {
+  getWorldVector(localVector: Vec2): Vec2 {
     return Rot.mulVec2(this.m_xf.q, localVector);
   }
 
   /**
    * Gets the corresponding local point of a world point.
    */
-  getLocalPoint(worldPoint) {
+  getLocalPoint(worldPoint: Vec2): Vec2 {
     return Transform.mulTVec2(this.m_xf, worldPoint);
   }
 
   /**
-   *
    * Gets the corresponding local vector of a world vector.
    */
-  getLocalVector(worldVector) {
+  getLocalVector(worldVector: Vec2): Vec2 {
     return Rot.mulTVec2(this.m_xf.q, worldVector);
   }
 }

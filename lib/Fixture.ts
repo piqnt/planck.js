@@ -28,33 +28,32 @@ import options from './util/options';
 import Math from './common/Math';
 import Vec2 from './common/Vec2';
 
-import AABB from './collision/AABB';
+import AABB, { RayCastInput, RayCastOutput } from './collision/AABB';
 
 import Shape, { ShapeType } from './Shape';
+import Body, { MassData } from "./Body";
+import BroadPhase from "./collision/BroadPhase";
+import Transform from "./common/Transform";
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 /**
- * @typedef {Object} FixtureDef
- *
  * A fixture definition is used to create a fixture. This class defines an
  * abstract fixture definition. You can reuse fixture definitions safely.
  *
  * @prop friction The friction coefficient, usually in the range [0,1]
  * @prop restitution The restitution (elasticity) usually in the range [0,1]
  * @prop density The density, usually in kg/m^2
- * @prop isSensor A sensor shape collects contact information but never
- *       generates a collision response
+ * @prop isSensor A sensor shape collects contact information but never generates a collision response
  * @prop userData
- * @prop filterGroupIndex Zero, positive or negative collision group. Fixtures with same positive groupIndex always collide and fixtures with same
- * negative groupIndex never collide.
+ * @prop filterGroupIndex Zero, positive or negative collision group. Fixtures with
+ * same positive groupIndex always collide and fixtures with same negative groupIndex never collide.
  * @prop filterCategoryBits Collision category bit or bits that this fixture belongs
  *       to. If groupIndex is zero or not matching, then at least one bit in this fixture
  * categoryBits should match other fixture maskBits and vice versa.
  * @prop filterMaskBits Collision category bit or bits that this fixture accept for
  *       collision.
  */
-
 export interface FixtureOpt {
   userData?: any;
   friction?: number;
@@ -70,7 +69,7 @@ export interface FixtureDef extends FixtureOpt {
   shape: Shape;
 }
 
-const FixtureDefDefault: FixtureDef = {
+const FixtureDefDefault: FixtureOpt = {
   userData : null,
   friction : 0.2,
   restitution : 0.0,
@@ -118,34 +117,6 @@ export default class Fixture {
   /** @internal */ m_proxies: FixtureProxy[];
   /** @internal */ m_proxyCount: number;
   /** @internal */ m_userData: unknown;
-
-  // getType(): ShapeType;
-  // getShape(): Shape;
-  // isSensor(): boolean;
-  // setSensor(sensor: boolean): void;
-  // getUserData(): unknown;
-  // setUserData(data: any): void;
-  // getBody(): Body;
-  // getNext(): Fixture | null;
-  // getDensity(): number;
-  // setDensity(density: number): void;
-  // getFriction(): number;
-  // setFriction(friction: number): void;
-  // getRestitution(): number;
-  // setRestitution(restitution: number): void;
-  // testPoint(p: Vec2): boolean;
-  // rayCast(output: RayCastOutput, input: RayCastInput, childIndex: number): boolean; // is childIndex optional?
-  // getMassData(massData: MassData): void;
-  // getAABB(childIndex: number): AABB;
-  // createProxies(broadPhase: BroadPhase, xf: Transform): void; // TODO
-  // destroyProxies(broadPhase: BroadPhase): void;
-  // synchronize(broadPhase: BroadPhase, xf1: Transform, xf2: Transform): void;
-  // setFilterData(filter: { groupIndex: number, categoryBits: number, maskBits: number }): void;
-  // getFilterGroupIndex(): number;
-  // getFilterCategoryBits(): number;
-  // getFilterMaskBits(): number;
-  // refilter(): void;
-  // shouldCollide(that: Fixture): boolean;
 
   constructor(body: Body, def: FixtureDef);
   constructor(body: Body, shape: Shape, def?: FixtureOpt);
@@ -232,7 +203,7 @@ export default class Fixture {
    * Get the type of the child shape. You can use this to down cast to the
    * concrete shape.
    */
-  getType() {
+  getType(): ShapeType {
     return this.m_shape.getType();
   }
 
@@ -241,21 +212,21 @@ export default class Fixture {
    * change the number of vertices because this will crash some collision caching
    * mechanisms. Manipulating the shape may lead to non-physical behavior.
    */
-  getShape() {
+  getShape(): Shape {
     return this.m_shape;
   }
   /**
    * A sensor shape collects contact information but never generates a collision
    * response.
    */
-  isSensor() {
+  isSensor(): boolean {
     return this.m_isSensor;
   }
 
   /**
    * Set if this fixture is a sensor.
    */
-  setSensor(sensor) {
+  setSensor(sensor: boolean): void {
     if (sensor != this.m_isSensor) {
       this.m_body.setAwake(true);
       this.m_isSensor = sensor;
@@ -273,14 +244,14 @@ export default class Fixture {
    * Get the user data that was assigned in the fixture definition. Use this to
    * store your application specific data.
    */
-  getUserData() {
+  getUserData(): unknown {
     return this.m_userData;
   }
 
   /**
    * Set the user data. Use this to store your application specific data.
    */
-  setUserData(data) {
+  setUserData(data: any): void {
     this.m_userData = data;
   }
 
@@ -288,21 +259,21 @@ export default class Fixture {
    * Get the parent body of this fixture. This is null if the fixture is not
    * attached.
    */
-  getBody() {
+  getBody(): Body {
     return this.m_body;
   }
 
   /**
    * Get the next fixture in the parent body's fixture list.
    */
-  getNext() {
+  getNext(): Fixture | null {
     return this.m_next;
   }
 
   /**
    * Get the density of this fixture.
    */
-  getDensity() {
+  getDensity(): number {
     return this.m_density;
   }
 
@@ -310,7 +281,7 @@ export default class Fixture {
    * Set the density of this fixture. This will _not_ automatically adjust the
    * mass of the body. You must call Body.resetMassData to update the body's mass.
    */
-  setDensity(density) {
+  setDensity(density: number): void {
     _ASSERT && common.assert(Math.isFinite(density) && density >= 0.0);
     this.m_density = density;
   }
@@ -318,7 +289,7 @@ export default class Fixture {
   /**
    * Get the coefficient of friction, usually in the range [0,1].
    */
-  getFriction() {
+  getFriction(): number {
     return this.m_friction;
   }
 
@@ -326,14 +297,14 @@ export default class Fixture {
    * Set the coefficient of friction. This will not change the friction of
    * existing contacts.
    */
-  setFriction(friction) {
+  setFriction(friction: number): void {
     this.m_friction = friction;
   }
 
   /**
    * Get the coefficient of restitution.
    */
-  getRestitution() {
+  getRestitution(): number {
     return this.m_restitution;
   }
 
@@ -341,21 +312,21 @@ export default class Fixture {
    * Set the coefficient of restitution. This will not change the restitution of
    * existing contacts.
    */
-  setRestitution(restitution) {
+  setRestitution(restitution: number): void {
     this.m_restitution = restitution;
   }
 
   /**
    * Test a point in world coordinates for containment in this fixture.
    */
-  testPoint(p) {
+  testPoint(p: Vec2): boolean {
     return this.m_shape.testPoint(this.m_body.getTransform(), p);
   }
 
   /**
    * Cast a ray against this shape.
    */
-  rayCast(output, input, childIndex) {
+  rayCast(output: RayCastOutput, input: RayCastInput, childIndex: number): boolean {
     return this.m_shape.rayCast(output, input, this.m_body.getTransform(), childIndex);
   }
 
@@ -364,7 +335,7 @@ export default class Fixture {
    * the shape. The rotational inertia is about the shape's origin. This operation
    * may be expensive.
    */
-  getMassData(massData) {
+  getMassData(massData: MassData): void {
     this.m_shape.computeMass(massData, this.m_density);
   }
 
@@ -372,7 +343,7 @@ export default class Fixture {
    * Get the fixture's AABB. This AABB may be enlarge and/or stale. If you need a
    * more accurate AABB, compute it using the shape and the body transform.
    */
-  getAABB(childIndex) {
+  getAABB(childIndex: number): AABB {
     _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_proxyCount);
     return this.m_proxies[childIndex].aabb;
   }
@@ -380,7 +351,7 @@ export default class Fixture {
   /**
    * These support body activation/deactivation.
    */
-  createProxies(broadPhase, xf) {
+  createProxies(broadPhase: BroadPhase, xf: Transform): void {
     _ASSERT && common.assert(this.m_proxyCount == 0);
 
     // Create proxies in the broad-phase.
@@ -393,7 +364,7 @@ export default class Fixture {
     }
   }
 
-  destroyProxies(broadPhase) {
+  destroyProxies(broadPhase: BroadPhase): void {
     // Destroy proxies in the broad-phase.
     for (let i = 0; i < this.m_proxyCount; ++i) {
       const proxy = this.m_proxies[i];
@@ -408,7 +379,7 @@ export default class Fixture {
    * Updates this fixture proxy in broad-phase (with combined AABB of current and
    * next transformation).
    */
-  synchronize(broadPhase, xf1, xf2) {
+  synchronize(broadPhase: BroadPhase, xf1: Transform, xf2: Transform): void {
     for (let i = 0; i < this.m_proxyCount; ++i) {
       const proxy = this.m_proxies[i];
       // Compute an AABB that covers the swept shape (may miss some rotation
@@ -431,34 +402,34 @@ export default class Fixture {
    * time step when either parent body is active and awake. This automatically
    * calls refilter.
    */
-  setFilterData(filter) {
+  setFilterData(filter: { groupIndex: number, categoryBits: number, maskBits: number }): void {
     this.m_filterGroupIndex = filter.groupIndex;
     this.m_filterCategoryBits = filter.categoryBits;
     this.m_filterMaskBits = filter.maskBits;
     this.refilter();
   }
 
-  getFilterGroupIndex() {
+  getFilterGroupIndex(): number {
     return this.m_filterGroupIndex;
   }
 
-  setFilterGroupIndex(groupIndex) {
+  setFilterGroupIndex(groupIndex: number) {
     return this.m_filterGroupIndex = groupIndex;
   }
 
-  getFilterCategoryBits() {
+  getFilterCategoryBits(): number {
     return this.m_filterCategoryBits;
   }
 
-  setFilterCategoryBits(categoryBits) {
+  setFilterCategoryBits(categoryBits: number) {
     this.m_filterCategoryBits = categoryBits;
   }
 
-  getFilterMaskBits() {
+  getFilterMaskBits(): number {
     return this.m_filterMaskBits;
   }
 
-  setFilterMaskBits(maskBits) {
+  setFilterMaskBits(maskBits: number) {
     this.m_filterMaskBits = maskBits;
   }
 
@@ -466,7 +437,7 @@ export default class Fixture {
    * Call this if you want to establish collision that was previously disabled by
    * ContactFilter.
    */
-  refilter() {
+  refilter(): void {
     if (this.m_body == null) {
       return;
     }
@@ -506,10 +477,8 @@ export default class Fixture {
    *
    * Warning: for performance reasons this is only called when the AABBs begin to
    * overlap.
-   *
-   * @param {Fixture} that
    */
-  shouldCollide(that) {
+  shouldCollide(that: Fixture): boolean {
 
     if (that.m_filterGroupIndex === this.m_filterGroupIndex && that.m_filterGroupIndex !== 0) {
       return that.m_filterGroupIndex > 0;

@@ -35,7 +35,7 @@ import type Vec2 from './common/Vec2';
  * Fixture is created. Shapes may encapsulate one or more child shapes.
  */
 export default abstract class Shape {
-  m_type: string;
+  m_type: ShapeType;
   m_radius: number;
 
   _reset() {
@@ -64,7 +64,7 @@ export default abstract class Shape {
    *
    * @return the shape type.
    */
-  getType() {
+  getType(): ShapeType {
     return this.m_type;
   }
 

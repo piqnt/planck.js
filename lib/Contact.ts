@@ -33,9 +33,11 @@ import Mat22 from './common/Mat22';
 import Rot from './common/Rot';
 
 import Settings from './Settings';
-import Manifold, { ManifoldType } from './Manifold';
+import Manifold, { ManifoldType, WorldManifold } from './Manifold';
 import Distance from './collision/Distance';
 import Fixture from "./Fixture";
+import Body from "./Body";
+import { TimeStep } from "./Solver";
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
@@ -260,37 +262,7 @@ export default class Contact {
   /** @internal */ p_invIA: number | undefined;
   /** @internal */ p_invIB: number | undefined;
 
-  // initConstraint(step: {warmStarting: boolean, dtRatio: number}): void;
-  // getManifold(): Manifold;
-  // getWorldManifold(worldManifold: WorldManifold | null | undefined): WorldManifold | undefined;
-  // setEnabled(flag: boolean): void;
-  // isEnabled(): boolean;
-  // isTouching(): boolean;
-  // getNext(): Contact | null;
-  // getFixtureA(): Fixture;
-  // getFixtureB(): Fixture;
-  // getChildIndexA(): number;
-  // getChildIndexB(): number;
-  // flagForFiltering(): void;
-  // setFriction(friction: number): void;
-  // getFriction(): number;
-  // resetFriction(): void;
-  // setRestitution(restitution: number): void;
-  // getRestitution(): number;
-  // resetRestitution(): void;
-  // setTangentSpeed(speed: number): void;
-  // getTangentSpeed(): number;
-  // evaluate(manifold: Manifold, xfA: Transform, xfB: Transform): void;
-  // update(listener?: {beginContact(contact: Contact): void, endContact(contact: Contact): void, oreSolve(contact: Contact, oldManifold: Manifold): void}): void;
-  // solvePositionConstraint(step: any): number;
-  // solvePositionConstraintTOI(step: any, toiA?: Body | null, toiB?: Body | null): number;
-  // _solvePositionConstraint(step: any, toi: boolean, toiA?: Body | null, toiB?: Body | null): number;
-  // initVelocityConstraint(step: {blockSolve: boolean}): void;
-  // warmStartConstraint(step?: any): void;
-  // storeConstraintImpulses(step?: any): void;
-  // solveVelocityConstraint(step: {blockSolve: boolean}): void;
-
-  initConstraint(step) {
+  initConstraint(step: TimeStep): void {
     const fixtureA = this.m_fixtureA;
     const fixtureB = this.m_fixtureB;
 
@@ -334,7 +306,7 @@ export default class Contact {
     this.p_localPoint = Vec2.clone(manifold.localPoint);
     this.p_pointCount = pointCount;
 
-    for (const j = 0; j < pointCount; ++j) {
+    for (let j = 0; j < pointCount; ++j) {
       const cp = manifold.points[j];
       const vcp = this.v_points[j] = new VelocityConstraintPoint();
 
@@ -362,16 +334,14 @@ export default class Contact {
    * Get the contact manifold. Do not modify the manifold unless you understand
    * the internals of the library.
    */
-  getManifold() {
+  getManifold(): Manifold {
     return this.m_manifold;
   }
 
   /**
    * Get the world manifold.
-   *
-   * @param [worldManifold]
    */
-  getWorldManifold(worldManifold) {
+  getWorldManifold(worldManifold: WorldManifold | null | undefined): WorldManifold | undefined {
     const bodyA = this.m_fixtureA.getBody();
     const bodyB = this.m_fixtureB.getBody();
     const shapeA = this.m_fixtureA.getShape();
@@ -386,63 +356,63 @@ export default class Contact {
    * listener. The contact is only disabled for the current time step (or sub-step
    * in continuous collisions).
    */
-  setEnabled(flag) {
+  setEnabled(flag: boolean): void {
     this.m_enabledFlag = !!flag;
   }
 
   /**
    * Has this contact been disabled?
    */
-  isEnabled() {
+  isEnabled(): boolean {
     return this.m_enabledFlag;
   }
 
   /**
    * Is this contact touching?
    */
-  isTouching() {
+  isTouching(): boolean {
     return this.m_touchingFlag;
   }
 
   /**
    * Get the next contact in the world's contact list.
    */
-  getNext() {
+  getNext(): Contact | null {
     return this.m_next;
   }
 
   /**
    * Get fixture A in this contact.
    */
-  getFixtureA() {
+  getFixtureA(): Fixture {
     return this.m_fixtureA;
   }
 
   /**
    * Get fixture B in this contact.
    */
-  getFixtureB() {
+  getFixtureB(): Fixture {
     return this.m_fixtureB;
   }
 
   /**
    * Get the child primitive index for fixture A.
    */
-  getChildIndexA() {
+  getChildIndexA(): number {
     return this.m_indexA;
   }
 
   /**
    * Get the child primitive index for fixture B.
    */
-  getChildIndexB() {
+  getChildIndexB(): number {
     return this.m_indexB;
   }
 
   /**
    * Flag this contact for filtering. Filtering will occur the next time step.
    */
-  flagForFiltering() {
+  flagForFiltering(): void {
     this.m_filterFlag = true;
   }
 
@@ -450,21 +420,21 @@ export default class Contact {
    * Override the default friction mixture. You can call this in
    * ContactListener.preSolve. This value persists until set or reset.
    */
-  setFriction(friction) {
+  setFriction(friction: number): void {
     this.m_friction = friction;
   }
 
   /**
    * Get the friction.
    */
-  getFriction() {
+  getFriction(): number {
     return this.m_friction;
   }
 
   /**
    * Reset the friction mixture to the default value.
    */
-  resetFriction() {
+  resetFriction(): void {
     this.m_friction = mixFriction(this.m_fixtureA.m_friction,
       this.m_fixtureB.m_friction);
   }
@@ -473,21 +443,21 @@ export default class Contact {
    * Override the default restitution mixture. You can call this in
    * ContactListener.preSolve. The value persists until you set or reset.
    */
-  setRestitution(restitution) {
+  setRestitution(restitution: number): void {
     this.m_restitution = restitution;
   }
 
   /**
    * Get the restitution.
    */
-  getRestitution() {
+  getRestitution(): number {
     return this.m_restitution;
   }
 
   /**
    * Reset the restitution to the default value.
    */
-  resetRestitution() {
+  resetRestitution(): void {
     this.m_restitution = mixRestitution(this.m_fixtureA.m_restitution,
       this.m_fixtureB.m_restitution);
   }
@@ -496,21 +466,21 @@ export default class Contact {
    * Set the desired tangent speed for a conveyor belt behavior. In meters per
    * second.
    */
-  setTangentSpeed(speed) {
+  setTangentSpeed(speed: number): void {
     this.m_tangentSpeed = speed;
   }
 
   /**
    * Get the desired tangent speed. In meters per second.
    */
-  getTangentSpeed() {
+  getTangentSpeed(): number {
     return this.m_tangentSpeed;
   }
 
   /**
    * Called by Update method, and implemented by subclasses.
    */
-  evaluate(manifold, xfA, xfB) {
+  evaluate(manifold: Manifold, xfA: Transform, xfB: Transform): void {
     this.m_evaluateFcn(manifold, xfA, this.m_fixtureA, this.m_indexA, xfB,
       this.m_fixtureB, this.m_indexB);
   }
@@ -524,12 +494,16 @@ export default class Contact {
    * @param listener.endContact
    * @param listener.preSolve
    */
-  update(listener) {
+  update(listener?: {
+    beginContact(contact: Contact): void,
+    endContact(contact: Contact): void,
+    preSolve(contact: Contact, oldManifold: Manifold): void
+  }): void {
 
     // Re-enable this contact.
     this.m_enabledFlag = true;
 
-    const touching = false;
+    let touching = false;
     const wasTouching = this.m_touchingFlag;
 
     const sensorA = this.m_fixtureA.isSensor();
@@ -541,19 +515,20 @@ export default class Contact {
     const xfA = bodyA.getTransform();
     const xfB = bodyB.getTransform();
 
+    let oldManifold;
+
     // Is this contact a sensor?
     if (sensor) {
       const shapeA = this.m_fixtureA.getShape();
       const shapeB = this.m_fixtureB.getShape();
-      touching = Distance.testOverlap(shapeA, this.m_indexA, shapeB,
-        this.m_indexB, xfA, xfB);
+      touching = Distance.testOverlap(shapeA, this.m_indexA, shapeB, this.m_indexB, xfA, xfB);
 
       // Sensors don't generate manifolds.
       this.m_manifold.pointCount = 0;
     } else {
 
       // TODO reuse manifold
-      const oldManifold = this.m_manifold;
+      oldManifold = this.m_manifold;
       this.m_manifold = new Manifold();
 
       this.evaluate(this.m_manifold, xfA, xfB);
@@ -561,14 +536,14 @@ export default class Contact {
 
       // Match old contact ids to new contact ids and copy the
       // stored impulses to warm start the solver.
-      for (const i = 0; i < this.m_manifold.pointCount; ++i) {
+      for (let i = 0; i < this.m_manifold.pointCount; ++i) {
         const nmp = this.m_manifold.points[i];
         nmp.normalImpulse = 0.0;
         nmp.tangentImpulse = 0.0;
 
-        for (const j = 0; j < oldManifold.pointCount; ++j) {
+        for (let j = 0; j < oldManifold.pointCount; ++j) {
           const omp = oldManifold.points[j];
-          if (omp.id.key == nmp.id.key) { // ContactID.key
+          if (omp.id.key == nmp.id.key) {
             nmp.normalImpulse = omp.normalImpulse;
             nmp.tangentImpulse = omp.tangentImpulse;
             break;
@@ -584,28 +559,28 @@ export default class Contact {
 
     this.m_touchingFlag = touching;
 
-    if (wasTouching == false && touching == true && listener) {
+    if (!wasTouching && touching && listener) {
       listener.beginContact(this);
     }
 
-    if (wasTouching == true && touching == false && listener) {
+    if (wasTouching && !touching && listener) {
       listener.endContact(this);
     }
 
-    if (sensor == false && touching && listener) {
+    if (!sensor && touching && listener) {
       listener.preSolve(this, oldManifold);
     }
   }
 
-  solvePositionConstraint(step) {
+  solvePositionConstraint(step: any): number {
     return this._solvePositionConstraint(step, false);
   }
 
-  solvePositionConstraintTOI(step, toiA, toiB) {
+  solvePositionConstraintTOI(step: any, toiA?: Body | null, toiB?: Body | null): number {
     return this._solvePositionConstraint(step, true, toiA, toiB);
   }
 
-  _solvePositionConstraint(step, toi, toiA, toiB) {
+  _solvePositionConstraint(step: any, toi: boolean, toiA?: Body | null, toiB?: Body | null): number {
 
     const fixtureA = this.m_fixtureA;
     const fixtureB = this.m_fixtureB;
@@ -621,30 +596,30 @@ export default class Contact {
     const localCenterA = Vec2.clone(this.p_localCenterA);
     const localCenterB = Vec2.clone(this.p_localCenterB);
 
-    const mA = 0.0;
-    const iA = 0.0;
+    let mA = 0.0;
+    let iA = 0.0;
     if (!toi || (bodyA == toiA || bodyA == toiB)) {
       mA = this.p_invMassA;
       iA = this.p_invIA;
     }
 
-    const mB = 0.0;
-    const iB = 0.0;
+    let mB = 0.0;
+    let iB = 0.0;
     if (!toi || (bodyB == toiA || bodyB == toiB)) {
       mB = this.p_invMassB;
       iB = this.p_invIB;
     }
 
     const cA = Vec2.clone(positionA.c);
-    const aA = positionA.a;
+    let aA = positionA.a;
 
     const cB = Vec2.clone(positionB.c);
-    const aB = positionB.a;
+    let aB = positionB.a;
 
-    const minSeparation = 0.0;
+    let minSeparation = 0.0;
 
     // Solve normal constraints
-    for (const j = 0; j < this.p_pointCount; ++j) {
+    for (let j = 0; j < this.p_pointCount; ++j) {
       const xfA = Transform.identity();
       const xfB = Transform.identity();
       xfA.q.set(aA);
@@ -653,11 +628,11 @@ export default class Contact {
       xfB.p = Vec2.sub(cB, Rot.mulVec2(xfB.q, localCenterB));
 
       // PositionSolverManifold
-      const normal;
-      const point;
-      const separation;
+      let normal;
+      let point;
+      let separation;
       switch (this.p_type) {
-        case ManifoldType.e_circles:
+        case ManifoldType.e_circles: {
           const pointA = Transform.mulVec2(xfA, this.p_localPoint);
           const pointB = Transform.mulVec2(xfB, this.p_localPoints[0]);
           normal = Vec2.sub(pointB, pointA);
@@ -665,16 +640,18 @@ export default class Contact {
           point = Vec2.combine(0.5, pointA, 0.5, pointB);
           separation = Vec2.dot(Vec2.sub(pointB, pointA), normal) - this.p_radiusA - this.p_radiusB;
           break;
+        }
 
-        case ManifoldType.e_faceA:
+        case ManifoldType.e_faceA: {
           normal = Rot.mulVec2(xfA.q, this.p_localNormal);
           const planePoint = Transform.mulVec2(xfA, this.p_localPoint);
           const clipPoint = Transform.mulVec2(xfB, this.p_localPoints[j]);
           separation = Vec2.dot(Vec2.sub(clipPoint, planePoint), normal) - this.p_radiusA - this.p_radiusB;
           point = clipPoint;
           break;
+        }
 
-        case ManifoldType.e_faceB:
+        case ManifoldType.e_faceB: {
           normal = Rot.mulVec2(xfB.q, this.p_localNormal);
           const planePoint = Transform.mulVec2(xfB, this.p_localPoint);
           const clipPoint = Transform.mulVec2(xfA, this.p_localPoints[j]);
@@ -684,6 +661,7 @@ export default class Contact {
           // Ensure normal points from A to B
           normal.mul(-1);
           break;
+        }
       }
 
       const rA = Vec2.sub(point, cA);
@@ -725,7 +703,7 @@ export default class Contact {
     return minSeparation;
   }
 
-  initVelocityConstraint(step) {
+  initVelocityConstraint(step: TimeStep): void {
     const fixtureA = this.m_fixtureA;
     const fixtureB = this.m_fixtureB;
 
@@ -772,7 +750,7 @@ export default class Contact {
 
     this.v_normal.set(worldManifold.normal);
 
-    for (const j = 0; j < this.v_pointCount; ++j) {
+    for (let j = 0; j < this.v_pointCount; ++j) {
       const vcp = this.v_points[j]; // VelocityConstraintPoint
 
       vcp.rA.set(Vec2.sub(worldManifold.points[j], cA));
@@ -844,7 +822,7 @@ export default class Contact {
     velocityB.w = wB;
   }
 
-  warmStartConstraint(step) {
+  warmStartConstraint(step: TimeStep): void {
     const fixtureA = this.m_fixtureA;
     const fixtureB = this.m_fixtureB;
 
@@ -862,14 +840,14 @@ export default class Contact {
     const iB = this.v_invIB;
 
     const vA = Vec2.clone(velocityA.v);
-    const wA = velocityA.w;
+    let wA = velocityA.w;
     const vB = Vec2.clone(velocityB.v);
-    const wB = velocityB.w;
+    let wB = velocityB.w;
 
     const normal = this.v_normal;
     const tangent = Vec2.cross(normal, 1.0);
 
-    for (const j = 0; j < this.v_pointCount; ++j) {
+    for (let j = 0; j < this.v_pointCount; ++j) {
       const vcp = this.v_points[j]; // VelocityConstraintPoint
 
       const P = Vec2.combine(vcp.normalImpulse, normal, vcp.tangentImpulse, tangent);
@@ -885,15 +863,15 @@ export default class Contact {
     velocityB.w = wB;
   }
 
-  storeConstraintImpulses(step) {
+  storeConstraintImpulses(step: TimeStep): void {
     const manifold = this.m_manifold;
-    for (const j = 0; j < this.v_pointCount; ++j) {
+    for (let j = 0; j < this.v_pointCount; ++j) {
       manifold.points[j].normalImpulse = this.v_points[j].normalImpulse;
       manifold.points[j].tangentImpulse = this.v_points[j].tangentImpulse;
     }
   }
 
-  solveVelocityConstraint(step) {
+  solveVelocityConstraint(step: TimeStep): void {
     const bodyA = this.m_fixtureA.m_body;
     const bodyB = this.m_fixtureB.m_body;
 
@@ -909,9 +887,9 @@ export default class Contact {
     const iB = this.v_invIB;
 
     const vA = Vec2.clone(velocityA.v);
-    const wA = velocityA.w;
+    let wA = velocityA.w;
     const vB = Vec2.clone(velocityB.v);
-    const wB = velocityB.w;
+    let wB = velocityB.w;
 
     const normal = this.v_normal;
     const tangent = Vec2.cross(normal, 1.0);
@@ -921,7 +899,7 @@ export default class Contact {
 
     // Solve tangent constraints first because non-penetration is more important
     // than friction.
-    for (const j = 0; j < this.v_pointCount; ++j) {
+    for (let j = 0; j < this.v_pointCount; ++j) {
       const vcp = this.v_points[j]; // VelocityConstraintPoint
 
       // Relative velocity at contact
@@ -951,7 +929,7 @@ export default class Contact {
 
     // Solve normal constraints
     if (this.v_pointCount == 1 || step.blockSolve == false) {
-      for (const i = 0; i < this.v_pointCount; ++i) {
+      for (let i = 0; i < this.v_pointCount; ++i) {
         const vcp = this.v_points[i]; // VelocityConstraintPoint
 
         // Relative velocity at contact
@@ -961,7 +939,7 @@ export default class Contact {
 
         // Compute normal impulse
         const vn = Vec2.dot(dv, normal);
-        const lambda = -vcp.normalMass * (vn - vcp.velocityBias);
+        let lambda = -vcp.normalMass * (vn - vcp.velocityBias);
 
         // Clamp the accumulated impulse
         const newImpulse = Math.max(vcp.normalImpulse + lambda, 0.0);
@@ -1026,12 +1004,12 @@ export default class Contact {
       _ASSERT && common.assert(a.x >= 0.0 && a.y >= 0.0);
 
       // Relative velocity at contact
-      const dv1 = Vec2.zero().add(vB).add(Vec2.cross(wB, vcp1.rB)).sub(vA).sub(Vec2.cross(wA, vcp1.rA));
-      const dv2 = Vec2.zero().add(vB).add(Vec2.cross(wB, vcp2.rB)).sub(vA).sub(Vec2.cross(wA, vcp2.rA));
+      let dv1 = Vec2.zero().add(vB).add(Vec2.cross(wB, vcp1.rB)).sub(vA).sub(Vec2.cross(wA, vcp1.rA));
+      let dv2 = Vec2.zero().add(vB).add(Vec2.cross(wB, vcp2.rB)).sub(vA).sub(Vec2.cross(wA, vcp2.rA));
 
       // Compute normal velocity
-      const vn1 = Vec2.dot(dv1, normal);
-      const vn2 = Vec2.dot(dv2, normal);
+      let vn1 = Vec2.dot(dv1, normal);
+      let vn2 = Vec2.dot(dv2, normal);
 
       const b = Vec2.neo(vn1 - vcp1.velocityBias, vn2 - vcp2.velocityBias);
 
@@ -1073,8 +1051,8 @@ export default class Contact {
 
           if (DEBUG_SOLVER) {
             // Postconditions
-            dv1 = vB + Vec2.cross(wB, vcp1.rB) - vA - Vec2.cross(wA, vcp1.rA);
-            dv2 = vB + Vec2.cross(wB, vcp2.rB) - vA - Vec2.cross(wA, vcp2.rA);
+            dv1 = Vec2.sub(Vec2.add(vB, Vec2.cross(wB, vcp1.rB)), Vec2.add(vA, Vec2.cross(wA, vcp1.rA)));
+            dv2 = Vec2.sub(Vec2.add(vB, Vec2.cross(wB, vcp2.rB)), Vec2.add(vA, Vec2.cross(wA, vcp2.rA)));
 
             // Compute normal velocity
             vn1 = Vec2.dot(dv1, normal);
@@ -1228,7 +1206,8 @@ export default class Contact {
     const typeB = fixtureB.getType(); // Shape.Type
 
     // TODO: pool contacts
-    const contact, evaluateFcn;
+    let contact;
+    let evaluateFcn;
     if (evaluateFcn = s_registers[typeA] && s_registers[typeA][typeB]) {
       contact = new Contact(fixtureA, indexA, fixtureB, indexB, evaluateFcn);
     } else if (evaluateFcn = s_registers[typeB] && s_registers[typeB][typeA]) {

@@ -22,9 +22,6 @@
  * SOFTWARE.
  */
 
-const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 import Settings from './Settings';
 import common from './util/common';
 
@@ -35,23 +32,27 @@ import Body from './Body';
 import Contact from './Contact';
 import Joint from './Joint';
 
-import TimeOfImpact, { TOIInput, TOIOutput } from './collision/TimeOfImpact';
+import TimeOfImpact, { TOIInput, TOIOutput, TOIOutputState } from './collision/TimeOfImpact';
 import Distance, { DistanceInput, DistanceOutput, SimplexCache } from './collision/Distance';
+import World from "./World";
+
+
+const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
+const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
 export class TimeStep {
-  constructor(dt) {
-    this.dt = 0; // time step
-    this.inv_dt = 0; // inverse time step (0 if dt == 0)
-    this.velocityIterations = 0;
-    this.positionIterations = 0;
-    this.warmStarting = false;
-    this.blockSolve = true;
+  dt = 0; // time step
+  inv_dt = 0; // inverse time step (0 if dt == 0)
+  velocityIterations = 0;
+  positionIterations = 0;
+  warmStarting = false;
+  blockSolve = true;
 
-    // timestep ratio for variable timestep
-    this.inv_dt0 = 0.0;
-    this.dtRatio = 1; // dt * inv_dt0
-  }
+  // timestep ratio for variable timestep
+  inv_dt0 = 0.0;
+  dtRatio = 1; // dt * inv_dt0
+
   reset(dt) {
     if (this.dt > 0.0) {
       this.inv_dt0 = this.inv_dt;
@@ -78,6 +79,12 @@ export class ContactImpulse {
  * Finds and solves islands. An island is a connected subset of the world.
  */
 export default class Solver {
+  m_world: World;
+  m_stack: Body[];
+  m_bodies: Body[];
+  m_contacts: Contact[];
+  m_joints: Joint[];
+
   constructor(world) {
     this.m_world = world;
     this.m_stack = [];
@@ -573,7 +580,7 @@ export default class Solver {
 
           // Beta is the fraction of the remaining portion of the [time?].
           const beta = output.t;
-          if (output.state == TOIOutput.e_touching) {
+          if (output.state == TOIOutputState.e_touching) {
             alpha = Math.min(alpha0 + (1.0 - alpha0) * beta, 1.0);
           } else {
             alpha = 1.0;
@@ -899,4 +906,5 @@ export default class Solver {
   }
 }
 
+// todo:
 Solver.TimeStep = TimeStep;

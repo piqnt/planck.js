@@ -27,6 +27,7 @@ import Vec2 from '../common/Vec2';
 import Math from '../common/Math';
 import AABB from './AABB';
 import DynamicTree from './DynamicTree';
+import { FixtureProxy } from "../Fixture";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -37,17 +38,17 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * objects and query them on update.
  */
 export default class BroadPhase {
-  m_tree = new DynamicTree();
+  m_tree = new DynamicTree<FixtureProxy>();
   m_proxyCount = 0;
   m_moveBuffer = [];
 
   m_callback: (userDataA: any, userDataB: any) => void;
-  m_queryProxyId: string;
+  m_queryProxyId: number;
 
   /**
    * Get user data from a proxy. Returns null if the id is invalid.
    */
-  getUserData(proxyId) {
+  getUserData(proxyId): FixtureProxy {
     return this.m_tree.getUserData(proxyId);
   }
 
@@ -133,7 +134,7 @@ export default class BroadPhase {
    * Create a proxy with an initial AABB. Pairs are not reported until UpdatePairs
    * is called.
    */
-  createProxy(aabb: string, userData: any) {
+  createProxy(aabb: AABB, userData: any) {
     _ASSERT && common.assert(AABB.isValid(aabb));
     const proxyId = this.m_tree.createProxy(aabb, userData);
     this.m_proxyCount++;
@@ -144,7 +145,7 @@ export default class BroadPhase {
   /**
    * Destroy a proxy. It is up to the client to remove any pairs.
    */
-  destroyProxy(proxyId: string) {
+  destroyProxy(proxyId: number) {
     this.unbufferMove(proxyId);
     this.m_proxyCount--;
     this.m_tree.destroyProxy(proxyId);
@@ -154,7 +155,7 @@ export default class BroadPhase {
    * Call moveProxy as many times as you like, then when you are done call
    * UpdatePairs to finalized the proxy pairs (for your time step).
    */
-  moveProxy(proxyId: string, aabb: AABB, displacement: Vec2) {
+  moveProxy(proxyId: number, aabb: AABB, displacement: Vec2) {
     _ASSERT && common.assert(AABB.isValid(aabb));
     const changed = this.m_tree.moveProxy(proxyId, aabb, displacement);
     if (changed) {
@@ -166,15 +167,15 @@ export default class BroadPhase {
    * Call to trigger a re-processing of it's pairs on the next call to
    * UpdatePairs.
    */
-  touchProxy(proxyId: string) {
+  touchProxy(proxyId: number) {
     this.bufferMove(proxyId);
   }
 
-  bufferMove(proxyId: string) {
+  bufferMove(proxyId: number) {
     this.m_moveBuffer.push(proxyId);
   }
 
-  unbufferMove(proxyId: string) {
+  unbufferMove(proxyId: number) {
     for (let i = 0; i < this.m_moveBuffer.length; ++i) {
       if (this.m_moveBuffer[i] === proxyId) {
         this.m_moveBuffer[i] = null;
@@ -208,7 +209,7 @@ export default class BroadPhase {
     // this.m_tree.rebalance(4);
   }
 
-  queryCallback(proxyId: string) {
+  queryCallback = (proxyId: number) => {
     // A proxy cannot form a pair with itself.
     if (proxyId === this.m_queryProxyId) {
       return true;

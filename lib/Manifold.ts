@@ -74,7 +74,7 @@ export default class Manifold {
    * from the original state. This does not change the point count, impulses, etc.
    * The radii must come from the shapes that generated the manifold.
    */
-  getWorldManifold(wm: WorldManifold | undefined, xfA: Transform, radiusA: number, xfB: Transform, radiusB: number): WorldManifold | undefined {
+  getWorldManifold(wm: WorldManifold | undefined, xfA: Transform, radiusA: number, xfB: Transform, radiusB: number): WorldManifold {
     if (this.pointCount == 0) {
       return;
     }
