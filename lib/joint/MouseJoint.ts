@@ -149,7 +149,7 @@ export default class MouseJoint extends Joint {
     this.m_localCenterB = Vec2.zero();
     this.m_invMassB = 0.0;
     this.m_invIB = 0.0;
-    this.mass = new Mat22(); // TODO m_mass?
+    this.m_mass = new Mat22();
     this.m_C = Vec2.zero();
 
     // p = attached point, m = mouse point

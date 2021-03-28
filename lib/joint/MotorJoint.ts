@@ -194,17 +194,6 @@ export default class MotorJoint extends Joint {
    * @internal
    */
   _setAnchors(def) {
-    if (def.anchorA) {
-      this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
-    } else if (def.localAnchorA) {
-      this.m_localAnchorA.set(def.localAnchorA);
-    }
-
-    if (def.anchorB) {
-      this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
-    } else if (def.localAnchorB) {
-      this.m_localAnchorB.set(def.localAnchorB);
-    }
   }
 
   /**
@@ -285,7 +274,7 @@ export default class MotorJoint extends Joint {
 
   /**
    * Get the anchor point on bodyA in world coordinates.
-   * 
+   *
    * @return {Vec2}
    */
   getAnchorA() {
@@ -294,7 +283,7 @@ export default class MotorJoint extends Joint {
 
   /**
    * Get the anchor point on bodyB in world coordinates.
-   * 
+   *
    * @return {Vec2}
    */
   getAnchorB() {
@@ -303,7 +292,7 @@ export default class MotorJoint extends Joint {
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
-   * 
+   *
    * @param {float} inv_dt
    * @return {Vec2}
    */

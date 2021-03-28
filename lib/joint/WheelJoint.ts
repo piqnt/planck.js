@@ -502,14 +502,14 @@ export default class WheelJoint extends Joint {
         var omega = 2.0 * Math.PI * this.m_frequencyHz; // float
 
         // Damping coefficient
-        var d = 2.0 * this.m_springMass * this.m_dampingRatio * omega; // float
+        var damp = 2.0 * this.m_springMass * this.m_dampingRatio * omega; // float
 
         // Spring stiffness
         var k = this.m_springMass * omega * omega; // float
 
         // magic formulas
         var h = step.dt; // float
-        this.m_gamma = h * (d + h * k);
+        this.m_gamma = h * (damp + h * k);
         if (this.m_gamma > 0.0) {
           this.m_gamma = 1.0 / this.m_gamma;
         }
