@@ -6,7 +6,7 @@ export const debug = function() {
   console.log.apply(console, arguments);
 };
 
-export const assert = function(statement, err, log) {
+export const assert = function(statement, err?, log?) {
   if (!_ASSERT) return;
   if (statement) return;
   log && console.log(log);

@@ -124,3 +124,5 @@ export default abstract class Shape {
   abstract computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
 
 }
+
+export type ShapeType = "circle" | "edge" | "polygon" | "chain";

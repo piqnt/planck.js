@@ -95,7 +95,7 @@ export default class Vec2 {
   /**
    * Does this vector contain finite coordinates?
    */
-  static isValid(v: Vec2 | null | undefined): v is Vec2 {
+  static isValid(v: any): boolean {
     return v && Math.isFinite(v.x) && Math.isFinite(v.y);
   }
 
