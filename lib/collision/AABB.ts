@@ -32,7 +32,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
 /**
- * Ray-cast input data. The ray extends from p1 to p1 + maxFraction * (p2 - p1).
+ * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
  */
 export interface RayCastInput {
   p1: Vec2;
@@ -41,8 +41,8 @@ export interface RayCastInput {
 }
 
 /**
- * Ray-cast output data. The ray hits at p1 + fraction * (p2 - p1), where p1 and
- * p2 come from RayCastInput.
+ * Ray-cast output data. The ray hits at `p1 + fraction * (p2 - p1)`,
+ * where `p1` and `p2` come from RayCastInput.
  */
 export interface RayCastOutput {
   normal: Vec2;
@@ -52,26 +52,6 @@ export interface RayCastOutput {
 export default class AABB {
   lowerBound: Vec2;
   upperBound: Vec2;
-
-  // isValid(o: any): boolean;
-  // assert(o: any): void;
-  // extend(aabb: AABB, value: number): void;
-  // testOverlap(a: AABB, b: AABB): boolean;
-  // areEqual(a: AABB, b: AABB): boolean;
-  // diff(a: AABB, b: AABB): number;
-  //
-  //
-  // isValid(): boolean;
-  // getCenter(): Vec2;
-  // getExtents(): Vec2;
-  // getPerimeter(): number;
-  // combine(a: AABB, b: AABB): void;
-  // combinePoints(a: Vec2, b: Vec2): void;
-  // set(aabb: AABB): void;
-  // contains(aabb: AABB): boolean;
-  // extend(value: number): AABB;
-  // rayCast(output: RayCastOutput, input: RayCastInput): boolean;
-  // toString(): string;
 
   constructor(lower?: Vec2, upper?: Vec2) {
     if (!(this instanceof AABB)) {
@@ -94,17 +74,17 @@ export default class AABB {
   /**
    * Verify that the bounds are sorted.
    */
-  isValid() {
+  isValid(): boolean {
     return AABB.isValid(this);
   }
 
-  static isValid(aabb) {
+  static isValid(aabb: any): boolean {
     const d = Vec2.sub(aabb.upperBound, aabb.lowerBound);
     const valid = d.x >= 0.0 && d.y >= 0.0 && Vec2.isValid(aabb.lowerBound) && Vec2.isValid(aabb.upperBound);
     return valid;
   }
 
-  static assert(o) {
+  static assert(o: any): void {
     if (!_ASSERT) return;
     if (!AABB.isValid(o)) {
       _DEBUG && common.debug(o);
@@ -115,28 +95,28 @@ export default class AABB {
   /**
    * Get the center of the AABB.
    */
-  getCenter() {
+  getCenter(): Vec2 {
     return Vec2.neo((this.lowerBound.x + this.upperBound.x) * 0.5, (this.lowerBound.y + this.upperBound.y) * 0.5);
   }
 
   /**
    * Get the extents of the AABB (half-widths).
    */
-  getExtents() {
+  getExtents(): Vec2 {
     return Vec2.neo((this.upperBound.x - this.lowerBound.x) * 0.5, (this.upperBound.y - this.lowerBound.y) * 0.5);
   }
 
   /**
    * Get the perimeter length.
    */
-  getPerimeter() {
+  getPerimeter(): number {
     return 2.0 * (this.upperBound.x - this.lowerBound.x + this.upperBound.y - this.lowerBound.y);
   }
 
   /**
    * Combine one or two AABB into this one.
    */
-  combine(a, b) {
+  combine(a: AABB, b: AABB): void {
     b = b || this;
 
     const lowerA = a.lowerBound;
@@ -153,17 +133,17 @@ export default class AABB {
     this.upperBound.set(upperX, upperY);
   }
 
-  combinePoints(a, b) {
+  combinePoints(a: Vec2, b: Vec2): void {
     this.lowerBound.set(Math.min(a.x, b.x), Math.min(a.y, b.y));
     this.upperBound.set(Math.max(a.x, b.x), Math.max(a.y, b.y));
   }
 
-  set(aabb) {
+  set(aabb: AABB): void {
     this.lowerBound.set(aabb.lowerBound.x, aabb.lowerBound.y);
     this.upperBound.set(aabb.upperBound.x, aabb.upperBound.y);
   }
 
-  contains(aabb) {
+  contains(aabb: AABB): boolean {
     let result = true;
     result = result && this.lowerBound.x <= aabb.lowerBound.x;
     result = result && this.lowerBound.y <= aabb.lowerBound.y;
@@ -172,19 +152,19 @@ export default class AABB {
     return result;
   }
 
-  extend(value) {
+  extend(value: number): AABB {
     AABB.extend(this, value);
     return this;
   }
 
-  static extend(aabb, value) {
+  static extend(aabb: AABB, value: number): void {
     aabb.lowerBound.x -= value;
     aabb.lowerBound.y -= value;
     aabb.upperBound.x += value;
     aabb.upperBound.y += value;
   }
 
-  static testOverlap(a, b) {
+  static testOverlap(a: AABB, b: AABB): boolean {
     const d1x = b.lowerBound.x - a.upperBound.x;
     const d2x = a.lowerBound.x - b.upperBound.x;
 
@@ -197,11 +177,11 @@ export default class AABB {
     return true;
   }
 
-  static areEqual(a, b) {
+  static areEqual(a: AABB, b: AABB): boolean {
     return Vec2.areEqual(a.lowerBound, b.lowerBound) && Vec2.areEqual(a.upperBound, b.upperBound);
   }
 
-  static diff(a, b) {
+  static diff(a: AABB, b: AABB): number {
     const wD = Math.max(0, Math.min(a.upperBound.x, b.upperBound.x) - Math.max(b.lowerBound.x, a.lowerBound.x));
     const hD = Math.max(0, Math.min(a.upperBound.y, b.upperBound.y) - Math.max(b.lowerBound.y, a.lowerBound.y));
 

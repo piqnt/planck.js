@@ -36,26 +36,19 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 /**
  * A node in the dynamic tree. The client does not interact with this directly.
  */
-export class TreeNode {
+export class TreeNode<T> {
   id: number;
   /** Enlarged AABB */
-  aabb: AABB;
-  userData: any;
-  parent: TreeNode;
-  child1: TreeNode;
-  child2: TreeNode;
+  aabb: AABB = new AABB();
+  userData: T = null;
+  parent: TreeNode<T> = null;
+  child1: TreeNode<T> = null;
+  child2: TreeNode<T> = null;
   /** 0: leaf, -1: free node */
-  height: number;
+  height = -1;
 
   constructor(id?) {
     this.id = id;
-    this.aabb = new AABB();
-    this.userData = null;
-    this.parent = null;
-    this.child1 = null;
-    this.child2 = null;
-    this.height = -1;
-
   }
 
   toString() {
@@ -79,17 +72,19 @@ export class TreeNode {
  * pointers.
  */
 export default class DynamicTree<T> {
-  m_root: TreeNode;
+  m_root: TreeNode<T>;
   m_lastProxyId: number;
-  m_nodes: object;
-  m_pool: Pool<TreeNode>;
+  m_nodes: {
+    [id: number]: TreeNode<T>
+  };
+  m_pool: Pool<TreeNode<T>>;
 
   constructor() {
     this.m_root = null;
     this.m_nodes = {};
     this.m_lastProxyId = 0;
 
-    this.m_pool = new Pool<TreeNode>({
+    this.m_pool = new Pool<TreeNode<T>>({
       create() {
         return new TreeNode();
       }
@@ -118,7 +113,7 @@ export default class DynamicTree<T> {
     return node.aabb;
   }
 
-  allocateNode(): TreeNode {
+  allocateNode(): TreeNode<T> {
     const node = this.m_pool.allocate();
     node.id = ++this.m_lastProxyId;
     node.userData = null;
@@ -130,7 +125,7 @@ export default class DynamicTree<T> {
     return node;
   }
 
-  freeNode(node: TreeNode): void {
+  freeNode(node: TreeNode<T>): void {
     this.m_pool.release(node);
     node.height = -1;
     // tslint:disable-next-line:no-dynamic-delete
@@ -224,7 +219,7 @@ export default class DynamicTree<T> {
     return true;
   }
 
-  insertLeaf(leaf: TreeNode): void {
+  insertLeaf(leaf: TreeNode<T>): void {
     _ASSERT && common.assert(AABB.isValid(leaf.aabb));
 
     if (this.m_root == null) {
@@ -344,7 +339,7 @@ export default class DynamicTree<T> {
     // validate();
   }
 
-  removeLeaf(leaf: TreeNode): void {
+  removeLeaf(leaf: TreeNode<T>): void {
     if (leaf === this.m_root) {
       this.m_root = null;
       return;
@@ -395,7 +390,7 @@ export default class DynamicTree<T> {
    * Perform a left or right rotation if node A is imbalanced. Returns the new
    * root index.
    */
-  balance(iA: TreeNode): TreeNode {
+  balance(iA: TreeNode<T>): TreeNode<T> {
     _ASSERT && common.assert(iA != null);
 
     const A = iA;
@@ -526,7 +521,7 @@ export default class DynamicTree<T> {
 
     let totalArea = 0.0;
     let node;
-    const it = iteratorPool.allocate().preorder(this.m_root);
+    const it = this.iteratorPool.allocate().preorder(this.m_root);
     while (node = it.next()) {
       if (node.height < 0) {
         // Free node in pool
@@ -536,7 +531,7 @@ export default class DynamicTree<T> {
       totalArea += node.aabb.getPerimeter();
     }
 
-    iteratorPool.release(it);
+    this.iteratorPool.release(it);
 
     return totalArea / rootArea;
   }
@@ -563,7 +558,7 @@ export default class DynamicTree<T> {
     return 1 + Math.max(height1, height2);
   }
 
-  validateStructure(node: TreeNode): void {
+  validateStructure(node: TreeNode<T>): void {
     if (node == null) {
       return;
     }
@@ -592,7 +587,7 @@ export default class DynamicTree<T> {
     this.validateStructure(child2);
   }
 
-  validateMetrics(node: TreeNode): void {
+  validateMetrics(node: TreeNode<T>): void {
     if (node == null) {
       return;
     }
@@ -641,7 +636,7 @@ export default class DynamicTree<T> {
   getMaxBalance(): number {
     let maxBalance = 0;
     let node;
-    const it = iteratorPool.allocate().preorder(this.m_root);
+    const it = this.iteratorPool.allocate().preorder(this.m_root);
     while (node = it.next()) {
       if (node.height <= 1) {
         continue;
@@ -652,7 +647,7 @@ export default class DynamicTree<T> {
       const balance = Math.abs(node.child2.height - node.child1.height);
       maxBalance = Math.max(maxBalance, balance);
     }
-    iteratorPool.release(it);
+    this.iteratorPool.release(it);
 
     return maxBalance;
   }
@@ -666,7 +661,7 @@ export default class DynamicTree<T> {
 
     // Build array of leaves. Free the rest.
     let node;
-    const it = iteratorPool.allocate().preorder(this.m_root);
+    const it = this.iteratorPool.allocate().preorder(this.m_root);
     while (node = it.next()) {
       if (node.height < 0) {
         // free node in pool
@@ -681,7 +676,7 @@ export default class DynamicTree<T> {
         this.freeNode(node);
       }
     }
-    iteratorPool.release(it);
+    this.iteratorPool.release(it);
 
     while (count > 1) {
       let minCost = Infinity;
@@ -734,7 +729,7 @@ export default class DynamicTree<T> {
   shiftOrigin(newOrigin: Vec2): void {
     // Build array of leaves. Free the rest.
     let node;
-    const it = iteratorPool.allocate().preorder(this.m_root);
+    const it = this.iteratorPool.allocate().preorder(this.m_root);
     while (node = it.next()) {
       const aabb = node.aabb;
       aabb.lowerBound.x -= newOrigin.x;
@@ -742,7 +737,7 @@ export default class DynamicTree<T> {
       aabb.upperBound.x -= newOrigin.x;
       aabb.upperBound.y -= newOrigin.y;
     }
-    iteratorPool.release(it);
+    this.iteratorPool.release(it);
   }
 
   /**
@@ -751,7 +746,7 @@ export default class DynamicTree<T> {
    */
   query(aabb: AABB, queryCallback: (nodeId: number) => boolean): void {
     _ASSERT && common.assert(typeof queryCallback === 'function');
-    const stack = stackPool.allocate();
+    const stack = this.stackPool.allocate();
 
     stack.push(this.m_root);
     while (stack.length > 0) {
@@ -773,7 +768,7 @@ export default class DynamicTree<T> {
       }
     }
 
-    stackPool.release(stack);
+    this.stackPool.release(stack);
   }
 
   /**
@@ -811,8 +806,8 @@ export default class DynamicTree<T> {
     let t = Vec2.combine((1 - maxFraction), p1, maxFraction, p2);
     segmentAABB.combinePoints(p1, t);
 
-    const stack = stackPool.allocate();
-    const subInput = inputPool.allocate();
+    const stack = this.stackPool.allocate();
+    const subInput = this.inputPool.allocate();
 
     stack.push(this.m_root);
     while (stack.length > 0) {
@@ -857,40 +852,40 @@ export default class DynamicTree<T> {
         stack.push(node.child2);
       }
     }
-    stackPool.release(stack);
-    inputPool.release(subInput);
+    this.stackPool.release(stack);
+    this.inputPool.release(subInput);
   }
+
+  private inputPool = new Pool<RayCastInput>({
+    create() {
+      return {};
+    },
+    release(stack) {
+    }
+  });
+
+  private stackPool = new Pool<Array<TreeNode<T>>>({
+    create() {
+      return [];
+    },
+    release(stack) {
+      stack.length = 0;
+    }
+  });
+
+  private iteratorPool = new Pool<Iterator<T>>({
+    create() {
+      return new Iterator();
+    },
+    release(iterator) {
+      iterator.close();
+    }
+  });
+
 }
 
-
-const inputPool = new Pool<RayCastInput>({
-  create() {
-    return {};
-  },
-  release(stack) {
-  }
-});
-
-const stackPool = new Pool<TreeNode[]>({
-  create() {
-    return [];
-  },
-  release(stack) {
-    stack.length = 0;
-  }
-});
-
-const iteratorPool = new Pool<Iterator>({
-  create() {
-    return new Iterator();
-  },
-  release(iterator) {
-    iterator.close();
-  }
-});
-
-class Iterator {
-  parents: TreeNode[] = [];
+class Iterator<T> {
+  parents: Array<TreeNode<T>> = [];
   states: number[] = [];
   preorder(root) {
     this.parents.length = 0;

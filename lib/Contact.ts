@@ -91,7 +91,7 @@ type ContactCallack = (
   xfB: Transform,
   fixtureB: Fixture,
   indexB: number
-) => void & { destroyFcn?: (contact: Contact) => void };
+) => void /* & { destroyFcn?: (contact: Contact) => void }*/;
 
 
 /**
@@ -210,10 +210,6 @@ export default class Contact {
     this.p_invIA;
     this.p_invIB;
   }
-
-  // /** @internal */ static addType(type1: ShapeType, type2: ShapeType, callback: ContactCallack): void;
-  // /** @internal */ static create(fixtureA: Fixture, indexA: number, fixtureB: Fixture, indexB: number): Contact | null;
-  // /** @internal */ static destroy(contact: Contact, listener: { endContact: (contact: Contact) => void }): void;
 
   /** @internal */ m_nodeA: ContactEdge;
   /** @internal */ m_nodeB: ContactEdge;
@@ -572,15 +568,16 @@ export default class Contact {
     }
   }
 
-  solvePositionConstraint(step: any): number {
-    return this._solvePositionConstraint(step, false);
+  solvePositionConstraint(step: TimeStep): number {
+    return this._solvePositionConstraint(step);
   }
 
-  solvePositionConstraintTOI(step: any, toiA?: Body | null, toiB?: Body | null): number {
-    return this._solvePositionConstraint(step, true, toiA, toiB);
+  solvePositionConstraintTOI(step: TimeStep, toiA: Body, toiB: Body): number {
+    return this._solvePositionConstraint(step, toiA, toiB);
   }
 
-  _solvePositionConstraint(step: any, toi: boolean, toiA?: Body | null, toiB?: Body | null): number {
+  private _solvePositionConstraint(step: TimeStep, toiA?: Body, toiB?: Body): number {
+    const toi: boolean = !!toiA && !!toiB;
 
     const fixtureA = this.m_fixtureA;
     const fixtureB = this.m_fixtureB;
@@ -1193,17 +1190,19 @@ export default class Contact {
   }
 
   /**
-   * @param fn function(fixtureA, indexA, fixtureB, indexB) Contact
+   * @internal
    */
-  static addType(type1, type2, callback) {
-
+  static addType(type1: ShapeType, type2: ShapeType, callback: ContactCallack): void {
     s_registers[type1] = s_registers[type1] || {};
     s_registers[type1][type2] = callback;
   }
 
-  static create(fixtureA, indexA, fixtureB, indexB) {
-    const typeA = fixtureA.getType(); // Shape.Type
-    const typeB = fixtureB.getType(); // Shape.Type
+  /**
+   * @internal
+   */
+  static create(fixtureA: Fixture, indexA: number, fixtureB: Fixture, indexB: number): Contact | null {
+    const typeA = fixtureA.getType();
+    const typeB = fixtureB.getType();
 
     // TODO: pool contacts
     let contact;
@@ -1255,7 +1254,10 @@ export default class Contact {
     return contact;
   }
 
-  static destroy(contact, listener) {
+  /**
+   * @internal
+   */
+  static destroy(contact: Contact, listener: { endContact: (contact: Contact) => void }): void {
     const fixtureA = contact.m_fixtureA;
     const fixtureB = contact.m_fixtureB;
 
@@ -1298,12 +1300,12 @@ export default class Contact {
       bodyB.setAwake(true);
     }
 
-    const typeA = fixtureA.getType(); // Shape.Type
-    const typeB = fixtureB.getType(); // Shape.Type
+    const typeA = fixtureA.getType();
+    const typeB = fixtureB.getType();
 
-    const destroyFcn = s_registers[typeA][typeB].destroyFcn;
-    if (typeof destroyFcn === 'function') {
-      destroyFcn(contact);
-    }
+    // const destroyFcn = s_registers[typeA][typeB].destroyFcn;
+    // if (typeof destroyFcn === 'function') {
+    //   destroyFcn(contact);
+    // }
   }
 }

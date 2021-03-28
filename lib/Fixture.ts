@@ -55,7 +55,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  *       collision.
  */
 export interface FixtureOpt {
-  userData?: any;
+  userData?: unknown;
   friction?: number;
   restitution?: number;
   density?: number;
@@ -251,7 +251,7 @@ export default class Fixture {
   /**
    * Set the user data. Use this to store your application specific data.
    */
-  setUserData(data: any): void {
+  setUserData(data: unknown): void {
     this.m_userData = data;
   }
 

@@ -120,10 +120,7 @@ export default class Solver {
     this.m_joints.push(joint);
   }
 
-  /**
-   * @param step
-   */
-  solveWorld(step) {
+  solveWorld(step: TimeStep) {
     const world = this.m_world;
 
     // Clear all the island flags.
@@ -254,10 +251,7 @@ export default class Solver {
     }
   }
 
-  /**
-   * @param step
-   */
-  solveIsland(step) {
+  solveIsland(step: TimeStep) {
     // B2: Island Solve
     const world = this.m_world;
     const gravity = world.m_gravity;
@@ -475,10 +469,8 @@ export default class Solver {
 
   /**
    * Find TOI contacts and solve them.
-   *
-   * @param step
    */
-  solveWorldTOI(step) {
+  solveWorldTOI(step: TimeStep) {
     const world = this.m_world;
 
     if (world.m_stepComplete) {
@@ -756,12 +748,7 @@ export default class Solver {
     }
   }
 
-  /**
-   * @param subStep
-   * @param toiA
-   * @param toiB
-   */
-  solveIslandTOI(subStep, toiA, toiB) {
+  solveIslandTOI(subStep: TimeStep, toiA, toiB) {
     const world = this.m_world;
 
     // Initialize the body state.
