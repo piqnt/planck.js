@@ -22,18 +22,17 @@
  * SOFTWARE.
  */
 
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 import common from '../util/common';
-import Math from '../common/Math';
 import Transform from '../common/Transform';
 import Vec2 from '../common/Vec2';
-import Settings from '../Settings';
-import Shape from '../Shape';
 import Contact from '../Contact';
-import Manifold from '../Manifold';
 import CircleShape from './CircleShape';
+import { ContactFeatureType, ManifoldType } from "../Manifold";
+
+
+const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
 
 Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
 
@@ -43,16 +42,16 @@ function CircleCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, ind
   CollideCircles(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
 }
 
-function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
+export function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
   manifold.pointCount = 0;
 
-  var pA = Transform.mulVec2(xfA, circleA.m_p);
-  var pB = Transform.mulVec2(xfB, circleB.m_p);
+  let pA = Transform.mulVec2(xfA, circleA.m_p);
+  let pB = Transform.mulVec2(xfB, circleB.m_p);
 
-  var distSqr = Vec2.distanceSquared(pB, pA);
-  var rA = circleA.m_radius;
-  var rB = circleB.m_radius;
-  var radius = rA + rB;
+  let distSqr = Vec2.distanceSquared(pB, pA);
+  let rA = circleA.m_radius;
+  let rB = circleB.m_radius;
+  let radius = rA + rB;
   if (distSqr > radius * radius) {
     return;
   }
@@ -69,5 +68,3 @@ function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
   manifold.points[0].id.cf.indexB = 0;
   manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
 }
-
-export { CollideCircles };

@@ -22,32 +22,28 @@
  * SOFTWARE.
  */
 
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 import common from '../util/common';
-import Math from '../common/Math';
 import Transform from '../common/Transform';
 import Vec2 from '../common/Vec2';
-import Rot from '../common/Rot';
-import Settings from '../Settings';
-import Shape from '../Shape';
 import Contact from '../Contact';
-import Manifold from '../Manifold';
 import EdgeShape from './EdgeShape';
 import ChainShape from './ChainShape';
 import CircleShape from './CircleShape';
+import { ContactFeatureType, ManifoldType } from "../Manifold";
+
+
+const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
 
 Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
 
-function EdgeCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB,
-    indexB) {
+function EdgeCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
   _ASSERT && common.assert(fixtureA.getType() == EdgeShape.TYPE);
   _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
 
-  var shapeA = fixtureA.getShape();
-  var shapeB = fixtureB.getShape();
+  let shapeA = fixtureA.getShape();
+  let shapeB = fixtureB.getShape();
 
   CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
 }
@@ -57,49 +53,49 @@ function ChainCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB,
   _ASSERT && common.assert(fixtureA.getType() == ChainShape.TYPE);
   _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
 
-  var chain = fixtureA.getShape();
-  var edge = new EdgeShape();
+  let chain = fixtureA.getShape();
+  let edge = new EdgeShape();
   chain.getChildEdge(edge, indexA);
 
-  var shapeA = edge;
-  var shapeB = fixtureB.getShape();
+  let shapeA = edge;
+  let shapeB = fixtureB.getShape();
 
   CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
 }
 
 // Compute contact points for edge versus circle.
 // This accounts for edge connectivity.
-function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
+export function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
   manifold.pointCount = 0;
 
   // Compute circle in frame of edge
-  var Q = Transform.mulTVec2(xfA, Transform.mulVec2(xfB, circleB.m_p));
+  let Q = Transform.mulTVec2(xfA, Transform.mulVec2(xfB, circleB.m_p));
 
-  var A = edgeA.m_vertex1;
-  var B = edgeA.m_vertex2;
-  var e = Vec2.sub(B, A);
+  let A = edgeA.m_vertex1;
+  let B = edgeA.m_vertex2;
+  let e = Vec2.sub(B, A);
 
   // Barycentric coordinates
-  var u = Vec2.dot(e, Vec2.sub(B, Q));
-  var v = Vec2.dot(e, Vec2.sub(Q, A));
+  let u = Vec2.dot(e, Vec2.sub(B, Q));
+  let v = Vec2.dot(e, Vec2.sub(Q, A));
 
-  var radius = edgeA.m_radius + circleB.m_radius;
+  let radius = edgeA.m_radius + circleB.m_radius;
 
   // Region A
   if (v <= 0.0) {
-    var P = Vec2.clone(A);
-    var d = Vec2.sub(Q, P);
-    var dd = Vec2.dot(d, d);
+    let P = Vec2.clone(A);
+    let d = Vec2.sub(Q, P);
+    let dd = Vec2.dot(d, d);
     if (dd > radius * radius) {
       return;
     }
 
     // Is there an edge connected to A?
     if (edgeA.m_hasVertex0) {
-      var A1 = edgeA.m_vertex0;
-      var B1 = A;
-      var e1 = Vec2.sub(B1, A1);
-      var u1 = Vec2.dot(e1, Vec2.sub(B1, Q));
+      let A1 = edgeA.m_vertex0;
+      let B1 = A;
+      let e1 = Vec2.sub(B1, A1);
+      let u1 = Vec2.dot(e1, Vec2.sub(B1, Q));
 
       // Is the circle in Region AB of the previous edge?
       if (u1 > 0.0) {
@@ -123,19 +119,19 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 
   // Region B
   if (u <= 0.0) {
-    var P = Vec2.clone(B);
-    var d = Vec2.sub(Q, P);
-    var dd = Vec2.dot(d, d);
+    let P = Vec2.clone(B);
+    let d = Vec2.sub(Q, P);
+    let dd = Vec2.dot(d, d);
     if (dd > radius * radius) {
       return;
     }
 
     // Is there an edge connected to B?
     if (edgeA.m_hasVertex3) {
-      var B2 = edgeA.m_vertex3;
-      var A2 = B;
-      var e2 = Vec2.sub(B2, A2);
-      var v2 = Vec2.dot(e2, Vec2.sub(Q, A2));
+      let B2 = edgeA.m_vertex3;
+      let A2 = B;
+      let e2 = Vec2.sub(B2, A2);
+      let v2 = Vec2.dot(e2, Vec2.sub(Q, A2));
 
       // Is the circle in Region AB of the next edge?
       if (v2 > 0.0) {
@@ -158,16 +154,16 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
   }
 
   // Region AB
-  var den = Vec2.dot(e, e);
+  let den = Vec2.dot(e, e);
   _ASSERT && common.assert(den > 0.0);
-  var P = Vec2.combine(u / den, A, v / den, B);
-  var d = Vec2.sub(Q, P);
-  var dd = Vec2.dot(d, d);
+  let P = Vec2.combine(u / den, A, v / den, B);
+  let d = Vec2.sub(Q, P);
+  let dd = Vec2.dot(d, d);
   if (dd > radius * radius) {
     return;
   }
 
-  var n = Vec2.neo(-e.y, e.x);
+  let n = Vec2.neo(-e.y, e.x);
   if (Vec2.dot(n, Vec2.sub(Q, A)) < 0.0) {
     n.set(-n.x, -n.y);
   }
@@ -185,5 +181,3 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
   manifold.points[0].id.cf.indexB = 0;
   manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
 }
-
-export { CollideEdgeCircle };

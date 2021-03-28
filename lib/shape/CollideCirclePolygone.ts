@@ -22,48 +22,44 @@
  * SOFTWARE.
  */
 
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 import common from '../util/common';
 import Math from '../common/Math';
 import Transform from '../common/Transform';
-import Rot from '../common/Rot';
 import Vec2 from '../common/Vec2';
-import AABB from '../collision/AABB';
-import Settings from '../Settings';
-import Manifold from '../Manifold';
 import Contact from '../Contact';
-import Shape from '../Shape';
 import CircleShape from './CircleShape';
 import PolygonShape from './PolygonShape';
+import { ContactFeatureType, ManifoldType } from "../Manifold";
+
+
+const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
 
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
 
 function PolygonCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
   _ASSERT && common.assert(fixtureA.getType() == PolygonShape.TYPE);
   _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
-  CollidePolygonCircle(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(),
-      xfB);
+  CollidePolygonCircle(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
 }
 
-function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
+export function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
   manifold.pointCount = 0;
 
   // Compute circle position in the frame of the polygon.
-  var c = Transform.mulVec2(xfB, circleB.m_p);
-  var cLocal = Transform.mulTVec2(xfA, c);
+  let c = Transform.mulVec2(xfB, circleB.m_p);
+  let cLocal = Transform.mulTVec2(xfA, c);
 
   // Find the min separating edge.
-  var normalIndex = 0;
-  var separation = -Infinity;
-  var radius = polygonA.m_radius + circleB.m_radius;
-  var vertexCount = polygonA.m_count;
-  var vertices = polygonA.m_vertices;
-  var normals = polygonA.m_normals;
+  let normalIndex = 0;
+  let separation = -Infinity;
+  let radius = polygonA.m_radius + circleB.m_radius;
+  let vertexCount = polygonA.m_count;
+  let vertices = polygonA.m_vertices;
+  let normals = polygonA.m_normals;
 
-  for (var i = 0; i < vertexCount; ++i) {
-    var s = Vec2.dot(normals[i], Vec2.sub(cLocal, vertices[i]));
+  for (let i = 0; i < vertexCount; ++i) {
+    let s = Vec2.dot(normals[i], Vec2.sub(cLocal, vertices[i]));
 
     if (s > radius) {
       // Early out.
@@ -77,10 +73,10 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
   }
 
   // Vertices that subtend the incident face.
-  var vertIndex1 = normalIndex;
-  var vertIndex2 = vertIndex1 + 1 < vertexCount ? vertIndex1 + 1 : 0;
-  var v1 = vertices[vertIndex1];
-  var v2 = vertices[vertIndex2];
+  let vertIndex1 = normalIndex;
+  let vertIndex2 = vertIndex1 + 1 < vertexCount ? vertIndex1 + 1 : 0;
+  let v1 = vertices[vertIndex1];
+  let v2 = vertices[vertIndex2];
 
   // If the center is inside the polygon ...
   if (separation < Math.EPSILON) {
@@ -99,8 +95,8 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
   }
 
   // Compute barycentric coordinates
-  var u1 = Vec2.dot(Vec2.sub(cLocal, v1), Vec2.sub(v2, v1));
-  var u2 = Vec2.dot(Vec2.sub(cLocal, v2), Vec2.sub(v1, v2));
+  let u1 = Vec2.dot(Vec2.sub(cLocal, v1), Vec2.sub(v2, v1));
+  let u2 = Vec2.dot(Vec2.sub(cLocal, v2), Vec2.sub(v1, v2));
   if (u1 <= 0.0) {
     if (Vec2.distanceSquared(cLocal, v1) > radius * radius) {
       return;
@@ -136,9 +132,8 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
     manifold.points[0].id.cf.indexB = 0;
     manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
   } else {
-    var faceCenter = Vec2.mid(v1, v2);
-    var separation = Vec2.dot(cLocal, normals[vertIndex1])
-        - Vec2.dot(faceCenter, normals[vertIndex1]);
+    let faceCenter = Vec2.mid(v1, v2);
+    let separation = Vec2.dot(cLocal, normals[vertIndex1]) - Vec2.dot(faceCenter, normals[vertIndex1]);
     if (separation > radius) {
       return;
     }
@@ -156,5 +151,3 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
     manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
   }
 }
-
-export { CollidePolygonCircle };

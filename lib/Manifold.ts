@@ -321,8 +321,8 @@ export class ClipVertex {
  * Clipping for contact manifolds. Sutherland-Hodgman clipping.
  */
 export function clipSegmentToLine(
-  vOut: [ClipVertex, ClipVertex],
-  vIn: [ClipVertex, ClipVertex],
+  vOut: ClipVertex[],
+  vIn: ClipVertex[],
   normal: Vec2,
   offset: number,
   vertexIndexA: number
