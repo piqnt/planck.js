@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
         // "strictNullChecks": true,
-        // "noImplicitAny": true
+        // "noImplicitAny": true,
+        "lib": ["ES2015"],
         "stripInternal": true,
         "target": "ES5"
     }
