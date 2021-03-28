@@ -68,7 +68,7 @@ function Serializer(opts?) {
       }
       if (typeof value._serialize === 'function') {
         if (value !== top) {
-          for (let typeName in refTypes) {
+          for (const typeName in refTypes) {
             if (value instanceof refTypes[typeName]) {
               return storeRef(value, typeName);
             }
@@ -85,7 +85,7 @@ function Serializer(opts?) {
 
       } else {
         const newValue = {};
-        for (let key in value) {
+        for (const key in value) {
           if (value.hasOwnProperty(key)) {
             newValue[key] = toJson(value[key]);
           }

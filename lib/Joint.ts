@@ -22,14 +22,11 @@
  * SOFTWARE.
  */
 
-// @ts-ignore
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-// @ts-ignore
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 import common from './util/common';
 import type Vec2 from './common/Vec2';
 import type Body from './Body';
+
+const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 /**
  * A joint edge is used to connect bodies and joints together in a joint graph
@@ -54,7 +51,7 @@ export class JointEdge {
    * the next joint edge in the body's joint list
    */
   next = null as JointEdge | null;
-};
+}
 
 /**
  * Joint definitions are used to construct joints.
@@ -84,7 +81,7 @@ export interface JointDef extends JointOpt {
   bodyB: Body;
 }
 
-var DEFAULTS = {
+const DEFAULTS = {
   userData : null,
   collideConnected : false
 };
@@ -117,148 +114,128 @@ export default abstract class Joint {
   constructor(def: JointDef | JointOpt, bodyA?: Body, bodyB?: Body) {
     bodyA = 'bodyA' in def ? def.bodyA : bodyA;
     bodyB = 'bodyB' in def ? def.bodyB : bodyB;
-  
+
     _ASSERT && common.assert(bodyA);
     _ASSERT && common.assert(bodyB);
     _ASSERT && common.assert(bodyA != bodyB);
-  
+
     // this.m_type = 'unknown-joint';
-  
+
     this.m_bodyA = bodyA!;
     this.m_bodyB = bodyB!;
-  
+
     // this.m_index = 0;
     this.m_collideConnected = !!def.collideConnected;
-  
+
     // this.m_prev = null;
     // this.m_next = null;
-  
+
     // this.m_edgeA = new JointEdge();
     // this.m_edgeB = new JointEdge();
-  
+
     // this.m_islandFlag = false;
     this.m_userData = def.userData;
   }
 
-  static TYPES = {} as { [id: string] : new (...args: any[]) => Joint; };
-  
+  static TYPES = {} as { [id: string]: new (...args: any[]) => Joint; };
+
   static _deserialize = function(data, context, restore) {
-    var clazz = Joint.TYPES[data.type];
+    const clazz = Joint.TYPES[data.type];
     return clazz && restore(clazz, data);
-  }
-  
+  };
+
   /**
    * Short-cut function to determine if either body is inactive.
-   * 
-   * @returns {boolean}
    */
   isActive() {
     return this.m_bodyA.isActive() && this.m_bodyB.isActive();
   }
-  
+
   /**
    * Get the type of the concrete joint.
-   * 
+   *
    * @returns JointType
    */
   getType() {
     return this.m_type;
   }
-  
+
   /**
    * Get the first body attached to this joint.
-   * 
+   *
    * @returns Body
    */
   getBodyA() {
     return this.m_bodyA;
   }
-  
+
   /**
    * Get the second body attached to this joint.
-   * 
+   *
    * @returns Body
    */
   getBodyB() {
     return this.m_bodyB;
   }
-  
+
   /**
    * Get the next joint the world joint list.
-   * 
+   *
    * @returns Joint
    */
   getNext() {
     return this.m_next;
   }
-  
+
   getUserData() {
     return this.m_userData;
   }
-  
+
   setUserData(data: any) {
     this.m_userData = data;
   }
-  
+
   /**
    * Get collide connected. Note: modifying the collide connect flag won't work
    * correctly because the flag is only checked when fixture AABBs begin to
    * overlap.
-   * 
-   * @returns {boolean}
    */
   getCollideConnected() {
     return this.m_collideConnected;
   }
-  
+
   /**
    * Get the anchor point on bodyA in world coordinates.
-   * 
-   * @return {Vec2}
    */
   abstract getAnchorA(): Vec2;
-  
+
   /**
    * Get the anchor point on bodyB in world coordinates.
-   * 
-   * @return {Vec2}
    */
   abstract getAnchorB(): Vec2;
-  
+
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
-   * 
-   * @param {float} inv_dt
-   * @return {Vec2}
    */
   abstract getReactionForce(inv_dt: number): Vec2;
-  
+
   /**
    * Get the reaction torque on bodyB in N*m.
-   * 
-   * @param {float} inv_dt
-   * @return {float}
    */
   abstract getReactionTorque(inv_dt: number): number;
-  
+
   /**
    * Shift the origin for any points stored in world coordinates.
-   * 
-   * @param {Vec2} newOrigin
    */
-  shiftOrigin(newOrigin: Vec2) {};
-  
-  /**
-   */
+  shiftOrigin(newOrigin: Vec2) {}
+
   abstract initVelocityConstraints(step): void;
-  
-  /**
-   */
+
   abstract solveVelocityConstraints(step): void;
-  
+
   /**
    * This returns true if the position errors are within tolerance.
    */
   abstract solvePositionConstraints(step): boolean;
 
-} 
+}

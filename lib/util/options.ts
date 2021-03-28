@@ -5,7 +5,7 @@ export default function(input, defaults) {
 
   const output = {...input};
 
-  for (let key in defaults) {
+  for (const key in defaults) {
     if (defaults.hasOwnProperty(key) && typeof input[key] === 'undefined') {
       output[key] = defaults[key];
     }

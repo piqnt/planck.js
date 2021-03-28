@@ -83,7 +83,7 @@ export default class Rope {
       this.m_p0s[i] = def.vertices[i];
       this.m_vs[i].setZero();
 
-      let m = def.masses[i];
+      const m = def.masses[i];
       if (m > 0.0) {
         this.m_ims[i] = 1.0 / m;
       } else {
@@ -91,27 +91,27 @@ export default class Rope {
       }
     }
 
-    let count2 = this.m_count - 1;
-    let count3 = this.m_count - 2;
+    const count2 = this.m_count - 1;
+    const count3 = this.m_count - 2;
     this.m_Ls = []; // [count2]
     this.m_as = []; // [count3]
 
     for (let i = 0; i < count2; ++i) {
-      let p1 = this.m_ps[i];
-      let p2 = this.m_ps[i + 1];
+      const p1 = this.m_ps[i];
+      const p2 = this.m_ps[i + 1];
       this.m_Ls[i] = Vec2.distance(p1, p2);
     }
 
     for (let i = 0; i < count3; ++i) {
-      let p1 = this.m_ps[i];
-      let p2 = this.m_ps[i + 1];
-      let p3 = this.m_ps[i + 2];
+      const p1 = this.m_ps[i];
+      const p2 = this.m_ps[i + 1];
+      const p3 = this.m_ps[i + 2];
 
-      let d1 = Vec2.sub(p2, p1);
-      let d2 = Vec2.sub(p3, p2);
+      const d1 = Vec2.sub(p2, p1);
+      const d2 = Vec2.sub(p3, p2);
 
-      let a = Vec2.cross(d1, d2);
-      let b = Vec2.dot(d1, d2);
+      const a = Vec2.cross(d1, d2);
+      const b = Vec2.dot(d1, d2);
 
       this.m_as[i] = Math.atan2(a, b);
     }
@@ -136,7 +136,7 @@ export default class Rope {
       return;
     }
 
-    let d = Math.exp(-h * this.m_damping);
+    const d = Math.exp(-h * this.m_damping);
 
     for (let i = 0; i < this.m_count; ++i) {
       this.m_p0s[i] = this.m_ps[i];
@@ -154,31 +154,31 @@ export default class Rope {
       this.solveC2();
     }
 
-    let inv_h = 1.0 / h;
+    const inv_h = 1.0 / h;
     for (let i = 0; i < this.m_count; ++i) {
       this.m_vs[i] = inv_h * (this.m_ps[i] - this.m_p0s[i]);
     }
   }
 
   solveC2() {
-    let count2 = this.m_count - 1;
+    const count2 = this.m_count - 1;
 
     for (let i = 0; i < count2; ++i) {
       let p1 = this.m_ps[i]; // Vec2
       let p2 = this.m_ps[i + 1]; // Vec2
 
-      let d = p2 - p1; // Vec2
-      let L = d.normalize();
+      const d = p2 - p1; // Vec2
+      const L = d.normalize();
 
-      let im1 = this.m_ims[i];
-      let im2 = this.m_ims[i + 1];
+      const im1 = this.m_ims[i];
+      const im2 = this.m_ims[i + 1];
 
       if (im1 + im2 == 0.0) {
         continue;
       }
 
-      let s1 = im1 / (im1 + im2);
-      let s2 = im2 / (im1 + im2);
+      const s1 = im1 / (im1 + im2);
+      const s2 = im2 / (im1 + im2);
 
       p1 -= this.m_k2 * s1 * (this.m_Ls[i] - L) * d;
       p2 += this.m_k2 * s2 * (this.m_Ls[i] - L) * d;
@@ -189,45 +189,45 @@ export default class Rope {
   }
 
   setAngle(angle) {
-    let count3 = this.m_count - 2;
+    const count3 = this.m_count - 2;
     for (let i = 0; i < count3; ++i) {
       this.m_as[i] = angle;
     }
   }
 
   solveC3() {
-    let count3 = this.m_count - 2;
+    const count3 = this.m_count - 2;
 
     for (let i = 0; i < count3; ++i) {
       let p1 = this.m_ps[i]; // Vec2
       let p2 = this.m_ps[i + 1]; // Vec2
       let p3 = this.m_ps[i + 2]; // Vec2
 
-      let m1 = this.m_ims[i];
-      let m2 = this.m_ims[i + 1];
-      let m3 = this.m_ims[i + 2];
+      const m1 = this.m_ims[i];
+      const m2 = this.m_ims[i + 1];
+      const m3 = this.m_ims[i + 2];
 
-      let d1 = p2 - p1;
-      let d2 = p3 - p2;
+      const d1 = p2 - p1;
+      const d2 = p3 - p2;
 
-      let L1sqr = d1.lengthSquared();
-      let L2sqr = d2.lengthSquared();
+      const L1sqr = d1.lengthSquared();
+      const L2sqr = d2.lengthSquared();
 
       if (L1sqr * L2sqr == 0.0) {
         continue;
       }
 
-      let a = Vec2.cross(d1, d2);
-      let b = Vec2.dot(d1, d2);
+      const a = Vec2.cross(d1, d2);
+      const b = Vec2.dot(d1, d2);
 
       let angle = Math.atan2(a, b);
 
-      let Jd1 = (-1.0 / L1sqr) * d1.skew(); // Vec2
-      let Jd2 = (1.0 / L2sqr) * d2.skew(); // Vec2
+      const Jd1 = (-1.0 / L1sqr) * d1.skew(); // Vec2
+      const Jd2 = (1.0 / L2sqr) * d2.skew(); // Vec2
 
-      let J1 = -Jd1;
-      let J2 = Jd1 - Jd2;
-      let J3 = Jd2;
+      const J1 = -Jd1;
+      const J2 = Jd1 - Jd2;
+      const J3 = Jd2;
 
       let mass = m1 * Vec2.dot(J1, J1) + m2 * Vec2.dot(J2, J2) + m3 * Vec2.dot(J3, J3);
       if (mass == 0.0) {
@@ -248,7 +248,7 @@ export default class Rope {
         C = angle - this.m_as[i];
       }
 
-      let impulse = -this.m_k3 * mass * C;
+      const impulse = -this.m_k3 * mass * C;
 
       p1 += (m1 * impulse) * J1;
       p2 += (m2 * impulse) * J2;
