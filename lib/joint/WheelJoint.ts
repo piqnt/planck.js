@@ -22,25 +22,14 @@
  * SOFTWARE.
  */
 
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 import options from '../util/options';
 import Settings from '../Settings';
-
 import Math from '../common/Math';
 import Vec2 from '../common/Vec2';
-import Vec3 from '../common/Vec3';
-import Mat22 from '../common/Mat22';
-import Mat33 from '../common/Mat33';
 import Rot from '../common/Rot';
-import Sweep from '../common/Sweep';
-import Transform from '../common/Transform';
-import Velocity from '../common/Velocity';
-import Position from '../common/Position';
-
-import { default as Joint, JointOpt, JointDef} from '../Joint';
+import { default as Joint, JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
+
 
 /**
  * Wheel joint definition. This requires defining a line of motion using an axis
@@ -95,7 +84,7 @@ export interface WheelJointDef extends JointDef, WheelJointOpt {
   localAxisA: Vec2;
 }
 
-var DEFAULTS = {
+const DEFAULTS = {
   enableMotor : false,
   maxMotorTorque : 0.0,
   motorSpeed : 0.0,
@@ -108,10 +97,6 @@ var DEFAULTS = {
  * an axis fixed in bodyA and rotation in the plane. In other words, it is a
  * point to line constraint with a rotational motor and a linear spring/damper.
  * This joint is designed for vehicle suspensions.
- *
- * @param {WheelJointDef} def
- * @param {Body} bodyA
- * @param {Body} bodyB
  */
 export default class WheelJoint extends Joint {
   static TYPE = 'wheel-joint' as 'wheel-joint';
@@ -243,15 +228,15 @@ export default class WheelJoint extends Joint {
       localAnchorB: this.m_localAnchorB,
       localAxisA: this.m_localXAxisA,
     };
-  };
+  }
 
   static _deserialize(data, world, restore) {
-    data = Object.assign({}, data);
+    data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
-    var joint = new WheelJoint(data);
+    const joint = new WheelJoint(data);
     return joint;
-  };
+  }
 
   /**
    * @internal
@@ -300,15 +285,15 @@ export default class WheelJoint extends Joint {
    * Get the current joint translation, usually in meters.
    */
   getJointTranslation() {
-    var bA = this.m_bodyA;
-    var bB = this.m_bodyB;
+    const bA = this.m_bodyA;
+    const bB = this.m_bodyB;
 
-    var pA = bA.getWorldPoint(this.m_localAnchorA); // Vec2
-    var pB = bB.getWorldPoint(this.m_localAnchorB); // Vec2
-    var d = Vec2.sub(pB, pA); // Vec2
-    var axis = bA.getWorldVector(this.m_localXAxisA); // Vec2
+    const pA = bA.getWorldPoint(this.m_localAnchorA); // Vec2
+    const pB = bB.getWorldPoint(this.m_localAnchorB); // Vec2
+    const d = Vec2.sub(pB, pA); // Vec2
+    const axis = bA.getWorldVector(this.m_localXAxisA); // Vec2
 
-    var translation = Vec2.dot(d, axis); // float
+    const translation = Vec2.dot(d, axis); // float
     return translation;
   }
 
@@ -316,8 +301,8 @@ export default class WheelJoint extends Joint {
    * Get the current joint translation speed, usually in meters per second.
    */
   getJointSpeed() {
-    var wA = this.m_bodyA.m_angularVelocity;
-    var wB = this.m_bodyB.m_angularVelocity;
+    const wA = this.m_bodyA.m_angularVelocity;
+    const wB = this.m_bodyB.m_angularVelocity;
     return wB - wA;
   }
 
@@ -398,38 +383,28 @@ export default class WheelJoint extends Joint {
 
   /**
    * Get the anchor point on bodyA in world coordinates.
-   * 
-   * @return {Vec2}
-   */
+*/
   getAnchorA() {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
-   * 
-   * @return {Vec2}
-   */
+*/
   getAnchorB() {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
-   * 
-   * @param {float} inv_dt
-   * @return {Vec2}
-   */
+*/
   getReactionForce(inv_dt) {
     return Vec2.combine(this.m_impulse, this.m_ay, this.m_springImpulse, this.m_ax).mul(inv_dt);
   }
 
   /**
    * Get the reaction torque on bodyB in N*m.
-   * 
-   * @param {float} inv_dt
-   * @return {float}
-   */
+*/
   getReactionTorque(inv_dt) {
     return inv_dt * this.m_motorImpulse;
   }
@@ -442,28 +417,28 @@ export default class WheelJoint extends Joint {
     this.m_invIA = this.m_bodyA.m_invI;
     this.m_invIB = this.m_bodyB.m_invI;
 
-    var mA = this.m_invMassA;
-    var mB = this.m_invMassB; // float
-    var iA = this.m_invIA;
-    var iB = this.m_invIB; // float
+    const mA = this.m_invMassA;
+    const mB = this.m_invMassB; // float
+    const iA = this.m_invIA;
+    const iB = this.m_invIB; // float
 
-    var cA = this.m_bodyA.c_position.c;
-    var aA = this.m_bodyA.c_position.a;
-    var vA = this.m_bodyA.c_velocity.v;
-    var wA = this.m_bodyA.c_velocity.w;
+    const cA = this.m_bodyA.c_position.c;
+    const aA = this.m_bodyA.c_position.a;
+    const vA = this.m_bodyA.c_velocity.v;
+    let wA = this.m_bodyA.c_velocity.w;
 
-    var cB = this.m_bodyB.c_position.c;
-    var aB = this.m_bodyB.c_position.a;
-    var vB = this.m_bodyB.c_velocity.v;
-    var wB = this.m_bodyB.c_velocity.w;
+    const cB = this.m_bodyB.c_position.c;
+    const aB = this.m_bodyB.c_position.a;
+    const vB = this.m_bodyB.c_velocity.v;
+    let wB = this.m_bodyB.c_velocity.w;
 
-    var qA = Rot.neo(aA);
-    var qB = Rot.neo(aB);
+    const qA = Rot.neo(aA);
+    const qB = Rot.neo(aB);
 
     // Compute the effective masses.
-    var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
-    var d = Vec2.zero();
+    const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+    const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    const d = Vec2.zero();
     d.addCombine(1, cB, 1, rB);
     d.subCombine(1, cA, 1, rA); // Vec2
 
@@ -490,25 +465,25 @@ export default class WheelJoint extends Joint {
       this.m_sAx = Vec2.cross(Vec2.add(d, rA), this.m_ax);
       this.m_sBx = Vec2.cross(rB, this.m_ax);
 
-      var invMass = mA + mB + iA * this.m_sAx * this.m_sAx + iB * this.m_sBx
+      const invMass = mA + mB + iA * this.m_sAx * this.m_sAx + iB * this.m_sBx
           * this.m_sBx; // float
 
       if (invMass > 0.0) {
         this.m_springMass = 1.0 / invMass;
 
-        var C = Vec2.dot(d, this.m_ax); // float
+        const C = Vec2.dot(d, this.m_ax); // float
 
         // Frequency
-        var omega = 2.0 * Math.PI * this.m_frequencyHz; // float
+        const omega = 2.0 * Math.PI * this.m_frequencyHz; // float
 
         // Damping coefficient
-        var damp = 2.0 * this.m_springMass * this.m_dampingRatio * omega; // float
+        const damp = 2.0 * this.m_springMass * this.m_dampingRatio * omega; // float
 
         // Spring stiffness
-        var k = this.m_springMass * omega * omega; // float
+        const k = this.m_springMass * omega * omega; // float
 
         // magic formulas
-        var h = step.dt; // float
+        const h = step.dt; // float
         this.m_gamma = h * (damp + h * k);
         if (this.m_gamma > 0.0) {
           this.m_gamma = 1.0 / this.m_gamma;
@@ -542,9 +517,9 @@ export default class WheelJoint extends Joint {
       this.m_springImpulse *= step.dtRatio;
       this.m_motorImpulse *= step.dtRatio;
 
-      var P = Vec2.combine(this.m_impulse, this.m_ay, this.m_springImpulse, this.m_ax);
-      var LA = this.m_impulse * this.m_sAy + this.m_springImpulse * this.m_sAx + this.m_motorImpulse;
-      var LB = this.m_impulse * this.m_sBy + this.m_springImpulse * this.m_sBx + this.m_motorImpulse;
+      const P = Vec2.combine(this.m_impulse, this.m_ay, this.m_springImpulse, this.m_ax);
+      const LA = this.m_impulse * this.m_sAy + this.m_springImpulse * this.m_sAx + this.m_motorImpulse;
+      const LB = this.m_impulse * this.m_sBy + this.m_springImpulse * this.m_sBx + this.m_motorImpulse;
 
       vA.subMul(this.m_invMassA, P);
       wA -= this.m_invIA * LA;
@@ -565,27 +540,27 @@ export default class WheelJoint extends Joint {
   }
 
   solveVelocityConstraints(step) {
-    var mA = this.m_invMassA;
-    var mB = this.m_invMassB; // float
-    var iA = this.m_invIA;
-    var iB = this.m_invIB; // float
+    const mA = this.m_invMassA;
+    const mB = this.m_invMassB; // float
+    const iA = this.m_invIA;
+    const iB = this.m_invIB; // float
 
-    var vA = this.m_bodyA.c_velocity.v;
-    var wA = this.m_bodyA.c_velocity.w;
-    var vB = this.m_bodyB.c_velocity.v;
-    var wB = this.m_bodyB.c_velocity.w;
+    const vA = this.m_bodyA.c_velocity.v;
+    let wA = this.m_bodyA.c_velocity.w;
+    const vB = this.m_bodyB.c_velocity.v;
+    let wB = this.m_bodyB.c_velocity.w;
 
     // Solve spring constraint
     {
-      var Cdot = Vec2.dot(this.m_ax, vB) - Vec2.dot(this.m_ax, vA) + this.m_sBx
+      const Cdot = Vec2.dot(this.m_ax, vB) - Vec2.dot(this.m_ax, vA) + this.m_sBx
           * wB - this.m_sAx * wA; // float
-      var impulse = -this.m_springMass
+      const impulse = -this.m_springMass
           * (Cdot + this.m_bias + this.m_gamma * this.m_springImpulse); // float
       this.m_springImpulse += impulse;
 
-      var P = Vec2.mul(impulse, this.m_ax); // Vec2
-      var LA = impulse * this.m_sAx; // float
-      var LB = impulse * this.m_sBx; // float
+      const P = Vec2.mul(impulse, this.m_ax); // Vec2
+      const LA = impulse * this.m_sAx; // float
+      const LB = impulse * this.m_sBx; // float
 
       vA.subMul(mA, P);
       wA -= iA * LA;
@@ -596,11 +571,11 @@ export default class WheelJoint extends Joint {
 
     // Solve rotational motor constraint
     {
-      var Cdot = wB - wA - this.m_motorSpeed; // float
-      var impulse = -this.m_motorMass * Cdot; // float
+      const Cdot = wB - wA - this.m_motorSpeed; // float
+      let impulse = -this.m_motorMass * Cdot; // float
 
-      var oldImpulse = this.m_motorImpulse; // float
-      var maxImpulse = step.dt * this.m_maxMotorTorque; // float
+      const oldImpulse = this.m_motorImpulse; // float
+      const maxImpulse = step.dt * this.m_maxMotorTorque; // float
       this.m_motorImpulse = Math.clamp(this.m_motorImpulse + impulse,
           -maxImpulse, maxImpulse);
       impulse = this.m_motorImpulse - oldImpulse;
@@ -611,14 +586,14 @@ export default class WheelJoint extends Joint {
 
     // Solve point to line constraint
     {
-      var Cdot = Vec2.dot(this.m_ay, vB) - Vec2.dot(this.m_ay, vA) + this.m_sBy
+      const Cdot = Vec2.dot(this.m_ay, vB) - Vec2.dot(this.m_ay, vA) + this.m_sBy
           * wB - this.m_sAy * wA; // float
-      var impulse = -this.m_mass * Cdot; // float
+      const impulse = -this.m_mass * Cdot; // float
       this.m_impulse += impulse;
 
-      var P = Vec2.mul(impulse, this.m_ay); // Vec2
-      var LA = impulse * this.m_sAy; // float
-      var LB = impulse * this.m_sBy; // float
+      const P = Vec2.mul(impulse, this.m_ay); // Vec2
+      const LA = impulse * this.m_sAy; // float
+      const LB = impulse * this.m_sBy; // float
 
       vA.subMul(mA, P);
       wA -= iA * LA;
@@ -637,40 +612,40 @@ export default class WheelJoint extends Joint {
    * This returns true if the position errors are within tolerance.
    */
   solvePositionConstraints(step) {
-    var cA = this.m_bodyA.c_position.c;
-    var aA = this.m_bodyA.c_position.a;
-    var cB = this.m_bodyB.c_position.c;
-    var aB = this.m_bodyB.c_position.a;
+    const cA = this.m_bodyA.c_position.c;
+    let aA = this.m_bodyA.c_position.a;
+    const cB = this.m_bodyB.c_position.c;
+    let aB = this.m_bodyB.c_position.a;
 
-    var qA = Rot.neo(aA);
-    var qB = Rot.neo(aB);
+    const qA = Rot.neo(aA);
+    const qB = Rot.neo(aB);
 
-    var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
-    var d = Vec2.zero();
+    const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+    const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    const d = Vec2.zero();
     d.addCombine(1, cB, 1, rB);
     d.subCombine(1, cA, 1, rA);
 
-    var ay = Rot.mulVec2(qA, this.m_localYAxisA);
+    const ay = Rot.mulVec2(qA, this.m_localYAxisA);
 
-    var sAy = Vec2.cross(Vec2.add(d, rA), ay); // float
-    var sBy = Vec2.cross(rB, ay); // float
+    const sAy = Vec2.cross(Vec2.add(d, rA), ay); // float
+    const sBy = Vec2.cross(rB, ay); // float
 
-    var C = Vec2.dot(d, ay); // float
+    const C = Vec2.dot(d, ay); // float
 
-    var k = this.m_invMassA + this.m_invMassB + this.m_invIA * this.m_sAy
+    const k = this.m_invMassA + this.m_invMassB + this.m_invIA * this.m_sAy
         * this.m_sAy + this.m_invIB * this.m_sBy * this.m_sBy; // float
 
-    var impulse; // float
+    let impulse; // float
     if (k != 0.0) {
       impulse = -C / k;
     } else {
       impulse = 0.0;
     }
 
-    var P = Vec2.mul(impulse, ay); // Vec2
-    var LA = impulse * sAy; // float
-    var LB = impulse * sBy; // float
+    const P = Vec2.mul(impulse, ay); // Vec2
+    const LA = impulse * sAy; // float
+    const LB = impulse * sBy; // float
 
     cA.subMul(this.m_invMassA, P);
     aA -= this.m_invIA * LA;

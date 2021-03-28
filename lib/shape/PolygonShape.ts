@@ -80,14 +80,14 @@ export default class PolygonShape extends Shape {
   }
 
   static _deserialize = function(data, fixture, restore) {
-    var vertices = [] as Vec2[];
+    const vertices = [] as Vec2[];
     if (data.vertices) {
-      for (var i = 0; i < data.vertices.length; i++) {
+      for (let i = 0; i < data.vertices.length; i++) {
         vertices.push(restore(Vec2, data.vertices[i]));
       }
     }
 
-    var shape = new PolygonShape(vertices);
+    const shape = new PolygonShape(vertices);
     return shape;
   };
 
@@ -102,15 +102,15 @@ export default class PolygonShape extends Shape {
    * clone the concrete shape.
    */
   _clone() {
-    var clone = new PolygonShape();
+    const clone = new PolygonShape();
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
     clone.m_count = this.m_count;
     clone.m_centroid.set(this.m_centroid);
-    for (var i = 0; i < this.m_count; i++) {
+    for (let i = 0; i < this.m_count; i++) {
       clone.m_vertices.push(this.m_vertices[i].clone());
     }
-    for (var i = 0; i < this.m_normals.length; i++) {
+    for (let i = 0; i < this.m_normals.length; i++) {
       clone.m_normals.push(this.m_normals[i].clone());
     }
     return clone;
@@ -124,7 +124,7 @@ export default class PolygonShape extends Shape {
   }
 
   _reset() {
-    this._set(this.m_vertices)
+    this._set(this.m_vertices);
   }
 
   /**
@@ -144,15 +144,15 @@ export default class PolygonShape extends Shape {
       return;
     }
 
-    var n = Math.min(vertices.length, Settings.maxPolygonVertices);
+    let n = Math.min(vertices.length, Settings.maxPolygonVertices);
 
     // Perform welding and copy vertices into local buffer.
-    var ps = [] as Vec2[]; // [Settings.maxPolygonVertices];
-    for (var i = 0; i < n; ++i) {
-      var v = vertices[i];
+    const ps = [] as Vec2[]; // [Settings.maxPolygonVertices];
+    for (let i = 0; i < n; ++i) {
+      const v = vertices[i];
 
-      var unique = true;
-      for (var j = 0; j < ps.length; ++j) {
+      let unique = true;
+      for (let j = 0; j < ps.length; ++j) {
         if (Vec2.distanceSquared(v, ps[j]) < 0.25 * Settings.linearSlopSquared) {
           unique = false;
           break;
@@ -176,33 +176,33 @@ export default class PolygonShape extends Shape {
     // http://en.wikipedia.org/wiki/Gift_wrapping_algorithm
 
     // Find the right most point on the hull (in case of multiple points bottom most is used)
-    var i0 = 0;
-    var x0 = ps[0].x;
-    for (var i = 1; i < n; ++i) {
-      var x = ps[i].x;
+    let i0 = 0;
+    let x0 = ps[0].x;
+    for (let i = 1; i < n; ++i) {
+      const x = ps[i].x;
       if (x > x0 || (x === x0 && ps[i].y < ps[i0].y)) {
         i0 = i;
         x0 = x;
       }
     }
 
-    var hull = [] as number[]; // [Settings.maxPolygonVertices];
-    var m = 0;
-    var ih = i0;
+    const hull = [] as number[]; // [Settings.maxPolygonVertices];
+    let m = 0;
+    let ih = i0;
 
-    for (;;) {
+    while (true) {
       hull[m] = ih;
 
-      var ie = 0;
-      for (var j = 1; j < n; ++j) {
+      let ie = 0;
+      for (let j = 1; j < n; ++j) {
         if (ie === ih) {
           ie = j;
           continue;
         }
 
-        var r = Vec2.sub(ps[ie], ps[hull[m]]);
-        var v = Vec2.sub(ps[j], ps[hull[m]]);
-        var c = Vec2.cross(r, v);
+        const r = Vec2.sub(ps[ie], ps[hull[m]]);
+        const v = Vec2.sub(ps[j], ps[hull[m]]);
+        const c = Vec2.cross(r, v);
         // c < 0 means counter-clockwise wrapping, c > 0 means clockwise wrapping
         if (c < 0.0) {
           ie = j;
@@ -233,15 +233,15 @@ export default class PolygonShape extends Shape {
 
     // Copy vertices.
     this.m_vertices = [];
-    for (var i = 0; i < m; ++i) {
+    for (let i = 0; i < m; ++i) {
       this.m_vertices[i] = ps[hull[i]];
     }
 
     // Compute normals. Ensure the edges have non-zero length.
-    for (var i = 0; i < m; ++i) {
-      var i1 = i;
-      var i2 = i + 1 < m ? i + 1 : 0;
-      var edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
+    for (let i = 0; i < m; ++i) {
+      const i1 = i;
+      const i2 = i + 1 < m ? i + 1 : 0;
+      const edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
       _ASSERT && common.assert(edge.lengthSquared() > Math.EPSILON * Math.EPSILON);
       this.m_normals[i] = Vec2.cross(edge, 1.0);
       this.m_normals[i].normalize();
@@ -275,12 +275,12 @@ export default class PolygonShape extends Shape {
 
       this.m_centroid.set(center);
 
-      var xf = Transform.identity();
+      const xf = Transform.identity();
       xf.p.set(center);
       xf.q.set(angle);
 
       // Transform vertices and normals.
-      for (var i = 0; i < this.m_count; ++i) {
+      for (let i = 0; i < this.m_count; ++i) {
         this.m_vertices[i] = Transform.mulVec2(xf, this.m_vertices[i]);
         this.m_normals[i] = Rot.mulVec2(xf.q, this.m_normals[i]);
       }
@@ -295,10 +295,10 @@ export default class PolygonShape extends Shape {
    * @param p A point in world coordinates.
    */
   testPoint(xf: Transform, p: Vec2) {
-    var pLocal = Rot.mulTVec2(xf.q, Vec2.sub(p, xf.p));
+    const pLocal = Rot.mulTVec2(xf.q, Vec2.sub(p, xf.p));
 
-    for (var i = 0; i < this.m_count; ++i) {
-      var dot = Vec2.dot(this.m_normals[i], Vec2.sub(pLocal, this.m_vertices[i]));
+    for (let i = 0; i < this.m_count; ++i) {
+      const dot = Vec2.dot(this.m_normals[i], Vec2.sub(pLocal, this.m_vertices[i]));
       if (dot > 0.0) {
         return false;
       }
@@ -318,21 +318,21 @@ export default class PolygonShape extends Shape {
   rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number) {
 
     // Put the ray into the polygon's frame of reference.
-    var p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
-    var p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
-    var d = Vec2.sub(p2, p1);
+    const p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
+    const p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
+    const d = Vec2.sub(p2, p1);
 
-    var lower = 0.0;
-    var upper = input.maxFraction;
+    let lower = 0.0;
+    let upper = input.maxFraction;
 
-    var index = -1;
+    let index = -1;
 
-    for (var i = 0; i < this.m_count; ++i) {
+    for (let i = 0; i < this.m_count; ++i) {
       // p = p1 + a * d
       // dot(normal, p - v) = 0
       // dot(normal, p1 - v) + a * dot(normal, d) = 0
-      var numerator = Vec2.dot(this.m_normals[i], Vec2.sub(this.m_vertices[i], p1));
-      var denominator = Vec2.dot(this.m_normals[i], d);
+      const numerator = Vec2.dot(this.m_normals[i], Vec2.sub(this.m_vertices[i], p1));
+      const denominator = Vec2.dot(this.m_normals[i], d);
 
       if (denominator == 0.0) {
         if (numerator < 0.0) {
@@ -384,10 +384,10 @@ export default class PolygonShape extends Shape {
    * @param childIndex The child shape
    */
   computeAABB = function(aabb: AABB, xf: Transform, childIndex: number) {
-    var minX = Infinity, minY = Infinity;
-    var maxX = -Infinity, maxY = -Infinity;
-    for (var i = 0; i < this.m_count; ++i) {
-      var v = Transform.mulVec2(xf, this.m_vertices[i]);
+    let minX = Infinity, minY = Infinity;
+    let maxX = -Infinity, maxY = -Infinity;
+    for (let i = 0; i < this.m_count; ++i) {
+      const v = Transform.mulVec2(xf, this.m_vertices[i]);
       minX = Math.min(minX, v.x);
       maxX = Math.max(maxX, v.x);
       minY = Math.min(minY, v.y);
@@ -397,7 +397,7 @@ export default class PolygonShape extends Shape {
     aabb.lowerBound.set(minX, minY);
     aabb.upperBound.set(maxX, maxY);
     aabb.extend(this.m_radius);
-  }
+  };
 
   /**
    * Compute the mass properties of this shape using its dimensions and density.
@@ -433,43 +433,43 @@ export default class PolygonShape extends Shape {
 
     _ASSERT && common.assert(this.m_count >= 3);
 
-    var center = Vec2.zero();
-    var area = 0.0;
-    var I = 0.0;
+    const center = Vec2.zero();
+    let area = 0.0;
+    let I = 0.0;
 
     // s is the reference point for forming triangles.
     // It's location doesn't change the result (except for rounding error).
-    var s = Vec2.zero();
+    const s = Vec2.zero();
 
     // This code would put the reference point inside the polygon.
-    for (var i = 0; i < this.m_count; ++i) {
+    for (let i = 0; i < this.m_count; ++i) {
       s.add(this.m_vertices[i]);
     }
     s.mul(1.0 / this.m_count);
 
-    var k_inv3 = 1.0 / 3.0;
+    const k_inv3 = 1.0 / 3.0;
 
-    for (var i = 0; i < this.m_count; ++i) {
+    for (let i = 0; i < this.m_count; ++i) {
       // Triangle vertices.
-      var e1 = Vec2.sub(this.m_vertices[i], s);
-      var e2 = i + 1 < this.m_count ? Vec2.sub(this.m_vertices[i + 1], s) : Vec2
+      const e1 = Vec2.sub(this.m_vertices[i], s);
+      const e2 = i + 1 < this.m_count ? Vec2.sub(this.m_vertices[i + 1], s) : Vec2
           .sub(this.m_vertices[0], s);
 
-      var D = Vec2.cross(e1, e2);
+      const D = Vec2.cross(e1, e2);
 
-      var triangleArea = 0.5 * D;
+      const triangleArea = 0.5 * D;
       area += triangleArea;
 
       // Area weighted centroid
       center.addCombine(triangleArea * k_inv3, e1, triangleArea * k_inv3, e2);
 
-      var ex1 = e1.x;
-      var ey1 = e1.y;
-      var ex2 = e2.x;
-      var ey2 = e2.y;
+      const ex1 = e1.x;
+      const ey1 = e1.y;
+      const ex2 = e2.x;
+      const ey2 = e2.y;
 
-      var intx2 = ex1 * ex1 + ex2 * ex1 + ex2 * ex2;
-      var inty2 = ey1 * ey1 + ey2 * ey1 + ey2 * ey2;
+      const intx2 = ex1 * ex1 + ex2 * ex1 + ex2 * ex2;
+      const inty2 = ey1 * ey1 + ey2 * ey1 + ey2 * ey2;
 
       I += (0.25 * k_inv3 * D) * (intx2 + inty2);
     }
@@ -488,26 +488,26 @@ export default class PolygonShape extends Shape {
     // Shift to center of mass then to original body origin.
     massData.I += massData.mass
         * (Vec2.dot(massData.center, massData.center) - Vec2.dot(center, center));
-  }
+  };
 
   /**
    * Validate convexity. This is a very time consuming operation.
    * @returns true if valid
    */
   validate() {
-    for (var i = 0; i < this.m_count; ++i) {
-      var i1 = i;
-      var i2 = i < this.m_count - 1 ? i1 + 1 : 0;
-      var p = this.m_vertices[i1];
-      var e = Vec2.sub(this.m_vertices[i2], p);
+    for (let i = 0; i < this.m_count; ++i) {
+      const i1 = i;
+      const i2 = i < this.m_count - 1 ? i1 + 1 : 0;
+      const p = this.m_vertices[i1];
+      const e = Vec2.sub(this.m_vertices[i2], p);
 
-      for (var j = 0; j < this.m_count; ++j) {
+      for (let j = 0; j < this.m_count; ++j) {
         if (j == i1 || j == i2) {
           continue;
         }
 
-        var v = Vec2.sub(this.m_vertices[j], p);
-        var c = Vec2.cross(e, v);
+        const v = Vec2.sub(this.m_vertices[j], p);
+        const c = Vec2.cross(e, v);
         if (c < 0.0) {
           return false;
         }
@@ -528,34 +528,34 @@ export default class PolygonShape extends Shape {
 function ComputeCentroid(vs: Vec2[], count: number) {
   _ASSERT && common.assert(count >= 3);
 
-  var c = Vec2.zero();
-  var area = 0.0;
+  const c = Vec2.zero();
+  let area = 0.0;
 
   // pRef is the reference point for forming triangles.
   // It's location doesn't change the result (except for rounding error).
-  var pRef = Vec2.zero();
+  const pRef = Vec2.zero();
   if (false) {
     // This code would put the reference point inside the polygon.
-    for (var i = 0; i < count; ++i) {
+    for (let i = 0; i < count; ++i) {
       pRef.add(vs[i]);
     }
     pRef.mul(1.0 / count);
   }
 
-  var inv3 = 1.0 / 3.0;
+  const inv3 = 1.0 / 3.0;
 
-  for (var i = 0; i < count; ++i) {
+  for (let i = 0; i < count; ++i) {
     // Triangle vertices.
-    var p1 = pRef;
-    var p2 = vs[i];
-    var p3 = i + 1 < count ? vs[i + 1] : vs[0];
+    const p1 = pRef;
+    const p2 = vs[i];
+    const p3 = i + 1 < count ? vs[i + 1] : vs[0];
 
-    var e1 = Vec2.sub(p2, p1);
-    var e2 = Vec2.sub(p3, p1);
+    const e1 = Vec2.sub(p2, p1);
+    const e2 = Vec2.sub(p3, p1);
 
-    var D = Vec2.cross(e1, e2);
+    const D = Vec2.cross(e1, e2);
 
-    var triangleArea = 0.5 * D;
+    const triangleArea = 0.5 * D;
     area += triangleArea;
 
     // Area weighted centroid

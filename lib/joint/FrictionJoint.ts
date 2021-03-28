@@ -22,26 +22,18 @@
  * SOFTWARE.
  */
 
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 import common from '../util/common';
 import options from '../util/options';
-import Settings from '../Settings';
-
 import Math from '../common/Math';
 import Vec2 from '../common/Vec2';
-import Vec3 from '../common/Vec3';
 import Mat22 from '../common/Mat22';
-import Mat33 from '../common/Mat33';
 import Rot from '../common/Rot';
-import Sweep from '../common/Sweep';
-import Transform from '../common/Transform';
-import Velocity from '../common/Velocity';
-import Position from '../common/Position';
-
-import { default as Joint, JointOpt, JointDef} from '../Joint';
+import { default as Joint, JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
+
+
+const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
 
 /**
  * Friction joint definition.
@@ -70,7 +62,7 @@ export interface FrictionJointDef extends JointDef, FrictionJointOpt {
   localAnchorB: Vec2;
 }
 
-var DEFAULTS = {
+const DEFAULTS = {
   maxForce : 0.0,
   maxTorque : 0.0,
 };
@@ -79,10 +71,7 @@ var DEFAULTS = {
  * Friction joint. This is used for top-down friction. It provides 2D
  * translational friction and angular friction.
  *
- * @param {FrictionJointDef} def
- * @param {Body} bodyA
- * @param {Body} bodyB
- * @param {Vec2} anchor Anchor in global coordination.
+ * @param anchor Anchor in global coordination.
  */
 export default class FrictionJoint extends Joint {
   static TYPE = 'friction-joint' as 'friction-joint';
@@ -170,15 +159,15 @@ export default class FrictionJoint extends Joint {
       localAnchorA: this.m_localAnchorA,
       localAnchorB: this.m_localAnchorB,
     };
-  };
+  }
 
   static _deserialize(data, world, restore) {
-    data = Object.assign({}, data);
+    data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
-    var joint = new FrictionJoint(data);
+    const joint = new FrictionJoint(data);
     return joint;
-  };
+  }
 
   /**
    * @internal
@@ -244,8 +233,6 @@ export default class FrictionJoint extends Joint {
 
   /**
    * Get the anchor point on bodyA in world coordinates.
-   * 
-   * @return {Vec2}
    */
   getAnchorA() {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
@@ -253,8 +240,6 @@ export default class FrictionJoint extends Joint {
 
   /**
    * Get the anchor point on bodyB in world coordinates.
-   * 
-   * @return {Vec2}
    */
   getAnchorB() {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
@@ -262,9 +247,6 @@ export default class FrictionJoint extends Joint {
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
-   * 
-   * @param {float} inv_dt
-   * @return {Vec2}
    */
   getReactionForce(inv_dt) {
     return Vec2.mul(inv_dt, this.m_linearImpulse);
@@ -272,9 +254,6 @@ export default class FrictionJoint extends Joint {
 
   /**
    * Get the reaction torque on bodyB in N*m.
-   * 
-   * @param {float} inv_dt
-   * @return {float}
    */
   getReactionTorque(inv_dt) {
     return inv_dt * this.m_angularImpulse;
@@ -288,15 +267,15 @@ export default class FrictionJoint extends Joint {
     this.m_invIA = this.m_bodyA.m_invI;
     this.m_invIB = this.m_bodyB.m_invI;
 
-    var aA = this.m_bodyA.c_position.a;
-    var vA = this.m_bodyA.c_velocity.v;
-    var wA = this.m_bodyA.c_velocity.w;
+    const aA = this.m_bodyA.c_position.a;
+    const vA = this.m_bodyA.c_velocity.v;
+    let wA = this.m_bodyA.c_velocity.w;
 
-    var aB = this.m_bodyB.c_position.a;
-    var vB = this.m_bodyB.c_velocity.v;
-    var wB = this.m_bodyB.c_velocity.w;
+    const aB = this.m_bodyB.c_position.a;
+    const vB = this.m_bodyB.c_velocity.v;
+    let wB = this.m_bodyB.c_velocity.w;
 
-    var qA = Rot.neo(aA), qB = Rot.neo(aB);
+    const qA = Rot.neo(aA), qB = Rot.neo(aB);
 
     // Compute the effective mass matrix.
     this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
@@ -311,10 +290,10 @@ export default class FrictionJoint extends Joint {
     // [ -r1y*iA*r1x-r2y*iB*r2x, mA+r1x^2*iA+mB+r2x^2*iB, r1x*iA+r2x*iB]
     // [ -r1y*iA-r2y*iB, r1x*iA+r2x*iB, iA+iB]
 
-    var mA = this.m_invMassA, mB = this.m_invMassB; // float
-    var iA = this.m_invIA, iB = this.m_invIB; // float
+    const mA = this.m_invMassA, mB = this.m_invMassB; // float
+    const iA = this.m_invIA, iB = this.m_invIB; // float
 
-    var K = new Mat22()
+    const K = new Mat22();
     K.ex.x = mA + mB + iA * this.m_rA.y * this.m_rA.y + iB * this.m_rB.y
         * this.m_rB.y;
     K.ex.y = -iA * this.m_rA.x * this.m_rA.y - iB * this.m_rB.x * this.m_rB.y;
@@ -334,7 +313,7 @@ export default class FrictionJoint extends Joint {
       this.m_linearImpulse.mul(step.dtRatio);
       this.m_angularImpulse *= step.dtRatio;
 
-      var P = Vec2.neo(this.m_linearImpulse.x, this.m_linearImpulse.y);
+      const P = Vec2.neo(this.m_linearImpulse.x, this.m_linearImpulse.y);
 
       vA.subMul(mA, P);
       wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_angularImpulse);
@@ -354,23 +333,23 @@ export default class FrictionJoint extends Joint {
   }
 
   solveVelocityConstraints(step) {
-    var vA = this.m_bodyA.c_velocity.v;
-    var wA = this.m_bodyA.c_velocity.w;
-    var vB = this.m_bodyB.c_velocity.v;
-    var wB = this.m_bodyB.c_velocity.w;
+    const vA = this.m_bodyA.c_velocity.v;
+    let wA = this.m_bodyA.c_velocity.w;
+    const vB = this.m_bodyB.c_velocity.v;
+    let wB = this.m_bodyB.c_velocity.w;
 
-    var mA = this.m_invMassA, mB = this.m_invMassB; // float
-    var iA = this.m_invIA, iB = this.m_invIB; // float
+    const mA = this.m_invMassA, mB = this.m_invMassB; // float
+    const iA = this.m_invIA, iB = this.m_invIB; // float
 
-    var h = step.dt; // float
+    const h = step.dt; // float
 
     // Solve angular friction
     {
-      let Cdot = wB - wA; // float
+      const Cdot = wB - wA; // float
       let impulse = -this.m_angularMass * Cdot; // float
 
-      let oldImpulse = this.m_angularImpulse; // float
-      let maxImpulse = h * this.m_maxTorque; // float
+      const oldImpulse = this.m_angularImpulse; // float
+      const maxImpulse = h * this.m_maxTorque; // float
       this.m_angularImpulse = Math.clamp(this.m_angularImpulse + impulse,
           -maxImpulse, maxImpulse);
       impulse = this.m_angularImpulse - oldImpulse;
@@ -381,14 +360,14 @@ export default class FrictionJoint extends Joint {
 
     // Solve linear friction
     {
-      let Cdot = Vec2.sub(Vec2.add(vB, Vec2.cross(wB, this.m_rB)), Vec2.add(vA,
+      const Cdot = Vec2.sub(Vec2.add(vB, Vec2.cross(wB, this.m_rB)), Vec2.add(vA,
           Vec2.cross(wA, this.m_rA))); // Vec2
 
       let impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot)); // Vec2
-      let oldImpulse = this.m_linearImpulse; // Vec2
+      const oldImpulse = this.m_linearImpulse; // Vec2
       this.m_linearImpulse.add(impulse);
 
-      let maxImpulse = h * this.m_maxForce; // float
+      const maxImpulse = h * this.m_maxForce; // float
 
       if (this.m_linearImpulse.lengthSquared() > maxImpulse * maxImpulse) {
         this.m_linearImpulse.normalize();

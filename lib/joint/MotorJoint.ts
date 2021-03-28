@@ -22,26 +22,18 @@
  * SOFTWARE.
  */
 
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 import common from '../util/common';
 import options from '../util/options';
-import Settings from '../Settings';
-
 import Math from '../common/Math';
 import Vec2 from '../common/Vec2';
-import Vec3 from '../common/Vec3';
 import Mat22 from '../common/Mat22';
-import Mat33 from '../common/Mat33';
 import Rot from '../common/Rot';
-import Sweep from '../common/Sweep';
-import Transform from '../common/Transform';
-import Velocity from '../common/Velocity';
-import Position from '../common/Position';
-
-import { default as Joint, JointOpt, JointDef} from '../Joint';
+import { default as Joint, JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
+
+
+const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
 
 /**
  * Motor joint definition.
@@ -74,7 +66,7 @@ export interface MotorJointOpt extends JointOpt {
 export interface MotorJointDef extends JointDef, MotorJointOpt {
 }
 
-var DEFAULTS = {
+const DEFAULTS = {
   maxForce : 1.0,
   maxTorque : 1.0,
   correctionFactor : 0.3
@@ -84,10 +76,6 @@ var DEFAULTS = {
  * A motor joint is used to control the relative motion between two bodies. A
  * typical usage is to control the movement of a dynamic body with respect to
  * the ground.
- *
- * @param {MotorJointDef} def
- * @param {Body} bodyA
- * @param {Body} bodyB
  */
 export default class MotorJoint extends Joint {
   static TYPE = 'motor-joint' as 'motor-joint';
@@ -180,15 +168,15 @@ export default class MotorJoint extends Joint {
       linearOffset: this.m_linearOffset,
       angularOffset: this.m_angularOffset,
     };
-  };
+  }
 
   static _deserialize(data, world, restore) {
-    data = Object.assign({}, data);
+    data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
-    var joint = new MotorJoint(data);
+    const joint = new MotorJoint(data);
     return joint;
-  };
+  }
 
   /**
    * @internal
@@ -274,8 +262,6 @@ export default class MotorJoint extends Joint {
 
   /**
    * Get the anchor point on bodyA in world coordinates.
-   *
-   * @return {Vec2}
    */
   getAnchorA() {
     return this.m_bodyA.getPosition();
@@ -283,8 +269,6 @@ export default class MotorJoint extends Joint {
 
   /**
    * Get the anchor point on bodyB in world coordinates.
-   *
-   * @return {Vec2}
    */
   getAnchorB() {
     return this.m_bodyB.getPosition();
@@ -292,9 +276,6 @@ export default class MotorJoint extends Joint {
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
-   *
-   * @param {float} inv_dt
-   * @return {Vec2}
    */
   getReactionForce(inv_dt) {
     return Vec2.mul(inv_dt, this.m_linearImpulse);
@@ -302,9 +283,6 @@ export default class MotorJoint extends Joint {
 
   /**
    * Get the reaction torque on bodyB in N*m.
-   * 
-   * @param {float} inv_dt
-   * @return {float}
    */
   getReactionTorque(inv_dt) {
     return inv_dt * this.m_angularImpulse;
@@ -318,17 +296,17 @@ export default class MotorJoint extends Joint {
     this.m_invIA = this.m_bodyA.m_invI;
     this.m_invIB = this.m_bodyB.m_invI;
 
-    var cA = this.m_bodyA.c_position.c;
-    var aA = this.m_bodyA.c_position.a;
-    var vA = this.m_bodyA.c_velocity.v;
-    var wA = this.m_bodyA.c_velocity.w;
+    const cA = this.m_bodyA.c_position.c;
+    const aA = this.m_bodyA.c_position.a;
+    const vA = this.m_bodyA.c_velocity.v;
+    let wA = this.m_bodyA.c_velocity.w;
 
-    var cB = this.m_bodyB.c_position.c;
-    var aB = this.m_bodyB.c_position.a;
-    var vB = this.m_bodyB.c_velocity.v;
-    var wB = this.m_bodyB.c_velocity.w;
+    const cB = this.m_bodyB.c_position.c;
+    const aB = this.m_bodyB.c_position.a;
+    const vB = this.m_bodyB.c_velocity.v;
+    let wB = this.m_bodyB.c_velocity.w;
 
-    var qA = Rot.neo(aA), qB = Rot.neo(aB);
+    const qA = Rot.neo(aA), qB = Rot.neo(aB);
 
     // Compute the effective mass matrix.
     this.m_rA = Rot.mulVec2(qA, Vec2.neg(this.m_localCenterA));
@@ -343,12 +321,12 @@ export default class MotorJoint extends Joint {
     // [ -r1y*iA*r1x-r2y*iB*r2x, mA+r1x^2*iA+mB+r2x^2*iB, r1x*iA+r2x*iB]
     // [ -r1y*iA-r2y*iB, r1x*iA+r2x*iB, iA+iB]
 
-    var mA = this.m_invMassA;
-    var mB = this.m_invMassB;
-    var iA = this.m_invIA;
-    var iB = this.m_invIB;
+    const mA = this.m_invMassA;
+    const mB = this.m_invMassB;
+    const iA = this.m_invIA;
+    const iB = this.m_invIB;
 
-    var K = new Mat22();
+    const K = new Mat22();
     K.ex.x = mA + mB + iA * this.m_rA.y * this.m_rA.y + iB * this.m_rB.y
         * this.m_rB.y;
     K.ex.y = -iA * this.m_rA.x * this.m_rA.y - iB * this.m_rB.x * this.m_rB.y;
@@ -375,7 +353,7 @@ export default class MotorJoint extends Joint {
       this.m_linearImpulse.mul(step.dtRatio);
       this.m_angularImpulse *= step.dtRatio;
 
-      var P = Vec2.neo(this.m_linearImpulse.x, this.m_linearImpulse.y);
+      const P = Vec2.neo(this.m_linearImpulse.x, this.m_linearImpulse.y);
 
       vA.subMul(mA, P);
       wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_angularImpulse);
@@ -395,24 +373,24 @@ export default class MotorJoint extends Joint {
   }
 
   solveVelocityConstraints(step) {
-    var vA = this.m_bodyA.c_velocity.v;
-    var wA = this.m_bodyA.c_velocity.w;
-    var vB = this.m_bodyB.c_velocity.v;
-    var wB = this.m_bodyB.c_velocity.w;
+    const vA = this.m_bodyA.c_velocity.v;
+    let wA = this.m_bodyA.c_velocity.w;
+    const vB = this.m_bodyB.c_velocity.v;
+    let wB = this.m_bodyB.c_velocity.w;
 
-    var mA = this.m_invMassA, mB = this.m_invMassB;
-    var iA = this.m_invIA, iB = this.m_invIB;
+    const mA = this.m_invMassA, mB = this.m_invMassB;
+    const iA = this.m_invIA, iB = this.m_invIB;
 
-    var h = step.dt;
-    var inv_h = step.inv_dt;
+    const h = step.dt;
+    const inv_h = step.inv_dt;
 
     // Solve angular friction
     {
-      let Cdot = wB - wA + inv_h * this.m_correctionFactor * this.m_angularError;
+      const Cdot = wB - wA + inv_h * this.m_correctionFactor * this.m_angularError;
       let impulse = -this.m_angularMass * Cdot;
 
-      let oldImpulse = this.m_angularImpulse;
-      let maxImpulse = h * this.m_maxTorque;
+      const oldImpulse = this.m_angularImpulse;
+      const maxImpulse = h * this.m_maxTorque;
       this.m_angularImpulse = Math.clamp(this.m_angularImpulse + impulse,
           -maxImpulse, maxImpulse);
       impulse = this.m_angularImpulse - oldImpulse;
@@ -423,16 +401,16 @@ export default class MotorJoint extends Joint {
 
     // Solve linear friction
     {
-      let Cdot = Vec2.zero();
+      const Cdot = Vec2.zero();
       Cdot.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
       Cdot.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA));
       Cdot.addMul(inv_h * this.m_correctionFactor, this.m_linearError);
 
       let impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
-      let oldImpulse = Vec2.clone(this.m_linearImpulse);
+      const oldImpulse = Vec2.clone(this.m_linearImpulse);
       this.m_linearImpulse.add(impulse);
 
-      let maxImpulse = h * this.m_maxForce;
+      const maxImpulse = h * this.m_maxForce;
 
       this.m_linearImpulse.clamp(maxImpulse);
 

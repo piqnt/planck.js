@@ -52,22 +52,22 @@ function ChainPolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
   _ASSERT && common.assert(fA.getType() == ChainShape.TYPE);
   _ASSERT && common.assert(fB.getType() == PolygonShape.TYPE);
 
-  let chain = fA.getShape();
-  let edge = new EdgeShape();
+  const chain = fA.getShape();
+  const edge = new EdgeShape();
   chain.getChildEdge(edge, indexA);
 
   CollideEdgePolygon(manifold, edge, xfA, fB.getShape(), xfB);
 }
 
 // EPAxis Type
-let e_unknown = -1;
-let e_edgeA = 1;
-let e_edgeB = 2;
+const e_unknown = -1;
+const e_edgeA = 1;
+const e_edgeB = 2;
 
 // VertexType unused?
-let e_isolated = 0;
-let e_concave = 1;
-let e_convex = 2;
+const e_isolated = 0;
+const e_concave = 1;
+const e_convex = 2;
 
 // This structure is used to keep track of the best separating axis.
 function EPAxis() {
@@ -85,7 +85,7 @@ function TempPolygon() {
 
 // Reference face used for clipping
 function ReferenceFace() {
-  this.i1, this.i2; // int
+  this.i1; this.i2; // int
   this.v1, this.v2; // v
   this.normal = Vec2.zero();
   this.sideNormal1 = Vec2.zero();
@@ -95,10 +95,10 @@ function ReferenceFace() {
 }
 
 // reused
-let edgeAxis = new EPAxis();
-let polygonAxis = new EPAxis();
-let polygonBA = new TempPolygon();
-let rf = new ReferenceFace();
+const edgeAxis = new EPAxis();
+const polygonAxis = new EPAxis();
+const polygonBA = new TempPolygon();
+const rf = new ReferenceFace();
 
 /**
  * This function collides and edge and a polygon, taking into account edge
@@ -117,22 +117,22 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 
   let m_type1, m_type2; // VertexType unused?
 
-  let xf = Transform.mulTXf(xfA, xfB);
+  const xf = Transform.mulTXf(xfA, xfB);
 
-  let centroidB = Transform.mulVec2(xf, polygonB.m_centroid);
+  const centroidB = Transform.mulVec2(xf, polygonB.m_centroid);
 
-  let v0 = edgeA.m_vertex0;
-  let v1 = edgeA.m_vertex1;
-  let v2 = edgeA.m_vertex2;
-  let v3 = edgeA.m_vertex3;
+  const v0 = edgeA.m_vertex0;
+  const v1 = edgeA.m_vertex1;
+  const v2 = edgeA.m_vertex2;
+  const v3 = edgeA.m_vertex3;
 
-  let hasVertex0 = edgeA.m_hasVertex0;
-  let hasVertex3 = edgeA.m_hasVertex3;
+  const hasVertex0 = edgeA.m_hasVertex0;
+  const hasVertex3 = edgeA.m_hasVertex3;
 
-  let edge1 = Vec2.sub(v2, v1);
+  const edge1 = Vec2.sub(v2, v1);
   edge1.normalize();
-  let normal1 = Vec2.neo(edge1.y, -edge1.x);
-  let offset1 = Vec2.dot(normal1, Vec2.sub(centroidB, v1));
+  const normal1 = Vec2.neo(edge1.y, -edge1.x);
+  const offset1 = Vec2.dot(normal1, Vec2.sub(centroidB, v1));
   let offset0 = 0.0;
   let offset2 = 0.0;
   let convex1 = false;
@@ -143,7 +143,7 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 
   // Is there a preceding edge?
   if (hasVertex0) {
-    let edge0 = Vec2.sub(v1, v0);
+    const edge0 = Vec2.sub(v1, v0);
     edge0.normalize();
     normal0 = Vec2.neo(edge0.y, -edge0.x);
     convex1 = Vec2.cross(edge0, edge1) >= 0.0;
@@ -152,7 +152,7 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 
   // Is there a following edge?
   if (hasVertex3) {
-    let edge2 = Vec2.sub(v3, v2);
+    const edge2 = Vec2.sub(v3, v2);
     edge2.normalize();
     normal2 = Vec2.neo(edge2.y, -edge2.x);
     convex2 = Vec2.cross(edge1, edge2) > 0.0;
@@ -160,9 +160,9 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
   }
 
   let front;
-  let normal = Vec2.zero();
-  let lowerLimit = Vec2.zero();
-  let upperLimit = Vec2.zero();
+  const normal = Vec2.zero();
+  const lowerLimit = Vec2.zero();
+  const upperLimit = Vec2.zero();
 
   // Determine front or back collision. Determine collision normal limits.
   if (hasVertex0 && hasVertex3) {
@@ -279,7 +279,7 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
     polygonBA.normals[i] = Rot.mulVec2(xf.q, polygonB.m_normals[i]);
   }
 
-  let radius = 2.0 * Settings.polygonRadius;
+  const radius = 2.0 * Settings.polygonRadius;
 
   manifold.pointCount = 0;
 
@@ -289,7 +289,7 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
     edgeAxis.separation = Infinity;
 
     for (let i = 0; i < polygonBA.count; ++i) {
-      let s = Vec2.dot(normal, Vec2.sub(polygonBA.vertices[i], v1));
+      const s = Vec2.dot(normal, Vec2.sub(polygonBA.vertices[i], v1));
       if (s < edgeAxis.separation) {
         edgeAxis.separation = s;
       }
@@ -310,14 +310,14 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
     polygonAxis.index = -1;
     polygonAxis.separation = -Infinity;
 
-    let perp = Vec2.neo(-normal.y, normal.x);
+    const perp = Vec2.neo(-normal.y, normal.x);
 
     for (let i = 0; i < polygonBA.count; ++i) {
-      let n = Vec2.neg(polygonBA.normals[i]);
+      const n = Vec2.neg(polygonBA.normals[i]);
 
-      let s1 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v1));
-      let s2 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v2));
-      let s = Math.min(s1, s2);
+      const s1 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v1));
+      const s2 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v2));
+      const s = Math.min(s1, s2);
 
       if (s > radius) {
         // No collision
@@ -351,8 +351,8 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
   }
 
   // Use hysteresis for jitter reduction.
-  let k_relativeTol = 0.98;
-  let k_absoluteTol = 0.001;
+  const k_relativeTol = 0.98;
+  const k_absoluteTol = 0.001;
 
   let primaryAxis;
   if (polygonAxis.type == e_unknown) {
@@ -363,7 +363,7 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
     primaryAxis = edgeAxis;
   }
 
-  let ie = [ new ClipVertex(), new ClipVertex() ];
+  const ie = [ new ClipVertex(), new ClipVertex() ];
 
   if (primaryAxis.type == e_edgeA) {
     manifold.type = ManifoldType.e_faceA;
@@ -373,15 +373,15 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
     let bestIndex = 0;
     let bestValue = Vec2.dot(normal, polygonBA.normals[0]);
     for (let i = 1; i < polygonBA.count; ++i) {
-      let value = Vec2.dot(normal, polygonBA.normals[i]);
+      const value = Vec2.dot(normal, polygonBA.normals[i]);
       if (value < bestValue) {
         bestValue = value;
         bestIndex = i;
       }
     }
 
-    let i1 = bestIndex;
-    let i2 = i1 + 1 < polygonBA.count ? i1 + 1 : 0;
+    const i1 = bestIndex;
+    const i2 = i1 + 1 < polygonBA.count ? i1 + 1 : 0;
 
     ie[0].v = polygonBA.vertices[i1];
     ie[0].id.cf.indexA = 0;
@@ -436,8 +436,8 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
   rf.sideOffset2 = Vec2.dot(rf.sideNormal2, rf.v2);
 
   // Clip incident edge against extruded edge1 side edges.
-  let clipPoints1 = [ new ClipVertex(), new ClipVertex() ];
-  let clipPoints2 = [ new ClipVertex(), new ClipVertex() ];
+  const clipPoints1 = [ new ClipVertex(), new ClipVertex() ];
+  const clipPoints2 = [ new ClipVertex(), new ClipVertex() ];
 
   let np;
 
@@ -466,10 +466,10 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 
   let pointCount = 0;
   for (let i = 0; i < Settings.maxManifoldPoints; ++i) {
-    let separation = Vec2.dot(rf.normal, Vec2.sub(clipPoints2[i].v, rf.v1));
+    const separation = Vec2.dot(rf.normal, Vec2.sub(clipPoints2[i].v, rf.v1));
 
     if (separation <= radius) {
-      let cp = manifold.points[pointCount]; // ManifoldPoint
+      const cp = manifold.points[pointCount]; // ManifoldPoint
 
       if (primaryAxis.type == e_edgeA) {
         cp.localPoint = Transform.mulT(xf, clipPoints2[i].v);

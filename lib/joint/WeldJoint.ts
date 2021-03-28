@@ -22,37 +22,28 @@
  * SOFTWARE.
  */
 
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 import options from '../util/options';
 import Settings from '../Settings';
-
 import Math from '../common/Math';
 import Vec2 from '../common/Vec2';
 import Vec3 from '../common/Vec3';
-import Mat22 from '../common/Mat22';
 import Mat33 from '../common/Mat33';
 import Rot from '../common/Rot';
-import Sweep from '../common/Sweep';
-import Transform from '../common/Transform';
-import Velocity from '../common/Velocity';
-import Position from '../common/Position';
-
-import { default as Joint, JointOpt, JointDef} from '../Joint';
+import { default as Joint, JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
+
 
 /**
  * Weld joint definition. You need to specify local anchor points where they are
  * attached and the relative body angle. The position of the anchor points is
  * important for computing the reaction torque.
- * 
- * @prop {float} frequencyHz 
- * @prop {float} dampingRatio 
  *
- * @prop {Vec2} localAnchorA 
- * @prop {Vec2} localAnchorB 
- * @prop {float} referenceAngle 
+ * @prop {float} frequencyHz
+ * @prop {float} dampingRatio
+ *
+ * @prop {Vec2} localAnchorA
+ * @prop {Vec2} localAnchorB
+ * @prop {float} referenceAngle
  */
 export interface WeldJointOpt extends JointOpt {
   /**
@@ -85,18 +76,14 @@ export interface WeldJointDef extends JointDef, WeldJointOpt {
   localAnchorB: Vec2;
 }
 
-var DEFAULTS = {
+const DEFAULTS = {
   frequencyHz : 0.0,
   dampingRatio : 0.0,
-}
+};
 
 /**
  * A weld joint essentially glues two bodies together. A weld joint may distort
  * somewhat because the island constraint solver is approximate.
- *
- * @param {WeldJointDef} def
- * @param {Body} bodyA
- * @param {Body} bodyB
  */
 export default class WeldJoint extends Joint {
   static TYPE = 'weld-joint' as 'weld-joint';
@@ -184,7 +171,7 @@ export default class WeldJoint extends Joint {
       bodyA: this.m_bodyA,
       bodyB: this.m_bodyB,
       collideConnected: this.m_collideConnected,
-      
+
       frequencyHz: this.m_frequencyHz,
       dampingRatio: this.m_dampingRatio,
 
@@ -192,15 +179,15 @@ export default class WeldJoint extends Joint {
       localAnchorB: this.m_localAnchorB,
       referenceAngle: this.m_referenceAngle,
     };
-  };
+  }
 
   static _deserialize(data, world, restore) {
-    data = Object.assign({}, data);
+    data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
-    var joint = new WeldJoint(data);
+    const joint = new WeldJoint(data);
     return joint;
-  };
+  }
 
   /**
    * @internal
@@ -224,87 +211,77 @@ export default class WeldJoint extends Joint {
    */
   getLocalAnchorA() {
     return this.m_localAnchorA;
-  };
+  }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
   getLocalAnchorB() {
     return this.m_localAnchorB;
-  };
+  }
 
   /**
    * Get the reference angle.
    */
   getReferenceAngle() {
     return this.m_referenceAngle;
-  };
+  }
 
   /**
    * Set frequency in Hz.
    */
   setFrequency(hz: number) {
     this.m_frequencyHz = hz;
-  };
+  }
 
   /**
    * Get frequency in Hz.
    */
   getFrequency() {
     return this.m_frequencyHz;
-  };
+  }
 
   /**
    * Set damping ratio.
    */
   setDampingRatio(ratio: number) {
     this.m_dampingRatio = ratio;
-  };
+  }
 
   /**
    * Get damping ratio.
    */
   getDampingRatio() {
     return this.m_dampingRatio;
-  };
+  }
 
   /**
    * Get the anchor point on bodyA in world coordinates.
-   * 
-   * @return {Vec2}
-   */
+*/
   getAnchorA() {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
-  };
+  }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
-   * 
-   * @return {Vec2}
-   */
+*/
   getAnchorB() {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
-  };
+  }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
-   * 
-   * @param {float} inv_dt
-   * @return {Vec2}
-   */
+*/
   getReactionForce(inv_dt: number) {
     return Vec2.neo(this.m_impulse.x, this.m_impulse.y).mul(inv_dt);
-  };
+  }
 
   /**
    * Get the reaction torque on bodyB in N*m.
-   * 
-   * @param {float} inv_dt
-   * @return {float}
-   */
+*/
   getReactionTorque(inv_dt: number) {
     return inv_dt * this.m_impulse.z;
-  };
+  }
 
   initVelocityConstraints(step) {
     this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
@@ -314,15 +291,15 @@ export default class WeldJoint extends Joint {
     this.m_invIA = this.m_bodyA.m_invI;
     this.m_invIB = this.m_bodyB.m_invI;
 
-    var aA = this.m_bodyA.c_position.a;
-    var vA = this.m_bodyA.c_velocity.v;
-    var wA = this.m_bodyA.c_velocity.w;
+    const aA = this.m_bodyA.c_position.a;
+    const vA = this.m_bodyA.c_velocity.v;
+    let wA = this.m_bodyA.c_velocity.w;
 
-    var aB = this.m_bodyB.c_position.a;
-    var vB = this.m_bodyB.c_velocity.v;
-    var wB = this.m_bodyB.c_velocity.w;
+    const aB = this.m_bodyB.c_position.a;
+    const vB = this.m_bodyB.c_velocity.v;
+    let wB = this.m_bodyB.c_velocity.w;
 
-    var qA = Rot.neo(aA), qB = Rot.neo(aB);
+    const qA = Rot.neo(aA), qB = Rot.neo(aB);
 
     this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
     this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
@@ -336,12 +313,12 @@ export default class WeldJoint extends Joint {
     // [ -r1y*iA*r1x-r2y*iB*r2x, mA+r1x^2*iA+mB+r2x^2*iB, r1x*iA+r2x*iB]
     // [ -r1y*iA-r2y*iB, r1x*iA+r2x*iB, iA+iB]
 
-    var mA = this.m_invMassA;
-    var mB = this.m_invMassB; // float
-    var iA = this.m_invIA;
-    var iB = this.m_invIB; // float
+    const mA = this.m_invMassA;
+    const mB = this.m_invMassB; // float
+    const iA = this.m_invIA;
+    const iB = this.m_invIB; // float
 
-    var K = new Mat33();
+    const K = new Mat33();
     K.ex.x = mA + mB + this.m_rA.y * this.m_rA.y * iA + this.m_rB.y * this.m_rB.y
         * iB;
     K.ey.x = -this.m_rA.y * this.m_rA.x * iA - this.m_rB.y * this.m_rB.x * iB;
@@ -357,22 +334,22 @@ export default class WeldJoint extends Joint {
     if (this.m_frequencyHz > 0.0) {
       K.getInverse22(this.m_mass);
 
-      var invM = iA + iB; // float
-      var m = invM > 0.0 ? 1.0 / invM : 0.0; // float
+      let invM = iA + iB; // float
+      const m = invM > 0.0 ? 1.0 / invM : 0.0; // float
 
-      var C = aB - aA - this.m_referenceAngle; // float
+      const C = aB - aA - this.m_referenceAngle; // float
 
       // Frequency
-      var omega = 2.0 * Math.PI * this.m_frequencyHz; // float
+      const omega = 2.0 * Math.PI * this.m_frequencyHz; // float
 
       // Damping coefficient
-      var d = 2.0 * m * this.m_dampingRatio * omega; // float
+      const d = 2.0 * m * this.m_dampingRatio * omega; // float
 
       // Spring stiffness
-      var k = m * omega * omega; // float
+      const k = m * omega * omega; // float
 
       // magic formulas
-      var h = step.dt; // float
+      const h = step.dt; // float
       this.m_gamma = h * (d + h * k);
       this.m_gamma = this.m_gamma != 0.0 ? 1.0 / this.m_gamma : 0.0;
       this.m_bias = C * h * k * this.m_gamma;
@@ -393,7 +370,7 @@ export default class WeldJoint extends Joint {
       // Scale impulses to support a variable time step.
       this.m_impulse.mul(step.dtRatio);
 
-      var P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
+      const P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
 
       vA.subMul(mA, P);
       wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_impulse.z);
@@ -412,35 +389,35 @@ export default class WeldJoint extends Joint {
   }
 
   solveVelocityConstraints(step) {
-    var vA = this.m_bodyA.c_velocity.v;
-    var wA = this.m_bodyA.c_velocity.w;
-    var vB = this.m_bodyB.c_velocity.v;
-    var wB = this.m_bodyB.c_velocity.w;
+    const vA = this.m_bodyA.c_velocity.v;
+    let wA = this.m_bodyA.c_velocity.w;
+    const vB = this.m_bodyB.c_velocity.v;
+    let wB = this.m_bodyB.c_velocity.w;
 
-    var mA = this.m_invMassA;
-    var mB = this.m_invMassB; // float
-    var iA = this.m_invIA;
-    var iB = this.m_invIB; // float
+    const mA = this.m_invMassA;
+    const mB = this.m_invMassB; // float
+    const iA = this.m_invIA;
+    const iB = this.m_invIB; // float
 
     if (this.m_frequencyHz > 0.0) {
-      var Cdot2 = wB - wA; // float
+      const Cdot2 = wB - wA; // float
 
-      var impulse2 = -this.m_mass.ez.z
+      const impulse2 = -this.m_mass.ez.z
           * (Cdot2 + this.m_bias + this.m_gamma * this.m_impulse.z); // float
       this.m_impulse.z += impulse2;
 
       wA -= iA * impulse2;
       wB += iB * impulse2;
 
-      var Cdot1 = Vec2.zero();
+      const Cdot1 = Vec2.zero();
       Cdot1.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
       Cdot1.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA)); // Vec2
 
-      var impulse1 = Vec2.neg(Mat33.mulVec2(this.m_mass, Cdot1)); // Vec2
+      const impulse1 = Vec2.neg(Mat33.mulVec2(this.m_mass, Cdot1)); // Vec2
       this.m_impulse.x += impulse1.x;
       this.m_impulse.y += impulse1.y;
 
-      var P = Vec2.clone(impulse1); // Vec2
+      const P = Vec2.clone(impulse1); // Vec2
 
       vA.subMul(mA, P);
       wA -= iA * Vec2.cross(this.m_rA, P);
@@ -448,16 +425,16 @@ export default class WeldJoint extends Joint {
       vB.addMul(mB, P);
       wB += iB * Vec2.cross(this.m_rB, P);
     } else {
-      var Cdot1 = Vec2.zero();
+      const Cdot1 = Vec2.zero();
       Cdot1.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
       Cdot1.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA)); // Vec2
-      var Cdot2 = wB - wA; // float
-      var Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2); // Vec3
+      const Cdot2 = wB - wA; // float
+      const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2); // Vec3
 
-      var impulse = Vec3.neg(Mat33.mulVec3(this.m_mass, Cdot)); // Vec3
+      const impulse = Vec3.neg(Mat33.mulVec3(this.m_mass, Cdot)); // Vec3
       this.m_impulse.add(impulse);
 
-      var P = Vec2.neo(impulse.x, impulse.y);
+      const P = Vec2.neo(impulse.x, impulse.y);
 
       vA.subMul(mA, P);
       wA -= iA * (Vec2.cross(this.m_rA, P) + impulse.z);
@@ -476,22 +453,22 @@ export default class WeldJoint extends Joint {
    * This returns true if the position errors are within tolerance.
    */
   solvePositionConstraints(step) {
-    var cA = this.m_bodyA.c_position.c;
-    var aA = this.m_bodyA.c_position.a;
-    var cB = this.m_bodyB.c_position.c;
-    var aB = this.m_bodyB.c_position.a;
+    const cA = this.m_bodyA.c_position.c;
+    let aA = this.m_bodyA.c_position.a;
+    const cB = this.m_bodyB.c_position.c;
+    let aB = this.m_bodyB.c_position.a;
 
-    var qA = Rot.neo(aA), qB = Rot.neo(aB);
+    const qA = Rot.neo(aA), qB = Rot.neo(aB);
 
-    var mA = this.m_invMassA, mB = this.m_invMassB; // float
-    var iA = this.m_invIA, iB = this.m_invIB; // float
+    const mA = this.m_invMassA, mB = this.m_invMassB; // float
+    const iA = this.m_invIA, iB = this.m_invIB; // float
 
-    var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+    const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
 
-    var positionError, angularError; // float
+    let positionError, angularError; // float
 
-    var K = new Mat33();
+    const K = new Mat33();
     K.ex.x = mA + mB + rA.y * rA.y * iA + rB.y * rB.y * iB;
     K.ey.x = -rA.y * rA.x * iA - rB.y * rB.x * iB;
     K.ez.x = -rA.y * iA - rB.y * iB;
@@ -503,14 +480,14 @@ export default class WeldJoint extends Joint {
     K.ez.z = iA + iB;
 
     if (this.m_frequencyHz > 0.0) {
-      var C1 = Vec2.zero();
+      const C1 = Vec2.zero();
       C1.addCombine(1, cB, 1, rB);
       C1.subCombine(1, cA, 1, rA); // Vec2
 
       positionError = C1.length();
       angularError = 0.0;
 
-      var P = Vec2.neg(K.solve22(C1)); // Vec2
+      const P = Vec2.neg(K.solve22(C1)); // Vec2
 
       cA.subMul(mA, P);
       aA -= iA * Vec2.cross(rA, P);
@@ -518,26 +495,26 @@ export default class WeldJoint extends Joint {
       cB.addMul(mB, P);
       aB += iB * Vec2.cross(rB, P);
     } else {
-      var C1 = Vec2.zero();
+      const C1 = Vec2.zero();
       C1.addCombine(1, cB, 1, rB);
       C1.subCombine(1, cA, 1, rA);
 
-      var C2 = aB - aA - this.m_referenceAngle; // float
+      const C2 = aB - aA - this.m_referenceAngle; // float
 
       positionError = C1.length();
       angularError = Math.abs(C2);
 
-      var C = new Vec3(C1.x, C1.y, C2);
+      const C = new Vec3(C1.x, C1.y, C2);
 
-      var impulse = new Vec3();
+      let impulse = new Vec3();
       if (K.ez.z > 0.0) {
         impulse = Vec3.neg(K.solve33(C));
       } else {
-        var impulse2 = Vec2.neg(K.solve22(C1));
+        const impulse2 = Vec2.neg(K.solve22(C1));
         impulse.set(impulse2.x, impulse2.y, 0.0);
       }
 
-      var P = Vec2.neo(impulse.x, impulse.y);
+      const P = Vec2.neo(impulse.x, impulse.y);
 
       cA.subMul(mA, P);
       aA -= iA * (Vec2.cross(rA, P) + impulse.z);

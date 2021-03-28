@@ -42,8 +42,8 @@ function EdgeCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, index
   _ASSERT && common.assert(fixtureA.getType() == EdgeShape.TYPE);
   _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
 
-  let shapeA = fixtureA.getShape();
-  let shapeB = fixtureB.getShape();
+  const shapeA = fixtureA.getShape();
+  const shapeB = fixtureB.getShape();
 
   CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
 }
@@ -53,12 +53,12 @@ function ChainCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB,
   _ASSERT && common.assert(fixtureA.getType() == ChainShape.TYPE);
   _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
 
-  let chain = fixtureA.getShape();
-  let edge = new EdgeShape();
+  const chain = fixtureA.getShape();
+  const edge = new EdgeShape();
   chain.getChildEdge(edge, indexA);
 
-  let shapeA = edge;
-  let shapeB = fixtureB.getShape();
+  const shapeA = edge;
+  const shapeB = fixtureB.getShape();
 
   CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
 }
@@ -69,33 +69,33 @@ export function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
   manifold.pointCount = 0;
 
   // Compute circle in frame of edge
-  let Q = Transform.mulTVec2(xfA, Transform.mulVec2(xfB, circleB.m_p));
+  const Q = Transform.mulTVec2(xfA, Transform.mulVec2(xfB, circleB.m_p));
 
-  let A = edgeA.m_vertex1;
-  let B = edgeA.m_vertex2;
-  let e = Vec2.sub(B, A);
+  const A = edgeA.m_vertex1;
+  const B = edgeA.m_vertex2;
+  const e = Vec2.sub(B, A);
 
   // Barycentric coordinates
-  let u = Vec2.dot(e, Vec2.sub(B, Q));
-  let v = Vec2.dot(e, Vec2.sub(Q, A));
+  const u = Vec2.dot(e, Vec2.sub(B, Q));
+  const v = Vec2.dot(e, Vec2.sub(Q, A));
 
-  let radius = edgeA.m_radius + circleB.m_radius;
+  const radius = edgeA.m_radius + circleB.m_radius;
 
   // Region A
   if (v <= 0.0) {
-    let P = Vec2.clone(A);
-    let d = Vec2.sub(Q, P);
-    let dd = Vec2.dot(d, d);
+    const P = Vec2.clone(A);
+    const d = Vec2.sub(Q, P);
+    const dd = Vec2.dot(d, d);
     if (dd > radius * radius) {
       return;
     }
 
     // Is there an edge connected to A?
     if (edgeA.m_hasVertex0) {
-      let A1 = edgeA.m_vertex0;
-      let B1 = A;
-      let e1 = Vec2.sub(B1, A1);
-      let u1 = Vec2.dot(e1, Vec2.sub(B1, Q));
+      const A1 = edgeA.m_vertex0;
+      const B1 = A;
+      const e1 = Vec2.sub(B1, A1);
+      const u1 = Vec2.dot(e1, Vec2.sub(B1, Q));
 
       // Is the circle in Region AB of the previous edge?
       if (u1 > 0.0) {
@@ -119,19 +119,19 @@ export function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 
   // Region B
   if (u <= 0.0) {
-    let P = Vec2.clone(B);
-    let d = Vec2.sub(Q, P);
-    let dd = Vec2.dot(d, d);
+    const P = Vec2.clone(B);
+    const d = Vec2.sub(Q, P);
+    const dd = Vec2.dot(d, d);
     if (dd > radius * radius) {
       return;
     }
 
     // Is there an edge connected to B?
     if (edgeA.m_hasVertex3) {
-      let B2 = edgeA.m_vertex3;
-      let A2 = B;
-      let e2 = Vec2.sub(B2, A2);
-      let v2 = Vec2.dot(e2, Vec2.sub(Q, A2));
+      const B2 = edgeA.m_vertex3;
+      const A2 = B;
+      const e2 = Vec2.sub(B2, A2);
+      const v2 = Vec2.dot(e2, Vec2.sub(Q, A2));
 
       // Is the circle in Region AB of the next edge?
       if (v2 > 0.0) {
@@ -154,16 +154,16 @@ export function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
   }
 
   // Region AB
-  let den = Vec2.dot(e, e);
+  const den = Vec2.dot(e, e);
   _ASSERT && common.assert(den > 0.0);
-  let P = Vec2.combine(u / den, A, v / den, B);
-  let d = Vec2.sub(Q, P);
-  let dd = Vec2.dot(d, d);
+  const P = Vec2.combine(u / den, A, v / den, B);
+  const d = Vec2.sub(Q, P);
+  const dd = Vec2.dot(d, d);
   if (dd > radius * radius) {
     return;
   }
 
-  let n = Vec2.neo(-e.y, e.x);
+  const n = Vec2.neo(-e.y, e.x);
   if (Vec2.dot(n, Vec2.sub(Q, A)) < 0.0) {
     n.set(-n.x, -n.y);
   }

@@ -45,13 +45,13 @@ function CircleCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, ind
 export function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
   manifold.pointCount = 0;
 
-  let pA = Transform.mulVec2(xfA, circleA.m_p);
-  let pB = Transform.mulVec2(xfB, circleB.m_p);
+  const pA = Transform.mulVec2(xfA, circleA.m_p);
+  const pB = Transform.mulVec2(xfB, circleB.m_p);
 
-  let distSqr = Vec2.distanceSquared(pB, pA);
-  let rA = circleA.m_radius;
-  let rB = circleB.m_radius;
-  let radius = rA + rB;
+  const distSqr = Vec2.distanceSquared(pB, pA);
+  const rA = circleA.m_radius;
+  const rB = circleB.m_radius;
+  const radius = rA + rB;
   if (distSqr > radius * radius) {
     return;
   }

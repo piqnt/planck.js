@@ -104,13 +104,13 @@ export default class ChainShape extends Shape {
   }
 
   _deserialize(data, fixture, restore) {
-    var vertices = [] as Vec2[];
+    const vertices = [] as Vec2[];
     if (data.vertices) {
-      for (var i = 0; i < data.vertices.length; i++) {
+      for (let i = 0; i < data.vertices.length; i++) {
         vertices.push(restore(Vec2, data.vertices[i]));
       }
     }
-    var shape = new ChainShape(vertices, data.isLoop);
+    const shape = new ChainShape(vertices, data.isLoop);
     if (data.prevVertex) {
       shape.setPrevVertex(data.prevVertex);
     }
@@ -134,16 +134,16 @@ export default class ChainShape extends Shape {
   _createLoop(vertices: Vec2[]) {
     _ASSERT && common.assert(this.m_vertices.length == 0 && this.m_count == 0);
     _ASSERT && common.assert(vertices.length >= 3);
-    for (var i = 1; i < vertices.length; ++i) {
-      var v1 = vertices[i - 1];
-      var v2 = vertices[i];
+    for (let i = 1; i < vertices.length; ++i) {
+      const v1 = vertices[i - 1];
+      const v2 = vertices[i];
       // If the code crashes here, it means your vertices are too close together.
       _ASSERT && common.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
     }
 
     this.m_vertices = [];
     this.m_count = vertices.length + 1;
-    for (var i = 0; i < vertices.length; ++i) {
+    for (let i = 0; i < vertices.length; ++i) {
       this.m_vertices[i] = Vec2.clone(vertices[i]);
     }
     this.m_vertices[vertices.length] = Vec2.clone(vertices[0]);
@@ -164,15 +164,15 @@ export default class ChainShape extends Shape {
   _createChain(vertices: Vec2[]) {
     _ASSERT && common.assert(this.m_vertices.length == 0 && this.m_count == 0);
     _ASSERT && common.assert(vertices.length >= 2);
-    for (var i = 1; i < vertices.length; ++i) {
+    for (let i = 1; i < vertices.length; ++i) {
       // If the code crashes here, it means your vertices are too close together.
-      var v1 = vertices[i - 1];
-      var v2 = vertices[i];
+      const v1 = vertices[i - 1];
+      const v2 = vertices[i];
       _ASSERT && common.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
     }
 
     this.m_count = vertices.length;
-    for (var i = 0; i < vertices.length; ++i) {
+    for (let i = 0; i < vertices.length; ++i) {
       this.m_vertices[i] = Vec2.clone(vertices[i]);
     }
 
@@ -215,7 +215,7 @@ export default class ChainShape extends Shape {
    * clone the concrete shape.
    */
   _clone() {
-    var clone = new ChainShape();
+    const clone = new ChainShape();
     clone._createChain(this.m_vertices);
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
@@ -272,7 +272,7 @@ export default class ChainShape extends Shape {
   /**
    * Test a point for containment in this shape. This only works for convex
    * shapes.
-   * 
+   *
    * This always return false.
    *
    * @param {Transform} xf The shape world transform.
@@ -293,7 +293,7 @@ export default class ChainShape extends Shape {
   rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number) {
     _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
 
-    var edgeShape = new EdgeShape(this.getVertex(childIndex), this.getVertex(childIndex + 1));
+    const edgeShape = new EdgeShape(this.getVertex(childIndex), this.getVertex(childIndex + 1));
     return edgeShape.rayCast(output, input, xf, 0);
   }
 
@@ -308,8 +308,8 @@ export default class ChainShape extends Shape {
   computeAABB(aabb: AABB, xf: Transform, childIndex: number) {
     _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
 
-    var v1 = Transform.mulVec2(xf, this.getVertex(childIndex));
-    var v2 = Transform.mulVec2(xf, this.getVertex(childIndex + 1));
+    const v1 = Transform.mulVec2(xf, this.getVertex(childIndex));
+    const v2 = Transform.mulVec2(xf, this.getVertex(childIndex + 1));
 
     aabb.combinePoints(v1, v2);
   }
@@ -317,9 +317,9 @@ export default class ChainShape extends Shape {
   /**
    * Compute the mass properties of this shape using its dimensions and density.
    * The inertia tensor is computed about the local origin.
-   * 
+   *
    * Chains have zero mass.
-   * 
+   *
    * @param {MassData} massData Returns the mass data for this shape.
    * @param density The density in kilograms per meter squared.
    */
@@ -336,7 +336,7 @@ export default class ChainShape extends Shape {
     proxy.m_vertices = proxy.m_buffer;
     proxy.m_count = 2;
     proxy.m_radius = this.m_radius;
-  };
+  }
 }
 
 Shape.TYPES[ChainShape.TYPE] = ChainShape;

@@ -86,7 +86,7 @@ export default class EdgeShape extends Shape {
   }
 
   static _deserialize(data) {
-    var shape = new EdgeShape(data.vertex1, data.vertex2);
+    const shape = new EdgeShape(data.vertex1, data.vertex2);
     if (shape.m_hasVertex0) {
       shape.setPrev(data.vertex0);
     }
@@ -135,7 +135,7 @@ export default class EdgeShape extends Shape {
    * clone the concrete shape.
    */
   _clone() {
-    var clone = new EdgeShape();
+    const clone = new EdgeShape();
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
     clone.m_vertex1.set(this.m_vertex1);
@@ -181,42 +181,42 @@ export default class EdgeShape extends Shape {
     // NOT_USED(childIndex);
 
     // Put the ray into the edge's frame of reference.
-    var p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
-    var p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
-    var d = Vec2.sub(p2, p1);
+    const p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
+    const p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
+    const d = Vec2.sub(p2, p1);
 
-    var v1 = this.m_vertex1;
-    var v2 = this.m_vertex2;
-    var e = Vec2.sub(v2, v1);
-    var normal = Vec2.neo(e.y, -e.x);
+    const v1 = this.m_vertex1;
+    const v2 = this.m_vertex2;
+    const e = Vec2.sub(v2, v1);
+    const normal = Vec2.neo(e.y, -e.x);
     normal.normalize();
 
     // q = p1 + t * d
     // dot(normal, q - v1) = 0
     // dot(normal, p1 - v1) + t * dot(normal, d) = 0
-    var numerator = Vec2.dot(normal, Vec2.sub(v1, p1));
-    var denominator = Vec2.dot(normal, d);
+    const numerator = Vec2.dot(normal, Vec2.sub(v1, p1));
+    const denominator = Vec2.dot(normal, d);
 
     if (denominator == 0.0) {
       return false;
     }
 
-    var t = numerator / denominator;
+    const t = numerator / denominator;
     if (t < 0.0 || input.maxFraction < t) {
       return false;
     }
 
-    var q = Vec2.add(p1, Vec2.mul(t, d));
+    const q = Vec2.add(p1, Vec2.mul(t, d));
 
     // q = v1 + s * r
     // s = dot(q - v1, r) / dot(r, r)
-    var r = Vec2.sub(v2, v1);
-    var rr = Vec2.dot(r, r);
+    const r = Vec2.sub(v2, v1);
+    const rr = Vec2.dot(r, r);
     if (rr == 0.0) {
       return false;
     }
 
-    var s = Vec2.dot(Vec2.sub(q, v1), r) / rr;
+    const s = Vec2.dot(Vec2.sub(q, v1), r) / rr;
     if (s < 0.0 || 1.0 < s) {
       return false;
     }
@@ -239,11 +239,11 @@ export default class EdgeShape extends Shape {
    * @param childIndex The child shape
    */
   computeAABB(aabb: AABB, xf: Transform, childIndex: number) {
-    var v1 = Transform.mulVec2(xf, this.m_vertex1);
-    var v2 = Transform.mulVec2(xf, this.m_vertex2);
+    const v1 = Transform.mulVec2(xf, this.m_vertex1);
+    const v2 = Transform.mulVec2(xf, this.m_vertex2);
 
     aabb.combinePoints(v1, v2);
-    aabb.extend(this.m_radius)
+    aabb.extend(this.m_radius);
   }
 
   /**

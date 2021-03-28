@@ -100,7 +100,7 @@ export default class CircleShape extends Shape {
    * clone the concrete shape.
    */
   _clone() {
-    var clone = new CircleShape();
+    const clone = new CircleShape();
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
     clone.m_p = this.m_p.clone();
@@ -122,8 +122,8 @@ export default class CircleShape extends Shape {
    * @param p A point in world coordinates.
    */
   testPoint(xf: Transform, p: Vec2) {
-    var center = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
-    var d = Vec2.sub(p, center);
+    const center = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
+    const d = Vec2.sub(p, center);
     return Vec2.dot(d, d) <= this.m_radius * this.m_radius;
   }
 
@@ -141,15 +141,15 @@ export default class CircleShape extends Shape {
   // norm(x) = radius
   rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number) {
 
-    var position = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
-    var s = Vec2.sub(input.p1, position);
-    var b = Vec2.dot(s, s) - this.m_radius * this.m_radius;
+    const position = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
+    const s = Vec2.sub(input.p1, position);
+    const b = Vec2.dot(s, s) - this.m_radius * this.m_radius;
 
     // Solve quadratic equation.
-    var r = Vec2.sub(input.p2, input.p1);
-    var c = Vec2.dot(s, r);
-    var rr = Vec2.dot(r, r);
-    var sigma = c * c - rr * b;
+    const r = Vec2.sub(input.p2, input.p1);
+    const c = Vec2.dot(s, r);
+    const rr = Vec2.dot(r, r);
+    const sigma = c * c - rr * b;
 
     // Check for negative discriminant and short segment.
     if (sigma < 0.0 || rr < Math.EPSILON) {
@@ -157,7 +157,7 @@ export default class CircleShape extends Shape {
     }
 
     // Find the point of intersection of the line with the circle.
-    var a = -(c + Math.sqrt(sigma));
+    let a = -(c + Math.sqrt(sigma));
 
     // Is the intersection point on the segment?
     if (0.0 <= a && a <= input.maxFraction * rr) {
@@ -180,7 +180,7 @@ export default class CircleShape extends Shape {
    * @param childIndex The child shape
    */
   computeAABB(aabb: AABB, xf: Transform, childIndex: number) {
-    var p = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
+    const p = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
     aabb.lowerBound.set(p.x - this.m_radius, p.y - this.m_radius);
     aabb.upperBound.set(p.x + this.m_radius, p.y + this.m_radius);
   }

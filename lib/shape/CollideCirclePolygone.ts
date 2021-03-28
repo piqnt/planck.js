@@ -47,19 +47,19 @@ export function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
   manifold.pointCount = 0;
 
   // Compute circle position in the frame of the polygon.
-  let c = Transform.mulVec2(xfB, circleB.m_p);
-  let cLocal = Transform.mulTVec2(xfA, c);
+  const c = Transform.mulVec2(xfB, circleB.m_p);
+  const cLocal = Transform.mulTVec2(xfA, c);
 
   // Find the min separating edge.
   let normalIndex = 0;
   let separation = -Infinity;
-  let radius = polygonA.m_radius + circleB.m_radius;
-  let vertexCount = polygonA.m_count;
-  let vertices = polygonA.m_vertices;
-  let normals = polygonA.m_normals;
+  const radius = polygonA.m_radius + circleB.m_radius;
+  const vertexCount = polygonA.m_count;
+  const vertices = polygonA.m_vertices;
+  const normals = polygonA.m_normals;
 
   for (let i = 0; i < vertexCount; ++i) {
-    let s = Vec2.dot(normals[i], Vec2.sub(cLocal, vertices[i]));
+    const s = Vec2.dot(normals[i], Vec2.sub(cLocal, vertices[i]));
 
     if (s > radius) {
       // Early out.
@@ -73,10 +73,10 @@ export function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
   }
 
   // Vertices that subtend the incident face.
-  let vertIndex1 = normalIndex;
-  let vertIndex2 = vertIndex1 + 1 < vertexCount ? vertIndex1 + 1 : 0;
-  let v1 = vertices[vertIndex1];
-  let v2 = vertices[vertIndex2];
+  const vertIndex1 = normalIndex;
+  const vertIndex2 = vertIndex1 + 1 < vertexCount ? vertIndex1 + 1 : 0;
+  const v1 = vertices[vertIndex1];
+  const v2 = vertices[vertIndex2];
 
   // If the center is inside the polygon ...
   if (separation < Math.EPSILON) {
@@ -95,8 +95,8 @@ export function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
   }
 
   // Compute barycentric coordinates
-  let u1 = Vec2.dot(Vec2.sub(cLocal, v1), Vec2.sub(v2, v1));
-  let u2 = Vec2.dot(Vec2.sub(cLocal, v2), Vec2.sub(v1, v2));
+  const u1 = Vec2.dot(Vec2.sub(cLocal, v1), Vec2.sub(v2, v1));
+  const u2 = Vec2.dot(Vec2.sub(cLocal, v2), Vec2.sub(v1, v2));
   if (u1 <= 0.0) {
     if (Vec2.distanceSquared(cLocal, v1) > radius * radius) {
       return;
@@ -132,8 +132,8 @@ export function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
     manifold.points[0].id.cf.indexB = 0;
     manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
   } else {
-    let faceCenter = Vec2.mid(v1, v2);
-    let separation = Vec2.dot(cLocal, normals[vertIndex1]) - Vec2.dot(faceCenter, normals[vertIndex1]);
+    const faceCenter = Vec2.mid(v1, v2);
+    const separation = Vec2.dot(cLocal, normals[vertIndex1]) - Vec2.dot(faceCenter, normals[vertIndex1]);
     if (separation > radius) {
       return;
     }

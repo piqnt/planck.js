@@ -22,26 +22,18 @@
  * SOFTWARE.
  */
 
-var _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-var _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 import common from '../util/common';
 import options from '../util/options';
 import Settings from '../Settings';
-
 import Math from '../common/Math';
 import Vec2 from '../common/Vec2';
-import Vec3 from '../common/Vec3';
-import Mat22 from '../common/Mat22';
-import Mat33 from '../common/Mat33';
 import Rot from '../common/Rot';
-import Sweep from '../common/Sweep';
-import Transform from '../common/Transform';
-import Velocity from '../common/Velocity';
-import Position from '../common/Position';
-
-import { default as Joint, JointOpt, JointDef} from '../Joint';
+import { default as Joint, JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
+
+
+const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
 
 /**
  * Pulley joint definition. This requires two ground anchors, two dynamic body
@@ -84,24 +76,20 @@ export interface PulleyJointDef extends JointDef, PulleyJointOpt {
   ratio: number;
 }
 
-var DEFAULTS = {
+const DEFAULTS = {
   collideConnected : true
 };
 
 /**
  * The pulley joint is connected to two bodies and two fixed ground points. The
  * pulley supports a ratio such that: length1 + ratio * length2 <= constant
- * 
+ *
  * Yes, the force transmitted is scaled by the ratio.
- * 
+ *
  * Warning: the pulley joint can get a bit squirrelly by itself. They often work
  * better when combined with prismatic joints. You should also cover the the
  * anchor points with static shapes to prevent one side from going to zero
  * length.
- *
- * @param {PulleyJointDef} def
- * @param {Body} bodyA
- * @param {Body} bodyB
  */
 export default class PulleyJoint extends Joint {
   static TYPE = 'pulley-joint' as 'pulley-joint';
@@ -200,15 +188,15 @@ export default class PulleyJoint extends Joint {
       lengthB: this.m_lengthB,
       ratio: this.m_ratio,
     };
-  };
+  }
 
   static _deserialize(data, world, restore) {
-    data = Object.assign({}, data);
+    data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
-    var joint = new PulleyJoint(data);
+    const joint = new PulleyJoint(data);
     return joint;
-  };
+  }
 
   /**
    * Get the first ground anchor.
@@ -249,8 +237,8 @@ export default class PulleyJoint extends Joint {
    * Get the current length of the segment attached to bodyA.
    */
   getCurrentLengthA() {
-    var p = this.m_bodyA.getWorldPoint(this.m_localAnchorA);
-    var s = this.m_groundAnchorA;
+    const p = this.m_bodyA.getWorldPoint(this.m_localAnchorA);
+    const s = this.m_groundAnchorA;
     return Vec2.distance(p, s);
   }
 
@@ -258,15 +246,15 @@ export default class PulleyJoint extends Joint {
    * Get the current length of the segment attached to bodyB.
    */
   getCurrentLengthB() {
-    var p = this.m_bodyB.getWorldPoint(this.m_localAnchorB);
-    var s = this.m_groundAnchorB;
+    const p = this.m_bodyB.getWorldPoint(this.m_localAnchorB);
+    const s = this.m_groundAnchorB;
     return Vec2.distance(p, s);
   }
 
   /**
    * Shift the origin for any points stored in world coordinates.
-   * 
-   * @param {Vec2} newOrigin
+   *
+   * @param newOrigin
    */
   shiftOrigin(newOrigin) {
     this.m_groundAnchorA.sub(newOrigin);
@@ -275,38 +263,28 @@ export default class PulleyJoint extends Joint {
 
   /**
    * Get the anchor point on bodyA in world coordinates.
-   * 
-   * @return {Vec2}
-   */
+*/
   getAnchorA() {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
-   * 
-   * @return {Vec2}
-   */
+*/
   getAnchorB() {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
-   * 
-   * @param {float} inv_dt
-   * @return {Vec2}
-   */
+*/
   getReactionForce(inv_dt) {
     return Vec2.mul(this.m_impulse, this.m_uB).mul(inv_dt);
   }
 
   /**
    * Get the reaction torque on bodyB in N*m.
-   * 
-   * @param {float} inv_dt
-   * @return {float}
-   */
+*/
   getReactionTorque(inv_dt) {
     return 0.0;
   }
@@ -319,18 +297,18 @@ export default class PulleyJoint extends Joint {
     this.m_invIA = this.m_bodyA.m_invI;
     this.m_invIB = this.m_bodyB.m_invI;
 
-    var cA = this.m_bodyA.c_position.c;
-    var aA = this.m_bodyA.c_position.a;
-    var vA = this.m_bodyA.c_velocity.v;
-    var wA = this.m_bodyA.c_velocity.w;
+    const cA = this.m_bodyA.c_position.c;
+    const aA = this.m_bodyA.c_position.a;
+    const vA = this.m_bodyA.c_velocity.v;
+    let wA = this.m_bodyA.c_velocity.w;
 
-    var cB = this.m_bodyB.c_position.c;
-    var aB = this.m_bodyB.c_position.a;
-    var vB = this.m_bodyB.c_velocity.v;
-    var wB = this.m_bodyB.c_velocity.w;
+    const cB = this.m_bodyB.c_position.c;
+    const aB = this.m_bodyB.c_position.a;
+    const vB = this.m_bodyB.c_velocity.v;
+    let wB = this.m_bodyB.c_velocity.w;
 
-    var qA = Rot.neo(aA);
-    var qB = Rot.neo(aB);
+    const qA = Rot.neo(aA);
+    const qB = Rot.neo(aB);
 
     this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
     this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
@@ -339,8 +317,8 @@ export default class PulleyJoint extends Joint {
     this.m_uA = Vec2.sub(Vec2.add(cA, this.m_rA), this.m_groundAnchorA);
     this.m_uB = Vec2.sub(Vec2.add(cB, this.m_rB), this.m_groundAnchorB);
 
-    var lengthA = this.m_uA.length();
-    var lengthB = this.m_uB.length();
+    const lengthA = this.m_uA.length();
+    const lengthB = this.m_uB.length();
 
     if (lengthA > 10.0 * Settings.linearSlop) {
       this.m_uA.mul(1.0 / lengthA);
@@ -355,11 +333,11 @@ export default class PulleyJoint extends Joint {
     }
 
     // Compute effective mass.
-    var ruA = Vec2.cross(this.m_rA, this.m_uA); // float
-    var ruB = Vec2.cross(this.m_rB, this.m_uB); // float
+    const ruA = Vec2.cross(this.m_rA, this.m_uA); // float
+    const ruB = Vec2.cross(this.m_rB, this.m_uB); // float
 
-    var mA = this.m_invMassA + this.m_invIA * ruA * ruA; // float
-    var mB = this.m_invMassB + this.m_invIB * ruB * ruB; // float
+    const mA = this.m_invMassA + this.m_invIA * ruA * ruA; // float
+    const mB = this.m_invMassB + this.m_invIB * ruB * ruB; // float
 
     this.m_mass = mA + this.m_ratio * this.m_ratio * mB;
 
@@ -372,8 +350,8 @@ export default class PulleyJoint extends Joint {
       this.m_impulse *= step.dtRatio;
 
       // Warm starting.
-      var PA = Vec2.mul(-this.m_impulse, this.m_uA);
-      var PB = Vec2.mul(-this.m_ratio * this.m_impulse, this.m_uB);
+      const PA = Vec2.mul(-this.m_impulse, this.m_uA);
+      const PB = Vec2.mul(-this.m_ratio * this.m_impulse, this.m_uB);
 
       vA.addMul(this.m_invMassA, PA);
       wA += this.m_invIA * Vec2.cross(this.m_rA, PA);
@@ -392,21 +370,21 @@ export default class PulleyJoint extends Joint {
   }
 
   solveVelocityConstraints(step) {
-    var vA = this.m_bodyA.c_velocity.v;
-    var wA = this.m_bodyA.c_velocity.w;
-    var vB = this.m_bodyB.c_velocity.v;
-    var wB = this.m_bodyB.c_velocity.w;
+    const vA = this.m_bodyA.c_velocity.v;
+    let wA = this.m_bodyA.c_velocity.w;
+    const vB = this.m_bodyB.c_velocity.v;
+    let wB = this.m_bodyB.c_velocity.w;
 
-    var vpA = Vec2.add(vA, Vec2.cross(wA, this.m_rA));
-    var vpB = Vec2.add(vB, Vec2.cross(wB, this.m_rB));
+    const vpA = Vec2.add(vA, Vec2.cross(wA, this.m_rA));
+    const vpB = Vec2.add(vB, Vec2.cross(wB, this.m_rB));
 
-    var Cdot = -Vec2.dot(this.m_uA, vpA) - this.m_ratio
+    const Cdot = -Vec2.dot(this.m_uA, vpA) - this.m_ratio
         * Vec2.dot(this.m_uB, vpB); // float
-    var impulse = -this.m_mass * Cdot; // float
+    const impulse = -this.m_mass * Cdot; // float
     this.m_impulse += impulse;
 
-    var PA = Vec2.mul(-impulse, this.m_uA); // Vec2
-    var PB = Vec2.mul(-this.m_ratio * impulse, this.m_uB); // Vec2
+    const PA = Vec2.mul(-impulse, this.m_uA); // Vec2
+    const PB = Vec2.mul(-this.m_ratio * impulse, this.m_uB); // Vec2
     vA.addMul(this.m_invMassA, PA);
     wA += this.m_invIA * Vec2.cross(this.m_rA, PA);
     vB.addMul(this.m_invMassB, PB);
@@ -422,22 +400,22 @@ export default class PulleyJoint extends Joint {
    * This returns true if the position errors are within tolerance.
    */
   solvePositionConstraints(step) {
-    var cA = this.m_bodyA.c_position.c;
-    var aA = this.m_bodyA.c_position.a;
-    var cB = this.m_bodyB.c_position.c;
-    var aB = this.m_bodyB.c_position.a;
+    const cA = this.m_bodyA.c_position.c;
+    let aA = this.m_bodyA.c_position.a;
+    const cB = this.m_bodyB.c_position.c;
+    let aB = this.m_bodyB.c_position.a;
 
-    var qA = Rot.neo(aA), qB = Rot.neo(aB);
+    const qA = Rot.neo(aA), qB = Rot.neo(aB);
 
-    var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+    const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
 
     // Get the pulley axes.
-    var uA = Vec2.sub(Vec2.add(cA, this.m_rA), this.m_groundAnchorA);
-    var uB = Vec2.sub(Vec2.add(cB, this.m_rB), this.m_groundAnchorB);
+    const uA = Vec2.sub(Vec2.add(cA, this.m_rA), this.m_groundAnchorA);
+    const uB = Vec2.sub(Vec2.add(cB, this.m_rB), this.m_groundAnchorB);
 
-    var lengthA = uA.length();
-    var lengthB = uB.length();
+    const lengthA = uA.length();
+    const lengthB = uB.length();
 
     if (lengthA > 10.0 * Settings.linearSlop) {
       uA.mul(1.0 / lengthA);
@@ -452,25 +430,25 @@ export default class PulleyJoint extends Joint {
     }
 
     // Compute effective mass.
-    var ruA = Vec2.cross(rA, uA);
-    var ruB = Vec2.cross(rB, uB);
+    const ruA = Vec2.cross(rA, uA);
+    const ruB = Vec2.cross(rB, uB);
 
-    var mA = this.m_invMassA + this.m_invIA * ruA * ruA; // float
-    var mB = this.m_invMassB + this.m_invIB * ruB * ruB; // float
+    const mA = this.m_invMassA + this.m_invIA * ruA * ruA; // float
+    const mB = this.m_invMassB + this.m_invIB * ruB * ruB; // float
 
-    var mass = mA + this.m_ratio * this.m_ratio * mB; // float
+    let mass = mA + this.m_ratio * this.m_ratio * mB; // float
 
     if (mass > 0.0) {
       mass = 1.0 / mass;
     }
 
-    var C = this.m_constant - lengthA - this.m_ratio * lengthB; // float
-    var linearError = Math.abs(C); // float
+    const C = this.m_constant - lengthA - this.m_ratio * lengthB; // float
+    const linearError = Math.abs(C); // float
 
-    var impulse = -mass * C; // float
+    const impulse = -mass * C; // float
 
-    var PA = Vec2.mul(-impulse, uA); // Vec2
-    var PB = Vec2.mul(-this.m_ratio * impulse, uB); // Vec2
+    const PA = Vec2.mul(-impulse, uA); // Vec2
+    const PB = Vec2.mul(-this.m_ratio * impulse, uB); // Vec2
 
     cA.addMul(this.m_invMassA, PA);
     aA += this.m_invIA * Vec2.cross(rA, PA);
