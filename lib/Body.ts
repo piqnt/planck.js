@@ -36,7 +36,7 @@ import Position from './common/Position';
 
 import Fixture, { FixtureDef, FixtureOpt } from './Fixture';
 import Shape from './Shape';
-import { JointEdge } from "./joint";
+import { JointEdge } from "./Joint";
 import World from "./World";
 import { ContactEdge } from "./Contact";
 
