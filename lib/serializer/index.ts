@@ -6,46 +6,47 @@ import Shape from '../Shape';
 import Vec2 from '../common/Vec2';
 import Vec3 from '../common/Vec3';
 
-var SID = 0;
+let SID = 0;
 
-function Serializer(opts) {
+function Serializer(opts?) {
   opts = opts || {};
 
-  var rootClass = opts.rootClass || World;
+  const rootClass = opts.rootClass || World;
 
-  var preSerialize = opts.preSerialize || function (obj) { return obj; };
-  var postSerialize = opts.postSerialize || function (data, obj) { return data; };
+  const preSerialize = opts.preSerialize || function(obj) { return obj; };
+  const postSerialize = opts.postSerialize || function(data, obj) { return data; };
 
-  var preDeserialize = opts.preDeserialize || function (data) { return data; };
-  var postDeserialize = opts.postDeserialize || function (obj, data) { return obj; };
+  const preDeserialize = opts.preDeserialize || function(data) { return data; };
+  const postDeserialize = opts.postDeserialize || function(obj, data) { return obj; };
 
   // This is used to create ref objects during serialize
-  var refTypes = {
-    'World': World,
-    'Body': Body,
-    'Joint': Joint,
-    'Fixture': Fixture,
-    'Shape': Shape,
+  const refTypes = {
+    World,
+    Body,
+    Joint,
+    Fixture,
+    Shape,
   };
 
   // This is used by restore to deserialize objects and refs
-  var restoreTypes = Object.assign({
-    'Vec2': Vec2,
-    'Vec3': Vec3,
-  }, refTypes);
+  const restoreTypes = {
+    Vec2,
+    Vec3,
+    ...refTypes
+  };
 
-  this.toJson = function (root) {
-    var json = [];
+  this.toJson = function(root) {
+    const json = [];
 
-    var queue = [root];
-    var refMap = {};
+    const queue = [root];
+    const refMap = {};
 
     function storeRef(value, typeName) {
       value.__sid = value.__sid || ++SID;
       if (!refMap[value.__sid]) {
         queue.push(value);
-        var index = json.length + queue.length;
-        var ref = {
+        const index = json.length + queue.length;
+        const ref = {
           refIndex: index,
           refType: typeName
         };
@@ -56,18 +57,18 @@ function Serializer(opts) {
 
     function serialize(obj) {
       obj = preSerialize(obj);
-      var data = obj._serialize();
+      let data = obj._serialize();
       data = postSerialize(data, obj);
       return data;
     }
 
-    function toJson(value, top) {
+    function toJson(value, top?) {
       if (typeof value !== 'object' || value === null) {
         return value;
       }
       if (typeof value._serialize === 'function') {
         if (value !== top) {
-          for (var typeName in refTypes) {
+          for (let typeName in refTypes) {
             if (value instanceof refTypes[typeName]) {
               return storeRef(value, typeName);
             }
@@ -76,15 +77,15 @@ function Serializer(opts) {
         value = serialize(value);
       }
       if (Array.isArray(value)) {
-        var newValue = [];
-        for (var key = 0; key < value.length; key++) {
+        const newValue = [];
+        for (let key = 0; key < value.length; key++) {
           newValue[key] = toJson(value[key]);
         }
         value = newValue;
 
       } else {
-        var newValue = {};
-        for (var key in value) {
+        const newValue = {};
+        for (let key in value) {
           if (value.hasOwnProperty(key)) {
             newValue[key] = toJson(value[key]);
           }
@@ -95,20 +96,20 @@ function Serializer(opts) {
     }
 
     while (queue.length) {
-      var obj = queue.shift();
-      var str = toJson(obj, obj);
+      const obj = queue.shift();
+      const str = toJson(obj, obj);
       json.push(str);
     }
 
     return json;
   };
 
-  this.fromJson = function (json) {
-    var refMap = {};
+  this.fromJson = function(json) {
+    const refMap = {};
 
     function deserialize(cls, data, ctx) {
       data = preDeserialize(data);
-      var obj = cls._deserialize(data, ctx, restoreRef);
+      let obj = cls._deserialize(data, ctx, restoreRef);
       obj = postDeserialize(obj, data);
       return obj;
     }
@@ -118,22 +119,22 @@ function Serializer(opts) {
         return cls && cls._deserialize && deserialize(cls, ref, ctx);
       }
       cls = restoreTypes[ref.refType] || cls;
-      var index = ref.refIndex;
+      const index = ref.refIndex;
       if (!refMap[index]) {
-        var data = json[index];
-        var obj = deserialize(cls, data, ctx);
+        const data = json[index];
+        const obj = deserialize(cls, data, ctx);
         refMap[index] = obj;
       }
       return refMap[index];
     }
 
-    var root = rootClass._deserialize(json[0], null, restoreRef);
+    const root = rootClass._deserialize(json[0], null, restoreRef);
 
     return root;
-  }
+  };
 }
 
-var serializer = new Serializer();
+const serializer = new Serializer();
 
 Serializer.toJson = serializer.toJson;
 Serializer.fromJson = serializer.fromJson;
