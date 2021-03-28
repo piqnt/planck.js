@@ -2,6 +2,7 @@
     "compilerOptions": {
         // "strictNullChecks": true,
         // "noImplicitAny": true
+        "stripInternal": true,
         "target": "ES5"
     }
 }

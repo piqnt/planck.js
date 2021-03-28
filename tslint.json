@@ -11,6 +11,7 @@
     "prefer-conditional-expression": false,
     "prefer-template": false,
     "no-conditional-assignment": false,
-    "triple-equals": false
+    "triple-equals": false,
+    "prefer-for-of": false
   }
 }
