@@ -356,9 +356,3 @@ export function clipSegmentToLine(
 
   return numOut;
 }
-
-// todo
-Manifold.clipSegmentToLine = clipSegmentToLine;
-Manifold.ClipVertex = ClipVertex;
-Manifold.getPointStates = getPointStates;
-Manifold.PointState = PointState;

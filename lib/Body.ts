@@ -25,7 +25,6 @@
 
 import common from './util/common';
 import options from './util/options';
-
 import Vec2 from './common/Vec2';
 import Rot from './common/Rot';
 import Math from './common/Math';
@@ -33,7 +32,6 @@ import Sweep from './common/Sweep';
 import Transform from './common/Transform';
 import Velocity from './common/Velocity';
 import Position from './common/Position';
-
 import Fixture, { FixtureDef, FixtureOpt } from './Fixture';
 import Shape from './Shape';
 import { JointEdge } from "./Joint";
@@ -128,15 +126,13 @@ const BodyDefDefault: BodyDef = {
 
 /**
  * MassData This holds the mass data computed for a shape.
- *
- * @prop mass The mass of the shape, usually in kilograms.
- * @prop center The position of the shape's centroid relative to the shape's
- *       origin.
- * @prop I The rotational inertia of the shape about the local origin.
  */
 export class MassData {
+  /** The mass of the shape, usually in kilograms. */
   mass = 0;
+  /** The position of the shape's centroid relative to the shape's origin. */
   center = Vec2.zero();
+  /** The rotational inertia of the shape about the local origin. */
   I = 0;
 }
 
@@ -144,13 +140,9 @@ export class MassData {
  * A rigid body composed of one or more fixtures.
  */
 export default class Body {
-  STATIC = STATIC;
-  KINEMATIC = KINEMATIC;
-  DYNAMIC = DYNAMIC;
-
-  static STATIC: 'static';
-  static KINEMATIC: 'kinematic';
-  static DYNAMIC: 'dynamic';
+  static STATIC: BodyType = STATIC;
+  static KINEMATIC: BodyType = KINEMATIC;
+  static DYNAMIC: BodyType = DYNAMIC;
 
   /** @internal */ m_world: World;
   /** @internal */ m_awakeFlag: boolean;

@@ -24,14 +24,11 @@
 
 import Settings from './Settings';
 import common from './util/common';
-
 import Vec2 from './common/Vec2';
 import Math from './common/Math';
-
 import Body from './Body';
 import Contact from './Contact';
 import Joint from './Joint';
-
 import TimeOfImpact, { TOIInput, TOIOutput, TOIOutputState } from './collision/TimeOfImpact';
 import Distance, { DistanceInput, DistanceOutput, SimplexCache } from './collision/Distance';
 import World from "./World";
@@ -892,6 +889,3 @@ export default class Solver {
     }
   }
 }
-
-// todo:
-Solver.TimeStep = TimeStep;

@@ -701,10 +701,3 @@ export function testOverlap(shapeA: Shape, indexA: number, shapeB: Shape, indexB
 
   return output.distance < 10.0 * Math.EPSILON;
 }
-
-// todo:
-Distance.testOverlap = testOverlap;
-Distance.Input = DistanceInput;
-Distance.Output = DistanceOutput;
-Distance.Proxy = DistanceProxy;
-Distance.Cache = SimplexCache;

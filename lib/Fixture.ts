@@ -24,44 +24,53 @@
 
 import common from './util/common';
 import options from './util/options';
-
 import Math from './common/Math';
 import Vec2 from './common/Vec2';
-
 import AABB, { RayCastInput, RayCastOutput } from './collision/AABB';
-
 import Shape, { ShapeType } from './Shape';
 import Body, { MassData } from "./Body";
 import BroadPhase from "./collision/BroadPhase";
 import Transform from "./common/Transform";
 
+
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
 
 /**
  * A fixture definition is used to create a fixture. This class defines an
  * abstract fixture definition. You can reuse fixture definitions safely.
- *
- * @prop friction The friction coefficient, usually in the range [0,1]
- * @prop restitution The restitution (elasticity) usually in the range [0,1]
- * @prop density The density, usually in kg/m^2
- * @prop isSensor A sensor shape collects contact information but never generates a collision response
- * @prop userData
- * @prop filterGroupIndex Zero, positive or negative collision group. Fixtures with
- * same positive groupIndex always collide and fixtures with same negative groupIndex never collide.
- * @prop filterCategoryBits Collision category bit or bits that this fixture belongs
- *       to. If groupIndex is zero or not matching, then at least one bit in this fixture
- * categoryBits should match other fixture maskBits and vice versa.
- * @prop filterMaskBits Collision category bit or bits that this fixture accept for
- *       collision.
  */
 export interface FixtureOpt {
   userData?: unknown;
+  /**
+   * The friction coefficient, usually in the range [0,1]
+   */
   friction?: number;
+  /**
+   * The restitution (elasticity) usually in the range [0,1]
+   */
   restitution?: number;
+  /**
+   * The density, usually in kg/m^2
+   */
   density?: number;
+  /**
+   * A sensor shape collects contact information but never generates a collision response.
+   */
   isSensor?: boolean;
+  /**
+   * Zero, positive or negative collision group.
+   * Fixtures with same positive groupIndex always collide and fixtures with same negative groupIndex never collide.
+   */
   filterGroupIndex?: number;
+  /**
+   * Collision category bit or bits that this fixture belongs to.
+   * If groupIndex is zero or not matching, then at least one bit in this fixture categoryBits should match other fixture maskBits and vice versa.
+   */
   filterCategoryBits?: number;
+  /**
+   * Collision category bit or bits that this fixture accept for collision.
+   */
   filterMaskBits?: number;
 }
 

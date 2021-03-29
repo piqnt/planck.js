@@ -49,24 +49,61 @@ export { default as Distance } from './collision/Distance';
 export { default as TimeOfImpact } from './collision/TimeOfImpact';
 export { default as DynamicTree } from './collision/DynamicTree';
 
+import Solver, { TimeStep } from "./Solver";
 import { CollidePolygons } from './shape/CollidePolygon';
 import { default as Settings } from './Settings';
 import { default as Sweep } from './common/Sweep';
-import { default as Manifold } from './Manifold';
-import { default as Distance } from './collision/Distance';
-import { default as TimeOfImpact } from './collision/TimeOfImpact';
+import { clipSegmentToLine, ClipVertex, default as Manifold, getPointStates, PointState } from './Manifold';
+import { default as Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache, testOverlap } from './collision/Distance';
+import { default as TimeOfImpact, TOIInput, TOIOutput } from './collision/TimeOfImpact';
 import { default as DynamicTree } from './collision/DynamicTree';
 
 import { default as stats } from './util/stats'; // todo: what to do with this?
 
 /** @deprecated Merged with main namespace */
-export const internal = {
-  CollidePolygons,
-  Settings,
-  Sweep,
-  Manifold,
-  Distance,
-  TimeOfImpact,
-  DynamicTree,
-  stats,
-};
+export const internal = {};
+
+// @ts-ignore
+internal.CollidePolygons = CollidePolygons;
+// @ts-ignore
+internal.Settings = Settings;
+// @ts-ignore
+internal.Sweep = Sweep;
+// @ts-ignore
+internal.Manifold = Manifold;
+// @ts-ignore
+internal.Distance = Distance;
+// @ts-ignore
+internal.TimeOfImpact = TimeOfImpact;
+// @ts-ignore
+internal.DynamicTree = DynamicTree;
+// @ts-ignore
+internal.stats = stats;
+
+// @ts-ignore
+Manifold.clipSegmentToLine = clipSegmentToLine;
+// @ts-ignore
+Manifold.ClipVertex = ClipVertex;
+// @ts-ignore
+Manifold.getPointStates = getPointStates;
+// @ts-ignore
+Manifold.PointState = PointState;
+
+// @ts-ignore
+Solver.TimeStep = TimeStep;
+
+// @ts-ignore
+Distance.testOverlap = testOverlap;
+// @ts-ignore
+Distance.Input = DistanceInput;
+// @ts-ignore
+Distance.Output = DistanceOutput;
+// @ts-ignore
+Distance.Proxy = DistanceProxy;
+// @ts-ignore
+Distance.Cache = SimplexCache;
+
+// @ts-ignore
+TimeOfImpact.Input = TOIInput;
+// @ts-ignore
+TimeOfImpact.Output = TOIOutput;

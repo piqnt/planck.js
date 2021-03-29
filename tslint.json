@@ -12,6 +12,7 @@
     "prefer-template": false,
     "no-conditional-assignment": false,
     "triple-equals": false,
-    "prefer-for-of": false
+    "prefer-for-of": false,
+    "prefer-switch": false
   }
 }

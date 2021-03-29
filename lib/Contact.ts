@@ -23,23 +23,22 @@
  */
 
 import { ShapeType } from "./Shape";
-
 import common from './util/common';
-
 import Math from './common/Math';
 import Vec2 from './common/Vec2';
 import Transform from './common/Transform';
 import Mat22 from './common/Mat22';
 import Rot from './common/Rot';
-
 import Settings from './Settings';
 import Manifold, { ManifoldType, WorldManifold } from './Manifold';
-import Distance from './collision/Distance';
+import Distance, { testOverlap } from './collision/Distance';
 import Fixture from "./Fixture";
 import Body from "./Body";
 import { TimeStep } from "./Solver";
 
+
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
 
 const DEBUG_SOLVER = false;
 
@@ -73,7 +72,7 @@ export class ContactEdge {
  * @param fixtureB
  * @param indexB
  */
-type EvaluateFunction = (
+export type EvaluateFunction = (
   manifold: Manifold,
   xfA: Transform,
   fixtureA: Fixture,
@@ -83,7 +82,7 @@ type EvaluateFunction = (
   indexB: number
 ) => void;
 
-type ContactCallack = (
+export type ContactCallback = (
   manifold: Manifold,
   xfA: Transform,
   fixtureA: Fixture,
@@ -98,7 +97,7 @@ type ContactCallack = (
  * Friction mixing law. The idea is to allow either fixture to drive the
  * restitution to zero. For example, anything slides on ice.
  */
-function mixFriction(friction1, friction2) {
+export function mixFriction(friction1, friction2) {
   return Math.sqrt(friction1 * friction2);
 }
 
@@ -106,7 +105,7 @@ function mixFriction(friction1, friction2) {
  * Restitution mixing law. The idea is allow for anything to bounce off an
  * inelastic surface. For example, a superball bounces on anything.
  */
-function mixRestitution(restitution1, restitution2) {
+export function mixRestitution(restitution1, restitution2) {
   return restitution1 > restitution2 ? restitution1 : restitution2;
 }
 
@@ -200,7 +199,7 @@ export default class Contact {
     this.p_localPoint = Vec2.zero();
     this.p_localCenterA = Vec2.zero();
     this.p_localCenterB = Vec2.zero();
-    this.p_type; // Manifold.Type
+    this.p_type; // ManifoldType
     this.p_radiusA;
     this.p_radiusB;
     this.p_pointCount;
@@ -517,7 +516,7 @@ export default class Contact {
     if (sensor) {
       const shapeA = this.m_fixtureA.getShape();
       const shapeB = this.m_fixtureB.getShape();
-      touching = Distance.testOverlap(shapeA, this.m_indexA, shapeB, this.m_indexB, xfA, xfB);
+      touching = testOverlap(shapeA, this.m_indexA, shapeB, this.m_indexB, xfA, xfB);
 
       // Sensors don't generate manifolds.
       this.m_manifold.pointCount = 0;
@@ -1192,7 +1191,7 @@ export default class Contact {
   /**
    * @internal
    */
-  static addType(type1: ShapeType, type2: ShapeType, callback: ContactCallack): void {
+  static addType(type1: ShapeType, type2: ShapeType, callback: ContactCallback): void {
     s_registers[type1] = s_registers[type1] || {};
     s_registers[type1][type2] = callback;
   }

@@ -474,7 +474,3 @@ class SeparationFunction {
     return this.compute(false, t);
   }
 }
-
-// todo:
-TimeOfImpact.Input = TOIInput;
-TimeOfImpact.Output = TOIOutput;
