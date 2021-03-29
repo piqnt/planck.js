@@ -1,7 +1,7 @@
-export * from "../lib";
+export * from "../src";
 
-import AABB from "../lib/collision/AABB";
-import { Body, Fixture, Joint, World } from "../lib";
+import AABB from "../src/collision/AABB";
+import { Body, Fixture, Joint, World } from "../src";
 
 export interface Testbed {
   width: number;
