@@ -68,8 +68,35 @@ const s_subStep = new TimeStep(); // reuse
  * up one-to-one with the contact points in Manifold.
  */
 export class ContactImpulse {
-  normalImpulses = [];
-  tangentImpulses = [];
+  // TODO: merge with Contact class?
+
+  private readonly contact: Contact;
+  private readonly normals: number[];
+  private readonly tangents: number[];
+
+  constructor(contact) {
+    this.contact = contact;
+  }
+
+  get normalImpulses() {
+    const contact = this.contact;
+    const normals = this.normals;
+    normals.length = 0;
+    for (let p = 0; p < contact.v_points.length; ++p) {
+      normals.push(contact.v_points[p].normalImpulse);
+    }
+    return normals;
+  }
+
+  get tangentImpulses() {
+    const contact = this.contact;
+    const tangents = this.tangents;
+    tangents.length = 0;
+    for (let p = 0; p < contact.v_points.length; ++p) {
+      tangents.push(contact.v_points[p].tangentImpulse);
+    }
+    return tangents;
+  }
 }
 
 /**
@@ -877,15 +904,9 @@ export default class Solver {
   }
 
   postSolveIsland() {
-    // TODO: report contact.v_points instead of new object?
-    const impulse = new ContactImpulse();
     for (let c = 0; c < this.m_contacts.length; ++c) {
       const contact = this.m_contacts[c];
-      for (let p = 0; p < contact.v_points.length; ++p) {
-        impulse.normalImpulses.push(contact.v_points[p].normalImpulse);
-        impulse.tangentImpulses.push(contact.v_points[p].tangentImpulse);
-      }
-      this.m_world.postSolve(contact, impulse);
+      this.m_world.postSolve(contact, contact.m_impulse);
     }
   }
 }

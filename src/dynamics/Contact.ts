@@ -257,6 +257,9 @@ export default class Contact {
   /** @internal */ p_invIA: number | undefined;
   /** @internal */ p_invIB: number | undefined;
 
+  /** @internal this is used just for reporting */
+  m_impulse: ContactImpulse = new ContactImpulse(this);
+
   initConstraint(step: TimeStep): void {
     const fixtureA = this.m_fixtureA;
     const fixtureB = this.m_fixtureB;
