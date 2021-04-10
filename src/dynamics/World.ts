@@ -398,7 +398,7 @@ export default class World {
       const proxy = broadPhase.getUserData(proxyId); // FixtureProxy
       const fixture = proxy.fixture;
       const index = proxy.childIndex;
-      const output: RayCastOutput = {}; // TODO GC
+      const output = {} as RayCastOutput; // TODO GC
       const hit = fixture.rayCast(output, input, index);
       if (hit) {
         const fraction = output.fraction;
