@@ -79,7 +79,7 @@ export default class PolygonShape extends Shape {
     };
   }
 
-  static _deserialize = function(data, fixture, restore) {
+  static _deserialize(data, fixture, restore) {
     const vertices = [] as Vec2[];
     if (data.vertices) {
       for (let i = 0; i < data.vertices.length; i++) {
@@ -128,7 +128,7 @@ export default class PolygonShape extends Shape {
   }
 
   /**
-   * @private
+   * @internal
    *
    * Create a convex hull from the given array of local points. The count must be
    * in the range [3, Settings.maxPolygonVertices].
@@ -252,7 +252,7 @@ export default class PolygonShape extends Shape {
   }
 
   /**
-   * @private
+   * @internal
    */
   _setAsBox(hx: number, hy: number, center: Vec2, angle?: number): void;
   _setAsBox(hx: number, hy: number): void;
@@ -383,7 +383,7 @@ export default class PolygonShape extends Shape {
    * @param {Transform} xf The world transform of the shape.
    * @param childIndex The child shape
    */
-  computeAABB = function(aabb: AABB, xf: Transform, childIndex: number) {
+  computeAABB(aabb: AABB, xf: Transform, childIndex: number) {
     let minX = Infinity, minY = Infinity;
     let maxX = -Infinity, maxY = -Infinity;
     for (let i = 0; i < this.m_count; ++i) {
@@ -406,7 +406,7 @@ export default class PolygonShape extends Shape {
    * @param {MassData} massData Returns the mass data for this shape.
    * @param density The density in kilograms per meter squared.
    */
-  computeMass = function(massData: MassData, density: number) {
+  computeMass(massData: MassData, density: number) {
     // Polygon mass, centroid, and inertia.
     // Let rho be the polygon density in mass per unit area.
     // Then:
