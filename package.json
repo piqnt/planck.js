@@ -1,29 +1,31 @@
 {
   "name": "planck-js",
-  "version": "0.4.0-alpha.1",
-  "description": "2D JavaScript physics engine for cross-platform HTML5 game development",
+  "version": "1.0.0-alpha.1",
+  "description": "2D JavaScript/TypeScript physics engine for cross-platform HTML5 game development",
   "homepage": "http://shakiba.me/planck.js",
   "keywords": [
     "box2d",
     "html5",
     "javascript",
+    "typescript",
     "game",
     "physics",
     "engine",
     "2d",
     "mobile"
   ],
-  "license": "zlib",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/shakiba/planck.js.git"
   },
   "main": "dist/planck.js",
   "types": "index.d.ts",
-  "author": "Ali Shakiba (http://shakiba.me/planck.js)",
+  "author": "Ali Shakiba (https://github.com/shakiba)",
   "contributors": [
-    "Ali Shakiba (http://shakiba.me/planck.js)",
-    "Erin Catto (http://box2d.org/)"
+    "Erin Catto",
+    "Ali Shakiba",
+    "Oliver Zell"
   ],
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.13.0",
