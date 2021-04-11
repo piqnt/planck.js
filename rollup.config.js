@@ -3,7 +3,7 @@ import { terser } from "rollup-plugin-terser";
 import license from 'rollup-plugin-license';
 import replace from '@rollup/plugin-replace';
 import filesize from 'rollup-plugin-filesize';
-import typescript from '@rollup/plugin-typescript';
+import typescript from 'rollup-plugin-ts';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 
