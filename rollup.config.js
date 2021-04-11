@@ -15,21 +15,25 @@ export default [
     src: 'src/index.ts',
     dest: 'dist/planck.js',
     minimize: false,
+    declaration: true,
   },
   {
     src: 'src/index.ts',
     dest: 'dist/planck.min.js',
     minimize: true,
+    declaration: false,
   },
   {
     src: 'testbed/index.js',
     dest: 'dist/planck-with-testbed.js',
     minimize: false,
+    declaration: false,
   },
   {
     src: 'testbed/index.js',
     dest: 'dist/planck-with-testbed.min.js',
     minimize: true,
+    declaration: false,
   }
 ].map(options => {
   const config = {
@@ -52,7 +56,12 @@ export default [
       commonjs({
         include: ['node_modules/stage-js/**']
       }),
-      typescript({ target: "es5" }),
+      typescript({
+        tsconfig: resolvedConfig => ({
+          ...resolvedConfig,
+          declaration: options.declaration
+        })
+      }),
       babel({
         runtimeHelpers: true,
         exclude: 'node_modules/**',
