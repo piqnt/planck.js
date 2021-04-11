@@ -97,7 +97,6 @@ export default abstract class Joint {
   /** @internal */ m_bodyA: Body;
   /** @internal */ m_bodyB: Body;
 
-  /** @internal */ m_index = 0;
   /** @internal */ m_collideConnected: boolean;
 
   /** @internal */ m_prev = null as Joint | null;
@@ -119,25 +118,14 @@ export default abstract class Joint {
     _ASSERT && common.assert(bodyB);
     _ASSERT && common.assert(bodyA != bodyB);
 
-    // this.m_type = 'unknown-joint';
-
     this.m_bodyA = bodyA!;
     this.m_bodyB = bodyB!;
 
-    // this.m_index = 0;
     this.m_collideConnected = !!def.collideConnected;
-
-    // this.m_prev = null;
-    // this.m_next = null;
-
-    // this.m_edgeA = new JointEdge();
-    // this.m_edgeB = new JointEdge();
-
-    // this.m_islandFlag = false;
     this.m_userData = def.userData;
   }
 
-  static TYPES = {} as { [id: string]: new (...args: any[]) => Joint; };
+  static TYPES: { [id: string]: new (...args: any[]) => Joint; } = {};
 
   abstract _serialize(): object;
 
@@ -155,8 +143,6 @@ export default abstract class Joint {
 
   /**
    * Get the type of the concrete joint.
-   *
-   * @returns JointType
    */
   getType() {
     return this.m_type;
@@ -164,8 +150,6 @@ export default abstract class Joint {
 
   /**
    * Get the first body attached to this joint.
-   *
-   * @returns Body
    */
   getBodyA() {
     return this.m_bodyA;
@@ -173,8 +157,6 @@ export default abstract class Joint {
 
   /**
    * Get the second body attached to this joint.
-   *
-   * @returns Body
    */
   getBodyB() {
     return this.m_bodyB;
@@ -182,8 +164,6 @@ export default abstract class Joint {
 
   /**
    * Get the next joint the world joint list.
-   *
-   * @returns Joint
    */
   getNext() {
     return this.m_next;
@@ -193,7 +173,7 @@ export default abstract class Joint {
     return this.m_userData;
   }
 
-  setUserData(data: any) {
+  setUserData(data: unknown) {
     this.m_userData = data;
   }
 

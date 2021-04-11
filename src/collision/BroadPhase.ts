@@ -111,10 +111,8 @@ export default class BroadPhase {
    * roughly equal to k * log(n), where k is the number of collisions and n is the
    * number of proxies in the tree.
    *
-   * @param input The ray-cast input data. The ray extends from p1 to p1 +
-   *          maxFraction * (p2 - p1).
-   * @param rayCastCallback A function that is called for each proxy that is hit by
-   *          the ray.
+   * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
+   * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
    */
   rayCast(input, rayCastCallback) {
     this.m_tree.rayCast(input, rayCastCallback);
@@ -134,7 +132,7 @@ export default class BroadPhase {
    * Create a proxy with an initial AABB. Pairs are not reported until UpdatePairs
    * is called.
    */
-  createProxy(aabb: AABB, userData: any) {
+  createProxy(aabb: AABB, userData: FixtureProxy) {
     _ASSERT && common.assert(AABB.isValid(aabb));
     const proxyId = this.m_tree.createProxy(aabb, userData);
     this.m_proxyCount++;
@@ -186,7 +184,7 @@ export default class BroadPhase {
   /**
    * Update the pairs. This results in pair callbacks. This can only add pairs.
    */
-  updatePairs(addPairCallback: (userDataA: any, userDataB: any) => void) {
+  updatePairs(addPairCallback: (userDataA: FixtureProxy, userDataB: FixtureProxy) => void) {
     _ASSERT && common.assert(typeof addPairCallback === 'function');
     this.m_callback = addPairCallback;
 

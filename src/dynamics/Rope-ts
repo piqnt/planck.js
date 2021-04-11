@@ -141,10 +141,10 @@ export default class Rope {
     for (let i = 0; i < this.m_count; ++i) {
       this.m_p0s[i] = this.m_ps[i];
       if (this.m_ims[i] > 0.0) {
-        this.m_vs[i] += h * this.m_gravity;
+        this.m_vs[i].addMul(h, this.m_gravity);
       }
-      this.m_vs[i] *= d;
-      this.m_ps[i] += h * this.m_vs[i];
+      this.m_vs[i].mul(d);
+      this.m_ps[i].addMul(h, this.m_vs[i]);
 
     }
 
@@ -199,16 +199,16 @@ export default class Rope {
     const count3 = this.m_count - 2;
 
     for (let i = 0; i < count3; ++i) {
-      let p1 = this.m_ps[i]; // Vec2
-      let p2 = this.m_ps[i + 1]; // Vec2
-      let p3 = this.m_ps[i + 2]; // Vec2
+      const p1 = this.m_ps[i];
+      const p2 = this.m_ps[i + 1];
+      const p3 = this.m_ps[i + 2];
 
       const m1 = this.m_ims[i];
       const m2 = this.m_ims[i + 1];
       const m3 = this.m_ims[i + 2];
 
-      const d1 = p2 - p1;
-      const d2 = p3 - p2;
+      const d1 = Vec2.sub(p2, p1);
+      const d2 = Vec2.sub(p3, p2);
 
       const L1sqr = d1.lengthSquared();
       const L2sqr = d2.lengthSquared();
@@ -222,12 +222,12 @@ export default class Rope {
 
       let angle = Math.atan2(a, b);
 
-      const Jd1 = (-1.0 / L1sqr) * d1.skew(); // Vec2
-      const Jd2 = (1.0 / L2sqr) * d2.skew(); // Vec2
+      const Jd1 = Vec2.mul(Vec2.skew(d1), -1.0 / L1sqr);
+      const Jd2 = Vec2.mul(Vec2.skew(d2), 1.0 / L2sqr);
 
-      const J1 = -Jd1;
-      const J2 = Jd1 - Jd2;
-      const J3 = Jd2;
+      const J1 = Vec2.neg(Jd1);
+      const J2 = Vec2.sub(Jd1, Jd2);
+      const J3 = Jd2.clone();
 
       let mass = m1 * Vec2.dot(J1, J1) + m2 * Vec2.dot(J2, J2) + m3 * Vec2.dot(J3, J3);
       if (mass == 0.0) {
@@ -250,9 +250,9 @@ export default class Rope {
 
       const impulse = -this.m_k3 * mass * C;
 
-      p1 += (m1 * impulse) * J1;
-      p2 += (m2 * impulse) * J2;
-      p3 += (m3 * impulse) * J3;
+      p1.addMul(m1 * impulse, J1);
+      p2.addMul(m2 * impulse, J2);
+      p3.addMul(m3 * impulse, J3);
 
       this.m_ps[i] = p1;
       this.m_ps[i + 1] = p2;

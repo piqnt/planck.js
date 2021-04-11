@@ -116,20 +116,11 @@ export default class Transform {
 
   static mul(a: Transform, b: Vec2): Vec2;
   static mul(a: Transform, b: Transform): Transform;
-  static mul(a: Transform, b: Vec2[]): Vec2[];
-  static mul(a: Transform, b: Transform[]): Transform[];
-  /**
-   * @param {Transform} a
-   * @param {Vec2} b
-   * @returns {Vec2}
-   *
-   * @param {Transform} a
-   * @param {Transform} b
-   * @returns {Transform}
-   */
+  // static mul(a: Transform, b: Vec2[]): Vec2[];
+  // static mul(a: Transform, b: Transform[]): Transform[];
   static mul(a, b) {
-    _ASSERT && Transform.assert(a);
     if (Array.isArray(b)) {
+      _ASSERT && Transform.assert(a);
       const arr = [];
       for (let i = 0; i < b.length; i++) {
         arr[i] = Transform.mul(a, b[i]);
@@ -137,27 +128,16 @@ export default class Transform {
       return arr;
 
     } else if ('x' in b && 'y' in b) {
-      _ASSERT && Vec2.assert(b);
-      const x = (a.q.c * b.x - a.q.s * b.y) + a.p.x;
-      const y = (a.q.s * b.x + a.q.c * b.y) + a.p.y;
-      return Vec2.neo(x, y);
+      return Transform.mulVec2(a, b);
 
     } else if ('p' in b && 'q' in b) {
-      _ASSERT && Transform.assert(b);
-      // v2 = A.q.Rot(B.q.Rot(v1) + B.p) + A.p
-      // = (A.q * B.q).Rot(v1) + A.q.Rot(B.p) + A.p
-      const xf = Transform.identity();
-      xf.q = Rot.mulRot(a.q, b.q);
-      xf.p = Vec2.add(Rot.mulVec2(a.q, b.p), a.p);
-      return xf;
+      return Transform.mulXf(a, b);
     }
   }
 
-
-  // mulAll(a: Transform, b: Vec2[]): Vec2[];
-  // mulAll(a: Transform, b: Transform[]): Transform[];
-  /** @deprecated Use mulFn instead. */
-  static mulAll(a, b) {
+  static mulAll(a: Transform, b: Vec2[]): Vec2[];
+  static mulAll(a: Transform, b: Transform[]): Transform[];
+  static mulAll(a: Transform, b) {
     _ASSERT && Transform.assert(a);
     const arr = [];
     for (let i = 0; i < b.length; i++) {
@@ -166,9 +146,7 @@ export default class Transform {
     return arr;
   }
 
-  /**
-   * @experimental
-   */
+  /** @deprecated */
   static mulFn(a) {
     _ASSERT && Transform.assert(a);
     return function(b) {
@@ -176,7 +154,7 @@ export default class Transform {
     };
   }
 
-  static mulVec2(a, b) {
+  static mulVec2(a: Transform, b: Vec2): Vec2 {
     _ASSERT && Transform.assert(a);
     _ASSERT && Vec2.assert(b);
     const x = (a.q.c * b.x - a.q.s * b.y) + a.p.x;
@@ -184,9 +162,7 @@ export default class Transform {
     return Vec2.neo(x, y);
   }
 
-  // static mulVec2(a: Transform, b: Vec2): Vec2;
-  // static mulXf(a: Transform, b: Transform): Transform;
-  static mulXf(a, b) {
+  static mulXf(a: Transform, b: Transform): Transform {
     _ASSERT && Transform.assert(a);
     _ASSERT && Transform.assert(b);
     // v2 = A.q.Rot(B.q.Rot(v1) + B.p) + A.p
@@ -199,33 +175,12 @@ export default class Transform {
 
   static mulT(a: Transform, b: Vec2): Vec2;
   static mulT(a: Transform, b: Transform): Transform;
-  /**
-   * @param {Transform} a
-   * @param {Vec2} b
-   * @returns {Vec2}
-   *
-   * @param {Transform} a
-   * @param {Transform} b
-   * @returns {Transform}
-   */
   static mulT(a, b) {
-    _ASSERT && Transform.assert(a);
     if ('x' in b && 'y' in b) {
-      _ASSERT && Vec2.assert(b);
-      const px = b.x - a.p.x;
-      const py = b.y - a.p.y;
-      const x = (a.q.c * px + a.q.s * py);
-      const y = (-a.q.s * px + a.q.c * py);
-      return Vec2.neo(x, y);
+      return Transform.mulTVec2(a, b);
 
     } else if ('p' in b && 'q' in b) {
-      _ASSERT && Transform.assert(b);
-      // v2 = A.q' * (B.q * v1 + B.p - A.p)
-      // = A.q' * B.q * v1 + A.q' * (B.p - A.p)
-      const xf = Transform.identity();
-      xf.q.set(Rot.mulTRot(a.q, b.q));
-      xf.p.set(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
-      return xf;
+      return Transform.mulTXf(a, b);
     }
   }
 

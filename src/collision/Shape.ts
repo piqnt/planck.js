@@ -43,7 +43,7 @@ export default abstract class Shape {
 
   abstract _serialize(): object;
 
-  static TYPES = {} as { [id: string]: new (...args: any[]) => Shape; };
+  static TYPES: { [id: string]: new (...args: any[]) => Shape; } = {};
 
   static _deserialize(data, context, restore) {
     const clazz = Shape.TYPES[data.type];
@@ -94,7 +94,7 @@ export default abstract class Shape {
    *
    * @param output The ray-cast results.
    * @param input The ray-cast input parameters.
-   * @param transform The transform to be applied to the shape.
+   * @param xf The transform to be applied to the shape.
    * @param childIndex The child shape index
    */
   abstract rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;

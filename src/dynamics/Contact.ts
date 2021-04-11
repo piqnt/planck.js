@@ -31,10 +31,10 @@ import Mat22 from '../common/Mat22';
 import Rot from '../common/Rot';
 import Settings from '../Settings';
 import Manifold, { ManifoldType, WorldManifold } from '../collision/Manifold';
-import Distance, { testOverlap } from '../collision/Distance';
+import { testOverlap } from '../collision/Distance';
 import Fixture from "./Fixture";
 import Body from "./Body";
-import { TimeStep } from "./Solver";
+import { ContactImpulse, TimeStep } from "./Solver";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -63,15 +63,6 @@ export class ContactEdge {
   }
 }
 
-/**
- * @param manifold
- * @param xfA
- * @param fixtureA
- * @param indexA
- * @param xfB
- * @param fixtureB
- * @param indexB
- */
 export type EvaluateFunction = (
   manifold: Manifold,
   xfA: Transform,
@@ -109,6 +100,7 @@ export function mixRestitution(restitution1, restitution2) {
   return restitution1 > restitution2 ? restitution1 : restitution2;
 }
 
+// TODO: move this to Settings?
 const s_registers = [];
 
 // TODO: merge with ManifoldPoint?
@@ -128,13 +120,82 @@ export class VelocityConstraintPoint {
  * object may exist that has no contact points.
  */
 export default class Contact {
-  constructor(
-    fA: Fixture,
-    indexA: number,
-    fB: Fixture,
-    indexB: number,
-    evaluateFcn: EvaluateFunction
-  ) {
+  /** @internal */
+  m_nodeA: ContactEdge;
+  /** @internal */
+  m_nodeB: ContactEdge;
+  /** @internal */
+  m_fixtureA: Fixture;
+  /** @internal */
+  m_fixtureB: Fixture;
+  /** @internal */
+  m_indexA: number;
+  /** @internal */
+  m_indexB: number;
+  /** @internal */
+  m_evaluateFcn: EvaluateFunction;
+  /** @internal */
+  m_manifold: Manifold = new Manifold();
+  /** @internal */
+  m_prev: Contact | null = null;
+  /** @internal */
+  m_next: Contact | null = null;
+  /** @internal */
+  m_toi = 1.0;
+  /** @internal */
+  m_toiCount = 0;
+  /** @internal This contact has a valid TOI in m_toi */
+  m_toiFlag = false;
+  /** @internal */
+  m_friction: number;
+  /** @internal */
+  m_restitution: number;
+  /** @internal */
+  m_tangentSpeed = 0.0;
+  /** @internal This contact can be disabled (by user) */
+  m_enabledFlag = true;
+  /** @internal Used when crawling contact graph when forming islands. */
+  m_islandFlag = false;
+  /** @internal Set when the shapes are touching. */
+  m_touchingFlag = false;
+  /** @internal This contact needs filtering because a fixture filter was changed. */
+  m_filterFlag = false;
+  /** @internal This bullet contact had a TOI event */
+  m_bulletHitFlag = false;
+
+  /** @internal Contact reporting impulse object cache */
+  m_impulse: ContactImpulse = new ContactImpulse(this);
+
+  // VelocityConstraint
+  /** @internal */ v_points: VelocityConstraintPoint[] = []; // [maxManifoldPoints];
+  /** @internal */ v_normal: Vec2 = Vec2.zero();
+  /** @internal */ v_normalMass: Mat22 = new Mat22();
+  /** @internal */ v_K: Mat22 = new Mat22();
+  /** @internal */ v_pointCount: number;
+  /** @internal */ v_tangentSpeed: number | undefined;
+  /** @internal */ v_friction: number | undefined;
+  /** @internal */ v_restitution: number | undefined;
+  /** @internal */ v_invMassA: number | undefined;
+  /** @internal */ v_invMassB: number | undefined;
+  /** @internal */ v_invIA: number | undefined;
+  /** @internal */ v_invIB: number | undefined;
+
+  // PositionConstraint
+  /** @internal */ p_localPoints: Vec2[] = []; // [maxManifoldPoints];
+  /** @internal */ p_localNormal: Vec2 = Vec2.zero();
+  /** @internal */ p_localPoint: Vec2 = Vec2.zero();
+  /** @internal */ p_localCenterA: Vec2 = Vec2.zero();
+  /** @internal */ p_localCenterB: Vec2 = Vec2.zero();
+  /** @internal */ p_type: ManifoldType | undefined;
+  /** @internal */ p_radiusA: number | undefined;
+  /** @internal */ p_radiusB: number | undefined;
+  /** @internal */ p_pointCount: number | undefined;
+  /** @internal */ p_invMassA: number | undefined;
+  /** @internal */ p_invMassB: number | undefined;
+  /** @internal */ p_invIA: number | undefined;
+  /** @internal */ p_invIB: number | undefined;
+
+  constructor(fA: Fixture, indexA: number, fB: Fixture, indexB: number, evaluateFcn: EvaluateFunction) {
     // Nodes for connecting bodies.
     this.m_nodeA = new ContactEdge(this);
     this.m_nodeB = new ContactEdge(this);
@@ -147,118 +208,9 @@ export default class Contact {
 
     this.m_evaluateFcn = evaluateFcn;
 
-    this.m_manifold = new Manifold();
-
-    this.m_prev = null;
-    this.m_next = null;
-
-    this.m_toi = 1.0;
-    this.m_toiCount = 0;
-    // This contact has a valid TOI in m_toi
-    this.m_toiFlag = false;
-
-    this.m_friction = mixFriction(this.m_fixtureA.m_friction,
-      this.m_fixtureB.m_friction);
-    this.m_restitution = mixRestitution(this.m_fixtureA.m_restitution,
-      this.m_fixtureB.m_restitution);
-
-    this.m_tangentSpeed = 0.0;
-
-    // This contact can be disabled (by user)
-    this.m_enabledFlag = true;
-
-    // Used when crawling contact graph when forming islands.
-    this.m_islandFlag = false;
-
-    // Set when the shapes are touching.
-    this.m_touchingFlag = false;
-
-    // This contact needs filtering because a fixture filter was changed.
-    this.m_filterFlag = false;
-
-    // This bulconst contact had a TOI event
-    this.m_bulletHitFlag = false;
-
-    this.v_points = []; // VelocityConstraintPoint[maxManifoldPoints]
-    this.v_normal = Vec2.zero();
-    this.v_normalMass = new Mat22();
-    this.v_K = new Mat22();
-    this.v_pointCount;
-
-    this.v_tangentSpeed;
-    this.v_friction;
-    this.v_restitution;
-
-    this.v_invMassA;
-    this.v_invMassB;
-    this.v_invIA;
-    this.v_invIB;
-
-    this.p_localPoints = []; // Vec2[maxManifoldPoints];
-    this.p_localNormal = Vec2.zero();
-    this.p_localPoint = Vec2.zero();
-    this.p_localCenterA = Vec2.zero();
-    this.p_localCenterB = Vec2.zero();
-    this.p_type; // ManifoldType
-    this.p_radiusA;
-    this.p_radiusB;
-    this.p_pointCount;
-
-    this.p_invMassA;
-    this.p_invMassB;
-    this.p_invIA;
-    this.p_invIB;
+    this.m_friction = mixFriction(this.m_fixtureA.m_friction, this.m_fixtureB.m_friction);
+    this.m_restitution = mixRestitution(this.m_fixtureA.m_restitution, this.m_fixtureB.m_restitution);
   }
-
-  /** @internal */ m_nodeA: ContactEdge;
-  /** @internal */ m_nodeB: ContactEdge;
-  /** @internal */ m_fixtureA: Fixture;
-  /** @internal */ m_fixtureB: Fixture;
-  /** @internal */ m_indexA: number;
-  /** @internal */ m_indexB: number;
-  /** @internal */ m_evaluateFcn: EvaluateFunction;
-  /** @internal */ m_manifold: Manifold;
-  /** @internal */ m_prev: Contact | null;
-  /** @internal */ m_next: Contact | null;
-  /** @internal */ m_toi: number;
-  /** @internal */ m_toiCount: number;
-  /** @internal */ m_toiFlag: boolean;
-  /** @internal */ m_friction: number;
-  /** @internal */ m_restitution: number;
-  /** @internal */ m_tangentSpeed: number;
-  /** @internal */ m_enabledFlag: boolean;
-  /** @internal */ m_islandFlag: boolean;
-  /** @internal */ m_touchingFlag: boolean;
-  /** @internal */ m_filterFlag: boolean;
-  /** @internal */ m_bulletHitFlag: boolean;
-  /** @internal */ v_points: VelocityConstraintPoint[];
-  /** @internal */ v_normal: Vec2;
-  /** @internal */ v_normalMass: Mat22;
-  /** @internal */ v_K: Mat22;
-  /** @internal */ v_pointCount: number;
-  /** @internal */ v_tangentSpeed: number | undefined;
-  /** @internal */ v_friction: number | undefined;
-  /** @internal */ v_restitution: number | undefined;
-  /** @internal */ v_invMassA: number | undefined;
-  /** @internal */ v_invMassB: number | undefined;
-  /** @internal */ v_invIA: number | undefined;
-  /** @internal */ v_invIB: number | undefined;
-  /** @internal */ p_localPoints: Vec2[];
-  /** @internal */ p_localNormal: Vec2;
-  /** @internal */ p_localPoint: Vec2;
-  /** @internal */ p_localCenterA: Vec2;
-  /** @internal */ p_localCenterB: Vec2;
-  /** @internal */ p_type: ManifoldType | undefined;
-  /** @internal */ p_radiusA: number | undefined;
-  /** @internal */ p_radiusB: number | undefined;
-  /** @internal */ p_pointCount: number | undefined;
-  /** @internal */ p_invMassA: number | undefined;
-  /** @internal */ p_invMassB: number | undefined;
-  /** @internal */ p_invIA: number | undefined;
-  /** @internal */ p_invIB: number | undefined;
-
-  /** @internal this is used just for reporting */
-  m_impulse: ContactImpulse = new ContactImpulse(this);
 
   initConstraint(step: TimeStep): void {
     const fixtureA = this.m_fixtureA;

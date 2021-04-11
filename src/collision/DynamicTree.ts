@@ -778,10 +778,8 @@ export default class DynamicTree<T> {
    * roughly equal to k * log(n), where k is the number of collisions and n is the
    * number of proxies in the tree.
    *
-   * @param input The ray-cast input data. The ray extends from p1 to p1 +
-   *          maxFraction * (p2 - p1).
-   * @param rayCastCallback A function that is called for each proxy that is hit by
-   *          the ray.
+   * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
+   * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
    */
   rayCast(input: RayCastInput, rayCastCallback: (subInput: RayCastInput, id: number) => number): void {
     // TODO: GC

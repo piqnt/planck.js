@@ -85,7 +85,12 @@ const WorldDefDefault: WorldDef = {
  *
  * @return -1 to filter, 0 to terminate, fraction to clip the ray for closest hit, 1 to continue
  */
-type RayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) => number;
+export type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) => number;
+
+/**
+ * Called for each fixture found in the query AABB. It may return `false` to terminate the query.
+ */
+export type WorldAABBQueryCallback = (fixture: Fixture) => boolean;
 
 export default class World {
   /** @internal */ m_solver: Solver;
@@ -163,6 +168,7 @@ export default class World {
     this.m_t = 0;
   }
 
+  /** @internal */
   _serialize() {
     const bodies = [];
     const joints = [];
@@ -172,6 +178,7 @@ export default class World {
     }
 
     for (let j = this.getJointList(); j; j = j.getNext()) {
+      // @ts-ignore
       if (typeof j._serialize === 'function') {
         joints.push(j);
       }
@@ -184,6 +191,7 @@ export default class World {
     };
   }
 
+  /** @internal */
   static _deserialize(data, context, restore) {
     if (!data) {
       return new World();
@@ -365,14 +373,14 @@ export default class World {
    * Query the world for all fixtures that potentially overlap the provided AABB.
    *
    * @param aabb The query box.
-   * @param queryCallback Called for each fixture found in the query AABB. It may return `false` to terminate the query.
+   * @param callback Called for each fixture found in the query AABB. It may return `false` to terminate the query.
    */
-  queryAABB(aabb: AABB, queryCallback: (fixture: Fixture) => boolean): void {
-    _ASSERT && common.assert(typeof queryCallback === 'function');
+  queryAABB(aabb: AABB, callback: WorldAABBQueryCallback): void {
+    _ASSERT && common.assert(typeof callback === 'function');
     const broadPhase = this.m_broadPhase;
     this.m_broadPhase.query(aabb, function(proxyId) { // TODO GC
-      const proxy = broadPhase.getUserData(proxyId); // FixtureProxy
-      return queryCallback(proxy.fixture);
+      const proxy = broadPhase.getUserData(proxyId);
+      return callback(proxy.fixture);
     });
   }
 
@@ -386,7 +394,7 @@ export default class World {
    * @param point2 The ray ending point
    * @param callback A user implemented callback function.
    */
-  rayCast(point1: Vec2, point2: Vec2, callback: RayCastCallback): void {
+  rayCast(point1: Vec2, point2: Vec2, callback: WorldRayCastCallback): void {
     _ASSERT && common.assert(typeof callback === 'function');
     const broadPhase = this.m_broadPhase;
 
@@ -395,7 +403,7 @@ export default class World {
       p1 : point1,
       p2 : point2
     }, function(input, proxyId) { // TODO GC
-      const proxy = broadPhase.getUserData(proxyId); // FixtureProxy
+      const proxy = broadPhase.getUserData(proxyId);
       const fixture = proxy.fixture;
       const index = proxy.childIndex;
       const output = {} as RayCastOutput; // TODO GC
@@ -488,50 +496,50 @@ export default class World {
    *
    * Warning: This function is locked during callbacks.
    */
-  createBody(def: BodyDef): Body;
+  createBody(def?: BodyDef): Body;
   createBody(position: Vec2, angle?: number): Body;
-  createBody(): Body;
-  createBody(def?, angle?) {
+  createBody(arg1?, arg2?) {
     _ASSERT && common.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return null;
     }
 
-    if (def && Vec2.isValid(def)) {
-      def = {
-        position : def,
-        angle
-      };
+    let def: BodyDef = {};
+    if (!arg1) {
+    } else if (Vec2.isValid(arg1)) {
+      def = { position : arg1, angle: arg2 };
+    } else if (typeof arg1 === 'object') {
+      def = arg1;
     }
 
     const body = new Body(this, def);
-
     this._addBody(body);
-
     return body;
   }
 
-  createDynamicBody(def: BodyDef): Body;
+  createDynamicBody(def?: BodyDef): Body;
   createDynamicBody(position: Vec2, angle?: number): Body;
-  createDynamicBody(): Body;
-  createDynamicBody(def?, angle?) {
-    if (!def) {
-      def = {};
-    } else if (Vec2.isValid(def)) {
-      def = { position : def, angle };
+  createDynamicBody(arg1?, arg2?) {
+    let def: BodyDef = {};
+    if (!arg1) {
+    } else if (Vec2.isValid(arg1)) {
+      def = { position : arg1, angle: arg2 };
+    } else if (typeof arg1 === 'object') {
+      def = arg1;
     }
     def.type = 'dynamic';
     return this.createBody(def);
   }
 
-  createKinematicBody(def: BodyDef): Body;
+  createKinematicBody(def?: BodyDef): Body;
   createKinematicBody(position: Vec2, angle?: number): Body;
-  createKinematicBody(): Body;
-  createKinematicBody(def?, angle?) {
-    if (!def) {
-      def = {};
-    } else if (Vec2.isValid(def)) {
-      def = { position : def, angle };
+  createKinematicBody(arg1?, arg2?) {
+    let def: BodyDef = {};
+    if (!arg1) {
+    } else if (Vec2.isValid(arg1)) {
+      def = { position : arg1, angle: arg2 };
+    } else if (typeof arg1 === 'object') {
+      def = arg1;
     }
     def.type = 'kinematic';
     return this.createBody(def);
@@ -755,6 +763,7 @@ export default class World {
     this.publish('remove-joint', joint);
   }
 
+  /** @internal */
   s_step = new TimeStep(); // reuse
 
   /**

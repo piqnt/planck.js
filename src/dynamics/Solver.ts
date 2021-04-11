@@ -39,16 +39,19 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
 export class TimeStep {
-  dt = 0; // time step
-  inv_dt = 0; // inverse time step (0 if dt == 0)
+  /** time step */
+  dt = 0;
+  /** inverse time step (0 if dt == 0) */
+  inv_dt = 0;
   velocityIterations = 0;
   positionIterations = 0;
   warmStarting = false;
   blockSolve = true;
 
-  // timestep ratio for variable timestep
+  /** timestep ratio for variable timestep */
   inv_dt0 = 0.0;
-  dtRatio = 1; // dt * inv_dt0
+  /** dt * inv_dt0 */
+  dtRatio = 1;
 
   reset(dt) {
     if (this.dt > 0.0) {
@@ -60,7 +63,8 @@ export class TimeStep {
   }
 }
 
-const s_subStep = new TimeStep(); // reuse
+// reuse
+const s_subStep = new TimeStep();
 
 /**
  * Contact impulses for reporting. Impulses are used instead of forces because
@@ -128,10 +132,10 @@ export default class Solver {
     _ASSERT && common.assert(body instanceof Body, 'Not a Body!', body);
     this.m_bodies.push(body);
     // why?
-//  body.c_position.c.setZero();
-//  body.c_position.a = 0;
-//  body.c_velocity.v.setZero();
-//  body.c_velocity.w = 0;
+    // body.c_position.c.setZero();
+    // body.c_position.a = 0;
+    // body.c_velocity.v.setZero();
+    // body.c_velocity.w = 0;
   }
 
   addContact(contact) {

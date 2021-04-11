@@ -126,8 +126,8 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
   // 7. Return if _any_ axis indicates separation
   // 8. Clip
 
-  let m_type1: VertexType;
-  let m_type2: VertexType; // unused?
+  // let m_type1: VertexType;
+  // let m_type2: VertexType;
 
   const xf = Transform.mulTXf(xfA, xfB);
 
@@ -309,6 +309,7 @@ export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
   }
 
   // If no valid normal can be found than this edge should not collide.
+  // @ts-ignore
   if (edgeAxis.type == EPAxisType.e_unknown) {
     return;
   }

@@ -43,11 +43,16 @@ function PolygonContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) 
   CollidePolygons(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
 }
 
+interface MaxSeparation {
+  maxSeparation: number;
+  bestIndex: number;
+}
+
 /**
  * Find the max separation between poly1 and poly2 using edge normals from
  * poly1.
  */
-function FindMaxSeparation(poly1, xf1, poly2, xf2) {
+function findMaxSeparation(poly1: PolygonShape, xf1: Transform, poly2: PolygonShape, xf2: Transform, output: MaxSeparation) {
   const count1 = poly1.m_count;
   const count2 = poly2.m_count;
   const n1s = poly1.m_normals;
@@ -78,11 +83,11 @@ function FindMaxSeparation(poly1, xf1, poly2, xf2) {
   }
 
   // used to keep last FindMaxSeparation call values
-  FindMaxSeparation._maxSeparation = maxSeparation;
-  FindMaxSeparation._bestIndex = bestIndex;
+  output.maxSeparation = maxSeparation;
+  output.bestIndex = bestIndex;
 }
 
-function FindIncidentEdge(c, poly1, xf1, edge1, poly2, xf2) {
+function findIncidentEdge(c: ClipVertex[], poly1: PolygonShape, xf1: Transform, edge1: number, poly2: PolygonShape, xf2: Transform) {
   const normals1 = poly1.m_normals;
 
   const count2 = poly2.m_count;
@@ -122,6 +127,11 @@ function FindIncidentEdge(c, poly1, xf1, edge1, poly2, xf2) {
   c[1].id.cf.typeB = ContactFeatureType.e_vertex;
 }
 
+const maxSeparation = {
+  maxSeparation: 0,
+  bestIndex: 0,
+};
+
 /**
  *
  * Find edge normal of max separation on A - return if separating axis is found<br>
@@ -132,19 +142,19 @@ function FindIncidentEdge(c, poly1, xf1, edge1, poly2, xf2) {
  *
  * The normal points from 1 to 2
  */
-export function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
+export function CollidePolygons(manifold, polyA: PolygonShape, xfA: Transform, polyB: PolygonShape, xfB: Transform) {
   manifold.pointCount = 0;
   const totalRadius = polyA.m_radius + polyB.m_radius;
 
-  FindMaxSeparation(polyA, xfA, polyB, xfB);
-  const edgeA = FindMaxSeparation._bestIndex;
-  const separationA = FindMaxSeparation._maxSeparation;
+  findMaxSeparation(polyA, xfA, polyB, xfB, maxSeparation);
+  const edgeA = maxSeparation.bestIndex;
+  const separationA = maxSeparation.maxSeparation;
   if (separationA > totalRadius)
     return;
 
-  FindMaxSeparation(polyB, xfB, polyA, xfA);
-  const edgeB = FindMaxSeparation._bestIndex;
-  const separationB = FindMaxSeparation._maxSeparation;
+  findMaxSeparation(polyB, xfB, polyA, xfA, maxSeparation);
+  const edgeB = maxSeparation.bestIndex;
+  const separationB = maxSeparation.maxSeparation;
   if (separationB > totalRadius)
     return;
 
@@ -175,7 +185,7 @@ export function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
   }
 
   const incidentEdge = [ new ClipVertex(), new ClipVertex() ];
-  FindIncidentEdge(incidentEdge, poly1, xf1, edge1, poly2, xf2);
+  findIncidentEdge(incidentEdge, poly1, xf1, edge1, poly2, xf2);
 
   const count1 = poly1.m_count;
   const vertices1 = poly1.m_vertices;
@@ -211,16 +221,14 @@ export function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
   let np;
 
   // Clip to box side 1
-  np = clipSegmentToLine(clipPoints1, incidentEdge, Vec2.neg(tangent),
-      sideOffset1, iv1);
+  np = clipSegmentToLine(clipPoints1, incidentEdge, Vec2.neg(tangent), sideOffset1, iv1);
 
   if (np < 2) {
     return;
   }
 
   // Clip to negative box side 1
-  np = clipSegmentToLine(clipPoints2, clipPoints1, tangent,
-      sideOffset2, iv2);
+  np = clipSegmentToLine(clipPoints2, clipPoints1, tangent, sideOffset2, iv2);
 
   if (np < 2) {
     return;
@@ -235,12 +243,12 @@ export function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
     const separation = Vec2.dot(normal, clipPoints2[i].v) - frontOffset;
 
     if (separation <= totalRadius) {
-      const cp = manifold.points[pointCount]; // ManifoldPoint
+      const cp = manifold.points[pointCount];
       cp.localPoint.set(Transform.mulTVec2(xf2, clipPoints2[i].v));
       cp.id = clipPoints2[i].id;
       if (flip) {
         // Swap features
-        const cf = cp.id.cf; // ContactFeature
+        const cf = cp.id.cf;
         const indexA = cf.indexA;
         const indexB = cf.indexB;
         const typeA = cf.typeA;

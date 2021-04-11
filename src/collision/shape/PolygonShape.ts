@@ -51,6 +51,7 @@ export default class PolygonShape extends Shape {
   m_normals: Vec2[]; // Vec2[Settings.maxPolygonVertices]
   m_count: number;
 
+  // @ts-ignore
   constructor(vertices?: Vec2[]) {
     // @ts-ignore
     if (!(this instanceof PolygonShape)) {
@@ -89,7 +90,7 @@ export default class PolygonShape extends Shape {
 
     const shape = new PolygonShape(vertices);
     return shape;
-  };
+  }
 
   getVertex(index: number) {
     _ASSERT && common.assert(0 <= index && index < this.m_count);
@@ -310,9 +311,9 @@ export default class PolygonShape extends Shape {
   /**
    * Cast a ray against a child shape.
    *
-   * @param {RayCastOutput} output The ray-cast results.
-   * @param {RayCastInput} input The ray-cast input parameters.
-   * @param {Transform} transform The transform to be applied to the shape.
+   * @param output The ray-cast results.
+   * @param input The ray-cast input parameters.
+   * @param xf The transform to be applied to the shape.
    * @param childIndex The child shape index
    */
   rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number) {
@@ -379,13 +380,15 @@ export default class PolygonShape extends Shape {
    * Given a transform, compute the associated axis aligned bounding box for a
    * child shape.
    *
-   * @param {AABB} aabb Returns the axis aligned box.
-   * @param {Transform} xf The world transform of the shape.
+   * @param aabb Returns the axis aligned box.
+   * @param xf The world transform of the shape.
    * @param childIndex The child shape
    */
   computeAABB(aabb: AABB, xf: Transform, childIndex: number) {
-    let minX = Infinity, minY = Infinity;
-    let maxX = -Infinity, maxY = -Infinity;
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
     for (let i = 0; i < this.m_count; ++i) {
       const v = Transform.mulVec2(xf, this.m_vertices[i]);
       minX = Math.min(minX, v.x);
@@ -397,7 +400,7 @@ export default class PolygonShape extends Shape {
     aabb.lowerBound.set(minX, minY);
     aabb.upperBound.set(maxX, maxY);
     aabb.extend(this.m_radius);
-  };
+  }
 
   /**
    * Compute the mass properties of this shape using its dimensions and density.
@@ -452,8 +455,7 @@ export default class PolygonShape extends Shape {
     for (let i = 0; i < this.m_count; ++i) {
       // Triangle vertices.
       const e1 = Vec2.sub(this.m_vertices[i], s);
-      const e2 = i + 1 < this.m_count ? Vec2.sub(this.m_vertices[i + 1], s) : Vec2
-          .sub(this.m_vertices[0], s);
+      const e2 = i + 1 < this.m_count ? Vec2.sub(this.m_vertices[i + 1], s) : Vec2 .sub(this.m_vertices[0], s);
 
       const D = Vec2.cross(e1, e2);
 
@@ -486,9 +488,8 @@ export default class PolygonShape extends Shape {
     massData.I = density * I;
 
     // Shift to center of mass then to original body origin.
-    massData.I += massData.mass
-        * (Vec2.dot(massData.center, massData.center) - Vec2.dot(center, center));
-  };
+    massData.I += massData.mass * (Vec2.dot(massData.center, massData.center) - Vec2.dot(center, center));
+  }
 
   /**
    * Validate convexity. This is a very time consuming operation.

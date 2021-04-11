@@ -156,6 +156,7 @@ export default class WheelJoint extends Joint {
 
     this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
     this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
+    // @ts-ignore localAxis
     this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || def.localAxis || Vec2.neo(1.0, 0.0));
     this.m_localYAxisA = Vec2.cross(1.0, this.m_localXAxisA);
 
@@ -383,28 +384,28 @@ export default class WheelJoint extends Joint {
 
   /**
    * Get the anchor point on bodyA in world coordinates.
-*/
+   */
   getAnchorA() {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
-*/
+   */
   getAnchorB() {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
-*/
+   */
   getReactionForce(inv_dt) {
     return Vec2.combine(this.m_impulse, this.m_ay, this.m_springImpulse, this.m_ax).mul(inv_dt);
   }
 
   /**
    * Get the reaction torque on bodyB in N*m.
-*/
+   */
   getReactionTorque(inv_dt) {
     return inv_dt * this.m_motorImpulse;
   }
