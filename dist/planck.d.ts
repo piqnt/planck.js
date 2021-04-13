@@ -2390,10 +2390,6 @@ declare function CollidePolygonCircle(manifold: any, polygonA: any, xfA: any, ci
  * adjacency.
  */
 declare function CollideEdgePolygon(manifold: any, edgeA: any, xfA: any, polygonB: any, xfB: any): void;
-declare module JointWrapper {
-    export { Joint };
-}
-import Joint = JointWrapper.Joint;
 /**
  * Distance joint definition. This requires defining an anchor point on both
  * bodies and the non-zero length of the distance joint. The definition uses
@@ -2502,10 +2498,6 @@ declare class DistanceJoint extends Joint {
      */
     solvePositionConstraints(step: any): boolean;
 }
-declare module JointWrapper {
-    export { Joint };
-}
-import Joint = JointWrapper.Joint;
 /**
  * Friction joint definition.
  */
@@ -2601,14 +2593,6 @@ declare class FrictionJoint extends Joint {
      */
     solvePositionConstraints(step: any): boolean;
 }
-declare module JointWrapper {
-    export { Joint };
-}
-import Joint = JointWrapper.Joint;
-declare module JointWrapper {
-    export { Joint };
-}
-import Joint = JointWrapper.Joint;
 /**
  * Revolute joint definition. This requires defining an anchor point where the
  * bodies are joined. The definition uses local anchor points so that the
@@ -2792,10 +2776,6 @@ declare class RevoluteJoint extends Joint {
      */
     solvePositionConstraints(step: any): boolean;
 }
-declare module JointWrapper {
-    export { Joint };
-}
-import Joint = JointWrapper.Joint;
 /**
  * Prismatic joint definition. This requires defining a line of motion using an
  * axis and an anchor point. The definition uses local anchor points and a local
@@ -3065,10 +3045,6 @@ declare class GearJoint extends Joint {
      */
     solvePositionConstraints(step: any): boolean;
 }
-declare module JointWrapper {
-    export { Joint };
-}
-import Joint = JointWrapper.Joint;
 /**
  * Motor joint definition.
  */
@@ -3178,10 +3154,6 @@ declare class MotorJoint extends Joint {
      */
     solvePositionConstraints(step: any): boolean;
 }
-declare module JointWrapper {
-    export { Joint };
-}
-import Joint = JointWrapper.Joint;
 /**
  * Mouse joint definition. This requires a world target point, tuning
  * parameters, and the time step.
@@ -3295,10 +3267,6 @@ declare class MouseJoint extends Joint {
      */
     solvePositionConstraints(step: any): boolean;
 }
-declare module JointWrapper {
-    export { Joint };
-}
-import Joint = JointWrapper.Joint;
 /**
  * Pulley joint definition. This requires two ground anchors, two dynamic body
  * anchor points, and a pulley ratio.
@@ -3427,10 +3395,6 @@ declare class PulleyJoint extends Joint {
      */
     solvePositionConstraints(step: any): boolean;
 }
-declare module JointWrapper {
-    export { Joint };
-}
-import Joint = JointWrapper.Joint;
 /**
  * Rope joint definition. This requires two body anchor points and a maximum
  * lengths. Note: by default the connected objects will not collide. see
@@ -3524,10 +3488,6 @@ declare class RopeJoint extends Joint {
      */
     solvePositionConstraints(step: any): boolean;
 }
-declare module JointWrapper {
-    export { Joint };
-}
-import Joint = JointWrapper.Joint;
 /**
  * Weld joint definition. You need to specify local anchor points where they are
  * attached and the relative body angle. The position of the anchor points is
@@ -3641,10 +3601,6 @@ declare class WeldJoint extends Joint {
      */
     solvePositionConstraints(step: any): boolean;
 }
-declare module JointWrapper {
-    export { Joint };
-}
-import Joint = JointWrapper.Joint;
 /**
  * Wheel joint definition. This requires defining a line of motion using an axis
  * and an anchor point. The definition uses local anchor points and a local axis
