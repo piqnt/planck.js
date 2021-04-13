@@ -31,7 +31,8 @@ import Vec3 from '../../common/Vec3';
 import Mat22 from '../../common/Mat22';
 import Mat33 from '../../common/Mat33';
 import Rot from '../../common/Rot';
-import { default as Joint, JointOpt, JointDef } from '../Joint';
+import Joint from '../Joint';
+import { JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
 
 

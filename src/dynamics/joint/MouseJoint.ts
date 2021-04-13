@@ -29,7 +29,8 @@ import Vec2 from '../../common/Vec2';
 import Mat22 from '../../common/Mat22';
 import Rot from '../../common/Rot';
 import Transform from '../../common/Transform';
-import { default as Joint, JointOpt, JointDef } from '../Joint';
+import Joint from '../Joint';
+import { JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
 
 

@@ -27,7 +27,8 @@ import Settings from '../../Settings';
 import Math from '../../common/Math';
 import Vec2 from '../../common/Vec2';
 import Rot from '../../common/Rot';
-import { default as Joint, JointOpt, JointDef } from '../Joint';
+import Joint from '../Joint';
+import { JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
 
 /**

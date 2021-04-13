@@ -3,7 +3,7 @@ import { terser } from "rollup-plugin-terser";
 import license from 'rollup-plugin-license';
 import replace from '@rollup/plugin-replace';
 import filesize from 'rollup-plugin-filesize';
-import typescript from '@rollup/plugin-typescript';
+import typescript from 'rollup-plugin-ts';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 
@@ -15,21 +15,25 @@ export default [
     src: 'src/index.ts',
     dest: 'dist/planck.js',
     minimize: false,
+    declaration: true,
   },
   {
     src: 'src/index.ts',
     dest: 'dist/planck.min.js',
     minimize: true,
+    declaration: false,
   },
   {
     src: 'testbed/index.js',
     dest: 'dist/planck-with-testbed.js',
     minimize: false,
+    declaration: false,
   },
   {
     src: 'testbed/index.js',
     dest: 'dist/planck-with-testbed.min.js',
     minimize: true,
+    declaration: false,
   }
 ].map(options => {
   const config = {
@@ -52,7 +56,12 @@ export default [
       commonjs({
         include: ['node_modules/stage-js/**']
       }),
-      typescript({ target: "es5" }),
+      typescript({
+        tsconfig: resolvedConfig => ({
+          ...resolvedConfig,
+          declaration: options.declaration
+        })
+      }),
       babel({
         runtimeHelpers: true,
         exclude: 'node_modules/**',
