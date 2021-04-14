@@ -6,6 +6,7 @@ import filesize from 'rollup-plugin-filesize';
 import typescript from 'rollup-plugin-ts';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import declarationTransformer from './declarationTransformer';
 
 import licenseBanner from './license';
 
@@ -60,7 +61,44 @@ export default [
         tsconfig: resolvedConfig => ({
           ...resolvedConfig,
           declaration: options.declaration
-        })
+        }),
+        transformers: {
+          afterDeclarations: [
+            declarationTransformer({
+              exclude: [
+                'Mat22',
+                'Mat33',
+                'Pool',
+                'TreeNode',
+                'DynamicTree',
+                'BroadPhase',
+                'FixtureProxy',
+                'Fixture',
+                'JointEdge',
+                'Joint',
+                'Manifold',
+                'ManifoldPoint',
+                'ContactID',
+                'ContactFeature',
+                'WorldManifold',
+                'ContactEdge',
+                'Contact',
+                'TimeStep',
+                'ContactImpulse',
+                'MassData',
+                'Body',
+                'DistanceInput',
+                'DistanceOutput',
+                'SimplexCache',
+                'DistanceProxy',
+                'Shape',
+                'Sweep',
+                'TOIInput',
+                'TOIOutput'
+              ]
+            })
+          ]
+        },
       }),
       babel({
         runtimeHelpers: true,

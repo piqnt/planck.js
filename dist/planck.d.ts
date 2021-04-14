@@ -35,6 +35,12 @@ declare const math: Math & {
      */
     random(min?: number, max?: number): number;
 };
+declare function Vec2(x: number, y: number): Vec2;
+declare function Vec2(obj: {
+    x: number;
+    y: number;
+}): Vec2;
+declare function Vec2(): Vec2;
 declare class Vec2 {
     x: number;
     y: number;
@@ -179,6 +185,13 @@ declare class Vec2 {
      */
     static translateFn(x: any, y: any): (v: any) => Vec2;
 }
+declare function Vec3(x: number, y: number, z: number): Vec3;
+declare function Vec3(obj: {
+    x: number;
+    y: number;
+    z: number;
+}): Vec3;
+declare function Vec3(): Vec3;
 declare class Vec3 {
     x: number;
     y: number;
@@ -319,6 +332,7 @@ declare class Mat33 {
     static mulVec2(a: Mat33, b: Vec2): Vec2;
     static add(a: Mat33, b: Mat33): Mat33;
 }
+declare function Rot(angle?: number | Rot): Rot;
 declare class Rot {
     s: number;
     c: number;
@@ -353,6 +367,7 @@ declare class Rot {
     static mulTRot(rot: Rot, m: Rot): Rot;
     static mulTVec2(rot: Rot, m: Vec2): Vec2;
 }
+declare function Transform(position?: Vec2, rotation?: number): Transform;
 /**
  * A transform contains translation and rotation. It is used to represent the
  * position and orientation of rigid frames. Initialize using a position vector
@@ -403,6 +418,7 @@ interface RayCastOutput {
     normal: Vec2;
     fraction: number;
 }
+declare function AABB(lower?: Vec2, upper?: Vec2): AABB;
 declare class AABB {
     lowerBound: Vec2;
     upperBound: Vec2;
@@ -1353,6 +1369,7 @@ type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2, fracti
  * Called for each fixture found in the query AABB. It may return `false` to terminate the query.
  */
 type WorldAABBQueryCallback = (fixture: Fixture) => boolean;
+declare function World(def?: WorldDef | Vec2 | null): World;
 declare class World {
     /**
      * @param def World definition or gravity vector.
@@ -2031,6 +2048,8 @@ declare abstract class Shape {
     abstract computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
 }
 type ShapeType = "circle" | "edge" | "polygon" | "chain";
+declare function CircleShape(position: Vec2, radius?: number): CircleShape;
+declare function CircleShape(radius?: number): CircleShape;
 declare class CircleShape extends Shape {
     static TYPE: "circle";
     private m_p;
@@ -2096,6 +2115,7 @@ declare class CircleShape extends Shape {
     computeMass(massData: MassData, density: number): void;
     computeDistanceProxy(proxy: DistanceProxy): void;
 }
+declare function EdgeShape(v1?: Vec2, v2?: Vec2): EdgeShape;
 /**
  * A line segment (edge) shape. These can be connected in chains or loops to
  * other edge shapes. The connectivity information is used to ensure correct
@@ -2179,6 +2199,7 @@ declare class EdgeShape extends Shape {
     computeMass(massData: MassData, density?: number): void;
     computeDistanceProxy(proxy: DistanceProxy): void;
 }
+declare function PolygonShape(vertices?: Vec2[]): PolygonShape;
 /**
  * A convex polygon. It is assumed that the interior of the polygon is to the
  * left of each edge. Polygons have a maximum number of vertices equal to
@@ -2252,6 +2273,7 @@ declare class PolygonShape extends Shape {
     validate(): boolean;
     computeDistanceProxy(proxy: DistanceProxy): void;
 }
+declare function ChainShape(vertices?: Vec2[], loop?: boolean): ChainShape;
 /**
  * A chain shape is a free form sequence of line segments. The chain has
  * two-sided collision, so you can use inside and outside collision. Therefore,
@@ -2362,6 +2384,7 @@ declare class ChainShape extends Shape {
     computeMass(massData: MassData, density?: number): void;
     computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
 }
+declare function BoxShape(hx: number, hy: number, center?: Vec2, angle?: number): BoxShape;
 /**
  * A rectangle polygon which extend PolygonShape.
  */
@@ -2428,6 +2451,8 @@ interface DistanceJointDef extends JointDef, DistanceJointOpt {
      */
     localAnchorB: Vec2;
 }
+declare function DistanceJoint(def: DistanceJointDef): DistanceJoint;
+declare function DistanceJoint(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2): DistanceJoint;
 /**
  * A distance joint constrains two points on two bodies to remain at a fixed
  * distance from each other. You can view this as a massless, rigid rod.
@@ -2524,6 +2549,8 @@ interface FrictionJointDef extends JointDef, FrictionJointOpt {
      */
     localAnchorB: Vec2;
 }
+declare function FrictionJoint(def: FrictionJointDef): FrictionJoint;
+declare function FrictionJoint(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): FrictionJoint;
 /**
  * Friction joint. This is used for top-down friction. It provides 2D
  * translational friction and angular friction.
@@ -2658,6 +2685,8 @@ interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
      */
     referenceAngle: number;
 }
+declare function RevoluteJoint(def: RevoluteJointDef): RevoluteJoint;
+declare function RevoluteJoint(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RevoluteJoint;
 /**
  * A revolute joint constrains two bodies to share a common point while they are
  * free to rotate about the point. The relative rotation about the shared point
@@ -2837,6 +2866,8 @@ interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
      */
     referenceAngle: number;
 }
+declare function PrismaticJoint(def: PrismaticJointDef): PrismaticJoint;
+declare function PrismaticJoint(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): PrismaticJoint;
 /**
  * A prismatic joint. This joint provides one degree of freedom: translation
  * along an axis fixed in bodyA. Relative rotation is prevented. You can use a
@@ -2978,6 +3009,8 @@ interface GearJointDef extends JointDef, GearJointOpt {
      */
     joint2: RevoluteJoint | PrismaticJoint;
 }
+declare function GearJoint(def: GearJointDef): GearJoint;
+declare function GearJoint(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
 /**
  * A gear joint is used to connect two joints together. Either joint can be a
  * revolute or prismatic joint. You specify a gear ratio to bind the motions
@@ -3075,6 +3108,8 @@ interface MotorJointOpt extends JointOpt {
  */
 interface MotorJointDef extends JointDef, MotorJointOpt {
 }
+declare function MotorJoint(def: MotorJointDef): MotorJoint;
+declare function MotorJoint(def: MotorJointOpt, bodyA: Body, bodyB: Body): MotorJoint;
 /**
  * A motor joint is used to control the relative motion between two bodies. A
  * typical usage is to control the movement of a dynamic body with respect to
@@ -3186,6 +3221,8 @@ interface MouseJointDef extends JointDef, MouseJointOpt {
      */
     target: Vec2;
 }
+declare function MouseJoint(def: MouseJointDef): MouseJoint;
+declare function MouseJoint(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2): MouseJoint;
 /**
  * A mouse joint is used to make a point on a body track a specified world
  * point. This a soft constraint with a maximum force. This allows the
@@ -3307,6 +3344,8 @@ interface PulleyJointDef extends JointDef, PulleyJointOpt {
      */
     ratio: number;
 }
+declare function PulleyJoint(def: PulleyJointDef): PulleyJoint;
+declare function PulleyJoint(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number): PulleyJoint;
 /**
  * The pulley joint is connected to two bodies and two fixed ground points. The
  * pulley supports a ratio such that: length1 + ratio * length2 <= constant
@@ -3422,6 +3461,8 @@ interface RopeJointDef extends JointDef, RopeJointOpt {
      */
     localAnchorB: Vec2;
 }
+declare function RopeJoint(def: RopeJointDef): RopeJoint;
+declare function RopeJoint(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RopeJoint;
 /**
  * A rope joint enforces a maximum distance between two points on two bodies. It
  * has no other effect.
@@ -3530,6 +3571,8 @@ interface WeldJointDef extends JointDef, WeldJointOpt {
      */
     localAnchorB: Vec2;
 }
+declare function WeldJoint(def: WeldJointDef): WeldJoint;
+declare function WeldJoint(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): WeldJoint;
 /**
  * A weld joint essentially glues two bodies together. A weld joint may distort
  * somewhat because the island constraint solver is approximate.
@@ -3653,6 +3696,8 @@ interface WheelJointDef extends JointDef, WheelJointOpt {
      */
     localAxisA: Vec2;
 }
+declare function WheelJoint(def: WheelJointDef): WheelJoint;
+declare function WheelJoint(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): WheelJoint;
 /**
  * A wheel joint. This joint provides two degrees of freedom: translation along
  * an axis fixed in bodyA and rotation in the plane. In other words, it is a
