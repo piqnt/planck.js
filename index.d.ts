@@ -1,4 +1,4 @@
 export as namespace planck;
 
-export * from "./src";
+export * from "./dist/planck";
 export * from "./testbed";

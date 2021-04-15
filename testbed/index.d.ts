@@ -1,4 +1,4 @@
-export * from "../src";
+export * from "../dist/planck";
 
 import AABB from "../src/collision/AABB";
 import { Body, Fixture, Joint, World } from "../src";
