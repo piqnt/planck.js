@@ -22,54 +22,54 @@
 
 ###  normalImpulse
 
-• **normalImpulse**: *number*
+• **normalImpulse**: *number* = 0
 
-*Defined in [index.d.ts:304](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L304)*
+*Defined in [src/dynamics/Contact.ts:110](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Contact.ts#L110)*
 
 ___
 
 ###  normalMass
 
-• **normalMass**: *number*
+• **normalMass**: *number* = 0
 
-*Defined in [index.d.ts:306](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L306)*
+*Defined in [src/dynamics/Contact.ts:112](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Contact.ts#L112)*
 
 ___
 
 ###  rA
 
-• **rA**: *[Vec2](vec2.md)*
+• **rA**: *Vec2‹›* = Vec2.zero()
 
-*Defined in [index.d.ts:302](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L302)*
+*Defined in [src/dynamics/Contact.ts:108](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Contact.ts#L108)*
 
 ___
 
 ###  rB
 
-• **rB**: *[Vec2](vec2.md)*
+• **rB**: *Vec2‹›* = Vec2.zero()
 
-*Defined in [index.d.ts:303](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L303)*
+*Defined in [src/dynamics/Contact.ts:109](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Contact.ts#L109)*
 
 ___
 
 ###  tangentImpulse
 
-• **tangentImpulse**: *number*
+• **tangentImpulse**: *number* = 0
 
-*Defined in [index.d.ts:305](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L305)*
+*Defined in [src/dynamics/Contact.ts:111](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Contact.ts#L111)*
 
 ___
 
 ###  tangentMass
 
-• **tangentMass**: *number*
+• **tangentMass**: *number* = 0
 
-*Defined in [index.d.ts:307](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L307)*
+*Defined in [src/dynamics/Contact.ts:113](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Contact.ts#L113)*
 
 ___
 
 ###  velocityBias
 
-• **velocityBias**: *number*
+• **velocityBias**: *number* = 0
 
-*Defined in [index.d.ts:308](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L308)*
+*Defined in [src/dynamics/Contact.ts:114](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Contact.ts#L114)*

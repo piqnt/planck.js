@@ -2,4 +2,62 @@
 
 # Enumeration: TOIOutputState
 
+## Index
 
+### Enumeration members
+
+* [e_failed](toioutputstate.md#e_failed)
+* [e_overlapped](toioutputstate.md#e_overlapped)
+* [e_separated](toioutputstate.md#e_separated)
+* [e_touching](toioutputstate.md#e_touching)
+* [e_unknown](toioutputstate.md#e_unknown)
+
+## Enumeration members
+
+###  e_failed
+
+• **e_failed**: = 1
+
+*Defined in [dist/planck.d.ts:3888](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3888)*
+
+*Defined in [src/collision/TimeOfImpact.ts:57](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/TimeOfImpact.ts#L57)*
+
+___
+
+###  e_overlapped
+
+• **e_overlapped**: = 2
+
+*Defined in [dist/planck.d.ts:3889](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3889)*
+
+*Defined in [src/collision/TimeOfImpact.ts:58](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/TimeOfImpact.ts#L58)*
+
+___
+
+###  e_separated
+
+• **e_separated**: = 4
+
+*Defined in [dist/planck.d.ts:3891](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3891)*
+
+*Defined in [src/collision/TimeOfImpact.ts:60](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/TimeOfImpact.ts#L60)*
+
+___
+
+###  e_touching
+
+• **e_touching**: = 3
+
+*Defined in [dist/planck.d.ts:3890](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3890)*
+
+*Defined in [src/collision/TimeOfImpact.ts:59](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/TimeOfImpact.ts#L59)*
+
+___
+
+###  e_unknown
+
+• **e_unknown**: = 0
+
+*Defined in [dist/planck.d.ts:3887](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3887)*
+
+*Defined in [src/collision/TimeOfImpact.ts:56](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/TimeOfImpact.ts#L56)*

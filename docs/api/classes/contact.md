@@ -2,6 +2,13 @@
 
 # Class: Contact
 
+The class manages contact between two shapes. A contact exists for each
+overlapping AABB in the broad-phase (except if filtered). Therefore a contact
+object may exist that has no contact points.
+The class manages contact between two shapes. A contact exists for each
+overlapping AABB in the broad-phase (except if filtered). Therefore a contact
+object may exist that has no contact points.
+
 ## Hierarchy
 
 * **Contact**
@@ -14,7 +21,6 @@
 
 ### Methods
 
-* [_solvePositionConstraint](contact.md#_solvepositionconstraint)
 * [evaluate](contact.md#evaluate)
 * [flagForFiltering](contact.md#flagforfiltering)
 * [getChildIndexA](contact.md#getchildindexa)
@@ -50,7 +56,7 @@
 
 \+ **new Contact**(`fA`: [Fixture](fixture.md), `indexA`: number, `fB`: [Fixture](fixture.md), `indexB`: number, `evaluateFcn`: [EvaluateFunction](../globals.md#evaluatefunction)): *[Contact](contact.md)*
 
-*Defined in [index.d.ts:331](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L331)*
+*Defined in [dist/planck.d.ts:1192](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1192)*
 
 **Parameters:**
 
@@ -66,36 +72,19 @@ Name | Type |
 
 ## Methods
 
-###  _solvePositionConstraint
-
-▸ **_solvePositionConstraint**(`step`: any, `toi`: boolean, `toiA?`: [Body](body.md) | null, `toiB?`: [Body](body.md) | null): *number*
-
-*Defined in [index.d.ts:415](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L415)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`step` | any |
-`toi` | boolean |
-`toiA?` | [Body](body.md) &#124; null |
-`toiB?` | [Body](body.md) &#124; null |
-
-**Returns:** *number*
-
-___
-
 ###  evaluate
 
-▸ **evaluate**(`manifold`: [Manifold](../interfaces/manifold.md), `xfA`: [Transform](transform.md), `xfB`: [Transform](transform.md)): *void*
+▸ **evaluate**(`manifold`: [Manifold](manifold.md), `xfA`: [Transform](transform.md), `xfB`: [Transform](transform.md)): *void*
 
-*Defined in [index.d.ts:411](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L411)*
+*Defined in [dist/planck.d.ts:1280](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1280)*
+
+Called by Update method, and implemented by subclasses.
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`manifold` | [Manifold](../interfaces/manifold.md) |
+`manifold` | [Manifold](manifold.md) |
 `xfA` | [Transform](transform.md) |
 `xfB` | [Transform](transform.md) |
 
@@ -107,7 +96,9 @@ ___
 
 ▸ **flagForFiltering**(): *void*
 
-*Defined in [index.d.ts:402](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L402)*
+*Defined in [dist/planck.d.ts:1241](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1241)*
+
+Flag this contact for filtering. Filtering will occur the next time step.
 
 **Returns:** *void*
 
@@ -117,7 +108,9 @@ ___
 
 ▸ **getChildIndexA**(): *number*
 
-*Defined in [index.d.ts:400](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L400)*
+*Defined in [dist/planck.d.ts:1233](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1233)*
+
+Get the child primitive index for fixture A.
 
 **Returns:** *number*
 
@@ -127,7 +120,9 @@ ___
 
 ▸ **getChildIndexB**(): *number*
 
-*Defined in [index.d.ts:401](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L401)*
+*Defined in [dist/planck.d.ts:1237](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1237)*
+
+Get the child primitive index for fixture B.
 
 **Returns:** *number*
 
@@ -137,7 +132,9 @@ ___
 
 ▸ **getFixtureA**(): *[Fixture](fixture.md)*
 
-*Defined in [index.d.ts:398](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L398)*
+*Defined in [dist/planck.d.ts:1225](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1225)*
+
+Get fixture A in this contact.
 
 **Returns:** *[Fixture](fixture.md)*
 
@@ -147,7 +144,9 @@ ___
 
 ▸ **getFixtureB**(): *[Fixture](fixture.md)*
 
-*Defined in [index.d.ts:399](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L399)*
+*Defined in [dist/planck.d.ts:1229](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1229)*
+
+Get fixture B in this contact.
 
 **Returns:** *[Fixture](fixture.md)*
 
@@ -157,7 +156,9 @@ ___
 
 ▸ **getFriction**(): *number*
 
-*Defined in [index.d.ts:404](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L404)*
+*Defined in [dist/planck.d.ts:1250](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1250)*
+
+Get the friction.
 
 **Returns:** *number*
 
@@ -165,11 +166,14 @@ ___
 
 ###  getManifold
 
-▸ **getManifold**(): *[Manifold](../interfaces/manifold.md)*
+▸ **getManifold**(): *[Manifold](manifold.md)*
 
-*Defined in [index.d.ts:392](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L392)*
+*Defined in [dist/planck.d.ts:1199](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1199)*
 
-**Returns:** *[Manifold](../interfaces/manifold.md)*
+Get the contact manifold. Do not modify the manifold unless you understand
+the internals of the library.
+
+**Returns:** *[Manifold](manifold.md)*
 
 ___
 
@@ -177,7 +181,9 @@ ___
 
 ▸ **getNext**(): *[Contact](contact.md) | null*
 
-*Defined in [index.d.ts:397](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L397)*
+*Defined in [dist/planck.d.ts:1221](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1221)*
+
+Get the next contact in the world's contact list.
 
 **Returns:** *[Contact](contact.md) | null*
 
@@ -187,7 +193,9 @@ ___
 
 ▸ **getRestitution**(): *number*
 
-*Defined in [index.d.ts:407](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L407)*
+*Defined in [dist/planck.d.ts:1263](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1263)*
+
+Get the restitution.
 
 **Returns:** *number*
 
@@ -197,7 +205,9 @@ ___
 
 ▸ **getTangentSpeed**(): *number*
 
-*Defined in [index.d.ts:410](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L410)*
+*Defined in [dist/planck.d.ts:1276](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1276)*
+
+Get the desired tangent speed. In meters per second.
 
 **Returns:** *number*
 
@@ -205,34 +215,33 @@ ___
 
 ###  getWorldManifold
 
-▸ **getWorldManifold**(`worldManifold`: [WorldManifold](../interfaces/worldmanifold.md) | null | undefined): *[WorldManifold](../interfaces/worldmanifold.md) | undefined*
+▸ **getWorldManifold**(`worldManifold`: [WorldManifold](worldmanifold.md) | null | undefined): *[WorldManifold](worldmanifold.md) | undefined*
 
-*Defined in [index.d.ts:393](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L393)*
+*Defined in [dist/planck.d.ts:1203](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1203)*
+
+Get the world manifold.
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`worldManifold` | [WorldManifold](../interfaces/worldmanifold.md) &#124; null &#124; undefined |
+`worldManifold` | [WorldManifold](worldmanifold.md) &#124; null &#124; undefined |
 
-**Returns:** *[WorldManifold](../interfaces/worldmanifold.md) | undefined*
+**Returns:** *[WorldManifold](worldmanifold.md) | undefined*
 
 ___
 
 ###  initConstraint
 
-▸ **initConstraint**(`step`: object): *void*
+▸ **initConstraint**(`step`: [TimeStep](timestep.md)): *void*
 
-*Defined in [index.d.ts:391](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L391)*
+*Defined in [dist/planck.d.ts:1194](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1194)*
 
 **Parameters:**
 
-▪ **step**: *object*
-
 Name | Type |
 ------ | ------ |
-`dtRatio` | number |
-`warmStarting` | boolean |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *void*
 
@@ -240,17 +249,15 @@ ___
 
 ###  initVelocityConstraint
 
-▸ **initVelocityConstraint**(`step`: object): *void*
+▸ **initVelocityConstraint**(`step`: [TimeStep](timestep.md)): *void*
 
-*Defined in [index.d.ts:416](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L416)*
+*Defined in [dist/planck.d.ts:1298](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1298)*
 
 **Parameters:**
 
-▪ **step**: *object*
-
 Name | Type |
 ------ | ------ |
-`blockSolve` | boolean |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *void*
 
@@ -260,7 +267,9 @@ ___
 
 ▸ **isEnabled**(): *boolean*
 
-*Defined in [index.d.ts:395](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L395)*
+*Defined in [dist/planck.d.ts:1213](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1213)*
+
+Has this contact been disabled?
 
 **Returns:** *boolean*
 
@@ -270,7 +279,9 @@ ___
 
 ▸ **isTouching**(): *boolean*
 
-*Defined in [index.d.ts:396](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L396)*
+*Defined in [dist/planck.d.ts:1217](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1217)*
+
+Is this contact touching?
 
 **Returns:** *boolean*
 
@@ -280,7 +291,9 @@ ___
 
 ▸ **resetFriction**(): *void*
 
-*Defined in [index.d.ts:405](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L405)*
+*Defined in [dist/planck.d.ts:1254](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1254)*
+
+Reset the friction mixture to the default value.
 
 **Returns:** *void*
 
@@ -290,7 +303,9 @@ ___
 
 ▸ **resetRestitution**(): *void*
 
-*Defined in [index.d.ts:408](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L408)*
+*Defined in [dist/planck.d.ts:1267](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1267)*
+
+Reset the restitution to the default value.
 
 **Returns:** *void*
 
@@ -300,7 +315,11 @@ ___
 
 ▸ **setEnabled**(`flag`: boolean): *void*
 
-*Defined in [index.d.ts:394](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L394)*
+*Defined in [dist/planck.d.ts:1209](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1209)*
+
+Enable/disable this contact. This can be used inside the pre-solve contact
+listener. The contact is only disabled for the current time step (or sub-step
+in continuous collisions).
 
 **Parameters:**
 
@@ -316,7 +335,10 @@ ___
 
 ▸ **setFriction**(`friction`: number): *void*
 
-*Defined in [index.d.ts:403](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L403)*
+*Defined in [dist/planck.d.ts:1246](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1246)*
+
+Override the default friction mixture. You can call this in
+ContactListener.preSolve. This value persists until set or reset.
 
 **Parameters:**
 
@@ -332,7 +354,10 @@ ___
 
 ▸ **setRestitution**(`restitution`: number): *void*
 
-*Defined in [index.d.ts:406](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L406)*
+*Defined in [dist/planck.d.ts:1259](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1259)*
+
+Override the default restitution mixture. You can call this in
+ContactListener.preSolve. The value persists until you set or reset.
 
 **Parameters:**
 
@@ -348,7 +373,10 @@ ___
 
 ▸ **setTangentSpeed**(`speed`: number): *void*
 
-*Defined in [index.d.ts:409](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L409)*
+*Defined in [dist/planck.d.ts:1272](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1272)*
+
+Set the desired tangent speed for a conveyor belt behavior. In meters per
+second.
 
 **Parameters:**
 
@@ -362,15 +390,15 @@ ___
 
 ###  solvePositionConstraint
 
-▸ **solvePositionConstraint**(`step`: any): *number*
+▸ **solvePositionConstraint**(`step`: [TimeStep](timestep.md)): *number*
 
-*Defined in [index.d.ts:413](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L413)*
+*Defined in [dist/planck.d.ts:1295](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1295)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`step` | any |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *number*
 
@@ -378,17 +406,17 @@ ___
 
 ###  solvePositionConstraintTOI
 
-▸ **solvePositionConstraintTOI**(`step`: any, `toiA?`: [Body](body.md) | null, `toiB?`: [Body](body.md) | null): *number*
+▸ **solvePositionConstraintTOI**(`step`: [TimeStep](timestep.md), `toiA`: [Body](body.md), `toiB`: [Body](body.md)): *number*
 
-*Defined in [index.d.ts:414](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L414)*
+*Defined in [dist/planck.d.ts:1296](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1296)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`step` | any |
-`toiA?` | [Body](body.md) &#124; null |
-`toiB?` | [Body](body.md) &#124; null |
+`step` | [TimeStep](timestep.md) |
+`toiA` | [Body](body.md) |
+`toiB` | [Body](body.md) |
 
 **Returns:** *number*
 
@@ -396,17 +424,15 @@ ___
 
 ###  solveVelocityConstraint
 
-▸ **solveVelocityConstraint**(`step`: object): *void*
+▸ **solveVelocityConstraint**(`step`: [TimeStep](timestep.md)): *void*
 
-*Defined in [index.d.ts:419](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L419)*
+*Defined in [dist/planck.d.ts:1301](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1301)*
 
 **Parameters:**
 
-▪ **step**: *object*
-
 Name | Type |
 ------ | ------ |
-`blockSolve` | boolean |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *void*
 
@@ -414,15 +440,15 @@ ___
 
 ###  storeConstraintImpulses
 
-▸ **storeConstraintImpulses**(`step?`: any): *void*
+▸ **storeConstraintImpulses**(`step`: [TimeStep](timestep.md)): *void*
 
-*Defined in [index.d.ts:418](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L418)*
+*Defined in [dist/planck.d.ts:1300](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1300)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`step?` | any |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *void*
 
@@ -432,17 +458,21 @@ ___
 
 ▸ **update**(`listener?`: object): *void*
 
-*Defined in [index.d.ts:412](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L412)*
+*Defined in [dist/planck.d.ts:1290](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1290)*
+
+Updates the contact manifold and touching status.
+
+Note: do not assume the fixture AABBs are overlapping or are valid.
 
 **Parameters:**
 
 ▪`Optional`  **listener**: *object*
 
-Name | Type |
------- | ------ |
-`beginContact` |  |
-`endContact` |  |
-`oreSolve` |  |
+Name | Type | Description |
+------ | ------ | ------ |
+`beginContact` |  | - |
+`endContact` |  | - |
+`preSolve` |  |   |
 
 **Returns:** *void*
 
@@ -450,14 +480,14 @@ ___
 
 ###  warmStartConstraint
 
-▸ **warmStartConstraint**(`step?`: any): *void*
+▸ **warmStartConstraint**(`step`: [TimeStep](timestep.md)): *void*
 
-*Defined in [index.d.ts:417](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L417)*
+*Defined in [dist/planck.d.ts:1299](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1299)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`step?` | any |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *void*

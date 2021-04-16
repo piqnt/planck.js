@@ -2,11 +2,18 @@
 
 # Interface: GearJointDef
 
+Gear joint definition.
+Gear joint definition.
+
 ## Hierarchy
 
   ↳ [JointDef](jointdef.md)
 
   ↳ [GearJointOpt](gearjointopt.md)
+
+* JointDef
+
+* GearJointOpt
 
   ↳ **GearJointDef**
 
@@ -19,7 +26,7 @@
 * [collideConnected](gearjointdef.md#optional-collideconnected)
 * [joint1](gearjointdef.md#joint1)
 * [joint2](gearjointdef.md#joint2)
-* [ratio](gearjointdef.md#ratio)
+* [ratio](gearjointdef.md#optional-ratio)
 * [userData](gearjointdef.md#optional-userdata)
 
 ## Properties
@@ -30,7 +37,11 @@
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L56)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:969](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L969)*
+
+The first attached body.
 
 ___
 
@@ -40,7 +51,11 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L57)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:973](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L973)*
+
+The second attached body.
 
 ___
 
@@ -52,33 +67,50 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
+*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+
+Set this flag to true if the attached bodies
+should collide.
 
 ___
 
 ###  joint1
 
-• **joint1**: *[RevoluteJoint](../classes/revolutejoint.md) | [PrismaticJoint](../classes/prismaticjoint.md)*
+• **joint1**: *RevoluteJoint | PrismaticJoint*
 
-*Defined in [joint/index.d.ts:202](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L202)*
+*Defined in [dist/planck.d.ts:3006](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3006)*
+
+*Defined in [src/dynamics/joint/GearJoint.ts:57](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/GearJoint.ts#L57)*
+
+The first revolute/prismatic joint attached to the gear joint.
+The first revolute/prismatic joint attached to the gear joint.
 
 ___
 
 ###  joint2
 
-• **joint2**: *[RevoluteJoint](../classes/revolutejoint.md) | [PrismaticJoint](../classes/prismaticjoint.md)*
+• **joint2**: *RevoluteJoint | PrismaticJoint*
 
-*Defined in [joint/index.d.ts:203](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L203)*
+*Defined in [dist/planck.d.ts:3010](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3010)*
+
+*Defined in [src/dynamics/joint/GearJoint.ts:61](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/GearJoint.ts#L61)*
+
+The second prismatic/revolute joint attached to the gear joint.
+The second prismatic/revolute joint attached to the gear joint.
 
 ___
 
-###  ratio
+### `Optional` ratio
 
-• **ratio**: *number*
+• **ratio**? : *number*
 
-*Inherited from [GearJointOpt](gearjointopt.md).[ratio](gearjointopt.md#ratio)*
+*Inherited from [GearJointOpt](gearjointopt.md).[ratio](gearjointopt.md#optional-ratio)*
 
-*Defined in [joint/index.d.ts:198](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L198)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:2997](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2997)*
+
+The gear ratio. See GearJoint for explanation.
 
 ___
 
@@ -90,4 +122,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*
+*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+
+Use this to attach application specific data to your joints.

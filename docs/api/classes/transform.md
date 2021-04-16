@@ -2,28 +2,36 @@
 
 # Class: Transform
 
+A transform contains translation and rotation. It is used to represent the
+position and orientation of rigid frames. Initialize using a position vector
+and a rotation.
+A transform contains translation and rotation. It is used to represent the
+position and orientation of rigid frames. Initialize using a position vector
+and a rotation.
+
 ## Hierarchy
 
 * **Transform**
 
 ## Callable
 
-▸ **Transform**(`position`: [Vec2](vec2.md), `rotation`: number): *[Transform](transform.md)*
+▸ **Transform**(`position?`: [Vec2](vec2.md), `rotation?`: number): *[Transform](transform.md)*
 
-*Defined in [common/index.d.ts:126](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L126)*
+*Defined in [dist/planck.d.ts:370](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L370)*
+
+A transform contains translation and rotation. It is used to represent the
+position and orientation of rigid frames. Initialize using a position vector
+and a rotation.
+A transform contains translation and rotation. It is used to represent the
+position and orientation of rigid frames. Initialize using a position vector
+and a rotation.
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`position` | [Vec2](vec2.md) |
-`rotation` | number |
-
-**Returns:** *[Transform](transform.md)*
-
-▸ **Transform**(): *[Transform](transform.md)*
-
-*Defined in [common/index.d.ts:127](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L127)*
+`position?` | [Vec2](vec2.md) |
+`rotation?` | number |
 
 **Returns:** *[Transform](transform.md)*
 
@@ -47,6 +55,8 @@ Name | Type |
 * [identity](transform.md#static-identity)
 * [isValid](transform.md#static-isvalid)
 * [mul](transform.md#static-mul)
+* [mulAll](transform.md#static-mulall)
+* [mulFn](transform.md#static-mulfn)
 * [mulT](transform.md#static-mult)
 * [mulTVec2](transform.md#static-multvec2)
 * [mulTXf](transform.md#static-multxf)
@@ -57,22 +67,16 @@ Name | Type |
 
 ###  constructor
 
-\+ **new Transform**(`position`: [Vec2](vec2.md), `rotation`: number): *[Transform](transform.md)*
+\+ **new Transform**(`position?`: [Vec2](vec2.md), `rotation?`: number): *[Transform](transform.md)*
 
-*Defined in [common/index.d.ts:134](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L134)*
+*Defined in [dist/planck.d.ts:380](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L380)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`position` | [Vec2](vec2.md) |
-`rotation` | number |
-
-**Returns:** *[Transform](transform.md)*
-
-\+ **new Transform**(): *[Transform](transform.md)*
-
-*Defined in [common/index.d.ts:136](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L136)*
+`position?` | [Vec2](vec2.md) |
+`rotation?` | number |
 
 **Returns:** *[Transform](transform.md)*
 
@@ -80,17 +84,27 @@ Name | Type |
 
 ###  p
 
-• **p**: *[Vec2](vec2.md)*
+• **p**: *Vec2*
 
-*Defined in [common/index.d.ts:129](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L129)*
+*Defined in [dist/planck.d.ts:378](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L378)*
+
+*Defined in [src/common/Transform.ts:41](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Transform.ts#L41)*
+
+position
+position
 
 ___
 
 ###  q
 
-• **q**: *[Rot](rot.md)*
+• **q**: *Rot*
 
-*Defined in [common/index.d.ts:130](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L130)*
+*Defined in [dist/planck.d.ts:380](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L380)*
+
+*Defined in [src/common/Transform.ts:44](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Transform.ts#L44)*
+
+rotation
+rotation
 
 ## Methods
 
@@ -98,7 +112,9 @@ ___
 
 ▸ **set**(`position`: [Vec2](vec2.md), `rotation`: number): *void*
 
-*Defined in [common/index.d.ts:133](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L133)*
+*Defined in [dist/planck.d.ts:388](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L388)*
+
+Set this based on the position and angle.
 
 **Parameters:**
 
@@ -111,7 +127,9 @@ Name | Type |
 
 ▸ **set**(`xf`: [Transform](transform.md)): *void*
 
-*Defined in [common/index.d.ts:134](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L134)*
+*Defined in [dist/planck.d.ts:389](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L389)*
+
+Set this based on the position and angle.
 
 **Parameters:**
 
@@ -121,13 +139,44 @@ Name | Type |
 
 **Returns:** *void*
 
+▸ **set**(`position`: Vec2, `rotation`: number): *void*
+
+*Defined in [src/common/Transform.ts:90](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Transform.ts#L90)*
+
+Set this based on the position and angle.
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`position` | Vec2 |
+`rotation` | number |
+
+**Returns:** *void*
+
+▸ **set**(`xf`: Transform): *void*
+
+*Defined in [src/common/Transform.ts:91](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Transform.ts#L91)*
+
+Set this based on the position and angle.
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`xf` | Transform |
+
+**Returns:** *void*
+
 ___
 
 ###  setIdentity
 
 ▸ **setIdentity**(): *void*
 
-*Defined in [common/index.d.ts:132](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L132)*
+*Defined in [dist/planck.d.ts:387](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L387)*
+
+Set this to the identity transform.
 
 **Returns:** *void*
 
@@ -137,7 +186,7 @@ ___
 
 ▸ **assert**(`o`: any): *void*
 
-*Defined in [common/index.d.ts:143](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L143)*
+*Defined in [dist/planck.d.ts:391](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L391)*
 
 **Parameters:**
 
@@ -153,7 +202,7 @@ ___
 
 ▸ **clone**(`xf`: [Transform](transform.md)): *[Transform](transform.md)*
 
-*Defined in [common/index.d.ts:139](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L139)*
+*Defined in [dist/planck.d.ts:382](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L382)*
 
 **Parameters:**
 
@@ -169,7 +218,7 @@ ___
 
 ▸ **identity**(): *[Transform](transform.md)*
 
-*Defined in [common/index.d.ts:141](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L141)*
+*Defined in [dist/planck.d.ts:383](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L383)*
 
 **Returns:** *[Transform](transform.md)*
 
@@ -179,7 +228,7 @@ ___
 
 ▸ **isValid**(`o`: any): *boolean*
 
-*Defined in [common/index.d.ts:142](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L142)*
+*Defined in [dist/planck.d.ts:390](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L390)*
 
 **Parameters:**
 
@@ -195,7 +244,7 @@ ___
 
 ▸ **mul**(`a`: [Transform](transform.md), `b`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:144](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L144)*
+*Defined in [dist/planck.d.ts:392](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L392)*
 
 **Parameters:**
 
@@ -208,7 +257,7 @@ Name | Type |
 
 ▸ **mul**(`a`: [Transform](transform.md), `b`: [Transform](transform.md)): *[Transform](transform.md)*
 
-*Defined in [common/index.d.ts:145](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L145)*
+*Defined in [dist/planck.d.ts:393](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L393)*
 
 **Parameters:**
 
@@ -219,9 +268,39 @@ Name | Type |
 
 **Returns:** *[Transform](transform.md)*
 
-▸ **mul**(`a`: [Transform](transform.md), `b`: [Vec2](vec2.md)[]): *[Vec2](vec2.md)[]*
+▸ **mul**(`a`: Transform, `b`: Vec2): *Vec2*
 
-*Defined in [common/index.d.ts:146](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L146)*
+*Defined in [src/common/Transform.ts:117](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Transform.ts#L117)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`a` | Transform |
+`b` | Vec2 |
+
+**Returns:** *Vec2*
+
+▸ **mul**(`a`: Transform, `b`: Transform): *Transform*
+
+*Defined in [src/common/Transform.ts:118](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Transform.ts#L118)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`a` | Transform |
+`b` | Transform |
+
+**Returns:** *Transform*
+
+___
+
+### `Static` mulAll
+
+▸ **mulAll**(`a`: [Transform](transform.md), `b`: [Vec2](vec2.md)[]): *[Vec2](vec2.md)[]*
+
+*Defined in [dist/planck.d.ts:394](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L394)*
 
 **Parameters:**
 
@@ -232,9 +311,9 @@ Name | Type |
 
 **Returns:** *[Vec2](vec2.md)[]*
 
-▸ **mul**(`a`: [Transform](transform.md), `b`: [Transform](transform.md)[]): *[Transform](transform.md)[]*
+▸ **mulAll**(`a`: [Transform](transform.md), `b`: [Transform](transform.md)[]): *[Transform](transform.md)[]*
 
-*Defined in [common/index.d.ts:147](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L147)*
+*Defined in [dist/planck.d.ts:395](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L395)*
 
 **Parameters:**
 
@@ -245,13 +324,65 @@ Name | Type |
 
 **Returns:** *[Transform](transform.md)[]*
 
+▸ **mulAll**(`a`: Transform, `b`: Vec2[]): *Vec2[]*
+
+*Defined in [src/common/Transform.ts:138](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Transform.ts#L138)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`a` | Transform |
+`b` | Vec2[] |
+
+**Returns:** *Vec2[]*
+
+▸ **mulAll**(`a`: Transform, `b`: Transform[]): *Transform[]*
+
+*Defined in [src/common/Transform.ts:139](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Transform.ts#L139)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`a` | Transform |
+`b` | Transform[] |
+
+**Returns:** *Transform[]*
+
+___
+
+### `Static` mulFn
+
+▸ **mulFn**(`a`: any): *function*
+
+*Defined in [dist/planck.d.ts:397](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L397)*
+
+**`deprecated`** 
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`a` | any |
+
+**Returns:** *function*
+
+▸ (`b`: any): *[Vec2](vec2.md)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`b` | any |
+
 ___
 
 ### `Static` mulT
 
 ▸ **mulT**(`a`: [Transform](transform.md), `b`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:153](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L153)*
+*Defined in [dist/planck.d.ts:400](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L400)*
 
 **Parameters:**
 
@@ -264,7 +395,7 @@ Name | Type |
 
 ▸ **mulT**(`a`: [Transform](transform.md), `b`: [Transform](transform.md)): *[Transform](transform.md)*
 
-*Defined in [common/index.d.ts:154](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L154)*
+*Defined in [dist/planck.d.ts:401](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L401)*
 
 **Parameters:**
 
@@ -275,13 +406,39 @@ Name | Type |
 
 **Returns:** *[Transform](transform.md)*
 
+▸ **mulT**(`a`: Transform, `b`: Vec2): *Vec2*
+
+*Defined in [src/common/Transform.ts:176](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Transform.ts#L176)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`a` | Transform |
+`b` | Vec2 |
+
+**Returns:** *Vec2*
+
+▸ **mulT**(`a`: Transform, `b`: Transform): *Transform*
+
+*Defined in [src/common/Transform.ts:177](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Transform.ts#L177)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`a` | Transform |
+`b` | Transform |
+
+**Returns:** *Transform*
+
 ___
 
 ### `Static` mulTVec2
 
 ▸ **mulTVec2**(`a`: [Transform](transform.md), `b`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:155](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L155)*
+*Defined in [dist/planck.d.ts:402](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L402)*
 
 **Parameters:**
 
@@ -298,7 +455,7 @@ ___
 
 ▸ **mulTXf**(`a`: [Transform](transform.md), `b`: [Transform](transform.md)): *[Transform](transform.md)*
 
-*Defined in [common/index.d.ts:156](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L156)*
+*Defined in [dist/planck.d.ts:403](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L403)*
 
 **Parameters:**
 
@@ -315,7 +472,7 @@ ___
 
 ▸ **mulVec2**(`a`: [Transform](transform.md), `b`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/index.d.ts:151](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L151)*
+*Defined in [dist/planck.d.ts:398](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L398)*
 
 **Parameters:**
 
@@ -332,7 +489,7 @@ ___
 
 ▸ **mulXf**(`a`: [Transform](transform.md), `b`: [Transform](transform.md)): *[Transform](transform.md)*
 
-*Defined in [common/index.d.ts:152](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L152)*
+*Defined in [dist/planck.d.ts:399](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L399)*
 
 **Parameters:**
 

@@ -2,11 +2,20 @@
 
 # Interface: PulleyJointDef
 
+Pulley joint definition. This requires two ground anchors, two dynamic body
+anchor points, and a pulley ratio.
+Pulley joint definition. This requires two ground anchors, two dynamic body
+anchor points, and a pulley ratio.
+
 ## Hierarchy
 
   ↳ [JointDef](jointdef.md)
 
   ↳ [PulleyJointOpt](pulleyjointopt.md)
+
+* JointDef
+
+* PulleyJointOpt
 
   ↳ **PulleyJointDef**
 
@@ -34,7 +43,11 @@
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L56)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:969](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L969)*
+
+The first attached body.
 
 ___
 
@@ -44,7 +57,11 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L57)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:973](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L973)*
+
+The second attached body.
 
 ___
 
@@ -56,23 +73,36 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
+*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+
+Set this flag to true if the attached bodies
+should collide.
 
 ___
 
 ###  groundAnchorA
 
-• **groundAnchorA**: *[Vec2](../classes/vec2.md)*
+• **groundAnchorA**: *Vec2*
 
-*Defined in [joint/index.d.ts:423](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L423)*
+*Defined in [dist/planck.d.ts:3321](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3321)*
+
+*Defined in [src/dynamics/joint/PulleyJoint.ts:53](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PulleyJoint.ts#L53)*
+
+The first ground anchor in world coordinates. This point never moves.
+The first ground anchor in world coordinates. This point never moves.
 
 ___
 
 ###  groundAnchorB
 
-• **groundAnchorB**: *[Vec2](../classes/vec2.md)*
+• **groundAnchorB**: *Vec2*
 
-*Defined in [joint/index.d.ts:424](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L424)*
+*Defined in [dist/planck.d.ts:3325](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3325)*
+
+*Defined in [src/dynamics/joint/PulleyJoint.ts:57](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PulleyJoint.ts#L57)*
+
+The second ground anchor in world coordinates. This point never moves.
+The second ground anchor in world coordinates. This point never moves.
 
 ___
 
@@ -80,7 +110,12 @@ ___
 
 • **lengthA**: *number*
 
-*Defined in [joint/index.d.ts:427](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L427)*
+*Defined in [dist/planck.d.ts:3337](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3337)*
+
+*Defined in [src/dynamics/joint/PulleyJoint.ts:69](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PulleyJoint.ts#L69)*
+
+The reference length for the segment attached to bodyA.
+The reference length for the segment attached to bodyA.
 
 ___
 
@@ -88,23 +123,38 @@ ___
 
 • **lengthB**: *number*
 
-*Defined in [joint/index.d.ts:428](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L428)*
+*Defined in [dist/planck.d.ts:3341](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3341)*
+
+*Defined in [src/dynamics/joint/PulleyJoint.ts:73](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PulleyJoint.ts#L73)*
+
+The reference length for the segment attached to bodyB.
+The reference length for the segment attached to bodyB.
 
 ___
 
 ###  localAnchorA
 
-• **localAnchorA**: *[Vec2](../classes/vec2.md)*
+• **localAnchorA**: *Vec2*
 
-*Defined in [joint/index.d.ts:425](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L425)*
+*Defined in [dist/planck.d.ts:3329](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3329)*
+
+*Defined in [src/dynamics/joint/PulleyJoint.ts:61](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PulleyJoint.ts#L61)*
+
+The local anchor point relative to bodyA's origin.
+The local anchor point relative to bodyA's origin.
 
 ___
 
 ###  localAnchorB
 
-• **localAnchorB**: *[Vec2](../classes/vec2.md)*
+• **localAnchorB**: *Vec2*
 
-*Defined in [joint/index.d.ts:426](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L426)*
+*Defined in [dist/planck.d.ts:3333](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3333)*
+
+*Defined in [src/dynamics/joint/PulleyJoint.ts:65](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PulleyJoint.ts#L65)*
+
+The local anchor point relative to bodyB's origin.
+The local anchor point relative to bodyB's origin.
 
 ___
 
@@ -112,7 +162,12 @@ ___
 
 • **ratio**: *number*
 
-*Defined in [joint/index.d.ts:429](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L429)*
+*Defined in [dist/planck.d.ts:3345](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3345)*
+
+*Defined in [src/dynamics/joint/PulleyJoint.ts:77](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PulleyJoint.ts#L77)*
+
+The pulley ratio, used to simulate a block-and-tackle.
+The pulley ratio, used to simulate a block-and-tackle.
 
 ___
 
@@ -124,4 +179,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*
+*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+
+Use this to attach application specific data to your joints.

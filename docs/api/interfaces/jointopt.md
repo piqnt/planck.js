@@ -2,6 +2,9 @@
 
 # Interface: JointOpt
 
+Joint definitions are used to construct joints.
+Joint definitions are used to construct joints.
+
 ## Hierarchy
 
 * **JointOpt**
@@ -12,17 +15,17 @@
 
   ↳ [FrictionJointOpt](frictionjointopt.md)
 
+  ↳ [RevoluteJointOpt](revolutejointopt.md)
+
+  ↳ [PrismaticJointOpt](prismaticjointopt.md)
+
   ↳ [GearJointOpt](gearjointopt.md)
 
   ↳ [MotorJointOpt](motorjointopt.md)
 
   ↳ [MouseJointOpt](mousejointopt.md)
 
-  ↳ [PrismaticJointOpt](prismaticjointopt.md)
-
   ↳ [PulleyJointOpt](pulleyjointopt.md)
-
-  ↳ [RevoluteJointOpt](revolutejointopt.md)
 
   ↳ [RopeJointOpt](ropejointopt.md)
 
@@ -43,7 +46,14 @@
 
 • **collideConnected**? : *boolean*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
+*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+
+*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L68)*
+
+Set this flag to true if the attached bodies
+should collide.
+Set this flag to true if the attached bodies
+should collide.
 
 ___
 
@@ -51,4 +61,9 @@ ___
 
 • **userData**? : *any*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*
+*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+
+*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L63)*
+
+Use this to attach application specific data to your joints.
+Use this to attach application specific data to your joints.

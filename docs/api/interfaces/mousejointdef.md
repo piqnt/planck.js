@@ -2,11 +2,20 @@
 
 # Interface: MouseJointDef
 
+Mouse joint definition. This requires a world target point, tuning
+parameters, and the time step.
+Mouse joint definition. This requires a world target point, tuning
+parameters, and the time step.
+
 ## Hierarchy
 
   ↳ [JointDef](jointdef.md)
 
   ↳ [MouseJointOpt](mousejointopt.md)
+
+* JointDef
+
+* MouseJointOpt
 
   ↳ **MouseJointDef**
 
@@ -17,9 +26,9 @@
 * [bodyA](mousejointdef.md#bodya)
 * [bodyB](mousejointdef.md#bodyb)
 * [collideConnected](mousejointdef.md#optional-collideconnected)
-* [dampingRatio](mousejointdef.md#dampingratio)
-* [frequencyHz](mousejointdef.md#frequencyhz)
-* [maxForce](mousejointdef.md#maxforce)
+* [dampingRatio](mousejointdef.md#optional-dampingratio)
+* [frequencyHz](mousejointdef.md#optional-frequencyhz)
+* [maxForce](mousejointdef.md#optional-maxforce)
 * [target](mousejointdef.md#target)
 * [userData](mousejointdef.md#optional-userdata)
 
@@ -31,7 +40,11 @@
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L56)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:969](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L969)*
+
+The first attached body.
 
 ___
 
@@ -41,7 +54,11 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L57)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:973](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L973)*
+
+The second attached body.
 
 ___
 
@@ -53,45 +70,70 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
+*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+
+Set this flag to true if the attached bodies
+should collide.
 
 ___
 
-###  dampingRatio
+### `Optional` dampingRatio
 
-• **dampingRatio**: *number*
+• **dampingRatio**? : *number*
 
-*Inherited from [MouseJointOpt](mousejointopt.md).[dampingRatio](mousejointopt.md#dampingratio)*
+*Inherited from [MouseJointOpt](mousejointopt.md).[dampingRatio](mousejointopt.md#optional-dampingratio)*
 
-*Defined in [joint/index.d.ts:296](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L296)*
+*Overrides void*
 
-___
+*Defined in [dist/planck.d.ts:3211](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3211)*
 
-###  frequencyHz
-
-• **frequencyHz**: *number*
-
-*Inherited from [MouseJointOpt](mousejointopt.md).[frequencyHz](mousejointopt.md#frequencyhz)*
-
-*Defined in [joint/index.d.ts:295](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L295)*
+[dampingRatio = 0.7] The damping ratio. 0 = no damping, 1 = critical
+damping.
 
 ___
 
-###  maxForce
+### `Optional` frequencyHz
 
-• **maxForce**: *number*
+• **frequencyHz**? : *number*
 
-*Inherited from [MouseJointOpt](mousejointopt.md).[maxForce](mousejointopt.md#maxforce)*
+*Inherited from [MouseJointOpt](mousejointopt.md).[frequencyHz](mousejointopt.md#optional-frequencyhz)*
 
-*Defined in [joint/index.d.ts:294](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L294)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:3206](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3206)*
+
+[frequencyHz = 5.0] The response speed.
+
+___
+
+### `Optional` maxForce
+
+• **maxForce**? : *number*
+
+*Inherited from [MouseJointOpt](mousejointopt.md).[maxForce](mousejointopt.md#optional-maxforce)*
+
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:3202](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3202)*
+
+[maxForce = 0.0] The maximum constraint force that can be exerted to move
+the candidate body. Usually you will express as some multiple of the
+weight (multiplier * mass * gravity).
 
 ___
 
 ###  target
 
-• **target**: *[Vec2](../classes/vec2.md)*
+• **target**: *Vec2*
 
-*Defined in [joint/index.d.ts:300](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L300)*
+*Defined in [dist/planck.d.ts:3222](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3222)*
+
+*Defined in [src/dynamics/joint/MouseJoint.ts:70](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/MouseJoint.ts#L70)*
+
+The initial world target point. This is assumed to coincide with the body
+anchor initially.
+The initial world target point. This is assumed to coincide with the body
+anchor initially.
 
 ___
 
@@ -103,4 +145,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*
+*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+
+Use this to attach application specific data to your joints.

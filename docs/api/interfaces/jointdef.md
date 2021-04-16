@@ -2,9 +2,14 @@
 
 # Interface: JointDef
 
+Joint definitions are used to construct joints.
+Joint definitions are used to construct joints.
+
 ## Hierarchy
 
 * [JointOpt](jointopt.md)
+
+* JointOpt
 
   ↳ **JointDef**
 
@@ -12,17 +17,17 @@
 
   ↳ [FrictionJointDef](frictionjointdef.md)
 
+  ↳ [RevoluteJointDef](revolutejointdef.md)
+
+  ↳ [PrismaticJointDef](prismaticjointdef.md)
+
   ↳ [GearJointDef](gearjointdef.md)
 
   ↳ [MotorJointDef](motorjointdef.md)
 
   ↳ [MouseJointDef](mousejointdef.md)
 
-  ↳ [PrismaticJointDef](prismaticjointdef.md)
-
   ↳ [PulleyJointDef](pulleyjointdef.md)
-
-  ↳ [RevoluteJointDef](revolutejointdef.md)
 
   ↳ [RopeJointDef](ropejointdef.md)
 
@@ -43,17 +48,27 @@
 
 ###  bodyA
 
-• **bodyA**: *[Body](../classes/body.md)*
+• **bodyA**: *Body*
 
-*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L56)*
+*Defined in [dist/planck.d.ts:969](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L969)*
+
+*Defined in [src/dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L77)*
+
+The first attached body.
+The first attached body.
 
 ___
 
 ###  bodyB
 
-• **bodyB**: *[Body](../classes/body.md)*
+• **bodyB**: *Body*
 
-*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L57)*
+*Defined in [dist/planck.d.ts:973](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L973)*
+
+*Defined in [src/dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L81)*
+
+The second attached body.
+The second attached body.
 
 ___
 
@@ -63,7 +78,12 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+
+Set this flag to true if the attached bodies
+should collide.
 
 ___
 
@@ -73,4 +93,8 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+
+Use this to attach application specific data to your joints.

@@ -2,11 +2,18 @@
 
 # Interface: FrictionJointDef
 
+Friction joint definition.
+Friction joint definition.
+
 ## Hierarchy
 
   ↳ [JointDef](jointdef.md)
 
   ↳ [FrictionJointOpt](frictionjointopt.md)
+
+* JointDef
+
+* FrictionJointOpt
 
   ↳ **FrictionJointDef**
 
@@ -19,8 +26,8 @@
 * [collideConnected](frictionjointdef.md#optional-collideconnected)
 * [localAnchorA](frictionjointdef.md#localanchora)
 * [localAnchorB](frictionjointdef.md#localanchorb)
-* [maxForce](frictionjointdef.md#maxforce)
-* [maxTorque](frictionjointdef.md#maxtorque)
+* [maxForce](frictionjointdef.md#optional-maxforce)
+* [maxTorque](frictionjointdef.md#optional-maxtorque)
 * [userData](frictionjointdef.md#optional-userdata)
 
 ## Properties
@@ -31,7 +38,11 @@
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L56)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:969](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L969)*
+
+The first attached body.
 
 ___
 
@@ -41,7 +52,11 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L57)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:973](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L973)*
+
+The second attached body.
 
 ___
 
@@ -53,43 +68,64 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
+*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+
+Set this flag to true if the attached bodies
+should collide.
 
 ___
 
 ###  localAnchorA
 
-• **localAnchorA**: *[Vec2](../classes/vec2.md)*
+• **localAnchorA**: *Vec2*
 
-*Defined in [joint/index.d.ts:153](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L153)*
+*Defined in [dist/planck.d.ts:2546](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2546)*
+
+*Defined in [src/dynamics/joint/FrictionJoint.ts:59](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/FrictionJoint.ts#L59)*
+
+The local anchor point relative to bodyA's origin.
+The local anchor point relative to bodyA's origin.
 
 ___
 
 ###  localAnchorB
 
-• **localAnchorB**: *[Vec2](../classes/vec2.md)*
+• **localAnchorB**: *Vec2*
 
-*Defined in [joint/index.d.ts:154](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L154)*
+*Defined in [dist/planck.d.ts:2550](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2550)*
 
-___
+*Defined in [src/dynamics/joint/FrictionJoint.ts:63](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/FrictionJoint.ts#L63)*
 
-###  maxForce
-
-• **maxForce**: *number*
-
-*Inherited from [FrictionJointOpt](frictionjointopt.md).[maxForce](frictionjointopt.md#maxforce)*
-
-*Defined in [joint/index.d.ts:148](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L148)*
+The local anchor point relative to bodyB's origin.
+The local anchor point relative to bodyB's origin.
 
 ___
 
-###  maxTorque
+### `Optional` maxForce
 
-• **maxTorque**: *number*
+• **maxForce**? : *number*
 
-*Inherited from [FrictionJointOpt](frictionjointopt.md).[maxTorque](frictionjointopt.md#maxtorque)*
+*Inherited from [FrictionJointOpt](frictionjointopt.md).[maxForce](frictionjointopt.md#optional-maxforce)*
 
-*Defined in [joint/index.d.ts:149](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L149)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:2533](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2533)*
+
+The maximum friction force in N.
+
+___
+
+### `Optional` maxTorque
+
+• **maxTorque**? : *number*
+
+*Inherited from [FrictionJointOpt](frictionjointopt.md).[maxTorque](frictionjointopt.md#optional-maxtorque)*
+
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:2537](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2537)*
+
+The maximum friction torque in N-m.
 
 ___
 
@@ -101,4 +137,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*
+*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+
+Use this to attach application specific data to your joints.

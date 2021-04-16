@@ -2,50 +2,171 @@
 
 # Class: Joint
 
+The base joint class. Joints are used to constraint two bodies together in
+various fashions. Some joints also feature limits and motors.
+The base joint class. Joints are used to constraint two bodies together in
+various fashions. Some joints also feature limits and motors.
+
 ## Hierarchy
 
 * **Joint**
 
 ## Index
 
+### Constructors
+
+* [constructor](joint.md#constructor)
+
+### Properties
+
+* [TYPES](joint.md#static-types)
+
 ### Methods
 
-* [getAnchorA](joint.md#getanchora)
-* [getAnchorB](joint.md#getanchorb)
+* [_serialize](joint.md#abstract-_serialize)
+* [getAnchorA](joint.md#abstract-getanchora)
+* [getAnchorB](joint.md#abstract-getanchorb)
 * [getBodyA](joint.md#getbodya)
 * [getBodyB](joint.md#getbodyb)
 * [getCollideConnected](joint.md#getcollideconnected)
 * [getNext](joint.md#getnext)
-* [getReactionForce](joint.md#getreactionforce)
-* [getReactionTorque](joint.md#getreactiontorque)
+* [getReactionForce](joint.md#abstract-getreactionforce)
+* [getReactionTorque](joint.md#abstract-getreactiontorque)
 * [getType](joint.md#gettype)
 * [getUserData](joint.md#getuserdata)
-* [initVelocityConstraints](joint.md#initvelocityconstraints)
+* [initVelocityConstraints](joint.md#abstract-initvelocityconstraints)
 * [isActive](joint.md#isactive)
 * [setUserData](joint.md#setuserdata)
 * [shiftOrigin](joint.md#shiftorigin)
-* [solvePositionConstraints](joint.md#solvepositionconstraints)
-* [solveVelocityConstraints](joint.md#solvevelocityconstraints)
+* [solvePositionConstraints](joint.md#abstract-solvepositionconstraints)
+* [solveVelocityConstraints](joint.md#abstract-solvevelocityconstraints)
+* [_deserialize](joint.md#static-_deserialize)
+
+## Constructors
+
+###  constructor
+
+\+ **new Joint**(`def`: [JointDef](../interfaces/jointdef.md)): *[Joint](joint.md)*
+
+*Defined in [dist/planck.d.ts:979](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L979)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`def` | [JointDef](../interfaces/jointdef.md) |
+
+**Returns:** *[Joint](joint.md)*
+
+\+ **new Joint**(`def`: [JointOpt](../interfaces/jointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md)): *[Joint](joint.md)*
+
+*Defined in [dist/planck.d.ts:980](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L980)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`def` | [JointOpt](../interfaces/jointopt.md) |
+`bodyA` | [Body](body.md) |
+`bodyB` | [Body](body.md) |
+
+**Returns:** *[Joint](joint.md)*
+
+\+ **new Joint**(`def`: JointDef): *[Joint](joint.md)*
+
+*Defined in [src/dynamics/Joint.ts:109](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L109)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`def` | JointDef |
+
+**Returns:** *[Joint](joint.md)*
+
+\+ **new Joint**(`def`: JointOpt, `bodyA`: Body, `bodyB`: Body): *[Joint](joint.md)*
+
+*Defined in [src/dynamics/Joint.ts:111](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L111)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`def` | JointOpt |
+`bodyA` | Body |
+`bodyB` | Body |
+
+**Returns:** *[Joint](joint.md)*
+
+## Properties
+
+### `Static` TYPES
+
+▪ **TYPES**: *object*
+
+*Defined in [dist/planck.d.ts:982](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L982)*
+
+*Defined in [src/dynamics/Joint.ts:128](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L128)*
+
+#### Type declaration:
+
+* \[ **id**: *string*\]: object
 
 ## Methods
 
-###  getAnchorA
+### `Abstract` _serialize
 
-▸ **getAnchorA**(): *[Vec2](vec2.md)*
+▸ **_serialize**(): *object*
 
-*Defined in [joint/index.d.ts:41](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L41)*
+*Defined in [dist/planck.d.ts:985](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L985)*
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *object*
+
+▸ **_serialize**(): *object*
+
+*Defined in [src/dynamics/Joint.ts:130](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L130)*
+
+**Returns:** *object*
 
 ___
 
-###  getAnchorB
+### `Abstract` getAnchorA
+
+▸ **getAnchorA**(): *[Vec2](vec2.md)*
+
+*Defined in [dist/planck.d.ts:1018](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1018)*
+
+Get the anchor point on bodyA in world coordinates.
+
+**Returns:** *[Vec2](vec2.md)*
+
+▸ **getAnchorA**(): *Vec2*
+
+*Defined in [src/dynamics/Joint.ts:192](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L192)*
+
+Get the anchor point on bodyA in world coordinates.
+
+**Returns:** *Vec2*
+
+___
+
+### `Abstract` getAnchorB
 
 ▸ **getAnchorB**(): *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:42](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L42)*
+*Defined in [dist/planck.d.ts:1022](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1022)*
+
+Get the anchor point on bodyB in world coordinates.
 
 **Returns:** *[Vec2](vec2.md)*
+
+▸ **getAnchorB**(): *Vec2*
+
+*Defined in [src/dynamics/Joint.ts:197](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L197)*
+
+Get the anchor point on bodyB in world coordinates.
+
+**Returns:** *Vec2*
 
 ___
 
@@ -53,7 +174,9 @@ ___
 
 ▸ **getBodyA**(): *[Body](body.md)*
 
-*Defined in [joint/index.d.ts:35](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L35)*
+*Defined in [dist/planck.d.ts:998](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L998)*
+
+Get the first body attached to this joint.
 
 **Returns:** *[Body](body.md)*
 
@@ -63,7 +186,9 @@ ___
 
 ▸ **getBodyB**(): *[Body](body.md)*
 
-*Defined in [joint/index.d.ts:36](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L36)*
+*Defined in [dist/planck.d.ts:1002](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1002)*
+
+Get the second body attached to this joint.
 
 **Returns:** *[Body](body.md)*
 
@@ -73,7 +198,11 @@ ___
 
 ▸ **getCollideConnected**(): *boolean*
 
-*Defined in [joint/index.d.ts:40](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L40)*
+*Defined in [dist/planck.d.ts:1014](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1014)*
+
+Get collide connected. Note: modifying the collide connect flag won't work
+correctly because the flag is only checked when fixture AABBs begin to
+overlap.
 
 **Returns:** *boolean*
 
@@ -81,19 +210,23 @@ ___
 
 ###  getNext
 
-▸ **getNext**(): *[Joint](joint.md) | null*
+▸ **getNext**(): *[Joint](joint.md)*
 
-*Defined in [joint/index.d.ts:37](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L37)*
+*Defined in [dist/planck.d.ts:1006](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1006)*
 
-**Returns:** *[Joint](joint.md) | null*
+Get the next joint the world joint list.
+
+**Returns:** *[Joint](joint.md)*
 
 ___
 
-###  getReactionForce
+### `Abstract` getReactionForce
 
 ▸ **getReactionForce**(`inv_dt`: number): *[Vec2](vec2.md)*
 
-*Defined in [joint/index.d.ts:43](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L43)*
+*Defined in [dist/planck.d.ts:1026](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1026)*
+
+Get the reaction force on bodyB at the joint anchor in Newtons.
 
 **Parameters:**
 
@@ -103,13 +236,43 @@ Name | Type |
 
 **Returns:** *[Vec2](vec2.md)*
 
+▸ **getReactionForce**(`inv_dt`: number): *Vec2*
+
+*Defined in [src/dynamics/Joint.ts:202](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L202)*
+
+Get the reaction force on bodyB at the joint anchor in Newtons.
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`inv_dt` | number |
+
+**Returns:** *Vec2*
+
 ___
 
-###  getReactionTorque
+### `Abstract` getReactionTorque
 
 ▸ **getReactionTorque**(`inv_dt`: number): *number*
 
-*Defined in [joint/index.d.ts:44](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L44)*
+*Defined in [dist/planck.d.ts:1030](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1030)*
+
+Get the reaction torque on bodyB in N*m.
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`inv_dt` | number |
+
+**Returns:** *number*
+
+▸ **getReactionTorque**(`inv_dt`: number): *number*
+
+*Defined in [src/dynamics/Joint.ts:207](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L207)*
+
+Get the reaction torque on bodyB in N*m.
 
 **Parameters:**
 
@@ -125,7 +288,9 @@ ___
 
 ▸ **getType**(): *string*
 
-*Defined in [joint/index.d.ts:34](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L34)*
+*Defined in [dist/planck.d.ts:994](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L994)*
+
+Get the type of the concrete joint.
 
 **Returns:** *string*
 
@@ -135,17 +300,29 @@ ___
 
 ▸ **getUserData**(): *unknown*
 
-*Defined in [joint/index.d.ts:38](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L38)*
+*Defined in [dist/planck.d.ts:1007](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1007)*
 
 **Returns:** *unknown*
 
 ___
 
-###  initVelocityConstraints
+### `Abstract` initVelocityConstraints
 
 ▸ **initVelocityConstraints**(`step`: any): *void*
 
-*Defined in [joint/index.d.ts:46](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L46)*
+*Defined in [dist/planck.d.ts:1035](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1035)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`step` | any |
+
+**Returns:** *void*
+
+▸ **initVelocityConstraints**(`step`: any): *void*
+
+*Defined in [src/dynamics/Joint.ts:214](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L214)*
 
 **Parameters:**
 
@@ -161,7 +338,9 @@ ___
 
 ▸ **isActive**(): *boolean*
 
-*Defined in [joint/index.d.ts:33](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L33)*
+*Defined in [dist/planck.d.ts:990](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L990)*
+
+Short-cut function to determine if either body is inactive.
 
 **Returns:** *boolean*
 
@@ -169,15 +348,15 @@ ___
 
 ###  setUserData
 
-▸ **setUserData**(`data`: any): *void*
+▸ **setUserData**(`data`: unknown): *void*
 
-*Defined in [joint/index.d.ts:39](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L39)*
+*Defined in [dist/planck.d.ts:1008](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1008)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`data` | any |
+`data` | unknown |
 
 **Returns:** *void*
 
@@ -187,7 +366,9 @@ ___
 
 ▸ **shiftOrigin**(`newOrigin`: [Vec2](vec2.md)): *void*
 
-*Defined in [joint/index.d.ts:45](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L45)*
+*Defined in [dist/planck.d.ts:1034](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1034)*
+
+Shift the origin for any points stored in world coordinates.
 
 **Parameters:**
 
@@ -199,11 +380,27 @@ Name | Type |
 
 ___
 
-###  solvePositionConstraints
+### `Abstract` solvePositionConstraints
 
 ▸ **solvePositionConstraints**(`step`: any): *boolean*
 
-*Defined in [joint/index.d.ts:48](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L48)*
+*Defined in [dist/planck.d.ts:1040](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1040)*
+
+This returns true if the position errors are within tolerance.
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`step` | any |
+
+**Returns:** *boolean*
+
+▸ **solvePositionConstraints**(`step`: any): *boolean*
+
+*Defined in [src/dynamics/Joint.ts:221](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L221)*
+
+This returns true if the position errors are within tolerance.
 
 **Parameters:**
 
@@ -215,11 +412,11 @@ Name | Type |
 
 ___
 
-###  solveVelocityConstraints
+### `Abstract` solveVelocityConstraints
 
 ▸ **solveVelocityConstraints**(`step`: any): *void*
 
-*Defined in [joint/index.d.ts:47](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L47)*
+*Defined in [dist/planck.d.ts:1036](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1036)*
 
 **Parameters:**
 
@@ -228,3 +425,33 @@ Name | Type |
 `step` | any |
 
 **Returns:** *void*
+
+▸ **solveVelocityConstraints**(`step`: any): *void*
+
+*Defined in [src/dynamics/Joint.ts:216](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L216)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`step` | any |
+
+**Returns:** *void*
+
+___
+
+### `Static` _deserialize
+
+▸ **_deserialize**(`data`: any, `context`: any, `restore`: any): *any*
+
+*Defined in [src/dynamics/Joint.ts:132](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L132)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`data` | any |
+`context` | any |
+`restore` | any |
+
+**Returns:** *any*

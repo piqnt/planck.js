@@ -2,9 +2,18 @@
 
 # Interface: RopeJointOpt
 
+Rope joint definition. This requires two body anchor points and a maximum
+lengths. Note: by default the connected objects will not collide. see
+collideConnected in JointDef.
+Rope joint definition. This requires two body anchor points and a maximum
+lengths. Note: by default the connected objects will not collide. see
+collideConnected in JointDef.
+
 ## Hierarchy
 
 * [JointOpt](jointopt.md)
+
+* JointOpt
 
   ↳ **RopeJointOpt**
 
@@ -15,7 +24,7 @@
 ### Properties
 
 * [collideConnected](ropejointopt.md#optional-collideconnected)
-* [maxLength](ropejointopt.md#maxlength)
+* [maxLength](ropejointopt.md#optional-maxlength)
 * [userData](ropejointopt.md#optional-userdata)
 
 ## Properties
@@ -26,15 +35,27 @@
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+
+Set this flag to true if the attached bodies
+should collide.
 
 ___
 
-###  maxLength
+### `Optional` maxLength
 
-• **maxLength**: *number*
+• **maxLength**? : *number*
 
-*Defined in [joint/index.d.ts:539](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L539)*
+*Defined in [dist/planck.d.ts:3447](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3447)*
+
+*Defined in [src/dynamics/joint/RopeJoint.ts:49](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/RopeJoint.ts#L49)*
+
+The maximum length of the rope.
+Warning: this must be larger than linearSlop or the joint will have no effect.
+The maximum length of the rope.
+Warning: this must be larger than linearSlop or the joint will have no effect.
 
 ___
 
@@ -44,4 +65,8 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+
+Use this to attach application specific data to your joints.
