@@ -6,30 +6,36 @@
 
 ### Enumeration members
 
-* [Circles](manifoldtype.md#circles)
-* [FaceA](manifoldtype.md#facea)
-* [FaceB](manifoldtype.md#faceb)
+* [e_circles](manifoldtype.md#e_circles)
+* [e_faceA](manifoldtype.md#e_facea)
+* [e_faceB](manifoldtype.md#e_faceb)
 
 ## Enumeration members
 
-###  Circles
+###  e_circles
 
-• **Circles**: = 0
+• **e_circles**: = 0
 
-*Defined in [index.d.ts:36](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L36)*
+*Defined in [dist/planck.d.ts:1043](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1043)*
 
-___
-
-###  FaceA
-
-• **FaceA**: = 1
-
-*Defined in [index.d.ts:37](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L37)*
+*Defined in [src/collision/Manifold.ts:31](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Manifold.ts#L31)*
 
 ___
 
-###  FaceB
+###  e_faceA
 
-• **FaceB**: = 2
+• **e_faceA**: = 1
 
-*Defined in [index.d.ts:38](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L38)*
+*Defined in [dist/planck.d.ts:1044](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1044)*
+
+*Defined in [src/collision/Manifold.ts:32](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Manifold.ts#L32)*
+
+___
+
+###  e_faceB
+
+• **e_faceB**: = 2
+
+*Defined in [dist/planck.d.ts:1045](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1045)*
+
+*Defined in [src/collision/Manifold.ts:33](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Manifold.ts#L33)*

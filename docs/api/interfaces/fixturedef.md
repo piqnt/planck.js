@@ -6,106 +6,142 @@
 
 * [FixtureOpt](fixtureopt.md)
 
+* FixtureOpt
+
   ↳ **FixtureDef**
 
 ## Index
 
 ### Properties
 
-* [density](fixturedef.md#density)
-* [filterCategoryBits](fixturedef.md#filtercategorybits)
-* [filterGroupIndex](fixturedef.md#filtergroupindex)
-* [filterMaskBits](fixturedef.md#filtermaskbits)
-* [friction](fixturedef.md#friction)
-* [isSensor](fixturedef.md#issensor)
-* [restitution](fixturedef.md#restitution)
+* [density](fixturedef.md#optional-density)
+* [filterCategoryBits](fixturedef.md#optional-filtercategorybits)
+* [filterGroupIndex](fixturedef.md#optional-filtergroupindex)
+* [filterMaskBits](fixturedef.md#optional-filtermaskbits)
+* [friction](fixturedef.md#optional-friction)
+* [isSensor](fixturedef.md#optional-issensor)
+* [restitution](fixturedef.md#optional-restitution)
 * [shape](fixturedef.md#shape)
-* [userData](fixturedef.md#userdata)
+* [userData](fixturedef.md#optional-userdata)
 
 ## Properties
 
-###  density
+### `Optional` density
 
-• **density**: *number*
+• **density**? : *number*
 
-*Inherited from [FixtureOpt](fixtureopt.md).[density](fixtureopt.md#density)*
+*Inherited from [FixtureOpt](fixtureopt.md).[density](fixtureopt.md#optional-density)*
 
-*Defined in [index.d.ts:137](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L137)*
+*Overrides void*
 
-___
+*Defined in [dist/planck.d.ts:732](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L732)*
 
-###  filterCategoryBits
-
-• **filterCategoryBits**: *number*
-
-*Inherited from [FixtureOpt](fixtureopt.md).[filterCategoryBits](fixtureopt.md#filtercategorybits)*
-
-*Defined in [index.d.ts:140](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L140)*
+The density, usually in kg/m^2
 
 ___
 
-###  filterGroupIndex
+### `Optional` filterCategoryBits
 
-• **filterGroupIndex**: *number*
+• **filterCategoryBits**? : *number*
 
-*Inherited from [FixtureOpt](fixtureopt.md).[filterGroupIndex](fixtureopt.md#filtergroupindex)*
+*Inherited from [FixtureOpt](fixtureopt.md).[filterCategoryBits](fixtureopt.md#optional-filtercategorybits)*
 
-*Defined in [index.d.ts:139](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L139)*
+*Overrides void*
 
-___
+*Defined in [dist/planck.d.ts:746](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L746)*
 
-###  filterMaskBits
-
-• **filterMaskBits**: *number*
-
-*Inherited from [FixtureOpt](fixtureopt.md).[filterMaskBits](fixtureopt.md#filtermaskbits)*
-
-*Defined in [index.d.ts:141](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L141)*
+Collision category bit or bits that this fixture belongs to.
+If groupIndex is zero or not matching, then at least one bit in this fixture categoryBits should match other fixture maskBits and vice versa.
 
 ___
 
-###  friction
+### `Optional` filterGroupIndex
 
-• **friction**: *number*
+• **filterGroupIndex**? : *number*
 
-*Inherited from [FixtureOpt](fixtureopt.md).[friction](fixtureopt.md#friction)*
+*Inherited from [FixtureOpt](fixtureopt.md).[filterGroupIndex](fixtureopt.md#optional-filtergroupindex)*
 
-*Defined in [index.d.ts:135](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L135)*
+*Overrides void*
 
-___
+*Defined in [dist/planck.d.ts:741](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L741)*
 
-###  isSensor
-
-• **isSensor**: *boolean*
-
-*Inherited from [FixtureOpt](fixtureopt.md).[isSensor](fixtureopt.md#issensor)*
-
-*Defined in [index.d.ts:138](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L138)*
+Zero, positive or negative collision group.
+Fixtures with same positive groupIndex always collide and fixtures with same negative groupIndex never collide.
 
 ___
 
-###  restitution
+### `Optional` filterMaskBits
 
-• **restitution**: *number*
+• **filterMaskBits**? : *number*
 
-*Inherited from [FixtureOpt](fixtureopt.md).[restitution](fixtureopt.md#restitution)*
+*Inherited from [FixtureOpt](fixtureopt.md).[filterMaskBits](fixtureopt.md#optional-filtermaskbits)*
 
-*Defined in [index.d.ts:136](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L136)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:750](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L750)*
+
+Collision category bit or bits that this fixture accept for collision.
+
+___
+
+### `Optional` friction
+
+• **friction**? : *number*
+
+*Inherited from [FixtureOpt](fixtureopt.md).[friction](fixtureopt.md#optional-friction)*
+
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:724](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L724)*
+
+The friction coefficient, usually in the range [0,1]
+
+___
+
+### `Optional` isSensor
+
+• **isSensor**? : *boolean*
+
+*Inherited from [FixtureOpt](fixtureopt.md).[isSensor](fixtureopt.md#optional-issensor)*
+
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:736](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L736)*
+
+A sensor shape collects contact information but never generates a collision response.
+
+___
+
+### `Optional` restitution
+
+• **restitution**? : *number*
+
+*Inherited from [FixtureOpt](fixtureopt.md).[restitution](fixtureopt.md#optional-restitution)*
+
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:728](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L728)*
+
+The restitution (elasticity) usually in the range [0,1]
 
 ___
 
 ###  shape
 
-• **shape**: *[Shape](../classes/shape.md)*
+• **shape**: *Shape*
 
-*Defined in [index.d.ts:145](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L145)*
+*Defined in [dist/planck.d.ts:753](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L753)*
+
+*Defined in [src/dynamics/Fixture.ts:78](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L78)*
 
 ___
 
-###  userData
+### `Optional` userData
 
-• **userData**: *any*
+• **userData**? : *unknown*
 
-*Inherited from [FixtureOpt](fixtureopt.md).[userData](fixtureopt.md#userdata)*
+*Inherited from [FixtureOpt](fixtureopt.md).[userData](fixtureopt.md#optional-userdata)*
 
-*Defined in [index.d.ts:134](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L134)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:720](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L720)*

@@ -2,6 +2,38 @@
 
 # Interface: WorldDef
 
+**`prop`** gravity [{ x : 0, y : 0}]
+
+**`prop`** allowSleep [true]
+
+**`prop`** warmStarting [true]
+
+**`prop`** continuousPhysics [true]
+
+**`prop`** subStepping [false]
+
+**`prop`** blockSolve [true]
+
+**`prop`** velocityIterations [8] For the velocity constraint solver.
+
+**`prop`** positionIterations [3] For the position constraint solver.
+
+**`prop`** gravity [{ x : 0, y : 0}]
+
+**`prop`** allowSleep [true]
+
+**`prop`** warmStarting [true]
+
+**`prop`** continuousPhysics [true]
+
+**`prop`** subStepping [false]
+
+**`prop`** blockSolve [true]
+
+**`prop`** velocityIterations [8] For the velocity constraint solver.
+
+**`prop`** positionIterations [3] For the position constraint solver.
+
 ## Hierarchy
 
 * **WorldDef**
@@ -25,7 +57,9 @@
 
 • **allowSleep**? : *boolean*
 
-*Defined in [index.d.ts:424](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L424)*
+*Defined in [dist/planck.d.ts:1344](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1344)*
+
+*Defined in [src/dynamics/World.ts:53](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/World.ts#L53)*
 
 ___
 
@@ -33,7 +67,9 @@ ___
 
 • **blockSolve**? : *boolean*
 
-*Defined in [index.d.ts:428](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L428)*
+*Defined in [dist/planck.d.ts:1348](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1348)*
+
+*Defined in [src/dynamics/World.ts:57](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/World.ts#L57)*
 
 ___
 
@@ -41,15 +77,19 @@ ___
 
 • **continuousPhysics**? : *boolean*
 
-*Defined in [index.d.ts:426](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L426)*
+*Defined in [dist/planck.d.ts:1346](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1346)*
+
+*Defined in [src/dynamics/World.ts:55](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/World.ts#L55)*
 
 ___
 
 ### `Optional` gravity
 
-• **gravity**? : *[Vec2](../classes/vec2.md)*
+• **gravity**? : *Vec2*
 
-*Defined in [index.d.ts:423](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L423)*
+*Defined in [dist/planck.d.ts:1343](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1343)*
+
+*Defined in [src/dynamics/World.ts:52](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/World.ts#L52)*
 
 ___
 
@@ -57,7 +97,9 @@ ___
 
 • **positionIterations**? : *number*
 
-*Defined in [index.d.ts:430](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L430)*
+*Defined in [dist/planck.d.ts:1350](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1350)*
+
+*Defined in [src/dynamics/World.ts:59](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/World.ts#L59)*
 
 ___
 
@@ -65,7 +107,9 @@ ___
 
 • **subStepping**? : *boolean*
 
-*Defined in [index.d.ts:427](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L427)*
+*Defined in [dist/planck.d.ts:1347](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1347)*
+
+*Defined in [src/dynamics/World.ts:56](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/World.ts#L56)*
 
 ___
 
@@ -73,7 +117,9 @@ ___
 
 • **velocityIterations**? : *number*
 
-*Defined in [index.d.ts:429](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L429)*
+*Defined in [dist/planck.d.ts:1349](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1349)*
+
+*Defined in [src/dynamics/World.ts:58](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/World.ts#L58)*
 
 ___
 
@@ -81,4 +127,6 @@ ___
 
 • **warmStarting**? : *boolean*
 
-*Defined in [index.d.ts:425](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L425)*
+*Defined in [dist/planck.d.ts:1345](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1345)*
+
+*Defined in [src/dynamics/World.ts:54](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/World.ts#L54)*

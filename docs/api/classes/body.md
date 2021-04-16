@@ -2,24 +2,12 @@
 
 # Class: Body
 
+A rigid body composed of one or more fixtures.
+A rigid body composed of one or more fixtures.
+
 ## Hierarchy
 
 * **Body**
-
-## Callable
-
-▸ **Body**(`world`: [World](world.md), `def?`: [BodyDef](../interfaces/bodydef.md)): *[Body](body.md)*
-
-*Defined in [index.d.ts:150](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L150)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`world` | [World](world.md) |
-`def?` | [BodyDef](../interfaces/bodydef.md) |
-
-**Returns:** *[Body](body.md)*
 
 ## Index
 
@@ -35,6 +23,7 @@ Name | Type |
 
 ### Methods
 
+* [_serialize](body.md#_serialize)
 * [advance](body.md#advance)
 * [applyAngularImpulse](body.md#applyangularimpulse)
 * [applyForce](body.md#applyforce)
@@ -99,21 +88,22 @@ Name | Type |
 * [shouldCollide](body.md#shouldcollide)
 * [synchronizeFixtures](body.md#synchronizefixtures)
 * [synchronizeTransform](body.md#synchronizetransform)
+* [_deserialize](body.md#static-_deserialize)
 
 ## Constructors
 
 ###  constructor
 
-\+ **new Body**(`world`: [World](world.md), `def?`: [BodyDef](../interfaces/bodydef.md)): *[Body](body.md)*
+\+ **new Body**(`world`: any, `def`: any): *[Body](body.md)*
 
-*Defined in [index.d.ts:151](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L151)*
+*Defined in [dist/planck.d.ts:1633](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1633)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`world` | [World](world.md) |
-`def?` | [BodyDef](../interfaces/bodydef.md) |
+`world` | any |
+`def` | any |
 
 **Returns:** *[Body](body.md)*
 
@@ -121,33 +111,65 @@ Name | Type |
 
 ### `Static` DYNAMIC
 
-▪ **DYNAMIC**: *"dynamic"*
+▪ **DYNAMIC**: *[BodyType](../globals.md#bodytype)* = DYNAMIC
 
-*Defined in [index.d.ts:156](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L156)*
+*Defined in [dist/planck.d.ts:1633](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1633)*
+
+*Defined in [src/dynamics/Body.ts:145](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L145)*
 
 ___
 
 ### `Static` KINEMATIC
 
-▪ **KINEMATIC**: *"kinematic"*
+▪ **KINEMATIC**: *[BodyType](../globals.md#bodytype)* = KINEMATIC
 
-*Defined in [index.d.ts:155](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L155)*
+*Defined in [dist/planck.d.ts:1632](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1632)*
+
+*Defined in [src/dynamics/Body.ts:144](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L144)*
 
 ___
 
 ### `Static` STATIC
 
-▪ **STATIC**: *"static"*
+▪ **STATIC**: *[BodyType](../globals.md#bodytype)* = STATIC
 
-*Defined in [index.d.ts:154](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L154)*
+*Defined in [dist/planck.d.ts:1631](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1631)*
+
+*Defined in [src/dynamics/Body.ts:143](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L143)*
 
 ## Methods
+
+###  _serialize
+
+▸ **_serialize**(): *object*
+
+*Defined in [dist/planck.d.ts:1635](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1635)*
+
+**Returns:** *object*
+
+* **angle**: *number*
+
+* **angularVelocity**: *number*
+
+* **bullet**: *boolean*
+
+* **fixtures**: *any[]*
+
+* **linearVelocity**: *[Vec2](vec2.md)*
+
+* **position**: *[Vec2](vec2.md)*
+
+* **type**: *[BodyType](../globals.md#bodytype)*
+
+___
 
 ###  advance
 
 ▸ **advance**(`alpha`: number): *void*
 
-*Defined in [index.d.ts:237](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L237)*
+*Defined in [dist/planck.d.ts:1721](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1721)*
+
+Used in TOI.
 
 **Parameters:**
 
@@ -163,14 +185,16 @@ ___
 
 ▸ **applyAngularImpulse**(`impulse`: number, `wake?`: boolean): *void*
 
-*Defined in [index.d.ts:265](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L265)*
+*Defined in [dist/planck.d.ts:1857](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1857)*
+
+Apply an angular impulse.
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`impulse` | number |
-`wake?` | boolean |
+Name | Type | Description |
+------ | ------ | ------ |
+`impulse` | number | The angular impulse in units of kg*m*m/s |
+`wake?` | boolean | Also wake up the body  |
 
 **Returns:** *void*
 
@@ -180,15 +204,19 @@ ___
 
 ▸ **applyForce**(`force`: [Vec2](vec2.md), `point`: [Vec2](vec2.md), `wake?`: boolean): *void*
 
-*Defined in [index.d.ts:261](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L261)*
+*Defined in [dist/planck.d.ts:1825](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1825)*
+
+Apply a force at a world point. If the force is not applied at the center of
+mass, it will generate a torque and affect the angular velocity. This wakes
+up the body.
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`force` | [Vec2](vec2.md) |
-`point` | [Vec2](vec2.md) |
-`wake?` | boolean |
+Name | Type | Description |
+------ | ------ | ------ |
+`force` | [Vec2](vec2.md) | The world force vector, usually in Newtons (N). |
+`point` | [Vec2](vec2.md) | The world position of the point of application. |
+`wake?` | boolean | Also wake up the body  |
 
 **Returns:** *void*
 
@@ -198,14 +226,16 @@ ___
 
 ▸ **applyForceToCenter**(`force`: [Vec2](vec2.md), `wake?`: boolean): *void*
 
-*Defined in [index.d.ts:262](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L262)*
+*Defined in [dist/planck.d.ts:1832](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1832)*
+
+Apply a force to the center of mass. This wakes up the body.
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`force` | [Vec2](vec2.md) |
-`wake?` | boolean |
+Name | Type | Description |
+------ | ------ | ------ |
+`force` | [Vec2](vec2.md) | The world force vector, usually in Newtons (N). |
+`wake?` | boolean | Also wake up the body  |
 
 **Returns:** *void*
 
@@ -215,15 +245,19 @@ ___
 
 ▸ **applyLinearImpulse**(`impulse`: [Vec2](vec2.md), `point`: [Vec2](vec2.md), `wake?`: boolean): *void*
 
-*Defined in [index.d.ts:264](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L264)*
+*Defined in [dist/planck.d.ts:1850](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1850)*
+
+Apply an impulse at a point. This immediately modifies the velocity. It also
+modifies the angular velocity if the point of application is not at the
+center of mass. This wakes up the body.
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`impulse` | [Vec2](vec2.md) |
-`point` | [Vec2](vec2.md) |
-`wake?` | boolean |
+Name | Type | Description |
+------ | ------ | ------ |
+`impulse` | [Vec2](vec2.md) | The world impulse vector, usually in N-seconds or kg-m/s. |
+`point` | [Vec2](vec2.md) | The world position of the point of application. |
+`wake?` | boolean | Also wake up the body  |
 
 **Returns:** *void*
 
@@ -233,14 +267,17 @@ ___
 
 ▸ **applyTorque**(`torque`: number, `wake?`: boolean): *void*
 
-*Defined in [index.d.ts:263](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L263)*
+*Defined in [dist/planck.d.ts:1840](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1840)*
+
+Apply a torque. This affects the angular velocity without affecting the
+linear velocity of the center of mass. This wakes up the body.
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`torque` | number |
-`wake?` | boolean |
+Name | Type | Description |
+------ | ------ | ------ |
+`torque` | number | About the z-axis (out of the screen), usually in N-m. |
+`wake?` | boolean | Also wake up the body  |
 
 **Returns:** *void*
 
@@ -250,7 +287,16 @@ ___
 
 ▸ **createFixture**(`def`: [FixtureDef](../interfaces/fixturedef.md)): *[Fixture](fixture.md)*
 
-*Defined in [index.d.ts:267](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L267)*
+*Defined in [dist/planck.d.ts:1873](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1873)*
+
+Creates a fixture and attach it to this body.
+
+If the density is non-zero, this function automatically updates the mass of
+the body.
+
+Contacts are not created until the next time step.
+
+Warning: This function is locked during callbacks.
 
 **Parameters:**
 
@@ -262,7 +308,7 @@ Name | Type |
 
 ▸ **createFixture**(`shape`: [Shape](shape.md), `opt?`: [FixtureOpt](../interfaces/fixtureopt.md)): *[Fixture](fixture.md)*
 
-*Defined in [index.d.ts:268](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L268)*
+*Defined in [dist/planck.d.ts:1874](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1874)*
 
 **Parameters:**
 
@@ -275,7 +321,7 @@ Name | Type |
 
 ▸ **createFixture**(`shape`: [Shape](shape.md), `density?`: number): *[Fixture](fixture.md)*
 
-*Defined in [index.d.ts:269](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L269)*
+*Defined in [dist/planck.d.ts:1875](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1875)*
 
 **Parameters:**
 
@@ -286,19 +332,74 @@ Name | Type |
 
 **Returns:** *[Fixture](fixture.md)*
 
+▸ **createFixture**(`def`: FixtureDef): *Fixture*
+
+*Defined in [src/dynamics/Body.ts:1021](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L1021)*
+
+Creates a fixture and attach it to this body.
+
+If the density is non-zero, this function automatically updates the mass of
+the body.
+
+Contacts are not created until the next time step.
+
+Warning: This function is locked during callbacks.
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`def` | FixtureDef |
+
+**Returns:** *Fixture*
+
+▸ **createFixture**(`shape`: Shape, `opt?`: FixtureOpt): *Fixture*
+
+*Defined in [src/dynamics/Body.ts:1022](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L1022)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`shape` | Shape |
+`opt?` | FixtureOpt |
+
+**Returns:** *Fixture*
+
+▸ **createFixture**(`shape`: Shape, `density?`: number): *Fixture*
+
+*Defined in [src/dynamics/Body.ts:1023](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L1023)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`shape` | Shape |
+`density?` | number |
+
+**Returns:** *Fixture*
+
 ___
 
 ###  destroyFixture
 
 ▸ **destroyFixture**(`fixture`: [Fixture](fixture.md)): *void*
 
-*Defined in [index.d.ts:270](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L270)*
+*Defined in [dist/planck.d.ts:1887](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1887)*
+
+Destroy a fixture. This removes the fixture from the broad-phase and destroys
+all contacts associated with this fixture. This will automatically adjust the
+mass of the body if the body is dynamic and the fixture has positive density.
+All fixtures attached to a body are implicitly destroyed when the body is
+destroyed.
+
+Warning: This function is locked during callbacks.
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`fixture` | [Fixture](fixture.md) |
+Name | Type | Description |
+------ | ------ | ------ |
+`fixture` | [Fixture](fixture.md) | The fixture to be removed.  |
 
 **Returns:** *void*
 
@@ -308,7 +409,9 @@ ___
 
 ▸ **getAngle**(): *number*
 
-*Defined in [index.d.ts:240](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L240)*
+*Defined in [dist/planck.d.ts:1730](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1730)*
+
+Get the current world rotation angle in radians.
 
 **Returns:** *number*
 
@@ -318,7 +421,7 @@ ___
 
 ▸ **getAngularDamping**(): *number*
 
-*Defined in [index.d.ts:252](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L252)*
+*Defined in [dist/planck.d.ts:1778](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1778)*
 
 **Returns:** *number*
 
@@ -328,9 +431,13 @@ ___
 
 ▸ **getAngularVelocity**(): *number*
 
-*Defined in [index.d.ts:248](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L248)*
+*Defined in [dist/planck.d.ts:1769](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1769)*
+
+Get the angular velocity.
 
 **Returns:** *number*
+
+the angular velocity in radians/second.
 
 ___
 
@@ -338,7 +445,7 @@ ___
 
 ▸ **getContactList**(): *[ContactEdge](contactedge.md) | null*
 
-*Defined in [index.d.ts:205](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L205)*
+*Defined in [dist/planck.d.ts:1656](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1656)*
 
 Warning: this list changes during the time step and you may miss some
 collisions if you don't use ContactListener.
@@ -351,7 +458,7 @@ ___
 
 ▸ **getFixtureList**(): *[Fixture](fixture.md) | null*
 
-*Defined in [index.d.ts:199](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L199)*
+*Defined in [dist/planck.d.ts:1650](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1650)*
 
 **Returns:** *[Fixture](fixture.md) | null*
 
@@ -361,7 +468,7 @@ ___
 
 ▸ **getGravityScale**(): *number*
 
-*Defined in [index.d.ts:254](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L254)*
+*Defined in [dist/planck.d.ts:1780](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1780)*
 
 **Returns:** *number*
 
@@ -371,19 +478,23 @@ ___
 
 ▸ **getInertia**(): *number*
 
-*Defined in [index.d.ts:257](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L257)*
+*Defined in [dist/planck.d.ts:1796](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1796)*
+
+Get the rotational inertia of the body about the local origin.
 
 **Returns:** *number*
+
+the rotational inertia, usually in kg-m^2.
 
 ___
 
 ###  getJointList
 
-▸ **getJointList**(): *[JointEdge](../interfaces/jointedge.md) | null*
+▸ **getJointList**(): *[JointEdge](jointedge.md) | null*
 
-*Defined in [index.d.ts:200](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L200)*
+*Defined in [dist/planck.d.ts:1651](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1651)*
 
-**Returns:** *[JointEdge](../interfaces/jointedge.md) | null*
+**Returns:** *[JointEdge](jointedge.md) | null*
 
 ___
 
@@ -391,7 +502,7 @@ ___
 
 ▸ **getLinearDamping**(): *number*
 
-*Defined in [index.d.ts:250](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L250)*
+*Defined in [dist/planck.d.ts:1776](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1776)*
 
 **Returns:** *number*
 
@@ -401,9 +512,13 @@ ___
 
 ▸ **getLinearVelocity**(): *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:244](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L244)*
+*Defined in [dist/planck.d.ts:1745](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1745)*
+
+Get the linear velocity of the center of mass.
 
 **Returns:** *[Vec2](vec2.md)*
+
+the linear velocity of the center of mass.
 
 ___
 
@@ -411,13 +526,15 @@ ___
 
 ▸ **getLinearVelocityFromLocalPoint**(`localPoint`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:246](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L246)*
+*Defined in [dist/planck.d.ts:1757](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1757)*
+
+Get the world velocity of a local point.
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`localPoint` | [Vec2](vec2.md) |
+Name | Type | Description |
+------ | ------ | ------ |
+`localPoint` | [Vec2](vec2.md) | A point in local coordinates.  |
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -427,13 +544,15 @@ ___
 
 ▸ **getLinearVelocityFromWorldPoint**(`worldPoint`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:245](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L245)*
+*Defined in [dist/planck.d.ts:1751](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1751)*
+
+Get the world linear velocity of a world point attached to this body.
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`worldPoint` | [Vec2](vec2.md) |
+Name | Type | Description |
+------ | ------ | ------ |
+`worldPoint` | [Vec2](vec2.md) | A point in world coordinates.  |
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -443,7 +562,9 @@ ___
 
 ▸ **getLocalCenter**(): *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:243](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L243)*
+*Defined in [dist/planck.d.ts:1739](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1739)*
+
+Get the local position of the center of mass.
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -453,7 +574,9 @@ ___
 
 ▸ **getLocalPoint**(`worldPoint`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:273](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L273)*
+*Defined in [dist/planck.d.ts:1899](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1899)*
+
+Gets the corresponding local point of a world point.
 
 **Parameters:**
 
@@ -469,7 +592,9 @@ ___
 
 ▸ **getLocalVector**(`worldVector`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:274](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L274)*
+*Defined in [dist/planck.d.ts:1903](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1903)*
+
+Gets the corresponding local vector of a world vector.
 
 **Parameters:**
 
@@ -485,23 +610,29 @@ ___
 
 ▸ **getMass**(): *number*
 
-*Defined in [index.d.ts:256](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L256)*
+*Defined in [dist/planck.d.ts:1790](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1790)*
+
+Get the total mass of the body.
 
 **Returns:** *number*
+
+The mass, usually in kilograms (kg).
 
 ___
 
 ###  getMassData
 
-▸ **getMassData**(`data`: [MassData](../interfaces/massdata.md)): *void*
+▸ **getMassData**(`data`: [MassData](massdata.md)): *void*
 
-*Defined in [index.d.ts:258](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L258)*
+*Defined in [dist/planck.d.ts:1800](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1800)*
+
+Copy the mass data of the body to data.
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`data` | [MassData](../interfaces/massdata.md) |
+`data` | [MassData](massdata.md) |
 
 **Returns:** *void*
 
@@ -511,7 +642,7 @@ ___
 
 ▸ **getNext**(): *[Body](body.md) | null*
 
-*Defined in [index.d.ts:196](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L196)*
+*Defined in [dist/planck.d.ts:1647](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1647)*
 
 **Returns:** *[Body](body.md) | null*
 
@@ -521,7 +652,9 @@ ___
 
 ▸ **getPosition**(): *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:238](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L238)*
+*Defined in [dist/planck.d.ts:1725](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1725)*
+
+Get the world position for the body's origin.
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -531,7 +664,9 @@ ___
 
 ▸ **getTransform**(): *[Transform](transform.md)*
 
-*Defined in [index.d.ts:233](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L233)*
+*Defined in [dist/planck.d.ts:1703](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1703)*
+
+Get the world transform for the body's origin.
 
 **Returns:** *[Transform](transform.md)*
 
@@ -541,7 +676,7 @@ ___
 
 ▸ **getUserData**(): *unknown*
 
-*Defined in [index.d.ts:198](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L198)*
+*Defined in [dist/planck.d.ts:1649](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1649)*
 
 **Returns:** *unknown*
 
@@ -551,7 +686,7 @@ ___
 
 ▸ **getWorld**(): *[World](world.md)*
 
-*Defined in [index.d.ts:195](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L195)*
+*Defined in [dist/planck.d.ts:1646](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1646)*
 
 **Returns:** *[World](world.md)*
 
@@ -561,7 +696,9 @@ ___
 
 ▸ **getWorldCenter**(): *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:242](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L242)*
+*Defined in [dist/planck.d.ts:1735](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1735)*
+
+Get the world position of the center of mass.
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -571,7 +708,9 @@ ___
 
 ▸ **getWorldPoint**(`localPoint`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:271](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L271)*
+*Defined in [dist/planck.d.ts:1891](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1891)*
+
+Get the corresponding world point of a local point.
 
 **Parameters:**
 
@@ -587,7 +726,9 @@ ___
 
 ▸ **getWorldVector**(`localVector`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [index.d.ts:272](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L272)*
+*Defined in [dist/planck.d.ts:1895](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1895)*
+
+Get the corresponding world vector of a local vector.
 
 **Parameters:**
 
@@ -603,7 +744,7 @@ ___
 
 ▸ **isActive**(): *boolean*
 
-*Defined in [index.d.ts:229](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L229)*
+*Defined in [dist/planck.d.ts:1680](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1680)*
 
 **Returns:** *boolean*
 
@@ -613,7 +754,7 @@ ___
 
 ▸ **isAwake**(): *boolean*
 
-*Defined in [index.d.ts:227](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L227)*
+*Defined in [dist/planck.d.ts:1673](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1673)*
 
 **Returns:** *boolean*
 
@@ -623,7 +764,7 @@ ___
 
 ▸ **isBullet**(): *boolean*
 
-*Defined in [index.d.ts:223](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L223)*
+*Defined in [dist/planck.d.ts:1666](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1666)*
 
 **Returns:** *boolean*
 
@@ -633,7 +774,7 @@ ___
 
 ▸ **isDynamic**(): *boolean*
 
-*Defined in [index.d.ts:207](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L207)*
+*Defined in [dist/planck.d.ts:1658](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1658)*
 
 **Returns:** *boolean*
 
@@ -643,7 +784,7 @@ ___
 
 ▸ **isFixedRotation**(): *boolean*
 
-*Defined in [index.d.ts:231](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L231)*
+*Defined in [dist/planck.d.ts:1695](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1695)*
 
 **Returns:** *boolean*
 
@@ -653,7 +794,7 @@ ___
 
 ▸ **isKinematic**(): *boolean*
 
-*Defined in [index.d.ts:208](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L208)*
+*Defined in [dist/planck.d.ts:1659](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1659)*
 
 **Returns:** *boolean*
 
@@ -663,7 +804,7 @@ ___
 
 ▸ **isSleepingAllowed**(): *boolean*
 
-*Defined in [index.d.ts:225](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L225)*
+*Defined in [dist/planck.d.ts:1671](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1671)*
 
 **Returns:** *boolean*
 
@@ -673,7 +814,7 @@ ___
 
 ▸ **isStatic**(): *boolean*
 
-*Defined in [index.d.ts:206](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L206)*
+*Defined in [dist/planck.d.ts:1657](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1657)*
 
 **Returns:** *boolean*
 
@@ -683,7 +824,7 @@ ___
 
 ▸ **isWorldLocked**(): *boolean*
 
-*Defined in [index.d.ts:194](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L194)*
+*Defined in [dist/planck.d.ts:1645](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1645)*
 
 **Returns:** *boolean*
 
@@ -693,7 +834,11 @@ ___
 
 ▸ **resetMassData**(): *void*
 
-*Defined in [index.d.ts:259](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L259)*
+*Defined in [dist/planck.d.ts:1806](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1806)*
+
+This resets the mass properties to the sum of the mass properties of the
+fixtures. This normally does not need to be called unless you called
+SetMassData to override the mass and you later want to reset the mass.
 
 **Returns:** *void*
 
@@ -703,7 +848,19 @@ ___
 
 ▸ **setActive**(`flag`: boolean): *void*
 
-*Defined in [index.d.ts:230](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L230)*
+*Defined in [dist/planck.d.ts:1694](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1694)*
+
+Set the active state of the body. An inactive body is not simulated and
+cannot be collided with or woken up. If you pass a flag of true, all fixtures
+will be added to the broad-phase. If you pass a flag of false, all fixtures
+will be removed from the broad-phase and all contacts will be destroyed.
+Fixtures and joints are otherwise unaffected.
+
+You may continue to create/destroy fixtures and joints on inactive bodies.
+Fixtures on an inactive body are implicitly inactive and will not participate
+in collisions, ray-casts, or queries. Joints connected to an inactive body
+are implicitly inactive. An inactive body is still owned by a World object
+and remains
 
 **Parameters:**
 
@@ -719,7 +876,7 @@ ___
 
 ▸ **setAngle**(`angle`: number): *void*
 
-*Defined in [index.d.ts:241](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L241)*
+*Defined in [dist/planck.d.ts:1731](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1731)*
 
 **Parameters:**
 
@@ -735,7 +892,7 @@ ___
 
 ▸ **setAngularDamping**(`angularDamping`: number): *void*
 
-*Defined in [index.d.ts:253](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L253)*
+*Defined in [dist/planck.d.ts:1779](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1779)*
 
 **Parameters:**
 
@@ -751,7 +908,9 @@ ___
 
 ▸ **setAngularVelocity**(`w`: number): *void*
 
-*Defined in [index.d.ts:249](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L249)*
+*Defined in [dist/planck.d.ts:1775](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1775)*
+
+Set the angular velocity.
 
 **Parameters:**
 
@@ -767,13 +926,15 @@ ___
 
 ▸ **setAwake**(`flag`: boolean): *void*
 
-*Defined in [index.d.ts:228](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L228)*
+*Defined in [dist/planck.d.ts:1679](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1679)*
+
+Set the sleep state of the body. A sleeping body has very low CPU cost.
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`flag` | boolean |
+Name | Type | Description |
+------ | ------ | ------ |
+`flag` | boolean | Set to true to wake the body, false to put it to sleep.  |
 
 **Returns:** *void*
 
@@ -783,7 +944,9 @@ ___
 
 ▸ **setBullet**(`flag`: boolean): *void*
 
-*Defined in [index.d.ts:224](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L224)*
+*Defined in [dist/planck.d.ts:1670](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1670)*
+
+Should this body be treated like a bullet for continuous collision detection?
 
 **Parameters:**
 
@@ -799,7 +962,7 @@ ___
 
 ▸ **setDynamic**(): *[Body](body.md)*
 
-*Defined in [index.d.ts:213](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L213)*
+*Defined in [dist/planck.d.ts:1664](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1664)*
 
 **Returns:** *[Body](body.md)*
 
@@ -809,7 +972,9 @@ ___
 
 ▸ **setFixedRotation**(`flag`: boolean): *void*
 
-*Defined in [index.d.ts:232](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L232)*
+*Defined in [dist/planck.d.ts:1699](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1699)*
+
+Set this body to have fixed rotation. This causes the mass to be reset.
 
 **Parameters:**
 
@@ -825,7 +990,9 @@ ___
 
 ▸ **setGravityScale**(`scale`: number): *void*
 
-*Defined in [index.d.ts:255](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L255)*
+*Defined in [dist/planck.d.ts:1784](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1784)*
+
+Scale the gravity applied to this body.
 
 **Parameters:**
 
@@ -841,7 +1008,7 @@ ___
 
 ▸ **setKinematic**(): *[Body](body.md)*
 
-*Defined in [index.d.ts:214](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L214)*
+*Defined in [dist/planck.d.ts:1665](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1665)*
 
 **Returns:** *[Body](body.md)*
 
@@ -851,7 +1018,7 @@ ___
 
 ▸ **setLinearDamping**(`linearDamping`: number): *void*
 
-*Defined in [index.d.ts:251](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L251)*
+*Defined in [dist/planck.d.ts:1777](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1777)*
 
 **Parameters:**
 
@@ -867,13 +1034,15 @@ ___
 
 ▸ **setLinearVelocity**(`v`: [Vec2](vec2.md)): *void*
 
-*Defined in [index.d.ts:247](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L247)*
+*Defined in [dist/planck.d.ts:1763](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1763)*
+
+Set the linear velocity of the center of mass.
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`v` | [Vec2](vec2.md) |
+Name | Type | Description |
+------ | ------ | ------ |
+`v` | [Vec2](vec2.md) | The new linear velocity of the center of mass.  |
 
 **Returns:** *void*
 
@@ -881,15 +1050,20 @@ ___
 
 ###  setMassData
 
-▸ **setMassData**(`massData`: [MassData](../interfaces/massdata.md)): *void*
+▸ **setMassData**(`massData`: [MassData](massdata.md)): *void*
 
-*Defined in [index.d.ts:260](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L260)*
+*Defined in [dist/planck.d.ts:1815](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1815)*
+
+Set the mass properties to override the mass properties of the fixtures. Note
+that this changes the center of mass position. Note that creating or
+destroying fixtures can also alter the mass. This function has no effect if
+the body isn't dynamic.
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`massData` | [MassData](../interfaces/massdata.md) |
+Name | Type | Description |
+------ | ------ | ------ |
+`massData` | [MassData](massdata.md) | The mass properties.  |
 
 **Returns:** *void*
 
@@ -899,7 +1073,7 @@ ___
 
 ▸ **setPosition**(`p`: [Vec2](vec2.md)): *void*
 
-*Defined in [index.d.ts:239](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L239)*
+*Defined in [dist/planck.d.ts:1726](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1726)*
 
 **Parameters:**
 
@@ -915,7 +1089,7 @@ ___
 
 ▸ **setSleepingAllowed**(`flag`: boolean): *void*
 
-*Defined in [index.d.ts:226](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L226)*
+*Defined in [dist/planck.d.ts:1672](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1672)*
 
 **Parameters:**
 
@@ -931,7 +1105,7 @@ ___
 
 ▸ **setStatic**(): *[Body](body.md)*
 
-*Defined in [index.d.ts:212](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L212)*
+*Defined in [dist/planck.d.ts:1663](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1663)*
 
 This will alter the mass and velocity.
 
@@ -943,14 +1117,18 @@ ___
 
 ▸ **setTransform**(`position`: [Vec2](vec2.md), `angle`: number): *void*
 
-*Defined in [index.d.ts:234](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L234)*
+*Defined in [dist/planck.d.ts:1712](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1712)*
+
+Set the position of the body's origin and rotation. Manipulating a body's
+transform may cause non-physical behavior. Note: contacts are updated on the
+next call to World.step.
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`position` | [Vec2](vec2.md) |
-`angle` | number |
+Name | Type | Description |
+------ | ------ | ------ |
+`position` | [Vec2](vec2.md) | The world position of the body's local origin. |
+`angle` | number | The world rotation in radians.  |
 
 **Returns:** *void*
 
@@ -960,7 +1138,7 @@ ___
 
 ▸ **setUserData**(`data`: any): *void*
 
-*Defined in [index.d.ts:197](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L197)*
+*Defined in [dist/planck.d.ts:1648](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1648)*
 
 **Parameters:**
 
@@ -976,7 +1154,10 @@ ___
 
 ▸ **shouldCollide**(`that`: [Body](body.md)): *boolean*
 
-*Defined in [index.d.ts:266](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L266)*
+*Defined in [dist/planck.d.ts:1862](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1862)*
+
+This is used to prevent connected bodies (by joints) from colliding,
+depending on the joint's collideConnected flag.
 
 **Parameters:**
 
@@ -992,7 +1173,9 @@ ___
 
 ▸ **synchronizeFixtures**(): *void*
 
-*Defined in [index.d.ts:236](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L236)*
+*Defined in [dist/planck.d.ts:1717](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1717)*
+
+Update fixtures in broad-phase.
 
 **Returns:** *void*
 
@@ -1002,6 +1185,24 @@ ___
 
 ▸ **synchronizeTransform**(): *void*
 
-*Defined in [index.d.ts:235](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L235)*
+*Defined in [dist/planck.d.ts:1713](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1713)*
 
 **Returns:** *void*
+
+___
+
+### `Static` _deserialize
+
+▸ **_deserialize**(`data`: any, `world`: any, `restore`: any): *[Body](body.md)*
+
+*Defined in [dist/planck.d.ts:1644](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1644)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`data` | any |
+`world` | any |
+`restore` | any |
+
+**Returns:** *[Body](body.md)*

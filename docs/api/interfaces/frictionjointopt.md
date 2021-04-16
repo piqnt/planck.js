@@ -2,9 +2,14 @@
 
 # Interface: FrictionJointOpt
 
+Friction joint definition.
+Friction joint definition.
+
 ## Hierarchy
 
 * [JointOpt](jointopt.md)
+
+* JointOpt
 
   ↳ **FrictionJointOpt**
 
@@ -15,8 +20,8 @@
 ### Properties
 
 * [collideConnected](frictionjointopt.md#optional-collideconnected)
-* [maxForce](frictionjointopt.md#maxforce)
-* [maxTorque](frictionjointopt.md#maxtorque)
+* [maxForce](frictionjointopt.md#optional-maxforce)
+* [maxTorque](frictionjointopt.md#optional-maxtorque)
 * [userData](frictionjointopt.md#optional-userdata)
 
 ## Properties
@@ -27,23 +32,38 @@
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+
+Set this flag to true if the attached bodies
+should collide.
 
 ___
 
-###  maxForce
+### `Optional` maxForce
 
-• **maxForce**: *number*
+• **maxForce**? : *number*
 
-*Defined in [joint/index.d.ts:148](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L148)*
+*Defined in [dist/planck.d.ts:2533](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2533)*
+
+*Defined in [src/dynamics/joint/FrictionJoint.ts:46](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/FrictionJoint.ts#L46)*
+
+The maximum friction force in N.
+The maximum friction force in N.
 
 ___
 
-###  maxTorque
+### `Optional` maxTorque
 
-• **maxTorque**: *number*
+• **maxTorque**? : *number*
 
-*Defined in [joint/index.d.ts:149](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L149)*
+*Defined in [dist/planck.d.ts:2537](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2537)*
+
+*Defined in [src/dynamics/joint/FrictionJoint.ts:50](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/FrictionJoint.ts#L50)*
+
+The maximum friction torque in N-m.
+The maximum friction torque in N-m.
 
 ___
 
@@ -53,4 +73,8 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+
+Use this to attach application specific data to your joints.

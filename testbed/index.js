@@ -1,7 +1,7 @@
-import { Vec2, MouseJoint, AABB } from '../lib/index';
+import { Vec2, MouseJoint, AABB } from '../src/index';
 import { default as Stage } from 'stage-js/platform/web';
 
-export * from '../lib/index';
+export * from '../src/index';
 
 // x, y, width, height: camera position
 // hz, speed: frequency and speed of simulation

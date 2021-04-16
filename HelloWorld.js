@@ -31,7 +31,7 @@
  * To run this example simply run `node HelloWorld.js` from command line.
  */
 
-var planck = require('./lib')
+var planck = require('./dist/planck')
 
 var Vec2 = planck.Vec2;
 

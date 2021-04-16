@@ -2,6 +2,11 @@
 
 # Interface: RayCastOutput
 
+Ray-cast output data. The ray hits at `p1 + fraction * (p2 - p1)`,
+where `p1` and `p2` come from RayCastInput.
+Ray-cast output data. The ray hits at `p1 + fraction * (p2 - p1)`,
+where `p1` and `p2` come from RayCastInput.
+
 ## Hierarchy
 
 * **RayCastOutput**
@@ -19,12 +24,16 @@
 
 • **fraction**: *number*
 
-*Defined in [collision/index.d.ts:16](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L16)*
+*Defined in [dist/planck.d.ts:419](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L419)*
+
+*Defined in [src/collision/AABB.ts:49](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/AABB.ts#L49)*
 
 ___
 
 ###  normal
 
-• **normal**: *[Vec2](../classes/vec2.md)*
+• **normal**: *Vec2*
 
-*Defined in [collision/index.d.ts:15](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L15)*
+*Defined in [dist/planck.d.ts:418](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L418)*
+
+*Defined in [src/collision/AABB.ts:48](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/AABB.ts#L48)*

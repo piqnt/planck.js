@@ -1,6 +1,6 @@
 # Planck.js
 
-Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5 game development.
+Planck.js is JavaScript (TypeScript) rewrite of Box2D physics engine for cross-platform HTML5 game development.
 
 #### Motivations
 
@@ -25,10 +25,15 @@ Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5
 
 ## Updates
 
-#### v0.4.0-alpha
-- Migrated to ESM and Rollup
-- `package.json` `main` now points to UMD build output under `/dist`
-- `planck.internal` namespace is deprecated and merged with `planck` (except `planck.internal.stats`)
+#### v1.0
+
+Starting v1.0 the project code is migrated to TypeScript, to improves library usability, documentation and maintenance.
+
+In addition to this main change, v1.0 also includes few other notable changes.
+
+- Source files are moved to `/src` directory (from `/lib`) and directory layout is updated to match Box2D
+- Rollup is used to build the project
+- `planck.internal` namespace is deprecated and everything is directly available under main namesapce (except `planck.internal.stats`)
 
 
 ## API and Architecture
@@ -73,7 +78,7 @@ With testbed:
 const planck = require('planck-js/dist/planck-with-testbed');
 
 planck.testbed(function() {
-  ...
+  // ...
 });
 
 ```

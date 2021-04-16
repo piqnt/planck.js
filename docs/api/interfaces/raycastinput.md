@@ -2,6 +2,9 @@
 
 # Interface: RayCastInput
 
+Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
+Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
+
 ## Hierarchy
 
 * **RayCastInput**
@@ -20,20 +23,26 @@
 
 • **maxFraction**: *number*
 
-*Defined in [collision/index.d.ts:11](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L11)*
+*Defined in [dist/planck.d.ts:411](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L411)*
+
+*Defined in [src/collision/AABB.ts:40](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/AABB.ts#L40)*
 
 ___
 
 ###  p1
 
-• **p1**: *[Vec2](../classes/vec2.md)*
+• **p1**: *Vec2*
 
-*Defined in [collision/index.d.ts:9](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L9)*
+*Defined in [dist/planck.d.ts:409](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L409)*
+
+*Defined in [src/collision/AABB.ts:38](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/AABB.ts#L38)*
 
 ___
 
 ###  p2
 
-• **p2**: *[Vec2](../classes/vec2.md)*
+• **p2**: *Vec2*
 
-*Defined in [collision/index.d.ts:10](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L10)*
+*Defined in [dist/planck.d.ts:410](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L410)*
+
+*Defined in [src/collision/AABB.ts:39](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/AABB.ts#L39)*

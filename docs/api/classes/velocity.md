@@ -8,18 +8,34 @@
 
 ## Index
 
+### Constructors
+
+* [constructor](velocity.md#constructor)
+
 ### Properties
 
 * [v](velocity.md#v)
 * [w](velocity.md#w)
 
+## Constructors
+
+###  constructor
+
+\+ **new Velocity**(): *[Velocity](velocity.md)*
+
+*Defined in [src/dynamics/Velocity.ts:32](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Velocity.ts#L32)*
+
+**Returns:** *[Velocity](velocity.md)*
+
 ## Properties
 
 ###  v
 
-• **v**: *[Vec2](vec2.md)*
+• **v**: *Vec2*
 
-*Defined in [common/index.d.ts:20](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L20)*
+*Defined in [src/dynamics/Velocity.ts:29](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Velocity.ts#L29)*
+
+linear
 
 ___
 
@@ -27,4 +43,6 @@ ___
 
 • **w**: *number*
 
-*Defined in [common/index.d.ts:21](https://github.com/shakiba/planck.js/blob/038d425/lib/common/index.d.ts#L21)*
+*Defined in [src/dynamics/Velocity.ts:32](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Velocity.ts#L32)*
+
+angular

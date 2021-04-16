@@ -2,9 +2,24 @@
 
 # Interface: WheelJointOpt
 
+Wheel joint definition. This requires defining a line of motion using an axis
+and an anchor point. The definition uses local anchor points and a local axis
+so that the initial configuration can violate the constraint slightly. The
+joint translation is zero when the local anchor points coincide in world
+space. Using local anchors and a local axis helps when saving and loading a
+game.
+Wheel joint definition. This requires defining a line of motion using an axis
+and an anchor point. The definition uses local anchor points and a local axis
+so that the initial configuration can violate the constraint slightly. The
+joint translation is zero when the local anchor points coincide in world
+space. Using local anchors and a local axis helps when saving and loading a
+game.
+
 ## Hierarchy
 
 * [JointOpt](jointopt.md)
+
+* JointOpt
 
   ↳ **WheelJointOpt**
 
@@ -15,11 +30,11 @@
 ### Properties
 
 * [collideConnected](wheeljointopt.md#optional-collideconnected)
-* [dampingRatio](wheeljointopt.md#dampingratio)
-* [enableMotor](wheeljointopt.md#enablemotor)
-* [frequencyHz](wheeljointopt.md#frequencyhz)
-* [maxMotorTorque](wheeljointopt.md#maxmotortorque)
-* [motorSpeed](wheeljointopt.md#motorspeed)
+* [dampingRatio](wheeljointopt.md#optional-dampingratio)
+* [enableMotor](wheeljointopt.md#optional-enablemotor)
+* [frequencyHz](wheeljointopt.md#optional-frequencyhz)
+* [maxMotorTorque](wheeljointopt.md#optional-maxmotortorque)
+* [motorSpeed](wheeljointopt.md#optional-motorspeed)
 * [userData](wheeljointopt.md#optional-userdata)
 
 ## Properties
@@ -30,47 +45,77 @@
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+
+Set this flag to true if the attached bodies
+should collide.
 
 ___
 
-###  dampingRatio
+### `Optional` dampingRatio
 
-• **dampingRatio**: *number*
+• **dampingRatio**? : *number*
 
-*Defined in [joint/index.d.ts:659](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L659)*
+*Defined in [dist/planck.d.ts:3675](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3675)*
 
-___
+*Defined in [src/dynamics/joint/WheelJoint.ts:63](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/WheelJoint.ts#L63)*
 
-###  enableMotor
-
-• **enableMotor**: *boolean*
-
-*Defined in [joint/index.d.ts:655](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L655)*
+Suspension damping ratio, one indicates critical damping.
+Suspension damping ratio, one indicates critical damping.
 
 ___
 
-###  frequencyHz
+### `Optional` enableMotor
 
-• **frequencyHz**: *number*
+• **enableMotor**? : *boolean*
 
-*Defined in [joint/index.d.ts:658](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L658)*
+*Defined in [dist/planck.d.ts:3659](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3659)*
 
-___
+*Defined in [src/dynamics/joint/WheelJoint.ts:47](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/WheelJoint.ts#L47)*
 
-###  maxMotorTorque
-
-• **maxMotorTorque**: *number*
-
-*Defined in [joint/index.d.ts:656](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L656)*
+Enable/disable the joint motor.
+Enable/disable the joint motor.
 
 ___
 
-###  motorSpeed
+### `Optional` frequencyHz
 
-• **motorSpeed**: *number*
+• **frequencyHz**? : *number*
 
-*Defined in [joint/index.d.ts:657](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L657)*
+*Defined in [dist/planck.d.ts:3671](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3671)*
+
+*Defined in [src/dynamics/joint/WheelJoint.ts:59](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/WheelJoint.ts#L59)*
+
+Suspension frequency, zero indicates no suspension.
+Suspension frequency, zero indicates no suspension.
+
+___
+
+### `Optional` maxMotorTorque
+
+• **maxMotorTorque**? : *number*
+
+*Defined in [dist/planck.d.ts:3663](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3663)*
+
+*Defined in [src/dynamics/joint/WheelJoint.ts:51](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/WheelJoint.ts#L51)*
+
+The maximum motor torque, usually in N-m.
+The maximum motor torque, usually in N-m.
+
+___
+
+### `Optional` motorSpeed
+
+• **motorSpeed**? : *number*
+
+*Defined in [dist/planck.d.ts:3667](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3667)*
+
+*Defined in [src/dynamics/joint/WheelJoint.ts:55](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/WheelJoint.ts#L55)*
+
+The desired motor speed in radians per second.
+The desired motor speed in radians per second.
 
 ___
 
@@ -80,4 +125,8 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+
+Use this to attach application specific data to your joints.

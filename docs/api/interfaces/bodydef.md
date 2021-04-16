@@ -2,6 +2,80 @@
 
 # Interface: BodyDef
 
+**`prop`** type Body types are static, kinematic, or dynamic. Note: if a dynamic
+      body would have zero mass, the mass is set to one.
+
+**`prop`** position The world position of the body. Avoid creating bodies at the
+      origin since this can lead to many overlapping shapes.
+
+**`prop`** angle The world angle of the body in radians.
+
+**`prop`** linearVelocity The linear velocity of the body's origin in world
+      co-ordinates.
+
+**`prop`** angularVelocity
+
+**`prop`** linearDamping Linear damping is use to reduce the linear velocity. The
+      damping parameter can be larger than 1.0 but the damping effect becomes
+      sensitive to the time step when the damping parameter is large.
+
+**`prop`** angularDamping Angular damping is use to reduce the angular velocity.
+      The damping parameter can be larger than 1.0 but the damping effect
+      becomes sensitive to the time step when the damping parameter is large.
+
+**`prop`** fixedRotation Should this body be prevented from rotating? Useful for
+      characters.
+
+**`prop`** bullet Is this a fast moving body that should be prevented from
+      tunneling through other moving bodies? Note that all bodies are
+      prevented from tunneling through kinematic and static bodies. This
+      setting is only considered on dynamic bodies. Warning: You should use
+      this flag sparingly since it increases processing time.
+
+**`prop`** active Does this body start out active?
+
+**`prop`** awake Is this body initially awake or sleeping?
+
+**`prop`** allowSleep Set this flag to false if this body should never fall
+      asleep. Note that this increases CPU usage.
+
+**`prop`** type Body types are static, kinematic, or dynamic. Note: if a dynamic
+      body would have zero mass, the mass is set to one.
+
+**`prop`** position The world position of the body. Avoid creating bodies at the
+      origin since this can lead to many overlapping shapes.
+
+**`prop`** angle The world angle of the body in radians.
+
+**`prop`** linearVelocity The linear velocity of the body's origin in world
+      co-ordinates.
+
+**`prop`** angularVelocity
+
+**`prop`** linearDamping Linear damping is use to reduce the linear velocity. The
+      damping parameter can be larger than 1.0 but the damping effect becomes
+      sensitive to the time step when the damping parameter is large.
+
+**`prop`** angularDamping Angular damping is use to reduce the angular velocity.
+      The damping parameter can be larger than 1.0 but the damping effect
+      becomes sensitive to the time step when the damping parameter is large.
+
+**`prop`** fixedRotation Should this body be prevented from rotating? Useful for
+      characters.
+
+**`prop`** bullet Is this a fast moving body that should be prevented from
+      tunneling through other moving bodies? Note that all bodies are
+      prevented from tunneling through kinematic and static bodies. This
+      setting is only considered on dynamic bodies. Warning: You should use
+      this flag sparingly since it increases processing time.
+
+**`prop`** active Does this body start out active?
+
+**`prop`** awake Is this body initially awake or sleeping?
+
+**`prop`** allowSleep Set this flag to false if this body should never fall
+      asleep. Note that this increases CPU usage.
+
 ## Hierarchy
 
 * **BodyDef**
@@ -31,7 +105,9 @@
 
 • **active**? : *boolean*
 
-*Defined in [index.d.ts:290](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L290)*
+*Defined in [dist/planck.d.ts:1613](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1613)*
+
+*Defined in [src/dynamics/Body.ts:101](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L101)*
 
 ___
 
@@ -39,7 +115,9 @@ ___
 
 • **allowSleep**? : *boolean*
 
-*Defined in [index.d.ts:288](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L288)*
+*Defined in [dist/planck.d.ts:1611](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1611)*
+
+*Defined in [src/dynamics/Body.ts:99](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L99)*
 
 ___
 
@@ -47,7 +125,9 @@ ___
 
 • **angle**? : *number*
 
-*Defined in [index.d.ts:280](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L280)*
+*Defined in [dist/planck.d.ts:1603](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1603)*
+
+*Defined in [src/dynamics/Body.ts:91](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L91)*
 
 ___
 
@@ -55,7 +135,9 @@ ___
 
 • **angularDamping**? : *number*
 
-*Defined in [index.d.ts:284](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L284)*
+*Defined in [dist/planck.d.ts:1607](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1607)*
+
+*Defined in [src/dynamics/Body.ts:95](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L95)*
 
 ___
 
@@ -63,7 +145,9 @@ ___
 
 • **angularVelocity**? : *number*
 
-*Defined in [index.d.ts:282](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L282)*
+*Defined in [dist/planck.d.ts:1605](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1605)*
+
+*Defined in [src/dynamics/Body.ts:93](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L93)*
 
 ___
 
@@ -71,7 +155,9 @@ ___
 
 • **awake**? : *boolean*
 
-*Defined in [index.d.ts:289](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L289)*
+*Defined in [dist/planck.d.ts:1612](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1612)*
+
+*Defined in [src/dynamics/Body.ts:100](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L100)*
 
 ___
 
@@ -79,7 +165,9 @@ ___
 
 • **bullet**? : *boolean*
 
-*Defined in [index.d.ts:286](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L286)*
+*Defined in [dist/planck.d.ts:1609](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1609)*
+
+*Defined in [src/dynamics/Body.ts:97](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L97)*
 
 ___
 
@@ -87,7 +175,9 @@ ___
 
 • **fixedRotation**? : *boolean*
 
-*Defined in [index.d.ts:285](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L285)*
+*Defined in [dist/planck.d.ts:1608](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1608)*
+
+*Defined in [src/dynamics/Body.ts:96](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L96)*
 
 ___
 
@@ -95,7 +185,9 @@ ___
 
 • **gravityScale**? : *number*
 
-*Defined in [index.d.ts:287](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L287)*
+*Defined in [dist/planck.d.ts:1610](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1610)*
+
+*Defined in [src/dynamics/Body.ts:98](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L98)*
 
 ___
 
@@ -103,23 +195,29 @@ ___
 
 • **linearDamping**? : *number*
 
-*Defined in [index.d.ts:283](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L283)*
+*Defined in [dist/planck.d.ts:1606](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1606)*
+
+*Defined in [src/dynamics/Body.ts:94](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L94)*
 
 ___
 
 ### `Optional` linearVelocity
 
-• **linearVelocity**? : *[Vec2](../classes/vec2.md)*
+• **linearVelocity**? : *Vec2*
 
-*Defined in [index.d.ts:281](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L281)*
+*Defined in [dist/planck.d.ts:1604](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1604)*
+
+*Defined in [src/dynamics/Body.ts:92](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L92)*
 
 ___
 
 ### `Optional` position
 
-• **position**? : *[Vec2](../classes/vec2.md)*
+• **position**? : *Vec2*
 
-*Defined in [index.d.ts:279](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L279)*
+*Defined in [dist/planck.d.ts:1602](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1602)*
+
+*Defined in [src/dynamics/Body.ts:90](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L90)*
 
 ___
 
@@ -127,7 +225,9 @@ ___
 
 • **type**? : *[BodyType](../globals.md#bodytype)*
 
-*Defined in [index.d.ts:278](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L278)*
+*Defined in [dist/planck.d.ts:1601](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1601)*
+
+*Defined in [src/dynamics/Body.ts:89](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L89)*
 
 ___
 
@@ -135,4 +235,6 @@ ___
 
 • **userData**? : *any*
 
-*Defined in [index.d.ts:291](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L291)*
+*Defined in [dist/planck.d.ts:1614](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1614)*
+
+*Defined in [src/dynamics/Body.ts:102](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L102)*

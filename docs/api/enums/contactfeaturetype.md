@@ -6,21 +6,25 @@
 
 ### Enumeration members
 
-* [Face](contactfeaturetype.md#face)
-* [Vertex](contactfeaturetype.md#vertex)
+* [e_face](contactfeaturetype.md#e_face)
+* [e_vertex](contactfeaturetype.md#e_vertex)
 
 ## Enumeration members
 
-###  Face
+###  e_face
 
-• **Face**: = 1
+• **e_face**: = 1
 
-*Defined in [index.d.ts:20](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L20)*
+*Defined in [dist/planck.d.ts:1049](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1049)*
+
+*Defined in [src/collision/Manifold.ts:38](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Manifold.ts#L38)*
 
 ___
 
-###  Vertex
+###  e_vertex
 
-• **Vertex**: = 0
+• **e_vertex**: = 0
 
-*Defined in [index.d.ts:19](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L19)*
+*Defined in [dist/planck.d.ts:1048](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1048)*
+
+*Defined in [src/collision/Manifold.ts:37](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Manifold.ts#L37)*

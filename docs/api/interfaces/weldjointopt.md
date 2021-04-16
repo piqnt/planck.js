@@ -2,9 +2,38 @@
 
 # Interface: WeldJointOpt
 
+Weld joint definition. You need to specify local anchor points where they are
+attached and the relative body angle. The position of the anchor points is
+important for computing the reaction torque.
+Weld joint definition. You need to specify local anchor points where they are
+attached and the relative body angle. The position of the anchor points is
+important for computing the reaction torque.
+
+**`prop`** {float} frequencyHz
+
+**`prop`** {float} dampingRatio
+
+**`prop`** {Vec2} localAnchorA
+
+**`prop`** {Vec2} localAnchorB
+
+**`prop`** {float} referenceAngle
+
+**`prop`** {float} frequencyHz
+
+**`prop`** {float} dampingRatio
+
+**`prop`** {Vec2} localAnchorA
+
+**`prop`** {Vec2} localAnchorB
+
+**`prop`** {float} referenceAngle
+
 ## Hierarchy
 
 * [JointOpt](jointopt.md)
+
+* JointOpt
 
   ↳ **WeldJointOpt**
 
@@ -15,9 +44,9 @@
 ### Properties
 
 * [collideConnected](weldjointopt.md#optional-collideconnected)
-* [dampingRatio](weldjointopt.md#dampingratio)
-* [frequencyHz](weldjointopt.md#frequencyhz)
-* [referenceAngle](weldjointopt.md#referenceangle)
+* [dampingRatio](weldjointopt.md#optional-dampingratio)
+* [frequencyHz](weldjointopt.md#optional-frequencyhz)
+* [referenceAngle](weldjointopt.md#optional-referenceangle)
 * [userData](weldjointopt.md#optional-userdata)
 
 ## Properties
@@ -28,31 +57,53 @@
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+
+Set this flag to true if the attached bodies
+should collide.
 
 ___
 
-###  dampingRatio
+### `Optional` dampingRatio
 
-• **dampingRatio**: *number*
+• **dampingRatio**? : *number*
 
-*Defined in [joint/index.d.ts:586](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L586)*
+*Defined in [dist/planck.d.ts:3553](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3553)*
 
-___
+*Defined in [src/dynamics/joint/WeldJoint.ts:58](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/WeldJoint.ts#L58)*
 
-###  frequencyHz
-
-• **frequencyHz**: *number*
-
-*Defined in [joint/index.d.ts:585](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L585)*
+The damping ratio. 0 = no damping, 1 = critical damping.
+The damping ratio. 0 = no damping, 1 = critical damping.
 
 ___
 
-###  referenceAngle
+### `Optional` frequencyHz
 
-• **referenceAngle**: *number*
+• **frequencyHz**? : *number*
 
-*Defined in [joint/index.d.ts:587](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L587)*
+*Defined in [dist/planck.d.ts:3549](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3549)*
+
+*Defined in [src/dynamics/joint/WeldJoint.ts:54](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/WeldJoint.ts#L54)*
+
+The mass-spring-damper frequency in Hertz. Rotation only. Disable softness
+with a value of 0.
+The mass-spring-damper frequency in Hertz. Rotation only. Disable softness
+with a value of 0.
+
+___
+
+### `Optional` referenceAngle
+
+• **referenceAngle**? : *number*
+
+*Defined in [dist/planck.d.ts:3557](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3557)*
+
+*Defined in [src/dynamics/joint/WeldJoint.ts:62](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/WeldJoint.ts#L62)*
+
+The bodyB angle minus bodyA angle in the reference state (radians).
+The bodyB angle minus bodyA angle in the reference state (radians).
 
 ___
 
@@ -62,4 +113,8 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+
+Use this to attach application specific data to your joints.

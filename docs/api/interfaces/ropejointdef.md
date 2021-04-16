@@ -2,11 +2,22 @@
 
 # Interface: RopeJointDef
 
+Rope joint definition. This requires two body anchor points and a maximum
+lengths. Note: by default the connected objects will not collide. see
+collideConnected in JointDef.
+Rope joint definition. This requires two body anchor points and a maximum
+lengths. Note: by default the connected objects will not collide. see
+collideConnected in JointDef.
+
 ## Hierarchy
 
   ↳ [JointDef](jointdef.md)
 
   ↳ [RopeJointOpt](ropejointopt.md)
+
+* JointDef
+
+* RopeJointOpt
 
   ↳ **RopeJointDef**
 
@@ -19,7 +30,7 @@
 * [collideConnected](ropejointdef.md#optional-collideconnected)
 * [localAnchorA](ropejointdef.md#localanchora)
 * [localAnchorB](ropejointdef.md#localanchorb)
-* [maxLength](ropejointdef.md#maxlength)
+* [maxLength](ropejointdef.md#optional-maxlength)
 * [userData](ropejointdef.md#optional-userdata)
 
 ## Properties
@@ -30,7 +41,11 @@
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [joint/index.d.ts:56](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L56)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:969](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L969)*
+
+The first attached body.
 
 ___
 
@@ -40,7 +55,11 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [joint/index.d.ts:57](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L57)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:973](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L973)*
+
+The second attached body.
 
 ___
 
@@ -52,33 +71,51 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
+*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+
+Set this flag to true if the attached bodies
+should collide.
 
 ___
 
 ###  localAnchorA
 
-• **localAnchorA**: *[Vec2](../classes/vec2.md)*
+• **localAnchorA**: *Vec2*
 
-*Defined in [joint/index.d.ts:543](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L543)*
+*Defined in [dist/planck.d.ts:3458](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3458)*
+
+*Defined in [src/dynamics/joint/RopeJoint.ts:60](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/RopeJoint.ts#L60)*
+
+The local anchor point relative to bodyA's origin.
+The local anchor point relative to bodyA's origin.
 
 ___
 
 ###  localAnchorB
 
-• **localAnchorB**: *[Vec2](../classes/vec2.md)*
+• **localAnchorB**: *Vec2*
 
-*Defined in [joint/index.d.ts:544](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L544)*
+*Defined in [dist/planck.d.ts:3462](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3462)*
+
+*Defined in [src/dynamics/joint/RopeJoint.ts:64](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/RopeJoint.ts#L64)*
+
+The local anchor point relative to bodyB's origin.
+The local anchor point relative to bodyB's origin.
 
 ___
 
-###  maxLength
+### `Optional` maxLength
 
-• **maxLength**: *number*
+• **maxLength**? : *number*
 
-*Inherited from [RopeJointOpt](ropejointopt.md).[maxLength](ropejointopt.md#maxlength)*
+*Inherited from [RopeJointOpt](ropejointopt.md).[maxLength](ropejointopt.md#optional-maxlength)*
 
-*Defined in [joint/index.d.ts:539](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L539)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:3447](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3447)*
+
+The maximum length of the rope.
+Warning: this must be larger than linearSlop or the joint will have no effect.
 
 ___
 
@@ -90,4 +127,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*
+*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+
+Use this to attach application specific data to your joints.

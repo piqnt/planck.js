@@ -2,6 +2,15 @@
 
 # Class: Fixture
 
+A fixture is used to attach a shape to a body for collision detection. A
+fixture inherits its transform from its parent. Fixtures hold additional
+non-geometric data such as friction, collision filters, etc. Fixtures are
+created via Body.createFixture.
+A fixture is used to attach a shape to a body for collision detection. A
+fixture inherits its transform from its parent. Fixtures hold additional
+non-geometric data such as friction, collision filters, etc. Fixtures are
+created via Body.createFixture.
+
 ## Hierarchy
 
 * **Fixture**
@@ -14,6 +23,7 @@
 
 ### Methods
 
+* [_serialize](fixture.md#_serialize)
 * [createProxies](fixture.md#createproxies)
 * [destroyProxies](fixture.md#destroyproxies)
 * [getAABB](fixture.md#getaabb)
@@ -33,7 +43,10 @@
 * [rayCast](fixture.md#raycast)
 * [refilter](fixture.md#refilter)
 * [setDensity](fixture.md#setdensity)
+* [setFilterCategoryBits](fixture.md#setfiltercategorybits)
 * [setFilterData](fixture.md#setfilterdata)
+* [setFilterGroupIndex](fixture.md#setfiltergroupindex)
+* [setFilterMaskBits](fixture.md#setfiltermaskbits)
 * [setFriction](fixture.md#setfriction)
 * [setRestitution](fixture.md#setrestitution)
 * [setSensor](fixture.md#setsensor)
@@ -41,6 +54,7 @@
 * [shouldCollide](fixture.md#shouldcollide)
 * [synchronize](fixture.md#synchronize)
 * [testPoint](fixture.md#testpoint)
+* [_deserialize](fixture.md#static-_deserialize)
 
 ## Constructors
 
@@ -48,7 +62,7 @@
 
 \+ **new Fixture**(`body`: [Body](body.md), `def`: [FixtureDef](../interfaces/fixturedef.md)): *[Fixture](fixture.md)*
 
-*Defined in [index.d.ts:85](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L85)*
+*Defined in [dist/planck.d.ts:771](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L771)*
 
 **Parameters:**
 
@@ -61,7 +75,7 @@ Name | Type |
 
 \+ **new Fixture**(`body`: [Body](body.md), `shape`: [Shape](shape.md), `def?`: [FixtureOpt](../interfaces/fixtureopt.md)): *[Fixture](fixture.md)*
 
-*Defined in [index.d.ts:86](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L86)*
+*Defined in [dist/planck.d.ts:772](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L772)*
 
 **Parameters:**
 
@@ -75,7 +89,7 @@ Name | Type |
 
 \+ **new Fixture**(`body`: [Body](body.md), `shape`: [Shape](shape.md), `density?`: number): *[Fixture](fixture.md)*
 
-*Defined in [index.d.ts:87](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L87)*
+*Defined in [dist/planck.d.ts:773](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L773)*
 
 **Parameters:**
 
@@ -87,13 +101,82 @@ Name | Type |
 
 **Returns:** *[Fixture](fixture.md)*
 
+\+ **new Fixture**(`body`: Body, `def`: FixtureDef): *[Fixture](fixture.md)*
+
+*Defined in [src/dynamics/Fixture.ts:128](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L128)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`body` | Body |
+`def` | FixtureDef |
+
+**Returns:** *[Fixture](fixture.md)*
+
+\+ **new Fixture**(`body`: Body, `shape`: Shape, `def?`: FixtureOpt): *[Fixture](fixture.md)*
+
+*Defined in [src/dynamics/Fixture.ts:130](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L130)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`body` | Body |
+`shape` | Shape |
+`def?` | FixtureOpt |
+
+**Returns:** *[Fixture](fixture.md)*
+
+\+ **new Fixture**(`body`: Body, `shape`: Shape, `density?`: number): *[Fixture](fixture.md)*
+
+*Defined in [src/dynamics/Fixture.ts:131](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L131)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`body` | Body |
+`shape` | Shape |
+`density?` | number |
+
+**Returns:** *[Fixture](fixture.md)*
+
 ## Methods
+
+###  _serialize
+
+▸ **_serialize**(): *object*
+
+*Defined in [dist/planck.d.ts:780](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L780)*
+
+**Returns:** *object*
+
+* **density**: *number*
+
+* **filterCategoryBits**: *number*
+
+* **filterGroupIndex**: *number*
+
+* **filterMaskBits**: *number*
+
+* **friction**: *number*
+
+* **isSensor**: *boolean*
+
+* **restitution**: *number*
+
+* **shape**: *[Shape](shape.md)*
+
+___
 
 ###  createProxies
 
 ▸ **createProxies**(`broadPhase`: [BroadPhase](broadphase.md), `xf`: [Transform](transform.md)): *void*
 
-*Defined in [index.d.ts:122](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L122)*
+*Defined in [dist/planck.d.ts:884](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L884)*
+
+These support body activation/deactivation.
 
 **Parameters:**
 
@@ -110,7 +193,7 @@ ___
 
 ▸ **destroyProxies**(`broadPhase`: [BroadPhase](broadphase.md)): *void*
 
-*Defined in [index.d.ts:123](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L123)*
+*Defined in [dist/planck.d.ts:885](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L885)*
 
 **Parameters:**
 
@@ -126,7 +209,10 @@ ___
 
 ▸ **getAABB**(`childIndex`: number): *[AABB](aabb.md)*
 
-*Defined in [index.d.ts:121](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L121)*
+*Defined in [dist/planck.d.ts:880](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L880)*
+
+Get the fixture's AABB. This AABB may be enlarge and/or stale. If you need a
+more accurate AABB, compute it using the shape and the body transform.
 
 **Parameters:**
 
@@ -142,7 +228,10 @@ ___
 
 ▸ **getBody**(): *[Body](body.md)*
 
-*Defined in [index.d.ts:110](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L110)*
+*Defined in [dist/planck.d.ts:830](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L830)*
+
+Get the parent body of this fixture. This is null if the fixture is not
+attached.
 
 **Returns:** *[Body](body.md)*
 
@@ -152,7 +241,9 @@ ___
 
 ▸ **getDensity**(): *number*
 
-*Defined in [index.d.ts:112](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L112)*
+*Defined in [dist/planck.d.ts:838](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L838)*
+
+Get the density of this fixture.
 
 **Returns:** *number*
 
@@ -162,7 +253,7 @@ ___
 
 ▸ **getFilterCategoryBits**(): *number*
 
-*Defined in [index.d.ts:127](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L127)*
+*Defined in [dist/planck.d.ts:903](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L903)*
 
 **Returns:** *number*
 
@@ -172,7 +263,7 @@ ___
 
 ▸ **getFilterGroupIndex**(): *number*
 
-*Defined in [index.d.ts:126](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L126)*
+*Defined in [dist/planck.d.ts:901](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L901)*
 
 **Returns:** *number*
 
@@ -182,7 +273,7 @@ ___
 
 ▸ **getFilterMaskBits**(): *number*
 
-*Defined in [index.d.ts:128](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L128)*
+*Defined in [dist/planck.d.ts:905](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L905)*
 
 **Returns:** *number*
 
@@ -192,7 +283,9 @@ ___
 
 ▸ **getFriction**(): *number*
 
-*Defined in [index.d.ts:114](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L114)*
+*Defined in [dist/planck.d.ts:847](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L847)*
+
+Get the coefficient of friction, usually in the range [0,1].
 
 **Returns:** *number*
 
@@ -200,15 +293,19 @@ ___
 
 ###  getMassData
 
-▸ **getMassData**(`massData`: [MassData](../interfaces/massdata.md)): *void*
+▸ **getMassData**(`massData`: [MassData](massdata.md)): *void*
 
-*Defined in [index.d.ts:120](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L120)*
+*Defined in [dist/planck.d.ts:875](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L875)*
+
+Get the mass data for this fixture. The mass data is based on the density and
+the shape. The rotational inertia is about the shape's origin. This operation
+may be expensive.
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`massData` | [MassData](../interfaces/massdata.md) |
+`massData` | [MassData](massdata.md) |
 
 **Returns:** *void*
 
@@ -218,7 +315,9 @@ ___
 
 ▸ **getNext**(): *[Fixture](fixture.md) | null*
 
-*Defined in [index.d.ts:111](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L111)*
+*Defined in [dist/planck.d.ts:834](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L834)*
+
+Get the next fixture in the parent body's fixture list.
 
 **Returns:** *[Fixture](fixture.md) | null*
 
@@ -228,7 +327,9 @@ ___
 
 ▸ **getRestitution**(): *number*
 
-*Defined in [index.d.ts:116](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L116)*
+*Defined in [dist/planck.d.ts:856](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L856)*
+
+Get the coefficient of restitution.
 
 **Returns:** *number*
 
@@ -238,7 +339,11 @@ ___
 
 ▸ **getShape**(): *[Shape](shape.md)*
 
-*Defined in [index.d.ts:105](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L105)*
+*Defined in [dist/planck.d.ts:801](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L801)*
+
+Get the child shape. You can modify the child shape, however you should not
+change the number of vertices because this will crash some collision caching
+mechanisms. Manipulating the shape may lead to non-physical behavior.
 
 **Returns:** *[Shape](shape.md)*
 
@@ -248,7 +353,10 @@ ___
 
 ▸ **getType**(): *[ShapeType](../globals.md#shapetype)*
 
-*Defined in [index.d.ts:104](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L104)*
+*Defined in [dist/planck.d.ts:795](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L795)*
+
+Get the type of the child shape. You can use this to down cast to the
+concrete shape.
 
 **Returns:** *[ShapeType](../globals.md#shapetype)*
 
@@ -258,7 +366,10 @@ ___
 
 ▸ **getUserData**(): *unknown*
 
-*Defined in [index.d.ts:108](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L108)*
+*Defined in [dist/planck.d.ts:821](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L821)*
+
+Get the user data that was assigned in the fixture definition. Use this to
+store your application specific data.
 
 **Returns:** *unknown*
 
@@ -268,7 +379,10 @@ ___
 
 ▸ **isSensor**(): *boolean*
 
-*Defined in [index.d.ts:106](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L106)*
+*Defined in [dist/planck.d.ts:806](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L806)*
+
+A sensor shape collects contact information but never generates a collision
+response.
 
 **Returns:** *boolean*
 
@@ -278,7 +392,9 @@ ___
 
 ▸ **rayCast**(`output`: [RayCastOutput](../interfaces/raycastoutput.md), `input`: [RayCastInput](../interfaces/raycastinput.md), `childIndex`: number): *boolean*
 
-*Defined in [index.d.ts:119](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L119)*
+*Defined in [dist/planck.d.ts:869](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L869)*
+
+Cast a ray against this shape.
 
 **Parameters:**
 
@@ -296,7 +412,10 @@ ___
 
 ▸ **refilter**(): *void*
 
-*Defined in [index.d.ts:129](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L129)*
+*Defined in [dist/planck.d.ts:911](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L911)*
+
+Call this if you want to establish collision that was previously disabled by
+ContactFilter.
 
 **Returns:** *void*
 
@@ -306,7 +425,10 @@ ___
 
 ▸ **setDensity**(`density`: number): *void*
 
-*Defined in [index.d.ts:113](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L113)*
+*Defined in [dist/planck.d.ts:843](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L843)*
+
+Set the density of this fixture. This will _not_ automatically adjust the
+mass of the body. You must call Body.resetMassData to update the body's mass.
 
 **Parameters:**
 
@@ -318,11 +440,31 @@ Name | Type |
 
 ___
 
+###  setFilterCategoryBits
+
+▸ **setFilterCategoryBits**(`categoryBits`: number): *void*
+
+*Defined in [dist/planck.d.ts:904](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L904)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`categoryBits` | number |
+
+**Returns:** *void*
+
+___
+
 ###  setFilterData
 
 ▸ **setFilterData**(`filter`: object): *void*
 
-*Defined in [index.d.ts:125](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L125)*
+*Defined in [dist/planck.d.ts:896](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L896)*
+
+Set the contact filtering data. This will not update contacts until the next
+time step when either parent body is active and awake. This automatically
+calls refilter.
 
 **Parameters:**
 
@@ -338,11 +480,46 @@ Name | Type |
 
 ___
 
+###  setFilterGroupIndex
+
+▸ **setFilterGroupIndex**(`groupIndex`: number): *number*
+
+*Defined in [dist/planck.d.ts:902](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L902)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`groupIndex` | number |
+
+**Returns:** *number*
+
+___
+
+###  setFilterMaskBits
+
+▸ **setFilterMaskBits**(`maskBits`: number): *void*
+
+*Defined in [dist/planck.d.ts:906](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L906)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`maskBits` | number |
+
+**Returns:** *void*
+
+___
+
 ###  setFriction
 
 ▸ **setFriction**(`friction`: number): *void*
 
-*Defined in [index.d.ts:115](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L115)*
+*Defined in [dist/planck.d.ts:852](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L852)*
+
+Set the coefficient of friction. This will not change the friction of
+existing contacts.
 
 **Parameters:**
 
@@ -358,7 +535,10 @@ ___
 
 ▸ **setRestitution**(`restitution`: number): *void*
 
-*Defined in [index.d.ts:117](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L117)*
+*Defined in [dist/planck.d.ts:861](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L861)*
+
+Set the coefficient of restitution. This will not change the restitution of
+existing contacts.
 
 **Parameters:**
 
@@ -374,7 +554,9 @@ ___
 
 ▸ **setSensor**(`sensor`: boolean): *void*
 
-*Defined in [index.d.ts:107](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L107)*
+*Defined in [dist/planck.d.ts:810](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L810)*
+
+Set if this fixture is a sensor.
 
 **Parameters:**
 
@@ -388,15 +570,17 @@ ___
 
 ###  setUserData
 
-▸ **setUserData**(`data`: any): *void*
+▸ **setUserData**(`data`: unknown): *void*
 
-*Defined in [index.d.ts:109](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L109)*
+*Defined in [dist/planck.d.ts:825](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L825)*
+
+Set the user data. Use this to store your application specific data.
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`data` | any |
+`data` | unknown |
 
 **Returns:** *void*
 
@@ -406,7 +590,16 @@ ___
 
 ▸ **shouldCollide**(`that`: [Fixture](fixture.md)): *boolean*
 
-*Defined in [index.d.ts:130](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L130)*
+*Defined in [dist/planck.d.ts:922](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L922)*
+
+Implement this method to provide collision filtering, if you want finer
+control over contact creation.
+
+Return true if contact calculations should be performed between these two
+fixtures.
+
+Warning: for performance reasons this is only called when the AABBs begin to
+overlap.
 
 **Parameters:**
 
@@ -422,7 +615,10 @@ ___
 
 ▸ **synchronize**(`broadPhase`: [BroadPhase](broadphase.md), `xf1`: [Transform](transform.md), `xf2`: [Transform](transform.md)): *void*
 
-*Defined in [index.d.ts:124](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L124)*
+*Defined in [dist/planck.d.ts:890](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L890)*
+
+Updates this fixture proxy in broad-phase (with combined AABB of current and
+next transformation).
 
 **Parameters:**
 
@@ -440,7 +636,9 @@ ___
 
 ▸ **testPoint**(`p`: [Vec2](vec2.md)): *boolean*
 
-*Defined in [index.d.ts:118](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L118)*
+*Defined in [dist/planck.d.ts:865](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L865)*
+
+Test a point in world coordinates for containment in this fixture.
 
 **Parameters:**
 
@@ -449,3 +647,21 @@ Name | Type |
 `p` | [Vec2](vec2.md) |
 
 **Returns:** *boolean*
+
+___
+
+### `Static` _deserialize
+
+▸ **_deserialize**(`data`: any, `body`: any, `restore`: any): *[Fixture](fixture.md)*
+
+*Defined in [dist/planck.d.ts:790](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L790)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`data` | any |
+`body` | any |
+`restore` | any |
+
+**Returns:** *[Fixture](fixture.md)*

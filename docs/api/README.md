@@ -4,12 +4,10 @@
 
 ### API Index
 
-
 * [World](/docs/api/classes/world.md)
 * [Body](/docs/api/classes/body.md)
 * [Fixture](/docs/api/classes/fixture.md)
 * [Settings](/docs/api/classes/settings.md)
-
 
 #### Math
 * [Math](/docs/api/classes/math.md)
@@ -20,7 +18,6 @@
 * [Mat22](/docs/api/classes/mat22.md)
 * [Mat33](/docs/api/classes/mat33.md)
 
-
 #### Shapes
 
 * [BoxShape](/docs/api/classes/boxshape.md)
@@ -28,7 +25,6 @@
 * [CircleShape](/docs/api/classes/circleshape.md)
 * [EdgeShape](/docs/api/classes/edgeshape.md)
 * [PolygonShape](/docs/api/classes/polygonshape.md)
-
 
 #### Joints
 
@@ -44,7 +40,6 @@
 * [WeldJoint](/docs/api/classes/weldjoint.md)
 * [WheelJoint](/docs/api/classes/wheeljoint.md)
 
-
 #### Collision Internal
 
 * [BroadPhase](/docs/api/classes/broadphase.md)
@@ -59,7 +54,6 @@
 * [Manifold](/docs/api/interfaces/manifold.md)
 * [ManifoldPoint](/docs/api/interfaces/manifoldpoint.md)
 * [WorldManifold](/docs/api/interfaces/worldmanifold.md)
-
 
 #### Dynamics Internal
 

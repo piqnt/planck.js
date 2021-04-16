@@ -5,7 +5,7 @@ const licenseBanner = require('license');
 module.exports = [
   {
     entry: {
-      'planck': './lib/index.js',
+      'planck': './src/index.ts',
       'planck-with-testbed': './testbed/index.js',
     },
     output: {
@@ -28,7 +28,7 @@ module.exports = [
   },
   {
     entry: {
-      'planck': './lib/index.js',
+      'planck': './src/index.ts',
       'planck-with-testbed': './testbed/index.js',
     },
     output: {
@@ -52,7 +52,7 @@ module.exports = [
   },
   { // todo: remove this, added umd to others instead
     entry: {
-      'planck': './lib/index.js',
+      'planck': './src/index.ts',
       'planck-with-testbed': './testbed/index.js',
     },
     output: {

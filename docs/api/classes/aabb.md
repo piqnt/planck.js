@@ -10,7 +10,7 @@
 
 ▸ **AABB**(`lower?`: [Vec2](vec2.md), `upper?`: [Vec2](vec2.md)): *[AABB](aabb.md)*
 
-*Defined in [collision/index.d.ts:34](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L34)*
+*Defined in [dist/planck.d.ts:421](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L421)*
 
 **Parameters:**
 
@@ -23,6 +23,10 @@ Name | Type |
 
 ## Index
 
+### Constructors
+
+* [constructor](aabb.md#constructor)
+
 ### Properties
 
 * [lowerBound](aabb.md#lowerbound)
@@ -30,13 +34,9 @@ Name | Type |
 
 ### Methods
 
-* [areEqual](aabb.md#areequal)
-* [assert](aabb.md#assert)
 * [combine](aabb.md#combine)
 * [combinePoints](aabb.md#combinepoints)
-* [constroctor](aabb.md#constroctor)
 * [contains](aabb.md#contains)
-* [diff](aabb.md#diff)
 * [extend](aabb.md#extend)
 * [getCenter](aabb.md#getcenter)
 * [getExtents](aabb.md#getextents)
@@ -44,65 +44,60 @@ Name | Type |
 * [isValid](aabb.md#isvalid)
 * [rayCast](aabb.md#raycast)
 * [set](aabb.md#set)
-* [testOverlap](aabb.md#testoverlap)
 * [toString](aabb.md#tostring)
+* [areEqual](aabb.md#static-areequal)
+* [assert](aabb.md#static-assert)
+* [diff](aabb.md#static-diff)
+* [extend](aabb.md#static-extend)
+* [isValid](aabb.md#static-isvalid)
+* [testOverlap](aabb.md#static-testoverlap)
+
+## Constructors
+
+###  constructor
+
+\+ **new AABB**(`lower?`: [Vec2](vec2.md), `upper?`: [Vec2](vec2.md)): *[AABB](aabb.md)*
+
+*Defined in [dist/planck.d.ts:424](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L424)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`lower?` | [Vec2](vec2.md) |
+`upper?` | [Vec2](vec2.md) |
+
+**Returns:** *[AABB](aabb.md)*
 
 ## Properties
 
 ###  lowerBound
 
-• **lowerBound**: *[Vec2](vec2.md)*
+• **lowerBound**: *Vec2*
 
-*Defined in [collision/index.d.ts:45](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L45)*
+*Defined in [dist/planck.d.ts:423](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L423)*
+
+*Defined in [src/collision/AABB.ts:53](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/AABB.ts#L53)*
 
 ___
 
 ###  upperBound
 
-• **upperBound**: *[Vec2](vec2.md)*
+• **upperBound**: *Vec2*
 
-*Defined in [collision/index.d.ts:46](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L46)*
+*Defined in [dist/planck.d.ts:424](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L424)*
+
+*Defined in [src/collision/AABB.ts:54](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/AABB.ts#L54)*
 
 ## Methods
-
-###  areEqual
-
-▸ **areEqual**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *boolean*
-
-*Defined in [collision/index.d.ts:42](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L42)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`a` | [AABB](aabb.md) |
-`b` | [AABB](aabb.md) |
-
-**Returns:** *boolean*
-
-___
-
-###  assert
-
-▸ **assert**(`o`: any): *void*
-
-*Defined in [collision/index.d.ts:39](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L39)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`o` | any |
-
-**Returns:** *void*
-
-___
 
 ###  combine
 
 ▸ **combine**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *void*
 
-*Defined in [collision/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L52)*
+*Defined in [dist/planck.d.ts:447](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L447)*
+
+Combine one or two AABB into this one.
 
 **Parameters:**
 
@@ -119,7 +114,7 @@ ___
 
 ▸ **combinePoints**(`a`: [Vec2](vec2.md), `b`: [Vec2](vec2.md)): *void*
 
-*Defined in [collision/index.d.ts:53](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L53)*
+*Defined in [dist/planck.d.ts:448](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L448)*
 
 **Parameters:**
 
@@ -132,28 +127,11 @@ Name | Type |
 
 ___
 
-###  constroctor
-
-▸ **constroctor**(`lower?`: [Vec2](vec2.md), `upper?`: [Vec2](vec2.md)): *any*
-
-*Defined in [collision/index.d.ts:36](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L36)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`lower?` | [Vec2](vec2.md) |
-`upper?` | [Vec2](vec2.md) |
-
-**Returns:** *any*
-
-___
-
 ###  contains
 
 ▸ **contains**(`aabb`: [AABB](aabb.md)): *boolean*
 
-*Defined in [collision/index.d.ts:55](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L55)*
+*Defined in [dist/planck.d.ts:450](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L450)*
 
 **Parameters:**
 
@@ -165,41 +143,11 @@ Name | Type |
 
 ___
 
-###  diff
-
-▸ **diff**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *number*
-
-*Defined in [collision/index.d.ts:43](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L43)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`a` | [AABB](aabb.md) |
-`b` | [AABB](aabb.md) |
-
-**Returns:** *number*
-
-___
-
 ###  extend
-
-▸ **extend**(`aabb`: [AABB](aabb.md), `value`: number): *void*
-
-*Defined in [collision/index.d.ts:40](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L40)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`aabb` | [AABB](aabb.md) |
-`value` | number |
-
-**Returns:** *void*
 
 ▸ **extend**(`value`: number): *[AABB](aabb.md)*
 
-*Defined in [collision/index.d.ts:56](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L56)*
+*Defined in [dist/planck.d.ts:451](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L451)*
 
 **Parameters:**
 
@@ -215,7 +163,9 @@ ___
 
 ▸ **getCenter**(): *[Vec2](vec2.md)*
 
-*Defined in [collision/index.d.ts:49](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L49)*
+*Defined in [dist/planck.d.ts:435](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L435)*
+
+Get the center of the AABB.
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -225,7 +175,9 @@ ___
 
 ▸ **getExtents**(): *[Vec2](vec2.md)*
 
-*Defined in [collision/index.d.ts:50](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L50)*
+*Defined in [dist/planck.d.ts:439](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L439)*
+
+Get the extents of the AABB (half-widths).
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -235,7 +187,9 @@ ___
 
 ▸ **getPerimeter**(): *number*
 
-*Defined in [collision/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L51)*
+*Defined in [dist/planck.d.ts:443](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L443)*
+
+Get the perimeter length.
 
 **Returns:** *number*
 
@@ -243,21 +197,11 @@ ___
 
 ###  isValid
 
-▸ **isValid**(`o`: any): *boolean*
-
-*Defined in [collision/index.d.ts:38](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L38)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`o` | any |
-
-**Returns:** *boolean*
-
 ▸ **isValid**(): *boolean*
 
-*Defined in [collision/index.d.ts:48](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L48)*
+*Defined in [dist/planck.d.ts:429](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L429)*
+
+Verify that the bounds are sorted.
 
 **Returns:** *boolean*
 
@@ -267,7 +211,7 @@ ___
 
 ▸ **rayCast**(`output`: [RayCastOutput](../interfaces/raycastoutput.md), `input`: [RayCastInput](../interfaces/raycastinput.md)): *boolean*
 
-*Defined in [collision/index.d.ts:57](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L57)*
+*Defined in [dist/planck.d.ts:456](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L456)*
 
 **Parameters:**
 
@@ -284,7 +228,7 @@ ___
 
 ▸ **set**(`aabb`: [AABB](aabb.md)): *void*
 
-*Defined in [collision/index.d.ts:54](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L54)*
+*Defined in [dist/planck.d.ts:449](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L449)*
 
 **Parameters:**
 
@@ -296,11 +240,21 @@ Name | Type |
 
 ___
 
-###  testOverlap
+###  toString
 
-▸ **testOverlap**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *boolean*
+▸ **toString**(): *string*
 
-*Defined in [collision/index.d.ts:41](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L41)*
+*Defined in [dist/planck.d.ts:457](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L457)*
+
+**Returns:** *string*
+
+___
+
+### `Static` areEqual
+
+▸ **areEqual**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *boolean*
+
+*Defined in [dist/planck.d.ts:454](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L454)*
 
 **Parameters:**
 
@@ -313,10 +267,83 @@ Name | Type |
 
 ___
 
-###  toString
+### `Static` assert
 
-▸ **toString**(): *string*
+▸ **assert**(`o`: any): *void*
 
-*Defined in [collision/index.d.ts:58](https://github.com/shakiba/planck.js/blob/038d425/lib/collision/index.d.ts#L58)*
+*Defined in [dist/planck.d.ts:431](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L431)*
 
-**Returns:** *string*
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`o` | any |
+
+**Returns:** *void*
+
+___
+
+### `Static` diff
+
+▸ **diff**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *number*
+
+*Defined in [dist/planck.d.ts:455](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L455)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`a` | [AABB](aabb.md) |
+`b` | [AABB](aabb.md) |
+
+**Returns:** *number*
+
+___
+
+### `Static` extend
+
+▸ **extend**(`aabb`: [AABB](aabb.md), `value`: number): *void*
+
+*Defined in [dist/planck.d.ts:452](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L452)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`aabb` | [AABB](aabb.md) |
+`value` | number |
+
+**Returns:** *void*
+
+___
+
+### `Static` isValid
+
+▸ **isValid**(`aabb`: any): *boolean*
+
+*Defined in [dist/planck.d.ts:430](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L430)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`aabb` | any |
+
+**Returns:** *boolean*
+
+___
+
+### `Static` testOverlap
+
+▸ **testOverlap**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *boolean*
+
+*Defined in [dist/planck.d.ts:453](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L453)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`a` | [AABB](aabb.md) |
+`b` | [AABB](aabb.md) |
+
+**Returns:** *boolean*

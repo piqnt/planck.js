@@ -2,6 +2,11 @@
 
 # Interface: FixtureOpt
 
+A fixture definition is used to create a fixture. This class defines an
+abstract fixture definition. You can reuse fixture definitions safely.
+A fixture definition is used to create a fixture. This class defines an
+abstract fixture definition. You can reuse fixture definitions safely.
+
 ## Hierarchy
 
 * **FixtureOpt**
@@ -12,75 +17,116 @@
 
 ### Properties
 
-* [density](fixtureopt.md#density)
-* [filterCategoryBits](fixtureopt.md#filtercategorybits)
-* [filterGroupIndex](fixtureopt.md#filtergroupindex)
-* [filterMaskBits](fixtureopt.md#filtermaskbits)
-* [friction](fixtureopt.md#friction)
-* [isSensor](fixtureopt.md#issensor)
-* [restitution](fixtureopt.md#restitution)
-* [userData](fixtureopt.md#userdata)
+* [density](fixtureopt.md#optional-density)
+* [filterCategoryBits](fixtureopt.md#optional-filtercategorybits)
+* [filterGroupIndex](fixtureopt.md#optional-filtergroupindex)
+* [filterMaskBits](fixtureopt.md#optional-filtermaskbits)
+* [friction](fixtureopt.md#optional-friction)
+* [isSensor](fixtureopt.md#optional-issensor)
+* [restitution](fixtureopt.md#optional-restitution)
+* [userData](fixtureopt.md#optional-userdata)
 
 ## Properties
 
-###  density
+### `Optional` density
 
-• **density**: *number*
+• **density**? : *number*
 
-*Defined in [index.d.ts:137](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L137)*
+*Defined in [dist/planck.d.ts:732](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L732)*
 
-___
+*Defined in [src/dynamics/Fixture.ts:56](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L56)*
 
-###  filterCategoryBits
-
-• **filterCategoryBits**: *number*
-
-*Defined in [index.d.ts:140](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L140)*
+The density, usually in kg/m^2
+The density, usually in kg/m^2
 
 ___
 
-###  filterGroupIndex
+### `Optional` filterCategoryBits
 
-• **filterGroupIndex**: *number*
+• **filterCategoryBits**? : *number*
 
-*Defined in [index.d.ts:139](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L139)*
+*Defined in [dist/planck.d.ts:746](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L746)*
 
-___
+*Defined in [src/dynamics/Fixture.ts:70](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L70)*
 
-###  filterMaskBits
-
-• **filterMaskBits**: *number*
-
-*Defined in [index.d.ts:141](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L141)*
-
-___
-
-###  friction
-
-• **friction**: *number*
-
-*Defined in [index.d.ts:135](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L135)*
+Collision category bit or bits that this fixture belongs to.
+If groupIndex is zero or not matching, then at least one bit in this fixture categoryBits should match other fixture maskBits and vice versa.
+Collision category bit or bits that this fixture belongs to.
+If groupIndex is zero or not matching, then at least one bit in this fixture categoryBits should match other fixture maskBits and vice versa.
 
 ___
 
-###  isSensor
+### `Optional` filterGroupIndex
 
-• **isSensor**: *boolean*
+• **filterGroupIndex**? : *number*
 
-*Defined in [index.d.ts:138](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L138)*
+*Defined in [dist/planck.d.ts:741](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L741)*
+
+*Defined in [src/dynamics/Fixture.ts:65](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L65)*
+
+Zero, positive or negative collision group.
+Fixtures with same positive groupIndex always collide and fixtures with same negative groupIndex never collide.
+Zero, positive or negative collision group.
+Fixtures with same positive groupIndex always collide and fixtures with same negative groupIndex never collide.
 
 ___
 
-###  restitution
+### `Optional` filterMaskBits
 
-• **restitution**: *number*
+• **filterMaskBits**? : *number*
 
-*Defined in [index.d.ts:136](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L136)*
+*Defined in [dist/planck.d.ts:750](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L750)*
+
+*Defined in [src/dynamics/Fixture.ts:74](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L74)*
+
+Collision category bit or bits that this fixture accept for collision.
+Collision category bit or bits that this fixture accept for collision.
 
 ___
 
-###  userData
+### `Optional` friction
 
-• **userData**: *any*
+• **friction**? : *number*
 
-*Defined in [index.d.ts:134](https://github.com/shakiba/planck.js/blob/038d425/lib/index.d.ts#L134)*
+*Defined in [dist/planck.d.ts:724](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L724)*
+
+*Defined in [src/dynamics/Fixture.ts:48](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L48)*
+
+The friction coefficient, usually in the range [0,1]
+The friction coefficient, usually in the range [0,1]
+
+___
+
+### `Optional` isSensor
+
+• **isSensor**? : *boolean*
+
+*Defined in [dist/planck.d.ts:736](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L736)*
+
+*Defined in [src/dynamics/Fixture.ts:60](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L60)*
+
+A sensor shape collects contact information but never generates a collision response.
+A sensor shape collects contact information but never generates a collision response.
+
+___
+
+### `Optional` restitution
+
+• **restitution**? : *number*
+
+*Defined in [dist/planck.d.ts:728](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L728)*
+
+*Defined in [src/dynamics/Fixture.ts:52](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L52)*
+
+The restitution (elasticity) usually in the range [0,1]
+The restitution (elasticity) usually in the range [0,1]
+
+___
+
+### `Optional` userData
+
+• **userData**? : *unknown*
+
+*Defined in [dist/planck.d.ts:720](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L720)*
+
+*Defined in [src/dynamics/Fixture.ts:44](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L44)*

@@ -2,9 +2,24 @@
 
 # Interface: PrismaticJointOpt
 
+Prismatic joint definition. This requires defining a line of motion using an
+axis and an anchor point. The definition uses local anchor points and a local
+axis so that the initial configuration can violate the constraint slightly.
+The joint translation is zero when the local anchor points coincide in world
+space. Using local anchors and a local axis helps when saving and loading a
+game.
+Prismatic joint definition. This requires defining a line of motion using an
+axis and an anchor point. The definition uses local anchor points and a local
+axis so that the initial configuration can violate the constraint slightly.
+The joint translation is zero when the local anchor points coincide in world
+space. Using local anchors and a local axis helps when saving and loading a
+game.
+
 ## Hierarchy
 
 * [JointOpt](jointopt.md)
+
+* JointOpt
 
   ↳ **PrismaticJointOpt**
 
@@ -15,12 +30,12 @@
 ### Properties
 
 * [collideConnected](prismaticjointopt.md#optional-collideconnected)
-* [enableLimit](prismaticjointopt.md#enablelimit)
-* [enableMotor](prismaticjointopt.md#enablemotor)
-* [lowerTranslation](prismaticjointopt.md#lowertranslation)
-* [maxMotorForce](prismaticjointopt.md#maxmotorforce)
-* [motorSpeed](prismaticjointopt.md#motorspeed)
-* [upperTranslation](prismaticjointopt.md#uppertranslation)
+* [enableLimit](prismaticjointopt.md#optional-enablelimit)
+* [enableMotor](prismaticjointopt.md#optional-enablemotor)
+* [lowerTranslation](prismaticjointopt.md#optional-lowertranslation)
+* [maxMotorForce](prismaticjointopt.md#optional-maxmotorforce)
+* [motorSpeed](prismaticjointopt.md#optional-motorspeed)
+* [upperTranslation](prismaticjointopt.md#optional-uppertranslation)
 * [userData](prismaticjointopt.md#optional-userdata)
 
 ## Properties
@@ -31,55 +46,90 @@
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [joint/index.d.ts:52](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L52)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+
+Set this flag to true if the attached bodies
+should collide.
 
 ___
 
-###  enableLimit
+### `Optional` enableLimit
 
-• **enableLimit**: *boolean*
+• **enableLimit**? : *boolean*
 
-*Defined in [joint/index.d.ts:362](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L362)*
+*Defined in [dist/planck.d.ts:2820](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2820)*
 
-___
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:59](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PrismaticJoint.ts#L59)*
 
-###  enableMotor
-
-• **enableMotor**: *boolean*
-
-*Defined in [joint/index.d.ts:365](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L365)*
+Enable/disable the joint limit.
+Enable/disable the joint limit.
 
 ___
 
-###  lowerTranslation
+### `Optional` enableMotor
 
-• **lowerTranslation**: *number*
+• **enableMotor**? : *boolean*
 
-*Defined in [joint/index.d.ts:363](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L363)*
+*Defined in [dist/planck.d.ts:2832](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2832)*
 
-___
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:71](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PrismaticJoint.ts#L71)*
 
-###  maxMotorForce
-
-• **maxMotorForce**: *number*
-
-*Defined in [joint/index.d.ts:366](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L366)*
+Enable/disable the joint motor.
+Enable/disable the joint motor.
 
 ___
 
-###  motorSpeed
+### `Optional` lowerTranslation
 
-• **motorSpeed**: *number*
+• **lowerTranslation**? : *number*
 
-*Defined in [joint/index.d.ts:367](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L367)*
+*Defined in [dist/planck.d.ts:2824](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2824)*
+
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:63](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PrismaticJoint.ts#L63)*
+
+The lower translation limit, usually in meters.
+The lower translation limit, usually in meters.
 
 ___
 
-###  upperTranslation
+### `Optional` maxMotorForce
 
-• **upperTranslation**: *number*
+• **maxMotorForce**? : *number*
 
-*Defined in [joint/index.d.ts:364](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L364)*
+*Defined in [dist/planck.d.ts:2836](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2836)*
+
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:75](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PrismaticJoint.ts#L75)*
+
+The maximum motor torque, usually in N-m.
+The maximum motor torque, usually in N-m.
+
+___
+
+### `Optional` motorSpeed
+
+• **motorSpeed**? : *number*
+
+*Defined in [dist/planck.d.ts:2840](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2840)*
+
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:79](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PrismaticJoint.ts#L79)*
+
+The desired motor speed in radians per second.
+The desired motor speed in radians per second.
+
+___
+
+### `Optional` upperTranslation
+
+• **upperTranslation**? : *number*
+
+*Defined in [dist/planck.d.ts:2828](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2828)*
+
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:67](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PrismaticJoint.ts#L67)*
+
+The upper translation limit, usually in meters.
+The upper translation limit, usually in meters.
 
 ___
 
@@ -89,4 +139,8 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [joint/index.d.ts:51](https://github.com/shakiba/planck.js/blob/038d425/lib/joint/index.d.ts#L51)*
+*Overrides void*
+
+*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+
+Use this to attach application specific data to your joints.

@@ -1,0 +1,52 @@
+[Planck.js API Doc](../README.md) › [Globals](../globals.md) › [ClipVertex](clipvertex.md)
+
+# Class: ClipVertex
+
+Used for computing contact manifolds.
+
+## Hierarchy
+
+* **ClipVertex**
+
+## Index
+
+### Properties
+
+* [id](clipvertex.md#id)
+* [v](clipvertex.md#v)
+
+### Methods
+
+* [set](clipvertex.md#set)
+
+## Properties
+
+###  id
+
+• **id**: *ContactID‹›* = new ContactID()
+
+*Defined in [src/collision/Manifold.ts:312](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Manifold.ts#L312)*
+
+___
+
+###  v
+
+• **v**: *Vec2‹›* = Vec2.zero()
+
+*Defined in [src/collision/Manifold.ts:311](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Manifold.ts#L311)*
+
+## Methods
+
+###  set
+
+▸ **set**(`o`: any): *void*
+
+*Defined in [src/collision/Manifold.ts:314](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Manifold.ts#L314)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`o` | any |
+
+**Returns:** *void*
