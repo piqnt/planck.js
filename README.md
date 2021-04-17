@@ -12,7 +12,7 @@ Planck.js is JavaScript (TypeScript) rewrite of Box2D physics engine for cross-p
 
 ## Documentation
 
-- [Documentations Wiki](https://github.com/shakiba/planck.js/wiki/) - This is the best place to start, and find other resources
+- [Documentation Wiki](https://github.com/shakiba/planck.js/wiki/) - This is the best place to start, and find other resources
 - [Examples](https://piqnt.com/planck.js/) - Online examples with editable code
 
 
@@ -25,9 +25,9 @@ Planck.js is JavaScript (TypeScript) rewrite of Box2D physics engine for cross-p
 
 ## Updates
 
-#### v1.0
+#### v1.0-alpha
 
-Starting v1.0 the project code is migrated to TypeScript, to improves library usability, documentation and maintenance.
+Starting from v1.0 the project code is migrated to TypeScript, to improves library usability, documentation and maintenance.
 
 In addition to this main change, v1.0 also includes few other notable changes.
 
