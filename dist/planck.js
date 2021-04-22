@@ -6955,8 +6955,65 @@
          * @param def World definition or gravity vector.
          */
         function World(def) {
+            var _this = this;
             /** @internal */
             this.s_step = new TimeStep(); // reuse
+            /**
+             * @internal
+             * Callback for broad-phase.
+             */
+            this.createContact = function (proxyA, proxyB) {
+                var fixtureA = proxyA.fixture;
+                var fixtureB = proxyB.fixture;
+                var indexA = proxyA.childIndex;
+                var indexB = proxyB.childIndex;
+                var bodyA = fixtureA.getBody();
+                var bodyB = fixtureB.getBody();
+                // Are the fixtures on the same body?
+                if (bodyA == bodyB) {
+                    return;
+                }
+                // TODO_ERIN use a hash table to remove a potential bottleneck when both
+                // bodies have a lot of contacts.
+                // Does a contact already exist?
+                var edge = bodyB.getContactList(); // ContactEdge
+                while (edge) {
+                    if (edge.other == bodyA) {
+                        var fA = edge.contact.getFixtureA();
+                        var fB = edge.contact.getFixtureB();
+                        var iA = edge.contact.getChildIndexA();
+                        var iB = edge.contact.getChildIndexB();
+                        if (fA == fixtureA && fB == fixtureB && iA == indexA && iB == indexB) {
+                            // A contact already exists.
+                            return;
+                        }
+                        if (fA == fixtureB && fB == fixtureA && iA == indexB && iB == indexA) {
+                            // A contact already exists.
+                            return;
+                        }
+                    }
+                    edge = edge.next;
+                }
+                if (bodyB.shouldCollide(bodyA) == false) {
+                    return;
+                }
+                if (fixtureB.shouldCollide(fixtureA) == false) {
+                    return;
+                }
+                // Call the factory.
+                var contact = Contact.create(fixtureA, indexA, fixtureB, indexB);
+                if (contact == null) {
+                    return;
+                }
+                // Insert into the world.
+                contact.m_prev = null;
+                if (_this.m_contactList != null) {
+                    contact.m_next = _this.m_contactList;
+                    _this.m_contactList.m_prev = contact;
+                }
+                _this.m_contactList = contact;
+                ++_this.m_contactCount;
+            };
             if (!(this instanceof World)) {
                 return new World(def);
             }
@@ -6986,6 +7043,8 @@
             this.m_velocityIterations = def.velocityIterations;
             this.m_positionIterations = def.positionIterations;
             this.m_t = 0;
+            // Broad-phase callback.
+            this.addPair = this.createContact.bind(this);
         }
         /** @internal */
         World.prototype._serialize = function () {
@@ -7533,62 +7592,6 @@
          */
         World.prototype.findNewContacts = function () {
             this.m_broadPhase.updatePairs(this.createContact);
-        };
-        /**
-         * @internal
-         * Callback for broad-phase.
-         */
-        World.prototype.createContact = function (proxyA, proxyB) {
-            var fixtureA = proxyA.fixture;
-            var fixtureB = proxyB.fixture;
-            var indexA = proxyA.childIndex;
-            var indexB = proxyB.childIndex;
-            var bodyA = fixtureA.getBody();
-            var bodyB = fixtureB.getBody();
-            // Are the fixtures on the same body?
-            if (bodyA == bodyB) {
-                return;
-            }
-            // TODO_ERIN use a hash table to remove a potential bottleneck when both
-            // bodies have a lot of contacts.
-            // Does a contact already exist?
-            var edge = bodyB.getContactList(); // ContactEdge
-            while (edge) {
-                if (edge.other == bodyA) {
-                    var fA = edge.contact.getFixtureA();
-                    var fB = edge.contact.getFixtureB();
-                    var iA = edge.contact.getChildIndexA();
-                    var iB = edge.contact.getChildIndexB();
-                    if (fA == fixtureA && fB == fixtureB && iA == indexA && iB == indexB) {
-                        // A contact already exists.
-                        return;
-                    }
-                    if (fA == fixtureB && fB == fixtureA && iA == indexB && iB == indexA) {
-                        // A contact already exists.
-                        return;
-                    }
-                }
-                edge = edge.next;
-            }
-            if (bodyB.shouldCollide(bodyA) == false) {
-                return;
-            }
-            if (fixtureB.shouldCollide(fixtureA) == false) {
-                return;
-            }
-            // Call the factory.
-            var contact = Contact.create(fixtureA, indexA, fixtureB, indexB);
-            if (contact == null) {
-                return;
-            }
-            // Insert into the world.
-            contact.m_prev = null;
-            if (this.m_contactList != null) {
-                contact.m_next = this.m_contactList;
-                this.m_contactList.m_prev = contact;
-            }
-            this.m_contactList = contact;
-            ++this.m_contactCount;
         };
         /**
          * @internal
