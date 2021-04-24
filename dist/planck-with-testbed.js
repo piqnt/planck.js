@@ -7059,8 +7059,6 @@
           this.m_velocityIterations = def.velocityIterations;
           this.m_positionIterations = def.positionIterations;
           this.m_t = 0;
-          // Broad-phase callback.
-          this.addPair = this.createContact.bind(this);
       }
       /** @internal */
       World.prototype._serialize = function () {

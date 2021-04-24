@@ -114,7 +114,6 @@ export default class World {
   /** @internal */ m_velocityIterations: number;
   /** @internal */ m_positionIterations: number;
   /** @internal */ m_t: number;
-  /** @internal */ addPair: (proxyA: FixtureProxy, proxyB: FixtureProxy) => void;
 
   // TODO
   /** @internal */ _listeners: {
@@ -167,9 +166,6 @@ export default class World {
     this.m_positionIterations = def.positionIterations;
 
     this.m_t = 0;
-
-    // Broad-phase callback.
-    this.addPair = this.createContact.bind(this);
   }
 
   /** @internal */
