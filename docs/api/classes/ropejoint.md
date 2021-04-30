@@ -33,7 +33,7 @@ want to dynamically control length.
 
 ▸ **RopeJoint**(`def`: [RopeJointDef](../interfaces/ropejointdef.md)): *[RopeJoint](ropejoint.md)*
 
-*Defined in [dist/planck.d.ts:3309](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3309)*
+*Defined in [dist/planck.d.ts:3309](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3309)*
 
 A rope joint enforces a maximum distance between two points on two bodies. It
 has no other effect.
@@ -64,7 +64,7 @@ Name | Type |
 
 ▸ **RopeJoint**(`def`: [RopeJointOpt](../interfaces/ropejointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `anchor`: [Vec2](vec2.md)): *[RopeJoint](ropejoint.md)*
 
-*Defined in [dist/planck.d.ts:3310](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3310)*
+*Defined in [dist/planck.d.ts:3310](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3310)*
 
 A rope joint enforces a maximum distance between two points on two bodies. It
 has no other effect.
@@ -139,7 +139,7 @@ Name | Type |
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3323](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3323)*
+*Defined in [dist/planck.d.ts:3323](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3323)*
 
 **Parameters:**
 
@@ -153,7 +153,7 @@ Name | Type |
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3325](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3325)*
+*Defined in [dist/planck.d.ts:3325](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3325)*
 
 **Parameters:**
 
@@ -170,7 +170,7 @@ Name | Type |
 
 *Overrides void*
 
-*Defined in [src/dynamics/joint/RopeJoint.ts:105](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/RopeJoint.ts#L105)*
+*Defined in [src/dynamics/joint/RopeJoint.ts:105](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RopeJoint.ts#L105)*
 
 **Parameters:**
 
@@ -184,7 +184,7 @@ Name | Type |
 
 *Overrides void*
 
-*Defined in [src/dynamics/joint/RopeJoint.ts:107](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/RopeJoint.ts#L107)*
+*Defined in [src/dynamics/joint/RopeJoint.ts:107](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RopeJoint.ts#L107)*
 
 **Parameters:**
 
@@ -203,9 +203,9 @@ Name | Type |
 
 ▪ **TYPE**: *"rope-joint"* = 'rope-joint' as 'rope-joint'
 
-*Defined in [dist/planck.d.ts:3323](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3323)*
+*Defined in [dist/planck.d.ts:3323](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3323)*
 
-*Defined in [src/dynamics/joint/RopeJoint.ts:83](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/RopeJoint.ts#L83)*
+*Defined in [src/dynamics/joint/RopeJoint.ts:83](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RopeJoint.ts#L83)*
 
 ___
 
@@ -215,7 +215,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[TYPES](distancejoint.md#static-types)*
 
-*Defined in [src/dynamics/Joint.ts:128](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L128)*
+*Defined in [src/dynamics/Joint.ts:128](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L128)*
 
 #### Type declaration:
 
@@ -229,7 +229,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3347](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3347)*
+*Defined in [dist/planck.d.ts:3347](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3347)*
 
 Get the anchor point on bodyA in world coordinates.
 
@@ -243,7 +243,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3351](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3351)*
+*Defined in [dist/planck.d.ts:3351](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3351)*
 
 Get the anchor point on bodyB in world coordinates.
 
@@ -257,7 +257,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getBodyA](distancejoint.md#getbodya)*
 
-*Defined in [src/dynamics/Joint.ts:156](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L156)*
+*Defined in [src/dynamics/Joint.ts:156](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L156)*
 
 Get the first body attached to this joint.
 
@@ -271,7 +271,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getBodyB](distancejoint.md#getbodyb)*
 
-*Defined in [src/dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L163)*
+*Defined in [src/dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L163)*
 
 Get the second body attached to this joint.
 
@@ -285,7 +285,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getCollideConnected](distancejoint.md#getcollideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:187](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L187)*
+*Defined in [src/dynamics/Joint.ts:187](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L187)*
 
 Get collide connected. Note: modifying the collide connect flag won't work
 correctly because the flag is only checked when fixture AABBs begin to
@@ -299,7 +299,7 @@ ___
 
 ▸ **getLimitState**(): *number*
 
-*Defined in [dist/planck.d.ts:3343](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3343)*
+*Defined in [dist/planck.d.ts:3343](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3343)*
 
 **Returns:** *number*
 
@@ -309,7 +309,7 @@ ___
 
 ▸ **getLocalAnchorA**(): *[Vec2](vec2.md)*
 
-*Defined in [dist/planck.d.ts:3330](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3330)*
+*Defined in [dist/planck.d.ts:3330](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3330)*
 
 The local anchor point relative to bodyA's origin.
 
@@ -321,7 +321,7 @@ ___
 
 ▸ **getLocalAnchorB**(): *[Vec2](vec2.md)*
 
-*Defined in [dist/planck.d.ts:3334](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3334)*
+*Defined in [dist/planck.d.ts:3334](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3334)*
 
 The local anchor point relative to bodyB's origin.
 
@@ -333,7 +333,7 @@ ___
 
 ▸ **getMaxLength**(): *number*
 
-*Defined in [dist/planck.d.ts:3342](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3342)*
+*Defined in [dist/planck.d.ts:3342](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3342)*
 
 Get the maximum length of the rope.
 
@@ -347,7 +347,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getNext](distancejoint.md#getnext)*
 
-*Defined in [src/dynamics/Joint.ts:170](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L170)*
+*Defined in [src/dynamics/Joint.ts:170](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L170)*
 
 Get the next joint the world joint list.
 
@@ -361,7 +361,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3355](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3355)*
+*Defined in [dist/planck.d.ts:3355](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3355)*
 
 Get the reaction force on bodyB at the joint anchor in Newtons.
 
@@ -381,7 +381,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3359](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3359)*
+*Defined in [dist/planck.d.ts:3359](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3359)*
 
 Get the reaction torque on bodyB in N*m.
 
@@ -401,7 +401,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getType](distancejoint.md#gettype)*
 
-*Defined in [src/dynamics/Joint.ts:149](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L149)*
+*Defined in [src/dynamics/Joint.ts:149](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L149)*
 
 Get the type of the concrete joint.
 
@@ -415,7 +415,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getUserData](distancejoint.md#getuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:174](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L174)*
+*Defined in [src/dynamics/Joint.ts:174](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L174)*
 
 **Returns:** *unknown*
 
@@ -427,7 +427,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3360](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3360)*
+*Defined in [dist/planck.d.ts:3360](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3360)*
 
 **Parameters:**
 
@@ -445,7 +445,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[isActive](distancejoint.md#isactive)*
 
-*Defined in [src/dynamics/Joint.ts:142](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L142)*
+*Defined in [src/dynamics/Joint.ts:142](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L142)*
 
 Short-cut function to determine if either body is inactive.
 
@@ -457,7 +457,7 @@ ___
 
 ▸ **setMaxLength**(`length`: any): *void*
 
-*Defined in [dist/planck.d.ts:3338](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3338)*
+*Defined in [dist/planck.d.ts:3338](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3338)*
 
 Set the maximum length of the rope.
 
@@ -477,7 +477,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[setUserData](distancejoint.md#setuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:178](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L178)*
+*Defined in [src/dynamics/Joint.ts:178](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L178)*
 
 **Parameters:**
 
@@ -495,7 +495,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[shiftOrigin](distancejoint.md#shiftorigin)*
 
-*Defined in [src/dynamics/Joint.ts:214](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L214)*
+*Defined in [src/dynamics/Joint.ts:214](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L214)*
 
 Shift the origin for any points stored in world coordinates.
 
@@ -515,7 +515,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3365](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3365)*
+*Defined in [dist/planck.d.ts:3365](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3365)*
 
 This returns true if the position errors are within tolerance.
 
@@ -535,7 +535,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3361](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3361)*
+*Defined in [dist/planck.d.ts:3361](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3361)*
 
 **Parameters:**
 

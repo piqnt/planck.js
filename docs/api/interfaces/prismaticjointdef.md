@@ -56,7 +56,7 @@ game.
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:947](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L947)*
+*Defined in [dist/planck.d.ts:947](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L947)*
 
 The first attached body.
 
@@ -70,7 +70,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:951](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L951)*
+*Defined in [dist/planck.d.ts:951](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L951)*
 
 The second attached body.
 
@@ -84,7 +84,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L938)*
+*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L938)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -99,7 +99,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2716](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2716)*
+*Defined in [dist/planck.d.ts:2716](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2716)*
 
 Enable/disable the joint limit.
 
@@ -113,7 +113,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2728](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2728)*
+*Defined in [dist/planck.d.ts:2728](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2728)*
 
 Enable/disable the joint motor.
 
@@ -123,9 +123,9 @@ ___
 
 • **localAnchorA**: *Vec2*
 
-*Defined in [dist/planck.d.ts:2750](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2750)*
+*Defined in [dist/planck.d.ts:2750](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2750)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:93](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PrismaticJoint.ts#L93)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:93](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L93)*
 
 The local anchor point relative to bodyA's origin.
 The local anchor point relative to bodyA's origin.
@@ -136,9 +136,9 @@ ___
 
 • **localAnchorB**: *Vec2*
 
-*Defined in [dist/planck.d.ts:2754](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2754)*
+*Defined in [dist/planck.d.ts:2754](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2754)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:97](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PrismaticJoint.ts#L97)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:97](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L97)*
 
 The local anchor point relative to bodyB's origin.
 The local anchor point relative to bodyB's origin.
@@ -149,9 +149,9 @@ ___
 
 • **localAxisA**: *Vec2*
 
-*Defined in [dist/planck.d.ts:2758](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2758)*
+*Defined in [dist/planck.d.ts:2758](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2758)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:101](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PrismaticJoint.ts#L101)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:101](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L101)*
 
 The local translation unit axis in bodyA.
 The local translation unit axis in bodyA.
@@ -166,7 +166,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2720](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2720)*
+*Defined in [dist/planck.d.ts:2720](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2720)*
 
 The lower translation limit, usually in meters.
 
@@ -180,7 +180,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2732](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2732)*
+*Defined in [dist/planck.d.ts:2732](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2732)*
 
 The maximum motor torque, usually in N-m.
 
@@ -194,7 +194,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2736](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2736)*
+*Defined in [dist/planck.d.ts:2736](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2736)*
 
 The desired motor speed in radians per second.
 
@@ -204,9 +204,9 @@ ___
 
 • **referenceAngle**: *number*
 
-*Defined in [dist/planck.d.ts:2763](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2763)*
+*Defined in [dist/planck.d.ts:2763](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2763)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:106](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PrismaticJoint.ts#L106)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:106](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L106)*
 
 referenceAngle The constrained angle between the bodies:
 bodyB_angle - bodyA_angle.
@@ -223,7 +223,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2724](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2724)*
+*Defined in [dist/planck.d.ts:2724](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2724)*
 
 The upper translation limit, usually in meters.
 
@@ -237,6 +237,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L933)*
+*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L933)*
 
 Use this to attach application specific data to your joints.

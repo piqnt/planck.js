@@ -23,7 +23,7 @@ motion or to model joint friction.
 
 ▸ **PrismaticJoint**(`def`: [PrismaticJointDef](../interfaces/prismaticjointdef.md)): *[PrismaticJoint](prismaticjoint.md)*
 
-*Defined in [dist/planck.d.ts:2765](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2765)*
+*Defined in [dist/planck.d.ts:2765](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2765)*
 
 A prismatic joint. This joint provides one degree of freedom: translation
 along an axis fixed in bodyA. Relative rotation is prevented. You can use a
@@ -44,7 +44,7 @@ Name | Type |
 
 ▸ **PrismaticJoint**(`def`: [PrismaticJointOpt](../interfaces/prismaticjointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `anchor`: [Vec2](vec2.md), `axis`: [Vec2](vec2.md)): *[PrismaticJoint](prismaticjoint.md)*
 
-*Defined in [dist/planck.d.ts:2766](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2766)*
+*Defined in [dist/planck.d.ts:2766](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2766)*
 
 A prismatic joint. This joint provides one degree of freedom: translation
 along an axis fixed in bodyA. Relative rotation is prevented. You can use a
@@ -123,7 +123,7 @@ Name | Type |
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2774](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2774)*
+*Defined in [dist/planck.d.ts:2774](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2774)*
 
 **Parameters:**
 
@@ -137,7 +137,7 @@ Name | Type |
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2775](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2775)*
+*Defined in [dist/planck.d.ts:2775](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2775)*
 
 **Parameters:**
 
@@ -155,7 +155,7 @@ Name | Type |
 
 *Overrides void*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:156](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PrismaticJoint.ts#L156)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:156](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L156)*
 
 **Parameters:**
 
@@ -169,7 +169,7 @@ Name | Type |
 
 *Overrides void*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:158](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PrismaticJoint.ts#L158)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:158](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L158)*
 
 **Parameters:**
 
@@ -189,9 +189,9 @@ Name | Type |
 
 ▪ **TYPE**: *"prismatic-joint"* = 'prismatic-joint' as 'prismatic-joint'
 
-*Defined in [dist/planck.d.ts:2774](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2774)*
+*Defined in [dist/planck.d.ts:2774](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2774)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:125](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PrismaticJoint.ts#L125)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:125](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L125)*
 
 ___
 
@@ -201,7 +201,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[TYPES](distancejoint.md#static-types)*
 
-*Defined in [src/dynamics/Joint.ts:128](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L128)*
+*Defined in [src/dynamics/Joint.ts:128](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L128)*
 
 #### Type declaration:
 
@@ -213,7 +213,7 @@ ___
 
 ▸ **enableLimit**(`flag`: any): *void*
 
-*Defined in [dist/planck.d.ts:2808](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2808)*
+*Defined in [dist/planck.d.ts:2808](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2808)*
 
 Enable/disable the joint limit.
 
@@ -231,7 +231,7 @@ ___
 
 ▸ **enableMotor**(`flag`: any): *void*
 
-*Defined in [dist/planck.d.ts:2828](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2828)*
+*Defined in [dist/planck.d.ts:2828](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2828)*
 
 Enable/disable the joint motor.
 
@@ -251,7 +251,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2849](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2849)*
+*Defined in [dist/planck.d.ts:2849](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2849)*
 
 Get the anchor point on bodyA in world coordinates.
 
@@ -265,7 +265,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2853](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2853)*
+*Defined in [dist/planck.d.ts:2853](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2853)*
 
 Get the anchor point on bodyB in world coordinates.
 
@@ -279,7 +279,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getBodyA](distancejoint.md#getbodya)*
 
-*Defined in [src/dynamics/Joint.ts:156](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L156)*
+*Defined in [src/dynamics/Joint.ts:156](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L156)*
 
 Get the first body attached to this joint.
 
@@ -293,7 +293,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getBodyB](distancejoint.md#getbodyb)*
 
-*Defined in [src/dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L163)*
+*Defined in [src/dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L163)*
 
 Get the second body attached to this joint.
 
@@ -307,7 +307,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getCollideConnected](distancejoint.md#getcollideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:187](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L187)*
+*Defined in [src/dynamics/Joint.ts:187](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L187)*
 
 Get collide connected. Note: modifying the collide connect flag won't work
 correctly because the flag is only checked when fixture AABBs begin to
@@ -321,7 +321,7 @@ ___
 
 ▸ **getJointSpeed**(): *number*
 
-*Defined in [dist/planck.d.ts:2800](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2800)*
+*Defined in [dist/planck.d.ts:2800](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2800)*
 
 Get the current joint translation speed, usually in meters per second.
 
@@ -333,7 +333,7 @@ ___
 
 ▸ **getJointTranslation**(): *number*
 
-*Defined in [dist/planck.d.ts:2796](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2796)*
+*Defined in [dist/planck.d.ts:2796](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2796)*
 
 Get the current joint translation, usually in meters.
 
@@ -345,7 +345,7 @@ ___
 
 ▸ **getLocalAnchorA**(): *[Vec2](vec2.md)*
 
-*Defined in [dist/planck.d.ts:2780](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2780)*
+*Defined in [dist/planck.d.ts:2780](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2780)*
 
 The local anchor point relative to bodyA's origin.
 
@@ -357,7 +357,7 @@ ___
 
 ▸ **getLocalAnchorB**(): *[Vec2](vec2.md)*
 
-*Defined in [dist/planck.d.ts:2784](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2784)*
+*Defined in [dist/planck.d.ts:2784](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2784)*
 
 The local anchor point relative to bodyB's origin.
 
@@ -369,7 +369,7 @@ ___
 
 ▸ **getLocalAxisA**(): *[Vec2](vec2.md)*
 
-*Defined in [dist/planck.d.ts:2788](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2788)*
+*Defined in [dist/planck.d.ts:2788](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2788)*
 
 The local joint axis relative to bodyA.
 
@@ -381,7 +381,7 @@ ___
 
 ▸ **getLowerLimit**(): *number*
 
-*Defined in [dist/planck.d.ts:2812](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2812)*
+*Defined in [dist/planck.d.ts:2812](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2812)*
 
 Get the lower joint limit, usually in meters.
 
@@ -393,7 +393,7 @@ ___
 
 ▸ **getMaxMotorForce**(): *number*
 
-*Defined in [dist/planck.d.ts:2837](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2837)*
+*Defined in [dist/planck.d.ts:2837](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2837)*
 
 **Returns:** *number*
 
@@ -403,7 +403,7 @@ ___
 
 ▸ **getMotorForce**(`inv_dt`: any): *number*
 
-*Defined in [dist/planck.d.ts:2845](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2845)*
+*Defined in [dist/planck.d.ts:2845](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2845)*
 
 Get the current motor force given the inverse time step, usually in N.
 
@@ -421,7 +421,7 @@ ___
 
 ▸ **getMotorSpeed**(): *number*
 
-*Defined in [dist/planck.d.ts:2841](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2841)*
+*Defined in [dist/planck.d.ts:2841](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2841)*
 
 Get the motor speed, usually in meters per second.
 
@@ -435,7 +435,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getNext](distancejoint.md#getnext)*
 
-*Defined in [src/dynamics/Joint.ts:170](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L170)*
+*Defined in [src/dynamics/Joint.ts:170](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L170)*
 
 Get the next joint the world joint list.
 
@@ -449,7 +449,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2857](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2857)*
+*Defined in [dist/planck.d.ts:2857](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2857)*
 
 Get the reaction force on bodyB at the joint anchor in Newtons.
 
@@ -469,7 +469,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2861](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2861)*
+*Defined in [dist/planck.d.ts:2861](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2861)*
 
 Get the reaction torque on bodyB in N*m.
 
@@ -487,7 +487,7 @@ ___
 
 ▸ **getReferenceAngle**(): *number*
 
-*Defined in [dist/planck.d.ts:2792](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2792)*
+*Defined in [dist/planck.d.ts:2792](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2792)*
 
 Get the reference angle.
 
@@ -501,7 +501,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getType](distancejoint.md#gettype)*
 
-*Defined in [src/dynamics/Joint.ts:149](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L149)*
+*Defined in [src/dynamics/Joint.ts:149](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L149)*
 
 Get the type of the concrete joint.
 
@@ -513,7 +513,7 @@ ___
 
 ▸ **getUpperLimit**(): *number*
 
-*Defined in [dist/planck.d.ts:2816](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2816)*
+*Defined in [dist/planck.d.ts:2816](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2816)*
 
 Get the upper joint limit, usually in meters.
 
@@ -527,7 +527,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getUserData](distancejoint.md#getuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:174](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L174)*
+*Defined in [src/dynamics/Joint.ts:174](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L174)*
 
 **Returns:** *unknown*
 
@@ -539,7 +539,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2862](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2862)*
+*Defined in [dist/planck.d.ts:2862](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2862)*
 
 **Parameters:**
 
@@ -557,7 +557,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[isActive](distancejoint.md#isactive)*
 
-*Defined in [src/dynamics/Joint.ts:142](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L142)*
+*Defined in [src/dynamics/Joint.ts:142](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L142)*
 
 Short-cut function to determine if either body is inactive.
 
@@ -569,7 +569,7 @@ ___
 
 ▸ **isLimitEnabled**(): *boolean*
 
-*Defined in [dist/planck.d.ts:2804](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2804)*
+*Defined in [dist/planck.d.ts:2804](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2804)*
 
 Is the joint limit enabled?
 
@@ -581,7 +581,7 @@ ___
 
 ▸ **isMotorEnabled**(): *boolean*
 
-*Defined in [dist/planck.d.ts:2824](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2824)*
+*Defined in [dist/planck.d.ts:2824](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2824)*
 
 Is the joint motor enabled?
 
@@ -593,7 +593,7 @@ ___
 
 ▸ **setLimits**(`lower`: any, `upper`: any): *void*
 
-*Defined in [dist/planck.d.ts:2820](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2820)*
+*Defined in [dist/planck.d.ts:2820](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2820)*
 
 Set the joint limits, usually in meters.
 
@@ -612,7 +612,7 @@ ___
 
 ▸ **setMaxMotorForce**(`force`: any): *void*
 
-*Defined in [dist/planck.d.ts:2836](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2836)*
+*Defined in [dist/planck.d.ts:2836](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2836)*
 
 Set the maximum motor force, usually in N.
 
@@ -630,7 +630,7 @@ ___
 
 ▸ **setMotorSpeed**(`speed`: any): *void*
 
-*Defined in [dist/planck.d.ts:2832](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2832)*
+*Defined in [dist/planck.d.ts:2832](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2832)*
 
 Set the motor speed, usually in meters per second.
 
@@ -650,7 +650,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[setUserData](distancejoint.md#setuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:178](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L178)*
+*Defined in [src/dynamics/Joint.ts:178](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L178)*
 
 **Parameters:**
 
@@ -668,7 +668,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[shiftOrigin](distancejoint.md#shiftorigin)*
 
-*Defined in [src/dynamics/Joint.ts:214](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L214)*
+*Defined in [src/dynamics/Joint.ts:214](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L214)*
 
 Shift the origin for any points stored in world coordinates.
 
@@ -688,7 +688,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2867](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2867)*
+*Defined in [dist/planck.d.ts:2867](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2867)*
 
 This returns true if the position errors are within tolerance.
 
@@ -708,7 +708,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2863](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2863)*
+*Defined in [dist/planck.d.ts:2863](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2863)*
 
 **Parameters:**
 

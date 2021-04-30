@@ -59,7 +59,7 @@ important for computing the reaction torque.
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L938)*
+*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L938)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -70,9 +70,9 @@ ___
 
 • **dampingRatio**? : *number*
 
-*Defined in [dist/planck.d.ts:3388](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3388)*
+*Defined in [dist/planck.d.ts:3388](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3388)*
 
-*Defined in [src/dynamics/joint/WeldJoint.ts:58](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/WeldJoint.ts#L58)*
+*Defined in [src/dynamics/joint/WeldJoint.ts:58](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WeldJoint.ts#L58)*
 
 The damping ratio. 0 = no damping, 1 = critical damping.
 The damping ratio. 0 = no damping, 1 = critical damping.
@@ -83,9 +83,9 @@ ___
 
 • **frequencyHz**? : *number*
 
-*Defined in [dist/planck.d.ts:3384](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3384)*
+*Defined in [dist/planck.d.ts:3384](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3384)*
 
-*Defined in [src/dynamics/joint/WeldJoint.ts:54](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/WeldJoint.ts#L54)*
+*Defined in [src/dynamics/joint/WeldJoint.ts:54](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WeldJoint.ts#L54)*
 
 The mass-spring-damper frequency in Hertz. Rotation only. Disable softness
 with a value of 0.
@@ -98,9 +98,9 @@ ___
 
 • **referenceAngle**? : *number*
 
-*Defined in [dist/planck.d.ts:3392](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3392)*
+*Defined in [dist/planck.d.ts:3392](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3392)*
 
-*Defined in [src/dynamics/joint/WeldJoint.ts:62](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/WeldJoint.ts#L62)*
+*Defined in [src/dynamics/joint/WeldJoint.ts:62](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WeldJoint.ts#L62)*
 
 The bodyB angle minus bodyA angle in the reference state (radians).
 The bodyB angle minus bodyA angle in the reference state (radians).
@@ -115,6 +115,6 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L933)*
+*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L933)*
 
 Use this to attach application specific data to your joints.

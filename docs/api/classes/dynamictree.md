@@ -74,7 +74,7 @@ pointers.
 
 \+ **new DynamicTree**(): *[DynamicTree](dynamictree.md)*
 
-*Defined in [dist/planck.d.ts:517](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L517)*
+*Defined in [dist/planck.d.ts:517](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L517)*
 
 **Returns:** *[DynamicTree](dynamictree.md)*
 
@@ -84,9 +84,9 @@ pointers.
 
 • **m_lastProxyId**: *number*
 
-*Defined in [dist/planck.d.ts:513](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L513)*
+*Defined in [dist/planck.d.ts:513](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L513)*
 
-*Defined in [src/collision/DynamicTree.ts:76](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/DynamicTree.ts#L76)*
+*Defined in [src/collision/DynamicTree.ts:76](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L76)*
 
 ___
 
@@ -94,9 +94,9 @@ ___
 
 • **m_nodes**: *object*
 
-*Defined in [dist/planck.d.ts:514](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L514)*
+*Defined in [dist/planck.d.ts:514](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L514)*
 
-*Defined in [src/collision/DynamicTree.ts:77](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/DynamicTree.ts#L77)*
+*Defined in [src/collision/DynamicTree.ts:77](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L77)*
 
 #### Type declaration:
 
@@ -108,9 +108,9 @@ ___
 
 • **m_pool**: *Pool‹TreeNode‹T››*
 
-*Defined in [dist/planck.d.ts:517](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L517)*
+*Defined in [dist/planck.d.ts:517](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L517)*
 
-*Defined in [src/collision/DynamicTree.ts:80](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/DynamicTree.ts#L80)*
+*Defined in [src/collision/DynamicTree.ts:80](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L80)*
 
 ___
 
@@ -118,9 +118,9 @@ ___
 
 • **m_root**: *TreeNode‹T›*
 
-*Defined in [dist/planck.d.ts:512](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L512)*
+*Defined in [dist/planck.d.ts:512](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L512)*
 
-*Defined in [src/collision/DynamicTree.ts:75](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/DynamicTree.ts#L75)*
+*Defined in [src/collision/DynamicTree.ts:75](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L75)*
 
 ## Methods
 
@@ -128,7 +128,7 @@ ___
 
 ▸ **allocateNode**(): *[TreeNode](treenode.md)‹T›*
 
-*Defined in [dist/planck.d.ts:531](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L531)*
+*Defined in [dist/planck.d.ts:531](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L531)*
 
 **Returns:** *[TreeNode](treenode.md)‹T›*
 
@@ -138,7 +138,7 @@ ___
 
 ▸ **balance**(`iA`: [TreeNode](treenode.md)‹T›): *[TreeNode](treenode.md)‹T›*
 
-*Defined in [dist/planck.d.ts:560](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L560)*
+*Defined in [dist/planck.d.ts:560](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L560)*
 
 Perform a left or right rotation if node A is imbalanced. Returns the new
 root index.
@@ -157,7 +157,7 @@ ___
 
 ▸ **computeHeight**(`id?`: number): *number*
 
-*Defined in [dist/planck.d.ts:573](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L573)*
+*Defined in [dist/planck.d.ts:573](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L573)*
 
 Compute the height of a sub-tree.
 
@@ -175,7 +175,7 @@ ___
 
 ▸ **createProxy**(`aabb`: [AABB](aabb.md), `userData`: T): *number*
 
-*Defined in [dist/planck.d.ts:539](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L539)*
+*Defined in [dist/planck.d.ts:539](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L539)*
 
 Create a proxy in the tree as a leaf node. We return the index of the node
 instead of a pointer so that we can grow the node pool.
@@ -197,7 +197,7 @@ ___
 
 ▸ **destroyProxy**(`id`: number): *void*
 
-*Defined in [dist/planck.d.ts:543](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L543)*
+*Defined in [dist/planck.d.ts:543](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L543)*
 
 Destroy a proxy. This asserts if the id is invalid.
 
@@ -215,7 +215,7 @@ ___
 
 ▸ **freeNode**(`node`: [TreeNode](treenode.md)‹T›): *void*
 
-*Defined in [dist/planck.d.ts:532](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L532)*
+*Defined in [dist/planck.d.ts:532](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L532)*
 
 **Parameters:**
 
@@ -231,7 +231,7 @@ ___
 
 ▸ **getAreaRatio**(): *number*
 
-*Defined in [dist/planck.d.ts:569](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L569)*
+*Defined in [dist/planck.d.ts:569](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L569)*
 
 Get the ratio of the sum of the node areas to the root area.
 
@@ -243,7 +243,7 @@ ___
 
 ▸ **getFatAABB**(`id`: number): *[AABB](aabb.md)*
 
-*Defined in [dist/planck.d.ts:530](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L530)*
+*Defined in [dist/planck.d.ts:530](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L530)*
 
 Get the fat AABB for a node id.
 
@@ -263,7 +263,7 @@ ___
 
 ▸ **getHeight**(): *number*
 
-*Defined in [dist/planck.d.ts:565](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L565)*
+*Defined in [dist/planck.d.ts:565](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L565)*
 
 Compute the height of the binary tree in O(N) time. Should not be called
 often.
@@ -276,7 +276,7 @@ ___
 
 ▸ **getMaxBalance**(): *number*
 
-*Defined in [dist/planck.d.ts:584](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L584)*
+*Defined in [dist/planck.d.ts:584](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L584)*
 
 Get the maximum balance of an node in the tree. The balance is the difference
 in height of the two children of a node.
@@ -289,7 +289,7 @@ ___
 
 ▸ **getUserData**(`id`: number): *T*
 
-*Defined in [dist/planck.d.ts:524](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L524)*
+*Defined in [dist/planck.d.ts:524](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L524)*
 
 Get proxy user data.
 
@@ -309,7 +309,7 @@ ___
 
 ▸ **insertLeaf**(`leaf`: [TreeNode](treenode.md)‹T›): *void*
 
-*Defined in [dist/planck.d.ts:554](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L554)*
+*Defined in [dist/planck.d.ts:554](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L554)*
 
 **Parameters:**
 
@@ -325,7 +325,7 @@ ___
 
 ▸ **moveProxy**(`id`: number, `aabb`: [AABB](aabb.md), `d`: [Vec2](vec2.md)): *boolean*
 
-*Defined in [dist/planck.d.ts:553](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L553)*
+*Defined in [dist/planck.d.ts:553](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L553)*
 
 Move a proxy with a swepted AABB. If the proxy has moved outside of its
 fattened AABB, then the proxy is removed from the tree and re-inserted.
@@ -349,7 +349,7 @@ ___
 
 ▸ **query**(`aabb`: [AABB](aabb.md), `queryCallback`: function): *void*
 
-*Defined in [dist/planck.d.ts:600](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L600)*
+*Defined in [dist/planck.d.ts:600](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L600)*
 
 Query an AABB for overlapping proxies. The callback class is called for each
 proxy that overlaps the supplied AABB.
@@ -376,7 +376,7 @@ ___
 
 ▸ **rayCast**(`input`: [RayCastInput](../interfaces/raycastinput.md), `rayCastCallback`: function): *void*
 
-*Defined in [dist/planck.d.ts:611](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L611)*
+*Defined in [dist/planck.d.ts:611](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L611)*
 
 Ray-cast against the proxies in the tree. This relies on the callback to
 perform a exact ray-cast in the case were the proxy contains a shape. The
@@ -411,7 +411,7 @@ ___
 
 ▸ **rebuildBottomUp**(): *void*
 
-*Defined in [dist/planck.d.ts:588](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L588)*
+*Defined in [dist/planck.d.ts:588](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L588)*
 
 Build an optimal tree. Very expensive. For testing.
 
@@ -423,7 +423,7 @@ ___
 
 ▸ **removeLeaf**(`leaf`: [TreeNode](treenode.md)‹T›): *void*
 
-*Defined in [dist/planck.d.ts:555](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L555)*
+*Defined in [dist/planck.d.ts:555](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L555)*
 
 **Parameters:**
 
@@ -439,7 +439,7 @@ ___
 
 ▸ **shiftOrigin**(`newOrigin`: [Vec2](vec2.md)): *void*
 
-*Defined in [dist/planck.d.ts:595](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L595)*
+*Defined in [dist/planck.d.ts:595](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L595)*
 
 Shift the world origin. Useful for large worlds. The shift formula is:
 position -= newOrigin
@@ -458,7 +458,7 @@ ___
 
 ▸ **validate**(): *void*
 
-*Defined in [dist/planck.d.ts:579](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L579)*
+*Defined in [dist/planck.d.ts:579](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L579)*
 
 Validate this tree. For testing.
 
@@ -470,7 +470,7 @@ ___
 
 ▸ **validateMetrics**(`node`: [TreeNode](treenode.md)‹T›): *void*
 
-*Defined in [dist/planck.d.ts:575](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L575)*
+*Defined in [dist/planck.d.ts:575](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L575)*
 
 **Parameters:**
 
@@ -486,7 +486,7 @@ ___
 
 ▸ **validateStructure**(`node`: [TreeNode](treenode.md)‹T›): *void*
 
-*Defined in [dist/planck.d.ts:574](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L574)*
+*Defined in [dist/planck.d.ts:574](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L574)*
 
 **Parameters:**
 

@@ -45,7 +45,7 @@ anchor points, and a pulley ratio.
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:947](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L947)*
+*Defined in [dist/planck.d.ts:947](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L947)*
 
 The first attached body.
 
@@ -59,7 +59,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:951](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L951)*
+*Defined in [dist/planck.d.ts:951](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L951)*
 
 The second attached body.
 
@@ -73,7 +73,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L938)*
+*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L938)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -84,9 +84,9 @@ ___
 
 • **groundAnchorA**: *Vec2*
 
-*Defined in [dist/planck.d.ts:3166](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3166)*
+*Defined in [dist/planck.d.ts:3166](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3166)*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:53](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PulleyJoint.ts#L53)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:53](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PulleyJoint.ts#L53)*
 
 The first ground anchor in world coordinates. This point never moves.
 The first ground anchor in world coordinates. This point never moves.
@@ -97,9 +97,9 @@ ___
 
 • **groundAnchorB**: *Vec2*
 
-*Defined in [dist/planck.d.ts:3170](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3170)*
+*Defined in [dist/planck.d.ts:3170](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3170)*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:57](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PulleyJoint.ts#L57)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:57](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PulleyJoint.ts#L57)*
 
 The second ground anchor in world coordinates. This point never moves.
 The second ground anchor in world coordinates. This point never moves.
@@ -110,9 +110,9 @@ ___
 
 • **lengthA**: *number*
 
-*Defined in [dist/planck.d.ts:3182](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3182)*
+*Defined in [dist/planck.d.ts:3182](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3182)*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:69](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PulleyJoint.ts#L69)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:69](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PulleyJoint.ts#L69)*
 
 The reference length for the segment attached to bodyA.
 The reference length for the segment attached to bodyA.
@@ -123,9 +123,9 @@ ___
 
 • **lengthB**: *number*
 
-*Defined in [dist/planck.d.ts:3186](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3186)*
+*Defined in [dist/planck.d.ts:3186](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3186)*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:73](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PulleyJoint.ts#L73)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:73](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PulleyJoint.ts#L73)*
 
 The reference length for the segment attached to bodyB.
 The reference length for the segment attached to bodyB.
@@ -136,9 +136,9 @@ ___
 
 • **localAnchorA**: *Vec2*
 
-*Defined in [dist/planck.d.ts:3174](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3174)*
+*Defined in [dist/planck.d.ts:3174](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3174)*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:61](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PulleyJoint.ts#L61)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:61](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PulleyJoint.ts#L61)*
 
 The local anchor point relative to bodyA's origin.
 The local anchor point relative to bodyA's origin.
@@ -149,9 +149,9 @@ ___
 
 • **localAnchorB**: *Vec2*
 
-*Defined in [dist/planck.d.ts:3178](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3178)*
+*Defined in [dist/planck.d.ts:3178](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3178)*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:65](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PulleyJoint.ts#L65)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:65](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PulleyJoint.ts#L65)*
 
 The local anchor point relative to bodyB's origin.
 The local anchor point relative to bodyB's origin.
@@ -162,9 +162,9 @@ ___
 
 • **ratio**: *number*
 
-*Defined in [dist/planck.d.ts:3190](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3190)*
+*Defined in [dist/planck.d.ts:3190](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3190)*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:77](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PulleyJoint.ts#L77)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:77](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PulleyJoint.ts#L77)*
 
 The pulley ratio, used to simulate a block-and-tackle.
 The pulley ratio, used to simulate a block-and-tackle.
@@ -179,6 +179,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L933)*
+*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L933)*
 
 Use this to attach application specific data to your joints.

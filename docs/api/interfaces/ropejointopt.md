@@ -37,7 +37,7 @@ collideConnected in JointDef.
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L938)*
+*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L938)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -48,9 +48,9 @@ ___
 
 • **maxLength**? : *number*
 
-*Defined in [dist/planck.d.ts:3292](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3292)*
+*Defined in [dist/planck.d.ts:3292](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3292)*
 
-*Defined in [src/dynamics/joint/RopeJoint.ts:49](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/RopeJoint.ts#L49)*
+*Defined in [src/dynamics/joint/RopeJoint.ts:49](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RopeJoint.ts#L49)*
 
 The maximum length of the rope.
 Warning: this must be larger than linearSlop or the joint will have no effect.
@@ -67,6 +67,6 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L933)*
+*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L933)*
 
 Use this to attach application specific data to your joints.

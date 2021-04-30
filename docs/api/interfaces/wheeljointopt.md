@@ -47,7 +47,7 @@ game.
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L938)*
+*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L938)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -58,9 +58,9 @@ ___
 
 • **dampingRatio**? : *number*
 
-*Defined in [dist/planck.d.ts:3498](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3498)*
+*Defined in [dist/planck.d.ts:3498](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3498)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:63](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/WheelJoint.ts#L63)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:63](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WheelJoint.ts#L63)*
 
 Suspension damping ratio, one indicates critical damping.
 Suspension damping ratio, one indicates critical damping.
@@ -71,9 +71,9 @@ ___
 
 • **enableMotor**? : *boolean*
 
-*Defined in [dist/planck.d.ts:3482](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3482)*
+*Defined in [dist/planck.d.ts:3482](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3482)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:47](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/WheelJoint.ts#L47)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:47](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WheelJoint.ts#L47)*
 
 Enable/disable the joint motor.
 Enable/disable the joint motor.
@@ -84,9 +84,9 @@ ___
 
 • **frequencyHz**? : *number*
 
-*Defined in [dist/planck.d.ts:3494](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3494)*
+*Defined in [dist/planck.d.ts:3494](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3494)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:59](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/WheelJoint.ts#L59)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:59](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WheelJoint.ts#L59)*
 
 Suspension frequency, zero indicates no suspension.
 Suspension frequency, zero indicates no suspension.
@@ -97,9 +97,9 @@ ___
 
 • **maxMotorTorque**? : *number*
 
-*Defined in [dist/planck.d.ts:3486](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3486)*
+*Defined in [dist/planck.d.ts:3486](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3486)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:51](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/WheelJoint.ts#L51)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:51](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WheelJoint.ts#L51)*
 
 The maximum motor torque, usually in N-m.
 The maximum motor torque, usually in N-m.
@@ -110,9 +110,9 @@ ___
 
 • **motorSpeed**? : *number*
 
-*Defined in [dist/planck.d.ts:3490](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3490)*
+*Defined in [dist/planck.d.ts:3490](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3490)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:55](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/WheelJoint.ts#L55)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:55](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WheelJoint.ts#L55)*
 
 The desired motor speed in radians per second.
 The desired motor speed in radians per second.
@@ -127,6 +127,6 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L933)*
+*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L933)*
 
 Use this to attach application specific data to your joints.

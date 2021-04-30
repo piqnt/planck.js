@@ -27,45 +27,46 @@
 /**
  * Tuning constants based on meters-kilograms-seconds (MKS) units.
  */
-export default {
+// tslint:disable-next-line:no-unnecessary-class
+export default class Settings {
   // Collision
   /**
    * The maximum number of contact points between two convex shapes. Do not change
    * this value.
    */
-  maxManifoldPoints: 2,
+  static maxManifoldPoints = 2;
 
   /**
    * The maximum number of vertices on a convex polygon. You cannot increase this
    * too much because BlockAllocator has a maximum object size.
    */
-  maxPolygonVertices: 12,
+  static maxPolygonVertices = 12;
 
   /**
    * This is used to fatten AABBs in the dynamic tree. This allows proxies to move
    * by a small amount without triggering a tree adjustment. This is in meters.
    */
-  aabbExtension: 0.1,
+  static aabbExtension = 0.1;
 
   /**
    * This is used to fatten AABBs in the dynamic tree. This is used to predict the
    * future position based on the current displacement. This is a dimensionless
    * multiplier.
    */
-  aabbMultiplier: 2.0,
+  static aabbMultiplier = 2.0;
 
   /**
    * A small length used as a collision and constraint tolerance. Usually it is
    * chosen to be numerically significant, but visually insignificant.
    */
-  linearSlop: 0.005,
-  get linearSlopSquared(): number { return this.linearSlop * this.linearSlop; },
+  static linearSlop = 0.005;
+  static get linearSlopSquared() { return Settings.linearSlop * Settings.linearSlop; }
 
   /**
    * A small angle used as a collision and constraint tolerance. Usually it is
    * chosen to be numerically significant, but visually insignificant.
    */
-  angularSlop: (2.0 / 180.0 * Math.PI),
+  static angularSlop = (2.0 / 180.0 * Math.PI);
 
   /**
    * The radius of the polygon/edge shape skin. This should not be modified.
@@ -73,87 +74,87 @@ export default {
    * continuous collision. Making it larger may create artifacts for vertex
    * collision.
    */
-  get polygonRadius(): number { return 2.0 *   this.linearSlop; },
+  static get polygonRadius() { return 2.0 * Settings.linearSlop; }
 
   /**
    * Maximum number of sub-steps per contact in continuous physics simulation.
    */
-  maxSubSteps: 8,
+  static maxSubSteps = 8;
 
 // Dynamics
 
   /**
    * Maximum number of contacts to be handled to solve a TOI impact.
    */
-  maxTOIContacts: 32,
+  static maxTOIContacts = 32;
 
   /**
    * Maximum iterations to solve a TOI.
    */
-  maxTOIIterations: 20,
+  static maxTOIIterations = 20;
 
   /**
    * Maximum iterations to find Distance.
    */
-  maxDistnceIterations: 20,
+  static maxDistnceIterations = 20;
 
   /**
    * A velocity threshold for elastic collisions. Any collision with a relative
    * linear velocity below this threshold will be treated as inelastic.
    */
-  velocityThreshold: 1.0,
+  static velocityThreshold = 1.0;
 
   /**
    * The maximum linear position correction used when solving constraints. This
    * helps to prevent overshoot.
    */
-  maxLinearCorrection: 0.2,
+  static maxLinearCorrection = 0.2;
 
   /**
    * The maximum angular position correction used when solving constraints. This
    * helps to prevent overshoot.
    */
-  maxAngularCorrection: (8.0 / 180.0 * Math.PI),
+  static maxAngularCorrection = (8.0 / 180.0 * Math.PI);
 
   /**
    * The maximum linear velocity of a body. This limit is very large and is used
-   * to prevent numerical problems. You shouldn't need to adjust this.
+   * to prevent numerical problems. You shouldn't need to adjust Settings.
    */
-  maxTranslation: 2.0,
-  get maxTranslationSquared(): number { return this.maxTranslation * this.maxTranslation; },
+  static maxTranslation = 2.0;
+  static get maxTranslationSquared() { return Settings.maxTranslation * Settings.maxTranslation; }
 
   /**
    * The maximum angular velocity of a body. This limit is very large and is used
-   * to prevent numerical problems. You shouldn't need to adjust this.
+   * to prevent numerical problems. You shouldn't need to adjust Settings.
    */
-  maxRotation: (0.5 * Math.PI),
-  get maxRotationSquared(): number { return this.maxRotation * this.maxRotation; },
+  static maxRotation = (0.5 * Math.PI);
+  static get maxRotationSquared() { return Settings.maxRotation * Settings.maxRotation; }
 
   /**
    * This scale factor controls how fast overlap is resolved. Ideally this would
    * be 1 so that overlap is removed in one time step. However using values close
    * to 1 often lead to overshoot.
    */
-  baumgarte: 0.2,
-  toiBaugarte: 0.75,
+  static baumgarte = 0.2;
+  static toiBaugarte = 0.75;
 
   // Sleep
 
   /**
    * The time that a body must be still before it will go to sleep.
    */
-  timeToSleep: 0.5,
+  static timeToSleep = 0.5;
 
   /**
    * A body cannot sleep if its linear velocity is above this tolerance.
    */
-  linearSleepTolerance: 0.01,
-  get linearSleepToleranceSqr(): number { return Math.pow(this.linearSleepTolerance, 2); },
+  static linearSleepTolerance = 0.01;
+  static get linearSleepToleranceSqr() { return Math.pow(Settings.linearSleepTolerance, 2); }
 
   /**
    * A body cannot sleep if its angular velocity is above this tolerance.
    */
-  angularSleepTolerance: (2.0 / 180.0 * Math.PI),
-  get angularSleepToleranceSqr(): number { return Math.pow(this.angularSleepTolerance, 2); },
+  static angularSleepTolerance = (2.0 / 180.0 * Math.PI);
+  static get angularSleepToleranceSqr() { return Math.pow(Settings.angularSleepTolerance, 2); }
 
-};
+}

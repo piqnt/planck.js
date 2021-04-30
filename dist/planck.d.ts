@@ -3611,34 +3611,141 @@ declare class WheelJoint extends Joint {
      */
     solvePositionConstraints(step: any): boolean;
 }
-declare const _default: {
-    maxManifoldPoints: number;
-    maxPolygonVertices: number;
-    aabbExtension: number;
-    aabbMultiplier: number;
-    linearSlop: number;
-    readonly linearSlopSquared: number;
-    angularSlop: number;
-    readonly polygonRadius: number;
-    maxSubSteps: number;
-    maxTOIContacts: number;
-    maxTOIIterations: number;
-    maxDistnceIterations: number;
-    velocityThreshold: number;
-    maxLinearCorrection: number;
-    maxAngularCorrection: number;
-    maxTranslation: number;
-    readonly maxTranslationSquared: number;
-    maxRotation: number;
-    readonly maxRotationSquared: number;
-    baumgarte: number;
-    toiBaugarte: number;
-    timeToSleep: number;
-    linearSleepTolerance: number;
-    readonly linearSleepToleranceSqr: number;
-    angularSleepTolerance: number;
-    readonly angularSleepToleranceSqr: number;
-};
+/*
+* Planck.js
+* The MIT License
+* Copyright (c) 2021 Erin Catto, Ali Shakiba
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*/
+// TODO merge with World options?
+/**
+ * Tuning constants based on meters-kilograms-seconds (MKS) units.
+ */
+declare class Settings {
+    // Collision
+    /**
+     * The maximum number of contact points between two convex shapes. Do not change
+     * this value.
+     */
+    static maxManifoldPoints: number;
+    /**
+     * The maximum number of vertices on a convex polygon. You cannot increase this
+     * too much because BlockAllocator has a maximum object size.
+     */
+    static maxPolygonVertices: number;
+    /**
+     * This is used to fatten AABBs in the dynamic tree. This allows proxies to move
+     * by a small amount without triggering a tree adjustment. This is in meters.
+     */
+    static aabbExtension: number;
+    /**
+     * This is used to fatten AABBs in the dynamic tree. This is used to predict the
+     * future position based on the current displacement. This is a dimensionless
+     * multiplier.
+     */
+    static aabbMultiplier: number;
+    /**
+     * A small length used as a collision and constraint tolerance. Usually it is
+     * chosen to be numerically significant, but visually insignificant.
+     */
+    static linearSlop: number;
+    static get linearSlopSquared(): number;
+    /**
+     * A small angle used as a collision and constraint tolerance. Usually it is
+     * chosen to be numerically significant, but visually insignificant.
+     */
+    static angularSlop: number;
+    /**
+     * The radius of the polygon/edge shape skin. This should not be modified.
+     * Making this smaller means polygons will have an insufficient buffer for
+     * continuous collision. Making it larger may create artifacts for vertex
+     * collision.
+     */
+    static get polygonRadius(): number;
+    /**
+     * Maximum number of sub-steps per contact in continuous physics simulation.
+     */
+    static maxSubSteps: number;
+    // Dynamics
+    /**
+     * Maximum number of contacts to be handled to solve a TOI impact.
+     */
+    static maxTOIContacts: number;
+    /**
+     * Maximum iterations to solve a TOI.
+     */
+    static maxTOIIterations: number;
+    /**
+     * Maximum iterations to find Distance.
+     */
+    static maxDistnceIterations: number;
+    /**
+     * A velocity threshold for elastic collisions. Any collision with a relative
+     * linear velocity below this threshold will be treated as inelastic.
+     */
+    static velocityThreshold: number;
+    /**
+     * The maximum linear position correction used when solving constraints. This
+     * helps to prevent overshoot.
+     */
+    static maxLinearCorrection: number;
+    /**
+     * The maximum angular position correction used when solving constraints. This
+     * helps to prevent overshoot.
+     */
+    static maxAngularCorrection: number;
+    /**
+     * The maximum linear velocity of a body. This limit is very large and is used
+     * to prevent numerical problems. You shouldn't need to adjust Settings.
+     */
+    static maxTranslation: number;
+    static get maxTranslationSquared(): number;
+    /**
+     * The maximum angular velocity of a body. This limit is very large and is used
+     * to prevent numerical problems. You shouldn't need to adjust Settings.
+     */
+    static maxRotation: number;
+    static get maxRotationSquared(): number;
+    /**
+     * This scale factor controls how fast overlap is resolved. Ideally this would
+     * be 1 so that overlap is removed in one time step. However using values close
+     * to 1 often lead to overshoot.
+     */
+    static baumgarte: number;
+    static toiBaugarte: number;
+    // Sleep
+    /**
+     * The time that a body must be still before it will go to sleep.
+     */
+    static timeToSleep: number;
+    /**
+     * A body cannot sleep if its linear velocity is above this tolerance.
+     */
+    static linearSleepTolerance: number;
+    static get linearSleepToleranceSqr(): number;
+    /**
+     * A body cannot sleep if its angular velocity is above this tolerance.
+     */
+    static angularSleepTolerance: number;
+    static get angularSleepToleranceSqr(): number;
+}
 /**
  * This describes the motion of a body/shape for TOI computation. Shapes are
  * defined with respect to the body origin, which may not coincide with the
@@ -3720,4 +3827,4 @@ declare class TOIOutput {
 declare function TimeOfImpact(output: TOIOutput, input: TOIInput): void;
 /** @deprecated Merged with main namespace */
 declare const internal: {};
-export { Serializer$0 as Serializer, math as Math, Vec2, Vec3, Mat22, Mat33, Transform, Rot, AABB, Shape, Fixture, Body, Contact, Joint, World, CircleShape as Circle, EdgeShape as Edge, PolygonShape as Polygon, ChainShape as Chain, BoxShape as Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJoint, FrictionJoint, GearJoint, MotorJoint, MouseJoint, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, WeldJoint, WheelJoint, _default as Settings, Sweep, Manifold, Distance, TimeOfImpact, DynamicTree, internal };
+export { Serializer$0 as Serializer, math as Math, Vec2, Vec3, Mat22, Mat33, Transform, Rot, AABB, Shape, Fixture, Body, Contact, Joint, World, CircleShape as Circle, EdgeShape as Edge, PolygonShape as Polygon, ChainShape as Chain, BoxShape as Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJoint, FrictionJoint, GearJoint, MotorJoint, MouseJoint, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, WeldJoint, WheelJoint, Settings, Sweep, Manifold, Distance, TimeOfImpact, DynamicTree, internal };
