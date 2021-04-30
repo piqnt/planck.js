@@ -47,7 +47,7 @@ of mass position.
 
 \+ **new Sweep**(`c?`: [Vec2](vec2.md), `a?`: number): *[Sweep](sweep.md)*
 
-*Defined in [dist/planck.d.ts:3850](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3850)*
+*Defined in [dist/planck.d.ts:3658](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3658)*
 
 **Parameters:**
 
@@ -64,9 +64,9 @@ Name | Type |
 
 • **a**: *number*
 
-*Defined in [dist/planck.d.ts:3846](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3846)*
+*Defined in [dist/planck.d.ts:3654](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3654)*
 
-*Defined in [src/common/Sweep.ts:49](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Sweep.ts#L49)*
+*Defined in [src/common/Sweep.ts:49](https://github.com/shakiba/planck.js/blob/3ede11b/src/common/Sweep.ts#L49)*
 
 World angle
 World angle
@@ -77,9 +77,9 @@ ___
 
 • **a0**: *number*
 
-*Defined in [dist/planck.d.ts:3850](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3850)*
+*Defined in [dist/planck.d.ts:3658](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3658)*
 
-*Defined in [src/common/Sweep.ts:55](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Sweep.ts#L55)*
+*Defined in [src/common/Sweep.ts:55](https://github.com/shakiba/planck.js/blob/3ede11b/src/common/Sweep.ts#L55)*
 
 ___
 
@@ -87,9 +87,9 @@ ___
 
 • **alpha0**: *number*
 
-*Defined in [dist/planck.d.ts:3848](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3848)*
+*Defined in [dist/planck.d.ts:3656](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3656)*
 
-*Defined in [src/common/Sweep.ts:52](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Sweep.ts#L52)*
+*Defined in [src/common/Sweep.ts:52](https://github.com/shakiba/planck.js/blob/3ede11b/src/common/Sweep.ts#L52)*
 
 Fraction of the current time step in the range [0,1], c0 and a0 are c and a at alpha0.
 Fraction of the current time step in the range [0,1], c0 and a0 are c and a at alpha0.
@@ -100,9 +100,9 @@ ___
 
 • **c**: *Vec2*
 
-*Defined in [dist/planck.d.ts:3844](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3844)*
+*Defined in [dist/planck.d.ts:3652](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3652)*
 
-*Defined in [src/common/Sweep.ts:46](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Sweep.ts#L46)*
+*Defined in [src/common/Sweep.ts:46](https://github.com/shakiba/planck.js/blob/3ede11b/src/common/Sweep.ts#L46)*
 
 World center position
 World center position
@@ -113,9 +113,9 @@ ___
 
 • **c0**: *Vec2*
 
-*Defined in [dist/planck.d.ts:3849](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3849)*
+*Defined in [dist/planck.d.ts:3657](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3657)*
 
-*Defined in [src/common/Sweep.ts:54](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Sweep.ts#L54)*
+*Defined in [src/common/Sweep.ts:54](https://github.com/shakiba/planck.js/blob/3ede11b/src/common/Sweep.ts#L54)*
 
 ___
 
@@ -123,9 +123,9 @@ ___
 
 • **localCenter**: *Vec2*
 
-*Defined in [dist/planck.d.ts:3842](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3842)*
+*Defined in [dist/planck.d.ts:3650](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3650)*
 
-*Defined in [src/common/Sweep.ts:43](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Sweep.ts#L43)*
+*Defined in [src/common/Sweep.ts:43](https://github.com/shakiba/planck.js/blob/3ede11b/src/common/Sweep.ts#L43)*
 
 Local center of mass position
 Local center of mass position
@@ -136,7 +136,7 @@ Local center of mass position
 
 ▸ **advance**(`alpha`: number): *void*
 
-*Defined in [dist/planck.d.ts:3866](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3866)*
+*Defined in [dist/planck.d.ts:3674](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3674)*
 
 Advance the sweep forward, yielding a new initial state.
 
@@ -154,7 +154,7 @@ ___
 
 ▸ **clone**(): *[Sweep](sweep.md)*
 
-*Defined in [dist/planck.d.ts:3872](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3872)*
+*Defined in [dist/planck.d.ts:3680](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3680)*
 
 **Returns:** *[Sweep](sweep.md)*
 
@@ -164,7 +164,7 @@ ___
 
 ▸ **forward**(): *void*
 
-*Defined in [dist/planck.d.ts:3867](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3867)*
+*Defined in [dist/planck.d.ts:3675](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3675)*
 
 **Returns:** *void*
 
@@ -174,7 +174,7 @@ ___
 
 ▸ **getTransform**(`xf`: [Transform](transform.md), `beta`: number): *void*
 
-*Defined in [dist/planck.d.ts:3860](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3860)*
+*Defined in [dist/planck.d.ts:3668](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3668)*
 
 Get the interpolated transform at a specific time.
 
@@ -193,7 +193,7 @@ ___
 
 ▸ **normalize**(): *void*
 
-*Defined in [dist/planck.d.ts:3871](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3871)*
+*Defined in [dist/planck.d.ts:3679](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3679)*
 
 normalize the angles in radians to be between -pi and pi.
 
@@ -205,7 +205,7 @@ ___
 
 ▸ **set**(`that`: [Sweep](sweep.md)): *void*
 
-*Defined in [dist/planck.d.ts:3873](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3873)*
+*Defined in [dist/planck.d.ts:3681](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3681)*
 
 **Parameters:**
 
@@ -221,7 +221,7 @@ ___
 
 ▸ **setLocalCenter**(`localCenter`: [Vec2](vec2.md), `xf`: [Transform](transform.md)): *void*
 
-*Defined in [dist/planck.d.ts:3853](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3853)*
+*Defined in [dist/planck.d.ts:3661](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3661)*
 
 **Parameters:**
 
@@ -238,7 +238,7 @@ ___
 
 ▸ **setTransform**(`xf`: [Transform](transform.md)): *void*
 
-*Defined in [dist/planck.d.ts:3852](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3852)*
+*Defined in [dist/planck.d.ts:3660](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3660)*
 
 **Parameters:**
 

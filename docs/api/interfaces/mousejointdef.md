@@ -42,7 +42,7 @@ parameters, and the time step.
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:969](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L969)*
+*Defined in [dist/planck.d.ts:947](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L947)*
 
 The first attached body.
 
@@ -56,7 +56,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:973](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L973)*
+*Defined in [dist/planck.d.ts:951](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L951)*
 
 The second attached body.
 
@@ -70,7 +70,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L938)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -85,7 +85,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3211](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3211)*
+*Defined in [dist/planck.d.ts:3068](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3068)*
 
 [dampingRatio = 0.7] The damping ratio. 0 = no damping, 1 = critical
 damping.
@@ -100,7 +100,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3206](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3206)*
+*Defined in [dist/planck.d.ts:3063](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3063)*
 
 [frequencyHz = 5.0] The response speed.
 
@@ -114,7 +114,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3202](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3202)*
+*Defined in [dist/planck.d.ts:3059](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3059)*
 
 [maxForce = 0.0] The maximum constraint force that can be exerted to move
 the candidate body. Usually you will express as some multiple of the
@@ -126,9 +126,9 @@ ___
 
 • **target**: *Vec2*
 
-*Defined in [dist/planck.d.ts:3222](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3222)*
+*Defined in [dist/planck.d.ts:3079](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3079)*
 
-*Defined in [src/dynamics/joint/MouseJoint.ts:70](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/MouseJoint.ts#L70)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:70](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/MouseJoint.ts#L70)*
 
 The initial world target point. This is assumed to coincide with the body
 anchor initially.
@@ -145,6 +145,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L933)*
 
 Use this to attach application specific data to your joints.

@@ -40,9 +40,9 @@ Used to warm start Distance. Set count to zero on first call.
 
 • **count**: *number* = 0
 
-*Defined in [dist/planck.d.ts:1942](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1942)*
+*Defined in [dist/planck.d.ts:1913](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1913)*
 
-*Defined in [src/collision/Distance.ts:86](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L86)*
+*Defined in [src/collision/Distance.ts:86](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L86)*
 
 ___
 
@@ -50,9 +50,9 @@ ___
 
 • **indexA**: *number[]* = []
 
-*Defined in [dist/planck.d.ts:1940](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1940)*
+*Defined in [dist/planck.d.ts:1911](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1911)*
 
-*Defined in [src/collision/Distance.ts:84](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L84)*
+*Defined in [src/collision/Distance.ts:84](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L84)*
 
 ___
 
@@ -60,9 +60,9 @@ ___
 
 • **indexB**: *number[]* = []
 
-*Defined in [dist/planck.d.ts:1941](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1941)*
+*Defined in [dist/planck.d.ts:1912](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1912)*
 
-*Defined in [src/collision/Distance.ts:85](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L85)*
+*Defined in [src/collision/Distance.ts:85](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L85)*
 
 ___
 
@@ -70,6 +70,6 @@ ___
 
 • **metric**: *number* = 0
 
-*Defined in [dist/planck.d.ts:1939](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1939)*
+*Defined in [dist/planck.d.ts:1910](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1910)*
 
-*Defined in [src/collision/Distance.ts:83](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L83)*
+*Defined in [src/collision/Distance.ts:83](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L83)*

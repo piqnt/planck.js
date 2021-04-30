@@ -25,7 +25,6 @@ Fixture is created. Shapes may encapsulate one or more child shapes.
 
 * [_clone](shape.md#abstract-_clone)
 * [_reset](shape.md#_reset)
-* [_serialize](shape.md#abstract-_serialize)
 * [computeAABB](shape.md#abstract-computeaabb)
 * [computeDistanceProxy](shape.md#abstract-computedistanceproxy)
 * [computeMass](shape.md#abstract-computemass)
@@ -34,7 +33,6 @@ Fixture is created. Shapes may encapsulate one or more child shapes.
 * [getType](shape.md#gettype)
 * [rayCast](shape.md#abstract-raycast)
 * [testPoint](shape.md#abstract-testpoint)
-* [_deserialize](shape.md#static-_deserialize)
 * [isValid](shape.md#static-isvalid)
 
 ## Properties
@@ -43,9 +41,9 @@ Fixture is created. Shapes may encapsulate one or more child shapes.
 
 • **m_radius**: *number*
 
-*Defined in [dist/planck.d.ts:1988](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1988)*
+*Defined in [dist/planck.d.ts:1959](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1959)*
 
-*Defined in [src/collision/Shape.ts:39](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Shape.ts#L39)*
+*Defined in [src/collision/Shape.ts:39](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Shape.ts#L39)*
 
 ___
 
@@ -53,9 +51,9 @@ ___
 
 • **m_type**: *[ShapeType](../globals.md#shapetype)*
 
-*Defined in [dist/planck.d.ts:1987](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1987)*
+*Defined in [dist/planck.d.ts:1958](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1958)*
 
-*Defined in [src/collision/Shape.ts:38](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Shape.ts#L38)*
+*Defined in [src/collision/Shape.ts:38](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Shape.ts#L38)*
 
 ___
 
@@ -63,9 +61,9 @@ ___
 
 ▪ **TYPES**: *object*
 
-*Defined in [dist/planck.d.ts:1991](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1991)*
+*Defined in [dist/planck.d.ts:1961](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1961)*
 
-*Defined in [src/collision/Shape.ts:46](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Shape.ts#L46)*
+*Defined in [src/collision/Shape.ts:47](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Shape.ts#L47)*
 
 #### Type declaration:
 
@@ -77,7 +75,7 @@ ___
 
 ▸ **_clone**(): *[Shape](shape.md)*
 
-*Defined in [dist/planck.d.ts:2009](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2009)*
+*Defined in [dist/planck.d.ts:1978](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1978)*
 
 **`deprecated`** Shapes should be treated as immutable.
 
@@ -87,7 +85,7 @@ clone the concrete shape.
 
 ▸ **_clone**(): *Shape*
 
-*Defined in [src/collision/Shape.ts:76](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Shape.ts#L76)*
+*Defined in [src/collision/Shape.ts:78](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Shape.ts#L78)*
 
 **`deprecated`** Shapes should be treated as immutable.
 
@@ -101,25 +99,9 @@ ___
 
 ▸ **_reset**(): *void*
 
-*Defined in [dist/planck.d.ts:1989](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1989)*
+*Defined in [dist/planck.d.ts:1960](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1960)*
 
 **Returns:** *void*
-
-___
-
-### `Abstract` _serialize
-
-▸ **_serialize**(): *object*
-
-*Defined in [dist/planck.d.ts:1990](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1990)*
-
-**Returns:** *object*
-
-▸ **_serialize**(): *object*
-
-*Defined in [src/collision/Shape.ts:44](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Shape.ts#L44)*
-
-**Returns:** *object*
 
 ___
 
@@ -127,7 +109,7 @@ ___
 
 ▸ **computeAABB**(`aabb`: [AABB](aabb.md), `xf`: [Transform](transform.md), `childIndex`: number): *void*
 
-*Defined in [dist/planck.d.ts:2039](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2039)*
+*Defined in [dist/planck.d.ts:2008](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2008)*
 
 Given a transform, compute the associated axis aligned bounding box for a
 child shape.
@@ -144,7 +126,7 @@ Name | Type | Description |
 
 ▸ **computeAABB**(`aabb`: AABB, `xf`: Transform, `childIndex`: number): *void*
 
-*Defined in [src/collision/Shape.ts:110](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Shape.ts#L110)*
+*Defined in [src/collision/Shape.ts:112](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Shape.ts#L112)*
 
 Given a transform, compute the associated axis aligned bounding box for a
 child shape.
@@ -165,7 +147,7 @@ ___
 
 ▸ **computeDistanceProxy**(`proxy`: [DistanceProxy](distanceproxy.md), `childIndex`: number): *void*
 
-*Defined in [dist/planck.d.ts:2048](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2048)*
+*Defined in [dist/planck.d.ts:2017](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2017)*
 
 **Parameters:**
 
@@ -178,7 +160,7 @@ Name | Type |
 
 ▸ **computeDistanceProxy**(`proxy`: DistanceProxy, `childIndex`: number): *void*
 
-*Defined in [src/collision/Shape.ts:121](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Shape.ts#L121)*
+*Defined in [src/collision/Shape.ts:123](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Shape.ts#L123)*
 
 **Parameters:**
 
@@ -195,7 +177,7 @@ ___
 
 ▸ **computeMass**(`massData`: [MassData](massdata.md), `density?`: number): *void*
 
-*Defined in [dist/planck.d.ts:2047](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2047)*
+*Defined in [dist/planck.d.ts:2016](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2016)*
 
 Compute the mass properties of this shape using its dimensions and density.
 The inertia tensor is computed about the local origin.
@@ -211,7 +193,7 @@ Name | Type | Description |
 
 ▸ **computeMass**(`massData`: MassData, `density?`: number): *void*
 
-*Defined in [src/collision/Shape.ts:119](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Shape.ts#L119)*
+*Defined in [src/collision/Shape.ts:121](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Shape.ts#L121)*
 
 Compute the mass properties of this shape using its dimensions and density.
 The inertia tensor is computed about the local origin.
@@ -231,7 +213,7 @@ ___
 
 ▸ **getChildCount**(): *number*
 
-*Defined in [dist/planck.d.ts:2013](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2013)*
+*Defined in [dist/planck.d.ts:1982](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1982)*
 
 Get the number of child primitives.
 
@@ -239,7 +221,7 @@ Get the number of child primitives.
 
 ▸ **getChildCount**(): *number*
 
-*Defined in [src/collision/Shape.ts:81](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Shape.ts#L81)*
+*Defined in [src/collision/Shape.ts:83](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Shape.ts#L83)*
 
 Get the number of child primitives.
 
@@ -251,7 +233,7 @@ ___
 
 ▸ **getRadius**(): *number*
 
-*Defined in [dist/planck.d.ts:1996](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1996)*
+*Defined in [dist/planck.d.ts:1965](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1965)*
 
 **Returns:** *number*
 
@@ -261,7 +243,7 @@ ___
 
 ▸ **getType**(): *[ShapeType](../globals.md#shapetype)*
 
-*Defined in [dist/planck.d.ts:2003](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2003)*
+*Defined in [dist/planck.d.ts:1972](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1972)*
 
 Get the type of this shape. You can use this to down cast to the concrete
 shape.
@@ -276,7 +258,7 @@ ___
 
 ▸ **rayCast**(`output`: [RayCastOutput](../interfaces/raycastoutput.md), `input`: [RayCastInput](../interfaces/raycastinput.md), `xf`: [Transform](transform.md), `childIndex`: number): *boolean*
 
-*Defined in [dist/planck.d.ts:2030](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2030)*
+*Defined in [dist/planck.d.ts:1999](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1999)*
 
 Cast a ray against a child shape.
 
@@ -293,7 +275,7 @@ Name | Type | Description |
 
 ▸ **rayCast**(`output`: RayCastOutput, `input`: RayCastInput, `xf`: Transform, `childIndex`: number): *boolean*
 
-*Defined in [src/collision/Shape.ts:100](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Shape.ts#L100)*
+*Defined in [src/collision/Shape.ts:102](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Shape.ts#L102)*
 
 Cast a ray against a child shape.
 
@@ -314,7 +296,7 @@ ___
 
 ▸ **testPoint**(`xf`: [Transform](transform.md), `p`: [Vec2](vec2.md)): *boolean*
 
-*Defined in [dist/planck.d.ts:2021](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2021)*
+*Defined in [dist/planck.d.ts:1990](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1990)*
 
 Test a point for containment in this shape. This only works for convex
 shapes.
@@ -330,7 +312,7 @@ Name | Type | Description |
 
 ▸ **testPoint**(`xf`: Transform, `p`: Vec2): *boolean*
 
-*Defined in [src/collision/Shape.ts:90](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Shape.ts#L90)*
+*Defined in [src/collision/Shape.ts:92](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Shape.ts#L92)*
 
 Test a point for containment in this shape. This only works for convex
 shapes.
@@ -346,29 +328,11 @@ Name | Type | Description |
 
 ___
 
-### `Static` _deserialize
-
-▸ **_deserialize**(`data`: any, `context`: any, `restore`: any): *any*
-
-*Defined in [dist/planck.d.ts:1994](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1994)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`data` | any |
-`context` | any |
-`restore` | any |
-
-**Returns:** *any*
-
-___
-
 ### `Static` isValid
 
 ▸ **isValid**(`shape`: [Shape](shape.md) | null | undefined): *shape is Shape*
 
-*Defined in [dist/planck.d.ts:1995](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1995)*
+*Defined in [dist/planck.d.ts:1964](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1964)*
 
 **Parameters:**
 

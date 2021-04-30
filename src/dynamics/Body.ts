@@ -256,6 +256,7 @@ export default class Body {
     this.m_destroyed = false;
   }
 
+  /** @internal */
   _serialize() {
     const fixtures = [];
     for (let f = this.m_fixtureList; f; f = f.m_next) {
@@ -272,6 +273,7 @@ export default class Body {
     };
   }
 
+  /** @internal */
   static _deserialize(data, world, restore) {
     const body = new Body(world, data);
 

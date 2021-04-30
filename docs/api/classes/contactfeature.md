@@ -28,9 +28,9 @@ The features that intersect to form the contact point.
 
 • **indexA**: *number*
 
-*Defined in [dist/planck.d.ts:1136](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1136)*
+*Defined in [dist/planck.d.ts:1112](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1112)*
 
-*Defined in [src/collision/Manifold.ts:207](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Manifold.ts#L207)*
+*Defined in [src/collision/Manifold.ts:207](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Manifold.ts#L207)*
 
 Feature index on shapeA
 Feature index on shapeA
@@ -41,9 +41,9 @@ ___
 
 • **indexB**: *number*
 
-*Defined in [dist/planck.d.ts:1140](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1140)*
+*Defined in [dist/planck.d.ts:1116](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1116)*
 
-*Defined in [src/collision/Manifold.ts:211](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Manifold.ts#L211)*
+*Defined in [src/collision/Manifold.ts:211](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Manifold.ts#L211)*
 
 Feature index on shapeB
 Feature index on shapeB
@@ -54,9 +54,9 @@ ___
 
 • **typeA**: *ContactFeatureType*
 
-*Defined in [dist/planck.d.ts:1144](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1144)*
+*Defined in [dist/planck.d.ts:1120](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1120)*
 
-*Defined in [src/collision/Manifold.ts:215](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Manifold.ts#L215)*
+*Defined in [src/collision/Manifold.ts:215](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Manifold.ts#L215)*
 
 The feature type on shapeA
 The feature type on shapeA
@@ -67,9 +67,9 @@ ___
 
 • **typeB**: *ContactFeatureType*
 
-*Defined in [dist/planck.d.ts:1148](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1148)*
+*Defined in [dist/planck.d.ts:1124](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1124)*
 
-*Defined in [src/collision/Manifold.ts:219](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Manifold.ts#L219)*
+*Defined in [src/collision/Manifold.ts:219](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Manifold.ts#L219)*
 
 The feature type on shapeB
 The feature type on shapeB
@@ -80,7 +80,7 @@ The feature type on shapeB
 
 ▸ **set**(`o`: [ContactFeature](contactfeature.md)): *void*
 
-*Defined in [dist/planck.d.ts:1149](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1149)*
+*Defined in [dist/planck.d.ts:1125](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1125)*
 
 **Parameters:**
 

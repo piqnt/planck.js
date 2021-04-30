@@ -24,9 +24,9 @@ where `p1` and `p2` come from RayCastInput.
 
 • **fraction**: *number*
 
-*Defined in [dist/planck.d.ts:419](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L419)*
+*Defined in [dist/planck.d.ts:408](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L408)*
 
-*Defined in [src/collision/AABB.ts:49](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/AABB.ts#L49)*
+*Defined in [src/collision/AABB.ts:49](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/AABB.ts#L49)*
 
 ___
 
@@ -34,6 +34,6 @@ ___
 
 • **normal**: *Vec2*
 
-*Defined in [dist/planck.d.ts:418](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L418)*
+*Defined in [dist/planck.d.ts:407](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L407)*
 
-*Defined in [src/collision/AABB.ts:48](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/AABB.ts#L48)*
+*Defined in [src/collision/AABB.ts:48](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/AABB.ts#L48)*

@@ -41,10 +41,12 @@ export default abstract class Shape {
   _reset() {
   }
 
+  /** @internal */
   abstract _serialize(): object;
 
   static TYPES: { [id: string]: new (...args: any[]) => Shape; } = {};
 
+  /** @internal */
   static _deserialize(data, context, restore) {
     const clazz = Shape.TYPES[data.type];
     return clazz && restore(clazz, data);

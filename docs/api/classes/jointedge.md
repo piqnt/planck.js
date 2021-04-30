@@ -30,9 +30,9 @@ joint nodes, one for each attached body.
 
 • **joint**: *Joint‹›* = null as Joint | null
 
-*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L938)*
+*Defined in [dist/planck.d.ts:916](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L916)*
 
-*Defined in [src/dynamics/Joint.ts:45](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L45)*
+*Defined in [src/dynamics/Joint.ts:45](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L45)*
 
 the joint
 the joint
@@ -43,9 +43,9 @@ ___
 
 • **next**: *JointEdge‹›* = null as JointEdge | null
 
-*Defined in [dist/planck.d.ts:946](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L946)*
+*Defined in [dist/planck.d.ts:924](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L924)*
 
-*Defined in [src/dynamics/Joint.ts:53](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L53)*
+*Defined in [src/dynamics/Joint.ts:53](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L53)*
 
 the next joint edge in the body's joint list
 the next joint edge in the body's joint list
@@ -56,9 +56,9 @@ ___
 
 • **other**: *Body‹›* = null as Body | null
 
-*Defined in [dist/planck.d.ts:934](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L934)*
+*Defined in [dist/planck.d.ts:912](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L912)*
 
-*Defined in [src/dynamics/Joint.ts:41](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L41)*
+*Defined in [src/dynamics/Joint.ts:41](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L41)*
 
 provides quick access to the other body attached.
 provides quick access to the other body attached.
@@ -69,9 +69,9 @@ ___
 
 • **prev**: *JointEdge‹›* = null as JointEdge | null
 
-*Defined in [dist/planck.d.ts:942](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L942)*
+*Defined in [dist/planck.d.ts:920](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L920)*
 
-*Defined in [src/dynamics/Joint.ts:49](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L49)*
+*Defined in [src/dynamics/Joint.ts:49](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L49)*
 
 prev the previous joint edge in the body's joint list
 prev the previous joint edge in the body's joint list

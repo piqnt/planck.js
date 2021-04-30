@@ -237,12 +237,14 @@
                 this.y = y;
             }
         }
+        /** @internal */
         Vec2.prototype._serialize = function () {
             return {
                 x: this.x,
                 y: this.y
             };
         };
+        /** @internal */
         Vec2._deserialize = function (data) {
             var obj = Object.create(Vec2.prototype);
             obj.x = data.x;
@@ -2480,6 +2482,7 @@
         }
         Shape.prototype._reset = function () {
         };
+        /** @internal */
         Shape._deserialize = function (data, context, restore) {
             var clazz = Shape.TYPES[data.type];
             return clazz && restore(clazz, data);
@@ -2601,6 +2604,7 @@
             this.createProxies(broadPhase, body.m_xf);
             body.resetMassData();
         };
+        /** @internal */
         Fixture.prototype._serialize = function () {
             return {
                 friction: this.m_friction,
@@ -2613,6 +2617,7 @@
                 shape: this.m_shape,
             };
         };
+        /** @internal */
         Fixture._deserialize = function (data, body, restore) {
             var shape = restore(Shape, data.shape);
             var fixture = shape && new Fixture(body, shape, data);
@@ -2974,6 +2979,7 @@
             this.m_next = null;
             this.m_destroyed = false;
         }
+        /** @internal */
         Body.prototype._serialize = function () {
             var fixtures = [];
             for (var f = this.m_fixtureList; f; f = f.m_next) {
@@ -2989,6 +2995,7 @@
                 fixtures: fixtures,
             };
         };
+        /** @internal */
         Body._deserialize = function (data, world, restore) {
             var body = new Body(world, data);
             if (data.fixtures) {
@@ -5810,6 +5817,7 @@
          */
         Joint.prototype.shiftOrigin = function (newOrigin) { };
         Joint.TYPES = {};
+        /** @internal */
         Joint._deserialize = function (data, context, restore) {
             var clazz = Joint.TYPES[data.type];
             return clazz && restore(clazz, data);
@@ -7825,6 +7833,7 @@
                 this.z = z;
             }
         }
+        /** @internal */
         Vec3.prototype._serialize = function () {
             return {
                 x: this.x,
@@ -7832,6 +7841,7 @@
                 z: this.z
             };
         };
+        /** @internal */
         Vec3._deserialize = function (data) {
             var obj = Object.create(Vec3.prototype);
             obj.x = data.x;
@@ -8263,6 +8273,7 @@
             }
             return _this;
         }
+        /** @internal */
         CircleShape.prototype._serialize = function () {
             return {
                 type: this.m_type,
@@ -8270,6 +8281,7 @@
                 radius: this.m_radius,
             };
         };
+        /** @internal */
         CircleShape._deserialize = function (data) {
             return new CircleShape(data.p, data.radius);
         };
@@ -8434,6 +8446,7 @@
             _this.m_hasVertex3 = false;
             return _this;
         }
+        /** @internal */
         EdgeShape.prototype._serialize = function () {
             return {
                 type: this.m_type,
@@ -8445,6 +8458,7 @@
                 hasVertex3: this.m_hasVertex3,
             };
         };
+        /** @internal */
         EdgeShape._deserialize = function (data) {
             var shape = new EdgeShape(data.vertex1, data.vertex2);
             if (shape.m_hasVertex0) {
@@ -8663,12 +8677,14 @@
             }
             return _this;
         }
+        /** @internal */
         PolygonShape.prototype._serialize = function () {
             return {
                 type: this.m_type,
                 vertices: this.m_vertices,
             };
         };
+        /** @internal */
         PolygonShape._deserialize = function (data, fixture, restore) {
             var vertices = [];
             if (data.vertices) {
@@ -9096,6 +9112,7 @@
             }
             return _this;
         }
+        /** @internal */
         ChainShape.prototype._serialize = function () {
             var data = {
                 type: this.m_type,
@@ -9114,6 +9131,7 @@
             }
             return data;
         };
+        /** @internal */
         ChainShape.prototype._deserialize = function (data, fixture, restore) {
             var vertices = [];
             if (data.vertices) {
@@ -10414,6 +10432,7 @@
             // K = J * invM * JT
             // = invMass1 + invI1 * cross(r1, u)^2 + invMass2 + invI2 * cross(r2, u)^2
         }
+        /** @internal */
         DistanceJoint.prototype._serialize = function () {
             return {
                 type: this.m_type,
@@ -10430,6 +10449,7 @@
                 bias: this.m_bias,
             };
         };
+        /** @internal */
         DistanceJoint._deserialize = function (data, world, restore) {
             data = __assign({}, data);
             data.bodyA = restore(Body, data.bodyA, world);
@@ -10437,9 +10457,7 @@
             var joint = new DistanceJoint(data);
             return joint;
         };
-        /**
-         * @internal
-         */
+        /** @internal */
         DistanceJoint.prototype._setAnchors = function (def) {
             if (def.anchorA) {
                 this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
@@ -10729,6 +10747,7 @@
             // J = [0 0 -1 0 0 1]
             // K = invI1 + invI2
         }
+        /** @internal */
         FrictionJoint.prototype._serialize = function () {
             return {
                 type: this.m_type,
@@ -10741,6 +10760,7 @@
                 localAnchorB: this.m_localAnchorB,
             };
         };
+        /** @internal */
         FrictionJoint._deserialize = function (data, world, restore) {
             data = __assign({}, data);
             data.bodyA = restore(Body, data.bodyA, world);
@@ -10748,9 +10768,7 @@
             var joint = new FrictionJoint(data);
             return joint;
         };
-        /**
-         * @internal
-         */
+        /** @internal */
         FrictionJoint.prototype._setAnchors = function (def) {
             if (def.anchorA) {
                 this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
@@ -11028,6 +11046,7 @@
             // J = [0 0 -1 0 0 1]
             // K = invI1 + invI2
         }
+        /** @internal */
         RevoluteJoint.prototype._serialize = function () {
             return {
                 type: this.m_type,
@@ -11045,6 +11064,7 @@
                 referenceAngle: this.m_referenceAngle,
             };
         };
+        /** @internal */
         RevoluteJoint._deserialize = function (data, world, restore) {
             data = __assign({}, data);
             data.bodyA = restore(Body, data.bodyA, world);
@@ -11052,9 +11072,7 @@
             var joint = new RevoluteJoint(data);
             return joint;
         };
-        /**
-         * @internal
-         */
+        /** @internal */
         RevoluteJoint.prototype._setAnchors = function (def) {
             if (def.anchorA) {
                 this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
@@ -11629,6 +11647,7 @@
             // Now compute impulse to be applied:
             // df = f2 - f1
         }
+        /** @internal */
         PrismaticJoint.prototype._serialize = function () {
             return {
                 type: this.m_type,
@@ -11647,6 +11666,7 @@
                 referenceAngle: this.m_referenceAngle,
             };
         };
+        /** @internal */
         PrismaticJoint._deserialize = function (data, world, restore) {
             data = __assign({}, data);
             data.bodyA = restore(Body, data.bodyA, world);
@@ -11655,9 +11675,7 @@
             var joint = new PrismaticJoint(data);
             return joint;
         };
-        /**
-         * @internal
-         */
+        /** @internal */
         PrismaticJoint.prototype._setAnchors = function (def) {
             if (def.anchorA) {
                 this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
@@ -12281,6 +12299,7 @@
             // J = [ug cross(r, ug)]
             // K = J * invM * JT = invMass + invI * cross(r, ug)^2
         }
+        /** @internal */
         GearJoint.prototype._serialize = function () {
             return {
                 type: this.m_type,
@@ -12293,6 +12312,7 @@
                 // _constant: this.m_constant,
             };
         };
+        /** @internal */
         GearJoint._deserialize = function (data, world, restore) {
             data = __assign({}, data);
             data.bodyA = restore(Body, data.bodyA, world);
@@ -12636,6 +12656,7 @@
             // J = [0 0 -1 0 0 1]
             // K = invI1 + invI2
         }
+        /** @internal */
         MotorJoint.prototype._serialize = function () {
             return {
                 type: this.m_type,
@@ -12649,6 +12670,7 @@
                 angularOffset: this.m_angularOffset,
             };
         };
+        /** @internal */
         MotorJoint._deserialize = function (data, world, restore) {
             data = __assign({}, data);
             data.bodyA = restore(Body, data.bodyA, world);
@@ -12656,9 +12678,7 @@
             var joint = new MotorJoint(data);
             return joint;
         };
-        /**
-         * @internal
-         */
+        /** @internal */
         MotorJoint.prototype._setAnchors = function (def) {
         };
         /**
@@ -12941,6 +12961,7 @@
             // Identity used:
             // w k % (rx i + ry j) = w * (-ry i + rx j)
         }
+        /** @internal */
         MouseJoint.prototype._serialize = function () {
             return {
                 type: this.m_type,
@@ -12954,6 +12975,7 @@
                 _localAnchorB: this.m_localAnchorB,
             };
         };
+        /** @internal */
         MouseJoint._deserialize = function (data, world, restore) {
             data = __assign({}, data);
             data.bodyA = restore(Body, data.bodyA, world);
@@ -13541,6 +13563,7 @@
             // K = J * invM * JT
             // = invMassA + invIA * cross(rA, u)^2 + invMassB + invIB * cross(rB, u)^2
         }
+        /** @internal */
         RopeJoint.prototype._serialize = function () {
             return {
                 type: this.m_type,
@@ -13552,6 +13575,7 @@
                 maxLength: this.m_maxLength,
             };
         };
+        /** @internal */
         RopeJoint._deserialize = function (data, world, restore) {
             data = __assign({}, data);
             data.bodyA = restore(Body, data.bodyA, world);
@@ -13812,6 +13836,7 @@
             // J = [0 0 -1 0 0 1]
             // K = invI1 + invI2
         }
+        /** @internal */
         WeldJoint.prototype._serialize = function () {
             return {
                 type: this.m_type,
@@ -13825,6 +13850,7 @@
                 referenceAngle: this.m_referenceAngle,
             };
         };
+        /** @internal */
         WeldJoint._deserialize = function (data, world, restore) {
             data = __assign({}, data);
             data.bodyA = restore(Body, data.bodyA, world);
@@ -13832,9 +13858,7 @@
             var joint = new WeldJoint(data);
             return joint;
         };
-        /**
-         * @internal
-         */
+        /** @internal */
         WeldJoint.prototype._setAnchors = function (def) {
             if (def.anchorA) {
                 this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
@@ -14215,6 +14239,7 @@
             // Cdot = wB - wA
             // J = [0 0 -1 0 0 1]
         }
+        /** @internal */
         WheelJoint.prototype._serialize = function () {
             return {
                 type: this.m_type,
@@ -14231,6 +14256,7 @@
                 localAxisA: this.m_localXAxisA,
             };
         };
+        /** @internal */
         WheelJoint._deserialize = function (data, world, restore) {
             data = __assign({}, data);
             data.bodyA = restore(Body, data.bodyA, world);
@@ -14238,9 +14264,7 @@
             var joint = new WheelJoint(data);
             return joint;
         };
-        /**
-         * @internal
-         */
+        /** @internal */
         WheelJoint.prototype._setAnchors = function (def) {
             if (def.anchorA) {
                 this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));

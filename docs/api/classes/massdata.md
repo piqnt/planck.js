@@ -23,9 +23,9 @@ MassData This holds the mass data computed for a shape.
 
 • **I**: *number* = 0
 
-*Defined in [dist/planck.d.ts:1625](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1625)*
+*Defined in [dist/planck.d.ts:1606](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1606)*
 
-*Defined in [src/dynamics/Body.ts:136](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L136)*
+*Defined in [src/dynamics/Body.ts:140](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Body.ts#L140)*
 
 The rotational inertia of the shape about the local origin.
 The rotational inertia of the shape about the local origin.
@@ -36,9 +36,9 @@ ___
 
 • **center**: *Vec2‹›* = Vec2.zero()
 
-*Defined in [dist/planck.d.ts:1623](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1623)*
+*Defined in [dist/planck.d.ts:1604](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1604)*
 
-*Defined in [src/dynamics/Body.ts:134](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L134)*
+*Defined in [src/dynamics/Body.ts:138](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Body.ts#L138)*
 
 The position of the shape's centroid relative to the shape's origin.
 The position of the shape's centroid relative to the shape's origin.
@@ -49,9 +49,9 @@ ___
 
 • **mass**: *number* = 0
 
-*Defined in [dist/planck.d.ts:1621](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1621)*
+*Defined in [dist/planck.d.ts:1602](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1602)*
 
-*Defined in [src/dynamics/Body.ts:132](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Body.ts#L132)*
+*Defined in [src/dynamics/Body.ts:136](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Body.ts#L136)*
 
 The mass of the shape, usually in kilograms.
 The mass of the shape, usually in kilograms.

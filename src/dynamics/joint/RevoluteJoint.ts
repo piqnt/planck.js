@@ -213,6 +213,7 @@ export default class RevoluteJoint extends Joint {
     // K = invI1 + invI2
   }
 
+  /** @internal */
   _serialize() {
     return {
       type: this.m_type,
@@ -233,6 +234,7 @@ export default class RevoluteJoint extends Joint {
     };
   }
 
+  /** @internal */
   static _deserialize(data, world, restore) {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
@@ -241,9 +243,7 @@ export default class RevoluteJoint extends Joint {
     return joint;
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   _setAnchors(def) {
     if (def.anchorA) {
       this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));

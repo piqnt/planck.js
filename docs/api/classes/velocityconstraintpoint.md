@@ -24,7 +24,7 @@
 
 • **normalImpulse**: *number* = 0
 
-*Defined in [src/dynamics/Contact.ts:110](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Contact.ts#L110)*
+*Defined in [src/dynamics/Contact.ts:110](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Contact.ts#L110)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **normalMass**: *number* = 0
 
-*Defined in [src/dynamics/Contact.ts:112](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Contact.ts#L112)*
+*Defined in [src/dynamics/Contact.ts:112](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Contact.ts#L112)*
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 • **rA**: *Vec2‹›* = Vec2.zero()
 
-*Defined in [src/dynamics/Contact.ts:108](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Contact.ts#L108)*
+*Defined in [src/dynamics/Contact.ts:108](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Contact.ts#L108)*
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 • **rB**: *Vec2‹›* = Vec2.zero()
 
-*Defined in [src/dynamics/Contact.ts:109](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Contact.ts#L109)*
+*Defined in [src/dynamics/Contact.ts:109](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Contact.ts#L109)*
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 • **tangentImpulse**: *number* = 0
 
-*Defined in [src/dynamics/Contact.ts:111](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Contact.ts#L111)*
+*Defined in [src/dynamics/Contact.ts:111](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Contact.ts#L111)*
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 • **tangentMass**: *number* = 0
 
-*Defined in [src/dynamics/Contact.ts:113](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Contact.ts#L113)*
+*Defined in [src/dynamics/Contact.ts:113](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Contact.ts#L113)*
 
 ___
 
@@ -72,4 +72,4 @@ ___
 
 • **velocityBias**: *number* = 0
 
-*Defined in [src/dynamics/Contact.ts:114](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Contact.ts#L114)*
+*Defined in [src/dynamics/Contact.ts:114](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Contact.ts#L114)*

@@ -44,7 +44,7 @@
 
 • **activeKeys**: *object*
 
-*Defined in [testbed/index.d.ts:15](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L15)*
+*Defined in [testbed/index.d.ts:15](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L15)*
 
 #### Type declaration:
 
@@ -136,7 +136,7 @@ ___
 
 • **background**: *string*
 
-*Defined in [testbed/index.d.ts:58](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L58)*
+*Defined in [testbed/index.d.ts:58](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L58)*
 
 ___
 
@@ -144,7 +144,7 @@ ___
 
 • **findAll**: *function*
 
-*Defined in [testbed/index.d.ts:80](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L80)*
+*Defined in [testbed/index.d.ts:80](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L80)*
 
 #### Type declaration:
 
@@ -162,7 +162,7 @@ ___
 
 • **findOne**: *function*
 
-*Defined in [testbed/index.d.ts:79](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L79)*
+*Defined in [testbed/index.d.ts:79](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L79)*
 
 #### Type declaration:
 
@@ -180,7 +180,7 @@ ___
 
 • **height**: *number*
 
-*Defined in [testbed/index.d.ts:8](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L8)*
+*Defined in [testbed/index.d.ts:8](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L8)*
 
 ___
 
@@ -188,7 +188,7 @@ ___
 
 • **hz**: *number*
 
-*Defined in [testbed/index.d.ts:13](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L13)*
+*Defined in [testbed/index.d.ts:13](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L13)*
 
 ___
 
@@ -196,7 +196,7 @@ ___
 
 • **keydown**? : *function*
 
-*Defined in [testbed/index.d.ts:76](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L76)*
+*Defined in [testbed/index.d.ts:76](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L76)*
 
 #### Type declaration:
 
@@ -215,7 +215,7 @@ ___
 
 • **keyup**? : *function*
 
-*Defined in [testbed/index.d.ts:77](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L77)*
+*Defined in [testbed/index.d.ts:77](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L77)*
 
 #### Type declaration:
 
@@ -234,7 +234,7 @@ ___
 
 • **mouseForce**? : *number*
 
-*Defined in [testbed/index.d.ts:60](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L60)*
+*Defined in [testbed/index.d.ts:60](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L60)*
 
 ___
 
@@ -242,7 +242,7 @@ ___
 
 • **ratio**: *number*
 
-*Defined in [testbed/index.d.ts:12](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L12)*
+*Defined in [testbed/index.d.ts:12](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L12)*
 
 ___
 
@@ -250,7 +250,7 @@ ___
 
 • **scaleY**: *number*
 
-*Defined in [testbed/index.d.ts:11](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L11)*
+*Defined in [testbed/index.d.ts:11](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L11)*
 
 ___
 
@@ -258,7 +258,7 @@ ___
 
 • **speed**: *number*
 
-*Defined in [testbed/index.d.ts:14](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L14)*
+*Defined in [testbed/index.d.ts:14](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L14)*
 
 ___
 
@@ -266,7 +266,7 @@ ___
 
 • **step**? : *function*
 
-*Defined in [testbed/index.d.ts:75](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L75)*
+*Defined in [testbed/index.d.ts:75](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L75)*
 
 #### Type declaration:
 
@@ -285,7 +285,7 @@ ___
 
 • **width**: *number*
 
-*Defined in [testbed/index.d.ts:7](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L7)*
+*Defined in [testbed/index.d.ts:7](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L7)*
 
 ___
 
@@ -293,7 +293,7 @@ ___
 
 • **x**: *number*
 
-*Defined in [testbed/index.d.ts:9](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L9)*
+*Defined in [testbed/index.d.ts:9](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L9)*
 
 ___
 
@@ -301,7 +301,7 @@ ___
 
 • **y**: *number*
 
-*Defined in [testbed/index.d.ts:10](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L10)*
+*Defined in [testbed/index.d.ts:10](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L10)*
 
 ## Methods
 
@@ -309,7 +309,7 @@ ___
 
 ▸ **color**(`r`: number, `g`: number, `b`: number): *string*
 
-*Defined in [testbed/index.d.ts:72](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L72)*
+*Defined in [testbed/index.d.ts:72](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L72)*
 
 **Parameters:**
 
@@ -327,7 +327,7 @@ ___
 
 ▸ **drawAABB**(`aabb`: AABB, `color`: string): *void*
 
-*Defined in [testbed/index.d.ts:71](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L71)*
+*Defined in [testbed/index.d.ts:71](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L71)*
 
 **Parameters:**
 
@@ -344,7 +344,7 @@ ___
 
 ▸ **drawCircle**(`p`: object, `r`: number, `color`: string): *void*
 
-*Defined in [testbed/index.d.ts:68](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L68)*
+*Defined in [testbed/index.d.ts:68](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L68)*
 
 **Parameters:**
 
@@ -367,7 +367,7 @@ ___
 
 ▸ **drawPoint**(`p`: object, `r`: any, `color`: string): *void*
 
-*Defined in [testbed/index.d.ts:67](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L67)*
+*Defined in [testbed/index.d.ts:67](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L67)*
 
 **Parameters:**
 
@@ -390,7 +390,7 @@ ___
 
 ▸ **drawPolygon**(`points`: object[], `color`: string): *void*
 
-*Defined in [testbed/index.d.ts:70](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L70)*
+*Defined in [testbed/index.d.ts:70](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L70)*
 
 **Parameters:**
 
@@ -407,7 +407,7 @@ ___
 
 ▸ **drawSegment**(`a`: object, `b`: object, `color`: string): *void*
 
-*Defined in [testbed/index.d.ts:69](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L69)*
+*Defined in [testbed/index.d.ts:69](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L69)*
 
 **Parameters:**
 
@@ -435,7 +435,7 @@ ___
 
 ▸ **info**(`text`: string): *void*
 
-*Defined in [testbed/index.d.ts:65](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L65)*
+*Defined in [testbed/index.d.ts:65](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L65)*
 
 **Parameters:**
 
@@ -451,7 +451,7 @@ ___
 
 ▸ **status**(`name`: string, `value`: any): *void*
 
-*Defined in [testbed/index.d.ts:62](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L62)*
+*Defined in [testbed/index.d.ts:62](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L62)*
 
 **Parameters:**
 
@@ -464,7 +464,7 @@ Name | Type |
 
 ▸ **status**(`a`: object): *void*
 
-*Defined in [testbed/index.d.ts:63](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L63)*
+*Defined in [testbed/index.d.ts:63](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L63)*
 
 **Parameters:**
 
@@ -476,7 +476,7 @@ Name | Type |
 
 ▸ **status**(`a`: string): *void*
 
-*Defined in [testbed/index.d.ts:64](https://github.com/shakiba/planck.js/blob/7e469c4/testbed/index.d.ts#L64)*
+*Defined in [testbed/index.d.ts:64](https://github.com/shakiba/planck.js/blob/3ede11b/testbed/index.d.ts#L64)*
 
 **Parameters:**
 

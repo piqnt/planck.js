@@ -34,7 +34,7 @@
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:732](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L732)*
+*Defined in [dist/planck.d.ts:721](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L721)*
 
 The density, usually in kg/m^2
 
@@ -48,7 +48,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:746](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L746)*
+*Defined in [dist/planck.d.ts:735](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L735)*
 
 Collision category bit or bits that this fixture belongs to.
 If groupIndex is zero or not matching, then at least one bit in this fixture categoryBits should match other fixture maskBits and vice versa.
@@ -63,7 +63,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:741](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L741)*
+*Defined in [dist/planck.d.ts:730](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L730)*
 
 Zero, positive or negative collision group.
 Fixtures with same positive groupIndex always collide and fixtures with same negative groupIndex never collide.
@@ -78,7 +78,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:750](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L750)*
+*Defined in [dist/planck.d.ts:739](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L739)*
 
 Collision category bit or bits that this fixture accept for collision.
 
@@ -92,7 +92,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:724](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L724)*
+*Defined in [dist/planck.d.ts:713](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L713)*
 
 The friction coefficient, usually in the range [0,1]
 
@@ -106,7 +106,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:736](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L736)*
+*Defined in [dist/planck.d.ts:725](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L725)*
 
 A sensor shape collects contact information but never generates a collision response.
 
@@ -120,7 +120,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:728](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L728)*
+*Defined in [dist/planck.d.ts:717](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L717)*
 
 The restitution (elasticity) usually in the range [0,1]
 
@@ -130,9 +130,9 @@ ___
 
 • **shape**: *Shape*
 
-*Defined in [dist/planck.d.ts:753](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L753)*
+*Defined in [dist/planck.d.ts:742](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L742)*
 
-*Defined in [src/dynamics/Fixture.ts:78](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L78)*
+*Defined in [src/dynamics/Fixture.ts:78](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Fixture.ts#L78)*
 
 ___
 
@@ -144,4 +144,4 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:720](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L720)*
+*Defined in [dist/planck.d.ts:709](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L709)*

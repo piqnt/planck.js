@@ -48,9 +48,9 @@ objects and query them on update.
 
 • **m_callback**: *function*
 
-*Defined in [dist/planck.d.ts:635](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L635)*
+*Defined in [dist/planck.d.ts:624](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L624)*
 
-*Defined in [src/collision/BroadPhase.ts:45](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/BroadPhase.ts#L45)*
+*Defined in [src/collision/BroadPhase.ts:45](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/BroadPhase.ts#L45)*
 
 #### Type declaration:
 
@@ -69,9 +69,9 @@ ___
 
 • **m_moveBuffer**: *any[]* = []
 
-*Defined in [dist/planck.d.ts:634](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L634)*
+*Defined in [dist/planck.d.ts:623](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L623)*
 
-*Defined in [src/collision/BroadPhase.ts:43](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/BroadPhase.ts#L43)*
+*Defined in [src/collision/BroadPhase.ts:43](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/BroadPhase.ts#L43)*
 
 ___
 
@@ -79,9 +79,9 @@ ___
 
 • **m_proxyCount**: *number* = 0
 
-*Defined in [dist/planck.d.ts:633](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L633)*
+*Defined in [dist/planck.d.ts:622](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L622)*
 
-*Defined in [src/collision/BroadPhase.ts:42](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/BroadPhase.ts#L42)*
+*Defined in [src/collision/BroadPhase.ts:42](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/BroadPhase.ts#L42)*
 
 ___
 
@@ -89,9 +89,9 @@ ___
 
 • **m_queryProxyId**: *number*
 
-*Defined in [dist/planck.d.ts:636](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L636)*
+*Defined in [dist/planck.d.ts:625](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L625)*
 
-*Defined in [src/collision/BroadPhase.ts:46](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/BroadPhase.ts#L46)*
+*Defined in [src/collision/BroadPhase.ts:46](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/BroadPhase.ts#L46)*
 
 ___
 
@@ -99,9 +99,9 @@ ___
 
 • **m_tree**: *DynamicTree‹FixtureProxy‹››* = new DynamicTree<FixtureProxy>()
 
-*Defined in [dist/planck.d.ts:632](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L632)*
+*Defined in [dist/planck.d.ts:621](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L621)*
 
-*Defined in [src/collision/BroadPhase.ts:41](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/BroadPhase.ts#L41)*
+*Defined in [src/collision/BroadPhase.ts:41](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/BroadPhase.ts#L41)*
 
 ## Methods
 
@@ -109,7 +109,7 @@ ___
 
 ▸ **bufferMove**(`proxyId`: number): *void*
 
-*Defined in [dist/planck.d.ts:707](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L707)*
+*Defined in [dist/planck.d.ts:696](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L696)*
 
 **Parameters:**
 
@@ -125,7 +125,7 @@ ___
 
 ▸ **createProxy**(`aabb`: [AABB](aabb.md), `userData`: [FixtureProxy](fixtureproxy.md)): *number*
 
-*Defined in [dist/planck.d.ts:692](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L692)*
+*Defined in [dist/planck.d.ts:681](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L681)*
 
 Create a proxy with an initial AABB. Pairs are not reported until UpdatePairs
 is called.
@@ -145,7 +145,7 @@ ___
 
 ▸ **destroyProxy**(`proxyId`: number): *void*
 
-*Defined in [dist/planck.d.ts:696](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L696)*
+*Defined in [dist/planck.d.ts:685](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L685)*
 
 Destroy a proxy. It is up to the client to remove any pairs.
 
@@ -163,7 +163,7 @@ ___
 
 ▸ **getFatAABB**(`proxyId`: any): *[AABB](aabb.md)*
 
-*Defined in [dist/planck.d.ts:648](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L648)*
+*Defined in [dist/planck.d.ts:637](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L637)*
 
 Get the fat AABB for a proxy.
 
@@ -181,7 +181,7 @@ ___
 
 ▸ **getProxyCount**(): *number*
 
-*Defined in [dist/planck.d.ts:652](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L652)*
+*Defined in [dist/planck.d.ts:641](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L641)*
 
 Get the number of proxies.
 
@@ -193,7 +193,7 @@ ___
 
 ▸ **getTreeBalance**(): *number*
 
-*Defined in [dist/planck.d.ts:660](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L660)*
+*Defined in [dist/planck.d.ts:649](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L649)*
 
 Get the balance (integer) of the embedded tree.
 
@@ -205,7 +205,7 @@ ___
 
 ▸ **getTreeHeight**(): *number*
 
-*Defined in [dist/planck.d.ts:656](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L656)*
+*Defined in [dist/planck.d.ts:645](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L645)*
 
 Get the height of the embedded tree.
 
@@ -217,7 +217,7 @@ ___
 
 ▸ **getTreeQuality**(): *number*
 
-*Defined in [dist/planck.d.ts:664](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L664)*
+*Defined in [dist/planck.d.ts:653](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L653)*
 
 Get the quality metric of the embedded tree.
 
@@ -229,7 +229,7 @@ ___
 
 ▸ **getUserData**(`proxyId`: any): *[FixtureProxy](fixtureproxy.md)*
 
-*Defined in [dist/planck.d.ts:640](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L640)*
+*Defined in [dist/planck.d.ts:629](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L629)*
 
 Get user data from a proxy. Returns null if the id is invalid.
 
@@ -247,7 +247,7 @@ ___
 
 ▸ **moveProxy**(`proxyId`: number, `aabb`: [AABB](aabb.md), `displacement`: [Vec2](vec2.md)): *void*
 
-*Defined in [dist/planck.d.ts:701](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L701)*
+*Defined in [dist/planck.d.ts:690](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L690)*
 
 Call moveProxy as many times as you like, then when you are done call
 UpdatePairs to finalized the proxy pairs (for your time step).
@@ -268,7 +268,7 @@ ___
 
 ▸ **query**(`aabb`: any, `queryCallback`: any): *void*
 
-*Defined in [src/collision/BroadPhase.ts:103](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/BroadPhase.ts#L103)*
+*Defined in [src/collision/BroadPhase.ts:103](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/BroadPhase.ts#L103)*
 
 Query an AABB for overlapping proxies. The callback class is called for each
 proxy that overlaps the supplied AABB.
@@ -290,7 +290,7 @@ ___
 
 ▸ **queryCallback**(`proxyId`: number): *boolean*
 
-*Defined in [src/collision/BroadPhase.ts:210](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/BroadPhase.ts#L210)*
+*Defined in [src/collision/BroadPhase.ts:210](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/BroadPhase.ts#L210)*
 
 **Parameters:**
 
@@ -306,7 +306,7 @@ ___
 
 ▸ **rayCast**(`input`: any, `rayCastCallback`: any): *void*
 
-*Defined in [dist/planck.d.ts:680](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L680)*
+*Defined in [dist/planck.d.ts:669](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L669)*
 
 Ray-cast against the proxies in the tree. This relies on the callback to
 perform a exact ray-cast in the case were the proxy contains a shape. The
@@ -329,7 +329,7 @@ ___
 
 ▸ **shiftOrigin**(`newOrigin`: [Vec2](vec2.md)): *void*
 
-*Defined in [dist/planck.d.ts:687](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L687)*
+*Defined in [dist/planck.d.ts:676](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L676)*
 
 Shift the world origin. Useful for large worlds. The shift formula is:
 position -= newOrigin
@@ -348,7 +348,7 @@ ___
 
 ▸ **testOverlap**(`proxyIdA`: any, `proxyIdB`: any): *boolean*
 
-*Defined in [dist/planck.d.ts:644](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L644)*
+*Defined in [dist/planck.d.ts:633](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L633)*
 
 Test overlap of fat AABBs.
 
@@ -367,7 +367,7 @@ ___
 
 ▸ **touchProxy**(`proxyId`: number): *void*
 
-*Defined in [dist/planck.d.ts:706](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L706)*
+*Defined in [dist/planck.d.ts:695](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L695)*
 
 Call to trigger a re-processing of it's pairs on the next call to
 UpdatePairs.
@@ -386,7 +386,7 @@ ___
 
 ▸ **unbufferMove**(`proxyId`: number): *void*
 
-*Defined in [dist/planck.d.ts:708](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L708)*
+*Defined in [dist/planck.d.ts:697](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L697)*
 
 **Parameters:**
 
@@ -402,7 +402,7 @@ ___
 
 ▸ **updatePairs**(`addPairCallback`: function): *void*
 
-*Defined in [dist/planck.d.ts:712](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L712)*
+*Defined in [dist/planck.d.ts:701](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L701)*
 
 Update the pairs. This results in pair callbacks. This can only add pairs.
 

@@ -15,7 +15,7 @@
 
 • **fromJson**: *any*
 
-*Defined in [dist/planck.d.ts:3](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3)*
+*Defined in [dist/planck.d.ts:3](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3)*
 
 ___
 
@@ -23,4 +23,4 @@ ___
 
 • **toJson**: *any*
 
-*Defined in [dist/planck.d.ts:2](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2)*
+*Defined in [dist/planck.d.ts:2](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2)*

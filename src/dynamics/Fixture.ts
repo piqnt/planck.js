@@ -187,6 +187,7 @@ export default class Fixture {
     body.resetMassData();
   }
 
+  /** @internal */
   _serialize() {
     return {
       friction: this.m_friction,
@@ -202,6 +203,7 @@ export default class Fixture {
     };
   }
 
+  /** @internal */
   static _deserialize(data, body, restore) {
     const shape = restore(Shape, data.shape);
     const fixture = shape && new Fixture(body, shape, data);

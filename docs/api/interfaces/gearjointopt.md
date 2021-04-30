@@ -33,7 +33,7 @@ Gear joint definition.
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L938)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -44,9 +44,9 @@ ___
 
 • **ratio**? : *number*
 
-*Defined in [dist/planck.d.ts:2997](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2997)*
+*Defined in [dist/planck.d.ts:2876](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2876)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:48](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/GearJoint.ts#L48)*
+*Defined in [src/dynamics/joint/GearJoint.ts:48](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/GearJoint.ts#L48)*
 
 The gear ratio. See GearJoint for explanation.
 The gear ratio. See GearJoint for explanation.
@@ -61,6 +61,6 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L933)*
 
 Use this to attach application specific data to your joints.

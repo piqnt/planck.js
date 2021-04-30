@@ -50,11 +50,6 @@ declare class Vec2 {
         y: number;
     });
     constructor();
-    _serialize(): {
-        x: number;
-        y: number;
-    };
-    static _deserialize(data: any): any;
     static zero(): Vec2;
     static clone(v: Vec2): Vec2;
     toString(): string;
@@ -203,12 +198,6 @@ declare class Vec3 {
         z: number;
     });
     constructor();
-    _serialize(): {
-        x: number;
-        y: number;
-        z: number;
-    };
-    static _deserialize(data: any): any;
     static zero(): Vec3;
     static clone(v: Vec3): Vec3;
     toString(): string;
@@ -777,17 +766,6 @@ declare class Fixture {
      * @private
      */
     _reset(): void;
-    _serialize(): {
-        friction: number;
-        restitution: number;
-        density: number;
-        isSensor: boolean;
-        filterGroupIndex: number;
-        filterCategoryBits: number;
-        filterMaskBits: number;
-        shape: Shape;
-    };
-    static _deserialize(data: any, body: any, restore: any): Fixture;
     /**
      * Get the type of the child shape. You can use this to down cast to the
      * concrete shape.
@@ -982,8 +960,6 @@ declare abstract class Joint {
     static TYPES: {
         [id: string]: new (...args: any[]) => Joint;
     };
-    abstract _serialize(): object;
-    static _deserialize: (data: any, context: any, restore: any) => any;
     /**
      * Short-cut function to determine if either body is inactive.
      */
@@ -1637,16 +1613,6 @@ declare class Body {
     static KINEMATIC: BodyType;
     static DYNAMIC: BodyType;
     constructor(world: any, def: any);
-    _serialize(): {
-        type: BodyType;
-        bullet: boolean;
-        position: Vec2;
-        angle: number;
-        linearVelocity: Vec2;
-        angularVelocity: number;
-        fixtures: any[];
-    };
-    static _deserialize(data: any, world: any, restore: any): Body;
     isWorldLocked(): boolean;
     getWorld(): World;
     getNext(): Body | null;
@@ -1992,11 +1958,9 @@ declare abstract class Shape {
     m_type: ShapeType;
     m_radius: number;
     _reset(): void;
-    abstract _serialize(): object;
     static TYPES: {
         [id: string]: new (...args: any[]) => Shape;
     };
-    static _deserialize(data: any, context: any, restore: any): any;
     static isValid(shape: Shape | null | undefined): shape is Shape;
     getRadius(): number;
     /**
@@ -2060,12 +2024,6 @@ declare class CircleShape extends Shape {
     private m_p;
     constructor(position: Vec2, radius?: number);
     constructor(radius?: number);
-    _serialize(): {
-        type: ShapeType;
-        p: Vec2;
-        radius: number;
-    };
-    static _deserialize(data: any): CircleShape;
     // TODO: already defined in Shape
     getRadius(): number;
     getCenter(): Vec2;
@@ -2138,16 +2096,6 @@ declare class EdgeShape extends Shape {
     m_hasVertex0: boolean;
     m_hasVertex3: boolean;
     constructor(v1?: Vec2, v2?: Vec2);
-    _serialize(): {
-        type: ShapeType;
-        vertex1: Vec2;
-        vertex2: Vec2;
-        vertex0: Vec2;
-        vertex3: Vec2;
-        hasVertex0: boolean;
-        hasVertex3: boolean;
-    };
-    static _deserialize(data: any): EdgeShape;
     setNext(v3?: Vec2): this;
     setPrev(v0?: Vec2): this;
     /**
@@ -2219,11 +2167,6 @@ declare class PolygonShape extends Shape {
     m_count: number;
     // @ts-ignore
     constructor(vertices?: Vec2[]);
-    _serialize(): {
-        type: ShapeType;
-        vertices: Vec2[];
-    };
-    static _deserialize(data: any, fixture: any, restore: any): PolygonShape;
     getVertex(index: number): Vec2;
     /**
      * @deprecated Shapes should be treated as immutable.
@@ -2297,16 +2240,6 @@ declare class ChainShape extends Shape {
     m_hasNextVertex: boolean;
     m_isLoop: boolean;
     constructor(vertices?: Vec2[], loop?: boolean);
-    _serialize(): {
-        type: ShapeType;
-        vertices: Vec2[];
-        isLoop: boolean;
-        hasPrevVertex: boolean;
-        hasNextVertex: boolean;
-        prevVertex: Vec2;
-        nextVertex: Vec2;
-    };
-    _deserialize(data: any, fixture: any, restore: any): ChainShape;
     // clear() {
     //   this.m_vertices.length = 0;
     //   this.m_count = 0;
@@ -2469,21 +2402,6 @@ declare class DistanceJoint extends Joint {
     static TYPE: "distance-joint";
     constructor(def: DistanceJointDef);
     constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2);
-    _serialize(): {
-        type: string;
-        bodyA: Body;
-        bodyB: Body;
-        collideConnected: boolean;
-        frequencyHz: number;
-        dampingRatio: number;
-        localAnchorA: Vec2;
-        localAnchorB: Vec2;
-        length: number;
-        impulse: number;
-        gamma: number;
-        bias: number;
-    };
-    static _deserialize(data: any, world: any, restore: any): DistanceJoint;
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -2567,17 +2485,6 @@ declare class FrictionJoint extends Joint {
     // float
     constructor(def: FrictionJointDef);
     constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
-    _serialize(): {
-        type: "friction-joint";
-        bodyA: Body;
-        bodyB: Body;
-        collideConnected: boolean;
-        maxForce: number;
-        maxTorque: number;
-        localAnchorA: Vec2;
-        localAnchorB: Vec2;
-    };
-    static _deserialize(data: any, world: any, restore: any): FrictionJoint;
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -2705,22 +2612,6 @@ declare class RevoluteJoint extends Joint {
     // TODO enum
     constructor(def: RevoluteJointDef);
     constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
-    _serialize(): {
-        type: "revolute-joint";
-        bodyA: Body;
-        bodyB: Body;
-        collideConnected: boolean;
-        lowerAngle: number;
-        upperAngle: number;
-        maxMotorTorque: number;
-        motorSpeed: number;
-        enableLimit: boolean;
-        enableMotor: boolean;
-        localAnchorA: Vec2;
-        localAnchorB: Vec2;
-        referenceAngle: number;
-    };
-    static _deserialize(data: any, world: any, restore: any): RevoluteJoint;
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -2883,23 +2774,6 @@ declare class PrismaticJoint extends Joint {
     static TYPE: "prismatic-joint";
     constructor(def: PrismaticJointDef);
     constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
-    _serialize(): {
-        type: "prismatic-joint";
-        bodyA: Body;
-        bodyB: Body;
-        collideConnected: boolean;
-        lowerTranslation: number;
-        upperTranslation: number;
-        maxMotorForce: number;
-        motorSpeed: number;
-        enableLimit: boolean;
-        enableMotor: boolean;
-        localAnchorA: Vec2;
-        localAnchorB: Vec2;
-        localAxisA: Vec2;
-        referenceAngle: number;
-    };
-    static _deserialize(data: any, world: any, restore: any): PrismaticJoint;
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -3034,16 +2908,6 @@ declare class GearJoint extends Joint {
     // float
     constructor(def: GearJointDef);
     constructor(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number);
-    _serialize(): {
-        type: "gear-joint";
-        bodyA: Body;
-        bodyB: Body;
-        collideConnected: boolean;
-        joint1: RevoluteJoint | PrismaticJoint;
-        joint2: RevoluteJoint | PrismaticJoint;
-        ratio: number;
-    };
-    static _deserialize(data: any, world: any, restore: any): GearJoint;
     /**
      * Get the first joint.
      */
@@ -3125,18 +2989,6 @@ declare class MotorJoint extends Joint {
     // float
     constructor(def: MotorJointDef);
     constructor(def: MotorJointOpt, bodyA: Body, bodyB: Body);
-    _serialize(): {
-        type: "motor-joint";
-        bodyA: Body;
-        bodyB: Body;
-        collideConnected: boolean;
-        maxForce: number;
-        maxTorque: number;
-        correctionFactor: number;
-        linearOffset: Vec2;
-        angularOffset: number;
-    };
-    static _deserialize(data: any, world: any, restore: any): MotorJoint;
     /**
      * Set the maximum friction force in N.
      */
@@ -3241,18 +3093,6 @@ declare class MouseJoint extends Joint {
     static TYPE: "mouse-joint";
     constructor(def: MouseJointDef);
     constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2);
-    _serialize(): {
-        type: "mouse-joint";
-        bodyA: Body;
-        bodyB: Body;
-        collideConnected: boolean;
-        target: Vec2;
-        maxForce: number;
-        frequencyHz: number;
-        dampingRatio: number;
-        _localAnchorB: Vec2;
-    };
-    static _deserialize(data: any, world: any, restore: any): MouseJoint;
     /**
      * Use this to update the target point.
      */
@@ -3484,16 +3324,6 @@ declare class RopeJoint extends Joint {
     // float
     constructor(def: RopeJointDef);
     constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
-    _serialize(): {
-        type: "rope-joint";
-        bodyA: Body;
-        bodyB: Body;
-        collideConnected: boolean;
-        localAnchorA: Vec2;
-        localAnchorB: Vec2;
-        maxLength: number;
-    };
-    static _deserialize(data: any, world: any, restore: any): RopeJoint;
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -3586,18 +3416,6 @@ declare class WeldJoint extends Joint {
     static TYPE: "weld-joint";
     constructor(def: WeldJointDef);
     constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
-    _serialize(): {
-        type: "weld-joint";
-        bodyA: Body;
-        bodyB: Body;
-        collideConnected: boolean;
-        frequencyHz: number;
-        dampingRatio: number;
-        localAnchorA: Vec2;
-        localAnchorB: Vec2;
-        referenceAngle: number;
-    };
-    static _deserialize(data: any, world: any, restore: any): WeldJoint;
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -3714,21 +3532,6 @@ declare class WheelJoint extends Joint {
     // float
     constructor(def: WheelJointDef);
     constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
-    _serialize(): {
-        type: "wheel-joint";
-        bodyA: Body;
-        bodyB: Body;
-        collideConnected: boolean;
-        enableMotor: boolean;
-        maxMotorTorque: number;
-        motorSpeed: number;
-        frequencyHz: number;
-        dampingRatio: number;
-        localAnchorA: Vec2;
-        localAnchorB: Vec2;
-        localAxisA: Vec2;
-    };
-    static _deserialize(data: any, world: any, restore: any): WheelJoint;
     /**
      * The local anchor point relative to bodyA's origin.
      */

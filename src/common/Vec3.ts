@@ -58,6 +58,7 @@ export default class Vec3 {
     _ASSERT && Vec3.assert(this);
   }
 
+  /** @internal */
   _serialize() {
     return {
       x: this.x,
@@ -66,6 +67,7 @@ export default class Vec3 {
     };
   }
 
+  /** @internal */
   static _deserialize(data) {
     const obj = Object.create(Vec3.prototype);
     obj.x = data.x;

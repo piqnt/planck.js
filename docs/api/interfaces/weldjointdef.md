@@ -45,7 +45,7 @@ important for computing the reaction torque.
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:969](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L969)*
+*Defined in [dist/planck.d.ts:947](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L947)*
 
 The first attached body.
 
@@ -59,7 +59,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:973](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L973)*
+*Defined in [dist/planck.d.ts:951](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L951)*
 
 The second attached body.
 
@@ -73,7 +73,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L938)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -88,7 +88,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3553](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3553)*
+*Defined in [dist/planck.d.ts:3388](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3388)*
 
 The damping ratio. 0 = no damping, 1 = critical damping.
 
@@ -102,7 +102,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3549](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3549)*
+*Defined in [dist/planck.d.ts:3384](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3384)*
 
 The mass-spring-damper frequency in Hertz. Rotation only. Disable softness
 with a value of 0.
@@ -113,9 +113,9 @@ ___
 
 • **localAnchorA**: *Vec2*
 
-*Defined in [dist/planck.d.ts:3568](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3568)*
+*Defined in [dist/planck.d.ts:3403](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3403)*
 
-*Defined in [src/dynamics/joint/WeldJoint.ts:73](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/WeldJoint.ts#L73)*
+*Defined in [src/dynamics/joint/WeldJoint.ts:73](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/WeldJoint.ts#L73)*
 
 The local anchor point relative to bodyA's origin.
 The local anchor point relative to bodyA's origin.
@@ -126,9 +126,9 @@ ___
 
 • **localAnchorB**: *Vec2*
 
-*Defined in [dist/planck.d.ts:3572](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3572)*
+*Defined in [dist/planck.d.ts:3407](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3407)*
 
-*Defined in [src/dynamics/joint/WeldJoint.ts:77](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/WeldJoint.ts#L77)*
+*Defined in [src/dynamics/joint/WeldJoint.ts:77](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/WeldJoint.ts#L77)*
 
 The local anchor point relative to bodyB's origin.
 The local anchor point relative to bodyB's origin.
@@ -143,7 +143,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3557](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3557)*
+*Defined in [dist/planck.d.ts:3392](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3392)*
 
 The bodyB angle minus bodyA angle in the reference state (radians).
 
@@ -157,6 +157,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L933)*
 
 Use this to attach application specific data to your joints.

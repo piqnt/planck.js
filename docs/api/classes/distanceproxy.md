@@ -36,7 +36,7 @@ A distance proxy is used by the GJK algorithm. It encapsulates any shape.
 
 \+ **new DistanceProxy**(): *[DistanceProxy](distanceproxy.md)*
 
-*Defined in [dist/planck.d.ts:1957](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1957)*
+*Defined in [dist/planck.d.ts:1928](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1928)*
 
 **Returns:** *[DistanceProxy](distanceproxy.md)*
 
@@ -46,9 +46,9 @@ A distance proxy is used by the GJK algorithm. It encapsulates any shape.
 
 • **m_buffer**: *Vec2[]*
 
-*Defined in [dist/planck.d.ts:1954](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1954)*
+*Defined in [dist/planck.d.ts:1925](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1925)*
 
-*Defined in [src/collision/Distance.ts:232](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L232)*
+*Defined in [src/collision/Distance.ts:232](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L232)*
 
 internal
 internal
@@ -59,9 +59,9 @@ ___
 
 • **m_count**: *number*
 
-*Defined in [dist/planck.d.ts:1956](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1956)*
+*Defined in [dist/planck.d.ts:1927](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1927)*
 
-*Defined in [src/collision/Distance.ts:234](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L234)*
+*Defined in [src/collision/Distance.ts:234](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L234)*
 
 internal
 internal
@@ -72,9 +72,9 @@ ___
 
 • **m_radius**: *number*
 
-*Defined in [dist/planck.d.ts:1957](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1957)*
+*Defined in [dist/planck.d.ts:1928](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1928)*
 
-*Defined in [src/collision/Distance.ts:235](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L235)*
+*Defined in [src/collision/Distance.ts:235](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L235)*
 
 internal
 internal
@@ -85,9 +85,9 @@ ___
 
 • **m_vertices**: *Vec2[]*
 
-*Defined in [dist/planck.d.ts:1955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1955)*
+*Defined in [dist/planck.d.ts:1926](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1926)*
 
-*Defined in [src/collision/Distance.ts:233](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L233)*
+*Defined in [src/collision/Distance.ts:233](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L233)*
 
 internal
 internal
@@ -98,7 +98,7 @@ internal
 
 ▸ **getSupport**(`d`: [Vec2](vec2.md)): *number*
 
-*Defined in [dist/planck.d.ts:1970](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1970)*
+*Defined in [dist/planck.d.ts:1941](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1941)*
 
 Get the supporting vertex index in the given direction.
 
@@ -112,7 +112,7 @@ Name | Type |
 
 ▸ **getSupport**(`d`: Vec2): *number*
 
-*Defined in [src/collision/Distance.ts:265](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L265)*
+*Defined in [src/collision/Distance.ts:265](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L265)*
 
 Get the supporting vertex index in the given direction.
 
@@ -130,7 +130,7 @@ ___
 
 ▸ **getSupportVertex**(`d`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [dist/planck.d.ts:1974](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1974)*
+*Defined in [dist/planck.d.ts:1945](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1945)*
 
 Get the supporting vertex in the given direction.
 
@@ -144,7 +144,7 @@ Name | Type |
 
 ▸ **getSupportVertex**(`d`: Vec2): *Vec2*
 
-*Defined in [src/collision/Distance.ts:282](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L282)*
+*Defined in [src/collision/Distance.ts:282](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L282)*
 
 Get the supporting vertex in the given direction.
 
@@ -162,7 +162,7 @@ ___
 
 ▸ **getVertex**(`index`: number): *[Vec2](vec2.md)*
 
-*Defined in [dist/planck.d.ts:1966](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1966)*
+*Defined in [dist/planck.d.ts:1937](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1937)*
 
 Get a vertex by index. Used by Distance.
 
@@ -176,7 +176,7 @@ Name | Type |
 
 ▸ **getVertex**(`index`: number): *Vec2*
 
-*Defined in [src/collision/Distance.ts:256](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L256)*
+*Defined in [src/collision/Distance.ts:256](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L256)*
 
 Get a vertex by index. Used by Distance.
 
@@ -194,7 +194,7 @@ ___
 
 ▸ **getVertexCount**(): *number*
 
-*Defined in [dist/planck.d.ts:1962](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1962)*
+*Defined in [dist/planck.d.ts:1933](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1933)*
 
 Get the vertex count.
 
@@ -202,7 +202,7 @@ Get the vertex count.
 
 ▸ **getVertexCount**(): *number*
 
-*Defined in [src/collision/Distance.ts:248](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L248)*
+*Defined in [src/collision/Distance.ts:248](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L248)*
 
 Get the vertex count.
 
@@ -214,7 +214,7 @@ ___
 
 ▸ **set**(`shape`: [Shape](shape.md), `index`: number): *void*
 
-*Defined in [dist/planck.d.ts:1979](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1979)*
+*Defined in [dist/planck.d.ts:1950](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1950)*
 
 Initialize the proxy using the given shape. The shape must remain in scope
 while the proxy is in use.
@@ -230,7 +230,7 @@ Name | Type |
 
 ▸ **set**(`shape`: Shape, `index`: number): *void*
 
-*Defined in [src/collision/Distance.ts:291](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L291)*
+*Defined in [src/collision/Distance.ts:291](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L291)*
 
 Initialize the proxy using the given shape. The shape must remain in scope
 while the proxy is in use.

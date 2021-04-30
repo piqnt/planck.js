@@ -23,9 +23,9 @@ Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`
 
 • **maxFraction**: *number*
 
-*Defined in [dist/planck.d.ts:411](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L411)*
+*Defined in [dist/planck.d.ts:400](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L400)*
 
-*Defined in [src/collision/AABB.ts:40](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/AABB.ts#L40)*
+*Defined in [src/collision/AABB.ts:40](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/AABB.ts#L40)*
 
 ___
 
@@ -33,9 +33,9 @@ ___
 
 • **p1**: *Vec2*
 
-*Defined in [dist/planck.d.ts:409](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L409)*
+*Defined in [dist/planck.d.ts:398](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L398)*
 
-*Defined in [src/collision/AABB.ts:38](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/AABB.ts#L38)*
+*Defined in [src/collision/AABB.ts:38](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/AABB.ts#L38)*
 
 ___
 
@@ -43,6 +43,6 @@ ___
 
 • **p2**: *Vec2*
 
-*Defined in [dist/planck.d.ts:410](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L410)*
+*Defined in [dist/planck.d.ts:399](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L399)*
 
-*Defined in [src/collision/AABB.ts:39](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/AABB.ts#L39)*
+*Defined in [src/collision/AABB.ts:39](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/AABB.ts#L39)*

@@ -168,6 +168,7 @@ export default class DistanceJoint extends Joint {
     // = invMass1 + invI1 * cross(r1, u)^2 + invMass2 + invI2 * cross(r2, u)^2
   }
 
+  /** @internal */
   _serialize() {
     return {
       type: this.m_type,
@@ -188,6 +189,7 @@ export default class DistanceJoint extends Joint {
     };
   }
 
+  /** @internal */
   static _deserialize(data, world, restore) {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
@@ -196,9 +198,7 @@ export default class DistanceJoint extends Joint {
     return joint;
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   _setAnchors(def) {
     if (def.anchorA) {
       this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));

@@ -63,7 +63,7 @@ joints will be broken.
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:969](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L969)*
+*Defined in [dist/planck.d.ts:947](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L947)*
 
 The first attached body.
 
@@ -77,7 +77,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:973](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L973)*
+*Defined in [dist/planck.d.ts:951](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L951)*
 
 The second attached body.
 
@@ -91,7 +91,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L938)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -106,7 +106,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2656](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2656)*
+*Defined in [dist/planck.d.ts:2568](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2568)*
 
 A flag to enable joint limits.
 
@@ -120,7 +120,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2660](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2660)*
+*Defined in [dist/planck.d.ts:2572](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2572)*
 
 A flag to enable the joint motor.
 
@@ -130,9 +130,9 @@ ___
 
 • **localAnchorA**: *Vec2*
 
-*Defined in [dist/planck.d.ts:2678](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2678)*
+*Defined in [dist/planck.d.ts:2590](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2590)*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:102](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/RevoluteJoint.ts#L102)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:102](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/RevoluteJoint.ts#L102)*
 
 The local anchor point relative to bodyA's origin.
 The local anchor point relative to bodyA's origin.
@@ -143,9 +143,9 @@ ___
 
 • **localAnchorB**: *Vec2*
 
-*Defined in [dist/planck.d.ts:2682](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2682)*
+*Defined in [dist/planck.d.ts:2594](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2594)*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:106](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/RevoluteJoint.ts#L106)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:106](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/RevoluteJoint.ts#L106)*
 
 The local anchor point relative to bodyB's origin.
 The local anchor point relative to bodyB's origin.
@@ -160,7 +160,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2639](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2639)*
+*Defined in [dist/planck.d.ts:2551](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2551)*
 
 The lower angle for the joint limit (radians).
 
@@ -174,7 +174,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2648](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2648)*
+*Defined in [dist/planck.d.ts:2560](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2560)*
 
 The maximum motor torque used to achieve the desired motor speed. Usually
 in N-m.
@@ -189,7 +189,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2652](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2652)*
+*Defined in [dist/planck.d.ts:2564](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2564)*
 
 The desired motor speed. Usually in radians per second.
 
@@ -199,9 +199,9 @@ ___
 
 • **referenceAngle**: *number*
 
-*Defined in [dist/planck.d.ts:2686](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2686)*
+*Defined in [dist/planck.d.ts:2598](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2598)*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:110](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/RevoluteJoint.ts#L110)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:110](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/RevoluteJoint.ts#L110)*
 
 The bodyB angle minus bodyA angle in the reference state (radians).
 The bodyB angle minus bodyA angle in the reference state (radians).
@@ -216,7 +216,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2643](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2643)*
+*Defined in [dist/planck.d.ts:2555](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2555)*
 
 The upper angle for the joint limit (radians).
 
@@ -230,6 +230,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L933)*
 
 Use this to attach application specific data to your joints.

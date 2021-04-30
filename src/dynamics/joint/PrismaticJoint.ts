@@ -279,6 +279,7 @@ export default class PrismaticJoint extends Joint {
     // df = f2 - f1
   }
 
+  /** @internal */
   _serialize() {
     return {
       type: this.m_type,
@@ -300,6 +301,7 @@ export default class PrismaticJoint extends Joint {
     };
   }
 
+  /** @internal */
   static _deserialize(data, world, restore) {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
@@ -309,9 +311,7 @@ export default class PrismaticJoint extends Joint {
     return joint;
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   _setAnchors(def) {
     if (def.anchorA) {
       this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));

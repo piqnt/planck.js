@@ -48,7 +48,7 @@ game.
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L938)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -59,9 +59,9 @@ ___
 
 • **enableLimit**? : *boolean*
 
-*Defined in [dist/planck.d.ts:2820](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2820)*
+*Defined in [dist/planck.d.ts:2716](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2716)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:59](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PrismaticJoint.ts#L59)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:59](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PrismaticJoint.ts#L59)*
 
 Enable/disable the joint limit.
 Enable/disable the joint limit.
@@ -72,9 +72,9 @@ ___
 
 • **enableMotor**? : *boolean*
 
-*Defined in [dist/planck.d.ts:2832](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2832)*
+*Defined in [dist/planck.d.ts:2728](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2728)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:71](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PrismaticJoint.ts#L71)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:71](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PrismaticJoint.ts#L71)*
 
 Enable/disable the joint motor.
 Enable/disable the joint motor.
@@ -85,9 +85,9 @@ ___
 
 • **lowerTranslation**? : *number*
 
-*Defined in [dist/planck.d.ts:2824](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2824)*
+*Defined in [dist/planck.d.ts:2720](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2720)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:63](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PrismaticJoint.ts#L63)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:63](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PrismaticJoint.ts#L63)*
 
 The lower translation limit, usually in meters.
 The lower translation limit, usually in meters.
@@ -98,9 +98,9 @@ ___
 
 • **maxMotorForce**? : *number*
 
-*Defined in [dist/planck.d.ts:2836](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2836)*
+*Defined in [dist/planck.d.ts:2732](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2732)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:75](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PrismaticJoint.ts#L75)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:75](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PrismaticJoint.ts#L75)*
 
 The maximum motor torque, usually in N-m.
 The maximum motor torque, usually in N-m.
@@ -111,9 +111,9 @@ ___
 
 • **motorSpeed**? : *number*
 
-*Defined in [dist/planck.d.ts:2840](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2840)*
+*Defined in [dist/planck.d.ts:2736](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2736)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:79](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PrismaticJoint.ts#L79)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:79](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PrismaticJoint.ts#L79)*
 
 The desired motor speed in radians per second.
 The desired motor speed in radians per second.
@@ -124,9 +124,9 @@ ___
 
 • **upperTranslation**? : *number*
 
-*Defined in [dist/planck.d.ts:2828](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2828)*
+*Defined in [dist/planck.d.ts:2724](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2724)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:67](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PrismaticJoint.ts#L67)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:67](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PrismaticJoint.ts#L67)*
 
 The upper translation limit, usually in meters.
 The upper translation limit, usually in meters.
@@ -141,6 +141,6 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L933)*
 
 Use this to attach application specific data to your joints.

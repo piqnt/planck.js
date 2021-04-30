@@ -244,6 +244,7 @@ export default class GearJoint extends Joint {
     // K = J * invM * JT = invMass + invI * cross(r, ug)^2
   }
 
+  /** @internal */
   _serialize() {
     return {
       type: this.m_type,
@@ -259,6 +260,7 @@ export default class GearJoint extends Joint {
     };
   }
 
+  /** @internal */
   static _deserialize(data, world, restore) {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);

@@ -84,6 +84,7 @@ export default class ChainShape extends Shape {
     }
   }
 
+  /** @internal */
   _serialize() {
     const data = {
       type: this.m_type,
@@ -103,6 +104,7 @@ export default class ChainShape extends Shape {
     return data;
   }
 
+  /** @internal */
   _deserialize(data, fixture, restore) {
     const vertices = [] as Vec2[];
     if (data.vertices) {

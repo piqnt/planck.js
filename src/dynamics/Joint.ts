@@ -127,8 +127,10 @@ export default abstract class Joint {
 
   static TYPES: { [id: string]: new (...args: any[]) => Joint; } = {};
 
+  /** @internal */
   abstract _serialize(): object;
 
+  /** @internal */
   static _deserialize = function(data, context, restore) {
     const clazz = Joint.TYPES[data.type];
     return clazz && restore(clazz, data);

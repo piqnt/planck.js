@@ -19,7 +19,7 @@
 
 • **bestIndex**: *number*
 
-*Defined in [src/collision/shape/CollidePolygon.ts:48](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/shape/CollidePolygon.ts#L48)*
+*Defined in [src/collision/shape/CollidePolygon.ts:48](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/shape/CollidePolygon.ts#L48)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **maxSeparation**: *number*
 
-*Defined in [src/collision/shape/CollidePolygon.ts:47](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/shape/CollidePolygon.ts#L47)*
+*Defined in [src/collision/shape/CollidePolygon.ts:47](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/shape/CollidePolygon.ts#L47)*

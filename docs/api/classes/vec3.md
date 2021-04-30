@@ -10,7 +10,7 @@
 
 ▸ **Vec3**(`x`: number, `y`: number, `z`: number): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:188](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L188)*
+*Defined in [dist/planck.d.ts:183](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L183)*
 
 **Parameters:**
 
@@ -24,7 +24,7 @@ Name | Type |
 
 ▸ **Vec3**(`obj`: object): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:189](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L189)*
+*Defined in [dist/planck.d.ts:184](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L184)*
 
 **Parameters:**
 
@@ -40,7 +40,7 @@ Name | Type |
 
 ▸ **Vec3**(): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:194](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L194)*
+*Defined in [dist/planck.d.ts:189](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L189)*
 
 **Returns:** *[Vec3](vec3.md)*
 
@@ -58,7 +58,6 @@ Name | Type |
 
 ### Methods
 
-* [_serialize](vec3.md#_serialize)
 * [add](vec3.md#add)
 * [mul](vec3.md#mul)
 * [neg](vec3.md#neg)
@@ -66,7 +65,6 @@ Name | Type |
 * [setZero](vec3.md#setzero)
 * [sub](vec3.md#sub)
 * [toString](vec3.md#tostring)
-* [_deserialize](vec3.md#static-_deserialize)
 * [add](vec3.md#static-add)
 * [areEqual](vec3.md#static-areequal)
 * [assert](vec3.md#static-assert)
@@ -85,7 +83,7 @@ Name | Type |
 
 \+ **new Vec3**(`x`: number, `y`: number, `z`: number): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:198](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L198)*
+*Defined in [dist/planck.d.ts:193](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L193)*
 
 **Parameters:**
 
@@ -99,7 +97,7 @@ Name | Type |
 
 \+ **new Vec3**(`obj`: object): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:199](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L199)*
+*Defined in [dist/planck.d.ts:194](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L194)*
 
 **Parameters:**
 
@@ -115,13 +113,13 @@ Name | Type |
 
 \+ **new Vec3**(): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:204](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L204)*
+*Defined in [dist/planck.d.ts:199](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L199)*
 
 **Returns:** *[Vec3](vec3.md)*
 
 \+ **new Vec3**(`x`: number, `y`: number, `z`: number): *[Vec3](vec3.md)*
 
-*Defined in [src/common/Vec3.ts:36](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Vec3.ts#L36)*
+*Defined in [src/common/Vec3.ts:36](https://github.com/shakiba/planck.js/blob/3ede11b/src/common/Vec3.ts#L36)*
 
 **Parameters:**
 
@@ -135,7 +133,7 @@ Name | Type |
 
 \+ **new Vec3**(`obj`: object): *[Vec3](vec3.md)*
 
-*Defined in [src/common/Vec3.ts:38](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Vec3.ts#L38)*
+*Defined in [src/common/Vec3.ts:38](https://github.com/shakiba/planck.js/blob/3ede11b/src/common/Vec3.ts#L38)*
 
 **Parameters:**
 
@@ -151,7 +149,7 @@ Name | Type |
 
 \+ **new Vec3**(): *[Vec3](vec3.md)*
 
-*Defined in [src/common/Vec3.ts:39](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Vec3.ts#L39)*
+*Defined in [src/common/Vec3.ts:39](https://github.com/shakiba/planck.js/blob/3ede11b/src/common/Vec3.ts#L39)*
 
 **Returns:** *[Vec3](vec3.md)*
 
@@ -161,9 +159,9 @@ Name | Type |
 
 • **x**: *number*
 
-*Defined in [dist/planck.d.ts:196](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L196)*
+*Defined in [dist/planck.d.ts:191](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L191)*
 
-*Defined in [src/common/Vec3.ts:34](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Vec3.ts#L34)*
+*Defined in [src/common/Vec3.ts:34](https://github.com/shakiba/planck.js/blob/3ede11b/src/common/Vec3.ts#L34)*
 
 ___
 
@@ -171,9 +169,9 @@ ___
 
 • **y**: *number*
 
-*Defined in [dist/planck.d.ts:197](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L197)*
+*Defined in [dist/planck.d.ts:192](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L192)*
 
-*Defined in [src/common/Vec3.ts:35](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Vec3.ts#L35)*
+*Defined in [src/common/Vec3.ts:35](https://github.com/shakiba/planck.js/blob/3ede11b/src/common/Vec3.ts#L35)*
 
 ___
 
@@ -181,33 +179,17 @@ ___
 
 • **z**: *number*
 
-*Defined in [dist/planck.d.ts:198](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L198)*
+*Defined in [dist/planck.d.ts:193](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L193)*
 
-*Defined in [src/common/Vec3.ts:36](https://github.com/shakiba/planck.js/blob/7e469c4/src/common/Vec3.ts#L36)*
+*Defined in [src/common/Vec3.ts:36](https://github.com/shakiba/planck.js/blob/3ede11b/src/common/Vec3.ts#L36)*
 
 ## Methods
-
-###  _serialize
-
-▸ **_serialize**(): *object*
-
-*Defined in [dist/planck.d.ts:206](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L206)*
-
-**Returns:** *object*
-
-* **x**: *number*
-
-* **y**: *number*
-
-* **z**: *number*
-
-___
 
 ###  add
 
 ▸ **add**(`w`: [Vec3](vec3.md)): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:222](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L222)*
+*Defined in [dist/planck.d.ts:211](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L211)*
 
 **Parameters:**
 
@@ -223,7 +205,7 @@ ___
 
 ▸ **mul**(`m`: number): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:224](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L224)*
+*Defined in [dist/planck.d.ts:213](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L213)*
 
 **Parameters:**
 
@@ -239,7 +221,7 @@ ___
 
 ▸ **neg**(): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:237](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L237)*
+*Defined in [dist/planck.d.ts:226](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L226)*
 
 **Returns:** *[Vec3](vec3.md)*
 
@@ -249,7 +231,7 @@ ___
 
 ▸ **set**(`x`: number, `y`: number, `z`: number): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:221](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L221)*
+*Defined in [dist/planck.d.ts:210](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L210)*
 
 **Parameters:**
 
@@ -267,7 +249,7 @@ ___
 
 ▸ **setZero**(): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:220](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L220)*
+*Defined in [dist/planck.d.ts:209](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L209)*
 
 **Returns:** *[Vec3](vec3.md)*
 
@@ -277,7 +259,7 @@ ___
 
 ▸ **sub**(`w`: [Vec3](vec3.md)): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:223](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L223)*
+*Defined in [dist/planck.d.ts:212](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L212)*
 
 **Parameters:**
 
@@ -293,25 +275,9 @@ ___
 
 ▸ **toString**(): *string*
 
-*Defined in [dist/planck.d.ts:214](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L214)*
+*Defined in [dist/planck.d.ts:203](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L203)*
 
 **Returns:** *string*
-
-___
-
-### `Static` _deserialize
-
-▸ **_deserialize**(`data`: any): *any*
-
-*Defined in [dist/planck.d.ts:211](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L211)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`data` | any |
-
-**Returns:** *any*
 
 ___
 
@@ -319,7 +285,7 @@ ___
 
 ▸ **add**(`v`: [Vec3](vec3.md), `w`: [Vec3](vec3.md)): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:234](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L234)*
+*Defined in [dist/planck.d.ts:223](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L223)*
 
 **Parameters:**
 
@@ -336,7 +302,7 @@ ___
 
 ▸ **areEqual**(`v`: [Vec3](vec3.md), `w`: [Vec3](vec3.md)): *boolean*
 
-*Defined in [dist/planck.d.ts:225](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L225)*
+*Defined in [dist/planck.d.ts:214](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L214)*
 
 **Parameters:**
 
@@ -353,7 +319,7 @@ ___
 
 ▸ **assert**(`o`: any): *void*
 
-*Defined in [dist/planck.d.ts:219](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L219)*
+*Defined in [dist/planck.d.ts:208](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L208)*
 
 **Parameters:**
 
@@ -369,7 +335,7 @@ ___
 
 ▸ **clone**(`v`: [Vec3](vec3.md)): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:213](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L213)*
+*Defined in [dist/planck.d.ts:202](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L202)*
 
 **Parameters:**
 
@@ -385,7 +351,7 @@ ___
 
 ▸ **cross**(`v`: [Vec3](vec3.md), `w`: [Vec3](vec3.md)): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:233](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L233)*
+*Defined in [dist/planck.d.ts:222](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L222)*
 
 Perform the cross product on two vectors. In 2D this produces a scalar.
 
@@ -404,7 +370,7 @@ ___
 
 ▸ **dot**(`v`: [Vec3](vec3.md), `w`: [Vec3](vec3.md)): *number*
 
-*Defined in [dist/planck.d.ts:229](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L229)*
+*Defined in [dist/planck.d.ts:218](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L218)*
 
 Perform the dot product on two vectors.
 
@@ -423,7 +389,7 @@ ___
 
 ▸ **isValid**(`v`: any): *boolean*
 
-*Defined in [dist/planck.d.ts:218](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L218)*
+*Defined in [dist/planck.d.ts:207](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L207)*
 
 Does this vector contain finite coordinates?
 
@@ -441,7 +407,7 @@ ___
 
 ▸ **mul**(`v`: [Vec3](vec3.md), `m`: number): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:236](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L236)*
+*Defined in [dist/planck.d.ts:225](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L225)*
 
 **Parameters:**
 
@@ -458,7 +424,7 @@ ___
 
 ▸ **neg**(`v`: [Vec3](vec3.md)): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:238](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L238)*
+*Defined in [dist/planck.d.ts:227](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L227)*
 
 **Parameters:**
 
@@ -474,7 +440,7 @@ ___
 
 ▸ **sub**(`v`: [Vec3](vec3.md), `w`: [Vec3](vec3.md)): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:235](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L235)*
+*Defined in [dist/planck.d.ts:224](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L224)*
 
 **Parameters:**
 
@@ -491,6 +457,6 @@ ___
 
 ▸ **zero**(): *[Vec3](vec3.md)*
 
-*Defined in [dist/planck.d.ts:212](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L212)*
+*Defined in [dist/planck.d.ts:201](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L201)*
 
 **Returns:** *[Vec3](vec3.md)*

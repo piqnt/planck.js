@@ -29,7 +29,7 @@ at the testbed.
 
 ▸ **MouseJoint**(`def`: [MouseJointDef](../interfaces/mousejointdef.md)): *[MouseJoint](mousejoint.md)*
 
-*Defined in [dist/planck.d.ts:3224](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3224)*
+*Defined in [dist/planck.d.ts:3081](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3081)*
 
 A mouse joint is used to make a point on a body track a specified world
 point. This a soft constraint with a maximum force. This allows the
@@ -56,7 +56,7 @@ Name | Type |
 
 ▸ **MouseJoint**(`def`: [MouseJointOpt](../interfaces/mousejointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `target`: [Vec2](vec2.md)): *[MouseJoint](mousejoint.md)*
 
-*Defined in [dist/planck.d.ts:3225](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3225)*
+*Defined in [dist/planck.d.ts:3082](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3082)*
 
 A mouse joint is used to make a point on a body track a specified world
 point. This a soft constraint with a maximum force. This allows the
@@ -97,7 +97,6 @@ Name | Type |
 
 ### Methods
 
-* [_serialize](mousejoint.md#_serialize)
 * [getAnchorA](mousejoint.md#getanchora)
 * [getAnchorB](mousejoint.md#getanchorb)
 * [getBodyA](mousejoint.md#getbodya)
@@ -122,7 +121,6 @@ Name | Type |
 * [shiftOrigin](mousejoint.md#shiftorigin)
 * [solvePositionConstraints](mousejoint.md#solvepositionconstraints)
 * [solveVelocityConstraints](mousejoint.md#solvevelocityconstraints)
-* [_deserialize](mousejoint.md#static-_deserialize)
 
 ## Constructors
 
@@ -132,7 +130,7 @@ Name | Type |
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3236](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3236)*
+*Defined in [dist/planck.d.ts:3093](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3093)*
 
 **Parameters:**
 
@@ -146,7 +144,7 @@ Name | Type |
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3237](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3237)*
+*Defined in [dist/planck.d.ts:3094](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3094)*
 
 **Parameters:**
 
@@ -163,7 +161,7 @@ Name | Type |
 
 *Overrides void*
 
-*Defined in [src/dynamics/joint/MouseJoint.ts:106](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/MouseJoint.ts#L106)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:106](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/MouseJoint.ts#L106)*
 
 **Parameters:**
 
@@ -177,7 +175,7 @@ Name | Type |
 
 *Overrides void*
 
-*Defined in [src/dynamics/joint/MouseJoint.ts:108](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/MouseJoint.ts#L108)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:108](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/MouseJoint.ts#L108)*
 
 **Parameters:**
 
@@ -196,9 +194,9 @@ Name | Type |
 
 ▪ **TYPE**: *"mouse-joint"* = 'mouse-joint' as 'mouse-joint'
 
-*Defined in [dist/planck.d.ts:3236](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3236)*
+*Defined in [dist/planck.d.ts:3093](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3093)*
 
-*Defined in [src/dynamics/joint/MouseJoint.ts:89](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/MouseJoint.ts#L89)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:89](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/MouseJoint.ts#L89)*
 
 ___
 
@@ -208,7 +206,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[TYPES](distancejoint.md#static-types)*
 
-*Defined in [src/dynamics/Joint.ts:128](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L128)*
+*Defined in [src/dynamics/Joint.ts:128](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L128)*
 
 #### Type declaration:
 
@@ -216,43 +214,13 @@ ___
 
 ## Methods
 
-###  _serialize
-
-▸ **_serialize**(): *object*
-
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:3239](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3239)*
-
-**Returns:** *object*
-
-* **_localAnchorB**: *[Vec2](vec2.md)*
-
-* **bodyA**: *[Body](body.md)*
-
-* **bodyB**: *[Body](body.md)*
-
-* **collideConnected**: *boolean*
-
-* **dampingRatio**: *number*
-
-* **frequencyHz**: *number*
-
-* **maxForce**: *number*
-
-* **target**: *[Vec2](vec2.md)*
-
-* **type**: *"mouse-joint"*
-
-___
-
 ###  getAnchorA
 
 ▸ **getAnchorA**(): *[Vec2](vec2.md)*
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3283](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3283)*
+*Defined in [dist/planck.d.ts:3128](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3128)*
 
 Get the anchor point on bodyA in world coordinates.
 
@@ -266,7 +234,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3287](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3287)*
+*Defined in [dist/planck.d.ts:3132](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3132)*
 
 Get the anchor point on bodyB in world coordinates.
 
@@ -280,7 +248,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getBodyA](distancejoint.md#getbodya)*
 
-*Defined in [src/dynamics/Joint.ts:154](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L154)*
+*Defined in [src/dynamics/Joint.ts:156](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L156)*
 
 Get the first body attached to this joint.
 
@@ -294,7 +262,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getBodyB](distancejoint.md#getbodyb)*
 
-*Defined in [src/dynamics/Joint.ts:161](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L161)*
+*Defined in [src/dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L163)*
 
 Get the second body attached to this joint.
 
@@ -308,7 +276,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getCollideConnected](distancejoint.md#getcollideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:185](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L185)*
+*Defined in [src/dynamics/Joint.ts:187](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L187)*
 
 Get collide connected. Note: modifying the collide connect flag won't work
 correctly because the flag is only checked when fixture AABBs begin to
@@ -322,7 +290,7 @@ ___
 
 ▸ **getDampingRatio**(): *number*
 
-*Defined in [dist/planck.d.ts:3279](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3279)*
+*Defined in [dist/planck.d.ts:3124](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3124)*
 
 Get the damping ratio (dimensionless).
 
@@ -334,7 +302,7 @@ ___
 
 ▸ **getFrequency**(): *number*
 
-*Defined in [dist/planck.d.ts:3271](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3271)*
+*Defined in [dist/planck.d.ts:3116](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3116)*
 
 Get the frequency in Hertz.
 
@@ -346,7 +314,7 @@ ___
 
 ▸ **getMaxForce**(): *number*
 
-*Defined in [dist/planck.d.ts:3263](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3263)*
+*Defined in [dist/planck.d.ts:3108](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3108)*
 
 Get the maximum force in Newtons.
 
@@ -360,7 +328,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getNext](distancejoint.md#getnext)*
 
-*Defined in [src/dynamics/Joint.ts:168](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L168)*
+*Defined in [src/dynamics/Joint.ts:170](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L170)*
 
 Get the next joint the world joint list.
 
@@ -374,7 +342,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3291](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3291)*
+*Defined in [dist/planck.d.ts:3136](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3136)*
 
 Get the reaction force on bodyB at the joint anchor in Newtons.
 
@@ -394,7 +362,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3295](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3295)*
+*Defined in [dist/planck.d.ts:3140](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3140)*
 
 Get the reaction torque on bodyB in N*m.
 
@@ -412,7 +380,7 @@ ___
 
 ▸ **getTarget**(): *[Vec2](vec2.md)*
 
-*Defined in [dist/planck.d.ts:3255](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3255)*
+*Defined in [dist/planck.d.ts:3100](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3100)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -424,7 +392,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getType](distancejoint.md#gettype)*
 
-*Defined in [src/dynamics/Joint.ts:147](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L147)*
+*Defined in [src/dynamics/Joint.ts:149](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L149)*
 
 Get the type of the concrete joint.
 
@@ -438,7 +406,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getUserData](distancejoint.md#getuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:172](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L172)*
+*Defined in [src/dynamics/Joint.ts:174](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L174)*
 
 **Returns:** *unknown*
 
@@ -450,7 +418,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3300](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3300)*
+*Defined in [dist/planck.d.ts:3145](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3145)*
 
 **Parameters:**
 
@@ -468,7 +436,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[isActive](distancejoint.md#isactive)*
 
-*Defined in [src/dynamics/Joint.ts:140](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L140)*
+*Defined in [src/dynamics/Joint.ts:142](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L142)*
 
 Short-cut function to determine if either body is inactive.
 
@@ -480,7 +448,7 @@ ___
 
 ▸ **setDampingRatio**(`ratio`: any): *void*
 
-*Defined in [dist/planck.d.ts:3275](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3275)*
+*Defined in [dist/planck.d.ts:3120](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3120)*
 
 Set the damping ratio (dimensionless).
 
@@ -498,7 +466,7 @@ ___
 
 ▸ **setFrequency**(`hz`: any): *void*
 
-*Defined in [dist/planck.d.ts:3267](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3267)*
+*Defined in [dist/planck.d.ts:3112](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3112)*
 
 Set the frequency in Hertz.
 
@@ -516,7 +484,7 @@ ___
 
 ▸ **setMaxForce**(`force`: any): *void*
 
-*Defined in [dist/planck.d.ts:3259](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3259)*
+*Defined in [dist/planck.d.ts:3104](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3104)*
 
 Set the maximum force in Newtons.
 
@@ -534,7 +502,7 @@ ___
 
 ▸ **setTarget**(`target`: any): *void*
 
-*Defined in [dist/planck.d.ts:3254](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3254)*
+*Defined in [dist/planck.d.ts:3099](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3099)*
 
 Use this to update the target point.
 
@@ -554,7 +522,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[setUserData](distancejoint.md#setuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:176](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L176)*
+*Defined in [src/dynamics/Joint.ts:178](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L178)*
 
 **Parameters:**
 
@@ -572,7 +540,7 @@ ___
 
 *Overrides [DistanceJoint](distancejoint.md).[shiftOrigin](distancejoint.md#shiftorigin)*
 
-*Defined in [dist/planck.d.ts:3299](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3299)*
+*Defined in [dist/planck.d.ts:3144](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3144)*
 
 Shift the origin for any points stored in world coordinates.
 
@@ -592,7 +560,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3305](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3305)*
+*Defined in [dist/planck.d.ts:3150](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3150)*
 
 This returns true if the position errors are within tolerance.
 
@@ -612,7 +580,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3301](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3301)*
+*Defined in [dist/planck.d.ts:3146](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3146)*
 
 **Parameters:**
 
@@ -621,23 +589,3 @@ Name | Type |
 `step` | any |
 
 **Returns:** *void*
-
-___
-
-### `Static` _deserialize
-
-▸ **_deserialize**(`data`: any, `world`: any, `restore`: any): *[MouseJoint](mousejoint.md)*
-
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:3250](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3250)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`data` | any |
-`world` | any |
-`restore` | any |
-
-**Returns:** *[MouseJoint](mousejoint.md)*

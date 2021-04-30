@@ -72,6 +72,7 @@ export default class PolygonShape extends Shape {
     }
   }
 
+  /** @internal */
   _serialize() {
     return {
       type: this.m_type,
@@ -80,6 +81,7 @@ export default class PolygonShape extends Shape {
     };
   }
 
+  /** @internal */
   static _deserialize(data, fixture, restore) {
     const vertices = [] as Vec2[];
     if (data.vertices) {

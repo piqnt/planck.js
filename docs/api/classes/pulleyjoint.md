@@ -33,7 +33,7 @@ length.
 
 ▸ **PulleyJoint**(`def`: [PulleyJointDef](../interfaces/pulleyjointdef.md)): *[PulleyJoint](pulleyjoint.md)*
 
-*Defined in [dist/planck.d.ts:3347](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3347)*
+*Defined in [dist/planck.d.ts:3192](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3192)*
 
 The pulley joint is connected to two bodies and two fixed ground points. The
 pulley supports a ratio such that: length1 + ratio * length2 <= constant
@@ -64,7 +64,7 @@ Name | Type |
 
 ▸ **PulleyJoint**(`def`: [PulleyJointOpt](../interfaces/pulleyjointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `groundA`: [Vec2](vec2.md), `groundB`: [Vec2](vec2.md), `anchorA`: [Vec2](vec2.md), `anchorB`: [Vec2](vec2.md), `ratio`: number): *[PulleyJoint](pulleyjoint.md)*
 
-*Defined in [dist/planck.d.ts:3348](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3348)*
+*Defined in [dist/planck.d.ts:3193](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3193)*
 
 The pulley joint is connected to two bodies and two fixed ground points. The
 pulley supports a ratio such that: length1 + ratio * length2 <= constant
@@ -148,7 +148,7 @@ Name | Type |
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3362](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3362)*
+*Defined in [dist/planck.d.ts:3207](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3207)*
 
 **Parameters:**
 
@@ -162,7 +162,7 @@ Name | Type |
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3364](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3364)*
+*Defined in [dist/planck.d.ts:3209](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3209)*
 
 **Parameters:**
 
@@ -183,7 +183,7 @@ Name | Type |
 
 *Overrides void*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:120](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PulleyJoint.ts#L120)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:120](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PulleyJoint.ts#L120)*
 
 **Parameters:**
 
@@ -197,7 +197,7 @@ Name | Type |
 
 *Overrides void*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:122](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PulleyJoint.ts#L122)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:122](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PulleyJoint.ts#L122)*
 
 **Parameters:**
 
@@ -220,9 +220,9 @@ Name | Type |
 
 ▪ **MIN_PULLEY_LENGTH**: *number* = 2
 
-*Defined in [dist/planck.d.ts:3362](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3362)*
+*Defined in [dist/planck.d.ts:3207](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3207)*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:97](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PulleyJoint.ts#L97)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:97](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PulleyJoint.ts#L97)*
 
 ___
 
@@ -230,9 +230,9 @@ ___
 
 ▪ **TYPE**: *"pulley-joint"* = 'pulley-joint' as 'pulley-joint'
 
-*Defined in [dist/planck.d.ts:3361](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3361)*
+*Defined in [dist/planck.d.ts:3206](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3206)*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:96](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/PulleyJoint.ts#L96)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:96](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/PulleyJoint.ts#L96)*
 
 ___
 
@@ -242,7 +242,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[TYPES](distancejoint.md#static-types)*
 
-*Defined in [src/dynamics/Joint.ts:128](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L128)*
+*Defined in [src/dynamics/Joint.ts:128](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L128)*
 
 #### Type declaration:
 
@@ -256,7 +256,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3366](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3366)*
+*Defined in [dist/planck.d.ts:3211](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3211)*
 
 **Returns:** *object*
 
@@ -290,7 +290,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3417](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3417)*
+*Defined in [dist/planck.d.ts:3262](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3262)*
 
 Get the anchor point on bodyA in world coordinates.
 
@@ -304,7 +304,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3421](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3421)*
+*Defined in [dist/planck.d.ts:3266](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3266)*
 
 Get the anchor point on bodyB in world coordinates.
 
@@ -318,7 +318,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getBodyA](distancejoint.md#getbodya)*
 
-*Defined in [src/dynamics/Joint.ts:154](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L154)*
+*Defined in [src/dynamics/Joint.ts:156](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L156)*
 
 Get the first body attached to this joint.
 
@@ -332,7 +332,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getBodyB](distancejoint.md#getbodyb)*
 
-*Defined in [src/dynamics/Joint.ts:161](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L161)*
+*Defined in [src/dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L163)*
 
 Get the second body attached to this joint.
 
@@ -346,7 +346,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getCollideConnected](distancejoint.md#getcollideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:185](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L185)*
+*Defined in [src/dynamics/Joint.ts:187](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L187)*
 
 Get collide connected. Note: modifying the collide connect flag won't work
 correctly because the flag is only checked when fixture AABBs begin to
@@ -360,7 +360,7 @@ ___
 
 ▸ **getCurrentLengthA**(): *number*
 
-*Defined in [dist/planck.d.ts:3403](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3403)*
+*Defined in [dist/planck.d.ts:3248](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3248)*
 
 Get the current length of the segment attached to bodyA.
 
@@ -372,7 +372,7 @@ ___
 
 ▸ **getCurrentLengthB**(): *number*
 
-*Defined in [dist/planck.d.ts:3407](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3407)*
+*Defined in [dist/planck.d.ts:3252](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3252)*
 
 Get the current length of the segment attached to bodyB.
 
@@ -384,7 +384,7 @@ ___
 
 ▸ **getGroundAnchorA**(): *[Vec2](vec2.md)*
 
-*Defined in [dist/planck.d.ts:3383](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3383)*
+*Defined in [dist/planck.d.ts:3228](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3228)*
 
 Get the first ground anchor.
 
@@ -396,7 +396,7 @@ ___
 
 ▸ **getGroundAnchorB**(): *[Vec2](vec2.md)*
 
-*Defined in [dist/planck.d.ts:3387](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3387)*
+*Defined in [dist/planck.d.ts:3232](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3232)*
 
 Get the second ground anchor.
 
@@ -408,7 +408,7 @@ ___
 
 ▸ **getLengthA**(): *number*
 
-*Defined in [dist/planck.d.ts:3391](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3391)*
+*Defined in [dist/planck.d.ts:3236](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3236)*
 
 Get the current length of the segment attached to bodyA.
 
@@ -420,7 +420,7 @@ ___
 
 ▸ **getLengthB**(): *number*
 
-*Defined in [dist/planck.d.ts:3395](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3395)*
+*Defined in [dist/planck.d.ts:3240](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3240)*
 
 Get the current length of the segment attached to bodyB.
 
@@ -434,7 +434,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getNext](distancejoint.md#getnext)*
 
-*Defined in [src/dynamics/Joint.ts:168](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L168)*
+*Defined in [src/dynamics/Joint.ts:170](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L170)*
 
 Get the next joint the world joint list.
 
@@ -446,7 +446,7 @@ ___
 
 ▸ **getRatio**(): *number*
 
-*Defined in [dist/planck.d.ts:3399](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3399)*
+*Defined in [dist/planck.d.ts:3244](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3244)*
 
 Get the pulley ratio.
 
@@ -460,7 +460,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3425](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3425)*
+*Defined in [dist/planck.d.ts:3270](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3270)*
 
 Get the reaction force on bodyB at the joint anchor in Newtons.
 
@@ -480,7 +480,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3429](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3429)*
+*Defined in [dist/planck.d.ts:3274](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3274)*
 
 Get the reaction torque on bodyB in N*m.
 
@@ -500,7 +500,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getType](distancejoint.md#gettype)*
 
-*Defined in [src/dynamics/Joint.ts:147](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L147)*
+*Defined in [src/dynamics/Joint.ts:149](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L149)*
 
 Get the type of the concrete joint.
 
@@ -514,7 +514,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[getUserData](distancejoint.md#getuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:172](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L172)*
+*Defined in [src/dynamics/Joint.ts:174](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L174)*
 
 **Returns:** *unknown*
 
@@ -526,7 +526,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3430](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3430)*
+*Defined in [dist/planck.d.ts:3275](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3275)*
 
 **Parameters:**
 
@@ -544,7 +544,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[isActive](distancejoint.md#isactive)*
 
-*Defined in [src/dynamics/Joint.ts:140](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L140)*
+*Defined in [src/dynamics/Joint.ts:142](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L142)*
 
 Short-cut function to determine if either body is inactive.
 
@@ -558,7 +558,7 @@ ___
 
 *Inherited from [DistanceJoint](distancejoint.md).[setUserData](distancejoint.md#setuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:176](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Joint.ts#L176)*
+*Defined in [src/dynamics/Joint.ts:178](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Joint.ts#L178)*
 
 **Parameters:**
 
@@ -576,7 +576,7 @@ ___
 
 *Overrides [DistanceJoint](distancejoint.md).[shiftOrigin](distancejoint.md#shiftorigin)*
 
-*Defined in [dist/planck.d.ts:3413](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3413)*
+*Defined in [dist/planck.d.ts:3258](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3258)*
 
 Shift the origin for any points stored in world coordinates.
 
@@ -596,7 +596,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3435](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3435)*
+*Defined in [dist/planck.d.ts:3280](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3280)*
 
 This returns true if the position errors are within tolerance.
 
@@ -616,7 +616,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3431](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3431)*
+*Defined in [dist/planck.d.ts:3276](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3276)*
 
 **Parameters:**
 
@@ -634,7 +634,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3379](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L3379)*
+*Defined in [dist/planck.d.ts:3224](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3224)*
 
 **Parameters:**
 

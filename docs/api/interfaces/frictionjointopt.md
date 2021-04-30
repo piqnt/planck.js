@@ -34,7 +34,7 @@ Friction joint definition.
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:960](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L960)*
+*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L938)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -45,9 +45,9 @@ ___
 
 • **maxForce**? : *number*
 
-*Defined in [dist/planck.d.ts:2533](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2533)*
+*Defined in [dist/planck.d.ts:2456](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2456)*
 
-*Defined in [src/dynamics/joint/FrictionJoint.ts:46](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/FrictionJoint.ts#L46)*
+*Defined in [src/dynamics/joint/FrictionJoint.ts:46](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/FrictionJoint.ts#L46)*
 
 The maximum friction force in N.
 The maximum friction force in N.
@@ -58,9 +58,9 @@ ___
 
 • **maxTorque**? : *number*
 
-*Defined in [dist/planck.d.ts:2537](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L2537)*
+*Defined in [dist/planck.d.ts:2460](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2460)*
 
-*Defined in [src/dynamics/joint/FrictionJoint.ts:50](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/joint/FrictionJoint.ts#L50)*
+*Defined in [src/dynamics/joint/FrictionJoint.ts:50](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/FrictionJoint.ts#L50)*
 
 The maximum friction torque in N-m.
 The maximum friction torque in N-m.
@@ -75,6 +75,6 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:955](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L955)*
+*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L933)*
 
 Use this to attach application specific data to your joints.

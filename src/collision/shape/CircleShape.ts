@@ -67,6 +67,7 @@ export default class CircleShape extends Shape {
     }
   }
 
+  /** @internal */
   _serialize() {
     return {
       type: this.m_type,
@@ -76,6 +77,7 @@ export default class CircleShape extends Shape {
     };
   }
 
+  /** @internal */
   static _deserialize(data) {
     return new CircleShape(data.p, data.radius);
   }

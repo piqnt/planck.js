@@ -149,6 +149,7 @@ export default class RopeJoint extends Joint {
     // = invMassA + invIA * cross(rA, u)^2 + invMassB + invIB * cross(rB, u)^2
   }
 
+  /** @internal */
   _serialize() {
     return {
       type: this.m_type,
@@ -162,6 +163,7 @@ export default class RopeJoint extends Joint {
     };
   }
 
+  /** @internal */
   static _deserialize(data, world, restore) {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);

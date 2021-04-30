@@ -45,7 +45,7 @@
 
 \+ **new Pool**(`opts`: any): *[Pool](pool.md)*
 
-*Defined in [dist/planck.d.ts:486](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L486)*
+*Defined in [dist/planck.d.ts:475](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L475)*
 
 **Parameters:**
 
@@ -61,9 +61,9 @@ Name | Type |
 
 • **_createCount**: *number* = 0
 
-*Defined in [dist/planck.d.ts:483](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L483)*
+*Defined in [dist/planck.d.ts:472](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L472)*
 
-*Defined in [src/util/Pool.ts:28](https://github.com/shakiba/planck.js/blob/7e469c4/src/util/Pool.ts#L28)*
+*Defined in [src/util/Pool.ts:28](https://github.com/shakiba/planck.js/blob/3ede11b/src/util/Pool.ts#L28)*
 
 ___
 
@@ -71,9 +71,9 @@ ___
 
 • **_createFn**: *function*
 
-*Defined in [dist/planck.d.ts:479](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L479)*
+*Defined in [dist/planck.d.ts:468](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L468)*
 
-*Defined in [src/util/Pool.ts:23](https://github.com/shakiba/planck.js/blob/7e469c4/src/util/Pool.ts#L23)*
+*Defined in [src/util/Pool.ts:23](https://github.com/shakiba/planck.js/blob/3ede11b/src/util/Pool.ts#L23)*
 
 #### Type declaration:
 
@@ -85,9 +85,9 @@ ___
 
 • **_discardCount**: *number* = 0
 
-*Defined in [dist/planck.d.ts:486](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L486)*
+*Defined in [dist/planck.d.ts:475](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L475)*
 
-*Defined in [src/util/Pool.ts:31](https://github.com/shakiba/planck.js/blob/7e469c4/src/util/Pool.ts#L31)*
+*Defined in [src/util/Pool.ts:31](https://github.com/shakiba/planck.js/blob/3ede11b/src/util/Pool.ts#L31)*
 
 ___
 
@@ -95,9 +95,9 @@ ___
 
 • **_discardFn**: *function*
 
-*Defined in [dist/planck.d.ts:482](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L482)*
+*Defined in [dist/planck.d.ts:471](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L471)*
 
-*Defined in [src/util/Pool.ts:26](https://github.com/shakiba/planck.js/blob/7e469c4/src/util/Pool.ts#L26)*
+*Defined in [src/util/Pool.ts:26](https://github.com/shakiba/planck.js/blob/3ede11b/src/util/Pool.ts#L26)*
 
 #### Type declaration:
 
@@ -115,9 +115,9 @@ ___
 
 • **_inCount**: *number* = 0
 
-*Defined in [dist/planck.d.ts:485](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L485)*
+*Defined in [dist/planck.d.ts:474](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L474)*
 
-*Defined in [src/util/Pool.ts:30](https://github.com/shakiba/planck.js/blob/7e469c4/src/util/Pool.ts#L30)*
+*Defined in [src/util/Pool.ts:30](https://github.com/shakiba/planck.js/blob/3ede11b/src/util/Pool.ts#L30)*
 
 ___
 
@@ -125,9 +125,9 @@ ___
 
 • **_inFn**: *function*
 
-*Defined in [dist/planck.d.ts:481](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L481)*
+*Defined in [dist/planck.d.ts:470](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L470)*
 
-*Defined in [src/util/Pool.ts:25](https://github.com/shakiba/planck.js/blob/7e469c4/src/util/Pool.ts#L25)*
+*Defined in [src/util/Pool.ts:25](https://github.com/shakiba/planck.js/blob/3ede11b/src/util/Pool.ts#L25)*
 
 #### Type declaration:
 
@@ -145,9 +145,9 @@ ___
 
 • **_list**: *any[]* = []
 
-*Defined in [dist/planck.d.ts:477](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L477)*
+*Defined in [dist/planck.d.ts:466](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L466)*
 
-*Defined in [src/util/Pool.ts:20](https://github.com/shakiba/planck.js/blob/7e469c4/src/util/Pool.ts#L20)*
+*Defined in [src/util/Pool.ts:20](https://github.com/shakiba/planck.js/blob/3ede11b/src/util/Pool.ts#L20)*
 
 ___
 
@@ -155,9 +155,9 @@ ___
 
 • **_max**: *number* = Infinity
 
-*Defined in [dist/planck.d.ts:478](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L478)*
+*Defined in [dist/planck.d.ts:467](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L467)*
 
-*Defined in [src/util/Pool.ts:21](https://github.com/shakiba/planck.js/blob/7e469c4/src/util/Pool.ts#L21)*
+*Defined in [src/util/Pool.ts:21](https://github.com/shakiba/planck.js/blob/3ede11b/src/util/Pool.ts#L21)*
 
 ___
 
@@ -165,9 +165,9 @@ ___
 
 • **_outCount**: *number* = 0
 
-*Defined in [dist/planck.d.ts:484](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L484)*
+*Defined in [dist/planck.d.ts:473](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L473)*
 
-*Defined in [src/util/Pool.ts:29](https://github.com/shakiba/planck.js/blob/7e469c4/src/util/Pool.ts#L29)*
+*Defined in [src/util/Pool.ts:29](https://github.com/shakiba/planck.js/blob/3ede11b/src/util/Pool.ts#L29)*
 
 ___
 
@@ -175,9 +175,9 @@ ___
 
 • **_outFn**: *function*
 
-*Defined in [dist/planck.d.ts:480](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L480)*
+*Defined in [dist/planck.d.ts:469](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L469)*
 
-*Defined in [src/util/Pool.ts:24](https://github.com/shakiba/planck.js/blob/7e469c4/src/util/Pool.ts#L24)*
+*Defined in [src/util/Pool.ts:24](https://github.com/shakiba/planck.js/blob/3ede11b/src/util/Pool.ts#L24)*
 
 #### Type declaration:
 
@@ -195,7 +195,7 @@ Name | Type |
 
 ▸ **allocate**(): *T*
 
-*Defined in [dist/planck.d.ts:490](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L490)*
+*Defined in [dist/planck.d.ts:479](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L479)*
 
 **Returns:** *T*
 
@@ -205,7 +205,7 @@ ___
 
 ▸ **max**(`n`: any): *number | this*
 
-*Defined in [dist/planck.d.ts:488](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L488)*
+*Defined in [dist/planck.d.ts:477](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L477)*
 
 **Parameters:**
 
@@ -221,7 +221,7 @@ ___
 
 ▸ **release**(`item`: T): *void*
 
-*Defined in [dist/planck.d.ts:491](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L491)*
+*Defined in [dist/planck.d.ts:480](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L480)*
 
 **Parameters:**
 
@@ -237,7 +237,7 @@ ___
 
 ▸ **size**(): *number*
 
-*Defined in [dist/planck.d.ts:489](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L489)*
+*Defined in [dist/planck.d.ts:478](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L478)*
 
 **Returns:** *number*
 
@@ -247,6 +247,6 @@ ___
 
 ▸ **toString**(): *string*
 
-*Defined in [dist/planck.d.ts:492](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L492)*
+*Defined in [dist/planck.d.ts:481](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L481)*
 
 **Returns:** *string*

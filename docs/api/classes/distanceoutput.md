@@ -40,9 +40,9 @@ Output for Distance.
 
 • **distance**: *number*
 
-*Defined in [dist/planck.d.ts:1927](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1927)*
+*Defined in [dist/planck.d.ts:1898](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1898)*
 
-*Defined in [src/collision/Distance.ts:70](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L70)*
+*Defined in [src/collision/Distance.ts:70](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L70)*
 
 ___
 
@@ -50,9 +50,9 @@ ___
 
 • **iterations**: *number*
 
-*Defined in [dist/planck.d.ts:1928](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1928)*
+*Defined in [dist/planck.d.ts:1899](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1899)*
 
-*Defined in [src/collision/Distance.ts:71](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L71)*
+*Defined in [src/collision/Distance.ts:71](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L71)*
 
 ___
 
@@ -60,9 +60,9 @@ ___
 
 • **pointA**: *Vec2* = Vec2.zero()
 
-*Defined in [dist/planck.d.ts:1925](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1925)*
+*Defined in [dist/planck.d.ts:1896](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1896)*
 
-*Defined in [src/collision/Distance.ts:68](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L68)*
+*Defined in [src/collision/Distance.ts:68](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L68)*
 
 ___
 
@@ -70,6 +70,6 @@ ___
 
 • **pointB**: *Vec2* = Vec2.zero()
 
-*Defined in [dist/planck.d.ts:1926](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L1926)*
+*Defined in [dist/planck.d.ts:1897](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1897)*
 
-*Defined in [src/collision/Distance.ts:69](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/Distance.ts#L69)*
+*Defined in [src/collision/Distance.ts:69](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Distance.ts#L69)*

@@ -28,7 +28,7 @@ This proxy is used internally to connect shape children to the broad-phase.
 
 \+ **new FixtureProxy**(`fixture`: any, `childIndex`: any): *[FixtureProxy](fixtureproxy.md)*
 
-*Defined in [dist/planck.d.ts:762](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L762)*
+*Defined in [dist/planck.d.ts:751](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L751)*
 
 **Parameters:**
 
@@ -45,9 +45,9 @@ Name | Type |
 
 • **aabb**: *AABB*
 
-*Defined in [dist/planck.d.ts:759](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L759)*
+*Defined in [dist/planck.d.ts:748](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L748)*
 
-*Defined in [src/dynamics/Fixture.ts:97](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L97)*
+*Defined in [src/dynamics/Fixture.ts:97](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Fixture.ts#L97)*
 
 ___
 
@@ -55,9 +55,9 @@ ___
 
 • **childIndex**: *number*
 
-*Defined in [dist/planck.d.ts:761](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L761)*
+*Defined in [dist/planck.d.ts:750](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L750)*
 
-*Defined in [src/dynamics/Fixture.ts:99](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L99)*
+*Defined in [src/dynamics/Fixture.ts:99](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Fixture.ts#L99)*
 
 ___
 
@@ -65,9 +65,9 @@ ___
 
 • **fixture**: *Fixture*
 
-*Defined in [dist/planck.d.ts:760](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L760)*
+*Defined in [dist/planck.d.ts:749](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L749)*
 
-*Defined in [src/dynamics/Fixture.ts:98](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L98)*
+*Defined in [src/dynamics/Fixture.ts:98](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Fixture.ts#L98)*
 
 ___
 
@@ -75,6 +75,6 @@ ___
 
 • **proxyId**: *number*
 
-*Defined in [dist/planck.d.ts:762](https://github.com/shakiba/planck.js/blob/7e469c4/dist/planck.d.ts#L762)*
+*Defined in [dist/planck.d.ts:751](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L751)*
 
-*Defined in [src/dynamics/Fixture.ts:100](https://github.com/shakiba/planck.js/blob/7e469c4/src/dynamics/Fixture.ts#L100)*
+*Defined in [src/dynamics/Fixture.ts:100](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Fixture.ts#L100)*

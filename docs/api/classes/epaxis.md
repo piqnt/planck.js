@@ -22,7 +22,7 @@ This structure is used to keep track of the best separating axis.
 
 • **index**: *number*
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:80](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/shape/CollideEdgePolygon.ts#L80)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:80](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/shape/CollideEdgePolygon.ts#L80)*
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 • **separation**: *number*
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:81](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/shape/CollideEdgePolygon.ts#L81)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:81](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/shape/CollideEdgePolygon.ts#L81)*
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 • **type**: *[EPAxisType](../enums/epaxistype.md)*
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:79](https://github.com/shakiba/planck.js/blob/7e469c4/src/collision/shape/CollideEdgePolygon.ts#L79)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:79](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/shape/CollideEdgePolygon.ts#L79)*
