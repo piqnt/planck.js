@@ -536,7 +536,7 @@ export class World {
 /**
  * Tuning constants based on meters-kilograms-seconds (MKS) units.
  */
-let Settings: {
+export let Settings: {
   // Collision
   /**
    * The maximum number of contact points between two convex shapes. Do not change
