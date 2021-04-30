@@ -1,6 +1,6 @@
 /*!
  * 
- * Planck.js v0.3.28
+ * Planck.js v0.3.29
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  * 
@@ -107,7 +107,7 @@ exports["planck"] =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 63);
+/******/ 	return __webpack_require__(__webpack_require__.s = 62);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -672,9 +672,8 @@ var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
 var common = __webpack_require__(2);
-var create = __webpack_require__(6);
 var native = Math;
-var math = module.exports = create(native);
+var math = module.exports = Object.create(native);
 
 math.EPSILON = 1e-9; // TODO
 
@@ -1434,28 +1433,6 @@ Transform.mulTXf = function(a, b) {
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports) {
-
-if (typeof Object.create == 'function') {
-  module.exports = function(proto, props) {
-    return Object.create.call(Object, proto, props);
-  };
-} else {
-  module.exports = function(proto, props) {
-    if (props)
-      throw Error('Second argument is not supported!');
-    if (typeof proto !== 'object' || proto === null)
-      throw Error('Invalid prototype!');
-    noop.prototype = proto;
-    return new noop;
-  };
-  function noop() {
-  }
-}
-
-
-/***/ }),
-/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _DEBUG =  false ? undefined : false;
@@ -1491,7 +1468,7 @@ module.exports = function(input, defaults) {
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -1675,7 +1652,7 @@ Vec3.neg = function(v) {
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -1708,18 +1685,18 @@ var _ASSERT =  false ? undefined : false;
 module.exports = Body;
 
 var common = __webpack_require__(2);
-var options = __webpack_require__(7);
+var options = __webpack_require__(6);
 
 var Vec2 = __webpack_require__(0);
 var Rot = __webpack_require__(3);
 var Math = __webpack_require__(1);
-var Sweep = __webpack_require__(10);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(13);
-var Position = __webpack_require__(14);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Fixture = __webpack_require__(27);
-var Shape = __webpack_require__(16);
+var Fixture = __webpack_require__(26);
+var Shape = __webpack_require__(15);
 
 var staticBody = Body.STATIC = 'static';
 var kinematicBody = Body.KINEMATIC = 'kinematic';
@@ -2765,7 +2742,7 @@ Body.prototype.getLocalVector = function(worldVector) {
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2907,7 +2884,7 @@ Sweep.prototype.set = function(that) {
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -3135,7 +3112,7 @@ Mat22.add = function(mx1, mx2) {
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -3369,7 +3346,7 @@ Joint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -3414,7 +3391,7 @@ function Velocity() {
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -3466,7 +3443,7 @@ Position.prototype.getTransform = function(xf, p) {
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -3501,7 +3478,7 @@ module.exports = Mat33;
 var common = __webpack_require__(2);
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(8);
+var Vec3 = __webpack_require__(7);
 
 /**
  * A 3-by-3 matrix. Stored in column-major order.
@@ -3700,7 +3677,7 @@ Mat33.add = function(a, b) {
 
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -3840,7 +3817,7 @@ Shape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -4109,7 +4086,7 @@ AABB.prototype.toString = function() {
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -4146,12 +4123,12 @@ var common = __webpack_require__(2);
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 var Transform = __webpack_require__(5);
-var Mat22 = __webpack_require__(11);
+var Mat22 = __webpack_require__(10);
 var Rot = __webpack_require__(3);
 
 var Settings = __webpack_require__(4);
-var Manifold = __webpack_require__(19);
-var Distance = __webpack_require__(22);
+var Manifold = __webpack_require__(18);
+var Distance = __webpack_require__(21);
 
 module.exports = Contact;
 
@@ -5344,7 +5321,7 @@ Contact.destroy = function(contact, listener) {
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -5702,16 +5679,16 @@ function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 if (false)
   {}
 
-var stats = __webpack_require__(36);
-var extend = __webpack_require__(37);
-var is = __webpack_require__(38);
-var _await = __webpack_require__(66);
+var stats = __webpack_require__(35);
+var extend = __webpack_require__(36);
+var is = __webpack_require__(37);
+var _await = __webpack_require__(65);
 
 stats.create = 0;
 
@@ -5929,7 +5906,7 @@ function loadScript(src, callback) {
 };
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -5962,18 +5939,17 @@ var _ASSERT =  false ? undefined : false;
 module.exports = PolygonShape;
 
 var common = __webpack_require__(2);
-var create = __webpack_require__(6);
-var options = __webpack_require__(7);
+var options = __webpack_require__(6);
 var Math = __webpack_require__(1);
 var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
 var Vec2 = __webpack_require__(0);
-var AABB = __webpack_require__(17);
+var AABB = __webpack_require__(16);
 var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(16);
+var Shape = __webpack_require__(15);
 
 PolygonShape._super = Shape;
-PolygonShape.prototype = create(PolygonShape._super.prototype);
+PolygonShape.prototype = Object.create(PolygonShape._super.prototype);
 
 PolygonShape.TYPE = 'polygon';
 Shape.TYPES[PolygonShape.TYPE] = PolygonShape;
@@ -6457,7 +6433,7 @@ PolygonShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -6497,18 +6473,18 @@ module.exports.Cache = SimplexCache;
 var Settings = __webpack_require__(4);
 var common = __webpack_require__(2);
 
-var stats = __webpack_require__(28);
+var stats = __webpack_require__(27);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(8);
-var Mat22 = __webpack_require__(11);
-var Mat33 = __webpack_require__(15);
+var Vec3 = __webpack_require__(7);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(13);
-var Position = __webpack_require__(14);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
 /**
  * GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
@@ -7160,7 +7136,7 @@ Distance.testOverlap = function(shapeA, indexA, shapeB, indexB, xfA, xfB) {
 
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -7193,18 +7169,17 @@ var _ASSERT =  false ? undefined : false;
 module.exports = CircleShape;
 
 var common = __webpack_require__(2);
-var create = __webpack_require__(6);
-var options = __webpack_require__(7);
+var options = __webpack_require__(6);
 var Math = __webpack_require__(1);
 var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
 var Vec2 = __webpack_require__(0);
-var AABB = __webpack_require__(17);
+var AABB = __webpack_require__(16);
 var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(16);
+var Shape = __webpack_require__(15);
 
 CircleShape._super = Shape;
-CircleShape.prototype = create(CircleShape._super.prototype);
+CircleShape.prototype = Object.create(CircleShape._super.prototype);
 
 CircleShape.TYPE = 'circle';
 Shape.TYPES[CircleShape.TYPE] = CircleShape;
@@ -7341,7 +7316,7 @@ CircleShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -7373,18 +7348,17 @@ var _ASSERT =  false ? undefined : false;
 
 module.exports = EdgeShape;
 
-var create = __webpack_require__(6);
-var options = __webpack_require__(7);
+var options = __webpack_require__(6);
 var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(16);
+var Shape = __webpack_require__(15);
 var Math = __webpack_require__(1);
 var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
 var Vec2 = __webpack_require__(0);
-var AABB = __webpack_require__(17);
+var AABB = __webpack_require__(16);
 
 EdgeShape._super = Shape;
-EdgeShape.prototype = create(EdgeShape._super.prototype);
+EdgeShape.prototype = Object.create(EdgeShape._super.prototype);
 
 EdgeShape.TYPE = 'edge';
 Shape.TYPES[EdgeShape.TYPE] = EdgeShape;
@@ -7578,7 +7552,7 @@ EdgeShape.prototype.computeDistanceProxy = function(proxy) {
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports) {
 
 if (typeof Object.create == 'function') {
@@ -7600,11 +7574,11 @@ if (typeof Object.create == 'function') {
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(20);
-var Matrix = __webpack_require__(62);
+var Class = __webpack_require__(19);
+var Matrix = __webpack_require__(61);
 
 var iid = 0;
 
@@ -8223,7 +8197,7 @@ module.exports = Pin;
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -8256,14 +8230,14 @@ var _ASSERT =  false ? undefined : false;
 module.exports = Fixture;
 
 var common = __webpack_require__(2);
-var options = __webpack_require__(7);
+var options = __webpack_require__(6);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
 
-var AABB = __webpack_require__(17);
+var AABB = __webpack_require__(16);
 
-var Shape = __webpack_require__(16);
+var Shape = __webpack_require__(15);
 
 /**
  * @typedef {Object} FixtureDef
@@ -8690,7 +8664,7 @@ Fixture.prototype.shouldCollide = function(that) {
 
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _DEBUG =  false ? undefined : false;
@@ -8708,7 +8682,7 @@ exports.toString = function(newline) {
 };
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -8741,19 +8715,18 @@ var _ASSERT =  false ? undefined : false;
 module.exports = ChainShape;
 
 var common = __webpack_require__(2);
-var create = __webpack_require__(6);
-var options = __webpack_require__(7);
+var options = __webpack_require__(6);
 var Math = __webpack_require__(1);
 var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
 var Vec2 = __webpack_require__(0);
-var AABB = __webpack_require__(17);
+var AABB = __webpack_require__(16);
 var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(16);
-var EdgeShape = __webpack_require__(24);
+var Shape = __webpack_require__(15);
+var EdgeShape = __webpack_require__(23);
 
 ChainShape._super = Shape;
-ChainShape.prototype = create(ChainShape._super.prototype);
+ChainShape.prototype = Object.create(ChainShape._super.prototype);
 
 ChainShape.TYPE = 'chain';
 Shape.TYPES[ChainShape.TYPE] = ChainShape;
@@ -9014,12 +8987,12 @@ ChainShape.prototype.computeDistanceProxy = function(proxy, childIndex) {
 
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(20);
-__webpack_require__(26);
-var stats = __webpack_require__(36);
+var Class = __webpack_require__(19);
+__webpack_require__(25);
+var stats = __webpack_require__(35);
 
 Class.prototype._textures = null;
 Class.prototype._alpha = 1;
@@ -9156,7 +9129,7 @@ Class.prototype.clearTimeout = function(timer) {
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -9188,14 +9161,14 @@ var _ASSERT =  false ? undefined : false;
 
 module.exports = World;
 
-var options = __webpack_require__(7);
+var options = __webpack_require__(6);
 var common = __webpack_require__(2);
 var Vec2 = __webpack_require__(0);
-var BroadPhase = __webpack_require__(41);
-var Solver = __webpack_require__(43);
-var Body = __webpack_require__(9);
-var Joint = __webpack_require__(12);
-var Contact = __webpack_require__(18);
+var BroadPhase = __webpack_require__(40);
+var Solver = __webpack_require__(42);
+var Body = __webpack_require__(8);
+var Joint = __webpack_require__(11);
+var Contact = __webpack_require__(17);
 
 /**
  * @typedef {Object} WorldDef
@@ -10294,7 +10267,7 @@ World.prototype.postSolve = function(contact, impulse) {
 
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -10326,10 +10299,10 @@ var _ASSERT =  false ? undefined : false;
 
 var Settings = __webpack_require__(4);
 var common = __webpack_require__(2);
-var Pool = __webpack_require__(42);
+var Pool = __webpack_require__(41);
 var Vec2 = __webpack_require__(0);
 var Math = __webpack_require__(1);
-var AABB = __webpack_require__(17);
+var AABB = __webpack_require__(16);
 
 module.exports = DynamicTree;
 
@@ -11220,7 +11193,7 @@ function Iterator() {
 
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -11257,22 +11230,22 @@ module.exports.Output = TOIOutput;
 var Settings = __webpack_require__(4);
 
 var common = __webpack_require__(2);
-var Timer = __webpack_require__(44);
+var Timer = __webpack_require__(43);
 
-var stats = __webpack_require__(28);
+var stats = __webpack_require__(27);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(8);
-var Mat22 = __webpack_require__(11);
-var Mat33 = __webpack_require__(15);
+var Vec3 = __webpack_require__(7);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(13);
-var Position = __webpack_require__(14);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Distance = __webpack_require__(22);
+var Distance = __webpack_require__(21);
 var DistanceInput = Distance.Input;
 var DistanceOutput = Distance.Output;
 var DistanceProxy = Distance.Proxy;
@@ -11728,7 +11701,7 @@ SeparationFunction.prototype.evaluate = function(t) {
 
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -11761,23 +11734,22 @@ var _ASSERT =  false ? undefined : false;
 module.exports = RevoluteJoint;
 
 var common = __webpack_require__(2);
-var options = __webpack_require__(7);
-var create = __webpack_require__(6);
+var options = __webpack_require__(6);
 var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(8);
-var Mat22 = __webpack_require__(11);
-var Mat33 = __webpack_require__(15);
+var Vec3 = __webpack_require__(7);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(13);
-var Position = __webpack_require__(14);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(12);
-var Body = __webpack_require__(9);
+var Joint = __webpack_require__(11);
+var Body = __webpack_require__(8);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -11788,7 +11760,7 @@ RevoluteJoint.TYPE = 'revolute-joint';
 Joint.TYPES[RevoluteJoint.TYPE] = RevoluteJoint;
 
 RevoluteJoint._super = Joint;
-RevoluteJoint.prototype = create(RevoluteJoint._super.prototype);
+RevoluteJoint.prototype = Object.create(RevoluteJoint._super.prototype);
 
 /**
  * @typedef {Object} RevoluteJointDef
@@ -12414,7 +12386,7 @@ RevoluteJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -12447,23 +12419,22 @@ var _ASSERT =  false ? undefined : false;
 module.exports = PrismaticJoint;
 
 var common = __webpack_require__(2);
-var options = __webpack_require__(7);
-var create = __webpack_require__(6);
+var options = __webpack_require__(6);
 var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(8);
-var Mat22 = __webpack_require__(11);
-var Mat33 = __webpack_require__(15);
+var Vec3 = __webpack_require__(7);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(13);
-var Position = __webpack_require__(14);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(12);
-var Body = __webpack_require__(9);
+var Joint = __webpack_require__(11);
+var Body = __webpack_require__(8);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -12474,7 +12445,7 @@ PrismaticJoint.TYPE = 'prismatic-joint';
 Joint.TYPES[PrismaticJoint.TYPE] = PrismaticJoint;
 
 PrismaticJoint._super = Joint;
-PrismaticJoint.prototype = create(PrismaticJoint._super.prototype);
+PrismaticJoint.prototype = Object.create(PrismaticJoint._super.prototype);
 
 /**
  * @typedef {Object} PrismaticJointDef
@@ -13229,14 +13200,14 @@ PrismaticJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports) {
 
 module.exports = {};
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports) {
 
 module.exports = function(base) {
@@ -13253,7 +13224,7 @@ module.exports = function(base) {
 
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports) {
 
 /**
@@ -13426,76 +13397,76 @@ is.hex = function(value) {
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports.internal = {};
 
-exports.Serializer = __webpack_require__(40);
+exports.Serializer = __webpack_require__(39);
 
 exports.Math = __webpack_require__(1);
 exports.Vec2 = __webpack_require__(0);
-exports.Vec3 = __webpack_require__(8);
-exports.Mat22 = __webpack_require__(11);
-exports.Mat33 = __webpack_require__(15);
+exports.Vec3 = __webpack_require__(7);
+exports.Mat22 = __webpack_require__(10);
+exports.Mat33 = __webpack_require__(14);
 exports.Transform = __webpack_require__(5);
 exports.Rot = __webpack_require__(3);
 
-exports.AABB = __webpack_require__(17);
+exports.AABB = __webpack_require__(16);
 
-exports.Shape = __webpack_require__(16);
-exports.Fixture = __webpack_require__(27);
-exports.Body = __webpack_require__(9);
-exports.Contact = __webpack_require__(18);
-exports.Joint = __webpack_require__(12);
-exports.World = __webpack_require__(31);
+exports.Shape = __webpack_require__(15);
+exports.Fixture = __webpack_require__(26);
+exports.Body = __webpack_require__(8);
+exports.Contact = __webpack_require__(17);
+exports.Joint = __webpack_require__(11);
+exports.World = __webpack_require__(30);
 
-exports.Circle = __webpack_require__(23);
-exports.Edge = __webpack_require__(24);
-exports.Polygon = __webpack_require__(21);
-exports.Chain = __webpack_require__(29);
-exports.Box = __webpack_require__(45);
+exports.Circle = __webpack_require__(22);
+exports.Edge = __webpack_require__(23);
+exports.Polygon = __webpack_require__(20);
+exports.Chain = __webpack_require__(28);
+exports.Box = __webpack_require__(44);
 
+__webpack_require__(45);
 __webpack_require__(46);
-__webpack_require__(47);
-exports.internal.CollidePolygons = __webpack_require__(48);
+exports.internal.CollidePolygons = __webpack_require__(47);
+__webpack_require__(48);
 __webpack_require__(49);
-__webpack_require__(50);
 
-exports.DistanceJoint = __webpack_require__(51);
-exports.FrictionJoint = __webpack_require__(52);
-exports.GearJoint = __webpack_require__(53);
-exports.MotorJoint = __webpack_require__(54);
-exports.MouseJoint = __webpack_require__(55);
-exports.PrismaticJoint = __webpack_require__(35);
-exports.PulleyJoint = __webpack_require__(56);
-exports.RevoluteJoint = __webpack_require__(34);
-exports.RopeJoint = __webpack_require__(57);
-exports.WeldJoint = __webpack_require__(58);
-exports.WheelJoint = __webpack_require__(59);
+exports.DistanceJoint = __webpack_require__(50);
+exports.FrictionJoint = __webpack_require__(51);
+exports.GearJoint = __webpack_require__(52);
+exports.MotorJoint = __webpack_require__(53);
+exports.MouseJoint = __webpack_require__(54);
+exports.PrismaticJoint = __webpack_require__(34);
+exports.PulleyJoint = __webpack_require__(55);
+exports.RevoluteJoint = __webpack_require__(33);
+exports.RopeJoint = __webpack_require__(56);
+exports.WeldJoint = __webpack_require__(57);
+exports.WheelJoint = __webpack_require__(58);
 
 exports.Settings = __webpack_require__(4);
 
-exports.internal.Sweep = __webpack_require__(10);
-exports.internal.stats = __webpack_require__(28); // todo: remove this
-exports.internal.Manifold = __webpack_require__(19);
-exports.internal.Distance = __webpack_require__(22);
-exports.internal.TimeOfImpact = __webpack_require__(33);
-exports.internal.DynamicTree = __webpack_require__(32);
+exports.internal.Sweep = __webpack_require__(9);
+exports.internal.stats = __webpack_require__(27); // todo: remove this
+exports.internal.Manifold = __webpack_require__(18);
+exports.internal.Distance = __webpack_require__(21);
+exports.internal.TimeOfImpact = __webpack_require__(32);
+exports.internal.DynamicTree = __webpack_require__(31);
 exports.internal.Settings = exports.Settings;
 
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var World = __webpack_require__(31);
-var Body = __webpack_require__(9);
-var Joint = __webpack_require__(12);
-var Fixture = __webpack_require__(27);
-var Shape = __webpack_require__(16);
+var World = __webpack_require__(30);
+var Body = __webpack_require__(8);
+var Joint = __webpack_require__(11);
+var Fixture = __webpack_require__(26);
+var Shape = __webpack_require__(15);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(8);
+var Vec3 = __webpack_require__(7);
 
 var SID = 0;
 
@@ -13632,7 +13603,7 @@ module.exports.fromJson = serializer.fromJson;
 
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -13665,8 +13636,8 @@ var _ASSERT =  false ? undefined : false;
 var Settings = __webpack_require__(4);
 var common = __webpack_require__(2);
 var Math = __webpack_require__(1);
-var AABB = __webpack_require__(17);
-var DynamicTree = __webpack_require__(32);
+var AABB = __webpack_require__(16);
+var DynamicTree = __webpack_require__(31);
 
 module.exports = BroadPhase;
 
@@ -13875,7 +13846,7 @@ BroadPhase.prototype.queryCallback = function(proxyId) {
 
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -13968,7 +13939,7 @@ function Pool(opts) {
 }
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -14007,15 +13978,15 @@ var common = __webpack_require__(2);
 var Vec2 = __webpack_require__(0);
 var Math = __webpack_require__(1);
 
-var Body = __webpack_require__(9);
-var Contact = __webpack_require__(18);
-var Joint = __webpack_require__(12);
+var Body = __webpack_require__(8);
+var Contact = __webpack_require__(17);
+var Joint = __webpack_require__(11);
 
-var TimeOfImpact = __webpack_require__(33);
+var TimeOfImpact = __webpack_require__(32);
 var TOIInput = TimeOfImpact.Input;
 var TOIOutput = TimeOfImpact.Output;
 
-var Distance = __webpack_require__(22);
+var Distance = __webpack_require__(21);
 var DistanceInput = Distance.Input;
 var DistanceOutput = Distance.Output;
 var DistanceProxy = Distance.Proxy;
@@ -14854,7 +14825,7 @@ Solver.prototype.postSolveIsland = function() {
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _DEBUG =  false ? undefined : false;
@@ -14867,6 +14838,62 @@ module.exports.now = function() {
 module.exports.diff = function(time) {
   return Date.now() - time;
 }
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * Planck.js
+ * The MIT License
+ * Copyright (c) 2021 Erin Catto, Ali Shakiba
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+var _DEBUG =  false ? undefined : false;
+var _ASSERT =  false ? undefined : false;
+
+module.exports = BoxShape;
+
+var common = __webpack_require__(2);
+var PolygonShape = __webpack_require__(20);
+
+BoxShape._super = PolygonShape;
+BoxShape.prototype = Object.create(BoxShape._super.prototype);
+
+BoxShape.TYPE = 'polygon';
+
+/**
+ * A rectangle polygon which extend PolygonShape.
+ */
+function BoxShape(hx, hy, center, angle) {
+  if (!(this instanceof BoxShape)) {
+    return new BoxShape(hx, hy, center, angle);
+  }
+
+  BoxShape._super.call(this);
+
+  this._setAsBox(hx, hy, center, angle);
+}
+
 
 
 /***/ }),
@@ -14900,73 +14927,15 @@ module.exports.diff = function(time) {
 var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
-module.exports = BoxShape;
-
 var common = __webpack_require__(2);
-var create = __webpack_require__(6);
-var PolygonShape = __webpack_require__(21);
-
-BoxShape._super = PolygonShape;
-BoxShape.prototype = create(BoxShape._super.prototype);
-
-BoxShape.TYPE = 'polygon';
-
-/**
- * A rectangle polygon which extend PolygonShape.
- */
-function BoxShape(hx, hy, center, angle) {
-  if (!(this instanceof BoxShape)) {
-    return new BoxShape(hx, hy, center, angle);
-  }
-
-  BoxShape._super.call(this);
-
-  this._setAsBox(hx, hy, center, angle);
-}
-
-
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
- * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
-var _DEBUG =  false ? undefined : false;
-var _ASSERT =  false ? undefined : false;
-
-var common = __webpack_require__(2);
-var create = __webpack_require__(6);
 var Math = __webpack_require__(1);
 var Transform = __webpack_require__(5);
 var Vec2 = __webpack_require__(0);
 var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(16);
-var Contact = __webpack_require__(18);
-var Manifold = __webpack_require__(19);
-var CircleShape = __webpack_require__(23);
+var Shape = __webpack_require__(15);
+var Contact = __webpack_require__(17);
+var Manifold = __webpack_require__(18);
+var CircleShape = __webpack_require__(22);
 
 Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
 
@@ -15007,7 +14976,7 @@ exports.CollideCircles = CollideCircles;
 
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -15038,18 +15007,17 @@ var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
 var common = __webpack_require__(2);
-var create = __webpack_require__(6);
 var Math = __webpack_require__(1);
 var Transform = __webpack_require__(5);
 var Vec2 = __webpack_require__(0);
 var Rot = __webpack_require__(3);
 var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(16);
-var Contact = __webpack_require__(18);
-var Manifold = __webpack_require__(19);
-var EdgeShape = __webpack_require__(24);
-var ChainShape = __webpack_require__(29);
-var CircleShape = __webpack_require__(23);
+var Shape = __webpack_require__(15);
+var Contact = __webpack_require__(17);
+var Manifold = __webpack_require__(18);
+var EdgeShape = __webpack_require__(23);
+var ChainShape = __webpack_require__(28);
+var CircleShape = __webpack_require__(22);
 
 Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
@@ -15201,7 +15169,7 @@ function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
 
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -15236,12 +15204,12 @@ var Math = __webpack_require__(1);
 var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
 var Vec2 = __webpack_require__(0);
-var AABB = __webpack_require__(17);
+var AABB = __webpack_require__(16);
 var Settings = __webpack_require__(4);
-var Manifold = __webpack_require__(19);
-var Contact = __webpack_require__(18);
-var Shape = __webpack_require__(16);
-var PolygonShape = __webpack_require__(21);
+var Manifold = __webpack_require__(18);
+var Contact = __webpack_require__(17);
+var Shape = __webpack_require__(15);
+var PolygonShape = __webpack_require__(20);
 
 module.exports = CollidePolygons;
 
@@ -15473,7 +15441,7 @@ function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
 
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -15508,13 +15476,13 @@ var Math = __webpack_require__(1);
 var Transform = __webpack_require__(5);
 var Rot = __webpack_require__(3);
 var Vec2 = __webpack_require__(0);
-var AABB = __webpack_require__(17);
+var AABB = __webpack_require__(16);
 var Settings = __webpack_require__(4);
-var Manifold = __webpack_require__(19);
-var Contact = __webpack_require__(18);
-var Shape = __webpack_require__(16);
-var CircleShape = __webpack_require__(23);
-var PolygonShape = __webpack_require__(21);
+var Manifold = __webpack_require__(18);
+var Contact = __webpack_require__(17);
+var Shape = __webpack_require__(15);
+var CircleShape = __webpack_require__(22);
+var PolygonShape = __webpack_require__(20);
 
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
 
@@ -15637,7 +15605,7 @@ function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
 
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -15668,18 +15636,17 @@ var _DEBUG =  false ? undefined : false;
 var _ASSERT =  false ? undefined : false;
 
 var common = __webpack_require__(2);
-var create = __webpack_require__(6);
 var Math = __webpack_require__(1);
 var Transform = __webpack_require__(5);
 var Vec2 = __webpack_require__(0);
 var Rot = __webpack_require__(3);
 var Settings = __webpack_require__(4);
-var Shape = __webpack_require__(16);
-var Contact = __webpack_require__(18);
-var Manifold = __webpack_require__(19);
-var EdgeShape = __webpack_require__(24);
-var ChainShape = __webpack_require__(29);
-var PolygonShape = __webpack_require__(21);
+var Shape = __webpack_require__(15);
+var Contact = __webpack_require__(17);
+var Manifold = __webpack_require__(18);
+var EdgeShape = __webpack_require__(23);
+var ChainShape = __webpack_require__(28);
+var PolygonShape = __webpack_require__(20);
 
 Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
@@ -16131,7 +16098,7 @@ function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
 
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -16163,29 +16130,28 @@ var _ASSERT =  false ? undefined : false;
 
 module.exports = DistanceJoint;
 
-var options = __webpack_require__(7);
-var create = __webpack_require__(6);
+var options = __webpack_require__(6);
 var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(8);
-var Mat22 = __webpack_require__(11);
-var Mat33 = __webpack_require__(15);
+var Vec3 = __webpack_require__(7);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(13);
-var Position = __webpack_require__(14);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(12);
-var Body = __webpack_require__(9);
+var Joint = __webpack_require__(11);
+var Body = __webpack_require__(8);
 
 DistanceJoint.TYPE = 'distance-joint';
 Joint.TYPES[DistanceJoint.TYPE] = DistanceJoint;
 
 DistanceJoint._super = Joint;
-DistanceJoint.prototype = create(DistanceJoint._super.prototype);
+DistanceJoint.prototype = Object.create(DistanceJoint._super.prototype);
 
 /**
  * @typedef {Object} DistanceJointDef
@@ -16548,7 +16514,7 @@ DistanceJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -16581,29 +16547,28 @@ var _ASSERT =  false ? undefined : false;
 module.exports = FrictionJoint;
 
 var common = __webpack_require__(2);
-var options = __webpack_require__(7);
-var create = __webpack_require__(6);
+var options = __webpack_require__(6);
 var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(8);
-var Mat22 = __webpack_require__(11);
-var Mat33 = __webpack_require__(15);
+var Vec3 = __webpack_require__(7);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(13);
-var Position = __webpack_require__(14);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(12);
-var Body = __webpack_require__(9);
+var Joint = __webpack_require__(11);
+var Body = __webpack_require__(8);
 
 FrictionJoint.TYPE = 'friction-joint';
 Joint.TYPES[FrictionJoint.TYPE] = FrictionJoint;
 
 FrictionJoint._super = Joint;
-FrictionJoint.prototype = create(FrictionJoint._super.prototype);
+FrictionJoint.prototype = Object.create(FrictionJoint._super.prototype);
 
 /**
  * @typedef {Object} FrictionJointDef
@@ -16914,7 +16879,7 @@ FrictionJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -16947,32 +16912,31 @@ var _ASSERT =  false ? undefined : false;
 module.exports = GearJoint;
 
 var common = __webpack_require__(2);
-var options = __webpack_require__(7);
-var create = __webpack_require__(6);
+var options = __webpack_require__(6);
 var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(8);
-var Mat22 = __webpack_require__(11);
-var Mat33 = __webpack_require__(15);
+var Vec3 = __webpack_require__(7);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(13);
-var Position = __webpack_require__(14);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(12);
-var Body = __webpack_require__(9);
+var Joint = __webpack_require__(11);
+var Body = __webpack_require__(8);
 
-var RevoluteJoint = __webpack_require__(34);
-var PrismaticJoint = __webpack_require__(35);
+var RevoluteJoint = __webpack_require__(33);
+var PrismaticJoint = __webpack_require__(34);
 
 GearJoint.TYPE = 'gear-joint';
 Joint.TYPES[GearJoint.TYPE] = GearJoint;
 
 GearJoint._super = Joint;
-GearJoint.prototype = create(GearJoint._super.prototype);
+GearJoint.prototype = Object.create(GearJoint._super.prototype);
 
 /**
  * @typedef {Object} GearJointDef
@@ -17430,7 +17394,7 @@ GearJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -17463,29 +17427,28 @@ var _ASSERT =  false ? undefined : false;
 module.exports = MotorJoint;
 
 var common = __webpack_require__(2);
-var options = __webpack_require__(7);
-var create = __webpack_require__(6);
+var options = __webpack_require__(6);
 var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(8);
-var Mat22 = __webpack_require__(11);
-var Mat33 = __webpack_require__(15);
+var Vec3 = __webpack_require__(7);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(13);
-var Position = __webpack_require__(14);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(12);
-var Body = __webpack_require__(9);
+var Joint = __webpack_require__(11);
+var Body = __webpack_require__(8);
 
 MotorJoint.TYPE = 'motor-joint';
 Joint.TYPES[MotorJoint.TYPE] = MotorJoint;
 
 MotorJoint._super = Joint;
-MotorJoint.prototype = create(MotorJoint._super.prototype);
+MotorJoint.prototype = Object.create(MotorJoint._super.prototype);
 
 /**
  * @typedef {Object} MotorJointDef
@@ -17844,7 +17807,7 @@ MotorJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -17877,28 +17840,27 @@ var _ASSERT =  false ? undefined : false;
 module.exports = MouseJoint;
 
 var common = __webpack_require__(2);
-var options = __webpack_require__(7);
-var create = __webpack_require__(6);
+var options = __webpack_require__(6);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(8);
-var Mat22 = __webpack_require__(11);
-var Mat33 = __webpack_require__(15);
+var Vec3 = __webpack_require__(7);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(13);
-var Position = __webpack_require__(14);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(12);
-var Body = __webpack_require__(9);
+var Joint = __webpack_require__(11);
+var Body = __webpack_require__(8);
 
 MouseJoint.TYPE = 'mouse-joint';
 Joint.TYPES[MouseJoint.TYPE] = MouseJoint;
 
 MouseJoint._super = Joint;
-MouseJoint.prototype = create(MouseJoint._super.prototype);
+MouseJoint.prototype = Object.create(MouseJoint._super.prototype);
 
 /**
  * @typedef {Object} MouseJointDef
@@ -18185,7 +18147,7 @@ MouseJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 56 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -18218,30 +18180,29 @@ var _ASSERT =  false ? undefined : false;
 module.exports = PulleyJoint;
 
 var common = __webpack_require__(2);
-var options = __webpack_require__(7);
-var create = __webpack_require__(6);
+var options = __webpack_require__(6);
 var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(8);
-var Mat22 = __webpack_require__(11);
-var Mat33 = __webpack_require__(15);
+var Vec3 = __webpack_require__(7);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(13);
-var Position = __webpack_require__(14);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(12);
-var Body = __webpack_require__(9);
+var Joint = __webpack_require__(11);
+var Body = __webpack_require__(8);
 
 PulleyJoint.TYPE = 'pulley-joint';
 PulleyJoint.MIN_PULLEY_LENGTH = 2.0; // minPulleyLength
 Joint.TYPES[PulleyJoint.TYPE] = PulleyJoint;
 
 PulleyJoint._super = Joint;
-PulleyJoint.prototype = create(PulleyJoint._super.prototype);
+PulleyJoint.prototype = Object.create(PulleyJoint._super.prototype);
 
 /**
  * @typedef {Object} PulleyJointDef
@@ -18602,7 +18563,7 @@ PulleyJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 57 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -18634,23 +18595,22 @@ var _ASSERT =  false ? undefined : false;
 
 module.exports = RopeJoint;
 
-var options = __webpack_require__(7);
-var create = __webpack_require__(6);
+var options = __webpack_require__(6);
 var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(8);
-var Mat22 = __webpack_require__(11);
-var Mat33 = __webpack_require__(15);
+var Vec3 = __webpack_require__(7);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(13);
-var Position = __webpack_require__(14);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(12);
-var Body = __webpack_require__(9);
+var Joint = __webpack_require__(11);
+var Body = __webpack_require__(8);
 
 var inactiveLimit = 0;
 var atLowerLimit = 1;
@@ -18661,7 +18621,7 @@ RopeJoint.TYPE = 'rope-joint';
 Joint.TYPES[RopeJoint.TYPE] = RopeJoint;
 
 RopeJoint._super = Joint;
-RopeJoint.prototype = create(RopeJoint._super.prototype);
+RopeJoint.prototype = Object.create(RopeJoint._super.prototype);
 
 /**
  * @typedef {Object} RopeJointDef
@@ -18952,7 +18912,7 @@ RopeJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 58 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -18984,29 +18944,28 @@ var _ASSERT =  false ? undefined : false;
 
 module.exports = WeldJoint;
 
-var options = __webpack_require__(7);
-var create = __webpack_require__(6);
+var options = __webpack_require__(6);
 var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(8);
-var Mat22 = __webpack_require__(11);
-var Mat33 = __webpack_require__(15);
+var Vec3 = __webpack_require__(7);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(13);
-var Position = __webpack_require__(14);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(12);
-var Body = __webpack_require__(9);
+var Joint = __webpack_require__(11);
+var Body = __webpack_require__(8);
 
 WeldJoint.TYPE = 'weld-joint';
 Joint.TYPES[WeldJoint.TYPE] = WeldJoint;
 
 WeldJoint._super = Joint;
-WeldJoint.prototype = create(WeldJoint._super.prototype);
+WeldJoint.prototype = Object.create(WeldJoint._super.prototype);
 
 /**
  * @typedef {Object} WeldJointDef
@@ -19436,7 +19395,7 @@ WeldJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 59 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -19468,29 +19427,28 @@ var _ASSERT =  false ? undefined : false;
 
 module.exports = WheelJoint;
 
-var options = __webpack_require__(7);
-var create = __webpack_require__(6);
+var options = __webpack_require__(6);
 var Settings = __webpack_require__(4);
 
 var Math = __webpack_require__(1);
 var Vec2 = __webpack_require__(0);
-var Vec3 = __webpack_require__(8);
-var Mat22 = __webpack_require__(11);
-var Mat33 = __webpack_require__(15);
+var Vec3 = __webpack_require__(7);
+var Mat22 = __webpack_require__(10);
+var Mat33 = __webpack_require__(14);
 var Rot = __webpack_require__(3);
-var Sweep = __webpack_require__(10);
+var Sweep = __webpack_require__(9);
 var Transform = __webpack_require__(5);
-var Velocity = __webpack_require__(13);
-var Position = __webpack_require__(14);
+var Velocity = __webpack_require__(12);
+var Position = __webpack_require__(13);
 
-var Joint = __webpack_require__(12);
-var Body = __webpack_require__(9);
+var Joint = __webpack_require__(11);
+var Body = __webpack_require__(8);
 
 WheelJoint.TYPE = 'wheel-joint';
 Joint.TYPES[WheelJoint.TYPE] = WheelJoint;
 
 WheelJoint._super = Joint;
-WheelJoint.prototype = create(WheelJoint._super.prototype);
+WheelJoint.prototype = Object.create(WheelJoint._super.prototype);
 
 /**
  * @typedef {Object} WheelJointDef
@@ -20036,11 +19994,11 @@ WheelJoint.prototype.solvePositionConstraints = function(step) {
 
 
 /***/ }),
-/* 60 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var stats = __webpack_require__(36);
-var math = __webpack_require__(61);
+var stats = __webpack_require__(35);
+var math = __webpack_require__(60);
 
 function Texture(image, ratio) {
   if (typeof image === 'object') {
@@ -20145,10 +20103,10 @@ module.exports = Texture;
 
 
 /***/ }),
-/* 61 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var create = __webpack_require__(25);
+var create = __webpack_require__(24);
 var native = Math;
 
 module.exports = create(Math);
@@ -20192,7 +20150,7 @@ module.exports.length = function(x, y) {
 };
 
 /***/ }),
-/* 62 */
+/* 61 */
 /***/ (function(module, exports) {
 
 function Matrix(a, b, c, d, e, f) {
@@ -20367,11 +20325,11 @@ module.exports = Matrix;
 
 
 /***/ }),
-/* 63 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var planck = __webpack_require__(39);
-var Stage = __webpack_require__(64);
+var planck = __webpack_require__(38);
+var Stage = __webpack_require__(63);
 
 module.exports = planck;
 
@@ -21084,43 +21042,43 @@ Viewer.prototype.drawChain = function(shape, options) {
 
 
 /***/ }),
-/* 64 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(65);
+module.exports = __webpack_require__(64);
 
 module.exports.internal = {};
 
-__webpack_require__(73);
-module.exports.internal.Image = __webpack_require__(74);
+__webpack_require__(72);
+module.exports.internal.Image = __webpack_require__(73);
+__webpack_require__(75);
 __webpack_require__(76);
 __webpack_require__(77);
 __webpack_require__(78);
-__webpack_require__(79);
-module.exports.Mouse = __webpack_require__(81);
-module.exports.Math = __webpack_require__(61);
-module.exports._extend = __webpack_require__(37);
-module.exports._create = __webpack_require__(25);
+module.exports.Mouse = __webpack_require__(80);
+module.exports.Math = __webpack_require__(60);
+module.exports._extend = __webpack_require__(36);
+module.exports._create = __webpack_require__(24);
 
-__webpack_require__(82);
+__webpack_require__(81);
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(19);
+module.exports.Matrix = __webpack_require__(61);
+module.exports.Texture = __webpack_require__(59);
+__webpack_require__(66);
+__webpack_require__(68);
+__webpack_require__(69);
+__webpack_require__(25);
+
+__webpack_require__(29);
+__webpack_require__(71);
 
 /***/ }),
 /* 65 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(20);
-module.exports.Matrix = __webpack_require__(62);
-module.exports.Texture = __webpack_require__(60);
-__webpack_require__(67);
-__webpack_require__(69);
-__webpack_require__(70);
-__webpack_require__(26);
-
-__webpack_require__(30);
-__webpack_require__(72);
-
-/***/ }),
-/* 66 */
 /***/ (function(module, exports) {
 
 module.exports = function() {
@@ -21153,20 +21111,20 @@ module.exports = function() {
 };
 
 /***/ }),
-/* 67 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 if (false)
   {}
 
-var Class = __webpack_require__(20);
-var Texture = __webpack_require__(60);
+var Class = __webpack_require__(19);
+var Texture = __webpack_require__(59);
 
-var extend = __webpack_require__(37);
-var create = __webpack_require__(25);
-var is = __webpack_require__(38);
+var extend = __webpack_require__(36);
+var create = __webpack_require__(24);
+var is = __webpack_require__(37);
 
-var string = __webpack_require__(68);
+var string = __webpack_require__(67);
 
 // name : atlas
 var _atlases_map = {};
@@ -21400,7 +21358,7 @@ module.exports = Atlas;
 
 
 /***/ }),
-/* 68 */
+/* 67 */
 /***/ (function(module, exports) {
 
 module.exports.startsWith = function(str, sub) {
@@ -21409,11 +21367,11 @@ module.exports.startsWith = function(str, sub) {
 };
 
 /***/ }),
-/* 69 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(20);
-var is = __webpack_require__(38);
+var Class = __webpack_require__(19);
+var is = __webpack_require__(37);
 
 var iid = 0;
 
@@ -21827,16 +21785,16 @@ module.exports = Class;
 
 
 /***/ }),
-/* 70 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(71)(__webpack_require__(20).prototype, function(obj, name, on) {
+__webpack_require__(70)(__webpack_require__(19).prototype, function(obj, name, on) {
   obj._flag(name, on);
 });
 
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports) {
 
 module.exports = function(prototype, callback) {
@@ -21913,16 +21871,16 @@ module.exports = function(prototype, callback) {
 
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(20);
-__webpack_require__(26);
-__webpack_require__(30);
+var Class = __webpack_require__(19);
+__webpack_require__(25);
+__webpack_require__(29);
 
-var stats = __webpack_require__(36);
-var create = __webpack_require__(25);
-var extend = __webpack_require__(37);
+var stats = __webpack_require__(35);
+var create = __webpack_require__(24);
+var extend = __webpack_require__(36);
 
 Root._super = Class;
 Root.prototype = create(Root._super.prototype);
@@ -22049,11 +22007,11 @@ Root.prototype.viewbox = function(width, height, mode) {
 
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(20);
-var Texture = __webpack_require__(60);
+var Class = __webpack_require__(19);
+var Texture = __webpack_require__(59);
 
 Class.canvas = function(type, attributes, callback) {
   if (typeof type === 'string') {
@@ -22105,15 +22063,15 @@ Class.canvas = function(type, attributes, callback) {
 };
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(20);
-__webpack_require__(26);
-__webpack_require__(30);
+var Class = __webpack_require__(19);
+__webpack_require__(25);
+__webpack_require__(29);
 
-var repeat = __webpack_require__(75);
-var create = __webpack_require__(25);
+var repeat = __webpack_require__(74);
+var create = __webpack_require__(24);
 
 module.exports = Image;
 
@@ -22183,7 +22141,7 @@ Image.prototype._repeat = function(stretch, inner) {
 
 
 /***/ }),
-/* 75 */
+/* 74 */
 /***/ (function(module, exports) {
 
 module.exports = function(img, owidth, oheight, stretch, inner, insert) {
@@ -22262,15 +22220,15 @@ module.exports = function(img, owidth, oheight, stretch, inner, insert) {
 };
 
 /***/ }),
-/* 76 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(20);
-__webpack_require__(26);
-__webpack_require__(30);
+var Class = __webpack_require__(19);
+__webpack_require__(25);
+__webpack_require__(29);
 
-var create = __webpack_require__(25);
-var math = __webpack_require__(61);
+var create = __webpack_require__(24);
+var math = __webpack_require__(60);
 
 Class.anim = function(frames, fps) {
   var anim = new Anim();
@@ -22403,15 +22361,15 @@ Anim.prototype.stop = function(frame) {
 
 
 /***/ }),
-/* 77 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(20);
-__webpack_require__(26);
-__webpack_require__(30);
+var Class = __webpack_require__(19);
+__webpack_require__(25);
+__webpack_require__(29);
 
-var create = __webpack_require__(25);
-var is = __webpack_require__(38);
+var create = __webpack_require__(24);
+var is = __webpack_require__(37);
 
 Class.string = function(frames) {
   return new Str().frames(frames);
@@ -22490,14 +22448,14 @@ Str.prototype.value = function(value) {
 
 
 /***/ }),
-/* 78 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Class = __webpack_require__(20);
-__webpack_require__(26);
-__webpack_require__(30);
+var Class = __webpack_require__(19);
+__webpack_require__(25);
+__webpack_require__(29);
 
-var create = __webpack_require__(25);
+var create = __webpack_require__(24);
 
 Class.row = function(align) {
   return Class.create().row(align).label('Row');
@@ -22639,12 +22597,12 @@ Class.prototype.spacing = function(space) {
 
 
 /***/ }),
-/* 79 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Easing = __webpack_require__(80);
-var Class = __webpack_require__(20);
-var Pin = __webpack_require__(26);
+var Easing = __webpack_require__(79);
+var Class = __webpack_require__(19);
+var Pin = __webpack_require__(25);
 
 Class.prototype.tween = function(duration, delay, append) {
   if (typeof duration !== 'number') {
@@ -22829,7 +22787,7 @@ Tween.prototype.clear = function(forward) {
 module.exports = Tween;
 
 /***/ }),
-/* 80 */
+/* 79 */
 /***/ (function(module, exports) {
 
 function _identity(x) {
@@ -23020,13 +22978,13 @@ module.exports = Easing;
 
 
 /***/ }),
-/* 81 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 if (false)
   {}
 
-__webpack_require__(20)._load(function(stage, elem) {
+__webpack_require__(19)._load(function(stage, elem) {
   Mouse.subscribe(stage, elem);
 });
 
@@ -23233,7 +23191,7 @@ module.exports = Mouse;
 
 
 /***/ }),
-/* 82 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -23243,7 +23201,7 @@ module.exports = Mouse;
 if (false)
   {}
 
-var Class = __webpack_require__(20);
+var Class = __webpack_require__(19);
 
 Class._supported = (function() {
   var elem = document.createElement('canvas');
