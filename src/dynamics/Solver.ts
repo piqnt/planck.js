@@ -80,6 +80,8 @@ export class ContactImpulse {
 
   constructor(contact) {
     this.contact = contact;
+    this.normals = [];
+    this.tangents = [];
   }
 
   get normalImpulses() {
