@@ -57,9 +57,9 @@
 
 • **allowSleep**? : *boolean*
 
-*Defined in [dist/planck.d.ts:1320](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1320)*
+*Defined in [dist/planck.d.ts:1320](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1320)*
 
-*Defined in [src/dynamics/World.ts:53](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/World.ts#L53)*
+*Defined in [src/dynamics/World.ts:53](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L53)*
 
 ___
 
@@ -67,9 +67,9 @@ ___
 
 • **blockSolve**? : *boolean*
 
-*Defined in [dist/planck.d.ts:1324](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1324)*
+*Defined in [dist/planck.d.ts:1324](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1324)*
 
-*Defined in [src/dynamics/World.ts:57](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/World.ts#L57)*
+*Defined in [src/dynamics/World.ts:57](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L57)*
 
 ___
 
@@ -77,9 +77,9 @@ ___
 
 • **continuousPhysics**? : *boolean*
 
-*Defined in [dist/planck.d.ts:1322](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1322)*
+*Defined in [dist/planck.d.ts:1322](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1322)*
 
-*Defined in [src/dynamics/World.ts:55](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/World.ts#L55)*
+*Defined in [src/dynamics/World.ts:55](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L55)*
 
 ___
 
@@ -87,9 +87,9 @@ ___
 
 • **gravity**? : *Vec2*
 
-*Defined in [dist/planck.d.ts:1319](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1319)*
+*Defined in [dist/planck.d.ts:1319](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1319)*
 
-*Defined in [src/dynamics/World.ts:52](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/World.ts#L52)*
+*Defined in [src/dynamics/World.ts:52](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L52)*
 
 ___
 
@@ -97,9 +97,9 @@ ___
 
 • **positionIterations**? : *number*
 
-*Defined in [dist/planck.d.ts:1326](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1326)*
+*Defined in [dist/planck.d.ts:1326](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1326)*
 
-*Defined in [src/dynamics/World.ts:59](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/World.ts#L59)*
+*Defined in [src/dynamics/World.ts:59](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L59)*
 
 ___
 
@@ -107,9 +107,9 @@ ___
 
 • **subStepping**? : *boolean*
 
-*Defined in [dist/planck.d.ts:1323](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1323)*
+*Defined in [dist/planck.d.ts:1323](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1323)*
 
-*Defined in [src/dynamics/World.ts:56](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/World.ts#L56)*
+*Defined in [src/dynamics/World.ts:56](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L56)*
 
 ___
 
@@ -117,9 +117,9 @@ ___
 
 • **velocityIterations**? : *number*
 
-*Defined in [dist/planck.d.ts:1325](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1325)*
+*Defined in [dist/planck.d.ts:1325](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1325)*
 
-*Defined in [src/dynamics/World.ts:58](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/World.ts#L58)*
+*Defined in [src/dynamics/World.ts:58](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L58)*
 
 ___
 
@@ -127,6 +127,6 @@ ___
 
 • **warmStarting**? : *boolean*
 
-*Defined in [dist/planck.d.ts:1321](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1321)*
+*Defined in [dist/planck.d.ts:1321](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1321)*
 
-*Defined in [src/dynamics/World.ts:54](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/World.ts#L54)*
+*Defined in [src/dynamics/World.ts:54](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L54)*

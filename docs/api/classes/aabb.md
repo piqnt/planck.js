@@ -10,7 +10,7 @@
 
 ▸ **AABB**(`lower?`: [Vec2](vec2.md), `upper?`: [Vec2](vec2.md)): *[AABB](aabb.md)*
 
-*Defined in [dist/planck.d.ts:410](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L410)*
+*Defined in [dist/planck.d.ts:410](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L410)*
 
 **Parameters:**
 
@@ -58,7 +58,7 @@ Name | Type |
 
 \+ **new AABB**(`lower?`: [Vec2](vec2.md), `upper?`: [Vec2](vec2.md)): *[AABB](aabb.md)*
 
-*Defined in [dist/planck.d.ts:413](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L413)*
+*Defined in [dist/planck.d.ts:413](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L413)*
 
 **Parameters:**
 
@@ -75,9 +75,9 @@ Name | Type |
 
 • **lowerBound**: *Vec2*
 
-*Defined in [dist/planck.d.ts:412](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L412)*
+*Defined in [dist/planck.d.ts:412](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L412)*
 
-*Defined in [src/collision/AABB.ts:53](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/AABB.ts#L53)*
+*Defined in [src/collision/AABB.ts:53](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/AABB.ts#L53)*
 
 ___
 
@@ -85,9 +85,9 @@ ___
 
 • **upperBound**: *Vec2*
 
-*Defined in [dist/planck.d.ts:413](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L413)*
+*Defined in [dist/planck.d.ts:413](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L413)*
 
-*Defined in [src/collision/AABB.ts:54](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/AABB.ts#L54)*
+*Defined in [src/collision/AABB.ts:54](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/AABB.ts#L54)*
 
 ## Methods
 
@@ -95,7 +95,7 @@ ___
 
 ▸ **combine**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *void*
 
-*Defined in [dist/planck.d.ts:436](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L436)*
+*Defined in [dist/planck.d.ts:436](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L436)*
 
 Combine one or two AABB into this one.
 
@@ -114,7 +114,7 @@ ___
 
 ▸ **combinePoints**(`a`: [Vec2](vec2.md), `b`: [Vec2](vec2.md)): *void*
 
-*Defined in [dist/planck.d.ts:437](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L437)*
+*Defined in [dist/planck.d.ts:437](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L437)*
 
 **Parameters:**
 
@@ -131,7 +131,7 @@ ___
 
 ▸ **contains**(`aabb`: [AABB](aabb.md)): *boolean*
 
-*Defined in [dist/planck.d.ts:439](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L439)*
+*Defined in [dist/planck.d.ts:439](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L439)*
 
 **Parameters:**
 
@@ -147,7 +147,7 @@ ___
 
 ▸ **extend**(`value`: number): *[AABB](aabb.md)*
 
-*Defined in [dist/planck.d.ts:440](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L440)*
+*Defined in [dist/planck.d.ts:440](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L440)*
 
 **Parameters:**
 
@@ -163,7 +163,7 @@ ___
 
 ▸ **getCenter**(): *[Vec2](vec2.md)*
 
-*Defined in [dist/planck.d.ts:424](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L424)*
+*Defined in [dist/planck.d.ts:424](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L424)*
 
 Get the center of the AABB.
 
@@ -175,7 +175,7 @@ ___
 
 ▸ **getExtents**(): *[Vec2](vec2.md)*
 
-*Defined in [dist/planck.d.ts:428](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L428)*
+*Defined in [dist/planck.d.ts:428](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L428)*
 
 Get the extents of the AABB (half-widths).
 
@@ -187,7 +187,7 @@ ___
 
 ▸ **getPerimeter**(): *number*
 
-*Defined in [dist/planck.d.ts:432](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L432)*
+*Defined in [dist/planck.d.ts:432](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L432)*
 
 Get the perimeter length.
 
@@ -199,7 +199,7 @@ ___
 
 ▸ **isValid**(): *boolean*
 
-*Defined in [dist/planck.d.ts:418](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L418)*
+*Defined in [dist/planck.d.ts:418](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L418)*
 
 Verify that the bounds are sorted.
 
@@ -211,7 +211,7 @@ ___
 
 ▸ **rayCast**(`output`: [RayCastOutput](../interfaces/raycastoutput.md), `input`: [RayCastInput](../interfaces/raycastinput.md)): *boolean*
 
-*Defined in [dist/planck.d.ts:445](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L445)*
+*Defined in [dist/planck.d.ts:445](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L445)*
 
 **Parameters:**
 
@@ -228,7 +228,7 @@ ___
 
 ▸ **set**(`aabb`: [AABB](aabb.md)): *void*
 
-*Defined in [dist/planck.d.ts:438](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L438)*
+*Defined in [dist/planck.d.ts:438](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L438)*
 
 **Parameters:**
 
@@ -244,7 +244,7 @@ ___
 
 ▸ **toString**(): *string*
 
-*Defined in [dist/planck.d.ts:446](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L446)*
+*Defined in [dist/planck.d.ts:446](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L446)*
 
 **Returns:** *string*
 
@@ -254,7 +254,7 @@ ___
 
 ▸ **areEqual**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *boolean*
 
-*Defined in [dist/planck.d.ts:443](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L443)*
+*Defined in [dist/planck.d.ts:443](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L443)*
 
 **Parameters:**
 
@@ -271,7 +271,7 @@ ___
 
 ▸ **assert**(`o`: any): *void*
 
-*Defined in [dist/planck.d.ts:420](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L420)*
+*Defined in [dist/planck.d.ts:420](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L420)*
 
 **Parameters:**
 
@@ -287,7 +287,7 @@ ___
 
 ▸ **diff**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *number*
 
-*Defined in [dist/planck.d.ts:444](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L444)*
+*Defined in [dist/planck.d.ts:444](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L444)*
 
 **Parameters:**
 
@@ -304,7 +304,7 @@ ___
 
 ▸ **extend**(`aabb`: [AABB](aabb.md), `value`: number): *void*
 
-*Defined in [dist/planck.d.ts:441](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L441)*
+*Defined in [dist/planck.d.ts:441](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L441)*
 
 **Parameters:**
 
@@ -321,7 +321,7 @@ ___
 
 ▸ **isValid**(`aabb`: any): *boolean*
 
-*Defined in [dist/planck.d.ts:419](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L419)*
+*Defined in [dist/planck.d.ts:419](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L419)*
 
 **Parameters:**
 
@@ -337,7 +337,7 @@ ___
 
 ▸ **testOverlap**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *boolean*
 
-*Defined in [dist/planck.d.ts:442](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L442)*
+*Defined in [dist/planck.d.ts:442](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L442)*
 
 **Parameters:**
 

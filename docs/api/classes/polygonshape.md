@@ -23,7 +23,7 @@ for a convex polygon. extends Shape
 
 ▸ **PolygonShape**(`vertices?`: [Vec2](vec2.md)[]): *[PolygonShape](polygonshape.md)*
 
-*Defined in [dist/planck.d.ts:2155](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2155)*
+*Defined in [dist/planck.d.ts:2155](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2155)*
 
 A convex polygon. It is assumed that the interior of the polygon is to the
 left of each edge. Polygons have a maximum number of vertices equal to
@@ -82,7 +82,7 @@ Name | Type |
 
 \+ **new PolygonShape**(`vertices?`: [Vec2](vec2.md)[]): *[PolygonShape](polygonshape.md)*
 
-*Defined in [dist/planck.d.ts:2167](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2167)*
+*Defined in [dist/planck.d.ts:2167](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2167)*
 
 **Parameters:**
 
@@ -98,9 +98,9 @@ Name | Type |
 
 • **m_centroid**: *Vec2*
 
-*Defined in [dist/planck.d.ts:2164](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2164)*
+*Defined in [dist/planck.d.ts:2164](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2164)*
 
-*Defined in [src/collision/shape/PolygonShape.ts:49](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/shape/PolygonShape.ts#L49)*
+*Defined in [src/collision/shape/PolygonShape.ts:49](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/PolygonShape.ts#L49)*
 
 ___
 
@@ -108,9 +108,9 @@ ___
 
 • **m_count**: *number*
 
-*Defined in [dist/planck.d.ts:2167](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2167)*
+*Defined in [dist/planck.d.ts:2167](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2167)*
 
-*Defined in [src/collision/shape/PolygonShape.ts:52](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/shape/PolygonShape.ts#L52)*
+*Defined in [src/collision/shape/PolygonShape.ts:52](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/PolygonShape.ts#L52)*
 
 ___
 
@@ -118,9 +118,9 @@ ___
 
 • **m_normals**: *Vec2[]*
 
-*Defined in [dist/planck.d.ts:2166](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2166)*
+*Defined in [dist/planck.d.ts:2166](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2166)*
 
-*Defined in [src/collision/shape/PolygonShape.ts:51](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/shape/PolygonShape.ts#L51)*
+*Defined in [src/collision/shape/PolygonShape.ts:51](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/PolygonShape.ts#L51)*
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 *Inherited from [CircleShape](circleshape.md).[m_radius](circleshape.md#m_radius)*
 
-*Defined in [src/collision/Shape.ts:39](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Shape.ts#L39)*
+*Defined in [src/collision/Shape.ts:39](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Shape.ts#L39)*
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 *Inherited from [CircleShape](circleshape.md).[m_type](circleshape.md#m_type)*
 
-*Defined in [src/collision/Shape.ts:38](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Shape.ts#L38)*
+*Defined in [src/collision/Shape.ts:38](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Shape.ts#L38)*
 
 ___
 
@@ -148,9 +148,9 @@ ___
 
 • **m_vertices**: *Vec2[]*
 
-*Defined in [dist/planck.d.ts:2165](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2165)*
+*Defined in [dist/planck.d.ts:2165](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2165)*
 
-*Defined in [src/collision/shape/PolygonShape.ts:50](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/shape/PolygonShape.ts#L50)*
+*Defined in [src/collision/shape/PolygonShape.ts:50](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/PolygonShape.ts#L50)*
 
 ___
 
@@ -158,9 +158,9 @@ ___
 
 ▪ **TYPE**: *"polygon"* = 'polygon' as 'polygon'
 
-*Defined in [dist/planck.d.ts:2163](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2163)*
+*Defined in [dist/planck.d.ts:2163](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2163)*
 
-*Defined in [src/collision/shape/PolygonShape.ts:47](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/shape/PolygonShape.ts#L47)*
+*Defined in [src/collision/shape/PolygonShape.ts:47](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/PolygonShape.ts#L47)*
 
 ___
 
@@ -170,7 +170,7 @@ ___
 
 *Inherited from [CircleShape](circleshape.md).[TYPES](circleshape.md#static-types)*
 
-*Defined in [src/collision/Shape.ts:47](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Shape.ts#L47)*
+*Defined in [src/collision/Shape.ts:47](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Shape.ts#L47)*
 
 #### Type declaration:
 
@@ -184,7 +184,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2176](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2176)*
+*Defined in [dist/planck.d.ts:2176](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2176)*
 
 **`deprecated`** Shapes should be treated as immutable.
 
@@ -200,7 +200,7 @@ ___
 
 *Overrides [CircleShape](circleshape.md).[_reset](circleshape.md#_reset)*
 
-*Defined in [dist/planck.d.ts:2181](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2181)*
+*Defined in [dist/planck.d.ts:2181](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2181)*
 
 **Returns:** *void*
 
@@ -210,7 +210,7 @@ ___
 
 ▸ **_setAsBox**(`hx`: number, `hy`: number): *void*
 
-*Defined in [dist/planck.d.ts:2182](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2182)*
+*Defined in [dist/planck.d.ts:2182](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2182)*
 
 **Parameters:**
 
@@ -223,7 +223,7 @@ Name | Type |
 
 ▸ **_setAsBox**(`hx`: number, `hy`: number): *void*
 
-*Defined in [src/collision/shape/PolygonShape.ts:261](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/shape/PolygonShape.ts#L261)*
+*Defined in [src/collision/shape/PolygonShape.ts:261](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/PolygonShape.ts#L261)*
 
 **Parameters:**
 
@@ -242,7 +242,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2208](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2208)*
+*Defined in [dist/planck.d.ts:2208](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2208)*
 
 Given a transform, compute the associated axis aligned bounding box for a
 child shape.
@@ -265,7 +265,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2222](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2222)*
+*Defined in [dist/planck.d.ts:2222](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2222)*
 
 **Parameters:**
 
@@ -283,7 +283,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2216](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2216)*
+*Defined in [dist/planck.d.ts:2216](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2216)*
 
 Compute the mass properties of this shape using its dimensions and density.
 The inertia tensor is computed about the local origin.
@@ -305,7 +305,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2180](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2180)*
+*Defined in [dist/planck.d.ts:2180](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2180)*
 
 Get the number of child primitives.
 
@@ -319,7 +319,7 @@ ___
 
 *Inherited from [EdgeShape](edgeshape.md).[getRadius](edgeshape.md#getradius)*
 
-*Defined in [src/collision/Shape.ts:59](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Shape.ts#L59)*
+*Defined in [src/collision/Shape.ts:59](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Shape.ts#L59)*
 
 **Returns:** *number*
 
@@ -331,7 +331,7 @@ ___
 
 *Inherited from [CircleShape](circleshape.md).[getType](circleshape.md#gettype)*
 
-*Defined in [src/collision/Shape.ts:69](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Shape.ts#L69)*
+*Defined in [src/collision/Shape.ts:69](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Shape.ts#L69)*
 
 Get the type of this shape. You can use this to down cast to the concrete
 shape.
@@ -346,7 +346,7 @@ ___
 
 ▸ **getVertex**(`index`: number): *[Vec2](vec2.md)*
 
-*Defined in [dist/planck.d.ts:2170](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2170)*
+*Defined in [dist/planck.d.ts:2170](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2170)*
 
 **Parameters:**
 
@@ -364,7 +364,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2199](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2199)*
+*Defined in [dist/planck.d.ts:2199](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2199)*
 
 Cast a ray against a child shape.
 
@@ -387,7 +387,7 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:2190](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2190)*
+*Defined in [dist/planck.d.ts:2190](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2190)*
 
 Test a point for containment in this shape. This only works for convex
 shapes.
@@ -407,7 +407,7 @@ ___
 
 ▸ **validate**(): *boolean*
 
-*Defined in [dist/planck.d.ts:2221](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2221)*
+*Defined in [dist/planck.d.ts:2221](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2221)*
 
 Validate convexity. This is a very time consuming operation.
 
@@ -423,7 +423,7 @@ ___
 
 *Inherited from [CircleShape](circleshape.md).[isValid](circleshape.md#static-isvalid)*
 
-*Defined in [src/collision/Shape.ts:55](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/Shape.ts#L55)*
+*Defined in [src/collision/Shape.ts:55](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Shape.ts#L55)*
 
 **Parameters:**
 

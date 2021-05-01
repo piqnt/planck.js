@@ -22,9 +22,9 @@ Output parameters for TimeOfImpact.
 
 • **state**: *TOIOutputState | undefined*
 
-*Defined in [dist/planck.d.ts:3705](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3705)*
+*Defined in [dist/planck.d.ts:3812](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3812)*
 
-*Defined in [src/collision/TimeOfImpact.ts:67](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/TimeOfImpact.ts#L67)*
+*Defined in [src/collision/TimeOfImpact.ts:67](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/TimeOfImpact.ts#L67)*
 
 ___
 
@@ -32,6 +32,6 @@ ___
 
 • **t**: *number | undefined*
 
-*Defined in [dist/planck.d.ts:3706](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L3706)*
+*Defined in [dist/planck.d.ts:3813](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3813)*
 
-*Defined in [src/collision/TimeOfImpact.ts:68](https://github.com/shakiba/planck.js/blob/3ede11b/src/collision/TimeOfImpact.ts#L68)*
+*Defined in [src/collision/TimeOfImpact.ts:68](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/TimeOfImpact.ts#L68)*

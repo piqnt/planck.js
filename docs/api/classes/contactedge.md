@@ -50,7 +50,7 @@ contact has two contact nodes, one for each attached body.
 
 \+ **new ContactEdge**(`contact`: any): *[ContactEdge](contactedge.md)*
 
-*Defined in [dist/planck.d.ts:1159](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1159)*
+*Defined in [dist/planck.d.ts:1159](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1159)*
 
 **Parameters:**
 
@@ -66,9 +66,9 @@ Name | Type |
 
 • **contact**: *Contact*
 
-*Defined in [dist/planck.d.ts:1156](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1156)*
+*Defined in [dist/planck.d.ts:1156](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1156)*
 
-*Defined in [src/dynamics/Contact.ts:57](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Contact.ts#L57)*
+*Defined in [src/dynamics/Contact.ts:57](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Contact.ts#L57)*
 
 ___
 
@@ -76,9 +76,9 @@ ___
 
 • **next**: *ContactEdge | undefined*
 
-*Defined in [dist/planck.d.ts:1158](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1158)*
+*Defined in [dist/planck.d.ts:1158](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1158)*
 
-*Defined in [src/dynamics/Contact.ts:59](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Contact.ts#L59)*
+*Defined in [src/dynamics/Contact.ts:59](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Contact.ts#L59)*
 
 ___
 
@@ -86,9 +86,9 @@ ___
 
 • **other**: *Body | undefined*
 
-*Defined in [dist/planck.d.ts:1159](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1159)*
+*Defined in [dist/planck.d.ts:1159](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1159)*
 
-*Defined in [src/dynamics/Contact.ts:60](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Contact.ts#L60)*
+*Defined in [src/dynamics/Contact.ts:60](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Contact.ts#L60)*
 
 ___
 
@@ -96,6 +96,6 @@ ___
 
 • **prev**: *ContactEdge | undefined*
 
-*Defined in [dist/planck.d.ts:1157](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L1157)*
+*Defined in [dist/planck.d.ts:1157](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1157)*
 
-*Defined in [src/dynamics/Contact.ts:58](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/Contact.ts#L58)*
+*Defined in [src/dynamics/Contact.ts:58](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Contact.ts#L58)*

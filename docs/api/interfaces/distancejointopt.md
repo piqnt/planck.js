@@ -43,7 +43,7 @@ not use a zero or short length.
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L938)*
+*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L938)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -54,9 +54,9 @@ ___
 
 • **dampingRatio**? : *number*
 
-*Defined in [dist/planck.d.ts:2369](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2369)*
+*Defined in [dist/planck.d.ts:2369](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2369)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:49](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/DistanceJoint.ts#L49)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:49](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/DistanceJoint.ts#L49)*
 
 The damping ratio. 0 = no damping, 1 = critical damping.
 The damping ratio. 0 = no damping, 1 = critical damping.
@@ -67,9 +67,9 @@ ___
 
 • **frequencyHz**? : *number*
 
-*Defined in [dist/planck.d.ts:2365](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2365)*
+*Defined in [dist/planck.d.ts:2365](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2365)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:45](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/DistanceJoint.ts#L45)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:45](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/DistanceJoint.ts#L45)*
 
 The mass-spring-damper frequency in Hertz. A value of 0 disables softness.
 The mass-spring-damper frequency in Hertz. A value of 0 disables softness.
@@ -80,9 +80,9 @@ ___
 
 • **length**? : *number*
 
-*Defined in [dist/planck.d.ts:2373](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L2373)*
+*Defined in [dist/planck.d.ts:2373](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2373)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:53](https://github.com/shakiba/planck.js/blob/3ede11b/src/dynamics/joint/DistanceJoint.ts#L53)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:53](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/DistanceJoint.ts#L53)*
 
 Distance length.
 Distance length.
@@ -97,6 +97,6 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/3ede11b/dist/planck.d.ts#L933)*
+*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L933)*
 
 Use this to attach application specific data to your joints.
