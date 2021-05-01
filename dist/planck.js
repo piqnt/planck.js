@@ -6279,6 +6279,8 @@
     var ContactImpulse = /** @class */ (function () {
         function ContactImpulse(contact) {
             this.contact = contact;
+            this.normals = [];
+            this.tangents = [];
         }
         Object.defineProperty(ContactImpulse.prototype, "normalImpulses", {
             get: function () {
