@@ -1619,16 +1619,16 @@
                 }
                 var child1 = nodes[iMin];
                 var child2 = nodes[jMin];
-                var parent = this.allocateNode();
-                parent.child1 = child1;
-                parent.child2 = child2;
-                parent.height = 1 + math.max(child1.height, child2.height);
-                parent.aabb.combine(child1.aabb, child2.aabb);
-                parent.parent = null;
-                child1.parent = parent;
-                child2.parent = parent;
+                var parent_1 = this.allocateNode();
+                parent_1.child1 = child1;
+                parent_1.child2 = child2;
+                parent_1.height = 1 + math.max(child1.height, child2.height);
+                parent_1.aabb.combine(child1.aabb, child2.aabb);
+                parent_1.parent = null;
+                child1.parent = parent_1;
+                child2.parent = parent_1;
                 nodes[jMin] = nodes[count - 1];
-                nodes[iMin] = parent;
+                nodes[iMin] = parent_1;
                 --count;
             }
             this.m_root = nodes[0];
@@ -4229,9 +4229,9 @@
         toString: function (newline) {
             newline = typeof newline === 'string' ? newline : '\n';
             var string = "";
-            for (var name in this) {
-                if (typeof this[name] !== 'function' && typeof this[name] !== 'object') {
-                    string += name + ': ' + this[name] + newline;
+            for (var name_1 in this) {
+                if (typeof this[name_1] !== 'function' && typeof this[name_1] !== 'object') {
+                    string += name_1 + ': ' + this[name_1] + newline;
                 }
             }
             return string;

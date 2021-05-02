@@ -25,13 +25,13 @@ export default [
     declaration: false,
   },
   {
-    src: 'testbed/index.js',
+    src: 'testbed/index.ts',
     dest: 'dist/planck-with-testbed.js',
     minimize: false,
-    declaration: false,
+    declaration: true,
   },
   {
-    src: 'testbed/index.js',
+    src: 'testbed/index.ts',
     dest: 'dist/planck-with-testbed.min.js',
     minimize: true,
     declaration: false,
