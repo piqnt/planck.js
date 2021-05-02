@@ -3638,6 +3638,7 @@ declare class WheelJoint extends Joint {
 /**
  * Tuning constants based on meters-kilograms-seconds (MKS) units.
  */
+// tslint:disable-next-line:no-unnecessary-class
 declare class Settings {
     // Collision
     /**

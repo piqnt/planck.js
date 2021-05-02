@@ -105,7 +105,7 @@ export default class ChainShape extends Shape {
   }
 
   /** @internal */
-  _deserialize(data, fixture, restore) {
+  static _deserialize(data, fixture, restore) {
     const vertices = [] as Vec2[];
     if (data.vertices) {
       for (let i = 0; i < data.vertices.length; i++) {

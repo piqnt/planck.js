@@ -821,6 +821,7 @@
     /**
      * Tuning constants based on meters-kilograms-seconds (MKS) units.
      */
+    // tslint:disable-next-line:no-unnecessary-class
     var Settings = /** @class */ (function () {
         function Settings() {
         }
@@ -9159,7 +9160,7 @@
             return data;
         };
         /** @internal */
-        ChainShape.prototype._deserialize = function (data, fixture, restore) {
+        ChainShape._deserialize = function (data, fixture, restore) {
             var vertices = [];
             if (data.vertices) {
                 for (var i = 0; i < data.vertices.length; i++) {
