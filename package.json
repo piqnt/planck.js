@@ -68,7 +68,7 @@
     "test:coverage:html": "nyc --reporter=html mocha 'lib/**/__test/*.js'",
     "build": "rollup -c",
     "watch": "rollup -c --watch",
-    "testbed": "nodemon testbed/server.js",
+    "testbed": "node testbed/server.js",
     "typedoc": "typedoc --options typedoc.json"
   }
 }
