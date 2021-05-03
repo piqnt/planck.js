@@ -1,4 +1,5 @@
 export as namespace planck;
 
 export * from "./dist/planck";
-export * from "./testbed/index";
+// @ts-ignore
+export * from "./dist/planck-with-testbed";
