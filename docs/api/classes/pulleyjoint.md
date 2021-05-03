@@ -4,15 +4,6 @@
 
 The pulley joint is connected to two bodies and two fixed ground points. The
 pulley supports a ratio such that: length1 + ratio * length2 <= constant
-The pulley joint is connected to two bodies and two fixed ground points. The
-pulley supports a ratio such that: length1 + ratio * length2 <= constant
-
-Yes, the force transmitted is scaled by the ratio.
-
-Warning: the pulley joint can get a bit squirrelly by itself. They often work
-better when combined with prismatic joints. You should also cover the the
-anchor points with static shapes to prevent one side from going to zero
-length.
 
 Yes, the force transmitted is scaled by the ratio.
 
@@ -23,82 +14,9 @@ length.
 
 ## Hierarchy
 
-* any
-
-* Joint
+* [Joint](joint.md)
 
   ↳ **PulleyJoint**
-
-## Callable
-
-▸ **PulleyJoint**(`def`: [PulleyJointDef](../interfaces/pulleyjointdef.md)): *[PulleyJoint](pulleyjoint.md)*
-
-*Defined in [dist/planck.d.ts:3192](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3192)*
-
-The pulley joint is connected to two bodies and two fixed ground points. The
-pulley supports a ratio such that: length1 + ratio * length2 <= constant
-The pulley joint is connected to two bodies and two fixed ground points. The
-pulley supports a ratio such that: length1 + ratio * length2 <= constant
-
-Yes, the force transmitted is scaled by the ratio.
-
-Warning: the pulley joint can get a bit squirrelly by itself. They often work
-better when combined with prismatic joints. You should also cover the the
-anchor points with static shapes to prevent one side from going to zero
-length.
-
-Yes, the force transmitted is scaled by the ratio.
-
-Warning: the pulley joint can get a bit squirrelly by itself. They often work
-better when combined with prismatic joints. You should also cover the the
-anchor points with static shapes to prevent one side from going to zero
-length.
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`def` | [PulleyJointDef](../interfaces/pulleyjointdef.md) |
-
-**Returns:** *[PulleyJoint](pulleyjoint.md)*
-
-▸ **PulleyJoint**(`def`: [PulleyJointOpt](../interfaces/pulleyjointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `groundA`: [Vec2](vec2.md), `groundB`: [Vec2](vec2.md), `anchorA`: [Vec2](vec2.md), `anchorB`: [Vec2](vec2.md), `ratio`: number): *[PulleyJoint](pulleyjoint.md)*
-
-*Defined in [dist/planck.d.ts:3193](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3193)*
-
-The pulley joint is connected to two bodies and two fixed ground points. The
-pulley supports a ratio such that: length1 + ratio * length2 <= constant
-The pulley joint is connected to two bodies and two fixed ground points. The
-pulley supports a ratio such that: length1 + ratio * length2 <= constant
-
-Yes, the force transmitted is scaled by the ratio.
-
-Warning: the pulley joint can get a bit squirrelly by itself. They often work
-better when combined with prismatic joints. You should also cover the the
-anchor points with static shapes to prevent one side from going to zero
-length.
-
-Yes, the force transmitted is scaled by the ratio.
-
-Warning: the pulley joint can get a bit squirrelly by itself. They often work
-better when combined with prismatic joints. You should also cover the the
-anchor points with static shapes to prevent one side from going to zero
-length.
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`def` | [PulleyJointOpt](../interfaces/pulleyjointopt.md) |
-`bodyA` | [Body](body.md) |
-`bodyB` | [Body](body.md) |
-`groundA` | [Vec2](vec2.md) |
-`groundB` | [Vec2](vec2.md) |
-`anchorA` | [Vec2](vec2.md) |
-`anchorB` | [Vec2](vec2.md) |
-`ratio` | number |
-
-**Returns:** *[PulleyJoint](pulleyjoint.md)*
 
 ## Index
 
@@ -146,9 +64,9 @@ Name | Type |
 
 \+ **new PulleyJoint**(`def`: [PulleyJointDef](../interfaces/pulleyjointdef.md)): *[PulleyJoint](pulleyjoint.md)*
 
-*Overrides void*
+*Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [dist/planck.d.ts:3207](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3207)*
+*Defined in [dynamics/joint/PulleyJoint.ts:120](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L120)*
 
 **Parameters:**
 
@@ -160,9 +78,9 @@ Name | Type |
 
 \+ **new PulleyJoint**(`def`: [PulleyJointOpt](../interfaces/pulleyjointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `groundA`: [Vec2](vec2.md), `groundB`: [Vec2](vec2.md), `anchorA`: [Vec2](vec2.md), `anchorB`: [Vec2](vec2.md), `ratio`: number): *[PulleyJoint](pulleyjoint.md)*
 
-*Overrides void*
+*Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [dist/planck.d.ts:3209](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3209)*
+*Defined in [dynamics/joint/PulleyJoint.ts:122](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L122)*
 
 **Parameters:**
 
@@ -179,50 +97,13 @@ Name | Type |
 
 **Returns:** *[PulleyJoint](pulleyjoint.md)*
 
-\+ **new PulleyJoint**(`def`: PulleyJointDef): *[PulleyJoint](pulleyjoint.md)*
-
-*Overrides void*
-
-*Defined in [src/dynamics/joint/PulleyJoint.ts:120](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PulleyJoint.ts#L120)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`def` | PulleyJointDef |
-
-**Returns:** *[PulleyJoint](pulleyjoint.md)*
-
-\+ **new PulleyJoint**(`def`: PulleyJointOpt, `bodyA`: Body, `bodyB`: Body, `groundA`: Vec2, `groundB`: Vec2, `anchorA`: Vec2, `anchorB`: Vec2, `ratio`: number): *[PulleyJoint](pulleyjoint.md)*
-
-*Overrides void*
-
-*Defined in [src/dynamics/joint/PulleyJoint.ts:122](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PulleyJoint.ts#L122)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`def` | PulleyJointOpt |
-`bodyA` | Body |
-`bodyB` | Body |
-`groundA` | Vec2 |
-`groundB` | Vec2 |
-`anchorA` | Vec2 |
-`anchorB` | Vec2 |
-`ratio` | number |
-
-**Returns:** *[PulleyJoint](pulleyjoint.md)*
-
 ## Properties
 
 ### `Static` MIN_PULLEY_LENGTH
 
 ▪ **MIN_PULLEY_LENGTH**: *number* = 2
 
-*Defined in [dist/planck.d.ts:3207](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3207)*
-
-*Defined in [src/dynamics/joint/PulleyJoint.ts:97](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PulleyJoint.ts#L97)*
+*Defined in [dynamics/joint/PulleyJoint.ts:97](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L97)*
 
 ___
 
@@ -230,9 +111,7 @@ ___
 
 ▪ **TYPE**: *"pulley-joint"* = 'pulley-joint' as 'pulley-joint'
 
-*Defined in [dist/planck.d.ts:3206](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3206)*
-
-*Defined in [src/dynamics/joint/PulleyJoint.ts:96](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PulleyJoint.ts#L96)*
+*Defined in [dynamics/joint/PulleyJoint.ts:96](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L96)*
 
 ___
 
@@ -240,9 +119,9 @@ ___
 
 ▪ **TYPES**: *object*
 
-*Inherited from [DistanceJoint](distancejoint.md).[TYPES](distancejoint.md#static-types)*
+*Inherited from [Joint](joint.md).[TYPES](joint.md#static-types)*
 
-*Defined in [src/dynamics/Joint.ts:128](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L128)*
+*Defined in [dynamics/Joint.ts:128](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L128)*
 
 #### Type declaration:
 
@@ -256,87 +135,87 @@ ___
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3211](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3211)*
+*Defined in [dynamics/joint/PulleyJoint.ts:177](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L177)*
 
 **Returns:** *object*
 
-* **bodyA**: *[Body](body.md)*
+* **bodyA**: *[Body](body.md)‹›* = this.m_bodyA
 
-* **bodyB**: *[Body](body.md)*
+* **bodyB**: *[Body](body.md)‹›* = this.m_bodyB
 
-* **collideConnected**: *boolean*
+* **collideConnected**: *boolean* = this.m_collideConnected
 
-* **groundAnchorA**: *[Vec2](vec2.md)*
+* **groundAnchorA**: *[Vec2](vec2.md)‹›* = this.m_groundAnchorA
 
-* **groundAnchorB**: *[Vec2](vec2.md)*
+* **groundAnchorB**: *[Vec2](vec2.md)‹›* = this.m_groundAnchorB
 
-* **lengthA**: *number*
+* **lengthA**: *number* = this.m_lengthA
 
-* **lengthB**: *number*
+* **lengthB**: *number* = this.m_lengthB
 
-* **localAnchorA**: *[Vec2](vec2.md)*
+* **localAnchorA**: *[Vec2](vec2.md)‹›* = this.m_localAnchorA
 
-* **localAnchorB**: *[Vec2](vec2.md)*
+* **localAnchorB**: *[Vec2](vec2.md)‹›* = this.m_localAnchorB
 
-* **ratio**: *number*
+* **ratio**: *number* = this.m_ratio
 
-* **type**: *"pulley-joint"*
+* **type**: *"pulley-joint"* = this.m_type
 
 ___
 
 ###  getAnchorA
 
-▸ **getAnchorA**(): *[Vec2](vec2.md)*
+▸ **getAnchorA**(): *[Vec2](vec2.md)‹›*
 
-*Overrides void*
+*Overrides [Joint](joint.md).[getAnchorA](joint.md#abstract-getanchora)*
 
-*Defined in [dist/planck.d.ts:3262](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3262)*
+*Defined in [dynamics/joint/PulleyJoint.ts:268](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L268)*
 
 Get the anchor point on bodyA in world coordinates.
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *[Vec2](vec2.md)‹›*
 
 ___
 
 ###  getAnchorB
 
-▸ **getAnchorB**(): *[Vec2](vec2.md)*
+▸ **getAnchorB**(): *[Vec2](vec2.md)‹›*
 
-*Overrides void*
+*Overrides [Joint](joint.md).[getAnchorB](joint.md#abstract-getanchorb)*
 
-*Defined in [dist/planck.d.ts:3266](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3266)*
+*Defined in [dynamics/joint/PulleyJoint.ts:275](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L275)*
 
 Get the anchor point on bodyB in world coordinates.
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *[Vec2](vec2.md)‹›*
 
 ___
 
 ###  getBodyA
 
-▸ **getBodyA**(): *Body‹›*
+▸ **getBodyA**(): *[Body](body.md)‹›*
 
-*Inherited from [DistanceJoint](distancejoint.md).[getBodyA](distancejoint.md#getbodya)*
+*Inherited from [Joint](joint.md).[getBodyA](joint.md#getbodya)*
 
-*Defined in [src/dynamics/Joint.ts:156](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L156)*
+*Defined in [dynamics/Joint.ts:156](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L156)*
 
 Get the first body attached to this joint.
 
-**Returns:** *Body‹›*
+**Returns:** *[Body](body.md)‹›*
 
 ___
 
 ###  getBodyB
 
-▸ **getBodyB**(): *Body‹›*
+▸ **getBodyB**(): *[Body](body.md)‹›*
 
-*Inherited from [DistanceJoint](distancejoint.md).[getBodyB](distancejoint.md#getbodyb)*
+*Inherited from [Joint](joint.md).[getBodyB](joint.md#getbodyb)*
 
-*Defined in [src/dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L163)*
+*Defined in [dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L163)*
 
 Get the second body attached to this joint.
 
-**Returns:** *Body‹›*
+**Returns:** *[Body](body.md)‹›*
 
 ___
 
@@ -344,9 +223,9 @@ ___
 
 ▸ **getCollideConnected**(): *boolean*
 
-*Inherited from [DistanceJoint](distancejoint.md).[getCollideConnected](distancejoint.md#getcollideconnected)*
+*Inherited from [Joint](joint.md).[getCollideConnected](joint.md#getcollideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:187](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L187)*
+*Defined in [dynamics/Joint.ts:187](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L187)*
 
 Get collide connected. Note: modifying the collide connect flag won't work
 correctly because the flag is only checked when fixture AABBs begin to
@@ -360,7 +239,7 @@ ___
 
 ▸ **getCurrentLengthA**(): *number*
 
-*Defined in [dist/planck.d.ts:3248](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3248)*
+*Defined in [dynamics/joint/PulleyJoint.ts:240](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L240)*
 
 Get the current length of the segment attached to bodyA.
 
@@ -372,7 +251,7 @@ ___
 
 ▸ **getCurrentLengthB**(): *number*
 
-*Defined in [dist/planck.d.ts:3252](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3252)*
+*Defined in [dynamics/joint/PulleyJoint.ts:249](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L249)*
 
 Get the current length of the segment attached to bodyB.
 
@@ -382,25 +261,25 @@ ___
 
 ###  getGroundAnchorA
 
-▸ **getGroundAnchorA**(): *[Vec2](vec2.md)*
+▸ **getGroundAnchorA**(): *[Vec2](vec2.md)‹›*
 
-*Defined in [dist/planck.d.ts:3228](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3228)*
+*Defined in [dynamics/joint/PulleyJoint.ts:205](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L205)*
 
 Get the first ground anchor.
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *[Vec2](vec2.md)‹›*
 
 ___
 
 ###  getGroundAnchorB
 
-▸ **getGroundAnchorB**(): *[Vec2](vec2.md)*
+▸ **getGroundAnchorB**(): *[Vec2](vec2.md)‹›*
 
-*Defined in [dist/planck.d.ts:3232](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3232)*
+*Defined in [dynamics/joint/PulleyJoint.ts:212](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L212)*
 
 Get the second ground anchor.
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *[Vec2](vec2.md)‹›*
 
 ___
 
@@ -408,7 +287,7 @@ ___
 
 ▸ **getLengthA**(): *number*
 
-*Defined in [dist/planck.d.ts:3236](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3236)*
+*Defined in [dynamics/joint/PulleyJoint.ts:219](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L219)*
 
 Get the current length of the segment attached to bodyA.
 
@@ -420,7 +299,7 @@ ___
 
 ▸ **getLengthB**(): *number*
 
-*Defined in [dist/planck.d.ts:3240](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3240)*
+*Defined in [dynamics/joint/PulleyJoint.ts:226](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L226)*
 
 Get the current length of the segment attached to bodyB.
 
@@ -430,15 +309,15 @@ ___
 
 ###  getNext
 
-▸ **getNext**(): *Joint‹›*
+▸ **getNext**(): *[Joint](joint.md)‹›*
 
-*Inherited from [DistanceJoint](distancejoint.md).[getNext](distancejoint.md#getnext)*
+*Inherited from [Joint](joint.md).[getNext](joint.md#getnext)*
 
-*Defined in [src/dynamics/Joint.ts:170](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L170)*
+*Defined in [dynamics/Joint.ts:170](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L170)*
 
 Get the next joint the world joint list.
 
-**Returns:** *Joint‹›*
+**Returns:** *[Joint](joint.md)‹›*
 
 ___
 
@@ -446,7 +325,7 @@ ___
 
 ▸ **getRatio**(): *number*
 
-*Defined in [dist/planck.d.ts:3244](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3244)*
+*Defined in [dynamics/joint/PulleyJoint.ts:233](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L233)*
 
 Get the pulley ratio.
 
@@ -456,11 +335,11 @@ ___
 
 ###  getReactionForce
 
-▸ **getReactionForce**(`inv_dt`: any): *[Vec2](vec2.md)*
+▸ **getReactionForce**(`inv_dt`: any): *[Vec2](vec2.md)‹›*
 
-*Overrides void*
+*Overrides [Joint](joint.md).[getReactionForce](joint.md#abstract-getreactionforce)*
 
-*Defined in [dist/planck.d.ts:3270](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3270)*
+*Defined in [dynamics/joint/PulleyJoint.ts:282](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L282)*
 
 Get the reaction force on bodyB at the joint anchor in Newtons.
 
@@ -470,7 +349,7 @@ Name | Type |
 ------ | ------ |
 `inv_dt` | any |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *[Vec2](vec2.md)‹›*
 
 ___
 
@@ -478,9 +357,9 @@ ___
 
 ▸ **getReactionTorque**(`inv_dt`: any): *number*
 
-*Overrides void*
+*Overrides [Joint](joint.md).[getReactionTorque](joint.md#abstract-getreactiontorque)*
 
-*Defined in [dist/planck.d.ts:3274](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3274)*
+*Defined in [dynamics/joint/PulleyJoint.ts:289](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L289)*
 
 Get the reaction torque on bodyB in N*m.
 
@@ -498,9 +377,9 @@ ___
 
 ▸ **getType**(): *string*
 
-*Inherited from [DistanceJoint](distancejoint.md).[getType](distancejoint.md#gettype)*
+*Inherited from [Joint](joint.md).[getType](joint.md#gettype)*
 
-*Defined in [src/dynamics/Joint.ts:149](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L149)*
+*Defined in [dynamics/Joint.ts:149](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L149)*
 
 Get the type of the concrete joint.
 
@@ -512,9 +391,9 @@ ___
 
 ▸ **getUserData**(): *unknown*
 
-*Inherited from [DistanceJoint](distancejoint.md).[getUserData](distancejoint.md#getuserdata)*
+*Inherited from [Joint](joint.md).[getUserData](joint.md#getuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:174](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L174)*
+*Defined in [dynamics/Joint.ts:174](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L174)*
 
 **Returns:** *unknown*
 
@@ -524,9 +403,9 @@ ___
 
 ▸ **initVelocityConstraints**(`step`: any): *void*
 
-*Overrides void*
+*Overrides [Joint](joint.md).[initVelocityConstraints](joint.md#abstract-initvelocityconstraints)*
 
-*Defined in [dist/planck.d.ts:3275](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3275)*
+*Defined in [dynamics/joint/PulleyJoint.ts:293](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L293)*
 
 **Parameters:**
 
@@ -542,9 +421,9 @@ ___
 
 ▸ **isActive**(): *boolean*
 
-*Inherited from [DistanceJoint](distancejoint.md).[isActive](distancejoint.md#isactive)*
+*Inherited from [Joint](joint.md).[isActive](joint.md#isactive)*
 
-*Defined in [src/dynamics/Joint.ts:142](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L142)*
+*Defined in [dynamics/Joint.ts:142](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L142)*
 
 Short-cut function to determine if either body is inactive.
 
@@ -556,9 +435,9 @@ ___
 
 ▸ **setUserData**(`data`: unknown): *void*
 
-*Inherited from [DistanceJoint](distancejoint.md).[setUserData](distancejoint.md#setuserdata)*
+*Inherited from [Joint](joint.md).[setUserData](joint.md#setuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:178](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L178)*
+*Defined in [dynamics/Joint.ts:178](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L178)*
 
 **Parameters:**
 
@@ -574,9 +453,9 @@ ___
 
 ▸ **shiftOrigin**(`newOrigin`: any): *void*
 
-*Overrides [DistanceJoint](distancejoint.md).[shiftOrigin](distancejoint.md#shiftorigin)*
+*Overrides [Joint](joint.md).[shiftOrigin](joint.md#shiftorigin)*
 
-*Defined in [dist/planck.d.ts:3258](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3258)*
+*Defined in [dynamics/joint/PulleyJoint.ts:260](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L260)*
 
 Shift the origin for any points stored in world coordinates.
 
@@ -594,9 +473,9 @@ ___
 
 ▸ **solvePositionConstraints**(`step`: any): *boolean*
 
-*Overrides void*
+*Overrides [Joint](joint.md).[solvePositionConstraints](joint.md#abstract-solvepositionconstraints)*
 
-*Defined in [dist/planck.d.ts:3280](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3280)*
+*Defined in [dynamics/joint/PulleyJoint.ts:403](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L403)*
 
 This returns true if the position errors are within tolerance.
 
@@ -614,9 +493,9 @@ ___
 
 ▸ **solveVelocityConstraints**(`step`: any): *void*
 
-*Overrides void*
+*Overrides [Joint](joint.md).[solveVelocityConstraints](joint.md#abstract-solvevelocityconstraints)*
 
-*Defined in [dist/planck.d.ts:3276](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3276)*
+*Defined in [dynamics/joint/PulleyJoint.ts:373](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L373)*
 
 **Parameters:**
 
@@ -630,11 +509,11 @@ ___
 
 ### `Static` _deserialize
 
-▸ **_deserialize**(`data`: any, `world`: any, `restore`: any): *[PulleyJoint](pulleyjoint.md)*
+▸ **_deserialize**(`data`: any, `world`: any, `restore`: any): *[PulleyJoint](pulleyjoint.md)‹›*
 
 *Overrides void*
 
-*Defined in [dist/planck.d.ts:3224](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3224)*
+*Defined in [dynamics/joint/PulleyJoint.ts:194](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L194)*
 
 **Parameters:**
 
@@ -644,4 +523,4 @@ Name | Type |
 `world` | any |
 `restore` | any |
 
-**Returns:** *[PulleyJoint](pulleyjoint.md)*
+**Returns:** *[PulleyJoint](pulleyjoint.md)‹›*

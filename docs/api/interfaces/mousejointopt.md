@@ -4,14 +4,10 @@
 
 Mouse joint definition. This requires a world target point, tuning
 parameters, and the time step.
-Mouse joint definition. This requires a world target point, tuning
-parameters, and the time step.
 
 ## Hierarchy
 
 * [JointOpt](jointopt.md)
-
-* JointOpt
 
   ↳ **MouseJointOpt**
 
@@ -35,9 +31,7 @@ parameters, and the time step.
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L938)*
+*Defined in [dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -48,12 +42,8 @@ ___
 
 • **dampingRatio**? : *number*
 
-*Defined in [dist/planck.d.ts:3068](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3068)*
+*Defined in [dynamics/joint/MouseJoint.ts:59](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MouseJoint.ts#L59)*
 
-*Defined in [src/dynamics/joint/MouseJoint.ts:59](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/MouseJoint.ts#L59)*
-
-[dampingRatio = 0.7] The damping ratio. 0 = no damping, 1 = critical
-damping.
 [dampingRatio = 0.7] The damping ratio. 0 = no damping, 1 = critical
 damping.
 
@@ -63,11 +53,8 @@ ___
 
 • **frequencyHz**? : *number*
 
-*Defined in [dist/planck.d.ts:3063](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3063)*
+*Defined in [dynamics/joint/MouseJoint.ts:54](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MouseJoint.ts#L54)*
 
-*Defined in [src/dynamics/joint/MouseJoint.ts:54](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/MouseJoint.ts#L54)*
-
-[frequencyHz = 5.0] The response speed.
 [frequencyHz = 5.0] The response speed.
 
 ___
@@ -76,13 +63,8 @@ ___
 
 • **maxForce**? : *number*
 
-*Defined in [dist/planck.d.ts:3059](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3059)*
+*Defined in [dynamics/joint/MouseJoint.ts:50](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MouseJoint.ts#L50)*
 
-*Defined in [src/dynamics/joint/MouseJoint.ts:50](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/MouseJoint.ts#L50)*
-
-[maxForce = 0.0] The maximum constraint force that can be exerted to move
-the candidate body. Usually you will express as some multiple of the
-weight (multiplier * mass * gravity).
 [maxForce = 0.0] The maximum constraint force that can be exerted to move
 the candidate body. Usually you will express as some multiple of the
 weight (multiplier * mass * gravity).
@@ -95,8 +77,6 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L933)*
+*Defined in [dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

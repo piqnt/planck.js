@@ -23,7 +23,7 @@
 
 \+ **new Velocity**(): *[Velocity](velocity.md)*
 
-*Defined in [src/dynamics/Velocity.ts:32](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Velocity.ts#L32)*
+*Defined in [dynamics/Velocity.ts:32](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Velocity.ts#L32)*
 
 **Returns:** *[Velocity](velocity.md)*
 
@@ -31,9 +31,9 @@
 
 ###  v
 
-• **v**: *Vec2*
+• **v**: *[Vec2](vec2.md)*
 
-*Defined in [src/dynamics/Velocity.ts:29](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Velocity.ts#L29)*
+*Defined in [dynamics/Velocity.ts:29](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Velocity.ts#L29)*
 
 linear
 
@@ -43,6 +43,6 @@ ___
 
 • **w**: *number*
 
-*Defined in [src/dynamics/Velocity.ts:32](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Velocity.ts#L32)*
+*Defined in [dynamics/Velocity.ts:32](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Velocity.ts#L32)*
 
 angular

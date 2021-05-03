@@ -23,17 +23,17 @@ Used for computing contact manifolds.
 
 ###  id
 
-• **id**: *ContactID‹›* = new ContactID()
+• **id**: *[ContactID](contactid.md)‹›* = new ContactID()
 
-*Defined in [src/collision/Manifold.ts:312](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Manifold.ts#L312)*
+*Defined in [collision/Manifold.ts:312](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L312)*
 
 ___
 
 ###  v
 
-• **v**: *Vec2‹›* = Vec2.zero()
+• **v**: *[Vec2](vec2.md)‹›* = Vec2.zero()
 
-*Defined in [src/collision/Manifold.ts:311](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Manifold.ts#L311)*
+*Defined in [collision/Manifold.ts:311](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L311)*
 
 ## Methods
 
@@ -41,7 +41,7 @@ ___
 
 ▸ **set**(`o`: any): *void*
 
-*Defined in [src/collision/Manifold.ts:314](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Manifold.ts#L314)*
+*Defined in [collision/Manifold.ts:314](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L314)*
 
 **Parameters:**
 

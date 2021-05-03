@@ -27,9 +27,9 @@
 
 ###  parents
 
-• **parents**: *Array‹TreeNode‹T››* = []
+• **parents**: *Array‹[TreeNode](treenode.md)‹T››* = []
 
-*Defined in [src/collision/DynamicTree.ts:886](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L886)*
+*Defined in [collision/DynamicTree.ts:886](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/DynamicTree.ts#L886)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **states**: *number[]* = []
 
-*Defined in [src/collision/DynamicTree.ts:887](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L887)*
+*Defined in [collision/DynamicTree.ts:887](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/DynamicTree.ts#L887)*
 
 ## Methods
 
@@ -45,7 +45,7 @@ ___
 
 ▸ **close**(): *void*
 
-*Defined in [src/collision/DynamicTree.ts:923](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L923)*
+*Defined in [collision/DynamicTree.ts:923](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/DynamicTree.ts#L923)*
 
 **Returns:** *void*
 
@@ -53,11 +53,11 @@ ___
 
 ###  next
 
-▸ **next**(): *TreeNode‹T›*
+▸ **next**(): *[TreeNode](treenode.md)‹T›*
 
-*Defined in [src/collision/DynamicTree.ts:895](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L895)*
+*Defined in [collision/DynamicTree.ts:895](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/DynamicTree.ts#L895)*
 
-**Returns:** *TreeNode‹T›*
+**Returns:** *[TreeNode](treenode.md)‹T›*
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 ▸ **preorder**(`root`: any): *this*
 
-*Defined in [src/collision/DynamicTree.ts:888](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L888)*
+*Defined in [collision/DynamicTree.ts:888](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/DynamicTree.ts#L888)*
 
 **Parameters:**
 

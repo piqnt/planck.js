@@ -4,7 +4,7 @@
   "inputFiles": ["./src"],
   "out": "./docs/api/",
   "mode": "file",
-  "includeDeclarations": true,
+  "includeDeclarations": false,
   "excludeExternals": true,
   "excludePrivate": true,
   "stripInternal": true

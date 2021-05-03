@@ -27,7 +27,7 @@
 
 • **a**: *number*
 
-*Defined in [src/collision/Distance.ts:307](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Distance.ts#L307)*
+*Defined in [collision/Distance.ts:307](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L307)*
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 • **indexA**: *number*
 
-*Defined in [src/collision/Distance.ts:301](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Distance.ts#L301)*
+*Defined in [collision/Distance.ts:301](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L301)*
 
 ___
 
@@ -43,31 +43,31 @@ ___
 
 • **indexB**: *number*
 
-*Defined in [src/collision/Distance.ts:304](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Distance.ts#L304)*
+*Defined in [collision/Distance.ts:304](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L304)*
 
 ___
 
 ###  w
 
-• **w**: *Vec2* = Vec2.zero()
+• **w**: *[Vec2](vec2.md)* = Vec2.zero()
 
-*Defined in [src/collision/Distance.ts:306](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Distance.ts#L306)*
+*Defined in [collision/Distance.ts:306](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L306)*
 
 ___
 
 ###  wA
 
-• **wA**: *Vec2* = Vec2.zero()
+• **wA**: *[Vec2](vec2.md)* = Vec2.zero()
 
-*Defined in [src/collision/Distance.ts:300](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Distance.ts#L300)*
+*Defined in [collision/Distance.ts:300](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L300)*
 
 ___
 
 ###  wB
 
-• **wB**: *Vec2* = Vec2.zero()
+• **wB**: *[Vec2](vec2.md)* = Vec2.zero()
 
-*Defined in [src/collision/Distance.ts:303](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Distance.ts#L303)*
+*Defined in [collision/Distance.ts:303](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L303)*
 
 ## Methods
 
@@ -75,7 +75,7 @@ ___
 
 ▸ **set**(`v`: any): *void*
 
-*Defined in [src/collision/Distance.ts:309](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Distance.ts#L309)*
+*Defined in [collision/Distance.ts:309](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L309)*
 
 **Parameters:**
 

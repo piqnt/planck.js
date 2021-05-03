@@ -3,13 +3,10 @@
 # Interface: JointDef
 
 Joint definitions are used to construct joints.
-Joint definitions are used to construct joints.
 
 ## Hierarchy
 
 * [JointOpt](jointopt.md)
-
-* JointOpt
 
   ↳ **JointDef**
 
@@ -48,26 +45,20 @@ Joint definitions are used to construct joints.
 
 ###  bodyA
 
-• **bodyA**: *Body*
+• **bodyA**: *[Body](../classes/body.md)*
 
-*Defined in [dist/planck.d.ts:947](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L947)*
+*Defined in [dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L77)*
 
-*Defined in [src/dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L77)*
-
-The first attached body.
 The first attached body.
 
 ___
 
 ###  bodyB
 
-• **bodyB**: *Body*
+• **bodyB**: *[Body](../classes/body.md)*
 
-*Defined in [dist/planck.d.ts:951](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L951)*
+*Defined in [dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L81)*
 
-*Defined in [src/dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L81)*
-
-The second attached body.
 The second attached body.
 
 ___
@@ -78,9 +69,7 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L938)*
+*Defined in [dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -93,8 +82,6 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L933)*
+*Defined in [dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

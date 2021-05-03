@@ -16,9 +16,7 @@
 
 • **e_circles**: = 0
 
-*Defined in [dist/planck.d.ts:1019](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1019)*
-
-*Defined in [src/collision/Manifold.ts:31](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Manifold.ts#L31)*
+*Defined in [collision/Manifold.ts:31](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L31)*
 
 ___
 
@@ -26,9 +24,7 @@ ___
 
 • **e_faceA**: = 1
 
-*Defined in [dist/planck.d.ts:1020](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1020)*
-
-*Defined in [src/collision/Manifold.ts:32](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Manifold.ts#L32)*
+*Defined in [collision/Manifold.ts:32](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L32)*
 
 ___
 
@@ -36,6 +32,4 @@ ___
 
 • **e_faceB**: = 2
 
-*Defined in [dist/planck.d.ts:1021](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1021)*
-
-*Defined in [src/collision/Manifold.ts:33](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Manifold.ts#L33)*
+*Defined in [collision/Manifold.ts:33](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L33)*

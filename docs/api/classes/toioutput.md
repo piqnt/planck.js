@@ -3,7 +3,6 @@
 # Class: TOIOutput
 
 Output parameters for TimeOfImpact.
-Output parameters for TimeOfImpact.
 
 ## Hierarchy
 
@@ -20,11 +19,9 @@ Output parameters for TimeOfImpact.
 
 ###  state
 
-• **state**: *TOIOutputState | undefined*
+• **state**: *[TOIOutputState](../enums/toioutputstate.md) | undefined*
 
-*Defined in [dist/planck.d.ts:3812](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3812)*
-
-*Defined in [src/collision/TimeOfImpact.ts:67](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/TimeOfImpact.ts#L67)*
+*Defined in [collision/TimeOfImpact.ts:67](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L67)*
 
 ___
 
@@ -32,6 +29,4 @@ ___
 
 • **t**: *number | undefined*
 
-*Defined in [dist/planck.d.ts:3813](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3813)*
-
-*Defined in [src/collision/TimeOfImpact.ts:68](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/TimeOfImpact.ts#L68)*
+*Defined in [collision/TimeOfImpact.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L68)*
