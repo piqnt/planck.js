@@ -22,20 +22,20 @@ This holds polygon B expressed in frame A.
 
 • **count**: *number* = 0
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:90](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideEdgePolygon.ts#L90)*
+*Defined in [collision/shape/CollideEdgePolygon.ts:90](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideEdgePolygon.ts#L90)*
 
 ___
 
 ###  normals
 
-• **normals**: *Vec2[]* = []
+• **normals**: *[Vec2](vec2.md)[]* = []
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:89](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideEdgePolygon.ts#L89)*
+*Defined in [collision/shape/CollideEdgePolygon.ts:89](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideEdgePolygon.ts#L89)*
 
 ___
 
 ###  vertices
 
-• **vertices**: *Vec2[]* = []
+• **vertices**: *[Vec2](vec2.md)[]* = []
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:88](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideEdgePolygon.ts#L88)*
+*Defined in [collision/shape/CollideEdgePolygon.ts:88](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideEdgePolygon.ts#L88)*

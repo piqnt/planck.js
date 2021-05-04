@@ -20,7 +20,7 @@
 
 • **angularA**: *number*
 
-*Defined in [src/common/Jacobian.ts:29](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Jacobian.ts#L29)*
+*Defined in [common/Jacobian.ts:29](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Jacobian.ts#L29)*
 
 ___
 
@@ -28,12 +28,12 @@ ___
 
 • **angularB**: *number*
 
-*Defined in [src/common/Jacobian.ts:30](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Jacobian.ts#L30)*
+*Defined in [common/Jacobian.ts:30](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Jacobian.ts#L30)*
 
 ___
 
 ###  linear
 
-• **linear**: *Vec2*
+• **linear**: *[Vec2](vec2.md)*
 
-*Defined in [src/common/Jacobian.ts:28](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Jacobian.ts#L28)*
+*Defined in [common/Jacobian.ts:28](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Jacobian.ts#L28)*

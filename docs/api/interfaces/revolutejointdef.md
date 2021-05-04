@@ -7,16 +7,6 @@ bodies are joined. The definition uses local anchor points so that the
 initial configuration can violate the constraint slightly. You also need to
 specify the initial relative angle for joint limits. This helps when saving
 and loading a game.
-Revolute joint definition. This requires defining an anchor point where the
-bodies are joined. The definition uses local anchor points so that the
-initial configuration can violate the constraint slightly. You also need to
-specify the initial relative angle for joint limits. This helps when saving
-and loading a game.
-
-The local anchor points are measured from the body's origin rather than the
-center of mass because: 1. you might not know where the center of mass will
-be. 2. if you add/remove shapes from a body and recompute the mass, the
-joints will be broken.
 
 The local anchor points are measured from the body's origin rather than the
 center of mass because: 1. you might not know where the center of mass will
@@ -28,10 +18,6 @@ joints will be broken.
   ↳ [JointDef](jointdef.md)
 
   ↳ [RevoluteJointOpt](revolutejointopt.md)
-
-* JointDef
-
-* RevoluteJointOpt
 
   ↳ **RevoluteJointDef**
 
@@ -61,9 +47,7 @@ joints will be broken.
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:947](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L947)*
+*Defined in [dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L77)*
 
 The first attached body.
 
@@ -75,9 +59,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:951](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L951)*
+*Defined in [dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L81)*
 
 The second attached body.
 
@@ -91,7 +73,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L938)*
+*Defined in [dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -104,9 +86,7 @@ ___
 
 *Inherited from [RevoluteJointOpt](revolutejointopt.md).[enableLimit](revolutejointopt.md#optional-enablelimit)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:2568](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2568)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:80](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L80)*
 
 A flag to enable joint limits.
 
@@ -118,9 +98,7 @@ ___
 
 *Inherited from [RevoluteJointOpt](revolutejointopt.md).[enableMotor](revolutejointopt.md#optional-enablemotor)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:2572](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2572)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:84](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L84)*
 
 A flag to enable the joint motor.
 
@@ -128,26 +106,20 @@ ___
 
 ###  localAnchorA
 
-• **localAnchorA**: *Vec2*
+• **localAnchorA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [dist/planck.d.ts:2590](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2590)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:102](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L102)*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:102](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RevoluteJoint.ts#L102)*
-
-The local anchor point relative to bodyA's origin.
 The local anchor point relative to bodyA's origin.
 
 ___
 
 ###  localAnchorB
 
-• **localAnchorB**: *Vec2*
+• **localAnchorB**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [dist/planck.d.ts:2594](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2594)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:106](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L106)*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:106](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RevoluteJoint.ts#L106)*
-
-The local anchor point relative to bodyB's origin.
 The local anchor point relative to bodyB's origin.
 
 ___
@@ -158,9 +130,7 @@ ___
 
 *Inherited from [RevoluteJointOpt](revolutejointopt.md).[lowerAngle](revolutejointopt.md#optional-lowerangle)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:2551](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2551)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:63](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L63)*
 
 The lower angle for the joint limit (radians).
 
@@ -172,9 +142,7 @@ ___
 
 *Inherited from [RevoluteJointOpt](revolutejointopt.md).[maxMotorTorque](revolutejointopt.md#optional-maxmotortorque)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:2560](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2560)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:72](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L72)*
 
 The maximum motor torque used to achieve the desired motor speed. Usually
 in N-m.
@@ -187,9 +155,7 @@ ___
 
 *Inherited from [RevoluteJointOpt](revolutejointopt.md).[motorSpeed](revolutejointopt.md#optional-motorspeed)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:2564](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2564)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:76](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L76)*
 
 The desired motor speed. Usually in radians per second.
 
@@ -199,11 +165,8 @@ ___
 
 • **referenceAngle**: *number*
 
-*Defined in [dist/planck.d.ts:2598](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2598)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:110](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L110)*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:110](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RevoluteJoint.ts#L110)*
-
-The bodyB angle minus bodyA angle in the reference state (radians).
 The bodyB angle minus bodyA angle in the reference state (radians).
 
 ___
@@ -214,9 +177,7 @@ ___
 
 *Inherited from [RevoluteJointOpt](revolutejointopt.md).[upperAngle](revolutejointopt.md#optional-upperangle)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:2555](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2555)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:67](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L67)*
 
 The upper angle for the joint limit (radians).
 
@@ -230,6 +191,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L933)*
+*Defined in [dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

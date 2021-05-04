@@ -7,17 +7,10 @@ bodies and the non-zero length of the distance joint. The definition uses
 local anchor points so that the initial configuration can violate the
 constraint slightly. This helps when saving and loading a game. Warning: Do
 not use a zero or short length.
-Distance joint definition. This requires defining an anchor point on both
-bodies and the non-zero length of the distance joint. The definition uses
-local anchor points so that the initial configuration can violate the
-constraint slightly. This helps when saving and loading a game. Warning: Do
-not use a zero or short length.
 
 ## Hierarchy
 
 * [JointOpt](jointopt.md)
-
-* JointOpt
 
   ↳ **DistanceJointOpt**
 
@@ -41,9 +34,7 @@ not use a zero or short length.
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L938)*
+*Defined in [dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -54,11 +45,8 @@ ___
 
 • **dampingRatio**? : *number*
 
-*Defined in [dist/planck.d.ts:2369](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2369)*
+*Defined in [dynamics/joint/DistanceJoint.ts:49](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/DistanceJoint.ts#L49)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:49](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/DistanceJoint.ts#L49)*
-
-The damping ratio. 0 = no damping, 1 = critical damping.
 The damping ratio. 0 = no damping, 1 = critical damping.
 
 ___
@@ -67,11 +55,8 @@ ___
 
 • **frequencyHz**? : *number*
 
-*Defined in [dist/planck.d.ts:2365](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2365)*
+*Defined in [dynamics/joint/DistanceJoint.ts:45](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/DistanceJoint.ts#L45)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:45](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/DistanceJoint.ts#L45)*
-
-The mass-spring-damper frequency in Hertz. A value of 0 disables softness.
 The mass-spring-damper frequency in Hertz. A value of 0 disables softness.
 
 ___
@@ -80,11 +65,8 @@ ___
 
 • **length**? : *number*
 
-*Defined in [dist/planck.d.ts:2373](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2373)*
+*Defined in [dynamics/joint/DistanceJoint.ts:53](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/DistanceJoint.ts#L53)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:53](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/DistanceJoint.ts#L53)*
-
-Distance length.
 Distance length.
 
 ___
@@ -95,8 +77,6 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L933)*
+*Defined in [dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

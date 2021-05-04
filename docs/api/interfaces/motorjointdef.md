@@ -3,17 +3,12 @@
 # Interface: MotorJointDef
 
 Motor joint definition.
-Motor joint definition.
 
 ## Hierarchy
 
   ↳ [JointDef](jointdef.md)
 
   ↳ [MotorJointOpt](motorjointopt.md)
-
-* JointDef
-
-* MotorJointOpt
 
   ↳ **MotorJointDef**
 
@@ -39,9 +34,7 @@ Motor joint definition.
 
 *Inherited from [MotorJointOpt](motorjointopt.md).[angularOffset](motorjointopt.md#optional-angularoffset)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:2957](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2957)*
+*Defined in [dynamics/joint/MotorJoint.ts:46](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MotorJoint.ts#L46)*
 
 The bodyB angle minus bodyA angle in radians.
 
@@ -53,9 +46,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:947](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L947)*
+*Defined in [dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L77)*
 
 The first attached body.
 
@@ -67,9 +58,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:951](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L951)*
+*Defined in [dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L81)*
 
 The second attached body.
 
@@ -83,7 +72,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L938)*
+*Defined in [dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -96,9 +85,7 @@ ___
 
 *Inherited from [MotorJointOpt](motorjointopt.md).[correctionFactor](motorjointopt.md#optional-correctionfactor)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:2969](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2969)*
+*Defined in [dynamics/joint/MotorJoint.ts:58](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MotorJoint.ts#L58)*
 
 Position correction factor in the range [0,1].
 
@@ -110,9 +97,7 @@ ___
 
 *Inherited from [MotorJointOpt](motorjointopt.md).[linearOffset](motorjointopt.md#optional-linearoffset)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:2973](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2973)*
+*Defined in [dynamics/joint/MotorJoint.ts:62](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MotorJoint.ts#L62)*
 
 Position of bodyB minus the position of bodyA, in bodyA's frame, in meters.
 
@@ -124,9 +109,7 @@ ___
 
 *Inherited from [MotorJointOpt](motorjointopt.md).[maxForce](motorjointopt.md#optional-maxforce)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:2961](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2961)*
+*Defined in [dynamics/joint/MotorJoint.ts:50](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MotorJoint.ts#L50)*
 
 The maximum motor force in N.
 
@@ -138,9 +121,7 @@ ___
 
 *Inherited from [MotorJointOpt](motorjointopt.md).[maxTorque](motorjointopt.md#optional-maxtorque)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:2965](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2965)*
+*Defined in [dynamics/joint/MotorJoint.ts:54](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MotorJoint.ts#L54)*
 
 The maximum motor torque in N-m.
 
@@ -154,6 +135,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L933)*
+*Defined in [dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

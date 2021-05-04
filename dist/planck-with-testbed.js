@@ -9178,7 +9178,7 @@
           return data;
       };
       /** @internal */
-      ChainShape.prototype._deserialize = function (data, fixture, restore) {
+      ChainShape._deserialize = function (data, fixture, restore) {
           var vertices = [];
           if (data.vertices) {
               for (var i = 0; i < data.vertices.length; i++) {

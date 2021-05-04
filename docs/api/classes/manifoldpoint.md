@@ -4,13 +4,6 @@
 
 A manifold point is a contact point belonging to a contact manifold. It holds
 details related to the geometry and dynamics of the contact points.
-A manifold point is a contact point belonging to a contact manifold. It holds
-details related to the geometry and dynamics of the contact points.
-
-This structure is stored across time steps, so we keep it small.
-
-Note: impulses are used for internal caching and may not provide reliable
-contact forces, especially for high speed collisions.
 
 This structure is stored across time steps, so we keep it small.
 
@@ -34,29 +27,20 @@ contact forces, especially for high speed collisions.
 
 ###  id
 
-• **id**: *ContactID‹›* = new ContactID()
+• **id**: *[ContactID](contactid.md)‹›* = new ContactID()
 
-*Defined in [dist/planck.d.ts:1092](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1092)*
+*Defined in [collision/Manifold.ts:178](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L178)*
 
-*Defined in [src/collision/Manifold.ts:178](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Manifold.ts#L178)*
-
-Uniquely identifies a contact point between two shapes to facilatate warm starting
 Uniquely identifies a contact point between two shapes to facilatate warm starting
 
 ___
 
 ###  localPoint
 
-• **localPoint**: *Vec2‹›* = Vec2.zero()
+• **localPoint**: *[Vec2](vec2.md)‹›* = Vec2.zero()
 
-*Defined in [dist/planck.d.ts:1080](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1080)*
+*Defined in [collision/Manifold.ts:166](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L166)*
 
-*Defined in [src/collision/Manifold.ts:166](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Manifold.ts#L166)*
-
-Usage depends on manifold type.
-      e_circles: the local center of circleB,
-      e_faceA: the local center of cirlceB or the clip point of polygonB,
-      e_faceB: the clip point of polygonA.
 Usage depends on manifold type.
       e_circles: the local center of circleB,
       e_faceA: the local center of cirlceB or the clip point of polygonB,
@@ -68,11 +52,8 @@ ___
 
 • **normalImpulse**: *number* = 0
 
-*Defined in [dist/planck.d.ts:1084](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1084)*
+*Defined in [collision/Manifold.ts:170](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L170)*
 
-*Defined in [src/collision/Manifold.ts:170](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Manifold.ts#L170)*
-
-The non-penetration impulse
 The non-penetration impulse
 
 ___
@@ -81,9 +62,6 @@ ___
 
 • **tangentImpulse**: *number* = 0
 
-*Defined in [dist/planck.d.ts:1088](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1088)*
+*Defined in [collision/Manifold.ts:174](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L174)*
 
-*Defined in [src/collision/Manifold.ts:174](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Manifold.ts#L174)*
-
-The friction impulse
 The friction impulse

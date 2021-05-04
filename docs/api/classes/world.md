@@ -6,20 +6,6 @@
 
 * **World**
 
-## Callable
-
-▸ **World**(`def?`: [WorldDef](../interfaces/worlddef.md) | [Vec2](vec2.md) | null): *[World](world.md)*
-
-*Defined in [dist/planck.d.ts:1348](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1348)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`def?` | [WorldDef](../interfaces/worlddef.md) &#124; [Vec2](vec2.md) &#124; null |
-
-**Returns:** *[World](world.md)*
-
 ## Index
 
 ### Constructors
@@ -72,7 +58,7 @@ Name | Type |
 
 \+ **new World**(`def?`: [WorldDef](../interfaces/worlddef.md) | [Vec2](vec2.md) | null): *[World](world.md)*
 
-*Defined in [dist/planck.d.ts:1349](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1349)*
+*Defined in [dynamics/World.ts:121](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L121)*
 
 **Parameters:**
 
@@ -88,7 +74,7 @@ Name | Type | Description |
 
 ▸ **clearForces**(): *void*
 
-*Defined in [dist/planck.d.ts:1436](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1436)*
+*Defined in [dynamics/World.ts:365](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L365)*
 
 Manually clear the force buffer on all bodies. By default, forces are cleared
 automatically after each call to step. The default behavior is modified by
@@ -108,7 +94,7 @@ ___
 
 ▸ **createBody**(`def?`: [BodyDef](../interfaces/bodydef.md)): *[Body](body.md)*
 
-*Defined in [dist/planck.d.ts:1485](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1485)*
+*Defined in [dynamics/World.ts:499](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L499)*
 
 Create a rigid body given a definition. No reference to the definition is
 retained.
@@ -125,7 +111,7 @@ Name | Type |
 
 ▸ **createBody**(`position`: [Vec2](vec2.md), `angle?`: number): *[Body](body.md)*
 
-*Defined in [dist/planck.d.ts:1486](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1486)*
+*Defined in [dynamics/World.ts:500](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L500)*
 
 **Parameters:**
 
@@ -136,43 +122,13 @@ Name | Type |
 
 **Returns:** *[Body](body.md)*
 
-▸ **createBody**(`def?`: BodyDef): *Body*
-
-*Defined in [src/dynamics/World.ts:499](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L499)*
-
-Create a rigid body given a definition. No reference to the definition is
-retained.
-
-Warning: This function is locked during callbacks.
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`def?` | BodyDef |
-
-**Returns:** *Body*
-
-▸ **createBody**(`position`: Vec2, `angle?`: number): *Body*
-
-*Defined in [src/dynamics/World.ts:500](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L500)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`position` | Vec2 |
-`angle?` | number |
-
-**Returns:** *Body*
-
 ___
 
 ###  createDynamicBody
 
 ▸ **createDynamicBody**(`def?`: [BodyDef](../interfaces/bodydef.md)): *[Body](body.md)*
 
-*Defined in [dist/planck.d.ts:1487](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1487)*
+*Defined in [dynamics/World.ts:520](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L520)*
 
 **Parameters:**
 
@@ -184,7 +140,7 @@ Name | Type |
 
 ▸ **createDynamicBody**(`position`: [Vec2](vec2.md), `angle?`: number): *[Body](body.md)*
 
-*Defined in [dist/planck.d.ts:1488](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1488)*
+*Defined in [dynamics/World.ts:521](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L521)*
 
 **Parameters:**
 
@@ -195,38 +151,13 @@ Name | Type |
 
 **Returns:** *[Body](body.md)*
 
-▸ **createDynamicBody**(`def?`: BodyDef): *Body*
-
-*Defined in [src/dynamics/World.ts:520](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L520)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`def?` | BodyDef |
-
-**Returns:** *Body*
-
-▸ **createDynamicBody**(`position`: Vec2, `angle?`: number): *Body*
-
-*Defined in [src/dynamics/World.ts:521](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L521)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`position` | Vec2 |
-`angle?` | number |
-
-**Returns:** *Body*
-
 ___
 
 ###  createJoint
 
 ▸ **createJoint**‹**T**›(`joint`: T): *T | null*
 
-*Defined in [dist/planck.d.ts:1506](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1506)*
+*Defined in [dynamics/World.ts:633](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L633)*
 
 Create a joint to constrain bodies together. No reference to the definition
 is retained. This may cause the connected bodies to cease colliding.
@@ -251,7 +182,7 @@ ___
 
 ▸ **createKinematicBody**(`def?`: [BodyDef](../interfaces/bodydef.md)): *[Body](body.md)*
 
-*Defined in [dist/planck.d.ts:1489](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1489)*
+*Defined in [dynamics/World.ts:534](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L534)*
 
 **Parameters:**
 
@@ -263,7 +194,7 @@ Name | Type |
 
 ▸ **createKinematicBody**(`position`: [Vec2](vec2.md), `angle?`: number): *[Body](body.md)*
 
-*Defined in [dist/planck.d.ts:1490](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1490)*
+*Defined in [dynamics/World.ts:535](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L535)*
 
 **Parameters:**
 
@@ -274,38 +205,13 @@ Name | Type |
 
 **Returns:** *[Body](body.md)*
 
-▸ **createKinematicBody**(`def?`: BodyDef): *Body*
-
-*Defined in [src/dynamics/World.ts:534](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L534)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`def?` | BodyDef |
-
-**Returns:** *Body*
-
-▸ **createKinematicBody**(`position`: Vec2, `angle?`: number): *Body*
-
-*Defined in [src/dynamics/World.ts:535](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L535)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`position` | Vec2 |
-`angle?` | number |
-
-**Returns:** *Body*
-
 ___
 
 ###  destroyBody
 
 ▸ **destroyBody**(`b`: [Body](body.md)): *boolean*
 
-*Defined in [dist/planck.d.ts:1499](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1499)*
+*Defined in [dynamics/World.ts:556](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L556)*
 
 Destroy a rigid body given a definition. No reference to the definition is
 retained.
@@ -328,7 +234,7 @@ ___
 
 ▸ **destroyJoint**(`joint`: [Joint](joint.md)): *void*
 
-*Defined in [dist/planck.d.ts:1511](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1511)*
+*Defined in [dynamics/World.ts:687](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L687)*
 
 Destroy a joint. This may cause the connected bodies to begin colliding.
 Warning: This function is locked during callbacks.
@@ -347,7 +253,7 @@ ___
 
 ▸ **getAllowSleeping**(): *boolean*
 
-*Defined in [dist/planck.d.ts:1401](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1401)*
+*Defined in [dynamics/World.ts:303](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L303)*
 
 **Returns:** *boolean*
 
@@ -357,7 +263,7 @@ ___
 
 ▸ **getAutoClearForces**(): *boolean*
 
-*Defined in [dist/planck.d.ts:1424](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1424)*
+*Defined in [dynamics/World.ts:350](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L350)*
 
 Get the flag that controls automatic clearing of forces after each time step.
 
@@ -369,7 +275,7 @@ ___
 
 ▸ **getBodyCount**(): *number*
 
-*Defined in [dist/planck.d.ts:1379](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1379)*
+*Defined in [dynamics/World.ts:251](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L251)*
 
 **Returns:** *number*
 
@@ -379,7 +285,7 @@ ___
 
 ▸ **getBodyList**(): *[Body](body.md) | null*
 
-*Defined in [dist/planck.d.ts:1360](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1360)*
+*Defined in [dynamics/World.ts:223](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L223)*
 
 Get the world body list. With the returned body, use Body.getNext to get the
 next body in the world list. A null body indicates the end of the list.
@@ -394,7 +300,7 @@ ___
 
 ▸ **getContactCount**(): *number*
 
-*Defined in [dist/planck.d.ts:1384](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1384)*
+*Defined in [dynamics/World.ts:262](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L262)*
 
 Get the number of contacts (each may have 0 or more contact points).
 
@@ -406,7 +312,7 @@ ___
 
 ▸ **getContactList**(): *[Contact](contact.md) | null*
 
-*Defined in [dist/planck.d.ts:1378](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1378)*
+*Defined in [dynamics/World.ts:247](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L247)*
 
 Get the world contact list. With the returned contact, use Contact.getNext to
 get the next contact in the world list. A null contact indicates the end of
@@ -425,7 +331,7 @@ ___
 
 ▸ **getContinuousPhysics**(): *boolean*
 
-*Defined in [dist/planck.d.ts:1411](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1411)*
+*Defined in [dynamics/World.ts:325](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L325)*
 
 **Returns:** *boolean*
 
@@ -435,7 +341,7 @@ ___
 
 ▸ **getGravity**(): *[Vec2](vec2.md)*
 
-*Defined in [dist/planck.d.ts:1392](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1392)*
+*Defined in [dynamics/World.ts:276](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L276)*
 
 Get the global gravity vector.
 
@@ -447,7 +353,7 @@ ___
 
 ▸ **getJointCount**(): *number*
 
-*Defined in [dist/planck.d.ts:1380](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1380)*
+*Defined in [dynamics/World.ts:255](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L255)*
 
 **Returns:** *number*
 
@@ -457,7 +363,7 @@ ___
 
 ▸ **getJointList**(): *[Joint](joint.md) | null*
 
-*Defined in [dist/planck.d.ts:1367](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1367)*
+*Defined in [dynamics/World.ts:233](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L233)*
 
 Get the world joint list. With the returned joint, use Joint.getNext to get
 the next joint in the world list. A null joint indicates the end of the list.
@@ -472,7 +378,7 @@ ___
 
 ▸ **getProxyCount**(): *number*
 
-*Defined in [dist/planck.d.ts:1458](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1458)*
+*Defined in [dynamics/World.ts:423](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L423)*
 
 Get the number of broad-phase proxies.
 
@@ -484,7 +390,7 @@ ___
 
 ▸ **getSubStepping**(): *boolean*
 
-*Defined in [dist/planck.d.ts:1416](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1416)*
+*Defined in [dynamics/World.ts:336](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L336)*
 
 **Returns:** *boolean*
 
@@ -494,7 +400,7 @@ ___
 
 ▸ **getTreeBalance**(): *number*
 
-*Defined in [dist/planck.d.ts:1466](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1466)*
+*Defined in [dynamics/World.ts:437](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L437)*
 
 Get the balance of broad-phase dynamic tree.
 
@@ -506,7 +412,7 @@ ___
 
 ▸ **getTreeHeight**(): *number*
 
-*Defined in [dist/planck.d.ts:1462](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1462)*
+*Defined in [dynamics/World.ts:430](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L430)*
 
 Get the height of broad-phase dynamic tree.
 
@@ -518,7 +424,7 @@ ___
 
 ▸ **getTreeQuality**(): *number*
 
-*Defined in [dist/planck.d.ts:1471](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1471)*
+*Defined in [dynamics/World.ts:445](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L445)*
 
 Get the quality metric of broad-phase dynamic tree. The smaller the better.
 The minimum is 1.
@@ -531,7 +437,7 @@ ___
 
 ▸ **getWarmStarting**(): *boolean*
 
-*Defined in [dist/planck.d.ts:1406](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1406)*
+*Defined in [dynamics/World.ts:314](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L314)*
 
 **Returns:** *boolean*
 
@@ -541,7 +447,7 @@ ___
 
 ▸ **isLocked**(): *boolean*
 
-*Defined in [dist/planck.d.ts:1396](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1396)*
+*Defined in [dynamics/World.ts:283](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L283)*
 
 Is the world locked (in the middle of a time step).
 
@@ -553,7 +459,7 @@ ___
 
 ▸ **off**(`name`: "begin-contact", `listener`: function): *[World](world.md)*
 
-*Defined in [dist/planck.d.ts:1528](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1528)*
+*Defined in [dynamics/World.ts:1018](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L1018)*
 
 Remove an event listener.
 
@@ -575,7 +481,7 @@ Name | Type |
 
 ▸ **off**(`name`: "end-contact", `listener`: function): *[World](world.md)*
 
-*Defined in [dist/planck.d.ts:1529](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1529)*
+*Defined in [dynamics/World.ts:1019](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L1019)*
 
 Remove an event listener.
 
@@ -597,7 +503,7 @@ Name | Type |
 
 ▸ **off**(`name`: "pre-solve", `listener`: function): *[World](world.md)*
 
-*Defined in [dist/planck.d.ts:1530](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1530)*
+*Defined in [dynamics/World.ts:1020](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L1020)*
 
 Remove an event listener.
 
@@ -620,7 +526,7 @@ Name | Type |
 
 ▸ **off**(`name`: "post-solve", `listener`: function): *[World](world.md)*
 
-*Defined in [dist/planck.d.ts:1531](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1531)*
+*Defined in [dynamics/World.ts:1021](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L1021)*
 
 Remove an event listener.
 
@@ -643,7 +549,7 @@ Name | Type |
 
 ▸ **off**(`name`: "remove-body", `listener`: function): *[World](world.md)*
 
-*Defined in [dist/planck.d.ts:1532](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1532)*
+*Defined in [dynamics/World.ts:1022](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L1022)*
 
 Remove an event listener.
 
@@ -665,7 +571,7 @@ Name | Type |
 
 ▸ **off**(`name`: "remove-joint", `listener`: function): *[World](world.md)*
 
-*Defined in [dist/planck.d.ts:1533](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1533)*
+*Defined in [dynamics/World.ts:1023](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L1023)*
 
 Remove an event listener.
 
@@ -687,7 +593,7 @@ Name | Type |
 
 ▸ **off**(`name`: "remove-fixture", `listener`: function): *[World](world.md)*
 
-*Defined in [dist/planck.d.ts:1534](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1534)*
+*Defined in [dynamics/World.ts:1024](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L1024)*
 
 Remove an event listener.
 
@@ -707,169 +613,13 @@ Name | Type |
 
 **Returns:** *[World](world.md)*
 
-▸ **off**(`name`: "begin-contact", `listener`: function): *World*
-
-*Defined in [src/dynamics/World.ts:1018](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L1018)*
-
-Remove an event listener.
-
-**Parameters:**
-
-▪ **name**: *"begin-contact"*
-
-▪ **listener**: *function*
-
-▸ (`contact`: Contact): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`contact` | Contact |
-
-**Returns:** *World*
-
-▸ **off**(`name`: "end-contact", `listener`: function): *World*
-
-*Defined in [src/dynamics/World.ts:1019](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L1019)*
-
-Remove an event listener.
-
-**Parameters:**
-
-▪ **name**: *"end-contact"*
-
-▪ **listener**: *function*
-
-▸ (`contact`: Contact): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`contact` | Contact |
-
-**Returns:** *World*
-
-▸ **off**(`name`: "pre-solve", `listener`: function): *World*
-
-*Defined in [src/dynamics/World.ts:1020](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L1020)*
-
-Remove an event listener.
-
-**Parameters:**
-
-▪ **name**: *"pre-solve"*
-
-▪ **listener**: *function*
-
-▸ (`contact`: Contact, `oldManifold`: Manifold): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`contact` | Contact |
-`oldManifold` | Manifold |
-
-**Returns:** *World*
-
-▸ **off**(`name`: "post-solve", `listener`: function): *World*
-
-*Defined in [src/dynamics/World.ts:1021](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L1021)*
-
-Remove an event listener.
-
-**Parameters:**
-
-▪ **name**: *"post-solve"*
-
-▪ **listener**: *function*
-
-▸ (`contact`: Contact, `impulse`: ContactImpulse): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`contact` | Contact |
-`impulse` | ContactImpulse |
-
-**Returns:** *World*
-
-▸ **off**(`name`: "remove-body", `listener`: function): *World*
-
-*Defined in [src/dynamics/World.ts:1022](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L1022)*
-
-Remove an event listener.
-
-**Parameters:**
-
-▪ **name**: *"remove-body"*
-
-▪ **listener**: *function*
-
-▸ (`body`: Body): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`body` | Body |
-
-**Returns:** *World*
-
-▸ **off**(`name`: "remove-joint", `listener`: function): *World*
-
-*Defined in [src/dynamics/World.ts:1023](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L1023)*
-
-Remove an event listener.
-
-**Parameters:**
-
-▪ **name**: *"remove-joint"*
-
-▪ **listener**: *function*
-
-▸ (`joint`: Joint): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`joint` | Joint |
-
-**Returns:** *World*
-
-▸ **off**(`name`: "remove-fixture", `listener`: function): *World*
-
-*Defined in [src/dynamics/World.ts:1024](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L1024)*
-
-Remove an event listener.
-
-**Parameters:**
-
-▪ **name**: *"remove-fixture"*
-
-▪ **listener**: *function*
-
-▸ (`fixture`: Fixture): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`fixture` | Fixture |
-
-**Returns:** *World*
-
 ___
 
 ###  on
 
 ▸ **on**(`name`: "begin-contact", `listener`: function): *[World](world.md)*
 
-*Defined in [dist/planck.d.ts:1521](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1521)*
+*Defined in [dynamics/World.ts:994](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L994)*
 
 Register an event listener.
 
@@ -891,7 +641,7 @@ Name | Type |
 
 ▸ **on**(`name`: "end-contact", `listener`: function): *[World](world.md)*
 
-*Defined in [dist/planck.d.ts:1522](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1522)*
+*Defined in [dynamics/World.ts:995](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L995)*
 
 Register an event listener.
 
@@ -913,7 +663,7 @@ Name | Type |
 
 ▸ **on**(`name`: "pre-solve", `listener`: function): *[World](world.md)*
 
-*Defined in [dist/planck.d.ts:1523](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1523)*
+*Defined in [dynamics/World.ts:996](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L996)*
 
 Register an event listener.
 
@@ -936,7 +686,7 @@ Name | Type |
 
 ▸ **on**(`name`: "post-solve", `listener`: function): *[World](world.md)*
 
-*Defined in [dist/planck.d.ts:1524](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1524)*
+*Defined in [dynamics/World.ts:997](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L997)*
 
 Register an event listener.
 
@@ -959,7 +709,7 @@ Name | Type |
 
 ▸ **on**(`name`: "remove-body", `listener`: function): *[World](world.md)*
 
-*Defined in [dist/planck.d.ts:1525](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1525)*
+*Defined in [dynamics/World.ts:998](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L998)*
 
 Register an event listener.
 
@@ -981,7 +731,7 @@ Name | Type |
 
 ▸ **on**(`name`: "remove-joint", `listener`: function): *[World](world.md)*
 
-*Defined in [dist/planck.d.ts:1526](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1526)*
+*Defined in [dynamics/World.ts:999](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L999)*
 
 Register an event listener.
 
@@ -1003,7 +753,7 @@ Name | Type |
 
 ▸ **on**(`name`: "remove-fixture", `listener`: function): *[World](world.md)*
 
-*Defined in [dist/planck.d.ts:1527](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1527)*
+*Defined in [dynamics/World.ts:1000](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L1000)*
 
 Register an event listener.
 
@@ -1023,169 +773,13 @@ Name | Type |
 
 **Returns:** *[World](world.md)*
 
-▸ **on**(`name`: "begin-contact", `listener`: function): *World*
-
-*Defined in [src/dynamics/World.ts:994](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L994)*
-
-Register an event listener.
-
-**Parameters:**
-
-▪ **name**: *"begin-contact"*
-
-▪ **listener**: *function*
-
-▸ (`contact`: Contact): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`contact` | Contact |
-
-**Returns:** *World*
-
-▸ **on**(`name`: "end-contact", `listener`: function): *World*
-
-*Defined in [src/dynamics/World.ts:995](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L995)*
-
-Register an event listener.
-
-**Parameters:**
-
-▪ **name**: *"end-contact"*
-
-▪ **listener**: *function*
-
-▸ (`contact`: Contact): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`contact` | Contact |
-
-**Returns:** *World*
-
-▸ **on**(`name`: "pre-solve", `listener`: function): *World*
-
-*Defined in [src/dynamics/World.ts:996](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L996)*
-
-Register an event listener.
-
-**Parameters:**
-
-▪ **name**: *"pre-solve"*
-
-▪ **listener**: *function*
-
-▸ (`contact`: Contact, `oldManifold`: Manifold): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`contact` | Contact |
-`oldManifold` | Manifold |
-
-**Returns:** *World*
-
-▸ **on**(`name`: "post-solve", `listener`: function): *World*
-
-*Defined in [src/dynamics/World.ts:997](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L997)*
-
-Register an event listener.
-
-**Parameters:**
-
-▪ **name**: *"post-solve"*
-
-▪ **listener**: *function*
-
-▸ (`contact`: Contact, `impulse`: ContactImpulse): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`contact` | Contact |
-`impulse` | ContactImpulse |
-
-**Returns:** *World*
-
-▸ **on**(`name`: "remove-body", `listener`: function): *World*
-
-*Defined in [src/dynamics/World.ts:998](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L998)*
-
-Register an event listener.
-
-**Parameters:**
-
-▪ **name**: *"remove-body"*
-
-▪ **listener**: *function*
-
-▸ (`body`: Body): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`body` | Body |
-
-**Returns:** *World*
-
-▸ **on**(`name`: "remove-joint", `listener`: function): *World*
-
-*Defined in [src/dynamics/World.ts:999](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L999)*
-
-Register an event listener.
-
-**Parameters:**
-
-▪ **name**: *"remove-joint"*
-
-▪ **listener**: *function*
-
-▸ (`joint`: Joint): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`joint` | Joint |
-
-**Returns:** *World*
-
-▸ **on**(`name`: "remove-fixture", `listener`: function): *World*
-
-*Defined in [src/dynamics/World.ts:1000](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L1000)*
-
-Register an event listener.
-
-**Parameters:**
-
-▪ **name**: *"remove-fixture"*
-
-▪ **listener**: *function*
-
-▸ (`fixture`: Fixture): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`fixture` | Fixture |
-
-**Returns:** *World*
-
 ___
 
 ###  publish
 
 ▸ **publish**(`name`: string, `arg1?`: any, `arg2?`: any, `arg3?`: any): *number*
 
-*Defined in [dist/planck.d.ts:1535](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1535)*
+*Defined in [dynamics/World.ts:1043](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L1043)*
 
 **Parameters:**
 
@@ -1204,7 +798,7 @@ ___
 
 ▸ **queryAABB**(`aabb`: [AABB](aabb.md), `callback`: [WorldAABBQueryCallback](../globals.md#worldaabbquerycallback)): *void*
 
-*Defined in [dist/planck.d.ts:1443](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1443)*
+*Defined in [dynamics/World.ts:378](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L378)*
 
 Query the world for all fixtures that potentially overlap the provided AABB.
 
@@ -1223,7 +817,7 @@ ___
 
 ▸ **rayCast**(`point1`: [Vec2](vec2.md), `point2`: [Vec2](vec2.md), `callback`: [WorldRayCastCallback](../globals.md#worldraycastcallback)): *void*
 
-*Defined in [dist/planck.d.ts:1454](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1454)*
+*Defined in [dynamics/World.ts:397](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L397)*
 
 Ray-cast the world for all fixtures in the path of the ray. Your callback
 controls whether you get the closest point, any point, or n-points. The
@@ -1245,7 +839,7 @@ ___
 
 ▸ **setAllowSleeping**(`flag`: boolean): *void*
 
-*Defined in [dist/planck.d.ts:1400](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1400)*
+*Defined in [dynamics/World.ts:290](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L290)*
 
 Enable/disable sleep.
 
@@ -1263,7 +857,7 @@ ___
 
 ▸ **setAutoClearForces**(`flag`: boolean): *void*
 
-*Defined in [dist/planck.d.ts:1420](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1420)*
+*Defined in [dynamics/World.ts:343](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L343)*
 
 Set flag to control automatic clearing of forces after each time step.
 
@@ -1281,7 +875,7 @@ ___
 
 ▸ **setContinuousPhysics**(`flag`: boolean): *void*
 
-*Defined in [dist/planck.d.ts:1410](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1410)*
+*Defined in [dynamics/World.ts:321](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L321)*
 
 Enable/disable continuous physics. For testing.
 
@@ -1299,7 +893,7 @@ ___
 
 ▸ **setGravity**(`gravity`: [Vec2](vec2.md)): *void*
 
-*Defined in [dist/planck.d.ts:1388](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1388)*
+*Defined in [dynamics/World.ts:269](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L269)*
 
 Change the global gravity vector.
 
@@ -1317,7 +911,7 @@ ___
 
 ▸ **setSubStepping**(`flag`: boolean): *void*
 
-*Defined in [dist/planck.d.ts:1415](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1415)*
+*Defined in [dynamics/World.ts:332](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L332)*
 
 Enable/disable single stepped continuous physics. For testing.
 
@@ -1335,7 +929,7 @@ ___
 
 ▸ **setWarmStarting**(`flag`: boolean): *void*
 
-*Defined in [dist/planck.d.ts:1405](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1405)*
+*Defined in [dynamics/World.ts:310](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L310)*
 
 Enable/disable warm starting. For testing.
 
@@ -1353,7 +947,7 @@ ___
 
 ▸ **shiftOrigin**(`newOrigin`: [Vec2](vec2.md)): *void*
 
-*Defined in [dist/planck.d.ts:1478](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1478)*
+*Defined in [dynamics/World.ts:455](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L455)*
 
 Shift the world origin. Useful for large worlds. The body shift formula is:
 position -= newOrigin
@@ -1372,7 +966,7 @@ ___
 
 ▸ **step**(`timeStep`: number, `velocityIterations?`: number, `positionIterations?`: number): *void*
 
-*Defined in [dist/planck.d.ts:1520](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1520)*
+*Defined in [dynamics/World.ts:777](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L777)*
 
 Take a time step. This performs collision detection, integration, and
 constraint solution.

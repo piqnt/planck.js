@@ -29,9 +29,7 @@
 
 • **blockSolve**: *boolean* = true
 
-*Defined in [dist/planck.d.ts:1287](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1287)*
-
-*Defined in [src/dynamics/Solver.ts:49](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Solver.ts#L49)*
+*Defined in [dynamics/Solver.ts:49](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Solver.ts#L49)*
 
 ___
 
@@ -39,11 +37,8 @@ ___
 
 • **dt**: *number* = 0
 
-*Defined in [dist/planck.d.ts:1281](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1281)*
+*Defined in [dynamics/Solver.ts:43](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Solver.ts#L43)*
 
-*Defined in [src/dynamics/Solver.ts:43](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Solver.ts#L43)*
-
-time step
 time step
 
 ___
@@ -52,11 +47,8 @@ ___
 
 • **dtRatio**: *number* = 1
 
-*Defined in [dist/planck.d.ts:1291](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1291)*
+*Defined in [dynamics/Solver.ts:54](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Solver.ts#L54)*
 
-*Defined in [src/dynamics/Solver.ts:54](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Solver.ts#L54)*
-
-dt * inv_dt0
 dt * inv_dt0
 
 ___
@@ -65,11 +57,8 @@ ___
 
 • **inv_dt**: *number* = 0
 
-*Defined in [dist/planck.d.ts:1283](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1283)*
+*Defined in [dynamics/Solver.ts:45](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Solver.ts#L45)*
 
-*Defined in [src/dynamics/Solver.ts:45](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Solver.ts#L45)*
-
-inverse time step (0 if dt == 0)
 inverse time step (0 if dt == 0)
 
 ___
@@ -78,11 +67,8 @@ ___
 
 • **inv_dt0**: *number* = 0
 
-*Defined in [dist/planck.d.ts:1289](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1289)*
+*Defined in [dynamics/Solver.ts:52](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Solver.ts#L52)*
 
-*Defined in [src/dynamics/Solver.ts:52](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Solver.ts#L52)*
-
-timestep ratio for variable timestep
 timestep ratio for variable timestep
 
 ___
@@ -91,9 +77,7 @@ ___
 
 • **positionIterations**: *number* = 0
 
-*Defined in [dist/planck.d.ts:1285](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1285)*
-
-*Defined in [src/dynamics/Solver.ts:47](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Solver.ts#L47)*
+*Defined in [dynamics/Solver.ts:47](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Solver.ts#L47)*
 
 ___
 
@@ -101,9 +85,7 @@ ___
 
 • **velocityIterations**: *number* = 0
 
-*Defined in [dist/planck.d.ts:1284](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1284)*
-
-*Defined in [src/dynamics/Solver.ts:46](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Solver.ts#L46)*
+*Defined in [dynamics/Solver.ts:46](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Solver.ts#L46)*
 
 ___
 
@@ -111,9 +93,7 @@ ___
 
 • **warmStarting**: *boolean* = false
 
-*Defined in [dist/planck.d.ts:1286](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1286)*
-
-*Defined in [src/dynamics/Solver.ts:48](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Solver.ts#L48)*
+*Defined in [dynamics/Solver.ts:48](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Solver.ts#L48)*
 
 ## Methods
 
@@ -121,7 +101,7 @@ ___
 
 ▸ **reset**(`dt`: any): *void*
 
-*Defined in [dist/planck.d.ts:1292](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1292)*
+*Defined in [dynamics/Solver.ts:56](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Solver.ts#L56)*
 
 **Parameters:**
 

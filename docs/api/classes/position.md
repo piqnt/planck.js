@@ -27,7 +27,7 @@
 
 \+ **new Position**(): *[Position](position.md)*
 
-*Defined in [src/dynamics/Position.ts:35](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Position.ts#L35)*
+*Defined in [dynamics/Position.ts:35](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Position.ts#L35)*
 
 **Returns:** *[Position](position.md)*
 
@@ -37,7 +37,7 @@
 
 • **a**: *number*
 
-*Defined in [src/dynamics/Position.ts:35](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Position.ts#L35)*
+*Defined in [dynamics/Position.ts:35](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Position.ts#L35)*
 
 angle
 
@@ -45,9 +45,9 @@ ___
 
 ###  c
 
-• **c**: *Vec2*
+• **c**: *[Vec2](vec2.md)*
 
-*Defined in [src/dynamics/Position.ts:32](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Position.ts#L32)*
+*Defined in [dynamics/Position.ts:32](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Position.ts#L32)*
 
 location
 
@@ -55,15 +55,15 @@ location
 
 ###  getTransform
 
-▸ **getTransform**(`xf`: Transform, `p`: Vec2): *Transform*
+▸ **getTransform**(`xf`: [Transform](transform.md), `p`: [Vec2](vec2.md)): *[Transform](transform.md)*
 
-*Defined in [src/dynamics/Position.ts:42](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Position.ts#L42)*
+*Defined in [dynamics/Position.ts:42](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Position.ts#L42)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`xf` | Transform |
-`p` | Vec2 |
+`xf` | [Transform](transform.md) |
+`p` | [Vec2](vec2.md) |
 
-**Returns:** *Transform*
+**Returns:** *[Transform](transform.md)*

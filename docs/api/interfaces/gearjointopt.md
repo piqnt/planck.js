@@ -3,13 +3,10 @@
 # Interface: GearJointOpt
 
 Gear joint definition.
-Gear joint definition.
 
 ## Hierarchy
 
 * [JointOpt](jointopt.md)
-
-* JointOpt
 
   ↳ **GearJointOpt**
 
@@ -31,9 +28,7 @@ Gear joint definition.
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L938)*
+*Defined in [dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -44,11 +39,8 @@ ___
 
 • **ratio**? : *number*
 
-*Defined in [dist/planck.d.ts:2876](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2876)*
+*Defined in [dynamics/joint/GearJoint.ts:48](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L48)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:48](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/GearJoint.ts#L48)*
-
-The gear ratio. See GearJoint for explanation.
 The gear ratio. See GearJoint for explanation.
 
 ___
@@ -59,8 +51,6 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L933)*
+*Defined in [dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

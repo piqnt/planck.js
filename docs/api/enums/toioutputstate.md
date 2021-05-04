@@ -18,9 +18,7 @@
 
 • **e_failed**: = 1
 
-*Defined in [dist/planck.d.ts:3803](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3803)*
-
-*Defined in [src/collision/TimeOfImpact.ts:57](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/TimeOfImpact.ts#L57)*
+*Defined in [collision/TimeOfImpact.ts:57](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L57)*
 
 ___
 
@@ -28,9 +26,7 @@ ___
 
 • **e_overlapped**: = 2
 
-*Defined in [dist/planck.d.ts:3804](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3804)*
-
-*Defined in [src/collision/TimeOfImpact.ts:58](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/TimeOfImpact.ts#L58)*
+*Defined in [collision/TimeOfImpact.ts:58](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L58)*
 
 ___
 
@@ -38,9 +34,7 @@ ___
 
 • **e_separated**: = 4
 
-*Defined in [dist/planck.d.ts:3806](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3806)*
-
-*Defined in [src/collision/TimeOfImpact.ts:60](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/TimeOfImpact.ts#L60)*
+*Defined in [collision/TimeOfImpact.ts:60](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L60)*
 
 ___
 
@@ -48,9 +42,7 @@ ___
 
 • **e_touching**: = 3
 
-*Defined in [dist/planck.d.ts:3805](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3805)*
-
-*Defined in [src/collision/TimeOfImpact.ts:59](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/TimeOfImpact.ts#L59)*
+*Defined in [collision/TimeOfImpact.ts:59](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L59)*
 
 ___
 
@@ -58,6 +50,4 @@ ___
 
 • **e_unknown**: = 0
 
-*Defined in [dist/planck.d.ts:3802](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3802)*
-
-*Defined in [src/collision/TimeOfImpact.ts:56](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/TimeOfImpact.ts#L56)*
+*Defined in [collision/TimeOfImpact.ts:56](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L56)*

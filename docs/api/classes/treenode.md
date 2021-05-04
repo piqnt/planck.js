@@ -1,13 +1,10 @@
 [Planck.js API Doc](../README.md) › [Globals](../globals.md) › [TreeNode](treenode.md)
 
-# Class: TreeNode ‹**T, T**›
+# Class: TreeNode ‹**T**›
 
-A node in the dynamic tree. The client does not interact with this directly.
 A node in the dynamic tree. The client does not interact with this directly.
 
 ## Type parameters
-
-▪ **T**
 
 ▪ **T**
 
@@ -42,7 +39,7 @@ A node in the dynamic tree. The client does not interact with this directly.
 
 \+ **new TreeNode**(`id?`: any): *[TreeNode](treenode.md)*
 
-*Defined in [dist/planck.d.ts:495](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L495)*
+*Defined in [collision/DynamicTree.ts:48](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/DynamicTree.ts#L48)*
 
 **Parameters:**
 
@@ -56,34 +53,27 @@ Name | Type |
 
 ###  aabb
 
-• **aabb**: *AABB* = new AABB()
+• **aabb**: *[AABB](aabb.md)* = new AABB()
 
-*Defined in [dist/planck.d.ts:489](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L489)*
+*Defined in [collision/DynamicTree.ts:42](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/DynamicTree.ts#L42)*
 
-*Defined in [src/collision/DynamicTree.ts:42](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L42)*
-
-Enlarged AABB
 Enlarged AABB
 
 ___
 
 ###  child1
 
-• **child1**: *TreeNode‹T›* = null
+• **child1**: *[TreeNode](treenode.md)‹T›* = null
 
-*Defined in [dist/planck.d.ts:492](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L492)*
-
-*Defined in [src/collision/DynamicTree.ts:45](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L45)*
+*Defined in [collision/DynamicTree.ts:45](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/DynamicTree.ts#L45)*
 
 ___
 
 ###  child2
 
-• **child2**: *TreeNode‹T›* = null
+• **child2**: *[TreeNode](treenode.md)‹T›* = null
 
-*Defined in [dist/planck.d.ts:493](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L493)*
-
-*Defined in [src/collision/DynamicTree.ts:46](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L46)*
+*Defined in [collision/DynamicTree.ts:46](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/DynamicTree.ts#L46)*
 
 ___
 
@@ -91,11 +81,8 @@ ___
 
 • **height**: *number* = -1
 
-*Defined in [dist/planck.d.ts:495](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L495)*
+*Defined in [collision/DynamicTree.ts:48](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/DynamicTree.ts#L48)*
 
-*Defined in [src/collision/DynamicTree.ts:48](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L48)*
-
-0: leaf, -1: free node
 0: leaf, -1: free node
 
 ___
@@ -104,19 +91,15 @@ ___
 
 • **id**: *number*
 
-*Defined in [dist/planck.d.ts:487](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L487)*
-
-*Defined in [src/collision/DynamicTree.ts:40](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L40)*
+*Defined in [collision/DynamicTree.ts:40](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/DynamicTree.ts#L40)*
 
 ___
 
 ###  parent
 
-• **parent**: *TreeNode‹T›* = null
+• **parent**: *[TreeNode](treenode.md)‹T›* = null
 
-*Defined in [dist/planck.d.ts:491](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L491)*
-
-*Defined in [src/collision/DynamicTree.ts:44](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L44)*
+*Defined in [collision/DynamicTree.ts:44](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/DynamicTree.ts#L44)*
 
 ___
 
@@ -124,9 +107,7 @@ ___
 
 • **userData**: *T* = null
 
-*Defined in [dist/planck.d.ts:490](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L490)*
-
-*Defined in [src/collision/DynamicTree.ts:43](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L43)*
+*Defined in [collision/DynamicTree.ts:43](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/DynamicTree.ts#L43)*
 
 ## Methods
 
@@ -134,7 +115,7 @@ ___
 
 ▸ **isLeaf**(): *boolean*
 
-*Defined in [dist/planck.d.ts:498](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L498)*
+*Defined in [collision/DynamicTree.ts:58](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/DynamicTree.ts#L58)*
 
 **Returns:** *boolean*
 
@@ -144,6 +125,6 @@ ___
 
 ▸ **toString**(): *string*
 
-*Defined in [dist/planck.d.ts:497](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L497)*
+*Defined in [collision/DynamicTree.ts:54](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/DynamicTree.ts#L54)*
 
 **Returns:** *string*

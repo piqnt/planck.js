@@ -4,18 +4,12 @@
 
 Mouse joint definition. This requires a world target point, tuning
 parameters, and the time step.
-Mouse joint definition. This requires a world target point, tuning
-parameters, and the time step.
 
 ## Hierarchy
 
   ↳ [JointDef](jointdef.md)
 
   ↳ [MouseJointOpt](mousejointopt.md)
-
-* JointDef
-
-* MouseJointOpt
 
   ↳ **MouseJointDef**
 
@@ -40,9 +34,7 @@ parameters, and the time step.
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:947](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L947)*
+*Defined in [dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L77)*
 
 The first attached body.
 
@@ -54,9 +46,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:951](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L951)*
+*Defined in [dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L81)*
 
 The second attached body.
 
@@ -70,7 +60,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L938)*
+*Defined in [dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -83,9 +73,7 @@ ___
 
 *Inherited from [MouseJointOpt](mousejointopt.md).[dampingRatio](mousejointopt.md#optional-dampingratio)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:3068](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3068)*
+*Defined in [dynamics/joint/MouseJoint.ts:59](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MouseJoint.ts#L59)*
 
 [dampingRatio = 0.7] The damping ratio. 0 = no damping, 1 = critical
 damping.
@@ -98,9 +86,7 @@ ___
 
 *Inherited from [MouseJointOpt](mousejointopt.md).[frequencyHz](mousejointopt.md#optional-frequencyhz)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:3063](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3063)*
+*Defined in [dynamics/joint/MouseJoint.ts:54](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MouseJoint.ts#L54)*
 
 [frequencyHz = 5.0] The response speed.
 
@@ -112,9 +98,7 @@ ___
 
 *Inherited from [MouseJointOpt](mousejointopt.md).[maxForce](mousejointopt.md#optional-maxforce)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:3059](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3059)*
+*Defined in [dynamics/joint/MouseJoint.ts:50](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MouseJoint.ts#L50)*
 
 [maxForce = 0.0] The maximum constraint force that can be exerted to move
 the candidate body. Usually you will express as some multiple of the
@@ -124,14 +108,10 @@ ___
 
 ###  target
 
-• **target**: *Vec2*
+• **target**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [dist/planck.d.ts:3079](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3079)*
+*Defined in [dynamics/joint/MouseJoint.ts:70](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MouseJoint.ts#L70)*
 
-*Defined in [src/dynamics/joint/MouseJoint.ts:70](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/MouseJoint.ts#L70)*
-
-The initial world target point. This is assumed to coincide with the body
-anchor initially.
 The initial world target point. This is assumed to coincide with the body
 anchor initially.
 
@@ -145,6 +125,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L933)*
+*Defined in [dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

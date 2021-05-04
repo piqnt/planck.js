@@ -4,8 +4,6 @@
 
 Input for Distance. You have to option to use the shape radii in the
 computation. Even
-Input for Distance. You have to option to use the shape radii in the
-computation. Even
 
 ## Hierarchy
 
@@ -25,41 +23,33 @@ computation. Even
 
 ###  proxyA
 
-• **proxyA**: *DistanceProxy* = new DistanceProxy()
+• **proxyA**: *[DistanceProxy](distanceproxy.md)* = new DistanceProxy()
 
-*Defined in [dist/planck.d.ts:1881](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1881)*
-
-*Defined in [src/collision/Distance.ts:52](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Distance.ts#L52)*
+*Defined in [collision/Distance.ts:52](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L52)*
 
 ___
 
 ###  proxyB
 
-• **proxyB**: *DistanceProxy* = new DistanceProxy()
+• **proxyB**: *[DistanceProxy](distanceproxy.md)* = new DistanceProxy()
 
-*Defined in [dist/planck.d.ts:1882](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1882)*
-
-*Defined in [src/collision/Distance.ts:53](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Distance.ts#L53)*
+*Defined in [collision/Distance.ts:53](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L53)*
 
 ___
 
 ###  transformA
 
-• **transformA**: *Transform | null* = null
+• **transformA**: *[Transform](transform.md) | null* = null
 
-*Defined in [dist/planck.d.ts:1883](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1883)*
-
-*Defined in [src/collision/Distance.ts:54](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Distance.ts#L54)*
+*Defined in [collision/Distance.ts:54](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L54)*
 
 ___
 
 ###  transformB
 
-• **transformB**: *Transform | null* = null
+• **transformB**: *[Transform](transform.md) | null* = null
 
-*Defined in [dist/planck.d.ts:1884](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1884)*
-
-*Defined in [src/collision/Distance.ts:55](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Distance.ts#L55)*
+*Defined in [collision/Distance.ts:55](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L55)*
 
 ___
 
@@ -67,6 +57,4 @@ ___
 
 • **useRadii**: *boolean* = false
 
-*Defined in [dist/planck.d.ts:1885](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1885)*
-
-*Defined in [src/collision/Distance.ts:56](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Distance.ts#L56)*
+*Defined in [collision/Distance.ts:56](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L56)*

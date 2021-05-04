@@ -6,14 +6,14 @@ export default options => context => node => {
 
 function visitor(factory, node, options) {
   if (node.kind !== ts.SyntaxKind.ClassDeclaration ||
-      isClassExcluded(node.name.escapedText, options)) {
+      !isClassIncluded(node.name.escapedText, options)) {
     return node;
   }
   return createNodeWithFactories(factory, node);
 }
 
-function isClassExcluded(className, options) {
-  return options.exclude.includes(className);
+function isClassIncluded(className, options) {
+  return options.classes.includes(className);
 }
 
 function createNodeWithFactories(factory, node) {

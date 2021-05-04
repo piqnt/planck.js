@@ -4,10 +4,6 @@
 
 ## Index
 
-### Namespaces
-
-* [Serializer$0](modules/serializer_0.md)
-
 ### Enumerations
 
 * [ContactFeatureType](enums/contactfeaturetype.md)
@@ -114,7 +110,6 @@
 * [RevoluteJointOpt](interfaces/revolutejointopt.md)
 * [RopeJointDef](interfaces/ropejointdef.md)
 * [RopeJointOpt](interfaces/ropejointopt.md)
-* [Testbed](interfaces/testbed.md)
 * [WeldJointDef](interfaces/weldjointdef.md)
 * [WeldJointOpt](interfaces/weldjointopt.md)
 * [WheelJointDef](interfaces/wheeljointdef.md)
@@ -132,8 +127,6 @@
 
 ### Variables
 
-* [ASSERT](globals.md#const-assert)
-* [DEBUG](globals.md#const-debug)
 * [DEBUG_SOLVER](globals.md#const-debug_solver)
 * [DYNAMIC](globals.md#const-dynamic)
 * [KINEMATIC](globals.md#const-kinematic)
@@ -185,7 +178,6 @@
 * [mixRestitution](globals.md#mixrestitution)
 * [now](globals.md#const-now)
 * [testOverlap](globals.md#testoverlap)
-* [testbed](globals.md#testbed)
 
 ### Object literals
 
@@ -201,9 +193,7 @@
 
 Ƭ **BodyType**: *"static" | "kinematic" | "dynamic"*
 
-*Defined in [dist/planck.d.ts:1537](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1537)*
-
-*Defined in [src/dynamics/Body.ts:43](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L43)*
+*Defined in [dynamics/Body.ts:43](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L43)*
 
 ___
 
@@ -211,22 +201,22 @@ ___
 
 Ƭ **ContactCallback**: *function*
 
-*Defined in [src/dynamics/Contact.ts:76](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Contact.ts#L76)*
+*Defined in [dynamics/Contact.ts:76](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Contact.ts#L76)*
 
 #### Type declaration:
 
-▸ (`manifold`: Manifold, `xfA`: Transform, `fixtureA`: Fixture, `indexA`: number, `xfB`: Transform, `fixtureB`: Fixture, `indexB`: number): *void*
+▸ (`manifold`: [Manifold](classes/manifold.md), `xfA`: [Transform](classes/transform.md), `fixtureA`: [Fixture](classes/fixture.md), `indexA`: number, `xfB`: [Transform](classes/transform.md), `fixtureB`: [Fixture](classes/fixture.md), `indexB`: number): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`manifold` | Manifold |
-`xfA` | Transform |
-`fixtureA` | Fixture |
+`manifold` | [Manifold](classes/manifold.md) |
+`xfA` | [Transform](classes/transform.md) |
+`fixtureA` | [Fixture](classes/fixture.md) |
 `indexA` | number |
-`xfB` | Transform |
-`fixtureB` | Fixture |
+`xfB` | [Transform](classes/transform.md) |
+`fixtureB` | [Fixture](classes/fixture.md) |
 `indexB` | number |
 
 ___
@@ -235,24 +225,22 @@ ___
 
 Ƭ **EvaluateFunction**: *function*
 
-*Defined in [dist/planck.d.ts:1162](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1162)*
-
-*Defined in [src/dynamics/Contact.ts:66](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Contact.ts#L66)*
+*Defined in [dynamics/Contact.ts:66](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Contact.ts#L66)*
 
 #### Type declaration:
 
-▸ (`manifold`: Manifold, `xfA`: Transform, `fixtureA`: Fixture, `indexA`: number, `xfB`: Transform, `fixtureB`: Fixture, `indexB`: number): *void*
+▸ (`manifold`: [Manifold](classes/manifold.md), `xfA`: [Transform](classes/transform.md), `fixtureA`: [Fixture](classes/fixture.md), `indexA`: number, `xfB`: [Transform](classes/transform.md), `fixtureB`: [Fixture](classes/fixture.md), `indexB`: number): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`manifold` | Manifold |
-`xfA` | Transform |
-`fixtureA` | Fixture |
+`manifold` | [Manifold](classes/manifold.md) |
+`xfA` | [Transform](classes/transform.md) |
+`fixtureA` | [Fixture](classes/fixture.md) |
 `indexA` | number |
-`xfB` | Transform |
-`fixtureB` | Fixture |
+`xfB` | [Transform](classes/transform.md) |
+`fixtureB` | [Fixture](classes/fixture.md) |
 `indexB` | number |
 
 ___
@@ -261,9 +249,7 @@ ___
 
 Ƭ **ShapeType**: *"circle" | "edge" | "polygon" | "chain"*
 
-*Defined in [dist/planck.d.ts:2019](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2019)*
-
-*Defined in [src/collision/Shape.ts:127](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Shape.ts#L127)*
+*Defined in [collision/Shape.ts:127](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Shape.ts#L127)*
 
 ___
 
@@ -271,22 +257,19 @@ ___
 
 Ƭ **WorldAABBQueryCallback**: *function*
 
-*Defined in [dist/planck.d.ts:1347](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1347)*
+*Defined in [dynamics/World.ts:93](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L93)*
 
-*Defined in [src/dynamics/World.ts:93](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L93)*
-
-Called for each fixture found in the query AABB. It may return `false` to terminate the query.
 Called for each fixture found in the query AABB. It may return `false` to terminate the query.
 
 #### Type declaration:
 
-▸ (`fixture`: Fixture): *boolean*
+▸ (`fixture`: [Fixture](classes/fixture.md)): *boolean*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`fixture` | Fixture |
+`fixture` | [Fixture](classes/fixture.md) |
 
 ___
 
@@ -294,32 +277,14 @@ ___
 
 Ƭ **WorldRayCastCallback**: *function*
 
-*Defined in [dist/planck.d.ts:1343](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1343)*
+*Defined in [dynamics/World.ts:88](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L88)*
 
-*Defined in [src/dynamics/World.ts:88](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L88)*
-
-Callback function for ray casts, see World.rayCast().
 Callback function for ray casts, see World.rayCast().
 
 Called for each fixture found in the query. You control how the ray cast
 proceeds by returning a float: return -1: ignore this fixture and continue
 return 0: terminate the ray cast return fraction: clip the ray to this point
 return 1: don't clip the ray and continue
-
-Called for each fixture found in the query. You control how the ray cast
-proceeds by returning a float: return -1: ignore this fixture and continue
-return 0: terminate the ray cast return fraction: clip the ray to this point
-return 1: don't clip the ray and continue
-
-**`param`** The fixture hit by the ray
-
-**`param`** The point of initial intersection
-
-**`param`** The normal vector at the point of intersection
-
-**`param`** 
-
-**`returns`** -1 to filter, 0 to terminate, fraction to clip the ray for closest hit, 1 to continue
 
 **`param`** The fixture hit by the ray
 
@@ -333,40 +298,24 @@ return 1: don't clip the ray and continue
 
 #### Type declaration:
 
-▸ (`fixture`: Fixture, `point`: Vec2, `normal`: Vec2, `fraction`: number): *number*
+▸ (`fixture`: [Fixture](classes/fixture.md), `point`: [Vec2](classes/vec2.md), `normal`: [Vec2](classes/vec2.md), `fraction`: number): *number*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`fixture` | Fixture |
-`point` | Vec2 |
-`normal` | Vec2 |
+`fixture` | [Fixture](classes/fixture.md) |
+`point` | [Vec2](classes/vec2.md) |
+`normal` | [Vec2](classes/vec2.md) |
 `fraction` | number |
 
 ## Variables
-
-### `Const` ASSERT
-
-• **ASSERT**: *boolean*
-
-*Defined in [src/types.d.ts:2](https://github.com/shakiba/planck.js/blob/6a5d3be/src/types.d.ts#L2)*
-
-___
-
-### `Const` DEBUG
-
-• **DEBUG**: *boolean*
-
-*Defined in [src/types.d.ts:1](https://github.com/shakiba/planck.js/blob/6a5d3be/src/types.d.ts#L1)*
-
-___
 
 ### `Const` DEBUG_SOLVER
 
 • **DEBUG_SOLVER**: *false* = false
 
-*Defined in [src/dynamics/Contact.ts:43](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Contact.ts#L43)*
+*Defined in [dynamics/Contact.ts:43](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Contact.ts#L43)*
 
 ___
 
@@ -374,7 +323,7 @@ ___
 
 • **DYNAMIC**: *"dynamic"* = "dynamic"
 
-*Defined in [src/dynamics/Body.ts:47](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L47)*
+*Defined in [dynamics/Body.ts:47](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L47)*
 
 ___
 
@@ -382,7 +331,7 @@ ___
 
 • **KINEMATIC**: *"kinematic"* = "kinematic"
 
-*Defined in [src/dynamics/Body.ts:46](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L46)*
+*Defined in [dynamics/Body.ts:46](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L46)*
 
 ___
 
@@ -390,7 +339,7 @@ ___
 
 • **SID**: *number* = 0
 
-*Defined in [src/serializer/index.ts:9](https://github.com/shakiba/planck.js/blob/6a5d3be/src/serializer/index.ts#L9)*
+*Defined in [serializer/index.ts:9](https://github.com/shakiba/planck.js/blob/8127f05/src/serializer/index.ts#L9)*
 
 ___
 
@@ -398,7 +347,7 @@ ___
 
 • **STATIC**: *"static"* = "static"
 
-*Defined in [src/dynamics/Body.ts:45](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L45)*
+*Defined in [dynamics/Body.ts:45](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L45)*
 
 ___
 
@@ -406,75 +355,75 @@ ___
 
 • **_ASSERT**: *boolean* = typeof ASSERT === 'undefined' ? false : ASSERT
 
-*Defined in [src/util/common.ts:2](https://github.com/shakiba/planck.js/blob/6a5d3be/src/util/common.ts#L2)*
+*Defined in [util/common.ts:2](https://github.com/shakiba/planck.js/blob/8127f05/src/util/common.ts#L2)*
 
-*Defined in [src/common/Math.ts:29](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Math.ts#L29)*
+*Defined in [common/Math.ts:29](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Math.ts#L29)*
 
-*Defined in [src/common/Vec2.ts:30](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Vec2.ts#L30)*
+*Defined in [common/Vec2.ts:30](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Vec2.ts#L30)*
 
-*Defined in [src/collision/AABB.ts:31](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/AABB.ts#L31)*
+*Defined in [collision/AABB.ts:31](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L31)*
 
-*Defined in [src/collision/DynamicTree.ts:33](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/DynamicTree.ts#L33)*
+*Defined in [collision/DynamicTree.ts:33](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/DynamicTree.ts#L33)*
 
-*Defined in [src/common/Rot.ts:31](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Rot.ts#L31)*
+*Defined in [common/Rot.ts:31](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Rot.ts#L31)*
 
-*Defined in [src/common/Transform.ts:31](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Transform.ts#L31)*
+*Defined in [common/Transform.ts:31](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Transform.ts#L31)*
 
-*Defined in [src/common/Sweep.ts:32](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Sweep.ts#L32)*
+*Defined in [common/Sweep.ts:32](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Sweep.ts#L32)*
 
-*Defined in [src/dynamics/Joint.ts:29](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L29)*
+*Defined in [dynamics/Joint.ts:29](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L29)*
 
-*Defined in [src/common/Mat22.ts:30](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Mat22.ts#L30)*
+*Defined in [common/Mat22.ts:30](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L30)*
 
-*Defined in [src/collision/Distance.ts:36](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Distance.ts#L36)*
+*Defined in [collision/Distance.ts:36](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L36)*
 
-*Defined in [src/collision/TimeOfImpact.ts:40](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/TimeOfImpact.ts#L40)*
+*Defined in [collision/TimeOfImpact.ts:40](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L40)*
 
-*Defined in [src/dynamics/Solver.ts:38](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Solver.ts#L38)*
+*Defined in [dynamics/Solver.ts:38](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Solver.ts#L38)*
 
-*Defined in [src/dynamics/Contact.ts:40](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Contact.ts#L40)*
+*Defined in [dynamics/Contact.ts:40](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Contact.ts#L40)*
 
-*Defined in [src/dynamics/Body.ts:41](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L41)*
+*Defined in [dynamics/Body.ts:41](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L41)*
 
-*Defined in [src/dynamics/Fixture.ts:36](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Fixture.ts#L36)*
+*Defined in [dynamics/Fixture.ts:36](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Fixture.ts#L36)*
 
-*Defined in [src/collision/BroadPhase.ts:33](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/BroadPhase.ts#L33)*
+*Defined in [collision/BroadPhase.ts:33](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/BroadPhase.ts#L33)*
 
-*Defined in [src/dynamics/World.ts:38](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L38)*
+*Defined in [dynamics/World.ts:38](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L38)*
 
-*Defined in [src/common/Vec3.ts:30](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Vec3.ts#L30)*
+*Defined in [common/Vec3.ts:30](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Vec3.ts#L30)*
 
-*Defined in [src/common/Mat33.ts:31](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Mat33.ts#L31)*
+*Defined in [common/Mat33.ts:31](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat33.ts#L31)*
 
-*Defined in [src/collision/shape/CircleShape.ts:36](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CircleShape.ts#L36)*
+*Defined in [collision/shape/CircleShape.ts:36](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CircleShape.ts#L36)*
 
-*Defined in [src/collision/shape/PolygonShape.ts:37](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/PolygonShape.ts#L37)*
+*Defined in [collision/shape/PolygonShape.ts:37](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/PolygonShape.ts#L37)*
 
-*Defined in [src/collision/shape/ChainShape.ts:36](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/ChainShape.ts#L36)*
+*Defined in [collision/shape/ChainShape.ts:36](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/ChainShape.ts#L36)*
 
-*Defined in [src/collision/shape/CollideCircle.ts:34](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideCircle.ts#L34)*
+*Defined in [collision/shape/CollideCircle.ts:34](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideCircle.ts#L34)*
 
-*Defined in [src/collision/shape/CollideEdgeCircle.ts:35](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideEdgeCircle.ts#L35)*
+*Defined in [collision/shape/CollideEdgeCircle.ts:35](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideEdgeCircle.ts#L35)*
 
-*Defined in [src/collision/shape/CollidePolygon.ts:35](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollidePolygon.ts#L35)*
+*Defined in [collision/shape/CollidePolygon.ts:35](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollidePolygon.ts#L35)*
 
-*Defined in [src/collision/shape/CollideCirclePolygone.ts:35](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideCirclePolygone.ts#L35)*
+*Defined in [collision/shape/CollideCirclePolygone.ts:35](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideCirclePolygone.ts#L35)*
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:38](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideEdgePolygon.ts#L38)*
+*Defined in [collision/shape/CollideEdgePolygon.ts:38](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideEdgePolygon.ts#L38)*
 
-*Defined in [src/dynamics/joint/FrictionJoint.ts:36](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/FrictionJoint.ts#L36)*
+*Defined in [dynamics/joint/FrictionJoint.ts:36](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/FrictionJoint.ts#L36)*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:39](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RevoluteJoint.ts#L39)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:39](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L39)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:39](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L39)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:39](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L39)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:38](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/GearJoint.ts#L38)*
+*Defined in [dynamics/joint/GearJoint.ts:38](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L38)*
 
-*Defined in [src/dynamics/joint/MotorJoint.ts:36](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/MotorJoint.ts#L36)*
+*Defined in [dynamics/joint/MotorJoint.ts:36](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MotorJoint.ts#L36)*
 
-*Defined in [src/dynamics/joint/MouseJoint.ts:37](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/MouseJoint.ts#L37)*
+*Defined in [dynamics/joint/MouseJoint.ts:37](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MouseJoint.ts#L37)*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:36](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PulleyJoint.ts#L36)*
+*Defined in [dynamics/joint/PulleyJoint.ts:36](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L36)*
 
 ___
 
@@ -482,25 +431,25 @@ ___
 
 • **_DEBUG**: *boolean* = typeof DEBUG === 'undefined' ? false : DEBUG
 
-*Defined in [src/util/common.ts:1](https://github.com/shakiba/planck.js/blob/6a5d3be/src/util/common.ts#L1)*
+*Defined in [util/common.ts:1](https://github.com/shakiba/planck.js/blob/8127f05/src/util/common.ts#L1)*
 
-*Defined in [src/common/Math.ts:28](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Math.ts#L28)*
+*Defined in [common/Math.ts:28](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Math.ts#L28)*
 
-*Defined in [src/common/Vec2.ts:29](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Vec2.ts#L29)*
+*Defined in [common/Vec2.ts:29](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Vec2.ts#L29)*
 
-*Defined in [src/collision/AABB.ts:30](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/AABB.ts#L30)*
+*Defined in [collision/AABB.ts:30](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L30)*
 
-*Defined in [src/common/Rot.ts:30](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Rot.ts#L30)*
+*Defined in [common/Rot.ts:30](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Rot.ts#L30)*
 
-*Defined in [src/common/Transform.ts:30](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Transform.ts#L30)*
+*Defined in [common/Transform.ts:30](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Transform.ts#L30)*
 
-*Defined in [src/common/Mat22.ts:29](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Mat22.ts#L29)*
+*Defined in [common/Mat22.ts:29](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L29)*
 
-*Defined in [src/dynamics/Solver.ts:37](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Solver.ts#L37)*
+*Defined in [dynamics/Solver.ts:37](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Solver.ts#L37)*
 
-*Defined in [src/common/Vec3.ts:29](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Vec3.ts#L29)*
+*Defined in [common/Vec3.ts:29](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Vec3.ts#L29)*
 
-*Defined in [src/common/Mat33.ts:30](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Mat33.ts#L30)*
+*Defined in [common/Mat33.ts:30](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat33.ts#L30)*
 
 ___
 
@@ -508,11 +457,11 @@ ___
 
 • **atLowerLimit**: *1* = 1
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:43](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RevoluteJoint.ts#L43)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:43](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L43)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:43](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L43)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:43](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L43)*
 
-*Defined in [src/dynamics/joint/RopeJoint.ts:35](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RopeJoint.ts#L35)*
+*Defined in [dynamics/joint/RopeJoint.ts:35](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RopeJoint.ts#L35)*
 
 ___
 
@@ -520,11 +469,11 @@ ___
 
 • **atUpperLimit**: *2* = 2
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:44](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RevoluteJoint.ts#L44)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:44](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L44)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:44](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L44)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:44](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L44)*
 
-*Defined in [src/dynamics/joint/RopeJoint.ts:36](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RopeJoint.ts#L36)*
+*Defined in [dynamics/joint/RopeJoint.ts:36](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RopeJoint.ts#L36)*
 
 ___
 
@@ -532,7 +481,7 @@ ___
 
 • **edgeAxis**: *[EPAxis](classes/epaxis.md)‹›* = new EPAxis()
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:109](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideEdgePolygon.ts#L109)*
+*Defined in [collision/shape/CollideEdgePolygon.ts:109](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideEdgePolygon.ts#L109)*
 
 ___
 
@@ -540,11 +489,11 @@ ___
 
 • **equalLimits**: *3* = 3
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:45](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RevoluteJoint.ts#L45)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:45](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L45)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:45](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L45)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:45](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L45)*
 
-*Defined in [src/dynamics/joint/RopeJoint.ts:37](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RopeJoint.ts#L37)*
+*Defined in [dynamics/joint/RopeJoint.ts:37](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RopeJoint.ts#L37)*
 
 ___
 
@@ -552,11 +501,11 @@ ___
 
 • **inactiveLimit**: *0* = 0
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:42](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RevoluteJoint.ts#L42)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:42](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L42)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:42](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L42)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:42](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L42)*
 
-*Defined in [src/dynamics/joint/RopeJoint.ts:34](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RopeJoint.ts#L34)*
+*Defined in [dynamics/joint/RopeJoint.ts:34](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RopeJoint.ts#L34)*
 
 ___
 
@@ -564,11 +513,7 @@ ___
 
 • **internal**: *object*
 
-*Defined in [dist/planck.d.ts:3829](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3829)*
-
-*Defined in [src/index.ts:64](https://github.com/shakiba/planck.js/blob/6a5d3be/src/index.ts#L64)*
-
-**`deprecated`** Merged with main namespace
+*Defined in [index.ts:64](https://github.com/shakiba/planck.js/blob/8127f05/src/index.ts#L64)*
 
 **`deprecated`** Merged with main namespace
 
@@ -580,9 +525,7 @@ ___
 
 • **math**: *Math & object* = Object.create(Math)
 
-*Defined in [dist/planck.d.ts:5](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L5)*
-
-*Defined in [src/common/Math.ts:32](https://github.com/shakiba/planck.js/blob/6a5d3be/src/common/Math.ts#L32)*
+*Defined in [common/Math.ts:32](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Math.ts#L32)*
 
 ___
 
@@ -590,7 +533,7 @@ ___
 
 • **polygonAxis**: *[EPAxis](classes/epaxis.md)‹›* = new EPAxis()
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:110](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideEdgePolygon.ts#L110)*
+*Defined in [collision/shape/CollideEdgePolygon.ts:110](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideEdgePolygon.ts#L110)*
 
 ___
 
@@ -598,7 +541,7 @@ ___
 
 • **polygonBA**: *[TempPolygon](classes/temppolygon.md)‹›* = new TempPolygon()
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:111](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideEdgePolygon.ts#L111)*
+*Defined in [collision/shape/CollideEdgePolygon.ts:111](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideEdgePolygon.ts#L111)*
 
 ___
 
@@ -606,7 +549,7 @@ ___
 
 • **rf**: *[ReferenceFace](classes/referenceface.md)‹›* = new ReferenceFace()
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:112](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideEdgePolygon.ts#L112)*
+*Defined in [collision/shape/CollideEdgePolygon.ts:112](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideEdgePolygon.ts#L112)*
 
 ___
 
@@ -614,15 +557,15 @@ ___
 
 • **s_registers**: *any[]* = []
 
-*Defined in [src/dynamics/Contact.ts:104](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Contact.ts#L104)*
+*Defined in [dynamics/Contact.ts:104](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Contact.ts#L104)*
 
 ___
 
 ### `Const` s_subStep
 
-• **s_subStep**: *TimeStep‹›* = new TimeStep()
+• **s_subStep**: *[TimeStep](classes/timestep.md)‹›* = new TimeStep()
 
-*Defined in [src/dynamics/Solver.ts:67](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Solver.ts#L67)*
+*Defined in [dynamics/Solver.ts:67](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Solver.ts#L67)*
 
 ___
 
@@ -630,7 +573,7 @@ ___
 
 • **serializer**: *any* = new Serializer()
 
-*Defined in [src/serializer/index.ts:137](https://github.com/shakiba/planck.js/blob/6a5d3be/src/serializer/index.ts#L137)*
+*Defined in [serializer/index.ts:137](https://github.com/shakiba/planck.js/blob/8127f05/src/serializer/index.ts#L137)*
 
 ## Functions
 
@@ -638,7 +581,7 @@ ___
 
 ▸ **ChainCircleContact**(`manifold`: any, `xfA`: any, `fixtureA`: any, `indexA`: any, `xfB`: any, `fixtureB`: any, `indexB`: any): *void*
 
-*Defined in [src/collision/shape/CollideEdgeCircle.ts:51](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideEdgeCircle.ts#L51)*
+*Defined in [collision/shape/CollideEdgeCircle.ts:51](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideEdgeCircle.ts#L51)*
 
 **Parameters:**
 
@@ -660,7 +603,7 @@ ___
 
 ▸ **ChainPolygonContact**(`manifold`: any, `xfA`: any, `fA`: any, `indexA`: any, `xfB`: any, `fB`: any, `indexB`: any): *void*
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:51](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideEdgePolygon.ts#L51)*
+*Defined in [collision/shape/CollideEdgePolygon.ts:51](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideEdgePolygon.ts#L51)*
 
 **Parameters:**
 
@@ -682,7 +625,7 @@ ___
 
 ▸ **CircleCircleContact**(`manifold`: any, `xfA`: any, `fixtureA`: any, `indexA`: any, `xfB`: any, `fixtureB`: any, `indexB`: any): *void*
 
-*Defined in [src/collision/shape/CollideCircle.ts:39](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideCircle.ts#L39)*
+*Defined in [collision/shape/CollideCircle.ts:39](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideCircle.ts#L39)*
 
 **Parameters:**
 
@@ -704,7 +647,7 @@ ___
 
 ▸ **CollideCircles**(`manifold`: any, `circleA`: any, `xfA`: any, `circleB`: any, `xfB`: any): *void*
 
-*Defined in [dist/planck.d.ts:2333](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2333)*
+*Defined in [collision/shape/CollideCircle.ts:45](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideCircle.ts#L45)*
 
 **Parameters:**
 
@@ -724,7 +667,7 @@ ___
 
 ▸ **CollideEdgeCircle**(`manifold`: any, `edgeA`: any, `xfA`: any, `circleB`: any, `xfB`: any): *void*
 
-*Defined in [dist/planck.d.ts:2336](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2336)*
+*Defined in [collision/shape/CollideEdgeCircle.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideEdgeCircle.ts#L68)*
 
 **Parameters:**
 
@@ -744,7 +687,7 @@ ___
 
 ▸ **CollideEdgePolygon**(`manifold`: any, `edgeA`: any, `xfA`: any, `polygonB`: any, `xfB`: any): *void*
 
-*Defined in [dist/planck.d.ts:2353](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2353)*
+*Defined in [collision/shape/CollideEdgePolygon.ts:118](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideEdgePolygon.ts#L118)*
 
 This function collides and edge and a polygon, taking into account edge
 adjacency.
@@ -767,7 +710,7 @@ ___
 
 ▸ **CollidePolygonCircle**(`manifold`: any, `polygonA`: any, `xfA`: any, `circleB`: any, `xfB`: any): *void*
 
-*Defined in [dist/planck.d.ts:2348](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2348)*
+*Defined in [collision/shape/CollideCirclePolygone.ts:46](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideCirclePolygone.ts#L46)*
 
 **Parameters:**
 
@@ -787,7 +730,7 @@ ___
 
 ▸ **CollidePolygons**(`manifold`: any, `polyA`: [PolygonShape](classes/polygonshape.md), `xfA`: [Transform](classes/transform.md), `polyB`: [PolygonShape](classes/polygonshape.md), `xfB`: [Transform](classes/transform.md)): *void*
 
-*Defined in [dist/planck.d.ts:2347](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2347)*
+*Defined in [collision/shape/CollidePolygon.ts:145](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollidePolygon.ts#L145)*
 
 Find edge normal of max separation on A - return if separating axis is found<br>
 Find edge normal of max separation on B - return if separation axis is found<br>
@@ -813,18 +756,18 @@ ___
 
 ###  ComputeCentroid
 
-▸ **ComputeCentroid**(`vs`: Vec2[], `count`: number): *Vec2‹›*
+▸ **ComputeCentroid**(`vs`: [Vec2](classes/vec2.md)[], `count`: number): *[Vec2](classes/vec2.md)‹›*
 
-*Defined in [src/collision/shape/PolygonShape.ts:531](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/PolygonShape.ts#L531)*
+*Defined in [collision/shape/PolygonShape.ts:531](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/PolygonShape.ts#L531)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`vs` | Vec2[] |
+`vs` | [Vec2](classes/vec2.md)[] |
 `count` | number |
 
-**Returns:** *Vec2‹›*
+**Returns:** *[Vec2](classes/vec2.md)‹›*
 
 ___
 
@@ -832,7 +775,7 @@ ___
 
 ▸ **Distance**(`output`: [DistanceOutput](classes/distanceoutput.md), `cache`: [SimplexCache](classes/simplexcache.md), `input`: [DistanceInput](classes/distanceinput.md)): *void*
 
-*Defined in [dist/planck.d.ts:1920](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L1920)*
+*Defined in [collision/Distance.ts:94](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L94)*
 
 Compute the closest points between two shapes. Supports any combination of:
 CircleShape, PolygonShape, EdgeShape. The simplex cache is input/output. On
@@ -854,7 +797,7 @@ ___
 
 ▸ **EdgeCircleContact**(`manifold`: any, `xfA`: any, `fixtureA`: any, `indexA`: any, `xfB`: any, `fixtureB`: any, `indexB`: any): *void*
 
-*Defined in [src/collision/shape/CollideEdgeCircle.ts:41](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideEdgeCircle.ts#L41)*
+*Defined in [collision/shape/CollideEdgeCircle.ts:41](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideEdgeCircle.ts#L41)*
 
 **Parameters:**
 
@@ -876,7 +819,7 @@ ___
 
 ▸ **EdgePolygonContact**(`manifold`: any, `xfA`: any, `fA`: any, `indexA`: any, `xfB`: any, `fB`: any, `indexB`: any): *void*
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:44](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideEdgePolygon.ts#L44)*
+*Defined in [collision/shape/CollideEdgePolygon.ts:44](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideEdgePolygon.ts#L44)*
 
 **Parameters:**
 
@@ -898,7 +841,7 @@ ___
 
 ▸ **PolygonCircleContact**(`manifold`: any, `xfA`: any, `fixtureA`: any, `indexA`: any, `xfB`: any, `fixtureB`: any, `indexB`: any): *void*
 
-*Defined in [src/collision/shape/CollideCirclePolygone.ts:40](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollideCirclePolygone.ts#L40)*
+*Defined in [collision/shape/CollideCirclePolygone.ts:40](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollideCirclePolygone.ts#L40)*
 
 **Parameters:**
 
@@ -920,7 +863,7 @@ ___
 
 ▸ **PolygonContact**(`manifold`: any, `xfA`: any, `fixtureA`: any, `indexA`: any, `xfB`: any, `fixtureB`: any, `indexB`: any): *void*
 
-*Defined in [src/collision/shape/CollidePolygon.ts:40](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollidePolygon.ts#L40)*
+*Defined in [collision/shape/CollidePolygon.ts:40](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollidePolygon.ts#L40)*
 
 **Parameters:**
 
@@ -942,7 +885,7 @@ ___
 
 ▸ **Serializer**(`opts?`: any): *void*
 
-*Defined in [src/serializer/index.ts:11](https://github.com/shakiba/planck.js/blob/6a5d3be/src/serializer/index.ts#L11)*
+*Defined in [serializer/index.ts:11](https://github.com/shakiba/planck.js/blob/8127f05/src/serializer/index.ts#L11)*
 
 **Parameters:**
 
@@ -958,7 +901,7 @@ ___
 
 ▸ **TimeOfImpact**(`output`: [TOIOutput](classes/toioutput.md), `input`: [TOIInput](classes/toiinput.md)): *void*
 
-*Defined in [dist/planck.d.ts:3827](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L3827)*
+*Defined in [collision/TimeOfImpact.ts:91](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L91)*
 
 Compute the upper bound on time before two shapes penetrate. Time is
 represented as a fraction between [0,tMax]. This uses a swept separating axis
@@ -986,7 +929,7 @@ ___
 
 ▸ **assert**(`statement`: any, `err?`: any, `log?`: any): *void*
 
-*Defined in [src/util/common.ts:9](https://github.com/shakiba/planck.js/blob/6a5d3be/src/util/common.ts#L9)*
+*Defined in [util/common.ts:9](https://github.com/shakiba/planck.js/blob/8127f05/src/util/common.ts#L9)*
 
 **Parameters:**
 
@@ -1002,9 +945,9 @@ ___
 
 ###  clipSegmentToLine
 
-▸ **clipSegmentToLine**(`vOut`: [ClipVertex](classes/clipvertex.md)[], `vIn`: [ClipVertex](classes/clipvertex.md)[], `normal`: Vec2, `offset`: number, `vertexIndexA`: number): *number*
+▸ **clipSegmentToLine**(`vOut`: [ClipVertex](classes/clipvertex.md)[], `vIn`: [ClipVertex](classes/clipvertex.md)[], `normal`: [Vec2](classes/vec2.md), `offset`: number, `vertexIndexA`: number): *number*
 
-*Defined in [src/collision/Manifold.ts:323](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Manifold.ts#L323)*
+*Defined in [collision/Manifold.ts:323](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L323)*
 
 Clipping for contact manifolds. Sutherland-Hodgman clipping.
 
@@ -1014,7 +957,7 @@ Name | Type |
 ------ | ------ |
 `vOut` | [ClipVertex](classes/clipvertex.md)[] |
 `vIn` | [ClipVertex](classes/clipvertex.md)[] |
-`normal` | Vec2 |
+`normal` | [Vec2](classes/vec2.md) |
 `offset` | number |
 `vertexIndexA` | number |
 
@@ -1026,7 +969,7 @@ ___
 
 ▸ **debug**(...`rest`: any[]): *void*
 
-*Defined in [src/util/common.ts:4](https://github.com/shakiba/planck.js/blob/6a5d3be/src/util/common.ts#L4)*
+*Defined in [util/common.ts:4](https://github.com/shakiba/planck.js/blob/8127f05/src/util/common.ts#L4)*
 
 **Parameters:**
 
@@ -1042,7 +985,7 @@ ___
 
 ▸ **default**(`input`: any, `defaults`: any): *any*
 
-*Defined in [src/util/options.ts:1](https://github.com/shakiba/planck.js/blob/6a5d3be/src/util/options.ts#L1)*
+*Defined in [util/options.ts:1](https://github.com/shakiba/planck.js/blob/8127f05/src/util/options.ts#L1)*
 
 **Parameters:**
 
@@ -1059,7 +1002,7 @@ ___
 
 ▸ **diff**(`time`: any): *number*
 
-*Defined in [src/util/Timer.ts:5](https://github.com/shakiba/planck.js/blob/6a5d3be/src/util/Timer.ts#L5)*
+*Defined in [util/Timer.ts:5](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Timer.ts#L5)*
 
 **Parameters:**
 
@@ -1073,20 +1016,20 @@ ___
 
 ###  findIncidentEdge
 
-▸ **findIncidentEdge**(`c`: [ClipVertex](classes/clipvertex.md)[], `poly1`: PolygonShape, `xf1`: Transform, `edge1`: number, `poly2`: PolygonShape, `xf2`: Transform): *void*
+▸ **findIncidentEdge**(`c`: [ClipVertex](classes/clipvertex.md)[], `poly1`: [PolygonShape](classes/polygonshape.md), `xf1`: [Transform](classes/transform.md), `edge1`: number, `poly2`: [PolygonShape](classes/polygonshape.md), `xf2`: [Transform](classes/transform.md)): *void*
 
-*Defined in [src/collision/shape/CollidePolygon.ts:90](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollidePolygon.ts#L90)*
+*Defined in [collision/shape/CollidePolygon.ts:90](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollidePolygon.ts#L90)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `c` | [ClipVertex](classes/clipvertex.md)[] |
-`poly1` | PolygonShape |
-`xf1` | Transform |
+`poly1` | [PolygonShape](classes/polygonshape.md) |
+`xf1` | [Transform](classes/transform.md) |
 `edge1` | number |
-`poly2` | PolygonShape |
-`xf2` | Transform |
+`poly2` | [PolygonShape](classes/polygonshape.md) |
+`xf2` | [Transform](classes/transform.md) |
 
 **Returns:** *void*
 
@@ -1094,9 +1037,9 @@ ___
 
 ###  findMaxSeparation
 
-▸ **findMaxSeparation**(`poly1`: PolygonShape, `xf1`: Transform, `poly2`: PolygonShape, `xf2`: Transform, `output`: [MaxSeparation](interfaces/maxseparation.md)): *void*
+▸ **findMaxSeparation**(`poly1`: [PolygonShape](classes/polygonshape.md), `xf1`: [Transform](classes/transform.md), `poly2`: [PolygonShape](classes/polygonshape.md), `xf2`: [Transform](classes/transform.md), `output`: [MaxSeparation](interfaces/maxseparation.md)): *void*
 
-*Defined in [src/collision/shape/CollidePolygon.ts:55](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollidePolygon.ts#L55)*
+*Defined in [collision/shape/CollidePolygon.ts:55](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollidePolygon.ts#L55)*
 
 Find the max separation between poly1 and poly2 using edge normals from
 poly1.
@@ -1105,10 +1048,10 @@ poly1.
 
 Name | Type |
 ------ | ------ |
-`poly1` | PolygonShape |
-`xf1` | Transform |
-`poly2` | PolygonShape |
-`xf2` | Transform |
+`poly1` | [PolygonShape](classes/polygonshape.md) |
+`xf1` | [Transform](classes/transform.md) |
+`poly2` | [PolygonShape](classes/polygonshape.md) |
+`xf2` | [Transform](classes/transform.md) |
 `output` | [MaxSeparation](interfaces/maxseparation.md) |
 
 **Returns:** *void*
@@ -1117,9 +1060,9 @@ ___
 
 ###  getPointStates
 
-▸ **getPointStates**(`state1`: [PointState](enums/pointstate.md)[], `state2`: [PointState](enums/pointstate.md)[], `manifold1`: Manifold, `manifold2`: Manifold): *void*
+▸ **getPointStates**(`state1`: [PointState](enums/pointstate.md)[], `state2`: [PointState](enums/pointstate.md)[], `manifold1`: [Manifold](classes/manifold.md), `manifold2`: [Manifold](classes/manifold.md)): *void*
 
-*Defined in [src/collision/Manifold.ts:265](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Manifold.ts#L265)*
+*Defined in [collision/Manifold.ts:265](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L265)*
 
 Compute the point states given two manifolds. The states pertain to the
 transition from manifold1 to manifold2. So state1 is either persist or remove
@@ -1131,8 +1074,8 @@ Name | Type |
 ------ | ------ |
 `state1` | [PointState](enums/pointstate.md)[] |
 `state2` | [PointState](enums/pointstate.md)[] |
-`manifold1` | Manifold |
-`manifold2` | Manifold |
+`manifold1` | [Manifold](classes/manifold.md) |
+`manifold2` | [Manifold](classes/manifold.md) |
 
 **Returns:** *void*
 
@@ -1142,7 +1085,7 @@ ___
 
 ▸ **mixFriction**(`friction1`: any, `friction2`: any): *number*
 
-*Defined in [src/dynamics/Contact.ts:91](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Contact.ts#L91)*
+*Defined in [dynamics/Contact.ts:91](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Contact.ts#L91)*
 
 Friction mixing law. The idea is to allow either fixture to drive the
 restitution to zero. For example, anything slides on ice.
@@ -1162,7 +1105,7 @@ ___
 
 ▸ **mixRestitution**(`restitution1`: any, `restitution2`: any): *any*
 
-*Defined in [src/dynamics/Contact.ts:99](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Contact.ts#L99)*
+*Defined in [dynamics/Contact.ts:99](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Contact.ts#L99)*
 
 Restitution mixing law. The idea is allow for anything to bounce off an
 inelastic surface. For example, a superball bounces on anything.
@@ -1182,7 +1125,7 @@ ___
 
 ▸ **now**(): *number*
 
-*Defined in [src/util/Timer.ts:1](https://github.com/shakiba/planck.js/blob/6a5d3be/src/util/Timer.ts#L1)*
+*Defined in [util/Timer.ts:1](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Timer.ts#L1)*
 
 **Returns:** *number*
 
@@ -1190,9 +1133,9 @@ ___
 
 ###  testOverlap
 
-▸ **testOverlap**(`shapeA`: Shape, `indexA`: number, `shapeB`: Shape, `indexB`: number, `xfA`: Transform, `xfB`: Transform): *boolean*
+▸ **testOverlap**(`shapeA`: [Shape](classes/shape.md), `indexA`: number, `shapeB`: [Shape](classes/shape.md), `indexB`: number, `xfA`: [Transform](classes/transform.md), `xfB`: [Transform](classes/transform.md)): *boolean*
 
-*Defined in [src/collision/Distance.ts:689](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/Distance.ts#L689)*
+*Defined in [collision/Distance.ts:689](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L689)*
 
 Determine if two generic shapes overlap.
 
@@ -1200,56 +1143,14 @@ Determine if two generic shapes overlap.
 
 Name | Type |
 ------ | ------ |
-`shapeA` | Shape |
+`shapeA` | [Shape](classes/shape.md) |
 `indexA` | number |
-`shapeB` | Shape |
+`shapeB` | [Shape](classes/shape.md) |
 `indexB` | number |
-`xfA` | Transform |
-`xfB` | Transform |
+`xfA` | [Transform](classes/transform.md) |
+`xfB` | [Transform](classes/transform.md) |
 
 **Returns:** *boolean*
-
-___
-
-###  testbed
-
-▸ **testbed**(`opts`: any, `callback`: function): *[Testbed](interfaces/testbed.md)*
-
-*Defined in [testbed/index.d.ts:83](https://github.com/shakiba/planck.js/blob/6a5d3be/testbed/index.d.ts#L83)*
-
-**Parameters:**
-
-▪ **opts**: *any*
-
-▪ **callback**: *function*
-
-▸ (`testbed`: [Testbed](interfaces/testbed.md)): *World*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`testbed` | [Testbed](interfaces/testbed.md) |
-
-**Returns:** *[Testbed](interfaces/testbed.md)*
-
-▸ **testbed**(`callback`: function): *[Testbed](interfaces/testbed.md)*
-
-*Defined in [testbed/index.d.ts:84](https://github.com/shakiba/planck.js/blob/6a5d3be/testbed/index.d.ts#L84)*
-
-**Parameters:**
-
-▪ **callback**: *function*
-
-▸ (`testbed`: [Testbed](interfaces/testbed.md)): *World*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`testbed` | [Testbed](interfaces/testbed.md) |
-
-**Returns:** *[Testbed](interfaces/testbed.md)*
 
 ## Object literals
 
@@ -1257,91 +1158,91 @@ Name | Type |
 
 ### ▪ **BodyDefDefault**: *object*
 
-*Defined in [src/dynamics/Body.ts:109](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L109)*
+*Defined in [dynamics/Body.ts:109](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L109)*
 
 ###  active
 
 • **active**: *true* = true
 
-*Defined in [src/dynamics/Body.ts:126](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L126)*
+*Defined in [dynamics/Body.ts:126](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L126)*
 
 ###  allowSleep
 
 • **allowSleep**: *true* = true
 
-*Defined in [src/dynamics/Body.ts:124](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L124)*
+*Defined in [dynamics/Body.ts:124](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L124)*
 
 ###  angle
 
 • **angle**: *number* = 0
 
-*Defined in [src/dynamics/Body.ts:112](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L112)*
+*Defined in [dynamics/Body.ts:112](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L112)*
 
 ###  angularDamping
 
 • **angularDamping**: *number* = 0
 
-*Defined in [src/dynamics/Body.ts:118](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L118)*
+*Defined in [dynamics/Body.ts:118](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L118)*
 
 ###  angularVelocity
 
 • **angularVelocity**: *number* = 0
 
-*Defined in [src/dynamics/Body.ts:115](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L115)*
+*Defined in [dynamics/Body.ts:115](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L115)*
 
 ###  awake
 
 • **awake**: *true* = true
 
-*Defined in [src/dynamics/Body.ts:125](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L125)*
+*Defined in [dynamics/Body.ts:125](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L125)*
 
 ###  bullet
 
 • **bullet**: *false* = false
 
-*Defined in [src/dynamics/Body.ts:121](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L121)*
+*Defined in [dynamics/Body.ts:121](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L121)*
 
 ###  fixedRotation
 
 • **fixedRotation**: *false* = false
 
-*Defined in [src/dynamics/Body.ts:120](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L120)*
+*Defined in [dynamics/Body.ts:120](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L120)*
 
 ###  gravityScale
 
 • **gravityScale**: *number* = 1
 
-*Defined in [src/dynamics/Body.ts:122](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L122)*
+*Defined in [dynamics/Body.ts:122](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L122)*
 
 ###  linearDamping
 
 • **linearDamping**: *number* = 0
 
-*Defined in [src/dynamics/Body.ts:117](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L117)*
+*Defined in [dynamics/Body.ts:117](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L117)*
 
 ###  linearVelocity
 
-• **linearVelocity**: *Vec2‹›* = Vec2.zero()
+• **linearVelocity**: *[Vec2](classes/vec2.md)‹›* = Vec2.zero()
 
-*Defined in [src/dynamics/Body.ts:114](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L114)*
+*Defined in [dynamics/Body.ts:114](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L114)*
 
 ###  position
 
-• **position**: *Vec2‹›* = Vec2.zero()
+• **position**: *[Vec2](classes/vec2.md)‹›* = Vec2.zero()
 
-*Defined in [src/dynamics/Body.ts:111](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L111)*
+*Defined in [dynamics/Body.ts:111](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L111)*
 
 ###  type
 
 • **type**: *"static"* = STATIC
 
-*Defined in [src/dynamics/Body.ts:110](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L110)*
+*Defined in [dynamics/Body.ts:110](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L110)*
 
 ###  userData
 
 • **userData**: *null* = null
 
-*Defined in [src/dynamics/Body.ts:128](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Body.ts#L128)*
+*Defined in [dynamics/Body.ts:128](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Body.ts#L128)*
 
 ___
 
@@ -1349,169 +1250,169 @@ ___
 
 ### ▪ **DEFAULTS**: *object*
 
-*Defined in [src/dynamics/Joint.ts:84](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L84)*
+*Defined in [dynamics/Joint.ts:84](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L84)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:73](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/DistanceJoint.ts#L73)*
+*Defined in [dynamics/joint/DistanceJoint.ts:73](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/DistanceJoint.ts#L73)*
 
-*Defined in [src/dynamics/joint/FrictionJoint.ts:66](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/FrictionJoint.ts#L66)*
+*Defined in [dynamics/joint/FrictionJoint.ts:66](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/FrictionJoint.ts#L66)*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:113](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RevoluteJoint.ts#L113)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:113](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L113)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:109](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L109)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:109](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L109)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:64](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/GearJoint.ts#L64)*
+*Defined in [dynamics/joint/GearJoint.ts:64](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L64)*
 
-*Defined in [src/dynamics/joint/MotorJoint.ts:70](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/MotorJoint.ts#L70)*
+*Defined in [dynamics/joint/MotorJoint.ts:70](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MotorJoint.ts#L70)*
 
-*Defined in [src/dynamics/joint/MouseJoint.ts:73](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/MouseJoint.ts#L73)*
+*Defined in [dynamics/joint/MouseJoint.ts:73](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MouseJoint.ts#L73)*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:80](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PulleyJoint.ts#L80)*
+*Defined in [dynamics/joint/PulleyJoint.ts:80](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L80)*
 
-*Defined in [src/dynamics/joint/RopeJoint.ts:67](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RopeJoint.ts#L67)*
+*Defined in [dynamics/joint/RopeJoint.ts:67](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RopeJoint.ts#L67)*
 
-*Defined in [src/dynamics/joint/WeldJoint.ts:80](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WeldJoint.ts#L80)*
+*Defined in [dynamics/joint/WeldJoint.ts:80](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/WeldJoint.ts#L80)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:88](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WheelJoint.ts#L88)*
+*Defined in [dynamics/joint/WheelJoint.ts:88](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/WheelJoint.ts#L88)*
 
 ###  collideConnected
 
 • **collideConnected**: *boolean* = true
 
-*Defined in [src/dynamics/Joint.ts:86](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L86)*
+*Defined in [dynamics/Joint.ts:86](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L86)*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:81](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PulleyJoint.ts#L81)*
+*Defined in [dynamics/joint/PulleyJoint.ts:81](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PulleyJoint.ts#L81)*
 
 ###  correctionFactor
 
 • **correctionFactor**: *number* = 0.3
 
-*Defined in [src/dynamics/joint/MotorJoint.ts:73](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/MotorJoint.ts#L73)*
+*Defined in [dynamics/joint/MotorJoint.ts:73](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MotorJoint.ts#L73)*
 
 ###  dampingRatio
 
 • **dampingRatio**: *number* = 0.7
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:75](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/DistanceJoint.ts#L75)*
+*Defined in [dynamics/joint/DistanceJoint.ts:75](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/DistanceJoint.ts#L75)*
 
-*Defined in [src/dynamics/joint/MouseJoint.ts:76](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/MouseJoint.ts#L76)*
+*Defined in [dynamics/joint/MouseJoint.ts:76](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MouseJoint.ts#L76)*
 
-*Defined in [src/dynamics/joint/WeldJoint.ts:82](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WeldJoint.ts#L82)*
+*Defined in [dynamics/joint/WeldJoint.ts:82](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/WeldJoint.ts#L82)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:93](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WheelJoint.ts#L93)*
+*Defined in [dynamics/joint/WheelJoint.ts:93](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/WheelJoint.ts#L93)*
 
 ###  enableLimit
 
 • **enableLimit**: *boolean* = false
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:118](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RevoluteJoint.ts#L118)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:118](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L118)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:110](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L110)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:110](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L110)*
 
 ###  enableMotor
 
 • **enableMotor**: *boolean* = false
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:119](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RevoluteJoint.ts#L119)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:119](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L119)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:113](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L113)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:113](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L113)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:89](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WheelJoint.ts#L89)*
+*Defined in [dynamics/joint/WheelJoint.ts:89](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/WheelJoint.ts#L89)*
 
 ###  frequencyHz
 
 • **frequencyHz**: *number* = 2
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:74](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/DistanceJoint.ts#L74)*
+*Defined in [dynamics/joint/DistanceJoint.ts:74](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/DistanceJoint.ts#L74)*
 
-*Defined in [src/dynamics/joint/MouseJoint.ts:75](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/MouseJoint.ts#L75)*
+*Defined in [dynamics/joint/MouseJoint.ts:75](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MouseJoint.ts#L75)*
 
-*Defined in [src/dynamics/joint/WeldJoint.ts:81](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WeldJoint.ts#L81)*
+*Defined in [dynamics/joint/WeldJoint.ts:81](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/WeldJoint.ts#L81)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:92](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WheelJoint.ts#L92)*
+*Defined in [dynamics/joint/WheelJoint.ts:92](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/WheelJoint.ts#L92)*
 
 ###  lowerAngle
 
 • **lowerAngle**: *number* = 0
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:114](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RevoluteJoint.ts#L114)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:114](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L114)*
 
 ###  lowerTranslation
 
 • **lowerTranslation**: *number* = 0
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:111](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L111)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:111](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L111)*
 
 ###  maxForce
 
 • **maxForce**: *number* = 0
 
-*Defined in [src/dynamics/joint/FrictionJoint.ts:67](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/FrictionJoint.ts#L67)*
+*Defined in [dynamics/joint/FrictionJoint.ts:67](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/FrictionJoint.ts#L67)*
 
-*Defined in [src/dynamics/joint/MotorJoint.ts:71](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/MotorJoint.ts#L71)*
+*Defined in [dynamics/joint/MotorJoint.ts:71](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MotorJoint.ts#L71)*
 
-*Defined in [src/dynamics/joint/MouseJoint.ts:74](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/MouseJoint.ts#L74)*
+*Defined in [dynamics/joint/MouseJoint.ts:74](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MouseJoint.ts#L74)*
 
 ###  maxLength
 
 • **maxLength**: *number* = 0
 
-*Defined in [src/dynamics/joint/RopeJoint.ts:68](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RopeJoint.ts#L68)*
+*Defined in [dynamics/joint/RopeJoint.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RopeJoint.ts#L68)*
 
 ###  maxMotorForce
 
 • **maxMotorForce**: *number* = 0
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:114](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L114)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:114](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L114)*
 
 ###  maxMotorTorque
 
 • **maxMotorTorque**: *number* = 0
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:116](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RevoluteJoint.ts#L116)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:116](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L116)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:90](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WheelJoint.ts#L90)*
+*Defined in [dynamics/joint/WheelJoint.ts:90](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/WheelJoint.ts#L90)*
 
 ###  maxTorque
 
 • **maxTorque**: *number* = 1
 
-*Defined in [src/dynamics/joint/FrictionJoint.ts:68](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/FrictionJoint.ts#L68)*
+*Defined in [dynamics/joint/FrictionJoint.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/FrictionJoint.ts#L68)*
 
-*Defined in [src/dynamics/joint/MotorJoint.ts:72](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/MotorJoint.ts#L72)*
+*Defined in [dynamics/joint/MotorJoint.ts:72](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/MotorJoint.ts#L72)*
 
 ###  motorSpeed
 
 • **motorSpeed**: *number* = 0
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:117](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RevoluteJoint.ts#L117)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:117](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L117)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:115](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L115)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:115](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L115)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:91](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/WheelJoint.ts#L91)*
+*Defined in [dynamics/joint/WheelJoint.ts:91](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/WheelJoint.ts#L91)*
 
 ###  ratio
 
 • **ratio**: *number* = 1
 
-*Defined in [src/dynamics/joint/GearJoint.ts:65](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/GearJoint.ts#L65)*
+*Defined in [dynamics/joint/GearJoint.ts:65](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L65)*
 
 ###  upperAngle
 
 • **upperAngle**: *number* = 0
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:115](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/RevoluteJoint.ts#L115)*
+*Defined in [dynamics/joint/RevoluteJoint.ts:115](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L115)*
 
 ###  upperTranslation
 
 • **upperTranslation**: *number* = 0
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:112](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/PrismaticJoint.ts#L112)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:112](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L112)*
 
 ###  userData
 
 • **userData**: *null* = null
 
-*Defined in [src/dynamics/Joint.ts:85](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Joint.ts#L85)*
+*Defined in [dynamics/Joint.ts:85](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L85)*
 
 ___
 
@@ -1519,55 +1420,55 @@ ___
 
 ### ▪ **FixtureDefDefault**: *object*
 
-*Defined in [src/dynamics/Fixture.ts:81](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Fixture.ts#L81)*
+*Defined in [dynamics/Fixture.ts:81](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Fixture.ts#L81)*
 
 ###  density
 
 • **density**: *number* = 0
 
-*Defined in [src/dynamics/Fixture.ts:85](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Fixture.ts#L85)*
+*Defined in [dynamics/Fixture.ts:85](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Fixture.ts#L85)*
 
 ###  filterCategoryBits
 
 • **filterCategoryBits**: *number* = 1
 
-*Defined in [src/dynamics/Fixture.ts:89](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Fixture.ts#L89)*
+*Defined in [dynamics/Fixture.ts:89](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Fixture.ts#L89)*
 
 ###  filterGroupIndex
 
 • **filterGroupIndex**: *number* = 0
 
-*Defined in [src/dynamics/Fixture.ts:88](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Fixture.ts#L88)*
+*Defined in [dynamics/Fixture.ts:88](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Fixture.ts#L88)*
 
 ###  filterMaskBits
 
 • **filterMaskBits**: *number* = 65535
 
-*Defined in [src/dynamics/Fixture.ts:90](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Fixture.ts#L90)*
+*Defined in [dynamics/Fixture.ts:90](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Fixture.ts#L90)*
 
 ###  friction
 
 • **friction**: *number* = 0.2
 
-*Defined in [src/dynamics/Fixture.ts:83](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Fixture.ts#L83)*
+*Defined in [dynamics/Fixture.ts:83](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Fixture.ts#L83)*
 
 ###  isSensor
 
 • **isSensor**: *false* = false
 
-*Defined in [src/dynamics/Fixture.ts:86](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Fixture.ts#L86)*
+*Defined in [dynamics/Fixture.ts:86](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Fixture.ts#L86)*
 
 ###  restitution
 
 • **restitution**: *number* = 0
 
-*Defined in [src/dynamics/Fixture.ts:84](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Fixture.ts#L84)*
+*Defined in [dynamics/Fixture.ts:84](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Fixture.ts#L84)*
 
 ###  userData
 
 • **userData**: *null* = null
 
-*Defined in [src/dynamics/Fixture.ts:82](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/Fixture.ts#L82)*
+*Defined in [dynamics/Fixture.ts:82](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Fixture.ts#L82)*
 
 ___
 
@@ -1575,55 +1476,55 @@ ___
 
 ### ▪ **WorldDefDefault**: *object*
 
-*Defined in [src/dynamics/World.ts:62](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L62)*
+*Defined in [dynamics/World.ts:62](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L62)*
 
 ###  allowSleep
 
 • **allowSleep**: *true* = true
 
-*Defined in [src/dynamics/World.ts:64](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L64)*
+*Defined in [dynamics/World.ts:64](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L64)*
 
 ###  blockSolve
 
 • **blockSolve**: *true* = true
 
-*Defined in [src/dynamics/World.ts:68](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L68)*
+*Defined in [dynamics/World.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L68)*
 
 ###  continuousPhysics
 
 • **continuousPhysics**: *true* = true
 
-*Defined in [src/dynamics/World.ts:66](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L66)*
+*Defined in [dynamics/World.ts:66](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L66)*
 
 ###  gravity
 
-• **gravity**: *Vec2‹›* = Vec2.zero()
+• **gravity**: *[Vec2](classes/vec2.md)‹›* = Vec2.zero()
 
-*Defined in [src/dynamics/World.ts:63](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L63)*
+*Defined in [dynamics/World.ts:63](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L63)*
 
 ###  positionIterations
 
 • **positionIterations**: *number* = 3
 
-*Defined in [src/dynamics/World.ts:70](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L70)*
+*Defined in [dynamics/World.ts:70](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L70)*
 
 ###  subStepping
 
 • **subStepping**: *false* = false
 
-*Defined in [src/dynamics/World.ts:67](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L67)*
+*Defined in [dynamics/World.ts:67](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L67)*
 
 ###  velocityIterations
 
 • **velocityIterations**: *number* = 8
 
-*Defined in [src/dynamics/World.ts:69](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L69)*
+*Defined in [dynamics/World.ts:69](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L69)*
 
 ###  warmStarting
 
 • **warmStarting**: *true* = true
 
-*Defined in [src/dynamics/World.ts:65](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/World.ts#L65)*
+*Defined in [dynamics/World.ts:65](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/World.ts#L65)*
 
 ___
 
@@ -1631,16 +1532,16 @@ ___
 
 ### ▪ **maxSeparation**: *object*
 
-*Defined in [src/collision/shape/CollidePolygon.ts:130](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollidePolygon.ts#L130)*
+*Defined in [collision/shape/CollidePolygon.ts:130](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollidePolygon.ts#L130)*
 
 ###  bestIndex
 
 • **bestIndex**: *number* = 0
 
-*Defined in [src/collision/shape/CollidePolygon.ts:132](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollidePolygon.ts#L132)*
+*Defined in [collision/shape/CollidePolygon.ts:132](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollidePolygon.ts#L132)*
 
 ###  maxSeparation
 
 • **maxSeparation**: *number* = 0
 
-*Defined in [src/collision/shape/CollidePolygon.ts:131](https://github.com/shakiba/planck.js/blob/6a5d3be/src/collision/shape/CollidePolygon.ts#L131)*
+*Defined in [collision/shape/CollidePolygon.ts:131](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/shape/CollidePolygon.ts#L131)*

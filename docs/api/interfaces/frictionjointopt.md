@@ -3,13 +3,10 @@
 # Interface: FrictionJointOpt
 
 Friction joint definition.
-Friction joint definition.
 
 ## Hierarchy
 
 * [JointOpt](jointopt.md)
-
-* JointOpt
 
   ↳ **FrictionJointOpt**
 
@@ -32,9 +29,7 @@ Friction joint definition.
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:938](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L938)*
+*Defined in [dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -45,11 +40,8 @@ ___
 
 • **maxForce**? : *number*
 
-*Defined in [dist/planck.d.ts:2456](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2456)*
+*Defined in [dynamics/joint/FrictionJoint.ts:46](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/FrictionJoint.ts#L46)*
 
-*Defined in [src/dynamics/joint/FrictionJoint.ts:46](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/FrictionJoint.ts#L46)*
-
-The maximum friction force in N.
 The maximum friction force in N.
 
 ___
@@ -58,11 +50,8 @@ ___
 
 • **maxTorque**? : *number*
 
-*Defined in [dist/planck.d.ts:2460](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L2460)*
+*Defined in [dynamics/joint/FrictionJoint.ts:50](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/FrictionJoint.ts#L50)*
 
-*Defined in [src/dynamics/joint/FrictionJoint.ts:50](https://github.com/shakiba/planck.js/blob/6a5d3be/src/dynamics/joint/FrictionJoint.ts#L50)*
-
-The maximum friction torque in N-m.
 The maximum friction torque in N-m.
 
 ___
@@ -73,8 +62,6 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Overrides void*
-
-*Defined in [dist/planck.d.ts:933](https://github.com/shakiba/planck.js/blob/6a5d3be/dist/planck.d.ts#L933)*
+*Defined in [dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

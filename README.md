@@ -120,18 +120,6 @@ planck.testbed(function() {
 - [Modd.io](https://www.modd.io/)
 
 
-## Install
-
-#### CDN
-
-Planck.js is [available on jsDelivr](https://www.jsdelivr.com/package/npm/planck-js).
-
-
-#### NPM
-
-    npm install planck-js --save
-
-
 ## Credits
 
 [Box2D](https://github.com/erincatto/box2d) is a popular C++ 2D rigid-body physics engine created by [Erin Catto](https://twitter.com/erin_catto). Box2D is used in several popular games, such as Angry Birds, Limbo and Crayon Physics, as well as game development tools and libraries such as Apple's SpriteKit.
