@@ -6307,6 +6307,8 @@
     var ContactImpulse = /** @class */ (function () {
         function ContactImpulse(contact) {
             this.contact = contact;
+            this.normals = [];
+            this.tangents = [];
         }
         Object.defineProperty(ContactImpulse.prototype, "normalImpulses", {
             get: function () {
@@ -14645,24 +14647,6 @@
     }(Joint));
     Joint.TYPES[WheelJoint.TYPE] = WheelJoint;
 
-    /** @deprecated Merged with main namespace */
-    var internal = {};
-    // @ts-ignore
-    internal.CollidePolygons = CollidePolygons;
-    // @ts-ignore
-    internal.Settings = Settings;
-    // @ts-ignore
-    internal.Sweep = Sweep;
-    // @ts-ignore
-    internal.Manifold = Manifold;
-    // @ts-ignore
-    internal.Distance = Distance;
-    // @ts-ignore
-    internal.TimeOfImpact = TimeOfImpact;
-    // @ts-ignore
-    internal.DynamicTree = DynamicTree;
-    // @ts-ignore
-    internal.stats = stats$1;
     // @ts-ignore
     Manifold.clipSegmentToLine = clipSegmentToLine;
     // @ts-ignore
@@ -18858,6 +18842,48 @@
         var node = web.create().append(image);
         return node;
     };
+    /** @deprecated Merged with main namespace */
+    var internal = {};
+    // @ts-ignore
+    internal.CollidePolygons = CollidePolygons;
+    // @ts-ignore
+    internal.Settings = Settings;
+    // @ts-ignore
+    internal.Sweep = Sweep;
+    // @ts-ignore
+    internal.Manifold = Manifold;
+    // @ts-ignore
+    internal.Distance = Distance;
+    // @ts-ignore
+    internal.TimeOfImpact = TimeOfImpact;
+    // @ts-ignore
+    internal.DynamicTree = DynamicTree;
+    // @ts-ignore
+    internal.stats = stats$1;
+    // @ts-ignore
+    Manifold.clipSegmentToLine = clipSegmentToLine;
+    // @ts-ignore
+    Manifold.ClipVertex = ClipVertex;
+    // @ts-ignore
+    Manifold.getPointStates = getPointStates;
+    // @ts-ignore
+    Manifold.PointState = PointState;
+    // @ts-ignore
+    Solver.TimeStep = TimeStep;
+    // @ts-ignore
+    Distance.testOverlap = testOverlap;
+    // @ts-ignore
+    Distance.Input = DistanceInput;
+    // @ts-ignore
+    Distance.Output = DistanceOutput;
+    // @ts-ignore
+    Distance.Proxy = DistanceProxy;
+    // @ts-ignore
+    Distance.Cache = SimplexCache;
+    // @ts-ignore
+    TimeOfImpact.Input = TOIInput;
+    // @ts-ignore
+    TimeOfImpact.Output = TOIOutput;
 
     exports.AABB = AABB;
     exports.Body = Body;

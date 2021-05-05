@@ -2,6 +2,39 @@ declare namespace Serializer$0 {
     var toJson: any;
     var fromJson: any;
 }
+declare const math: Math & {
+    readonly EPSILON: number;
+    /**
+     * This function is used to ensure that a floating point number is not a NaN or
+     * infinity.
+     */
+    isFinite(x: any): boolean;
+    assert(x: any): void;
+    /**
+     * This is a approximate yet fast inverse square-root (todo).
+     */
+    invSqrt(x: number): number;
+    /**
+     * Next Largest Power of 2 Given a binary integer value x, the next largest
+     * power of 2 can be computed by a SWAR algorithm that recursively "folds" the
+     * upper bits into the lower bits. This process yields a bit vector with the
+     * same most significant 1 as x, but all 1's below it. Adding 1 to that value
+     * yields the next largest power of 2. For a 32-bit value:
+     */
+    nextPowerOfTwo(x: number): number;
+    isPowerOfTwo(x: number): boolean;
+    mod(num: number, min?: number, max?: number): number;
+    /**
+     * Returns a min if num is less than min, and max if more than max, otherwise returns num.
+     */
+    clamp(num: number, min: number, max: number): number;
+    /**
+     * Returns a random number between min and max when two arguments are provided.
+     * If one arg is provided between 0 to max.
+     * If one arg is passed between 0 to 1.
+     */
+    random(min?: number, max?: number): number;
+};
 declare function Vec2(x: number, y: number): Vec2;
 declare function Vec2(obj: {
     x: number;
@@ -146,6 +179,147 @@ declare class Vec2 {
      * @deprecated
      */
     static translateFn(x: any, y: any): (v: any) => Vec2;
+}
+declare function Vec3(x: number, y: number, z: number): Vec3;
+declare function Vec3(obj: {
+    x: number;
+    y: number;
+    z: number;
+}): Vec3;
+declare function Vec3(): Vec3;
+declare class Vec3 {
+    x: number;
+    y: number;
+    z: number;
+    constructor(x: number, y: number, z: number);
+    constructor(obj: {
+        x: number;
+        y: number;
+        z: number;
+    });
+    constructor();
+    static zero(): Vec3;
+    static clone(v: Vec3): Vec3;
+    toString(): string;
+    /**
+     * Does this vector contain finite coordinates?
+     */
+    static isValid(v: any): boolean;
+    static assert(o: any): void;
+    setZero(): Vec3;
+    set(x: number, y: number, z: number): Vec3;
+    add(w: Vec3): Vec3;
+    sub(w: Vec3): Vec3;
+    mul(m: number): Vec3;
+    static areEqual(v: Vec3, w: Vec3): boolean;
+    /**
+     * Perform the dot product on two vectors.
+     */
+    static dot(v: Vec3, w: Vec3): number;
+    /**
+     * Perform the cross product on two vectors. In 2D this produces a scalar.
+     */
+    static cross(v: Vec3, w: Vec3): Vec3;
+    static add(v: Vec3, w: Vec3): Vec3;
+    static sub(v: Vec3, w: Vec3): Vec3;
+    static mul(v: Vec3, m: number): Vec3;
+    neg(): Vec3;
+    static neg(v: Vec3): Vec3;
+}
+/**
+ * A 2-by-2 matrix. Stored in column-major order.
+ */
+declare class Mat22 {
+    ex: Vec2;
+    ey: Vec2;
+    constructor(a: number, b: number, c: number, d: number);
+    constructor(a: {
+        x: number;
+        y: number;
+    }, b: {
+        x: number;
+        y: number;
+    });
+    constructor();
+    toString(): string;
+    static isValid(o: any): boolean;
+    static assert(o: any): void;
+    set(a: Mat22): void;
+    set(a: Vec2, b: Vec2): void;
+    set(a: number, b: number, c: number, d: number): void;
+    setIdentity(): void;
+    setZero(): void;
+    getInverse(): Mat22;
+    /**
+     * Solve A * x = b, where b is a column vector. This is more efficient than
+     * computing the inverse in one-shot cases.
+     */
+    solve(v: Vec2): Vec2;
+    /**
+     * Multiply a matrix times a vector. If a rotation matrix is provided, then this
+     * transforms the vector from one frame to another.
+     */
+    static mul(mx: Mat22, my: Mat22): Mat22;
+    static mul(mx: Mat22, v: Vec2): Vec2;
+    static mulVec2(mx: any, v: any): Vec2;
+    static mulMat22(mx: any, v: any): Mat22;
+    /**
+     * Multiply a matrix transpose times a vector. If a rotation matrix is provided,
+     * then this transforms the vector from one frame to another (inverse
+     * transform).
+     */
+    static mulT(mx: Mat22, my: Mat22): Mat22;
+    static mulT(mx: Mat22, v: Vec2): Vec2;
+    static mulTVec2(mx: Mat22, v: Vec2): Vec2;
+    static mulTMat22(mx: Mat22, v: Mat22): Mat22;
+    static abs(mx: Mat22): Mat22;
+    static add(mx1: Mat22, mx2: Mat22): Mat22;
+}
+/**
+ * A 3-by-3 matrix. Stored in column-major order.
+ */
+declare class Mat33 {
+    ex: Vec3;
+    ey: Vec3;
+    ez: Vec3;
+    constructor(a: Vec3, b: Vec3, c: Vec3);
+    constructor();
+    toString(): string;
+    static isValid(o: any): boolean;
+    static assert(o: any): void;
+    /**
+     * Set this matrix to all zeros.
+     */
+    setZero(): Mat33;
+    /**
+     * Solve A * x = b, where b is a column vector. This is more efficient than
+     * computing the inverse in one-shot cases.
+     */
+    solve33(v: Vec3): Vec3;
+    /**
+     * Solve A * x = b, where b is a column vector. This is more efficient than
+     * computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
+     * equation.
+     */
+    solve22(v: Vec2): Vec2;
+    /**
+     * Get the inverse of this matrix as a 2-by-2. Returns the zero matrix if
+     * singular.
+     */
+    getInverse22(M: Mat33): void;
+    /**
+     * Get the symmetric inverse of this matrix as a 3-by-3. Returns the zero matrix
+     * if singular.
+     */
+    getSymInverse33(M: Mat33): void;
+    /**
+     * Multiply a matrix times a vector.
+     */
+    static mul(a: Mat33, b: Vec2): Vec2;
+    static mul(a: Mat33, b: Vec3): Vec3;
+    static mulVec3(a: Mat33, b: Vec3): Vec3;
+    static mulVec2(a: Mat33, b: Vec2): Vec2;
+    static add(a: Mat33, b: Mat33): Mat33;
 }
 declare function Rot(angle?: number | Rot): Rot;
 declare class Rot {
@@ -1700,6 +1874,51 @@ declare class Body {
     getLocalVector(worldVector: Vec2): Vec2;
 }
 /**
+ * Input for Distance. You have to option to use the shape radii in the
+ * computation. Even
+ */
+declare class DistanceInput {
+    proxyA: DistanceProxy;
+    proxyB: DistanceProxy;
+    transformA: Transform | null;
+    transformB: Transform | null;
+    useRadii: boolean;
+}
+/**
+ * Output for Distance.
+ *
+ * @prop {Vec2} pointA closest point on shapeA
+ * @prop {Vec2} pointB closest point on shapeB
+ * @prop distance
+ * @prop iterations number of GJK iterations used
+ */
+declare class DistanceOutput {
+    pointA: Vec2;
+    pointB: Vec2;
+    distance: number;
+    iterations: number;
+}
+/**
+ * Used to warm start Distance. Set count to zero on first call.
+ *
+ * @prop {number} metric length or area
+ * @prop {array} indexA vertices on shape A
+ * @prop {array} indexB vertices on shape B
+ * @prop {number} count
+ */
+declare class SimplexCache {
+    metric: number;
+    indexA: number[];
+    indexB: number[];
+    count: number;
+}
+/**
+ * Compute the closest points between two shapes. Supports any combination of:
+ * CircleShape, PolygonShape, EdgeShape. The simplex cache is input/output. On
+ * the first call set SimplexCache.count to zero.
+ */
+declare function Distance(output: DistanceOutput, cache: SimplexCache, input: DistanceInput): void;
+/**
  * A distance proxy is used by the GJK algorithm. It encapsulates any shape.
  */
 declare class DistanceProxy {
@@ -1798,6 +2017,141 @@ declare abstract class Shape {
     abstract computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
 }
 type ShapeType = "circle" | "edge" | "polygon" | "chain";
+declare function CircleShape(position: Vec2, radius?: number): CircleShape;
+declare function CircleShape(radius?: number): CircleShape;
+declare class CircleShape extends Shape {
+    static TYPE: "circle";
+    private m_p;
+    constructor(position: Vec2, radius?: number);
+    constructor(radius?: number);
+    // TODO: already defined in Shape
+    getRadius(): number;
+    getCenter(): Vec2;
+    getVertex(index: 0): Vec2;
+    /**
+     * @deprecated Shapes should be treated as immutable.
+     *
+     * clone the concrete shape.
+     */
+    _clone(): CircleShape;
+    /**
+     * Get the number of child primitives.
+     */
+    getChildCount(): 1;
+    /**
+     * Test a point for containment in this shape. This only works for convex
+     * shapes.
+     *
+     * @param {Transform} xf The shape world transform.
+     * @param p A point in world coordinates.
+     */
+    testPoint(xf: Transform, p: Vec2): boolean;
+    /**
+     * Cast a ray against a child shape.
+     *
+     * @param {RayCastOutput} output The ray-cast results.
+     * @param {RayCastInput} input The ray-cast input parameters.
+     * @param {Transform} transform The transform to be applied to the shape.
+     * @param childIndex The child shape index
+     */
+    // Collision Detection in Interactive 3D Environments by Gino van den Bergen
+    // From Section 3.1.2
+    // x = s + a * r
+    // norm(x) = radius
+    rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;
+    /**
+     * Given a transform, compute the associated axis aligned bounding box for a
+     * child shape.
+     *
+     * @param {AABB} aabb Returns the axis aligned box.
+     * @param {Transform} xf The world transform of the shape.
+     * @param childIndex The child shape
+     */
+    computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
+    /**
+     * Compute the mass properties of this shape using its dimensions and density.
+     * The inertia tensor is computed about the local origin.
+     *
+     * @param {MassData} massData Returns the mass data for this shape.
+     * @param density The density in kilograms per meter squared.
+     */
+    computeMass(massData: MassData, density: number): void;
+    computeDistanceProxy(proxy: DistanceProxy): void;
+}
+declare function EdgeShape(v1?: Vec2, v2?: Vec2): EdgeShape;
+/**
+ * A line segment (edge) shape. These can be connected in chains or loops to
+ * other edge shapes. The connectivity information is used to ensure correct
+ * contact normals.
+ */
+declare class EdgeShape extends Shape {
+    static TYPE: "edge";
+    // These are the edge vertices
+    m_vertex1: Vec2;
+    m_vertex2: Vec2;
+    // Optional adjacent vertices. These are used for smooth collision.
+    // Used by chain shape.
+    m_vertex0: Vec2;
+    m_vertex3: Vec2;
+    m_hasVertex0: boolean;
+    m_hasVertex3: boolean;
+    constructor(v1?: Vec2, v2?: Vec2);
+    setNext(v3?: Vec2): this;
+    setPrev(v0?: Vec2): this;
+    /**
+     * Set this as an isolated edge.
+     */
+    _set(v1: Vec2, v2: Vec2): this;
+    /**
+     * @deprecated Shapes should be treated as immutable.
+     *
+     * clone the concrete shape.
+     */
+    _clone(): EdgeShape;
+    /**
+     * Get the number of child primitives.
+     */
+    getChildCount(): 1;
+    /**
+     * Test a point for containment in this shape. This only works for convex
+     * shapes.
+     *
+     * @param {Transform} xf The shape world transform.
+     * @param p A point in world coordinates.
+     */
+    testPoint(xf: Transform, p: Vec2): false;
+    /**
+     * Cast a ray against a child shape.
+     *
+     * @param {RayCastOutput} output The ray-cast results.
+     * @param {RayCastInput} input The ray-cast input parameters.
+     * @param {Transform} transform The transform to be applied to the shape.
+     * @param childIndex The child shape index
+     */
+    // p = p1 + t * d
+    // v = v1 + s * e
+    // p1 + t * d = v1 + s * e
+    // s * e - t * d = p1 - v1
+    rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;
+    /**
+     * Given a transform, compute the associated axis aligned bounding box for a
+     * child shape.
+     *
+     * @param {AABB} aabb Returns the axis aligned box.
+     * @param {Transform} xf The world transform of the shape.
+     * @param childIndex The child shape
+     */
+    computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
+    /**
+     * Compute the mass properties of this shape using its dimensions and density.
+     * The inertia tensor is computed about the local origin.
+     *
+     * @param {MassData} massData Returns the mass data for this shape.
+     * @param density The density in kilograms per meter squared.
+     */
+    computeMass(massData: MassData, density?: number): void;
+    computeDistanceProxy(proxy: DistanceProxy): void;
+}
 declare function PolygonShape(vertices?: Vec2[]): PolygonShape;
 /**
  * A convex polygon. It is assumed that the interior of the polygon is to the
@@ -1867,6 +2221,115 @@ declare class PolygonShape extends Shape {
     validate(): boolean;
     computeDistanceProxy(proxy: DistanceProxy): void;
 }
+declare function ChainShape(vertices?: Vec2[], loop?: boolean): ChainShape;
+/**
+ * A chain shape is a free form sequence of line segments. The chain has
+ * two-sided collision, so you can use inside and outside collision. Therefore,
+ * you may use any winding order. Connectivity information is used to create
+ * smooth collisions.
+ *
+ * WARNING: The chain will not collide properly if there are self-intersections.
+ */
+declare class ChainShape extends Shape {
+    static TYPE: "chain";
+    m_vertices: Vec2[];
+    m_count: number;
+    m_prevVertex: Vec2 | null;
+    m_nextVertex: Vec2 | null;
+    m_hasPrevVertex: boolean;
+    m_hasNextVertex: boolean;
+    m_isLoop: boolean;
+    constructor(vertices?: Vec2[], loop?: boolean);
+    // clear() {
+    //   this.m_vertices.length = 0;
+    //   this.m_count = 0;
+    // }
+    /**
+     * Create a loop. This automatically adjusts connectivity.
+     *
+     * @param vertices an array of vertices, these are copied
+     * @param count the vertex count
+     */
+    _createLoop(vertices: Vec2[]): this;
+    /**
+     * Create a chain with isolated end vertices.
+     *
+     * @param vertices an array of vertices, these are copied
+     * @param count the vertex count
+     */
+    _createChain(vertices: Vec2[]): this;
+    _reset(): void;
+    /**
+     * Establish connectivity to a vertex that precedes the first vertex. Don't call
+     * this for loops.
+     */
+    setPrevVertex(prevVertex: Vec2): void;
+    /**
+     * Establish connectivity to a vertex that follows the last vertex. Don't call
+     * this for loops.
+     */
+    setNextVertex(nextVertex: Vec2): void;
+    /**
+     * @deprecated Shapes should be treated as immutable.
+     *
+     * clone the concrete shape.
+     */
+    _clone(): ChainShape;
+    /**
+     * Get the number of child primitives.
+     */
+    getChildCount(): number;
+    // Get a child edge.
+    getChildEdge(edge: EdgeShape, childIndex: number): void;
+    getVertex(index: number): Vec2;
+    /**
+     * Test a point for containment in this shape. This only works for convex
+     * shapes.
+     *
+     * This always return false.
+     *
+     * @param {Transform} xf The shape world transform.
+     * @param p A point in world coordinates.
+     */
+    testPoint(xf: Transform, p: Vec2): false;
+    /**
+     * Cast a ray against a child shape.
+     *
+     * @param {RayCastOutput} output The ray-cast results.
+     * @param {RayCastInput} input The ray-cast input parameters.
+     * @param {Transform} transform The transform to be applied to the shape.
+     * @param childIndex The child shape index
+     */
+    rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;
+    /**
+     * Given a transform, compute the associated axis aligned bounding box for a
+     * child shape.
+     *
+     * @param {AABB} aabb Returns the axis aligned box.
+     * @param {Transform} xf The world transform of the shape.
+     * @param childIndex The child shape
+     */
+    computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
+    /**
+     * Compute the mass properties of this shape using its dimensions and density.
+     * The inertia tensor is computed about the local origin.
+     *
+     * Chains have zero mass.
+     *
+     * @param {MassData} massData Returns the mass data for this shape.
+     * @param density The density in kilograms per meter squared.
+     */
+    computeMass(massData: MassData, density?: number): void;
+    computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
+}
+declare function BoxShape(hx: number, hy: number, center?: Vec2, angle?: number): BoxShape;
+/**
+ * A rectangle polygon which extend PolygonShape.
+ */
+declare class BoxShape extends PolygonShape {
+    static TYPE: "polygon";
+    constructor(hx: number, hy: number, center?: Vec2, angle?: number);
+}
 declare function CollideCircles(manifold: any, circleA: any, xfA: any, circleB: any, xfB: any): void;
 // Compute contact points for edge versus circle.
 // This accounts for edge connectivity.
@@ -1888,8 +2351,1481 @@ declare function CollidePolygonCircle(manifold: any, polygonA: any, xfA: any, ci
  * adjacency.
  */
 declare function CollideEdgePolygon(manifold: any, edgeA: any, xfA: any, polygonB: any, xfB: any): void;
-/** @deprecated Merged with main namespace */
-declare const internal: {};
+/**
+ * Distance joint definition. This requires defining an anchor point on both
+ * bodies and the non-zero length of the distance joint. The definition uses
+ * local anchor points so that the initial configuration can violate the
+ * constraint slightly. This helps when saving and loading a game. Warning: Do
+ * not use a zero or short length.
+ */
+interface DistanceJointOpt extends JointOpt {
+    /**
+     * The mass-spring-damper frequency in Hertz. A value of 0 disables softness.
+     */
+    frequencyHz?: number;
+    /**
+     * The damping ratio. 0 = no damping, 1 = critical damping.
+     */
+    dampingRatio?: number;
+    /**
+     * Distance length.
+     */
+    length?: number;
+}
+/**
+ * Distance joint definition. This requires defining an anchor point on both
+ * bodies and the non-zero length of the distance joint. The definition uses
+ * local anchor points so that the initial configuration can violate the
+ * constraint slightly. This helps when saving and loading a game. Warning: Do
+ * not use a zero or short length.
+ */
+interface DistanceJointDef extends JointDef, DistanceJointOpt {
+    /**
+     * The local anchor point relative to bodyA's origin.
+     */
+    localAnchorA: Vec2;
+    /**
+     * The local anchor point relative to bodyB's origin.
+     */
+    localAnchorB: Vec2;
+}
+declare function DistanceJoint(def: DistanceJointDef): DistanceJoint;
+declare function DistanceJoint(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2): DistanceJoint;
+/**
+ * A distance joint constrains two points on two bodies to remain at a fixed
+ * distance from each other. You can view this as a massless, rigid rod.
+ *
+ * @param anchorA Anchor A in global coordination.
+ * @param anchorB Anchor B in global coordination.
+ */
+declare class DistanceJoint extends Joint {
+    static TYPE: "distance-joint";
+    constructor(def: DistanceJointDef);
+    constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2);
+    /**
+     * The local anchor point relative to bodyA's origin.
+     */
+    getLocalAnchorA(): Vec2;
+    /**
+     * The local anchor point relative to bodyB's origin.
+     */
+    getLocalAnchorB(): Vec2;
+    /**
+     * Set the natural length. Manipulating the length can lead to non-physical
+     * behavior when the frequency is zero.
+     */
+    setLength(length: number): void;
+    /**
+     * Get the natural length.
+     */
+    getLength(): number;
+    setFrequency(hz: number): void;
+    getFrequency(): number;
+    setDampingRatio(ratio: number): void;
+    getDampingRatio(): number;
+    /**
+     * Get the anchor point on bodyA in world coordinates.
+     */
+    getAnchorA(): Vec2;
+    /**
+     * Get the anchor point on bodyB in world coordinates.
+     */
+    getAnchorB(): Vec2;
+    /**
+     * Get the reaction force on bodyB at the joint anchor in Newtons.
+     */
+    getReactionForce(inv_dt: number): Vec2;
+    /**
+     * Get the reaction torque on bodyB in N*m.
+     */
+    getReactionTorque(inv_dt: number): number;
+    initVelocityConstraints(step: any): void;
+    solveVelocityConstraints(step: any): void;
+    /**
+     * This returns true if the position errors are within tolerance.
+     */
+    solvePositionConstraints(step: any): boolean;
+}
+/**
+ * Friction joint definition.
+ */
+interface FrictionJointOpt extends JointOpt {
+    /**
+     * The maximum friction force in N.
+     */
+    maxForce?: number;
+    /**
+     * The maximum friction torque in N-m.
+     */
+    maxTorque?: number;
+}
+/**
+ * Friction joint definition.
+ */
+interface FrictionJointDef extends JointDef, FrictionJointOpt {
+    /**
+     * The local anchor point relative to bodyA's origin.
+     */
+    localAnchorA: Vec2;
+    /**
+     * The local anchor point relative to bodyB's origin.
+     */
+    localAnchorB: Vec2;
+}
+declare function FrictionJoint(def: FrictionJointDef): FrictionJoint;
+declare function FrictionJoint(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): FrictionJoint;
+/**
+ * Friction joint. This is used for top-down friction. It provides 2D
+ * translational friction and angular friction.
+ *
+ * @param anchor Anchor in global coordination.
+ */
+declare class FrictionJoint extends Joint {
+    static TYPE: "friction-joint";
+    // float
+    constructor(def: FrictionJointDef);
+    constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+    /**
+     * The local anchor point relative to bodyA's origin.
+     */
+    getLocalAnchorA(): Vec2;
+    /**
+     * The local anchor point relative to bodyB's origin.
+     */
+    getLocalAnchorB(): Vec2;
+    /**
+     * Set the maximum friction force in N.
+     */
+    setMaxForce(force: any): void;
+    /**
+     * Get the maximum friction force in N.
+     */
+    getMaxForce(): number;
+    /**
+     * Set the maximum friction torque in N*m.
+     */
+    setMaxTorque(torque: any): void;
+    /**
+     * Get the maximum friction torque in N*m.
+     */
+    getMaxTorque(): number;
+    /**
+     * Get the anchor point on bodyA in world coordinates.
+     */
+    getAnchorA(): Vec2;
+    /**
+     * Get the anchor point on bodyB in world coordinates.
+     */
+    getAnchorB(): Vec2;
+    /**
+     * Get the reaction force on bodyB at the joint anchor in Newtons.
+     */
+    getReactionForce(inv_dt: any): Vec2;
+    /**
+     * Get the reaction torque on bodyB in N*m.
+     */
+    getReactionTorque(inv_dt: any): number;
+    initVelocityConstraints(step: any): void;
+    solveVelocityConstraints(step: any): void;
+    /**
+     * This returns true if the position errors are within tolerance.
+     */
+    solvePositionConstraints(step: any): boolean;
+}
+/**
+ * Revolute joint definition. This requires defining an anchor point where the
+ * bodies are joined. The definition uses local anchor points so that the
+ * initial configuration can violate the constraint slightly. You also need to
+ * specify the initial relative angle for joint limits. This helps when saving
+ * and loading a game.
+ *
+ * The local anchor points are measured from the body's origin rather than the
+ * center of mass because: 1. you might not know where the center of mass will
+ * be. 2. if you add/remove shapes from a body and recompute the mass, the
+ * joints will be broken.
+ */
+interface RevoluteJointOpt extends JointOpt {
+    /**
+     * The lower angle for the joint limit (radians).
+     */
+    lowerAngle?: number;
+    /**
+     * The upper angle for the joint limit (radians).
+     */
+    upperAngle?: number;
+    /**
+     * The maximum motor torque used to achieve the desired motor speed. Usually
+     * in N-m.
+     */
+    maxMotorTorque?: number;
+    /**
+     * The desired motor speed. Usually in radians per second.
+     */
+    motorSpeed?: number;
+    /**
+     * A flag to enable joint limits.
+     */
+    enableLimit?: boolean;
+    /**
+     * A flag to enable the joint motor.
+     */
+    enableMotor?: boolean;
+}
+/**
+ * Revolute joint definition. This requires defining an anchor point where the
+ * bodies are joined. The definition uses local anchor points so that the
+ * initial configuration can violate the constraint slightly. You also need to
+ * specify the initial relative angle for joint limits. This helps when saving
+ * and loading a game.
+ *
+ * The local anchor points are measured from the body's origin rather than the
+ * center of mass because: 1. you might not know where the center of mass will
+ * be. 2. if you add/remove shapes from a body and recompute the mass, the
+ * joints will be broken.
+ */
+interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
+    /**
+     * The local anchor point relative to bodyA's origin.
+     */
+    localAnchorA: Vec2;
+    /**
+     * The local anchor point relative to bodyB's origin.
+     */
+    localAnchorB: Vec2;
+    /**
+     * The bodyB angle minus bodyA angle in the reference state (radians).
+     */
+    referenceAngle: number;
+}
+declare function RevoluteJoint(def: RevoluteJointDef): RevoluteJoint;
+declare function RevoluteJoint(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RevoluteJoint;
+/**
+ * A revolute joint constrains two bodies to share a common point while they are
+ * free to rotate about the point. The relative rotation about the shared point
+ * is the joint angle. You can limit the relative rotation with a joint limit
+ * that specifies a lower and upper angle. You can use a motor to drive the
+ * relative rotation about the shared point. A maximum motor torque is provided
+ * so that infinite forces are not generated.
+ */
+declare class RevoluteJoint extends Joint {
+    static TYPE: "revolute-joint";
+    // TODO enum
+    constructor(def: RevoluteJointDef);
+    constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+    /**
+     * The local anchor point relative to bodyA's origin.
+     */
+    getLocalAnchorA(): Vec2;
+    /**
+     * The local anchor point relative to bodyB's origin.
+     */
+    getLocalAnchorB(): Vec2;
+    /**
+     * Get the reference angle.
+     */
+    getReferenceAngle(): number;
+    /**
+     * Get the current joint angle in radians.
+     */
+    getJointAngle(): number;
+    /**
+     * Get the current joint angle speed in radians per second.
+     */
+    getJointSpeed(): number;
+    /**
+     * Is the joint motor enabled?
+     */
+    isMotorEnabled(): boolean;
+    /**
+     * Enable/disable the joint motor.
+     */
+    enableMotor(flag: any): void;
+    /**
+     * Get the current motor torque given the inverse time step. Unit is N*m.
+     */
+    getMotorTorque(inv_dt: any): number;
+    /**
+     * Set the motor speed in radians per second.
+     */
+    setMotorSpeed(speed: any): void;
+    /**
+     * Get the motor speed in radians per second.
+     */
+    getMotorSpeed(): number;
+    /**
+     * Set the maximum motor torque, usually in N-m.
+     */
+    setMaxMotorTorque(torque: any): void;
+    getMaxMotorTorque(): number;
+    /**
+     * Is the joint limit enabled?
+     */
+    isLimitEnabled(): boolean;
+    /**
+     * Enable/disable the joint limit.
+     */
+    enableLimit(flag: any): void;
+    /**
+     * Get the lower joint limit in radians.
+     */
+    getLowerLimit(): number;
+    /**
+     * Get the upper joint limit in radians.
+     */
+    getUpperLimit(): number;
+    /**
+     * Set the joint limits in radians.
+     */
+    setLimits(lower: any, upper: any): void;
+    /**
+     * Get the anchor point on bodyA in world coordinates.
+     */
+    getAnchorA(): Vec2;
+    /**
+     * Get the anchor point on bodyB in world coordinates.
+     */
+    getAnchorB(): Vec2;
+    /**
+     * Get the reaction force given the inverse time step. Unit is N.
+     */
+    getReactionForce(inv_dt: any): Vec2;
+    /**
+     * Get the reaction torque due to the joint limit given the inverse time step.
+     * Unit is N*m.
+     */
+    getReactionTorque(inv_dt: any): number;
+    initVelocityConstraints(step: any): void;
+    solveVelocityConstraints(step: any): void;
+    /**
+     * This returns true if the position errors are within tolerance.
+     */
+    solvePositionConstraints(step: any): boolean;
+}
+/**
+ * Prismatic joint definition. This requires defining a line of motion using an
+ * axis and an anchor point. The definition uses local anchor points and a local
+ * axis so that the initial configuration can violate the constraint slightly.
+ * The joint translation is zero when the local anchor points coincide in world
+ * space. Using local anchors and a local axis helps when saving and loading a
+ * game.
+ */
+interface PrismaticJointOpt extends JointOpt {
+    /**
+     * Enable/disable the joint limit.
+     */
+    enableLimit?: boolean;
+    /**
+     * The lower translation limit, usually in meters.
+     */
+    lowerTranslation?: number;
+    /**
+     * The upper translation limit, usually in meters.
+     */
+    upperTranslation?: number;
+    /**
+     * Enable/disable the joint motor.
+     */
+    enableMotor?: boolean;
+    /**
+     * The maximum motor torque, usually in N-m.
+     */
+    maxMotorForce?: number;
+    /**
+     * The desired motor speed in radians per second.
+     */
+    motorSpeed?: number;
+}
+/**
+ * Prismatic joint definition. This requires defining a line of motion using an
+ * axis and an anchor point. The definition uses local anchor points and a local
+ * axis so that the initial configuration can violate the constraint slightly.
+ * The joint translation is zero when the local anchor points coincide in world
+ * space. Using local anchors and a local axis helps when saving and loading a
+ * game.
+ */
+interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
+    /**
+     * The local anchor point relative to bodyA's origin.
+     */
+    localAnchorA: Vec2;
+    /**
+     * The local anchor point relative to bodyB's origin.
+     */
+    localAnchorB: Vec2;
+    /**
+     * The local translation unit axis in bodyA.
+     */
+    localAxisA: Vec2;
+    /**
+     * referenceAngle The constrained angle between the bodies:
+     * bodyB_angle - bodyA_angle.
+     */
+    referenceAngle: number;
+}
+declare function PrismaticJoint(def: PrismaticJointDef): PrismaticJoint;
+declare function PrismaticJoint(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): PrismaticJoint;
+/**
+ * A prismatic joint. This joint provides one degree of freedom: translation
+ * along an axis fixed in bodyA. Relative rotation is prevented. You can use a
+ * joint limit to restrict the range of motion and a joint motor to drive the
+ * motion or to model joint friction.
+ */
+declare class PrismaticJoint extends Joint {
+    static TYPE: "prismatic-joint";
+    constructor(def: PrismaticJointDef);
+    constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
+    /**
+     * The local anchor point relative to bodyA's origin.
+     */
+    getLocalAnchorA(): Vec2;
+    /**
+     * The local anchor point relative to bodyB's origin.
+     */
+    getLocalAnchorB(): Vec2;
+    /**
+     * The local joint axis relative to bodyA.
+     */
+    getLocalAxisA(): Vec2;
+    /**
+     * Get the reference angle.
+     */
+    getReferenceAngle(): number;
+    /**
+     * Get the current joint translation, usually in meters.
+     */
+    getJointTranslation(): number;
+    /**
+     * Get the current joint translation speed, usually in meters per second.
+     */
+    getJointSpeed(): number;
+    /**
+     * Is the joint limit enabled?
+     */
+    isLimitEnabled(): boolean;
+    /**
+     * Enable/disable the joint limit.
+     */
+    enableLimit(flag: any): void;
+    /**
+     * Get the lower joint limit, usually in meters.
+     */
+    getLowerLimit(): number;
+    /**
+     * Get the upper joint limit, usually in meters.
+     */
+    getUpperLimit(): number;
+    /**
+     * Set the joint limits, usually in meters.
+     */
+    setLimits(lower: any, upper: any): void;
+    /**
+     * Is the joint motor enabled?
+     */
+    isMotorEnabled(): boolean;
+    /**
+     * Enable/disable the joint motor.
+     */
+    enableMotor(flag: any): void;
+    /**
+     * Set the motor speed, usually in meters per second.
+     */
+    setMotorSpeed(speed: any): void;
+    /**
+     * Set the maximum motor force, usually in N.
+     */
+    setMaxMotorForce(force: any): void;
+    getMaxMotorForce(): number;
+    /**
+     * Get the motor speed, usually in meters per second.
+     */
+    getMotorSpeed(): number;
+    /**
+     * Get the current motor force given the inverse time step, usually in N.
+     */
+    getMotorForce(inv_dt: any): number;
+    /**
+     * Get the anchor point on bodyA in world coordinates.
+     */
+    getAnchorA(): Vec2;
+    /**
+     * Get the anchor point on bodyB in world coordinates.
+     */
+    getAnchorB(): Vec2;
+    /**
+     * Get the reaction force on bodyB at the joint anchor in Newtons.
+     */
+    getReactionForce(inv_dt: any): Vec2;
+    /**
+     * Get the reaction torque on bodyB in N*m.
+     */
+    getReactionTorque(inv_dt: any): number;
+    initVelocityConstraints(step: any): void;
+    solveVelocityConstraints(step: any): void;
+    /**
+     * This returns true if the position errors are within tolerance.
+     */
+    solvePositionConstraints(step: any): boolean;
+}
+/**
+ * Gear joint definition.
+ */
+interface GearJointOpt extends JointOpt {
+    /**
+     * The gear ratio. See GearJoint for explanation.
+     */
+    ratio?: number;
+}
+/**
+ * Gear joint definition.
+ */
+interface GearJointDef extends JointDef, GearJointOpt {
+    /**
+     * The first revolute/prismatic joint attached to the gear joint.
+     */
+    joint1: RevoluteJoint | PrismaticJoint;
+    /**
+     * The second prismatic/revolute joint attached to the gear joint.
+     */
+    joint2: RevoluteJoint | PrismaticJoint;
+}
+declare function GearJoint(def: GearJointDef): GearJoint;
+declare function GearJoint(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
+/**
+ * A gear joint is used to connect two joints together. Either joint can be a
+ * revolute or prismatic joint. You specify a gear ratio to bind the motions
+ * together: coordinate1 + ratio * coordinate2 = constant
+ *
+ * The ratio can be negative or positive. If one joint is a revolute joint and
+ * the other joint is a prismatic joint, then the ratio will have units of
+ * length or units of 1/length. Warning: You have to manually destroy the gear
+ * joint if joint1 or joint2 is destroyed.
+ *
+ * This definition requires two existing revolute or prismatic joints (any
+ * combination will work).
+ */
+declare class GearJoint extends Joint {
+    static TYPE: "gear-joint";
+    // float
+    constructor(def: GearJointDef);
+    constructor(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number);
+    /**
+     * Get the first joint.
+     */
+    getJoint1(): RevoluteJoint | PrismaticJoint;
+    /**
+     * Get the second joint.
+     */
+    getJoint2(): RevoluteJoint | PrismaticJoint;
+    /**
+     * Set the gear ratio.
+     */
+    setRatio(ratio: any): void;
+    /**
+     * Get the gear ratio.
+     */
+    getRatio(): number;
+    /**
+     * Get the anchor point on bodyA in world coordinates.
+     */
+    getAnchorA(): Vec2;
+    /**
+     * Get the anchor point on bodyB in world coordinates.
+     */
+    getAnchorB(): Vec2;
+    /**
+     * Get the reaction force on bodyB at the joint anchor in Newtons.
+     */
+    getReactionForce(inv_dt: any): Vec2;
+    /**
+     * Get the reaction torque on bodyB in N*m.
+     */
+    getReactionTorque(inv_dt: any): number;
+    initVelocityConstraints(step: any): void;
+    solveVelocityConstraints(step: any): void;
+    /**
+     * This returns true if the position errors are within tolerance.
+     */
+    solvePositionConstraints(step: any): boolean;
+}
+/**
+ * Motor joint definition.
+ */
+interface MotorJointOpt extends JointOpt {
+    /**
+     * The bodyB angle minus bodyA angle in radians.
+     */
+    angularOffset?: number;
+    /**
+     * The maximum motor force in N.
+     */
+    maxForce?: number;
+    /**
+     * The maximum motor torque in N-m.
+     */
+    maxTorque?: number;
+    /**
+     * Position correction factor in the range [0,1].
+     */
+    correctionFactor?: number;
+    /**
+     * Position of bodyB minus the position of bodyA, in bodyA's frame, in meters.
+     */
+    linearOffset?: Vec2;
+}
+/**
+ * Motor joint definition.
+ */
+interface MotorJointDef extends JointDef, MotorJointOpt {
+}
+declare function MotorJoint(def: MotorJointDef): MotorJoint;
+declare function MotorJoint(def: MotorJointOpt, bodyA: Body, bodyB: Body): MotorJoint;
+/**
+ * A motor joint is used to control the relative motion between two bodies. A
+ * typical usage is to control the movement of a dynamic body with respect to
+ * the ground.
+ */
+declare class MotorJoint extends Joint {
+    static TYPE: "motor-joint";
+    // float
+    constructor(def: MotorJointDef);
+    constructor(def: MotorJointOpt, bodyA: Body, bodyB: Body);
+    /**
+     * Set the maximum friction force in N.
+     */
+    setMaxForce(force: any): void;
+    /**
+     * Get the maximum friction force in N.
+     */
+    getMaxForce(): number;
+    /**
+     * Set the maximum friction torque in N*m.
+     */
+    setMaxTorque(torque: any): void;
+    /**
+     * Get the maximum friction torque in N*m.
+     */
+    getMaxTorque(): number;
+    /**
+     * Set the position correction factor in the range [0,1].
+     */
+    setCorrectionFactor(factor: any): void;
+    /**
+     * Get the position correction factor in the range [0,1].
+     */
+    getCorrectionFactor(): number;
+    /**
+     * Set/get the target linear offset, in frame A, in meters.
+     */
+    setLinearOffset(linearOffset: any): void;
+    getLinearOffset(): Vec2;
+    /**
+     * Set/get the target angular offset, in radians.
+     */
+    setAngularOffset(angularOffset: any): void;
+    getAngularOffset(): number;
+    /**
+     * Get the anchor point on bodyA in world coordinates.
+     */
+    getAnchorA(): Vec2;
+    /**
+     * Get the anchor point on bodyB in world coordinates.
+     */
+    getAnchorB(): Vec2;
+    /**
+     * Get the reaction force on bodyB at the joint anchor in Newtons.
+     */
+    getReactionForce(inv_dt: any): Vec2;
+    /**
+     * Get the reaction torque on bodyB in N*m.
+     */
+    getReactionTorque(inv_dt: any): number;
+    initVelocityConstraints(step: any): void;
+    solveVelocityConstraints(step: any): void;
+    /**
+     * This returns true if the position errors are within tolerance.
+     */
+    solvePositionConstraints(step: any): boolean;
+}
+/**
+ * Mouse joint definition. This requires a world target point, tuning
+ * parameters, and the time step.
+ */
+interface MouseJointOpt extends JointOpt {
+    /**
+     * [maxForce = 0.0] The maximum constraint force that can be exerted to move
+     * the candidate body. Usually you will express as some multiple of the
+     * weight (multiplier * mass * gravity).
+     */
+    maxForce?: number;
+    /**
+     * [frequencyHz = 5.0] The response speed.
+     */
+    frequencyHz?: number;
+    /**
+     * [dampingRatio = 0.7] The damping ratio. 0 = no damping, 1 = critical
+     * damping.
+     */
+    dampingRatio?: number;
+}
+/**
+ * Mouse joint definition. This requires a world target point, tuning
+ * parameters, and the time step.
+ */
+interface MouseJointDef extends JointDef, MouseJointOpt {
+    /**
+     * The initial world target point. This is assumed to coincide with the body
+     * anchor initially.
+     */
+    target: Vec2;
+}
+declare function MouseJoint(def: MouseJointDef): MouseJoint;
+declare function MouseJoint(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2): MouseJoint;
+/**
+ * A mouse joint is used to make a point on a body track a specified world
+ * point. This a soft constraint with a maximum force. This allows the
+ * constraint to stretch and without applying huge forces.
+ *
+ * NOTE: this joint is not documented in the manual because it was developed to
+ * be used in the testbed. If you want to learn how to use the mouse joint, look
+ * at the testbed.
+ */
+declare class MouseJoint extends Joint {
+    static TYPE: "mouse-joint";
+    constructor(def: MouseJointDef);
+    constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2);
+    /**
+     * Use this to update the target point.
+     */
+    setTarget(target: any): void;
+    getTarget(): Vec2;
+    /**
+     * Set the maximum force in Newtons.
+     */
+    setMaxForce(force: any): void;
+    /**
+     * Get the maximum force in Newtons.
+     */
+    getMaxForce(): number;
+    /**
+     * Set the frequency in Hertz.
+     */
+    setFrequency(hz: any): void;
+    /**
+     * Get the frequency in Hertz.
+     */
+    getFrequency(): number;
+    /**
+     * Set the damping ratio (dimensionless).
+     */
+    setDampingRatio(ratio: any): void;
+    /**
+     * Get the damping ratio (dimensionless).
+     */
+    getDampingRatio(): number;
+    /**
+     * Get the anchor point on bodyA in world coordinates.
+     */
+    getAnchorA(): Vec2;
+    /**
+     * Get the anchor point on bodyB in world coordinates.
+     */
+    getAnchorB(): Vec2;
+    /**
+     * Get the reaction force on bodyB at the joint anchor in Newtons.
+     */
+    getReactionForce(inv_dt: any): Vec2;
+    /**
+     * Get the reaction torque on bodyB in N*m.
+     */
+    getReactionTorque(inv_dt: any): number;
+    /**
+     * Shift the origin for any points stored in world coordinates.
+     */
+    shiftOrigin(newOrigin: any): void;
+    initVelocityConstraints(step: any): void;
+    solveVelocityConstraints(step: any): void;
+    /**
+     * This returns true if the position errors are within tolerance.
+     */
+    solvePositionConstraints(step: any): boolean;
+}
+/**
+ * Pulley joint definition. This requires two ground anchors, two dynamic body
+ * anchor points, and a pulley ratio.
+ */
+interface PulleyJointOpt extends JointOpt {
+}
+/**
+ * Pulley joint definition. This requires two ground anchors, two dynamic body
+ * anchor points, and a pulley ratio.
+ */
+interface PulleyJointDef extends JointDef, PulleyJointOpt {
+    /**
+     * The first ground anchor in world coordinates. This point never moves.
+     */
+    groundAnchorA: Vec2;
+    /**
+     * The second ground anchor in world coordinates. This point never moves.
+     */
+    groundAnchorB: Vec2;
+    /**
+     * The local anchor point relative to bodyA's origin.
+     */
+    localAnchorA: Vec2;
+    /**
+     * The local anchor point relative to bodyB's origin.
+     */
+    localAnchorB: Vec2;
+    /**
+     * The reference length for the segment attached to bodyA.
+     */
+    lengthA: number;
+    /**
+     * The reference length for the segment attached to bodyB.
+     */
+    lengthB: number;
+    /**
+     * The pulley ratio, used to simulate a block-and-tackle.
+     */
+    ratio: number;
+}
+declare function PulleyJoint(def: PulleyJointDef): PulleyJoint;
+declare function PulleyJoint(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number): PulleyJoint;
+/**
+ * The pulley joint is connected to two bodies and two fixed ground points. The
+ * pulley supports a ratio such that: length1 + ratio * length2 <= constant
+ *
+ * Yes, the force transmitted is scaled by the ratio.
+ *
+ * Warning: the pulley joint can get a bit squirrelly by itself. They often work
+ * better when combined with prismatic joints. You should also cover the the
+ * anchor points with static shapes to prevent one side from going to zero
+ * length.
+ */
+declare class PulleyJoint extends Joint {
+    static TYPE: "pulley-joint";
+    static MIN_PULLEY_LENGTH: number; // minPulleyLength
+    // float
+    constructor(def: PulleyJointDef);
+    constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number);
+    _serialize(): {
+        type: "pulley-joint";
+        bodyA: Body;
+        bodyB: Body;
+        collideConnected: boolean;
+        groundAnchorA: Vec2;
+        groundAnchorB: Vec2;
+        localAnchorA: Vec2;
+        localAnchorB: Vec2;
+        lengthA: number;
+        lengthB: number;
+        ratio: number;
+    };
+    static _deserialize(data: any, world: any, restore: any): PulleyJoint;
+    /**
+     * Get the first ground anchor.
+     */
+    getGroundAnchorA(): Vec2;
+    /**
+     * Get the second ground anchor.
+     */
+    getGroundAnchorB(): Vec2;
+    /**
+     * Get the current length of the segment attached to bodyA.
+     */
+    getLengthA(): number;
+    /**
+     * Get the current length of the segment attached to bodyB.
+     */
+    getLengthB(): number;
+    /**
+     * Get the pulley ratio.
+     */
+    getRatio(): number;
+    /**
+     * Get the current length of the segment attached to bodyA.
+     */
+    getCurrentLengthA(): number;
+    /**
+     * Get the current length of the segment attached to bodyB.
+     */
+    getCurrentLengthB(): number;
+    /**
+     * Shift the origin for any points stored in world coordinates.
+     *
+     * @param newOrigin
+     */
+    shiftOrigin(newOrigin: any): void;
+    /**
+     * Get the anchor point on bodyA in world coordinates.
+     */
+    getAnchorA(): Vec2;
+    /**
+     * Get the anchor point on bodyB in world coordinates.
+     */
+    getAnchorB(): Vec2;
+    /**
+     * Get the reaction force on bodyB at the joint anchor in Newtons.
+     */
+    getReactionForce(inv_dt: any): Vec2;
+    /**
+     * Get the reaction torque on bodyB in N*m.
+     */
+    getReactionTorque(inv_dt: any): number;
+    initVelocityConstraints(step: any): void;
+    solveVelocityConstraints(step: any): void;
+    /**
+     * This returns true if the position errors are within tolerance.
+     */
+    solvePositionConstraints(step: any): boolean;
+}
+/**
+ * Rope joint definition. This requires two body anchor points and a maximum
+ * lengths. Note: by default the connected objects will not collide. see
+ * collideConnected in JointDef.
+ */
+interface RopeJointOpt extends JointOpt {
+    /**
+     * The maximum length of the rope.
+     * Warning: this must be larger than linearSlop or the joint will have no effect.
+     */
+    maxLength?: number;
+}
+/**
+ * Rope joint definition. This requires two body anchor points and a maximum
+ * lengths. Note: by default the connected objects will not collide. see
+ * collideConnected in JointDef.
+ */
+interface RopeJointDef extends JointDef, RopeJointOpt {
+    /**
+     * The local anchor point relative to bodyA's origin.
+     */
+    localAnchorA: Vec2;
+    /**
+     * The local anchor point relative to bodyB's origin.
+     */
+    localAnchorB: Vec2;
+}
+declare function RopeJoint(def: RopeJointDef): RopeJoint;
+declare function RopeJoint(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RopeJoint;
+/**
+ * A rope joint enforces a maximum distance between two points on two bodies. It
+ * has no other effect.
+ *
+ * Warning: if you attempt to change the maximum length during the simulation
+ * you will get some non-physical behavior.
+ *
+ * A model that would allow you to dynamically modify the length would have some
+ * sponginess, so I chose not to implement it that way. See DistanceJoint if you
+ * want to dynamically control length.
+ */
+declare class RopeJoint extends Joint {
+    static TYPE: "rope-joint";
+    // float
+    constructor(def: RopeJointDef);
+    constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+    /**
+     * The local anchor point relative to bodyA's origin.
+     */
+    getLocalAnchorA(): Vec2;
+    /**
+     * The local anchor point relative to bodyB's origin.
+     */
+    getLocalAnchorB(): Vec2;
+    /**
+     * Set the maximum length of the rope.
+     */
+    setMaxLength(length: any): void;
+    /**
+     * Get the maximum length of the rope.
+     */
+    getMaxLength(): number;
+    getLimitState(): number;
+    /**
+     * Get the anchor point on bodyA in world coordinates.
+     */
+    getAnchorA(): Vec2;
+    /**
+     * Get the anchor point on bodyB in world coordinates.
+     */
+    getAnchorB(): Vec2;
+    /**
+     * Get the reaction force on bodyB at the joint anchor in Newtons.
+     */
+    getReactionForce(inv_dt: any): Vec2;
+    /**
+     * Get the reaction torque on bodyB in N*m.
+     */
+    getReactionTorque(inv_dt: any): number;
+    initVelocityConstraints(step: any): void;
+    solveVelocityConstraints(step: any): void;
+    /**
+     * This returns true if the position errors are within tolerance.
+     */
+    solvePositionConstraints(step: any): boolean;
+}
+/**
+ * Weld joint definition. You need to specify local anchor points where they are
+ * attached and the relative body angle. The position of the anchor points is
+ * important for computing the reaction torque.
+ *
+ * @prop {float} frequencyHz
+ * @prop {float} dampingRatio
+ *
+ * @prop {Vec2} localAnchorA
+ * @prop {Vec2} localAnchorB
+ * @prop {float} referenceAngle
+ */
+interface WeldJointOpt extends JointOpt {
+    /**
+     * The mass-spring-damper frequency in Hertz. Rotation only. Disable softness
+     * with a value of 0.
+     */
+    frequencyHz?: number;
+    /**
+     * The damping ratio. 0 = no damping, 1 = critical damping.
+     */
+    dampingRatio?: number;
+    /**
+     * The bodyB angle minus bodyA angle in the reference state (radians).
+     */
+    referenceAngle?: number;
+}
+/**
+ * Weld joint definition. You need to specify local anchor points where they are
+ * attached and the relative body angle. The position of the anchor points is
+ * important for computing the reaction torque.
+ */
+interface WeldJointDef extends JointDef, WeldJointOpt {
+    /**
+     * The local anchor point relative to bodyA's origin.
+     */
+    localAnchorA: Vec2;
+    /**
+     * The local anchor point relative to bodyB's origin.
+     */
+    localAnchorB: Vec2;
+}
+declare function WeldJoint(def: WeldJointDef): WeldJoint;
+declare function WeldJoint(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): WeldJoint;
+/**
+ * A weld joint essentially glues two bodies together. A weld joint may distort
+ * somewhat because the island constraint solver is approximate.
+ */
+declare class WeldJoint extends Joint {
+    static TYPE: "weld-joint";
+    constructor(def: WeldJointDef);
+    constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+    /**
+     * The local anchor point relative to bodyA's origin.
+     */
+    getLocalAnchorA(): Vec2;
+    /**
+     * The local anchor point relative to bodyB's origin.
+     */
+    getLocalAnchorB(): Vec2;
+    /**
+     * Get the reference angle.
+     */
+    getReferenceAngle(): number;
+    /**
+     * Set frequency in Hz.
+     */
+    setFrequency(hz: number): void;
+    /**
+     * Get frequency in Hz.
+     */
+    getFrequency(): number;
+    /**
+     * Set damping ratio.
+     */
+    setDampingRatio(ratio: number): void;
+    /**
+     * Get damping ratio.
+     */
+    getDampingRatio(): number;
+    /**
+     * Get the anchor point on bodyA in world coordinates.
+     */
+    getAnchorA(): Vec2;
+    /**
+     * Get the anchor point on bodyB in world coordinates.
+     */
+    getAnchorB(): Vec2;
+    /**
+     * Get the reaction force on bodyB at the joint anchor in Newtons.
+     */
+    getReactionForce(inv_dt: number): Vec2;
+    /**
+     * Get the reaction torque on bodyB in N*m.
+     */
+    getReactionTorque(inv_dt: number): number;
+    initVelocityConstraints(step: any): void;
+    solveVelocityConstraints(step: any): void;
+    /**
+     * This returns true if the position errors are within tolerance.
+     */
+    solvePositionConstraints(step: any): boolean;
+}
+/**
+ * Wheel joint definition. This requires defining a line of motion using an axis
+ * and an anchor point. The definition uses local anchor points and a local axis
+ * so that the initial configuration can violate the constraint slightly. The
+ * joint translation is zero when the local anchor points coincide in world
+ * space. Using local anchors and a local axis helps when saving and loading a
+ * game.
+ */
+interface WheelJointOpt extends JointOpt {
+    /**
+     * Enable/disable the joint motor.
+     */
+    enableMotor?: boolean;
+    /**
+     * The maximum motor torque, usually in N-m.
+     */
+    maxMotorTorque?: number;
+    /**
+     * The desired motor speed in radians per second.
+     */
+    motorSpeed?: number;
+    /**
+     * Suspension frequency, zero indicates no suspension.
+     */
+    frequencyHz?: number;
+    /**
+     * Suspension damping ratio, one indicates critical damping.
+     */
+    dampingRatio?: number;
+}
+/**
+ * Wheel joint definition. This requires defining a line of motion using an axis
+ * and an anchor point. The definition uses local anchor points and a local axis
+ * so that the initial configuration can violate the constraint slightly. The
+ * joint translation is zero when the local anchor points coincide in world
+ * space. Using local anchors and a local axis helps when saving and loading a
+ * game.
+ */
+interface WheelJointDef extends JointDef, WheelJointOpt {
+    /**
+     * The local anchor point relative to bodyA's origin.
+     */
+    localAnchorA: Vec2;
+    /**
+     * The local anchor point relative to bodyB's origin.
+     */
+    localAnchorB: Vec2;
+    /**
+     * The local translation axis in bodyA.
+     */
+    localAxisA: Vec2;
+}
+declare function WheelJoint(def: WheelJointDef): WheelJoint;
+declare function WheelJoint(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): WheelJoint;
+/**
+ * A wheel joint. This joint provides two degrees of freedom: translation along
+ * an axis fixed in bodyA and rotation in the plane. In other words, it is a
+ * point to line constraint with a rotational motor and a linear spring/damper.
+ * This joint is designed for vehicle suspensions.
+ */
+declare class WheelJoint extends Joint {
+    static TYPE: "wheel-joint";
+    // float
+    constructor(def: WheelJointDef);
+    constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
+    /**
+     * The local anchor point relative to bodyA's origin.
+     */
+    getLocalAnchorA(): Vec2;
+    /**
+     * The local anchor point relative to bodyB's origin.
+     */
+    getLocalAnchorB(): Vec2;
+    /**
+     * The local joint axis relative to bodyA.
+     */
+    getLocalAxisA(): Vec2;
+    /**
+     * Get the current joint translation, usually in meters.
+     */
+    getJointTranslation(): number;
+    /**
+     * Get the current joint translation speed, usually in meters per second.
+     */
+    getJointSpeed(): number;
+    /**
+     * Is the joint motor enabled?
+     */
+    isMotorEnabled(): boolean;
+    /**
+     * Enable/disable the joint motor.
+     */
+    enableMotor(flag: any): void;
+    /**
+     * Set the motor speed, usually in radians per second.
+     */
+    setMotorSpeed(speed: any): void;
+    /**
+     * Get the motor speed, usually in radians per second.
+     */
+    getMotorSpeed(): number;
+    /**
+     * Set/Get the maximum motor force, usually in N-m.
+     */
+    setMaxMotorTorque(torque: any): void;
+    getMaxMotorTorque(): number;
+    /**
+     * Get the current motor torque given the inverse time step, usually in N-m.
+     */
+    getMotorTorque(inv_dt: any): number;
+    /**
+     * Set/Get the spring frequency in hertz. Setting the frequency to zero disables
+     * the spring.
+     */
+    setSpringFrequencyHz(hz: any): void;
+    getSpringFrequencyHz(): number;
+    /**
+     * Set/Get the spring damping ratio
+     */
+    setSpringDampingRatio(ratio: any): void;
+    getSpringDampingRatio(): number;
+    /**
+     * Get the anchor point on bodyA in world coordinates.
+     */
+    getAnchorA(): Vec2;
+    /**
+     * Get the anchor point on bodyB in world coordinates.
+     */
+    getAnchorB(): Vec2;
+    /**
+     * Get the reaction force on bodyB at the joint anchor in Newtons.
+     */
+    getReactionForce(inv_dt: any): Vec2;
+    /**
+     * Get the reaction torque on bodyB in N*m.
+     */
+    getReactionTorque(inv_dt: any): number;
+    initVelocityConstraints(step: any): void;
+    solveVelocityConstraints(step: any): void;
+    /**
+     * This returns true if the position errors are within tolerance.
+     */
+    solvePositionConstraints(step: any): boolean;
+}
+/*
+* Planck.js
+* The MIT License
+* Copyright (c) 2021 Erin Catto, Ali Shakiba
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*/
+// TODO merge with World options?
+/**
+ * Tuning constants based on meters-kilograms-seconds (MKS) units.
+ */
+// tslint:disable-next-line:no-unnecessary-class
+declare class Settings {
+    // Collision
+    /**
+     * The maximum number of contact points between two convex shapes. Do not change
+     * this value.
+     */
+    static maxManifoldPoints: number;
+    /**
+     * The maximum number of vertices on a convex polygon. You cannot increase this
+     * too much because BlockAllocator has a maximum object size.
+     */
+    static maxPolygonVertices: number;
+    /**
+     * This is used to fatten AABBs in the dynamic tree. This allows proxies to move
+     * by a small amount without triggering a tree adjustment. This is in meters.
+     */
+    static aabbExtension: number;
+    /**
+     * This is used to fatten AABBs in the dynamic tree. This is used to predict the
+     * future position based on the current displacement. This is a dimensionless
+     * multiplier.
+     */
+    static aabbMultiplier: number;
+    /**
+     * A small length used as a collision and constraint tolerance. Usually it is
+     * chosen to be numerically significant, but visually insignificant.
+     */
+    static linearSlop: number;
+    static get linearSlopSquared(): number;
+    /**
+     * A small angle used as a collision and constraint tolerance. Usually it is
+     * chosen to be numerically significant, but visually insignificant.
+     */
+    static angularSlop: number;
+    /**
+     * The radius of the polygon/edge shape skin. This should not be modified.
+     * Making this smaller means polygons will have an insufficient buffer for
+     * continuous collision. Making it larger may create artifacts for vertex
+     * collision.
+     */
+    static get polygonRadius(): number;
+    /**
+     * Maximum number of sub-steps per contact in continuous physics simulation.
+     */
+    static maxSubSteps: number;
+    // Dynamics
+    /**
+     * Maximum number of contacts to be handled to solve a TOI impact.
+     */
+    static maxTOIContacts: number;
+    /**
+     * Maximum iterations to solve a TOI.
+     */
+    static maxTOIIterations: number;
+    /**
+     * Maximum iterations to find Distance.
+     */
+    static maxDistnceIterations: number;
+    /**
+     * A velocity threshold for elastic collisions. Any collision with a relative
+     * linear velocity below this threshold will be treated as inelastic.
+     */
+    static velocityThreshold: number;
+    /**
+     * The maximum linear position correction used when solving constraints. This
+     * helps to prevent overshoot.
+     */
+    static maxLinearCorrection: number;
+    /**
+     * The maximum angular position correction used when solving constraints. This
+     * helps to prevent overshoot.
+     */
+    static maxAngularCorrection: number;
+    /**
+     * The maximum linear velocity of a body. This limit is very large and is used
+     * to prevent numerical problems. You shouldn't need to adjust Settings.
+     */
+    static maxTranslation: number;
+    static get maxTranslationSquared(): number;
+    /**
+     * The maximum angular velocity of a body. This limit is very large and is used
+     * to prevent numerical problems. You shouldn't need to adjust Settings.
+     */
+    static maxRotation: number;
+    static get maxRotationSquared(): number;
+    /**
+     * This scale factor controls how fast overlap is resolved. Ideally this would
+     * be 1 so that overlap is removed in one time step. However using values close
+     * to 1 often lead to overshoot.
+     */
+    static baumgarte: number;
+    static toiBaugarte: number;
+    // Sleep
+    /**
+     * The time that a body must be still before it will go to sleep.
+     */
+    static timeToSleep: number;
+    /**
+     * A body cannot sleep if its linear velocity is above this tolerance.
+     */
+    static linearSleepTolerance: number;
+    static get linearSleepToleranceSqr(): number;
+    /**
+     * A body cannot sleep if its angular velocity is above this tolerance.
+     */
+    static angularSleepTolerance: number;
+    static get angularSleepToleranceSqr(): number;
+}
+/**
+ * This describes the motion of a body/shape for TOI computation. Shapes are
+ * defined with respect to the body origin, which may not coincide with the
+ * center of mass. However, to support dynamics we must interpolate the center
+ * of mass position.
+ */
+declare class Sweep {
+    /** Local center of mass position */
+    localCenter: Vec2;
+    /** World center position */
+    c: Vec2;
+    /** World angle */
+    a: number;
+    /** Fraction of the current time step in the range [0,1], c0 and a0 are c and a at alpha0. */
+    alpha0: number;
+    c0: Vec2;
+    a0: number;
+    constructor(c?: Vec2, a?: number);
+    setTransform(xf: Transform): void;
+    setLocalCenter(localCenter: Vec2, xf: Transform): void;
+    /**
+     * Get the interpolated transform at a specific time.
+     *
+     * @param xf
+     * @param beta A factor in [0,1], where 0 indicates alpha0
+     */
+    getTransform(xf: Transform, beta: number): void;
+    /**
+     * Advance the sweep forward, yielding a new initial state.
+     *
+     * @param alpha The new initial time
+     */
+    advance(alpha: number): void;
+    forward(): void;
+    /**
+     * normalize the angles in radians to be between -pi and pi.
+     */
+    normalize(): void;
+    clone(): Sweep;
+    set(that: Sweep): void;
+}
+/**
+ * Input parameters for TimeOfImpact.
+ */
+declare class TOIInput {
+    proxyA: DistanceProxy;
+    proxyB: DistanceProxy;
+    sweepA: Sweep;
+    sweepB: Sweep;
+    /** defines sweep interval [0, tMax] */
+    tMax: number | undefined;
+}
+declare enum TOIOutputState {
+    e_unknown = 0,
+    e_failed = 1,
+    e_overlapped = 2,
+    e_touching = 3,
+    e_separated = 4
+}
+/**
+ * Output parameters for TimeOfImpact.
+ */
+declare class TOIOutput {
+    state: TOIOutputState | undefined;
+    t: number | undefined;
+}
+/**
+ * Compute the upper bound on time before two shapes penetrate. Time is
+ * represented as a fraction between [0,tMax]. This uses a swept separating axis
+ * and may miss some intermediate, non-tunneling collision. If you change the
+ * time interval, you should call this function again.
+ *
+ * Note: use Distance to compute the contact point and normal at the time of
+ * impact.
+ *
+ * CCD via the local separating axis method. This seeks progression by computing
+ * the largest time at which separation is maintained.
+ */
+declare function TimeOfImpact(output: TOIOutput, input: TOIInput): void;
 interface ActiveKeys {
     0?: boolean;
     1?: boolean;
@@ -1977,4 +3913,6 @@ interface Testbed {
 }
 declare function testbed(opts: object, callback: (testbed: Testbed) => World): any;
 declare function testbed(callback: (testbed: Testbed) => World): any;
-export { default as Serializer, default as Math, default as Vec2, default as Vec3, default as Mat22, default as Mat33, default as Transform, default as Rot, default as AABB, default as Shape, default as Fixture, default as Body, default as Contact, default as Joint, default as World, default as Circle, default as Edge, default as Polygon, default as Chain, default as Box, default as DistanceJoint, default as FrictionJoint, default as GearJoint, default as MotorJoint, default as MouseJoint, default as PrismaticJoint, default as PulleyJoint, default as RevoluteJoint, default as RopeJoint, default as WeldJoint, default as WheelJoint, default as Settings, default as Sweep, default as Manifold, default as Distance, default as TimeOfImpact, default as DynamicTree, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, internal, ActiveKeys, Testbed, testbed };
+/** @deprecated Merged with main namespace */
+declare const internal$0: {};
+export { ActiveKeys, Testbed, testbed, Serializer$0 as Serializer, math as Math, Vec2, Vec3, Mat22, Mat33, Transform, Rot, AABB, Shape, Fixture, Body, Contact, Joint, World, CircleShape as Circle, EdgeShape as Edge, PolygonShape as Polygon, ChainShape as Chain, BoxShape as Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJoint, FrictionJoint, GearJoint, MotorJoint, MouseJoint, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, WeldJoint, WheelJoint, Settings, Sweep, Manifold, Distance, TimeOfImpact, DynamicTree, internal$0 as internal };
