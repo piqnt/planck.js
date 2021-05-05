@@ -2,7 +2,7 @@
     "compilerOptions": {
         // "strictNullChecks": true,
         // "noImplicitAny": true,
-        "lib": ["ES2015"],
+        "lib": ["ES2015", "DOM"],
         "stripInternal": true,
         "target": "ES5"
     }
