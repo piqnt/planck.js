@@ -63,9 +63,9 @@
     "webpack-dev-middleware": "^3.7.0"
   },
   "scripts": {
-    "test": "mocha 'lib/**/__test/*.js' --require esm",
-    "test:coverage": "nyc --reporter=text mocha 'lib/**/__test/*.js'",
-    "test:coverage:html": "nyc --reporter=html mocha 'lib/**/__test/*.js'",
+    "test": "mocha 'src/**/__test/*.js' --require esm",
+    "test:coverage": "nyc --reporter=text mocha 'src/**/__test/*.js'",
+    "test:coverage:html": "nyc --reporter=html mocha 'src/**/__test/*.js'",
     "build": "rollup -c",
     "watch": "rollup -c --watch",
     "testbed": "node testbed/server.js",
