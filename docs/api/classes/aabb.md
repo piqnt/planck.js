@@ -43,7 +43,7 @@
 
 \+ **new AABB**(`lower?`: [Vec2](vec2.md), `upper?`: [Vec2](vec2.md)): *[AABB](aabb.md)*
 
-*Defined in [collision/AABB.ts:54](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L54)*
+*Defined in [src/collision/AABB.ts:54](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L54)*
 
 **Parameters:**
 
@@ -60,7 +60,7 @@ Name | Type |
 
 • **lowerBound**: *[Vec2](vec2.md)*
 
-*Defined in [collision/AABB.ts:53](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L53)*
+*Defined in [src/collision/AABB.ts:53](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L53)*
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 • **upperBound**: *[Vec2](vec2.md)*
 
-*Defined in [collision/AABB.ts:54](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L54)*
+*Defined in [src/collision/AABB.ts:54](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L54)*
 
 ## Methods
 
@@ -76,7 +76,7 @@ ___
 
 ▸ **combine**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *void*
 
-*Defined in [collision/AABB.ts:119](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L119)*
+*Defined in [src/collision/AABB.ts:119](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L119)*
 
 Combine one or two AABB into this one.
 
@@ -95,7 +95,7 @@ ___
 
 ▸ **combinePoints**(`a`: [Vec2](vec2.md), `b`: [Vec2](vec2.md)): *void*
 
-*Defined in [collision/AABB.ts:136](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L136)*
+*Defined in [src/collision/AABB.ts:136](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L136)*
 
 **Parameters:**
 
@@ -112,7 +112,7 @@ ___
 
 ▸ **contains**(`aabb`: [AABB](aabb.md)): *boolean*
 
-*Defined in [collision/AABB.ts:146](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L146)*
+*Defined in [src/collision/AABB.ts:146](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L146)*
 
 **Parameters:**
 
@@ -128,7 +128,7 @@ ___
 
 ▸ **extend**(`value`: number): *[AABB](aabb.md)*
 
-*Defined in [collision/AABB.ts:155](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L155)*
+*Defined in [src/collision/AABB.ts:155](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L155)*
 
 **Parameters:**
 
@@ -144,7 +144,7 @@ ___
 
 ▸ **getCenter**(): *[Vec2](vec2.md)*
 
-*Defined in [collision/AABB.ts:98](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L98)*
+*Defined in [src/collision/AABB.ts:98](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L98)*
 
 Get the center of the AABB.
 
@@ -156,7 +156,7 @@ ___
 
 ▸ **getExtents**(): *[Vec2](vec2.md)*
 
-*Defined in [collision/AABB.ts:105](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L105)*
+*Defined in [src/collision/AABB.ts:105](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L105)*
 
 Get the extents of the AABB (half-widths).
 
@@ -168,7 +168,7 @@ ___
 
 ▸ **getPerimeter**(): *number*
 
-*Defined in [collision/AABB.ts:112](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L112)*
+*Defined in [src/collision/AABB.ts:112](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L112)*
 
 Get the perimeter length.
 
@@ -180,7 +180,7 @@ ___
 
 ▸ **isValid**(): *boolean*
 
-*Defined in [collision/AABB.ts:77](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L77)*
+*Defined in [src/collision/AABB.ts:77](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L77)*
 
 Verify that the bounds are sorted.
 
@@ -192,7 +192,7 @@ ___
 
 ▸ **rayCast**(`output`: [RayCastOutput](../interfaces/raycastoutput.md), `input`: [RayCastInput](../interfaces/raycastinput.md)): *boolean*
 
-*Defined in [collision/AABB.ts:197](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L197)*
+*Defined in [src/collision/AABB.ts:197](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L197)*
 
 **Parameters:**
 
@@ -209,7 +209,7 @@ ___
 
 ▸ **set**(`aabb`: [AABB](aabb.md)): *void*
 
-*Defined in [collision/AABB.ts:141](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L141)*
+*Defined in [src/collision/AABB.ts:141](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L141)*
 
 **Parameters:**
 
@@ -225,7 +225,7 @@ ___
 
 ▸ **toString**(): *string*
 
-*Defined in [collision/AABB.ts:258](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L258)*
+*Defined in [src/collision/AABB.ts:258](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L258)*
 
 **Returns:** *string*
 
@@ -235,7 +235,7 @@ ___
 
 ▸ **areEqual**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *boolean*
 
-*Defined in [collision/AABB.ts:180](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L180)*
+*Defined in [src/collision/AABB.ts:180](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L180)*
 
 **Parameters:**
 
@@ -252,7 +252,7 @@ ___
 
 ▸ **assert**(`o`: any): *void*
 
-*Defined in [collision/AABB.ts:87](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L87)*
+*Defined in [src/collision/AABB.ts:87](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L87)*
 
 **Parameters:**
 
@@ -268,7 +268,7 @@ ___
 
 ▸ **diff**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *number*
 
-*Defined in [collision/AABB.ts:184](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L184)*
+*Defined in [src/collision/AABB.ts:184](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L184)*
 
 **Parameters:**
 
@@ -285,7 +285,7 @@ ___
 
 ▸ **extend**(`aabb`: [AABB](aabb.md), `value`: number): *void*
 
-*Defined in [collision/AABB.ts:160](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L160)*
+*Defined in [src/collision/AABB.ts:160](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L160)*
 
 **Parameters:**
 
@@ -302,7 +302,7 @@ ___
 
 ▸ **isValid**(`aabb`: any): *boolean*
 
-*Defined in [collision/AABB.ts:81](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L81)*
+*Defined in [src/collision/AABB.ts:81](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L81)*
 
 **Parameters:**
 
@@ -318,7 +318,7 @@ ___
 
 ▸ **testOverlap**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *boolean*
 
-*Defined in [collision/AABB.ts:167](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/AABB.ts#L167)*
+*Defined in [src/collision/AABB.ts:167](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/AABB.ts#L167)*
 
 **Parameters:**
 

@@ -38,7 +38,7 @@ contact has two contact nodes, one for each attached body.
 
 \+ **new ContactEdge**(`contact`: any): *[ContactEdge](contactedge.md)*
 
-*Defined in [dynamics/Contact.ts:60](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Contact.ts#L60)*
+*Defined in [src/dynamics/Contact.ts:60](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Contact.ts#L60)*
 
 **Parameters:**
 
@@ -54,7 +54,7 @@ Name | Type |
 
 • **contact**: *[Contact](contact.md)*
 
-*Defined in [dynamics/Contact.ts:57](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Contact.ts#L57)*
+*Defined in [src/dynamics/Contact.ts:57](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Contact.ts#L57)*
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 • **next**: *[ContactEdge](contactedge.md) | undefined*
 
-*Defined in [dynamics/Contact.ts:59](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Contact.ts#L59)*
+*Defined in [src/dynamics/Contact.ts:59](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Contact.ts#L59)*
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 • **other**: *[Body](body.md) | undefined*
 
-*Defined in [dynamics/Contact.ts:60](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Contact.ts#L60)*
+*Defined in [src/dynamics/Contact.ts:60](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Contact.ts#L60)*
 
 ___
 
@@ -78,4 +78,4 @@ ___
 
 • **prev**: *[ContactEdge](contactedge.md) | undefined*
 
-*Defined in [dynamics/Contact.ts:58](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Contact.ts#L58)*
+*Defined in [src/dynamics/Contact.ts:58](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Contact.ts#L58)*

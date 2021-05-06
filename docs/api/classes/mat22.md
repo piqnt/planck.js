@@ -44,7 +44,7 @@ A 2-by-2 matrix. Stored in column-major order.
 
 \+ **new Mat22**(`a`: number, `b`: number, `c`: number, `d`: number): *[Mat22](mat22.md)*
 
-*Defined in [common/Mat22.ts:38](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L38)*
+*Defined in [src/common/Mat22.ts:38](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L38)*
 
 **Parameters:**
 
@@ -59,7 +59,7 @@ Name | Type |
 
 \+ **new Mat22**(`a`: object, `b`: object): *[Mat22](mat22.md)*
 
-*Defined in [common/Mat22.ts:40](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L40)*
+*Defined in [src/common/Mat22.ts:40](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L40)*
 
 **Parameters:**
 
@@ -81,7 +81,7 @@ Name | Type |
 
 \+ **new Mat22**(): *[Mat22](mat22.md)*
 
-*Defined in [common/Mat22.ts:41](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L41)*
+*Defined in [src/common/Mat22.ts:41](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L41)*
 
 **Returns:** *[Mat22](mat22.md)*
 
@@ -91,7 +91,7 @@ Name | Type |
 
 • **ex**: *[Vec2](vec2.md)*
 
-*Defined in [common/Mat22.ts:37](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L37)*
+*Defined in [src/common/Mat22.ts:37](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L37)*
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 • **ey**: *[Vec2](vec2.md)*
 
-*Defined in [common/Mat22.ts:38](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L38)*
+*Defined in [src/common/Mat22.ts:38](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L38)*
 
 ## Methods
 
@@ -107,7 +107,7 @@ ___
 
 ▸ **getInverse**(): *[Mat22](mat22.md)*
 
-*Defined in [common/Mat22.ts:109](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L109)*
+*Defined in [src/common/Mat22.ts:109](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L109)*
 
 **Returns:** *[Mat22](mat22.md)*
 
@@ -117,7 +117,7 @@ ___
 
 ▸ **set**(`a`: [Mat22](mat22.md)): *void*
 
-*Defined in [common/Mat22.ts:72](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L72)*
+*Defined in [src/common/Mat22.ts:72](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L72)*
 
 **Parameters:**
 
@@ -129,7 +129,7 @@ Name | Type |
 
 ▸ **set**(`a`: [Vec2](vec2.md), `b`: [Vec2](vec2.md)): *void*
 
-*Defined in [common/Mat22.ts:73](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L73)*
+*Defined in [src/common/Mat22.ts:73](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L73)*
 
 **Parameters:**
 
@@ -142,7 +142,7 @@ Name | Type |
 
 ▸ **set**(`a`: number, `b`: number, `c`: number, `d`: number): *void*
 
-*Defined in [common/Mat22.ts:74](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L74)*
+*Defined in [src/common/Mat22.ts:74](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L74)*
 
 **Parameters:**
 
@@ -161,7 +161,7 @@ ___
 
 ▸ **setIdentity**(): *void*
 
-*Defined in [common/Mat22.ts:95](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L95)*
+*Defined in [src/common/Mat22.ts:95](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L95)*
 
 **Returns:** *void*
 
@@ -171,7 +171,7 @@ ___
 
 ▸ **setZero**(): *void*
 
-*Defined in [common/Mat22.ts:102](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L102)*
+*Defined in [src/common/Mat22.ts:102](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L102)*
 
 **Returns:** *void*
 
@@ -181,7 +181,7 @@ ___
 
 ▸ **solve**(`v`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/Mat22.ts:130](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L130)*
+*Defined in [src/common/Mat22.ts:130](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L130)*
 
 Solve A * x = b, where b is a column vector. This is more efficient than
 computing the inverse in one-shot cases.
@@ -200,7 +200,7 @@ ___
 
 ▸ **toString**(): *string*
 
-*Defined in [common/Mat22.ts:56](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L56)*
+*Defined in [src/common/Mat22.ts:56](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L56)*
 
 **Returns:** *string*
 
@@ -210,7 +210,7 @@ ___
 
 ▸ **abs**(`mx`: [Mat22](mat22.md)): *[Mat22](mat22.md)*
 
-*Defined in [common/Mat22.ts:225](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L225)*
+*Defined in [src/common/Mat22.ts:225](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L225)*
 
 **Parameters:**
 
@@ -226,7 +226,7 @@ ___
 
 ▸ **add**(`mx1`: [Mat22](mat22.md), `mx2`: [Mat22](mat22.md)): *[Mat22](mat22.md)*
 
-*Defined in [common/Mat22.ts:230](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L230)*
+*Defined in [src/common/Mat22.ts:230](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L230)*
 
 **Parameters:**
 
@@ -243,7 +243,7 @@ ___
 
 ▸ **assert**(`o`: any): *void*
 
-*Defined in [common/Mat22.ts:64](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L64)*
+*Defined in [src/common/Mat22.ts:64](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L64)*
 
 **Parameters:**
 
@@ -259,7 +259,7 @@ ___
 
 ▸ **isValid**(`o`: any): *boolean*
 
-*Defined in [common/Mat22.ts:60](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L60)*
+*Defined in [src/common/Mat22.ts:60](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L60)*
 
 **Parameters:**
 
@@ -275,7 +275,7 @@ ___
 
 ▸ **mul**(`mx`: [Mat22](mat22.md), `my`: [Mat22](mat22.md)): *[Mat22](mat22.md)*
 
-*Defined in [common/Mat22.ts:150](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L150)*
+*Defined in [src/common/Mat22.ts:150](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L150)*
 
 Multiply a matrix times a vector. If a rotation matrix is provided, then this
 transforms the vector from one frame to another.
@@ -291,7 +291,7 @@ Name | Type |
 
 ▸ **mul**(`mx`: [Mat22](mat22.md), `v`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/Mat22.ts:151](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L151)*
+*Defined in [src/common/Mat22.ts:151](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L151)*
 
 **Parameters:**
 
@@ -308,7 +308,7 @@ ___
 
 ▸ **mulMat22**(`mx`: any, `v`: any): *[Mat22](mat22.md)‹›*
 
-*Defined in [common/Mat22.ts:179](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L179)*
+*Defined in [src/common/Mat22.ts:179](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L179)*
 
 **Parameters:**
 
@@ -325,7 +325,7 @@ ___
 
 ▸ **mulT**(`mx`: [Mat22](mat22.md), `my`: [Mat22](mat22.md)): *[Mat22](mat22.md)*
 
-*Defined in [common/Mat22.ts:194](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L194)*
+*Defined in [src/common/Mat22.ts:194](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L194)*
 
 Multiply a matrix transpose times a vector. If a rotation matrix is provided,
 then this transforms the vector from one frame to another (inverse
@@ -342,7 +342,7 @@ Name | Type |
 
 ▸ **mulT**(`mx`: [Mat22](mat22.md), `v`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/Mat22.ts:195](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L195)*
+*Defined in [src/common/Mat22.ts:195](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L195)*
 
 **Parameters:**
 
@@ -359,7 +359,7 @@ ___
 
 ▸ **mulTMat22**(`mx`: [Mat22](mat22.md), `v`: [Mat22](mat22.md)): *[Mat22](mat22.md)*
 
-*Defined in [common/Mat22.ts:217](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L217)*
+*Defined in [src/common/Mat22.ts:217](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L217)*
 
 **Parameters:**
 
@@ -376,7 +376,7 @@ ___
 
 ▸ **mulTVec2**(`mx`: [Mat22](mat22.md), `v`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [common/Mat22.ts:211](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L211)*
+*Defined in [src/common/Mat22.ts:211](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L211)*
 
 **Parameters:**
 
@@ -393,7 +393,7 @@ ___
 
 ▸ **mulVec2**(`mx`: any, `v`: any): *[Vec2](vec2.md)‹›*
 
-*Defined in [common/Mat22.ts:172](https://github.com/shakiba/planck.js/blob/8127f05/src/common/Mat22.ts#L172)*
+*Defined in [src/common/Mat22.ts:172](https://github.com/shakiba/planck.js/blob/b8c946c/src/common/Mat22.ts#L172)*
 
 **Parameters:**
 

@@ -24,7 +24,7 @@ Input parameters for TimeOfImpact.
 
 • **proxyA**: *[DistanceProxy](distanceproxy.md)* = new DistanceProxy()
 
-*Defined in [collision/TimeOfImpact.ts:47](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L47)*
+*Defined in [src/collision/TimeOfImpact.ts:47](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/TimeOfImpact.ts#L47)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **proxyB**: *[DistanceProxy](distanceproxy.md)* = new DistanceProxy()
 
-*Defined in [collision/TimeOfImpact.ts:48](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L48)*
+*Defined in [src/collision/TimeOfImpact.ts:48](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/TimeOfImpact.ts#L48)*
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 • **sweepA**: *[Sweep](sweep.md)* = new Sweep()
 
-*Defined in [collision/TimeOfImpact.ts:49](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L49)*
+*Defined in [src/collision/TimeOfImpact.ts:49](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/TimeOfImpact.ts#L49)*
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 • **sweepB**: *[Sweep](sweep.md)* = new Sweep()
 
-*Defined in [collision/TimeOfImpact.ts:50](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L50)*
+*Defined in [src/collision/TimeOfImpact.ts:50](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/TimeOfImpact.ts#L50)*
 
 ___
 
@@ -56,6 +56,6 @@ ___
 
 • **tMax**: *number | undefined*
 
-*Defined in [collision/TimeOfImpact.ts:52](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L52)*
+*Defined in [src/collision/TimeOfImpact.ts:52](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/TimeOfImpact.ts#L52)*
 
 defines sweep interval [0, tMax]

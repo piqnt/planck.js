@@ -18,7 +18,7 @@
 
 • **e_failed**: = 1
 
-*Defined in [collision/TimeOfImpact.ts:57](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L57)*
+*Defined in [src/collision/TimeOfImpact.ts:57](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/TimeOfImpact.ts#L57)*
 
 ___
 
@@ -26,7 +26,7 @@ ___
 
 • **e_overlapped**: = 2
 
-*Defined in [collision/TimeOfImpact.ts:58](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L58)*
+*Defined in [src/collision/TimeOfImpact.ts:58](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/TimeOfImpact.ts#L58)*
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 • **e_separated**: = 4
 
-*Defined in [collision/TimeOfImpact.ts:60](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L60)*
+*Defined in [src/collision/TimeOfImpact.ts:60](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/TimeOfImpact.ts#L60)*
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 • **e_touching**: = 3
 
-*Defined in [collision/TimeOfImpact.ts:59](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L59)*
+*Defined in [src/collision/TimeOfImpact.ts:59](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/TimeOfImpact.ts#L59)*
 
 ___
 
@@ -50,4 +50,4 @@ ___
 
 • **e_unknown**: = 0
 
-*Defined in [collision/TimeOfImpact.ts:56](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/TimeOfImpact.ts#L56)*
+*Defined in [src/collision/TimeOfImpact.ts:56](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/TimeOfImpact.ts#L56)*

@@ -28,7 +28,7 @@ Contact ids to facilitate warm starting.
 
 • **cf**: *[ContactFeature](contactfeature.md)* = new ContactFeature()
 
-*Defined in [collision/Manifold.ts:185](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L185)*
+*Defined in [src/collision/Manifold.ts:185](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L185)*
 
 ## Accessors
 
@@ -36,7 +36,7 @@ Contact ids to facilitate warm starting.
 
 • **get key**(): *number*
 
-*Defined in [collision/Manifold.ts:190](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L190)*
+*Defined in [src/collision/Manifold.ts:190](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L190)*
 
 Used to quickly compare contact ids.
 
@@ -48,7 +48,7 @@ Used to quickly compare contact ids.
 
 ▸ **set**(`o`: any): *void*
 
-*Defined in [collision/Manifold.ts:194](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L194)*
+*Defined in [src/collision/Manifold.ts:194](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L194)*
 
 **Parameters:**
 

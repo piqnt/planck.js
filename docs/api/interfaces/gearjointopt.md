@@ -28,7 +28,7 @@ Gear joint definition.
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L68)*
+*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -39,7 +39,7 @@ ___
 
 • **ratio**? : *number*
 
-*Defined in [dynamics/joint/GearJoint.ts:48](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L48)*
+*Defined in [src/dynamics/joint/GearJoint.ts:48](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/GearJoint.ts#L48)*
 
 The gear ratio. See GearJoint for explanation.
 
@@ -51,6 +51,6 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L63)*
+*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

@@ -44,7 +44,7 @@ game.
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L77)*
+*Defined in [src/dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L77)*
 
 The first attached body.
 
@@ -56,7 +56,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L81)*
+*Defined in [src/dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L81)*
 
 The second attached body.
 
@@ -70,7 +70,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L68)*
+*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -83,7 +83,7 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[enableLimit](prismaticjointopt.md#optional-enablelimit)*
 
-*Defined in [dynamics/joint/PrismaticJoint.ts:59](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L59)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:59](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/PrismaticJoint.ts#L59)*
 
 Enable/disable the joint limit.
 
@@ -95,7 +95,7 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[enableMotor](prismaticjointopt.md#optional-enablemotor)*
 
-*Defined in [dynamics/joint/PrismaticJoint.ts:71](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L71)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:71](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/PrismaticJoint.ts#L71)*
 
 Enable/disable the joint motor.
 
@@ -105,7 +105,7 @@ ___
 
 • **localAnchorA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [dynamics/joint/PrismaticJoint.ts:93](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L93)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:93](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/PrismaticJoint.ts#L93)*
 
 The local anchor point relative to bodyA's origin.
 
@@ -115,7 +115,7 @@ ___
 
 • **localAnchorB**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [dynamics/joint/PrismaticJoint.ts:97](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L97)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:97](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/PrismaticJoint.ts#L97)*
 
 The local anchor point relative to bodyB's origin.
 
@@ -125,7 +125,7 @@ ___
 
 • **localAxisA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [dynamics/joint/PrismaticJoint.ts:101](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L101)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:101](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/PrismaticJoint.ts#L101)*
 
 The local translation unit axis in bodyA.
 
@@ -137,7 +137,7 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[lowerTranslation](prismaticjointopt.md#optional-lowertranslation)*
 
-*Defined in [dynamics/joint/PrismaticJoint.ts:63](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L63)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:63](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/PrismaticJoint.ts#L63)*
 
 The lower translation limit, usually in meters.
 
@@ -149,7 +149,7 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[maxMotorForce](prismaticjointopt.md#optional-maxmotorforce)*
 
-*Defined in [dynamics/joint/PrismaticJoint.ts:75](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L75)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:75](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/PrismaticJoint.ts#L75)*
 
 The maximum motor torque, usually in N-m.
 
@@ -161,7 +161,7 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[motorSpeed](prismaticjointopt.md#optional-motorspeed)*
 
-*Defined in [dynamics/joint/PrismaticJoint.ts:79](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L79)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:79](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/PrismaticJoint.ts#L79)*
 
 The desired motor speed in radians per second.
 
@@ -171,7 +171,7 @@ ___
 
 • **referenceAngle**: *number*
 
-*Defined in [dynamics/joint/PrismaticJoint.ts:106](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L106)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:106](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/PrismaticJoint.ts#L106)*
 
 referenceAngle The constrained angle between the bodies:
 bodyB_angle - bodyA_angle.
@@ -184,7 +184,7 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[upperTranslation](prismaticjointopt.md#optional-uppertranslation)*
 
-*Defined in [dynamics/joint/PrismaticJoint.ts:67](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/PrismaticJoint.ts#L67)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:67](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/PrismaticJoint.ts#L67)*
 
 The upper translation limit, usually in meters.
 
@@ -198,6 +198,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L63)*
+*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

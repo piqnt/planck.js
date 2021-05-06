@@ -53,7 +53,7 @@ steps, so we keep it small.
 
 • **localNormal**: *[Vec2](vec2.md)* = Vec2.zero()
 
-*Defined in [collision/Manifold.ts:67](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L67)*
+*Defined in [src/collision/Manifold.ts:67](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L67)*
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 • **localPoint**: *[Vec2](vec2.md)* = Vec2.zero()
 
-*Defined in [collision/Manifold.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L68)*
+*Defined in [src/collision/Manifold.ts:68](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L68)*
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 • **pointCount**: *number* = 0
 
-*Defined in [collision/Manifold.ts:70](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L70)*
+*Defined in [src/collision/Manifold.ts:70](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L70)*
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 • **points**: *[ManifoldPoint](manifoldpoint.md)[]* = [ new ManifoldPoint(), new ManifoldPoint() ]
 
-*Defined in [collision/Manifold.ts:69](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L69)*
+*Defined in [src/collision/Manifold.ts:69](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L69)*
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 • **type**: *[ManifoldType](../enums/manifoldtype.md)*
 
-*Defined in [collision/Manifold.ts:66](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L66)*
+*Defined in [src/collision/Manifold.ts:66](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L66)*
 
 ## Methods
 
@@ -93,7 +93,7 @@ ___
 
 ▸ **getWorldManifold**(`wm`: [WorldManifold](worldmanifold.md) | undefined, `xfA`: [Transform](transform.md), `radiusA`: number, `xfB`: [Transform](transform.md), `radiusB`: number): *[WorldManifold](worldmanifold.md)*
 
-*Defined in [collision/Manifold.ts:77](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L77)*
+*Defined in [src/collision/Manifold.ts:77](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L77)*
 
 Evaluate the manifold with supplied transforms. This assumes modest motion
 from the original state. This does not change the point count, impulses, etc.

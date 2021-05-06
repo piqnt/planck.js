@@ -43,7 +43,7 @@
 
 \+ **new Pool**(`opts`: any): *[Pool](pool.md)*
 
-*Defined in [util/Pool.ts:31](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Pool.ts#L31)*
+*Defined in [src/util/Pool.ts:31](https://github.com/shakiba/planck.js/blob/b8c946c/src/util/Pool.ts#L31)*
 
 **Parameters:**
 
@@ -59,7 +59,7 @@ Name | Type |
 
 • **_createCount**: *number* = 0
 
-*Defined in [util/Pool.ts:28](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Pool.ts#L28)*
+*Defined in [src/util/Pool.ts:28](https://github.com/shakiba/planck.js/blob/b8c946c/src/util/Pool.ts#L28)*
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 • **_createFn**: *function*
 
-*Defined in [util/Pool.ts:23](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Pool.ts#L23)*
+*Defined in [src/util/Pool.ts:23](https://github.com/shakiba/planck.js/blob/b8c946c/src/util/Pool.ts#L23)*
 
 #### Type declaration:
 
@@ -79,7 +79,7 @@ ___
 
 • **_discardCount**: *number* = 0
 
-*Defined in [util/Pool.ts:31](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Pool.ts#L31)*
+*Defined in [src/util/Pool.ts:31](https://github.com/shakiba/planck.js/blob/b8c946c/src/util/Pool.ts#L31)*
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 • **_discardFn**: *function*
 
-*Defined in [util/Pool.ts:26](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Pool.ts#L26)*
+*Defined in [src/util/Pool.ts:26](https://github.com/shakiba/planck.js/blob/b8c946c/src/util/Pool.ts#L26)*
 
 #### Type declaration:
 
@@ -105,7 +105,7 @@ ___
 
 • **_inCount**: *number* = 0
 
-*Defined in [util/Pool.ts:30](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Pool.ts#L30)*
+*Defined in [src/util/Pool.ts:30](https://github.com/shakiba/planck.js/blob/b8c946c/src/util/Pool.ts#L30)*
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 • **_inFn**: *function*
 
-*Defined in [util/Pool.ts:25](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Pool.ts#L25)*
+*Defined in [src/util/Pool.ts:25](https://github.com/shakiba/planck.js/blob/b8c946c/src/util/Pool.ts#L25)*
 
 #### Type declaration:
 
@@ -131,7 +131,7 @@ ___
 
 • **_list**: *any[]* = []
 
-*Defined in [util/Pool.ts:20](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Pool.ts#L20)*
+*Defined in [src/util/Pool.ts:20](https://github.com/shakiba/planck.js/blob/b8c946c/src/util/Pool.ts#L20)*
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 • **_max**: *number* = Infinity
 
-*Defined in [util/Pool.ts:21](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Pool.ts#L21)*
+*Defined in [src/util/Pool.ts:21](https://github.com/shakiba/planck.js/blob/b8c946c/src/util/Pool.ts#L21)*
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 • **_outCount**: *number* = 0
 
-*Defined in [util/Pool.ts:29](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Pool.ts#L29)*
+*Defined in [src/util/Pool.ts:29](https://github.com/shakiba/planck.js/blob/b8c946c/src/util/Pool.ts#L29)*
 
 ___
 
@@ -155,7 +155,7 @@ ___
 
 • **_outFn**: *function*
 
-*Defined in [util/Pool.ts:24](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Pool.ts#L24)*
+*Defined in [src/util/Pool.ts:24](https://github.com/shakiba/planck.js/blob/b8c946c/src/util/Pool.ts#L24)*
 
 #### Type declaration:
 
@@ -173,7 +173,7 @@ Name | Type |
 
 ▸ **allocate**(): *T*
 
-*Defined in [util/Pool.ts:55](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Pool.ts#L55)*
+*Defined in [src/util/Pool.ts:55](https://github.com/shakiba/planck.js/blob/b8c946c/src/util/Pool.ts#L55)*
 
 **Returns:** *T*
 
@@ -183,7 +183,7 @@ ___
 
 ▸ **max**(`n`: any): *number | this*
 
-*Defined in [util/Pool.ts:43](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Pool.ts#L43)*
+*Defined in [src/util/Pool.ts:43](https://github.com/shakiba/planck.js/blob/b8c946c/src/util/Pool.ts#L43)*
 
 **Parameters:**
 
@@ -199,7 +199,7 @@ ___
 
 ▸ **release**(`item`: T): *void*
 
-*Defined in [util/Pool.ts:74](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Pool.ts#L74)*
+*Defined in [src/util/Pool.ts:74](https://github.com/shakiba/planck.js/blob/b8c946c/src/util/Pool.ts#L74)*
 
 **Parameters:**
 
@@ -215,7 +215,7 @@ ___
 
 ▸ **size**(): *number*
 
-*Defined in [util/Pool.ts:51](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Pool.ts#L51)*
+*Defined in [src/util/Pool.ts:51](https://github.com/shakiba/planck.js/blob/b8c946c/src/util/Pool.ts#L51)*
 
 **Returns:** *number*
 
@@ -225,6 +225,6 @@ ___
 
 ▸ **toString**(): *string*
 
-*Defined in [util/Pool.ts:89](https://github.com/shakiba/planck.js/blob/8127f05/src/util/Pool.ts#L89)*
+*Defined in [src/util/Pool.ts:89](https://github.com/shakiba/planck.js/blob/b8c946c/src/util/Pool.ts#L89)*
 
 **Returns:** *string*

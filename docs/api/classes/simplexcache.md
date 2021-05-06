@@ -31,7 +31,7 @@ Used to warm start Distance. Set count to zero on first call.
 
 • **count**: *number* = 0
 
-*Defined in [collision/Distance.ts:86](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L86)*
+*Defined in [src/collision/Distance.ts:86](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Distance.ts#L86)*
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 • **indexA**: *number[]* = []
 
-*Defined in [collision/Distance.ts:84](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L84)*
+*Defined in [src/collision/Distance.ts:84](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Distance.ts#L84)*
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 • **indexB**: *number[]* = []
 
-*Defined in [collision/Distance.ts:85](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L85)*
+*Defined in [src/collision/Distance.ts:85](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Distance.ts#L85)*
 
 ___
 
@@ -55,4 +55,4 @@ ___
 
 • **metric**: *number* = 0
 
-*Defined in [collision/Distance.ts:83](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Distance.ts#L83)*
+*Defined in [src/collision/Distance.ts:83](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Distance.ts#L83)*

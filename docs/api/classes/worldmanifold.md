@@ -22,7 +22,7 @@ This is used to compute the current state of a contact manifold.
 
 • **normal**: *[Vec2](vec2.md)*
 
-*Defined in [collision/Manifold.ts:235](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L235)*
+*Defined in [src/collision/Manifold.ts:235](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L235)*
 
 World vector pointing from A to B
 
@@ -32,7 +32,7 @@ ___
 
 • **points**: *[Vec2](vec2.md)[]* = []
 
-*Defined in [collision/Manifold.ts:239](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L239)*
+*Defined in [src/collision/Manifold.ts:239](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L239)*
 
 World contact point (point of intersection)
 
@@ -42,6 +42,6 @@ ___
 
 • **separations**: *number[]* = []
 
-*Defined in [collision/Manifold.ts:243](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L243)*
+*Defined in [src/collision/Manifold.ts:243](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L243)*
 
 A negative value indicates overlap, in meters

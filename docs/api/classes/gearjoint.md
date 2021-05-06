@@ -62,7 +62,7 @@ combination will work).
 
 *Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [dynamics/joint/GearJoint.ts:121](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L121)*
+*Defined in [src/dynamics/joint/GearJoint.ts:121](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/GearJoint.ts#L121)*
 
 **Parameters:**
 
@@ -76,7 +76,7 @@ Name | Type |
 
 *Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [dynamics/joint/GearJoint.ts:123](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L123)*
+*Defined in [src/dynamics/joint/GearJoint.ts:123](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/GearJoint.ts#L123)*
 
 **Parameters:**
 
@@ -97,7 +97,7 @@ Name | Type |
 
 ▪ **TYPE**: *"gear-joint"* = 'gear-joint' as 'gear-joint'
 
-*Defined in [dynamics/joint/GearJoint.ts:82](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L82)*
+*Defined in [src/dynamics/joint/GearJoint.ts:82](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/GearJoint.ts#L82)*
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 *Inherited from [Joint](joint.md).[TYPES](joint.md#static-types)*
 
-*Defined in [dynamics/Joint.ts:128](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L128)*
+*Defined in [src/dynamics/Joint.ts:128](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L128)*
 
 #### Type declaration:
 
@@ -121,7 +121,7 @@ ___
 
 *Overrides [Joint](joint.md).[getAnchorA](joint.md#abstract-getanchora)*
 
-*Defined in [dynamics/joint/GearJoint.ts:307](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L307)*
+*Defined in [src/dynamics/joint/GearJoint.ts:307](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/GearJoint.ts#L307)*
 
 Get the anchor point on bodyA in world coordinates.
 
@@ -135,7 +135,7 @@ ___
 
 *Overrides [Joint](joint.md).[getAnchorB](joint.md#abstract-getanchorb)*
 
-*Defined in [dynamics/joint/GearJoint.ts:314](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L314)*
+*Defined in [src/dynamics/joint/GearJoint.ts:314](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/GearJoint.ts#L314)*
 
 Get the anchor point on bodyB in world coordinates.
 
@@ -149,7 +149,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getBodyA](joint.md#getbodya)*
 
-*Defined in [dynamics/Joint.ts:156](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L156)*
+*Defined in [src/dynamics/Joint.ts:156](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L156)*
 
 Get the first body attached to this joint.
 
@@ -163,7 +163,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getBodyB](joint.md#getbodyb)*
 
-*Defined in [dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L163)*
+*Defined in [src/dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L163)*
 
 Get the second body attached to this joint.
 
@@ -177,7 +177,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getCollideConnected](joint.md#getcollideconnected)*
 
-*Defined in [dynamics/Joint.ts:187](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L187)*
+*Defined in [src/dynamics/Joint.ts:187](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L187)*
 
 Get collide connected. Note: modifying the collide connect flag won't work
 correctly because the flag is only checked when fixture AABBs begin to
@@ -191,7 +191,7 @@ ___
 
 ▸ **getJoint1**(): *[RevoluteJoint](revolutejoint.md)‹› | [PrismaticJoint](prismaticjoint.md)‹›*
 
-*Defined in [dynamics/joint/GearJoint.ts:278](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L278)*
+*Defined in [src/dynamics/joint/GearJoint.ts:278](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/GearJoint.ts#L278)*
 
 Get the first joint.
 
@@ -203,7 +203,7 @@ ___
 
 ▸ **getJoint2**(): *[RevoluteJoint](revolutejoint.md)‹› | [PrismaticJoint](prismaticjoint.md)‹›*
 
-*Defined in [dynamics/joint/GearJoint.ts:285](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L285)*
+*Defined in [src/dynamics/joint/GearJoint.ts:285](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/GearJoint.ts#L285)*
 
 Get the second joint.
 
@@ -217,7 +217,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getNext](joint.md#getnext)*
 
-*Defined in [dynamics/Joint.ts:170](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L170)*
+*Defined in [src/dynamics/Joint.ts:170](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L170)*
 
 Get the next joint the world joint list.
 
@@ -229,7 +229,7 @@ ___
 
 ▸ **getRatio**(): *number*
 
-*Defined in [dynamics/joint/GearJoint.ts:300](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L300)*
+*Defined in [src/dynamics/joint/GearJoint.ts:300](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/GearJoint.ts#L300)*
 
 Get the gear ratio.
 
@@ -243,7 +243,7 @@ ___
 
 *Overrides [Joint](joint.md).[getReactionForce](joint.md#abstract-getreactionforce)*
 
-*Defined in [dynamics/joint/GearJoint.ts:321](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L321)*
+*Defined in [src/dynamics/joint/GearJoint.ts:321](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/GearJoint.ts#L321)*
 
 Get the reaction force on bodyB at the joint anchor in Newtons.
 
@@ -263,7 +263,7 @@ ___
 
 *Overrides [Joint](joint.md).[getReactionTorque](joint.md#abstract-getreactiontorque)*
 
-*Defined in [dynamics/joint/GearJoint.ts:328](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L328)*
+*Defined in [src/dynamics/joint/GearJoint.ts:328](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/GearJoint.ts#L328)*
 
 Get the reaction torque on bodyB in N*m.
 
@@ -283,7 +283,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getType](joint.md#gettype)*
 
-*Defined in [dynamics/Joint.ts:149](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L149)*
+*Defined in [src/dynamics/Joint.ts:149](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L149)*
 
 Get the type of the concrete joint.
 
@@ -297,7 +297,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getUserData](joint.md#getuserdata)*
 
-*Defined in [dynamics/Joint.ts:174](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L174)*
+*Defined in [src/dynamics/Joint.ts:174](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L174)*
 
 **Returns:** *unknown*
 
@@ -309,7 +309,7 @@ ___
 
 *Overrides [Joint](joint.md).[initVelocityConstraints](joint.md#abstract-initvelocityconstraints)*
 
-*Defined in [dynamics/joint/GearJoint.ts:333](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L333)*
+*Defined in [src/dynamics/joint/GearJoint.ts:333](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/GearJoint.ts#L333)*
 
 **Parameters:**
 
@@ -327,7 +327,7 @@ ___
 
 *Inherited from [Joint](joint.md).[isActive](joint.md#isactive)*
 
-*Defined in [dynamics/Joint.ts:142](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L142)*
+*Defined in [src/dynamics/Joint.ts:142](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L142)*
 
 Short-cut function to determine if either body is inactive.
 
@@ -339,7 +339,7 @@ ___
 
 ▸ **setRatio**(`ratio`: any): *void*
 
-*Defined in [dynamics/joint/GearJoint.ts:292](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L292)*
+*Defined in [src/dynamics/joint/GearJoint.ts:292](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/GearJoint.ts#L292)*
 
 Set the gear ratio.
 
@@ -359,7 +359,7 @@ ___
 
 *Inherited from [Joint](joint.md).[setUserData](joint.md#setuserdata)*
 
-*Defined in [dynamics/Joint.ts:178](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L178)*
+*Defined in [src/dynamics/Joint.ts:178](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L178)*
 
 **Parameters:**
 
@@ -377,7 +377,7 @@ ___
 
 *Inherited from [Joint](joint.md).[shiftOrigin](joint.md#shiftorigin)*
 
-*Defined in [dynamics/Joint.ts:214](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L214)*
+*Defined in [src/dynamics/Joint.ts:214](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L214)*
 
 Shift the origin for any points stored in world coordinates.
 
@@ -397,7 +397,7 @@ ___
 
 *Overrides [Joint](joint.md).[solvePositionConstraints](joint.md#abstract-solvepositionconstraints)*
 
-*Defined in [dynamics/joint/GearJoint.ts:470](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L470)*
+*Defined in [src/dynamics/joint/GearJoint.ts:470](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/GearJoint.ts#L470)*
 
 This returns true if the position errors are within tolerance.
 
@@ -417,7 +417,7 @@ ___
 
 *Overrides [Joint](joint.md).[solveVelocityConstraints](joint.md#abstract-solvevelocityconstraints)*
 
-*Defined in [dynamics/joint/GearJoint.ts:430](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/GearJoint.ts#L430)*
+*Defined in [src/dynamics/joint/GearJoint.ts:430](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/GearJoint.ts#L430)*
 
 **Parameters:**
 

@@ -42,7 +42,7 @@ joints will be broken.
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L68)*
+*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -53,7 +53,7 @@ ___
 
 • **enableLimit**? : *boolean*
 
-*Defined in [dynamics/joint/RevoluteJoint.ts:80](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L80)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:80](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/RevoluteJoint.ts#L80)*
 
 A flag to enable joint limits.
 
@@ -63,7 +63,7 @@ ___
 
 • **enableMotor**? : *boolean*
 
-*Defined in [dynamics/joint/RevoluteJoint.ts:84](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L84)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:84](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/RevoluteJoint.ts#L84)*
 
 A flag to enable the joint motor.
 
@@ -73,7 +73,7 @@ ___
 
 • **lowerAngle**? : *number*
 
-*Defined in [dynamics/joint/RevoluteJoint.ts:63](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L63)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:63](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/RevoluteJoint.ts#L63)*
 
 The lower angle for the joint limit (radians).
 
@@ -83,7 +83,7 @@ ___
 
 • **maxMotorTorque**? : *number*
 
-*Defined in [dynamics/joint/RevoluteJoint.ts:72](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L72)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:72](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/RevoluteJoint.ts#L72)*
 
 The maximum motor torque used to achieve the desired motor speed. Usually
 in N-m.
@@ -94,7 +94,7 @@ ___
 
 • **motorSpeed**? : *number*
 
-*Defined in [dynamics/joint/RevoluteJoint.ts:76](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L76)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:76](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/RevoluteJoint.ts#L76)*
 
 The desired motor speed. Usually in radians per second.
 
@@ -104,7 +104,7 @@ ___
 
 • **upperAngle**? : *number*
 
-*Defined in [dynamics/joint/RevoluteJoint.ts:67](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/joint/RevoluteJoint.ts#L67)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:67](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/RevoluteJoint.ts#L67)*
 
 The upper angle for the joint limit (radians).
 
@@ -116,6 +116,6 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/8127f05/src/dynamics/Joint.ts#L63)*
+*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

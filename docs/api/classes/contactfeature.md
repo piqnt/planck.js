@@ -27,7 +27,7 @@ The features that intersect to form the contact point.
 
 • **indexA**: *number*
 
-*Defined in [collision/Manifold.ts:207](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L207)*
+*Defined in [src/collision/Manifold.ts:207](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L207)*
 
 Feature index on shapeA
 
@@ -37,7 +37,7 @@ ___
 
 • **indexB**: *number*
 
-*Defined in [collision/Manifold.ts:211](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L211)*
+*Defined in [src/collision/Manifold.ts:211](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L211)*
 
 Feature index on shapeB
 
@@ -47,7 +47,7 @@ ___
 
 • **typeA**: *[ContactFeatureType](../enums/contactfeaturetype.md)*
 
-*Defined in [collision/Manifold.ts:215](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L215)*
+*Defined in [src/collision/Manifold.ts:215](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L215)*
 
 The feature type on shapeA
 
@@ -57,7 +57,7 @@ ___
 
 • **typeB**: *[ContactFeatureType](../enums/contactfeaturetype.md)*
 
-*Defined in [collision/Manifold.ts:219](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L219)*
+*Defined in [src/collision/Manifold.ts:219](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L219)*
 
 The feature type on shapeB
 
@@ -67,7 +67,7 @@ The feature type on shapeB
 
 ▸ **set**(`o`: [ContactFeature](contactfeature.md)): *void*
 
-*Defined in [collision/Manifold.ts:220](https://github.com/shakiba/planck.js/blob/8127f05/src/collision/Manifold.ts#L220)*
+*Defined in [src/collision/Manifold.ts:220](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L220)*
 
 **Parameters:**
 

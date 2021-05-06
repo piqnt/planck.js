@@ -67,20 +67,24 @@ export interface Testbed {
   /** @private @internal */ focus: () => void;
 
   // camera position
+  /** World viewbox width. */
   width: number;
+  /** World viewbox height. */
   height: number;
+  /** World viewbox center vertical offset. */
   x: number;
+  /** World viewbox center horizontal offset. */
   y: number;
 
   scaleY: number;
   ratio: number;
 
-  // frequency and speed of simulation
+  /** World simulation step frequency */
   hz: number;
+  /** World simulation speed, default is 1 */
   speed: number;
 
   activeKeys: ActiveKeys;
-  // background: background color
   background: string;
 
   mouseForce?: number;
