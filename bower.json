@@ -1,23 +1,20 @@
 {
   "name": "planck-js",
-  "description": "2D JavaScript physics engine for cross-platform HTML5 game development",
+  "description": "2D JavaScript/TypeScript physics engine for cross-platform HTML5 game development",
   "keywords": [
+    "box2d",
     "html5",
     "javascript",
+    "typescript",
     "game",
     "physics",
     "engine",
     "2d",
     "mobile"
   ],
-  "license": "zlib",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/shakiba/planck.js.git"
-  },
-  "ignore": [
-    "example/",
-    "ignore/",
-    "test/"
-  ]
+  }
 }
