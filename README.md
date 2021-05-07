@@ -55,7 +55,7 @@ Planck.js public API closely follows Box2D API, with the following differences:
 `'begin-contact'`, `'end-contact'`, `'pre-solve'`, `'post-solve'`, `'remove-joint'`, `'remove-fixture'`, `'remove-body'`
 
 
-## Install v1.0-alpha
+## Install
 
 Staring from v1.0 the library is released under `planck` package name.
 Releases and updates before v1.0 will remain available under [`planck-js`](https://www.npmjs.com/package/planck-js).
