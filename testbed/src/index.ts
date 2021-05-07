@@ -1,5 +1,4 @@
-// @ts-ignore
-export as namespace planck;
+import { default as Stage } from 'stage-js/platform/web';
 
 import {
   AABB,
@@ -9,8 +8,7 @@ import {
   MouseJoint,
   Vec2,
   World
-} from '../src/index';
-import { default as Stage } from 'stage-js/platform/web';
+} from '../../src/index';
 
 export interface ActiveKeys {
   0?: boolean;
@@ -825,69 +823,69 @@ Viewer.prototype.drawChain = function(shape, options) {
 };
 
 
-// Everything below this is copied from ../src/index.ts
+// Everything below this is copied from ../../src/index.ts
 
-export { default as Serializer } from '../src/serializer/index';
+export { default as Serializer } from '../../src/serializer/index';
 
-export { default as Math } from '../src/common/Math';
-export { default as Vec2 } from '../src/common/Vec2';
-export { default as Vec3 } from '../src/common/Vec3';
-export { default as Mat22 } from '../src/common/Mat22';
-export { default as Mat33 } from '../src/common/Mat33';
-export { default as Transform } from '../src/common/Transform';
-export { default as Rot } from '../src/common/Rot';
+export { default as Math } from '../../src/common/Math';
+export { default as Vec2 } from '../../src/common/Vec2';
+export { default as Vec3 } from '../../src/common/Vec3';
+export { default as Mat22 } from '../../src/common/Mat22';
+export { default as Mat33 } from '../../src/common/Mat33';
+export { default as Transform } from '../../src/common/Transform';
+export { default as Rot } from '../../src/common/Rot';
 
-export { default as AABB } from '../src/collision/AABB';
+export { default as AABB } from '../../src/collision/AABB';
 
-export { default as Shape } from '../src/collision/Shape';
-export { default as Fixture } from '../src/dynamics/Fixture';
-export { default as Body } from '../src/dynamics/Body';
-export { default as Contact } from '../src/dynamics/Contact';
-export { default as Joint } from '../src/dynamics/Joint';
-export { default as World } from '../src/dynamics/World';
+export { default as Shape } from '../../src/collision/Shape';
+export { default as Fixture } from '../../src/dynamics/Fixture';
+export { default as Body } from '../../src/dynamics/Body';
+export { default as Contact } from '../../src/dynamics/Contact';
+export { default as Joint } from '../../src/dynamics/Joint';
+export { default as World } from '../../src/dynamics/World';
 
-export { default as Circle } from '../src/collision/shape/CircleShape';
-export { default as Edge } from '../src/collision/shape/EdgeShape';
-export { default as Polygon } from '../src/collision/shape/PolygonShape';
-export { default as Chain } from '../src/collision/shape/ChainShape';
-export { default as Box } from '../src/collision/shape/BoxShape';
+export { default as Circle } from '../../src/collision/shape/CircleShape';
+export { default as Edge } from '../../src/collision/shape/EdgeShape';
+export { default as Polygon } from '../../src/collision/shape/PolygonShape';
+export { default as Chain } from '../../src/collision/shape/ChainShape';
+export { default as Box } from '../../src/collision/shape/BoxShape';
 
-export { CollideCircles } from '../src/collision/shape/CollideCircle';
-export { CollideEdgeCircle } from '../src/collision/shape/CollideEdgeCircle';
-export { CollidePolygons } from '../src/collision/shape/CollidePolygon';
-export { CollidePolygonCircle } from '../src/collision/shape/CollideCirclePolygone';
-export { CollideEdgePolygon } from '../src/collision/shape/CollideEdgePolygon';
+export { CollideCircles } from '../../src/collision/shape/CollideCircle';
+export { CollideEdgeCircle } from '../../src/collision/shape/CollideEdgeCircle';
+export { CollidePolygons } from '../../src/collision/shape/CollidePolygon';
+export { CollidePolygonCircle } from '../../src/collision/shape/CollideCirclePolygone';
+export { CollideEdgePolygon } from '../../src/collision/shape/CollideEdgePolygon';
 
-export { default as DistanceJoint } from '../src/dynamics/joint/DistanceJoint';
-export { default as FrictionJoint } from '../src/dynamics/joint/FrictionJoint';
-export { default as GearJoint } from '../src/dynamics/joint/GearJoint';
-export { default as MotorJoint } from '../src/dynamics/joint/MotorJoint';
-export { default as MouseJoint } from '../src/dynamics/joint/MouseJoint';
-export { default as PrismaticJoint } from '../src/dynamics/joint/PrismaticJoint';
-export { default as PulleyJoint } from '../src/dynamics/joint/PulleyJoint';
-export { default as RevoluteJoint } from '../src/dynamics/joint/RevoluteJoint';
-export { default as RopeJoint } from '../src/dynamics/joint/RopeJoint';
-export { default as WeldJoint } from '../src/dynamics/joint/WeldJoint';
-export { default as WheelJoint } from '../src/dynamics/joint/WheelJoint';
+export { default as DistanceJoint } from '../../src/dynamics/joint/DistanceJoint';
+export { default as FrictionJoint } from '../../src/dynamics/joint/FrictionJoint';
+export { default as GearJoint } from '../../src/dynamics/joint/GearJoint';
+export { default as MotorJoint } from '../../src/dynamics/joint/MotorJoint';
+export { default as MouseJoint } from '../../src/dynamics/joint/MouseJoint';
+export { default as PrismaticJoint } from '../../src/dynamics/joint/PrismaticJoint';
+export { default as PulleyJoint } from '../../src/dynamics/joint/PulleyJoint';
+export { default as RevoluteJoint } from '../../src/dynamics/joint/RevoluteJoint';
+export { default as RopeJoint } from '../../src/dynamics/joint/RopeJoint';
+export { default as WeldJoint } from '../../src/dynamics/joint/WeldJoint';
+export { default as WheelJoint } from '../../src/dynamics/joint/WheelJoint';
 
-export { default as Settings } from '../src/Settings';
+export { default as Settings } from '../../src/Settings';
 
-export { default as Sweep } from '../src/common/Sweep';
-export { default as Manifold } from '../src/collision/Manifold';
-export { default as Distance } from '../src/collision/Distance';
-export { default as TimeOfImpact } from '../src/collision/TimeOfImpact';
-export { default as DynamicTree } from '../src/collision/DynamicTree';
+export { default as Sweep } from '../../src/common/Sweep';
+export { default as Manifold } from '../../src/collision/Manifold';
+export { default as Distance } from '../../src/collision/Distance';
+export { default as TimeOfImpact } from '../../src/collision/TimeOfImpact';
+export { default as DynamicTree } from '../../src/collision/DynamicTree';
 
-import Solver, { TimeStep } from "../src/dynamics/Solver";
-import { CollidePolygons } from '../src/collision/shape/CollidePolygon';
-import { default as Settings } from '../src/Settings';
-import { default as Sweep } from '../src/common/Sweep';
-import { clipSegmentToLine, ClipVertex, default as Manifold, getPointStates, PointState } from '../src/collision/Manifold';
-import { default as Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache, testOverlap } from '../src/collision/Distance';
-import { default as TimeOfImpact, TOIInput, TOIOutput } from '../src/collision/TimeOfImpact';
-import { default as DynamicTree } from '../src/collision/DynamicTree';
+import Solver, { TimeStep } from "../../src/dynamics/Solver";
+import { CollidePolygons } from '../../src/collision/shape/CollidePolygon';
+import { default as Settings } from '../../src/Settings';
+import { default as Sweep } from '../../src/common/Sweep';
+import { clipSegmentToLine, ClipVertex, default as Manifold, getPointStates, PointState } from '../../src/collision/Manifold';
+import { default as Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache, testOverlap } from '../../src/collision/Distance';
+import { default as TimeOfImpact, TOIInput, TOIOutput } from '../../src/collision/TimeOfImpact';
+import { default as DynamicTree } from '../../src/collision/DynamicTree';
 
-import { default as stats } from '../src/util/stats'; // todo: what to do with this?
+import { default as stats } from '../../src/util/stats'; // todo: what to do with this?
 
 /** @deprecated Merged with main namespace */
 export const internal = {};
