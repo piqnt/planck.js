@@ -53,35 +53,11 @@ Planck.js public API closely follows Box2D API, with the following differences:
 `'begin-contact'`, `'end-contact'`, `'pre-solve'`, `'post-solve'`, `'remove-joint'`, `'remove-fixture'`, `'remove-body'`
 
 
-
 ## Install
 
-#### CDN
+- To install v0.3 (stable) release see [v0.3 branch](https://github.com/shakiba/planck.js/tree/v0.3#install).
+- To install v1.0-alpha release see [v1.0 branch](https://github.com/shakiba/planck.js/tree/v1.0#install).
 
-Planck.js is [available on jsDelivr](https://www.jsdelivr.com/package/npm/planck-js).
-
-#### NPM
-
-Install:
-```sh
-npm install planck-js --save
-```
-
-Core library:
-```js
-const planck = require('planck-js');
-```
-
-With testbed:
-
-```js
-const planck = require('planck-js/dist/planck-with-testbed');
-
-planck.testbed(function() {
-  // ...
-});
-
-```
 
 ## Projects
 
