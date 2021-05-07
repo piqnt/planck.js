@@ -78,7 +78,26 @@ import * as planck from 'planck';
 
 #### Testbed
 
-See [Testbed](https://github.com/shakiba/planck.js/wiki/Testbed) wiki page. 
+Use CDN in a web page.
+```html
+<html><body>
+  <script src="//cdn.jsdelivr.net/npm/planck@latest/dist/planck-with-testbed.min.js"></script>
+  <script>
+    planck.testbed(function(testbed) {
+      // Your testbed code
+    });
+  </script>
+</body></html>
+```
+
+Use NPM package in Node.
+```js
+const planck = require('planck/dist/planck-with-testbed');
+
+planck.testbed(function() {
+  // ...
+});
+```
 
 ## Projects
 
