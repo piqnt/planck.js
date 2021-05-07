@@ -58,9 +58,11 @@ Planck.js public API closely follows Box2D API, with the following differences:
 
 ## Install
 
+Staring from v1.0 the library is released under `planck` package name. Releases and updates before v1.0 will remain available under `planck-js`.
+
 #### CDN
 
-`planck` package is available on [jsDelivr](https://www.jsdelivr.com/package/npm/planck) and [cdnjs](https://cdnjs.com/libraries/planck). 
+Planck.js package (`planck`) is available on [jsDelivr](https://www.jsdelivr.com/package/npm/planck) and [cdnjs](https://cdnjs.com/libraries/planck).
 
 #### NPM
 
@@ -76,7 +78,7 @@ import * as planck from 'planck';
 
 #### Testbed
 
-Testbed for v1.0+ is available under [`planck-testbed`]() package.
+Staring from v1.0 Testbed is moved to [`planck-testbed`](./testbed) package.
 
 ## Projects
 

@@ -1,21 +1,24 @@
 # Testbed
 
-Testbed runs and renders Planck.js examples. Testbed is helpful to get started with the Planck.js, and develop and debug physics code.
+Testbed runs and renders Planck.js examples. It is helpful to get started with the Planck.js, and develop and debug physics code.
 
-Please note that you don't need testbed to use Planck.js library in your application. You can run simulation and render world yourself, or integrate Planck.js with a rendering library (see [Rendering](./Rendering) for more details).
+Please note that Testbed is not required to use Planck.js library.
+You can run run and render physics world directly, or integrate Planck.js with a rendering library (see [Rendering](https://github.com/shakiba/planck.js/wiki/Rendering) for more details).
 
 ## Usage
 
-There are few different way to run testbed.
+There are a few different way to run Testbed.
 
 #### Space
 
-[Space](https://piqnt.com/space/) is an online playground for Planck.js, it is the easiest way to run testbed scripts. You can quickly edit, run and share your physics code in the Space! [Planck.js examples](https://piqnt.com/planck.js/) are hosted on Space.
+[Space](https://piqnt.com/space/) is an online playground for Planck.js, it is the easiest way to run Testbed scripts.
+You can quickly edit, run and share your physics code in the Space!
+[Planck.js examples](https://piqnt.com/planck.js/) are hosted on Space.
 
 #### CDN
 
-`planck-testbed` package is available on [jsDelivr](https://www.jsdelivr.com/package/npm/planck-testbed) and [cdnjs](https://cdnjs.com/libraries/planck-testbed). 
-You can simply add `planck-testbed.js` script to your page and use it.
+Testbed package (`planck-testbed`) is available on [jsDelivr](https://www.jsdelivr.com/package/npm/planck-testbed) and [cdnjs](https://cdnjs.com/libraries/planck-testbed). 
+You can simply add `planck-testbed.js` to your page and use it.
 
 ```html
 <html><body>
@@ -67,7 +70,7 @@ Your function is called with a testbed instance, you can use it to setup testbed
 
 ```js
 planck.testbed(function(testbed) {
-  // Your code
+  // Your testbed code
 });
 ```
 
