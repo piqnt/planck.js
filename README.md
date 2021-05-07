@@ -55,65 +55,30 @@ Planck.js public API closely follows Box2D API, with the following differences:
 `'begin-contact'`, `'end-contact'`, `'pre-solve'`, `'post-solve'`, `'remove-joint'`, `'remove-fixture'`, `'remove-body'`
 
 
+## Install v1.0-alpha
 
-## Install v0.3.x (current)
-
-#### CDN
-
-Planck.js is [available on jsDelivr](https://www.jsdelivr.com/package/npm/planck-js).
-
-#### NPM
-
-Install:
-```sh
-npm install planck-js --save
-```
-
-Core library:
-```js
-const planck = require('planck-js');
-```
-
-With testbed:
-
-```js
-const planck = require('planck-js/dist/planck-with-testbed');
-
-planck.testbed(function() {
-  // ...
-});
-
-```
-
-## Install v1.0-alpha (next)
+Staring from v1.0 the library is released under `planck` package name.
+Releases and updates before v1.0 will remain available under [`planck-js`](https://www.npmjs.com/package/planck-js).
 
 #### CDN
 
-Planck.js is [available on jsDelivr](https://www.jsdelivr.com/package/npm/planck).
+Planck.js is available on [jsDelivr](https://www.jsdelivr.com/package/npm/planck) and [cdnjs](https://cdnjs.com/libraries/planck).
 
 #### NPM
 
-Install:
+Install npm package.
 ```sh
-npm install planck
+npm install planck@v1.0.0-alpha.1
 ```
 
-Core library:
+Import it in your code.
 ```js
 import * as planck from 'planck';
 ```
 
-With testbed:
+#### Testbed
 
-```js
-import * as planck from 'planck/dist/planck-with-testbed';
-
-planck.testbed(function() {
-  // ...
-});
-
-```
-
+See [Testbed](https://github.com/shakiba/planck.js/wiki/Testbed) wiki page. 
 
 ## Projects
 
