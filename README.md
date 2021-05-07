@@ -12,7 +12,7 @@ Planck.js is JavaScript rewrite of Box2D physics engine for cross-platform HTML5
 
 ## Documentation
 
-- [Documentations Wiki](https://github.com/shakiba/planck.js/wiki/) - This is the best place to start, and find other resources
+- [Documentation Wiki](https://github.com/shakiba/planck.js/wiki/) - This is the best place to start, and find other resources
 - [Examples](https://piqnt.com/planck.js/) - Online examples with editable code
 
 
@@ -40,12 +40,55 @@ Planck.js public API closely follows Box2D API, with the following differences:
 `'begin-contact'`, `'end-contact'`, `'pre-solve'`, `'post-solve'`, `'remove-joint'`, `'remove-fixture'`, `'remove-body'`
 
 
+## Install
+
+#### CDN
+
+The library is available on [jsDelivr](https://www.jsdelivr.com/package/npm/planck-js).
+
+#### NPM
+
+Install NPM package.
+```sh
+npm install planck-js --save
+```
+
+Use core library.
+```js
+const planck = require('planck-js');
+```
+
+#### Testbed
+
+Use CDN in a web page.
+```html
+<html><body>
+  <script src="//cdn.jsdelivr.net/npm/planck-js@latest/dist/planck-with-testbed.min.js"></script>
+  <script>
+    planck.testbed(function(testbed) {
+      // Your testbed code
+    });
+  </script>
+</body></html>
+```
+
+Use NPM package in Node.
+```js
+const planck = require('planck-js/dist/planck-with-testbed');
+
+planck.testbed(function() {
+  // ...
+});
+```
+
 ## Projects
 
 #### Games
 - [Astray 2](https://wwwtyro.github.io/astray-2/) ([source](https://github.com/wwwtyro/astray-2)) by Rye Terrell
 - [I have to flap](https://ihavetoflap.web.app/) by Elias Ku
 - [Hoverator](https://vgel.me/hoverator/) by Jonathon Vogel
+- [Totem Destroyer](https://www.emanueleferonato.com/2021/03/13/build-a-html5-game-like-old-flash-glory-totem-destroyer-using-phaser-and-planck-js-physics-engine/) by Emanuele Feronato
+- [Pancake Tower](https://pancake-tower.netlify.app/) by Aloysius Kieth
 - [Acolyte Fight](https://acolytefight.io/)
 - [Comeback](http://romainclement.eu/Comeback/) by Romain Clément
 - [Nitro Clash](http://nitroclash.io/)
@@ -53,33 +96,26 @@ Planck.js public API closely follows Box2D API, with the following differences:
 - Air Hockey ([source](https://github.com/Steveeeie/webgl-air-hockey-server)) by Steve Meredith
 - [Coined](https://coined--parameterized.repl.co/) ([source](https://repl.it/talk/challenge/Coined/13314))
 - [Zzzone!](https://www.engehausen.de/jan/zzz.html) ([source](https://github.com/smurf667/zzzone)) by Jan Engehausen
+- [Star Fly](https://fxplayground.herokuapp.com/) by Kal Torak
 
-#### Other Projects
+#### Dynamic Visualization
  - [Fall / Fill](https://twitter.com/jezzamonn/status/1246212104593403905) by Jez Swanson
  - [1000 Unique Postcards](https://twitter.com/andreasgysin/status/956131218386509824) by Andreas Gysin
  - [Flag in the Wind](https://codepen.io/unframework/pen/OrOMBg) by Nick Matantsev
- - [Handle](https://twitter.com/marurur/status/1240141036606947329) by Ichiro Maruta
- - [Q-Learning Ragdoll](https://codepen.io/mikkokam/pen/EGEjYe) by Mikko Kämäräinen
  - [Dynamic Convex Hull](https://codepen.io/bozheng-stokes/pen/abormNX) by Bo Zheng
  - [Chaotic Water Wheel](https://john-hearn.info/articles/simulate-chaotic-water-wheel-with-planck) by John Hearn
+
+#### Science and AI
+ - [Handle](https://twitter.com/marurur/status/1240141036606947329) by Ichiro Maruta
+ - [Q-Learning Ragdoll](https://codepen.io/mikkokam/pen/EGEjYe) by Mikko Kämäräinen
  - [Walking EA](https://matsemann.github.io/walkingea/) by Mats Krüger Svensson
  - [Neuroevolution Bots](https://twitter.com/mishig25/status/1077672181503590400) by Mishig Davaadorj
+ - [Bubble Treemaps](https://github.com/grtlr/bubble-treemaps)
+ - [Walking Robot](https://neuro-ts.vercel.app/walk) [Source](https://github.com/suhdonghwi/neuro-ts/)
 
 #### Game Development
 - [Space](https://piqnt.com/space/)
 - [Modd.io](https://www.modd.io/)
-
-
-## Install
-
-#### CDN
-
-Planck.js is [available on jsDelivr](https://www.jsdelivr.com/package/npm/planck-js).
-
-
-#### NPM
-
-    npm install planck-js --save
 
 
 ## Credits
