@@ -1,3 +1,6 @@
+// @ts-ignore
+export as namespace planck;
+
 import {
   AABB,
   Body,

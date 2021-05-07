@@ -52,7 +52,7 @@ app.listen(app.get('port'), function() {
 
 const loadConfigFile = require('rollup/dist/loadConfigFile');
 
-loadConfigFile(path.resolve(__dirname, '../rollup.config.js')).then(
+loadConfigFile(path.resolve(__dirname, './rollup.config.js')).then(
   async ({ options, warnings }) => {
     console.log(`We currently have ${warnings.count} warnings`);
     warnings.flush();

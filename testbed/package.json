@@ -1,0 +1,26 @@
+{
+  "name": "planck-testbed",
+  "version": "0.0.0",
+  "description": "Testbed for Planck.js",
+  "homepage": "https://github.com/shakiba/planck.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/shakiba/planck.js.git"
+  },
+  "main": "dist/planck-testbed.js",
+  "types": "index.d.ts",
+  "author": "Ali Shakiba",
+  "dependencies": {
+    "stage-js": "^0.8.11"
+  },
+  "devDependencies": {
+    "express": "^4.17.1",
+    "handlebars": "^4.7.6"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "build": "rollup -c",
+    "watch": "rollup -c --watch"
+  }
+}

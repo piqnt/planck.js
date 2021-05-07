@@ -11,32 +11,7 @@ import declarationTransformer from './declarationTransformer';
 import licenseBanner from './license';
 
 
-export default [
-  {
-    src: 'src/index.ts',
-    dest: 'dist/planck.js',
-    minimize: false,
-    declaration: true,
-  },
-  {
-    src: 'src/index.ts',
-    dest: 'dist/planck.min.js',
-    minimize: true,
-    declaration: false,
-  },
-  {
-    src: 'testbed/index.ts',
-    dest: 'dist/planck-with-testbed.js',
-    minimize: false,
-    declaration: true,
-  },
-  {
-    src: 'testbed/index.ts',
-    dest: 'dist/planck-with-testbed.min.js',
-    minimize: true,
-    declaration: false,
-  }
-].map(options => {
+export const configFactory = options => {
   const config = {
     input: options.src,
     output: {
@@ -105,4 +80,19 @@ export default [
     ]
   };
   return config;
-})
+};
+
+export default [
+  {
+    src: 'src/index.ts',
+    dest: 'dist/planck.js',
+    minimize: false,
+    declaration: true,
+  },
+  {
+    src: 'src/index.ts',
+    dest: 'dist/planck.min.js',
+    minimize: true,
+    declaration: false,
+  },
+].map(configFactory);

@@ -27,6 +27,9 @@
     "Ali Shakiba",
     "Oliver Zell"
   ],
+  "workspaces": [
+    "./testbed"
+  ],
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-transform-runtime": "^7.13.9",
@@ -38,8 +41,6 @@
     "chai": "^4.3.3",
     "dtslint": "^3.6.9",
     "esm": "^3.2.25",
-    "express": "^4.17.1",
-    "handlebars": "^4.7.6",
     "is-core-module": "^2.2.0",
     "mocha": "^8.3.1",
     "nodemon": "^1.19.1",
@@ -51,7 +52,6 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-ts": "^1.3.10",
     "sinon": "^9.2.4",
-    "stage-js": "^0.8.11",
     "tslint": "^5.17.0",
     "typedoc": "^0.17.8",
     "typedoc-plugin-markdown": "^2.3.1",
@@ -63,7 +63,7 @@
     "test:coverage:html": "nyc --reporter=html mocha 'src/**/__test/*.js'",
     "build": "rollup -c",
     "watch": "rollup -c --watch",
-    "testbed": "node testbed/server.js",
-    "typedoc": "typedoc --options typedoc.json"
+    "testbed": "npm run start -w ./testbed",
+    "typedoc": "typedoc --options ./typedoc.json"
   }
 }

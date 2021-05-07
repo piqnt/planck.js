@@ -25,7 +25,7 @@ Planck.js is JavaScript (TypeScript) rewrite of Box2D physics engine for cross-p
 
 ## Updates
 
-### v1.0-alpha
+### v1.0
 
 - Source code is migrated to TypeScript, to improves library usability, documentation and maintenance.
 
@@ -56,64 +56,27 @@ Planck.js public API closely follows Box2D API, with the following differences:
 
 
 
-## Install v0.3.x (current)
+## Install
 
 #### CDN
 
-Planck.js is [available on jsDelivr](https://www.jsdelivr.com/package/npm/planck-js).
+`planck` package is available on [jsDelivr](https://www.jsdelivr.com/package/npm/planck) and [cdnjs](https://cdnjs.com/libraries/planck). 
 
 #### NPM
 
-Install:
+Install npm package.
 ```sh
-npm install planck-js --save
+npm install planck@v1.0.0-alpha.1
 ```
 
-Core library:
-```js
-const planck = require('planck-js');
-```
-
-With testbed:
-
-```js
-const planck = require('planck-js/dist/planck-with-testbed');
-
-planck.testbed(function() {
-  // ...
-});
-
-```
-
-## Install v1.0-alpha (next)
-
-#### CDN
-
-Planck.js is [available on jsDelivr](https://www.jsdelivr.com/package/npm/planck).
-
-#### NPM
-
-Install:
-```sh
-npm install planck
-```
-
-Core library:
+Import it in your code.
 ```js
 import * as planck from 'planck';
 ```
 
-With testbed:
+#### Testbed
 
-```js
-import * as planck from 'planck/dist/planck-with-testbed';
-
-planck.testbed(function() {
-  // ...
-});
-
-```
-
+Testbed for v1.0+ is available under [`planck-testbed`]() package.
 
 ## Projects
 

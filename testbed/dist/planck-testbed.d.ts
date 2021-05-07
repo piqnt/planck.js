@@ -1,4 +1,5 @@
-declare namespace Serializer$0 {
+declare function Serializer(opts?: any): void;
+declare namespace Serializer {
     var toJson: any;
     var fromJson: any;
 }
@@ -3870,13 +3871,19 @@ interface ActiveKeys {
     fire?: boolean;
 }
 interface Testbed {
+    /** World viewbox width. */
     width: number;
+    /** World viewbox height. */
     height: number;
+    /** World viewbox center vertical offset. */
     x: number;
+    /** World viewbox center horizontal offset. */
     y: number;
     scaleY: number;
     ratio: number;
+    /** World simulation step frequency */
     hz: number;
+    /** World simulation speed, default is 1 */
     speed: number;
     activeKeys: ActiveKeys;
     background: string;
@@ -3915,4 +3922,4 @@ declare function testbed(opts: object, callback: (testbed: Testbed) => World): a
 declare function testbed(callback: (testbed: Testbed) => World): any;
 /** @deprecated Merged with main namespace */
 declare const internal$0: {};
-export { ActiveKeys, Testbed, testbed, Serializer$0 as Serializer, math as Math, Vec2, Vec3, Mat22, Mat33, Transform, Rot, AABB, Shape, Fixture, Body, Contact, Joint, World, CircleShape as Circle, EdgeShape as Edge, PolygonShape as Polygon, ChainShape as Chain, BoxShape as Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJoint, FrictionJoint, GearJoint, MotorJoint, MouseJoint, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, WeldJoint, WheelJoint, Settings, Sweep, Manifold, Distance, TimeOfImpact, DynamicTree, internal$0 as internal };
+export { ActiveKeys, Testbed, testbed, Serializer, math as Math, Vec2, Vec3, Mat22, Mat33, Transform, Rot, AABB, Shape, Fixture, Body, Contact, Joint, World, CircleShape as Circle, EdgeShape as Edge, PolygonShape as Polygon, ChainShape as Chain, BoxShape as Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJoint, FrictionJoint, GearJoint, MotorJoint, MouseJoint, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, WeldJoint, WheelJoint, Settings, Sweep, Manifold, Distance, TimeOfImpact, DynamicTree, internal$0 as internal };
