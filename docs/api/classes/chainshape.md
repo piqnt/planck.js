@@ -33,22 +33,20 @@ WARNING: The chain will not collide properly if there are self-intersections.
 * [m_type](chainshape.md#m_type)
 * [m_vertices](chainshape.md#m_vertices)
 * [TYPE](chainshape.md#static-type)
-* [TYPES](chainshape.md#static-types)
 
 ### Methods
 
-* [_clone](chainshape.md#_clone)
-* [_createChain](chainshape.md#_createchain)
-* [_createLoop](chainshape.md#_createloop)
-* [_reset](chainshape.md#_reset)
 * [computeAABB](chainshape.md#computeaabb)
 * [computeDistanceProxy](chainshape.md#computedistanceproxy)
 * [computeMass](chainshape.md#computemass)
 * [getChildCount](chainshape.md#getchildcount)
 * [getChildEdge](chainshape.md#getchildedge)
+* [getNextVertex](chainshape.md#getnextvertex)
+* [getPrevVertex](chainshape.md#getprevvertex)
 * [getRadius](chainshape.md#getradius)
 * [getType](chainshape.md#gettype)
 * [getVertex](chainshape.md#getvertex)
+* [isLoop](chainshape.md#isloop)
 * [rayCast](chainshape.md#raycast)
 * [setNextVertex](chainshape.md#setnextvertex)
 * [setPrevVertex](chainshape.md#setprevvertex)
@@ -61,7 +59,7 @@ WARNING: The chain will not collide properly if there are self-intersections.
 
 \+ **new ChainShape**(`vertices?`: [Vec2](vec2.md)[], `loop?`: boolean): *[ChainShape](chainshape.md)*
 
-*Defined in [src/collision/shape/ChainShape.ts:57](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L57)*
+*Defined in [src/collision/shape/ChainShape.ts:57](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L57)*
 
 **Parameters:**
 
@@ -78,7 +76,7 @@ Name | Type |
 
 • **m_count**: *number*
 
-*Defined in [src/collision/shape/ChainShape.ts:51](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L51)*
+*Defined in [src/collision/shape/ChainShape.ts:51](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L51)*
 
 ___
 
@@ -86,7 +84,7 @@ ___
 
 • **m_hasNextVertex**: *boolean*
 
-*Defined in [src/collision/shape/ChainShape.ts:55](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L55)*
+*Defined in [src/collision/shape/ChainShape.ts:55](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L55)*
 
 ___
 
@@ -94,7 +92,7 @@ ___
 
 • **m_hasPrevVertex**: *boolean*
 
-*Defined in [src/collision/shape/ChainShape.ts:54](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L54)*
+*Defined in [src/collision/shape/ChainShape.ts:54](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L54)*
 
 ___
 
@@ -102,7 +100,7 @@ ___
 
 • **m_isLoop**: *boolean*
 
-*Defined in [src/collision/shape/ChainShape.ts:57](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L57)*
+*Defined in [src/collision/shape/ChainShape.ts:57](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L57)*
 
 ___
 
@@ -110,7 +108,7 @@ ___
 
 • **m_nextVertex**: *[Vec2](vec2.md) | null*
 
-*Defined in [src/collision/shape/ChainShape.ts:53](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L53)*
+*Defined in [src/collision/shape/ChainShape.ts:53](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L53)*
 
 ___
 
@@ -118,7 +116,7 @@ ___
 
 • **m_prevVertex**: *[Vec2](vec2.md) | null*
 
-*Defined in [src/collision/shape/ChainShape.ts:52](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L52)*
+*Defined in [src/collision/shape/ChainShape.ts:52](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L52)*
 
 ___
 
@@ -128,7 +126,7 @@ ___
 
 *Inherited from [Shape](shape.md).[m_radius](shape.md#m_radius)*
 
-*Defined in [src/collision/Shape.ts:39](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Shape.ts#L39)*
+*Defined in [src/collision/Shape.ts:39](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L39)*
 
 ___
 
@@ -138,7 +136,7 @@ ___
 
 *Inherited from [Shape](shape.md).[m_type](shape.md#m_type)*
 
-*Defined in [src/collision/Shape.ts:38](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Shape.ts#L38)*
+*Defined in [src/collision/Shape.ts:38](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L38)*
 
 ___
 
@@ -146,7 +144,7 @@ ___
 
 • **m_vertices**: *[Vec2](vec2.md)[]*
 
-*Defined in [src/collision/shape/ChainShape.ts:50](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L50)*
+*Defined in [src/collision/shape/ChainShape.ts:50](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L50)*
 
 ___
 
@@ -154,87 +152,9 @@ ___
 
 ▪ **TYPE**: *"chain"* = 'chain' as 'chain'
 
-*Defined in [src/collision/shape/ChainShape.ts:48](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L48)*
-
-___
-
-### `Static` TYPES
-
-▪ **TYPES**: *object*
-
-*Inherited from [Shape](shape.md).[TYPES](shape.md#static-types)*
-
-*Defined in [src/collision/Shape.ts:47](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Shape.ts#L47)*
-
-#### Type declaration:
-
-* \[ **id**: *string*\]: object
+*Defined in [src/collision/shape/ChainShape.ts:48](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L48)*
 
 ## Methods
-
-###  _clone
-
-▸ **_clone**(): *[ChainShape](chainshape.md)‹›*
-
-*Overrides [Shape](shape.md).[_clone](shape.md#abstract-_clone)*
-
-*Defined in [src/collision/shape/ChainShape.ts:219](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L219)*
-
-**`deprecated`** Shapes should be treated as immutable.
-
-clone the concrete shape.
-
-**Returns:** *[ChainShape](chainshape.md)‹›*
-
-___
-
-###  _createChain
-
-▸ **_createChain**(`vertices`: [Vec2](vec2.md)[]): *this*
-
-*Defined in [src/collision/shape/ChainShape.ts:166](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L166)*
-
-Create a chain with isolated end vertices.
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
-`vertices` | [Vec2](vec2.md)[] | an array of vertices, these are copied |
-
-**Returns:** *this*
-
-___
-
-###  _createLoop
-
-▸ **_createLoop**(`vertices`: [Vec2](vec2.md)[]): *this*
-
-*Defined in [src/collision/shape/ChainShape.ts:136](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L136)*
-
-Create a loop. This automatically adjusts connectivity.
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
-`vertices` | [Vec2](vec2.md)[] | an array of vertices, these are copied |
-
-**Returns:** *this*
-
-___
-
-###  _reset
-
-▸ **_reset**(): *void*
-
-*Overrides [Shape](shape.md).[_reset](shape.md#_reset)*
-
-*Defined in [src/collision/shape/ChainShape.ts:188](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L188)*
-
-**Returns:** *void*
-
-___
 
 ###  computeAABB
 
@@ -242,7 +162,7 @@ ___
 
 *Overrides [Shape](shape.md).[computeAABB](shape.md#abstract-computeaabb)*
 
-*Defined in [src/collision/shape/ChainShape.ts:310](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L310)*
+*Defined in [src/collision/shape/ChainShape.ts:326](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L326)*
 
 Given a transform, compute the associated axis aligned bounding box for a
 child shape.
@@ -265,7 +185,7 @@ ___
 
 *Overrides [Shape](shape.md).[computeDistanceProxy](shape.md#abstract-computedistanceproxy)*
 
-*Defined in [src/collision/shape/ChainShape.ts:334](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L334)*
+*Defined in [src/collision/shape/ChainShape.ts:350](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L350)*
 
 **Parameters:**
 
@@ -284,7 +204,7 @@ ___
 
 *Overrides [Shape](shape.md).[computeMass](shape.md#abstract-computemass)*
 
-*Defined in [src/collision/shape/ChainShape.ts:328](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L328)*
+*Defined in [src/collision/shape/ChainShape.ts:344](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L344)*
 
 Compute the mass properties of this shape using its dimensions and density.
 The inertia tensor is computed about the local origin.
@@ -308,7 +228,7 @@ ___
 
 *Overrides [Shape](shape.md).[getChildCount](shape.md#abstract-getchildcount)*
 
-*Defined in [src/collision/shape/ChainShape.ts:234](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L234)*
+*Defined in [src/collision/shape/ChainShape.ts:246](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L246)*
 
 Get the number of child primitives.
 
@@ -320,7 +240,7 @@ ___
 
 ▸ **getChildEdge**(`edge`: [EdgeShape](edgeshape.md), `childIndex`: number): *void*
 
-*Defined in [src/collision/shape/ChainShape.ts:240](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L240)*
+*Defined in [src/collision/shape/ChainShape.ts:252](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L252)*
 
 **Parameters:**
 
@@ -333,13 +253,33 @@ Name | Type |
 
 ___
 
+###  getNextVertex
+
+▸ **getNextVertex**(): *[Vec2](vec2.md)‹›*
+
+*Defined in [src/collision/shape/ChainShape.ts:221](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L221)*
+
+**Returns:** *[Vec2](vec2.md)‹›*
+
+___
+
+###  getPrevVertex
+
+▸ **getPrevVertex**(): *[Vec2](vec2.md)‹›*
+
+*Defined in [src/collision/shape/ChainShape.ts:208](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L208)*
+
+**Returns:** *[Vec2](vec2.md)‹›*
+
+___
+
 ###  getRadius
 
 ▸ **getRadius**(): *number*
 
 *Inherited from [Shape](shape.md).[getRadius](shape.md#getradius)*
 
-*Defined in [src/collision/Shape.ts:59](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Shape.ts#L59)*
+*Defined in [src/collision/Shape.ts:61](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L61)*
 
 **Returns:** *number*
 
@@ -351,7 +291,7 @@ ___
 
 *Inherited from [Shape](shape.md).[getType](shape.md#gettype)*
 
-*Defined in [src/collision/Shape.ts:69](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Shape.ts#L69)*
+*Defined in [src/collision/Shape.ts:71](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L71)*
 
 Get the type of this shape. You can use this to down cast to the concrete
 shape.
@@ -366,7 +306,7 @@ ___
 
 ▸ **getVertex**(`index`: number): *[Vec2](vec2.md)‹›*
 
-*Defined in [src/collision/shape/ChainShape.ts:265](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L265)*
+*Defined in [src/collision/shape/ChainShape.ts:277](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L277)*
 
 **Parameters:**
 
@@ -378,13 +318,23 @@ Name | Type |
 
 ___
 
+###  isLoop
+
+▸ **isLoop**(): *boolean*
+
+*Defined in [src/collision/shape/ChainShape.ts:286](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L286)*
+
+**Returns:** *boolean*
+
+___
+
 ###  rayCast
 
 ▸ **rayCast**(`output`: [RayCastOutput](../interfaces/raycastoutput.md), `input`: [RayCastInput](../interfaces/raycastinput.md), `xf`: [Transform](transform.md), `childIndex`: number): *boolean*
 
 *Overrides [Shape](shape.md).[rayCast](shape.md#abstract-raycast)*
 
-*Defined in [src/collision/shape/ChainShape.ts:295](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L295)*
+*Defined in [src/collision/shape/ChainShape.ts:311](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L311)*
 
 Cast a ray against a child shape.
 
@@ -394,7 +344,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `output` | [RayCastOutput](../interfaces/raycastoutput.md) | The ray-cast results. |
 `input` | [RayCastInput](../interfaces/raycastinput.md) | The ray-cast input parameters. |
-`xf` | [Transform](transform.md) | - |
+`xf` | [Transform](transform.md) | The transform to be applied to the shape. |
 `childIndex` | number | The child shape index  |
 
 **Returns:** *boolean*
@@ -405,7 +355,7 @@ ___
 
 ▸ **setNextVertex**(`nextVertex`: [Vec2](vec2.md)): *void*
 
-*Defined in [src/collision/shape/ChainShape.ts:209](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L209)*
+*Defined in [src/collision/shape/ChainShape.ts:216](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L216)*
 
 Establish connectivity to a vertex that follows the last vertex. Don't call
 this for loops.
@@ -424,7 +374,7 @@ ___
 
 ▸ **setPrevVertex**(`prevVertex`: [Vec2](vec2.md)): *void*
 
-*Defined in [src/collision/shape/ChainShape.ts:200](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L200)*
+*Defined in [src/collision/shape/ChainShape.ts:203](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L203)*
 
 Establish connectivity to a vertex that precedes the first vertex. Don't call
 this for loops.
@@ -445,7 +395,7 @@ ___
 
 *Overrides [Shape](shape.md).[testPoint](shape.md#abstract-testpoint)*
 
-*Defined in [src/collision/shape/ChainShape.ts:283](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/ChainShape.ts#L283)*
+*Defined in [src/collision/shape/ChainShape.ts:299](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/ChainShape.ts#L299)*
 
 Test a point for containment in this shape. This only works for convex
 shapes.
@@ -469,7 +419,7 @@ ___
 
 *Inherited from [Shape](shape.md).[isValid](shape.md#static-isvalid)*
 
-*Defined in [src/collision/Shape.ts:55](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Shape.ts#L55)*
+*Defined in [src/collision/Shape.ts:57](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L57)*
 
 **Parameters:**
 

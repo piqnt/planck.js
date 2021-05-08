@@ -16,7 +16,7 @@
 
 • **e_faceA**: = 2
 
-*Defined in [src/collision/TimeOfImpact.ts:307](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/TimeOfImpact.ts#L307)*
+*Defined in [src/collision/TimeOfImpact.ts:307](https://github.com/shakiba/planck.js/blob/1523746/src/collision/TimeOfImpact.ts#L307)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **e_faceB**: = 3
 
-*Defined in [src/collision/TimeOfImpact.ts:308](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/TimeOfImpact.ts#L308)*
+*Defined in [src/collision/TimeOfImpact.ts:308](https://github.com/shakiba/planck.js/blob/1523746/src/collision/TimeOfImpact.ts#L308)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **e_points**: = 1
 
-*Defined in [src/collision/TimeOfImpact.ts:306](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/TimeOfImpact.ts#L306)*
+*Defined in [src/collision/TimeOfImpact.ts:306](https://github.com/shakiba/planck.js/blob/1523746/src/collision/TimeOfImpact.ts#L306)*

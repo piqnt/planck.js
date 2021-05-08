@@ -16,15 +16,13 @@
 
 ### Properties
 
+* [m_p](circleshape.md#m_p)
 * [m_radius](circleshape.md#m_radius)
 * [m_type](circleshape.md#m_type)
 * [TYPE](circleshape.md#static-type)
-* [TYPES](circleshape.md#static-types)
 
 ### Methods
 
-* [_clone](circleshape.md#_clone)
-* [_reset](circleshape.md#_reset)
 * [computeAABB](circleshape.md#computeaabb)
 * [computeDistanceProxy](circleshape.md#computedistanceproxy)
 * [computeMass](circleshape.md#computemass)
@@ -43,7 +41,7 @@
 
 \+ **new CircleShape**(`position`: [Vec2](vec2.md), `radius?`: number): *[CircleShape](circleshape.md)*
 
-*Defined in [src/collision/shape/CircleShape.ts:42](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/CircleShape.ts#L42)*
+*Defined in [src/collision/shape/CircleShape.ts:42](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CircleShape.ts#L42)*
 
 **Parameters:**
 
@@ -56,7 +54,7 @@ Name | Type |
 
 \+ **new CircleShape**(`radius?`: number): *[CircleShape](circleshape.md)*
 
-*Defined in [src/collision/shape/CircleShape.ts:44](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/CircleShape.ts#L44)*
+*Defined in [src/collision/shape/CircleShape.ts:44](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CircleShape.ts#L44)*
 
 **Parameters:**
 
@@ -68,13 +66,21 @@ Name | Type |
 
 ## Properties
 
+###  m_p
+
+• **m_p**: *[Vec2](vec2.md)*
+
+*Defined in [src/collision/shape/CircleShape.ts:42](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CircleShape.ts#L42)*
+
+___
+
 ###  m_radius
 
 • **m_radius**: *number*
 
 *Inherited from [Shape](shape.md).[m_radius](shape.md#m_radius)*
 
-*Defined in [src/collision/Shape.ts:39](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Shape.ts#L39)*
+*Defined in [src/collision/Shape.ts:39](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L39)*
 
 ___
 
@@ -84,7 +90,7 @@ ___
 
 *Inherited from [Shape](shape.md).[m_type](shape.md#m_type)*
 
-*Defined in [src/collision/Shape.ts:38](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Shape.ts#L38)*
+*Defined in [src/collision/Shape.ts:38](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L38)*
 
 ___
 
@@ -92,51 +98,9 @@ ___
 
 ▪ **TYPE**: *"circle"* = 'circle' as 'circle'
 
-*Defined in [src/collision/shape/CircleShape.ts:40](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/CircleShape.ts#L40)*
-
-___
-
-### `Static` TYPES
-
-▪ **TYPES**: *object*
-
-*Inherited from [Shape](shape.md).[TYPES](shape.md#static-types)*
-
-*Defined in [src/collision/Shape.ts:47](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Shape.ts#L47)*
-
-#### Type declaration:
-
-* \[ **id**: *string*\]: object
+*Defined in [src/collision/shape/CircleShape.ts:40](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CircleShape.ts#L40)*
 
 ## Methods
-
-###  _clone
-
-▸ **_clone**(): *[CircleShape](circleshape.md)‹›*
-
-*Overrides [Shape](shape.md).[_clone](shape.md#abstract-_clone)*
-
-*Defined in [src/collision/shape/CircleShape.ts:104](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/CircleShape.ts#L104)*
-
-**`deprecated`** Shapes should be treated as immutable.
-
-clone the concrete shape.
-
-**Returns:** *[CircleShape](circleshape.md)‹›*
-
-___
-
-###  _reset
-
-▸ **_reset**(): *void*
-
-*Inherited from [Shape](shape.md).[_reset](shape.md#_reset)*
-
-*Defined in [src/collision/Shape.ts:41](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Shape.ts#L41)*
-
-**Returns:** *void*
-
-___
 
 ###  computeAABB
 
@@ -144,7 +108,7 @@ ___
 
 *Overrides [Shape](shape.md).[computeAABB](shape.md#abstract-computeaabb)*
 
-*Defined in [src/collision/shape/CircleShape.ts:184](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/CircleShape.ts#L184)*
+*Defined in [src/collision/shape/CircleShape.ts:185](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CircleShape.ts#L185)*
 
 Given a transform, compute the associated axis aligned bounding box for a
 child shape.
@@ -167,7 +131,7 @@ ___
 
 *Overrides [Shape](shape.md).[computeDistanceProxy](shape.md#abstract-computedistanceproxy)*
 
-*Defined in [src/collision/shape/CircleShape.ts:205](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/CircleShape.ts#L205)*
+*Defined in [src/collision/shape/CircleShape.ts:206](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CircleShape.ts#L206)*
 
 **Parameters:**
 
@@ -185,7 +149,7 @@ ___
 
 *Overrides [Shape](shape.md).[computeMass](shape.md#abstract-computemass)*
 
-*Defined in [src/collision/shape/CircleShape.ts:197](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/CircleShape.ts#L197)*
+*Defined in [src/collision/shape/CircleShape.ts:198](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CircleShape.ts#L198)*
 
 Compute the mass properties of this shape using its dimensions and density.
 The inertia tensor is computed about the local origin.
@@ -205,7 +169,7 @@ ___
 
 ▸ **getCenter**(): *[Vec2](vec2.md)‹›*
 
-*Defined in [src/collision/shape/CircleShape.ts:90](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/CircleShape.ts#L90)*
+*Defined in [src/collision/shape/CircleShape.ts:90](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CircleShape.ts#L90)*
 
 **Returns:** *[Vec2](vec2.md)‹›*
 
@@ -217,7 +181,7 @@ ___
 
 *Overrides [Shape](shape.md).[getChildCount](shape.md#abstract-getchildcount)*
 
-*Defined in [src/collision/shape/CircleShape.ts:115](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/CircleShape.ts#L115)*
+*Defined in [src/collision/shape/CircleShape.ts:116](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CircleShape.ts#L116)*
 
 Get the number of child primitives.
 
@@ -231,7 +195,7 @@ ___
 
 *Overrides [Shape](shape.md).[getRadius](shape.md#getradius)*
 
-*Defined in [src/collision/shape/CircleShape.ts:86](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/CircleShape.ts#L86)*
+*Defined in [src/collision/shape/CircleShape.ts:86](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CircleShape.ts#L86)*
 
 **Returns:** *number*
 
@@ -243,7 +207,7 @@ ___
 
 *Inherited from [Shape](shape.md).[getType](shape.md#gettype)*
 
-*Defined in [src/collision/Shape.ts:69](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Shape.ts#L69)*
+*Defined in [src/collision/Shape.ts:71](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L71)*
 
 Get the type of this shape. You can use this to down cast to the concrete
 shape.
@@ -258,7 +222,7 @@ ___
 
 ▸ **getVertex**(`index`: 0): *[Vec2](vec2.md)‹›*
 
-*Defined in [src/collision/shape/CircleShape.ts:94](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/CircleShape.ts#L94)*
+*Defined in [src/collision/shape/CircleShape.ts:94](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CircleShape.ts#L94)*
 
 **Parameters:**
 
@@ -276,7 +240,7 @@ ___
 
 *Overrides [Shape](shape.md).[rayCast](shape.md#abstract-raycast)*
 
-*Defined in [src/collision/shape/CircleShape.ts:144](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/CircleShape.ts#L144)*
+*Defined in [src/collision/shape/CircleShape.ts:141](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CircleShape.ts#L141)*
 
 Cast a ray against a child shape.
 
@@ -286,7 +250,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `output` | [RayCastOutput](../interfaces/raycastoutput.md) | The ray-cast results. |
 `input` | [RayCastInput](../interfaces/raycastinput.md) | The ray-cast input parameters. |
-`xf` | [Transform](transform.md) | - |
+`xf` | [Transform](transform.md) | The transform to be applied to the shape. |
 `childIndex` | number | The child shape index  |
 
 **Returns:** *boolean*
@@ -299,7 +263,7 @@ ___
 
 *Overrides [Shape](shape.md).[testPoint](shape.md#abstract-testpoint)*
 
-*Defined in [src/collision/shape/CircleShape.ts:126](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/shape/CircleShape.ts#L126)*
+*Defined in [src/collision/shape/CircleShape.ts:127](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CircleShape.ts#L127)*
 
 Test a point for containment in this shape. This only works for convex
 shapes.
@@ -321,7 +285,7 @@ ___
 
 *Inherited from [Shape](shape.md).[isValid](shape.md#static-isvalid)*
 
-*Defined in [src/collision/Shape.ts:55](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Shape.ts#L55)*
+*Defined in [src/collision/Shape.ts:57](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L57)*
 
 **Parameters:**
 

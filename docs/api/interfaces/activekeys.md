@@ -58,7 +58,7 @@
 
 • **0**? : *boolean*
 
-*Defined in [testbed/index.ts:13](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L13)*
+*Defined in [testbed/index.ts:13](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L13)*
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 • **1**? : *boolean*
 
-*Defined in [testbed/index.ts:14](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L14)*
+*Defined in [testbed/index.ts:14](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L14)*
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 • **2**? : *boolean*
 
-*Defined in [testbed/index.ts:15](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L15)*
+*Defined in [testbed/index.ts:15](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L15)*
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 • **3**? : *boolean*
 
-*Defined in [testbed/index.ts:16](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L16)*
+*Defined in [testbed/index.ts:16](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L16)*
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 • **4**? : *boolean*
 
-*Defined in [testbed/index.ts:17](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L17)*
+*Defined in [testbed/index.ts:17](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L17)*
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 • **5**? : *boolean*
 
-*Defined in [testbed/index.ts:18](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L18)*
+*Defined in [testbed/index.ts:18](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L18)*
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 • **6**? : *boolean*
 
-*Defined in [testbed/index.ts:19](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L19)*
+*Defined in [testbed/index.ts:19](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L19)*
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 • **7**? : *boolean*
 
-*Defined in [testbed/index.ts:20](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L20)*
+*Defined in [testbed/index.ts:20](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L20)*
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 • **8**? : *boolean*
 
-*Defined in [testbed/index.ts:21](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L21)*
+*Defined in [testbed/index.ts:21](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L21)*
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 • **9**? : *boolean*
 
-*Defined in [testbed/index.ts:22](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L22)*
+*Defined in [testbed/index.ts:22](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L22)*
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 • **A**? : *boolean*
 
-*Defined in [testbed/index.ts:23](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L23)*
+*Defined in [testbed/index.ts:23](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L23)*
 
 ___
 
@@ -146,7 +146,7 @@ ___
 
 • **B**? : *boolean*
 
-*Defined in [testbed/index.ts:24](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L24)*
+*Defined in [testbed/index.ts:24](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L24)*
 
 ___
 
@@ -154,7 +154,7 @@ ___
 
 • **C**? : *boolean*
 
-*Defined in [testbed/index.ts:25](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L25)*
+*Defined in [testbed/index.ts:25](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L25)*
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 • **D**? : *boolean*
 
-*Defined in [testbed/index.ts:26](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L26)*
+*Defined in [testbed/index.ts:26](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L26)*
 
 ___
 
@@ -170,7 +170,7 @@ ___
 
 • **E**? : *boolean*
 
-*Defined in [testbed/index.ts:27](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L27)*
+*Defined in [testbed/index.ts:27](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L27)*
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 • **F**? : *boolean*
 
-*Defined in [testbed/index.ts:28](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L28)*
+*Defined in [testbed/index.ts:28](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L28)*
 
 ___
 
@@ -186,7 +186,7 @@ ___
 
 • **G**? : *boolean*
 
-*Defined in [testbed/index.ts:29](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L29)*
+*Defined in [testbed/index.ts:29](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L29)*
 
 ___
 
@@ -194,7 +194,7 @@ ___
 
 • **H**? : *boolean*
 
-*Defined in [testbed/index.ts:30](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L30)*
+*Defined in [testbed/index.ts:30](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L30)*
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 • **I**? : *boolean*
 
-*Defined in [testbed/index.ts:31](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L31)*
+*Defined in [testbed/index.ts:31](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L31)*
 
 ___
 
@@ -210,7 +210,7 @@ ___
 
 • **J**? : *boolean*
 
-*Defined in [testbed/index.ts:32](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L32)*
+*Defined in [testbed/index.ts:32](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L32)*
 
 ___
 
@@ -218,7 +218,7 @@ ___
 
 • **K**? : *boolean*
 
-*Defined in [testbed/index.ts:33](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L33)*
+*Defined in [testbed/index.ts:33](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L33)*
 
 ___
 
@@ -226,7 +226,7 @@ ___
 
 • **L**? : *boolean*
 
-*Defined in [testbed/index.ts:34](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L34)*
+*Defined in [testbed/index.ts:34](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L34)*
 
 ___
 
@@ -234,7 +234,7 @@ ___
 
 • **M**? : *boolean*
 
-*Defined in [testbed/index.ts:35](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L35)*
+*Defined in [testbed/index.ts:35](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L35)*
 
 ___
 
@@ -242,7 +242,7 @@ ___
 
 • **N**? : *boolean*
 
-*Defined in [testbed/index.ts:36](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L36)*
+*Defined in [testbed/index.ts:36](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L36)*
 
 ___
 
@@ -250,7 +250,7 @@ ___
 
 • **O**? : *boolean*
 
-*Defined in [testbed/index.ts:37](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L37)*
+*Defined in [testbed/index.ts:37](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L37)*
 
 ___
 
@@ -258,7 +258,7 @@ ___
 
 • **P**? : *boolean*
 
-*Defined in [testbed/index.ts:38](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L38)*
+*Defined in [testbed/index.ts:38](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L38)*
 
 ___
 
@@ -266,7 +266,7 @@ ___
 
 • **Q**? : *boolean*
 
-*Defined in [testbed/index.ts:39](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L39)*
+*Defined in [testbed/index.ts:39](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L39)*
 
 ___
 
@@ -274,7 +274,7 @@ ___
 
 • **R**? : *boolean*
 
-*Defined in [testbed/index.ts:40](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L40)*
+*Defined in [testbed/index.ts:40](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L40)*
 
 ___
 
@@ -282,7 +282,7 @@ ___
 
 • **S**? : *boolean*
 
-*Defined in [testbed/index.ts:41](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L41)*
+*Defined in [testbed/index.ts:41](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L41)*
 
 ___
 
@@ -290,7 +290,7 @@ ___
 
 • **T**? : *boolean*
 
-*Defined in [testbed/index.ts:42](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L42)*
+*Defined in [testbed/index.ts:42](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L42)*
 
 ___
 
@@ -298,7 +298,7 @@ ___
 
 • **U**? : *boolean*
 
-*Defined in [testbed/index.ts:43](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L43)*
+*Defined in [testbed/index.ts:43](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L43)*
 
 ___
 
@@ -306,7 +306,7 @@ ___
 
 • **V**? : *boolean*
 
-*Defined in [testbed/index.ts:44](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L44)*
+*Defined in [testbed/index.ts:44](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L44)*
 
 ___
 
@@ -314,7 +314,7 @@ ___
 
 • **W**? : *boolean*
 
-*Defined in [testbed/index.ts:45](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L45)*
+*Defined in [testbed/index.ts:45](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L45)*
 
 ___
 
@@ -322,7 +322,7 @@ ___
 
 • **X**? : *boolean*
 
-*Defined in [testbed/index.ts:46](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L46)*
+*Defined in [testbed/index.ts:46](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L46)*
 
 ___
 
@@ -330,7 +330,7 @@ ___
 
 • **Y**? : *boolean*
 
-*Defined in [testbed/index.ts:47](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L47)*
+*Defined in [testbed/index.ts:47](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L47)*
 
 ___
 
@@ -338,7 +338,7 @@ ___
 
 • **Z**? : *boolean*
 
-*Defined in [testbed/index.ts:48](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L48)*
+*Defined in [testbed/index.ts:48](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L48)*
 
 ___
 
@@ -346,7 +346,7 @@ ___
 
 • **down**? : *boolean*
 
-*Defined in [testbed/index.ts:52](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L52)*
+*Defined in [testbed/index.ts:52](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L52)*
 
 ___
 
@@ -354,7 +354,7 @@ ___
 
 • **fire**? : *boolean*
 
-*Defined in [testbed/index.ts:53](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L53)*
+*Defined in [testbed/index.ts:53](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L53)*
 
 ___
 
@@ -362,7 +362,7 @@ ___
 
 • **left**? : *boolean*
 
-*Defined in [testbed/index.ts:50](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L50)*
+*Defined in [testbed/index.ts:50](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L50)*
 
 ___
 
@@ -370,7 +370,7 @@ ___
 
 • **right**? : *boolean*
 
-*Defined in [testbed/index.ts:49](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L49)*
+*Defined in [testbed/index.ts:49](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L49)*
 
 ___
 
@@ -378,4 +378,4 @@ ___
 
 • **up**? : *boolean*
 
-*Defined in [testbed/index.ts:51](https://github.com/shakiba/planck.js/blob/b8c946c/testbed/index.ts#L51)*
+*Defined in [testbed/index.ts:51](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L51)*

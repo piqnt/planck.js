@@ -31,7 +31,7 @@ Output for Distance.
 
 • **distance**: *number*
 
-*Defined in [src/collision/Distance.ts:70](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Distance.ts#L70)*
+*Defined in [src/collision/Distance.ts:70](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L70)*
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 • **iterations**: *number*
 
-*Defined in [src/collision/Distance.ts:71](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Distance.ts#L71)*
+*Defined in [src/collision/Distance.ts:71](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L71)*
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 • **pointA**: *[Vec2](vec2.md)* = Vec2.zero()
 
-*Defined in [src/collision/Distance.ts:68](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Distance.ts#L68)*
+*Defined in [src/collision/Distance.ts:68](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L68)*
 
 ___
 
@@ -55,4 +55,4 @@ ___
 
 • **pointB**: *[Vec2](vec2.md)* = Vec2.zero()
 
-*Defined in [src/collision/Distance.ts:69](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Distance.ts#L69)*
+*Defined in [src/collision/Distance.ts:69](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L69)*

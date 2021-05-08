@@ -45,7 +45,7 @@ Joint definitions are used to construct joints.
 
 • **collideConnected**? : *boolean*
 
-*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L68)*
+*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -56,6 +56,6 @@ ___
 
 • **userData**? : *any*
 
-*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L63)*
+*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

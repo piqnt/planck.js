@@ -38,7 +38,7 @@ not use a zero or short length.
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [src/dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L77)*
+*Defined in [src/dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L77)*
 
 The first attached body.
 
@@ -50,7 +50,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [src/dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L81)*
+*Defined in [src/dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L81)*
 
 The second attached body.
 
@@ -64,7 +64,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L68)*
+*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -77,7 +77,7 @@ ___
 
 *Inherited from [DistanceJointOpt](distancejointopt.md).[dampingRatio](distancejointopt.md#optional-dampingratio)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:49](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/DistanceJoint.ts#L49)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:49](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L49)*
 
 The damping ratio. 0 = no damping, 1 = critical damping.
 
@@ -89,7 +89,7 @@ ___
 
 *Inherited from [DistanceJointOpt](distancejointopt.md).[frequencyHz](distancejointopt.md#optional-frequencyhz)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:45](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/DistanceJoint.ts#L45)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:45](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L45)*
 
 The mass-spring-damper frequency in Hertz. A value of 0 disables softness.
 
@@ -101,7 +101,7 @@ ___
 
 *Inherited from [DistanceJointOpt](distancejointopt.md).[length](distancejointopt.md#optional-length)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:53](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/DistanceJoint.ts#L53)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:53](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L53)*
 
 Distance length.
 
@@ -111,7 +111,7 @@ ___
 
 • **localAnchorA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:66](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/DistanceJoint.ts#L66)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:66](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L66)*
 
 The local anchor point relative to bodyA's origin.
 
@@ -121,7 +121,7 @@ ___
 
 • **localAnchorB**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:70](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/joint/DistanceJoint.ts#L70)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:70](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L70)*
 
 The local anchor point relative to bodyB's origin.
 
@@ -135,6 +135,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/b8c946c/src/dynamics/Joint.ts#L63)*
+*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

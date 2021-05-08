@@ -27,7 +27,9 @@
 
 • **a**: *number*
 
-*Defined in [src/collision/Distance.ts:307](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Distance.ts#L307)*
+*Defined in [src/collision/Distance.ts:308](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L308)*
+
+barycentric coordinate for closest point
 
 ___
 
@@ -35,7 +37,9 @@ ___
 
 • **indexA**: *number*
 
-*Defined in [src/collision/Distance.ts:301](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Distance.ts#L301)*
+*Defined in [src/collision/Distance.ts:298](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L298)*
+
+wA index
 
 ___
 
@@ -43,7 +47,9 @@ ___
 
 • **indexB**: *number*
 
-*Defined in [src/collision/Distance.ts:304](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Distance.ts#L304)*
+*Defined in [src/collision/Distance.ts:303](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L303)*
+
+wB index
 
 ___
 
@@ -51,7 +57,9 @@ ___
 
 • **w**: *[Vec2](vec2.md)* = Vec2.zero()
 
-*Defined in [src/collision/Distance.ts:306](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Distance.ts#L306)*
+*Defined in [src/collision/Distance.ts:306](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L306)*
+
+wB - wA;
 
 ___
 
@@ -59,7 +67,9 @@ ___
 
 • **wA**: *[Vec2](vec2.md)* = Vec2.zero()
 
-*Defined in [src/collision/Distance.ts:300](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Distance.ts#L300)*
+*Defined in [src/collision/Distance.ts:296](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L296)*
+
+support point in proxyA
 
 ___
 
@@ -67,7 +77,9 @@ ___
 
 • **wB**: *[Vec2](vec2.md)* = Vec2.zero()
 
-*Defined in [src/collision/Distance.ts:303](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Distance.ts#L303)*
+*Defined in [src/collision/Distance.ts:301](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L301)*
+
+support point in proxyB
 
 ## Methods
 
@@ -75,7 +87,7 @@ ___
 
 ▸ **set**(`v`: any): *void*
 
-*Defined in [src/collision/Distance.ts:309](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Distance.ts#L309)*
+*Defined in [src/collision/Distance.ts:310](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L310)*
 
 **Parameters:**
 

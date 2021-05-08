@@ -15,7 +15,7 @@
 
 • **e_face**: = 1
 
-*Defined in [src/collision/Manifold.ts:38](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L38)*
+*Defined in [src/collision/Manifold.ts:38](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Manifold.ts#L38)*
 
 ___
 
@@ -23,4 +23,4 @@ ___
 
 • **e_vertex**: = 0
 
-*Defined in [src/collision/Manifold.ts:37](https://github.com/shakiba/planck.js/blob/b8c946c/src/collision/Manifold.ts#L37)*
+*Defined in [src/collision/Manifold.ts:37](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Manifold.ts#L37)*
