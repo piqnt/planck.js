@@ -125,6 +125,7 @@ export default abstract class Joint {
     this.m_userData = def.userData;
   }
 
+  /** @internal */
   static TYPES: { [id: string]: new (...args: any[]) => Joint; } = {};
 
   /** @internal */

@@ -17,20 +17,26 @@
  */
 
 export default class Pool<T> {
-  _list = [];
+  _list: T[] = [];
   _max = Infinity;
 
   _createFn: () => T;
-  _outFn: (T) => void;
-  _inFn: (T) => void;
-  _discardFn: (T) => T;
+  _outFn: (item: T) => void;
+  _inFn: (item: T) => void;
+  _discardFn: (item: T) => T;
 
   _createCount = 0;
   _outCount = 0;
   _inCount = 0;
   _discardCount = 0;
 
-  constructor(opts) {
+  constructor(opts: {
+    max?: number,
+    create?: () => T,
+    allocate?: (item: T) => void,
+    release?: (item: T) => void,
+    discard?: (item: T) => T,
+  }) {
     this._list = [];
     this._max = opts.max || this._max;
 
@@ -40,7 +46,7 @@ export default class Pool<T> {
     this._discardFn = opts.discard;
   }
 
-  max(n) {
+  max(n?: number) {
     if (typeof n === 'number') {
       this._max = n;
       return this;
@@ -53,7 +59,7 @@ export default class Pool<T> {
   }
 
   allocate(): T {
-    let item;
+    let item: T;
     if (this._list.length > 0) {
       item = this._list.shift();
     } else {
@@ -61,7 +67,8 @@ export default class Pool<T> {
       if (typeof this._createFn === 'function') {
         item = this._createFn();
       } else {
-        item = {};
+        // tslint:disable-next-line:no-object-literal-type-assertion
+        item = {} as T;
       }
     }
     this._outCount++;

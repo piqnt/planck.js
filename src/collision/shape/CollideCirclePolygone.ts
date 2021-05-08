@@ -30,6 +30,7 @@ import Contact from '../../dynamics/Contact';
 import CircleShape from './CircleShape';
 import PolygonShape from './PolygonShape';
 import { ContactFeatureType, ManifoldType } from "../Manifold";
+import Fixture from "../../dynamics/Fixture";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -37,13 +38,13 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
 
-function PolygonCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
+function PolygonCircleContact(manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) {
   _ASSERT && common.assert(fixtureA.getType() == PolygonShape.TYPE);
   _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
-  CollidePolygonCircle(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
+  CollidePolygonCircle(manifold, fixtureA.getShape() as PolygonShape, xfA, fixtureB.getShape() as CircleShape, xfB);
 }
 
-export function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
+export function CollidePolygonCircle(manifold, polygonA: PolygonShape, xfA: Transform, circleB: CircleShape, xfB: Transform) {
   manifold.pointCount = 0;
 
   // Compute circle position in the frame of the polygon.

@@ -128,6 +128,7 @@ export default class ChainShape extends Shape {
   // }
 
   /**
+   * @internal
    * Create a loop. This automatically adjusts connectivity.
    *
    * @param vertices an array of vertices, these are copied
@@ -158,6 +159,7 @@ export default class ChainShape extends Shape {
   }
 
   /**
+   * @internal
    * Create a chain with isolated end vertices.
    *
    * @param vertices an array of vertices, these are copied
@@ -185,6 +187,7 @@ export default class ChainShape extends Shape {
     return this;
   }
 
+  /** @internal */
   _reset() {
     if (this.m_isLoop) {
       this._createLoop(this.m_vertices);
@@ -212,6 +215,7 @@ export default class ChainShape extends Shape {
   }
 
   /**
+   * @internal
    * @deprecated Shapes should be treated as immutable.
    *
    * clone the concrete shape.
@@ -271,13 +275,17 @@ export default class ChainShape extends Shape {
     }
   }
 
+  isLoop() {
+    return this.m_isLoop;
+  }
+
   /**
    * Test a point for containment in this shape. This only works for convex
    * shapes.
    *
    * This always return false.
    *
-   * @param {Transform} xf The shape world transform.
+   * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
   testPoint(xf: Transform, p: Vec2): false {
@@ -287,9 +295,9 @@ export default class ChainShape extends Shape {
   /**
    * Cast a ray against a child shape.
    *
-   * @param {RayCastOutput} output The ray-cast results.
-   * @param {RayCastInput} input The ray-cast input parameters.
-   * @param {Transform} transform The transform to be applied to the shape.
+   * @param output The ray-cast results.
+   * @param input The ray-cast input parameters.
+   * @param xf The transform to be applied to the shape.
    * @param childIndex The child shape index
    */
   rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number) {
@@ -303,8 +311,8 @@ export default class ChainShape extends Shape {
    * Given a transform, compute the associated axis aligned bounding box for a
    * child shape.
    *
-   * @param {AABB} aabb Returns the axis aligned box.
-   * @param {Transform} xf The world transform of the shape.
+   * @param aabb Returns the axis aligned box.
+   * @param xf The world transform of the shape.
    * @param childIndex The child shape
    */
   computeAABB(aabb: AABB, xf: Transform, childIndex: number) {
@@ -322,7 +330,7 @@ export default class ChainShape extends Shape {
    *
    * Chains have zero mass.
    *
-   * @param {MassData} massData Returns the mass data for this shape.
+   * @param massData Returns the mass data for this shape.
    * @param density The density in kilograms per meter squared.
    */
   computeMass(massData: MassData, density?: number) {

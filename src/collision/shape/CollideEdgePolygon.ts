@@ -29,10 +29,11 @@ import Vec2 from '../../common/Vec2';
 import Rot from '../../common/Rot';
 import Settings from '../../Settings';
 import Contact from '../../dynamics/Contact';
-import { clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from '../Manifold';
+import Manifold, { clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from '../Manifold';
 import EdgeShape from './EdgeShape';
 import ChainShape from './ChainShape';
 import PolygonShape from './PolygonShape';
+import Fixture from "../../dynamics/Fixture";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -41,22 +42,22 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
 
-function EdgePolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
+function EdgePolygonContact(manifold: Manifold, xfA: Transform, fA: Fixture, indexA: number, xfB: Transform, fB: Fixture, indexB: number) {
   _ASSERT && common.assert(fA.getType() == EdgeShape.TYPE);
   _ASSERT && common.assert(fB.getType() == PolygonShape.TYPE);
 
-  CollideEdgePolygon(manifold, fA.getShape(), xfA, fB.getShape(), xfB);
+  CollideEdgePolygon(manifold, fA.getShape() as EdgeShape, xfA, fB.getShape() as PolygonShape, xfB);
 }
 
-function ChainPolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
+function ChainPolygonContact(manifold: Manifold, xfA: Transform, fA: Fixture, indexA: number, xfB: Transform, fB: Fixture, indexB: number) {
   _ASSERT && common.assert(fA.getType() == ChainShape.TYPE);
   _ASSERT && common.assert(fB.getType() == PolygonShape.TYPE);
 
-  const chain = fA.getShape();
+  const chain = fA.getShape() as ChainShape;
   const edge = new EdgeShape();
   chain.getChildEdge(edge, indexA);
 
-  CollideEdgePolygon(manifold, edge, xfA, fB.getShape(), xfB);
+  CollideEdgePolygon(manifold, edge, xfA, fB.getShape() as PolygonShape, xfB);
 }
 
 enum EPAxisType {
@@ -115,7 +116,7 @@ const rf = new ReferenceFace();
  * This function collides and edge and a polygon, taking into account edge
  * adjacency.
  */
-export function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
+export function CollideEdgePolygon(manifold, edgeA: EdgeShape, xfA: Transform, polygonB: PolygonShape, xfB: Transform) {
   // Algorithm:
   // 1. Classify v1 and v2
   // 2. Classify polygon centroid as front or back

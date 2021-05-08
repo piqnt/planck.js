@@ -25,7 +25,7 @@
 import common from '../util/common';
 import Vec2 from '../common/Vec2';
 import Math from '../common/Math';
-import AABB from './AABB';
+import AABB, { RayCastCallback, RayCastInput } from './AABB';
 import DynamicTree from './DynamicTree';
 import { FixtureProxy } from "../dynamics/Fixture";
 
@@ -114,7 +114,7 @@ export default class BroadPhase {
    * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
    * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
    */
-  rayCast(input, rayCastCallback) {
+  rayCast(input: RayCastInput, rayCastCallback: RayCastCallback) {
     this.m_tree.rayCast(input, rayCastCallback);
   }
 

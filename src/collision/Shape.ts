@@ -38,12 +38,14 @@ export default abstract class Shape {
   m_type: ShapeType;
   m_radius: number;
 
+  /** @internal */
   _reset() {
   }
 
   /** @internal */
   abstract _serialize(): object;
 
+  /** @internal */
   static TYPES: { [id: string]: new (...args: any[]) => Shape; } = {};
 
   /** @internal */
@@ -71,6 +73,7 @@ export default abstract class Shape {
   }
 
   /**
+   * @internal
    * @deprecated Shapes should be treated as immutable.
    *
    * clone the concrete shape.

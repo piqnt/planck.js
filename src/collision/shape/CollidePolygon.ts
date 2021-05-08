@@ -27,9 +27,10 @@ import Transform from '../../common/Transform';
 import Rot from '../../common/Rot';
 import Vec2 from '../../common/Vec2';
 import Settings from '../../Settings';
-import { clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from '../Manifold';
+import Manifold, { clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from '../Manifold';
 import Contact from '../../dynamics/Contact';
 import PolygonShape from './PolygonShape';
+import Fixture from "../../dynamics/Fixture";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -37,10 +38,10 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
 
-function PolygonContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
+function PolygonContact(manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) {
   _ASSERT && common.assert(fixtureA.getType() == PolygonShape.TYPE);
   _ASSERT && common.assert(fixtureB.getType() == PolygonShape.TYPE);
-  CollidePolygons(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
+  CollidePolygons(manifold, fixtureA.getShape() as PolygonShape, xfA, fixtureB.getShape() as PolygonShape, xfB);
 }
 
 interface MaxSeparation {
@@ -142,7 +143,7 @@ const maxSeparation = {
  *
  * The normal points from 1 to 2
  */
-export function CollidePolygons(manifold, polyA: PolygonShape, xfA: Transform, polyB: PolygonShape, xfB: Transform) {
+export function CollidePolygons(manifold: Manifold, polyA: PolygonShape, xfA: Transform, polyB: PolygonShape, xfB: Transform) {
   manifold.pointCount = 0;
   const totalRadius = polyA.m_radius + polyB.m_radius;
 

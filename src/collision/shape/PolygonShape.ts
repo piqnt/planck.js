@@ -47,8 +47,8 @@ export default class PolygonShape extends Shape {
   static TYPE = 'polygon' as 'polygon';
 
   m_centroid: Vec2;
-  m_vertices: Vec2[]; // Vec2[Settings.maxPolygonVertices]
-  m_normals: Vec2[]; // Vec2[Settings.maxPolygonVertices]
+  m_vertices: Vec2[]; // [Settings.maxPolygonVertices]
+  m_normals: Vec2[]; // [Settings.maxPolygonVertices]
   m_count: number;
 
   // @ts-ignore
@@ -63,8 +63,8 @@ export default class PolygonShape extends Shape {
     this.m_type = PolygonShape.TYPE;
     this.m_radius = Settings.polygonRadius;
     this.m_centroid = Vec2.zero();
-    this.m_vertices = []; // Vec2[Settings.maxPolygonVertices]
-    this.m_normals = []; // Vec2[Settings.maxPolygonVertices]
+    this.m_vertices = [];
+    this.m_normals = [];
     this.m_count = 0;
 
     if (vertices && vertices.length) {
@@ -100,6 +100,7 @@ export default class PolygonShape extends Shape {
   }
 
   /**
+   * @internal
    * @deprecated Shapes should be treated as immutable.
    *
    * clone the concrete shape.
@@ -126,6 +127,7 @@ export default class PolygonShape extends Shape {
     return 1;
   }
 
+  /** @internal */
   _reset() {
     this._set(this.m_vertices);
   }
@@ -254,11 +256,7 @@ export default class PolygonShape extends Shape {
     this.m_centroid = ComputeCentroid(this.m_vertices, m);
   }
 
-  /**
-   * @internal
-   */
-  _setAsBox(hx: number, hy: number, center: Vec2, angle?: number): void;
-  _setAsBox(hx: number, hy: number): void;
+  /** @internal */
   _setAsBox(hx: number, hy: number, center?: Vec2, angle?: number) {
     // start with right-bottom, counter-clockwise, as in Gift wrapping algorithm in PolygonShape._set()
     this.m_vertices[0] = Vec2.neo(hx, -hy);
@@ -294,7 +292,7 @@ export default class PolygonShape extends Shape {
    * Test a point for containment in this shape. This only works for convex
    * shapes.
    *
-   * @param {Transform} xf The shape world transform.
+   * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
   testPoint(xf: Transform, p: Vec2) {
@@ -408,7 +406,7 @@ export default class PolygonShape extends Shape {
    * Compute the mass properties of this shape using its dimensions and density.
    * The inertia tensor is computed about the local origin.
    *
-   * @param {MassData} massData Returns the mass data for this shape.
+   * @param massData Returns the mass data for this shape.
    * @param density The density in kilograms per meter squared.
    */
   computeMass(massData: MassData, density: number) {

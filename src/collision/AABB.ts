@@ -40,6 +40,8 @@ export interface RayCastInput {
   maxFraction: number;
 }
 
+export type RayCastCallback = (subInput: RayCastInput, id: number) => number;
+
 /**
  * Ray-cast output data. The ray hits at `p1 + fraction * (p2 - p1)`,
  * where `p1` and `p2` come from RayCastInput.
@@ -206,7 +208,7 @@ export default class AABB {
 
     const normal = Vec2.zero();
 
-    for (let f = 'x'; f !== null; f = (f === 'x' ? 'y' : null)) {
+    for (let f: 'x' | 'y' = 'x'; f !== null; f = (f === 'x' ? 'y' : null)) {
       if (absD.x < Math.EPSILON) {
         // Parallel.
         if (p[f] < this.lowerBound[f] || this.upperBound[f] < p[f]) {

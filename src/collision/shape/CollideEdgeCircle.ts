@@ -29,7 +29,8 @@ import Contact from '../../dynamics/Contact';
 import EdgeShape from './EdgeShape';
 import ChainShape from './ChainShape';
 import CircleShape from './CircleShape';
-import { ContactFeatureType, ManifoldType } from "../Manifold";
+import Manifold, { ContactFeatureType, ManifoldType } from "../Manifold";
+import Fixture from "../../dynamics/Fixture";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -38,34 +39,33 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
 
-function EdgeCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
+function EdgeCircleContact(manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) {
   _ASSERT && common.assert(fixtureA.getType() == EdgeShape.TYPE);
   _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
 
-  const shapeA = fixtureA.getShape();
-  const shapeB = fixtureB.getShape();
+  const shapeA = fixtureA.getShape() as EdgeShape;
+  const shapeB = fixtureB.getShape() as CircleShape;
 
   CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
 }
 
-function ChainCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB,
-    indexB) {
+function ChainCircleContact(manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) {
   _ASSERT && common.assert(fixtureA.getType() == ChainShape.TYPE);
   _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
 
-  const chain = fixtureA.getShape();
+  const chain = fixtureA.getShape() as ChainShape;
   const edge = new EdgeShape();
   chain.getChildEdge(edge, indexA);
 
   const shapeA = edge;
-  const shapeB = fixtureB.getShape();
+  const shapeB = fixtureB.getShape() as CircleShape;
 
   CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
 }
 
 // Compute contact points for edge versus circle.
 // This accounts for edge connectivity.
-export function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
+export function CollideEdgeCircle(manifold: Manifold, edgeA: EdgeShape, xfA: Transform, circleB: CircleShape, xfB: Transform) {
   manifold.pointCount = 0;
 
   // Compute circle in frame of edge

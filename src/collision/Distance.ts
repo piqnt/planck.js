@@ -245,16 +245,14 @@ export class DistanceProxy {
   /**
    * Get the vertex count.
    */
-  getVertexCount(): number;
-  getVertexCount() {
+  getVertexCount(): number {
     return this.m_count;
   }
 
   /**
    * Get a vertex by index. Used by Distance.
    */
-  getVertex(index: number): Vec2;
-  getVertex(index) {
+  getVertex(index: number): Vec2 {
     _ASSERT && common.assert(0 <= index && index < this.m_count);
     return this.m_vertices[index];
   }
@@ -262,8 +260,7 @@ export class DistanceProxy {
   /**
    * Get the supporting vertex index in the given direction.
    */
-  getSupport(d: Vec2): number;
-  getSupport(d) {
+  getSupport(d: Vec2): number {
     let bestIndex = 0;
     let bestValue = Vec2.dot(this.m_vertices[0], d);
     for (let i = 0; i < this.m_count; ++i) {
@@ -279,8 +276,7 @@ export class DistanceProxy {
   /**
    * Get the supporting vertex in the given direction.
    */
-  getSupportVertex(d: Vec2): Vec2;
-  getSupportVertex(d) {
+  getSupportVertex(d: Vec2): Vec2 {
     return this.m_vertices[this.getSupport(d)];
   }
 
@@ -288,8 +284,7 @@ export class DistanceProxy {
    * Initialize the proxy using the given shape. The shape must remain in scope
    * while the proxy is in use.
    */
-  set(shape: Shape, index: number): void;
-  set(shape, index) {
+  set(shape: Shape, index: number): void {
     // TODO remove, use shape instead
     _ASSERT && common.assert(typeof shape.computeDistanceProxy === 'function');
     shape.computeDistanceProxy(this, index);
@@ -297,14 +292,20 @@ export class DistanceProxy {
 }
 
 class SimplexVertex {
-  wA: Vec2 = Vec2.zero(); // support point in proxyA
-  indexA: number; // wA index
+  /** support point in proxyA */
+  wA: Vec2 = Vec2.zero();
+  /** wA index */
+  indexA: number;
 
-  wB: Vec2 = Vec2.zero(); // support point in proxyB
-  indexB: number; // wB index
+  /** support point in proxyB */
+  wB: Vec2 = Vec2.zero();
+  /** wB index */
+  indexB: number;
 
-  w: Vec2 = Vec2.zero(); // wB - wA;
-  a: number; // barycentric coordinate for closest point
+  /** wB - wA; */
+  w: Vec2 = Vec2.zero();
+  /** barycentric coordinate for closest point */
+  a: number;
 
   set(v) {
     this.indexA = v.indexA;
@@ -330,6 +331,8 @@ class Simplex {
     this.m_v = [ this.m_v1, this.m_v2, this.m_v3 ];
     this.m_count;
   }
+
+  /** @internal */
   print() {
     if (this.m_count === 3) {
       return ["+" + this.m_count,
@@ -354,8 +357,7 @@ class Simplex {
     }
   }
 
-// (SimplexCache, DistanceProxy, ...)
-  readCache(cache, proxyA, transformA, proxyB, transformB) {
+  readCache(cache: SimplexCache, proxyA: DistanceProxy, transformA: Transform, proxyB: DistanceProxy, transformB: Transform) {
     _ASSERT && common.assert(cache.count <= 3);
 
     // Copy data from cache.

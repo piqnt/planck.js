@@ -27,11 +27,13 @@ import common from '../util/common';
 import Pool from '../util/Pool';
 import Vec2 from '../common/Vec2';
 import Math from '../common/Math';
-import AABB, { RayCastInput } from './AABB';
+import AABB, { RayCastCallback, RayCastInput } from './AABB';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
+
+export type DynamicTreeQueryCallback = (nodeId: number) => boolean;
 
 /**
  * A node in the dynamic tree. The client does not interact with this directly.
@@ -744,7 +746,7 @@ export default class DynamicTree<T> {
    * Query an AABB for overlapping proxies. The callback class is called for each
    * proxy that overlaps the supplied AABB.
    */
-  query(aabb: AABB, queryCallback: (nodeId: number) => boolean): void {
+  query(aabb: AABB, queryCallback: DynamicTreeQueryCallback): void {
     _ASSERT && common.assert(typeof queryCallback === 'function');
     const stack = this.stackPool.allocate();
 
@@ -781,7 +783,7 @@ export default class DynamicTree<T> {
    * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
    * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
    */
-  rayCast(input: RayCastInput, rayCastCallback: (subInput: RayCastInput, id: number) => number): void {
+  rayCast(input: RayCastInput, rayCastCallback: RayCastCallback): void {
     // TODO: GC
     _ASSERT && common.assert(typeof rayCastCallback === 'function');
     const p1 = input.p1;
@@ -856,7 +858,8 @@ export default class DynamicTree<T> {
 
   private inputPool = new Pool<RayCastInput>({
     create() {
-      return {};
+      // tslint:disable-next-line:no-object-literal-type-assertion
+      return {} as RayCastInput;
     },
     release(stack) {
     }

@@ -132,6 +132,7 @@ export default class EdgeShape extends Shape {
   }
 
   /**
+   * @internal
    * @deprecated Shapes should be treated as immutable.
    *
    * clone the concrete shape.
@@ -160,7 +161,7 @@ export default class EdgeShape extends Shape {
    * Test a point for containment in this shape. This only works for convex
    * shapes.
    *
-   * @param {Transform} xf The shape world transform.
+   * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
   testPoint(xf: Transform, p: Vec2): false {
@@ -170,16 +171,17 @@ export default class EdgeShape extends Shape {
   /**
    * Cast a ray against a child shape.
    *
-   * @param {RayCastOutput} output The ray-cast results.
-   * @param {RayCastInput} input The ray-cast input parameters.
-   * @param {Transform} transform The transform to be applied to the shape.
+   * @param output The ray-cast results.
+   * @param input The ray-cast input parameters.
+   * @param xf The transform to be applied to the shape.
    * @param childIndex The child shape index
    */
-  // p = p1 + t * d
-  // v = v1 + s * e
-  // p1 + t * d = v1 + s * e
-  // s * e - t * d = p1 - v1
   rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number) {
+    // p = p1 + t * d
+    // v = v1 + s * e
+    // p1 + t * d = v1 + s * e
+    // s * e - t * d = p1 - v1
+
     // NOT_USED(childIndex);
 
     // Put the ray into the edge's frame of reference.
@@ -236,8 +238,8 @@ export default class EdgeShape extends Shape {
    * Given a transform, compute the associated axis aligned bounding box for a
    * child shape.
    *
-   * @param {AABB} aabb Returns the axis aligned box.
-   * @param {Transform} xf The world transform of the shape.
+   * @param aabb Returns the axis aligned box.
+   * @param xf The world transform of the shape.
    * @param childIndex The child shape
    */
   computeAABB(aabb: AABB, xf: Transform, childIndex: number) {
@@ -252,7 +254,7 @@ export default class EdgeShape extends Shape {
    * Compute the mass properties of this shape using its dimensions and density.
    * The inertia tensor is computed about the local origin.
    *
-   * @param {MassData} massData Returns the mass data for this shape.
+   * @param massData Returns the mass data for this shape.
    * @param density The density in kilograms per meter squared.
    */
   computeMass(massData: MassData, density?: number) {

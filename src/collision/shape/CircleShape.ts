@@ -39,7 +39,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 export default class CircleShape extends Shape {
   static TYPE = 'circle' as 'circle';
 
-  private m_p: Vec2;
+  m_p: Vec2;
 
   constructor(position: Vec2, radius?: number);
   constructor(radius?: number);
@@ -97,6 +97,7 @@ export default class CircleShape extends Shape {
   }
 
   /**
+   * @internal
    * @deprecated Shapes should be treated as immutable.
    *
    * clone the concrete shape.
@@ -120,7 +121,7 @@ export default class CircleShape extends Shape {
    * Test a point for containment in this shape. This only works for convex
    * shapes.
    *
-   * @param {Transform} xf The shape world transform.
+   * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
   testPoint(xf: Transform, p: Vec2) {
@@ -132,16 +133,16 @@ export default class CircleShape extends Shape {
   /**
    * Cast a ray against a child shape.
    *
-   * @param {RayCastOutput} output The ray-cast results.
-   * @param {RayCastInput} input The ray-cast input parameters.
-   * @param {Transform} transform The transform to be applied to the shape.
+   * @param output The ray-cast results.
+   * @param input The ray-cast input parameters.
+   * @param xf The transform to be applied to the shape.
    * @param childIndex The child shape index
    */
-  // Collision Detection in Interactive 3D Environments by Gino van den Bergen
-  // From Section 3.1.2
-  // x = s + a * r
-  // norm(x) = radius
   rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number) {
+    // Collision Detection in Interactive 3D Environments by Gino van den Bergen
+    // From Section 3.1.2
+    // x = s + a * r
+    // norm(x) = radius
 
     const position = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
     const s = Vec2.sub(input.p1, position);
@@ -177,8 +178,8 @@ export default class CircleShape extends Shape {
    * Given a transform, compute the associated axis aligned bounding box for a
    * child shape.
    *
-   * @param {AABB} aabb Returns the axis aligned box.
-   * @param {Transform} xf The world transform of the shape.
+   * @param aabb Returns the axis aligned box.
+   * @param xf The world transform of the shape.
    * @param childIndex The child shape
    */
   computeAABB(aabb: AABB, xf: Transform, childIndex: number) {
@@ -191,7 +192,7 @@ export default class CircleShape extends Shape {
    * Compute the mass properties of this shape using its dimensions and density.
    * The inertia tensor is computed about the local origin.
    *
-   * @param {MassData} massData Returns the mass data for this shape.
+   * @param massData Returns the mass data for this shape.
    * @param density The density in kilograms per meter squared.
    */
   computeMass(massData: MassData, density: number) {
