@@ -36,31 +36,31 @@ planck.testbed('EdgeTest', function(testbed) {
   var v7 = Vec2(10.0, 0.0);
 
   var shape1 = pl.Edge(v1, v2);
-  shape1.setNext(v3);
+  shape1.setNextVertex(v3);
   ground.createFixture(shape1, 0.0);
 
   var shape2 = pl.Edge(v2, v3);
-  shape2.setPrev(v1);
-  shape2.setNext(v4);
+  shape2.setPrevVertex(v1);
+  shape2.setNextVertex(v4);
   ground.createFixture(shape2, 0.0);
 
   var shape3 = pl.Edge(v3, v4);
-  shape3.setPrev(v2);
-  shape3.setNext(v5);
+  shape3.setPrevVertex(v2);
+  shape3.setNextVertex(v5);
   ground.createFixture(shape3, 0.0);
 
   var shape4 = pl.Edge(v4, v5);
-  shape4.setPrev(v3);
-  shape4.setNext(v6);
+  shape4.setPrevVertex(v3);
+  shape4.setNextVertex(v6);
   ground.createFixture(shape4, 0.0);
 
   var shape5 = pl.Edge(v5, v6);
-  shape5.setPrev(v4);
-  shape5.setNext(v7);
+  shape5.setPrevVertex(v4);
+  shape5.setNextVertex(v7);
   ground.createFixture(shape5, 0.0);
 
   var shape6 = pl.Edge(v6, v7);
-  shape6.setPrev(v5);
+  shape6.setPrevVertex(v5);
   ground.createFixture(shape6, 0.0);
 
   world.createBody({

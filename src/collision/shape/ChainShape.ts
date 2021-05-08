@@ -205,6 +205,10 @@ export default class ChainShape extends Shape {
     this.m_hasPrevVertex = true;
   }
 
+  getPrevVertex() {
+    return this.m_prevVertex;
+  }
+
   /**
    * Establish connectivity to a vertex that follows the last vertex. Don't call
    * this for loops.
@@ -212,6 +216,10 @@ export default class ChainShape extends Shape {
   setNextVertex(nextVertex: Vec2) {
     this.m_nextVertex = nextVertex;
     this.m_hasNextVertex = true;
+  }
+
+  getNextVertex() {
+    return this.m_nextVertex;
   }
 
   /**

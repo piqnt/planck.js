@@ -90,17 +90,25 @@ export default class EdgeShape extends Shape {
   static _deserialize(data) {
     const shape = new EdgeShape(data.vertex1, data.vertex2);
     if (shape.m_hasVertex0) {
-      shape.setPrev(data.vertex0);
+      shape.setPrevVertex(data.vertex0);
     }
     if (shape.m_hasVertex3) {
-      shape.setNext(data.vertex3);
+      shape.setNextVertex(data.vertex3);
     }
     return shape;
   }
 
-  setNext(v3?: Vec2) {
-    if (v3) {
-      this.m_vertex3.set(v3);
+  /** @internal @deprecated */
+  setNext(v?: Vec2) {
+    return this.setNextVertex(v);
+  }
+
+  /**
+   * Optional next vertex, used for smooth collision.
+   */
+  setNextVertex(v?: Vec2) {
+    if (v) {
+      this.m_vertex3.set(v);
       this.m_hasVertex3 = true;
     } else {
       this.m_vertex3.setZero();
@@ -109,15 +117,37 @@ export default class EdgeShape extends Shape {
     return this;
   }
 
-  setPrev(v0?: Vec2) {
-    if (v0) {
-      this.m_vertex0.set(v0);
+  /**
+   * Optional next vertex, used for smooth collision.
+   */
+  getNextVertex() {
+    return this.m_vertex3;
+  }
+
+  /** @internal @deprecated */
+  setPrev(v?: Vec2) {
+    this.setPrevVertex(v);
+  }
+
+  /**
+   * Optional prev vertex, used for smooth collision.
+   */
+  setPrevVertex(v?: Vec2) {
+    if (v) {
+      this.m_vertex0.set(v);
       this.m_hasVertex0 = true;
     } else {
       this.m_vertex0.setZero();
       this.m_hasVertex0 = false;
     }
     return this;
+  }
+
+  /**
+   * Optional prev vertex, used for smooth collision.
+   */
+  getPrevVertex() {
+    return this.m_vertex0;
   }
 
   /**
