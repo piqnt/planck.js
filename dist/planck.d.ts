@@ -1,4 +1,5 @@
-declare namespace Serializer$0 {
+declare function Serializer(opts?: any): void;
+declare namespace Serializer {
     var toJson: any;
     var fromJson: any;
 }
@@ -3828,4 +3829,4 @@ declare class TOIOutput {
 declare function TimeOfImpact(output: TOIOutput, input: TOIInput): void;
 /** @deprecated Merged with main namespace */
 declare const internal: {};
-export { Serializer$0 as Serializer, math as Math, Vec2, Vec3, Mat22, Mat33, Transform, Rot, AABB, Shape, Fixture, Body, Contact, Joint, World, CircleShape as Circle, EdgeShape as Edge, PolygonShape as Polygon, ChainShape as Chain, BoxShape as Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJoint, FrictionJoint, GearJoint, MotorJoint, MouseJoint, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, WeldJoint, WheelJoint, Settings, Sweep, Manifold, Distance, TimeOfImpact, DynamicTree, internal };
+export { Serializer, math as Math, Vec2, Vec3, Mat22, Mat33, Transform, Rot, AABB, Shape, Fixture, Body, Contact, Joint, World, CircleShape as Circle, EdgeShape as Edge, PolygonShape as Polygon, ChainShape as Chain, BoxShape as Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJoint, FrictionJoint, GearJoint, MotorJoint, MouseJoint, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, WeldJoint, WheelJoint, Settings, Sweep, Manifold, Distance, TimeOfImpact, DynamicTree, internal };
