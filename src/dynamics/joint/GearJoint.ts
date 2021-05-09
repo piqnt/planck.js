@@ -28,11 +28,11 @@ import Settings from '../../Settings';
 import Math from '../../common/Math';
 import Vec2 from '../../common/Vec2';
 import Rot from '../../common/Rot';
-import Joint from '../Joint';
-import { JointOpt, JointDef } from '../Joint';
+import Joint, { JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
 import RevoluteJoint from './RevoluteJoint';
 import PrismaticJoint from './PrismaticJoint';
+import { TimeStep } from "../Solver";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -99,26 +99,27 @@ export default class GearJoint extends Joint {
   /** @internal */ m_ratio: number;
   /** @internal */ m_constant: number;
   /** @internal */ m_impulse: number;
+
   // Solver temp
-  /** @internal */ m_lcA;
-  /** @internal */ m_lcB;
-  /** @internal */ m_lcC;
-  /** @internal */ m_lcD; // Vec2
-  /** @internal */ m_mA;
-  /** @internal */ m_mB;
-  /** @internal */ m_mC;
-  /** @internal */ m_mD; // float
-  /** @internal */ m_iA;
-  /** @internal */ m_iB;
-  /** @internal */ m_iC;
-  /** @internal */ m_iD; // float
-  /** @internal */ m_JvAC;
-  /** @internal */ m_JvBD; // Vec2
-  /** @internal */ m_JwA;
-  /** @internal */ m_JwB;
-  /** @internal */ m_JwC;
-  /** @internal */ m_JwD; // float
-  /** @internal */ m_mass; // float
+  /** @internal */ m_lcA: Vec2;
+  /** @internal */ m_lcB: Vec2;
+  /** @internal */ m_lcC: Vec2;
+  /** @internal */ m_lcD: Vec2;
+  /** @internal */ m_mA: number;
+  /** @internal */ m_mB: number;
+  /** @internal */ m_mC: number;
+  /** @internal */ m_mD: number;
+  /** @internal */ m_iA: number;
+  /** @internal */ m_iB: number;
+  /** @internal */ m_iC: number;
+  /** @internal */ m_iD: number;
+  /** @internal */ m_JvAC: Vec2;
+  /** @internal */ m_JvBD: Vec2;
+  /** @internal */ m_JwA: number;
+  /** @internal */ m_JwB: number;
+  /** @internal */ m_JwC: number;
+  /** @internal */ m_JwD: number;
+  /** @internal */ m_mass: number;
 
   constructor(def: GearJointDef);
   constructor(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number);
@@ -150,7 +151,8 @@ export default class GearJoint extends Joint {
     // joint1 connects body A to body C
     // joint2 connects body B to body D
 
-    let coordinateA, coordinateB; // float
+    let coordinateA: number;
+    let coordinateB: number;
 
     // TODO_ERIN there might be some problem with the joint edges in Joint.
 
@@ -216,14 +218,6 @@ export default class GearJoint extends Joint {
 
     this.m_impulse = 0.0;
 
-    // Solver temp
-    this.m_lcA, this.m_lcB, this.m_lcC, this.m_lcD; // Vec2
-    this.m_mA, this.m_mB, this.m_mC, this.m_mD; // float
-    this.m_iA, this.m_iB, this.m_iC, this.m_iD; // float
-    this.m_JvAC, this.m_JvBD; // Vec2
-    this.m_JwA, this.m_JwB, this.m_JwC, this.m_JwD; // float
-    this.m_mass; // float
-
     // Gear Joint:
     // C0 = (coordinate1 + ratio * coordinate2)_initial
     // C = (coordinate1 + ratio * coordinate2) - C0 = 0
@@ -245,7 +239,7 @@ export default class GearJoint extends Joint {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     return {
       type: this.m_type,
       bodyA: this.m_bodyA,
@@ -261,6 +255,7 @@ export default class GearJoint extends Joint {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data, world, restore) {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
@@ -275,21 +270,21 @@ export default class GearJoint extends Joint {
   /**
    * Get the first joint.
    */
-  getJoint1() {
+  getJoint1(): Joint {
     return this.m_joint1;
   }
 
   /**
    * Get the second joint.
    */
-  getJoint2() {
+  getJoint2(): Joint {
     return this.m_joint2;
   }
 
   /**
    * Set the gear ratio.
    */
-  setRatio(ratio) {
+  setRatio(ratio: number): void {
     _ASSERT && common.assert(Math.isFinite(ratio));
     this.m_ratio = ratio;
   }
@@ -297,40 +292,40 @@ export default class GearJoint extends Joint {
   /**
    * Get the gear ratio.
    */
-  getRatio() {
+  getRatio(): number {
     return this.m_ratio;
   }
 
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA() {
+  getAnchorA(): Vec2 {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB() {
+  getAnchorB(): Vec2 {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt) {
+  getReactionForce(inv_dt: number): Vec2 {
     return Vec2.mul(this.m_impulse, this.m_JvAC).mul(inv_dt);
   }
 
   /**
    * Get the reaction torque on bodyB in N*m.
    */
-  getReactionTorque(inv_dt) {
+  getReactionTorque(inv_dt: number): number {
     const L = this.m_impulse * this.m_JwA; // float
     return inv_dt * L;
   }
 
-  initVelocityConstraints(step) {
+  initVelocityConstraints(step: TimeStep): void {
     this.m_lcA = this.m_bodyA.m_sweep.localCenter;
     this.m_lcB = this.m_bodyB.m_sweep.localCenter;
     this.m_lcC = this.m_bodyC.m_sweep.localCenter;
@@ -427,7 +422,7 @@ export default class GearJoint extends Joint {
     this.m_bodyD.c_velocity.w = wD;
   }
 
-  solveVelocityConstraints(step) {
+  solveVelocityConstraints(step: TimeStep): void {
     const vA = this.m_bodyA.c_velocity.v;
     let wA = this.m_bodyA.c_velocity.w;
     const vB = this.m_bodyB.c_velocity.v;
@@ -467,7 +462,7 @@ export default class GearJoint extends Joint {
   /**
    * This returns true if the position errors are within tolerance.
    */
-  solvePositionConstraints(step) {
+  solvePositionConstraints(step: TimeStep): boolean {
     const cA = this.m_bodyA.c_position.c;
     let aA = this.m_bodyA.c_position.a;
     const cB = this.m_bodyB.c_position.c;
@@ -482,13 +477,18 @@ export default class GearJoint extends Joint {
     const qC = Rot.neo(aC);
     const qD = Rot.neo(aD);
 
-    const linearError = 0.0; // float
+    const linearError = 0.0;
 
-    let coordinateA, coordinateB; // float
+    let coordinateA: number;
+    let coordinateB: number;
 
-    let JvAC, JvBD; // Vec2
-    let JwA, JwB, JwC, JwD; // float
-    let mass = 0.0; // float
+    let JvAC: Vec2;
+    let JvBD: Vec2;
+    let JwA: number;
+    let JwB: number;
+    let JwC: number;
+    let JwD: number;
+    let mass = 0.0;
 
     if (this.m_type1 == RevoluteJoint.TYPE) {
       JvAC = Vec2.zero();

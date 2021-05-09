@@ -30,7 +30,7 @@ import Solver, { ContactImpulse, TimeStep } from './Solver';
 import Body, { BodyDef } from './Body';
 import Joint from './Joint';
 import Contact from './Contact';
-import AABB, { RayCastOutput } from "../collision/AABB";
+import AABB, { RayCastInput, RayCastOutput } from "../collision/AABB";
 import Fixture, { FixtureProxy } from "./Fixture";
 import Manifold from "../collision/Manifold";
 
@@ -169,7 +169,7 @@ export default class World {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     const bodies = [];
     const joints = [];
 
@@ -192,6 +192,7 @@ export default class World {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data, context, restore) {
     if (!data) {
       return new World();
@@ -360,7 +361,7 @@ export default class World {
    * auto clearing of forces and instead call clearForces after all sub-steps are
    * complete in one pass of your game loop.
    *
-   * @see setAutoClearForces
+   * Ssee World#setAutoClearForces
    */
   clearForces(): void {
     for (let body = this.m_bodyList; body; body = body.getNext()) {
@@ -378,14 +379,13 @@ export default class World {
   queryAABB(aabb: AABB, callback: WorldAABBQueryCallback): void {
     _ASSERT && common.assert(typeof callback === 'function');
     const broadPhase = this.m_broadPhase;
-    this.m_broadPhase.query(aabb, function(proxyId) { // TODO GC
+    this.m_broadPhase.query(aabb, function(proxyId: number): boolean { // TODO GC
       const proxy = broadPhase.getUserData(proxyId);
       return callback(proxy.fixture);
     });
   }
 
   /**
-   *
    * Ray-cast the world for all fixtures in the path of the ray. Your callback
    * controls whether you get the closest point, any point, or n-points. The
    * ray-cast ignores shapes that contain the starting point.
@@ -402,11 +402,12 @@ export default class World {
       maxFraction : 1.0,
       p1 : point1,
       p2 : point2
-    }, function(input, proxyId) { // TODO GC
+    }, function(input: RayCastInput, proxyId: number): number { // TODO GC
       const proxy = broadPhase.getUserData(proxyId);
       const fixture = proxy.fixture;
       const index = proxy.childIndex;
-      const output = {} as RayCastOutput; // TODO GC
+      // @ts-ignore
+      const output: RayCastOutput = {}; // TODO GC
       const hit = fixture.rayCast(output, input, index);
       if (hit) {
         const fraction = output.fraction;
@@ -474,7 +475,7 @@ export default class World {
   /**
    * @internal Used for deserialize.
    */
-  _addBody(body) {
+  _addBody(body: Body): void {
     _ASSERT && common.assert(this.isLocked() === false);
     if (this.isLocked()) {
       return;
@@ -498,6 +499,7 @@ export default class World {
    */
   createBody(def?: BodyDef): Body;
   createBody(position: Vec2, angle?: number): Body;
+  // tslint:disable-next-line:typedef
   createBody(arg1?, arg2?) {
     _ASSERT && common.assert(this.isLocked() == false);
     if (this.isLocked()) {
@@ -519,6 +521,7 @@ export default class World {
 
   createDynamicBody(def?: BodyDef): Body;
   createDynamicBody(position: Vec2, angle?: number): Body;
+  // tslint:disable-next-line:typedef
   createDynamicBody(arg1?, arg2?) {
     let def: BodyDef = {};
     if (!arg1) {
@@ -533,6 +536,7 @@ export default class World {
 
   createKinematicBody(def?: BodyDef): Body;
   createKinematicBody(position: Vec2, angle?: number): Body;
+  // tslint:disable-next-line:typedef
   createKinematicBody(arg1?, arg2?) {
     let def: BodyDef = {};
     if (!arg1) {
@@ -991,16 +995,67 @@ export default class World {
   }
 
 
+  /**
+   * Called when two fixtures begin to touch.
+   *
+   * Implement contact callbacks to get contact information. You can use these
+   * results for things like sounds and game logic. You can also get contact
+   * results by traversing the contact lists after the time step. However, you
+   * might miss some contacts because continuous physics leads to sub-stepping.
+   * Additionally you may receive multiple callbacks for the same contact in a
+   * single time step. You should strive to make your callbacks efficient because
+   * there may be many callbacks per time step.
+   *
+   * Warning: You cannot create/destroy world entities inside these callbacks.
+   */
   on(name: 'begin-contact', listener: (contact: Contact) => void): World;
+  /**
+   * Called when two fixtures cease to touch.
+   *
+   * Implement contact callbacks to get contact information. You can use these
+   * results for things like sounds and game logic. You can also get contact
+   * results by traversing the contact lists after the time step. However, you
+   * might miss some contacts because continuous physics leads to sub-stepping.
+   * Additionally you may receive multiple callbacks for the same contact in a
+   * single time step. You should strive to make your callbacks efficient because
+   * there may be many callbacks per time step.
+   *
+   * Warning: You cannot create/destroy world entities inside these callbacks.
+   */
   on(name: 'end-contact', listener: (contact: Contact) => void): World;
+  /**
+   * This is called after a contact is updated. This allows you to inspect a
+   * contact before it goes to the solver. If you are careful, you can modify the
+   * contact manifold (e.g. disable contact). A copy of the old manifold is
+   * provided so that you can detect changes. Note: this is called only for awake
+   * bodies. Note: this is called even when the number of contact points is zero.
+   * Note: this is not called for sensors. Note: if you set the number of contact
+   * points to zero, you will not get an endContact callback. However, you may get
+   * a beginContact callback the next step.
+   *
+   * Warning: You cannot create/destroy world entities inside these callbacks.
+   */
   on(name: 'pre-solve', listener: (contact: Contact, oldManifold: Manifold) => void): World;
+  /**
+   * This lets you inspect a contact after the solver is finished. This is useful
+   * for inspecting impulses. Note: the contact manifold does not include time of
+   * impact impulses, which can be arbitrarily large if the sub-step is small.
+   * Hence the impulse is provided explicitly in a separate data structure. Note:
+   * this is only called for contacts that are touching, solid, and awake.
+   *
+   * Warning: You cannot create/destroy world entities inside these callbacks.
+   */
   on(name: 'post-solve', listener: (contact: Contact, impulse: ContactImpulse) => void): World;
+  /** Listener is called whenever a body is removed. */
   on(name: 'remove-body', listener: (body: Body) => void): World;
+  /** Listener is called whenever a joint is removed implicitly or explicitly. */
   on(name: 'remove-joint', listener: (joint: Joint) => void): World;
+  /** Listener is called whenever a fixture is removed implicitly or explicitly. */
   on(name: 'remove-fixture', listener: (fixture: Fixture) => void): World;
   /**
    * Register an event listener.
    */
+  // tslint:disable-next-line:typedef
   on(name, listener) {
     if (typeof name !== 'string' || typeof listener !== 'function') {
       return this;
@@ -1025,6 +1080,7 @@ export default class World {
   /**
    * Remove an event listener.
    */
+  // tslint:disable-next-line:typedef
   off(name, listener) {
     if (typeof name !== 'string' || typeof listener !== 'function') {
       return this;
@@ -1052,40 +1108,11 @@ export default class World {
   }
 
   /**
-   * @event World#remove-body
-   * @event World#remove-joint
-   * @event World#remove-fixture
-   *
-   * Joints and fixtures are destroyed when their associated body is destroyed.
-   * Register a destruction listener so that you may nullify references to these
-   * joints and shapes.
-   *
-   * `function(object)` is called when any joint or fixture is about to
-   * be destroyed due to the destruction of one of its attached or parent bodies.
-   */
-
-  /**
    * @internal
    */
   beginContact(contact: Contact): void {
     this.publish('begin-contact', contact);
   }
-
-  /**
-   * @event World#begin-contact
-   *
-   * Called when two fixtures begin to touch.
-   *
-   * Implement contact callbacks to get contact information. You can use these
-   * results for things like sounds and game logic. You can also get contact
-   * results by traversing the contact lists after the time step. However, you
-   * might miss some contacts because continuous physics leads to sub-stepping.
-   * Additionally you may receive multiple callbacks for the same contact in a
-   * single time step. You should strive to make your callbacks efficient because
-   * there may be many callbacks per time step.
-   *
-   * Warning: You cannot create/destroy world entities inside these callbacks.
-   */
 
   /**
    * @internal
@@ -1095,42 +1122,11 @@ export default class World {
   }
 
   /**
-   * @event World#end-contact
-   *
-   * Called when two fixtures cease to touch.
-   *
-   * Implement contact callbacks to get contact information. You can use these
-   * results for things like sounds and game logic. You can also get contact
-   * results by traversing the contact lists after the time step. However, you
-   * might miss some contacts because continuous physics leads to sub-stepping.
-   * Additionally you may receive multiple callbacks for the same contact in a
-   * single time step. You should strive to make your callbacks efficient because
-   * there may be many callbacks per time step.
-   *
-   * Warning: You cannot create/destroy world entities inside these callbacks.
-   */
-
-  /**
    * @internal
    */
   preSolve(contact: Contact, oldManifold: Manifold): void {
     this.publish('pre-solve', contact, oldManifold);
   }
-
-  /**
-   * @event World#pre-solve
-   *
-   * This is called after a contact is updated. This allows you to inspect a
-   * contact before it goes to the solver. If you are careful, you can modify the
-   * contact manifold (e.g. disable contact). A copy of the old manifold is
-   * provided so that you can detect changes. Note: this is called only for awake
-   * bodies. Note: this is called even when the number of contact points is zero.
-   * Note: this is not called for sensors. Note: if you set the number of contact
-   * points to zero, you will not get an endContact callback. However, you may get
-   * a beginContact callback the next step.
-   *
-   * Warning: You cannot create/destroy world entities inside these callbacks.
-   */
 
   /**
    * @internal
@@ -1140,15 +1136,12 @@ export default class World {
   }
 
   /**
-   * @event World#post-solve
+   * Joints and fixtures are destroyed when their associated body is destroyed.
+   * Register a destruction listener so that you may nullify references to these
+   * joints and shapes.
    *
-   * This lets you inspect a contact after the solver is finished. This is useful
-   * for inspecting impulses. Note: the contact manifold does not include time of
-   * impact impulses, which can be arbitrarily large if the sub-step is small.
-   * Hence the impulse is provided explicitly in a separate data structure. Note:
-   * this is only called for contacts that are touching, solid, and awake.
-   *
-   * Warning: You cannot create/destroy world entities inside these callbacks.
+   * `function(object)` is called when any joint or fixture is about to
+   * be destroyed due to the destruction of one of its attached or parent bodies.
    */
 
   /**

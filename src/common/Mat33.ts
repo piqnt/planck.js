@@ -173,6 +173,7 @@ export default class Mat33 {
    */
   static mul(a: Mat33, b: Vec2): Vec2;
   static mul(a: Mat33, b: Vec3): Vec3;
+  // tslint:disable-next-line:typedef
   static mul(a, b) {
     _ASSERT && Mat33.assert(a);
     if (b && 'z' in b && 'y' in b && 'x' in b) {

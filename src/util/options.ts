@@ -1,6 +1,7 @@
-export default function(input, defaults) {
+export default function<T>(input: T, defaults: object): T {
   if (input === null || typeof input === 'undefined') {
-    input = {};
+    // tslint:disable-next-line:no-object-literal-type-assertion
+    input = {} as T;
   }
 
   const output = {...input};

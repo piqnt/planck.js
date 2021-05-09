@@ -46,7 +46,7 @@ export default class Pool<T> {
     this._discardFn = opts.discard;
   }
 
-  max(n?: number) {
+  max(n?: number): number | Pool<T> {
     if (typeof n === 'number') {
       this._max = n;
       return this;
@@ -54,7 +54,7 @@ export default class Pool<T> {
     return this._max;
   }
 
-  size() {
+  size(): number {
     return this._list.length;
   }
 
@@ -93,7 +93,7 @@ export default class Pool<T> {
     }
   }
 
-  toString() {
+  toString(): string {
     return " +" + this._createCount + " >" + this._outCount + " <" + this._inCount + " -"
       + this._discardCount + " =" + this._list.length + "/" + this._max;
   }

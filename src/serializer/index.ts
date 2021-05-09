@@ -1,3 +1,4 @@
+// tslint:disable:typedef
 import World from '../dynamics/World';
 import Body from '../dynamics/Body';
 import Joint from '../dynamics/Joint';
@@ -68,6 +69,7 @@ function Serializer(opts?) {
       }
       if (typeof value._serialize === 'function') {
         if (value !== top) {
+          // tslint:disable-next-line:no-for-in
           for (const typeName in refTypes) {
             if (value instanceof refTypes[typeName]) {
               return storeRef(value, typeName);
@@ -85,6 +87,7 @@ function Serializer(opts?) {
 
       } else {
         const newValue = {};
+        // tslint:disable-next-line:no-for-in
         for (const key in value) {
           if (value.hasOwnProperty(key)) {
             newValue[key] = toJson(value[key]);
@@ -104,7 +107,7 @@ function Serializer(opts?) {
     return json;
   };
 
-  this.fromJson = function(json) {
+  this.fromJson = function(json: object) {
     const refMap = {};
 
     function deserialize(cls, data, ctx) {

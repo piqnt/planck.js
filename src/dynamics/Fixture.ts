@@ -98,7 +98,7 @@ export class FixtureProxy {
   fixture: Fixture;
   childIndex: number;
   proxyId: number;
-  constructor(fixture, childIndex) {
+  constructor(fixture: Fixture, childIndex: number) {
     this.aabb = new AABB();
     this.fixture = fixture;
     this.childIndex = childIndex;
@@ -130,7 +130,8 @@ export default class Fixture {
   constructor(body: Body, def: FixtureDef);
   constructor(body: Body, shape: Shape, def?: FixtureOpt);
   constructor(body: Body, shape: Shape, density?: number);
-  constructor(body, shape?, def?) {
+  // tslint:disable-next-line:typedef
+  constructor(body: Body, shape?, def?) {
     if (shape.shape) {
       def = shape;
       shape = shape.shape;
@@ -170,9 +171,9 @@ export default class Fixture {
 
   /**
    * Re-setup fixture.
-   * @private
+   * @internal
    */
-  _reset() {
+  _reset(): void {
     const body = this.getBody();
     const broadPhase = body.m_world.m_broadPhase;
     this.destroyProxies(broadPhase);
@@ -188,7 +189,7 @@ export default class Fixture {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     return {
       friction: this.m_friction,
       restitution: this.m_restitution,
@@ -204,7 +205,8 @@ export default class Fixture {
   }
 
   /** @internal */
-  static _deserialize(data, body, restore) {
+  // tslint:disable-next-line:typedef
+  static _deserialize(data: any, body: any, restore: any) {
     const shape = restore(Shape, data.shape);
     const fixture = shape && new Fixture(body, shape, data);
     return fixture;
@@ -226,6 +228,7 @@ export default class Fixture {
   getShape(): Shape {
     return this.m_shape;
   }
+
   /**
    * A sensor shape collects contact information but never generates a collision
    * response.
@@ -244,12 +247,12 @@ export default class Fixture {
     }
   }
 
-  /**
-   * Get the contact filtering data.
-   */
-// getFilterData() {
-//   return this.m_filter;
-// }
+  // /**
+  //  * Get the contact filtering data.
+  //  */
+  // getFilterData() {
+  //   return this.m_filter;
+  // }
 
   /**
    * Get the user data that was assigned in the fixture definition. Use this to
@@ -424,15 +427,15 @@ export default class Fixture {
     return this.m_filterGroupIndex;
   }
 
-  setFilterGroupIndex(groupIndex: number) {
-    return this.m_filterGroupIndex = groupIndex;
+  setFilterGroupIndex(groupIndex: number): void {
+    this.m_filterGroupIndex = groupIndex;
   }
 
   getFilterCategoryBits(): number {
     return this.m_filterCategoryBits;
   }
 
-  setFilterCategoryBits(categoryBits: number) {
+  setFilterCategoryBits(categoryBits: number): void {
     this.m_filterCategoryBits = categoryBits;
   }
 
@@ -440,7 +443,7 @@ export default class Fixture {
     return this.m_filterMaskBits;
   }
 
-  setFilterMaskBits(maskBits: number) {
+  setFilterMaskBits(maskBits: number): void {
     this.m_filterMaskBits = maskBits;
   }
 

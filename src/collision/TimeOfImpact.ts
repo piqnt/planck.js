@@ -321,7 +321,7 @@ class SeparationFunction {
 
   // TODO_ERIN might not need to return the separation
 
-  initialize(cache: SimplexCache, proxyA: DistanceProxy, sweepA: Sweep, proxyB: DistanceProxy, sweepB: Sweep, t1: number) {
+  initialize(cache: SimplexCache, proxyA: DistanceProxy, sweepA: Sweep, proxyB: DistanceProxy, sweepB: Sweep, t1: number): number {
     this.m_proxyA = proxyA;
     this.m_proxyB = proxyB;
     const count = cache.count;
@@ -393,7 +393,7 @@ class SeparationFunction {
     }
   }
 
-  compute(find, t) {
+  compute(find: boolean, t: number): number {
     // It was findMinSeparation and evaluate
     const xfA = Transform.identity();
     const xfB = Transform.identity();
@@ -466,11 +466,11 @@ class SeparationFunction {
     }
   }
 
-  findMinSeparation(t) {
+  findMinSeparation(t: number): number {
     return this.compute(true, t);
   }
 
-  evaluate(t) {
+  evaluate(t: number): number {
     return this.compute(false, t);
   }
 }

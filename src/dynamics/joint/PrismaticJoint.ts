@@ -31,9 +31,9 @@ import Vec3 from '../../common/Vec3';
 import Mat22 from '../../common/Mat22';
 import Mat33 from '../../common/Mat33';
 import Rot from '../../common/Rot';
-import Joint from '../Joint';
-import { JointOpt, JointDef } from '../Joint';
+import Joint, { JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
+import { TimeStep } from "../Solver";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -192,19 +192,6 @@ export default class PrismaticJoint extends Joint {
     this.m_axis = Vec2.zero();
     this.m_perp = Vec2.zero();
 
-    // Solver temp
-    this.m_localCenterA; // Vec2
-    this.m_localCenterB; // Vec2
-    this.m_invMassA; // float
-    this.m_invMassB; // float
-    this.m_invIA; // float
-    this.m_invIB; // float
-    this.m_axis, this.m_perp; // Vec2
-    this.m_s1, this.m_s2; // float
-    this.m_a1, this.m_a2; // float
-    this.m_K = new Mat33();
-    this.m_motorMass; // float
-
     // Linear constraint (point-to-line)
     // d = p2 - p1 = x2 + r2 - x1 - r1
     // C = dot(perp, d)
@@ -280,7 +267,7 @@ export default class PrismaticJoint extends Joint {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     return {
       type: this.m_type,
       bodyA: this.m_bodyA,
@@ -302,6 +289,7 @@ export default class PrismaticJoint extends Joint {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data, world, restore) {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
@@ -312,7 +300,13 @@ export default class PrismaticJoint extends Joint {
   }
 
   /** @internal */
-  _setAnchors(def) {
+  _setAnchors(def: {
+    anchorA?: Vec2,
+    localAnchorA?: Vec2,
+    anchorB?: Vec2,
+    localAnchorB?: Vec2,
+    localAxisA?: Vec2,
+  }): void {
     if (def.anchorA) {
       this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
@@ -334,35 +328,35 @@ export default class PrismaticJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA() {
+  getLocalAnchorA(): Vec2 {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB() {
+  getLocalAnchorB(): Vec2 {
     return this.m_localAnchorB;
   }
 
   /**
    * The local joint axis relative to bodyA.
    */
-  getLocalAxisA() {
+  getLocalAxisA(): Vec2 {
     return this.m_localXAxisA;
   }
 
   /**
    * Get the reference angle.
    */
-  getReferenceAngle() {
+  getReferenceAngle(): number {
     return this.m_referenceAngle;
   }
 
   /**
    * Get the current joint translation, usually in meters.
    */
-  getJointTranslation() {
+  getJointTranslation(): number {
     const pA = this.m_bodyA.getWorldPoint(this.m_localAnchorA);
     const pB = this.m_bodyB.getWorldPoint(this.m_localAnchorB);
     const d = Vec2.sub(pB, pA);
@@ -375,7 +369,7 @@ export default class PrismaticJoint extends Joint {
   /**
    * Get the current joint translation speed, usually in meters per second.
    */
-  getJointSpeed() {
+  getJointSpeed(): number {
     const bA = this.m_bodyA;
     const bB = this.m_bodyB;
 
@@ -399,14 +393,14 @@ export default class PrismaticJoint extends Joint {
   /**
    * Is the joint limit enabled?
    */
-  isLimitEnabled() {
+  isLimitEnabled(): boolean {
     return this.m_enableLimit;
   }
 
   /**
    * Enable/disable the joint limit.
    */
-  enableLimit(flag) {
+  enableLimit(flag: boolean): void {
     if (flag != this.m_enableLimit) {
       this.m_bodyA.setAwake(true);
       this.m_bodyB.setAwake(true);
@@ -418,21 +412,21 @@ export default class PrismaticJoint extends Joint {
   /**
    * Get the lower joint limit, usually in meters.
    */
-  getLowerLimit() {
+  getLowerLimit(): number {
     return this.m_lowerTranslation;
   }
 
   /**
    * Get the upper joint limit, usually in meters.
    */
-  getUpperLimit() {
+  getUpperLimit(): number {
     return this.m_upperTranslation;
   }
 
   /**
    * Set the joint limits, usually in meters.
    */
-  setLimits(lower, upper) {
+  setLimits(lower: number, upper: number): void {
     _ASSERT && common.assert(lower <= upper);
     if (lower != this.m_lowerTranslation || upper != this.m_upperTranslation) {
       this.m_bodyA.setAwake(true);
@@ -446,14 +440,14 @@ export default class PrismaticJoint extends Joint {
   /**
    * Is the joint motor enabled?
    */
-  isMotorEnabled() {
+  isMotorEnabled(): boolean {
     return this.m_enableMotor;
   }
 
   /**
    * Enable/disable the joint motor.
    */
-  enableMotor(flag) {
+  enableMotor(flag: boolean): void {
     this.m_bodyA.setAwake(true);
     this.m_bodyB.setAwake(true);
     this.m_enableMotor = flag;
@@ -462,7 +456,7 @@ export default class PrismaticJoint extends Joint {
   /**
    * Set the motor speed, usually in meters per second.
    */
-  setMotorSpeed(speed) {
+  setMotorSpeed(speed: number): void {
     this.m_bodyA.setAwake(true);
     this.m_bodyB.setAwake(true);
     this.m_motorSpeed = speed;
@@ -471,59 +465,59 @@ export default class PrismaticJoint extends Joint {
   /**
    * Set the maximum motor force, usually in N.
    */
-  setMaxMotorForce(force) {
+  setMaxMotorForce(force: number): void {
     this.m_bodyA.setAwake(true);
     this.m_bodyB.setAwake(true);
     this.m_maxMotorForce = force;
   }
 
-  getMaxMotorForce() {
+  getMaxMotorForce(): number {
     return this.m_maxMotorForce;
   }
 
   /**
    * Get the motor speed, usually in meters per second.
    */
-  getMotorSpeed() {
+  getMotorSpeed(): number {
     return this.m_motorSpeed;
   }
 
   /**
    * Get the current motor force given the inverse time step, usually in N.
    */
-  getMotorForce(inv_dt) {
+  getMotorForce(inv_dt: number): number {
     return inv_dt * this.m_motorImpulse;
   }
 
   /**
    * Get the anchor point on bodyA in world coordinates.
-*/
-  getAnchorA() {
+   */
+  getAnchorA(): Vec2 {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
-*/
-  getAnchorB() {
+   */
+  getAnchorB(): Vec2 {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
-*/
-  getReactionForce(inv_dt) {
+   */
+  getReactionForce(inv_dt: number): Vec2 {
     return Vec2.combine(this.m_impulse.x, this.m_perp, this.m_motorImpulse + this.m_impulse.z, this.m_axis).mul(inv_dt);
   }
 
   /**
    * Get the reaction torque on bodyB in N*m.
-*/
-  getReactionTorque(inv_dt) {
+   */
+  getReactionTorque(inv_dt: number): number {
     return inv_dt * this.m_impulse.y;
   }
 
-  initVelocityConstraints(step) {
+  initVelocityConstraints(step: TimeStep): void {
     this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
     this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
     this.m_invMassA = this.m_bodyA.m_invMass;
@@ -551,8 +545,10 @@ export default class PrismaticJoint extends Joint {
     d.addCombine(1, cB, 1, rB);
     d.subCombine(1, cA, 1, rA);
 
-    const mA = this.m_invMassA, mB = this.m_invMassB;
-    const iA = this.m_invIA, iB = this.m_invIB;
+    const mA = this.m_invMassA;
+    const mB = this.m_invMassB;
+    const iA = this.m_invIA;
+    const iB = this.m_invIB;
 
     // Compute motor Jacobian and effective mass.
     {
@@ -653,7 +649,7 @@ export default class PrismaticJoint extends Joint {
     this.m_bodyB.c_velocity.w = wB;
   }
 
-  solveVelocityConstraints(step) {
+  solveVelocityConstraints(step: TimeStep): void {
     const vA = this.m_bodyA.c_velocity.v;
     let wA = this.m_bodyA.c_velocity.w;
     const vB = this.m_bodyB.c_velocity.v;
@@ -753,7 +749,7 @@ export default class PrismaticJoint extends Joint {
   /**
    * This returns true if the position errors are within tolerance.
    */
-  solvePositionConstraints(step) {
+  solvePositionConstraints(step: TimeStep): boolean {
     const cA = this.m_bodyA.c_position.c;
     let aA = this.m_bodyA.c_position.a;
     const cB = this.m_bodyB.c_position.c;

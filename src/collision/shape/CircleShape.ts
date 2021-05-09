@@ -43,6 +43,7 @@ export default class CircleShape extends Shape {
 
   constructor(position: Vec2, radius?: number);
   constructor(radius?: number);
+  // tslint:disable-next-line:typedef
   constructor(a, b?) {
     // @ts-ignore
     if (!(this instanceof CircleShape)) {
@@ -68,7 +69,7 @@ export default class CircleShape extends Shape {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     return {
       type: this.m_type,
 
@@ -78,20 +79,21 @@ export default class CircleShape extends Shape {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data) {
     return new CircleShape(data.p, data.radius);
   }
 
   // TODO: already defined in Shape
-  getRadius() {
+  getRadius(): number {
     return this.m_radius;
   }
 
-  getCenter() {
+  getCenter(): Vec2 {
     return this.m_p;
   }
 
-  getVertex(index: 0) {
+  getVertex(index: 0): Vec2 {
     _ASSERT && common.assert(index == 0);
     return this.m_p;
   }
@@ -102,7 +104,7 @@ export default class CircleShape extends Shape {
    *
    * clone the concrete shape.
    */
-  _clone() {
+  _clone(): CircleShape {
     const clone = new CircleShape();
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
@@ -124,7 +126,7 @@ export default class CircleShape extends Shape {
    * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
-  testPoint(xf: Transform, p: Vec2) {
+  testPoint(xf: Transform, p: Vec2): boolean {
     const center = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
     const d = Vec2.sub(p, center);
     return Vec2.dot(d, d) <= this.m_radius * this.m_radius;
@@ -138,7 +140,7 @@ export default class CircleShape extends Shape {
    * @param xf The transform to be applied to the shape.
    * @param childIndex The child shape index
    */
-  rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number) {
+  rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean {
     // Collision Detection in Interactive 3D Environments by Gino van den Bergen
     // From Section 3.1.2
     // x = s + a * r
@@ -182,7 +184,7 @@ export default class CircleShape extends Shape {
    * @param xf The world transform of the shape.
    * @param childIndex The child shape
    */
-  computeAABB(aabb: AABB, xf: Transform, childIndex: number) {
+  computeAABB(aabb: AABB, xf: Transform, childIndex: number): void {
     const p = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
     aabb.lowerBound.set(p.x - this.m_radius, p.y - this.m_radius);
     aabb.upperBound.set(p.x + this.m_radius, p.y + this.m_radius);
@@ -195,7 +197,7 @@ export default class CircleShape extends Shape {
    * @param massData Returns the mass data for this shape.
    * @param density The density in kilograms per meter squared.
    */
-  computeMass(massData: MassData, density: number) {
+  computeMass(massData: MassData, density: number): void {
     massData.mass = density * Math.PI * this.m_radius * this.m_radius;
     massData.center = this.m_p;
     // inertia about the local origin
@@ -203,7 +205,7 @@ export default class CircleShape extends Shape {
         * (0.5 * this.m_radius * this.m_radius + Vec2.dot(this.m_p, this.m_p));
   }
 
-  computeDistanceProxy(proxy: DistanceProxy) {
+  computeDistanceProxy(proxy: DistanceProxy): void {
     proxy.m_vertices.push(this.m_p);
     proxy.m_count = 1;
     proxy.m_radius = this.m_radius;

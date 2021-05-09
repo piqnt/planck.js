@@ -27,9 +27,9 @@ import Settings from '../../Settings';
 import Math from '../../common/Math';
 import Vec2 from '../../common/Vec2';
 import Rot from '../../common/Rot';
-import Joint from '../Joint';
-import { JointOpt, JointDef } from '../Joint';
+import Joint, { JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
+import { TimeStep } from "../Solver";
 
 
 /**
@@ -214,7 +214,7 @@ export default class WheelJoint extends Joint {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     return {
       type: this.m_type,
       bodyA: this.m_bodyA,
@@ -234,7 +234,8 @@ export default class WheelJoint extends Joint {
   }
 
   /** @internal */
-  static _deserialize(data, world, restore) {
+  // tslint:disable-next-line:typedef
+  static _deserialize(data, world, restore): Joint {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
@@ -243,7 +244,13 @@ export default class WheelJoint extends Joint {
   }
 
   /** @internal */
-  _setAnchors(def) {
+  _setAnchors(def: {
+    anchorA?: Vec2,
+    localAnchorA?: Vec2,
+    anchorB?: Vec2,
+    localAnchorB?: Vec2,
+    localAxisA?: Vec2,
+  }): void {
     if (def.anchorA) {
       this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
@@ -265,28 +272,28 @@ export default class WheelJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA() {
+  getLocalAnchorA(): Vec2 {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB() {
+  getLocalAnchorB(): Vec2 {
     return this.m_localAnchorB;
   }
 
   /**
    * The local joint axis relative to bodyA.
    */
-  getLocalAxisA() {
+  getLocalAxisA(): Vec2 {
     return this.m_localXAxisA;
   }
 
   /**
    * Get the current joint translation, usually in meters.
    */
-  getJointTranslation() {
+  getJointTranslation(): number {
     const bA = this.m_bodyA;
     const bB = this.m_bodyB;
 
@@ -302,7 +309,7 @@ export default class WheelJoint extends Joint {
   /**
    * Get the current joint translation speed, usually in meters per second.
    */
-  getJointSpeed() {
+  getJointSpeed(): number {
     const wA = this.m_bodyA.m_angularVelocity;
     const wB = this.m_bodyB.m_angularVelocity;
     return wB - wA;
@@ -311,14 +318,14 @@ export default class WheelJoint extends Joint {
   /**
    * Is the joint motor enabled?
    */
-  isMotorEnabled() {
+  isMotorEnabled(): boolean {
     return this.m_enableMotor;
   }
 
   /**
    * Enable/disable the joint motor.
    */
-  enableMotor(flag) {
+  enableMotor(flag: boolean): void {
     this.m_bodyA.setAwake(true);
     this.m_bodyB.setAwake(true);
     this.m_enableMotor = flag;
@@ -327,7 +334,7 @@ export default class WheelJoint extends Joint {
   /**
    * Set the motor speed, usually in radians per second.
    */
-  setMotorSpeed(speed) {
+  setMotorSpeed(speed: number): void {
     this.m_bodyA.setAwake(true);
     this.m_bodyB.setAwake(true);
     this.m_motorSpeed = speed;
@@ -336,27 +343,27 @@ export default class WheelJoint extends Joint {
   /**
    * Get the motor speed, usually in radians per second.
    */
-  getMotorSpeed() {
+  getMotorSpeed(): number {
     return this.m_motorSpeed;
   }
 
   /**
    * Set/Get the maximum motor force, usually in N-m.
    */
-  setMaxMotorTorque(torque) {
+  setMaxMotorTorque(torque: number): void {
     this.m_bodyA.setAwake(true);
     this.m_bodyB.setAwake(true);
     this.m_maxMotorTorque = torque;
   }
 
-  getMaxMotorTorque() {
+  getMaxMotorTorque(): number {
     return this.m_maxMotorTorque;
   }
 
   /**
    * Get the current motor torque given the inverse time step, usually in N-m.
    */
-  getMotorTorque(inv_dt) {
+  getMotorTorque(inv_dt: number): number {
     return inv_dt * this.m_motorImpulse;
   }
 
@@ -364,54 +371,54 @@ export default class WheelJoint extends Joint {
    * Set/Get the spring frequency in hertz. Setting the frequency to zero disables
    * the spring.
    */
-  setSpringFrequencyHz(hz) {
+  setSpringFrequencyHz(hz: number): void {
     this.m_frequencyHz = hz;
   }
 
-  getSpringFrequencyHz() {
+  getSpringFrequencyHz(): number {
     return this.m_frequencyHz;
   }
 
   /**
    * Set/Get the spring damping ratio
    */
-  setSpringDampingRatio(ratio) {
+  setSpringDampingRatio(ratio: number): void {
     this.m_dampingRatio = ratio;
   }
 
-  getSpringDampingRatio() {
+  getSpringDampingRatio(): number {
     return this.m_dampingRatio;
   }
 
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA() {
+  getAnchorA(): Vec2 {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB() {
+  getAnchorB(): Vec2 {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt) {
+  getReactionForce(inv_dt: number): Vec2 {
     return Vec2.combine(this.m_impulse, this.m_ay, this.m_springImpulse, this.m_ax).mul(inv_dt);
   }
 
   /**
    * Get the reaction torque on bodyB in N*m.
    */
-  getReactionTorque(inv_dt) {
+  getReactionTorque(inv_dt: number): number {
     return inv_dt * this.m_motorImpulse;
   }
 
-  initVelocityConstraints(step) {
+  initVelocityConstraints(step: TimeStep): void {
     this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
     this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
     this.m_invMassA = this.m_bodyA.m_invMass;
@@ -541,7 +548,7 @@ export default class WheelJoint extends Joint {
     this.m_bodyB.c_velocity.w = wB;
   }
 
-  solveVelocityConstraints(step) {
+  solveVelocityConstraints(step: TimeStep): void {
     const mA = this.m_invMassA;
     const mB = this.m_invMassB; // float
     const iA = this.m_invIA;
@@ -613,7 +620,7 @@ export default class WheelJoint extends Joint {
   /**
    * This returns true if the position errors are within tolerance.
    */
-  solvePositionConstraints(step) {
+  solvePositionConstraints(step: TimeStep): boolean {
     const cA = this.m_bodyA.c_position.c;
     let aA = this.m_bodyA.c_position.a;
     const cB = this.m_bodyB.c_position.c;

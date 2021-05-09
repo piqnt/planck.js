@@ -40,6 +40,7 @@ export default class Mat22 {
   constructor(a: number, b: number, c: number, d: number);
   constructor(a: { x: number; y: number }, b: { x: number; y: number });
   constructor();
+  // tslint:disable-next-line:typedef
   constructor(a?, b?, c?, d?) {
     if (typeof a === 'object' && a !== null) {
       this.ex = Vec2.clone(a);
@@ -72,6 +73,7 @@ export default class Mat22 {
   set(a: Mat22): void;
   set(a: Vec2, b: Vec2): void;
   set(a: number, b: number, c: number, d: number): void;
+  // tslint:disable-next-line:typedef
   set(a, b?, c?, d?): void {
     if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
       && typeof d === 'number') {
@@ -149,6 +151,7 @@ export default class Mat22 {
    */
   static mul(mx: Mat22, my: Mat22): Mat22;
   static mul(mx: Mat22, v: Vec2): Vec2;
+  // tslint:disable-next-line:typedef
   static mul(mx, v) {
     if (v && 'x' in v && 'y' in v) {
       _ASSERT && Vec2.assert(v);
@@ -169,14 +172,14 @@ export default class Mat22 {
     _ASSERT && common.assert(false);
   }
 
-  static mulVec2(mx, v) {
+  static mulVec2(mx: Mat22, v: Vec2): Vec2 {
     _ASSERT && Vec2.assert(v);
     const x = mx.ex.x * v.x + mx.ey.x * v.y;
     const y = mx.ex.y * v.x + mx.ey.y * v.y;
     return Vec2.neo(x, y);
   }
 
-  static mulMat22(mx, v) {
+  static mulMat22(mx: Mat22, v: Mat22): Mat22 {
     _ASSERT && Mat22.assert(v);
     // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
     const a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
@@ -193,6 +196,7 @@ export default class Mat22 {
    */
   static mulT(mx: Mat22, my: Mat22): Mat22;
   static mulT(mx: Mat22, v: Vec2): Vec2;
+  // tslint:disable-next-line:typedef
   static mulT(mx, v) {
     if (v && 'x' in v && 'y' in v) { // Vec2
       _ASSERT && Vec2.assert(v);

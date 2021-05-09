@@ -29,9 +29,9 @@ import Vec2 from '../../common/Vec2';
 import Mat22 from '../../common/Mat22';
 import Rot from '../../common/Rot';
 import Transform from '../../common/Transform';
-import Joint from '../Joint';
-import { JointOpt, JointDef } from '../Joint';
+import Joint, { JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
+import { TimeStep } from "../Solver";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -154,7 +154,7 @@ export default class MouseJoint extends Joint {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     return {
       type: this.m_type,
       bodyA: this.m_bodyA,
@@ -171,6 +171,7 @@ export default class MouseJoint extends Joint {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data, world, restore) {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
@@ -186,95 +187,95 @@ export default class MouseJoint extends Joint {
   /**
    * Use this to update the target point.
    */
-  setTarget(target) {
+  setTarget(target: Vec2): void {
     if (this.m_bodyB.isAwake() == false) {
       this.m_bodyB.setAwake(true);
     }
     this.m_targetA = Vec2.clone(target);
   }
 
-  getTarget() {
+  getTarget(): Vec2 {
     return this.m_targetA;
   }
 
   /**
    * Set the maximum force in Newtons.
    */
-  setMaxForce(force) {
+  setMaxForce(force: number): void {
     this.m_maxForce = force;
   }
 
   /**
    * Get the maximum force in Newtons.
    */
-  getMaxForce() {
+  getMaxForce(): number {
     return this.m_maxForce;
   }
 
   /**
    * Set the frequency in Hertz.
    */
-  setFrequency(hz) {
+  setFrequency(hz: number): void {
     this.m_frequencyHz = hz;
   }
 
   /**
    * Get the frequency in Hertz.
    */
-  getFrequency() {
+  getFrequency(): number {
     return this.m_frequencyHz;
   }
 
   /**
    * Set the damping ratio (dimensionless).
    */
-  setDampingRatio(ratio) {
+  setDampingRatio(ratio: number): void {
     this.m_dampingRatio = ratio;
   }
 
   /**
    * Get the damping ratio (dimensionless).
    */
-  getDampingRatio() {
+  getDampingRatio(): number {
     return this.m_dampingRatio;
   }
 
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA() {
+  getAnchorA(): Vec2 {
     return Vec2.clone(this.m_targetA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
-*/
-  getAnchorB() {
+   */
+  getAnchorB(): Vec2 {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
-*/
-  getReactionForce(inv_dt) {
+   */
+  getReactionForce(inv_dt: number): Vec2 {
     return Vec2.mul(inv_dt, this.m_impulse);
   }
 
   /**
    * Get the reaction torque on bodyB in N*m.
-*/
-  getReactionTorque(inv_dt) {
+   */
+  getReactionTorque(inv_dt: number): number {
     return inv_dt * 0.0;
   }
 
   /**
    * Shift the origin for any points stored in world coordinates.
    */
-  shiftOrigin(newOrigin) {
+  shiftOrigin(newOrigin: Vec2): void {
     this.m_targetA.sub(newOrigin);
   }
 
-  initVelocityConstraints(step) {
+  initVelocityConstraints(step: TimeStep): void {
     this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
     this.m_invMassB = this.m_bodyB.m_invMass;
     this.m_invIB = this.m_bodyB.m_invI;
@@ -349,7 +350,7 @@ export default class MouseJoint extends Joint {
     velocity.w = wB;
   }
 
-  solveVelocityConstraints(step) {
+  solveVelocityConstraints(step: TimeStep): void {
     const velocity = this.m_bodyB.c_velocity;
     const vB = Vec2.clone(velocity.v);
     let wB = velocity.w;
@@ -380,7 +381,7 @@ export default class MouseJoint extends Joint {
   /**
    * This returns true if the position errors are within tolerance.
    */
-  solvePositionConstraints(step) {
+  solvePositionConstraints(step: TimeStep): boolean {
     return true;
   }
 

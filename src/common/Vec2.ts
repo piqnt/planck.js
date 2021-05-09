@@ -37,6 +37,7 @@ export default class Vec2 {
   constructor(x: number, y: number);
   constructor(obj: { x: number, y: number });
   constructor();
+  // tslint:disable-next-line:typedef
   constructor(x?, y?) {
     if (!(this instanceof Vec2)) {
       return new Vec2(x, y);
@@ -55,7 +56,7 @@ export default class Vec2 {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     return {
       x: this.x,
       y: this.y
@@ -63,6 +64,7 @@ export default class Vec2 {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data) {
     const obj = Object.create(Vec2.prototype);
     obj.x = data.x;
@@ -131,6 +133,7 @@ export default class Vec2 {
    *
    * @returns this
    */
+  // tslint:disable-next-line:typedef
   set(x, y?) {
     if (typeof x === 'object') {
       _ASSERT && Vec2.assert(x);
@@ -146,9 +149,10 @@ export default class Vec2 {
   }
 
   /**
+   * @internal
    * @deprecated Use setCombine or setMul
    */
-  wSet(a, v, b, w) {
+  wSet(a: number, v: Vec2, b?: number, w?: Vec2): Vec2 {
     if (typeof b !== 'undefined' || typeof w !== 'undefined') {
       return this.setCombine(a, v, b, w);
     } else {
@@ -197,9 +201,10 @@ export default class Vec2 {
   }
 
   /**
+   * @internal
    * @deprecated Use addCombine or addMul
    */
-  wAdd(a, v, b, w) {
+  wAdd(a: number, v: Vec2, b?: number, w?: Vec2): Vec2 {
     if (typeof b !== 'undefined' || typeof w !== 'undefined') {
       return this.addCombine(a, v, b, w);
     } else {
@@ -239,7 +244,7 @@ export default class Vec2 {
   /**
    * @deprecated Use subCombine or subMul
    */
-  wSub(a, v, b, w) {
+  wSub(a: number, v: Vec2, b?: number, w?: Vec2): Vec2 {
     if (typeof b !== 'undefined' || typeof w !== 'undefined') {
       return this.subCombine(a, v, b, w);
     } else {
@@ -396,6 +401,7 @@ export default class Vec2 {
    * Perform the cross product on a vector and a scalar. In 2D this produces a
    * vector.
    */
+  // tslint:disable-next-line:typedef
   static cross(v, w) {
     if (typeof w === 'number') {
       _ASSERT && Vec2.assert(v);
@@ -419,6 +425,7 @@ export default class Vec2 {
   /**
    * Returns `a + (v x w)`
    */
+  // tslint:disable-next-line:typedef
   static addCross(a, v, w) {
     if (typeof w === 'number') {
       _ASSERT && Vec2.assert(v);
@@ -440,10 +447,8 @@ export default class Vec2 {
     return Vec2.neo(v.x + w.x, v.y + w.y);
   }
 
-  /**
-   * @deprecated Use combine
-   */
-  static wAdd(a, v, b, w) {
+  /** @internal @deprecated */
+  static wAdd(a: number, v: Vec2, b: number, w: Vec2): Vec2 {
     if (typeof b !== 'undefined' || typeof w !== 'undefined') {
       return Vec2.combine(a, v, b, w);
     } else {
@@ -463,6 +468,7 @@ export default class Vec2 {
 
   static mul(a: Vec2, b: number): Vec2;
   static mul(a: number, b: Vec2): Vec2;
+  // tslint:disable-next-line:typedef
   static mul(a, b) {
     if (typeof a === 'object') {
       _ASSERT && Vec2.assert(a);
@@ -526,20 +532,18 @@ export default class Vec2 {
     return v;
   }
 
-  /**
-   * @deprecated
-   */
-  static scaleFn(x, y) {
-    return function(v) {
+  /**  @internal @deprecated */
+  // tslint:disable-next-line:typedef
+  static scaleFn(x: number, y: number) {
+    return function(v: Vec2): Vec2 {
       return Vec2.neo(v.x * x, v.y * y);
     };
   }
 
-  /**
-   * @deprecated
-   */
-  static translateFn(x, y) {
-    return function(v) {
+  /**  @internal @deprecated */
+  // tslint:disable-next-line:typedef
+  static translateFn(x: number, y: number) {
+    return function(v: Vec2): Vec2 {
       return Vec2.neo(v.x + x, v.y + y);
     };
   }

@@ -50,7 +50,7 @@ export default class Rot {
   }
 
   /** @internal */
-  static neo(angle): Rot {
+  static neo(angle: number): Rot {
     const obj = Object.create(Rot.prototype);
     obj.setAngle(angle);
     return obj;
@@ -84,7 +84,7 @@ export default class Rot {
   }
 
   /** Set to the identity rotation. */
-  setIdentity() {
+  setIdentity(): void {
     this.s = 0.0;
     this.c = 1.0;
   }
@@ -130,6 +130,7 @@ export default class Rot {
   static mul(rot: Rot, m: Rot): Rot;
   /** Rotate a vector */
   static mul(rot: Rot, m: Vec2): Vec2;
+  // tslint:disable-next-line:typedef
   static mul(rot, m) {
     _ASSERT && Rot.assert(rot);
     if ('c' in m && 's' in m) {
@@ -178,6 +179,7 @@ export default class Rot {
   static mulT(rot: Rot, m: Rot): Rot;
   /** Inverse rotate a vector */
   static mulT(rot: Rot, m: Vec2): Vec2;
+  // tslint:disable-next-line:typedef
   static mulT(rot, m) {
     if ('c' in m && 's' in m) {
       _ASSERT && Rot.assert(m);

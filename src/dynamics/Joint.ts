@@ -25,6 +25,7 @@
 import common from '../util/common';
 import type Vec2 from '../common/Vec2';
 import type Body from './Body';
+import { TimeStep } from "./Solver";
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
@@ -114,8 +115,8 @@ export default abstract class Joint {
     bodyA = 'bodyA' in def ? def.bodyA : bodyA;
     bodyB = 'bodyB' in def ? def.bodyB : bodyB;
 
-    _ASSERT && common.assert(bodyA);
-    _ASSERT && common.assert(bodyB);
+    _ASSERT && common.assert(!!bodyA);
+    _ASSERT && common.assert(!!bodyB);
     _ASSERT && common.assert(bodyA != bodyB);
 
     this.m_bodyA = bodyA!;
@@ -132,6 +133,7 @@ export default abstract class Joint {
   abstract _serialize(): object;
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize = function(data, context, restore) {
     const clazz = Joint.TYPES[data.type];
     return clazz && restore(clazz, data);
@@ -140,43 +142,43 @@ export default abstract class Joint {
   /**
    * Short-cut function to determine if either body is inactive.
    */
-  isActive() {
+  isActive(): boolean {
     return this.m_bodyA.isActive() && this.m_bodyB.isActive();
   }
 
   /**
    * Get the type of the concrete joint.
    */
-  getType() {
+  getType(): string {
     return this.m_type;
   }
 
   /**
    * Get the first body attached to this joint.
    */
-  getBodyA() {
+  getBodyA(): Body {
     return this.m_bodyA;
   }
 
   /**
    * Get the second body attached to this joint.
    */
-  getBodyB() {
+  getBodyB(): Body {
     return this.m_bodyB;
   }
 
   /**
    * Get the next joint the world joint list.
    */
-  getNext() {
+  getNext(): Joint {
     return this.m_next;
   }
 
-  getUserData() {
+  getUserData(): unknown {
     return this.m_userData;
   }
 
-  setUserData(data: unknown) {
+  setUserData(data: unknown): void {
     this.m_userData = data;
   }
 
@@ -185,7 +187,7 @@ export default abstract class Joint {
    * correctly because the flag is only checked when fixture AABBs begin to
    * overlap.
    */
-  getCollideConnected() {
+  getCollideConnected(): boolean {
     return this.m_collideConnected;
   }
 
@@ -212,15 +214,15 @@ export default abstract class Joint {
   /**
    * Shift the origin for any points stored in world coordinates.
    */
-  shiftOrigin(newOrigin: Vec2) {}
+  shiftOrigin(newOrigin: Vec2): void {}
 
-  abstract initVelocityConstraints(step): void;
+  abstract initVelocityConstraints(step: TimeStep): void;
 
-  abstract solveVelocityConstraints(step): void;
+  abstract solveVelocityConstraints(step: TimeStep): void;
 
   /**
    * This returns true if the position errors are within tolerance.
    */
-  abstract solvePositionConstraints(step): boolean;
+  abstract solvePositionConstraints(step: TimeStep): boolean;
 
 }

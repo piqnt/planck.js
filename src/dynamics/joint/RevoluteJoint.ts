@@ -31,9 +31,9 @@ import Vec3 from '../../common/Vec3';
 import Mat22 from '../../common/Mat22';
 import Mat33 from '../../common/Mat33';
 import Rot from '../../common/Rot';
-import Joint from '../Joint';
-import { JointOpt, JointDef } from '../Joint';
+import Joint, { JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
+import { TimeStep } from "../Solver";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -214,7 +214,7 @@ export default class RevoluteJoint extends Joint {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     return {
       type: this.m_type,
       bodyA: this.m_bodyA,
@@ -235,6 +235,7 @@ export default class RevoluteJoint extends Joint {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data, world, restore) {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
@@ -244,7 +245,12 @@ export default class RevoluteJoint extends Joint {
   }
 
   /** @internal */
-  _setAnchors(def) {
+  _setAnchors(def: {
+    anchorA?: Vec2,
+    localAnchorA?: Vec2,
+    anchorB?: Vec2,
+    localAnchorB?: Vec2,
+  }): void {
     if (def.anchorA) {
       this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
@@ -261,28 +267,28 @@ export default class RevoluteJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA() {
+  getLocalAnchorA(): Vec2 {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB() {
+  getLocalAnchorB(): Vec2 {
     return this.m_localAnchorB;
   }
 
   /**
    * Get the reference angle.
    */
-  getReferenceAngle() {
+  getReferenceAngle(): number {
     return this.m_referenceAngle;
   }
 
   /**
    * Get the current joint angle in radians.
    */
-  getJointAngle() {
+  getJointAngle(): number {
     const bA = this.m_bodyA;
     const bB = this.m_bodyB;
     return bB.m_sweep.a - bA.m_sweep.a - this.m_referenceAngle;
@@ -291,7 +297,7 @@ export default class RevoluteJoint extends Joint {
   /**
    * Get the current joint angle speed in radians per second.
    */
-  getJointSpeed() {
+  getJointSpeed(): number {
     const bA = this.m_bodyA;
     const bB = this.m_bodyB;
     return bB.m_angularVelocity - bA.m_angularVelocity;
@@ -300,14 +306,14 @@ export default class RevoluteJoint extends Joint {
   /**
    * Is the joint motor enabled?
    */
-  isMotorEnabled() {
+  isMotorEnabled(): boolean {
     return this.m_enableMotor;
   }
 
   /**
    * Enable/disable the joint motor.
    */
-  enableMotor(flag) {
+  enableMotor(flag: boolean): void {
     this.m_bodyA.setAwake(true);
     this.m_bodyB.setAwake(true);
     this.m_enableMotor = flag;
@@ -316,14 +322,14 @@ export default class RevoluteJoint extends Joint {
   /**
    * Get the current motor torque given the inverse time step. Unit is N*m.
    */
-  getMotorTorque(inv_dt) {
+  getMotorTorque(inv_dt: number): number {
     return inv_dt * this.m_motorImpulse;
   }
 
   /**
    * Set the motor speed in radians per second.
    */
-  setMotorSpeed(speed) {
+  setMotorSpeed(speed: number): void {
     this.m_bodyA.setAwake(true);
     this.m_bodyB.setAwake(true);
     this.m_motorSpeed = speed;
@@ -332,34 +338,34 @@ export default class RevoluteJoint extends Joint {
   /**
    * Get the motor speed in radians per second.
    */
-  getMotorSpeed() {
+  getMotorSpeed(): number {
     return this.m_motorSpeed;
   }
 
   /**
    * Set the maximum motor torque, usually in N-m.
    */
-  setMaxMotorTorque(torque) {
+  setMaxMotorTorque(torque: number): void {
     this.m_bodyA.setAwake(true);
     this.m_bodyB.setAwake(true);
     this.m_maxMotorTorque = torque;
   }
 
-  getMaxMotorTorque() {
+  getMaxMotorTorque(): number {
     return this.m_maxMotorTorque;
   }
 
   /**
    * Is the joint limit enabled?
    */
-  isLimitEnabled() {
+  isLimitEnabled(): boolean {
     return this.m_enableLimit;
   }
 
   /**
    * Enable/disable the joint limit.
    */
-  enableLimit(flag) {
+  enableLimit(flag: boolean): void {
     if (flag != this.m_enableLimit) {
       this.m_bodyA.setAwake(true);
       this.m_bodyB.setAwake(true);
@@ -371,21 +377,21 @@ export default class RevoluteJoint extends Joint {
   /**
    * Get the lower joint limit in radians.
    */
-  getLowerLimit() {
+  getLowerLimit(): number {
     return this.m_lowerAngle;
   }
 
   /**
    * Get the upper joint limit in radians.
    */
-  getUpperLimit() {
+  getUpperLimit(): number {
     return this.m_upperAngle;
   }
 
   /**
    * Set the joint limits in radians.
    */
-  setLimits(lower, upper) {
+  setLimits(lower: number, upper: number): void {
     _ASSERT && common.assert(lower <= upper);
 
     if (lower != this.m_lowerAngle || upper != this.m_upperAngle) {
@@ -399,22 +405,22 @@ export default class RevoluteJoint extends Joint {
 
   /**
    * Get the anchor point on bodyA in world coordinates.
-*/
-  getAnchorA() {
+   */
+  getAnchorA(): Vec2 {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
-*/
-  getAnchorB() {
+   */
+  getAnchorB(): Vec2 {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force given the inverse time step. Unit is N.
    */
-  getReactionForce(inv_dt) {
+  getReactionForce(inv_dt: number): Vec2 {
     return Vec2.neo(this.m_impulse.x, this.m_impulse.y).mul(inv_dt);
   }
 
@@ -422,11 +428,11 @@ export default class RevoluteJoint extends Joint {
    * Get the reaction torque due to the joint limit given the inverse time step.
    * Unit is N*m.
    */
-  getReactionTorque(inv_dt) {
+  getReactionTorque(inv_dt: number): number {
     return inv_dt * this.m_impulse.z;
   }
 
-  initVelocityConstraints(step) {
+  initVelocityConstraints(step: TimeStep): void {
     this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
     this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
     this.m_invMassA = this.m_bodyA.m_invMass;
@@ -537,7 +543,7 @@ export default class RevoluteJoint extends Joint {
     this.m_bodyB.c_velocity.w = wB;
   }
 
-  solveVelocityConstraints(step) {
+  solveVelocityConstraints(step: TimeStep): void {
     const vA = this.m_bodyA.c_velocity.v;
     let wA = this.m_bodyA.c_velocity.w;
     const vB = this.m_bodyB.c_velocity.v;
@@ -648,7 +654,7 @@ export default class RevoluteJoint extends Joint {
   /**
    * This returns true if the position errors are within tolerance.
    */
-  solvePositionConstraints(step) {
+  solvePositionConstraints(step: TimeStep): boolean {
     const cA = this.m_bodyA.c_position.c;
     let aA = this.m_bodyA.c_position.a;
     const cB = this.m_bodyB.c_position.c;

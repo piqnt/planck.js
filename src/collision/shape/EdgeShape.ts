@@ -72,7 +72,7 @@ export default class EdgeShape extends Shape {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     return {
       type: this.m_type,
 
@@ -87,6 +87,7 @@ export default class EdgeShape extends Shape {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data) {
     const shape = new EdgeShape(data.vertex1, data.vertex2);
     if (shape.m_hasVertex0) {
@@ -99,14 +100,14 @@ export default class EdgeShape extends Shape {
   }
 
   /** @internal @deprecated */
-  setNext(v?: Vec2) {
+  setNext(v?: Vec2): EdgeShape {
     return this.setNextVertex(v);
   }
 
   /**
    * Optional next vertex, used for smooth collision.
    */
-  setNextVertex(v?: Vec2) {
+  setNextVertex(v?: Vec2): EdgeShape {
     if (v) {
       this.m_vertex3.set(v);
       this.m_hasVertex3 = true;
@@ -120,19 +121,19 @@ export default class EdgeShape extends Shape {
   /**
    * Optional next vertex, used for smooth collision.
    */
-  getNextVertex() {
+  getNextVertex(): Vec2 {
     return this.m_vertex3;
   }
 
   /** @internal @deprecated */
-  setPrev(v?: Vec2) {
-    this.setPrevVertex(v);
+  setPrev(v?: Vec2): EdgeShape {
+    return this.setPrevVertex(v);
   }
 
   /**
    * Optional prev vertex, used for smooth collision.
    */
-  setPrevVertex(v?: Vec2) {
+  setPrevVertex(v?: Vec2): EdgeShape {
     if (v) {
       this.m_vertex0.set(v);
       this.m_hasVertex0 = true;
@@ -146,14 +147,14 @@ export default class EdgeShape extends Shape {
   /**
    * Optional prev vertex, used for smooth collision.
    */
-  getPrevVertex() {
+  getPrevVertex(): Vec2 {
     return this.m_vertex0;
   }
 
   /**
    * Set this as an isolated edge.
    */
-  _set(v1: Vec2, v2: Vec2) {
+  _set(v1: Vec2, v2: Vec2): EdgeShape {
     this.m_vertex1.set(v1);
     this.m_vertex2.set(v2);
     this.m_hasVertex0 = false;
@@ -167,7 +168,7 @@ export default class EdgeShape extends Shape {
    *
    * clone the concrete shape.
    */
-  _clone() {
+  _clone(): EdgeShape {
     const clone = new EdgeShape();
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
@@ -206,7 +207,7 @@ export default class EdgeShape extends Shape {
    * @param xf The transform to be applied to the shape.
    * @param childIndex The child shape index
    */
-  rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number) {
+  rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean {
     // p = p1 + t * d
     // v = v1 + s * e
     // p1 + t * d = v1 + s * e
@@ -272,7 +273,7 @@ export default class EdgeShape extends Shape {
    * @param xf The world transform of the shape.
    * @param childIndex The child shape
    */
-  computeAABB(aabb: AABB, xf: Transform, childIndex: number) {
+  computeAABB(aabb: AABB, xf: Transform, childIndex: number): void {
     const v1 = Transform.mulVec2(xf, this.m_vertex1);
     const v2 = Transform.mulVec2(xf, this.m_vertex2);
 
@@ -287,13 +288,13 @@ export default class EdgeShape extends Shape {
    * @param massData Returns the mass data for this shape.
    * @param density The density in kilograms per meter squared.
    */
-  computeMass(massData: MassData, density?: number) {
+  computeMass(massData: MassData, density?: number): void {
     massData.mass = 0.0;
     massData.center.setCombine(0.5, this.m_vertex1, 0.5, this.m_vertex2);
     massData.I = 0.0;
   }
 
-  computeDistanceProxy(proxy: DistanceProxy) {
+  computeDistanceProxy(proxy: DistanceProxy): void {
     proxy.m_vertices.push(this.m_vertex1);
     proxy.m_vertices.push(this.m_vertex2);
     proxy.m_count = 2;

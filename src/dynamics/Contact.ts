@@ -58,7 +58,7 @@ export class ContactEdge {
   prev: ContactEdge | undefined;
   next: ContactEdge | undefined;
   other: Body | undefined;
-  constructor(contact) {
+  constructor(contact: Contact) {
     this.contact = contact;
   }
 }
@@ -88,7 +88,7 @@ export type ContactCallback = (
  * Friction mixing law. The idea is to allow either fixture to drive the
  * restitution to zero. For example, anything slides on ice.
  */
-export function mixFriction(friction1, friction2) {
+export function mixFriction(friction1: number, friction2: number): number {
   return Math.sqrt(friction1 * friction2);
 }
 
@@ -96,7 +96,7 @@ export function mixFriction(friction1, friction2) {
  * Restitution mixing law. The idea is allow for anything to bounce off an
  * inelastic surface. For example, a superball bounces on anything.
  */
-export function mixRestitution(restitution1, restitution2) {
+export function mixRestitution(restitution1: number, restitution2: number): number {
   return restitution1 > restitution2 ? restitution1 : restitution2;
 }
 

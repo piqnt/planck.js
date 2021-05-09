@@ -11,9 +11,10 @@ export default {
   toiRootIters: 0,
   toiMaxRootIters: 0,
 
-  toString(newline?: string) {
+  toString(newline?: string): string {
     newline = typeof newline === 'string' ? newline : '\n';
     let string = "";
+    // tslint:disable-next-line:no-for-in
     for (const name in this) {
       if (typeof this[name] !== 'function' && typeof this[name] !== 'object') {
         string += name + ': ' + this[name] + newline;

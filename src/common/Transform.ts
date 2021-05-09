@@ -92,6 +92,7 @@ export default class Transform {
   /**
    * Set this based on the position and angle.
    */
+  // tslint:disable-next-line:typedef
   set(a, b?) {
     if (typeof b === 'undefined') {
       this.p.set(a.p);
@@ -118,6 +119,7 @@ export default class Transform {
   static mul(a: Transform, b: Transform): Transform;
   // static mul(a: Transform, b: Vec2[]): Vec2[];
   // static mul(a: Transform, b: Transform[]): Transform[];
+  // tslint:disable-next-line:typedef
   static mul(a, b) {
     if (Array.isArray(b)) {
       _ASSERT && Transform.assert(a);
@@ -137,6 +139,7 @@ export default class Transform {
 
   static mulAll(a: Transform, b: Vec2[]): Vec2[];
   static mulAll(a: Transform, b: Transform[]): Transform[];
+  // tslint:disable-next-line:typedef
   static mulAll(a: Transform, b) {
     _ASSERT && Transform.assert(a);
     const arr = [];
@@ -146,10 +149,11 @@ export default class Transform {
     return arr;
   }
 
-  /** @deprecated */
-  static mulFn(a) {
+  /** @internal @deprecated */
+  // tslint:disable-next-line:typedef
+  static mulFn(a: Transform) {
     _ASSERT && Transform.assert(a);
-    return function(b) {
+    return function(b: Vec2): Vec2 {
       return Transform.mul(a, b);
     };
   }
@@ -175,6 +179,7 @@ export default class Transform {
 
   static mulT(a: Transform, b: Vec2): Vec2;
   static mulT(a: Transform, b: Transform): Transform;
+  // tslint:disable-next-line:typedef
   static mulT(a, b) {
     if ('x' in b && 'y' in b) {
       return Transform.mulTVec2(a, b);

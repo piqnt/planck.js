@@ -27,9 +27,9 @@ import Settings from '../../Settings';
 import Math from '../../common/Math';
 import Vec2 from '../../common/Vec2';
 import Rot from '../../common/Rot';
-import Joint from '../Joint';
-import { JointOpt, JointDef } from '../Joint';
+import Joint, { JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
+import { TimeStep } from "../Solver";
 
 /**
  * Distance joint definition. This requires defining an anchor point on both
@@ -169,7 +169,7 @@ export default class DistanceJoint extends Joint {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     return {
       type: this.m_type,
       bodyA: this.m_bodyA,
@@ -190,6 +190,7 @@ export default class DistanceJoint extends Joint {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data, world, restore) {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
@@ -199,7 +200,13 @@ export default class DistanceJoint extends Joint {
   }
 
   /** @internal */
-  _setAnchors(def) {
+  _setAnchors(def: {
+    anchorA?: Vec2,
+    localAnchorA?: Vec2,
+    anchorB?: Vec2,
+    localAnchorB?: Vec2,
+    length?: number,
+  }): void {
     if (def.anchorA) {
       this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
@@ -226,14 +233,14 @@ export default class DistanceJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA() {
+  getLocalAnchorA(): Vec2 {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB() {
+  getLocalAnchorB(): Vec2 {
     return this.m_localAnchorB;
   }
 
@@ -241,62 +248,62 @@ export default class DistanceJoint extends Joint {
    * Set the natural length. Manipulating the length can lead to non-physical
    * behavior when the frequency is zero.
    */
-  setLength(length: number) {
+  setLength(length: number): void {
     this.m_length = length;
   }
 
   /**
    * Get the natural length.
    */
-  getLength() {
+  getLength(): number {
     return this.m_length;
   }
 
-  setFrequency(hz: number) {
+  setFrequency(hz: number): void {
     this.m_frequencyHz = hz;
   }
 
-  getFrequency() {
+  getFrequency(): number {
     return this.m_frequencyHz;
   }
 
-  setDampingRatio(ratio: number) {
+  setDampingRatio(ratio: number): void {
     this.m_dampingRatio = ratio;
   }
 
-  getDampingRatio() {
+  getDampingRatio(): number {
     return this.m_dampingRatio;
   }
 
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA() {
+  getAnchorA(): Vec2 {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB() {
+  getAnchorB(): Vec2 {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number) {
+  getReactionForce(inv_dt: number): Vec2 {
     return Vec2.mul(this.m_impulse, this.m_u).mul(inv_dt);
   }
 
   /**
    * Get the reaction torque on bodyB in N*m.
    */
-  getReactionTorque(inv_dt: number) {
+  getReactionTorque(inv_dt: number): number {
     return 0.0;
   }
 
-  initVelocityConstraints(step) {
+  initVelocityConstraints(step: TimeStep): void {
     this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
     this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
     this.m_invMassA = this.m_bodyA.m_invMass;
@@ -384,7 +391,7 @@ export default class DistanceJoint extends Joint {
     this.m_bodyB.c_velocity.w = wB;
   }
 
-  solveVelocityConstraints(step) {
+  solveVelocityConstraints(step: TimeStep): void {
     const vA = this.m_bodyA.c_velocity.v;
     let wA = this.m_bodyA.c_velocity.w;
     const vB = this.m_bodyB.c_velocity.v;
@@ -414,7 +421,7 @@ export default class DistanceJoint extends Joint {
   /**
    * This returns true if the position errors are within tolerance.
    */
-  solvePositionConstraints(step) {
+  solvePositionConstraints(step: TimeStep): boolean {
     if (this.m_frequencyHz > 0.0) {
       // There is no position correction for soft distance constraints.
       return true;

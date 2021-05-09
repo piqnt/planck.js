@@ -28,9 +28,9 @@ import Math from '../../common/Math';
 import Vec2 from '../../common/Vec2';
 import Mat22 from '../../common/Mat22';
 import Rot from '../../common/Rot';
-import Joint from '../Joint';
-import { JointOpt, JointDef } from '../Joint';
+import Joint, { JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
+import { TimeStep } from "../Solver";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -148,7 +148,7 @@ export default class FrictionJoint extends Joint {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     return {
       type: this.m_type,
       bodyA: this.m_bodyA,
@@ -164,6 +164,7 @@ export default class FrictionJoint extends Joint {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data, world, restore) {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
@@ -173,7 +174,12 @@ export default class FrictionJoint extends Joint {
   }
 
   /** @internal */
-  _setAnchors(def) {
+  _setAnchors(def: {
+    anchorA?: Vec2,
+    localAnchorA?: Vec2,
+    anchorB?: Vec2,
+    localAnchorB?: Vec2,
+  }): void {
     if (def.anchorA) {
       this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
@@ -191,21 +197,21 @@ export default class FrictionJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA() {
+  getLocalAnchorA(): Vec2 {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB() {
+  getLocalAnchorB(): Vec2 {
     return this.m_localAnchorB;
   }
 
   /**
    * Set the maximum friction force in N.
    */
-  setMaxForce(force) {
+  setMaxForce(force: number): void {
     _ASSERT && common.assert(Math.isFinite(force) && force >= 0.0);
     this.m_maxForce = force;
   }
@@ -213,14 +219,14 @@ export default class FrictionJoint extends Joint {
   /**
    * Get the maximum friction force in N.
    */
-  getMaxForce() {
+  getMaxForce(): number {
     return this.m_maxForce;
   }
 
   /**
    * Set the maximum friction torque in N*m.
    */
-  setMaxTorque(torque) {
+  setMaxTorque(torque: number): void {
     _ASSERT && common.assert(Math.isFinite(torque) && torque >= 0.0);
     this.m_maxTorque = torque;
   }
@@ -228,39 +234,39 @@ export default class FrictionJoint extends Joint {
   /**
    * Get the maximum friction torque in N*m.
    */
-  getMaxTorque() {
+  getMaxTorque(): number {
     return this.m_maxTorque;
   }
 
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA() {
+  getAnchorA(): Vec2 {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB() {
+  getAnchorB(): Vec2 {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt) {
+  getReactionForce(inv_dt: number): Vec2 {
     return Vec2.mul(inv_dt, this.m_linearImpulse);
   }
 
   /**
    * Get the reaction torque on bodyB in N*m.
    */
-  getReactionTorque(inv_dt) {
+  getReactionTorque(inv_dt: number): number {
     return inv_dt * this.m_angularImpulse;
   }
 
-  initVelocityConstraints(step) {
+  initVelocityConstraints(step: TimeStep): void {
     this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
     this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
     this.m_invMassA = this.m_bodyA.m_invMass;
@@ -276,7 +282,8 @@ export default class FrictionJoint extends Joint {
     const vB = this.m_bodyB.c_velocity.v;
     let wB = this.m_bodyB.c_velocity.w;
 
-    const qA = Rot.neo(aA), qB = Rot.neo(aB);
+    const qA = Rot.neo(aA);
+    const qB = Rot.neo(aB);
 
     // Compute the effective mass matrix.
     this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
@@ -291,8 +298,10 @@ export default class FrictionJoint extends Joint {
     // [ -r1y*iA*r1x-r2y*iB*r2x, mA+r1x^2*iA+mB+r2x^2*iB, r1x*iA+r2x*iB]
     // [ -r1y*iA-r2y*iB, r1x*iA+r2x*iB, iA+iB]
 
-    const mA = this.m_invMassA, mB = this.m_invMassB; // float
-    const iA = this.m_invIA, iB = this.m_invIB; // float
+    const mA = this.m_invMassA;
+    const mB = this.m_invMassB;
+    const iA = this.m_invIA;
+    const iB = this.m_invIB;
 
     const K = new Mat22();
     K.ex.x = mA + mB + iA * this.m_rA.y * this.m_rA.y + iB * this.m_rB.y
@@ -333,14 +342,16 @@ export default class FrictionJoint extends Joint {
     this.m_bodyB.c_velocity.w = wB;
   }
 
-  solveVelocityConstraints(step) {
+  solveVelocityConstraints(step: TimeStep): void {
     const vA = this.m_bodyA.c_velocity.v;
     let wA = this.m_bodyA.c_velocity.w;
     const vB = this.m_bodyB.c_velocity.v;
     let wB = this.m_bodyB.c_velocity.w;
 
-    const mA = this.m_invMassA, mB = this.m_invMassB; // float
-    const iA = this.m_invIA, iB = this.m_invIB; // float
+    const mA = this.m_invMassA;
+    const mB = this.m_invMassB;
+    const iA = this.m_invIA;
+    const iB = this.m_invIB;
 
     const h = step.dt; // float
 
@@ -393,7 +404,7 @@ export default class FrictionJoint extends Joint {
   /**
    * This returns true if the position errors are within tolerance.
    */
-  solvePositionConstraints(step) {
+  solvePositionConstraints(step: TimeStep): boolean {
     return true;
   }
 

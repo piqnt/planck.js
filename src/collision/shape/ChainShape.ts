@@ -85,7 +85,7 @@ export default class ChainShape extends Shape {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     const data = {
       type: this.m_type,
       vertices: this.m_vertices,
@@ -105,6 +105,7 @@ export default class ChainShape extends Shape {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data, fixture, restore) {
     const vertices = [] as Vec2[];
     if (data.vertices) {
@@ -134,7 +135,7 @@ export default class ChainShape extends Shape {
    * @param vertices an array of vertices, these are copied
    * @param count the vertex count
    */
-  _createLoop(vertices: Vec2[]) {
+  _createLoop(vertices: Vec2[]): ChainShape {
     _ASSERT && common.assert(this.m_vertices.length == 0 && this.m_count == 0);
     _ASSERT && common.assert(vertices.length >= 3);
     for (let i = 1; i < vertices.length; ++i) {
@@ -165,7 +166,7 @@ export default class ChainShape extends Shape {
    * @param vertices an array of vertices, these are copied
    * @param count the vertex count
    */
-  _createChain(vertices: Vec2[]) {
+  _createChain(vertices: Vec2[]): ChainShape {
     _ASSERT && common.assert(this.m_vertices.length == 0 && this.m_count == 0);
     _ASSERT && common.assert(vertices.length >= 2);
     for (let i = 1; i < vertices.length; ++i) {
@@ -188,7 +189,7 @@ export default class ChainShape extends Shape {
   }
 
   /** @internal */
-  _reset() {
+  _reset(): void {
     if (this.m_isLoop) {
       this._createLoop(this.m_vertices);
     } else {
@@ -200,12 +201,12 @@ export default class ChainShape extends Shape {
    * Establish connectivity to a vertex that precedes the first vertex. Don't call
    * this for loops.
    */
-  setPrevVertex(prevVertex: Vec2) {
+  setPrevVertex(prevVertex: Vec2): void {
     this.m_prevVertex = prevVertex;
     this.m_hasPrevVertex = true;
   }
 
-  getPrevVertex() {
+  getPrevVertex(): Vec2 {
     return this.m_prevVertex;
   }
 
@@ -213,12 +214,12 @@ export default class ChainShape extends Shape {
    * Establish connectivity to a vertex that follows the last vertex. Don't call
    * this for loops.
    */
-  setNextVertex(nextVertex: Vec2) {
+  setNextVertex(nextVertex: Vec2): void {
     this.m_nextVertex = nextVertex;
     this.m_hasNextVertex = true;
   }
 
-  getNextVertex() {
+  getNextVertex(): Vec2 {
     return this.m_nextVertex;
   }
 
@@ -228,7 +229,7 @@ export default class ChainShape extends Shape {
    *
    * clone the concrete shape.
    */
-  _clone() {
+  _clone(): ChainShape {
     const clone = new ChainShape();
     clone._createChain(this.m_vertices);
     clone.m_type = this.m_type;
@@ -243,13 +244,13 @@ export default class ChainShape extends Shape {
   /**
    * Get the number of child primitives.
    */
-  getChildCount() {
+  getChildCount(): number {
     // edge count = vertex count - 1
     return this.m_count - 1;
   }
 
   // Get a child edge.
-  getChildEdge(edge: EdgeShape, childIndex: number) {
+  getChildEdge(edge: EdgeShape, childIndex: number): void {
     _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count - 1);
     edge.m_type = EdgeShape.TYPE;
     edge.m_radius = this.m_radius;
@@ -274,7 +275,7 @@ export default class ChainShape extends Shape {
     }
   }
 
-  getVertex(index: number) {
+  getVertex(index: number): Vec2 {
     _ASSERT && common.assert(0 <= index && index <= this.m_count);
     if (index < this.m_count) {
       return this.m_vertices[index];
@@ -283,7 +284,7 @@ export default class ChainShape extends Shape {
     }
   }
 
-  isLoop() {
+  isLoop(): boolean {
     return this.m_isLoop;
   }
 
@@ -308,7 +309,7 @@ export default class ChainShape extends Shape {
    * @param xf The transform to be applied to the shape.
    * @param childIndex The child shape index
    */
-  rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number) {
+  rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean {
     _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
 
     const edgeShape = new EdgeShape(this.getVertex(childIndex), this.getVertex(childIndex + 1));
@@ -323,7 +324,7 @@ export default class ChainShape extends Shape {
    * @param xf The world transform of the shape.
    * @param childIndex The child shape
    */
-  computeAABB(aabb: AABB, xf: Transform, childIndex: number) {
+  computeAABB(aabb: AABB, xf: Transform, childIndex: number): void {
     _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
 
     const v1 = Transform.mulVec2(xf, this.getVertex(childIndex));
@@ -341,13 +342,13 @@ export default class ChainShape extends Shape {
    * @param massData Returns the mass data for this shape.
    * @param density The density in kilograms per meter squared.
    */
-  computeMass(massData: MassData, density?: number) {
+  computeMass(massData: MassData, density?: number): void {
     massData.mass = 0.0;
     massData.center = Vec2.zero();
     massData.I = 0.0;
   }
 
-  computeDistanceProxy(proxy: DistanceProxy, childIndex: number) {
+  computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void {
     _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
     proxy.m_buffer[0] = this.getVertex(childIndex);
     proxy.m_buffer[1] = this.getVertex(childIndex + 1);

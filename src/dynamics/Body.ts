@@ -279,7 +279,7 @@ export default class Body {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     const fixtures = [];
     for (let f = this.m_fixtureList; f; f = f.m_next) {
       fixtures.push(f);
@@ -296,6 +296,7 @@ export default class Body {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data, world, restore) {
     const body = new Body(world, data);
 
@@ -1009,7 +1010,7 @@ export default class Body {
   /**
    * @internal Used for deserialize.
    */
-  _addFixture(fixture) {
+  _addFixture(fixture: Fixture): Fixture {
     _ASSERT && common.assert(this.isWorldLocked() == false);
 
     if (this.isWorldLocked() == true) {
@@ -1049,6 +1050,7 @@ export default class Body {
   createFixture(def: FixtureDef): Fixture;
   createFixture(shape: Shape, opt?: FixtureOpt): Fixture;
   createFixture(shape: Shape, density?: number): Fixture;
+  // tslint:disable-next-line:typedef
   createFixture(shape, fixdef?) {
     _ASSERT && common.assert(this.isWorldLocked() == false);
 

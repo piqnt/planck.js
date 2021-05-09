@@ -29,9 +29,9 @@ import Vec2 from '../../common/Vec2';
 import Vec3 from '../../common/Vec3';
 import Mat33 from '../../common/Mat33';
 import Rot from '../../common/Rot';
-import Joint from '../Joint';
-import { JointOpt, JointDef } from '../Joint';
+import Joint, { JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
+import { TimeStep } from "../Solver";
 
 
 /**
@@ -103,14 +103,14 @@ export default class WeldJoint extends Joint {
   /** @internal */ m_gamma: number;
 
   // Solver temp
-  /** @internal */ m_rA; // Vec2
-  /** @internal */ m_rB; // Vec2
-  /** @internal */ m_localCenterA; // Vec2
-  /** @internal */ m_localCenterB; // Vec2
-  /** @internal */ m_invMassA; // float
-  /** @internal */ m_invMassB; // float
-  /** @internal */ m_invIA; // float
-  /** @internal */ m_invIB; // float
+  /** @internal */ m_rA: Vec2;
+  /** @internal */ m_rB: Vec2;
+  /** @internal */ m_localCenterA: Vec2;
+  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_invMassA: number;
+  /** @internal */ m_invMassB: number;
+  /** @internal */ m_invIA: number;
+  /** @internal */ m_invIB: number;
   /** @internal */ m_mass: Mat33;
 
   constructor(def: WeldJointDef);
@@ -167,7 +167,7 @@ export default class WeldJoint extends Joint {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     return {
       type: this.m_type,
       bodyA: this.m_bodyA,
@@ -184,6 +184,7 @@ export default class WeldJoint extends Joint {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data, world, restore) {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
@@ -193,7 +194,12 @@ export default class WeldJoint extends Joint {
   }
 
   /** @internal */
-  _setAnchors(def) {
+  _setAnchors(def: {
+    anchorA?: Vec2,
+    localAnchorA?: Vec2,
+    anchorB?: Vec2,
+    localAnchorB?: Vec2,
+  }): void {
     if (def.anchorA) {
       this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
@@ -210,81 +216,81 @@ export default class WeldJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA() {
+  getLocalAnchorA(): Vec2 {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB() {
+  getLocalAnchorB(): Vec2 {
     return this.m_localAnchorB;
   }
 
   /**
    * Get the reference angle.
    */
-  getReferenceAngle() {
+  getReferenceAngle(): number {
     return this.m_referenceAngle;
   }
 
   /**
    * Set frequency in Hz.
    */
-  setFrequency(hz: number) {
+  setFrequency(hz: number): void {
     this.m_frequencyHz = hz;
   }
 
   /**
    * Get frequency in Hz.
    */
-  getFrequency() {
+  getFrequency(): number {
     return this.m_frequencyHz;
   }
 
   /**
    * Set damping ratio.
    */
-  setDampingRatio(ratio: number) {
+  setDampingRatio(ratio: number): void {
     this.m_dampingRatio = ratio;
   }
 
   /**
    * Get damping ratio.
    */
-  getDampingRatio() {
+  getDampingRatio(): number {
     return this.m_dampingRatio;
   }
 
   /**
    * Get the anchor point on bodyA in world coordinates.
-*/
-  getAnchorA() {
+   */
+  getAnchorA(): Vec2 {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
-*/
-  getAnchorB() {
+   */
+  getAnchorB(): Vec2 {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
-*/
-  getReactionForce(inv_dt: number) {
+   */
+  getReactionForce(inv_dt: number): Vec2 {
     return Vec2.neo(this.m_impulse.x, this.m_impulse.y).mul(inv_dt);
   }
 
   /**
    * Get the reaction torque on bodyB in N*m.
-*/
-  getReactionTorque(inv_dt: number) {
+   */
+  getReactionTorque(inv_dt: number): number {
     return inv_dt * this.m_impulse.z;
   }
 
-  initVelocityConstraints(step) {
+  initVelocityConstraints(step: TimeStep): void {
     this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
     this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
     this.m_invMassA = this.m_bodyA.m_invMass;
@@ -300,7 +306,8 @@ export default class WeldJoint extends Joint {
     const vB = this.m_bodyB.c_velocity.v;
     let wB = this.m_bodyB.c_velocity.w;
 
-    const qA = Rot.neo(aA), qB = Rot.neo(aB);
+    const qA = Rot.neo(aA);
+    const qB = Rot.neo(aB);
 
     this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
     this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
@@ -315,9 +322,9 @@ export default class WeldJoint extends Joint {
     // [ -r1y*iA-r2y*iB, r1x*iA+r2x*iB, iA+iB]
 
     const mA = this.m_invMassA;
-    const mB = this.m_invMassB; // float
+    const mB = this.m_invMassB;
     const iA = this.m_invIA;
-    const iB = this.m_invIB; // float
+    const iB = this.m_invIB;
 
     const K = new Mat33();
     K.ex.x = mA + mB + this.m_rA.y * this.m_rA.y * iA + this.m_rB.y * this.m_rB.y
@@ -389,7 +396,7 @@ export default class WeldJoint extends Joint {
     this.m_bodyB.c_velocity.w = wB;
   }
 
-  solveVelocityConstraints(step) {
+  solveVelocityConstraints(step: TimeStep): void {
     const vA = this.m_bodyA.c_velocity.v;
     let wA = this.m_bodyA.c_velocity.w;
     const vB = this.m_bodyB.c_velocity.v;
@@ -453,21 +460,25 @@ export default class WeldJoint extends Joint {
   /**
    * This returns true if the position errors are within tolerance.
    */
-  solvePositionConstraints(step) {
+  solvePositionConstraints(step: TimeStep): boolean {
     const cA = this.m_bodyA.c_position.c;
     let aA = this.m_bodyA.c_position.a;
     const cB = this.m_bodyB.c_position.c;
     let aB = this.m_bodyB.c_position.a;
 
-    const qA = Rot.neo(aA), qB = Rot.neo(aB);
+    const qA = Rot.neo(aA);
+    const qB = Rot.neo(aB);
 
-    const mA = this.m_invMassA, mB = this.m_invMassB; // float
-    const iA = this.m_invIA, iB = this.m_invIB; // float
+    const mA = this.m_invMassA;
+    const mB = this.m_invMassB;
+    const iA = this.m_invIA;
+    const iB = this.m_invIB;
 
     const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
     const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
 
-    let positionError, angularError; // float
+    let positionError: number;
+    let angularError: number;
 
     const K = new Mat33();
     K.ex.x = mA + mB + rA.y * rA.y * iA + rB.y * rB.y * iB;
@@ -529,8 +540,7 @@ export default class WeldJoint extends Joint {
     this.m_bodyB.c_position.c = cB;
     this.m_bodyB.c_position.a = aB;
 
-    return positionError <= Settings.linearSlop
-        && angularError <= Settings.angularSlop;
+    return positionError <= Settings.linearSlop && angularError <= Settings.angularSlop;
   }
 
 }

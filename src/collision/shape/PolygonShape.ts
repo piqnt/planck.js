@@ -73,7 +73,7 @@ export default class PolygonShape extends Shape {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     return {
       type: this.m_type,
 
@@ -82,6 +82,7 @@ export default class PolygonShape extends Shape {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data, fixture, restore) {
     const vertices = [] as Vec2[];
     if (data.vertices) {
@@ -94,7 +95,7 @@ export default class PolygonShape extends Shape {
     return shape;
   }
 
-  getVertex(index: number) {
+  getVertex(index: number): Vec2 {
     _ASSERT && common.assert(0 <= index && index < this.m_count);
     return this.m_vertices[index];
   }
@@ -105,7 +106,7 @@ export default class PolygonShape extends Shape {
    *
    * clone the concrete shape.
    */
-  _clone() {
+  _clone(): PolygonShape {
     const clone = new PolygonShape();
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
@@ -128,7 +129,7 @@ export default class PolygonShape extends Shape {
   }
 
   /** @internal */
-  _reset() {
+  _reset(): void {
     this._set(this.m_vertices);
   }
 
@@ -142,7 +143,7 @@ export default class PolygonShape extends Shape {
    * Warning: collinear points are handled but not removed. Collinear points may
    * lead to poor stacking behavior.
    */
-  _set(vertices: Vec2[]) {
+  _set(vertices: Vec2[]): void {
     _ASSERT && common.assert(3 <= vertices.length && vertices.length <= Settings.maxPolygonVertices);
     if (vertices.length < 3) {
       this._setAsBox(1.0, 1.0);
@@ -257,7 +258,7 @@ export default class PolygonShape extends Shape {
   }
 
   /** @internal */
-  _setAsBox(hx: number, hy: number, center?: Vec2, angle?: number) {
+  _setAsBox(hx: number, hy: number, center?: Vec2, angle?: number): void {
     // start with right-bottom, counter-clockwise, as in Gift wrapping algorithm in PolygonShape._set()
     this.m_vertices[0] = Vec2.neo(hx, -hy);
     this.m_vertices[1] = Vec2.neo(hx, hy);
@@ -295,7 +296,7 @@ export default class PolygonShape extends Shape {
    * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
-  testPoint(xf: Transform, p: Vec2) {
+  testPoint(xf: Transform, p: Vec2): boolean {
     const pLocal = Rot.mulTVec2(xf.q, Vec2.sub(p, xf.p));
 
     for (let i = 0; i < this.m_count; ++i) {
@@ -316,7 +317,7 @@ export default class PolygonShape extends Shape {
    * @param xf The transform to be applied to the shape.
    * @param childIndex The child shape index
    */
-  rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number) {
+  rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean {
 
     // Put the ray into the polygon's frame of reference.
     const p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
@@ -384,7 +385,7 @@ export default class PolygonShape extends Shape {
    * @param xf The world transform of the shape.
    * @param childIndex The child shape
    */
-  computeAABB(aabb: AABB, xf: Transform, childIndex: number) {
+  computeAABB(aabb: AABB, xf: Transform, childIndex: number): void {
     let minX = Infinity;
     let minY = Infinity;
     let maxX = -Infinity;
@@ -409,7 +410,7 @@ export default class PolygonShape extends Shape {
    * @param massData Returns the mass data for this shape.
    * @param density The density in kilograms per meter squared.
    */
-  computeMass(massData: MassData, density: number) {
+  computeMass(massData: MassData, density: number): void {
     // Polygon mass, centroid, and inertia.
     // Let rho be the polygon density in mass per unit area.
     // Then:
@@ -495,7 +496,7 @@ export default class PolygonShape extends Shape {
    * Validate convexity. This is a very time consuming operation.
    * @returns true if valid
    */
-  validate() {
+  validate(): boolean {
     for (let i = 0; i < this.m_count; ++i) {
       const i1 = i;
       const i2 = i < this.m_count - 1 ? i1 + 1 : 0;
@@ -518,15 +519,14 @@ export default class PolygonShape extends Shape {
     return true;
   }
 
-  computeDistanceProxy(proxy: DistanceProxy) {
+  computeDistanceProxy(proxy: DistanceProxy): void {
     proxy.m_vertices = this.m_vertices;
     proxy.m_count = this.m_count;
     proxy.m_radius = this.m_radius;
   }
-
 }
 
-function ComputeCentroid(vs: Vec2[], count: number) {
+function ComputeCentroid(vs: Vec2[], count: number): Vec2 {
   _ASSERT && common.assert(count >= 3);
 
   const c = Vec2.zero();

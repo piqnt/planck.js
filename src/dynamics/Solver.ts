@@ -53,7 +53,7 @@ export class TimeStep {
   /** dt * inv_dt0 */
   dtRatio = 1;
 
-  reset(dt) {
+  reset(dt: number): void {
     if (this.dt > 0.0) {
       this.inv_dt0 = this.inv_dt;
     }
@@ -78,13 +78,13 @@ export class ContactImpulse {
   private readonly normals: number[];
   private readonly tangents: number[];
 
-  constructor(contact) {
+  constructor(contact: Contact) {
     this.contact = contact;
     this.normals = [];
     this.tangents = [];
   }
 
-  get normalImpulses() {
+  get normalImpulses(): number[] {
     const contact = this.contact;
     const normals = this.normals;
     normals.length = 0;
@@ -94,7 +94,7 @@ export class ContactImpulse {
     return normals;
   }
 
-  get tangentImpulses() {
+  get tangentImpulses(): number[] {
     const contact = this.contact;
     const tangents = this.tangents;
     tangents.length = 0;
@@ -115,7 +115,7 @@ export default class Solver {
   m_contacts: Contact[];
   m_joints: Joint[];
 
-  constructor(world) {
+  constructor(world: World) {
     this.m_world = world;
     this.m_stack = [];
     this.m_bodies = [];
@@ -123,14 +123,14 @@ export default class Solver {
     this.m_joints = [];
   }
 
-  clear() {
+  clear(): void {
     this.m_stack.length = 0;
     this.m_bodies.length = 0;
     this.m_contacts.length = 0;
     this.m_joints.length = 0;
   }
 
-  addBody(body) {
+  addBody(body: Body): void {
     _ASSERT && common.assert(body instanceof Body, 'Not a Body!', body);
     this.m_bodies.push(body);
     // why?
@@ -140,17 +140,17 @@ export default class Solver {
     // body.c_velocity.w = 0;
   }
 
-  addContact(contact) {
+  addContact(contact: Contact): void {
     _ASSERT && common.assert(contact instanceof Contact, 'Not a Contact!', contact);
     this.m_contacts.push(contact);
   }
 
-  addJoint(joint) {
+  addJoint(joint: Joint): void {
     _ASSERT && common.assert(joint instanceof Joint, 'Not a Joint!', joint);
     this.m_joints.push(joint);
   }
 
-  solveWorld(step: TimeStep) {
+  solveWorld(step: TimeStep): void {
     const world = this.m_world;
 
     // Clear all the island flags.
@@ -281,7 +281,7 @@ export default class Solver {
     }
   }
 
-  solveIsland(step: TimeStep) {
+  solveIsland(step: TimeStep): void {
     // B2: Island Solve
     const world = this.m_world;
     const gravity = world.m_gravity;
@@ -490,7 +490,8 @@ export default class Solver {
     }
   }
 
-  printBodies(tag) {
+  /** @internal */
+  printBodies(tag: string): void {
     for (let i = 0; i < this.m_bodies.length; ++i) {
       const b = this.m_bodies[i];
       common.debug(tag, b.c_position.a, b.c_position.c.x, b.c_position.c.y, b.c_velocity.w, b.c_velocity.v.x, b.c_velocity.v.y);
@@ -500,7 +501,7 @@ export default class Solver {
   /**
    * Find TOI contacts and solve them.
    */
-  solveWorldTOI(step: TimeStep) {
+  solveWorldTOI(step: TimeStep): void {
     const world = this.m_world;
 
     if (world.m_stepComplete) {
@@ -778,7 +779,7 @@ export default class Solver {
     }
   }
 
-  solveIslandTOI(subStep: TimeStep, toiA, toiB) {
+  solveIslandTOI(subStep: TimeStep, toiA: Body, toiB: Body): void {
     const world = this.m_world;
 
     // Initialize the body state.
@@ -909,7 +910,8 @@ export default class Solver {
     this.postSolveIsland();
   }
 
-  postSolveIsland() {
+  /** @internal */
+  postSolveIsland(): void {
     for (let c = 0; c < this.m_contacts.length; ++c) {
       const contact = this.m_contacts[c];
       this.m_world.postSolve(contact, contact.m_impulse);

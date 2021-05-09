@@ -49,15 +49,15 @@ export class TreeNode<T> {
   /** 0: leaf, -1: free node */
   height = -1;
 
-  constructor(id?) {
+  constructor(id?: number) {
     this.id = id;
   }
 
-  toString() {
+  toString(): string {
     return this.id + ": " + this.userData;
   }
 
-  isLeaf() {
+  isLeaf(): boolean {
     return this.child1 == null;
   }
 }
@@ -87,7 +87,7 @@ export default class DynamicTree<T> {
     this.m_lastProxyId = 0;
 
     this.m_pool = new Pool<TreeNode<T>>({
-      create() {
+      create(): TreeNode<T> {
         return new TreeNode();
       }
     });
@@ -857,28 +857,28 @@ export default class DynamicTree<T> {
   }
 
   private inputPool = new Pool<RayCastInput>({
-    create() {
+    create(): RayCastInput {
       // tslint:disable-next-line:no-object-literal-type-assertion
       return {} as RayCastInput;
     },
-    release(stack) {
+    release(stack: RayCastInput): void {
     }
   });
 
   private stackPool = new Pool<Array<TreeNode<T>>>({
-    create() {
+    create(): Array<TreeNode<T>> {
       return [];
     },
-    release(stack) {
+    release(stack: Array<TreeNode<T>>): void {
       stack.length = 0;
     }
   });
 
   private iteratorPool = new Pool<Iterator<T>>({
-    create() {
+    create(): Iterator<T> {
       return new Iterator();
     },
-    release(iterator) {
+    release(iterator: Iterator<T>): void {
       iterator.close();
     }
   });
@@ -888,14 +888,14 @@ export default class DynamicTree<T> {
 class Iterator<T> {
   parents: Array<TreeNode<T>> = [];
   states: number[] = [];
-  preorder(root) {
+  preorder(root: TreeNode<T>): Iterator<T> {
     this.parents.length = 0;
     this.parents.push(root);
     this.states.length = 0;
     this.states.push(0);
     return this;
   }
-  next() {
+  next(): TreeNode<T> {
     while (this.parents.length > 0) {
       const i = this.parents.length - 1;
       const node = this.parents[i];
@@ -923,7 +923,7 @@ class Iterator<T> {
       this.states.pop();
     }
   }
-  close() {
+  close(): void {
     this.parents.length = 0;
   }
 }

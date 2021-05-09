@@ -28,9 +28,9 @@ import Math from '../../common/Math';
 import Vec2 from '../../common/Vec2';
 import Mat22 from '../../common/Mat22';
 import Rot from '../../common/Rot';
-import Joint from '../Joint';
-import { JointOpt, JointDef } from '../Joint';
+import Joint, { JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
+import { TimeStep } from "../Solver";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -90,18 +90,18 @@ export default class MotorJoint extends Joint {
   /** @internal */ m_maxTorque: number;
   /** @internal */ m_correctionFactor: number;
   // Solver temp
-  /** @internal */ m_rA; // Vec2
-  /** @internal */ m_rB; // Vec2
-  /** @internal */ m_localCenterA; // Vec2
-  /** @internal */ m_localCenterB; // Vec2
-  /** @internal */ m_linearError; // Vec2
-  /** @internal */ m_angularError; // float
-  /** @internal */ m_invMassA; // float
-  /** @internal */ m_invMassB; // float
-  /** @internal */ m_invIA; // float
-  /** @internal */ m_invIB; // float
-  /** @internal */ m_linearMass; // Mat22
-  /** @internal */ m_angularMass; // float
+  /** @internal */ m_rA: Vec2;
+  /** @internal */ m_rB: Vec2;
+  /** @internal */ m_localCenterA: Vec2;
+  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_linearError: Vec2;
+  /** @internal */ m_angularError: number;
+  /** @internal */ m_invMassA: number;
+  /** @internal */ m_invMassB: number;
+  /** @internal */ m_invIA: number;
+  /** @internal */ m_invIB: number;
+  /** @internal */ m_linearMass: Mat22;
+  /** @internal */ m_angularMass: number;
 
   constructor(def: MotorJointDef);
   constructor(def: MotorJointOpt, bodyA: Body, bodyB: Body);
@@ -128,20 +128,6 @@ export default class MotorJoint extends Joint {
     this.m_maxTorque = def.maxTorque;
     this.m_correctionFactor = def.correctionFactor;
 
-    // Solver temp
-    this.m_rA; // Vec2
-    this.m_rB; // Vec2
-    this.m_localCenterA; // Vec2
-    this.m_localCenterB; // Vec2
-    this.m_linearError; // Vec2
-    this.m_angularError; // float
-    this.m_invMassA; // float
-    this.m_invMassB; // float
-    this.m_invIA; // float
-    this.m_invIB; // float
-    this.m_linearMass; // Mat22
-    this.m_angularMass; // float
-
     // Point-to-point constraint
     // Cdot = v2 - v1
     // = v2 + cross(w2, r2) - v1 - cross(w1, r1)
@@ -156,7 +142,7 @@ export default class MotorJoint extends Joint {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     return {
       type: this.m_type,
       bodyA: this.m_bodyA,
@@ -173,6 +159,7 @@ export default class MotorJoint extends Joint {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data, world, restore) {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
@@ -182,13 +169,13 @@ export default class MotorJoint extends Joint {
   }
 
   /** @internal */
-  _setAnchors(def) {
+  _setAnchors(def: {}): void {
   }
 
   /**
    * Set the maximum friction force in N.
    */
-  setMaxForce(force) {
+  setMaxForce(force: number): void {
     _ASSERT && common.assert(Math.isFinite(force) && force >= 0.0);
     this.m_maxForce = force;
   }
@@ -196,14 +183,14 @@ export default class MotorJoint extends Joint {
   /**
    * Get the maximum friction force in N.
    */
-  getMaxForce() {
+  getMaxForce(): number {
     return this.m_maxForce;
   }
 
   /**
    * Set the maximum friction torque in N*m.
    */
-  setMaxTorque(torque) {
+  setMaxTorque(torque: number): void {
     _ASSERT && common.assert(Math.isFinite(torque) && torque >= 0.0);
     this.m_maxTorque = torque;
   }
@@ -211,14 +198,14 @@ export default class MotorJoint extends Joint {
   /**
    * Get the maximum friction torque in N*m.
    */
-  getMaxTorque() {
+  getMaxTorque(): number {
     return this.m_maxTorque;
   }
 
   /**
    * Set the position correction factor in the range [0,1].
    */
-  setCorrectionFactor(factor) {
+  setCorrectionFactor(factor: number): void {
     _ASSERT && common.assert(Math.isFinite(factor) && 0.0 <= factor && factor <= 1.0);
     this.m_correctionFactor = factor;
   }
@@ -226,14 +213,14 @@ export default class MotorJoint extends Joint {
   /**
    * Get the position correction factor in the range [0,1].
    */
-  getCorrectionFactor() {
+  getCorrectionFactor(): number {
     return this.m_correctionFactor;
   }
 
   /**
    * Set/get the target linear offset, in frame A, in meters.
    */
-  setLinearOffset(linearOffset) {
+  setLinearOffset(linearOffset: Vec2): void {
     if (linearOffset.x != this.m_linearOffset.x
         || linearOffset.y != this.m_linearOffset.y) {
       this.m_bodyA.setAwake(true);
@@ -242,14 +229,14 @@ export default class MotorJoint extends Joint {
     }
   }
 
-  getLinearOffset() {
+  getLinearOffset(): Vec2 {
     return this.m_linearOffset;
   }
 
   /**
    * Set/get the target angular offset, in radians.
    */
-  setAngularOffset(angularOffset) {
+  setAngularOffset(angularOffset: number): void {
     if (angularOffset != this.m_angularOffset) {
       this.m_bodyA.setAwake(true);
       this.m_bodyB.setAwake(true);
@@ -257,39 +244,39 @@ export default class MotorJoint extends Joint {
     }
   }
 
-  getAngularOffset() {
+  getAngularOffset(): number {
     return this.m_angularOffset;
   }
 
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA() {
+  getAnchorA(): Vec2 {
     return this.m_bodyA.getPosition();
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB() {
+  getAnchorB(): Vec2 {
     return this.m_bodyB.getPosition();
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt) {
+  getReactionForce(inv_dt: number): Vec2 {
     return Vec2.mul(inv_dt, this.m_linearImpulse);
   }
 
   /**
    * Get the reaction torque on bodyB in N*m.
    */
-  getReactionTorque(inv_dt) {
+  getReactionTorque(inv_dt: number): number {
     return inv_dt * this.m_angularImpulse;
   }
 
-  initVelocityConstraints(step) {
+  initVelocityConstraints(step: TimeStep): void {
     this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
     this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
     this.m_invMassA = this.m_bodyA.m_invMass;
@@ -307,7 +294,8 @@ export default class MotorJoint extends Joint {
     const vB = this.m_bodyB.c_velocity.v;
     let wB = this.m_bodyB.c_velocity.w;
 
-    const qA = Rot.neo(aA), qB = Rot.neo(aB);
+    const qA = Rot.neo(aA);
+    const qB = Rot.neo(aB);
 
     // Compute the effective mass matrix.
     this.m_rA = Rot.mulVec2(qA, Vec2.neg(this.m_localCenterA));
@@ -328,12 +316,10 @@ export default class MotorJoint extends Joint {
     const iB = this.m_invIB;
 
     const K = new Mat22();
-    K.ex.x = mA + mB + iA * this.m_rA.y * this.m_rA.y + iB * this.m_rB.y
-        * this.m_rB.y;
+    K.ex.x = mA + mB + iA * this.m_rA.y * this.m_rA.y + iB * this.m_rB.y * this.m_rB.y;
     K.ex.y = -iA * this.m_rA.x * this.m_rA.y - iB * this.m_rB.x * this.m_rB.y;
     K.ey.x = K.ex.y;
-    K.ey.y = mA + mB + iA * this.m_rA.x * this.m_rA.x + iB * this.m_rB.x
-        * this.m_rB.x;
+    K.ey.y = mA + mB + iA * this.m_rA.x * this.m_rA.x + iB * this.m_rB.x * this.m_rB.x;
 
     this.m_linearMass = K.getInverse();
 
@@ -373,14 +359,16 @@ export default class MotorJoint extends Joint {
     this.m_bodyB.c_velocity.w = wB;
   }
 
-  solveVelocityConstraints(step) {
+  solveVelocityConstraints(step: TimeStep): void {
     const vA = this.m_bodyA.c_velocity.v;
     let wA = this.m_bodyA.c_velocity.w;
     const vB = this.m_bodyB.c_velocity.v;
     let wB = this.m_bodyB.c_velocity.w;
 
-    const mA = this.m_invMassA, mB = this.m_invMassB;
-    const iA = this.m_invIA, iB = this.m_invIB;
+    const mA = this.m_invMassA;
+    const mB = this.m_invMassB;
+    const iA = this.m_invIA;
+    const iB = this.m_invIB;
 
     const h = step.dt;
     const inv_h = step.inv_dt;
@@ -433,7 +421,7 @@ export default class MotorJoint extends Joint {
   /**
    * This returns true if the position errors are within tolerance.
    */
-  solvePositionConstraints(step) {
+  solvePositionConstraints(step: TimeStep): boolean {
     return true;
   }
 

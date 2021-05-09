@@ -307,7 +307,7 @@ class SimplexVertex {
   /** barycentric coordinate for closest point */
   a: number;
 
-  set(v) {
+  set(v: SimplexVertex): void {
     this.indexA = v.indexA;
     this.indexB = v.indexB;
     this.wA = Vec2.clone(v.wA);
@@ -333,7 +333,7 @@ class Simplex {
   }
 
   /** @internal */
-  print() {
+  print(): string {
     if (this.m_count === 3) {
       return ["+" + this.m_count,
         this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y,
@@ -357,7 +357,7 @@ class Simplex {
     }
   }
 
-  readCache(cache: SimplexCache, proxyA: DistanceProxy, transformA: Transform, proxyB: DistanceProxy, transformB: Transform) {
+  readCache(cache: SimplexCache, proxyA: DistanceProxy, transformA: Transform, proxyB: DistanceProxy, transformB: Transform): void {
     _ASSERT && common.assert(cache.count <= 3);
 
     // Copy data from cache.
@@ -401,7 +401,7 @@ class Simplex {
     }
   }
 
-  writeCache(cache: SimplexCache) {
+  writeCache(cache: SimplexCache): void {
     cache.metric = this.getMetric();
     cache.count = this.m_count;
     for (let i = 0; i < this.m_count; ++i) {
@@ -410,7 +410,7 @@ class Simplex {
     }
   }
 
-  getSearchDirection() {
+  getSearchDirection(): Vec2 {
     switch (this.m_count) {
       case 1:
         return Vec2.neg(this.m_v1.w);
@@ -433,7 +433,7 @@ class Simplex {
     }
   }
 
-  getClosestPoint() {
+  getClosestPoint(): Vec2 {
     switch (this.m_count) {
       case 0:
         _ASSERT && common.assert(false);
@@ -454,7 +454,7 @@ class Simplex {
     }
   }
 
-  getWitnessPoints(pA, pB) {
+  getWitnessPoints(pA: Vec2, pB: Vec2): void {
     switch (this.m_count) {
       case 0:
         _ASSERT && common.assert(false);
@@ -482,7 +482,7 @@ class Simplex {
     }
   }
 
-  getMetric() {
+  getMetric(): number {
     switch (this.m_count) {
       case 0:
         _ASSERT && common.assert(false);
@@ -504,7 +504,7 @@ class Simplex {
     }
   }
 
-  solve() {
+  solve(): void {
     switch (this.m_count) {
       case 1:
         break;
@@ -545,7 +545,7 @@ class Simplex {
 // Solution
 // a1 = d12_1 / d12
 // a2 = d12_2 / d12
-  solve2() {
+  solve2(): void {
     const w1 = this.m_v1.w;
     const w2 = this.m_v2.w;
     const e12 = Vec2.sub(w2, w1);
@@ -581,7 +581,7 @@ class Simplex {
 // - edge points[0]-points[2]
 // - edge points[1]-points[2]
 // - inside the triangle
-  solve3() {
+  solve3(): void {
     const w1 = this.m_v1.w;
     const w2 = this.m_v2.w;
     const w3 = this.m_v3.w;

@@ -29,7 +29,7 @@ import Vec2 from '../../common/Vec2';
 import Contact from '../../dynamics/Contact';
 import CircleShape from './CircleShape';
 import PolygonShape from './PolygonShape';
-import { ContactFeatureType, ManifoldType } from "../Manifold";
+import Manifold, { ContactFeatureType, ManifoldType } from "../Manifold";
 import Fixture from "../../dynamics/Fixture";
 
 
@@ -38,13 +38,13 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
 
-function PolygonCircleContact(manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) {
+function PolygonCircleContact(manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number): void {
   _ASSERT && common.assert(fixtureA.getType() == PolygonShape.TYPE);
   _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
   CollidePolygonCircle(manifold, fixtureA.getShape() as PolygonShape, xfA, fixtureB.getShape() as CircleShape, xfB);
 }
 
-export function CollidePolygonCircle(manifold, polygonA: PolygonShape, xfA: Transform, circleB: CircleShape, xfB: Transform) {
+export function CollidePolygonCircle(manifold: Manifold, polygonA: PolygonShape, xfA: Transform, circleB: CircleShape, xfB: Transform): void {
   manifold.pointCount = 0;
 
   // Compute circle position in the frame of the polygon.

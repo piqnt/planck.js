@@ -38,6 +38,7 @@ export default class Vec3 {
   constructor(x: number, y: number, z: number);
   constructor(obj: { x: number, y: number, z: number });
   constructor();
+  // tslint:disable-next-line:typedef
   constructor(x?, y?, z?) {
     if (!(this instanceof Vec3)) {
       return new Vec3(x, y, z);
@@ -59,7 +60,7 @@ export default class Vec3 {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     return {
       x: this.x,
       y: this.y,
@@ -68,6 +69,7 @@ export default class Vec3 {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data) {
     const obj = Object.create(Vec3.prototype);
     obj.x = data.x;

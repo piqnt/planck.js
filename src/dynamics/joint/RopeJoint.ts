@@ -27,9 +27,9 @@ import Settings from '../../Settings';
 import Math from '../../common/Math';
 import Vec2 from '../../common/Vec2';
 import Rot from '../../common/Rot';
-import Joint from '../Joint';
-import { JointOpt, JointDef } from '../Joint';
+import Joint, { JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
+import { TimeStep } from "../Solver";
 
 const inactiveLimit = 0;
 const atLowerLimit = 1;
@@ -150,7 +150,7 @@ export default class RopeJoint extends Joint {
   }
 
   /** @internal */
-  _serialize() {
+  _serialize(): object {
     return {
       type: this.m_type,
       bodyA: this.m_bodyA,
@@ -164,6 +164,7 @@ export default class RopeJoint extends Joint {
   }
 
   /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data, world, restore) {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
@@ -175,65 +176,65 @@ export default class RopeJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA() {
+  getLocalAnchorA(): Vec2 {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB() {
+  getLocalAnchorB(): Vec2 {
     return this.m_localAnchorB;
   }
 
   /**
    * Set the maximum length of the rope.
    */
-  setMaxLength(length) {
+  setMaxLength(length: number): void {
     this.m_maxLength = length;
   }
 
   /**
    * Get the maximum length of the rope.
    */
-  getMaxLength() {
+  getMaxLength(): number {
     return this.m_maxLength;
   }
 
-  getLimitState() {
+  getLimitState(): number {
     // TODO LimitState
     return this.m_state;
   }
 
   /**
    * Get the anchor point on bodyA in world coordinates.
-*/
-  getAnchorA() {
+   */
+  getAnchorA(): Vec2 {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
-*/
-  getAnchorB() {
+   */
+  getAnchorB(): Vec2 {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
-*/
-  getReactionForce(inv_dt) {
+   */
+  getReactionForce(inv_dt: number): Vec2 {
     return Vec2.mul(this.m_impulse, this.m_u).mul(inv_dt);
   }
 
   /**
    * Get the reaction torque on bodyB in N*m.
-*/
-  getReactionTorque(inv_dt) {
+   */
+  getReactionTorque(inv_dt: number): number {
     return 0.0;
   }
 
-  initVelocityConstraints(step) {
+  initVelocityConstraints(step: TimeStep): void {
     this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
     this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
     this.m_invMassA = this.m_bodyA.m_invMass;
@@ -308,7 +309,7 @@ export default class RopeJoint extends Joint {
     this.m_bodyB.c_velocity.w = wB;
   }
 
-  solveVelocityConstraints(step) {
+  solveVelocityConstraints(step: TimeStep): void {
     const vA = this.m_bodyA.c_velocity.v;
     let wA = this.m_bodyA.c_velocity.w;
     const vB = this.m_bodyB.c_velocity.v;
@@ -345,7 +346,7 @@ export default class RopeJoint extends Joint {
   /**
    * This returns true if the position errors are within tolerance.
    */
-  solvePositionConstraints(step) {
+  solvePositionConstraints(step: TimeStep): boolean {
     const cA = this.m_bodyA.c_position.c; // Vec2
     let aA = this.m_bodyA.c_position.a; // float
     const cB = this.m_bodyB.c_position.c; // Vec2

@@ -69,11 +69,11 @@ export default math;
 // noinspection JSConstantReassignment
 math.EPSILON = 1e-9; // TODO
 
-math.isFinite = function(x) {
+math.isFinite = function(x: unknown): boolean {
   return (typeof x === 'number') && isFinite(x) && !isNaN(x);
 };
 
-math.assert = function(x) {
+math.assert = function(x: any): void {
   if (!_ASSERT) return;
   if (!math.isFinite(x)) {
     _DEBUG && common.debug(x);
@@ -81,12 +81,12 @@ math.assert = function(x) {
   }
 };
 
-math.invSqrt = function(x) {
+math.invSqrt = function(x: number): number {
   // TODO:
   return 1 / Math.sqrt(x);
 };
 
-math.nextPowerOfTwo = function(x) {
+math.nextPowerOfTwo = function(x: number): number {
   // TODO
   x |= (x >> 1);
   x |= (x >> 2);
@@ -96,11 +96,11 @@ math.nextPowerOfTwo = function(x) {
   return x + 1;
 };
 
-math.isPowerOfTwo = function(x) {
+math.isPowerOfTwo = function(x: number): boolean {
   return x > 0 && (x & (x - 1)) === 0;
 };
 
-math.mod = function(num, min?, max?) {
+math.mod = function(num: number, min?: number, max?: number): number {
   if (typeof min === 'undefined') {
     max = 1;
     min = 0;
@@ -117,7 +117,7 @@ math.mod = function(num, min?, max?) {
   }
 };
 
-math.clamp = function(num, min, max) {
+math.clamp = function(num: number, min: number, max: number): number {
   if (num < min) {
     return min;
   } else if (num > max) {
@@ -127,7 +127,7 @@ math.clamp = function(num, min, max) {
   }
 };
 
-math.random = function(min?, max?) {
+math.random = function(min?: number, max?: number): number {
   if (typeof min === 'undefined') {
     max = 1;
     min = 0;

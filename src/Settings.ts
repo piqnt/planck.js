@@ -60,7 +60,7 @@ export default class Settings {
    * chosen to be numerically significant, but visually insignificant.
    */
   static linearSlop = 0.005;
-  static get linearSlopSquared() { return Settings.linearSlop * Settings.linearSlop; }
+  static get linearSlopSquared(): number { return Settings.linearSlop * Settings.linearSlop; }
 
   /**
    * A small angle used as a collision and constraint tolerance. Usually it is
@@ -74,7 +74,7 @@ export default class Settings {
    * continuous collision. Making it larger may create artifacts for vertex
    * collision.
    */
-  static get polygonRadius() { return 2.0 * Settings.linearSlop; }
+  static get polygonRadius(): number { return 2.0 * Settings.linearSlop; }
 
   /**
    * Maximum number of sub-steps per contact in continuous physics simulation.
@@ -121,14 +121,14 @@ export default class Settings {
    * to prevent numerical problems. You shouldn't need to adjust Settings.
    */
   static maxTranslation = 2.0;
-  static get maxTranslationSquared() { return Settings.maxTranslation * Settings.maxTranslation; }
+  static get maxTranslationSquared(): number { return Settings.maxTranslation * Settings.maxTranslation; }
 
   /**
    * The maximum angular velocity of a body. This limit is very large and is used
    * to prevent numerical problems. You shouldn't need to adjust Settings.
    */
   static maxRotation = (0.5 * Math.PI);
-  static get maxRotationSquared() { return Settings.maxRotation * Settings.maxRotation; }
+  static get maxRotationSquared(): number { return Settings.maxRotation * Settings.maxRotation; }
 
   /**
    * This scale factor controls how fast overlap is resolved. Ideally this would
@@ -149,12 +149,12 @@ export default class Settings {
    * A body cannot sleep if its linear velocity is above this tolerance.
    */
   static linearSleepTolerance = 0.01;
-  static get linearSleepToleranceSqr() { return Math.pow(Settings.linearSleepTolerance, 2); }
+  static get linearSleepToleranceSqr(): number { return Math.pow(Settings.linearSleepTolerance, 2); }
 
   /**
    * A body cannot sleep if its angular velocity is above this tolerance.
    */
   static angularSleepTolerance = (2.0 / 180.0 * Math.PI);
-  static get angularSleepToleranceSqr() { return Math.pow(Settings.angularSleepTolerance, 2); }
+  static get angularSleepToleranceSqr(): number { return Math.pow(Settings.angularSleepTolerance, 2); }
 
 }

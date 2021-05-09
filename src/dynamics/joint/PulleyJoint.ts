@@ -28,9 +28,9 @@ import Settings from '../../Settings';
 import Math from '../../common/Math';
 import Vec2 from '../../common/Vec2';
 import Rot from '../../common/Rot';
-import Joint from '../Joint';
-import { JointOpt, JointDef } from '../Joint';
+import Joint, { JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
+import { TimeStep } from "../Solver";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -40,6 +40,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * Pulley joint definition. This requires two ground anchors, two dynamic body
  * anchor points, and a pulley ratio.
  */
+// tslint:disable-next-line:no-empty-interface
 export interface PulleyJointOpt extends JointOpt {
 }
 /**
@@ -174,7 +175,7 @@ export default class PulleyJoint extends Joint {
     // cross(r2, u2)^2)
   }
 
-  _serialize() {
+  _serialize(): object {
     return {
       type: this.m_type,
       bodyA: this.m_bodyA,
@@ -191,6 +192,8 @@ export default class PulleyJoint extends Joint {
     };
   }
 
+  /** @internal */
+  // tslint:disable-next-line:typedef
   static _deserialize(data, world, restore) {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
@@ -202,42 +205,42 @@ export default class PulleyJoint extends Joint {
   /**
    * Get the first ground anchor.
    */
-  getGroundAnchorA() {
+  getGroundAnchorA(): Vec2 {
     return this.m_groundAnchorA;
   }
 
   /**
    * Get the second ground anchor.
    */
-  getGroundAnchorB() {
+  getGroundAnchorB(): Vec2 {
     return this.m_groundAnchorB;
   }
 
   /**
    * Get the current length of the segment attached to bodyA.
    */
-  getLengthA() {
+  getLengthA(): number {
     return this.m_lengthA;
   }
 
   /**
    * Get the current length of the segment attached to bodyB.
    */
-  getLengthB() {
+  getLengthB(): number {
     return this.m_lengthB;
   }
 
   /**
    * Get the pulley ratio.
    */
-  getRatio() {
+  getRatio(): number {
     return this.m_ratio;
   }
 
   /**
    * Get the current length of the segment attached to bodyA.
    */
-  getCurrentLengthA() {
+  getCurrentLengthA(): number {
     const p = this.m_bodyA.getWorldPoint(this.m_localAnchorA);
     const s = this.m_groundAnchorA;
     return Vec2.distance(p, s);
@@ -246,7 +249,7 @@ export default class PulleyJoint extends Joint {
   /**
    * Get the current length of the segment attached to bodyB.
    */
-  getCurrentLengthB() {
+  getCurrentLengthB(): number {
     const p = this.m_bodyB.getWorldPoint(this.m_localAnchorB);
     const s = this.m_groundAnchorB;
     return Vec2.distance(p, s);
@@ -257,40 +260,40 @@ export default class PulleyJoint extends Joint {
    *
    * @param newOrigin
    */
-  shiftOrigin(newOrigin) {
+  shiftOrigin(newOrigin: Vec2): void {
     this.m_groundAnchorA.sub(newOrigin);
     this.m_groundAnchorB.sub(newOrigin);
   }
 
   /**
    * Get the anchor point on bodyA in world coordinates.
-*/
-  getAnchorA() {
+   */
+  getAnchorA(): Vec2 {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
-*/
-  getAnchorB() {
+   */
+  getAnchorB(): Vec2 {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
-*/
-  getReactionForce(inv_dt) {
+   */
+  getReactionForce(inv_dt: number): Vec2 {
     return Vec2.mul(this.m_impulse, this.m_uB).mul(inv_dt);
   }
 
   /**
    * Get the reaction torque on bodyB in N*m.
-*/
-  getReactionTorque(inv_dt) {
+   */
+  getReactionTorque(inv_dt: number): number {
     return 0.0;
   }
 
-  initVelocityConstraints(step) {
+  initVelocityConstraints(step: TimeStep): void {
     this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
     this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
     this.m_invMassA = this.m_bodyA.m_invMass;
@@ -370,7 +373,7 @@ export default class PulleyJoint extends Joint {
     this.m_bodyB.c_velocity.w = wB;
   }
 
-  solveVelocityConstraints(step) {
+  solveVelocityConstraints(step: TimeStep): void {
     const vA = this.m_bodyA.c_velocity.v;
     let wA = this.m_bodyA.c_velocity.w;
     const vB = this.m_bodyB.c_velocity.v;
@@ -400,13 +403,14 @@ export default class PulleyJoint extends Joint {
   /**
    * This returns true if the position errors are within tolerance.
    */
-  solvePositionConstraints(step) {
+  solvePositionConstraints(step: TimeStep): boolean {
     const cA = this.m_bodyA.c_position.c;
     let aA = this.m_bodyA.c_position.a;
     const cB = this.m_bodyB.c_position.c;
     let aB = this.m_bodyB.c_position.a;
 
-    const qA = Rot.neo(aA), qB = Rot.neo(aB);
+    const qA = Rot.neo(aA);
+    const qB = Rot.neo(aB);
 
     const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
     const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));

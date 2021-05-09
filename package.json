@@ -60,6 +60,7 @@
     "typescript": "^4.0.0-beta"
   },
   "scripts": {
+    "lint": "tslint --project ./tslint.json './src/**/*.ts'",
     "test": "mocha 'src/**/__test/*.js' --require esm",
     "test:coverage": "nyc --reporter=text mocha 'src/**/__test/*.js'",
     "test:coverage:html": "nyc --reporter=html mocha 'src/**/__test/*.js'",

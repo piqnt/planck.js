@@ -1,5 +1,4 @@
 {
-  "extends": "dtslint/dt.json",
   "rules": {
     "indent": [true, "spaces", 2],
     "adjacent-overload-signatures": false,
@@ -13,6 +12,7 @@
     "no-conditional-assignment": false,
     "triple-equals": false,
     "prefer-for-of": false,
-    "prefer-switch": false
+    "prefer-switch": false,
+    "typedef": [true, "call-signature", "parameter", "arrow-parameter"]
   }
 }

@@ -191,7 +191,7 @@ export class ContactID {
     return this.cf.indexA + this.cf.indexB * 4 + this.cf.typeA * 16 + this.cf.typeB * 64;
   }
 
-  set(o) {
+  set(o: ContactID): void {
     // this.key = o.key;
     this.cf.set(o.cf);
   }
@@ -217,7 +217,7 @@ export class ContactFeature {
    * The feature type on shapeB
    */
   typeB: ContactFeatureType;
-  set(o: ContactFeature) {
+  set(o: ContactFeature): void {
     this.indexA = o.indexA;
     this.indexB = o.indexB;
     this.typeA = o.typeA;
@@ -267,7 +267,7 @@ export function getPointStates(
   state2: PointState[],
   manifold1: Manifold,
   manifold2: Manifold
-) {
+): void {
   // state1, state2: PointState[Settings.maxManifoldPoints]
 
   // for (var i = 0; i < Settings.maxManifoldPoints; ++i) {
@@ -311,7 +311,7 @@ export class ClipVertex {
   v = Vec2.zero();
   id = new ContactID();
 
-  set(o) {
+  set(o: ClipVertex): void {
     this.v.set(o.v);
     this.id.set(o.id);
   }
@@ -326,7 +326,7 @@ export function clipSegmentToLine(
   normal: Vec2,
   offset: number,
   vertexIndexA: number
-) {
+): number {
   // Start with no output points
   let numOut = 0;
 
