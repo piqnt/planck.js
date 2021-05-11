@@ -23,6 +23,9 @@ jobs:
         run: npm install
 
       - name: npm-build
+        run: npm run test
+
+      - name: npm-build
         run: npm run build
 
       - name: npm-typedoc

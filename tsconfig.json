@@ -1,9 +1,15 @@
 {
+  "ts-node": {
     "compilerOptions": {
-        // "strictNullChecks": true,
-        // "noImplicitAny": true,
-        "lib": ["ES2015", "DOM"],
-        "stripInternal": true,
-        "target": "ES5"
+      "typeRoots" : ["./node_modules/@types", "./types"]
     }
+  },
+  "compilerOptions": {
+    "module": "commonjs",
+    // "strictNullChecks": true,
+    // "noImplicitAny": true,
+    "lib": ["ES2015", "DOM"],
+    "stripInternal": true,
+    "target": "ES5"
+  }
 }

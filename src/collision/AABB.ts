@@ -118,7 +118,7 @@ export default class AABB {
   /**
    * Combine one or two AABB into this one.
    */
-  combine(a: AABB, b: AABB): void {
+  combine(a: AABB, b?: AABB): void {
     b = b || this;
 
     const lowerA = a.lowerBound;
