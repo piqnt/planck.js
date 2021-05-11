@@ -44,6 +44,8 @@ Planck.js public API closely follows Box2D API, with the following differences:
 
 ### v0.3 (stable release)
 
+Package name for v0.3 is `planck-js`.
+
 ##### CDN
 
 The library is available on [jsDelivr](https://www.jsdelivr.com/package/npm/planck-js).
