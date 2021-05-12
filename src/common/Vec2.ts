@@ -92,6 +92,7 @@ export default class Vec2 {
     return Vec2.neo(v.x, v.y);
   }
 
+  /** @internal */
   toString(): string {
     return JSON.stringify(this);
   }

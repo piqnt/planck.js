@@ -53,6 +53,7 @@ export class TreeNode<T> {
     this.id = id;
   }
 
+  /** @internal */
   toString(): string {
     return this.id + ": " + this.userData;
   }

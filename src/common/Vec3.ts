@@ -100,6 +100,7 @@ export default class Vec3 {
     return Vec3.neo(v.x, v.y, v.z);
   }
 
+  /** @internal */
   toString(): string {
     return JSON.stringify(this);
   }

@@ -93,6 +93,7 @@ export default class Pool<T> {
     }
   }
 
+  /** @internal */
   toString(): string {
     return " +" + this._createCount + " >" + this._outCount + " <" + this._inCount + " -"
       + this._discardCount + " =" + this._list.length + "/" + this._max;

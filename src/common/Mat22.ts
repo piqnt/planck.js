@@ -54,6 +54,7 @@ export default class Mat22 {
     }
   }
 
+  /** @internal */
   toString(): string {
     return JSON.stringify(this);
   }

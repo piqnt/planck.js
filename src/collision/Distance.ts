@@ -333,7 +333,7 @@ class Simplex {
   }
 
   /** @internal */
-  print(): string {
+  toString(): string {
     if (this.m_count === 3) {
       return ["+" + this.m_count,
         this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y,

@@ -53,6 +53,7 @@ export default class Mat33 {
     }
   }
 
+  /** @internal */
   toString(): string {
     return JSON.stringify(this);
   }

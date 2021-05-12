@@ -258,6 +258,7 @@ export default class AABB {
     return true;
   }
 
+  /** @internal */
   toString(): string {
     return JSON.stringify(this);
   }
