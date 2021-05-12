@@ -84,7 +84,7 @@ export default class AABB {
     if (obj === null || typeof obj === 'undefined') {
       return false;
     }
-    return Vec2.isValid(obj.lowerBound) && Vec2.isValid(obj.upperBound) && Vec2.sub(obj.upperBound, obj.lowerBound).lengthSquared() > 0;
+    return Vec2.isValid(obj.lowerBound) && Vec2.isValid(obj.upperBound) && Vec2.sub(obj.upperBound, obj.lowerBound).lengthSquared() >= 0;
   }
 
   static assert(o: any): void {
