@@ -299,8 +299,7 @@ export default class Body {
   }
 
   /** @internal */
-  // tslint:disable-next-line:typedef
-  static _deserialize(data, world, restore) {
+  static _deserialize(data: any, world: any, restore: any): Body {
     const body = new Body(world, data);
 
     if (data.fixtures) {

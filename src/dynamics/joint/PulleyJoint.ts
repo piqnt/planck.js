@@ -181,8 +181,7 @@ export default class PulleyJoint extends Joint {
   }
 
   /** @internal */
-  // tslint:disable-next-line:typedef
-  static _deserialize(data, world, restore) {
+  static _deserialize(data: any, world: any, restore: any): PulleyJoint {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);

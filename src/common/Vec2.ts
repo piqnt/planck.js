@@ -64,8 +64,7 @@ export default class Vec2 {
   }
 
   /** @internal */
-  // tslint:disable-next-line:typedef
-  static _deserialize(data) {
+  static _deserialize(data: any): Vec2 {
     const obj = Object.create(Vec2.prototype);
     obj.x = data.x;
     obj.y = data.y;

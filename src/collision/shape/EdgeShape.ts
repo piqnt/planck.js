@@ -87,8 +87,7 @@ export default class EdgeShape extends Shape {
   }
 
   /** @internal */
-  // tslint:disable-next-line:typedef
-  static _deserialize(data) {
+  static _deserialize(data: any): EdgeShape {
     const shape = new EdgeShape(data.vertex1, data.vertex2);
     if (shape.m_hasVertex0) {
       shape.setPrevVertex(data.vertex0);

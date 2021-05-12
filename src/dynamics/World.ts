@@ -192,8 +192,7 @@ export default class World {
   }
 
   /** @internal */
-  // tslint:disable-next-line:typedef
-  static _deserialize(data, context, restore) {
+  static _deserialize(data: any, context: any, restore: any): World {
     if (!data) {
       return new World();
     }

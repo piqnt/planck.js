@@ -69,8 +69,7 @@ export default class Vec3 {
   }
 
   /** @internal */
-  // tslint:disable-next-line:typedef
-  static _deserialize(data) {
+  static _deserialize(data: any): Vec3 {
     const obj = Object.create(Vec3.prototype);
     obj.x = data.x;
     obj.y = data.y;

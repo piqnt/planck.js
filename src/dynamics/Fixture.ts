@@ -206,8 +206,7 @@ export default class Fixture {
   }
 
   /** @internal */
-  // tslint:disable-next-line:typedef
-  static _deserialize(data: any, body: any, restore: any) {
+  static _deserialize(data: any, body: any, restore: any): Fixture {
     const shape = restore(Shape, data.shape);
     const fixture = shape && new Fixture(body, shape, data);
     return fixture;

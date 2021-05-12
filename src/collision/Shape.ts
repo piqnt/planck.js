@@ -49,8 +49,7 @@ export default abstract class Shape {
   static TYPES: { [id: string]: new (...args: any[]) => Shape; } = {};
 
   /** @internal */
-  // tslint:disable-next-line:typedef
-  static _deserialize(data, context, restore) {
+  static _deserialize(data: any, context: any, restore: any): Shape {
     const clazz = Shape.TYPES[data.type];
     return clazz && restore(clazz, data);
   }

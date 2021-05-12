@@ -79,8 +79,7 @@ export default class CircleShape extends Shape {
   }
 
   /** @internal */
-  // tslint:disable-next-line:typedef
-  static _deserialize(data) {
+  static _deserialize(data: any): CircleShape {
     return new CircleShape(data.p, data.radius);
   }
 

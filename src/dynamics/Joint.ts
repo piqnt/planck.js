@@ -133,8 +133,7 @@ export default abstract class Joint {
   abstract _serialize(): object;
 
   /** @internal */
-  // tslint:disable-next-line:typedef
-  static _deserialize = function(data, context, restore) {
+  static _deserialize(data: any, context: any, restore: any): Joint {
     const clazz = Joint.TYPES[data.type];
     return clazz && restore(clazz, data);
   };

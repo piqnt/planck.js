@@ -220,8 +220,7 @@ export default class WheelJoint extends Joint {
   }
 
   /** @internal */
-  // tslint:disable-next-line:typedef
-  static _deserialize(data, world, restore): Joint {
+  static _deserialize(data: any, world: any, restore: any): WheelJoint {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);

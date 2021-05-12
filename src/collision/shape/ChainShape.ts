@@ -105,8 +105,7 @@ export default class ChainShape extends Shape {
   }
 
   /** @internal */
-  // tslint:disable-next-line:typedef
-  static _deserialize(data, fixture, restore) {
+  static _deserialize(data: any, fixture: any, restore: any): ChainShape {
     const vertices = [] as Vec2[];
     if (data.vertices) {
       for (let i = 0; i < data.vertices.length; i++) {
