@@ -109,8 +109,9 @@ export class FixtureProxy {
 /**
  * A fixture is used to attach a shape to a body for collision detection. A
  * fixture inherits its transform from its parent. Fixtures hold additional
- * non-geometric data such as friction, collision filters, etc. Fixtures are
- * created via Body.createFixture.
+ * non-geometric data such as friction, collision filters, etc.
+ *
+ * To create a new Fixture use {@link Body.createFixture}.
  */
 export default class Fixture {
   /** @internal */ m_body: Body;
@@ -131,7 +132,7 @@ export default class Fixture {
   constructor(body: Body, shape: Shape, def?: FixtureOpt);
   constructor(body: Body, shape: Shape, density?: number);
   // tslint:disable-next-line:typedef
-  constructor(body: Body, shape?, def?) {
+  /** @internal */ constructor(body: Body, shape?, def?) {
     if (shape.shape) {
       def = shape;
       shape = shape.shape;

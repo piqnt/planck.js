@@ -43,7 +43,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  */
 export interface GearJointOpt extends JointOpt {
   /**
-   * The gear ratio. See GearJoint for explanation.
+   * The gear ratio. See {@link GearJoint} for explanation.
    */
   ratio?: number;
 }

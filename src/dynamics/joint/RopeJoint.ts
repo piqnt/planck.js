@@ -76,7 +76,7 @@ const DEFAULTS = {
  * you will get some non-physical behavior.
  *
  * A model that would allow you to dynamically modify the length would have some
- * sponginess, so I chose not to implement it that way. See DistanceJoint if you
+ * sponginess, so I chose not to implement it that way. See {@link DistanceJoint} if you
  * want to dynamically control length.
  */
 export default class RopeJoint extends Joint {

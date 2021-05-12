@@ -71,7 +71,7 @@ const WorldDefDefault: WorldDef = {
 };
 
 /**
- * Callback function for ray casts, see World.rayCast().
+ * Callback function for ray casts, see {@link World.rayCast}.
  *
  * Called for each fixture found in the query. You control how the ray cast
  * proceeds by returning a float: return -1: ignore this fixture and continue
@@ -361,7 +361,7 @@ export default class World {
    * auto clearing of forces and instead call clearForces after all sub-steps are
    * complete in one pass of your game loop.
    *
-   * Ssee World#setAutoClearForces
+   * See {@link World.setAutoClearForces}
    */
   clearForces(): void {
     for (let body = this.m_bodyList; body; body = body.getNext()) {

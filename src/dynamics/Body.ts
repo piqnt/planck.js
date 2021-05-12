@@ -142,6 +142,8 @@ export class MassData {
 
 /**
  * A rigid body composed of one or more fixtures.
+ *
+ * To create a new Body use {@link World.createBody}.
  */
 export default class Body {
   /**
@@ -207,6 +209,7 @@ export default class Body {
   /** @internal */ m_next: Body | null;
   /** @internal */ m_destroyed: boolean;
 
+  /** @internal */
   constructor(world: World, def: BodyDef) {
     def = options(def, BodyDefDefault);
 
