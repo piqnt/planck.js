@@ -31,7 +31,7 @@ parameters, and the time step.
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L68)*
+*Defined in [src/dynamics/Joint.ts:69](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L69)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -42,7 +42,7 @@ ___
 
 • **dampingRatio**? : *number*
 
-*Defined in [src/dynamics/joint/MouseJoint.ts:59](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/MouseJoint.ts#L59)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:59](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/MouseJoint.ts#L59)*
 
 [dampingRatio = 0.7] The damping ratio. 0 = no damping, 1 = critical
 damping.
@@ -53,7 +53,7 @@ ___
 
 • **frequencyHz**? : *number*
 
-*Defined in [src/dynamics/joint/MouseJoint.ts:54](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/MouseJoint.ts#L54)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:54](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/MouseJoint.ts#L54)*
 
 [frequencyHz = 5.0] The response speed.
 
@@ -63,7 +63,7 @@ ___
 
 • **maxForce**? : *number*
 
-*Defined in [src/dynamics/joint/MouseJoint.ts:50](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/MouseJoint.ts#L50)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:50](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/MouseJoint.ts#L50)*
 
 [maxForce = 0.0] The maximum constraint force that can be exerted to move
 the candidate body. Usually you will express as some multiple of the
@@ -77,6 +77,6 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L63)*
+*Defined in [src/dynamics/Joint.ts:64](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L64)*
 
 Use this to attach application specific data to your joints.

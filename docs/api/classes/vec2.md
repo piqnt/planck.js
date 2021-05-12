@@ -37,8 +37,6 @@
 * [subCombine](vec2.md#subcombine)
 * [subMul](vec2.md#submul)
 * [toString](vec2.md#tostring)
-* [wAdd](vec2.md#wadd)
-* [wSet](vec2.md#wset)
 * [wSub](vec2.md#wsub)
 * [abs](vec2.md#static-abs)
 * [add](vec2.md#static-add)
@@ -59,12 +57,9 @@
 * [mid](vec2.md#static-mid)
 * [mul](vec2.md#static-mul)
 * [neg](vec2.md#static-neg)
-* [scaleFn](vec2.md#static-scalefn)
 * [skew](vec2.md#static-skew)
 * [sub](vec2.md#static-sub)
-* [translateFn](vec2.md#static-translatefn)
 * [upper](vec2.md#static-upper)
-* [wAdd](vec2.md#static-wadd)
 * [zero](vec2.md#static-zero)
 
 ## Constructors
@@ -73,7 +68,7 @@
 
 \+ **new Vec2**(`x`: number, `y`: number): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:35](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L35)*
+*Defined in [src/common/Vec2.ts:35](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L35)*
 
 **Parameters:**
 
@@ -86,7 +81,7 @@ Name | Type |
 
 \+ **new Vec2**(`obj`: object): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:37](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L37)*
+*Defined in [src/common/Vec2.ts:37](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L37)*
 
 **Parameters:**
 
@@ -101,7 +96,7 @@ Name | Type |
 
 \+ **new Vec2**(): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:38](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L38)*
+*Defined in [src/common/Vec2.ts:38](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L38)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -111,7 +106,7 @@ Name | Type |
 
 • **x**: *number*
 
-*Defined in [src/common/Vec2.ts:34](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L34)*
+*Defined in [src/common/Vec2.ts:34](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L34)*
 
 ___
 
@@ -119,7 +114,7 @@ ___
 
 • **y**: *number*
 
-*Defined in [src/common/Vec2.ts:35](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L35)*
+*Defined in [src/common/Vec2.ts:35](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L35)*
 
 ## Methods
 
@@ -127,7 +122,7 @@ ___
 
 ▸ **add**(`w`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:192](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L192)*
+*Defined in [src/common/Vec2.ts:196](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L196)*
 
 Add a vector to this vector.
 
@@ -147,7 +142,7 @@ ___
 
 ▸ **addCombine**(`a`: number, `v`: [Vec2](vec2.md), `b`: number, `w`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:213](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L213)*
+*Defined in [src/common/Vec2.ts:218](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L218)*
 
 Add linear combination of v and w: `a * v + b * w`
 
@@ -168,7 +163,7 @@ ___
 
 ▸ **addMul**(`a`: number, `v`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:228](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L228)*
+*Defined in [src/common/Vec2.ts:233](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L233)*
 
 **Parameters:**
 
@@ -185,7 +180,7 @@ ___
 
 ▸ **clamp**(`max`: number): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:513](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L513)*
+*Defined in [src/common/Vec2.ts:519](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L519)*
 
 **Parameters:**
 
@@ -201,7 +196,7 @@ ___
 
 ▸ **clone**(): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:112](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L112)*
+*Defined in [src/common/Vec2.ts:114](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L114)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -211,7 +206,7 @@ ___
 
 ▸ **length**(): *number*
 
-*Defined in [src/common/Vec2.ts:306](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L306)*
+*Defined in [src/common/Vec2.ts:311](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L311)*
 
 Get the length of this vector (the norm).
 
@@ -225,7 +220,7 @@ ___
 
 ▸ **lengthSquared**(): *number*
 
-*Defined in [src/common/Vec2.ts:313](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L313)*
+*Defined in [src/common/Vec2.ts:318](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L318)*
 
 Get the length squared.
 
@@ -237,7 +232,7 @@ ___
 
 ▸ **mul**(`m`: number): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:294](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L294)*
+*Defined in [src/common/Vec2.ts:299](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L299)*
 
 Multiply this vector by a scalar.
 
@@ -257,7 +252,7 @@ ___
 
 ▸ **neg**(): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:479](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L479)*
+*Defined in [src/common/Vec2.ts:485](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L485)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -267,7 +262,7 @@ ___
 
 ▸ **normalize**(): *number*
 
-*Defined in [src/common/Vec2.ts:322](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L322)*
+*Defined in [src/common/Vec2.ts:327](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L327)*
 
 Convert this vector into a unit vector.
 
@@ -281,7 +276,7 @@ ___
 
 ▸ **set**(`x`: number, `y`: number): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:127](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L127)*
+*Defined in [src/common/Vec2.ts:129](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L129)*
 
 Set this vector to some specified coordinates.
 
@@ -298,7 +293,7 @@ this
 
 ▸ **set**(`value`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:128](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L128)*
+*Defined in [src/common/Vec2.ts:130](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L130)*
 
 Set this vector to some specified coordinates.
 
@@ -318,7 +313,7 @@ ___
 
 ▸ **setCombine**(`a`: number, `v`: [Vec2](vec2.md), `b`: number, `w`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:162](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L162)*
+*Defined in [src/common/Vec2.ts:166](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L166)*
 
 Set linear combination of v and w: `a * v + b * w`
 
@@ -339,7 +334,7 @@ ___
 
 ▸ **setMul**(`a`: number, `v`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:176](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L176)*
+*Defined in [src/common/Vec2.ts:180](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L180)*
 
 **Parameters:**
 
@@ -356,7 +351,7 @@ ___
 
 ▸ **setZero**(): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:121](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L121)*
+*Defined in [src/common/Vec2.ts:123](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L123)*
 
 Set this vector to all zeros.
 
@@ -370,7 +365,7 @@ ___
 
 ▸ **sub**(`w`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:282](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L282)*
+*Defined in [src/common/Vec2.ts:287](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L287)*
 
 Subtract a vector from this vector
 
@@ -390,7 +385,7 @@ ___
 
 ▸ **subCombine**(`a`: number, `v`: [Vec2](vec2.md), `b`: number, `w`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:252](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L252)*
+*Defined in [src/common/Vec2.ts:257](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L257)*
 
 Subtract linear combination of v and w: `a * v + b * w`
 
@@ -411,7 +406,7 @@ ___
 
 ▸ **subMul**(`a`: number, `v`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:266](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L266)*
+*Defined in [src/common/Vec2.ts:271](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L271)*
 
 **Parameters:**
 
@@ -428,59 +423,17 @@ ___
 
 ▸ **toString**(): *string*
 
-*Defined in [src/common/Vec2.ts:93](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L93)*
+*Defined in [src/common/Vec2.ts:95](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L95)*
 
 **Returns:** *string*
 
 ___
 
-###  wAdd
-
-▸ **wAdd**(`a`: any, `v`: any, `b`: any, `w`: any): *[Vec2](vec2.md)‹›*
-
-*Defined in [src/common/Vec2.ts:202](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L202)*
-
-**`deprecated`** Use addCombine or addMul
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`a` | any |
-`v` | any |
-`b` | any |
-`w` | any |
-
-**Returns:** *[Vec2](vec2.md)‹›*
-
-___
-
-###  wSet
-
-▸ **wSet**(`a`: any, `v`: any, `b`: any, `w`: any): *[Vec2](vec2.md)‹›*
-
-*Defined in [src/common/Vec2.ts:151](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L151)*
-
-**`deprecated`** Use setCombine or setMul
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`a` | any |
-`v` | any |
-`b` | any |
-`w` | any |
-
-**Returns:** *[Vec2](vec2.md)‹›*
-
-___
-
 ###  wSub
 
-▸ **wSub**(`a`: any, `v`: any, `b`: any, `w`: any): *[Vec2](vec2.md)‹›*
+▸ **wSub**(`a`: number, `v`: [Vec2](vec2.md), `b?`: number, `w?`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:242](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L242)*
+*Defined in [src/common/Vec2.ts:247](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L247)*
 
 **`deprecated`** Use subCombine or subMul
 
@@ -488,12 +441,12 @@ ___
 
 Name | Type |
 ------ | ------ |
-`a` | any |
-`v` | any |
-`b` | any |
-`w` | any |
+`a` | number |
+`v` | [Vec2](vec2.md) |
+`b?` | number |
+`w?` | [Vec2](vec2.md) |
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
@@ -501,7 +454,7 @@ ___
 
 ▸ **abs**(`v`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:490](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L490)*
+*Defined in [src/common/Vec2.ts:496](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L496)*
 
 **Parameters:**
 
@@ -517,7 +470,7 @@ ___
 
 ▸ **add**(`v`: [Vec2](vec2.md), `w`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:437](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L437)*
+*Defined in [src/common/Vec2.ts:444](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L444)*
 
 **Parameters:**
 
@@ -534,7 +487,7 @@ ___
 
 ▸ **addCross**(`a`: [Vec2](vec2.md), `v`: [Vec2](vec2.md), `w`: number): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:417](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L417)*
+*Defined in [src/common/Vec2.ts:423](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L423)*
 
 Returns `a + (v x w)`
 
@@ -550,7 +503,7 @@ Name | Type |
 
 ▸ **addCross**(`a`: [Vec2](vec2.md), `v`: number, `w`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:418](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L418)*
+*Defined in [src/common/Vec2.ts:424](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L424)*
 
 Returns `a + (v x w)`
 
@@ -570,7 +523,7 @@ ___
 
 ▸ **areEqual**(`v`: [Vec2](vec2.md), `w`: [Vec2](vec2.md)): *boolean*
 
-*Defined in [src/common/Vec2.ts:367](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L367)*
+*Defined in [src/common/Vec2.ts:372](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L372)*
 
 **Parameters:**
 
@@ -587,7 +540,7 @@ ___
 
 ▸ **assert**(`o`: any): *void*
 
-*Defined in [src/common/Vec2.ts:104](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L104)*
+*Defined in [src/common/Vec2.ts:106](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L106)*
 
 **Parameters:**
 
@@ -603,7 +556,7 @@ ___
 
 ▸ **clamp**(`v`: [Vec2](vec2.md), `max`: number): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:523](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L523)*
+*Defined in [src/common/Vec2.ts:529](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L529)*
 
 **Parameters:**
 
@@ -620,7 +573,7 @@ ___
 
 ▸ **clone**(`v`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:88](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L88)*
+*Defined in [src/common/Vec2.ts:90](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L90)*
 
 **Parameters:**
 
@@ -636,7 +589,7 @@ ___
 
 ▸ **combine**(`a`: number, `v`: [Vec2](vec2.md), `b`: number, `w`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:454](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L454)*
+*Defined in [src/common/Vec2.ts:459](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L459)*
 
 **Parameters:**
 
@@ -655,7 +608,7 @@ ___
 
 ▸ **cross**(`v`: [Vec2](vec2.md), `w`: [Vec2](vec2.md)): *number*
 
-*Defined in [src/common/Vec2.ts:390](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L390)*
+*Defined in [src/common/Vec2.ts:395](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L395)*
 
 Perform the cross product on two vectors. In 2D this produces a scalar.
 
@@ -673,7 +626,7 @@ Name | Type |
 
 ▸ **cross**(`v`: [Vec2](vec2.md), `w`: number): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:391](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L391)*
+*Defined in [src/common/Vec2.ts:396](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L396)*
 
 Perform the cross product on two vectors. In 2D this produces a scalar.
 
@@ -691,7 +644,7 @@ Name | Type |
 
 ▸ **cross**(`v`: number, `w`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:392](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L392)*
+*Defined in [src/common/Vec2.ts:397](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L397)*
 
 Perform the cross product on two vectors. In 2D this produces a scalar.
 
@@ -713,7 +666,7 @@ ___
 
 ▸ **distance**(`v`: [Vec2](vec2.md), `w`: [Vec2](vec2.md)): *number*
 
-*Defined in [src/common/Vec2.ts:351](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L351)*
+*Defined in [src/common/Vec2.ts:356](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L356)*
 
 **Parameters:**
 
@@ -730,7 +683,7 @@ ___
 
 ▸ **distanceSquared**(`v`: [Vec2](vec2.md), `w`: [Vec2](vec2.md)): *number*
 
-*Defined in [src/common/Vec2.ts:359](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L359)*
+*Defined in [src/common/Vec2.ts:364](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L364)*
 
 **Parameters:**
 
@@ -747,7 +700,7 @@ ___
 
 ▸ **dot**(`v`: [Vec2](vec2.md), `w`: [Vec2](vec2.md)): *number*
 
-*Defined in [src/common/Vec2.ts:384](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L384)*
+*Defined in [src/common/Vec2.ts:389](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L389)*
 
 Perform the dot product on two vectors.
 
@@ -766,7 +719,7 @@ ___
 
 ▸ **isValid**(`v`: any): *boolean*
 
-*Defined in [src/common/Vec2.ts:100](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L100)*
+*Defined in [src/common/Vec2.ts:102](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L102)*
 
 Does this vector contain finite coordinates?
 
@@ -784,7 +737,7 @@ ___
 
 ▸ **lengthOf**(`v`: [Vec2](vec2.md)): *number*
 
-*Defined in [src/common/Vec2.ts:338](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L338)*
+*Defined in [src/common/Vec2.ts:343](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L343)*
 
 Get the length of this vector (the norm).
 
@@ -804,7 +757,7 @@ ___
 
 ▸ **lengthSquared**(`v`: [Vec2](vec2.md)): *number*
 
-*Defined in [src/common/Vec2.ts:346](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L346)*
+*Defined in [src/common/Vec2.ts:351](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L351)*
 
 Get the length squared.
 
@@ -822,7 +775,7 @@ ___
 
 ▸ **lower**(`v`: [Vec2](vec2.md), `w`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:507](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L507)*
+*Defined in [src/common/Vec2.ts:513](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L513)*
 
 **Parameters:**
 
@@ -839,7 +792,7 @@ ___
 
 ▸ **mid**(`v`: [Vec2](vec2.md), `w`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:495](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L495)*
+*Defined in [src/common/Vec2.ts:501](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L501)*
 
 **Parameters:**
 
@@ -856,7 +809,7 @@ ___
 
 ▸ **mul**(`a`: [Vec2](vec2.md), `b`: number): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:464](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L464)*
+*Defined in [src/common/Vec2.ts:469](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L469)*
 
 **Parameters:**
 
@@ -869,7 +822,7 @@ Name | Type |
 
 ▸ **mul**(`a`: number, `b`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:465](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L465)*
+*Defined in [src/common/Vec2.ts:470](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L470)*
 
 **Parameters:**
 
@@ -886,7 +839,7 @@ ___
 
 ▸ **neg**(`v`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:485](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L485)*
+*Defined in [src/common/Vec2.ts:491](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L491)*
 
 **Parameters:**
 
@@ -898,30 +851,11 @@ Name | Type |
 
 ___
 
-### `Static` scaleFn
-
-▸ **scaleFn**(`x`: any, `y`: any): *(Anonymous function)*
-
-*Defined in [src/common/Vec2.ts:532](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L532)*
-
-**`deprecated`** 
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`x` | any |
-`y` | any |
-
-**Returns:** *(Anonymous function)*
-
-___
-
 ### `Static` skew
 
 ▸ **skew**(`v`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:376](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L376)*
+*Defined in [src/common/Vec2.ts:381](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L381)*
 
 Get the skew vector such that dot(skew_vec, other) == cross(vec, other)
 
@@ -939,7 +873,7 @@ ___
 
 ▸ **sub**(`v`: [Vec2](vec2.md), `w`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:458](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L458)*
+*Defined in [src/common/Vec2.ts:463](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L463)*
 
 **Parameters:**
 
@@ -949,25 +883,6 @@ Name | Type |
 `w` | [Vec2](vec2.md) |
 
 **Returns:** *[Vec2](vec2.md)*
-
-___
-
-### `Static` translateFn
-
-▸ **translateFn**(`x`: any, `y`: any): *(Anonymous function)*
-
-*Defined in [src/common/Vec2.ts:541](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L541)*
-
-**`deprecated`** 
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`x` | any |
-`y` | any |
-
-**Returns:** *(Anonymous function)*
 
 ___
 
@@ -975,7 +890,7 @@ ___
 
 ▸ **upper**(`v`: [Vec2](vec2.md), `w`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:501](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L501)*
+*Defined in [src/common/Vec2.ts:507](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L507)*
 
 **Parameters:**
 
@@ -988,31 +903,10 @@ Name | Type |
 
 ___
 
-### `Static` wAdd
-
-▸ **wAdd**(`a`: any, `v`: any, `b`: any, `w`: any): *[Vec2](vec2.md)‹›*
-
-*Defined in [src/common/Vec2.ts:446](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L446)*
-
-**`deprecated`** Use combine
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`a` | any |
-`v` | any |
-`b` | any |
-`w` | any |
-
-**Returns:** *[Vec2](vec2.md)‹›*
-
-___
-
 ### `Static` zero
 
 ▸ **zero**(): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Vec2.ts:73](https://github.com/shakiba/planck.js/blob/1523746/src/common/Vec2.ts#L73)*
+*Defined in [src/common/Vec2.ts:75](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Vec2.ts#L75)*
 
 **Returns:** *[Vec2](vec2.md)*

@@ -33,7 +33,7 @@
 
 • **indexA**: *number*
 
-*Defined in [src/collision/TimeOfImpact.ts:316](https://github.com/shakiba/planck.js/blob/1523746/src/collision/TimeOfImpact.ts#L316)*
+*Defined in [src/collision/TimeOfImpact.ts:316](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L316)*
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 • **indexB**: *number*
 
-*Defined in [src/collision/TimeOfImpact.ts:317](https://github.com/shakiba/planck.js/blob/1523746/src/collision/TimeOfImpact.ts#L317)*
+*Defined in [src/collision/TimeOfImpact.ts:317](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L317)*
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 • **m_axis**: *[Vec2](vec2.md)‹›* = Vec2.zero()
 
-*Defined in [src/collision/TimeOfImpact.ts:320](https://github.com/shakiba/planck.js/blob/1523746/src/collision/TimeOfImpact.ts#L320)*
+*Defined in [src/collision/TimeOfImpact.ts:320](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L320)*
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 • **m_localPoint**: *[Vec2](vec2.md)‹›* = Vec2.zero()
 
-*Defined in [src/collision/TimeOfImpact.ts:319](https://github.com/shakiba/planck.js/blob/1523746/src/collision/TimeOfImpact.ts#L319)*
+*Defined in [src/collision/TimeOfImpact.ts:319](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L319)*
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 • **m_proxyA**: *[DistanceProxy](distanceproxy.md)‹›* = new DistanceProxy()
 
-*Defined in [src/collision/TimeOfImpact.ts:312](https://github.com/shakiba/planck.js/blob/1523746/src/collision/TimeOfImpact.ts#L312)*
+*Defined in [src/collision/TimeOfImpact.ts:312](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L312)*
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 • **m_proxyB**: *[DistanceProxy](distanceproxy.md)‹›* = new DistanceProxy()
 
-*Defined in [src/collision/TimeOfImpact.ts:313](https://github.com/shakiba/planck.js/blob/1523746/src/collision/TimeOfImpact.ts#L313)*
+*Defined in [src/collision/TimeOfImpact.ts:313](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L313)*
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 • **m_sweepA**: *[Sweep](sweep.md)*
 
-*Defined in [src/collision/TimeOfImpact.ts:314](https://github.com/shakiba/planck.js/blob/1523746/src/collision/TimeOfImpact.ts#L314)*
+*Defined in [src/collision/TimeOfImpact.ts:314](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L314)*
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 • **m_sweepB**: *[Sweep](sweep.md)*
 
-*Defined in [src/collision/TimeOfImpact.ts:315](https://github.com/shakiba/planck.js/blob/1523746/src/collision/TimeOfImpact.ts#L315)*
+*Defined in [src/collision/TimeOfImpact.ts:315](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L315)*
 
 ___
 
@@ -97,22 +97,22 @@ ___
 
 • **m_type**: *[SeparationFunctionType](../enums/separationfunctiontype.md)*
 
-*Defined in [src/collision/TimeOfImpact.ts:318](https://github.com/shakiba/planck.js/blob/1523746/src/collision/TimeOfImpact.ts#L318)*
+*Defined in [src/collision/TimeOfImpact.ts:318](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L318)*
 
 ## Methods
 
 ###  compute
 
-▸ **compute**(`find`: any, `t`: any): *number*
+▸ **compute**(`find`: boolean, `t`: number): *number*
 
-*Defined in [src/collision/TimeOfImpact.ts:396](https://github.com/shakiba/planck.js/blob/1523746/src/collision/TimeOfImpact.ts#L396)*
+*Defined in [src/collision/TimeOfImpact.ts:396](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L396)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`find` | any |
-`t` | any |
+`find` | boolean |
+`t` | number |
 
 **Returns:** *number*
 
@@ -120,15 +120,15 @@ ___
 
 ###  evaluate
 
-▸ **evaluate**(`t`: any): *number*
+▸ **evaluate**(`t`: number): *number*
 
-*Defined in [src/collision/TimeOfImpact.ts:473](https://github.com/shakiba/planck.js/blob/1523746/src/collision/TimeOfImpact.ts#L473)*
+*Defined in [src/collision/TimeOfImpact.ts:473](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L473)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`t` | any |
+`t` | number |
 
 **Returns:** *number*
 
@@ -136,15 +136,15 @@ ___
 
 ###  findMinSeparation
 
-▸ **findMinSeparation**(`t`: any): *number*
+▸ **findMinSeparation**(`t`: number): *number*
 
-*Defined in [src/collision/TimeOfImpact.ts:469](https://github.com/shakiba/planck.js/blob/1523746/src/collision/TimeOfImpact.ts#L469)*
+*Defined in [src/collision/TimeOfImpact.ts:469](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L469)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`t` | any |
+`t` | number |
 
 **Returns:** *number*
 
@@ -154,7 +154,7 @@ ___
 
 ▸ **initialize**(`cache`: [SimplexCache](simplexcache.md), `proxyA`: [DistanceProxy](distanceproxy.md), `sweepA`: [Sweep](sweep.md), `proxyB`: [DistanceProxy](distanceproxy.md), `sweepB`: [Sweep](sweep.md), `t1`: number): *number*
 
-*Defined in [src/collision/TimeOfImpact.ts:324](https://github.com/shakiba/planck.js/blob/1523746/src/collision/TimeOfImpact.ts#L324)*
+*Defined in [src/collision/TimeOfImpact.ts:324](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L324)*
 
 **Parameters:**
 

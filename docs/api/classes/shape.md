@@ -43,7 +43,7 @@ Fixture is created. Shapes may encapsulate one or more child shapes.
 
 • **m_radius**: *number*
 
-*Defined in [src/collision/Shape.ts:39](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L39)*
+*Defined in [src/collision/Shape.ts:39](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L39)*
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 • **m_type**: *[ShapeType](../globals.md#shapetype)*
 
-*Defined in [src/collision/Shape.ts:38](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L38)*
+*Defined in [src/collision/Shape.ts:38](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L38)*
 
 ## Methods
 
@@ -59,7 +59,7 @@ ___
 
 ▸ **computeAABB**(`aabb`: [AABB](aabb.md), `xf`: [Transform](transform.md), `childIndex`: number): *void*
 
-*Defined in [src/collision/Shape.ts:115](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L115)*
+*Defined in [src/collision/Shape.ts:116](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L116)*
 
 Given a transform, compute the associated axis aligned bounding box for a
 child shape.
@@ -80,7 +80,7 @@ ___
 
 ▸ **computeDistanceProxy**(`proxy`: [DistanceProxy](distanceproxy.md), `childIndex`: number): *void*
 
-*Defined in [src/collision/Shape.ts:126](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L126)*
+*Defined in [src/collision/Shape.ts:127](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L127)*
 
 **Parameters:**
 
@@ -97,7 +97,7 @@ ___
 
 ▸ **computeMass**(`massData`: [MassData](massdata.md), `density?`: number): *void*
 
-*Defined in [src/collision/Shape.ts:124](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L124)*
+*Defined in [src/collision/Shape.ts:125](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L125)*
 
 Compute the mass properties of this shape using its dimensions and density.
 The inertia tensor is computed about the local origin.
@@ -117,7 +117,7 @@ ___
 
 ▸ **getChildCount**(): *number*
 
-*Defined in [src/collision/Shape.ts:86](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L86)*
+*Defined in [src/collision/Shape.ts:87](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L87)*
 
 Get the number of child primitives.
 
@@ -129,7 +129,7 @@ ___
 
 ▸ **getRadius**(): *number*
 
-*Defined in [src/collision/Shape.ts:61](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L61)*
+*Defined in [src/collision/Shape.ts:62](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L62)*
 
 **Returns:** *number*
 
@@ -139,7 +139,7 @@ ___
 
 ▸ **getType**(): *[ShapeType](../globals.md#shapetype)*
 
-*Defined in [src/collision/Shape.ts:71](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L71)*
+*Defined in [src/collision/Shape.ts:72](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L72)*
 
 Get the type of this shape. You can use this to down cast to the concrete
 shape.
@@ -154,7 +154,7 @@ ___
 
 ▸ **rayCast**(`output`: [RayCastOutput](../interfaces/raycastoutput.md), `input`: [RayCastInput](../interfaces/raycastinput.md), `xf`: [Transform](transform.md), `childIndex`: number): *boolean*
 
-*Defined in [src/collision/Shape.ts:105](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L105)*
+*Defined in [src/collision/Shape.ts:106](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L106)*
 
 Cast a ray against a child shape.
 
@@ -175,7 +175,7 @@ ___
 
 ▸ **testPoint**(`xf`: [Transform](transform.md), `p`: [Vec2](vec2.md)): *boolean*
 
-*Defined in [src/collision/Shape.ts:95](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L95)*
+*Defined in [src/collision/Shape.ts:96](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L96)*
 
 Test a point for containment in this shape. This only works for convex
 shapes.
@@ -195,7 +195,7 @@ ___
 
 ▸ **isValid**(`shape`: [Shape](shape.md) | null | undefined): *shape is Shape*
 
-*Defined in [src/collision/Shape.ts:57](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Shape.ts#L57)*
+*Defined in [src/collision/Shape.ts:58](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L58)*
 
 **Parameters:**
 

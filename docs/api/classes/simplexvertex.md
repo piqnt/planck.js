@@ -27,7 +27,7 @@
 
 • **a**: *number*
 
-*Defined in [src/collision/Distance.ts:308](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L308)*
+*Defined in [src/collision/Distance.ts:308](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L308)*
 
 barycentric coordinate for closest point
 
@@ -37,7 +37,7 @@ ___
 
 • **indexA**: *number*
 
-*Defined in [src/collision/Distance.ts:298](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L298)*
+*Defined in [src/collision/Distance.ts:298](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L298)*
 
 wA index
 
@@ -47,7 +47,7 @@ ___
 
 • **indexB**: *number*
 
-*Defined in [src/collision/Distance.ts:303](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L303)*
+*Defined in [src/collision/Distance.ts:303](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L303)*
 
 wB index
 
@@ -57,7 +57,7 @@ ___
 
 • **w**: *[Vec2](vec2.md)* = Vec2.zero()
 
-*Defined in [src/collision/Distance.ts:306](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L306)*
+*Defined in [src/collision/Distance.ts:306](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L306)*
 
 wB - wA;
 
@@ -67,7 +67,7 @@ ___
 
 • **wA**: *[Vec2](vec2.md)* = Vec2.zero()
 
-*Defined in [src/collision/Distance.ts:296](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L296)*
+*Defined in [src/collision/Distance.ts:296](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L296)*
 
 support point in proxyA
 
@@ -77,7 +77,7 @@ ___
 
 • **wB**: *[Vec2](vec2.md)* = Vec2.zero()
 
-*Defined in [src/collision/Distance.ts:301](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L301)*
+*Defined in [src/collision/Distance.ts:301](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L301)*
 
 support point in proxyB
 
@@ -85,14 +85,14 @@ support point in proxyB
 
 ###  set
 
-▸ **set**(`v`: any): *void*
+▸ **set**(`v`: [SimplexVertex](simplexvertex.md)): *void*
 
-*Defined in [src/collision/Distance.ts:310](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L310)*
+*Defined in [src/collision/Distance.ts:310](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L310)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`v` | any |
+`v` | [SimplexVertex](simplexvertex.md) |
 
 **Returns:** *void*

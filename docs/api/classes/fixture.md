@@ -4,18 +4,15 @@
 
 A fixture is used to attach a shape to a body for collision detection. A
 fixture inherits its transform from its parent. Fixtures hold additional
-non-geometric data such as friction, collision filters, etc. Fixtures are
-created via Body.createFixture.
+non-geometric data such as friction, collision filters, etc.
+
+To create a new Fixture use [Body.createFixture](body.md#createfixture).
 
 ## Hierarchy
 
 * **Fixture**
 
 ## Index
-
-### Constructors
-
-* [constructor](fixture.md#constructor)
 
 ### Methods
 
@@ -50,58 +47,13 @@ created via Body.createFixture.
 * [synchronize](fixture.md#synchronize)
 * [testPoint](fixture.md#testpoint)
 
-## Constructors
-
-###  constructor
-
-\+ **new Fixture**(`body`: [Body](body.md), `def`: [FixtureDef](../interfaces/fixturedef.md)): *[Fixture](fixture.md)*
-
-*Defined in [src/dynamics/Fixture.ts:128](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L128)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`body` | [Body](body.md) |
-`def` | [FixtureDef](../interfaces/fixturedef.md) |
-
-**Returns:** *[Fixture](fixture.md)*
-
-\+ **new Fixture**(`body`: [Body](body.md), `shape`: [Shape](shape.md), `def?`: [FixtureOpt](../interfaces/fixtureopt.md)): *[Fixture](fixture.md)*
-
-*Defined in [src/dynamics/Fixture.ts:130](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L130)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`body` | [Body](body.md) |
-`shape` | [Shape](shape.md) |
-`def?` | [FixtureOpt](../interfaces/fixtureopt.md) |
-
-**Returns:** *[Fixture](fixture.md)*
-
-\+ **new Fixture**(`body`: [Body](body.md), `shape`: [Shape](shape.md), `density?`: number): *[Fixture](fixture.md)*
-
-*Defined in [src/dynamics/Fixture.ts:131](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L131)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`body` | [Body](body.md) |
-`shape` | [Shape](shape.md) |
-`density?` | number |
-
-**Returns:** *[Fixture](fixture.md)*
-
 ## Methods
 
 ###  createProxies
 
 ▸ **createProxies**(`broadPhase`: [BroadPhase](broadphase.md), `xf`: [Transform](transform.md)): *void*
 
-*Defined in [src/dynamics/Fixture.ts:365](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L365)*
+*Defined in [src/dynamics/Fixture.ts:369](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L369)*
 
 These support body activation/deactivation.
 
@@ -120,7 +72,7 @@ ___
 
 ▸ **destroyProxies**(`broadPhase`: [BroadPhase](broadphase.md)): *void*
 
-*Defined in [src/dynamics/Fixture.ts:378](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L378)*
+*Defined in [src/dynamics/Fixture.ts:382](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L382)*
 
 **Parameters:**
 
@@ -136,7 +88,7 @@ ___
 
 ▸ **getAABB**(`childIndex`: number): *[AABB](aabb.md)*
 
-*Defined in [src/dynamics/Fixture.ts:357](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L357)*
+*Defined in [src/dynamics/Fixture.ts:361](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L361)*
 
 Get the fixture's AABB. This AABB may be enlarge and/or stale. If you need a
 more accurate AABB, compute it using the shape and the body transform.
@@ -155,7 +107,7 @@ ___
 
 ▸ **getBody**(): *[Body](body.md)*
 
-*Defined in [src/dynamics/Fixture.ts:273](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L273)*
+*Defined in [src/dynamics/Fixture.ts:277](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L277)*
 
 Get the parent body of this fixture. This is null if the fixture is not
 attached.
@@ -168,7 +120,7 @@ ___
 
 ▸ **getDensity**(): *number*
 
-*Defined in [src/dynamics/Fixture.ts:287](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L287)*
+*Defined in [src/dynamics/Fixture.ts:291](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L291)*
 
 Get the density of this fixture.
 
@@ -180,7 +132,7 @@ ___
 
 ▸ **getFilterCategoryBits**(): *number*
 
-*Defined in [src/dynamics/Fixture.ts:431](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L431)*
+*Defined in [src/dynamics/Fixture.ts:435](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L435)*
 
 **Returns:** *number*
 
@@ -190,7 +142,7 @@ ___
 
 ▸ **getFilterGroupIndex**(): *number*
 
-*Defined in [src/dynamics/Fixture.ts:423](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L423)*
+*Defined in [src/dynamics/Fixture.ts:427](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L427)*
 
 **Returns:** *number*
 
@@ -200,7 +152,7 @@ ___
 
 ▸ **getFilterMaskBits**(): *number*
 
-*Defined in [src/dynamics/Fixture.ts:439](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L439)*
+*Defined in [src/dynamics/Fixture.ts:443](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L443)*
 
 **Returns:** *number*
 
@@ -210,7 +162,7 @@ ___
 
 ▸ **getFriction**(): *number*
 
-*Defined in [src/dynamics/Fixture.ts:303](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L303)*
+*Defined in [src/dynamics/Fixture.ts:307](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L307)*
 
 Get the coefficient of friction, usually in the range [0,1].
 
@@ -222,7 +174,7 @@ ___
 
 ▸ **getMassData**(`massData`: [MassData](massdata.md)): *void*
 
-*Defined in [src/dynamics/Fixture.ts:349](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L349)*
+*Defined in [src/dynamics/Fixture.ts:353](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L353)*
 
 Get the mass data for this fixture. The mass data is based on the density and
 the shape. The rotational inertia is about the shape's origin. This operation
@@ -242,7 +194,7 @@ ___
 
 ▸ **getNext**(): *[Fixture](fixture.md) | null*
 
-*Defined in [src/dynamics/Fixture.ts:280](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L280)*
+*Defined in [src/dynamics/Fixture.ts:284](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L284)*
 
 Get the next fixture in the parent body's fixture list.
 
@@ -254,7 +206,7 @@ ___
 
 ▸ **getRestitution**(): *number*
 
-*Defined in [src/dynamics/Fixture.ts:318](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L318)*
+*Defined in [src/dynamics/Fixture.ts:322](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L322)*
 
 Get the coefficient of restitution.
 
@@ -266,7 +218,7 @@ ___
 
 ▸ **getShape**(): *[Shape](shape.md)*
 
-*Defined in [src/dynamics/Fixture.ts:226](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L226)*
+*Defined in [src/dynamics/Fixture.ts:229](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L229)*
 
 Get the child shape. You can modify the child shape, however you should not
 change the number of vertices because this will crash some collision caching
@@ -280,7 +232,7 @@ ___
 
 ▸ **getType**(): *[ShapeType](../globals.md#shapetype)*
 
-*Defined in [src/dynamics/Fixture.ts:217](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L217)*
+*Defined in [src/dynamics/Fixture.ts:220](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L220)*
 
 Get the type of the child shape. You can use this to down cast to the
 concrete shape.
@@ -293,7 +245,7 @@ ___
 
 ▸ **getUserData**(): *unknown*
 
-*Defined in [src/dynamics/Fixture.ts:258](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L258)*
+*Defined in [src/dynamics/Fixture.ts:262](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L262)*
 
 Get the user data that was assigned in the fixture definition. Use this to
 store your application specific data.
@@ -306,7 +258,7 @@ ___
 
 ▸ **isSensor**(): *boolean*
 
-*Defined in [src/dynamics/Fixture.ts:233](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L233)*
+*Defined in [src/dynamics/Fixture.ts:237](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L237)*
 
 A sensor shape collects contact information but never generates a collision
 response.
@@ -319,7 +271,7 @@ ___
 
 ▸ **rayCast**(`output`: [RayCastOutput](../interfaces/raycastoutput.md), `input`: [RayCastInput](../interfaces/raycastinput.md), `childIndex`: number): *boolean*
 
-*Defined in [src/dynamics/Fixture.ts:340](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L340)*
+*Defined in [src/dynamics/Fixture.ts:344](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L344)*
 
 Cast a ray against this shape.
 
@@ -339,7 +291,7 @@ ___
 
 ▸ **refilter**(): *void*
 
-*Defined in [src/dynamics/Fixture.ts:451](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L451)*
+*Defined in [src/dynamics/Fixture.ts:455](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L455)*
 
 Call this if you want to establish collision that was previously disabled by
 ContactFilter.
@@ -352,7 +304,7 @@ ___
 
 ▸ **setDensity**(`density`: number): *void*
 
-*Defined in [src/dynamics/Fixture.ts:295](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L295)*
+*Defined in [src/dynamics/Fixture.ts:299](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L299)*
 
 Set the density of this fixture. This will _not_ automatically adjust the
 mass of the body. You must call Body.resetMassData to update the body's mass.
@@ -371,7 +323,7 @@ ___
 
 ▸ **setFilterCategoryBits**(`categoryBits`: number): *void*
 
-*Defined in [src/dynamics/Fixture.ts:435](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L435)*
+*Defined in [src/dynamics/Fixture.ts:439](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L439)*
 
 **Parameters:**
 
@@ -387,7 +339,7 @@ ___
 
 ▸ **setFilterData**(`filter`: object): *void*
 
-*Defined in [src/dynamics/Fixture.ts:416](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L416)*
+*Defined in [src/dynamics/Fixture.ts:420](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L420)*
 
 Set the contact filtering data. This will not update contacts until the next
 time step when either parent body is active and awake. This automatically
@@ -409,9 +361,9 @@ ___
 
 ###  setFilterGroupIndex
 
-▸ **setFilterGroupIndex**(`groupIndex`: number): *number*
+▸ **setFilterGroupIndex**(`groupIndex`: number): *void*
 
-*Defined in [src/dynamics/Fixture.ts:427](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L427)*
+*Defined in [src/dynamics/Fixture.ts:431](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L431)*
 
 **Parameters:**
 
@@ -419,7 +371,7 @@ Name | Type |
 ------ | ------ |
 `groupIndex` | number |
 
-**Returns:** *number*
+**Returns:** *void*
 
 ___
 
@@ -427,7 +379,7 @@ ___
 
 ▸ **setFilterMaskBits**(`maskBits`: number): *void*
 
-*Defined in [src/dynamics/Fixture.ts:443](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L443)*
+*Defined in [src/dynamics/Fixture.ts:447](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L447)*
 
 **Parameters:**
 
@@ -443,7 +395,7 @@ ___
 
 ▸ **setFriction**(`friction`: number): *void*
 
-*Defined in [src/dynamics/Fixture.ts:311](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L311)*
+*Defined in [src/dynamics/Fixture.ts:315](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L315)*
 
 Set the coefficient of friction. This will not change the friction of
 existing contacts.
@@ -462,7 +414,7 @@ ___
 
 ▸ **setRestitution**(`restitution`: number): *void*
 
-*Defined in [src/dynamics/Fixture.ts:326](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L326)*
+*Defined in [src/dynamics/Fixture.ts:330](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L330)*
 
 Set the coefficient of restitution. This will not change the restitution of
 existing contacts.
@@ -481,7 +433,7 @@ ___
 
 ▸ **setSensor**(`sensor`: boolean): *void*
 
-*Defined in [src/dynamics/Fixture.ts:240](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L240)*
+*Defined in [src/dynamics/Fixture.ts:244](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L244)*
 
 Set if this fixture is a sensor.
 
@@ -499,7 +451,7 @@ ___
 
 ▸ **setUserData**(`data`: unknown): *void*
 
-*Defined in [src/dynamics/Fixture.ts:265](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L265)*
+*Defined in [src/dynamics/Fixture.ts:269](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L269)*
 
 Set the user data. Use this to store your application specific data.
 
@@ -517,7 +469,7 @@ ___
 
 ▸ **shouldCollide**(`that`: [Fixture](fixture.md)): *boolean*
 
-*Defined in [src/dynamics/Fixture.ts:492](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L492)*
+*Defined in [src/dynamics/Fixture.ts:496](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L496)*
 
 Implement this method to provide collision filtering, if you want finer
 control over contact creation.
@@ -542,7 +494,7 @@ ___
 
 ▸ **synchronize**(`broadPhase`: [BroadPhase](broadphase.md), `xf1`: [Transform](transform.md), `xf2`: [Transform](transform.md)): *void*
 
-*Defined in [src/dynamics/Fixture.ts:393](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L393)*
+*Defined in [src/dynamics/Fixture.ts:397](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L397)*
 
 Updates this fixture proxy in broad-phase (with combined AABB of current and
 next transformation).
@@ -563,7 +515,7 @@ ___
 
 ▸ **testPoint**(`p`: [Vec2](vec2.md)): *boolean*
 
-*Defined in [src/dynamics/Fixture.ts:333](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Fixture.ts#L333)*
+*Defined in [src/dynamics/Fixture.ts:337](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Fixture.ts#L337)*
 
 Test a point in world coordinates for containment in this fixture.
 

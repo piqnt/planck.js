@@ -16,7 +16,7 @@
 
 • **e_concave**: = 1
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:72](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CollideEdgePolygon.ts#L72)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:72](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideEdgePolygon.ts#L72)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **e_convex**: = 2
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:73](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CollideEdgePolygon.ts#L73)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:73](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideEdgePolygon.ts#L73)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **e_isolated**: = 0
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:71](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CollideEdgePolygon.ts#L71)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:71](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideEdgePolygon.ts#L71)*

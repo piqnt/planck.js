@@ -16,7 +16,7 @@
 
 • **e_edgeA**: = 1
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:65](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CollideEdgePolygon.ts#L65)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:65](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideEdgePolygon.ts#L65)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **e_edgeB**: = 2
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:66](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CollideEdgePolygon.ts#L66)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:66](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideEdgePolygon.ts#L66)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **e_unknown**: = -1
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:64](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CollideEdgePolygon.ts#L64)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:64](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideEdgePolygon.ts#L64)*

@@ -25,15 +25,15 @@ up one-to-one with the contact points in Manifold.
 
 ###  constructor
 
-\+ **new ContactImpulse**(`contact`: any): *[ContactImpulse](contactimpulse.md)*
+\+ **new ContactImpulse**(`contact`: [Contact](contact.md)): *[ContactImpulse](contactimpulse.md)*
 
-*Defined in [src/dynamics/Solver.ts:79](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L79)*
+*Defined in [src/dynamics/Solver.ts:79](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L79)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`contact` | any |
+`contact` | [Contact](contact.md) |
 
 **Returns:** *[ContactImpulse](contactimpulse.md)*
 
@@ -43,7 +43,7 @@ Name | Type |
 
 • **get normalImpulses**(): *number[]*
 
-*Defined in [src/dynamics/Solver.ts:87](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L87)*
+*Defined in [src/dynamics/Solver.ts:87](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L87)*
 
 **Returns:** *number[]*
 
@@ -53,6 +53,6 @@ ___
 
 • **get tangentImpulses**(): *number[]*
 
-*Defined in [src/dynamics/Solver.ts:97](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L97)*
+*Defined in [src/dynamics/Solver.ts:97](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L97)*
 
 **Returns:** *number[]*

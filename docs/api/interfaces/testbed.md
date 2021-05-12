@@ -44,7 +44,7 @@
 
 • **activeKeys**: *[ActiveKeys](activekeys.md)*
 
-*Defined in [testbed/index.ts:87](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L87)*
+*Defined in [testbed/index.ts:87](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L87)*
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 • **background**: *string*
 
-*Defined in [testbed/index.ts:88](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L88)*
+*Defined in [testbed/index.ts:88](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L88)*
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 • **findAll**: *function*
 
-*Defined in [testbed/index.ts:109](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L109)*
+*Defined in [testbed/index.ts:109](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L109)*
 
 #### Type declaration:
 
@@ -78,7 +78,7 @@ ___
 
 • **findOne**: *function*
 
-*Defined in [testbed/index.ts:108](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L108)*
+*Defined in [testbed/index.ts:108](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L108)*
 
 #### Type declaration:
 
@@ -96,7 +96,7 @@ ___
 
 • **height**: *number*
 
-*Defined in [testbed/index.ts:73](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L73)*
+*Defined in [testbed/index.ts:73](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L73)*
 
 World viewbox height.
 
@@ -106,7 +106,7 @@ ___
 
 • **hz**: *number*
 
-*Defined in [testbed/index.ts:83](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L83)*
+*Defined in [testbed/index.ts:83](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L83)*
 
 World simulation step frequency
 
@@ -116,7 +116,7 @@ ___
 
 • **keydown**? : *function*
 
-*Defined in [testbed/index.ts:105](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L105)*
+*Defined in [testbed/index.ts:105](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L105)*
 
 #### Type declaration:
 
@@ -135,7 +135,7 @@ ___
 
 • **keyup**? : *function*
 
-*Defined in [testbed/index.ts:106](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L106)*
+*Defined in [testbed/index.ts:106](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L106)*
 
 #### Type declaration:
 
@@ -154,7 +154,7 @@ ___
 
 • **mouseForce**? : *number*
 
-*Defined in [testbed/index.ts:90](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L90)*
+*Defined in [testbed/index.ts:90](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L90)*
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 • **ratio**: *number*
 
-*Defined in [testbed/index.ts:80](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L80)*
+*Defined in [testbed/index.ts:80](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L80)*
 
 ___
 
@@ -170,7 +170,7 @@ ___
 
 • **scaleY**: *number*
 
-*Defined in [testbed/index.ts:79](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L79)*
+*Defined in [testbed/index.ts:79](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L79)*
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 • **speed**: *number*
 
-*Defined in [testbed/index.ts:85](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L85)*
+*Defined in [testbed/index.ts:85](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L85)*
 
 World simulation speed, default is 1
 
@@ -188,7 +188,7 @@ ___
 
 • **step**? : *function*
 
-*Defined in [testbed/index.ts:104](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L104)*
+*Defined in [testbed/index.ts:104](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L104)*
 
 #### Type declaration:
 
@@ -207,7 +207,7 @@ ___
 
 • **width**: *number*
 
-*Defined in [testbed/index.ts:71](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L71)*
+*Defined in [testbed/index.ts:71](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L71)*
 
 World viewbox width.
 
@@ -217,7 +217,7 @@ ___
 
 • **x**: *number*
 
-*Defined in [testbed/index.ts:75](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L75)*
+*Defined in [testbed/index.ts:75](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L75)*
 
 World viewbox center vertical offset.
 
@@ -227,7 +227,7 @@ ___
 
 • **y**: *number*
 
-*Defined in [testbed/index.ts:77](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L77)*
+*Defined in [testbed/index.ts:77](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L77)*
 
 World viewbox center horizontal offset.
 
@@ -237,7 +237,7 @@ World viewbox center horizontal offset.
 
 ▸ **color**(`r`: number, `g`: number, `b`: number): *string*
 
-*Defined in [testbed/index.ts:101](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L101)*
+*Defined in [testbed/index.ts:101](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L101)*
 
 **Parameters:**
 
@@ -255,7 +255,7 @@ ___
 
 ▸ **drawAABB**(`aabb`: [AABB](../classes/aabb.md), `color`: string): *void*
 
-*Defined in [testbed/index.ts:100](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L100)*
+*Defined in [testbed/index.ts:100](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L100)*
 
 **Parameters:**
 
@@ -272,7 +272,7 @@ ___
 
 ▸ **drawCircle**(`p`: object, `r`: number, `color`: string): *void*
 
-*Defined in [testbed/index.ts:97](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L97)*
+*Defined in [testbed/index.ts:97](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L97)*
 
 **Parameters:**
 
@@ -295,7 +295,7 @@ ___
 
 ▸ **drawPoint**(`p`: object, `r`: any, `color`: string): *void*
 
-*Defined in [testbed/index.ts:96](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L96)*
+*Defined in [testbed/index.ts:96](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L96)*
 
 **Parameters:**
 
@@ -318,7 +318,7 @@ ___
 
 ▸ **drawPolygon**(`points`: Array‹object›, `color`: string): *void*
 
-*Defined in [testbed/index.ts:99](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L99)*
+*Defined in [testbed/index.ts:99](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L99)*
 
 **Parameters:**
 
@@ -335,7 +335,7 @@ ___
 
 ▸ **drawSegment**(`a`: object, `b`: object, `color`: string): *void*
 
-*Defined in [testbed/index.ts:98](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L98)*
+*Defined in [testbed/index.ts:98](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L98)*
 
 **Parameters:**
 
@@ -363,7 +363,7 @@ ___
 
 ▸ **info**(`text`: string): *void*
 
-*Defined in [testbed/index.ts:94](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L94)*
+*Defined in [testbed/index.ts:94](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L94)*
 
 **Parameters:**
 
@@ -379,7 +379,7 @@ ___
 
 ▸ **status**(`name`: string, `value`: any): *void*
 
-*Defined in [testbed/index.ts:92](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L92)*
+*Defined in [testbed/index.ts:92](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L92)*
 
 **Parameters:**
 
@@ -392,7 +392,7 @@ Name | Type |
 
 ▸ **status**(`value`: object | string): *void*
 
-*Defined in [testbed/index.ts:93](https://github.com/shakiba/planck.js/blob/1523746/testbed/index.ts#L93)*
+*Defined in [testbed/index.ts:93](https://github.com/shakiba/planck.js/blob/acc3bd8/testbed/index.ts#L93)*
 
 **Parameters:**
 

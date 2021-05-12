@@ -37,7 +37,7 @@ anchor points, and a pulley ratio.
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [src/dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L77)*
+*Defined in [src/dynamics/Joint.ts:78](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L78)*
 
 The first attached body.
 
@@ -49,7 +49,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [src/dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L81)*
+*Defined in [src/dynamics/Joint.ts:82](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L82)*
 
 The second attached body.
 
@@ -63,7 +63,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L68)*
+*Defined in [src/dynamics/Joint.ts:69](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L69)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -74,7 +74,7 @@ ___
 
 • **groundAnchorA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:53](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PulleyJoint.ts#L53)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:54](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PulleyJoint.ts#L54)*
 
 The first ground anchor in world coordinates. This point never moves.
 
@@ -84,7 +84,7 @@ ___
 
 • **groundAnchorB**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:57](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PulleyJoint.ts#L57)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:58](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PulleyJoint.ts#L58)*
 
 The second ground anchor in world coordinates. This point never moves.
 
@@ -94,7 +94,7 @@ ___
 
 • **lengthA**: *number*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:69](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PulleyJoint.ts#L69)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:70](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PulleyJoint.ts#L70)*
 
 The reference length for the segment attached to bodyA.
 
@@ -104,7 +104,7 @@ ___
 
 • **lengthB**: *number*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:73](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PulleyJoint.ts#L73)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:74](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PulleyJoint.ts#L74)*
 
 The reference length for the segment attached to bodyB.
 
@@ -114,7 +114,7 @@ ___
 
 • **localAnchorA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:61](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PulleyJoint.ts#L61)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:62](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PulleyJoint.ts#L62)*
 
 The local anchor point relative to bodyA's origin.
 
@@ -124,7 +124,7 @@ ___
 
 • **localAnchorB**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:65](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PulleyJoint.ts#L65)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:66](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PulleyJoint.ts#L66)*
 
 The local anchor point relative to bodyB's origin.
 
@@ -134,7 +134,7 @@ ___
 
 • **ratio**: *number*
 
-*Defined in [src/dynamics/joint/PulleyJoint.ts:77](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PulleyJoint.ts#L77)*
+*Defined in [src/dynamics/joint/PulleyJoint.ts:78](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PulleyJoint.ts#L78)*
 
 The pulley ratio, used to simulate a block-and-tackle.
 
@@ -148,6 +148,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L63)*
+*Defined in [src/dynamics/Joint.ts:64](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L64)*
 
 Use this to attach application specific data to your joints.

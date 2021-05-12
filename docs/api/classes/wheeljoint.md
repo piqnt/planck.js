@@ -66,7 +66,7 @@ This joint is designed for vehicle suspensions.
 
 *Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:141](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L141)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:141](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L141)*
 
 **Parameters:**
 
@@ -80,7 +80,7 @@ Name | Type |
 
 *Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:143](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L143)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:143](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L143)*
 
 **Parameters:**
 
@@ -100,15 +100,15 @@ Name | Type |
 
 ▪ **TYPE**: *"wheel-joint"* = 'wheel-joint' as 'wheel-joint'
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:103](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L103)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:103](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L103)*
 
 ## Methods
 
 ###  enableMotor
 
-▸ **enableMotor**(`flag`: any): *void*
+▸ **enableMotor**(`flag`: boolean): *void*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:321](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L321)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:328](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L328)*
 
 Enable/disable the joint motor.
 
@@ -116,7 +116,7 @@ Enable/disable the joint motor.
 
 Name | Type |
 ------ | ------ |
-`flag` | any |
+`flag` | boolean |
 
 **Returns:** *void*
 
@@ -124,57 +124,57 @@ ___
 
 ###  getAnchorA
 
-▸ **getAnchorA**(): *[Vec2](vec2.md)‹›*
+▸ **getAnchorA**(): *[Vec2](vec2.md)*
 
 *Overrides [Joint](joint.md).[getAnchorA](joint.md#abstract-getanchora)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:389](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L389)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:396](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L396)*
 
 Get the anchor point on bodyA in world coordinates.
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getAnchorB
 
-▸ **getAnchorB**(): *[Vec2](vec2.md)‹›*
+▸ **getAnchorB**(): *[Vec2](vec2.md)*
 
 *Overrides [Joint](joint.md).[getAnchorB](joint.md#abstract-getanchorb)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:396](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L396)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:403](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L403)*
 
 Get the anchor point on bodyB in world coordinates.
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getBodyA
 
-▸ **getBodyA**(): *[Body](body.md)‹›*
+▸ **getBodyA**(): *[Body](body.md)*
 
 *Inherited from [Joint](joint.md).[getBodyA](joint.md#getbodya)*
 
-*Defined in [src/dynamics/Joint.ts:157](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L157)*
+*Defined in [src/dynamics/Joint.ts:159](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L159)*
 
 Get the first body attached to this joint.
 
-**Returns:** *[Body](body.md)‹›*
+**Returns:** *[Body](body.md)*
 
 ___
 
 ###  getBodyB
 
-▸ **getBodyB**(): *[Body](body.md)‹›*
+▸ **getBodyB**(): *[Body](body.md)*
 
 *Inherited from [Joint](joint.md).[getBodyB](joint.md#getbodyb)*
 
-*Defined in [src/dynamics/Joint.ts:164](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L164)*
+*Defined in [src/dynamics/Joint.ts:166](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L166)*
 
 Get the second body attached to this joint.
 
-**Returns:** *[Body](body.md)‹›*
+**Returns:** *[Body](body.md)*
 
 ___
 
@@ -184,7 +184,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getCollideConnected](joint.md#getcollideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:188](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L188)*
+*Defined in [src/dynamics/Joint.ts:190](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L190)*
 
 Get collide connected. Note: modifying the collide connect flag won't work
 correctly because the flag is only checked when fixture AABBs begin to
@@ -198,7 +198,7 @@ ___
 
 ▸ **getJointSpeed**(): *number*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:305](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L305)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:312](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L312)*
 
 Get the current joint translation speed, usually in meters per second.
 
@@ -210,7 +210,7 @@ ___
 
 ▸ **getJointTranslation**(): *number*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:289](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L289)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:296](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L296)*
 
 Get the current joint translation, usually in meters.
 
@@ -220,37 +220,37 @@ ___
 
 ###  getLocalAnchorA
 
-▸ **getLocalAnchorA**(): *[Vec2](vec2.md)‹›*
+▸ **getLocalAnchorA**(): *[Vec2](vec2.md)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:268](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L268)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:275](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L275)*
 
 The local anchor point relative to bodyA's origin.
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getLocalAnchorB
 
-▸ **getLocalAnchorB**(): *[Vec2](vec2.md)‹›*
+▸ **getLocalAnchorB**(): *[Vec2](vec2.md)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:275](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L275)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:282](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L282)*
 
 The local anchor point relative to bodyB's origin.
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getLocalAxisA
 
-▸ **getLocalAxisA**(): *[Vec2](vec2.md)‹›*
+▸ **getLocalAxisA**(): *[Vec2](vec2.md)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:282](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L282)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:289](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L289)*
 
 The local joint axis relative to bodyA.
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
@@ -258,7 +258,7 @@ ___
 
 ▸ **getMaxMotorTorque**(): *number*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:352](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L352)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:359](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L359)*
 
 **Returns:** *number*
 
@@ -268,7 +268,7 @@ ___
 
 ▸ **getMotorSpeed**(): *number*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:339](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L339)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:346](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L346)*
 
 Get the motor speed, usually in radians per second.
 
@@ -278,9 +278,9 @@ ___
 
 ###  getMotorTorque
 
-▸ **getMotorTorque**(`inv_dt`: any): *number*
+▸ **getMotorTorque**(`inv_dt`: number): *number*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:359](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L359)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:366](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L366)*
 
 Get the current motor torque given the inverse time step, usually in N-m.
 
@@ -288,7 +288,7 @@ Get the current motor torque given the inverse time step, usually in N-m.
 
 Name | Type |
 ------ | ------ |
-`inv_dt` | any |
+`inv_dt` | number |
 
 **Returns:** *number*
 
@@ -296,25 +296,25 @@ ___
 
 ###  getNext
 
-▸ **getNext**(): *[Joint](joint.md)‹›*
+▸ **getNext**(): *[Joint](joint.md)*
 
 *Inherited from [Joint](joint.md).[getNext](joint.md#getnext)*
 
-*Defined in [src/dynamics/Joint.ts:171](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L171)*
+*Defined in [src/dynamics/Joint.ts:173](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L173)*
 
 Get the next joint the world joint list.
 
-**Returns:** *[Joint](joint.md)‹›*
+**Returns:** *[Joint](joint.md)*
 
 ___
 
 ###  getReactionForce
 
-▸ **getReactionForce**(`inv_dt`: any): *[Vec2](vec2.md)‹›*
+▸ **getReactionForce**(`inv_dt`: number): *[Vec2](vec2.md)*
 
 *Overrides [Joint](joint.md).[getReactionForce](joint.md#abstract-getreactionforce)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:403](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L403)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:410](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L410)*
 
 Get the reaction force on bodyB at the joint anchor in Newtons.
 
@@ -322,19 +322,19 @@ Get the reaction force on bodyB at the joint anchor in Newtons.
 
 Name | Type |
 ------ | ------ |
-`inv_dt` | any |
+`inv_dt` | number |
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getReactionTorque
 
-▸ **getReactionTorque**(`inv_dt`: any): *number*
+▸ **getReactionTorque**(`inv_dt`: number): *number*
 
 *Overrides [Joint](joint.md).[getReactionTorque](joint.md#abstract-getreactiontorque)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:410](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L410)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:417](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L417)*
 
 Get the reaction torque on bodyB in N*m.
 
@@ -342,7 +342,7 @@ Get the reaction torque on bodyB in N*m.
 
 Name | Type |
 ------ | ------ |
-`inv_dt` | any |
+`inv_dt` | number |
 
 **Returns:** *number*
 
@@ -352,7 +352,7 @@ ___
 
 ▸ **getSpringDampingRatio**(): *number*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:382](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L382)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:389](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L389)*
 
 **Returns:** *number*
 
@@ -362,7 +362,7 @@ ___
 
 ▸ **getSpringFrequencyHz**(): *number*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:371](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L371)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:378](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L378)*
 
 **Returns:** *number*
 
@@ -374,7 +374,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getType](joint.md#gettype)*
 
-*Defined in [src/dynamics/Joint.ts:150](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L150)*
+*Defined in [src/dynamics/Joint.ts:152](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L152)*
 
 Get the type of the concrete joint.
 
@@ -388,7 +388,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getUserData](joint.md#getuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:175](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L175)*
+*Defined in [src/dynamics/Joint.ts:177](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L177)*
 
 **Returns:** *unknown*
 
@@ -396,17 +396,17 @@ ___
 
 ###  initVelocityConstraints
 
-▸ **initVelocityConstraints**(`step`: any): *void*
+▸ **initVelocityConstraints**(`step`: [TimeStep](timestep.md)): *void*
 
 *Overrides [Joint](joint.md).[initVelocityConstraints](joint.md#abstract-initvelocityconstraints)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:414](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L414)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:421](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L421)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`step` | any |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *void*
 
@@ -418,7 +418,7 @@ ___
 
 *Inherited from [Joint](joint.md).[isActive](joint.md#isactive)*
 
-*Defined in [src/dynamics/Joint.ts:143](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L143)*
+*Defined in [src/dynamics/Joint.ts:145](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L145)*
 
 Short-cut function to determine if either body is inactive.
 
@@ -430,7 +430,7 @@ ___
 
 ▸ **isMotorEnabled**(): *boolean*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:314](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L314)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:321](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L321)*
 
 Is the joint motor enabled?
 
@@ -440,9 +440,9 @@ ___
 
 ###  setMaxMotorTorque
 
-▸ **setMaxMotorTorque**(`torque`: any): *void*
+▸ **setMaxMotorTorque**(`torque`: number): *void*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:346](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L346)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:353](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L353)*
 
 Set/Get the maximum motor force, usually in N-m.
 
@@ -450,7 +450,7 @@ Set/Get the maximum motor force, usually in N-m.
 
 Name | Type |
 ------ | ------ |
-`torque` | any |
+`torque` | number |
 
 **Returns:** *void*
 
@@ -458,9 +458,9 @@ ___
 
 ###  setMotorSpeed
 
-▸ **setMotorSpeed**(`speed`: any): *void*
+▸ **setMotorSpeed**(`speed`: number): *void*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:330](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L330)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:337](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L337)*
 
 Set the motor speed, usually in radians per second.
 
@@ -468,7 +468,7 @@ Set the motor speed, usually in radians per second.
 
 Name | Type |
 ------ | ------ |
-`speed` | any |
+`speed` | number |
 
 **Returns:** *void*
 
@@ -476,9 +476,9 @@ ___
 
 ###  setSpringDampingRatio
 
-▸ **setSpringDampingRatio**(`ratio`: any): *void*
+▸ **setSpringDampingRatio**(`ratio`: number): *void*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:378](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L378)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:385](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L385)*
 
 Set/Get the spring damping ratio
 
@@ -486,7 +486,7 @@ Set/Get the spring damping ratio
 
 Name | Type |
 ------ | ------ |
-`ratio` | any |
+`ratio` | number |
 
 **Returns:** *void*
 
@@ -494,9 +494,9 @@ ___
 
 ###  setSpringFrequencyHz
 
-▸ **setSpringFrequencyHz**(`hz`: any): *void*
+▸ **setSpringFrequencyHz**(`hz`: number): *void*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:367](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L367)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:374](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L374)*
 
 Set/Get the spring frequency in hertz. Setting the frequency to zero disables
 the spring.
@@ -505,7 +505,7 @@ the spring.
 
 Name | Type |
 ------ | ------ |
-`hz` | any |
+`hz` | number |
 
 **Returns:** *void*
 
@@ -517,7 +517,7 @@ ___
 
 *Inherited from [Joint](joint.md).[setUserData](joint.md#setuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:179](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L179)*
+*Defined in [src/dynamics/Joint.ts:181](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L181)*
 
 **Parameters:**
 
@@ -535,7 +535,7 @@ ___
 
 *Inherited from [Joint](joint.md).[shiftOrigin](joint.md#shiftorigin)*
 
-*Defined in [src/dynamics/Joint.ts:215](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L215)*
+*Defined in [src/dynamics/Joint.ts:217](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L217)*
 
 Shift the origin for any points stored in world coordinates.
 
@@ -551,11 +551,11 @@ ___
 
 ###  solvePositionConstraints
 
-▸ **solvePositionConstraints**(`step`: any): *boolean*
+▸ **solvePositionConstraints**(`step`: [TimeStep](timestep.md)): *boolean*
 
 *Overrides [Joint](joint.md).[solvePositionConstraints](joint.md#abstract-solvepositionconstraints)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:616](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L616)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:623](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L623)*
 
 This returns true if the position errors are within tolerance.
 
@@ -563,7 +563,7 @@ This returns true if the position errors are within tolerance.
 
 Name | Type |
 ------ | ------ |
-`step` | any |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *boolean*
 
@@ -571,16 +571,16 @@ ___
 
 ###  solveVelocityConstraints
 
-▸ **solveVelocityConstraints**(`step`: any): *void*
+▸ **solveVelocityConstraints**(`step`: [TimeStep](timestep.md)): *void*
 
 *Overrides [Joint](joint.md).[solveVelocityConstraints](joint.md#abstract-solvevelocityconstraints)*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:544](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L544)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:551](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L551)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`step` | any |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *void*

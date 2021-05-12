@@ -38,7 +38,7 @@
 
 \+ **new Simplex**(): *[Simplex](simplex.md)*
 
-*Defined in [src/collision/Distance.ts:325](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L325)*
+*Defined in [src/collision/Distance.ts:325](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L325)*
 
 **Returns:** *[Simplex](simplex.md)*
 
@@ -48,7 +48,7 @@
 
 • **m_count**: *number*
 
-*Defined in [src/collision/Distance.ts:325](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L325)*
+*Defined in [src/collision/Distance.ts:325](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L325)*
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 • **m_v**: *[SimplexVertex](simplexvertex.md)[]*
 
-*Defined in [src/collision/Distance.ts:324](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L324)*
+*Defined in [src/collision/Distance.ts:324](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L324)*
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 • **m_v1**: *[SimplexVertex](simplexvertex.md)*
 
-*Defined in [src/collision/Distance.ts:321](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L321)*
+*Defined in [src/collision/Distance.ts:321](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L321)*
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 • **m_v2**: *[SimplexVertex](simplexvertex.md)*
 
-*Defined in [src/collision/Distance.ts:322](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L322)*
+*Defined in [src/collision/Distance.ts:322](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L322)*
 
 ___
 
@@ -80,17 +80,17 @@ ___
 
 • **m_v3**: *[SimplexVertex](simplexvertex.md)*
 
-*Defined in [src/collision/Distance.ts:323](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L323)*
+*Defined in [src/collision/Distance.ts:323](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L323)*
 
 ## Methods
 
 ###  getClosestPoint
 
-▸ **getClosestPoint**(): *[Vec2](vec2.md)‹›*
+▸ **getClosestPoint**(): *[Vec2](vec2.md)*
 
-*Defined in [src/collision/Distance.ts:436](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L436)*
+*Defined in [src/collision/Distance.ts:436](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L436)*
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 ▸ **getMetric**(): *number*
 
-*Defined in [src/collision/Distance.ts:485](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L485)*
+*Defined in [src/collision/Distance.ts:485](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L485)*
 
 **Returns:** *number*
 
@@ -106,26 +106,26 @@ ___
 
 ###  getSearchDirection
 
-▸ **getSearchDirection**(): *[Vec2](vec2.md)‹›*
+▸ **getSearchDirection**(): *[Vec2](vec2.md)*
 
-*Defined in [src/collision/Distance.ts:413](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L413)*
+*Defined in [src/collision/Distance.ts:413](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L413)*
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getWitnessPoints
 
-▸ **getWitnessPoints**(`pA`: any, `pB`: any): *void*
+▸ **getWitnessPoints**(`pA`: [Vec2](vec2.md), `pB`: [Vec2](vec2.md)): *void*
 
-*Defined in [src/collision/Distance.ts:457](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L457)*
+*Defined in [src/collision/Distance.ts:457](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L457)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`pA` | any |
-`pB` | any |
+`pA` | [Vec2](vec2.md) |
+`pB` | [Vec2](vec2.md) |
 
 **Returns:** *void*
 
@@ -135,7 +135,7 @@ ___
 
 ▸ **readCache**(`cache`: [SimplexCache](simplexcache.md), `proxyA`: [DistanceProxy](distanceproxy.md), `transformA`: [Transform](transform.md), `proxyB`: [DistanceProxy](distanceproxy.md), `transformB`: [Transform](transform.md)): *void*
 
-*Defined in [src/collision/Distance.ts:360](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L360)*
+*Defined in [src/collision/Distance.ts:360](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L360)*
 
 **Parameters:**
 
@@ -155,7 +155,7 @@ ___
 
 ▸ **solve**(): *void*
 
-*Defined in [src/collision/Distance.ts:507](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L507)*
+*Defined in [src/collision/Distance.ts:507](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L507)*
 
 **Returns:** *void*
 
@@ -165,7 +165,7 @@ ___
 
 ▸ **solve2**(): *void*
 
-*Defined in [src/collision/Distance.ts:548](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L548)*
+*Defined in [src/collision/Distance.ts:548](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L548)*
 
 **Returns:** *void*
 
@@ -175,7 +175,7 @@ ___
 
 ▸ **solve3**(): *void*
 
-*Defined in [src/collision/Distance.ts:584](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L584)*
+*Defined in [src/collision/Distance.ts:584](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L584)*
 
 **Returns:** *void*
 
@@ -185,7 +185,7 @@ ___
 
 ▸ **writeCache**(`cache`: [SimplexCache](simplexcache.md)): *void*
 
-*Defined in [src/collision/Distance.ts:404](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L404)*
+*Defined in [src/collision/Distance.ts:404](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L404)*
 
 **Parameters:**
 

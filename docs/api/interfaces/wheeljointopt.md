@@ -37,7 +37,7 @@ game.
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L68)*
+*Defined in [src/dynamics/Joint.ts:69](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L69)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -48,7 +48,7 @@ ___
 
 • **dampingRatio**? : *number*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:63](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L63)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:63](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L63)*
 
 Suspension damping ratio, one indicates critical damping.
 
@@ -58,7 +58,7 @@ ___
 
 • **enableMotor**? : *boolean*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:47](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L47)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:47](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L47)*
 
 Enable/disable the joint motor.
 
@@ -68,7 +68,7 @@ ___
 
 • **frequencyHz**? : *number*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:59](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L59)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:59](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L59)*
 
 Suspension frequency, zero indicates no suspension.
 
@@ -78,7 +78,7 @@ ___
 
 • **maxMotorTorque**? : *number*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:51](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L51)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:51](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L51)*
 
 The maximum motor torque, usually in N-m.
 
@@ -88,7 +88,7 @@ ___
 
 • **motorSpeed**? : *number*
 
-*Defined in [src/dynamics/joint/WheelJoint.ts:55](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/WheelJoint.ts#L55)*
+*Defined in [src/dynamics/joint/WheelJoint.ts:55](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WheelJoint.ts#L55)*
 
 The desired motor speed in radians per second.
 
@@ -100,6 +100,6 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L63)*
+*Defined in [src/dynamics/Joint.ts:64](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L64)*
 
 Use this to attach application specific data to your joints.

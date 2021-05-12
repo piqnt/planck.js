@@ -25,7 +25,7 @@ computation. Even
 
 • **proxyA**: *[DistanceProxy](distanceproxy.md)* = new DistanceProxy()
 
-*Defined in [src/collision/Distance.ts:52](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L52)*
+*Defined in [src/collision/Distance.ts:52](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L52)*
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **proxyB**: *[DistanceProxy](distanceproxy.md)* = new DistanceProxy()
 
-*Defined in [src/collision/Distance.ts:53](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L53)*
+*Defined in [src/collision/Distance.ts:53](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L53)*
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 • **transformA**: *[Transform](transform.md) | null* = null
 
-*Defined in [src/collision/Distance.ts:54](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L54)*
+*Defined in [src/collision/Distance.ts:54](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L54)*
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 • **transformB**: *[Transform](transform.md) | null* = null
 
-*Defined in [src/collision/Distance.ts:55](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L55)*
+*Defined in [src/collision/Distance.ts:55](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L55)*
 
 ___
 
@@ -57,4 +57,4 @@ ___
 
 • **useRadii**: *boolean* = false
 
-*Defined in [src/collision/Distance.ts:56](https://github.com/shakiba/planck.js/blob/1523746/src/collision/Distance.ts#L56)*
+*Defined in [src/collision/Distance.ts:56](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L56)*

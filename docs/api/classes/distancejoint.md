@@ -60,7 +60,7 @@ distance from each other. You can view this as a massless, rigid rod.
 
 *Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:108](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L108)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:108](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L108)*
 
 **Parameters:**
 
@@ -74,7 +74,7 @@ Name | Type |
 
 *Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:110](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L110)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:110](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L110)*
 
 **Parameters:**
 
@@ -94,63 +94,63 @@ Name | Type |
 
 ▪ **TYPE**: *"distance-joint"* = 'distance-joint' as 'distance-joint'
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:86](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L86)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:86](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L86)*
 
 ## Methods
 
 ###  getAnchorA
 
-▸ **getAnchorA**(): *[Vec2](vec2.md)‹›*
+▸ **getAnchorA**(): *[Vec2](vec2.md)*
 
 *Overrides [Joint](joint.md).[getAnchorA](joint.md#abstract-getanchora)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:274](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L274)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:281](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L281)*
 
 Get the anchor point on bodyA in world coordinates.
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getAnchorB
 
-▸ **getAnchorB**(): *[Vec2](vec2.md)‹›*
+▸ **getAnchorB**(): *[Vec2](vec2.md)*
 
 *Overrides [Joint](joint.md).[getAnchorB](joint.md#abstract-getanchorb)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:281](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L281)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:288](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L288)*
 
 Get the anchor point on bodyB in world coordinates.
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getBodyA
 
-▸ **getBodyA**(): *[Body](body.md)‹›*
+▸ **getBodyA**(): *[Body](body.md)*
 
 *Inherited from [Joint](joint.md).[getBodyA](joint.md#getbodya)*
 
-*Defined in [src/dynamics/Joint.ts:157](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L157)*
+*Defined in [src/dynamics/Joint.ts:159](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L159)*
 
 Get the first body attached to this joint.
 
-**Returns:** *[Body](body.md)‹›*
+**Returns:** *[Body](body.md)*
 
 ___
 
 ###  getBodyB
 
-▸ **getBodyB**(): *[Body](body.md)‹›*
+▸ **getBodyB**(): *[Body](body.md)*
 
 *Inherited from [Joint](joint.md).[getBodyB](joint.md#getbodyb)*
 
-*Defined in [src/dynamics/Joint.ts:164](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L164)*
+*Defined in [src/dynamics/Joint.ts:166](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L166)*
 
 Get the second body attached to this joint.
 
-**Returns:** *[Body](body.md)‹›*
+**Returns:** *[Body](body.md)*
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getCollideConnected](joint.md#getcollideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:188](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L188)*
+*Defined in [src/dynamics/Joint.ts:190](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L190)*
 
 Get collide connected. Note: modifying the collide connect flag won't work
 correctly because the flag is only checked when fixture AABBs begin to
@@ -174,7 +174,7 @@ ___
 
 ▸ **getDampingRatio**(): *number*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:267](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L267)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:274](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L274)*
 
 **Returns:** *number*
 
@@ -184,7 +184,7 @@ ___
 
 ▸ **getFrequency**(): *number*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:259](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L259)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:266](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L266)*
 
 **Returns:** *number*
 
@@ -194,7 +194,7 @@ ___
 
 ▸ **getLength**(): *number*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:251](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L251)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:258](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L258)*
 
 Get the natural length.
 
@@ -204,49 +204,49 @@ ___
 
 ###  getLocalAnchorA
 
-▸ **getLocalAnchorA**(): *[Vec2](vec2.md)‹›*
+▸ **getLocalAnchorA**(): *[Vec2](vec2.md)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:229](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L229)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:236](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L236)*
 
 The local anchor point relative to bodyA's origin.
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getLocalAnchorB
 
-▸ **getLocalAnchorB**(): *[Vec2](vec2.md)‹›*
+▸ **getLocalAnchorB**(): *[Vec2](vec2.md)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:236](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L236)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:243](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L243)*
 
 The local anchor point relative to bodyB's origin.
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getNext
 
-▸ **getNext**(): *[Joint](joint.md)‹›*
+▸ **getNext**(): *[Joint](joint.md)*
 
 *Inherited from [Joint](joint.md).[getNext](joint.md#getnext)*
 
-*Defined in [src/dynamics/Joint.ts:171](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L171)*
+*Defined in [src/dynamics/Joint.ts:173](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L173)*
 
 Get the next joint the world joint list.
 
-**Returns:** *[Joint](joint.md)‹›*
+**Returns:** *[Joint](joint.md)*
 
 ___
 
 ###  getReactionForce
 
-▸ **getReactionForce**(`inv_dt`: number): *[Vec2](vec2.md)‹›*
+▸ **getReactionForce**(`inv_dt`: number): *[Vec2](vec2.md)*
 
 *Overrides [Joint](joint.md).[getReactionForce](joint.md#abstract-getreactionforce)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:288](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L288)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:295](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L295)*
 
 Get the reaction force on bodyB at the joint anchor in Newtons.
 
@@ -256,7 +256,7 @@ Name | Type |
 ------ | ------ |
 `inv_dt` | number |
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
@@ -266,7 +266,7 @@ ___
 
 *Overrides [Joint](joint.md).[getReactionTorque](joint.md#abstract-getreactiontorque)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:295](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L295)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:302](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L302)*
 
 Get the reaction torque on bodyB in N*m.
 
@@ -286,7 +286,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getType](joint.md#gettype)*
 
-*Defined in [src/dynamics/Joint.ts:150](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L150)*
+*Defined in [src/dynamics/Joint.ts:152](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L152)*
 
 Get the type of the concrete joint.
 
@@ -300,7 +300,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getUserData](joint.md#getuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:175](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L175)*
+*Defined in [src/dynamics/Joint.ts:177](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L177)*
 
 **Returns:** *unknown*
 
@@ -308,17 +308,17 @@ ___
 
 ###  initVelocityConstraints
 
-▸ **initVelocityConstraints**(`step`: any): *void*
+▸ **initVelocityConstraints**(`step`: [TimeStep](timestep.md)): *void*
 
 *Overrides [Joint](joint.md).[initVelocityConstraints](joint.md#abstract-initvelocityconstraints)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:299](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L299)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:306](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L306)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`step` | any |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *void*
 
@@ -330,7 +330,7 @@ ___
 
 *Inherited from [Joint](joint.md).[isActive](joint.md#isactive)*
 
-*Defined in [src/dynamics/Joint.ts:143](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L143)*
+*Defined in [src/dynamics/Joint.ts:145](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L145)*
 
 Short-cut function to determine if either body is inactive.
 
@@ -342,7 +342,7 @@ ___
 
 ▸ **setDampingRatio**(`ratio`: number): *void*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:263](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L263)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:270](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L270)*
 
 **Parameters:**
 
@@ -358,7 +358,7 @@ ___
 
 ▸ **setFrequency**(`hz`: number): *void*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:255](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L255)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:262](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L262)*
 
 **Parameters:**
 
@@ -374,7 +374,7 @@ ___
 
 ▸ **setLength**(`length`: number): *void*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:244](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L244)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:251](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L251)*
 
 Set the natural length. Manipulating the length can lead to non-physical
 behavior when the frequency is zero.
@@ -395,7 +395,7 @@ ___
 
 *Inherited from [Joint](joint.md).[setUserData](joint.md#setuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:179](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L179)*
+*Defined in [src/dynamics/Joint.ts:181](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L181)*
 
 **Parameters:**
 
@@ -413,7 +413,7 @@ ___
 
 *Inherited from [Joint](joint.md).[shiftOrigin](joint.md#shiftorigin)*
 
-*Defined in [src/dynamics/Joint.ts:215](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L215)*
+*Defined in [src/dynamics/Joint.ts:217](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L217)*
 
 Shift the origin for any points stored in world coordinates.
 
@@ -429,11 +429,11 @@ ___
 
 ###  solvePositionConstraints
 
-▸ **solvePositionConstraints**(`step`: any): *boolean*
+▸ **solvePositionConstraints**(`step`: [TimeStep](timestep.md)): *boolean*
 
 *Overrides [Joint](joint.md).[solvePositionConstraints](joint.md#abstract-solvepositionconstraints)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:417](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L417)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:424](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L424)*
 
 This returns true if the position errors are within tolerance.
 
@@ -441,7 +441,7 @@ This returns true if the position errors are within tolerance.
 
 Name | Type |
 ------ | ------ |
-`step` | any |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *boolean*
 
@@ -449,16 +449,16 @@ ___
 
 ###  solveVelocityConstraints
 
-▸ **solveVelocityConstraints**(`step`: any): *void*
+▸ **solveVelocityConstraints**(`step`: [TimeStep](timestep.md)): *void*
 
 *Overrides [Joint](joint.md).[solveVelocityConstraints](joint.md#abstract-solvevelocityconstraints)*
 
-*Defined in [src/dynamics/joint/DistanceJoint.ts:387](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/DistanceJoint.ts#L387)*
+*Defined in [src/dynamics/joint/DistanceJoint.ts:394](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/DistanceJoint.ts#L394)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`step` | any |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *void*

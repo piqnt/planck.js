@@ -28,7 +28,7 @@ Reference face used for clipping
 
 • **i1**: *number*
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:98](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CollideEdgePolygon.ts#L98)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:98](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideEdgePolygon.ts#L98)*
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 • **i2**: *number*
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:99](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CollideEdgePolygon.ts#L99)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:99](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideEdgePolygon.ts#L99)*
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 • **normal**: *[Vec2](vec2.md)‹›* = Vec2.zero()
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:102](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CollideEdgePolygon.ts#L102)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:102](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideEdgePolygon.ts#L102)*
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 • **sideNormal1**: *[Vec2](vec2.md)‹›* = Vec2.zero()
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:103](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CollideEdgePolygon.ts#L103)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:103](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideEdgePolygon.ts#L103)*
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 • **sideNormal2**: *[Vec2](vec2.md)‹›* = Vec2.zero()
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:105](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CollideEdgePolygon.ts#L105)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:105](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideEdgePolygon.ts#L105)*
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 • **sideOffset1**: *number*
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:104](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CollideEdgePolygon.ts#L104)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:104](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideEdgePolygon.ts#L104)*
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 • **sideOffset2**: *number*
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:106](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CollideEdgePolygon.ts#L106)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:106](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideEdgePolygon.ts#L106)*
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 • **v1**: *[Vec2](vec2.md)*
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:100](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CollideEdgePolygon.ts#L100)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:100](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideEdgePolygon.ts#L100)*
 
 ___
 
@@ -92,4 +92,4 @@ ___
 
 • **v2**: *[Vec2](vec2.md)*
 
-*Defined in [src/collision/shape/CollideEdgePolygon.ts:101](https://github.com/shakiba/planck.js/blob/1523746/src/collision/shape/CollideEdgePolygon.ts#L101)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:101](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideEdgePolygon.ts#L101)*

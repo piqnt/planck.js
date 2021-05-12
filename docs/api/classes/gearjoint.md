@@ -61,7 +61,7 @@ combination will work).
 
 *Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:121](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/GearJoint.ts#L121)*
+*Defined in [src/dynamics/joint/GearJoint.ts:122](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L122)*
 
 **Parameters:**
 
@@ -75,7 +75,7 @@ Name | Type |
 
 *Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:123](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/GearJoint.ts#L123)*
+*Defined in [src/dynamics/joint/GearJoint.ts:124](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L124)*
 
 **Parameters:**
 
@@ -96,63 +96,63 @@ Name | Type |
 
 ▪ **TYPE**: *"gear-joint"* = 'gear-joint' as 'gear-joint'
 
-*Defined in [src/dynamics/joint/GearJoint.ts:82](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/GearJoint.ts#L82)*
+*Defined in [src/dynamics/joint/GearJoint.ts:82](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L82)*
 
 ## Methods
 
 ###  getAnchorA
 
-▸ **getAnchorA**(): *[Vec2](vec2.md)‹›*
+▸ **getAnchorA**(): *[Vec2](vec2.md)*
 
 *Overrides [Joint](joint.md).[getAnchorA](joint.md#abstract-getanchora)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:307](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/GearJoint.ts#L307)*
+*Defined in [src/dynamics/joint/GearJoint.ts:302](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L302)*
 
 Get the anchor point on bodyA in world coordinates.
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getAnchorB
 
-▸ **getAnchorB**(): *[Vec2](vec2.md)‹›*
+▸ **getAnchorB**(): *[Vec2](vec2.md)*
 
 *Overrides [Joint](joint.md).[getAnchorB](joint.md#abstract-getanchorb)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:314](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/GearJoint.ts#L314)*
+*Defined in [src/dynamics/joint/GearJoint.ts:309](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L309)*
 
 Get the anchor point on bodyB in world coordinates.
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getBodyA
 
-▸ **getBodyA**(): *[Body](body.md)‹›*
+▸ **getBodyA**(): *[Body](body.md)*
 
 *Inherited from [Joint](joint.md).[getBodyA](joint.md#getbodya)*
 
-*Defined in [src/dynamics/Joint.ts:157](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L157)*
+*Defined in [src/dynamics/Joint.ts:159](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L159)*
 
 Get the first body attached to this joint.
 
-**Returns:** *[Body](body.md)‹›*
+**Returns:** *[Body](body.md)*
 
 ___
 
 ###  getBodyB
 
-▸ **getBodyB**(): *[Body](body.md)‹›*
+▸ **getBodyB**(): *[Body](body.md)*
 
 *Inherited from [Joint](joint.md).[getBodyB](joint.md#getbodyb)*
 
-*Defined in [src/dynamics/Joint.ts:164](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L164)*
+*Defined in [src/dynamics/Joint.ts:166](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L166)*
 
 Get the second body attached to this joint.
 
-**Returns:** *[Body](body.md)‹›*
+**Returns:** *[Body](body.md)*
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getCollideConnected](joint.md#getcollideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:188](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L188)*
+*Defined in [src/dynamics/Joint.ts:190](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L190)*
 
 Get collide connected. Note: modifying the collide connect flag won't work
 correctly because the flag is only checked when fixture AABBs begin to
@@ -174,39 +174,39 @@ ___
 
 ###  getJoint1
 
-▸ **getJoint1**(): *[RevoluteJoint](revolutejoint.md)‹› | [PrismaticJoint](prismaticjoint.md)‹›*
+▸ **getJoint1**(): *[Joint](joint.md)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:278](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/GearJoint.ts#L278)*
+*Defined in [src/dynamics/joint/GearJoint.ts:273](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L273)*
 
 Get the first joint.
 
-**Returns:** *[RevoluteJoint](revolutejoint.md)‹› | [PrismaticJoint](prismaticjoint.md)‹›*
+**Returns:** *[Joint](joint.md)*
 
 ___
 
 ###  getJoint2
 
-▸ **getJoint2**(): *[RevoluteJoint](revolutejoint.md)‹› | [PrismaticJoint](prismaticjoint.md)‹›*
+▸ **getJoint2**(): *[Joint](joint.md)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:285](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/GearJoint.ts#L285)*
+*Defined in [src/dynamics/joint/GearJoint.ts:280](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L280)*
 
 Get the second joint.
 
-**Returns:** *[RevoluteJoint](revolutejoint.md)‹› | [PrismaticJoint](prismaticjoint.md)‹›*
+**Returns:** *[Joint](joint.md)*
 
 ___
 
 ###  getNext
 
-▸ **getNext**(): *[Joint](joint.md)‹›*
+▸ **getNext**(): *[Joint](joint.md)*
 
 *Inherited from [Joint](joint.md).[getNext](joint.md#getnext)*
 
-*Defined in [src/dynamics/Joint.ts:171](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L171)*
+*Defined in [src/dynamics/Joint.ts:173](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L173)*
 
 Get the next joint the world joint list.
 
-**Returns:** *[Joint](joint.md)‹›*
+**Returns:** *[Joint](joint.md)*
 
 ___
 
@@ -214,7 +214,7 @@ ___
 
 ▸ **getRatio**(): *number*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:300](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/GearJoint.ts#L300)*
+*Defined in [src/dynamics/joint/GearJoint.ts:295](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L295)*
 
 Get the gear ratio.
 
@@ -224,11 +224,11 @@ ___
 
 ###  getReactionForce
 
-▸ **getReactionForce**(`inv_dt`: any): *[Vec2](vec2.md)‹›*
+▸ **getReactionForce**(`inv_dt`: number): *[Vec2](vec2.md)*
 
 *Overrides [Joint](joint.md).[getReactionForce](joint.md#abstract-getreactionforce)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:321](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/GearJoint.ts#L321)*
+*Defined in [src/dynamics/joint/GearJoint.ts:316](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L316)*
 
 Get the reaction force on bodyB at the joint anchor in Newtons.
 
@@ -236,19 +236,19 @@ Get the reaction force on bodyB at the joint anchor in Newtons.
 
 Name | Type |
 ------ | ------ |
-`inv_dt` | any |
+`inv_dt` | number |
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getReactionTorque
 
-▸ **getReactionTorque**(`inv_dt`: any): *number*
+▸ **getReactionTorque**(`inv_dt`: number): *number*
 
 *Overrides [Joint](joint.md).[getReactionTorque](joint.md#abstract-getreactiontorque)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:328](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/GearJoint.ts#L328)*
+*Defined in [src/dynamics/joint/GearJoint.ts:323](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L323)*
 
 Get the reaction torque on bodyB in N*m.
 
@@ -256,7 +256,7 @@ Get the reaction torque on bodyB in N*m.
 
 Name | Type |
 ------ | ------ |
-`inv_dt` | any |
+`inv_dt` | number |
 
 **Returns:** *number*
 
@@ -268,7 +268,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getType](joint.md#gettype)*
 
-*Defined in [src/dynamics/Joint.ts:150](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L150)*
+*Defined in [src/dynamics/Joint.ts:152](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L152)*
 
 Get the type of the concrete joint.
 
@@ -282,7 +282,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getUserData](joint.md#getuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:175](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L175)*
+*Defined in [src/dynamics/Joint.ts:177](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L177)*
 
 **Returns:** *unknown*
 
@@ -290,17 +290,17 @@ ___
 
 ###  initVelocityConstraints
 
-▸ **initVelocityConstraints**(`step`: any): *void*
+▸ **initVelocityConstraints**(`step`: [TimeStep](timestep.md)): *void*
 
 *Overrides [Joint](joint.md).[initVelocityConstraints](joint.md#abstract-initvelocityconstraints)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:333](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/GearJoint.ts#L333)*
+*Defined in [src/dynamics/joint/GearJoint.ts:328](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L328)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`step` | any |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *void*
 
@@ -312,7 +312,7 @@ ___
 
 *Inherited from [Joint](joint.md).[isActive](joint.md#isactive)*
 
-*Defined in [src/dynamics/Joint.ts:143](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L143)*
+*Defined in [src/dynamics/Joint.ts:145](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L145)*
 
 Short-cut function to determine if either body is inactive.
 
@@ -322,9 +322,9 @@ ___
 
 ###  setRatio
 
-▸ **setRatio**(`ratio`: any): *void*
+▸ **setRatio**(`ratio`: number): *void*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:292](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/GearJoint.ts#L292)*
+*Defined in [src/dynamics/joint/GearJoint.ts:287](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L287)*
 
 Set the gear ratio.
 
@@ -332,7 +332,7 @@ Set the gear ratio.
 
 Name | Type |
 ------ | ------ |
-`ratio` | any |
+`ratio` | number |
 
 **Returns:** *void*
 
@@ -344,7 +344,7 @@ ___
 
 *Inherited from [Joint](joint.md).[setUserData](joint.md#setuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:179](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L179)*
+*Defined in [src/dynamics/Joint.ts:181](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L181)*
 
 **Parameters:**
 
@@ -362,7 +362,7 @@ ___
 
 *Inherited from [Joint](joint.md).[shiftOrigin](joint.md#shiftorigin)*
 
-*Defined in [src/dynamics/Joint.ts:215](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L215)*
+*Defined in [src/dynamics/Joint.ts:217](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L217)*
 
 Shift the origin for any points stored in world coordinates.
 
@@ -378,11 +378,11 @@ ___
 
 ###  solvePositionConstraints
 
-▸ **solvePositionConstraints**(`step`: any): *boolean*
+▸ **solvePositionConstraints**(`step`: [TimeStep](timestep.md)): *boolean*
 
 *Overrides [Joint](joint.md).[solvePositionConstraints](joint.md#abstract-solvepositionconstraints)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:470](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/GearJoint.ts#L470)*
+*Defined in [src/dynamics/joint/GearJoint.ts:465](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L465)*
 
 This returns true if the position errors are within tolerance.
 
@@ -390,7 +390,7 @@ This returns true if the position errors are within tolerance.
 
 Name | Type |
 ------ | ------ |
-`step` | any |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *boolean*
 
@@ -398,16 +398,16 @@ ___
 
 ###  solveVelocityConstraints
 
-▸ **solveVelocityConstraints**(`step`: any): *void*
+▸ **solveVelocityConstraints**(`step`: [TimeStep](timestep.md)): *void*
 
 *Overrides [Joint](joint.md).[solveVelocityConstraints](joint.md#abstract-solvevelocityconstraints)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:430](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/GearJoint.ts#L430)*
+*Defined in [src/dynamics/joint/GearJoint.ts:425](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L425)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`step` | any |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *void*

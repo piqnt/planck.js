@@ -28,8 +28,6 @@ Finds and solves islands. An island is a connected subset of the world.
 * [addContact](solver.md#addcontact)
 * [addJoint](solver.md#addjoint)
 * [clear](solver.md#clear)
-* [postSolveIsland](solver.md#postsolveisland)
-* [printBodies](solver.md#printbodies)
 * [solveIsland](solver.md#solveisland)
 * [solveIslandTOI](solver.md#solveislandtoi)
 * [solveWorld](solver.md#solveworld)
@@ -39,15 +37,15 @@ Finds and solves islands. An island is a connected subset of the world.
 
 ###  constructor
 
-\+ **new Solver**(`world`: any): *[Solver](solver.md)*
+\+ **new Solver**(`world`: [World](world.md)): *[Solver](solver.md)*
 
-*Defined in [src/dynamics/Solver.ts:116](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L116)*
+*Defined in [src/dynamics/Solver.ts:116](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L116)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`world` | any |
+`world` | [World](world.md) |
 
 **Returns:** *[Solver](solver.md)*
 
@@ -57,7 +55,7 @@ Name | Type |
 
 • **m_bodies**: *[Body](body.md)[]*
 
-*Defined in [src/dynamics/Solver.ts:114](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L114)*
+*Defined in [src/dynamics/Solver.ts:114](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L114)*
 
 ___
 
@@ -65,7 +63,7 @@ ___
 
 • **m_contacts**: *[Contact](contact.md)[]*
 
-*Defined in [src/dynamics/Solver.ts:115](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L115)*
+*Defined in [src/dynamics/Solver.ts:115](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L115)*
 
 ___
 
@@ -73,7 +71,7 @@ ___
 
 • **m_joints**: *[Joint](joint.md)[]*
 
-*Defined in [src/dynamics/Solver.ts:116](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L116)*
+*Defined in [src/dynamics/Solver.ts:116](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L116)*
 
 ___
 
@@ -81,7 +79,7 @@ ___
 
 • **m_stack**: *[Body](body.md)[]*
 
-*Defined in [src/dynamics/Solver.ts:113](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L113)*
+*Defined in [src/dynamics/Solver.ts:113](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L113)*
 
 ___
 
@@ -89,21 +87,21 @@ ___
 
 • **m_world**: *[World](world.md)*
 
-*Defined in [src/dynamics/Solver.ts:112](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L112)*
+*Defined in [src/dynamics/Solver.ts:112](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L112)*
 
 ## Methods
 
 ###  addBody
 
-▸ **addBody**(`body`: any): *void*
+▸ **addBody**(`body`: [Body](body.md)): *void*
 
-*Defined in [src/dynamics/Solver.ts:133](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L133)*
+*Defined in [src/dynamics/Solver.ts:133](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L133)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`body` | any |
+`body` | [Body](body.md) |
 
 **Returns:** *void*
 
@@ -111,15 +109,15 @@ ___
 
 ###  addContact
 
-▸ **addContact**(`contact`: any): *void*
+▸ **addContact**(`contact`: [Contact](contact.md)): *void*
 
-*Defined in [src/dynamics/Solver.ts:143](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L143)*
+*Defined in [src/dynamics/Solver.ts:143](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L143)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`contact` | any |
+`contact` | [Contact](contact.md) |
 
 **Returns:** *void*
 
@@ -127,15 +125,15 @@ ___
 
 ###  addJoint
 
-▸ **addJoint**(`joint`: any): *void*
+▸ **addJoint**(`joint`: [Joint](joint.md)): *void*
 
-*Defined in [src/dynamics/Solver.ts:148](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L148)*
+*Defined in [src/dynamics/Solver.ts:148](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L148)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`joint` | any |
+`joint` | [Joint](joint.md) |
 
 **Returns:** *void*
 
@@ -145,33 +143,7 @@ ___
 
 ▸ **clear**(): *void*
 
-*Defined in [src/dynamics/Solver.ts:126](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L126)*
-
-**Returns:** *void*
-
-___
-
-###  postSolveIsland
-
-▸ **postSolveIsland**(): *void*
-
-*Defined in [src/dynamics/Solver.ts:912](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L912)*
-
-**Returns:** *void*
-
-___
-
-###  printBodies
-
-▸ **printBodies**(`tag`: any): *void*
-
-*Defined in [src/dynamics/Solver.ts:493](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L493)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`tag` | any |
+*Defined in [src/dynamics/Solver.ts:126](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L126)*
 
 **Returns:** *void*
 
@@ -181,7 +153,7 @@ ___
 
 ▸ **solveIsland**(`step`: [TimeStep](timestep.md)): *void*
 
-*Defined in [src/dynamics/Solver.ts:284](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L284)*
+*Defined in [src/dynamics/Solver.ts:284](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L284)*
 
 **Parameters:**
 
@@ -195,17 +167,17 @@ ___
 
 ###  solveIslandTOI
 
-▸ **solveIslandTOI**(`subStep`: [TimeStep](timestep.md), `toiA`: any, `toiB`: any): *void*
+▸ **solveIslandTOI**(`subStep`: [TimeStep](timestep.md), `toiA`: [Body](body.md), `toiB`: [Body](body.md)): *void*
 
-*Defined in [src/dynamics/Solver.ts:781](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L781)*
+*Defined in [src/dynamics/Solver.ts:782](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L782)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `subStep` | [TimeStep](timestep.md) |
-`toiA` | any |
-`toiB` | any |
+`toiA` | [Body](body.md) |
+`toiB` | [Body](body.md) |
 
 **Returns:** *void*
 
@@ -215,7 +187,7 @@ ___
 
 ▸ **solveWorld**(`step`: [TimeStep](timestep.md)): *void*
 
-*Defined in [src/dynamics/Solver.ts:153](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L153)*
+*Defined in [src/dynamics/Solver.ts:153](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L153)*
 
 **Parameters:**
 
@@ -231,7 +203,7 @@ ___
 
 ▸ **solveWorldTOI**(`step`: [TimeStep](timestep.md)): *void*
 
-*Defined in [src/dynamics/Solver.ts:503](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Solver.ts#L503)*
+*Defined in [src/dynamics/Solver.ts:504](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L504)*
 
 Find TOI contacts and solve them.
 

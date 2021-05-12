@@ -68,7 +68,7 @@ motion or to model joint friction.
 
 *Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:156](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L156)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:156](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L156)*
 
 **Parameters:**
 
@@ -82,7 +82,7 @@ Name | Type |
 
 *Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:158](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L158)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:158](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L158)*
 
 **Parameters:**
 
@@ -102,15 +102,15 @@ Name | Type |
 
 ▪ **TYPE**: *"prismatic-joint"* = 'prismatic-joint' as 'prismatic-joint'
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:125](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L125)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:125](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L125)*
 
 ## Methods
 
 ###  enableLimit
 
-▸ **enableLimit**(`flag`: any): *void*
+▸ **enableLimit**(`flag`: boolean): *void*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:409](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L409)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:403](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L403)*
 
 Enable/disable the joint limit.
 
@@ -118,7 +118,7 @@ Enable/disable the joint limit.
 
 Name | Type |
 ------ | ------ |
-`flag` | any |
+`flag` | boolean |
 
 **Returns:** *void*
 
@@ -126,9 +126,9 @@ ___
 
 ###  enableMotor
 
-▸ **enableMotor**(`flag`: any): *void*
+▸ **enableMotor**(`flag`: boolean): *void*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:456](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L456)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:450](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L450)*
 
 Enable/disable the joint motor.
 
@@ -136,7 +136,7 @@ Enable/disable the joint motor.
 
 Name | Type |
 ------ | ------ |
-`flag` | any |
+`flag` | boolean |
 
 **Returns:** *void*
 
@@ -144,57 +144,57 @@ ___
 
 ###  getAnchorA
 
-▸ **getAnchorA**(): *[Vec2](vec2.md)‹›*
+▸ **getAnchorA**(): *[Vec2](vec2.md)*
 
 *Overrides [Joint](joint.md).[getAnchorA](joint.md#abstract-getanchora)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:501](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L501)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:495](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L495)*
 
 Get the anchor point on bodyA in world coordinates.
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getAnchorB
 
-▸ **getAnchorB**(): *[Vec2](vec2.md)‹›*
+▸ **getAnchorB**(): *[Vec2](vec2.md)*
 
 *Overrides [Joint](joint.md).[getAnchorB](joint.md#abstract-getanchorb)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:508](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L508)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:502](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L502)*
 
 Get the anchor point on bodyB in world coordinates.
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getBodyA
 
-▸ **getBodyA**(): *[Body](body.md)‹›*
+▸ **getBodyA**(): *[Body](body.md)*
 
 *Inherited from [Joint](joint.md).[getBodyA](joint.md#getbodya)*
 
-*Defined in [src/dynamics/Joint.ts:157](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L157)*
+*Defined in [src/dynamics/Joint.ts:159](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L159)*
 
 Get the first body attached to this joint.
 
-**Returns:** *[Body](body.md)‹›*
+**Returns:** *[Body](body.md)*
 
 ___
 
 ###  getBodyB
 
-▸ **getBodyB**(): *[Body](body.md)‹›*
+▸ **getBodyB**(): *[Body](body.md)*
 
 *Inherited from [Joint](joint.md).[getBodyB](joint.md#getbodyb)*
 
-*Defined in [src/dynamics/Joint.ts:164](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L164)*
+*Defined in [src/dynamics/Joint.ts:166](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L166)*
 
 Get the second body attached to this joint.
 
-**Returns:** *[Body](body.md)‹›*
+**Returns:** *[Body](body.md)*
 
 ___
 
@@ -204,7 +204,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getCollideConnected](joint.md#getcollideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:188](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L188)*
+*Defined in [src/dynamics/Joint.ts:190](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L190)*
 
 Get collide connected. Note: modifying the collide connect flag won't work
 correctly because the flag is only checked when fixture AABBs begin to
@@ -218,7 +218,7 @@ ___
 
 ▸ **getJointSpeed**(): *number*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:378](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L378)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:372](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L372)*
 
 Get the current joint translation speed, usually in meters per second.
 
@@ -230,7 +230,7 @@ ___
 
 ▸ **getJointTranslation**(): *number*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:365](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L365)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:359](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L359)*
 
 Get the current joint translation, usually in meters.
 
@@ -240,37 +240,37 @@ ___
 
 ###  getLocalAnchorA
 
-▸ **getLocalAnchorA**(): *[Vec2](vec2.md)‹›*
+▸ **getLocalAnchorA**(): *[Vec2](vec2.md)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:337](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L337)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:331](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L331)*
 
 The local anchor point relative to bodyA's origin.
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getLocalAnchorB
 
-▸ **getLocalAnchorB**(): *[Vec2](vec2.md)‹›*
+▸ **getLocalAnchorB**(): *[Vec2](vec2.md)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:344](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L344)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:338](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L338)*
 
 The local anchor point relative to bodyB's origin.
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getLocalAxisA
 
-▸ **getLocalAxisA**(): *[Vec2](vec2.md)‹›*
+▸ **getLocalAxisA**(): *[Vec2](vec2.md)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:351](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L351)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:345](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L345)*
 
 The local joint axis relative to bodyA.
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
@@ -278,7 +278,7 @@ ___
 
 ▸ **getLowerLimit**(): *number*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:421](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L421)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:415](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L415)*
 
 Get the lower joint limit, usually in meters.
 
@@ -290,7 +290,7 @@ ___
 
 ▸ **getMaxMotorForce**(): *number*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:480](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L480)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:474](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L474)*
 
 **Returns:** *number*
 
@@ -298,9 +298,9 @@ ___
 
 ###  getMotorForce
 
-▸ **getMotorForce**(`inv_dt`: any): *number*
+▸ **getMotorForce**(`inv_dt`: number): *number*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:494](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L494)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:488](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L488)*
 
 Get the current motor force given the inverse time step, usually in N.
 
@@ -308,7 +308,7 @@ Get the current motor force given the inverse time step, usually in N.
 
 Name | Type |
 ------ | ------ |
-`inv_dt` | any |
+`inv_dt` | number |
 
 **Returns:** *number*
 
@@ -318,7 +318,7 @@ ___
 
 ▸ **getMotorSpeed**(): *number*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:487](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L487)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:481](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L481)*
 
 Get the motor speed, usually in meters per second.
 
@@ -328,25 +328,25 @@ ___
 
 ###  getNext
 
-▸ **getNext**(): *[Joint](joint.md)‹›*
+▸ **getNext**(): *[Joint](joint.md)*
 
 *Inherited from [Joint](joint.md).[getNext](joint.md#getnext)*
 
-*Defined in [src/dynamics/Joint.ts:171](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L171)*
+*Defined in [src/dynamics/Joint.ts:173](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L173)*
 
 Get the next joint the world joint list.
 
-**Returns:** *[Joint](joint.md)‹›*
+**Returns:** *[Joint](joint.md)*
 
 ___
 
 ###  getReactionForce
 
-▸ **getReactionForce**(`inv_dt`: any): *[Vec2](vec2.md)‹›*
+▸ **getReactionForce**(`inv_dt`: number): *[Vec2](vec2.md)*
 
 *Overrides [Joint](joint.md).[getReactionForce](joint.md#abstract-getreactionforce)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:515](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L515)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:509](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L509)*
 
 Get the reaction force on bodyB at the joint anchor in Newtons.
 
@@ -354,19 +354,19 @@ Get the reaction force on bodyB at the joint anchor in Newtons.
 
 Name | Type |
 ------ | ------ |
-`inv_dt` | any |
+`inv_dt` | number |
 
-**Returns:** *[Vec2](vec2.md)‹›*
+**Returns:** *[Vec2](vec2.md)*
 
 ___
 
 ###  getReactionTorque
 
-▸ **getReactionTorque**(`inv_dt`: any): *number*
+▸ **getReactionTorque**(`inv_dt`: number): *number*
 
 *Overrides [Joint](joint.md).[getReactionTorque](joint.md#abstract-getreactiontorque)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:522](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L522)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:516](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L516)*
 
 Get the reaction torque on bodyB in N*m.
 
@@ -374,7 +374,7 @@ Get the reaction torque on bodyB in N*m.
 
 Name | Type |
 ------ | ------ |
-`inv_dt` | any |
+`inv_dt` | number |
 
 **Returns:** *number*
 
@@ -384,7 +384,7 @@ ___
 
 ▸ **getReferenceAngle**(): *number*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:358](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L358)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:352](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L352)*
 
 Get the reference angle.
 
@@ -398,7 +398,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getType](joint.md#gettype)*
 
-*Defined in [src/dynamics/Joint.ts:150](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L150)*
+*Defined in [src/dynamics/Joint.ts:152](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L152)*
 
 Get the type of the concrete joint.
 
@@ -410,7 +410,7 @@ ___
 
 ▸ **getUpperLimit**(): *number*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:428](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L428)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:422](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L422)*
 
 Get the upper joint limit, usually in meters.
 
@@ -424,7 +424,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getUserData](joint.md#getuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:175](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L175)*
+*Defined in [src/dynamics/Joint.ts:177](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L177)*
 
 **Returns:** *unknown*
 
@@ -432,17 +432,17 @@ ___
 
 ###  initVelocityConstraints
 
-▸ **initVelocityConstraints**(`step`: any): *void*
+▸ **initVelocityConstraints**(`step`: [TimeStep](timestep.md)): *void*
 
 *Overrides [Joint](joint.md).[initVelocityConstraints](joint.md#abstract-initvelocityconstraints)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:526](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L526)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:520](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L520)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`step` | any |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *void*
 
@@ -454,7 +454,7 @@ ___
 
 *Inherited from [Joint](joint.md).[isActive](joint.md#isactive)*
 
-*Defined in [src/dynamics/Joint.ts:143](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L143)*
+*Defined in [src/dynamics/Joint.ts:145](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L145)*
 
 Short-cut function to determine if either body is inactive.
 
@@ -466,7 +466,7 @@ ___
 
 ▸ **isLimitEnabled**(): *boolean*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:402](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L402)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:396](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L396)*
 
 Is the joint limit enabled?
 
@@ -478,7 +478,7 @@ ___
 
 ▸ **isMotorEnabled**(): *boolean*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:449](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L449)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:443](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L443)*
 
 Is the joint motor enabled?
 
@@ -488,9 +488,9 @@ ___
 
 ###  setLimits
 
-▸ **setLimits**(`lower`: any, `upper`: any): *void*
+▸ **setLimits**(`lower`: number, `upper`: number): *void*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:435](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L435)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:429](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L429)*
 
 Set the joint limits, usually in meters.
 
@@ -498,8 +498,8 @@ Set the joint limits, usually in meters.
 
 Name | Type |
 ------ | ------ |
-`lower` | any |
-`upper` | any |
+`lower` | number |
+`upper` | number |
 
 **Returns:** *void*
 
@@ -507,9 +507,9 @@ ___
 
 ###  setMaxMotorForce
 
-▸ **setMaxMotorForce**(`force`: any): *void*
+▸ **setMaxMotorForce**(`force`: number): *void*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:474](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L474)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:468](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L468)*
 
 Set the maximum motor force, usually in N.
 
@@ -517,7 +517,7 @@ Set the maximum motor force, usually in N.
 
 Name | Type |
 ------ | ------ |
-`force` | any |
+`force` | number |
 
 **Returns:** *void*
 
@@ -525,9 +525,9 @@ ___
 
 ###  setMotorSpeed
 
-▸ **setMotorSpeed**(`speed`: any): *void*
+▸ **setMotorSpeed**(`speed`: number): *void*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:465](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L465)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:459](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L459)*
 
 Set the motor speed, usually in meters per second.
 
@@ -535,7 +535,7 @@ Set the motor speed, usually in meters per second.
 
 Name | Type |
 ------ | ------ |
-`speed` | any |
+`speed` | number |
 
 **Returns:** *void*
 
@@ -547,7 +547,7 @@ ___
 
 *Inherited from [Joint](joint.md).[setUserData](joint.md#setuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:179](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L179)*
+*Defined in [src/dynamics/Joint.ts:181](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L181)*
 
 **Parameters:**
 
@@ -565,7 +565,7 @@ ___
 
 *Inherited from [Joint](joint.md).[shiftOrigin](joint.md#shiftorigin)*
 
-*Defined in [src/dynamics/Joint.ts:215](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/Joint.ts#L215)*
+*Defined in [src/dynamics/Joint.ts:217](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L217)*
 
 Shift the origin for any points stored in world coordinates.
 
@@ -581,11 +581,11 @@ ___
 
 ###  solvePositionConstraints
 
-▸ **solvePositionConstraints**(`step`: any): *boolean*
+▸ **solvePositionConstraints**(`step`: [TimeStep](timestep.md)): *boolean*
 
 *Overrides [Joint](joint.md).[solvePositionConstraints](joint.md#abstract-solvepositionconstraints)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:756](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L756)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:752](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L752)*
 
 This returns true if the position errors are within tolerance.
 
@@ -593,7 +593,7 @@ This returns true if the position errors are within tolerance.
 
 Name | Type |
 ------ | ------ |
-`step` | any |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *boolean*
 
@@ -601,16 +601,16 @@ ___
 
 ###  solveVelocityConstraints
 
-▸ **solveVelocityConstraints**(`step`: any): *void*
+▸ **solveVelocityConstraints**(`step`: [TimeStep](timestep.md)): *void*
 
 *Overrides [Joint](joint.md).[solveVelocityConstraints](joint.md#abstract-solvevelocityconstraints)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:656](https://github.com/shakiba/planck.js/blob/1523746/src/dynamics/joint/PrismaticJoint.ts#L656)*
+*Defined in [src/dynamics/joint/PrismaticJoint.ts:652](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/PrismaticJoint.ts#L652)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`step` | any |
+`step` | [TimeStep](timestep.md) |
 
 **Returns:** *void*

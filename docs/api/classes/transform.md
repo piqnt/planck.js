@@ -31,7 +31,6 @@ and a rotation.
 * [isValid](transform.md#static-isvalid)
 * [mul](transform.md#static-mul)
 * [mulAll](transform.md#static-mulall)
-* [mulFn](transform.md#static-mulfn)
 * [mulT](transform.md#static-mult)
 * [mulTVec2](transform.md#static-multvec2)
 * [mulTXf](transform.md#static-multxf)
@@ -44,7 +43,7 @@ and a rotation.
 
 \+ **new Transform**(`position?`: [Vec2](vec2.md), `rotation?`: number): *[Transform](transform.md)*
 
-*Defined in [src/common/Transform.ts:44](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L44)*
+*Defined in [src/common/Transform.ts:44](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L44)*
 
 **Parameters:**
 
@@ -61,7 +60,7 @@ Name | Type |
 
 • **p**: *[Vec2](vec2.md)*
 
-*Defined in [src/common/Transform.ts:41](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L41)*
+*Defined in [src/common/Transform.ts:41](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L41)*
 
 position
 
@@ -71,7 +70,7 @@ ___
 
 • **q**: *[Rot](rot.md)*
 
-*Defined in [src/common/Transform.ts:44](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L44)*
+*Defined in [src/common/Transform.ts:44](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L44)*
 
 rotation
 
@@ -81,7 +80,7 @@ rotation
 
 ▸ **set**(`position`: [Vec2](vec2.md), `rotation`: number): *void*
 
-*Defined in [src/common/Transform.ts:90](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L90)*
+*Defined in [src/common/Transform.ts:90](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L90)*
 
 Set this based on the position and angle.
 
@@ -96,7 +95,7 @@ Name | Type |
 
 ▸ **set**(`xf`: [Transform](transform.md)): *void*
 
-*Defined in [src/common/Transform.ts:91](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L91)*
+*Defined in [src/common/Transform.ts:91](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L91)*
 
 Set this based on the position and angle.
 
@@ -114,7 +113,7 @@ ___
 
 ▸ **setIdentity**(): *void*
 
-*Defined in [src/common/Transform.ts:85](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L85)*
+*Defined in [src/common/Transform.ts:85](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L85)*
 
 Set this to the identity transform.
 
@@ -126,7 +125,7 @@ ___
 
 ▸ **assert**(`o`: any): *void*
 
-*Defined in [src/common/Transform.ts:109](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L109)*
+*Defined in [src/common/Transform.ts:110](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L110)*
 
 **Parameters:**
 
@@ -142,7 +141,7 @@ ___
 
 ▸ **clone**(`xf`: [Transform](transform.md)): *[Transform](transform.md)*
 
-*Defined in [src/common/Transform.ts:60](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L60)*
+*Defined in [src/common/Transform.ts:60](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L60)*
 
 **Parameters:**
 
@@ -158,7 +157,7 @@ ___
 
 ▸ **identity**(): *[Transform](transform.md)*
 
-*Defined in [src/common/Transform.ts:75](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L75)*
+*Defined in [src/common/Transform.ts:75](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L75)*
 
 **Returns:** *[Transform](transform.md)*
 
@@ -168,7 +167,7 @@ ___
 
 ▸ **isValid**(`o`: any): *boolean*
 
-*Defined in [src/common/Transform.ts:105](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L105)*
+*Defined in [src/common/Transform.ts:106](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L106)*
 
 **Parameters:**
 
@@ -184,7 +183,7 @@ ___
 
 ▸ **mul**(`a`: [Transform](transform.md), `b`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Transform.ts:117](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L117)*
+*Defined in [src/common/Transform.ts:118](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L118)*
 
 **Parameters:**
 
@@ -197,7 +196,7 @@ Name | Type |
 
 ▸ **mul**(`a`: [Transform](transform.md), `b`: [Transform](transform.md)): *[Transform](transform.md)*
 
-*Defined in [src/common/Transform.ts:118](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L118)*
+*Defined in [src/common/Transform.ts:119](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L119)*
 
 **Parameters:**
 
@@ -214,7 +213,7 @@ ___
 
 ▸ **mulAll**(`a`: [Transform](transform.md), `b`: [Vec2](vec2.md)[]): *[Vec2](vec2.md)[]*
 
-*Defined in [src/common/Transform.ts:138](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L138)*
+*Defined in [src/common/Transform.ts:140](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L140)*
 
 **Parameters:**
 
@@ -227,7 +226,7 @@ Name | Type |
 
 ▸ **mulAll**(`a`: [Transform](transform.md), `b`: [Transform](transform.md)[]): *[Transform](transform.md)[]*
 
-*Defined in [src/common/Transform.ts:139](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L139)*
+*Defined in [src/common/Transform.ts:141](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L141)*
 
 **Parameters:**
 
@@ -240,29 +239,11 @@ Name | Type |
 
 ___
 
-### `Static` mulFn
-
-▸ **mulFn**(`a`: any): *(Anonymous function)*
-
-*Defined in [src/common/Transform.ts:150](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L150)*
-
-**`deprecated`** 
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`a` | any |
-
-**Returns:** *(Anonymous function)*
-
-___
-
 ### `Static` mulT
 
 ▸ **mulT**(`a`: [Transform](transform.md), `b`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Transform.ts:176](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L176)*
+*Defined in [src/common/Transform.ts:180](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L180)*
 
 **Parameters:**
 
@@ -275,7 +256,7 @@ Name | Type |
 
 ▸ **mulT**(`a`: [Transform](transform.md), `b`: [Transform](transform.md)): *[Transform](transform.md)*
 
-*Defined in [src/common/Transform.ts:177](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L177)*
+*Defined in [src/common/Transform.ts:181](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L181)*
 
 **Parameters:**
 
@@ -292,7 +273,7 @@ ___
 
 ▸ **mulTVec2**(`a`: [Transform](transform.md), `b`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Transform.ts:187](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L187)*
+*Defined in [src/common/Transform.ts:192](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L192)*
 
 **Parameters:**
 
@@ -309,7 +290,7 @@ ___
 
 ▸ **mulTXf**(`a`: [Transform](transform.md), `b`: [Transform](transform.md)): *[Transform](transform.md)*
 
-*Defined in [src/common/Transform.ts:197](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L197)*
+*Defined in [src/common/Transform.ts:202](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L202)*
 
 **Parameters:**
 
@@ -326,7 +307,7 @@ ___
 
 ▸ **mulVec2**(`a`: [Transform](transform.md), `b`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
 
-*Defined in [src/common/Transform.ts:157](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L157)*
+*Defined in [src/common/Transform.ts:161](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L161)*
 
 **Parameters:**
 
@@ -343,7 +324,7 @@ ___
 
 ▸ **mulXf**(`a`: [Transform](transform.md), `b`: [Transform](transform.md)): *[Transform](transform.md)*
 
-*Defined in [src/common/Transform.ts:165](https://github.com/shakiba/planck.js/blob/1523746/src/common/Transform.ts#L165)*
+*Defined in [src/common/Transform.ts:169](https://github.com/shakiba/planck.js/blob/acc3bd8/src/common/Transform.ts#L169)*
 
 **Parameters:**
 
