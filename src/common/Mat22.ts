@@ -58,8 +58,11 @@ export default class Mat22 {
     return JSON.stringify(this);
   }
 
-  static isValid(o: any): boolean {
-    return o && Vec2.isValid(o.ex) && Vec2.isValid(o.ey);
+  static isValid(obj: any): boolean {
+    if (obj === null || typeof obj === 'undefined') {
+      return false;
+    }
+    return Vec2.isValid(obj.ex) && Vec2.isValid(obj.ey);
   }
 
   static assert(o: any): void {

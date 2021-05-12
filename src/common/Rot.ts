@@ -71,8 +71,11 @@ export default class Rot {
     return obj;
   }
 
-  static isValid(o: any): boolean {
-    return o && Math.isFinite(o.s) && Math.isFinite(o.c);
+  static isValid(obj: any): boolean {
+    if (obj === null || typeof obj === 'undefined') {
+      return false;
+    }
+    return Math.isFinite(obj.s) && Math.isFinite(obj.c);
   }
 
   static assert(o: any): void {

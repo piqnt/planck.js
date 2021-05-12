@@ -55,8 +55,11 @@ export default abstract class Shape {
     return clazz && restore(clazz, data);
   }
 
-  static isValid(shape: Shape | null | undefined): shape is Shape {
-    return !!shape;
+  static isValid(obj: any): boolean {
+    if (obj === null || typeof obj === 'undefined') {
+      return false;
+    }
+    return typeof obj.m_type === 'string' && typeof obj.m_radius === 'number';
   }
 
   getRadius(): number {

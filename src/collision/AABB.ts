@@ -80,10 +80,11 @@ export default class AABB {
     return AABB.isValid(this);
   }
 
-  static isValid(aabb: any): boolean {
-    const d = Vec2.sub(aabb.upperBound, aabb.lowerBound);
-    const valid = d.x >= 0.0 && d.y >= 0.0 && Vec2.isValid(aabb.lowerBound) && Vec2.isValid(aabb.upperBound);
-    return valid;
+  static isValid(obj: any): boolean {
+    if (obj === null || typeof obj === 'undefined') {
+      return false;
+    }
+    return Vec2.isValid(obj.lowerBound) && Vec2.isValid(obj.upperBound) && Vec2.sub(obj.upperBound, obj.lowerBound).lengthSquared() > 0;
   }
 
   static assert(o: any): void {

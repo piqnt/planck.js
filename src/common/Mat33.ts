@@ -57,8 +57,11 @@ export default class Mat33 {
     return JSON.stringify(this);
   }
 
-  static isValid(o: any): boolean {
-    return o && Vec3.isValid(o.ex) && Vec3.isValid(o.ey) && Vec3.isValid(o.ez);
+  static isValid(obj: any): boolean {
+    if (obj === null || typeof obj === 'undefined') {
+      return false;
+    }
+    return Vec3.isValid(obj.ex) && Vec3.isValid(obj.ey) && Vec3.isValid(obj.ez);
   }
 
   static assert(o: any): void {

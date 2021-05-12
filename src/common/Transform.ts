@@ -103,8 +103,11 @@ export default class Transform {
     }
   }
 
-  static isValid(o: any): boolean {
-    return o && Vec2.isValid(o.p) && Rot.isValid(o.q);
+  static isValid(obj: any): boolean {
+    if (obj === null || typeof obj === 'undefined') {
+      return false;
+    }
+    return Vec2.isValid(obj.p) && Rot.isValid(obj.q);
   }
 
   static assert(o: any): void {

@@ -107,8 +107,11 @@ export default class Vec3 {
   /**
    * Does this vector contain finite coordinates?
    */
-  static isValid(v: any): boolean {
-    return v && Math.isFinite(v.x) && Math.isFinite(v.y) && Math.isFinite(v.z);
+  static isValid(obj: any): boolean {
+    if (obj === null || typeof obj === 'undefined') {
+      return false;
+    }
+    return Math.isFinite(obj.x) && Math.isFinite(obj.y) && Math.isFinite(obj.z);
   }
 
   static assert(o: any): void {

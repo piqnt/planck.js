@@ -99,8 +99,11 @@ export default class Vec2 {
   /**
    * Does this vector contain finite coordinates?
    */
-  static isValid(v: any): boolean {
-    return v && Math.isFinite(v.x) && Math.isFinite(v.y);
+  static isValid(obj: any): boolean {
+    if (obj === null || typeof obj === 'undefined') {
+      return false;
+    }
+    return Math.isFinite(obj.x) && Math.isFinite(obj.y);
   }
 
   static assert(o: any): void {
