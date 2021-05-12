@@ -385,5 +385,3 @@ export default class MouseJoint extends Joint {
   }
 
 }
-
-Joint.TYPES[MouseJoint.TYPE] = MouseJoint;

@@ -655,5 +655,3 @@ export default class WheelJoint extends Joint {
   }
 
 }
-
-Joint.TYPES[WheelJoint.TYPE] = WheelJoint;

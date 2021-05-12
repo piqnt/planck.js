@@ -563,5 +563,3 @@ export default class GearJoint extends Joint {
   }
 
 }
-
-Joint.TYPES[GearJoint.TYPE] = GearJoint;

@@ -875,5 +875,3 @@ export default class PrismaticJoint extends Joint {
   }
 
 }
-
-Joint.TYPES[PrismaticJoint.TYPE] = PrismaticJoint;

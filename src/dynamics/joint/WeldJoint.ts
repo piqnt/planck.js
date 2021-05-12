@@ -543,5 +543,3 @@ export default class WeldJoint extends Joint {
   }
 
 }
-
-Joint.TYPES[WeldJoint.TYPE] = WeldJoint;

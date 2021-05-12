@@ -734,5 +734,3 @@ export default class RevoluteJoint extends Joint {
   }
 
 }
-
-Joint.TYPES[RevoluteJoint.TYPE] = RevoluteJoint;

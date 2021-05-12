@@ -448,5 +448,3 @@ export default class DistanceJoint extends Joint {
   }
 
 }
-
-Joint.TYPES[DistanceJoint.TYPE] = DistanceJoint;

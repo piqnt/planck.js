@@ -456,5 +456,3 @@ export default class PulleyJoint extends Joint {
   }
 
 }
-
-Joint.TYPES[PulleyJoint.TYPE] = PulleyJoint;

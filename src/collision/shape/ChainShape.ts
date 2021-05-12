@@ -356,5 +356,3 @@ export default class ChainShape extends Shape {
     proxy.m_radius = this.m_radius;
   }
 }
-
-Shape.TYPES[ChainShape.TYPE] = ChainShape;

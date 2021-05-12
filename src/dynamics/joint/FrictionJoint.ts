@@ -398,5 +398,3 @@ export default class FrictionJoint extends Joint {
   }
 
 }
-
-Joint.TYPES[FrictionJoint.TYPE] = FrictionJoint;

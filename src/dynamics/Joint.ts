@@ -126,18 +126,6 @@ export default abstract class Joint {
     this.m_userData = def.userData;
   }
 
-  /** @internal */
-  static TYPES: { [id: string]: new (...args: any[]) => Joint; } = {};
-
-  /** @internal */
-  abstract _serialize(): object;
-
-  /** @internal */
-  static _deserialize(data: any, context: any, restore: any): Joint {
-    const clazz = Joint.TYPES[data.type];
-    return clazz && restore(clazz, data);
-  };
-
   /**
    * Short-cut function to determine if either body is inactive.
    */

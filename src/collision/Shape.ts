@@ -42,18 +42,6 @@ export default abstract class Shape {
   _reset(): void {
   }
 
-  /** @internal */
-  abstract _serialize(): object;
-
-  /** @internal */
-  static TYPES: { [id: string]: new (...args: any[]) => Shape; } = {};
-
-  /** @internal */
-  static _deserialize(data: any, context: any, restore: any): Shape {
-    const clazz = Shape.TYPES[data.type];
-    return clazz && restore(clazz, data);
-  }
-
   static isValid(obj: any): boolean {
     if (obj === null || typeof obj === 'undefined') {
       return false;

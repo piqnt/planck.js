@@ -211,5 +211,3 @@ export default class CircleShape extends Shape {
   }
 
 }
-
-Shape.TYPES[CircleShape.TYPE] = CircleShape;

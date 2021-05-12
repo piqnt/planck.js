@@ -301,5 +301,3 @@ export default class EdgeShape extends Shape {
   }
 
 }
-
-Shape.TYPES[EdgeShape.TYPE] = EdgeShape;

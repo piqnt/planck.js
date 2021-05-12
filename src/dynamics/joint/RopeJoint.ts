@@ -370,5 +370,3 @@ export default class RopeJoint extends Joint {
   }
 
 }
-
-Joint.TYPES[RopeJoint.TYPE] = RopeJoint;

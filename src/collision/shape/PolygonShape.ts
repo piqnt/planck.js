@@ -569,5 +569,3 @@ function ComputeCentroid(vs: Vec2[], count: number): Vec2 {
   c.mul(1.0 / area);
   return c;
 }
-
-Shape.TYPES[PolygonShape.TYPE] = PolygonShape;

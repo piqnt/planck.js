@@ -426,5 +426,3 @@ export default class MotorJoint extends Joint {
   }
 
 }
-
-Joint.TYPES[MotorJoint.TYPE] = MotorJoint;

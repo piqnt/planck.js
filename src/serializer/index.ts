@@ -6,6 +6,22 @@ import Fixture from '../dynamics/Fixture';
 import Shape from '../collision/Shape';
 import Vec2 from '../common/Vec2';
 import Vec3 from '../common/Vec3';
+import ChainShape from "../collision/shape/ChainShape";
+import BoxShape from "../collision/shape/BoxShape";
+import EdgeShape from "../collision/shape/EdgeShape";
+import PolygonShape from "../collision/shape/PolygonShape";
+import CircleShape from "../collision/shape/CircleShape";
+import DistanceJoint from "../dynamics/joint/DistanceJoint";
+import FrictionJoint from "../dynamics/joint/FrictionJoint";
+import GearJoint from "../dynamics/joint/GearJoint";
+import MotorJoint from "../dynamics/joint/MotorJoint";
+import MouseJoint from "../dynamics/joint/MouseJoint";
+import PrismaticJoint from "../dynamics/joint/PrismaticJoint";
+import PulleyJoint from "../dynamics/joint/PulleyJoint";
+import RevoluteJoint from "../dynamics/joint/RevoluteJoint";
+import RopeJoint from "../dynamics/joint/RopeJoint";
+import WeldJoint from "../dynamics/joint/WeldJoint";
+import WheelJoint from "../dynamics/joint/WheelJoint";
 
 let SID = 0;
 
@@ -35,6 +51,28 @@ function Serializer(opts?) {
     Vec3,
     ...refTypes
   };
+
+  const CLASS_BY_TYPE_PROP = {
+    [Body.STATIC]: Body,
+    [Body.DYNAMIC]: Body,
+    [Body.KINEMATIC]: Body,
+    [ChainShape.TYPE]: ChainShape,
+    [BoxShape.TYPE]: BoxShape,
+    [EdgeShape.TYPE]: EdgeShape,
+    [PolygonShape.TYPE]: PolygonShape,
+    [CircleShape.TYPE]: CircleShape,
+    [DistanceJoint.TYPE]: DistanceJoint,
+    [FrictionJoint.TYPE]: FrictionJoint,
+    [GearJoint.TYPE]: GearJoint,
+    [MotorJoint.TYPE]: MotorJoint,
+    [MouseJoint.TYPE]: MouseJoint,
+    [PrismaticJoint.TYPE]: PrismaticJoint,
+    [PulleyJoint.TYPE]: PulleyJoint,
+    [RevoluteJoint.TYPE]: RevoluteJoint,
+    [RopeJoint.TYPE]: RopeJoint,
+    [WeldJoint.TYPE]: WeldJoint,
+    [WheelJoint.TYPE]: WheelJoint,
+  }
 
   this.toJson = function(root) {
     const json = [];
@@ -110,13 +148,32 @@ function Serializer(opts?) {
   this.fromJson = function(json: object) {
     const refMap = {};
 
+    function findDeserilizer(data, cls) {
+      if (!cls || !cls._deserialize) {
+        cls = CLASS_BY_TYPE_PROP[data.type]
+      }
+      return cls && cls._deserialize;
+    }
+
+    /**
+     * Deserialize a data object.
+     */
     function deserialize(cls, data, ctx) {
+      const deserializer = findDeserilizer(data, cls);
+      if (!deserializer) {
+        return;
+      }
       data = preDeserialize(data);
-      let obj = cls._deserialize(data, ctx, restoreRef);
+      let obj = deserializer(data, ctx, restoreRef);
       obj = postDeserialize(obj, data);
       return obj;
     }
 
+    /**
+     * Restore a ref object or deserialize a data object.
+     *
+     * This is passed as callback to class deserializers.
+     */
     function restoreRef(cls, ref, ctx) {
       if (!ref.refIndex) {
         return cls && cls._deserialize && deserialize(cls, ref, ctx);
