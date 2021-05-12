@@ -53,7 +53,7 @@ export class DistanceInput {
   proxyB: DistanceProxy = new DistanceProxy();
   transformA: Transform | null = null;
   transformB: Transform | null = null;
-  useRadii = false;
+  useRadii: boolean = false;
 }
 
 /**
@@ -80,10 +80,10 @@ export class DistanceOutput {
  * @prop {number} count
  */
 export class SimplexCache {
-  metric = 0;
+  metric: number = 0;
   indexA: number[] = [];
   indexB: number[] = [];
-  count = 0;
+  count: number = 0;
 }
 
 /**

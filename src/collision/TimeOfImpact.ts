@@ -309,15 +309,15 @@ enum SeparationFunctionType {
 }
 
 class SeparationFunction {
-  m_proxyA = new DistanceProxy();
-  m_proxyB = new DistanceProxy();
+  m_proxyA: DistanceProxy = new DistanceProxy();
+  m_proxyB: DistanceProxy = new DistanceProxy();
   m_sweepA: Sweep;
   m_sweepB: Sweep;
   indexA: number;
   indexB: number;
   m_type: SeparationFunctionType;
-  m_localPoint = Vec2.zero();
-  m_axis = Vec2.zero();
+  m_localPoint: Vec2 = Vec2.zero();
+  m_axis: Vec2 = Vec2.zero();
 
   // TODO_ERIN might not need to return the separation
 

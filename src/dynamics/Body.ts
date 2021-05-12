@@ -133,11 +133,11 @@ const BodyDefDefault: BodyDef = {
  */
 export class MassData {
   /** The mass of the shape, usually in kilograms. */
-  mass = 0;
+  mass: number = 0;
   /** The position of the shape's centroid relative to the shape's origin. */
-  center = Vec2.zero();
+  center: Vec2 = Vec2.zero();
   /** The rotational inertia of the shape about the local origin. */
-  I = 0;
+  I: number = 0;
 }
 
 /**

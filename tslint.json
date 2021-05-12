@@ -13,6 +13,14 @@
     "triple-equals": false,
     "prefer-for-of": false,
     "prefer-switch": false,
-    "typedef": [true, "call-signature", "parameter", "arrow-parameter"]
+    "typedef": [
+      true,
+      "call-signature",
+      "arrow-call-signature",
+      "parameter",
+      "arrow-parameter",
+      "property-declaration",
+      "member-variable-declaration"
+    ]
   }
 }

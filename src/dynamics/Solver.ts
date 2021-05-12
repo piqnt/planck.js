@@ -40,18 +40,18 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 export class TimeStep {
   /** time step */
-  dt = 0;
+  dt: number = 0;
   /** inverse time step (0 if dt == 0) */
-  inv_dt = 0;
-  velocityIterations = 0;
-  positionIterations = 0;
-  warmStarting = false;
-  blockSolve = true;
+  inv_dt: number = 0;
+  velocityIterations: number = 0;
+  positionIterations: number = 0;
+  warmStarting: boolean = false;
+  blockSolve: boolean = true;
 
   /** timestep ratio for variable timestep */
-  inv_dt0 = 0.0;
+  inv_dt0: number = 0.0;
   /** dt * inv_dt0 */
-  dtRatio = 1;
+  dtRatio: number = 1;
 
   reset(dt: number): void {
     if (this.dt > 0.0) {

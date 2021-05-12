@@ -94,8 +94,8 @@ const DEFAULTS = {
  * length.
  */
 export default class PulleyJoint extends Joint {
-  static TYPE = 'pulley-joint' as 'pulley-joint';
-  static MIN_PULLEY_LENGTH = 2.0; // minPulleyLength
+  static TYPE: 'pulley-joint' = 'pulley-joint';
+  // static MIN_PULLEY_LENGTH: number = 2.0; // TODO where this is used?
 
   /** @internal */ m_type: 'pulley-joint';
   /** @internal */ m_groundAnchorA: Vec2;
@@ -107,18 +107,19 @@ export default class PulleyJoint extends Joint {
   /** @internal */ m_ratio: number;
   /** @internal */ m_constant: number;
   /** @internal */ m_impulse: number;
+
   // Solver temp
-  /** @internal */ m_uA; // Vec2
-  /** @internal */ m_uB; // Vec2
-  /** @internal */ m_rA; // Vec2
-  /** @internal */ m_rB; // Vec2
-  /** @internal */ m_localCenterA; // Vec2
-  /** @internal */ m_localCenterB; // Vec2
-  /** @internal */ m_invMassA; // float
-  /** @internal */ m_invMassB; // float
-  /** @internal */ m_invIA; // float
-  /** @internal */ m_invIB; // float
-  /** @internal */ m_mass; // float
+  /** @internal */ m_uA: Vec2;
+  /** @internal */ m_uB: Vec2;
+  /** @internal */ m_rA: Vec2;
+  /** @internal */ m_rB: Vec2;
+  /** @internal */ m_localCenterA: Vec2;
+  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_invMassA: number;
+  /** @internal */ m_invMassB: number;
+  /** @internal */ m_invIA: number;
+  /** @internal */ m_invIB: number;
+  /** @internal */ m_mass: number;
 
   constructor(def: PulleyJointDef);
   constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number);
@@ -147,19 +148,6 @@ export default class PulleyJoint extends Joint {
     this.m_constant = this.m_lengthA + this.m_ratio * this.m_lengthB;
 
     this.m_impulse = 0.0;
-
-    // Solver temp
-    this.m_uA; // Vec2
-    this.m_uB; // Vec2
-    this.m_rA; // Vec2
-    this.m_rB; // Vec2
-    this.m_localCenterA; // Vec2
-    this.m_localCenterB; // Vec2
-    this.m_invMassA; // float
-    this.m_invMassB; // float
-    this.m_invIA; // float
-    this.m_invIB; // float
-    this.m_mass; // float
 
     // Pulley:
     // length1 = norm(p1 - s1)

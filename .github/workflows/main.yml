@@ -22,8 +22,11 @@ jobs:
       - name: npm-install
         run: npm install
 
-      - name: npm-build
+      - name: npm-test
         run: npm run test
+
+      - name: npm-lint
+        run: npm run lint
 
       - name: npm-build
         run: npm run build

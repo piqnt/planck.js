@@ -47,7 +47,7 @@ export class TreeNode<T> {
   child1: TreeNode<T> = null;
   child2: TreeNode<T> = null;
   /** 0: leaf, -1: free node */
-  height = -1;
+  height: number = -1;
 
   constructor(id?: number) {
     this.id = id;
@@ -857,7 +857,7 @@ export default class DynamicTree<T> {
     this.inputPool.release(subInput);
   }
 
-  private inputPool = new Pool<RayCastInput>({
+  private inputPool: Pool<RayCastInput> = new Pool<RayCastInput>({
     create(): RayCastInput {
       // tslint:disable-next-line:no-object-literal-type-assertion
       return {} as RayCastInput;
@@ -866,7 +866,7 @@ export default class DynamicTree<T> {
     }
   });
 
-  private stackPool = new Pool<Array<TreeNode<T>>>({
+  private stackPool: Pool<Array<TreeNode<T>>> = new Pool<Array<TreeNode<T>>>({
     create(): Array<TreeNode<T>> {
       return [];
     },
@@ -875,7 +875,7 @@ export default class DynamicTree<T> {
     }
   });
 
-  private iteratorPool = new Pool<Iterator<T>>({
+  private iteratorPool: Pool<Iterator<T>> = new Pool<Iterator<T>>({
     create(): Iterator<T> {
       return new Iterator();
     },

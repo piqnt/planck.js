@@ -80,7 +80,7 @@ const DEFAULTS = {
  * want to dynamically control length.
  */
 export default class RopeJoint extends Joint {
-  static TYPE = 'rope-joint' as 'rope-joint';
+  static TYPE: 'rope-joint' = 'rope-joint';
 
   /** @internal */ m_type: 'rope-joint';
   /** @internal */ m_localAnchorA: Vec2;
@@ -94,15 +94,15 @@ export default class RopeJoint extends Joint {
   /** @internal */ m_state: number; // TODO enum
 
   // Solver temp
-  /** @internal */ m_u; // Vec2
-  /** @internal */ m_rA; // Vec2
-  /** @internal */ m_rB; // Vec2
-  /** @internal */ m_localCenterA; // Vec2
-  /** @internal */ m_localCenterB; // Vec2
-  /** @internal */ m_invMassA; // float
-  /** @internal */ m_invMassB; // float
-  /** @internal */ m_invIA; // float
-  /** @internal */ m_invIB; // float
+  /** @internal */ m_u: Vec2;
+  /** @internal */ m_rA: Vec2;
+  /** @internal */ m_rB: Vec2;
+  /** @internal */ m_localCenterA: Vec2;
+  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_invMassA: number;
+  /** @internal */ m_invMassB: number;
+  /** @internal */ m_invIA: number;
+  /** @internal */ m_invIB: number;
 
   constructor(def: RopeJointDef);
   constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
@@ -127,18 +127,6 @@ export default class RopeJoint extends Joint {
     this.m_impulse = 0.0;
     this.m_length = 0.0;
     this.m_state = inactiveLimit;
-
-    // Solver temp
-    this.m_u; // Vec2
-    this.m_rA; // Vec2
-    this.m_rB; // Vec2
-    this.m_localCenterA; // Vec2
-    this.m_localCenterB; // Vec2
-    this.m_invMassA; // float
-    this.m_invMassB; // float
-    this.m_invIA; // float
-    this.m_invIB; // float
-    this.m_mass; // float
 
     // Limit:
     // C = norm(pB - pA) - L

@@ -83,7 +83,7 @@ const DEFAULTS = {
  * @param anchorB Anchor B in global coordination.
  */
 export default class DistanceJoint extends Joint {
-  static TYPE = 'distance-joint' as 'distance-joint';
+  static TYPE: 'distance-joint' = 'distance-joint';
 
   // Solver shared
   /** @internal */ m_localAnchorA: Vec2;
@@ -96,16 +96,16 @@ export default class DistanceJoint extends Joint {
   /** @internal */ m_bias: number;
 
   // Solver temp
-  /** @internal */ m_u; // Vec2
-  /** @internal */ m_rA; // Vec2
-  /** @internal */ m_rB; // Vec2
-  /** @internal */ m_localCenterA; // Vec2
-  /** @internal */ m_localCenterB; // Vec2
-  /** @internal */ m_invMassA;
-  /** @internal */ m_invMassB;
-  /** @internal */ m_invIA;
-  /** @internal */ m_invIB;
-  /** @internal */ m_mass;
+  /** @internal */ m_u: Vec2;
+  /** @internal */ m_rA: Vec2;
+  /** @internal */ m_rB: Vec2;
+  /** @internal */ m_localCenterA: Vec2;
+  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_invMassA: number;
+  /** @internal */ m_invMassB: number;
+  /** @internal */ m_invIA: number;
+  /** @internal */ m_invIB: number;
+  /** @internal */ m_mass: number;
 
   constructor(def: DistanceJointDef);
   constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2);
@@ -139,18 +139,6 @@ export default class DistanceJoint extends Joint {
     this.m_impulse = 0.0;
     this.m_gamma = 0.0;
     this.m_bias = 0.0;
-
-    // Solver temp
-    this.m_u; // Vec2
-    this.m_rA; // Vec2
-    this.m_rB; // Vec2
-    this.m_localCenterA; // Vec2
-    this.m_localCenterB; // Vec2
-    this.m_invMassA;
-    this.m_invMassB;
-    this.m_invIA;
-    this.m_invIB;
-    this.m_mass;
 
     // 1-D constrained system
     // m (v2 - v1) = lambda

@@ -128,7 +128,7 @@ const DEFAULTS = {
  * so that infinite forces are not generated.
  */
 export default class RevoluteJoint extends Joint {
-  static TYPE = 'revolute-joint' as 'revolute-joint';
+  static TYPE: 'revolute-joint' = 'revolute-joint';
 
   /** @internal */ m_type: 'revolute-joint';
   /** @internal */ m_localAnchorA: Vec2;
@@ -142,21 +142,25 @@ export default class RevoluteJoint extends Joint {
   /** @internal */ m_motorSpeed: number;
   /** @internal */ m_enableLimit: boolean;
   /** @internal */ m_enableMotor: boolean;
+
   // Solver temp
-  /** @internal */ m_rA; // Vec2
-  /** @internal */ m_rB; // Vec2
-  /** @internal */ m_localCenterA; // Vec2
-  /** @internal */ m_localCenterB; // Vec2
-  /** @internal */ m_invMassA; // float
-  /** @internal */ m_invMassB; // float
-  /** @internal */ m_invIA; // float
-  /** @internal */ m_invIB; // float
-  /** @internal */ m_mass: Mat33;
-  /** @internal */ m_motorMass; // float
-  /** @internal */ m_limitState: number; // TODO enum
+  /** @internal */ m_rA: Vec2;
+  /** @internal */ m_rB: Vec2;
+  /** @internal */ m_localCenterA: Vec2;
+  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_invMassA: number;
+  /** @internal */ m_invMassB: number;
+  /** @internal */ m_invIA: number;
+  /** @internal */ m_invIB: number;
+  // effective mass for point-to-point constraint.
+  /** @internal */ m_mass: Mat33 = new Mat33();
+  // effective mass for motor/limit angular constraint.
+  /** @internal */ m_motorMass: number;
+  /** @internal */ m_limitState: number = inactiveLimit; // TODO enum
 
   constructor(def: RevoluteJointDef);
   constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+  // @ts-ignore
   constructor(def: RevoluteJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2) {
     // @ts-ignore
     if (!(this instanceof RevoluteJoint)) {
@@ -183,21 +187,6 @@ export default class RevoluteJoint extends Joint {
     this.m_motorSpeed = def.motorSpeed;
     this.m_enableLimit = def.enableLimit;
     this.m_enableMotor = def.enableMotor;
-
-    // Solver temp
-    this.m_rA; // Vec2
-    this.m_rB; // Vec2
-    this.m_localCenterA; // Vec2
-    this.m_localCenterB; // Vec2
-    this.m_invMassA; // float
-    this.m_invMassB; // float
-    this.m_invIA; // float
-    this.m_invIB; // float
-    // effective mass for point-to-point constraint.
-    this.m_mass = new Mat33();
-    // effective mass for motor/limit angular constraint.
-    this.m_motorMass; // float
-    this.m_limitState = inactiveLimit;
 
     // Point-to-point constraint
     // C = p2 - p1

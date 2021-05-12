@@ -122,7 +122,7 @@ const DEFAULTS = {
  * motion or to model joint friction.
  */
 export default class PrismaticJoint extends Joint {
-  static TYPE = 'prismatic-joint' as 'prismatic-joint';
+  static TYPE: 'prismatic-joint' = 'prismatic-joint';
 
   /** @internal */ m_type: 'prismatic-joint';
   /** @internal */ m_localAnchorA: Vec2;
@@ -143,16 +143,16 @@ export default class PrismaticJoint extends Joint {
   /** @internal */ m_axis: Vec2;
   /** @internal */ m_perp: Vec2;
   // Solver temp
-  /** @internal */ m_localCenterA; // Vec2
-  /** @internal */ m_localCenterB; // Vec2
-  /** @internal */ m_invMassA; // float
-  /** @internal */ m_invMassB; // float
-  /** @internal */ m_invIA; // float
-  /** @internal */ m_invIB; // float
-  /** @internal */ m_s1;
-  /** @internal */ m_s2; // float
-  /** @internal */ m_a1;
-  /** @internal */ m_a2; // float
+  /** @internal */ m_localCenterA: Vec2;
+  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_invMassA: number;
+  /** @internal */ m_invMassB: number;
+  /** @internal */ m_invIA: number;
+  /** @internal */ m_invIB: number;
+  /** @internal */ m_s1: number;
+  /** @internal */ m_s2: number;
+  /** @internal */ m_a1: number;
+  /** @internal */ m_a2: number;
   /** @internal */ m_K: Mat33;
 
   constructor(def: PrismaticJointDef);

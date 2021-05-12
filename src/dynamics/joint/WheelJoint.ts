@@ -100,7 +100,7 @@ const DEFAULTS = {
  * This joint is designed for vehicle suspensions.
  */
 export default class WheelJoint extends Joint {
-  static TYPE = 'wheel-joint' as 'wheel-joint';
+  static TYPE: 'wheel-joint' = 'wheel-joint';
 
   /** @internal */ m_type: 'wheel-joint';
   /** @internal */ m_localAnchorA: Vec2;
@@ -126,22 +126,23 @@ export default class WheelJoint extends Joint {
   /** @internal */ m_gamma: number;
 
   // Solver temp
-  /** @internal */ m_localCenterA; // Vec2
-  /** @internal */ m_localCenterB; // Vec2
-  /** @internal */ m_invMassA; // float
-  /** @internal */ m_invMassB; // float
-  /** @internal */ m_invIA; // float
-  /** @internal */ m_invIB; // float
+  /** @internal */ m_localCenterA: Vec2;
+  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_invMassA: number;
+  /** @internal */ m_invMassB: number;
+  /** @internal */ m_invIA: number;
+  /** @internal */ m_invIB: number;
 
-  /** @internal */ m_ax: Vec2;
-  /** @internal */ m_ay: Vec2; // Vec2
-  /** @internal */ m_sAx;
-  /** @internal */ m_sBx; // float
-  /** @internal */ m_sAy;
-  /** @internal */ m_sBy; // float
+  /** @internal */ m_ax: Vec2 = Vec2.zero();
+  /** @internal */ m_ay: Vec2 = Vec2.zero();
+  /** @internal */ m_sAx: number;
+  /** @internal */ m_sBx: number;
+  /** @internal */ m_sAy: number;
+  /** @internal */ m_sBy: number;
 
   constructor(def: WheelJointDef);
   constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
+  // @ts-ignore
   constructor(def: WheelJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2, axis?: Vec2) {
     // @ts-ignore
     if (!(this instanceof WheelJoint)) {
@@ -177,21 +178,6 @@ export default class WheelJoint extends Joint {
 
     this.m_bias = 0.0;
     this.m_gamma = 0.0;
-
-    // Solver temp
-    this.m_localCenterA; // Vec2
-    this.m_localCenterB; // Vec2
-    this.m_invMassA; // float
-    this.m_invMassB; // float
-    this.m_invIA; // float
-    this.m_invIB; // float
-
-    this.m_ax = Vec2.zero();
-    this.m_ay = Vec2.zero(); // Vec2
-    this.m_sAx;
-    this.m_sBx; // float
-    this.m_sAy;
-    this.m_sBy; // float
 
     // Linear constraint (point-to-line)
     // d = pB - pA = xB + rB - xA - rA

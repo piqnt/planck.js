@@ -18,17 +18,17 @@
 
 export default class Pool<T> {
   _list: T[] = [];
-  _max = Infinity;
+  _max: number = Infinity;
 
   _createFn: () => T;
   _outFn: (item: T) => void;
   _inFn: (item: T) => void;
   _discardFn: (item: T) => T;
 
-  _createCount = 0;
-  _outCount = 0;
-  _inCount = 0;
-  _discardCount = 0;
+  _createCount: number = 0;
+  _outCount: number = 0;
+  _inCount: number = 0;
+  _discardCount: number = 0;
 
   constructor(opts: {
     max?: number,

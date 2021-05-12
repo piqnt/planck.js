@@ -79,7 +79,7 @@ const DEFAULTS = {
  * the ground.
  */
 export default class MotorJoint extends Joint {
-  static TYPE = 'motor-joint' as 'motor-joint';
+  static TYPE: 'motor-joint' = 'motor-joint';
 
   /** @internal */ m_type: 'motor-joint';
   /** @internal */ m_linearOffset: Vec2;
@@ -89,6 +89,7 @@ export default class MotorJoint extends Joint {
   /** @internal */ m_maxForce: number;
   /** @internal */ m_maxTorque: number;
   /** @internal */ m_correctionFactor: number;
+
   // Solver temp
   /** @internal */ m_rA: Vec2;
   /** @internal */ m_rB: Vec2;

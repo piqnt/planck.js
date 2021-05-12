@@ -88,7 +88,7 @@ class EPAxis {
 class TempPolygon {
   vertices: Vec2[] = []; // [Settings.maxPolygonVertices]
   normals: Vec2[] = []; // [Settings.maxPolygonVertices];
-  count = 0;
+  count: number = 0;
 }
 
 /**
@@ -99,10 +99,10 @@ class ReferenceFace {
   i2: number;
   v1: Vec2;
   v2: Vec2;
-  normal = Vec2.zero();
-  sideNormal1 = Vec2.zero();
+  normal: Vec2 = Vec2.zero();
+  sideNormal1: Vec2 = Vec2.zero();
   sideOffset1: number;
-  sideNormal2 = Vec2.zero();
+  sideNormal2: Vec2 = Vec2.zero();
   sideOffset2: number;
 }
 

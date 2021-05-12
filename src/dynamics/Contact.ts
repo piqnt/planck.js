@@ -105,13 +105,13 @@ const s_registers = [];
 
 // TODO: merge with ManifoldPoint?
 export class VelocityConstraintPoint {
-  rA = Vec2.zero();
-  rB = Vec2.zero();
-  normalImpulse = 0;
-  tangentImpulse = 0;
-  normalMass = 0;
-  tangentMass = 0;
-  velocityBias = 0;
+  rA: Vec2 = Vec2.zero();
+  rB: Vec2 = Vec2.zero();
+  normalImpulse: number = 0;
+  tangentImpulse: number = 0;
+  normalMass: number = 0;
+  tangentMass: number = 0;
+  velocityBias: number = 0;
 }
 
 /**
@@ -141,27 +141,27 @@ export default class Contact {
   /** @internal */
   m_next: Contact | null = null;
   /** @internal */
-  m_toi = 1.0;
+  m_toi: number = 1.0;
   /** @internal */
-  m_toiCount = 0;
+  m_toiCount: number = 0;
   /** @internal This contact has a valid TOI in m_toi */
-  m_toiFlag = false;
+  m_toiFlag: boolean = false;
   /** @internal */
   m_friction: number;
   /** @internal */
   m_restitution: number;
   /** @internal */
-  m_tangentSpeed = 0.0;
+  m_tangentSpeed: number = 0.0;
   /** @internal This contact can be disabled (by user) */
-  m_enabledFlag = true;
+  m_enabledFlag: boolean = true;
   /** @internal Used when crawling contact graph when forming islands. */
-  m_islandFlag = false;
+  m_islandFlag: boolean = false;
   /** @internal Set when the shapes are touching. */
-  m_touchingFlag = false;
+  m_touchingFlag: boolean = false;
   /** @internal This contact needs filtering because a fixture filter was changed. */
-  m_filterFlag = false;
+  m_filterFlag: boolean = false;
   /** @internal This bullet contact had a TOI event */
-  m_bulletHitFlag = false;
+  m_bulletHitFlag: boolean = false;
 
   /** @internal Contact reporting impulse object cache */
   m_impulse: ContactImpulse = new ContactImpulse(this);

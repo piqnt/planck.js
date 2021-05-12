@@ -67,7 +67,7 @@ export default class Manifold {
   localNormal: Vec2 = Vec2.zero();
   localPoint: Vec2 = Vec2.zero();
   points: ManifoldPoint[] = [ new ManifoldPoint(), new ManifoldPoint() ];
-  pointCount = 0;
+  pointCount: number = 0;
 
   /**
    * Evaluate the manifold with supplied transforms. This assumes modest motion
@@ -163,19 +163,19 @@ export class ManifoldPoint {
    *       e_faceA: the local center of cirlceB or the clip point of polygonB,
    *       e_faceB: the clip point of polygonA.
    */
-  localPoint = Vec2.zero();
+  localPoint: Vec2 = Vec2.zero();
   /**
    * The non-penetration impulse
    */
-  normalImpulse = 0;
+  normalImpulse: number = 0;
   /**
    * The friction impulse
    */
-  tangentImpulse = 0;
+  tangentImpulse: number = 0;
   /**
    * Uniquely identifies a contact point between two shapes to facilatate warm starting
    */
-  id = new ContactID();
+  id: ContactID = new ContactID();
 }
 
 /**
@@ -308,8 +308,8 @@ export function getPointStates(
  * Used for computing contact manifolds.
  */
 export class ClipVertex {
-  v = Vec2.zero();
-  id = new ContactID();
+  v: Vec2 = Vec2.zero();
+  id: ContactID = new ContactID();
 
   set(o: ClipVertex): void {
     this.v.set(o.v);

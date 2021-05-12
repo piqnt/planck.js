@@ -768,7 +768,7 @@ export default class World {
   }
 
   /** @internal */
-  s_step = new TimeStep(); // reuse
+  s_step: TimeStep = new TimeStep(); // reuse
 
   /**
    * Take a time step. This performs collision detection, integration, and
@@ -854,7 +854,7 @@ export default class World {
    * @internal
    * Callback for broad-phase.
    */
-  createContact = (proxyA: FixtureProxy, proxyB: FixtureProxy) => {
+  createContact = (proxyA: FixtureProxy, proxyB: FixtureProxy): void => {
     const fixtureA = proxyA.fixture;
     const fixtureB = proxyB.fixture;
 

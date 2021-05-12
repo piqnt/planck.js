@@ -39,19 +39,19 @@ export class JointEdge {
   /**
    * provides quick access to the other body attached.
    */
-  other = null as Body | null;
+  other: Body | null = null;
   /**
    * the joint
    */
-  joint = null as Joint | null;
+  joint: Joint | null = null;
   /**
    * prev the previous joint edge in the body's joint list
    */
-  prev = null as JointEdge | null;
+  prev: JointEdge | null = null;
   /**
    * the next joint edge in the body's joint list
    */
-  next = null as JointEdge | null;
+  next: JointEdge | null = null;
 }
 
 /**
@@ -93,20 +93,20 @@ const DEFAULTS = {
  */
 export default abstract class Joint {
 
-  /** @internal */ m_type = 'unknown-joint';
+  /** @internal */ m_type: string = 'unknown-joint';
 
   /** @internal */ m_bodyA: Body;
   /** @internal */ m_bodyB: Body;
 
   /** @internal */ m_collideConnected: boolean;
 
-  /** @internal */ m_prev = null as Joint | null;
-  /** @internal */ m_next = null as Joint | null;
+  /** @internal */ m_prev: Joint | null = null;
+  /** @internal */ m_next: Joint | null = null;
 
-  /** @internal */ m_edgeA = new JointEdge();
-  /** @internal */ m_edgeB = new JointEdge();
+  /** @internal */ m_edgeA: JointEdge = new JointEdge();
+  /** @internal */ m_edgeB: JointEdge = new JointEdge();
 
-  /** @internal */ m_islandFlag = false;
+  /** @internal */ m_islandFlag: boolean = false;
   /** @internal */ m_userData: unknown;
 
   constructor(def: JointDef);

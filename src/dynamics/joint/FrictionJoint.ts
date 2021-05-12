@@ -75,28 +75,30 @@ const DEFAULTS = {
  * @param anchor Anchor in global coordination.
  */
 export default class FrictionJoint extends Joint {
-  static TYPE = 'friction-joint' as 'friction-joint';
+  static TYPE: 'friction-joint' = 'friction-joint';
 
   /** @internal */ m_type: 'friction-joint';
 
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
+
   // Solver shared
   /** @internal */ m_linearImpulse: Vec2;
   /** @internal */ m_angularImpulse: number;
   /** @internal */ m_maxForce: number;
   /** @internal */ m_maxTorque: number;
+
   // Solver temp
-  /** @internal */ m_rA; // Vec2
-  /** @internal */ m_rB; // Vec2
-  /** @internal */ m_localCenterA; // Vec2
-  /** @internal */ m_localCenterB; // Vec2
-  /** @internal */ m_invMassA; // float
-  /** @internal */ m_invMassB; // float
-  /** @internal */ m_invIA; // float
-  /** @internal */ m_invIB; // float
-  /** @internal */ m_linearMass; // Mat22
-  /** @internal */ m_angularMass; // float
+  /** @internal */ m_rA: Vec2;
+  /** @internal */ m_rB: Vec2;
+  /** @internal */ m_localCenterA: Vec2;
+  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_invMassA: number;
+  /** @internal */ m_invMassB: number;
+  /** @internal */ m_invIA: number;
+  /** @internal */ m_invIB: number;
+  /** @internal */ m_linearMass: Mat22;
+  /** @internal */ m_angularMass: number;
 
   constructor(def: FrictionJointDef);
   constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
@@ -121,18 +123,6 @@ export default class FrictionJoint extends Joint {
     this.m_angularImpulse = 0.0;
     this.m_maxForce = def.maxForce;
     this.m_maxTorque = def.maxTorque;
-
-    // Solver temp
-    this.m_rA; // Vec2
-    this.m_rB; // Vec2
-    this.m_localCenterA; // Vec2
-    this.m_localCenterB; // Vec2
-    this.m_invMassA; // float
-    this.m_invMassB; // float
-    this.m_invIA; // float
-    this.m_invIB; // float
-    this.m_linearMass; // Mat22
-    this.m_angularMass; // float
 
     // Point-to-point constraint
     // Cdot = v2 - v1

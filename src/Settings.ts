@@ -34,39 +34,39 @@ export default class Settings {
    * The maximum number of contact points between two convex shapes. Do not change
    * this value.
    */
-  static maxManifoldPoints = 2;
+  static maxManifoldPoints: number = 2;
 
   /**
    * The maximum number of vertices on a convex polygon. You cannot increase this
    * too much because BlockAllocator has a maximum object size.
    */
-  static maxPolygonVertices = 12;
+  static maxPolygonVertices: number = 12;
 
   /**
    * This is used to fatten AABBs in the dynamic tree. This allows proxies to move
    * by a small amount without triggering a tree adjustment. This is in meters.
    */
-  static aabbExtension = 0.1;
+  static aabbExtension: number = 0.1;
 
   /**
    * This is used to fatten AABBs in the dynamic tree. This is used to predict the
    * future position based on the current displacement. This is a dimensionless
    * multiplier.
    */
-  static aabbMultiplier = 2.0;
+  static aabbMultiplier: number = 2.0;
 
   /**
    * A small length used as a collision and constraint tolerance. Usually it is
    * chosen to be numerically significant, but visually insignificant.
    */
-  static linearSlop = 0.005;
+  static linearSlop: number = 0.005;
   static get linearSlopSquared(): number { return Settings.linearSlop * Settings.linearSlop; }
 
   /**
    * A small angle used as a collision and constraint tolerance. Usually it is
    * chosen to be numerically significant, but visually insignificant.
    */
-  static angularSlop = (2.0 / 180.0 * Math.PI);
+  static angularSlop: number = (2.0 / 180.0 * Math.PI);
 
   /**
    * The radius of the polygon/edge shape skin. This should not be modified.
@@ -79,55 +79,55 @@ export default class Settings {
   /**
    * Maximum number of sub-steps per contact in continuous physics simulation.
    */
-  static maxSubSteps = 8;
+  static maxSubSteps: number = 8;
 
 // Dynamics
 
   /**
    * Maximum number of contacts to be handled to solve a TOI impact.
    */
-  static maxTOIContacts = 32;
+  static maxTOIContacts: number = 32;
 
   /**
    * Maximum iterations to solve a TOI.
    */
-  static maxTOIIterations = 20;
+  static maxTOIIterations: number = 20;
 
   /**
    * Maximum iterations to find Distance.
    */
-  static maxDistnceIterations = 20;
+  static maxDistnceIterations: number = 20;
 
   /**
    * A velocity threshold for elastic collisions. Any collision with a relative
    * linear velocity below this threshold will be treated as inelastic.
    */
-  static velocityThreshold = 1.0;
+  static velocityThreshold: number = 1.0;
 
   /**
    * The maximum linear position correction used when solving constraints. This
    * helps to prevent overshoot.
    */
-  static maxLinearCorrection = 0.2;
+  static maxLinearCorrection: number = 0.2;
 
   /**
    * The maximum angular position correction used when solving constraints. This
    * helps to prevent overshoot.
    */
-  static maxAngularCorrection = (8.0 / 180.0 * Math.PI);
+  static maxAngularCorrection: number = (8.0 / 180.0 * Math.PI);
 
   /**
    * The maximum linear velocity of a body. This limit is very large and is used
    * to prevent numerical problems. You shouldn't need to adjust Settings.
    */
-  static maxTranslation = 2.0;
+  static maxTranslation: number = 2.0;
   static get maxTranslationSquared(): number { return Settings.maxTranslation * Settings.maxTranslation; }
 
   /**
    * The maximum angular velocity of a body. This limit is very large and is used
    * to prevent numerical problems. You shouldn't need to adjust Settings.
    */
-  static maxRotation = (0.5 * Math.PI);
+  static maxRotation: number = (0.5 * Math.PI);
   static get maxRotationSquared(): number { return Settings.maxRotation * Settings.maxRotation; }
 
   /**
@@ -135,26 +135,26 @@ export default class Settings {
    * be 1 so that overlap is removed in one time step. However using values close
    * to 1 often lead to overshoot.
    */
-  static baumgarte = 0.2;
-  static toiBaugarte = 0.75;
+  static baumgarte: number = 0.2;
+  static toiBaugarte: number = 0.75;
 
   // Sleep
 
   /**
    * The time that a body must be still before it will go to sleep.
    */
-  static timeToSleep = 0.5;
+  static timeToSleep: number = 0.5;
 
   /**
    * A body cannot sleep if its linear velocity is above this tolerance.
    */
-  static linearSleepTolerance = 0.01;
+  static linearSleepTolerance: number = 0.01;
   static get linearSleepToleranceSqr(): number { return Math.pow(Settings.linearSleepTolerance, 2); }
 
   /**
    * A body cannot sleep if its angular velocity is above this tolerance.
    */
-  static angularSleepTolerance = (2.0 / 180.0 * Math.PI);
+  static angularSleepTolerance: number = (2.0 / 180.0 * Math.PI);
   static get angularSleepToleranceSqr(): number { return Math.pow(Settings.angularSleepTolerance, 2); }
 
 }

@@ -87,7 +87,7 @@ const DEFAULTS = {
  * somewhat because the island constraint solver is approximate.
  */
 export default class WeldJoint extends Joint {
-  static TYPE = 'weld-joint' as 'weld-joint';
+  static TYPE: 'weld-joint' = 'weld-joint';
 
   /** @internal */ m_type: 'weld-joint';
   /** @internal */ m_localAnchorA: Vec2;
