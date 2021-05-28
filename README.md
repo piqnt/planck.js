@@ -107,6 +107,7 @@ planck.testbed(function() {
 
 #### Games
 - [Astray 2](https://wwwtyro.github.io/astray-2/) ([source](https://github.com/wwwtyro/astray-2)) by Rye Terrell
+- [Rope](https://one.fserb.com/rope/) ([source](https://github.com/fserb/one/blob/master/src/rope.js)) by Fernando Serboncini
 - [I have to flap](https://ihavetoflap.web.app/) by Elias Ku
 - [Hoverator](https://vgel.me/hoverator/) by Jonathon Vogel
 - [Totem Destroyer](https://www.emanueleferonato.com/2021/03/13/build-a-html5-game-like-old-flash-glory-totem-destroyer-using-phaser-and-planck-js-physics-engine/) by Emanuele Feronato
