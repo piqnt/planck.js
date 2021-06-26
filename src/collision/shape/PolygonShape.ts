@@ -2,6 +2,7 @@
  * Planck.js
  * The MIT License
  * Copyright (c) 2021 Erin Catto, Ali Shakiba
+ * Copyright (c) 2013 Google, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -306,6 +307,50 @@ export default class PolygonShape extends Shape {
     }
 
     return true;
+  }
+
+  /**
+   * LIQUID_FUN:
+   * 
+   * Compute the distance from the current shape to the specified point. This only works for convex shapes.
+   * @param xf the shape world transform.
+   * @param p a point in world coordinates.
+   * @param normal returns the direction in which the distance increases.
+   * @return returns the distance from the current shape.
+   */
+  computeDistance(xf: Transform, p: Vec2, normal: Vec2, childIndex: number) {
+    const pLocal = Rot.mulTVec2(xf.q, Vec2.sub(p, xf.p));
+    let maxDistance = -Infinity;
+    let normalForMaxDistance = pLocal;
+
+    for (let i = 0; i < this.m_count; ++i) {
+      const dot = Vec2.dot(this.m_normals[i], Vec2.sub(pLocal, this.m_vertices[i]));
+      if (dot > maxDistance) {
+        maxDistance = dot;
+        normalForMaxDistance = this.m_normals[i];
+      }
+    }
+
+    if (maxDistance > 0) {
+      let minDistance = normalForMaxDistance;
+      let minDistance2 = maxDistance * maxDistance;
+      for (let i = 0; i < this.m_count; ++i) {
+        const distance = Vec2.sub(pLocal, this.m_vertices[i]);
+        const distance2 = distance.lengthSquared();
+        if (minDistance2 > distance2) {
+          minDistance = distance;
+          minDistance2 = distance2;
+        }
+      }
+
+      normal.set(Rot.mulVec2(xf.q, minDistance));
+      normal.normalize();
+      return Math.sqrt(minDistance2);
+    }
+    else {
+      normal.set(Rot.mulVec2(xf.q, normalForMaxDistance));
+      return maxDistance;
+    }
   }
 
   /**

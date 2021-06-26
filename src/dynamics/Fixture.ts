@@ -2,6 +2,7 @@
  * Planck.js
  * The MIT License
  * Copyright (c) 2021 Erin Catto, Ali Shakiba
+ * Copyright (c) 2013 Google, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -335,6 +336,19 @@ export default class Fixture {
    */
   testPoint(p: Vec2): boolean {
     return this.m_shape.testPoint(this.m_body.getTransform(), p);
+  }
+
+  /**
+   * LIQUID_FUN:
+   * 
+   * Compute the distance from this fixture to the specified point. This only works for convex shapes.
+   * @param p a point in world coordinates.
+   * @param normal returns the direction in which the distance increases.
+   * @return returns the distance from the current shape.
+   */
+  // TODO remove normal as paramenter and return [distance: number, normal: Vec2] directly
+  computeDistance(p: Vec2, normal: Vec2, childIndex: number): number {
+    return this.m_shape.computeDistance(this.m_body.getTransform(), p, normal, childIndex);
   }
 
   /**

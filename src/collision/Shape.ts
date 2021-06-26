@@ -2,6 +2,7 @@
  * Planck.js
  * The MIT License
  * Copyright (c) 2021 Erin Catto, Ali Shakiba
+ * Copyright (c) 2013 Google, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -84,6 +85,17 @@ export default abstract class Shape {
    * @param p A point in world coordinates.
    */
   abstract testPoint(xf: Transform, p: Vec2): boolean;
+
+	/**
+   * LIQUID_FUN:
+   * 
+   * Compute the distance from the current shape to the specified point. This only works for convex shapes.
+   * @param xf the shape world transform.
+   * @param p a point in world coordinates.
+   * @param normal returns the direction in which the distance increases.
+   * @return returns the distance from the current shape.
+   */
+	abstract computeDistance(xf: Transform, p: Vec2, normal: Vec2, childIndex: number): number;
 
   /**
    * Cast a ray against a child shape.
