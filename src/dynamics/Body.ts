@@ -2,6 +2,7 @@
  * Planck.js
  * The MIT License
  * Copyright (c) 2021 Erin Catto, Ali Shakiba
+ * Copyright (c) 2013 Google, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -189,6 +190,8 @@ export default class Body {
   /** @internal */ m_invI: number;
   /** @internal the body origin transform */
   m_xf: Transform;
+  /** @internal LIQUID_FUN: the previous transform for particle simulation */
+  m_xf0: Transform;
   /** @internal the swept motion for CCD */
   m_sweep: Sweep;
   // position and velocity correction
@@ -250,6 +253,8 @@ export default class Body {
     this.m_xf = Transform.identity();
     this.m_xf.p = Vec2.clone(def.position);
     this.m_xf.q.setAngle(def.angle);
+    // LIQUID_FUN:
+    this.m_xf0 = Transform.clone(this.m_xf); // TODO clone necessary?
 
     // the swept motion for CCD
     this.m_sweep = new Sweep();
@@ -574,6 +579,8 @@ export default class Body {
     }
 
     this.m_xf.set(position, angle);
+    // LIQUID_FUN:
+    this.m_xf0 = Transform.clone(this.m_xf); // TODO clone necessary?
     this.m_sweep.setTransform(this.m_xf);
 
     const broadPhase = this.m_world.m_broadPhase;

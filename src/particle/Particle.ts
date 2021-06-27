@@ -367,7 +367,7 @@ export const ParticleDefDefault: ParticleDef = {
 /**
  * A helper function to calculate the optimal number of iterations.
  */
-function b2CalculateParticleIterations(
+export function b2CalculateParticleIterations(
   gravity: number, radius: number, timeStep: number) {
   // In some situations you may want more particle iterations than this,
   // but to avoid excessive cycle cost, don't recommend more than this.
