@@ -36,6 +36,7 @@ import Fixture, { FixtureProxy } from "./Fixture";
 import Manifold from "../collision/Manifold";
 import { b2CalculateParticleIterations } from '../particle/Particle';
 import b2ParticleSystem, { b2ParticleSystemDef, ParticleAABBQueryCallback, ParticleRayCastCallback } from '../particle/ParticleSystem';
+import { b2ParticleGroup } from '../particle/ParticleGroup';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -1225,6 +1226,8 @@ export default class World {
   on(name: 'remove-joint', listener: (joint: Joint) => void): World;
   /** Listener is called whenever a fixture is removed implicitly or explicitly. */
   on(name: 'remove-fixture', listener: (fixture: Fixture) => void): World;
+  on(name: 'remove-particle', listener: (system: b2ParticleSystem, index: number) => void): World;
+  on(name: 'remove-particle-group', listener: (group: b2ParticleGroup) => void): World;
   /**
    * Register an event listener.
    */
@@ -1250,6 +1253,8 @@ export default class World {
   off(name: 'remove-body', listener: (body: Body) => void): World;
   off(name: 'remove-joint', listener: (joint: Joint) => void): World;
   off(name: 'remove-fixture', listener: (fixture: Fixture) => void): World;
+  off(name: 'remove-particle', listener: (system: b2ParticleSystem, index: number) => void): World;
+  off(name: 'remove-particle-group', listener: (group: b2ParticleGroup) => void): World;
   /**
    * Remove an event listener.
    */

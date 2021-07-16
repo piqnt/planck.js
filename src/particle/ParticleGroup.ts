@@ -93,10 +93,10 @@ export interface b2ParticleGroupDef {
   shape: Shape;
 
   /** A array of shapes where particles will be added. */
-  shapes: Shape[];
+  // shapes: Shape[]; // LATER
 
   /** The number of shapes. */
-  shapeCount: number;
+  // shapeCount: number; // LATER
 
   /**
    * The interval of particles in the shape.
@@ -108,7 +108,7 @@ export interface b2ParticleGroupDef {
   particleCount: number;
 
   /** The initial positions of the particleCount particles. */
-  positionData: Vec2;
+  positionData: Vec2[];
 
   /**
    * Lifetime of the particle group in seconds.  A value <= 0.0f indicates a
@@ -193,8 +193,8 @@ export const ParticleGroupDefDefault: b2ParticleGroupDef = {
   color: b2ParticleColor.zero(),
   strength: 1,
   shape: null,
-  shapes: null,
-  shapeCount: 0,
+  // shapes: null, // LATER
+  // shapeCount: 0, // LATER
   stride: 0,
   particleCount: 0,
   positionData: null,
@@ -406,7 +406,7 @@ export class b2ParticleGroup {
 
   //	~b2ParticleGroup();
 
-  private updateStatistics() {
+  updateStatistics() {
     if (this.m_timestamp != this.m_system.m_timestamp) {
       const m = this.m_system.getParticleMass();
       let m_mass = 0;

@@ -39,6 +39,7 @@
     "@rollup/plugin-replace": "^2.4.1",
     "@types/mocha": "^8.2.2",
     "ajv": "^6.10.2",
+    "assemblyscript": "^0.19.5",
     "chai": "^4.3.3",
     "dtslint": "^3.6.9",
     "esm": "^3.2.25",

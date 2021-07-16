@@ -138,6 +138,38 @@ export default class Settings {
   static baumgarte: number = 0.2;
   static toiBaugarte: number = 0.75;
 
+  // Particle
+
+  /** A symbolic constant that stands for particle allocation error. */
+  static b2_invalidParticleIndex = -1;
+
+  static b2_maxParticleIndex = 0x7FFFFFFF;
+
+  /** The default distance between particles, multiplied by the particle diameter. */
+  static b2_particleStride = 0.75;
+
+  /** The minimum particle weight that produces pressure. */
+  static b2_minParticleWeight = 1.0;
+
+  /** The upper limit for particle pressure. */
+  static b2_maxParticlePressure = 0.25;
+
+  /** The upper limit for force between particles. */
+  static b2_maxParticleForce = 0.5;
+
+  /**
+   * The maximum distance between particles in a triad, multiplied by the
+   * particle diameter.
+   */
+  static b2_maxTriadDistance = 2;
+  static b2_maxTriadDistanceSquared = (Settings.b2_maxTriadDistance * Settings.b2_maxTriadDistance)
+
+  /** The initial size of particle data buffers. */
+  static b2_minParticleSystemBufferCapacity = 256;
+
+  /** The time into the future that collisions against barrier particles will be detected. */
+  static b2_barrierCollisionTime = 2.5;
+
   // Sleep
 
   /**

@@ -180,6 +180,26 @@ export default class Vec2 {
     return this;
   }
 
+  /**
+   * LIQUID_FUN:
+   * Set linear combination of u, v and w: `a * u + b * v + c * w`
+   */
+  setCombine3(a: number, u: Vec2, b: number, v: Vec2, c: number, w: Vec2): Vec2 {
+    _ASSERT && Math.assert(a);
+    _ASSERT && Vec2.assert(u);
+    _ASSERT && Math.assert(b);
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && Math.assert(c);
+    _ASSERT && Vec2.assert(w);
+    const x = a * u.x + b * v.x + c * w.x;
+    const y = a * u.y + b * v.y + c * w.y;
+
+    // `this` may be `w`
+    this.x = x;
+    this.y = y;
+    return this;
+  }  
+
   setMul(a: number, v: Vec2): Vec2 {
     _ASSERT && Math.assert(a);
     _ASSERT && Vec2.assert(v);
@@ -461,6 +481,13 @@ export default class Vec2 {
 
   static combine(a: number, v: Vec2, b: number, w: Vec2): Vec2 {
     return Vec2.zero().setCombine(a, v, b, w);
+  }
+
+  /**
+   * LIQUID_FUN:
+   */
+  static combine3(a: number, u: Vec2, b: number, v: Vec2, c: number, w: Vec2): Vec2 {
+    return Vec2.zero().setCombine3(a, u, b, v, c, w);
   }
 
   static sub(v: Vec2, w: Vec2): Vec2 {

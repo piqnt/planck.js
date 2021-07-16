@@ -19,7 +19,11 @@
 import Math from '../common/Math'
 import Vec2 from '../common/Vec2';
 import { b2ParticleGroup } from './ParticleGroup';
-import { b2_invalidParticleIndex } from './ParticleSystem';
+import Settings from '../Settings';
+
+const {
+  b2_invalidParticleIndex,
+} = Settings;
 
 const B2PARTICLECOLOR_BITS_PER_COMPONENT = 8; // (sizeof(uint8) << 3);
 // Maximum value of a b2ParticleColor component.
