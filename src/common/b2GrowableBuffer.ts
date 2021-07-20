@@ -28,19 +28,20 @@ export default class b2GrowableBuffer<T> {
 
   data: T[] | null;
 //  count: number;
-//  capacity: number; // TODO kann weg
+//  capacity: number;
 
-  constructor(rhs?: b2GrowableBuffer) {
+  constructor(rhs?: b2GrowableBuffer<T>) {
     this.data = null;
 //    this.count = 0;
 //    this.capacity = 0;
 
     if(rhs) {
-//      this.count = rhs.count;
-//      this.capacity = rhs.capacity;
-      if(rhs.data) {
-        this.data = rhs.data.map(e => this.copy(e)); // TODO
-      }
+      throw new Error('TODO'); // TODO
+// //      this.count = rhs.count;
+// //      this.capacity = rhs.capacity;
+//       if(rhs.data) {
+//         this.data = rhs.data.map(e => this.copy(e)); // TODO
+//       }
     }
 
     // #if defined(LIQUIDFUN_SIMD_NEON)
@@ -53,10 +54,9 @@ export default class b2GrowableBuffer<T> {
     // #endif // defined(LIQUIDFUN_SIMD_NEON)
   }
 
-  append(): T {
-    const obj = this.create();
-    this.data.push(obj);
-    return obj;
+  append(value: T): T {
+    this.data.push(value);
+    return value;
   /*  if (this.count >= this.capacity)
     {
       Grow();
@@ -96,7 +96,7 @@ export default class b2GrowableBuffer<T> {
 
     this.data = null;
 //    capacity = 0;
-    this.count = 0;
+//     this.count = 0;
   }
 
 /*  void Shorten(const T* newEnd)
@@ -130,7 +130,7 @@ export default class b2GrowableBuffer<T> {
   }
 
   end() {
-    return this.data.length; // TODO soll glaub außerhalb des arrays sein
+    return this.data.length;
   }
 
   getCount() {
@@ -143,16 +143,29 @@ export default class b2GrowableBuffer<T> {
   }
 
   removeIf(pred: (e: T) => boolean) {
-    this.data = this.data.filter(e => !pred(e)); // TODO so richtig oder verneinung weg
+    this.data = this.data.filter(e => !pred(e)); // TODO mutate?
     return this.data.length;
   }
 
   // TODO
-  template<class BinaryPredicate>
-  T* Unique(BinaryPredicate pred)
-  {
-    T* newEnd = std::unique(data, data + count, pred);
-    Shorten(newEnd);
-    return newEnd;
+  // template<class BinaryPredicate>
+  // T* Unique(BinaryPredicate pred)
+  // {
+  //   T* newEnd = std::unique(data, data + count, pred);
+  //   Shorten(newEnd);
+  //   return newEnd;
+  // }
+  unique(pred: (a: T, b: T) => boolean) {
+    if (this.data.length == 0) {
+      return 0;
+    }
+    let newLength = 1;
+    for (let i = 1; i < this.data.length; i++) {
+      if(!pred(this.data[newLength - 1], this.data[i])) {
+        this.data[newLength++] = this.data[i];
+      }
+    }
+    this.data.length = newLength;
+    return newLength;
   }
 }

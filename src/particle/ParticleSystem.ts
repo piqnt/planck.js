@@ -32,6 +32,7 @@ import Rot from '../common/Rot';
 import Settings from '../Settings';
 import World from '../dynamics/World';
 import b2GrowableBuffer from '../common/b2GrowableBuffer';
+import b2SlabAllocator from '../common/b2SlabAllocator';
 import CircleShape from '../collision/shape/CircleShape';
 import ChainShape from '../collision/shape/ChainShape';
 import EdgeShape from '../collision/shape/EdgeShape';
@@ -42,6 +43,7 @@ import EdgeShape from '../collision/shape/EdgeShape';
  * Either use assemblyscript in the future or replace casts by faster methods
  */
 import 'assemblyscript/std/portable';
+import VoronoiDiagram from './VoronoiDiagram';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -286,55 +288,63 @@ class b2ParticleContact {
   }
 }
 
-interface b2ParticleBodyContact {
+class b2ParticleBodyContact {
   /** Index of the particle making contact. */
-  index: number;
+  index: number = 0;
 
   /** The body making contact. */
-  body: Body;
+  body: Body = null; // TODO actually zero Body
 
   /** The specific fixture making contact */
-  fixture: Fixture;
+  fixture: Fixture = null; // TODO actually zero Fixture
 
   /** Weight of the contact. A value between 0.0f and 1.0f. */
-  weight: number;
+  weight: number = 0;
 
   /** The normalized direction from the particle to the body. */
-  normal: Vec2;
+  normal: Vec2 = null; // TODO or zero? actually zero
 
   /** The effective mass used in calculating force. */
-  mass: number;
+  mass: number = 0;
 };
 
 /** Connection between two particles */
-interface b2ParticlePair {
+class b2ParticlePair {
   /** Indices of the respective particles making pair. */
-  indexA: number, indexB: number;
+  indexA: number = 0;
+  indexB: number = 0;
 
   /** The logical sum of the particle flags. See the b2ParticleFlag enum. */
-  flags: number;
+  flags: number = 0;
 
   /** The strength of cohesion among the particles. */
-  strength: number;
+  strength: number = 0;
 
   /** The initial distance of the particles. */
-  distance: number;
+  distance: number = 0;
 };
 
 /** Connection between three particles */
-interface b2ParticleTriad {
+class b2ParticleTriad {
   /** Indices of the respective particles making triad. */
-  indexA: number, indexB: number, indexC: number;
+  indexA: number = 0;
+  indexB: number = 0;
+  indexC: number = 0;
 
   /** The logical sum of the particle flags. See the b2ParticleFlag enum. */
-  flags: number;
+  flags: number = 0;
 
   /** The strength of cohesion among the particles. */
-  strength: number;
+  strength: number = 0;
 
   /** Values used for calculation. */
-  pa: Vec2, pb: Vec2, pc: Vec2;
-  ka: number, kb: number, kc: number, s: number;
+  pa: Vec2 = null; // TODO zero?
+  pb: Vec2 = null; // TODO zero?
+  pc: Vec2 = null; // TODO zero?
+  ka: number = 0;
+  kb: number = 0;
+  kc: number = 0;
+  s: number = 0;
 };
 
 export interface b2ParticleSystemDef {
@@ -462,8 +472,8 @@ class UserOverridableBuffer<T> {
 
 /** Used for detecting particle contacts */
 class Proxy {
-  index: number;
-  tag: number;
+  index: number = 0;
+  tag: number = 0;
   // static lessThan(a: Proxy, b: Proxy); // TODO maybe we can remove these functions
   // static lessThan(a: number, b: Proxy);
   // static lessThan(a: Proxy, b: number);
@@ -478,7 +488,7 @@ class Proxy {
   // }
 };
 
-/// Class for filtering pairs or triads.
+/** Class for filtering pairs or triads. */
 class ConnectionFilter {
 /*public:
   virtual ~ConnectionFilter() {}*/
@@ -1011,6 +1021,41 @@ const std = {
     }
     return index;
   },
+  rotate<T>(buffer: T[], start: number, mid: number, end: number) {
+    // TODO better solution
+    const startToMid = buffer.splice(start, mid - start);
+    buffer.splice(end - (mid - start), 0, ...startToMid)
+  },
+  stable_sort_buffer<T>(buffer: T[], start: number, end: number, compare: (a: T, b: T) => boolean) { // TODO why do we need a stable sort?
+    /*
+    TODO use better algorithm than naive (recursive) merge sort
+    radix sort is applicable, but the key length may be to big to outperform mergesort for small n
+    */
+    if(end - start <= 1) return;
+    const mid = start + Math.floor((end - start) / 2);
+    std.stable_sort_buffer(buffer, start, mid, compare);
+    std.stable_sort_buffer(buffer, mid, end, compare);
+
+    // merge
+    const buffer2 = new Array(buffer.length);
+    let i = start, i1 = start, i2 = mid;
+    while (i1 < mid && i2 < end) {
+      if (compare(buffer[i2], buffer[i1])) {
+        buffer2[i++] = buffer[i2++];
+      } else {
+        buffer2[i++] = buffer[i1++];
+      }
+    }
+    while (i1 < mid) {
+      buffer2[i++] = buffer[i1++];
+    }
+    while (i2 < end) {
+      buffer2[i++] = buffer[i2++];
+    }
+    for (let j = start; j < end; j++) {
+      buffer[j] = buffer2[j];
+    }
+  }
 }
 
 const b2ParticleSystemDefDefault: b2ParticleSystemDef = {
@@ -1057,9 +1102,9 @@ export default class b2ParticleSystem {
   /** @internal */ m_count: number;
   /** @internal */ m_internalAllocatedCapacity: number;
   /// Allocator for b2ParticleHandle instances.
-  /** @internal */ m_handleAllocator: b2SlabAllocator<b2ParticleHandle>; // TODO
+  /** @internal */ m_handleAllocator: b2SlabAllocator<b2ParticleHandle>;
   /// Maps particle indicies to  handles.
-  /** @internal */ m_handleIndexBuffer: UserOverridableBuffer<b2ParticleHandle>; // TODO
+  /** @internal */ m_handleIndexBuffer: UserOverridableBuffer<b2ParticleHandle>;
   /** @internal */ m_flagsBuffer: UserOverridableBuffer<number>;
   /** @internal */ m_positionBuffer: UserOverridableBuffer<Vec2>;
   /** @internal */ m_velocityBuffer: UserOverridableBuffer<Vec2>;
@@ -1132,7 +1177,10 @@ export default class b2ParticleSystem {
   constructor(def: b2ParticleSystemDef, world: World) {
     def = options(def, b2ParticleSystemDefDefault);
 
-    m_handleAllocator(b2_minParticleSystemBufferCapacity), // TODO
+    this.m_handleAllocator = new b2SlabAllocator(
+      b2_minParticleSystemBufferCapacity,
+      () => new b2ParticleHandle(),
+    ),
     this.m_stuckParticleBuffer = new b2GrowableBuffer();
     this.m_proxyBuffer = new b2GrowableBuffer();
     this.m_contactBuffer = new b2GrowableBuffer();
@@ -1232,18 +1280,18 @@ export default class b2ParticleSystem {
       // Double the particle capacity.
       const capacity =
         this.m_count ? 2 * this.m_count : b2_minParticleSystemBufferCapacity;
-      ReallocateInternalAllocatedBuffers(capacity); // TODO
+      this.reallocateInternalAllocatedBuffers(capacity);
     }
     if (this.m_count >= this.m_internalAllocatedCapacity) {
       // If the oldest particle should be destroyed...
-/*      if (this.m_def.destroyByAge) { // LATER
-        this.destroyOldestParticle(0, false);
-        // Need to destroy this particle *now* so that it's possible to
-        // create a new particle.
-        this.solveZombie();
-      } else {*/
+      // if (this.m_def.destroyByAge) { // LATER
+      //   this.destroyOldestParticle(0, false);
+      //   // Need to destroy this particle *now* so that it's possible to
+      //   // create a new particle.
+      //   this.solveZombie();
+      // } else {
         return b2_invalidParticleIndex; // TODO_google
-//      }
+      // }
     }
     const index = this.m_count++;
     this.m_flagsBuffer.data[index] = 0;
@@ -1267,29 +1315,29 @@ export default class b2ParticleSystem {
       this.m_depthBuffer[index] = 0;
     }
     if (this.m_colorBuffer.data || !def.color.isZero()) {
-      this.m_colorBuffer.data = RequestBuffer(this.m_colorBuffer.data);
+      this.m_colorBuffer.data = this.requestBuffer(this.m_colorBuffer.data);
       this.m_colorBuffer.data[index] = def.color;
     }
     if (this.m_userDataBuffer.data || def.userData) {
-      this.m_userDataBuffer.data= RequestBuffer(this.m_userDataBuffer.data);
+      this.m_userDataBuffer.data= this.requestBuffer(this.m_userDataBuffer.data);
       this.m_userDataBuffer.data[index] = def.userData;
     }
     if (this.m_handleIndexBuffer.data) {
       this.m_handleIndexBuffer.data[index] = null;
     }
-    const proxy = this.m_proxyBuffer.Append();
+    const proxy = this.m_proxyBuffer.append(new Proxy());
 
     // If particle lifetimes are enabled or the lifetime is set in the particle
     // definition, initialize the lifetime.
-/*    const finiteLifetime = def.lifetime > 0; // LATER
-    if (this.m_expirationTimeBuffer.data || finiteLifetime) {
-      this.setParticleLifetime(index, finiteLifetime ? def.lifetime :
-                  this.expirationTimeToLifetime(
-                    -this.getQuantizedTimeElapsed()));
-      // Add a reference to the newly added particle to the end of the
-      // queue.
-      this.m_indexByExpirationTimeBuffer.data[index] = index;
-    }*/
+    // const finiteLifetime = def.lifetime > 0; // LATER
+    // if (this.m_expirationTimeBuffer.data || finiteLifetime) {
+    //   this.setParticleLifetime(index, finiteLifetime ? def.lifetime :
+    //               this.expirationTimeToLifetime(
+    //                 -this.getQuantizedTimeElapsed()));
+    //   // Add a reference to the newly added particle to the end of the
+    //   // queue.
+    //   this.m_indexByExpirationTimeBuffer.data[index] = index;
+    // }
 
     proxy.index = index;
     const group = def.group;
@@ -1319,13 +1367,13 @@ export default class b2ParticleSystem {
   getParticleHandleFromIndex(index: number): b2ParticleHandle {
     _ASSERT && common.assert(index >= 0 && index < this.getParticleCount() &&
          index != b2_invalidParticleIndex);
-    this.m_handleIndexBuffer.data = RequestBuffer(this.m_handleIndexBuffer.data); // TODO
+    this.m_handleIndexBuffer.data = this.requestBuffer(this.m_handleIndexBuffer.data);
     let handle = this.m_handleIndexBuffer.data[index];
     if (handle) {
       return handle;
     }
     // Create a handle.
-    handle = this.m_handleAllocator.Allocate(); // TODO
+    handle = this.m_handleAllocator.allocate();
     _ASSERT && common.assert(!!handle);
     handle.setIndex(index);
     this.m_handleIndexBuffer.data[index] = handle;
@@ -1503,60 +1551,59 @@ export default class b2ParticleSystem {
   }
 
 
-  /// Join two particle groups.
-  /// @param the first group. Expands to encompass the second group.
-  /// @param the second group. It is destroyed.
-  /// @warning This function is locked during callbacks.
-/*  joinParticleGroups(groupA: b2ParticleGroup, groupB: b2ParticleGroup) { TODO
-    b2Assert(m_world->IsLocked() == false);
-    if (m_world->IsLocked())
-    {
+  /**
+   * Join two particle groups.
+   * @param the first group. Expands to encompass the second group.
+   * @param the second group. It is destroyed.
+   * @warning This function is locked during callbacks.
+   */
+  joinParticleGroups(groupA: b2ParticleGroup, groupB: b2ParticleGroup) {
+    _ASSERT && common.assert(this.m_world.isLocked() == false);
+    if (this.m_world.isLocked()) {
       return;
     }
   
-    b2Assert(groupA != groupB);
-    RotateBuffer(groupB->m_firstIndex, groupB->m_lastIndex, m_count);
-    b2Assert(groupB->m_lastIndex == m_count);
-    RotateBuffer(groupA->m_firstIndex, groupA->m_lastIndex,
-           groupB->m_firstIndex);
-    b2Assert(groupA->m_lastIndex == groupB->m_firstIndex);
+    _ASSERT && common.assert(groupA != groupB);
+    this.rotateBuffer(groupB.m_firstIndex, groupB.m_lastIndex, this.m_count);
+    _ASSERT && common.assert(groupB.m_lastIndex == this.m_count);
+    this.rotateBuffer(groupA.m_firstIndex, groupA.m_lastIndex,
+           groupB.m_firstIndex);
+    _ASSERT && common.assert(groupA.m_lastIndex == groupB.m_firstIndex);
   
     // Create pairs and triads connecting groupA and groupB.
-    class JoinParticleGroupsFilter// : public ConnectionFilter
-    {
-      bool ShouldCreatePair(int32 a, int32 b) const
-      {
-        return
-          (a < m_threshold && m_threshold <= b) ||
-          (b < m_threshold && m_threshold <= a);
+    class JoinParticleGroupsFilter extends ConnectionFilter {
+      private m_threshold: number;
+      constructor(threshold: number) {
+        super();
+        this.m_threshold = threshold;
       }
-      bool ShouldCreateTriad(int32 a, int32 b, int32 c) const
-      {
-        return
-          (a < m_threshold || b < m_threshold || c < m_threshold) &&
-          (m_threshold <= a || m_threshold <= b || m_threshold <= c);
+      shouldCreatePair(a: number, b: number) {
+        return (
+          (a < this.m_threshold && this.m_threshold <= b) ||
+          (b < this.m_threshold && this.m_threshold <= a)
+        );
       }
-      int32 m_threshold;
-//    public:
-      JoinParticleGroupsFilter(int32 threshold)
-      {
-        m_threshold = threshold;
+      shouldCreateTriad(a: number, b: number, c: number) {
+        return (
+          (a < this.m_threshold || b < this.m_threshold || c < this.m_threshold) &&
+          (this.m_threshold <= a || this.m_threshold <= b || this.m_threshold <= c)
+        );
       }
-    } filter(groupB->m_firstIndex);
-    UpdateContacts(true);
-    UpdatePairsAndTriads(groupA->m_firstIndex, groupB->m_lastIndex, filter);
-  
-    for (int32 i = groupB->m_firstIndex; i < groupB->m_lastIndex; i++)
-    {
-      m_groupBuffer[i] = groupA;
     }
-    uint32 groupFlags = groupA->m_groupFlags | groupB->m_groupFlags;
-    SetGroupFlags(groupA, groupFlags);
-    groupA->m_lastIndex = groupB->m_lastIndex;
-    groupB->m_firstIndex = groupB->m_lastIndex;
-    DestroyParticleGroup(groupB);
+    const filter = new JoinParticleGroupsFilter(groupB.m_firstIndex);
+    this.updateContacts(true);
+    this.updatePairsAndTriads(groupA.m_firstIndex, groupB.m_lastIndex, filter);
+  
+    for (let i = groupB.m_firstIndex; i < groupB.m_lastIndex; i++) {
+      this.m_groupBuffer[i] = groupA;
+    }
+    const groupFlags = groupA.m_groupFlags | groupB.m_groupFlags;
+    this.setGroupFlags(groupA, groupFlags);
+    groupA.m_lastIndex = groupB.m_lastIndex;
+    groupB.m_firstIndex = groupB.m_lastIndex;
+    this.destroyParticleGroup(groupB);
   }
-*/
+
   /**
    * Split particle group into multiple disconnected groups.
    * @param group the group to be split.
@@ -1810,11 +1857,11 @@ void** b2ParticleSystem::GetUserDataBuffer()
     if (~this.m_allParticleFlags & newFlags) {
       // If any flags were added
       if (newFlags & ParticleFlag.b2_tensileParticle) {
-        this.m_accumulation2Buffer = RequestBuffer(
+        this.m_accumulation2Buffer = this.requestBuffer(
           this.m_accumulation2Buffer); // TODO
       }
       if (newFlags & ParticleFlag.b2_colorMixingParticle) {
-        this.m_colorBuffer.data = RequestBuffer(this.m_colorBuffer.data); // TODO
+        this.m_colorBuffer.data = this.requestBuffer(this.m_colorBuffer.data); // TODO
       }
       this.m_allParticleFlags |= newFlags;
     }
@@ -1952,11 +1999,11 @@ void b2ParticleSystem::SetUserDataBuffer(void** buffer, int32 capacity)
     this.m_stuckThreshold = steps;
 
     if (steps > 0) {
-      this.m_lastBodyContactStepBuffer.data = RequestBuffer( // TODO
+      this.m_lastBodyContactStepBuffer.data = this.requestBuffer(
         this.m_lastBodyContactStepBuffer.data);
-      this.m_bodyContactCountBuffer.data = RequestBuffer( // TODO
+      this.m_bodyContactCountBuffer.data = this.requestBuffer(
         this.m_bodyContactCountBuffer.data);
-      this.m_consecutiveContactStepsBuffer.data = RequestBuffer( // TODO
+      this.m_consecutiveContactStepsBuffer.data = this.requestBuffer(
         this.m_consecutiveContactStepsBuffer.data);
     }
   };
@@ -2244,7 +2291,7 @@ void b2ParticleSystem::SetUserDataBuffer(void** buffer, int32 capacity)
    * @param shape the query shape
    * @param xf the transform of the AABB
    */
-  queryShapeAABB(callback: b2QueryCallback, shape: Shape,
+  queryShapeAABB(callback: ParticleAABBQueryCallback, shape: Shape,
             xf: Transform) {
     const aabb = new AABB();
     shape.computeAABB(aabb, xf, 0);
@@ -2260,7 +2307,7 @@ void b2ParticleSystem::SetUserDataBuffer(void** buffer, int32 capacity)
    * @param point1 the ray starting point
    * @param point2 the ray ending point
    */
-  rayCast(callback: b2RayCastCallback, point1: Vec2,
+  rayCast(callback: ParticleRayCastCallback, point1: Vec2,
     point2: Vec2) {
     if (this.m_proxyBuffer.getCount() == 0) {
       return;
@@ -2297,7 +2344,7 @@ void b2ParticleSystem::SetUserDataBuffer(void** buffer, int32 capacity)
         }
         const n = Vec2.combine(1, p, t, v);
         n.normalize();
-        const f = callback.reportParticle(this, i, Vec2.combine(1, point1, t, v), n, t);
+        const f = callback(this, i, Vec2.combine(1, point1, t, v), n, t);
         fraction = math.min(fraction, f);
         if (fraction <= 0) {
           break;
@@ -2483,137 +2530,136 @@ private:
     }
   }*/
   // Reallocate a buffer
- /* reallocateBuffer<T>(oldBuffer: T[], oldCapacity, // TODO
-                        newCapacity: number): T[]
-  {
+  private reallocateBuffer<T>(oldBuffer: T[], oldCapacity: number,
+                        newCapacity: number): T[] {
     _ASSERT && common.assert(newCapacity > oldCapacity);
-    T* newBuffer = (T*) m_world->m_blockAllocator.Allocate(
-      sizeof(T) * newCapacity);
-    if (oldBuffer)
-    {
-      memcpy(newBuffer, oldBuffer, sizeof(T) * oldCapacity);
-      m_world->m_blockAllocator.Free(oldBuffer, sizeof(T) * oldCapacity);
-    }
-    return newBuffer;
+    // T* newBuffer = (T*) m_world->m_blockAllocator.Allocate(
+    //   sizeof(T) * newCapacity);
+    // if (oldBuffer)
+    // {
+    //   memcpy(newBuffer, oldBuffer, sizeof(T) * oldCapacity);
+    //   m_world->m_blockAllocator.Free(oldBuffer, sizeof(T) * oldCapacity);
+    // }
+    // return newBuffer;
+    oldBuffer.length = newCapacity;
+    // TODO set defaults?
+    return oldBuffer;
   }
   // Reallocate a buffer
-  template <typename T> T* ReallocateBuffer(
-    T* buffer, int32 userSuppliedCapacity, int32 oldCapacity,
-    int32 newCapacity, bool deferred)
+  private _reallocateBuffer<T>(
+    buffer: T[], userSuppliedCapacity: number, oldCapacity: number,
+    newCapacity: number, deferred: boolean)
   {
-    b2Assert(newCapacity > oldCapacity);
+    _ASSERT && common.assert(newCapacity > oldCapacity);
     // A 'deferred' buffer is reallocated only if it is not NULL.
     // If 'userSuppliedCapacity' is not zero, buffer is user supplied and must
     // be kept.
-    b2Assert(!userSuppliedCapacity || newCapacity <= userSuppliedCapacity);
-    if ((!deferred || buffer) && !userSuppliedCapacity)
-    {
-      buffer = ReallocateBuffer(buffer, oldCapacity, newCapacity);
+    _ASSERT && common.assert(!userSuppliedCapacity || newCapacity <= userSuppliedCapacity);
+    if ((!deferred || buffer) && !userSuppliedCapacity) {
+      buffer = this.reallocateBuffer(buffer, oldCapacity, newCapacity);
     }
     return buffer;
   }
   // Reallocate a buffer
-  template <typename T> T* ReallocateBuffer(
-    UserOverridableBuffer<T>* buffer, int32 oldCapacity, int32 newCapacity,
-    bool deferred)
+  private reallocateUserOverridableBuffer<T>(
+    buffer: UserOverridableBuffer<T>, oldCapacity: number, newCapacity: number,
+    deferred: boolean)
   {
-    b2Assert(newCapacity > oldCapacity);
-    return ReallocateBuffer(buffer->data, buffer->userSuppliedCapacity,
+    _ASSERT && common.assert(newCapacity > oldCapacity);
+    return this._reallocateBuffer(buffer.data, buffer.userSuppliedCapacity,
                 oldCapacity, newCapacity, deferred);
   }
-  template <typename T> T* RequestBuffer(T* buffer)
-  {
-    if (!buffer)
-    {
-      if (m_internalAllocatedCapacity == 0)
-      {
-        ReallocateInternalAllocatedBuffers(
+  requestBuffer<T>(buffer: T[]): T[] {
+    if (!buffer) {
+      if (this.m_internalAllocatedCapacity == 0) {
+        this.reallocateInternalAllocatedBuffers(
           b2_minParticleSystemBufferCapacity);
       }
-      buffer = (T*) (m_world->m_blockAllocator.Allocate(
-                 sizeof(T) * m_internalAllocatedCapacity));
-      b2Assert(buffer);
-      memset(buffer, 0, sizeof(T) * m_internalAllocatedCapacity);
+      // buffer = (T*) (m_world->m_blockAllocator.Allocate(
+      //            sizeof(T) * m_internalAllocatedCapacity));
+      // b2Assert(buffer);
+      // memset(buffer, 0, sizeof(T) * m_internalAllocatedCapacity);
+      buffer = new Array(this.m_internalAllocatedCapacity);
+      // TODO defaults
     }
     return buffer;
   }
 
-  /// Reallocate the handle / index map and schedule the allocation of a new
-  /// pool for handle allocation.
-  void ReallocateHandleBuffers(int32 newCapacity)
-  {
-    b2Assert(newCapacity > m_internalAllocatedCapacity);
+  /**
+   * Reallocate the handle / index map and schedule the allocation of a new
+   * pool for handle allocation.
+   */
+  reallocateHandleBuffers(newCapacity: number) {
+    _ASSERT && common.assert(newCapacity > this.m_internalAllocatedCapacity);
     // Reallocate a new handle / index map buffer, copying old handle pointers
     // is fine since they're kept around.
-    m_handleIndexBuffer.data = ReallocateBuffer(
-      &m_handleIndexBuffer, m_internalAllocatedCapacity, newCapacity,
+    this.m_handleIndexBuffer.data = this.reallocateUserOverridableBuffer(
+      this.m_handleIndexBuffer, this.m_internalAllocatedCapacity, newCapacity,
       true);
     // Set the size of the next handle allocation.
-    m_handleAllocator.SetItemsPerSlab(newCapacity -
-                      m_internalAllocatedCapacity);
+    this.m_handleAllocator.setItemsPerSlab(newCapacity -
+                      this.m_internalAllocatedCapacity);
   }
 
-  void ReallocateInternalAllocatedBuffers(int32 capacity)
-  {
+  private reallocateInternalAllocatedBuffers(capacity: number) {
     // Don't increase capacity beyond the smallest user-supplied buffer size.
-    capacity = LimitCapacity(capacity, m_def.maxCount);
-    capacity = LimitCapacity(capacity, m_flagsBuffer.userSuppliedCapacity);
-    capacity = LimitCapacity(capacity, m_positionBuffer.userSuppliedCapacity);
-    capacity = LimitCapacity(capacity, m_velocityBuffer.userSuppliedCapacity);
-    capacity = LimitCapacity(capacity, m_colorBuffer.userSuppliedCapacity);
-    capacity = LimitCapacity(capacity, m_userDataBuffer.userSuppliedCapacity);
-    if (m_internalAllocatedCapacity < capacity)
-    {
-      ReallocateHandleBuffers(capacity);
-      m_flagsBuffer.data = ReallocateBuffer(
-        &m_flagsBuffer, m_internalAllocatedCapacity, capacity, false);
+    capacity = limitCapacity(capacity, this.m_def.maxCount);
+    capacity = limitCapacity(capacity, this.m_flagsBuffer.userSuppliedCapacity);
+    capacity = limitCapacity(capacity, this.m_positionBuffer.userSuppliedCapacity);
+    capacity = limitCapacity(capacity, this.m_velocityBuffer.userSuppliedCapacity);
+    capacity = limitCapacity(capacity, this.m_colorBuffer.userSuppliedCapacity);
+    capacity = limitCapacity(capacity, this.m_userDataBuffer.userSuppliedCapacity);
+    if (this.m_internalAllocatedCapacity < capacity) {
+      this.reallocateHandleBuffers(capacity);
+      this.m_flagsBuffer.data = this.reallocateUserOverridableBuffer(
+        this.m_flagsBuffer, this.m_internalAllocatedCapacity, capacity, false);
   
       // Conditionally defer these as they are optional if the feature is
       // not enabled.
-      const bool stuck = m_stuckThreshold > 0;
-      m_lastBodyContactStepBuffer.data = ReallocateBuffer(
-        &m_lastBodyContactStepBuffer, m_internalAllocatedCapacity,
+      const stuck = this.m_stuckThreshold > 0;
+      this.m_lastBodyContactStepBuffer.data = this.reallocateUserOverridableBuffer(
+        this.m_lastBodyContactStepBuffer, this.m_internalAllocatedCapacity,
         capacity, stuck);
-      m_bodyContactCountBuffer.data = ReallocateBuffer(
-        &m_bodyContactCountBuffer, m_internalAllocatedCapacity, capacity,
+      this.m_bodyContactCountBuffer.data = this.reallocateUserOverridableBuffer(
+        this.m_bodyContactCountBuffer, this.m_internalAllocatedCapacity, capacity,
         stuck);
-      m_consecutiveContactStepsBuffer.data = ReallocateBuffer(
-        &m_consecutiveContactStepsBuffer, m_internalAllocatedCapacity,
+      this.m_consecutiveContactStepsBuffer.data = this.reallocateUserOverridableBuffer(
+        this.m_consecutiveContactStepsBuffer, this.m_internalAllocatedCapacity,
         capacity, stuck);
-      m_positionBuffer.data = ReallocateBuffer(
-        &m_positionBuffer, m_internalAllocatedCapacity, capacity, false);
-      m_velocityBuffer.data = ReallocateBuffer(
-        &m_velocityBuffer, m_internalAllocatedCapacity, capacity, false);
-      m_forceBuffer = ReallocateBuffer(
-        m_forceBuffer, 0, m_internalAllocatedCapacity, capacity, false);
-      m_weightBuffer = ReallocateBuffer(
-        m_weightBuffer, 0, m_internalAllocatedCapacity, capacity, false);
-      m_staticPressureBuffer = ReallocateBuffer(
-        m_staticPressureBuffer, 0, m_internalAllocatedCapacity, capacity,
+      this.m_positionBuffer.data = this.reallocateUserOverridableBuffer(
+        this.m_positionBuffer, this.m_internalAllocatedCapacity, capacity, false);
+      this.m_velocityBuffer.data = this.reallocateUserOverridableBuffer(
+        this.m_velocityBuffer, this.m_internalAllocatedCapacity, capacity, false);
+      this.m_forceBuffer = this._reallocateBuffer(
+        this.m_forceBuffer, 0, this.m_internalAllocatedCapacity, capacity, false);
+      this.m_weightBuffer = this._reallocateBuffer(
+        this.m_weightBuffer, 0, this.m_internalAllocatedCapacity, capacity, false);
+      this.m_staticPressureBuffer = this._reallocateBuffer(
+        this.m_staticPressureBuffer, 0, this.m_internalAllocatedCapacity, capacity,
         true);
-      m_accumulationBuffer = ReallocateBuffer(
-        m_accumulationBuffer, 0, m_internalAllocatedCapacity, capacity,
+      this.m_accumulationBuffer = this._reallocateBuffer(
+        this.m_accumulationBuffer, 0, this.m_internalAllocatedCapacity, capacity,
         false);
-      m_accumulation2Buffer = ReallocateBuffer(
-        m_accumulation2Buffer, 0, m_internalAllocatedCapacity, capacity,
+      this.m_accumulation2Buffer = this._reallocateBuffer(
+        this.m_accumulation2Buffer, 0, this.m_internalAllocatedCapacity, capacity,
         true);
-      m_depthBuffer = ReallocateBuffer(
-        m_depthBuffer, 0, m_internalAllocatedCapacity, capacity, true);
-      m_colorBuffer.data = ReallocateBuffer(
-        &m_colorBuffer, m_internalAllocatedCapacity, capacity, true);
-      m_groupBuffer = ReallocateBuffer(
-        m_groupBuffer, 0, m_internalAllocatedCapacity, capacity, false);
-      m_userDataBuffer.data = ReallocateBuffer(
-        &m_userDataBuffer, m_internalAllocatedCapacity, capacity, true);
-      m_expirationTimeBuffer.data = ReallocateBuffer(
-        &m_expirationTimeBuffer, m_internalAllocatedCapacity, capacity,
-        true);
-      m_indexByExpirationTimeBuffer.data = ReallocateBuffer(
-        &m_indexByExpirationTimeBuffer, m_internalAllocatedCapacity,
+      this.m_depthBuffer = this._reallocateBuffer(
+        this.m_depthBuffer, 0, this.m_internalAllocatedCapacity, capacity, true);
+      this.m_colorBuffer.data = this.reallocateUserOverridableBuffer(
+        this.m_colorBuffer, this.m_internalAllocatedCapacity, capacity, true);
+      this.m_groupBuffer = this._reallocateBuffer(
+        this.m_groupBuffer, 0, this.m_internalAllocatedCapacity, capacity, false);
+      this.m_userDataBuffer.data = this.reallocateUserOverridableBuffer(
+        this.m_userDataBuffer, this.m_internalAllocatedCapacity, capacity, true);
+      // this.m_expirationTimeBuffer.data = this.reallocateUserOverridableBuffer(
+      //   this.m_expirationTimeBuffer, this.m_internalAllocatedCapacity, capacity,
+      //   true); // LATER
+      this.m_indexByExpirationTimeBuffer.data = this.reallocateUserOverridableBuffer(
+        this.m_indexByExpirationTimeBuffer, this.m_internalAllocatedCapacity,
         capacity, true);
-      m_internalAllocatedCapacity = capacity;
+      this.m_internalAllocatedCapacity = capacity;
     }
-  }*/
+  }
   createParticleForGroup(
     groupDef: b2ParticleGroupDef,
     xf: Transform, p: Vec2): number {
@@ -2644,7 +2690,7 @@ private:
         edge = shape as EdgeShape;
       } else {
         _ASSERT && common.assert(shape.getType() == ChainShape.TYPE);
-        (shape as ChainShape).getChildEdge(edge, childIndex);
+        (shape as ChainShape).getChildEdge(edge, childIndex); // TODO edge is null
       }
       const d = Vec2.sub(edge.m_vertex2, edge.m_vertex1);
       const edgeLength = d.length();
@@ -2854,118 +2900,118 @@ private:
     // this.m_world.m_blockAllocator.Free(group, sizeof(b2ParticleGroup));
   }
 
-  // updatePairsAndTriads( // TODO
-  //   firstIndex: number, lastIndex: number, filter: ConnectionFilter)
-  // {
-  //   // Create pairs or triads.
-  //   // All particles in each pair/triad should satisfy the following:
-  //   // * firstIndex <= index < lastIndex
-  //   // * don't have b2_zombieParticle
-  //   // * ParticleCanBeConnected returns true
-  //   // * ShouldCreatePair/ShouldCreateTriad returns true
-  //   // Any particles in each pair/triad should satisfy the following:
-  //   // * filter.IsNeeded returns true
-  //   // * have one of k_pairFlags/k_triadsFlags
-  //   _ASSERT && common.assert(firstIndex <= lastIndex);
-  //   let particleFlags = 0;
-  //   for (let i = firstIndex; i < lastIndex; i++) {
-  //     particleFlags |= this.m_flagsBuffer.data[i];
-  //   }
-  //   if (particleFlags & b2ParticleSystem.k_pairFlags) {
-  //     for (let k = 0; k < this.m_contactBuffer.getCount(); k++) {
-  //       const contact = this.m_contactBuffer.getData()[k];
-  //       const a = contact.getIndexA();
-  //       const b = contact.getIndexB();
-  //       const af = this.m_flagsBuffer.data[a];
-  //       const bf = this.m_flagsBuffer.data[b];
-  //       const groupA = this.m_groupBuffer[a];
-  //       const groupB = this.m_groupBuffer[b];
-  //       if (a >= firstIndex && a < lastIndex &&
-  //         b >= firstIndex && b < lastIndex &&
-  //         !((af | bf) & ParticleFlag.b2_zombieParticle) &&
-  //         ((af | bf) & b2ParticleSystem.k_pairFlags) &&
-  //         (filter.isNecessary(a) || filter.isNecessary(b)) &&
-  //         particleCanBeConnected(af, groupA) &&
-  //         particleCanBeConnected(bf, groupB) &&
-  //         filter.shouldCreatePair(a, b))
-  //       {
-  //         const pair = this.m_pairBuffer.append();
-  //         pair.indexA = a;
-  //         pair.indexB = b;
-  //         pair.flags = contact.getFlags();
-  //         pair.strength = math.min(
-  //           groupA ? groupA.m_strength : 1,
-  //           groupB ? groupB.m_strength : 1);
-  //         pair.distance = Vec2.distance(this.m_positionBuffer.data[a],
-  //                         this.m_positionBuffer.data[b]);
-  //       }
-  //     }
-  //     std.stable_sort_buffer(
-  //       m_pairBuffer.Begin(), m_pairBuffer.End(), ComparePairIndices); // TODO
-  //     m_pairBuffer.Unique(MatchPairIndices); // TODO
-  //   }
-  //   if (particleFlags & b2ParticleSystem.k_triadFlags) {
-  //     const diagram = new VoronoiDiagram(lastIndex - firstIndex);
-  //     for (let i = firstIndex; i < lastIndex; i++) {
-  //       const flags = this.m_flagsBuffer.data[i];
-  //       const group = this.m_groupBuffer[i];
-  //       if (!(flags & ParticleFlag.b2_zombieParticle) &&
-  //         particleCanBeConnected(flags, group)) {
-  //         diagram.addGenerator(
-  //           this.m_positionBuffer.data[i], i, filter.isNecessary(i));
-  //       }
-  //     }
-  //     const stride = this.getParticleStride();
-  //     diagram.generate(stride / 2, stride * 2);
-  //     const updateTriadsCallback = (a: number, b: number, c: number) => {
-  //       const af = this.m_flagsBuffer.data[a];
-  //       const bf = this.m_flagsBuffer.data[b];
-  //       const cf = this.m_flagsBuffer.data[c];
-  //       if (((af | bf | cf) & b2ParticleSystem.k_triadFlags) &&
-  //         filter.shouldCreateTriad(a, b, c))
-  //       {
-  //         const pa = this.m_positionBuffer.data[a];
-  //         const pb = this.m_positionBuffer.data[b];
-  //         const pc = this.m_positionBuffer.data[c];
-  //         const dab = Vec2.sub(pa, pb);
-  //         const dbc = Vec2.sub(pb, pc);
-  //         const dca = Vec2.sub(pc, pa);
-  //         const maxDistanceSquared = b2_maxTriadDistanceSquared *
-  //                         this.m_squaredDiameter;
-  //         if (Vec2.dot(dab, dab) > maxDistanceSquared ||
-  //           Vec2.dot(dbc, dbc) > maxDistanceSquared ||
-  //           Vec2.dot(dca, dca) > maxDistanceSquared)
-  //         {
-  //           return;
-  //         }
-  //         const groupA = this.m_groupBuffer[a];
-  //         const groupB = this.m_groupBuffer[b];
-  //         const groupC = this.m_groupBuffer[c];
-  //         const triad = this.m_triadBuffer.append();
-  //         triad.indexA = a;
-  //         triad.indexB = b;
-  //         triad.indexC = c;
-  //         triad.flags = af | bf | cf;
-  //         triad.strength = math.min(
-  //           groupA ? groupA.m_strength : 1,
-  //           groupB ? groupB.m_strength : 1,
-  //           groupC ? groupC.m_strength : 1);
-  //         const midPoint = Vec2.combine3(1 / 3, pa, 1 / 3, pb, 1 / 3, pc);
-  //         triad.pa = Vec2.sub(pa, midPoint);
-  //         triad.pb = Vec2.sub(pb, midPoint);
-  //         triad.pc = Vec2.sub(pc, midPoint);
-  //         triad.ka = -Vec2.dot(dca, dab);
-  //         triad.kb = -Vec2.dot(dab, dbc);
-  //         triad.kc = -Vec2.dot(dbc, dca);
-  //         triad.s = Vec2.cross(pa, pb) + Vec2.cross(pb, pc) + Vec2.cross(pc, pa);
-  //       }
-  //     }
-  //     diagram.getNodes(callback);
-  //     std.stable_sort_buffer(
-  //       m_triadBuffer.Begin(), m_triadBuffer.End(), CompareTriadIndices); // TODO
-  //     m_triadBuffer.Unique(MatchTriadIndices);
-  //   }
-  // }
+  updatePairsAndTriads(
+    firstIndex: number, lastIndex: number, filter: ConnectionFilter)
+  {
+    // Create pairs or triads.
+    // All particles in each pair/triad should satisfy the following:
+    // * firstIndex <= index < lastIndex
+    // * don't have b2_zombieParticle
+    // * ParticleCanBeConnected returns true
+    // * ShouldCreatePair/ShouldCreateTriad returns true
+    // Any particles in each pair/triad should satisfy the following:
+    // * filter.IsNeeded returns true
+    // * have one of k_pairFlags/k_triadsFlags
+    _ASSERT && common.assert(firstIndex <= lastIndex);
+    let particleFlags = 0;
+    for (let i = firstIndex; i < lastIndex; i++) {
+      particleFlags |= this.m_flagsBuffer.data[i];
+    }
+    if (particleFlags & b2ParticleSystem.k_pairFlags) {
+      for (let k = 0; k < this.m_contactBuffer.getCount(); k++) {
+        const contact = this.m_contactBuffer.getData()[k];
+        const a = contact.getIndexA();
+        const b = contact.getIndexB();
+        const af = this.m_flagsBuffer.data[a];
+        const bf = this.m_flagsBuffer.data[b];
+        const groupA = this.m_groupBuffer[a];
+        const groupB = this.m_groupBuffer[b];
+        if (a >= firstIndex && a < lastIndex &&
+          b >= firstIndex && b < lastIndex &&
+          !((af | bf) & ParticleFlag.b2_zombieParticle) &&
+          ((af | bf) & b2ParticleSystem.k_pairFlags) &&
+          (filter.isNecessary(a) || filter.isNecessary(b)) &&
+          particleCanBeConnected(af, groupA) &&
+          particleCanBeConnected(bf, groupB) &&
+          filter.shouldCreatePair(a, b))
+        {
+          const pair = this.m_pairBuffer.append(new b2ParticlePair());
+          pair.indexA = a;
+          pair.indexB = b;
+          pair.flags = contact.getFlags();
+          pair.strength = math.min(
+            groupA ? groupA.m_strength : 1,
+            groupB ? groupB.m_strength : 1);
+          pair.distance = Vec2.distance(this.m_positionBuffer.data[a],
+                          this.m_positionBuffer.data[b]);
+        }
+      }
+      std.stable_sort_buffer(this.m_pairBuffer.getData(),
+        this.m_pairBuffer.begin(), this.m_pairBuffer.end(), b2ParticleSystem.comparePairIndices);
+      this.m_pairBuffer.unique(b2ParticleSystem.matchPairIndices);
+    }
+    if (particleFlags & b2ParticleSystem.k_triadFlags) {
+      const diagram = new VoronoiDiagram(lastIndex - firstIndex);
+      for (let i = firstIndex; i < lastIndex; i++) {
+        const flags = this.m_flagsBuffer.data[i];
+        const group = this.m_groupBuffer[i];
+        if (!(flags & ParticleFlag.b2_zombieParticle) &&
+          particleCanBeConnected(flags, group)) {
+          diagram.addGenerator(
+            this.m_positionBuffer.data[i], i, filter.isNecessary(i));
+        }
+      }
+      const stride = this.getParticleStride();
+      diagram.generate(stride / 2, stride * 2);
+      const updateTriadsCallback = (a: number, b: number, c: number) => {
+        const af = this.m_flagsBuffer.data[a];
+        const bf = this.m_flagsBuffer.data[b];
+        const cf = this.m_flagsBuffer.data[c];
+        if (((af | bf | cf) & b2ParticleSystem.k_triadFlags) &&
+          filter.shouldCreateTriad(a, b, c))
+        {
+          const pa = this.m_positionBuffer.data[a];
+          const pb = this.m_positionBuffer.data[b];
+          const pc = this.m_positionBuffer.data[c];
+          const dab = Vec2.sub(pa, pb);
+          const dbc = Vec2.sub(pb, pc);
+          const dca = Vec2.sub(pc, pa);
+          const maxDistanceSquared = b2_maxTriadDistanceSquared *
+                          this.m_squaredDiameter;
+          if (Vec2.dot(dab, dab) > maxDistanceSquared ||
+            Vec2.dot(dbc, dbc) > maxDistanceSquared ||
+            Vec2.dot(dca, dca) > maxDistanceSquared)
+          {
+            return;
+          }
+          const groupA = this.m_groupBuffer[a];
+          const groupB = this.m_groupBuffer[b];
+          const groupC = this.m_groupBuffer[c];
+          const triad = this.m_triadBuffer.append(new b2ParticleTriad());
+          triad.indexA = a;
+          triad.indexB = b;
+          triad.indexC = c;
+          triad.flags = af | bf | cf;
+          triad.strength = math.min(
+            groupA ? groupA.m_strength : 1,
+            groupB ? groupB.m_strength : 1,
+            groupC ? groupC.m_strength : 1);
+          const midPoint = Vec2.combine3(1 / 3, pa, 1 / 3, pb, 1 / 3, pc);
+          triad.pa = Vec2.sub(pa, midPoint);
+          triad.pb = Vec2.sub(pb, midPoint);
+          triad.pc = Vec2.sub(pc, midPoint);
+          triad.ka = -Vec2.dot(dca, dab);
+          triad.kb = -Vec2.dot(dab, dbc);
+          triad.kc = -Vec2.dot(dbc, dca);
+          triad.s = Vec2.cross(pa, pb) + Vec2.cross(pb, pc) + Vec2.cross(pc, pa);
+        }
+      }
+      diagram.getNodes(updateTriadsCallback);
+      std.stable_sort_buffer(this.m_triadBuffer.getData(),
+        this.m_triadBuffer.begin(), this.m_triadBuffer.end(), b2ParticleSystem.compareTriadIndices);
+      this.m_triadBuffer.unique(b2ParticleSystem.matchTriadIndices);
+    }
+  }
   updatePairsAndTriadsWithReactiveParticles() {
     class ReactiveFilter extends ConnectionFilter {
       private m_flagsBuffer: number[];
@@ -3007,7 +3053,7 @@ private:
   }
 
   static initializeParticleLists(
-    group: b2ParticleGroup, nodeBuffer: ParticleListNode)
+    group: b2ParticleGroup, nodeBuffer: ParticleListNode[])
   {
     const bufferIndex = group.getBufferIndex();
     const particleCount = group.getParticleCount();
@@ -3020,7 +3066,7 @@ private:
     }
   }
   mergeParticleListsInContact(
-    group: b2ParticleGroup, nodeBuffer: ParticleListNode)
+    group: b2ParticleGroup, nodeBuffer: ParticleListNode[])
   {
     const bufferIndex = group.getBufferIndex();
     for (let k = 0; k < this.m_contactBuffer.getCount(); k++) {
@@ -3030,8 +3076,8 @@ private:
       if (!group.containsParticle(a) || !group.containsParticle(b)) {
         continue;
       }
-      let listA = nodeBuffer[a - bufferIndex].list;
-      let listB = nodeBuffer[b - bufferIndex].list;
+      let listA = nodeBuffer[a - bufferIndex].list; // TODO
+      let listB = nodeBuffer[b - bufferIndex].list; // TODO
       if (listA == listB) {
         continue;
       }
@@ -3069,10 +3115,10 @@ private:
     listB.count = 0;
   }
   static findLongestParticleList(
-    group: b2ParticleGroup, nodeBuffer: ParticleListNode): ParticleListNode
+    group: b2ParticleGroup, nodeBuffer: ParticleListNode[]): ParticleListNode
   {
     const particleCount = group.getParticleCount();
-    let result = nodeBuffer;
+    let result = nodeBuffer[0]; // TODO ok?
     for (let i = 0; i < particleCount; i++) {
       const node = nodeBuffer[i];
       if (result.count < node.count) {
@@ -3305,7 +3351,7 @@ private:
     const distBtParticlesSq = Vec2.dot(d, d);
     if (distBtParticlesSq < this.m_squaredDiameter) {
       const invD = math.invSqrt(distBtParticlesSq);
-      const contact = contacts.append();
+      const contact = contacts.append(new b2ParticleContact());
       contact.setIndices(a, b);
       contact.setFlags(this.m_flagsBuffer.data[a] | this.m_flagsBuffer.data[b]);
       // 1 - distBtParticles / diameter
@@ -3835,202 +3881,202 @@ private:
   //   // this.notifyBodyContactListenerPostContact(fixtureSet); // LATER
   // }
 
-  solve(step: TimeStep) {
-    if (this.m_count == 0) {
-      return;
-    }
-    // If particle lifetimes are enabled, destroy particles that are too old.
-/*    if (this.m_expirationTimeBuffer.data) { // LATER
-      this.solveLifetimes(step);
-    }*/
-    if (this.m_allParticleFlags & ParticleFlag.b2_zombieParticle) {
-      this.solveZombie(); // TODO
-    }
-    if (this.m_needsUpdateAllParticleFlags) {
-      this.updateAllParticleFlags();
-    }
-    if (this.m_needsUpdateAllGroupFlags) {
-      this.updateAllGroupFlags();
-    }
-    if (this.m_paused) {
-      return;
-    }
-    for (this.m_iterationIndex = 0;
-      this.m_iterationIndex < step.particleIterations;
-      this.m_iterationIndex++)
-    {
-      ++this.m_timestamp;
-      const subStep = new TimeStep(); // TODO reuse instance (also we don't need all properties)
-      subStep.dt = step.dt / step.particleIterations;
-      subStep.inv_dt = step.inv_dt * step.particleIterations;
-      subStep.velocityIterations = step.velocityIterations;
-      subStep.positionIterations = step.positionIterations;
-      subStep.particleIterations = step.particleIterations;
-      subStep.warmStarting = step.warmStarting;
-      subStep.blockSolve = step.blockSolve;
-      subStep.inv_dt0 = step.inv_dt0;
-      subStep.dtRatio = step.dtRatio;
-      this.updateContacts(false);
-      this.updateBodyContacts(); // TODO
-      this.computeWeight();
-      if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_particleGroupNeedsUpdateDepth) {
-        this.computeDepth(); // TODO
-      }
-      if (this.m_allParticleFlags & ParticleFlag.b2_reactiveParticle) {
-        this.updatePairsAndTriadsWithReactiveParticles(); // TODO
-      }
-      if (this.m_hasForce) {
-        this.solveForce(subStep);
-      }
-      if (this.m_allParticleFlags & ParticleFlag.b2_viscousParticle) {
-        this.solveViscous(); // TODO
-      }
-      if (this.m_allParticleFlags & ParticleFlag.b2_repulsiveParticle) {
-        this.solveRepulsive(subStep); // TODO
-      }
-      if (this.m_allParticleFlags & ParticleFlag.b2_powderParticle) {
-        this.solvePowder(subStep); // TODO
-      }
-      if (this.m_allParticleFlags & ParticleFlag.b2_tensileParticle) {
-        this.solveTensile(subStep); // TODO
-      }
-      if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_solidParticleGroup) {
-        this.solveSolid(subStep); // TODO
-      }
-      // if (this.m_allParticleFlags & ParticleFlag.b2_colorMixingParticle) {
-      //   this.solveColorMixing(); // LATER
-      // }
-      this.solveGravity(subStep);
-      if (this.m_allParticleFlags & ParticleFlag.b2_staticPressureParticle) {
-        this.solveStaticPressure(subStep); // TODO
-      }
-      this.solvePressure(subStep); // TODO
-      this.solveDamping(subStep); // TODO
-      if (this.m_allParticleFlags & b2ParticleSystem.k_extraDampingFlags) {
-        this.solveExtraDamping(); // TODO
-      }
-      // SolveElastic and SolveSpring refer the current velocities for
-      // numerical stability, they should be called as late as possible.
-      if (this.m_allParticleFlags & ParticleFlag.b2_elasticParticle) {
-        this.solveElastic(subStep); // TODO
-      }
-      if (this.m_allParticleFlags & ParticleFlag.b2_springParticle) {
-        this.solveSpring(subStep);
-      }
-      this.limitVelocity(subStep);
-      if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_rigidParticleGroup) {
-        this.solveRigidDamping(); // TODO
-      }
-      if (this.m_allParticleFlags & ParticleFlag.b2_barrierParticle) {
-        this.solveBarrier(subStep); // TODO
-      }
-      // SolveCollision, SolveRigid and SolveWall should be called after
-      // other force functions because they may require particles to have
-      // specific velocities.
-      this.solveCollision(subStep); // TODO
-      if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_rigidParticleGroup) {
-        this.solveRigid(subStep); // TODO
-      }
-      if (this.m_allParticleFlags & ParticleFlag.b2_wallParticle) {
-        this.solveWall();
-      }
-      // The particle positions can be updated only at the end of substep.
-      for (let i = 0; i < this.m_count; i++) {
-        this.m_positionBuffer.data[i].addMul(subStep.dt, this.m_velocityBuffer.data[i]);
-      }
-    }
+  solve(step: TimeStep) { // TODO
+//     if (this.m_count == 0) {
+//       return;
+//     }
+//     // If particle lifetimes are enabled, destroy particles that are too old.
+// /*    if (this.m_expirationTimeBuffer.data) { // LATER
+//       this.solveLifetimes(step);
+//     }*/
+//     if (this.m_allParticleFlags & ParticleFlag.b2_zombieParticle) {
+//       this.solveZombie(); // TODO
+//     }
+//     if (this.m_needsUpdateAllParticleFlags) {
+//       this.updateAllParticleFlags();
+//     }
+//     if (this.m_needsUpdateAllGroupFlags) {
+//       this.updateAllGroupFlags();
+//     }
+//     if (this.m_paused) {
+//       return;
+//     }
+//     for (this.m_iterationIndex = 0;
+//       this.m_iterationIndex < step.particleIterations;
+//       this.m_iterationIndex++)
+//     {
+//       ++this.m_timestamp;
+//       const subStep = new TimeStep(); // TODO reuse instance (also we don't need all properties)
+//       subStep.dt = step.dt / step.particleIterations;
+//       subStep.inv_dt = step.inv_dt * step.particleIterations;
+//       subStep.velocityIterations = step.velocityIterations;
+//       subStep.positionIterations = step.positionIterations;
+//       subStep.particleIterations = step.particleIterations;
+//       subStep.warmStarting = step.warmStarting;
+//       subStep.blockSolve = step.blockSolve;
+//       subStep.inv_dt0 = step.inv_dt0;
+//       subStep.dtRatio = step.dtRatio;
+//       this.updateContacts(false);
+//       this.updateBodyContacts(); // TODO
+//       this.computeWeight();
+//       if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_particleGroupNeedsUpdateDepth) {
+//         this.computeDepth(); // TODO
+//       }
+//       if (this.m_allParticleFlags & ParticleFlag.b2_reactiveParticle) {
+//         this.updatePairsAndTriadsWithReactiveParticles(); // TODO
+//       }
+//       if (this.m_hasForce) {
+//         this.solveForce(subStep);
+//       }
+//       if (this.m_allParticleFlags & ParticleFlag.b2_viscousParticle) {
+//         this.solveViscous(); // TODO
+//       }
+//       if (this.m_allParticleFlags & ParticleFlag.b2_repulsiveParticle) {
+//         this.solveRepulsive(subStep); // TODO
+//       }
+//       if (this.m_allParticleFlags & ParticleFlag.b2_powderParticle) {
+//         this.solvePowder(subStep); // TODO
+//       }
+//       if (this.m_allParticleFlags & ParticleFlag.b2_tensileParticle) {
+//         this.solveTensile(subStep); // TODO
+//       }
+//       if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_solidParticleGroup) {
+//         this.solveSolid(subStep); // TODO
+//       }
+//       // if (this.m_allParticleFlags & ParticleFlag.b2_colorMixingParticle) {
+//       //   this.solveColorMixing(); // LATER
+//       // }
+//       this.solveGravity(subStep);
+//       if (this.m_allParticleFlags & ParticleFlag.b2_staticPressureParticle) {
+//         this.solveStaticPressure(subStep); // TODO
+//       }
+//       this.solvePressure(subStep); // TODO
+//       this.solveDamping(subStep); // TODO
+//       if (this.m_allParticleFlags & b2ParticleSystem.k_extraDampingFlags) {
+//         this.solveExtraDamping(); // TODO
+//       }
+//       // SolveElastic and SolveSpring refer the current velocities for
+//       // numerical stability, they should be called as late as possible.
+//       if (this.m_allParticleFlags & ParticleFlag.b2_elasticParticle) {
+//         this.solveElastic(subStep); // TODO
+//       }
+//       if (this.m_allParticleFlags & ParticleFlag.b2_springParticle) {
+//         this.solveSpring(subStep);
+//       }
+//       this.limitVelocity(subStep);
+//       if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_rigidParticleGroup) {
+//         this.solveRigidDamping(); // TODO
+//       }
+//       if (this.m_allParticleFlags & ParticleFlag.b2_barrierParticle) {
+//         this.solveBarrier(subStep); // TODO
+//       }
+//       // SolveCollision, SolveRigid and SolveWall should be called after
+//       // other force functions because they may require particles to have
+//       // specific velocities.
+//       this.solveCollision(subStep); // TODO
+//       if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_rigidParticleGroup) {
+//         this.solveRigid(subStep); // TODO
+//       }
+//       if (this.m_allParticleFlags & ParticleFlag.b2_wallParticle) {
+//         this.solveWall();
+//       }
+//       // The particle positions can be updated only at the end of substep.
+//       for (let i = 0; i < this.m_count; i++) {
+//         this.m_positionBuffer.data[i].addMul(subStep.dt, this.m_velocityBuffer.data[i]);
+//       }
+//     }
   }
-  solveCollision(step: TimeStep) {
-    // This function detects particles which are crossing boundary of bodies
-    // and modifies velocities of them so that they will move just in front of
-    // boundary. This function function also applies the reaction force to
-    // bodies as precisely as the numerical stability is kept.
-    const aabb = new AABB();
-    aabb.lowerBound.x = +Infinity;
-    aabb.lowerBound.y = +Infinity;
-    aabb.upperBound.x = -Infinity;
-    aabb.upperBound.y = -Infinity;
-    for (let i = 0; i < this.m_count; i++) {
-      const v = this.m_velocityBuffer.data[i];
-      const p1 = this.m_positionBuffer.data[i];
-      const p2 = Vec2.combine(1, p1, step.dt, v);
-      aabb.lowerBound = Vec2.lower(aabb.lowerBound, Vec2.lower(p1, p2));
-      aabb.upperBound = Vec2.upper(aabb.upperBound, Vec2.upper(p1, p2)); // TODO more performant Solution
-    }
-    class SolveCollisionCallback extends b2FixtureParticleQueryCallback {
-      private m_step: TimeStep;
-      private m_contactFilter: b2ContactFilter;
+  // solveCollision(step: TimeStep) {
+  //   // This function detects particles which are crossing boundary of bodies
+  //   // and modifies velocities of them so that they will move just in front of
+  //   // boundary. This function function also applies the reaction force to
+  //   // bodies as precisely as the numerical stability is kept.
+  //   const aabb = new AABB();
+  //   aabb.lowerBound.x = +Infinity;
+  //   aabb.lowerBound.y = +Infinity;
+  //   aabb.upperBound.x = -Infinity;
+  //   aabb.upperBound.y = -Infinity;
+  //   for (let i = 0; i < this.m_count; i++) {
+  //     const v = this.m_velocityBuffer.data[i];
+  //     const p1 = this.m_positionBuffer.data[i];
+  //     const p2 = Vec2.combine(1, p1, step.dt, v);
+  //     aabb.lowerBound = Vec2.lower(aabb.lowerBound, Vec2.lower(p1, p2));
+  //     aabb.upperBound = Vec2.upper(aabb.upperBound, Vec2.upper(p1, p2)); // TODO more performant Solution
+  //   }
+  //   class SolveCollisionCallback extends b2FixtureParticleQueryCallback {
+  //     private m_step: TimeStep;
+  //     private m_contactFilter: b2ContactFilter;
 
-      constructor(system: b2ParticleSystem, step: TimeStep, contactFilter: b2ContactFilter) {
-        super(system)
-        this.m_step = step;
-        this.m_contactFilter = contactFilter;
-      }
+  //     constructor(system: b2ParticleSystem, step: TimeStep, contactFilter: b2ContactFilter) {
+  //       super(system)
+  //       this.m_step = step;
+  //       this.m_contactFilter = contactFilter;
+  //     }
 
-      // Call the contact filter if it's set, to determine whether to
-      // filter this contact.  Returns true if contact calculations should
-      // be performed, false otherwise.
-      shouldCollide(fixture: Fixture,
-                    particleIndex: number) {
-        if (this.m_contactFilter) {
-          const flags = this.m_system.getFlagsBuffer();
-          if (flags[particleIndex] & ParticleFlag.b2_fixtureContactFilterParticle) {
-            return this.m_contactFilter.shouldCollide(fixture, this.m_system,
-                                particleIndex);
-          }
-        }
-        return true;
-      }
+  //     // Call the contact filter if it's set, to determine whether to
+  //     // filter this contact.  Returns true if contact calculations should
+  //     // be performed, false otherwise.
+  //     shouldCollide(fixture: Fixture,
+  //                   particleIndex: number) {
+  //       if (this.m_contactFilter) {
+  //         const flags = this.m_system.getFlagsBuffer();
+  //         if (flags[particleIndex] & ParticleFlag.b2_fixtureContactFilterParticle) {
+  //           return this.m_contactFilter.shouldCollide(fixture, this.m_system,
+  //                               particleIndex);
+  //         }
+  //       }
+  //       return true;
+  //     }
   
-      reportFixtureAndParticle(
-                  fixture: Fixture, childIndex: number, a: number)
-      {
-        if (this.shouldCollide(fixture, a)) {
-          const body = fixture.getBody();
-          const ap = this.m_system.m_positionBuffer.data[a];
-          const av = this.m_system.m_velocityBuffer.data[a];
-          const output = {} as RayCastOutput; // TODO shape not constant -> deoptimization?
-          const input = {} as RayCastInput;
-          if (this.m_system.m_iterationIndex == 0) {
-            // Put 'ap' in the local space of the previous frame
-            let p1 = Transform.mulTVec2(body.m_xf0, ap);
-            if (fixture.getShape().getType() == CircleShape.TYPE) {
-              // Make relative to the center of the circle
-              p1.sub(body.getLocalCenter());
-              // Re-apply rotation about the center of the
-              // circle
-              p1 = Rot.mulVec2(body.m_xf0.q, p1); // TODO can we mutate p1 directly?
-              // Subtract rotation of the current frame
-              p1 = Rot.mulTVec2(body.m_xf.q, p1);
-              // Return to local space
-              p1.add(body.getLocalCenter());
-            }
-            // Return to global space and apply rotation of current frame
-            input.p1 = Transform.mulVec2(body.m_xf, p1);
-          } else {
-            input.p1 = ap; // TODO maybe clone here
-          }
-          input.p2 = Vec2.combine(1, ap, this.m_step.dt, av);
-          input.maxFraction = 1;
-          if (fixture.rayCast(output, input, childIndex)) {
-            const n = output.normal;
-            const p = Vec2.combine3(
-              (1 - output.fraction), input.p1,
-              output.fraction, input.p2,
-              linearSlop, n
-            );
-            const v = Vec2.sub(p, ap).mul(this.m_step.inv_dt);
-            this.m_system.m_velocityBuffer.data[a] = v;
-            const f = Vec2.sub(av, v).mul(this.m_step.inv_dt *
-              this.m_system.getParticleMass());
-            this.m_system.particleApplyForce(a, f);
-          }
-        }
-      }
-    }
-    const callback = new SolveCollisionCallback(this, step, this.getFixtureContactFilter());
-    this.m_world.queryAABB(callback, aabb);
-  }
+  //     reportFixtureAndParticle(
+  //                 fixture: Fixture, childIndex: number, a: number)
+  //     {
+  //       if (this.shouldCollide(fixture, a)) {
+  //         const body = fixture.getBody();
+  //         const ap = this.m_system.m_positionBuffer.data[a];
+  //         const av = this.m_system.m_velocityBuffer.data[a];
+  //         const output = {} as RayCastOutput; // TODO shape not constant -> deoptimization?
+  //         const input = {} as RayCastInput;
+  //         if (this.m_system.m_iterationIndex == 0) {
+  //           // Put 'ap' in the local space of the previous frame
+  //           let p1 = Transform.mulTVec2(body.m_xf0, ap);
+  //           if (fixture.getShape().getType() == CircleShape.TYPE) {
+  //             // Make relative to the center of the circle
+  //             p1.sub(body.getLocalCenter());
+  //             // Re-apply rotation about the center of the
+  //             // circle
+  //             p1 = Rot.mulVec2(body.m_xf0.q, p1); // TODO can we mutate p1 directly?
+  //             // Subtract rotation of the current frame
+  //             p1 = Rot.mulTVec2(body.m_xf.q, p1);
+  //             // Return to local space
+  //             p1.add(body.getLocalCenter());
+  //           }
+  //           // Return to global space and apply rotation of current frame
+  //           input.p1 = Transform.mulVec2(body.m_xf, p1);
+  //         } else {
+  //           input.p1 = ap; // TODO maybe clone here
+  //         }
+  //         input.p2 = Vec2.combine(1, ap, this.m_step.dt, av);
+  //         input.maxFraction = 1;
+  //         if (fixture.rayCast(output, input, childIndex)) {
+  //           const n = output.normal;
+  //           const p = Vec2.combine3(
+  //             (1 - output.fraction), input.p1,
+  //             output.fraction, input.p2,
+  //             linearSlop, n
+  //           );
+  //           const v = Vec2.sub(p, ap).mul(this.m_step.inv_dt);
+  //           this.m_system.m_velocityBuffer.data[a] = v;
+  //           const f = Vec2.sub(av, v).mul(this.m_step.inv_dt *
+  //             this.m_system.getParticleMass());
+  //           this.m_system.particleApplyForce(a, f);
+  //         }
+  //       }
+  //     }
+  //   }
+  //   const callback = new SolveCollisionCallback(this, step, this.getFixtureContactFilter());
+  //   this.m_world.queryAABB(callback, aabb);
+  // }
   limitVelocity(step: TimeStep) {
     const criticalVelocitySquared = this.getCriticalVelocitySquared(step);
     for (let i = 0; i < this.m_count; i++) {
@@ -4155,7 +4201,7 @@ private:
     }
   }
   solveStaticPressure(step: TimeStep) {
-    this.m_staticPressureBuffer = RequestBuffer(this.m_staticPressureBuffer); // TODO
+    this.m_staticPressureBuffer = this.requestBuffer(this.m_staticPressureBuffer);
     const criticalPressure = this.getCriticalPressure(step);
     const pressurePerWeight = this.m_def.staticPressureStrength * criticalPressure;
     const maxPressure = b2_maxParticlePressure * criticalPressure;
@@ -4683,7 +4729,7 @@ private:
           if (handle) {
             handle.setIndex(b2_invalidParticleIndex);
             this.m_handleIndexBuffer.data[i] = null;
-            this.m_handleAllocator.Free(handle); // TODO
+            this.m_handleAllocator.free(handle);
           }
         }
         newIndices[i] = b2_invalidParticleIndex;
@@ -4896,168 +4942,129 @@ private:
       this.destroyParticle(particleIndex);
     }
   }*/
-/*  rotateBuffer(start: i32, mid: i32, end: i32) { // TODO
+  /**
+   * TODO doc
+   * ```
+   *     S   M       E
+   * ----ABCDEfghijkl----
+   *
+   * ----fghijklABCDE----
+   * ```
+   * @param start 
+   * @param mid 
+   * @param end 
+   * @returns 
+   */
+  rotateBuffer(start: i32, mid: i32, end: i32) { // TODO
     // move the particles assigned to the given group toward the end of array
-    if (start == mid || mid == end)
-    {
+    if (start == mid || mid == end) {
       return;
     }
-    b2Assert(mid >= start && mid <= end);
-    struct NewIndices
-    {
-      int32 operator[](int32 i) const
-      {
-        if (i < start)
-        {
-          return i;
-        }
-        else if (i < mid)
-        {
-          return i + end - mid;
-        }
-        else if (i < end)
-        {
-          return i + start - mid;
-        }
-        else
-        {
-          return i;
-        }
+    _ASSERT && common.assert(mid >= start && mid <= end);
+    function newIndices(i: number) {
+      if (i < start) {
+        return i;
+      } else if (i < mid) {
+        return i + end - mid;
+      } else if (i < end) {
+        return i + start - mid;
+      } else {
+        return i;
       }
-      int32 start, mid, end;
-    } newIndices;
-    newIndices.start = start;
-    newIndices.mid = mid;
-    newIndices.end = end;
+    }
   
-    std::rotate(m_flagsBuffer.data + start, m_flagsBuffer.data + mid,
-          m_flagsBuffer.data + end);
-    if (m_lastBodyContactStepBuffer.data)
-    {
-      std::rotate(m_lastBodyContactStepBuffer.data + start,
-            m_lastBodyContactStepBuffer.data + mid,
-            m_lastBodyContactStepBuffer.data + end);
+    std.rotate(this.m_flagsBuffer.data, start, mid, end);
+    if (this.m_lastBodyContactStepBuffer.data) {
+      std.rotate(this.m_lastBodyContactStepBuffer.data, start, mid, end);
     }
-    if (m_bodyContactCountBuffer.data)
-    {
-      std::rotate(m_bodyContactCountBuffer.data + start,
-            m_bodyContactCountBuffer.data + mid,
-            m_bodyContactCountBuffer.data + end);
+    if (this.m_bodyContactCountBuffer.data) {
+      std.rotate(this.m_bodyContactCountBuffer.data, start, mid, end);
     }
-    if (m_consecutiveContactStepsBuffer.data)
-    {
-      std::rotate(m_consecutiveContactStepsBuffer.data + start,
-            m_consecutiveContactStepsBuffer.data + mid,
-            m_consecutiveContactStepsBuffer.data + end);
+    if (this.m_consecutiveContactStepsBuffer.data) {
+      std.rotate(this.m_consecutiveContactStepsBuffer.data, start, mid, end);
     }
-    std::rotate(m_positionBuffer.data + start, m_positionBuffer.data + mid,
-          m_positionBuffer.data + end);
-    std::rotate(m_velocityBuffer.data + start, m_velocityBuffer.data + mid,
-          m_velocityBuffer.data + end);
-    std::rotate(m_groupBuffer + start, m_groupBuffer + mid,
-          m_groupBuffer + end);
-    if (m_hasForce)
-    {
-      std::rotate(m_forceBuffer + start, m_forceBuffer + mid,
-            m_forceBuffer + end);
+    std.rotate(this.m_positionBuffer.data, start, mid, end);
+    std.rotate(this.m_velocityBuffer.data, start, mid, end);
+    std.rotate(this.m_groupBuffer, start, mid, end);
+    if (this.m_hasForce) {
+      std.rotate(this.m_forceBuffer, start, mid, end);
     }
-    if (m_staticPressureBuffer)
-    {
-      std::rotate(m_staticPressureBuffer + start,
-            m_staticPressureBuffer + mid,
-            m_staticPressureBuffer + end);
+    if (this.m_staticPressureBuffer) {
+      std.rotate(this.m_staticPressureBuffer, start, mid, end);
     }
-    if (m_depthBuffer)
-    {
-      std::rotate(m_depthBuffer + start, m_depthBuffer + mid,
-            m_depthBuffer + end);
+    if (this.m_depthBuffer) {
+      std.rotate(this.m_depthBuffer, start, mid, end);
     }
-    if (m_colorBuffer.data)
-    {
-      std::rotate(m_colorBuffer.data + start,
-            m_colorBuffer.data + mid, m_colorBuffer.data + end);
+    if (this.m_colorBuffer.data) {
+      std.rotate(this.m_colorBuffer.data, start, mid, end);
     }
-    if (m_userDataBuffer.data)
-    {
-      std::rotate(m_userDataBuffer.data + start,
-            m_userDataBuffer.data + mid, m_userDataBuffer.data + end);
+    if (this.m_userDataBuffer.data) {
+      std.rotate(this.m_userDataBuffer.data, start, mid, end);
     }
   
     // Update handle indices.
-    if (m_handleIndexBuffer.data)
-    {
-      std::rotate(m_handleIndexBuffer.data + start,
-            m_handleIndexBuffer.data + mid,
-            m_handleIndexBuffer.data + end);
-      for (int32 i = start; i < end; ++i)
-      {
-        b2ParticleHandle * const handle = m_handleIndexBuffer.data[i];
-        if (handle) handle->SetIndex(newIndices[handle->GetIndex()]);
+    if (this.m_handleIndexBuffer.data) {
+      std.rotate(this.m_handleIndexBuffer.data, start, mid, end);
+      for (let i = start; i < end; ++i) {
+        const handle = this.m_handleIndexBuffer.data[i];
+        if (handle) handle.setIndex(newIndices(handle.getIndex()));
       }
     }
   
-    if (m_expirationTimeBuffer.data)
-    {
-      std::rotate(m_expirationTimeBuffer.data + start,
-            m_expirationTimeBuffer.data + mid,
-            m_expirationTimeBuffer.data + end);
-      // Update expiration time buffer indices.
-      const int32 particleCount = GetParticleCount();
-      int32* const indexByExpirationTime =
-        m_indexByExpirationTimeBuffer.data;
-      for (int32 i = 0; i < particleCount; ++i)
-      {
-        indexByExpirationTime[i] = newIndices[indexByExpirationTime[i]];
-      }
-    }
+    // if (this.m_expirationTimeBuffer.data) { // LATER
+    //   std.rotate(m_expirationTimeBuffer.data, start, mid, end);
+    //   // Update expiration time buffer indices.
+    //   const int32 particleCount = GetParticleCount();
+    //   int32* const indexByExpirationTime =
+    //     m_indexByExpirationTimeBuffer.data;
+    //   for (int32 i = 0; i < particleCount; ++i)
+    //   {
+    //     indexByExpirationTime[i] = newIndices(indexByExpirationTime[i]);
+    //   }
+    // }
   
     // update proxies
-    for (int32 k = 0; k < m_proxyBuffer.GetCount(); k++)
-    {
-      Proxy& proxy = m_proxyBuffer.Begin()[k];
-      proxy.index = newIndices[proxy.index];
+    for (let k = 0; k < this.m_proxyBuffer.getCount(); k++) {
+      const proxy = this.m_proxyBuffer.getData()[k]; // TODO why was this m_proxyBuffer.Begin()[k]?
+      proxy.index = newIndices(proxy.index);
     }
   
     // update contacts
-    for (int32 k = 0; k < m_contactBuffer.GetCount(); k++)
-    {
-      b2ParticleContact& contact = m_contactBuffer[k];
-      contact.SetIndices(newIndices[contact.GetIndexA()],
-                 newIndices[contact.GetIndexB()]);
+    for (let k = 0; k < this.m_contactBuffer.getCount(); k++) {
+      const contact = this.m_contactBuffer.getData()[k];
+      contact.setIndices(newIndices(contact.getIndexA()),
+                 newIndices(contact.getIndexB()));
     }
   
     // update particle-body contacts
-    for (int32 k = 0; k < m_bodyContactBuffer.GetCount(); k++)
-    {
-      b2ParticleBodyContact& contact = m_bodyContactBuffer[k];
-      contact.index = newIndices[contact.index];
+    for (let k = 0; k < this.m_bodyContactBuffer.getCount(); k++) {
+      const contact = this.m_bodyContactBuffer.getData()[k];
+      contact.index = newIndices(contact.index);
     }
   
     // update pairs
-    for (int32 k = 0; k < m_pairBuffer.GetCount(); k++)
-    {
-      b2ParticlePair& pair = m_pairBuffer[k];
-      pair.indexA = newIndices[pair.indexA];
-      pair.indexB = newIndices[pair.indexB];
+    for (let k = 0; k < this.m_pairBuffer.getCount(); k++) {
+      const pair = this.m_pairBuffer.getData()[k];
+      pair.indexA = newIndices(pair.indexA);
+      pair.indexB = newIndices(pair.indexB);
     }
   
     // update triads
-    for (int32 k = 0; k < m_triadBuffer.GetCount(); k++)
-    {
-      b2ParticleTriad& triad = m_triadBuffer[k];
-      triad.indexA = newIndices[triad.indexA];
-      triad.indexB = newIndices[triad.indexB];
-      triad.indexC = newIndices[triad.indexC];
+    for (let k = 0; k < this.m_triadBuffer.getCount(); k++) {
+      const triad = this.m_triadBuffer.getData()[k];
+      triad.indexA = newIndices(triad.indexA);
+      triad.indexB = newIndices(triad.indexB);
+      triad.indexC = newIndices(triad.indexC);
     }
   
     // update groups
-    for (b2ParticleGroup* group = m_groupList; group; group = group->GetNext())
+    for (let group = this.m_groupList; group; group = group.getNext())
     {
-      group->m_firstIndex = newIndices[group->m_firstIndex];
-      group->m_lastIndex = newIndices[group->m_lastIndex - 1] + 1;
+      group.m_firstIndex = newIndices(group.m_firstIndex);
+      group.m_lastIndex = newIndices(group.m_lastIndex - 1) + 1;
     }
   }
-*/
+
   getCriticalVelocity(step: TimeStep) {
     return this.m_particleDiameter * step.inv_dt;
   }
@@ -5085,10 +5092,10 @@ private:
    * Get the world's contact filter if any particles with the
    * b2_contactFilterParticle flag are present in the system.
    */
-  getFixtureContactFilter(): b2ContactFilter | null {
-    return (this.m_allParticleFlags & ParticleFlag.b2_fixtureContactFilterParticle) ?
-      this.m_world.m_contactManager.m_contactFilter : null;
-  }
+  // getFixtureContactFilter(): b2ContactFilter | null { // TODO
+  //   return (this.m_allParticleFlags & ParticleFlag.b2_fixtureContactFilterParticle) ?
+  //     this.m_world.m_contactManager.m_contactFilter : null;
+  // }
 
   /**
    * Get the world's contact filter if any particles with the
@@ -5141,7 +5148,7 @@ private:
     if (~this.m_allGroupFlags & newFlags) {
       // If any flags were added
       if (newFlags & b2ParticleGroupFlag.b2_solidParticleGroup) {
-        this.m_depthBuffer = RequestBuffer(this.m_depthBuffer);
+        this.m_depthBuffer = this.requestBuffer(this.m_depthBuffer);
       }
       this.m_allGroupFlags |= newFlags;
     }
