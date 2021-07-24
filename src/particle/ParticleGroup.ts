@@ -245,7 +245,7 @@ export class b2ParticleGroup {
     this.m_center = Vec2.zero();
     this.m_linearVelocity = Vec2.zero();
     this.m_angularVelocity = 0;
-    this.m_transform.setIdentity();
+    this.m_transform = Transform.identity();
 
     this.m_userData = null;
   }

@@ -31,7 +31,7 @@ export default class b2GrowableBuffer<T> {
 //  capacity: number;
 
   constructor(rhs?: b2GrowableBuffer<T>) {
-    this.data = null;
+    this.data = [];
 //    this.count = 0;
 //    this.capacity = 0;
 

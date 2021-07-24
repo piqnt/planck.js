@@ -19,7 +19,7 @@
 import Body from '../dynamics/Body';
 import Fixture from '../dynamics/Fixture';
 import Vec2 from '../common/Vec2';
-import { Shape } from '../../dist/planck-with-testbed';
+import Shape from '../collision/Shape';
 import Transform from '../common/Transform';
 import { TimeStep } from '../dynamics/Solver';
 import options from '../util/options';
@@ -1104,10 +1104,10 @@ export default class b2ParticleSystem {
   /// Allocator for b2ParticleHandle instances.
   /** @internal */ m_handleAllocator: b2SlabAllocator<b2ParticleHandle>;
   /// Maps particle indicies to  handles.
-  /** @internal */ m_handleIndexBuffer: UserOverridableBuffer<b2ParticleHandle>;
-  /** @internal */ m_flagsBuffer: UserOverridableBuffer<number>;
-  /** @internal */ m_positionBuffer: UserOverridableBuffer<Vec2>;
-  /** @internal */ m_velocityBuffer: UserOverridableBuffer<Vec2>;
+  /** @internal */ m_handleIndexBuffer: UserOverridableBuffer<b2ParticleHandle> = new UserOverridableBuffer();
+  /** @internal */ m_flagsBuffer: UserOverridableBuffer<number> = new UserOverridableBuffer();
+  /** @internal */ m_positionBuffer: UserOverridableBuffer<Vec2> = new UserOverridableBuffer();
+  /** @internal */ m_velocityBuffer: UserOverridableBuffer<Vec2> = new UserOverridableBuffer();
   /** @internal */ m_forceBuffer: Vec2[];
   /// m_weightBuffer is populated in ComputeWeight and used in
   /// ComputeDepth(), SolveStaticPressure() and SolvePressure().
@@ -1130,21 +1130,21 @@ export default class b2ParticleSystem {
   /// used in SolveSolid(). It will be reallocated on subsequent
   /// CreateParticle() calls.
   /** @internal */ m_depthBuffer: number[];
-  /** @internal */ m_colorBuffer: UserOverridableBuffer<b2ParticleColor>;
+  /** @internal */ m_colorBuffer: UserOverridableBuffer<b2ParticleColor> = new UserOverridableBuffer();
   /** @internal */ m_groupBuffer: b2ParticleGroup[]; // TODO ok? was b2ParticleGroup**
-  /** @internal */ m_userDataBuffer: UserOverridableBuffer<any>;
+  /** @internal */ m_userDataBuffer: UserOverridableBuffer<any> = new UserOverridableBuffer();
 
   /// Stuck particle detection parameters and record keeping
   /** @internal */ m_stuckThreshold: number;
-  /** @internal */ m_lastBodyContactStepBuffer: UserOverridableBuffer<number>;
-  /** @internal */ m_bodyContactCountBuffer: UserOverridableBuffer<number>;
-  /** @internal */ m_consecutiveContactStepsBuffer: UserOverridableBuffer<number>;
-  /** @internal */ m_stuckParticleBuffer: b2GrowableBuffer<i32>;
-  /** @internal */ m_proxyBuffer: b2GrowableBuffer<Proxy>;
-  /** @internal */ m_contactBuffer: b2GrowableBuffer<b2ParticleContact>;
-  /** @internal */ m_bodyContactBuffer: b2GrowableBuffer<b2ParticleBodyContact>;
-  /** @internal */ m_pairBuffer: b2GrowableBuffer<b2ParticlePair>;
-  /** @internal */ m_triadBuffer: b2GrowableBuffer<b2ParticleTriad>;
+  /** @internal */ m_lastBodyContactStepBuffer: UserOverridableBuffer<number> = new UserOverridableBuffer();
+  /** @internal */ m_bodyContactCountBuffer: UserOverridableBuffer<number> = new UserOverridableBuffer();
+  /** @internal */ m_consecutiveContactStepsBuffer: UserOverridableBuffer<number> = new UserOverridableBuffer();
+  /** @internal */ m_stuckParticleBuffer: b2GrowableBuffer<i32> = new b2GrowableBuffer();
+  /** @internal */ m_proxyBuffer: b2GrowableBuffer<Proxy> = new b2GrowableBuffer();
+  /** @internal */ m_contactBuffer: b2GrowableBuffer<b2ParticleContact> = new b2GrowableBuffer();
+  /** @internal */ m_bodyContactBuffer: b2GrowableBuffer<b2ParticleBodyContact> = new b2GrowableBuffer();
+  /** @internal */ m_pairBuffer: b2GrowableBuffer<b2ParticlePair> = new b2GrowableBuffer();
+  /** @internal */ m_triadBuffer: b2GrowableBuffer<b2ParticleTriad> = new b2GrowableBuffer();
 
   /**
    * @internal
@@ -1157,7 +1157,7 @@ export default class b2ParticleSystem {
    * @internal
    * List of particle indices sorted by expiration time.
    */
-  m_indexByExpirationTimeBuffer: UserOverridableBuffer<i32>;
+  m_indexByExpirationTimeBuffer: UserOverridableBuffer<i32> = new UserOverridableBuffer();
   /// Time elapsed in 32:32 fixed point.  Each non-fractional unit of time
   /// corresponds to b2ParticleSystemDef::lifetimeGranularity seconds.
 //  int64 m_timeElapsed: number; // LATER TODO was int64, is JS number enough?
@@ -1198,6 +1198,9 @@ export default class b2ParticleSystem {
     this.m_hasForce = false;
     this.m_iterationIndex = 0;
 
+    _ASSERT && common.assert(def.lifetimeGranularity > 0.0);
+    this.m_def = def;
+
     this.setStrictContactCheck(def.strictContactCheck);
     this.setDensity(def.density);
     this.setGravityScale(def.gravityScale);
@@ -1216,9 +1219,6 @@ export default class b2ParticleSystem {
 
     this.m_groupCount = 0;
     this.m_groupList = null;
-
-    _ASSERT && common.assert(def.lifetimeGranularity > 0.0);
-    this.m_def = def;
 
     this.m_world = world;
 
@@ -2541,6 +2541,9 @@ private:
     //   m_world->m_blockAllocator.Free(oldBuffer, sizeof(T) * oldCapacity);
     // }
     // return newBuffer;
+    if (oldBuffer == null) {
+      oldBuffer = [];
+    }
     oldBuffer.length = newCapacity;
     // TODO set defaults?
     return oldBuffer;
