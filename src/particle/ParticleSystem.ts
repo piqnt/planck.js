@@ -161,11 +161,11 @@ const relativeTagBottomRight = (1 << yShift) + (1 << xShift);
 
 
 function computeTag(x: f32, y: f32): u32 {
-	return (u32(y + yOffset) << yShift) + u32(xScale * x + xOffset);
+	return u32(u32(y + yOffset) << yShift) + u32(xScale * x + xOffset);
 }
 
 function computeRelativeTag(tag: u32, x: i32, y: i32): u32 {
-	return tag + (y << yShift) + (x << xShift);
+	return u32(tag + u32(y << yShift) + u32(x << xShift));
 }
 
 function limitCapacity(capacity: i32, maxCount: i32): i32 {
@@ -302,7 +302,7 @@ class b2ParticleBodyContact {
   weight: number = 0;
 
   /** The normalized direction from the particle to the body. */
-  normal: Vec2 = null; // TODO or zero? actually zero
+  normal: Vec2 = Vec2.zero(); // TODO or zero? actually zero
 
   /** The effective mass used in calculating force. */
   mass: number = 0;
@@ -966,7 +966,7 @@ private:
 // TODO find some better solution in JS, for now just use classes
 /// Callback class to receive pairs of fixtures and particles which may be
 /// overlapping. Used as an argument of b2World::QueryAABB.
-abstract class b2FixtureParticleQueryCallback { // TODO extends b2QueryCallback
+abstract class b2FixtureParticleQueryCallback { // TODO extends b2QueryCallback // TODO remove
 
   protected m_system: b2ParticleSystem;
 
@@ -1002,6 +1002,25 @@ abstract class b2FixtureParticleQueryCallback { // TODO extends b2QueryCallback
 	abstract reportFixtureAndParticle(
 						fixture: Fixture, childIndex: number, index: number): void;
 
+}
+
+function fixtureParticleQueryCallback(m_system: b2ParticleSystem, reportFixtureAndParticle: (fixture: Fixture, childIndex: number, index: number) => void) {
+  return function reportFixture(fixture: Fixture): boolean {
+    if (fixture.isSensor())	{
+			return true;
+		}
+		const shape = fixture.getShape();
+		const childCount = shape.getChildCount();
+		for (let childIndex = 0; childIndex < childCount; childIndex++) {
+			const aabb = fixture.getAABB(childIndex);
+			const enumerator = m_system.getInsideBoundsEnumerator(aabb);
+			let index: number;
+			while ((index = enumerator.getNext()) >= 0) {
+				reportFixtureAndParticle(fixture, childIndex, index);
+			}
+		}
+		return true;
+  }
 }
 
 // TODO remove later
@@ -3352,6 +3371,11 @@ private:
   {
     const d = Vec2.sub(this.m_positionBuffer.data[b], this.m_positionBuffer.data[a]);
     const distBtParticlesSq = Vec2.dot(d, d);
+    // TODO why is this check not necessary in cpp version?
+    if (distBtParticlesSq == 0) {
+      // TODO add default contact?
+      return;
+    }
     if (distBtParticlesSq < this.m_squaredDiameter) {
       const invD = math.invSqrt(distBtParticlesSq);
       const contact = contacts.append(new b2ParticleContact());
@@ -3795,142 +3819,190 @@ private:
   //     }
   //   }
   // }
-  // updateBodyContacts() { // TODO
-  //   // If the particle contact listener is enabled, generate a set of
-  //   // fixture / particle contacts.
-  //   const fixtureSet = new FixtureParticleSet(); // TODO ok?
-  //   // this.notifyBodyContactListenerPreContact(fixtureSet); // LATER
+  updateBodyContacts() {
+    // If the particle contact listener is enabled, generate a set of
+    // fixture / particle contacts.
+    const fixtureSet = new FixtureParticleSet(); // TODO ok?
+    // this.notifyBodyContactListenerPreContact(fixtureSet); // LATER
 
-  //   if (this.m_stuckThreshold > 0) {
-  //     const particleCount = this.getParticleCount();
-  //     for (let i = 0; i < particleCount; i++) {
-  //       // Detect stuck particles, see comment in
-  //       // b2ParticleSystem::DetectStuckParticle()
-  //       this.m_bodyContactCountBuffer.data[i] = 0;
-  //       if (this.m_timestamp > (this.m_lastBodyContactStepBuffer.data[i] + 1)) {
-  //         this.m_consecutiveContactStepsBuffer.data[i] = 0;
-  //       }
-  //     }
-  //   }
-  //   this.m_bodyContactBuffer.setCount(0);
-  //   this.m_stuckParticleBuffer.setCount(0);
+    if (this.m_stuckThreshold > 0) {
+      const particleCount = this.getParticleCount();
+      for (let i = 0; i < particleCount; i++) {
+        // Detect stuck particles, see comment in
+        // b2ParticleSystem::DetectStuckParticle()
+        this.m_bodyContactCountBuffer.data[i] = 0;
+        if (this.m_timestamp > (this.m_lastBodyContactStepBuffer.data[i] + 1)) {
+          this.m_consecutiveContactStepsBuffer.data[i] = 0;
+        }
+      }
+    }
+    this.m_bodyContactBuffer.setCount(0);
+    this.m_stuckParticleBuffer.setCount(0);
 
-  //   class UpdateBodyContactsCallback extends b2FixtureParticleQueryCallback {
-  //     private m_contactFilter: b2ContactFilter;
+    const m_contactFilter = null; // this.getFixtureContactFilter() TODO
+    // Call the contact filter if it's set, to determine whether to
+    // filter this contact.  Returns true if contact calculations should
+    // be performed, false otherwise.
+    const shouldCollide = (fixture: Fixture, particleIndex: number) => {
+      if (m_contactFilter) {
+        const flags = this.getFlagsBuffer();
+        if (flags[particleIndex] & ParticleFlag.b2_fixtureContactFilterParticle) {
+          return m_contactFilter.shouldCollide(fixture, this,
+                        particleIndex);
+        }
+      }
+      return true;
+    }
 
-  //     constructor(system: b2ParticleSystem, contactFilter: b2ContactFilter) {
-  //       super(system);
-  //       this.m_contactFilter = contactFilter;
-  //     }
+    const reportFixtureAndParticle = (
+      fixture: Fixture, childIndex: number, a: number) => {
+      const ap = this.m_positionBuffer.data[a];
+      const n = new Vec2();
+      const d = fixture.computeDistance(ap, n, childIndex);
+      if (d < this.m_particleDiameter && shouldCollide(fixture, a)) {
+        const b = fixture.getBody();
+        const bp = b.getWorldCenter();
+        const bm = b.getMass();
+        const bI = b.getInertia() - bm * b.getLocalCenter().lengthSquared();
+        const invBm = bm > 0 ? 1 / bm : 0;
+        const invBI = bI > 0 ? 1 / bI : 0;
+        const invAm =
+          this.m_flagsBuffer.data[a] &
+          ParticleFlag.b2_wallParticle ? 0 : this.getParticleInvMass();
+        const rp = Vec2.sub(ap, bp);
+        const rpn = Vec2.cross(rp, n);
+        const invM = invAm + invBm + invBI * rpn * rpn;
 
-  //     // Call the contact filter if it's set, to determine whether to
-  //     // filter this contact.  Returns true if contact calculations should
-  //     // be performed, false otherwise.
-  //     shouldCollide(fixture: Fixture,
-  //                   particleIndex: number)
-  //     {
-  //       if (this.m_contactFilter) {
-  //         const flags = this.m_system.getFlagsBuffer();
-  //         if (flags[particleIndex] & ParticleFlag.b2_fixtureContactFilterParticle) {
-  //           return this.m_contactFilter.shouldCollide(fixture, this.m_system,
-  //                               particleIndex);
-  //         }
-  //       }
-  //       return true;
-  //     }
+        const contact =
+          this.m_bodyContactBuffer.append(new b2ParticleBodyContact());
+        contact.index = a;
+        contact.body = b;
+        contact.fixture = fixture;
+        contact.weight = 1 - d * this.m_inverseDiameter;
+        contact.normal.set(Vec2.neg(n));
+        contact.mass = invM > 0 ? 1 / invM : 0;
+        // this.detectStuckParticle(a); // TODO
+      }
+    }
 
-  //     reportFixtureAndParticle(
-  //                 fixture: Fixture, childIndex: number, a: number)
-  //     {
-  //       const ap = this.m_system.m_positionBuffer.data[a];
-  //       const n = new Vec2();
-  //       const d = fixture.computeDistance(ap, n, childIndex);
-  //       if (d < this.m_system.m_particleDiameter && this.shouldCollide(fixture, a)) {
-  //         const b = fixture.getBody();
-  //         const bp = b.getWorldCenter();
-  //         const bm = b.getMass();
-  //         const bI = b.getInertia() - bm * b.getLocalCenter().lengthSquared();
-  //         const invBm = bm > 0 ? 1 / bm : 0;
-  //         const invBI = bI > 0 ? 1 / bI : 0;
-  //         const invAm =
-  //           this.m_system.m_flagsBuffer.data[a] &
-  //           ParticleFlag.b2_wallParticle ? 0 : this.m_system.getParticleInvMass();
-  //         const rp = Vec2.sub(ap, bp);
-  //         const rpn = Vec2.cross(rp, n);
-  //         const invM = invAm + invBm + invBI * rpn * rpn;
+   /* class UpdateBodyContactsCallback extends b2FixtureParticleQueryCallback {
+      private m_contactFilter: b2ContactFilter;
 
-  //         const contact =
-  //           this.m_system.m_bodyContactBuffer.append();
-  //         contact.index = a;
-  //         contact.body = b;
-  //         contact.fixture = fixture;
-  //         contact.weight = 1 - d * this.m_system.m_inverseDiameter;
-  //         contact.normal.set(Vec2.neg(n));
-  //         contact.mass = invM > 0 ? 1 / invM : 0;
-  //         this.m_system.detectStuckParticle(a);
-  //       }
-  //     }
-  //   }
-  //   const callback = new UpdateBodyContactsCallback(this, this.getFixtureContactFilter());
+      constructor(system: b2ParticleSystem, contactFilter: b2ContactFilter) {
+        super(system);
+        this.m_contactFilter = contactFilter;
+      }
 
-  //   const aabb = new AABB();
-  //   this.computeAABB(aabb);
-  //   this.m_world.queryAABB(callback, aabb); // TODO
+      // Call the contact filter if it's set, to determine whether to
+      // filter this contact.  Returns true if contact calculations should
+      // be performed, false otherwise.
+      shouldCollide(fixture: Fixture,
+                    particleIndex: number)
+      {
+        if (this.m_contactFilter) {
+          const flags = this.m_system.getFlagsBuffer();
+          if (flags[particleIndex] & ParticleFlag.b2_fixtureContactFilterParticle) {
+            return this.m_contactFilter.shouldCollide(fixture, this.m_system,
+                                particleIndex);
+          }
+        }
+        return true;
+      }
 
-  //   // if (this.m_def.strictContactCheck) { // LATER
-  //   //   this.removeSpuriousBodyContacts();
-  //   // }
+      reportFixtureAndParticle(
+                  fixture: Fixture, childIndex: number, a: number)
+      {
+        const ap = this.m_system.m_positionBuffer.data[a];
+        const n = new Vec2();
+        const d = fixture.computeDistance(ap, n, childIndex);
+        if (d < this.m_system.m_particleDiameter && this.shouldCollide(fixture, a)) {
+          const b = fixture.getBody();
+          const bp = b.getWorldCenter();
+          const bm = b.getMass();
+          const bI = b.getInertia() - bm * b.getLocalCenter().lengthSquared();
+          const invBm = bm > 0 ? 1 / bm : 0;
+          const invBI = bI > 0 ? 1 / bI : 0;
+          const invAm =
+            this.m_system.m_flagsBuffer.data[a] &
+            ParticleFlag.b2_wallParticle ? 0 : this.m_system.getParticleInvMass();
+          const rp = Vec2.sub(ap, bp);
+          const rpn = Vec2.cross(rp, n);
+          const invM = invAm + invBm + invBI * rpn * rpn;
 
-  //   // this.notifyBodyContactListenerPostContact(fixtureSet); // LATER
-  // }
+          const contact =
+            this.m_system.m_bodyContactBuffer.append();
+          contact.index = a;
+          contact.body = b;
+          contact.fixture = fixture;
+          contact.weight = 1 - d * this.m_system.m_inverseDiameter;
+          contact.normal.set(Vec2.neg(n));
+          contact.mass = invM > 0 ? 1 / invM : 0;
+          this.m_system.detectStuckParticle(a);
+        }
+      }
+    }
+    const callback = new UpdateBodyContactsCallback(this, this.getFixtureContactFilter());*/
 
-  solve(step: TimeStep) { // TODO
-//     if (this.m_count == 0) {
-//       return;
-//     }
+    const callback = fixtureParticleQueryCallback(this, reportFixtureAndParticle);
+
+    const aabb = new AABB();
+    this.computeAABB(aabb);
+    this.m_world.queryAABB(aabb, callback);
+
+    // if (this.m_def.strictContactCheck) { // LATER
+    //   this.removeSpuriousBodyContacts();
+    // }
+
+    // this.notifyBodyContactListenerPostContact(fixtureSet); // LATER
+  }
+
+  solve(step: TimeStep) {
+    if (this.m_count == 0) {
+      return;
+    }
 //     // If particle lifetimes are enabled, destroy particles that are too old.
 // /*    if (this.m_expirationTimeBuffer.data) { // LATER
 //       this.solveLifetimes(step);
 //     }*/
-//     if (this.m_allParticleFlags & ParticleFlag.b2_zombieParticle) {
-//       this.solveZombie(); // TODO
-//     }
-//     if (this.m_needsUpdateAllParticleFlags) {
-//       this.updateAllParticleFlags();
-//     }
-//     if (this.m_needsUpdateAllGroupFlags) {
-//       this.updateAllGroupFlags();
-//     }
-//     if (this.m_paused) {
-//       return;
-//     }
-//     for (this.m_iterationIndex = 0;
-//       this.m_iterationIndex < step.particleIterations;
-//       this.m_iterationIndex++)
-//     {
-//       ++this.m_timestamp;
-//       const subStep = new TimeStep(); // TODO reuse instance (also we don't need all properties)
-//       subStep.dt = step.dt / step.particleIterations;
-//       subStep.inv_dt = step.inv_dt * step.particleIterations;
-//       subStep.velocityIterations = step.velocityIterations;
-//       subStep.positionIterations = step.positionIterations;
-//       subStep.particleIterations = step.particleIterations;
-//       subStep.warmStarting = step.warmStarting;
-//       subStep.blockSolve = step.blockSolve;
-//       subStep.inv_dt0 = step.inv_dt0;
-//       subStep.dtRatio = step.dtRatio;
-//       this.updateContacts(false);
-//       this.updateBodyContacts(); // TODO
-//       this.computeWeight();
+    // if (this.m_allParticleFlags & ParticleFlag.b2_zombieParticle) {
+    //   this.solveZombie(); // TODO
+    // }
+    if (this.m_needsUpdateAllParticleFlags) {
+      this.updateAllParticleFlags();
+    }
+    if (this.m_needsUpdateAllGroupFlags) {
+      this.updateAllGroupFlags();
+    }
+    if (this.m_paused) {
+      return;
+    }
+    for (this.m_iterationIndex = 0;
+      this.m_iterationIndex < step.particleIterations;
+      this.m_iterationIndex++)
+    {
+      ++this.m_timestamp;
+      const subStep = new TimeStep(); // TODO reuse instance (also we don't need all properties)
+      subStep.dt = step.dt / step.particleIterations;
+      subStep.inv_dt = step.inv_dt * step.particleIterations;
+      subStep.velocityIterations = step.velocityIterations;
+      subStep.positionIterations = step.positionIterations;
+      subStep.particleIterations = step.particleIterations;
+      subStep.warmStarting = step.warmStarting;
+      subStep.blockSolve = step.blockSolve;
+      subStep.inv_dt0 = step.inv_dt0;
+      subStep.dtRatio = step.dtRatio;
+      this.updateContacts(false);
+      this.updateBodyContacts();
+      this.computeWeight();
 //       if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_particleGroupNeedsUpdateDepth) {
 //         this.computeDepth(); // TODO
 //       }
 //       if (this.m_allParticleFlags & ParticleFlag.b2_reactiveParticle) {
 //         this.updatePairsAndTriadsWithReactiveParticles(); // TODO
 //       }
-//       if (this.m_hasForce) {
-//         this.solveForce(subStep);
-//       }
+      if (this.m_hasForce) {
+        this.solveForce(subStep);
+      }
 //       if (this.m_allParticleFlags & ParticleFlag.b2_viscousParticle) {
 //         this.solveViscous(); // TODO
 //       }
@@ -3949,12 +4021,12 @@ private:
 //       // if (this.m_allParticleFlags & ParticleFlag.b2_colorMixingParticle) {
 //       //   this.solveColorMixing(); // LATER
 //       // }
-//       this.solveGravity(subStep);
+      this.solveGravity(subStep);
 //       if (this.m_allParticleFlags & ParticleFlag.b2_staticPressureParticle) {
 //         this.solveStaticPressure(subStep); // TODO
 //       }
-//       this.solvePressure(subStep); // TODO
-//       this.solveDamping(subStep); // TODO
+      this.solvePressure(subStep);
+      this.solveDamping(subStep);
 //       if (this.m_allParticleFlags & b2ParticleSystem.k_extraDampingFlags) {
 //         this.solveExtraDamping(); // TODO
 //       }
@@ -3966,120 +4038,179 @@ private:
 //       if (this.m_allParticleFlags & ParticleFlag.b2_springParticle) {
 //         this.solveSpring(subStep);
 //       }
-//       this.limitVelocity(subStep);
+      this.limitVelocity(subStep);
 //       if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_rigidParticleGroup) {
 //         this.solveRigidDamping(); // TODO
 //       }
 //       if (this.m_allParticleFlags & ParticleFlag.b2_barrierParticle) {
 //         this.solveBarrier(subStep); // TODO
 //       }
-//       // SolveCollision, SolveRigid and SolveWall should be called after
-//       // other force functions because they may require particles to have
-//       // specific velocities.
-//       this.solveCollision(subStep); // TODO
+      // SolveCollision, SolveRigid and SolveWall should be called after
+      // other force functions because they may require particles to have
+      // specific velocities.
+      this.solveCollision(subStep);
 //       if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_rigidParticleGroup) {
 //         this.solveRigid(subStep); // TODO
 //       }
 //       if (this.m_allParticleFlags & ParticleFlag.b2_wallParticle) {
 //         this.solveWall();
 //       }
-//       // The particle positions can be updated only at the end of substep.
-//       for (let i = 0; i < this.m_count; i++) {
-//         this.m_positionBuffer.data[i].addMul(subStep.dt, this.m_velocityBuffer.data[i]);
-//       }
-//     }
+      // The particle positions can be updated only at the end of substep.
+      for (let i = 0; i < this.m_count; i++) {
+        this.m_positionBuffer.data[i].addMul(subStep.dt, this.m_velocityBuffer.data[i]);
+      }
+    }
   }
-  // solveCollision(step: TimeStep) {
-  //   // This function detects particles which are crossing boundary of bodies
-  //   // and modifies velocities of them so that they will move just in front of
-  //   // boundary. This function function also applies the reaction force to
-  //   // bodies as precisely as the numerical stability is kept.
-  //   const aabb = new AABB();
-  //   aabb.lowerBound.x = +Infinity;
-  //   aabb.lowerBound.y = +Infinity;
-  //   aabb.upperBound.x = -Infinity;
-  //   aabb.upperBound.y = -Infinity;
-  //   for (let i = 0; i < this.m_count; i++) {
-  //     const v = this.m_velocityBuffer.data[i];
-  //     const p1 = this.m_positionBuffer.data[i];
-  //     const p2 = Vec2.combine(1, p1, step.dt, v);
-  //     aabb.lowerBound = Vec2.lower(aabb.lowerBound, Vec2.lower(p1, p2));
-  //     aabb.upperBound = Vec2.upper(aabb.upperBound, Vec2.upper(p1, p2)); // TODO more performant Solution
-  //   }
-  //   class SolveCollisionCallback extends b2FixtureParticleQueryCallback {
-  //     private m_step: TimeStep;
-  //     private m_contactFilter: b2ContactFilter;
+  solveCollision(step: TimeStep) {
+    // This function detects particles which are crossing boundary of bodies
+    // and modifies velocities of them so that they will move just in front of
+    // boundary. This function function also applies the reaction force to
+    // bodies as precisely as the numerical stability is kept.
+    const aabb = new AABB();
+    aabb.lowerBound.x = +Infinity;
+    aabb.lowerBound.y = +Infinity;
+    aabb.upperBound.x = -Infinity;
+    aabb.upperBound.y = -Infinity;
+    for (let i = 0; i < this.m_count; i++) {
+      const v = this.m_velocityBuffer.data[i];
+      const p1 = this.m_positionBuffer.data[i];
+      const p2 = Vec2.combine(1, p1, step.dt, v);
+      aabb.lowerBound = Vec2.lower(aabb.lowerBound, Vec2.lower(p1, p2));
+      aabb.upperBound = Vec2.upper(aabb.upperBound, Vec2.upper(p1, p2)); // TODO more performant Solution
+    }
+    const m_contactFilter = null; // this.getFixtureContactFilter() TODO
+    // Call the contact filter if it's set, to determine whether to
+    // filter this contact.  Returns true if contact calculations should
+    // be performed, false otherwise.
+    const shouldCollide = (fixture: Fixture, particleIndex: number) => {
+      if (m_contactFilter) {
+        const flags = this.getFlagsBuffer();
+        if (flags[particleIndex] & ParticleFlag.b2_fixtureContactFilterParticle) {
+          return m_contactFilter.shouldCollide(fixture, this,
+                            particleIndex);
+        }
+      }
+      return true;
+    }
+    const reportFixtureAndParticle = (
+      fixture: Fixture, childIndex: number, a: number) => {
+      if (shouldCollide(fixture, a)) {
+        const body = fixture.getBody();
+        const ap = this.m_positionBuffer.data[a];
+        const av = this.m_velocityBuffer.data[a];
+        const output = {} as RayCastOutput; // TODO shape not constant -> deoptimization?
+        const input = {} as RayCastInput;
+        if (this.m_iterationIndex == 0) {
+          // Put 'ap' in the local space of the previous frame
+          let p1 = Transform.mulTVec2(body.m_xf0, ap);
+          if (fixture.getShape().getType() == CircleShape.TYPE) {
+            // Make relative to the center of the circle
+            p1.sub(body.getLocalCenter());
+            // Re-apply rotation about the center of the
+            // circle
+            p1 = Rot.mulVec2(body.m_xf0.q, p1); // TODO can we mutate p1 directly?
+            // Subtract rotation of the current frame
+            p1 = Rot.mulTVec2(body.m_xf.q, p1);
+            // Return to local space
+            p1.add(body.getLocalCenter());
+          }
+          // Return to global space and apply rotation of current frame
+          input.p1 = Transform.mulVec2(body.m_xf, p1);
+        } else {
+          input.p1 = ap; // TODO maybe clone here
+        }
+        input.p2 = Vec2.combine(1, ap, step.dt, av);
+        input.maxFraction = 1;
+        if (fixture.rayCast(output, input, childIndex)) {
+          const n = output.normal;
+          const p = Vec2.combine3(
+            (1 - output.fraction), input.p1,
+            output.fraction, input.p2,
+            linearSlop, n
+          );
+          const v = Vec2.sub(p, ap).mul(step.inv_dt);
+          this.m_velocityBuffer.data[a] = v;
+          const f = Vec2.sub(av, v).mul(step.inv_dt *
+            this.getParticleMass());
+          this.particleApplyForce(a, f);
+        }
+      }
+    }
+    const solveCollisionCallback = fixtureParticleQueryCallback(this, reportFixtureAndParticle);
+   /* class SolveCollisionCallback extends b2FixtureParticleQueryCallback {
+      private m_step: TimeStep;
+      private m_contactFilter: b2ContactFilter;
 
-  //     constructor(system: b2ParticleSystem, step: TimeStep, contactFilter: b2ContactFilter) {
-  //       super(system)
-  //       this.m_step = step;
-  //       this.m_contactFilter = contactFilter;
-  //     }
+      constructor(system: b2ParticleSystem, step: TimeStep, contactFilter: b2ContactFilter) {
+        super(system)
+        this.m_step = step;
+        this.m_contactFilter = contactFilter;
+      }
 
-  //     // Call the contact filter if it's set, to determine whether to
-  //     // filter this contact.  Returns true if contact calculations should
-  //     // be performed, false otherwise.
-  //     shouldCollide(fixture: Fixture,
-  //                   particleIndex: number) {
-  //       if (this.m_contactFilter) {
-  //         const flags = this.m_system.getFlagsBuffer();
-  //         if (flags[particleIndex] & ParticleFlag.b2_fixtureContactFilterParticle) {
-  //           return this.m_contactFilter.shouldCollide(fixture, this.m_system,
-  //                               particleIndex);
-  //         }
-  //       }
-  //       return true;
-  //     }
+      // Call the contact filter if it's set, to determine whether to
+      // filter this contact.  Returns true if contact calculations should
+      // be performed, false otherwise.
+      shouldCollide(fixture: Fixture,
+                    particleIndex: number) {
+        if (this.m_contactFilter) {
+          const flags = this.m_system.getFlagsBuffer();
+          if (flags[particleIndex] & ParticleFlag.b2_fixtureContactFilterParticle) {
+            return this.m_contactFilter.shouldCollide(fixture, this.m_system,
+                                particleIndex);
+          }
+        }
+        return true;
+      }
   
-  //     reportFixtureAndParticle(
-  //                 fixture: Fixture, childIndex: number, a: number)
-  //     {
-  //       if (this.shouldCollide(fixture, a)) {
-  //         const body = fixture.getBody();
-  //         const ap = this.m_system.m_positionBuffer.data[a];
-  //         const av = this.m_system.m_velocityBuffer.data[a];
-  //         const output = {} as RayCastOutput; // TODO shape not constant -> deoptimization?
-  //         const input = {} as RayCastInput;
-  //         if (this.m_system.m_iterationIndex == 0) {
-  //           // Put 'ap' in the local space of the previous frame
-  //           let p1 = Transform.mulTVec2(body.m_xf0, ap);
-  //           if (fixture.getShape().getType() == CircleShape.TYPE) {
-  //             // Make relative to the center of the circle
-  //             p1.sub(body.getLocalCenter());
-  //             // Re-apply rotation about the center of the
-  //             // circle
-  //             p1 = Rot.mulVec2(body.m_xf0.q, p1); // TODO can we mutate p1 directly?
-  //             // Subtract rotation of the current frame
-  //             p1 = Rot.mulTVec2(body.m_xf.q, p1);
-  //             // Return to local space
-  //             p1.add(body.getLocalCenter());
-  //           }
-  //           // Return to global space and apply rotation of current frame
-  //           input.p1 = Transform.mulVec2(body.m_xf, p1);
-  //         } else {
-  //           input.p1 = ap; // TODO maybe clone here
-  //         }
-  //         input.p2 = Vec2.combine(1, ap, this.m_step.dt, av);
-  //         input.maxFraction = 1;
-  //         if (fixture.rayCast(output, input, childIndex)) {
-  //           const n = output.normal;
-  //           const p = Vec2.combine3(
-  //             (1 - output.fraction), input.p1,
-  //             output.fraction, input.p2,
-  //             linearSlop, n
-  //           );
-  //           const v = Vec2.sub(p, ap).mul(this.m_step.inv_dt);
-  //           this.m_system.m_velocityBuffer.data[a] = v;
-  //           const f = Vec2.sub(av, v).mul(this.m_step.inv_dt *
-  //             this.m_system.getParticleMass());
-  //           this.m_system.particleApplyForce(a, f);
-  //         }
-  //       }
-  //     }
-  //   }
-  //   const callback = new SolveCollisionCallback(this, step, this.getFixtureContactFilter());
-  //   this.m_world.queryAABB(callback, aabb);
-  // }
+      reportFixtureAndParticle(
+                  fixture: Fixture, childIndex: number, a: number)
+      {
+        if (this.shouldCollide(fixture, a)) {
+          const body = fixture.getBody();
+          const ap = this.m_system.m_positionBuffer.data[a];
+          const av = this.m_system.m_velocityBuffer.data[a];
+          const output = {} as RayCastOutput; // TODO shape not constant -> deoptimization?
+          const input = {} as RayCastInput;
+          if (this.m_system.m_iterationIndex == 0) {
+            // Put 'ap' in the local space of the previous frame
+            let p1 = Transform.mulTVec2(body.m_xf0, ap);
+            if (fixture.getShape().getType() == CircleShape.TYPE) {
+              // Make relative to the center of the circle
+              p1.sub(body.getLocalCenter());
+              // Re-apply rotation about the center of the
+              // circle
+              p1 = Rot.mulVec2(body.m_xf0.q, p1); // TODO can we mutate p1 directly?
+              // Subtract rotation of the current frame
+              p1 = Rot.mulTVec2(body.m_xf.q, p1);
+              // Return to local space
+              p1.add(body.getLocalCenter());
+            }
+            // Return to global space and apply rotation of current frame
+            input.p1 = Transform.mulVec2(body.m_xf, p1);
+          } else {
+            input.p1 = ap; // TODO maybe clone here
+          }
+          input.p2 = Vec2.combine(1, ap, this.m_step.dt, av);
+          input.maxFraction = 1;
+          if (fixture.rayCast(output, input, childIndex)) {
+            const n = output.normal;
+            const p = Vec2.combine3(
+              (1 - output.fraction), input.p1,
+              output.fraction, input.p2,
+              linearSlop, n
+            );
+            const v = Vec2.sub(p, ap).mul(this.m_step.inv_dt);
+            this.m_system.m_velocityBuffer.data[a] = v;
+            const f = Vec2.sub(av, v).mul(this.m_step.inv_dt *
+              this.m_system.getParticleMass());
+            this.m_system.particleApplyForce(a, f);
+          }
+        }
+      }
+    }
+    const callback = new SolveCollisionCallback(this, step, this.getFixtureContactFilter());*/
+    this.m_world.queryAABB(aabb, solveCollisionCallback);
+  }
   limitVelocity(step: TimeStep) {
     const criticalVelocitySquared = this.getCriticalVelocitySquared(step);
     for (let i = 0; i < this.m_count; i++) {
