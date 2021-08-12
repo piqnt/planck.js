@@ -409,7 +409,7 @@ export class b2ParticleGroup {
   updateStatistics() {
     if (this.m_timestamp != this.m_system.m_timestamp) {
       const m = this.m_system.getParticleMass();
-      let m_mass = 0;
+      this.m_mass = 0;
       this.m_center.setZero();
       this.m_linearVelocity.setZero();
       for (let i = this.m_firstIndex; i < this.m_lastIndex; i++) {
@@ -418,8 +418,8 @@ export class b2ParticleGroup {
         this.m_linearVelocity.addMul(m, this.m_system.m_velocityBuffer.data[i]);
       }
       if (this.m_mass > 0) {
-        this.m_center.mul(1 / m_mass);
-        this.m_linearVelocity.mul(1 / m_mass);
+        this.m_center.mul(1 / this.m_mass);
+        this.m_linearVelocity.mul(1 / this.m_mass);
       }
       this.m_inertia = 0;
       this.m_angularVelocity = 0;

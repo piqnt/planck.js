@@ -43,7 +43,7 @@ export default class Transform {
   /** rotation */
   q: Rot;
 
-  constructor(position?: Vec2, rotation?: number) {
+  constructor(position?: Vec2, rotation?: number | Rot) {
     if (!(this instanceof Transform)) {
       return new Transform(position, rotation);
     }

@@ -2980,7 +2980,7 @@ private:
         if (!(flags & ParticleFlag.b2_zombieParticle) &&
           particleCanBeConnected(flags, group)) {
           diagram.addGenerator(
-            this.m_positionBuffer.data[i], i, filter.isNecessary(i));
+            this.m_positionBuffer.data[i].clone(), i, filter.isNecessary(i));
         }
       }
       const stride = this.getParticleStride();
@@ -3994,9 +3994,9 @@ private:
       this.updateContacts(false);
       this.updateBodyContacts();
       this.computeWeight();
-//       if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_particleGroupNeedsUpdateDepth) {
-//         this.computeDepth(); // TODO
-//       }
+      if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_particleGroupNeedsUpdateDepth) {
+        this.computeDepth(); // TODO
+      }
 //       if (this.m_allParticleFlags & ParticleFlag.b2_reactiveParticle) {
 //         this.updatePairsAndTriadsWithReactiveParticles(); // TODO
 //       }
@@ -4015,9 +4015,9 @@ private:
 //       if (this.m_allParticleFlags & ParticleFlag.b2_tensileParticle) {
 //         this.solveTensile(subStep); // TODO
 //       }
-//       if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_solidParticleGroup) {
-//         this.solveSolid(subStep); // TODO
-//       }
+      if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_solidParticleGroup) {
+        this.solveSolid(subStep); // TODO
+      }
 //       // if (this.m_allParticleFlags & ParticleFlag.b2_colorMixingParticle) {
 //       //   this.solveColorMixing(); // LATER
 //       // }
@@ -4030,18 +4030,18 @@ private:
 //       if (this.m_allParticleFlags & b2ParticleSystem.k_extraDampingFlags) {
 //         this.solveExtraDamping(); // TODO
 //       }
-//       // SolveElastic and SolveSpring refer the current velocities for
-//       // numerical stability, they should be called as late as possible.
-//       if (this.m_allParticleFlags & ParticleFlag.b2_elasticParticle) {
-//         this.solveElastic(subStep); // TODO
-//       }
-//       if (this.m_allParticleFlags & ParticleFlag.b2_springParticle) {
-//         this.solveSpring(subStep);
-//       }
+      // SolveElastic and SolveSpring refer the current velocities for
+      // numerical stability, they should be called as late as possible.
+      if (this.m_allParticleFlags & ParticleFlag.b2_elasticParticle) {
+        this.solveElastic(subStep); // TODO
+      }
+      if (this.m_allParticleFlags & ParticleFlag.b2_springParticle) {
+        this.solveSpring(subStep);
+      }
       this.limitVelocity(subStep);
-//       if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_rigidParticleGroup) {
-//         this.solveRigidDamping(); // TODO
-//       }
+      if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_rigidParticleGroup) {
+        this.solveRigidDamping(); // TODO
+      }
 //       if (this.m_allParticleFlags & ParticleFlag.b2_barrierParticle) {
 //         this.solveBarrier(subStep); // TODO
 //       }
@@ -4049,9 +4049,9 @@ private:
       // other force functions because they may require particles to have
       // specific velocities.
       this.solveCollision(subStep);
-//       if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_rigidParticleGroup) {
-//         this.solveRigid(subStep); // TODO
-//       }
+      if (this.m_allGroupFlags & b2ParticleGroupFlag.b2_rigidParticleGroup) {
+        this.solveRigid(subStep); // TODO
+      }
 //       if (this.m_allParticleFlags & ParticleFlag.b2_wallParticle) {
 //         this.solveWall();
 //       }
@@ -4613,11 +4613,11 @@ private:
     for (let group = this.m_groupList; group; group = group.getNext()) {
       if (group.m_groupFlags & b2ParticleGroupFlag.b2_rigidParticleGroup) {
         group.updateStatistics();
-        const rotation = step.dt * group.m_angularVelocity;
+        const rotation = new Rot(step.dt * group.m_angularVelocity);
         const transform = new Transform(Vec2.combine3(
           1, group.m_center,
           step.dt, group.m_linearVelocity,
-          -1, Vec2.mul(rotation, group.m_center)
+          -1, Rot.mul(rotation, group.m_center)
         ), rotation)
         group.m_transform = Transform.mulXf(transform, group.m_transform);
         const velocityTransform = new Transform();
