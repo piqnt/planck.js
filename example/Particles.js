@@ -16,11 +16,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-// TODO export enums
-const b2_rigidParticleGroup = 1 << 1;
-const b2_solidParticleGroup = 1 << 0;
-
-planck.testbed('RigidPaticles', function(testbed) {
+planck.testbed('Particles', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
 
   var world = new pl.World({
@@ -44,7 +40,7 @@ planck.testbed('RigidPaticles', function(testbed) {
       Vec2(-4, -0.1),
       Vec2(-2, -0.1),
       Vec2(-2, 2),
-      Vec2(-4, 2)
+      Vec2(-4, 3)
     ]);
     ground.createFixture(shape, 0.0);
   }
@@ -53,38 +49,25 @@ planck.testbed('RigidPaticles', function(testbed) {
     const shape = pl.Polygon([
       Vec2(2, -0.1),
       Vec2(4, -0.1),
-      Vec2(4, 2),
+      Vec2(4, 3),
       Vec2(2, 2)
     ]);
     ground.createFixture(shape, 0.0);
   }
 
+  var particleType = 0; // TestMain::GetParticleParameterValue(); // TODO
   var particleSystem = world.createParticleSystem({
-    radius: 0.035,
+    radius: 0.025,
+    dampingStrength: 0.2,
   });
 
-  particleSystem.createParticleGroup({
-    groupFlags: b2_rigidParticleGroup | b2_solidParticleGroup,
-    shape: pl.Circle(Vec2(0, 3), 0.5)
-    // color: (255, 0, 0, 255) // TODO
+  const group = particleSystem.createParticleGroup({
+    flags: particleType,
+    shape: pl.Circle(Vec2(0, 3), 2)
   });
-
-  particleSystem.createParticleGroup({
-    groupFlags: b2_rigidParticleGroup | b2_solidParticleGroup,
-    shape: pl.Circle(Vec2(-1, 3), 0.5)
-    // color: (0, 255, 0, 255); // TODO
-  });
-
-  {
-    particleSystem.createParticleGroup({
-      groupFlags: b2_rigidParticleGroup | b2_solidParticleGroup,
-      position: Vec2(1, 4),
-      angle: -0.5,
-      angularVelocity: 2.0,
-      shape: pl.Box(1, 0.5)
-      // color: (0, 0, 255, 255); // TODO
-    });
-  }
+  // if (pd.flags & b2_colorMixingParticle) {
+  //    ColorParticleGroup(group, 0); // TODO
+  // }
 
   {
     const body = world.createDynamicBody();
@@ -92,7 +75,7 @@ planck.testbed('RigidPaticles', function(testbed) {
     body.createFixture(shape, 0.5);
   }
 
-	testbed.x = 0;
+  testbed.x = 0;
   testbed.y = 0;
   testbed.width = 10;
   testbed.height = 10;
