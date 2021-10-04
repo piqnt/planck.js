@@ -5,7 +5,7 @@ export default options => context => node => {
 }
 
 function visitor(factory, node, options) {
-  if (node.kind !== ts.SyntaxKind.ClassDeclaration ||
+  if (!ts.isClassDeclaration(node) ||
       !isClassIncluded(node.name.escapedText, options)) {
     return node;
   }
@@ -40,7 +40,7 @@ function createConstNodeWithStaticMethods(factory, node) {
         factory.createTypeLiteralNode([
           // constructors
           ...node.members
-            .filter(member => member.kind === ts.SyntaxKind.Constructor)
+            .filter(ts.isConstructorDeclaration)
             .flatMap(member => [
               factory.createConstructSignature(
                 undefined,
@@ -61,8 +61,8 @@ function createConstNodeWithStaticMethods(factory, node) {
             ]),
           // static properties
           ...node.members
-            .filter(member => member.modifiers?.some?.(modifier => modifier.kind === ts.SyntaxKind.StaticKeyword))
-            .filter(member => !member.modifiers?.some?.(modifier => modifier.kind === ts.SyntaxKind.PrivateKeyword))
+            .filter(member => hasModifier(ts.SyntaxKind.StaticKeyword, member))
+            .filter(member => !hasModifier(ts.SyntaxKind.PrivateKeyword, member))
             .map(member => declarationToSignature(factory, member))
           ]
         ),
@@ -82,11 +82,15 @@ function createInterfaceWithMethods(factory, node) {
     node.heritageClauses,
     // instance properties
     node.members
-      .filter(member => member.kind !== ts.SyntaxKind.Constructor)
-      .filter(member => !member.modifiers?.some?.(modifier => modifier.kind === ts.SyntaxKind.StaticKeyword))
-      .filter(member => !member.modifiers?.some?.(modifier => modifier.kind === ts.SyntaxKind.PrivateKeyword))
+      .filter(member => !ts.isConstructorDeclaration(member))
+      .filter(member => !hasModifier(ts.SyntaxKind.StaticKeyword, member))
+      .filter(member => !hasModifier(ts.SyntaxKind.PrivateKeyword, member))
       .map(member => declarationToSignature(factory, member))
   );
+}
+
+function hasModifier(kind, node) {
+  return node.modifiers?.some?.(modifier => modifier.kind === kind)
 }
 
 function declarationToSignature(factory, node) {
@@ -114,7 +118,7 @@ function declarationToSignature(factory, node) {
 function createNodeWithFactories(factory, node) {
   return [
     ...node.members
-      .filter(member => member.kind === ts.SyntaxKind.Constructor)
+      .filter(ts.isConstructorDeclaration)
       .map(member => member.parameters)
       .map(parameters => createFunctionDeclaration(factory, node.name, parameters)),
     node
