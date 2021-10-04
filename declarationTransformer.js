@@ -46,7 +46,7 @@ function createConstNodeWithStaticMethods(factory, node) {
                 undefined,
                 member.parameters,
                 factory.createTypeReferenceNode(
-                  factory.createIdentifier(node.name.escapedText),
+                  node.name,
                   undefined
                 )
               ),
@@ -54,7 +54,7 @@ function createConstNodeWithStaticMethods(factory, node) {
                 undefined,
                 member.parameters,
                 factory.createTypeReferenceNode(
-                  factory.createIdentifier(node.name.escapedText),
+                  node.name,
                   undefined
                 )
               )
@@ -114,23 +114,23 @@ function declarationToSignature(factory, node) {
 function createNodeWithFactories(factory, node) {
   return [
     ...node.members
-      .filter(node => node.kind === ts.SyntaxKind.Constructor)
-      .map(node => node.parameters)
-      .map(parameters => createFunctionDeclaration(factory, node.name.escapedText, parameters)),
+      .filter(member => member.kind === ts.SyntaxKind.Constructor)
+      .map(member => member.parameters)
+      .map(parameters => createFunctionDeclaration(factory, node.name, parameters)),
     node
   ]
 }
 
-function createFunctionDeclaration(factory, className, parameters) {
+function createFunctionDeclaration(factory, identifier, parameters) {
   return factory.createFunctionDeclaration(
     undefined,
     [factory.createModifier(ts.SyntaxKind.DeclareKeyword)],
     undefined,
-    factory.createIdentifier(className),
+    identifier,
     undefined,
     parameters,
     factory.createTypeReferenceNode(
-      factory.createIdentifier(className),
+      identifier,
       undefined
     ),
     undefined
