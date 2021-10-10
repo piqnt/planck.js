@@ -70,11 +70,11 @@ function createConstNodeWithStaticMethods(factory, node) {
       )],
       ts.NodeFlags.Const | ts.NodeFlags.Ambient | ts.NodeFlags.ContextFlags
     )
-  )  
+  );
 }
 
 function createInterfaceWithMethods(factory, node) {
-  return factory.createInterfaceDeclaration(
+  const result = factory.createInterfaceDeclaration(
     undefined,
     [factory.createModifier(ts.SyntaxKind.DeclareKeyword)],
     node.name,
@@ -87,23 +87,26 @@ function createInterfaceWithMethods(factory, node) {
       .filter(member => !hasModifier(ts.SyntaxKind.PrivateKeyword, member))
       .map(member => declarationToSignature(factory, member))
   );
+  return copyComments(result, node);
 }
 
 function hasModifier(kind, node) {
-  return node.modifiers?.some?.(modifier => modifier.kind === kind)
+  return node.modifiers?.some?.(modifier => modifier.kind === kind);
 }
 
 function declarationToSignature(factory, node) {
+  let result;
   switch (node.kind) {
     case ts.SyntaxKind.PropertyDeclaration:
-      return factory.createPropertySignature(
+      result = factory.createPropertySignature(
         undefined,
         node.name,
         undefined,
         node.type
       );
+      break;
     case ts.SyntaxKind.MethodDeclaration:
-      return factory.createMethodSignature(
+      result = factory.createMethodSignature(
         undefined,
         node.name,
         undefined,
@@ -111,8 +114,11 @@ function declarationToSignature(factory, node) {
         node.parameters,
         node.type
       );
+      break;
+    default:
+      throw new Error(`Could not convert node of kind ${node.kind} to signature.`);
   }
-  throw new Error(`Could not convert node of kind ${node.kind} to signature.`);
+  return copyComments(result, node);
 }
 
 function createNodeWithFactories(factory, node) {
@@ -120,23 +126,30 @@ function createNodeWithFactories(factory, node) {
     ...node.members
       .filter(ts.isConstructorDeclaration)
       .map(member => member.parameters)
-      .map(parameters => createFunctionDeclaration(factory, node.name, parameters)),
+      .map(parameters => createFunctionDeclaration(factory, node, parameters)),
     node
-  ]
+  ];
 }
 
-function createFunctionDeclaration(factory, identifier, parameters) {
-  return factory.createFunctionDeclaration(
+function createFunctionDeclaration(factory, node, parameters) {
+  const result = factory.createFunctionDeclaration(
     undefined,
     [factory.createModifier(ts.SyntaxKind.DeclareKeyword)],
     undefined,
-    identifier,
+    node.name,
     undefined,
     parameters,
     factory.createTypeReferenceNode(
-      identifier,
+      node.name,
       undefined
     ),
     undefined
-  )
+  );
+  return copyComments(result, node);
+}
+
+function copyComments(node, original) {
+  ts.setSyntheticLeadingComments(node, ts.getSyntheticLeadingComments(original));
+  ts.setSyntheticTrailingComments(node, ts.getSyntheticTrailingComments(original));
+  return node;
 }
