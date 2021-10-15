@@ -892,7 +892,7 @@ export default class Body {
    * @param point The world position of the point of application.
    * @param wake Also wake up the body
    */
-  applyForce(force: Vec2, point: Vec2, wake?: boolean): void {
+  applyForce(force: Vec2, point: Vec2, wake: boolean = true): void {
     if (this.m_type != DYNAMIC) {
       return;
     }
@@ -912,7 +912,7 @@ export default class Body {
    * @param force The world force vector, usually in Newtons (N).
    * @param wake Also wake up the body
    */
-  applyForceToCenter(force: Vec2, wake?: boolean): void {
+  applyForceToCenter(force: Vec2, wake: boolean = true): void {
     if (this.m_type != DYNAMIC) {
       return;
     }
@@ -932,7 +932,7 @@ export default class Body {
    * @param torque About the z-axis (out of the screen), usually in N-m.
    * @param wake Also wake up the body
    */
-  applyTorque(torque: number, wake?: boolean): void {
+  applyTorque(torque: number, wake: boolean = true): void {
     if (this.m_type != DYNAMIC) {
       return;
     }
@@ -954,7 +954,7 @@ export default class Body {
    * @param point The world position of the point of application.
    * @param wake Also wake up the body
    */
-  applyLinearImpulse(impulse: Vec2, point: Vec2, wake?: boolean): void {
+  applyLinearImpulse(impulse: Vec2, point: Vec2, wake: boolean = true): void {
     if (this.m_type != DYNAMIC) {
       return;
     }
@@ -975,7 +975,7 @@ export default class Body {
    * @param impulse The angular impulse in units of kg*m*m/s
    * @param wake Also wake up the body
    */
-  applyAngularImpulse(impulse: number, wake?: boolean): void {
+  applyAngularImpulse(impulse: number, wake: boolean = true): void {
     if (this.m_type != DYNAMIC) {
       return;
     }
