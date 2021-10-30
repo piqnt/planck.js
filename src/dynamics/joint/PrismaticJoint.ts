@@ -122,7 +122,7 @@ const DEFAULTS = {
  * motion or to model joint friction.
  */
 export default class PrismaticJoint extends Joint {
-  static TYPE: 'prismatic-joint' = 'prismatic-joint';
+  static TYPE = 'prismatic-joint' as const;
 
   /** @internal */ m_type: 'prismatic-joint';
   /** @internal */ m_localAnchorA: Vec2;

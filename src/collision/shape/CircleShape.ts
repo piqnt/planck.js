@@ -37,7 +37,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
 export default class CircleShape extends Shape {
-  static TYPE: 'circle' = 'circle';
+  static TYPE = 'circle' as const;
 
   m_p: Vec2;
 

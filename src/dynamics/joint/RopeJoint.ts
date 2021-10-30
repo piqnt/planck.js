@@ -80,7 +80,7 @@ const DEFAULTS = {
  * want to dynamically control length.
  */
 export default class RopeJoint extends Joint {
-  static TYPE: 'rope-joint' = 'rope-joint';
+  static TYPE = 'rope-joint' as const;
 
   /** @internal */ m_type: 'rope-joint';
   /** @internal */ m_localAnchorA: Vec2;

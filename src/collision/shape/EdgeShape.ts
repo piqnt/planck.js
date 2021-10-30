@@ -37,7 +37,7 @@ import { DistanceProxy } from '../Distance';
  * contact normals.
  */
 export default class EdgeShape extends Shape {
-  static TYPE: 'edge' = 'edge';
+  static TYPE = 'edge' as const;
 
   // These are the edge vertices
   m_vertex1: Vec2;

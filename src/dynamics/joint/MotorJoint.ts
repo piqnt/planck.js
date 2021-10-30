@@ -79,7 +79,7 @@ const DEFAULTS = {
  * the ground.
  */
 export default class MotorJoint extends Joint {
-  static TYPE: 'motor-joint' = 'motor-joint';
+  static TYPE = 'motor-joint' as const;
 
   /** @internal */ m_type: 'motor-joint';
   /** @internal */ m_linearOffset: Vec2;

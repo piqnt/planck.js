@@ -100,7 +100,7 @@ const DEFAULTS = {
  * This joint is designed for vehicle suspensions.
  */
 export default class WheelJoint extends Joint {
-  static TYPE: 'wheel-joint' = 'wheel-joint';
+  static TYPE = 'wheel-joint' as const;
 
   /** @internal */ m_type: 'wheel-joint';
   /** @internal */ m_localAnchorA: Vec2;

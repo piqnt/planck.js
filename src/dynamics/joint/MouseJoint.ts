@@ -86,7 +86,7 @@ const DEFAULTS = {
  * at the testbed.
  */
 export default class MouseJoint extends Joint {
-  static TYPE: 'mouse-joint' = 'mouse-joint';
+  static TYPE = 'mouse-joint' as const;
 
   /** @internal */ m_type: 'mouse-joint';
   /** @internal */ m_targetA: Vec2;
