@@ -58,7 +58,8 @@ function createConstNodeWithStaticMethods(factory, node) {
                   undefined
                 )
               )
-            ]),
+            ].map(node => copyComments(node, member))
+          ),
           // static properties
           ...node.members
             .filter(member => hasModifier(ts.SyntaxKind.StaticKeyword, member))
