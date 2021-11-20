@@ -128,7 +128,7 @@ const DEFAULTS = {
  * so that infinite forces are not generated.
  */
 export default class RevoluteJoint extends Joint {
-  static TYPE: 'revolute-joint' = 'revolute-joint';
+  static TYPE = 'revolute-joint' as const;
 
   /** @internal */ m_type: 'revolute-joint';
   /** @internal */ m_localAnchorA: Vec2;

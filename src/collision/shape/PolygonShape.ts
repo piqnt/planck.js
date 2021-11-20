@@ -44,7 +44,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * for a convex polygon. extends Shape
  */
 export default class PolygonShape extends Shape {
-  static TYPE: 'polygon' = 'polygon';
+  static TYPE = 'polygon' as const;
 
   m_centroid: Vec2;
   m_vertices: Vec2[]; // [Settings.maxPolygonVertices]

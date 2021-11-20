@@ -83,7 +83,7 @@ const DEFAULTS = {
  * @param anchorB Anchor B in global coordination.
  */
 export default class DistanceJoint extends Joint {
-  static TYPE: 'distance-joint' = 'distance-joint';
+  static TYPE = 'distance-joint' as const;
 
   // Solver shared
   /** @internal */ m_localAnchorA: Vec2;

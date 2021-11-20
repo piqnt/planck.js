@@ -94,7 +94,7 @@ const DEFAULTS = {
  * length.
  */
 export default class PulleyJoint extends Joint {
-  static TYPE: 'pulley-joint' = 'pulley-joint';
+  static TYPE = 'pulley-joint' as const;
   // static MIN_PULLEY_LENGTH: number = 2.0; // TODO where this is used?
 
   /** @internal */ m_type: 'pulley-joint';

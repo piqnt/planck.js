@@ -75,7 +75,7 @@ const DEFAULTS = {
  * @param anchor Anchor in global coordination.
  */
 export default class FrictionJoint extends Joint {
-  static TYPE: 'friction-joint' = 'friction-joint';
+  static TYPE = 'friction-joint' as const;
 
   /** @internal */ m_type: 'friction-joint';
 

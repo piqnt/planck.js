@@ -79,7 +79,7 @@ const DEFAULTS = {
  * combination will work).
  */
 export default class GearJoint extends Joint {
-  static TYPE: 'gear-joint' = 'gear-joint';
+  static TYPE = 'gear-joint' as const;
 
   /** @internal */ m_type: 'gear-joint';
   /** @internal */ m_joint1: RevoluteJoint | PrismaticJoint;
