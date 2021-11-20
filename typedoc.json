@@ -5,6 +5,7 @@
   "out": "./docs/api/",
   "mode": "file",
   "includeDeclarations": false,
+  "exclude": "**/*.test-d.ts",
   "excludeExternals": true,
   "excludePrivate": true,
   "stripInternal": true
