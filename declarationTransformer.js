@@ -10,6 +10,7 @@ function visitor(factory, node, options) {
     return node;
   }
   if (isClassDerived(node)) {
+    // workaround for https://github.com/microsoft/TypeScript/issues/46503
     return splitClassIntoConstAndInterface(factory, node);
   }
   return createNodeWithFactories(factory, node);
