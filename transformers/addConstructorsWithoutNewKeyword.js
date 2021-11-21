@@ -1,8 +1,37 @@
 import ts from 'typescript';
 
-export default options => context => node => {
-  return ts.visitEachChild(node, (node) => visitor(context.factory, node, options), context);
-}
+export default options => shared => ({
+  before: context => node => {
+    shared.classes = [
+      'Vec2',
+      'Vec3',
+      'Rot',
+      'Transform',
+      'AABB',
+      'World',
+      'BoxShape',
+      'CircleShape',
+      'ChainShape',
+      'EdgeShape',
+      'PolygonShape',
+      'DistanceJoint',
+      'FrictionJoint',
+      'GearJoint',
+      'MotorJoint',
+      'MouseJoint',
+      'PrismaticJoint',
+      'PulleyJoint',
+      'RevoluteJoint',
+      'RopeJoint',
+      'WeldJoint',
+      'WheelJoint',
+    ]
+    return node;
+  },
+  afterDeclarations: context => node => {
+    return ts.visitEachChild(node, (node) => visitor(context.factory, node, shared), context);
+  }
+})
 
 function visitor(factory, node, options) {
   if (!ts.isClassDeclaration(node) ||

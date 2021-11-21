@@ -6,10 +6,26 @@ import filesize from 'rollup-plugin-filesize';
 import typescript from 'rollup-plugin-ts';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import declarationTransformer from './declarationTransformer';
+import addConstructorsWithoutNewKeyword from './transformers/addConstructorsWithoutNewKeyword';
 
 import licenseBanner from './license';
 
+
+function buildTransformerPipeline(...transformers) {
+  transformers = transformers.map(t => t({}))
+
+  return {
+    before: transformers
+      .map(t => t.before)
+      .filter(Boolean),
+    after: transformers
+      .map(t => t.after)
+      .filter(Boolean),
+    afterDeclarations: transformers
+      .map(t => t.afterDeclarations)
+      .filter(Boolean),
+  }
+}
 
 export default [
   {
@@ -62,36 +78,9 @@ export default [
           ...resolvedConfig,
           declaration: options.declaration
         }),
-        transformers: {
-          afterDeclarations: [
-            declarationTransformer({
-              classes: [
-                'Vec2',
-                'Vec3',
-                'Rot',
-                'Transform',
-                'AABB',
-                'World',
-                'BoxShape',
-                'CircleShape',
-                'ChainShape',
-                'EdgeShape',
-                'PolygonShape',
-                'DistanceJoint',
-                'FrictionJoint',
-                'GearJoint',
-                'MotorJoint',
-                'MouseJoint',
-                'PrismaticJoint',
-                'PulleyJoint',
-                'RevoluteJoint',
-                'RopeJoint',
-                'WeldJoint',
-                'WheelJoint',
-              ]
-            })
-          ]
-        },
+        transformers: buildTransformerPipeline(
+          addConstructorsWithoutNewKeyword()
+        ),
       }),
       babel({
         runtimeHelpers: true,
