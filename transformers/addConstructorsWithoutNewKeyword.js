@@ -25,13 +25,54 @@ export default options => shared => ({
       'RopeJoint',
       'WeldJoint',
       'WheelJoint',
-    ]
-    return node;
+    ];
+    return ts.visitEachChild(node, (node) => applyFactoryConstructorDecoratorVisitor(context.factory, node, shared), context);
   },
   afterDeclarations: context => node => {
     return ts.visitEachChild(node, (node) => visitor(context.factory, node, shared), context);
   }
 })
+
+function applyFactoryConstructorDecoratorVisitor(factory, node, shared) {
+  if(ts.isClassDeclaration(node) && shared.classes.includes(node.name.escapedText)) {
+    const members = node.members.map(member => {
+      if(ts.isConstructorDeclaration(member) && member.body) {
+        const block = factory.updateBlock(member.body, [
+          createRecallWithNewKeyword(factory, node.name, member.parameters),          
+          ...member.body.statements
+        ]);
+        return factory.updateConstructorDeclaration(member, member.decorators, member.modifiers, member.parameters, block);
+      }
+      return member;
+    });
+    return factory.updateClassDeclaration(
+      node, node.decorators, node.modifiers, node.name, node.typeParameters, node.heritageClauses, members
+    );
+  }
+  return node;
+}
+
+function createRecallWithNewKeyword(factory, className, parameters) {
+  return factory.createIfStatement(
+    factory.createPrefixUnaryExpression(
+      ts.SyntaxKind.ExclamationToken,
+      factory.createParenthesizedExpression(factory.createBinaryExpression(
+        factory.createThis(),
+        factory.createToken(ts.SyntaxKind.InstanceOfKeyword),
+        className
+      ))
+    ),
+    factory.createBlock(
+      [factory.createReturnStatement(factory.createNewExpression(
+        className,
+        undefined,
+        parameters.map(parameter => parameter.name)
+      ))],
+      true
+    ),
+    undefined
+  )
+}
 
 function visitor(factory, node, options) {
   if (!ts.isClassDeclaration(node) ||

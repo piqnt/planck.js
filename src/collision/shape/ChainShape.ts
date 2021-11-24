@@ -57,11 +57,6 @@ export default class ChainShape extends Shape {
   m_isLoop: boolean;
 
   constructor(vertices?: Vec2[], loop?: boolean) {
-    // @ts-ignore
-    if (!(this instanceof ChainShape)) {
-      return new ChainShape(vertices, loop);
-    }
-
     super();
 
     this.m_type = ChainShape.TYPE;

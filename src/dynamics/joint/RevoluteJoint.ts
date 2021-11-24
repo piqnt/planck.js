@@ -162,11 +162,6 @@ export default class RevoluteJoint extends Joint {
   constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
   // @ts-ignore
   constructor(def: RevoluteJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2) {
-    // @ts-ignore
-    if (!(this instanceof RevoluteJoint)) {
-      return new RevoluteJoint(def, bodyA, bodyB, anchor);
-    }
-
     def = options(def, DEFAULTS);
     super(def, bodyA, bodyB);
     bodyA = this.m_bodyA;

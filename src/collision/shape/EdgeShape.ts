@@ -51,11 +51,6 @@ export default class EdgeShape extends Shape {
   m_hasVertex3: boolean;
 
   constructor(v1?: Vec2, v2?: Vec2) {
-    // @ts-ignore
-    if (!(this instanceof EdgeShape)) {
-      return new EdgeShape(v1, v2);
-    }
-
     super();
 
     this.m_type = EdgeShape.TYPE;

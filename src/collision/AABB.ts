@@ -56,10 +56,6 @@ export default class AABB {
   upperBound: Vec2;
 
   constructor(lower?: Vec2, upper?: Vec2) {
-    if (!(this instanceof AABB)) {
-      return new AABB(lower, upper);
-    }
-
     this.lowerBound = Vec2.zero();
     this.upperBound = Vec2.zero();
 

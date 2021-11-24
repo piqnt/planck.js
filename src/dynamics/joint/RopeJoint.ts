@@ -107,11 +107,6 @@ export default class RopeJoint extends Joint {
   constructor(def: RopeJointDef);
   constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
   constructor(def: RopeJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2) {
-    // @ts-ignore
-    if (!(this instanceof RopeJoint)) {
-      return new RopeJoint(def, bodyA, bodyB, anchor);
-    }
-
     def = options(def, DEFAULTS);
     super(def, bodyA, bodyB);
     bodyA = this.m_bodyA;

@@ -44,9 +44,6 @@ export default class Transform {
   q: Rot;
 
   constructor(position?: Vec2, rotation?: number) {
-    if (!(this instanceof Transform)) {
-      return new Transform(position, rotation);
-    }
     this.p = Vec2.zero();
     this.q = Rot.identity();
     if (typeof position !== 'undefined') {

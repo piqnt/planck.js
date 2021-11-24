@@ -32,11 +32,6 @@ export default class BoxShape extends PolygonShape {
   static TYPE = 'polygon' as const;
 
   constructor(hx: number, hy: number, center?: Vec2, angle?: number) {
-    // @ts-ignore
-    if (!(this instanceof BoxShape)) {
-      return new BoxShape(hx, hy, center, angle);
-    }
-
     super();
 
     this._setAsBox(hx, hy, center, angle);

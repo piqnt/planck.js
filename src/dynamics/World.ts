@@ -124,10 +124,6 @@ export default class World {
    * @param def World definition or gravity vector.
    */
   constructor(def?: WorldDef | Vec2 | null) {
-    if (!(this instanceof World)) {
-      return new World(def);
-    }
-
     if (def && Vec2.isValid(def)) {
       def = { gravity: def as Vec2 };
     }

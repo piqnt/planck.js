@@ -144,11 +144,6 @@ export default class WheelJoint extends Joint {
   constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
   // @ts-ignore
   constructor(def: WheelJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2, axis?: Vec2) {
-    // @ts-ignore
-    if (!(this instanceof WheelJoint)) {
-      return new WheelJoint(def, bodyA, bodyB, anchor, axis);
-    }
-
     def = options(def, DEFAULTS);
     super(def, bodyA, bodyB);
     bodyA = this.m_bodyA;

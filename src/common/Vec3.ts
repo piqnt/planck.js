@@ -40,9 +40,6 @@ export default class Vec3 {
   constructor();
   // tslint:disable-next-line:typedef
   constructor(x?, y?, z?) {
-    if (!(this instanceof Vec3)) {
-      return new Vec3(x, y, z);
-    }
     if (typeof x === 'undefined') {
       this.x = 0;
       this.y = 0;

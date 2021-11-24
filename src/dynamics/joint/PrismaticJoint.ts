@@ -158,11 +158,6 @@ export default class PrismaticJoint extends Joint {
   constructor(def: PrismaticJointDef);
   constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
   constructor(def: PrismaticJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2, axis?: Vec2) {
-    // @ts-ignore
-    if (!(this instanceof PrismaticJoint)) {
-      return new PrismaticJoint(def, bodyA, bodyB, anchor, axis);
-    }
-
     def = options(def, DEFAULTS);
     super(def, bodyA, bodyB);
     bodyA = this.m_bodyA;

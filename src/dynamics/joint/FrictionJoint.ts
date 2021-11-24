@@ -103,11 +103,6 @@ export default class FrictionJoint extends Joint {
   constructor(def: FrictionJointDef);
   constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
   constructor(def: FrictionJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2) {
-    // @ts-ignore
-    if (!(this instanceof FrictionJoint)) {
-      return new FrictionJoint(def, bodyA, bodyB, anchor);
-    }
-
     def = options(def, DEFAULTS);
     super(def, bodyA, bodyB);
     bodyA = this.m_bodyA;

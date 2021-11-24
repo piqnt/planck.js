@@ -39,9 +39,6 @@ export default class Vec2 {
   constructor();
   // tslint:disable-next-line:typedef
   constructor(x?, y?) {
-    if (!(this instanceof Vec2)) {
-      return new Vec2(x, y);
-    }
     if (typeof x === 'undefined') {
       this.x = 0;
       this.y = 0;

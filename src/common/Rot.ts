@@ -37,9 +37,6 @@ export default class Rot {
 
   /** Initialize from an angle in radians. */
   constructor(angle?: number | Rot) {
-    if (!(this instanceof Rot)) {
-      return new Rot(angle);
-    }
     if (typeof angle === 'number') {
       this.setAngle(angle);
     } else if (typeof angle === 'object') {

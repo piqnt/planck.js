@@ -53,11 +53,6 @@ export default class PolygonShape extends Shape {
 
   // @ts-ignore
   constructor(vertices?: Vec2[]) {
-    // @ts-ignore
-    if (!(this instanceof PolygonShape)) {
-      return new PolygonShape(vertices);
-    }
-
     super();
 
     this.m_type = PolygonShape.TYPE;

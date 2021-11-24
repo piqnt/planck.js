@@ -45,11 +45,6 @@ export default class CircleShape extends Shape {
   constructor(radius?: number);
   // tslint:disable-next-line:typedef
   constructor(a, b?) {
-    // @ts-ignore
-    if (!(this instanceof CircleShape)) {
-      return new CircleShape(a, b);
-    }
-
     super();
 
     this.m_type = CircleShape.TYPE;

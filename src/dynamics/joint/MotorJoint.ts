@@ -107,11 +107,6 @@ export default class MotorJoint extends Joint {
   constructor(def: MotorJointDef);
   constructor(def: MotorJointOpt, bodyA: Body, bodyB: Body);
   constructor(def: MotorJointDef | MotorJointOpt, bodyA?: Body, bodyB?: Body) {
-    // @ts-ignore
-    if (!(this instanceof MotorJoint)) {
-      return new MotorJoint(def, bodyA, bodyB);
-    }
-
     def = options(def, DEFAULTS);
     super(def, bodyA, bodyB);
     bodyA = this.m_bodyA;

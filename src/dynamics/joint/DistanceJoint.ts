@@ -110,11 +110,6 @@ export default class DistanceJoint extends Joint {
   constructor(def: DistanceJointDef);
   constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2);
   constructor(def: DistanceJointDef, bodyA?: Body, bodyB?: Body, anchorA?: Vec2, anchorB?: Vec2) {
-    // @ts-ignore
-    if (!(this instanceof DistanceJoint)) {
-      return new DistanceJoint(def, bodyA, bodyB, anchorA, anchorB);
-    }
-
     // order of constructor arguments is changed in v0.2
     if (bodyB && anchorA && ('m_type' in anchorA) && ('x' in bodyB) && ('y' in bodyB)) {
       const temp = bodyB;
