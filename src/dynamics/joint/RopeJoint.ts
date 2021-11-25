@@ -79,6 +79,7 @@ const DEFAULTS = {
  * sponginess, so I chose not to implement it that way. See {@link DistanceJoint} if you
  * want to dynamically control length.
  */
+@factoryConstructor
 export default class RopeJoint extends Joint {
   static TYPE = 'rope-joint' as const;
 

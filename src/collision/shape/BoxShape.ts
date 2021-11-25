@@ -28,6 +28,7 @@ import PolygonShape from './PolygonShape';
 /**
  * A rectangle polygon which extend PolygonShape.
  */
+@factoryConstructor
 export default class BoxShape extends PolygonShape {
   static TYPE = 'polygon' as const;
 

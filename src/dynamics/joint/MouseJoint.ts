@@ -85,6 +85,7 @@ const DEFAULTS = {
  * be used in the testbed. If you want to learn how to use the mouse joint, look
  * at the testbed.
  */
+@factoryConstructor
 export default class MouseJoint extends Joint {
   static TYPE = 'mouse-joint' as const;
 

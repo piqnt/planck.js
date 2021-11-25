@@ -1,42 +1,22 @@
 import ts from 'typescript';
 
-export default options => shared => ({
-  before: context => node => {
-    shared.classes = [
-      'Vec2',
-      'Vec3',
-      'Rot',
-      'Transform',
-      'AABB',
-      'World',
-      'BoxShape',
-      'CircleShape',
-      'ChainShape',
-      'EdgeShape',
-      'PolygonShape',
-      'DistanceJoint',
-      'FrictionJoint',
-      'GearJoint',
-      'MotorJoint',
-      'MouseJoint',
-      'PrismaticJoint',
-      'PulleyJoint',
-      'RevoluteJoint',
-      'RopeJoint',
-      'WeldJoint',
-      'WheelJoint',
-    ];
-    return ts.visitEachChild(node, (node) => applyFactoryConstructorDecoratorVisitor(context.factory, node, shared), context);
-  },
-  afterDeclarations: context => node => {
-    return ts.visitEachChild(node, (node) => visitor(context.factory, node, shared), context);
+export default options => shared => {
+  shared.classes = new Set();
+  return {
+    before: context => node => {
+      return ts.visitEachChild(node, (node) => applyFactoryConstructorDecoratorVisitor(context.factory, node, shared), context);
+    },
+    afterDeclarations: context => node => {
+      return ts.visitEachChild(node, (node) => visitor(context.factory, node, shared), context);
+    }
   }
-})
+}
 
 function applyFactoryConstructorDecoratorVisitor(factory, node, shared) {
-  if(ts.isClassDeclaration(node) && shared.classes.includes(node.name.escapedText)) {
+  if (ts.isClassDeclaration(node) && hasFactoryConstructorDecorator(node.decorators)) {
+    shared.classes.add(node.name.escapedText);
     const members = node.members.map(member => {
-      if(ts.isConstructorDeclaration(member) && member.body) {
+      if (ts.isConstructorDeclaration(member) && member.body) {
         const block = factory.updateBlock(member.body, [
           createRecallWithNewKeyword(factory, node.name, member.parameters),          
           ...member.body.statements
@@ -46,10 +26,31 @@ function applyFactoryConstructorDecoratorVisitor(factory, node, shared) {
       return member;
     });
     return factory.updateClassDeclaration(
-      node, node.decorators, node.modifiers, node.name, node.typeParameters, node.heritageClauses, members
+      node,
+      removeFactoryConstructorDecorator(node.decorators),
+      node.modifiers,
+      node.name,
+      node.typeParameters,
+      node.heritageClauses,
+      members
     );
   }
   return node;
+}
+
+function hasFactoryConstructorDecorator(decorators) {
+  return decorators?.some(isFactoryConstructorDecorator);
+}
+
+function removeFactoryConstructorDecorator(decorators) {
+  const filtered = decorators?.filter(decorator => !isFactoryConstructorDecorator(decorator));
+  if (filtered?.length > 0) {
+    return filtered;
+  }
+}
+
+function isFactoryConstructorDecorator(decorator) {
+  return ts.isIdentifier(decorator.expression) && decorator.expression.escapedText === 'factoryConstructor';
 }
 
 function createRecallWithNewKeyword(factory, className, parameters) {
@@ -87,7 +88,7 @@ function visitor(factory, node, options) {
 }
 
 function isClassIncluded(className, options) {
-  return options.classes.includes(className);
+  return options.classes.has(className);
 }
 
 function isClassDerived(node) {

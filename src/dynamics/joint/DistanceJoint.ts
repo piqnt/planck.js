@@ -82,6 +82,7 @@ const DEFAULTS = {
  * @param anchorA Anchor A in global coordination.
  * @param anchorB Anchor B in global coordination.
  */
+@factoryConstructor
 export default class DistanceJoint extends Joint {
   static TYPE = 'distance-joint' as const;
 

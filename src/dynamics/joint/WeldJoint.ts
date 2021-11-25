@@ -86,6 +86,7 @@ const DEFAULTS = {
  * A weld joint essentially glues two bodies together. A weld joint may distort
  * somewhat because the island constraint solver is approximate.
  */
+@factoryConstructor
 export default class WeldJoint extends Joint {
   static TYPE = 'weld-joint' as const
 

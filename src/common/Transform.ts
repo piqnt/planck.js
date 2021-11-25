@@ -36,6 +36,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * position and orientation of rigid frames. Initialize using a position vector
  * and a rotation.
  */
+@factoryConstructor
 export default class Transform {
   /** position */
   p: Vec2;

@@ -36,6 +36,7 @@ import { DistanceProxy } from '../Distance';
  * other edge shapes. The connectivity information is used to ensure correct
  * contact normals.
  */
+@factoryConstructor
 export default class EdgeShape extends Shape {
   static TYPE = 'edge' as const;
 

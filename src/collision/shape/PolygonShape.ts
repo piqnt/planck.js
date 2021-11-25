@@ -43,6 +43,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * Settings.maxPolygonVertices. In most cases you should not need many vertices
  * for a convex polygon. extends Shape
  */
+@factoryConstructor
 export default class PolygonShape extends Shape {
   static TYPE = 'polygon' as const;
 

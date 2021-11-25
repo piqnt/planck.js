@@ -44,6 +44,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  *
  * WARNING: The chain will not collide properly if there are self-intersections.
  */
+@factoryConstructor
 export default class ChainShape extends Shape {
   static TYPE = 'chain' as const;
 

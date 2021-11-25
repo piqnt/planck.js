@@ -30,6 +30,7 @@ const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
+@factoryConstructor
 export default class Vec2 {
   x: number;
   y: number;

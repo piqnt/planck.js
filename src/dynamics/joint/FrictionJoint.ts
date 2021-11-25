@@ -74,6 +74,7 @@ const DEFAULTS = {
  *
  * @param anchor Anchor in global coordination.
  */
+@factoryConstructor
 export default class FrictionJoint extends Joint {
   static TYPE = 'friction-joint' as const;
 

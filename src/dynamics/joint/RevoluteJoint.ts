@@ -127,6 +127,7 @@ const DEFAULTS = {
  * relative rotation about the shared point. A maximum motor torque is provided
  * so that infinite forces are not generated.
  */
+@factoryConstructor
 export default class RevoluteJoint extends Joint {
   static TYPE = 'revolute-joint' as const;
 

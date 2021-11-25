@@ -36,6 +36,7 @@ import { DistanceProxy } from '../Distance';
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
+@factoryConstructor
 export default class CircleShape extends Shape {
   static TYPE = 'circle' as const;
 

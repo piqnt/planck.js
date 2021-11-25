@@ -31,6 +31,7 @@ const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
+@factoryConstructor
 export default class Rot {
   s: number;
   c: number;

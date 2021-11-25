@@ -93,6 +93,7 @@ const DEFAULTS = {
  * anchor points with static shapes to prevent one side from going to zero
  * length.
  */
+@factoryConstructor
 export default class PulleyJoint extends Joint {
   static TYPE = 'pulley-joint' as const;
   // static MIN_PULLEY_LENGTH: number = 2.0; // TODO where this is used?

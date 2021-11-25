@@ -51,6 +51,7 @@ export interface RayCastOutput {
   fraction: number;
 }
 
+@factoryConstructor
 export default class AABB {
   lowerBound: Vec2;
   upperBound: Vec2;

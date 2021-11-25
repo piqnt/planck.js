@@ -121,6 +121,7 @@ const DEFAULTS = {
  * joint limit to restrict the range of motion and a joint motor to drive the
  * motion or to model joint friction.
  */
+@factoryConstructor
 export default class PrismaticJoint extends Joint {
   static TYPE = 'prismatic-joint' as const;
 

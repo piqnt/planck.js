@@ -99,6 +99,7 @@ const DEFAULTS = {
  * point to line constraint with a rotational motor and a linear spring/damper.
  * This joint is designed for vehicle suspensions.
  */
+@factoryConstructor
 export default class WheelJoint extends Joint {
   static TYPE = 'wheel-joint' as const;
 

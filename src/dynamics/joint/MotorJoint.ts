@@ -78,6 +78,7 @@ const DEFAULTS = {
  * typical usage is to control the movement of a dynamic body with respect to
  * the ground.
  */
+@factoryConstructor
 export default class MotorJoint extends Joint {
   static TYPE = 'motor-joint' as const;
 

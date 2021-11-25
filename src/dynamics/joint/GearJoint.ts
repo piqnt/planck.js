@@ -78,6 +78,7 @@ const DEFAULTS = {
  * This definition requires two existing revolute or prismatic joints (any
  * combination will work).
  */
+@factoryConstructor
 export default class GearJoint extends Joint {
   static TYPE = 'gear-joint' as const;
 
