@@ -6,7 +6,7 @@ import filesize from 'rollup-plugin-filesize';
 import typescript from 'rollup-plugin-ts';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import addConstructorsWithoutNewKeyword from './transformers/addConstructorsWithoutNewKeyword';
+import factoryConstructorTransformer from './transformers/factoryConstructorTransformer.js';
 
 import licenseBanner from './license';
 
@@ -83,7 +83,7 @@ export default [
           declaration: options.declaration
         }),
         transformers: buildTransformerPipeline(
-          addConstructorsWithoutNewKeyword({ enabled: options.includeFactoryConstructors })
+          factoryConstructorTransformer({ enabled: options.includeFactoryConstructors })
         ),
       }),
       babel({
