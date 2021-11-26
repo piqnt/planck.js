@@ -33,24 +33,28 @@ export default [
     dest: 'dist/planck.js',
     minimize: false,
     declaration: true,
+    includeFactoryConstructors: true,
   },
   {
     src: 'src/index.ts',
     dest: 'dist/planck.min.js',
     minimize: true,
     declaration: false,
+    includeFactoryConstructors: true,
   },
   {
     src: 'testbed/index.ts',
     dest: 'dist/planck-with-testbed.js',
     minimize: false,
     declaration: true,
+    includeFactoryConstructors: true,
   },
   {
     src: 'testbed/index.ts',
     dest: 'dist/planck-with-testbed.min.js',
     minimize: true,
     declaration: false,
+    includeFactoryConstructors: true,
   }
 ].map(options => {
   const config = {
@@ -79,7 +83,7 @@ export default [
           declaration: options.declaration
         }),
         transformers: buildTransformerPipeline(
-          addConstructorsWithoutNewKeyword()
+          addConstructorsWithoutNewKeyword({ enabled: options.includeFactoryConstructors })
         ),
       }),
       babel({

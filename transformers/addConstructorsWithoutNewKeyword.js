@@ -1,20 +1,42 @@
 import ts from 'typescript';
 
-export default options => shared => {
+export default ({ enabled }) => shared => {
   shared.classes = new Set();
   return {
     before: context => node => {
+      node = ts.visitEachChild(node, (node) => removeFactoryConstructorDecoratorVisitor(context.factory, node, shared), context);
+      if (!enabled) {
+        return node;
+      }
       return ts.visitEachChild(node, (node) => applyFactoryConstructorDecoratorVisitor(context.factory, node, shared), context);
     },
     afterDeclarations: context => node => {
+      if (!enabled) {
+        return node;
+      }
       return ts.visitEachChild(node, (node) => visitor(context.factory, node, shared), context);
     }
   }
 }
 
-function applyFactoryConstructorDecoratorVisitor(factory, node, shared) {
+function removeFactoryConstructorDecoratorVisitor(factory, node, shared) {
   if (ts.isClassDeclaration(node) && hasFactoryConstructorDecorator(node.decorators)) {
     shared.classes.add(node.name.escapedText);
+    return factory.updateClassDeclaration(
+      node,
+      removeFactoryConstructorDecorator(node.decorators),
+      node.modifiers,
+      node.name,
+      node.typeParameters,
+      node.heritageClauses,
+      node.members
+    );
+  }
+  return node;
+}
+
+function applyFactoryConstructorDecoratorVisitor(factory, node, shared) {
+  if (isRelevantClassDeclaration(node, shared)) {
     const members = node.members.map(member => {
       if (ts.isConstructorDeclaration(member) && member.body) {
         const block = factory.updateBlock(member.body, [
@@ -75,9 +97,8 @@ function createRecallWithNewKeyword(factory, className, parameters) {
   )
 }
 
-function visitor(factory, node, options) {
-  if (!ts.isClassDeclaration(node) ||
-      !isClassIncluded(node.name.escapedText, options)) {
+function visitor(factory, node, shared) {
+  if (!isRelevantClassDeclaration(node, shared)) {
     return node;
   }
   if (isClassDerived(node)) {
@@ -87,8 +108,8 @@ function visitor(factory, node, options) {
   return createNodeWithFactories(factory, node);
 }
 
-function isClassIncluded(className, options) {
-  return options.classes.has(className);
+function isRelevantClassDeclaration(node, shared) {
+  return ts.isClassDeclaration(node) && shared.classes.has(node.name.escapedText);
 }
 
 function isClassDerived(node) {
