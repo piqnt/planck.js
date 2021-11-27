@@ -10,7 +10,7 @@
     // "noImplicitAny": true,
     "lib": ["ES2015", "DOM"],
     "stripInternal": true,
-    "target": "ES5",
+    "target": "ESNEXT",
     "experimentalDecorators": true
   }
 }

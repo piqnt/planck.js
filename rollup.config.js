@@ -33,29 +33,29 @@ export default [
     dest: 'dist/planck.js',
     minimize: false,
     declaration: true,
-    includeFactoryConstructors: true,
+    includeFactoryConstructors: false,
   },
-  {
-    src: 'src/index.ts',
-    dest: 'dist/planck.min.js',
-    minimize: true,
-    declaration: false,
-    includeFactoryConstructors: true,
-  },
-  {
-    src: 'testbed/index.ts',
-    dest: 'dist/planck-with-testbed.js',
-    minimize: false,
-    declaration: true,
-    includeFactoryConstructors: true,
-  },
-  {
-    src: 'testbed/index.ts',
-    dest: 'dist/planck-with-testbed.min.js',
-    minimize: true,
-    declaration: false,
-    includeFactoryConstructors: true,
-  }
+  // {
+  //   src: 'src/index.ts',
+  //   dest: 'dist/planck.min.js',
+  //   minimize: true,
+  //   declaration: false,
+  //   includeFactoryConstructors: false,
+  // },
+  // {
+  //   src: 'testbed/index.ts',
+  //   dest: 'dist/planck-with-testbed.js',
+  //   minimize: false,
+  //   declaration: true,
+  //   includeFactoryConstructors: false,
+  // },
+  // {
+  //   src: 'testbed/index.ts',
+  //   dest: 'dist/planck-with-testbed.min.js',
+  //   minimize: true,
+  //   declaration: false,
+  //   includeFactoryConstructors: false,
+  // }
 ].map(options => {
   const config = {
     input: options.src,
@@ -64,6 +64,7 @@ export default [
       file: options.dest,
       format: 'umd',
       sourcemap: true,
+      generatedCode: 'es2015'
     },
     plugins: [
       replace({
