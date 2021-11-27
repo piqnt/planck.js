@@ -38,23 +38,12 @@ export default class Vec3 {
   z: number;
 
   constructor(x: number, y: number, z: number);
-  constructor(obj: { x: number, y: number, z: number });
   constructor();
   // tslint:disable-next-line:typedef
-  constructor(x?, y?, z?) {
-    if (typeof x === 'undefined') {
-      this.x = 0;
-      this.y = 0;
-      this.z = 0;
-    } else if (typeof x === 'object') {
-      this.x = x.x;
-      this.y = x.y;
-      this.z = x.z;
-    } else {
-      this.x = x;
-      this.y = y;
-      this.z = z;
-    }
+  constructor(x=0, y=0, z=0) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
     _ASSERT && Vec3.assert(this);
   }
 
@@ -69,28 +58,16 @@ export default class Vec3 {
 
   /** @internal */
   static _deserialize(data: any): Vec3 {
-    const obj = Object.create(Vec3.prototype);
-    obj.x = data.x;
-    obj.y = data.y;
-    obj.z = data.z;
-    return obj;
+    return new Vec3(data.x, data.y, data.z);
   }
 
   /** @internal */
   static neo(x: number, y: number, z: number): Vec3 {
-    const obj = Object.create(Vec3.prototype);
-    obj.x = x;
-    obj.y = y;
-    obj.z = z;
-    return obj;
+    return new Vec3(x, y, z);
   }
 
   static zero(): Vec3 {
-    const obj = Object.create(Vec3.prototype);
-    obj.x = 0;
-    obj.y = 0;
-    obj.z = 0;
-    return obj;
+    return new Vec3(0, 0, 0);
   }
 
   static clone(v: Vec3): Vec3 {
@@ -160,7 +137,7 @@ export default class Vec3 {
     _ASSERT && Vec3.assert(v);
     _ASSERT && Vec3.assert(w);
     return v === w ||
-      typeof v === 'object' && v !== null &&
+      typeof v === 'object' && v !== null && // TODO remove with strictNullChecks
       typeof w === 'object' && w !== null &&
       v.x === w.x && v.y === w.y && v.z === w.z;
   }

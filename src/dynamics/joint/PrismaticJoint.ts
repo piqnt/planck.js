@@ -691,7 +691,7 @@ export default class PrismaticJoint extends Joint {
 
       const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
 
-      const f1 = new Vec3(this.m_impulse);
+      const f1 = Vec3.clone(this.m_impulse);
       let df = this.m_K.solve33(Vec3.neg(Cdot)); // Vec3
       this.m_impulse.add(df);
 
