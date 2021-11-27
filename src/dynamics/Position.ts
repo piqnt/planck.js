@@ -40,7 +40,7 @@ export default class Position {
   }
 
   getTransform(xf: Transform, p: Vec2): Transform {
-    xf.q.set(this.a);
+    xf.q.setAngle(this.a);
     xf.p.setVec2(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
     return xf;
   }

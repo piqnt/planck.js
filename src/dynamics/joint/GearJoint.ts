@@ -178,7 +178,7 @@ export default class GearJoint extends Joint {
       this.m_localAxisC = prismatic.m_localXAxisA;
 
       const pC = this.m_localAnchorC;
-      const pA = Rot.mulTVec2(xfC.q, Vec2.add(Rot.mul(xfA.q, this.m_localAnchorA), Vec2.sub(xfA.p, xfC.p)));
+      const pA = Rot.mulTVec2(xfC.q, Vec2.add(Rot.mulVec2(xfA.q, this.m_localAnchorA), Vec2.sub(xfA.p, xfC.p)));
       coordinateA = Vec2.dot(pA, this.m_localAxisC) - Vec2.dot(pC, this.m_localAxisC);
     }
 
@@ -207,7 +207,7 @@ export default class GearJoint extends Joint {
       this.m_localAxisD = prismatic.m_localXAxisA;
 
       const pD = this.m_localAnchorD;
-      const pB = Rot.mulTVec2(xfD.q, Vec2.add(Rot.mul(xfB.q, this.m_localAnchorB), Vec2.sub(xfB.p, xfD.p)));
+      const pB = Rot.mulTVec2(xfD.q, Vec2.add(Rot.mulVec2(xfB.q, this.m_localAnchorB), Vec2.sub(xfB.p, xfD.p)));
       coordinateB = Vec2.dot(pB, this.m_localAxisD) - Vec2.dot(pD, this.m_localAxisD);
     }
 

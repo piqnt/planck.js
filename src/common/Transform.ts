@@ -49,7 +49,7 @@ export default class Transform {
     this.p.setVec2(position);
     this.q = Rot.identity();
     if (rotation != 0) {
-      this.q.set(rotation);
+      this.q.setAngle(rotation);
     }
   }
 
@@ -84,13 +84,13 @@ export default class Transform {
    * Set this based on the position and angle.
    */
   // tslint:disable-next-line:typedef
-  set(a, b?) {
+  set(aposition: Vec2, rotation: number) {
     // if (typeof b === 'undefined') {
     //   this.p.setVec2(a.p);
     //   this.q.set(a.q);
     // } else {
-      this.p.setVec2(a);
-      this.q.set(b);
+      this.p.setVec2(aposition);
+      this.q.setAngle(rotation);
     // }
   }
 
