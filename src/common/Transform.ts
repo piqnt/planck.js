@@ -40,42 +40,34 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 @factoryConstructor
 export default class Transform {
   /** position */
-  p: Vec2;
+  p: Vec2 = new Vec2();
 
   /** rotation */
   q: Rot;
 
-  constructor(position?: Vec2, rotation?: number) {
-    this.p = Vec2.zero();
+  constructor(position=Vec2.zero(), rotation=0) {
+    this.p.setVec2(position);
     this.q = Rot.identity();
-    if (typeof position !== 'undefined') {
-      this.p.setVec2(position);
-    }
-    if (typeof rotation !== 'undefined') {
+    if (rotation != 0) {
       this.q.set(rotation);
     }
   }
 
   static clone(xf: Transform): Transform {
-    const obj = Object.create(Transform.prototype);
-    obj.p = Vec2.clone(xf.p);
-    obj.q = Rot.clone(xf.q);
+    const obj = new Transform(xf.p);
+    obj.q.set(xf.q);
     return obj;
   }
 
   /** @internal */
   static neo(position: Vec2, rotation: Rot): Transform {
-    const obj = Object.create(Transform.prototype);
-    obj.p = Vec2.clone(position);
-    obj.q = Rot.clone(rotation);
+    const obj = new Transform(position);
+    obj.q.set(Rot.clone(rotation));
     return obj;
   }
 
   static identity(): Transform {
-    const obj = Object.create(Transform.prototype);
-    obj.p = Vec2.zero();
-    obj.q = Rot.identity();
-    return obj;
+    return new Transform();
   }
 
   /**
@@ -87,19 +79,19 @@ export default class Transform {
   }
 
   set(position: Vec2, rotation: number): void;
-  set(xf: Transform): void;
+  // set(xf: Transform): void; // TODO
   /**
    * Set this based on the position and angle.
    */
   // tslint:disable-next-line:typedef
   set(a, b?) {
-    if (typeof b === 'undefined') {
-      this.p.setVec2(a.p);
-      this.q.set(a.q);
-    } else {
+    // if (typeof b === 'undefined') {
+    //   this.p.setVec2(a.p);
+    //   this.q.set(a.q);
+    // } else {
       this.p.setVec2(a);
       this.q.set(b);
-    }
+    // }
   }
 
   static isValid(obj: any): boolean {
@@ -117,48 +109,48 @@ export default class Transform {
     }
   }
 
-  static mul(a: Transform, b: Vec2): Vec2;
-  static mul(a: Transform, b: Transform): Transform;
-  // static mul(a: Transform, b: Vec2[]): Vec2[];
-  // static mul(a: Transform, b: Transform[]): Transform[];
-  // tslint:disable-next-line:typedef
-  static mul(a, b) {
-    if (Array.isArray(b)) {
-      _ASSERT && Transform.assert(a);
-      const arr = [];
-      for (let i = 0; i < b.length; i++) {
-        arr[i] = Transform.mul(a, b[i]);
-      }
-      return arr;
+  // static mul(a: Transform, b: Vec2): Vec2;
+  // static mul(a: Transform, b: Transform): Transform; // TODO
+  // // static mul(a: Transform, b: Vec2[]): Vec2[];
+  // // static mul(a: Transform, b: Transform[]): Transform[];
+  // // tslint:disable-next-line:typedef
+  // static mul(a, b) {
+  //   if (Array.isArray(b)) {
+  //     _ASSERT && Transform.assert(a);
+  //     const arr = [];
+  //     for (let i = 0; i < b.length; i++) {
+  //       arr[i] = Transform.mul(a, b[i]);
+  //     }
+  //     return arr;
 
-    } else if ('x' in b && 'y' in b) {
-      return Transform.mulVec2(a, b);
+  //   } else if ('x' in b && 'y' in b) {
+  //     return Transform.mulVec2(a, b);
 
-    } else if ('p' in b && 'q' in b) {
-      return Transform.mulXf(a, b);
-    }
-  }
+  //   } else if ('p' in b && 'q' in b) {
+  //     return Transform.mulXf(a, b);
+  //   }
+  // }
 
-  static mulAll(a: Transform, b: Vec2[]): Vec2[];
-  static mulAll(a: Transform, b: Transform[]): Transform[];
-  // tslint:disable-next-line:typedef
-  static mulAll(a: Transform, b) {
-    _ASSERT && Transform.assert(a);
-    const arr = [];
-    for (let i = 0; i < b.length; i++) {
-      arr[i] = Transform.mul(a, b[i]);
-    }
-    return arr;
-  }
+  // static mulAll(a: Transform, b: Vec2[]): Vec2[];
+  // static mulAll(a: Transform, b: Transform[]): Transform[]; // TODO
+  // // tslint:disable-next-line:typedef
+  // static mulAll(a: Transform, b) {
+  //   _ASSERT && Transform.assert(a);
+  //   const arr = [];
+  //   for (let i = 0; i < b.length; i++) {
+  //     arr[i] = Transform.mul(a, b[i]);
+  //   }
+  //   return arr;
+  // }
 
-  /** @internal @deprecated */
-  // tslint:disable-next-line:typedef
-  static mulFn(a: Transform) {
-    _ASSERT && Transform.assert(a);
-    return function(b: Vec2): Vec2 {
-      return Transform.mul(a, b);
-    };
-  }
+  // /** @internal @deprecated */
+  // // tslint:disable-next-line:typedef
+  // static mulFn(a: Transform) {
+  //   _ASSERT && Transform.assert(a);
+  //   return function(b: Vec2): Vec2 {
+  //     return Transform.mul(a, b);
+  //   };
+  // }
 
   static mulVec2(a: Transform, b: Vec2): Vec2 {
     _ASSERT && Transform.assert(a);
@@ -179,17 +171,17 @@ export default class Transform {
     return xf;
   }
 
-  static mulT(a: Transform, b: Vec2): Vec2;
-  static mulT(a: Transform, b: Transform): Transform;
-  // tslint:disable-next-line:typedef
-  static mulT(a, b) {
-    if ('x' in b && 'y' in b) {
-      return Transform.mulTVec2(a, b);
+  // static mulT(a: Transform, b: Vec2): Vec2;
+  // static mulT(a: Transform, b: Transform): Transform;
+  // // tslint:disable-next-line:typedef
+  // static mulT(a, b) {
+  //   if ('x' in b && 'y' in b) {
+  //     return Transform.mulTVec2(a, b);
 
-    } else if ('p' in b && 'q' in b) {
-      return Transform.mulTXf(a, b);
-    }
-  }
+  //   } else if ('p' in b && 'q' in b) {
+  //     return Transform.mulTXf(a, b);
+  //   }
+  // }
 
   static mulTVec2(a: Transform, b: Vec2): Vec2 {
     _ASSERT && Transform.assert(a);

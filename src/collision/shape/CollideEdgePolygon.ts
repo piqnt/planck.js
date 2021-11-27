@@ -486,7 +486,7 @@ export function CollideEdgePolygon(manifold: Manifold, edgeA: EdgeShape, xfA: Tr
       const cp = manifold.points[pointCount]; // ManifoldPoint
 
       if (primaryAxis.type == EPAxisType.e_edgeA) {
-        cp.localPoint = Transform.mulT(xf, clipPoints2[i].v);
+        cp.localPoint = Transform.mulTVec2(xf, clipPoints2[i].v);
         cp.id = clipPoints2[i].id;
       } else {
         cp.localPoint = clipPoints2[i].v;
