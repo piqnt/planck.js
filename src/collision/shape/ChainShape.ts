@@ -31,6 +31,7 @@ import Vec2 from '../../common/Vec2';
 import Settings from '../../Settings';
 import Shape from '../Shape';
 import EdgeShape from './EdgeShape';
+import factoryConstructor from '../../decorators/factoryConstructor';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;

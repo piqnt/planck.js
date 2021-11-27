@@ -33,6 +33,7 @@ import Body from '../Body';
 import RevoluteJoint from './RevoluteJoint';
 import PrismaticJoint from './PrismaticJoint';
 import { TimeStep } from "../Solver";
+import factoryConstructor from '../../decorators/factoryConstructor';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;

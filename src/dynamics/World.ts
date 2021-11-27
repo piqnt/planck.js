@@ -33,6 +33,7 @@ import Contact from './Contact';
 import AABB, { RayCastInput, RayCastOutput } from "../collision/AABB";
 import Fixture, { FixtureProxy } from "./Fixture";
 import Manifold from "../collision/Manifold";
+import factoryConstructor from '../decorators/factoryConstructor';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;

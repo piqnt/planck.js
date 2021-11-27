@@ -31,6 +31,7 @@ import AABB, { RayCastInput, RayCastOutput } from '../AABB';
 import Transform from '../../common/Transform';
 import { MassData } from '../../dynamics/Body';
 import { DistanceProxy } from '../Distance';
+import factoryConstructor from '../../decorators/factoryConstructor';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;

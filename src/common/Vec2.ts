@@ -24,6 +24,7 @@
 
 import common from '../util/common';
 import Math from './Math';
+import factoryConstructor from '../decorators/factoryConstructor';
 
 
 const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;

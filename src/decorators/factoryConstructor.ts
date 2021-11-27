@@ -20,4 +20,4 @@
  * ```
  * **Note**: Only supported when `target` is ES5 or lower.
  */
-declare function factoryConstructor(target: Function): void;
+export default function factoryConstructor(target: Function) { }

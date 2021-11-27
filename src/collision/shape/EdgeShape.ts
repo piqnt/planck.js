@@ -30,6 +30,7 @@ import Vec2 from '../../common/Vec2';
 import AABB, { RayCastInput, RayCastOutput } from '../AABB';
 import { MassData } from '../../dynamics/Body';
 import { DistanceProxy } from '../Distance';
+import factoryConstructor from '../../decorators/factoryConstructor';
 
 /**
  * A line segment (edge) shape. These can be connected in chains or loops to

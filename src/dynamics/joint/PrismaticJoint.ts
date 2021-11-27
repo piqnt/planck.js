@@ -34,6 +34,7 @@ import Rot from '../../common/Rot';
 import Joint, { JointOpt, JointDef } from '../Joint';
 import Body from '../Body';
 import { TimeStep } from "../Solver";
+import factoryConstructor from '../../decorators/factoryConstructor';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;

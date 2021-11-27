@@ -24,6 +24,7 @@
 
 import type Vec2 from '../../common/Vec2';
 import PolygonShape from './PolygonShape';
+import factoryConstructor from '../../decorators/factoryConstructor';
 
 /**
  * A rectangle polygon which extend PolygonShape.
