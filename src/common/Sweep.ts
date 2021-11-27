@@ -88,8 +88,7 @@ export default class Sweep {
    * @param xf
    * @param beta A factor in [0,1], where 0 indicates alpha0
    */
-  getTransform(xf: Transform, beta: number): void {
-    beta = typeof beta === 'undefined' ? 0 : beta;
+  getTransform(xf: Transform, beta=0): void {
     xf.q.setAngle((1.0 - beta) * this.a0 + beta * this.a);
     xf.p.setCombine((1.0 - beta), this.c0, beta, this.c);
 

@@ -37,17 +37,17 @@ export default class Mat22 {
   ex: Vec2;
   ey: Vec2;
 
-  constructor(a: number, b: number, c: number, d: number);
-  constructor(a: { x: number; y: number }, b: { x: number; y: number });
+  // constructor(a: number, b: number, c: number, d: number);
+  constructor(a: Vec2, b: Vec2);
   constructor();
   // tslint:disable-next-line:typedef
   constructor(a?, b?, c?, d?) {
-    if (typeof a === 'object' && a !== null) {
+    if (a != null) {
       this.ex = Vec2.clone(a);
       this.ey = Vec2.clone(b);
-    } else if (typeof a === 'number') {
-      this.ex = Vec2.neo(a, c);
-      this.ey = Vec2.neo(b, d);
+    // } else if (typeof a === 'number') {
+    //   this.ex = Vec2.neo(a, c);
+    //   this.ey = Vec2.neo(b, d);
     } else {
       this.ex = Vec2.zero();
       this.ey = Vec2.zero();
@@ -75,27 +75,27 @@ export default class Mat22 {
   }
 
   set(a: Mat22): void;
-  set(a: Vec2, b: Vec2): void;
-  set(a: number, b: number, c: number, d: number): void;
+  // set(a: Vec2, b: Vec2): void;
+  // set(a: number, b: number, c: number, d: number): void;
   // tslint:disable-next-line:typedef
   set(a, b?, c?, d?): void {
-    if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
-      && typeof d === 'number') {
-      this.ex.set(a, c);
-      this.ey.set(b, d);
+    // if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
+    //   && typeof d === 'number') {
+    //   this.ex.set(a, c);
+    //   this.ey.set(b, d);
 
-    } else if (typeof a === 'object' && typeof b === 'object') {
-      this.ex.setVec2(a);
-      this.ey.setVec2(b);
+    // } else if (typeof a === 'object' && typeof b === 'object') {
+    //   this.ex.setVec2(a);
+    //   this.ey.setVec2(b);
 
-    } else if (typeof a === 'object') {
+    // } else if (typeof a === 'object') {
       _ASSERT && Mat22.assert(a);
       this.ex.setVec2(a.ex);
       this.ey.setVec2(a.ey);
 
-    } else {
-      _ASSERT && common.assert(false);
-    }
+    // } else {
+    //   _ASSERT && common.assert(false);
+    // }
   }
 
   setIdentity(): void {
@@ -153,28 +153,28 @@ export default class Mat22 {
    * Multiply a matrix times a vector. If a rotation matrix is provided, then this
    * transforms the vector from one frame to another.
    */
-  static mul(mx: Mat22, my: Mat22): Mat22;
-  static mul(mx: Mat22, v: Vec2): Vec2;
-  // tslint:disable-next-line:typedef
-  static mul(mx, v) {
-    if (v && 'x' in v && 'y' in v) {
-      _ASSERT && Vec2.assert(v);
-      const x = mx.ex.x * v.x + mx.ey.x * v.y;
-      const y = mx.ex.y * v.x + mx.ey.y * v.y;
-      return Vec2.neo(x, y);
+  // static mul(mx: Mat22, my: Mat22): Mat22;
+  // static mul(mx: Mat22, v: Vec2): Vec2;
+  // // tslint:disable-next-line:typedef
+  // static mul(mx, v) {
+  //   if (v && 'x' in v && 'y' in v) {
+  //     _ASSERT && Vec2.assert(v);
+  //     const x = mx.ex.x * v.x + mx.ey.x * v.y;
+  //     const y = mx.ex.y * v.x + mx.ey.y * v.y;
+  //     return Vec2.neo(x, y);
 
-    } else if (v && 'ex' in v && 'ey' in v) { // Mat22
-      _ASSERT && Mat22.assert(v);
-      // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
-      const a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
-      const b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
-      const c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;
-      const d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
-      return new Mat22(a, b, c, d);
-    }
+  //   } else if (v && 'ex' in v && 'ey' in v) { // Mat22
+  //     _ASSERT && Mat22.assert(v);
+  //     // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+  //     const a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
+  //     const b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
+  //     const c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;
+  //     const d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
+  //     return new Mat22(a, b, c, d);
+  //   }
 
-    _ASSERT && common.assert(false);
-  }
+  //   _ASSERT && common.assert(false);
+  // }
 
   static mulVec2(mx: Mat22, v: Vec2): Vec2 {
     _ASSERT && Vec2.assert(v);
@@ -190,7 +190,7 @@ export default class Mat22 {
     const b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
     const c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;
     const d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
-    return new Mat22(a, b, c, d);
+    return new Mat22(Vec2.neo(a, b), Vec2.neo(c, d));
   }
 
   /**
@@ -198,23 +198,23 @@ export default class Mat22 {
    * then this transforms the vector from one frame to another (inverse
    * transform).
    */
-  static mulT(mx: Mat22, my: Mat22): Mat22;
-  static mulT(mx: Mat22, v: Vec2): Vec2;
-  // tslint:disable-next-line:typedef
-  static mulT(mx, v) {
-    if (v && 'x' in v && 'y' in v) { // Vec2
-      _ASSERT && Vec2.assert(v);
-      return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
+  // static mulT(mx: Mat22, my: Mat22): Mat22;
+  // static mulT(mx: Mat22, v: Vec2): Vec2;
+  // // tslint:disable-next-line:typedef
+  // static mulT(mx, v) {
+  //   if (v && 'x' in v && 'y' in v) { // Vec2
+  //     _ASSERT && Vec2.assert(v);
+  //     return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
 
-    } else if (v && 'ex' in v && 'ey' in v) { // Mat22
-      _ASSERT && Mat22.assert(v);
-      const c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
-      const c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
-      return new Mat22(c1, c2);
-    }
+  //   } else if (v && 'ex' in v && 'ey' in v) { // Mat22
+  //     _ASSERT && Mat22.assert(v);
+  //     const c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
+  //     const c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
+  //     return new Mat22(c1, c2);
+  //   }
 
-    _ASSERT && common.assert(false);
-  }
+  //   _ASSERT && common.assert(false);
+  // }
 
   static mulTVec2(mx: Mat22, v: Vec2): Vec2 {
     _ASSERT && Mat22.assert(mx);

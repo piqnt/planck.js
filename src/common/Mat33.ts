@@ -42,7 +42,7 @@ export default class Mat33 {
   constructor(a: Vec3, b: Vec3, c: Vec3);
   constructor();
   constructor(a?: Vec3, b?: Vec3, c?: Vec3) {
-    if (typeof a === 'object' && a !== null) {
+    if (a != null) {
       this.ex = Vec3.clone(a);
       this.ey = Vec3.clone(b);
       this.ez = Vec3.clone(c);
@@ -175,27 +175,27 @@ export default class Mat33 {
   /**
    * Multiply a matrix times a vector.
    */
-  static mul(a: Mat33, b: Vec2): Vec2;
-  static mul(a: Mat33, b: Vec3): Vec3;
-  // tslint:disable-next-line:typedef
-  static mul(a, b) {
-    _ASSERT && Mat33.assert(a);
-    if (b && 'z' in b && 'y' in b && 'x' in b) {
-      _ASSERT && Vec3.assert(b);
-      const x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
-      const y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
-      const z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
-      return new Vec3(x, y, z);
+  // static mul(a: Mat33, b: Vec2): Vec2;
+  // static mul(a: Mat33, b: Vec3): Vec3;
+  // // tslint:disable-next-line:typedef
+  // static mul(a, b) {
+  //   _ASSERT && Mat33.assert(a);
+  //   if (b && 'z' in b && 'y' in b && 'x' in b) {
+  //     _ASSERT && Vec3.assert(b);
+  //     const x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
+  //     const y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
+  //     const z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
+  //     return new Vec3(x, y, z);
 
-    } else if (b && 'y' in b && 'x' in b) {
-      _ASSERT && Vec2.assert(b);
-      const x = a.ex.x * b.x + a.ey.x * b.y;
-      const y = a.ex.y * b.x + a.ey.y * b.y;
-      return Vec2.neo(x, y);
-    }
+  //   } else if (b && 'y' in b && 'x' in b) {
+  //     _ASSERT && Vec2.assert(b);
+  //     const x = a.ex.x * b.x + a.ey.x * b.y;
+  //     const y = a.ex.y * b.x + a.ey.y * b.y;
+  //     return Vec2.neo(x, y);
+  //   }
 
-    _ASSERT && common.assert(false);
-  }
+  //   _ASSERT && common.assert(false);
+  // }
 
   static mulVec3(a: Mat33, b: Vec3): Vec3 {
     _ASSERT && Mat33.assert(a);
