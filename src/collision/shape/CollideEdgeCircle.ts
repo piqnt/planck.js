@@ -105,9 +105,9 @@ export function CollideEdgeCircle(manifold: Manifold, edgeA: EdgeShape, xfA: Tra
 
     manifold.type = ManifoldType.e_circles;
     manifold.localNormal.setZero();
-    manifold.localPoint.set(P);
+    manifold.localPoint.setVec2(P);
     manifold.pointCount = 1;
-    manifold.points[0].localPoint.set(circleB.m_p);
+    manifold.points[0].localPoint.setVec2(circleB.m_p);
 
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.cf.indexA = 0;
@@ -141,9 +141,9 @@ export function CollideEdgeCircle(manifold: Manifold, edgeA: EdgeShape, xfA: Tra
 
     manifold.type = ManifoldType.e_circles;
     manifold.localNormal.setZero();
-    manifold.localPoint.set(P);
+    manifold.localPoint.setVec2(P);
     manifold.pointCount = 1;
-    manifold.points[0].localPoint.set(circleB.m_p);
+    manifold.points[0].localPoint.setVec2(circleB.m_p);
 
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.cf.indexA = 1;
@@ -171,9 +171,9 @@ export function CollideEdgeCircle(manifold: Manifold, edgeA: EdgeShape, xfA: Tra
 
   manifold.type = ManifoldType.e_faceA;
   manifold.localNormal = n;
-  manifold.localPoint.set(A);
+  manifold.localPoint.setVec2(A);
   manifold.pointCount = 1;
-  manifold.points[0].localPoint.set(circleB.m_p);
+  manifold.points[0].localPoint.setVec2(circleB.m_p);
 
   // manifold.points[0].id.key = 0;
   manifold.points[0].id.cf.indexA = 0;

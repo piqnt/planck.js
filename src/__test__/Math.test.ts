@@ -65,10 +65,10 @@ describe('Math', function(): void {
     r = Vec2.dot(v, new Vec2(2, 3));
     expect(r).equal(13);
 
-    r = Vec2.cross(v, new Vec2(2, 3));
+    r = Vec2.crossNumberVec2(v, new Vec2(2, 3));
     expect(r).equal(0);
 
-    r = Vec2.cross(v, 5);
+    r = Vec2.crossNumberVec2(v, 5);
     expect(r.x).equal(15);
     expect(r.y).equal(-10);
 

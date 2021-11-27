@@ -794,7 +794,7 @@ export default class DynamicTree<T> {
     r.normalize();
 
     // v is perpendicular to the segment.
-    const v = Vec2.cross(1.0, r);
+    const v = Vec2.crossNumberVec2(1.0, r);
     const abs_v = Vec2.abs(v);
 
     // Separating axis for segment (Gino, p80).

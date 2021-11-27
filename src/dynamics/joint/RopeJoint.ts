@@ -264,8 +264,8 @@ export default class RopeJoint extends Joint {
     }
 
     // Compute effective mass.
-    const crA = Vec2.cross(this.m_rA, this.m_u); // float
-    const crB = Vec2.cross(this.m_rB, this.m_u); // float
+    const crA = Vec2.crossVec2Vec2(this.m_rA, this.m_u); // float
+    const crB = Vec2.crossVec2Vec2(this.m_rB, this.m_u); // float
     const invMass = this.m_invMassA + this.m_invIA * crA * crA + this.m_invMassB
         + this.m_invIB * crB * crB; // float
 
@@ -278,18 +278,18 @@ export default class RopeJoint extends Joint {
       const P = Vec2.mul(this.m_impulse, this.m_u);
 
       vA.subMul(this.m_invMassA, P);
-      wA -= this.m_invIA * Vec2.cross(this.m_rA, P);
+      wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
 
       vB.addMul(this.m_invMassB, P);
-      wB += this.m_invIB * Vec2.cross(this.m_rB, P);
+      wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
 
     } else {
       this.m_impulse = 0.0;
     }
 
-    this.m_bodyA.c_velocity.v.set(vA);
+    this.m_bodyA.c_velocity.v.setVec2(vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.set(vB);
+    this.m_bodyB.c_velocity.v.setVec2(vB);
     this.m_bodyB.c_velocity.w = wB;
   }
 
@@ -317,9 +317,9 @@ export default class RopeJoint extends Joint {
 
     const P = Vec2.mul(impulse, this.m_u); // Vec2
     vA.subMul(this.m_invMassA, P);
-    wA -= this.m_invIA * Vec2.cross(this.m_rA, P);
+    wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
     vB.addMul(this.m_invMassB, P);
-    wB += this.m_invIB * Vec2.cross(this.m_rB, P);
+    wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
 
     this.m_bodyA.c_velocity.v = vA;
     this.m_bodyA.c_velocity.w = wA;
@@ -354,13 +354,13 @@ export default class RopeJoint extends Joint {
     const P = Vec2.mul(impulse, u); // Vec2
 
     cA.subMul(this.m_invMassA, P);
-    aA -= this.m_invIA * Vec2.cross(rA, P);
+    aA -= this.m_invIA * Vec2.crossVec2Vec2(rA, P);
     cB.addMul(this.m_invMassB, P);
-    aB += this.m_invIB * Vec2.cross(rB, P);
+    aB += this.m_invIB * Vec2.crossVec2Vec2(rB, P);
 
-    this.m_bodyA.c_position.c.set(cA);
+    this.m_bodyA.c_position.c.setVec2(cA);
     this.m_bodyA.c_position.a = aA;
-    this.m_bodyB.c_position.c.set(cB);
+    this.m_bodyB.c_position.c.setVec2(cB);
     this.m_bodyB.c_position.a = aB;
 
     return length - this.m_maxLength < Settings.linearSlop;

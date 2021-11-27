@@ -200,11 +200,11 @@ export function CollidePolygons(manifold: Manifold, polyA: PolygonShape, xfA: Tr
   const localTangent = Vec2.sub(v12, v11);
   localTangent.normalize();
 
-  const localNormal = Vec2.cross(localTangent, 1.0);
+  const localNormal = Vec2.crossVec2Number(localTangent, 1.0);
   const planePoint = Vec2.combine(0.5, v11, 0.5, v12);
 
   const tangent = Rot.mulVec2(xf1.q, localTangent);
-  const normal = Vec2.cross(tangent, 1.0);
+  const normal = Vec2.crossVec2Number(tangent, 1.0);
 
   v11 = Transform.mulVec2(xf1, v11);
   v12 = Transform.mulVec2(xf1, v12);
@@ -245,7 +245,7 @@ export function CollidePolygons(manifold: Manifold, polyA: PolygonShape, xfA: Tr
 
     if (separation <= totalRadius) {
       const cp = manifold.points[pointCount];
-      cp.localPoint.set(Transform.mulTVec2(xf2, clipPoints2[i].v));
+      cp.localPoint.setVec2(Transform.mulTVec2(xf2, clipPoints2[i].v));
       cp.id = clipPoints2[i].id;
       if (flip) {
         // Swap features

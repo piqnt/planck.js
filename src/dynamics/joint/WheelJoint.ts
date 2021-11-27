@@ -157,7 +157,7 @@ export default class WheelJoint extends Joint {
     this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
     // @ts-ignore localAxis
     this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || def.localAxis || Vec2.neo(1.0, 0.0));
-    this.m_localYAxisA = Vec2.cross(1.0, this.m_localXAxisA);
+    this.m_localYAxisA = Vec2.crossNumberVec2(1.0, this.m_localXAxisA);
 
     this.m_mass = 0.0;
     this.m_impulse = 0.0;
@@ -234,20 +234,20 @@ export default class WheelJoint extends Joint {
     localAxisA?: Vec2,
   }): void {
     if (def.anchorA) {
-      this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+      this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
-      this.m_localAnchorA.set(def.localAnchorA);
+      this.m_localAnchorA.setVec2(def.localAnchorA);
     }
 
     if (def.anchorB) {
-      this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+      this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
-      this.m_localAnchorB.set(def.localAnchorB);
+      this.m_localAnchorB.setVec2(def.localAnchorB);
     }
 
     if (def.localAxisA) {
-      this.m_localXAxisA.set(def.localAxisA);
-      this.m_localYAxisA.set(Vec2.cross(1.0, def.localAxisA));
+      this.m_localXAxisA.setVec2(def.localAxisA);
+      this.m_localYAxisA.setVec2(Vec2.crossNumberVec2(1.0, def.localAxisA));
     }
   }
 
@@ -436,8 +436,8 @@ export default class WheelJoint extends Joint {
     // Point to line constraint
     {
       this.m_ay = Rot.mulVec2(qA, this.m_localYAxisA);
-      this.m_sAy = Vec2.cross(Vec2.add(d, rA), this.m_ay);
-      this.m_sBy = Vec2.cross(rB, this.m_ay);
+      this.m_sAy = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_ay);
+      this.m_sBy = Vec2.crossVec2Vec2(rB, this.m_ay);
 
       this.m_mass = mA + mB + iA * this.m_sAy * this.m_sAy + iB * this.m_sBy
           * this.m_sBy;
@@ -453,8 +453,8 @@ export default class WheelJoint extends Joint {
     this.m_gamma = 0.0;
     if (this.m_frequencyHz > 0.0) {
       this.m_ax = Rot.mulVec2(qA, this.m_localXAxisA);
-      this.m_sAx = Vec2.cross(Vec2.add(d, rA), this.m_ax);
-      this.m_sBx = Vec2.cross(rB, this.m_ax);
+      this.m_sAx = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_ax);
+      this.m_sBx = Vec2.crossVec2Vec2(rB, this.m_ax);
 
       const invMass = mA + mB + iA * this.m_sAx * this.m_sAx + iB * this.m_sBx
           * this.m_sBx; // float
@@ -524,9 +524,9 @@ export default class WheelJoint extends Joint {
       this.m_motorImpulse = 0.0;
     }
 
-    this.m_bodyA.c_velocity.v.set(vA);
+    this.m_bodyA.c_velocity.v.setVec2(vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.set(vB);
+    this.m_bodyB.c_velocity.v.setVec2(vB);
     this.m_bodyB.c_velocity.w = wB;
   }
 
@@ -593,9 +593,9 @@ export default class WheelJoint extends Joint {
       wB += iB * LB;
     }
 
-    this.m_bodyA.c_velocity.v.set(vA);
+    this.m_bodyA.c_velocity.v.setVec2(vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.set(vB);
+    this.m_bodyB.c_velocity.v.setVec2(vB);
     this.m_bodyB.c_velocity.w = wB;
   }
 
@@ -619,8 +619,8 @@ export default class WheelJoint extends Joint {
 
     const ay = Rot.mulVec2(qA, this.m_localYAxisA);
 
-    const sAy = Vec2.cross(Vec2.add(d, rA), ay); // float
-    const sBy = Vec2.cross(rB, ay); // float
+    const sAy = Vec2.crossVec2Vec2(Vec2.add(d, rA), ay); // float
+    const sBy = Vec2.crossVec2Vec2(rB, ay); // float
 
     const C = Vec2.dot(d, ay); // float
 
@@ -643,9 +643,9 @@ export default class WheelJoint extends Joint {
     cB.addMul(this.m_invMassB, P);
     aB += this.m_invIB * LB;
 
-    this.m_bodyA.c_position.c.set(cA);
+    this.m_bodyA.c_position.c.setVec2(cA);
     this.m_bodyA.c_position.a = aA;
-    this.m_bodyB.c_position.c.set(cB);
+    this.m_bodyB.c_position.c.setVec2(cB);
     this.m_bodyB.c_position.a = aB;
 
     return Math.abs(C) <= Settings.linearSlop;

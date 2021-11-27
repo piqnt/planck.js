@@ -54,7 +54,7 @@ export default class CircleShape extends Shape {
     this.m_radius = 1;
 
     if (typeof a === 'object' && Vec2.isValid(a)) {
-      this.m_p.set(a);
+      this.m_p.setVec2(a);
 
       if (typeof b === 'number') {
         this.m_radius = b;

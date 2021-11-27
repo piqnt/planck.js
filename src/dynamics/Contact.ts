@@ -579,9 +579,9 @@ export default class Contact {
       xfB.p = Vec2.sub(cB, Rot.mulVec2(xfB.q, localCenterB));
 
       // PositionSolverManifold
-      let normal;
-      let point;
-      let separation;
+      let normal: Vec2;
+      let point: Vec2;
+      let separation: number;
       switch (this.p_type) {
         case ManifoldType.e_circles: {
           const pointA = Transform.mulVec2(xfA, this.p_localPoint);
@@ -629,8 +629,8 @@ export default class Contact {
       const C = Math.clamp(baumgarte * (separation + linearSlop), -maxLinearCorrection, 0.0);
 
       // Compute the effective mass.
-      const rnA = Vec2.cross(rA, normal);
-      const rnB = Vec2.cross(rB, normal);
+      const rnA = Vec2.crossVec2Vec2(rA, normal);
+      const rnB = Vec2.crossVec2Vec2(rB, normal);
       const K = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
 
       // Compute normal impulse
@@ -639,16 +639,16 @@ export default class Contact {
       const P = Vec2.mul(impulse, normal);
 
       cA.subMul(mA, P);
-      aA -= iA * Vec2.cross(rA, P);
+      aA -= iA * Vec2.crossVec2Vec2(rA, P);
 
       cB.addMul(mB, P);
-      aB += iB * Vec2.cross(rB, P);
+      aB += iB * Vec2.crossVec2Vec2(rB, P);
     }
 
-    positionA.c.set(cA);
+    positionA.c.setVec2(cA);
     positionA.a = aA;
 
-    positionB.c.set(cB);
+    positionB.c.setVec2(cB);
     positionB.a = aB;
 
     return minSeparation;
@@ -699,25 +699,25 @@ export default class Contact {
 
     const worldManifold = manifold.getWorldManifold(null, xfA, radiusA, xfB, radiusB);
 
-    this.v_normal.set(worldManifold.normal);
+    this.v_normal.setVec2(worldManifold.normal);
 
     for (let j = 0; j < this.v_pointCount; ++j) {
       const vcp = this.v_points[j]; // VelocityConstraintPoint
 
-      vcp.rA.set(Vec2.sub(worldManifold.points[j], cA));
-      vcp.rB.set(Vec2.sub(worldManifold.points[j], cB));
+      vcp.rA.setVec2(Vec2.sub(worldManifold.points[j], cA));
+      vcp.rB.setVec2(Vec2.sub(worldManifold.points[j], cB));
 
-      const rnA = Vec2.cross(vcp.rA, this.v_normal);
-      const rnB = Vec2.cross(vcp.rB, this.v_normal);
+      const rnA = Vec2.crossVec2Vec2(vcp.rA, this.v_normal);
+      const rnB = Vec2.crossVec2Vec2(vcp.rB, this.v_normal);
 
       const kNormal = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
 
       vcp.normalMass = kNormal > 0.0 ? 1.0 / kNormal : 0.0;
 
-      const tangent = Vec2.cross(this.v_normal, 1.0);
+      const tangent = Vec2.crossVec2Number(this.v_normal, 1.0);
 
-      const rtA = Vec2.cross(vcp.rA, tangent);
-      const rtB = Vec2.cross(vcp.rB, tangent);
+      const rtA = Vec2.crossVec2Vec2(vcp.rA, tangent);
+      const rtB = Vec2.crossVec2Vec2(vcp.rB, tangent);
 
       const kTangent = mA + mB + iA * rtA * rtA + iB * rtB * rtB;
 
@@ -726,9 +726,9 @@ export default class Contact {
       // Setup a velocity bias for restitution.
       vcp.velocityBias = 0.0;
       const vRel = Vec2.dot(this.v_normal, vB)
-        + Vec2.dot(this.v_normal, Vec2.cross(wB, vcp.rB))
+        + Vec2.dot(this.v_normal, Vec2.crossNumberVec2(wB, vcp.rB))
         - Vec2.dot(this.v_normal, vA)
-        - Vec2.dot(this.v_normal, Vec2.cross(wA, vcp.rA));
+        - Vec2.dot(this.v_normal, Vec2.crossNumberVec2(wA, vcp.rA));
       if (vRel < -Settings.velocityThreshold) {
         vcp.velocityBias = -this.v_restitution * vRel;
       }
@@ -739,10 +739,10 @@ export default class Contact {
       const vcp1 = this.v_points[0]; // VelocityConstraintPoint
       const vcp2 = this.v_points[1]; // VelocityConstraintPoint
 
-      const rn1A = Vec2.cross(vcp1.rA, this.v_normal);
-      const rn1B = Vec2.cross(vcp1.rB, this.v_normal);
-      const rn2A = Vec2.cross(vcp2.rA, this.v_normal);
-      const rn2B = Vec2.cross(vcp2.rB, this.v_normal);
+      const rn1A = Vec2.crossVec2Vec2(vcp1.rA, this.v_normal);
+      const rn1B = Vec2.crossVec2Vec2(vcp1.rB, this.v_normal);
+      const rn2A = Vec2.crossVec2Vec2(vcp2.rA, this.v_normal);
+      const rn2B = Vec2.crossVec2Vec2(vcp2.rB, this.v_normal);
 
       const k11 = mA + mB + iA * rn1A * rn1A + iB * rn1B * rn1B;
       const k22 = mA + mB + iA * rn2A * rn2A + iB * rn2B * rn2B;
@@ -762,14 +762,14 @@ export default class Contact {
       }
     }
 
-    positionA.c.set(cA);
+    positionA.c.setVec2(cA);
     positionA.a = aA;
-    velocityA.v.set(vA);
+    velocityA.v.setVec2(vA);
     velocityA.w = wA;
 
-    positionB.c.set(cB);
+    positionB.c.setVec2(cB);
     positionB.a = aB;
-    velocityB.v.set(vB);
+    velocityB.v.setVec2(vB);
     velocityB.w = wB;
   }
 
@@ -796,21 +796,21 @@ export default class Contact {
     let wB = velocityB.w;
 
     const normal = this.v_normal;
-    const tangent = Vec2.cross(normal, 1.0);
+    const tangent = Vec2.crossVec2Number(normal, 1.0);
 
     for (let j = 0; j < this.v_pointCount; ++j) {
       const vcp = this.v_points[j]; // VelocityConstraintPoint
 
       const P = Vec2.combine(vcp.normalImpulse, normal, vcp.tangentImpulse, tangent);
-      wA -= iA * Vec2.cross(vcp.rA, P);
+      wA -= iA * Vec2.crossVec2Vec2(vcp.rA, P);
       vA.subMul(mA, P);
-      wB += iB * Vec2.cross(vcp.rB, P);
+      wB += iB * Vec2.crossVec2Vec2(vcp.rB, P);
       vB.addMul(mB, P);
     }
 
-    velocityA.v.set(vA);
+    velocityA.v.setVec2(vA);
     velocityA.w = wA;
-    velocityB.v.set(vB);
+    velocityB.v.setVec2(vB);
     velocityB.w = wB;
   }
 
@@ -843,7 +843,7 @@ export default class Contact {
     let wB = velocityB.w;
 
     const normal = this.v_normal;
-    const tangent = Vec2.cross(normal, 1.0);
+    const tangent = Vec2.crossVec2Number(normal, 1.0);
     const friction = this.v_friction;
 
     _ASSERT && common.assert(this.v_pointCount == 1 || this.v_pointCount == 2);
@@ -855,8 +855,8 @@ export default class Contact {
 
       // Relative velocity at contact
       const dv = Vec2.zero();
-      dv.addCombine(1, vB, 1, Vec2.cross(wB, vcp.rB));
-      dv.subCombine(1, vA, 1, Vec2.cross(wA, vcp.rA));
+      dv.addCombine(1, vB, 1, Vec2.crossNumberVec2(wB, vcp.rB));
+      dv.subCombine(1, vA, 1, Vec2.crossNumberVec2(wA, vcp.rA));
 
       // Compute tangent force
       const vt = Vec2.dot(dv, tangent) - this.v_tangentSpeed;
@@ -872,10 +872,10 @@ export default class Contact {
       const P = Vec2.mul(lambda, tangent);
 
       vA.subMul(mA, P);
-      wA -= iA * Vec2.cross(vcp.rA, P);
+      wA -= iA * Vec2.crossVec2Vec2(vcp.rA, P);
 
       vB.addMul(mB, P);
-      wB += iB * Vec2.cross(vcp.rB, P);
+      wB += iB * Vec2.crossVec2Vec2(vcp.rB, P);
     }
 
     // Solve normal constraints
@@ -885,8 +885,8 @@ export default class Contact {
 
         // Relative velocity at contact
         const dv = Vec2.zero();
-        dv.addCombine(1, vB, 1, Vec2.cross(wB, vcp.rB));
-        dv.subCombine(1, vA, 1, Vec2.cross(wA, vcp.rA));
+        dv.addCombine(1, vB, 1, Vec2.crossNumberVec2(wB, vcp.rB));
+        dv.subCombine(1, vA, 1, Vec2.crossNumberVec2(wA, vcp.rA));
 
         // Compute normal impulse
         const vn = Vec2.dot(dv, normal);
@@ -901,10 +901,10 @@ export default class Contact {
         const P = Vec2.mul(lambda, normal);
 
         vA.subMul(mA, P);
-        wA -= iA * Vec2.cross(vcp.rA, P);
+        wA -= iA * Vec2.crossVec2Vec2(vcp.rA, P);
 
         vB.addMul(mB, P);
-        wB += iB * Vec2.cross(vcp.rB, P);
+        wB += iB * Vec2.crossVec2Vec2(vcp.rB, P);
       }
     } else {
       // Block solver developed in collaboration with Dirk Gregorius (back in
@@ -955,8 +955,8 @@ export default class Contact {
       _ASSERT && common.assert(a.x >= 0.0 && a.y >= 0.0);
 
       // Relative velocity at contact
-      let dv1 = Vec2.zero().add(vB).add(Vec2.cross(wB, vcp1.rB)).sub(vA).sub(Vec2.cross(wA, vcp1.rA));
-      let dv2 = Vec2.zero().add(vB).add(Vec2.cross(wB, vcp2.rB)).sub(vA).sub(Vec2.cross(wA, vcp2.rA));
+      let dv1 = Vec2.zero().add(vB).add(Vec2.crossNumberVec2(wB, vcp1.rB)).sub(vA).sub(Vec2.crossNumberVec2(wA, vcp1.rA));
+      let dv2 = Vec2.zero().add(vB).add(Vec2.crossNumberVec2(wB, vcp2.rB)).sub(vA).sub(Vec2.crossNumberVec2(wA, vcp2.rA));
 
       // Compute normal velocity
       let vn1 = Vec2.dot(dv1, normal);
@@ -991,10 +991,10 @@ export default class Contact {
           const P2 = Vec2.mul(d.y, normal);
 
           vA.subCombine(mA, P1, mA, P2);
-          wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
+          wA -= iA * (Vec2.crossVec2Vec2(vcp1.rA, P1) + Vec2.crossVec2Vec2(vcp2.rA, P2));
 
           vB.addCombine(mB, P1, mB, P2);
-          wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
+          wB += iB * (Vec2.crossVec2Vec2(vcp1.rB, P1) + Vec2.crossVec2Vec2(vcp2.rB, P2));
 
           // Accumulate
           vcp1.normalImpulse = x.x;
@@ -1002,8 +1002,8 @@ export default class Contact {
 
           if (DEBUG_SOLVER) {
             // Postconditions
-            dv1 = Vec2.sub(Vec2.add(vB, Vec2.cross(wB, vcp1.rB)), Vec2.add(vA, Vec2.cross(wA, vcp1.rA)));
-            dv2 = Vec2.sub(Vec2.add(vB, Vec2.cross(wB, vcp2.rB)), Vec2.add(vA, Vec2.cross(wA, vcp2.rA)));
+            dv1 = Vec2.sub(Vec2.add(vB, Vec2.crossNumberVec2(wB, vcp1.rB)), Vec2.add(vA, Vec2.crossNumberVec2(wA, vcp1.rA)));
+            dv2 = Vec2.sub(Vec2.add(vB, Vec2.crossNumberVec2(wB, vcp2.rB)), Vec2.add(vA, Vec2.crossNumberVec2(wA, vcp2.rA)));
 
             // Compute normal velocity
             vn1 = Vec2.dot(dv1, normal);
@@ -1034,10 +1034,10 @@ export default class Contact {
           const P1 = Vec2.mul(d.x, normal);
           const P2 = Vec2.mul(d.y, normal);
           vA.subCombine(mA, P1, mA, P2);
-          wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
+          wA -= iA * (Vec2.crossVec2Vec2(vcp1.rA, P1) + Vec2.crossVec2Vec2(vcp2.rA, P2));
 
           vB.addCombine(mB, P1, mB, P2);
-          wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
+          wB += iB * (Vec2.crossVec2Vec2(vcp1.rB, P1) + Vec2.crossVec2Vec2(vcp2.rB, P2));
 
           // Accumulate
           vcp1.normalImpulse = x.x;
@@ -1045,8 +1045,8 @@ export default class Contact {
 
           if (DEBUG_SOLVER) {
             // Postconditions
-            const dv1B = Vec2.add(vB, Vec2.cross(wB, vcp1.rB));
-            const dv1A = Vec2.add(vA, Vec2.cross(wA, vcp1.rA));
+            const dv1B = Vec2.add(vB, Vec2.crossNumberVec2(wB, vcp1.rB));
+            const dv1A = Vec2.add(vA, Vec2.crossNumberVec2(wA, vcp1.rA));
             const dv1 = Vec2.sub(dv1B, dv1A);
 
             // Compute normal velocity
@@ -1076,10 +1076,10 @@ export default class Contact {
           const P1 = Vec2.mul(d.x, normal);
           const P2 = Vec2.mul(d.y, normal);
           vA.subCombine(mA, P1, mA, P2);
-          wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
+          wA -= iA * (Vec2.crossVec2Vec2(vcp1.rA, P1) + Vec2.crossVec2Vec2(vcp2.rA, P2));
 
           vB.addCombine(mB, P1, mB, P2);
-          wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
+          wB += iB * (Vec2.crossVec2Vec2(vcp1.rB, P1) + Vec2.crossVec2Vec2(vcp2.rB, P2));
 
           // Accumulate
           vcp1.normalImpulse = x.x;
@@ -1087,8 +1087,8 @@ export default class Contact {
 
           if (DEBUG_SOLVER) {
             // Postconditions
-            const dv2B = Vec2.add(vB, Vec2.cross(wB, vcp2.rB));
-            const dv2A = Vec2.add(vA, Vec2.cross(wA, vcp2.rA));
+            const dv2B = Vec2.add(vB, Vec2.crossNumberVec2(wB, vcp2.rB));
+            const dv2A = Vec2.add(vA, Vec2.crossNumberVec2(wA, vcp2.rA));
             const dv1 = Vec2.sub(dv2B, dv2A);
 
             // Compute normal velocity
@@ -1118,10 +1118,10 @@ export default class Contact {
           const P1 = Vec2.mul(d.x, normal);
           const P2 = Vec2.mul(d.y, normal);
           vA.subCombine(mA, P1, mA, P2);
-          wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
+          wA -= iA * (Vec2.crossVec2Vec2(vcp1.rA, P1) + Vec2.crossVec2Vec2(vcp2.rA, P2));
 
           vB.addCombine(mB, P1, mB, P2);
-          wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
+          wB += iB * (Vec2.crossVec2Vec2(vcp1.rB, P1) + Vec2.crossVec2Vec2(vcp2.rB, P2));
 
           // Accumulate
           vcp1.normalImpulse = x.x;
@@ -1136,10 +1136,10 @@ export default class Contact {
       }
     }
 
-    velocityA.v.set(vA);
+    velocityA.v.setVec2(vA);
     velocityA.w = wA;
 
-    velocityB.v.set(vB);
+    velocityB.v.setVec2(vB);
     velocityB.w = wB;
   }
 

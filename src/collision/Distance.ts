@@ -218,8 +218,8 @@ export default function Distance(output: DistanceOutput, cache: SimplexCache, in
       // Shapes are overlapped when radii are considered.
       // Move the witness points to the middle.
       const p = Vec2.mid(output.pointA, output.pointB);
-      output.pointA.set(p);
-      output.pointB.set(p);
+      output.pointA.setVec2(p);
+      output.pointB.setVec2(p);
       output.distance = 0.0;
     }
   }
@@ -417,13 +417,13 @@ class Simplex {
 
       case 2: {
         const e12 = Vec2.sub(this.m_v2.w, this.m_v1.w);
-        const sgn = Vec2.cross(e12, Vec2.neg(this.m_v1.w));
+        const sgn = Vec2.crossVec2Vec2(e12, Vec2.neg(this.m_v1.w));
         if (sgn > 0.0) {
           // Origin is left of e12.
-          return Vec2.cross(1.0, e12);
+          return Vec2.crossNumberVec2(1.0, e12);
         } else {
           // Origin is right of e12.
-          return Vec2.cross(e12, 1.0);
+          return Vec2.crossVec2Number(e12, 1.0);
         }
       }
 
@@ -461,8 +461,8 @@ class Simplex {
         break;
 
       case 1:
-        pA.set(this.m_v1.wA);
-        pB.set(this.m_v1.wB);
+        pA.setVec2(this.m_v1.wA);
+        pB.setVec2(this.m_v1.wB);
         break;
 
       case 2:
@@ -473,7 +473,7 @@ class Simplex {
       case 3:
         pA.setCombine(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
         pA.addMul(this.m_v3.a, this.m_v3.wA);
-        pB.set(pA);
+        pB.setVec2(pA);
         break;
 
       default:
@@ -495,7 +495,7 @@ class Simplex {
         return Vec2.distance(this.m_v1.w, this.m_v2.w);
 
       case 3:
-        return Vec2.cross(Vec2.sub(this.m_v2.w, this.m_v1.w), Vec2.sub(this.m_v3.w,
+        return Vec2.crossVec2Vec2(Vec2.sub(this.m_v2.w, this.m_v1.w), Vec2.sub(this.m_v3.w,
           this.m_v1.w));
 
       default:
@@ -617,11 +617,11 @@ class Simplex {
     const d23_2 = -w2e23;
 
     // Triangle123
-    const n123 = Vec2.cross(e12, e13);
+    const n123 = Vec2.crossVec2Vec2(e12, e13);
 
-    const d123_1 = n123 * Vec2.cross(w2, w3);
-    const d123_2 = n123 * Vec2.cross(w3, w1);
-    const d123_3 = n123 * Vec2.cross(w1, w2);
+    const d123_1 = n123 * Vec2.crossVec2Vec2(w2, w3);
+    const d123_2 = n123 * Vec2.crossVec2Vec2(w3, w1);
+    const d123_3 = n123 * Vec2.crossVec2Vec2(w1, w2);
 
     // w1 region
     if (d12_2 <= 0.0 && d13_2 <= 0.0) {
