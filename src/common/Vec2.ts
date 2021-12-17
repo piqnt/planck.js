@@ -129,25 +129,30 @@ export default class Vec2 {
     return this;
   }
 
-  set(x: number, y: number): Vec2;
-  set(value: Vec2): Vec2;
   /**
    * Set this vector to some specified coordinates.
    *
    * @returns this
    */
-  // tslint:disable-next-line:typedef
-  set(x, y?) {
-    if (typeof x === 'object') {
-      _ASSERT && Vec2.assert(x);
-      this.x = x.x;
-      this.y = x.y;
-    } else {
-      _ASSERT && Math.assert(x);
-      _ASSERT && Math.assert(y);
-      this.x = x;
-      this.y = y;
-    }
+  set(x: number, y: number) {
+    _ASSERT && Math.assert(x);
+    _ASSERT && Math.assert(y);
+    this.x = x;
+    this.y = y;
+
+    return this;
+  }
+
+  /**
+   * Set this vector to some specified coordinates.
+   *
+   * @returns this
+   */
+  setVec2(value: Vec2) {
+    _ASSERT && Vec2.assert(value);
+    this.x = value.x;
+    this.y = value.y;
+
     return this;
   }
 
@@ -423,6 +428,35 @@ export default class Vec2 {
     }
   }
 
+  /**
+   * Perform the cross product on two vectors. In 2D this produces a scalar.
+   */
+  static crossVec2Vec2(v: Vec2, w: Vec2): number {
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(w);
+    return v.x * w.y - v.y * w.x;
+  }
+
+  /**
+   * Perform the cross product on a vector and a scalar. In 2D this produces a
+   * vector.
+   */
+  static crossVec2Number(v: Vec2, w: number): Vec2 {
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && Math.assert(w);
+    return Vec2.neo(w * v.y, -w * v.x);
+  }
+
+  /**
+   * Perform the cross product on a vector and a scalar. In 2D this produces a
+   * vector.
+   */
+  static crossNumberVec2(v: number, w: Vec2): Vec2 {
+    _ASSERT && Math.assert(v);
+    _ASSERT && Vec2.assert(w);
+    return Vec2.neo(-v * w.y, v * w.x);
+  }
+
   static addCross(a: Vec2, v: Vec2, w: number): Vec2;
   static addCross(a: Vec2, v: number, w: Vec2): Vec2;
   /**
@@ -444,6 +478,24 @@ export default class Vec2 {
     _ASSERT && common.assert(false);
   }
 
+  /**
+   * Returns `a + (v x w)`
+   */
+  static addCrossVec2Number(a: Vec2, v: Vec2, w: number): Vec2 {
+    _ASSERT && Vec2.assert(v);
+    _ASSERT && Math.assert(w);
+    return Vec2.neo(w * v.y + a.x, -w * v.x + a.y);
+  }
+
+  /**
+   * Returns `a + (v x w)`
+   */
+  static addCrossNumberVec2(a: Vec2, v: number, w: Vec2): Vec2 {
+    _ASSERT && Math.assert(v);
+    _ASSERT && Vec2.assert(w);
+    return Vec2.neo(-v * w.y + a.x, v * w.x + a.y);
+  }
+
   static add(v: Vec2, w: Vec2): Vec2 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
@@ -455,7 +507,7 @@ export default class Vec2 {
     if (typeof b !== 'undefined' || typeof w !== 'undefined') {
       return Vec2.combine(a, v, b, w);
     } else {
-      return Vec2.mul(a, v);
+      return Vec2.mulNumberVec2(a, v);
     }
   }
 
@@ -483,6 +535,18 @@ export default class Vec2 {
       _ASSERT && Vec2.assert(b);
       return Vec2.neo(a * b.x, a * b.y);
     }
+  }
+
+  static mulVec2Number(a: Vec2, b: number): Vec2 {
+    _ASSERT && Vec2.assert(a);
+    _ASSERT && Math.assert(b);
+    return Vec2.neo(a.x * b, a.y * b);
+  }
+
+  static mulNumberVec2(a: number, b: Vec2): Vec2 {
+    _ASSERT && Math.assert(a);
+    _ASSERT && Vec2.assert(b);
+    return Vec2.neo(a * b.x, a * b.y);
   }
 
   neg(): Vec2 {

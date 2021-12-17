@@ -85,13 +85,13 @@ export default class Mat22 {
       this.ey.set(b, d);
 
     } else if (typeof a === 'object' && typeof b === 'object') {
-      this.ex.set(a);
-      this.ey.set(b);
+      this.ex.setVec2(a);
+      this.ey.setVec2(b);
 
     } else if (typeof a === 'object') {
       _ASSERT && Mat22.assert(a);
-      this.ex.set(a.ex);
-      this.ey.set(a.ey);
+      this.ex.setVec2(a.ex);
+      this.ey.setVec2(a.ey);
 
     } else {
       _ASSERT && common.assert(false);

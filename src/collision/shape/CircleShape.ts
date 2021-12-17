@@ -57,7 +57,7 @@ export default class CircleShape extends Shape {
     this.m_radius = 1;
 
     if (typeof a === 'object' && Vec2.isValid(a)) {
-      this.m_p.set(a);
+      this.m_p.setVec2(a);
 
       if (typeof b === 'number') {
         this.m_radius = b;
@@ -167,7 +167,7 @@ export default class CircleShape extends Shape {
     if (0.0 <= a && a <= input.maxFraction * rr) {
       a /= rr;
       output.fraction = a;
-      output.normal = Vec2.add(s, Vec2.mul(a, r));
+      output.normal = Vec2.add(s, Vec2.mulNumberVec2(a, r));
       output.normal.normalize();
       return true;
     }

@@ -83,7 +83,7 @@ export function CollidePolygonCircle(manifold: Manifold, polygonA: PolygonShape,
   if (separation < Math.EPSILON) {
     manifold.pointCount = 1;
     manifold.type = ManifoldType.e_faceA;
-    manifold.localNormal.set(normals[normalIndex]);
+    manifold.localNormal.setVec2(normals[normalIndex]);
     manifold.localPoint.setCombine(0.5, v1, 0.5, v2);
     manifold.points[0].localPoint = circleB.m_p;
 
@@ -108,7 +108,7 @@ export function CollidePolygonCircle(manifold: Manifold, polygonA: PolygonShape,
     manifold.localNormal.setCombine(1, cLocal, -1, v1);
     manifold.localNormal.normalize();
     manifold.localPoint = v1;
-    manifold.points[0].localPoint.set(circleB.m_p);
+    manifold.points[0].localPoint.setVec2(circleB.m_p);
 
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.cf.indexA = 0;
@@ -124,8 +124,8 @@ export function CollidePolygonCircle(manifold: Manifold, polygonA: PolygonShape,
     manifold.type = ManifoldType.e_faceA;
     manifold.localNormal.setCombine(1, cLocal, -1, v2);
     manifold.localNormal.normalize();
-    manifold.localPoint.set(v2);
-    manifold.points[0].localPoint.set(circleB.m_p);
+    manifold.localPoint.setVec2(v2);
+    manifold.points[0].localPoint.setVec2(circleB.m_p);
 
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.cf.indexA = 0;
@@ -141,9 +141,9 @@ export function CollidePolygonCircle(manifold: Manifold, polygonA: PolygonShape,
 
     manifold.pointCount = 1;
     manifold.type = ManifoldType.e_faceA;
-    manifold.localNormal.set(normals[vertIndex1]);
-    manifold.localPoint.set(faceCenter);
-    manifold.points[0].localPoint.set(circleB.m_p);
+    manifold.localNormal.setVec2(normals[vertIndex1]);
+    manifold.localPoint.setVec2(faceCenter);
+    manifold.points[0].localPoint.setVec2(circleB.m_p);
 
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.cf.indexA = 0;

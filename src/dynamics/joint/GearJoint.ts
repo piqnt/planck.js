@@ -313,7 +313,7 @@ export default class GearJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.mul(this.m_impulse, this.m_JvAC).mul(inv_dt);
+    return Vec2.mulNumberVec2(this.m_impulse, this.m_JvAC).mul(inv_dt);
   }
 
   /**
@@ -371,8 +371,8 @@ export default class GearJoint extends Joint {
       const rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC); // Vec2
       const rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA); // Vec2
       this.m_JvAC = u;
-      this.m_JwC = Vec2.cross(rC, u);
-      this.m_JwA = Vec2.cross(rA, u);
+      this.m_JwC = Vec2.crossVec2Vec2(rC, u);
+      this.m_JwA = Vec2.crossVec2Vec2(rA, u);
       this.m_mass += this.m_mC + this.m_mA + this.m_iC * this.m_JwC * this.m_JwC + this.m_iA * this.m_JwA * this.m_JwA;
     }
 
@@ -385,9 +385,9 @@ export default class GearJoint extends Joint {
       const u = Rot.mulVec2(qD, this.m_localAxisD); // Vec2
       const rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD); // Vec2
       const rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB); // Vec2
-      this.m_JvBD = Vec2.mul(this.m_ratio, u);
-      this.m_JwD = this.m_ratio * Vec2.cross(rD, u);
-      this.m_JwB = this.m_ratio * Vec2.cross(rB, u);
+      this.m_JvBD = Vec2.mulNumberVec2(this.m_ratio, u);
+      this.m_JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u);
+      this.m_JwB = this.m_ratio * Vec2.crossVec2Vec2(rB, u);
       this.m_mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD * this.m_JwD * this.m_JwD + this.m_iB * this.m_JwB * this.m_JwB;
     }
 
@@ -411,13 +411,13 @@ export default class GearJoint extends Joint {
       this.m_impulse = 0.0;
     }
 
-    this.m_bodyA.c_velocity.v.set(vA);
+    this.m_bodyA.c_velocity.v.setVec2(vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.set(vB);
+    this.m_bodyB.c_velocity.v.setVec2(vB);
     this.m_bodyB.c_velocity.w = wB;
-    this.m_bodyC.c_velocity.v.set(vC);
+    this.m_bodyC.c_velocity.v.setVec2(vC);
     this.m_bodyC.c_velocity.w = wC;
-    this.m_bodyD.c_velocity.v.set(vD);
+    this.m_bodyD.c_velocity.v.setVec2(vD);
     this.m_bodyD.c_velocity.w = wD;
   }
 
@@ -448,13 +448,13 @@ export default class GearJoint extends Joint {
     vD.subMul(this.m_mD * impulse, this.m_JvBD);
     wD -= this.m_iD * impulse * this.m_JwD;
 
-    this.m_bodyA.c_velocity.v.set(vA);
+    this.m_bodyA.c_velocity.v.setVec2(vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.set(vB);
+    this.m_bodyB.c_velocity.v.setVec2(vB);
     this.m_bodyB.c_velocity.w = wB;
-    this.m_bodyC.c_velocity.v.set(vC);
+    this.m_bodyC.c_velocity.v.setVec2(vC);
     this.m_bodyC.c_velocity.w = wC;
-    this.m_bodyD.c_velocity.v.set(vD);
+    this.m_bodyD.c_velocity.v.setVec2(vD);
     this.m_bodyD.c_velocity.w = wD;
   }
 
@@ -501,8 +501,8 @@ export default class GearJoint extends Joint {
       const rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC); // Vec2
       const rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA); // Vec2
       JvAC = u;
-      JwC = Vec2.cross(rC, u);
-      JwA = Vec2.cross(rA, u);
+      JwC = Vec2.crossVec2Vec2(rC, u);
+      JwA = Vec2.crossVec2Vec2(rA, u);
       mass += this.m_mC + this.m_mA + this.m_iC * JwC * JwC + this.m_iA * JwA * JwA;
 
       const pC = Vec2.sub(this.m_localAnchorC, this.m_lcC); // Vec2
@@ -521,9 +521,9 @@ export default class GearJoint extends Joint {
       const u = Rot.mulVec2(qD, this.m_localAxisD);
       const rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD);
       const rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB);
-      JvBD = Vec2.mul(this.m_ratio, u);
-      JwD = this.m_ratio * Vec2.cross(rD, u);
-      JwB = this.m_ratio * Vec2.cross(rB, u);
+      JvBD = Vec2.mulNumberVec2(this.m_ratio, u);
+      JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u);
+      JwB = this.m_ratio * Vec2.crossVec2Vec2(rB, u);
       mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD
           * JwD * JwD + this.m_iB * JwB * JwB;
 
@@ -549,13 +549,13 @@ export default class GearJoint extends Joint {
     cD.subMul(this.m_mD * impulse, JvBD);
     aD -= this.m_iD * impulse * JwD;
 
-    this.m_bodyA.c_position.c.set(cA);
+    this.m_bodyA.c_position.c.setVec2(cA);
     this.m_bodyA.c_position.a = aA;
-    this.m_bodyB.c_position.c.set(cB);
+    this.m_bodyB.c_position.c.setVec2(cB);
     this.m_bodyB.c_position.a = aB;
-    this.m_bodyC.c_position.c.set(cC);
+    this.m_bodyC.c_position.c.setVec2(cC);
     this.m_bodyC.c_position.a = aC;
-    this.m_bodyD.c_position.c.set(cD);
+    this.m_bodyD.c_position.c.setVec2(cD);
     this.m_bodyD.c_position.a = aD;
 
     // TODO_ERIN not implemented

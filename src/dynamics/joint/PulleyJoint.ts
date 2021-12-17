@@ -270,7 +270,7 @@ export default class PulleyJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.mul(this.m_impulse, this.m_uB).mul(inv_dt);
+    return Vec2.mulNumberVec2(this.m_impulse, this.m_uB).mul(inv_dt);
   }
 
   /**
@@ -324,8 +324,8 @@ export default class PulleyJoint extends Joint {
     }
 
     // Compute effective mass.
-    const ruA = Vec2.cross(this.m_rA, this.m_uA); // float
-    const ruB = Vec2.cross(this.m_rB, this.m_uB); // float
+    const ruA = Vec2.crossVec2Vec2(this.m_rA, this.m_uA); // float
+    const ruB = Vec2.crossVec2Vec2(this.m_rB, this.m_uB); // float
 
     const mA = this.m_invMassA + this.m_invIA * ruA * ruA; // float
     const mB = this.m_invMassB + this.m_invIB * ruB * ruB; // float
@@ -341,14 +341,14 @@ export default class PulleyJoint extends Joint {
       this.m_impulse *= step.dtRatio;
 
       // Warm starting.
-      const PA = Vec2.mul(-this.m_impulse, this.m_uA);
-      const PB = Vec2.mul(-this.m_ratio * this.m_impulse, this.m_uB);
+      const PA = Vec2.mulNumberVec2(-this.m_impulse, this.m_uA);
+      const PB = Vec2.mulNumberVec2(-this.m_ratio * this.m_impulse, this.m_uB);
 
       vA.addMul(this.m_invMassA, PA);
-      wA += this.m_invIA * Vec2.cross(this.m_rA, PA);
+      wA += this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, PA);
 
       vB.addMul(this.m_invMassB, PB);
-      wB += this.m_invIB * Vec2.cross(this.m_rB, PB);
+      wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, PB);
 
     } else {
       this.m_impulse = 0.0;
@@ -366,20 +366,20 @@ export default class PulleyJoint extends Joint {
     const vB = this.m_bodyB.c_velocity.v;
     let wB = this.m_bodyB.c_velocity.w;
 
-    const vpA = Vec2.add(vA, Vec2.cross(wA, this.m_rA));
-    const vpB = Vec2.add(vB, Vec2.cross(wB, this.m_rB));
+    const vpA = Vec2.add(vA, Vec2.crossNumberVec2(wA, this.m_rA));
+    const vpB = Vec2.add(vB, Vec2.crossNumberVec2(wB, this.m_rB));
 
     const Cdot = -Vec2.dot(this.m_uA, vpA) - this.m_ratio
         * Vec2.dot(this.m_uB, vpB); // float
     const impulse = -this.m_mass * Cdot; // float
     this.m_impulse += impulse;
 
-    const PA = Vec2.mul(-impulse, this.m_uA); // Vec2
-    const PB = Vec2.mul(-this.m_ratio * impulse, this.m_uB); // Vec2
+    const PA = Vec2.mulNumberVec2(-impulse, this.m_uA); // Vec2
+    const PB = Vec2.mulNumberVec2(-this.m_ratio * impulse, this.m_uB); // Vec2
     vA.addMul(this.m_invMassA, PA);
-    wA += this.m_invIA * Vec2.cross(this.m_rA, PA);
+    wA += this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, PA);
     vB.addMul(this.m_invMassB, PB);
-    wB += this.m_invIB * Vec2.cross(this.m_rB, PB);
+    wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, PB);
 
     this.m_bodyA.c_velocity.v = vA;
     this.m_bodyA.c_velocity.w = wA;
@@ -422,8 +422,8 @@ export default class PulleyJoint extends Joint {
     }
 
     // Compute effective mass.
-    const ruA = Vec2.cross(rA, uA);
-    const ruB = Vec2.cross(rB, uB);
+    const ruA = Vec2.crossVec2Vec2(rA, uA);
+    const ruB = Vec2.crossVec2Vec2(rB, uB);
 
     const mA = this.m_invMassA + this.m_invIA * ruA * ruA; // float
     const mB = this.m_invMassB + this.m_invIB * ruB * ruB; // float
@@ -439,13 +439,13 @@ export default class PulleyJoint extends Joint {
 
     const impulse = -mass * C; // float
 
-    const PA = Vec2.mul(-impulse, uA); // Vec2
-    const PB = Vec2.mul(-this.m_ratio * impulse, uB); // Vec2
+    const PA = Vec2.mulNumberVec2(-impulse, uA); // Vec2
+    const PB = Vec2.mulNumberVec2(-this.m_ratio * impulse, uB); // Vec2
 
     cA.addMul(this.m_invMassA, PA);
-    aA += this.m_invIA * Vec2.cross(rA, PA);
+    aA += this.m_invIA * Vec2.crossVec2Vec2(rA, PA);
     cB.addMul(this.m_invMassB, PB);
-    aB += this.m_invIB * Vec2.cross(rB, PB);
+    aB += this.m_invIB * Vec2.crossVec2Vec2(rB, PB);
 
     this.m_bodyA.c_position.c = cA;
     this.m_bodyA.c_position.a = aA;

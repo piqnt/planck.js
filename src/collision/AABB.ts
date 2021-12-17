@@ -64,12 +64,12 @@ export default class AABB {
     this.upperBound = Vec2.zero();
 
     if (typeof lower === 'object') {
-      this.lowerBound.set(lower);
+      this.lowerBound.setVec2(lower);
     }
     if (typeof upper === 'object') {
-      this.upperBound.set(upper);
+      this.upperBound.setVec2(upper);
     } else if (typeof lower === 'object') {
-      this.upperBound.set(lower);
+      this.upperBound.setVec2(lower);
     }
   }
 

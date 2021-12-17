@@ -50,7 +50,7 @@ export default class Transform {
     this.p = Vec2.zero();
     this.q = Rot.identity();
     if (typeof position !== 'undefined') {
-      this.p.set(position);
+      this.p.setVec2(position);
     }
     if (typeof rotation !== 'undefined') {
       this.q.set(rotation);
@@ -95,10 +95,10 @@ export default class Transform {
   // tslint:disable-next-line:typedef
   set(a, b?) {
     if (typeof b === 'undefined') {
-      this.p.set(a.p);
+      this.p.setVec2(a.p);
       this.q.set(a.q);
     } else {
-      this.p.set(a);
+      this.p.setVec2(a);
       this.q.set(b);
     }
   }
@@ -209,7 +209,7 @@ export default class Transform {
     // = A.q' * B.q * v1 + A.q' * (B.p - A.p)
     const xf = Transform.identity();
     xf.q.set(Rot.mulTRot(a.q, b.q));
-    xf.p.set(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
+    xf.p.setVec2(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
     return xf;
   }
 }

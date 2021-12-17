@@ -266,7 +266,7 @@ export default class MotorJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.mul(inv_dt, this.m_linearImpulse);
+    return Vec2.mulNumberVec2(inv_dt, this.m_linearImpulse);
   }
 
   /**
@@ -343,10 +343,10 @@ export default class MotorJoint extends Joint {
       const P = Vec2.neo(this.m_linearImpulse.x, this.m_linearImpulse.y);
 
       vA.subMul(mA, P);
-      wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_angularImpulse);
+      wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_angularImpulse);
 
       vB.addMul(mB, P);
-      wB += iB * (Vec2.cross(this.m_rB, P) + this.m_angularImpulse);
+      wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_angularImpulse);
 
     } else {
       this.m_linearImpulse.setZero();
@@ -391,8 +391,8 @@ export default class MotorJoint extends Joint {
     // Solve linear friction
     {
       const Cdot = Vec2.zero();
-      Cdot.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
-      Cdot.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA));
+      Cdot.addCombine(1, vB, 1, Vec2.crossNumberVec2(wB, this.m_rB));
+      Cdot.subCombine(1, vA, 1, Vec2.crossNumberVec2(wA, this.m_rA));
       Cdot.addMul(inv_h * this.m_correctionFactor, this.m_linearError);
 
       let impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
@@ -406,10 +406,10 @@ export default class MotorJoint extends Joint {
       impulse = Vec2.sub(this.m_linearImpulse, oldImpulse);
 
       vA.subMul(mA, impulse);
-      wA -= iA * Vec2.cross(this.m_rA, impulse);
+      wA -= iA * Vec2.crossVec2Vec2(this.m_rA, impulse);
 
       vB.addMul(mB, impulse);
-      wB += iB * Vec2.cross(this.m_rB, impulse);
+      wB += iB * Vec2.crossVec2Vec2(this.m_rB, impulse);
     }
 
     this.m_bodyA.c_velocity.v = vA;
