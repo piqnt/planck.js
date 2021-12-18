@@ -573,8 +573,8 @@ export default class Contact {
     for (let j = 0; j < this.p_pointCount; ++j) {
       const xfA = Transform.identity();
       const xfB = Transform.identity();
-      xfA.q.set(aA);
-      xfB.q.set(aB);
+      xfA.q.setAngle(aA);
+      xfB.q.setAngle(aB);
       xfA.p = Vec2.sub(cA, Rot.mulVec2(xfA.q, localCenterA));
       xfB.p = Vec2.sub(cB, Rot.mulVec2(xfB.q, localCenterB));
 
@@ -692,8 +692,8 @@ export default class Contact {
 
     const xfA = Transform.identity();
     const xfB = Transform.identity();
-    xfA.q.set(aA);
-    xfB.q.set(aB);
+    xfA.q.setAngle(aA);
+    xfB.q.setAngle(aB);
     xfA.p.setCombine(1, cA, -1, Rot.mulVec2(xfA.q, localCenterA));
     xfB.p.setCombine(1, cB, -1, Rot.mulVec2(xfB.q, localCenterB));
 

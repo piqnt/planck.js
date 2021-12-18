@@ -98,7 +98,7 @@ function findIncidentEdge(c: ClipVertex[], poly1: PolygonShape, xf1: Transform, 
   _ASSERT && common.assert(0 <= edge1 && edge1 < poly1.m_count);
 
   // Get the normal of the reference edge in poly2's frame.
-  const normal1 = Rot.mulT(xf2.q, Rot.mulVec2(xf1.q, normals1[edge1]));
+  const normal1 = Rot.mulTVec2(xf2.q, Rot.mulVec2(xf1.q, normals1[edge1]));
 
   // Find the incident edge on poly2.
   let index = 0;

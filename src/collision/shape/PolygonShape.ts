@@ -278,7 +278,7 @@ export default class PolygonShape extends Shape {
 
       const xf = Transform.identity();
       xf.p.setVec2(center);
-      xf.q.set(angle);
+      xf.q.setAngle(angle);
 
       // Transform vertices and normals.
       for (let i = 0; i < this.m_count; ++i) {

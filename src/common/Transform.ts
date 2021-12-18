@@ -53,7 +53,7 @@ export default class Transform {
       this.p.setVec2(position);
     }
     if (typeof rotation !== 'undefined') {
-      this.q.set(rotation);
+      this.q.setAngle(rotation);
     }
   }
 
@@ -96,10 +96,10 @@ export default class Transform {
   set(a, b?) {
     if (typeof b === 'undefined') {
       this.p.setVec2(a.p);
-      this.q.set(a.q);
+      this.q.setRot(a.q);
     } else {
       this.p.setVec2(a);
-      this.q.set(b);
+      this.q.setAngle(b);
     }
   }
 
@@ -208,7 +208,7 @@ export default class Transform {
     // v2 = A.q' * (B.q * v1 + B.p - A.p)
     // = A.q' * B.q * v1 + A.q' * (B.p - A.p)
     const xf = Transform.identity();
-    xf.q.set(Rot.mulTRot(a.q, b.q));
+    xf.q.setRot(Rot.mulTRot(a.q, b.q));
     xf.p.setVec2(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
     return xf;
   }

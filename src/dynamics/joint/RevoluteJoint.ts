@@ -694,8 +694,8 @@ export default class RevoluteJoint extends Joint {
 
     // Solve point-to-point constraint.
     {
-      qA.set(aA);
-      qB.set(aB);
+      qA.setAngle(aA);
+      qB.setAngle(aB);
       const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA)); // Vec2
       const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB)); // Vec2
 
