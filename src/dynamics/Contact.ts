@@ -752,8 +752,8 @@ export default class Contact {
       const k_maxConditionNumber = 1000.0;
       if (k11 * k11 < k_maxConditionNumber * (k11 * k22 - k12 * k12)) {
         // K is safe to invert.
-        this.v_K.ex.set(k11, k12);
-        this.v_K.ey.set(k12, k22);
+        this.v_K.ex.setNum(k11, k12);
+        this.v_K.ey.setNum(k12, k22);
         this.v_normalMass.set(this.v_K.getInverse());
       } else {
         // The constraints are redundant, just use one.

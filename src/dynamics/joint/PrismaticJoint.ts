@@ -847,8 +847,8 @@ export default class PrismaticJoint extends Joint {
       }
 
       const K = new Mat22();
-      K.ex.set(k11, k12);
-      K.ey.set(k12, k22);
+      K.ex.setNum(k11, k12);
+      K.ey.setNum(k12, k22);
 
       const impulse1 = K.solve(Vec2.neg(C1)); // Vec2
       impulse.x = impulse1.x;

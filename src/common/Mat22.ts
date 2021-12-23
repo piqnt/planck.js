@@ -81,8 +81,8 @@ export default class Mat22 {
   set(a, b?, c?, d?): void {
     if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
       && typeof d === 'number') {
-      this.ex.set(a, c);
-      this.ey.set(b, d);
+      this.ex.setNum(a, c);
+      this.ey.setNum(b, d);
 
     } else if (typeof a === 'object' && typeof b === 'object') {
       this.ex.setVec2(a);

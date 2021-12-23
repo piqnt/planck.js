@@ -320,7 +320,7 @@ export default class DistanceJoint extends Joint {
     if (length > Settings.linearSlop) {
       this.m_u.mul(1.0 / length);
     } else {
-      this.m_u.set(0.0, 0.0);
+      this.m_u.setNum(0.0, 0.0);
     }
 
     const crAu = Vec2.crossVec2Vec2(this.m_rA, this.m_u);

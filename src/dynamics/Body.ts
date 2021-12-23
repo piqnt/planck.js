@@ -573,7 +573,7 @@ export default class Body {
       return;
     }
 
-    this.m_xf.set(position, angle);
+    this.m_xf.setNum(position, angle);
     this.m_sweep.setTransform(this.m_xf);
 
     const broadPhase = this.m_world.m_broadPhase;

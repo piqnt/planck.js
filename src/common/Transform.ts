@@ -87,10 +87,26 @@ export default class Transform {
     this.q.setIdentity();
   }
 
+  set(position: Vec2, rotation: number): void;
+  set(xf: Transform): void;
   /**
    * Set this based on the position and angle.
    */
-  set(position: Vec2, rotation: number) {
+  // tslint:disable-next-line:typedef
+  set(a, b?) {
+    if (typeof b === 'undefined') {
+      this.p.set(a.p);
+      this.q.set(a.q);
+    } else {
+      this.p.set(a);
+      this.q.set(b);
+    }
+  }
+
+  /**
+   * Set this based on the position and angle.
+   */
+  setNum(position: Vec2, rotation: number) {
     this.p.setVec2(position);
     this.q.setAngle(rotation);
   }

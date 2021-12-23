@@ -28,7 +28,7 @@ describe('Math', function(): void {
     expect(v.x).equal(0);
     expect(v.y).equal(0);
 
-    v.set(3, 4);
+    v.setNum(3, 4);
     expect(v.x).equal(3);
     expect(v.y).equal(4);
     expect(v.length()).equal(5);
@@ -54,7 +54,7 @@ describe('Math', function(): void {
     expect(v.x).equal(5);
     expect(v.y).equal(5);
 
-    v.set(2, 3);
+    v.setNum(2, 3);
     expect(v.x).equal(2);
     expect(v.y).equal(3);
 

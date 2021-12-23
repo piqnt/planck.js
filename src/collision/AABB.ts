@@ -132,18 +132,18 @@ export default class AABB {
     const upperX = Math.max(upperB.x, upperA.x);
     const upperY = Math.max(upperB.y, upperA.y);
 
-    this.lowerBound.set(lowerX, lowerY);
-    this.upperBound.set(upperX, upperY);
+    this.lowerBound.setNum(lowerX, lowerY);
+    this.upperBound.setNum(upperX, upperY);
   }
 
   combinePoints(a: Vec2, b: Vec2): void {
-    this.lowerBound.set(Math.min(a.x, b.x), Math.min(a.y, b.y));
-    this.upperBound.set(Math.max(a.x, b.x), Math.max(a.y, b.y));
+    this.lowerBound.setNum(Math.min(a.x, b.x), Math.min(a.y, b.y));
+    this.upperBound.setNum(Math.max(a.x, b.x), Math.max(a.y, b.y));
   }
 
   set(aabb: AABB): void {
-    this.lowerBound.set(aabb.lowerBound.x, aabb.lowerBound.y);
-    this.upperBound.set(aabb.upperBound.x, aabb.upperBound.y);
+    this.lowerBound.setNum(aabb.lowerBound.x, aabb.lowerBound.y);
+    this.upperBound.setNum(aabb.upperBound.x, aabb.upperBound.y);
   }
 
   contains(aabb: AABB): boolean {

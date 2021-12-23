@@ -397,8 +397,8 @@ export default class PolygonShape extends Shape {
       maxY = Math.max(maxY, v.y);
     }
 
-    aabb.lowerBound.set(minX, minY);
-    aabb.upperBound.set(maxX, maxY);
+    aabb.lowerBound.setNum(minX, minY);
+    aabb.upperBound.setNum(maxX, maxY);
     aabb.extend(this.m_radius);
   }
 

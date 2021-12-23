@@ -129,12 +129,34 @@ export default class Vec2 {
     return this;
   }
 
+  set(x: number, y: number): Vec2;
+  set(value: Vec2): Vec2;
   /**
    * Set this vector to some specified coordinates.
    *
    * @returns this
    */
-  set(x: number, y: number) {
+  // tslint:disable-next-line:typedef
+  set(x, y?) {
+    if (typeof x === 'object') {
+      _ASSERT && Vec2.assert(x);
+      this.x = x.x;
+      this.y = x.y;
+    } else {
+      _ASSERT && Math.assert(x);
+      _ASSERT && Math.assert(y);
+      this.x = x;
+      this.y = y;
+    }
+    return this;
+  }
+
+  /**
+   * Set this vector to some specified coordinates.
+   *
+   * @returns this
+   */
+   setNum(x: number, y: number) {
     _ASSERT && Math.assert(x);
     _ASSERT && Math.assert(y);
     this.x = x;

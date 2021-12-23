@@ -165,7 +165,7 @@ export function CollideEdgeCircle(manifold: Manifold, edgeA: EdgeShape, xfA: Tra
 
   const n = Vec2.neo(-e.y, e.x);
   if (Vec2.dot(n, Vec2.sub(Q, A)) < 0.0) {
-    n.set(-n.x, -n.y);
+    n.setNum(-n.x, -n.y);
   }
   n.normalize();
 

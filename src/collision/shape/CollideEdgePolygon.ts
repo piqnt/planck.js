@@ -444,7 +444,7 @@ export function CollideEdgePolygon(manifold: Manifold, edgeA: EdgeShape, xfA: Tr
     rf.normal.setVec2(polygonBA.normals[rf.i1]);
   }
 
-  rf.sideNormal1.set(rf.normal.y, -rf.normal.x);
+  rf.sideNormal1.setNum(rf.normal.y, -rf.normal.x);
   rf.sideNormal2.setMul(-1, rf.sideNormal1);
   rf.sideOffset1 = Vec2.dot(rf.sideNormal1, rf.v1);
   rf.sideOffset2 = Vec2.dot(rf.sideNormal2, rf.v2);
