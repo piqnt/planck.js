@@ -636,7 +636,7 @@ export default class Contact {
       // Compute normal impulse
       const impulse = K > 0.0 ? -C / K : 0.0;
 
-      const P = Vec2.mulNumberVec2(impulse, normal);
+      const P = Vec2.mulNumVec2(impulse, normal);
 
       cA.subMul(mA, P);
       aA -= iA * Vec2.crossVec2Vec2(rA, P);
@@ -714,7 +714,7 @@ export default class Contact {
 
       vcp.normalMass = kNormal > 0.0 ? 1.0 / kNormal : 0.0;
 
-      const tangent = Vec2.crossVec2Number(this.v_normal, 1.0);
+      const tangent = Vec2.crossVec2Num(this.v_normal, 1.0);
 
       const rtA = Vec2.crossVec2Vec2(vcp.rA, tangent);
       const rtB = Vec2.crossVec2Vec2(vcp.rB, tangent);
@@ -726,9 +726,9 @@ export default class Contact {
       // Setup a velocity bias for restitution.
       vcp.velocityBias = 0.0;
       const vRel = Vec2.dot(this.v_normal, vB)
-        + Vec2.dot(this.v_normal, Vec2.crossNumberVec2(wB, vcp.rB))
+        + Vec2.dot(this.v_normal, Vec2.crossNumVec2(wB, vcp.rB))
         - Vec2.dot(this.v_normal, vA)
-        - Vec2.dot(this.v_normal, Vec2.crossNumberVec2(wA, vcp.rA));
+        - Vec2.dot(this.v_normal, Vec2.crossNumVec2(wA, vcp.rA));
       if (vRel < -Settings.velocityThreshold) {
         vcp.velocityBias = -this.v_restitution * vRel;
       }
@@ -796,7 +796,7 @@ export default class Contact {
     let wB = velocityB.w;
 
     const normal = this.v_normal;
-    const tangent = Vec2.crossVec2Number(normal, 1.0);
+    const tangent = Vec2.crossVec2Num(normal, 1.0);
 
     for (let j = 0; j < this.v_pointCount; ++j) {
       const vcp = this.v_points[j]; // VelocityConstraintPoint
@@ -843,7 +843,7 @@ export default class Contact {
     let wB = velocityB.w;
 
     const normal = this.v_normal;
-    const tangent = Vec2.crossVec2Number(normal, 1.0);
+    const tangent = Vec2.crossVec2Num(normal, 1.0);
     const friction = this.v_friction;
 
     _ASSERT && common.assert(this.v_pointCount == 1 || this.v_pointCount == 2);
@@ -855,8 +855,8 @@ export default class Contact {
 
       // Relative velocity at contact
       const dv = Vec2.zero();
-      dv.addCombine(1, vB, 1, Vec2.crossNumberVec2(wB, vcp.rB));
-      dv.subCombine(1, vA, 1, Vec2.crossNumberVec2(wA, vcp.rA));
+      dv.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, vcp.rB));
+      dv.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, vcp.rA));
 
       // Compute tangent force
       const vt = Vec2.dot(dv, tangent) - this.v_tangentSpeed;
@@ -869,7 +869,7 @@ export default class Contact {
       vcp.tangentImpulse = newImpulse;
 
       // Apply contact impulse
-      const P = Vec2.mulNumberVec2(lambda, tangent);
+      const P = Vec2.mulNumVec2(lambda, tangent);
 
       vA.subMul(mA, P);
       wA -= iA * Vec2.crossVec2Vec2(vcp.rA, P);
@@ -885,8 +885,8 @@ export default class Contact {
 
         // Relative velocity at contact
         const dv = Vec2.zero();
-        dv.addCombine(1, vB, 1, Vec2.crossNumberVec2(wB, vcp.rB));
-        dv.subCombine(1, vA, 1, Vec2.crossNumberVec2(wA, vcp.rA));
+        dv.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, vcp.rB));
+        dv.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, vcp.rA));
 
         // Compute normal impulse
         const vn = Vec2.dot(dv, normal);
@@ -898,7 +898,7 @@ export default class Contact {
         vcp.normalImpulse = newImpulse;
 
         // Apply contact impulse
-        const P = Vec2.mulNumberVec2(lambda, normal);
+        const P = Vec2.mulNumVec2(lambda, normal);
 
         vA.subMul(mA, P);
         wA -= iA * Vec2.crossVec2Vec2(vcp.rA, P);
@@ -955,8 +955,8 @@ export default class Contact {
       _ASSERT && common.assert(a.x >= 0.0 && a.y >= 0.0);
 
       // Relative velocity at contact
-      let dv1 = Vec2.zero().add(vB).add(Vec2.crossNumberVec2(wB, vcp1.rB)).sub(vA).sub(Vec2.crossNumberVec2(wA, vcp1.rA));
-      let dv2 = Vec2.zero().add(vB).add(Vec2.crossNumberVec2(wB, vcp2.rB)).sub(vA).sub(Vec2.crossNumberVec2(wA, vcp2.rA));
+      let dv1 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp1.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp1.rA));
+      let dv2 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp2.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp2.rA));
 
       // Compute normal velocity
       let vn1 = Vec2.dot(dv1, normal);
@@ -987,8 +987,8 @@ export default class Contact {
           const d = Vec2.sub(x, a);
 
           // Apply incremental impulse
-          const P1 = Vec2.mulNumberVec2(d.x, normal);
-          const P2 = Vec2.mulNumberVec2(d.y, normal);
+          const P1 = Vec2.mulNumVec2(d.x, normal);
+          const P2 = Vec2.mulNumVec2(d.y, normal);
 
           vA.subCombine(mA, P1, mA, P2);
           wA -= iA * (Vec2.crossVec2Vec2(vcp1.rA, P1) + Vec2.crossVec2Vec2(vcp2.rA, P2));
@@ -1002,8 +1002,8 @@ export default class Contact {
 
           if (DEBUG_SOLVER) {
             // Postconditions
-            dv1 = Vec2.sub(Vec2.add(vB, Vec2.crossNumberVec2(wB, vcp1.rB)), Vec2.add(vA, Vec2.crossNumberVec2(wA, vcp1.rA)));
-            dv2 = Vec2.sub(Vec2.add(vB, Vec2.crossNumberVec2(wB, vcp2.rB)), Vec2.add(vA, Vec2.crossNumberVec2(wA, vcp2.rA)));
+            dv1 = Vec2.sub(Vec2.add(vB, Vec2.crossNumVec2(wB, vcp1.rB)), Vec2.add(vA, Vec2.crossNumVec2(wA, vcp1.rA)));
+            dv2 = Vec2.sub(Vec2.add(vB, Vec2.crossNumVec2(wB, vcp2.rB)), Vec2.add(vA, Vec2.crossNumVec2(wA, vcp2.rA)));
 
             // Compute normal velocity
             vn1 = Vec2.dot(dv1, normal);
@@ -1031,8 +1031,8 @@ export default class Contact {
           const d = Vec2.sub(x, a);
 
           // Apply incremental impulse
-          const P1 = Vec2.mulNumberVec2(d.x, normal);
-          const P2 = Vec2.mulNumberVec2(d.y, normal);
+          const P1 = Vec2.mulNumVec2(d.x, normal);
+          const P2 = Vec2.mulNumVec2(d.y, normal);
           vA.subCombine(mA, P1, mA, P2);
           wA -= iA * (Vec2.crossVec2Vec2(vcp1.rA, P1) + Vec2.crossVec2Vec2(vcp2.rA, P2));
 
@@ -1045,8 +1045,8 @@ export default class Contact {
 
           if (DEBUG_SOLVER) {
             // Postconditions
-            const dv1B = Vec2.add(vB, Vec2.crossNumberVec2(wB, vcp1.rB));
-            const dv1A = Vec2.add(vA, Vec2.crossNumberVec2(wA, vcp1.rA));
+            const dv1B = Vec2.add(vB, Vec2.crossNumVec2(wB, vcp1.rB));
+            const dv1A = Vec2.add(vA, Vec2.crossNumVec2(wA, vcp1.rA));
             const dv1 = Vec2.sub(dv1B, dv1A);
 
             // Compute normal velocity
@@ -1073,8 +1073,8 @@ export default class Contact {
           const d = Vec2.sub(x, a);
 
           // Apply incremental impulse
-          const P1 = Vec2.mulNumberVec2(d.x, normal);
-          const P2 = Vec2.mulNumberVec2(d.y, normal);
+          const P1 = Vec2.mulNumVec2(d.x, normal);
+          const P2 = Vec2.mulNumVec2(d.y, normal);
           vA.subCombine(mA, P1, mA, P2);
           wA -= iA * (Vec2.crossVec2Vec2(vcp1.rA, P1) + Vec2.crossVec2Vec2(vcp2.rA, P2));
 
@@ -1087,8 +1087,8 @@ export default class Contact {
 
           if (DEBUG_SOLVER) {
             // Postconditions
-            const dv2B = Vec2.add(vB, Vec2.crossNumberVec2(wB, vcp2.rB));
-            const dv2A = Vec2.add(vA, Vec2.crossNumberVec2(wA, vcp2.rA));
+            const dv2B = Vec2.add(vB, Vec2.crossNumVec2(wB, vcp2.rB));
+            const dv2A = Vec2.add(vA, Vec2.crossNumVec2(wA, vcp2.rA));
             const dv1 = Vec2.sub(dv2B, dv2A);
 
             // Compute normal velocity
@@ -1115,8 +1115,8 @@ export default class Contact {
           const d = Vec2.sub(x, a);
 
           // Apply incremental impulse
-          const P1 = Vec2.mulNumberVec2(d.x, normal);
-          const P2 = Vec2.mulNumberVec2(d.y, normal);
+          const P1 = Vec2.mulNumVec2(d.x, normal);
+          const P2 = Vec2.mulNumVec2(d.y, normal);
           vA.subCombine(mA, P1, mA, P2);
           wA -= iA * (Vec2.crossVec2Vec2(vcp1.rA, P1) + Vec2.crossVec2Vec2(vcp2.rA, P2));
 

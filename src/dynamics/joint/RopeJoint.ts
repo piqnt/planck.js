@@ -211,7 +211,7 @@ export default class RopeJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.mulNumberVec2(this.m_impulse, this.m_u).mul(inv_dt);
+    return Vec2.mulNumVec2(this.m_impulse, this.m_u).mul(inv_dt);
   }
 
   /**
@@ -278,7 +278,7 @@ export default class RopeJoint extends Joint {
       // Scale the impulse to support a variable time step.
       this.m_impulse *= step.dtRatio;
 
-      const P = Vec2.mulNumberVec2(this.m_impulse, this.m_u);
+      const P = Vec2.mulNumVec2(this.m_impulse, this.m_u);
 
       vA.subMul(this.m_invMassA, P);
       wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
@@ -303,8 +303,8 @@ export default class RopeJoint extends Joint {
     let wB = this.m_bodyB.c_velocity.w;
 
     // Cdot = dot(u, v + cross(w, r))
-    const vpA = Vec2.addCrossNumberVec2(vA, wA, this.m_rA); // Vec2
-    const vpB = Vec2.addCrossNumberVec2(vB, wB, this.m_rB); // Vec2
+    const vpA = Vec2.addCrossNumVec2(vA, wA, this.m_rA); // Vec2
+    const vpB = Vec2.addCrossNumVec2(vB, wB, this.m_rB); // Vec2
     const C = this.m_length - this.m_maxLength; // float
     let Cdot = Vec2.dot(this.m_u, Vec2.sub(vpB, vpA)); // float
 
@@ -318,7 +318,7 @@ export default class RopeJoint extends Joint {
     this.m_impulse = Math.min(0.0, this.m_impulse + impulse);
     impulse = this.m_impulse - oldImpulse;
 
-    const P = Vec2.mulNumberVec2(impulse, this.m_u); // Vec2
+    const P = Vec2.mulNumVec2(impulse, this.m_u); // Vec2
     vA.subMul(this.m_invMassA, P);
     wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
     vB.addMul(this.m_invMassB, P);
@@ -354,7 +354,7 @@ export default class RopeJoint extends Joint {
     C = Math.clamp(C, 0.0, Settings.maxLinearCorrection);
 
     const impulse = -this.m_mass * C; // float
-    const P = Vec2.mulNumberVec2(impulse, u); // Vec2
+    const P = Vec2.mulNumVec2(impulse, u); // Vec2
 
     cA.subMul(this.m_invMassA, P);
     aA -= this.m_invIA * Vec2.crossVec2Vec2(rA, P);

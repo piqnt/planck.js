@@ -257,7 +257,7 @@ export default class MouseJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.mulNumberVec2(inv_dt, this.m_impulse);
+    return Vec2.mulNumVec2(inv_dt, this.m_impulse);
   }
 
   /**
@@ -356,7 +356,7 @@ export default class MouseJoint extends Joint {
 
     // Cdot = v + cross(w, r)
 
-    const Cdot = Vec2.crossNumberVec2(wB, this.m_rB);
+    const Cdot = Vec2.crossNumVec2(wB, this.m_rB);
     Cdot.add(vB);
 
     Cdot.addCombine(1, this.m_C, this.m_gamma, this.m_impulse);

@@ -392,7 +392,7 @@ export default class Solver {
       let w = body.c_velocity.w;
 
       // Check for large velocities
-      const translation = Vec2.mulNumberVec2(h, v);
+      const translation = Vec2.mulNumVec2(h, v);
       if (Vec2.lengthSquared(translation) > Settings.maxTranslationSquared) {
         const ratio = Settings.maxTranslation / translation.length();
         v.mul(ratio);
@@ -878,7 +878,7 @@ export default class Solver {
       let w = body.c_velocity.w;
 
       // Check for large velocities
-      const translation = Vec2.mulNumberVec2(h, v);
+      const translation = Vec2.mulNumVec2(h, v);
       if (Vec2.dot(translation, translation) > Settings.maxTranslationSquared) {
         const ratio = Settings.maxTranslation / translation.length();
         v.mul(ratio);

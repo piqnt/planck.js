@@ -410,7 +410,7 @@ export default class World {
       const hit = fixture.rayCast(output, input, index);
       if (hit) {
         const fraction = output.fraction;
-        const point = Vec2.add(Vec2.mulNumberVec2((1.0 - fraction), input.p1), Vec2.mulNumberVec2(fraction, input.p2));
+        const point = Vec2.add(Vec2.mulNumVec2((1.0 - fraction), input.p1), Vec2.mulNumVec2(fraction, input.p2));
         return callback(fixture, point, output.normal, fraction);
       }
       return input.maxFraction;

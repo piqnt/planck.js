@@ -167,7 +167,7 @@ export default class CircleShape extends Shape {
     if (0.0 <= a && a <= input.maxFraction * rr) {
       a /= rr;
       output.fraction = a;
-      output.normal = Vec2.add(s, Vec2.mulNumberVec2(a, r));
+      output.normal = Vec2.add(s, Vec2.mulNumVec2(a, r));
       output.normal.normalize();
       return true;
     }

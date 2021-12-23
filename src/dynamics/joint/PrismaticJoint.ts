@@ -174,7 +174,7 @@ export default class PrismaticJoint extends Joint {
     this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
     this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0));
     this.m_localXAxisA.normalize();
-    this.m_localYAxisA = Vec2.crossNumberVec2(1.0, this.m_localXAxisA);
+    this.m_localYAxisA = Vec2.crossNumVec2(1.0, this.m_localXAxisA);
     this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
 
     this.m_impulse = new Vec3();
@@ -320,7 +320,7 @@ export default class PrismaticJoint extends Joint {
 
     if (def.localAxisA) {
       this.m_localXAxisA.setVec2(def.localAxisA);
-      this.m_localYAxisA.setVec2(Vec2.crossNumberVec2(1.0, def.localAxisA));
+      this.m_localYAxisA.setVec2(Vec2.crossNumVec2(1.0, def.localAxisA));
     }
   }
 
@@ -384,8 +384,8 @@ export default class PrismaticJoint extends Joint {
     const wA = bA.m_angularVelocity; // float
     const wB = bB.m_angularVelocity; // float
 
-    const speed = Vec2.dot(d, Vec2.crossNumberVec2(wA, axis))
-        + Vec2.dot(axis, Vec2.sub(Vec2.addCrossNumberVec2(vB, wB, rB), Vec2.addCrossNumberVec2(vA, wA, rA))); // float
+    const speed = Vec2.dot(d, Vec2.crossNumVec2(wA, axis))
+        + Vec2.dot(axis, Vec2.sub(Vec2.addCrossNumVec2(vB, wB, rB), Vec2.addCrossNumVec2(vA, wA, rA))); // float
     return speed;
   }
 
@@ -670,7 +670,7 @@ export default class PrismaticJoint extends Joint {
           -maxImpulse, maxImpulse);
       impulse = this.m_motorImpulse - oldImpulse;
 
-      const P = Vec2.mulNumberVec2(impulse, this.m_axis);
+      const P = Vec2.mulNumVec2(impulse, this.m_axis);
       const LA = impulse * this.m_a1;
       const LB = impulse * this.m_a2;
 
@@ -728,7 +728,7 @@ export default class PrismaticJoint extends Joint {
       this.m_impulse.x += df.x;
       this.m_impulse.y += df.y;
 
-      const P = Vec2.mulNumberVec2(df.x, this.m_perp); // Vec2
+      const P = Vec2.mulNumVec2(df.x, this.m_perp); // Vec2
       const LA = df.x * this.m_s1 + df.y; // float
       const LB = df.x * this.m_s2 + df.y; // float
 

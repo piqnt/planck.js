@@ -313,7 +313,7 @@ export default class GearJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.mulNumberVec2(this.m_impulse, this.m_JvAC).mul(inv_dt);
+    return Vec2.mulNumVec2(this.m_impulse, this.m_JvAC).mul(inv_dt);
   }
 
   /**
@@ -385,7 +385,7 @@ export default class GearJoint extends Joint {
       const u = Rot.mulVec2(qD, this.m_localAxisD); // Vec2
       const rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD); // Vec2
       const rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB); // Vec2
-      this.m_JvBD = Vec2.mulNumberVec2(this.m_ratio, u);
+      this.m_JvBD = Vec2.mulNumVec2(this.m_ratio, u);
       this.m_JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u);
       this.m_JwB = this.m_ratio * Vec2.crossVec2Vec2(rB, u);
       this.m_mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD * this.m_JwD * this.m_JwD + this.m_iB * this.m_JwB * this.m_JwB;
@@ -521,7 +521,7 @@ export default class GearJoint extends Joint {
       const u = Rot.mulVec2(qD, this.m_localAxisD);
       const rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD);
       const rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB);
-      JvBD = Vec2.mulNumberVec2(this.m_ratio, u);
+      JvBD = Vec2.mulNumVec2(this.m_ratio, u);
       JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u);
       JwB = this.m_ratio * Vec2.crossVec2Vec2(rB, u);
       mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD

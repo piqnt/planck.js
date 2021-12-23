@@ -351,7 +351,7 @@ class SeparationFunction {
       const localPointB1 = proxyB.getVertex(cache.indexB[0]);
       const localPointB2 = proxyB.getVertex(cache.indexB[1]);
 
-      this.m_axis = Vec2.crossVec2Number(Vec2.sub(localPointB2, localPointB1), 1.0);
+      this.m_axis = Vec2.crossVec2Num(Vec2.sub(localPointB2, localPointB1), 1.0);
       this.m_axis.normalize();
       const normal = Rot.mulVec2(xfB.q, this.m_axis);
 
@@ -374,7 +374,7 @@ class SeparationFunction {
       const localPointA1 = this.m_proxyA.getVertex(cache.indexA[0]);
       const localPointA2 = this.m_proxyA.getVertex(cache.indexA[1]);
 
-      this.m_axis = Vec2.crossVec2Number(Vec2.sub(localPointA2, localPointA1), 1.0);
+      this.m_axis = Vec2.crossVec2Num(Vec2.sub(localPointA2, localPointA1), 1.0);
       this.m_axis.normalize();
       const normal = Rot.mulVec2(xfA.q, this.m_axis);
 

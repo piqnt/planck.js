@@ -245,7 +245,7 @@ export default class FrictionJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.mulNumberVec2(inv_dt, this.m_linearImpulse);
+    return Vec2.mulNumVec2(inv_dt, this.m_linearImpulse);
   }
 
   /**
@@ -361,8 +361,8 @@ export default class FrictionJoint extends Joint {
 
     // Solve linear friction
     {
-      const Cdot = Vec2.sub(Vec2.add(vB, Vec2.crossNumberVec2(wB, this.m_rB)), Vec2.add(vA,
-          Vec2.crossNumberVec2(wA, this.m_rA))); // Vec2
+      const Cdot = Vec2.sub(Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB)), Vec2.add(vA,
+          Vec2.crossNumVec2(wA, this.m_rA))); // Vec2
 
       let impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot)); // Vec2
       const oldImpulse = this.m_linearImpulse; // Vec2

@@ -68,7 +68,7 @@ describe('Math', function(): void {
     r = Vec2.crossVec2Vec2(v, new Vec2(2, 3));
     expect(r).equal(0);
 
-    r = Vec2.crossVec2Number(v, 5);
+    r = Vec2.crossVec2Num(v, 5);
     expect(r.x).equal(15);
     expect(r.y).equal(-10);
 

@@ -420,10 +420,10 @@ class Simplex {
         const sgn = Vec2.crossVec2Vec2(e12, Vec2.neg(this.m_v1.w));
         if (sgn > 0.0) {
           // Origin is left of e12.
-          return Vec2.crossNumberVec2(1.0, e12);
+          return Vec2.crossNumVec2(1.0, e12);
         } else {
           // Origin is right of e12.
-          return Vec2.crossVec2Number(e12, 1.0);
+          return Vec2.crossVec2Num(e12, 1.0);
         }
       }
 

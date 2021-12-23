@@ -200,11 +200,11 @@ export function CollidePolygons(manifold: Manifold, polyA: PolygonShape, xfA: Tr
   const localTangent = Vec2.sub(v12, v11);
   localTangent.normalize();
 
-  const localNormal = Vec2.crossVec2Number(localTangent, 1.0);
+  const localNormal = Vec2.crossVec2Num(localTangent, 1.0);
   const planePoint = Vec2.combine(0.5, v11, 0.5, v12);
 
   const tangent = Rot.mulVec2(xf1.q, localTangent);
-  const normal = Vec2.crossVec2Number(tangent, 1.0);
+  const normal = Vec2.crossVec2Num(tangent, 1.0);
 
   v11 = Transform.mulVec2(xf1, v11);
   v12 = Transform.mulVec2(xf1, v12);

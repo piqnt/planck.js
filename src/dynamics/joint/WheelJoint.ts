@@ -160,7 +160,7 @@ export default class WheelJoint extends Joint {
     this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
     // @ts-ignore localAxis
     this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || def.localAxis || Vec2.neo(1.0, 0.0));
-    this.m_localYAxisA = Vec2.crossNumberVec2(1.0, this.m_localXAxisA);
+    this.m_localYAxisA = Vec2.crossNumVec2(1.0, this.m_localXAxisA);
 
     this.m_mass = 0.0;
     this.m_impulse = 0.0;
@@ -250,7 +250,7 @@ export default class WheelJoint extends Joint {
 
     if (def.localAxisA) {
       this.m_localXAxisA.setVec2(def.localAxisA);
-      this.m_localYAxisA.setVec2(Vec2.crossNumberVec2(1.0, def.localAxisA));
+      this.m_localYAxisA.setVec2(Vec2.crossNumVec2(1.0, def.localAxisA));
     }
   }
 
@@ -552,7 +552,7 @@ export default class WheelJoint extends Joint {
           * (Cdot + this.m_bias + this.m_gamma * this.m_springImpulse); // float
       this.m_springImpulse += impulse;
 
-      const P = Vec2.mulNumberVec2(impulse, this.m_ax); // Vec2
+      const P = Vec2.mulNumVec2(impulse, this.m_ax); // Vec2
       const LA = impulse * this.m_sAx; // float
       const LB = impulse * this.m_sBx; // float
 
@@ -585,7 +585,7 @@ export default class WheelJoint extends Joint {
       const impulse = -this.m_mass * Cdot; // float
       this.m_impulse += impulse;
 
-      const P = Vec2.mulNumberVec2(impulse, this.m_ay); // Vec2
+      const P = Vec2.mulNumVec2(impulse, this.m_ay); // Vec2
       const LA = impulse * this.m_sAy; // float
       const LB = impulse * this.m_sBy; // float
 
@@ -637,7 +637,7 @@ export default class WheelJoint extends Joint {
       impulse = 0.0;
     }
 
-    const P = Vec2.mulNumberVec2(impulse, ay); // Vec2
+    const P = Vec2.mulNumVec2(impulse, ay); // Vec2
     const LA = impulse * sAy; // float
     const LB = impulse * sBy; // float
 

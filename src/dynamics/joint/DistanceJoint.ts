@@ -280,7 +280,7 @@ export default class DistanceJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.mulNumberVec2(this.m_impulse, this.m_u).mul(inv_dt);
+    return Vec2.mulNumVec2(this.m_impulse, this.m_u).mul(inv_dt);
   }
 
   /**
@@ -360,7 +360,7 @@ export default class DistanceJoint extends Joint {
       // Scale the impulse to support a variable time step.
       this.m_impulse *= step.dtRatio;
 
-      const P = Vec2.mulNumberVec2(this.m_impulse, this.m_u);
+      const P = Vec2.mulNumVec2(this.m_impulse, this.m_u);
 
       vA.subMul(this.m_invMassA, P);
       wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
@@ -385,15 +385,15 @@ export default class DistanceJoint extends Joint {
     let wB = this.m_bodyB.c_velocity.w;
 
     // Cdot = dot(u, v + cross(w, r))
-    const vpA = Vec2.add(vA, Vec2.crossNumberVec2(wA, this.m_rA));
-    const vpB = Vec2.add(vB, Vec2.crossNumberVec2(wB, this.m_rB));
+    const vpA = Vec2.add(vA, Vec2.crossNumVec2(wA, this.m_rA));
+    const vpB = Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB));
     const Cdot = Vec2.dot(this.m_u, vpB) - Vec2.dot(this.m_u, vpA);
 
     const impulse = -this.m_mass
         * (Cdot + this.m_bias + this.m_gamma * this.m_impulse);
     this.m_impulse += impulse;
 
-    const P = Vec2.mulNumberVec2(impulse, this.m_u);
+    const P = Vec2.mulNumVec2(impulse, this.m_u);
     vA.subMul(this.m_invMassA, P);
     wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
     vB.addMul(this.m_invMassB, P);
@@ -432,7 +432,7 @@ export default class DistanceJoint extends Joint {
         .clamp(C, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
 
     const impulse = -this.m_mass * C;
-    const P = Vec2.mulNumberVec2(impulse, u);
+    const P = Vec2.mulNumVec2(impulse, u);
 
     cA.subMul(this.m_invMassA, P);
     aA -= this.m_invIA * Vec2.crossVec2Vec2(rA, P);

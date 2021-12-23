@@ -441,7 +441,7 @@ export default class Vec2 {
    * Perform the cross product on a vector and a scalar. In 2D this produces a
    * vector.
    */
-  static crossVec2Number(v: Vec2, w: number): Vec2 {
+  static crossVec2Num(v: Vec2, w: number): Vec2 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Math.assert(w);
     return Vec2.neo(w * v.y, -w * v.x);
@@ -451,7 +451,7 @@ export default class Vec2 {
    * Perform the cross product on a vector and a scalar. In 2D this produces a
    * vector.
    */
-  static crossNumberVec2(v: number, w: Vec2): Vec2 {
+  static crossNumVec2(v: number, w: Vec2): Vec2 {
     _ASSERT && Math.assert(v);
     _ASSERT && Vec2.assert(w);
     return Vec2.neo(-v * w.y, v * w.x);
@@ -481,7 +481,7 @@ export default class Vec2 {
   /**
    * Returns `a + (v x w)`
    */
-  static addCrossVec2Number(a: Vec2, v: Vec2, w: number): Vec2 {
+  static addCrossVec2Num(a: Vec2, v: Vec2, w: number): Vec2 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Math.assert(w);
     return Vec2.neo(w * v.y + a.x, -w * v.x + a.y);
@@ -490,7 +490,7 @@ export default class Vec2 {
   /**
    * Returns `a + (v x w)`
    */
-  static addCrossNumberVec2(a: Vec2, v: number, w: Vec2): Vec2 {
+  static addCrossNumVec2(a: Vec2, v: number, w: Vec2): Vec2 {
     _ASSERT && Math.assert(v);
     _ASSERT && Vec2.assert(w);
     return Vec2.neo(-v * w.y + a.x, v * w.x + a.y);
@@ -507,7 +507,7 @@ export default class Vec2 {
     if (typeof b !== 'undefined' || typeof w !== 'undefined') {
       return Vec2.combine(a, v, b, w);
     } else {
-      return Vec2.mulNumberVec2(a, v);
+      return Vec2.mulNumVec2(a, v);
     }
   }
 
@@ -537,13 +537,13 @@ export default class Vec2 {
     }
   }
 
-  static mulVec2Number(a: Vec2, b: number): Vec2 {
+  static mulVec2Num(a: Vec2, b: number): Vec2 {
     _ASSERT && Vec2.assert(a);
     _ASSERT && Math.assert(b);
     return Vec2.neo(a.x * b, a.y * b);
   }
 
-  static mulNumberVec2(a: number, b: Vec2): Vec2 {
+  static mulNumVec2(a: number, b: Vec2): Vec2 {
     _ASSERT && Math.assert(a);
     _ASSERT && Vec2.assert(b);
     return Vec2.neo(a * b.x, a * b.y);

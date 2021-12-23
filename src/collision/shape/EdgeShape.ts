@@ -240,7 +240,7 @@ export default class EdgeShape extends Shape {
       return false;
     }
 
-    const q = Vec2.add(p1, Vec2.mulNumberVec2(t, d));
+    const q = Vec2.add(p1, Vec2.mulNumVec2(t, d));
 
     // q = v1 + s * r
     // s = dot(q - v1, r) / dot(r, r)

@@ -663,7 +663,7 @@ export default class Body {
    */
   getLinearVelocityFromWorldPoint(worldPoint: Vec2): Vec2 {
     const localCenter = Vec2.sub(worldPoint, this.m_sweep.c);
-    return Vec2.add(this.m_linearVelocity, Vec2.crossNumberVec2(this.m_angularVelocity,
+    return Vec2.add(this.m_linearVelocity, Vec2.crossNumVec2(this.m_angularVelocity,
       localCenter));
   }
 
@@ -834,7 +834,7 @@ export default class Body {
     this.m_sweep.setLocalCenter(localCenter, this.m_xf);
 
     // Update center of mass velocity.
-    this.m_linearVelocity.add(Vec2.crossNumberVec2(this.m_angularVelocity, Vec2.sub(
+    this.m_linearVelocity.add(Vec2.crossNumVec2(this.m_angularVelocity, Vec2.sub(
       this.m_sweep.c, oldCenter)));
   }
 
@@ -879,7 +879,7 @@ export default class Body {
     this.m_sweep.setLocalCenter(massData.center, this.m_xf);
 
     // Update center of mass velocity.
-    this.m_linearVelocity.add(Vec2.crossNumberVec2(this.m_angularVelocity, Vec2.sub(
+    this.m_linearVelocity.add(Vec2.crossNumVec2(this.m_angularVelocity, Vec2.sub(
       this.m_sweep.c, oldCenter)));
   }
 
