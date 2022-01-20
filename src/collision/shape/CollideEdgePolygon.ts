@@ -159,7 +159,7 @@ export function CollideEdgePolygon(manifold: Manifold, edgeA: EdgeShape, xfA: Tr
     const edge0 = Vec2.sub(v1, v0);
     edge0.normalize();
     normal0 = Vec2.neo(edge0.y, -edge0.x);
-    convex1 = Vec2.cross(edge0, edge1) >= 0.0;
+    convex1 = Vec2.crossVec2Vec2(edge0, edge1) >= 0.0;
     offset0 = Vec2.dot(normal0, centroidB) - Vec2.dot(normal0, v0);
   }
 
@@ -168,7 +168,7 @@ export function CollideEdgePolygon(manifold: Manifold, edgeA: EdgeShape, xfA: Tr
     const edge2 = Vec2.sub(v3, v2);
     edge2.normalize();
     normal2 = Vec2.neo(edge2.y, -edge2.x);
-    convex2 = Vec2.cross(edge1, edge2) > 0.0;
+    convex2 = Vec2.crossVec2Vec2(edge1, edge2) > 0.0;
     offset2 = Vec2.dot(normal2, centroidB) - Vec2.dot(normal2, v2);
   }
 
@@ -182,9 +182,9 @@ export function CollideEdgePolygon(manifold: Manifold, edgeA: EdgeShape, xfA: Tr
     if (convex1 && convex2) {
       front = offset0 >= 0.0 || offset1 >= 0.0 || offset2 >= 0.0;
       if (front) {
-        normal.set(normal1);
-        lowerLimit.set(normal0);
-        upperLimit.set(normal2);
+        normal.setVec2(normal1);
+        lowerLimit.setVec2(normal0);
+        upperLimit.setVec2(normal2);
       } else {
         normal.setMul(-1, normal1);
         lowerLimit.setMul(-1, normal1);
@@ -193,9 +193,9 @@ export function CollideEdgePolygon(manifold: Manifold, edgeA: EdgeShape, xfA: Tr
     } else if (convex1) {
       front = offset0 >= 0.0 || (offset1 >= 0.0 && offset2 >= 0.0);
       if (front) {
-        normal.set(normal1);
-        lowerLimit.set(normal0);
-        upperLimit.set(normal1);
+        normal.setVec2(normal1);
+        lowerLimit.setVec2(normal0);
+        upperLimit.setVec2(normal1);
       } else {
         normal.setMul(-1, normal1);
         lowerLimit.setMul(-1, normal2);
@@ -204,9 +204,9 @@ export function CollideEdgePolygon(manifold: Manifold, edgeA: EdgeShape, xfA: Tr
     } else if (convex2) {
       front = offset2 >= 0.0 || (offset0 >= 0.0 && offset1 >= 0.0);
       if (front) {
-        normal.set(normal1);
-        lowerLimit.set(normal1);
-        upperLimit.set(normal2);
+        normal.setVec2(normal1);
+        lowerLimit.setVec2(normal1);
+        upperLimit.setVec2(normal2);
       } else {
         normal.setMul(-1, normal1);
         lowerLimit.setMul(-1, normal1);
@@ -215,9 +215,9 @@ export function CollideEdgePolygon(manifold: Manifold, edgeA: EdgeShape, xfA: Tr
     } else {
       front = offset0 >= 0.0 && offset1 >= 0.0 && offset2 >= 0.0;
       if (front) {
-        normal.set(normal1);
-        lowerLimit.set(normal1);
-        upperLimit.set(normal1);
+        normal.setVec2(normal1);
+        lowerLimit.setVec2(normal1);
+        upperLimit.setVec2(normal1);
       } else {
         normal.setMul(-1, normal1);
         lowerLimit.setMul(-1, normal2);
@@ -228,23 +228,23 @@ export function CollideEdgePolygon(manifold: Manifold, edgeA: EdgeShape, xfA: Tr
     if (convex1) {
       front = offset0 >= 0.0 || offset1 >= 0.0;
       if (front) {
-        normal.set(normal1);
-        lowerLimit.set(normal0);
+        normal.setVec2(normal1);
+        lowerLimit.setVec2(normal0);
         upperLimit.setMul(-1, normal1);
       } else {
         normal.setMul(-1, normal1);
-        lowerLimit.set(normal1);
+        lowerLimit.setVec2(normal1);
         upperLimit.setMul(-1, normal1);
       }
     } else {
       front = offset0 >= 0.0 && offset1 >= 0.0;
       if (front) {
-        normal.set(normal1);
-        lowerLimit.set(normal1);
+        normal.setVec2(normal1);
+        lowerLimit.setVec2(normal1);
         upperLimit.setMul(-1, normal1);
       } else {
         normal.setMul(-1, normal1);
-        lowerLimit.set(normal1);
+        lowerLimit.setVec2(normal1);
         upperLimit.setMul(-1, normal0);
       }
     }
@@ -252,36 +252,36 @@ export function CollideEdgePolygon(manifold: Manifold, edgeA: EdgeShape, xfA: Tr
     if (convex2) {
       front = offset1 >= 0.0 || offset2 >= 0.0;
       if (front) {
-        normal.set(normal1);
+        normal.setVec2(normal1);
         lowerLimit.setMul(-1, normal1);
-        upperLimit.set(normal2);
+        upperLimit.setVec2(normal2);
       } else {
         normal.setMul(-1, normal1);
         lowerLimit.setMul(-1, normal1);
-        upperLimit.set(normal1);
+        upperLimit.setVec2(normal1);
       }
     } else {
       front = offset1 >= 0.0 && offset2 >= 0.0;
       if (front) {
-        normal.set(normal1);
+        normal.setVec2(normal1);
         lowerLimit.setMul(-1, normal1);
-        upperLimit.set(normal1);
+        upperLimit.setVec2(normal1);
       } else {
         normal.setMul(-1, normal1);
         lowerLimit.setMul(-1, normal2);
-        upperLimit.set(normal1);
+        upperLimit.setVec2(normal1);
       }
     }
   } else {
     front = offset1 >= 0.0;
     if (front) {
-      normal.set(normal1);
+      normal.setVec2(normal1);
       lowerLimit.setMul(-1, normal1);
       upperLimit.setMul(-1, normal1);
     } else {
       normal.setMul(-1, normal1);
-      lowerLimit.set(normal1);
-      upperLimit.set(normal1);
+      lowerLimit.setVec2(normal1);
+      upperLimit.setVec2(normal1);
     }
   }
 
@@ -414,7 +414,7 @@ export function CollideEdgePolygon(manifold: Manifold, edgeA: EdgeShape, xfA: Tr
       rf.i2 = 1;
       rf.v1 = v1;
       rf.v2 = v2;
-      rf.normal.set(normal1);
+      rf.normal.setVec2(normal1);
     } else {
       rf.i1 = 1;
       rf.i2 = 0;
@@ -441,10 +441,10 @@ export function CollideEdgePolygon(manifold: Manifold, edgeA: EdgeShape, xfA: Tr
     rf.i2 = rf.i1 + 1 < polygonBA.count ? rf.i1 + 1 : 0;
     rf.v1 = polygonBA.vertices[rf.i1];
     rf.v2 = polygonBA.vertices[rf.i2];
-    rf.normal.set(polygonBA.normals[rf.i1]);
+    rf.normal.setVec2(polygonBA.normals[rf.i1]);
   }
 
-  rf.sideNormal1.set(rf.normal.y, -rf.normal.x);
+  rf.sideNormal1.setNum(rf.normal.y, -rf.normal.x);
   rf.sideNormal2.setMul(-1, rf.sideNormal1);
   rf.sideOffset1 = Vec2.dot(rf.sideNormal1, rf.v1);
   rf.sideOffset2 = Vec2.dot(rf.sideNormal2, rf.v2);
@@ -486,7 +486,7 @@ export function CollideEdgePolygon(manifold: Manifold, edgeA: EdgeShape, xfA: Tr
       const cp = manifold.points[pointCount]; // ManifoldPoint
 
       if (primaryAxis.type == EPAxisType.e_edgeA) {
-        cp.localPoint = Transform.mulT(xf, clipPoints2[i].v);
+        cp.localPoint = Transform.mulTVec2(xf, clipPoints2[i].v);
         cp.id = clipPoints2[i].id;
       } else {
         cp.localPoint = clipPoints2[i].v;

@@ -174,7 +174,7 @@ export default class PrismaticJoint extends Joint {
     this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
     this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0));
     this.m_localXAxisA.normalize();
-    this.m_localYAxisA = Vec2.cross(1.0, this.m_localXAxisA);
+    this.m_localYAxisA = Vec2.crossNumVec2(1.0, this.m_localXAxisA);
     this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
 
     this.m_impulse = new Vec3();
@@ -293,7 +293,7 @@ export default class PrismaticJoint extends Joint {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
-    data.localAxisA = new Vec2(data.localAxisA);
+    data.localAxisA = Vec2.clone(data.localAxisA);
     const joint = new PrismaticJoint(data);
     return joint;
   }
@@ -307,20 +307,20 @@ export default class PrismaticJoint extends Joint {
     localAxisA?: Vec2,
   }): void {
     if (def.anchorA) {
-      this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+      this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
-      this.m_localAnchorA.set(def.localAnchorA);
+      this.m_localAnchorA.setVec2(def.localAnchorA);
     }
 
     if (def.anchorB) {
-      this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+      this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
-      this.m_localAnchorB.set(def.localAnchorB);
+      this.m_localAnchorB.setVec2(def.localAnchorB);
     }
 
     if (def.localAxisA) {
-      this.m_localXAxisA.set(def.localAxisA);
-      this.m_localYAxisA.set(Vec2.cross(1.0, def.localAxisA));
+      this.m_localXAxisA.setVec2(def.localAxisA);
+      this.m_localYAxisA.setVec2(Vec2.crossNumVec2(1.0, def.localAxisA));
     }
   }
 
@@ -384,8 +384,8 @@ export default class PrismaticJoint extends Joint {
     const wA = bA.m_angularVelocity; // float
     const wB = bB.m_angularVelocity; // float
 
-    const speed = Vec2.dot(d, Vec2.cross(wA, axis))
-        + Vec2.dot(axis, Vec2.sub(Vec2.addCross(vB, wB, rB), Vec2.addCross(vA, wA, rA))); // float
+    const speed = Vec2.dot(d, Vec2.crossNumVec2(wA, axis))
+        + Vec2.dot(axis, Vec2.sub(Vec2.addCrossNumVec2(vB, wB, rB), Vec2.addCrossNumVec2(vA, wA, rA))); // float
     return speed;
   }
 
@@ -552,8 +552,8 @@ export default class PrismaticJoint extends Joint {
     // Compute motor Jacobian and effective mass.
     {
       this.m_axis = Rot.mulVec2(qA, this.m_localXAxisA);
-      this.m_a1 = Vec2.cross(Vec2.add(d, rA), this.m_axis);
-      this.m_a2 = Vec2.cross(rB, this.m_axis);
+      this.m_a1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_axis);
+      this.m_a2 = Vec2.crossVec2Vec2(rB, this.m_axis);
 
       this.m_motorMass = mA + mB + iA * this.m_a1 * this.m_a1 + iB * this.m_a2
           * this.m_a2;
@@ -566,10 +566,10 @@ export default class PrismaticJoint extends Joint {
     {
       this.m_perp = Rot.mulVec2(qA, this.m_localYAxisA);
 
-      this.m_s1 = Vec2.cross(Vec2.add(d, rA), this.m_perp);
-      this.m_s2 = Vec2.cross(rB, this.m_perp);
+      this.m_s1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_perp);
+      this.m_s2 = Vec2.crossVec2Vec2(rB, this.m_perp);
 
-      const s1test = Vec2.cross(rA, this.m_perp);
+      const s1test = Vec2.crossVec2Vec2(rA, this.m_perp);
 
       const k11 = mA + mB + iA * this.m_s1 * this.m_s1 + iB * this.m_s2 * this.m_s2;
       const k12 = iA * this.m_s1 + iB * this.m_s2;
@@ -642,9 +642,9 @@ export default class PrismaticJoint extends Joint {
       this.m_motorImpulse = 0.0;
     }
 
-    this.m_bodyA.c_velocity.v.set(vA);
+    this.m_bodyA.c_velocity.v.setVec2(vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.set(vB);
+    this.m_bodyB.c_velocity.v.setVec2(vB);
     this.m_bodyB.c_velocity.w = wB;
   }
 
@@ -670,7 +670,7 @@ export default class PrismaticJoint extends Joint {
           -maxImpulse, maxImpulse);
       impulse = this.m_motorImpulse - oldImpulse;
 
-      const P = Vec2.mul(impulse, this.m_axis);
+      const P = Vec2.mulNumVec2(impulse, this.m_axis);
       const LA = impulse * this.m_a1;
       const LB = impulse * this.m_a2;
 
@@ -694,7 +694,7 @@ export default class PrismaticJoint extends Joint {
 
       const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
 
-      const f1 = new Vec3(this.m_impulse);
+      const f1 = Vec3.clone(this.m_impulse);
       let df = this.m_K.solve33(Vec3.neg(Cdot)); // Vec3
       this.m_impulse.add(df);
 
@@ -728,7 +728,7 @@ export default class PrismaticJoint extends Joint {
       this.m_impulse.x += df.x;
       this.m_impulse.y += df.y;
 
-      const P = Vec2.mul(df.x, this.m_perp); // Vec2
+      const P = Vec2.mulNumVec2(df.x, this.m_perp); // Vec2
       const LA = df.x * this.m_s1 + df.y; // float
       const LB = df.x * this.m_s2 + df.y; // float
 
@@ -768,12 +768,12 @@ export default class PrismaticJoint extends Joint {
     const d = Vec2.sub(Vec2.add(cB, rB), Vec2.add(cA, rA)); // Vec2
 
     const axis = Rot.mulVec2(qA, this.m_localXAxisA); // Vec2
-    const a1 = Vec2.cross(Vec2.add(d, rA), axis); // float
-    const a2 = Vec2.cross(rB, axis); // float
+    const a1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), axis); // float
+    const a2 = Vec2.crossVec2Vec2(rB, axis); // float
     const perp = Rot.mulVec2(qA, this.m_localYAxisA); // Vec2
 
-    const s1 = Vec2.cross(Vec2.add(d, rA), perp); // float
-    const s2 = Vec2.cross(rB, perp); // float
+    const s1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), perp); // float
+    const s2 = Vec2.crossVec2Vec2(rB, perp); // float
 
     let impulse = new Vec3();
     const C1 = Vec2.zero(); // Vec2
@@ -847,8 +847,8 @@ export default class PrismaticJoint extends Joint {
       }
 
       const K = new Mat22();
-      K.ex.set(k11, k12);
-      K.ey.set(k12, k22);
+      K.ex.setNum(k11, k12);
+      K.ey.setNum(k12, k22);
 
       const impulse1 = K.solve(Vec2.neg(C1)); // Vec2
       impulse.x = impulse1.x;
