@@ -60,6 +60,10 @@ import { default as DynamicTree } from './collision/DynamicTree';
 
 import { default as stats } from './util/stats'; // todo: what to do with this?
 
+import { ContactImpulse } from './dynamics/Solver';
+type _ContactImpulse = InstanceType<typeof ContactImpulse>;
+export type { _ContactImpulse as ContactImpulse }
+
 /** @deprecated Merged with main namespace */
 export const internal = {};
 

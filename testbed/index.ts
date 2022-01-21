@@ -886,6 +886,10 @@ import { default as DynamicTree } from '../src/collision/DynamicTree';
 
 import { default as stats } from '../src/util/stats'; // todo: what to do with this?
 
+import { ContactImpulse } from '../src/dynamics/Solver';
+type _ContactImpulse = InstanceType<typeof ContactImpulse>;
+export type { _ContactImpulse as ContactImpulse }
+
 /** @deprecated Merged with main namespace */
 export const internal = {};
 
