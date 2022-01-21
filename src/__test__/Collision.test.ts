@@ -13,8 +13,8 @@ describe('Collision', function(): void {
     var r, o = new AABB();
     expect(o.isValid()).equal(true);
 
-    o.upperBound.set(10, 6);
-    o.lowerBound.set(6, 4);
+    o.upperBound.setNum(10, 6);
+    o.lowerBound.setNum(6, 4);
 
     r = o.getCenter();
     expect(r.x).equal(8);

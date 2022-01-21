@@ -170,15 +170,15 @@ export default class FrictionJoint extends Joint {
     localAnchorB?: Vec2,
   }): void {
     if (def.anchorA) {
-      this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+      this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
-      this.m_localAnchorA.set(def.localAnchorA);
+      this.m_localAnchorA.setVec2(def.localAnchorA);
     }
 
     if (def.anchorB) {
-      this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+      this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
-      this.m_localAnchorB.set(def.localAnchorB);
+      this.m_localAnchorB.setVec2(def.localAnchorB);
     }
   }
 
@@ -245,7 +245,7 @@ export default class FrictionJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.mul(inv_dt, this.m_linearImpulse);
+    return Vec2.mulNumVec2(inv_dt, this.m_linearImpulse);
   }
 
   /**
@@ -315,10 +315,10 @@ export default class FrictionJoint extends Joint {
       const P = Vec2.neo(this.m_linearImpulse.x, this.m_linearImpulse.y);
 
       vA.subMul(mA, P);
-      wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_angularImpulse);
+      wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_angularImpulse);
 
       vB.addMul(mB, P);
-      wB += iB * (Vec2.cross(this.m_rB, P) + this.m_angularImpulse);
+      wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_angularImpulse);
 
     } else {
       this.m_linearImpulse.setZero();
@@ -361,8 +361,8 @@ export default class FrictionJoint extends Joint {
 
     // Solve linear friction
     {
-      const Cdot = Vec2.sub(Vec2.add(vB, Vec2.cross(wB, this.m_rB)), Vec2.add(vA,
-          Vec2.cross(wA, this.m_rA))); // Vec2
+      const Cdot = Vec2.sub(Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB)), Vec2.add(vA,
+          Vec2.crossNumVec2(wA, this.m_rA))); // Vec2
 
       let impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot)); // Vec2
       const oldImpulse = this.m_linearImpulse; // Vec2
@@ -378,10 +378,10 @@ export default class FrictionJoint extends Joint {
       impulse = Vec2.sub(this.m_linearImpulse, oldImpulse);
 
       vA.subMul(mA, impulse);
-      wA -= iA * Vec2.cross(this.m_rA, impulse);
+      wA -= iA * Vec2.crossVec2Vec2(this.m_rA, impulse);
 
       vB.addMul(mB, impulse);
-      wB += iB * Vec2.cross(this.m_rB, impulse);
+      wB += iB * Vec2.crossVec2Vec2(this.m_rB, impulse);
     }
 
     this.m_bodyA.c_velocity.v = vA;

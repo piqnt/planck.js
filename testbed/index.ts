@@ -392,7 +392,7 @@ export function testbed(opts, callback?) {
         targetBody = body;
 
       } else {
-        mouseJoint = new MouseJoint({maxForce: 1000}, mouseGround, body, new Vec2(point));
+        mouseJoint = new MouseJoint({maxForce: 1000}, mouseGround, body, Vec2.clone(point));
         world.createJoint(mouseJoint);
       }
 

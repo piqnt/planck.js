@@ -299,7 +299,7 @@ export default class Solver {
       let w = body.m_angularVelocity;
 
       // Store positions for continuous collision.
-      body.m_sweep.c0.set(body.m_sweep.c);
+      body.m_sweep.c0.setVec2(body.m_sweep.c);
       body.m_sweep.a0 = body.m_sweep.a;
 
       if (body.isDynamic()) {
@@ -392,7 +392,7 @@ export default class Solver {
       let w = body.c_velocity.w;
 
       // Check for large velocities
-      const translation = Vec2.mul(h, v);
+      const translation = Vec2.mulNumVec2(h, v);
       if (Vec2.lengthSquared(translation) > Settings.maxTranslationSquared) {
         const ratio = Settings.maxTranslation / translation.length();
         v.mul(ratio);
@@ -408,9 +408,9 @@ export default class Solver {
       c.addMul(h, v);
       a += h * w;
 
-      body.c_position.c.set(c);
+      body.c_position.c.setVec2(c);
       body.c_position.a = a;
-      body.c_velocity.v.set(v);
+      body.c_velocity.v.setVec2(v);
       body.c_velocity.w = w;
     }
 
@@ -449,9 +449,9 @@ export default class Solver {
     for (let i = 0; i < this.m_bodies.length; ++i) {
       const body = this.m_bodies[i];
 
-      body.m_sweep.c.set(body.c_position.c);
+      body.m_sweep.c.setVec2(body.c_position.c);
       body.m_sweep.a = body.c_position.a;
-      body.m_linearVelocity.set(body.c_velocity.v);
+      body.m_linearVelocity.setVec2(body.c_velocity.v);
       body.m_angularVelocity = body.c_velocity.w;
       body.synchronizeTransform();
     }
@@ -785,9 +785,9 @@ export default class Solver {
     // Initialize the body state.
     for (let i = 0; i < this.m_bodies.length; ++i) {
       const body = this.m_bodies[i];
-      body.c_position.c.set(body.m_sweep.c);
+      body.c_position.c.setVec2(body.m_sweep.c);
       body.c_position.a = body.m_sweep.a;
-      body.c_velocity.v.set(body.m_linearVelocity);
+      body.c_velocity.v.setVec2(body.m_linearVelocity);
       body.c_velocity.w = body.m_angularVelocity;
     }
 
@@ -843,9 +843,9 @@ export default class Solver {
     }
 
     // Leap of faith to new safe state.
-    toiA.m_sweep.c0.set(toiA.c_position.c);
+    toiA.m_sweep.c0.setVec2(toiA.c_position.c);
     toiA.m_sweep.a0 = toiA.c_position.a;
-    toiB.m_sweep.c0.set(toiB.c_position.c);
+    toiB.m_sweep.c0.setVec2(toiB.c_position.c);
     toiB.m_sweep.a0 = toiB.c_position.a;
 
     // No warm starting is needed for TOI events because warm
@@ -878,7 +878,7 @@ export default class Solver {
       let w = body.c_velocity.w;
 
       // Check for large velocities
-      const translation = Vec2.mul(h, v);
+      const translation = Vec2.mulNumVec2(h, v);
       if (Vec2.dot(translation, translation) > Settings.maxTranslationSquared) {
         const ratio = Settings.maxTranslation / translation.length();
         v.mul(ratio);

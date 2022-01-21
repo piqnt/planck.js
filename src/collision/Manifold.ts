@@ -60,7 +60,7 @@ export enum ContactFeatureType {
   id: ContactID = new ContactID();
 
   set(o: ClipVertex): void {
-    this.v.set(o.v);
+    this.v.setVec2(o.v);
     this.id.set(o.id);
   }
 }
@@ -120,7 +120,7 @@ export default class Manifold {
         const pointB = Transform.mulVec2(xfB, this.points[0].localPoint);
         const dist = Vec2.sub(pointB, pointA);
         if (Vec2.lengthSquared(dist) > Math.EPSILON * Math.EPSILON) {
-          normal.set(dist);
+          normal.setVec2(dist);
           normal.normalize();
         }
         const cA = pointA.clone().addMul(radiusA, normal);
