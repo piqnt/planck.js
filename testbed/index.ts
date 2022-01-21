@@ -879,7 +879,7 @@ import Solver, { TimeStep } from "../src/dynamics/Solver";
 import { CollidePolygons } from '../src/collision/shape/CollidePolygon';
 import { default as Settings } from '../src/Settings';
 import { default as Sweep } from '../src/common/Sweep';
-import { clipSegmentToLine, ClipVertex, default as Manifold, getPointStates, PointState } from '../src/collision/Manifold';
+import { default as Manifold } from '../src/collision/Manifold';
 import { default as Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache, testOverlap } from '../src/collision/Distance';
 import { default as TimeOfImpact, TOIInput, TOIOutput } from '../src/collision/TimeOfImpact';
 import { default as DynamicTree } from '../src/collision/DynamicTree';
@@ -905,15 +905,6 @@ internal.TimeOfImpact = TimeOfImpact;
 internal.DynamicTree = DynamicTree;
 // @ts-ignore
 internal.stats = stats;
-
-// @ts-ignore
-Manifold.clipSegmentToLine = clipSegmentToLine;
-// @ts-ignore
-Manifold.ClipVertex = ClipVertex;
-// @ts-ignore
-Manifold.getPointStates = getPointStates;
-// @ts-ignore
-Manifold.PointState = PointState;
 
 // @ts-ignore
 Solver.TimeStep = TimeStep;
