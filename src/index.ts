@@ -49,7 +49,7 @@ export { default as Distance } from './collision/Distance';
 export { default as TimeOfImpact } from './collision/TimeOfImpact';
 export { default as DynamicTree } from './collision/DynamicTree';
 
-import Solver, { TimeStep } from "./dynamics/Solver";
+import Solver, { TimeStep } from './dynamics/Solver';
 import { CollidePolygons } from './collision/shape/CollidePolygon';
 import { default as Settings } from './Settings';
 import { default as Sweep } from './common/Sweep';
