@@ -53,11 +53,10 @@ declare class Vec2 {
     constructor();
     static zero(): Vec2;
     static clone(v: Vec2): Vec2;
-    toString(): string;
     /**
      * Does this vector contain finite coordinates?
      */
-    static isValid(v: any): boolean;
+    static isValid(obj: any): boolean;
     static assert(o: any): void;
     clone(): Vec2;
     /**
@@ -69,9 +68,17 @@ declare class Vec2 {
     set(x: number, y: number): Vec2;
     set(value: Vec2): Vec2;
     /**
-     * @deprecated Use setCombine or setMul
+     * Set this vector to some specified coordinates.
+     *
+     * @returns this
      */
-    wSet(a: any, v: any, b: any, w: any): Vec2;
+    setNum(x: number, y: number): this;
+    /**
+     * Set this vector to some specified coordinates.
+     *
+     * @returns this
+     */
+    setVec2(value: Vec2): this;
     /**
      * Set linear combination of v and w: `a * v + b * w`
      */
@@ -84,10 +91,6 @@ declare class Vec2 {
      */
     add(w: Vec2): Vec2;
     /**
-     * @deprecated Use addCombine or addMul
-     */
-    wAdd(a: any, v: any, b: any, w: any): Vec2;
-    /**
      * Add linear combination of v and w: `a * v + b * w`
      */
     addCombine(a: number, v: Vec2, b: number, w: Vec2): Vec2;
@@ -95,7 +98,7 @@ declare class Vec2 {
     /**
      * @deprecated Use subCombine or subMul
      */
-    wSub(a: any, v: any, b: any, w: any): Vec2;
+    wSub(a: number, v: Vec2, b?: number, w?: Vec2): Vec2;
     /**
      * Subtract linear combination of v and w: `a * v + b * w`
      */
@@ -153,17 +156,37 @@ declare class Vec2 {
     static cross(v: Vec2, w: Vec2): number;
     static cross(v: Vec2, w: number): Vec2;
     static cross(v: number, w: Vec2): Vec2;
+    /**
+     * Perform the cross product on two vectors. In 2D this produces a scalar.
+     */
+    static crossVec2Vec2(v: Vec2, w: Vec2): number;
+    /**
+     * Perform the cross product on a vector and a scalar. In 2D this produces a
+     * vector.
+     */
+    static crossVec2Num(v: Vec2, w: number): Vec2;
+    /**
+     * Perform the cross product on a vector and a scalar. In 2D this produces a
+     * vector.
+     */
+    static crossNumVec2(v: number, w: Vec2): Vec2;
     static addCross(a: Vec2, v: Vec2, w: number): Vec2;
     static addCross(a: Vec2, v: number, w: Vec2): Vec2;
-    static add(v: Vec2, w: Vec2): Vec2;
     /**
-     * @deprecated Use combine
+     * Returns `a + (v x w)`
      */
-    static wAdd(a: any, v: any, b: any, w: any): Vec2;
+    static addCrossVec2Num(a: Vec2, v: Vec2, w: number): Vec2;
+    /**
+     * Returns `a + (v x w)`
+     */
+    static addCrossNumVec2(a: Vec2, v: number, w: Vec2): Vec2;
+    static add(v: Vec2, w: Vec2): Vec2;
     static combine(a: number, v: Vec2, b: number, w: Vec2): Vec2;
     static sub(v: Vec2, w: Vec2): Vec2;
     static mul(a: Vec2, b: number): Vec2;
     static mul(a: number, b: Vec2): Vec2;
+    static mulVec2Num(a: Vec2, b: number): Vec2;
+    static mulNumVec2(a: number, b: Vec2): Vec2;
     neg(): Vec2;
     static neg(v: Vec2): Vec2;
     static abs(v: Vec2): Vec2;
@@ -172,14 +195,6 @@ declare class Vec2 {
     static lower(v: Vec2, w: Vec2): Vec2;
     clamp(max: number): Vec2;
     static clamp(v: Vec2, max: number): Vec2;
-    /**
-     * @deprecated
-     */
-    static scaleFn(x: any, y: any): (v: any) => Vec2;
-    /**
-     * @deprecated
-     */
-    static translateFn(x: any, y: any): (v: any) => Vec2;
 }
 declare function Vec3(x: number, y: number, z: number): Vec3;
 declare function Vec3(obj: {
@@ -201,11 +216,10 @@ declare class Vec3 {
     constructor();
     static zero(): Vec3;
     static clone(v: Vec3): Vec3;
-    toString(): string;
     /**
      * Does this vector contain finite coordinates?
      */
-    static isValid(v: any): boolean;
+    static isValid(obj: any): boolean;
     static assert(o: any): void;
     setZero(): Vec3;
     set(x: number, y: number, z: number): Vec3;
@@ -242,8 +256,7 @@ declare class Mat22 {
         y: number;
     });
     constructor();
-    toString(): string;
-    static isValid(o: any): boolean;
+    static isValid(obj: any): boolean;
     static assert(o: any): void;
     set(a: Mat22): void;
     set(a: Vec2, b: Vec2): void;
@@ -262,8 +275,8 @@ declare class Mat22 {
      */
     static mul(mx: Mat22, my: Mat22): Mat22;
     static mul(mx: Mat22, v: Vec2): Vec2;
-    static mulVec2(mx: any, v: any): Vec2;
-    static mulMat22(mx: any, v: any): Mat22;
+    static mulVec2(mx: Mat22, v: Vec2): Vec2;
+    static mulMat22(mx: Mat22, v: Mat22): Mat22;
     /**
      * Multiply a matrix transpose times a vector. If a rotation matrix is provided,
      * then this transforms the vector from one frame to another (inverse
@@ -285,8 +298,7 @@ declare class Mat33 {
     ez: Vec3;
     constructor(a: Vec3, b: Vec3, c: Vec3);
     constructor();
-    toString(): string;
-    static isValid(o: any): boolean;
+    static isValid(obj: any): boolean;
     static assert(o: any): void;
     /**
      * Set this matrix to all zeros.
@@ -330,11 +342,12 @@ declare class Rot {
     constructor(angle?: number | Rot);
     static clone(rot: Rot): Rot;
     static identity(): Rot;
-    static isValid(o: any): boolean;
+    static isValid(obj: any): boolean;
     static assert(o: any): void;
     /** Set to the identity rotation. */
     setIdentity(): void;
     set(angle: number | Rot): void;
+    setRot(angle: Rot): void;
     /** Set using an angle in radians. */
     setAngle(angle: number): void;
     /** Get the angle in radians. */
@@ -347,16 +360,25 @@ declare class Rot {
     static mul(rot: Rot, m: Rot): Rot;
     /** Rotate a vector */
     static mul(rot: Rot, m: Vec2): Vec2;
+    /** Multiply two rotations: q * r */
     static mulRot(rot: Rot, m: Rot): Rot;
+    /** Rotate a vector */
     static mulVec2(rot: Rot, m: Vec2): Vec2;
     static mulSub(rot: Rot, v: Vec2, w: Vec2): Vec2;
     /** Transpose multiply two rotations: qT * r */
     static mulT(rot: Rot, m: Rot): Rot;
     /** Inverse rotate a vector */
     static mulT(rot: Rot, m: Vec2): Vec2;
+    /** Transpose multiply two rotations: qT * r */
     static mulTRot(rot: Rot, m: Rot): Rot;
+    /** Inverse rotate a vector */
     static mulTVec2(rot: Rot, m: Vec2): Vec2;
 }
+/**
+ * A transform contains translation and rotation. It is used to represent the
+ * position and orientation of rigid frames. Initialize using a position vector
+ * and a rotation.
+ */
 declare function Transform(position?: Vec2, rotation?: number): Transform;
 /**
  * A transform contains translation and rotation. It is used to represent the
@@ -377,14 +399,17 @@ declare class Transform {
     setIdentity(): void;
     set(position: Vec2, rotation: number): void;
     set(xf: Transform): void;
-    static isValid(o: any): boolean;
+    /**
+     * Set this based on the position and angle.
+     */
+    setNum(position: Vec2, rotation: number): void;
+    setTransform(xf: Transform): void;
+    static isValid(obj: any): boolean;
     static assert(o: any): void;
     static mul(a: Transform, b: Vec2): Vec2;
     static mul(a: Transform, b: Transform): Transform;
     static mulAll(a: Transform, b: Vec2[]): Vec2[];
     static mulAll(a: Transform, b: Transform[]): Transform[];
-    /** @deprecated */
-    static mulFn(a: any): (b: any) => Vec2;
     static mulVec2(a: Transform, b: Vec2): Vec2;
     static mulXf(a: Transform, b: Transform): Transform;
     static mulT(a: Transform, b: Vec2): Vec2;
@@ -400,6 +425,7 @@ interface RayCastInput {
     p2: Vec2;
     maxFraction: number;
 }
+type RayCastCallback = (subInput: RayCastInput, id: number) => number;
 /**
  * Ray-cast output data. The ray hits at `p1 + fraction * (p2 - p1)`,
  * where `p1` and `p2` come from RayCastInput.
@@ -417,7 +443,7 @@ declare class AABB {
      * Verify that the bounds are sorted.
      */
     isValid(): boolean;
-    static isValid(aabb: any): boolean;
+    static isValid(obj: any): boolean;
     static assert(o: any): void;
     /**
      * Get the center of the AABB.
@@ -434,7 +460,7 @@ declare class AABB {
     /**
      * Combine one or two AABB into this one.
      */
-    combine(a: AABB, b: AABB): void;
+    combine(a: AABB, b?: AABB): void;
     combinePoints(a: Vec2, b: Vec2): void;
     set(aabb: AABB): void;
     contains(aabb: AABB): boolean;
@@ -444,7 +470,6 @@ declare class AABB {
     static areEqual(a: AABB, b: AABB): boolean;
     static diff(a: AABB, b: AABB): number;
     rayCast(output: RayCastOutput, input: RayCastInput): boolean;
-    toString(): string;
 }
 /*
 * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
@@ -464,23 +489,29 @@ declare class AABB {
 * 3. This notice may not be removed or altered from any source distribution.
 */
 declare class Pool<T> {
-    _list: any[];
+    _list: T[];
     _max: number;
     _createFn: () => T;
-    _outFn: (T: any) => void;
-    _inFn: (T: any) => void;
-    _discardFn: (T: any) => T;
+    _outFn: (item: T) => void;
+    _inFn: (item: T) => void;
+    _discardFn: (item: T) => T;
     _createCount: number;
     _outCount: number;
     _inCount: number;
     _discardCount: number;
-    constructor(opts: any);
-    max(n: any): number | this;
+    constructor(opts: {
+        max?: number;
+        create?: () => T;
+        allocate?: (item: T) => void;
+        release?: (item: T) => void;
+        discard?: (item: T) => T;
+    });
+    max(n?: number): number | Pool<T>;
     size(): number;
     allocate(): T;
     release(item: T): void;
-    toString(): string;
 }
+type DynamicTreeQueryCallback = (nodeId: number) => boolean;
 /**
  * A node in the dynamic tree. The client does not interact with this directly.
  */
@@ -494,8 +525,7 @@ declare class TreeNode<T> {
     child2: TreeNode<T>;
     /** 0: leaf, -1: free node */
     height: number;
-    constructor(id?: any);
-    toString(): string;
+    constructor(id?: number);
     isLeaf(): boolean;
 }
 /**
@@ -598,7 +628,7 @@ declare class DynamicTree<T> {
      * Query an AABB for overlapping proxies. The callback class is called for each
      * proxy that overlaps the supplied AABB.
      */
-    query(aabb: AABB, queryCallback: (nodeId: number) => boolean): void;
+    query(aabb: AABB, queryCallback: DynamicTreeQueryCallback): void;
     /**
      * Ray-cast against the proxies in the tree. This relies on the callback to
      * perform a exact ray-cast in the case were the proxy contains a shape. The
@@ -609,7 +639,7 @@ declare class DynamicTree<T> {
      * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
      * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
      */
-    rayCast(input: RayCastInput, rayCastCallback: (subInput: RayCastInput, id: number) => number): void;
+    rayCast(input: RayCastInput, rayCastCallback: RayCastCallback): void;
     private inputPool;
     private stackPool;
     private iteratorPool;
@@ -621,21 +651,21 @@ declare class DynamicTree<T> {
 declare class BroadPhase {
     m_tree: DynamicTree<FixtureProxy>;
     m_proxyCount: number;
-    m_moveBuffer: any[];
+    m_moveBuffer: number[];
     m_callback: (userDataA: any, userDataB: any) => void;
     m_queryProxyId: number;
     /**
      * Get user data from a proxy. Returns null if the id is invalid.
      */
-    getUserData(proxyId: any): FixtureProxy;
+    getUserData(proxyId: number): FixtureProxy;
     /**
      * Test overlap of fat AABBs.
      */
-    testOverlap(proxyIdA: any, proxyIdB: any): boolean;
+    testOverlap(proxyIdA: number, proxyIdB: number): boolean;
     /**
      * Get the fat AABB for a proxy.
      */
-    getFatAABB(proxyId: any): AABB;
+    getFatAABB(proxyId: number): AABB;
     /**
      * Get the number of proxies.
      */
@@ -656,7 +686,7 @@ declare class BroadPhase {
      * Query an AABB for overlapping proxies. The callback class is called for each
      * proxy that overlaps the supplied AABB.
      */
-    query: (aabb: any, queryCallback: any) => void;
+    query: (aabb: AABB, queryCallback: DynamicTreeQueryCallback) => void;
     /**
      * Ray-cast against the proxies in the tree. This relies on the callback to
      * perform a exact ray-cast in the case were the proxy contains a shape. The
@@ -667,7 +697,7 @@ declare class BroadPhase {
      * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
      * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
      */
-    rayCast(input: any, rayCastCallback: any): void;
+    rayCast(input: RayCastInput, rayCastCallback: RayCastCallback): void;
     /**
      * Shift the world origin. Useful for large worlds. The shift formula is:
      * position -= newOrigin
@@ -750,23 +780,19 @@ declare class FixtureProxy {
     fixture: Fixture;
     childIndex: number;
     proxyId: number;
-    constructor(fixture: any, childIndex: any);
+    constructor(fixture: Fixture, childIndex: number);
 }
 /**
  * A fixture is used to attach a shape to a body for collision detection. A
  * fixture inherits its transform from its parent. Fixtures hold additional
- * non-geometric data such as friction, collision filters, etc. Fixtures are
- * created via Body.createFixture.
+ * non-geometric data such as friction, collision filters, etc.
+ *
+ * To create a new Fixture use {@link Body.createFixture}.
  */
 declare class Fixture {
     constructor(body: Body, def: FixtureDef);
     constructor(body: Body, shape: Shape, def?: FixtureOpt);
     constructor(body: Body, shape: Shape, density?: number);
-    /**
-     * Re-setup fixture.
-     * @private
-     */
-    _reset(): void;
     /**
      * Get the type of the child shape. You can use this to down cast to the
      * concrete shape.
@@ -787,9 +813,9 @@ declare class Fixture {
      * Set if this fixture is a sensor.
      */
     setSensor(sensor: boolean): void;
-    /**
-     * Get the contact filtering data.
-     */
+    // /**
+    //  * Get the contact filtering data.
+    //  */
     // getFilterData() {
     //   return this.m_filter;
     // }
@@ -878,7 +904,7 @@ declare class Fixture {
         maskBits: number;
     }): void;
     getFilterGroupIndex(): number;
-    setFilterGroupIndex(groupIndex: number): number;
+    setFilterGroupIndex(groupIndex: number): void;
     getFilterCategoryBits(): number;
     setFilterCategoryBits(categoryBits: number): void;
     getFilterMaskBits(): number;
@@ -900,122 +926,6 @@ declare class Fixture {
      */
     shouldCollide(that: Fixture): boolean;
 }
-/**
- * A joint edge is used to connect bodies and joints together in a joint graph
- * where each body is a node and each joint is an edge. A joint edge belongs to
- * a doubly linked list maintained in each attached body. Each joint has two
- * joint nodes, one for each attached body.
- */
-declare class JointEdge {
-    /**
-     * provides quick access to the other body attached.
-     */
-    other: Body;
-    /**
-     * the joint
-     */
-    joint: Joint;
-    /**
-     * prev the previous joint edge in the body's joint list
-     */
-    prev: JointEdge;
-    /**
-     * the next joint edge in the body's joint list
-     */
-    next: JointEdge;
-}
-/**
- * Joint definitions are used to construct joints.
- */
-interface JointOpt {
-    /**
-     * Use this to attach application specific data to your joints.
-     */
-    userData?: any;
-    /**
-     * Set this flag to true if the attached bodies
-     * should collide.
-     */
-    collideConnected?: boolean;
-}
-/**
- * Joint definitions are used to construct joints.
- */
-interface JointDef extends JointOpt {
-    /**
-     * The first attached body.
-     */
-    bodyA: Body;
-    /**
-     * The second attached body.
-     */
-    bodyB: Body;
-}
-/**
- * The base joint class. Joints are used to constraint two bodies together in
- * various fashions. Some joints also feature limits and motors.
- */
-declare abstract class Joint {
-    constructor(def: JointDef);
-    constructor(def: JointOpt, bodyA: Body, bodyB: Body);
-    static TYPES: {
-        [id: string]: new (...args: any[]) => Joint;
-    };
-    /**
-     * Short-cut function to determine if either body is inactive.
-     */
-    isActive(): boolean;
-    /**
-     * Get the type of the concrete joint.
-     */
-    getType(): string;
-    /**
-     * Get the first body attached to this joint.
-     */
-    getBodyA(): Body;
-    /**
-     * Get the second body attached to this joint.
-     */
-    getBodyB(): Body;
-    /**
-     * Get the next joint the world joint list.
-     */
-    getNext(): Joint;
-    getUserData(): unknown;
-    setUserData(data: unknown): void;
-    /**
-     * Get collide connected. Note: modifying the collide connect flag won't work
-     * correctly because the flag is only checked when fixture AABBs begin to
-     * overlap.
-     */
-    getCollideConnected(): boolean;
-    /**
-     * Get the anchor point on bodyA in world coordinates.
-     */
-    abstract getAnchorA(): Vec2;
-    /**
-     * Get the anchor point on bodyB in world coordinates.
-     */
-    abstract getAnchorB(): Vec2;
-    /**
-     * Get the reaction force on bodyB at the joint anchor in Newtons.
-     */
-    abstract getReactionForce(inv_dt: number): Vec2;
-    /**
-     * Get the reaction torque on bodyB in N*m.
-     */
-    abstract getReactionTorque(inv_dt: number): number;
-    /**
-     * Shift the origin for any points stored in world coordinates.
-     */
-    shiftOrigin(newOrigin: Vec2): void;
-    abstract initVelocityConstraints(step: any): void;
-    abstract solveVelocityConstraints(step: any): void;
-    /**
-     * This returns true if the position errors are within tolerance.
-     */
-    abstract solvePositionConstraints(step: any): boolean;
-}
 declare enum ManifoldType {
     e_circles = 0,
     e_faceA = 1,
@@ -1024,6 +934,27 @@ declare enum ManifoldType {
 declare enum ContactFeatureType {
     e_vertex = 0,
     e_face = 1
+}
+/**
+ * This is used for determining the state of contact points.
+ */
+declare enum PointState {
+    /** Point does not exist */
+    nullState = 0,
+    /** Point was added in the update */
+    addState = 1,
+    /** Point persisted across the update */
+    persistState = 2,
+    /** Point was removed in the update */
+    removeState = 3
+}
+/**
+ * Used for computing contact manifolds.
+ */
+declare class ClipVertex {
+    v: Vec2;
+    id: ContactID;
+    set(o: ClipVertex): void;
 }
 /**
  * A manifold for two touching convex shapes. Manifolds are created in `evaluate`
@@ -1061,6 +992,10 @@ declare class Manifold {
      * The radii must come from the shapes that generated the manifold.
      */
     getWorldManifold(wm: WorldManifold | undefined, xfA: Transform, radiusA: number, xfB: Transform, radiusB: number): WorldManifold;
+    static clipSegmentToLine: typeof clipSegmentToLine;
+    static ClipVertex: typeof ClipVertex;
+    static getPointStates: typeof getPointStates;
+    static PointState: typeof PointState;
 }
 /**
  * A manifold point is a contact point belonging to a contact manifold. It holds
@@ -1101,7 +1036,7 @@ declare class ContactID {
      * Used to quickly compare contact ids.
      */
     get key(): number;
-    set(o: any): void;
+    set(o: ContactID): void;
 }
 /**
  * The features that intersect to form the contact point.
@@ -1143,6 +1078,16 @@ declare class WorldManifold {
     separations: number[]; // [maxManifoldPoints]
 }
 /**
+ * Compute the point states given two manifolds. The states pertain to the
+ * transition from manifold1 to manifold2. So state1 is either persist or remove
+ * while state2 is either add or persist.
+ */
+declare function getPointStates(state1: PointState[], state2: PointState[], manifold1: Manifold, manifold2: Manifold): void;
+/**
+ * Clipping for contact manifolds. Sutherland-Hodgman clipping.
+ */
+declare function clipSegmentToLine(vOut: ClipVertex[], vIn: ClipVertex[], normal: Vec2, offset: number, vertexIndexA: number): number;
+/**
  * A contact edge is used to connect bodies and contacts together in a contact
  * graph where each body is a node and each contact is an edge. A contact edge
  * belongs to a doubly linked list maintained in each attached body. Each
@@ -1158,7 +1103,7 @@ declare class ContactEdge {
     prev: ContactEdge | undefined;
     next: ContactEdge | undefined;
     other: Body | undefined;
-    constructor(contact: any);
+    constructor(contact: Contact);
 }
 type EvaluateFunction = (manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) => void;
 /**
@@ -1277,35 +1222,6 @@ declare class Contact {
     storeConstraintImpulses(step: TimeStep): void;
     solveVelocityConstraint(step: TimeStep): void;
 }
-declare class TimeStep {
-    /** time step */
-    dt: number;
-    /** inverse time step (0 if dt == 0) */
-    inv_dt: number;
-    velocityIterations: number;
-    positionIterations: number;
-    warmStarting: boolean;
-    blockSolve: boolean;
-    /** timestep ratio for variable timestep */
-    inv_dt0: number;
-    /** dt * inv_dt0 */
-    dtRatio: number;
-    reset(dt: any): void;
-}
-/**
- * Contact impulses for reporting. Impulses are used instead of forces because
- * sub-step forces may approach infinity for rigid body collisions. These match
- * up one-to-one with the contact points in Manifold.
- */
-declare class ContactImpulse {
-    // TODO: merge with Contact class?
-    private readonly contact;
-    private readonly normals;
-    private readonly tangents;
-    constructor(contact: any);
-    get normalImpulses(): number[];
-    get tangentImpulses(): number[];
-}
 /**
  * @prop gravity [{ x : 0, y : 0}]
  * @prop allowSleep [true]
@@ -1327,7 +1243,7 @@ interface WorldDef {
     positionIterations?: number;
 }
 /**
- * Callback function for ray casts, see World.rayCast().
+ * Callback function for ray casts, see {@link World.rayCast}.
  *
  * Called for each fixture found in the query. You control how the ray cast
  * proceeds by returning a float: return -1: ignore this fixture and continue
@@ -1432,7 +1348,7 @@ declare class World {
      * auto clearing of forces and instead call clearForces after all sub-steps are
      * complete in one pass of your game loop.
      *
-     * @see setAutoClearForces
+     * See {@link World.setAutoClearForces}
      */
     clearForces(): void;
     /**
@@ -1443,7 +1359,6 @@ declare class World {
      */
     queryAABB(aabb: AABB, callback: WorldAABBQueryCallback): void;
     /**
-     *
      * Ray-cast the world for all fixtures in the path of the ray. Your callback
      * controls whether you get the closest point, any point, or n-points. The
      * ray-cast ignores shapes that contain the starting point.
@@ -1519,12 +1434,62 @@ declare class World {
      * @param timeStep Time step, this should not vary.
      */
     step(timeStep: number, velocityIterations?: number, positionIterations?: number): void;
+    /**
+     * Called when two fixtures begin to touch.
+     *
+     * Implement contact callbacks to get contact information. You can use these
+     * results for things like sounds and game logic. You can also get contact
+     * results by traversing the contact lists after the time step. However, you
+     * might miss some contacts because continuous physics leads to sub-stepping.
+     * Additionally you may receive multiple callbacks for the same contact in a
+     * single time step. You should strive to make your callbacks efficient because
+     * there may be many callbacks per time step.
+     *
+     * Warning: You cannot create/destroy world entities inside these callbacks.
+     */
     on(name: "begin-contact", listener: (contact: Contact) => void): World;
+    /**
+     * Called when two fixtures cease to touch.
+     *
+     * Implement contact callbacks to get contact information. You can use these
+     * results for things like sounds and game logic. You can also get contact
+     * results by traversing the contact lists after the time step. However, you
+     * might miss some contacts because continuous physics leads to sub-stepping.
+     * Additionally you may receive multiple callbacks for the same contact in a
+     * single time step. You should strive to make your callbacks efficient because
+     * there may be many callbacks per time step.
+     *
+     * Warning: You cannot create/destroy world entities inside these callbacks.
+     */
     on(name: "end-contact", listener: (contact: Contact) => void): World;
+    /**
+     * This is called after a contact is updated. This allows you to inspect a
+     * contact before it goes to the solver. If you are careful, you can modify the
+     * contact manifold (e.g. disable contact). A copy of the old manifold is
+     * provided so that you can detect changes. Note: this is called only for awake
+     * bodies. Note: this is called even when the number of contact points is zero.
+     * Note: this is not called for sensors. Note: if you set the number of contact
+     * points to zero, you will not get an endContact callback. However, you may get
+     * a beginContact callback the next step.
+     *
+     * Warning: You cannot create/destroy world entities inside these callbacks.
+     */
     on(name: "pre-solve", listener: (contact: Contact, oldManifold: Manifold) => void): World;
+    /**
+     * This lets you inspect a contact after the solver is finished. This is useful
+     * for inspecting impulses. Note: the contact manifold does not include time of
+     * impact impulses, which can be arbitrarily large if the sub-step is small.
+     * Hence the impulse is provided explicitly in a separate data structure. Note:
+     * this is only called for contacts that are touching, solid, and awake.
+     *
+     * Warning: You cannot create/destroy world entities inside these callbacks.
+     */
     on(name: "post-solve", listener: (contact: Contact, impulse: ContactImpulse) => void): World;
+    /** Listener is called whenever a body is removed. */
     on(name: "remove-body", listener: (body: Body) => void): World;
+    /** Listener is called whenever a joint is removed implicitly or explicitly. */
     on(name: "remove-joint", listener: (joint: Joint) => void): World;
+    /** Listener is called whenever a fixture is removed implicitly or explicitly. */
     on(name: "remove-fixture", listener: (fixture: Fixture) => void): World;
     off(name: "begin-contact", listener: (contact: Contact) => void): World;
     off(name: "end-contact", listener: (contact: Contact) => void): World;
@@ -1534,6 +1499,148 @@ declare class World {
     off(name: "remove-joint", listener: (joint: Joint) => void): World;
     off(name: "remove-fixture", listener: (fixture: Fixture) => void): World;
     publish(name: string, arg1?: any, arg2?: any, arg3?: any): number;
+}
+declare class TimeStep {
+    /** time step */
+    dt: number;
+    /** inverse time step (0 if dt == 0) */
+    inv_dt: number;
+    velocityIterations: number;
+    positionIterations: number;
+    warmStarting: boolean;
+    blockSolve: boolean;
+    /** timestep ratio for variable timestep */
+    inv_dt0: number;
+    /** dt * inv_dt0 */
+    dtRatio: number;
+    reset(dt: number): void;
+}
+/**
+ * Contact impulses for reporting. Impulses are used instead of forces because
+ * sub-step forces may approach infinity for rigid body collisions. These match
+ * up one-to-one with the contact points in Manifold.
+ */
+declare class ContactImpulse {
+    // TODO: merge with Contact class?
+    private readonly contact;
+    private readonly normals;
+    private readonly tangents;
+    constructor(contact: Contact);
+    get normalImpulses(): number[];
+    get tangentImpulses(): number[];
+}
+/**
+ * A joint edge is used to connect bodies and joints together in a joint graph
+ * where each body is a node and each joint is an edge. A joint edge belongs to
+ * a doubly linked list maintained in each attached body. Each joint has two
+ * joint nodes, one for each attached body.
+ */
+declare class JointEdge {
+    /**
+     * provides quick access to the other body attached.
+     */
+    other: Body | null;
+    /**
+     * the joint
+     */
+    joint: Joint | null;
+    /**
+     * prev the previous joint edge in the body's joint list
+     */
+    prev: JointEdge | null;
+    /**
+     * the next joint edge in the body's joint list
+     */
+    next: JointEdge | null;
+}
+/**
+ * Joint definitions are used to construct joints.
+ */
+interface JointOpt {
+    /**
+     * Use this to attach application specific data to your joints.
+     */
+    userData?: any;
+    /**
+     * Set this flag to true if the attached bodies
+     * should collide.
+     */
+    collideConnected?: boolean;
+}
+/**
+ * Joint definitions are used to construct joints.
+ */
+interface JointDef extends JointOpt {
+    /**
+     * The first attached body.
+     */
+    bodyA: Body;
+    /**
+     * The second attached body.
+     */
+    bodyB: Body;
+}
+/**
+ * The base joint class. Joints are used to constraint two bodies together in
+ * various fashions. Some joints also feature limits and motors.
+ */
+declare abstract class Joint {
+    constructor(def: JointDef);
+    constructor(def: JointOpt, bodyA: Body, bodyB: Body);
+    /**
+     * Short-cut function to determine if either body is inactive.
+     */
+    isActive(): boolean;
+    /**
+     * Get the type of the concrete joint.
+     */
+    getType(): string;
+    /**
+     * Get the first body attached to this joint.
+     */
+    getBodyA(): Body;
+    /**
+     * Get the second body attached to this joint.
+     */
+    getBodyB(): Body;
+    /**
+     * Get the next joint the world joint list.
+     */
+    getNext(): Joint;
+    getUserData(): unknown;
+    setUserData(data: unknown): void;
+    /**
+     * Get collide connected. Note: modifying the collide connect flag won't work
+     * correctly because the flag is only checked when fixture AABBs begin to
+     * overlap.
+     */
+    getCollideConnected(): boolean;
+    /**
+     * Get the anchor point on bodyA in world coordinates.
+     */
+    abstract getAnchorA(): Vec2;
+    /**
+     * Get the anchor point on bodyB in world coordinates.
+     */
+    abstract getAnchorB(): Vec2;
+    /**
+     * Get the reaction force on bodyB at the joint anchor in Newtons.
+     */
+    abstract getReactionForce(inv_dt: number): Vec2;
+    /**
+     * Get the reaction torque on bodyB in N*m.
+     */
+    abstract getReactionTorque(inv_dt: number): number;
+    /**
+     * Shift the origin for any points stored in world coordinates.
+     */
+    shiftOrigin(newOrigin: Vec2): void;
+    abstract initVelocityConstraints(step: TimeStep): void;
+    abstract solveVelocityConstraints(step: TimeStep): void;
+    /**
+     * This returns true if the position errors are within tolerance.
+     */
+    abstract solvePositionConstraints(step: TimeStep): boolean;
 }
 type BodyType = "static" | "kinematic" | "dynamic";
 interface BodyDef {
@@ -1608,12 +1715,34 @@ declare class MassData {
 }
 /**
  * A rigid body composed of one or more fixtures.
+ *
+ * To create a new Body use {@link World.createBody}.
  */
 declare class Body {
-    static STATIC: BodyType;
-    static KINEMATIC: BodyType;
-    static DYNAMIC: BodyType;
-    constructor(world: any, def: any);
+    /**
+     * A static body does not move under simulation and behaves as if it has infinite mass.
+     * Internally, zero is stored for the mass and the inverse mass.
+     * Static bodies can be moved manually by the user.
+     * A static body has zero velocity.
+     * Static bodies do not collide with other static or kinematic bodies.
+     */
+    static readonly STATIC: BodyType;
+    /**
+     * A kinematic body moves under simulation according to its velocity.
+     * Kinematic bodies do not respond to forces.
+     * They can be moved manually by the user, but normally a kinematic body is moved by setting its velocity.
+     * A kinematic body behaves as if it has infinite mass, however, zero is stored for the mass and the inverse mass.
+     * Kinematic bodies do not collide with other kinematic or static bodies.
+     */
+    static readonly KINEMATIC: BodyType;
+    /**
+     * A dynamic body is fully simulated.
+     * They can be moved manually by the user, but normally they move according to forces.
+     * A dynamic body can collide with all body types.
+     * A dynamic body always has finite, non-zero mass.
+     * If you try to set the mass of a dynamic body to zero, it will automatically acquire a mass of one kilogram and it won't rotate.
+     */
+    static readonly DYNAMIC: BodyType;
     isWorldLocked(): boolean;
     getWorld(): World;
     getNext(): Body | null;
@@ -1958,11 +2087,7 @@ declare class DistanceProxy {
 declare abstract class Shape {
     m_type: ShapeType;
     m_radius: number;
-    _reset(): void;
-    static TYPES: {
-        [id: string]: new (...args: any[]) => Shape;
-    };
-    static isValid(shape: Shape | null | undefined): shape is Shape;
+    static isValid(obj: any): boolean;
     getRadius(): number;
     /**
      * Get the type of this shape. You can use this to down cast to the concrete
@@ -1971,12 +2096,6 @@ declare abstract class Shape {
      * @return the shape type.
      */
     getType(): ShapeType;
-    /**
-     * @deprecated Shapes should be treated as immutable.
-     *
-     * clone the concrete shape.
-     */
-    abstract _clone(): Shape;
     /**
      * Get the number of child primitives.
      */
@@ -2018,24 +2137,20 @@ declare abstract class Shape {
     abstract computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
 }
 type ShapeType = "circle" | "edge" | "polygon" | "chain";
-declare function CircleShape(position: Vec2, radius?: number): CircleShape;
-declare function CircleShape(radius?: number): CircleShape;
-declare class CircleShape extends Shape {
-    static TYPE: "circle";
-    private m_p;
-    constructor(position: Vec2, radius?: number);
-    constructor(radius?: number);
+declare const CircleShape: {
+    new (position: Vec2, radius?: number): CircleShape;
+    (position: Vec2, radius?: number): CircleShape;
+    new (radius?: number): CircleShape;
+    (radius?: number): CircleShape;
+    TYPE: "circle";
+};
+declare interface CircleShape extends Shape {
+    m_p: Vec2;
     // TODO: already defined in Shape
     getRadius(): number;
     getCenter(): Vec2;
     getVertex(index: 0): Vec2;
     /**
-     * @deprecated Shapes should be treated as immutable.
-     *
-     * clone the concrete shape.
-     */
-    _clone(): CircleShape;
-    /**
      * Get the number of child primitives.
      */
     getChildCount(): 1;
@@ -2043,149 +2158,7 @@ declare class CircleShape extends Shape {
      * Test a point for containment in this shape. This only works for convex
      * shapes.
      *
-     * @param {Transform} xf The shape world transform.
-     * @param p A point in world coordinates.
-     */
-    testPoint(xf: Transform, p: Vec2): boolean;
-    /**
-     * Cast a ray against a child shape.
-     *
-     * @param {RayCastOutput} output The ray-cast results.
-     * @param {RayCastInput} input The ray-cast input parameters.
-     * @param {Transform} transform The transform to be applied to the shape.
-     * @param childIndex The child shape index
-     */
-    // Collision Detection in Interactive 3D Environments by Gino van den Bergen
-    // From Section 3.1.2
-    // x = s + a * r
-    // norm(x) = radius
-    rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;
-    /**
-     * Given a transform, compute the associated axis aligned bounding box for a
-     * child shape.
-     *
-     * @param {AABB} aabb Returns the axis aligned box.
-     * @param {Transform} xf The world transform of the shape.
-     * @param childIndex The child shape
-     */
-    computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
-    /**
-     * Compute the mass properties of this shape using its dimensions and density.
-     * The inertia tensor is computed about the local origin.
-     *
-     * @param {MassData} massData Returns the mass data for this shape.
-     * @param density The density in kilograms per meter squared.
-     */
-    computeMass(massData: MassData, density: number): void;
-    computeDistanceProxy(proxy: DistanceProxy): void;
-}
-declare function EdgeShape(v1?: Vec2, v2?: Vec2): EdgeShape;
-/**
- * A line segment (edge) shape. These can be connected in chains or loops to
- * other edge shapes. The connectivity information is used to ensure correct
- * contact normals.
- */
-declare class EdgeShape extends Shape {
-    static TYPE: "edge";
-    // These are the edge vertices
-    m_vertex1: Vec2;
-    m_vertex2: Vec2;
-    // Optional adjacent vertices. These are used for smooth collision.
-    // Used by chain shape.
-    m_vertex0: Vec2;
-    m_vertex3: Vec2;
-    m_hasVertex0: boolean;
-    m_hasVertex3: boolean;
-    constructor(v1?: Vec2, v2?: Vec2);
-    setNext(v3?: Vec2): this;
-    setPrev(v0?: Vec2): this;
-    /**
-     * Set this as an isolated edge.
-     */
-    _set(v1: Vec2, v2: Vec2): this;
-    /**
-     * @deprecated Shapes should be treated as immutable.
-     *
-     * clone the concrete shape.
-     */
-    _clone(): EdgeShape;
-    /**
-     * Get the number of child primitives.
-     */
-    getChildCount(): 1;
-    /**
-     * Test a point for containment in this shape. This only works for convex
-     * shapes.
-     *
-     * @param {Transform} xf The shape world transform.
-     * @param p A point in world coordinates.
-     */
-    testPoint(xf: Transform, p: Vec2): false;
-    /**
-     * Cast a ray against a child shape.
-     *
-     * @param {RayCastOutput} output The ray-cast results.
-     * @param {RayCastInput} input The ray-cast input parameters.
-     * @param {Transform} transform The transform to be applied to the shape.
-     * @param childIndex The child shape index
-     */
-    // p = p1 + t * d
-    // v = v1 + s * e
-    // p1 + t * d = v1 + s * e
-    // s * e - t * d = p1 - v1
-    rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;
-    /**
-     * Given a transform, compute the associated axis aligned bounding box for a
-     * child shape.
-     *
-     * @param {AABB} aabb Returns the axis aligned box.
-     * @param {Transform} xf The world transform of the shape.
-     * @param childIndex The child shape
-     */
-    computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
-    /**
-     * Compute the mass properties of this shape using its dimensions and density.
-     * The inertia tensor is computed about the local origin.
-     *
-     * @param {MassData} massData Returns the mass data for this shape.
-     * @param density The density in kilograms per meter squared.
-     */
-    computeMass(massData: MassData, density?: number): void;
-    computeDistanceProxy(proxy: DistanceProxy): void;
-}
-declare function PolygonShape(vertices?: Vec2[]): PolygonShape;
-/**
- * A convex polygon. It is assumed that the interior of the polygon is to the
- * left of each edge. Polygons have a maximum number of vertices equal to
- * Settings.maxPolygonVertices. In most cases you should not need many vertices
- * for a convex polygon. extends Shape
- */
-declare class PolygonShape extends Shape {
-    static TYPE: "polygon";
-    m_centroid: Vec2;
-    m_vertices: Vec2[]; // Vec2[Settings.maxPolygonVertices]
-    m_normals: Vec2[]; // Vec2[Settings.maxPolygonVertices]
-    m_count: number;
-    // @ts-ignore
-    constructor(vertices?: Vec2[]);
-    getVertex(index: number): Vec2;
-    /**
-     * @deprecated Shapes should be treated as immutable.
-     *
-     * clone the concrete shape.
-     */
-    _clone(): PolygonShape;
-    /**
-     * Get the number of child primitives.
-     */
-    getChildCount(): 1;
-    _reset(): void;
-    _setAsBox(hx: number, hy: number): void;
-    /**
-     * Test a point for containment in this shape. This only works for convex
-     * shapes.
-     *
-     * @param {Transform} xf The shape world transform.
+     * @param xf The shape world transform.
      * @param p A point in world coordinates.
      */
     testPoint(xf: Transform, p: Vec2): boolean;
@@ -2211,7 +2184,146 @@ declare class PolygonShape extends Shape {
      * Compute the mass properties of this shape using its dimensions and density.
      * The inertia tensor is computed about the local origin.
      *
-     * @param {MassData} massData Returns the mass data for this shape.
+     * @param massData Returns the mass data for this shape.
+     * @param density The density in kilograms per meter squared.
+     */
+    computeMass(massData: MassData, density: number): void;
+    computeDistanceProxy(proxy: DistanceProxy): void;
+}
+declare const EdgeShape: {
+    new (v1?: Vec2, v2?: Vec2): EdgeShape;
+    (v1?: Vec2, v2?: Vec2): EdgeShape;
+    TYPE: "edge";
+};
+/**
+ * A line segment (edge) shape. These can be connected in chains or loops to
+ * other edge shapes. The connectivity information is used to ensure correct
+ * contact normals.
+ */
+declare interface EdgeShape extends Shape {
+    // These are the edge vertices
+    m_vertex1: Vec2;
+    m_vertex2: Vec2;
+    // Optional adjacent vertices. These are used for smooth collision.
+    // Used by chain shape.
+    m_vertex0: Vec2;
+    m_vertex3: Vec2;
+    m_hasVertex0: boolean;
+    m_hasVertex3: boolean;
+    /**
+     * Optional next vertex, used for smooth collision.
+     */
+    setNextVertex(v?: Vec2): EdgeShape;
+    /**
+     * Optional next vertex, used for smooth collision.
+     */
+    getNextVertex(): Vec2;
+    /**
+     * Optional prev vertex, used for smooth collision.
+     */
+    setPrevVertex(v?: Vec2): EdgeShape;
+    /**
+     * Optional prev vertex, used for smooth collision.
+     */
+    getPrevVertex(): Vec2;
+    /**
+     * Set this as an isolated edge.
+     */
+    _set(v1: Vec2, v2: Vec2): EdgeShape;
+    /**
+     * Get the number of child primitives.
+     */
+    getChildCount(): 1;
+    /**
+     * Test a point for containment in this shape. This only works for convex
+     * shapes.
+     *
+     * @param xf The shape world transform.
+     * @param p A point in world coordinates.
+     */
+    testPoint(xf: Transform, p: Vec2): false;
+    /**
+     * Cast a ray against a child shape.
+     *
+     * @param output The ray-cast results.
+     * @param input The ray-cast input parameters.
+     * @param xf The transform to be applied to the shape.
+     * @param childIndex The child shape index
+     */
+    rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;
+    /**
+     * Given a transform, compute the associated axis aligned bounding box for a
+     * child shape.
+     *
+     * @param aabb Returns the axis aligned box.
+     * @param xf The world transform of the shape.
+     * @param childIndex The child shape
+     */
+    computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
+    /**
+     * Compute the mass properties of this shape using its dimensions and density.
+     * The inertia tensor is computed about the local origin.
+     *
+     * @param massData Returns the mass data for this shape.
+     * @param density The density in kilograms per meter squared.
+     */
+    computeMass(massData: MassData, density?: number): void;
+    computeDistanceProxy(proxy: DistanceProxy): void;
+}
+declare const PolygonShape: {
+    // @ts-ignore
+    new (vertices?: Vec2[]): PolygonShape;
+    // @ts-ignore
+    (vertices?: Vec2[]): PolygonShape;
+    TYPE: "polygon";
+};
+/**
+ * A convex polygon. It is assumed that the interior of the polygon is to the
+ * left of each edge. Polygons have a maximum number of vertices equal to
+ * Settings.maxPolygonVertices. In most cases you should not need many vertices
+ * for a convex polygon. extends Shape
+ */
+declare interface PolygonShape extends Shape {
+    m_centroid: Vec2;
+    m_vertices: Vec2[]; // [Settings.maxPolygonVertices]
+    m_normals: Vec2[]; // [Settings.maxPolygonVertices]
+    m_count: number;
+    getVertex(index: number): Vec2;
+    /**
+     * Get the number of child primitives.
+     */
+    getChildCount(): 1;
+    /**
+     * Test a point for containment in this shape. This only works for convex
+     * shapes.
+     *
+     * @param xf The shape world transform.
+     * @param p A point in world coordinates.
+     */
+    testPoint(xf: Transform, p: Vec2): boolean;
+    /**
+     * Cast a ray against a child shape.
+     *
+     * @param output The ray-cast results.
+     * @param input The ray-cast input parameters.
+     * @param xf The transform to be applied to the shape.
+     * @param childIndex The child shape index
+     */
+    rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;
+    /**
+     * Given a transform, compute the associated axis aligned bounding box for a
+     * child shape.
+     *
+     * @param aabb Returns the axis aligned box.
+     * @param xf The world transform of the shape.
+     * @param childIndex The child shape
+     */
+    computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
+    /**
+     * Compute the mass properties of this shape using its dimensions and density.
+     * The inertia tensor is computed about the local origin.
+     *
+     * @param massData Returns the mass data for this shape.
      * @param density The density in kilograms per meter squared.
      */
     computeMass(massData: MassData, density: number): void;
@@ -2222,7 +2334,11 @@ declare class PolygonShape extends Shape {
     validate(): boolean;
     computeDistanceProxy(proxy: DistanceProxy): void;
 }
-declare function ChainShape(vertices?: Vec2[], loop?: boolean): ChainShape;
+declare const ChainShape: {
+    new (vertices?: Vec2[], loop?: boolean): ChainShape;
+    (vertices?: Vec2[], loop?: boolean): ChainShape;
+    TYPE: "chain";
+};
 /**
  * A chain shape is a free form sequence of line segments. The chain has
  * two-sided collision, so you can use inside and outside collision. Therefore,
@@ -2231,8 +2347,7 @@ declare function ChainShape(vertices?: Vec2[], loop?: boolean): ChainShape;
  *
  * WARNING: The chain will not collide properly if there are self-intersections.
  */
-declare class ChainShape extends Shape {
-    static TYPE: "chain";
+declare interface ChainShape extends Shape {
     m_vertices: Vec2[];
     m_count: number;
     m_prevVertex: Vec2 | null;
@@ -2240,42 +2355,18 @@ declare class ChainShape extends Shape {
     m_hasPrevVertex: boolean;
     m_hasNextVertex: boolean;
     m_isLoop: boolean;
-    constructor(vertices?: Vec2[], loop?: boolean);
-    // clear() {
-    //   this.m_vertices.length = 0;
-    //   this.m_count = 0;
-    // }
-    /**
-     * Create a loop. This automatically adjusts connectivity.
-     *
-     * @param vertices an array of vertices, these are copied
-     * @param count the vertex count
-     */
-    _createLoop(vertices: Vec2[]): this;
-    /**
-     * Create a chain with isolated end vertices.
-     *
-     * @param vertices an array of vertices, these are copied
-     * @param count the vertex count
-     */
-    _createChain(vertices: Vec2[]): this;
-    _reset(): void;
     /**
      * Establish connectivity to a vertex that precedes the first vertex. Don't call
      * this for loops.
      */
     setPrevVertex(prevVertex: Vec2): void;
+    getPrevVertex(): Vec2;
     /**
      * Establish connectivity to a vertex that follows the last vertex. Don't call
      * this for loops.
      */
     setNextVertex(nextVertex: Vec2): void;
-    /**
-     * @deprecated Shapes should be treated as immutable.
-     *
-     * clone the concrete shape.
-     */
-    _clone(): ChainShape;
+    getNextVertex(): Vec2;
     /**
      * Get the number of child primitives.
      */
@@ -2283,22 +2374,23 @@ declare class ChainShape extends Shape {
     // Get a child edge.
     getChildEdge(edge: EdgeShape, childIndex: number): void;
     getVertex(index: number): Vec2;
+    isLoop(): boolean;
     /**
      * Test a point for containment in this shape. This only works for convex
      * shapes.
      *
      * This always return false.
      *
-     * @param {Transform} xf The shape world transform.
+     * @param xf The shape world transform.
      * @param p A point in world coordinates.
      */
     testPoint(xf: Transform, p: Vec2): false;
     /**
      * Cast a ray against a child shape.
      *
-     * @param {RayCastOutput} output The ray-cast results.
-     * @param {RayCastInput} input The ray-cast input parameters.
-     * @param {Transform} transform The transform to be applied to the shape.
+     * @param output The ray-cast results.
+     * @param input The ray-cast input parameters.
+     * @param xf The transform to be applied to the shape.
      * @param childIndex The child shape index
      */
     rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;
@@ -2306,8 +2398,8 @@ declare class ChainShape extends Shape {
      * Given a transform, compute the associated axis aligned bounding box for a
      * child shape.
      *
-     * @param {AABB} aabb Returns the axis aligned box.
-     * @param {Transform} xf The world transform of the shape.
+     * @param aabb Returns the axis aligned box.
+     * @param xf The world transform of the shape.
      * @param childIndex The child shape
      */
     computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
@@ -2317,24 +2409,26 @@ declare class ChainShape extends Shape {
      *
      * Chains have zero mass.
      *
-     * @param {MassData} massData Returns the mass data for this shape.
+     * @param massData Returns the mass data for this shape.
      * @param density The density in kilograms per meter squared.
      */
     computeMass(massData: MassData, density?: number): void;
     computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
 }
-declare function BoxShape(hx: number, hy: number, center?: Vec2, angle?: number): BoxShape;
+declare const BoxShape: {
+    new (hx: number, hy: number, center?: Vec2, angle?: number): BoxShape;
+    (hx: number, hy: number, center?: Vec2, angle?: number): BoxShape;
+    TYPE: "polygon";
+};
 /**
  * A rectangle polygon which extend PolygonShape.
  */
-declare class BoxShape extends PolygonShape {
-    static TYPE: "polygon";
-    constructor(hx: number, hy: number, center?: Vec2, angle?: number);
+declare interface BoxShape extends PolygonShape {
 }
-declare function CollideCircles(manifold: any, circleA: any, xfA: any, circleB: any, xfB: any): void;
+declare function CollideCircles(manifold: Manifold, circleA: CircleShape, xfA: Transform, circleB: CircleShape, xfB: Transform): void;
 // Compute contact points for edge versus circle.
 // This accounts for edge connectivity.
-declare function CollideEdgeCircle(manifold: any, edgeA: any, xfA: any, circleB: any, xfB: any): void;
+declare function CollideEdgeCircle(manifold: Manifold, edgeA: EdgeShape, xfA: Transform, circleB: CircleShape, xfB: Transform): void;
 /**
  *
  * Find edge normal of max separation on A - return if separating axis is found<br>
@@ -2345,13 +2439,13 @@ declare function CollideEdgeCircle(manifold: any, edgeA: any, xfA: any, circleB:
  *
  * The normal points from 1 to 2
  */
-declare function CollidePolygons(manifold: any, polyA: PolygonShape, xfA: Transform, polyB: PolygonShape, xfB: Transform): void;
-declare function CollidePolygonCircle(manifold: any, polygonA: any, xfA: any, circleB: any, xfB: any): void;
+declare function CollidePolygons(manifold: Manifold, polyA: PolygonShape, xfA: Transform, polyB: PolygonShape, xfB: Transform): void;
+declare function CollidePolygonCircle(manifold: Manifold, polygonA: PolygonShape, xfA: Transform, circleB: CircleShape, xfB: Transform): void;
 /**
  * This function collides and edge and a polygon, taking into account edge
  * adjacency.
  */
-declare function CollideEdgePolygon(manifold: any, edgeA: any, xfA: any, polygonB: any, xfB: any): void;
+declare function CollideEdgePolygon(manifold: Manifold, edgeA: EdgeShape, xfA: Transform, polygonB: PolygonShape, xfB: Transform): void;
 /**
  * Distance joint definition. This requires defining an anchor point on both
  * bodies and the non-zero length of the distance joint. The definition uses
@@ -2390,8 +2484,13 @@ interface DistanceJointDef extends JointDef, DistanceJointOpt {
      */
     localAnchorB: Vec2;
 }
-declare function DistanceJoint(def: DistanceJointDef): DistanceJoint;
-declare function DistanceJoint(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2): DistanceJoint;
+declare const DistanceJoint: {
+    new (def: DistanceJointDef): DistanceJoint;
+    (def: DistanceJointDef): DistanceJoint;
+    new (def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2): DistanceJoint;
+    (def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2): DistanceJoint;
+    TYPE: "distance-joint";
+};
 /**
  * A distance joint constrains two points on two bodies to remain at a fixed
  * distance from each other. You can view this as a massless, rigid rod.
@@ -2399,10 +2498,7 @@ declare function DistanceJoint(def: DistanceJointOpt, bodyA: Body, bodyB: Body, 
  * @param anchorA Anchor A in global coordination.
  * @param anchorB Anchor B in global coordination.
  */
-declare class DistanceJoint extends Joint {
-    static TYPE: "distance-joint";
-    constructor(def: DistanceJointDef);
-    constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2);
+declare interface DistanceJoint extends Joint {
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -2440,12 +2536,12 @@ declare class DistanceJoint extends Joint {
      * Get the reaction torque on bodyB in N*m.
      */
     getReactionTorque(inv_dt: number): number;
-    initVelocityConstraints(step: any): void;
-    solveVelocityConstraints(step: any): void;
+    initVelocityConstraints(step: TimeStep): void;
+    solveVelocityConstraints(step: TimeStep): void;
     /**
      * This returns true if the position errors are within tolerance.
      */
-    solvePositionConstraints(step: any): boolean;
+    solvePositionConstraints(step: TimeStep): boolean;
 }
 /**
  * Friction joint definition.
@@ -2473,19 +2569,20 @@ interface FrictionJointDef extends JointDef, FrictionJointOpt {
      */
     localAnchorB: Vec2;
 }
-declare function FrictionJoint(def: FrictionJointDef): FrictionJoint;
-declare function FrictionJoint(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): FrictionJoint;
+declare const FrictionJoint: {
+    new (def: FrictionJointDef): FrictionJoint;
+    (def: FrictionJointDef): FrictionJoint;
+    new (def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): FrictionJoint;
+    (def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): FrictionJoint;
+    TYPE: "friction-joint";
+};
 /**
  * Friction joint. This is used for top-down friction. It provides 2D
  * translational friction and angular friction.
  *
  * @param anchor Anchor in global coordination.
  */
-declare class FrictionJoint extends Joint {
-    static TYPE: "friction-joint";
-    // float
-    constructor(def: FrictionJointDef);
-    constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+declare interface FrictionJoint extends Joint {
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -2497,7 +2594,7 @@ declare class FrictionJoint extends Joint {
     /**
      * Set the maximum friction force in N.
      */
-    setMaxForce(force: any): void;
+    setMaxForce(force: number): void;
     /**
      * Get the maximum friction force in N.
      */
@@ -2505,7 +2602,7 @@ declare class FrictionJoint extends Joint {
     /**
      * Set the maximum friction torque in N*m.
      */
-    setMaxTorque(torque: any): void;
+    setMaxTorque(torque: number): void;
     /**
      * Get the maximum friction torque in N*m.
      */
@@ -2521,17 +2618,17 @@ declare class FrictionJoint extends Joint {
     /**
      * Get the reaction force on bodyB at the joint anchor in Newtons.
      */
-    getReactionForce(inv_dt: any): Vec2;
+    getReactionForce(inv_dt: number): Vec2;
     /**
      * Get the reaction torque on bodyB in N*m.
      */
-    getReactionTorque(inv_dt: any): number;
-    initVelocityConstraints(step: any): void;
-    solveVelocityConstraints(step: any): void;
+    getReactionTorque(inv_dt: number): number;
+    initVelocityConstraints(step: TimeStep): void;
+    solveVelocityConstraints(step: TimeStep): void;
     /**
      * This returns true if the position errors are within tolerance.
      */
-    solvePositionConstraints(step: any): boolean;
+    solvePositionConstraints(step: TimeStep): boolean;
 }
 /**
  * Revolute joint definition. This requires defining an anchor point where the
@@ -2598,8 +2695,15 @@ interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
      */
     referenceAngle: number;
 }
-declare function RevoluteJoint(def: RevoluteJointDef): RevoluteJoint;
-declare function RevoluteJoint(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RevoluteJoint;
+declare const RevoluteJoint: {
+    // TODO enum
+    new (def: RevoluteJointDef): RevoluteJoint;
+    // TODO enum
+    (def: RevoluteJointDef): RevoluteJoint;
+    new (def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RevoluteJoint;
+    (def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RevoluteJoint;
+    TYPE: "revolute-joint";
+};
 /**
  * A revolute joint constrains two bodies to share a common point while they are
  * free to rotate about the point. The relative rotation about the shared point
@@ -2608,11 +2712,7 @@ declare function RevoluteJoint(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, 
  * relative rotation about the shared point. A maximum motor torque is provided
  * so that infinite forces are not generated.
  */
-declare class RevoluteJoint extends Joint {
-    static TYPE: "revolute-joint";
-    // TODO enum
-    constructor(def: RevoluteJointDef);
-    constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+declare interface RevoluteJoint extends Joint {
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -2640,15 +2740,15 @@ declare class RevoluteJoint extends Joint {
     /**
      * Enable/disable the joint motor.
      */
-    enableMotor(flag: any): void;
+    enableMotor(flag: boolean): void;
     /**
      * Get the current motor torque given the inverse time step. Unit is N*m.
      */
-    getMotorTorque(inv_dt: any): number;
+    getMotorTorque(inv_dt: number): number;
     /**
      * Set the motor speed in radians per second.
      */
-    setMotorSpeed(speed: any): void;
+    setMotorSpeed(speed: number): void;
     /**
      * Get the motor speed in radians per second.
      */
@@ -2656,7 +2756,7 @@ declare class RevoluteJoint extends Joint {
     /**
      * Set the maximum motor torque, usually in N-m.
      */
-    setMaxMotorTorque(torque: any): void;
+    setMaxMotorTorque(torque: number): void;
     getMaxMotorTorque(): number;
     /**
      * Is the joint limit enabled?
@@ -2665,7 +2765,7 @@ declare class RevoluteJoint extends Joint {
     /**
      * Enable/disable the joint limit.
      */
-    enableLimit(flag: any): void;
+    enableLimit(flag: boolean): void;
     /**
      * Get the lower joint limit in radians.
      */
@@ -2677,7 +2777,7 @@ declare class RevoluteJoint extends Joint {
     /**
      * Set the joint limits in radians.
      */
-    setLimits(lower: any, upper: any): void;
+    setLimits(lower: number, upper: number): void;
     /**
      * Get the anchor point on bodyA in world coordinates.
      */
@@ -2689,18 +2789,18 @@ declare class RevoluteJoint extends Joint {
     /**
      * Get the reaction force given the inverse time step. Unit is N.
      */
-    getReactionForce(inv_dt: any): Vec2;
+    getReactionForce(inv_dt: number): Vec2;
     /**
      * Get the reaction torque due to the joint limit given the inverse time step.
      * Unit is N*m.
      */
-    getReactionTorque(inv_dt: any): number;
-    initVelocityConstraints(step: any): void;
-    solveVelocityConstraints(step: any): void;
+    getReactionTorque(inv_dt: number): number;
+    initVelocityConstraints(step: TimeStep): void;
+    solveVelocityConstraints(step: TimeStep): void;
     /**
      * This returns true if the position errors are within tolerance.
      */
-    solvePositionConstraints(step: any): boolean;
+    solvePositionConstraints(step: TimeStep): boolean;
 }
 /**
  * Prismatic joint definition. This requires defining a line of motion using an
@@ -2763,18 +2863,20 @@ interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
      */
     referenceAngle: number;
 }
-declare function PrismaticJoint(def: PrismaticJointDef): PrismaticJoint;
-declare function PrismaticJoint(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): PrismaticJoint;
+declare const PrismaticJoint: {
+    new (def: PrismaticJointDef): PrismaticJoint;
+    (def: PrismaticJointDef): PrismaticJoint;
+    new (def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): PrismaticJoint;
+    (def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): PrismaticJoint;
+    TYPE: "prismatic-joint";
+};
 /**
  * A prismatic joint. This joint provides one degree of freedom: translation
  * along an axis fixed in bodyA. Relative rotation is prevented. You can use a
  * joint limit to restrict the range of motion and a joint motor to drive the
  * motion or to model joint friction.
  */
-declare class PrismaticJoint extends Joint {
-    static TYPE: "prismatic-joint";
-    constructor(def: PrismaticJointDef);
-    constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
+declare interface PrismaticJoint extends Joint {
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -2806,7 +2908,7 @@ declare class PrismaticJoint extends Joint {
     /**
      * Enable/disable the joint limit.
      */
-    enableLimit(flag: any): void;
+    enableLimit(flag: boolean): void;
     /**
      * Get the lower joint limit, usually in meters.
      */
@@ -2818,7 +2920,7 @@ declare class PrismaticJoint extends Joint {
     /**
      * Set the joint limits, usually in meters.
      */
-    setLimits(lower: any, upper: any): void;
+    setLimits(lower: number, upper: number): void;
     /**
      * Is the joint motor enabled?
      */
@@ -2826,15 +2928,15 @@ declare class PrismaticJoint extends Joint {
     /**
      * Enable/disable the joint motor.
      */
-    enableMotor(flag: any): void;
+    enableMotor(flag: boolean): void;
     /**
      * Set the motor speed, usually in meters per second.
      */
-    setMotorSpeed(speed: any): void;
+    setMotorSpeed(speed: number): void;
     /**
      * Set the maximum motor force, usually in N.
      */
-    setMaxMotorForce(force: any): void;
+    setMaxMotorForce(force: number): void;
     getMaxMotorForce(): number;
     /**
      * Get the motor speed, usually in meters per second.
@@ -2843,7 +2945,7 @@ declare class PrismaticJoint extends Joint {
     /**
      * Get the current motor force given the inverse time step, usually in N.
      */
-    getMotorForce(inv_dt: any): number;
+    getMotorForce(inv_dt: number): number;
     /**
      * Get the anchor point on bodyA in world coordinates.
      */
@@ -2855,24 +2957,24 @@ declare class PrismaticJoint extends Joint {
     /**
      * Get the reaction force on bodyB at the joint anchor in Newtons.
      */
-    getReactionForce(inv_dt: any): Vec2;
+    getReactionForce(inv_dt: number): Vec2;
     /**
      * Get the reaction torque on bodyB in N*m.
      */
-    getReactionTorque(inv_dt: any): number;
-    initVelocityConstraints(step: any): void;
-    solveVelocityConstraints(step: any): void;
+    getReactionTorque(inv_dt: number): number;
+    initVelocityConstraints(step: TimeStep): void;
+    solveVelocityConstraints(step: TimeStep): void;
     /**
      * This returns true if the position errors are within tolerance.
      */
-    solvePositionConstraints(step: any): boolean;
+    solvePositionConstraints(step: TimeStep): boolean;
 }
 /**
  * Gear joint definition.
  */
 interface GearJointOpt extends JointOpt {
     /**
-     * The gear ratio. See GearJoint for explanation.
+     * The gear ratio. See {@link GearJoint} for explanation.
      */
     ratio?: number;
 }
@@ -2889,8 +2991,13 @@ interface GearJointDef extends JointDef, GearJointOpt {
      */
     joint2: RevoluteJoint | PrismaticJoint;
 }
-declare function GearJoint(def: GearJointDef): GearJoint;
-declare function GearJoint(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
+declare const GearJoint: {
+    new (def: GearJointDef): GearJoint;
+    (def: GearJointDef): GearJoint;
+    new (def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
+    (def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
+    TYPE: "gear-joint";
+};
 /**
  * A gear joint is used to connect two joints together. Either joint can be a
  * revolute or prismatic joint. You specify a gear ratio to bind the motions
@@ -2904,23 +3011,19 @@ declare function GearJoint(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: 
  * This definition requires two existing revolute or prismatic joints (any
  * combination will work).
  */
-declare class GearJoint extends Joint {
-    static TYPE: "gear-joint";
-    // float
-    constructor(def: GearJointDef);
-    constructor(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number);
+declare interface GearJoint extends Joint {
     /**
      * Get the first joint.
      */
-    getJoint1(): RevoluteJoint | PrismaticJoint;
+    getJoint1(): Joint;
     /**
      * Get the second joint.
      */
-    getJoint2(): RevoluteJoint | PrismaticJoint;
+    getJoint2(): Joint;
     /**
      * Set the gear ratio.
      */
-    setRatio(ratio: any): void;
+    setRatio(ratio: number): void;
     /**
      * Get the gear ratio.
      */
@@ -2936,17 +3039,17 @@ declare class GearJoint extends Joint {
     /**
      * Get the reaction force on bodyB at the joint anchor in Newtons.
      */
-    getReactionForce(inv_dt: any): Vec2;
+    getReactionForce(inv_dt: number): Vec2;
     /**
      * Get the reaction torque on bodyB in N*m.
      */
-    getReactionTorque(inv_dt: any): number;
-    initVelocityConstraints(step: any): void;
-    solveVelocityConstraints(step: any): void;
+    getReactionTorque(inv_dt: number): number;
+    initVelocityConstraints(step: TimeStep): void;
+    solveVelocityConstraints(step: TimeStep): void;
     /**
      * This returns true if the position errors are within tolerance.
      */
-    solvePositionConstraints(step: any): boolean;
+    solvePositionConstraints(step: TimeStep): boolean;
 }
 /**
  * Motor joint definition.
@@ -2978,22 +3081,23 @@ interface MotorJointOpt extends JointOpt {
  */
 interface MotorJointDef extends JointDef, MotorJointOpt {
 }
-declare function MotorJoint(def: MotorJointDef): MotorJoint;
-declare function MotorJoint(def: MotorJointOpt, bodyA: Body, bodyB: Body): MotorJoint;
+declare const MotorJoint: {
+    new (def: MotorJointDef): MotorJoint;
+    (def: MotorJointDef): MotorJoint;
+    new (def: MotorJointOpt, bodyA: Body, bodyB: Body): MotorJoint;
+    (def: MotorJointOpt, bodyA: Body, bodyB: Body): MotorJoint;
+    TYPE: "motor-joint";
+};
 /**
  * A motor joint is used to control the relative motion between two bodies. A
  * typical usage is to control the movement of a dynamic body with respect to
  * the ground.
  */
-declare class MotorJoint extends Joint {
-    static TYPE: "motor-joint";
-    // float
-    constructor(def: MotorJointDef);
-    constructor(def: MotorJointOpt, bodyA: Body, bodyB: Body);
+declare interface MotorJoint extends Joint {
     /**
      * Set the maximum friction force in N.
      */
-    setMaxForce(force: any): void;
+    setMaxForce(force: number): void;
     /**
      * Get the maximum friction force in N.
      */
@@ -3001,7 +3105,7 @@ declare class MotorJoint extends Joint {
     /**
      * Set the maximum friction torque in N*m.
      */
-    setMaxTorque(torque: any): void;
+    setMaxTorque(torque: number): void;
     /**
      * Get the maximum friction torque in N*m.
      */
@@ -3009,7 +3113,7 @@ declare class MotorJoint extends Joint {
     /**
      * Set the position correction factor in the range [0,1].
      */
-    setCorrectionFactor(factor: any): void;
+    setCorrectionFactor(factor: number): void;
     /**
      * Get the position correction factor in the range [0,1].
      */
@@ -3017,12 +3121,12 @@ declare class MotorJoint extends Joint {
     /**
      * Set/get the target linear offset, in frame A, in meters.
      */
-    setLinearOffset(linearOffset: any): void;
+    setLinearOffset(linearOffset: Vec2): void;
     getLinearOffset(): Vec2;
     /**
      * Set/get the target angular offset, in radians.
      */
-    setAngularOffset(angularOffset: any): void;
+    setAngularOffset(angularOffset: number): void;
     getAngularOffset(): number;
     /**
      * Get the anchor point on bodyA in world coordinates.
@@ -3035,17 +3139,17 @@ declare class MotorJoint extends Joint {
     /**
      * Get the reaction force on bodyB at the joint anchor in Newtons.
      */
-    getReactionForce(inv_dt: any): Vec2;
+    getReactionForce(inv_dt: number): Vec2;
     /**
      * Get the reaction torque on bodyB in N*m.
      */
-    getReactionTorque(inv_dt: any): number;
-    initVelocityConstraints(step: any): void;
-    solveVelocityConstraints(step: any): void;
+    getReactionTorque(inv_dt: number): number;
+    initVelocityConstraints(step: TimeStep): void;
+    solveVelocityConstraints(step: TimeStep): void;
     /**
      * This returns true if the position errors are within tolerance.
      */
-    solvePositionConstraints(step: any): boolean;
+    solvePositionConstraints(step: TimeStep): boolean;
 }
 /**
  * Mouse joint definition. This requires a world target point, tuning
@@ -3079,8 +3183,13 @@ interface MouseJointDef extends JointDef, MouseJointOpt {
      */
     target: Vec2;
 }
-declare function MouseJoint(def: MouseJointDef): MouseJoint;
-declare function MouseJoint(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2): MouseJoint;
+declare const MouseJoint: {
+    new (def: MouseJointDef): MouseJoint;
+    (def: MouseJointDef): MouseJoint;
+    new (def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2): MouseJoint;
+    (def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2): MouseJoint;
+    TYPE: "mouse-joint";
+};
 /**
  * A mouse joint is used to make a point on a body track a specified world
  * point. This a soft constraint with a maximum force. This allows the
@@ -3090,19 +3199,16 @@ declare function MouseJoint(def: MouseJointOpt, bodyA: Body, bodyB: Body, target
  * be used in the testbed. If you want to learn how to use the mouse joint, look
  * at the testbed.
  */
-declare class MouseJoint extends Joint {
-    static TYPE: "mouse-joint";
-    constructor(def: MouseJointDef);
-    constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2);
+declare interface MouseJoint extends Joint {
     /**
      * Use this to update the target point.
      */
-    setTarget(target: any): void;
+    setTarget(target: Vec2): void;
     getTarget(): Vec2;
     /**
      * Set the maximum force in Newtons.
      */
-    setMaxForce(force: any): void;
+    setMaxForce(force: number): void;
     /**
      * Get the maximum force in Newtons.
      */
@@ -3110,7 +3216,7 @@ declare class MouseJoint extends Joint {
     /**
      * Set the frequency in Hertz.
      */
-    setFrequency(hz: any): void;
+    setFrequency(hz: number): void;
     /**
      * Get the frequency in Hertz.
      */
@@ -3118,7 +3224,7 @@ declare class MouseJoint extends Joint {
     /**
      * Set the damping ratio (dimensionless).
      */
-    setDampingRatio(ratio: any): void;
+    setDampingRatio(ratio: number): void;
     /**
      * Get the damping ratio (dimensionless).
      */
@@ -3134,26 +3240,27 @@ declare class MouseJoint extends Joint {
     /**
      * Get the reaction force on bodyB at the joint anchor in Newtons.
      */
-    getReactionForce(inv_dt: any): Vec2;
+    getReactionForce(inv_dt: number): Vec2;
     /**
      * Get the reaction torque on bodyB in N*m.
      */
-    getReactionTorque(inv_dt: any): number;
+    getReactionTorque(inv_dt: number): number;
     /**
      * Shift the origin for any points stored in world coordinates.
      */
-    shiftOrigin(newOrigin: any): void;
-    initVelocityConstraints(step: any): void;
-    solveVelocityConstraints(step: any): void;
+    shiftOrigin(newOrigin: Vec2): void;
+    initVelocityConstraints(step: TimeStep): void;
+    solveVelocityConstraints(step: TimeStep): void;
     /**
      * This returns true if the position errors are within tolerance.
      */
-    solvePositionConstraints(step: any): boolean;
+    solvePositionConstraints(step: TimeStep): boolean;
 }
 /**
  * Pulley joint definition. This requires two ground anchors, two dynamic body
  * anchor points, and a pulley ratio.
  */
+// tslint:disable-next-line:no-empty-interface
 interface PulleyJointOpt extends JointOpt {
 }
 /**
@@ -3190,8 +3297,13 @@ interface PulleyJointDef extends JointDef, PulleyJointOpt {
      */
     ratio: number;
 }
-declare function PulleyJoint(def: PulleyJointDef): PulleyJoint;
-declare function PulleyJoint(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number): PulleyJoint;
+declare const PulleyJoint: {
+    new (def: PulleyJointDef): PulleyJoint;
+    (def: PulleyJointDef): PulleyJoint;
+    new (def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number): PulleyJoint;
+    (def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number): PulleyJoint;
+    TYPE: "pulley-joint";
+};
 /**
  * The pulley joint is connected to two bodies and two fixed ground points. The
  * pulley supports a ratio such that: length1 + ratio * length2 <= constant
@@ -3203,26 +3315,8 @@ declare function PulleyJoint(def: PulleyJointOpt, bodyA: Body, bodyB: Body, grou
  * anchor points with static shapes to prevent one side from going to zero
  * length.
  */
-declare class PulleyJoint extends Joint {
-    static TYPE: "pulley-joint";
-    static MIN_PULLEY_LENGTH: number; // minPulleyLength
-    // float
-    constructor(def: PulleyJointDef);
-    constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number);
-    _serialize(): {
-        type: "pulley-joint";
-        bodyA: Body;
-        bodyB: Body;
-        collideConnected: boolean;
-        groundAnchorA: Vec2;
-        groundAnchorB: Vec2;
-        localAnchorA: Vec2;
-        localAnchorB: Vec2;
-        lengthA: number;
-        lengthB: number;
-        ratio: number;
-    };
-    static _deserialize(data: any, world: any, restore: any): PulleyJoint;
+declare interface PulleyJoint extends Joint {
+    _serialize(): object;
     /**
      * Get the first ground anchor.
      */
@@ -3256,7 +3350,7 @@ declare class PulleyJoint extends Joint {
      *
      * @param newOrigin
      */
-    shiftOrigin(newOrigin: any): void;
+    shiftOrigin(newOrigin: Vec2): void;
     /**
      * Get the anchor point on bodyA in world coordinates.
      */
@@ -3268,17 +3362,17 @@ declare class PulleyJoint extends Joint {
     /**
      * Get the reaction force on bodyB at the joint anchor in Newtons.
      */
-    getReactionForce(inv_dt: any): Vec2;
+    getReactionForce(inv_dt: number): Vec2;
     /**
      * Get the reaction torque on bodyB in N*m.
      */
-    getReactionTorque(inv_dt: any): number;
-    initVelocityConstraints(step: any): void;
-    solveVelocityConstraints(step: any): void;
+    getReactionTorque(inv_dt: number): number;
+    initVelocityConstraints(step: TimeStep): void;
+    solveVelocityConstraints(step: TimeStep): void;
     /**
      * This returns true if the position errors are within tolerance.
      */
-    solvePositionConstraints(step: any): boolean;
+    solvePositionConstraints(step: TimeStep): boolean;
 }
 /**
  * Rope joint definition. This requires two body anchor points and a maximum
@@ -3307,8 +3401,13 @@ interface RopeJointDef extends JointDef, RopeJointOpt {
      */
     localAnchorB: Vec2;
 }
-declare function RopeJoint(def: RopeJointDef): RopeJoint;
-declare function RopeJoint(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RopeJoint;
+declare const RopeJoint: {
+    new (def: RopeJointDef): RopeJoint;
+    (def: RopeJointDef): RopeJoint;
+    new (def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RopeJoint;
+    (def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RopeJoint;
+    TYPE: "rope-joint";
+};
 /**
  * A rope joint enforces a maximum distance between two points on two bodies. It
  * has no other effect.
@@ -3317,14 +3416,10 @@ declare function RopeJoint(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: 
  * you will get some non-physical behavior.
  *
  * A model that would allow you to dynamically modify the length would have some
- * sponginess, so I chose not to implement it that way. See DistanceJoint if you
+ * sponginess, so I chose not to implement it that way. See {@link DistanceJoint} if you
  * want to dynamically control length.
  */
-declare class RopeJoint extends Joint {
-    static TYPE: "rope-joint";
-    // float
-    constructor(def: RopeJointDef);
-    constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+declare interface RopeJoint extends Joint {
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -3336,7 +3431,7 @@ declare class RopeJoint extends Joint {
     /**
      * Set the maximum length of the rope.
      */
-    setMaxLength(length: any): void;
+    setMaxLength(length: number): void;
     /**
      * Get the maximum length of the rope.
      */
@@ -3353,17 +3448,17 @@ declare class RopeJoint extends Joint {
     /**
      * Get the reaction force on bodyB at the joint anchor in Newtons.
      */
-    getReactionForce(inv_dt: any): Vec2;
+    getReactionForce(inv_dt: number): Vec2;
     /**
      * Get the reaction torque on bodyB in N*m.
      */
-    getReactionTorque(inv_dt: any): number;
-    initVelocityConstraints(step: any): void;
-    solveVelocityConstraints(step: any): void;
+    getReactionTorque(inv_dt: number): number;
+    initVelocityConstraints(step: TimeStep): void;
+    solveVelocityConstraints(step: TimeStep): void;
     /**
      * This returns true if the position errors are within tolerance.
      */
-    solvePositionConstraints(step: any): boolean;
+    solvePositionConstraints(step: TimeStep): boolean;
 }
 /**
  * Weld joint definition. You need to specify local anchor points where they are
@@ -3407,16 +3502,18 @@ interface WeldJointDef extends JointDef, WeldJointOpt {
      */
     localAnchorB: Vec2;
 }
-declare function WeldJoint(def: WeldJointDef): WeldJoint;
-declare function WeldJoint(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): WeldJoint;
+declare const WeldJoint: {
+    new (def: WeldJointDef): WeldJoint;
+    (def: WeldJointDef): WeldJoint;
+    new (def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): WeldJoint;
+    (def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): WeldJoint;
+    TYPE: "weld-joint";
+};
 /**
  * A weld joint essentially glues two bodies together. A weld joint may distort
  * somewhat because the island constraint solver is approximate.
  */
-declare class WeldJoint extends Joint {
-    static TYPE: "weld-joint";
-    constructor(def: WeldJointDef);
-    constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+declare interface WeldJoint extends Joint {
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -3461,12 +3558,12 @@ declare class WeldJoint extends Joint {
      * Get the reaction torque on bodyB in N*m.
      */
     getReactionTorque(inv_dt: number): number;
-    initVelocityConstraints(step: any): void;
-    solveVelocityConstraints(step: any): void;
+    initVelocityConstraints(step: TimeStep): void;
+    solveVelocityConstraints(step: TimeStep): void;
     /**
      * This returns true if the position errors are within tolerance.
      */
-    solvePositionConstraints(step: any): boolean;
+    solvePositionConstraints(step: TimeStep): boolean;
 }
 /**
  * Wheel joint definition. This requires defining a line of motion using an axis
@@ -3520,19 +3617,20 @@ interface WheelJointDef extends JointDef, WheelJointOpt {
      */
     localAxisA: Vec2;
 }
-declare function WheelJoint(def: WheelJointDef): WheelJoint;
-declare function WheelJoint(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): WheelJoint;
+declare const WheelJoint: {
+    new (def: WheelJointDef): WheelJoint;
+    (def: WheelJointDef): WheelJoint;
+    new (def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): WheelJoint;
+    (def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): WheelJoint;
+    TYPE: "wheel-joint";
+};
 /**
  * A wheel joint. This joint provides two degrees of freedom: translation along
  * an axis fixed in bodyA and rotation in the plane. In other words, it is a
  * point to line constraint with a rotational motor and a linear spring/damper.
  * This joint is designed for vehicle suspensions.
  */
-declare class WheelJoint extends Joint {
-    static TYPE: "wheel-joint";
-    // float
-    constructor(def: WheelJointDef);
-    constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
+declare interface WheelJoint extends Joint {
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -3560,11 +3658,11 @@ declare class WheelJoint extends Joint {
     /**
      * Enable/disable the joint motor.
      */
-    enableMotor(flag: any): void;
+    enableMotor(flag: boolean): void;
     /**
      * Set the motor speed, usually in radians per second.
      */
-    setMotorSpeed(speed: any): void;
+    setMotorSpeed(speed: number): void;
     /**
      * Get the motor speed, usually in radians per second.
      */
@@ -3572,22 +3670,22 @@ declare class WheelJoint extends Joint {
     /**
      * Set/Get the maximum motor force, usually in N-m.
      */
-    setMaxMotorTorque(torque: any): void;
+    setMaxMotorTorque(torque: number): void;
     getMaxMotorTorque(): number;
     /**
      * Get the current motor torque given the inverse time step, usually in N-m.
      */
-    getMotorTorque(inv_dt: any): number;
+    getMotorTorque(inv_dt: number): number;
     /**
      * Set/Get the spring frequency in hertz. Setting the frequency to zero disables
      * the spring.
      */
-    setSpringFrequencyHz(hz: any): void;
+    setSpringFrequencyHz(hz: number): void;
     getSpringFrequencyHz(): number;
     /**
      * Set/Get the spring damping ratio
      */
-    setSpringDampingRatio(ratio: any): void;
+    setSpringDampingRatio(ratio: number): void;
     getSpringDampingRatio(): number;
     /**
      * Get the anchor point on bodyA in world coordinates.
@@ -3600,17 +3698,17 @@ declare class WheelJoint extends Joint {
     /**
      * Get the reaction force on bodyB at the joint anchor in Newtons.
      */
-    getReactionForce(inv_dt: any): Vec2;
+    getReactionForce(inv_dt: number): Vec2;
     /**
      * Get the reaction torque on bodyB in N*m.
      */
-    getReactionTorque(inv_dt: any): number;
-    initVelocityConstraints(step: any): void;
-    solveVelocityConstraints(step: any): void;
+    getReactionTorque(inv_dt: number): number;
+    initVelocityConstraints(step: TimeStep): void;
+    solveVelocityConstraints(step: TimeStep): void;
     /**
      * This returns true if the position errors are within tolerance.
      */
-    solvePositionConstraints(step: any): boolean;
+    solvePositionConstraints(step: TimeStep): boolean;
 }
 /*
 * Planck.js
@@ -3774,7 +3872,7 @@ declare class Sweep {
      * @param xf
      * @param beta A factor in [0,1], where 0 indicates alpha0
      */
-    getTransform(xf: Transform, beta: number): void;
+    getTransform(xf: Transform, beta?: number): void;
     /**
      * Advance the sweep forward, yielding a new initial state.
      *
@@ -3920,6 +4018,7 @@ interface Testbed {
 }
 declare function testbed(opts: object, callback: (testbed: Testbed) => World): any;
 declare function testbed(callback: (testbed: Testbed) => World): any;
+type _ContactImpulse$0 = InstanceType<typeof ContactImpulse>;
 /** @deprecated Merged with main namespace */
 declare const internal$0: {};
-export { ActiveKeys, Testbed, testbed, Serializer, math as Math, Vec2, Vec3, Mat22, Mat33, Transform, Rot, AABB, Shape, Fixture, Body, Contact, Joint, World, CircleShape as Circle, EdgeShape as Edge, PolygonShape as Polygon, ChainShape as Chain, BoxShape as Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJoint, FrictionJoint, GearJoint, MotorJoint, MouseJoint, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, WeldJoint, WheelJoint, Settings, Sweep, Manifold, Distance, TimeOfImpact, DynamicTree, internal$0 as internal };
+export { ActiveKeys, Testbed, testbed, Serializer, math as Math, Vec2, Vec3, Mat22, Mat33, Transform, Rot, AABB, Shape, Fixture, Body, Contact, Joint, World, CircleShape as Circle, EdgeShape as Edge, PolygonShape as Polygon, ChainShape as Chain, BoxShape as Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJoint, FrictionJoint, GearJoint, MotorJoint, MouseJoint, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, WeldJoint, WheelJoint, Settings, Sweep, Manifold, Distance, TimeOfImpact, DynamicTree, _ContactImpulse$0 as ContactImpulse, internal$0 as internal };

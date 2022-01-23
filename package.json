@@ -1,6 +1,6 @@
 {
   "name": "planck",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "2D JavaScript/TypeScript physics engine for cross-platform HTML5 game development",
   "homepage": "https://github.com/shakiba/planck.js",
   "keywords": [

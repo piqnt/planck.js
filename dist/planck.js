@@ -72,6 +72,7 @@
 
     function options (input, defaults) {
         if (input === null || typeof input === 'undefined') {
+            // tslint:disable-next-line:no-object-literal-type-assertion
             input = {};
         }
         var output = __assign({}, input);
@@ -222,6 +223,7 @@
      * SOFTWARE.
      */
     var Vec2 = /** @class */ (function () {
+        // tslint:disable-next-line:typedef
         function Vec2(x, y) {
             if (!(this instanceof Vec2)) {
                 return new Vec2(x, y);
@@ -269,14 +271,18 @@
         Vec2.clone = function (v) {
             return Vec2.neo(v.x, v.y);
         };
+        /** @internal */
         Vec2.prototype.toString = function () {
             return JSON.stringify(this);
         };
         /**
          * Does this vector contain finite coordinates?
          */
-        Vec2.isValid = function (v) {
-            return v && math.isFinite(v.x) && math.isFinite(v.y);
+        Vec2.isValid = function (obj) {
+            if (obj === null || typeof obj === 'undefined') {
+                return false;
+            }
+            return math.isFinite(obj.x) && math.isFinite(obj.y);
         };
         Vec2.assert = function (o) {
             return;
@@ -299,6 +305,7 @@
          *
          * @returns this
          */
+        // tslint:disable-next-line:typedef
         Vec2.prototype.set = function (x, y) {
             if (typeof x === 'object') {
                 this.x = x.x;
@@ -311,6 +318,27 @@
             return this;
         };
         /**
+         * Set this vector to some specified coordinates.
+         *
+         * @returns this
+         */
+        Vec2.prototype.setNum = function (x, y) {
+            this.x = x;
+            this.y = y;
+            return this;
+        };
+        /**
+         * Set this vector to some specified coordinates.
+         *
+         * @returns this
+         */
+        Vec2.prototype.setVec2 = function (value) {
+            this.x = value.x;
+            this.y = value.y;
+            return this;
+        };
+        /**
+         * @internal
          * @deprecated Use setCombine or setMul
          */
         Vec2.prototype.wSet = function (a, v, b, w) {
@@ -350,6 +378,7 @@
             return this;
         };
         /**
+         * @internal
          * @deprecated Use addCombine or addMul
          */
         Vec2.prototype.wAdd = function (a, v, b, w) {
@@ -501,6 +530,7 @@
          * Perform the cross product on a vector and a scalar. In 2D this produces a
          * vector.
          */
+        // tslint:disable-next-line:typedef
         Vec2.cross = function (v, w) {
             if (typeof w === 'number') {
                 return Vec2.neo(w * v.y, -w * v.x);
@@ -513,8 +543,29 @@
             }
         };
         /**
+         * Perform the cross product on two vectors. In 2D this produces a scalar.
+         */
+        Vec2.crossVec2Vec2 = function (v, w) {
+            return v.x * w.y - v.y * w.x;
+        };
+        /**
+         * Perform the cross product on a vector and a scalar. In 2D this produces a
+         * vector.
+         */
+        Vec2.crossVec2Num = function (v, w) {
+            return Vec2.neo(w * v.y, -w * v.x);
+        };
+        /**
+         * Perform the cross product on a vector and a scalar. In 2D this produces a
+         * vector.
+         */
+        Vec2.crossNumVec2 = function (v, w) {
+            return Vec2.neo(-v * w.y, v * w.x);
+        };
+        /**
          * Returns `a + (v x w)`
          */
+        // tslint:disable-next-line:typedef
         Vec2.addCross = function (a, v, w) {
             if (typeof w === 'number') {
                 return Vec2.neo(w * v.y + a.x, -w * v.x + a.y);
@@ -523,18 +574,28 @@
                 return Vec2.neo(-v * w.y + a.x, v * w.x + a.y);
             }
         };
+        /**
+         * Returns `a + (v x w)`
+         */
+        Vec2.addCrossVec2Num = function (a, v, w) {
+            return Vec2.neo(w * v.y + a.x, -w * v.x + a.y);
+        };
+        /**
+         * Returns `a + (v x w)`
+         */
+        Vec2.addCrossNumVec2 = function (a, v, w) {
+            return Vec2.neo(-v * w.y + a.x, v * w.x + a.y);
+        };
         Vec2.add = function (v, w) {
             return Vec2.neo(v.x + w.x, v.y + w.y);
         };
-        /**
-         * @deprecated Use combine
-         */
+        /** @internal @deprecated */
         Vec2.wAdd = function (a, v, b, w) {
             if (typeof b !== 'undefined' || typeof w !== 'undefined') {
                 return Vec2.combine(a, v, b, w);
             }
             else {
-                return Vec2.mul(a, v);
+                return Vec2.mulNumVec2(a, v);
             }
         };
         Vec2.combine = function (a, v, b, w) {
@@ -543,6 +604,7 @@
         Vec2.sub = function (v, w) {
             return Vec2.neo(v.x - w.x, v.y - w.y);
         };
+        // tslint:disable-next-line:typedef
         Vec2.mul = function (a, b) {
             if (typeof a === 'object') {
                 return Vec2.neo(a.x * b, a.y * b);
@@ -550,6 +612,12 @@
             else if (typeof b === 'object') {
                 return Vec2.neo(a * b.x, a * b.y);
             }
+        };
+        Vec2.mulVec2Num = function (a, b) {
+            return Vec2.neo(a.x * b, a.y * b);
+        };
+        Vec2.mulNumVec2 = function (a, b) {
+            return Vec2.neo(a * b.x, a * b.y);
         };
         Vec2.prototype.neg = function () {
             this.x = -this.x;
@@ -585,17 +653,15 @@
             v.clamp(max);
             return v;
         };
-        /**
-         * @deprecated
-         */
+        /**  @internal @deprecated */
+        // tslint:disable-next-line:typedef
         Vec2.scaleFn = function (x, y) {
             return function (v) {
                 return Vec2.neo(v.x * x, v.y * y);
             };
         };
-        /**
-         * @deprecated
-         */
+        /**  @internal @deprecated */
+        // tslint:disable-next-line:typedef
         Vec2.translateFn = function (x, y) {
             return function (v) {
                 return Vec2.neo(v.x + x, v.y + y);
@@ -635,13 +701,13 @@
             this.lowerBound = Vec2.zero();
             this.upperBound = Vec2.zero();
             if (typeof lower === 'object') {
-                this.lowerBound.set(lower);
+                this.lowerBound.setVec2(lower);
             }
             if (typeof upper === 'object') {
-                this.upperBound.set(upper);
+                this.upperBound.setVec2(upper);
             }
             else if (typeof lower === 'object') {
-                this.upperBound.set(lower);
+                this.upperBound.setVec2(lower);
             }
         }
         /**
@@ -650,10 +716,11 @@
         AABB.prototype.isValid = function () {
             return AABB.isValid(this);
         };
-        AABB.isValid = function (aabb) {
-            var d = Vec2.sub(aabb.upperBound, aabb.lowerBound);
-            var valid = d.x >= 0.0 && d.y >= 0.0 && Vec2.isValid(aabb.lowerBound) && Vec2.isValid(aabb.upperBound);
-            return valid;
+        AABB.isValid = function (obj) {
+            if (obj === null || typeof obj === 'undefined') {
+                return false;
+            }
+            return Vec2.isValid(obj.lowerBound) && Vec2.isValid(obj.upperBound) && Vec2.sub(obj.upperBound, obj.lowerBound).lengthSquared() >= 0;
         };
         AABB.assert = function (o) {
             return;
@@ -689,16 +756,16 @@
             var lowerY = math.min(lowerA.y, lowerB.y);
             var upperX = math.max(upperB.x, upperA.x);
             var upperY = math.max(upperB.y, upperA.y);
-            this.lowerBound.set(lowerX, lowerY);
-            this.upperBound.set(upperX, upperY);
+            this.lowerBound.setNum(lowerX, lowerY);
+            this.upperBound.setNum(upperX, upperY);
         };
         AABB.prototype.combinePoints = function (a, b) {
-            this.lowerBound.set(math.min(a.x, b.x), math.min(a.y, b.y));
-            this.upperBound.set(math.max(a.x, b.x), math.max(a.y, b.y));
+            this.lowerBound.setNum(math.min(a.x, b.x), math.min(a.y, b.y));
+            this.upperBound.setNum(math.max(a.x, b.x), math.max(a.y, b.y));
         };
         AABB.prototype.set = function (aabb) {
-            this.lowerBound.set(aabb.lowerBound.x, aabb.lowerBound.y);
-            this.upperBound.set(aabb.upperBound.x, aabb.upperBound.y);
+            this.lowerBound.setNum(aabb.lowerBound.x, aabb.lowerBound.y);
+            this.upperBound.setNum(aabb.upperBound.x, aabb.upperBound.y);
         };
         AABB.prototype.contains = function (aabb) {
             var result = true;
@@ -790,6 +857,7 @@
             output.normal = normal;
             return true;
         };
+        /** @internal */
         AABB.prototype.toString = function () {
             return JSON.stringify(this);
         };
@@ -1013,6 +1081,7 @@
                     item = this._createFn();
                 }
                 else {
+                    // tslint:disable-next-line:no-object-literal-type-assertion
                     item = {};
                 }
             }
@@ -1037,6 +1106,7 @@
                 }
             }
         };
+        /** @internal */
         Pool.prototype.toString = function () {
             return " +" + this._createCount + " >" + this._outCount + " <" + this._inCount + " -"
                 + this._discardCount + " =" + this._list.length + "/" + this._max;
@@ -1082,6 +1152,7 @@
             this.height = -1;
             this.id = id;
         }
+        /** @internal */
         TreeNode.prototype.toString = function () {
             return this.id + ": " + this.userData;
         };
@@ -1105,6 +1176,7 @@
         function DynamicTree() {
             this.inputPool = new Pool({
                 create: function () {
+                    // tslint:disable-next-line:no-object-literal-type-assertion
                     return {};
                 },
                 release: function (stack) {
@@ -1698,7 +1770,7 @@
             var r = Vec2.sub(p2, p1);
             r.normalize();
             // v is perpendicular to the segment.
-            var v = Vec2.cross(1.0, r);
+            var v = Vec2.crossNumVec2(1.0, r);
             var abs_v = Vec2.abs(v);
             // Separating axis for segment (Gino, p80).
             // |dot(v, p1 - c)| > dot(|v|, h)
@@ -2020,7 +2092,7 @@
                 this.setAngle(angle);
             }
             else if (typeof angle === 'object') {
-                this.set(angle);
+                this.setRot(angle);
             }
             else {
                 this.setIdentity();
@@ -2044,8 +2116,11 @@
             obj.c = 1.0;
             return obj;
         };
-        Rot.isValid = function (o) {
-            return o && math.isFinite(o.s) && math.isFinite(o.c);
+        Rot.isValid = function (obj) {
+            if (obj === null || typeof obj === 'undefined') {
+                return false;
+            }
+            return math.isFinite(obj.s) && math.isFinite(obj.c);
         };
         Rot.assert = function (o) {
             return;
@@ -2066,6 +2141,10 @@
                 this.c = math.cos(angle);
             }
         };
+        Rot.prototype.setRot = function (angle) {
+            this.s = angle.s;
+            this.c = angle.c;
+        };
         /** Set using an angle in radians. */
         Rot.prototype.setAngle = function (angle) {
             // TODO_ERIN optimize
@@ -2084,6 +2163,7 @@
         Rot.prototype.getYAxis = function () {
             return Vec2.neo(-this.s, this.c);
         };
+        // tslint:disable-next-line:typedef
         Rot.mul = function (rot, m) {
             if ('c' in m && 's' in m) {
                 // [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
@@ -2099,6 +2179,7 @@
                 return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
             }
         };
+        /** Multiply two rotations: q * r */
         Rot.mulRot = function (rot, m) {
             // [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
             // [qs qc] [rs rc] [qs*rc+qc*rs -qs*rs+qc*rc]
@@ -2109,6 +2190,7 @@
             qr.c = rot.c * m.c - rot.s * m.s;
             return qr;
         };
+        /** Rotate a vector */
         Rot.mulVec2 = function (rot, m) {
             return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
         };
@@ -2117,6 +2199,7 @@
             var y = rot.s * (v.x - w.x) + rot.c * (v.y - w.y);
             return Vec2.neo(x, y);
         };
+        // tslint:disable-next-line:typedef
         Rot.mulT = function (rot, m) {
             if ('c' in m && 's' in m) {
                 // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
@@ -2132,6 +2215,7 @@
                 return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
             }
         };
+        /** Transpose multiply two rotations: qT * r */
         Rot.mulTRot = function (rot, m) {
             // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
             // [-qs qc] [rs rc] [-qs*rc+qc*rs qs*rs+qc*rc]
@@ -2142,6 +2226,7 @@
             qr.c = rot.c * m.c + rot.s * m.s;
             return qr;
         };
+        /** Inverse rotate a vector */
         Rot.mulTVec2 = function (rot, m) {
             return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
         };
@@ -2184,10 +2269,10 @@
             this.p = Vec2.zero();
             this.q = Rot.identity();
             if (typeof position !== 'undefined') {
-                this.p.set(position);
+                this.p.setVec2(position);
             }
             if (typeof rotation !== 'undefined') {
-                this.q.set(rotation);
+                this.q.setAngle(rotation);
             }
         }
         Transform.clone = function (xf) {
@@ -2219,6 +2304,7 @@
         /**
          * Set this based on the position and angle.
          */
+        // tslint:disable-next-line:typedef
         Transform.prototype.set = function (a, b) {
             if (typeof b === 'undefined') {
                 this.p.set(a.p);
@@ -2229,14 +2315,29 @@
                 this.q.set(b);
             }
         };
-        Transform.isValid = function (o) {
-            return o && Vec2.isValid(o.p) && Rot.isValid(o.q);
+        /**
+         * Set this based on the position and angle.
+         */
+        Transform.prototype.setNum = function (position, rotation) {
+            this.p.setVec2(position);
+            this.q.setAngle(rotation);
+        };
+        Transform.prototype.setTransform = function (xf) {
+            this.p.setVec2(xf.p);
+            this.q.setRot(xf.q);
+        };
+        Transform.isValid = function (obj) {
+            if (obj === null || typeof obj === 'undefined') {
+                return false;
+            }
+            return Vec2.isValid(obj.p) && Rot.isValid(obj.q);
         };
         Transform.assert = function (o) {
             return;
         };
         // static mul(a: Transform, b: Vec2[]): Vec2[];
         // static mul(a: Transform, b: Transform[]): Transform[];
+        // tslint:disable-next-line:typedef
         Transform.mul = function (a, b) {
             if (Array.isArray(b)) {
                 var arr = [];
@@ -2252,6 +2353,7 @@
                 return Transform.mulXf(a, b);
             }
         };
+        // tslint:disable-next-line:typedef
         Transform.mulAll = function (a, b) {
             var arr = [];
             for (var i = 0; i < b.length; i++) {
@@ -2259,7 +2361,8 @@
             }
             return arr;
         };
-        /** @deprecated */
+        /** @internal @deprecated */
+        // tslint:disable-next-line:typedef
         Transform.mulFn = function (a) {
             return function (b) {
                 return Transform.mul(a, b);
@@ -2278,6 +2381,7 @@
             xf.p = Vec2.add(Rot.mulVec2(a.q, b.p), a.p);
             return xf;
         };
+        // tslint:disable-next-line:typedef
         Transform.mulT = function (a, b) {
             if ('x' in b && 'y' in b) {
                 return Transform.mulTVec2(a, b);
@@ -2297,8 +2401,8 @@
             // v2 = A.q' * (B.q * v1 + B.p - A.p)
             // = A.q' * B.q * v1 + A.q' * (B.p - A.p)
             var xf = Transform.identity();
-            xf.q.set(Rot.mulTRot(a.q, b.q));
-            xf.p.set(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
+            xf.q.setRot(Rot.mulTRot(a.q, b.q));
+            xf.p.setVec2(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
             return xf;
         };
         return Transform;
@@ -2344,16 +2448,16 @@
         }
         Sweep.prototype.setTransform = function (xf) {
             var c = Transform.mulVec2(xf, this.localCenter);
-            this.c.set(c);
-            this.c0.set(c);
+            this.c.setVec2(c);
+            this.c0.setVec2(c);
             this.a = xf.q.getAngle();
             this.a0 = xf.q.getAngle();
         };
         Sweep.prototype.setLocalCenter = function (localCenter, xf) {
-            this.localCenter.set(localCenter);
+            this.localCenter.setVec2(localCenter);
             var c = Transform.mulVec2(xf, this.localCenter);
-            this.c.set(c);
-            this.c0.set(c);
+            this.c.setVec2(c);
+            this.c0.setVec2(c);
         };
         /**
          * Get the interpolated transform at a specific time.
@@ -2362,7 +2466,7 @@
          * @param beta A factor in [0,1], where 0 indicates alpha0
          */
         Sweep.prototype.getTransform = function (xf, beta) {
-            beta = typeof beta === 'undefined' ? 0 : beta;
+            if (beta === void 0) { beta = 0; }
             xf.q.setAngle((1.0 - beta) * this.a0 + beta * this.a);
             xf.p.setCombine((1.0 - beta), this.c0, beta, this.c);
             // shift to origin
@@ -2381,7 +2485,7 @@
         };
         Sweep.prototype.forward = function () {
             this.a0 = this.a;
-            this.c0.set(this.c);
+            this.c0.setVec2(this.c);
         };
         /**
          * normalize the angles in radians to be between -pi and pi.
@@ -2393,21 +2497,21 @@
         };
         Sweep.prototype.clone = function () {
             var clone = new Sweep();
-            clone.localCenter.set(this.localCenter);
+            clone.localCenter.setVec2(this.localCenter);
             clone.alpha0 = this.alpha0;
             clone.a0 = this.a0;
             clone.a = this.a;
-            clone.c0.set(this.c0);
-            clone.c.set(this.c);
+            clone.c0.setVec2(this.c0);
+            clone.c.setVec2(this.c);
             return clone;
         };
         Sweep.prototype.set = function (that) {
-            this.localCenter.set(that.localCenter);
+            this.localCenter.setVec2(that.localCenter);
             this.alpha0 = that.alpha0;
             this.a0 = that.a0;
             this.a = that.a;
-            this.c0.set(that.c0);
-            this.c.set(that.c);
+            this.c0.setVec2(that.c0);
+            this.c.setVec2(that.c);
         };
         return Sweep;
     }());
@@ -2472,8 +2576,8 @@
             this.a = 0;
         }
         Position.prototype.getTransform = function (xf, p) {
-            xf.q.set(this.a);
-            xf.p.set(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
+            xf.q.setAngle(this.a);
+            xf.p.setVec2(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
             return xf;
         };
         return Position;
@@ -2510,15 +2614,14 @@
     var Shape = /** @class */ (function () {
         function Shape() {
         }
+        /** @internal */
         Shape.prototype._reset = function () {
         };
-        /** @internal */
-        Shape._deserialize = function (data, context, restore) {
-            var clazz = Shape.TYPES[data.type];
-            return clazz && restore(clazz, data);
-        };
-        Shape.isValid = function (shape) {
-            return !!shape;
+        Shape.isValid = function (obj) {
+            if (obj === null || typeof obj === 'undefined') {
+                return false;
+            }
+            return typeof obj.m_type === 'string' && typeof obj.m_radius === 'number';
         };
         Shape.prototype.getRadius = function () {
             return this.m_radius;
@@ -2532,7 +2635,6 @@
         Shape.prototype.getType = function () {
             return this.m_type;
         };
-        Shape.TYPES = {};
         return Shape;
     }());
 
@@ -2584,11 +2686,13 @@
     /**
      * A fixture is used to attach a shape to a body for collision detection. A
      * fixture inherits its transform from its parent. Fixtures hold additional
-     * non-geometric data such as friction, collision filters, etc. Fixtures are
-     * created via Body.createFixture.
+     * non-geometric data such as friction, collision filters, etc.
+     *
+     * To create a new Fixture use {@link Body.createFixture}.
      */
     var Fixture = /** @class */ (function () {
-        function Fixture(body, shape, def) {
+        // tslint:disable-next-line:typedef
+        /** @internal */ function Fixture(body, shape, def) {
             if (shape.shape) {
                 def = shape;
                 shape = shape.shape;
@@ -2618,7 +2722,7 @@
         }
         /**
          * Re-setup fixture.
-         * @private
+         * @internal
          */
         Fixture.prototype._reset = function () {
             var body = this.getBody();
@@ -2684,9 +2788,9 @@
                 this.m_isSensor = sensor;
             }
         };
-        /**
-         * Get the contact filtering data.
-         */
+        // /**
+        //  * Get the contact filtering data.
+        //  */
         // getFilterData() {
         //   return this.m_filter;
         // }
@@ -2836,7 +2940,7 @@
             return this.m_filterGroupIndex;
         };
         Fixture.prototype.setFilterGroupIndex = function (groupIndex) {
-            return this.m_filterGroupIndex = groupIndex;
+            this.m_filterGroupIndex = groupIndex;
         };
         Fixture.prototype.getFilterCategoryBits = function () {
             return this.m_filterCategoryBits;
@@ -2959,8 +3063,11 @@
     }());
     /**
      * A rigid body composed of one or more fixtures.
+     *
+     * To create a new Body use {@link World.createBody}.
      */
     var Body = /** @class */ (function () {
+        /** @internal */
         function Body(world, def) {
             def = options(def, BodyDefDefault);
             this.m_world = world;
@@ -3251,7 +3358,7 @@
             if (this.isWorldLocked() == true) {
                 return;
             }
-            this.m_xf.set(position, angle);
+            this.m_xf.setNum(position, angle);
             this.m_sweep.setTransform(this.m_xf);
             var broadPhase = this.m_world.m_broadPhase;
             for (var f = this.m_fixtureList; f; f = f.m_next) {
@@ -3278,7 +3385,7 @@
         Body.prototype.advance = function (alpha) {
             // Advance to the new safe time. This doesn't sync the broad-phase.
             this.m_sweep.advance(alpha);
-            this.m_sweep.c.set(this.m_sweep.c0);
+            this.m_sweep.c.setVec2(this.m_sweep.c0);
             this.m_sweep.a = this.m_sweep.a0;
             this.m_sweep.getTransform(this.m_xf, 1);
         };
@@ -3327,7 +3434,7 @@
          */
         Body.prototype.getLinearVelocityFromWorldPoint = function (worldPoint) {
             var localCenter = Vec2.sub(worldPoint, this.m_sweep.c);
-            return Vec2.add(this.m_linearVelocity, Vec2.cross(this.m_angularVelocity, localCenter));
+            return Vec2.add(this.m_linearVelocity, Vec2.crossNumVec2(this.m_angularVelocity, localCenter));
         };
         /**
          * Get the world velocity of a local point.
@@ -3349,7 +3456,7 @@
             if (Vec2.dot(v, v) > 0.0) {
                 this.setAwake(true);
             }
-            this.m_linearVelocity.set(v);
+            this.m_linearVelocity.setVec2(v);
         };
         /**
          * Get the angular velocity.
@@ -3417,7 +3524,7 @@
         Body.prototype.getMassData = function (data) {
             data.mass = this.m_mass;
             data.I = this.getInertia();
-            data.center.set(this.m_sweep.localCenter);
+            data.center.setVec2(this.m_sweep.localCenter);
         };
         /**
          * This resets the mass properties to the sum of the mass properties of the
@@ -3433,8 +3540,8 @@
             this.m_sweep.localCenter.setZero();
             // Static and kinematic bodies have zero mass.
             if (this.isStatic() || this.isKinematic()) {
-                this.m_sweep.c0.set(this.m_xf.p);
-                this.m_sweep.c.set(this.m_xf.p);
+                this.m_sweep.c0.setVec2(this.m_xf.p);
+                this.m_sweep.c.setVec2(this.m_xf.p);
                 this.m_sweep.a0 = this.m_sweep.a;
                 return;
             }
@@ -3473,7 +3580,7 @@
             var oldCenter = Vec2.clone(this.m_sweep.c);
             this.m_sweep.setLocalCenter(localCenter, this.m_xf);
             // Update center of mass velocity.
-            this.m_linearVelocity.add(Vec2.cross(this.m_angularVelocity, Vec2.sub(this.m_sweep.c, oldCenter)));
+            this.m_linearVelocity.add(Vec2.crossNumVec2(this.m_angularVelocity, Vec2.sub(this.m_sweep.c, oldCenter)));
         };
         /**
          * Set the mass properties to override the mass properties of the fixtures. Note
@@ -3507,7 +3614,7 @@
             var oldCenter = Vec2.clone(this.m_sweep.c);
             this.m_sweep.setLocalCenter(massData.center, this.m_xf);
             // Update center of mass velocity.
-            this.m_linearVelocity.add(Vec2.cross(this.m_angularVelocity, Vec2.sub(this.m_sweep.c, oldCenter)));
+            this.m_linearVelocity.add(Vec2.crossNumVec2(this.m_angularVelocity, Vec2.sub(this.m_sweep.c, oldCenter)));
         };
         /**
          * Apply a force at a world point. If the force is not applied at the center of
@@ -3519,6 +3626,7 @@
          * @param wake Also wake up the body
          */
         Body.prototype.applyForce = function (force, point, wake) {
+            if (wake === void 0) { wake = true; }
             if (this.m_type != DYNAMIC) {
                 return;
             }
@@ -3528,7 +3636,7 @@
             // Don't accumulate a force if the body is sleeping.
             if (this.m_awakeFlag) {
                 this.m_force.add(force);
-                this.m_torque += Vec2.cross(Vec2.sub(point, this.m_sweep.c), force);
+                this.m_torque += Vec2.crossVec2Vec2(Vec2.sub(point, this.m_sweep.c), force);
             }
         };
         /**
@@ -3538,6 +3646,7 @@
          * @param wake Also wake up the body
          */
         Body.prototype.applyForceToCenter = function (force, wake) {
+            if (wake === void 0) { wake = true; }
             if (this.m_type != DYNAMIC) {
                 return;
             }
@@ -3557,6 +3666,7 @@
          * @param wake Also wake up the body
          */
         Body.prototype.applyTorque = function (torque, wake) {
+            if (wake === void 0) { wake = true; }
             if (this.m_type != DYNAMIC) {
                 return;
             }
@@ -3578,6 +3688,7 @@
          * @param wake Also wake up the body
          */
         Body.prototype.applyLinearImpulse = function (impulse, point, wake) {
+            if (wake === void 0) { wake = true; }
             if (this.m_type != DYNAMIC) {
                 return;
             }
@@ -3587,7 +3698,7 @@
             // Don't accumulate velocity if the body is sleeping
             if (this.m_awakeFlag) {
                 this.m_linearVelocity.addMul(this.m_invMass, impulse);
-                this.m_angularVelocity += this.m_invI * Vec2.cross(Vec2.sub(point, this.m_sweep.c), impulse);
+                this.m_angularVelocity += this.m_invI * Vec2.crossVec2Vec2(Vec2.sub(point, this.m_sweep.c), impulse);
             }
         };
         /**
@@ -3597,6 +3708,7 @@
          * @param wake Also wake up the body
          */
         Body.prototype.applyAngularImpulse = function (impulse, wake) {
+            if (wake === void 0) { wake = true; }
             if (this.m_type != DYNAMIC) {
                 return;
             }
@@ -3649,6 +3761,7 @@
             this.m_world.m_newFixture = true;
             return fixture;
         };
+        // tslint:disable-next-line:typedef
         Body.prototype.createFixture = function (shape, fixdef) {
             if (this.isWorldLocked() == true) {
                 return null;
@@ -3732,9 +3845,30 @@
         Body.prototype.getLocalVector = function (worldVector) {
             return Rot.mulTVec2(this.m_xf.q, worldVector);
         };
-        Body.STATIC = STATIC;
-        Body.KINEMATIC = KINEMATIC;
-        Body.DYNAMIC = DYNAMIC;
+        /**
+         * A static body does not move under simulation and behaves as if it has infinite mass.
+         * Internally, zero is stored for the mass and the inverse mass.
+         * Static bodies can be moved manually by the user.
+         * A static body has zero velocity.
+         * Static bodies do not collide with other static or kinematic bodies.
+         */
+        Body.STATIC = 'static';
+        /**
+         * A kinematic body moves under simulation according to its velocity.
+         * Kinematic bodies do not respond to forces.
+         * They can be moved manually by the user, but normally a kinematic body is moved by setting its velocity.
+         * A kinematic body behaves as if it has infinite mass, however, zero is stored for the mass and the inverse mass.
+         * Kinematic bodies do not collide with other kinematic or static bodies.
+         */
+        Body.KINEMATIC = 'kinematic';
+        /**
+         * A dynamic body is fully simulated.
+         * They can be moved manually by the user, but normally they move according to forces.
+         * A dynamic body can collide with all body types.
+         * A dynamic body always has finite, non-zero mass.
+         * If you try to set the mass of a dynamic body to zero, it will automatically acquire a mass of one kilogram and it won't rotate.
+         */
+        Body.DYNAMIC = 'dynamic';
         return Body;
     }());
 
@@ -3765,6 +3899,7 @@
      * A 2-by-2 matrix. Stored in column-major order.
      */
     var Mat22 = /** @class */ (function () {
+        // tslint:disable-next-line:typedef
         function Mat22(a, b, c, d) {
             if (typeof a === 'object' && a !== null) {
                 this.ex = Vec2.clone(a);
@@ -3779,28 +3914,33 @@
                 this.ey = Vec2.zero();
             }
         }
+        /** @internal */
         Mat22.prototype.toString = function () {
             return JSON.stringify(this);
         };
-        Mat22.isValid = function (o) {
-            return o && Vec2.isValid(o.ex) && Vec2.isValid(o.ey);
+        Mat22.isValid = function (obj) {
+            if (obj === null || typeof obj === 'undefined') {
+                return false;
+            }
+            return Vec2.isValid(obj.ex) && Vec2.isValid(obj.ey);
         };
         Mat22.assert = function (o) {
             return;
         };
+        // tslint:disable-next-line:typedef
         Mat22.prototype.set = function (a, b, c, d) {
             if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
                 && typeof d === 'number') {
-                this.ex.set(a, c);
-                this.ey.set(b, d);
+                this.ex.setNum(a, c);
+                this.ey.setNum(b, d);
             }
             else if (typeof a === 'object' && typeof b === 'object') {
-                this.ex.set(a);
-                this.ey.set(b);
+                this.ex.setVec2(a);
+                this.ey.setVec2(b);
             }
             else if (typeof a === 'object') {
-                this.ex.set(a.ex);
-                this.ey.set(a.ey);
+                this.ex.setVec2(a.ex);
+                this.ey.setVec2(a.ey);
             }
             else ;
         };
@@ -3850,6 +3990,7 @@
             w.y = det * (a * v.y - c * v.x);
             return w;
         };
+        // tslint:disable-next-line:typedef
         Mat22.mul = function (mx, v) {
             if (v && 'x' in v && 'y' in v) {
                 var x = mx.ex.x * v.x + mx.ey.x * v.y;
@@ -3878,6 +4019,7 @@
             var d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
             return new Mat22(a, b, c, d);
         };
+        // tslint:disable-next-line:typedef
         Mat22.mulT = function (mx, v) {
             if (v && 'x' in v && 'y' in v) { // Vec2
                 return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
@@ -3940,6 +4082,34 @@
         ContactFeatureType[ContactFeatureType["e_face"] = 1] = "e_face";
     })(ContactFeatureType || (ContactFeatureType = {}));
     /**
+     * This is used for determining the state of contact points.
+     */
+    var PointState;
+    (function (PointState) {
+        /** Point does not exist */
+        PointState[PointState["nullState"] = 0] = "nullState";
+        /** Point was added in the update */
+        PointState[PointState["addState"] = 1] = "addState";
+        /** Point persisted across the update */
+        PointState[PointState["persistState"] = 2] = "persistState";
+        /** Point was removed in the update */
+        PointState[PointState["removeState"] = 3] = "removeState";
+    })(PointState || (PointState = {}));
+    /**
+     * Used for computing contact manifolds.
+     */
+    var ClipVertex = /** @class */ (function () {
+        function ClipVertex() {
+            this.v = Vec2.zero();
+            this.id = new ContactID();
+        }
+        ClipVertex.prototype.set = function (o) {
+            this.v.setVec2(o.v);
+            this.id.set(o.id);
+        };
+        return ClipVertex;
+    }());
+    /**
      * A manifold for two touching convex shapes. Manifolds are created in `evaluate`
      * method of Contact subclasses.
      *
@@ -3991,7 +4161,7 @@
                     var pointB = Transform.mulVec2(xfB, this.points[0].localPoint);
                     var dist = Vec2.sub(pointB, pointA);
                     if (Vec2.lengthSquared(dist) > math.EPSILON * math.EPSILON) {
-                        normal.set(dist);
+                        normal.setVec2(dist);
                         normal.normalize();
                     }
                     var cA = pointA.clone().addMul(radiusA, normal);
@@ -4038,6 +4208,10 @@
             wm.separations = separations;
             return wm;
         };
+        Manifold.clipSegmentToLine = clipSegmentToLine;
+        Manifold.ClipVertex = ClipVertex;
+        Manifold.getPointStates = getPointStates;
+        Manifold.PointState = PointState;
         return Manifold;
     }());
     /**
@@ -4127,20 +4301,6 @@
         return WorldManifold;
     }());
     /**
-     * This is used for determining the state of contact points.
-     */
-    var PointState;
-    (function (PointState) {
-        /** Point does not exist */
-        PointState[PointState["nullState"] = 0] = "nullState";
-        /** Point was added in the update */
-        PointState[PointState["addState"] = 1] = "addState";
-        /** Point persisted across the update */
-        PointState[PointState["persistState"] = 2] = "persistState";
-        /** Point was removed in the update */
-        PointState[PointState["removeState"] = 3] = "removeState";
-    })(PointState || (PointState = {}));
-    /**
      * Compute the point states given two manifolds. The states pertain to the
      * transition from manifold1 to manifold2. So state1 is either persist or remove
      * while state2 is either add or persist.
@@ -4174,20 +4334,6 @@
             }
         }
     }
-    /**
-     * Used for computing contact manifolds.
-     */
-    var ClipVertex = /** @class */ (function () {
-        function ClipVertex() {
-            this.v = Vec2.zero();
-            this.id = new ContactID();
-        }
-        ClipVertex.prototype.set = function (o) {
-            this.v.set(o.v);
-            this.id.set(o.id);
-        };
-        return ClipVertex;
-    }());
     /**
      * Clipping for contact manifolds. Sutherland-Hodgman clipping.
      */
@@ -4231,6 +4377,7 @@
         toString: function (newline) {
             newline = typeof newline === 'string' ? newline : '\n';
             var string = "";
+            // tslint:disable-next-line:no-for-in
             for (var name_1 in this) {
                 if (typeof this[name_1] !== 'function' && typeof this[name_1] !== 'object') {
                     string += name_1 + ': ' + this[name_1] + newline;
@@ -4415,8 +4562,8 @@
                 // Shapes are overlapped when radii are considered.
                 // Move the witness points to the middle.
                 var p = Vec2.mid(output.pointA, output.pointB);
-                output.pointA.set(p);
-                output.pointB.set(p);
+                output.pointA.setVec2(p);
+                output.pointB.setVec2(p);
                 output.distance = 0.0;
             }
         }
@@ -4431,12 +4578,21 @@
             this.m_count = 0;
             this.m_radius = 0;
         }
+        /**
+         * Get the vertex count.
+         */
         DistanceProxy.prototype.getVertexCount = function () {
             return this.m_count;
         };
+        /**
+         * Get a vertex by index. Used by Distance.
+         */
         DistanceProxy.prototype.getVertex = function (index) {
             return this.m_vertices[index];
         };
+        /**
+         * Get the supporting vertex index in the given direction.
+         */
         DistanceProxy.prototype.getSupport = function (d) {
             var bestIndex = 0;
             var bestValue = Vec2.dot(this.m_vertices[0], d);
@@ -4449,9 +4605,16 @@
             }
             return bestIndex;
         };
+        /**
+         * Get the supporting vertex in the given direction.
+         */
         DistanceProxy.prototype.getSupportVertex = function (d) {
             return this.m_vertices[this.getSupport(d)];
         };
+        /**
+         * Initialize the proxy using the given shape. The shape must remain in scope
+         * while the proxy is in use.
+         */
         DistanceProxy.prototype.set = function (shape, index) {
             shape.computeDistanceProxy(this, index);
         };
@@ -4459,9 +4622,12 @@
     }());
     var SimplexVertex = /** @class */ (function () {
         function SimplexVertex() {
-            this.wA = Vec2.zero(); // support point in proxyA
-            this.wB = Vec2.zero(); // support point in proxyB
-            this.w = Vec2.zero(); // wB - wA;
+            /** support point in proxyA */
+            this.wA = Vec2.zero();
+            /** support point in proxyB */
+            this.wB = Vec2.zero();
+            /** wB - wA; */
+            this.w = Vec2.zero();
         }
         SimplexVertex.prototype.set = function (v) {
             this.indexA = v.indexA;
@@ -4481,7 +4647,8 @@
             this.m_v = [this.m_v1, this.m_v2, this.m_v3];
             this.m_count;
         }
-        Simplex.prototype.print = function () {
+        /** @internal */
+        Simplex.prototype.toString = function () {
             if (this.m_count === 3) {
                 return ["+" + this.m_count,
                     this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y,
@@ -4504,7 +4671,6 @@
                 return "+" + this.m_count;
             }
         };
-        // (SimplexCache, DistanceProxy, ...)
         Simplex.prototype.readCache = function (cache, proxyA, transformA, proxyB, transformB) {
             // Copy data from cache.
             this.m_count = cache.count;
@@ -4558,14 +4724,14 @@
                     return Vec2.neg(this.m_v1.w);
                 case 2: {
                     var e12 = Vec2.sub(this.m_v2.w, this.m_v1.w);
-                    var sgn = Vec2.cross(e12, Vec2.neg(this.m_v1.w));
+                    var sgn = Vec2.crossVec2Vec2(e12, Vec2.neg(this.m_v1.w));
                     if (sgn > 0.0) {
                         // Origin is left of e12.
-                        return Vec2.cross(1.0, e12);
+                        return Vec2.crossNumVec2(1.0, e12);
                     }
                     else {
                         // Origin is right of e12.
-                        return Vec2.cross(e12, 1.0);
+                        return Vec2.crossVec2Num(e12, 1.0);
                     }
                 }
                 default:
@@ -4591,8 +4757,8 @@
                 case 0:
                     break;
                 case 1:
-                    pA.set(this.m_v1.wA);
-                    pB.set(this.m_v1.wB);
+                    pA.setVec2(this.m_v1.wA);
+                    pB.setVec2(this.m_v1.wB);
                     break;
                 case 2:
                     pA.setCombine(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
@@ -4601,7 +4767,7 @@
                 case 3:
                     pA.setCombine(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
                     pA.addMul(this.m_v3.a, this.m_v3.wA);
-                    pB.set(pA);
+                    pB.setVec2(pA);
                     break;
             }
         };
@@ -4614,7 +4780,7 @@
                 case 2:
                     return Vec2.distance(this.m_v1.w, this.m_v2.w);
                 case 3:
-                    return Vec2.cross(Vec2.sub(this.m_v2.w, this.m_v1.w), Vec2.sub(this.m_v3.w, this.m_v1.w));
+                    return Vec2.crossVec2Vec2(Vec2.sub(this.m_v2.w, this.m_v1.w), Vec2.sub(this.m_v3.w, this.m_v1.w));
                 default:
                     return 0.0;
             }
@@ -4718,10 +4884,10 @@
             var d23_1 = w3e23;
             var d23_2 = -w2e23;
             // Triangle123
-            var n123 = Vec2.cross(e12, e13);
-            var d123_1 = n123 * Vec2.cross(w2, w3);
-            var d123_2 = n123 * Vec2.cross(w3, w1);
-            var d123_3 = n123 * Vec2.cross(w1, w2);
+            var n123 = Vec2.crossVec2Vec2(e12, e13);
+            var d123_1 = n123 * Vec2.crossVec2Vec2(w2, w3);
+            var d123_2 = n123 * Vec2.crossVec2Vec2(w3, w1);
+            var d123_3 = n123 * Vec2.crossVec2Vec2(w1, w2);
             // w1 region
             if (d12_2 <= 0.0 && d13_2 <= 0.0) {
                 this.m_v1.a = 1.0;
@@ -5203,8 +5369,8 @@
             for (var j = 0; j < this.p_pointCount; ++j) {
                 var xfA = Transform.identity();
                 var xfB = Transform.identity();
-                xfA.q.set(aA);
-                xfB.q.set(aB);
+                xfA.q.setAngle(aA);
+                xfB.q.setAngle(aB);
                 xfA.p = Vec2.sub(cA, Rot.mulVec2(xfA.q, localCenterA));
                 xfB.p = Vec2.sub(cB, Rot.mulVec2(xfB.q, localCenterB));
                 // PositionSolverManifold
@@ -5250,20 +5416,20 @@
                 // Prevent large corrections and allow slop.
                 var C = math.clamp(baumgarte * (separation + linearSlop), -maxLinearCorrection, 0.0);
                 // Compute the effective mass.
-                var rnA = Vec2.cross(rA, normal);
-                var rnB = Vec2.cross(rB, normal);
+                var rnA = Vec2.crossVec2Vec2(rA, normal);
+                var rnB = Vec2.crossVec2Vec2(rB, normal);
                 var K = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
                 // Compute normal impulse
                 var impulse = K > 0.0 ? -C / K : 0.0;
-                var P = Vec2.mul(impulse, normal);
+                var P = Vec2.mulNumVec2(impulse, normal);
                 cA.subMul(mA, P);
-                aA -= iA * Vec2.cross(rA, P);
+                aA -= iA * Vec2.crossVec2Vec2(rA, P);
                 cB.addMul(mB, P);
-                aB += iB * Vec2.cross(rB, P);
+                aB += iB * Vec2.crossVec2Vec2(rB, P);
             }
-            positionA.c.set(cA);
+            positionA.c.setVec2(cA);
             positionA.a = aA;
-            positionB.c.set(cB);
+            positionB.c.setVec2(cB);
             positionB.a = aB;
             return minSeparation;
         };
@@ -5295,31 +5461,31 @@
             var wB = velocityB.w;
             var xfA = Transform.identity();
             var xfB = Transform.identity();
-            xfA.q.set(aA);
-            xfB.q.set(aB);
+            xfA.q.setAngle(aA);
+            xfB.q.setAngle(aB);
             xfA.p.setCombine(1, cA, -1, Rot.mulVec2(xfA.q, localCenterA));
             xfB.p.setCombine(1, cB, -1, Rot.mulVec2(xfB.q, localCenterB));
             var worldManifold = manifold.getWorldManifold(null, xfA, radiusA, xfB, radiusB);
-            this.v_normal.set(worldManifold.normal);
+            this.v_normal.setVec2(worldManifold.normal);
             for (var j = 0; j < this.v_pointCount; ++j) {
                 var vcp = this.v_points[j]; // VelocityConstraintPoint
-                vcp.rA.set(Vec2.sub(worldManifold.points[j], cA));
-                vcp.rB.set(Vec2.sub(worldManifold.points[j], cB));
-                var rnA = Vec2.cross(vcp.rA, this.v_normal);
-                var rnB = Vec2.cross(vcp.rB, this.v_normal);
+                vcp.rA.setVec2(Vec2.sub(worldManifold.points[j], cA));
+                vcp.rB.setVec2(Vec2.sub(worldManifold.points[j], cB));
+                var rnA = Vec2.crossVec2Vec2(vcp.rA, this.v_normal);
+                var rnB = Vec2.crossVec2Vec2(vcp.rB, this.v_normal);
                 var kNormal = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
                 vcp.normalMass = kNormal > 0.0 ? 1.0 / kNormal : 0.0;
-                var tangent = Vec2.cross(this.v_normal, 1.0);
-                var rtA = Vec2.cross(vcp.rA, tangent);
-                var rtB = Vec2.cross(vcp.rB, tangent);
+                var tangent = Vec2.crossVec2Num(this.v_normal, 1.0);
+                var rtA = Vec2.crossVec2Vec2(vcp.rA, tangent);
+                var rtB = Vec2.crossVec2Vec2(vcp.rB, tangent);
                 var kTangent = mA + mB + iA * rtA * rtA + iB * rtB * rtB;
                 vcp.tangentMass = kTangent > 0.0 ? 1.0 / kTangent : 0.0;
                 // Setup a velocity bias for restitution.
                 vcp.velocityBias = 0.0;
                 var vRel = Vec2.dot(this.v_normal, vB)
-                    + Vec2.dot(this.v_normal, Vec2.cross(wB, vcp.rB))
+                    + Vec2.dot(this.v_normal, Vec2.crossNumVec2(wB, vcp.rB))
                     - Vec2.dot(this.v_normal, vA)
-                    - Vec2.dot(this.v_normal, Vec2.cross(wA, vcp.rA));
+                    - Vec2.dot(this.v_normal, Vec2.crossNumVec2(wA, vcp.rA));
                 if (vRel < -Settings.velocityThreshold) {
                     vcp.velocityBias = -this.v_restitution * vRel;
                 }
@@ -5328,10 +5494,10 @@
             if (this.v_pointCount == 2 && step.blockSolve) {
                 var vcp1 = this.v_points[0]; // VelocityConstraintPoint
                 var vcp2 = this.v_points[1]; // VelocityConstraintPoint
-                var rn1A = Vec2.cross(vcp1.rA, this.v_normal);
-                var rn1B = Vec2.cross(vcp1.rB, this.v_normal);
-                var rn2A = Vec2.cross(vcp2.rA, this.v_normal);
-                var rn2B = Vec2.cross(vcp2.rB, this.v_normal);
+                var rn1A = Vec2.crossVec2Vec2(vcp1.rA, this.v_normal);
+                var rn1B = Vec2.crossVec2Vec2(vcp1.rB, this.v_normal);
+                var rn2A = Vec2.crossVec2Vec2(vcp2.rA, this.v_normal);
+                var rn2B = Vec2.crossVec2Vec2(vcp2.rB, this.v_normal);
                 var k11 = mA + mB + iA * rn1A * rn1A + iB * rn1B * rn1B;
                 var k22 = mA + mB + iA * rn2A * rn2A + iB * rn2B * rn2B;
                 var k12 = mA + mB + iA * rn1A * rn2A + iB * rn1B * rn2B;
@@ -5339,8 +5505,8 @@
                 var k_maxConditionNumber = 1000.0;
                 if (k11 * k11 < k_maxConditionNumber * (k11 * k22 - k12 * k12)) {
                     // K is safe to invert.
-                    this.v_K.ex.set(k11, k12);
-                    this.v_K.ey.set(k12, k22);
+                    this.v_K.ex.setNum(k11, k12);
+                    this.v_K.ey.setNum(k12, k22);
                     this.v_normalMass.set(this.v_K.getInverse());
                 }
                 else {
@@ -5349,13 +5515,13 @@
                     this.v_pointCount = 1;
                 }
             }
-            positionA.c.set(cA);
+            positionA.c.setVec2(cA);
             positionA.a = aA;
-            velocityA.v.set(vA);
+            velocityA.v.setVec2(vA);
             velocityA.w = wA;
-            positionB.c.set(cB);
+            positionB.c.setVec2(cB);
             positionB.a = aB;
-            velocityB.v.set(vB);
+            velocityB.v.setVec2(vB);
             velocityB.w = wB;
         };
         Contact.prototype.warmStartConstraint = function (step) {
@@ -5376,18 +5542,18 @@
             var vB = Vec2.clone(velocityB.v);
             var wB = velocityB.w;
             var normal = this.v_normal;
-            var tangent = Vec2.cross(normal, 1.0);
+            var tangent = Vec2.crossVec2Num(normal, 1.0);
             for (var j = 0; j < this.v_pointCount; ++j) {
                 var vcp = this.v_points[j]; // VelocityConstraintPoint
                 var P = Vec2.combine(vcp.normalImpulse, normal, vcp.tangentImpulse, tangent);
-                wA -= iA * Vec2.cross(vcp.rA, P);
+                wA -= iA * Vec2.crossVec2Vec2(vcp.rA, P);
                 vA.subMul(mA, P);
-                wB += iB * Vec2.cross(vcp.rB, P);
+                wB += iB * Vec2.crossVec2Vec2(vcp.rB, P);
                 vB.addMul(mB, P);
             }
-            velocityA.v.set(vA);
+            velocityA.v.setVec2(vA);
             velocityA.w = wA;
-            velocityB.v.set(vB);
+            velocityB.v.setVec2(vB);
             velocityB.w = wB;
         };
         Contact.prototype.storeConstraintImpulses = function (step) {
@@ -5413,7 +5579,7 @@
             var vB = Vec2.clone(velocityB.v);
             var wB = velocityB.w;
             var normal = this.v_normal;
-            var tangent = Vec2.cross(normal, 1.0);
+            var tangent = Vec2.crossVec2Num(normal, 1.0);
             var friction = this.v_friction;
             // Solve tangent constraints first because non-penetration is more important
             // than friction.
@@ -5421,8 +5587,8 @@
                 var vcp = this.v_points[j]; // VelocityConstraintPoint
                 // Relative velocity at contact
                 var dv = Vec2.zero();
-                dv.addCombine(1, vB, 1, Vec2.cross(wB, vcp.rB));
-                dv.subCombine(1, vA, 1, Vec2.cross(wA, vcp.rA));
+                dv.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, vcp.rB));
+                dv.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, vcp.rA));
                 // Compute tangent force
                 var vt = Vec2.dot(dv, tangent) - this.v_tangentSpeed;
                 var lambda = vcp.tangentMass * (-vt);
@@ -5432,11 +5598,11 @@
                 lambda = newImpulse - vcp.tangentImpulse;
                 vcp.tangentImpulse = newImpulse;
                 // Apply contact impulse
-                var P = Vec2.mul(lambda, tangent);
+                var P = Vec2.mulNumVec2(lambda, tangent);
                 vA.subMul(mA, P);
-                wA -= iA * Vec2.cross(vcp.rA, P);
+                wA -= iA * Vec2.crossVec2Vec2(vcp.rA, P);
                 vB.addMul(mB, P);
-                wB += iB * Vec2.cross(vcp.rB, P);
+                wB += iB * Vec2.crossVec2Vec2(vcp.rB, P);
             }
             // Solve normal constraints
             if (this.v_pointCount == 1 || step.blockSolve == false) {
@@ -5444,8 +5610,8 @@
                     var vcp = this.v_points[i]; // VelocityConstraintPoint
                     // Relative velocity at contact
                     var dv = Vec2.zero();
-                    dv.addCombine(1, vB, 1, Vec2.cross(wB, vcp.rB));
-                    dv.subCombine(1, vA, 1, Vec2.cross(wA, vcp.rA));
+                    dv.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, vcp.rB));
+                    dv.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, vcp.rA));
                     // Compute normal impulse
                     var vn = Vec2.dot(dv, normal);
                     var lambda = -vcp.normalMass * (vn - vcp.velocityBias);
@@ -5454,11 +5620,11 @@
                     lambda = newImpulse - vcp.normalImpulse;
                     vcp.normalImpulse = newImpulse;
                     // Apply contact impulse
-                    var P = Vec2.mul(lambda, normal);
+                    var P = Vec2.mulNumVec2(lambda, normal);
                     vA.subMul(mA, P);
-                    wA -= iA * Vec2.cross(vcp.rA, P);
+                    wA -= iA * Vec2.crossVec2Vec2(vcp.rA, P);
                     vB.addMul(mB, P);
-                    wB += iB * Vec2.cross(vcp.rB, P);
+                    wB += iB * Vec2.crossVec2Vec2(vcp.rB, P);
                 }
             }
             else {
@@ -5506,8 +5672,8 @@
                 var vcp2 = this.v_points[1]; // VelocityConstraintPoint
                 var a = Vec2.neo(vcp1.normalImpulse, vcp2.normalImpulse);
                 // Relative velocity at contact
-                var dv1 = Vec2.zero().add(vB).add(Vec2.cross(wB, vcp1.rB)).sub(vA).sub(Vec2.cross(wA, vcp1.rA));
-                var dv2 = Vec2.zero().add(vB).add(Vec2.cross(wB, vcp2.rB)).sub(vA).sub(Vec2.cross(wA, vcp2.rA));
+                var dv1 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp1.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp1.rA));
+                var dv2 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp2.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp2.rA));
                 // Compute normal velocity
                 var vn1 = Vec2.dot(dv1, normal);
                 var vn2 = Vec2.dot(dv2, normal);
@@ -5530,12 +5696,12 @@
                         // Get the incremental impulse
                         var d = Vec2.sub(x, a);
                         // Apply incremental impulse
-                        var P1 = Vec2.mul(d.x, normal);
-                        var P2 = Vec2.mul(d.y, normal);
+                        var P1 = Vec2.mulNumVec2(d.x, normal);
+                        var P2 = Vec2.mulNumVec2(d.y, normal);
                         vA.subCombine(mA, P1, mA, P2);
-                        wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
+                        wA -= iA * (Vec2.crossVec2Vec2(vcp1.rA, P1) + Vec2.crossVec2Vec2(vcp2.rA, P2));
                         vB.addCombine(mB, P1, mB, P2);
-                        wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
+                        wB += iB * (Vec2.crossVec2Vec2(vcp1.rB, P1) + Vec2.crossVec2Vec2(vcp2.rB, P2));
                         // Accumulate
                         vcp1.normalImpulse = x.x;
                         vcp2.normalImpulse = x.y;
@@ -5555,12 +5721,12 @@
                         // Get the incremental impulse
                         var d = Vec2.sub(x, a);
                         // Apply incremental impulse
-                        var P1 = Vec2.mul(d.x, normal);
-                        var P2 = Vec2.mul(d.y, normal);
+                        var P1 = Vec2.mulNumVec2(d.x, normal);
+                        var P2 = Vec2.mulNumVec2(d.y, normal);
                         vA.subCombine(mA, P1, mA, P2);
-                        wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
+                        wA -= iA * (Vec2.crossVec2Vec2(vcp1.rA, P1) + Vec2.crossVec2Vec2(vcp2.rA, P2));
                         vB.addCombine(mB, P1, mB, P2);
-                        wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
+                        wB += iB * (Vec2.crossVec2Vec2(vcp1.rB, P1) + Vec2.crossVec2Vec2(vcp2.rB, P2));
                         // Accumulate
                         vcp1.normalImpulse = x.x;
                         vcp2.normalImpulse = x.y;
@@ -5580,12 +5746,12 @@
                         // Resubstitute for the incremental impulse
                         var d = Vec2.sub(x, a);
                         // Apply incremental impulse
-                        var P1 = Vec2.mul(d.x, normal);
-                        var P2 = Vec2.mul(d.y, normal);
+                        var P1 = Vec2.mulNumVec2(d.x, normal);
+                        var P2 = Vec2.mulNumVec2(d.y, normal);
                         vA.subCombine(mA, P1, mA, P2);
-                        wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
+                        wA -= iA * (Vec2.crossVec2Vec2(vcp1.rA, P1) + Vec2.crossVec2Vec2(vcp2.rA, P2));
                         vB.addCombine(mB, P1, mB, P2);
-                        wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
+                        wB += iB * (Vec2.crossVec2Vec2(vcp1.rB, P1) + Vec2.crossVec2Vec2(vcp2.rB, P2));
                         // Accumulate
                         vcp1.normalImpulse = x.x;
                         vcp2.normalImpulse = x.y;
@@ -5605,12 +5771,12 @@
                         // Resubstitute for the incremental impulse
                         var d = Vec2.sub(x, a);
                         // Apply incremental impulse
-                        var P1 = Vec2.mul(d.x, normal);
-                        var P2 = Vec2.mul(d.y, normal);
+                        var P1 = Vec2.mulNumVec2(d.x, normal);
+                        var P2 = Vec2.mulNumVec2(d.y, normal);
                         vA.subCombine(mA, P1, mA, P2);
-                        wA -= iA * (Vec2.cross(vcp1.rA, P1) + Vec2.cross(vcp2.rA, P2));
+                        wA -= iA * (Vec2.crossVec2Vec2(vcp1.rA, P1) + Vec2.crossVec2Vec2(vcp2.rA, P2));
                         vB.addCombine(mB, P1, mB, P2);
-                        wB += iB * (Vec2.cross(vcp1.rB, P1) + Vec2.cross(vcp2.rB, P2));
+                        wB += iB * (Vec2.crossVec2Vec2(vcp1.rB, P1) + Vec2.crossVec2Vec2(vcp2.rB, P2));
                         // Accumulate
                         vcp1.normalImpulse = x.x;
                         vcp2.normalImpulse = x.y;
@@ -5621,9 +5787,9 @@
                     break;
                 }
             }
-            velocityA.v.set(vA);
+            velocityA.v.setVec2(vA);
             velocityA.w = wA;
-            velocityB.v.set(vB);
+            velocityB.v.setVec2(vB);
             velocityB.w = wB;
         };
         /**
@@ -5846,12 +6012,6 @@
          * Shift the origin for any points stored in world coordinates.
          */
         Joint.prototype.shiftOrigin = function (newOrigin) { };
-        Joint.TYPES = {};
-        /** @internal */
-        Joint._deserialize = function (data, context, restore) {
-            var clazz = Joint.TYPES[data.type];
-            return clazz && restore(clazz, data);
-        };
         return Joint;
     }());
 
@@ -6153,7 +6313,7 @@
                 this.m_type = SeparationFunctionType.e_faceB;
                 var localPointB1 = proxyB.getVertex(cache.indexB[0]);
                 var localPointB2 = proxyB.getVertex(cache.indexB[1]);
-                this.m_axis = Vec2.cross(Vec2.sub(localPointB2, localPointB1), 1.0);
+                this.m_axis = Vec2.crossVec2Num(Vec2.sub(localPointB2, localPointB1), 1.0);
                 this.m_axis.normalize();
                 var normal = Rot.mulVec2(xfB.q, this.m_axis);
                 this.m_localPoint = Vec2.mid(localPointB1, localPointB2);
@@ -6172,7 +6332,7 @@
                 this.m_type = SeparationFunctionType.e_faceA;
                 var localPointA1 = this.m_proxyA.getVertex(cache.indexA[0]);
                 var localPointA2 = this.m_proxyA.getVertex(cache.indexA[1]);
-                this.m_axis = Vec2.cross(Vec2.sub(localPointA2, localPointA1), 1.0);
+                this.m_axis = Vec2.crossVec2Num(Vec2.sub(localPointA2, localPointA1), 1.0);
                 this.m_axis.normalize();
                 var normal = Rot.mulVec2(xfA.q, this.m_axis);
                 this.m_localPoint = Vec2.mid(localPointA1, localPointA2);
@@ -6486,7 +6646,7 @@
                 var v = Vec2.clone(body.m_linearVelocity);
                 var w = body.m_angularVelocity;
                 // Store positions for continuous collision.
-                body.m_sweep.c0.set(body.m_sweep.c);
+                body.m_sweep.c0.setVec2(body.m_sweep.c);
                 body.m_sweep.a0 = body.m_sweep.a;
                 if (body.isDynamic()) {
                     // Integrate velocities.
@@ -6555,7 +6715,7 @@
                 var v = Vec2.clone(body.c_velocity.v);
                 var w = body.c_velocity.w;
                 // Check for large velocities
-                var translation = Vec2.mul(h, v);
+                var translation = Vec2.mulNumVec2(h, v);
                 if (Vec2.lengthSquared(translation) > Settings.maxTranslationSquared) {
                     var ratio = Settings.maxTranslation / translation.length();
                     v.mul(ratio);
@@ -6568,9 +6728,9 @@
                 // Integrate
                 c.addMul(h, v);
                 a += h * w;
-                body.c_position.c.set(c);
+                body.c_position.c.setVec2(c);
                 body.c_position.a = a;
-                body.c_velocity.v.set(v);
+                body.c_velocity.v.setVec2(v);
                 body.c_velocity.w = w;
             }
             // Solve position constraints
@@ -6600,9 +6760,9 @@
             // Copy state buffers back to the bodies
             for (var i = 0; i < this.m_bodies.length; ++i) {
                 var body = this.m_bodies[i];
-                body.m_sweep.c.set(body.c_position.c);
+                body.m_sweep.c.setVec2(body.c_position.c);
                 body.m_sweep.a = body.c_position.a;
-                body.m_linearVelocity.set(body.c_velocity.v);
+                body.m_linearVelocity.setVec2(body.c_velocity.v);
                 body.m_angularVelocity = body.c_velocity.w;
                 body.synchronizeTransform();
             }
@@ -6635,6 +6795,7 @@
                 }
             }
         };
+        /** @internal */
         Solver.prototype.printBodies = function (tag) {
             for (var i = 0; i < this.m_bodies.length; ++i) {
                 var b = this.m_bodies[i];
@@ -6868,9 +7029,9 @@
             // Initialize the body state.
             for (var i = 0; i < this.m_bodies.length; ++i) {
                 var body = this.m_bodies[i];
-                body.c_position.c.set(body.m_sweep.c);
+                body.c_position.c.setVec2(body.m_sweep.c);
                 body.c_position.a = body.m_sweep.a;
-                body.c_velocity.v.set(body.m_linearVelocity);
+                body.c_velocity.v.setVec2(body.m_linearVelocity);
                 body.c_velocity.w = body.m_angularVelocity;
             }
             for (var i = 0; i < this.m_contacts.length; ++i) {
@@ -6894,9 +7055,9 @@
             }
             var i, c; 
             // Leap of faith to new safe state.
-            toiA.m_sweep.c0.set(toiA.c_position.c);
+            toiA.m_sweep.c0.setVec2(toiA.c_position.c);
             toiA.m_sweep.a0 = toiA.c_position.a;
-            toiB.m_sweep.c0.set(toiB.c_position.c);
+            toiB.m_sweep.c0.setVec2(toiB.c_position.c);
             toiB.m_sweep.a0 = toiB.c_position.a;
             // No warm starting is needed for TOI events because warm
             // starting impulses were applied in the discrete solver.
@@ -6922,7 +7083,7 @@
                 var v = Vec2.clone(body.c_velocity.v);
                 var w = body.c_velocity.w;
                 // Check for large velocities
-                var translation = Vec2.mul(h, v);
+                var translation = Vec2.mulNumVec2(h, v);
                 if (Vec2.dot(translation, translation) > Settings.maxTranslationSquared) {
                     var ratio = Settings.maxTranslation / translation.length();
                     v.mul(ratio);
@@ -6948,6 +7109,7 @@
             }
             this.postSolveIsland();
         };
+        /** @internal */
         Solver.prototype.postSolveIsland = function () {
             for (var c = 0; c < this.m_contacts.length; ++c) {
                 var contact = this.m_contacts[c];
@@ -7247,7 +7409,7 @@
          * auto clearing of forces and instead call clearForces after all sub-steps are
          * complete in one pass of your game loop.
          *
-         * @see setAutoClearForces
+         * See {@link World.setAutoClearForces}
          */
         World.prototype.clearForces = function () {
             for (var body = this.m_bodyList; body; body = body.getNext()) {
@@ -7269,7 +7431,6 @@
             });
         };
         /**
-         *
          * Ray-cast the world for all fixtures in the path of the ray. Your callback
          * controls whether you get the closest point, any point, or n-points. The
          * ray-cast ignores shapes that contain the starting point.
@@ -7288,11 +7449,12 @@
                 var proxy = broadPhase.getUserData(proxyId);
                 var fixture = proxy.fixture;
                 var index = proxy.childIndex;
+                // @ts-ignore
                 var output = {}; // TODO GC
                 var hit = fixture.rayCast(output, input, index);
                 if (hit) {
                     var fraction = output.fraction;
-                    var point = Vec2.add(Vec2.mul((1.0 - fraction), input.p1), Vec2.mul(fraction, input.p2));
+                    var point = Vec2.add(Vec2.mulNumVec2((1.0 - fraction), input.p1), Vec2.mulNumVec2(fraction, input.p2));
                     return callback(fixture, point, output.normal, fraction);
                 }
                 return input.maxFraction;
@@ -7359,6 +7521,7 @@
             this.m_bodyList = body;
             ++this.m_bodyCount;
         };
+        // tslint:disable-next-line:typedef
         World.prototype.createBody = function (arg1, arg2) {
             if (this.isLocked()) {
                 return null;
@@ -7375,6 +7538,7 @@
             this._addBody(body);
             return body;
         };
+        // tslint:disable-next-line:typedef
         World.prototype.createDynamicBody = function (arg1, arg2) {
             var def = {};
             if (!arg1) ;
@@ -7387,6 +7551,7 @@
             def.type = 'dynamic';
             return this.createBody(def);
         };
+        // tslint:disable-next-line:typedef
         World.prototype.createKinematicBody = function (arg1, arg2) {
             var def = {};
             if (!arg1) ;
@@ -7698,6 +7863,7 @@
         /**
          * Register an event listener.
          */
+        // tslint:disable-next-line:typedef
         World.prototype.on = function (name, listener) {
             if (typeof name !== 'string' || typeof listener !== 'function') {
                 return this;
@@ -7714,6 +7880,7 @@
         /**
          * Remove an event listener.
          */
+        // tslint:disable-next-line:typedef
         World.prototype.off = function (name, listener) {
             if (typeof name !== 'string' || typeof listener !== 'function') {
                 return this;
@@ -7739,38 +7906,11 @@
             return listeners.length;
         };
         /**
-         * @event World#remove-body
-         * @event World#remove-joint
-         * @event World#remove-fixture
-         *
-         * Joints and fixtures are destroyed when their associated body is destroyed.
-         * Register a destruction listener so that you may nullify references to these
-         * joints and shapes.
-         *
-         * `function(object)` is called when any joint or fixture is about to
-         * be destroyed due to the destruction of one of its attached or parent bodies.
-         */
-        /**
          * @internal
          */
         World.prototype.beginContact = function (contact) {
             this.publish('begin-contact', contact);
         };
-        /**
-         * @event World#begin-contact
-         *
-         * Called when two fixtures begin to touch.
-         *
-         * Implement contact callbacks to get contact information. You can use these
-         * results for things like sounds and game logic. You can also get contact
-         * results by traversing the contact lists after the time step. However, you
-         * might miss some contacts because continuous physics leads to sub-stepping.
-         * Additionally you may receive multiple callbacks for the same contact in a
-         * single time step. You should strive to make your callbacks efficient because
-         * there may be many callbacks per time step.
-         *
-         * Warning: You cannot create/destroy world entities inside these callbacks.
-         */
         /**
          * @internal
          */
@@ -7778,40 +7918,11 @@
             this.publish('end-contact', contact);
         };
         /**
-         * @event World#end-contact
-         *
-         * Called when two fixtures cease to touch.
-         *
-         * Implement contact callbacks to get contact information. You can use these
-         * results for things like sounds and game logic. You can also get contact
-         * results by traversing the contact lists after the time step. However, you
-         * might miss some contacts because continuous physics leads to sub-stepping.
-         * Additionally you may receive multiple callbacks for the same contact in a
-         * single time step. You should strive to make your callbacks efficient because
-         * there may be many callbacks per time step.
-         *
-         * Warning: You cannot create/destroy world entities inside these callbacks.
-         */
-        /**
          * @internal
          */
         World.prototype.preSolve = function (contact, oldManifold) {
             this.publish('pre-solve', contact, oldManifold);
         };
-        /**
-         * @event World#pre-solve
-         *
-         * This is called after a contact is updated. This allows you to inspect a
-         * contact before it goes to the solver. If you are careful, you can modify the
-         * contact manifold (e.g. disable contact). A copy of the old manifold is
-         * provided so that you can detect changes. Note: this is called only for awake
-         * bodies. Note: this is called even when the number of contact points is zero.
-         * Note: this is not called for sensors. Note: if you set the number of contact
-         * points to zero, you will not get an endContact callback. However, you may get
-         * a beginContact callback the next step.
-         *
-         * Warning: You cannot create/destroy world entities inside these callbacks.
-         */
         /**
          * @internal
          */
@@ -7845,6 +7956,7 @@
      * SOFTWARE.
      */
     var Vec3 = /** @class */ (function () {
+        // tslint:disable-next-line:typedef
         function Vec3(x, y, z) {
             if (!(this instanceof Vec3)) {
                 return new Vec3(x, y, z);
@@ -7899,14 +8011,18 @@
         Vec3.clone = function (v) {
             return Vec3.neo(v.x, v.y, v.z);
         };
+        /** @internal */
         Vec3.prototype.toString = function () {
             return JSON.stringify(this);
         };
         /**
          * Does this vector contain finite coordinates?
          */
-        Vec3.isValid = function (v) {
-            return v && math.isFinite(v.x) && math.isFinite(v.y) && math.isFinite(v.z);
+        Vec3.isValid = function (obj) {
+            if (obj === null || typeof obj === 'undefined') {
+                return false;
+            }
+            return math.isFinite(obj.x) && math.isFinite(obj.y) && math.isFinite(obj.z);
         };
         Vec3.assert = function (o) {
             return;
@@ -7980,457 +8096,6 @@
         return Vec3;
     }());
 
-    var SID = 0;
-    function Serializer(opts) {
-        opts = opts || {};
-        var rootClass = opts.rootClass || World;
-        var preSerialize = opts.preSerialize || function (obj) { return obj; };
-        var postSerialize = opts.postSerialize || function (data, obj) { return data; };
-        var preDeserialize = opts.preDeserialize || function (data) { return data; };
-        var postDeserialize = opts.postDeserialize || function (obj, data) { return obj; };
-        // This is used to create ref objects during serialize
-        var refTypes = {
-            World: World,
-            Body: Body,
-            Joint: Joint,
-            Fixture: Fixture,
-            Shape: Shape,
-        };
-        // This is used by restore to deserialize objects and refs
-        var restoreTypes = __assign({ Vec2: Vec2,
-            Vec3: Vec3 }, refTypes);
-        this.toJson = function (root) {
-            var json = [];
-            var queue = [root];
-            var refMap = {};
-            function storeRef(value, typeName) {
-                value.__sid = value.__sid || ++SID;
-                if (!refMap[value.__sid]) {
-                    queue.push(value);
-                    var index = json.length + queue.length;
-                    var ref = {
-                        refIndex: index,
-                        refType: typeName
-                    };
-                    refMap[value.__sid] = ref;
-                }
-                return refMap[value.__sid];
-            }
-            function serialize(obj) {
-                obj = preSerialize(obj);
-                var data = obj._serialize();
-                data = postSerialize(data, obj);
-                return data;
-            }
-            function toJson(value, top) {
-                if (typeof value !== 'object' || value === null) {
-                    return value;
-                }
-                if (typeof value._serialize === 'function') {
-                    if (value !== top) {
-                        for (var typeName in refTypes) {
-                            if (value instanceof refTypes[typeName]) {
-                                return storeRef(value, typeName);
-                            }
-                        }
-                    }
-                    value = serialize(value);
-                }
-                if (Array.isArray(value)) {
-                    var newValue = [];
-                    for (var key = 0; key < value.length; key++) {
-                        newValue[key] = toJson(value[key]);
-                    }
-                    value = newValue;
-                }
-                else {
-                    var newValue = {};
-                    for (var key in value) {
-                        if (value.hasOwnProperty(key)) {
-                            newValue[key] = toJson(value[key]);
-                        }
-                    }
-                    value = newValue;
-                }
-                return value;
-            }
-            while (queue.length) {
-                var obj = queue.shift();
-                var str = toJson(obj, obj);
-                json.push(str);
-            }
-            return json;
-        };
-        this.fromJson = function (json) {
-            var refMap = {};
-            function deserialize(cls, data, ctx) {
-                data = preDeserialize(data);
-                var obj = cls._deserialize(data, ctx, restoreRef);
-                obj = postDeserialize(obj, data);
-                return obj;
-            }
-            function restoreRef(cls, ref, ctx) {
-                if (!ref.refIndex) {
-                    return cls && cls._deserialize && deserialize(cls, ref, ctx);
-                }
-                cls = restoreTypes[ref.refType] || cls;
-                var index = ref.refIndex;
-                if (!refMap[index]) {
-                    var data = json[index];
-                    var obj = deserialize(cls, data, ctx);
-                    refMap[index] = obj;
-                }
-                return refMap[index];
-            }
-            var root = rootClass._deserialize(json[0], null, restoreRef);
-            return root;
-        };
-    }
-    var serializer = new Serializer();
-    Serializer.toJson = serializer.toJson;
-    Serializer.fromJson = serializer.fromJson;
-
-    /*
-     * Planck.js
-     * The MIT License
-     * Copyright (c) 2021 Erin Catto, Ali Shakiba
-     *
-     * Permission is hereby granted, free of charge, to any person obtaining a copy
-     * of this software and associated documentation files (the "Software"), to deal
-     * in the Software without restriction, including without limitation the rights
-     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     * copies of the Software, and to permit persons to whom the Software is
-     * furnished to do so, subject to the following conditions:
-     *
-     * The above copyright notice and this permission notice shall be included in all
-     * copies or substantial portions of the Software.
-     *
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-     * SOFTWARE.
-     */
-    /**
-     * A 3-by-3 matrix. Stored in column-major order.
-     */
-    var Mat33 = /** @class */ (function () {
-        function Mat33(a, b, c) {
-            if (typeof a === 'object' && a !== null) {
-                this.ex = Vec3.clone(a);
-                this.ey = Vec3.clone(b);
-                this.ez = Vec3.clone(c);
-            }
-            else {
-                this.ex = Vec3.zero();
-                this.ey = Vec3.zero();
-                this.ez = Vec3.zero();
-            }
-        }
-        Mat33.prototype.toString = function () {
-            return JSON.stringify(this);
-        };
-        Mat33.isValid = function (o) {
-            return o && Vec3.isValid(o.ex) && Vec3.isValid(o.ey) && Vec3.isValid(o.ez);
-        };
-        Mat33.assert = function (o) {
-            return;
-        };
-        /**
-         * Set this matrix to all zeros.
-         */
-        Mat33.prototype.setZero = function () {
-            this.ex.setZero();
-            this.ey.setZero();
-            this.ez.setZero();
-            return this;
-        };
-        /**
-         * Solve A * x = b, where b is a column vector. This is more efficient than
-         * computing the inverse in one-shot cases.
-         */
-        Mat33.prototype.solve33 = function (v) {
-            var det = Vec3.dot(this.ex, Vec3.cross(this.ey, this.ez));
-            if (det !== 0.0) {
-                det = 1.0 / det;
-            }
-            var r = new Vec3();
-            r.x = det * Vec3.dot(v, Vec3.cross(this.ey, this.ez));
-            r.y = det * Vec3.dot(this.ex, Vec3.cross(v, this.ez));
-            r.z = det * Vec3.dot(this.ex, Vec3.cross(this.ey, v));
-            return r;
-        };
-        /**
-         * Solve A * x = b, where b is a column vector. This is more efficient than
-         * computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
-         * equation.
-         */
-        Mat33.prototype.solve22 = function (v) {
-            var a11 = this.ex.x;
-            var a12 = this.ey.x;
-            var a21 = this.ex.y;
-            var a22 = this.ey.y;
-            var det = a11 * a22 - a12 * a21;
-            if (det !== 0.0) {
-                det = 1.0 / det;
-            }
-            var r = Vec2.zero();
-            r.x = det * (a22 * v.x - a12 * v.y);
-            r.y = det * (a11 * v.y - a21 * v.x);
-            return r;
-        };
-        /**
-         * Get the inverse of this matrix as a 2-by-2. Returns the zero matrix if
-         * singular.
-         */
-        Mat33.prototype.getInverse22 = function (M) {
-            var a = this.ex.x;
-            var b = this.ey.x;
-            var c = this.ex.y;
-            var d = this.ey.y;
-            var det = a * d - b * c;
-            if (det !== 0.0) {
-                det = 1.0 / det;
-            }
-            M.ex.x = det * d;
-            M.ey.x = -det * b;
-            M.ex.z = 0.0;
-            M.ex.y = -det * c;
-            M.ey.y = det * a;
-            M.ey.z = 0.0;
-            M.ez.x = 0.0;
-            M.ez.y = 0.0;
-            M.ez.z = 0.0;
-        };
-        /**
-         * Get the symmetric inverse of this matrix as a 3-by-3. Returns the zero matrix
-         * if singular.
-         */
-        Mat33.prototype.getSymInverse33 = function (M) {
-            var det = Vec3.dot(this.ex, Vec3.cross(this.ey, this.ez));
-            if (det !== 0.0) {
-                det = 1.0 / det;
-            }
-            var a11 = this.ex.x;
-            var a12 = this.ey.x;
-            var a13 = this.ez.x;
-            var a22 = this.ey.y;
-            var a23 = this.ez.y;
-            var a33 = this.ez.z;
-            M.ex.x = det * (a22 * a33 - a23 * a23);
-            M.ex.y = det * (a13 * a23 - a12 * a33);
-            M.ex.z = det * (a12 * a23 - a13 * a22);
-            M.ey.x = M.ex.y;
-            M.ey.y = det * (a11 * a33 - a13 * a13);
-            M.ey.z = det * (a13 * a12 - a11 * a23);
-            M.ez.x = M.ex.z;
-            M.ez.y = M.ey.z;
-            M.ez.z = det * (a11 * a22 - a12 * a12);
-        };
-        Mat33.mul = function (a, b) {
-            if (b && 'z' in b && 'y' in b && 'x' in b) {
-                var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
-                var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
-                var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
-                return new Vec3(x, y, z);
-            }
-            else if (b && 'y' in b && 'x' in b) {
-                var x = a.ex.x * b.x + a.ey.x * b.y;
-                var y = a.ex.y * b.x + a.ey.y * b.y;
-                return Vec2.neo(x, y);
-            }
-        };
-        Mat33.mulVec3 = function (a, b) {
-            var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
-            var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
-            var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
-            return new Vec3(x, y, z);
-        };
-        Mat33.mulVec2 = function (a, b) {
-            var x = a.ex.x * b.x + a.ey.x * b.y;
-            var y = a.ex.y * b.x + a.ey.y * b.y;
-            return Vec2.neo(x, y);
-        };
-        Mat33.add = function (a, b) {
-            return new Mat33(Vec3.add(a.ex, b.ex), Vec3.add(a.ey, b.ey), Vec3.add(a.ez, b.ez));
-        };
-        return Mat33;
-    }());
-
-    /*
-     * Planck.js
-     * The MIT License
-     * Copyright (c) 2021 Erin Catto, Ali Shakiba
-     *
-     * Permission is hereby granted, free of charge, to any person obtaining a copy
-     * of this software and associated documentation files (the "Software"), to deal
-     * in the Software without restriction, including without limitation the rights
-     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     * copies of the Software, and to permit persons to whom the Software is
-     * furnished to do so, subject to the following conditions:
-     *
-     * The above copyright notice and this permission notice shall be included in all
-     * copies or substantial portions of the Software.
-     *
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-     * SOFTWARE.
-     */
-    var CircleShape = /** @class */ (function (_super) {
-        __extends(CircleShape, _super);
-        function CircleShape(a, b) {
-            var _this = this;
-            // @ts-ignore
-            if (!(_this instanceof CircleShape)) {
-                return new CircleShape(a, b);
-            }
-            _this = _super.call(this) || this;
-            _this.m_type = CircleShape.TYPE;
-            _this.m_p = Vec2.zero();
-            _this.m_radius = 1;
-            if (typeof a === 'object' && Vec2.isValid(a)) {
-                _this.m_p.set(a);
-                if (typeof b === 'number') {
-                    _this.m_radius = b;
-                }
-            }
-            else if (typeof a === 'number') {
-                _this.m_radius = a;
-            }
-            return _this;
-        }
-        /** @internal */
-        CircleShape.prototype._serialize = function () {
-            return {
-                type: this.m_type,
-                p: this.m_p,
-                radius: this.m_radius,
-            };
-        };
-        /** @internal */
-        CircleShape._deserialize = function (data) {
-            return new CircleShape(data.p, data.radius);
-        };
-        // TODO: already defined in Shape
-        CircleShape.prototype.getRadius = function () {
-            return this.m_radius;
-        };
-        CircleShape.prototype.getCenter = function () {
-            return this.m_p;
-        };
-        CircleShape.prototype.getVertex = function (index) {
-            return this.m_p;
-        };
-        /**
-         * @deprecated Shapes should be treated as immutable.
-         *
-         * clone the concrete shape.
-         */
-        CircleShape.prototype._clone = function () {
-            var clone = new CircleShape();
-            clone.m_type = this.m_type;
-            clone.m_radius = this.m_radius;
-            clone.m_p = this.m_p.clone();
-            return clone;
-        };
-        /**
-         * Get the number of child primitives.
-         */
-        CircleShape.prototype.getChildCount = function () {
-            return 1;
-        };
-        /**
-         * Test a point for containment in this shape. This only works for convex
-         * shapes.
-         *
-         * @param {Transform} xf The shape world transform.
-         * @param p A point in world coordinates.
-         */
-        CircleShape.prototype.testPoint = function (xf, p) {
-            var center = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
-            var d = Vec2.sub(p, center);
-            return Vec2.dot(d, d) <= this.m_radius * this.m_radius;
-        };
-        /**
-         * Cast a ray against a child shape.
-         *
-         * @param {RayCastOutput} output The ray-cast results.
-         * @param {RayCastInput} input The ray-cast input parameters.
-         * @param {Transform} transform The transform to be applied to the shape.
-         * @param childIndex The child shape index
-         */
-        // Collision Detection in Interactive 3D Environments by Gino van den Bergen
-        // From Section 3.1.2
-        // x = s + a * r
-        // norm(x) = radius
-        CircleShape.prototype.rayCast = function (output, input, xf, childIndex) {
-            var position = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
-            var s = Vec2.sub(input.p1, position);
-            var b = Vec2.dot(s, s) - this.m_radius * this.m_radius;
-            // Solve quadratic equation.
-            var r = Vec2.sub(input.p2, input.p1);
-            var c = Vec2.dot(s, r);
-            var rr = Vec2.dot(r, r);
-            var sigma = c * c - rr * b;
-            // Check for negative discriminant and short segment.
-            if (sigma < 0.0 || rr < math.EPSILON) {
-                return false;
-            }
-            // Find the point of intersection of the line with the circle.
-            var a = -(c + math.sqrt(sigma));
-            // Is the intersection point on the segment?
-            if (0.0 <= a && a <= input.maxFraction * rr) {
-                a /= rr;
-                output.fraction = a;
-                output.normal = Vec2.add(s, Vec2.mul(a, r));
-                output.normal.normalize();
-                return true;
-            }
-            return false;
-        };
-        /**
-         * Given a transform, compute the associated axis aligned bounding box for a
-         * child shape.
-         *
-         * @param {AABB} aabb Returns the axis aligned box.
-         * @param {Transform} xf The world transform of the shape.
-         * @param childIndex The child shape
-         */
-        CircleShape.prototype.computeAABB = function (aabb, xf, childIndex) {
-            var p = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
-            aabb.lowerBound.set(p.x - this.m_radius, p.y - this.m_radius);
-            aabb.upperBound.set(p.x + this.m_radius, p.y + this.m_radius);
-        };
-        /**
-         * Compute the mass properties of this shape using its dimensions and density.
-         * The inertia tensor is computed about the local origin.
-         *
-         * @param {MassData} massData Returns the mass data for this shape.
-         * @param density The density in kilograms per meter squared.
-         */
-        CircleShape.prototype.computeMass = function (massData, density) {
-            massData.mass = density * math.PI * this.m_radius * this.m_radius;
-            massData.center = this.m_p;
-            // inertia about the local origin
-            massData.I = massData.mass
-                * (0.5 * this.m_radius * this.m_radius + Vec2.dot(this.m_p, this.m_p));
-        };
-        CircleShape.prototype.computeDistanceProxy = function (proxy) {
-            proxy.m_vertices.push(this.m_p);
-            proxy.m_count = 1;
-            proxy.m_radius = this.m_radius;
-        };
-        CircleShape.TYPE = 'circle';
-        return CircleShape;
-    }(Shape));
-    Shape.TYPES[CircleShape.TYPE] = CircleShape;
-
     /*
      * Planck.js
      * The MIT License
@@ -8494,16 +8159,23 @@
         EdgeShape._deserialize = function (data) {
             var shape = new EdgeShape(data.vertex1, data.vertex2);
             if (shape.m_hasVertex0) {
-                shape.setPrev(data.vertex0);
+                shape.setPrevVertex(data.vertex0);
             }
             if (shape.m_hasVertex3) {
-                shape.setNext(data.vertex3);
+                shape.setNextVertex(data.vertex3);
             }
             return shape;
         };
-        EdgeShape.prototype.setNext = function (v3) {
-            if (v3) {
-                this.m_vertex3.set(v3);
+        /** @internal @deprecated */
+        EdgeShape.prototype.setNext = function (v) {
+            return this.setNextVertex(v);
+        };
+        /**
+         * Optional next vertex, used for smooth collision.
+         */
+        EdgeShape.prototype.setNextVertex = function (v) {
+            if (v) {
+                this.m_vertex3.setVec2(v);
                 this.m_hasVertex3 = true;
             }
             else {
@@ -8512,9 +8184,22 @@
             }
             return this;
         };
-        EdgeShape.prototype.setPrev = function (v0) {
-            if (v0) {
-                this.m_vertex0.set(v0);
+        /**
+         * Optional next vertex, used for smooth collision.
+         */
+        EdgeShape.prototype.getNextVertex = function () {
+            return this.m_vertex3;
+        };
+        /** @internal @deprecated */
+        EdgeShape.prototype.setPrev = function (v) {
+            return this.setPrevVertex(v);
+        };
+        /**
+         * Optional prev vertex, used for smooth collision.
+         */
+        EdgeShape.prototype.setPrevVertex = function (v) {
+            if (v) {
+                this.m_vertex0.setVec2(v);
                 this.m_hasVertex0 = true;
             }
             else {
@@ -8524,16 +8209,23 @@
             return this;
         };
         /**
+         * Optional prev vertex, used for smooth collision.
+         */
+        EdgeShape.prototype.getPrevVertex = function () {
+            return this.m_vertex0;
+        };
+        /**
          * Set this as an isolated edge.
          */
         EdgeShape.prototype._set = function (v1, v2) {
-            this.m_vertex1.set(v1);
-            this.m_vertex2.set(v2);
+            this.m_vertex1.setVec2(v1);
+            this.m_vertex2.setVec2(v2);
             this.m_hasVertex0 = false;
             this.m_hasVertex3 = false;
             return this;
         };
         /**
+         * @internal
          * @deprecated Shapes should be treated as immutable.
          *
          * clone the concrete shape.
@@ -8542,10 +8234,10 @@
             var clone = new EdgeShape();
             clone.m_type = this.m_type;
             clone.m_radius = this.m_radius;
-            clone.m_vertex1.set(this.m_vertex1);
-            clone.m_vertex2.set(this.m_vertex2);
-            clone.m_vertex0.set(this.m_vertex0);
-            clone.m_vertex3.set(this.m_vertex3);
+            clone.m_vertex1.setVec2(this.m_vertex1);
+            clone.m_vertex2.setVec2(this.m_vertex2);
+            clone.m_vertex0.setVec2(this.m_vertex0);
+            clone.m_vertex3.setVec2(this.m_vertex3);
             clone.m_hasVertex0 = this.m_hasVertex0;
             clone.m_hasVertex3 = this.m_hasVertex3;
             return clone;
@@ -8560,7 +8252,7 @@
          * Test a point for containment in this shape. This only works for convex
          * shapes.
          *
-         * @param {Transform} xf The shape world transform.
+         * @param xf The shape world transform.
          * @param p A point in world coordinates.
          */
         EdgeShape.prototype.testPoint = function (xf, p) {
@@ -8569,16 +8261,16 @@
         /**
          * Cast a ray against a child shape.
          *
-         * @param {RayCastOutput} output The ray-cast results.
-         * @param {RayCastInput} input The ray-cast input parameters.
-         * @param {Transform} transform The transform to be applied to the shape.
+         * @param output The ray-cast results.
+         * @param input The ray-cast input parameters.
+         * @param xf The transform to be applied to the shape.
          * @param childIndex The child shape index
          */
-        // p = p1 + t * d
-        // v = v1 + s * e
-        // p1 + t * d = v1 + s * e
-        // s * e - t * d = p1 - v1
         EdgeShape.prototype.rayCast = function (output, input, xf, childIndex) {
+            // p = p1 + t * d
+            // v = v1 + s * e
+            // p1 + t * d = v1 + s * e
+            // s * e - t * d = p1 - v1
             // NOT_USED(childIndex);
             // Put the ray into the edge's frame of reference.
             var p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
@@ -8601,7 +8293,7 @@
             if (t < 0.0 || input.maxFraction < t) {
                 return false;
             }
-            var q = Vec2.add(p1, Vec2.mul(t, d));
+            var q = Vec2.add(p1, Vec2.mulNumVec2(t, d));
             // q = v1 + s * r
             // s = dot(q - v1, r) / dot(r, r)
             var r = Vec2.sub(v2, v1);
@@ -8626,8 +8318,8 @@
          * Given a transform, compute the associated axis aligned bounding box for a
          * child shape.
          *
-         * @param {AABB} aabb Returns the axis aligned box.
-         * @param {Transform} xf The world transform of the shape.
+         * @param aabb Returns the axis aligned box.
+         * @param xf The world transform of the shape.
          * @param childIndex The child shape
          */
         EdgeShape.prototype.computeAABB = function (aabb, xf, childIndex) {
@@ -8640,7 +8332,7 @@
          * Compute the mass properties of this shape using its dimensions and density.
          * The inertia tensor is computed about the local origin.
          *
-         * @param {MassData} massData Returns the mass data for this shape.
+         * @param massData Returns the mass data for this shape.
          * @param density The density in kilograms per meter squared.
          */
         EdgeShape.prototype.computeMass = function (massData, density) {
@@ -8657,433 +8349,6 @@
         EdgeShape.TYPE = 'edge';
         return EdgeShape;
     }(Shape));
-    Shape.TYPES[EdgeShape.TYPE] = EdgeShape;
-
-    /*
-     * Planck.js
-     * The MIT License
-     * Copyright (c) 2021 Erin Catto, Ali Shakiba
-     *
-     * Permission is hereby granted, free of charge, to any person obtaining a copy
-     * of this software and associated documentation files (the "Software"), to deal
-     * in the Software without restriction, including without limitation the rights
-     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     * copies of the Software, and to permit persons to whom the Software is
-     * furnished to do so, subject to the following conditions:
-     *
-     * The above copyright notice and this permission notice shall be included in all
-     * copies or substantial portions of the Software.
-     *
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-     * SOFTWARE.
-     */
-    /**
-     * A convex polygon. It is assumed that the interior of the polygon is to the
-     * left of each edge. Polygons have a maximum number of vertices equal to
-     * Settings.maxPolygonVertices. In most cases you should not need many vertices
-     * for a convex polygon. extends Shape
-     */
-    var PolygonShape = /** @class */ (function (_super) {
-        __extends(PolygonShape, _super);
-        // @ts-ignore
-        function PolygonShape(vertices) {
-            var _this = this;
-            // @ts-ignore
-            if (!(_this instanceof PolygonShape)) {
-                return new PolygonShape(vertices);
-            }
-            _this = _super.call(this) || this;
-            _this.m_type = PolygonShape.TYPE;
-            _this.m_radius = Settings.polygonRadius;
-            _this.m_centroid = Vec2.zero();
-            _this.m_vertices = []; // Vec2[Settings.maxPolygonVertices]
-            _this.m_normals = []; // Vec2[Settings.maxPolygonVertices]
-            _this.m_count = 0;
-            if (vertices && vertices.length) {
-                _this._set(vertices);
-            }
-            return _this;
-        }
-        /** @internal */
-        PolygonShape.prototype._serialize = function () {
-            return {
-                type: this.m_type,
-                vertices: this.m_vertices,
-            };
-        };
-        /** @internal */
-        PolygonShape._deserialize = function (data, fixture, restore) {
-            var vertices = [];
-            if (data.vertices) {
-                for (var i = 0; i < data.vertices.length; i++) {
-                    vertices.push(restore(Vec2, data.vertices[i]));
-                }
-            }
-            var shape = new PolygonShape(vertices);
-            return shape;
-        };
-        PolygonShape.prototype.getVertex = function (index) {
-            return this.m_vertices[index];
-        };
-        /**
-         * @deprecated Shapes should be treated as immutable.
-         *
-         * clone the concrete shape.
-         */
-        PolygonShape.prototype._clone = function () {
-            var clone = new PolygonShape();
-            clone.m_type = this.m_type;
-            clone.m_radius = this.m_radius;
-            clone.m_count = this.m_count;
-            clone.m_centroid.set(this.m_centroid);
-            for (var i = 0; i < this.m_count; i++) {
-                clone.m_vertices.push(this.m_vertices[i].clone());
-            }
-            for (var i = 0; i < this.m_normals.length; i++) {
-                clone.m_normals.push(this.m_normals[i].clone());
-            }
-            return clone;
-        };
-        /**
-         * Get the number of child primitives.
-         */
-        PolygonShape.prototype.getChildCount = function () {
-            return 1;
-        };
-        PolygonShape.prototype._reset = function () {
-            this._set(this.m_vertices);
-        };
-        /**
-         * @internal
-         *
-         * Create a convex hull from the given array of local points. The count must be
-         * in the range [3, Settings.maxPolygonVertices].
-         *
-         * Warning: the points may be re-ordered, even if they form a convex polygon
-         * Warning: collinear points are handled but not removed. Collinear points may
-         * lead to poor stacking behavior.
-         */
-        PolygonShape.prototype._set = function (vertices) {
-            if (vertices.length < 3) {
-                this._setAsBox(1.0, 1.0);
-                return;
-            }
-            var n = math.min(vertices.length, Settings.maxPolygonVertices);
-            // Perform welding and copy vertices into local buffer.
-            var ps = []; // [Settings.maxPolygonVertices];
-            for (var i = 0; i < n; ++i) {
-                var v = vertices[i];
-                var unique = true;
-                for (var j = 0; j < ps.length; ++j) {
-                    if (Vec2.distanceSquared(v, ps[j]) < 0.25 * Settings.linearSlopSquared) {
-                        unique = false;
-                        break;
-                    }
-                }
-                if (unique) {
-                    ps.push(v);
-                }
-            }
-            n = ps.length;
-            if (n < 3) {
-                this._setAsBox(1.0, 1.0);
-                return;
-            }
-            // Create the convex hull using the Gift wrapping algorithm
-            // http://en.wikipedia.org/wiki/Gift_wrapping_algorithm
-            // Find the right most point on the hull (in case of multiple points bottom most is used)
-            var i0 = 0;
-            var x0 = ps[0].x;
-            for (var i = 1; i < n; ++i) {
-                var x = ps[i].x;
-                if (x > x0 || (x === x0 && ps[i].y < ps[i0].y)) {
-                    i0 = i;
-                    x0 = x;
-                }
-            }
-            var hull = []; // [Settings.maxPolygonVertices];
-            var m = 0;
-            var ih = i0;
-            while (true) {
-                hull[m] = ih;
-                var ie = 0;
-                for (var j = 1; j < n; ++j) {
-                    if (ie === ih) {
-                        ie = j;
-                        continue;
-                    }
-                    var r = Vec2.sub(ps[ie], ps[hull[m]]);
-                    var v = Vec2.sub(ps[j], ps[hull[m]]);
-                    var c = Vec2.cross(r, v);
-                    // c < 0 means counter-clockwise wrapping, c > 0 means clockwise wrapping
-                    if (c < 0.0) {
-                        ie = j;
-                    }
-                    // Collinearity check
-                    if (c === 0.0 && v.lengthSquared() > r.lengthSquared()) {
-                        ie = j;
-                    }
-                }
-                ++m;
-                ih = ie;
-                if (ie === i0) {
-                    break;
-                }
-            }
-            if (m < 3) {
-                this._setAsBox(1.0, 1.0);
-                return;
-            }
-            this.m_count = m;
-            // Copy vertices.
-            this.m_vertices = [];
-            for (var i = 0; i < m; ++i) {
-                this.m_vertices[i] = ps[hull[i]];
-            }
-            // Compute normals. Ensure the edges have non-zero length.
-            for (var i = 0; i < m; ++i) {
-                var i1 = i;
-                var i2 = i + 1 < m ? i + 1 : 0;
-                var edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
-                this.m_normals[i] = Vec2.cross(edge, 1.0);
-                this.m_normals[i].normalize();
-            }
-            // Compute the polygon centroid.
-            this.m_centroid = ComputeCentroid(this.m_vertices, m);
-        };
-        PolygonShape.prototype._setAsBox = function (hx, hy, center, angle) {
-            // start with right-bottom, counter-clockwise, as in Gift wrapping algorithm in PolygonShape._set()
-            this.m_vertices[0] = Vec2.neo(hx, -hy);
-            this.m_vertices[1] = Vec2.neo(hx, hy);
-            this.m_vertices[2] = Vec2.neo(-hx, hy);
-            this.m_vertices[3] = Vec2.neo(-hx, -hy);
-            this.m_normals[0] = Vec2.neo(1.0, 0.0);
-            this.m_normals[1] = Vec2.neo(0.0, 1.0);
-            this.m_normals[2] = Vec2.neo(-1.0, 0.0);
-            this.m_normals[3] = Vec2.neo(0.0, -1.0);
-            this.m_count = 4;
-            if (Vec2.isValid(center)) {
-                angle = angle || 0;
-                this.m_centroid.set(center);
-                var xf = Transform.identity();
-                xf.p.set(center);
-                xf.q.set(angle);
-                // Transform vertices and normals.
-                for (var i = 0; i < this.m_count; ++i) {
-                    this.m_vertices[i] = Transform.mulVec2(xf, this.m_vertices[i]);
-                    this.m_normals[i] = Rot.mulVec2(xf.q, this.m_normals[i]);
-                }
-            }
-        };
-        /**
-         * Test a point for containment in this shape. This only works for convex
-         * shapes.
-         *
-         * @param {Transform} xf The shape world transform.
-         * @param p A point in world coordinates.
-         */
-        PolygonShape.prototype.testPoint = function (xf, p) {
-            var pLocal = Rot.mulTVec2(xf.q, Vec2.sub(p, xf.p));
-            for (var i = 0; i < this.m_count; ++i) {
-                var dot = Vec2.dot(this.m_normals[i], Vec2.sub(pLocal, this.m_vertices[i]));
-                if (dot > 0.0) {
-                    return false;
-                }
-            }
-            return true;
-        };
-        /**
-         * Cast a ray against a child shape.
-         *
-         * @param output The ray-cast results.
-         * @param input The ray-cast input parameters.
-         * @param xf The transform to be applied to the shape.
-         * @param childIndex The child shape index
-         */
-        PolygonShape.prototype.rayCast = function (output, input, xf, childIndex) {
-            // Put the ray into the polygon's frame of reference.
-            var p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
-            var p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
-            var d = Vec2.sub(p2, p1);
-            var lower = 0.0;
-            var upper = input.maxFraction;
-            var index = -1;
-            for (var i = 0; i < this.m_count; ++i) {
-                // p = p1 + a * d
-                // dot(normal, p - v) = 0
-                // dot(normal, p1 - v) + a * dot(normal, d) = 0
-                var numerator = Vec2.dot(this.m_normals[i], Vec2.sub(this.m_vertices[i], p1));
-                var denominator = Vec2.dot(this.m_normals[i], d);
-                if (denominator == 0.0) {
-                    if (numerator < 0.0) {
-                        return false;
-                    }
-                }
-                else {
-                    // Note: we want this predicate without division:
-                    // lower < numerator / denominator, where denominator < 0
-                    // Since denominator < 0, we have to flip the inequality:
-                    // lower < numerator / denominator <==> denominator * lower > numerator.
-                    if (denominator < 0.0 && numerator < lower * denominator) {
-                        // Increase lower.
-                        // The segment enters this half-space.
-                        lower = numerator / denominator;
-                        index = i;
-                    }
-                    else if (denominator > 0.0 && numerator < upper * denominator) {
-                        // Decrease upper.
-                        // The segment exits this half-space.
-                        upper = numerator / denominator;
-                    }
-                }
-                // The use of epsilon here causes the assert on lower to trip
-                // in some cases. Apparently the use of epsilon was to make edge
-                // shapes work, but now those are handled separately.
-                // if (upper < lower - Math.EPSILON)
-                if (upper < lower) {
-                    return false;
-                }
-            }
-            if (index >= 0) {
-                output.fraction = lower;
-                output.normal = Rot.mulVec2(xf.q, this.m_normals[index]);
-                return true;
-            }
-            return false;
-        };
-        /**
-         * Given a transform, compute the associated axis aligned bounding box for a
-         * child shape.
-         *
-         * @param aabb Returns the axis aligned box.
-         * @param xf The world transform of the shape.
-         * @param childIndex The child shape
-         */
-        PolygonShape.prototype.computeAABB = function (aabb, xf, childIndex) {
-            var minX = Infinity;
-            var minY = Infinity;
-            var maxX = -Infinity;
-            var maxY = -Infinity;
-            for (var i = 0; i < this.m_count; ++i) {
-                var v = Transform.mulVec2(xf, this.m_vertices[i]);
-                minX = math.min(minX, v.x);
-                maxX = math.max(maxX, v.x);
-                minY = math.min(minY, v.y);
-                maxY = math.max(maxY, v.y);
-            }
-            aabb.lowerBound.set(minX, minY);
-            aabb.upperBound.set(maxX, maxY);
-            aabb.extend(this.m_radius);
-        };
-        /**
-         * Compute the mass properties of this shape using its dimensions and density.
-         * The inertia tensor is computed about the local origin.
-         *
-         * @param {MassData} massData Returns the mass data for this shape.
-         * @param density The density in kilograms per meter squared.
-         */
-        PolygonShape.prototype.computeMass = function (massData, density) {
-            var center = Vec2.zero();
-            var area = 0.0;
-            var I = 0.0;
-            // s is the reference point for forming triangles.
-            // It's location doesn't change the result (except for rounding error).
-            var s = Vec2.zero();
-            // This code would put the reference point inside the polygon.
-            for (var i = 0; i < this.m_count; ++i) {
-                s.add(this.m_vertices[i]);
-            }
-            s.mul(1.0 / this.m_count);
-            var k_inv3 = 1.0 / 3.0;
-            for (var i = 0; i < this.m_count; ++i) {
-                // Triangle vertices.
-                var e1 = Vec2.sub(this.m_vertices[i], s);
-                var e2 = i + 1 < this.m_count ? Vec2.sub(this.m_vertices[i + 1], s) : Vec2.sub(this.m_vertices[0], s);
-                var D = Vec2.cross(e1, e2);
-                var triangleArea = 0.5 * D;
-                area += triangleArea;
-                // Area weighted centroid
-                center.addCombine(triangleArea * k_inv3, e1, triangleArea * k_inv3, e2);
-                var ex1 = e1.x;
-                var ey1 = e1.y;
-                var ex2 = e2.x;
-                var ey2 = e2.y;
-                var intx2 = ex1 * ex1 + ex2 * ex1 + ex2 * ex2;
-                var inty2 = ey1 * ey1 + ey2 * ey1 + ey2 * ey2;
-                I += (0.25 * k_inv3 * D) * (intx2 + inty2);
-            }
-            // Total mass
-            massData.mass = density * area;
-            center.mul(1.0 / area);
-            massData.center.setCombine(1, center, 1, s);
-            // Inertia tensor relative to the local origin (point s).
-            massData.I = density * I;
-            // Shift to center of mass then to original body origin.
-            massData.I += massData.mass * (Vec2.dot(massData.center, massData.center) - Vec2.dot(center, center));
-        };
-        /**
-         * Validate convexity. This is a very time consuming operation.
-         * @returns true if valid
-         */
-        PolygonShape.prototype.validate = function () {
-            for (var i = 0; i < this.m_count; ++i) {
-                var i1 = i;
-                var i2 = i < this.m_count - 1 ? i1 + 1 : 0;
-                var p = this.m_vertices[i1];
-                var e = Vec2.sub(this.m_vertices[i2], p);
-                for (var j = 0; j < this.m_count; ++j) {
-                    if (j == i1 || j == i2) {
-                        continue;
-                    }
-                    var v = Vec2.sub(this.m_vertices[j], p);
-                    var c = Vec2.cross(e, v);
-                    if (c < 0.0) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        };
-        PolygonShape.prototype.computeDistanceProxy = function (proxy) {
-            proxy.m_vertices = this.m_vertices;
-            proxy.m_count = this.m_count;
-            proxy.m_radius = this.m_radius;
-        };
-        PolygonShape.TYPE = 'polygon';
-        return PolygonShape;
-    }(Shape));
-    function ComputeCentroid(vs, count) {
-        var c = Vec2.zero();
-        var area = 0.0;
-        // pRef is the reference point for forming triangles.
-        // It's location doesn't change the result (except for rounding error).
-        var pRef = Vec2.zero();
-        var i; 
-        var inv3 = 1.0 / 3.0;
-        for (var i = 0; i < count; ++i) {
-            // Triangle vertices.
-            var p1 = pRef;
-            var p2 = vs[i];
-            var p3 = i + 1 < count ? vs[i + 1] : vs[0];
-            var e1 = Vec2.sub(p2, p1);
-            var e2 = Vec2.sub(p3, p1);
-            var D = Vec2.cross(e1, e2);
-            var triangleArea = 0.5 * D;
-            area += triangleArea;
-            // Area weighted centroid
-            c.addMul(triangleArea * inv3, p1);
-            c.addMul(triangleArea * inv3, p2);
-            c.addMul(triangleArea * inv3, p3);
-        }
-        c.mul(1.0 / area);
-        return c;
-    }
-    Shape.TYPES[PolygonShape.TYPE] = PolygonShape;
 
     /*
      * Planck.js
@@ -9185,6 +8450,7 @@
         //   this.m_count = 0;
         // }
         /**
+         * @internal
          * Create a loop. This automatically adjusts connectivity.
          *
          * @param vertices an array of vertices, these are copied
@@ -9208,6 +8474,7 @@
             return this;
         };
         /**
+         * @internal
          * Create a chain with isolated end vertices.
          *
          * @param vertices an array of vertices, these are copied
@@ -9229,6 +8496,7 @@
             this.m_nextVertex = null;
             return this;
         };
+        /** @internal */
         ChainShape.prototype._reset = function () {
             if (this.m_isLoop) {
                 this._createLoop(this.m_vertices);
@@ -9245,6 +8513,9 @@
             this.m_prevVertex = prevVertex;
             this.m_hasPrevVertex = true;
         };
+        ChainShape.prototype.getPrevVertex = function () {
+            return this.m_prevVertex;
+        };
         /**
          * Establish connectivity to a vertex that follows the last vertex. Don't call
          * this for loops.
@@ -9253,7 +8524,11 @@
             this.m_nextVertex = nextVertex;
             this.m_hasNextVertex = true;
         };
+        ChainShape.prototype.getNextVertex = function () {
+            return this.m_nextVertex;
+        };
         /**
+         * @internal
          * @deprecated Shapes should be treated as immutable.
          *
          * clone the concrete shape.
@@ -9307,13 +8582,16 @@
                 return this.m_vertices[0];
             }
         };
+        ChainShape.prototype.isLoop = function () {
+            return this.m_isLoop;
+        };
         /**
          * Test a point for containment in this shape. This only works for convex
          * shapes.
          *
          * This always return false.
          *
-         * @param {Transform} xf The shape world transform.
+         * @param xf The shape world transform.
          * @param p A point in world coordinates.
          */
         ChainShape.prototype.testPoint = function (xf, p) {
@@ -9322,9 +8600,9 @@
         /**
          * Cast a ray against a child shape.
          *
-         * @param {RayCastOutput} output The ray-cast results.
-         * @param {RayCastInput} input The ray-cast input parameters.
-         * @param {Transform} transform The transform to be applied to the shape.
+         * @param output The ray-cast results.
+         * @param input The ray-cast input parameters.
+         * @param xf The transform to be applied to the shape.
          * @param childIndex The child shape index
          */
         ChainShape.prototype.rayCast = function (output, input, xf, childIndex) {
@@ -9335,8 +8613,8 @@
          * Given a transform, compute the associated axis aligned bounding box for a
          * child shape.
          *
-         * @param {AABB} aabb Returns the axis aligned box.
-         * @param {Transform} xf The world transform of the shape.
+         * @param aabb Returns the axis aligned box.
+         * @param xf The world transform of the shape.
          * @param childIndex The child shape
          */
         ChainShape.prototype.computeAABB = function (aabb, xf, childIndex) {
@@ -9350,7 +8628,7 @@
          *
          * Chains have zero mass.
          *
-         * @param {MassData} massData Returns the mass data for this shape.
+         * @param massData Returns the mass data for this shape.
          * @param density The density in kilograms per meter squared.
          */
         ChainShape.prototype.computeMass = function (massData, density) {
@@ -9368,7 +8646,434 @@
         ChainShape.TYPE = 'chain';
         return ChainShape;
     }(Shape));
-    Shape.TYPES[ChainShape.TYPE] = ChainShape;
+
+    /*
+     * Planck.js
+     * The MIT License
+     * Copyright (c) 2021 Erin Catto, Ali Shakiba
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining a copy
+     * of this software and associated documentation files (the "Software"), to deal
+     * in the Software without restriction, including without limitation the rights
+     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     * copies of the Software, and to permit persons to whom the Software is
+     * furnished to do so, subject to the following conditions:
+     *
+     * The above copyright notice and this permission notice shall be included in all
+     * copies or substantial portions of the Software.
+     *
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     * SOFTWARE.
+     */
+    /**
+     * A convex polygon. It is assumed that the interior of the polygon is to the
+     * left of each edge. Polygons have a maximum number of vertices equal to
+     * Settings.maxPolygonVertices. In most cases you should not need many vertices
+     * for a convex polygon. extends Shape
+     */
+    var PolygonShape = /** @class */ (function (_super) {
+        __extends(PolygonShape, _super);
+        // @ts-ignore
+        function PolygonShape(vertices) {
+            var _this = this;
+            // @ts-ignore
+            if (!(_this instanceof PolygonShape)) {
+                return new PolygonShape(vertices);
+            }
+            _this = _super.call(this) || this;
+            _this.m_type = PolygonShape.TYPE;
+            _this.m_radius = Settings.polygonRadius;
+            _this.m_centroid = Vec2.zero();
+            _this.m_vertices = [];
+            _this.m_normals = [];
+            _this.m_count = 0;
+            if (vertices && vertices.length) {
+                _this._set(vertices);
+            }
+            return _this;
+        }
+        /** @internal */
+        PolygonShape.prototype._serialize = function () {
+            return {
+                type: this.m_type,
+                vertices: this.m_vertices,
+            };
+        };
+        /** @internal */
+        PolygonShape._deserialize = function (data, fixture, restore) {
+            var vertices = [];
+            if (data.vertices) {
+                for (var i = 0; i < data.vertices.length; i++) {
+                    vertices.push(restore(Vec2, data.vertices[i]));
+                }
+            }
+            var shape = new PolygonShape(vertices);
+            return shape;
+        };
+        PolygonShape.prototype.getVertex = function (index) {
+            return this.m_vertices[index];
+        };
+        /**
+         * @internal
+         * @deprecated Shapes should be treated as immutable.
+         *
+         * clone the concrete shape.
+         */
+        PolygonShape.prototype._clone = function () {
+            var clone = new PolygonShape();
+            clone.m_type = this.m_type;
+            clone.m_radius = this.m_radius;
+            clone.m_count = this.m_count;
+            clone.m_centroid.setVec2(this.m_centroid);
+            for (var i = 0; i < this.m_count; i++) {
+                clone.m_vertices.push(this.m_vertices[i].clone());
+            }
+            for (var i = 0; i < this.m_normals.length; i++) {
+                clone.m_normals.push(this.m_normals[i].clone());
+            }
+            return clone;
+        };
+        /**
+         * Get the number of child primitives.
+         */
+        PolygonShape.prototype.getChildCount = function () {
+            return 1;
+        };
+        /** @internal */
+        PolygonShape.prototype._reset = function () {
+            this._set(this.m_vertices);
+        };
+        /**
+         * @internal
+         *
+         * Create a convex hull from the given array of local points. The count must be
+         * in the range [3, Settings.maxPolygonVertices].
+         *
+         * Warning: the points may be re-ordered, even if they form a convex polygon
+         * Warning: collinear points are handled but not removed. Collinear points may
+         * lead to poor stacking behavior.
+         */
+        PolygonShape.prototype._set = function (vertices) {
+            if (vertices.length < 3) {
+                this._setAsBox(1.0, 1.0);
+                return;
+            }
+            var n = math.min(vertices.length, Settings.maxPolygonVertices);
+            // Perform welding and copy vertices into local buffer.
+            var ps = []; // [Settings.maxPolygonVertices];
+            for (var i = 0; i < n; ++i) {
+                var v = vertices[i];
+                var unique = true;
+                for (var j = 0; j < ps.length; ++j) {
+                    if (Vec2.distanceSquared(v, ps[j]) < 0.25 * Settings.linearSlopSquared) {
+                        unique = false;
+                        break;
+                    }
+                }
+                if (unique) {
+                    ps.push(v);
+                }
+            }
+            n = ps.length;
+            if (n < 3) {
+                this._setAsBox(1.0, 1.0);
+                return;
+            }
+            // Create the convex hull using the Gift wrapping algorithm
+            // http://en.wikipedia.org/wiki/Gift_wrapping_algorithm
+            // Find the right most point on the hull (in case of multiple points bottom most is used)
+            var i0 = 0;
+            var x0 = ps[0].x;
+            for (var i = 1; i < n; ++i) {
+                var x = ps[i].x;
+                if (x > x0 || (x === x0 && ps[i].y < ps[i0].y)) {
+                    i0 = i;
+                    x0 = x;
+                }
+            }
+            var hull = []; // [Settings.maxPolygonVertices];
+            var m = 0;
+            var ih = i0;
+            while (true) {
+                hull[m] = ih;
+                var ie = 0;
+                for (var j = 1; j < n; ++j) {
+                    if (ie === ih) {
+                        ie = j;
+                        continue;
+                    }
+                    var r = Vec2.sub(ps[ie], ps[hull[m]]);
+                    var v = Vec2.sub(ps[j], ps[hull[m]]);
+                    var c = Vec2.crossVec2Vec2(r, v);
+                    // c < 0 means counter-clockwise wrapping, c > 0 means clockwise wrapping
+                    if (c < 0.0) {
+                        ie = j;
+                    }
+                    // Collinearity check
+                    if (c === 0.0 && v.lengthSquared() > r.lengthSquared()) {
+                        ie = j;
+                    }
+                }
+                ++m;
+                ih = ie;
+                if (ie === i0) {
+                    break;
+                }
+            }
+            if (m < 3) {
+                this._setAsBox(1.0, 1.0);
+                return;
+            }
+            this.m_count = m;
+            // Copy vertices.
+            this.m_vertices = [];
+            for (var i = 0; i < m; ++i) {
+                this.m_vertices[i] = ps[hull[i]];
+            }
+            // Compute normals. Ensure the edges have non-zero length.
+            for (var i = 0; i < m; ++i) {
+                var i1 = i;
+                var i2 = i + 1 < m ? i + 1 : 0;
+                var edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
+                this.m_normals[i] = Vec2.crossVec2Num(edge, 1.0);
+                this.m_normals[i].normalize();
+            }
+            // Compute the polygon centroid.
+            this.m_centroid = ComputeCentroid(this.m_vertices, m);
+        };
+        /** @internal */
+        PolygonShape.prototype._setAsBox = function (hx, hy, center, angle) {
+            // start with right-bottom, counter-clockwise, as in Gift wrapping algorithm in PolygonShape._set()
+            this.m_vertices[0] = Vec2.neo(hx, -hy);
+            this.m_vertices[1] = Vec2.neo(hx, hy);
+            this.m_vertices[2] = Vec2.neo(-hx, hy);
+            this.m_vertices[3] = Vec2.neo(-hx, -hy);
+            this.m_normals[0] = Vec2.neo(1.0, 0.0);
+            this.m_normals[1] = Vec2.neo(0.0, 1.0);
+            this.m_normals[2] = Vec2.neo(-1.0, 0.0);
+            this.m_normals[3] = Vec2.neo(0.0, -1.0);
+            this.m_count = 4;
+            if (Vec2.isValid(center)) {
+                angle = angle || 0;
+                this.m_centroid.setVec2(center);
+                var xf = Transform.identity();
+                xf.p.setVec2(center);
+                xf.q.setAngle(angle);
+                // Transform vertices and normals.
+                for (var i = 0; i < this.m_count; ++i) {
+                    this.m_vertices[i] = Transform.mulVec2(xf, this.m_vertices[i]);
+                    this.m_normals[i] = Rot.mulVec2(xf.q, this.m_normals[i]);
+                }
+            }
+        };
+        /**
+         * Test a point for containment in this shape. This only works for convex
+         * shapes.
+         *
+         * @param xf The shape world transform.
+         * @param p A point in world coordinates.
+         */
+        PolygonShape.prototype.testPoint = function (xf, p) {
+            var pLocal = Rot.mulTVec2(xf.q, Vec2.sub(p, xf.p));
+            for (var i = 0; i < this.m_count; ++i) {
+                var dot = Vec2.dot(this.m_normals[i], Vec2.sub(pLocal, this.m_vertices[i]));
+                if (dot > 0.0) {
+                    return false;
+                }
+            }
+            return true;
+        };
+        /**
+         * Cast a ray against a child shape.
+         *
+         * @param output The ray-cast results.
+         * @param input The ray-cast input parameters.
+         * @param xf The transform to be applied to the shape.
+         * @param childIndex The child shape index
+         */
+        PolygonShape.prototype.rayCast = function (output, input, xf, childIndex) {
+            // Put the ray into the polygon's frame of reference.
+            var p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
+            var p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
+            var d = Vec2.sub(p2, p1);
+            var lower = 0.0;
+            var upper = input.maxFraction;
+            var index = -1;
+            for (var i = 0; i < this.m_count; ++i) {
+                // p = p1 + a * d
+                // dot(normal, p - v) = 0
+                // dot(normal, p1 - v) + a * dot(normal, d) = 0
+                var numerator = Vec2.dot(this.m_normals[i], Vec2.sub(this.m_vertices[i], p1));
+                var denominator = Vec2.dot(this.m_normals[i], d);
+                if (denominator == 0.0) {
+                    if (numerator < 0.0) {
+                        return false;
+                    }
+                }
+                else {
+                    // Note: we want this predicate without division:
+                    // lower < numerator / denominator, where denominator < 0
+                    // Since denominator < 0, we have to flip the inequality:
+                    // lower < numerator / denominator <==> denominator * lower > numerator.
+                    if (denominator < 0.0 && numerator < lower * denominator) {
+                        // Increase lower.
+                        // The segment enters this half-space.
+                        lower = numerator / denominator;
+                        index = i;
+                    }
+                    else if (denominator > 0.0 && numerator < upper * denominator) {
+                        // Decrease upper.
+                        // The segment exits this half-space.
+                        upper = numerator / denominator;
+                    }
+                }
+                // The use of epsilon here causes the assert on lower to trip
+                // in some cases. Apparently the use of epsilon was to make edge
+                // shapes work, but now those are handled separately.
+                // if (upper < lower - Math.EPSILON)
+                if (upper < lower) {
+                    return false;
+                }
+            }
+            if (index >= 0) {
+                output.fraction = lower;
+                output.normal = Rot.mulVec2(xf.q, this.m_normals[index]);
+                return true;
+            }
+            return false;
+        };
+        /**
+         * Given a transform, compute the associated axis aligned bounding box for a
+         * child shape.
+         *
+         * @param aabb Returns the axis aligned box.
+         * @param xf The world transform of the shape.
+         * @param childIndex The child shape
+         */
+        PolygonShape.prototype.computeAABB = function (aabb, xf, childIndex) {
+            var minX = Infinity;
+            var minY = Infinity;
+            var maxX = -Infinity;
+            var maxY = -Infinity;
+            for (var i = 0; i < this.m_count; ++i) {
+                var v = Transform.mulVec2(xf, this.m_vertices[i]);
+                minX = math.min(minX, v.x);
+                maxX = math.max(maxX, v.x);
+                minY = math.min(minY, v.y);
+                maxY = math.max(maxY, v.y);
+            }
+            aabb.lowerBound.setNum(minX, minY);
+            aabb.upperBound.setNum(maxX, maxY);
+            aabb.extend(this.m_radius);
+        };
+        /**
+         * Compute the mass properties of this shape using its dimensions and density.
+         * The inertia tensor is computed about the local origin.
+         *
+         * @param massData Returns the mass data for this shape.
+         * @param density The density in kilograms per meter squared.
+         */
+        PolygonShape.prototype.computeMass = function (massData, density) {
+            var center = Vec2.zero();
+            var area = 0.0;
+            var I = 0.0;
+            // s is the reference point for forming triangles.
+            // It's location doesn't change the result (except for rounding error).
+            var s = Vec2.zero();
+            // This code would put the reference point inside the polygon.
+            for (var i = 0; i < this.m_count; ++i) {
+                s.add(this.m_vertices[i]);
+            }
+            s.mul(1.0 / this.m_count);
+            var k_inv3 = 1.0 / 3.0;
+            for (var i = 0; i < this.m_count; ++i) {
+                // Triangle vertices.
+                var e1 = Vec2.sub(this.m_vertices[i], s);
+                var e2 = i + 1 < this.m_count ? Vec2.sub(this.m_vertices[i + 1], s) : Vec2.sub(this.m_vertices[0], s);
+                var D = Vec2.crossVec2Vec2(e1, e2);
+                var triangleArea = 0.5 * D;
+                area += triangleArea;
+                // Area weighted centroid
+                center.addCombine(triangleArea * k_inv3, e1, triangleArea * k_inv3, e2);
+                var ex1 = e1.x;
+                var ey1 = e1.y;
+                var ex2 = e2.x;
+                var ey2 = e2.y;
+                var intx2 = ex1 * ex1 + ex2 * ex1 + ex2 * ex2;
+                var inty2 = ey1 * ey1 + ey2 * ey1 + ey2 * ey2;
+                I += (0.25 * k_inv3 * D) * (intx2 + inty2);
+            }
+            // Total mass
+            massData.mass = density * area;
+            center.mul(1.0 / area);
+            massData.center.setCombine(1, center, 1, s);
+            // Inertia tensor relative to the local origin (point s).
+            massData.I = density * I;
+            // Shift to center of mass then to original body origin.
+            massData.I += massData.mass * (Vec2.dot(massData.center, massData.center) - Vec2.dot(center, center));
+        };
+        /**
+         * Validate convexity. This is a very time consuming operation.
+         * @returns true if valid
+         */
+        PolygonShape.prototype.validate = function () {
+            for (var i = 0; i < this.m_count; ++i) {
+                var i1 = i;
+                var i2 = i < this.m_count - 1 ? i1 + 1 : 0;
+                var p = this.m_vertices[i1];
+                var e = Vec2.sub(this.m_vertices[i2], p);
+                for (var j = 0; j < this.m_count; ++j) {
+                    if (j == i1 || j == i2) {
+                        continue;
+                    }
+                    var v = Vec2.sub(this.m_vertices[j], p);
+                    var c = Vec2.crossVec2Vec2(e, v);
+                    if (c < 0.0) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
+        PolygonShape.prototype.computeDistanceProxy = function (proxy) {
+            proxy.m_vertices = this.m_vertices;
+            proxy.m_count = this.m_count;
+            proxy.m_radius = this.m_radius;
+        };
+        PolygonShape.TYPE = 'polygon';
+        return PolygonShape;
+    }(Shape));
+    function ComputeCentroid(vs, count) {
+        var c = Vec2.zero();
+        var area = 0.0;
+        // pRef is the reference point for forming triangles.
+        // It's location doesn't change the result (except for rounding error).
+        var pRef = Vec2.zero();
+        var i; 
+        var inv3 = 1.0 / 3.0;
+        for (var i = 0; i < count; ++i) {
+            // Triangle vertices.
+            var p1 = pRef;
+            var p2 = vs[i];
+            var p3 = i + 1 < count ? vs[i + 1] : vs[0];
+            var e1 = Vec2.sub(p2, p1);
+            var e2 = Vec2.sub(p3, p1);
+            var D = Vec2.crossVec2Vec2(e1, e2);
+            var triangleArea = 0.5 * D;
+            area += triangleArea;
+            // Area weighted centroid
+            c.addMul(triangleArea * inv3, p1);
+            c.addMul(triangleArea * inv3, p2);
+            c.addMul(triangleArea * inv3, p3);
+        }
+        c.mul(1.0 / area);
+        return c;
+    }
 
     /*
      * Planck.js
@@ -9435,946 +9140,155 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
      * SOFTWARE.
      */
-    Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
-    function CircleCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-        CollideCircles(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
-    }
-    function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
-        manifold.pointCount = 0;
-        var pA = Transform.mulVec2(xfA, circleA.m_p);
-        var pB = Transform.mulVec2(xfB, circleB.m_p);
-        var distSqr = Vec2.distanceSquared(pB, pA);
-        var rA = circleA.m_radius;
-        var rB = circleB.m_radius;
-        var radius = rA + rB;
-        if (distSqr > radius * radius) {
-            return;
-        }
-        manifold.type = ManifoldType.e_circles;
-        manifold.localPoint.set(circleA.m_p);
-        manifold.localNormal.setZero();
-        manifold.pointCount = 1;
-        manifold.points[0].localPoint.set(circleB.m_p);
-        // manifold.points[0].id.key = 0;
-        manifold.points[0].id.cf.indexA = 0;
-        manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
-        manifold.points[0].id.cf.indexB = 0;
-        manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
-    }
-
-    /*
-     * Planck.js
-     * The MIT License
-     * Copyright (c) 2021 Erin Catto, Ali Shakiba
-     *
-     * Permission is hereby granted, free of charge, to any person obtaining a copy
-     * of this software and associated documentation files (the "Software"), to deal
-     * in the Software without restriction, including without limitation the rights
-     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     * copies of the Software, and to permit persons to whom the Software is
-     * furnished to do so, subject to the following conditions:
-     *
-     * The above copyright notice and this permission notice shall be included in all
-     * copies or substantial portions of the Software.
-     *
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-     * SOFTWARE.
-     */
-    Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
-    Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
-    function EdgeCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-        var shapeA = fixtureA.getShape();
-        var shapeB = fixtureB.getShape();
-        CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
-    }
-    function ChainCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-        var chain = fixtureA.getShape();
-        var edge = new EdgeShape();
-        chain.getChildEdge(edge, indexA);
-        var shapeA = edge;
-        var shapeB = fixtureB.getShape();
-        CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
-    }
-    // Compute contact points for edge versus circle.
-    // This accounts for edge connectivity.
-    function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
-        manifold.pointCount = 0;
-        // Compute circle in frame of edge
-        var Q = Transform.mulTVec2(xfA, Transform.mulVec2(xfB, circleB.m_p));
-        var A = edgeA.m_vertex1;
-        var B = edgeA.m_vertex2;
-        var e = Vec2.sub(B, A);
-        // Barycentric coordinates
-        var u = Vec2.dot(e, Vec2.sub(B, Q));
-        var v = Vec2.dot(e, Vec2.sub(Q, A));
-        var radius = edgeA.m_radius + circleB.m_radius;
-        // Region A
-        if (v <= 0.0) {
-            var P_1 = Vec2.clone(A);
-            var d_1 = Vec2.sub(Q, P_1);
-            var dd_1 = Vec2.dot(d_1, d_1);
-            if (dd_1 > radius * radius) {
-                return;
+    var CircleShape = /** @class */ (function (_super) {
+        __extends(CircleShape, _super);
+        // tslint:disable-next-line:typedef
+        function CircleShape(a, b) {
+            var _this = this;
+            // @ts-ignore
+            if (!(_this instanceof CircleShape)) {
+                return new CircleShape(a, b);
             }
-            // Is there an edge connected to A?
-            if (edgeA.m_hasVertex0) {
-                var A1 = edgeA.m_vertex0;
-                var B1 = A;
-                var e1 = Vec2.sub(B1, A1);
-                var u1 = Vec2.dot(e1, Vec2.sub(B1, Q));
-                // Is the circle in Region AB of the previous edge?
-                if (u1 > 0.0) {
-                    return;
+            _this = _super.call(this) || this;
+            _this.m_type = CircleShape.TYPE;
+            _this.m_p = Vec2.zero();
+            _this.m_radius = 1;
+            if (typeof a === 'object' && Vec2.isValid(a)) {
+                _this.m_p.setVec2(a);
+                if (typeof b === 'number') {
+                    _this.m_radius = b;
                 }
             }
-            manifold.type = ManifoldType.e_circles;
-            manifold.localNormal.setZero();
-            manifold.localPoint.set(P_1);
-            manifold.pointCount = 1;
-            manifold.points[0].localPoint.set(circleB.m_p);
-            // manifold.points[0].id.key = 0;
-            manifold.points[0].id.cf.indexA = 0;
-            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
-            manifold.points[0].id.cf.indexB = 0;
-            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
-            return;
-        }
-        // Region B
-        if (u <= 0.0) {
-            var P_2 = Vec2.clone(B);
-            var d_2 = Vec2.sub(Q, P_2);
-            var dd_2 = Vec2.dot(d_2, d_2);
-            if (dd_2 > radius * radius) {
-                return;
+            else if (typeof a === 'number') {
+                _this.m_radius = a;
             }
-            // Is there an edge connected to B?
-            if (edgeA.m_hasVertex3) {
-                var B2 = edgeA.m_vertex3;
-                var A2 = B;
-                var e2 = Vec2.sub(B2, A2);
-                var v2 = Vec2.dot(e2, Vec2.sub(Q, A2));
-                // Is the circle in Region AB of the next edge?
-                if (v2 > 0.0) {
-                    return;
-                }
+            return _this;
+        }
+        /** @internal */
+        CircleShape.prototype._serialize = function () {
+            return {
+                type: this.m_type,
+                p: this.m_p,
+                radius: this.m_radius,
+            };
+        };
+        /** @internal */
+        CircleShape._deserialize = function (data) {
+            return new CircleShape(data.p, data.radius);
+        };
+        // TODO: already defined in Shape
+        CircleShape.prototype.getRadius = function () {
+            return this.m_radius;
+        };
+        CircleShape.prototype.getCenter = function () {
+            return this.m_p;
+        };
+        CircleShape.prototype.getVertex = function (index) {
+            return this.m_p;
+        };
+        /**
+         * @internal
+         * @deprecated Shapes should be treated as immutable.
+         *
+         * clone the concrete shape.
+         */
+        CircleShape.prototype._clone = function () {
+            var clone = new CircleShape();
+            clone.m_type = this.m_type;
+            clone.m_radius = this.m_radius;
+            clone.m_p = this.m_p.clone();
+            return clone;
+        };
+        /**
+         * Get the number of child primitives.
+         */
+        CircleShape.prototype.getChildCount = function () {
+            return 1;
+        };
+        /**
+         * Test a point for containment in this shape. This only works for convex
+         * shapes.
+         *
+         * @param xf The shape world transform.
+         * @param p A point in world coordinates.
+         */
+        CircleShape.prototype.testPoint = function (xf, p) {
+            var center = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
+            var d = Vec2.sub(p, center);
+            return Vec2.dot(d, d) <= this.m_radius * this.m_radius;
+        };
+        /**
+         * Cast a ray against a child shape.
+         *
+         * @param output The ray-cast results.
+         * @param input The ray-cast input parameters.
+         * @param xf The transform to be applied to the shape.
+         * @param childIndex The child shape index
+         */
+        CircleShape.prototype.rayCast = function (output, input, xf, childIndex) {
+            // Collision Detection in Interactive 3D Environments by Gino van den Bergen
+            // From Section 3.1.2
+            // x = s + a * r
+            // norm(x) = radius
+            var position = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
+            var s = Vec2.sub(input.p1, position);
+            var b = Vec2.dot(s, s) - this.m_radius * this.m_radius;
+            // Solve quadratic equation.
+            var r = Vec2.sub(input.p2, input.p1);
+            var c = Vec2.dot(s, r);
+            var rr = Vec2.dot(r, r);
+            var sigma = c * c - rr * b;
+            // Check for negative discriminant and short segment.
+            if (sigma < 0.0 || rr < math.EPSILON) {
+                return false;
             }
-            manifold.type = ManifoldType.e_circles;
-            manifold.localNormal.setZero();
-            manifold.localPoint.set(P_2);
-            manifold.pointCount = 1;
-            manifold.points[0].localPoint.set(circleB.m_p);
-            // manifold.points[0].id.key = 0;
-            manifold.points[0].id.cf.indexA = 1;
-            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
-            manifold.points[0].id.cf.indexB = 0;
-            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
-            return;
-        }
-        // Region AB
-        var den = Vec2.dot(e, e);
-        var P = Vec2.combine(u / den, A, v / den, B);
-        var d = Vec2.sub(Q, P);
-        var dd = Vec2.dot(d, d);
-        if (dd > radius * radius) {
-            return;
-        }
-        var n = Vec2.neo(-e.y, e.x);
-        if (Vec2.dot(n, Vec2.sub(Q, A)) < 0.0) {
-            n.set(-n.x, -n.y);
-        }
-        n.normalize();
-        manifold.type = ManifoldType.e_faceA;
-        manifold.localNormal = n;
-        manifold.localPoint.set(A);
-        manifold.pointCount = 1;
-        manifold.points[0].localPoint.set(circleB.m_p);
-        // manifold.points[0].id.key = 0;
-        manifold.points[0].id.cf.indexA = 0;
-        manifold.points[0].id.cf.typeA = ContactFeatureType.e_face;
-        manifold.points[0].id.cf.indexB = 0;
-        manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
-    }
-
-    /*
-     * Planck.js
-     * The MIT License
-     * Copyright (c) 2021 Erin Catto, Ali Shakiba
-     *
-     * Permission is hereby granted, free of charge, to any person obtaining a copy
-     * of this software and associated documentation files (the "Software"), to deal
-     * in the Software without restriction, including without limitation the rights
-     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     * copies of the Software, and to permit persons to whom the Software is
-     * furnished to do so, subject to the following conditions:
-     *
-     * The above copyright notice and this permission notice shall be included in all
-     * copies or substantial portions of the Software.
-     *
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-     * SOFTWARE.
-     */
-    Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
-    function PolygonContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-        CollidePolygons(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
-    }
-    /**
-     * Find the max separation between poly1 and poly2 using edge normals from
-     * poly1.
-     */
-    function findMaxSeparation(poly1, xf1, poly2, xf2, output) {
-        var count1 = poly1.m_count;
-        var count2 = poly2.m_count;
-        var n1s = poly1.m_normals;
-        var v1s = poly1.m_vertices;
-        var v2s = poly2.m_vertices;
-        var xf = Transform.mulTXf(xf2, xf1);
-        var bestIndex = 0;
-        var maxSeparation = -Infinity;
-        for (var i = 0; i < count1; ++i) {
-            // Get poly1 normal in frame2.
-            var n = Rot.mulVec2(xf.q, n1s[i]);
-            var v1 = Transform.mulVec2(xf, v1s[i]);
-            // Find deepest point for normal i.
-            var si = Infinity;
-            for (var j = 0; j < count2; ++j) {
-                var sij = Vec2.dot(n, v2s[j]) - Vec2.dot(n, v1);
-                if (sij < si) {
-                    si = sij;
-                }
+            // Find the point of intersection of the line with the circle.
+            var a = -(c + math.sqrt(sigma));
+            // Is the intersection point on the segment?
+            if (0.0 <= a && a <= input.maxFraction * rr) {
+                a /= rr;
+                output.fraction = a;
+                output.normal = Vec2.add(s, Vec2.mulNumVec2(a, r));
+                output.normal.normalize();
+                return true;
             }
-            if (si > maxSeparation) {
-                maxSeparation = si;
-                bestIndex = i;
-            }
-        }
-        // used to keep last FindMaxSeparation call values
-        output.maxSeparation = maxSeparation;
-        output.bestIndex = bestIndex;
-    }
-    function findIncidentEdge(c, poly1, xf1, edge1, poly2, xf2) {
-        var normals1 = poly1.m_normals;
-        var count2 = poly2.m_count;
-        var vertices2 = poly2.m_vertices;
-        var normals2 = poly2.m_normals;
-        // Get the normal of the reference edge in poly2's frame.
-        var normal1 = Rot.mulT(xf2.q, Rot.mulVec2(xf1.q, normals1[edge1]));
-        // Find the incident edge on poly2.
-        var index = 0;
-        var minDot = Infinity;
-        for (var i = 0; i < count2; ++i) {
-            var dot = Vec2.dot(normal1, normals2[i]);
-            if (dot < minDot) {
-                minDot = dot;
-                index = i;
-            }
-        }
-        // Build the clip vertices for the incident edge.
-        var i1 = index;
-        var i2 = i1 + 1 < count2 ? i1 + 1 : 0;
-        c[0].v = Transform.mulVec2(xf2, vertices2[i1]);
-        c[0].id.cf.indexA = edge1;
-        c[0].id.cf.indexB = i1;
-        c[0].id.cf.typeA = ContactFeatureType.e_face;
-        c[0].id.cf.typeB = ContactFeatureType.e_vertex;
-        c[1].v = Transform.mulVec2(xf2, vertices2[i2]);
-        c[1].id.cf.indexA = edge1;
-        c[1].id.cf.indexB = i2;
-        c[1].id.cf.typeA = ContactFeatureType.e_face;
-        c[1].id.cf.typeB = ContactFeatureType.e_vertex;
-    }
-    var maxSeparation = {
-        maxSeparation: 0,
-        bestIndex: 0,
-    };
-    /**
-     *
-     * Find edge normal of max separation on A - return if separating axis is found<br>
-     * Find edge normal of max separation on B - return if separation axis is found<br>
-     * Choose reference edge as min(minA, minB)<br>
-     * Find incident edge<br>
-     * Clip
-     *
-     * The normal points from 1 to 2
-     */
-    function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
-        manifold.pointCount = 0;
-        var totalRadius = polyA.m_radius + polyB.m_radius;
-        findMaxSeparation(polyA, xfA, polyB, xfB, maxSeparation);
-        var edgeA = maxSeparation.bestIndex;
-        var separationA = maxSeparation.maxSeparation;
-        if (separationA > totalRadius)
-            return;
-        findMaxSeparation(polyB, xfB, polyA, xfA, maxSeparation);
-        var edgeB = maxSeparation.bestIndex;
-        var separationB = maxSeparation.maxSeparation;
-        if (separationB > totalRadius)
-            return;
-        var poly1; // reference polygon
-        var poly2; // incident polygon
-        var xf1;
-        var xf2;
-        var edge1; // reference edge
-        var flip;
-        var k_tol = 0.1 * Settings.linearSlop;
-        if (separationB > separationA + k_tol) {
-            poly1 = polyB;
-            poly2 = polyA;
-            xf1 = xfB;
-            xf2 = xfA;
-            edge1 = edgeB;
-            manifold.type = ManifoldType.e_faceB;
-            flip = 1;
-        }
-        else {
-            poly1 = polyA;
-            poly2 = polyB;
-            xf1 = xfA;
-            xf2 = xfB;
-            edge1 = edgeA;
-            manifold.type = ManifoldType.e_faceA;
-            flip = 0;
-        }
-        var incidentEdge = [new ClipVertex(), new ClipVertex()];
-        findIncidentEdge(incidentEdge, poly1, xf1, edge1, poly2, xf2);
-        var count1 = poly1.m_count;
-        var vertices1 = poly1.m_vertices;
-        var iv1 = edge1;
-        var iv2 = edge1 + 1 < count1 ? edge1 + 1 : 0;
-        var v11 = vertices1[iv1];
-        var v12 = vertices1[iv2];
-        var localTangent = Vec2.sub(v12, v11);
-        localTangent.normalize();
-        var localNormal = Vec2.cross(localTangent, 1.0);
-        var planePoint = Vec2.combine(0.5, v11, 0.5, v12);
-        var tangent = Rot.mulVec2(xf1.q, localTangent);
-        var normal = Vec2.cross(tangent, 1.0);
-        v11 = Transform.mulVec2(xf1, v11);
-        v12 = Transform.mulVec2(xf1, v12);
-        // Face offset.
-        var frontOffset = Vec2.dot(normal, v11);
-        // Side offsets, extended by polytope skin thickness.
-        var sideOffset1 = -Vec2.dot(tangent, v11) + totalRadius;
-        var sideOffset2 = Vec2.dot(tangent, v12) + totalRadius;
-        // Clip incident edge against extruded edge1 side edges.
-        var clipPoints1 = [new ClipVertex(), new ClipVertex()];
-        var clipPoints2 = [new ClipVertex(), new ClipVertex()];
-        var np;
-        // Clip to box side 1
-        np = clipSegmentToLine(clipPoints1, incidentEdge, Vec2.neg(tangent), sideOffset1, iv1);
-        if (np < 2) {
-            return;
-        }
-        // Clip to negative box side 1
-        np = clipSegmentToLine(clipPoints2, clipPoints1, tangent, sideOffset2, iv2);
-        if (np < 2) {
-            return;
-        }
-        // Now clipPoints2 contains the clipped points.
-        manifold.localNormal = localNormal;
-        manifold.localPoint = planePoint;
-        var pointCount = 0;
-        for (var i = 0; i < clipPoints2.length /* maxManifoldPoints */; ++i) {
-            var separation = Vec2.dot(normal, clipPoints2[i].v) - frontOffset;
-            if (separation <= totalRadius) {
-                var cp = manifold.points[pointCount];
-                cp.localPoint.set(Transform.mulTVec2(xf2, clipPoints2[i].v));
-                cp.id = clipPoints2[i].id;
-                if (flip) {
-                    // Swap features
-                    var cf = cp.id.cf;
-                    var indexA = cf.indexA;
-                    var indexB = cf.indexB;
-                    var typeA = cf.typeA;
-                    var typeB = cf.typeB;
-                    cf.indexA = indexB;
-                    cf.indexB = indexA;
-                    cf.typeA = typeB;
-                    cf.typeB = typeA;
-                }
-                ++pointCount;
-            }
-        }
-        manifold.pointCount = pointCount;
-    }
-
-    /*
-     * Planck.js
-     * The MIT License
-     * Copyright (c) 2021 Erin Catto, Ali Shakiba
-     *
-     * Permission is hereby granted, free of charge, to any person obtaining a copy
-     * of this software and associated documentation files (the "Software"), to deal
-     * in the Software without restriction, including without limitation the rights
-     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     * copies of the Software, and to permit persons to whom the Software is
-     * furnished to do so, subject to the following conditions:
-     *
-     * The above copyright notice and this permission notice shall be included in all
-     * copies or substantial portions of the Software.
-     *
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-     * SOFTWARE.
-     */
-    Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
-    function PolygonCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
-        CollidePolygonCircle(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
-    }
-    function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
-        manifold.pointCount = 0;
-        // Compute circle position in the frame of the polygon.
-        var c = Transform.mulVec2(xfB, circleB.m_p);
-        var cLocal = Transform.mulTVec2(xfA, c);
-        // Find the min separating edge.
-        var normalIndex = 0;
-        var separation = -Infinity;
-        var radius = polygonA.m_radius + circleB.m_radius;
-        var vertexCount = polygonA.m_count;
-        var vertices = polygonA.m_vertices;
-        var normals = polygonA.m_normals;
-        for (var i = 0; i < vertexCount; ++i) {
-            var s = Vec2.dot(normals[i], Vec2.sub(cLocal, vertices[i]));
-            if (s > radius) {
-                // Early out.
-                return;
-            }
-            if (s > separation) {
-                separation = s;
-                normalIndex = i;
-            }
-        }
-        // Vertices that subtend the incident face.
-        var vertIndex1 = normalIndex;
-        var vertIndex2 = vertIndex1 + 1 < vertexCount ? vertIndex1 + 1 : 0;
-        var v1 = vertices[vertIndex1];
-        var v2 = vertices[vertIndex2];
-        // If the center is inside the polygon ...
-        if (separation < math.EPSILON) {
-            manifold.pointCount = 1;
-            manifold.type = ManifoldType.e_faceA;
-            manifold.localNormal.set(normals[normalIndex]);
-            manifold.localPoint.setCombine(0.5, v1, 0.5, v2);
-            manifold.points[0].localPoint = circleB.m_p;
-            // manifold.points[0].id.key = 0;
-            manifold.points[0].id.cf.indexA = 0;
-            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
-            manifold.points[0].id.cf.indexB = 0;
-            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
-            return;
-        }
-        // Compute barycentric coordinates
-        var u1 = Vec2.dot(Vec2.sub(cLocal, v1), Vec2.sub(v2, v1));
-        var u2 = Vec2.dot(Vec2.sub(cLocal, v2), Vec2.sub(v1, v2));
-        if (u1 <= 0.0) {
-            if (Vec2.distanceSquared(cLocal, v1) > radius * radius) {
-                return;
-            }
-            manifold.pointCount = 1;
-            manifold.type = ManifoldType.e_faceA;
-            manifold.localNormal.setCombine(1, cLocal, -1, v1);
-            manifold.localNormal.normalize();
-            manifold.localPoint = v1;
-            manifold.points[0].localPoint.set(circleB.m_p);
-            // manifold.points[0].id.key = 0;
-            manifold.points[0].id.cf.indexA = 0;
-            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
-            manifold.points[0].id.cf.indexB = 0;
-            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
-        }
-        else if (u2 <= 0.0) {
-            if (Vec2.distanceSquared(cLocal, v2) > radius * radius) {
-                return;
-            }
-            manifold.pointCount = 1;
-            manifold.type = ManifoldType.e_faceA;
-            manifold.localNormal.setCombine(1, cLocal, -1, v2);
-            manifold.localNormal.normalize();
-            manifold.localPoint.set(v2);
-            manifold.points[0].localPoint.set(circleB.m_p);
-            // manifold.points[0].id.key = 0;
-            manifold.points[0].id.cf.indexA = 0;
-            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
-            manifold.points[0].id.cf.indexB = 0;
-            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
-        }
-        else {
-            var faceCenter = Vec2.mid(v1, v2);
-            var separation_1 = Vec2.dot(cLocal, normals[vertIndex1]) - Vec2.dot(faceCenter, normals[vertIndex1]);
-            if (separation_1 > radius) {
-                return;
-            }
-            manifold.pointCount = 1;
-            manifold.type = ManifoldType.e_faceA;
-            manifold.localNormal.set(normals[vertIndex1]);
-            manifold.localPoint.set(faceCenter);
-            manifold.points[0].localPoint.set(circleB.m_p);
-            // manifold.points[0].id.key = 0;
-            manifold.points[0].id.cf.indexA = 0;
-            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
-            manifold.points[0].id.cf.indexB = 0;
-            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
-        }
-    }
-
-    /*
-     * Planck.js
-     * The MIT License
-     * Copyright (c) 2021 Erin Catto, Ali Shakiba
-     *
-     * Permission is hereby granted, free of charge, to any person obtaining a copy
-     * of this software and associated documentation files (the "Software"), to deal
-     * in the Software without restriction, including without limitation the rights
-     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     * copies of the Software, and to permit persons to whom the Software is
-     * furnished to do so, subject to the following conditions:
-     *
-     * The above copyright notice and this permission notice shall be included in all
-     * copies or substantial portions of the Software.
-     *
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-     * SOFTWARE.
-     */
-    Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
-    Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
-    function EdgePolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
-        CollideEdgePolygon(manifold, fA.getShape(), xfA, fB.getShape(), xfB);
-    }
-    function ChainPolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
-        var chain = fA.getShape();
-        var edge = new EdgeShape();
-        chain.getChildEdge(edge, indexA);
-        CollideEdgePolygon(manifold, edge, xfA, fB.getShape(), xfB);
-    }
-    var EPAxisType;
-    (function (EPAxisType) {
-        EPAxisType[EPAxisType["e_unknown"] = -1] = "e_unknown";
-        EPAxisType[EPAxisType["e_edgeA"] = 1] = "e_edgeA";
-        EPAxisType[EPAxisType["e_edgeB"] = 2] = "e_edgeB";
-    })(EPAxisType || (EPAxisType = {}));
-    // unused?
-    var VertexType;
-    (function (VertexType) {
-        VertexType[VertexType["e_isolated"] = 0] = "e_isolated";
-        VertexType[VertexType["e_concave"] = 1] = "e_concave";
-        VertexType[VertexType["e_convex"] = 2] = "e_convex";
-    })(VertexType || (VertexType = {}));
-    /**
-     * This structure is used to keep track of the best separating axis.
-     */
-    var EPAxis = /** @class */ (function () {
-        function EPAxis() {
-        }
-        return EPAxis;
-    }());
-    /**
-     * This holds polygon B expressed in frame A.
-     */
-    var TempPolygon = /** @class */ (function () {
-        function TempPolygon() {
-            this.vertices = []; // [Settings.maxPolygonVertices]
-            this.normals = []; // [Settings.maxPolygonVertices];
-            this.count = 0;
-        }
-        return TempPolygon;
-    }());
-    /**
-     * Reference face used for clipping
-     */
-    var ReferenceFace = /** @class */ (function () {
-        function ReferenceFace() {
-            this.normal = Vec2.zero();
-            this.sideNormal1 = Vec2.zero();
-            this.sideNormal2 = Vec2.zero();
-        }
-        return ReferenceFace;
-    }());
-    // reused
-    var edgeAxis = new EPAxis();
-    var polygonAxis = new EPAxis();
-    var polygonBA = new TempPolygon();
-    var rf = new ReferenceFace();
-    /**
-     * This function collides and edge and a polygon, taking into account edge
-     * adjacency.
-     */
-    function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
-        // Algorithm:
-        // 1. Classify v1 and v2
-        // 2. Classify polygon centroid as front or back
-        // 3. Flip normal if necessary
-        // 4. Initialize normal range to [-pi, pi] about face normal
-        // 5. Adjust normal range according to adjacent edges
-        // 6. Visit each separating axes, only accept axes within the range
-        // 7. Return if _any_ axis indicates separation
-        // 8. Clip
-        // let m_type1: VertexType;
-        // let m_type2: VertexType;
-        var xf = Transform.mulTXf(xfA, xfB);
-        var centroidB = Transform.mulVec2(xf, polygonB.m_centroid);
-        var v0 = edgeA.m_vertex0;
-        var v1 = edgeA.m_vertex1;
-        var v2 = edgeA.m_vertex2;
-        var v3 = edgeA.m_vertex3;
-        var hasVertex0 = edgeA.m_hasVertex0;
-        var hasVertex3 = edgeA.m_hasVertex3;
-        var edge1 = Vec2.sub(v2, v1);
-        edge1.normalize();
-        var normal1 = Vec2.neo(edge1.y, -edge1.x);
-        var offset1 = Vec2.dot(normal1, Vec2.sub(centroidB, v1));
-        var offset0 = 0.0;
-        var offset2 = 0.0;
-        var convex1 = false;
-        var convex2 = false;
-        var normal0;
-        var normal2;
-        // Is there a preceding edge?
-        if (hasVertex0) {
-            var edge0 = Vec2.sub(v1, v0);
-            edge0.normalize();
-            normal0 = Vec2.neo(edge0.y, -edge0.x);
-            convex1 = Vec2.cross(edge0, edge1) >= 0.0;
-            offset0 = Vec2.dot(normal0, centroidB) - Vec2.dot(normal0, v0);
-        }
-        // Is there a following edge?
-        if (hasVertex3) {
-            var edge2 = Vec2.sub(v3, v2);
-            edge2.normalize();
-            normal2 = Vec2.neo(edge2.y, -edge2.x);
-            convex2 = Vec2.cross(edge1, edge2) > 0.0;
-            offset2 = Vec2.dot(normal2, centroidB) - Vec2.dot(normal2, v2);
-        }
-        var front;
-        var normal = Vec2.zero();
-        var lowerLimit = Vec2.zero();
-        var upperLimit = Vec2.zero();
-        // Determine front or back collision. Determine collision normal limits.
-        if (hasVertex0 && hasVertex3) {
-            if (convex1 && convex2) {
-                front = offset0 >= 0.0 || offset1 >= 0.0 || offset2 >= 0.0;
-                if (front) {
-                    normal.set(normal1);
-                    lowerLimit.set(normal0);
-                    upperLimit.set(normal2);
-                }
-                else {
-                    normal.setMul(-1, normal1);
-                    lowerLimit.setMul(-1, normal1);
-                    upperLimit.setMul(-1, normal1);
-                }
-            }
-            else if (convex1) {
-                front = offset0 >= 0.0 || (offset1 >= 0.0 && offset2 >= 0.0);
-                if (front) {
-                    normal.set(normal1);
-                    lowerLimit.set(normal0);
-                    upperLimit.set(normal1);
-                }
-                else {
-                    normal.setMul(-1, normal1);
-                    lowerLimit.setMul(-1, normal2);
-                    upperLimit.setMul(-1, normal1);
-                }
-            }
-            else if (convex2) {
-                front = offset2 >= 0.0 || (offset0 >= 0.0 && offset1 >= 0.0);
-                if (front) {
-                    normal.set(normal1);
-                    lowerLimit.set(normal1);
-                    upperLimit.set(normal2);
-                }
-                else {
-                    normal.setMul(-1, normal1);
-                    lowerLimit.setMul(-1, normal1);
-                    upperLimit.setMul(-1, normal0);
-                }
-            }
-            else {
-                front = offset0 >= 0.0 && offset1 >= 0.0 && offset2 >= 0.0;
-                if (front) {
-                    normal.set(normal1);
-                    lowerLimit.set(normal1);
-                    upperLimit.set(normal1);
-                }
-                else {
-                    normal.setMul(-1, normal1);
-                    lowerLimit.setMul(-1, normal2);
-                    upperLimit.setMul(-1, normal0);
-                }
-            }
-        }
-        else if (hasVertex0) {
-            if (convex1) {
-                front = offset0 >= 0.0 || offset1 >= 0.0;
-                if (front) {
-                    normal.set(normal1);
-                    lowerLimit.set(normal0);
-                    upperLimit.setMul(-1, normal1);
-                }
-                else {
-                    normal.setMul(-1, normal1);
-                    lowerLimit.set(normal1);
-                    upperLimit.setMul(-1, normal1);
-                }
-            }
-            else {
-                front = offset0 >= 0.0 && offset1 >= 0.0;
-                if (front) {
-                    normal.set(normal1);
-                    lowerLimit.set(normal1);
-                    upperLimit.setMul(-1, normal1);
-                }
-                else {
-                    normal.setMul(-1, normal1);
-                    lowerLimit.set(normal1);
-                    upperLimit.setMul(-1, normal0);
-                }
-            }
-        }
-        else if (hasVertex3) {
-            if (convex2) {
-                front = offset1 >= 0.0 || offset2 >= 0.0;
-                if (front) {
-                    normal.set(normal1);
-                    lowerLimit.setMul(-1, normal1);
-                    upperLimit.set(normal2);
-                }
-                else {
-                    normal.setMul(-1, normal1);
-                    lowerLimit.setMul(-1, normal1);
-                    upperLimit.set(normal1);
-                }
-            }
-            else {
-                front = offset1 >= 0.0 && offset2 >= 0.0;
-                if (front) {
-                    normal.set(normal1);
-                    lowerLimit.setMul(-1, normal1);
-                    upperLimit.set(normal1);
-                }
-                else {
-                    normal.setMul(-1, normal1);
-                    lowerLimit.setMul(-1, normal2);
-                    upperLimit.set(normal1);
-                }
-            }
-        }
-        else {
-            front = offset1 >= 0.0;
-            if (front) {
-                normal.set(normal1);
-                lowerLimit.setMul(-1, normal1);
-                upperLimit.setMul(-1, normal1);
-            }
-            else {
-                normal.setMul(-1, normal1);
-                lowerLimit.set(normal1);
-                upperLimit.set(normal1);
-            }
-        }
-        // Get polygonB in frameA
-        polygonBA.count = polygonB.m_count;
-        for (var i = 0; i < polygonB.m_count; ++i) {
-            polygonBA.vertices[i] = Transform.mulVec2(xf, polygonB.m_vertices[i]);
-            polygonBA.normals[i] = Rot.mulVec2(xf.q, polygonB.m_normals[i]);
-        }
-        var radius = 2.0 * Settings.polygonRadius;
-        manifold.pointCount = 0;
-        { // ComputeEdgeSeparation
-            edgeAxis.type = EPAxisType.e_edgeA;
-            edgeAxis.index = front ? 0 : 1;
-            edgeAxis.separation = Infinity;
-            for (var i = 0; i < polygonBA.count; ++i) {
-                var s = Vec2.dot(normal, Vec2.sub(polygonBA.vertices[i], v1));
-                if (s < edgeAxis.separation) {
-                    edgeAxis.separation = s;
-                }
-            }
-        }
-        // If no valid normal can be found than this edge should not collide.
-        // @ts-ignore
-        if (edgeAxis.type == EPAxisType.e_unknown) {
-            return;
-        }
-        if (edgeAxis.separation > radius) {
-            return;
-        }
-        { // ComputePolygonSeparation
-            polygonAxis.type = EPAxisType.e_unknown;
-            polygonAxis.index = -1;
-            polygonAxis.separation = -Infinity;
-            var perp = Vec2.neo(-normal.y, normal.x);
-            for (var i = 0; i < polygonBA.count; ++i) {
-                var n = Vec2.neg(polygonBA.normals[i]);
-                var s1 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v1));
-                var s2 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v2));
-                var s = math.min(s1, s2);
-                if (s > radius) {
-                    // No collision
-                    polygonAxis.type = EPAxisType.e_edgeB;
-                    polygonAxis.index = i;
-                    polygonAxis.separation = s;
-                    break;
-                }
-                // Adjacency
-                if (Vec2.dot(n, perp) >= 0.0) {
-                    if (Vec2.dot(Vec2.sub(n, upperLimit), normal) < -Settings.angularSlop) {
-                        continue;
-                    }
-                }
-                else {
-                    if (Vec2.dot(Vec2.sub(n, lowerLimit), normal) < -Settings.angularSlop) {
-                        continue;
-                    }
-                }
-                if (s > polygonAxis.separation) {
-                    polygonAxis.type = EPAxisType.e_edgeB;
-                    polygonAxis.index = i;
-                    polygonAxis.separation = s;
-                }
-            }
-        }
-        if (polygonAxis.type != EPAxisType.e_unknown && polygonAxis.separation > radius) {
-            return;
-        }
-        // Use hysteresis for jitter reduction.
-        var k_relativeTol = 0.98;
-        var k_absoluteTol = 0.001;
-        var primaryAxis;
-        if (polygonAxis.type == EPAxisType.e_unknown) {
-            primaryAxis = edgeAxis;
-        }
-        else if (polygonAxis.separation > k_relativeTol * edgeAxis.separation + k_absoluteTol) {
-            primaryAxis = polygonAxis;
-        }
-        else {
-            primaryAxis = edgeAxis;
-        }
-        var ie = [new ClipVertex(), new ClipVertex()];
-        if (primaryAxis.type == EPAxisType.e_edgeA) {
-            manifold.type = ManifoldType.e_faceA;
-            // Search for the polygon normal that is most anti-parallel to the edge
-            // normal.
-            var bestIndex = 0;
-            var bestValue = Vec2.dot(normal, polygonBA.normals[0]);
-            for (var i = 1; i < polygonBA.count; ++i) {
-                var value = Vec2.dot(normal, polygonBA.normals[i]);
-                if (value < bestValue) {
-                    bestValue = value;
-                    bestIndex = i;
-                }
-            }
-            var i1 = bestIndex;
-            var i2 = i1 + 1 < polygonBA.count ? i1 + 1 : 0;
-            ie[0].v = polygonBA.vertices[i1];
-            ie[0].id.cf.indexA = 0;
-            ie[0].id.cf.indexB = i1;
-            ie[0].id.cf.typeA = ContactFeatureType.e_face;
-            ie[0].id.cf.typeB = ContactFeatureType.e_vertex;
-            ie[1].v = polygonBA.vertices[i2];
-            ie[1].id.cf.indexA = 0;
-            ie[1].id.cf.indexB = i2;
-            ie[1].id.cf.typeA = ContactFeatureType.e_face;
-            ie[1].id.cf.typeB = ContactFeatureType.e_vertex;
-            if (front) {
-                rf.i1 = 0;
-                rf.i2 = 1;
-                rf.v1 = v1;
-                rf.v2 = v2;
-                rf.normal.set(normal1);
-            }
-            else {
-                rf.i1 = 1;
-                rf.i2 = 0;
-                rf.v1 = v2;
-                rf.v2 = v1;
-                rf.normal.setMul(-1, normal1);
-            }
-        }
-        else {
-            manifold.type = ManifoldType.e_faceB;
-            ie[0].v = v1;
-            ie[0].id.cf.indexA = 0;
-            ie[0].id.cf.indexB = primaryAxis.index;
-            ie[0].id.cf.typeA = ContactFeatureType.e_vertex;
-            ie[0].id.cf.typeB = ContactFeatureType.e_face;
-            ie[1].v = v2;
-            ie[1].id.cf.indexA = 0;
-            ie[1].id.cf.indexB = primaryAxis.index;
-            ie[1].id.cf.typeA = ContactFeatureType.e_vertex;
-            ie[1].id.cf.typeB = ContactFeatureType.e_face;
-            rf.i1 = primaryAxis.index;
-            rf.i2 = rf.i1 + 1 < polygonBA.count ? rf.i1 + 1 : 0;
-            rf.v1 = polygonBA.vertices[rf.i1];
-            rf.v2 = polygonBA.vertices[rf.i2];
-            rf.normal.set(polygonBA.normals[rf.i1]);
-        }
-        rf.sideNormal1.set(rf.normal.y, -rf.normal.x);
-        rf.sideNormal2.setMul(-1, rf.sideNormal1);
-        rf.sideOffset1 = Vec2.dot(rf.sideNormal1, rf.v1);
-        rf.sideOffset2 = Vec2.dot(rf.sideNormal2, rf.v2);
-        // Clip incident edge against extruded edge1 side edges.
-        var clipPoints1 = [new ClipVertex(), new ClipVertex()];
-        var clipPoints2 = [new ClipVertex(), new ClipVertex()];
-        var np;
-        // Clip to box side 1
-        np = clipSegmentToLine(clipPoints1, ie, rf.sideNormal1, rf.sideOffset1, rf.i1);
-        if (np < Settings.maxManifoldPoints) {
-            return;
-        }
-        // Clip to negative box side 1
-        np = clipSegmentToLine(clipPoints2, clipPoints1, rf.sideNormal2, rf.sideOffset2, rf.i2);
-        if (np < Settings.maxManifoldPoints) {
-            return;
-        }
-        // Now clipPoints2 contains the clipped points.
-        if (primaryAxis.type == EPAxisType.e_edgeA) {
-            manifold.localNormal = Vec2.clone(rf.normal);
-            manifold.localPoint = Vec2.clone(rf.v1);
-        }
-        else {
-            manifold.localNormal = Vec2.clone(polygonB.m_normals[rf.i1]);
-            manifold.localPoint = Vec2.clone(polygonB.m_vertices[rf.i1]);
-        }
-        var pointCount = 0;
-        for (var i = 0; i < Settings.maxManifoldPoints; ++i) {
-            var separation = Vec2.dot(rf.normal, Vec2.sub(clipPoints2[i].v, rf.v1));
-            if (separation <= radius) {
-                var cp = manifold.points[pointCount]; // ManifoldPoint
-                if (primaryAxis.type == EPAxisType.e_edgeA) {
-                    cp.localPoint = Transform.mulT(xf, clipPoints2[i].v);
-                    cp.id = clipPoints2[i].id;
-                }
-                else {
-                    cp.localPoint = clipPoints2[i].v;
-                    cp.id.cf.typeA = clipPoints2[i].id.cf.typeB;
-                    cp.id.cf.typeB = clipPoints2[i].id.cf.typeA;
-                    cp.id.cf.indexA = clipPoints2[i].id.cf.indexB;
-                    cp.id.cf.indexB = clipPoints2[i].id.cf.indexA;
-                }
-                ++pointCount;
-            }
-        }
-        manifold.pointCount = pointCount;
-    }
+            return false;
+        };
+        /**
+         * Given a transform, compute the associated axis aligned bounding box for a
+         * child shape.
+         *
+         * @param aabb Returns the axis aligned box.
+         * @param xf The world transform of the shape.
+         * @param childIndex The child shape
+         */
+        CircleShape.prototype.computeAABB = function (aabb, xf, childIndex) {
+            var p = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
+            aabb.lowerBound.setNum(p.x - this.m_radius, p.y - this.m_radius);
+            aabb.upperBound.setNum(p.x + this.m_radius, p.y + this.m_radius);
+        };
+        /**
+         * Compute the mass properties of this shape using its dimensions and density.
+         * The inertia tensor is computed about the local origin.
+         *
+         * @param massData Returns the mass data for this shape.
+         * @param density The density in kilograms per meter squared.
+         */
+        CircleShape.prototype.computeMass = function (massData, density) {
+            massData.mass = density * math.PI * this.m_radius * this.m_radius;
+            massData.center = this.m_p;
+            // inertia about the local origin
+            massData.I = massData.mass
+                * (0.5 * this.m_radius * this.m_radius + Vec2.dot(this.m_p, this.m_p));
+        };
+        CircleShape.prototype.computeDistanceProxy = function (proxy) {
+            proxy.m_vertices.push(this.m_p);
+            proxy.m_count = 1;
+            proxy.m_radius = this.m_radius;
+        };
+        CircleShape.TYPE = 'circle';
+        return CircleShape;
+    }(Shape));
 
     /*
      * Planck.js
@@ -10439,17 +9353,6 @@
             _this.m_impulse = 0.0;
             _this.m_gamma = 0.0;
             _this.m_bias = 0.0;
-            // Solver temp
-            _this.m_u; // Vec2
-            _this.m_rA; // Vec2
-            _this.m_rB; // Vec2
-            _this.m_localCenterA; // Vec2
-            _this.m_localCenterB; // Vec2
-            _this.m_invMassA;
-            _this.m_invMassB;
-            _this.m_invIA;
-            _this.m_invIB;
-            _this.m_mass;
             return _this;
             // 1-D constrained system
             // m (v2 - v1) = lambda
@@ -10492,16 +9395,16 @@
         /** @internal */
         DistanceJoint.prototype._setAnchors = function (def) {
             if (def.anchorA) {
-                this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+                this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
             }
             else if (def.localAnchorA) {
-                this.m_localAnchorA.set(def.localAnchorA);
+                this.m_localAnchorA.setVec2(def.localAnchorA);
             }
             if (def.anchorB) {
-                this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+                this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
             }
             else if (def.localAnchorB) {
-                this.m_localAnchorB.set(def.localAnchorB);
+                this.m_localAnchorB.setVec2(def.localAnchorB);
             }
             if (def.length > 0) {
                 this.m_length = +def.length;
@@ -10564,7 +9467,7 @@
          * Get the reaction force on bodyB at the joint anchor in Newtons.
          */
         DistanceJoint.prototype.getReactionForce = function (inv_dt) {
-            return Vec2.mul(this.m_impulse, this.m_u).mul(inv_dt);
+            return Vec2.mulNumVec2(this.m_impulse, this.m_u).mul(inv_dt);
         };
         /**
          * Get the reaction torque on bodyB in N*m.
@@ -10598,10 +9501,10 @@
                 this.m_u.mul(1.0 / length);
             }
             else {
-                this.m_u.set(0.0, 0.0);
+                this.m_u.setNum(0.0, 0.0);
             }
-            var crAu = Vec2.cross(this.m_rA, this.m_u);
-            var crBu = Vec2.cross(this.m_rB, this.m_u);
+            var crAu = Vec2.crossVec2Vec2(this.m_rA, this.m_u);
+            var crBu = Vec2.crossVec2Vec2(this.m_rB, this.m_u);
             var invMass = this.m_invMassA + this.m_invIA * crAu * crAu + this.m_invMassB
                 + this.m_invIB * crBu * crBu;
             // Compute the effective mass matrix.
@@ -10629,18 +9532,18 @@
             if (step.warmStarting) {
                 // Scale the impulse to support a variable time step.
                 this.m_impulse *= step.dtRatio;
-                var P = Vec2.mul(this.m_impulse, this.m_u);
+                var P = Vec2.mulNumVec2(this.m_impulse, this.m_u);
                 vA.subMul(this.m_invMassA, P);
-                wA -= this.m_invIA * Vec2.cross(this.m_rA, P);
+                wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
                 vB.addMul(this.m_invMassB, P);
-                wB += this.m_invIB * Vec2.cross(this.m_rB, P);
+                wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
             }
             else {
                 this.m_impulse = 0.0;
             }
-            this.m_bodyA.c_velocity.v.set(vA);
+            this.m_bodyA.c_velocity.v.setVec2(vA);
             this.m_bodyA.c_velocity.w = wA;
-            this.m_bodyB.c_velocity.v.set(vB);
+            this.m_bodyB.c_velocity.v.setVec2(vB);
             this.m_bodyB.c_velocity.w = wB;
         };
         DistanceJoint.prototype.solveVelocityConstraints = function (step) {
@@ -10649,20 +9552,20 @@
             var vB = this.m_bodyB.c_velocity.v;
             var wB = this.m_bodyB.c_velocity.w;
             // Cdot = dot(u, v + cross(w, r))
-            var vpA = Vec2.add(vA, Vec2.cross(wA, this.m_rA));
-            var vpB = Vec2.add(vB, Vec2.cross(wB, this.m_rB));
+            var vpA = Vec2.add(vA, Vec2.crossNumVec2(wA, this.m_rA));
+            var vpB = Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB));
             var Cdot = Vec2.dot(this.m_u, vpB) - Vec2.dot(this.m_u, vpA);
             var impulse = -this.m_mass
                 * (Cdot + this.m_bias + this.m_gamma * this.m_impulse);
             this.m_impulse += impulse;
-            var P = Vec2.mul(impulse, this.m_u);
+            var P = Vec2.mulNumVec2(impulse, this.m_u);
             vA.subMul(this.m_invMassA, P);
-            wA -= this.m_invIA * Vec2.cross(this.m_rA, P);
+            wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
             vB.addMul(this.m_invMassB, P);
-            wB += this.m_invIB * Vec2.cross(this.m_rB, P);
-            this.m_bodyA.c_velocity.v.set(vA);
+            wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
+            this.m_bodyA.c_velocity.v.setVec2(vA);
             this.m_bodyA.c_velocity.w = wA;
-            this.m_bodyB.c_velocity.v.set(vB);
+            this.m_bodyB.c_velocity.v.setVec2(vB);
             this.m_bodyB.c_velocity.w = wB;
         };
         /**
@@ -10687,21 +9590,20 @@
             C = math
                 .clamp(C, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
             var impulse = -this.m_mass * C;
-            var P = Vec2.mul(impulse, u);
+            var P = Vec2.mulNumVec2(impulse, u);
             cA.subMul(this.m_invMassA, P);
-            aA -= this.m_invIA * Vec2.cross(rA, P);
+            aA -= this.m_invIA * Vec2.crossVec2Vec2(rA, P);
             cB.addMul(this.m_invMassB, P);
-            aB += this.m_invIB * Vec2.cross(rB, P);
-            this.m_bodyA.c_position.c.set(cA);
+            aB += this.m_invIB * Vec2.crossVec2Vec2(rB, P);
+            this.m_bodyA.c_position.c.setVec2(cA);
             this.m_bodyA.c_position.a = aA;
-            this.m_bodyB.c_position.c.set(cB);
+            this.m_bodyB.c_position.c.setVec2(cB);
             this.m_bodyB.c_position.a = aB;
             return math.abs(C) < Settings.linearSlop;
         };
         DistanceJoint.TYPE = 'distance-joint';
         return DistanceJoint;
     }(Joint));
-    Joint.TYPES[DistanceJoint.TYPE] = DistanceJoint;
 
     /*
      * Planck.js
@@ -10756,17 +9658,6 @@
             _this.m_angularImpulse = 0.0;
             _this.m_maxForce = def.maxForce;
             _this.m_maxTorque = def.maxTorque;
-            // Solver temp
-            _this.m_rA; // Vec2
-            _this.m_rB; // Vec2
-            _this.m_localCenterA; // Vec2
-            _this.m_localCenterB; // Vec2
-            _this.m_invMassA; // float
-            _this.m_invMassB; // float
-            _this.m_invIA; // float
-            _this.m_invIB; // float
-            _this.m_linearMass; // Mat22
-            _this.m_angularMass; // float
             return _this;
             // Point-to-point constraint
             // Cdot = v2 - v1
@@ -10803,16 +9694,16 @@
         /** @internal */
         FrictionJoint.prototype._setAnchors = function (def) {
             if (def.anchorA) {
-                this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+                this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
             }
             else if (def.localAnchorA) {
-                this.m_localAnchorA.set(def.localAnchorA);
+                this.m_localAnchorA.setVec2(def.localAnchorA);
             }
             if (def.anchorB) {
-                this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+                this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
             }
             else if (def.localAnchorB) {
-                this.m_localAnchorB.set(def.localAnchorB);
+                this.m_localAnchorB.setVec2(def.localAnchorB);
             }
         };
         /**
@@ -10867,7 +9758,7 @@
          * Get the reaction force on bodyB at the joint anchor in Newtons.
          */
         FrictionJoint.prototype.getReactionForce = function (inv_dt) {
-            return Vec2.mul(inv_dt, this.m_linearImpulse);
+            return Vec2.mulNumVec2(inv_dt, this.m_linearImpulse);
         };
         /**
          * Get the reaction torque on bodyB in N*m.
@@ -10888,7 +9779,8 @@
             var aB = this.m_bodyB.c_position.a;
             var vB = this.m_bodyB.c_velocity.v;
             var wB = this.m_bodyB.c_velocity.w;
-            var qA = Rot.neo(aA), qB = Rot.neo(aB);
+            var qA = Rot.neo(aA);
+            var qB = Rot.neo(aB);
             // Compute the effective mass matrix.
             this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
             this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
@@ -10899,8 +9791,10 @@
             // K = [ mA+r1y^2*iA+mB+r2y^2*iB, -r1y*iA*r1x-r2y*iB*r2x, -r1y*iA-r2y*iB]
             // [ -r1y*iA*r1x-r2y*iB*r2x, mA+r1x^2*iA+mB+r2x^2*iB, r1x*iA+r2x*iB]
             // [ -r1y*iA-r2y*iB, r1x*iA+r2x*iB, iA+iB]
-            var mA = this.m_invMassA, mB = this.m_invMassB; // float
-            var iA = this.m_invIA, iB = this.m_invIB; // float
+            var mA = this.m_invMassA;
+            var mB = this.m_invMassB;
+            var iA = this.m_invIA;
+            var iB = this.m_invIB;
             var K = new Mat22();
             K.ex.x = mA + mB + iA * this.m_rA.y * this.m_rA.y + iB * this.m_rB.y
                 * this.m_rB.y;
@@ -10919,9 +9813,9 @@
                 this.m_angularImpulse *= step.dtRatio;
                 var P = Vec2.neo(this.m_linearImpulse.x, this.m_linearImpulse.y);
                 vA.subMul(mA, P);
-                wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_angularImpulse);
+                wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_angularImpulse);
                 vB.addMul(mB, P);
-                wB += iB * (Vec2.cross(this.m_rB, P) + this.m_angularImpulse);
+                wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_angularImpulse);
             }
             else {
                 this.m_linearImpulse.setZero();
@@ -10937,8 +9831,10 @@
             var wA = this.m_bodyA.c_velocity.w;
             var vB = this.m_bodyB.c_velocity.v;
             var wB = this.m_bodyB.c_velocity.w;
-            var mA = this.m_invMassA, mB = this.m_invMassB; // float
-            var iA = this.m_invIA, iB = this.m_invIB; // float
+            var mA = this.m_invMassA;
+            var mB = this.m_invMassB;
+            var iA = this.m_invIA;
+            var iB = this.m_invIB;
             var h = step.dt; // float
             // Solve angular friction
             {
@@ -10953,7 +9849,7 @@
             }
             // Solve linear friction
             {
-                var Cdot = Vec2.sub(Vec2.add(vB, Vec2.cross(wB, this.m_rB)), Vec2.add(vA, Vec2.cross(wA, this.m_rA))); // Vec2
+                var Cdot = Vec2.sub(Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB)), Vec2.add(vA, Vec2.crossNumVec2(wA, this.m_rA))); // Vec2
                 var impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot)); // Vec2
                 var oldImpulse = this.m_linearImpulse; // Vec2
                 this.m_linearImpulse.add(impulse);
@@ -10964,9 +9860,9 @@
                 }
                 impulse = Vec2.sub(this.m_linearImpulse, oldImpulse);
                 vA.subMul(mA, impulse);
-                wA -= iA * Vec2.cross(this.m_rA, impulse);
+                wA -= iA * Vec2.crossVec2Vec2(this.m_rA, impulse);
                 vB.addMul(mB, impulse);
-                wB += iB * Vec2.cross(this.m_rB, impulse);
+                wB += iB * Vec2.crossVec2Vec2(this.m_rB, impulse);
             }
             this.m_bodyA.c_velocity.v = vA;
             this.m_bodyA.c_velocity.w = wA;
@@ -10982,7 +9878,180 @@
         FrictionJoint.TYPE = 'friction-joint';
         return FrictionJoint;
     }(Joint));
-    Joint.TYPES[FrictionJoint.TYPE] = FrictionJoint;
+
+    /*
+     * Planck.js
+     * The MIT License
+     * Copyright (c) 2021 Erin Catto, Ali Shakiba
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining a copy
+     * of this software and associated documentation files (the "Software"), to deal
+     * in the Software without restriction, including without limitation the rights
+     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     * copies of the Software, and to permit persons to whom the Software is
+     * furnished to do so, subject to the following conditions:
+     *
+     * The above copyright notice and this permission notice shall be included in all
+     * copies or substantial portions of the Software.
+     *
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     * SOFTWARE.
+     */
+    /**
+     * A 3-by-3 matrix. Stored in column-major order.
+     */
+    var Mat33 = /** @class */ (function () {
+        function Mat33(a, b, c) {
+            if (typeof a === 'object' && a !== null) {
+                this.ex = Vec3.clone(a);
+                this.ey = Vec3.clone(b);
+                this.ez = Vec3.clone(c);
+            }
+            else {
+                this.ex = Vec3.zero();
+                this.ey = Vec3.zero();
+                this.ez = Vec3.zero();
+            }
+        }
+        /** @internal */
+        Mat33.prototype.toString = function () {
+            return JSON.stringify(this);
+        };
+        Mat33.isValid = function (obj) {
+            if (obj === null || typeof obj === 'undefined') {
+                return false;
+            }
+            return Vec3.isValid(obj.ex) && Vec3.isValid(obj.ey) && Vec3.isValid(obj.ez);
+        };
+        Mat33.assert = function (o) {
+            return;
+        };
+        /**
+         * Set this matrix to all zeros.
+         */
+        Mat33.prototype.setZero = function () {
+            this.ex.setZero();
+            this.ey.setZero();
+            this.ez.setZero();
+            return this;
+        };
+        /**
+         * Solve A * x = b, where b is a column vector. This is more efficient than
+         * computing the inverse in one-shot cases.
+         */
+        Mat33.prototype.solve33 = function (v) {
+            var det = Vec3.dot(this.ex, Vec3.cross(this.ey, this.ez));
+            if (det !== 0.0) {
+                det = 1.0 / det;
+            }
+            var r = new Vec3();
+            r.x = det * Vec3.dot(v, Vec3.cross(this.ey, this.ez));
+            r.y = det * Vec3.dot(this.ex, Vec3.cross(v, this.ez));
+            r.z = det * Vec3.dot(this.ex, Vec3.cross(this.ey, v));
+            return r;
+        };
+        /**
+         * Solve A * x = b, where b is a column vector. This is more efficient than
+         * computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
+         * equation.
+         */
+        Mat33.prototype.solve22 = function (v) {
+            var a11 = this.ex.x;
+            var a12 = this.ey.x;
+            var a21 = this.ex.y;
+            var a22 = this.ey.y;
+            var det = a11 * a22 - a12 * a21;
+            if (det !== 0.0) {
+                det = 1.0 / det;
+            }
+            var r = Vec2.zero();
+            r.x = det * (a22 * v.x - a12 * v.y);
+            r.y = det * (a11 * v.y - a21 * v.x);
+            return r;
+        };
+        /**
+         * Get the inverse of this matrix as a 2-by-2. Returns the zero matrix if
+         * singular.
+         */
+        Mat33.prototype.getInverse22 = function (M) {
+            var a = this.ex.x;
+            var b = this.ey.x;
+            var c = this.ex.y;
+            var d = this.ey.y;
+            var det = a * d - b * c;
+            if (det !== 0.0) {
+                det = 1.0 / det;
+            }
+            M.ex.x = det * d;
+            M.ey.x = -det * b;
+            M.ex.z = 0.0;
+            M.ex.y = -det * c;
+            M.ey.y = det * a;
+            M.ey.z = 0.0;
+            M.ez.x = 0.0;
+            M.ez.y = 0.0;
+            M.ez.z = 0.0;
+        };
+        /**
+         * Get the symmetric inverse of this matrix as a 3-by-3. Returns the zero matrix
+         * if singular.
+         */
+        Mat33.prototype.getSymInverse33 = function (M) {
+            var det = Vec3.dot(this.ex, Vec3.cross(this.ey, this.ez));
+            if (det !== 0.0) {
+                det = 1.0 / det;
+            }
+            var a11 = this.ex.x;
+            var a12 = this.ey.x;
+            var a13 = this.ez.x;
+            var a22 = this.ey.y;
+            var a23 = this.ez.y;
+            var a33 = this.ez.z;
+            M.ex.x = det * (a22 * a33 - a23 * a23);
+            M.ex.y = det * (a13 * a23 - a12 * a33);
+            M.ex.z = det * (a12 * a23 - a13 * a22);
+            M.ey.x = M.ex.y;
+            M.ey.y = det * (a11 * a33 - a13 * a13);
+            M.ey.z = det * (a13 * a12 - a11 * a23);
+            M.ez.x = M.ex.z;
+            M.ez.y = M.ey.z;
+            M.ez.z = det * (a11 * a22 - a12 * a12);
+        };
+        // tslint:disable-next-line:typedef
+        Mat33.mul = function (a, b) {
+            if (b && 'z' in b && 'y' in b && 'x' in b) {
+                var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
+                var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
+                var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
+                return new Vec3(x, y, z);
+            }
+            else if (b && 'y' in b && 'x' in b) {
+                var x = a.ex.x * b.x + a.ey.x * b.y;
+                var y = a.ex.y * b.x + a.ey.y * b.y;
+                return Vec2.neo(x, y);
+            }
+        };
+        Mat33.mulVec3 = function (a, b) {
+            var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
+            var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
+            var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
+            return new Vec3(x, y, z);
+        };
+        Mat33.mulVec2 = function (a, b) {
+            var x = a.ex.x * b.x + a.ey.x * b.y;
+            var y = a.ex.y * b.x + a.ey.y * b.y;
+            return Vec2.neo(x, y);
+        };
+        Mat33.add = function (a, b) {
+            return new Mat33(Vec3.add(a.ex, b.ex), Vec3.add(a.ey, b.ey), Vec3.add(a.ez, b.ez));
+        };
+        return Mat33;
+    }());
 
     /*
      * Planck.js
@@ -11029,6 +10098,7 @@
      */
     var RevoluteJoint = /** @class */ (function (_super) {
         __extends(RevoluteJoint, _super);
+        // @ts-ignore
         function RevoluteJoint(def, bodyA, bodyB, anchor) {
             var _this = this;
             // @ts-ignore
@@ -11037,6 +10107,9 @@
             }
             def = options(def, DEFAULTS$8);
             _this = _super.call(this, def, bodyA, bodyB) || this;
+            // effective mass for point-to-point constraint.
+            /** @internal */ _this.m_mass = new Mat33();
+            /** @internal */ _this.m_limitState = inactiveLimit$2; // TODO enum
             bodyA = _this.m_bodyA;
             bodyB = _this.m_bodyB;
             _this.m_type = RevoluteJoint.TYPE;
@@ -11051,20 +10124,6 @@
             _this.m_motorSpeed = def.motorSpeed;
             _this.m_enableLimit = def.enableLimit;
             _this.m_enableMotor = def.enableMotor;
-            // Solver temp
-            _this.m_rA; // Vec2
-            _this.m_rB; // Vec2
-            _this.m_localCenterA; // Vec2
-            _this.m_localCenterB; // Vec2
-            _this.m_invMassA; // float
-            _this.m_invMassB; // float
-            _this.m_invIA; // float
-            _this.m_invIB; // float
-            // effective mass for point-to-point constraint.
-            _this.m_mass = new Mat33();
-            // effective mass for motor/limit angular constraint.
-            _this.m_motorMass; // float
-            _this.m_limitState = inactiveLimit$2;
             return _this;
             // Point-to-point constraint
             // C = p2 - p1
@@ -11107,16 +10166,16 @@
         /** @internal */
         RevoluteJoint.prototype._setAnchors = function (def) {
             if (def.anchorA) {
-                this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+                this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
             }
             else if (def.localAnchorA) {
-                this.m_localAnchorA.set(def.localAnchorA);
+                this.m_localAnchorA.setVec2(def.localAnchorA);
             }
             if (def.anchorB) {
-                this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+                this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
             }
             else if (def.localAnchorB) {
-                this.m_localAnchorB.set(def.localAnchorB);
+                this.m_localAnchorB.setVec2(def.localAnchorB);
             }
         };
         /**
@@ -11241,13 +10300,13 @@
         };
         /**
          * Get the anchor point on bodyA in world coordinates.
-      */
+         */
         RevoluteJoint.prototype.getAnchorA = function () {
             return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
         };
         /**
          * Get the anchor point on bodyB in world coordinates.
-      */
+         */
         RevoluteJoint.prototype.getAnchorB = function () {
             return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
         };
@@ -11343,9 +10402,9 @@
                 this.m_motorImpulse *= step.dtRatio;
                 var P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
                 vA.subMul(mA, P);
-                wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_motorImpulse + this.m_impulse.z);
+                wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_motorImpulse + this.m_impulse.z);
                 vB.addMul(mB, P);
-                wB += iB * (Vec2.cross(this.m_rB, P) + this.m_motorImpulse + this.m_impulse.z);
+                wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_motorImpulse + this.m_impulse.z);
             }
             else {
                 this.m_impulse.setZero();
@@ -11382,8 +10441,8 @@
             if (this.m_enableLimit && this.m_limitState != inactiveLimit$2
                 && fixedRotation == false) {
                 var Cdot1 = Vec2.zero();
-                Cdot1.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
-                Cdot1.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA));
+                Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
+                Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
                 var Cdot2 = wB - wA; // float
                 var Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
                 var impulse = Vec3.neg(this.m_mass.solve33(Cdot)); // Vec3
@@ -11424,22 +10483,22 @@
                 }
                 var P = Vec2.neo(impulse.x, impulse.y);
                 vA.subMul(mA, P);
-                wA -= iA * (Vec2.cross(this.m_rA, P) + impulse.z);
+                wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + impulse.z);
                 vB.addMul(mB, P);
-                wB += iB * (Vec2.cross(this.m_rB, P) + impulse.z);
+                wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + impulse.z);
             }
             else {
                 // Solve point-to-point constraint
                 var Cdot = Vec2.zero();
-                Cdot.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
-                Cdot.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA));
+                Cdot.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
+                Cdot.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
                 var impulse = this.m_mass.solve22(Vec2.neg(Cdot)); // Vec2
                 this.m_impulse.x += impulse.x;
                 this.m_impulse.y += impulse.y;
                 vA.subMul(mA, impulse);
-                wA -= iA * Vec2.cross(this.m_rA, impulse);
+                wA -= iA * Vec2.crossVec2Vec2(this.m_rA, impulse);
                 vB.addMul(mB, impulse);
-                wB += iB * Vec2.cross(this.m_rB, impulse);
+                wB += iB * Vec2.crossVec2Vec2(this.m_rB, impulse);
             }
             this.m_bodyA.c_velocity.v = vA;
             this.m_bodyA.c_velocity.w = wA;
@@ -11489,8 +10548,8 @@
             }
             // Solve point-to-point constraint.
             {
-                qA.set(aA);
-                qB.set(aB);
+                qA.setAngle(aA);
+                qB.setAngle(aB);
                 var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA)); // Vec2
                 var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB)); // Vec2
                 var C = Vec2.zero();
@@ -11508,13 +10567,13 @@
                 K.ey.y = mA + mB + iA * rA.x * rA.x + iB * rB.x * rB.x;
                 var impulse = Vec2.neg(K.solve(C)); // Vec2
                 cA.subMul(mA, impulse);
-                aA -= iA * Vec2.cross(rA, impulse);
+                aA -= iA * Vec2.crossVec2Vec2(rA, impulse);
                 cB.addMul(mB, impulse);
-                aB += iB * Vec2.cross(rB, impulse);
+                aB += iB * Vec2.crossVec2Vec2(rB, impulse);
             }
-            this.m_bodyA.c_position.c.set(cA);
+            this.m_bodyA.c_position.c.setVec2(cA);
             this.m_bodyA.c_position.a = aA;
-            this.m_bodyB.c_position.c.set(cB);
+            this.m_bodyB.c_position.c.setVec2(cB);
             this.m_bodyB.c_position.a = aB;
             return positionError <= Settings.linearSlop
                 && angularError <= Settings.angularSlop;
@@ -11522,7 +10581,6 @@
         RevoluteJoint.TYPE = 'revolute-joint';
         return RevoluteJoint;
     }(Joint));
-    Joint.TYPES[RevoluteJoint.TYPE] = RevoluteJoint;
 
     /*
      * Planck.js
@@ -11582,7 +10640,7 @@
             _this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
             _this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0));
             _this.m_localXAxisA.normalize();
-            _this.m_localYAxisA = Vec2.cross(1.0, _this.m_localXAxisA);
+            _this.m_localYAxisA = Vec2.crossNumVec2(1.0, _this.m_localXAxisA);
             _this.m_referenceAngle = math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
             _this.m_impulse = new Vec3();
             _this.m_motorMass = 0.0;
@@ -11596,18 +10654,6 @@
             _this.m_limitState = inactiveLimit$1;
             _this.m_axis = Vec2.zero();
             _this.m_perp = Vec2.zero();
-            // Solver temp
-            _this.m_localCenterA; // Vec2
-            _this.m_localCenterB; // Vec2
-            _this.m_invMassA; // float
-            _this.m_invMassB; // float
-            _this.m_invIA; // float
-            _this.m_invIB; // float
-            _this.m_axis, _this.m_perp; // Vec2
-            _this.m_s1, _this.m_s2; // float
-            _this.m_a1, _this.m_a2; // float
-            _this.m_K = new Mat33();
-            _this.m_motorMass; // float
             return _this;
             // Linear constraint (point-to-line)
             // d = p2 - p1 = x2 + r2 - x1 - r1
@@ -11703,27 +10749,27 @@
             data = __assign({}, data);
             data.bodyA = restore(Body, data.bodyA, world);
             data.bodyB = restore(Body, data.bodyB, world);
-            data.localAxisA = new Vec2(data.localAxisA);
+            data.localAxisA = Vec2.clone(data.localAxisA);
             var joint = new PrismaticJoint(data);
             return joint;
         };
         /** @internal */
         PrismaticJoint.prototype._setAnchors = function (def) {
             if (def.anchorA) {
-                this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+                this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
             }
             else if (def.localAnchorA) {
-                this.m_localAnchorA.set(def.localAnchorA);
+                this.m_localAnchorA.setVec2(def.localAnchorA);
             }
             if (def.anchorB) {
-                this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+                this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
             }
             else if (def.localAnchorB) {
-                this.m_localAnchorB.set(def.localAnchorB);
+                this.m_localAnchorB.setVec2(def.localAnchorB);
             }
             if (def.localAxisA) {
-                this.m_localXAxisA.set(def.localAxisA);
-                this.m_localYAxisA.set(Vec2.cross(1.0, def.localAxisA));
+                this.m_localXAxisA.setVec2(def.localAxisA);
+                this.m_localYAxisA.setVec2(Vec2.crossNumVec2(1.0, def.localAxisA));
             }
         };
         /**
@@ -11777,8 +10823,8 @@
             var vB = bB.m_linearVelocity; // Vec2
             var wA = bA.m_angularVelocity; // float
             var wB = bB.m_angularVelocity; // float
-            var speed = Vec2.dot(d, Vec2.cross(wA, axis))
-                + Vec2.dot(axis, Vec2.sub(Vec2.addCross(vB, wB, rB), Vec2.addCross(vA, wA, rA))); // float
+            var speed = Vec2.dot(d, Vec2.crossNumVec2(wA, axis))
+                + Vec2.dot(axis, Vec2.sub(Vec2.addCrossNumVec2(vB, wB, rB), Vec2.addCrossNumVec2(vA, wA, rA))); // float
             return speed;
         };
         /**
@@ -11869,25 +10915,25 @@
         };
         /**
          * Get the anchor point on bodyA in world coordinates.
-      */
+         */
         PrismaticJoint.prototype.getAnchorA = function () {
             return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
         };
         /**
          * Get the anchor point on bodyB in world coordinates.
-      */
+         */
         PrismaticJoint.prototype.getAnchorB = function () {
             return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
         };
         /**
          * Get the reaction force on bodyB at the joint anchor in Newtons.
-      */
+         */
         PrismaticJoint.prototype.getReactionForce = function (inv_dt) {
             return Vec2.combine(this.m_impulse.x, this.m_perp, this.m_motorImpulse + this.m_impulse.z, this.m_axis).mul(inv_dt);
         };
         /**
          * Get the reaction torque on bodyB in N*m.
-      */
+         */
         PrismaticJoint.prototype.getReactionTorque = function (inv_dt) {
             return inv_dt * this.m_impulse.y;
         };
@@ -11914,13 +10960,15 @@
             var d = Vec2.zero();
             d.addCombine(1, cB, 1, rB);
             d.subCombine(1, cA, 1, rA);
-            var mA = this.m_invMassA, mB = this.m_invMassB;
-            var iA = this.m_invIA, iB = this.m_invIB;
+            var mA = this.m_invMassA;
+            var mB = this.m_invMassB;
+            var iA = this.m_invIA;
+            var iB = this.m_invIB;
             // Compute motor Jacobian and effective mass.
             {
                 this.m_axis = Rot.mulVec2(qA, this.m_localXAxisA);
-                this.m_a1 = Vec2.cross(Vec2.add(d, rA), this.m_axis);
-                this.m_a2 = Vec2.cross(rB, this.m_axis);
+                this.m_a1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_axis);
+                this.m_a2 = Vec2.crossVec2Vec2(rB, this.m_axis);
                 this.m_motorMass = mA + mB + iA * this.m_a1 * this.m_a1 + iB * this.m_a2
                     * this.m_a2;
                 if (this.m_motorMass > 0.0) {
@@ -11930,9 +10978,9 @@
             // Prismatic constraint.
             {
                 this.m_perp = Rot.mulVec2(qA, this.m_localYAxisA);
-                this.m_s1 = Vec2.cross(Vec2.add(d, rA), this.m_perp);
-                this.m_s2 = Vec2.cross(rB, this.m_perp);
-                Vec2.cross(rA, this.m_perp);
+                this.m_s1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_perp);
+                this.m_s2 = Vec2.crossVec2Vec2(rB, this.m_perp);
+                Vec2.crossVec2Vec2(rA, this.m_perp);
                 var k11 = mA + mB + iA * this.m_s1 * this.m_s1 + iB * this.m_s2 * this.m_s2;
                 var k12 = iA * this.m_s1 + iB * this.m_s2;
                 var k13 = iA * this.m_s1 * this.m_a1 + iB * this.m_s2 * this.m_a2;
@@ -11996,9 +11044,9 @@
                 this.m_impulse.setZero();
                 this.m_motorImpulse = 0.0;
             }
-            this.m_bodyA.c_velocity.v.set(vA);
+            this.m_bodyA.c_velocity.v.setVec2(vA);
             this.m_bodyA.c_velocity.w = wA;
-            this.m_bodyB.c_velocity.v.set(vB);
+            this.m_bodyB.c_velocity.v.setVec2(vB);
             this.m_bodyB.c_velocity.w = wB;
         };
         PrismaticJoint.prototype.solveVelocityConstraints = function (step) {
@@ -12019,7 +11067,7 @@
                 var maxImpulse = step.dt * this.m_maxMotorForce;
                 this.m_motorImpulse = math.clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = this.m_motorImpulse - oldImpulse;
-                var P = Vec2.mul(impulse, this.m_axis);
+                var P = Vec2.mulNumVec2(impulse, this.m_axis);
                 var LA = impulse * this.m_a1;
                 var LB = impulse * this.m_a2;
                 vA.subMul(mA, P);
@@ -12037,7 +11085,7 @@
                 Cdot2 += Vec2.dot(this.m_axis, vB) + this.m_a2 * wB;
                 Cdot2 -= Vec2.dot(this.m_axis, vA) + this.m_a1 * wA;
                 var Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
-                var f1 = new Vec3(this.m_impulse);
+                var f1 = Vec3.clone(this.m_impulse);
                 var df = this.m_K.solve33(Vec3.neg(Cdot)); // Vec3
                 this.m_impulse.add(df);
                 if (this.m_limitState == atLowerLimit) {
@@ -12066,7 +11114,7 @@
                 var df = this.m_K.solve22(Vec2.neg(Cdot1)); // Vec2
                 this.m_impulse.x += df.x;
                 this.m_impulse.y += df.y;
-                var P = Vec2.mul(df.x, this.m_perp); // Vec2
+                var P = Vec2.mulNumVec2(df.x, this.m_perp); // Vec2
                 var LA = df.x * this.m_s1 + df.y; // float
                 var LB = df.x * this.m_s2 + df.y; // float
                 vA.subMul(mA, P);
@@ -12098,11 +11146,11 @@
             var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB)); // Vec2
             var d = Vec2.sub(Vec2.add(cB, rB), Vec2.add(cA, rA)); // Vec2
             var axis = Rot.mulVec2(qA, this.m_localXAxisA); // Vec2
-            var a1 = Vec2.cross(Vec2.add(d, rA), axis); // float
-            var a2 = Vec2.cross(rB, axis); // float
+            var a1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), axis); // float
+            var a2 = Vec2.crossVec2Vec2(rB, axis); // float
             var perp = Rot.mulVec2(qA, this.m_localYAxisA); // Vec2
-            var s1 = Vec2.cross(Vec2.add(d, rA), perp); // float
-            var s2 = Vec2.cross(rB, perp); // float
+            var s1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), perp); // float
+            var s2 = Vec2.crossVec2Vec2(rB, perp); // float
             var impulse = new Vec3();
             var C1 = Vec2.zero(); // Vec2
             C1.x = Vec2.dot(perp, d);
@@ -12165,8 +11213,8 @@
                     k22 = 1.0;
                 }
                 var K = new Mat22();
-                K.ex.set(k11, k12);
-                K.ey.set(k12, k22);
+                K.ex.setNum(k11, k12);
+                K.ey.setNum(k12, k22);
                 var impulse1 = K.solve(Vec2.neg(C1)); // Vec2
                 impulse.x = impulse1.x;
                 impulse.y = impulse1.y;
@@ -12189,7 +11237,6 @@
         PrismaticJoint.TYPE = 'prismatic-joint';
         return PrismaticJoint;
     }(Joint));
-    Joint.TYPES[PrismaticJoint.TYPE] = PrismaticJoint;
 
     /*
      * Planck.js
@@ -12250,7 +11297,8 @@
             _this.m_type2 = _this.m_joint2.getType();
             // joint1 connects body A to body C
             // joint2 connects body B to body D
-            var coordinateA, coordinateB; // float
+            var coordinateA;
+            var coordinateB;
             // TODO_ERIN there might be some problem with the joint edges in Joint.
             _this.m_bodyC = _this.m_joint1.getBodyA();
             _this.m_bodyA = _this.m_joint1.getBodyB();
@@ -12274,7 +11322,7 @@
                 _this.m_referenceAngleA = prismatic.m_referenceAngle;
                 _this.m_localAxisC = prismatic.m_localXAxisA;
                 var pC = _this.m_localAnchorC;
-                var pA = Rot.mulTVec2(xfC.q, Vec2.add(Rot.mul(xfA.q, _this.m_localAnchorA), Vec2.sub(xfA.p, xfC.p)));
+                var pA = Rot.mulTVec2(xfC.q, Vec2.add(Rot.mulVec2(xfA.q, _this.m_localAnchorA), Vec2.sub(xfA.p, xfC.p)));
                 coordinateA = Vec2.dot(pA, _this.m_localAxisC) - Vec2.dot(pC, _this.m_localAxisC);
             }
             _this.m_bodyD = _this.m_joint2.getBodyA();
@@ -12299,18 +11347,11 @@
                 _this.m_referenceAngleB = prismatic.m_referenceAngle;
                 _this.m_localAxisD = prismatic.m_localXAxisA;
                 var pD = _this.m_localAnchorD;
-                var pB = Rot.mulTVec2(xfD.q, Vec2.add(Rot.mul(xfB.q, _this.m_localAnchorB), Vec2.sub(xfB.p, xfD.p)));
+                var pB = Rot.mulTVec2(xfD.q, Vec2.add(Rot.mulVec2(xfB.q, _this.m_localAnchorB), Vec2.sub(xfB.p, xfD.p)));
                 coordinateB = Vec2.dot(pB, _this.m_localAxisD) - Vec2.dot(pD, _this.m_localAxisD);
             }
             _this.m_constant = coordinateA + _this.m_ratio * coordinateB;
             _this.m_impulse = 0.0;
-            // Solver temp
-            _this.m_lcA, _this.m_lcB, _this.m_lcC, _this.m_lcD; // Vec2
-            _this.m_mA, _this.m_mB, _this.m_mC, _this.m_mD; // float
-            _this.m_iA, _this.m_iB, _this.m_iC, _this.m_iD; // float
-            _this.m_JvAC, _this.m_JvBD; // Vec2
-            _this.m_JwA, _this.m_JwB, _this.m_JwC, _this.m_JwD; // float
-            _this.m_mass; // float
             return _this;
             // Gear Joint:
             // C0 = (coordinate1 + ratio * coordinate2)_initial
@@ -12395,7 +11436,7 @@
          * Get the reaction force on bodyB at the joint anchor in Newtons.
          */
         GearJoint.prototype.getReactionForce = function (inv_dt) {
-            return Vec2.mul(this.m_impulse, this.m_JvAC).mul(inv_dt);
+            return Vec2.mulNumVec2(this.m_impulse, this.m_JvAC).mul(inv_dt);
         };
         /**
          * Get the reaction torque on bodyB in N*m.
@@ -12445,8 +11486,8 @@
                 var rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC); // Vec2
                 var rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA); // Vec2
                 this.m_JvAC = u;
-                this.m_JwC = Vec2.cross(rC, u);
-                this.m_JwA = Vec2.cross(rA, u);
+                this.m_JwC = Vec2.crossVec2Vec2(rC, u);
+                this.m_JwA = Vec2.crossVec2Vec2(rA, u);
                 this.m_mass += this.m_mC + this.m_mA + this.m_iC * this.m_JwC * this.m_JwC + this.m_iA * this.m_JwA * this.m_JwA;
             }
             if (this.m_type2 == RevoluteJoint.TYPE) {
@@ -12459,9 +11500,9 @@
                 var u = Rot.mulVec2(qD, this.m_localAxisD); // Vec2
                 var rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD); // Vec2
                 var rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB); // Vec2
-                this.m_JvBD = Vec2.mul(this.m_ratio, u);
-                this.m_JwD = this.m_ratio * Vec2.cross(rD, u);
-                this.m_JwB = this.m_ratio * Vec2.cross(rB, u);
+                this.m_JvBD = Vec2.mulNumVec2(this.m_ratio, u);
+                this.m_JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u);
+                this.m_JwB = this.m_ratio * Vec2.crossVec2Vec2(rB, u);
                 this.m_mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD * this.m_JwD * this.m_JwD + this.m_iB * this.m_JwB * this.m_JwB;
             }
             // Compute effective mass.
@@ -12479,13 +11520,13 @@
             else {
                 this.m_impulse = 0.0;
             }
-            this.m_bodyA.c_velocity.v.set(vA);
+            this.m_bodyA.c_velocity.v.setVec2(vA);
             this.m_bodyA.c_velocity.w = wA;
-            this.m_bodyB.c_velocity.v.set(vB);
+            this.m_bodyB.c_velocity.v.setVec2(vB);
             this.m_bodyB.c_velocity.w = wB;
-            this.m_bodyC.c_velocity.v.set(vC);
+            this.m_bodyC.c_velocity.v.setVec2(vC);
             this.m_bodyC.c_velocity.w = wC;
-            this.m_bodyD.c_velocity.v.set(vD);
+            this.m_bodyD.c_velocity.v.setVec2(vD);
             this.m_bodyD.c_velocity.w = wD;
         };
         GearJoint.prototype.solveVelocityConstraints = function (step) {
@@ -12511,13 +11552,13 @@
             wC -= this.m_iC * impulse * this.m_JwC;
             vD.subMul(this.m_mD * impulse, this.m_JvBD);
             wD -= this.m_iD * impulse * this.m_JwD;
-            this.m_bodyA.c_velocity.v.set(vA);
+            this.m_bodyA.c_velocity.v.setVec2(vA);
             this.m_bodyA.c_velocity.w = wA;
-            this.m_bodyB.c_velocity.v.set(vB);
+            this.m_bodyB.c_velocity.v.setVec2(vB);
             this.m_bodyB.c_velocity.w = wB;
-            this.m_bodyC.c_velocity.v.set(vC);
+            this.m_bodyC.c_velocity.v.setVec2(vC);
             this.m_bodyC.c_velocity.w = wC;
-            this.m_bodyD.c_velocity.v.set(vD);
+            this.m_bodyD.c_velocity.v.setVec2(vD);
             this.m_bodyD.c_velocity.w = wD;
         };
         /**
@@ -12536,11 +11577,16 @@
             var qB = Rot.neo(aB);
             var qC = Rot.neo(aC);
             var qD = Rot.neo(aD);
-            var linearError = 0.0; // float
-            var coordinateA, coordinateB; // float
-            var JvAC, JvBD; // Vec2
-            var JwA, JwB, JwC, JwD; // float
-            var mass = 0.0; // float
+            var linearError = 0.0;
+            var coordinateA;
+            var coordinateB;
+            var JvAC;
+            var JvBD;
+            var JwA;
+            var JwB;
+            var JwC;
+            var JwD;
+            var mass = 0.0;
             if (this.m_type1 == RevoluteJoint.TYPE) {
                 JvAC = Vec2.zero();
                 JwA = 1.0;
@@ -12553,8 +11599,8 @@
                 var rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC); // Vec2
                 var rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA); // Vec2
                 JvAC = u;
-                JwC = Vec2.cross(rC, u);
-                JwA = Vec2.cross(rA, u);
+                JwC = Vec2.crossVec2Vec2(rC, u);
+                JwA = Vec2.crossVec2Vec2(rA, u);
                 mass += this.m_mC + this.m_mA + this.m_iC * JwC * JwC + this.m_iA * JwA * JwA;
                 var pC = Vec2.sub(this.m_localAnchorC, this.m_lcC); // Vec2
                 var pA = Rot.mulTVec2(qC, Vec2.add(rA, Vec2.sub(cA, cC))); // Vec2
@@ -12571,9 +11617,9 @@
                 var u = Rot.mulVec2(qD, this.m_localAxisD);
                 var rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD);
                 var rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB);
-                JvBD = Vec2.mul(this.m_ratio, u);
-                JwD = this.m_ratio * Vec2.cross(rD, u);
-                JwB = this.m_ratio * Vec2.cross(rB, u);
+                JvBD = Vec2.mulNumVec2(this.m_ratio, u);
+                JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u);
+                JwB = this.m_ratio * Vec2.crossVec2Vec2(rB, u);
                 mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD
                     * JwD * JwD + this.m_iB * JwB * JwB;
                 var pD = Vec2.sub(this.m_localAnchorD, this.m_lcD); // Vec2
@@ -12594,13 +11640,13 @@
             aC -= this.m_iC * impulse * JwC;
             cD.subMul(this.m_mD * impulse, JvBD);
             aD -= this.m_iD * impulse * JwD;
-            this.m_bodyA.c_position.c.set(cA);
+            this.m_bodyA.c_position.c.setVec2(cA);
             this.m_bodyA.c_position.a = aA;
-            this.m_bodyB.c_position.c.set(cB);
+            this.m_bodyB.c_position.c.setVec2(cB);
             this.m_bodyB.c_position.a = aB;
-            this.m_bodyC.c_position.c.set(cC);
+            this.m_bodyC.c_position.c.setVec2(cC);
             this.m_bodyC.c_position.a = aC;
-            this.m_bodyD.c_position.c.set(cD);
+            this.m_bodyD.c_position.c.setVec2(cD);
             this.m_bodyD.c_position.a = aD;
             // TODO_ERIN not implemented
             return linearError < Settings.linearSlop;
@@ -12608,7 +11654,6 @@
         GearJoint.TYPE = 'gear-joint';
         return GearJoint;
     }(Joint));
-    Joint.TYPES[GearJoint.TYPE] = GearJoint;
 
     /*
      * Planck.js
@@ -12663,19 +11708,6 @@
             _this.m_maxForce = def.maxForce;
             _this.m_maxTorque = def.maxTorque;
             _this.m_correctionFactor = def.correctionFactor;
-            // Solver temp
-            _this.m_rA; // Vec2
-            _this.m_rB; // Vec2
-            _this.m_localCenterA; // Vec2
-            _this.m_localCenterB; // Vec2
-            _this.m_linearError; // Vec2
-            _this.m_angularError; // float
-            _this.m_invMassA; // float
-            _this.m_invMassB; // float
-            _this.m_invIA; // float
-            _this.m_invIB; // float
-            _this.m_linearMass; // Mat22
-            _this.m_angularMass; // float
             return _this;
             // Point-to-point constraint
             // Cdot = v2 - v1
@@ -12792,7 +11824,7 @@
          * Get the reaction force on bodyB at the joint anchor in Newtons.
          */
         MotorJoint.prototype.getReactionForce = function (inv_dt) {
-            return Vec2.mul(inv_dt, this.m_linearImpulse);
+            return Vec2.mulNumVec2(inv_dt, this.m_linearImpulse);
         };
         /**
          * Get the reaction torque on bodyB in N*m.
@@ -12815,7 +11847,8 @@
             var aB = this.m_bodyB.c_position.a;
             var vB = this.m_bodyB.c_velocity.v;
             var wB = this.m_bodyB.c_velocity.w;
-            var qA = Rot.neo(aA), qB = Rot.neo(aB);
+            var qA = Rot.neo(aA);
+            var qB = Rot.neo(aB);
             // Compute the effective mass matrix.
             this.m_rA = Rot.mulVec2(qA, Vec2.neg(this.m_localCenterA));
             this.m_rB = Rot.mulVec2(qB, Vec2.neg(this.m_localCenterB));
@@ -12831,12 +11864,10 @@
             var iA = this.m_invIA;
             var iB = this.m_invIB;
             var K = new Mat22();
-            K.ex.x = mA + mB + iA * this.m_rA.y * this.m_rA.y + iB * this.m_rB.y
-                * this.m_rB.y;
+            K.ex.x = mA + mB + iA * this.m_rA.y * this.m_rA.y + iB * this.m_rB.y * this.m_rB.y;
             K.ex.y = -iA * this.m_rA.x * this.m_rA.y - iB * this.m_rB.x * this.m_rB.y;
             K.ey.x = K.ex.y;
-            K.ey.y = mA + mB + iA * this.m_rA.x * this.m_rA.x + iB * this.m_rB.x
-                * this.m_rB.x;
+            K.ey.y = mA + mB + iA * this.m_rA.x * this.m_rA.x + iB * this.m_rB.x * this.m_rB.x;
             this.m_linearMass = K.getInverse();
             this.m_angularMass = iA + iB;
             if (this.m_angularMass > 0.0) {
@@ -12853,9 +11884,9 @@
                 this.m_angularImpulse *= step.dtRatio;
                 var P = Vec2.neo(this.m_linearImpulse.x, this.m_linearImpulse.y);
                 vA.subMul(mA, P);
-                wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_angularImpulse);
+                wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_angularImpulse);
                 vB.addMul(mB, P);
-                wB += iB * (Vec2.cross(this.m_rB, P) + this.m_angularImpulse);
+                wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_angularImpulse);
             }
             else {
                 this.m_linearImpulse.setZero();
@@ -12871,8 +11902,10 @@
             var wA = this.m_bodyA.c_velocity.w;
             var vB = this.m_bodyB.c_velocity.v;
             var wB = this.m_bodyB.c_velocity.w;
-            var mA = this.m_invMassA, mB = this.m_invMassB;
-            var iA = this.m_invIA, iB = this.m_invIB;
+            var mA = this.m_invMassA;
+            var mB = this.m_invMassB;
+            var iA = this.m_invIA;
+            var iB = this.m_invIB;
             var h = step.dt;
             var inv_h = step.inv_dt;
             // Solve angular friction
@@ -12889,8 +11922,8 @@
             // Solve linear friction
             {
                 var Cdot = Vec2.zero();
-                Cdot.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
-                Cdot.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA));
+                Cdot.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
+                Cdot.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
                 Cdot.addMul(inv_h * this.m_correctionFactor, this.m_linearError);
                 var impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
                 var oldImpulse = Vec2.clone(this.m_linearImpulse);
@@ -12899,9 +11932,9 @@
                 this.m_linearImpulse.clamp(maxImpulse);
                 impulse = Vec2.sub(this.m_linearImpulse, oldImpulse);
                 vA.subMul(mA, impulse);
-                wA -= iA * Vec2.cross(this.m_rA, impulse);
+                wA -= iA * Vec2.crossVec2Vec2(this.m_rA, impulse);
                 vB.addMul(mB, impulse);
-                wB += iB * Vec2.cross(this.m_rB, impulse);
+                wB += iB * Vec2.crossVec2Vec2(this.m_rB, impulse);
             }
             this.m_bodyA.c_velocity.v = vA;
             this.m_bodyA.c_velocity.w = wA;
@@ -12917,7 +11950,6 @@
         MotorJoint.TYPE = 'motor-joint';
         return MotorJoint;
     }(Joint));
-    Joint.TYPES[MotorJoint.TYPE] = MotorJoint;
 
     /*
      * Planck.js
@@ -13012,7 +12044,7 @@
             data = __assign({}, data);
             data.bodyA = restore(Body, data.bodyA, world);
             data.bodyB = restore(Body, data.bodyB, world);
-            data.target = new Vec2(data.target);
+            data.target = Vec2.clone(data.target);
             var joint = new MouseJoint(data);
             if (data._localAnchorB) {
                 joint.m_localAnchorB = data._localAnchorB;
@@ -13075,19 +12107,19 @@
         };
         /**
          * Get the anchor point on bodyB in world coordinates.
-      */
+         */
         MouseJoint.prototype.getAnchorB = function () {
             return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
         };
         /**
          * Get the reaction force on bodyB at the joint anchor in Newtons.
-      */
+         */
         MouseJoint.prototype.getReactionForce = function (inv_dt) {
-            return Vec2.mul(inv_dt, this.m_impulse);
+            return Vec2.mulNumVec2(inv_dt, this.m_impulse);
         };
         /**
          * Get the reaction torque on bodyB in N*m.
-      */
+         */
         MouseJoint.prototype.getReactionTorque = function (inv_dt) {
             return inv_dt * 0.0;
         };
@@ -13139,7 +12171,7 @@
             K.ey.y = this.m_invMassB + this.m_invIB * this.m_rB.x * this.m_rB.x
                 + this.m_gamma;
             this.m_mass = K.getInverse();
-            this.m_C.set(cB);
+            this.m_C.setVec2(cB);
             this.m_C.addCombine(1, this.m_rB, -1, this.m_targetA);
             this.m_C.mul(this.m_beta);
             // Cheat with some damping
@@ -13147,12 +12179,12 @@
             if (step.warmStarting) {
                 this.m_impulse.mul(step.dtRatio);
                 vB.addMul(this.m_invMassB, this.m_impulse);
-                wB += this.m_invIB * Vec2.cross(this.m_rB, this.m_impulse);
+                wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, this.m_impulse);
             }
             else {
                 this.m_impulse.setZero();
             }
-            velocity.v.set(vB);
+            velocity.v.setVec2(vB);
             velocity.w = wB;
         };
         MouseJoint.prototype.solveVelocityConstraints = function (step) {
@@ -13160,7 +12192,7 @@
             var vB = Vec2.clone(velocity.v);
             var wB = velocity.w;
             // Cdot = v + cross(w, r)
-            var Cdot = Vec2.cross(wB, this.m_rB);
+            var Cdot = Vec2.crossNumVec2(wB, this.m_rB);
             Cdot.add(vB);
             Cdot.addCombine(1, this.m_C, this.m_gamma, this.m_impulse);
             Cdot.neg();
@@ -13171,8 +12203,8 @@
             this.m_impulse.clamp(maxImpulse);
             impulse = Vec2.sub(this.m_impulse, oldImpulse);
             vB.addMul(this.m_invMassB, impulse);
-            wB += this.m_invIB * Vec2.cross(this.m_rB, impulse);
-            velocity.v.set(vB);
+            wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, impulse);
+            velocity.v.setVec2(vB);
             velocity.w = wB;
         };
         /**
@@ -13184,7 +12216,6 @@
         MouseJoint.TYPE = 'mouse-joint';
         return MouseJoint;
     }(Joint));
-    Joint.TYPES[MouseJoint.TYPE] = MouseJoint;
 
     /*
      * Planck.js
@@ -13245,18 +12276,6 @@
             _this.m_ratio = math.isFinite(ratio) ? ratio : def.ratio;
             _this.m_constant = _this.m_lengthA + _this.m_ratio * _this.m_lengthB;
             _this.m_impulse = 0.0;
-            // Solver temp
-            _this.m_uA; // Vec2
-            _this.m_uB; // Vec2
-            _this.m_rA; // Vec2
-            _this.m_rB; // Vec2
-            _this.m_localCenterA; // Vec2
-            _this.m_localCenterB; // Vec2
-            _this.m_invMassA; // float
-            _this.m_invMassB; // float
-            _this.m_invIA; // float
-            _this.m_invIB; // float
-            _this.m_mass; // float
             return _this;
             // Pulley:
             // length1 = norm(p1 - s1)
@@ -13286,6 +12305,7 @@
                 ratio: this.m_ratio,
             };
         };
+        /** @internal */
         PulleyJoint._deserialize = function (data, world, restore) {
             data = __assign({}, data);
             data.bodyA = restore(Body, data.bodyA, world);
@@ -13350,25 +12370,25 @@
         };
         /**
          * Get the anchor point on bodyA in world coordinates.
-      */
+         */
         PulleyJoint.prototype.getAnchorA = function () {
             return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
         };
         /**
          * Get the anchor point on bodyB in world coordinates.
-      */
+         */
         PulleyJoint.prototype.getAnchorB = function () {
             return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
         };
         /**
          * Get the reaction force on bodyB at the joint anchor in Newtons.
-      */
+         */
         PulleyJoint.prototype.getReactionForce = function (inv_dt) {
-            return Vec2.mul(this.m_impulse, this.m_uB).mul(inv_dt);
+            return Vec2.mulNumVec2(this.m_impulse, this.m_uB).mul(inv_dt);
         };
         /**
          * Get the reaction torque on bodyB in N*m.
-      */
+         */
         PulleyJoint.prototype.getReactionTorque = function (inv_dt) {
             return 0.0;
         };
@@ -13409,8 +12429,8 @@
                 this.m_uB.setZero();
             }
             // Compute effective mass.
-            var ruA = Vec2.cross(this.m_rA, this.m_uA); // float
-            var ruB = Vec2.cross(this.m_rB, this.m_uB); // float
+            var ruA = Vec2.crossVec2Vec2(this.m_rA, this.m_uA); // float
+            var ruB = Vec2.crossVec2Vec2(this.m_rB, this.m_uB); // float
             var mA = this.m_invMassA + this.m_invIA * ruA * ruA; // float
             var mB = this.m_invMassB + this.m_invIB * ruB * ruB; // float
             this.m_mass = mA + this.m_ratio * this.m_ratio * mB;
@@ -13421,12 +12441,12 @@
                 // Scale impulses to support variable time steps.
                 this.m_impulse *= step.dtRatio;
                 // Warm starting.
-                var PA = Vec2.mul(-this.m_impulse, this.m_uA);
-                var PB = Vec2.mul(-this.m_ratio * this.m_impulse, this.m_uB);
+                var PA = Vec2.mulNumVec2(-this.m_impulse, this.m_uA);
+                var PB = Vec2.mulNumVec2(-this.m_ratio * this.m_impulse, this.m_uB);
                 vA.addMul(this.m_invMassA, PA);
-                wA += this.m_invIA * Vec2.cross(this.m_rA, PA);
+                wA += this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, PA);
                 vB.addMul(this.m_invMassB, PB);
-                wB += this.m_invIB * Vec2.cross(this.m_rB, PB);
+                wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, PB);
             }
             else {
                 this.m_impulse = 0.0;
@@ -13441,18 +12461,18 @@
             var wA = this.m_bodyA.c_velocity.w;
             var vB = this.m_bodyB.c_velocity.v;
             var wB = this.m_bodyB.c_velocity.w;
-            var vpA = Vec2.add(vA, Vec2.cross(wA, this.m_rA));
-            var vpB = Vec2.add(vB, Vec2.cross(wB, this.m_rB));
+            var vpA = Vec2.add(vA, Vec2.crossNumVec2(wA, this.m_rA));
+            var vpB = Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB));
             var Cdot = -Vec2.dot(this.m_uA, vpA) - this.m_ratio
                 * Vec2.dot(this.m_uB, vpB); // float
             var impulse = -this.m_mass * Cdot; // float
             this.m_impulse += impulse;
-            var PA = Vec2.mul(-impulse, this.m_uA); // Vec2
-            var PB = Vec2.mul(-this.m_ratio * impulse, this.m_uB); // Vec2
+            var PA = Vec2.mulNumVec2(-impulse, this.m_uA); // Vec2
+            var PB = Vec2.mulNumVec2(-this.m_ratio * impulse, this.m_uB); // Vec2
             vA.addMul(this.m_invMassA, PA);
-            wA += this.m_invIA * Vec2.cross(this.m_rA, PA);
+            wA += this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, PA);
             vB.addMul(this.m_invMassB, PB);
-            wB += this.m_invIB * Vec2.cross(this.m_rB, PB);
+            wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, PB);
             this.m_bodyA.c_velocity.v = vA;
             this.m_bodyA.c_velocity.w = wA;
             this.m_bodyB.c_velocity.v = vB;
@@ -13466,7 +12486,8 @@
             var aA = this.m_bodyA.c_position.a;
             var cB = this.m_bodyB.c_position.c;
             var aB = this.m_bodyB.c_position.a;
-            var qA = Rot.neo(aA), qB = Rot.neo(aB);
+            var qA = Rot.neo(aA);
+            var qB = Rot.neo(aB);
             var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
             var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
             // Get the pulley axes.
@@ -13487,8 +12508,8 @@
                 uB.setZero();
             }
             // Compute effective mass.
-            var ruA = Vec2.cross(rA, uA);
-            var ruB = Vec2.cross(rB, uB);
+            var ruA = Vec2.crossVec2Vec2(rA, uA);
+            var ruB = Vec2.crossVec2Vec2(rB, uB);
             var mA = this.m_invMassA + this.m_invIA * ruA * ruA; // float
             var mB = this.m_invMassB + this.m_invIB * ruB * ruB; // float
             var mass = mA + this.m_ratio * this.m_ratio * mB; // float
@@ -13498,12 +12519,12 @@
             var C = this.m_constant - lengthA - this.m_ratio * lengthB; // float
             var linearError = math.abs(C); // float
             var impulse = -mass * C; // float
-            var PA = Vec2.mul(-impulse, uA); // Vec2
-            var PB = Vec2.mul(-this.m_ratio * impulse, uB); // Vec2
+            var PA = Vec2.mulNumVec2(-impulse, uA); // Vec2
+            var PB = Vec2.mulNumVec2(-this.m_ratio * impulse, uB); // Vec2
             cA.addMul(this.m_invMassA, PA);
-            aA += this.m_invIA * Vec2.cross(rA, PA);
+            aA += this.m_invIA * Vec2.crossVec2Vec2(rA, PA);
             cB.addMul(this.m_invMassB, PB);
-            aB += this.m_invIB * Vec2.cross(rB, PB);
+            aB += this.m_invIB * Vec2.crossVec2Vec2(rB, PB);
             this.m_bodyA.c_position.c = cA;
             this.m_bodyA.c_position.a = aA;
             this.m_bodyB.c_position.c = cB;
@@ -13511,10 +12532,8 @@
             return linearError < Settings.linearSlop;
         };
         PulleyJoint.TYPE = 'pulley-joint';
-        PulleyJoint.MIN_PULLEY_LENGTH = 2.0; // minPulleyLength
         return PulleyJoint;
     }(Joint));
-    Joint.TYPES[PulleyJoint.TYPE] = PulleyJoint;
 
     /*
      * Planck.js
@@ -13552,7 +12571,7 @@
      * you will get some non-physical behavior.
      *
      * A model that would allow you to dynamically modify the length would have some
-     * sponginess, so I chose not to implement it that way. See DistanceJoint if you
+     * sponginess, so I chose not to implement it that way. See {@link DistanceJoint} if you
      * want to dynamically control length.
      */
     var RopeJoint = /** @class */ (function (_super) {
@@ -13575,17 +12594,6 @@
             _this.m_impulse = 0.0;
             _this.m_length = 0.0;
             _this.m_state = inactiveLimit;
-            // Solver temp
-            _this.m_u; // Vec2
-            _this.m_rA; // Vec2
-            _this.m_rB; // Vec2
-            _this.m_localCenterA; // Vec2
-            _this.m_localCenterB; // Vec2
-            _this.m_invMassA; // float
-            _this.m_invMassB; // float
-            _this.m_invIA; // float
-            _this.m_invIB; // float
-            _this.m_mass; // float
             return _this;
             // Limit:
             // C = norm(pB - pA) - L
@@ -13645,25 +12653,25 @@
         };
         /**
          * Get the anchor point on bodyA in world coordinates.
-      */
+         */
         RopeJoint.prototype.getAnchorA = function () {
             return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
         };
         /**
          * Get the anchor point on bodyB in world coordinates.
-      */
+         */
         RopeJoint.prototype.getAnchorB = function () {
             return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
         };
         /**
          * Get the reaction force on bodyB at the joint anchor in Newtons.
-      */
+         */
         RopeJoint.prototype.getReactionForce = function (inv_dt) {
-            return Vec2.mul(this.m_impulse, this.m_u).mul(inv_dt);
+            return Vec2.mulNumVec2(this.m_impulse, this.m_u).mul(inv_dt);
         };
         /**
          * Get the reaction torque on bodyB in N*m.
-      */
+         */
         RopeJoint.prototype.getReactionTorque = function (inv_dt) {
             return 0.0;
         };
@@ -13707,26 +12715,26 @@
                 return;
             }
             // Compute effective mass.
-            var crA = Vec2.cross(this.m_rA, this.m_u); // float
-            var crB = Vec2.cross(this.m_rB, this.m_u); // float
+            var crA = Vec2.crossVec2Vec2(this.m_rA, this.m_u); // float
+            var crB = Vec2.crossVec2Vec2(this.m_rB, this.m_u); // float
             var invMass = this.m_invMassA + this.m_invIA * crA * crA + this.m_invMassB
                 + this.m_invIB * crB * crB; // float
             this.m_mass = invMass != 0.0 ? 1.0 / invMass : 0.0;
             if (step.warmStarting) {
                 // Scale the impulse to support a variable time step.
                 this.m_impulse *= step.dtRatio;
-                var P = Vec2.mul(this.m_impulse, this.m_u);
+                var P = Vec2.mulNumVec2(this.m_impulse, this.m_u);
                 vA.subMul(this.m_invMassA, P);
-                wA -= this.m_invIA * Vec2.cross(this.m_rA, P);
+                wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
                 vB.addMul(this.m_invMassB, P);
-                wB += this.m_invIB * Vec2.cross(this.m_rB, P);
+                wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
             }
             else {
                 this.m_impulse = 0.0;
             }
-            this.m_bodyA.c_velocity.v.set(vA);
+            this.m_bodyA.c_velocity.v.setVec2(vA);
             this.m_bodyA.c_velocity.w = wA;
-            this.m_bodyB.c_velocity.v.set(vB);
+            this.m_bodyB.c_velocity.v.setVec2(vB);
             this.m_bodyB.c_velocity.w = wB;
         };
         RopeJoint.prototype.solveVelocityConstraints = function (step) {
@@ -13735,8 +12743,8 @@
             var vB = this.m_bodyB.c_velocity.v;
             var wB = this.m_bodyB.c_velocity.w;
             // Cdot = dot(u, v + cross(w, r))
-            var vpA = Vec2.addCross(vA, wA, this.m_rA); // Vec2
-            var vpB = Vec2.addCross(vB, wB, this.m_rB); // Vec2
+            var vpA = Vec2.addCrossNumVec2(vA, wA, this.m_rA); // Vec2
+            var vpB = Vec2.addCrossNumVec2(vB, wB, this.m_rB); // Vec2
             var C = this.m_length - this.m_maxLength; // float
             var Cdot = Vec2.dot(this.m_u, Vec2.sub(vpB, vpA)); // float
             // Predictive constraint.
@@ -13747,11 +12755,11 @@
             var oldImpulse = this.m_impulse; // float
             this.m_impulse = math.min(0.0, this.m_impulse + impulse);
             impulse = this.m_impulse - oldImpulse;
-            var P = Vec2.mul(impulse, this.m_u); // Vec2
+            var P = Vec2.mulNumVec2(impulse, this.m_u); // Vec2
             vA.subMul(this.m_invMassA, P);
-            wA -= this.m_invIA * Vec2.cross(this.m_rA, P);
+            wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
             vB.addMul(this.m_invMassB, P);
-            wB += this.m_invIB * Vec2.cross(this.m_rB, P);
+            wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
             this.m_bodyA.c_velocity.v = vA;
             this.m_bodyA.c_velocity.w = wA;
             this.m_bodyB.c_velocity.v = vB;
@@ -13776,21 +12784,20 @@
             var C = length - this.m_maxLength; // float
             C = math.clamp(C, 0.0, Settings.maxLinearCorrection);
             var impulse = -this.m_mass * C; // float
-            var P = Vec2.mul(impulse, u); // Vec2
+            var P = Vec2.mulNumVec2(impulse, u); // Vec2
             cA.subMul(this.m_invMassA, P);
-            aA -= this.m_invIA * Vec2.cross(rA, P);
+            aA -= this.m_invIA * Vec2.crossVec2Vec2(rA, P);
             cB.addMul(this.m_invMassB, P);
-            aB += this.m_invIB * Vec2.cross(rB, P);
-            this.m_bodyA.c_position.c.set(cA);
+            aB += this.m_invIB * Vec2.crossVec2Vec2(rB, P);
+            this.m_bodyA.c_position.c.setVec2(cA);
             this.m_bodyA.c_position.a = aA;
-            this.m_bodyB.c_position.c.set(cB);
+            this.m_bodyB.c_position.c.setVec2(cB);
             this.m_bodyB.c_position.a = aB;
             return length - this.m_maxLength < Settings.linearSlop;
         };
         RopeJoint.TYPE = 'rope-joint';
         return RopeJoint;
     }(Joint));
-    Joint.TYPES[RopeJoint.TYPE] = RopeJoint;
 
     /*
      * Planck.js
@@ -13893,16 +12900,16 @@
         /** @internal */
         WeldJoint.prototype._setAnchors = function (def) {
             if (def.anchorA) {
-                this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+                this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
             }
             else if (def.localAnchorA) {
-                this.m_localAnchorA.set(def.localAnchorA);
+                this.m_localAnchorA.setVec2(def.localAnchorA);
             }
             if (def.anchorB) {
-                this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+                this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
             }
             else if (def.localAnchorB) {
-                this.m_localAnchorB.set(def.localAnchorB);
+                this.m_localAnchorB.setVec2(def.localAnchorB);
             }
         };
         /**
@@ -13949,25 +12956,25 @@
         };
         /**
          * Get the anchor point on bodyA in world coordinates.
-      */
+         */
         WeldJoint.prototype.getAnchorA = function () {
             return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
         };
         /**
          * Get the anchor point on bodyB in world coordinates.
-      */
+         */
         WeldJoint.prototype.getAnchorB = function () {
             return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
         };
         /**
          * Get the reaction force on bodyB at the joint anchor in Newtons.
-      */
+         */
         WeldJoint.prototype.getReactionForce = function (inv_dt) {
             return Vec2.neo(this.m_impulse.x, this.m_impulse.y).mul(inv_dt);
         };
         /**
          * Get the reaction torque on bodyB in N*m.
-      */
+         */
         WeldJoint.prototype.getReactionTorque = function (inv_dt) {
             return inv_dt * this.m_impulse.z;
         };
@@ -13984,7 +12991,8 @@
             var aB = this.m_bodyB.c_position.a;
             var vB = this.m_bodyB.c_velocity.v;
             var wB = this.m_bodyB.c_velocity.w;
-            var qA = Rot.neo(aA), qB = Rot.neo(aB);
+            var qA = Rot.neo(aA);
+            var qB = Rot.neo(aB);
             this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
             this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
             // J = [-I -r1_skew I r2_skew]
@@ -13995,9 +13003,9 @@
             // [ -r1y*iA*r1x-r2y*iB*r2x, mA+r1x^2*iA+mB+r2x^2*iB, r1x*iA+r2x*iB]
             // [ -r1y*iA-r2y*iB, r1x*iA+r2x*iB, iA+iB]
             var mA = this.m_invMassA;
-            var mB = this.m_invMassB; // float
+            var mB = this.m_invMassB;
             var iA = this.m_invIA;
-            var iB = this.m_invIB; // float
+            var iB = this.m_invIB;
             var K = new Mat33();
             K.ex.x = mA + mB + this.m_rA.y * this.m_rA.y * iA + this.m_rB.y * this.m_rB.y
                 * iB;
@@ -14044,9 +13052,9 @@
                 this.m_impulse.mul(step.dtRatio);
                 var P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
                 vA.subMul(mA, P);
-                wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_impulse.z);
+                wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_impulse.z);
                 vB.addMul(mB, P);
-                wB += iB * (Vec2.cross(this.m_rB, P) + this.m_impulse.z);
+                wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_impulse.z);
             }
             else {
                 this.m_impulse.setZero();
@@ -14073,30 +13081,30 @@
                 wA -= iA * impulse2;
                 wB += iB * impulse2;
                 var Cdot1 = Vec2.zero();
-                Cdot1.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
-                Cdot1.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA)); // Vec2
+                Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
+                Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA)); // Vec2
                 var impulse1 = Vec2.neg(Mat33.mulVec2(this.m_mass, Cdot1)); // Vec2
                 this.m_impulse.x += impulse1.x;
                 this.m_impulse.y += impulse1.y;
                 var P = Vec2.clone(impulse1); // Vec2
                 vA.subMul(mA, P);
-                wA -= iA * Vec2.cross(this.m_rA, P);
+                wA -= iA * Vec2.crossVec2Vec2(this.m_rA, P);
                 vB.addMul(mB, P);
-                wB += iB * Vec2.cross(this.m_rB, P);
+                wB += iB * Vec2.crossVec2Vec2(this.m_rB, P);
             }
             else {
                 var Cdot1 = Vec2.zero();
-                Cdot1.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
-                Cdot1.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA)); // Vec2
+                Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
+                Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA)); // Vec2
                 var Cdot2 = wB - wA; // float
                 var Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2); // Vec3
                 var impulse = Vec3.neg(Mat33.mulVec3(this.m_mass, Cdot)); // Vec3
                 this.m_impulse.add(impulse);
                 var P = Vec2.neo(impulse.x, impulse.y);
                 vA.subMul(mA, P);
-                wA -= iA * (Vec2.cross(this.m_rA, P) + impulse.z);
+                wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + impulse.z);
                 vB.addMul(mB, P);
-                wB += iB * (Vec2.cross(this.m_rB, P) + impulse.z);
+                wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + impulse.z);
             }
             this.m_bodyA.c_velocity.v = vA;
             this.m_bodyA.c_velocity.w = wA;
@@ -14111,12 +13119,16 @@
             var aA = this.m_bodyA.c_position.a;
             var cB = this.m_bodyB.c_position.c;
             var aB = this.m_bodyB.c_position.a;
-            var qA = Rot.neo(aA), qB = Rot.neo(aB);
-            var mA = this.m_invMassA, mB = this.m_invMassB; // float
-            var iA = this.m_invIA, iB = this.m_invIB; // float
+            var qA = Rot.neo(aA);
+            var qB = Rot.neo(aB);
+            var mA = this.m_invMassA;
+            var mB = this.m_invMassB;
+            var iA = this.m_invIA;
+            var iB = this.m_invIB;
             var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
             var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
-            var positionError, angularError; // float
+            var positionError;
+            var angularError;
             var K = new Mat33();
             K.ex.x = mA + mB + rA.y * rA.y * iA + rB.y * rB.y * iB;
             K.ey.x = -rA.y * rA.x * iA - rB.y * rB.x * iB;
@@ -14135,9 +13147,9 @@
                 angularError = 0.0;
                 var P = Vec2.neg(K.solve22(C1)); // Vec2
                 cA.subMul(mA, P);
-                aA -= iA * Vec2.cross(rA, P);
+                aA -= iA * Vec2.crossVec2Vec2(rA, P);
                 cB.addMul(mB, P);
-                aB += iB * Vec2.cross(rB, P);
+                aB += iB * Vec2.crossVec2Vec2(rB, P);
             }
             else {
                 var C1 = Vec2.zero();
@@ -14157,21 +13169,19 @@
                 }
                 var P = Vec2.neo(impulse.x, impulse.y);
                 cA.subMul(mA, P);
-                aA -= iA * (Vec2.cross(rA, P) + impulse.z);
+                aA -= iA * (Vec2.crossVec2Vec2(rA, P) + impulse.z);
                 cB.addMul(mB, P);
-                aB += iB * (Vec2.cross(rB, P) + impulse.z);
+                aB += iB * (Vec2.crossVec2Vec2(rB, P) + impulse.z);
             }
             this.m_bodyA.c_position.c = cA;
             this.m_bodyA.c_position.a = aA;
             this.m_bodyB.c_position.c = cB;
             this.m_bodyB.c_position.a = aB;
-            return positionError <= Settings.linearSlop
-                && angularError <= Settings.angularSlop;
+            return positionError <= Settings.linearSlop && angularError <= Settings.angularSlop;
         };
         WeldJoint.TYPE = 'weld-joint';
         return WeldJoint;
     }(Joint));
-    Joint.TYPES[WeldJoint.TYPE] = WeldJoint;
 
     /*
      * Planck.js
@@ -14211,6 +13221,7 @@
      */
     var WheelJoint = /** @class */ (function (_super) {
         __extends(WheelJoint, _super);
+        // @ts-ignore
         function WheelJoint(def, bodyA, bodyB, anchor, axis) {
             var _this = this;
             // @ts-ignore
@@ -14219,6 +13230,8 @@
             }
             def = options(def, DEFAULTS);
             _this = _super.call(this, def, bodyA, bodyB) || this;
+            /** @internal */ _this.m_ax = Vec2.zero();
+            /** @internal */ _this.m_ay = Vec2.zero();
             bodyA = _this.m_bodyA;
             bodyB = _this.m_bodyB;
             _this.m_type = WheelJoint.TYPE;
@@ -14226,7 +13239,7 @@
             _this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
             // @ts-ignore localAxis
             _this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || def.localAxis || Vec2.neo(1.0, 0.0));
-            _this.m_localYAxisA = Vec2.cross(1.0, _this.m_localXAxisA);
+            _this.m_localYAxisA = Vec2.crossNumVec2(1.0, _this.m_localXAxisA);
             _this.m_mass = 0.0;
             _this.m_impulse = 0.0;
             _this.m_motorMass = 0.0;
@@ -14240,19 +13253,6 @@
             _this.m_dampingRatio = def.dampingRatio;
             _this.m_bias = 0.0;
             _this.m_gamma = 0.0;
-            // Solver temp
-            _this.m_localCenterA; // Vec2
-            _this.m_localCenterB; // Vec2
-            _this.m_invMassA; // float
-            _this.m_invMassB; // float
-            _this.m_invIA; // float
-            _this.m_invIB; // float
-            _this.m_ax = Vec2.zero();
-            _this.m_ay = Vec2.zero(); // Vec2
-            _this.m_sAx;
-            _this.m_sBx; // float
-            _this.m_sAy;
-            _this.m_sBy; // float
             return _this;
             // Linear constraint (point-to-line)
             // d = pB - pA = xB + rB - xA - rA
@@ -14299,20 +13299,20 @@
         /** @internal */
         WheelJoint.prototype._setAnchors = function (def) {
             if (def.anchorA) {
-                this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+                this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
             }
             else if (def.localAnchorA) {
-                this.m_localAnchorA.set(def.localAnchorA);
+                this.m_localAnchorA.setVec2(def.localAnchorA);
             }
             if (def.anchorB) {
-                this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+                this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
             }
             else if (def.localAnchorB) {
-                this.m_localAnchorB.set(def.localAnchorB);
+                this.m_localAnchorB.setVec2(def.localAnchorB);
             }
             if (def.localAxisA) {
-                this.m_localXAxisA.set(def.localAxisA);
-                this.m_localYAxisA.set(Vec2.cross(1.0, def.localAxisA));
+                this.m_localXAxisA.setVec2(def.localAxisA);
+                this.m_localYAxisA.setVec2(Vec2.crossNumVec2(1.0, def.localAxisA));
             }
         };
         /**
@@ -14472,8 +13472,8 @@
             // Point to line constraint
             {
                 this.m_ay = Rot.mulVec2(qA, this.m_localYAxisA);
-                this.m_sAy = Vec2.cross(Vec2.add(d, rA), this.m_ay);
-                this.m_sBy = Vec2.cross(rB, this.m_ay);
+                this.m_sAy = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_ay);
+                this.m_sBy = Vec2.crossVec2Vec2(rB, this.m_ay);
                 this.m_mass = mA + mB + iA * this.m_sAy * this.m_sAy + iB * this.m_sBy
                     * this.m_sBy;
                 if (this.m_mass > 0.0) {
@@ -14486,8 +13486,8 @@
             this.m_gamma = 0.0;
             if (this.m_frequencyHz > 0.0) {
                 this.m_ax = Rot.mulVec2(qA, this.m_localXAxisA);
-                this.m_sAx = Vec2.cross(Vec2.add(d, rA), this.m_ax);
-                this.m_sBx = Vec2.cross(rB, this.m_ax);
+                this.m_sAx = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_ax);
+                this.m_sBx = Vec2.crossVec2Vec2(rB, this.m_ax);
                 var invMass = mA + mB + iA * this.m_sAx * this.m_sAx + iB * this.m_sBx
                     * this.m_sBx; // float
                 if (invMass > 0.0) {
@@ -14544,9 +13544,9 @@
                 this.m_springImpulse = 0.0;
                 this.m_motorImpulse = 0.0;
             }
-            this.m_bodyA.c_velocity.v.set(vA);
+            this.m_bodyA.c_velocity.v.setVec2(vA);
             this.m_bodyA.c_velocity.w = wA;
-            this.m_bodyB.c_velocity.v.set(vB);
+            this.m_bodyB.c_velocity.v.setVec2(vB);
             this.m_bodyB.c_velocity.w = wB;
         };
         WheelJoint.prototype.solveVelocityConstraints = function (step) {
@@ -14565,7 +13565,7 @@
                 var impulse = -this.m_springMass
                     * (Cdot + this.m_bias + this.m_gamma * this.m_springImpulse); // float
                 this.m_springImpulse += impulse;
-                var P = Vec2.mul(impulse, this.m_ax); // Vec2
+                var P = Vec2.mulNumVec2(impulse, this.m_ax); // Vec2
                 var LA = impulse * this.m_sAx; // float
                 var LB = impulse * this.m_sBx; // float
                 vA.subMul(mA, P);
@@ -14590,7 +13590,7 @@
                     * wB - this.m_sAy * wA; // float
                 var impulse = -this.m_mass * Cdot; // float
                 this.m_impulse += impulse;
-                var P = Vec2.mul(impulse, this.m_ay); // Vec2
+                var P = Vec2.mulNumVec2(impulse, this.m_ay); // Vec2
                 var LA = impulse * this.m_sAy; // float
                 var LB = impulse * this.m_sBy; // float
                 vA.subMul(mA, P);
@@ -14598,9 +13598,9 @@
                 vB.addMul(mB, P);
                 wB += iB * LB;
             }
-            this.m_bodyA.c_velocity.v.set(vA);
+            this.m_bodyA.c_velocity.v.setVec2(vA);
             this.m_bodyA.c_velocity.w = wA;
-            this.m_bodyB.c_velocity.v.set(vB);
+            this.m_bodyB.c_velocity.v.setVec2(vB);
             this.m_bodyB.c_velocity.w = wB;
         };
         /**
@@ -14619,8 +13619,8 @@
             d.addCombine(1, cB, 1, rB);
             d.subCombine(1, cA, 1, rA);
             var ay = Rot.mulVec2(qA, this.m_localYAxisA);
-            var sAy = Vec2.cross(Vec2.add(d, rA), ay); // float
-            var sBy = Vec2.cross(rB, ay); // float
+            var sAy = Vec2.crossVec2Vec2(Vec2.add(d, rA), ay); // float
+            var sBy = Vec2.crossVec2Vec2(rB, ay); // float
             var C = Vec2.dot(d, ay); // float
             var k = this.m_invMassA + this.m_invMassB + this.m_invIA * this.m_sAy
                 * this.m_sAy + this.m_invIB * this.m_sBy * this.m_sBy; // float
@@ -14631,23 +13631,1138 @@
             else {
                 impulse = 0.0;
             }
-            var P = Vec2.mul(impulse, ay); // Vec2
+            var P = Vec2.mulNumVec2(impulse, ay); // Vec2
             var LA = impulse * sAy; // float
             var LB = impulse * sBy; // float
             cA.subMul(this.m_invMassA, P);
             aA -= this.m_invIA * LA;
             cB.addMul(this.m_invMassB, P);
             aB += this.m_invIB * LB;
-            this.m_bodyA.c_position.c.set(cA);
+            this.m_bodyA.c_position.c.setVec2(cA);
             this.m_bodyA.c_position.a = aA;
-            this.m_bodyB.c_position.c.set(cB);
+            this.m_bodyB.c_position.c.setVec2(cB);
             this.m_bodyB.c_position.a = aB;
             return math.abs(C) <= Settings.linearSlop;
         };
         WheelJoint.TYPE = 'wheel-joint';
         return WheelJoint;
     }(Joint));
-    Joint.TYPES[WheelJoint.TYPE] = WheelJoint;
+
+    var SID = 0;
+    function Serializer(opts) {
+        var _a;
+        opts = opts || {};
+        var rootClass = opts.rootClass || World;
+        var preSerialize = opts.preSerialize || function (obj) { return obj; };
+        var postSerialize = opts.postSerialize || function (data, obj) { return data; };
+        var preDeserialize = opts.preDeserialize || function (data) { return data; };
+        var postDeserialize = opts.postDeserialize || function (obj, data) { return obj; };
+        // This is used to create ref objects during serialize
+        var refTypes = {
+            World: World,
+            Body: Body,
+            Joint: Joint,
+            Fixture: Fixture,
+            Shape: Shape,
+        };
+        // This is used by restore to deserialize objects and refs
+        var restoreTypes = __assign({ Vec2: Vec2,
+            Vec3: Vec3 }, refTypes);
+        var CLASS_BY_TYPE_PROP = (_a = {},
+            _a[Body.STATIC] = Body,
+            _a[Body.DYNAMIC] = Body,
+            _a[Body.KINEMATIC] = Body,
+            _a[ChainShape.TYPE] = ChainShape,
+            _a[BoxShape.TYPE] = BoxShape,
+            _a[EdgeShape.TYPE] = EdgeShape,
+            _a[PolygonShape.TYPE] = PolygonShape,
+            _a[CircleShape.TYPE] = CircleShape,
+            _a[DistanceJoint.TYPE] = DistanceJoint,
+            _a[FrictionJoint.TYPE] = FrictionJoint,
+            _a[GearJoint.TYPE] = GearJoint,
+            _a[MotorJoint.TYPE] = MotorJoint,
+            _a[MouseJoint.TYPE] = MouseJoint,
+            _a[PrismaticJoint.TYPE] = PrismaticJoint,
+            _a[PulleyJoint.TYPE] = PulleyJoint,
+            _a[RevoluteJoint.TYPE] = RevoluteJoint,
+            _a[RopeJoint.TYPE] = RopeJoint,
+            _a[WeldJoint.TYPE] = WeldJoint,
+            _a[WheelJoint.TYPE] = WheelJoint,
+            _a);
+        this.toJson = function (root) {
+            var json = [];
+            var queue = [root];
+            var refMap = {};
+            function storeRef(value, typeName) {
+                value.__sid = value.__sid || ++SID;
+                if (!refMap[value.__sid]) {
+                    queue.push(value);
+                    var index = json.length + queue.length;
+                    var ref = {
+                        refIndex: index,
+                        refType: typeName
+                    };
+                    refMap[value.__sid] = ref;
+                }
+                return refMap[value.__sid];
+            }
+            function serialize(obj) {
+                obj = preSerialize(obj);
+                var data = obj._serialize();
+                data = postSerialize(data, obj);
+                return data;
+            }
+            function toJson(value, top) {
+                if (typeof value !== 'object' || value === null) {
+                    return value;
+                }
+                if (typeof value._serialize === 'function') {
+                    if (value !== top) {
+                        // tslint:disable-next-line:no-for-in
+                        for (var typeName in refTypes) {
+                            if (value instanceof refTypes[typeName]) {
+                                return storeRef(value, typeName);
+                            }
+                        }
+                    }
+                    value = serialize(value);
+                }
+                if (Array.isArray(value)) {
+                    var newValue = [];
+                    for (var key = 0; key < value.length; key++) {
+                        newValue[key] = toJson(value[key]);
+                    }
+                    value = newValue;
+                }
+                else {
+                    var newValue = {};
+                    // tslint:disable-next-line:no-for-in
+                    for (var key in value) {
+                        if (value.hasOwnProperty(key)) {
+                            newValue[key] = toJson(value[key]);
+                        }
+                    }
+                    value = newValue;
+                }
+                return value;
+            }
+            while (queue.length) {
+                var obj = queue.shift();
+                var str = toJson(obj, obj);
+                json.push(str);
+            }
+            return json;
+        };
+        this.fromJson = function (json) {
+            var refMap = {};
+            function findDeserilizer(data, cls) {
+                if (!cls || !cls._deserialize) {
+                    cls = CLASS_BY_TYPE_PROP[data.type];
+                }
+                return cls && cls._deserialize;
+            }
+            /**
+             * Deserialize a data object.
+             */
+            function deserialize(cls, data, ctx) {
+                var deserializer = findDeserilizer(data, cls);
+                if (!deserializer) {
+                    return;
+                }
+                data = preDeserialize(data);
+                var obj = deserializer(data, ctx, restoreRef);
+                obj = postDeserialize(obj, data);
+                return obj;
+            }
+            /**
+             * Restore a ref object or deserialize a data object.
+             *
+             * This is passed as callback to class deserializers.
+             */
+            function restoreRef(cls, ref, ctx) {
+                if (!ref.refIndex) {
+                    return cls && cls._deserialize && deserialize(cls, ref, ctx);
+                }
+                cls = restoreTypes[ref.refType] || cls;
+                var index = ref.refIndex;
+                if (!refMap[index]) {
+                    var data = json[index];
+                    var obj = deserialize(cls, data, ctx);
+                    refMap[index] = obj;
+                }
+                return refMap[index];
+            }
+            var root = rootClass._deserialize(json[0], null, restoreRef);
+            return root;
+        };
+    }
+    var serializer = new Serializer();
+    Serializer.toJson = serializer.toJson;
+    Serializer.fromJson = serializer.fromJson;
+
+    /*
+     * Planck.js
+     * The MIT License
+     * Copyright (c) 2021 Erin Catto, Ali Shakiba
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining a copy
+     * of this software and associated documentation files (the "Software"), to deal
+     * in the Software without restriction, including without limitation the rights
+     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     * copies of the Software, and to permit persons to whom the Software is
+     * furnished to do so, subject to the following conditions:
+     *
+     * The above copyright notice and this permission notice shall be included in all
+     * copies or substantial portions of the Software.
+     *
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     * SOFTWARE.
+     */
+    Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
+    function CircleCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
+        CollideCircles(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
+    }
+    function CollideCircles(manifold, circleA, xfA, circleB, xfB) {
+        manifold.pointCount = 0;
+        var pA = Transform.mulVec2(xfA, circleA.m_p);
+        var pB = Transform.mulVec2(xfB, circleB.m_p);
+        var distSqr = Vec2.distanceSquared(pB, pA);
+        var rA = circleA.m_radius;
+        var rB = circleB.m_radius;
+        var radius = rA + rB;
+        if (distSqr > radius * radius) {
+            return;
+        }
+        manifold.type = ManifoldType.e_circles;
+        manifold.localPoint.setVec2(circleA.m_p);
+        manifold.localNormal.setZero();
+        manifold.pointCount = 1;
+        manifold.points[0].localPoint.setVec2(circleB.m_p);
+        // manifold.points[0].id.key = 0;
+        manifold.points[0].id.cf.indexA = 0;
+        manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+        manifold.points[0].id.cf.indexB = 0;
+        manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+    }
+
+    /*
+     * Planck.js
+     * The MIT License
+     * Copyright (c) 2021 Erin Catto, Ali Shakiba
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining a copy
+     * of this software and associated documentation files (the "Software"), to deal
+     * in the Software without restriction, including without limitation the rights
+     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     * copies of the Software, and to permit persons to whom the Software is
+     * furnished to do so, subject to the following conditions:
+     *
+     * The above copyright notice and this permission notice shall be included in all
+     * copies or substantial portions of the Software.
+     *
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     * SOFTWARE.
+     */
+    Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
+    Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
+    function EdgeCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
+        var shapeA = fixtureA.getShape();
+        var shapeB = fixtureB.getShape();
+        CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
+    }
+    function ChainCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
+        var chain = fixtureA.getShape();
+        var edge = new EdgeShape();
+        chain.getChildEdge(edge, indexA);
+        var shapeA = edge;
+        var shapeB = fixtureB.getShape();
+        CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
+    }
+    // Compute contact points for edge versus circle.
+    // This accounts for edge connectivity.
+    function CollideEdgeCircle(manifold, edgeA, xfA, circleB, xfB) {
+        manifold.pointCount = 0;
+        // Compute circle in frame of edge
+        var Q = Transform.mulTVec2(xfA, Transform.mulVec2(xfB, circleB.m_p));
+        var A = edgeA.m_vertex1;
+        var B = edgeA.m_vertex2;
+        var e = Vec2.sub(B, A);
+        // Barycentric coordinates
+        var u = Vec2.dot(e, Vec2.sub(B, Q));
+        var v = Vec2.dot(e, Vec2.sub(Q, A));
+        var radius = edgeA.m_radius + circleB.m_radius;
+        // Region A
+        if (v <= 0.0) {
+            var P_1 = Vec2.clone(A);
+            var d_1 = Vec2.sub(Q, P_1);
+            var dd_1 = Vec2.dot(d_1, d_1);
+            if (dd_1 > radius * radius) {
+                return;
+            }
+            // Is there an edge connected to A?
+            if (edgeA.m_hasVertex0) {
+                var A1 = edgeA.m_vertex0;
+                var B1 = A;
+                var e1 = Vec2.sub(B1, A1);
+                var u1 = Vec2.dot(e1, Vec2.sub(B1, Q));
+                // Is the circle in Region AB of the previous edge?
+                if (u1 > 0.0) {
+                    return;
+                }
+            }
+            manifold.type = ManifoldType.e_circles;
+            manifold.localNormal.setZero();
+            manifold.localPoint.setVec2(P_1);
+            manifold.pointCount = 1;
+            manifold.points[0].localPoint.setVec2(circleB.m_p);
+            // manifold.points[0].id.key = 0;
+            manifold.points[0].id.cf.indexA = 0;
+            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.indexB = 0;
+            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+            return;
+        }
+        // Region B
+        if (u <= 0.0) {
+            var P_2 = Vec2.clone(B);
+            var d_2 = Vec2.sub(Q, P_2);
+            var dd_2 = Vec2.dot(d_2, d_2);
+            if (dd_2 > radius * radius) {
+                return;
+            }
+            // Is there an edge connected to B?
+            if (edgeA.m_hasVertex3) {
+                var B2 = edgeA.m_vertex3;
+                var A2 = B;
+                var e2 = Vec2.sub(B2, A2);
+                var v2 = Vec2.dot(e2, Vec2.sub(Q, A2));
+                // Is the circle in Region AB of the next edge?
+                if (v2 > 0.0) {
+                    return;
+                }
+            }
+            manifold.type = ManifoldType.e_circles;
+            manifold.localNormal.setZero();
+            manifold.localPoint.setVec2(P_2);
+            manifold.pointCount = 1;
+            manifold.points[0].localPoint.setVec2(circleB.m_p);
+            // manifold.points[0].id.key = 0;
+            manifold.points[0].id.cf.indexA = 1;
+            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.indexB = 0;
+            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+            return;
+        }
+        // Region AB
+        var den = Vec2.dot(e, e);
+        var P = Vec2.combine(u / den, A, v / den, B);
+        var d = Vec2.sub(Q, P);
+        var dd = Vec2.dot(d, d);
+        if (dd > radius * radius) {
+            return;
+        }
+        var n = Vec2.neo(-e.y, e.x);
+        if (Vec2.dot(n, Vec2.sub(Q, A)) < 0.0) {
+            n.setNum(-n.x, -n.y);
+        }
+        n.normalize();
+        manifold.type = ManifoldType.e_faceA;
+        manifold.localNormal = n;
+        manifold.localPoint.setVec2(A);
+        manifold.pointCount = 1;
+        manifold.points[0].localPoint.setVec2(circleB.m_p);
+        // manifold.points[0].id.key = 0;
+        manifold.points[0].id.cf.indexA = 0;
+        manifold.points[0].id.cf.typeA = ContactFeatureType.e_face;
+        manifold.points[0].id.cf.indexB = 0;
+        manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+    }
+
+    /*
+     * Planck.js
+     * The MIT License
+     * Copyright (c) 2021 Erin Catto, Ali Shakiba
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining a copy
+     * of this software and associated documentation files (the "Software"), to deal
+     * in the Software without restriction, including without limitation the rights
+     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     * copies of the Software, and to permit persons to whom the Software is
+     * furnished to do so, subject to the following conditions:
+     *
+     * The above copyright notice and this permission notice shall be included in all
+     * copies or substantial portions of the Software.
+     *
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     * SOFTWARE.
+     */
+    Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
+    function PolygonContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
+        CollidePolygons(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
+    }
+    /**
+     * Find the max separation between poly1 and poly2 using edge normals from
+     * poly1.
+     */
+    function findMaxSeparation(poly1, xf1, poly2, xf2, output) {
+        var count1 = poly1.m_count;
+        var count2 = poly2.m_count;
+        var n1s = poly1.m_normals;
+        var v1s = poly1.m_vertices;
+        var v2s = poly2.m_vertices;
+        var xf = Transform.mulTXf(xf2, xf1);
+        var bestIndex = 0;
+        var maxSeparation = -Infinity;
+        for (var i = 0; i < count1; ++i) {
+            // Get poly1 normal in frame2.
+            var n = Rot.mulVec2(xf.q, n1s[i]);
+            var v1 = Transform.mulVec2(xf, v1s[i]);
+            // Find deepest point for normal i.
+            var si = Infinity;
+            for (var j = 0; j < count2; ++j) {
+                var sij = Vec2.dot(n, v2s[j]) - Vec2.dot(n, v1);
+                if (sij < si) {
+                    si = sij;
+                }
+            }
+            if (si > maxSeparation) {
+                maxSeparation = si;
+                bestIndex = i;
+            }
+        }
+        // used to keep last FindMaxSeparation call values
+        output.maxSeparation = maxSeparation;
+        output.bestIndex = bestIndex;
+    }
+    function findIncidentEdge(c, poly1, xf1, edge1, poly2, xf2) {
+        var normals1 = poly1.m_normals;
+        var count2 = poly2.m_count;
+        var vertices2 = poly2.m_vertices;
+        var normals2 = poly2.m_normals;
+        // Get the normal of the reference edge in poly2's frame.
+        var normal1 = Rot.mulTVec2(xf2.q, Rot.mulVec2(xf1.q, normals1[edge1]));
+        // Find the incident edge on poly2.
+        var index = 0;
+        var minDot = Infinity;
+        for (var i = 0; i < count2; ++i) {
+            var dot = Vec2.dot(normal1, normals2[i]);
+            if (dot < minDot) {
+                minDot = dot;
+                index = i;
+            }
+        }
+        // Build the clip vertices for the incident edge.
+        var i1 = index;
+        var i2 = i1 + 1 < count2 ? i1 + 1 : 0;
+        c[0].v = Transform.mulVec2(xf2, vertices2[i1]);
+        c[0].id.cf.indexA = edge1;
+        c[0].id.cf.indexB = i1;
+        c[0].id.cf.typeA = ContactFeatureType.e_face;
+        c[0].id.cf.typeB = ContactFeatureType.e_vertex;
+        c[1].v = Transform.mulVec2(xf2, vertices2[i2]);
+        c[1].id.cf.indexA = edge1;
+        c[1].id.cf.indexB = i2;
+        c[1].id.cf.typeA = ContactFeatureType.e_face;
+        c[1].id.cf.typeB = ContactFeatureType.e_vertex;
+    }
+    var maxSeparation = {
+        maxSeparation: 0,
+        bestIndex: 0,
+    };
+    /**
+     *
+     * Find edge normal of max separation on A - return if separating axis is found<br>
+     * Find edge normal of max separation on B - return if separation axis is found<br>
+     * Choose reference edge as min(minA, minB)<br>
+     * Find incident edge<br>
+     * Clip
+     *
+     * The normal points from 1 to 2
+     */
+    function CollidePolygons(manifold, polyA, xfA, polyB, xfB) {
+        manifold.pointCount = 0;
+        var totalRadius = polyA.m_radius + polyB.m_radius;
+        findMaxSeparation(polyA, xfA, polyB, xfB, maxSeparation);
+        var edgeA = maxSeparation.bestIndex;
+        var separationA = maxSeparation.maxSeparation;
+        if (separationA > totalRadius)
+            return;
+        findMaxSeparation(polyB, xfB, polyA, xfA, maxSeparation);
+        var edgeB = maxSeparation.bestIndex;
+        var separationB = maxSeparation.maxSeparation;
+        if (separationB > totalRadius)
+            return;
+        var poly1; // reference polygon
+        var poly2; // incident polygon
+        var xf1;
+        var xf2;
+        var edge1; // reference edge
+        var flip;
+        var k_tol = 0.1 * Settings.linearSlop;
+        if (separationB > separationA + k_tol) {
+            poly1 = polyB;
+            poly2 = polyA;
+            xf1 = xfB;
+            xf2 = xfA;
+            edge1 = edgeB;
+            manifold.type = ManifoldType.e_faceB;
+            flip = 1;
+        }
+        else {
+            poly1 = polyA;
+            poly2 = polyB;
+            xf1 = xfA;
+            xf2 = xfB;
+            edge1 = edgeA;
+            manifold.type = ManifoldType.e_faceA;
+            flip = 0;
+        }
+        var incidentEdge = [new ClipVertex(), new ClipVertex()];
+        findIncidentEdge(incidentEdge, poly1, xf1, edge1, poly2, xf2);
+        var count1 = poly1.m_count;
+        var vertices1 = poly1.m_vertices;
+        var iv1 = edge1;
+        var iv2 = edge1 + 1 < count1 ? edge1 + 1 : 0;
+        var v11 = vertices1[iv1];
+        var v12 = vertices1[iv2];
+        var localTangent = Vec2.sub(v12, v11);
+        localTangent.normalize();
+        var localNormal = Vec2.crossVec2Num(localTangent, 1.0);
+        var planePoint = Vec2.combine(0.5, v11, 0.5, v12);
+        var tangent = Rot.mulVec2(xf1.q, localTangent);
+        var normal = Vec2.crossVec2Num(tangent, 1.0);
+        v11 = Transform.mulVec2(xf1, v11);
+        v12 = Transform.mulVec2(xf1, v12);
+        // Face offset.
+        var frontOffset = Vec2.dot(normal, v11);
+        // Side offsets, extended by polytope skin thickness.
+        var sideOffset1 = -Vec2.dot(tangent, v11) + totalRadius;
+        var sideOffset2 = Vec2.dot(tangent, v12) + totalRadius;
+        // Clip incident edge against extruded edge1 side edges.
+        var clipPoints1 = [new ClipVertex(), new ClipVertex()];
+        var clipPoints2 = [new ClipVertex(), new ClipVertex()];
+        var np;
+        // Clip to box side 1
+        np = clipSegmentToLine(clipPoints1, incidentEdge, Vec2.neg(tangent), sideOffset1, iv1);
+        if (np < 2) {
+            return;
+        }
+        // Clip to negative box side 1
+        np = clipSegmentToLine(clipPoints2, clipPoints1, tangent, sideOffset2, iv2);
+        if (np < 2) {
+            return;
+        }
+        // Now clipPoints2 contains the clipped points.
+        manifold.localNormal = localNormal;
+        manifold.localPoint = planePoint;
+        var pointCount = 0;
+        for (var i = 0; i < clipPoints2.length /* maxManifoldPoints */; ++i) {
+            var separation = Vec2.dot(normal, clipPoints2[i].v) - frontOffset;
+            if (separation <= totalRadius) {
+                var cp = manifold.points[pointCount];
+                cp.localPoint.setVec2(Transform.mulTVec2(xf2, clipPoints2[i].v));
+                cp.id = clipPoints2[i].id;
+                if (flip) {
+                    // Swap features
+                    var cf = cp.id.cf;
+                    var indexA = cf.indexA;
+                    var indexB = cf.indexB;
+                    var typeA = cf.typeA;
+                    var typeB = cf.typeB;
+                    cf.indexA = indexB;
+                    cf.indexB = indexA;
+                    cf.typeA = typeB;
+                    cf.typeB = typeA;
+                }
+                ++pointCount;
+            }
+        }
+        manifold.pointCount = pointCount;
+    }
+
+    /*
+     * Planck.js
+     * The MIT License
+     * Copyright (c) 2021 Erin Catto, Ali Shakiba
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining a copy
+     * of this software and associated documentation files (the "Software"), to deal
+     * in the Software without restriction, including without limitation the rights
+     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     * copies of the Software, and to permit persons to whom the Software is
+     * furnished to do so, subject to the following conditions:
+     *
+     * The above copyright notice and this permission notice shall be included in all
+     * copies or substantial portions of the Software.
+     *
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     * SOFTWARE.
+     */
+    Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
+    function PolygonCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
+        CollidePolygonCircle(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
+    }
+    function CollidePolygonCircle(manifold, polygonA, xfA, circleB, xfB) {
+        manifold.pointCount = 0;
+        // Compute circle position in the frame of the polygon.
+        var c = Transform.mulVec2(xfB, circleB.m_p);
+        var cLocal = Transform.mulTVec2(xfA, c);
+        // Find the min separating edge.
+        var normalIndex = 0;
+        var separation = -Infinity;
+        var radius = polygonA.m_radius + circleB.m_radius;
+        var vertexCount = polygonA.m_count;
+        var vertices = polygonA.m_vertices;
+        var normals = polygonA.m_normals;
+        for (var i = 0; i < vertexCount; ++i) {
+            var s = Vec2.dot(normals[i], Vec2.sub(cLocal, vertices[i]));
+            if (s > radius) {
+                // Early out.
+                return;
+            }
+            if (s > separation) {
+                separation = s;
+                normalIndex = i;
+            }
+        }
+        // Vertices that subtend the incident face.
+        var vertIndex1 = normalIndex;
+        var vertIndex2 = vertIndex1 + 1 < vertexCount ? vertIndex1 + 1 : 0;
+        var v1 = vertices[vertIndex1];
+        var v2 = vertices[vertIndex2];
+        // If the center is inside the polygon ...
+        if (separation < math.EPSILON) {
+            manifold.pointCount = 1;
+            manifold.type = ManifoldType.e_faceA;
+            manifold.localNormal.setVec2(normals[normalIndex]);
+            manifold.localPoint.setCombine(0.5, v1, 0.5, v2);
+            manifold.points[0].localPoint = circleB.m_p;
+            // manifold.points[0].id.key = 0;
+            manifold.points[0].id.cf.indexA = 0;
+            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.indexB = 0;
+            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+            return;
+        }
+        // Compute barycentric coordinates
+        var u1 = Vec2.dot(Vec2.sub(cLocal, v1), Vec2.sub(v2, v1));
+        var u2 = Vec2.dot(Vec2.sub(cLocal, v2), Vec2.sub(v1, v2));
+        if (u1 <= 0.0) {
+            if (Vec2.distanceSquared(cLocal, v1) > radius * radius) {
+                return;
+            }
+            manifold.pointCount = 1;
+            manifold.type = ManifoldType.e_faceA;
+            manifold.localNormal.setCombine(1, cLocal, -1, v1);
+            manifold.localNormal.normalize();
+            manifold.localPoint = v1;
+            manifold.points[0].localPoint.setVec2(circleB.m_p);
+            // manifold.points[0].id.key = 0;
+            manifold.points[0].id.cf.indexA = 0;
+            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.indexB = 0;
+            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+        }
+        else if (u2 <= 0.0) {
+            if (Vec2.distanceSquared(cLocal, v2) > radius * radius) {
+                return;
+            }
+            manifold.pointCount = 1;
+            manifold.type = ManifoldType.e_faceA;
+            manifold.localNormal.setCombine(1, cLocal, -1, v2);
+            manifold.localNormal.normalize();
+            manifold.localPoint.setVec2(v2);
+            manifold.points[0].localPoint.setVec2(circleB.m_p);
+            // manifold.points[0].id.key = 0;
+            manifold.points[0].id.cf.indexA = 0;
+            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.indexB = 0;
+            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+        }
+        else {
+            var faceCenter = Vec2.mid(v1, v2);
+            var separation_1 = Vec2.dot(cLocal, normals[vertIndex1]) - Vec2.dot(faceCenter, normals[vertIndex1]);
+            if (separation_1 > radius) {
+                return;
+            }
+            manifold.pointCount = 1;
+            manifold.type = ManifoldType.e_faceA;
+            manifold.localNormal.setVec2(normals[vertIndex1]);
+            manifold.localPoint.setVec2(faceCenter);
+            manifold.points[0].localPoint.setVec2(circleB.m_p);
+            // manifold.points[0].id.key = 0;
+            manifold.points[0].id.cf.indexA = 0;
+            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.indexB = 0;
+            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+        }
+    }
+
+    /*
+     * Planck.js
+     * The MIT License
+     * Copyright (c) 2021 Erin Catto, Ali Shakiba
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining a copy
+     * of this software and associated documentation files (the "Software"), to deal
+     * in the Software without restriction, including without limitation the rights
+     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     * copies of the Software, and to permit persons to whom the Software is
+     * furnished to do so, subject to the following conditions:
+     *
+     * The above copyright notice and this permission notice shall be included in all
+     * copies or substantial portions of the Software.
+     *
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     * SOFTWARE.
+     */
+    Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
+    Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
+    function EdgePolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
+        CollideEdgePolygon(manifold, fA.getShape(), xfA, fB.getShape(), xfB);
+    }
+    function ChainPolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
+        var chain = fA.getShape();
+        var edge = new EdgeShape();
+        chain.getChildEdge(edge, indexA);
+        CollideEdgePolygon(manifold, edge, xfA, fB.getShape(), xfB);
+    }
+    var EPAxisType;
+    (function (EPAxisType) {
+        EPAxisType[EPAxisType["e_unknown"] = -1] = "e_unknown";
+        EPAxisType[EPAxisType["e_edgeA"] = 1] = "e_edgeA";
+        EPAxisType[EPAxisType["e_edgeB"] = 2] = "e_edgeB";
+    })(EPAxisType || (EPAxisType = {}));
+    // unused?
+    var VertexType;
+    (function (VertexType) {
+        VertexType[VertexType["e_isolated"] = 0] = "e_isolated";
+        VertexType[VertexType["e_concave"] = 1] = "e_concave";
+        VertexType[VertexType["e_convex"] = 2] = "e_convex";
+    })(VertexType || (VertexType = {}));
+    /**
+     * This structure is used to keep track of the best separating axis.
+     */
+    var EPAxis = /** @class */ (function () {
+        function EPAxis() {
+        }
+        return EPAxis;
+    }());
+    /**
+     * This holds polygon B expressed in frame A.
+     */
+    var TempPolygon = /** @class */ (function () {
+        function TempPolygon() {
+            this.vertices = []; // [Settings.maxPolygonVertices]
+            this.normals = []; // [Settings.maxPolygonVertices];
+            this.count = 0;
+        }
+        return TempPolygon;
+    }());
+    /**
+     * Reference face used for clipping
+     */
+    var ReferenceFace = /** @class */ (function () {
+        function ReferenceFace() {
+            this.normal = Vec2.zero();
+            this.sideNormal1 = Vec2.zero();
+            this.sideNormal2 = Vec2.zero();
+        }
+        return ReferenceFace;
+    }());
+    // reused
+    var edgeAxis = new EPAxis();
+    var polygonAxis = new EPAxis();
+    var polygonBA = new TempPolygon();
+    var rf = new ReferenceFace();
+    /**
+     * This function collides and edge and a polygon, taking into account edge
+     * adjacency.
+     */
+    function CollideEdgePolygon(manifold, edgeA, xfA, polygonB, xfB) {
+        // Algorithm:
+        // 1. Classify v1 and v2
+        // 2. Classify polygon centroid as front or back
+        // 3. Flip normal if necessary
+        // 4. Initialize normal range to [-pi, pi] about face normal
+        // 5. Adjust normal range according to adjacent edges
+        // 6. Visit each separating axes, only accept axes within the range
+        // 7. Return if _any_ axis indicates separation
+        // 8. Clip
+        // let m_type1: VertexType;
+        // let m_type2: VertexType;
+        var xf = Transform.mulTXf(xfA, xfB);
+        var centroidB = Transform.mulVec2(xf, polygonB.m_centroid);
+        var v0 = edgeA.m_vertex0;
+        var v1 = edgeA.m_vertex1;
+        var v2 = edgeA.m_vertex2;
+        var v3 = edgeA.m_vertex3;
+        var hasVertex0 = edgeA.m_hasVertex0;
+        var hasVertex3 = edgeA.m_hasVertex3;
+        var edge1 = Vec2.sub(v2, v1);
+        edge1.normalize();
+        var normal1 = Vec2.neo(edge1.y, -edge1.x);
+        var offset1 = Vec2.dot(normal1, Vec2.sub(centroidB, v1));
+        var offset0 = 0.0;
+        var offset2 = 0.0;
+        var convex1 = false;
+        var convex2 = false;
+        var normal0;
+        var normal2;
+        // Is there a preceding edge?
+        if (hasVertex0) {
+            var edge0 = Vec2.sub(v1, v0);
+            edge0.normalize();
+            normal0 = Vec2.neo(edge0.y, -edge0.x);
+            convex1 = Vec2.crossVec2Vec2(edge0, edge1) >= 0.0;
+            offset0 = Vec2.dot(normal0, centroidB) - Vec2.dot(normal0, v0);
+        }
+        // Is there a following edge?
+        if (hasVertex3) {
+            var edge2 = Vec2.sub(v3, v2);
+            edge2.normalize();
+            normal2 = Vec2.neo(edge2.y, -edge2.x);
+            convex2 = Vec2.crossVec2Vec2(edge1, edge2) > 0.0;
+            offset2 = Vec2.dot(normal2, centroidB) - Vec2.dot(normal2, v2);
+        }
+        var front;
+        var normal = Vec2.zero();
+        var lowerLimit = Vec2.zero();
+        var upperLimit = Vec2.zero();
+        // Determine front or back collision. Determine collision normal limits.
+        if (hasVertex0 && hasVertex3) {
+            if (convex1 && convex2) {
+                front = offset0 >= 0.0 || offset1 >= 0.0 || offset2 >= 0.0;
+                if (front) {
+                    normal.setVec2(normal1);
+                    lowerLimit.setVec2(normal0);
+                    upperLimit.setVec2(normal2);
+                }
+                else {
+                    normal.setMul(-1, normal1);
+                    lowerLimit.setMul(-1, normal1);
+                    upperLimit.setMul(-1, normal1);
+                }
+            }
+            else if (convex1) {
+                front = offset0 >= 0.0 || (offset1 >= 0.0 && offset2 >= 0.0);
+                if (front) {
+                    normal.setVec2(normal1);
+                    lowerLimit.setVec2(normal0);
+                    upperLimit.setVec2(normal1);
+                }
+                else {
+                    normal.setMul(-1, normal1);
+                    lowerLimit.setMul(-1, normal2);
+                    upperLimit.setMul(-1, normal1);
+                }
+            }
+            else if (convex2) {
+                front = offset2 >= 0.0 || (offset0 >= 0.0 && offset1 >= 0.0);
+                if (front) {
+                    normal.setVec2(normal1);
+                    lowerLimit.setVec2(normal1);
+                    upperLimit.setVec2(normal2);
+                }
+                else {
+                    normal.setMul(-1, normal1);
+                    lowerLimit.setMul(-1, normal1);
+                    upperLimit.setMul(-1, normal0);
+                }
+            }
+            else {
+                front = offset0 >= 0.0 && offset1 >= 0.0 && offset2 >= 0.0;
+                if (front) {
+                    normal.setVec2(normal1);
+                    lowerLimit.setVec2(normal1);
+                    upperLimit.setVec2(normal1);
+                }
+                else {
+                    normal.setMul(-1, normal1);
+                    lowerLimit.setMul(-1, normal2);
+                    upperLimit.setMul(-1, normal0);
+                }
+            }
+        }
+        else if (hasVertex0) {
+            if (convex1) {
+                front = offset0 >= 0.0 || offset1 >= 0.0;
+                if (front) {
+                    normal.setVec2(normal1);
+                    lowerLimit.setVec2(normal0);
+                    upperLimit.setMul(-1, normal1);
+                }
+                else {
+                    normal.setMul(-1, normal1);
+                    lowerLimit.setVec2(normal1);
+                    upperLimit.setMul(-1, normal1);
+                }
+            }
+            else {
+                front = offset0 >= 0.0 && offset1 >= 0.0;
+                if (front) {
+                    normal.setVec2(normal1);
+                    lowerLimit.setVec2(normal1);
+                    upperLimit.setMul(-1, normal1);
+                }
+                else {
+                    normal.setMul(-1, normal1);
+                    lowerLimit.setVec2(normal1);
+                    upperLimit.setMul(-1, normal0);
+                }
+            }
+        }
+        else if (hasVertex3) {
+            if (convex2) {
+                front = offset1 >= 0.0 || offset2 >= 0.0;
+                if (front) {
+                    normal.setVec2(normal1);
+                    lowerLimit.setMul(-1, normal1);
+                    upperLimit.setVec2(normal2);
+                }
+                else {
+                    normal.setMul(-1, normal1);
+                    lowerLimit.setMul(-1, normal1);
+                    upperLimit.setVec2(normal1);
+                }
+            }
+            else {
+                front = offset1 >= 0.0 && offset2 >= 0.0;
+                if (front) {
+                    normal.setVec2(normal1);
+                    lowerLimit.setMul(-1, normal1);
+                    upperLimit.setVec2(normal1);
+                }
+                else {
+                    normal.setMul(-1, normal1);
+                    lowerLimit.setMul(-1, normal2);
+                    upperLimit.setVec2(normal1);
+                }
+            }
+        }
+        else {
+            front = offset1 >= 0.0;
+            if (front) {
+                normal.setVec2(normal1);
+                lowerLimit.setMul(-1, normal1);
+                upperLimit.setMul(-1, normal1);
+            }
+            else {
+                normal.setMul(-1, normal1);
+                lowerLimit.setVec2(normal1);
+                upperLimit.setVec2(normal1);
+            }
+        }
+        // Get polygonB in frameA
+        polygonBA.count = polygonB.m_count;
+        for (var i = 0; i < polygonB.m_count; ++i) {
+            polygonBA.vertices[i] = Transform.mulVec2(xf, polygonB.m_vertices[i]);
+            polygonBA.normals[i] = Rot.mulVec2(xf.q, polygonB.m_normals[i]);
+        }
+        var radius = 2.0 * Settings.polygonRadius;
+        manifold.pointCount = 0;
+        { // ComputeEdgeSeparation
+            edgeAxis.type = EPAxisType.e_edgeA;
+            edgeAxis.index = front ? 0 : 1;
+            edgeAxis.separation = Infinity;
+            for (var i = 0; i < polygonBA.count; ++i) {
+                var s = Vec2.dot(normal, Vec2.sub(polygonBA.vertices[i], v1));
+                if (s < edgeAxis.separation) {
+                    edgeAxis.separation = s;
+                }
+            }
+        }
+        // If no valid normal can be found than this edge should not collide.
+        // @ts-ignore
+        if (edgeAxis.type == EPAxisType.e_unknown) {
+            return;
+        }
+        if (edgeAxis.separation > radius) {
+            return;
+        }
+        { // ComputePolygonSeparation
+            polygonAxis.type = EPAxisType.e_unknown;
+            polygonAxis.index = -1;
+            polygonAxis.separation = -Infinity;
+            var perp = Vec2.neo(-normal.y, normal.x);
+            for (var i = 0; i < polygonBA.count; ++i) {
+                var n = Vec2.neg(polygonBA.normals[i]);
+                var s1 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v1));
+                var s2 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v2));
+                var s = math.min(s1, s2);
+                if (s > radius) {
+                    // No collision
+                    polygonAxis.type = EPAxisType.e_edgeB;
+                    polygonAxis.index = i;
+                    polygonAxis.separation = s;
+                    break;
+                }
+                // Adjacency
+                if (Vec2.dot(n, perp) >= 0.0) {
+                    if (Vec2.dot(Vec2.sub(n, upperLimit), normal) < -Settings.angularSlop) {
+                        continue;
+                    }
+                }
+                else {
+                    if (Vec2.dot(Vec2.sub(n, lowerLimit), normal) < -Settings.angularSlop) {
+                        continue;
+                    }
+                }
+                if (s > polygonAxis.separation) {
+                    polygonAxis.type = EPAxisType.e_edgeB;
+                    polygonAxis.index = i;
+                    polygonAxis.separation = s;
+                }
+            }
+        }
+        if (polygonAxis.type != EPAxisType.e_unknown && polygonAxis.separation > radius) {
+            return;
+        }
+        // Use hysteresis for jitter reduction.
+        var k_relativeTol = 0.98;
+        var k_absoluteTol = 0.001;
+        var primaryAxis;
+        if (polygonAxis.type == EPAxisType.e_unknown) {
+            primaryAxis = edgeAxis;
+        }
+        else if (polygonAxis.separation > k_relativeTol * edgeAxis.separation + k_absoluteTol) {
+            primaryAxis = polygonAxis;
+        }
+        else {
+            primaryAxis = edgeAxis;
+        }
+        var ie = [new ClipVertex(), new ClipVertex()];
+        if (primaryAxis.type == EPAxisType.e_edgeA) {
+            manifold.type = ManifoldType.e_faceA;
+            // Search for the polygon normal that is most anti-parallel to the edge
+            // normal.
+            var bestIndex = 0;
+            var bestValue = Vec2.dot(normal, polygonBA.normals[0]);
+            for (var i = 1; i < polygonBA.count; ++i) {
+                var value = Vec2.dot(normal, polygonBA.normals[i]);
+                if (value < bestValue) {
+                    bestValue = value;
+                    bestIndex = i;
+                }
+            }
+            var i1 = bestIndex;
+            var i2 = i1 + 1 < polygonBA.count ? i1 + 1 : 0;
+            ie[0].v = polygonBA.vertices[i1];
+            ie[0].id.cf.indexA = 0;
+            ie[0].id.cf.indexB = i1;
+            ie[0].id.cf.typeA = ContactFeatureType.e_face;
+            ie[0].id.cf.typeB = ContactFeatureType.e_vertex;
+            ie[1].v = polygonBA.vertices[i2];
+            ie[1].id.cf.indexA = 0;
+            ie[1].id.cf.indexB = i2;
+            ie[1].id.cf.typeA = ContactFeatureType.e_face;
+            ie[1].id.cf.typeB = ContactFeatureType.e_vertex;
+            if (front) {
+                rf.i1 = 0;
+                rf.i2 = 1;
+                rf.v1 = v1;
+                rf.v2 = v2;
+                rf.normal.setVec2(normal1);
+            }
+            else {
+                rf.i1 = 1;
+                rf.i2 = 0;
+                rf.v1 = v2;
+                rf.v2 = v1;
+                rf.normal.setMul(-1, normal1);
+            }
+        }
+        else {
+            manifold.type = ManifoldType.e_faceB;
+            ie[0].v = v1;
+            ie[0].id.cf.indexA = 0;
+            ie[0].id.cf.indexB = primaryAxis.index;
+            ie[0].id.cf.typeA = ContactFeatureType.e_vertex;
+            ie[0].id.cf.typeB = ContactFeatureType.e_face;
+            ie[1].v = v2;
+            ie[1].id.cf.indexA = 0;
+            ie[1].id.cf.indexB = primaryAxis.index;
+            ie[1].id.cf.typeA = ContactFeatureType.e_vertex;
+            ie[1].id.cf.typeB = ContactFeatureType.e_face;
+            rf.i1 = primaryAxis.index;
+            rf.i2 = rf.i1 + 1 < polygonBA.count ? rf.i1 + 1 : 0;
+            rf.v1 = polygonBA.vertices[rf.i1];
+            rf.v2 = polygonBA.vertices[rf.i2];
+            rf.normal.setVec2(polygonBA.normals[rf.i1]);
+        }
+        rf.sideNormal1.setNum(rf.normal.y, -rf.normal.x);
+        rf.sideNormal2.setMul(-1, rf.sideNormal1);
+        rf.sideOffset1 = Vec2.dot(rf.sideNormal1, rf.v1);
+        rf.sideOffset2 = Vec2.dot(rf.sideNormal2, rf.v2);
+        // Clip incident edge against extruded edge1 side edges.
+        var clipPoints1 = [new ClipVertex(), new ClipVertex()];
+        var clipPoints2 = [new ClipVertex(), new ClipVertex()];
+        var np;
+        // Clip to box side 1
+        np = clipSegmentToLine(clipPoints1, ie, rf.sideNormal1, rf.sideOffset1, rf.i1);
+        if (np < Settings.maxManifoldPoints) {
+            return;
+        }
+        // Clip to negative box side 1
+        np = clipSegmentToLine(clipPoints2, clipPoints1, rf.sideNormal2, rf.sideOffset2, rf.i2);
+        if (np < Settings.maxManifoldPoints) {
+            return;
+        }
+        // Now clipPoints2 contains the clipped points.
+        if (primaryAxis.type == EPAxisType.e_edgeA) {
+            manifold.localNormal = Vec2.clone(rf.normal);
+            manifold.localPoint = Vec2.clone(rf.v1);
+        }
+        else {
+            manifold.localNormal = Vec2.clone(polygonB.m_normals[rf.i1]);
+            manifold.localPoint = Vec2.clone(polygonB.m_vertices[rf.i1]);
+        }
+        var pointCount = 0;
+        for (var i = 0; i < Settings.maxManifoldPoints; ++i) {
+            var separation = Vec2.dot(rf.normal, Vec2.sub(clipPoints2[i].v, rf.v1));
+            if (separation <= radius) {
+                var cp = manifold.points[pointCount]; // ManifoldPoint
+                if (primaryAxis.type == EPAxisType.e_edgeA) {
+                    cp.localPoint = Transform.mulTVec2(xf, clipPoints2[i].v);
+                    cp.id = clipPoints2[i].id;
+                }
+                else {
+                    cp.localPoint = clipPoints2[i].v;
+                    cp.id.cf.typeA = clipPoints2[i].id.cf.typeB;
+                    cp.id.cf.typeB = clipPoints2[i].id.cf.typeA;
+                    cp.id.cf.indexA = clipPoints2[i].id.cf.indexB;
+                    cp.id.cf.indexB = clipPoints2[i].id.cf.indexA;
+                }
+                ++pointCount;
+            }
+        }
+        manifold.pointCount = pointCount;
+    }
 
     /** @deprecated Merged with main namespace */
     var internal = {};
@@ -14667,14 +14782,6 @@
     internal.DynamicTree = DynamicTree;
     // @ts-ignore
     internal.stats = stats;
-    // @ts-ignore
-    Manifold.clipSegmentToLine = clipSegmentToLine;
-    // @ts-ignore
-    Manifold.ClipVertex = ClipVertex;
-    // @ts-ignore
-    Manifold.getPointStates = getPointStates;
-    // @ts-ignore
-    Manifold.PointState = PointState;
     // @ts-ignore
     Solver.TimeStep = TimeStep;
     // @ts-ignore
