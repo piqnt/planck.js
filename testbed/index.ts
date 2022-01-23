@@ -875,16 +875,20 @@ export { default as Distance } from '../src/collision/Distance';
 export { default as TimeOfImpact } from '../src/collision/TimeOfImpact';
 export { default as DynamicTree } from '../src/collision/DynamicTree';
 
-import Solver, { TimeStep } from "../src/dynamics/Solver";
+import Solver, { TimeStep } from '../src/dynamics/Solver';
 import { CollidePolygons } from '../src/collision/shape/CollidePolygon';
 import { default as Settings } from '../src/Settings';
 import { default as Sweep } from '../src/common/Sweep';
-import { clipSegmentToLine, ClipVertex, default as Manifold, getPointStates, PointState } from '../src/collision/Manifold';
+import { default as Manifold } from '../src/collision/Manifold';
 import { default as Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache, testOverlap } from '../src/collision/Distance';
 import { default as TimeOfImpact, TOIInput, TOIOutput } from '../src/collision/TimeOfImpact';
 import { default as DynamicTree } from '../src/collision/DynamicTree';
 
 import { default as stats } from '../src/util/stats'; // todo: what to do with this?
+
+import { ContactImpulse } from '../src/dynamics/Solver';
+type _ContactImpulse = InstanceType<typeof ContactImpulse>;
+export type { _ContactImpulse as ContactImpulse }
 
 /** @deprecated Merged with main namespace */
 export const internal = {};
@@ -905,15 +909,6 @@ internal.TimeOfImpact = TimeOfImpact;
 internal.DynamicTree = DynamicTree;
 // @ts-ignore
 internal.stats = stats;
-
-// @ts-ignore
-Manifold.clipSegmentToLine = clipSegmentToLine;
-// @ts-ignore
-Manifold.ClipVertex = ClipVertex;
-// @ts-ignore
-Manifold.getPointStates = getPointStates;
-// @ts-ignore
-Manifold.PointState = PointState;
 
 // @ts-ignore
 Solver.TimeStep = TimeStep;
