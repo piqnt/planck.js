@@ -68,8 +68,8 @@
   "scripts": {
     "lint": "eslint './src/**/*.ts'",
     "test": "mocha 'src/**/__test__/*.test.*' --require ts-node/register",
-    "test:coverage": "nyc --reporter=text mocha 'src/**/__test/*.js'",
-    "test:coverage:html": "nyc --reporter=html mocha 'src/**/__test/*.js'",
+    "test:coverage": "nyc --reporter=text mocha 'src/**/__test__/*.test.*' --require ts-node/register",
+    "test:coverage:html": "nyc --reporter=html mocha 'src/**/__test__/*.test.*' --require ts-node/register",
     "test:types": "tsd",
     "build": "rollup -c",
     "watch": "rollup -c --watch",
