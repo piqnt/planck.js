@@ -192,6 +192,8 @@ export default class PrismaticJoint extends Joint {
     this.m_axis = Vec2.zero();
     this.m_perp = Vec2.zero();
 
+    this.m_K = new Mat33();
+
     // Linear constraint (point-to-line)
     // d = p2 - p1 = x2 + r2 - x1 - r1
     // C = dot(perp, d)
