@@ -44,8 +44,8 @@ export default class Mat33 {
   constructor(a?: Vec3, b?: Vec3, c?: Vec3) {
     if (typeof a === 'object' && a !== null) {
       this.ex = Vec3.clone(a);
-      this.ey = Vec3.clone(b);
-      this.ez = Vec3.clone(c);
+      this.ey = Vec3.clone(b!);
+      this.ez = Vec3.clone(c!);
     } else {
       this.ex = Vec3.zero();
       this.ey = Vec3.zero();

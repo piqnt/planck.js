@@ -139,7 +139,7 @@ export default class Transform {
   static mul(a, b) {
     if (Array.isArray(b)) {
       _ASSERT && Transform.assert(a);
-      const arr = [];
+      const arr: Vec2[] | Transform[] = [];
       for (let i = 0; i < b.length; i++) {
         arr[i] = Transform.mul(a, b[i]);
       }
@@ -158,7 +158,7 @@ export default class Transform {
   // tslint:disable-next-line:typedef
   static mulAll(a: Transform, b) {
     _ASSERT && Transform.assert(a);
-    const arr = [];
+    const arr: Vec2[] | Transform[] = [];
     for (let i = 0; i < b.length; i++) {
       arr[i] = Transform.mul(a, b[i]);
     }

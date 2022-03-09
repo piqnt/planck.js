@@ -183,7 +183,7 @@ export default class Vec2 {
    * @deprecated Use setCombine or setMul
    */
   wSet(a: number, v: Vec2, b?: number, w?: Vec2): Vec2 {
-    if (typeof b !== 'undefined' || typeof w !== 'undefined') {
+    if (typeof b !== 'undefined' && typeof w !== 'undefined') {
       return this.setCombine(a, v, b, w);
     } else {
       return this.setMul(a, v);
@@ -235,7 +235,7 @@ export default class Vec2 {
    * @deprecated Use addCombine or addMul
    */
   wAdd(a: number, v: Vec2, b?: number, w?: Vec2): Vec2 {
-    if (typeof b !== 'undefined' || typeof w !== 'undefined') {
+    if (typeof b !== 'undefined' && typeof w !== 'undefined') {
       return this.addCombine(a, v, b, w);
     } else {
       return this.addMul(a, v);
@@ -275,7 +275,7 @@ export default class Vec2 {
    * @deprecated Use subCombine or subMul
    */
   wSub(a: number, v: Vec2, b?: number, w?: Vec2): Vec2 {
-    if (typeof b !== 'undefined' || typeof w !== 'undefined') {
+    if (typeof b !== 'undefined' && typeof w !== 'undefined') {
       return this.subCombine(a, v, b, w);
     } else {
       return this.subMul(a, v);
