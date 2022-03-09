@@ -6,8 +6,7 @@
   },
   "compilerOptions": {
     "module": "commonjs",
-    // "strictNullChecks": true,
-    // "noImplicitAny": true,
+    "strictNullChecks": true,
     "lib": ["ES2015", "DOM"],
     "stripInternal": true,
     "target": "ES5"
