@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.0-alpha.2
+ * Planck.js v1.0.0-alpha.4
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
@@ -10654,6 +10654,7 @@
             _this.m_limitState = inactiveLimit$1;
             _this.m_axis = Vec2.zero();
             _this.m_perp = Vec2.zero();
+            _this.m_K = new Mat33();
             return _this;
             // Linear constraint (point-to-line)
             // d = p2 - p1 = x2 + r2 - x1 - r1
