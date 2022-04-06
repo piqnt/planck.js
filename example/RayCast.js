@@ -38,7 +38,7 @@ var RayCastClosest = (function() {
   def.callback = function(fixture, point, normal, fraction) {
     var body = fixture.getBody();
     var userData = body.getUserData();
-    if (userData) {
+    if (userData !== undefined) {
       if (userData === 0) {
         // By returning -1, we instruct the calling code to ignore this fixture and
         // continue the ray-cast to the next fixture.
@@ -74,7 +74,7 @@ var RayCastAny = (function() {
   def.callback = function(fixture, point, normal, fraction) {
     var body = fixture.getBody();
     var userData = body.getUserData();
-    if (userData) {
+    if (userData !== undefined) {
       if (userData === 0) {
         // By returning -1, we instruct the calling code to ignore this fixture
         // and continue the ray-cast to the next fixture.
@@ -109,7 +109,7 @@ var RayCastMultiple = (function() {
   def.callback = function(fixture, point, normal, fraction) {
     var body = fixture.getBody();
     var userData = body.getUserData();
-    if (userData) {
+    if (userData !== undefined) {
       if (userData === 0) {
         // By returning -1, we instruct the calling code to ignore this fixture
         // and continue the ray-cast to the next fixture.
