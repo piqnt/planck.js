@@ -28,7 +28,7 @@ describe('Math', function(): void {
     expect(v.x).equal(0);
     expect(v.y).equal(0);
 
-    v.set(3, 4);
+    v.setNum(3, 4);
     expect(v.x).equal(3);
     expect(v.y).equal(4);
     expect(v.length()).equal(5);
@@ -54,7 +54,7 @@ describe('Math', function(): void {
     expect(v.x).equal(5);
     expect(v.y).equal(5);
 
-    v.set(2, 3);
+    v.setNum(2, 3);
     expect(v.x).equal(2);
     expect(v.y).equal(3);
 
@@ -65,10 +65,10 @@ describe('Math', function(): void {
     r = Vec2.dot(v, new Vec2(2, 3));
     expect(r).equal(13);
 
-    r = Vec2.cross(v, new Vec2(2, 3));
+    r = Vec2.crossVec2Vec2(v, new Vec2(2, 3));
     expect(r).equal(0);
 
-    r = Vec2.cross(v, 5);
+    r = Vec2.crossVec2Num(v, 5);
     expect(r.x).equal(15);
     expect(r.y).equal(-10);
 

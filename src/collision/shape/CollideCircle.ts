@@ -58,10 +58,10 @@ export function CollideCircles(manifold: Manifold, circleA: CircleShape, xfA: Tr
   }
 
   manifold.type = ManifoldType.e_circles;
-  manifold.localPoint.set(circleA.m_p);
+  manifold.localPoint.setVec2(circleA.m_p);
   manifold.localNormal.setZero();
   manifold.pointCount = 1;
-  manifold.points[0].localPoint.set(circleB.m_p);
+  manifold.points[0].localPoint.setVec2(circleB.m_p);
 
   // manifold.points[0].id.key = 0;
   manifold.points[0].id.cf.indexA = 0;

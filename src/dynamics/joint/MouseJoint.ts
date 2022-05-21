@@ -86,7 +86,7 @@ const DEFAULTS = {
  * at the testbed.
  */
 export default class MouseJoint extends Joint {
-  static TYPE: 'mouse-joint' = 'mouse-joint';
+  static TYPE = 'mouse-joint' as const;
 
   /** @internal */ m_type: 'mouse-joint';
   /** @internal */ m_targetA: Vec2;
@@ -175,7 +175,7 @@ export default class MouseJoint extends Joint {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
-    data.target = new Vec2(data.target);
+    data.target = Vec2.clone(data.target);
     const joint = new MouseJoint(data);
     if (data._localAnchorB) {
       joint.m_localAnchorB = data._localAnchorB;
@@ -257,7 +257,7 @@ export default class MouseJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.mul(inv_dt, this.m_impulse);
+    return Vec2.mulNumVec2(inv_dt, this.m_impulse);
   }
 
   /**
@@ -329,7 +329,7 @@ export default class MouseJoint extends Joint {
 
     this.m_mass = K.getInverse();
 
-    this.m_C.set(cB);
+    this.m_C.setVec2(cB);
     this.m_C.addCombine(1, this.m_rB, -1, this.m_targetA);
     this.m_C.mul(this.m_beta);
 
@@ -339,13 +339,13 @@ export default class MouseJoint extends Joint {
     if (step.warmStarting) {
       this.m_impulse.mul(step.dtRatio);
       vB.addMul(this.m_invMassB, this.m_impulse);
-      wB += this.m_invIB * Vec2.cross(this.m_rB, this.m_impulse);
+      wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, this.m_impulse);
 
     } else {
       this.m_impulse.setZero();
     }
 
-    velocity.v.set(vB);
+    velocity.v.setVec2(vB);
     velocity.w = wB;
   }
 
@@ -356,7 +356,7 @@ export default class MouseJoint extends Joint {
 
     // Cdot = v + cross(w, r)
 
-    const Cdot = Vec2.cross(wB, this.m_rB);
+    const Cdot = Vec2.crossNumVec2(wB, this.m_rB);
     Cdot.add(vB);
 
     Cdot.addCombine(1, this.m_C, this.m_gamma, this.m_impulse);
@@ -371,9 +371,9 @@ export default class MouseJoint extends Joint {
     impulse = Vec2.sub(this.m_impulse, oldImpulse);
 
     vB.addMul(this.m_invMassB, impulse);
-    wB += this.m_invIB * Vec2.cross(this.m_rB, impulse);
+    wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, impulse);
 
-    velocity.v.set(vB);
+    velocity.v.setVec2(vB);
     velocity.w = wB;
   }
 

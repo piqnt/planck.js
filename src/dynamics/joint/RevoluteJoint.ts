@@ -128,7 +128,7 @@ const DEFAULTS = {
  * so that infinite forces are not generated.
  */
 export default class RevoluteJoint extends Joint {
-  static TYPE: 'revolute-joint' = 'revolute-joint';
+  static TYPE = 'revolute-joint' as const;
 
   /** @internal */ m_type: 'revolute-joint';
   /** @internal */ m_localAnchorA: Vec2;
@@ -240,15 +240,15 @@ export default class RevoluteJoint extends Joint {
     localAnchorB?: Vec2,
   }): void {
     if (def.anchorA) {
-      this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+      this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
-      this.m_localAnchorA.set(def.localAnchorA);
+      this.m_localAnchorA.setVec2(def.localAnchorA);
     }
 
     if (def.anchorB) {
-      this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+      this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
-      this.m_localAnchorB.set(def.localAnchorB);
+      this.m_localAnchorB.setVec2(def.localAnchorB);
     }
   }
 
@@ -515,10 +515,10 @@ export default class RevoluteJoint extends Joint {
       const P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
 
       vA.subMul(mA, P);
-      wA -= iA * (Vec2.cross(this.m_rA, P) + this.m_motorImpulse + this.m_impulse.z);
+      wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_motorImpulse + this.m_impulse.z);
 
       vB.addMul(mB, P);
-      wB += iB * (Vec2.cross(this.m_rB, P) + this.m_motorImpulse + this.m_impulse.z);
+      wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_motorImpulse + this.m_impulse.z);
 
     } else {
       this.m_impulse.setZero();
@@ -563,8 +563,8 @@ export default class RevoluteJoint extends Joint {
     if (this.m_enableLimit && this.m_limitState != inactiveLimit
         && fixedRotation == false) {
       const Cdot1 = Vec2.zero();
-      Cdot1.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
-      Cdot1.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA));
+      Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
+      Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
       const Cdot2 = wB - wA; // float
       const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
 
@@ -611,26 +611,26 @@ export default class RevoluteJoint extends Joint {
       const P = Vec2.neo(impulse.x, impulse.y);
 
       vA.subMul(mA, P);
-      wA -= iA * (Vec2.cross(this.m_rA, P) + impulse.z);
+      wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + impulse.z);
 
       vB.addMul(mB, P);
-      wB += iB * (Vec2.cross(this.m_rB, P) + impulse.z);
+      wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + impulse.z);
 
     } else {
       // Solve point-to-point constraint
       const Cdot = Vec2.zero();
-      Cdot.addCombine(1, vB, 1, Vec2.cross(wB, this.m_rB));
-      Cdot.subCombine(1, vA, 1, Vec2.cross(wA, this.m_rA));
+      Cdot.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
+      Cdot.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
       const impulse = this.m_mass.solve22(Vec2.neg(Cdot)); // Vec2
 
       this.m_impulse.x += impulse.x;
       this.m_impulse.y += impulse.y;
 
       vA.subMul(mA, impulse);
-      wA -= iA * Vec2.cross(this.m_rA, impulse);
+      wA -= iA * Vec2.crossVec2Vec2(this.m_rA, impulse);
 
       vB.addMul(mB, impulse);
-      wB += iB * Vec2.cross(this.m_rB, impulse);
+      wB += iB * Vec2.crossVec2Vec2(this.m_rB, impulse);
     }
 
     this.m_bodyA.c_velocity.v = vA;
@@ -694,8 +694,8 @@ export default class RevoluteJoint extends Joint {
 
     // Solve point-to-point constraint.
     {
-      qA.set(aA);
-      qB.set(aB);
+      qA.setAngle(aA);
+      qB.setAngle(aB);
       const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA)); // Vec2
       const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB)); // Vec2
 
@@ -718,15 +718,15 @@ export default class RevoluteJoint extends Joint {
       const impulse = Vec2.neg(K.solve(C)); // Vec2
 
       cA.subMul(mA, impulse);
-      aA -= iA * Vec2.cross(rA, impulse);
+      aA -= iA * Vec2.crossVec2Vec2(rA, impulse);
 
       cB.addMul(mB, impulse);
-      aB += iB * Vec2.cross(rB, impulse);
+      aB += iB * Vec2.crossVec2Vec2(rB, impulse);
     }
 
-    this.m_bodyA.c_position.c.set(cA);
+    this.m_bodyA.c_position.c.setVec2(cA);
     this.m_bodyA.c_position.a = aA;
-    this.m_bodyB.c_position.c.set(cB);
+    this.m_bodyB.c_position.c.setVec2(cB);
     this.m_bodyB.c_position.a = aB;
 
     return positionError <= Settings.linearSlop

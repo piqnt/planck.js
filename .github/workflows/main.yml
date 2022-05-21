@@ -31,5 +31,8 @@ jobs:
       - name: npm-build
         run: npm run build
 
+      - name: npm-test-types
+        run: npm run test:types
+
       - name: npm-typedoc
         run: npm run typedoc

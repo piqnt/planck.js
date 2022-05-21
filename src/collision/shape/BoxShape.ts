@@ -29,7 +29,7 @@ import PolygonShape from './PolygonShape';
  * A rectangle polygon which extend PolygonShape.
  */
 export default class BoxShape extends PolygonShape {
-  static TYPE: 'polygon' = 'polygon';
+  static TYPE = 'polygon' as const;
 
   constructor(hx: number, hy: number, center?: Vec2, angle?: number) {
     // @ts-ignore

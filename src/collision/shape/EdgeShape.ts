@@ -38,7 +38,7 @@ import { DistanceProxy } from '../Distance';
  * contact normals.
  */
 export default class EdgeShape extends Shape {
-  static TYPE: 'edge' = 'edge';
+  static TYPE = 'edge' as const;
 
   // These are the edge vertices
   m_vertex1: Vec2;
@@ -109,7 +109,7 @@ export default class EdgeShape extends Shape {
    */
   setNextVertex(v?: Vec2): EdgeShape {
     if (v) {
-      this.m_vertex3.set(v);
+      this.m_vertex3.setVec2(v);
       this.m_hasVertex3 = true;
     } else {
       this.m_vertex3.setZero();
@@ -135,7 +135,7 @@ export default class EdgeShape extends Shape {
    */
   setPrevVertex(v?: Vec2): EdgeShape {
     if (v) {
-      this.m_vertex0.set(v);
+      this.m_vertex0.setVec2(v);
       this.m_hasVertex0 = true;
     } else {
       this.m_vertex0.setZero();
@@ -155,8 +155,8 @@ export default class EdgeShape extends Shape {
    * Set this as an isolated edge.
    */
   _set(v1: Vec2, v2: Vec2): EdgeShape {
-    this.m_vertex1.set(v1);
-    this.m_vertex2.set(v2);
+    this.m_vertex1.setVec2(v1);
+    this.m_vertex2.setVec2(v2);
     this.m_hasVertex0 = false;
     this.m_hasVertex3 = false;
     return this;
@@ -172,10 +172,10 @@ export default class EdgeShape extends Shape {
     const clone = new EdgeShape();
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
-    clone.m_vertex1.set(this.m_vertex1);
-    clone.m_vertex2.set(this.m_vertex2);
-    clone.m_vertex0.set(this.m_vertex0);
-    clone.m_vertex3.set(this.m_vertex3);
+    clone.m_vertex1.setVec2(this.m_vertex1);
+    clone.m_vertex2.setVec2(this.m_vertex2);
+    clone.m_vertex0.setVec2(this.m_vertex0);
+    clone.m_vertex3.setVec2(this.m_vertex3);
     clone.m_hasVertex0 = this.m_hasVertex0;
     clone.m_hasVertex3 = this.m_hasVertex3;
     return clone;
@@ -271,7 +271,7 @@ export default class EdgeShape extends Shape {
       return false;
     }
 
-    const q = Vec2.add(p1, Vec2.mul(t, d));
+    const q = Vec2.add(p1, Vec2.mulNumVec2(t, d));
 
     // q = v1 + s * r
     // s = dot(q - v1, r) / dot(r, r)

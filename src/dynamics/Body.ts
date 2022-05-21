@@ -578,7 +578,7 @@ export default class Body {
       return;
     }
 
-    this.m_xf.set(position, angle);
+    this.m_xf.setNum(position, angle);
     // LIQUID_FUN:
     this.m_xf0 = Transform.clone(this.m_xf); // TODO clone necessary?
     this.m_sweep.setTransform(this.m_xf);
@@ -613,7 +613,7 @@ export default class Body {
   advance(alpha: number): void {
     // Advance to the new safe time. This doesn't sync the broad-phase.
     this.m_sweep.advance(alpha);
-    this.m_sweep.c.set(this.m_sweep.c0);
+    this.m_sweep.c.setVec2(this.m_sweep.c0);
     this.m_sweep.a = this.m_sweep.a0;
     this.m_sweep.getTransform(this.m_xf, 1);
   }
@@ -670,7 +670,7 @@ export default class Body {
    */
   getLinearVelocityFromWorldPoint(worldPoint: Vec2): Vec2 {
     const localCenter = Vec2.sub(worldPoint, this.m_sweep.c);
-    return Vec2.add(this.m_linearVelocity, Vec2.cross(this.m_angularVelocity,
+    return Vec2.add(this.m_linearVelocity, Vec2.crossNumVec2(this.m_angularVelocity,
       localCenter));
   }
 
@@ -695,7 +695,7 @@ export default class Body {
     if (Vec2.dot(v, v) > 0.0) {
       this.setAwake(true);
     }
-    this.m_linearVelocity.set(v);
+    this.m_linearVelocity.setVec2(v);
   }
 
   /**
@@ -774,7 +774,7 @@ export default class Body {
   getMassData(data: MassData): void {
     data.mass = this.m_mass;
     data.I = this.getInertia();
-    data.center.set(this.m_sweep.localCenter);
+    data.center.setVec2(this.m_sweep.localCenter);
   }
 
   /**
@@ -792,8 +792,8 @@ export default class Body {
 
     // Static and kinematic bodies have zero mass.
     if (this.isStatic() || this.isKinematic()) {
-      this.m_sweep.c0.set(this.m_xf.p);
-      this.m_sweep.c.set(this.m_xf.p);
+      this.m_sweep.c0.setVec2(this.m_xf.p);
+      this.m_sweep.c.setVec2(this.m_xf.p);
       this.m_sweep.a0 = this.m_sweep.a;
       return;
     }
@@ -841,7 +841,7 @@ export default class Body {
     this.m_sweep.setLocalCenter(localCenter, this.m_xf);
 
     // Update center of mass velocity.
-    this.m_linearVelocity.add(Vec2.cross(this.m_angularVelocity, Vec2.sub(
+    this.m_linearVelocity.add(Vec2.crossNumVec2(this.m_angularVelocity, Vec2.sub(
       this.m_sweep.c, oldCenter)));
   }
 
@@ -886,7 +886,7 @@ export default class Body {
     this.m_sweep.setLocalCenter(massData.center, this.m_xf);
 
     // Update center of mass velocity.
-    this.m_linearVelocity.add(Vec2.cross(this.m_angularVelocity, Vec2.sub(
+    this.m_linearVelocity.add(Vec2.crossNumVec2(this.m_angularVelocity, Vec2.sub(
       this.m_sweep.c, oldCenter)));
   }
 
@@ -899,7 +899,7 @@ export default class Body {
    * @param point The world position of the point of application.
    * @param wake Also wake up the body
    */
-  applyForce(force: Vec2, point: Vec2, wake?: boolean): void {
+  applyForce(force: Vec2, point: Vec2, wake: boolean = true): void {
     if (this.m_type != DYNAMIC) {
       return;
     }
@@ -909,7 +909,7 @@ export default class Body {
     // Don't accumulate a force if the body is sleeping.
     if (this.m_awakeFlag) {
       this.m_force.add(force);
-      this.m_torque += Vec2.cross(Vec2.sub(point, this.m_sweep.c), force);
+      this.m_torque += Vec2.crossVec2Vec2(Vec2.sub(point, this.m_sweep.c), force);
     }
   }
 
@@ -919,7 +919,7 @@ export default class Body {
    * @param force The world force vector, usually in Newtons (N).
    * @param wake Also wake up the body
    */
-  applyForceToCenter(force: Vec2, wake?: boolean): void {
+  applyForceToCenter(force: Vec2, wake: boolean = true): void {
     if (this.m_type != DYNAMIC) {
       return;
     }
@@ -939,7 +939,7 @@ export default class Body {
    * @param torque About the z-axis (out of the screen), usually in N-m.
    * @param wake Also wake up the body
    */
-  applyTorque(torque: number, wake?: boolean): void {
+  applyTorque(torque: number, wake: boolean = true): void {
     if (this.m_type != DYNAMIC) {
       return;
     }
@@ -961,7 +961,7 @@ export default class Body {
    * @param point The world position of the point of application.
    * @param wake Also wake up the body
    */
-  applyLinearImpulse(impulse: Vec2, point: Vec2, wake?: boolean): void {
+  applyLinearImpulse(impulse: Vec2, point: Vec2, wake: boolean = true): void {
     if (this.m_type != DYNAMIC) {
       return;
     }
@@ -972,7 +972,7 @@ export default class Body {
     // Don't accumulate velocity if the body is sleeping
     if (this.m_awakeFlag) {
       this.m_linearVelocity.addMul(this.m_invMass, impulse);
-      this.m_angularVelocity += this.m_invI * Vec2.cross(Vec2.sub(point, this.m_sweep.c), impulse);
+      this.m_angularVelocity += this.m_invI * Vec2.crossVec2Vec2(Vec2.sub(point, this.m_sweep.c), impulse);
     }
   }
 
@@ -982,7 +982,7 @@ export default class Body {
    * @param impulse The angular impulse in units of kg*m*m/s
    * @param wake Also wake up the body
    */
-  applyAngularImpulse(impulse: number, wake?: boolean): void {
+  applyAngularImpulse(impulse: number, wake: boolean = true): void {
     if (this.m_type != DYNAMIC) {
       return;
     }

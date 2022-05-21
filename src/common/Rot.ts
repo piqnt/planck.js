@@ -43,7 +43,7 @@ export default class Rot {
     if (typeof angle === 'number') {
       this.setAngle(angle);
     } else if (typeof angle === 'object') {
-      this.set(angle);
+      this.setRot(angle);
     } else {
       this.setIdentity();
     }
@@ -106,6 +106,12 @@ export default class Rot {
     }
   }
 
+  setRot(angle: Rot): void {
+    _ASSERT && Rot.assert(angle);
+    this.s = angle.s;
+    this.c = angle.c;
+  }
+
   /** Set using an angle in radians. */
   setAngle(angle: number): void {
     _ASSERT && Math.assert(angle);
@@ -153,6 +159,7 @@ export default class Rot {
     }
   }
 
+  /** Multiply two rotations: q * r */
   static mulRot(rot: Rot, m: Rot): Rot {
     _ASSERT && Rot.assert(rot);
     _ASSERT && Rot.assert(m);
@@ -166,6 +173,7 @@ export default class Rot {
     return qr;
   }
 
+  /** Rotate a vector */
   static mulVec2(rot: Rot, m: Vec2): Vec2 {
     _ASSERT && Rot.assert(rot);
     _ASSERT && Vec2.assert(m);
@@ -201,6 +209,7 @@ export default class Rot {
     }
   }
 
+  /** Transpose multiply two rotations: qT * r */
   static mulTRot(rot: Rot, m: Rot): Rot {
     _ASSERT && Rot.assert(m);
     // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
@@ -213,6 +222,7 @@ export default class Rot {
     return qr;
   }
 
+  /** Inverse rotate a vector */
   static mulTVec2(rot: Rot, m: Vec2): Vec2 {
     _ASSERT && Vec2.assert(m);
     return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);

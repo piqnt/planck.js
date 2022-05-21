@@ -45,7 +45,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * for a convex polygon. extends Shape
  */
 export default class PolygonShape extends Shape {
-  static TYPE: 'polygon' = 'polygon';
+  static TYPE = 'polygon' as const;
 
   m_centroid: Vec2;
   m_vertices: Vec2[]; // [Settings.maxPolygonVertices]
@@ -111,7 +111,7 @@ export default class PolygonShape extends Shape {
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
     clone.m_count = this.m_count;
-    clone.m_centroid.set(this.m_centroid);
+    clone.m_centroid.setVec2(this.m_centroid);
     for (let i = 0; i < this.m_count; i++) {
       clone.m_vertices.push(this.m_vertices[i].clone());
     }
@@ -208,7 +208,7 @@ export default class PolygonShape extends Shape {
 
         const r = Vec2.sub(ps[ie], ps[hull[m]]);
         const v = Vec2.sub(ps[j], ps[hull[m]]);
-        const c = Vec2.cross(r, v);
+        const c = Vec2.crossVec2Vec2(r, v);
         // c < 0 means counter-clockwise wrapping, c > 0 means clockwise wrapping
         if (c < 0.0) {
           ie = j;
@@ -249,7 +249,7 @@ export default class PolygonShape extends Shape {
       const i2 = i + 1 < m ? i + 1 : 0;
       const edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
       _ASSERT && common.assert(edge.lengthSquared() > Math.EPSILON * Math.EPSILON);
-      this.m_normals[i] = Vec2.cross(edge, 1.0);
+      this.m_normals[i] = Vec2.crossVec2Num(edge, 1.0);
       this.m_normals[i].normalize();
     }
 
@@ -275,11 +275,11 @@ export default class PolygonShape extends Shape {
     if (Vec2.isValid(center)) {
       angle = angle || 0;
 
-      this.m_centroid.set(center);
+      this.m_centroid.setVec2(center);
 
       const xf = Transform.identity();
-      xf.p.set(center);
-      xf.q.set(angle);
+      xf.p.setVec2(center);
+      xf.q.setAngle(angle);
 
       // Transform vertices and normals.
       for (let i = 0; i < this.m_count; ++i) {
@@ -442,8 +442,8 @@ export default class PolygonShape extends Shape {
       maxY = Math.max(maxY, v.y);
     }
 
-    aabb.lowerBound.set(minX, minY);
-    aabb.upperBound.set(maxX, maxY);
+    aabb.lowerBound.setNum(minX, minY);
+    aabb.upperBound.setNum(maxX, maxY);
     aabb.extend(this.m_radius);
   }
 
@@ -502,7 +502,7 @@ export default class PolygonShape extends Shape {
       const e1 = Vec2.sub(this.m_vertices[i], s);
       const e2 = i + 1 < this.m_count ? Vec2.sub(this.m_vertices[i + 1], s) : Vec2 .sub(this.m_vertices[0], s);
 
-      const D = Vec2.cross(e1, e2);
+      const D = Vec2.crossVec2Vec2(e1, e2);
 
       const triangleArea = 0.5 * D;
       area += triangleArea;
@@ -553,7 +553,7 @@ export default class PolygonShape extends Shape {
         }
 
         const v = Vec2.sub(this.m_vertices[j], p);
-        const c = Vec2.cross(e, v);
+        const c = Vec2.crossVec2Vec2(e, v);
         if (c < 0.0) {
           return false;
         }
@@ -598,7 +598,7 @@ function ComputeCentroid(vs: Vec2[], count: number): Vec2 {
     const e1 = Vec2.sub(p2, p1);
     const e2 = Vec2.sub(p3, p1);
 
-    const D = Vec2.cross(e1, e2);
+    const D = Vec2.crossVec2Vec2(e1, e2);
 
     const triangleArea = 0.5 * D;
     area += triangleArea;

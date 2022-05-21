@@ -67,19 +67,19 @@ export default class Sweep {
 
   setTransform(xf: Transform): void {
     const c = Transform.mulVec2(xf, this.localCenter);
-    this.c.set(c);
-    this.c0.set(c);
+    this.c.setVec2(c);
+    this.c0.setVec2(c);
 
     this.a = xf.q.getAngle();
     this.a0 = xf.q.getAngle();
   }
 
   setLocalCenter(localCenter: Vec2, xf: Transform): void {
-    this.localCenter.set(localCenter);
+    this.localCenter.setVec2(localCenter);
 
     const c = Transform.mulVec2(xf, this.localCenter);
-    this.c.set(c);
-    this.c0.set(c);
+    this.c.setVec2(c);
+    this.c0.setVec2(c);
   }
 
   /**
@@ -88,8 +88,7 @@ export default class Sweep {
    * @param xf
    * @param beta A factor in [0,1], where 0 indicates alpha0
    */
-  getTransform(xf: Transform, beta: number): void {
-    beta = typeof beta === 'undefined' ? 0 : beta;
+  getTransform(xf: Transform, beta: number = 0): void {
     xf.q.setAngle((1.0 - beta) * this.a0 + beta * this.a);
     xf.p.setCombine((1.0 - beta), this.c0, beta, this.c);
 
@@ -112,7 +111,7 @@ export default class Sweep {
 
   forward(): void {
     this.a0 = this.a;
-    this.c0.set(this.c);
+    this.c0.setVec2(this.c);
   }
 
   /**
@@ -126,21 +125,21 @@ export default class Sweep {
 
   clone(): Sweep {
     const clone = new Sweep();
-    clone.localCenter.set(this.localCenter);
+    clone.localCenter.setVec2(this.localCenter);
     clone.alpha0 = this.alpha0;
     clone.a0 = this.a0;
     clone.a = this.a;
-    clone.c0.set(this.c0);
-    clone.c.set(this.c);
+    clone.c0.setVec2(this.c0);
+    clone.c.setVec2(this.c);
     return clone;
   }
 
   set(that: Sweep): void {
-    this.localCenter.set(that.localCenter);
+    this.localCenter.setVec2(that.localCenter);
     this.alpha0 = that.alpha0;
     this.a0 = that.a0;
     this.a = that.a;
-    this.c0.set(that.c0);
-    this.c.set(that.c);
+    this.c0.setVec2(that.c0);
+    this.c.setVec2(that.c);
   }
 }

@@ -80,7 +80,7 @@ const DEFAULTS = {
  * want to dynamically control length.
  */
 export default class RopeJoint extends Joint {
-  static TYPE: 'rope-joint' = 'rope-joint';
+  static TYPE = 'rope-joint' as const;
 
   /** @internal */ m_type: 'rope-joint';
   /** @internal */ m_localAnchorA: Vec2;
@@ -211,7 +211,7 @@ export default class RopeJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.mul(this.m_impulse, this.m_u).mul(inv_dt);
+    return Vec2.mulNumVec2(this.m_impulse, this.m_u).mul(inv_dt);
   }
 
   /**
@@ -267,8 +267,8 @@ export default class RopeJoint extends Joint {
     }
 
     // Compute effective mass.
-    const crA = Vec2.cross(this.m_rA, this.m_u); // float
-    const crB = Vec2.cross(this.m_rB, this.m_u); // float
+    const crA = Vec2.crossVec2Vec2(this.m_rA, this.m_u); // float
+    const crB = Vec2.crossVec2Vec2(this.m_rB, this.m_u); // float
     const invMass = this.m_invMassA + this.m_invIA * crA * crA + this.m_invMassB
         + this.m_invIB * crB * crB; // float
 
@@ -278,21 +278,21 @@ export default class RopeJoint extends Joint {
       // Scale the impulse to support a variable time step.
       this.m_impulse *= step.dtRatio;
 
-      const P = Vec2.mul(this.m_impulse, this.m_u);
+      const P = Vec2.mulNumVec2(this.m_impulse, this.m_u);
 
       vA.subMul(this.m_invMassA, P);
-      wA -= this.m_invIA * Vec2.cross(this.m_rA, P);
+      wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
 
       vB.addMul(this.m_invMassB, P);
-      wB += this.m_invIB * Vec2.cross(this.m_rB, P);
+      wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
 
     } else {
       this.m_impulse = 0.0;
     }
 
-    this.m_bodyA.c_velocity.v.set(vA);
+    this.m_bodyA.c_velocity.v.setVec2(vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.set(vB);
+    this.m_bodyB.c_velocity.v.setVec2(vB);
     this.m_bodyB.c_velocity.w = wB;
   }
 
@@ -303,8 +303,8 @@ export default class RopeJoint extends Joint {
     let wB = this.m_bodyB.c_velocity.w;
 
     // Cdot = dot(u, v + cross(w, r))
-    const vpA = Vec2.addCross(vA, wA, this.m_rA); // Vec2
-    const vpB = Vec2.addCross(vB, wB, this.m_rB); // Vec2
+    const vpA = Vec2.addCrossNumVec2(vA, wA, this.m_rA); // Vec2
+    const vpB = Vec2.addCrossNumVec2(vB, wB, this.m_rB); // Vec2
     const C = this.m_length - this.m_maxLength; // float
     let Cdot = Vec2.dot(this.m_u, Vec2.sub(vpB, vpA)); // float
 
@@ -318,11 +318,11 @@ export default class RopeJoint extends Joint {
     this.m_impulse = Math.min(0.0, this.m_impulse + impulse);
     impulse = this.m_impulse - oldImpulse;
 
-    const P = Vec2.mul(impulse, this.m_u); // Vec2
+    const P = Vec2.mulNumVec2(impulse, this.m_u); // Vec2
     vA.subMul(this.m_invMassA, P);
-    wA -= this.m_invIA * Vec2.cross(this.m_rA, P);
+    wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
     vB.addMul(this.m_invMassB, P);
-    wB += this.m_invIB * Vec2.cross(this.m_rB, P);
+    wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
 
     this.m_bodyA.c_velocity.v = vA;
     this.m_bodyA.c_velocity.w = wA;
@@ -354,16 +354,16 @@ export default class RopeJoint extends Joint {
     C = Math.clamp(C, 0.0, Settings.maxLinearCorrection);
 
     const impulse = -this.m_mass * C; // float
-    const P = Vec2.mul(impulse, u); // Vec2
+    const P = Vec2.mulNumVec2(impulse, u); // Vec2
 
     cA.subMul(this.m_invMassA, P);
-    aA -= this.m_invIA * Vec2.cross(rA, P);
+    aA -= this.m_invIA * Vec2.crossVec2Vec2(rA, P);
     cB.addMul(this.m_invMassB, P);
-    aB += this.m_invIB * Vec2.cross(rB, P);
+    aB += this.m_invIB * Vec2.crossVec2Vec2(rB, P);
 
-    this.m_bodyA.c_position.c.set(cA);
+    this.m_bodyA.c_position.c.setVec2(cA);
     this.m_bodyA.c_position.a = aA;
-    this.m_bodyB.c_position.c.set(cB);
+    this.m_bodyB.c_position.c.setVec2(cB);
     this.m_bodyB.c_position.a = aB;
 
     return length - this.m_maxLength < Settings.linearSlop;
