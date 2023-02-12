@@ -42,7 +42,6 @@ export default [
     output: {
       name: 'planck',
       file: options.dest,
-      format: 'umd',
       sourcemap: true,
     },
     plugins: [
