@@ -50,7 +50,9 @@ app.listen(app.get('port'), function() {
 });
 
 
-const loadConfigFile = require('rollup/dist/loadConfigFile');
+const { dirname, join } = require('path');
+const loadConfigPath = join(dirname(require.resolve('rollup')), 'loadConfigFile');
+const loadConfigFile = require(loadConfigPath);
 
 loadConfigFile(path.resolve(__dirname, '../rollup.config.js')).then(
   async ({ options, warnings }) => {
