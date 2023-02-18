@@ -14,25 +14,43 @@ import licenseBanner from './license';
 export default [
   {
     src: 'src/index.ts',
-    dest: 'dist/planck.js',
+    dest: 'dist/planck.mjs',
+    format: 'esm',
     minimize: false,
     declaration: true,
   },
   {
     src: 'src/index.ts',
+    dest: 'dist/planck.js',
+    format: 'umd',
+    minimize: false,
+    declaration: false,
+  },
+  {
+    src: 'src/index.ts',
     dest: 'dist/planck.min.js',
+    format: 'umd',
     minimize: true,
     declaration: false,
   },
   {
     src: 'testbed/index.ts',
-    dest: 'dist/planck-with-testbed.js',
+    dest: 'dist/planck-with-testbed.mjs',
+    format: 'esm',
     minimize: false,
     declaration: true,
   },
   {
     src: 'testbed/index.ts',
+    dest: 'dist/planck-with-testbed.js',
+    format: 'umd',
+    minimize: false,
+    declaration: false,
+  },
+  {
+    src: 'testbed/index.ts',
     dest: 'dist/planck-with-testbed.min.js',
+    format: 'umd',
     minimize: true,
     declaration: false,
   }
@@ -42,6 +60,7 @@ export default [
     output: {
       name: 'planck',
       file: options.dest,
+      format: options.format,
       sourcemap: true,
     },
     plugins: [

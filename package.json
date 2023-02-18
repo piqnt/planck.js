@@ -20,6 +20,7 @@
     "url": "git://github.com/shakiba/planck.js.git"
   },
   "main": "dist/planck.js",
+  "module": "dist/planck.mjs",
   "types": "index.d.ts",
   "author": "Ali Shakiba",
   "contributors": [
