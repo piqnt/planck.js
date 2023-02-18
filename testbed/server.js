@@ -61,6 +61,7 @@ loadConfigFile(path.resolve(__dirname, '../rollup.config.js')).then(
 
     options = options
       .filter(opt => opt.output[0].file.indexOf('.min.js') === -1)
+      .filter(opt => opt.output[0].file.indexOf('.mjs') === -1)
       .map(opt => ({...opt, treeshake: false }));
 
     const watcher = rollup.watch(options);
