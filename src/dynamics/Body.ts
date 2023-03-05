@@ -927,7 +927,7 @@ export default class Body {
 
   /**
    * Apply a torque. This affects the angular velocity without affecting the
-   * linear velocity of the center of mass. This wakes up the body.
+   * linear velocity of the center of mass.
    *
    * @param torque About the z-axis (out of the screen), usually in N-m.
    * @param wake Also wake up the body
@@ -966,6 +966,26 @@ export default class Body {
     if (this.m_awakeFlag) {
       this.m_linearVelocity.addMul(this.m_invMass, impulse);
       this.m_angularVelocity += this.m_invI * Vec2.crossVec2Vec2(Vec2.sub(point, this.m_sweep.c), impulse);
+    }
+  }
+
+  /**
+   * Apply an impulse to the center of mass. This immediately modifies the velocity.
+   *
+   * @param impulse the world impulse vector, usually in N-seconds or kg-m/s.
+   * @param wake also wake up the body
+   */
+	applyLinearImpulseToCenter(impulse: Vec2, wake: boolean = true): void {
+    if (this.m_type != DYNAMIC) {
+      return;
+    }
+    if (wake && this.m_awakeFlag == false) {
+      this.setAwake(true);
+    }
+
+    // Don't accumulate velocity if the body is sleeping
+    if (this.m_awakeFlag) {
+      this.m_linearVelocity.addMul(this.m_invMass, impulse);
     }
   }
 
