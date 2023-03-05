@@ -880,8 +880,8 @@ export default class Contact {
 
     // Solve normal constraints
     if (this.v_pointCount == 1 || step.blockSolve == false) {
-      for (let i = 0; i < this.v_pointCount; ++i) {
-        const vcp = this.v_points[i]; // VelocityConstraintPoint
+      for (let j = 0; j < this.v_pointCount; ++j) {
+        const vcp = this.v_points[j]; // VelocityConstraintPoint
 
         // Relative velocity at contact
         const dv = Vec2.zero();
