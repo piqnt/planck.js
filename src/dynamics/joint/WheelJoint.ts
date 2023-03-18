@@ -292,9 +292,41 @@ export default class WheelJoint extends Joint {
   }
 
   /**
-   * Get the current joint translation speed, usually in meters per second.
+   * Get the current joint linear speed, usually in meters per second.
    */
-  getJointSpeed(): number {
+  getJointLinearSpeed() {
+    const bA = this.m_bodyA;
+    const bB = this.m_bodyB;
+
+    const rA = Rot.mulSub(bA.m_xf.q, this.m_localAnchorA, bA.m_sweep.localCenter);
+    const rB = Rot.mulSub(bB.m_xf.q, this.m_localAnchorB, bB.m_sweep.localCenter);
+    const p1 = Vec2.add(bA.m_sweep.c, rA);
+    const p2 = Vec2.add(bB.m_sweep.c, rB);
+    const d = Vec2.sub(p2, p1);
+    const axis = Rot.mulVec2(bA.m_xf.q, this.m_localXAxisA);
+
+    const vA = bA.m_linearVelocity;
+    const vB = bB.m_linearVelocity;
+    const wA = bA.m_angularVelocity;
+    const wB = bB.m_angularVelocity;
+
+    const speed = Vec2.dot(d, Vec2.crossNumVec2(wA, axis)) + Vec2.dot(axis, Vec2.add(vB, Vec2.crossNumVec2(wB, rB)).sub(vA).sub(Vec2.crossNumVec2(wA, rA)));
+    return speed;
+  }
+
+  /**
+   * Get the current joint angle in radians.
+   */
+  getJointAngle() {
+    const bA = this.m_bodyA;
+    const bB = this.m_bodyB;
+    return bB.m_sweep.a - bA.m_sweep.a;
+  }
+
+  /**
+   * Get the current joint angular speed in radians per second.
+   */
+  getJointAngularSpeed(): number {
     const wA = this.m_bodyA.m_angularVelocity;
     const wB = this.m_bodyB.m_angularVelocity;
     return wB - wA;
