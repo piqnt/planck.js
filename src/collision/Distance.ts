@@ -114,7 +114,6 @@ export default function Distance(output: DistanceOutput, cache: SimplexCache, in
   let saveCount = 0;
 
   let distanceSqr1 = Infinity;
-  let distanceSqr2 = Infinity;
 
   // Main iteration loop.
   let iter = 0;
@@ -135,7 +134,7 @@ export default function Distance(output: DistanceOutput, cache: SimplexCache, in
 
     // Compute closest point.
     const p = simplex.getClosestPoint();
-    distanceSqr2 = p.lengthSquared();
+    const distanceSqr2 = p.lengthSquared();
 
     // Ensure progress
     if (distanceSqr2 >= distanceSqr1) {

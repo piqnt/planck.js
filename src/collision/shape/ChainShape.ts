@@ -137,6 +137,10 @@ export default class ChainShape extends Shape {
   _createLoop(vertices: Vec2[]): ChainShape {
     _ASSERT && common.assert(this.m_vertices.length == 0 && this.m_count == 0);
     _ASSERT && common.assert(vertices.length >= 3);
+    if (vertices.length < 3) {
+      return;
+    }
+
     for (let i = 1; i < vertices.length; ++i) {
       const v1 = vertices[i - 1];
       const v2 = vertices[i];
