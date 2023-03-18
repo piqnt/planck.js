@@ -39,6 +39,7 @@ import { ContactImpulse, TimeStep } from "./Solver";
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
+// Solver debugging is normally disabled because the block solver sometimes has to deal with a poorly conditioned effective mass matrix.
 const DEBUG_SOLVER = false;
 
 /**
@@ -910,8 +911,7 @@ export class Contact {
       // 01/07 on Box2D_Lite).
       // Build the mini LCP for this contact patch
       //
-      // vn = A * x + b, vn >= 0, , vn >= 0, x >= 0 and vn_i * x_i = 0 with i =
-      // 1..2
+      // vn = A * x + b, vn >= 0, x >= 0 and vn_i * x_i = 0 with i = 1..2
       //
       // A = J * W * JT and J = ( -n, -r1 x n, n, r2 x n )
       // b = vn0 - velocityBias
