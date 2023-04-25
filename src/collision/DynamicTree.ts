@@ -626,10 +626,12 @@ export default class DynamicTree<T> {
    * Validate this tree. For testing.
    */
   validate(): void {
-    this.validateStructure(this.m_root);
-    this.validateMetrics(this.m_root);
-
-    _ASSERT && common.assert(this.getHeight() === this.computeHeight());
+    if (_ASSERT) {
+      this.validateStructure(this.m_root);
+      this.validateMetrics(this.m_root);
+  
+      common.assert(this.getHeight() === this.computeHeight());
+    }
   }
 
   /**

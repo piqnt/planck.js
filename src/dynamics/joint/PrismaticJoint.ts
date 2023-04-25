@@ -571,8 +571,6 @@ export default class PrismaticJoint extends Joint {
       this.m_s1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_perp);
       this.m_s2 = Vec2.crossVec2Vec2(rB, this.m_perp);
 
-      const s1test = Vec2.crossVec2Vec2(rA, this.m_perp);
-
       const k11 = mA + mB + iA * this.m_s1 * this.m_s1 + iB * this.m_s2 * this.m_s2;
       const k12 = iA * this.m_s1 + iB * this.m_s2;
       const k13 = iA * this.m_s1 * this.m_a1 + iB * this.m_s2 * this.m_a2;

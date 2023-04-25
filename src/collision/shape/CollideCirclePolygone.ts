@@ -134,8 +134,8 @@ export function CollidePolygonCircle(manifold: Manifold, polygonA: PolygonShape,
     manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
   } else {
     const faceCenter = Vec2.mid(v1, v2);
-    const separation = Vec2.dot(cLocal, normals[vertIndex1]) - Vec2.dot(faceCenter, normals[vertIndex1]);
-    if (separation > radius) {
+    const s = Vec2.dot(cLocal, normals[vertIndex1]) - Vec2.dot(faceCenter, normals[vertIndex1]);
+    if (s > radius) {
       return;
     }
 

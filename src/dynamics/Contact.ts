@@ -40,6 +40,7 @@ import { ContactImpulse, TimeStep } from "./Solver";
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
+// Solver debugging is normally disabled because the block solver sometimes has to deal with a poorly conditioned effective mass matrix.
 const DEBUG_SOLVER = false;
 
 /**
@@ -880,8 +881,8 @@ export default class Contact {
 
     // Solve normal constraints
     if (this.v_pointCount == 1 || step.blockSolve == false) {
-      for (let i = 0; i < this.v_pointCount; ++i) {
-        const vcp = this.v_points[i]; // VelocityConstraintPoint
+      for (let j = 0; j < this.v_pointCount; ++j) {
+        const vcp = this.v_points[j]; // VelocityConstraintPoint
 
         // Relative velocity at contact
         const dv = Vec2.zero();
@@ -911,8 +912,7 @@ export default class Contact {
       // 01/07 on Box2D_Lite).
       // Build the mini LCP for this contact patch
       //
-      // vn = A * x + b, vn >= 0, , vn >= 0, x >= 0 and vn_i * x_i = 0 with i =
-      // 1..2
+      // vn = A * x + b, vn >= 0, x >= 0 and vn_i * x_i = 0 with i = 1..2
       //
       // A = J * W * JT and J = ( -n, -r1 x n, n, r2 x n )
       // b = vn0 - velocityBias
