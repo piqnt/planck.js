@@ -6,7 +6,7 @@ import filesize from 'rollup-plugin-filesize';
 import typescript from 'rollup-plugin-ts';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import factoryConstructorTransformer from './transformers/factoryConstructorTransformer.js';
+import factoryConstructorTransformer from './transformers/factoryConstructorTransformer';
 
 import licenseBanner from './license';
 
