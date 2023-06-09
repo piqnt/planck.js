@@ -5,9 +5,9 @@ import filesize from 'rollup-plugin-filesize';
 import typescript from 'rollup-plugin-ts';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import declarationTransformer from './declarationTransformer';
+import declarationTransformer from './build-utils/declarationTransformer';
 
-import licenseBanner from './license';
+import licenseBanner from './build-utils/license';
 
 
 export default [
