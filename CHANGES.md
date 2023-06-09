@@ -1,3 +1,6 @@
+## 1.0.0-alpha
+* Migrated the code to typescript
+
 ## 0.2
 * TypeScript definitions added
 * wSet/wAdd/wSub(a, v, b, w) replaced with combine/setCombine/addCombine/subCombine(a, v, b, w)

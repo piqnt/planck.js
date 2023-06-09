@@ -1,7 +1,7 @@
-const pkg = require('./package.json');
+const version = process.env.npm_package_version;
 
 export default `
-Planck.js v${pkg.version}
+Planck.js v${version}
 @license The MIT license
 @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
 
