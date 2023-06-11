@@ -128,6 +128,9 @@ export default class World {
       return new World(def);
     }
 
+    this.s_step = new TimeStep();
+
+
     if (def && Vec2.isValid(def)) {
       def = { gravity: def as Vec2 };
     }
@@ -767,7 +770,7 @@ export default class World {
   }
 
   /** @internal */
-  s_step: TimeStep = new TimeStep(); // reuse
+  s_step: TimeStep; // reuse
 
   /**
    * Take a time step. This performs collision detection, integration, and
@@ -846,14 +849,16 @@ export default class World {
    * Call this method to find new contacts.
    */
   findNewContacts(): void {
-    this.m_broadPhase.updatePairs(this.createContact);
+    this.m_broadPhase.updatePairs(
+      (proxyA: FixtureProxy, proxyB: FixtureProxy) => this.createContact(proxyA, proxyB)
+    );
   }
 
   /**
    * @internal
    * Callback for broad-phase.
    */
-  createContact = (proxyA: FixtureProxy, proxyB: FixtureProxy): void => {
+  createContact(proxyA: FixtureProxy, proxyB: FixtureProxy): void {
     const fixtureA = proxyA.fixture;
     const fixtureB = proxyB.fixture;
 
