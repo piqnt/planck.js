@@ -39,6 +39,33 @@ export enum ContactFeatureType {
 }
 
 /**
+ * This is used for determining the state of contact points.
+ */
+ export enum PointState {
+  /** Point does not exist */
+  nullState = 0,
+  /** Point was added in the update */
+  addState = 1,
+  /** Point persisted across the update */
+  persistState = 2,
+  /** Point was removed in the update */
+  removeState = 3
+}
+
+/**
+ * Used for computing contact manifolds.
+ */
+ export class ClipVertex {
+  v: Vec2 = Vec2.zero();
+  id: ContactID = new ContactID();
+
+  set(o: ClipVertex): void {
+    this.v.setVec2(o.v);
+    this.id.set(o.id);
+  }
+}
+
+/**
  * A manifold for two touching convex shapes. Manifolds are created in `evaluate`
  * method of Contact subclasses.
  *
@@ -93,7 +120,7 @@ export default class Manifold {
         const pointB = Transform.mulVec2(xfB, this.points[0].localPoint);
         const dist = Vec2.sub(pointB, pointA);
         if (Vec2.lengthSquared(dist) > Math.EPSILON * Math.EPSILON) {
-          normal.set(dist);
+          normal.setVec2(dist);
           normal.normalize();
         }
         const cA = pointA.clone().addMul(radiusA, normal);
@@ -145,6 +172,11 @@ export default class Manifold {
     wm.separations = separations;
     return wm;
   }
+
+  static clipSegmentToLine = clipSegmentToLine;
+  static ClipVertex = ClipVertex;
+  static getPointStates = getPointStates;
+  static PointState = PointState;
 }
 
 /**
@@ -244,20 +276,6 @@ export class WorldManifold {
 }
 
 /**
- * This is used for determining the state of contact points.
- */
-export enum PointState {
-  /** Point does not exist */
-  nullState = 0,
-  /** Point was added in the update */
-  addState = 1,
-  /** Point persisted across the update */
-  persistState = 2,
-  /** Point was removed in the update */
-  removeState = 3
-}
-
-/**
  * Compute the point states given two manifolds. The states pertain to the
  * transition from manifold1 to manifold2. So state1 is either persist or remove
  * while state2 is either add or persist.
@@ -301,19 +319,6 @@ export function getPointStates(
         break;
       }
     }
-  }
-}
-
-/**
- * Used for computing contact manifolds.
- */
-export class ClipVertex {
-  v: Vec2 = Vec2.zero();
-  id: ContactID = new ContactID();
-
-  set(o: ClipVertex): void {
-    this.v.set(o.v);
-    this.id.set(o.id);
   }
 }
 

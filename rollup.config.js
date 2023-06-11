@@ -1,4 +1,3 @@
-import babel from 'rollup-plugin-babel';
 import { terser } from "rollup-plugin-terser";
 import license from 'rollup-plugin-license';
 import replace from '@rollup/plugin-replace';
@@ -6,9 +5,9 @@ import filesize from 'rollup-plugin-filesize';
 import typescript from 'rollup-plugin-ts';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import factoryConstructorTransformer from './transformers/factoryConstructorTransformer';
+import factoryConstructorTransformer from './build-utils/factoryConstructorTransformer';
 
-import licenseBanner from './license';
+import licenseBanner from './build-utils/license';
 
 
 function buildTransformerPipeline(...transformers) {
@@ -85,10 +84,6 @@ export default [
         transformers: buildTransformerPipeline(
           factoryConstructorTransformer({ enabled: options.includeFactoryConstructors })
         ),
-      }),
-      babel({
-        runtimeHelpers: true,
-        exclude: 'node_modules/**',
       }),
       license({
         banner: licenseBanner,
