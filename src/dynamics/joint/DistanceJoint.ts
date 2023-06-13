@@ -118,8 +118,8 @@ export default class DistanceJoint extends Joint {
     // order of constructor arguments is changed in v0.2
     if (bodyB && anchorA && ('m_type' in anchorA) && ('x' in bodyB) && ('y' in bodyB)) {
       const temp = bodyB;
-      bodyB = anchorA;
-      anchorA = temp;
+      bodyB = anchorA as any as Body;
+      anchorA = temp as any as Vec2;
     }
 
     def = options(def, DEFAULTS);
