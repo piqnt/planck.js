@@ -23,8 +23,8 @@
  */
 
 import common from '../util/common';
-import Vec2 from './Vec2';
-import Rot from './Rot';
+import { Vec2 } from './Vec2';
+import { Rot } from './Rot';
 
 
 const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -36,7 +36,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * position and orientation of rigid frames. Initialize using a position vector
  * and a rotation.
  */
-export default class Transform {
+export class Transform {
   /** position */
   p: Vec2;
 

@@ -23,7 +23,7 @@
  */
 
 import common from '../util/common';
-import Vec2 from './Vec2';
+import { Vec2 } from './Vec2';
 
 
 const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -33,7 +33,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 /**
  * A 2-by-2 matrix. Stored in column-major order.
  */
-export default class Mat22 {
+export class Mat22 {
   ex: Vec2;
   ey: Vec2;
 

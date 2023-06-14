@@ -1,36 +1,35 @@
-import { terser } from "rollup-plugin-terser";
-import license from 'rollup-plugin-license';
-import replace from '@rollup/plugin-replace';
-import filesize from 'rollup-plugin-filesize';
-import typescript from 'rollup-plugin-ts';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
-import declarationTransformer from './build-utils/declarationTransformer';
+const terser =  require('@rollup/plugin-terser');
+const license =  require('rollup-plugin-license');
+const replace =  require('@rollup/plugin-replace');
+const filesize =  require('rollup-plugin-filesize');
+const typescript =  require('rollup-plugin-ts');
+const { nodeResolve } =  require('@rollup/plugin-node-resolve');
 
-import licenseBanner from './build-utils/license';
+const declarationTransformer =  require('./build-utils/declarationTransformer');
+const licenseBanner =  require('./build-utils/license');
 
 
-export default [
+module.exports = [
   {
-    src: 'src/index.ts',
+    src: 'src/main.ts',
     dest: 'dist/planck.js',
     minimize: false,
     declaration: true,
   },
   {
-    src: 'src/index.ts',
+    src: 'src/main.ts',
     dest: 'dist/planck.min.js',
     minimize: true,
     declaration: false,
   },
   {
-    src: 'testbed/index.ts',
+    src: 'testbed/main.ts',
     dest: 'dist/planck-with-testbed.js',
     minimize: false,
     declaration: true,
   },
   {
-    src: 'testbed/index.ts',
+    src: 'testbed/main.ts',
     dest: 'dist/planck-with-testbed.min.js',
     minimize: true,
     declaration: false,
@@ -53,10 +52,8 @@ export default [
         },
       }),
       nodeResolve(),
-      commonjs({
-        include: ['node_modules/stage-js/**']
-      }),
       typescript({
+        sourceMap: false,
         tsconfig: resolvedConfig => ({
           ...resolvedConfig,
           declaration: options.declaration

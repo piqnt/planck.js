@@ -1,31 +1,31 @@
 // tslint:disable:typedef
-import World from '../dynamics/World';
-import Body from '../dynamics/Body';
-import Joint from '../dynamics/Joint';
-import Fixture from '../dynamics/Fixture';
-import Shape from '../collision/Shape';
-import Vec2 from '../common/Vec2';
-import Vec3 from '../common/Vec3';
-import ChainShape from "../collision/shape/ChainShape";
-import BoxShape from "../collision/shape/BoxShape";
-import EdgeShape from "../collision/shape/EdgeShape";
-import PolygonShape from "../collision/shape/PolygonShape";
-import CircleShape from "../collision/shape/CircleShape";
-import DistanceJoint from "../dynamics/joint/DistanceJoint";
-import FrictionJoint from "../dynamics/joint/FrictionJoint";
-import GearJoint from "../dynamics/joint/GearJoint";
-import MotorJoint from "../dynamics/joint/MotorJoint";
-import MouseJoint from "../dynamics/joint/MouseJoint";
-import PrismaticJoint from "../dynamics/joint/PrismaticJoint";
-import PulleyJoint from "../dynamics/joint/PulleyJoint";
-import RevoluteJoint from "../dynamics/joint/RevoluteJoint";
-import RopeJoint from "../dynamics/joint/RopeJoint";
-import WeldJoint from "../dynamics/joint/WeldJoint";
-import WheelJoint from "../dynamics/joint/WheelJoint";
+import { World } from '../dynamics/World';
+import { Body } from '../dynamics/Body';
+import { Joint } from '../dynamics/Joint';
+import { Fixture } from '../dynamics/Fixture';
+import { Shape } from '../collision/Shape';
+import { Vec2 } from '../common/Vec2';
+import { Vec3 } from '../common/Vec3';
+import { ChainShape } from "../collision/shape/ChainShape";
+import { BoxShape } from "../collision/shape/BoxShape";
+import { EdgeShape } from "../collision/shape/EdgeShape";
+import { PolygonShape } from "../collision/shape/PolygonShape";
+import { CircleShape } from "../collision/shape/CircleShape";
+import { DistanceJoint } from "../dynamics/joint/DistanceJoint";
+import { FrictionJoint } from "../dynamics/joint/FrictionJoint";
+import { GearJoint } from "../dynamics/joint/GearJoint";
+import { MotorJoint } from "../dynamics/joint/MotorJoint";
+import { MouseJoint } from "../dynamics/joint/MouseJoint";
+import { PrismaticJoint } from "../dynamics/joint/PrismaticJoint";
+import { PulleyJoint } from "../dynamics/joint/PulleyJoint";
+import { RevoluteJoint } from "../dynamics/joint/RevoluteJoint";
+import { RopeJoint } from "../dynamics/joint/RopeJoint";
+import { WeldJoint } from "../dynamics/joint/WeldJoint";
+import { WheelJoint } from "../dynamics/joint/WheelJoint";
 
 let SID = 0;
 
-function Serializer(opts?) {
+export function Serializer(opts?) {
   opts = opts || {};
 
   const rootClass = opts.rootClass || World;
@@ -198,5 +198,3 @@ const serializer = new Serializer();
 
 Serializer.toJson = serializer.toJson;
 Serializer.fromJson = serializer.fromJson;
-
-export default Serializer;

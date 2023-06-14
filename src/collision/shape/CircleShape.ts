@@ -23,12 +23,12 @@
  */
 
 import common from '../../util/common';
-import Math from '../../common/Math';
-import Rot from '../../common/Rot';
-import Vec2 from '../../common/Vec2';
-import Shape from '../Shape';
-import AABB, { RayCastInput, RayCastOutput } from '../AABB';
-import Transform from '../../common/Transform';
+import { Math } from '../../common/Math';
+import { Rot } from '../../common/Rot';
+import { Vec2 } from '../../common/Vec2';
+import { Shape } from '../Shape';
+import { AABB, RayCastInput, RayCastOutput } from '../AABB';
+import { Transform } from '../../common/Transform';
 import { MassData } from '../../dynamics/Body';
 import { DistanceProxy } from '../Distance';
 
@@ -36,7 +36,7 @@ import { DistanceProxy } from '../Distance';
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
-export default class CircleShape extends Shape {
+export class CircleShape extends Shape {
   static TYPE = 'circle' as const;
 
   m_p: Vec2;
@@ -211,3 +211,5 @@ export default class CircleShape extends Shape {
   }
 
 }
+
+export { CircleShape as Circle };

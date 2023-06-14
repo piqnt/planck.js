@@ -23,8 +23,8 @@
  */
 
 import common from '../util/common';
-import Math from '../common/Math';
-import Vec2 from '../common/Vec2';
+import { Math } from '../common/Math';
+import { Vec2 } from '../common/Vec2';
 
 
 const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -51,7 +51,7 @@ export interface RayCastOutput {
   fraction: number;
 }
 
-export default class AABB {
+export class AABB {
   lowerBound: Vec2;
   upperBound: Vec2;
 

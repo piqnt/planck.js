@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-import type Vec2 from '../../common/Vec2';
-import PolygonShape from './PolygonShape';
+import type { Vec2 } from '../../common/Vec2';
+import { PolygonShape } from './PolygonShape';
 
 /**
  * A rectangle polygon which extend PolygonShape.
  */
-export default class BoxShape extends PolygonShape {
+export class BoxShape extends PolygonShape {
   static TYPE = 'polygon' as const;
 
   constructor(hx: number, hy: number, center?: Vec2, angle?: number) {
@@ -42,3 +42,5 @@ export default class BoxShape extends PolygonShape {
     this._setAsBox(hx, hy, center, angle);
   }
 }
+
+export { BoxShape as Box };

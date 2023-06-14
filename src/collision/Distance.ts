@@ -22,15 +22,15 @@
  * SOFTWARE.
  */
 
-import Settings from '../Settings';
-import stats from '../util/stats';
+import { Settings } from '../Settings';
+import { stats } from '../util/stats';
 import common from '../util/common';
 
-import Shape from './Shape';
-import Math from '../common/Math';
-import Vec2 from '../common/Vec2';
-import Rot from '../common/Rot';
-import Transform from '../common/Transform';
+import { Shape } from './Shape';
+import { Math } from '../common/Math';
+import { Vec2 } from '../common/Vec2';
+import { Rot } from '../common/Rot';
+import { Transform } from '../common/Transform';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -91,7 +91,7 @@ export class SimplexCache {
  * CircleShape, PolygonShape, EdgeShape. The simplex cache is input/output. On
  * the first call set SimplexCache.count to zero.
  */
-export default function Distance(output: DistanceOutput, cache: SimplexCache, input: DistanceInput): void {
+export function Distance(output: DistanceOutput, cache: SimplexCache, input: DistanceInput): void {
   ++stats.gjkCalls;
 
   const proxyA = input.proxyA;

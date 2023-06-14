@@ -23,14 +23,14 @@
  */
 
 import common from '../../util/common';
-import Transform from '../../common/Transform';
-import Vec2 from '../../common/Vec2';
-import Contact from '../../dynamics/Contact';
-import EdgeShape from './EdgeShape';
-import ChainShape from './ChainShape';
-import CircleShape from './CircleShape';
-import Manifold, { ContactFeatureType, ManifoldType } from "../Manifold";
-import Fixture from "../../dynamics/Fixture";
+import { Transform } from '../../common/Transform';
+import { Vec2 } from '../../common/Vec2';
+import { Contact } from '../../dynamics/Contact';
+import { EdgeShape } from './EdgeShape';
+import { ChainShape } from './ChainShape';
+import { CircleShape } from './CircleShape';
+import { Manifold, ContactFeatureType, ManifoldType } from "../Manifold";
+import { Fixture } from "../../dynamics/Fixture";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;

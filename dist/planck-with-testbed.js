@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.0-alpha.4
+ * Planck.js v1.0.0-beta.0
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
@@ -26,9 +26,9 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
     typeof define === 'function' && define.amd ? define(['exports'], factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.planck = {}));
-}(this, (function (exports) { 'use strict';
+})(this, (function (exports) { 'use strict';
 
-    /*! *****************************************************************************
+    /******************************************************************************
     Copyright (c) Microsoft Corporation.
 
     Permission to use, copy, modify, and/or distribute this software for any
@@ -70,7 +70,2665 @@
         return __assign.apply(this, arguments);
     };
 
-    function options (input, defaults) {
+    var __defProp = Object.defineProperty;
+    var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+    var __publicField = (obj, key, value) => {
+      __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+      return value;
+    };
+    const stats$1 = {
+      create: 0,
+      tick: 0,
+      node: 0,
+      draw: 0,
+      fps: 0
+    };
+    class Matrix {
+      constructor(a, b, c, d, e, f) {
+        this.reset(a, b, c, d, e, f);
+      }
+      toString() {
+        return "[" + this.a + ", " + this.b + ", " + this.c + ", " + this.d + ", " + this.e + ", " + this.f + "]";
+      }
+      clone() {
+        return new Matrix(this.a, this.b, this.c, this.d, this.e, this.f);
+      }
+      reset(a, b, c, d, e, f) {
+        this._dirty = true;
+        if (typeof a === "object") {
+          this.a = a.a, this.d = a.d;
+          this.b = a.b, this.c = a.c;
+          this.e = a.e, this.f = a.f;
+        } else {
+          this.a = a || 1, this.d = d || 1;
+          this.b = b || 0, this.c = c || 0;
+          this.e = e || 0, this.f = f || 0;
+        }
+        return this;
+      }
+      identity() {
+        this._dirty = true;
+        this.a = 1;
+        this.b = 0;
+        this.c = 0;
+        this.d = 1;
+        this.e = 0;
+        this.f = 0;
+        return this;
+      }
+      rotate(angle) {
+        if (!angle) {
+          return this;
+        }
+        this._dirty = true;
+        var u = angle ? Math.cos(angle) : 1;
+        var v = angle ? Math.sin(angle) : 0;
+        var a = u * this.a - v * this.b;
+        var b = u * this.b + v * this.a;
+        var c = u * this.c - v * this.d;
+        var d = u * this.d + v * this.c;
+        var e = u * this.e - v * this.f;
+        var f = u * this.f + v * this.e;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        this.e = e;
+        this.f = f;
+        return this;
+      }
+      translate(x, y) {
+        if (!x && !y) {
+          return this;
+        }
+        this._dirty = true;
+        this.e += x;
+        this.f += y;
+        return this;
+      }
+      scale(x, y) {
+        if (!(x - 1) && !(y - 1)) {
+          return this;
+        }
+        this._dirty = true;
+        this.a *= x;
+        this.b *= y;
+        this.c *= x;
+        this.d *= y;
+        this.e *= x;
+        this.f *= y;
+        return this;
+      }
+      skew(x, y) {
+        if (!x && !y) {
+          return this;
+        }
+        this._dirty = true;
+        var a = this.a + this.b * x;
+        var b = this.b + this.a * y;
+        var c = this.c + this.d * x;
+        var d = this.d + this.c * y;
+        var e = this.e + this.f * x;
+        var f = this.f + this.e * y;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        this.e = e;
+        this.f = f;
+        return this;
+      }
+      concat(m) {
+        this._dirty = true;
+        var n = this;
+        var a = n.a * m.a + n.b * m.c;
+        var b = n.b * m.d + n.a * m.b;
+        var c = n.c * m.a + n.d * m.c;
+        var d = n.d * m.d + n.c * m.b;
+        var e = n.e * m.a + m.e + n.f * m.c;
+        var f = n.f * m.d + m.f + n.e * m.b;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        this.e = e;
+        this.f = f;
+        return this;
+      }
+      inverse() {
+        if (this._dirty) {
+          this._dirty = false;
+          this.inverted = this.inverted || new Matrix();
+          var z = this.a * this.d - this.b * this.c;
+          this.inverted.a = this.d / z;
+          this.inverted.b = -this.b / z;
+          this.inverted.c = -this.c / z;
+          this.inverted.d = this.a / z;
+          this.inverted.e = (this.c * this.f - this.e * this.d) / z;
+          this.inverted.f = (this.e * this.b - this.a * this.f) / z;
+        }
+        return this.inverted;
+      }
+      map(p, q) {
+        q = q || {};
+        q.x = this.a * p.x + this.c * p.y + this.e;
+        q.y = this.b * p.x + this.d * p.y + this.f;
+        return q;
+      }
+      mapX(x, y) {
+        if (typeof x === "object")
+          y = x.y, x = x.x;
+        return this.a * x + this.c * y + this.e;
+      }
+      mapY(x, y) {
+        if (typeof x === "object")
+          y = x.y, x = x.x;
+        return this.b * x + this.d * y + this.f;
+      }
+    }
+    var iid$1 = 0;
+    function Pin(owner) {
+      this._owner = owner;
+      this._parent = null;
+      this._relativeMatrix = new Matrix();
+      this._absoluteMatrix = new Matrix();
+      this.reset();
+    }
+    Pin.prototype.reset = function() {
+      this._textureAlpha = 1;
+      this._alpha = 1;
+      this._width = 0;
+      this._height = 0;
+      this._scaleX = 1;
+      this._scaleY = 1;
+      this._skewX = 0;
+      this._skewY = 0;
+      this._rotation = 0;
+      this._pivoted = false;
+      this._pivotX = null;
+      this._pivotY = null;
+      this._handled = false;
+      this._handleX = 0;
+      this._handleY = 0;
+      this._aligned = false;
+      this._alignX = 0;
+      this._alignY = 0;
+      this._offsetX = 0;
+      this._offsetY = 0;
+      this._boxX = 0;
+      this._boxY = 0;
+      this._boxWidth = this._width;
+      this._boxHeight = this._height;
+      this._ts_translate = ++iid$1;
+      this._ts_transform = ++iid$1;
+      this._ts_matrix = ++iid$1;
+    };
+    Pin.prototype._update = function() {
+      this._parent = this._owner._parent && this._owner._parent._pin;
+      if (this._handled && this._mo_handle != this._ts_transform) {
+        this._mo_handle = this._ts_transform;
+        this._ts_translate = ++iid$1;
+      }
+      if (this._aligned && this._parent && this._mo_align != this._parent._ts_transform) {
+        this._mo_align = this._parent._ts_transform;
+        this._ts_translate = ++iid$1;
+      }
+      return this;
+    };
+    Pin.prototype.toString = function() {
+      return this._owner + " (" + (this._parent ? this._parent._owner : null) + ")";
+    };
+    Pin.prototype.absoluteMatrix = function() {
+      this._update();
+      var ts = Math.max(
+        this._ts_transform,
+        this._ts_translate,
+        this._parent ? this._parent._ts_matrix : 0
+      );
+      if (this._mo_abs == ts) {
+        return this._absoluteMatrix;
+      }
+      this._mo_abs = ts;
+      var abs2 = this._absoluteMatrix;
+      abs2.reset(this.relativeMatrix());
+      this._parent && abs2.concat(this._parent._absoluteMatrix);
+      this._ts_matrix = ++iid$1;
+      return abs2;
+    };
+    Pin.prototype.relativeMatrix = function() {
+      this._update();
+      var ts = Math.max(
+        this._ts_transform,
+        this._ts_translate,
+        this._parent ? this._parent._ts_transform : 0
+      );
+      if (this._mo_rel == ts) {
+        return this._relativeMatrix;
+      }
+      this._mo_rel = ts;
+      var rel2 = this._relativeMatrix;
+      rel2.identity();
+      if (this._pivoted) {
+        rel2.translate(-this._pivotX * this._width, -this._pivotY * this._height);
+      }
+      rel2.scale(this._scaleX, this._scaleY);
+      rel2.skew(this._skewX, this._skewY);
+      rel2.rotate(this._rotation);
+      if (this._pivoted) {
+        rel2.translate(this._pivotX * this._width, this._pivotY * this._height);
+      }
+      if (this._pivoted) {
+        this._boxX = 0;
+        this._boxY = 0;
+        this._boxWidth = this._width;
+        this._boxHeight = this._height;
+      } else {
+        var p, q;
+        if (rel2.a > 0 && rel2.c > 0 || rel2.a < 0 && rel2.c < 0) {
+          p = 0, q = rel2.a * this._width + rel2.c * this._height;
+        } else {
+          p = rel2.a * this._width, q = rel2.c * this._height;
+        }
+        if (p > q) {
+          this._boxX = q;
+          this._boxWidth = p - q;
+        } else {
+          this._boxX = p;
+          this._boxWidth = q - p;
+        }
+        if (rel2.b > 0 && rel2.d > 0 || rel2.b < 0 && rel2.d < 0) {
+          p = 0, q = rel2.b * this._width + rel2.d * this._height;
+        } else {
+          p = rel2.b * this._width, q = rel2.d * this._height;
+        }
+        if (p > q) {
+          this._boxY = q;
+          this._boxHeight = p - q;
+        } else {
+          this._boxY = p;
+          this._boxHeight = q - p;
+        }
+      }
+      this._x = this._offsetX;
+      this._y = this._offsetY;
+      this._x -= this._boxX + this._handleX * this._boxWidth;
+      this._y -= this._boxY + this._handleY * this._boxHeight;
+      if (this._aligned && this._parent) {
+        this._parent.relativeMatrix();
+        this._x += this._alignX * this._parent._width;
+        this._y += this._alignY * this._parent._height;
+      }
+      rel2.translate(this._x, this._y);
+      return this._relativeMatrix;
+    };
+    Pin.prototype.get = function(key) {
+      if (typeof getters[key] === "function") {
+        return getters[key](this);
+      }
+    };
+    Pin.prototype.set = function(a, b) {
+      if (typeof a === "string") {
+        if (typeof setters[a] === "function" && typeof b !== "undefined") {
+          setters[a](this, b);
+        }
+      } else if (typeof a === "object") {
+        for (b in a) {
+          if (typeof setters[b] === "function" && typeof a[b] !== "undefined") {
+            setters[b](this, a[b], a);
+          }
+        }
+      }
+      if (this._owner) {
+        this._owner._ts_pin = ++iid$1;
+        this._owner.touch();
+      }
+      return this;
+    };
+    var getters = {
+      alpha: function(pin) {
+        return pin._alpha;
+      },
+      textureAlpha: function(pin) {
+        return pin._textureAlpha;
+      },
+      width: function(pin) {
+        return pin._width;
+      },
+      height: function(pin) {
+        return pin._height;
+      },
+      boxWidth: function(pin) {
+        return pin._boxWidth;
+      },
+      boxHeight: function(pin) {
+        return pin._boxHeight;
+      },
+      // scale : function(pin) {
+      // },
+      scaleX: function(pin) {
+        return pin._scaleX;
+      },
+      scaleY: function(pin) {
+        return pin._scaleY;
+      },
+      // skew : function(pin) {
+      // },
+      skewX: function(pin) {
+        return pin._skewX;
+      },
+      skewY: function(pin) {
+        return pin._skewY;
+      },
+      rotation: function(pin) {
+        return pin._rotation;
+      },
+      // pivot : function(pin) {
+      // },
+      pivotX: function(pin) {
+        return pin._pivotX;
+      },
+      pivotY: function(pin) {
+        return pin._pivotY;
+      },
+      // offset : function(pin) {
+      // },
+      offsetX: function(pin) {
+        return pin._offsetX;
+      },
+      offsetY: function(pin) {
+        return pin._offsetY;
+      },
+      // align : function(pin) {
+      // },
+      alignX: function(pin) {
+        return pin._alignX;
+      },
+      alignY: function(pin) {
+        return pin._alignY;
+      },
+      // handle : function(pin) {
+      // },
+      handleX: function(pin) {
+        return pin._handleX;
+      },
+      handleY: function(pin) {
+        return pin._handleY;
+      }
+    };
+    var setters = {
+      alpha: function(pin, value) {
+        pin._alpha = value;
+      },
+      textureAlpha: function(pin, value) {
+        pin._textureAlpha = value;
+      },
+      width: function(pin, value) {
+        pin._width_ = value;
+        pin._width = value;
+        pin._ts_transform = ++iid$1;
+      },
+      height: function(pin, value) {
+        pin._height_ = value;
+        pin._height = value;
+        pin._ts_transform = ++iid$1;
+      },
+      scale: function(pin, value) {
+        pin._scaleX = value;
+        pin._scaleY = value;
+        pin._ts_transform = ++iid$1;
+      },
+      scaleX: function(pin, value) {
+        pin._scaleX = value;
+        pin._ts_transform = ++iid$1;
+      },
+      scaleY: function(pin, value) {
+        pin._scaleY = value;
+        pin._ts_transform = ++iid$1;
+      },
+      skew: function(pin, value) {
+        pin._skewX = value;
+        pin._skewY = value;
+        pin._ts_transform = ++iid$1;
+      },
+      skewX: function(pin, value) {
+        pin._skewX = value;
+        pin._ts_transform = ++iid$1;
+      },
+      skewY: function(pin, value) {
+        pin._skewY = value;
+        pin._ts_transform = ++iid$1;
+      },
+      rotation: function(pin, value) {
+        pin._rotation = value;
+        pin._ts_transform = ++iid$1;
+      },
+      pivot: function(pin, value) {
+        pin._pivotX = value;
+        pin._pivotY = value;
+        pin._pivoted = true;
+        pin._ts_transform = ++iid$1;
+      },
+      pivotX: function(pin, value) {
+        pin._pivotX = value;
+        pin._pivoted = true;
+        pin._ts_transform = ++iid$1;
+      },
+      pivotY: function(pin, value) {
+        pin._pivotY = value;
+        pin._pivoted = true;
+        pin._ts_transform = ++iid$1;
+      },
+      offset: function(pin, value) {
+        pin._offsetX = value;
+        pin._offsetY = value;
+        pin._ts_translate = ++iid$1;
+      },
+      offsetX: function(pin, value) {
+        pin._offsetX = value;
+        pin._ts_translate = ++iid$1;
+      },
+      offsetY: function(pin, value) {
+        pin._offsetY = value;
+        pin._ts_translate = ++iid$1;
+      },
+      align: function(pin, value) {
+        this.alignX(pin, value);
+        this.alignY(pin, value);
+      },
+      alignX: function(pin, value) {
+        pin._alignX = value;
+        pin._aligned = true;
+        pin._ts_translate = ++iid$1;
+        this.handleX(pin, value);
+      },
+      alignY: function(pin, value) {
+        pin._alignY = value;
+        pin._aligned = true;
+        pin._ts_translate = ++iid$1;
+        this.handleY(pin, value);
+      },
+      handle: function(pin, value) {
+        this.handleX(pin, value);
+        this.handleY(pin, value);
+      },
+      handleX: function(pin, value) {
+        pin._handleX = value;
+        pin._handled = true;
+        pin._ts_translate = ++iid$1;
+      },
+      handleY: function(pin, value) {
+        pin._handleY = value;
+        pin._handled = true;
+        pin._ts_translate = ++iid$1;
+      },
+      resizeMode: function(pin, value, all) {
+        if (all) {
+          if (value == "in") {
+            value = "in-pad";
+          } else if (value == "out") {
+            value = "out-crop";
+          }
+          scaleTo(pin, all.resizeWidth, all.resizeHeight, value);
+        }
+      },
+      resizeWidth: function(pin, value, all) {
+        if (!all || !all.resizeMode) {
+          scaleTo(pin, value, null);
+        }
+      },
+      resizeHeight: function(pin, value, all) {
+        if (!all || !all.resizeMode) {
+          scaleTo(pin, null, value);
+        }
+      },
+      scaleMode: function(pin, value, all) {
+        if (all) {
+          scaleTo(pin, all.scaleWidth, all.scaleHeight, value);
+        }
+      },
+      scaleWidth: function(pin, value, all) {
+        if (!all || !all.scaleMode) {
+          scaleTo(pin, value, null);
+        }
+      },
+      scaleHeight: function(pin, value, all) {
+        if (!all || !all.scaleMode) {
+          scaleTo(pin, null, value);
+        }
+      },
+      matrix: function(pin, value) {
+        this.scaleX(pin, value.a);
+        this.skewX(pin, value.c / value.d);
+        this.skewY(pin, value.b / value.a);
+        this.scaleY(pin, value.d);
+        this.offsetX(pin, value.e);
+        this.offsetY(pin, value.f);
+        this.rotation(pin, 0);
+      }
+    };
+    Pin.prototype.scaleTo = function(width, height, mode) {
+      scaleTo(this, width, height, mode);
+    };
+    function scaleTo(pin, width, height, mode) {
+      var w = typeof width === "number";
+      var h = typeof height === "number";
+      var m = typeof mode === "string";
+      pin._ts_transform = ++iid$1;
+      if (w) {
+        pin._scaleX = width / pin._width_;
+        pin._width = pin._width_;
+      }
+      if (h) {
+        pin._scaleY = height / pin._height_;
+        pin._height = pin._height_;
+      }
+      if (w && h && m) {
+        if (mode == "out" || mode == "out-crop") {
+          pin._scaleX = pin._scaleY = Math.max(pin._scaleX, pin._scaleY);
+        } else if (mode == "in" || mode == "in-pad") {
+          pin._scaleX = pin._scaleY = Math.min(pin._scaleX, pin._scaleY);
+        }
+        if (mode == "out-crop" || mode == "in-pad") {
+          pin._width = width / pin._scaleX;
+          pin._height = height / pin._scaleY;
+        }
+      }
+    }
+    Pin._add_shortcuts = function(prototype) {
+      prototype.size = function(w, h) {
+        this.pin("width", w);
+        this.pin("height", h);
+        return this;
+      };
+      prototype.width = function(w) {
+        if (typeof w === "undefined") {
+          return this.pin("width");
+        }
+        this.pin("width", w);
+        return this;
+      };
+      prototype.height = function(h) {
+        if (typeof h === "undefined") {
+          return this.pin("height");
+        }
+        this.pin("height", h);
+        return this;
+      };
+      prototype.offset = function(a, b) {
+        if (typeof a === "object")
+          b = a.y, a = a.x;
+        this.pin("offsetX", a);
+        this.pin("offsetY", b);
+        return this;
+      };
+      prototype.rotate = function(a) {
+        this.pin("rotation", a);
+        return this;
+      };
+      prototype.skew = function(a, b) {
+        if (typeof a === "object")
+          b = a.y, a = a.x;
+        else if (typeof b === "undefined")
+          b = a;
+        this.pin("skewX", a);
+        this.pin("skewY", b);
+        return this;
+      };
+      prototype.scale = function(a, b) {
+        if (typeof a === "object")
+          b = a.y, a = a.x;
+        else if (typeof b === "undefined")
+          b = a;
+        this.pin("scaleX", a);
+        this.pin("scaleY", b);
+        return this;
+      };
+      prototype.alpha = function(a, ta) {
+        this.pin("alpha", a);
+        if (typeof ta !== "undefined") {
+          this.pin("textureAlpha", ta);
+        }
+        return this;
+      };
+    };
+    var iid = 0;
+    stats$1.create = 0;
+    function assertType(obj) {
+      if (obj && obj instanceof Node) {
+        return obj;
+      }
+      throw "Invalid node: " + obj;
+    }
+    const create = function() {
+      return new Node();
+    };
+    function Node() {
+      stats$1.create++;
+      this._pin = new Pin(this);
+    }
+    Node.prototype.matrix = function(relative) {
+      if (relative === true) {
+        return this._pin.relativeMatrix();
+      }
+      return this._pin.absoluteMatrix();
+    };
+    Node.prototype.pin = function(a, b) {
+      if (typeof a === "object") {
+        this._pin.set(a);
+        return this;
+      } else if (typeof a === "string") {
+        if (typeof b === "undefined") {
+          return this._pin.get(a);
+        } else {
+          this._pin.set(a, b);
+          return this;
+        }
+      } else if (typeof a === "undefined") {
+        return this._pin;
+      }
+    };
+    Node.prototype.scaleTo = function(a, b, c) {
+      if (typeof a === "object")
+        c = b, b = a.y, a = a.x;
+      this._pin.scaleTo(a, b, c);
+      return this;
+    };
+    Pin._add_shortcuts(Node.prototype);
+    Node.prototype._label = "";
+    Node.prototype._visible = true;
+    Node.prototype._parent = null;
+    Node.prototype._next = null;
+    Node.prototype._prev = null;
+    Node.prototype._first = null;
+    Node.prototype._last = null;
+    Node.prototype._attrs = null;
+    Node.prototype._flags = null;
+    Node.prototype.toString = function() {
+      return "[" + this._label + "]";
+    };
+    Node.prototype.id = function(id) {
+      return this.label(id);
+    };
+    Node.prototype.label = function(label) {
+      if (typeof label === "undefined") {
+        return this._label;
+      }
+      this._label = label;
+      return this;
+    };
+    Node.prototype.attr = function(name, value) {
+      if (typeof value === "undefined") {
+        return this._attrs !== null ? this._attrs[name] : void 0;
+      }
+      (this._attrs !== null ? this._attrs : this._attrs = {})[name] = value;
+      return this;
+    };
+    Node.prototype.visible = function(visible) {
+      if (typeof visible === "undefined") {
+        return this._visible;
+      }
+      this._visible = visible;
+      this._parent && (this._parent._ts_children = ++iid);
+      this._ts_pin = ++iid;
+      this.touch();
+      return this;
+    };
+    Node.prototype.hide = function() {
+      return this.visible(false);
+    };
+    Node.prototype.show = function() {
+      return this.visible(true);
+    };
+    Node.prototype.parent = function() {
+      return this._parent;
+    };
+    Node.prototype.next = function(visible) {
+      var next = this._next;
+      while (next && visible && !next._visible) {
+        next = next._next;
+      }
+      return next;
+    };
+    Node.prototype.prev = function(visible) {
+      var prev = this._prev;
+      while (prev && visible && !prev._visible) {
+        prev = prev._prev;
+      }
+      return prev;
+    };
+    Node.prototype.first = function(visible) {
+      var next = this._first;
+      while (next && visible && !next._visible) {
+        next = next._next;
+      }
+      return next;
+    };
+    Node.prototype.last = function(visible) {
+      var prev = this._last;
+      while (prev && visible && !prev._visible) {
+        prev = prev._prev;
+      }
+      return prev;
+    };
+    Node.prototype.visit = function(visitor, data) {
+      var reverse = visitor.reverse;
+      var visible = visitor.visible;
+      if (visitor.start && visitor.start(this, data)) {
+        return;
+      }
+      var child, next = reverse ? this.last(visible) : this.first(visible);
+      while (child = next) {
+        next = reverse ? child.prev(visible) : child.next(visible);
+        if (child.visit(visitor, data)) {
+          return true;
+        }
+      }
+      return visitor.end && visitor.end(this, data);
+    };
+    Node.prototype.append = function(child, more) {
+      if (Array.isArray(child))
+        for (var i = 0; i < child.length; i++)
+          append(this, child[i]);
+      else if (typeof more !== "undefined")
+        for (var i = 0; i < arguments.length; i++)
+          append(this, arguments[i]);
+      else if (typeof child !== "undefined")
+        append(this, child);
+      return this;
+    };
+    Node.prototype.prepend = function(child, more) {
+      if (Array.isArray(child))
+        for (var i = child.length - 1; i >= 0; i--)
+          prepend(this, child[i]);
+      else if (typeof more !== "undefined")
+        for (var i = arguments.length - 1; i >= 0; i--)
+          prepend(this, arguments[i]);
+      else if (typeof child !== "undefined")
+        prepend(this, child);
+      return this;
+    };
+    Node.prototype.appendTo = function(parent) {
+      append(parent, this);
+      return this;
+    };
+    Node.prototype.prependTo = function(parent) {
+      prepend(parent, this);
+      return this;
+    };
+    Node.prototype.insertNext = function(sibling, more) {
+      if (Array.isArray(sibling))
+        for (var i = 0; i < sibling.length; i++)
+          insertAfter(sibling[i], this);
+      else if (typeof more !== "undefined")
+        for (var i = 0; i < arguments.length; i++)
+          insertAfter(arguments[i], this);
+      else if (typeof sibling !== "undefined")
+        insertAfter(sibling, this);
+      return this;
+    };
+    Node.prototype.insertPrev = function(sibling, more) {
+      if (Array.isArray(sibling))
+        for (var i = sibling.length - 1; i >= 0; i--)
+          insertBefore(sibling[i], this);
+      else if (typeof more !== "undefined")
+        for (var i = arguments.length - 1; i >= 0; i--)
+          insertBefore(arguments[i], this);
+      else if (typeof sibling !== "undefined")
+        insertBefore(sibling, this);
+      return this;
+    };
+    Node.prototype.insertAfter = function(prev) {
+      insertAfter(this, prev);
+      return this;
+    };
+    Node.prototype.insertBefore = function(next) {
+      insertBefore(this, next);
+      return this;
+    };
+    function append(parent, child) {
+      assertType(child);
+      assertType(parent);
+      child.remove();
+      if (parent._last) {
+        parent._last._next = child;
+        child._prev = parent._last;
+      }
+      child._parent = parent;
+      parent._last = child;
+      if (!parent._first) {
+        parent._first = child;
+      }
+      child._parent._flag(child, true);
+      child._ts_parent = ++iid;
+      parent._ts_children = ++iid;
+      parent.touch();
+    }
+    function prepend(parent, child) {
+      assertType(child);
+      assertType(parent);
+      child.remove();
+      if (parent._first) {
+        parent._first._prev = child;
+        child._next = parent._first;
+      }
+      child._parent = parent;
+      parent._first = child;
+      if (!parent._last) {
+        parent._last = child;
+      }
+      child._parent._flag(child, true);
+      child._ts_parent = ++iid;
+      parent._ts_children = ++iid;
+      parent.touch();
+    }
+    function insertBefore(self, next) {
+      assertType(self);
+      assertType(next);
+      self.remove();
+      var parent = next._parent;
+      var prev = next._prev;
+      next._prev = self;
+      prev && (prev._next = self) || parent && (parent._first = self);
+      self._parent = parent;
+      self._prev = prev;
+      self._next = next;
+      self._parent._flag(self, true);
+      self._ts_parent = ++iid;
+      self.touch();
+    }
+    function insertAfter(self, prev) {
+      assertType(self);
+      assertType(prev);
+      self.remove();
+      var parent = prev._parent;
+      var next = prev._next;
+      prev._next = self;
+      next && (next._prev = self) || parent && (parent._last = self);
+      self._parent = parent;
+      self._prev = prev;
+      self._next = next;
+      self._parent._flag(self, true);
+      self._ts_parent = ++iid;
+      self.touch();
+    }
+    Node.prototype.remove = function(child, more) {
+      if (typeof child !== "undefined") {
+        if (Array.isArray(child)) {
+          for (var i = 0; i < child.length; i++)
+            assertType(child[i]).remove();
+        } else if (typeof more !== "undefined") {
+          for (var i = 0; i < arguments.length; i++)
+            assertType(arguments[i]).remove();
+        } else {
+          assertType(child).remove();
+        }
+        return this;
+      }
+      if (this._prev) {
+        this._prev._next = this._next;
+      }
+      if (this._next) {
+        this._next._prev = this._prev;
+      }
+      if (this._parent) {
+        if (this._parent._first === this) {
+          this._parent._first = this._next;
+        }
+        if (this._parent._last === this) {
+          this._parent._last = this._prev;
+        }
+        this._parent._flag(this, false);
+        this._parent._ts_children = ++iid;
+        this._parent.touch();
+      }
+      this._prev = this._next = this._parent = null;
+      this._ts_parent = ++iid;
+      return this;
+    };
+    Node.prototype.empty = function() {
+      var child, next = this._first;
+      while (child = next) {
+        next = child._next;
+        child._prev = child._next = child._parent = null;
+        this._flag(child, false);
+      }
+      this._first = this._last = null;
+      this._ts_children = ++iid;
+      this.touch();
+      return this;
+    };
+    Node.prototype.touch = function() {
+      this._ts_touch = ++iid;
+      this._parent && this._parent.touch();
+      return this;
+    };
+    Node.prototype._flag = function(obj, name) {
+      if (typeof name === "undefined") {
+        return this._flags !== null && this._flags[obj] || 0;
+      }
+      if (typeof obj === "string") {
+        if (name) {
+          this._flags = this._flags || {};
+          if (!this._flags[obj] && this._parent) {
+            this._parent._flag(obj, true);
+          }
+          this._flags[obj] = (this._flags[obj] || 0) + 1;
+        } else if (this._flags && this._flags[obj] > 0) {
+          if (this._flags[obj] == 1 && this._parent) {
+            this._parent._flag(obj, false);
+          }
+          this._flags[obj] = this._flags[obj] - 1;
+        }
+      }
+      if (typeof obj === "object") {
+        if (obj._flags) {
+          for (var type in obj._flags) {
+            if (obj._flags[type] > 0) {
+              this._flag(type, name);
+            }
+          }
+        }
+      }
+      return this;
+    };
+    Node.prototype.hitTest = function(hit) {
+      var width = this._pin._width;
+      var height = this._pin._height;
+      return hit.x >= 0 && hit.x <= width && hit.y >= 0 && hit.y <= height;
+    };
+    Node.prototype._textures = null;
+    Node.prototype._alpha = 1;
+    Node.prototype.render = function(context) {
+      if (!this._visible) {
+        return;
+      }
+      stats$1.node++;
+      var m = this.matrix();
+      context.setTransform(m.a, m.b, m.c, m.d, m.e, m.f);
+      this._alpha = this._pin._alpha * (this._parent ? this._parent._alpha : 1);
+      var alpha = this._pin._textureAlpha * this._alpha;
+      if (context.globalAlpha != alpha) {
+        context.globalAlpha = alpha;
+      }
+      if (this._textures !== null) {
+        for (var i = 0, n = this._textures.length; i < n; i++) {
+          this._textures[i].draw(context);
+        }
+      }
+      if (context.globalAlpha != this._alpha) {
+        context.globalAlpha = this._alpha;
+      }
+      var child, next = this._first;
+      while (child = next) {
+        next = child._next;
+        child.render(context);
+      }
+    };
+    Node.prototype._tickBefore = null;
+    Node.prototype._tickAfter = null;
+    Node.prototype.MAX_ELAPSE = Infinity;
+    Node.prototype._tick = function(elapsed, now, last) {
+      if (!this._visible) {
+        return;
+      }
+      if (elapsed > this.MAX_ELAPSE) {
+        elapsed = this.MAX_ELAPSE;
+      }
+      var ticked = false;
+      if (this._tickBefore !== null) {
+        for (var i = 0; i < this._tickBefore.length; i++) {
+          stats$1.tick++;
+          var tickFn = this._tickBefore[i];
+          ticked = tickFn.call(this, elapsed, now, last) === true || ticked;
+        }
+      }
+      var child, next = this._first;
+      while (child = next) {
+        next = child._next;
+        if (child._flag("_tick")) {
+          ticked = child._tick(elapsed, now, last) === true ? true : ticked;
+        }
+      }
+      if (this._tickAfter !== null) {
+        for (var i = 0; i < this._tickAfter.length; i++) {
+          stats$1.tick++;
+          var tickFn = this._tickAfter[i];
+          ticked = tickFn.call(this, elapsed, now, last) === true || ticked;
+        }
+      }
+      return ticked;
+    };
+    Node.prototype.tick = function(ticker, before) {
+      if (typeof ticker !== "function") {
+        return;
+      }
+      if (before) {
+        if (this._tickBefore === null) {
+          this._tickBefore = [];
+        }
+        this._tickBefore.push(ticker);
+      } else {
+        if (this._tickAfter === null) {
+          this._tickAfter = [];
+        }
+        this._tickAfter.push(ticker);
+      }
+      this._flag("_tick", this._tickAfter !== null && this._tickAfter.length > 0 || this._tickBefore !== null && this._tickBefore.length > 0);
+    };
+    Node.prototype.untick = function(ticker) {
+      if (typeof ticker !== "function") {
+        return;
+      }
+      var i;
+      if (this._tickBefore !== null && (i = this._tickBefore.indexOf(ticker)) >= 0) {
+        this._tickBefore.splice(i, 1);
+      }
+      if (this._tickAfter !== null && (i = this._tickAfter.indexOf(ticker)) >= 0) {
+        this._tickAfter.splice(i, 1);
+      }
+    };
+    Node.prototype.timeout = function(fn, time) {
+      this.setTimeout(fn, time);
+    };
+    Node.prototype.setTimeout = function(fn, time) {
+      function timer(t) {
+        if ((time -= t) < 0) {
+          this.untick(timer);
+          fn.call(this);
+        } else {
+          return true;
+        }
+      }
+      this.tick(timer);
+      return timer;
+    };
+    Node.prototype.clearTimeout = function(timer) {
+      this.untick(timer);
+    };
+    Node.prototype._listeners = null;
+    Node.prototype._event_callback = function(name, on) {
+      this._flag(name, on);
+    };
+    Node.prototype.on = function(types, listener) {
+      if (!types || !types.length || typeof listener !== "function") {
+        return this;
+      }
+      if (this._listeners === null) {
+        this._listeners = {};
+      }
+      var isarray = typeof types !== "string" && typeof types.join === "function";
+      if (types = (isarray ? types.join(" ") : types).match(/\S+/g)) {
+        for (var i = 0; i < types.length; i++) {
+          var type = types[i];
+          this._listeners[type] = this._listeners[type] || [];
+          this._listeners[type].push(listener);
+          if (typeof this._event_callback === "function") {
+            this._event_callback(type, true);
+          }
+        }
+      }
+      return this;
+    };
+    Node.prototype.off = function(types, listener) {
+      if (!types || !types.length || typeof listener !== "function") {
+        return this;
+      }
+      if (this._listeners === null) {
+        return this;
+      }
+      var isarray = typeof types !== "string" && typeof types.join === "function";
+      if (types = (isarray ? types.join(" ") : types).match(/\S+/g)) {
+        for (var i = 0; i < types.length; i++) {
+          var type = types[i], all = this._listeners[type], index;
+          if (all && (index = all.indexOf(listener)) >= 0) {
+            all.splice(index, 1);
+            if (!all.length) {
+              delete this._listeners[type];
+            }
+            if (typeof this._event_callback === "function") {
+              this._event_callback(type, false);
+            }
+          }
+        }
+      }
+      return this;
+    };
+    Node.prototype.listeners = function(type) {
+      return this._listeners && this._listeners[type];
+    };
+    Node.prototype.publish = function(name, args) {
+      var listeners = this.listeners(name);
+      if (!listeners || !listeners.length) {
+        return 0;
+      }
+      for (var l = 0; l < listeners.length; l++) {
+        listeners[l].apply(this, args);
+      }
+      return listeners.length;
+    };
+    Node.prototype.trigger = function(name, args) {
+      this.publish(name, args);
+      return this;
+    };
+    var native$1 = Math;
+    const math = Object.create(Math);
+    math.random = function(min, max) {
+      if (typeof min === "undefined") {
+        max = 1, min = 0;
+      } else if (typeof max === "undefined") {
+        max = min, min = 0;
+      }
+      return min == max ? min : native$1.random() * (max - min) + min;
+    };
+    math.wrap = function(num, min, max) {
+      if (typeof min === "undefined") {
+        max = 1, min = 0;
+      } else if (typeof max === "undefined") {
+        max = min, min = 0;
+      }
+      if (max > min) {
+        num = (num - min) % (max - min);
+        return num + (num < 0 ? max : min);
+      } else {
+        num = (num - max) % (min - max);
+        return num + (num <= 0 ? min : max);
+      }
+    };
+    math.clamp = function(num, min, max) {
+      if (num < min) {
+        return min;
+      } else if (num > max) {
+        return max;
+      } else {
+        return num;
+      }
+    };
+    math.length = function(x, y) {
+      return native$1.sqrt(x * x + y * y);
+    };
+    math.rotate = math.wrap;
+    math.limit = math.clamp;
+    const isFn = function(value) {
+      var str = Object.prototype.toString.call(value);
+      return str === "[object Function]" || str === "[object GeneratorFunction]" || str === "[object AsyncFunction]";
+    };
+    const isHash = function(value) {
+      return Object.prototype.toString.call(value) === "[object Object]" && value.constructor === Object;
+    };
+    class Texture {
+      constructor(texture2, ratio) {
+        if (typeof texture2 === "object") {
+          this.src(texture2, ratio);
+        }
+      }
+      pipe() {
+        return new Texture(this);
+      }
+      /**
+       * Signatures: (texture), (x, y, w, h), (w, h)
+       */
+      src(x, y, w, h) {
+        if (typeof x === "object") {
+          var drawable = x, ratio = y || 1;
+          this._image = drawable;
+          this._sx = this._dx = 0;
+          this._sy = this._dy = 0;
+          this._sw = this._dw = drawable.width / ratio;
+          this._sh = this._dh = drawable.height / ratio;
+          this.width = drawable.width / ratio;
+          this.height = drawable.height / ratio;
+          this.ratio = ratio;
+        } else {
+          if (typeof w === "undefined") {
+            w = x, h = y;
+          } else {
+            this._sx = x, this._sy = y;
+          }
+          this._sw = this._dw = w;
+          this._sh = this._dh = h;
+          this.width = w;
+          this.height = h;
+        }
+        return this;
+      }
+      /**
+       * Signatures: (x, y, w, h), (x, y)
+       */
+      dest(x, y, w, h) {
+        this._dx = x, this._dy = y;
+        this._dx = x, this._dy = y;
+        if (typeof w !== "undefined") {
+          this._dw = w, this._dh = h;
+          this.width = w, this.height = h;
+        }
+        return this;
+      }
+      draw(context, x1, y1, x2, y2, x3, y3, x4, y4) {
+        var drawable = this._image;
+        if (drawable === null || typeof drawable !== "object") {
+          return;
+        }
+        var sx = this._sx, sy = this._sy;
+        var sw = this._sw, sh = this._sh;
+        var dx = this._dx, dy = this._dy;
+        var dw = this._dw, dh = this._dh;
+        if (typeof x3 !== "undefined") {
+          x1 = math.clamp(x1, 0, this._sw), x2 = math.clamp(x2, 0, this._sw - x1);
+          y1 = math.clamp(y1, 0, this._sh), y2 = math.clamp(y2, 0, this._sh - y1);
+          sx += x1, sy += y1, sw = x2, sh = y2;
+          dx = x3, dy = y3, dw = x4, dh = y4;
+        } else if (typeof x2 !== "undefined") {
+          dx = x1, dy = y1, dw = x2, dh = y2;
+        } else if (typeof x1 !== "undefined") {
+          dw = x1, dh = y1;
+        }
+        var ratio = this.ratio || 1;
+        sx *= ratio, sy *= ratio, sw *= ratio, sh *= ratio;
+        try {
+          if (typeof drawable.draw === "function") {
+            drawable.draw(context, sx, sy, sw, sh, dx, dy, dw, dh);
+          } else {
+            stats$1.draw++;
+            context.drawImage(drawable, sx, sy, sw, sh, dx, dy, dw, dh);
+          }
+        } catch (ex) {
+          if (!drawable._draw_failed) {
+            console.log("Unable to draw: ", drawable);
+            console.log(ex);
+            drawable._draw_failed = true;
+          }
+        }
+      }
+    }
+    var NO_TEXTURE = new class extends Texture {
+      constructor() {
+        super();
+        __publicField(this, "pipe", function() {
+          return this;
+        });
+        __publicField(this, "src", function() {
+          return this;
+        });
+        __publicField(this, "dest", function() {
+          return this;
+        });
+        __publicField(this, "draw", function() {
+        });
+        this.x = this.y = this.width = this.height = 0;
+      }
+    }();
+    var NO_SELECTION = new Selection(NO_TEXTURE);
+    function preloadImage(src) {
+      console.log("Loading image: " + src);
+      return new Promise(function(resolve, reject) {
+        const img = new Image();
+        img.onload = function() {
+          console.log("Image loaded: " + src);
+          resolve(img);
+        };
+        img.onerror = function(error) {
+          console.log("Loading failed: " + src);
+          reject(error);
+        };
+        img.src = src;
+      });
+    }
+    var _atlases_map = {};
+    var _atlases_arr = [];
+    const atlas = async function(def) {
+      var atlas2 = isFn(def.draw) ? def : new Atlas(def);
+      if (def.name) {
+        _atlases_map[def.name] = atlas2;
+      }
+      _atlases_arr.push(atlas2);
+      deprecated(def, "imagePath");
+      deprecated(def, "imageRatio");
+      var url = def.imagePath;
+      var ratio = def.imageRatio || 1;
+      if ("string" === typeof def.image) {
+        url = def.image;
+      } else if (isHash(def.image)) {
+        url = def.image.src || def.image.url;
+        ratio = def.image.ratio || ratio;
+      }
+      if (url) {
+        const image2 = await preloadImage(url);
+        atlas2.src(image2, ratio);
+      }
+      return atlas2;
+    };
+    class Atlas extends Texture {
+      constructor(def) {
+        super();
+        var atlas2 = this;
+        deprecated(def, "filter");
+        deprecated(def, "cutouts");
+        deprecated(def, "sprites");
+        deprecated(def, "factory");
+        var map = def.map || def.filter;
+        var ppu = def.ppu || def.ratio || 1;
+        var trim = def.trim || 0;
+        var textures = def.textures;
+        var factory = def.factory;
+        var cutouts = def.cutouts || def.sprites;
+        function make(def2) {
+          if (!def2 || isFn(def2.draw)) {
+            return def2;
+          }
+          def2 = Object.assign({}, def2);
+          if (isFn(map)) {
+            def2 = map(def2);
+          }
+          if (ppu != 1) {
+            def2.x *= ppu, def2.y *= ppu;
+            def2.width *= ppu, def2.height *= ppu;
+            def2.top *= ppu, def2.bottom *= ppu;
+            def2.left *= ppu, def2.right *= ppu;
+          }
+          if (trim != 0) {
+            def2.x += trim, def2.y += trim;
+            def2.width -= 2 * trim, def2.height -= 2 * trim;
+            def2.top -= trim, def2.bottom -= trim;
+            def2.left -= trim, def2.right -= trim;
+          }
+          var texture2 = atlas2.pipe();
+          texture2.top = def2.top, texture2.bottom = def2.bottom;
+          texture2.left = def2.left, texture2.right = def2.right;
+          texture2.src(def2.x, def2.y, def2.width, def2.height);
+          return texture2;
+        }
+        function find(query) {
+          if (textures) {
+            if (isFn(textures)) {
+              return textures(query);
+            } else if (isHash(textures)) {
+              return textures[query];
+            }
+          }
+          if (cutouts) {
+            var result = null, n = 0;
+            for (var i = 0; i < cutouts.length; i++) {
+              if (string.startsWith(cutouts[i].name, query)) {
+                if (n === 0) {
+                  result = cutouts[i];
+                } else if (n === 1) {
+                  result = [result, cutouts[i]];
+                } else {
+                  result.push(cutouts[i]);
+                }
+                n++;
+              }
+            }
+            if (n === 0 && isFn(factory)) {
+              result = function(subquery) {
+                return factory(query + (subquery ? subquery : ""));
+              };
+            }
+            return result;
+          }
+        }
+        this.select = function(query) {
+          if (!query) {
+            return new Selection(this.pipe());
+          }
+          var found = find(query);
+          if (found) {
+            return new Selection(found, find, make);
+          }
+        };
+      }
+    }
+    function Selection(result, find, make) {
+      function link(result2, subquery) {
+        if (!result2) {
+          return NO_TEXTURE;
+        } else if (isFn(result2.draw)) {
+          return result2;
+        } else if (isHash(result2) && "number" === typeof result2.width && "number" === typeof result2.height && isFn(make)) {
+          return make(result2);
+        } else if (isHash(result2) && "undefined" !== typeof subquery) {
+          return link(result2[subquery]);
+        } else if (isFn(result2)) {
+          return link(result2(subquery));
+        } else if (Array.isArray(result2)) {
+          return link(result2[0]);
+        } else if ("string" === typeof result2 && isFn(find)) {
+          return link(find(result2));
+        }
+      }
+      this.one = function(subquery) {
+        return link(result, subquery);
+      };
+      this.array = function(arr) {
+        var array = Array.isArray(arr) ? arr : [];
+        if (Array.isArray(result)) {
+          for (var i = 0; i < result.length; i++) {
+            array[i] = link(result[i]);
+          }
+        } else {
+          array[0] = link(result);
+        }
+        return array;
+      };
+    }
+    const texture = function(query) {
+      if (!("string" === typeof query)) {
+        return new Selection(query);
+      }
+      var result = null, atlas2, i;
+      if ((i = query.indexOf(":")) > 0 && query.length > i + 1) {
+        atlas2 = _atlases_map[query.slice(0, i)];
+        result = atlas2 && atlas2.select(query.slice(i + 1));
+      }
+      if (!result && (atlas2 = _atlases_map[query])) {
+        result = atlas2.select();
+      }
+      for (i = 0; !result && i < _atlases_arr.length; i++) {
+        result = _atlases_arr[i].select(query);
+      }
+      if (!result) {
+        console.error("Texture not found: " + query);
+        result = NO_SELECTION;
+      }
+      return result;
+    };
+    function deprecated(hash, name, msg) {
+      if (name in hash)
+        console.log(msg ? msg.replace("%name", name) : "'" + name + "' field of texture atlas is deprecated.");
+    }
+    const canvas = function(type, attributes, plotter) {
+      if (typeof type === "string") {
+        if (typeof attributes === "object")
+          ;
+        else {
+          if (typeof attributes === "function") {
+            plotter = attributes;
+          }
+          attributes = {};
+        }
+      } else {
+        if (typeof type === "function") {
+          plotter = type;
+        }
+        attributes = {};
+        type = "2d";
+      }
+      var canvas2 = document.createElement("canvas");
+      var context = canvas2.getContext(type, attributes);
+      var texture2 = new Texture(canvas2);
+      texture2.context = function() {
+        return context;
+      };
+      texture2.size = function(width, height, ratio) {
+        ratio = ratio || 1;
+        canvas2.width = width * ratio;
+        canvas2.height = height * ratio;
+        this.src(canvas2, ratio);
+        return this;
+      };
+      if (typeof plotter === "function") {
+        plotter.call(texture2, context);
+      }
+      return texture2;
+    };
+    class Mouse {
+      constructor() {
+        __publicField(this, "x", 0);
+        __publicField(this, "y", 0);
+        __publicField(this, "ratio", 1);
+        __publicField(this, "stage");
+        __publicField(this, "elem");
+        __publicField(this, "clicklist", []);
+        __publicField(this, "cancellist", []);
+        __publicField(this, "handleStart", (event) => {
+          event.preventDefault();
+          this.locate(event);
+          this.publish(event.type, event);
+          this.lookup("click", this.clicklist);
+          this.lookup("mousecancel", this.cancellist);
+        });
+        __publicField(this, "handleMove", (event) => {
+          event.preventDefault();
+          this.locate(event);
+          this.publish(event.type, event);
+        });
+        __publicField(this, "handleEnd", (event) => {
+          event.preventDefault();
+          this.publish(event.type, event);
+          if (this.clicklist.length) {
+            this.publish("click", event, this.clicklist);
+          }
+          this.cancellist.length = 0;
+        });
+        __publicField(this, "handleCancel", (event) => {
+          if (this.cancellist.length) {
+            this.publish("mousecancel", event, this.cancellist);
+          }
+          this.clicklist.length = 0;
+        });
+        __publicField(this, "toString", function() {
+          return (this.x | 0) + "x" + (this.y | 0);
+        });
+        __publicField(this, "locate", function(event) {
+          const elem = this.elem;
+          let x;
+          let y;
+          if (event.touches && event.touches.length) {
+            x = event.touches[0].clientX;
+            y = event.touches[0].clientY;
+          } else {
+            x = event.clientX;
+            y = event.clientY;
+          }
+          var rect = elem.getBoundingClientRect();
+          x -= rect.left;
+          y -= rect.top;
+          x -= elem.clientLeft | 0;
+          y -= elem.clientTop | 0;
+          this.x = x * this.ratio;
+          this.y = y * this.ratio;
+        });
+        __publicField(this, "lookup", function(type, collect) {
+          this.type = type;
+          this.root = this.stage;
+          this.event = null;
+          collect.length = 0;
+          this.collect = collect;
+          this.root.visit({
+            reverse: true,
+            visible: true,
+            start: this.visitStart,
+            end: this.visitEnd
+          }, this);
+        });
+        __publicField(this, "publish", function(type, event, targets) {
+          this.type = type;
+          this.root = this.stage;
+          this.event = event;
+          this.collect = false;
+          this.timeStamp = Date.now();
+          if (type !== "mousemove" && type !== "touchmove") {
+            console.log(this.type + " " + this);
+          }
+          if (targets) {
+            while (targets.length)
+              if (this.visitEnd(targets.shift()))
+                break;
+            targets.length = 0;
+          } else {
+            this.root.visit({
+              reverse: true,
+              visible: true,
+              start: this.visitStart,
+              end: this.visitEnd
+            }, this);
+          }
+        });
+        __publicField(this, "visitStart", (node) => {
+          return !node._flag(this.type);
+        });
+        __publicField(this, "visitEnd", (node) => {
+          rel.raw = this.event;
+          rel.type = this.type;
+          rel.timeStamp = this.timeStamp;
+          rel.abs.x = this.x;
+          rel.abs.y = this.y;
+          var listeners = node.listeners(this.type);
+          if (!listeners) {
+            return;
+          }
+          node.matrix().inverse().map(this, rel);
+          if (!(node === this.root || node.attr("spy") || node.hitTest(rel))) {
+            return;
+          }
+          if (this.collect) {
+            this.collect.push(node);
+          }
+          if (this.event) {
+            var cancel = false;
+            for (var l = 0; l < listeners.length; l++) {
+              cancel = listeners[l].call(node, rel) ? true : cancel;
+            }
+            return cancel;
+          }
+        });
+      }
+      mount(stage, elem) {
+        this.stage = stage;
+        this.elem = elem;
+        this.ratio = stage.viewport().ratio || 1;
+        stage.on("viewport", (size) => {
+          this.ratio = size.ratio ?? this.ratio;
+        });
+        elem.addEventListener("touchstart", this.handleStart);
+        elem.addEventListener("touchend", this.handleEnd);
+        elem.addEventListener("touchmove", this.handleMove);
+        elem.addEventListener("touchcancel", this.handleCancel);
+        elem.addEventListener("mousedown", this.handleStart);
+        elem.addEventListener("mouseup", this.handleEnd);
+        elem.addEventListener("mousemove", this.handleMove);
+        document.addEventListener("mouseup", this.handleCancel);
+        window.addEventListener("blur", this.handleCancel);
+        return this;
+      }
+      unmount() {
+        const elem = this.elem;
+        elem.removeEventListener("touchstart", this.handleStart);
+        elem.removeEventListener("touchend", this.handleEnd);
+        elem.removeEventListener("touchmove", this.handleMove);
+        elem.removeEventListener("touchcancel", this.handleCancel);
+        elem.removeEventListener("mousedown", this.handleStart);
+        elem.removeEventListener("mouseup", this.handleEnd);
+        elem.removeEventListener("mousemove", this.handleMove);
+        document.removeEventListener("mouseup", this.handleCancel);
+        window.removeEventListener("blur", this.handleCancel);
+        return this;
+      }
+    }
+    __publicField(Mouse, "CLICK", "click");
+    __publicField(Mouse, "START", "touchstart mousedown");
+    __publicField(Mouse, "MOVE", "touchmove mousemove");
+    __publicField(Mouse, "END", "touchend mouseup");
+    __publicField(Mouse, "CANCEL", "touchcancel mousecancel");
+    var rel = {}, abs = {};
+    defineValue(rel, "clone", function(obj) {
+      obj = obj || {}, obj.x = this.x, obj.y = this.y;
+      return obj;
+    });
+    defineValue(rel, "toString", function() {
+      return (this.x | 0) + "x" + (this.y | 0) + " (" + this.abs + ")";
+    });
+    defineValue(rel, "abs", abs);
+    defineValue(abs, "clone", function(obj) {
+      obj = obj || {}, obj.x = this.x, obj.y = this.y;
+      return obj;
+    });
+    defineValue(abs, "toString", function() {
+      return (this.x | 0) + "x" + (this.y | 0);
+    });
+    function defineValue(obj, name, value) {
+      Object.defineProperty(obj, name, {
+        value
+      });
+    }
+    function IDENTITY(x) {
+      return x;
+    }
+    var _cache = {};
+    var _modes = {};
+    var _easings = {};
+    class Easing {
+      static get(token, fallback = IDENTITY) {
+        if (typeof token === "function") {
+          return token;
+        }
+        if (typeof token !== "string") {
+          return fallback;
+        }
+        var fn = _cache[token];
+        if (fn) {
+          return fn;
+        }
+        var match = /^(\w+)(-(in|out|in-out|out-in))?(\((.*)\))?$/i.exec(token);
+        if (!match || !match.length) {
+          return fallback;
+        }
+        var easing = _easings[match[1]];
+        var mode = _modes[match[3]];
+        var params = match[5];
+        if (easing && easing.fn) {
+          fn = easing.fn;
+        } else if (easing && easing.fc) {
+          fn = easing.fc.apply(easing.fc, params && params.replace(/\s+/, "").split(","));
+        } else {
+          fn = fallback;
+        }
+        if (mode) {
+          fn = mode.fn(fn);
+        }
+        _cache[token] = fn;
+        return fn;
+      }
+      static add(data) {
+        var names = (data.name || data.mode).split(/\s+/);
+        for (var i = 0; i < names.length; i++) {
+          var name = names[i];
+          if (name) {
+            (data.name ? _easings : _modes)[name] = data;
+          }
+        }
+      }
+    }
+    Easing.add({
+      mode: "in",
+      fn: function(f) {
+        return f;
+      }
+    });
+    Easing.add({
+      mode: "out",
+      fn: function(f) {
+        return function(t) {
+          return 1 - f(1 - t);
+        };
+      }
+    });
+    Easing.add({
+      mode: "in-out",
+      fn: function(f) {
+        return function(t) {
+          return t < 0.5 ? f(2 * t) / 2 : 1 - f(2 * (1 - t)) / 2;
+        };
+      }
+    });
+    Easing.add({
+      mode: "out-in",
+      fn: function(f) {
+        return function(t) {
+          return t < 0.5 ? 1 - f(2 * (1 - t)) / 2 : f(2 * t) / 2;
+        };
+      }
+    });
+    Easing.add({
+      name: "linear",
+      fn: function(t) {
+        return t;
+      }
+    });
+    Easing.add({
+      name: "quad",
+      fn: function(t) {
+        return t * t;
+      }
+    });
+    Easing.add({
+      name: "cubic",
+      fn: function(t) {
+        return t * t * t;
+      }
+    });
+    Easing.add({
+      name: "quart",
+      fn: function(t) {
+        return t * t * t * t;
+      }
+    });
+    Easing.add({
+      name: "quint",
+      fn: function(t) {
+        return t * t * t * t * t;
+      }
+    });
+    Easing.add({
+      name: "sin sine",
+      fn: function(t) {
+        return 1 - Math.cos(t * Math.PI / 2);
+      }
+    });
+    Easing.add({
+      name: "exp expo",
+      fn: function(t) {
+        return t == 0 ? 0 : Math.pow(2, 10 * (t - 1));
+      }
+    });
+    Easing.add({
+      name: "circle circ",
+      fn: function(t) {
+        return 1 - Math.sqrt(1 - t * t);
+      }
+    });
+    Easing.add({
+      name: "bounce",
+      fn: function(t) {
+        return t < 1 / 2.75 ? 7.5625 * t * t : t < 2 / 2.75 ? 7.5625 * (t -= 1.5 / 2.75) * t + 0.75 : t < 2.5 / 2.75 ? 7.5625 * (t -= 2.25 / 2.75) * t + 0.9375 : 7.5625 * (t -= 2.625 / 2.75) * t + 0.984375;
+      }
+    });
+    Easing.add({
+      name: "poly",
+      fc: function(e) {
+        return function(t) {
+          return Math.pow(t, e);
+        };
+      }
+    });
+    Easing.add({
+      name: "elastic",
+      fc: function(a, p) {
+        p = p || 0.45;
+        a = a || 1;
+        var s = p / (2 * Math.PI) * Math.asin(1 / a);
+        return function(t) {
+          return 1 + a * Math.pow(2, -10 * t) * Math.sin((t - s) * (2 * Math.PI) / p);
+        };
+      }
+    });
+    Easing.add({
+      name: "back",
+      fc: function(s) {
+        s = typeof s !== "undefined" ? s : 1.70158;
+        return function(t) {
+          return t * t * ((s + 1) * t - s);
+        };
+      }
+    });
+    Node.prototype.tween = function(duration, delay, append2) {
+      if (typeof duration !== "number") {
+        append2 = duration, delay = 0, duration = 0;
+      } else if (typeof delay !== "number") {
+        append2 = delay, delay = 0;
+      }
+      if (!this._tweens) {
+        this._tweens = [];
+        var ticktime = 0;
+        this.tick(function(elapsed, now, last) {
+          if (!this._tweens.length) {
+            return;
+          }
+          var ignore = ticktime != last;
+          ticktime = now;
+          if (ignore) {
+            return true;
+          }
+          var head = this._tweens[0];
+          var ended = head.tick(this, elapsed, now, last);
+          if (ended) {
+            if (head === this._tweens[0]) {
+              this._tweens.shift();
+            }
+            var next = head.finish();
+            if (next) {
+              this._tweens.unshift(next);
+            }
+          }
+          return true;
+        }, true);
+      }
+      this.touch();
+      if (!append2) {
+        this._tweens.length = 0;
+      }
+      var tween = new Tween(this, duration, delay);
+      this._tweens.push(tween);
+      return tween;
+    };
+    class Tween {
+      constructor(owner, duration, delay) {
+        __publicField(this, "_ending", []);
+        this._end = {};
+        this._duration = duration || 400;
+        this._delay = delay || 0;
+        this._owner = owner;
+        this._time = 0;
+      }
+      // @internal
+      tick(node, elapsed, now, last) {
+        this._time += elapsed;
+        if (this._time < this._delay) {
+          return;
+        }
+        var time = this._time - this._delay;
+        if (!this._start) {
+          this._start = {};
+          for (var key in this._end) {
+            this._start[key] = this._owner.pin(key);
+          }
+        }
+        var p, ended;
+        if (time < this._duration) {
+          p = time / this._duration;
+          ended = false;
+        } else {
+          p = 1;
+          ended = true;
+        }
+        if (typeof this._easing == "function") {
+          p = this._easing(p);
+        }
+        var q = 1 - p;
+        for (var key in this._end) {
+          this._owner.pin(key, this._start[key] * q + this._end[key] * p);
+        }
+        return ended;
+      }
+      // @internal
+      finish() {
+        this._ending.forEach((callback) => {
+          try {
+            callback.call(this._owner);
+          } catch (e) {
+            console.error(e);
+          }
+        });
+        return this._next;
+      }
+      tween(duration, delay) {
+        return this._next = new Tween(this._owner, duration, delay);
+      }
+      duration(duration) {
+        this._duration = duration;
+        return this;
+      }
+      delay(delay) {
+        this._delay = delay;
+        return this;
+      }
+      ease(easing) {
+        this._easing = Easing.get(easing);
+        return this;
+      }
+      done(fn) {
+        this._ending.push(fn);
+        return this;
+      }
+      hide() {
+        this._ending.push(function() {
+          this.remove();
+        });
+        this._hide = true;
+        return this;
+      }
+      remove() {
+        this._ending.push(function() {
+          this.remove();
+        });
+        this._remove = true;
+        return this;
+      }
+      pin(a, b) {
+        if (typeof a === "object") {
+          for (var attr in a) {
+            pinning(this._owner, this._end, attr, a[attr]);
+          }
+        } else if (typeof b !== "undefined") {
+          pinning(this._owner, this._end, a, b);
+        }
+        return this;
+      }
+      /**
+       * @deprecated Use .done(fn) instead.
+       */
+      then(fn) {
+        this.done(fn);
+        return this;
+      }
+      /**
+       * @deprecated NOOP
+       */
+      clear(forward) {
+        return this;
+      }
+    }
+    function pinning(node, map, key, value) {
+      if (typeof node.pin(key) === "number") {
+        map[key] = value;
+      } else if (typeof node.pin(key + "X") === "number" && typeof node.pin(key + "Y") === "number") {
+        map[key + "X"] = value;
+        map[key + "Y"] = value;
+      }
+    }
+    Pin._add_shortcuts(Tween.prototype);
+    const _stages = [];
+    const pause = function() {
+      for (let i = _stages.length - 1; i >= 0; i--) {
+        _stages[i].pause();
+      }
+    };
+    const resume = function() {
+      for (let i = _stages.length - 1; i >= 0; i--) {
+        _stages[i].resume();
+      }
+    };
+    const mount = function(configs = {}) {
+      let root = new Root();
+      root.mount(configs);
+      root.mouse = new Mouse().mount(root, root.dom);
+      return root;
+    };
+    class Root extends Node {
+      constructor() {
+        super();
+        __publicField(this, "lastTime", 0);
+        __publicField(this, "pixelWidth", -1);
+        __publicField(this, "pixelHeight", -1);
+        __publicField(this, "canvas", null);
+        __publicField(this, "dom", null);
+        __publicField(this, "context", null);
+        __publicField(this, "fullpage", false);
+        __publicField(this, "drawingWidth", 0);
+        __publicField(this, "drawingHeight", 0);
+        __publicField(this, "pixelRatio", 1);
+        __publicField(this, "mounted", false);
+        __publicField(this, "paused", false);
+        __publicField(this, "sleep", false);
+        __publicField(this, "computeViewport", () => {
+          let newPixelWidth;
+          let newPixelHeight;
+          if (this.fullpage) {
+            newPixelWidth = window.innerWidth > 0 ? window.innerWidth : screen.width;
+            newPixelHeight = window.innerHeight > 0 ? window.innerHeight : screen.height;
+          } else {
+            newPixelWidth = this.canvas.clientWidth;
+            newPixelHeight = this.canvas.clientHeight;
+          }
+          return [newPixelWidth, newPixelHeight, this.fullpage];
+        });
+        __publicField(this, "mount", (configs = {}) => {
+          if (typeof configs.canvas === "string") {
+            this.canvas = document.getElementById(configs.canvas);
+          }
+          if (!this.canvas) {
+            this.canvas = document.getElementById("cutjs") || document.getElementById("stage");
+          }
+          if (!this.canvas) {
+            this.fullpage = true;
+            console.log("Creating Canvas...");
+            this.canvas = document.createElement("canvas");
+            this.canvas.style.position = "absolute";
+            this.canvas.style.top = "0";
+            this.canvas.style.left = "0";
+            let body = document.body;
+            body.insertBefore(this.canvas, body.firstChild);
+          }
+          this.dom = this.canvas;
+          this.context = this.canvas.getContext("2d");
+          this.devicePixelRatio = window.devicePixelRatio || 1;
+          this.backingStoreRatio = this.context.webkitBackingStorePixelRatio || this.context.mozBackingStorePixelRatio || this.context.msBackingStorePixelRatio || this.context.oBackingStorePixelRatio || this.context.backingStorePixelRatio || 1;
+          this.pixelRatio = this.devicePixelRatio / this.backingStoreRatio;
+          this.mounted = true;
+          _stages.push(this);
+          this.requestFrame(this.onFrame);
+        });
+        __publicField(this, "frameRequested", false);
+        __publicField(this, "requestFrame", () => {
+          if (!this.frameRequested) {
+            this.frameRequested = true;
+            requestAnimationFrame(this.onFrame);
+          }
+        });
+        __publicField(this, "onFrame", (now) => {
+          this.frameRequested = false;
+          if (!this.mounted) {
+            return;
+          }
+          this.requestFrame();
+          let [newPixelWidth, newPixelHeight, managed] = this.computeViewport();
+          if (this.pixelWidth !== newPixelWidth || this.pixelHeight !== newPixelHeight) {
+            this.pixelWidth = newPixelWidth;
+            this.pixelHeight = newPixelHeight;
+            if (managed) {
+              this.canvas.style.width = newPixelWidth + "px";
+              this.canvas.style.height = newPixelHeight + "px";
+            }
+            this.drawingWidth = newPixelWidth * this.pixelRatio;
+            this.drawingHeight = newPixelHeight * this.pixelRatio;
+            if (this.canvas.width !== this.drawingWidth || this.canvas.height !== this.drawingHeight) {
+              this.canvas.width = this.drawingWidth;
+              this.canvas.height = this.drawingHeight;
+              console.log("Resize: " + this.drawingWidth + " x " + this.drawingHeight + " / " + this.pixelRatio);
+              this.viewport(this.drawingWidth, this.drawingHeight, this.pixelRatio);
+            }
+          }
+          let last = this.lastTime || now;
+          let elapsed = now - last;
+          if (!this.mounted || this.paused || this.sleep) {
+            return;
+          }
+          this.lastTime = now;
+          let loopRequest = this._tick(elapsed, now, last);
+          if (this._mo_touch != this._ts_touch) {
+            this._mo_touch = this._ts_touch;
+            this.sleep = false;
+            if (this.drawingWidth > 0 && this.drawingHeight > 0) {
+              this.context.setTransform(1, 0, 0, 1, 0, 0);
+              this.context.clearRect(0, 0, this.drawingWidth, this.drawingHeight);
+              this.render(this.context);
+            }
+          } else if (loopRequest) {
+            this.sleep = false;
+          } else {
+            this.sleep = true;
+          }
+          stats$1.fps = elapsed ? 1e3 / elapsed : 0;
+        });
+        this.label("Root");
+      }
+      resume() {
+        if (this.sleep || this.paused) {
+          this.requestFrame();
+        }
+        this.paused = false;
+        this.sleep = false;
+        this.publish("resume");
+        return this;
+      }
+      pause() {
+        if (!this.paused) {
+          this.publish("pause");
+        }
+        this.paused = true;
+        return this;
+      }
+      touch() {
+        if (this.sleep || this.paused) {
+          this.requestFrame();
+        }
+        this.sleep = false;
+        return Node.prototype.touch();
+      }
+      unmount() {
+        var _a;
+        this.mounted = false;
+        let index = _stages.indexOf(this);
+        if (index >= 0) {
+          _stages.splice(index, 1);
+        }
+        (_a = this.mouse) == null ? void 0 : _a.unmount();
+        return this;
+      }
+      background(color) {
+        this.dom.style.backgroundColor = color;
+        return this;
+      }
+      /**
+       * Set/get viewport. This is combined with viewbox to determine the scale and position of the viewbox within the viewport.
+       */
+      viewport(width, height, ratio) {
+        if (typeof width === "undefined") {
+          return Object.assign({}, this._viewport);
+        }
+        this._viewport = {
+          width,
+          height,
+          ratio: ratio || 1
+        };
+        this.viewbox();
+        let data = Object.assign({}, this._viewport);
+        this.visit({
+          start: function(node) {
+            if (!node._flag("viewport")) {
+              return true;
+            }
+            node.publish("viewport", [data]);
+          }
+        });
+        return this;
+      }
+      /**
+       * Set/get viewbox. This is combined with viewport to determine the scale and position of the viewbox within the viewport.
+       * 
+       * @param {mode} string - One of: 'in-pad' (like css object-fit: 'contain'), 'in', 'out-crop' (like css object-fit: 'cover'), 'out'
+       */
+      // TODO: static/fixed viewbox
+      viewbox(width, height, mode) {
+        if (typeof width === "number" && typeof height === "number") {
+          this._viewbox = {
+            width,
+            height,
+            mode: /^(in|out|in-pad|out-crop)$/.test(mode) ? mode : "in-pad"
+          };
+        }
+        let viewbox = this._viewbox;
+        let viewport = this._viewport;
+        if (viewport && viewbox) {
+          this.pin({
+            width: viewbox.width,
+            height: viewbox.height
+          });
+          this.scaleTo(viewport.width, viewport.height, viewbox.mode);
+        } else if (viewport) {
+          this.pin({
+            width: viewport.width,
+            height: viewport.height
+          });
+        }
+        return this;
+      }
+    }
+    const sprite = function(frame) {
+      var sprite2 = new Sprite();
+      frame && sprite2.texture(frame);
+      return sprite2;
+    };
+    Sprite._super = Node;
+    Sprite.prototype = Object.create(Sprite._super.prototype);
+    function Sprite() {
+      Sprite._super.call(this);
+      this.label("Sprite");
+      this._textures = [];
+      this._image = null;
+    }
+    Sprite.prototype.texture = function(frame) {
+      this._image = texture(frame).one();
+      this.pin("width", this._image ? this._image.width : 0);
+      this.pin("height", this._image ? this._image.height : 0);
+      this._textures[0] = this._image.pipe();
+      this._textures.length = 1;
+      return this;
+    };
+    Sprite.prototype.tile = function(inner) {
+      this._repeat(false, inner);
+      return this;
+    };
+    Sprite.prototype.stretch = function(inner) {
+      this._repeat(true, inner);
+      return this;
+    };
+    Sprite.prototype._repeat = function(stretch, inner) {
+      var self = this;
+      this.untick(this._repeatTicker);
+      this.tick(this._repeatTicker = function() {
+        if (this._mo_stretch == this._pin._ts_transform) {
+          return;
+        }
+        this._mo_stretch = this._pin._ts_transform;
+        var width = this.pin("width");
+        var height = this.pin("height");
+        this._textures.length = repeat(this._image, width, height, stretch, inner, insert);
+      });
+      function insert(i, sx, sy, sw, sh, dx, dy, dw, dh) {
+        var repeat2 = self._textures.length > i ? self._textures[i] : self._textures[i] = self._image.pipe();
+        repeat2.src(sx, sy, sw, sh);
+        repeat2.dest(dx, dy, dw, dh);
+      }
+    };
+    function repeat(img, owidth, oheight, stretch, inner, insert) {
+      var width = img.width;
+      var height = img.height;
+      var left = img.left;
+      var right = img.right;
+      var top = img.top;
+      var bottom = img.bottom;
+      left = typeof left === "number" && left === left ? left : 0;
+      right = typeof right === "number" && right === right ? right : 0;
+      top = typeof top === "number" && top === top ? top : 0;
+      bottom = typeof bottom === "number" && bottom === bottom ? bottom : 0;
+      width = width - left - right;
+      height = height - top - bottom;
+      if (!inner) {
+        owidth = Math.max(owidth - left - right, 0);
+        oheight = Math.max(oheight - top - bottom, 0);
+      }
+      var i = 0;
+      if (top > 0 && left > 0)
+        insert(i++, 0, 0, left, top, 0, 0, left, top);
+      if (bottom > 0 && left > 0)
+        insert(i++, 0, height + top, left, bottom, 0, oheight + top, left, bottom);
+      if (top > 0 && right > 0)
+        insert(i++, width + left, 0, right, top, owidth + left, 0, right, top);
+      if (bottom > 0 && right > 0)
+        insert(
+          i++,
+          width + left,
+          height + top,
+          right,
+          bottom,
+          owidth + left,
+          oheight + top,
+          right,
+          bottom
+        );
+      if (stretch) {
+        if (top > 0)
+          insert(i++, left, 0, width, top, left, 0, owidth, top);
+        if (bottom > 0)
+          insert(
+            i++,
+            left,
+            height + top,
+            width,
+            bottom,
+            left,
+            oheight + top,
+            owidth,
+            bottom
+          );
+        if (left > 0)
+          insert(i++, 0, top, left, height, 0, top, left, oheight);
+        if (right > 0)
+          insert(
+            i++,
+            width + left,
+            top,
+            right,
+            height,
+            owidth + left,
+            top,
+            right,
+            oheight
+          );
+        insert(i++, left, top, width, height, left, top, owidth, oheight);
+      } else {
+        var l = left, r = owidth, w;
+        while (r > 0) {
+          w = Math.min(width, r), r -= width;
+          var t = top, b = oheight, h;
+          while (b > 0) {
+            h = Math.min(height, b), b -= height;
+            insert(i++, left, top, w, h, l, t, w, h);
+            if (r <= 0) {
+              if (left)
+                insert(i++, 0, top, left, h, 0, t, left, h);
+              if (right)
+                insert(i++, width + left, top, right, h, l + w, t, right, h);
+            }
+            t += h;
+          }
+          if (top)
+            insert(i++, left, 0, w, top, l, 0, w, top);
+          if (bottom)
+            insert(i++, left, height + top, w, bottom, l, t, w, bottom);
+          l += w;
+        }
+      }
+      return i;
+    }
+    Sprite.prototype.image = Sprite.prototype.texture;
+    const image = sprite;
+    const Image$1 = Sprite;
+    const anim = function(frames, fps) {
+      var anim2 = new Anim();
+      anim2.frames(frames).gotoFrame(0);
+      fps && anim2.fps(fps);
+      return anim2;
+    };
+    Anim._super = Node;
+    Anim.prototype = Object.create(Anim._super.prototype);
+    const FPS = 15;
+    function Anim() {
+      Anim._super.call(this);
+      this.label("Anim");
+      this._textures = [];
+      this._fps = FPS;
+      this._ft = 1e3 / this._fps;
+      this._time = -1;
+      this._repeat = 0;
+      this._index = 0;
+      this._frames = [];
+      var lastTime = 0;
+      this.tick(function(t, now, last) {
+        if (this._time < 0 || this._frames.length <= 1) {
+          return;
+        }
+        var ignore = lastTime != last;
+        lastTime = now;
+        if (ignore) {
+          return true;
+        }
+        this._time += t;
+        if (this._time < this._ft) {
+          return true;
+        }
+        var n = this._time / this._ft | 0;
+        this._time -= n * this._ft;
+        this.moveFrame(n);
+        if (this._repeat > 0 && (this._repeat -= n) <= 0) {
+          this.stop();
+          this._callback && this._callback();
+          return false;
+        }
+        return true;
+      }, false);
+    }
+    Anim.prototype.fps = function(fps) {
+      if (typeof fps === "undefined") {
+        return this._fps;
+      }
+      this._fps = fps > 0 ? fps : FPS;
+      this._ft = 1e3 / this._fps;
+      return this;
+    };
+    Anim.prototype.setFrames = function(a, b, c) {
+      return this.frames(a, b, c);
+    };
+    Anim.prototype.frames = function(frames) {
+      this._index = 0;
+      this._frames = texture(frames).array();
+      this.touch();
+      return this;
+    };
+    Anim.prototype.length = function() {
+      return this._frames ? this._frames.length : 0;
+    };
+    Anim.prototype.gotoFrame = function(frame, resize) {
+      this._index = math.wrap(frame, this._frames.length) | 0;
+      resize = resize || !this._textures[0];
+      this._textures[0] = this._frames[this._index];
+      if (resize) {
+        this.pin("width", this._textures[0].width);
+        this.pin("height", this._textures[0].height);
+      }
+      this.touch();
+      return this;
+    };
+    Anim.prototype.moveFrame = function(move) {
+      return this.gotoFrame(this._index + move);
+    };
+    Anim.prototype.repeat = function(repeat2, callback) {
+      this._repeat = repeat2 * this._frames.length - 1;
+      this._callback = callback;
+      this.play();
+      return this;
+    };
+    Anim.prototype.play = function(frame) {
+      if (typeof frame !== "undefined") {
+        this.gotoFrame(frame);
+        this._time = 0;
+      } else if (this._time < 0) {
+        this._time = 0;
+      }
+      this.touch();
+      return this;
+    };
+    Anim.prototype.stop = function(frame) {
+      this._time = -1;
+      if (typeof frame !== "undefined") {
+        this.gotoFrame(frame);
+      }
+      return this;
+    };
+    const string$1 = function(frames) {
+      return new Str().frames(frames);
+    };
+    Str._super = Node;
+    Str.prototype = Object.create(Str._super.prototype);
+    function Str() {
+      Str._super.call(this);
+      this.label("String");
+      this._textures = [];
+    }
+    Str.prototype.setFont = function(a, b, c) {
+      return this.frames(a, b, c);
+    };
+    Str.prototype.frames = function(frames) {
+      this._textures = [];
+      if (typeof frames == "string") {
+        frames = texture(frames);
+        this._item = function(value) {
+          return frames.one(value);
+        };
+      } else if (typeof frames === "object") {
+        this._item = function(value) {
+          return frames[value];
+        };
+      } else if (typeof frames === "function") {
+        this._item = frames;
+      }
+      return this;
+    };
+    Str.prototype.setValue = function(a, b, c) {
+      return this.value(a, b, c);
+    };
+    Str.prototype.value = function(value) {
+      if (typeof value === "undefined") {
+        return this._value;
+      }
+      if (this._value === value) {
+        return this;
+      }
+      this._value = value;
+      if (value === null) {
+        value = "";
+      } else if (typeof value !== "string" && !Array.isArray(value)) {
+        value = value.toString();
+      }
+      this._spacing = this._spacing || 0;
+      var width = 0, height = 0;
+      for (var i = 0; i < value.length; i++) {
+        var texture2 = this._textures[i] = this._item(value[i]);
+        width += i > 0 ? this._spacing : 0;
+        texture2.dest(width, 0);
+        width = width + texture2.width;
+        height = Math.max(height, texture2.height);
+      }
+      this.pin("width", width);
+      this.pin("height", height);
+      this._textures.length = value.length;
+      return this;
+    };
+    const row = function(align) {
+      return create().row(align).label("Row");
+    };
+    Node.prototype.row = function(align) {
+      this.align("row", align);
+      return this;
+    };
+    const column = function(align) {
+      return create().column(align).label("Row");
+    };
+    Node.prototype.column = function(align) {
+      this.align("column", align);
+      return this;
+    };
+    Node.prototype.align = function(type, align) {
+      this._padding = this._padding || 0;
+      this._spacing = this._spacing || 0;
+      this.untick(this._layoutTiker);
+      this.tick(this._layoutTiker = function() {
+        if (this._mo_seq == this._ts_touch) {
+          return;
+        }
+        this._mo_seq = this._ts_touch;
+        var alignChildren = this._mo_seqAlign != this._ts_children;
+        this._mo_seqAlign = this._ts_children;
+        var width = 0, height = 0;
+        var child, next = this.first(true);
+        var first = true;
+        while (child = next) {
+          next = child.next(true);
+          child.matrix(true);
+          var w = child.pin("boxWidth");
+          var h = child.pin("boxHeight");
+          if (type == "column") {
+            !first && (height += this._spacing);
+            child.pin("offsetY") != height && child.pin("offsetY", height);
+            width = Math.max(width, w);
+            height = height + h;
+            alignChildren && child.pin("alignX", align);
+          } else if (type == "row") {
+            !first && (width += this._spacing);
+            child.pin("offsetX") != width && child.pin("offsetX", width);
+            width = width + w;
+            height = Math.max(height, h);
+            alignChildren && child.pin("alignY", align);
+          }
+          first = false;
+        }
+        width += 2 * this._padding;
+        height += 2 * this._padding;
+        this.pin("width") != width && this.pin("width", width);
+        this.pin("height") != height && this.pin("height", height);
+      });
+      return this;
+    };
+    const box = function() {
+      return create().box().label("Box");
+    };
+    Node.prototype.box = function() {
+      this._padding = this._padding || 0;
+      this.untick(this._layoutTiker);
+      this.tick(this._layoutTiker = function() {
+        if (this._mo_box == this._ts_touch) {
+          return;
+        }
+        this._mo_box = this._ts_touch;
+        var width = 0, height = 0;
+        var child, next = this.first(true);
+        while (child = next) {
+          next = child.next(true);
+          child.matrix(true);
+          var w = child.pin("boxWidth");
+          var h = child.pin("boxHeight");
+          width = Math.max(width, w);
+          height = Math.max(height, h);
+        }
+        width += 2 * this._padding;
+        height += 2 * this._padding;
+        this.pin("width") != width && this.pin("width", width);
+        this.pin("height") != height && this.pin("height", height);
+      });
+      return this;
+    };
+    const layer = function() {
+      return create().layer().label("Layer");
+    };
+    Node.prototype.layer = function() {
+      this.untick(this._layoutTiker);
+      this.tick(this._layoutTiker = function() {
+        var parent = this.parent();
+        if (parent) {
+          var width = parent.pin("width");
+          if (this.pin("width") != width) {
+            this.pin("width", width);
+          }
+          var height = parent.pin("height");
+          if (this.pin("height") != height) {
+            this.pin("height", height);
+          }
+        }
+      }, true);
+      return this;
+    };
+    Node.prototype.padding = function(pad) {
+      this._padding = pad;
+      return this;
+    };
+    Node.prototype.spacing = function(space) {
+      this._spacing = space;
+      return this;
+    };
+    const Stage = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+      __proto__: null,
+      Anim,
+      Atlas,
+      Image: Image$1,
+      Matrix,
+      Mouse,
+      Node,
+      Pin,
+      Root,
+      Sprite,
+      Str,
+      Texture,
+      Tween,
+      anim,
+      atlas,
+      box,
+      canvas,
+      column,
+      create,
+      image,
+      layer,
+      math,
+      mount,
+      pause,
+      resume,
+      row,
+      sprite,
+      string: string$1,
+      texture
+    }, Symbol.toStringTag, { value: "Module" }));
+
+    var options = function (input, defaults) {
         if (input === null || typeof input === 'undefined') {
             // tslint:disable-next-line:no-object-literal-type-assertion
             input = {};
@@ -92,13 +2750,9 @@
             }
         }
         return output;
-    }
+    };
 
     var debug = function () {
-        var rest = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            rest[_i] = arguments[_i];
-        }
         return;
     };
     var assert = function (statement, err, log) {
@@ -132,72 +2786,94 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
      * SOFTWARE.
      */
-    var math$1 = Object.create(Math);
-    // @ts-ignore
-    // noinspection JSConstantReassignment
-    math$1.EPSILON = 1e-9; // TODO
-    math$1.isFinite = function (x) {
-        return (typeof x === 'number') && isFinite(x) && !isNaN(x);
-    };
-    math$1.assert = function (x) {
-        return;
-    };
-    math$1.invSqrt = function (x) {
-        // TODO:
-        return 1 / Math.sqrt(x);
-    };
-    math$1.nextPowerOfTwo = function (x) {
-        // TODO
-        x |= (x >> 1);
-        x |= (x >> 2);
-        x |= (x >> 4);
-        x |= (x >> 8);
-        x |= (x >> 16);
-        return x + 1;
-    };
-    math$1.isPowerOfTwo = function (x) {
-        return x > 0 && (x & (x - 1)) === 0;
-    };
-    math$1.mod = function (num, min, max) {
-        if (typeof min === 'undefined') {
-            max = 1;
-            min = 0;
+    var native = Object.create(Math);
+    var extended = Object.assign(native, {
+        EPSILON: 1e-9,
+        /**
+         * This function is used to ensure that a floating point number is not a NaN or
+         * infinity.
+         */
+        isFinite: function (x) {
+            return (typeof x === 'number') && isFinite(x) && !isNaN(x);
+        },
+        assert: function (x) {
+            return;
+        },
+        /**
+        * This is a approximate yet fast inverse square-root (todo).
+        */
+        invSqrt: function (x) {
+            // TODO:
+            return 1 / native.sqrt(x);
+        },
+        /**
+         * Next Largest Power of 2 Given a binary integer value x, the next largest
+         * power of 2 can be computed by a SWAR algorithm that recursively "folds" the
+         * upper bits into the lower bits. This process yields a bit vector with the
+         * same most significant 1 as x, but all 1's below it. Adding 1 to that value
+         * yields the next largest power of 2. For a 32-bit value:
+         */
+        nextPowerOfTwo: function (x) {
+            // TODO
+            x |= (x >> 1);
+            x |= (x >> 2);
+            x |= (x >> 4);
+            x |= (x >> 8);
+            x |= (x >> 16);
+            return x + 1;
+        },
+        isPowerOfTwo: function (x) {
+            return x > 0 && (x & (x - 1)) === 0;
+        },
+        mod: function (num, min, max) {
+            if (typeof min === 'undefined') {
+                max = 1;
+                min = 0;
+            }
+            else if (typeof max === 'undefined') {
+                max = min;
+                min = 0;
+            }
+            if (max > min) {
+                num = (num - min) % (max - min);
+                return num + (num < 0 ? max : min);
+            }
+            else {
+                num = (num - max) % (min - max);
+                return num + (num <= 0 ? min : max);
+            }
+        },
+        /**
+         * Returns a min if num is less than min, and max if more than max, otherwise returns num.
+         */
+        clamp: function (num, min, max) {
+            if (num < min) {
+                return min;
+            }
+            else if (num > max) {
+                return max;
+            }
+            else {
+                return num;
+            }
+        },
+        /**
+         * Returns a random number between min and max when two arguments are provided.
+         * If one arg is provided between 0 to max.
+         * If one arg is passed between 0 to 1.
+         */
+        random: function (min, max) {
+            if (typeof min === 'undefined') {
+                max = 1;
+                min = 0;
+            }
+            else if (typeof max === 'undefined') {
+                max = min;
+                min = 0;
+            }
+            return min === max ? min : native.random() * (max - min) + min;
         }
-        else if (typeof max === 'undefined') {
-            max = min;
-            min = 0;
-        }
-        if (max > min) {
-            num = (num - min) % (max - min);
-            return num + (num < 0 ? max : min);
-        }
-        else {
-            num = (num - max) % (min - max);
-            return num + (num <= 0 ? min : max);
-        }
-    };
-    math$1.clamp = function (num, min, max) {
-        if (num < min) {
-            return min;
-        }
-        else if (num > max) {
-            return max;
-        }
-        else {
-            return num;
-        }
-    };
-    math$1.random = function (min, max) {
-        if (typeof min === 'undefined') {
-            max = 1;
-            min = 0;
-        }
-        else if (typeof max === 'undefined') {
-            max = min;
-            min = 0;
-        }
-        return min === max ? min : Math.random() * (max - min) + min;
-    };
+    });
 
     /*
      * Planck.js
@@ -282,7 +2958,7 @@
             if (obj === null || typeof obj === 'undefined') {
                 return false;
             }
-            return math$1.isFinite(obj.x) && math$1.isFinite(obj.y);
+            return extended.isFinite(obj.x) && extended.isFinite(obj.y);
         };
         Vec2.assert = function (o) {
             return;
@@ -477,7 +3153,7 @@
          */
         Vec2.prototype.normalize = function () {
             var length = this.length();
-            if (length < math$1.EPSILON) {
+            if (length < extended.EPSILON) {
                 return 0.0;
             }
             var invLength = 1.0 / length;
@@ -491,7 +3167,7 @@
          * For performance, use this instead of lengthSquared (if possible).
          */
         Vec2.lengthOf = function (v) {
-            return math$1.sqrt(v.x * v.x + v.y * v.y);
+            return extended.sqrt(v.x * v.x + v.y * v.y);
         };
         /**
          * Get the length squared.
@@ -502,7 +3178,7 @@
         Vec2.distance = function (v, w) {
             var dx = v.x - w.x;
             var dy = v.y - w.y;
-            return math$1.sqrt(dx * dx + dy * dy);
+            return extended.sqrt(dx * dx + dy * dy);
         };
         Vec2.distanceSquared = function (v, w) {
             var dx = v.x - w.x;
@@ -628,21 +3304,21 @@
             return Vec2.neo(-v.x, -v.y);
         };
         Vec2.abs = function (v) {
-            return Vec2.neo(math$1.abs(v.x), math$1.abs(v.y));
+            return Vec2.neo(extended.abs(v.x), extended.abs(v.y));
         };
         Vec2.mid = function (v, w) {
             return Vec2.neo((v.x + w.x) * 0.5, (v.y + w.y) * 0.5);
         };
         Vec2.upper = function (v, w) {
-            return Vec2.neo(math$1.max(v.x, w.x), math$1.max(v.y, w.y));
+            return Vec2.neo(extended.max(v.x, w.x), extended.max(v.y, w.y));
         };
         Vec2.lower = function (v, w) {
-            return Vec2.neo(math$1.min(v.x, w.x), math$1.min(v.y, w.y));
+            return Vec2.neo(extended.min(v.x, w.x), extended.min(v.y, w.y));
         };
         Vec2.prototype.clamp = function (max) {
             var lengthSqr = this.x * this.x + this.y * this.y;
             if (lengthSqr > max * max) {
-                var invLength = math$1.invSqrt(lengthSqr);
+                var invLength = extended.invSqrt(lengthSqr);
                 this.x *= invLength * max;
                 this.y *= invLength * max;
             }
@@ -752,16 +3428,16 @@
             var upperA = a.upperBound;
             var lowerB = b.lowerBound;
             var upperB = b.upperBound;
-            var lowerX = math$1.min(lowerA.x, lowerB.x);
-            var lowerY = math$1.min(lowerA.y, lowerB.y);
-            var upperX = math$1.max(upperB.x, upperA.x);
-            var upperY = math$1.max(upperB.y, upperA.y);
+            var lowerX = extended.min(lowerA.x, lowerB.x);
+            var lowerY = extended.min(lowerA.y, lowerB.y);
+            var upperX = extended.max(upperB.x, upperA.x);
+            var upperY = extended.max(upperB.y, upperA.y);
             this.lowerBound.setNum(lowerX, lowerY);
             this.upperBound.setNum(upperX, upperY);
         };
         AABB.prototype.combinePoints = function (a, b) {
-            this.lowerBound.setNum(math$1.min(a.x, b.x), math$1.min(a.y, b.y));
-            this.upperBound.setNum(math$1.max(a.x, b.x), math$1.max(a.y, b.y));
+            this.lowerBound.setNum(extended.min(a.x, b.x), extended.min(a.y, b.y));
+            this.upperBound.setNum(extended.max(a.x, b.x), extended.max(a.y, b.y));
         };
         AABB.prototype.set = function (aabb) {
             this.lowerBound.setNum(aabb.lowerBound.x, aabb.lowerBound.y);
@@ -799,8 +3475,8 @@
             return Vec2.areEqual(a.lowerBound, b.lowerBound) && Vec2.areEqual(a.upperBound, b.upperBound);
         };
         AABB.diff = function (a, b) {
-            var wD = math$1.max(0, math$1.min(a.upperBound.x, b.upperBound.x) - math$1.max(b.lowerBound.x, a.lowerBound.x));
-            var hD = math$1.max(0, math$1.min(a.upperBound.y, b.upperBound.y) - math$1.max(b.lowerBound.y, a.lowerBound.y));
+            var wD = extended.max(0, extended.min(a.upperBound.x, b.upperBound.x) - extended.max(b.lowerBound.x, a.lowerBound.x));
+            var hD = extended.max(0, extended.min(a.upperBound.y, b.upperBound.y) - extended.max(b.lowerBound.y, a.lowerBound.y));
             var wA = a.upperBound.x - a.lowerBound.x;
             var hA = a.upperBound.y - a.lowerBound.y;
             var wB = b.upperBound.x - b.lowerBound.x;
@@ -816,7 +3492,7 @@
             var absD = Vec2.abs(d);
             var normal = Vec2.zero();
             for (var f = 'x'; f !== null; f = (f === 'x' ? 'y' : null)) {
-                if (absD.x < math$1.EPSILON) {
+                if (absD.x < extended.EPSILON) {
                     // Parallel.
                     if (p[f] < this.lowerBound[f] || this.upperBound[f] < p[f]) {
                         return false;
@@ -841,7 +3517,7 @@
                         tmin = t1;
                     }
                     // Pull the max down
-                    tmax = math$1.min(tmax, t2);
+                    tmax = extended.min(tmax, t2);
                     if (tmin > tmax) {
                         return false;
                     }
@@ -1397,7 +4073,7 @@
                 index = this.balance(index);
                 var child1 = index.child1;
                 var child2 = index.child2;
-                index.height = 1 + math$1.max(child1.height, child2.height);
+                index.height = 1 + extended.max(child1.height, child2.height);
                 index.aabb.combine(child1.aabb, child2.aabb);
                 index = index.parent;
             }
@@ -1434,7 +4110,7 @@
                     var child1 = index.child1;
                     var child2 = index.child2;
                     index.aabb.combine(child1.aabb, child2.aabb);
-                    index.height = 1 + math$1.max(child1.height, child2.height);
+                    index.height = 1 + extended.max(child1.height, child2.height);
                     index = index.parent;
                 }
             }
@@ -1484,8 +4160,8 @@
                     G.parent = A;
                     A.aabb.combine(B.aabb, G.aabb);
                     C.aabb.combine(A.aabb, F.aabb);
-                    A.height = 1 + math$1.max(B.height, G.height);
-                    C.height = 1 + math$1.max(A.height, F.height);
+                    A.height = 1 + extended.max(B.height, G.height);
+                    C.height = 1 + extended.max(A.height, F.height);
                 }
                 else {
                     C.child2 = G;
@@ -1493,8 +4169,8 @@
                     F.parent = A;
                     A.aabb.combine(B.aabb, F.aabb);
                     C.aabb.combine(A.aabb, G.aabb);
-                    A.height = 1 + math$1.max(B.height, F.height);
-                    C.height = 1 + math$1.max(A.height, G.height);
+                    A.height = 1 + extended.max(B.height, F.height);
+                    C.height = 1 + extended.max(A.height, G.height);
                 }
                 return C;
             }
@@ -1525,8 +4201,8 @@
                     E.parent = A;
                     A.aabb.combine(C.aabb, E.aabb);
                     B.aabb.combine(A.aabb, D.aabb);
-                    A.height = 1 + math$1.max(C.height, E.height);
-                    B.height = 1 + math$1.max(A.height, D.height);
+                    A.height = 1 + extended.max(C.height, E.height);
+                    B.height = 1 + extended.max(A.height, D.height);
                 }
                 else {
                     B.child2 = E;
@@ -1534,8 +4210,8 @@
                     D.parent = A;
                     A.aabb.combine(C.aabb, D.aabb);
                     B.aabb.combine(A.aabb, E.aabb);
-                    A.height = 1 + math$1.max(C.height, D.height);
-                    B.height = 1 + math$1.max(A.height, E.height);
+                    A.height = 1 + extended.max(C.height, D.height);
+                    B.height = 1 + extended.max(A.height, E.height);
                 }
                 return B;
             }
@@ -1590,7 +4266,7 @@
             }
             var height1 = this.computeHeight(node.child1.id);
             var height2 = this.computeHeight(node.child2.id);
-            return 1 + math$1.max(height1, height2);
+            return 1 + extended.max(height1, height2);
         };
         DynamicTree.prototype.validateStructure = function (node) {
             if (node == null) {
@@ -1618,7 +4294,7 @@
             // _ASSERT && common.assert(0 <= child2 && child2 < this.m_nodeCapacity);
             var height1 = child1.height;
             var height2 = child2.height;
-            1 + math$1.max(height1, height2);
+            1 + extended.max(height1, height2);
             var aabb = new AABB();
             aabb.combine(child1.aabb, child2.aabb);
             this.validateMetrics(child1);
@@ -1643,8 +4319,8 @@
                 if (node.height <= 1) {
                     continue;
                 }
-                var balance = math$1.abs(node.child2.height - node.child1.height);
-                maxBalance = math$1.max(maxBalance, balance);
+                var balance = extended.abs(node.child2.height - node.child1.height);
+                maxBalance = extended.max(maxBalance, balance);
             }
             this.iteratorPool.release(it);
             return maxBalance;
@@ -1696,7 +4372,7 @@
                 var parent_1 = this.allocateNode();
                 parent_1.child1 = child1;
                 parent_1.child2 = child2;
-                parent_1.height = 1 + math$1.max(child1.height, child2.height);
+                parent_1.height = 1 + extended.max(child1.height, child2.height);
                 parent_1.aabb.combine(child1.aabb, child2.aabb);
                 parent_1.parent = null;
                 child1.parent = parent_1;
@@ -1794,7 +4470,7 @@
                 // |dot(v, p1 - c)| > dot(|v|, h)
                 var c = node.aabb.getCenter();
                 var h = node.aabb.getExtents();
-                var separation = math$1.abs(Vec2.dot(v, Vec2.sub(p1, c))) - Vec2.dot(abs_v, h);
+                var separation = extended.abs(Vec2.dot(v, Vec2.sub(p1, c))) - Vec2.dot(abs_v, h);
                 if (separation > 0.0) {
                     continue;
                 }
@@ -1915,8 +4591,8 @@
                 if (proxyId === _this.m_queryProxyId) {
                     return true;
                 }
-                var proxyIdA = math$1.min(proxyId, _this.m_queryProxyId);
-                var proxyIdB = math$1.max(proxyId, _this.m_queryProxyId);
+                var proxyIdA = extended.min(proxyId, _this.m_queryProxyId);
+                var proxyIdB = extended.max(proxyId, _this.m_queryProxyId);
                 // TODO: Skip any duplicate pairs.
                 var userDataA = _this.m_tree.getUserData(proxyIdA);
                 var userDataB = _this.m_tree.getUserData(proxyIdB);
@@ -2120,7 +4796,7 @@
             if (obj === null || typeof obj === 'undefined') {
                 return false;
             }
-            return math$1.isFinite(obj.s) && math$1.isFinite(obj.c);
+            return extended.isFinite(obj.s) && extended.isFinite(obj.c);
         };
         Rot.assert = function (o) {
             return;
@@ -2137,8 +4813,8 @@
             }
             else {
                 // TODO_ERIN optimize
-                this.s = math$1.sin(angle);
-                this.c = math$1.cos(angle);
+                this.s = extended.sin(angle);
+                this.c = extended.cos(angle);
             }
         };
         Rot.prototype.setRot = function (angle) {
@@ -2148,12 +4824,12 @@
         /** Set using an angle in radians. */
         Rot.prototype.setAngle = function (angle) {
             // TODO_ERIN optimize
-            this.s = math$1.sin(angle);
-            this.c = math$1.cos(angle);
+            this.s = extended.sin(angle);
+            this.c = extended.cos(angle);
         };
         /** Get the angle in radians. */
         Rot.prototype.getAngle = function () {
-            return math$1.atan2(this.s, this.c);
+            return extended.atan2(this.s, this.c);
         };
         /** Get the x-axis. */
         Rot.prototype.getXAxis = function () {
@@ -2491,7 +5167,7 @@
          * normalize the angles in radians to be between -pi and pi.
          */
         Sweep.prototype.normalize = function () {
-            var a0 = math$1.mod(this.a0, -math$1.PI, +math$1.PI);
+            var a0 = extended.mod(this.a0, -extended.PI, +extended.PI);
             this.a -= this.a0 - a0;
             this.a0 = a0;
         };
@@ -3896,474 +6572,103 @@
      * SOFTWARE.
      */
     /**
-     * A 2-by-2 matrix. Stored in column-major order.
+     * A joint edge is used to connect bodies and joints together in a joint graph
+     * where each body is a node and each joint is an edge. A joint edge belongs to
+     * a doubly linked list maintained in each attached body. Each joint has two
+     * joint nodes, one for each attached body.
      */
-    var Mat22 = /** @class */ (function () {
-        // tslint:disable-next-line:typedef
-        function Mat22(a, b, c, d) {
-            if (typeof a === 'object' && a !== null) {
-                this.ex = Vec2.clone(a);
-                this.ey = Vec2.clone(b);
-            }
-            else if (typeof a === 'number') {
-                this.ex = Vec2.neo(a, c);
-                this.ey = Vec2.neo(b, d);
-            }
-            else {
-                this.ex = Vec2.zero();
-                this.ey = Vec2.zero();
-            }
+    var JointEdge = /** @class */ (function () {
+        function JointEdge() {
+            /**
+             * provides quick access to the other body attached.
+             */
+            this.other = null;
+            /**
+             * the joint
+             */
+            this.joint = null;
+            /**
+             * prev the previous joint edge in the body's joint list
+             */
+            this.prev = null;
+            /**
+             * the next joint edge in the body's joint list
+             */
+            this.next = null;
         }
-        /** @internal */
-        Mat22.prototype.toString = function () {
-            return JSON.stringify(this);
-        };
-        Mat22.isValid = function (obj) {
-            if (obj === null || typeof obj === 'undefined') {
-                return false;
-            }
-            return Vec2.isValid(obj.ex) && Vec2.isValid(obj.ey);
-        };
-        Mat22.assert = function (o) {
-            return;
-        };
-        // tslint:disable-next-line:typedef
-        Mat22.prototype.set = function (a, b, c, d) {
-            if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
-                && typeof d === 'number') {
-                this.ex.setNum(a, c);
-                this.ey.setNum(b, d);
-            }
-            else if (typeof a === 'object' && typeof b === 'object') {
-                this.ex.setVec2(a);
-                this.ey.setVec2(b);
-            }
-            else if (typeof a === 'object') {
-                this.ex.setVec2(a.ex);
-                this.ey.setVec2(a.ey);
-            }
-            else ;
-        };
-        Mat22.prototype.setIdentity = function () {
-            this.ex.x = 1.0;
-            this.ey.x = 0.0;
-            this.ex.y = 0.0;
-            this.ey.y = 1.0;
-        };
-        Mat22.prototype.setZero = function () {
-            this.ex.x = 0.0;
-            this.ey.x = 0.0;
-            this.ex.y = 0.0;
-            this.ey.y = 0.0;
-        };
-        Mat22.prototype.getInverse = function () {
-            var a = this.ex.x;
-            var b = this.ey.x;
-            var c = this.ex.y;
-            var d = this.ey.y;
-            var det = a * d - b * c;
-            if (det !== 0.0) {
-                det = 1.0 / det;
-            }
-            var imx = new Mat22();
-            imx.ex.x = det * d;
-            imx.ey.x = -det * b;
-            imx.ex.y = -det * c;
-            imx.ey.y = det * a;
-            return imx;
-        };
-        /**
-         * Solve A * x = b, where b is a column vector. This is more efficient than
-         * computing the inverse in one-shot cases.
-         */
-        Mat22.prototype.solve = function (v) {
-            var a = this.ex.x;
-            var b = this.ey.x;
-            var c = this.ex.y;
-            var d = this.ey.y;
-            var det = a * d - b * c;
-            if (det !== 0.0) {
-                det = 1.0 / det;
-            }
-            var w = Vec2.zero();
-            w.x = det * (d * v.x - b * v.y);
-            w.y = det * (a * v.y - c * v.x);
-            return w;
-        };
-        // tslint:disable-next-line:typedef
-        Mat22.mul = function (mx, v) {
-            if (v && 'x' in v && 'y' in v) {
-                var x = mx.ex.x * v.x + mx.ey.x * v.y;
-                var y = mx.ex.y * v.x + mx.ey.y * v.y;
-                return Vec2.neo(x, y);
-            }
-            else if (v && 'ex' in v && 'ey' in v) { // Mat22
-                // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
-                var a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
-                var b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
-                var c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;
-                var d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
-                return new Mat22(a, b, c, d);
-            }
-        };
-        Mat22.mulVec2 = function (mx, v) {
-            var x = mx.ex.x * v.x + mx.ey.x * v.y;
-            var y = mx.ex.y * v.x + mx.ey.y * v.y;
-            return Vec2.neo(x, y);
-        };
-        Mat22.mulMat22 = function (mx, v) {
-            // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
-            var a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
-            var b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
-            var c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;
-            var d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
-            return new Mat22(a, b, c, d);
-        };
-        // tslint:disable-next-line:typedef
-        Mat22.mulT = function (mx, v) {
-            if (v && 'x' in v && 'y' in v) { // Vec2
-                return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
-            }
-            else if (v && 'ex' in v && 'ey' in v) { // Mat22
-                var c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
-                var c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
-                return new Mat22(c1, c2);
-            }
-        };
-        Mat22.mulTVec2 = function (mx, v) {
-            return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
-        };
-        Mat22.mulTMat22 = function (mx, v) {
-            var c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
-            var c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
-            return new Mat22(c1, c2);
-        };
-        Mat22.abs = function (mx) {
-            return new Mat22(Vec2.abs(mx.ex), Vec2.abs(mx.ey));
-        };
-        Mat22.add = function (mx1, mx2) {
-            return new Mat22(Vec2.add(mx1.ex, mx2.ex), Vec2.add(mx1.ey, mx2.ey));
-        };
-        return Mat22;
-    }());
-
-    /*
-     * Planck.js
-     * The MIT License
-     * Copyright (c) 2021 Erin Catto, Ali Shakiba
-     *
-     * Permission is hereby granted, free of charge, to any person obtaining a copy
-     * of this software and associated documentation files (the "Software"), to deal
-     * in the Software without restriction, including without limitation the rights
-     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     * copies of the Software, and to permit persons to whom the Software is
-     * furnished to do so, subject to the following conditions:
-     *
-     * The above copyright notice and this permission notice shall be included in all
-     * copies or substantial portions of the Software.
-     *
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-     * SOFTWARE.
-     */
-    var ManifoldType;
-    (function (ManifoldType) {
-        ManifoldType[ManifoldType["e_circles"] = 0] = "e_circles";
-        ManifoldType[ManifoldType["e_faceA"] = 1] = "e_faceA";
-        ManifoldType[ManifoldType["e_faceB"] = 2] = "e_faceB";
-    })(ManifoldType || (ManifoldType = {}));
-    var ContactFeatureType;
-    (function (ContactFeatureType) {
-        ContactFeatureType[ContactFeatureType["e_vertex"] = 0] = "e_vertex";
-        ContactFeatureType[ContactFeatureType["e_face"] = 1] = "e_face";
-    })(ContactFeatureType || (ContactFeatureType = {}));
-    /**
-     * This is used for determining the state of contact points.
-     */
-    var PointState;
-    (function (PointState) {
-        /** Point does not exist */
-        PointState[PointState["nullState"] = 0] = "nullState";
-        /** Point was added in the update */
-        PointState[PointState["addState"] = 1] = "addState";
-        /** Point persisted across the update */
-        PointState[PointState["persistState"] = 2] = "persistState";
-        /** Point was removed in the update */
-        PointState[PointState["removeState"] = 3] = "removeState";
-    })(PointState || (PointState = {}));
-    /**
-     * Used for computing contact manifolds.
-     */
-    var ClipVertex = /** @class */ (function () {
-        function ClipVertex() {
-            this.v = Vec2.zero();
-            this.id = new ContactID();
-        }
-        ClipVertex.prototype.set = function (o) {
-            this.v.setVec2(o.v);
-            this.id.set(o.id);
-        };
-        return ClipVertex;
+        return JointEdge;
     }());
     /**
-     * A manifold for two touching convex shapes. Manifolds are created in `evaluate`
-     * method of Contact subclasses.
-     *
-     * Supported manifold types are e_faceA or e_faceB for clip point versus plane
-     * with radius and e_circles point versus point with radius.
-     *
-     * We store contacts in this way so that position correction can account for
-     * movement, which is critical for continuous physics. All contact scenarios
-     * must be expressed in one of these types. This structure is stored across time
-     * steps, so we keep it small.
-     *
-     * @prop type e_circle, e_faceA, e_faceB
-     * @prop localPoint Usage depends on manifold type:<br>
-     *       e_circles: the local center of circleA <br>
-     *       e_faceA: the center of faceA <br>
-     *       e_faceB: the center of faceB
-     * @prop localNormal Usage depends on manifold type:<br>
-     *       e_circles: not used <br>
-     *       e_faceA: the normal on polygonA <br>
-     *       e_faceB: the normal on polygonB
-     * @prop points The points of contact {ManifoldPoint[]}
-     * @prop pointCount The number of manifold points
+     * The base joint class. Joints are used to constraint two bodies together in
+     * various fashions. Some joints also feature limits and motors.
      */
-    var Manifold = /** @class */ (function () {
-        function Manifold() {
-            this.localNormal = Vec2.zero();
-            this.localPoint = Vec2.zero();
-            this.points = [new ManifoldPoint(), new ManifoldPoint()];
-            this.pointCount = 0;
+    var Joint = /** @class */ (function () {
+        function Joint(def, bodyA, bodyB) {
+            /** @internal */ this.m_type = 'unknown-joint';
+            /** @internal */ this.m_prev = null;
+            /** @internal */ this.m_next = null;
+            /** @internal */ this.m_edgeA = new JointEdge();
+            /** @internal */ this.m_edgeB = new JointEdge();
+            /** @internal */ this.m_islandFlag = false;
+            bodyA = 'bodyA' in def ? def.bodyA : bodyA;
+            bodyB = 'bodyB' in def ? def.bodyB : bodyB;
+            this.m_bodyA = bodyA;
+            this.m_bodyB = bodyB;
+            this.m_collideConnected = !!def.collideConnected;
+            this.m_userData = def.userData;
         }
         /**
-         * Evaluate the manifold with supplied transforms. This assumes modest motion
-         * from the original state. This does not change the point count, impulses, etc.
-         * The radii must come from the shapes that generated the manifold.
+         * Short-cut function to determine if either body is inactive.
          */
-        Manifold.prototype.getWorldManifold = function (wm, xfA, radiusA, xfB, radiusB) {
-            if (this.pointCount == 0) {
-                return;
-            }
-            wm = wm || new WorldManifold();
-            var normal = wm.normal;
-            var points = wm.points;
-            var separations = wm.separations;
-            // TODO: improve
-            switch (this.type) {
-                case ManifoldType.e_circles: {
-                    normal = Vec2.neo(1.0, 0.0);
-                    var pointA = Transform.mulVec2(xfA, this.localPoint);
-                    var pointB = Transform.mulVec2(xfB, this.points[0].localPoint);
-                    var dist = Vec2.sub(pointB, pointA);
-                    if (Vec2.lengthSquared(dist) > math$1.EPSILON * math$1.EPSILON) {
-                        normal.setVec2(dist);
-                        normal.normalize();
-                    }
-                    var cA = pointA.clone().addMul(radiusA, normal);
-                    var cB = pointB.clone().addMul(-radiusB, normal);
-                    points[0] = Vec2.mid(cA, cB);
-                    separations[0] = Vec2.dot(Vec2.sub(cB, cA), normal);
-                    points.length = 1;
-                    separations.length = 1;
-                    break;
-                }
-                case ManifoldType.e_faceA: {
-                    normal = Rot.mulVec2(xfA.q, this.localNormal);
-                    var planePoint = Transform.mulVec2(xfA, this.localPoint);
-                    for (var i = 0; i < this.pointCount; ++i) {
-                        var clipPoint = Transform.mulVec2(xfB, this.points[i].localPoint);
-                        var cA = Vec2.clone(clipPoint).addMul(radiusA - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
-                        var cB = Vec2.clone(clipPoint).subMul(radiusB, normal);
-                        points[i] = Vec2.mid(cA, cB);
-                        separations[i] = Vec2.dot(Vec2.sub(cB, cA), normal);
-                    }
-                    points.length = this.pointCount;
-                    separations.length = this.pointCount;
-                    break;
-                }
-                case ManifoldType.e_faceB: {
-                    normal = Rot.mulVec2(xfB.q, this.localNormal);
-                    var planePoint = Transform.mulVec2(xfB, this.localPoint);
-                    for (var i = 0; i < this.pointCount; ++i) {
-                        var clipPoint = Transform.mulVec2(xfA, this.points[i].localPoint);
-                        var cB = Vec2.combine(1, clipPoint, radiusB - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
-                        var cA = Vec2.combine(1, clipPoint, -radiusA, normal);
-                        points[i] = Vec2.mid(cA, cB);
-                        separations[i] = Vec2.dot(Vec2.sub(cA, cB), normal);
-                    }
-                    points.length = this.pointCount;
-                    separations.length = this.pointCount;
-                    // Ensure normal points from A to B.
-                    normal.mul(-1);
-                    break;
-                }
-            }
-            wm.normal = normal;
-            wm.points = points;
-            wm.separations = separations;
-            return wm;
+        Joint.prototype.isActive = function () {
+            return this.m_bodyA.isActive() && this.m_bodyB.isActive();
         };
-        Manifold.clipSegmentToLine = clipSegmentToLine;
-        Manifold.ClipVertex = ClipVertex;
-        Manifold.getPointStates = getPointStates;
-        Manifold.PointState = PointState;
-        return Manifold;
-    }());
-    /**
-     * A manifold point is a contact point belonging to a contact manifold. It holds
-     * details related to the geometry and dynamics of the contact points.
-     *
-     * This structure is stored across time steps, so we keep it small.
-     *
-     * Note: impulses are used for internal caching and may not provide reliable
-     * contact forces, especially for high speed collisions.
-     */
-    var ManifoldPoint = /** @class */ (function () {
-        function ManifoldPoint() {
-            /**
-             * Usage depends on manifold type.
-             *       e_circles: the local center of circleB,
-             *       e_faceA: the local center of cirlceB or the clip point of polygonB,
-             *       e_faceB: the clip point of polygonA.
-             */
-            this.localPoint = Vec2.zero();
-            /**
-             * The non-penetration impulse
-             */
-            this.normalImpulse = 0;
-            /**
-             * The friction impulse
-             */
-            this.tangentImpulse = 0;
-            /**
-             * Uniquely identifies a contact point between two shapes to facilatate warm starting
-             */
-            this.id = new ContactID();
-        }
-        return ManifoldPoint;
-    }());
-    /**
-     * Contact ids to facilitate warm starting.
-     */
-    var ContactID = /** @class */ (function () {
-        function ContactID() {
-            this.cf = new ContactFeature();
-        }
-        Object.defineProperty(ContactID.prototype, "key", {
-            /**
-             * Used to quickly compare contact ids.
-             */
-            get: function () {
-                return this.cf.indexA + this.cf.indexB * 4 + this.cf.typeA * 16 + this.cf.typeB * 64;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        ContactID.prototype.set = function (o) {
-            // this.key = o.key;
-            this.cf.set(o.cf);
+        /**
+         * Get the type of the concrete joint.
+         */
+        Joint.prototype.getType = function () {
+            return this.m_type;
         };
-        return ContactID;
-    }());
-    /**
-     * The features that intersect to form the contact point.
-     */
-    var ContactFeature = /** @class */ (function () {
-        function ContactFeature() {
-        }
-        ContactFeature.prototype.set = function (o) {
-            this.indexA = o.indexA;
-            this.indexB = o.indexB;
-            this.typeA = o.typeA;
-            this.typeB = o.typeB;
+        /**
+         * Get the first body attached to this joint.
+         */
+        Joint.prototype.getBodyA = function () {
+            return this.m_bodyA;
         };
-        return ContactFeature;
+        /**
+         * Get the second body attached to this joint.
+         */
+        Joint.prototype.getBodyB = function () {
+            return this.m_bodyB;
+        };
+        /**
+         * Get the next joint the world joint list.
+         */
+        Joint.prototype.getNext = function () {
+            return this.m_next;
+        };
+        Joint.prototype.getUserData = function () {
+            return this.m_userData;
+        };
+        Joint.prototype.setUserData = function (data) {
+            this.m_userData = data;
+        };
+        /**
+         * Get collide connected. Note: modifying the collide connect flag won't work
+         * correctly because the flag is only checked when fixture AABBs begin to
+         * overlap.
+         */
+        Joint.prototype.getCollideConnected = function () {
+            return this.m_collideConnected;
+        };
+        /**
+         * Shift the origin for any points stored in world coordinates.
+         */
+        Joint.prototype.shiftOrigin = function (newOrigin) { };
+        return Joint;
     }());
-    /**
-     * This is used to compute the current state of a contact manifold.
-     */
-    var WorldManifold = /** @class */ (function () {
-        function WorldManifold() {
-            /**
-             * World contact point (point of intersection)
-             */
-            this.points = []; // [maxManifoldPoints]
-            /**
-             * A negative value indicates overlap, in meters
-             */
-            this.separations = []; // [maxManifoldPoints]
-        }
-        return WorldManifold;
-    }());
-    /**
-     * Compute the point states given two manifolds. The states pertain to the
-     * transition from manifold1 to manifold2. So state1 is either persist or remove
-     * while state2 is either add or persist.
-     */
-    function getPointStates(state1, state2, manifold1, manifold2) {
-        // state1, state2: PointState[Settings.maxManifoldPoints]
-        // for (var i = 0; i < Settings.maxManifoldPoints; ++i) {
-        // state1[i] = PointState.nullState;
-        // state2[i] = PointState.nullState;
-        // }
-        // Detect persists and removes.
-        for (var i = 0; i < manifold1.pointCount; ++i) {
-            var id = manifold1.points[i].id;
-            state1[i] = PointState.removeState;
-            for (var j = 0; j < manifold2.pointCount; ++j) {
-                if (manifold2.points[j].id.key == id.key) {
-                    state1[i] = PointState.persistState;
-                    break;
-                }
-            }
-        }
-        // Detect persists and adds.
-        for (var i = 0; i < manifold2.pointCount; ++i) {
-            var id = manifold2.points[i].id;
-            state2[i] = PointState.addState;
-            for (var j = 0; j < manifold1.pointCount; ++j) {
-                if (manifold1.points[j].id.key == id.key) {
-                    state2[i] = PointState.persistState;
-                    break;
-                }
-            }
-        }
-    }
-    /**
-     * Clipping for contact manifolds. Sutherland-Hodgman clipping.
-     */
-    function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
-        // Start with no output points
-        var numOut = 0;
-        // Calculate the distance of end points to the line
-        var distance0 = Vec2.dot(normal, vIn[0].v) - offset;
-        var distance1 = Vec2.dot(normal, vIn[1].v) - offset;
-        // If the points are behind the plane
-        if (distance0 <= 0.0)
-            vOut[numOut++].set(vIn[0]);
-        if (distance1 <= 0.0)
-            vOut[numOut++].set(vIn[1]);
-        // If the points are on different sides of the plane
-        if (distance0 * distance1 < 0.0) {
-            // Find intersection point of edge and plane
-            var interp = distance0 / (distance0 - distance1);
-            vOut[numOut].v.setCombine(1 - interp, vIn[0].v, interp, vIn[1].v);
-            // VertexA is hitting edgeB.
-            vOut[numOut].id.cf.indexA = vertexIndexA;
-            vOut[numOut].id.cf.indexB = vIn[0].id.cf.indexB;
-            vOut[numOut].id.cf.typeA = ContactFeatureType.e_vertex;
-            vOut[numOut].id.cf.typeB = ContactFeatureType.e_face;
-            ++numOut;
-        }
-        return numOut;
-    }
 
-    var stats$1 = {
+    var stats = {
         gjkCalls: 0,
         gjkIters: 0,
         gjkMaxIters: 0,
@@ -4385,6 +6690,17 @@
             }
             return string;
         }
+    };
+
+    var now = function () {
+        return Date.now();
+    };
+    var diff = function (time) {
+        return Date.now() - time;
+    };
+    var Timer = {
+        now: now,
+        diff: diff,
     };
 
     /*
@@ -4413,9 +6729,9 @@
     /**
      * GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
      */
-    stats$1.gjkCalls = 0;
-    stats$1.gjkIters = 0;
-    stats$1.gjkMaxIters = 0;
+    stats.gjkCalls = 0;
+    stats.gjkIters = 0;
+    stats.gjkMaxIters = 0;
     /**
      * Input for Distance. You have to option to use the shape radii in the
      * computation. Even
@@ -4468,7 +6784,7 @@
      * the first call set SimplexCache.count to zero.
      */
     function Distance(output, cache, input) {
-        ++stats$1.gjkCalls;
+        ++stats.gjkCalls;
         var proxyA = input.proxyA;
         var proxyB = input.proxyB;
         var xfA = input.transformA;
@@ -4504,7 +6820,7 @@
             // Get search direction.
             var d = simplex.getSearchDirection();
             // Ensure the search direction is numerically fit.
-            if (d.lengthSquared() < math$1.EPSILON * math$1.EPSILON) {
+            if (d.lengthSquared() < extended.EPSILON * extended.EPSILON) {
                 // The origin is probably contained by a line segment
                 // or triangle. Thus the shapes are overlapped.
                 // We can't return zero here even though there may be overlap.
@@ -4521,7 +6837,7 @@
             vertex.w = Vec2.sub(vertex.wB, vertex.wA);
             // Iteration count is equated to the number of support point calls.
             ++iter;
-            ++stats$1.gjkIters;
+            ++stats.gjkIters;
             // Check for duplicate support points. This is the main termination
             // criteria.
             var duplicate = false;
@@ -4538,7 +6854,7 @@
             // New vertex is ok and needed.
             ++simplex.m_count;
         }
-        stats$1.gjkMaxIters = math$1.max(stats$1.gjkMaxIters, iter);
+        stats.gjkMaxIters = extended.max(stats.gjkMaxIters, iter);
         // Prepare output.
         simplex.getWitnessPoints(output.pointA, output.pointB);
         output.distance = Vec2.distance(output.pointA, output.pointB);
@@ -4549,7 +6865,7 @@
         if (input.useRadii) {
             var rA = proxyA.m_radius;
             var rB = proxyB.m_radius;
-            if (output.distance > rA + rB && output.distance > math$1.EPSILON) {
+            if (output.distance > rA + rB && output.distance > extended.EPSILON) {
                 // Shapes are still no overlapped.
                 // Move the witness points to the outer surface.
                 output.distance -= rA + rB;
@@ -4691,7 +7007,7 @@
                 var metric1 = cache.metric;
                 var metric2 = this.getMetric();
                 if (metric2 < 0.5 * metric1 || 2.0 * metric1 < metric2
-                    || metric2 < math$1.EPSILON) {
+                    || metric2 < extended.EPSILON) {
                     // Reset the simplex.
                     this.m_count = 0;
                 }
@@ -4956,7 +7272,1592 @@
         var cache = new SimplexCache();
         var output = new DistanceOutput();
         Distance(output, cache, input);
-        return output.distance < 10.0 * math$1.EPSILON;
+        return output.distance < 10.0 * extended.EPSILON;
+    }
+
+    /*
+     * Planck.js
+     * The MIT License
+     * Copyright (c) 2021 Erin Catto, Ali Shakiba
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining a copy
+     * of this software and associated documentation files (the "Software"), to deal
+     * in the Software without restriction, including without limitation the rights
+     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     * copies of the Software, and to permit persons to whom the Software is
+     * furnished to do so, subject to the following conditions:
+     *
+     * The above copyright notice and this permission notice shall be included in all
+     * copies or substantial portions of the Software.
+     *
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     * SOFTWARE.
+     */
+    /**
+     * Input parameters for TimeOfImpact.
+     */
+    var TOIInput = /** @class */ (function () {
+        function TOIInput() {
+            this.proxyA = new DistanceProxy();
+            this.proxyB = new DistanceProxy();
+            this.sweepA = new Sweep();
+            this.sweepB = new Sweep();
+        }
+        return TOIInput;
+    }());
+    exports.TOIOutputState = void 0;
+    (function (TOIOutputState) {
+        TOIOutputState[TOIOutputState["e_unknown"] = 0] = "e_unknown";
+        TOIOutputState[TOIOutputState["e_failed"] = 1] = "e_failed";
+        TOIOutputState[TOIOutputState["e_overlapped"] = 2] = "e_overlapped";
+        TOIOutputState[TOIOutputState["e_touching"] = 3] = "e_touching";
+        TOIOutputState[TOIOutputState["e_separated"] = 4] = "e_separated";
+    })(exports.TOIOutputState || (exports.TOIOutputState = {}));
+    /**
+     * Output parameters for TimeOfImpact.
+     */
+    var TOIOutput = /** @class */ (function () {
+        function TOIOutput() {
+        }
+        return TOIOutput;
+    }());
+    stats.toiTime = 0;
+    stats.toiMaxTime = 0;
+    stats.toiCalls = 0;
+    stats.toiIters = 0;
+    stats.toiMaxIters = 0;
+    stats.toiRootIters = 0;
+    stats.toiMaxRootIters = 0;
+    /**
+     * Compute the upper bound on time before two shapes penetrate. Time is
+     * represented as a fraction between [0,tMax]. This uses a swept separating axis
+     * and may miss some intermediate, non-tunneling collision. If you change the
+     * time interval, you should call this function again.
+     *
+     * Note: use Distance to compute the contact point and normal at the time of
+     * impact.
+     *
+     * CCD via the local separating axis method. This seeks progression by computing
+     * the largest time at which separation is maintained.
+     */
+    function TimeOfImpact(output, input) {
+        var timer = Timer.now();
+        ++stats.toiCalls;
+        output.state = exports.TOIOutputState.e_unknown;
+        output.t = input.tMax;
+        var proxyA = input.proxyA; // DistanceProxy
+        var proxyB = input.proxyB; // DistanceProxy
+        var sweepA = input.sweepA; // Sweep
+        var sweepB = input.sweepB; // Sweep
+        // Large rotations can make the root finder fail, so we normalize the
+        // sweep angles.
+        sweepA.normalize();
+        sweepB.normalize();
+        var tMax = input.tMax;
+        var totalRadius = proxyA.m_radius + proxyB.m_radius;
+        var target = extended.max(Settings.linearSlop, totalRadius - 3.0 * Settings.linearSlop);
+        var tolerance = 0.25 * Settings.linearSlop;
+        var t1 = 0.0;
+        var k_maxIterations = Settings.maxTOIIterations;
+        var iter = 0;
+        // Prepare input for distance query.
+        var cache = new SimplexCache();
+        var distanceInput = new DistanceInput();
+        distanceInput.proxyA = input.proxyA;
+        distanceInput.proxyB = input.proxyB;
+        distanceInput.useRadii = false;
+        // The outer loop progressively attempts to compute new separating axes.
+        // This loop terminates when an axis is repeated (no progress is made).
+        while (true) {
+            var xfA = Transform.identity();
+            var xfB = Transform.identity();
+            sweepA.getTransform(xfA, t1);
+            sweepB.getTransform(xfB, t1);
+            // Get the distance between shapes. We can also use the results
+            // to get a separating axis.
+            distanceInput.transformA = xfA;
+            distanceInput.transformB = xfB;
+            var distanceOutput = new DistanceOutput();
+            Distance(distanceOutput, cache, distanceInput);
+            // If the shapes are overlapped, we give up on continuous collision.
+            if (distanceOutput.distance <= 0.0) {
+                // Failure!
+                output.state = exports.TOIOutputState.e_overlapped;
+                output.t = 0.0;
+                break;
+            }
+            if (distanceOutput.distance < target + tolerance) {
+                // Victory!
+                output.state = exports.TOIOutputState.e_touching;
+                output.t = t1;
+                break;
+            }
+            // Initialize the separating axis.
+            var fcn = new SeparationFunction();
+            fcn.initialize(cache, proxyA, sweepA, proxyB, sweepB, t1);
+            // if (false) {
+            //   // Dump the curve seen by the root finder
+            //   const N = 100;
+            //   const dx = 1.0 / N;
+            //   const xs = []; // [ N + 1 ];
+            //   const fs = []; // [ N + 1 ];
+            //   const x = 0.0;
+            //   for (const i = 0; i <= N; ++i) {
+            //     sweepA.getTransform(xfA, x);
+            //     sweepB.getTransform(xfB, x);
+            //     const f = fcn.evaluate(xfA, xfB) - target;
+            //     printf("%g %g\n", x, f);
+            //     xs[i] = x;
+            //     fs[i] = f;
+            //     x += dx;
+            //   }
+            // }
+            // Compute the TOI on the separating axis. We do this by successively
+            // resolving the deepest point. This loop is bounded by the number of
+            // vertices.
+            var done = false;
+            var t2 = tMax;
+            var pushBackIter = 0;
+            while (true) {
+                // Find the deepest point at t2. Store the witness point indices.
+                var s2 = fcn.findMinSeparation(t2);
+                // const indexA = fcn.indexA;
+                // const indexB = fcn.indexB;
+                // Is the final configuration separated?
+                if (s2 > target + tolerance) {
+                    // Victory!
+                    output.state = exports.TOIOutputState.e_separated;
+                    output.t = tMax;
+                    done = true;
+                    break;
+                }
+                // Has the separation reached tolerance?
+                if (s2 > target - tolerance) {
+                    // Advance the sweeps
+                    t1 = t2;
+                    break;
+                }
+                // Compute the initial separation of the witness points.
+                var s1 = fcn.evaluate(t1);
+                // const indexA = fcn.indexA;
+                // const indexB = fcn.indexB;
+                // Check for initial overlap. This might happen if the root finder
+                // runs out of iterations.
+                if (s1 < target - tolerance) {
+                    output.state = exports.TOIOutputState.e_failed;
+                    output.t = t1;
+                    done = true;
+                    break;
+                }
+                // Check for touching
+                if (s1 <= target + tolerance) {
+                    // Victory! t1 should hold the TOI (could be 0.0).
+                    output.state = exports.TOIOutputState.e_touching;
+                    output.t = t1;
+                    done = true;
+                    break;
+                }
+                // Compute 1D root of: f(x) - target = 0
+                var rootIterCount = 0;
+                var a1 = t1;
+                var a2 = t2;
+                while (true) {
+                    // Use a mix of the secant rule and bisection.
+                    var t = void 0;
+                    if (rootIterCount & 1) {
+                        // Secant rule to improve convergence.
+                        t = a1 + (target - s1) * (a2 - a1) / (s2 - s1);
+                    }
+                    else {
+                        // Bisection to guarantee progress.
+                        t = 0.5 * (a1 + a2);
+                    }
+                    ++rootIterCount;
+                    ++stats.toiRootIters;
+                    var s = fcn.evaluate(t);
+                    fcn.indexA;
+                    fcn.indexB;
+                    if (extended.abs(s - target) < tolerance) {
+                        // t2 holds a tentative value for t1
+                        t2 = t;
+                        break;
+                    }
+                    // Ensure we continue to bracket the root.
+                    if (s > target) {
+                        a1 = t;
+                        s1 = s;
+                    }
+                    else {
+                        a2 = t;
+                        s2 = s;
+                    }
+                    if (rootIterCount === 50) {
+                        break;
+                    }
+                }
+                stats.toiMaxRootIters = extended.max(stats.toiMaxRootIters, rootIterCount);
+                ++pushBackIter;
+                if (pushBackIter === Settings.maxPolygonVertices) {
+                    break;
+                }
+            }
+            ++iter;
+            ++stats.toiIters;
+            if (done) {
+                break;
+            }
+            if (iter === k_maxIterations) {
+                // Root finder got stuck. Semi-victory.
+                output.state = exports.TOIOutputState.e_failed;
+                output.t = t1;
+                break;
+            }
+        }
+        stats.toiMaxIters = extended.max(stats.toiMaxIters, iter);
+        var time = Timer.diff(timer);
+        stats.toiMaxTime = extended.max(stats.toiMaxTime, time);
+        stats.toiTime += time;
+    }
+    var SeparationFunctionType;
+    (function (SeparationFunctionType) {
+        SeparationFunctionType[SeparationFunctionType["e_points"] = 1] = "e_points";
+        SeparationFunctionType[SeparationFunctionType["e_faceA"] = 2] = "e_faceA";
+        SeparationFunctionType[SeparationFunctionType["e_faceB"] = 3] = "e_faceB";
+    })(SeparationFunctionType || (SeparationFunctionType = {}));
+    var SeparationFunction = /** @class */ (function () {
+        function SeparationFunction() {
+            this.m_proxyA = new DistanceProxy();
+            this.m_proxyB = new DistanceProxy();
+            this.m_localPoint = Vec2.zero();
+            this.m_axis = Vec2.zero();
+        }
+        // TODO_ERIN might not need to return the separation
+        SeparationFunction.prototype.initialize = function (cache, proxyA, sweepA, proxyB, sweepB, t1) {
+            this.m_proxyA = proxyA;
+            this.m_proxyB = proxyB;
+            var count = cache.count;
+            this.m_sweepA = sweepA;
+            this.m_sweepB = sweepB;
+            var xfA = Transform.identity();
+            var xfB = Transform.identity();
+            this.m_sweepA.getTransform(xfA, t1);
+            this.m_sweepB.getTransform(xfB, t1);
+            if (count === 1) {
+                this.m_type = SeparationFunctionType.e_points;
+                var localPointA = this.m_proxyA.getVertex(cache.indexA[0]);
+                var localPointB = this.m_proxyB.getVertex(cache.indexB[0]);
+                var pointA = Transform.mulVec2(xfA, localPointA);
+                var pointB = Transform.mulVec2(xfB, localPointB);
+                this.m_axis.setCombine(1, pointB, -1, pointA);
+                var s = this.m_axis.normalize();
+                return s;
+            }
+            else if (cache.indexA[0] === cache.indexA[1]) {
+                // Two points on B and one on A.
+                this.m_type = SeparationFunctionType.e_faceB;
+                var localPointB1 = proxyB.getVertex(cache.indexB[0]);
+                var localPointB2 = proxyB.getVertex(cache.indexB[1]);
+                this.m_axis = Vec2.crossVec2Num(Vec2.sub(localPointB2, localPointB1), 1.0);
+                this.m_axis.normalize();
+                var normal = Rot.mulVec2(xfB.q, this.m_axis);
+                this.m_localPoint = Vec2.mid(localPointB1, localPointB2);
+                var pointB = Transform.mulVec2(xfB, this.m_localPoint);
+                var localPointA = proxyA.getVertex(cache.indexA[0]);
+                var pointA = Transform.mulVec2(xfA, localPointA);
+                var s = Vec2.dot(pointA, normal) - Vec2.dot(pointB, normal);
+                if (s < 0.0) {
+                    this.m_axis = Vec2.neg(this.m_axis);
+                    s = -s;
+                }
+                return s;
+            }
+            else {
+                // Two points on A and one or two points on B.
+                this.m_type = SeparationFunctionType.e_faceA;
+                var localPointA1 = this.m_proxyA.getVertex(cache.indexA[0]);
+                var localPointA2 = this.m_proxyA.getVertex(cache.indexA[1]);
+                this.m_axis = Vec2.crossVec2Num(Vec2.sub(localPointA2, localPointA1), 1.0);
+                this.m_axis.normalize();
+                var normal = Rot.mulVec2(xfA.q, this.m_axis);
+                this.m_localPoint = Vec2.mid(localPointA1, localPointA2);
+                var pointA = Transform.mulVec2(xfA, this.m_localPoint);
+                var localPointB = this.m_proxyB.getVertex(cache.indexB[0]);
+                var pointB = Transform.mulVec2(xfB, localPointB);
+                var s = Vec2.dot(pointB, normal) - Vec2.dot(pointA, normal);
+                if (s < 0.0) {
+                    this.m_axis = Vec2.neg(this.m_axis);
+                    s = -s;
+                }
+                return s;
+            }
+        };
+        SeparationFunction.prototype.compute = function (find, t) {
+            // It was findMinSeparation and evaluate
+            var xfA = Transform.identity();
+            var xfB = Transform.identity();
+            this.m_sweepA.getTransform(xfA, t);
+            this.m_sweepB.getTransform(xfB, t);
+            switch (this.m_type) {
+                case SeparationFunctionType.e_points: {
+                    if (find) {
+                        var axisA = Rot.mulTVec2(xfA.q, this.m_axis);
+                        var axisB = Rot.mulTVec2(xfB.q, Vec2.neg(this.m_axis));
+                        this.indexA = this.m_proxyA.getSupport(axisA);
+                        this.indexB = this.m_proxyB.getSupport(axisB);
+                    }
+                    var localPointA = this.m_proxyA.getVertex(this.indexA);
+                    var localPointB = this.m_proxyB.getVertex(this.indexB);
+                    var pointA = Transform.mulVec2(xfA, localPointA);
+                    var pointB = Transform.mulVec2(xfB, localPointB);
+                    var sep = Vec2.dot(pointB, this.m_axis) - Vec2.dot(pointA, this.m_axis);
+                    return sep;
+                }
+                case SeparationFunctionType.e_faceA: {
+                    var normal = Rot.mulVec2(xfA.q, this.m_axis);
+                    var pointA = Transform.mulVec2(xfA, this.m_localPoint);
+                    if (find) {
+                        var axisB = Rot.mulTVec2(xfB.q, Vec2.neg(normal));
+                        this.indexA = -1;
+                        this.indexB = this.m_proxyB.getSupport(axisB);
+                    }
+                    var localPointB = this.m_proxyB.getVertex(this.indexB);
+                    var pointB = Transform.mulVec2(xfB, localPointB);
+                    var sep = Vec2.dot(pointB, normal) - Vec2.dot(pointA, normal);
+                    return sep;
+                }
+                case SeparationFunctionType.e_faceB: {
+                    var normal = Rot.mulVec2(xfB.q, this.m_axis);
+                    var pointB = Transform.mulVec2(xfB, this.m_localPoint);
+                    if (find) {
+                        var axisA = Rot.mulTVec2(xfA.q, Vec2.neg(normal));
+                        this.indexB = -1;
+                        this.indexA = this.m_proxyA.getSupport(axisA);
+                    }
+                    var localPointA = this.m_proxyA.getVertex(this.indexA);
+                    var pointA = Transform.mulVec2(xfA, localPointA);
+                    var sep = Vec2.dot(pointA, normal) - Vec2.dot(pointB, normal);
+                    return sep;
+                }
+                default:
+                    if (find) {
+                        this.indexA = -1;
+                        this.indexB = -1;
+                    }
+                    return 0.0;
+            }
+        };
+        SeparationFunction.prototype.findMinSeparation = function (t) {
+            return this.compute(true, t);
+        };
+        SeparationFunction.prototype.evaluate = function (t) {
+            return this.compute(false, t);
+        };
+        return SeparationFunction;
+    }());
+
+    /*
+     * Planck.js
+     * The MIT License
+     * Copyright (c) 2021 Erin Catto, Ali Shakiba
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining a copy
+     * of this software and associated documentation files (the "Software"), to deal
+     * in the Software without restriction, including without limitation the rights
+     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     * copies of the Software, and to permit persons to whom the Software is
+     * furnished to do so, subject to the following conditions:
+     *
+     * The above copyright notice and this permission notice shall be included in all
+     * copies or substantial portions of the Software.
+     *
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     * SOFTWARE.
+     */
+    var TimeStep = /** @class */ (function () {
+        function TimeStep() {
+            /** time step */
+            this.dt = 0;
+            /** inverse time step (0 if dt == 0) */
+            this.inv_dt = 0;
+            this.velocityIterations = 0;
+            this.positionIterations = 0;
+            this.warmStarting = false;
+            this.blockSolve = true;
+            /** timestep ratio for variable timestep */
+            this.inv_dt0 = 0.0;
+            /** dt * inv_dt0 */
+            this.dtRatio = 1;
+        }
+        TimeStep.prototype.reset = function (dt) {
+            if (this.dt > 0.0) {
+                this.inv_dt0 = this.inv_dt;
+            }
+            this.dt = dt;
+            this.inv_dt = dt == 0 ? 0 : 1 / dt;
+            this.dtRatio = dt * this.inv_dt0;
+        };
+        return TimeStep;
+    }());
+    // reuse
+    var s_subStep = new TimeStep();
+    /**
+     * Contact impulses for reporting. Impulses are used instead of forces because
+     * sub-step forces may approach infinity for rigid body collisions. These match
+     * up one-to-one with the contact points in Manifold.
+     */
+    var ContactImpulse = /** @class */ (function () {
+        function ContactImpulse(contact) {
+            this.contact = contact;
+            this.normals = [];
+            this.tangents = [];
+        }
+        Object.defineProperty(ContactImpulse.prototype, "normalImpulses", {
+            get: function () {
+                var contact = this.contact;
+                var normals = this.normals;
+                normals.length = 0;
+                for (var p = 0; p < contact.v_points.length; ++p) {
+                    normals.push(contact.v_points[p].normalImpulse);
+                }
+                return normals;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(ContactImpulse.prototype, "tangentImpulses", {
+            get: function () {
+                var contact = this.contact;
+                var tangents = this.tangents;
+                tangents.length = 0;
+                for (var p = 0; p < contact.v_points.length; ++p) {
+                    tangents.push(contact.v_points[p].tangentImpulse);
+                }
+                return tangents;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        return ContactImpulse;
+    }());
+    /**
+     * Finds and solves islands. An island is a connected subset of the world.
+     */
+    var Solver = /** @class */ (function () {
+        function Solver(world) {
+            this.m_world = world;
+            this.m_stack = [];
+            this.m_bodies = [];
+            this.m_contacts = [];
+            this.m_joints = [];
+        }
+        Solver.prototype.clear = function () {
+            this.m_stack.length = 0;
+            this.m_bodies.length = 0;
+            this.m_contacts.length = 0;
+            this.m_joints.length = 0;
+        };
+        Solver.prototype.addBody = function (body) {
+            this.m_bodies.push(body);
+            // why?
+            // body.c_position.c.setZero();
+            // body.c_position.a = 0;
+            // body.c_velocity.v.setZero();
+            // body.c_velocity.w = 0;
+        };
+        Solver.prototype.addContact = function (contact) {
+            // _ASSERT && common.assert(contact instanceof Contact, 'Not a Contact!', contact);
+            this.m_contacts.push(contact);
+        };
+        Solver.prototype.addJoint = function (joint) {
+            this.m_joints.push(joint);
+        };
+        Solver.prototype.solveWorld = function (step) {
+            var world = this.m_world;
+            // Clear all the island flags.
+            for (var b = world.m_bodyList; b; b = b.m_next) {
+                b.m_islandFlag = false;
+            }
+            for (var c = world.m_contactList; c; c = c.m_next) {
+                c.m_islandFlag = false;
+            }
+            for (var j = world.m_jointList; j; j = j.m_next) {
+                j.m_islandFlag = false;
+            }
+            // Build and simulate all awake islands.
+            var stack = this.m_stack;
+            for (var seed = world.m_bodyList; seed; seed = seed.m_next) {
+                if (seed.m_islandFlag) {
+                    continue;
+                }
+                if (seed.isAwake() == false || seed.isActive() == false) {
+                    continue;
+                }
+                // The seed can be dynamic or kinematic.
+                if (seed.isStatic()) {
+                    continue;
+                }
+                // Reset island and stack.
+                this.clear();
+                stack.push(seed);
+                seed.m_islandFlag = true;
+                // Perform a depth first search (DFS) on the constraint graph.
+                while (stack.length > 0) {
+                    // Grab the next body off the stack and add it to the island.
+                    var b = stack.pop();
+                    this.addBody(b);
+                    // Make sure the body is awake.
+                    b.setAwake(true);
+                    // To keep islands as small as possible, we don't
+                    // propagate islands across static bodies.
+                    if (b.isStatic()) {
+                        continue;
+                    }
+                    // Search all contacts connected to this body.
+                    for (var ce = b.m_contactList; ce; ce = ce.next) {
+                        var contact = ce.contact;
+                        // Has this contact already been added to an island?
+                        if (contact.m_islandFlag) {
+                            continue;
+                        }
+                        // Is this contact solid and touching?
+                        if (contact.isEnabled() == false || contact.isTouching() == false) {
+                            continue;
+                        }
+                        // Skip sensors.
+                        var sensorA = contact.m_fixtureA.m_isSensor;
+                        var sensorB = contact.m_fixtureB.m_isSensor;
+                        if (sensorA || sensorB) {
+                            continue;
+                        }
+                        this.addContact(contact);
+                        contact.m_islandFlag = true;
+                        var other = ce.other;
+                        // Was the other body already added to this island?
+                        if (other.m_islandFlag) {
+                            continue;
+                        }
+                        // _ASSERT && common.assert(stack.length < world.m_bodyCount);
+                        stack.push(other);
+                        other.m_islandFlag = true;
+                    }
+                    // Search all joints connect to this body.
+                    for (var je = b.m_jointList; je; je = je.next) {
+                        if (je.joint.m_islandFlag == true) {
+                            continue;
+                        }
+                        var other = je.other;
+                        // Don't simulate joints connected to inactive bodies.
+                        if (other.isActive() == false) {
+                            continue;
+                        }
+                        this.addJoint(je.joint);
+                        je.joint.m_islandFlag = true;
+                        if (other.m_islandFlag) {
+                            continue;
+                        }
+                        // _ASSERT && common.assert(stack.length < world.m_bodyCount);
+                        stack.push(other);
+                        other.m_islandFlag = true;
+                    }
+                }
+                this.solveIsland(step);
+                // Post solve cleanup.
+                for (var i = 0; i < this.m_bodies.length; ++i) {
+                    // Allow static bodies to participate in other islands.
+                    // TODO: are they added at all?
+                    var b = this.m_bodies[i];
+                    if (b.isStatic()) {
+                        b.m_islandFlag = false;
+                    }
+                }
+            }
+        };
+        Solver.prototype.solveIsland = function (step) {
+            // B2: Island Solve
+            var world = this.m_world;
+            var gravity = world.m_gravity;
+            var allowSleep = world.m_allowSleep;
+            var h = step.dt;
+            // Integrate velocities and apply damping. Initialize the body state.
+            for (var i = 0; i < this.m_bodies.length; ++i) {
+                var body = this.m_bodies[i];
+                var c = Vec2.clone(body.m_sweep.c);
+                var a = body.m_sweep.a;
+                var v = Vec2.clone(body.m_linearVelocity);
+                var w = body.m_angularVelocity;
+                // Store positions for continuous collision.
+                body.m_sweep.c0.setVec2(body.m_sweep.c);
+                body.m_sweep.a0 = body.m_sweep.a;
+                if (body.isDynamic()) {
+                    // Integrate velocities.
+                    v.addMul(h * body.m_gravityScale, gravity);
+                    v.addMul(h * body.m_invMass, body.m_force);
+                    w += h * body.m_invI * body.m_torque;
+                    /**
+                     * <pre>
+                     * Apply damping.
+                     * ODE: dv/dt + c * v = 0
+                     * Solution: v(t) = v0 * exp(-c * t)
+                     * Time step: v(t + dt) = v0 * exp(-c * (t + dt)) = v0 * exp(-c * t) * exp(-c * dt) = v * exp(-c * dt)
+                     * v2 = exp(-c * dt) * v1
+                     * Pade approximation:
+                     * v2 = v1 * 1 / (1 + c * dt)
+                     * </pre>
+                     */
+                    v.mul(1.0 / (1.0 + h * body.m_linearDamping));
+                    w *= 1.0 / (1.0 + h * body.m_angularDamping);
+                }
+                body.c_position.c = c;
+                body.c_position.a = a;
+                body.c_velocity.v = v;
+                body.c_velocity.w = w;
+            }
+            for (var i = 0; i < this.m_contacts.length; ++i) {
+                var contact = this.m_contacts[i];
+                contact.initConstraint(step);
+            }
+            for (var i = 0; i < this.m_contacts.length; ++i) {
+                var contact = this.m_contacts[i];
+                contact.initVelocityConstraint(step);
+            }
+            if (step.warmStarting) {
+                // Warm start.
+                for (var i = 0; i < this.m_contacts.length; ++i) {
+                    var contact = this.m_contacts[i];
+                    contact.warmStartConstraint(step);
+                }
+            }
+            for (var i = 0; i < this.m_joints.length; ++i) {
+                var joint = this.m_joints[i];
+                joint.initVelocityConstraints(step);
+            }
+            // Solve velocity constraints
+            for (var i = 0; i < step.velocityIterations; ++i) {
+                for (var j = 0; j < this.m_joints.length; ++j) {
+                    var joint = this.m_joints[j];
+                    joint.solveVelocityConstraints(step);
+                }
+                for (var j = 0; j < this.m_contacts.length; ++j) {
+                    var contact = this.m_contacts[j];
+                    contact.solveVelocityConstraint(step);
+                }
+            }
+            // Store impulses for warm starting
+            for (var i = 0; i < this.m_contacts.length; ++i) {
+                var contact = this.m_contacts[i];
+                contact.storeConstraintImpulses(step);
+            }
+            // Integrate positions
+            for (var i = 0; i < this.m_bodies.length; ++i) {
+                var body = this.m_bodies[i];
+                var c = Vec2.clone(body.c_position.c);
+                var a = body.c_position.a;
+                var v = Vec2.clone(body.c_velocity.v);
+                var w = body.c_velocity.w;
+                // Check for large velocities
+                var translation = Vec2.mulNumVec2(h, v);
+                if (Vec2.lengthSquared(translation) > Settings.maxTranslationSquared) {
+                    var ratio = Settings.maxTranslation / translation.length();
+                    v.mul(ratio);
+                }
+                var rotation = h * w;
+                if (rotation * rotation > Settings.maxRotationSquared) {
+                    var ratio = Settings.maxRotation / extended.abs(rotation);
+                    w *= ratio;
+                }
+                // Integrate
+                c.addMul(h, v);
+                a += h * w;
+                body.c_position.c.setVec2(c);
+                body.c_position.a = a;
+                body.c_velocity.v.setVec2(v);
+                body.c_velocity.w = w;
+            }
+            // Solve position constraints
+            var positionSolved = false;
+            for (var i = 0; i < step.positionIterations; ++i) {
+                var minSeparation = 0.0;
+                for (var j = 0; j < this.m_contacts.length; ++j) {
+                    var contact = this.m_contacts[j];
+                    var separation = contact.solvePositionConstraint(step);
+                    minSeparation = extended.min(minSeparation, separation);
+                }
+                // We can't expect minSpeparation >= -Settings.linearSlop because we don't
+                // push the separation above -Settings.linearSlop.
+                var contactsOkay = minSeparation >= -3.0 * Settings.linearSlop;
+                var jointsOkay = true;
+                for (var j = 0; j < this.m_joints.length; ++j) {
+                    var joint = this.m_joints[j];
+                    var jointOkay = joint.solvePositionConstraints(step);
+                    jointsOkay = jointsOkay && jointOkay;
+                }
+                if (contactsOkay && jointsOkay) {
+                    // Exit early if the position errors are small.
+                    positionSolved = true;
+                    break;
+                }
+            }
+            // Copy state buffers back to the bodies
+            for (var i = 0; i < this.m_bodies.length; ++i) {
+                var body = this.m_bodies[i];
+                body.m_sweep.c.setVec2(body.c_position.c);
+                body.m_sweep.a = body.c_position.a;
+                body.m_linearVelocity.setVec2(body.c_velocity.v);
+                body.m_angularVelocity = body.c_velocity.w;
+                body.synchronizeTransform();
+            }
+            this.postSolveIsland();
+            if (allowSleep) {
+                var minSleepTime = Infinity;
+                var linTolSqr = Settings.linearSleepToleranceSqr;
+                var angTolSqr = Settings.angularSleepToleranceSqr;
+                for (var i = 0; i < this.m_bodies.length; ++i) {
+                    var body = this.m_bodies[i];
+                    if (body.isStatic()) {
+                        continue;
+                    }
+                    if ((body.m_autoSleepFlag == false)
+                        || (body.m_angularVelocity * body.m_angularVelocity > angTolSqr)
+                        || (Vec2.lengthSquared(body.m_linearVelocity) > linTolSqr)) {
+                        body.m_sleepTime = 0.0;
+                        minSleepTime = 0.0;
+                    }
+                    else {
+                        body.m_sleepTime += h;
+                        minSleepTime = extended.min(minSleepTime, body.m_sleepTime);
+                    }
+                }
+                if (minSleepTime >= Settings.timeToSleep && positionSolved) {
+                    for (var i = 0; i < this.m_bodies.length; ++i) {
+                        var body = this.m_bodies[i];
+                        body.setAwake(false);
+                    }
+                }
+            }
+        };
+        /** @internal */
+        Solver.prototype.printBodies = function (tag) {
+            for (var i = 0; i < this.m_bodies.length; ++i) {
+                var b = this.m_bodies[i];
+                common.debug(tag, b.c_position.a, b.c_position.c.x, b.c_position.c.y, b.c_velocity.w, b.c_velocity.v.x, b.c_velocity.v.y);
+            }
+        };
+        /**
+         * Find TOI contacts and solve them.
+         */
+        Solver.prototype.solveWorldTOI = function (step) {
+            var world = this.m_world;
+            if (world.m_stepComplete) {
+                for (var b = world.m_bodyList; b; b = b.m_next) {
+                    b.m_islandFlag = false;
+                    b.m_sweep.alpha0 = 0.0;
+                }
+                for (var c = world.m_contactList; c; c = c.m_next) {
+                    // Invalidate TOI
+                    c.m_toiFlag = false;
+                    c.m_islandFlag = false;
+                    c.m_toiCount = 0;
+                    c.m_toi = 1.0;
+                }
+            }
+            // Find TOI events and solve them.
+            while (true) {
+                // Find the first TOI.
+                var minContact = null; // Contact
+                var minAlpha = 1.0;
+                for (var c = world.m_contactList; c; c = c.m_next) {
+                    // Is this contact disabled?
+                    if (c.isEnabled() == false) {
+                        continue;
+                    }
+                    // Prevent excessive sub-stepping.
+                    if (c.m_toiCount > Settings.maxSubSteps) {
+                        continue;
+                    }
+                    var alpha = 1.0;
+                    if (c.m_toiFlag) {
+                        // This contact has a valid cached TOI.
+                        alpha = c.m_toi;
+                    }
+                    else {
+                        var fA_1 = c.getFixtureA();
+                        var fB_1 = c.getFixtureB();
+                        // Is there a sensor?
+                        if (fA_1.isSensor() || fB_1.isSensor()) {
+                            continue;
+                        }
+                        var bA_1 = fA_1.getBody();
+                        var bB_1 = fB_1.getBody();
+                        var activeA = bA_1.isAwake() && !bA_1.isStatic();
+                        var activeB = bB_1.isAwake() && !bB_1.isStatic();
+                        // Is at least one body active (awake and dynamic or kinematic)?
+                        if (activeA == false && activeB == false) {
+                            continue;
+                        }
+                        var collideA = bA_1.isBullet() || !bA_1.isDynamic();
+                        var collideB = bB_1.isBullet() || !bB_1.isDynamic();
+                        // Are these two non-bullet dynamic bodies?
+                        if (collideA == false && collideB == false) {
+                            continue;
+                        }
+                        // Compute the TOI for this contact.
+                        // Put the sweeps onto the same time interval.
+                        var alpha0 = bA_1.m_sweep.alpha0;
+                        if (bA_1.m_sweep.alpha0 < bB_1.m_sweep.alpha0) {
+                            alpha0 = bB_1.m_sweep.alpha0;
+                            bA_1.m_sweep.advance(alpha0);
+                        }
+                        else if (bB_1.m_sweep.alpha0 < bA_1.m_sweep.alpha0) {
+                            alpha0 = bA_1.m_sweep.alpha0;
+                            bB_1.m_sweep.advance(alpha0);
+                        }
+                        var indexA = c.getChildIndexA();
+                        var indexB = c.getChildIndexB();
+                        bA_1.m_sweep;
+                        bB_1.m_sweep;
+                        // Compute the time of impact in interval [0, minTOI]
+                        var input = new TOIInput(); // TODO: reuse
+                        input.proxyA.set(fA_1.getShape(), indexA);
+                        input.proxyB.set(fB_1.getShape(), indexB);
+                        input.sweepA.set(bA_1.m_sweep);
+                        input.sweepB.set(bB_1.m_sweep);
+                        input.tMax = 1.0;
+                        var output = new TOIOutput(); // TODO: reuse
+                        TimeOfImpact(output, input);
+                        // Beta is the fraction of the remaining portion of the [time?].
+                        var beta = output.t;
+                        if (output.state == exports.TOIOutputState.e_touching) {
+                            alpha = extended.min(alpha0 + (1.0 - alpha0) * beta, 1.0);
+                        }
+                        else {
+                            alpha = 1.0;
+                        }
+                        c.m_toi = alpha;
+                        c.m_toiFlag = true;
+                    }
+                    if (alpha < minAlpha) {
+                        // This is the minimum TOI found so far.
+                        minContact = c;
+                        minAlpha = alpha;
+                    }
+                }
+                if (minContact == null || 1.0 - 10.0 * extended.EPSILON < minAlpha) {
+                    // No more TOI events. Done!
+                    world.m_stepComplete = true;
+                    break;
+                }
+                // Advance the bodies to the TOI.
+                var fA = minContact.getFixtureA();
+                var fB = minContact.getFixtureB();
+                var bA = fA.getBody();
+                var bB = fB.getBody();
+                var backup1 = bA.m_sweep.clone();
+                var backup2 = bB.m_sweep.clone();
+                bA.advance(minAlpha);
+                bB.advance(minAlpha);
+                // The TOI contact likely has some new contact points.
+                minContact.update(world);
+                minContact.m_toiFlag = false;
+                ++minContact.m_toiCount;
+                // Is the contact solid?
+                if (minContact.isEnabled() == false || minContact.isTouching() == false) {
+                    // Restore the sweeps.
+                    minContact.setEnabled(false);
+                    bA.m_sweep.set(backup1);
+                    bB.m_sweep.set(backup2);
+                    bA.synchronizeTransform();
+                    bB.synchronizeTransform();
+                    continue;
+                }
+                bA.setAwake(true);
+                bB.setAwake(true);
+                // Build the island
+                this.clear();
+                this.addBody(bA);
+                this.addBody(bB);
+                this.addContact(minContact);
+                bA.m_islandFlag = true;
+                bB.m_islandFlag = true;
+                minContact.m_islandFlag = true;
+                // Get contacts on bodyA and bodyB.
+                var bodies = [bA, bB];
+                for (var i = 0; i < bodies.length; ++i) {
+                    var body = bodies[i];
+                    if (body.isDynamic()) {
+                        for (var ce = body.m_contactList; ce; ce = ce.next) {
+                            // if (this.m_bodyCount == this.m_bodyCapacity) { break; }
+                            // if (this.m_contactCount == this.m_contactCapacity) { break; }
+                            var contact = ce.contact;
+                            // Has this contact already been added to the island?
+                            if (contact.m_islandFlag) {
+                                continue;
+                            }
+                            // Only add if either is static, kinematic or bullet.
+                            var other = ce.other;
+                            if (other.isDynamic() && !body.isBullet() && !other.isBullet()) {
+                                continue;
+                            }
+                            // Skip sensors.
+                            var sensorA = contact.m_fixtureA.m_isSensor;
+                            var sensorB = contact.m_fixtureB.m_isSensor;
+                            if (sensorA || sensorB) {
+                                continue;
+                            }
+                            // Tentatively advance the body to the TOI.
+                            var backup = other.m_sweep.clone();
+                            if (other.m_islandFlag == false) {
+                                other.advance(minAlpha);
+                            }
+                            // Update the contact points
+                            contact.update(world);
+                            // Was the contact disabled by the user?
+                            // Are there contact points?
+                            if (contact.isEnabled() == false || contact.isTouching() == false) {
+                                other.m_sweep.set(backup);
+                                other.synchronizeTransform();
+                                continue;
+                            }
+                            // Add the contact to the island
+                            contact.m_islandFlag = true;
+                            this.addContact(contact);
+                            // Has the other body already been added to the island?
+                            if (other.m_islandFlag) {
+                                continue;
+                            }
+                            // Add the other body to the island.
+                            other.m_islandFlag = true;
+                            if (!other.isStatic()) {
+                                other.setAwake(true);
+                            }
+                            this.addBody(other);
+                        }
+                    }
+                }
+                s_subStep.reset((1.0 - minAlpha) * step.dt);
+                s_subStep.dtRatio = 1.0;
+                s_subStep.positionIterations = 20;
+                s_subStep.velocityIterations = step.velocityIterations;
+                s_subStep.warmStarting = false;
+                this.solveIslandTOI(s_subStep, bA, bB);
+                // Reset island flags and synchronize broad-phase proxies.
+                for (var i = 0; i < this.m_bodies.length; ++i) {
+                    var body = this.m_bodies[i];
+                    body.m_islandFlag = false;
+                    if (!body.isDynamic()) {
+                        continue;
+                    }
+                    body.synchronizeFixtures();
+                    // Invalidate all contact TOIs on this displaced body.
+                    for (var ce = body.m_contactList; ce; ce = ce.next) {
+                        ce.contact.m_toiFlag = false;
+                        ce.contact.m_islandFlag = false;
+                    }
+                }
+                // Commit fixture proxy movements to the broad-phase so that new contacts
+                // are created.
+                // Also, some contacts can be destroyed.
+                world.findNewContacts();
+                if (world.m_subStepping) {
+                    world.m_stepComplete = false;
+                    break;
+                }
+            }
+            var b, c; 
+        };
+        Solver.prototype.solveIslandTOI = function (subStep, toiA, toiB) {
+            this.m_world;
+            // Initialize the body state.
+            for (var i = 0; i < this.m_bodies.length; ++i) {
+                var body = this.m_bodies[i];
+                body.c_position.c.setVec2(body.m_sweep.c);
+                body.c_position.a = body.m_sweep.a;
+                body.c_velocity.v.setVec2(body.m_linearVelocity);
+                body.c_velocity.w = body.m_angularVelocity;
+            }
+            for (var i = 0; i < this.m_contacts.length; ++i) {
+                var contact = this.m_contacts[i];
+                contact.initConstraint(subStep);
+            }
+            // Solve position constraints.
+            for (var i = 0; i < subStep.positionIterations; ++i) {
+                var minSeparation = 0.0;
+                for (var j = 0; j < this.m_contacts.length; ++j) {
+                    var contact = this.m_contacts[j];
+                    var separation = contact.solvePositionConstraintTOI(subStep, toiA, toiB);
+                    minSeparation = extended.min(minSeparation, separation);
+                }
+                // We can't expect minSpeparation >= -Settings.linearSlop because we don't
+                // push the separation above -Settings.linearSlop.
+                var contactsOkay = minSeparation >= -1.5 * Settings.linearSlop;
+                if (contactsOkay) {
+                    break;
+                }
+            }
+            var i, c; 
+            // Leap of faith to new safe state.
+            toiA.m_sweep.c0.setVec2(toiA.c_position.c);
+            toiA.m_sweep.a0 = toiA.c_position.a;
+            toiB.m_sweep.c0.setVec2(toiB.c_position.c);
+            toiB.m_sweep.a0 = toiB.c_position.a;
+            // No warm starting is needed for TOI events because warm
+            // starting impulses were applied in the discrete solver.
+            for (var i = 0; i < this.m_contacts.length; ++i) {
+                var contact = this.m_contacts[i];
+                contact.initVelocityConstraint(subStep);
+            }
+            // Solve velocity constraints.
+            for (var i = 0; i < subStep.velocityIterations; ++i) {
+                for (var j = 0; j < this.m_contacts.length; ++j) {
+                    var contact = this.m_contacts[j];
+                    contact.solveVelocityConstraint(subStep);
+                }
+            }
+            // Don't store the TOI contact forces for warm starting
+            // because they can be quite large.
+            var h = subStep.dt;
+            // Integrate positions
+            for (var i = 0; i < this.m_bodies.length; ++i) {
+                var body = this.m_bodies[i];
+                var c = Vec2.clone(body.c_position.c);
+                var a = body.c_position.a;
+                var v = Vec2.clone(body.c_velocity.v);
+                var w = body.c_velocity.w;
+                // Check for large velocities
+                var translation = Vec2.mulNumVec2(h, v);
+                if (Vec2.dot(translation, translation) > Settings.maxTranslationSquared) {
+                    var ratio = Settings.maxTranslation / translation.length();
+                    v.mul(ratio);
+                }
+                var rotation = h * w;
+                if (rotation * rotation > Settings.maxRotationSquared) {
+                    var ratio = Settings.maxRotation / extended.abs(rotation);
+                    w *= ratio;
+                }
+                // Integrate
+                c.addMul(h, v);
+                a += h * w;
+                body.c_position.c = c;
+                body.c_position.a = a;
+                body.c_velocity.v = v;
+                body.c_velocity.w = w;
+                // Sync bodies
+                body.m_sweep.c = c;
+                body.m_sweep.a = a;
+                body.m_linearVelocity = v;
+                body.m_angularVelocity = w;
+                body.synchronizeTransform();
+            }
+            this.postSolveIsland();
+        };
+        /** @internal */
+        Solver.prototype.postSolveIsland = function () {
+            for (var c = 0; c < this.m_contacts.length; ++c) {
+                var contact = this.m_contacts[c];
+                this.m_world.postSolve(contact, contact.m_impulse);
+            }
+        };
+        return Solver;
+    }());
+
+    /*
+     * Planck.js
+     * The MIT License
+     * Copyright (c) 2021 Erin Catto, Ali Shakiba
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining a copy
+     * of this software and associated documentation files (the "Software"), to deal
+     * in the Software without restriction, including without limitation the rights
+     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     * copies of the Software, and to permit persons to whom the Software is
+     * furnished to do so, subject to the following conditions:
+     *
+     * The above copyright notice and this permission notice shall be included in all
+     * copies or substantial portions of the Software.
+     *
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     * SOFTWARE.
+     */
+    /**
+     * A 2-by-2 matrix. Stored in column-major order.
+     */
+    var Mat22 = /** @class */ (function () {
+        // tslint:disable-next-line:typedef
+        function Mat22(a, b, c, d) {
+            if (typeof a === 'object' && a !== null) {
+                this.ex = Vec2.clone(a);
+                this.ey = Vec2.clone(b);
+            }
+            else if (typeof a === 'number') {
+                this.ex = Vec2.neo(a, c);
+                this.ey = Vec2.neo(b, d);
+            }
+            else {
+                this.ex = Vec2.zero();
+                this.ey = Vec2.zero();
+            }
+        }
+        /** @internal */
+        Mat22.prototype.toString = function () {
+            return JSON.stringify(this);
+        };
+        Mat22.isValid = function (obj) {
+            if (obj === null || typeof obj === 'undefined') {
+                return false;
+            }
+            return Vec2.isValid(obj.ex) && Vec2.isValid(obj.ey);
+        };
+        Mat22.assert = function (o) {
+            return;
+        };
+        // tslint:disable-next-line:typedef
+        Mat22.prototype.set = function (a, b, c, d) {
+            if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
+                && typeof d === 'number') {
+                this.ex.setNum(a, c);
+                this.ey.setNum(b, d);
+            }
+            else if (typeof a === 'object' && typeof b === 'object') {
+                this.ex.setVec2(a);
+                this.ey.setVec2(b);
+            }
+            else if (typeof a === 'object') {
+                this.ex.setVec2(a.ex);
+                this.ey.setVec2(a.ey);
+            }
+            else ;
+        };
+        Mat22.prototype.setIdentity = function () {
+            this.ex.x = 1.0;
+            this.ey.x = 0.0;
+            this.ex.y = 0.0;
+            this.ey.y = 1.0;
+        };
+        Mat22.prototype.setZero = function () {
+            this.ex.x = 0.0;
+            this.ey.x = 0.0;
+            this.ex.y = 0.0;
+            this.ey.y = 0.0;
+        };
+        Mat22.prototype.getInverse = function () {
+            var a = this.ex.x;
+            var b = this.ey.x;
+            var c = this.ex.y;
+            var d = this.ey.y;
+            var det = a * d - b * c;
+            if (det !== 0.0) {
+                det = 1.0 / det;
+            }
+            var imx = new Mat22();
+            imx.ex.x = det * d;
+            imx.ey.x = -det * b;
+            imx.ex.y = -det * c;
+            imx.ey.y = det * a;
+            return imx;
+        };
+        /**
+         * Solve A * x = b, where b is a column vector. This is more efficient than
+         * computing the inverse in one-shot cases.
+         */
+        Mat22.prototype.solve = function (v) {
+            var a = this.ex.x;
+            var b = this.ey.x;
+            var c = this.ex.y;
+            var d = this.ey.y;
+            var det = a * d - b * c;
+            if (det !== 0.0) {
+                det = 1.0 / det;
+            }
+            var w = Vec2.zero();
+            w.x = det * (d * v.x - b * v.y);
+            w.y = det * (a * v.y - c * v.x);
+            return w;
+        };
+        // tslint:disable-next-line:typedef
+        Mat22.mul = function (mx, v) {
+            if (v && 'x' in v && 'y' in v) {
+                var x = mx.ex.x * v.x + mx.ey.x * v.y;
+                var y = mx.ex.y * v.x + mx.ey.y * v.y;
+                return Vec2.neo(x, y);
+            }
+            else if (v && 'ex' in v && 'ey' in v) { // Mat22
+                // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+                var a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
+                var b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
+                var c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;
+                var d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
+                return new Mat22(a, b, c, d);
+            }
+        };
+        Mat22.mulVec2 = function (mx, v) {
+            var x = mx.ex.x * v.x + mx.ey.x * v.y;
+            var y = mx.ex.y * v.x + mx.ey.y * v.y;
+            return Vec2.neo(x, y);
+        };
+        Mat22.mulMat22 = function (mx, v) {
+            // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+            var a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
+            var b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
+            var c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;
+            var d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
+            return new Mat22(a, b, c, d);
+        };
+        // tslint:disable-next-line:typedef
+        Mat22.mulT = function (mx, v) {
+            if (v && 'x' in v && 'y' in v) { // Vec2
+                return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
+            }
+            else if (v && 'ex' in v && 'ey' in v) { // Mat22
+                var c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
+                var c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
+                return new Mat22(c1, c2);
+            }
+        };
+        Mat22.mulTVec2 = function (mx, v) {
+            return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
+        };
+        Mat22.mulTMat22 = function (mx, v) {
+            var c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
+            var c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
+            return new Mat22(c1, c2);
+        };
+        Mat22.abs = function (mx) {
+            return new Mat22(Vec2.abs(mx.ex), Vec2.abs(mx.ey));
+        };
+        Mat22.add = function (mx1, mx2) {
+            return new Mat22(Vec2.add(mx1.ex, mx2.ex), Vec2.add(mx1.ey, mx2.ey));
+        };
+        return Mat22;
+    }());
+
+    /*
+     * Planck.js
+     * The MIT License
+     * Copyright (c) 2021 Erin Catto, Ali Shakiba
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining a copy
+     * of this software and associated documentation files (the "Software"), to deal
+     * in the Software without restriction, including without limitation the rights
+     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     * copies of the Software, and to permit persons to whom the Software is
+     * furnished to do so, subject to the following conditions:
+     *
+     * The above copyright notice and this permission notice shall be included in all
+     * copies or substantial portions of the Software.
+     *
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     * SOFTWARE.
+     */
+    exports.ManifoldType = void 0;
+    (function (ManifoldType) {
+        ManifoldType[ManifoldType["e_circles"] = 0] = "e_circles";
+        ManifoldType[ManifoldType["e_faceA"] = 1] = "e_faceA";
+        ManifoldType[ManifoldType["e_faceB"] = 2] = "e_faceB";
+    })(exports.ManifoldType || (exports.ManifoldType = {}));
+    exports.ContactFeatureType = void 0;
+    (function (ContactFeatureType) {
+        ContactFeatureType[ContactFeatureType["e_vertex"] = 0] = "e_vertex";
+        ContactFeatureType[ContactFeatureType["e_face"] = 1] = "e_face";
+    })(exports.ContactFeatureType || (exports.ContactFeatureType = {}));
+    /**
+     * This is used for determining the state of contact points.
+     */
+    exports.PointState = void 0;
+    (function (PointState) {
+        /** Point does not exist */
+        PointState[PointState["nullState"] = 0] = "nullState";
+        /** Point was added in the update */
+        PointState[PointState["addState"] = 1] = "addState";
+        /** Point persisted across the update */
+        PointState[PointState["persistState"] = 2] = "persistState";
+        /** Point was removed in the update */
+        PointState[PointState["removeState"] = 3] = "removeState";
+    })(exports.PointState || (exports.PointState = {}));
+    /**
+     * Used for computing contact manifolds.
+     */
+    var ClipVertex = /** @class */ (function () {
+        function ClipVertex() {
+            this.v = Vec2.zero();
+            this.id = new ContactID();
+        }
+        ClipVertex.prototype.set = function (o) {
+            this.v.setVec2(o.v);
+            this.id.set(o.id);
+        };
+        return ClipVertex;
+    }());
+    /**
+     * A manifold for two touching convex shapes. Manifolds are created in `evaluate`
+     * method of Contact subclasses.
+     *
+     * Supported manifold types are e_faceA or e_faceB for clip point versus plane
+     * with radius and e_circles point versus point with radius.
+     *
+     * We store contacts in this way so that position correction can account for
+     * movement, which is critical for continuous physics. All contact scenarios
+     * must be expressed in one of these types. This structure is stored across time
+     * steps, so we keep it small.
+     *
+     * @prop type e_circle, e_faceA, e_faceB
+     * @prop localPoint Usage depends on manifold type:<br>
+     *       e_circles: the local center of circleA <br>
+     *       e_faceA: the center of faceA <br>
+     *       e_faceB: the center of faceB
+     * @prop localNormal Usage depends on manifold type:<br>
+     *       e_circles: not used <br>
+     *       e_faceA: the normal on polygonA <br>
+     *       e_faceB: the normal on polygonB
+     * @prop points The points of contact {ManifoldPoint[]}
+     * @prop pointCount The number of manifold points
+     */
+    var Manifold = /** @class */ (function () {
+        function Manifold() {
+            this.localNormal = Vec2.zero();
+            this.localPoint = Vec2.zero();
+            this.points = [new ManifoldPoint(), new ManifoldPoint()];
+            this.pointCount = 0;
+        }
+        /**
+         * Evaluate the manifold with supplied transforms. This assumes modest motion
+         * from the original state. This does not change the point count, impulses, etc.
+         * The radii must come from the shapes that generated the manifold.
+         */
+        Manifold.prototype.getWorldManifold = function (wm, xfA, radiusA, xfB, radiusB) {
+            if (this.pointCount == 0) {
+                return;
+            }
+            wm = wm || new WorldManifold();
+            var normal = wm.normal;
+            var points = wm.points;
+            var separations = wm.separations;
+            // TODO: improve
+            switch (this.type) {
+                case exports.ManifoldType.e_circles: {
+                    normal = Vec2.neo(1.0, 0.0);
+                    var pointA = Transform.mulVec2(xfA, this.localPoint);
+                    var pointB = Transform.mulVec2(xfB, this.points[0].localPoint);
+                    var dist = Vec2.sub(pointB, pointA);
+                    if (Vec2.lengthSquared(dist) > extended.EPSILON * extended.EPSILON) {
+                        normal.setVec2(dist);
+                        normal.normalize();
+                    }
+                    var cA = pointA.clone().addMul(radiusA, normal);
+                    var cB = pointB.clone().addMul(-radiusB, normal);
+                    points[0] = Vec2.mid(cA, cB);
+                    separations[0] = Vec2.dot(Vec2.sub(cB, cA), normal);
+                    points.length = 1;
+                    separations.length = 1;
+                    break;
+                }
+                case exports.ManifoldType.e_faceA: {
+                    normal = Rot.mulVec2(xfA.q, this.localNormal);
+                    var planePoint = Transform.mulVec2(xfA, this.localPoint);
+                    for (var i = 0; i < this.pointCount; ++i) {
+                        var clipPoint = Transform.mulVec2(xfB, this.points[i].localPoint);
+                        var cA = Vec2.clone(clipPoint).addMul(radiusA - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
+                        var cB = Vec2.clone(clipPoint).subMul(radiusB, normal);
+                        points[i] = Vec2.mid(cA, cB);
+                        separations[i] = Vec2.dot(Vec2.sub(cB, cA), normal);
+                    }
+                    points.length = this.pointCount;
+                    separations.length = this.pointCount;
+                    break;
+                }
+                case exports.ManifoldType.e_faceB: {
+                    normal = Rot.mulVec2(xfB.q, this.localNormal);
+                    var planePoint = Transform.mulVec2(xfB, this.localPoint);
+                    for (var i = 0; i < this.pointCount; ++i) {
+                        var clipPoint = Transform.mulVec2(xfA, this.points[i].localPoint);
+                        var cB = Vec2.combine(1, clipPoint, radiusB - Vec2.dot(Vec2.sub(clipPoint, planePoint), normal), normal);
+                        var cA = Vec2.combine(1, clipPoint, -radiusA, normal);
+                        points[i] = Vec2.mid(cA, cB);
+                        separations[i] = Vec2.dot(Vec2.sub(cA, cB), normal);
+                    }
+                    points.length = this.pointCount;
+                    separations.length = this.pointCount;
+                    // Ensure normal points from A to B.
+                    normal.mul(-1);
+                    break;
+                }
+            }
+            wm.normal = normal;
+            wm.points = points;
+            wm.separations = separations;
+            return wm;
+        };
+        Manifold.clipSegmentToLine = clipSegmentToLine;
+        Manifold.ClipVertex = ClipVertex;
+        Manifold.getPointStates = getPointStates;
+        Manifold.PointState = exports.PointState;
+        return Manifold;
+    }());
+    /**
+     * A manifold point is a contact point belonging to a contact manifold. It holds
+     * details related to the geometry and dynamics of the contact points.
+     *
+     * This structure is stored across time steps, so we keep it small.
+     *
+     * Note: impulses are used for internal caching and may not provide reliable
+     * contact forces, especially for high speed collisions.
+     */
+    var ManifoldPoint = /** @class */ (function () {
+        function ManifoldPoint() {
+            /**
+             * Usage depends on manifold type.
+             *       e_circles: the local center of circleB,
+             *       e_faceA: the local center of cirlceB or the clip point of polygonB,
+             *       e_faceB: the clip point of polygonA.
+             */
+            this.localPoint = Vec2.zero();
+            /**
+             * The non-penetration impulse
+             */
+            this.normalImpulse = 0;
+            /**
+             * The friction impulse
+             */
+            this.tangentImpulse = 0;
+            /**
+             * Uniquely identifies a contact point between two shapes to facilatate warm starting
+             */
+            this.id = new ContactID();
+        }
+        return ManifoldPoint;
+    }());
+    /**
+     * Contact ids to facilitate warm starting.
+     */
+    var ContactID = /** @class */ (function () {
+        function ContactID() {
+            this.cf = new ContactFeature();
+        }
+        Object.defineProperty(ContactID.prototype, "key", {
+            /**
+             * Used to quickly compare contact ids.
+             */
+            get: function () {
+                return this.cf.indexA + this.cf.indexB * 4 + this.cf.typeA * 16 + this.cf.typeB * 64;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        ContactID.prototype.set = function (o) {
+            // this.key = o.key;
+            this.cf.set(o.cf);
+        };
+        return ContactID;
+    }());
+    /**
+     * The features that intersect to form the contact point.
+     */
+    var ContactFeature = /** @class */ (function () {
+        function ContactFeature() {
+        }
+        ContactFeature.prototype.set = function (o) {
+            this.indexA = o.indexA;
+            this.indexB = o.indexB;
+            this.typeA = o.typeA;
+            this.typeB = o.typeB;
+        };
+        return ContactFeature;
+    }());
+    /**
+     * This is used to compute the current state of a contact manifold.
+     */
+    var WorldManifold = /** @class */ (function () {
+        function WorldManifold() {
+            /**
+             * World contact point (point of intersection)
+             */
+            this.points = []; // [maxManifoldPoints]
+            /**
+             * A negative value indicates overlap, in meters
+             */
+            this.separations = []; // [maxManifoldPoints]
+        }
+        return WorldManifold;
+    }());
+    /**
+     * Compute the point states given two manifolds. The states pertain to the
+     * transition from manifold1 to manifold2. So state1 is either persist or remove
+     * while state2 is either add or persist.
+     */
+    function getPointStates(state1, state2, manifold1, manifold2) {
+        // state1, state2: PointState[Settings.maxManifoldPoints]
+        // for (var i = 0; i < Settings.maxManifoldPoints; ++i) {
+        // state1[i] = PointState.nullState;
+        // state2[i] = PointState.nullState;
+        // }
+        // Detect persists and removes.
+        for (var i = 0; i < manifold1.pointCount; ++i) {
+            var id = manifold1.points[i].id;
+            state1[i] = exports.PointState.removeState;
+            for (var j = 0; j < manifold2.pointCount; ++j) {
+                if (manifold2.points[j].id.key == id.key) {
+                    state1[i] = exports.PointState.persistState;
+                    break;
+                }
+            }
+        }
+        // Detect persists and adds.
+        for (var i = 0; i < manifold2.pointCount; ++i) {
+            var id = manifold2.points[i].id;
+            state2[i] = exports.PointState.addState;
+            for (var j = 0; j < manifold1.pointCount; ++j) {
+                if (manifold1.points[j].id.key == id.key) {
+                    state2[i] = exports.PointState.persistState;
+                    break;
+                }
+            }
+        }
+    }
+    /**
+     * Clipping for contact manifolds. Sutherland-Hodgman clipping.
+     */
+    function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
+        // Start with no output points
+        var numOut = 0;
+        // Calculate the distance of end points to the line
+        var distance0 = Vec2.dot(normal, vIn[0].v) - offset;
+        var distance1 = Vec2.dot(normal, vIn[1].v) - offset;
+        // If the points are behind the plane
+        if (distance0 <= 0.0)
+            vOut[numOut++].set(vIn[0]);
+        if (distance1 <= 0.0)
+            vOut[numOut++].set(vIn[1]);
+        // If the points are on different sides of the plane
+        if (distance0 * distance1 < 0.0) {
+            // Find intersection point of edge and plane
+            var interp = distance0 / (distance0 - distance1);
+            vOut[numOut].v.setCombine(1 - interp, vIn[0].v, interp, vIn[1].v);
+            // VertexA is hitting edgeB.
+            vOut[numOut].id.cf.indexA = vertexIndexA;
+            vOut[numOut].id.cf.indexB = vIn[0].id.cf.indexB;
+            vOut[numOut].id.cf.typeA = exports.ContactFeatureType.e_vertex;
+            vOut[numOut].id.cf.typeB = exports.ContactFeatureType.e_face;
+            ++numOut;
+        }
+        return numOut;
     }
 
     /*
@@ -5004,7 +8905,7 @@
      * restitution to zero. For example, anything slides on ice.
      */
     function mixFriction(friction1, friction2) {
-        return math$1.sqrt(friction1 * friction2);
+        return extended.sqrt(friction1 * friction2);
     }
     /**
      * Restitution mixing law. The idea is allow for anything to bounce off an
@@ -5378,7 +9279,7 @@
                 var point = void 0;
                 var separation = void 0;
                 switch (this.p_type) {
-                    case ManifoldType.e_circles: {
+                    case exports.ManifoldType.e_circles: {
                         var pointA = Transform.mulVec2(xfA, this.p_localPoint);
                         var pointB = Transform.mulVec2(xfB, this.p_localPoints[0]);
                         normal = Vec2.sub(pointB, pointA);
@@ -5387,7 +9288,7 @@
                         separation = Vec2.dot(Vec2.sub(pointB, pointA), normal) - this.p_radiusA - this.p_radiusB;
                         break;
                     }
-                    case ManifoldType.e_faceA: {
+                    case exports.ManifoldType.e_faceA: {
                         normal = Rot.mulVec2(xfA.q, this.p_localNormal);
                         var planePoint = Transform.mulVec2(xfA, this.p_localPoint);
                         var clipPoint = Transform.mulVec2(xfB, this.p_localPoints[j]);
@@ -5395,7 +9296,7 @@
                         point = clipPoint;
                         break;
                     }
-                    case ManifoldType.e_faceB: {
+                    case exports.ManifoldType.e_faceB: {
                         normal = Rot.mulVec2(xfB.q, this.p_localNormal);
                         var planePoint = Transform.mulVec2(xfB, this.p_localPoint);
                         var clipPoint = Transform.mulVec2(xfA, this.p_localPoints[j]);
@@ -5409,12 +9310,12 @@
                 var rA = Vec2.sub(point, cA);
                 var rB = Vec2.sub(point, cB);
                 // Track max constraint error.
-                minSeparation = math$1.min(minSeparation, separation);
+                minSeparation = extended.min(minSeparation, separation);
                 var baumgarte = toi ? Settings.toiBaugarte : Settings.baumgarte;
                 var linearSlop = Settings.linearSlop;
                 var maxLinearCorrection = Settings.maxLinearCorrection;
                 // Prevent large corrections and allow slop.
-                var C = math$1.clamp(baumgarte * (separation + linearSlop), -maxLinearCorrection, 0.0);
+                var C = extended.clamp(baumgarte * (separation + linearSlop), -maxLinearCorrection, 0.0);
                 // Compute the effective mass.
                 var rnA = Vec2.crossVec2Vec2(rA, normal);
                 var rnB = Vec2.crossVec2Vec2(rB, normal);
@@ -5594,7 +9495,7 @@
                 var lambda = vcp.tangentMass * (-vt);
                 // Clamp the accumulated force
                 var maxFriction = friction * vcp.normalImpulse;
-                var newImpulse = math$1.clamp(vcp.tangentImpulse + lambda, -maxFriction, maxFriction);
+                var newImpulse = extended.clamp(vcp.tangentImpulse + lambda, -maxFriction, maxFriction);
                 lambda = newImpulse - vcp.tangentImpulse;
                 vcp.tangentImpulse = newImpulse;
                 // Apply contact impulse
@@ -5616,7 +9517,7 @@
                     var vn = Vec2.dot(dv, normal);
                     var lambda = -vcp.normalMass * (vn - vcp.velocityBias);
                     // Clamp the accumulated impulse
-                    var newImpulse = math$1.max(vcp.normalImpulse + lambda, 0.0);
+                    var newImpulse = extended.max(vcp.normalImpulse + lambda, 0.0);
                     lambda = newImpulse - vcp.normalImpulse;
                     vcp.normalImpulse = newImpulse;
                     // Apply contact impulse
@@ -5918,1230 +9819,6 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
      * SOFTWARE.
      */
-    /**
-     * A joint edge is used to connect bodies and joints together in a joint graph
-     * where each body is a node and each joint is an edge. A joint edge belongs to
-     * a doubly linked list maintained in each attached body. Each joint has two
-     * joint nodes, one for each attached body.
-     */
-    var JointEdge = /** @class */ (function () {
-        function JointEdge() {
-            /**
-             * provides quick access to the other body attached.
-             */
-            this.other = null;
-            /**
-             * the joint
-             */
-            this.joint = null;
-            /**
-             * prev the previous joint edge in the body's joint list
-             */
-            this.prev = null;
-            /**
-             * the next joint edge in the body's joint list
-             */
-            this.next = null;
-        }
-        return JointEdge;
-    }());
-    /**
-     * The base joint class. Joints are used to constraint two bodies together in
-     * various fashions. Some joints also feature limits and motors.
-     */
-    var Joint = /** @class */ (function () {
-        function Joint(def, bodyA, bodyB) {
-            /** @internal */ this.m_type = 'unknown-joint';
-            /** @internal */ this.m_prev = null;
-            /** @internal */ this.m_next = null;
-            /** @internal */ this.m_edgeA = new JointEdge();
-            /** @internal */ this.m_edgeB = new JointEdge();
-            /** @internal */ this.m_islandFlag = false;
-            bodyA = 'bodyA' in def ? def.bodyA : bodyA;
-            bodyB = 'bodyB' in def ? def.bodyB : bodyB;
-            this.m_bodyA = bodyA;
-            this.m_bodyB = bodyB;
-            this.m_collideConnected = !!def.collideConnected;
-            this.m_userData = def.userData;
-        }
-        /**
-         * Short-cut function to determine if either body is inactive.
-         */
-        Joint.prototype.isActive = function () {
-            return this.m_bodyA.isActive() && this.m_bodyB.isActive();
-        };
-        /**
-         * Get the type of the concrete joint.
-         */
-        Joint.prototype.getType = function () {
-            return this.m_type;
-        };
-        /**
-         * Get the first body attached to this joint.
-         */
-        Joint.prototype.getBodyA = function () {
-            return this.m_bodyA;
-        };
-        /**
-         * Get the second body attached to this joint.
-         */
-        Joint.prototype.getBodyB = function () {
-            return this.m_bodyB;
-        };
-        /**
-         * Get the next joint the world joint list.
-         */
-        Joint.prototype.getNext = function () {
-            return this.m_next;
-        };
-        Joint.prototype.getUserData = function () {
-            return this.m_userData;
-        };
-        Joint.prototype.setUserData = function (data) {
-            this.m_userData = data;
-        };
-        /**
-         * Get collide connected. Note: modifying the collide connect flag won't work
-         * correctly because the flag is only checked when fixture AABBs begin to
-         * overlap.
-         */
-        Joint.prototype.getCollideConnected = function () {
-            return this.m_collideConnected;
-        };
-        /**
-         * Shift the origin for any points stored in world coordinates.
-         */
-        Joint.prototype.shiftOrigin = function (newOrigin) { };
-        return Joint;
-    }());
-
-    var now = function () {
-        return Date.now();
-    };
-    var diff = function (time) {
-        return Date.now() - time;
-    };
-    var Timer = {
-        now: now,
-        diff: diff,
-    };
-
-    /*
-     * Planck.js
-     * The MIT License
-     * Copyright (c) 2021 Erin Catto, Ali Shakiba
-     *
-     * Permission is hereby granted, free of charge, to any person obtaining a copy
-     * of this software and associated documentation files (the "Software"), to deal
-     * in the Software without restriction, including without limitation the rights
-     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     * copies of the Software, and to permit persons to whom the Software is
-     * furnished to do so, subject to the following conditions:
-     *
-     * The above copyright notice and this permission notice shall be included in all
-     * copies or substantial portions of the Software.
-     *
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-     * SOFTWARE.
-     */
-    /**
-     * Input parameters for TimeOfImpact.
-     */
-    var TOIInput = /** @class */ (function () {
-        function TOIInput() {
-            this.proxyA = new DistanceProxy();
-            this.proxyB = new DistanceProxy();
-            this.sweepA = new Sweep();
-            this.sweepB = new Sweep();
-        }
-        return TOIInput;
-    }());
-    var TOIOutputState;
-    (function (TOIOutputState) {
-        TOIOutputState[TOIOutputState["e_unknown"] = 0] = "e_unknown";
-        TOIOutputState[TOIOutputState["e_failed"] = 1] = "e_failed";
-        TOIOutputState[TOIOutputState["e_overlapped"] = 2] = "e_overlapped";
-        TOIOutputState[TOIOutputState["e_touching"] = 3] = "e_touching";
-        TOIOutputState[TOIOutputState["e_separated"] = 4] = "e_separated";
-    })(TOIOutputState || (TOIOutputState = {}));
-    /**
-     * Output parameters for TimeOfImpact.
-     */
-    var TOIOutput = /** @class */ (function () {
-        function TOIOutput() {
-        }
-        return TOIOutput;
-    }());
-    stats$1.toiTime = 0;
-    stats$1.toiMaxTime = 0;
-    stats$1.toiCalls = 0;
-    stats$1.toiIters = 0;
-    stats$1.toiMaxIters = 0;
-    stats$1.toiRootIters = 0;
-    stats$1.toiMaxRootIters = 0;
-    /**
-     * Compute the upper bound on time before two shapes penetrate. Time is
-     * represented as a fraction between [0,tMax]. This uses a swept separating axis
-     * and may miss some intermediate, non-tunneling collision. If you change the
-     * time interval, you should call this function again.
-     *
-     * Note: use Distance to compute the contact point and normal at the time of
-     * impact.
-     *
-     * CCD via the local separating axis method. This seeks progression by computing
-     * the largest time at which separation is maintained.
-     */
-    function TimeOfImpact(output, input) {
-        var timer = Timer.now();
-        ++stats$1.toiCalls;
-        output.state = TOIOutputState.e_unknown;
-        output.t = input.tMax;
-        var proxyA = input.proxyA; // DistanceProxy
-        var proxyB = input.proxyB; // DistanceProxy
-        var sweepA = input.sweepA; // Sweep
-        var sweepB = input.sweepB; // Sweep
-        // Large rotations can make the root finder fail, so we normalize the
-        // sweep angles.
-        sweepA.normalize();
-        sweepB.normalize();
-        var tMax = input.tMax;
-        var totalRadius = proxyA.m_radius + proxyB.m_radius;
-        var target = math$1.max(Settings.linearSlop, totalRadius - 3.0 * Settings.linearSlop);
-        var tolerance = 0.25 * Settings.linearSlop;
-        var t1 = 0.0;
-        var k_maxIterations = Settings.maxTOIIterations;
-        var iter = 0;
-        // Prepare input for distance query.
-        var cache = new SimplexCache();
-        var distanceInput = new DistanceInput();
-        distanceInput.proxyA = input.proxyA;
-        distanceInput.proxyB = input.proxyB;
-        distanceInput.useRadii = false;
-        // The outer loop progressively attempts to compute new separating axes.
-        // This loop terminates when an axis is repeated (no progress is made).
-        while (true) {
-            var xfA = Transform.identity();
-            var xfB = Transform.identity();
-            sweepA.getTransform(xfA, t1);
-            sweepB.getTransform(xfB, t1);
-            // Get the distance between shapes. We can also use the results
-            // to get a separating axis.
-            distanceInput.transformA = xfA;
-            distanceInput.transformB = xfB;
-            var distanceOutput = new DistanceOutput();
-            Distance(distanceOutput, cache, distanceInput);
-            // If the shapes are overlapped, we give up on continuous collision.
-            if (distanceOutput.distance <= 0.0) {
-                // Failure!
-                output.state = TOIOutputState.e_overlapped;
-                output.t = 0.0;
-                break;
-            }
-            if (distanceOutput.distance < target + tolerance) {
-                // Victory!
-                output.state = TOIOutputState.e_touching;
-                output.t = t1;
-                break;
-            }
-            // Initialize the separating axis.
-            var fcn = new SeparationFunction();
-            fcn.initialize(cache, proxyA, sweepA, proxyB, sweepB, t1);
-            // if (false) {
-            //   // Dump the curve seen by the root finder
-            //   const N = 100;
-            //   const dx = 1.0 / N;
-            //   const xs = []; // [ N + 1 ];
-            //   const fs = []; // [ N + 1 ];
-            //   const x = 0.0;
-            //   for (const i = 0; i <= N; ++i) {
-            //     sweepA.getTransform(xfA, x);
-            //     sweepB.getTransform(xfB, x);
-            //     const f = fcn.evaluate(xfA, xfB) - target;
-            //     printf("%g %g\n", x, f);
-            //     xs[i] = x;
-            //     fs[i] = f;
-            //     x += dx;
-            //   }
-            // }
-            // Compute the TOI on the separating axis. We do this by successively
-            // resolving the deepest point. This loop is bounded by the number of
-            // vertices.
-            var done = false;
-            var t2 = tMax;
-            var pushBackIter = 0;
-            while (true) {
-                // Find the deepest point at t2. Store the witness point indices.
-                var s2 = fcn.findMinSeparation(t2);
-                // const indexA = fcn.indexA;
-                // const indexB = fcn.indexB;
-                // Is the final configuration separated?
-                if (s2 > target + tolerance) {
-                    // Victory!
-                    output.state = TOIOutputState.e_separated;
-                    output.t = tMax;
-                    done = true;
-                    break;
-                }
-                // Has the separation reached tolerance?
-                if (s2 > target - tolerance) {
-                    // Advance the sweeps
-                    t1 = t2;
-                    break;
-                }
-                // Compute the initial separation of the witness points.
-                var s1 = fcn.evaluate(t1);
-                // const indexA = fcn.indexA;
-                // const indexB = fcn.indexB;
-                // Check for initial overlap. This might happen if the root finder
-                // runs out of iterations.
-                if (s1 < target - tolerance) {
-                    output.state = TOIOutputState.e_failed;
-                    output.t = t1;
-                    done = true;
-                    break;
-                }
-                // Check for touching
-                if (s1 <= target + tolerance) {
-                    // Victory! t1 should hold the TOI (could be 0.0).
-                    output.state = TOIOutputState.e_touching;
-                    output.t = t1;
-                    done = true;
-                    break;
-                }
-                // Compute 1D root of: f(x) - target = 0
-                var rootIterCount = 0;
-                var a1 = t1;
-                var a2 = t2;
-                while (true) {
-                    // Use a mix of the secant rule and bisection.
-                    var t = void 0;
-                    if (rootIterCount & 1) {
-                        // Secant rule to improve convergence.
-                        t = a1 + (target - s1) * (a2 - a1) / (s2 - s1);
-                    }
-                    else {
-                        // Bisection to guarantee progress.
-                        t = 0.5 * (a1 + a2);
-                    }
-                    ++rootIterCount;
-                    ++stats$1.toiRootIters;
-                    var s = fcn.evaluate(t);
-                    fcn.indexA;
-                    fcn.indexB;
-                    if (math$1.abs(s - target) < tolerance) {
-                        // t2 holds a tentative value for t1
-                        t2 = t;
-                        break;
-                    }
-                    // Ensure we continue to bracket the root.
-                    if (s > target) {
-                        a1 = t;
-                        s1 = s;
-                    }
-                    else {
-                        a2 = t;
-                        s2 = s;
-                    }
-                    if (rootIterCount === 50) {
-                        break;
-                    }
-                }
-                stats$1.toiMaxRootIters = math$1.max(stats$1.toiMaxRootIters, rootIterCount);
-                ++pushBackIter;
-                if (pushBackIter === Settings.maxPolygonVertices) {
-                    break;
-                }
-            }
-            ++iter;
-            ++stats$1.toiIters;
-            if (done) {
-                break;
-            }
-            if (iter === k_maxIterations) {
-                // Root finder got stuck. Semi-victory.
-                output.state = TOIOutputState.e_failed;
-                output.t = t1;
-                break;
-            }
-        }
-        stats$1.toiMaxIters = math$1.max(stats$1.toiMaxIters, iter);
-        var time = Timer.diff(timer);
-        stats$1.toiMaxTime = math$1.max(stats$1.toiMaxTime, time);
-        stats$1.toiTime += time;
-    }
-    var SeparationFunctionType;
-    (function (SeparationFunctionType) {
-        SeparationFunctionType[SeparationFunctionType["e_points"] = 1] = "e_points";
-        SeparationFunctionType[SeparationFunctionType["e_faceA"] = 2] = "e_faceA";
-        SeparationFunctionType[SeparationFunctionType["e_faceB"] = 3] = "e_faceB";
-    })(SeparationFunctionType || (SeparationFunctionType = {}));
-    var SeparationFunction = /** @class */ (function () {
-        function SeparationFunction() {
-            this.m_proxyA = new DistanceProxy();
-            this.m_proxyB = new DistanceProxy();
-            this.m_localPoint = Vec2.zero();
-            this.m_axis = Vec2.zero();
-        }
-        // TODO_ERIN might not need to return the separation
-        SeparationFunction.prototype.initialize = function (cache, proxyA, sweepA, proxyB, sweepB, t1) {
-            this.m_proxyA = proxyA;
-            this.m_proxyB = proxyB;
-            var count = cache.count;
-            this.m_sweepA = sweepA;
-            this.m_sweepB = sweepB;
-            var xfA = Transform.identity();
-            var xfB = Transform.identity();
-            this.m_sweepA.getTransform(xfA, t1);
-            this.m_sweepB.getTransform(xfB, t1);
-            if (count === 1) {
-                this.m_type = SeparationFunctionType.e_points;
-                var localPointA = this.m_proxyA.getVertex(cache.indexA[0]);
-                var localPointB = this.m_proxyB.getVertex(cache.indexB[0]);
-                var pointA = Transform.mulVec2(xfA, localPointA);
-                var pointB = Transform.mulVec2(xfB, localPointB);
-                this.m_axis.setCombine(1, pointB, -1, pointA);
-                var s = this.m_axis.normalize();
-                return s;
-            }
-            else if (cache.indexA[0] === cache.indexA[1]) {
-                // Two points on B and one on A.
-                this.m_type = SeparationFunctionType.e_faceB;
-                var localPointB1 = proxyB.getVertex(cache.indexB[0]);
-                var localPointB2 = proxyB.getVertex(cache.indexB[1]);
-                this.m_axis = Vec2.crossVec2Num(Vec2.sub(localPointB2, localPointB1), 1.0);
-                this.m_axis.normalize();
-                var normal = Rot.mulVec2(xfB.q, this.m_axis);
-                this.m_localPoint = Vec2.mid(localPointB1, localPointB2);
-                var pointB = Transform.mulVec2(xfB, this.m_localPoint);
-                var localPointA = proxyA.getVertex(cache.indexA[0]);
-                var pointA = Transform.mulVec2(xfA, localPointA);
-                var s = Vec2.dot(pointA, normal) - Vec2.dot(pointB, normal);
-                if (s < 0.0) {
-                    this.m_axis = Vec2.neg(this.m_axis);
-                    s = -s;
-                }
-                return s;
-            }
-            else {
-                // Two points on A and one or two points on B.
-                this.m_type = SeparationFunctionType.e_faceA;
-                var localPointA1 = this.m_proxyA.getVertex(cache.indexA[0]);
-                var localPointA2 = this.m_proxyA.getVertex(cache.indexA[1]);
-                this.m_axis = Vec2.crossVec2Num(Vec2.sub(localPointA2, localPointA1), 1.0);
-                this.m_axis.normalize();
-                var normal = Rot.mulVec2(xfA.q, this.m_axis);
-                this.m_localPoint = Vec2.mid(localPointA1, localPointA2);
-                var pointA = Transform.mulVec2(xfA, this.m_localPoint);
-                var localPointB = this.m_proxyB.getVertex(cache.indexB[0]);
-                var pointB = Transform.mulVec2(xfB, localPointB);
-                var s = Vec2.dot(pointB, normal) - Vec2.dot(pointA, normal);
-                if (s < 0.0) {
-                    this.m_axis = Vec2.neg(this.m_axis);
-                    s = -s;
-                }
-                return s;
-            }
-        };
-        SeparationFunction.prototype.compute = function (find, t) {
-            // It was findMinSeparation and evaluate
-            var xfA = Transform.identity();
-            var xfB = Transform.identity();
-            this.m_sweepA.getTransform(xfA, t);
-            this.m_sweepB.getTransform(xfB, t);
-            switch (this.m_type) {
-                case SeparationFunctionType.e_points: {
-                    if (find) {
-                        var axisA = Rot.mulTVec2(xfA.q, this.m_axis);
-                        var axisB = Rot.mulTVec2(xfB.q, Vec2.neg(this.m_axis));
-                        this.indexA = this.m_proxyA.getSupport(axisA);
-                        this.indexB = this.m_proxyB.getSupport(axisB);
-                    }
-                    var localPointA = this.m_proxyA.getVertex(this.indexA);
-                    var localPointB = this.m_proxyB.getVertex(this.indexB);
-                    var pointA = Transform.mulVec2(xfA, localPointA);
-                    var pointB = Transform.mulVec2(xfB, localPointB);
-                    var sep = Vec2.dot(pointB, this.m_axis) - Vec2.dot(pointA, this.m_axis);
-                    return sep;
-                }
-                case SeparationFunctionType.e_faceA: {
-                    var normal = Rot.mulVec2(xfA.q, this.m_axis);
-                    var pointA = Transform.mulVec2(xfA, this.m_localPoint);
-                    if (find) {
-                        var axisB = Rot.mulTVec2(xfB.q, Vec2.neg(normal));
-                        this.indexA = -1;
-                        this.indexB = this.m_proxyB.getSupport(axisB);
-                    }
-                    var localPointB = this.m_proxyB.getVertex(this.indexB);
-                    var pointB = Transform.mulVec2(xfB, localPointB);
-                    var sep = Vec2.dot(pointB, normal) - Vec2.dot(pointA, normal);
-                    return sep;
-                }
-                case SeparationFunctionType.e_faceB: {
-                    var normal = Rot.mulVec2(xfB.q, this.m_axis);
-                    var pointB = Transform.mulVec2(xfB, this.m_localPoint);
-                    if (find) {
-                        var axisA = Rot.mulTVec2(xfA.q, Vec2.neg(normal));
-                        this.indexB = -1;
-                        this.indexA = this.m_proxyA.getSupport(axisA);
-                    }
-                    var localPointA = this.m_proxyA.getVertex(this.indexA);
-                    var pointA = Transform.mulVec2(xfA, localPointA);
-                    var sep = Vec2.dot(pointA, normal) - Vec2.dot(pointB, normal);
-                    return sep;
-                }
-                default:
-                    if (find) {
-                        this.indexA = -1;
-                        this.indexB = -1;
-                    }
-                    return 0.0;
-            }
-        };
-        SeparationFunction.prototype.findMinSeparation = function (t) {
-            return this.compute(true, t);
-        };
-        SeparationFunction.prototype.evaluate = function (t) {
-            return this.compute(false, t);
-        };
-        return SeparationFunction;
-    }());
-
-    /*
-     * Planck.js
-     * The MIT License
-     * Copyright (c) 2021 Erin Catto, Ali Shakiba
-     *
-     * Permission is hereby granted, free of charge, to any person obtaining a copy
-     * of this software and associated documentation files (the "Software"), to deal
-     * in the Software without restriction, including without limitation the rights
-     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     * copies of the Software, and to permit persons to whom the Software is
-     * furnished to do so, subject to the following conditions:
-     *
-     * The above copyright notice and this permission notice shall be included in all
-     * copies or substantial portions of the Software.
-     *
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-     * SOFTWARE.
-     */
-    var TimeStep = /** @class */ (function () {
-        function TimeStep() {
-            /** time step */
-            this.dt = 0;
-            /** inverse time step (0 if dt == 0) */
-            this.inv_dt = 0;
-            this.velocityIterations = 0;
-            this.positionIterations = 0;
-            this.warmStarting = false;
-            this.blockSolve = true;
-            /** timestep ratio for variable timestep */
-            this.inv_dt0 = 0.0;
-            /** dt * inv_dt0 */
-            this.dtRatio = 1;
-        }
-        TimeStep.prototype.reset = function (dt) {
-            if (this.dt > 0.0) {
-                this.inv_dt0 = this.inv_dt;
-            }
-            this.dt = dt;
-            this.inv_dt = dt == 0 ? 0 : 1 / dt;
-            this.dtRatio = dt * this.inv_dt0;
-        };
-        return TimeStep;
-    }());
-    // reuse
-    var s_subStep = new TimeStep();
-    /**
-     * Contact impulses for reporting. Impulses are used instead of forces because
-     * sub-step forces may approach infinity for rigid body collisions. These match
-     * up one-to-one with the contact points in Manifold.
-     */
-    var ContactImpulse = /** @class */ (function () {
-        function ContactImpulse(contact) {
-            this.contact = contact;
-            this.normals = [];
-            this.tangents = [];
-        }
-        Object.defineProperty(ContactImpulse.prototype, "normalImpulses", {
-            get: function () {
-                var contact = this.contact;
-                var normals = this.normals;
-                normals.length = 0;
-                for (var p = 0; p < contact.v_points.length; ++p) {
-                    normals.push(contact.v_points[p].normalImpulse);
-                }
-                return normals;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(ContactImpulse.prototype, "tangentImpulses", {
-            get: function () {
-                var contact = this.contact;
-                var tangents = this.tangents;
-                tangents.length = 0;
-                for (var p = 0; p < contact.v_points.length; ++p) {
-                    tangents.push(contact.v_points[p].tangentImpulse);
-                }
-                return tangents;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return ContactImpulse;
-    }());
-    /**
-     * Finds and solves islands. An island is a connected subset of the world.
-     */
-    var Solver = /** @class */ (function () {
-        function Solver(world) {
-            this.m_world = world;
-            this.m_stack = [];
-            this.m_bodies = [];
-            this.m_contacts = [];
-            this.m_joints = [];
-        }
-        Solver.prototype.clear = function () {
-            this.m_stack.length = 0;
-            this.m_bodies.length = 0;
-            this.m_contacts.length = 0;
-            this.m_joints.length = 0;
-        };
-        Solver.prototype.addBody = function (body) {
-            this.m_bodies.push(body);
-            // why?
-            // body.c_position.c.setZero();
-            // body.c_position.a = 0;
-            // body.c_velocity.v.setZero();
-            // body.c_velocity.w = 0;
-        };
-        Solver.prototype.addContact = function (contact) {
-            this.m_contacts.push(contact);
-        };
-        Solver.prototype.addJoint = function (joint) {
-            this.m_joints.push(joint);
-        };
-        Solver.prototype.solveWorld = function (step) {
-            var world = this.m_world;
-            // Clear all the island flags.
-            for (var b = world.m_bodyList; b; b = b.m_next) {
-                b.m_islandFlag = false;
-            }
-            for (var c = world.m_contactList; c; c = c.m_next) {
-                c.m_islandFlag = false;
-            }
-            for (var j = world.m_jointList; j; j = j.m_next) {
-                j.m_islandFlag = false;
-            }
-            // Build and simulate all awake islands.
-            var stack = this.m_stack;
-            for (var seed = world.m_bodyList; seed; seed = seed.m_next) {
-                if (seed.m_islandFlag) {
-                    continue;
-                }
-                if (seed.isAwake() == false || seed.isActive() == false) {
-                    continue;
-                }
-                // The seed can be dynamic or kinematic.
-                if (seed.isStatic()) {
-                    continue;
-                }
-                // Reset island and stack.
-                this.clear();
-                stack.push(seed);
-                seed.m_islandFlag = true;
-                // Perform a depth first search (DFS) on the constraint graph.
-                while (stack.length > 0) {
-                    // Grab the next body off the stack and add it to the island.
-                    var b = stack.pop();
-                    this.addBody(b);
-                    // Make sure the body is awake.
-                    b.setAwake(true);
-                    // To keep islands as small as possible, we don't
-                    // propagate islands across static bodies.
-                    if (b.isStatic()) {
-                        continue;
-                    }
-                    // Search all contacts connected to this body.
-                    for (var ce = b.m_contactList; ce; ce = ce.next) {
-                        var contact = ce.contact;
-                        // Has this contact already been added to an island?
-                        if (contact.m_islandFlag) {
-                            continue;
-                        }
-                        // Is this contact solid and touching?
-                        if (contact.isEnabled() == false || contact.isTouching() == false) {
-                            continue;
-                        }
-                        // Skip sensors.
-                        var sensorA = contact.m_fixtureA.m_isSensor;
-                        var sensorB = contact.m_fixtureB.m_isSensor;
-                        if (sensorA || sensorB) {
-                            continue;
-                        }
-                        this.addContact(contact);
-                        contact.m_islandFlag = true;
-                        var other = ce.other;
-                        // Was the other body already added to this island?
-                        if (other.m_islandFlag) {
-                            continue;
-                        }
-                        // _ASSERT && common.assert(stack.length < world.m_bodyCount);
-                        stack.push(other);
-                        other.m_islandFlag = true;
-                    }
-                    // Search all joints connect to this body.
-                    for (var je = b.m_jointList; je; je = je.next) {
-                        if (je.joint.m_islandFlag == true) {
-                            continue;
-                        }
-                        var other = je.other;
-                        // Don't simulate joints connected to inactive bodies.
-                        if (other.isActive() == false) {
-                            continue;
-                        }
-                        this.addJoint(je.joint);
-                        je.joint.m_islandFlag = true;
-                        if (other.m_islandFlag) {
-                            continue;
-                        }
-                        // _ASSERT && common.assert(stack.length < world.m_bodyCount);
-                        stack.push(other);
-                        other.m_islandFlag = true;
-                    }
-                }
-                this.solveIsland(step);
-                // Post solve cleanup.
-                for (var i = 0; i < this.m_bodies.length; ++i) {
-                    // Allow static bodies to participate in other islands.
-                    // TODO: are they added at all?
-                    var b = this.m_bodies[i];
-                    if (b.isStatic()) {
-                        b.m_islandFlag = false;
-                    }
-                }
-            }
-        };
-        Solver.prototype.solveIsland = function (step) {
-            // B2: Island Solve
-            var world = this.m_world;
-            var gravity = world.m_gravity;
-            var allowSleep = world.m_allowSleep;
-            var h = step.dt;
-            // Integrate velocities and apply damping. Initialize the body state.
-            for (var i = 0; i < this.m_bodies.length; ++i) {
-                var body = this.m_bodies[i];
-                var c = Vec2.clone(body.m_sweep.c);
-                var a = body.m_sweep.a;
-                var v = Vec2.clone(body.m_linearVelocity);
-                var w = body.m_angularVelocity;
-                // Store positions for continuous collision.
-                body.m_sweep.c0.setVec2(body.m_sweep.c);
-                body.m_sweep.a0 = body.m_sweep.a;
-                if (body.isDynamic()) {
-                    // Integrate velocities.
-                    v.addMul(h * body.m_gravityScale, gravity);
-                    v.addMul(h * body.m_invMass, body.m_force);
-                    w += h * body.m_invI * body.m_torque;
-                    /**
-                     * <pre>
-                     * Apply damping.
-                     * ODE: dv/dt + c * v = 0
-                     * Solution: v(t) = v0 * exp(-c * t)
-                     * Time step: v(t + dt) = v0 * exp(-c * (t + dt)) = v0 * exp(-c * t) * exp(-c * dt) = v * exp(-c * dt)
-                     * v2 = exp(-c * dt) * v1
-                     * Pade approximation:
-                     * v2 = v1 * 1 / (1 + c * dt)
-                     * </pre>
-                     */
-                    v.mul(1.0 / (1.0 + h * body.m_linearDamping));
-                    w *= 1.0 / (1.0 + h * body.m_angularDamping);
-                }
-                body.c_position.c = c;
-                body.c_position.a = a;
-                body.c_velocity.v = v;
-                body.c_velocity.w = w;
-            }
-            for (var i = 0; i < this.m_contacts.length; ++i) {
-                var contact = this.m_contacts[i];
-                contact.initConstraint(step);
-            }
-            for (var i = 0; i < this.m_contacts.length; ++i) {
-                var contact = this.m_contacts[i];
-                contact.initVelocityConstraint(step);
-            }
-            if (step.warmStarting) {
-                // Warm start.
-                for (var i = 0; i < this.m_contacts.length; ++i) {
-                    var contact = this.m_contacts[i];
-                    contact.warmStartConstraint(step);
-                }
-            }
-            for (var i = 0; i < this.m_joints.length; ++i) {
-                var joint = this.m_joints[i];
-                joint.initVelocityConstraints(step);
-            }
-            // Solve velocity constraints
-            for (var i = 0; i < step.velocityIterations; ++i) {
-                for (var j = 0; j < this.m_joints.length; ++j) {
-                    var joint = this.m_joints[j];
-                    joint.solveVelocityConstraints(step);
-                }
-                for (var j = 0; j < this.m_contacts.length; ++j) {
-                    var contact = this.m_contacts[j];
-                    contact.solveVelocityConstraint(step);
-                }
-            }
-            // Store impulses for warm starting
-            for (var i = 0; i < this.m_contacts.length; ++i) {
-                var contact = this.m_contacts[i];
-                contact.storeConstraintImpulses(step);
-            }
-            // Integrate positions
-            for (var i = 0; i < this.m_bodies.length; ++i) {
-                var body = this.m_bodies[i];
-                var c = Vec2.clone(body.c_position.c);
-                var a = body.c_position.a;
-                var v = Vec2.clone(body.c_velocity.v);
-                var w = body.c_velocity.w;
-                // Check for large velocities
-                var translation = Vec2.mulNumVec2(h, v);
-                if (Vec2.lengthSquared(translation) > Settings.maxTranslationSquared) {
-                    var ratio = Settings.maxTranslation / translation.length();
-                    v.mul(ratio);
-                }
-                var rotation = h * w;
-                if (rotation * rotation > Settings.maxRotationSquared) {
-                    var ratio = Settings.maxRotation / math$1.abs(rotation);
-                    w *= ratio;
-                }
-                // Integrate
-                c.addMul(h, v);
-                a += h * w;
-                body.c_position.c.setVec2(c);
-                body.c_position.a = a;
-                body.c_velocity.v.setVec2(v);
-                body.c_velocity.w = w;
-            }
-            // Solve position constraints
-            var positionSolved = false;
-            for (var i = 0; i < step.positionIterations; ++i) {
-                var minSeparation = 0.0;
-                for (var j = 0; j < this.m_contacts.length; ++j) {
-                    var contact = this.m_contacts[j];
-                    var separation = contact.solvePositionConstraint(step);
-                    minSeparation = math$1.min(minSeparation, separation);
-                }
-                // We can't expect minSpeparation >= -Settings.linearSlop because we don't
-                // push the separation above -Settings.linearSlop.
-                var contactsOkay = minSeparation >= -3.0 * Settings.linearSlop;
-                var jointsOkay = true;
-                for (var j = 0; j < this.m_joints.length; ++j) {
-                    var joint = this.m_joints[j];
-                    var jointOkay = joint.solvePositionConstraints(step);
-                    jointsOkay = jointsOkay && jointOkay;
-                }
-                if (contactsOkay && jointsOkay) {
-                    // Exit early if the position errors are small.
-                    positionSolved = true;
-                    break;
-                }
-            }
-            // Copy state buffers back to the bodies
-            for (var i = 0; i < this.m_bodies.length; ++i) {
-                var body = this.m_bodies[i];
-                body.m_sweep.c.setVec2(body.c_position.c);
-                body.m_sweep.a = body.c_position.a;
-                body.m_linearVelocity.setVec2(body.c_velocity.v);
-                body.m_angularVelocity = body.c_velocity.w;
-                body.synchronizeTransform();
-            }
-            this.postSolveIsland();
-            if (allowSleep) {
-                var minSleepTime = Infinity;
-                var linTolSqr = Settings.linearSleepToleranceSqr;
-                var angTolSqr = Settings.angularSleepToleranceSqr;
-                for (var i = 0; i < this.m_bodies.length; ++i) {
-                    var body = this.m_bodies[i];
-                    if (body.isStatic()) {
-                        continue;
-                    }
-                    if ((body.m_autoSleepFlag == false)
-                        || (body.m_angularVelocity * body.m_angularVelocity > angTolSqr)
-                        || (Vec2.lengthSquared(body.m_linearVelocity) > linTolSqr)) {
-                        body.m_sleepTime = 0.0;
-                        minSleepTime = 0.0;
-                    }
-                    else {
-                        body.m_sleepTime += h;
-                        minSleepTime = math$1.min(minSleepTime, body.m_sleepTime);
-                    }
-                }
-                if (minSleepTime >= Settings.timeToSleep && positionSolved) {
-                    for (var i = 0; i < this.m_bodies.length; ++i) {
-                        var body = this.m_bodies[i];
-                        body.setAwake(false);
-                    }
-                }
-            }
-        };
-        /** @internal */
-        Solver.prototype.printBodies = function (tag) {
-            for (var i = 0; i < this.m_bodies.length; ++i) {
-                var b = this.m_bodies[i];
-                common.debug(tag, b.c_position.a, b.c_position.c.x, b.c_position.c.y, b.c_velocity.w, b.c_velocity.v.x, b.c_velocity.v.y);
-            }
-        };
-        /**
-         * Find TOI contacts and solve them.
-         */
-        Solver.prototype.solveWorldTOI = function (step) {
-            var world = this.m_world;
-            if (world.m_stepComplete) {
-                for (var b = world.m_bodyList; b; b = b.m_next) {
-                    b.m_islandFlag = false;
-                    b.m_sweep.alpha0 = 0.0;
-                }
-                for (var c = world.m_contactList; c; c = c.m_next) {
-                    // Invalidate TOI
-                    c.m_toiFlag = false;
-                    c.m_islandFlag = false;
-                    c.m_toiCount = 0;
-                    c.m_toi = 1.0;
-                }
-            }
-            // Find TOI events and solve them.
-            while (true) {
-                // Find the first TOI.
-                var minContact = null; // Contact
-                var minAlpha = 1.0;
-                for (var c = world.m_contactList; c; c = c.m_next) {
-                    // Is this contact disabled?
-                    if (c.isEnabled() == false) {
-                        continue;
-                    }
-                    // Prevent excessive sub-stepping.
-                    if (c.m_toiCount > Settings.maxSubSteps) {
-                        continue;
-                    }
-                    var alpha = 1.0;
-                    if (c.m_toiFlag) {
-                        // This contact has a valid cached TOI.
-                        alpha = c.m_toi;
-                    }
-                    else {
-                        var fA_1 = c.getFixtureA();
-                        var fB_1 = c.getFixtureB();
-                        // Is there a sensor?
-                        if (fA_1.isSensor() || fB_1.isSensor()) {
-                            continue;
-                        }
-                        var bA_1 = fA_1.getBody();
-                        var bB_1 = fB_1.getBody();
-                        var activeA = bA_1.isAwake() && !bA_1.isStatic();
-                        var activeB = bB_1.isAwake() && !bB_1.isStatic();
-                        // Is at least one body active (awake and dynamic or kinematic)?
-                        if (activeA == false && activeB == false) {
-                            continue;
-                        }
-                        var collideA = bA_1.isBullet() || !bA_1.isDynamic();
-                        var collideB = bB_1.isBullet() || !bB_1.isDynamic();
-                        // Are these two non-bullet dynamic bodies?
-                        if (collideA == false && collideB == false) {
-                            continue;
-                        }
-                        // Compute the TOI for this contact.
-                        // Put the sweeps onto the same time interval.
-                        var alpha0 = bA_1.m_sweep.alpha0;
-                        if (bA_1.m_sweep.alpha0 < bB_1.m_sweep.alpha0) {
-                            alpha0 = bB_1.m_sweep.alpha0;
-                            bA_1.m_sweep.advance(alpha0);
-                        }
-                        else if (bB_1.m_sweep.alpha0 < bA_1.m_sweep.alpha0) {
-                            alpha0 = bA_1.m_sweep.alpha0;
-                            bB_1.m_sweep.advance(alpha0);
-                        }
-                        var indexA = c.getChildIndexA();
-                        var indexB = c.getChildIndexB();
-                        bA_1.m_sweep;
-                        bB_1.m_sweep;
-                        // Compute the time of impact in interval [0, minTOI]
-                        var input = new TOIInput(); // TODO: reuse
-                        input.proxyA.set(fA_1.getShape(), indexA);
-                        input.proxyB.set(fB_1.getShape(), indexB);
-                        input.sweepA.set(bA_1.m_sweep);
-                        input.sweepB.set(bB_1.m_sweep);
-                        input.tMax = 1.0;
-                        var output = new TOIOutput(); // TODO: reuse
-                        TimeOfImpact(output, input);
-                        // Beta is the fraction of the remaining portion of the [time?].
-                        var beta = output.t;
-                        if (output.state == TOIOutputState.e_touching) {
-                            alpha = math$1.min(alpha0 + (1.0 - alpha0) * beta, 1.0);
-                        }
-                        else {
-                            alpha = 1.0;
-                        }
-                        c.m_toi = alpha;
-                        c.m_toiFlag = true;
-                    }
-                    if (alpha < minAlpha) {
-                        // This is the minimum TOI found so far.
-                        minContact = c;
-                        minAlpha = alpha;
-                    }
-                }
-                if (minContact == null || 1.0 - 10.0 * math$1.EPSILON < minAlpha) {
-                    // No more TOI events. Done!
-                    world.m_stepComplete = true;
-                    break;
-                }
-                // Advance the bodies to the TOI.
-                var fA = minContact.getFixtureA();
-                var fB = minContact.getFixtureB();
-                var bA = fA.getBody();
-                var bB = fB.getBody();
-                var backup1 = bA.m_sweep.clone();
-                var backup2 = bB.m_sweep.clone();
-                bA.advance(minAlpha);
-                bB.advance(minAlpha);
-                // The TOI contact likely has some new contact points.
-                minContact.update(world);
-                minContact.m_toiFlag = false;
-                ++minContact.m_toiCount;
-                // Is the contact solid?
-                if (minContact.isEnabled() == false || minContact.isTouching() == false) {
-                    // Restore the sweeps.
-                    minContact.setEnabled(false);
-                    bA.m_sweep.set(backup1);
-                    bB.m_sweep.set(backup2);
-                    bA.synchronizeTransform();
-                    bB.synchronizeTransform();
-                    continue;
-                }
-                bA.setAwake(true);
-                bB.setAwake(true);
-                // Build the island
-                this.clear();
-                this.addBody(bA);
-                this.addBody(bB);
-                this.addContact(minContact);
-                bA.m_islandFlag = true;
-                bB.m_islandFlag = true;
-                minContact.m_islandFlag = true;
-                // Get contacts on bodyA and bodyB.
-                var bodies = [bA, bB];
-                for (var i = 0; i < bodies.length; ++i) {
-                    var body = bodies[i];
-                    if (body.isDynamic()) {
-                        for (var ce = body.m_contactList; ce; ce = ce.next) {
-                            // if (this.m_bodyCount == this.m_bodyCapacity) { break; }
-                            // if (this.m_contactCount == this.m_contactCapacity) { break; }
-                            var contact = ce.contact;
-                            // Has this contact already been added to the island?
-                            if (contact.m_islandFlag) {
-                                continue;
-                            }
-                            // Only add if either is static, kinematic or bullet.
-                            var other = ce.other;
-                            if (other.isDynamic() && !body.isBullet() && !other.isBullet()) {
-                                continue;
-                            }
-                            // Skip sensors.
-                            var sensorA = contact.m_fixtureA.m_isSensor;
-                            var sensorB = contact.m_fixtureB.m_isSensor;
-                            if (sensorA || sensorB) {
-                                continue;
-                            }
-                            // Tentatively advance the body to the TOI.
-                            var backup = other.m_sweep.clone();
-                            if (other.m_islandFlag == false) {
-                                other.advance(minAlpha);
-                            }
-                            // Update the contact points
-                            contact.update(world);
-                            // Was the contact disabled by the user?
-                            // Are there contact points?
-                            if (contact.isEnabled() == false || contact.isTouching() == false) {
-                                other.m_sweep.set(backup);
-                                other.synchronizeTransform();
-                                continue;
-                            }
-                            // Add the contact to the island
-                            contact.m_islandFlag = true;
-                            this.addContact(contact);
-                            // Has the other body already been added to the island?
-                            if (other.m_islandFlag) {
-                                continue;
-                            }
-                            // Add the other body to the island.
-                            other.m_islandFlag = true;
-                            if (!other.isStatic()) {
-                                other.setAwake(true);
-                            }
-                            this.addBody(other);
-                        }
-                    }
-                }
-                s_subStep.reset((1.0 - minAlpha) * step.dt);
-                s_subStep.dtRatio = 1.0;
-                s_subStep.positionIterations = 20;
-                s_subStep.velocityIterations = step.velocityIterations;
-                s_subStep.warmStarting = false;
-                this.solveIslandTOI(s_subStep, bA, bB);
-                // Reset island flags and synchronize broad-phase proxies.
-                for (var i = 0; i < this.m_bodies.length; ++i) {
-                    var body = this.m_bodies[i];
-                    body.m_islandFlag = false;
-                    if (!body.isDynamic()) {
-                        continue;
-                    }
-                    body.synchronizeFixtures();
-                    // Invalidate all contact TOIs on this displaced body.
-                    for (var ce = body.m_contactList; ce; ce = ce.next) {
-                        ce.contact.m_toiFlag = false;
-                        ce.contact.m_islandFlag = false;
-                    }
-                }
-                // Commit fixture proxy movements to the broad-phase so that new contacts
-                // are created.
-                // Also, some contacts can be destroyed.
-                world.findNewContacts();
-                if (world.m_subStepping) {
-                    world.m_stepComplete = false;
-                    break;
-                }
-            }
-            var b, c; 
-        };
-        Solver.prototype.solveIslandTOI = function (subStep, toiA, toiB) {
-            this.m_world;
-            // Initialize the body state.
-            for (var i = 0; i < this.m_bodies.length; ++i) {
-                var body = this.m_bodies[i];
-                body.c_position.c.setVec2(body.m_sweep.c);
-                body.c_position.a = body.m_sweep.a;
-                body.c_velocity.v.setVec2(body.m_linearVelocity);
-                body.c_velocity.w = body.m_angularVelocity;
-            }
-            for (var i = 0; i < this.m_contacts.length; ++i) {
-                var contact = this.m_contacts[i];
-                contact.initConstraint(subStep);
-            }
-            // Solve position constraints.
-            for (var i = 0; i < subStep.positionIterations; ++i) {
-                var minSeparation = 0.0;
-                for (var j = 0; j < this.m_contacts.length; ++j) {
-                    var contact = this.m_contacts[j];
-                    var separation = contact.solvePositionConstraintTOI(subStep, toiA, toiB);
-                    minSeparation = math$1.min(minSeparation, separation);
-                }
-                // We can't expect minSpeparation >= -Settings.linearSlop because we don't
-                // push the separation above -Settings.linearSlop.
-                var contactsOkay = minSeparation >= -1.5 * Settings.linearSlop;
-                if (contactsOkay) {
-                    break;
-                }
-            }
-            var i, c; 
-            // Leap of faith to new safe state.
-            toiA.m_sweep.c0.setVec2(toiA.c_position.c);
-            toiA.m_sweep.a0 = toiA.c_position.a;
-            toiB.m_sweep.c0.setVec2(toiB.c_position.c);
-            toiB.m_sweep.a0 = toiB.c_position.a;
-            // No warm starting is needed for TOI events because warm
-            // starting impulses were applied in the discrete solver.
-            for (var i = 0; i < this.m_contacts.length; ++i) {
-                var contact = this.m_contacts[i];
-                contact.initVelocityConstraint(subStep);
-            }
-            // Solve velocity constraints.
-            for (var i = 0; i < subStep.velocityIterations; ++i) {
-                for (var j = 0; j < this.m_contacts.length; ++j) {
-                    var contact = this.m_contacts[j];
-                    contact.solveVelocityConstraint(subStep);
-                }
-            }
-            // Don't store the TOI contact forces for warm starting
-            // because they can be quite large.
-            var h = subStep.dt;
-            // Integrate positions
-            for (var i = 0; i < this.m_bodies.length; ++i) {
-                var body = this.m_bodies[i];
-                var c = Vec2.clone(body.c_position.c);
-                var a = body.c_position.a;
-                var v = Vec2.clone(body.c_velocity.v);
-                var w = body.c_velocity.w;
-                // Check for large velocities
-                var translation = Vec2.mulNumVec2(h, v);
-                if (Vec2.dot(translation, translation) > Settings.maxTranslationSquared) {
-                    var ratio = Settings.maxTranslation / translation.length();
-                    v.mul(ratio);
-                }
-                var rotation = h * w;
-                if (rotation * rotation > Settings.maxRotationSquared) {
-                    var ratio = Settings.maxRotation / math$1.abs(rotation);
-                    w *= ratio;
-                }
-                // Integrate
-                c.addMul(h, v);
-                a += h * w;
-                body.c_position.c = c;
-                body.c_position.a = a;
-                body.c_velocity.v = v;
-                body.c_velocity.w = w;
-                // Sync bodies
-                body.m_sweep.c = c;
-                body.m_sweep.a = a;
-                body.m_linearVelocity = v;
-                body.m_angularVelocity = w;
-                body.synchronizeTransform();
-            }
-            this.postSolveIsland();
-        };
-        /** @internal */
-        Solver.prototype.postSolveIsland = function () {
-            for (var c = 0; c < this.m_contacts.length; ++c) {
-                var contact = this.m_contacts[c];
-                this.m_world.postSolve(contact, contact.m_impulse);
-            }
-        };
-        return Solver;
-    }());
-
-    /*
-     * Planck.js
-     * The MIT License
-     * Copyright (c) 2021 Erin Catto, Ali Shakiba
-     *
-     * Permission is hereby granted, free of charge, to any person obtaining a copy
-     * of this software and associated documentation files (the "Software"), to deal
-     * in the Software without restriction, including without limitation the rights
-     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     * copies of the Software, and to permit persons to whom the Software is
-     * furnished to do so, subject to the following conditions:
-     *
-     * The above copyright notice and this permission notice shall be included in all
-     * copies or substantial portions of the Software.
-     *
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-     * SOFTWARE.
-     */
     var WorldDefDefault = {
         gravity: Vec2.zero(),
         allowSleep: true,
@@ -7157,68 +9834,10 @@
          * @param def World definition or gravity vector.
          */
         function World(def) {
-            var _this = this;
-            /** @internal */
-            this.s_step = new TimeStep(); // reuse
-            /**
-             * @internal
-             * Callback for broad-phase.
-             */
-            this.createContact = function (proxyA, proxyB) {
-                var fixtureA = proxyA.fixture;
-                var fixtureB = proxyB.fixture;
-                var indexA = proxyA.childIndex;
-                var indexB = proxyB.childIndex;
-                var bodyA = fixtureA.getBody();
-                var bodyB = fixtureB.getBody();
-                // Are the fixtures on the same body?
-                if (bodyA == bodyB) {
-                    return;
-                }
-                // TODO_ERIN use a hash table to remove a potential bottleneck when both
-                // bodies have a lot of contacts.
-                // Does a contact already exist?
-                var edge = bodyB.getContactList(); // ContactEdge
-                while (edge) {
-                    if (edge.other == bodyA) {
-                        var fA = edge.contact.getFixtureA();
-                        var fB = edge.contact.getFixtureB();
-                        var iA = edge.contact.getChildIndexA();
-                        var iB = edge.contact.getChildIndexB();
-                        if (fA == fixtureA && fB == fixtureB && iA == indexA && iB == indexB) {
-                            // A contact already exists.
-                            return;
-                        }
-                        if (fA == fixtureB && fB == fixtureA && iA == indexB && iB == indexA) {
-                            // A contact already exists.
-                            return;
-                        }
-                    }
-                    edge = edge.next;
-                }
-                if (bodyB.shouldCollide(bodyA) == false) {
-                    return;
-                }
-                if (fixtureB.shouldCollide(fixtureA) == false) {
-                    return;
-                }
-                // Call the factory.
-                var contact = Contact.create(fixtureA, indexA, fixtureB, indexB);
-                if (contact == null) {
-                    return;
-                }
-                // Insert into the world.
-                contact.m_prev = null;
-                if (_this.m_contactList != null) {
-                    contact.m_next = _this.m_contactList;
-                    _this.m_contactList.m_prev = contact;
-                }
-                _this.m_contactList = contact;
-                ++_this.m_contactCount;
-            };
             if (!(this instanceof World)) {
                 return new World(def);
             }
+            this.s_step = new TimeStep();
             if (def && Vec2.isValid(def)) {
                 def = { gravity: def };
             }
@@ -7794,7 +10413,64 @@
          * Call this method to find new contacts.
          */
         World.prototype.findNewContacts = function () {
-            this.m_broadPhase.updatePairs(this.createContact);
+            var _this = this;
+            this.m_broadPhase.updatePairs(function (proxyA, proxyB) { return _this.createContact(proxyA, proxyB); });
+        };
+        /**
+         * @internal
+         * Callback for broad-phase.
+         */
+        World.prototype.createContact = function (proxyA, proxyB) {
+            var fixtureA = proxyA.fixture;
+            var fixtureB = proxyB.fixture;
+            var indexA = proxyA.childIndex;
+            var indexB = proxyB.childIndex;
+            var bodyA = fixtureA.getBody();
+            var bodyB = fixtureB.getBody();
+            // Are the fixtures on the same body?
+            if (bodyA == bodyB) {
+                return;
+            }
+            // TODO_ERIN use a hash table to remove a potential bottleneck when both
+            // bodies have a lot of contacts.
+            // Does a contact already exist?
+            var edge = bodyB.getContactList(); // ContactEdge
+            while (edge) {
+                if (edge.other == bodyA) {
+                    var fA = edge.contact.getFixtureA();
+                    var fB = edge.contact.getFixtureB();
+                    var iA = edge.contact.getChildIndexA();
+                    var iB = edge.contact.getChildIndexB();
+                    if (fA == fixtureA && fB == fixtureB && iA == indexA && iB == indexB) {
+                        // A contact already exists.
+                        return;
+                    }
+                    if (fA == fixtureB && fB == fixtureA && iA == indexB && iB == indexA) {
+                        // A contact already exists.
+                        return;
+                    }
+                }
+                edge = edge.next;
+            }
+            if (bodyB.shouldCollide(bodyA) == false) {
+                return;
+            }
+            if (fixtureB.shouldCollide(fixtureA) == false) {
+                return;
+            }
+            // Call the factory.
+            var contact = Contact.create(fixtureA, indexA, fixtureB, indexB);
+            if (contact == null) {
+                return;
+            }
+            // Insert into the world.
+            contact.m_prev = null;
+            if (this.m_contactList != null) {
+                contact.m_next = this.m_contactList;
+                this.m_contactList.m_prev = contact;
+            }
+            this.m_contactList = contact;
+            ++this.m_contactCount;
         };
         /**
          * @internal
@@ -8022,7 +10698,7 @@
             if (obj === null || typeof obj === 'undefined') {
                 return false;
             }
-            return math$1.isFinite(obj.x) && math$1.isFinite(obj.y) && math$1.isFinite(obj.z);
+            return extended.isFinite(obj.x) && extended.isFinite(obj.y) && extended.isFinite(obj.z);
         };
         Vec3.assert = function (o) {
             return;
@@ -8763,7 +11439,7 @@
                 this._setAsBox(1.0, 1.0);
                 return;
             }
-            var n = math$1.min(vertices.length, Settings.maxPolygonVertices);
+            var n = extended.min(vertices.length, Settings.maxPolygonVertices);
             // Perform welding and copy vertices into local buffer.
             var ps = []; // [Settings.maxPolygonVertices];
             for (var i = 0; i < n; ++i) {
@@ -8962,10 +11638,10 @@
             var maxY = -Infinity;
             for (var i = 0; i < this.m_count; ++i) {
                 var v = Transform.mulVec2(xf, this.m_vertices[i]);
-                minX = math$1.min(minX, v.x);
-                maxX = math$1.max(maxX, v.x);
-                minY = math$1.min(minY, v.y);
-                maxY = math$1.max(maxY, v.y);
+                minX = extended.min(minX, v.x);
+                maxX = extended.max(maxX, v.x);
+                minY = extended.min(minY, v.y);
+                maxY = extended.max(maxY, v.y);
             }
             aabb.lowerBound.setNum(minX, minY);
             aabb.upperBound.setNum(maxX, maxY);
@@ -9239,11 +11915,11 @@
             var rr = Vec2.dot(r, r);
             var sigma = c * c - rr * b;
             // Check for negative discriminant and short segment.
-            if (sigma < 0.0 || rr < math$1.EPSILON) {
+            if (sigma < 0.0 || rr < extended.EPSILON) {
                 return false;
             }
             // Find the point of intersection of the line with the circle.
-            var a = -(c + math$1.sqrt(sigma));
+            var a = -(c + extended.sqrt(sigma));
             // Is the intersection point on the segment?
             if (0.0 <= a && a <= input.maxFraction * rr) {
                 a /= rr;
@@ -9275,7 +11951,7 @@
          * @param density The density in kilograms per meter squared.
          */
         CircleShape.prototype.computeMass = function (massData, density) {
-            massData.mass = density * math$1.PI * this.m_radius * this.m_radius;
+            massData.mass = density * extended.PI * this.m_radius * this.m_radius;
             massData.center = this.m_p;
             // inertia about the local origin
             massData.I = massData.mass
@@ -9346,7 +12022,7 @@
             // Solver shared
             _this.m_localAnchorA = Vec2.clone(anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.zero());
             _this.m_localAnchorB = Vec2.clone(anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.zero());
-            _this.m_length = math$1.isFinite(def.length) ? def.length :
+            _this.m_length = extended.isFinite(def.length) ? def.length :
                 Vec2.distance(bodyA.getWorldPoint(_this.m_localAnchorA), bodyB.getWorldPoint(_this.m_localAnchorB));
             _this.m_frequencyHz = def.frequencyHz;
             _this.m_dampingRatio = def.dampingRatio;
@@ -9512,7 +12188,7 @@
             if (this.m_frequencyHz > 0.0) {
                 var C = length - this.m_length;
                 // Frequency
-                var omega = 2.0 * math$1.PI * this.m_frequencyHz;
+                var omega = 2.0 * extended.PI * this.m_frequencyHz;
                 // Damping coefficient
                 var d = 2.0 * this.m_mass * this.m_dampingRatio * omega;
                 // Spring stiffness
@@ -9587,7 +12263,7 @@
             var u = Vec2.sub(Vec2.add(cB, rB), Vec2.add(cA, rA));
             var length = u.normalize();
             var C = length - this.m_length;
-            C = math$1
+            C = extended
                 .clamp(C, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
             var impulse = -this.m_mass * C;
             var P = Vec2.mulNumVec2(impulse, u);
@@ -9599,7 +12275,7 @@
             this.m_bodyA.c_position.a = aA;
             this.m_bodyB.c_position.c.setVec2(cB);
             this.m_bodyB.c_position.a = aB;
-            return math$1.abs(C) < Settings.linearSlop;
+            return extended.abs(C) < Settings.linearSlop;
         };
         DistanceJoint.TYPE = 'distance-joint';
         return DistanceJoint;
@@ -9842,7 +12518,7 @@
                 var impulse = -this.m_angularMass * Cdot; // float
                 var oldImpulse = this.m_angularImpulse; // float
                 var maxImpulse = h * this.m_maxTorque; // float
-                this.m_angularImpulse = math$1.clamp(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
+                this.m_angularImpulse = extended.clamp(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = this.m_angularImpulse - oldImpulse;
                 wA -= iA * impulse;
                 wB += iB * impulse;
@@ -10115,7 +12791,7 @@
             _this.m_type = RevoluteJoint.TYPE;
             _this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
             _this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
-            _this.m_referenceAngle = math$1.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
+            _this.m_referenceAngle = extended.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
             _this.m_impulse = new Vec3();
             _this.m_motorImpulse = 0.0;
             _this.m_lowerAngle = def.lowerAngle;
@@ -10373,7 +13049,7 @@
             }
             if (this.m_enableLimit && fixedRotation == false) {
                 var jointAngle = aB - aA - this.m_referenceAngle; // float
-                if (math$1.abs(this.m_upperAngle - this.m_lowerAngle) < 2.0 * Settings.angularSlop) {
+                if (extended.abs(this.m_upperAngle - this.m_lowerAngle) < 2.0 * Settings.angularSlop) {
                     this.m_limitState = equalLimits$1;
                 }
                 else if (jointAngle <= this.m_lowerAngle) {
@@ -10432,7 +13108,7 @@
                 var impulse = -this.m_motorMass * Cdot; // float
                 var oldImpulse = this.m_motorImpulse; // float
                 var maxImpulse = step.dt * this.m_maxMotorTorque; // float
-                this.m_motorImpulse = math$1.clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
+                this.m_motorImpulse = extended.clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = this.m_motorImpulse - oldImpulse;
                 wA -= iA * impulse;
                 wB += iB * impulse;
@@ -10525,22 +13201,22 @@
                 var limitImpulse = 0.0; // float
                 if (this.m_limitState == equalLimits$1) {
                     // Prevent large angular corrections
-                    var C = math$1.clamp(angle - this.m_lowerAngle, -Settings.maxAngularCorrection, Settings.maxAngularCorrection); // float
+                    var C = extended.clamp(angle - this.m_lowerAngle, -Settings.maxAngularCorrection, Settings.maxAngularCorrection); // float
                     limitImpulse = -this.m_motorMass * C;
-                    angularError = math$1.abs(C);
+                    angularError = extended.abs(C);
                 }
                 else if (this.m_limitState == atLowerLimit$1) {
                     var C = angle - this.m_lowerAngle; // float
                     angularError = -C;
                     // Prevent large angular corrections and allow some slop.
-                    C = math$1.clamp(C + Settings.angularSlop, -Settings.maxAngularCorrection, 0.0);
+                    C = extended.clamp(C + Settings.angularSlop, -Settings.maxAngularCorrection, 0.0);
                     limitImpulse = -this.m_motorMass * C;
                 }
                 else if (this.m_limitState == atUpperLimit$2) {
                     var C = angle - this.m_upperAngle; // float
                     angularError = C;
                     // Prevent large angular corrections and allow some slop.
-                    C = math$1.clamp(C - Settings.angularSlop, 0.0, Settings.maxAngularCorrection);
+                    C = extended.clamp(C - Settings.angularSlop, 0.0, Settings.maxAngularCorrection);
                     limitImpulse = -this.m_motorMass * C;
                 }
                 aA -= this.m_invIA * limitImpulse;
@@ -10641,7 +13317,7 @@
             _this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0));
             _this.m_localXAxisA.normalize();
             _this.m_localYAxisA = Vec2.crossNumVec2(1.0, _this.m_localXAxisA);
-            _this.m_referenceAngle = math$1.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
+            _this.m_referenceAngle = extended.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
             _this.m_impulse = new Vec3();
             _this.m_motorMass = 0.0;
             _this.m_motorImpulse = 0.0;
@@ -10999,7 +13675,7 @@
             // Compute motor and limit terms.
             if (this.m_enableLimit) {
                 var jointTranslation = Vec2.dot(this.m_axis, d); // float
-                if (math$1.abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * Settings.linearSlop) {
+                if (extended.abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * Settings.linearSlop) {
                     this.m_limitState = equalLimits;
                 }
                 else if (jointTranslation <= this.m_lowerTranslation) {
@@ -11066,7 +13742,7 @@
                 var impulse = this.m_motorMass * (this.m_motorSpeed - Cdot);
                 var oldImpulse = this.m_motorImpulse;
                 var maxImpulse = step.dt * this.m_maxMotorForce;
-                this.m_motorImpulse = math$1.clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
+                this.m_motorImpulse = extended.clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = this.m_motorImpulse - oldImpulse;
                 var P = Vec2.mulNumVec2(impulse, this.m_axis);
                 var LA = impulse * this.m_a1;
@@ -11090,10 +13766,10 @@
                 var df = this.m_K.solve33(Vec3.neg(Cdot)); // Vec3
                 this.m_impulse.add(df);
                 if (this.m_limitState == atLowerLimit) {
-                    this.m_impulse.z = math$1.max(this.m_impulse.z, 0.0);
+                    this.m_impulse.z = extended.max(this.m_impulse.z, 0.0);
                 }
                 else if (this.m_limitState == atUpperLimit$1) {
-                    this.m_impulse.z = math$1.min(this.m_impulse.z, 0.0);
+                    this.m_impulse.z = extended.min(this.m_impulse.z, 0.0);
                 }
                 // f2(1:2) = invK(1:2,1:2) * (-Cdot(1:2) - K(1:2,3) * (f2(3) - f1(3))) +
                 // f1(1:2)
@@ -11156,31 +13832,31 @@
             var C1 = Vec2.zero(); // Vec2
             C1.x = Vec2.dot(perp, d);
             C1.y = aB - aA - this.m_referenceAngle;
-            var linearError = math$1.abs(C1.x); // float
-            var angularError = math$1.abs(C1.y); // float
+            var linearError = extended.abs(C1.x); // float
+            var angularError = extended.abs(C1.y); // float
             var linearSlop = Settings.linearSlop;
             var maxLinearCorrection = Settings.maxLinearCorrection;
             var active = false; // bool
             var C2 = 0.0; // float
             if (this.m_enableLimit) {
                 var translation = Vec2.dot(axis, d); // float
-                if (math$1.abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * linearSlop) {
+                if (extended.abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * linearSlop) {
                     // Prevent large angular corrections
-                    C2 = math$1.clamp(translation, -maxLinearCorrection, maxLinearCorrection);
-                    linearError = math$1.max(linearError, math$1.abs(translation));
+                    C2 = extended.clamp(translation, -maxLinearCorrection, maxLinearCorrection);
+                    linearError = extended.max(linearError, extended.abs(translation));
                     active = true;
                 }
                 else if (translation <= this.m_lowerTranslation) {
                     // Prevent large linear corrections and allow some slop.
-                    C2 = math$1.clamp(translation - this.m_lowerTranslation + linearSlop, -maxLinearCorrection, 0.0);
-                    linearError = math$1
+                    C2 = extended.clamp(translation - this.m_lowerTranslation + linearSlop, -maxLinearCorrection, 0.0);
+                    linearError = extended
                         .max(linearError, this.m_lowerTranslation - translation);
                     active = true;
                 }
                 else if (translation >= this.m_upperTranslation) {
                     // Prevent large linear corrections and allow some slop.
-                    C2 = math$1.clamp(translation - this.m_upperTranslation - linearSlop, 0.0, maxLinearCorrection);
-                    linearError = math$1
+                    C2 = extended.clamp(translation - this.m_upperTranslation - linearSlop, 0.0, maxLinearCorrection);
+                    linearError = extended
                         .max(linearError, translation - this.m_upperTranslation);
                     active = true;
                 }
@@ -11293,7 +13969,7 @@
             _this.m_type = GearJoint.TYPE;
             _this.m_joint1 = joint1 ? joint1 : def.joint1;
             _this.m_joint2 = joint2 ? joint2 : def.joint2;
-            _this.m_ratio = math$1.isFinite(ratio) ? ratio : def.ratio;
+            _this.m_ratio = extended.isFinite(ratio) ? ratio : def.ratio;
             _this.m_type1 = _this.m_joint1.getType();
             _this.m_type2 = _this.m_joint2.getType();
             // joint1 connects body A to body C
@@ -11702,8 +14378,8 @@
             bodyA = _this.m_bodyA;
             bodyB = _this.m_bodyB;
             _this.m_type = MotorJoint.TYPE;
-            _this.m_linearOffset = math$1.isFinite(def.linearOffset) ? def.linearOffset : bodyA.getLocalPoint(bodyB.getPosition());
-            _this.m_angularOffset = math$1.isFinite(def.angularOffset) ? def.angularOffset : bodyB.getAngle() - bodyA.getAngle();
+            _this.m_linearOffset = extended.isFinite(def.linearOffset) ? def.linearOffset : bodyA.getLocalPoint(bodyB.getPosition());
+            _this.m_angularOffset = extended.isFinite(def.angularOffset) ? def.angularOffset : bodyB.getAngle() - bodyA.getAngle();
             _this.m_linearImpulse = Vec2.zero();
             _this.m_angularImpulse = 0.0;
             _this.m_maxForce = def.maxForce;
@@ -11915,7 +14591,7 @@
                 var impulse = -this.m_angularMass * Cdot;
                 var oldImpulse = this.m_angularImpulse;
                 var maxImpulse = h * this.m_maxTorque;
-                this.m_angularImpulse = math$1.clamp(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
+                this.m_angularImpulse = extended.clamp(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = this.m_angularImpulse - oldImpulse;
                 wA -= iA * impulse;
                 wB += iB * impulse;
@@ -12143,7 +14819,7 @@
             var qB = Rot.neo(aB);
             var mass = this.m_bodyB.getMass();
             // Frequency
-            var omega = 2.0 * math$1.PI * this.m_frequencyHz;
+            var omega = 2.0 * extended.PI * this.m_frequencyHz;
             // Damping coefficient
             var d = 2.0 * mass * this.m_dampingRatio * omega;
             // Spring stiffness
@@ -12272,9 +14948,9 @@
             _this.m_groundAnchorB = groundB ? groundB : def.groundAnchorB || Vec2.neo(1.0, 1.0);
             _this.m_localAnchorA = anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.neo(-1.0, 0.0);
             _this.m_localAnchorB = anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.neo(1.0, 0.0);
-            _this.m_lengthA = math$1.isFinite(def.lengthA) ? def.lengthA : Vec2.distance(anchorA, groundA);
-            _this.m_lengthB = math$1.isFinite(def.lengthB) ? def.lengthB : Vec2.distance(anchorB, groundB);
-            _this.m_ratio = math$1.isFinite(ratio) ? ratio : def.ratio;
+            _this.m_lengthA = extended.isFinite(def.lengthA) ? def.lengthA : Vec2.distance(anchorA, groundA);
+            _this.m_lengthB = extended.isFinite(def.lengthB) ? def.lengthB : Vec2.distance(anchorB, groundB);
+            _this.m_ratio = extended.isFinite(ratio) ? ratio : def.ratio;
             _this.m_constant = _this.m_lengthA + _this.m_ratio * _this.m_lengthB;
             _this.m_impulse = 0.0;
             return _this;
@@ -12518,7 +15194,7 @@
                 mass = 1.0 / mass;
             }
             var C = this.m_constant - lengthA - this.m_ratio * lengthB; // float
-            var linearError = math$1.abs(C); // float
+            var linearError = extended.abs(C); // float
             var impulse = -mass * C; // float
             var PA = Vec2.mulNumVec2(-impulse, uA); // Vec2
             var PB = Vec2.mulNumVec2(-this.m_ratio * impulse, uB); // Vec2
@@ -12754,7 +15430,7 @@
             }
             var impulse = -this.m_mass * Cdot; // float
             var oldImpulse = this.m_impulse; // float
-            this.m_impulse = math$1.min(0.0, this.m_impulse + impulse);
+            this.m_impulse = extended.min(0.0, this.m_impulse + impulse);
             impulse = this.m_impulse - oldImpulse;
             var P = Vec2.mulNumVec2(impulse, this.m_u); // Vec2
             vA.subMul(this.m_invMassA, P);
@@ -12783,7 +15459,7 @@
             u.subCombine(1, cA, 1, rA); // Vec2
             var length = u.normalize(); // float
             var C = length - this.m_maxLength; // float
-            C = math$1.clamp(C, 0.0, Settings.maxLinearCorrection);
+            C = extended.clamp(C, 0.0, Settings.maxLinearCorrection);
             var impulse = -this.m_mass * C; // float
             var P = Vec2.mulNumVec2(impulse, u); // Vec2
             cA.subMul(this.m_invMassA, P);
@@ -12846,7 +15522,7 @@
             _this.m_type = WeldJoint.TYPE;
             _this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
             _this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
-            _this.m_referenceAngle = math$1.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
+            _this.m_referenceAngle = extended.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
             _this.m_frequencyHz = def.frequencyHz;
             _this.m_dampingRatio = def.dampingRatio;
             _this.m_impulse = new Vec3();
@@ -13025,7 +15701,7 @@
                 var m = invM > 0.0 ? 1.0 / invM : 0.0; // float
                 var C = aB - aA - this.m_referenceAngle; // float
                 // Frequency
-                var omega = 2.0 * math$1.PI * this.m_frequencyHz; // float
+                var omega = 2.0 * extended.PI * this.m_frequencyHz; // float
                 // Damping coefficient
                 var d = 2.0 * m * this.m_dampingRatio * omega; // float
                 // Spring stiffness
@@ -13158,7 +15834,7 @@
                 C1.subCombine(1, cA, 1, rA);
                 var C2 = aB - aA - this.m_referenceAngle; // float
                 positionError = C1.length();
-                angularError = math$1.abs(C2);
+                angularError = extended.abs(C2);
                 var C = new Vec3(C1.x, C1.y, C2);
                 var impulse = new Vec3();
                 if (K.ez.z > 0.0) {
@@ -13495,7 +16171,7 @@
                     this.m_springMass = 1.0 / invMass;
                     var C = Vec2.dot(d, this.m_ax); // float
                     // Frequency
-                    var omega = 2.0 * math$1.PI * this.m_frequencyHz; // float
+                    var omega = 2.0 * extended.PI * this.m_frequencyHz; // float
                     // Damping coefficient
                     var damp = 2.0 * this.m_springMass * this.m_dampingRatio * omega; // float
                     // Spring stiffness
@@ -13580,7 +16256,7 @@
                 var impulse = -this.m_motorMass * Cdot; // float
                 var oldImpulse = this.m_motorImpulse; // float
                 var maxImpulse = step.dt * this.m_maxMotorTorque; // float
-                this.m_motorImpulse = math$1.clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
+                this.m_motorImpulse = extended.clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = this.m_motorImpulse - oldImpulse;
                 wA -= iA * impulse;
                 wB += iB * impulse;
@@ -13643,7 +16319,7 @@
             this.m_bodyA.c_position.a = aA;
             this.m_bodyB.c_position.c.setVec2(cB);
             this.m_bodyB.c_position.a = aB;
-            return math$1.abs(C) <= Settings.linearSlop;
+            return extended.abs(C) <= Settings.linearSlop;
         };
         WheelJoint.TYPE = 'wheel-joint';
         return WheelJoint;
@@ -13667,8 +16343,7 @@
             Shape: Shape,
         };
         // This is used by restore to deserialize objects and refs
-        var restoreTypes = __assign({ Vec2: Vec2,
-            Vec3: Vec3 }, refTypes);
+        var restoreTypes = __assign({ Vec2: Vec2, Vec3: Vec3 }, refTypes);
         var CLASS_BY_TYPE_PROP = (_a = {},
             _a[Body.STATIC] = Body,
             _a[Body.DYNAMIC] = Body,
@@ -13839,16 +16514,16 @@
         if (distSqr > radius * radius) {
             return;
         }
-        manifold.type = ManifoldType.e_circles;
+        manifold.type = exports.ManifoldType.e_circles;
         manifold.localPoint.setVec2(circleA.m_p);
         manifold.localNormal.setZero();
         manifold.pointCount = 1;
         manifold.points[0].localPoint.setVec2(circleB.m_p);
         // manifold.points[0].id.key = 0;
         manifold.points[0].id.cf.indexA = 0;
-        manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+        manifold.points[0].id.cf.typeA = exports.ContactFeatureType.e_vertex;
         manifold.points[0].id.cf.indexB = 0;
-        manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+        manifold.points[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
     }
 
     /*
@@ -13921,16 +16596,16 @@
                     return;
                 }
             }
-            manifold.type = ManifoldType.e_circles;
+            manifold.type = exports.ManifoldType.e_circles;
             manifold.localNormal.setZero();
             manifold.localPoint.setVec2(P_1);
             manifold.pointCount = 1;
             manifold.points[0].localPoint.setVec2(circleB.m_p);
             // manifold.points[0].id.key = 0;
             manifold.points[0].id.cf.indexA = 0;
-            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.typeA = exports.ContactFeatureType.e_vertex;
             manifold.points[0].id.cf.indexB = 0;
-            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
             return;
         }
         // Region B
@@ -13952,16 +16627,16 @@
                     return;
                 }
             }
-            manifold.type = ManifoldType.e_circles;
+            manifold.type = exports.ManifoldType.e_circles;
             manifold.localNormal.setZero();
             manifold.localPoint.setVec2(P_2);
             manifold.pointCount = 1;
             manifold.points[0].localPoint.setVec2(circleB.m_p);
             // manifold.points[0].id.key = 0;
             manifold.points[0].id.cf.indexA = 1;
-            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.typeA = exports.ContactFeatureType.e_vertex;
             manifold.points[0].id.cf.indexB = 0;
-            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
             return;
         }
         // Region AB
@@ -13977,16 +16652,16 @@
             n.setNum(-n.x, -n.y);
         }
         n.normalize();
-        manifold.type = ManifoldType.e_faceA;
+        manifold.type = exports.ManifoldType.e_faceA;
         manifold.localNormal = n;
         manifold.localPoint.setVec2(A);
         manifold.pointCount = 1;
         manifold.points[0].localPoint.setVec2(circleB.m_p);
         // manifold.points[0].id.key = 0;
         manifold.points[0].id.cf.indexA = 0;
-        manifold.points[0].id.cf.typeA = ContactFeatureType.e_face;
+        manifold.points[0].id.cf.typeA = exports.ContactFeatureType.e_face;
         manifold.points[0].id.cf.indexB = 0;
-        manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+        manifold.points[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
     }
 
     /*
@@ -14073,13 +16748,13 @@
         c[0].v = Transform.mulVec2(xf2, vertices2[i1]);
         c[0].id.cf.indexA = edge1;
         c[0].id.cf.indexB = i1;
-        c[0].id.cf.typeA = ContactFeatureType.e_face;
-        c[0].id.cf.typeB = ContactFeatureType.e_vertex;
+        c[0].id.cf.typeA = exports.ContactFeatureType.e_face;
+        c[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
         c[1].v = Transform.mulVec2(xf2, vertices2[i2]);
         c[1].id.cf.indexA = edge1;
         c[1].id.cf.indexB = i2;
-        c[1].id.cf.typeA = ContactFeatureType.e_face;
-        c[1].id.cf.typeB = ContactFeatureType.e_vertex;
+        c[1].id.cf.typeA = exports.ContactFeatureType.e_face;
+        c[1].id.cf.typeB = exports.ContactFeatureType.e_vertex;
     }
     var maxSeparation = {
         maxSeparation: 0,
@@ -14121,7 +16796,7 @@
             xf1 = xfB;
             xf2 = xfA;
             edge1 = edgeB;
-            manifold.type = ManifoldType.e_faceB;
+            manifold.type = exports.ManifoldType.e_faceB;
             flip = 1;
         }
         else {
@@ -14130,7 +16805,7 @@
             xf1 = xfA;
             xf2 = xfB;
             edge1 = edgeA;
-            manifold.type = ManifoldType.e_faceA;
+            manifold.type = exports.ManifoldType.e_faceA;
             flip = 0;
         }
         var incidentEdge = [new ClipVertex(), new ClipVertex()];
@@ -14252,17 +16927,17 @@
         var v1 = vertices[vertIndex1];
         var v2 = vertices[vertIndex2];
         // If the center is inside the polygon ...
-        if (separation < math$1.EPSILON) {
+        if (separation < extended.EPSILON) {
             manifold.pointCount = 1;
-            manifold.type = ManifoldType.e_faceA;
+            manifold.type = exports.ManifoldType.e_faceA;
             manifold.localNormal.setVec2(normals[normalIndex]);
             manifold.localPoint.setCombine(0.5, v1, 0.5, v2);
             manifold.points[0].localPoint = circleB.m_p;
             // manifold.points[0].id.key = 0;
             manifold.points[0].id.cf.indexA = 0;
-            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.typeA = exports.ContactFeatureType.e_vertex;
             manifold.points[0].id.cf.indexB = 0;
-            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
             return;
         }
         // Compute barycentric coordinates
@@ -14273,32 +16948,32 @@
                 return;
             }
             manifold.pointCount = 1;
-            manifold.type = ManifoldType.e_faceA;
+            manifold.type = exports.ManifoldType.e_faceA;
             manifold.localNormal.setCombine(1, cLocal, -1, v1);
             manifold.localNormal.normalize();
             manifold.localPoint = v1;
             manifold.points[0].localPoint.setVec2(circleB.m_p);
             // manifold.points[0].id.key = 0;
             manifold.points[0].id.cf.indexA = 0;
-            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.typeA = exports.ContactFeatureType.e_vertex;
             manifold.points[0].id.cf.indexB = 0;
-            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
         }
         else if (u2 <= 0.0) {
             if (Vec2.distanceSquared(cLocal, v2) > radius * radius) {
                 return;
             }
             manifold.pointCount = 1;
-            manifold.type = ManifoldType.e_faceA;
+            manifold.type = exports.ManifoldType.e_faceA;
             manifold.localNormal.setCombine(1, cLocal, -1, v2);
             manifold.localNormal.normalize();
             manifold.localPoint.setVec2(v2);
             manifold.points[0].localPoint.setVec2(circleB.m_p);
             // manifold.points[0].id.key = 0;
             manifold.points[0].id.cf.indexA = 0;
-            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.typeA = exports.ContactFeatureType.e_vertex;
             manifold.points[0].id.cf.indexB = 0;
-            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
         }
         else {
             var faceCenter = Vec2.mid(v1, v2);
@@ -14307,15 +16982,15 @@
                 return;
             }
             manifold.pointCount = 1;
-            manifold.type = ManifoldType.e_faceA;
+            manifold.type = exports.ManifoldType.e_faceA;
             manifold.localNormal.setVec2(normals[vertIndex1]);
             manifold.localPoint.setVec2(faceCenter);
             manifold.points[0].localPoint.setVec2(circleB.m_p);
             // manifold.points[0].id.key = 0;
             manifold.points[0].id.cf.indexA = 0;
-            manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.typeA = exports.ContactFeatureType.e_vertex;
             manifold.points[0].id.cf.indexB = 0;
-            manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+            manifold.points[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
         }
     }
 
@@ -14615,7 +17290,7 @@
                 var n = Vec2.neg(polygonBA.normals[i]);
                 var s1 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v1));
                 var s2 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v2));
-                var s = math$1.min(s1, s2);
+                var s = extended.min(s1, s2);
                 if (s > radius) {
                     // No collision
                     polygonAxis.type = EPAxisType.e_edgeB;
@@ -14659,7 +17334,7 @@
         }
         var ie = [new ClipVertex(), new ClipVertex()];
         if (primaryAxis.type == EPAxisType.e_edgeA) {
-            manifold.type = ManifoldType.e_faceA;
+            manifold.type = exports.ManifoldType.e_faceA;
             // Search for the polygon normal that is most anti-parallel to the edge
             // normal.
             var bestIndex = 0;
@@ -14676,13 +17351,13 @@
             ie[0].v = polygonBA.vertices[i1];
             ie[0].id.cf.indexA = 0;
             ie[0].id.cf.indexB = i1;
-            ie[0].id.cf.typeA = ContactFeatureType.e_face;
-            ie[0].id.cf.typeB = ContactFeatureType.e_vertex;
+            ie[0].id.cf.typeA = exports.ContactFeatureType.e_face;
+            ie[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
             ie[1].v = polygonBA.vertices[i2];
             ie[1].id.cf.indexA = 0;
             ie[1].id.cf.indexB = i2;
-            ie[1].id.cf.typeA = ContactFeatureType.e_face;
-            ie[1].id.cf.typeB = ContactFeatureType.e_vertex;
+            ie[1].id.cf.typeA = exports.ContactFeatureType.e_face;
+            ie[1].id.cf.typeB = exports.ContactFeatureType.e_vertex;
             if (front) {
                 rf.i1 = 0;
                 rf.i2 = 1;
@@ -14699,17 +17374,17 @@
             }
         }
         else {
-            manifold.type = ManifoldType.e_faceB;
+            manifold.type = exports.ManifoldType.e_faceB;
             ie[0].v = v1;
             ie[0].id.cf.indexA = 0;
             ie[0].id.cf.indexB = primaryAxis.index;
-            ie[0].id.cf.typeA = ContactFeatureType.e_vertex;
-            ie[0].id.cf.typeB = ContactFeatureType.e_face;
+            ie[0].id.cf.typeA = exports.ContactFeatureType.e_vertex;
+            ie[0].id.cf.typeB = exports.ContactFeatureType.e_face;
             ie[1].v = v2;
             ie[1].id.cf.indexA = 0;
             ie[1].id.cf.indexB = primaryAxis.index;
-            ie[1].id.cf.typeA = ContactFeatureType.e_vertex;
-            ie[1].id.cf.typeB = ContactFeatureType.e_face;
+            ie[1].id.cf.typeA = exports.ContactFeatureType.e_vertex;
+            ie[1].id.cf.typeB = exports.ContactFeatureType.e_face;
             rf.i1 = primaryAxis.index;
             rf.i2 = rf.i1 + 1 < polygonBA.count ? rf.i1 + 1 : 0;
             rf.v1 = polygonBA.vertices[rf.i1];
@@ -14765,4226 +17440,6 @@
         manifold.pointCount = pointCount;
     }
 
-    // @ts-ignore
-    Solver.TimeStep = TimeStep;
-    // @ts-ignore
-    Distance.testOverlap = testOverlap;
-    // @ts-ignore
-    Distance.Input = DistanceInput;
-    // @ts-ignore
-    Distance.Output = DistanceOutput;
-    // @ts-ignore
-    Distance.Proxy = DistanceProxy;
-    // @ts-ignore
-    Distance.Cache = SimplexCache;
-    // @ts-ignore
-    TimeOfImpact.Input = TOIInput;
-    // @ts-ignore
-    TimeOfImpact.Output = TOIOutput;
-
-    function createCommonjsModule(fn) {
-      var module = { exports: {} };
-    	return fn(module, module.exports), module.exports;
-    }
-
-    var stats = {};
-
-    var extend = function(base) {
-      for (var i = 1; i < arguments.length; i++) {
-        var obj = arguments[i];
-        for ( var key in obj) {
-          if (obj.hasOwnProperty(key)) {
-            base[key] = obj[key];
-          }
-        }
-      }
-      return base;
-    };
-
-    /**
-     * ! is the definitive JavaScript type testing library
-     * 
-     * @copyright 2013-2014 Enrico Marino / Jordan Harband
-     * @license MIT
-     */
-
-    var is_1 = createCommonjsModule(function (module) {
-    var objProto = Object.prototype;
-    var owns = objProto.hasOwnProperty;
-    var toStr = objProto.toString;
-
-    var hexRegex = /^[A-Fa-f0-9]+$/;
-
-    var is = module.exports = {};
-
-    is.a = is.an = is.type = function(value, type) {
-      return typeof value === type;
-    };
-
-    is.defined = function(value) {
-      return typeof value !== 'undefined';
-    };
-
-    is.empty = function(value) {
-      var type = toStr.call(value);
-      var key;
-
-      if ('[object Array]' === type || '[object Arguments]' === type
-          || '[object String]' === type) {
-        return value.length === 0;
-      }
-
-      if ('[object Object]' === type) {
-        for (key in value) {
-          if (owns.call(value, key)) {
-            return false;
-          }
-        }
-        return true;
-      }
-
-      return !value;
-    };
-
-    is.equal = function(value, other) {
-      if (value === other) {
-        return true;
-      }
-
-      var type = toStr.call(value);
-      var key;
-
-      if (type !== toStr.call(other)) {
-        return false;
-      }
-
-      if ('[object Object]' === type) {
-        for (key in value) {
-          if (!is.equal(value[key], other[key]) || !(key in other)) {
-            return false;
-          }
-        }
-        for (key in other) {
-          if (!is.equal(value[key], other[key]) || !(key in value)) {
-            return false;
-          }
-        }
-        return true;
-      }
-
-      if ('[object Array]' === type) {
-        key = value.length;
-        if (key !== other.length) {
-          return false;
-        }
-        while (--key) {
-          if (!is.equal(value[key], other[key])) {
-            return false;
-          }
-        }
-        return true;
-      }
-
-      if ('[object Function]' === type) {
-        return value.prototype === other.prototype;
-      }
-
-      if ('[object Date]' === type) {
-        return value.getTime() === other.getTime();
-      }
-
-      return false;
-    };
-
-    is.instance = function(value, constructor) {
-      return value instanceof constructor;
-    };
-
-    is.nil = function(value) {
-      return value === null;
-    };
-
-    is.undef = function(value) {
-      return typeof value === 'undefined';
-    };
-
-    is.array = function(value) {
-      return '[object Array]' === toStr.call(value);
-    };
-
-    is.emptyarray = function(value) {
-      return is.array(value) && value.length === 0;
-    };
-
-    is.arraylike = function(value) {
-      return !!value && !is.boolean(value) && owns.call(value, 'length')
-          && isFinite(value.length) && is.number(value.length) && value.length >= 0;
-    };
-
-    is.boolean = function(value) {
-      return '[object Boolean]' === toStr.call(value);
-    };
-
-    is.element = function(value) {
-      return value !== undefined && typeof HTMLElement !== 'undefined'
-          && value instanceof HTMLElement && value.nodeType === 1;
-    };
-
-    is.fn = function(value) {
-      return '[object Function]' === toStr.call(value);
-    };
-
-    is.number = function(value) {
-      return '[object Number]' === toStr.call(value);
-    };
-
-    is.nan = function(value) {
-      return !is.number(value) || value !== value;
-    };
-
-    is.object = function(value) {
-      return '[object Object]' === toStr.call(value);
-    };
-
-    is.hash = function(value) {
-      return is.object(value) && value.constructor === Object && !value.nodeType
-          && !value.setInterval;
-    };
-
-    is.regexp = function(value) {
-      return '[object RegExp]' === toStr.call(value);
-    };
-
-    is.string = function(value) {
-      return '[object String]' === toStr.call(value);
-    };
-
-    is.hex = function(value) {
-      return is.string(value) && (!value.length || hexRegex.test(value));
-    };
-    });
-
-    var _await = function() {
-      var count = 0;
-      function fork(fn, n) {
-        count += n = (typeof n === 'number' && n >= 1 ? n : 1);
-        return function() {
-          fn && fn.apply(this, arguments);
-          if (n > 0) {
-            n--, count--, call();
-          }
-        };
-      }
-      var then = [];
-      function call() {
-        if (count === 0) {
-          while (then.length) {
-            setTimeout(then.shift(), 0);
-          }
-        }
-      }
-      fork.then = function(fn) {
-        if (count === 0) {
-          setTimeout(fn, 0);
-        } else {
-          then.push(fn);
-        }
-      };
-      return fork;
-    };
-
-    stats.create = 0;
-
-    function Class(arg) {
-      if (!(this instanceof Class)) {
-        if (is_1.fn(arg)) {
-          return Class.app.apply(Class, arguments);
-        } else if (is_1.object(arg)) {
-          return Class.atlas.apply(Class, arguments);
-        } else {
-          return arg;
-        }
-      }
-
-      stats.create++;
-
-      for (var i = 0; i < _init.length; i++) {
-        _init[i].call(this);
-      }
-    }
-
-    var _init = [];
-
-    Class._init = function(fn) {
-      _init.push(fn);
-    };
-
-    var _load = [];
-
-    Class._load = function(fn) {
-      _load.push(fn);
-    };
-
-    var _config = {};
-
-    Class.config = function() {
-      if (arguments.length === 1 && is_1.string(arguments[0])) {
-        return _config[arguments[0]];
-      }
-      if (arguments.length === 1 && is_1.object(arguments[0])) {
-        extend(_config, arguments[0]);
-      }
-      if (arguments.length === 2 && is_1.string(arguments[0])) ;
-    };
-
-    var _app_queue = [];
-    var _stages = [];
-    var _loaded = false;
-    var _paused = false;
-
-    Class.app = function(app, opts) {
-      if (!_loaded) {
-        _app_queue.push(arguments);
-        return;
-      }
-      var loader = Class.config('app-loader');
-      loader(function(stage, canvas) {
-        for (var i = 0; i < _load.length; i++) {
-          _load[i].call(this, stage, canvas);
-        }
-        app(stage, canvas);
-        _stages.push(stage);
-        stage.start();
-      }, opts);
-    };
-
-    var loading = _await();
-
-    Class.preload = function(load) {
-      if (typeof load === 'string') {
-        var url = Class.resolve(load);
-        if (/\.js($|\?|\#)/.test(url)) {
-          load = function(callback) {
-            loadScript(url, callback);
-          };
-        }
-      }
-      if (typeof load !== 'function') {
-        return;
-      }
-      // if (!_started) {
-      // _preload_queue.push(load);
-      // return;
-      // }
-      load(loading());
-    };
-
-    Class.start = function(config) {
-
-      Class.config(config);
-
-      // false && console.log('Preloading...');
-      // _started = true;
-      // while (_preload_queue.length) {
-      // var load = _preload_queue.shift();
-      // load(loading());
-      // }
-
-      loading.then(function() {
-        _loaded = true;
-        while (_app_queue.length) {
-          var args = _app_queue.shift();
-          Class.app.apply(Class, args);
-        }
-      });
-    };
-
-    Class.pause = function() {
-      if (!_paused) {
-        _paused = true;
-        for (var i = _stages.length - 1; i >= 0; i--) {
-          _stages[i].pause();
-        }
-      }
-    };
-
-    Class.resume = function() {
-      if (_paused) {
-        _paused = false;
-        for (var i = _stages.length - 1; i >= 0; i--) {
-          _stages[i].resume();
-        }
-      }
-    };
-
-    Class.create = function() {
-      return new Class();
-    };
-
-    Class.resolve = (function() {
-
-      if (typeof window === 'undefined' || typeof document === 'undefined') {
-        return function(url) {
-          return url;
-        };
-      }
-
-      var scripts = document.getElementsByTagName('script');
-
-      function getScriptSrc() {
-        // HTML5
-        if (document.currentScript) {
-          return document.currentScript.src;
-        }
-
-        // IE>=10
-        var stack;
-        try {
-          var err = new Error();
-          if (err.stack) {
-            stack = err.stack;
-          } else {
-            throw err;
-          }
-        } catch (err) {
-          stack = err.stack;
-        }
-        if (typeof stack === 'string') {
-          stack = stack.split('\n');
-          // Uses the last line, where the call started
-          for (var i = stack.length; i--;) {
-            var url = stack[i].match(/(\w+\:\/\/[^/]*?\/.+?)(:\d+)(:\d+)?/);
-            if (url) {
-              return url[1];
-            }
-          }
-        }
-
-        // IE<11
-        if (scripts.length && 'readyState' in scripts[0]) {
-          for (var i = scripts.length; i--;) {
-            if (scripts[i].readyState === 'interactive') {
-              return scripts[i].src;
-            }
-          }
-        }
-
-        return location.href;
-      }
-
-      return function(url) {
-        if (/^\.\//.test(url)) {
-          var src = getScriptSrc();
-          var base = src.substring(0, src.lastIndexOf('/') + 1);
-          url = base + url.substring(2);
-          // } else if (/^\.\.\//.test(url)) {
-          // url = base + url;
-        }
-        return url;
-      };
-    })();
-
-    var core = Class;
-
-    function loadScript(src, callback) {
-      var el = document.createElement('script');
-      el.addEventListener('load', function() {
-        callback();
-      });
-      el.addEventListener('error', function(err) {
-        callback(err || 'Error loading script: ' + src);
-      });
-      el.src = src;
-      el.id = 'preload-' + Date.now();
-      document.body.appendChild(el);
-    }
-
-    function Matrix$1(a, b, c, d, e, f) {
-      this.reset(a, b, c, d, e, f);
-    }
-    Matrix$1.prototype.toString = function() {
-      return '[' + this.a + ', ' + this.b + ', ' + this.c + ', ' + this.d + ', '
-          + this.e + ', ' + this.f + ']';
-    };
-
-    Matrix$1.prototype.clone = function() {
-      return new Matrix$1(this.a, this.b, this.c, this.d, this.e, this.f);
-    };
-
-    Matrix$1.prototype.reset = function(a, b, c, d, e, f) {
-      this._dirty = true;
-      if (typeof a === 'object') {
-        this.a = a.a, this.d = a.d;
-        this.b = a.b, this.c = a.c;
-        this.e = a.e, this.f = a.f;
-      } else {
-        this.a = a || 1, this.d = d || 1;
-        this.b = b || 0, this.c = c || 0;
-        this.e = e || 0, this.f = f || 0;
-      }
-      return this;
-    };
-
-    Matrix$1.prototype.identity = function() {
-      this._dirty = true;
-      this.a = 1;
-      this.b = 0;
-      this.c = 0;
-      this.d = 1;
-      this.e = 0;
-      this.f = 0;
-      return this;
-    };
-
-    Matrix$1.prototype.rotate = function(angle) {
-      if (!angle) {
-        return this;
-      }
-
-      this._dirty = true;
-
-      var u = angle ? Math.cos(angle) : 1;
-      // android bug may give bad 0 values
-      var v = angle ? Math.sin(angle) : 0;
-
-      var a = u * this.a - v * this.b;
-      var b = u * this.b + v * this.a;
-      var c = u * this.c - v * this.d;
-      var d = u * this.d + v * this.c;
-      var e = u * this.e - v * this.f;
-      var f = u * this.f + v * this.e;
-
-      this.a = a;
-      this.b = b;
-      this.c = c;
-      this.d = d;
-      this.e = e;
-      this.f = f;
-
-      return this;
-    };
-
-    Matrix$1.prototype.translate = function(x, y) {
-      if (!x && !y) {
-        return this;
-      }
-      this._dirty = true;
-      this.e += x;
-      this.f += y;
-      return this;
-    };
-
-    Matrix$1.prototype.scale = function(x, y) {
-      if (!(x - 1) && !(y - 1)) {
-        return this;
-      }
-      this._dirty = true;
-      this.a *= x;
-      this.b *= y;
-      this.c *= x;
-      this.d *= y;
-      this.e *= x;
-      this.f *= y;
-      return this;
-    };
-
-    Matrix$1.prototype.skew = function(x, y) {
-      if (!x && !y) {
-        return this;
-      }
-      this._dirty = true;
-
-      var a = this.a + this.b * x;
-      var b = this.b + this.a * y;
-      var c = this.c + this.d * x;
-      var d = this.d + this.c * y;
-      var e = this.e + this.f * x;
-      var f = this.f + this.e * y;
-
-      this.a = a;
-      this.b = b;
-      this.c = c;
-      this.d = d;
-      this.e = e;
-      this.f = f;
-      return this;
-    };
-
-    Matrix$1.prototype.concat = function(m) {
-      this._dirty = true;
-
-      var n = this;
-
-      var a = n.a * m.a + n.b * m.c;
-      var b = n.b * m.d + n.a * m.b;
-      var c = n.c * m.a + n.d * m.c;
-      var d = n.d * m.d + n.c * m.b;
-      var e = n.e * m.a + m.e + n.f * m.c;
-      var f = n.f * m.d + m.f + n.e * m.b;
-
-      this.a = a;
-      this.b = b;
-      this.c = c;
-      this.d = d;
-      this.e = e;
-      this.f = f;
-
-      return this;
-    };
-
-    Matrix$1.prototype.inverse = Matrix$1.prototype.reverse = function() {
-      if (this._dirty) {
-        this._dirty = false;
-        this.inversed = this.inversed || new Matrix$1();
-        var z = this.a * this.d - this.b * this.c;
-        this.inversed.a = this.d / z;
-        this.inversed.b = -this.b / z;
-        this.inversed.c = -this.c / z;
-        this.inversed.d = this.a / z;
-        this.inversed.e = (this.c * this.f - this.e * this.d) / z;
-        this.inversed.f = (this.e * this.b - this.a * this.f) / z;
-      }
-      return this.inversed;
-    };
-
-    Matrix$1.prototype.map = function(p, q) {
-      q = q || {};
-      q.x = this.a * p.x + this.c * p.y + this.e;
-      q.y = this.b * p.x + this.d * p.y + this.f;
-      return q;
-    };
-
-    Matrix$1.prototype.mapX = function(x, y) {
-      if (typeof x === 'object')
-        y = x.y, x = x.x;
-      return this.a * x + this.c * y + this.e;
-    };
-
-    Matrix$1.prototype.mapY = function(x, y) {
-      if (typeof x === 'object')
-        y = x.y, x = x.x;
-      return this.b * x + this.d * y + this.f;
-    };
-
-    var matrix = Matrix$1;
-
-    var create = createCommonjsModule(function (module) {
-    if (typeof Object.create == 'function') {
-      module.exports = function(proto, props) {
-        return Object.create.call(Object, proto, props);
-      };
-    } else {
-      module.exports = function(proto, props) {
-        if (props)
-          throw Error('Second argument is not supported!');
-        if (typeof proto !== 'object' || proto === null)
-          throw Error('Invalid prototype!');
-        noop.prototype = proto;
-        return new noop;
-      };
-      function noop() {
-      }
-    }
-    });
-
-    var native = Math;
-
-    var math = create(Math);
-
-    var random = function(min, max) {
-      if (typeof min === 'undefined') {
-        max = 1, min = 0;
-      } else if (typeof max === 'undefined') {
-        max = min, min = 0;
-      }
-      return min == max ? min : native.random() * (max - min) + min;
-    };
-
-    var rotate = function(num, min, max) {
-      if (typeof min === 'undefined') {
-        max = 1, min = 0;
-      } else if (typeof max === 'undefined') {
-        max = min, min = 0;
-      }
-      if (max > min) {
-        num = (num - min) % (max - min);
-        return num + (num < 0 ? max : min);
-      } else {
-        num = (num - max) % (min - max);
-        return num + (num <= 0 ? min : max);
-      }
-    };
-
-    var limit = function(num, min, max) {
-      if (num < min) {
-        return min;
-      } else if (num > max) {
-        return max;
-      } else {
-        return num;
-      }
-    };
-
-    var length = function(x, y) {
-      return native.sqrt(x * x + y * y);
-    };
-    math.random = random;
-    math.rotate = rotate;
-    math.limit = limit;
-    math.length = length;
-
-    function Texture$1(image, ratio) {
-      if (typeof image === 'object') {
-        this.src(image, ratio);
-      }
-    }
-
-    Texture$1.prototype.pipe = function() {
-      return new Texture$1(this);
-    };
-
-    /**
-     * Signatures: (image), (x, y, w, h), (w, h)
-     */
-    Texture$1.prototype.src = function(x, y, w, h) {
-      if (typeof x === 'object') {
-        var image = x, ratio = y || 1;
-
-        this._image = image;
-        this._sx = this._dx = 0;
-        this._sy = this._dy = 0;
-        this._sw = this._dw = image.width / ratio;
-        this._sh = this._dh = image.height / ratio;
-
-        this.width = image.width / ratio;
-        this.height = image.height / ratio;
-
-        this.ratio = ratio;
-
-      } else {
-        if (typeof w === 'undefined') {
-          w = x, h = y;
-        } else {
-          this._sx = x, this._sy = y;
-        }
-        this._sw = this._dw = w;
-        this._sh = this._dh = h;
-
-        this.width = w;
-        this.height = h;
-      }
-      return this;
-    };
-
-    /**
-     * Signatures: (x, y, w, h), (x, y)
-     */
-    Texture$1.prototype.dest = function(x, y, w, h) {
-      this._dx = x, this._dy = y;
-      this._dx = x, this._dy = y;
-      if (typeof w !== 'undefined') {
-        this._dw = w, this._dh = h;
-        this.width = w, this.height = h;
-      }
-      return this;
-    };
-
-    Texture$1.prototype.draw = function(context, x1, y1, x2, y2, x3, y3, x4, y4) {
-      var image = this._image;
-      if (image === null || typeof image !== 'object') {
-        return;
-      }
-
-      var sx = this._sx, sy = this._sy;
-      var sw = this._sw, sh = this._sh;
-      var dx = this._dx, dy = this._dy;
-      var dw = this._dw, dh = this._dh;
-
-      if (typeof x3 !== 'undefined') {
-        x1 = math.limit(x1, 0, this._sw), x2 = math.limit(x2, 0, this._sw - x1);
-        y1 = math.limit(y1, 0, this._sh), y2 = math.limit(y2, 0, this._sh - y1);
-        sx += x1, sy += y1, sw = x2, sh = y2;
-        dx = x3, dy = y3, dw = x4, dh = y4;
-
-      } else if (typeof x2 !== 'undefined') {
-        dx = x1, dy = y1, dw = x2, dh = y2;
-
-      } else if (typeof x1 !== 'undefined') {
-        dw = x1, dh = y1;
-      }
-
-      var ratio = this.ratio || 1;
-      sx *= ratio, sy *= ratio, sw *= ratio, sh *= ratio;
-
-      try {
-        if (typeof image.draw === 'function') {
-          image.draw(context, sx, sy, sw, sh, dx, dy, dw, dh);
-        } else {
-          stats.draw++;
-          context.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh);
-        }
-      } catch (ex) {
-        if (!image._draw_failed) {
-          console.log('Unable to draw: ', image);
-          console.log(ex);
-          image._draw_failed = true;
-        }
-      }
-    };
-
-    var texture = Texture$1;
-
-    var startsWith = function(str, sub) {
-      return typeof str === 'string' && typeof sub === 'string'
-          && str.substring(0, sub.length) == sub;
-    };
-
-    var string = {
-    	startsWith: startsWith
-    };
-
-    // name : atlas
-    var _atlases_map = {};
-    // [atlas]
-    var _atlases_arr = [];
-
-    // TODO: print subquery not found error
-    // TODO: index textures
-
-    core.atlas = function(def) {
-      var atlas = is_1.fn(def.draw) ? def : new Atlas(def);
-      if (def.name) {
-        _atlases_map[def.name] = atlas;
-      }
-      _atlases_arr.push(atlas);
-
-      deprecated(def, 'imagePath');
-      deprecated(def, 'imageRatio');
-
-      var url = def.imagePath;
-      var ratio = def.imageRatio || 1;
-      if (is_1.string(def.image)) {
-        url = def.image;
-      } else if (is_1.hash(def.image)) {
-        url = def.image.src || def.image.url;
-        ratio = def.image.ratio || ratio;
-      }
-      url && core.preload(function(done) {
-        url = core.resolve(url);
-        var imageloader = core.config('image-loader');
-
-        imageloader(url, function(image) {
-          atlas.src(image, ratio);
-          done();
-
-        }, function(err) {
-          done();
-        });
-      });
-
-      return atlas;
-    };
-
-    Atlas._super = texture;
-    Atlas.prototype = create(Atlas._super.prototype);
-
-    function Atlas(def) {
-      Atlas._super.call(this);
-
-      var atlas = this;
-
-      deprecated(def, 'filter');
-      deprecated(def, 'cutouts');
-      deprecated(def, 'sprites');
-      deprecated(def, 'factory');
-
-      var map = def.map || def.filter;
-      var ppu = def.ppu || def.ratio || 1;
-      var trim = def.trim || 0;
-      var textures = def.textures;
-      var factory = def.factory;
-      var cutouts = def.cutouts || def.sprites;
-
-      function make(def) {
-        if (!def || is_1.fn(def.draw)) {
-          return def;
-        }
-
-        def = extend({}, def);
-
-        if (is_1.fn(map)) {
-          def = map(def);
-        }
-
-        if (ppu != 1) {
-          def.x *= ppu, def.y *= ppu;
-          def.width *= ppu, def.height *= ppu;
-          def.top *= ppu, def.bottom *= ppu;
-          def.left *= ppu, def.right *= ppu;
-        }
-
-        if (trim != 0) {
-          def.x += trim, def.y += trim;
-          def.width -= 2 * trim, def.height -= 2 * trim;
-          def.top -= trim, def.bottom -= trim;
-          def.left -= trim, def.right -= trim;
-        }
-
-        var texture = atlas.pipe();
-        texture.top = def.top, texture.bottom = def.bottom;
-        texture.left = def.left, texture.right = def.right;
-        texture.src(def.x, def.y, def.width, def.height);
-        return texture;
-      }
-
-      function find(query) {
-        if (textures) {
-          if (is_1.fn(textures)) {
-            return textures(query);
-          } else if (is_1.hash(textures)) {
-            return textures[query];
-          }
-        }
-        if (cutouts) { // deprecated
-          var result = null, n = 0;
-          for (var i = 0; i < cutouts.length; i++) {
-            if (string.startsWith(cutouts[i].name, query)) {
-              if (n === 0) {
-                result = cutouts[i];
-              } else if (n === 1) {
-                result = [ result, cutouts[i] ];
-              } else {
-                result.push(cutouts[i]);
-              }
-              n++;
-            }
-          }
-          if (n === 0 && is_1.fn(factory)) {
-            result = function(subquery) {
-              return factory(query + (subquery ? subquery : ''));
-            };
-          }
-          return result;
-        }
-      }
-
-      this.select = function(query) {
-        if (!query) {
-          // TODO: if `textures` is texture def, map or fn?
-          return new Selection(this.pipe());
-        }
-        var found = find(query);
-        if (found) {
-          return new Selection(found, find, make);
-        }
-      };
-
-    }
-    var nfTexture = new texture();
-    nfTexture.x = nfTexture.y = nfTexture.width = nfTexture.height = 0;
-    nfTexture.pipe = nfTexture.src = nfTexture.dest = function() {
-      return this;
-    };
-    nfTexture.draw = function() {
-    };
-
-    var nfSelection = new Selection(nfTexture);
-
-    function Selection(result, find, make) {
-      function link(result, subquery) {
-        if (!result) {
-          return nfTexture;
-
-        } else if (is_1.fn(result.draw)) {
-          return result;
-
-        } else if (is_1.hash(result) && is_1.number(result.width)
-            && is_1.number(result.height) && is_1.fn(make)) {
-          return make(result);
-
-        } else if (is_1.hash(result) && is_1.defined(subquery)) {
-          return link(result[subquery]);
-
-        } else if (is_1.fn(result)) {
-          return link(result(subquery));
-
-        } else if (is_1.array(result)) {
-          return link(result[0]);
-
-        } else if (is_1.string(result) && is_1.fn(find)) {
-          return link(find(result));
-        }
-      }
-
-      this.one = function(subquery) {
-        return link(result, subquery);
-      };
-
-      this.array = function(arr) {
-        var array = is_1.array(arr) ? arr : [];
-        if (is_1.array(result)) {
-          for (var i = 0; i < result.length; i++) {
-            array[i] = link(result[i]);
-          }
-        } else {
-          array[0] = link(result);
-        }
-        return array;
-      };
-    }
-
-    core.texture = function(query) {
-      if (!is_1.string(query)) {
-        return new Selection(query);
-      }
-
-      var result = null, atlas, i;
-
-      if ((i = query.indexOf(':')) > 0 && query.length > i + 1) {
-        atlas = _atlases_map[query.slice(0, i)];
-        result = atlas && atlas.select(query.slice(i + 1));
-      }
-
-      if (!result && (atlas = _atlases_map[query])) {
-        result = atlas.select();
-      }
-
-      for (i = 0; !result && i < _atlases_arr.length; i++) {
-        result = _atlases_arr[i].select(query);
-      }
-
-      if (!result) {
-        console.error('Texture not found: ' + query);
-        result = nfSelection;
-      }
-
-      return result;
-    };
-
-    function deprecated(hash, name, msg) {
-      if (name in hash)
-        console.log(msg ? msg.replace('%name', name) : '\'' + name
-            + '\' field of texture atlas is deprecated.');
-    }
-
-    var iid$1 = 0;
-
-    // TODO: do not clear next/prev/parent on remove
-
-    core.prototype._label = '';
-
-    core.prototype._visible = true;
-
-    core.prototype._parent = null;
-    core.prototype._next = null;
-    core.prototype._prev = null;
-
-    core.prototype._first = null;
-    core.prototype._last = null;
-
-    core.prototype._attrs = null;
-    core.prototype._flags = null;
-
-    core.prototype.toString = function() {
-      return '[' + this._label + ']';
-    };
-
-    /**
-     * @deprecated Use label()
-     */
-    core.prototype.id = function(id) {
-      return this.label(id);
-    };
-
-    core.prototype.label = function(label) {
-      if (typeof label === 'undefined') {
-        return this._label;
-      }
-      this._label = label;
-      return this;
-    };
-
-    core.prototype.attr = function(name, value) {
-      if (typeof value === 'undefined') {
-        return this._attrs !== null ? this._attrs[name] : undefined;
-      }
-      (this._attrs !== null ? this._attrs : this._attrs = {})[name] = value;
-      return this;
-    };
-
-    core.prototype.visible = function(visible) {
-      if (typeof visible === 'undefined') {
-        return this._visible;
-      }
-      this._visible = visible;
-      this._parent && (this._parent._ts_children = ++iid$1);
-      this._ts_pin = ++iid$1;
-      this.touch();
-      return this;
-    };
-
-    core.prototype.hide = function() {
-      return this.visible(false);
-    };
-
-    core.prototype.show = function() {
-      return this.visible(true);
-    };
-
-    core.prototype.parent = function() {
-      return this._parent;
-    };
-
-    core.prototype.next = function(visible) {
-      var next = this._next;
-      while (next && visible && !next._visible) {
-        next = next._next;
-      }
-      return next;
-    };
-
-    core.prototype.prev = function(visible) {
-      var prev = this._prev;
-      while (prev && visible && !prev._visible) {
-        prev = prev._prev;
-      }
-      return prev;
-    };
-
-    core.prototype.first = function(visible) {
-      var next = this._first;
-      while (next && visible && !next._visible) {
-        next = next._next;
-      }
-      return next;
-    };
-
-    core.prototype.last = function(visible) {
-      var prev = this._last;
-      while (prev && visible && !prev._visible) {
-        prev = prev._prev;
-      }
-      return prev;
-    };
-
-    core.prototype.visit = function(visitor, data) {
-      var reverse = visitor.reverse;
-      var visible = visitor.visible;
-      if (visitor.start && visitor.start(this, data)) {
-        return;
-      }
-      var child, next = reverse ? this.last(visible) : this.first(visible);
-      while (child = next) {
-        next = reverse ? child.prev(visible) : child.next(visible);
-        if (child.visit(visitor, data)) {
-          return true;
-        }
-      }
-      return visitor.end && visitor.end(this, data);
-    };
-
-    core.prototype.append = function(child, more) {
-      if (is_1.array(child))
-        for (var i = 0; i < child.length; i++)
-          append(this, child[i]);
-
-      else if (typeof more !== 'undefined') // deprecated
-        for (var i = 0; i < arguments.length; i++)
-          append(this, arguments[i]);
-
-      else if (typeof child !== 'undefined')
-        append(this, child);
-
-      return this;
-    };
-
-    core.prototype.prepend = function(child, more) {
-      if (is_1.array(child))
-        for (var i = child.length - 1; i >= 0; i--)
-          prepend(this, child[i]);
-
-      else if (typeof more !== 'undefined') // deprecated
-        for (var i = arguments.length - 1; i >= 0; i--)
-          prepend(this, arguments[i]);
-
-      else if (typeof child !== 'undefined')
-        prepend(this, child);
-
-      return this;
-    };
-
-    core.prototype.appendTo = function(parent) {
-      append(parent, this);
-      return this;
-    };
-
-    core.prototype.prependTo = function(parent) {
-      prepend(parent, this);
-      return this;
-    };
-
-    core.prototype.insertNext = function(sibling, more) {
-      if (is_1.array(sibling))
-        for (var i = 0; i < sibling.length; i++)
-          insertAfter(sibling[i], this);
-
-      else if (typeof more !== 'undefined') // deprecated
-        for (var i = 0; i < arguments.length; i++)
-          insertAfter(arguments[i], this);
-
-      else if (typeof sibling !== 'undefined')
-        insertAfter(sibling, this);
-
-      return this;
-    };
-
-    core.prototype.insertPrev = function(sibling, more) {
-      if (is_1.array(sibling))
-        for (var i = sibling.length - 1; i >= 0; i--)
-          insertBefore(sibling[i], this);
-
-      else if (typeof more !== 'undefined') // deprecated
-        for (var i = arguments.length - 1; i >= 0; i--)
-          insertBefore(arguments[i], this);
-
-      else if (typeof sibling !== 'undefined')
-        insertBefore(sibling, this);
-
-      return this;
-    };
-
-    core.prototype.insertAfter = function(prev) {
-      insertAfter(this, prev);
-      return this;
-    };
-
-    core.prototype.insertBefore = function(next) {
-      insertBefore(this, next);
-      return this;
-    };
-
-    function append(parent, child) {
-      _ensure(child);
-      _ensure(parent);
-
-      child.remove();
-
-      if (parent._last) {
-        parent._last._next = child;
-        child._prev = parent._last;
-      }
-
-      child._parent = parent;
-      parent._last = child;
-
-      if (!parent._first) {
-        parent._first = child;
-      }
-
-      child._parent._flag(child, true);
-
-      child._ts_parent = ++iid$1;
-      parent._ts_children = ++iid$1;
-      parent.touch();
-    }
-
-    function prepend(parent, child) {
-      _ensure(child);
-      _ensure(parent);
-
-      child.remove();
-
-      if (parent._first) {
-        parent._first._prev = child;
-        child._next = parent._first;
-      }
-
-      child._parent = parent;
-      parent._first = child;
-
-      if (!parent._last) {
-        parent._last = child;
-      }
-
-      child._parent._flag(child, true);
-
-      child._ts_parent = ++iid$1;
-      parent._ts_children = ++iid$1;
-      parent.touch();
-    }
-    function insertBefore(self, next) {
-      _ensure(self);
-      _ensure(next);
-
-      self.remove();
-
-      var parent = next._parent;
-      var prev = next._prev;
-
-      next._prev = self;
-      prev && (prev._next = self) || parent && (parent._first = self);
-
-      self._parent = parent;
-      self._prev = prev;
-      self._next = next;
-
-      self._parent._flag(self, true);
-
-      self._ts_parent = ++iid$1;
-      self.touch();
-    }
-    function insertAfter(self, prev) {
-      _ensure(self);
-      _ensure(prev);
-
-      self.remove();
-
-      var parent = prev._parent;
-      var next = prev._next;
-
-      prev._next = self;
-      next && (next._prev = self) || parent && (parent._last = self);
-
-      self._parent = parent;
-      self._prev = prev;
-      self._next = next;
-
-      self._parent._flag(self, true);
-
-      self._ts_parent = ++iid$1;
-      self.touch();
-    }
-    core.prototype.remove = function(child, more) {
-      if (typeof child !== 'undefined') {
-        if (is_1.array(child)) {
-          for (var i = 0; i < child.length; i++)
-            _ensure(child[i]).remove();
-
-        } else if (typeof more !== 'undefined') {
-          for (var i = 0; i < arguments.length; i++)
-            _ensure(arguments[i]).remove();
-
-        } else {
-          _ensure(child).remove();
-        }
-        return this;
-      }
-
-      if (this._prev) {
-        this._prev._next = this._next;
-      }
-      if (this._next) {
-        this._next._prev = this._prev;
-      }
-
-      if (this._parent) {
-        if (this._parent._first === this) {
-          this._parent._first = this._next;
-        }
-        if (this._parent._last === this) {
-          this._parent._last = this._prev;
-        }
-
-        this._parent._flag(this, false);
-
-        this._parent._ts_children = ++iid$1;
-        this._parent.touch();
-      }
-
-      this._prev = this._next = this._parent = null;
-      this._ts_parent = ++iid$1;
-      // this._parent.touch();
-
-      return this;
-    };
-
-    core.prototype.empty = function() {
-      var child, next = this._first;
-      while (child = next) {
-        next = child._next;
-        child._prev = child._next = child._parent = null;
-
-        this._flag(child, false);
-      }
-
-      this._first = this._last = null;
-
-      this._ts_children = ++iid$1;
-      this.touch();
-      return this;
-    };
-
-    core.prototype.touch = function() {
-      this._ts_touch = ++iid$1;
-      this._parent && this._parent.touch();
-      return this;
-    };
-
-    /**
-     * Deep flags used for optimizing event distribution.
-     */
-    core.prototype._flag = function(obj, name) {
-      if (typeof name === 'undefined') {
-        return this._flags !== null && this._flags[obj] || 0;
-      }
-      if (typeof obj === 'string') {
-        if (name) {
-          this._flags = this._flags || {};
-          if (!this._flags[obj] && this._parent) {
-            this._parent._flag(obj, true);
-          }
-          this._flags[obj] = (this._flags[obj] || 0) + 1;
-
-        } else if (this._flags && this._flags[obj] > 0) {
-          if (this._flags[obj] == 1 && this._parent) {
-            this._parent._flag(obj, false);
-          }
-          this._flags[obj] = this._flags[obj] - 1;
-        }
-      }
-      if (typeof obj === 'object') {
-        if (obj._flags) {
-          for ( var type in obj._flags) {
-            if (obj._flags[type] > 0) {
-              this._flag(type, name);
-            }
-          }
-        }
-      }
-      return this;
-    };
-
-    /**
-     * @private
-     */
-    core.prototype.hitTest = function(hit) {
-      var width = this._pin._width;
-      var height = this._pin._height;
-      return hit.x >= 0 && hit.x <= width && hit.y >= 0 && hit.y <= height;
-    };
-
-    function _ensure(obj) {
-      if (obj && obj instanceof core) {
-        return obj;
-      }
-      throw 'Invalid node: ' + obj;
-    }
-
-    var event = function(prototype, callback) {
-
-      prototype._listeners = null;
-
-      prototype.on = prototype.listen = function(types, listener) {
-        if (!types || !types.length || typeof listener !== 'function') {
-          return this;
-        }
-        if (this._listeners === null) {
-          this._listeners = {};
-        }
-        var isarray = typeof types !== 'string' && typeof types.join === 'function';
-        if (types = (isarray ? types.join(' ') : types).match(/\S+/g)) {
-          for (var i = 0; i < types.length; i++) {
-            var type = types[i];
-            this._listeners[type] = this._listeners[type] || [];
-            this._listeners[type].push(listener);
-            if (typeof callback === 'function') {
-              callback(this, type, true);
-            }
-          }
-        }
-        return this;
-      };
-
-      prototype.off = function(types, listener) {
-        if (!types || !types.length || typeof listener !== 'function') {
-          return this;
-        }
-        if (this._listeners === null) {
-          return this;
-        }
-        var isarray = typeof types !== 'string' && typeof types.join === 'function';
-        if (types = (isarray ? types.join(' ') : types).match(/\S+/g)) {
-          for (var i = 0; i < types.length; i++) {
-            var type = types[i], all = this._listeners[type], index;
-            if (all && (index = all.indexOf(listener)) >= 0) {
-              all.splice(index, 1);
-              if (!all.length) {
-                delete this._listeners[type];
-              }
-              if (typeof callback === 'function') {
-                callback(this, type, false);
-              }
-            }
-          }
-        }
-        return this;
-      };
-
-      prototype.listeners = function(type) {
-        return this._listeners && this._listeners[type];
-      };
-
-      prototype.publish = function(name, args) {
-        var listeners = this.listeners(name);
-        if (!listeners || !listeners.length) {
-          return 0;
-        }
-        for (var l = 0; l < listeners.length; l++) {
-          listeners[l].apply(this, args);
-        }
-        return listeners.length;
-      };
-
-      prototype.trigger = function(name, args) {
-        this.publish(name, args);
-        return this;
-      };
-
-    };
-
-    event(core.prototype, function(obj, name, on) {
-      obj._flag(name, on);
-    });
-
-    var iid = 0;
-
-    core._init(function() {
-      this._pin = new Pin(this);
-    });
-
-    core.prototype.matrix = function(relative) {
-      if (relative === true) {
-        return this._pin.relativeMatrix();
-      }
-      return this._pin.absoluteMatrix();
-    };
-
-    core.prototype.pin = function(a, b) {
-      if (typeof a === 'object') {
-        this._pin.set(a);
-        return this;
-
-      } else if (typeof a === 'string') {
-        if (typeof b === 'undefined') {
-          return this._pin.get(a);
-        } else {
-          this._pin.set(a, b);
-          return this;
-        }
-      } else if (typeof a === 'undefined') {
-        return this._pin;
-      }
-    };
-
-    function Pin(owner) {
-
-      this._owner = owner;
-      this._parent = null;
-
-      // relative to parent
-      this._relativeMatrix = new matrix();
-
-      // relative to stage
-      this._absoluteMatrix = new matrix();
-
-      this.reset();
-    }
-    Pin.prototype.reset = function() {
-
-      this._textureAlpha = 1;
-      this._alpha = 1;
-
-      this._width = 0;
-      this._height = 0;
-
-      this._scaleX = 1;
-      this._scaleY = 1;
-      this._skewX = 0;
-      this._skewY = 0;
-      this._rotation = 0;
-
-      // scale/skew/rotate center
-      this._pivoted = false;
-      this._pivotX = null;
-      this._pivotY = null;
-
-      // self pin point
-      this._handled = false;
-      this._handleX = 0;
-      this._handleY = 0;
-
-      // parent pin point
-      this._aligned = false;
-      this._alignX = 0;
-      this._alignY = 0;
-
-      // as seen by parent px
-      this._offsetX = 0;
-      this._offsetY = 0;
-
-      this._boxX = 0;
-      this._boxY = 0;
-      this._boxWidth = this._width;
-      this._boxHeight = this._height;
-
-      // TODO: also set for owner
-      this._ts_translate = ++iid;
-      this._ts_transform = ++iid;
-      this._ts_matrix = ++iid;
-    };
-
-    Pin.prototype._update = function() {
-      this._parent = this._owner._parent && this._owner._parent._pin;
-
-      // if handled and transformed then be translated
-      if (this._handled && this._mo_handle != this._ts_transform) {
-        this._mo_handle = this._ts_transform;
-        this._ts_translate = ++iid;
-      }
-
-      if (this._aligned && this._parent
-          && this._mo_align != this._parent._ts_transform) {
-        this._mo_align = this._parent._ts_transform;
-        this._ts_translate = ++iid;
-      }
-
-      return this;
-    };
-
-    Pin.prototype.toString = function() {
-      return this._owner + ' (' + (this._parent ? this._parent._owner : null) + ')';
-    };
-
-    // TODO: ts fields require refactoring
-
-    Pin.prototype.absoluteMatrix = function() {
-      this._update();
-      var ts = Math.max(
-        this._ts_transform,
-        this._ts_translate,
-        this._parent ? this._parent._ts_matrix : 0
-      );
-      if (this._mo_abs == ts) {
-        return this._absoluteMatrix;
-      }
-      this._mo_abs = ts;
-
-      var abs = this._absoluteMatrix;
-      abs.reset(this.relativeMatrix());
-
-      this._parent && abs.concat(this._parent._absoluteMatrix);
-
-      this._ts_matrix = ++iid;
-
-      return abs;
-    };
-
-    Pin.prototype.relativeMatrix = function() {
-      this._update();
-      var ts = Math.max(this._ts_transform, this._ts_translate,
-          this._parent ? this._parent._ts_transform : 0);
-      if (this._mo_rel == ts) {
-        return this._relativeMatrix;
-      }
-      this._mo_rel = ts;
-
-      var rel = this._relativeMatrix;
-
-      rel.identity();
-      if (this._pivoted) {
-        rel.translate(-this._pivotX * this._width, -this._pivotY * this._height);
-      }
-      rel.scale(this._scaleX, this._scaleY);
-      rel.skew(this._skewX, this._skewY);
-      rel.rotate(this._rotation);
-      if (this._pivoted) {
-        rel.translate(this._pivotX * this._width, this._pivotY * this._height);
-      }
-
-      // calculate effective box
-      if (this._pivoted) {
-        // origin
-        this._boxX = 0;
-        this._boxY = 0;
-        this._boxWidth = this._width;
-        this._boxHeight = this._height;
-
-      } else {
-        // aabb
-        var p, q;
-        if (rel.a > 0 && rel.c > 0 || rel.a < 0 && rel.c < 0) {
-          p = 0, q = rel.a * this._width + rel.c * this._height;
-        } else {
-          p = rel.a * this._width, q = rel.c * this._height;
-        }
-        if (p > q) {
-          this._boxX = q;
-          this._boxWidth = p - q;
-        } else {
-          this._boxX = p;
-          this._boxWidth = q - p;
-        }
-        if (rel.b > 0 && rel.d > 0 || rel.b < 0 && rel.d < 0) {
-          p = 0, q = rel.b * this._width + rel.d * this._height;
-        } else {
-          p = rel.b * this._width, q = rel.d * this._height;
-        }
-        if (p > q) {
-          this._boxY = q;
-          this._boxHeight = p - q;
-        } else {
-          this._boxY = p;
-          this._boxHeight = q - p;
-        }
-      }
-
-      this._x = this._offsetX;
-      this._y = this._offsetY;
-
-      this._x -= this._boxX + this._handleX * this._boxWidth;
-      this._y -= this._boxY + this._handleY * this._boxHeight;
-
-      if (this._aligned && this._parent) {
-        this._parent.relativeMatrix();
-        this._x += this._alignX * this._parent._width;
-        this._y += this._alignY * this._parent._height;
-      }
-
-      rel.translate(this._x, this._y);
-
-      return this._relativeMatrix;
-    };
-
-    Pin.prototype.get = function(key) {
-      if (typeof getters[key] === 'function') {
-        return getters[key](this);
-      }
-    };
-
-    // TODO: Use defineProperty instead? What about multi-field pinning?
-    Pin.prototype.set = function(a, b) {
-      if (typeof a === 'string') {
-        if (typeof setters[a] === 'function' && typeof b !== 'undefined') {
-          setters[a](this, b);
-        }
-      } else if (typeof a === 'object') {
-        for (b in a) {
-          if (typeof setters[b] === 'function' && typeof a[b] !== 'undefined') {
-            setters[b](this, a[b], a);
-          }
-        }
-      }
-      if (this._owner) {
-        this._owner._ts_pin = ++iid;
-        this._owner.touch();
-      }
-      return this;
-    };
-
-    var getters = {
-      alpha : function(pin) {
-        return pin._alpha;
-      },
-
-      textureAlpha : function(pin) {
-        return pin._textureAlpha;
-      },
-
-      width : function(pin) {
-        return pin._width;
-      },
-
-      height : function(pin) {
-        return pin._height;
-      },
-
-      boxWidth : function(pin) {
-        return pin._boxWidth;
-      },
-
-      boxHeight : function(pin) {
-        return pin._boxHeight;
-      },
-
-      // scale : function(pin) {
-      // },
-
-      scaleX : function(pin) {
-        return pin._scaleX;
-      },
-
-      scaleY : function(pin) {
-        return pin._scaleY;
-      },
-
-      // skew : function(pin) {
-      // },
-
-      skewX : function(pin) {
-        return pin._skewX;
-      },
-
-      skewY : function(pin) {
-        return pin._skewY;
-      },
-
-      rotation : function(pin) {
-        return pin._rotation;
-      },
-
-      // pivot : function(pin) {
-      // },
-
-      pivotX : function(pin) {
-        return pin._pivotX;
-      },
-
-      pivotY : function(pin) {
-        return pin._pivotY;
-      },
-
-      // offset : function(pin) {
-      // },
-
-      offsetX : function(pin) {
-        return pin._offsetX;
-      },
-
-      offsetY : function(pin) {
-        return pin._offsetY;
-      },
-
-      // align : function(pin) {
-      // },
-
-      alignX : function(pin) {
-        return pin._alignX;
-      },
-
-      alignY : function(pin) {
-        return pin._alignY;
-      },
-
-      // handle : function(pin) {
-      // },
-
-      handleX : function(pin) {
-        return pin._handleX;
-      },
-
-      handleY : function(pin) {
-        return pin._handleY;
-      }
-    };
-
-    var setters = {
-      alpha : function(pin, value) {
-        pin._alpha = value;
-      },
-
-      textureAlpha : function(pin, value) {
-        pin._textureAlpha = value;
-      },
-
-      width : function(pin, value) {
-        pin._width_ = value;
-        pin._width = value;
-        pin._ts_transform = ++iid;
-      },
-
-      height : function(pin, value) {
-        pin._height_ = value;
-        pin._height = value;
-        pin._ts_transform = ++iid;
-      },
-
-      scale : function(pin, value) {
-        pin._scaleX = value;
-        pin._scaleY = value;
-        pin._ts_transform = ++iid;
-      },
-
-      scaleX : function(pin, value) {
-        pin._scaleX = value;
-        pin._ts_transform = ++iid;
-      },
-
-      scaleY : function(pin, value) {
-        pin._scaleY = value;
-        pin._ts_transform = ++iid;
-      },
-
-      skew : function(pin, value) {
-        pin._skewX = value;
-        pin._skewY = value;
-        pin._ts_transform = ++iid;
-      },
-
-      skewX : function(pin, value) {
-        pin._skewX = value;
-        pin._ts_transform = ++iid;
-      },
-
-      skewY : function(pin, value) {
-        pin._skewY = value;
-        pin._ts_transform = ++iid;
-      },
-
-      rotation : function(pin, value) {
-        pin._rotation = value;
-        pin._ts_transform = ++iid;
-      },
-
-      pivot : function(pin, value) {
-        pin._pivotX = value;
-        pin._pivotY = value;
-        pin._pivoted = true;
-        pin._ts_transform = ++iid;
-      },
-
-      pivotX : function(pin, value) {
-        pin._pivotX = value;
-        pin._pivoted = true;
-        pin._ts_transform = ++iid;
-      },
-
-      pivotY : function(pin, value) {
-        pin._pivotY = value;
-        pin._pivoted = true;
-        pin._ts_transform = ++iid;
-      },
-
-      offset : function(pin, value) {
-        pin._offsetX = value;
-        pin._offsetY = value;
-        pin._ts_translate = ++iid;
-      },
-
-      offsetX : function(pin, value) {
-        pin._offsetX = value;
-        pin._ts_translate = ++iid;
-      },
-
-      offsetY : function(pin, value) {
-        pin._offsetY = value;
-        pin._ts_translate = ++iid;
-      },
-
-      align : function(pin, value) {
-        this.alignX(pin, value);
-        this.alignY(pin, value);
-      },
-
-      alignX : function(pin, value) {
-        pin._alignX = value;
-        pin._aligned = true;
-        pin._ts_translate = ++iid;
-
-        this.handleX(pin, value);
-      },
-
-      alignY : function(pin, value) {
-        pin._alignY = value;
-        pin._aligned = true;
-        pin._ts_translate = ++iid;
-
-        this.handleY(pin, value);
-      },
-
-      handle : function(pin, value) {
-        this.handleX(pin, value);
-        this.handleY(pin, value);
-      },
-
-      handleX : function(pin, value) {
-        pin._handleX = value;
-        pin._handled = true;
-        pin._ts_translate = ++iid;
-      },
-
-      handleY : function(pin, value) {
-        pin._handleY = value;
-        pin._handled = true;
-        pin._ts_translate = ++iid;
-      },
-
-      resizeMode : function(pin, value, all) {
-        if (all) {
-          if (value == 'in') {
-            value = 'in-pad';
-          } else if (value == 'out') {
-            value = 'out-crop';
-          }
-          scaleTo(pin, all.resizeWidth, all.resizeHeight, value);
-        }
-      },
-
-      resizeWidth : function(pin, value, all) {
-        if (!all || !all.resizeMode) {
-          scaleTo(pin, value, null);
-        }
-      },
-
-      resizeHeight : function(pin, value, all) {
-        if (!all || !all.resizeMode) {
-          scaleTo(pin, null, value);
-        }
-      },
-
-      scaleMode : function(pin, value, all) {
-        if (all) {
-          scaleTo(pin, all.scaleWidth, all.scaleHeight, value);
-        }
-      },
-
-      scaleWidth : function(pin, value, all) {
-        if (!all || !all.scaleMode) {
-          scaleTo(pin, value, null);
-        }
-      },
-
-      scaleHeight : function(pin, value, all) {
-        if (!all || !all.scaleMode) {
-          scaleTo(pin, null, value);
-        }
-      },
-
-      matrix : function(pin, value) {
-        this.scaleX(pin, value.a);
-        this.skewX(pin, value.c / value.d);
-        this.skewY(pin, value.b / value.a);
-        this.scaleY(pin, value.d);
-        this.offsetX(pin, value.e);
-        this.offsetY(pin, value.f);
-        this.rotation(pin, 0);
-      }
-    };
-
-    function scaleTo(pin, width, height, mode) {
-      var w = typeof width === 'number';
-      var h = typeof height === 'number';
-      var m = typeof mode === 'string';
-      pin._ts_transform = ++iid;
-      if (w) {
-        pin._scaleX = width / pin._width_;
-        pin._width = pin._width_;
-      }
-      if (h) {
-        pin._scaleY = height / pin._height_;
-        pin._height = pin._height_;
-      }
-      if (w && h && m) {
-        if (mode == 'out' || mode == 'out-crop') {
-          pin._scaleX = pin._scaleY = Math.max(pin._scaleX, pin._scaleY);
-        } else if (mode == 'in' || mode == 'in-pad') {
-          pin._scaleX = pin._scaleY = Math.min(pin._scaleX, pin._scaleY);
-        }
-        if (mode == 'out-crop' || mode == 'in-pad') {
-          pin._width = width / pin._scaleX;
-          pin._height = height / pin._scaleY;
-        }
-      }
-    }
-    core.prototype.scaleTo = function(a, b, c) {
-      if (typeof a === 'object')
-        c = b, b = a.y, a = a.x;
-      scaleTo(this._pin, a, b, c);
-      return this;
-    };
-
-    // Used by Tween class
-    Pin._add_shortcuts = function(Class) {
-      Class.prototype.size = function(w, h) {
-        this.pin('width', w);
-        this.pin('height', h);
-        return this;
-      };
-
-      Class.prototype.width = function(w) {
-        if (typeof w === 'undefined') {
-          return this.pin('width');
-        }
-        this.pin('width', w);
-        return this;
-      };
-
-      Class.prototype.height = function(h) {
-        if (typeof h === 'undefined') {
-          return this.pin('height');
-        }
-        this.pin('height', h);
-        return this;
-      };
-
-      Class.prototype.offset = function(a, b) {
-        if (typeof a === 'object')
-          b = a.y, a = a.x;
-        this.pin('offsetX', a);
-        this.pin('offsetY', b);
-        return this;
-      };
-
-      Class.prototype.rotate = function(a) {
-        this.pin('rotation', a);
-        return this;
-      };
-
-      Class.prototype.skew = function(a, b) {
-        if (typeof a === 'object')
-          b = a.y, a = a.x;
-        else if (typeof b === 'undefined')
-          b = a;
-        this.pin('skewX', a);
-        this.pin('skewY', b);
-        return this;
-      };
-
-      Class.prototype.scale = function(a, b) {
-        if (typeof a === 'object')
-          b = a.y, a = a.x;
-        else if (typeof b === 'undefined')
-          b = a;
-        this.pin('scaleX', a);
-        this.pin('scaleY', b);
-        return this;
-      };
-
-      Class.prototype.alpha = function(a, ta) {
-        this.pin('alpha', a);
-        if (typeof ta !== 'undefined') {
-          this.pin('textureAlpha', ta);
-        }
-        return this;
-      };
-    };
-
-    Pin._add_shortcuts(core);
-
-    var pin = Pin;
-
-    core.prototype._textures = null;
-    core.prototype._alpha = 1;
-
-    core.prototype.render = function(context) {
-      if (!this._visible) {
-        return;
-      }
-      stats.node++;
-
-      var m = this.matrix();
-      context.setTransform(m.a, m.b, m.c, m.d, m.e, m.f);
-
-      // move this elsewhere!
-      this._alpha = this._pin._alpha * (this._parent ? this._parent._alpha : 1);
-      var alpha = this._pin._textureAlpha * this._alpha;
-
-      if (context.globalAlpha != alpha) {
-        context.globalAlpha = alpha;
-      }
-
-      if (this._textures !== null) {
-        for (var i = 0, n = this._textures.length; i < n; i++) {
-          this._textures[i].draw(context);
-        }
-      }
-
-      if (context.globalAlpha != this._alpha) {
-        context.globalAlpha = this._alpha;
-      }
-
-      var child, next = this._first;
-      while (child = next) {
-        next = child._next;
-        child.render(context);
-      }
-    };
-
-    core.prototype._tickBefore = null;
-    core.prototype._tickAfter = null;
-    core.prototype.MAX_ELAPSE = Infinity;
-
-    core.prototype._tick = function(elapsed, now, last) {
-      if (!this._visible) {
-        return;
-      }
-
-      if (elapsed > this.MAX_ELAPSE) {
-        elapsed = this.MAX_ELAPSE;
-      }
-
-      var ticked = false;
-
-      if (this._tickBefore !== null) {
-        for (var i = 0; i < this._tickBefore.length; i++) {
-          stats.tick++;
-          var tickFn = this._tickBefore[i];
-          ticked = tickFn.call(this, elapsed, now, last) === true || ticked;
-        }
-      }
-
-      var child, next = this._first;
-      while (child = next) {
-        next = child._next;
-        if (child._flag('_tick')) {
-          ticked = child._tick(elapsed, now, last) === true ? true : ticked;
-        }
-      }
-
-      if (this._tickAfter !== null) {
-        for (var i = 0; i < this._tickAfter.length; i++) {
-          stats.tick++;
-          var tickFn = this._tickAfter[i];
-          ticked = tickFn.call(this, elapsed, now, last) === true || ticked;
-        }
-      }
-
-      return ticked;
-    };
-
-    core.prototype.tick = function(ticker, before) {
-      if (typeof ticker !== 'function') {
-        return;
-      }
-      if (before) {
-        if (this._tickBefore === null) {
-          this._tickBefore = [];
-        }
-        this._tickBefore.push(ticker);
-      } else {
-        if (this._tickAfter === null) {
-          this._tickAfter = [];
-        }
-        this._tickAfter.push(ticker);
-      }
-      this._flag('_tick', this._tickAfter !== null && this._tickAfter.length > 0
-          || this._tickBefore !== null && this._tickBefore.length > 0);
-    };
-
-    core.prototype.untick = function(ticker) {
-      if (typeof ticker !== 'function') {
-        return;
-      }
-      var i;
-      if (this._tickBefore !== null && (i = this._tickBefore.indexOf(ticker)) >= 0) {
-        this._tickBefore.splice(i, 1);
-      }
-      if (this._tickAfter !== null && (i = this._tickAfter.indexOf(ticker)) >= 0) {
-        this._tickAfter.splice(i, 1);
-      }
-    };
-
-    core.prototype.timeout = function(fn, time) {
-      this.setTimeout(fn, time);
-    };
-
-    core.prototype.setTimeout = function(fn, time) {
-      function timer(t) {
-        if ((time -= t) < 0) {
-          this.untick(timer);
-          fn.call(this);
-        } else {
-          return true;
-        }
-      }
-      this.tick(timer);
-      return timer;
-    };
-
-    core.prototype.clearTimeout = function(timer) {
-      this.untick(timer);
-    };
-
-    Root._super = core;
-    Root.prototype = create(Root._super.prototype);
-
-    core.root = function(request, render) {
-      return new Root(request, render);
-    };
-
-    function Root(request, render) {
-      Root._super.call(this);
-      this.label('Root');
-
-      var paused = true;
-      var stopped = true;
-
-      var self = this;
-      var lastTime = 0;
-      var loop = function(now) {
-        if (paused === true || stopped === true) {
-          return;
-        }
-
-        stats.tick = stats.node = stats.draw = 0;
-
-        var last = lastTime || now;
-        var elapsed = now - last;
-        lastTime = now;
-
-        var ticked = self._tick(elapsed, now, last);
-        if (self._mo_touch != self._ts_touch) {
-          self._mo_touch = self._ts_touch;
-          render(self);
-          request(loop);
-        } else if (ticked) {
-          request(loop);
-        } else {
-          paused = true;
-        }
-
-        stats.fps = elapsed ? 1000 / elapsed : 0;
-      };
-
-      this.start = function() {
-        stopped = false;
-        return this.resume();
-      };
-
-      this.resume = function() {
-        if (paused) {
-          this.publish('resume');
-          paused = false;
-          request(loop);
-        }
-        return this;
-      };
-
-      this.pause = function() {
-        if (!paused) {
-          this.publish('pause');
-        }
-        paused = true;
-        return this;
-      };
-
-      this.touch_root = this.touch;
-      this.touch = function() {
-        this.resume();
-        return this.touch_root();
-      };
-      this.stop = function() {
-        stopped = true;
-        return this;
-      };
-    }
-    Root.prototype.background = function(color) {
-      // to be implemented by loaders
-      return this;
-    };
-
-    Root.prototype.viewport = function(width, height, ratio) {
-      if (typeof width === 'undefined') {
-        return extend({}, this._viewport);
-      }
-      this._viewport = {
-        width : width,
-        height : height,
-        ratio : ratio || 1
-      };
-      this.viewbox();
-      var data = extend({}, this._viewport);
-      this.visit({
-        start : function(node) {
-          if (!node._flag('viewport')) {
-            return true;
-          }
-          node.publish('viewport', [ data ]);
-        }
-      });
-      return this;
-    };
-
-    // TODO: static/fixed viewbox
-    Root.prototype.viewbox = function(width, height, mode) {
-      if (typeof width === 'number' && typeof height === 'number') {
-        this._viewbox = {
-          width : width,
-          height : height,
-          mode : /^(in|out|in-pad|out-crop)$/.test(mode) ? mode : 'in-pad'
-        };
-      }
-
-      var box = this._viewbox;
-      var size = this._viewport;
-      if (size && box) {
-        this.pin({
-          width : box.width,
-          height : box.height
-        });
-        this.scaleTo(size.width, size.height, box.mode);
-      } else if (size) {
-        this.pin({
-          width : size.width,
-          height : size.height
-        });
-      }
-
-      return this;
-    };
-
-    var lib = core;
-    var Matrix = matrix;
-    var Texture = texture;
-    lib.Matrix = Matrix;
-    lib.Texture = Texture;
-
-    core.canvas = function(type, attributes, drawFn) {
-      if (typeof type === 'string') {
-        if (typeof attributes === 'object') ; else {
-          if (typeof attributes === 'function') {
-            drawFn = attributes;
-          }
-          attributes = {};
-        }
-      } else {
-        if (typeof type === 'function') {
-          drawFn = type;
-        }
-        attributes = {};
-        type = '2d';
-      }
-
-      var canvas = document.createElement('canvas');
-      var context = canvas.getContext(type, attributes);
-      var texture$1 = new texture(canvas);
-
-      texture$1.context = function() {
-        return context;
-      };
-
-      texture$1.size = function(width, height, ratio) {
-        ratio = ratio || 1;
-        canvas.width = width * ratio;
-        canvas.height = height * ratio;
-        this.src(canvas, ratio);
-        return this;
-      };
-
-      texture$1.canvas = function(fn) {
-        if (typeof fn === 'function') {
-          fn.call(this, context);
-        } else if (typeof fn === 'undefined' && typeof drawFn === 'function') {
-          drawFn.call(this, context);
-        }
-        return this;
-      };
-
-      if (typeof drawFn === 'function') {
-        drawFn.call(texture$1, context);
-      }
-
-      return texture$1;
-    };
-
-    var repeat = function(img, owidth, oheight, stretch, inner, insert) {
-
-      var width = img.width;
-      var height = img.height;
-      var left = img.left;
-      var right = img.right;
-      var top = img.top;
-      var bottom = img.bottom;
-
-      left = typeof left === 'number' && left === left ? left : 0;
-      right = typeof right === 'number' && right === right ? right : 0;
-      top = typeof top === 'number' && top === top ? top : 0;
-      bottom = typeof bottom === 'number' && bottom === bottom ? bottom : 0;
-
-      width = width - left - right;
-      height = height - top - bottom;
-
-      if (!inner) {
-        owidth = Math.max(owidth - left - right, 0);
-        oheight = Math.max(oheight - top - bottom, 0);
-      }
-
-      var i = 0;
-
-      if (top > 0 && left > 0)
-        insert(i++, 0, 0, left, top, 0, 0, left, top);
-      if (bottom > 0 && left > 0)
-        insert(i++, 0, height + top, left, bottom, 0, oheight + top, left, bottom);
-      if (top > 0 && right > 0)
-        insert(i++, width + left, 0, right, top, owidth + left, 0, right, top);
-      if (bottom > 0 && right > 0)
-        insert(i++, width + left, height + top, right, bottom, owidth + left,
-            oheight + top, right, bottom);
-
-      if (stretch) {
-        if (top > 0)
-          insert(i++, left, 0, width, top, left, 0, owidth, top);
-        if (bottom > 0)
-          insert(i++, left, height + top, width, bottom, left, oheight + top,
-              owidth, bottom);
-        if (left > 0)
-          insert(i++, 0, top, left, height, 0, top, left, oheight);
-        if (right > 0)
-          insert(i++, width + left, top, right, height, owidth + left, top, right,
-              oheight);
-        // center
-        insert(i++, left, top, width, height, left, top, owidth, oheight);
-
-      } else { // tile
-        var l = left, r = owidth, w;
-        while (r > 0) {
-          w = Math.min(width, r), r -= width;
-          var t = top, b = oheight, h;
-          while (b > 0) {
-            h = Math.min(height, b), b -= height;
-            insert(i++, left, top, w, h, l, t, w, h);
-            if (r <= 0) {
-              if (left)
-                insert(i++, 0, top, left, h, 0, t, left, h);
-              if (right)
-                insert(i++, width + left, top, right, h, l + w, t, right, h);
-            }
-            t += h;
-          }
-          if (top)
-            insert(i++, left, 0, w, top, l, 0, w, top);
-          if (bottom)
-            insert(i++, left, height + top, w, bottom, l, t, w, bottom);
-          l += w;
-        }
-      }
-
-      return i;
-    };
-
-    var image = Image$1;
-
-    core.image = function(image) {
-      var img = new Image$1();
-      image && img.image(image);
-      return img;
-    };
-
-    Image$1._super = core;
-    Image$1.prototype = create(Image$1._super.prototype);
-
-    function Image$1() {
-      Image$1._super.call(this);
-      this.label('Image');
-      this._textures = [];
-      this._image = null;
-    }
-    /**
-     * @deprecated Use image
-     */
-    Image$1.prototype.setImage = function(a, b, c) {
-      return this.image(a, b, c);
-    };
-
-    Image$1.prototype.image = function(image) {
-      this._image = core.texture(image).one();
-      this.pin('width', this._image ? this._image.width : 0);
-      this.pin('height', this._image ? this._image.height : 0);
-      this._textures[0] = this._image.pipe();
-      this._textures.length = 1;
-      return this;
-    };
-
-    Image$1.prototype.tile = function(inner) {
-      this._repeat(false, inner);
-      return this;
-    };
-
-    Image$1.prototype.stretch = function(inner) {
-      this._repeat(true, inner);
-      return this;
-    };
-
-    Image$1.prototype._repeat = function(stretch, inner) {
-      var self = this;
-      this.untick(this._repeatTicker);
-      this.tick(this._repeatTicker = function() {
-        if (this._mo_stretch == this._pin._ts_transform) {
-          return;
-        }
-        this._mo_stretch = this._pin._ts_transform;
-        var width = this.pin('width');
-        var height = this.pin('height');
-        this._textures.length = repeat(this._image, width, height, stretch, inner,
-            insert);
-      });
-
-      function insert(i, sx, sy, sw, sh, dx, dy, dw, dh) {
-        var repeat = self._textures.length > i ? self._textures[i]
-            : self._textures[i] = self._image.pipe();
-        repeat.src(sx, sy, sw, sh);
-        repeat.dest(dx, dy, dw, dh);
-      }
-    };
-
-    core.anim = function(frames, fps) {
-      var anim = new Anim();
-      anim.frames(frames).gotoFrame(0);
-      fps && anim.fps(fps);
-      return anim;
-    };
-
-    Anim._super = core;
-    Anim.prototype = create(Anim._super.prototype);
-
-    // TODO: replace with atlas fps or texture time
-    core.Anim = {
-      FPS : 15
-    };
-
-    function Anim() {
-      Anim._super.call(this);
-      this.label('Anim');
-
-      this._textures = [];
-
-      this._fps = core.Anim.FPS;
-      this._ft = 1000 / this._fps;
-
-      this._time = -1;
-      this._repeat = 0;
-
-      this._index = 0;
-      this._frames = [];
-
-      var lastTime = 0;
-      this.tick(function(t, now, last) {
-        if (this._time < 0 || this._frames.length <= 1) {
-          return;
-        }
-
-        // ignore old elapsed
-        var ignore = lastTime != last;
-        lastTime = now;
-        if (ignore) {
-          return true;
-        }
-
-        this._time += t;
-        if (this._time < this._ft) {
-          return true;
-        }
-        var n = this._time / this._ft | 0;
-        this._time -= n * this._ft;
-        this.moveFrame(n);
-        if (this._repeat > 0 && (this._repeat -= n) <= 0) {
-          this.stop();
-          this._callback && this._callback();
-          return false;
-        }
-        return true;
-      }, false);
-    }
-    Anim.prototype.fps = function(fps) {
-      if (typeof fps === 'undefined') {
-        return this._fps;
-      }
-      this._fps = fps > 0 ? fps : core.Anim.FPS;
-      this._ft = 1000 / this._fps;
-      return this;
-    };
-
-    /**
-     * @deprecated Use frames
-     */
-    Anim.prototype.setFrames = function(a, b, c) {
-      return this.frames(a, b, c);
-    };
-
-    Anim.prototype.frames = function(frames) {
-      this._index = 0;
-      this._frames = core.texture(frames).array();
-      this.touch();
-      return this;
-    };
-
-    Anim.prototype.length = function() {
-      return this._frames ? this._frames.length : 0;
-    };
-
-    Anim.prototype.gotoFrame = function(frame, resize) {
-      this._index = math.rotate(frame, this._frames.length) | 0;
-      resize = resize || !this._textures[0];
-      this._textures[0] = this._frames[this._index];
-      if (resize) {
-        this.pin('width', this._textures[0].width);
-        this.pin('height', this._textures[0].height);
-      }
-      this.touch();
-      return this;
-    };
-
-    Anim.prototype.moveFrame = function(move) {
-      return this.gotoFrame(this._index + move);
-    };
-
-    Anim.prototype.repeat = function(repeat, callback) {
-      this._repeat = repeat * this._frames.length - 1;
-      this._callback = callback;
-      this.play();
-      return this;
-    };
-
-    Anim.prototype.play = function(frame) {
-      if (typeof frame !== 'undefined') {
-        this.gotoFrame(frame);
-        this._time = 0;
-      } else if (this._time < 0) {
-        this._time = 0;
-      }
-
-      this.touch();
-      return this;
-    };
-
-    Anim.prototype.stop = function(frame) {
-      this._time = -1;
-      if (typeof frame !== 'undefined') {
-        this.gotoFrame(frame);
-      }
-      return this;
-    };
-
-    core.string = function(frames) {
-      return new Str().frames(frames);
-    };
-
-    Str._super = core;
-    Str.prototype = create(Str._super.prototype);
-
-    function Str() {
-      Str._super.call(this);
-      this.label('String');
-      this._textures = [];
-    }
-    /**
-     * @deprecated Use frames
-     */
-    Str.prototype.setFont = function(a, b, c) {
-      return this.frames(a, b, c);
-    };
-
-    Str.prototype.frames = function(frames) {
-      this._textures = [];
-      if (typeof frames == 'string') {
-        frames = core.texture(frames);
-        this._item = function(value) {
-          return frames.one(value);
-        };
-      } else if (typeof frames === 'object') {
-        this._item = function(value) {
-          return frames[value];
-        };
-      } else if (typeof frames === 'function') {
-        this._item = frames;
-      }
-      return this;
-    };
-
-    /**
-     * @deprecated Use value
-     */
-    Str.prototype.setValue = function(a, b, c) {
-      return this.value(a, b, c);
-    };
-
-    Str.prototype.value = function(value) {
-      if (typeof value === 'undefined') {
-        return this._value;
-      }
-      if (this._value === value) {
-        return this;
-      }
-      this._value = value;
-
-      if (value === null) {
-        value = '';
-      } else if (typeof value !== 'string' && !is_1.array(value)) {
-        value = value.toString();
-      }
-
-      this._spacing = this._spacing || 0;
-
-      var width = 0, height = 0;
-      for (var i = 0; i < value.length; i++) {
-        var image = this._textures[i] = this._item(value[i]);
-        width += i > 0 ? this._spacing : 0;
-        image.dest(width, 0);
-        width = width + image.width;
-        height = Math.max(height, image.height);
-      }
-      this.pin('width', width);
-      this.pin('height', height);
-      this._textures.length = value.length;
-      return this;
-    };
-
-    core.row = function(align) {
-      return core.create().row(align).label('Row');
-    };
-
-    core.prototype.row = function(align) {
-      this.sequence('row', align);
-      return this;
-    };
-
-    core.column = function(align) {
-      return core.create().column(align).label('Row');
-    };
-
-    core.prototype.column = function(align) {
-      this.sequence('column', align);
-      return this;
-    };
-
-    core.sequence = function(type, align) {
-      return core.create().sequence(type, align).label('Sequence');
-    };
-
-    core.prototype.sequence = function(type, align) {
-
-      this._padding = this._padding || 0;
-      this._spacing = this._spacing || 0;
-
-      this.untick(this._layoutTiker);
-      this.tick(this._layoutTiker = function() {
-        if (this._mo_seq == this._ts_touch) {
-          return;
-        }
-        this._mo_seq = this._ts_touch;
-
-        var alignChildren = (this._mo_seqAlign != this._ts_children);
-        this._mo_seqAlign = this._ts_children;
-
-        var width = 0, height = 0;
-
-        var child, next = this.first(true);
-        var first = true;
-        while (child = next) {
-          next = child.next(true);
-
-          child.matrix(true);
-          var w = child.pin('boxWidth');
-          var h = child.pin('boxHeight');
-
-          if (type == 'column') {
-            !first && (height += this._spacing);
-            child.pin('offsetY') != height && child.pin('offsetY', height);
-            width = Math.max(width, w);
-            height = height + h;
-            alignChildren && child.pin('alignX', align);
-
-          } else if (type == 'row') {
-            !first && (width += this._spacing);
-            child.pin('offsetX') != width && child.pin('offsetX', width);
-            width = width + w;
-            height = Math.max(height, h);
-            alignChildren && child.pin('alignY', align);
-          }
-          first = false;
-        }
-        width += 2 * this._padding;
-        height += 2 * this._padding;
-        this.pin('width') != width && this.pin('width', width);
-        this.pin('height') != height && this.pin('height', height);
-      });
-      return this;
-    };
-
-    core.box = function() {
-      return core.create().box().label('Box');
-    };
-
-    core.prototype.box = function() {
-      this._padding = this._padding || 0;
-
-      this.untick(this._layoutTiker);
-      this.tick(this._layoutTiker = function() {
-        if (this._mo_box == this._ts_touch) {
-          return;
-        }
-        this._mo_box = this._ts_touch;
-
-        var width = 0, height = 0;
-        var child, next = this.first(true);
-        while (child = next) {
-          next = child.next(true);
-          child.matrix(true);
-          var w = child.pin('boxWidth');
-          var h = child.pin('boxHeight');
-          width = Math.max(width, w);
-          height = Math.max(height, h);
-        }
-        width += 2 * this._padding;
-        height += 2 * this._padding;
-        this.pin('width') != width && this.pin('width', width);
-        this.pin('height') != height && this.pin('height', height);
-      });
-      return this;
-    };
-
-    core.layer = function() {
-      return core.create().layer().label('Layer');
-    };
-
-    core.prototype.layer = function() {
-
-      this.untick(this._layoutTiker);
-      this.tick(this._layoutTiker = function() {
-        var parent = this.parent();
-        if (parent) {
-          var width = parent.pin('width');
-          if (this.pin('width') != width) {
-            this.pin('width', width);
-          }
-          var height = parent.pin('height');
-          if (this.pin('height') != height) {
-            this.pin('height', height);
-          }
-        }
-      }, true);
-      return this;
-    };
-
-    // TODO: move padding to pin
-    core.prototype.padding = function(pad) {
-      this._padding = pad;
-      return this;
-    };
-
-    core.prototype.spacing = function(space) {
-      this._spacing = space;
-      return this;
-    };
-
-    function _identity(x) {
-      return x;
-    }var _cache = {};
-    var _modes = {};
-    var _easings = {};
-
-    function Easing(token) {
-      if (typeof token === 'function') {
-        return token;
-      }
-      if (typeof token !== 'string') {
-        return _identity;
-      }
-      var fn = _cache[token];
-      if (fn) {
-        return fn;
-      }
-      var match = /^(\w+)(-(in|out|in-out|out-in))?(\((.*)\))?$/i.exec(token);
-      if (!match || !match.length) {
-        return _identity;
-      }
-      var easing = _easings[match[1]];
-      var mode = _modes[match[3]];
-      var params = match[5];
-      if (easing && easing.fn) {
-        fn = easing.fn;
-      } else if (easing && easing.fc) {
-        fn = easing.fc.apply(easing.fc, params
-            && params.replace(/\s+/, '').split(','));
-      } else {
-        fn = _identity;
-      }
-      if (mode) {
-        fn = mode.fn(fn);
-      }
-      // TODO: It can be a memory leak with different `params`.
-      _cache[token] = fn;
-      return fn;
-    }
-    Easing.add = function(data) {
-      // TODO: create a map of all { name-mode : data }
-      var names = (data.name || data.mode).split(/\s+/);
-      for (var i = 0; i < names.length; i++) {
-        var name = names[i];
-        if (name) {
-          (data.name ? _easings : _modes)[name] = data;
-        }
-      }
-    };
-
-    Easing.add({
-      mode : 'in',
-      fn : function(f) {
-        return f;
-      }
-    });
-
-    Easing.add({
-      mode : 'out',
-      fn : function(f) {
-        return function(t) {
-          return 1 - f(1 - t);
-        };
-      }
-    });
-
-    Easing.add({
-      mode : 'in-out',
-      fn : function(f) {
-        return function(t) {
-          return (t < 0.5) ? (f(2 * t) / 2) : (1 - f(2 * (1 - t)) / 2);
-        };
-      }
-    });
-
-    Easing.add({
-      mode : 'out-in',
-      fn : function(f) {
-        return function(t) {
-          return (t < 0.5) ? (1 - f(2 * (1 - t)) / 2) : (f(2 * t) / 2);
-        };
-      }
-    });
-
-    Easing.add({
-      name : 'linear',
-      fn : function(t) {
-        return t;
-      }
-    });
-
-    Easing.add({
-      name : 'quad',
-      fn : function(t) {
-        return t * t;
-      }
-    });
-
-    Easing.add({
-      name : 'cubic',
-      fn : function(t) {
-        return t * t * t;
-      }
-    });
-
-    Easing.add({
-      name : 'quart',
-      fn : function(t) {
-        return t * t * t * t;
-      }
-    });
-
-    Easing.add({
-      name : 'quint',
-      fn : function(t) {
-        return t * t * t * t * t;
-      }
-    });
-
-    Easing.add({
-      name : 'sin sine',
-      fn : function(t) {
-        return 1 - Math.cos(t * Math.PI / 2);
-      }
-    });
-
-    Easing.add({
-      name : 'exp expo',
-      fn : function(t) {
-        return t == 0 ? 0 : Math.pow(2, 10 * (t - 1));
-      }
-    });
-
-    Easing.add({
-      name : 'circle circ',
-      fn : function(t) {
-        return 1 - Math.sqrt(1 - t * t);
-      }
-    });
-
-    Easing.add({
-      name : 'bounce',
-      fn : function(t) {
-        return t < 1 / 2.75 ? 7.5625 * t * t : t < 2 / 2.75 ? 7.5625
-            * (t -= 1.5 / 2.75) * t + .75 : t < 2.5 / 2.75 ? 7.5625
-            * (t -= 2.25 / 2.75) * t + .9375 : 7.5625 * (t -= 2.625 / 2.75) * t
-            + .984375;
-      }
-    });
-
-    Easing.add({
-      name : 'poly',
-      fc : function(e) {
-        return function(t) {
-          return Math.pow(t, e);
-        };
-      }
-    });
-
-    Easing.add({
-      name : 'elastic',
-      fc : function(a, p) {
-        p = p || 0.45;
-        a = a || 1;
-        var s = p / (2 * Math.PI) * Math.asin(1 / a);
-        return function(t) {
-          return 1 + a * Math.pow(2, -10 * t)
-              * Math.sin((t - s) * (2 * Math.PI) / p);
-        };
-      }
-    });
-
-    Easing.add({
-      name : 'back',
-      fc : function(s) {
-        s = typeof s !== 'undefined' ? s : 1.70158;
-        return function(t) {
-          return t * t * ((s + 1) * t - s);
-        };
-      }
-    });
-
-    var easing = Easing;
-
-    core.prototype.tween = function(duration, delay, append) {
-      if (typeof duration !== 'number') {
-        append = duration, delay = 0, duration = 0;
-      } else if (typeof delay !== 'number') {
-        append = delay, delay = 0;
-      }
-
-      if (!this._tweens) {
-        this._tweens = [];
-        var ticktime = 0;
-        this.tick(function(elapsed, now, last) {
-          if (!this._tweens.length) {
-            return;
-          }
-
-          // ignore old elapsed
-          var ignore = ticktime != last;
-          ticktime = now;
-          if (ignore) {
-            return true;
-          }
-
-          var head = this._tweens[0];
-
-          var next = head.tick(this, elapsed, now, last);
-
-          if (next && head === this._tweens[0]) {
-            this._tweens.shift();
-          }
-
-          if (Array.isArray(next)) {
-            for (var i = 0; i < next.length; i++) {
-              try {
-                next[i].call(this);
-              } catch (e) {
-                console.log(e);
-              }
-            }
-          } else if (typeof next === 'object') {
-            this._tweens.unshift(next);
-          }
-
-          return true;
-        }, true);
-      }
-
-      this.touch();
-      if (!append) {
-        this._tweens.length = 0;
-      }
-      var tween = new Tween(this, duration, delay);
-      this._tweens.push(tween);
-      return tween;
-    };
-
-    function Tween(owner, duration, delay) {
-      this._end = {};
-      this._duration = duration || 400;
-      this._delay = delay || 0;
-
-      this._owner = owner;
-      this._time = 0;
-    }
-    Tween.prototype.tick = function(node, elapsed, now, last) {
-      this._time += elapsed;
-
-      if (this._time < this._delay) {
-        return;
-      }
-
-      var time = this._time - this._delay;
-
-      if (!this._start) {
-        this._start = {};
-        for ( var key in this._end) {
-          this._start[key] = this._owner.pin(key);
-        }
-      }
-
-      var p, over;
-      if (time < this._duration) {
-        p = time / this._duration;
-        over = false;
-      } else {
-        p = 1;
-        over = true;
-      }
-
-      if (typeof this._easing == 'function') {
-        p = this._easing(p);
-      }
-
-      var q = 1 - p;
-
-      for ( var key in this._end) {
-        this._owner.pin(key, this._start[key] * q + this._end[key] * p);
-      }
-
-      if (over) {
-        var actions = [this._hide, this._remove, this._done];
-        actions = actions.filter(function( element ) {
-          return typeof element === 'function';
-        });
-        return this._next || actions;
-      }
-    };
-
-    Tween.prototype.tween = function(duration, delay) {
-      return this._next = new Tween(this._owner, duration, delay);
-    };
-
-    Tween.prototype.duration = function(duration) {
-      this._duration = duration;
-      return this;
-    };
-
-    Tween.prototype.delay = function(delay) {
-      this._delay = delay;
-      return this;
-    };
-
-    Tween.prototype.ease = function(easing$1) {
-      this._easing = easing(easing$1);
-      return this;
-    };
-
-    Tween.prototype.done = function(fn) {
-      this._done = fn;
-      return this;
-    };
-
-    Tween.prototype.hide = function() {
-      this._hide = function() {
-        this.hide();
-      };
-      return this;
-    };
-
-    Tween.prototype.remove = function() {
-      this._remove = function() {
-        this.remove();
-      };
-      return this;
-    };
-
-    Tween.prototype.pin = function(a, b) {
-      if (typeof a === 'object') {
-        for ( var attr in a) {
-          pinning(this._owner, this._end, attr, a[attr]);
-        }
-      } else if (typeof b !== 'undefined') {
-        pinning(this._owner, this._end, a, b);
-      }
-      return this;
-    };
-
-    function pinning(node, map, key, value) {
-      if (typeof node.pin(key) === 'number') {
-        map[key] = value;
-      } else if (typeof node.pin(key + 'X') === 'number'
-          && typeof node.pin(key + 'Y') === 'number') {
-        map[key + 'X'] = value;
-        map[key + 'Y'] = value;
-      }
-    }
-
-    pin._add_shortcuts(Tween);
-
-    /**
-     * @deprecated Use .done(fn) instead.
-     */
-    Tween.prototype.then = function(fn) {
-      this.done(fn);
-      return this;
-    };
-
-    /**
-     * @deprecated NOOP
-     */
-    Tween.prototype.clear = function(forward) {
-      return this;
-    };
-
-    core._load(function(stage, elem) {
-      Mouse.subscribe(stage, elem);
-    });
-
-    // TODO: capture mouse
-
-    Mouse.CLICK = 'click';
-    Mouse.START = 'touchstart mousedown';
-    Mouse.MOVE = 'touchmove mousemove';
-    Mouse.END = 'touchend mouseup';
-    Mouse.CANCEL = 'touchcancel mousecancel';
-
-    Mouse.subscribe = function(stage, elem) {
-      if (stage.mouse) {
-        return;
-      }
-
-      stage.mouse = new Mouse(stage, elem);
-
-      // `click` events are synthesized from start/end events on same nodes
-      // `mousecancel` events are synthesized on blur or mouseup outside element
-
-      elem.addEventListener('touchstart', handleStart);
-      elem.addEventListener('touchend', handleEnd);
-      elem.addEventListener('touchmove', handleMove);
-      elem.addEventListener('touchcancel', handleCancel);
-
-      elem.addEventListener('mousedown', handleStart);
-      elem.addEventListener('mouseup', handleEnd);
-      elem.addEventListener('mousemove', handleMove);
-
-      document.addEventListener('mouseup', handleCancel);
-      window.addEventListener("blur", handleCancel);
-
-      var clicklist = [], cancellist = [];
-
-      function handleStart(event) {
-        event.preventDefault();
-        stage.mouse.locate(event);
-        // false && console.log('Mouse Start: ' + event.type + ' ' + mouse);
-        stage.mouse.publish(event.type, event);
-
-        stage.mouse.lookup('click', clicklist);
-        stage.mouse.lookup('mousecancel', cancellist);
-      }
-
-      function handleMove(event) {
-        event.preventDefault();
-        stage.mouse.locate(event);
-        stage.mouse.publish(event.type, event);
-      }
-
-      function handleEnd(event) {
-        event.preventDefault();
-        // up/end location is not available, last one is used instead
-        // false && console.log('Mouse End: ' + event.type + ' ' + mouse);
-        stage.mouse.publish(event.type, event);
-
-        if (clicklist.length) {
-          // false && console.log('Mouse Click: ' + clicklist.length);
-          stage.mouse.publish('click', event, clicklist);
-        }
-        cancellist.length = 0;
-      }
-
-      function handleCancel(event) {
-        if (cancellist.length) {
-          // false && console.log('Mouse Cancel: ' + event.type);
-          stage.mouse.publish('mousecancel', event, cancellist);
-        }
-        clicklist.length = 0;
-      }
-    };
-
-    function Mouse(stage, elem) {
-      if (!(this instanceof Mouse)) {
-        // old-style mouse subscription
-        return;
-      }
-
-      var ratio = stage.viewport().ratio || 1;
-
-      stage.on('viewport', function(size) {
-        ratio = size.ratio || ratio;
-      });
-
-      this.x = 0;
-      this.y = 0;
-      this.toString = function() {
-        return (this.x | 0) + 'x' + (this.y | 0);
-      };
-      this.locate = function(event) {
-        locateElevent(elem, event, this);
-        this.x *= ratio;
-        this.y *= ratio;
-      };
-      this.lookup = function(type, collect) {
-        this.type = type;
-        this.root = stage;
-        this.event = null;
-        collect.length = 0;
-        this.collect = collect;
-
-        this.root.visit(this.visitor, this);
-      };
-      this.publish = function(type, event, targets) {
-        this.type = type;
-        this.root = stage;
-        this.event = event;
-        this.collect = false;
-        this.timeStamp = Date.now();
-
-        if (targets) {
-          while (targets.length)
-            if (this.visitor.end(targets.shift(), this))
-              break;
-          targets.length = 0;
-        } else {
-          this.root.visit(this.visitor, this);
-        }
-      };
-      this.visitor = {
-        reverse : true,
-        visible : true,
-        start : function(node, mouse) {
-          return !node._flag(mouse.type);
-        },
-        end : function(node, mouse) {
-          // mouse: event/collect, type, root
-          rel.raw = mouse.event;
-          rel.type = mouse.type;
-          rel.timeStamp = mouse.timeStamp;
-          rel.abs.x = mouse.x;
-          rel.abs.y = mouse.y;
-
-          var listeners = node.listeners(mouse.type);
-          if (!listeners) {
-            return;
-          }
-          node.matrix().inverse().map(mouse, rel);
-          if (!(node === mouse.root || node.attr('spy') || node.hitTest(rel))) {
-            return;
-          }
-          if (mouse.collect) {
-            mouse.collect.push(node);
-          }
-          if (mouse.event) {
-            var cancel = false;
-            for (var l = 0; l < listeners.length; l++) {
-              cancel = listeners[l].call(node, rel) ? true : cancel;
-            }
-            return cancel;
-          }
-        }
-      };
-    }
-    // TODO: define per mouse object with get-only x and y
-    var rel = {}, abs = {};
-
-    defineValue(rel, 'clone', function(obj) {
-      obj = obj || {}, obj.x = this.x, obj.y = this.y;
-      return obj;
-    });
-    defineValue(rel, 'toString', function() {
-      return (this.x | 0) + 'x' + (this.y | 0) + ' (' + this.abs + ')';
-    });
-    defineValue(rel, 'abs', abs);
-    defineValue(abs, 'clone', function(obj) {
-      obj = obj || {}, obj.x = this.x, obj.y = this.y;
-      return obj;
-    });
-    defineValue(abs, 'toString', function() {
-      return (this.x | 0) + 'x' + (this.y | 0);
-    });
-
-    function defineValue(obj, name, value) {
-      Object.defineProperty(obj, name, {
-        value : value
-      });
-    }
-
-    function locateElevent(el, ev, loc) {
-      // pageX/Y if available?
-      if (ev.touches && ev.touches.length) {
-        loc.x = ev.touches[0].clientX;
-        loc.y = ev.touches[0].clientY;
-      } else {
-        loc.x = ev.clientX;
-        loc.y = ev.clientY;
-      }
-      var rect = el.getBoundingClientRect();
-      loc.x -= rect.left;
-      loc.y -= rect.top;
-      loc.x -= el.clientLeft | 0;
-      loc.y -= el.clientTop | 0;
-      return loc;
-    }
-    var mouse = Mouse;
-
-    /**
-     * Default loader for web.
-     */
-
-
-
-    core._supported = (function() {
-      var elem = document.createElement('canvas');
-      return (elem.getContext && elem.getContext('2d')) ? true : false;
-    })();
-
-    window.addEventListener('load', function() {
-      if (core._supported) {
-        core.start();
-      }
-      // TODO if not supported
-    }, false);
-
-    core.config({
-      'app-loader' : AppLoader,
-      'image-loader' : ImageLoader
-    });
-
-    function AppLoader(app, configs) {
-      configs = configs || {};
-      var canvas = configs.canvas, context = null, full = false;
-      var width = 0, height = 0, ratio = 1;
-
-      if (typeof canvas === 'string') {
-        canvas = document.getElementById(canvas);
-      }
-
-      if (!canvas) {
-        canvas = document.getElementById('cutjs')
-            || document.getElementById('stage');
-      }
-
-      if (!canvas) {
-        full = true;
-        canvas = document.createElement('canvas');
-        canvas.style.position = 'absolute';
-        canvas.style.top = '0';
-        canvas.style.left = '0';
-
-        var body = document.body;
-        body.insertBefore(canvas, body.firstChild);
-      }
-
-      context = canvas.getContext('2d');
-
-      var devicePixelRatio = window.devicePixelRatio || 1;
-      var backingStoreRatio = context.webkitBackingStorePixelRatio
-          || context.mozBackingStorePixelRatio || context.msBackingStorePixelRatio
-          || context.oBackingStorePixelRatio || context.backingStorePixelRatio || 1;
-      ratio = devicePixelRatio / backingStoreRatio;
-
-      var requestAnimationFrame = window.requestAnimationFrame
-          || window.msRequestAnimationFrame || window.mozRequestAnimationFrame
-          || window.webkitRequestAnimationFrame || window.oRequestAnimationFrame
-          || function(callback) {
-            return window.setTimeout(callback, 1000 / 60);
-          };
-      var root = core.root(requestAnimationFrame, render);
-
-      function render() {
-        if (width > 0 && height > 0) {
-          context.setTransform(1, 0, 0, 1, 0, 0);
-          context.clearRect(0, 0, width, height);
-          root.render(context);
-        }
-      }
-
-      root.background = function(color) {
-        canvas.style.backgroundColor = color;
-        return this;
-      };
-
-      app(root, canvas);
-
-      // resize();
-      // window.addEventListener('resize', resize, false);
-      // window.addEventListener('orientationchange', resize, false);
-
-      var lastWidth = -1;
-      var lastHeight = -1;
-      (function resizeLoop() {
-        var width, height;
-        if (full) {
-          // screen.availWidth/Height?
-          width = (window.innerWidth > 0 ? window.innerWidth : screen.width);
-          height = (window.innerHeight > 0 ? window.innerHeight : screen.height);
-        } else {
-          width = canvas.clientWidth;
-          height = canvas.clientHeight;
-        }
-        if (lastWidth !== width || lastHeight !== height) {
-          lastWidth = width;
-          lastHeight = height;
-          resize();
-        }
-        requestAnimationFrame(resizeLoop);
-      })();
-
-      function resize() {
-
-        if (full) {
-          // screen.availWidth/Height?
-          width = (window.innerWidth > 0 ? window.innerWidth : screen.width);
-          height = (window.innerHeight > 0 ? window.innerHeight : screen.height);
-
-          canvas.style.width = width + 'px';
-          canvas.style.height = height + 'px';
-
-        } else {
-          width = canvas.clientWidth;
-          height = canvas.clientHeight;
-        }
-
-        width *= ratio;
-        height *= ratio;
-
-        if (canvas.width === width && canvas.height === height) {
-          return;
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-
-        root.viewport(width, height, ratio);
-
-        render();
-      }
-    }
-
-    function ImageLoader(src, success, error) {
-      var image = new Image();
-      image.onload = function() {
-        success(image);
-      };
-      image.onerror = error;
-      image.src = src;
-    }
-
-    var web = createCommonjsModule(function (module) {
-    module.exports = lib;
-
-    module.exports.internal = {};
-
-
-    module.exports.internal.Image = image;
-
-
-
-
-    module.exports.Mouse = mouse;
-    module.exports.Math = math;
-    module.exports._extend = extend;
-    module.exports._create = create;
-    });
-
-    function testbed(opts, callback) {
-        if (typeof opts === 'function') {
-            callback = opts;
-            opts = null;
-        }
-        web(function (stage, canvas) {
-            stage.on(web.Mouse.START, function () {
-                window.focus();
-                // @ts-ignore
-                document.activeElement && document.activeElement.blur();
-                canvas.focus();
-            });
-            stage.MAX_ELAPSE = 1000 / 30;
-            // @ts-ignore
-            var testbed = {};
-            testbed.canvas = canvas;
-            var paused = false;
-            stage.on('resume', function () {
-                paused = false;
-                testbed._resume && testbed._resume();
-            });
-            stage.on('pause', function () {
-                paused = true;
-                testbed._pause && testbed._pause();
-            });
-            testbed.isPaused = function () {
-                return paused;
-            };
-            testbed.togglePause = function () {
-                paused ? testbed.resume() : testbed.pause();
-            };
-            testbed.pause = function () {
-                stage.pause();
-            };
-            testbed.resume = function () {
-                stage.resume();
-                testbed.focus();
-            };
-            testbed.focus = function () {
-                // @ts-ignore
-                document.activeElement && document.activeElement.blur();
-                canvas.focus();
-            };
-            testbed.width = 80;
-            testbed.height = 60;
-            testbed.x = 0;
-            testbed.y = -10;
-            testbed.scaleY = -1;
-            testbed.ratio = 16;
-            testbed.hz = 60;
-            testbed.speed = 1;
-            testbed.activeKeys = {};
-            testbed.background = '#222222';
-            testbed.findOne = function () {
-                // todo: implement
-                return null;
-            };
-            testbed.findAll = function () {
-                // todo: implement
-                return [];
-            };
-            var statusText = '';
-            var statusMap = {};
-            function statusSet(name, value) {
-                if (typeof value !== 'function' && typeof value !== 'object') {
-                    statusMap[name] = value;
-                }
-            }
-            function statusMerge(obj) {
-                // tslint:disable-next-line:no-for-in
-                for (var key in obj) {
-                    statusSet(key, obj[key]);
-                }
-            }
-            testbed.status = function (a, b) {
-                if (typeof b !== 'undefined') {
-                    statusSet(a, b);
-                }
-                else if (a && typeof a === 'object') {
-                    statusMerge(a);
-                }
-                else if (typeof a === 'string') {
-                    statusText = a;
-                }
-                testbed._status && testbed._status(statusText, statusMap);
-            };
-            testbed.info = function (text) {
-                testbed._info && testbed._info(text);
-            };
-            var lastDrawHash = "";
-            var drawHash = "";
-            (function () {
-                var drawingTexture = new web.Texture();
-                stage.append(web.image(drawingTexture));
-                var buffer = [];
-                stage.tick(function () {
-                    buffer.length = 0;
-                }, true);
-                drawingTexture.draw = function (ctx) {
-                    ctx.save();
-                    ctx.transform(1, 0, 0, testbed.scaleY, -testbed.x, -testbed.y);
-                    ctx.lineWidth = 2 / testbed.ratio;
-                    ctx.lineCap = 'round';
-                    for (var drawing = buffer.shift(); drawing; drawing = buffer.shift()) {
-                        drawing(ctx, testbed.ratio);
-                    }
-                    ctx.restore();
-                };
-                testbed.drawPoint = function (p, r, color) {
-                    buffer.push(function (ctx, ratio) {
-                        ctx.beginPath();
-                        ctx.arc(p.x, p.y, 5 / ratio, 0, 2 * Math.PI);
-                        ctx.strokeStyle = color;
-                        ctx.stroke();
-                    });
-                    drawHash += "point" + p.x + ',' + p.y + ',' + r + ',' + color;
-                };
-                testbed.drawCircle = function (p, r, color) {
-                    buffer.push(function (ctx) {
-                        ctx.beginPath();
-                        ctx.arc(p.x, p.y, r, 0, 2 * Math.PI);
-                        ctx.strokeStyle = color;
-                        ctx.stroke();
-                    });
-                    drawHash += "circle" + p.x + ',' + p.y + ',' + r + ',' + color;
-                };
-                testbed.drawSegment = function (a, b, color) {
-                    buffer.push(function (ctx) {
-                        ctx.beginPath();
-                        ctx.moveTo(a.x, a.y);
-                        ctx.lineTo(b.x, b.y);
-                        ctx.strokeStyle = color;
-                        ctx.stroke();
-                    });
-                    drawHash += "segment" + a.x + ',' + a.y + ',' + b.x + ',' + b.y + ',' + color;
-                };
-                testbed.drawPolygon = function (points, color) {
-                    if (!points || !points.length) {
-                        return;
-                    }
-                    buffer.push(function (ctx) {
-                        ctx.beginPath();
-                        ctx.moveTo(points[0].x, points[0].y);
-                        for (var i = 1; i < points.length; i++) {
-                            ctx.lineTo(points[i].x, points[i].y);
-                        }
-                        ctx.strokeStyle = color;
-                        ctx.closePath();
-                        ctx.stroke();
-                    });
-                    drawHash += "segment";
-                    for (var i = 1; i < points.length; i++) {
-                        drawHash += points[i].x + ',' + points[i].y + ',';
-                    }
-                    drawHash += color;
-                };
-                testbed.drawAABB = function (aabb, color) {
-                    buffer.push(function (ctx) {
-                        ctx.beginPath();
-                        ctx.moveTo(aabb.lowerBound.x, aabb.lowerBound.y);
-                        ctx.lineTo(aabb.upperBound.x, aabb.lowerBound.y);
-                        ctx.lineTo(aabb.upperBound.x, aabb.upperBound.y);
-                        ctx.lineTo(aabb.lowerBound.x, aabb.upperBound.y);
-                        ctx.strokeStyle = color;
-                        ctx.closePath();
-                        ctx.stroke();
-                    });
-                    drawHash += "aabb";
-                    drawHash += aabb.lowerBound.x + ',' + aabb.lowerBound.y + ',';
-                    drawHash += aabb.upperBound.x + ',' + aabb.upperBound.y + ',';
-                    drawHash += color;
-                };
-                testbed.color = function (r, g, b) {
-                    r = r * 256 | 0;
-                    g = g * 256 | 0;
-                    b = b * 256 | 0;
-                    return 'rgb(' + r + ', ' + g + ', ' + b + ')';
-                };
-            })();
-            var world = callback(testbed);
-            var viewer = new Viewer(world, testbed);
-            var lastX = 0;
-            var lastY = 0;
-            stage.tick(function (dt, t) {
-                // update camera position
-                if (lastX !== testbed.x || lastY !== testbed.y) {
-                    viewer.offset(-testbed.x, -testbed.y);
-                    lastX = testbed.x;
-                    lastY = testbed.y;
-                }
-            });
-            viewer.tick(function (dt, t) {
-                // call testbed step, if provided
-                if (typeof testbed.step === 'function') {
-                    testbed.step(dt, t);
-                }
-                if (targetBody) {
-                    testbed.drawSegment(targetBody.getPosition(), mouseMove, 'rgba(255,255,255,0.2)');
-                }
-                if (lastDrawHash !== drawHash) {
-                    lastDrawHash = drawHash;
-                    stage.touch();
-                }
-                drawHash = "";
-                return true;
-            });
-            // stage.empty();
-            stage.background(testbed.background);
-            stage.viewbox(testbed.width, testbed.height);
-            stage.pin('alignX', -0.5);
-            stage.pin('alignY', -0.5);
-            stage.prepend(viewer);
-            function findBody(point) {
-                var body;
-                var aabb = new AABB(point, point);
-                world.queryAABB(aabb, function (fixture) {
-                    if (body) {
-                        return;
-                    }
-                    if (!fixture.getBody().isDynamic() || !fixture.testPoint(point)) {
-                        return;
-                    }
-                    body = fixture.getBody();
-                    return true;
-                });
-                return body;
-            }
-            var mouseGround = world.createBody();
-            var mouseJoint;
-            var targetBody;
-            var mouseMove = { x: 0, y: 0 };
-            viewer.attr('spy', true).on(web.Mouse.START, function (point) {
-                point = { x: point.x, y: testbed.scaleY * point.y };
-                if (targetBody) {
-                    return;
-                }
-                var body = findBody(point);
-                if (!body) {
-                    return;
-                }
-                if (testbed.mouseForce) {
-                    targetBody = body;
-                }
-                else {
-                    mouseJoint = new MouseJoint({ maxForce: 1000 }, mouseGround, body, Vec2.clone(point));
-                    world.createJoint(mouseJoint);
-                }
-            }).on(web.Mouse.MOVE, function (point) {
-                point = { x: point.x, y: testbed.scaleY * point.y };
-                if (mouseJoint) {
-                    mouseJoint.setTarget(point);
-                }
-                mouseMove.x = point.x;
-                mouseMove.y = point.y;
-            }).on(web.Mouse.END, function (point) {
-                point = { x: point.x, y: testbed.scaleY * point.y };
-                if (mouseJoint) {
-                    world.destroyJoint(mouseJoint);
-                    mouseJoint = null;
-                }
-                if (targetBody) {
-                    var force = Vec2.sub(point, targetBody.getPosition());
-                    targetBody.applyForceToCenter(force.mul(testbed.mouseForce), true);
-                    targetBody = null;
-                }
-            }).on(web.Mouse.CANCEL, function (point) {
-                point = { x: point.x, y: testbed.scaleY * point.y };
-                if (mouseJoint) {
-                    world.destroyJoint(mouseJoint);
-                    mouseJoint = null;
-                }
-                if (targetBody) {
-                    targetBody = null;
-                }
-            });
-            window.addEventListener("keydown", function (e) {
-                switch (e.keyCode) {
-                    case 'P'.charCodeAt(0):
-                        testbed.togglePause();
-                        break;
-                }
-            }, false);
-            var downKeys = {};
-            window.addEventListener("keydown", function (e) {
-                var keyCode = e.keyCode;
-                downKeys[keyCode] = true;
-                updateActiveKeys(keyCode, true);
-                testbed.keydown && testbed.keydown(keyCode, String.fromCharCode(keyCode));
-            });
-            window.addEventListener("keyup", function (e) {
-                var keyCode = e.keyCode;
-                downKeys[keyCode] = false;
-                updateActiveKeys(keyCode, false);
-                testbed.keyup && testbed.keyup(keyCode, String.fromCharCode(keyCode));
-            });
-            var activeKeys = testbed.activeKeys;
-            function updateActiveKeys(keyCode, down) {
-                var char = String.fromCharCode(keyCode);
-                if (/\w/.test(char)) {
-                    activeKeys[char] = down;
-                }
-                activeKeys.right = downKeys[39] || activeKeys['D'];
-                activeKeys.left = downKeys[37] || activeKeys['A'];
-                activeKeys.up = downKeys[38] || activeKeys['W'];
-                activeKeys.down = downKeys[40] || activeKeys['S'];
-                activeKeys.fire = downKeys[32] || downKeys[13];
-            }
-        });
-    }
-    Viewer._super = web;
-    Viewer.prototype = web._create(Viewer._super.prototype);
-    function Viewer(world, opts) {
-        var _this = this;
-        Viewer._super.call(this);
-        this.label('Planck');
-        opts = opts || {};
-        this._options = {};
-        this._options.speed = opts.speed || 1;
-        this._options.hz = opts.hz || 60;
-        if (Math.abs(this._options.hz) < 1) {
-            this._options.hz = 1 / this._options.hz;
-        }
-        this._options.scaleY = opts.scaleY || -1;
-        this._options.ratio = opts.ratio || 16;
-        this._options.lineWidth = 2 / this._options.ratio;
-        this._world = world;
-        var timeStep = 1 / this._options.hz;
-        var elapsedTime = 0;
-        this.tick(function (dt) {
-            dt = dt * 0.001 * _this._options.speed;
-            elapsedTime += dt;
-            while (elapsedTime > timeStep) {
-                world.step(timeStep);
-                elapsedTime -= timeStep;
-            }
-            _this.renderWorld();
-            return true;
-        }, true);
-        world.on('remove-fixture', function (obj) {
-            obj.ui && obj.ui.remove();
-        });
-        world.on('remove-joint', function (obj) {
-            obj.ui && obj.ui.remove();
-        });
-    }
-    Viewer.prototype.renderWorld = function () {
-        var world = this._world;
-        var options = this._options;
-        var viewer = this;
-        for (var b = world.getBodyList(); b; b = b.getNext()) {
-            for (var f = b.getFixtureList(); f; f = f.getNext()) {
-                if (!f.ui) {
-                    if (f.render && f.render.stroke) {
-                        options.strokeStyle = f.render.stroke;
-                    }
-                    else if (b.render && b.render.stroke) {
-                        options.strokeStyle = b.render.stroke;
-                    }
-                    else if (b.isDynamic()) {
-                        options.strokeStyle = 'rgba(255,255,255,0.9)';
-                    }
-                    else if (b.isKinematic()) {
-                        options.strokeStyle = 'rgba(255,255,255,0.7)';
-                    }
-                    else if (b.isStatic()) {
-                        options.strokeStyle = 'rgba(255,255,255,0.5)';
-                    }
-                    if (f.render && f.render.fill) {
-                        options.fillStyle = f.render.fill;
-                    }
-                    else if (b.render && b.render.fill) {
-                        options.fillStyle = b.render.fill;
-                    }
-                    else {
-                        options.fillStyle = '';
-                    }
-                    var type = f.getType();
-                    var shape = f.getShape();
-                    if (type == 'circle') {
-                        f.ui = viewer.drawCircle(shape, options);
-                    }
-                    if (type == 'edge') {
-                        f.ui = viewer.drawEdge(shape, options);
-                    }
-                    if (type == 'polygon') {
-                        f.ui = viewer.drawPolygon(shape, options);
-                    }
-                    if (type == 'chain') {
-                        f.ui = viewer.drawChain(shape, options);
-                    }
-                    if (f.ui) {
-                        f.ui.appendTo(viewer);
-                    }
-                }
-                if (f.ui) {
-                    var p = b.getPosition();
-                    var r = b.getAngle();
-                    if (f.ui.__lastX !== p.x || f.ui.__lastY !== p.y || f.ui.__lastR !== r) {
-                        f.ui.__lastX = p.x;
-                        f.ui.__lastY = p.y;
-                        f.ui.__lastR = r;
-                        f.ui.offset(p.x, options.scaleY * p.y);
-                        f.ui.rotate(options.scaleY * r);
-                    }
-                }
-            }
-        }
-        for (var j = world.getJointList(); j; j = j.getNext()) {
-            var type = j.getType();
-            var a = j.getAnchorA();
-            var b = j.getAnchorB();
-            if (!j.ui) {
-                options.strokeStyle = 'rgba(255,255,255,0.2)';
-                j.ui = viewer.drawJoint(j, options);
-                j.ui.pin('handle', 0.5);
-                if (j.ui) {
-                    j.ui.appendTo(viewer);
-                }
-            }
-            if (j.ui) {
-                var cx = (a.x + b.x) * 0.5;
-                var cy = options.scaleY * (a.y + b.y) * 0.5;
-                var dx = a.x - b.x;
-                var dy = options.scaleY * (a.y - b.y);
-                var d = Math.sqrt(dx * dx + dy * dy);
-                j.ui.width(d);
-                j.ui.rotate(Math.atan2(dy, dx));
-                j.ui.offset(cx, cy);
-            }
-        }
-    };
-    Viewer.prototype.drawJoint = function (joint, options) {
-        var lw = options.lineWidth;
-        var ratio = options.ratio;
-        var length = 10;
-        var texture = web.canvas(function (ctx) {
-            this.size(length + 2 * lw, 2 * lw, ratio);
-            ctx.scale(ratio, ratio);
-            ctx.beginPath();
-            ctx.moveTo(lw, lw);
-            ctx.lineTo(lw + length, lw);
-            ctx.lineCap = 'round';
-            ctx.lineWidth = options.lineWidth;
-            ctx.strokeStyle = options.strokeStyle;
-            ctx.stroke();
-        });
-        var image = web.image(texture).stretch();
-        return image;
-    };
-    Viewer.prototype.drawCircle = function (shape, options) {
-        var lw = options.lineWidth;
-        var ratio = options.ratio;
-        var r = shape.m_radius;
-        var cx = r + lw;
-        var cy = r + lw;
-        var w = r * 2 + lw * 2;
-        var h = r * 2 + lw * 2;
-        var texture = web.canvas(function (ctx) {
-            this.size(w, h, ratio);
-            ctx.scale(ratio, ratio);
-            ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-            if (options.fillStyle) {
-                ctx.fillStyle = options.fillStyle;
-                ctx.fill();
-            }
-            ctx.lineTo(cx, cy);
-            ctx.lineWidth = options.lineWidth;
-            ctx.strokeStyle = options.strokeStyle;
-            ctx.stroke();
-        });
-        var image = web.image(texture)
-            .offset(shape.m_p.x - cx, options.scaleY * shape.m_p.y - cy);
-        var node = web.create().append(image);
-        return node;
-    };
-    Viewer.prototype.drawEdge = function (edge, options) {
-        var lw = options.lineWidth;
-        var ratio = options.ratio;
-        var v1 = edge.m_vertex1;
-        var v2 = edge.m_vertex2;
-        var dx = v2.x - v1.x;
-        var dy = v2.y - v1.y;
-        var length = Math.sqrt(dx * dx + dy * dy);
-        var texture = web.canvas(function (ctx) {
-            this.size(length + 2 * lw, 2 * lw, ratio);
-            ctx.scale(ratio, ratio);
-            ctx.beginPath();
-            ctx.moveTo(lw, lw);
-            ctx.lineTo(lw + length, lw);
-            ctx.lineCap = 'round';
-            ctx.lineWidth = options.lineWidth;
-            ctx.strokeStyle = options.strokeStyle;
-            ctx.stroke();
-        });
-        var minX = Math.min(v1.x, v2.x);
-        var minY = Math.min(options.scaleY * v1.y, options.scaleY * v2.y);
-        var image = web.image(texture);
-        image.rotate(options.scaleY * Math.atan2(dy, dx));
-        image.offset(minX - lw, minY - lw);
-        var node = web.create().append(image);
-        return node;
-    };
-    Viewer.prototype.drawPolygon = function (shape, options) {
-        var lw = options.lineWidth;
-        var ratio = options.ratio;
-        var vertices = shape.m_vertices;
-        if (!vertices.length) {
-            return;
-        }
-        var minX = Infinity;
-        var minY = Infinity;
-        var maxX = -Infinity;
-        var maxY = -Infinity;
-        for (var i = 0; i < vertices.length; ++i) {
-            var v = vertices[i];
-            minX = Math.min(minX, v.x);
-            maxX = Math.max(maxX, v.x);
-            minY = Math.min(minY, options.scaleY * v.y);
-            maxY = Math.max(maxY, options.scaleY * v.y);
-        }
-        var width = maxX - minX;
-        var height = maxY - minY;
-        var texture = web.canvas(function (ctx) {
-            this.size(width + 2 * lw, height + 2 * lw, ratio);
-            ctx.scale(ratio, ratio);
-            ctx.beginPath();
-            for (var i = 0; i < vertices.length; ++i) {
-                var v = vertices[i];
-                var x = v.x - minX + lw;
-                var y = options.scaleY * v.y - minY + lw;
-                if (i == 0)
-                    ctx.moveTo(x, y);
-                else
-                    ctx.lineTo(x, y);
-            }
-            if (vertices.length > 2) {
-                ctx.closePath();
-            }
-            if (options.fillStyle) {
-                ctx.fillStyle = options.fillStyle;
-                ctx.fill();
-                ctx.closePath();
-            }
-            ctx.lineCap = 'round';
-            ctx.lineWidth = options.lineWidth;
-            ctx.strokeStyle = options.strokeStyle;
-            ctx.stroke();
-        });
-        var image = web.image(texture);
-        image.offset(minX - lw, minY - lw);
-        var node = web.create().append(image);
-        return node;
-    };
-    Viewer.prototype.drawChain = function (shape, options) {
-        var lw = options.lineWidth;
-        var ratio = options.ratio;
-        var vertices = shape.m_vertices;
-        if (!vertices.length) {
-            return;
-        }
-        var minX = Infinity;
-        var minY = Infinity;
-        var maxX = -Infinity;
-        var maxY = -Infinity;
-        for (var i = 0; i < vertices.length; ++i) {
-            var v = vertices[i];
-            minX = Math.min(minX, v.x);
-            maxX = Math.max(maxX, v.x);
-            minY = Math.min(minY, options.scaleY * v.y);
-            maxY = Math.max(maxY, options.scaleY * v.y);
-        }
-        var width = maxX - minX;
-        var height = maxY - minY;
-        var texture = web.canvas(function (ctx) {
-            this.size(width + 2 * lw, height + 2 * lw, ratio);
-            ctx.scale(ratio, ratio);
-            ctx.beginPath();
-            for (var i = 0; i < vertices.length; ++i) {
-                var v = vertices[i];
-                var x = v.x - minX + lw;
-                var y = options.scaleY * v.y - minY + lw;
-                if (i == 0)
-                    ctx.moveTo(x, y);
-                else
-                    ctx.lineTo(x, y);
-            }
-            // TODO: if loop
-            if (vertices.length > 2) ;
-            if (options.fillStyle) {
-                ctx.fillStyle = options.fillStyle;
-                ctx.fill();
-                ctx.closePath();
-            }
-            ctx.lineCap = 'round';
-            ctx.lineWidth = options.lineWidth;
-            ctx.strokeStyle = options.strokeStyle;
-            ctx.stroke();
-        });
-        var image = web.image(texture);
-        image.offset(minX - lw, minY - lw);
-        var node = web.create().append(image);
-        return node;
-    };
     /** @deprecated Merged with main namespace */
     var internal = {};
     // @ts-ignore
@@ -19002,7 +17457,7 @@
     // @ts-ignore
     internal.DynamicTree = DynamicTree;
     // @ts-ignore
-    internal.stats = stats$1;
+    internal.stats = stats;
     // @ts-ignore
     Solver.TimeStep = TimeStep;
     // @ts-ignore
@@ -19020,32 +17475,859 @@
     // @ts-ignore
     TimeOfImpact.Output = TOIOutput;
 
+    function findBody(world, point) {
+        var body = null;
+        var aabb = new AABB(point, point);
+        world.queryAABB(aabb, function (fixture) {
+            if (body) {
+                return false;
+            }
+            if (!fixture.getBody().isDynamic() || !fixture.testPoint(point)) {
+                return false;
+            }
+            body = fixture.getBody();
+            return true;
+        });
+        return body;
+    }
+    var playButton = null;
+    var status = null;
+    var info = null;
+    // status.innerText = '';
+    // info.innerText = '';
+    var Testbed = /** @class */ (function () {
+        function Testbed() {
+            // camera position
+            var _this = this;
+            /** World viewbox width. */
+            this.width = 80;
+            /** World viewbox height. */
+            this.height = 60;
+            /** World viewbox center vertical offset. */
+            this.x = 0;
+            /** World viewbox center horizontal offset. */
+            this.y = -10;
+            this.scaleY = -1;
+            /** World simulation step frequency */
+            this.hz = 60;
+            /** World simulation speed, default is 1 */
+            this.speed = 1;
+            this.ratio = 16;
+            this.background = '#222222';
+            this.activeKeys = {};
+            /** callback, to be implemented by user */
+            this.step = function (dt, t) {
+                return;
+            };
+            /** callback, to be implemented by user */
+            this.keydown = function (keyCode, label) {
+                return;
+            };
+            /** callback, to be implemented by user */
+            this.keyup = function (keyCode, label) {
+                return;
+            };
+            this.lastDrawHash = "";
+            this.newDrawHash = "";
+            this.buffer = [];
+            this.start = function (world) {
+                var stage = _this.stage = Stage.mount();
+                var canvas = _this.canvas = stage.dom;
+                var testbed = _this;
+                _this.canvas = canvas;
+                stage.on(Stage.Mouse.START, function () {
+                    var _a;
+                    window.focus();
+                    // @ts-ignore
+                    (_a = document.activeElement) === null || _a === void 0 ? void 0 : _a.blur();
+                    canvas.focus();
+                });
+                stage.MAX_ELAPSE = 1000 / 30;
+                stage.on('resume', function () {
+                    var _a;
+                    _this.paused = false;
+                    (_a = _this._resume) === null || _a === void 0 ? void 0 : _a.call(_this);
+                });
+                stage.on('pause', function () {
+                    var _a;
+                    _this.paused = true;
+                    (_a = _this._pause) === null || _a === void 0 ? void 0 : _a.call(_this);
+                });
+                var drawingTexture = new Stage.Texture();
+                stage.append(Stage.sprite(drawingTexture));
+                stage.tick(function () {
+                    _this.buffer.length = 0;
+                }, true);
+                drawingTexture.draw = function (ctx) {
+                    ctx.save();
+                    ctx.transform(1, 0, 0, _this.scaleY, -_this.x, -_this.y);
+                    ctx.lineWidth = 2 / _this.ratio;
+                    ctx.lineCap = 'round';
+                    for (var drawing = _this.buffer.shift(); drawing; drawing = _this.buffer.shift()) {
+                        drawing(ctx, _this.ratio);
+                    }
+                    ctx.restore();
+                };
+                var worldNode = new WorldNode(world, _this);
+                var lastX = 0;
+                var lastY = 0;
+                stage.tick(function (dt, t) {
+                    // update camera position
+                    if (lastX !== _this.x || lastY !== _this.y) {
+                        worldNode.offset(-_this.x, -_this.y);
+                        lastX = _this.x;
+                        lastY = _this.y;
+                    }
+                });
+                worldNode.tick(function (dt, t) {
+                    _this.step(dt, t);
+                    if (targetBody) {
+                        _this.drawSegment(targetBody.getPosition(), mouseMove, 'rgba(255,255,255,0.2)');
+                    }
+                    if (_this.lastDrawHash !== _this.newDrawHash) {
+                        _this.lastDrawHash = _this.newDrawHash;
+                        stage.touch();
+                    }
+                    _this.newDrawHash = "";
+                    return true;
+                });
+                // stage.empty();
+                stage.background(_this.background);
+                stage.viewbox(_this.width, _this.height);
+                stage.pin('alignX', -0.5);
+                stage.pin('alignY', -0.5);
+                stage.prepend(worldNode);
+                var mouseGround = world.createBody();
+                var mouseJoint = null;
+                var targetBody = null;
+                var mouseMove = { x: 0, y: 0 };
+                worldNode.attr('spy', true);
+                worldNode.on(Stage.Mouse.START, function (point) {
+                    point = { x: point.x, y: testbed.scaleY * point.y };
+                    if (targetBody) {
+                        return;
+                    }
+                    var body = findBody(world, point);
+                    if (!body) {
+                        return;
+                    }
+                    if (_this.mouseForce) {
+                        targetBody = body;
+                    }
+                    else {
+                        mouseJoint = new MouseJoint({ maxForce: 1000 }, mouseGround, body, Vec2.clone(point));
+                        world.createJoint(mouseJoint);
+                    }
+                });
+                worldNode.on(Stage.Mouse.MOVE, function (point) {
+                    point = { x: point.x, y: testbed.scaleY * point.y };
+                    if (mouseJoint) {
+                        mouseJoint.setTarget(point);
+                    }
+                    mouseMove.x = point.x;
+                    mouseMove.y = point.y;
+                });
+                worldNode.on(Stage.Mouse.END, function (point) {
+                    point = { x: point.x, y: testbed.scaleY * point.y };
+                    if (mouseJoint) {
+                        world.destroyJoint(mouseJoint);
+                        mouseJoint = null;
+                    }
+                    if (targetBody && _this.mouseForce) {
+                        var force = Vec2.sub(point, targetBody.getPosition());
+                        targetBody.applyForceToCenter(force.mul(_this.mouseForce), true);
+                        targetBody = null;
+                    }
+                });
+                worldNode.on(Stage.Mouse.CANCEL, function (point) {
+                    point = { x: point.x, y: testbed.scaleY * point.y };
+                    if (mouseJoint) {
+                        world.destroyJoint(mouseJoint);
+                        mouseJoint = null;
+                    }
+                    if (targetBody) {
+                        targetBody = null;
+                    }
+                });
+                window.addEventListener("keydown", function (e) {
+                    switch (e.keyCode) {
+                        case 'P'.charCodeAt(0):
+                            _this.togglePause();
+                            break;
+                    }
+                }, false);
+                var activeKeys = testbed.activeKeys;
+                var downKeys = {};
+                function updateActiveKeys(keyCode, down) {
+                    var char = String.fromCharCode(keyCode);
+                    if (/\w/.test(char)) {
+                        activeKeys[char] = down;
+                    }
+                    activeKeys.right = downKeys[39] || activeKeys['D'];
+                    activeKeys.left = downKeys[37] || activeKeys['A'];
+                    activeKeys.up = downKeys[38] || activeKeys['W'];
+                    activeKeys.down = downKeys[40] || activeKeys['S'];
+                    activeKeys.fire = downKeys[32] || downKeys[13];
+                }
+                window.addEventListener("keydown", function (e) {
+                    var keyCode = e.keyCode;
+                    downKeys[keyCode] = true;
+                    updateActiveKeys(keyCode, true);
+                    testbed.keydown && testbed.keydown(keyCode, String.fromCharCode(keyCode));
+                });
+                window.addEventListener("keyup", function (e) {
+                    var keyCode = e.keyCode;
+                    downKeys[keyCode] = false;
+                    updateActiveKeys(keyCode, false);
+                    testbed.keyup && testbed.keyup(keyCode, String.fromCharCode(keyCode));
+                });
+                playButton === null || playButton === void 0 ? void 0 : playButton.addEventListener('click', function () {
+                    testbed.isPaused() ? testbed.resume() : testbed.pause();
+                });
+                _this.resume();
+            };
+            /** @private @internal */
+            this.focus = function () {
+                // @ts-ignore
+                document.activeElement && document.activeElement.blur();
+                _this.canvas.focus();
+            };
+            this.paused = false;
+            /** @internal */
+            this._pause = function () {
+                playButton === null || playButton === void 0 ? void 0 : playButton.classList.add('pause');
+                playButton === null || playButton === void 0 ? void 0 : playButton.classList.remove('play');
+            };
+            /** @internal */
+            this._resume = function () {
+                playButton === null || playButton === void 0 ? void 0 : playButton.classList.add('play');
+                playButton === null || playButton === void 0 ? void 0 : playButton.classList.remove('pause');
+            };
+            this.lastStatus = '';
+            this.lastInfo = '';
+            /** @internal */
+            this._status = function (statusText, statusMap) {
+                var newline = '\n';
+                var string = statusText || '';
+                for (var key in statusMap) {
+                    var value = statusMap[key];
+                    if (typeof value === 'function')
+                        continue;
+                    string += (string && newline) + key + ': ' + value;
+                }
+                if (_this.lastStatus !== string) {
+                    status.innerText = _this.lastStatus = string;
+                }
+            };
+            /** @internal */
+            this._info = function (text) {
+                if (_this.lastInfo !== text) {
+                    info.innerText = _this.lastInfo = text;
+                }
+            };
+            /** @internal */
+            this.isPaused = function () {
+                return _this.paused;
+            };
+            /** @internal */
+            this.togglePause = function () {
+                _this.paused ? _this.resume() : _this.pause();
+            };
+            /** @internal */
+            this.pause = function () {
+                _this.stage.pause();
+            };
+            /** @internal */
+            this.resume = function () {
+                _this.stage.resume();
+                _this.focus();
+            };
+            this.statusText = '';
+            this.statusMap = {};
+            this.info = function (text) {
+                var _a;
+                (_a = _this._info) === null || _a === void 0 ? void 0 : _a.call(_this, text);
+            };
+            this.drawPoint = function (p, r, color) {
+                _this.buffer.push(function (ctx, ratio) {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 5 / ratio, 0, 2 * Math.PI);
+                    ctx.strokeStyle = color;
+                    ctx.stroke();
+                });
+                _this.newDrawHash += "point" + p.x + ',' + p.y + ',' + r + ',' + color;
+            };
+            this.drawCircle = function (p, r, color) {
+                _this.buffer.push(function (ctx) {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, r, 0, 2 * Math.PI);
+                    ctx.strokeStyle = color;
+                    ctx.stroke();
+                });
+                _this.newDrawHash += "circle" + p.x + ',' + p.y + ',' + r + ',' + color;
+            };
+            this.drawEdge = function (a, b, color) {
+                _this.buffer.push(function (ctx) {
+                    ctx.beginPath();
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(b.x, b.y);
+                    ctx.strokeStyle = color;
+                    ctx.stroke();
+                });
+                _this.newDrawHash += "segment" + a.x + ',' + a.y + ',' + b.x + ',' + b.y + ',' + color;
+            };
+            this.drawSegment = this.drawEdge;
+            this.drawPolygon = function (points, color) {
+                if (!points || !points.length) {
+                    return;
+                }
+                _this.buffer.push(function (ctx) {
+                    ctx.beginPath();
+                    ctx.moveTo(points[0].x, points[0].y);
+                    for (var i = 1; i < points.length; i++) {
+                        ctx.lineTo(points[i].x, points[i].y);
+                    }
+                    ctx.strokeStyle = color;
+                    ctx.closePath();
+                    ctx.stroke();
+                });
+                _this.newDrawHash += "segment";
+                for (var i = 1; i < points.length; i++) {
+                    _this.newDrawHash += points[i].x + ',' + points[i].y + ',';
+                }
+                _this.newDrawHash += color;
+            };
+            this.drawAABB = function (aabb, color) {
+                _this.buffer.push(function (ctx) {
+                    ctx.beginPath();
+                    ctx.moveTo(aabb.lowerBound.x, aabb.lowerBound.y);
+                    ctx.lineTo(aabb.upperBound.x, aabb.lowerBound.y);
+                    ctx.lineTo(aabb.upperBound.x, aabb.upperBound.y);
+                    ctx.lineTo(aabb.lowerBound.x, aabb.upperBound.y);
+                    ctx.strokeStyle = color;
+                    ctx.closePath();
+                    ctx.stroke();
+                });
+                _this.newDrawHash += "aabb";
+                _this.newDrawHash += aabb.lowerBound.x + ',' + aabb.lowerBound.y + ',';
+                _this.newDrawHash += aabb.upperBound.x + ',' + aabb.upperBound.y + ',';
+                _this.newDrawHash += color;
+            };
+            this.color = function (r, g, b) {
+                r = r * 256 | 0;
+                g = g * 256 | 0;
+                b = b * 256 | 0;
+                return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+            };
+            this.findOne = function (query) {
+                // todo: implement
+                return null;
+            };
+            this.findAll = function (query) {
+                // todo: implement
+                return [];
+            };
+        }
+        Testbed.prototype.statusSet = function (name, value) {
+            if (typeof value !== 'function' && typeof value !== 'object') {
+                this.statusMap[name] = value;
+            }
+        };
+        Testbed.prototype.statusMerge = function (obj) {
+            // tslint:disable-next-line:no-for-in
+            for (var key in obj) {
+                this.statusSet(key, obj[key]);
+            }
+        };
+        Testbed.prototype.status = function (a, b) {
+            var _a;
+            if (typeof b !== 'undefined') {
+                this.statusSet(a, b);
+            }
+            else if (a && typeof a === 'object') {
+                this.statusMerge(a);
+            }
+            else if (typeof a === 'string') {
+                this.statusText = a;
+            }
+            (_a = this._status) === null || _a === void 0 ? void 0 : _a.call(this, this.statusText, this.statusMap);
+        };
+        return Testbed;
+    }());
+    var WorldNode = /** @class */ (function (_super) {
+        __extends(WorldNode, _super);
+        function WorldNode(world, opts) {
+            if (opts === void 0) { opts = {}; }
+            var _this = this;
+            var _a, _b, _c, _d;
+            _this = _super.call(this) || this;
+            _this.nodes = new WeakMap();
+            _this.options = {
+                speed: 1,
+                hz: 60,
+                scaleY: -1,
+                ratio: 16,
+                lineWidth: 1,
+                strokeStyle: undefined,
+                fillStyle: undefined
+            };
+            _this.renderWorld = function () {
+                var world = _this.world;
+                var options = _this.options;
+                var viewer = _this;
+                for (var b = world.getBodyList(); b; b = b.getNext()) {
+                    for (var f = b.getFixtureList(); f; f = f.getNext()) {
+                        var node = _this.nodes.get(f);
+                        if (!node) {
+                            if (f.render && f.render.stroke) {
+                                options.strokeStyle = f.render.stroke;
+                            }
+                            else if (b.render && b.render.stroke) {
+                                options.strokeStyle = b.render.stroke;
+                            }
+                            else if (b.isDynamic()) {
+                                options.strokeStyle = 'rgba(255,255,255,0.9)';
+                            }
+                            else if (b.isKinematic()) {
+                                options.strokeStyle = 'rgba(255,255,255,0.7)';
+                            }
+                            else if (b.isStatic()) {
+                                options.strokeStyle = 'rgba(255,255,255,0.5)';
+                            }
+                            if (f.render && f.render.fill) {
+                                options.fillStyle = f.render.fill;
+                            }
+                            else if (b.render && b.render.fill) {
+                                options.fillStyle = b.render.fill;
+                            }
+                            else {
+                                options.fillStyle = '';
+                            }
+                            var type = f.getType();
+                            var shape = f.getShape();
+                            if (type == 'circle') {
+                                node = viewer.drawCircle(shape, options);
+                            }
+                            if (type == 'edge') {
+                                node = viewer.drawEdge(shape, options);
+                            }
+                            if (type == 'polygon') {
+                                node = viewer.drawPolygon(shape, options);
+                            }
+                            if (type == 'chain') {
+                                node = viewer.drawChain(shape, options);
+                            }
+                            if (node) {
+                                node.appendTo(viewer);
+                                _this.nodes.set(f, node);
+                            }
+                        }
+                        if (node) {
+                            var p = b.getPosition();
+                            var r = b.getAngle();
+                            // @ts-ignore
+                            var isChanged = node.__lastX !== p.x || node.__lastY !== p.y || node.__lastR !== r;
+                            if (isChanged) {
+                                // @ts-ignore
+                                node.__lastX = p.x;
+                                // @ts-ignore
+                                node.__lastY = p.y;
+                                // @ts-ignore
+                                node.__lastR = r;
+                                node.offset(p.x, options.scaleY * p.y);
+                                node.rotate(options.scaleY * r);
+                            }
+                        }
+                    }
+                }
+                for (var j = world.getJointList(); j; j = j.getNext()) {
+                    var type = j.getType();
+                    var a = j.getAnchorA();
+                    var b = j.getAnchorB();
+                    var node = _this.nodes.get(j);
+                    if (!node) {
+                        options.strokeStyle = 'rgba(255,255,255,0.2)';
+                        node = viewer.drawJoint(j, options);
+                        node.pin('handle', 0.5);
+                        node.appendTo(viewer);
+                        _this.nodes.set(j, node);
+                    }
+                    if (node) {
+                        var cx = (a.x + b.x) * 0.5;
+                        var cy = options.scaleY * (a.y + b.y) * 0.5;
+                        var dx = a.x - b.x;
+                        var dy = options.scaleY * (a.y - b.y);
+                        var d = Math.sqrt(dx * dx + dy * dy);
+                        node.width(d);
+                        node.rotate(Math.atan2(dy, dx));
+                        node.offset(cx, cy);
+                    }
+                }
+            };
+            _this.drawJoint = function (joint, options) {
+                var lw = options.lineWidth;
+                var ratio = options.ratio;
+                var length = 10;
+                var texture = Stage.canvas(function (ctx) {
+                    var _a;
+                    // @ts-ignore
+                    this.size(length + 2 * lw, 2 * lw, ratio);
+                    ctx.scale(ratio, ratio);
+                    ctx.beginPath();
+                    ctx.moveTo(lw, lw);
+                    ctx.lineTo(lw + length, lw);
+                    ctx.lineCap = 'round';
+                    ctx.lineWidth = options.lineWidth;
+                    ctx.strokeStyle = (_a = options.strokeStyle) !== null && _a !== void 0 ? _a : '';
+                    ctx.stroke();
+                });
+                var image = Stage.sprite(texture).stretch();
+                return image;
+            };
+            _this.drawCircle = function (shape, options) {
+                var lw = options.lineWidth;
+                var ratio = options.ratio;
+                var r = shape.m_radius;
+                var cx = r + lw;
+                var cy = r + lw;
+                var w = r * 2 + lw * 2;
+                var h = r * 2 + lw * 2;
+                var texture = Stage.canvas(function (ctx) {
+                    var _a;
+                    // @ts-ignore
+                    this.size(w, h, ratio);
+                    ctx.scale(ratio, ratio);
+                    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+                    if (options.fillStyle) {
+                        ctx.fillStyle = options.fillStyle;
+                        ctx.fill();
+                    }
+                    ctx.lineTo(cx, cy);
+                    ctx.lineWidth = options.lineWidth;
+                    ctx.strokeStyle = (_a = options.strokeStyle) !== null && _a !== void 0 ? _a : '';
+                    ctx.stroke();
+                });
+                var image = Stage.sprite(texture)
+                    .offset(shape.m_p.x - cx, options.scaleY * shape.m_p.y - cy);
+                var node = Stage.create().append(image);
+                return node;
+            };
+            _this.drawEdge = function (edge, options) {
+                var lw = options.lineWidth;
+                var ratio = options.ratio;
+                var v1 = edge.m_vertex1;
+                var v2 = edge.m_vertex2;
+                var dx = v2.x - v1.x;
+                var dy = v2.y - v1.y;
+                var length = Math.sqrt(dx * dx + dy * dy);
+                var texture = Stage.canvas(function (ctx) {
+                    var _a;
+                    // @ts-ignore
+                    this.size(length + 2 * lw, 2 * lw, ratio);
+                    ctx.scale(ratio, ratio);
+                    ctx.beginPath();
+                    ctx.moveTo(lw, lw);
+                    ctx.lineTo(lw + length, lw);
+                    ctx.lineCap = 'round';
+                    ctx.lineWidth = options.lineWidth;
+                    ctx.strokeStyle = (_a = options.strokeStyle) !== null && _a !== void 0 ? _a : '';
+                    ctx.stroke();
+                });
+                var minX = Math.min(v1.x, v2.x);
+                var minY = Math.min(options.scaleY * v1.y, options.scaleY * v2.y);
+                var image = Stage.sprite(texture);
+                image.rotate(options.scaleY * Math.atan2(dy, dx));
+                image.offset(minX - lw, minY - lw);
+                var node = Stage.create().append(image);
+                return node;
+            };
+            _this.drawPolygon = function (shape, options) {
+                var lw = options.lineWidth;
+                var ratio = options.ratio;
+                var vertices = shape.m_vertices;
+                if (!vertices.length) {
+                    return;
+                }
+                var minX = Infinity;
+                var minY = Infinity;
+                var maxX = -Infinity;
+                var maxY = -Infinity;
+                for (var i = 0; i < vertices.length; ++i) {
+                    var v = vertices[i];
+                    minX = Math.min(minX, v.x);
+                    maxX = Math.max(maxX, v.x);
+                    minY = Math.min(minY, options.scaleY * v.y);
+                    maxY = Math.max(maxY, options.scaleY * v.y);
+                }
+                var width = maxX - minX;
+                var height = maxY - minY;
+                var texture = Stage.canvas(function (ctx) {
+                    var _a;
+                    // @ts-ignore
+                    this.size(width + 2 * lw, height + 2 * lw, ratio);
+                    ctx.scale(ratio, ratio);
+                    ctx.beginPath();
+                    for (var i = 0; i < vertices.length; ++i) {
+                        var v = vertices[i];
+                        var x = v.x - minX + lw;
+                        var y = options.scaleY * v.y - minY + lw;
+                        if (i == 0)
+                            ctx.moveTo(x, y);
+                        else
+                            ctx.lineTo(x, y);
+                    }
+                    if (vertices.length > 2) {
+                        ctx.closePath();
+                    }
+                    if (options.fillStyle) {
+                        ctx.fillStyle = options.fillStyle;
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+                    ctx.lineCap = 'round';
+                    ctx.lineWidth = options.lineWidth;
+                    ctx.strokeStyle = (_a = options.strokeStyle) !== null && _a !== void 0 ? _a : '';
+                    ctx.stroke();
+                });
+                var image = Stage.sprite(texture);
+                image.offset(minX - lw, minY - lw);
+                var node = Stage.create().append(image);
+                return node;
+            };
+            _this.drawChain = function (shape, options) {
+                var lw = options.lineWidth;
+                var ratio = options.ratio;
+                var vertices = shape.m_vertices;
+                if (!vertices.length) {
+                    return;
+                }
+                var minX = Infinity;
+                var minY = Infinity;
+                var maxX = -Infinity;
+                var maxY = -Infinity;
+                for (var i = 0; i < vertices.length; ++i) {
+                    var v = vertices[i];
+                    minX = Math.min(minX, v.x);
+                    maxX = Math.max(maxX, v.x);
+                    minY = Math.min(minY, options.scaleY * v.y);
+                    maxY = Math.max(maxY, options.scaleY * v.y);
+                }
+                var width = maxX - minX;
+                var height = maxY - minY;
+                var texture = Stage.canvas(function (ctx) {
+                    var _a;
+                    // @ts-ignore
+                    this.size(width + 2 * lw, height + 2 * lw, ratio);
+                    ctx.scale(ratio, ratio);
+                    ctx.beginPath();
+                    for (var i = 0; i < vertices.length; ++i) {
+                        var v = vertices[i];
+                        var x = v.x - minX + lw;
+                        var y = options.scaleY * v.y - minY + lw;
+                        if (i == 0)
+                            ctx.moveTo(x, y);
+                        else
+                            ctx.lineTo(x, y);
+                    }
+                    // TODO: if loop
+                    if (vertices.length > 2) ;
+                    if (options.fillStyle) {
+                        ctx.fillStyle = options.fillStyle;
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+                    ctx.lineCap = 'round';
+                    ctx.lineWidth = options.lineWidth;
+                    ctx.strokeStyle = (_a = options.strokeStyle) !== null && _a !== void 0 ? _a : '';
+                    ctx.stroke();
+                });
+                var image = Stage.sprite(texture);
+                image.offset(minX - lw, minY - lw);
+                var node = Stage.create().append(image);
+                return node;
+            };
+            _this.label('Planck');
+            _this.options.speed = (_a = opts.speed) !== null && _a !== void 0 ? _a : _this.options.speed;
+            _this.options.hz = (_b = opts.hz) !== null && _b !== void 0 ? _b : _this.options.speed;
+            if (Math.abs(_this.options.hz) < 1) {
+                _this.options.hz = 1 / _this.options.hz;
+            }
+            _this.options.scaleY = (_c = opts.scaleY) !== null && _c !== void 0 ? _c : _this.options.scaleY;
+            _this.options.ratio = (_d = opts.ratio) !== null && _d !== void 0 ? _d : _this.options.ratio;
+            _this.options.lineWidth = 2 / _this.options.ratio;
+            _this.world = world;
+            var timeStep = 1 / _this.options.hz;
+            var elapsedTime = 0;
+            _this.tick(function (dt) {
+                dt = dt * 0.001 * _this.options.speed;
+                elapsedTime += dt;
+                while (elapsedTime > timeStep) {
+                    world.step(timeStep);
+                    elapsedTime -= timeStep;
+                }
+                _this.renderWorld();
+                return true;
+            }, true);
+            world.on('remove-fixture', function (obj) {
+                var _a;
+                (_a = _this.nodes.get(obj)) === null || _a === void 0 ? void 0 : _a.remove();
+            });
+            world.on('remove-joint', function (obj) {
+                var _a;
+                (_a = _this.nodes.get(obj)) === null || _a === void 0 ? void 0 : _a.remove();
+            });
+            return _this;
+        }
+        return WorldNode;
+    }(Stage.Node));
+    var tb = new Testbed();
+    var testbed = function (a, b) {
+        playButton = null;
+        document.getElementById('testbed-play');
+        status = document.getElementById('testbed-status');
+        info = document.getElementById('testbed-info');
+        var callback;
+        if (typeof a === 'function') {
+            callback = a;
+        }
+        else if (typeof b === 'function') {
+            callback = b;
+        }
+        else ;
+        if (callback) {
+            // this is for backwards compatibility
+            var world = callback(tb);
+            tb.start(world);
+        }
+        else {
+            return tb;
+        }
+    };
+
+    var planck = /*#__PURE__*/Object.freeze({
+        __proto__: null,
+        AABB: AABB,
+        Body: Body,
+        Box: BoxShape,
+        BoxShape: BoxShape,
+        Chain: ChainShape,
+        ChainShape: ChainShape,
+        Circle: CircleShape,
+        CircleShape: CircleShape,
+        ClipVertex: ClipVertex,
+        CollideCircles: CollideCircles,
+        CollideEdgeCircle: CollideEdgeCircle,
+        CollideEdgePolygon: CollideEdgePolygon,
+        CollidePolygonCircle: CollidePolygonCircle,
+        CollidePolygons: CollidePolygons,
+        Contact: Contact,
+        ContactEdge: ContactEdge,
+        ContactFeature: ContactFeature,
+        get ContactFeatureType () { return exports.ContactFeatureType; },
+        ContactID: ContactID,
+        ContactImpulse: ContactImpulse,
+        Distance: Distance,
+        DistanceInput: DistanceInput,
+        DistanceJoint: DistanceJoint,
+        DistanceOutput: DistanceOutput,
+        DistanceProxy: DistanceProxy,
+        DynamicTree: DynamicTree,
+        Edge: EdgeShape,
+        EdgeShape: EdgeShape,
+        Fixture: Fixture,
+        FixtureProxy: FixtureProxy,
+        FrictionJoint: FrictionJoint,
+        GearJoint: GearJoint,
+        Joint: Joint,
+        JointEdge: JointEdge,
+        Manifold: Manifold,
+        ManifoldPoint: ManifoldPoint,
+        get ManifoldType () { return exports.ManifoldType; },
+        MassData: MassData,
+        Mat22: Mat22,
+        Mat33: Mat33,
+        Math: extended,
+        MotorJoint: MotorJoint,
+        MouseJoint: MouseJoint,
+        get PointState () { return exports.PointState; },
+        Polygon: PolygonShape,
+        PolygonShape: PolygonShape,
+        PrismaticJoint: PrismaticJoint,
+        PulleyJoint: PulleyJoint,
+        RevoluteJoint: RevoluteJoint,
+        RopeJoint: RopeJoint,
+        Rot: Rot,
+        Serializer: Serializer,
+        Settings: Settings,
+        Shape: Shape,
+        SimplexCache: SimplexCache,
+        Sweep: Sweep,
+        TOIInput: TOIInput,
+        TOIOutput: TOIOutput,
+        get TOIOutputState () { return exports.TOIOutputState; },
+        Testbed: Testbed,
+        TimeOfImpact: TimeOfImpact,
+        Transform: Transform,
+        TreeNode: TreeNode,
+        Vec2: Vec2,
+        Vec3: Vec3,
+        VelocityConstraintPoint: VelocityConstraintPoint,
+        WeldJoint: WeldJoint,
+        WheelJoint: WheelJoint,
+        World: World,
+        WorldManifold: WorldManifold,
+        clipSegmentToLine: clipSegmentToLine,
+        getPointStates: getPointStates,
+        internal: internal,
+        mixFriction: mixFriction,
+        mixRestitution: mixRestitution,
+        testOverlap: testOverlap,
+        testbed: testbed
+    });
+
     exports.AABB = AABB;
     exports.Body = Body;
     exports.Box = BoxShape;
+    exports.BoxShape = BoxShape;
     exports.Chain = ChainShape;
+    exports.ChainShape = ChainShape;
     exports.Circle = CircleShape;
+    exports.CircleShape = CircleShape;
+    exports.ClipVertex = ClipVertex;
     exports.CollideCircles = CollideCircles;
     exports.CollideEdgeCircle = CollideEdgeCircle;
     exports.CollideEdgePolygon = CollideEdgePolygon;
     exports.CollidePolygonCircle = CollidePolygonCircle;
     exports.CollidePolygons = CollidePolygons;
     exports.Contact = Contact;
+    exports.ContactEdge = ContactEdge;
+    exports.ContactFeature = ContactFeature;
+    exports.ContactID = ContactID;
+    exports.ContactImpulse = ContactImpulse;
     exports.Distance = Distance;
+    exports.DistanceInput = DistanceInput;
     exports.DistanceJoint = DistanceJoint;
+    exports.DistanceOutput = DistanceOutput;
+    exports.DistanceProxy = DistanceProxy;
     exports.DynamicTree = DynamicTree;
     exports.Edge = EdgeShape;
+    exports.EdgeShape = EdgeShape;
     exports.Fixture = Fixture;
+    exports.FixtureProxy = FixtureProxy;
     exports.FrictionJoint = FrictionJoint;
     exports.GearJoint = GearJoint;
     exports.Joint = Joint;
+    exports.JointEdge = JointEdge;
     exports.Manifold = Manifold;
+    exports.ManifoldPoint = ManifoldPoint;
+    exports.MassData = MassData;
     exports.Mat22 = Mat22;
     exports.Mat33 = Mat33;
-    exports.Math = math$1;
+    exports.Math = extended;
     exports.MotorJoint = MotorJoint;
     exports.MouseJoint = MouseJoint;
     exports.Polygon = PolygonShape;
+    exports.PolygonShape = PolygonShape;
     exports.PrismaticJoint = PrismaticJoint;
     exports.PulleyJoint = PulleyJoint;
     exports.RevoluteJoint = RevoluteJoint;
@@ -19054,18 +18336,31 @@
     exports.Serializer = Serializer;
     exports.Settings = Settings;
     exports.Shape = Shape;
+    exports.SimplexCache = SimplexCache;
     exports.Sweep = Sweep;
+    exports.TOIInput = TOIInput;
+    exports.TOIOutput = TOIOutput;
+    exports.Testbed = Testbed;
     exports.TimeOfImpact = TimeOfImpact;
     exports.Transform = Transform;
+    exports.TreeNode = TreeNode;
     exports.Vec2 = Vec2;
     exports.Vec3 = Vec3;
+    exports.VelocityConstraintPoint = VelocityConstraintPoint;
     exports.WeldJoint = WeldJoint;
     exports.WheelJoint = WheelJoint;
     exports.World = World;
+    exports.WorldManifold = WorldManifold;
+    exports.clipSegmentToLine = clipSegmentToLine;
+    exports.default = planck;
+    exports.getPointStates = getPointStates;
     exports.internal = internal;
+    exports.mixFriction = mixFriction;
+    exports.mixRestitution = mixRestitution;
+    exports.testOverlap = testOverlap;
     exports.testbed = testbed;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));
 //# sourceMappingURL=planck-with-testbed.js.map

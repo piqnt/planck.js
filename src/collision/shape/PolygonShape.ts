@@ -23,15 +23,15 @@
  */
 
 import type { MassData } from '../../dynamics/Body';
-import AABB, { RayCastOutput, RayCastInput } from '../AABB';
+import { AABB, RayCastOutput, RayCastInput } from '../AABB';
 import { DistanceProxy } from '../Distance';
 import common from '../../util/common';
-import Math from '../../common/Math';
-import Transform from '../../common/Transform';
-import Rot from '../../common/Rot';
-import Vec2 from '../../common/Vec2';
-import Settings from '../../Settings';
-import Shape from '../Shape';
+import { Math } from '../../common/Math';
+import { Transform } from '../../common/Transform';
+import { Rot } from '../../common/Rot';
+import { Vec2 } from '../../common/Vec2';
+import { Settings } from '../../Settings';
+import { Shape } from '../Shape';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -43,7 +43,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * Settings.maxPolygonVertices. In most cases you should not need many vertices
  * for a convex polygon. extends Shape
  */
-export default class PolygonShape extends Shape {
+export class PolygonShape extends Shape {
   static TYPE = 'polygon' as const;
 
   m_centroid: Vec2;
@@ -569,3 +569,5 @@ function ComputeCentroid(vs: Vec2[], count: number): Vec2 {
   c.mul(1.0 / area);
   return c;
 }
+
+export { PolygonShape as Polygon };

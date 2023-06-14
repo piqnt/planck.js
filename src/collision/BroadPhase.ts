@@ -23,10 +23,10 @@
  */
 
 import common from '../util/common';
-import Vec2 from '../common/Vec2';
-import Math from '../common/Math';
-import AABB, { RayCastCallback, RayCastInput } from './AABB';
-import DynamicTree, { DynamicTreeQueryCallback } from './DynamicTree';
+import { Vec2 } from '../common/Vec2';
+import { Math } from '../common/Math';
+import { AABB, RayCastCallback, RayCastInput } from './AABB';
+import { DynamicTree, DynamicTreeQueryCallback } from './DynamicTree';
 import { FixtureProxy } from "../dynamics/Fixture";
 
 
@@ -37,7 +37,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * The broad-phase wraps and extends a dynamic-tree to keep track of moved
  * objects and query them on update.
  */
-export default class BroadPhase {
+export class BroadPhase {
   m_tree: DynamicTree<FixtureProxy> = new DynamicTree<FixtureProxy>();
   m_proxyCount: number = 0;
   m_moveBuffer: number[] = [];

@@ -23,13 +23,13 @@
  */
 
 import common from '../../util/common';
-import options from '../../util/options';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Mat22 from '../../common/Mat22';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Mat22 } from '../../common/Mat22';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
@@ -74,7 +74,7 @@ const DEFAULTS = {
  *
  * @param anchor Anchor in global coordination.
  */
-export default class FrictionJoint extends Joint {
+export class FrictionJoint extends Joint {
   static TYPE = 'friction-joint' as const;
 
   /** @internal */ m_type: 'friction-joint';

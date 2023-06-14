@@ -24,7 +24,7 @@
 
 import common from '../util/common';
 import { Vec2 } from "../index";
-import options from "../util/options";
+import { options } from "../util/options";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -52,7 +52,7 @@ const RopeDefDefault: RopeDef = {
   k3 : 0.1
 };
 
-export default class Rope {
+export class Rope {
   m_gravity = Vec2.zero();
   m_damping: number;
 

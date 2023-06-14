@@ -11,5 +11,9 @@
     "lib": ["ES2015", "DOM"],
     "stripInternal": true,
     "target": "ES5"
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

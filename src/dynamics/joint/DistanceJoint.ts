@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-import options from '../../util/options';
-import Settings from '../../Settings';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { Settings } from '../../Settings';
+import { Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 /**
@@ -82,7 +82,7 @@ const DEFAULTS = {
  * @param anchorA Anchor A in global coordination.
  * @param anchorB Anchor B in global coordination.
  */
-export default class DistanceJoint extends Joint {
+export class DistanceJoint extends Joint {
   static TYPE = 'distance-joint' as const;
 
   // Solver shared

@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-import Settings from '../Settings';
+import { Settings } from '../Settings';
 import common from '../util/common';
-import Pool from '../util/Pool';
-import Vec2 from '../common/Vec2';
-import Math from '../common/Math';
-import AABB, { RayCastCallback, RayCastInput } from './AABB';
+import { Pool } from '../util/Pool';
+import { Vec2 } from '../common/Vec2';
+import { Math } from '../common/Math';
+import { AABB, RayCastCallback, RayCastInput } from './AABB';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -74,7 +74,7 @@ export class TreeNode<T> {
  * Nodes are pooled and relocatable, so we use node indices rather than
  * pointers.
  */
-export default class DynamicTree<T> {
+export class DynamicTree<T> {
   m_root: TreeNode<T>;
   m_lastProxyId: number;
   m_nodes: {

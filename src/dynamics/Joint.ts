@@ -23,8 +23,8 @@
  */
 
 import common from '../util/common';
-import type Vec2 from '../common/Vec2';
-import type Body from './Body';
+import type { Vec2 }  from '../common/Vec2';
+import type { Body }  from './Body';
 import { TimeStep } from "./Solver";
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -91,7 +91,7 @@ const DEFAULTS = {
  * The base joint class. Joints are used to constraint two bodies together in
  * various fashions. Some joints also feature limits and motors.
  */
-export default abstract class Joint {
+export abstract class Joint {
 
   /** @internal */ m_type: string = 'unknown-joint';
 

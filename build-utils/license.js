@@ -1,6 +1,6 @@
 const version = process.env.npm_package_version;
 
-export default `
+module.exports = `
 Planck.js v${version}
 @license The MIT license
 @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba

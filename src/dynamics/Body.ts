@@ -24,18 +24,18 @@
 
 
 import common from '../util/common';
-import options from '../util/options';
-import Vec2 from '../common/Vec2';
-import Rot from '../common/Rot';
-import Math from '../common/Math';
-import Sweep from '../common/Sweep';
-import Transform from '../common/Transform';
-import Velocity from './Velocity';
-import Position from './Position';
-import Fixture, { FixtureDef, FixtureOpt } from './Fixture';
-import Shape from '../collision/Shape';
+import { options } from '../util/options';
+import { Vec2 } from '../common/Vec2';
+import { Rot } from '../common/Rot';
+import { Math } from '../common/Math';
+import { Sweep } from '../common/Sweep';
+import { Transform } from '../common/Transform';
+import { Velocity } from './Velocity';
+import { Position } from './Position';
+import { Fixture, FixtureDef, FixtureOpt } from './Fixture';
+import { Shape } from '../collision/Shape';
 import { JointEdge } from "./Joint";
-import World from "./World";
+import { World } from "./World";
 import { ContactEdge } from "./Contact";
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -145,7 +145,7 @@ export class MassData {
  *
  * To create a new Body use {@link World.createBody}.
  */
-export default class Body {
+export class Body {
   /**
    * A static body does not move under simulation and behaves as if it has infinite mass.
    * Internally, zero is stored for the mass and the inverse mass.

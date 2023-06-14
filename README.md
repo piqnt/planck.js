@@ -44,13 +44,13 @@ Planck.js public API closely follows Box2D API, with the following differences:
 
 #### v1.0-alpha
 
-- Source code is migrated to TypeScript, to improves library usability, documentation and maintenance.
+- Source code is migrated to TypeScript, to improve library usability, documentation and maintenance.
 
 - Package name for v1.0+ is changed to `planck`. Package name for releases *before v1.0* is `planck-js`.
 
-- `planck.internal` namespace is deprecated and everything is directly available under main namesapce (except `planck.internal.stats`).
+- `planck.internal` namespace is deprecated and everything is directly available under main namespace (except `planck.internal.stats`).
 
-- Source files are moved to `/src` directory (from `/lib`) and directory layout is updated to match Box2D.
+- Source files are moved to `/src` directory (from `/lib`) and the directory layout is updated to match Box2D.
 
 - Rollup is used to build the project.
 
@@ -61,42 +61,50 @@ Planck.js public API closely follows Box2D API, with the following differences:
 To install `planck-js@0.3` (stable release) see [v0.3 branch](https://github.com/shakiba/planck.js/tree/v0.3#install).
 
 ### v1.0 (alpha)
-Staring from v1.0 package name is changed to `planck`.
+Starting from v1.0 package name is changed to `planck`.
 Releases and updates before v1.0 will remain available under `planck-js`.
 
 ##### CDN
 
-Planck.js is available on [jsDelivr](https://www.jsdelivr.com/package/npm/planck).
+Planck.js is available on [jsDelivr](https://www.jsdelivr.com/package/npm/planck) and [unpkg](https://unpkg.com/browse/planck/).
 
 ##### NPM
 
-Install npm package.
+Install:
 ```sh
 npm install planck
 ```
 
-Import it in your code.
+Import it in your code:
 ```js
-import * as planck from 'planck';
+import planck, { World, Vec2 } from 'planck';
 ```
 
-##### Testbed
+```js
+const planck = require('planck');
+```
 
-Use CDN in a web page.
+## Testbed
+
+Testbed is a simple tool for visualizing Planck.js.
+
 ```html
-<html><body>
+<html>
+  <body>
   <script src="//cdn.jsdelivr.net/npm/planck@latest/dist/planck-with-testbed.min.js"></script>
-  <script>
-    planck.testbed(function(testbed) {
-      // Your testbed code
-    });
-  </script>
-</body></html>
+    <script>
+      const world = planck.World();
+      const testbed = planck.testbed();
+      testbed.start(world);
+      // your code
+    </script>
+  </body>
+</html>
 ```
 
-Use NPM package in Node.
+
 ```js
-const planck = require('planck/dist/planck-with-testbed');
+const planck = require('planck/with-testbed');
 
 planck.testbed(function() {
   // ...

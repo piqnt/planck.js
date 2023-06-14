@@ -23,8 +23,8 @@
  */
 
 import common from '../util/common';
-import Vec2 from './Vec2';
-import Vec3 from './Vec3';
+import { Vec2 } from './Vec2';
+import { Vec3 } from './Vec3';
 
 
 const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
@@ -34,7 +34,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 /**
  * A 3-by-3 matrix. Stored in column-major order.
  */
-export default class Mat33 {
+export class Mat33 {
   ex: Vec3;
   ey: Vec3;
   ez: Vec3;

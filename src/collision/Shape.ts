@@ -23,10 +23,10 @@
  */
 
 import type { MassData } from '../dynamics/Body';
-import AABB, { RayCastOutput, RayCastInput } from './AABB';
+import { AABB, RayCastOutput, RayCastInput } from './AABB';
 import { DistanceProxy } from './Distance';
-import type Transform from '../common/Transform';
-import type Vec2 from '../common/Vec2';
+import type { Transform }  from '../common/Transform';
+import type { Vec2 }  from '../common/Vec2';
 
 
 /**
@@ -34,7 +34,7 @@ import type Vec2 from '../common/Vec2';
  * like. Shapes used for simulation in World are created automatically when a
  * Fixture is created. Shapes may encapsulate one or more child shapes.
  */
-export default abstract class Shape {
+export abstract class Shape {
   m_type: ShapeType;
   m_radius: number;
 

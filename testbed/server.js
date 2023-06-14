@@ -49,8 +49,7 @@ app.listen(app.get('port'), function() {
   console.log('Checkout http://localhost:' + app.get('port'));
 });
 
-
-const loadConfigFile = require('rollup/dist/loadConfigFile');
+const { loadConfigFile } = require('rollup/loadConfigFile');
 
 loadConfigFile(path.resolve(__dirname, '../rollup.config.js')).then(
   async ({ options, warnings }) => {

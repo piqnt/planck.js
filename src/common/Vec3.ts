@@ -23,14 +23,14 @@
  */
 
 import common from '../util/common';
-import Math from './Math';
+import { Math } from './Math';
 
 
 const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
-export default class Vec3 {
+export class Vec3 {
   x: number;
   y: number;
   z: number;

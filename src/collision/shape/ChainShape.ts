@@ -23,14 +23,14 @@
  */
 
 import type { MassData } from '../../dynamics/Body';
-import AABB, { RayCastOutput, RayCastInput } from '../AABB';
+import { AABB, RayCastOutput, RayCastInput } from '../AABB';
 import { DistanceProxy } from '../Distance';
-import common from '../../util/common';
-import Transform from '../../common/Transform';
-import Vec2 from '../../common/Vec2';
-import Settings from '../../Settings';
-import Shape from '../Shape';
-import EdgeShape from './EdgeShape';
+import * as common from '../../util/common';
+import { Transform } from '../../common/Transform';
+import { Vec2 } from '../../common/Vec2';
+import { Settings } from '../../Settings';
+import { Shape } from '../Shape';
+import { EdgeShape } from './EdgeShape';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -44,7 +44,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  *
  * WARNING: The chain will not collide properly if there are self-intersections.
  */
-export default class ChainShape extends Shape {
+export class ChainShape extends Shape {
   static TYPE = 'chain' as const;
 
   m_vertices: Vec2[];
@@ -356,3 +356,5 @@ export default class ChainShape extends Shape {
     proxy.m_radius = this.m_radius;
   }
 }
+
+export { ChainShape as Chain };

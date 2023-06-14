@@ -23,13 +23,13 @@
  */
 
 import common from '../../util/common';
-import options from '../../util/options';
-import Settings from '../../Settings';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { Settings } from '../../Settings';
+import { Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
@@ -93,7 +93,7 @@ const DEFAULTS = {
  * anchor points with static shapes to prevent one side from going to zero
  * length.
  */
-export default class PulleyJoint extends Joint {
+export class PulleyJoint extends Joint {
   static TYPE = 'pulley-joint' as const;
   // static MIN_PULLEY_LENGTH: number = 2.0; // TODO where this is used?
 

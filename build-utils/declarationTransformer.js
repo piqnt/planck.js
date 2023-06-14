@@ -1,6 +1,6 @@
-import ts from 'typescript';
+const ts = require('typescript');
 
-export default options => context => node => {
+module.exports = options => context => node => {
   return ts.visitEachChild(node, (node) => visitor(context.factory, node, options), context);
 }
 
@@ -9,10 +9,10 @@ function visitor(factory, node, options) {
       !isClassIncluded(node.name.escapedText, options)) {
     return node;
   }
-  if (isClassDerived(node)) {
-    // workaround for https://github.com/microsoft/TypeScript/issues/46503
-    return splitClassIntoConstAndInterface(factory, node);
-  }
+  // if (isClassDerived(node)) {
+  //   // workaround for https://github.com/microsoft/TypeScript/issues/46503
+  //   return splitClassIntoConstAndInterface(factory, node);
+  // }
   return createNodeWithFactories(factory, node);
 }
 

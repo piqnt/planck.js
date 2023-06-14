@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-import options from '../../util/options';
-import Settings from '../../Settings';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { Settings } from '../../Settings';
+import { Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 const inactiveLimit = 0;
@@ -79,7 +79,7 @@ const DEFAULTS = {
  * sponginess, so I chose not to implement it that way. See {@link DistanceJoint} if you
  * want to dynamically control length.
  */
-export default class RopeJoint extends Joint {
+export class RopeJoint extends Joint {
   static TYPE = 'rope-joint' as const;
 
   /** @internal */ m_type: 'rope-joint';

@@ -23,16 +23,16 @@
  */
 
 import common from '../../util/common';
-import options from '../../util/options';
-import Settings from '../../Settings';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Vec3 from '../../common/Vec3';
-import Mat22 from '../../common/Mat22';
-import Mat33 from '../../common/Mat33';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { Settings } from '../../Settings';
+import { Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Vec3 } from '../../common/Vec3';
+import { Mat22 } from '../../common/Mat22';
+import { Mat33 } from '../../common/Mat33';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
@@ -121,7 +121,7 @@ const DEFAULTS = {
  * joint limit to restrict the range of motion and a joint motor to drive the
  * motion or to model joint friction.
  */
-export default class PrismaticJoint extends Joint {
+export class PrismaticJoint extends Joint {
   static TYPE = 'prismatic-joint' as const;
 
   /** @internal */ m_type: 'prismatic-joint';

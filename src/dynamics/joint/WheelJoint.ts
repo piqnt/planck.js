@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-import options from '../../util/options';
-import Settings from '../../Settings';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { Settings } from '../../Settings';
+import { Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
@@ -99,7 +99,7 @@ const DEFAULTS = {
  * point to line constraint with a rotational motor and a linear spring/damper.
  * This joint is designed for vehicle suspensions.
  */
-export default class WheelJoint extends Joint {
+export class WheelJoint extends Joint {
   static TYPE = 'wheel-joint' as const;
 
   /** @internal */ m_type: 'wheel-joint';

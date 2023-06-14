@@ -22,19 +22,19 @@
  * SOFTWARE.
  */
 
-import Settings from '../Settings';
+import { Settings } from '../Settings';
 
 import common from '../util/common';
-import stats from '../util/stats';
+import { stats } from '../util/stats';
 import Timer from '../util/Timer';
 
-import Math from '../common/Math';
-import Vec2 from '../common/Vec2';
-import Rot from '../common/Rot';
-import Sweep from '../common/Sweep';
-import Transform from '../common/Transform';
+import { Math } from '../common/Math';
+import { Vec2 } from '../common/Vec2';
+import { Rot } from '../common/Rot';
+import { Sweep } from '../common/Sweep';
+import { Transform } from '../common/Transform';
 
-import Distance, { DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from './Distance';
+import { Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from './Distance';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -88,7 +88,7 @@ stats.toiMaxRootIters = 0;
  * CCD via the local separating axis method. This seeks progression by computing
  * the largest time at which separation is maintained.
  */
-export default function TimeOfImpact(output: TOIOutput, input: TOIInput): void {
+export function TimeOfImpact(output: TOIOutput, input: TOIInput): void {
   const timer = Timer.now();
 
   ++stats.toiCalls;

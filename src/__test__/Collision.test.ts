@@ -1,10 +1,10 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 
-import Vec2 from '../common/Vec2';
-import AABB from '../collision/AABB';
-import DynamicTree from '../collision/DynamicTree';
-import BroadPhase from '../collision/BroadPhase';
+import { Vec2 } from '../common/Vec2';
+import { AABB } from '../collision/AABB';
+import { DynamicTree } from '../collision/DynamicTree';
+import { BroadPhase } from '../collision/BroadPhase';
 import { FixtureProxy } from "../dynamics/Fixture";
 
 describe('Collision', function(): void {

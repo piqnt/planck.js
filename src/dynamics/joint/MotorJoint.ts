@@ -23,13 +23,13 @@
  */
 
 import common from '../../util/common';
-import options from '../../util/options';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Mat22 from '../../common/Mat22';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Mat22 } from '../../common/Mat22';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
@@ -78,7 +78,7 @@ const DEFAULTS = {
  * typical usage is to control the movement of a dynamic body with respect to
  * the ground.
  */
-export default class MotorJoint extends Joint {
+export class MotorJoint extends Joint {
   static TYPE = 'motor-joint' as const;
 
   /** @internal */ m_type: 'motor-joint';

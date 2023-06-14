@@ -1,21 +1,21 @@
-// import util from 'util';
+// import { util } from 'util';
 import { expect } from 'chai';
 
-import Vec2 from '../../common/Vec2';
-import Circle from '../../collision/shape/CircleShape';
-import Box from '../../collision/shape/BoxShape';
-import DistanceJoint from '../../dynamics/joint/DistanceJoint';
-import World from '../../dynamics/World';
+import { Vec2 } from '../../common/Vec2';
+import { CircleShape } from '../../collision/shape/CircleShape';
+import { BoxShape } from '../../collision/shape/BoxShape';
+import { DistanceJoint } from '../../dynamics/joint/DistanceJoint';
+import { World } from '../../dynamics/World';
 
-import Serializer from '../../serializer';
+import { Serializer } from '../../serializer';
 
 describe('Serializer', function(): void {
   it('saves and loads to JSON', function(): void {
 
     var world = new World();
 
-    var circle = new Circle(1);
-    var box = new Box(1, 1);
+    var circle = new CircleShape(1);
+    var box = new BoxShape(1, 1);
 
     var b1 = world.createBody({
       position : new Vec2(0, 0),

@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-import Settings from '../../Settings';
-import Shape from '../Shape';
-import Transform from '../../common/Transform';
-import Rot from '../../common/Rot';
-import Vec2 from '../../common/Vec2';
-import AABB, { RayCastInput, RayCastOutput } from '../AABB';
+import { Settings } from '../../Settings';
+import { Shape } from '../Shape';
+import { Transform } from '../../common/Transform';
+import { Rot } from '../../common/Rot';
+import { Vec2 } from '../../common/Vec2';
+import { AABB, RayCastInput, RayCastOutput } from '../AABB';
 import { MassData } from '../../dynamics/Body';
 import { DistanceProxy } from '../Distance';
 
@@ -36,7 +36,7 @@ import { DistanceProxy } from '../Distance';
  * other edge shapes. The connectivity information is used to ensure correct
  * contact normals.
  */
-export default class EdgeShape extends Shape {
+export class EdgeShape extends Shape {
   static TYPE = 'edge' as const;
 
   // These are the edge vertices
@@ -301,3 +301,5 @@ export default class EdgeShape extends Shape {
   }
 
 }
+
+export { EdgeShape as Edge };

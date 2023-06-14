@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-import Vec2 from '../common/Vec2';
-import Transform from '../common/Transform';
-import Math from '../common/Math';
-import Rot from '../common/Rot';
+import { Vec2 } from '../common/Vec2';
+import { Transform } from '../common/Transform';
+import { Math } from '../common/Math';
+import { Rot } from '../common/Rot';
 
 export enum ManifoldType {
   e_circles = 0,
@@ -89,7 +89,7 @@ export enum ContactFeatureType {
  * @prop points The points of contact {ManifoldPoint[]}
  * @prop pointCount The number of manifold points
  */
-export default class Manifold {
+export class Manifold {
   type: ManifoldType;
   localNormal: Vec2 = Vec2.zero();
   localPoint: Vec2 = Vec2.zero();

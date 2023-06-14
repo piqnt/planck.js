@@ -23,17 +23,17 @@
  */
 
 import common from '../../util/common';
-import Math from '../../common/Math';
-import Transform from '../../common/Transform';
-import Vec2 from '../../common/Vec2';
-import Rot from '../../common/Rot';
-import Settings from '../../Settings';
-import Contact from '../../dynamics/Contact';
-import Manifold, { clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from '../Manifold';
-import EdgeShape from './EdgeShape';
-import ChainShape from './ChainShape';
-import PolygonShape from './PolygonShape';
-import Fixture from "../../dynamics/Fixture";
+import { Math } from '../../common/Math';
+import { Transform } from '../../common/Transform';
+import { Vec2 } from '../../common/Vec2';
+import { Rot } from '../../common/Rot';
+import { Settings } from '../../Settings';
+import { Contact } from '../../dynamics/Contact';
+import { Manifold, clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from '../Manifold';
+import { EdgeShape } from './EdgeShape';
+import { ChainShape } from './ChainShape';
+import { PolygonShape } from './PolygonShape';
+import { Fixture } from "../../dynamics/Fixture";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;

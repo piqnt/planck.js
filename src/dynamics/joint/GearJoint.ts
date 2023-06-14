@@ -23,15 +23,15 @@
  */
 
 import common from '../../util/common';
-import options from '../../util/options';
-import Settings from '../../Settings';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
-import RevoluteJoint from './RevoluteJoint';
-import PrismaticJoint from './PrismaticJoint';
+import { options } from '../../util/options';
+import { Settings } from '../../Settings';
+import { Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
+import { RevoluteJoint } from './RevoluteJoint';
+import { PrismaticJoint } from './PrismaticJoint';
 import { TimeStep } from "../Solver";
 
 
@@ -78,7 +78,7 @@ const DEFAULTS = {
  * This definition requires two existing revolute or prismatic joints (any
  * combination will work).
  */
-export default class GearJoint extends Joint {
+export class GearJoint extends Joint {
   static TYPE = 'gear-joint' as const;
 
   /** @internal */ m_type: 'gear-joint';

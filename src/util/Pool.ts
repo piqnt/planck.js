@@ -16,7 +16,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-export default class Pool<T> {
+export class Pool<T> {
   _list: T[] = [];
   _max: number = Infinity;
 

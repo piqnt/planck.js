@@ -24,16 +24,16 @@
 
 import { ShapeType } from "../collision/Shape";
 import common from '../util/common';
-import Math from '../common/Math';
-import Vec2 from '../common/Vec2';
-import Transform from '../common/Transform';
-import Mat22 from '../common/Mat22';
-import Rot from '../common/Rot';
-import Settings from '../Settings';
-import Manifold, { ManifoldType, WorldManifold } from '../collision/Manifold';
+import { Math } from '../common/Math';
+import { Vec2 } from '../common/Vec2';
+import { Transform } from '../common/Transform';
+import { Mat22 } from '../common/Mat22';
+import { Rot } from '../common/Rot';
+import { Settings } from '../Settings';
+import { Manifold, ManifoldType, WorldManifold } from '../collision/Manifold';
 import { testOverlap } from '../collision/Distance';
-import Fixture from "./Fixture";
-import Body from "./Body";
+import { Fixture } from "./Fixture";
+import { Body } from "./Body";
 import { ContactImpulse, TimeStep } from "./Solver";
 
 
@@ -119,7 +119,7 @@ export class VelocityConstraintPoint {
  * overlapping AABB in the broad-phase (except if filtered). Therefore a contact
  * object may exist that has no contact points.
  */
-export default class Contact {
+export class Contact {
   /** @internal */
   m_nodeA: ContactEdge;
   /** @internal */

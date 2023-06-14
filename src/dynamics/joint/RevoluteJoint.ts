@@ -23,16 +23,16 @@
  */
 
 import common from '../../util/common';
-import options from '../../util/options';
-import Settings from '../../Settings';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Vec3 from '../../common/Vec3';
-import Mat22 from '../../common/Mat22';
-import Mat33 from '../../common/Mat33';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { Settings } from '../../Settings';
+import { Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Vec3 } from '../../common/Vec3';
+import { Mat22 } from '../../common/Mat22';
+import { Mat33 } from '../../common/Mat33';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
@@ -127,7 +127,7 @@ const DEFAULTS = {
  * relative rotation about the shared point. A maximum motor torque is provided
  * so that infinite forces are not generated.
  */
-export default class RevoluteJoint extends Joint {
+export class RevoluteJoint extends Joint {
   static TYPE = 'revolute-joint' as const;
 
   /** @internal */ m_type: 'revolute-joint';

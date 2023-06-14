@@ -23,14 +23,14 @@
  */
 
 import common from '../../util/common';
-import options from '../../util/options';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Mat22 from '../../common/Mat22';
-import Rot from '../../common/Rot';
-import Transform from '../../common/Transform';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Mat22 } from '../../common/Mat22';
+import { Rot } from '../../common/Rot';
+import { Transform } from '../../common/Transform';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
@@ -85,7 +85,7 @@ const DEFAULTS = {
  * be used in the testbed. If you want to learn how to use the mouse joint, look
  * at the testbed.
  */
-export default class MouseJoint extends Joint {
+export class MouseJoint extends Joint {
   static TYPE = 'mouse-joint' as const;
 
   /** @internal */ m_type: 'mouse-joint';

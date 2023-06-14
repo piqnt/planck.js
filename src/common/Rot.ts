@@ -23,15 +23,15 @@
  */
 
 import common from '../util/common';
-import Vec2 from './Vec2';
-import Math from './Math';
+import { Vec2 } from './Vec2';
+import { Math } from './Math';
 
 
 const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
-export default class Rot {
+export class Rot {
   s: number;
   c: number;
 
