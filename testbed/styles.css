@@ -34,7 +34,7 @@ a:hover {
 	color: #444;
 	font-size: 20px;
 	text-shadow: 0 1px rgba(255, 255, 255, 0.5);
-	margin: 3px 0 0;
+	margin: 6px;
 }
 
 .title a {
@@ -144,9 +144,9 @@ select {
 		background: #333;
 		color: #fff;
 	}
-  .control a {
-    color: #ddd;
-  }
+	.control a {
+		color: #ddd;
+	}
 	#status {
 		position: absolute;
 		bottom: 0;

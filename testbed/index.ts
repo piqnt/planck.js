@@ -1,3 +1,7 @@
+import Stage from 'stage-js';
+
+export * from '../src/index';
+
 import {
   AABB,
   Body,
@@ -5,418 +9,255 @@ import {
   Joint,
   MouseJoint,
   Vec2,
-  World
-} from '../src/index';
-import { default as Stage } from 'stage-js/platform/web';
+  World,
+  Edge,
+  Polygon,
+  Chain,
+  Circle,
+} from '../src';
 
-export interface ActiveKeys {
-  0?: boolean;
-  1?: boolean;
-  2?: boolean;
-  3?: boolean;
-  4?: boolean;
-  5?: boolean;
-  6?: boolean;
-  7?: boolean;
-  8?: boolean;
-  9?: boolean;
-  A?: boolean;
-  B?: boolean;
-  C?: boolean;
-  D?: boolean;
-  E?: boolean;
-  F?: boolean;
-  G?: boolean;
-  H?: boolean;
-  I?: boolean;
-  J?: boolean;
-  K?: boolean;
-  L?: boolean;
-  M?: boolean;
-  N?: boolean;
-  O?: boolean;
-  P?: boolean;
-  Q?: boolean;
-  R?: boolean;
-  S?: boolean;
-  T?: boolean;
-  U?: boolean;
-  V?: boolean;
-  W?: boolean;
-  X?: boolean;
-  Y?: boolean;
-  Z?: boolean;
-  right?: boolean;
-  left?: boolean;
-  up?: boolean;
-  down?: boolean;
-  fire?: boolean;
+type RenderOption = {
+  stroke?: string;
+  fill?: string;
 }
 
-export interface Testbed {
-  /** @private @internal */ _pause: any;
-  /** @private @internal */ _resume: any;
-  /** @private @internal */ _status: any;
-  /** @private @internal */ _info: any;
+type JointX = Joint & {
+  render?: RenderOption;
+}
 
-  /** @private @internal */ resume: any;
-  /** @private @internal */ pause: any;
-  /** @private @internal */ isPaused: any;
-  /** @private @internal */ togglePause: any;
-  /** @private @internal */ canvas: any;
-  /** @private @internal */ focus: () => void;
+type FixtureX = Fixture & {
+  render?: RenderOption;
+}
 
-  // camera position
-  /** World viewbox width. */
-  width: number;
-  /** World viewbox height. */
-  height: number;
-  /** World viewbox center vertical offset. */
-  x: number;
-  /** World viewbox center horizontal offset. */
-  y: number;
+type BodyX = Body & {
+  render?: RenderOption;
+}
 
+interface Options {
+  speed: number;
+  hz: number;
   scaleY: number;
   ratio: number;
-
-  /** World simulation step frequency */
-  hz: number;
-  /** World simulation speed, default is 1 */
-  speed: number;
-
-  activeKeys: ActiveKeys;
-  background: string;
-
-  mouseForce?: number;
-
-  status(name: string, value: any): void;
-  status(value: object | string): void;
-  info(text: string): void;
-
-  drawPoint(p: {x: number, y: number}, r: any, color: string): void;
-  drawCircle(p: {x: number, y: number}, r: number, color: string): void;
-  drawSegment(a: {x: number, y: number}, b: {x: number, y: number}, color: string): void;
-  drawPolygon(points: Array<{x: number, y: number}>, color: string): void;
-  drawAABB(aabb: AABB, color: string): void;
-  color(r: number, g: number, b: number): string;
-
-  // callbacks
-  step?: (dt: number, t: number) => void;
-  keydown?: (keyCode: number, label: string) => void;
-  keyup?: (keyCode: number, label: string) => void;
-
-  findOne: (query: string) => Body | Joint | Fixture | null;
-  findAll: (query: string) => Body[] | Joint[] | Fixture[];
+  lineWidth: number;
+  strokeStyle: string | undefined;
+  fillStyle: string | undefined;
 }
 
-export function testbed(opts: object, callback: (testbed: Testbed) => World);
-export function testbed(callback: (testbed: Testbed) => World);
-export function testbed(opts, callback?) {
-  if (typeof opts === 'function') {
-    callback = opts;
-    opts = null;
-  }
+interface Point {
+  x: number;
+  y: number;
+}
 
-  Stage(function(stage, canvas) {
+type KEY = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' |
+  '8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' |
+  'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' |
+  'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' |
+  'Z' | 'right' | 'left' | 'up' | 'down' | 'fire';
 
-    stage.on(Stage.Mouse.START, function() {
+export type ActiveKeys = { [key in KEY]?: boolean };
+
+function findBody(world: World, point: Point) {
+  let body: Body | null = null;
+  const aabb = new AABB(point as Vec2, point as Vec2);
+  world.queryAABB(aabb, (fixture) => {
+    if (body) {
+      return false;
+    }
+    if (!fixture.getBody().isDynamic() || !fixture.testPoint(point as Vec2)) {
+      return false;
+    }
+    body = fixture.getBody();
+    return true;
+  });
+  return body;
+}
+
+let playButton: HTMLElement | null = null;
+let status: HTMLElement | null = null;
+let info: HTMLElement | null = null;
+
+// status.innerText = '';
+// info.innerText = '';
+
+export class Testbed {
+  // camera position
+
+  /** World viewbox width. */
+  width: number = 80;
+
+  /** World viewbox height. */
+  height: number = 60;
+
+  /** World viewbox center vertical offset. */
+  x: number = 0;
+
+  /** World viewbox center horizontal offset. */
+  y: number = -10;
+
+  scaleY: number = -1;
+
+  /** World simulation step frequency */
+  hz: number = 60;
+
+  /** World simulation speed, default is 1 */
+  speed: number = 1;
+
+  ratio: number = 16;
+  background: string = '#222222';
+
+  mouseForce?: number;
+  activeKeys: ActiveKeys = {};
+
+  /** callback, to be implemented by user */
+  step = (dt: number, t: number): void => {
+    return;
+  };
+
+  /** callback, to be implemented by user */
+  keydown = (keyCode: number, label: string): void => {
+    return;
+  };
+
+  /** callback, to be implemented by user */
+  keyup = (keyCode: number, label: string): void => {
+    return;
+  };
+
+  private canvas: any;
+  private stage: any;
+  private lastDrawHash = "";
+  private newDrawHash = "";
+  private buffer: ((context: CanvasRenderingContext2D, ratio: number)=> void)[] = [];
+
+  start = (world: World) => {
+    const stage = this.stage = Stage.mount();
+    const canvas = this.canvas = stage.dom as HTMLCanvasElement;
+
+    const testbed = this;
+    this.canvas = canvas;
+
+    stage.on(Stage.Mouse.START, () => {
       window.focus();
       // @ts-ignore
-      document.activeElement && document.activeElement.blur();
+      document.activeElement?.blur();
       canvas.focus();
     });
 
-    stage.MAX_ELAPSE = 1000 / 30;
+    (stage as any).MAX_ELAPSE = 1000 / 30;
 
-    // @ts-ignore
-    const testbed: Testbed = {};
-    testbed.canvas = canvas;
-
-    let paused = false;
-    stage.on('resume', function() {
-      paused = false;
-      testbed._resume && testbed._resume();
+    stage.on('resume', () => {
+      this.paused = false;
+      this._resume?.();
     });
-    stage.on('pause', function() {
-      paused = true;
-      testbed._pause && testbed._pause();
+    stage.on('pause', () => {
+      this.paused = true;
+      this._pause?.();
     });
-    testbed.isPaused = function() {
-      return paused;
-    };
-    testbed.togglePause = function() {
-      paused ? testbed.resume() : testbed.pause();
-    };
-    testbed.pause = function() {
-      stage.pause();
-    };
-    testbed.resume = function() {
-      stage.resume();
-      testbed.focus();
-    };
-    testbed.focus = function() {
-      // @ts-ignore
-      document.activeElement && document.activeElement.blur();
-      canvas.focus();
-    };
 
-    testbed.width = 80;
-    testbed.height = 60;
-    testbed.x = 0;
-    testbed.y = -10;
-    testbed.scaleY = -1;
-    testbed.ratio = 16;
-    testbed.hz = 60;
-    testbed.speed = 1;
-    testbed.activeKeys = {};
-    testbed.background = '#222222';
+    const drawingTexture = new Stage.Texture();
+    stage.append(Stage.sprite(drawingTexture));
+    stage.tick(() => {
+      this.buffer.length = 0;
+    }, true);
 
-    testbed.findOne = function() {
-      // todo: implement
-      return null;
-    };
-
-    testbed.findAll = function() {
-      // todo: implement
-      return [];
-    };
-
-    let statusText = '';
-    const statusMap = {};
-
-    function statusSet(name, value) {
-      if (typeof value !== 'function' && typeof value !== 'object') {
-        statusMap[name] = value;
+    drawingTexture.draw = (ctx: CanvasRenderingContext2D) => {
+      ctx.save();
+      ctx.transform(1, 0, 0, this.scaleY, -this.x, -this.y);
+      ctx.lineWidth = 2  / this.ratio;
+      ctx.lineCap = 'round';
+      for (let drawing = this.buffer.shift(); drawing; drawing = this.buffer.shift()) {
+        drawing(ctx, this.ratio);
       }
-    }
-
-    function statusMerge(obj) {
-      // tslint:disable-next-line:no-for-in
-      for (const key in obj) {
-        statusSet(key, obj[key]);
-      }
-    }
-
-    testbed.status = function(a, b?) {
-      if (typeof b !== 'undefined') {
-        statusSet(a, b);
-      } else if (a && typeof a === 'object') {
-        statusMerge(a);
-      } else if (typeof a === 'string') {
-        statusText = a;
-      }
-
-      testbed._status && testbed._status(statusText, statusMap);
+      ctx.restore();
     };
 
-    testbed.info = function(text) {
-      testbed._info && testbed._info(text);
-    };
-
-    let lastDrawHash = "";
-    let drawHash = "";
-
-    (function() {
-      const drawingTexture = new Stage.Texture();
-      stage.append(Stage.image(drawingTexture));
-
-      const buffer = [];
-      stage.tick(function() {
-        buffer.length = 0;
-      }, true);
-
-      drawingTexture.draw = function(ctx) {
-        ctx.save();
-        ctx.transform(1, 0, 0, testbed.scaleY, -testbed.x, -testbed.y);
-        ctx.lineWidth = 2  / testbed.ratio;
-        ctx.lineCap = 'round';
-        for (let drawing = buffer.shift(); drawing; drawing = buffer.shift()) {
-          drawing(ctx, testbed.ratio);
-        }
-        ctx.restore();
-      };
-
-      testbed.drawPoint = function(p, r, color) {
-        buffer.push(function(ctx, ratio) {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, 5  / ratio, 0, 2 * Math.PI);
-          ctx.strokeStyle = color;
-          ctx.stroke();
-        });
-        drawHash += "point" + p.x + ',' + p.y + ',' + r + ',' + color;
-      };
-
-      testbed.drawCircle = function(p, r, color) {
-        buffer.push(function(ctx) {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, r, 0, 2 * Math.PI);
-          ctx.strokeStyle = color;
-          ctx.stroke();
-        });
-        drawHash += "circle" + p.x + ',' + p.y + ',' + r + ',' + color;
-      };
-
-      testbed.drawSegment = function(a, b, color) {
-        buffer.push(function(ctx) {
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.strokeStyle = color;
-          ctx.stroke();
-        });
-        drawHash += "segment" + a.x + ',' + a.y + ',' + b.x + ',' + b.y + ',' + color;
-      };
-
-      testbed.drawPolygon = function(points, color) {
-        if (!points || !points.length) {
-          return;
-        }
-        buffer.push(function(ctx) {
-          ctx.beginPath();
-          ctx.moveTo(points[0].x, points[0].y);
-          for (let i = 1; i < points.length; i++) {
-            ctx.lineTo(points[i].x, points[i].y);
-          }
-          ctx.strokeStyle = color;
-          ctx.closePath();
-          ctx.stroke();
-        });
-        drawHash += "segment";
-        for (let i = 1; i < points.length; i++) {
-          drawHash += points[i].x + ',' + points[i].y + ',';
-        }
-        drawHash += color;
-      };
-
-      testbed.drawAABB = function(aabb, color) {
-        buffer.push(function(ctx) {
-          ctx.beginPath();
-          ctx.moveTo(aabb.lowerBound.x, aabb.lowerBound.y);
-          ctx.lineTo(aabb.upperBound.x, aabb.lowerBound.y);
-          ctx.lineTo(aabb.upperBound.x, aabb.upperBound.y);
-          ctx.lineTo(aabb.lowerBound.x, aabb.upperBound.y);
-          ctx.strokeStyle = color;
-          ctx.closePath();
-          ctx.stroke();
-        });
-        drawHash += "aabb";
-        drawHash += aabb.lowerBound.x + ',' + aabb.lowerBound.y + ',';
-        drawHash += aabb.upperBound.x + ',' + aabb.upperBound.y + ',';
-        drawHash += color;
-      };
-
-      testbed.color = function(r, g, b) {
-        r = r * 256 | 0;
-        g = g * 256 | 0;
-        b = b * 256 | 0;
-        return 'rgb(' + r + ', ' + g + ', ' + b + ')';
-      };
-
-    })();
-
-    const world = callback(testbed);
-
-    const viewer = new Viewer(world, testbed);
+    const worldNode = new WorldNode(world, this);
 
     let lastX = 0;
     let lastY = 0;
-    stage.tick(function(dt, t) {
+    stage.tick((dt: number, t: number) => {
       // update camera position
-      if (lastX !== testbed.x || lastY !== testbed.y) {
-        viewer.offset(-testbed.x, -testbed.y);
-        lastX = testbed.x;
-        lastY = testbed.y;
+      if (lastX !== this.x || lastY !== this.y) {
+        worldNode.offset(-this.x, -this.y);
+        lastX = this.x;
+        lastY = this.y;
       }
     });
 
-    viewer.tick(function(dt, t) {
-      // call testbed step, if provided
-      if (typeof testbed.step === 'function') {
-        testbed.step(dt, t);
-      }
+    worldNode.tick((dt: number, t: number) => {
+      this.step(dt, t);
 
       if (targetBody) {
-        testbed.drawSegment(targetBody.getPosition(), mouseMove, 'rgba(255,255,255,0.2)');
+        this.drawSegment(targetBody.getPosition(), mouseMove, 'rgba(255,255,255,0.2)');
       }
 
-      if (lastDrawHash !== drawHash) {
-        lastDrawHash = drawHash;
+      if (this.lastDrawHash !== this.newDrawHash) {
+        this.lastDrawHash = this.newDrawHash;
         stage.touch();
       }
-      drawHash = "";
+      this.newDrawHash = "";
 
       return true;
     });
 
     // stage.empty();
-    stage.background(testbed.background);
-    stage.viewbox(testbed.width, testbed.height);
+    stage.background(this.background);
+    stage.viewbox(this.width, this.height);
     stage.pin('alignX', -0.5);
     stage.pin('alignY', -0.5);
-    stage.prepend(viewer);
-
-    function findBody(point) {
-      let body;
-      const aabb = new AABB(point, point);
-      world.queryAABB(aabb, function(fixture) {
-        if (body) {
-          return;
-        }
-        if (!fixture.getBody().isDynamic() || !fixture.testPoint(point)) {
-          return;
-        }
-        body = fixture.getBody();
-        return true;
-      });
-      return body;
-    }
+    stage.prepend(worldNode);
 
     const mouseGround = world.createBody();
-    let mouseJoint;
-
-    let targetBody;
+    let mouseJoint: MouseJoint | null = null;
+    let targetBody: Body | null = null;
     const mouseMove = {x: 0, y: 0};
 
-    viewer.attr('spy', true).on(Stage.Mouse.START, function(point) {
+    worldNode.attr('spy', true);
+
+    worldNode.on(Stage.Mouse.START, (point: Point) => {
       point = { x: point.x, y: testbed.scaleY * point.y };
       if (targetBody) {
         return;
       }
 
-      const body = findBody(point);
+      const body = findBody(world, point);
       if (!body) {
         return;
       }
 
-      if (testbed.mouseForce) {
+      if (this.mouseForce) {
         targetBody = body;
 
       } else {
-        mouseJoint = new MouseJoint({maxForce: 1000}, mouseGround, body, Vec2.clone(point));
+        mouseJoint = new MouseJoint({maxForce: 1000}, mouseGround, body, Vec2.clone(point as Vec2));
         world.createJoint(mouseJoint);
       }
+    });
 
-    }).on(Stage.Mouse.MOVE, function(point) {
+    worldNode.on(Stage.Mouse.MOVE, (point: Point) => {
       point = { x: point.x, y: testbed.scaleY * point.y };
       if (mouseJoint) {
-        mouseJoint.setTarget(point);
+        mouseJoint.setTarget(point as Vec2);
       }
 
       mouseMove.x = point.x;
       mouseMove.y = point.y;
-    }).on(Stage.Mouse.END, function(point) {
+    });
+
+    worldNode.on(Stage.Mouse.END, (point: Point) => {
       point = { x: point.x, y: testbed.scaleY * point.y };
       if (mouseJoint) {
         world.destroyJoint(mouseJoint);
         mouseJoint = null;
       }
-      if (targetBody) {
-        const force = Vec2.sub(point, targetBody.getPosition());
-        targetBody.applyForceToCenter(force.mul(testbed.mouseForce), true);
+      if (targetBody && this.mouseForce) {
+        const force = Vec2.sub(point as Vec2, targetBody.getPosition());
+        targetBody.applyForceToCenter(force.mul(this.mouseForce), true);
         targetBody = null;
       }
+    });
 
-    }).on(Stage.Mouse.CANCEL, function(point) {
+    worldNode.on(Stage.Mouse.CANCEL, (point: Point) => {
       point = { x: point.x, y: testbed.scaleY * point.y };
       if (mouseJoint) {
         world.destroyJoint(mouseJoint);
@@ -427,15 +268,28 @@ export function testbed(opts, callback?) {
       }
     });
 
-    window.addEventListener("keydown", function(e) {
+    window.addEventListener("keydown", (e) => {
       switch (e.keyCode) {
         case 'P'.charCodeAt(0):
-          testbed.togglePause();
+          this.togglePause();
           break;
       }
     }, false);
 
-    const downKeys = {};
+    const activeKeys = testbed.activeKeys;
+    const downKeys: Record<number, boolean> = {};
+    function updateActiveKeys(keyCode: number, down: boolean) {
+      const char = String.fromCharCode(keyCode) as KEY;
+      if (/\w/.test(char)) {
+        activeKeys[char] = down;
+      }
+      activeKeys.right = downKeys[39] || activeKeys['D'];
+      activeKeys.left = downKeys[37] || activeKeys['A'];
+      activeKeys.up = downKeys[38] || activeKeys['W'];
+      activeKeys.down = downKeys[40] || activeKeys['S'];
+      activeKeys.fire = downKeys[32] || downKeys[13] ;
+    }
+
     window.addEventListener("keydown", function(e) {
       const keyCode = e.keyCode;
       downKeys[keyCode] = true;
@@ -449,482 +303,600 @@ export function testbed(opts, callback?) {
       testbed.keyup && testbed.keyup(keyCode, String.fromCharCode(keyCode));
     });
 
-    const activeKeys = testbed.activeKeys;
-    function updateActiveKeys(keyCode, down) {
-      const char = String.fromCharCode(keyCode);
-      if (/\w/.test(char)) {
-        activeKeys[char] = down;
-      }
-      activeKeys.right = downKeys[39] || activeKeys['D'];
-      activeKeys.left = downKeys[37] || activeKeys['A'];
-      activeKeys.up = downKeys[38] || activeKeys['W'];
-      activeKeys.down = downKeys[40] || activeKeys['S'];
-      activeKeys.fire = downKeys[32] || downKeys[13] ;
+
+    playButton?.addEventListener('click', () => {
+      testbed.isPaused() ? testbed.resume() : testbed.pause();
+    });
+
+    this.resume();
+  }
+
+  /** @private @internal */
+  focus = () => {
+    // @ts-ignore
+    document.activeElement && document.activeElement.blur();
+    this.canvas.focus();
+  };
+
+  private paused: boolean = false;
+
+  /** @internal */
+  _pause = () => {
+    playButton?.classList.add('pause');
+    playButton?.classList.remove('play');
+  };
+  /** @internal */
+  _resume = () => {
+    playButton?.classList.add('play');
+    playButton?.classList.remove('pause');
+  };
+
+  private lastStatus = '';
+  private lastInfo = '';
+  
+  /** @internal */
+  _status = (statusText: string, statusMap: Record<string, any>) => {
+    var newline = '\n';
+    var string = statusText || '';
+    for (var key in statusMap) {
+      var value = statusMap[key];
+      if (typeof value === 'function') continue;
+      string += (string && newline) + key + ': ' + value;
+    }
+  
+    if (this.lastStatus !== string) {
+      status.innerText = this.lastStatus = string;
+    }
+  };
+  /** @internal */  
+  _info = (text: string) => {
+    if (this.lastInfo !== text) {
+      info.innerText = this.lastInfo = text;
+    }
+  };
+
+  /** @internal */
+  isPaused = () => {
+    return this.paused;
+  };
+  /** @internal */
+  togglePause = () => {
+    this.paused ? this.resume() : this.pause();
+  };
+  /** @internal */
+  pause = () => {
+    this.stage.pause();
+  };
+  /** @internal */
+  resume = () => {
+    this.stage.resume();
+    this.focus();
+  };
+
+  statusText = '';
+  statusMap: Record<string, any> = {};
+
+  private statusSet(name: string, value: string | number | boolean) {
+    if (typeof value !== 'function' && typeof value !== 'object') {
+      this.statusMap[name] = value;
+    }
+  }
+  private statusMerge(obj: Record<string, any>) {
+    // tslint:disable-next-line:no-for-in
+    for (const key in obj) {
+      this.statusSet(key, obj[key]);
+    }
+  }
+
+  status(name: string, value: any): void;
+  status(value: object | string): void;
+  status(a: any, b?: any) {
+    if (typeof b !== 'undefined') {
+      this.statusSet(a, b);
+    } else if (a && typeof a === 'object') {
+      this.statusMerge(a);
+    } else if (typeof a === 'string') {
+      this.statusText = a;
     }
 
-  });
+    this._status?.(this.statusText, this.statusMap);
+  };
+
+  info = (text: string): void => {
+    this._info?.(text);
+  };
+
+  drawPoint = (p: {x: number, y: number}, r: any, color: string): void => {
+    this.buffer.push(function(ctx, ratio) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 5  / ratio, 0, 2 * Math.PI);
+      ctx.strokeStyle = color;
+      ctx.stroke();
+    });
+    this.newDrawHash += "point" + p.x + ',' + p.y + ',' + r + ',' + color;
+  };
+
+  drawCircle = (p: {x: number, y: number}, r: number, color: string): void => {
+    this.buffer.push(function(ctx) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r, 0, 2 * Math.PI);
+      ctx.strokeStyle = color;
+      ctx.stroke();
+    });
+    this.newDrawHash += "circle" + p.x + ',' + p.y + ',' + r + ',' + color;
+  };
+
+  drawEdge = (a: {x: number, y: number}, b: {x: number, y: number}, color: string): void => {
+    this.buffer.push(function(ctx) {
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(b.x, b.y);
+      ctx.strokeStyle = color;
+      ctx.stroke();
+    });
+    this.newDrawHash += "segment" + a.x + ',' + a.y + ',' + b.x + ',' + b.y + ',' + color;
+  };
+
+  drawSegment = this.drawEdge;
+
+  drawPolygon = (points: Array<{x: number, y: number}>, color: string): void => {
+    if (!points || !points.length) {
+      return;
+    }
+    this.buffer.push(function(ctx) {
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+      ctx.strokeStyle = color;
+      ctx.closePath();
+      ctx.stroke();
+    });
+    this.newDrawHash += "segment";
+    for (let i = 1; i < points.length; i++) {
+      this.newDrawHash += points[i].x + ',' + points[i].y + ',';
+    }
+    this.newDrawHash += color;
+  };
+
+  drawAABB = (aabb: AABB, color: string): void => {
+    this.buffer.push(function(ctx) {
+      ctx.beginPath();
+      ctx.moveTo(aabb.lowerBound.x, aabb.lowerBound.y);
+      ctx.lineTo(aabb.upperBound.x, aabb.lowerBound.y);
+      ctx.lineTo(aabb.upperBound.x, aabb.upperBound.y);
+      ctx.lineTo(aabb.lowerBound.x, aabb.upperBound.y);
+      ctx.strokeStyle = color;
+      ctx.closePath();
+      ctx.stroke();
+    });
+    this.newDrawHash += "aabb";
+    this.newDrawHash += aabb.lowerBound.x + ',' + aabb.lowerBound.y + ',';
+    this.newDrawHash += aabb.upperBound.x + ',' + aabb.upperBound.y + ',';
+    this.newDrawHash += color;
+  };
+
+  color = function(r: number, g: number, b: number): string {
+    r = r * 256 | 0;
+    g = g * 256 | 0;
+    b = b * 256 | 0;
+    return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+  };
+
+  findOne = (query: string): (Body | Joint | Fixture | null) => {
+    // todo: implement
+    return null;
+  };
+
+  findAll = (query: string): (Body | Joint | Fixture)[] => {
+    // todo: implement
+    return [];
+  };
 }
 
-Viewer._super = Stage;
-Viewer.prototype = Stage._create(Viewer._super.prototype);
+class WorldNode extends Stage.Node {
+  private nodes = new WeakMap<BodyX | FixtureX | JointX, Stage.Node>();
 
-function Viewer(world, opts) {
-  Viewer._super.call(this);
-  this.label('Planck');
+  private options: Options = {
+    speed: 1,
+    hz: 60,
+    scaleY: -1,
+    ratio: 16,
+    lineWidth: 1,
+    strokeStyle: undefined,
+    fillStyle: undefined
+  };
 
-  opts = opts || {};
+  private world: World;
 
-  this._options = {};
-  this._options.speed = opts.speed || 1;
-  this._options.hz = opts.hz || 60;
-  if (Math.abs(this._options.hz) < 1) {
-    this._options.hz = 1 / this._options.hz;
-  }
-  this._options.scaleY = opts.scaleY || -1;
-  this._options.ratio = opts.ratio || 16;
-  this._options.lineWidth = 2 / this._options.ratio;
+  constructor(world: World, opts: Partial<Options> = {}) {
+    super();
+    this.label('Planck');
 
-  this._world = world;
-
-  const timeStep = 1 / this._options.hz;
-  let elapsedTime = 0;
-  this.tick((dt) => {
-    dt = dt * 0.001 * this._options.speed;
-    elapsedTime += dt;
-    while (elapsedTime > timeStep) {
-      world.step(timeStep);
-      elapsedTime -= timeStep;
+    this.options.speed = opts.speed ?? this.options.speed;
+    this.options.hz = opts.hz ?? this.options.speed;
+    if (Math.abs(this.options.hz) < 1) {
+      this.options.hz = 1 / this.options.hz;
     }
-    this.renderWorld();
-    return true;
-  }, true);
+    this.options.scaleY = opts.scaleY ?? this.options.scaleY;
+    this.options.ratio = opts.ratio ?? this.options.ratio;
+    this.options.lineWidth = 2 / this.options.ratio;
 
-  world.on('remove-fixture', function(obj) {
-    obj.ui && obj.ui.remove();
-  });
+    this.world = world;
 
-  world.on('remove-joint', function(obj) {
-    obj.ui && obj.ui.remove();
-  });
+    const timeStep = 1 / this.options.hz;
+    let elapsedTime = 0;
+    this.tick((dt) => {
+      dt = dt * 0.001 * this.options.speed;
+      elapsedTime += dt;
+      while (elapsedTime > timeStep) {
+        world.step(timeStep);
+        elapsedTime -= timeStep;
+      }
+      this.renderWorld();
+      return true;
+    }, true);
+
+    world.on('remove-fixture', (obj: FixtureX) => {
+      this.nodes.get(obj)?.remove();
+    });
+
+    world.on('remove-joint', (obj: JointX) => {
+      this.nodes.get(obj)?.remove();
+    });
+  }
+
+  renderWorld = () => {
+    const world = this.world;
+    const options = this.options;
+    const viewer = this;
+
+    for (let b = world.getBodyList() as BodyX; b; b = b.getNext() as BodyX) {
+      for (let f = b.getFixtureList() as FixtureX; f; f = f.getNext() as FixtureX) {
+
+        let node = this.nodes.get(f);
+        if (!node) {
+          if (f.render && f.render.stroke) {
+            options.strokeStyle = f.render.stroke;
+          } else if (b.render && b.render.stroke) {
+            options.strokeStyle = b.render.stroke;
+          } else if (b.isDynamic()) {
+            options.strokeStyle = 'rgba(255,255,255,0.9)';
+          } else if (b.isKinematic()) {
+            options.strokeStyle = 'rgba(255,255,255,0.7)';
+          } else if (b.isStatic()) {
+            options.strokeStyle = 'rgba(255,255,255,0.5)';
+          }
+
+          if (f.render && f.render.fill) {
+            options.fillStyle = f.render.fill;
+          } else if (b.render && b.render.fill) {
+            options.fillStyle = b.render.fill;
+          } else {
+            options.fillStyle = '';
+          }
+
+          const type = f.getType();
+          const shape = f.getShape();
+          if (type == 'circle') {
+            node = viewer.drawCircle(shape as Circle, options);
+          }
+          if (type == 'edge') {
+            node = viewer.drawEdge(shape as Edge, options);
+          }
+          if (type == 'polygon') {
+            node = viewer.drawPolygon(shape as Polygon, options);
+          }
+          if (type == 'chain') {
+            node = viewer.drawChain(shape as Chain, options);
+          }
+
+          if (node) {
+            node.appendTo(viewer);
+            this.nodes.set(f, node);
+          }
+        }
+
+        if (node) {
+          const p = b.getPosition();
+          const r = b.getAngle();
+          // @ts-ignore
+          const isChanged = node.__lastX !== p.x || node.__lastY !== p.y || node.__lastR !== r;
+          if (isChanged) {
+            // @ts-ignore
+            node.__lastX = p.x;
+            // @ts-ignore
+            node.__lastY = p.y;
+            // @ts-ignore
+            node.__lastR = r;
+            node.offset(p.x, options.scaleY * p.y);
+            node.rotate(options.scaleY * r);
+          }
+        }
+
+      }
+    }
+
+    for (let j = world.getJointList() as JointX; j; j = j.getNext() as JointX) {
+      const type = j.getType();
+      const a = j.getAnchorA();
+      const b = j.getAnchorB();
+
+      let node = this.nodes.get(j);
+      if (!node) {
+        options.strokeStyle = 'rgba(255,255,255,0.2)';
+
+        node = viewer.drawJoint(j, options);
+        node.pin('handle', 0.5);
+        node.appendTo(viewer);
+        this.nodes.set(j, node);
+      }
+
+      if (node) {
+        const cx = (a.x + b.x) * 0.5;
+        const cy = options.scaleY * (a.y + b.y) * 0.5;
+        const dx = a.x - b.x;
+        const dy = options.scaleY * (a.y - b.y);
+        const d = Math.sqrt(dx * dx + dy * dy);
+        node.width(d);
+        node.rotate(Math.atan2(dy, dx));
+        node.offset(cx, cy);
+      }
+    }
+  }
+
+  drawJoint = (joint: Joint, options: Options) => {
+    const lw = options.lineWidth;
+    const ratio = options.ratio;
+
+    const length = 10;
+
+    const texture = Stage.canvas(function (ctx) {
+      // @ts-ignore
+      this.size(length + 2 * lw, 2 * lw, ratio);
+
+      ctx.scale(ratio, ratio);
+      ctx.beginPath();
+      ctx.moveTo(lw, lw);
+      ctx.lineTo(lw + length, lw);
+
+      ctx.lineCap = 'round';
+      ctx.lineWidth = options.lineWidth;
+      ctx.strokeStyle = options.strokeStyle ?? '';
+      ctx.stroke();
+    });
+
+    const image = Stage.sprite(texture).stretch();
+    return image;
+  }
+
+  drawCircle = (shape: Circle, options: Options) => {
+    const lw = options.lineWidth;
+    const ratio = options.ratio;
+
+    const r = shape.m_radius;
+    const cx = r + lw;
+    const cy = r + lw;
+    const w = r * 2 + lw * 2;
+    const h = r * 2 + lw * 2;
+
+    const texture = Stage.canvas(function (ctx) {
+      // @ts-ignore
+      this.size(w, h, ratio);
+
+      ctx.scale(ratio, ratio);
+      ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+      if (options.fillStyle) {
+        ctx.fillStyle = options.fillStyle;
+        ctx.fill();
+      }
+      ctx.lineTo(cx, cy);
+      ctx.lineWidth = options.lineWidth;
+      ctx.strokeStyle = options.strokeStyle ?? '';
+      ctx.stroke();
+    });
+    const image = Stage.sprite(texture)
+      .offset(shape.m_p.x - cx, options.scaleY * shape.m_p.y - cy);
+    const node = Stage.create().append(image);
+    return node;
+  }
+
+  drawEdge = (edge: Edge, options: Options) => {
+    const lw = options.lineWidth;
+    const ratio = options.ratio;
+
+    const v1 = edge.m_vertex1;
+    const v2 = edge.m_vertex2;
+
+    const dx = v2.x - v1.x;
+    const dy = v2.y - v1.y;
+
+    const length = Math.sqrt(dx * dx + dy * dy);
+
+    const texture = Stage.canvas(function (ctx) {
+      // @ts-ignore
+      this.size(length + 2 * lw, 2 * lw, ratio);
+
+      ctx.scale(ratio, ratio);
+      ctx.beginPath();
+      ctx.moveTo(lw, lw);
+      ctx.lineTo(lw + length, lw);
+
+      ctx.lineCap = 'round';
+      ctx.lineWidth = options.lineWidth;
+      ctx.strokeStyle = options.strokeStyle ?? '';
+      ctx.stroke();
+    });
+
+    const minX = Math.min(v1.x, v2.x);
+    const minY = Math.min(options.scaleY * v1.y, options.scaleY * v2.y);
+
+    const image = Stage.sprite(texture);
+    image.rotate(options.scaleY * Math.atan2(dy, dx));
+    image.offset(minX - lw, minY - lw);
+    const node = Stage.create().append(image);
+    return node;
+  }
+
+  drawPolygon = (shape: Polygon, options: Options) => {
+    const lw = options.lineWidth;
+    const ratio = options.ratio;
+
+    const vertices = shape.m_vertices;
+
+    if (!vertices.length) {
+      return;
+    }
+
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+    for (let i = 0; i < vertices.length; ++i) {
+      const v = vertices[i];
+      minX = Math.min(minX, v.x);
+      maxX = Math.max(maxX, v.x);
+      minY = Math.min(minY, options.scaleY * v.y);
+      maxY = Math.max(maxY, options.scaleY * v.y);
+    }
+
+    const width = maxX - minX;
+    const height = maxY - minY;
+
+    const texture = Stage.canvas(function (ctx: CanvasRenderingContext2D) {
+      // @ts-ignore
+      this.size(width + 2 * lw, height + 2 * lw, ratio);
+
+      ctx.scale(ratio, ratio);
+      ctx.beginPath();
+      for (let i = 0; i < vertices.length; ++i) {
+        const v = vertices[i];
+        const x = v.x - minX + lw;
+        const y = options.scaleY * v.y - minY + lw;
+        if (i == 0)
+          ctx.moveTo(x, y);
+
+        else
+          ctx.lineTo(x, y);
+      }
+
+      if (vertices.length > 2) {
+        ctx.closePath();
+      }
+
+      if (options.fillStyle) {
+        ctx.fillStyle = options.fillStyle;
+        ctx.fill();
+        ctx.closePath();
+      }
+
+      ctx.lineCap = 'round';
+      ctx.lineWidth = options.lineWidth;
+      ctx.strokeStyle = options.strokeStyle ?? '';
+      ctx.stroke();
+    });
+
+    const image = Stage.sprite(texture);
+    image.offset(minX - lw, minY - lw);
+    const node = Stage.create().append(image);
+    return node;
+  }
+
+  drawChain = (shape: Chain, options: Options) => {
+    const lw = options.lineWidth;
+    const ratio = options.ratio;
+
+    const vertices = shape.m_vertices;
+
+    if (!vertices.length) {
+      return;
+    }
+
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+    for (let i = 0; i < vertices.length; ++i) {
+      const v = vertices[i];
+      minX = Math.min(minX, v.x);
+      maxX = Math.max(maxX, v.x);
+      minY = Math.min(minY, options.scaleY * v.y);
+      maxY = Math.max(maxY, options.scaleY * v.y);
+    }
+
+    const width = maxX - minX;
+    const height = maxY - minY;
+
+    const texture = Stage.canvas(function (ctx) {
+      // @ts-ignore
+      this.size(width + 2 * lw, height + 2 * lw, ratio);
+
+      ctx.scale(ratio, ratio);
+      ctx.beginPath();
+      for (let i = 0; i < vertices.length; ++i) {
+        const v = vertices[i];
+        const x = v.x - minX + lw;
+        const y = options.scaleY * v.y - minY + lw;
+        if (i == 0)
+          ctx.moveTo(x, y);
+
+        else
+          ctx.lineTo(x, y);
+      }
+
+      // TODO: if loop
+      if (vertices.length > 2) {
+        // ctx.closePath();
+      }
+
+      if (options.fillStyle) {
+        ctx.fillStyle = options.fillStyle;
+        ctx.fill();
+        ctx.closePath();
+      }
+
+      ctx.lineCap = 'round';
+      ctx.lineWidth = options.lineWidth;
+      ctx.strokeStyle = options.strokeStyle ?? '';
+      ctx.stroke();
+    });
+
+    const image = Stage.sprite(texture);
+    image.offset(minX - lw, minY - lw);
+    const node = Stage.create().append(image);
+    return node;
+  }
 }
 
-Viewer.prototype.renderWorld = function() {
-  const world = this._world;
-  const options = this._options;
-  const viewer = this;
+const tb = new Testbed();
 
-  for (let b = world.getBodyList(); b; b = b.getNext()) {
-    for (let f = b.getFixtureList(); f; f = f.getNext()) {
+/** @deprecated */
+type testbedLegacyWithOptions = (options: any, factory: (testbed: Testbed) => World) => void;
+/** @deprecated */
+type testbedLegacy = (factory: (testbed: Testbed) => World) => void;
 
-      if (!f.ui) {
-        if (f.render && f.render.stroke) {
-          options.strokeStyle = f.render.stroke;
-        } else if (b.render && b.render.stroke) {
-          options.strokeStyle = b.render.stroke;
-        } else if (b.isDynamic()) {
-          options.strokeStyle = 'rgba(255,255,255,0.9)';
-        } else if (b.isKinematic()) {
-          options.strokeStyle = 'rgba(255,255,255,0.7)';
-        } else if (b.isStatic()) {
-          options.strokeStyle = 'rgba(255,255,255,0.5)';
-        }
-
-        if (f.render && f.render.fill) {
-          options.fillStyle = f.render.fill;
-        } else if (b.render && b.render.fill) {
-          options.fillStyle = b.render.fill;
-        } else {
-          options.fillStyle = '';
-        }
-
-        const type = f.getType();
-        const shape = f.getShape();
-        if (type == 'circle') {
-          f.ui = viewer.drawCircle(shape, options);
-        }
-        if (type == 'edge') {
-          f.ui = viewer.drawEdge(shape, options);
-        }
-        if (type == 'polygon') {
-          f.ui = viewer.drawPolygon(shape, options);
-        }
-        if (type == 'chain') {
-          f.ui = viewer.drawChain(shape, options);
-        }
-
-        if (f.ui) {
-          f.ui.appendTo(viewer);
-        }
-      }
-
-      if (f.ui) {
-        const p = b.getPosition();
-        const r = b.getAngle();
-        if (f.ui.__lastX !== p.x || f.ui.__lastY !== p.y || f.ui.__lastR !== r) {
-          f.ui.__lastX = p.x;
-          f.ui.__lastY = p.y;
-          f.ui.__lastR = r;
-          f.ui.offset(p.x, options.scaleY * p.y);
-          f.ui.rotate(options.scaleY * r);
-        }
-      }
-
-    }
+export const testbed: ((options: any) => Testbed) | testbedLegacyWithOptions | testbedLegacy | undefined = (a, b) => {
+  playButton = null;document.getElementById('testbed-play');
+  status = document.getElementById('testbed-status');
+  info = document.getElementById('testbed-info');
+  let callback;
+  let options;
+  if (typeof a === 'function') {
+    callback = a;
+    options = b;
+  } else if (typeof b === 'function') {
+    callback = b;
+    options = a;
+  } else {
+    options = a ?? b;
   }
-
-  for (let j = world.getJointList(); j; j = j.getNext()) {
-    const type = j.getType();
-    const a = j.getAnchorA();
-    const b = j.getAnchorB();
-
-    if (!j.ui) {
-      options.strokeStyle = 'rgba(255,255,255,0.2)';
-
-      j.ui = viewer.drawJoint(j, options);
-      j.ui.pin('handle', 0.5);
-      if (j.ui) {
-        j.ui.appendTo(viewer);
-      }
-    }
-
-    if (j.ui) {
-      const cx = (a.x + b.x) * 0.5;
-      const cy = options.scaleY * (a.y + b.y) * 0.5;
-      const dx = a.x - b.x;
-      const dy = options.scaleY * (a.y - b.y);
-      const d = Math.sqrt(dx * dx + dy * dy);
-      j.ui.width(d);
-      j.ui.rotate(Math.atan2(dy, dx));
-      j.ui.offset(cx, cy);
-    }
+  if (callback) {
+    // this is for backwards compatibility
+    const world = callback(tb);
+    tb.start(world);
+  } else {
+    return tb;
   }
-
 };
 
-Viewer.prototype.drawJoint = function(joint, options) {
-  const lw = options.lineWidth;
-  const ratio = options.ratio;
-
-  const length = 10;
-
-  const texture = Stage.canvas(function(ctx) {
-
-    this.size(length + 2 * lw, 2 * lw, ratio);
-
-    ctx.scale(ratio, ratio);
-    ctx.beginPath();
-    ctx.moveTo(lw, lw);
-    ctx.lineTo(lw + length, lw);
-
-    ctx.lineCap = 'round';
-    ctx.lineWidth = options.lineWidth;
-    ctx.strokeStyle = options.strokeStyle;
-    ctx.stroke();
-  });
-
-  const image = Stage.image(texture).stretch();
-  return image;
-};
-
-Viewer.prototype.drawCircle = function(shape, options) {
-  const lw = options.lineWidth;
-  const ratio = options.ratio;
-
-  const r = shape.m_radius;
-  const cx = r + lw;
-  const cy = r + lw;
-  const w = r * 2 + lw * 2;
-  const h = r * 2 + lw * 2;
-
-  const texture = Stage.canvas(function(ctx) {
-
-    this.size(w, h, ratio);
-
-    ctx.scale(ratio, ratio);
-    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-    if (options.fillStyle) {
-      ctx.fillStyle = options.fillStyle;
-      ctx.fill();
-    }
-    ctx.lineTo(cx, cy);
-    ctx.lineWidth = options.lineWidth;
-    ctx.strokeStyle = options.strokeStyle;
-    ctx.stroke();
-  });
-  const image = Stage.image(texture)
-    .offset(shape.m_p.x - cx, options.scaleY * shape.m_p.y - cy);
-  const node = Stage.create().append(image);
-  return node;
-};
-
-Viewer.prototype.drawEdge = function(edge, options) {
-  const lw = options.lineWidth;
-  const ratio = options.ratio;
-
-  const v1 = edge.m_vertex1;
-  const v2 = edge.m_vertex2;
-
-  const dx = v2.x - v1.x;
-  const dy = v2.y - v1.y;
-
-  const length = Math.sqrt(dx * dx + dy * dy);
-
-  const texture = Stage.canvas(function(ctx) {
-
-    this.size(length + 2 * lw, 2 * lw, ratio);
-
-    ctx.scale(ratio, ratio);
-    ctx.beginPath();
-    ctx.moveTo(lw, lw);
-    ctx.lineTo(lw + length, lw);
-
-    ctx.lineCap = 'round';
-    ctx.lineWidth = options.lineWidth;
-    ctx.strokeStyle = options.strokeStyle;
-    ctx.stroke();
-  });
-
-  const minX = Math.min(v1.x, v2.x);
-  const minY = Math.min(options.scaleY * v1.y, options.scaleY * v2.y);
-
-  const image = Stage.image(texture);
-  image.rotate(options.scaleY * Math.atan2(dy, dx));
-  image.offset(minX - lw, minY - lw);
-  const node = Stage.create().append(image);
-  return node;
-};
-
-Viewer.prototype.drawPolygon = function(shape, options) {
-  const lw = options.lineWidth;
-  const ratio = options.ratio;
-
-  const vertices = shape.m_vertices;
-
-  if (!vertices.length) {
-    return;
-  }
-
-  let minX = Infinity;
-  let minY = Infinity;
-  let maxX = -Infinity;
-  let maxY = -Infinity;
-  for (let i = 0; i < vertices.length; ++i) {
-    const v = vertices[i];
-    minX = Math.min(minX, v.x);
-    maxX = Math.max(maxX, v.x);
-    minY = Math.min(minY, options.scaleY * v.y);
-    maxY = Math.max(maxY, options.scaleY * v.y);
-  }
-
-  const width = maxX - minX;
-  const height = maxY - minY;
-
-  const texture = Stage.canvas(function(ctx) {
-
-    this.size(width + 2 * lw, height + 2 * lw, ratio);
-
-    ctx.scale(ratio, ratio);
-    ctx.beginPath();
-    for (let i = 0; i < vertices.length; ++i) {
-      const v = vertices[i];
-      const x = v.x - minX + lw;
-      const y = options.scaleY * v.y - minY + lw;
-      if (i == 0)
-        ctx.moveTo(x, y);
-      else
-        ctx.lineTo(x, y);
-    }
-
-    if (vertices.length > 2) {
-      ctx.closePath();
-    }
-
-    if (options.fillStyle) {
-      ctx.fillStyle = options.fillStyle;
-      ctx.fill();
-      ctx.closePath();
-    }
-
-    ctx.lineCap = 'round';
-    ctx.lineWidth = options.lineWidth;
-    ctx.strokeStyle = options.strokeStyle;
-    ctx.stroke();
-  });
-
-  const image = Stage.image(texture);
-  image.offset(minX - lw, minY - lw);
-  const node = Stage.create().append(image);
-  return node;
-};
-
-Viewer.prototype.drawChain = function(shape, options) {
-  const lw = options.lineWidth;
-  const ratio = options.ratio;
-
-  const vertices = shape.m_vertices;
-
-  if (!vertices.length) {
-    return;
-  }
-
-  let minX = Infinity;
-  let minY = Infinity;
-  let maxX = -Infinity;
-  let maxY = -Infinity;
-  for (let i = 0; i < vertices.length; ++i) {
-    const v = vertices[i];
-    minX = Math.min(minX, v.x);
-    maxX = Math.max(maxX, v.x);
-    minY = Math.min(minY, options.scaleY * v.y);
-    maxY = Math.max(maxY, options.scaleY * v.y);
-  }
-
-  const width = maxX - minX;
-  const height = maxY - minY;
-
-  const texture = Stage.canvas(function(ctx) {
-
-    this.size(width + 2 * lw, height + 2 * lw, ratio);
-
-    ctx.scale(ratio, ratio);
-    ctx.beginPath();
-    for (let i = 0; i < vertices.length; ++i) {
-      const v = vertices[i];
-      const x = v.x - minX + lw;
-      const y = options.scaleY * v.y - minY + lw;
-      if (i == 0)
-        ctx.moveTo(x, y);
-      else
-        ctx.lineTo(x, y);
-    }
-
-    // TODO: if loop
-    if (vertices.length > 2) {
-      // ctx.closePath();
-    }
-
-    if (options.fillStyle) {
-      ctx.fillStyle = options.fillStyle;
-      ctx.fill();
-      ctx.closePath();
-    }
-
-    ctx.lineCap = 'round';
-    ctx.lineWidth = options.lineWidth;
-    ctx.strokeStyle = options.strokeStyle;
-    ctx.stroke();
-  });
-
-  const image = Stage.image(texture);
-  image.offset(minX - lw, minY - lw);
-  const node = Stage.create().append(image);
-  return node;
-};
-
-
-// Everything below this is copied from ../src/index.ts
-
-export { default as Serializer } from '../src/serializer/index';
-
-export { default as Math } from '../src/common/Math';
-export { default as Vec2 } from '../src/common/Vec2';
-export { default as Vec3 } from '../src/common/Vec3';
-export { default as Mat22 } from '../src/common/Mat22';
-export { default as Mat33 } from '../src/common/Mat33';
-export { default as Transform } from '../src/common/Transform';
-export { default as Rot } from '../src/common/Rot';
-
-export { default as AABB } from '../src/collision/AABB';
-
-export { default as Shape } from '../src/collision/Shape';
-export { default as Fixture } from '../src/dynamics/Fixture';
-export { default as Body } from '../src/dynamics/Body';
-export { default as Contact } from '../src/dynamics/Contact';
-export { default as Joint } from '../src/dynamics/Joint';
-export { default as World } from '../src/dynamics/World';
-
-export { default as Circle } from '../src/collision/shape/CircleShape';
-export { default as Edge } from '../src/collision/shape/EdgeShape';
-export { default as Polygon } from '../src/collision/shape/PolygonShape';
-export { default as Chain } from '../src/collision/shape/ChainShape';
-export { default as Box } from '../src/collision/shape/BoxShape';
-
-export { CollideCircles } from '../src/collision/shape/CollideCircle';
-export { CollideEdgeCircle } from '../src/collision/shape/CollideEdgeCircle';
-export { CollidePolygons } from '../src/collision/shape/CollidePolygon';
-export { CollidePolygonCircle } from '../src/collision/shape/CollideCirclePolygone';
-export { CollideEdgePolygon } from '../src/collision/shape/CollideEdgePolygon';
-
-export { default as DistanceJoint } from '../src/dynamics/joint/DistanceJoint';
-export { default as FrictionJoint } from '../src/dynamics/joint/FrictionJoint';
-export { default as GearJoint } from '../src/dynamics/joint/GearJoint';
-export { default as MotorJoint } from '../src/dynamics/joint/MotorJoint';
-export { default as MouseJoint } from '../src/dynamics/joint/MouseJoint';
-export { default as PrismaticJoint } from '../src/dynamics/joint/PrismaticJoint';
-export { default as PulleyJoint } from '../src/dynamics/joint/PulleyJoint';
-export { default as RevoluteJoint } from '../src/dynamics/joint/RevoluteJoint';
-export { default as RopeJoint } from '../src/dynamics/joint/RopeJoint';
-export { default as WeldJoint } from '../src/dynamics/joint/WeldJoint';
-export { default as WheelJoint } from '../src/dynamics/joint/WheelJoint';
-
-export { default as Settings } from '../src/Settings';
-
-export { default as Sweep } from '../src/common/Sweep';
-export { default as Manifold } from '../src/collision/Manifold';
-export { default as Distance } from '../src/collision/Distance';
-export { default as TimeOfImpact } from '../src/collision/TimeOfImpact';
-export { default as DynamicTree } from '../src/collision/DynamicTree';
-
-import Solver, { TimeStep } from '../src/dynamics/Solver';
-import { CollidePolygons } from '../src/collision/shape/CollidePolygon';
-import { default as Settings } from '../src/Settings';
-import { default as Sweep } from '../src/common/Sweep';
-import { default as Manifold } from '../src/collision/Manifold';
-import { default as Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache, testOverlap } from '../src/collision/Distance';
-import { default as TimeOfImpact, TOIInput, TOIOutput } from '../src/collision/TimeOfImpact';
-import { default as DynamicTree } from '../src/collision/DynamicTree';
-
-import { default as stats } from '../src/util/stats'; // todo: what to do with this?
-
-import { ContactImpulse } from '../src/dynamics/Solver';
-type _ContactImpulse = InstanceType<typeof ContactImpulse>;
-export type { _ContactImpulse as ContactImpulse }
-
-/** @deprecated Merged with main namespace */
-export const internal = {};
-
-// @ts-ignore
-internal.CollidePolygons = CollidePolygons;
-// @ts-ignore
-internal.Settings = Settings;
-// @ts-ignore
-internal.Sweep = Sweep;
-// @ts-ignore
-internal.Manifold = Manifold;
-// @ts-ignore
-internal.Distance = Distance;
-// @ts-ignore
-internal.TimeOfImpact = TimeOfImpact;
-// @ts-ignore
-internal.DynamicTree = DynamicTree;
-// @ts-ignore
-internal.stats = stats;
-
-// @ts-ignore
-Solver.TimeStep = TimeStep;
-
-// @ts-ignore
-Distance.testOverlap = testOverlap;
-// @ts-ignore
-Distance.Input = DistanceInput;
-// @ts-ignore
-Distance.Output = DistanceOutput;
-// @ts-ignore
-Distance.Proxy = DistanceProxy;
-// @ts-ignore
-Distance.Cache = SimplexCache;
-
-// @ts-ignore
-TimeOfImpact.Input = TOIInput;
-// @ts-ignore
-TimeOfImpact.Output = TOIOutput;
