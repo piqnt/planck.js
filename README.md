@@ -40,29 +40,10 @@ Planck.js public API closely follows Box2D API, with the following differences:
 `'begin-contact'`, `'end-contact'`, `'pre-solve'`, `'post-solve'`, `'remove-joint'`, `'remove-fixture'`, `'remove-body'`
 
 
-## Updates
+## Install (v1.0 - alpha)
 
-#### v1.0-alpha
-
-- Source code is migrated to TypeScript, to improves library usability, documentation and maintenance.
-
-- Package name for v1.0+ is changed to `planck`. Package name for releases *before v1.0* is `planck-js`.
-
-- `planck.internal` namespace is deprecated and everything is directly available under main namesapce (except `planck.internal.stats`).
-
-- Source files are moved to `/src` directory (from `/lib`) and directory layout is updated to match Box2D.
-
-- Rollup is used to build the project.
-
-
-## Install
-
-### v0.3 (stable release)
-To install `planck-js@0.3` (stable release) see [v0.3 branch](https://github.com/shakiba/planck.js/tree/v0.3#install).
-
-### v1.0 (alpha)
 Staring from v1.0 package name is changed to `planck`.
-Releases and updates before v1.0 will remain available under `planck-js`.
+Releases and updates before v1.0 will remain available under `planck-js` package name.
 
 ##### CDN
 
