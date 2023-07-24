@@ -59,12 +59,16 @@ planck.testbed('OneSidedPlatform', function(testbed) {
     }
 
     if (0) {
+      // if character is below platform
+      // disable contact
       var p = character.getPosition();
 
       if (p.y < top + radius - 3.0 * /*linearSlop*/ 0.005) {
         contact.setEnabled(false);
       }
     } else {
+      // if character is moving up
+      // disable contact
       var v = character.getLinearVelocity();
       if (v.y > 0.0) {
         contact.setEnabled(false);
