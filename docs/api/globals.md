@@ -451,7 +451,7 @@ ___
 
 *Defined in [src/collision/shape/CollidePolygon.ts:36](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollidePolygon.ts#L36)*
 
-*Defined in [src/collision/shape/CollideCirclePolygone.ts:36](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideCirclePolygone.ts#L36)*
+*Defined in [src/collision/shape/CollideCirclePolygon.ts:36](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideCirclePolygon.ts#L36)*
 
 *Defined in [src/collision/shape/CollideEdgePolygon.ts:39](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideEdgePolygon.ts#L39)*
 
@@ -766,7 +766,7 @@ ___
 
 ▸ **CollidePolygonCircle**(`manifold`: [Manifold](classes/manifold.md), `polygonA`: [PolygonShape](classes/polygonshape.md), `xfA`: [Transform](classes/transform.md), `circleB`: [CircleShape](classes/circleshape.md), `xfB`: [Transform](classes/transform.md)): *void*
 
-*Defined in [src/collision/shape/CollideCirclePolygone.ts:47](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideCirclePolygone.ts#L47)*
+*Defined in [src/collision/shape/CollideCirclePolygon.ts:47](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideCirclePolygon.ts#L47)*
 
 **Parameters:**
 
@@ -897,7 +897,7 @@ ___
 
 ▸ **PolygonCircleContact**(`manifold`: [Manifold](classes/manifold.md), `xfA`: [Transform](classes/transform.md), `fixtureA`: [Fixture](classes/fixture.md), `indexA`: number, `xfB`: [Transform](classes/transform.md), `fixtureB`: [Fixture](classes/fixture.md), `indexB`: number): *void*
 
-*Defined in [src/collision/shape/CollideCirclePolygone.ts:41](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideCirclePolygone.ts#L41)*
+*Defined in [src/collision/shape/CollideCirclePolygon.ts:41](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/shape/CollideCirclePolygon.ts#L41)*
 
 **Parameters:**
 

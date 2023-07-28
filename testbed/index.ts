@@ -852,7 +852,7 @@ export { default as Box } from '../src/collision/shape/BoxShape';
 export { CollideCircles } from '../src/collision/shape/CollideCircle';
 export { CollideEdgeCircle } from '../src/collision/shape/CollideEdgeCircle';
 export { CollidePolygons } from '../src/collision/shape/CollidePolygon';
-export { CollidePolygonCircle } from '../src/collision/shape/CollideCirclePolygone';
+export { CollidePolygonCircle } from '../src/collision/shape/CollideCirclePolygon';
 export { CollideEdgePolygon } from '../src/collision/shape/CollideEdgePolygon';
 
 export { default as DistanceJoint } from '../src/dynamics/joint/DistanceJoint';

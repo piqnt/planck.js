@@ -26,7 +26,7 @@ export { default as Box } from './collision/shape/BoxShape';
 export { CollideCircles } from './collision/shape/CollideCircle';
 export { CollideEdgeCircle } from './collision/shape/CollideEdgeCircle';
 export { CollidePolygons } from './collision/shape/CollidePolygon';
-export { CollidePolygonCircle } from './collision/shape/CollideCirclePolygone';
+export { CollidePolygonCircle } from './collision/shape/CollideCirclePolygon';
 export { CollideEdgePolygon } from './collision/shape/CollideEdgePolygon';
 
 export { default as DistanceJoint } from './dynamics/joint/DistanceJoint';
