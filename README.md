@@ -9,8 +9,7 @@ Planck.js is JavaScript (TypeScript) rewrite of Box2D physics engine for cross-p
 - Optimizing the library for web and mobile platforms
 - Providing a JavaScript-friendly API
 
-
-#### [Documentation](https://piqnt.com/planck.js/docs/)
-#### [Examples](https://piqnt.com/planck.js/)
-
-#### [Show and Tell](https://github.com/piqnt/planck.js/wiki/Show-and-Tell)
+#### [Documentation ↗](https://piqnt.com/planck.js/docs/)
+#### [Examples ↗](https://piqnt.com/planck.js/)
+#### [Discord ↗](https://discord.com/invite/znjh6J7)
+#### [Made with Planck.js ↗](https://github.com/piqnt/planck.js/wiki/)
