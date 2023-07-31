@@ -22,19 +22,19 @@
  * SOFTWARE.
  */
 
-import common from '../../util/common';
-import options from '../../util/options';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Mat22 from '../../common/Mat22';
-import Rot from '../../common/Rot';
-import Transform from '../../common/Transform';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { math as Math } from '../../common/Math';
+import { Vec2, Vec2Value } from '../../common/Vec2';
+import { Mat22 } from '../../common/Mat22';
+import { Rot } from '../../common/Rot';
+import { Transform } from '../../common/Transform';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -67,7 +67,7 @@ export interface MouseJointDef extends JointDef, MouseJointOpt {
    * The initial world target point. This is assumed to coincide with the body
    * anchor initially.
    */
-  target: Vec2;
+  target: Vec2Value;
 }
 
 const DEFAULTS = {
@@ -85,7 +85,7 @@ const DEFAULTS = {
  * be used in the testbed. If you want to learn how to use the mouse joint, look
  * at the testbed.
  */
-export default class MouseJoint extends Joint {
+export class MouseJoint extends Joint {
   static TYPE = 'mouse-joint' as const;
 
   /** @internal */ m_type: 'mouse-joint';
@@ -109,7 +109,7 @@ export default class MouseJoint extends Joint {
   constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2);
   constructor(def: MouseJointDef, bodyA?: Body, bodyB?: Body, target?: Vec2) {
     // @ts-ignore
-    if (!(this instanceof MouseJoint)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof MouseJoint)) {
       return new MouseJoint(def, bodyA, bodyB, target);
     }
 
@@ -120,11 +120,18 @@ export default class MouseJoint extends Joint {
 
     this.m_type = MouseJoint.TYPE;
 
-    _ASSERT && common.assert(Math.isFinite(def.maxForce) && def.maxForce >= 0.0);
-    _ASSERT && common.assert(Math.isFinite(def.frequencyHz) && def.frequencyHz >= 0.0);
-    _ASSERT && common.assert(Math.isFinite(def.dampingRatio) && def.dampingRatio >= 0.0);
+    _ASSERT && console.assert(Math.isFinite(def.maxForce) && def.maxForce >= 0.0);
+    _ASSERT && console.assert(Math.isFinite(def.frequencyHz) && def.frequencyHz >= 0.0);
+    _ASSERT && console.assert(Math.isFinite(def.dampingRatio) && def.dampingRatio >= 0.0);
 
-    this.m_targetA = target ? Vec2.clone(target) : def.target || Vec2.zero();
+    if (Vec2.isValid(target)) {
+      this.m_targetA = Vec2.clone(target);
+    } else if (Vec2.isValid(def.target)) {
+      this.m_targetA = Vec2.clone(def.target);
+    } else {
+      this.m_targetA = Vec2.zero();
+    }
+
     this.m_localAnchorB = Transform.mulTVec2(bodyB.getTransform(), this.m_targetA);
 
     this.m_maxForce = def.maxForce;
@@ -186,7 +193,7 @@ export default class MouseJoint extends Joint {
   /**
    * Use this to update the target point.
    */
-  setTarget(target: Vec2): void {
+  setTarget(target: Vec2Value): void {
     if (this.m_bodyB.isAwake() == false) {
       this.m_bodyB.setAwake(true);
     }
@@ -270,7 +277,7 @@ export default class MouseJoint extends Joint {
   /**
    * Shift the origin for any points stored in world coordinates.
    */
-  shiftOrigin(newOrigin: Vec2): void {
+  shiftOrigin(newOrigin: Vec2Value): void {
     this.m_targetA.sub(newOrigin);
   }
 
@@ -304,7 +311,7 @@ export default class MouseJoint extends Joint {
     // gamma has units of inverse mass.
     // beta has units of inverse time.
     const h = step.dt;
-    _ASSERT && common.assert(d + h * k > Math.EPSILON);
+    _ASSERT && console.assert(d + h * k > Math.EPSILON);
     this.m_gamma = h * (d + h * k);
     if (this.m_gamma != 0.0) {
       this.m_gamma = 1.0 / this.m_gamma;

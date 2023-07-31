@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-import common from '../../util/common';
-import options from '../../util/options';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Mat22 from '../../common/Mat22';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { math as Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Mat22 } from '../../common/Mat22';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -78,7 +78,7 @@ const DEFAULTS = {
  * typical usage is to control the movement of a dynamic body with respect to
  * the ground.
  */
-export default class MotorJoint extends Joint {
+export class MotorJoint extends Joint {
   static TYPE = 'motor-joint' as const;
 
   /** @internal */ m_type: 'motor-joint';
@@ -108,7 +108,7 @@ export default class MotorJoint extends Joint {
   constructor(def: MotorJointOpt, bodyA: Body, bodyB: Body);
   constructor(def: MotorJointDef | MotorJointOpt, bodyA?: Body, bodyB?: Body) {
     // @ts-ignore
-    if (!(this instanceof MotorJoint)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof MotorJoint)) {
       return new MotorJoint(def, bodyA, bodyB);
     }
 
@@ -176,7 +176,7 @@ export default class MotorJoint extends Joint {
    * Set the maximum friction force in N.
    */
   setMaxForce(force: number): void {
-    _ASSERT && common.assert(Math.isFinite(force) && force >= 0.0);
+    _ASSERT && console.assert(Math.isFinite(force) && force >= 0.0);
     this.m_maxForce = force;
   }
 
@@ -191,7 +191,7 @@ export default class MotorJoint extends Joint {
    * Set the maximum friction torque in N*m.
    */
   setMaxTorque(torque: number): void {
-    _ASSERT && common.assert(Math.isFinite(torque) && torque >= 0.0);
+    _ASSERT && console.assert(Math.isFinite(torque) && torque >= 0.0);
     this.m_maxTorque = torque;
   }
 
@@ -206,7 +206,7 @@ export default class MotorJoint extends Joint {
    * Set the position correction factor in the range [0,1].
    */
   setCorrectionFactor(factor: number): void {
-    _ASSERT && common.assert(Math.isFinite(factor) && 0.0 <= factor && factor <= 1.0);
+    _ASSERT && console.assert(Math.isFinite(factor) && 0.0 <= factor && factor <= 1.0);
     this.m_correctionFactor = factor;
   }
 

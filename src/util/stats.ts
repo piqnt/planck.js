@@ -1,4 +1,4 @@
-export default {
+export const stats = {
   gjkCalls: 0,
   gjkIters: 0,
   gjkMaxIters: 0,

@@ -22,15 +22,13 @@
  * SOFTWARE.
  */
 
-import Settings from '../Settings';
-import stats from '../util/stats';
-import common from '../util/common';
-
-import Shape from './Shape';
-import Math from '../common/Math';
-import Vec2 from '../common/Vec2';
-import Rot from '../common/Rot';
-import Transform from '../common/Transform';
+import { Settings } from '../Settings';
+import { stats } from '../util/stats';
+import { Shape } from './Shape';
+import { math as Math } from '../common/Math';
+import { Vec2 } from '../common/Vec2';
+import { Rot } from '../common/Rot';
+import { Transform } from '../common/Transform';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -91,7 +89,7 @@ export class SimplexCache {
  * CircleShape, PolygonShape, EdgeShape. The simplex cache is input/output. On
  * the first call set SimplexCache.count to zero.
  */
-export default function Distance(output: DistanceOutput, cache: SimplexCache, input: DistanceInput): void {
+export const Distance = function (output: DistanceOutput, cache: SimplexCache, input: DistanceInput): void {
   ++stats.gjkCalls;
 
   const proxyA = input.proxyA;
@@ -253,7 +251,7 @@ export class DistanceProxy {
    * Get a vertex by index. Used by Distance.
    */
   getVertex(index: number): Vec2 {
-    _ASSERT && common.assert(0 <= index && index < this.m_count);
+    _ASSERT && console.assert(0 <= index && index < this.m_count);
     return this.m_vertices[index];
   }
 
@@ -286,7 +284,7 @@ export class DistanceProxy {
    */
   set(shape: Shape, index: number): void {
     // TODO remove, use shape instead
-    _ASSERT && common.assert(typeof shape.computeDistanceProxy === 'function');
+    _ASSERT && console.assert(typeof shape.computeDistanceProxy === 'function');
     shape.computeDistanceProxy(this, index);
   }
 }
@@ -358,7 +356,7 @@ class Simplex {
   }
 
   readCache(cache: SimplexCache, proxyA: DistanceProxy, transformA: Transform, proxyB: DistanceProxy, transformB: Transform): void {
-    _ASSERT && common.assert(cache.count <= 3);
+    _ASSERT && console.assert(cache.count <= 3);
 
     // Copy data from cache.
     this.m_count = cache.count;
@@ -428,7 +426,7 @@ class Simplex {
       }
 
       default:
-        _ASSERT && common.assert(false);
+        _ASSERT && console.assert(false);
         return Vec2.zero();
     }
   }
@@ -436,7 +434,7 @@ class Simplex {
   getClosestPoint(): Vec2 {
     switch (this.m_count) {
       case 0:
-        _ASSERT && common.assert(false);
+        _ASSERT && console.assert(false);
         return Vec2.zero();
 
       case 1:
@@ -449,7 +447,7 @@ class Simplex {
         return Vec2.zero();
 
       default:
-        _ASSERT && common.assert(false);
+        _ASSERT && console.assert(false);
         return Vec2.zero();
     }
   }
@@ -457,7 +455,7 @@ class Simplex {
   getWitnessPoints(pA: Vec2, pB: Vec2): void {
     switch (this.m_count) {
       case 0:
-        _ASSERT && common.assert(false);
+        _ASSERT && console.assert(false);
         break;
 
       case 1:
@@ -477,7 +475,7 @@ class Simplex {
         break;
 
       default:
-        _ASSERT && common.assert(false);
+        _ASSERT && console.assert(false);
         break;
     }
   }
@@ -485,7 +483,7 @@ class Simplex {
   getMetric(): number {
     switch (this.m_count) {
       case 0:
-        _ASSERT && common.assert(false);
+        _ASSERT && console.assert(false);
         return 0.0;
 
       case 1:
@@ -499,7 +497,7 @@ class Simplex {
           this.m_v1.w));
 
       default:
-        _ASSERT && common.assert(false);
+        _ASSERT && console.assert(false);
         return 0.0;
     }
   }
@@ -518,7 +516,7 @@ class Simplex {
         break;
 
       default:
-        _ASSERT && common.assert(false);
+        _ASSERT && console.assert(false);
     }
   }
 
@@ -684,11 +682,10 @@ class Simplex {
   }
 }
 
-
 /**
  * Determine if two generic shapes overlap.
  */
-export function testOverlap(shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: Transform, xfB: Transform): boolean {
+export const testOverlap = function (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: Transform, xfB: Transform): boolean {
   const input = new DistanceInput();
   input.proxyA.set(shapeA, indexA);
   input.proxyB.set(shapeB, indexB);
@@ -703,3 +700,10 @@ export function testOverlap(shapeA: Shape, indexA: number, shapeB: Shape, indexB
 
   return output.distance < 10.0 * Math.EPSILON;
 }
+
+// legacy exports
+Distance.testOverlap = testOverlap;
+Distance.Input = DistanceInput;
+Distance.Output = DistanceOutput;
+Distance.Proxy = DistanceProxy;
+Distance.Cache = SimplexCache;

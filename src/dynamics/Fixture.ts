@@ -22,15 +22,14 @@
  * SOFTWARE.
  */
 
-import common from '../util/common';
-import options from '../util/options';
-import Math from '../common/Math';
-import Vec2 from '../common/Vec2';
-import AABB, { RayCastInput, RayCastOutput } from '../collision/AABB';
-import Shape, { ShapeType } from '../collision/Shape';
-import Body, { MassData } from "./Body";
-import BroadPhase from "../collision/BroadPhase";
-import Transform from "../common/Transform";
+import { options } from '../util/options';
+import { math as Math } from '../common/Math';
+import { Vec2, Vec2Value } from '../common/Vec2';
+import { AABB, RayCastInput, RayCastOutput } from '../collision/AABB';
+import { Shape, ShapeType } from '../collision/Shape';
+import { Body, MassData } from "./Body";
+import { BroadPhase } from "../collision/BroadPhase";
+import { Transform } from "../common/Transform";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -113,7 +112,7 @@ export class FixtureProxy {
  *
  * To create a new Fixture use {@link Body.createFixture}.
  */
-export default class Fixture {
+export class Fixture {
   /** @internal */ m_body: Body;
   /** @internal */ m_friction: number;
   /** @internal */ m_restitution: number;
@@ -296,7 +295,7 @@ export default class Fixture {
    * mass of the body. You must call Body.resetMassData to update the body's mass.
    */
   setDensity(density: number): void {
-    _ASSERT && common.assert(Math.isFinite(density) && density >= 0.0);
+    _ASSERT && console.assert(Math.isFinite(density) && density >= 0.0);
     this.m_density = density;
   }
 
@@ -333,7 +332,7 @@ export default class Fixture {
   /**
    * Test a point in world coordinates for containment in this fixture.
    */
-  testPoint(p: Vec2): boolean {
+  testPoint(p: Vec2Value): boolean {
     return this.m_shape.testPoint(this.m_body.getTransform(), p);
   }
 
@@ -358,7 +357,7 @@ export default class Fixture {
    * more accurate AABB, compute it using the shape and the body transform.
    */
   getAABB(childIndex: number): AABB {
-    _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_proxyCount);
+    _ASSERT && console.assert(0 <= childIndex && childIndex < this.m_proxies.length);
     return this.m_proxies[childIndex].aabb;
   }
 
@@ -366,7 +365,7 @@ export default class Fixture {
    * These support body activation/deactivation.
    */
   createProxies(broadPhase: BroadPhase, xf: Transform): void {
-    _ASSERT && common.assert(this.m_proxyCount == 0);
+    _ASSERT && console.assert(this.m_proxyCount == 0);
 
     // Create proxies in the broad-phase.
     this.m_proxyCount = this.m_shape.getChildCount();

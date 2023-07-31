@@ -22,15 +22,14 @@
  * SOFTWARE.
  */
 
-import common from '../util/common';
-import Math from './Math';
+import { math as Math } from './Math';
 
 
-const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
-export default class Vec3 {
+export class Vec3 {
   x: number;
   y: number;
   z: number;
@@ -40,7 +39,7 @@ export default class Vec3 {
   constructor();
   // tslint:disable-next-line:typedef
   constructor(x?, y?, z?) {
-    if (!(this instanceof Vec3)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof Vec3)) {
       return new Vec3(x, y, z);
     }
     if (typeof x === 'undefined') {
@@ -115,11 +114,7 @@ export default class Vec3 {
   }
 
   static assert(o: any): void {
-    if (!_ASSERT) return;
-    if (!Vec3.isValid(o)) {
-      _DEBUG && common.debug(o);
-      throw new Error('Invalid Vec3!');
-    }
+    _ASSERT && console.assert(!Vec3.isValid(o), 'Invalid Vec3!', o);
   }
 
   setZero(): Vec3 {

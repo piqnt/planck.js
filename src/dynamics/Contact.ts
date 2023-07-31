@@ -23,17 +23,16 @@
  */
 
 import { ShapeType } from "../collision/Shape";
-import common from '../util/common';
-import Math from '../common/Math';
-import Vec2 from '../common/Vec2';
-import Transform from '../common/Transform';
-import Mat22 from '../common/Mat22';
-import Rot from '../common/Rot';
-import Settings from '../Settings';
-import Manifold, { ManifoldType, WorldManifold } from '../collision/Manifold';
+import { math as Math } from '../common/Math';
+import { Vec2 } from '../common/Vec2';
+import { Transform } from '../common/Transform';
+import { Mat22 } from '../common/Mat22';
+import { Rot } from '../common/Rot';
+import { Settings } from '../Settings';
+import { Manifold, ManifoldType, WorldManifold } from '../collision/Manifold';
 import { testOverlap } from '../collision/Distance';
-import Fixture from "./Fixture";
-import Body from "./Body";
+import { Fixture } from "./Fixture";
+import { Body } from "./Body";
 import { ContactImpulse, TimeStep } from "./Solver";
 
 
@@ -119,7 +118,7 @@ export class VelocityConstraintPoint {
  * overlapping AABB in the broad-phase (except if filtered). Therefore a contact
  * object may exist that has no contact points.
  */
-export default class Contact {
+export class Contact {
   /** @internal */
   m_nodeA: ContactEdge;
   /** @internal */
@@ -225,7 +224,7 @@ export default class Contact {
     const manifold = this.getManifold();
 
     const pointCount = manifold.pointCount;
-    _ASSERT && common.assert(pointCount > 0);
+    _ASSERT && console.assert(pointCount > 0);
 
     this.v_invMassA = bodyA.m_invMass;
     this.v_invMassB = bodyB.m_invMass;
@@ -688,7 +687,7 @@ export default class Contact {
     const vB = Vec2.clone(velocityB.v);
     const wB = velocityB.w;
 
-    _ASSERT && common.assert(manifold.pointCount > 0);
+    _ASSERT && console.assert(manifold.pointCount > 0);
 
     const xfA = Transform.identity();
     const xfB = Transform.identity();
@@ -846,7 +845,7 @@ export default class Contact {
     const tangent = Vec2.crossVec2Num(normal, 1.0);
     const friction = this.v_friction;
 
-    _ASSERT && common.assert(this.v_pointCount == 1 || this.v_pointCount == 2);
+    _ASSERT && console.assert(this.v_pointCount == 1 || this.v_pointCount == 2);
 
     // Solve tangent constraints first because non-penetration is more important
     // than friction.
@@ -952,7 +951,7 @@ export default class Contact {
       const vcp2 = this.v_points[1]; // VelocityConstraintPoint
 
       const a = Vec2.neo(vcp1.normalImpulse, vcp2.normalImpulse);
-      _ASSERT && common.assert(a.x >= 0.0 && a.y >= 0.0);
+      _ASSERT && console.assert(a.x >= 0.0 && a.y >= 0.0);
 
       // Relative velocity at contact
       let dv1 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp1.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp1.rA));
@@ -1009,8 +1008,8 @@ export default class Contact {
             vn1 = Vec2.dot(dv1, normal);
             vn2 = Vec2.dot(dv2, normal);
 
-            _ASSERT && common.assert(Math.abs(vn1 - vcp1.velocityBias) < k_errorTol);
-            _ASSERT && common.assert(Math.abs(vn2 - vcp2.velocityBias) < k_errorTol);
+            _ASSERT && console.assert(Math.abs(vn1 - vcp1.velocityBias) < k_errorTol);
+            _ASSERT && console.assert(Math.abs(vn2 - vcp2.velocityBias) < k_errorTol);
           }
           break;
         }
@@ -1052,7 +1051,7 @@ export default class Contact {
             // Compute normal velocity
             vn1 = Vec2.dot(dv1, normal);
 
-            _ASSERT && common.assert(Math.abs(vn1 - vcp1.velocityBias) < k_errorTol);
+            _ASSERT && console.assert(Math.abs(vn1 - vcp1.velocityBias) < k_errorTol);
           }
           break;
         }
@@ -1094,7 +1093,7 @@ export default class Contact {
             // Compute normal velocity
             vn2 = Vec2.dot(dv2, normal);
 
-            _ASSERT && common.assert(Math.abs(vn2 - vcp2.velocityBias) < k_errorTol);
+            _ASSERT && console.assert(Math.abs(vn2 - vcp2.velocityBias) < k_errorTol);
           }
           break;
         }

@@ -22,14 +22,17 @@
  * SOFTWARE.
  */
 
-import options from '../../util/options';
-import Settings from '../../Settings';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { Settings } from '../../Settings';
+import { math as Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
+
+
+const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -99,7 +102,7 @@ const DEFAULTS = {
  * point to line constraint with a rotational motor and a linear spring/damper.
  * This joint is designed for vehicle suspensions.
  */
-export default class WheelJoint extends Joint {
+export class WheelJoint extends Joint {
   static TYPE = 'wheel-joint' as const;
 
   /** @internal */ m_type: 'wheel-joint';
@@ -145,7 +148,7 @@ export default class WheelJoint extends Joint {
   // @ts-ignore
   constructor(def: WheelJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2, axis?: Vec2) {
     // @ts-ignore
-    if (!(this instanceof WheelJoint)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof WheelJoint)) {
       return new WheelJoint(def, bodyA, bodyB, anchor, axis);
     }
 

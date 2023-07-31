@@ -1,25 +1,27 @@
-import { expect } from 'chai';
+const { expect } = await import('chai');
+const { default: Ajv } = await import('ajv');
 
-import * as Ajv from 'ajv';
+const { Vec2 }  = await import( '../../common/Vec2');
+const { CircleShape }  = await import( '../../collision/shape/CircleShape');
+const { BoxShape }  = await import( '../../collision/shape/BoxShape');
+const { DistanceJoint }  = await import( '../../dynamics/joint/DistanceJoint');
+const { World }  = await import( '../../dynamics/World');
 
-import Vec2 from '../../common/Vec2';
-import Circle from '../../collision/shape/CircleShape';
-import Box from '../../collision/shape/BoxShape';
-import DistanceJoint from '../../dynamics/joint/DistanceJoint';
-import World from '../../dynamics/World';
+const { Serializer }  = await import( '../');
 
-import Serializer from '../';
-const schema = require('../schema.json');
+const schema = await import('../schema.json', {
+  assert: { type: 'json' }
+});
 
-describe('Serializer', function(): void {
+describe('Serializer', function() {
   var ajv = new Ajv();
   var validate = ajv.compile(schema);
 
-  it('produces valid schema', function(): void {
+  it('produces valid schema', function() {
     var world = new World();
 
-    var circle = new Circle(1);
-    var box = new Box(1, 1);
+    var circle = new CircleShape(1);
+    var box = new BoxShape(1, 1);
 
     var b1 = world.createBody({
       position : new Vec2(0, 0),

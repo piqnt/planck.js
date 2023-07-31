@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import Pool from '../util/Pool';
+import { Pool } from '../util/Pool';
 
 describe('Pool', function(): void {
   it('Pool', function(): void {

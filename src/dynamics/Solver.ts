@@ -22,19 +22,17 @@
  * SOFTWARE.
  */
 
-import Settings from '../Settings';
-import common from '../util/common';
-import Vec2 from '../common/Vec2';
-import Math from '../common/Math';
-import Body from './Body';
-import Contact from './Contact';
-import Joint from './Joint';
-import TimeOfImpact, { TOIInput, TOIOutput, TOIOutputState } from '../collision/TimeOfImpact';
-import Distance, { DistanceInput, DistanceOutput, SimplexCache } from '../collision/Distance';
-import World from "./World";
+import { Settings } from '../Settings';
+import { Vec2 } from '../common/Vec2';
+import { math as Math } from '../common/Math';
+import { Body } from './Body';
+import type { Contact } from './Contact';
+import { Joint } from './Joint';
+import { TimeOfImpact, TOIInput, TOIOutput, TOIOutputState } from '../collision/TimeOfImpact';
+import { Distance, DistanceInput, DistanceOutput, SimplexCache } from '../collision/Distance';
+import { World } from "./World";
 
 
-const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
@@ -108,7 +106,7 @@ export class ContactImpulse {
 /**
  * Finds and solves islands. An island is a connected subset of the world.
  */
-export default class Solver {
+export class Solver {
   m_world: World;
   m_stack: Body[];
   m_bodies: Body[];
@@ -131,7 +129,7 @@ export default class Solver {
   }
 
   addBody(body: Body): void {
-    _ASSERT && common.assert(body instanceof Body, 'Not a Body!', body);
+    _ASSERT && console.assert(body instanceof Body, 'Not a Body!', body);
     this.m_bodies.push(body);
     // why?
     // body.c_position.c.setZero();
@@ -141,12 +139,12 @@ export default class Solver {
   }
 
   addContact(contact: Contact): void {
-    _ASSERT && common.assert(contact instanceof Contact, 'Not a Contact!', contact);
+    // _ASSERT && console.assert(contact instanceof Contact, 'Not a Contact!', contact);
     this.m_contacts.push(contact);
   }
 
   addJoint(joint: Joint): void {
-    _ASSERT && common.assert(joint instanceof Joint, 'Not a Joint!', joint);
+    _ASSERT && console.assert(joint instanceof Joint, 'Not a Joint!', joint);
     this.m_joints.push(joint);
   }
 
@@ -193,7 +191,7 @@ export default class Solver {
       while (stack.length > 0) {
         // Grab the next body off the stack and add it to the island.
         const b = stack.pop();
-        _ASSERT && common.assert(b.isActive() == true);
+        _ASSERT && console.assert(b.isActive() == true);
         this.addBody(b);
 
         // Make sure the body is awake.
@@ -236,7 +234,7 @@ export default class Solver {
             continue;
           }
 
-          // _ASSERT && common.assert(stack.length < world.m_bodyCount);
+          // _ASSERT && console.assert(stack.length < world.m_bodyCount);
           stack.push(other);
           other.m_islandFlag = true;
         }
@@ -261,7 +259,7 @@ export default class Solver {
             continue;
           }
 
-          // _ASSERT && common.assert(stack.length < world.m_bodyCount);
+          // _ASSERT && console.assert(stack.length < world.m_bodyCount);
           stack.push(other);
           other.m_islandFlag = true;
         }
@@ -333,14 +331,10 @@ export default class Solver {
       contact.initConstraint(step);
     }
 
-    _DEBUG && this.printBodies('M: ');
-
     for (let i = 0; i < this.m_contacts.length; ++i) {
       const contact = this.m_contacts[i];
       contact.initVelocityConstraint(step);
     }
-
-    _DEBUG && this.printBodies('R: ');
 
     if (step.warmStarting) {
       // Warm start.
@@ -350,14 +344,10 @@ export default class Solver {
       }
     }
 
-    _DEBUG && this.printBodies('Q: ');
-
     for (let i = 0; i < this.m_joints.length; ++i) {
       const joint = this.m_joints[i];
       joint.initVelocityConstraints(step);
     }
-
-    _DEBUG && this.printBodies('E: ');
 
     // Solve velocity constraints
     for (let i = 0; i < step.velocityIterations; ++i) {
@@ -372,15 +362,11 @@ export default class Solver {
       }
     }
 
-    _DEBUG && this.printBodies('D: ');
-
     // Store impulses for warm starting
     for (let i = 0; i < this.m_contacts.length; ++i) {
       const contact = this.m_contacts[i];
       contact.storeConstraintImpulses(step);
     }
-
-    _DEBUG && this.printBodies('C: ');
 
     // Integrate positions
     for (let i = 0; i < this.m_bodies.length; ++i) {
@@ -414,8 +400,6 @@ export default class Solver {
       body.c_velocity.w = w;
     }
 
-    _DEBUG && this.printBodies('B: ');
-
     // Solve position constraints
     let positionSolved = false;
     for (let i = 0; i < step.positionIterations; ++i) {
@@ -442,8 +426,6 @@ export default class Solver {
         break;
       }
     }
-
-    _DEBUG && this.printBodies('L: ');
 
     // Copy state buffers back to the bodies
     for (let i = 0; i < this.m_bodies.length; ++i) {
@@ -487,14 +469,6 @@ export default class Solver {
           body.setAwake(false);
         }
       }
-    }
-  }
-
-  /** @internal */
-  printBodies(tag: string): void {
-    for (let i = 0; i < this.m_bodies.length; ++i) {
-      const b = this.m_bodies[i];
-      common.debug(tag, b.c_position.a, b.c_position.c.x, b.c_position.c.y, b.c_velocity.w, b.c_velocity.v.x, b.c_velocity.v.y);
     }
   }
 
@@ -552,7 +526,7 @@ export default class Solver {
           const bA = fA.getBody();
           const bB = fB.getBody();
 
-          _ASSERT && common.assert(bA.isDynamic() || bB.isDynamic());
+          _ASSERT && console.assert(bA.isDynamic() || bB.isDynamic());
 
           const activeA = bA.isAwake() && !bA.isStatic();
           const activeB = bB.isAwake() && !bB.isStatic();
@@ -582,7 +556,7 @@ export default class Solver {
             bB.m_sweep.advance(alpha0);
           }
 
-          _ASSERT && common.assert(alpha0 < 1.0);
+          _ASSERT && console.assert(alpha0 < 1.0);
 
           const indexA = c.getChildIndexA();
           const indexB = c.getChildIndexB();
@@ -770,13 +744,6 @@ export default class Solver {
         break;
       }
     }
-
-    if (_DEBUG) for (let b = world.m_bodyList; b; b = b.m_next) {
-      const c = b.m_sweep.c;
-      const a = b.m_sweep.a;
-      const v = b.m_linearVelocity;
-      const w = b.m_angularVelocity;
-    }
   }
 
   solveIslandTOI(subStep: TimeStep, toiA: Body, toiB: Body): void {
@@ -918,3 +885,6 @@ export default class Solver {
     }
   }
 }
+
+// @ts-ignore
+Solver.TimeStep = TimeStep;

@@ -22,6 +22,10 @@
  * SOFTWARE.
  */
 
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => {
@@ -7363,14 +7367,14 @@ var TOIInput = /** @class */ (function () {
     }
     return TOIInput;
 }());
-var TOIOutputState;
+exports.TOIOutputState = void 0;
 (function (TOIOutputState) {
     TOIOutputState[TOIOutputState["e_unknown"] = 0] = "e_unknown";
     TOIOutputState[TOIOutputState["e_failed"] = 1] = "e_failed";
     TOIOutputState[TOIOutputState["e_overlapped"] = 2] = "e_overlapped";
     TOIOutputState[TOIOutputState["e_touching"] = 3] = "e_touching";
     TOIOutputState[TOIOutputState["e_separated"] = 4] = "e_separated";
-})(TOIOutputState || (TOIOutputState = {}));
+})(exports.TOIOutputState || (exports.TOIOutputState = {}));
 /**
  * Output parameters for TimeOfImpact.
  */
@@ -7401,7 +7405,7 @@ stats.toiMaxRootIters = 0;
 var TimeOfImpact = function (output, input) {
     var timer = Timer.now();
     ++stats.toiCalls;
-    output.state = TOIOutputState.e_unknown;
+    output.state = exports.TOIOutputState.e_unknown;
     output.t = input.tMax;
     var proxyA = input.proxyA; // DistanceProxy
     var proxyB = input.proxyB; // DistanceProxy
@@ -7440,13 +7444,13 @@ var TimeOfImpact = function (output, input) {
         // If the shapes are overlapped, we give up on continuous collision.
         if (distanceOutput.distance <= 0.0) {
             // Failure!
-            output.state = TOIOutputState.e_overlapped;
+            output.state = exports.TOIOutputState.e_overlapped;
             output.t = 0.0;
             break;
         }
         if (distanceOutput.distance < target + tolerance) {
             // Victory!
-            output.state = TOIOutputState.e_touching;
+            output.state = exports.TOIOutputState.e_touching;
             output.t = t1;
             break;
         }
@@ -7484,7 +7488,7 @@ var TimeOfImpact = function (output, input) {
             // Is the final configuration separated?
             if (s2 > target + tolerance) {
                 // Victory!
-                output.state = TOIOutputState.e_separated;
+                output.state = exports.TOIOutputState.e_separated;
                 output.t = tMax;
                 done = true;
                 break;
@@ -7502,7 +7506,7 @@ var TimeOfImpact = function (output, input) {
             // Check for initial overlap. This might happen if the root finder
             // runs out of iterations.
             if (s1 < target - tolerance) {
-                output.state = TOIOutputState.e_failed;
+                output.state = exports.TOIOutputState.e_failed;
                 output.t = t1;
                 done = true;
                 break;
@@ -7510,7 +7514,7 @@ var TimeOfImpact = function (output, input) {
             // Check for touching
             if (s1 <= target + tolerance) {
                 // Victory! t1 should hold the TOI (could be 0.0).
-                output.state = TOIOutputState.e_touching;
+                output.state = exports.TOIOutputState.e_touching;
                 output.t = t1;
                 done = true;
                 break;
@@ -7566,7 +7570,7 @@ var TimeOfImpact = function (output, input) {
         }
         if (iter === k_maxIterations) {
             // Root finder got stuck. Semi-victory.
-            output.state = TOIOutputState.e_failed;
+            output.state = exports.TOIOutputState.e_failed;
             output.t = t1;
             break;
         }
@@ -8186,7 +8190,7 @@ var Solver = /** @class */ (function () {
                     TimeOfImpact(output, input);
                     // Beta is the fraction of the remaining portion of the [time?].
                     var beta = output.t;
-                    if (output.state == TOIOutputState.e_touching) {
+                    if (output.state == exports.TOIOutputState.e_touching) {
                         alpha = math.min(alpha0 + (1.0 - alpha0) * beta, 1.0);
                     }
                     else {
@@ -8617,21 +8621,21 @@ var Mat22 = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var ManifoldType;
+exports.ManifoldType = void 0;
 (function (ManifoldType) {
     ManifoldType[ManifoldType["e_circles"] = 0] = "e_circles";
     ManifoldType[ManifoldType["e_faceA"] = 1] = "e_faceA";
     ManifoldType[ManifoldType["e_faceB"] = 2] = "e_faceB";
-})(ManifoldType || (ManifoldType = {}));
-var ContactFeatureType;
+})(exports.ManifoldType || (exports.ManifoldType = {}));
+exports.ContactFeatureType = void 0;
 (function (ContactFeatureType) {
     ContactFeatureType[ContactFeatureType["e_vertex"] = 0] = "e_vertex";
     ContactFeatureType[ContactFeatureType["e_face"] = 1] = "e_face";
-})(ContactFeatureType || (ContactFeatureType = {}));
+})(exports.ContactFeatureType || (exports.ContactFeatureType = {}));
 /**
  * This is used for determining the state of contact points.
  */
-var PointState;
+exports.PointState = void 0;
 (function (PointState) {
     /** Point does not exist */
     PointState[PointState["nullState"] = 0] = "nullState";
@@ -8641,7 +8645,7 @@ var PointState;
     PointState[PointState["persistState"] = 2] = "persistState";
     /** Point was removed in the update */
     PointState[PointState["removeState"] = 3] = "removeState";
-})(PointState || (PointState = {}));
+})(exports.PointState || (exports.PointState = {}));
 /**
  * Used for computing contact manifolds.
  */
@@ -8702,7 +8706,7 @@ var Manifold = /** @class */ (function () {
         var separations = wm.separations;
         // TODO: improve
         switch (this.type) {
-            case ManifoldType.e_circles: {
+            case exports.ManifoldType.e_circles: {
                 normal = Vec2.neo(1.0, 0.0);
                 var pointA = Transform.mulVec2(xfA, this.localPoint);
                 var pointB = Transform.mulVec2(xfB, this.points[0].localPoint);
@@ -8719,7 +8723,7 @@ var Manifold = /** @class */ (function () {
                 separations.length = 1;
                 break;
             }
-            case ManifoldType.e_faceA: {
+            case exports.ManifoldType.e_faceA: {
                 normal = Rot.mulVec2(xfA.q, this.localNormal);
                 var planePoint = Transform.mulVec2(xfA, this.localPoint);
                 for (var i = 0; i < this.pointCount; ++i) {
@@ -8733,7 +8737,7 @@ var Manifold = /** @class */ (function () {
                 separations.length = this.pointCount;
                 break;
             }
-            case ManifoldType.e_faceB: {
+            case exports.ManifoldType.e_faceB: {
                 normal = Rot.mulVec2(xfB.q, this.localNormal);
                 var planePoint = Transform.mulVec2(xfB, this.localPoint);
                 for (var i = 0; i < this.pointCount; ++i) {
@@ -8758,7 +8762,7 @@ var Manifold = /** @class */ (function () {
     Manifold.clipSegmentToLine = clipSegmentToLine;
     Manifold.ClipVertex = ClipVertex;
     Manifold.getPointStates = getPointStates;
-    Manifold.PointState = PointState;
+    Manifold.PointState = exports.PointState;
     return Manifold;
 }());
 /**
@@ -8861,10 +8865,10 @@ function getPointStates(state1, state2, manifold1, manifold2) {
     // Detect persists and removes.
     for (var i = 0; i < manifold1.pointCount; ++i) {
         var id = manifold1.points[i].id;
-        state1[i] = PointState.removeState;
+        state1[i] = exports.PointState.removeState;
         for (var j = 0; j < manifold2.pointCount; ++j) {
             if (manifold2.points[j].id.key == id.key) {
-                state1[i] = PointState.persistState;
+                state1[i] = exports.PointState.persistState;
                 break;
             }
         }
@@ -8872,10 +8876,10 @@ function getPointStates(state1, state2, manifold1, manifold2) {
     // Detect persists and adds.
     for (var i = 0; i < manifold2.pointCount; ++i) {
         var id = manifold2.points[i].id;
-        state2[i] = PointState.addState;
+        state2[i] = exports.PointState.addState;
         for (var j = 0; j < manifold1.pointCount; ++j) {
             if (manifold1.points[j].id.key == id.key) {
-                state2[i] = PointState.persistState;
+                state2[i] = exports.PointState.persistState;
                 break;
             }
         }
@@ -8903,8 +8907,8 @@ function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
         // VertexA is hitting edgeB.
         vOut[numOut].id.cf.indexA = vertexIndexA;
         vOut[numOut].id.cf.indexB = vIn[0].id.cf.indexB;
-        vOut[numOut].id.cf.typeA = ContactFeatureType.e_vertex;
-        vOut[numOut].id.cf.typeB = ContactFeatureType.e_face;
+        vOut[numOut].id.cf.typeA = exports.ContactFeatureType.e_vertex;
+        vOut[numOut].id.cf.typeB = exports.ContactFeatureType.e_face;
         ++numOut;
     }
     return numOut;
@@ -9329,7 +9333,7 @@ var Contact = /** @class */ (function () {
             var point = void 0;
             var separation = void 0;
             switch (this.p_type) {
-                case ManifoldType.e_circles: {
+                case exports.ManifoldType.e_circles: {
                     var pointA = Transform.mulVec2(xfA, this.p_localPoint);
                     var pointB = Transform.mulVec2(xfB, this.p_localPoints[0]);
                     normal = Vec2.sub(pointB, pointA);
@@ -9338,7 +9342,7 @@ var Contact = /** @class */ (function () {
                     separation = Vec2.dot(Vec2.sub(pointB, pointA), normal) - this.p_radiusA - this.p_radiusB;
                     break;
                 }
-                case ManifoldType.e_faceA: {
+                case exports.ManifoldType.e_faceA: {
                     normal = Rot.mulVec2(xfA.q, this.p_localNormal);
                     var planePoint = Transform.mulVec2(xfA, this.p_localPoint);
                     var clipPoint = Transform.mulVec2(xfB, this.p_localPoints[j]);
@@ -9346,7 +9350,7 @@ var Contact = /** @class */ (function () {
                     point = clipPoint;
                     break;
                 }
-                case ManifoldType.e_faceB: {
+                case exports.ManifoldType.e_faceB: {
                     normal = Rot.mulVec2(xfB.q, this.p_localNormal);
                     var planePoint = Transform.mulVec2(xfB, this.p_localPoint);
                     var clipPoint = Transform.mulVec2(xfA, this.p_localPoints[j]);
@@ -16604,16 +16608,16 @@ var CollideCircles = function (manifold, circleA, xfA, circleB, xfB) {
     if (distSqr > radius * radius) {
         return;
     }
-    manifold.type = ManifoldType.e_circles;
+    manifold.type = exports.ManifoldType.e_circles;
     manifold.localPoint.setVec2(circleA.m_p);
     manifold.localNormal.setZero();
     manifold.pointCount = 1;
     manifold.points[0].localPoint.setVec2(circleB.m_p);
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.cf.indexA = 0;
-    manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+    manifold.points[0].id.cf.typeA = exports.ContactFeatureType.e_vertex;
     manifold.points[0].id.cf.indexB = 0;
-    manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+    manifold.points[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
 };
 
 /*
@@ -16686,16 +16690,16 @@ var CollideEdgeCircle = function (manifold, edgeA, xfA, circleB, xfB) {
                 return;
             }
         }
-        manifold.type = ManifoldType.e_circles;
+        manifold.type = exports.ManifoldType.e_circles;
         manifold.localNormal.setZero();
         manifold.localPoint.setVec2(P_1);
         manifold.pointCount = 1;
         manifold.points[0].localPoint.setVec2(circleB.m_p);
         // manifold.points[0].id.key = 0;
         manifold.points[0].id.cf.indexA = 0;
-        manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+        manifold.points[0].id.cf.typeA = exports.ContactFeatureType.e_vertex;
         manifold.points[0].id.cf.indexB = 0;
-        manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+        manifold.points[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
         return;
     }
     // Region B
@@ -16717,16 +16721,16 @@ var CollideEdgeCircle = function (manifold, edgeA, xfA, circleB, xfB) {
                 return;
             }
         }
-        manifold.type = ManifoldType.e_circles;
+        manifold.type = exports.ManifoldType.e_circles;
         manifold.localNormal.setZero();
         manifold.localPoint.setVec2(P_2);
         manifold.pointCount = 1;
         manifold.points[0].localPoint.setVec2(circleB.m_p);
         // manifold.points[0].id.key = 0;
         manifold.points[0].id.cf.indexA = 1;
-        manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+        manifold.points[0].id.cf.typeA = exports.ContactFeatureType.e_vertex;
         manifold.points[0].id.cf.indexB = 0;
-        manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+        manifold.points[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
         return;
     }
     // Region AB
@@ -16742,16 +16746,16 @@ var CollideEdgeCircle = function (manifold, edgeA, xfA, circleB, xfB) {
         n.setNum(-n.x, -n.y);
     }
     n.normalize();
-    manifold.type = ManifoldType.e_faceA;
+    manifold.type = exports.ManifoldType.e_faceA;
     manifold.localNormal = n;
     manifold.localPoint.setVec2(A);
     manifold.pointCount = 1;
     manifold.points[0].localPoint.setVec2(circleB.m_p);
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.cf.indexA = 0;
-    manifold.points[0].id.cf.typeA = ContactFeatureType.e_face;
+    manifold.points[0].id.cf.typeA = exports.ContactFeatureType.e_face;
     manifold.points[0].id.cf.indexB = 0;
-    manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+    manifold.points[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
 };
 
 /*
@@ -16838,13 +16842,13 @@ function findIncidentEdge(c, poly1, xf1, edge1, poly2, xf2) {
     c[0].v = Transform.mulVec2(xf2, vertices2[i1]);
     c[0].id.cf.indexA = edge1;
     c[0].id.cf.indexB = i1;
-    c[0].id.cf.typeA = ContactFeatureType.e_face;
-    c[0].id.cf.typeB = ContactFeatureType.e_vertex;
+    c[0].id.cf.typeA = exports.ContactFeatureType.e_face;
+    c[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
     c[1].v = Transform.mulVec2(xf2, vertices2[i2]);
     c[1].id.cf.indexA = edge1;
     c[1].id.cf.indexB = i2;
-    c[1].id.cf.typeA = ContactFeatureType.e_face;
-    c[1].id.cf.typeB = ContactFeatureType.e_vertex;
+    c[1].id.cf.typeA = exports.ContactFeatureType.e_face;
+    c[1].id.cf.typeB = exports.ContactFeatureType.e_vertex;
 }
 var maxSeparation = {
     maxSeparation: 0,
@@ -16886,7 +16890,7 @@ var CollidePolygons = function (manifold, polyA, xfA, polyB, xfB) {
         xf1 = xfB;
         xf2 = xfA;
         edge1 = edgeB;
-        manifold.type = ManifoldType.e_faceB;
+        manifold.type = exports.ManifoldType.e_faceB;
         flip = 1;
     }
     else {
@@ -16895,7 +16899,7 @@ var CollidePolygons = function (manifold, polyA, xfA, polyB, xfB) {
         xf1 = xfA;
         xf2 = xfB;
         edge1 = edgeA;
-        manifold.type = ManifoldType.e_faceA;
+        manifold.type = exports.ManifoldType.e_faceA;
         flip = 0;
     }
     var incidentEdge = [new ClipVertex(), new ClipVertex()];
@@ -17019,15 +17023,15 @@ var CollidePolygonCircle = function (manifold, polygonA, xfA, circleB, xfB) {
     // If the center is inside the polygon ...
     if (separation < math.EPSILON) {
         manifold.pointCount = 1;
-        manifold.type = ManifoldType.e_faceA;
+        manifold.type = exports.ManifoldType.e_faceA;
         manifold.localNormal.setVec2(normals[normalIndex]);
         manifold.localPoint.setCombine(0.5, v1, 0.5, v2);
         manifold.points[0].localPoint = circleB.m_p;
         // manifold.points[0].id.key = 0;
         manifold.points[0].id.cf.indexA = 0;
-        manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+        manifold.points[0].id.cf.typeA = exports.ContactFeatureType.e_vertex;
         manifold.points[0].id.cf.indexB = 0;
-        manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+        manifold.points[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
         return;
     }
     // Compute barycentric coordinates
@@ -17038,32 +17042,32 @@ var CollidePolygonCircle = function (manifold, polygonA, xfA, circleB, xfB) {
             return;
         }
         manifold.pointCount = 1;
-        manifold.type = ManifoldType.e_faceA;
+        manifold.type = exports.ManifoldType.e_faceA;
         manifold.localNormal.setCombine(1, cLocal, -1, v1);
         manifold.localNormal.normalize();
         manifold.localPoint = v1;
         manifold.points[0].localPoint.setVec2(circleB.m_p);
         // manifold.points[0].id.key = 0;
         manifold.points[0].id.cf.indexA = 0;
-        manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+        manifold.points[0].id.cf.typeA = exports.ContactFeatureType.e_vertex;
         manifold.points[0].id.cf.indexB = 0;
-        manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+        manifold.points[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
     }
     else if (u2 <= 0.0) {
         if (Vec2.distanceSquared(cLocal, v2) > radius * radius) {
             return;
         }
         manifold.pointCount = 1;
-        manifold.type = ManifoldType.e_faceA;
+        manifold.type = exports.ManifoldType.e_faceA;
         manifold.localNormal.setCombine(1, cLocal, -1, v2);
         manifold.localNormal.normalize();
         manifold.localPoint.setVec2(v2);
         manifold.points[0].localPoint.setVec2(circleB.m_p);
         // manifold.points[0].id.key = 0;
         manifold.points[0].id.cf.indexA = 0;
-        manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+        manifold.points[0].id.cf.typeA = exports.ContactFeatureType.e_vertex;
         manifold.points[0].id.cf.indexB = 0;
-        manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+        manifold.points[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
     }
     else {
         var faceCenter = Vec2.mid(v1, v2);
@@ -17072,15 +17076,15 @@ var CollidePolygonCircle = function (manifold, polygonA, xfA, circleB, xfB) {
             return;
         }
         manifold.pointCount = 1;
-        manifold.type = ManifoldType.e_faceA;
+        manifold.type = exports.ManifoldType.e_faceA;
         manifold.localNormal.setVec2(normals[vertIndex1]);
         manifold.localPoint.setVec2(faceCenter);
         manifold.points[0].localPoint.setVec2(circleB.m_p);
         // manifold.points[0].id.key = 0;
         manifold.points[0].id.cf.indexA = 0;
-        manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
+        manifold.points[0].id.cf.typeA = exports.ContactFeatureType.e_vertex;
         manifold.points[0].id.cf.indexB = 0;
-        manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+        manifold.points[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
     }
 };
 
@@ -17424,7 +17428,7 @@ var CollideEdgePolygon = function (manifold, edgeA, xfA, polygonB, xfB) {
     }
     var ie = [new ClipVertex(), new ClipVertex()];
     if (primaryAxis.type == EPAxisType.e_edgeA) {
-        manifold.type = ManifoldType.e_faceA;
+        manifold.type = exports.ManifoldType.e_faceA;
         // Search for the polygon normal that is most anti-parallel to the edge
         // normal.
         var bestIndex = 0;
@@ -17441,13 +17445,13 @@ var CollideEdgePolygon = function (manifold, edgeA, xfA, polygonB, xfB) {
         ie[0].v = polygonBA.vertices[i1];
         ie[0].id.cf.indexA = 0;
         ie[0].id.cf.indexB = i1;
-        ie[0].id.cf.typeA = ContactFeatureType.e_face;
-        ie[0].id.cf.typeB = ContactFeatureType.e_vertex;
+        ie[0].id.cf.typeA = exports.ContactFeatureType.e_face;
+        ie[0].id.cf.typeB = exports.ContactFeatureType.e_vertex;
         ie[1].v = polygonBA.vertices[i2];
         ie[1].id.cf.indexA = 0;
         ie[1].id.cf.indexB = i2;
-        ie[1].id.cf.typeA = ContactFeatureType.e_face;
-        ie[1].id.cf.typeB = ContactFeatureType.e_vertex;
+        ie[1].id.cf.typeA = exports.ContactFeatureType.e_face;
+        ie[1].id.cf.typeB = exports.ContactFeatureType.e_vertex;
         if (front) {
             rf.i1 = 0;
             rf.i2 = 1;
@@ -17464,17 +17468,17 @@ var CollideEdgePolygon = function (manifold, edgeA, xfA, polygonB, xfB) {
         }
     }
     else {
-        manifold.type = ManifoldType.e_faceB;
+        manifold.type = exports.ManifoldType.e_faceB;
         ie[0].v = v1;
         ie[0].id.cf.indexA = 0;
         ie[0].id.cf.indexB = primaryAxis.index;
-        ie[0].id.cf.typeA = ContactFeatureType.e_vertex;
-        ie[0].id.cf.typeB = ContactFeatureType.e_face;
+        ie[0].id.cf.typeA = exports.ContactFeatureType.e_vertex;
+        ie[0].id.cf.typeB = exports.ContactFeatureType.e_face;
         ie[1].v = v2;
         ie[1].id.cf.indexA = 0;
         ie[1].id.cf.indexB = primaryAxis.index;
-        ie[1].id.cf.typeA = ContactFeatureType.e_vertex;
-        ie[1].id.cf.typeB = ContactFeatureType.e_face;
+        ie[1].id.cf.typeA = exports.ContactFeatureType.e_vertex;
+        ie[1].id.cf.typeB = exports.ContactFeatureType.e_face;
         rf.i1 = primaryAxis.index;
         rf.i2 = rf.i1 + 1 < polygonBA.count ? rf.i1 + 1 : 0;
         rf.v1 = polygonBA.vertices[rf.i1];
@@ -18203,9 +18207,9 @@ var planck = /*#__PURE__*/Object.freeze({
   WheelJoint: WheelJoint,
   Settings: Settings,
   Sweep: Sweep,
-  get ManifoldType () { return ManifoldType; },
-  get ContactFeatureType () { return ContactFeatureType; },
-  get PointState () { return PointState; },
+  get ManifoldType () { return exports.ManifoldType; },
+  get ContactFeatureType () { return exports.ContactFeatureType; },
+  get PointState () { return exports.PointState; },
   ClipVertex: ClipVertex,
   Manifold: Manifold,
   ManifoldPoint: ManifoldPoint,
@@ -18221,7 +18225,7 @@ var planck = /*#__PURE__*/Object.freeze({
   DistanceProxy: DistanceProxy,
   testOverlap: testOverlap,
   TOIInput: TOIInput,
-  get TOIOutputState () { return TOIOutputState; },
+  get TOIOutputState () { return exports.TOIOutputState; },
   TOIOutput: TOIOutput,
   TimeOfImpact: TimeOfImpact,
   TreeNode: TreeNode,
@@ -18230,5 +18234,77 @@ var planck = /*#__PURE__*/Object.freeze({
   internal: internal
 });
 
-export { AABB, Body, Box, BoxShape, Chain, ChainShape, Circle, CircleShape, ClipVertex, CollideCircles, CollideEdgeCircle, CollideEdgePolygon, CollidePolygonCircle, CollidePolygons, Contact, ContactEdge, ContactFeature, ContactFeatureType, ContactID, Distance, DistanceInput, DistanceJoint, DistanceOutput, DistanceProxy, DynamicTree, Edge, EdgeShape, Fixture, FixtureProxy, FrictionJoint, GearJoint, Joint, JointEdge, Manifold, ManifoldPoint, ManifoldType, MassData, Mat22, Mat33, MotorJoint, MouseJoint, PointState, Polygon, PolygonShape, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, Rot, Serializer, Settings, Shape, SimplexCache, Sweep, TOIInput, TOIOutput, TOIOutputState, TimeOfImpact, Transform, TreeNode, Vec2, Vec3, VelocityConstraintPoint, WeldJoint, WheelJoint, World, WorldManifold, clipSegmentToLine, planck as default, getPointStates, internal, math, mixFriction, mixRestitution, stats, testOverlap, testbed };
-//# sourceMappingURL=planck-with-testbed.js.map
+exports.AABB = AABB;
+exports.Body = Body;
+exports.Box = Box;
+exports.BoxShape = BoxShape;
+exports.Chain = Chain;
+exports.ChainShape = ChainShape;
+exports.Circle = Circle;
+exports.CircleShape = CircleShape;
+exports.ClipVertex = ClipVertex;
+exports.CollideCircles = CollideCircles;
+exports.CollideEdgeCircle = CollideEdgeCircle;
+exports.CollideEdgePolygon = CollideEdgePolygon;
+exports.CollidePolygonCircle = CollidePolygonCircle;
+exports.CollidePolygons = CollidePolygons;
+exports.Contact = Contact;
+exports.ContactEdge = ContactEdge;
+exports.ContactFeature = ContactFeature;
+exports.ContactID = ContactID;
+exports.Distance = Distance;
+exports.DistanceInput = DistanceInput;
+exports.DistanceJoint = DistanceJoint;
+exports.DistanceOutput = DistanceOutput;
+exports.DistanceProxy = DistanceProxy;
+exports.DynamicTree = DynamicTree;
+exports.Edge = Edge;
+exports.EdgeShape = EdgeShape;
+exports.Fixture = Fixture;
+exports.FixtureProxy = FixtureProxy;
+exports.FrictionJoint = FrictionJoint;
+exports.GearJoint = GearJoint;
+exports.Joint = Joint;
+exports.JointEdge = JointEdge;
+exports.Manifold = Manifold;
+exports.ManifoldPoint = ManifoldPoint;
+exports.MassData = MassData;
+exports.Mat22 = Mat22;
+exports.Mat33 = Mat33;
+exports.MotorJoint = MotorJoint;
+exports.MouseJoint = MouseJoint;
+exports.Polygon = Polygon;
+exports.PolygonShape = PolygonShape;
+exports.PrismaticJoint = PrismaticJoint;
+exports.PulleyJoint = PulleyJoint;
+exports.RevoluteJoint = RevoluteJoint;
+exports.RopeJoint = RopeJoint;
+exports.Rot = Rot;
+exports.Serializer = Serializer;
+exports.Settings = Settings;
+exports.Shape = Shape;
+exports.SimplexCache = SimplexCache;
+exports.Sweep = Sweep;
+exports.TOIInput = TOIInput;
+exports.TOIOutput = TOIOutput;
+exports.TimeOfImpact = TimeOfImpact;
+exports.Transform = Transform;
+exports.TreeNode = TreeNode;
+exports.Vec2 = Vec2;
+exports.Vec3 = Vec3;
+exports.VelocityConstraintPoint = VelocityConstraintPoint;
+exports.WeldJoint = WeldJoint;
+exports.WheelJoint = WheelJoint;
+exports.World = World;
+exports.WorldManifold = WorldManifold;
+exports.clipSegmentToLine = clipSegmentToLine;
+exports["default"] = planck;
+exports.getPointStates = getPointStates;
+exports.internal = internal;
+exports.math = math;
+exports.mixFriction = mixFriction;
+exports.mixRestitution = mixRestitution;
+exports.stats = stats;
+exports.testOverlap = testOverlap;
+exports.testbed = testbed;
+//# sourceMappingURL=planck-with-testbed.cjs.map

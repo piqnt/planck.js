@@ -22,23 +22,23 @@
  * SOFTWARE.
  */
 
-
-import common from '../util/common';
-import options from '../util/options';
-import Vec2 from '../common/Vec2';
-import Rot from '../common/Rot';
-import Math from '../common/Math';
-import Sweep from '../common/Sweep';
-import Transform from '../common/Transform';
-import Velocity from './Velocity';
-import Position from './Position';
-import Fixture, { FixtureDef, FixtureOpt } from './Fixture';
-import Shape from '../collision/Shape';
+import { options } from '../util/options';
+import { Vec2, Vec2Value } from '../common/Vec2';
+import { Rot } from '../common/Rot';
+import { math as Math } from '../common/Math';
+import { Sweep } from '../common/Sweep';
+import { Transform } from '../common/Transform';
+import { Velocity } from './Velocity';
+import { Position } from './Position';
+import { Fixture, FixtureDef, FixtureOpt } from './Fixture';
+import { Shape } from '../collision/Shape';
 import { JointEdge } from "./Joint";
-import World from "./World";
+import { World } from "./World";
 import { ContactEdge } from "./Contact";
 
+
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+
 
 export type BodyType = 'static' | 'kinematic' | 'dynamic';
 
@@ -145,7 +145,7 @@ export class MassData {
  *
  * To create a new Body use {@link World.createBody}.
  */
-export default class Body {
+export class Body {
   /**
    * A static body does not move under simulation and behaves as if it has infinite mass.
    * Internally, zero is stored for the mass and the inverse mass.
@@ -213,12 +213,12 @@ export default class Body {
   constructor(world: World, def: BodyDef) {
     def = options(def, BodyDefDefault);
 
-    _ASSERT && common.assert(Vec2.isValid(def.position));
-    _ASSERT && common.assert(Vec2.isValid(def.linearVelocity));
-    _ASSERT && common.assert(Math.isFinite(def.angle));
-    _ASSERT && common.assert(Math.isFinite(def.angularVelocity));
-    _ASSERT && common.assert(Math.isFinite(def.angularDamping) && def.angularDamping >= 0.0);
-    _ASSERT && common.assert(Math.isFinite(def.linearDamping) && def.linearDamping >= 0.0);
+    _ASSERT && console.assert(Vec2.isValid(def.position));
+    _ASSERT && console.assert(Vec2.isValid(def.linearVelocity));
+    _ASSERT && console.assert(Math.isFinite(def.angle));
+    _ASSERT && console.assert(Math.isFinite(def.angularVelocity));
+    _ASSERT && console.assert(Math.isFinite(def.angularDamping) && def.angularDamping >= 0.0);
+    _ASSERT && console.assert(Math.isFinite(def.linearDamping) && def.linearDamping >= 0.0);
 
     this.m_world = world;
 
@@ -388,8 +388,8 @@ export default class Body {
    * @internal
    */
   setType(type: BodyType): void {
-    _ASSERT && common.assert(type === STATIC || type === KINEMATIC || type === DYNAMIC);
-    _ASSERT && common.assert(this.isWorldLocked() == false);
+    _ASSERT && console.assert(type === STATIC || type === KINEMATIC || type === DYNAMIC);
+    _ASSERT && console.assert(this.isWorldLocked() == false);
 
     if (this.isWorldLocked() == true) {
       return;
@@ -499,7 +499,7 @@ export default class Body {
    * and remains
    */
   setActive(flag: boolean): void {
-    _ASSERT && common.assert(this.isWorldLocked() == false);
+    _ASSERT && console.assert(this.isWorldLocked() == false);
 
     if (flag == this.m_activeFlag) {
       return;
@@ -568,7 +568,7 @@ export default class Body {
    * @param angle The world rotation in radians.
    */
   setTransform(position: Vec2, angle: number): void {
-    _ASSERT && common.assert(this.isWorldLocked() == false);
+    _ASSERT && console.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
       return;
     }
@@ -791,7 +791,7 @@ export default class Body {
       return;
     }
 
-    _ASSERT && common.assert(this.isDynamic());
+    _ASSERT && console.assert(this.isDynamic());
 
     // Accumulate mass over all fixtures.
     const localCenter = Vec2.zero();
@@ -821,7 +821,7 @@ export default class Body {
     if (this.m_I > 0.0 && this.m_fixedRotationFlag == false) {
       // Center the inertia about the center of mass.
       this.m_I -= this.m_mass * Vec2.dot(localCenter, localCenter);
-      _ASSERT && common.assert(this.m_I > 0.0);
+      _ASSERT && console.assert(this.m_I > 0.0);
       this.m_invI = 1.0 / this.m_I;
 
     } else {
@@ -847,7 +847,7 @@ export default class Body {
    * @param massData The mass properties.
    */
   setMassData(massData: MassData): void {
-    _ASSERT && common.assert(this.isWorldLocked() == false);
+    _ASSERT && console.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
       return;
     }
@@ -870,7 +870,7 @@ export default class Body {
     if (massData.I > 0.0 && this.m_fixedRotationFlag == false) {
       this.m_I = massData.I - this.m_mass
         * Vec2.dot(massData.center, massData.center);
-      _ASSERT && common.assert(this.m_I > 0.0);
+      _ASSERT && console.assert(this.m_I > 0.0);
       this.m_invI = 1.0 / this.m_I;
     }
 
@@ -1013,7 +1013,7 @@ export default class Body {
    * @internal Used for deserialize.
    */
   _addFixture(fixture: Fixture): Fixture {
-    _ASSERT && common.assert(this.isWorldLocked() == false);
+    _ASSERT && console.assert(this.isWorldLocked() == false);
 
     if (this.isWorldLocked() == true) {
       return null;
@@ -1054,7 +1054,7 @@ export default class Body {
   createFixture(shape: Shape, density?: number): Fixture;
   // tslint:disable-next-line:typedef
   createFixture(shape, fixdef?) {
-    _ASSERT && common.assert(this.isWorldLocked() == false);
+    _ASSERT && console.assert(this.isWorldLocked() == false);
 
     if (this.isWorldLocked() == true) {
       return null;
@@ -1077,13 +1077,13 @@ export default class Body {
    * @param fixture The fixture to be removed.
    */
   destroyFixture(fixture: Fixture): void {
-    _ASSERT && common.assert(this.isWorldLocked() == false);
+    _ASSERT && console.assert(this.isWorldLocked() == false);
 
     if (this.isWorldLocked() == true) {
       return;
     }
 
-    _ASSERT && common.assert(fixture.m_body == this);
+    _ASSERT && console.assert(fixture.m_body == this);
 
     // Remove the fixture from this body's singly linked list.
     let found = false;
@@ -1104,7 +1104,7 @@ export default class Body {
     }
 
     // You tried to remove a shape that is not attached to this body.
-    _ASSERT && common.assert(found);
+    _ASSERT && console.assert(found);
 
     // Destroy any contacts associated with the fixture.
     let edge = this.m_contactList;
@@ -1153,14 +1153,14 @@ export default class Body {
   /**
    * Gets the corresponding local point of a world point.
    */
-  getLocalPoint(worldPoint: Vec2): Vec2 {
+  getLocalPoint(worldPoint: Vec2Value): Vec2 {
     return Transform.mulTVec2(this.m_xf, worldPoint);
   }
 
   /**
    * Gets the corresponding local vector of a world vector.
    */
-  getLocalVector(worldVector: Vec2): Vec2 {
+  getLocalVector(worldVector: Vec2Value): Vec2 {
     return Rot.mulTVec2(this.m_xf.q, worldVector);
   }
 }

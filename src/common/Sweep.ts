@@ -22,11 +22,10 @@
  * SOFTWARE.
  */
 
-import common from '../util/common';
-import Math from './Math';
-import Vec2 from './Vec2';
-import Rot from './Rot';
-import Transform from './Transform';
+import { math as Math } from './Math';
+import { Vec2 } from './Vec2';
+import { Rot } from './Rot';
+import { Transform } from './Transform';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -38,7 +37,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * center of mass. However, to support dynamics we must interpolate the center
  * of mass position.
  */
-export default class Sweep {
+export class Sweep {
   /** Local center of mass position */
   localCenter: Vec2;
 
@@ -55,8 +54,8 @@ export default class Sweep {
   a0: number;
 
   constructor(c?: Vec2, a?: number) {
-    _ASSERT && common.assert(typeof c === 'undefined');
-    _ASSERT && common.assert(typeof a === 'undefined');
+    _ASSERT && console.assert(typeof c === 'undefined');
+    _ASSERT && console.assert(typeof a === 'undefined');
     this.localCenter = Vec2.zero();
     this.c = Vec2.zero();
     this.a = 0;
@@ -102,7 +101,7 @@ export default class Sweep {
    * @param alpha The new initial time
    */
   advance(alpha: number): void {
-    _ASSERT && common.assert(this.alpha0 < 1.0);
+    _ASSERT && console.assert(this.alpha0 < 1.0);
     const beta = (alpha - this.alpha0) / (1.0 - this.alpha0);
     this.c0.setCombine(beta, this.c, 1 - beta, this.c0);
     this.a0 = beta * this.a + (1 - beta) * this.a0;

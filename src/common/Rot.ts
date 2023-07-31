@@ -22,22 +22,21 @@
  * SOFTWARE.
  */
 
-import common from '../util/common';
-import Vec2 from './Vec2';
-import Math from './Math';
+import { Vec2, Vec2Value } from './Vec2';
+import { math as Math } from './Math';
 
 
-const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
-export default class Rot {
+export class Rot {
   s: number;
   c: number;
 
   /** Initialize from an angle in radians. */
   constructor(angle?: number | Rot) {
-    if (!(this instanceof Rot)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof Rot)) {
       return new Rot(angle);
     }
     if (typeof angle === 'number') {
@@ -79,11 +78,7 @@ export default class Rot {
   }
 
   static assert(o: any): void {
-    if (!_ASSERT) return;
-    if (!Rot.isValid(o)) {
-      _DEBUG && common.debug(o);
-      throw new Error('Invalid Rot!');
-    }
+    _ASSERT && console.assert(!Rot.isValid(o), 'Invalid Rot!', o);
   }
 
   /** Set to the identity rotation. */
@@ -223,7 +218,7 @@ export default class Rot {
   }
 
   /** Inverse rotate a vector */
-  static mulTVec2(rot: Rot, m: Vec2): Vec2 {
+  static mulTVec2(rot: Rot, m: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(m);
     return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
   }

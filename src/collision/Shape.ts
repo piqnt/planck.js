@@ -23,24 +23,24 @@
  */
 
 import type { MassData } from '../dynamics/Body';
-import AABB, { RayCastOutput, RayCastInput } from './AABB';
+import { AABB, RayCastOutput, RayCastInput } from './AABB';
 import { DistanceProxy } from './Distance';
-import type Transform from '../common/Transform';
-import type Vec2 from '../common/Vec2';
+import type { Transform }  from '../common/Transform';
+import type { Vec2Value }  from '../common/Vec2';
 
+// todo make shape an interface
 
 /**
  * A shape is used for collision detection. You can create a shape however you
  * like. Shapes used for simulation in World are created automatically when a
  * Fixture is created. Shapes may encapsulate one or more child shapes.
  */
-export default abstract class Shape {
+export abstract class Shape {
   m_type: ShapeType;
   m_radius: number;
 
   /** @internal */
-  _reset(): void {
-  }
+  abstract _reset(): void;
 
   static isValid(obj: any): boolean {
     if (obj === null || typeof obj === 'undefined') {
@@ -49,9 +49,7 @@ export default abstract class Shape {
     return typeof obj.m_type === 'string' && typeof obj.m_radius === 'number';
   }
 
-  getRadius(): number {
-    return this.m_radius;
-  }
+  abstract getRadius(): number;
 
   /**
    * Get the type of this shape. You can use this to down cast to the concrete
@@ -59,9 +57,7 @@ export default abstract class Shape {
    *
    * @return the shape type.
    */
-  getType(): ShapeType {
-    return this.m_type;
-  }
+  abstract getType(): ShapeType;
 
   /**
    * @internal
@@ -83,7 +79,7 @@ export default abstract class Shape {
    * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
-  abstract testPoint(xf: Transform, p: Vec2): boolean;
+  abstract testPoint(xf: Transform, p: Vec2Value): boolean;
 
   /**
    * Cast a ray against a child shape.

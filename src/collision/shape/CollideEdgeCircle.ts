@@ -22,15 +22,14 @@
  * SOFTWARE.
  */
 
-import common from '../../util/common';
-import Transform from '../../common/Transform';
-import Vec2 from '../../common/Vec2';
-import Contact from '../../dynamics/Contact';
-import EdgeShape from './EdgeShape';
-import ChainShape from './ChainShape';
-import CircleShape from './CircleShape';
-import Manifold, { ContactFeatureType, ManifoldType } from "../Manifold";
-import Fixture from "../../dynamics/Fixture";
+import { Transform } from '../../common/Transform';
+import { Vec2 } from '../../common/Vec2';
+import { Contact } from '../../dynamics/Contact';
+import { EdgeShape } from './EdgeShape';
+import { ChainShape } from './ChainShape';
+import { CircleShape } from './CircleShape';
+import { Manifold, ContactFeatureType, ManifoldType } from "../Manifold";
+import { Fixture } from "../../dynamics/Fixture";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -40,8 +39,8 @@ Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
 
 function EdgeCircleContact(manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number): void {
-  _ASSERT && common.assert(fixtureA.getType() == EdgeShape.TYPE);
-  _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
+  _ASSERT && console.assert(fixtureA.getType() == EdgeShape.TYPE);
+  _ASSERT && console.assert(fixtureB.getType() == CircleShape.TYPE);
 
   const shapeA = fixtureA.getShape() as EdgeShape;
   const shapeB = fixtureB.getShape() as CircleShape;
@@ -50,8 +49,8 @@ function EdgeCircleContact(manifold: Manifold, xfA: Transform, fixtureA: Fixture
 }
 
 function ChainCircleContact(manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number): void {
-  _ASSERT && common.assert(fixtureA.getType() == ChainShape.TYPE);
-  _ASSERT && common.assert(fixtureB.getType() == CircleShape.TYPE);
+  _ASSERT && console.assert(fixtureA.getType() == ChainShape.TYPE);
+  _ASSERT && console.assert(fixtureB.getType() == CircleShape.TYPE);
 
   const chain = fixtureA.getShape() as ChainShape;
   const edge = new EdgeShape();
@@ -65,7 +64,7 @@ function ChainCircleContact(manifold: Manifold, xfA: Transform, fixtureA: Fixtur
 
 // Compute contact points for edge versus circle.
 // This accounts for edge connectivity.
-export function CollideEdgeCircle(manifold: Manifold, edgeA: EdgeShape, xfA: Transform, circleB: CircleShape, xfB: Transform): void {
+export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape, xfA: Transform, circleB: CircleShape, xfB: Transform): void {
   manifold.pointCount = 0;
 
   // Compute circle in frame of edge
@@ -155,7 +154,7 @@ export function CollideEdgeCircle(manifold: Manifold, edgeA: EdgeShape, xfA: Tra
 
   // Region AB
   const den = Vec2.dot(e, e);
-  _ASSERT && common.assert(den > 0.0);
+  _ASSERT && console.assert(den > 0.0);
   const P = Vec2.combine(u / den, A, v / den, B);
   const d = Vec2.sub(Q, P);
   const dd = Vec2.dot(d, d);

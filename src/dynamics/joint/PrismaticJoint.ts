@@ -22,21 +22,21 @@
  * SOFTWARE.
  */
 
-import common from '../../util/common';
-import options from '../../util/options';
-import Settings from '../../Settings';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Vec3 from '../../common/Vec3';
-import Mat22 from '../../common/Mat22';
-import Mat33 from '../../common/Mat33';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { Settings } from '../../Settings';
+import { math as Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Vec3 } from '../../common/Vec3';
+import { Mat22 } from '../../common/Mat22';
+import { Mat33 } from '../../common/Mat33';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 const inactiveLimit = 0;
@@ -121,7 +121,7 @@ const DEFAULTS = {
  * joint limit to restrict the range of motion and a joint motor to drive the
  * motion or to model joint friction.
  */
-export default class PrismaticJoint extends Joint {
+export class PrismaticJoint extends Joint {
   static TYPE = 'prismatic-joint' as const;
 
   /** @internal */ m_type: 'prismatic-joint';
@@ -159,7 +159,7 @@ export default class PrismaticJoint extends Joint {
   constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
   constructor(def: PrismaticJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2, axis?: Vec2) {
     // @ts-ignore
-    if (!(this instanceof PrismaticJoint)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof PrismaticJoint)) {
       return new PrismaticJoint(def, bodyA, bodyB, anchor, axis);
     }
 
@@ -428,7 +428,7 @@ export default class PrismaticJoint extends Joint {
    * Set the joint limits, usually in meters.
    */
   setLimits(lower: number, upper: number): void {
-    _ASSERT && common.assert(lower <= upper);
+    _ASSERT && console.assert(lower <= upper);
     if (lower != this.m_lowerTranslation || upper != this.m_upperTranslation) {
       this.m_bodyA.setAwake(true);
       this.m_bodyB.setAwake(true);

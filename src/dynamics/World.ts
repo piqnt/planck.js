@@ -22,20 +22,20 @@
  * SOFTWARE.
  */
 
-import options from '../util/options';
-import common from '../util/common';
-import Vec2 from '../common/Vec2';
-import BroadPhase from '../collision/BroadPhase';
-import Solver, { ContactImpulse, TimeStep } from './Solver';
-import Body, { BodyDef } from './Body';
-import Joint from './Joint';
-import Contact from './Contact';
-import AABB, { RayCastInput, RayCastOutput } from "../collision/AABB";
-import Fixture, { FixtureProxy } from "./Fixture";
-import Manifold from "../collision/Manifold";
+import { options } from '../util/options';
+import { Vec2 } from '../common/Vec2';
+import { BroadPhase } from '../collision/BroadPhase';
+import { Solver, ContactImpulse, TimeStep } from './Solver';
+import { Body, BodyDef } from './Body';
+import { Joint } from './Joint';
+import { Contact } from './Contact';
+import { AABB, RayCastInput, RayCastOutput } from "../collision/AABB";
+import { Fixture, FixtureProxy } from "./Fixture";
+import { Manifold } from "../collision/Manifold";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -92,7 +92,7 @@ export type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2,
  */
 export type WorldAABBQueryCallback = (fixture: Fixture) => boolean;
 
-export default class World {
+export class World {
   /** @internal */ m_solver: Solver;
   /** @internal */ m_broadPhase: BroadPhase;
   /** @internal */ m_contactList: Contact | null;
@@ -124,7 +124,7 @@ export default class World {
    * @param def World definition or gravity vector.
    */
   constructor(def?: WorldDef | Vec2 | null) {
-    if (!(this instanceof World)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof World)) {
       return new World(def);
     }
 
@@ -379,7 +379,7 @@ export default class World {
    * @param callback Called for each fixture found in the query AABB. It may return `false` to terminate the query.
    */
   queryAABB(aabb: AABB, callback: WorldAABBQueryCallback): void {
-    _ASSERT && common.assert(typeof callback === 'function');
+    _ASSERT && console.assert(typeof callback === 'function');
     const broadPhase = this.m_broadPhase;
     this.m_broadPhase.query(aabb, function(proxyId: number): boolean { // TODO GC
       const proxy = broadPhase.getUserData(proxyId);
@@ -397,7 +397,7 @@ export default class World {
    * @param callback A user implemented callback function.
    */
   rayCast(point1: Vec2, point2: Vec2, callback: WorldRayCastCallback): void {
-    _ASSERT && common.assert(typeof callback === 'function');
+    _ASSERT && console.assert(typeof callback === 'function');
     const broadPhase = this.m_broadPhase;
 
     this.m_broadPhase.rayCast({
@@ -456,7 +456,7 @@ export default class World {
    * @param newOrigin The new origin with respect to the old origin
    */
   shiftOrigin(newOrigin: Vec2): void {
-    _ASSERT && common.assert(this.m_locked == false);
+    _ASSERT && console.assert(this.m_locked == false);
     if (this.m_locked) {
       return;
     }
@@ -478,7 +478,7 @@ export default class World {
    * @internal Used for deserialize.
    */
   _addBody(body: Body): void {
-    _ASSERT && common.assert(this.isLocked() === false);
+    _ASSERT && console.assert(this.isLocked() === false);
     if (this.isLocked()) {
       return;
     }
@@ -503,7 +503,7 @@ export default class World {
   createBody(position: Vec2, angle?: number): Body;
   // tslint:disable-next-line:typedef
   createBody(arg1?, arg2?) {
-    _ASSERT && common.assert(this.isLocked() == false);
+    _ASSERT && console.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return null;
     }
@@ -560,8 +560,8 @@ export default class World {
    * Warning: This function is locked during callbacks.
    */
   destroyBody(b: Body): boolean {
-    _ASSERT && common.assert(this.m_bodyCount > 0);
-    _ASSERT && common.assert(this.isLocked() == false);
+    _ASSERT && console.assert(this.m_bodyCount > 0);
+    _ASSERT && console.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return;
     }
@@ -637,9 +637,9 @@ export default class World {
    * Warning: This function is locked during callbacks.
    */
   createJoint<T extends Joint>(joint: T): T | null {
-    _ASSERT && common.assert(!!joint.m_bodyA);
-    _ASSERT && common.assert(!!joint.m_bodyB);
-    _ASSERT && common.assert(this.isLocked() == false);
+    _ASSERT && console.assert(!!joint.m_bodyA);
+    _ASSERT && console.assert(!!joint.m_bodyB);
+    _ASSERT && console.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return null;
     }
@@ -691,7 +691,7 @@ export default class World {
    * Warning: This function is locked during callbacks.
    */
   destroyJoint(joint: Joint): void {
-    _ASSERT && common.assert(this.isLocked() == false);
+    _ASSERT && console.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return;
     }
@@ -749,7 +749,7 @@ export default class World {
     joint.m_edgeB.prev = null;
     joint.m_edgeB.next = null;
 
-    _ASSERT && common.assert(this.m_jointCount > 0);
+    _ASSERT && console.assert(this.m_jointCount > 0);
     --this.m_jointCount;
 
     // If the joint prevents collisions, then flag any contacts for filtering.

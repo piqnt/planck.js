@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-import common from '../../util/common';
-import options from '../../util/options';
-import Settings from '../../Settings';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { Settings } from '../../Settings';
+import { math as Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -93,7 +93,7 @@ const DEFAULTS = {
  * anchor points with static shapes to prevent one side from going to zero
  * length.
  */
-export default class PulleyJoint extends Joint {
+export class PulleyJoint extends Joint {
   static TYPE = 'pulley-joint' as const;
   // static MIN_PULLEY_LENGTH: number = 2.0; // TODO where this is used?
 
@@ -125,7 +125,7 @@ export default class PulleyJoint extends Joint {
   constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number);
   constructor(def: PulleyJointDef, bodyA?: Body, bodyB?: Body, groundA?: Vec2, groundB?: Vec2, anchorA?: Vec2, anchorB?: Vec2, ratio?: number) {
     // @ts-ignore
-    if (!(this instanceof PulleyJoint)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof PulleyJoint)) {
       return new PulleyJoint(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, ratio);
     }
 
@@ -143,7 +143,7 @@ export default class PulleyJoint extends Joint {
     this.m_lengthB = Math.isFinite(def.lengthB) ? def.lengthB : Vec2.distance(anchorB, groundB);
     this.m_ratio = Math.isFinite(ratio) ? ratio : def.ratio;
 
-    _ASSERT && common.assert(ratio > Math.EPSILON);
+    _ASSERT && console.assert(ratio > Math.EPSILON);
 
     this.m_constant = this.m_lengthA + this.m_ratio * this.m_lengthB;
 

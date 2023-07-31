@@ -1,16 +1,16 @@
 import { expect } from 'chai';
 
-import Vec2 from '../common/Vec2';
-import Transform from '../common/Transform';
-import Sweep from '../common/Sweep';
-import Circle from '../collision/shape/CircleShape';
-import TimeOfImpact, {TOIInput, TOIOutput} from '../collision/TimeOfImpact';
-import Distance, {SimplexCache, DistanceOutput, DistanceInput} from '../collision/Distance';
+import { Vec2 } from '../common/Vec2';
+import { Transform } from '../common/Transform';
+import { Sweep } from '../common/Sweep';
+import { CircleShape } from '../collision/shape/CircleShape';
+import { TimeOfImpact, TOIInput, TOIOutput } from '../collision/TimeOfImpact';
+import { Distance, SimplexCache, DistanceOutput, DistanceInput } from '../collision/Distance';
 
 describe('CCD', function(): void {
 
   it('Distance', function(): void {
-    var c1 = new Circle(1);
+    var c1 = new CircleShape(1);
 
     var input = new DistanceInput();
     input.proxyA.set(c1, 0);
@@ -40,7 +40,7 @@ describe('CCD', function(): void {
   });
 
   it('TimeOfImpact', function(): void {
-    var c1 = new Circle(1);
+    var c1 = new CircleShape(1);
 
     var input = new TOIInput();
     input.proxyA.set(c1, 0);

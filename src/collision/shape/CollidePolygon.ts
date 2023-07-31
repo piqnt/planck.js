@@ -22,15 +22,14 @@
  * SOFTWARE.
  */
 
-import common from '../../util/common';
-import Transform from '../../common/Transform';
-import Rot from '../../common/Rot';
-import Vec2 from '../../common/Vec2';
-import Settings from '../../Settings';
-import Manifold, { clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from '../Manifold';
-import Contact from '../../dynamics/Contact';
-import PolygonShape from './PolygonShape';
-import Fixture from "../../dynamics/Fixture";
+import { Transform } from '../../common/Transform';
+import { Rot } from '../../common/Rot';
+import { Vec2 } from '../../common/Vec2';
+import { Settings } from '../../Settings';
+import { Manifold, clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from '../Manifold';
+import { Contact } from '../../dynamics/Contact';
+import { PolygonShape } from './PolygonShape';
+import { Fixture } from "../../dynamics/Fixture";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -39,8 +38,8 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
 
 function PolygonContact(manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number): void {
-  _ASSERT && common.assert(fixtureA.getType() == PolygonShape.TYPE);
-  _ASSERT && common.assert(fixtureB.getType() == PolygonShape.TYPE);
+  _ASSERT && console.assert(fixtureA.getType() == PolygonShape.TYPE);
+  _ASSERT && console.assert(fixtureB.getType() == PolygonShape.TYPE);
   CollidePolygons(manifold, fixtureA.getShape() as PolygonShape, xfA, fixtureB.getShape() as PolygonShape, xfB);
 }
 
@@ -95,7 +94,7 @@ function findIncidentEdge(c: ClipVertex[], poly1: PolygonShape, xf1: Transform, 
   const vertices2 = poly2.m_vertices;
   const normals2 = poly2.m_normals;
 
-  _ASSERT && common.assert(0 <= edge1 && edge1 < poly1.m_count);
+  _ASSERT && console.assert(0 <= edge1 && edge1 < poly1.m_count);
 
   // Get the normal of the reference edge in poly2's frame.
   const normal1 = Rot.mulTVec2(xf2.q, Rot.mulVec2(xf1.q, normals1[edge1]));
@@ -143,7 +142,7 @@ const maxSeparation = {
  *
  * The normal points from 1 to 2
  */
-export function CollidePolygons(manifold: Manifold, polyA: PolygonShape, xfA: Transform, polyB: PolygonShape, xfB: Transform): void {
+export const CollidePolygons = function (manifold: Manifold, polyA: PolygonShape, xfA: Transform, polyB: PolygonShape, xfB: Transform): void {
   manifold.pointCount = 0;
   const totalRadius = polyA.m_radius + polyB.m_radius;
 

@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-import common from '../../util/common';
-import options from '../../util/options';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Mat22 from '../../common/Mat22';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { math as Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Mat22 } from '../../common/Mat22';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -74,7 +74,7 @@ const DEFAULTS = {
  *
  * @param anchor Anchor in global coordination.
  */
-export default class FrictionJoint extends Joint {
+export class FrictionJoint extends Joint {
   static TYPE = 'friction-joint' as const;
 
   /** @internal */ m_type: 'friction-joint';
@@ -104,7 +104,7 @@ export default class FrictionJoint extends Joint {
   constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
   constructor(def: FrictionJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2) {
     // @ts-ignore
-    if (!(this instanceof FrictionJoint)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof FrictionJoint)) {
       return new FrictionJoint(def, bodyA, bodyB, anchor);
     }
 
@@ -201,7 +201,7 @@ export default class FrictionJoint extends Joint {
    * Set the maximum friction force in N.
    */
   setMaxForce(force: number): void {
-    _ASSERT && common.assert(Math.isFinite(force) && force >= 0.0);
+    _ASSERT && console.assert(Math.isFinite(force) && force >= 0.0);
     this.m_maxForce = force;
   }
 
@@ -216,7 +216,7 @@ export default class FrictionJoint extends Joint {
    * Set the maximum friction torque in N*m.
    */
   setMaxTorque(torque: number): void {
-    _ASSERT && common.assert(Math.isFinite(torque) && torque >= 0.0);
+    _ASSERT && console.assert(Math.isFinite(torque) && torque >= 0.0);
     this.m_maxTorque = torque;
   }
 
