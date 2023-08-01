@@ -21,37 +21,37 @@
  * SOFTWARE.
  */
 
-planck.testbed('ConveyorBelt', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, -10));
+const { Vec2, Rot, Transform, World, Edge, Circle, Box, Polygon } = planck;
 
-  // Ground
-  var ground = world.createBody();
-  ground.createFixture(pl.Edge(Vec2(-20.0, 0.0), Vec2(20.0, 0.0)), 0.0);
+var world = new World(new Vec2(0, -10));
 
-  // Platform
-  var platform = world
-    .createBody(Vec2(-5.0, 5.0))
-    .createFixture(pl.Box(10.0, 0.5), {friction : 0.8});
+const testbed = planck.testbed();
+testbed.start(world);
 
-  // Boxes
-  for (var i = 0; i < 5; ++i) {
-    world.createDynamicBody(Vec2(-10.0 + 2.0 * i, 7.0))
-      .createFixture(pl.Box(0.5, 0.5), 20.0);
+// Ground
+var ground = world.createBody();
+ground.createFixture(new Edge(new Vec2(-20.0, 0.0), new Vec2(20.0, 0.0)), 0.0);
+
+// Platform
+var platform = world
+  .createBody(new Vec2(-5.0, 5.0))
+  .createFixture(new Box(10.0, 0.5), {friction : 0.8});
+
+// Boxes
+for (var i = 0; i < 5; ++i) {
+  world.createDynamicBody(new Vec2(-10.0 + 2.0 * i, 7.0))
+    .createFixture(new Box(0.5, 0.5), 20.0);
+}
+
+world.on('pre-solve', function(contact, oldManifold) {
+  var fixtureA = contact.getFixtureA();
+  var fixtureB = contact.getFixtureB();
+
+  if (fixtureA == platform) {
+    contact.setTangentSpeed(5.0);
   }
 
-  world.on('pre-solve', function(contact, oldManifold) {
-    var fixtureA = contact.getFixtureA();
-    var fixtureB = contact.getFixtureB();
-
-    if (fixtureA == platform) {
-      contact.setTangentSpeed(5.0);
-    }
-
-    if (fixtureB == platform) {
-      contact.setTangentSpeed(-5.0);
-    }
-  });
-
-  return world;
+  if (fixtureB == platform) {
+    contact.setTangentSpeed(-5.0);
+  }
 });

@@ -21,23 +21,23 @@
  * SOFTWARE.
  */
 
-planck.testbed('SphereStack', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, -10));
+const { World, Vec2, Edge, Circle } = planck;
 
-  var COUNT = 10;
-  var bodies = [];
+var world = new World(new Vec2(0, -10));
 
-  var ground = world.createBody();
-  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
+const testbed = planck.testbed();
+testbed.start(world);
 
-  var circle = pl.Circle(1.0);
+var COUNT = 10;
+var bodies = [];
 
-  for (var i = 0; i < COUNT; ++i) {
-    bodies[i] = world.createDynamicBody(Vec2(0.0, 4.0 + 3.0 * i));
-    bodies[i].createFixture(circle, 1.0);
-    bodies[i].setLinearVelocity(Vec2(0.0, -50.0));
-  }
+var ground = world.createBody();
+ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
-  return world;
-});
+var circle = new Circle(1.0);
+
+for (var i = 0; i < COUNT; ++i) {
+  bodies[i] = world.createDynamicBody(new Vec2(0.0, 4.0 + 3.0 * i));
+  bodies[i].createFixture(circle, 1.0);
+  bodies[i].setLinearVelocity(new Vec2(0.0, -50.0));
+}

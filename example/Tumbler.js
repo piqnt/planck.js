@@ -21,40 +21,38 @@
  * SOFTWARE.
  */
 
-planck.testbed('Tumbler', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = pl.World(Vec2(0, -10));
+const { World, Vec2, Box, RevoluteJoint, Math } = planck;
 
-  testbed.hz = 40;
+var world = new World(new Vec2(0, -10));
 
-  var COUNT = 200;
+const testbed = planck.testbed();
+testbed.start(world);
 
-  var ground = world.createBody();
+var COUNT = 200;
 
-  var container = world.createDynamicBody({
-    allowSleep: false,
-    position: Vec2(0, 10)
-  });
+var ground = world.createBody();
 
-  container.createFixture(pl.Box(0.5, 20, Vec2(20, 0), 0), 5);
-  container.createFixture(pl.Box(0.5, 20, Vec2(-20, 0), 0), 5);
-  container.createFixture(pl.Box(20, 0.5, Vec2(0, 20), 0), 5);
-  container.createFixture(pl.Box(20, 0.5, Vec2(0, -20), 0), 5);
-
-  world.createJoint(pl.RevoluteJoint({
-    motorSpeed: 0.08 * Math.PI,
-    maxMotorTorque: 1e8,
-    enableMotor: true,
-  }, ground, container, Vec2(0, 10)));
-
-  var shape = pl.Box(0.5, 0.5);
-  var count = 0;
-  while (count < COUNT) {
-    var body = world.createDynamicBody();
-    body.setPosition(Vec2(pl.Math.random(-10, 10), 10 + pl.Math.random(-10, 10)));
-    body.createFixture(shape, 1);
-    ++count;
-  }
-
-  return world;
+var container = world.createDynamicBody({
+  allowSleep: false,
+  position: new Vec2(0, 10)
 });
+
+container.createFixture(new Box(0.5, 20, new Vec2(20, 0), 0), 5);
+container.createFixture(new Box(0.5, 20, new Vec2(-20, 0), 0), 5);
+container.createFixture(new Box(20, 0.5, new Vec2(0, 20), 0), 5);
+container.createFixture(new Box(20, 0.5, new Vec2(0, -20), 0), 5);
+
+world.createJoint(new RevoluteJoint({
+  motorSpeed: 0.08 * Math.PI,
+  maxMotorTorque: 1e8,
+  enableMotor: true,
+}, ground, container, new Vec2(0, 10)));
+
+var shape = new Box(0.5, 0.5);
+var count = 0;
+while (count < COUNT) {
+  var body = world.createDynamicBody();
+  body.setPosition(new Vec2(Math.random(-10, 10), 10 + Math.random(-10, 10)));
+  body.createFixture(shape, 1);
+  ++count;
+}

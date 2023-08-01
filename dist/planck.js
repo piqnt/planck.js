@@ -14780,6 +14780,7 @@ var CollideEdgePolygon = function (manifold, edgeA, xfA, polygonB, xfB) {
     manifold.pointCount = pointCount;
 };
 
+var Math$1 = math;
 /** @deprecated Merged with main namespace */
 var internal = {
     CollidePolygons: CollidePolygons,
@@ -14794,6 +14795,7 @@ var internal = {
 
 var planck = /*#__PURE__*/Object.freeze({
     __proto__: null,
+    Math: Math$1,
     internal: internal,
     Serializer: Serializer,
     math: math,
@@ -14871,5 +14873,5 @@ var planck = /*#__PURE__*/Object.freeze({
     stats: stats
 });
 
-export { AABB, Body, Box, BoxShape, Chain, ChainShape, Circle, CircleShape, ClipVertex, CollideCircles, CollideEdgeCircle, CollideEdgePolygon, CollidePolygonCircle, CollidePolygons, Contact, ContactEdge, ContactFeature, ContactFeatureType, ContactID, Distance, DistanceInput, DistanceJoint, DistanceOutput, DistanceProxy, DynamicTree, Edge, EdgeShape, Fixture, FixtureProxy, FrictionJoint, GearJoint, Joint, JointEdge, Manifold, ManifoldPoint, ManifoldType, MassData, Mat22, Mat33, MotorJoint, MouseJoint, PointState, Polygon, PolygonShape, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, Rot, Serializer, Settings, Shape, SimplexCache, Sweep, TOIInput, TOIOutput, TOIOutputState, TimeOfImpact, Transform, TreeNode, Vec2, Vec3, VelocityConstraintPoint, WeldJoint, WheelJoint, World, WorldManifold, clipSegmentToLine, planck as default, getPointStates, internal, math, mixFriction, mixRestitution, stats, testOverlap };
+export { AABB, Body, Box, BoxShape, Chain, ChainShape, Circle, CircleShape, ClipVertex, CollideCircles, CollideEdgeCircle, CollideEdgePolygon, CollidePolygonCircle, CollidePolygons, Contact, ContactEdge, ContactFeature, ContactFeatureType, ContactID, Distance, DistanceInput, DistanceJoint, DistanceOutput, DistanceProxy, DynamicTree, Edge, EdgeShape, Fixture, FixtureProxy, FrictionJoint, GearJoint, Joint, JointEdge, Manifold, ManifoldPoint, ManifoldType, MassData, Mat22, Mat33, Math$1 as Math, MotorJoint, MouseJoint, PointState, Polygon, PolygonShape, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, Rot, Serializer, Settings, Shape, SimplexCache, Sweep, TOIInput, TOIOutput, TOIOutputState, TimeOfImpact, Transform, TreeNode, Vec2, Vec3, VelocityConstraintPoint, WeldJoint, WheelJoint, World, WorldManifold, clipSegmentToLine, planck as default, getPointStates, internal, math, mixFriction, mixRestitution, stats, testOverlap };
 //# sourceMappingURL=planck.js.map

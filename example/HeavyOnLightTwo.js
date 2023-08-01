@@ -21,38 +21,36 @@
  * SOFTWARE.
  */
 
-planck.testbed('HeavyOnLightTwo', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, -10));
+var { World, Vec2, Circle, Edge } = planck;
 
-  world.createBody().createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
+var world = new World(new Vec2(0, -10));
 
-  world.createDynamicBody(Vec2(0.0, 2.5)).createFixture(pl.Circle(0.5), 10.0);
+const testbed = planck.testbed();
+testbed.info('X: Add/Remove heavy circle');
+testbed.start(world);
 
-  world.createDynamicBody(Vec2(0.0, 3.5)).createFixture(pl.Circle(0.5), 10.0);
+world.createBody().createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
-  var heavy = null;
+world.createDynamicBody(new Vec2(0.0, 2.5)).createFixture(new Circle(0.5), 10.0);
 
-  function toggleHeavy() {
-    if (heavy) {
-      world.destroyBody(heavy);
-      heavy = null;
-    } else {
-      heavy = world.createDynamicBody(Vec2(0.0, 9.0));
-      heavy.createFixture(pl.Circle(5.0), 10.0);
-    }
+world.createDynamicBody(new Vec2(0.0, 3.5)).createFixture(new Circle(0.5), 10.0);
+
+var heavy = null;
+
+function toggleHeavy() {
+  if (heavy) {
+    world.destroyBody(heavy);
+    heavy = null;
+  } else {
+    heavy = world.createDynamicBody(new Vec2(0.0, 9.0));
+    heavy.createFixture(new Circle(5.0), 10.0);
   }
+}
 
-  testbed.keydown = function(code, char) {
-    switch (char) {
-    case 'X':
-      toggleHeavy();
-      break;
-    }
-  };
-
-
-  testbed.info('X: Add/Remove heavy circle');
-
-  return world;
-});
+testbed.keydown = function(code, char) {
+  switch (char) {
+  case 'X':
+    toggleHeavy();
+    break;
+  }
+};

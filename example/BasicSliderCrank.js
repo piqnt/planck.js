@@ -22,30 +22,31 @@
  */
 
 // A basic slider crank created for GDC tutorial: Understanding Constraints
-planck.testbed('BasicSliderCrank', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, -10));
 
-  var ground = world.createBody(Vec2(0.0, 17.0));
+const { Vec2, World, Edge, Circle, Box, Chain, Math, RevoluteJoint, PrismaticJoint } = planck;
 
-  // Define crank.
-  var crank = world.createDynamicBody(Vec2(-8.0, 20.0));
-  crank.createFixture(pl.Box(4.0, 1.0), 2.0);
-  world.createJoint(pl.RevoluteJoint({}, ground, crank, Vec2(-12.0, 20.0)));
+var world = new World(new Vec2(0, -10));
 
-  // Define connecting rod
-  var rod = world.createDynamicBody(Vec2(4.0, 20.0));
-  rod.createFixture(pl.Box(8.0, 1.0), 2.0);
-  world.createJoint(pl.RevoluteJoint({}, crank, rod, Vec2(-4.0, 20.0)));
+const testbed = planck.testbed();
+testbed.start(world);
 
-  // Define piston
-  var piston = world.createDynamicBody({
-    fixedRotation : true,
-    position : Vec2(12.0, 20.0)
-  });
-  piston.createFixture(pl.Box(3.0, 3.0), 2.0);
-  world.createJoint(pl.RevoluteJoint({}, rod, piston, Vec2(12.0, 20.0)));
-  world.createJoint(pl.PrismaticJoint({}, ground, piston, Vec2(12.0, 17.0), Vec2(1.0, 0.0)));
+var ground = world.createBody(new Vec2(0.0, 17.0));
 
-  return world;
+// Define crank.
+var crank = world.createDynamicBody(new Vec2(-8.0, 20.0));
+crank.createFixture(new Box(4.0, 1.0), 2.0);
+world.createJoint(new RevoluteJoint({}, ground, crank, new Vec2(-12.0, 20.0)));
+
+// Define connecting rod
+var rod = world.createDynamicBody(new Vec2(4.0, 20.0));
+rod.createFixture(new Box(8.0, 1.0), 2.0);
+world.createJoint(new RevoluteJoint({}, crank, rod, new Vec2(-4.0, 20.0)));
+
+// Define piston
+var piston = world.createDynamicBody({
+  fixedRotation : true,
+  position : new Vec2(12.0, 20.0)
 });
+piston.createFixture(new Box(3.0, 3.0), 2.0);
+world.createJoint(new RevoluteJoint({}, rod, piston, new Vec2(12.0, 20.0)));
+world.createJoint(new PrismaticJoint({}, ground, piston, new Vec2(12.0, 17.0), new Vec2(1.0, 0.0)));

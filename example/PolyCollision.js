@@ -21,65 +21,65 @@
  * SOFTWARE.
  */
 
-planck.testbed('PolyCollision', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2, Transform = pl.Transform;
-  var world = new pl.World(Vec2(0, -10));
+const { World, Vec2, Transform, Manifold, CollidePolygons, Box } = planck;
 
-  var polygonA = pl.Box(2, 4);
-  var transformA = pl.Transform(Vec2(0.0, 0.0), 0.0);
+var world = new World(new Vec2(0, -10));
 
-  var polygonB = pl.Box(5, 5);
-  var positionB = Vec2(5, 4);
-  var angleB = 1.9160721;
-  var transformB = pl.Transform(positionB, angleB);
+const testbed = planck.testbed();
+testbed.info('Use arrow keys to move and Z or X to rotate.');
+testbed.start(world);
 
-  testbed.step = function() {
-    var manifold = new pl.Manifold();
-    pl.CollidePolygons(manifold, polygonA, transformA, polygonB, transformB);
+var polygonA = new Box(2, 4);
+var transformA = new Transform(new Vec2(0.0, 0.0), 0.0);
 
-    var worldManifold = manifold.getWorldManifold(null, transformA, polygonA.getRadius(), transformB, polygonB.getRadius());
+var polygonB = new Box(5, 5);
+var positionB = new Vec2(5, 4);
+var angleB = 1.9160721;
+var transformB = new Transform(positionB, angleB);
 
-    testbed.status('point count', manifold.pointCount);
+testbed.step = function() {
+  var manifold = new Manifold();
+  new CollidePolygons(manifold, polygonA, transformA, polygonB, transformB);
 
-    var vA = polygonA.m_vertices.map(Transform.mulFn(transformA));
-    testbed.drawPolygon(vA, testbed.color(0.9, 0.9, 0.9));
+  var worldManifold = manifold.getWorldManifold(null, transformA, polygonA.getRadius(), transformB, polygonB.getRadius());
 
-    var vB = polygonB.m_vertices.map(Transform.mulFn(transformB));
-    testbed.drawPolygon(vB, testbed.color(0.9, 0.9, 0.9));
+  testbed.status('point count', manifold.pointCount);
 
-    for (var i = 0; i < manifold.pointCount; ++i) {
-      testbed.drawPoint(worldManifold.points[i], 4.0, testbed.color(0.9, 0.3, 0.3));
-    }
-  };
+  var vA = polygonA.m_vertices.map(Transform.mulFn(transformA));
+  testbed.drawPolygon(vA, testbed.color(0.9, 0.9, 0.9));
 
-  testbed.keydown = function() {
-    if (testbed.activeKeys['left']) {
-      positionB.x -= 0.2;
-    }
+  var vB = polygonB.m_vertices.map(Transform.mulFn(transformB));
+  testbed.drawPolygon(vB, testbed.color(0.9, 0.9, 0.9));
 
-    if (testbed.activeKeys['right']) {
-      positionB.x += 0.2;
-    }
+  for (var i = 0; i < manifold.pointCount; ++i) {
+    testbed.drawPoint(worldManifold.points[i], 4.0, testbed.color(0.9, 0.3, 0.3));
+  }
+};
 
-    if (testbed.activeKeys['down']) {
-      positionB.y -= 0.2;
-    }
+testbed.keydown = function() {
+  if (testbed.activeKeys['left']) {
+    positionB.x -= 0.2;
+  }
 
-    if (testbed.activeKeys['up']) {
-      positionB.y += 0.2;
-    }
+  if (testbed.activeKeys['right']) {
+    positionB.x += 0.2;
+  }
 
-    if (testbed.activeKeys['Z']) {
-      angleB += 0.2;
-    }
+  if (testbed.activeKeys['down']) {
+    positionB.y -= 0.2;
+  }
 
-    if (testbed.activeKeys['X']) {
-      angleB -= 0.2;
-    }
+  if (testbed.activeKeys['up']) {
+    positionB.y += 0.2;
+  }
 
-    transformB.set(positionB, angleB);
-  };
+  if (testbed.activeKeys['Z']) {
+    angleB += 0.2;
+  }
 
-  testbed.info('Use arrow keys to move and Z or X to rotate.')
-  return world;
-});
+  if (testbed.activeKeys['X']) {
+    angleB -= 0.2;
+  }
+
+  transformB.set(positionB, angleB);
+};

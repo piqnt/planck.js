@@ -25,6 +25,8 @@
 // NOTE: we are intentionally filtering one of the polygons, therefore
 // the ray will always miss one type of polygon.
 
+const { World, Vec2, Transform, RayCastInput, RayCastOutput, Edge, Circle, Polygon, Box, Math } = planck;
+
 // This callback finds the closest hit. Polygon 0 is filtered.
 var RayCastClosest = (function() {
   var def = {};
@@ -134,220 +136,215 @@ var RayCastMultiple = (function() {
   return def;
 })();
 
+const world = new World(new Vec2(0, -10));
 
-planck.testbed('Ray-Cast', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, -10));
+const testbed = planck.testbed();
+testbed.info("1-6: Drop new objects, Z: Change mode, X: Destroy an object");
+testbed.start(world);
 
-  var MAX_BODIES = 256;
+var MAX_BODIES = 256;
 
-  // mode
-  var CLOSEST = 1, ANY = 2, MULTIPLE = 3;
+// mode
+var CLOSEST = 1, ANY = 2, MULTIPLE = 3;
 
-  var bodies = [];
-  var shapes = [];
+var bodies = [];
+var shapes = [];
 
-  var angle = 0.0;
-  var mode = CLOSEST;
+var angle = 0.0;
+var mode = CLOSEST;
 
-  var ground = world.createBody();
-  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
+var ground = world.createBody();
+ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
-  shapes[0] = pl.Polygon([
-    Vec2(-0.5, 0.0),
-    Vec2(0.5, 0.0),
-    Vec2(0.0, 1.5)
-  ]);
-  shapes[1] = pl.Polygon([
-    Vec2(-0.1, 0.0),
-    Vec2(0.1, 0.0),
-    Vec2(0.0, 1.5)
-  ]);
+shapes[0] = new Polygon([
+  new Vec2(-0.5, 0.0),
+  new Vec2(0.5, 0.0),
+  new Vec2(0.0, 1.5)
+]);
+shapes[1] = new Polygon([
+  new Vec2(-0.1, 0.0),
+  new Vec2(0.1, 0.0),
+  new Vec2(0.0, 1.5)
+]);
 
-  var w = 1.0;
-  var b = w / (2.0 + Math.sqrt(2.0));
-  var s = Math.sqrt(2.0) * b;
+var w = 1.0;
+var b = w / (2.0 + Math.sqrt(2.0));
+var s = Math.sqrt(2.0) * b;
 
-  shapes[2] = pl.Polygon([
-    Vec2(0.5 * s, 0.0),
-    Vec2(0.5 * w, b),
-    Vec2(0.5 * w, b + s),
-    Vec2(0.5 * s, w),
-    Vec2(-0.5 * s, w),
-    Vec2(-0.5 * w, b + s),
-    Vec2(-0.5 * w, b),
-    Vec2(-0.5 * s, 0.0)
-  ]);
-  shapes[3] = pl.Box(0.5, 0.5);
+shapes[2] = new Polygon([
+  new Vec2(0.5 * s, 0.0),
+  new Vec2(0.5 * w, b),
+  new Vec2(0.5 * w, b + s),
+  new Vec2(0.5 * s, w),
+  new Vec2(-0.5 * s, w),
+  new Vec2(-0.5 * w, b + s),
+  new Vec2(-0.5 * w, b),
+  new Vec2(-0.5 * s, 0.0)
+]);
+shapes[3] = new Box(0.5, 0.5);
 
-  shapes[4] = pl.Circle(0.5);
-  shapes[5] = pl.Edge(Vec2(-1.0, 0.0), Vec2(1.0, 0.0));
+shapes[4] = new Circle(0.5);
+shapes[5] = new Edge(new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0));
 
-  function createBody(index) {
-    if (bodies.length > MAX_BODIES) {
-      world.destroyBody(bodies.shift());
-    }
-
-    var x = pl.Math.random(-10.0, 10.0);
-    var y = pl.Math.random(0.0, 20.0);
-
-    var bd = {};
-    bd.position = Vec2(x, y);
-    bd.angle = pl.Math.random(-Math.PI, Math.PI);
-    bd.userData = index;
-
-    if (index === 4) {
-      bd.angularDamping = 0.02;
-    }
-
-    var body = world.createBody(bd);
-
-    var shape = shapes[index % shapes.length];
-
-    body.createFixture(shape, {friction: 0.3});
-
-    bodies.push(body);
-  }
-
-
-  function destroyBody() {
+function createBody(index) {
+  if (bodies.length > MAX_BODIES) {
     world.destroyBody(bodies.shift());
   }
 
-  testbed.keydown = function(code, char) {
-    switch (char){
-      case 'Z':
-        if (mode === CLOSEST) {
-          mode = ANY;
-        } else if (mode === ANY) {
-          mode = MULTIPLE;
-        } else if (mode === MULTIPLE) {
-          mode = CLOSEST;
-        }
-        break;
-      case 'X':
-        destroyBody();
-        break;
-      case '1':
-        createBody(0);
-        break;
-      case '2':
-        createBody(1);
-        break;
-      case '3':
-        createBody(2);
-        break;
-      case '4':
-        createBody(3);
-        break;
-      case '5':
-        createBody(4);
-      case '6':
-        createBody(5);
-        break;
+  var x = Math.random(-10.0, 10.0);
+  var y = Math.random(0.0, 20.0);
+
+  var bd = {};
+  bd.position = new Vec2(x, y);
+  bd.angle = Math.random(-Math.PI, Math.PI);
+  bd.userData = index;
+
+  if (index === 4) {
+    bd.angularDamping = 0.02;
+  }
+
+  var body = world.createBody(bd);
+
+  var shape = shapes[index % shapes.length];
+
+  body.createFixture(shape, {friction: 0.3});
+
+  bodies.push(body);
+}
+
+function destroyBody() {
+  world.destroyBody(bodies.shift());
+}
+
+testbed.keydown = function(code, char) {
+  switch (char){
+    case 'Z':
+      if (mode === CLOSEST) {
+        mode = ANY;
+      } else if (mode === ANY) {
+        mode = MULTIPLE;
+      } else if (mode === MULTIPLE) {
+        mode = CLOSEST;
+      }
+      break;
+    case 'X':
+      destroyBody();
+      break;
+    case '1':
+      createBody(0);
+      break;
+    case '2':
+      createBody(1);
+      break;
+    case '3':
+      createBody(2);
+      break;
+    case '4':
+      createBody(3);
+      break;
+    case '5':
+      createBody(4);
+    case '6':
+      createBody(5);
+      break;
+  }
+
+  updateStatus()
+};
+
+function updateStatus() {
+  switch (mode) {
+    case CLOSEST:
+      testbed.status("Ray-cast mode", "closest - find closest fixture along the ray");
+      break;
+
+    case ANY:
+      testbed.status("Ray-cast mode", "any - check for obstruction");
+      break;
+
+    case MULTIPLE:
+      testbed.status("Ray-cast mode", "multiple - gather multiple fixtures");
+      break;
+  }
+}
+
+testbed.step = function() {
+  var advanceRay = true;
+
+  var L = 11.0;
+  var point1 = new Vec2(0.0, 10.0);
+  var d = new Vec2(L * Math.cos(angle), L * Math.sin(angle));
+  var point2 = Vec2.add(point1, d);
+
+  if (mode === CLOSEST) {
+    RayCastClosest.reset();
+    world.rayCast(point1, point2, RayCastClosest.callback);
+
+    if (RayCastClosest.hit) {
+      testbed.drawPoint(RayCastClosest.point, 5.0, testbed.color(0.4, 0.9, 0.4));
+      testbed.drawSegment(point1, RayCastClosest.point, testbed.color(0.8, 0.8, 0.8));
+      var head = Vec2.combine(1, RayCastClosest.point, 0.5, RayCastClosest.normal);
+      testbed.drawSegment(RayCastClosest.point, head, testbed.color(0.9, 0.9, 0.4));
+    } else {
+      testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));
     }
 
-    updateStatus()
-  };
+  } else if (mode === ANY) {
+    RayCastAny.reset();
+    world.rayCast(point1, point2, RayCastAny.callback);
 
-  function updateStatus() {
-    switch (mode) {
-      case CLOSEST:
-        testbed.status("Ray-cast mode", "closest - find closest fixture along the ray");
-        break;
+    if (RayCastAny.hit) {
+      testbed.drawPoint(RayCastAny.point, 5.0, testbed.color(0.4, 0.9, 0.4));
+      testbed.drawSegment(point1, RayCastAny.point, testbed.color(0.8, 0.8, 0.8));
+      var head = Vec2.combine(1, RayCastAny.point, 0.5, RayCastAny.normal);
+      testbed.drawSegment(RayCastAny.point, head, testbed.color(0.9, 0.9, 0.4));
+    } else {
+      testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));
+    }
 
-      case ANY:
-        testbed.status("Ray-cast mode", "any - check for obstruction");
-        break;
+  } else if (mode === MULTIPLE) {
+    RayCastMultiple.reset();
+    world.rayCast(point1, point2, RayCastMultiple.callback);
+    testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));
 
-      case MULTIPLE:
-        testbed.status("Ray-cast mode", "multiple - gather multiple fixtures");
-        break;
+    for (var i = 0; i < RayCastMultiple.points.length; ++i) {
+      var p = RayCastMultiple.points[i];
+      var n = RayCastMultiple.normals[i];
+      testbed.drawPoint(p, 5.0, testbed.color(0.4, 0.9, 0.4));
+      testbed.drawSegment(point1, p, testbed.color(0.8, 0.8, 0.8));
+      var head = Vec2.combine(1, p, 0.5, n);
+      testbed.drawSegment(p, head, testbed.color(0.9, 0.9, 0.4));
     }
   }
 
-  testbed.info("1-6: Drop new objects, Z: Change mode, X: Destroy an object");
+  if (advanceRay) {
+    angle += 0.25 * Math.PI / 180.0;
+  }
 
-  testbed.step = function() {
-    var advanceRay = true;
+  if (0) {
+    // This case was failing.
+    var shape = new Box(22.875, 3.0);
 
-    var L = 11.0;
-    var point1 = Vec2(0.0, 10.0);
-    var d = Vec2(L * Math.cos(angle), L * Math.sin(angle));
-    var point2 = Vec2.add(point1, d);
+    var input = {}; // RayCastInput
+    input.p1 = new Vec2(10.2725, 1.71372);
+    input.p2 = new Vec2(10.2353, 2.21807);
+    // input.maxFraction = 0.567623;
+    input.maxFraction = 0.56762173;
 
-    if (mode === CLOSEST) {
-      RayCastClosest.reset();
-      world.rayCast(point1, point2, RayCastClosest.callback);
+    var xf = new Transform();
+    xf.setIdentity();
+    xf.position = new Vec2(23.0, 5.0);
 
-      if (RayCastClosest.hit) {
-        testbed.drawPoint(RayCastClosest.point, 5.0, testbed.color(0.4, 0.9, 0.4));
-        testbed.drawSegment(point1, RayCastClosest.point, testbed.color(0.8, 0.8, 0.8));
-        var head = Vec2.combine(1, RayCastClosest.point, 0.5, RayCastClosest.normal);
-        testbed.drawSegment(RayCastClosest.point, head, testbed.color(0.9, 0.9, 0.4));
-      } else {
-        testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));
-      }
+    var output = {}; // RayCastOutput
+    var hit = shape.rayCast(output, input, xf);
+    hit = false;
 
-    } else if (mode === ANY) {
-      RayCastAny.reset();
-      world.rayCast(point1, point2, RayCastAny.callback);
+    var color = testbed.color(1.0, 1.0, 1.0);
+    var vs = shape.vertices.map(Transform.mulFn(xf));
 
-      if (RayCastAny.hit) {
-        testbed.drawPoint(RayCastAny.point, 5.0, testbed.color(0.4, 0.9, 0.4));
-        testbed.drawSegment(point1, RayCastAny.point, testbed.color(0.8, 0.8, 0.8));
-        var head = Vec2.combine(1, RayCastAny.point, 0.5, RayCastAny.normal);
-        testbed.drawSegment(RayCastAny.point, head, testbed.color(0.9, 0.9, 0.4));
-      } else {
-        testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));
-      }
+    testbed.drawPolygon(vs, color);
+    testbed.drawSegment(input.p1, input.p2, color);
+  }
+};
 
-    } else if (mode === MULTIPLE) {
-      RayCastMultiple.reset();
-      world.rayCast(point1, point2, RayCastMultiple.callback);
-      testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));
-
-      for (var i = 0; i < RayCastMultiple.points.length; ++i) {
-        var p = RayCastMultiple.points[i];
-        var n = RayCastMultiple.normals[i];
-        testbed.drawPoint(p, 5.0, testbed.color(0.4, 0.9, 0.4));
-        testbed.drawSegment(point1, p, testbed.color(0.8, 0.8, 0.8));
-        var head = Vec2.combine(1, p, 0.5, n);
-        testbed.drawSegment(p, head, testbed.color(0.9, 0.9, 0.4));
-      }
-    }
-
-    if (advanceRay) {
-      angle += 0.25 * Math.PI / 180.0;
-    }
-
-    if (0) {
-      // This case was failing.
-      var shape = pl.Box(22.875, 3.0);
-
-      var input = {}; // RayCastInput
-      input.p1 = Vec2(10.2725, 1.71372);
-      input.p2 = Vec2(10.2353, 2.21807);
-      // input.maxFraction = 0.567623;
-      input.maxFraction = 0.56762173;
-
-      var xf = pl.Transform();
-      xf.setIdentity();
-      xf.position = Vec2(23.0, 5.0);
-
-      var output = {}; // RayCastOutput
-      var hit = shape.rayCast(output, input, xf);
-      hit = false;
-
-      var color = testbed.color(1.0, 1.0, 1.0);
-      var vs = shape.vertices.map(Transform.mulFn(xf));
-
-      testbed.drawPolygon(vs, color);
-      testbed.drawSegment(input.p1, input.p2, color);
-    }
-  };
-
-  updateStatus();
-
-  return world;
-});
+updateStatus();

@@ -21,53 +21,53 @@
  * SOFTWARE.
  */
 
-planck.testbed('Bridge', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, -4));
+const { Vec2, World, Edge, Box, Polygon, Circle, RevoluteJoint } = planck;
 
-  var COUNT = 30;
+var world = new World(new Vec2(0, -4));
 
-  var middle;
+const testbed = planck.testbed();
+testbed.start(world);
 
-  var ground = world.createBody();
-  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
+var COUNT = 30;
 
-  var bridgeRect = pl.Box(0.5, 0.125);
+var middle;
 
-  var bridgeFD = {
-    density: 20.0,
-    friction: 0.2
-  };
+var ground = world.createBody();
+ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
-  var prevBody = ground;
-  for (var i = 0; i < COUNT; ++i) {
-    var body = world.createDynamicBody(Vec2(-14.5 + 1.0 * i, 5.0));
-    body.createFixture(bridgeRect, bridgeFD);
+var bridgeRect = new Box(0.5, 0.125);
 
-    var anchor = Vec2(-15.0 + 1.0 * i, 5.0);
-    world.createJoint(pl.RevoluteJoint({}, prevBody, body, anchor));
+var bridgeFD = {
+  density: 20.0,
+  friction: 0.2
+};
 
-    if (i * 2 === COUNT) {
-      middle = body;
-    }
-    prevBody = body;
+var prevBody = ground;
+for (var i = 0; i < COUNT; ++i) {
+  var body = world.createDynamicBody(new Vec2(-14.5 + 1.0 * i, 5.0));
+  body.createFixture(bridgeRect, bridgeFD);
+
+  var anchor = new Vec2(-15.0 + 1.0 * i, 5.0);
+  world.createJoint(new RevoluteJoint({}, prevBody, body, anchor));
+
+  if (i * 2 === COUNT) {
+    middle = body;
   }
+  prevBody = body;
+}
 
-  var anchor = Vec2(-15.0 + 1.0 * COUNT, 5.0);
-  world.createJoint(pl.RevoluteJoint({}, prevBody, ground, anchor));
+var anchor = new Vec2(-15.0 + 1.0 * COUNT, 5.0);
+world.createJoint(new RevoluteJoint({}, prevBody, ground, anchor));
 
-  for (var i = 0; i < 2; ++i) {
-    var body = world.createDynamicBody(Vec2(-8.0 + 8.0 * i, 12.0));
+for (var i = 0; i < 2; ++i) {
+  var body = world.createDynamicBody(new Vec2(-8.0 + 8.0 * i, 12.0));
 
-    var vertices = [Vec2(-0.5, 0.0), Vec2(0.5, 0.0), Vec2(0.0, 1.5)];
-    body.createFixture(pl.Polygon(vertices), 1.0);
-  }
+  var vertices = [new Vec2(-0.5, 0.0), new Vec2(0.5, 0.0), new Vec2(0.0, 1.5)];
+  body.createFixture(new Polygon(vertices), 1.0);
+}
 
-  var shape = pl.Circle(0.5);
-  for (var i = 0; i < 3; ++i) {
-    var body = world.createDynamicBody(Vec2(-6.0 + 6.0 * i, 10.0));
-    body.createFixture(shape, 1.0);
-  }
-
-  return world;
-});
+var shape = new Circle(0.5);
+for (var i = 0; i < 3; ++i) {
+  var body = world.createDynamicBody(new Vec2(-6.0 + 6.0 * i, 10.0));
+  body.createFixture(shape, 1.0);
+}

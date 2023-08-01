@@ -14784,6 +14784,7 @@ var CollideEdgePolygon = function (manifold, edgeA, xfA, polygonB, xfB) {
     manifold.pointCount = pointCount;
 };
 
+var Math$1 = math;
 /** @deprecated Merged with main namespace */
 var internal = {
     CollidePolygons: CollidePolygons,
@@ -14798,6 +14799,7 @@ var internal = {
 
 var planck = /*#__PURE__*/Object.freeze({
     __proto__: null,
+    Math: Math$1,
     internal: internal,
     Serializer: Serializer,
     math: math,
@@ -14912,6 +14914,7 @@ exports.ManifoldPoint = ManifoldPoint;
 exports.MassData = MassData;
 exports.Mat22 = Mat22;
 exports.Mat33 = Mat33;
+exports.Math = Math$1;
 exports.MotorJoint = MotorJoint;
 exports.MouseJoint = MouseJoint;
 exports.Polygon = Polygon;

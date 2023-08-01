@@ -22,6 +22,48 @@
  * SOFTWARE.
  */
 
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    if (typeof b !== "function" && b !== null)
+        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => {
@@ -2771,48 +2813,6 @@ const Stage$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePrope
   string: string$1,
   texture
 }, Symbol.toStringTag, { value: "Module" }));
-
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-/* global Reflect, Promise */
-
-var extendStatics = function(d, b) {
-    extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-    return extendStatics(d, b);
-};
-
-function __extends(d, b) {
-    if (typeof b !== "function" && b !== null)
-        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-    extendStatics(d, b);
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-}
-
-var __assign = function() {
-    __assign = Object.assign || function __assign(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 
 var options = function (input, defaults) {
     if (input === null || typeof input === 'undefined') {
@@ -17530,6 +17530,7 @@ var CollideEdgePolygon = function (manifold, edgeA, xfA, polygonB, xfB) {
     manifold.pointCount = pointCount;
 };
 
+var Math$1 = math;
 /** @deprecated Merged with main namespace */
 var internal = {
     CollidePolygons: CollidePolygons,
@@ -17542,693 +17543,805 @@ var internal = {
     stats: stats
 };
 
-function testbed(opts, callback) {
-    if (typeof opts === 'function') {
-        callback = opts;
-        opts = null;
-    }
-    (function () {
-        var stage = Stage$1.mount();
-        var canvas = stage.dom;
-        stage.on(Stage$1.Mouse.START, function () {
-            window.focus();
-            // @ts-ignore
-            document.activeElement && document.activeElement.blur();
-            canvas.focus();
-        });
-        stage.MAX_ELAPSE = 1000 / 30;
-        // @ts-ignore
-        var testbed = {};
-        testbed.canvas = canvas;
-        var paused = false;
-        stage.on('resume', function () {
-            paused = false;
-            testbed._resume && testbed._resume();
-        });
-        stage.on('pause', function () {
-            paused = true;
-            testbed._pause && testbed._pause();
-        });
-        testbed.isPaused = function () {
-            return paused;
-        };
-        testbed.togglePause = function () {
-            paused ? testbed.resume() : testbed.pause();
-        };
-        testbed.pause = function () {
-            // @ts-ignore
-            stage.pause();
-        };
-        testbed.resume = function () {
-            // @ts-ignore
-            stage.resume();
-            testbed.focus();
-        };
-        testbed.focus = function () {
-            // @ts-ignore
-            document.activeElement && document.activeElement.blur();
-            canvas.focus();
-        };
-        testbed.width = 80;
-        testbed.height = 60;
-        testbed.x = 0;
-        testbed.y = -10;
-        testbed.scaleY = -1;
-        testbed.ratio = 16;
-        testbed.hz = 60;
-        testbed.speed = 1;
-        testbed.activeKeys = {};
-        testbed.background = '#222222';
-        testbed.findOne = function () {
-            // todo: implement
-            return null;
-        };
-        testbed.findAll = function () {
-            // todo: implement
-            return [];
-        };
-        var statusText = '';
-        var statusMap = {};
-        function statusSet(name, value) {
-            if (typeof value !== 'function' && typeof value !== 'object') {
-                statusMap[name] = value;
-            }
+var getStyle = function (obj) {
+    var _a, _b;
+    return (_b = (_a = obj['render']) !== null && _a !== void 0 ? _a : obj['style']) !== null && _b !== void 0 ? _b : {};
+};
+function findBody(world, point) {
+    var body = null;
+    var aabb = new AABB(point, point);
+    world.queryAABB(aabb, function (fixture) {
+        if (body) {
+            return false;
         }
-        function statusMerge(obj) {
-            // tslint:disable-next-line:no-for-in
-            for (var key in obj) {
-                statusSet(key, obj[key]);
-            }
+        if (!fixture.getBody().isDynamic() || !fixture.testPoint(point)) {
+            return false;
         }
-        testbed.status = function (a, b) {
-            if (typeof b !== 'undefined') {
-                statusSet(a, b);
-            }
-            else if (a && typeof a === 'object') {
-                statusMerge(a);
-            }
-            else if (typeof a === 'string') {
-                statusText = a;
-            }
-            testbed._status && testbed._status(statusText, statusMap);
+        body = fixture.getBody();
+        return true;
+    });
+    return body;
+}
+// status.innerText = '';
+// info.innerText = '';
+var Testbed = /** @class */ (function () {
+    function Testbed() {
+        // camera position
+        var _this = this;
+        /** World viewbox width. */
+        this.width = 80;
+        /** World viewbox height. */
+        this.height = 60;
+        /** World viewbox center vertical offset. */
+        this.x = 0;
+        /** World viewbox center horizontal offset. */
+        this.y = -10;
+        this.scaleY = -1;
+        /** World simulation step frequency */
+        this.hz = 60;
+        /** World simulation speed, default is 1 */
+        this.speed = 1;
+        this.ratio = 16;
+        this.background = '#222222';
+        this.activeKeys = {};
+        /** callback, to be implemented by user */
+        this.step = function (dt, t) {
+            return;
         };
-        testbed.info = function (text) {
-            testbed._info && testbed._info(text);
+        /** callback, to be implemented by user */
+        this.keydown = function (keyCode, label) {
+            return;
         };
-        var lastDrawHash = "";
-        var drawHash = "";
-        (function () {
+        /** callback, to be implemented by user */
+        this.keyup = function (keyCode, label) {
+            return;
+        };
+        this.paused = false;
+        this.lastDrawHash = "";
+        this.newDrawHash = "";
+        this.buffer = [];
+        this.start = function (world) {
+            var stage = _this.stage = Stage$1.mount();
+            var canvas = _this.canvas = stage.dom;
+            // eslint-disable-next-line @typescript-eslint/no-this-alias
+            var testbed = _this;
+            _this.canvas = canvas;
+            stage.on(Stage$1.Mouse.START, function () {
+                var _a;
+                window.focus();
+                // @ts-ignore
+                (_a = document.activeElement) === null || _a === void 0 ? void 0 : _a.blur();
+                canvas.focus();
+            });
+            stage.MAX_ELAPSE = 1000 / 30;
+            stage.on('resume', function () {
+                _this.paused = false;
+                _this._resume();
+            });
+            stage.on('pause', function () {
+                _this.paused = true;
+                _this._pause();
+            });
             var drawingTexture = new Stage$1.Texture();
-            stage.append(Stage$1.image(drawingTexture));
-            var buffer = [];
+            stage.append(Stage$1.sprite(drawingTexture));
             stage.tick(function () {
-                buffer.length = 0;
+                _this.buffer.length = 0;
             }, true);
             drawingTexture.draw = function (ctx) {
                 ctx.save();
-                ctx.transform(1, 0, 0, testbed.scaleY, -testbed.x, -testbed.y);
-                ctx.lineWidth = 2 / testbed.ratio;
+                ctx.transform(1, 0, 0, _this.scaleY, -_this.x, -_this.y);
+                ctx.lineWidth = 2 / _this.ratio;
                 ctx.lineCap = 'round';
-                for (var drawing = buffer.shift(); drawing; drawing = buffer.shift()) {
-                    drawing(ctx, testbed.ratio);
+                for (var drawing = _this.buffer.shift(); drawing; drawing = _this.buffer.shift()) {
+                    drawing(ctx, _this.ratio);
                 }
                 ctx.restore();
             };
-            testbed.drawPoint = function (p, r, color) {
-                buffer.push(function (ctx, ratio) {
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, 5 / ratio, 0, 2 * Math.PI);
-                    ctx.strokeStyle = color;
-                    ctx.stroke();
-                });
-                drawHash += "point" + p.x + ',' + p.y + ',' + r + ',' + color;
-            };
-            testbed.drawCircle = function (p, r, color) {
-                buffer.push(function (ctx) {
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, r, 0, 2 * Math.PI);
-                    ctx.strokeStyle = color;
-                    ctx.stroke();
-                });
-                drawHash += "circle" + p.x + ',' + p.y + ',' + r + ',' + color;
-            };
-            testbed.drawSegment = function (a, b, color) {
-                buffer.push(function (ctx) {
-                    ctx.beginPath();
-                    ctx.moveTo(a.x, a.y);
-                    ctx.lineTo(b.x, b.y);
-                    ctx.strokeStyle = color;
-                    ctx.stroke();
-                });
-                drawHash += "segment" + a.x + ',' + a.y + ',' + b.x + ',' + b.y + ',' + color;
-            };
-            testbed.drawPolygon = function (points, color) {
-                if (!points || !points.length) {
-                    return;
+            var worldNode = new PlanckStageNode(world, _this);
+            var lastX = 0;
+            var lastY = 0;
+            stage.tick(function (dt, t) {
+                // update camera position
+                if (lastX !== _this.x || lastY !== _this.y) {
+                    worldNode.offset(-_this.x, -_this.y);
+                    lastX = _this.x;
+                    lastY = _this.y;
                 }
-                buffer.push(function (ctx) {
-                    ctx.beginPath();
-                    ctx.moveTo(points[0].x, points[0].y);
-                    for (var i = 1; i < points.length; i++) {
-                        ctx.lineTo(points[i].x, points[i].y);
-                    }
-                    ctx.strokeStyle = color;
-                    ctx.closePath();
-                    ctx.stroke();
-                });
-                drawHash += "segment";
-                for (var i = 1; i < points.length; i++) {
-                    drawHash += points[i].x + ',' + points[i].y + ',';
+            });
+            worldNode.tick(function (dt, t) {
+                _this.step(dt, t);
+                if (targetBody) {
+                    _this.drawSegment(targetBody.getPosition(), mouseMove, 'rgba(255,255,255,0.2)');
                 }
-                drawHash += color;
-            };
-            testbed.drawAABB = function (aabb, color) {
-                buffer.push(function (ctx) {
-                    ctx.beginPath();
-                    ctx.moveTo(aabb.lowerBound.x, aabb.lowerBound.y);
-                    ctx.lineTo(aabb.upperBound.x, aabb.lowerBound.y);
-                    ctx.lineTo(aabb.upperBound.x, aabb.upperBound.y);
-                    ctx.lineTo(aabb.lowerBound.x, aabb.upperBound.y);
-                    ctx.strokeStyle = color;
-                    ctx.closePath();
-                    ctx.stroke();
-                });
-                drawHash += "aabb";
-                drawHash += aabb.lowerBound.x + ',' + aabb.lowerBound.y + ',';
-                drawHash += aabb.upperBound.x + ',' + aabb.upperBound.y + ',';
-                drawHash += color;
-            };
-            testbed.color = function (r, g, b) {
-                r = r * 256 | 0;
-                g = g * 256 | 0;
-                b = b * 256 | 0;
-                return 'rgb(' + r + ', ' + g + ', ' + b + ')';
-            };
-        })();
-        var world = callback(testbed);
-        var viewer = new Viewer(world, testbed);
-        var lastX = 0;
-        var lastY = 0;
-        stage.tick(function (dt, t) {
-            // update camera position
-            if (lastX !== testbed.x || lastY !== testbed.y) {
-                viewer.offset(-testbed.x, -testbed.y);
-                lastX = testbed.x;
-                lastY = testbed.y;
-            }
-        });
-        viewer.tick(function (dt, t) {
-            // call testbed step, if provided
-            if (typeof testbed.step === 'function') {
-                testbed.step(dt, t);
-            }
-            if (targetBody) {
-                testbed.drawSegment(targetBody.getPosition(), mouseMove, 'rgba(255,255,255,0.2)');
-            }
-            if (lastDrawHash !== drawHash) {
-                lastDrawHash = drawHash;
-                stage.touch();
-            }
-            drawHash = "";
-            return true;
-        });
-        // stage.empty();
-        stage.background(testbed.background);
-        stage.viewbox(testbed.width, testbed.height);
-        stage.pin('alignX', -0.5);
-        stage.pin('alignY', -0.5);
-        stage.prepend(viewer);
-        function findBody(point) {
-            var body;
-            var aabb = new AABB(point, point);
-            world.queryAABB(aabb, function (fixture) {
-                if (body) {
-                    return;
+                if (_this.lastDrawHash !== _this.newDrawHash) {
+                    _this.lastDrawHash = _this.newDrawHash;
+                    stage.touch();
                 }
-                if (!fixture.getBody().isDynamic() || !fixture.testPoint(point)) {
-                    return;
-                }
-                body = fixture.getBody();
+                _this.newDrawHash = "";
                 return true;
             });
-            return body;
-        }
-        var mouseGround = world.createBody();
-        var mouseJoint;
-        var targetBody;
-        var mouseMove = { x: 0, y: 0 };
-        viewer.attr('spy', true).on(Stage$1.Mouse.START, function (point) {
-            point = { x: point.x, y: testbed.scaleY * point.y };
-            if (targetBody) {
-                return;
-            }
-            var body = findBody(point);
-            if (!body) {
-                return;
-            }
-            if (testbed.mouseForce) {
-                targetBody = body;
-            }
-            else {
-                mouseJoint = new MouseJoint({ maxForce: 1000 }, mouseGround, body, Vec2.clone(point));
-                world.createJoint(mouseJoint);
-            }
-        }).on(Stage$1.Mouse.MOVE, function (point) {
-            point = { x: point.x, y: testbed.scaleY * point.y };
-            if (mouseJoint) {
-                mouseJoint.setTarget(point);
-            }
-            mouseMove.x = point.x;
-            mouseMove.y = point.y;
-        }).on(Stage$1.Mouse.END, function (point) {
-            point = { x: point.x, y: testbed.scaleY * point.y };
-            if (mouseJoint) {
-                world.destroyJoint(mouseJoint);
-                mouseJoint = null;
-            }
-            if (targetBody) {
-                var force = Vec2.sub(point, targetBody.getPosition());
-                targetBody.applyForceToCenter(force.mul(testbed.mouseForce), true);
-                targetBody = null;
-            }
-        }).on(Stage$1.Mouse.CANCEL, function (point) {
-            point = { x: point.x, y: testbed.scaleY * point.y };
-            if (mouseJoint) {
-                world.destroyJoint(mouseJoint);
-                mouseJoint = null;
-            }
-            if (targetBody) {
-                targetBody = null;
-            }
-        });
-        window.addEventListener("keydown", function (e) {
-            switch (e.keyCode) {
-                case 'P'.charCodeAt(0):
-                    testbed.togglePause();
-                    break;
-            }
-        }, false);
-        var downKeys = {};
-        window.addEventListener("keydown", function (e) {
-            var keyCode = e.keyCode;
-            downKeys[keyCode] = true;
-            updateActiveKeys(keyCode, true);
-            testbed.keydown && testbed.keydown(keyCode, String.fromCharCode(keyCode));
-        });
-        window.addEventListener("keyup", function (e) {
-            var keyCode = e.keyCode;
-            downKeys[keyCode] = false;
-            updateActiveKeys(keyCode, false);
-            testbed.keyup && testbed.keyup(keyCode, String.fromCharCode(keyCode));
-        });
-        var activeKeys = testbed.activeKeys;
-        function updateActiveKeys(keyCode, down) {
-            var char = String.fromCharCode(keyCode);
-            if (/\w/.test(char)) {
-                activeKeys[char] = down;
-            }
-            activeKeys.right = downKeys[39] || activeKeys['D'];
-            activeKeys.left = downKeys[37] || activeKeys['A'];
-            activeKeys.up = downKeys[38] || activeKeys['W'];
-            activeKeys.down = downKeys[40] || activeKeys['S'];
-            activeKeys.fire = downKeys[32] || downKeys[13];
-        }
-    })();
-}
-Viewer._super = Stage$1.Node;
-Viewer.prototype = Object.create(Viewer._super.prototype);
-function Viewer(world, opts) {
-    var _this = this;
-    Viewer._super.call(this);
-    this.label('Planck');
-    opts = opts || {};
-    this._options = {};
-    this._options.speed = opts.speed || 1;
-    this._options.hz = opts.hz || 60;
-    if (Math.abs(this._options.hz) < 1) {
-        this._options.hz = 1 / this._options.hz;
-    }
-    this._options.scaleY = opts.scaleY || -1;
-    this._options.ratio = opts.ratio || 16;
-    this._options.lineWidth = 2 / this._options.ratio;
-    this._world = world;
-    var timeStep = 1 / this._options.hz;
-    var elapsedTime = 0;
-    this.tick(function (dt) {
-        dt = dt * 0.001 * _this._options.speed;
-        elapsedTime += dt;
-        while (elapsedTime > timeStep) {
-            world.step(timeStep);
-            elapsedTime -= timeStep;
-        }
-        _this.renderWorld();
-        return true;
-    }, true);
-    world.on('remove-fixture', function (obj) {
-        obj.ui && obj.ui.remove();
-    });
-    world.on('remove-joint', function (obj) {
-        obj.ui && obj.ui.remove();
-    });
-}
-Viewer.prototype.renderWorld = function () {
-    var world = this._world;
-    var options = this._options;
-    var viewer = this;
-    for (var b = world.getBodyList(); b; b = b.getNext()) {
-        for (var f = b.getFixtureList(); f; f = f.getNext()) {
-            if (!f.ui) {
-                if (f.render && f.render.stroke) {
-                    options.strokeStyle = f.render.stroke;
+            // stage.empty();
+            stage.background(_this.background);
+            stage.viewbox(_this.width, _this.height);
+            stage.pin('alignX', -0.5);
+            stage.pin('alignY', -0.5);
+            stage.prepend(worldNode);
+            var mouseGround = world.createBody();
+            var mouseJoint = null;
+            var targetBody = null;
+            var mouseMove = { x: 0, y: 0 };
+            worldNode.attr('spy', true);
+            worldNode.on(Stage$1.Mouse.START, function (point) {
+                point = { x: point.x, y: testbed.scaleY * point.y };
+                if (targetBody) {
+                    return;
                 }
-                else if (b.render && b.render.stroke) {
-                    options.strokeStyle = b.render.stroke;
+                var body = findBody(world, point);
+                if (!body) {
+                    return;
                 }
-                else if (b.isDynamic()) {
-                    options.strokeStyle = 'rgba(255,255,255,0.9)';
-                }
-                else if (b.isKinematic()) {
-                    options.strokeStyle = 'rgba(255,255,255,0.7)';
-                }
-                else if (b.isStatic()) {
-                    options.strokeStyle = 'rgba(255,255,255,0.5)';
-                }
-                if (f.render && f.render.fill) {
-                    options.fillStyle = f.render.fill;
-                }
-                else if (b.render && b.render.fill) {
-                    options.fillStyle = b.render.fill;
+                if (_this.mouseForce) {
+                    targetBody = body;
                 }
                 else {
-                    options.fillStyle = '';
+                    mouseJoint = new MouseJoint({ maxForce: 1000 }, mouseGround, body, Vec2.clone(point));
+                    world.createJoint(mouseJoint);
                 }
-                var type = f.getType();
-                var shape = f.getShape();
-                if (type == 'circle') {
-                    f.ui = viewer.drawCircle(shape, options);
+            });
+            worldNode.on(Stage$1.Mouse.MOVE, function (point) {
+                point = { x: point.x, y: testbed.scaleY * point.y };
+                if (mouseJoint) {
+                    mouseJoint.setTarget(point);
                 }
-                if (type == 'edge') {
-                    f.ui = viewer.drawEdge(shape, options);
+                mouseMove.x = point.x;
+                mouseMove.y = point.y;
+            });
+            worldNode.on(Stage$1.Mouse.END, function (point) {
+                point = { x: point.x, y: testbed.scaleY * point.y };
+                if (mouseJoint) {
+                    world.destroyJoint(mouseJoint);
+                    mouseJoint = null;
                 }
-                if (type == 'polygon') {
-                    f.ui = viewer.drawPolygon(shape, options);
+                if (targetBody && _this.mouseForce) {
+                    var force = Vec2.sub(point, targetBody.getPosition());
+                    targetBody.applyForceToCenter(force.mul(_this.mouseForce), true);
+                    targetBody = null;
                 }
-                if (type == 'chain') {
-                    f.ui = viewer.drawChain(shape, options);
+            });
+            worldNode.on(Stage$1.Mouse.CANCEL, function (point) {
+                point = { x: point.x, y: testbed.scaleY * point.y };
+                if (mouseJoint) {
+                    world.destroyJoint(mouseJoint);
+                    mouseJoint = null;
                 }
-                if (f.ui) {
-                    f.ui.appendTo(viewer);
+                if (targetBody) {
+                    targetBody = null;
+                }
+            });
+            window.addEventListener("keydown", function (e) {
+                switch (e.keyCode) {
+                    case 'P'.charCodeAt(0):
+                        _this.togglePause();
+                        break;
+                }
+            }, false);
+            var activeKeys = testbed.activeKeys;
+            var downKeys = {};
+            function updateActiveKeys(keyCode, down) {
+                var char = String.fromCharCode(keyCode);
+                if (/\w/.test(char)) {
+                    activeKeys[char] = down;
+                }
+                activeKeys.right = downKeys[39] || activeKeys['D'];
+                activeKeys.left = downKeys[37] || activeKeys['A'];
+                activeKeys.up = downKeys[38] || activeKeys['W'];
+                activeKeys.down = downKeys[40] || activeKeys['S'];
+                activeKeys.fire = downKeys[32] || downKeys[13];
+            }
+            window.addEventListener("keydown", function (e) {
+                var keyCode = e.keyCode;
+                downKeys[keyCode] = true;
+                updateActiveKeys(keyCode, true);
+                testbed.keydown && testbed.keydown(keyCode, String.fromCharCode(keyCode));
+            });
+            window.addEventListener("keyup", function (e) {
+                var keyCode = e.keyCode;
+                downKeys[keyCode] = false;
+                updateActiveKeys(keyCode, false);
+                testbed.keyup && testbed.keyup(keyCode, String.fromCharCode(keyCode));
+            });
+            _this.resume();
+        };
+        /** @private @internal */
+        this.focus = function () {
+            // @ts-ignore
+            document.activeElement && document.activeElement.blur();
+            _this.canvas.focus();
+        };
+        /** @internal */
+        this._pause = function () {
+        };
+        /** @internal */
+        this._resume = function () {
+        };
+        /** @internal */
+        this._status = function (string) {
+        };
+        /** @internal */
+        this._info = function (text) {
+        };
+        /** @internal */
+        this.isPaused = function () {
+            return _this.paused;
+        };
+        /** @internal */
+        this.togglePause = function () {
+            _this.paused ? _this.resume() : _this.pause();
+        };
+        /** @internal */
+        this.pause = function () {
+            _this.stage.pause();
+        };
+        /** @internal */
+        this.resume = function () {
+            _this.stage.resume();
+            _this.focus();
+        };
+        this.statusText = '';
+        this.statusMap = {};
+        this.info = function (text) {
+            _this._info(text);
+        };
+        this.drawPoint = function (p, r, color) {
+            _this.buffer.push(function (ctx, ratio) {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 5 / ratio, 0, 2 * Math.PI);
+                ctx.strokeStyle = color;
+                ctx.stroke();
+            });
+            _this.newDrawHash += "point" + p.x + ',' + p.y + ',' + r + ',' + color;
+        };
+        this.drawCircle = function (p, r, color) {
+            _this.buffer.push(function (ctx) {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, r, 0, 2 * Math.PI);
+                ctx.strokeStyle = color;
+                ctx.stroke();
+            });
+            _this.newDrawHash += "circle" + p.x + ',' + p.y + ',' + r + ',' + color;
+        };
+        this.drawEdge = function (a, b, color) {
+            _this.buffer.push(function (ctx) {
+                ctx.beginPath();
+                ctx.moveTo(a.x, a.y);
+                ctx.lineTo(b.x, b.y);
+                ctx.strokeStyle = color;
+                ctx.stroke();
+            });
+            _this.newDrawHash += "segment" + a.x + ',' + a.y + ',' + b.x + ',' + b.y + ',' + color;
+        };
+        this.drawSegment = this.drawEdge;
+        this.drawPolygon = function (points, color) {
+            if (!points || !points.length) {
+                return;
+            }
+            _this.buffer.push(function (ctx) {
+                ctx.beginPath();
+                ctx.moveTo(points[0].x, points[0].y);
+                for (var i = 1; i < points.length; i++) {
+                    ctx.lineTo(points[i].x, points[i].y);
+                }
+                ctx.strokeStyle = color;
+                ctx.closePath();
+                ctx.stroke();
+            });
+            _this.newDrawHash += "segment";
+            for (var i = 1; i < points.length; i++) {
+                _this.newDrawHash += points[i].x + ',' + points[i].y + ',';
+            }
+            _this.newDrawHash += color;
+        };
+        this.drawAABB = function (aabb, color) {
+            _this.buffer.push(function (ctx) {
+                ctx.beginPath();
+                ctx.moveTo(aabb.lowerBound.x, aabb.lowerBound.y);
+                ctx.lineTo(aabb.upperBound.x, aabb.lowerBound.y);
+                ctx.lineTo(aabb.upperBound.x, aabb.upperBound.y);
+                ctx.lineTo(aabb.lowerBound.x, aabb.upperBound.y);
+                ctx.strokeStyle = color;
+                ctx.closePath();
+                ctx.stroke();
+            });
+            _this.newDrawHash += "aabb";
+            _this.newDrawHash += aabb.lowerBound.x + ',' + aabb.lowerBound.y + ',';
+            _this.newDrawHash += aabb.upperBound.x + ',' + aabb.upperBound.y + ',';
+            _this.newDrawHash += color;
+        };
+        this.color = function (r, g, b) {
+            r = r * 256 | 0;
+            g = g * 256 | 0;
+            b = b * 256 | 0;
+            return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+        };
+        this.findOne = function (query) {
+            // todo: implement
+            return null;
+        };
+        this.findAll = function (query) {
+            // todo: implement
+            return [];
+        };
+    }
+    Testbed.prototype.statusSet = function (name, value) {
+        if (typeof value !== 'function' && typeof value !== 'object') {
+            this.statusMap[name] = value;
+        }
+    };
+    Testbed.prototype.status = function (a, b) {
+        if (typeof b !== 'undefined') {
+            this.statusSet(a, b);
+        }
+        else if (a && typeof a === 'object') {
+            // tslint:disable-next-line:no-for-in
+            for (var key_1 in a) {
+                this.statusSet(key_1, a[key_1]);
+            }
+        }
+        else if (typeof a === 'string') {
+            this.statusText = a;
+        }
+        var newline = '\n';
+        var text = this.statusText || '';
+        for (var key in this.statusMap) {
+            var value = this.statusMap[key];
+            if (typeof value === 'function')
+                continue;
+            text += (text && newline) + key + ': ' + value;
+        }
+        this._status(text);
+    };
+    return Testbed;
+}());
+var PlanckStageNode = /** @class */ (function (_super) {
+    __extends(PlanckStageNode, _super);
+    function PlanckStageNode(world, opts) {
+        if (opts === void 0) { opts = {}; }
+        var _a, _b, _c, _d;
+        var _this = _super.call(this) || this;
+        _this.nodes = new WeakMap();
+        _this.options = {
+            speed: 1,
+            hz: 60,
+            scaleY: -1,
+            ratio: 16,
+            lineWidth: 1,
+            stroke: undefined,
+            fill: undefined
+        };
+        _this.renderWorld = function () {
+            var world = _this.world;
+            var options = _this.options;
+            // eslint-disable-next-line @typescript-eslint/no-this-alias
+            var viewer = _this;
+            for (var b = world.getBodyList(); b; b = b.getNext()) {
+                for (var f = b.getFixtureList(); f; f = f.getNext()) {
+                    var node = _this.nodes.get(f);
+                    var fstyle = getStyle(f);
+                    var bstyle = getStyle(b);
+                    if (!node) {
+                        if (fstyle && fstyle.stroke) {
+                            options.stroke = fstyle.stroke;
+                        }
+                        else if (bstyle && bstyle.stroke) {
+                            options.stroke = bstyle.stroke;
+                        }
+                        else if (b.isDynamic()) {
+                            options.stroke = 'rgba(255,255,255,0.9)';
+                        }
+                        else if (b.isKinematic()) {
+                            options.stroke = 'rgba(255,255,255,0.7)';
+                        }
+                        else if (b.isStatic()) {
+                            options.stroke = 'rgba(255,255,255,0.5)';
+                        }
+                        if (fstyle && fstyle.fill) {
+                            options.fill = fstyle.fill;
+                        }
+                        else if (bstyle && bstyle.fill) {
+                            options.fill = bstyle.fill;
+                        }
+                        else {
+                            options.fill = '';
+                        }
+                        var type = f.getType();
+                        var shape = f.getShape();
+                        if (type == 'circle') {
+                            node = viewer.drawCircle(shape, options);
+                        }
+                        if (type == 'edge') {
+                            node = viewer.drawEdge(shape, options);
+                        }
+                        if (type == 'polygon') {
+                            node = viewer.drawPolygon(shape, options);
+                        }
+                        if (type == 'chain') {
+                            node = viewer.drawChain(shape, options);
+                        }
+                        if (node) {
+                            node.appendTo(viewer);
+                            _this.nodes.set(f, node);
+                        }
+                    }
+                    if (node) {
+                        var p = b.getPosition();
+                        var r = b.getAngle();
+                        // @ts-ignore
+                        var isChanged = node.__lastX !== p.x || node.__lastY !== p.y || node.__lastR !== r;
+                        if (isChanged) {
+                            // @ts-ignore
+                            node.__lastX = p.x;
+                            // @ts-ignore
+                            node.__lastY = p.y;
+                            // @ts-ignore
+                            node.__lastR = r;
+                            node.offset(p.x, options.scaleY * p.y);
+                            node.rotate(options.scaleY * r);
+                        }
+                    }
                 }
             }
-            if (f.ui) {
-                var p = b.getPosition();
-                var r = b.getAngle();
-                if (f.ui.__lastX !== p.x || f.ui.__lastY !== p.y || f.ui.__lastR !== r) {
-                    f.ui.__lastX = p.x;
-                    f.ui.__lastY = p.y;
-                    f.ui.__lastR = r;
-                    f.ui.offset(p.x, options.scaleY * p.y);
-                    f.ui.rotate(options.scaleY * r);
+            for (var j = world.getJointList(); j; j = j.getNext()) {
+                var type = j.getType();
+                var a = j.getAnchorA();
+                var b = j.getAnchorB();
+                var node = _this.nodes.get(j);
+                if (!node) {
+                    options.stroke = 'rgba(255,255,255,0.2)';
+                    node = viewer.drawJoint(j, options);
+                    node.pin('handle', 0.5);
+                    node.appendTo(viewer);
+                    _this.nodes.set(j, node);
+                }
+                if (node) {
+                    var cx = (a.x + b.x) * 0.5;
+                    var cy = options.scaleY * (a.y + b.y) * 0.5;
+                    var dx = a.x - b.x;
+                    var dy = options.scaleY * (a.y - b.y);
+                    var d = Math.sqrt(dx * dx + dy * dy);
+                    node.width(d);
+                    node.rotate(Math.atan2(dy, dx));
+                    node.offset(cx, cy);
                 }
             }
-        }
-    }
-    for (var j = world.getJointList(); j; j = j.getNext()) {
-        var type = j.getType();
-        var a = j.getAnchorA();
-        var b = j.getAnchorB();
-        if (!j.ui) {
-            options.strokeStyle = 'rgba(255,255,255,0.2)';
-            j.ui = viewer.drawJoint(j, options);
-            j.ui.pin('handle', 0.5);
-            if (j.ui) {
-                j.ui.appendTo(viewer);
+        };
+        _this.drawJoint = function (joint, options) {
+            var lw = options.lineWidth;
+            var ratio = options.ratio;
+            var length = 10;
+            var texture = Stage$1.canvas(function (ctx) {
+                var _a;
+                // @ts-ignore
+                this.size(length + 2 * lw, 2 * lw, ratio);
+                ctx.scale(ratio, ratio);
+                ctx.beginPath();
+                ctx.moveTo(lw, lw);
+                ctx.lineTo(lw + length, lw);
+                ctx.lineCap = 'round';
+                ctx.lineWidth = options.lineWidth;
+                ctx.strokeStyle = (_a = options.stroke) !== null && _a !== void 0 ? _a : '';
+                ctx.stroke();
+            });
+            var image = Stage$1.sprite(texture).stretch();
+            return image;
+        };
+        _this.drawCircle = function (shape, options) {
+            var lw = options.lineWidth;
+            var ratio = options.ratio;
+            var r = shape.m_radius;
+            var cx = r + lw;
+            var cy = r + lw;
+            var w = r * 2 + lw * 2;
+            var h = r * 2 + lw * 2;
+            var texture = Stage$1.canvas(function (ctx) {
+                var _a;
+                // @ts-ignore
+                this.size(w, h, ratio);
+                ctx.scale(ratio, ratio);
+                ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+                if (options.fill) {
+                    ctx.fillStyle = options.fill;
+                    ctx.fill();
+                }
+                ctx.lineTo(cx, cy);
+                ctx.lineWidth = options.lineWidth;
+                ctx.strokeStyle = (_a = options.stroke) !== null && _a !== void 0 ? _a : '';
+                ctx.stroke();
+            });
+            var image = Stage$1.sprite(texture)
+                .offset(shape.m_p.x - cx, options.scaleY * shape.m_p.y - cy);
+            var node = Stage$1.create().append(image);
+            return node;
+        };
+        _this.drawEdge = function (edge, options) {
+            var lw = options.lineWidth;
+            var ratio = options.ratio;
+            var v1 = edge.m_vertex1;
+            var v2 = edge.m_vertex2;
+            var dx = v2.x - v1.x;
+            var dy = v2.y - v1.y;
+            var length = Math.sqrt(dx * dx + dy * dy);
+            var texture = Stage$1.canvas(function (ctx) {
+                var _a;
+                // @ts-ignore
+                this.size(length + 2 * lw, 2 * lw, ratio);
+                ctx.scale(ratio, ratio);
+                ctx.beginPath();
+                ctx.moveTo(lw, lw);
+                ctx.lineTo(lw + length, lw);
+                ctx.lineCap = 'round';
+                ctx.lineWidth = options.lineWidth;
+                ctx.strokeStyle = (_a = options.stroke) !== null && _a !== void 0 ? _a : '';
+                ctx.stroke();
+            });
+            var minX = Math.min(v1.x, v2.x);
+            var minY = Math.min(options.scaleY * v1.y, options.scaleY * v2.y);
+            var image = Stage$1.sprite(texture);
+            image.rotate(options.scaleY * Math.atan2(dy, dx));
+            image.offset(minX - lw, minY - lw);
+            var node = Stage$1.create().append(image);
+            return node;
+        };
+        _this.drawPolygon = function (shape, options) {
+            var lw = options.lineWidth;
+            var ratio = options.ratio;
+            var vertices = shape.m_vertices;
+            if (!vertices.length) {
+                return;
             }
+            var minX = Infinity;
+            var minY = Infinity;
+            var maxX = -Infinity;
+            var maxY = -Infinity;
+            for (var i = 0; i < vertices.length; ++i) {
+                var v = vertices[i];
+                minX = Math.min(minX, v.x);
+                maxX = Math.max(maxX, v.x);
+                minY = Math.min(minY, options.scaleY * v.y);
+                maxY = Math.max(maxY, options.scaleY * v.y);
+            }
+            var width = maxX - minX;
+            var height = maxY - minY;
+            var texture = Stage$1.canvas(function (ctx) {
+                var _a;
+                // @ts-ignore
+                this.size(width + 2 * lw, height + 2 * lw, ratio);
+                ctx.scale(ratio, ratio);
+                ctx.beginPath();
+                for (var i = 0; i < vertices.length; ++i) {
+                    var v = vertices[i];
+                    var x = v.x - minX + lw;
+                    var y = options.scaleY * v.y - minY + lw;
+                    if (i == 0)
+                        ctx.moveTo(x, y);
+                    else
+                        ctx.lineTo(x, y);
+                }
+                if (vertices.length > 2) {
+                    ctx.closePath();
+                }
+                if (options.fill) {
+                    ctx.fillStyle = options.fill;
+                    ctx.fill();
+                    ctx.closePath();
+                }
+                ctx.lineCap = 'round';
+                ctx.lineWidth = options.lineWidth;
+                ctx.strokeStyle = (_a = options.stroke) !== null && _a !== void 0 ? _a : '';
+                ctx.stroke();
+            });
+            var image = Stage$1.sprite(texture);
+            image.offset(minX - lw, minY - lw);
+            var node = Stage$1.create().append(image);
+            return node;
+        };
+        _this.drawChain = function (shape, options) {
+            var lw = options.lineWidth;
+            var ratio = options.ratio;
+            var vertices = shape.m_vertices;
+            if (!vertices.length) {
+                return;
+            }
+            var minX = Infinity;
+            var minY = Infinity;
+            var maxX = -Infinity;
+            var maxY = -Infinity;
+            for (var i = 0; i < vertices.length; ++i) {
+                var v = vertices[i];
+                minX = Math.min(minX, v.x);
+                maxX = Math.max(maxX, v.x);
+                minY = Math.min(minY, options.scaleY * v.y);
+                maxY = Math.max(maxY, options.scaleY * v.y);
+            }
+            var width = maxX - minX;
+            var height = maxY - minY;
+            var texture = Stage$1.canvas(function (ctx) {
+                var _a;
+                // @ts-ignore
+                this.size(width + 2 * lw, height + 2 * lw, ratio);
+                ctx.scale(ratio, ratio);
+                ctx.beginPath();
+                for (var i = 0; i < vertices.length; ++i) {
+                    var v = vertices[i];
+                    var x = v.x - minX + lw;
+                    var y = options.scaleY * v.y - minY + lw;
+                    if (i == 0)
+                        ctx.moveTo(x, y);
+                    else
+                        ctx.lineTo(x, y);
+                }
+                // TODO: if loop
+                if (vertices.length > 2) ;
+                if (options.fill) {
+                    ctx.fillStyle = options.fill;
+                    ctx.fill();
+                    ctx.closePath();
+                }
+                ctx.lineCap = 'round';
+                ctx.lineWidth = options.lineWidth;
+                ctx.strokeStyle = (_a = options.stroke) !== null && _a !== void 0 ? _a : '';
+                ctx.stroke();
+            });
+            var image = Stage$1.sprite(texture);
+            image.offset(minX - lw, minY - lw);
+            var node = Stage$1.create().append(image);
+            return node;
+        };
+        _this.label('Planck');
+        _this.options.speed = (_a = opts.speed) !== null && _a !== void 0 ? _a : _this.options.speed;
+        _this.options.hz = (_b = opts.hz) !== null && _b !== void 0 ? _b : _this.options.speed;
+        if (Math.abs(_this.options.hz) < 1) {
+            _this.options.hz = 1 / _this.options.hz;
         }
-        if (j.ui) {
-            var cx = (a.x + b.x) * 0.5;
-            var cy = options.scaleY * (a.y + b.y) * 0.5;
-            var dx = a.x - b.x;
-            var dy = options.scaleY * (a.y - b.y);
-            var d = Math.sqrt(dx * dx + dy * dy);
-            j.ui.width(d);
-            j.ui.rotate(Math.atan2(dy, dx));
-            j.ui.offset(cx, cy);
-        }
+        _this.options.scaleY = (_c = opts.scaleY) !== null && _c !== void 0 ? _c : _this.options.scaleY;
+        _this.options.ratio = (_d = opts.ratio) !== null && _d !== void 0 ? _d : _this.options.ratio;
+        _this.options.lineWidth = 2 / _this.options.ratio;
+        _this.world = world;
+        var timeStep = 1 / _this.options.hz;
+        var elapsedTime = 0;
+        var errored = false;
+        _this.tick(function (dt) {
+            if (errored) {
+                return false;
+            }
+            try {
+                dt = dt * 0.001 * _this.options.speed;
+                elapsedTime += dt;
+                while (elapsedTime > timeStep) {
+                    world.step(timeStep);
+                    elapsedTime -= timeStep;
+                }
+                _this.renderWorld();
+                return true;
+            }
+            catch (error) {
+                errored = true;
+                console.error(error);
+                return false;
+            }
+        }, true);
+        world.on('remove-fixture', function (obj) {
+            var _a;
+            (_a = _this.nodes.get(obj)) === null || _a === void 0 ? void 0 : _a.remove();
+        });
+        world.on('remove-joint', function (obj) {
+            var _a;
+            (_a = _this.nodes.get(obj)) === null || _a === void 0 ? void 0 : _a.remove();
+        });
+        return _this;
     }
-};
-Viewer.prototype.drawJoint = function (joint, options) {
-    var lw = options.lineWidth;
-    var ratio = options.ratio;
-    var length = 10;
-    var texture = Stage$1.canvas(function (ctx) {
-        this.size(length + 2 * lw, 2 * lw, ratio);
-        ctx.scale(ratio, ratio);
-        ctx.beginPath();
-        ctx.moveTo(lw, lw);
-        ctx.lineTo(lw + length, lw);
-        ctx.lineCap = 'round';
-        ctx.lineWidth = options.lineWidth;
-        ctx.strokeStyle = options.strokeStyle;
-        ctx.stroke();
-    });
-    var image = Stage$1.image(texture).stretch();
-    return image;
-};
-Viewer.prototype.drawCircle = function (shape, options) {
-    var lw = options.lineWidth;
-    var ratio = options.ratio;
-    var r = shape.m_radius;
-    var cx = r + lw;
-    var cy = r + lw;
-    var w = r * 2 + lw * 2;
-    var h = r * 2 + lw * 2;
-    var texture = Stage$1.canvas(function (ctx) {
-        this.size(w, h, ratio);
-        ctx.scale(ratio, ratio);
-        ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-        if (options.fillStyle) {
-            ctx.fillStyle = options.fillStyle;
-            ctx.fill();
-        }
-        ctx.lineTo(cx, cy);
-        ctx.lineWidth = options.lineWidth;
-        ctx.strokeStyle = options.strokeStyle;
-        ctx.stroke();
-    });
-    var image = Stage$1.image(texture)
-        .offset(shape.m_p.x - cx, options.scaleY * shape.m_p.y - cy);
-    var node = Stage$1.create().append(image);
-    return node;
-};
-Viewer.prototype.drawEdge = function (edge, options) {
-    var lw = options.lineWidth;
-    var ratio = options.ratio;
-    var v1 = edge.m_vertex1;
-    var v2 = edge.m_vertex2;
-    var dx = v2.x - v1.x;
-    var dy = v2.y - v1.y;
-    var length = Math.sqrt(dx * dx + dy * dy);
-    var texture = Stage$1.canvas(function (ctx) {
-        this.size(length + 2 * lw, 2 * lw, ratio);
-        ctx.scale(ratio, ratio);
-        ctx.beginPath();
-        ctx.moveTo(lw, lw);
-        ctx.lineTo(lw + length, lw);
-        ctx.lineCap = 'round';
-        ctx.lineWidth = options.lineWidth;
-        ctx.strokeStyle = options.strokeStyle;
-        ctx.stroke();
-    });
-    var minX = Math.min(v1.x, v2.x);
-    var minY = Math.min(options.scaleY * v1.y, options.scaleY * v2.y);
-    var image = Stage$1.image(texture);
-    image.rotate(options.scaleY * Math.atan2(dy, dx));
-    image.offset(minX - lw, minY - lw);
-    var node = Stage$1.create().append(image);
-    return node;
-};
-Viewer.prototype.drawPolygon = function (shape, options) {
-    var lw = options.lineWidth;
-    var ratio = options.ratio;
-    var vertices = shape.m_vertices;
-    if (!vertices.length) {
-        return;
+    return PlanckStageNode;
+}(Stage$1.Node));
+var tb = new Testbed();
+function testbed(a, b) {
+    var callback;
+    if (typeof a === 'function') {
+        callback = a;
     }
-    var minX = Infinity;
-    var minY = Infinity;
-    var maxX = -Infinity;
-    var maxY = -Infinity;
-    for (var i = 0; i < vertices.length; ++i) {
-        var v = vertices[i];
-        minX = Math.min(minX, v.x);
-        maxX = Math.max(maxX, v.x);
-        minY = Math.min(minY, options.scaleY * v.y);
-        maxY = Math.max(maxY, options.scaleY * v.y);
+    else if (typeof b === 'function') {
+        callback = b;
     }
-    var width = maxX - minX;
-    var height = maxY - minY;
-    var texture = Stage$1.canvas(function (ctx) {
-        this.size(width + 2 * lw, height + 2 * lw, ratio);
-        ctx.scale(ratio, ratio);
-        ctx.beginPath();
-        for (var i = 0; i < vertices.length; ++i) {
-            var v = vertices[i];
-            var x = v.x - minX + lw;
-            var y = options.scaleY * v.y - minY + lw;
-            if (i == 0)
-                ctx.moveTo(x, y);
-            else
-                ctx.lineTo(x, y);
-        }
-        if (vertices.length > 2) {
-            ctx.closePath();
-        }
-        if (options.fillStyle) {
-            ctx.fillStyle = options.fillStyle;
-            ctx.fill();
-            ctx.closePath();
-        }
-        ctx.lineCap = 'round';
-        ctx.lineWidth = options.lineWidth;
-        ctx.strokeStyle = options.strokeStyle;
-        ctx.stroke();
-    });
-    var image = Stage$1.image(texture);
-    image.offset(minX - lw, minY - lw);
-    var node = Stage$1.create().append(image);
-    return node;
-};
-Viewer.prototype.drawChain = function (shape, options) {
-    var lw = options.lineWidth;
-    var ratio = options.ratio;
-    var vertices = shape.m_vertices;
-    if (!vertices.length) {
-        return;
+    else ;
+    if (callback) {
+        // this is for backwards compatibility
+        var world = callback(tb);
+        tb.start(world);
     }
-    var minX = Infinity;
-    var minY = Infinity;
-    var maxX = -Infinity;
-    var maxY = -Infinity;
-    for (var i = 0; i < vertices.length; ++i) {
-        var v = vertices[i];
-        minX = Math.min(minX, v.x);
-        maxX = Math.max(maxX, v.x);
-        minY = Math.min(minY, options.scaleY * v.y);
-        maxY = Math.max(maxY, options.scaleY * v.y);
+    else {
+        return tb;
     }
-    var width = maxX - minX;
-    var height = maxY - minY;
-    var texture = Stage$1.canvas(function (ctx) {
-        this.size(width + 2 * lw, height + 2 * lw, ratio);
-        ctx.scale(ratio, ratio);
-        ctx.beginPath();
-        for (var i = 0; i < vertices.length; ++i) {
-            var v = vertices[i];
-            var x = v.x - minX + lw;
-            var y = options.scaleY * v.y - minY + lw;
-            if (i == 0)
-                ctx.moveTo(x, y);
-            else
-                ctx.lineTo(x, y);
-        }
-        // TODO: if loop
-        if (vertices.length > 2) ;
-        if (options.fillStyle) {
-            ctx.fillStyle = options.fillStyle;
-            ctx.fill();
-            ctx.closePath();
-        }
-        ctx.lineCap = 'round';
-        ctx.lineWidth = options.lineWidth;
-        ctx.strokeStyle = options.strokeStyle;
-        ctx.stroke();
-    });
-    var image = Stage$1.image(texture);
-    image.offset(minX - lw, minY - lw);
-    var node = Stage$1.create().append(image);
-    return node;
-};
+}
 
 var planck = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  testbed: testbed,
-  Serializer: Serializer,
-  math: math,
-  Vec2: Vec2,
-  Vec3: Vec3,
-  Mat22: Mat22,
-  Mat33: Mat33,
-  Transform: Transform,
-  Rot: Rot,
-  AABB: AABB,
-  Shape: Shape,
-  FixtureProxy: FixtureProxy,
-  Fixture: Fixture,
-  MassData: MassData,
-  Body: Body,
-  ContactEdge: ContactEdge,
-  mixFriction: mixFriction,
-  mixRestitution: mixRestitution,
-  VelocityConstraintPoint: VelocityConstraintPoint,
-  Contact: Contact,
-  JointEdge: JointEdge,
-  Joint: Joint,
-  World: World,
-  CircleShape: CircleShape,
-  Circle: Circle,
-  EdgeShape: EdgeShape,
-  Edge: Edge,
-  PolygonShape: PolygonShape,
-  Polygon: Polygon,
-  ChainShape: ChainShape,
-  Chain: Chain,
-  BoxShape: BoxShape,
-  Box: Box,
-  CollideCircles: CollideCircles,
-  CollideEdgeCircle: CollideEdgeCircle,
-  CollidePolygons: CollidePolygons,
-  CollidePolygonCircle: CollidePolygonCircle,
-  CollideEdgePolygon: CollideEdgePolygon,
-  DistanceJoint: DistanceJoint,
-  FrictionJoint: FrictionJoint,
-  GearJoint: GearJoint,
-  MotorJoint: MotorJoint,
-  MouseJoint: MouseJoint,
-  PrismaticJoint: PrismaticJoint,
-  PulleyJoint: PulleyJoint,
-  RevoluteJoint: RevoluteJoint,
-  RopeJoint: RopeJoint,
-  WeldJoint: WeldJoint,
-  WheelJoint: WheelJoint,
-  Settings: Settings,
-  Sweep: Sweep,
-  get ManifoldType () { return ManifoldType; },
-  get ContactFeatureType () { return ContactFeatureType; },
-  get PointState () { return PointState; },
-  ClipVertex: ClipVertex,
-  Manifold: Manifold,
-  ManifoldPoint: ManifoldPoint,
-  ContactID: ContactID,
-  ContactFeature: ContactFeature,
-  WorldManifold: WorldManifold,
-  getPointStates: getPointStates,
-  clipSegmentToLine: clipSegmentToLine,
-  DistanceInput: DistanceInput,
-  DistanceOutput: DistanceOutput,
-  SimplexCache: SimplexCache,
-  Distance: Distance,
-  DistanceProxy: DistanceProxy,
-  testOverlap: testOverlap,
-  TOIInput: TOIInput,
-  get TOIOutputState () { return TOIOutputState; },
-  TOIOutput: TOIOutput,
-  TimeOfImpact: TimeOfImpact,
-  TreeNode: TreeNode,
-  DynamicTree: DynamicTree,
-  stats: stats,
-  internal: internal
+    __proto__: null,
+    Testbed: Testbed,
+    testbed: testbed,
+    Serializer: Serializer,
+    math: math,
+    Vec2: Vec2,
+    Vec3: Vec3,
+    Mat22: Mat22,
+    Mat33: Mat33,
+    Transform: Transform,
+    Rot: Rot,
+    AABB: AABB,
+    Shape: Shape,
+    FixtureProxy: FixtureProxy,
+    Fixture: Fixture,
+    MassData: MassData,
+    Body: Body,
+    ContactEdge: ContactEdge,
+    mixFriction: mixFriction,
+    mixRestitution: mixRestitution,
+    VelocityConstraintPoint: VelocityConstraintPoint,
+    Contact: Contact,
+    JointEdge: JointEdge,
+    Joint: Joint,
+    World: World,
+    CircleShape: CircleShape,
+    Circle: Circle,
+    EdgeShape: EdgeShape,
+    Edge: Edge,
+    PolygonShape: PolygonShape,
+    Polygon: Polygon,
+    ChainShape: ChainShape,
+    Chain: Chain,
+    BoxShape: BoxShape,
+    Box: Box,
+    CollideCircles: CollideCircles,
+    CollideEdgeCircle: CollideEdgeCircle,
+    CollidePolygons: CollidePolygons,
+    CollidePolygonCircle: CollidePolygonCircle,
+    CollideEdgePolygon: CollideEdgePolygon,
+    DistanceJoint: DistanceJoint,
+    FrictionJoint: FrictionJoint,
+    GearJoint: GearJoint,
+    MotorJoint: MotorJoint,
+    MouseJoint: MouseJoint,
+    PrismaticJoint: PrismaticJoint,
+    PulleyJoint: PulleyJoint,
+    RevoluteJoint: RevoluteJoint,
+    RopeJoint: RopeJoint,
+    WeldJoint: WeldJoint,
+    WheelJoint: WheelJoint,
+    Settings: Settings,
+    Sweep: Sweep,
+    get ManifoldType () { return ManifoldType; },
+    get ContactFeatureType () { return ContactFeatureType; },
+    get PointState () { return PointState; },
+    ClipVertex: ClipVertex,
+    Manifold: Manifold,
+    ManifoldPoint: ManifoldPoint,
+    ContactID: ContactID,
+    ContactFeature: ContactFeature,
+    WorldManifold: WorldManifold,
+    getPointStates: getPointStates,
+    clipSegmentToLine: clipSegmentToLine,
+    DistanceInput: DistanceInput,
+    DistanceOutput: DistanceOutput,
+    SimplexCache: SimplexCache,
+    Distance: Distance,
+    DistanceProxy: DistanceProxy,
+    testOverlap: testOverlap,
+    TOIInput: TOIInput,
+    get TOIOutputState () { return TOIOutputState; },
+    TOIOutput: TOIOutput,
+    TimeOfImpact: TimeOfImpact,
+    TreeNode: TreeNode,
+    DynamicTree: DynamicTree,
+    stats: stats,
+    Math: Math$1,
+    internal: internal
 });
 
-export { AABB, Body, Box, BoxShape, Chain, ChainShape, Circle, CircleShape, ClipVertex, CollideCircles, CollideEdgeCircle, CollideEdgePolygon, CollidePolygonCircle, CollidePolygons, Contact, ContactEdge, ContactFeature, ContactFeatureType, ContactID, Distance, DistanceInput, DistanceJoint, DistanceOutput, DistanceProxy, DynamicTree, Edge, EdgeShape, Fixture, FixtureProxy, FrictionJoint, GearJoint, Joint, JointEdge, Manifold, ManifoldPoint, ManifoldType, MassData, Mat22, Mat33, MotorJoint, MouseJoint, PointState, Polygon, PolygonShape, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, Rot, Serializer, Settings, Shape, SimplexCache, Sweep, TOIInput, TOIOutput, TOIOutputState, TimeOfImpact, Transform, TreeNode, Vec2, Vec3, VelocityConstraintPoint, WeldJoint, WheelJoint, World, WorldManifold, clipSegmentToLine, planck as default, getPointStates, internal, math, mixFriction, mixRestitution, stats, testOverlap, testbed };
+export { AABB, Body, Box, BoxShape, Chain, ChainShape, Circle, CircleShape, ClipVertex, CollideCircles, CollideEdgeCircle, CollideEdgePolygon, CollidePolygonCircle, CollidePolygons, Contact, ContactEdge, ContactFeature, ContactFeatureType, ContactID, Distance, DistanceInput, DistanceJoint, DistanceOutput, DistanceProxy, DynamicTree, Edge, EdgeShape, Fixture, FixtureProxy, FrictionJoint, GearJoint, Joint, JointEdge, Manifold, ManifoldPoint, ManifoldType, MassData, Mat22, Mat33, Math$1 as Math, MotorJoint, MouseJoint, PointState, Polygon, PolygonShape, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, Rot, Serializer, Settings, Shape, SimplexCache, Sweep, TOIInput, TOIOutput, TOIOutputState, Testbed, TimeOfImpact, Transform, TreeNode, Vec2, Vec3, VelocityConstraintPoint, WeldJoint, WheelJoint, World, WorldManifold, clipSegmentToLine, planck as default, getPointStates, internal, math, mixFriction, mixRestitution, stats, testOverlap, testbed };
 //# sourceMappingURL=planck-with-testbed.js.map
