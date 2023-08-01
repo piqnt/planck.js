@@ -22,11 +22,10 @@
  * SOFTWARE.
  */
 
-import common from '../util/common';
-import Vec2 from '../common/Vec2';
-import Math from '../common/Math';
-import AABB, { RayCastCallback, RayCastInput } from './AABB';
-import DynamicTree, { DynamicTreeQueryCallback } from './DynamicTree';
+import { Vec2 } from '../common/Vec2';
+import { math as Math } from '../common/Math';
+import { AABB, RayCastCallback, RayCastInput } from './AABB';
+import { DynamicTree, DynamicTreeQueryCallback } from './DynamicTree';
 import { FixtureProxy } from "../dynamics/Fixture";
 
 
@@ -37,7 +36,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * The broad-phase wraps and extends a dynamic-tree to keep track of moved
  * objects and query them on update.
  */
-export default class BroadPhase {
+export class BroadPhase {
   m_tree: DynamicTree<FixtureProxy> = new DynamicTree<FixtureProxy>();
   m_proxyCount: number = 0;
   m_moveBuffer: number[] = [];
@@ -133,7 +132,7 @@ export default class BroadPhase {
    * is called.
    */
   createProxy(aabb: AABB, userData: FixtureProxy): number {
-    _ASSERT && common.assert(AABB.isValid(aabb));
+    _ASSERT && console.assert(AABB.isValid(aabb));
     const proxyId = this.m_tree.createProxy(aabb, userData);
     this.m_proxyCount++;
     this.bufferMove(proxyId);
@@ -154,7 +153,7 @@ export default class BroadPhase {
    * UpdatePairs to finalized the proxy pairs (for your time step).
    */
   moveProxy(proxyId: number, aabb: AABB, displacement: Vec2): void {
-    _ASSERT && common.assert(AABB.isValid(aabb));
+    _ASSERT && console.assert(AABB.isValid(aabb));
     const changed = this.m_tree.moveProxy(proxyId, aabb, displacement);
     if (changed) {
       this.bufferMove(proxyId);
@@ -185,7 +184,7 @@ export default class BroadPhase {
    * Update the pairs. This results in pair callbacks. This can only add pairs.
    */
   updatePairs(addPairCallback: (userDataA: FixtureProxy, userDataB: FixtureProxy) => void): void {
-    _ASSERT && common.assert(typeof addPairCallback === 'function');
+    _ASSERT && console.assert(typeof addPairCallback === 'function');
     this.m_callback = addPairCallback;
 
     // Perform tree queries for all moving proxies.

@@ -22,22 +22,29 @@
  * SOFTWARE.
  */
 
-import Settings from '../../Settings';
-import Shape from '../Shape';
-import Transform from '../../common/Transform';
-import Rot from '../../common/Rot';
-import Vec2 from '../../common/Vec2';
-import AABB, { RayCastInput, RayCastOutput } from '../AABB';
+import { Settings } from '../../Settings';
+import { Shape } from '../Shape';
+import { Transform } from '../../common/Transform';
+import { Rot } from '../../common/Rot';
+import { Vec2, Vec2Value } from '../../common/Vec2';
+import { AABB, RayCastInput, RayCastOutput } from '../AABB';
 import { MassData } from '../../dynamics/Body';
 import { DistanceProxy } from '../Distance';
+
+
+const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+
 
 /**
  * A line segment (edge) shape. These can be connected in chains or loops to
  * other edge shapes. The connectivity information is used to ensure correct
  * contact normals.
  */
-export default class EdgeShape extends Shape {
+export class EdgeShape extends Shape {
   static TYPE = 'edge' as const;
+  m_type: 'edge';
+
+  m_radius: number;
 
   // These are the edge vertices
   m_vertex1: Vec2;
@@ -50,9 +57,9 @@ export default class EdgeShape extends Shape {
   m_hasVertex0: boolean;
   m_hasVertex3: boolean;
 
-  constructor(v1?: Vec2, v2?: Vec2) {
+  constructor(v1?: Vec2Value, v2?: Vec2Value) {
     // @ts-ignore
-    if (!(this instanceof EdgeShape)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof EdgeShape)) {
       return new EdgeShape(v1, v2);
     }
 
@@ -60,7 +67,6 @@ export default class EdgeShape extends Shape {
 
     this.m_type = EdgeShape.TYPE;
     this.m_radius = Settings.polygonRadius;
-
 
     this.m_vertex1 = v1 ? Vec2.clone(v1) : Vec2.zero();
     this.m_vertex2 = v2 ? Vec2.clone(v2) : Vec2.zero();
@@ -96,6 +102,19 @@ export default class EdgeShape extends Shape {
       shape.setNextVertex(data.vertex3);
     }
     return shape;
+  }
+
+  /** @internal */
+  _reset(): void {
+    // noop
+  }
+
+  getRadius(): number {
+    return this.m_radius;
+  }
+
+  getType(): 'edge' {
+    return this.m_type;
   }
 
   /** @internal @deprecated */
@@ -194,7 +213,7 @@ export default class EdgeShape extends Shape {
    * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
-  testPoint(xf: Transform, p: Vec2): false {
+  testPoint(xf: Transform, p: Vec2Value): false {
     return false;
   }
 
@@ -299,5 +318,6 @@ export default class EdgeShape extends Shape {
     proxy.m_count = 2;
     proxy.m_radius = this.m_radius;
   }
-
 }
+
+export const Edge = EdgeShape;

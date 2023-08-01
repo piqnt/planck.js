@@ -22,20 +22,20 @@
  * SOFTWARE.
  */
 
-import common from '../../util/common';
-import options from '../../util/options';
-import Settings from '../../Settings';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
-import RevoluteJoint from './RevoluteJoint';
-import PrismaticJoint from './PrismaticJoint';
+import { options } from '../../util/options';
+import { Settings } from '../../Settings';
+import { math as Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
+import { RevoluteJoint } from './RevoluteJoint';
+import { PrismaticJoint } from './PrismaticJoint';
 import { TimeStep } from "../Solver";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -78,7 +78,7 @@ const DEFAULTS = {
  * This definition requires two existing revolute or prismatic joints (any
  * combination will work).
  */
-export default class GearJoint extends Joint {
+export class GearJoint extends Joint {
   static TYPE = 'gear-joint' as const;
 
   /** @internal */ m_type: 'gear-joint';
@@ -125,7 +125,7 @@ export default class GearJoint extends Joint {
   constructor(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number);
   constructor(def: GearJointDef, bodyA?: Body, bodyB?: Body, joint1?: RevoluteJoint | PrismaticJoint, joint2?: RevoluteJoint | PrismaticJoint, ratio?: number) {
     // @ts-ignore
-    if (!(this instanceof GearJoint)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof GearJoint)) {
       return new GearJoint(def, bodyA, bodyB, joint1, joint2, ratio);
     }
 
@@ -136,9 +136,9 @@ export default class GearJoint extends Joint {
 
     this.m_type = GearJoint.TYPE;
 
-    _ASSERT && common.assert(joint1.m_type === RevoluteJoint.TYPE
+    _ASSERT && console.assert(joint1.m_type === RevoluteJoint.TYPE
         || joint1.m_type === PrismaticJoint.TYPE);
-    _ASSERT && common.assert(joint2.m_type === RevoluteJoint.TYPE
+    _ASSERT && console.assert(joint2.m_type === RevoluteJoint.TYPE
         || joint2.m_type === PrismaticJoint.TYPE);
 
     this.m_joint1 = joint1 ? joint1 : def.joint1;
@@ -284,7 +284,7 @@ export default class GearJoint extends Joint {
    * Set the gear ratio.
    */
   setRatio(ratio: number): void {
-    _ASSERT && common.assert(Math.isFinite(ratio));
+    _ASSERT && console.assert(Math.isFinite(ratio));
     this.m_ratio = ratio;
   }
 

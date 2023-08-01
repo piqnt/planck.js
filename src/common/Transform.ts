@@ -22,13 +22,12 @@
  * SOFTWARE.
  */
 
-import common from '../util/common';
-import Vec2 from './Vec2';
-import Rot from './Rot';
+import { Vec2, Vec2Value } from './Vec2';
+import { Rot } from './Rot';
 
 
-const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -36,15 +35,15 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * position and orientation of rigid frames. Initialize using a position vector
  * and a rotation.
  */
-export default class Transform {
+export class Transform {
   /** position */
   p: Vec2;
 
   /** rotation */
   q: Rot;
 
-  constructor(position?: Vec2, rotation?: number) {
-    if (!(this instanceof Transform)) {
+  constructor(position?: Vec2Value, rotation?: number) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof Transform)) {
       return new Transform(position, rotation);
     }
     this.p = Vec2.zero();
@@ -124,16 +123,12 @@ export default class Transform {
   }
 
   static assert(o: any): void {
-    if (!_ASSERT) return;
-    if (!Transform.isValid(o)) {
-      _DEBUG && common.debug(o);
-      throw new Error('Invalid Transform!');
-    }
+    _ASSERT && console.assert(!Transform.isValid(o), 'Invalid Transform!', o);
   }
 
-  static mul(a: Transform, b: Vec2): Vec2;
+  static mul(a: Transform, b: Vec2Value): Vec2;
   static mul(a: Transform, b: Transform): Transform;
-  // static mul(a: Transform, b: Vec2[]): Vec2[];
+  // static mul(a: Transform, b: Vec2Value[]): Vec2[];
   // static mul(a: Transform, b: Transform[]): Transform[];
   // tslint:disable-next-line:typedef
   static mul(a, b) {
@@ -153,7 +148,7 @@ export default class Transform {
     }
   }
 
-  static mulAll(a: Transform, b: Vec2[]): Vec2[];
+  static mulAll(a: Transform, b: Vec2Value[]): Vec2[];
   static mulAll(a: Transform, b: Transform[]): Transform[];
   // tslint:disable-next-line:typedef
   static mulAll(a: Transform, b) {
@@ -169,12 +164,12 @@ export default class Transform {
   // tslint:disable-next-line:typedef
   static mulFn(a: Transform) {
     _ASSERT && Transform.assert(a);
-    return function(b: Vec2): Vec2 {
+    return function(b: Vec2Value): Vec2 {
       return Transform.mul(a, b);
     };
   }
 
-  static mulVec2(a: Transform, b: Vec2): Vec2 {
+  static mulVec2(a: Transform, b: Vec2Value): Vec2 {
     _ASSERT && Transform.assert(a);
     _ASSERT && Vec2.assert(b);
     const x = (a.q.c * b.x - a.q.s * b.y) + a.p.x;
@@ -193,7 +188,7 @@ export default class Transform {
     return xf;
   }
 
-  static mulT(a: Transform, b: Vec2): Vec2;
+  static mulT(a: Transform, b: Vec2Value): Vec2;
   static mulT(a: Transform, b: Transform): Transform;
   // tslint:disable-next-line:typedef
   static mulT(a, b) {
@@ -205,7 +200,7 @@ export default class Transform {
     }
   }
 
-  static mulTVec2(a: Transform, b: Vec2): Vec2 {
+  static mulTVec2(a: Transform, b: Vec2Value): Vec2 {
     _ASSERT && Transform.assert(a);
     _ASSERT && Vec2.assert(b);
     const px = b.x - a.p.x;

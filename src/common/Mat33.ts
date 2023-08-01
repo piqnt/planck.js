@@ -22,19 +22,17 @@
  * SOFTWARE.
  */
 
-import common from '../util/common';
-import Vec2 from './Vec2';
-import Vec3 from './Vec3';
+import { Vec2 } from './Vec2';
+import { Vec3 } from './Vec3';
 
 
-const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
 /**
  * A 3-by-3 matrix. Stored in column-major order.
  */
-export default class Mat33 {
+export class Mat33 {
   ex: Vec3;
   ey: Vec3;
   ez: Vec3;
@@ -66,11 +64,7 @@ export default class Mat33 {
   }
 
   static assert(o: any): void {
-    if (!_ASSERT) return;
-    if (!Mat33.isValid(o)) {
-      _DEBUG && common.debug(o);
-      throw new Error('Invalid Mat33!');
-    }
+    _ASSERT && console.assert(!Mat33.isValid(o), 'Invalid Mat33!', o);
   }
 
   /**
@@ -194,7 +188,7 @@ export default class Mat33 {
       return Vec2.neo(x, y);
     }
 
-    _ASSERT && common.assert(false);
+    _ASSERT && console.assert(false);
   }
 
   static mulVec3(a: Mat33, b: Vec3): Vec3 {

@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 
-import Math from '../common/Math';
-import Vec2 from '../common/Vec2';
-import Vec3 from '../common/Vec3';
+import { math as Math } from '../common/Math';
+import { Vec2 } from '../common/Vec2';
+import { Vec3 } from '../common/Vec3';
 
 describe('Math', function(): void {
 

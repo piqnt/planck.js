@@ -22,13 +22,12 @@
  * SOFTWARE.
  */
 
-import common from '../util/common';
-import Math from '../common/Math';
-import Vec2 from '../common/Vec2';
+import { math as Math } from '../common/Math';
+import { Vec2, Vec2Value } from '../common/Vec2';
 
 
-const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -51,12 +50,12 @@ export interface RayCastOutput {
   fraction: number;
 }
 
-export default class AABB {
+export class AABB {
   lowerBound: Vec2;
   upperBound: Vec2;
 
-  constructor(lower?: Vec2, upper?: Vec2) {
-    if (!(this instanceof AABB)) {
+  constructor(lower?: Vec2Value, upper?: Vec2Value) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof AABB)) {
       return new AABB(lower, upper);
     }
 
@@ -88,11 +87,7 @@ export default class AABB {
   }
 
   static assert(o: any): void {
-    if (!_ASSERT) return;
-    if (!AABB.isValid(o)) {
-      _DEBUG && common.debug(o);
-      throw new Error('Invalid AABB!');
-    }
+    _ASSERT && console.assert(!AABB.isValid(o), 'Invalid AABB!', o);
   }
 
   /**
@@ -136,7 +131,7 @@ export default class AABB {
     this.upperBound.setNum(upperX, upperY);
   }
 
-  combinePoints(a: Vec2, b: Vec2): void {
+  combinePoints(a: Vec2Value, b: Vec2Value): void {
     this.lowerBound.setNum(Math.min(a.x, b.x), Math.min(a.y, b.y));
     this.upperBound.setNum(Math.max(a.x, b.x), Math.max(a.y, b.y));
   }

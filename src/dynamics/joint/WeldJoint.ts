@@ -22,16 +22,19 @@
  * SOFTWARE.
  */
 
-import options from '../../util/options';
-import Settings from '../../Settings';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Vec3 from '../../common/Vec3';
-import Mat33 from '../../common/Mat33';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { Settings } from '../../Settings';
+import { math as Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Vec3 } from '../../common/Vec3';
+import { Mat33 } from '../../common/Mat33';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
+
+
+const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -86,7 +89,7 @@ const DEFAULTS = {
  * A weld joint essentially glues two bodies together. A weld joint may distort
  * somewhat because the island constraint solver is approximate.
  */
-export default class WeldJoint extends Joint {
+export class WeldJoint extends Joint {
   static TYPE = 'weld-joint' as const
 
   /** @internal */ m_type: 'weld-joint';
@@ -117,7 +120,7 @@ export default class WeldJoint extends Joint {
   constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
   constructor(def: WeldJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2) {
     // @ts-ignore
-    if (!(this instanceof WeldJoint)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof WeldJoint)) {
       return new WeldJoint(def, bodyA, bodyB, anchor);
     }
 

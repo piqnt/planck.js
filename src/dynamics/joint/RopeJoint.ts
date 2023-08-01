@@ -22,14 +22,18 @@
  * SOFTWARE.
  */
 
-import options from '../../util/options';
-import Settings from '../../Settings';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { Settings } from '../../Settings';
+import { math as Math } from '../../common/Math';
+import { Vec2 } from '../../common/Vec2';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
+
+
+const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+
 
 const inactiveLimit = 0;
 const atLowerLimit = 1;
@@ -79,7 +83,7 @@ const DEFAULTS = {
  * sponginess, so I chose not to implement it that way. See {@link DistanceJoint} if you
  * want to dynamically control length.
  */
-export default class RopeJoint extends Joint {
+export class RopeJoint extends Joint {
   static TYPE = 'rope-joint' as const;
 
   /** @internal */ m_type: 'rope-joint';
@@ -108,7 +112,7 @@ export default class RopeJoint extends Joint {
   constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
   constructor(def: RopeJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2) {
     // @ts-ignore
-    if (!(this instanceof RopeJoint)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof RopeJoint)) {
       return new RopeJoint(def, bodyA, bodyB, anchor);
     }
 

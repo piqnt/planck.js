@@ -22,31 +22,33 @@
  * SOFTWARE.
  */
 
-import common from '../../util/common';
-import Math from '../../common/Math';
-import Rot from '../../common/Rot';
-import Vec2 from '../../common/Vec2';
-import Shape from '../Shape';
-import AABB, { RayCastInput, RayCastOutput } from '../AABB';
-import Transform from '../../common/Transform';
+import { math as Math } from '../../common/Math';
+import { Rot } from '../../common/Rot';
+import { Vec2, Vec2Value } from '../../common/Vec2';
+import { Shape } from '../Shape';
+import { AABB, RayCastInput, RayCastOutput } from '../AABB';
+import { Transform } from '../../common/Transform';
 import { MassData } from '../../dynamics/Body';
 import { DistanceProxy } from '../Distance';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
-export default class CircleShape extends Shape {
+export class CircleShape extends Shape {
   static TYPE = 'circle' as const;
+  m_type: 'circle';
 
   m_p: Vec2;
+  m_radius: number;
 
-  constructor(position: Vec2, radius?: number);
+  constructor(position: Vec2Value, radius?: number);
   constructor(radius?: number);
   // tslint:disable-next-line:typedef
   constructor(a, b?) {
     // @ts-ignore
-    if (!(this instanceof CircleShape)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof CircleShape)) {
       return new CircleShape(a, b);
     }
 
@@ -83,7 +85,15 @@ export default class CircleShape extends Shape {
     return new CircleShape(data.p, data.radius);
   }
 
-  // TODO: already defined in Shape
+  /** @internal */
+  _reset(): void {
+    // noop
+  }
+
+  getType(): 'circle' {
+    return this.m_type;
+  }
+
   getRadius(): number {
     return this.m_radius;
   }
@@ -93,7 +103,7 @@ export default class CircleShape extends Shape {
   }
 
   getVertex(index: 0): Vec2 {
-    _ASSERT && common.assert(index == 0);
+    _ASSERT && console.assert(index == 0);
     return this.m_p;
   }
 
@@ -125,7 +135,7 @@ export default class CircleShape extends Shape {
    * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
-  testPoint(xf: Transform, p: Vec2): boolean {
+  testPoint(xf: Transform, p: Vec2Value): boolean {
     const center = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
     const d = Vec2.sub(p, center);
     return Vec2.dot(d, d) <= this.m_radius * this.m_radius;
@@ -211,3 +221,5 @@ export default class CircleShape extends Shape {
   }
 
 }
+
+export const Circle = CircleShape;

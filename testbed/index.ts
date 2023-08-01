@@ -1,3 +1,7 @@
+import Stage from 'stage-js';
+
+export * from '../src/index';
+
 import {
   AABB,
   Body,
@@ -7,7 +11,6 @@ import {
   Vec2,
   World
 } from '../src/index';
-import { default as Stage } from 'stage-js/platform/web';
 
 export interface ActiveKeys {
   0?: boolean;
@@ -117,8 +120,9 @@ export function testbed(opts, callback?) {
     opts = null;
   }
 
-  Stage(function(stage, canvas) {
-
+  (function() {
+    const stage = Stage.mount();
+    const canvas = stage.dom;
     stage.on(Stage.Mouse.START, function() {
       window.focus();
       // @ts-ignore
@@ -126,7 +130,7 @@ export function testbed(opts, callback?) {
       canvas.focus();
     });
 
-    stage.MAX_ELAPSE = 1000 / 30;
+    (stage as any).MAX_ELAPSE = 1000 / 30;
 
     // @ts-ignore
     const testbed: Testbed = {};
@@ -148,9 +152,11 @@ export function testbed(opts, callback?) {
       paused ? testbed.resume() : testbed.pause();
     };
     testbed.pause = function() {
+      // @ts-ignore
       stage.pause();
     };
     testbed.resume = function() {
+      // @ts-ignore
       stage.resume();
       testbed.focus();
     };
@@ -461,12 +467,11 @@ export function testbed(opts, callback?) {
       activeKeys.down = downKeys[40] || activeKeys['S'];
       activeKeys.fire = downKeys[32] || downKeys[13] ;
     }
-
-  });
+  })();
 }
 
-Viewer._super = Stage;
-Viewer.prototype = Stage._create(Viewer._super.prototype);
+Viewer._super = Stage.Node;
+Viewer.prototype = Object.create(Viewer._super.prototype);
 
 function Viewer(world, opts) {
   Viewer._super.call(this);
@@ -820,111 +825,3 @@ Viewer.prototype.drawChain = function(shape, options) {
   const node = Stage.create().append(image);
   return node;
 };
-
-
-// Everything below this is copied from ../src/index.ts
-
-export { default as Serializer } from '../src/serializer/index';
-
-export { default as Math } from '../src/common/Math';
-export { default as Vec2 } from '../src/common/Vec2';
-export { default as Vec3 } from '../src/common/Vec3';
-export { default as Mat22 } from '../src/common/Mat22';
-export { default as Mat33 } from '../src/common/Mat33';
-export { default as Transform } from '../src/common/Transform';
-export { default as Rot } from '../src/common/Rot';
-
-export { default as AABB } from '../src/collision/AABB';
-
-export { default as Shape } from '../src/collision/Shape';
-export { default as Fixture } from '../src/dynamics/Fixture';
-export { default as Body } from '../src/dynamics/Body';
-export { default as Contact } from '../src/dynamics/Contact';
-export { default as Joint } from '../src/dynamics/Joint';
-export { default as World } from '../src/dynamics/World';
-
-export { default as Circle } from '../src/collision/shape/CircleShape';
-export { default as Edge } from '../src/collision/shape/EdgeShape';
-export { default as Polygon } from '../src/collision/shape/PolygonShape';
-export { default as Chain } from '../src/collision/shape/ChainShape';
-export { default as Box } from '../src/collision/shape/BoxShape';
-
-export { CollideCircles } from '../src/collision/shape/CollideCircle';
-export { CollideEdgeCircle } from '../src/collision/shape/CollideEdgeCircle';
-export { CollidePolygons } from '../src/collision/shape/CollidePolygon';
-export { CollidePolygonCircle } from '../src/collision/shape/CollideCirclePolygon';
-export { CollideEdgePolygon } from '../src/collision/shape/CollideEdgePolygon';
-
-export { default as DistanceJoint } from '../src/dynamics/joint/DistanceJoint';
-export { default as FrictionJoint } from '../src/dynamics/joint/FrictionJoint';
-export { default as GearJoint } from '../src/dynamics/joint/GearJoint';
-export { default as MotorJoint } from '../src/dynamics/joint/MotorJoint';
-export { default as MouseJoint } from '../src/dynamics/joint/MouseJoint';
-export { default as PrismaticJoint } from '../src/dynamics/joint/PrismaticJoint';
-export { default as PulleyJoint } from '../src/dynamics/joint/PulleyJoint';
-export { default as RevoluteJoint } from '../src/dynamics/joint/RevoluteJoint';
-export { default as RopeJoint } from '../src/dynamics/joint/RopeJoint';
-export { default as WeldJoint } from '../src/dynamics/joint/WeldJoint';
-export { default as WheelJoint } from '../src/dynamics/joint/WheelJoint';
-
-export { default as Settings } from '../src/Settings';
-
-export { default as Sweep } from '../src/common/Sweep';
-export { default as Manifold } from '../src/collision/Manifold';
-export { default as Distance } from '../src/collision/Distance';
-export { default as TimeOfImpact } from '../src/collision/TimeOfImpact';
-export { default as DynamicTree } from '../src/collision/DynamicTree';
-
-import Solver, { TimeStep } from '../src/dynamics/Solver';
-import { CollidePolygons } from '../src/collision/shape/CollidePolygon';
-import { default as Settings } from '../src/Settings';
-import { default as Sweep } from '../src/common/Sweep';
-import { default as Manifold } from '../src/collision/Manifold';
-import { default as Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache, testOverlap } from '../src/collision/Distance';
-import { default as TimeOfImpact, TOIInput, TOIOutput } from '../src/collision/TimeOfImpact';
-import { default as DynamicTree } from '../src/collision/DynamicTree';
-
-import { default as stats } from '../src/util/stats'; // todo: what to do with this?
-
-import { ContactImpulse } from '../src/dynamics/Solver';
-type _ContactImpulse = InstanceType<typeof ContactImpulse>;
-export type { _ContactImpulse as ContactImpulse }
-
-/** @deprecated Merged with main namespace */
-export const internal = {};
-
-// @ts-ignore
-internal.CollidePolygons = CollidePolygons;
-// @ts-ignore
-internal.Settings = Settings;
-// @ts-ignore
-internal.Sweep = Sweep;
-// @ts-ignore
-internal.Manifold = Manifold;
-// @ts-ignore
-internal.Distance = Distance;
-// @ts-ignore
-internal.TimeOfImpact = TimeOfImpact;
-// @ts-ignore
-internal.DynamicTree = DynamicTree;
-// @ts-ignore
-internal.stats = stats;
-
-// @ts-ignore
-Solver.TimeStep = TimeStep;
-
-// @ts-ignore
-Distance.testOverlap = testOverlap;
-// @ts-ignore
-Distance.Input = DistanceInput;
-// @ts-ignore
-Distance.Output = DistanceOutput;
-// @ts-ignore
-Distance.Proxy = DistanceProxy;
-// @ts-ignore
-Distance.Cache = SimplexCache;
-
-// @ts-ignore
-TimeOfImpact.Input = TOIInput;
-// @ts-ignore
-TimeOfImpact.Output = TOIOutput;

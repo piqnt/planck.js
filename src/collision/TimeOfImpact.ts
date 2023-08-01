@@ -22,23 +22,19 @@
  * SOFTWARE.
  */
 
-import Settings from '../Settings';
-
-import common from '../util/common';
-import stats from '../util/stats';
+import { Settings } from '../Settings';
+import { stats } from '../util/stats';
 import Timer from '../util/Timer';
+import { math as Math } from '../common/Math';
+import { Vec2 } from '../common/Vec2';
+import { Rot } from '../common/Rot';
+import { Sweep } from '../common/Sweep';
+import { Transform } from '../common/Transform';
 
-import Math from '../common/Math';
-import Vec2 from '../common/Vec2';
-import Rot from '../common/Rot';
-import Sweep from '../common/Sweep';
-import Transform from '../common/Transform';
-
-import Distance, { DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from './Distance';
+import { Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from './Distance';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
 
 /**
  * Input parameters for TimeOfImpact.
@@ -88,7 +84,7 @@ stats.toiMaxRootIters = 0;
  * CCD via the local separating axis method. This seeks progression by computing
  * the largest time at which separation is maintained.
  */
-export default function TimeOfImpact(output: TOIOutput, input: TOIInput): void {
+export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void {
   const timer = Timer.now();
 
   ++stats.toiCalls;
@@ -112,7 +108,7 @@ export default function TimeOfImpact(output: TOIOutput, input: TOIInput): void {
   const totalRadius = proxyA.m_radius + proxyB.m_radius;
   const target = Math.max(Settings.linearSlop, totalRadius - 3.0 * Settings.linearSlop);
   const tolerance = 0.25 * Settings.linearSlop;
-  _ASSERT && common.assert(target > tolerance);
+  _ASSERT && console.assert(target > tolerance);
 
   let t1 = 0.0;
   const k_maxIterations = Settings.maxTOIIterations;
@@ -325,7 +321,7 @@ class SeparationFunction {
     this.m_proxyA = proxyA;
     this.m_proxyB = proxyB;
     const count = cache.count;
-    _ASSERT && common.assert(0 < count && count < 3);
+    _ASSERT && console.assert(0 < count && count < 3);
 
     this.m_sweepA = sweepA;
     this.m_sweepB = sweepB;
@@ -457,7 +453,7 @@ class SeparationFunction {
       }
 
       default:
-        _ASSERT && common.assert(false);
+        _ASSERT && console.assert(false);
         if (find) {
           this.indexA = -1;
           this.indexB = -1;
@@ -474,3 +470,9 @@ class SeparationFunction {
     return this.compute(false, t);
   }
 }
+
+const separationFunction_reuse = new SeparationFunction();
+
+// legacy exports
+TimeOfImpact.Input = TOIInput;
+TimeOfImpact.Output = TOIOutput;

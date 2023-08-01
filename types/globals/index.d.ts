@@ -1,2 +1,2 @@
-declare const DEBUG: boolean;
+declare const CONSTRUCTOR_FACTORY: boolean;
 declare const ASSERT: boolean;
