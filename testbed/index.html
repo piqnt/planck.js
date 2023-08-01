@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=no, width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <link rel="stylesheet" href="/testbed/styles.css" />
+    <title>Testbed for Planck.js</title>
+  </head>
+  <body>
+    <div class="center">
+      <div class="header">
+        <table class="control">
+          <tr><td>
+          <a id="testbed-play" class="pause"><span class="pause">Pause</span><span class="play">Play</span></a>
+          </td><td>
+          <a id="testbed-reload">Reload</a>
+          </td><td>
+          <a id="testbed-prev">Prev</a>
+          </td><td>
+          <a id="testbed-next">Next</a>
+          </td><td>
+          <select id="testbed-select">
+            <option selected disabled hidden value=''>Select...</option>
+          </select>
+          </td></tr>
+        </table>
+        <h3 class="title">Planck.js</h3>
+      </div>
+      <canvas id="stage"></canvas>
+      <div class="output">
+        <div id="testbed-status"></div>
+        <div id="testbed-info"></div>          
+      </div>
+    </div>
+    <script type="module">
+      import planck from '/testbed/main';
+      window.planck = planck;
+      if (window.location.pathname.startsWith('/example/')) {
+        import(window.location.pathname);
+      }
+    </script>
+    <script type="module">
+      import list from '/example/list.json';
+      {
+        const testbed = planck.testbed();
+
+        const playButton = document.getElementById('testbed-play');
+        const statusElement = document.getElementById('testbed-status');
+        const infoElement = document.getElementById('testbed-info');
+        const reloadButton = document.getElementById('testbed-reload');
+        const exampleSelect = document.getElementById('testbed-select');
+        const nextButton = document.getElementById('testbed-next');
+        const prevButton = document.getElementById('testbed-prev') ;
+
+        playButton.addEventListener('click', () => {
+          testbed.isPaused() ? testbed.resume() : testbed.pause();
+        });
+
+        reloadButton.addEventListener('click', function() {
+          window.location.reload();
+        });
+
+        exampleSelect.addEventListener('change', function() {
+          window.location.href = this.options[exampleSelect.selectedIndex].value;
+        });
+
+        for (const example of list){
+          var opt = document.createElement('option');
+          opt.value = '/example/' + example;
+          opt.innerHTML = example;
+          opt.selected = opt.value === window.location.pathname;
+          exampleSelect.appendChild(opt);
+        }
+
+        nextButton.addEventListener('click', function() {
+          playNext(+1);
+        });
+
+        prevButton.addEventListener('click', function() {
+          playNext(-1);
+        });
+
+        function playNext(step) {
+          for (var i = 0; i < exampleSelect.options.length; i++) {
+            var index = (exampleSelect.selectedIndex + (1 + i) * step + exampleSelect.options.length) % exampleSelect.options.length;
+
+            var option = exampleSelect.options[index];
+            if (option && option.value) {
+              window.location.href = option.value;
+              break;
+            }
+          }
+        }
+
+        testbed._pause = () => {
+          playButton.classList.add('pause');
+          playButton.classList.remove('play');
+        };
+
+        testbed._resume = () => {
+          playButton.classList.add('play');
+          playButton.classList.remove('pause');
+        };
+
+        let lastStatus = '';
+        statusElement.innerText = lastStatus;
+        testbed._status = (text) => {
+          if (lastStatus === text) {
+            return;
+          }
+          lastStatus = text;
+          if (statusElement) {
+            statusElement.innerText = text;
+          }
+        };
+
+        let lastInfo = '';
+        infoElement.innerText = lastInfo;
+        testbed._info = (text) => {
+          if (lastInfo === text) {
+            return;
+          }
+          lastInfo = text;
+          if (infoElement) {
+            infoElement.innerText = text;
+          }
+        };
+      }
+    </script>
+  </body>
+</html>

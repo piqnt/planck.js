@@ -21,68 +21,66 @@
  * SOFTWARE.
  */
 
-planck.testbed('Rope', function(testbed) {
+const { Vec2, World } = planck;
 
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, -10));
+const testbed = planck.testbed();
 
-  testbed.info('Not implemented!');
-  return world;
+    var world = new World(new Vec2(0, -10));
 
-  var /* Rope */rope;
-  var /* float32 */angle;
+testbed.info('Not implemented!');
+testbed.start(world);
+testbed.info("Z/X to adjust target angle");
 
-  var N = 40;
-  var vertices = [];
-  var masses = [];
+var /* Rope */rope;
+var /* float32 */angle;
 
-  for (var i = 0; i < N; ++i) {
-    vertices[i].set(0.0, 20.0 - 0.25 * i);
-    masses[i] = 1.0;
+var N = 40;
+var vertices = [];
+var masses = [];
+
+for (var i = 0; i < N; ++i) {
+  vertices[i].set(0.0, 20.0 - 0.25 * i);
+  masses[i] = 1.0;
+}
+masses[0] = 0.0;
+masses[1] = 0.0;
+
+var def = {};
+def.vertices = vertices;
+def.count = N;
+def.gravity.set(0.0, -10.0);
+def.masses = masses;
+def.damping = 0.1;
+def.k2 = 1.0;
+def.k3 = 0.5;
+
+rope.initialize(def);
+
+angle = 0.0;
+rope.setAngle(angle);
+
+testbed.keydown = function(code, char) {
+  switch (char) {
+  case 'Z':
+    angle = Math.max(-Math.PI, angle - 0.05 * Math.PI);
+    rope.setAngle(angle);
+    break;
+
+  case 'X':
+    angle = Math.min(Math.PI, angle + 0.05 * Math.PI);
+    rope.setAngle(angle);
+    break;
   }
-  masses[0] = 0.0;
-  masses[1] = 0.0;
+};
 
-  var def = {};
-  def.vertices = vertices;
-  def.count = N;
-  def.gravity.set(0.0, -10.0);
-  def.masses = masses;
-  def.damping = 0.1;
-  def.k2 = 1.0;
-  def.k3 = 0.5;
+testbed.step = function(settings) {
+  var dt = settings.hz > 0.0 ? 1.0 / settings.hz : 0.0;
 
-  rope.initialize(def);
+  if (settings.pause == 1 && settings.singleStep == 0) {
+    dt = 0.0;
+  }
 
-  angle = 0.0;
-  rope.setAngle(angle);
+  rope.step(dt, 1);
 
-  testbed.keydown = function(code, char) {
-    switch (char) {
-    case 'Z':
-      angle = Math.max(-Math.PI, angle - 0.05 * Math.PI);
-      rope.setAngle(angle);
-      break;
-
-    case 'X':
-      angle = Math.min(Math.PI, angle + 0.05 * Math.PI);
-      rope.setAngle(angle);
-      break;
-    }
-  };
-
-  testbed.step = function(settings) {
-    var dt = settings.hz > 0.0 ? 1.0 / settings.hz : 0.0;
-
-    if (settings.pause == 1 && settings.singleStep == 0) {
-      dt = 0.0;
-    }
-
-    rope.step(dt, 1);
-
-    testbed.status('Target angle', (angle * 180.0 / Math.PI) + degrees );
-  };
-  testbed.info("Z/X to adjust target angle");
-
-  return world;
-});
+  testbed.status('Target angle', (angle * 180.0 / Math.PI) + degrees );
+};

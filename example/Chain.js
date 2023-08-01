@@ -21,31 +21,31 @@
  * SOFTWARE.
  */
 
-planck.testbed('Chain', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = pl.World(Vec2(0, -10));
+const { World, Vec2, Edge, Box, RevoluteJoint } = planck;
 
-  var ground = world.createBody();
-  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
+var world = new World(new Vec2(0, -10));
 
-  var shape = pl.Box(0.6, 0.125);
+const testbed = planck.testbed();
+testbed.start(world);
 
-  var y = 25.0;
-  var prevBody = ground;
-  for (var i = 0; i < 30; ++i) {
-    var body = world.createDynamicBody(Vec2(0.5 + i, y));
-    body.createFixture(shape, {
-      density: 20.0,
-      friction: 0.2,
-    });
+var ground = world.createBody();
+ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
-    var anchor = Vec2(i, y);
-    world.createJoint(pl.RevoluteJoint({
-      collideConnected: false,
-    }, prevBody, body, anchor));
+var shape = new Box(0.6, 0.125);
 
-    prevBody = body;
-  }
+var y = 25.0;
+var prevBody = ground;
+for (var i = 0; i < 30; ++i) {
+  var body = world.createDynamicBody(new Vec2(0.5 + i, y));
+  body.createFixture(shape, {
+    density: 20.0,
+    friction: 0.2,
+  });
 
-  return world;
-});
+  var anchor = new Vec2(i, y);
+  world.createJoint(new RevoluteJoint({
+    collideConnected: false,
+  }, prevBody, body, anchor));
+
+  prevBody = body;
+}

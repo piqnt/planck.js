@@ -22,84 +22,86 @@
  */
 
 // This is used to test sensor shapes.
-planck.testbed('Breakable', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, -10));
 
-  var breakVelocity;
-  var breakAngularVelocity;
+const { World, Vec2, Edge, Box } = planck;
 
-  var broke = false;
+var world = new World(new Vec2(0, -10));
 
-  // Ground body
-  var ground = world.createBody();
-  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
+const testbed = planck.testbed();
+testbed.start(world);
 
-  // Breakable dynamic body
-  var body1 = world.createDynamicBody(Vec2(0.0, 40.0), 0.25 * Math.PI);
+var breakVelocity;
+var breakAngularVelocity;
 
-  var shape1 = pl.Box(0.5, 0.5, Vec2(-0.5, 0.0), 0.0);
-  var piece1 = body1.createFixture(shape1, 1.0);
+var broke = false;
 
-  var shape2 = pl.Box(0.5, 0.5, Vec2(0.5, 0.0), 0.0);
-  var piece2 = body1.createFixture(shape2, 1.0);
+// Ground body
+var ground = world.createBody();
+ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
-  world.on('post-solve', function (contact, impulse) {
-    if (broke) {
-      // The body already broke.
-      return;
-    }
+// Breakable dynamic body
+var body1 = world.createDynamicBody(new Vec2(0.0, 40.0), 0.25 * Math.PI);
 
-    // Should the body break?
-    var count = contact.getManifold().pointCount;
+var shape1 = new Box(0.5, 0.5, new Vec2(-0.5, 0.0), 0.0);
+var piece1 = body1.createFixture(shape1, 1.0);
 
-    var maxImpulse = 0.0;
-    for (var i = 0; i < count; ++i) {
-      maxImpulse = Math.max(maxImpulse, impulse.normalImpulses[i]);
-    }
+var shape2 = new Box(0.5, 0.5, new Vec2(0.5, 0.0), 0.0);
+var piece2 = body1.createFixture(shape2, 1.0);
 
-    if (maxImpulse > 40.0) {
-      setTimeout(function() {
-        Break();
-        broke = true;
-      });
-    }
-  });
-
-  function Break() {
-    // Create two bodies from one.
-    var center = body1.getWorldCenter();
-
-    body1.destroyFixture(piece2);
-
-    var body2 = world.createDynamicBody(body1.getPosition(), body1.getAngle());
-
-    piece2 = body2.createFixture(shape2, 1.0);
-
-    // Compute consistent velocities for new bodies based on
-    // cached velocity.
-    var center1 = body1.getWorldCenter();
-    var center2 = body2.getWorldCenter();
-
-    var velocity1 = Vec2.add(breakVelocity, Vec2.cross(breakAngularVelocity, Vec2.sub(center1, center)));
-    var velocity2 = Vec2.add(breakVelocity, Vec2.cross(breakAngularVelocity, Vec2.sub(center2, center)));
-
-    console.log(velocity1, velocity2);
-
-    body1.setAngularVelocity(breakAngularVelocity);
-    body1.setLinearVelocity(velocity1);
-
-    body2.setAngularVelocity(-breakAngularVelocity);
-    body2.setLinearVelocity(velocity2);
+world.on('post-solve', function (contact, impulse) {
+  if (broke) {
+    // The body already broke.
+    return;
   }
 
-  testbed.step = function() {
-    // Cache velocities to improve movement on breakage.
-    if (!broke) {
-      breakVelocity = body1.getLinearVelocity();
-      breakAngularVelocity = body1.getAngularVelocity();
-    }
-  };
+  // Should the body break?
+  var count = contact.getManifold().pointCount;
 
-  return world;
+  var maxImpulse = 0.0;
+  for (var i = 0; i < count; ++i) {
+    maxImpulse = Math.max(maxImpulse, impulse.normalImpulses[i]);
+  }
+
+  if (maxImpulse > 40.0) {
+    setTimeout(function() {
+      Break();
+      broke = true;
+    });
+  }
 });
+
+function Break() {
+  // Create two bodies from one.
+  var center = body1.getWorldCenter();
+
+  body1.destroyFixture(piece2);
+
+  var body2 = world.createDynamicBody(body1.getPosition(), body1.getAngle());
+
+  piece2 = body2.createFixture(shape2, 1.0);
+
+  // Compute consistent velocities for new bodies based on
+  // cached velocity.
+  var center1 = body1.getWorldCenter();
+  var center2 = body2.getWorldCenter();
+
+  var velocity1 = Vec2.add(breakVelocity, Vec2.cross(breakAngularVelocity, Vec2.sub(center1, center)));
+  var velocity2 = Vec2.add(breakVelocity, Vec2.cross(breakAngularVelocity, Vec2.sub(center2, center)));
+
+  console.log(velocity1, velocity2);
+
+  body1.setAngularVelocity(breakAngularVelocity);
+  body1.setLinearVelocity(velocity1);
+
+  body2.setAngularVelocity(-breakAngularVelocity);
+  body2.setLinearVelocity(velocity2);
+}
+
+testbed.step = function() {
+  // Cache velocities to improve movement on breakage.
+  if (!broke) {
+    breakVelocity = body1.getLinearVelocity();
+    breakAngularVelocity = body1.getAngularVelocity();
+  }
+};
+

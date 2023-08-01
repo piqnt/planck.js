@@ -4139,6 +4139,16 @@ declare const stats: {
     toiMaxRootIters: number;
     toString(newline?: string): string;
 };
+declare const Math: Math & {
+    EPSILON: number;
+    isFinite: (x: unknown) => boolean;
+    assert: (x: any) => void;
+    nextPowerOfTwo: (x: number) => number;
+    isPowerOfTwo: (x: number) => boolean;
+    mod: (num: number, min?: number, max?: number) => number;
+    clamp: (num: number, min: number, max: number) => number;
+    random: (min?: number, max?: number) => number;
+};
 /** @deprecated Merged with main namespace */
 declare const internal: {
     CollidePolygons: (manifold: Manifold, polyA: PolygonShape, xfA: Transform, polyB: PolygonShape, xfB: Transform) => void;
@@ -8093,6 +8103,16 @@ declare namespace planck {
         toiMaxRootIters: number;
         toString(newline?: string): string;
     };
+    const Math: Math & {
+        EPSILON: number;
+        isFinite: (x: unknown) => boolean;
+        assert: (x: any) => void;
+        nextPowerOfTwo: (x: number) => number;
+        isPowerOfTwo: (x: number) => boolean;
+        mod: (num: number, min?: number, max?: number) => number;
+        clamp: (num: number, min: number, max: number) => number;
+        random: (min?: number, max?: number) => number;
+    };
     /** @deprecated Merged with main namespace */
     const internal: {
         CollidePolygons: (manifold: Manifold, polyA: PolygonShape, xfA: Transform, polyB: PolygonShape, xfB: Transform) => void;
@@ -8128,5 +8148,5 @@ declare namespace planck {
         };
     };
 }
-export { planck as default, Serializer, math, Vec2Value, Vec2, Vec3, Mat22, Mat33, Transform, Rot, RayCastInput, RayCastCallback, RayCastOutput, AABB, Shape, ShapeType, FixtureOpt, FixtureDef, FixtureProxy, Fixture, BodyType, BodyDef, MassData, Body, ContactEdge, EvaluateFunction, ContactCallback, mixFriction, mixRestitution, VelocityConstraintPoint, Contact, JointEdge, JointOpt, JointDef, Joint, WorldDef, WorldRayCastCallback, WorldAABBQueryCallback, World, CircleShape, Circle, EdgeShape, Edge, PolygonShape, Polygon, ChainShape, Chain, BoxShape, Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJointOpt, DistanceJointDef, DistanceJoint, FrictionJointOpt, FrictionJointDef, FrictionJoint, GearJointOpt, GearJointDef, GearJoint, MotorJointOpt, MotorJointDef, MotorJoint, MouseJointOpt, MouseJointDef, MouseJoint, PrismaticJointOpt, PrismaticJointDef, PrismaticJoint, PulleyJointOpt, PulleyJointDef, PulleyJoint, RevoluteJointOpt, RevoluteJointDef, RevoluteJoint, RopeJointOpt, RopeJointDef, RopeJoint, WeldJointOpt, WeldJointDef, WeldJoint, WheelJointOpt, WheelJointDef, WheelJoint, Settings, Sweep, ManifoldType, ContactFeatureType, PointState, ClipVertex, Manifold, ManifoldPoint, ContactID, ContactFeature, WorldManifold, getPointStates, clipSegmentToLine, DistanceInput, DistanceOutput, SimplexCache, Distance, DistanceProxy, testOverlap, TOIInput, TOIOutputState, TOIOutput, TimeOfImpact, DynamicTreeQueryCallback, TreeNode, DynamicTree, stats, internal };
+export { planck as default, Serializer, math, Vec2Value, Vec2, Vec3, Mat22, Mat33, Transform, Rot, RayCastInput, RayCastCallback, RayCastOutput, AABB, Shape, ShapeType, FixtureOpt, FixtureDef, FixtureProxy, Fixture, BodyType, BodyDef, MassData, Body, ContactEdge, EvaluateFunction, ContactCallback, mixFriction, mixRestitution, VelocityConstraintPoint, Contact, JointEdge, JointOpt, JointDef, Joint, WorldDef, WorldRayCastCallback, WorldAABBQueryCallback, World, CircleShape, Circle, EdgeShape, Edge, PolygonShape, Polygon, ChainShape, Chain, BoxShape, Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJointOpt, DistanceJointDef, DistanceJoint, FrictionJointOpt, FrictionJointDef, FrictionJoint, GearJointOpt, GearJointDef, GearJoint, MotorJointOpt, MotorJointDef, MotorJoint, MouseJointOpt, MouseJointDef, MouseJoint, PrismaticJointOpt, PrismaticJointDef, PrismaticJoint, PulleyJointOpt, PulleyJointDef, PulleyJoint, RevoluteJointOpt, RevoluteJointDef, RevoluteJoint, RopeJointOpt, RopeJointDef, RopeJoint, WeldJointOpt, WeldJointDef, WeldJoint, WheelJointOpt, WheelJointDef, WheelJoint, Settings, Sweep, ManifoldType, ContactFeatureType, PointState, ClipVertex, Manifold, ManifoldPoint, ContactID, ContactFeature, WorldManifold, getPointStates, clipSegmentToLine, DistanceInput, DistanceOutput, SimplexCache, Distance, DistanceProxy, testOverlap, TOIInput, TOIOutputState, TOIOutput, TimeOfImpact, DynamicTreeQueryCallback, TreeNode, DynamicTree, stats, Math, internal };
 //# sourceMappingURL=planck.d.ts.map

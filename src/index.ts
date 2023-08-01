@@ -51,6 +51,10 @@ export * from './collision/TimeOfImpact';
 export * from './collision/DynamicTree';
 export * from './util/stats';
 
+import { math } from './common/Math';
+
+export const Math = math;
+
 import { CollidePolygons } from './collision/shape/CollidePolygon';
 import { Settings } from './Settings';
 import { Sweep } from './common/Sweep';
