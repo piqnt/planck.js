@@ -1,6 +1,6 @@
 {
   "name": "planck",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0-beta.5",
   "description": "2D JavaScript/TypeScript physics engine for cross-platform HTML5 game development",
   "homepage": "https://github.com/shakiba/planck.js",
   "keywords": [
@@ -26,7 +26,7 @@
     "Oliver Zell"
   ],
   "type": "module",
-  "module": "dist/planck.js",
+  "module": "dist/planck.mjs",
   "main": "dist/planck.js",
   "jsdelivr": "dist/planck.min.js",
   "unpkg": "dist/planck.min.js",
@@ -35,14 +35,14 @@
     ".": {
       "types": "./dist/planck.d.ts",
       "umd": "./dist/planck.min.js",
-      "require": "./dist/planck.cjs",
-      "default": "./dist/planck.js"
+      "require": "./dist/planck.js",
+      "default": "./dist/planck.mjs"
     },
     "./with-testbed": {
       "types": "./dist/planck-with-testbed.d.ts",
       "umd": "./dist/planck-with-testbed.min.js",
-      "require": "./dist/planck-with-testbed.cjs",
-      "default": "./dist/planck-with-testbed.js"
+      "require": "./dist/planck-with-testbed.js",
+      "default": "./dist/planck-with-testbed.mjs"
     },
     "./dist/*": "./dist/*"
   },
