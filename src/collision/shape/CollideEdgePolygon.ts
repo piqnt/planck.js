@@ -291,7 +291,7 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
     polygonBA.normals[i] = Rot.mulVec2(xf.q, polygonB.m_normals[i]);
   }
 
-  const radius = 2.0 * Settings.polygonRadius;
+  const radius = polygonB.m_radius + edgeA.m_radius;
 
   manifold.pointCount = 0;
 
