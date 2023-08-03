@@ -467,10 +467,8 @@ export class Body {
    */
   setAwake(flag: boolean): void {
     if (flag) {
-      if (this.m_awakeFlag == false) {
-        this.m_awakeFlag = true;
-        this.m_sleepTime = 0.0;
-      }
+      this.m_awakeFlag = true;
+      this.m_sleepTime = 0.0;
     } else {
       this.m_awakeFlag = false;
       this.m_sleepTime = 0.0;

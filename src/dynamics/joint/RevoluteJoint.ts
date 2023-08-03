@@ -302,9 +302,11 @@ export class RevoluteJoint extends Joint {
    * Enable/disable the joint motor.
    */
   enableMotor(flag: boolean): void {
-    this.m_bodyA.setAwake(true);
-    this.m_bodyB.setAwake(true);
-    this.m_enableMotor = flag;
+    if (flag != this.m_enableMotor) {
+      this.m_bodyA.setAwake(true);
+      this.m_bodyB.setAwake(true);
+      this.m_enableMotor = flag;
+    }
   }
 
   /**
@@ -318,9 +320,11 @@ export class RevoluteJoint extends Joint {
    * Set the motor speed in radians per second.
    */
   setMotorSpeed(speed: number): void {
-    this.m_bodyA.setAwake(true);
-    this.m_bodyB.setAwake(true);
-    this.m_motorSpeed = speed;
+    if (speed != this.m_motorSpeed) {
+      this.m_bodyA.setAwake(true);
+      this.m_bodyB.setAwake(true);
+      this.m_motorSpeed = speed;
+    }
   }
 
   /**
@@ -334,9 +338,11 @@ export class RevoluteJoint extends Joint {
    * Set the maximum motor torque, usually in N-m.
    */
   setMaxMotorTorque(torque: number): void {
-    this.m_bodyA.setAwake(true);
-    this.m_bodyB.setAwake(true);
-    this.m_maxMotorTorque = torque;
+    if (torque != this.m_maxMotorTorque) {
+      this.m_bodyA.setAwake(true);
+      this.m_bodyB.setAwake(true);
+      this.m_maxMotorTorque = torque;
+    }
   }
 
   getMaxMotorTorque(): number {
