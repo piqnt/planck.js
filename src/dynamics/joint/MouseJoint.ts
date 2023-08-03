@@ -194,10 +194,10 @@ export class MouseJoint extends Joint {
    * Use this to update the target point.
    */
   setTarget(target: Vec2Value): void {
-    if (this.m_bodyB.isAwake() == false) {
+    if (!Vec2.areEqual(target, this.m_targetA)) {
       this.m_bodyB.setAwake(true);
+      this.m_targetA = Vec2.clone(target);
     }
-    this.m_targetA = Vec2.clone(target);
   }
 
   getTarget(): Vec2 {
