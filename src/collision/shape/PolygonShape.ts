@@ -206,6 +206,7 @@ export class PolygonShape extends Shape {
     let ih = i0;
 
     while (true) {
+      _ASSERT && console.assert(m < Settings.maxPolygonVertices);
       hull[m] = ih;
 
       let ie = 0;
