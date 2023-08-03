@@ -37,6 +37,11 @@ import type { Vec2Value }  from '../common/Vec2';
  */
 export abstract class Shape {
   m_type: ShapeType;
+
+  /**
+   * Radius of a shape. For polygonal shapes this must be b2_polygonRadius.
+   * There is no support for making rounded polygons.
+   */
   m_radius: number;
 
   /** @internal */
