@@ -104,11 +104,6 @@ export class PolygonShape extends Shape {
     return this.m_radius;
   }
 
-  getVertex(index: number): Vec2 {
-    _ASSERT && console.assert(0 <= index && index < this.m_count);
-    return this.m_vertices[index];
-  }
-
   /**
    * @internal
    * @deprecated Shapes should be treated as immutable.
