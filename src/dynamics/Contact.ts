@@ -86,7 +86,7 @@ export type ContactCallback = (
 
 /**
  * Friction mixing law. The idea is to allow either fixture to drive the
- * restitution to zero. For example, anything slides on ice.
+ * friction to zero. For example, anything slides on ice.
  */
 export function mixFriction(friction1: number, friction2: number): number {
   return Math.sqrt(friction1 * friction2);
