@@ -102,11 +102,6 @@ export class CircleShape extends Shape {
     return this.m_p;
   }
 
-  getVertex(index: 0): Vec2 {
-    _ASSERT && console.assert(index == 0);
-    return this.m_p;
-  }
-
   /**
    * @internal
    * @deprecated Shapes should be treated as immutable.
