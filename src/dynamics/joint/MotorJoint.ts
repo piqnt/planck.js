@@ -135,6 +135,9 @@ export class MotorJoint extends Joint {
     // J = [-I -r1_skew I r2_skew ]
     // Identity used:
     // w k % (rx i + ry j) = w * (-ry i + rx j)
+    //
+    // r1 = offset - c1
+    // r2 = -c2
 
     // Angle constraint
     // Cdot = w2 - w1
@@ -298,11 +301,10 @@ export class MotorJoint extends Joint {
     const qB = Rot.neo(aB);
 
     // Compute the effective mass matrix.
-    this.m_rA = Rot.mulVec2(qA, Vec2.neg(this.m_localCenterA));
+    this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_linearOffset, this.m_localCenterA));
     this.m_rB = Rot.mulVec2(qB, Vec2.neg(this.m_localCenterB));
 
     // J = [-I -r1_skew I r2_skew]
-    // [ 0 -1 0 1]
     // r_skew = [-ry; rx]
 
     // Matlab
@@ -315,6 +317,7 @@ export class MotorJoint extends Joint {
     const iA = this.m_invIA;
     const iB = this.m_invIB;
 
+    // Upper 2 by 2 of K for point to point
     const K = new Mat22();
     K.ex.x = mA + mB + iA * this.m_rA.y * this.m_rA.y + iB * this.m_rB.y * this.m_rB.y;
     K.ex.y = -iA * this.m_rA.x * this.m_rA.y - iB * this.m_rB.x * this.m_rB.y;
@@ -331,7 +334,6 @@ export class MotorJoint extends Joint {
     this.m_linearError = Vec2.zero();
     this.m_linearError.addCombine(1, cB, 1, this.m_rB);
     this.m_linearError.subCombine(1, cA, 1, this.m_rA);
-    this.m_linearError.sub(Rot.mulVec2(qA, this.m_linearOffset));
 
     this.m_angularError = aB - aA - this.m_angularOffset;
 
