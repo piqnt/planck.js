@@ -449,33 +449,30 @@ export class PrismaticJoint extends Joint {
    * Enable/disable the joint motor.
    */
   enableMotor(flag: boolean): void {
-    if (flag != this.m_enableMotor) {
-      this.m_bodyA.setAwake(true);
-      this.m_bodyB.setAwake(true);
-      this.m_enableMotor = flag;
-    }
+    if (flag == this.m_enableMotor) return;
+    this.m_bodyA.setAwake(true);
+    this.m_bodyB.setAwake(true);
+    this.m_enableMotor = flag;
   }
 
   /**
    * Set the motor speed, usually in meters per second.
    */
   setMotorSpeed(speed: number): void {
-    if (speed != this.m_motorSpeed) {
-      this.m_bodyA.setAwake(true);
-      this.m_bodyB.setAwake(true);
-      this.m_motorSpeed = speed;
-    }
+    if (speed == this.m_motorSpeed) return;
+    this.m_bodyA.setAwake(true);
+    this.m_bodyB.setAwake(true);
+    this.m_motorSpeed = speed;
   }
 
   /**
    * Set the maximum motor force, usually in N.
    */
   setMaxMotorForce(force: number): void {
-    if (force != this.m_maxMotorForce) {
-      this.m_bodyA.setAwake(true);
-      this.m_bodyB.setAwake(true);
-      this.m_maxMotorForce = force;
-    }
+    if (force == this.m_maxMotorForce) return;
+    this.m_bodyA.setAwake(true);
+    this.m_bodyB.setAwake(true);
+    this.m_maxMotorForce = force;
   }
 
   getMaxMotorForce(): number {
