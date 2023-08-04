@@ -314,22 +314,20 @@ export class WheelJoint extends Joint {
    * Enable/disable the joint motor.
    */
   enableMotor(flag: boolean): void {
-    if (flag != this.m_enableMotor) {
-      this.m_bodyA.setAwake(true);
-      this.m_bodyB.setAwake(true);
-      this.m_enableMotor = flag;
-    }
+    if (flag == this.m_enableMotor) return;
+    this.m_bodyA.setAwake(true);
+    this.m_bodyB.setAwake(true);
+    this.m_enableMotor = flag;
   }
 
   /**
    * Set the motor speed, usually in radians per second.
    */
   setMotorSpeed(speed: number): void {
-    if (speed != this.m_motorSpeed) {
-      this.m_bodyA.setAwake(true);
-      this.m_bodyB.setAwake(true);
-      this.m_motorSpeed = speed;
-    }
+    if (speed == this.m_motorSpeed) return;
+    this.m_bodyA.setAwake(true);
+    this.m_bodyB.setAwake(true);
+    this.m_motorSpeed = speed;
   }
 
   /**
@@ -343,11 +341,10 @@ export class WheelJoint extends Joint {
    * Set/Get the maximum motor force, usually in N-m.
    */
   setMaxMotorTorque(torque: number): void {
-    if (torque != this.m_maxMotorTorque) {
-      this.m_bodyA.setAwake(true);
-      this.m_bodyB.setAwake(true);
-      this.m_maxMotorTorque = torque;
-    }
+    if (torque == this.m_maxMotorTorque) return;
+    this.m_bodyA.setAwake(true);
+    this.m_bodyB.setAwake(true);
+    this.m_maxMotorTorque = torque;
   }
 
   getMaxMotorTorque(): number {
