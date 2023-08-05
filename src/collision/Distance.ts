@@ -274,6 +274,15 @@ export class DistanceProxy {
     _ASSERT && console.assert(typeof shape.computeDistanceProxy === 'function');
     shape.computeDistanceProxy(this, index);
   }
+  /**
+   * Initialize the proxy using a vertex cloud and radius. The vertices
+   * must remain in scope while the proxy is in use.
+   */
+  setVertices(vertices: Vec2[], count: number, radius: number) {
+    this.m_vertices = vertices;
+    this.m_count = count;
+    this.m_radius = radius;
+  }
 }
 
 class SimplexVertex {
@@ -694,3 +703,170 @@ Distance.Input = DistanceInput;
 Distance.Output = DistanceOutput;
 Distance.Proxy = DistanceProxy;
 Distance.Cache = SimplexCache;
+
+/**
+ * Input parameters for ShapeCast
+ */
+export class ShapeCastInput {
+  proxyA: DistanceProxy = new DistanceProxy();
+  proxyB: DistanceProxy = new DistanceProxy();
+  transformA: Transform | null = null;
+  transformB: Transform | null = null;
+  translationB: Vec2 = Vec2.zero();
+}
+
+/**
+ * Output results for b2ShapeCast
+ */
+export class ShapeCastOutput {
+  point: Vec2 = Vec2.zero();
+  normal: Vec2 = Vec2.zero();
+  lambda: number;
+  iterations: number;
+}
+
+/**
+ * Perform a linear shape cast of shape B moving and shape A fixed. Determines
+ * the hit point, normal, and translation fraction.
+ * @returns true if hit, false if there is no hit or an initial overlap
+ */
+//
+// GJK-raycast
+// Algorithm by Gino van den Bergen.
+// "Smooth Mesh Contacts with GJK" in Game Physics Pearls. 2010
+export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput): boolean {
+  output.iterations = 0;
+  output.lambda = 1.0;
+  output.normal.setZero();
+  output.point.setZero();
+
+  const proxyA = input.proxyA;
+  const proxyB = input.proxyB;
+
+  const radiusA = Math.max(proxyA.m_radius, Settings.polygonRadius);
+  const radiusB = Math.max(proxyB.m_radius, Settings.polygonRadius);
+  const radius = radiusA + radiusB;
+
+  const xfA = input.transformA;
+  const xfB = input.transformB;
+
+  const r = input.translationB;
+  const n = Vec2.zero();
+  let lambda = 0.0;
+
+  // Initial simplex
+  const simplex = new Simplex();
+  simplex.m_count = 0;
+
+  // Get simplex vertices as an array.
+  const vertices = simplex.m_v;
+
+  // Get support point in -r direction
+  let indexA = proxyA.getSupport(Rot.mulTVec2(xfA.q, Vec2.neg(r)));
+  let wA = Transform.mulVec2(xfA, proxyA.getVertex(indexA));
+  let indexB = proxyB.getSupport(Rot.mulTVec2(xfB.q, r));
+  let wB = Transform.mulVec2(xfB, proxyB.getVertex(indexB));
+  let v = Vec2.sub(wA, wB);
+
+  // Sigma is the target distance between polygons
+  const sigma = Math.max(Settings.polygonRadius, radius - Settings.polygonRadius);
+  const tolerance = 0.5 * Settings.linearSlop;
+
+  // Main iteration loop.
+  const k_maxIters = 20;
+  let iter = 0;
+  while (iter < k_maxIters && v.length() - sigma > tolerance) {
+    _ASSERT && console.assert(simplex.m_count < 3);
+
+    output.iterations += 1;
+
+    // Support in direction -v (A - B)
+    indexA = proxyA.getSupport(Rot.mulTVec2(xfA.q, Vec2.neg(v)));
+    wA = Transform.mulVec2(xfA, proxyA.getVertex(indexA));
+    indexB = proxyB.getSupport(Rot.mulTVec2(xfB.q, v));
+    wB = Transform.mulVec2(xfB, proxyB.getVertex(indexB));
+    const p = Vec2.sub(wA, wB);
+
+    // -v is a normal at p
+    v.normalize();
+
+    // Intersect ray with plane
+    const vp = Vec2.dot(v, p);
+    const vr = Vec2.dot(v, r);
+    if (vp - sigma > lambda * vr) {
+      if (vr <= 0.0) {
+        return false;
+      }
+
+      lambda = (vp - sigma) / vr;
+      if (lambda > 1.0) {
+        return false;
+      }
+
+      n.setMul(-1, v);
+      simplex.m_count = 0;
+    }
+
+    // Reverse simplex since it works with B - A.
+    // Shift by lambda * r because we want the closest point to the current clip point.
+    // Note that the support point p is not shifted because we want the plane equation
+    // to be formed in unshifted space.
+    const vertex = vertices[simplex.m_count];
+    vertex.indexA = indexB;
+    vertex.wA = Vec2.combine(1, wB, lambda, r);
+    vertex.indexB = indexA;
+    vertex.wB = wA;
+    vertex.w = Vec2.sub(vertex.wB, vertex.wA);
+    vertex.a = 1.0;
+    simplex.m_count += 1;
+
+    switch (simplex.m_count) {
+      case 1:
+        break;
+
+      case 2:
+        simplex.solve2();
+        break;
+
+      case 3:
+        simplex.solve3();
+        break;
+
+      default:
+        _ASSERT && console.assert(false);
+    }
+    
+    // If we have 3 points, then the origin is in the corresponding triangle.
+    if (simplex.m_count == 3) {
+      // Overlap
+      return false;
+    }
+
+    // Get search direction.
+    v = simplex.getClosestPoint();
+
+    // Iteration count is equated to the number of support point calls.
+    ++iter;
+  }
+
+  if (iter == 0) {
+    // Initial overlap
+    return false;
+	}
+
+  // Prepare output.
+  const pointA = Vec2.zero();
+  const pointB = Vec2.zero();
+  simplex.getWitnessPoints(pointB, pointA);
+
+  if (v.lengthSquared() > 0.0) {
+    n.setMul(-1, v);
+    n.normalize();
+  }
+
+  output.point = Vec2.combine(1, pointA, radiusA, n);
+  output.normal = n;
+  output.lambda = lambda;
+  output.iterations = iter;
+  return true;
+}

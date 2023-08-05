@@ -75,7 +75,7 @@ stats.toiMaxRootIters = 0;
 /**
  * Compute the upper bound on time before two shapes penetrate. Time is
  * represented as a fraction between [0,tMax]. This uses a swept separating axis
- * and may miss some intermediate, non-tunneling collision. If you change the
+ * and may miss some intermediate, non-tunneling collisions. If you change the
  * time interval, you should call this function again.
  *
  * Note: use Distance to compute the contact point and normal at the time of
