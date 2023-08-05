@@ -732,7 +732,7 @@ export class Contact {
       // Track max constraint error.
       minSeparation = Math.min(minSeparation, separation);
 
-      const baumgarte = toi ? Settings.toiBaugarte : Settings.baumgarte;
+      const baumgarte = toi ? Settings.toiBaumgarte : Settings.baumgarte;
       const linearSlop = Settings.linearSlop;
       const maxLinearCorrection = Settings.maxLinearCorrection;
 
