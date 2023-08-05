@@ -349,6 +349,8 @@ export class DistanceJoint extends Joint {
 
       // magic formulas
       const h = step.dt;
+
+      // gamma = 1 / (h * (d + h * k)), the extra factor of h in the denominator is since the lambda is an impulse, not a force
       this.m_gamma = h * (d + h * k);
       this.m_gamma = this.m_gamma != 0.0 ? 1.0 / this.m_gamma : 0.0;
       this.m_bias = C * h * k * this.m_gamma;
