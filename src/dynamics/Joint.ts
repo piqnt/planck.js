@@ -126,10 +126,10 @@ export abstract class Joint {
   }
 
   /**
-   * Short-cut function to determine if either body is inactive.
+   * Short-cut function to determine if either body is enabled.
    */
-  isActive(): boolean {
-    return this.m_bodyA.isActive() && this.m_bodyB.isActive();
+  isEnabled(): boolean {
+    return this.m_bodyA.isEnabled() && this.m_bodyB.isEnabled();
   }
 
   /**

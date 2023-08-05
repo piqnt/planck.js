@@ -108,9 +108,9 @@ export interface BodyDef {
    */
   awake?: boolean;
   /**
-   * Does this body start out active?
+   * Does this body start out enabled?
    */
-  active?: boolean;
+  enabled?: boolean;
   userData?: any;
 }
 
@@ -131,7 +131,7 @@ const BodyDefDefault: BodyDef = {
 
   allowSleep : true,
   awake : true,
-  active : true,
+  enabled : true,
 
   userData : null
 };
@@ -185,7 +185,7 @@ export class Body {
   /** @internal */ m_autoSleepFlag: boolean;
   /** @internal */ m_bulletFlag: boolean;
   /** @internal */ m_fixedRotationFlag: boolean;
-  /** @internal */ m_activeFlag: boolean;
+  /** @internal */ m_enabledFlag: boolean;
   /** @internal */ m_islandFlag: boolean;
   /** @internal */ m_toiFlag: boolean;
   /** @internal */ m_userData: unknown;
@@ -234,7 +234,7 @@ export class Body {
     this.m_autoSleepFlag = def.allowSleep;
     this.m_bulletFlag = def.bullet;
     this.m_fixedRotationFlag = def.fixedRotation;
-    this.m_activeFlag = def.active;
+    this.m_enabledFlag = def.enabled;
 
     this.m_islandFlag = false;
     this.m_toiFlag = false;
@@ -486,39 +486,42 @@ export class Body {
     }
   }
 
-  isActive(): boolean {
-    return this.m_activeFlag;
+  isEnabled(): boolean {
+    return this.m_enabledFlag;
   }
 
   /**
-   * Set the active state of the body. An inactive body is not simulated and
-   * cannot be collided with or woken up. If you pass a flag of true, all fixtures
-   * will be added to the broad-phase. If you pass a flag of false, all fixtures
-   * will be removed from the broad-phase and all contacts will be destroyed.
-   * Fixtures and joints are otherwise unaffected.
-   *
-   * You may continue to create/destroy fixtures and joints on inactive bodies.
-   * Fixtures on an inactive body are implicitly inactive and will not participate
-   * in collisions, ray-casts, or queries. Joints connected to an inactive body
-   * are implicitly inactive. An inactive body is still owned by a World object
-   * and remains
+   * Allow a body to be disabled. A disabled body is not simulated and cannot be
+   * collided with or woken up.
+   * If you pass a flag of true, all fixtures will be added to the broad-phase.
+   * If you pass a flag of false, all fixtures will be removed from the
+   * broad-phase and all contacts will be destroyed.
+   * 
+   * Fixtures and joints are otherwise unaffected. You may continue to
+   * create/destroy fixtures and joints on disabled bodies.
+   * Fixtures on a disabled body are implicitly disabled and will not
+   * participate in collisions, ray-casts, or queries.
+   * Joints connected to a disabled body are implicitly disabled.
+   * An diabled body is still owned by a b2World object and remains in the body
+   * list.
    */
-  setActive(flag: boolean): void {
+  setEnabled(flag: boolean): void {
     _ASSERT && console.assert(this.isWorldLocked() == false);
 
-    if (flag == this.m_activeFlag) {
+    if (flag == this.m_enabledFlag) {
       return;
     }
 
-    this.m_activeFlag = !!flag;
+    this.m_enabledFlag = !!flag;
 
-    if (this.m_activeFlag) {
+    if (this.m_enabledFlag) {
       // Create all proxies.
       const broadPhase = this.m_world.m_broadPhase;
       for (let f = this.m_fixtureList; f; f = f.m_next) {
         f.createProxies(broadPhase, this.m_xf);
       }
-      // Contacts are created the next time step.
+      // Contacts are created at the beginning of the next time step.
+      this.m_world.m_newContacts = true;
 
     } else {
       // Destroy all proxies.
@@ -1021,7 +1024,7 @@ export class Body {
       return null;
     }
 
-    if (this.m_activeFlag) {
+    if (this.m_enabledFlag) {
       const broadPhase = this.m_world.m_broadPhase;
       fixture.createProxies(broadPhase, this.m_xf);
     }
@@ -1036,7 +1039,7 @@ export class Body {
 
     // Let the world know we have a new fixture. This will cause new contacts
     // to be created at the beginning of the next time step.
-    this.m_world.m_newFixture = true;
+    this.m_world.m_newContacts = true;
 
     return fixture;
   }
@@ -1124,7 +1127,7 @@ export class Body {
       }
     }
 
-    if (this.m_activeFlag) {
+    if (this.m_enabledFlag) {
       const broadPhase = this.m_world.m_broadPhase;
       fixture.destroyProxies(broadPhase);
     }

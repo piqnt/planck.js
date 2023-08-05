@@ -107,7 +107,7 @@ export class World {
   /** @internal */ m_allowSleep: boolean;
   /** @internal */ m_gravity: Vec2;
   /** @internal */ m_clearForces: boolean;
-  /** @internal */ m_newFixture: boolean;
+  /** @internal */ m_newContacts: boolean;
   /** @internal */ m_locked: boolean;
   /** @internal */ m_warmStarting: boolean;
   /** @internal */ m_continuousPhysics: boolean;
@@ -158,7 +158,7 @@ export class World {
     this.m_gravity = Vec2.clone(def.gravity);
 
     this.m_clearForces = true;
-    this.m_newFixture = false;
+    this.m_newContacts = false;
     this.m_locked = false;
 
     // These are for debugging the solver.
@@ -794,9 +794,9 @@ export class World {
     positionIterations = positionIterations || this.m_positionIterations;
 
     // If new fixtures were added, we need to find the new contacts.
-    if (this.m_newFixture) {
+    if (this.m_newContacts) {
       this.findNewContacts();
-      this.m_newFixture = false;
+      this.m_newContacts = false;
     }
 
     this.m_locked = true;
