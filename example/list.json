@@ -57,5 +57,6 @@
   "VaryingFriction",
   "VaryingRestitution",
   "VerticalStack",
-  "Web"
+  "Web",
+  "WheelJoint"
 ]

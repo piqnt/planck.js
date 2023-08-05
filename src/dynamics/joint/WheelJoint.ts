@@ -32,6 +32,7 @@ import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
+const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
@@ -45,6 +46,18 @@ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false 
  */
 export interface WheelJointOpt extends JointOpt {
   /**
+   * Enable/disable the joint limit.
+   */
+  enableLimit?: boolean;
+  /**
+   * The lower translation limit, usually in meters.
+   */
+  lowerTranslation?: number;
+  /**
+   * The upper translation limit, usually in meters.
+   */
+  upperTranslation?: number;
+  /**
    * Enable/disable the joint motor.
    */
   enableMotor?: boolean;
@@ -57,13 +70,13 @@ export interface WheelJointOpt extends JointOpt {
    */
   motorSpeed?: number;
   /**
-   * Suspension frequency, zero indicates no suspension.
+   * Suspension stiffness. Typically in units N/m.
    */
-  frequencyHz?: number;
+  stiffness?: number;
   /**
-   * Suspension damping ratio, one indicates critical damping.
+   * Suspension damping. Typically in units of N*s/m.
    */
-  dampingRatio?: number;
+  damping?: number;
 }
 /**
  * Wheel joint definition. This requires defining a line of motion using an axis
@@ -89,18 +102,22 @@ export interface WheelJointDef extends JointDef, WheelJointOpt {
 }
 
 const DEFAULTS = {
+  enableLimit : false,
+  lowerTranslation : 0.0,
+  upperTranslation : 0.0,
   enableMotor : false,
   maxMotorTorque : 0.0,
   motorSpeed : 0.0,
-  frequencyHz : 2.0,
-  dampingRatio : 0.7,
+  stiffness : 0.0,
+  damping : 0.0,
 };
 
 /**
  * A wheel joint. This joint provides two degrees of freedom: translation along
  * an axis fixed in bodyA and rotation in the plane. In other words, it is a
  * point to line constraint with a rotational motor and a linear spring/damper.
- * This joint is designed for vehicle suspensions.
+ * The spring/damper is initialized upon creation. This joint is designed for
+ * vehicle suspensions.
  */
 export class WheelJoint extends Joint {
   static TYPE = 'wheel-joint' as const;
@@ -114,16 +131,25 @@ export class WheelJoint extends Joint {
   /** @internal */ m_mass: number;
   /** @internal */ m_impulse: number;
   /** @internal */ m_motorMass: number;
+  /** @internal */ m_axialMass: number;
   /** @internal */ m_motorImpulse: number;
   /** @internal */ m_springMass: number;
   /** @internal */ m_springImpulse: number;
 
+  /** @internal */ m_lowerImpulse: number;
+  /** @internal */ m_upperImpulse: number;
+  /** @internal */ m_translation: number;
+  /** @internal */ m_lowerTranslation: number;
+  /** @internal */ m_upperTranslation: number;
+
   /** @internal */ m_maxMotorTorque: number;
   /** @internal */ m_motorSpeed: number;
+
+  /** @internal */ m_enableLimit: boolean;
   /** @internal */ m_enableMotor: boolean;
 
-  /** @internal */ m_frequencyHz: number;
-  /** @internal */ m_dampingRatio: number;
+  /** @internal */ m_stiffness: number;
+  /** @internal */ m_damping: number;
 
   /** @internal */ m_bias: number;
   /** @internal */ m_gamma: number;
@@ -165,6 +191,13 @@ export class WheelJoint extends Joint {
     this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || def.localAxis || Vec2.neo(1.0, 0.0));
     this.m_localYAxisA = Vec2.crossNumVec2(1.0, this.m_localXAxisA);
 
+    this.m_axialMass = 0.0;
+    this.m_lowerImpulse = 0.0;
+    this.m_upperImpulse = 0.0;
+    this.m_lowerTranslation = def.lowerTranslation;
+    this.m_upperTranslation = def.upperTranslation;
+    this.m_enableLimit = def.enableLimit;
+
     this.m_mass = 0.0;
     this.m_impulse = 0.0;
     this.m_motorMass = 0.0;
@@ -176,11 +209,11 @@ export class WheelJoint extends Joint {
     this.m_motorSpeed = def.motorSpeed;
     this.m_enableMotor = def.enableMotor;
 
-    this.m_frequencyHz = def.frequencyHz;
-    this.m_dampingRatio = def.dampingRatio;
-
     this.m_bias = 0.0;
     this.m_gamma = 0.0;
+
+    this.m_stiffness = def.stiffness;
+    this.m_damping = def.damping;
 
     // Linear constraint (point-to-line)
     // d = pB - pA = xB + rB - xA - rA
@@ -210,11 +243,16 @@ export class WheelJoint extends Joint {
       bodyB: this.m_bodyB,
       collideConnected: this.m_collideConnected,
 
+      lowerTranslation: this.m_lowerTranslation,
+      upperTranslation: this.m_upperTranslation,
+      enableLimit: this.m_enableLimit,
+
       enableMotor: this.m_enableMotor,
       maxMotorTorque: this.m_maxMotorTorque,
       motorSpeed: this.m_motorSpeed,
-      frequencyHz: this.m_frequencyHz,
-      dampingRatio: this.m_dampingRatio,
+
+      stiffness: this.m_stiffness,
+      damping: this.m_damping,
 
       localAnchorA: this.m_localAnchorA,
       localAnchorB: this.m_localAnchorB,
@@ -304,6 +342,55 @@ export class WheelJoint extends Joint {
   }
 
   /**
+   * Is the joint limit enabled?
+   */
+  isLimitEnabled(): boolean {
+    return this.m_enableLimit;
+  }
+
+  /**
+   * Enable/disable the joint translation limit.
+   */
+  enableLimit(flag: boolean): void {
+    if (flag == this.m_enableLimit) return;
+    this.m_bodyA.setAwake(true);
+    this.m_bodyB.setAwake(true);
+    this.m_enableLimit = flag;
+    this.m_lowerImpulse = 0.0;
+    this.m_upperImpulse = 0.0;
+  }
+
+  /**
+   * Get the lower joint translation limit, usually in meters.
+   */
+  getLowerLimit(): number {
+    return this.m_lowerTranslation;
+  }
+
+  /**
+   * Get the upper joint translation limit, usually in meters.
+   */
+  getUpperLimit(): number {
+    return this.m_upperTranslation;
+  }
+
+  /**
+   * Set the joint translation limits, usually in meters.
+   */
+  setLimits(lower: number, upper: number) {
+    _ASSERT && Math.assert(lower <= upper);
+    if (lower != this.m_lowerTranslation || upper != this.m_upperTranslation) {
+      this.m_bodyA.setAwake(true);
+      this.m_bodyB.setAwake(true);
+      this.m_lowerTranslation = lower;
+      this.m_upperTranslation = upper;
+      this.m_lowerImpulse = 0.0;
+      this.m_upperImpulse = 0.0;
+    }
+  }
+
+
+  /**
    * Is the joint motor enabled?
    */
   isMotorEnabled(): boolean {
@@ -359,26 +446,25 @@ export class WheelJoint extends Joint {
   }
 
   /**
-   * Set/Get the spring frequency in hertz. Setting the frequency to zero disables
-   * the spring.
+   * Access spring stiffness
    */
-  setSpringFrequencyHz(hz: number): void {
-    this.m_frequencyHz = hz;
+  setStiffness(stiffness: number): void {
+    this.m_stiffness = stiffness;
   }
 
-  getSpringFrequencyHz(): number {
-    return this.m_frequencyHz;
+  getStiffness(): number {
+    return this.m_stiffness;
   }
 
   /**
-   * Set/Get the spring damping ratio
+   * Access damping
    */
-  setSpringDampingRatio(ratio: number): void {
-    this.m_dampingRatio = ratio;
+  setDamping(damping: number): void {
+    this.m_damping = damping;
   }
 
-  getSpringDampingRatio(): number {
-    return this.m_dampingRatio;
+  getDamping(): number {
+    return this.m_damping;
   }
 
   /**
@@ -457,50 +543,49 @@ export class WheelJoint extends Joint {
     }
 
     // Spring constraint
+    this.m_ax = Rot.mulVec2(qA, this.m_localXAxisA);
+    this.m_sAx = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_ax);
+    this.m_sBx = Vec2.crossVec2Vec2(rB, this.m_ax);
+
+    const invMass = mA + mB + iA * this.m_sAx * this.m_sAx + iB * this.m_sBx * this.m_sBx;
+    if (invMass > 0.0) {
+      this.m_axialMass = 1.0 / invMass;
+    } else {
+      this.m_axialMass = 0.0;
+    }
+
     this.m_springMass = 0.0;
     this.m_bias = 0.0;
     this.m_gamma = 0.0;
-    if (this.m_frequencyHz > 0.0) {
-      this.m_ax = Rot.mulVec2(qA, this.m_localXAxisA);
-      this.m_sAx = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_ax);
-      this.m_sBx = Vec2.crossVec2Vec2(rB, this.m_ax);
+    if (this.m_stiffness > 0.0 && invMass > 0.0) {
+      this.m_springMass = 1.0 / invMass;
 
-      const invMass = mA + mB + iA * this.m_sAx * this.m_sAx + iB * this.m_sBx
-          * this.m_sBx; // float
+      const C = Vec2.dot(d, this.m_ax);
 
-      if (invMass > 0.0) {
-        this.m_springMass = 1.0 / invMass;
+      // magic formulas
+      const h = step.dt;
+      this.m_gamma = h * (this.m_damping + h * this.m_stiffness);
+      if (this.m_gamma > 0.0) {
+        this.m_gamma = 1.0 / this.m_gamma;
+      }
 
-        const C = Vec2.dot(d, this.m_ax); // float
+      this.m_bias = C * h * this.m_stiffness * this.m_gamma;
 
-        // Frequency
-        const omega = 2.0 * Math.PI * this.m_frequencyHz; // float
-
-        // Damping coefficient
-        const damp = 2.0 * this.m_springMass * this.m_dampingRatio * omega; // float
-
-        // Spring stiffness
-        const k = this.m_springMass * omega * omega; // float
-
-        // magic formulas
-        const h = step.dt; // float
-        this.m_gamma = h * (damp + h * k);
-        if (this.m_gamma > 0.0) {
-          this.m_gamma = 1.0 / this.m_gamma;
-        }
-
-        this.m_bias = C * h * k * this.m_gamma;
-
-        this.m_springMass = invMass + this.m_gamma;
-        if (this.m_springMass > 0.0) {
-          this.m_springMass = 1.0 / this.m_springMass;
-        }
+      this.m_springMass = invMass + this.m_gamma;
+      if (this.m_springMass > 0.0) {
+        this.m_springMass = 1.0 / this.m_springMass;
       }
     } else {
       this.m_springImpulse = 0.0;
     }
 
-    // Rotational motor
+    if (this.m_enableLimit) {
+      this.m_translation = Vec2.dot(this.m_ax, d);
+    } else {
+      this.m_lowerImpulse = 0.0;
+      this.m_upperImpulse = 0.0;
+    }  
+
     if (this.m_enableMotor) {
       this.m_motorMass = iA + iB;
       if (this.m_motorMass > 0.0) {
@@ -517,9 +602,10 @@ export class WheelJoint extends Joint {
       this.m_springImpulse *= step.dtRatio;
       this.m_motorImpulse *= step.dtRatio;
 
-      const P = Vec2.combine(this.m_impulse, this.m_ay, this.m_springImpulse, this.m_ax);
-      const LA = this.m_impulse * this.m_sAy + this.m_springImpulse * this.m_sAx + this.m_motorImpulse;
-      const LB = this.m_impulse * this.m_sBy + this.m_springImpulse * this.m_sBx + this.m_motorImpulse;
+      const axialImpulse = this.m_springImpulse + this.m_lowerImpulse - this.m_upperImpulse;
+      const P = Vec2.combine(this.m_impulse, this.m_ay, axialImpulse, this.m_ax);
+      const LA = this.m_impulse * this.m_sAy + axialImpulse * this.m_sAx + this.m_motorImpulse;
+      const LB = this.m_impulse * this.m_sBy + axialImpulse * this.m_sBx + this.m_motorImpulse;
 
       vA.subMul(this.m_invMassA, P);
       wA -= this.m_invIA * LA;
@@ -531,6 +617,8 @@ export class WheelJoint extends Joint {
       this.m_impulse = 0.0;
       this.m_springImpulse = 0.0;
       this.m_motorImpulse = 0.0;
+      this.m_lowerImpulse = 0.0;
+      this.m_upperImpulse = 0.0;
     }
 
     this.m_bodyA.c_velocity.v.setVec2(vA);
@@ -584,6 +672,48 @@ export class WheelJoint extends Joint {
       wB += iB * impulse;
     }
 
+    if (this.m_enableLimit) {
+      // Lower limit
+      {
+        const C = this.m_translation - this.m_lowerTranslation;
+        const Cdot = Vec2.dot(this.m_ax, Vec2.sub(vB, vA)) + this.m_sBx * wB - this.m_sAx * wA;
+        let impulse = -this.m_axialMass * (Cdot + Math.max(C, 0.0) * step.inv_dt);
+        const oldImpulse = this.m_lowerImpulse;
+        this.m_lowerImpulse = Math.max(this.m_lowerImpulse + impulse, 0.0);
+        impulse = this.m_lowerImpulse - oldImpulse;
+
+        const P = Vec2.mulNumVec2(impulse, this.m_ax);
+        const LA = impulse * this.m_sAx;
+        const LB = impulse * this.m_sBx;
+
+        vA.subMul(mA, P);
+        wA -= iA * LA;
+        vA.addMul(mB, P);
+        wB += iB * LB;
+      }
+
+      // Upper limit
+      // Note: signs are flipped to keep C positive when the constraint is satisfied.
+      // This also keeps the impulse positive when the limit is active.
+      {
+        const C = this.m_upperTranslation - this.m_translation;
+        const Cdot = Vec2.dot(this.m_ax, Vec2.sub(vA, vB)) + this.m_sAx * wA - this.m_sBx * wB;
+        let impulse = -this.m_axialMass * (Cdot + Math.max(C, 0.0) * step.inv_dt);
+        const oldImpulse = this.m_upperImpulse;
+        this.m_upperImpulse = Math.max(this.m_upperImpulse + impulse, 0.0);
+        impulse = this.m_upperImpulse - oldImpulse;
+
+        const P = Vec2.mulNumVec2(impulse, this.m_ax);
+        const LA = impulse * this.m_sAx;
+        const LB = impulse * this.m_sBx;
+
+        vA.addMul(mA, P);
+        wA += iA * LA;
+        vA.subMul(mB, P);
+        wB -= iB * LB;
+      }
+    }
+
     // Solve point to line constraint
     {
       const Cdot = Vec2.dot(this.m_ay, vB) - Vec2.dot(this.m_ay, vA) + this.m_sBy
@@ -617,47 +747,98 @@ export class WheelJoint extends Joint {
     const cB = this.m_bodyB.c_position.c;
     let aB = this.m_bodyB.c_position.a;
 
-    const qA = Rot.neo(aA);
-    const qB = Rot.neo(aB);
+    let linearError = 0.0;
 
-    const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
-    const d = Vec2.zero();
-    d.addCombine(1, cB, 1, rB);
-    d.subCombine(1, cA, 1, rA);
+    if (this.m_enableLimit) {
+      const qA = Rot.neo(aA);
+      const qB = Rot.neo(aB);
 
-    const ay = Rot.mulVec2(qA, this.m_localYAxisA);
+      const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+      const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+      const d = Vec2.zero();
+      d.addCombine(1, cB, 1, rB);
+      d.subCombine(1, cA, 1, rA);
 
-    const sAy = Vec2.crossVec2Vec2(Vec2.add(d, rA), ay); // float
-    const sBy = Vec2.crossVec2Vec2(rB, ay); // float
+      const ax = Rot.mulVec2(qA, this.m_localXAxisA);
+      const sAx = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_ax);
+      const sBx = Vec2.crossVec2Vec2(rB, this.m_ax);
 
-    const C = Vec2.dot(d, ay); // float
+      let C = 0.0;
+      const translation = Vec2.dot(ax, d);
+      if (Math.abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * Settings.linearSlop) {
+        C = translation;
+      } else if (translation <= this.m_lowerTranslation) {
+        C = Math.min(translation - this.m_lowerTranslation, 0.0);
+      } else if (translation >= this.m_upperTranslation) {
+        C = Math.max(translation - this.m_upperTranslation, 0.0);
+      }
 
-    const k = this.m_invMassA + this.m_invMassB + this.m_invIA * this.m_sAy
-        * this.m_sAy + this.m_invIB * this.m_sBy * this.m_sBy; // float
+      if (C != 0.0) {
+        const invMass = this.m_invMassA + this.m_invMassB + this.m_invIA * sAx * sAx + this.m_invIB * sBx * sBx;
+        let impulse = 0.0;
+        if (invMass != 0.0) {
+          impulse = -C / invMass;
+        }
 
-    let impulse; // float
-    if (k != 0.0) {
-      impulse = -C / k;
-    } else {
-      impulse = 0.0;
+        const P = Vec2.mulNumVec2(impulse, ax);
+        const LA = impulse * sAx;
+        const LB = impulse * sBx;
+
+        cA.subMul(this.m_invMassA, P);
+        aA -= this.m_invIA * LA;
+        cB.addMul(this.m_invMassB, P);
+        aB += this.m_invIB * LB;
+
+        linearError = Math.abs(C);
+      }
     }
 
-    const P = Vec2.mulNumVec2(impulse, ay); // Vec2
-    const LA = impulse * sAy; // float
-    const LB = impulse * sBy; // float
+    // Solve perpendicular constraint
+    {
+      const qA = Rot.neo(aA);
+      const qB = Rot.neo(aB);
 
-    cA.subMul(this.m_invMassA, P);
-    aA -= this.m_invIA * LA;
-    cB.addMul(this.m_invMassB, P);
-    aB += this.m_invIB * LB;
+      const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+      const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+      const d = Vec2.zero();
+      d.addCombine(1, cB, 1, rB);
+      d.subCombine(1, cA, 1, rA);
+
+      const ay = Rot.mulVec2(qA, this.m_localYAxisA);
+
+      const sAy = Vec2.crossVec2Vec2(Vec2.add(d, rA), ay); // float
+      const sBy = Vec2.crossVec2Vec2(rB, ay); // float
+
+      const C = Vec2.dot(d, ay); // float
+
+      const k = this.m_invMassA + this.m_invMassB + this.m_invIA * this.m_sAy
+          * this.m_sAy + this.m_invIB * this.m_sBy * this.m_sBy; // float
+
+      let impulse; // float
+      if (k != 0.0) {
+        impulse = -C / k;
+      } else {
+        impulse = 0.0;
+      }
+
+      const P = Vec2.mulNumVec2(impulse, ay); // Vec2
+      const LA = impulse * sAy; // float
+      const LB = impulse * sBy; // float
+
+      cA.subMul(this.m_invMassA, P);
+      aA -= this.m_invIA * LA;
+      cB.addMul(this.m_invMassB, P);
+      aB += this.m_invIB * LB;
+
+      linearError = Math.max(linearError, Math.abs(C));
+    }
 
     this.m_bodyA.c_position.c.setVec2(cA);
     this.m_bodyA.c_position.a = aA;
     this.m_bodyB.c_position.c.setVec2(cB);
     this.m_bodyB.c_position.a = aB;
 
-    return Math.abs(C) <= Settings.linearSlop;
+    return linearError <= Settings.linearSlop;
   }
 
 }
