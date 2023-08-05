@@ -595,11 +595,18 @@ export class Body {
    * Update fixtures in broad-phase.
    */
   synchronizeFixtures(): void {
-    this.m_sweep.getTransform(xf, 0);
-
     const broadPhase = this.m_world.m_broadPhase;
-    for (let f = this.m_fixtureList; f; f = f.m_next) {
-      f.synchronize(broadPhase, xf, this.m_xf);
+
+    if (this.m_awakeFlag) {
+      this.m_sweep.getTransform(xf, 0);
+
+      for (let f = this.m_fixtureList; f; f = f.m_next) {
+        f.synchronize(broadPhase, xf, this.m_xf);
+      }
+    } else {
+      for (let f = this.m_fixtureList; f; f = f.m_next) {
+        f.synchronize(broadPhase, this.m_xf, this.m_xf);
+      }
     }
   }
 

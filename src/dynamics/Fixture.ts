@@ -405,7 +405,7 @@ export class Fixture {
 
       proxy.aabb.combine(synchronize_aabb1, synchronize_aabb2);
 
-      matrix.diffVec2(displacement, xf2.p, xf1.p);
+      matrix.diffVec2(displacement, synchronize_aabb2.getCenter(), synchronize_aabb1.getCenter());
 
       broadPhase.moveProxy(proxy.proxyId, proxy.aabb, displacement);
     }

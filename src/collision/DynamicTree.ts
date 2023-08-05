@@ -47,6 +47,8 @@ export class TreeNode<T> {
   /** 0: leaf, -1: free node */
   height: number = -1;
 
+  moved: boolean = false;
+
   constructor(id?: number) {
     this.id = id;
   }
@@ -110,6 +112,18 @@ export class DynamicTree<T> {
     return node.userData;
   }
 
+  wasMoved(proxyId: number): boolean {
+    const node = this.m_nodes[proxyId];
+    _ASSERT && console.assert(!!node);
+    return node.moved;
+  }
+
+  clearMoved(proxyId: number): void {
+    const node = this.m_nodes[proxyId];
+    _ASSERT && console.assert(!!node);
+    node.moved = false;
+  }
+
   /**
    * Get the fat AABB for a node id.
    *
@@ -152,6 +166,7 @@ export class DynamicTree<T> {
 
     node.userData = userData;
     node.height = 0;
+    node.moved = true;
 
     this.insertLeaf(node);
 
@@ -176,47 +191,64 @@ export class DynamicTree<T> {
    * fattened AABB, then the proxy is removed from the tree and re-inserted.
    * Otherwise the function returns immediately.
    *
-   * @param d Displacement
+   * @param displacement Displacement
    *
    * @return true if the proxy was re-inserted.
    */
-  moveProxy(id: number, aabb: AABB, d: Vec2Value): boolean {
+  moveProxy(id: number, aabb: AABB, displacement: Vec2Value): boolean {
     _ASSERT && console.assert(AABB.isValid(aabb));
-    _ASSERT && console.assert(!d || Vec2.isValid(d));
+    _ASSERT && console.assert(!displacement || Vec2.isValid(displacement));
 
     const node = this.m_nodes[id];
 
     _ASSERT && console.assert(!!node);
     _ASSERT && console.assert(node.isLeaf());
 
-    if (node.aabb.contains(aabb)) {
-      return false;
+    // Extend AABB.
+    const fatAABB = new AABB()
+    fatAABB.set(aabb);
+    AABB.extend(fatAABB, Settings.aabbExtension);
+
+    // Predict AABB movement
+    // const d = Vec2.mul(Settings.aabbMultiplier, displacement);
+
+    if (displacement.x < 0.0) {
+      fatAABB.lowerBound.x += displacement.x * Settings.aabbMultiplier;
+    } else {
+      fatAABB.upperBound.x += displacement.x * Settings.aabbMultiplier;
+    }
+
+    if (displacement.y < 0.0) {
+      fatAABB.lowerBound.y += displacement.y * Settings.aabbMultiplier;
+    } else {
+      fatAABB.upperBound.y += displacement.y * Settings.aabbMultiplier;
+    }
+
+    const treeAABB = node.aabb;
+    if (treeAABB.contains(aabb)) {
+      // The tree AABB still contains the object, but it might be too large.
+      // Perhaps the object was moving fast but has since gone to sleep.
+      // The huge AABB is larger than the new fat AABB.
+      const hugeAABB = new AABB();
+      hugeAABB.set(fatAABB);
+      AABB.extend(hugeAABB, 4.0 * Settings.aabbExtension);
+
+      if (hugeAABB.contains(treeAABB)) {
+        // The tree AABB contains the object AABB and the tree AABB is
+        // not too large. No tree update needed.
+        return false;
+      }
+
+      // Otherwise the tree AABB is huge and needs to be shrunk
     }
 
     this.removeLeaf(node);
 
-    node.aabb.set(aabb);
-
-    // Extend AABB.
-    aabb = node.aabb;
-    AABB.extend(aabb, Settings.aabbExtension);
-
-    // Predict AABB displacement.
-    // const d = Vec2.mul(Settings.aabbMultiplier, displacement);
-
-    if (d.x < 0.0) {
-      aabb.lowerBound.x += d.x * Settings.aabbMultiplier;
-    } else {
-      aabb.upperBound.x += d.x * Settings.aabbMultiplier;
-    }
-
-    if (d.y < 0.0) {
-      aabb.lowerBound.y += d.y * Settings.aabbMultiplier;
-    } else {
-      aabb.upperBound.y += d.y * Settings.aabbMultiplier;
-    }
+    node.aabb = fatAABB;
 
     this.insertLeaf(node);
+
+    node.moved = true;
 
     return true;
   }
@@ -285,6 +317,7 @@ export class DynamicTree<T> {
     newParent.userData = null;
     newParent.aabb.combine(leafAABB, sibling.aabb);
     newParent.height = sibling.height + 1;
+    newParent.moved = false;
 
     if (oldParent != null) {
       // The sibling was not the root.
@@ -693,6 +726,7 @@ export class DynamicTree<T> {
       parent.height = 1 + Math.max(child1.height, child2.height);
       parent.aabb.combine(child1.aabb, child2.aabb);
       parent.parent = null;
+      parent.moved = false;
 
       child1.parent = parent;
       child2.parent = parent;

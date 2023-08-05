@@ -184,8 +184,8 @@ export class BroadPhase {
     this.m_callback = addPairCallback;
 
     // Perform tree queries for all moving proxies.
-    while (this.m_moveBuffer.length > 0) {
-      this.m_queryProxyId = this.m_moveBuffer.pop();
+    for (let i = 0; i < this.m_moveBuffer.length; ++i) {
+      this.m_queryProxyId = this.m_moveBuffer[i];
       if (this.m_queryProxyId === null) {
         continue;
       }
@@ -198,8 +198,18 @@ export class BroadPhase {
       this.m_tree.query(fatAABB, this.queryCallback);
     }
 
-    // Try to keep the tree balanced.
-    // this.m_tree.rebalance(4);
+    // Clear move flags
+    for (let i = 0; i < this.m_moveBuffer.length; ++i) {
+      this.m_queryProxyId = this.m_moveBuffer[i];
+      if (this.m_queryProxyId === null) {
+        continue;
+      }
+
+      this.m_tree.clearMoved(this.m_queryProxyId);
+  }
+
+    // Reset move buffer
+    this.m_moveBuffer.length = 0;
   }
 
   queryCallback = (proxyId: number): boolean => {
@@ -208,10 +218,14 @@ export class BroadPhase {
       return true;
     }
 
+    const moved = this.m_tree.wasMoved(proxyId);
+    if (moved && proxyId > this.m_queryProxyId) {
+      // Both proxies are moving. Avoid duplicate pairs.
+      return true;
+    }
+
     const proxyIdA = Math.min(proxyId, this.m_queryProxyId);
     const proxyIdB = Math.max(proxyId, this.m_queryProxyId);
-
-    // TODO: Skip any duplicate pairs.
 
     const userDataA = this.m_tree.getUserData(proxyIdA);
     const userDataB = this.m_tree.getUserData(proxyIdB);

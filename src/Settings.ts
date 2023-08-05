@@ -57,7 +57,7 @@ export class Settings {
    * future position based on the current displacement. This is a dimensionless
    * multiplier.
    */
-  static aabbMultiplier: number = 2.0;
+  static aabbMultiplier: number = 4.0;
 
   /**
    * A small length used as a collision and constraint tolerance. Usually it is
