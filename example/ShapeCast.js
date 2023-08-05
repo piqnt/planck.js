@@ -56,7 +56,7 @@ if (true) {
   countB = 4;
   radiusB = Settings.polygonRadius;
 
-  transformA = new Transform(new Vec2(0, 0.25));
+  transformA = new Transform(new Vec2(4, 0.25));
   transformB = new Transform(new Vec2(-4, 0));
   translationB = new Vec2(8.0, 0.0);
 } else if (true) {
