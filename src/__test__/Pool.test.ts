@@ -7,7 +7,7 @@ describe('Pool', function(): void {
 
     interface Type {
       busy: boolean;
-      discarded: boolean;
+      disposed: boolean;
       created: boolean;
     }
     var pool = new Pool<Type>({
@@ -15,7 +15,7 @@ describe('Pool', function(): void {
         return {
           created : true,
           busy : false,
-          discarded : false,
+          disposed : false,
         };
       },
       allocate : function(obj: Type): void {
@@ -24,8 +24,8 @@ describe('Pool', function(): void {
       release : function(obj: Type): void {
         obj.busy = false;
       },
-      discard : function(obj: Type): Type {
-        obj.discarded = true;
+      dispose : function(obj: Type): Type {
+        obj.disposed = true;
         return;
       },
       max : 1
@@ -36,14 +36,14 @@ describe('Pool', function(): void {
 
     expect(a.created).be.true;
     expect(a.busy).be.true;
-    expect(a.discarded).be.false;
+    expect(a.disposed).be.false;
 
     pool.release(a);
     expect(a.busy).be.false;
-    expect(a.discarded).be.false;
+    expect(a.disposed).be.false;
 
     pool.release(b);
-    expect(b.discarded).be.true;
+    expect(b.disposed).be.true;
 
   });
 });
