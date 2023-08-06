@@ -55,14 +55,11 @@ function findBody(world: World, point: Point) {
   let body: Body | null = null;
   const aabb = new AABB(point, point);
   world.queryAABB(aabb, (fixture: Fixture) => {
-    if (body) {
-      return false;
-    }
     if (!fixture.getBody().isDynamic() || !fixture.testPoint(point)) {
-      return false;
+      return true;
     }
     body = fixture.getBody();
-    return true;
+    return false;
   });
   return body;
 }
