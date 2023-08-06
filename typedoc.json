@@ -5,7 +5,7 @@
   "out": "./docs/api/",
   "mode": "file",
   "includeDeclarations": false,
-  "exclude": "**/*.test-d.ts",
+  "exclude": ["**/*.test-d.ts", "**/*.test.ts", "**/*.test.js"],
   "excludeExternals": true,
   "excludePrivate": true,
   "stripInternal": true
