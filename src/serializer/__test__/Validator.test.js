@@ -1,5 +1,6 @@
 const { expect } = await import('chai');
 const { default: Ajv } = await import('ajv');
+import { describe, it } from 'vitest';
 
 const { Vec2 }  = await import( '../../common/Vec2');
 const { CircleShape }  = await import( '../../collision/shape/CircleShape');
@@ -9,9 +10,7 @@ const { World }  = await import( '../../dynamics/World');
 
 const { Serializer }  = await import( '../');
 
-const schema = await import('../schema.json', {
-  assert: { type: 'json' }
-});
+const schema = await import('../schema.json');
 
 describe('Serializer', function() {
   var ajv = new Ajv();

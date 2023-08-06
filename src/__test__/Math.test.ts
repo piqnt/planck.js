@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { describe, it } from 'vitest';
 
 import { math as Math } from '../common/Math';
 import { Vec2 } from '../common/Vec2';
