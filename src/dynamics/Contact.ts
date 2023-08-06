@@ -73,17 +73,6 @@ export type EvaluateFunction = (
   indexB: number
 ) => void;
 
-export type ContactCallback = (
-  manifold: Manifold,
-  xfA: Transform,
-  fixtureA: Fixture,
-  indexA: number,
-  xfB: Transform,
-  fixtureB: Fixture,
-  indexB: number
-) => void /* & { destroyFcn?: (contact: Contact) => void }*/;
-
-
 /**
  * Friction mixing law. The idea is to allow either fixture to drive the
  * friction to zero. For example, anything slides on ice.
@@ -1145,7 +1134,7 @@ export class Contact {
   /**
    * @internal
    */
-  static addType(type1: ShapeType, type2: ShapeType, callback: ContactCallback): void {
+  static addType(type1: ShapeType, type2: ShapeType, callback: EvaluateFunction): void {
     s_registers[type1] = s_registers[type1] || {};
     s_registers[type1][type2] = callback;
   }
