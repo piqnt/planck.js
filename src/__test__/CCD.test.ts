@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, it, expect } from 'vitest';
 
 import { Vec2 } from '../common/Vec2';
 import { Transform } from '../common/Transform';

@@ -1,5 +1,5 @@
 // import { util } from 'util';
-import { expect } from 'chai';
+import { describe, it, expect } from 'vitest';
 
 import { Vec2 } from '../../common/Vec2';
 import { CircleShape } from '../../collision/shape/CircleShape';
