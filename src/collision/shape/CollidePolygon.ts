@@ -115,16 +115,10 @@ function findIncidentEdge(c: ClipVertex[], poly1: PolygonShape, xf1: Transform, 
   const i2 = i1 + 1 < count2 ? i1 + 1 : 0;
 
   c[0].v = Transform.mulVec2(xf2, vertices2[i1]);
-  c[0].id.cf.indexA = edge1;
-  c[0].id.cf.indexB = i1;
-  c[0].id.cf.typeA = ContactFeatureType.e_face;
-  c[0].id.cf.typeB = ContactFeatureType.e_vertex;
+  c[0].id.setFeatures(edge1, ContactFeatureType.e_face, i1, ContactFeatureType.e_vertex);
 
   c[1].v = Transform.mulVec2(xf2, vertices2[i2]);
-  c[1].id.cf.indexA = edge1;
-  c[1].id.cf.indexB = i2;
-  c[1].id.cf.typeA = ContactFeatureType.e_face;
-  c[1].id.cf.typeB = ContactFeatureType.e_vertex;
+  c[1].id.setFeatures(edge1, ContactFeatureType.e_face, i2, ContactFeatureType.e_vertex);
 }
 
 const maxSeparation = {
@@ -218,25 +212,24 @@ export const CollidePolygons = function (manifold: Manifold, polyA: PolygonShape
   // Clip incident edge against extruded edge1 side edges.
   const clipPoints1 = [ new ClipVertex(), new ClipVertex() ];
   const clipPoints2 = [ new ClipVertex(), new ClipVertex() ];
-  let np;
 
   // Clip to box side 1
-  np = clipSegmentToLine(clipPoints1, incidentEdge, Vec2.neg(tangent), sideOffset1, iv1);
+  const np1 = clipSegmentToLine(clipPoints1, incidentEdge, Vec2.neg(tangent), sideOffset1, iv1);
 
-  if (np < 2) {
+  if (np1 < 2) {
     return;
   }
 
   // Clip to negative box side 1
-  np = clipSegmentToLine(clipPoints2, clipPoints1, tangent, sideOffset2, iv2);
+  const np2 = clipSegmentToLine(clipPoints2, clipPoints1, tangent, sideOffset2, iv2);
 
-  if (np < 2) {
+  if (np2 < 2) {
     return;
   }
 
   // Now clipPoints2 contains the clipped points.
-  manifold.localNormal = localNormal;
-  manifold.localPoint = planePoint;
+  manifold.localNormal.setVec2(localNormal);
+  manifold.localPoint.setVec2(planePoint);
 
   let pointCount = 0;
   for (let i = 0; i < clipPoints2.length/* maxManifoldPoints */; ++i) {
@@ -245,18 +238,10 @@ export const CollidePolygons = function (manifold: Manifold, polyA: PolygonShape
     if (separation <= totalRadius) {
       const cp = manifold.points[pointCount];
       cp.localPoint.setVec2(Transform.mulTVec2(xf2, clipPoints2[i].v));
-      cp.id = clipPoints2[i].id;
+      cp.id.set(clipPoints2[i].id);
       if (flip) {
         // Swap features
-        const cf = cp.id.cf;
-        const indexA = cf.indexA;
-        const indexB = cf.indexB;
-        const typeA = cf.typeA;
-        const typeB = cf.typeB;
-        cf.indexA = indexB;
-        cf.indexB = indexA;
-        cf.typeA = typeB;
-        cf.typeB = typeA;
+        cp.id.swapFeatures();
       }
       ++pointCount;
     }

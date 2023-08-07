@@ -44,42 +44,38 @@ stats.gjkMaxIters = 0;
 
 /**
  * Input for Distance. You have to option to use the shape radii in the
- * computation. Even
+ * computation.
  */
 export class DistanceInput {
-  proxyA: DistanceProxy = new DistanceProxy();
-  proxyB: DistanceProxy = new DistanceProxy();
-  transformA: Transform | null = null;
-  transformB: Transform | null = null;
-  useRadii: boolean = false;
+  proxyA: DistanceProxy = null;
+  proxyB: DistanceProxy = null;
+  transformA: Transform = null;
+  transformB: Transform = null;
+  useRadii = false;
 }
 
 /**
  * Output for Distance.
- *
- * @prop {Vec2} pointA closest point on shapeA
- * @prop {Vec2} pointB closest point on shapeB
- * @prop distance
- * @prop iterations number of GJK iterations used
  */
 export class DistanceOutput {
-  pointA: Vec2 = Vec2.zero();
-  pointB: Vec2 = Vec2.zero();
-  distance: number;
-  iterations: number;
+  /** closest point on shapeA */
+  pointA = Vec2.zero();
+  /** closest point on shapeB */
+  pointB = Vec2.zero();
+  distance = 0;
+  /** iterations number of GJK iterations used */
+  iterations = 0;
 }
 
 /**
  * Used to warm start Distance. Set count to zero on first call.
- *
- * @prop {number} metric length or area
- * @prop {array} indexA vertices on shape A
- * @prop {array} indexB vertices on shape B
- * @prop {number} count
  */
 export class SimplexCache {
+  /** length or area */
   metric: number = 0;
+  /** vertices on shape A */
   indexA: number[] = [];
+  /** vertices on shape B */
   indexB: number[] = [];
   count: number = 0;
 }
@@ -214,18 +210,10 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
  * A distance proxy is used by the GJK algorithm. It encapsulates any shape.
  */
 export class DistanceProxy {
-  /** internal */ m_buffer: Vec2[];
-  /** internal */ m_vertices: Vec2[];
-  /** internal */ m_count: number;
-  /** internal */ m_radius: number;
-
-
-  constructor() {
-    this.m_buffer = []; // Vec2[2]
-    this.m_vertices = []; // Vec2[]
-    this.m_count = 0;
-    this.m_radius = 0;
-  }
+  // vertices are assigned by reference not value
+  /** @internal */ m_vertices: Vec2[] = [];
+  /** @internal */ m_count = 0;
+  /** @internal */ m_radius = 0;
 
   /**
    * Get the vertex count.
@@ -246,8 +234,8 @@ export class DistanceProxy {
    * Get the supporting vertex index in the given direction.
    */
   getSupport(d: Vec2): number {
-    let bestIndex = 0;
-    let bestValue = Vec2.dot(this.m_vertices[0], d);
+    let bestIndex = -1;
+    let bestValue = -Infinity;
     for (let i = 0; i < this.m_count; ++i) {
       const value = Vec2.dot(this.m_vertices[i], d);
       if (value > bestValue) {
@@ -270,10 +258,10 @@ export class DistanceProxy {
    * while the proxy is in use.
    */
   set(shape: Shape, index: number): void {
-    // TODO remove, use shape instead
     _ASSERT && console.assert(typeof shape.computeDistanceProxy === 'function');
     shape.computeDistanceProxy(this, index);
   }
+
   /**
    * Initialize the proxy using a vertex cloud and radius. The vertices
    * must remain in scope while the proxy is in use.
@@ -287,44 +275,39 @@ export class DistanceProxy {
 
 class SimplexVertex {
   /** support point in proxyA */
-  wA: Vec2 = Vec2.zero();
+  wA = Vec2.zero();
   /** wA index */
-  indexA: number;
+  indexA = 0;
 
   /** support point in proxyB */
-  wB: Vec2 = Vec2.zero();
+  wB = Vec2.zero();
   /** wB index */
-  indexB: number;
+  indexB = 0;
 
   /** wB - wA; */
-  w: Vec2 = Vec2.zero();
+  w = Vec2.zero();
   /** barycentric coordinate for closest point */
-  a: number;
+  a = 0;
 
   set(v: SimplexVertex): void {
     this.indexA = v.indexA;
     this.indexB = v.indexB;
-    this.wA = Vec2.clone(v.wA);
-    this.wB = Vec2.clone(v.wB);
-    this.w = Vec2.clone(v.w);
+    this.wA.x = v.wA.x;
+    this.wA.y = v.wA.y;
+    this.wB.x = v.wB.x;
+    this.wB.y = v.wB.y;
+    this.w.x = v.w.x;
+    this.w.y = v.w.y;
     this.a = v.a;
   }
 }
 
 class Simplex {
-  m_v1: SimplexVertex;
-  m_v2: SimplexVertex;
-  m_v3: SimplexVertex;
-  m_v: SimplexVertex[];
+  m_v1 = new SimplexVertex();
+  m_v2 = new SimplexVertex();
+  m_v3 = new SimplexVertex();
+  m_v = [this.m_v1, this.m_v2, this.m_v3];
   m_count: number;
-
-  constructor() {
-    this.m_v1 = new SimplexVertex();
-    this.m_v2 = new SimplexVertex();
-    this.m_v3 = new SimplexVertex();
-    this.m_v = [ this.m_v1, this.m_v2, this.m_v3 ];
-    this.m_count;
-  }
 
   /** @internal */
   toString(): string {
@@ -683,6 +666,8 @@ class Simplex {
  */
 export const testOverlap = function (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: Transform, xfB: Transform): boolean {
   const input = new DistanceInput();
+  input.proxyA = new DistanceProxy();
+  input.proxyB = new DistanceProxy();
   input.proxyA.set(shapeA, indexA);
   input.proxyB.set(shapeB, indexB);
   input.transformA = xfA;

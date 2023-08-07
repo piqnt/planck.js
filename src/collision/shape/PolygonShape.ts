@@ -525,7 +525,10 @@ export class PolygonShape extends Shape {
   }
 
   computeDistanceProxy(proxy: DistanceProxy): void {
-    proxy.m_vertices = this.m_vertices;
+    for (let i = 0; i < this.m_count; ++i) {
+      proxy.m_vertices[i] = this.m_vertices[i];
+    }
+    proxy.m_vertices.length = this.m_count;
     proxy.m_count = this.m_count;
     proxy.m_radius = this.m_radius;
   }

@@ -84,13 +84,10 @@ export const CollidePolygonCircle = function (manifold: Manifold, polygonA: Poly
     manifold.type = ManifoldType.e_faceA;
     manifold.localNormal.setVec2(normals[normalIndex]);
     manifold.localPoint.setCombine(0.5, v1, 0.5, v2);
-    manifold.points[0].localPoint = circleB.m_p;
+    manifold.points[0].localPoint.setVec2(circleB.m_p);
 
     // manifold.points[0].id.key = 0;
-    manifold.points[0].id.cf.indexA = 0;
-    manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
-    manifold.points[0].id.cf.indexB = 0;
-    manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+    manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
     return;
   }
 
@@ -106,14 +103,11 @@ export const CollidePolygonCircle = function (manifold: Manifold, polygonA: Poly
     manifold.type = ManifoldType.e_faceA;
     manifold.localNormal.setCombine(1, cLocal, -1, v1);
     manifold.localNormal.normalize();
-    manifold.localPoint = v1;
+    manifold.localPoint.setVec2(v1);
     manifold.points[0].localPoint.setVec2(circleB.m_p);
 
     // manifold.points[0].id.key = 0;
-    manifold.points[0].id.cf.indexA = 0;
-    manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
-    manifold.points[0].id.cf.indexB = 0;
-    manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+    manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
   } else if (u2 <= 0.0) {
     if (Vec2.distanceSquared(cLocal, v2) > radius * radius) {
       return;
@@ -127,10 +121,7 @@ export const CollidePolygonCircle = function (manifold: Manifold, polygonA: Poly
     manifold.points[0].localPoint.setVec2(circleB.m_p);
 
     // manifold.points[0].id.key = 0;
-    manifold.points[0].id.cf.indexA = 0;
-    manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
-    manifold.points[0].id.cf.indexB = 0;
-    manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+    manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
   } else {
     const faceCenter = Vec2.mid(v1, v2);
     const separation = Vec2.dot(cLocal, normals[vertIndex1]) - Vec2.dot(faceCenter, normals[vertIndex1]);
@@ -145,9 +136,6 @@ export const CollidePolygonCircle = function (manifold: Manifold, polygonA: Poly
     manifold.points[0].localPoint.setVec2(circleB.m_p);
 
     // manifold.points[0].id.key = 0;
-    manifold.points[0].id.cf.indexA = 0;
-    manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
-    manifold.points[0].id.cf.indexB = 0;
-    manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+    manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
   }
 }

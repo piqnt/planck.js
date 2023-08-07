@@ -429,8 +429,7 @@ export class Body {
     // Touch the proxies so that new contacts will be created (when appropriate)
     const broadPhase = this.m_world.m_broadPhase;
     for (let f = this.m_fixtureList; f; f = f.m_next) {
-      const proxyCount = f.m_proxyCount;
-      for (let i = 0; i < proxyCount; ++i) {
+      for (let i = 0; i < f.m_proxies.length; ++i) {
         broadPhase.touchProxy(f.m_proxies[i].proxyId);
       }
     }
@@ -879,8 +878,7 @@ export class Body {
     this.m_sweep.setLocalCenter(massData.center, this.m_xf);
 
     // Update center of mass velocity.
-    this.m_linearVelocity.add(Vec2.crossNumVec2(this.m_angularVelocity, Vec2.sub(
-      this.m_sweep.c, oldCenter)));
+    this.m_linearVelocity.add(Vec2.crossNumVec2(this.m_angularVelocity, Vec2.sub(this.m_sweep.c, oldCenter)));
   }
 
   /**

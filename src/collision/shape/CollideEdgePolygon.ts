@@ -367,7 +367,7 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
   const k_relativeTol = 0.98;
   const k_absoluteTol = 0.001;
 
-  let primaryAxis;
+  let primaryAxis: EPAxis;
   if (polygonAxis.type == EPAxisType.e_unknown) {
     primaryAxis = edgeAxis;
   } else if (polygonAxis.separation > k_relativeTol * edgeAxis.separation + k_absoluteTol) {
@@ -396,17 +396,12 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
     const i1 = bestIndex;
     const i2 = i1 + 1 < polygonBA.count ? i1 + 1 : 0;
 
-    ie[0].v = polygonBA.vertices[i1];
-    ie[0].id.cf.indexA = 0;
-    ie[0].id.cf.indexB = i1;
-    ie[0].id.cf.typeA = ContactFeatureType.e_face;
-    ie[0].id.cf.typeB = ContactFeatureType.e_vertex;
+    ie[0].v.setVec2(polygonBA.vertices[i1]);
+    ie[0].id.setFeatures(0, ContactFeatureType.e_face, i1, ContactFeatureType.e_vertex);
 
-    ie[1].v = polygonBA.vertices[i2];
-    ie[1].id.cf.indexA = 0;
-    ie[1].id.cf.indexB = i2;
-    ie[1].id.cf.typeA = ContactFeatureType.e_face;
-    ie[1].id.cf.typeB = ContactFeatureType.e_vertex;
+
+    ie[1].v.setVec2(polygonBA.vertices[i2]);
+    ie[1].id.setFeatures(0, ContactFeatureType.e_face, i2, ContactFeatureType.e_vertex);
 
     if (front) {
       rf.i1 = 0;
@@ -424,17 +419,11 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
   } else {
     manifold.type = ManifoldType.e_faceB;
 
-    ie[0].v = v1;
-    ie[0].id.cf.indexA = 0;
-    ie[0].id.cf.indexB = primaryAxis.index;
-    ie[0].id.cf.typeA = ContactFeatureType.e_vertex;
-    ie[0].id.cf.typeB = ContactFeatureType.e_face;
+    ie[0].v.setVec2(v1);
+    ie[0].id.setFeatures(0, ContactFeatureType.e_vertex, primaryAxis.index, ContactFeatureType.e_face);
 
-    ie[1].v = v2;
-    ie[1].id.cf.indexA = 0;
-    ie[1].id.cf.indexB = primaryAxis.index;
-    ie[1].id.cf.typeA = ContactFeatureType.e_vertex;
-    ie[1].id.cf.typeB = ContactFeatureType.e_face;
+    ie[1].v.setVec2(v2);
+    ie[1].id.setFeatures(0, ContactFeatureType.e_vertex, primaryAxis.index, ContactFeatureType.e_face);
 
     rf.i1 = primaryAxis.index;
     rf.i2 = rf.i1 + 1 < polygonBA.count ? rf.i1 + 1 : 0;
@@ -452,29 +441,27 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
   const clipPoints1 = [ new ClipVertex(), new ClipVertex() ];
   const clipPoints2 = [ new ClipVertex(), new ClipVertex() ];
 
-  let np;
-
   // Clip to box side 1
-  np = clipSegmentToLine(clipPoints1, ie, rf.sideNormal1, rf.sideOffset1, rf.i1);
+  const np1 = clipSegmentToLine(clipPoints1, ie, rf.sideNormal1, rf.sideOffset1, rf.i1);
 
-  if (np < Settings.maxManifoldPoints) {
+  if (np1 < Settings.maxManifoldPoints) {
     return;
   }
 
   // Clip to negative box side 1
-  np = clipSegmentToLine(clipPoints2, clipPoints1, rf.sideNormal2, rf.sideOffset2, rf.i2);
+  const np2 = clipSegmentToLine(clipPoints2, clipPoints1, rf.sideNormal2, rf.sideOffset2, rf.i2);
 
-  if (np < Settings.maxManifoldPoints) {
+  if (np2 < Settings.maxManifoldPoints) {
     return;
   }
 
   // Now clipPoints2 contains the clipped points.
   if (primaryAxis.type == EPAxisType.e_edgeA) {
-    manifold.localNormal = Vec2.clone(rf.normal);
-    manifold.localPoint = Vec2.clone(rf.v1);
+    manifold.localNormal.setVec2(rf.normal);
+    manifold.localPoint.setVec2(rf.v1);
   } else {
-    manifold.localNormal = Vec2.clone(polygonB.m_normals[rf.i1]);
-    manifold.localPoint = Vec2.clone(polygonB.m_vertices[rf.i1]);
+    manifold.localNormal.setVec2(polygonB.m_normals[rf.i1]);
+    manifold.localPoint.setVec2(polygonB.m_vertices[rf.i1]);
   }
 
   let pointCount = 0;
@@ -485,14 +472,11 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
       const cp = manifold.points[pointCount]; // ManifoldPoint
 
       if (primaryAxis.type == EPAxisType.e_edgeA) {
-        cp.localPoint = Transform.mulTVec2(xf, clipPoints2[i].v);
-        cp.id = clipPoints2[i].id;
+        cp.localPoint.setVec2(Transform.mulTVec2(xf, clipPoints2[i].v));
+        cp.id.set(clipPoints2[i].id);
       } else {
-        cp.localPoint = clipPoints2[i].v;
-        cp.id.cf.typeA = clipPoints2[i].id.cf.typeB;
-        cp.id.cf.typeB = clipPoints2[i].id.cf.typeA;
-        cp.id.cf.indexA = clipPoints2[i].id.cf.indexB;
-        cp.id.cf.indexB = clipPoints2[i].id.cf.indexA;
+        cp.localPoint.setVec2(clipPoints2[i].v);
+        cp.id.set(clipPoints2[i].id);
       }
 
       ++pointCount;

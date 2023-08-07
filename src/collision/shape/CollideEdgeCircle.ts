@@ -109,10 +109,7 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
     manifold.points[0].localPoint.setVec2(circleB.m_p);
 
     // manifold.points[0].id.key = 0;
-    manifold.points[0].id.cf.indexA = 0;
-    manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
-    manifold.points[0].id.cf.indexB = 0;
-    manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+    manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
     return;
   }
 
@@ -145,10 +142,8 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
     manifold.points[0].localPoint.setVec2(circleB.m_p);
 
     // manifold.points[0].id.key = 0;
-    manifold.points[0].id.cf.indexA = 1;
-    manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
-    manifold.points[0].id.cf.indexB = 0;
-    manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+    manifold.points[0].id.setFeatures(1, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
+
     return;
   }
 
@@ -169,14 +164,11 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
   n.normalize();
 
   manifold.type = ManifoldType.e_faceA;
-  manifold.localNormal = n;
+  manifold.localNormal.setVec2(n);
   manifold.localPoint.setVec2(A);
   manifold.pointCount = 1;
   manifold.points[0].localPoint.setVec2(circleB.m_p);
 
   // manifold.points[0].id.key = 0;
-  manifold.points[0].id.cf.indexA = 0;
-  manifold.points[0].id.cf.typeA = ContactFeatureType.e_face;
-  manifold.points[0].id.cf.indexB = 0;
-  manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+  manifold.points[0].id.setFeatures(0, ContactFeatureType.e_face, 0, ContactFeatureType.e_vertex);
 }

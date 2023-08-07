@@ -29,15 +29,11 @@ import { Transform } from '../common/Transform';
 
 export class Position {
   /** location */
-  c: Vec2;
+  c = Vec2.zero();
 
   /** angle */
-  a: number;
+  a = 0;
 
-  constructor() {
-    this.c = Vec2.zero();
-    this.a = 0;
-  }
 
   getTransform(xf: Transform, p: Vec2): Transform {
     xf.q.setAngle(this.a);
