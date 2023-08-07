@@ -1,5 +1,7 @@
 {
   "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node",
     "compilerOptions": {
       "typeRoots" : ["./node_modules/@types", "./types"]
     }

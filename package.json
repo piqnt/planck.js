@@ -35,14 +35,14 @@
     ".": {
       "types": "./dist/planck.d.ts",
       "umd": "./dist/planck.min.js",
-      "require": "./dist/planck.js",
-      "default": "./dist/planck.mjs"
+      "require": "./dist/planck.cjs",
+      "default": "./dist/planck.js"
     },
     "./with-testbed": {
       "types": "./dist/planck-with-testbed.d.ts",
       "umd": "./dist/planck-with-testbed.min.js",
-      "require": "./dist/planck-with-testbed.js",
-      "default": "./dist/planck-with-testbed.mjs"
+      "require": "./dist/planck-with-testbed.cjs",
+      "default": "./dist/planck-with-testbed.js"
     },
     "./dist/*": "./dist/*"
   },
@@ -100,6 +100,7 @@
     "dev": "vite",
     "vite-build": "vite build",
     "vite-preview": "vite preview",
+    "benchmark": "git log -n 1 && node --loader ts-node/esm ./benchmark/cli/index",
     "typedoc": "typedoc --options typedoc.json"
   }
 }

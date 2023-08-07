@@ -469,24 +469,32 @@ declare class AABB {
 * misrepresented as being the original software.
 * 3. This notice may not be removed or altered from any source distribution.
 */
+interface PoolOptions<T> {
+    max?: number;
+    create?: () => T;
+    /** Called when an object is being re-allocated. */
+    allocate?: (item: T) => void;
+    /** Called when an object is returned to pool. */
+    release?: (item: T) => void;
+    /** Called when an object is returned to the pool but will be disposed from pool. */
+    dispose?: (item: T) => T;
+}
 declare class Pool<T> {
     _list: T[];
     _max: number;
     _createFn: () => T;
-    _outFn: (item: T) => void;
-    _inFn: (item: T) => void;
-    _discardFn: (item: T) => T;
+    _hasCreateFn: boolean;
     _createCount: number;
-    _outCount: number;
-    _inCount: number;
-    _discardCount: number;
-    constructor(opts: {
-        max?: number;
-        create?: () => T;
-        allocate?: (item: T) => void;
-        release?: (item: T) => void;
-        discard?: (item: T) => T;
-    });
+    _allocateFn: (item: T) => void;
+    _hasAllocateFn: boolean;
+    _allocateCount: number;
+    _releaseFn: (item: T) => void;
+    _hasReleaseFn: boolean;
+    _releaseCount: number;
+    _disposeFn: (item: T) => T;
+    _hasDisposeFn: boolean;
+    _disposeCount: number;
+    constructor(opts: PoolOptions<T>);
     max(n?: number): number | Pool<T>;
     size(): number;
     allocate(): T;
@@ -1087,10 +1095,9 @@ declare class ContactEdge {
     constructor(contact: Contact);
 }
 type EvaluateFunction = (manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) => void;
-type ContactCallback = (manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) => void /* & { destroyFcn?: (contact: Contact) => void }*/;
 /**
  * Friction mixing law. The idea is to allow either fixture to drive the
- * restitution to zero. For example, anything slides on ice.
+ * friction to zero. For example, anything slides on ice.
  */
 declare function mixFriction(friction1: number, friction2: number): number;
 /**
@@ -1669,12 +1676,14 @@ interface BodyDef {
      * Linear damping is use to reduce the linear velocity. The
      * damping parameter can be larger than 1.0 but the damping effect becomes
      * sensitive to the time step when the damping parameter is large.
+     * Units are 1/time
      */
     linearDamping?: number;
     /**
      * Angular damping is use to reduce the angular velocity.
      * The damping parameter can be larger than 1.0 but the damping effect
      * becomes sensitive to the time step when the damping parameter is large.
+     * Units are 1/time
      */
     angularDamping?: number;
     /**
@@ -2087,11 +2096,45 @@ declare class DistanceProxy {
      * while the proxy is in use.
      */
     set(shape: Shape, index: number): void;
+    /**
+     * Initialize the proxy using a vertex cloud and radius. The vertices
+     * must remain in scope while the proxy is in use.
+     */
+    setVertices(vertices: Vec2[], count: number, radius: number): void;
 }
 /**
  * Determine if two generic shapes overlap.
  */
 declare const testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: Transform, xfB: Transform) => boolean;
+/**
+ * Input parameters for ShapeCast
+ */
+declare class ShapeCastInput {
+    proxyA: DistanceProxy;
+    proxyB: DistanceProxy;
+    transformA: Transform | null;
+    transformB: Transform | null;
+    translationB: Vec2;
+}
+/**
+ * Output results for b2ShapeCast
+ */
+declare class ShapeCastOutput {
+    point: Vec2;
+    normal: Vec2;
+    lambda: number;
+    iterations: number;
+}
+/**
+ * Perform a linear shape cast of shape B moving and shape A fixed. Determines
+ * the hit point, normal, and translation fraction.
+ * @returns true if hit, false if there is no hit or an initial overlap
+ */
+//
+// GJK-raycast
+// Algorithm by Gino van den Bergen.
+// "Smooth Mesh Contacts with GJK" in Game Physics Pearls. 2010
+declare const ShapeCast: (output: ShapeCastOutput, input: ShapeCastInput) => boolean;
 // todo make shape an interface
 /**
  * A shape is used for collision detection. You can create a shape however you
@@ -2100,6 +2143,10 @@ declare const testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB
  */
 declare abstract class Shape {
     m_type: ShapeType;
+    /**
+     * Radius of a shape. For polygonal shapes this must be b2_polygonRadius.
+     * There is no support for making rounded polygons.
+     */
     m_radius: number;
     static isValid(obj: any): boolean;
     abstract getRadius(): number;
@@ -2163,7 +2210,6 @@ declare class CircleShape extends Shape {
     getType(): "circle";
     getRadius(): number;
     getCenter(): Vec2;
-    getVertex(index: 0): Vec2;
     /**
      * Get the number of child primitives.
      */
@@ -2318,7 +2364,6 @@ declare class PolygonShape extends Shape {
     constructor(vertices?: Vec2Value[]);
     getType(): "polygon";
     getRadius(): number;
-    getVertex(index: number): Vec2;
     /**
      * Get the number of child primitives.
      */
@@ -4112,7 +4157,7 @@ declare class TOIOutput {
 /**
  * Compute the upper bound on time before two shapes penetrate. Time is
  * represented as a fraction between [0,tMax]. This uses a swept separating axis
- * and may miss some intermediate, non-tunneling collision. If you change the
+ * and may miss some intermediate, non-tunneling collisions. If you change the
  * time interval, you should call this function again.
  *
  * Note: use Distance to compute the contact point and normal at the time of
@@ -4634,24 +4679,32 @@ declare namespace planck {
     * misrepresented as being the original software.
     * 3. This notice may not be removed or altered from any source distribution.
     */
+    interface PoolOptions<T> {
+        max?: number;
+        create?: () => T;
+        /** Called when an object is being re-allocated. */
+        allocate?: (item: T) => void;
+        /** Called when an object is returned to pool. */
+        release?: (item: T) => void;
+        /** Called when an object is returned to the pool but will be disposed from pool. */
+        dispose?: (item: T) => T;
+    }
     class Pool<T> {
         _list: T[];
         _max: number;
         _createFn: () => T;
-        _outFn: (item: T) => void;
-        _inFn: (item: T) => void;
-        _discardFn: (item: T) => T;
+        _hasCreateFn: boolean;
         _createCount: number;
-        _outCount: number;
-        _inCount: number;
-        _discardCount: number;
-        constructor(opts: {
-            max?: number;
-            create?: () => T;
-            allocate?: (item: T) => void;
-            release?: (item: T) => void;
-            discard?: (item: T) => T;
-        });
+        _allocateFn: (item: T) => void;
+        _hasAllocateFn: boolean;
+        _allocateCount: number;
+        _releaseFn: (item: T) => void;
+        _hasReleaseFn: boolean;
+        _releaseCount: number;
+        _disposeFn: (item: T) => T;
+        _hasDisposeFn: boolean;
+        _disposeCount: number;
+        constructor(opts: PoolOptions<T>);
         max(n?: number): number | Pool<T>;
         size(): number;
         allocate(): T;
@@ -5252,10 +5305,9 @@ declare namespace planck {
         constructor(contact: Contact);
     }
     type EvaluateFunction = (manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) => void;
-    type ContactCallback = (manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) => void /* & { destroyFcn?: (contact: Contact) => void }*/;
     /**
      * Friction mixing law. The idea is to allow either fixture to drive the
-     * restitution to zero. For example, anything slides on ice.
+     * friction to zero. For example, anything slides on ice.
      */
     function mixFriction(friction1: number, friction2: number): number;
     /**
@@ -5855,12 +5907,14 @@ declare namespace planck {
          * Linear damping is use to reduce the linear velocity. The
          * damping parameter can be larger than 1.0 but the damping effect becomes
          * sensitive to the time step when the damping parameter is large.
+         * Units are 1/time
          */
         linearDamping?: number;
         /**
          * Angular damping is use to reduce the angular velocity.
          * The damping parameter can be larger than 1.0 but the damping effect
          * becomes sensitive to the time step when the damping parameter is large.
+         * Units are 1/time
          */
         angularDamping?: number;
         /**
@@ -6273,11 +6327,45 @@ declare namespace planck {
          * while the proxy is in use.
          */
         set(shape: Shape, index: number): void;
+        /**
+         * Initialize the proxy using a vertex cloud and radius. The vertices
+         * must remain in scope while the proxy is in use.
+         */
+        setVertices(vertices: Vec2[], count: number, radius: number): void;
     }
     /**
      * Determine if two generic shapes overlap.
      */
     const testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: Transform, xfB: Transform) => boolean;
+    /**
+     * Input parameters for ShapeCast
+     */
+    class ShapeCastInput {
+        proxyA: DistanceProxy;
+        proxyB: DistanceProxy;
+        transformA: Transform | null;
+        transformB: Transform | null;
+        translationB: Vec2;
+    }
+    /**
+     * Output results for b2ShapeCast
+     */
+    class ShapeCastOutput {
+        point: Vec2;
+        normal: Vec2;
+        lambda: number;
+        iterations: number;
+    }
+    /**
+     * Perform a linear shape cast of shape B moving and shape A fixed. Determines
+     * the hit point, normal, and translation fraction.
+     * @returns true if hit, false if there is no hit or an initial overlap
+     */
+    //
+    // GJK-raycast
+    // Algorithm by Gino van den Bergen.
+    // "Smooth Mesh Contacts with GJK" in Game Physics Pearls. 2010
+    const ShapeCast: (output: ShapeCastOutput, input: ShapeCastInput) => boolean;
     // todo make shape an interface
     /**
      * A shape is used for collision detection. You can create a shape however you
@@ -6286,6 +6374,10 @@ declare namespace planck {
      */
     abstract class Shape {
         m_type: ShapeType;
+        /**
+         * Radius of a shape. For polygonal shapes this must be b2_polygonRadius.
+         * There is no support for making rounded polygons.
+         */
         m_radius: number;
         static isValid(obj: any): boolean;
         abstract getRadius(): number;
@@ -6347,7 +6439,6 @@ declare namespace planck {
         getType(): "circle";
         getRadius(): number;
         getCenter(): Vec2;
-        getVertex(index: 0): Vec2;
         /**
          * Get the number of child primitives.
          */
@@ -6489,7 +6580,6 @@ declare namespace planck {
         constructor(vertices?: Vec2Value[]);
         getType(): "polygon";
         getRadius(): number;
-        getVertex(index: number): Vec2;
         /**
          * Get the number of child primitives.
          */
@@ -8076,7 +8166,7 @@ declare namespace planck {
     /**
      * Compute the upper bound on time before two shapes penetrate. Time is
      * represented as a fraction between [0,tMax]. This uses a swept separating axis
-     * and may miss some intermediate, non-tunneling collision. If you change the
+     * and may miss some intermediate, non-tunneling collisions. If you change the
      * time interval, you should call this function again.
      *
      * Note: use Distance to compute the contact point and normal at the time of
@@ -8148,5 +8238,5 @@ declare namespace planck {
         };
     };
 }
-export { planck as default, Serializer, math, Vec2Value, Vec2, Vec3, Mat22, Mat33, Transform, Rot, RayCastInput, RayCastCallback, RayCastOutput, AABB, Shape, ShapeType, FixtureOpt, FixtureDef, FixtureProxy, Fixture, BodyType, BodyDef, MassData, Body, ContactEdge, EvaluateFunction, ContactCallback, mixFriction, mixRestitution, VelocityConstraintPoint, Contact, JointEdge, JointOpt, JointDef, Joint, WorldDef, WorldRayCastCallback, WorldAABBQueryCallback, World, CircleShape, Circle, EdgeShape, Edge, PolygonShape, Polygon, ChainShape, Chain, BoxShape, Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJointOpt, DistanceJointDef, DistanceJoint, FrictionJointOpt, FrictionJointDef, FrictionJoint, GearJointOpt, GearJointDef, GearJoint, MotorJointOpt, MotorJointDef, MotorJoint, MouseJointOpt, MouseJointDef, MouseJoint, PrismaticJointOpt, PrismaticJointDef, PrismaticJoint, PulleyJointOpt, PulleyJointDef, PulleyJoint, RevoluteJointOpt, RevoluteJointDef, RevoluteJoint, RopeJointOpt, RopeJointDef, RopeJoint, WeldJointOpt, WeldJointDef, WeldJoint, WheelJointOpt, WheelJointDef, WheelJoint, Settings, Sweep, ManifoldType, ContactFeatureType, PointState, ClipVertex, Manifold, ManifoldPoint, ContactID, ContactFeature, WorldManifold, getPointStates, clipSegmentToLine, DistanceInput, DistanceOutput, SimplexCache, Distance, DistanceProxy, testOverlap, TOIInput, TOIOutputState, TOIOutput, TimeOfImpact, DynamicTreeQueryCallback, TreeNode, DynamicTree, stats, Math, internal };
+export { planck as default, Serializer, math, Vec2Value, Vec2, Vec3, Mat22, Mat33, Transform, Rot, RayCastInput, RayCastCallback, RayCastOutput, AABB, Shape, ShapeType, FixtureOpt, FixtureDef, FixtureProxy, Fixture, BodyType, BodyDef, MassData, Body, ContactEdge, EvaluateFunction, mixFriction, mixRestitution, VelocityConstraintPoint, Contact, JointEdge, JointOpt, JointDef, Joint, WorldDef, WorldRayCastCallback, WorldAABBQueryCallback, World, CircleShape, Circle, EdgeShape, Edge, PolygonShape, Polygon, ChainShape, Chain, BoxShape, Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJointOpt, DistanceJointDef, DistanceJoint, FrictionJointOpt, FrictionJointDef, FrictionJoint, GearJointOpt, GearJointDef, GearJoint, MotorJointOpt, MotorJointDef, MotorJoint, MouseJointOpt, MouseJointDef, MouseJoint, PrismaticJointOpt, PrismaticJointDef, PrismaticJoint, PulleyJointOpt, PulleyJointDef, PulleyJoint, RevoluteJointOpt, RevoluteJointDef, RevoluteJoint, RopeJointOpt, RopeJointDef, RopeJoint, WeldJointOpt, WeldJointDef, WeldJoint, WheelJointOpt, WheelJointDef, WheelJoint, Settings, Sweep, ManifoldType, ContactFeatureType, PointState, ClipVertex, Manifold, ManifoldPoint, ContactID, ContactFeature, WorldManifold, getPointStates, clipSegmentToLine, DistanceInput, DistanceOutput, SimplexCache, Distance, DistanceProxy, testOverlap, ShapeCastInput, ShapeCastOutput, ShapeCast, TOIInput, TOIOutputState, TOIOutput, TimeOfImpact, DynamicTreeQueryCallback, TreeNode, DynamicTree, stats, Math, internal };
 //# sourceMappingURL=planck.d.ts.map
