@@ -1,6 +1,5 @@
-const { expect } = await import('chai');
 const { default: Ajv } = await import('ajv');
-import { describe, it } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 const { Vec2 }  = await import( '../../common/Vec2');
 const { CircleShape }  = await import( '../../collision/shape/CircleShape');
