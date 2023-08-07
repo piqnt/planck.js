@@ -313,8 +313,8 @@ export class EdgeShape extends Shape {
   }
 
   computeDistanceProxy(proxy: DistanceProxy): void {
-    proxy.m_vertices.push(this.m_vertex1);
-    proxy.m_vertices.push(this.m_vertex2);
+    proxy.m_vertices[0] = this.m_vertex1;
+    proxy.m_vertices[1] = this.m_vertex2;
     proxy.m_count = 2;
     proxy.m_radius = this.m_radius;
   }

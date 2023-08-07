@@ -26,13 +26,8 @@ import { Vec2 } from '../common/Vec2';
 
 export class Velocity {
   /** linear */
-  v: Vec2;
+  v = Vec2.zero();
 
   /** angular */
-  w: number;
-
-  constructor() {
-    this.v = Vec2.zero();
-    this.w = 0;
-  }
+  w = 0;
 }

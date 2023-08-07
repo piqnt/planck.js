@@ -50,6 +50,11 @@ export interface RayCastOutput {
   fraction: number;
 }
 
+export interface AABBValue {
+  lowerBound: Vec2Value;
+  upperBound: Vec2Value;
+}
+
 export class AABB {
   lowerBound: Vec2;
   upperBound: Vec2;
@@ -256,5 +261,13 @@ export class AABB {
   /** @internal */
   toString(): string {
     return JSON.stringify(this);
+  }
+
+  static combinedPerimeter(a: AABBValue, b: AABBValue) {
+    const lx = Math.min(a.lowerBound.x, b.lowerBound.x);
+    const ly = Math.min(a.lowerBound.y, b.lowerBound.y);
+    const ux = Math.max(a.upperBound.x, b.upperBound.x);
+    const uy = Math.max(a.upperBound.y, b.upperBound.y);
+    return 2.0 * (ux - lx + uy - ly);  
   }
 }

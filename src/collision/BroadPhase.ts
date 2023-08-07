@@ -38,7 +38,6 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  */
 export class BroadPhase {
   m_tree: DynamicTree<FixtureProxy> = new DynamicTree<FixtureProxy>();
-  m_proxyCount: number = 0;
   m_moveBuffer: number[] = [];
 
   m_callback: (userDataA: any, userDataB: any) => void;
@@ -71,7 +70,7 @@ export class BroadPhase {
    * Get the number of proxies.
    */
   getProxyCount(): number {
-    return this.m_proxyCount;
+    return this.m_moveBuffer.length;
   }
 
   /**
@@ -134,7 +133,6 @@ export class BroadPhase {
   createProxy(aabb: AABB, userData: FixtureProxy): number {
     _ASSERT && console.assert(AABB.isValid(aabb));
     const proxyId = this.m_tree.createProxy(aabb, userData);
-    this.m_proxyCount++;
     this.bufferMove(proxyId);
     return proxyId;
   }
@@ -144,7 +142,6 @@ export class BroadPhase {
    */
   destroyProxy(proxyId: number): void {
     this.unbufferMove(proxyId);
-    this.m_proxyCount--;
     this.m_tree.destroyProxy(proxyId);
   }
 

@@ -203,14 +203,14 @@ export class CircleShape extends Shape {
    */
   computeMass(massData: MassData, density: number): void {
     massData.mass = density * Math.PI * this.m_radius * this.m_radius;
-    massData.center = this.m_p;
+    massData.center.setVec2(this.m_p);
     // inertia about the local origin
     massData.I = massData.mass
         * (0.5 * this.m_radius * this.m_radius + Vec2.dot(this.m_p, this.m_p));
   }
 
   computeDistanceProxy(proxy: DistanceProxy): void {
-    proxy.m_vertices.push(this.m_p);
+    proxy.m_vertices[0] = this.m_p;
     proxy.m_count = 1;
     proxy.m_radius = this.m_radius;
   }

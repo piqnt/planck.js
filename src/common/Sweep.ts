@@ -39,30 +39,32 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  */
 export class Sweep {
   /** Local center of mass position */
-  localCenter: Vec2;
+  localCenter = Vec2.zero();
 
   /** World center position */
-  c: Vec2;
+  c = Vec2.zero();
 
   /** World angle */
-  a: number;
+  a = 0;
 
   /** Fraction of the current time step in the range [0,1], c0 and a0 are c and a at alpha0. */
-  alpha0: number;
+  alpha0 = 0;
 
-  c0: Vec2;
-  a0: number;
+  c0 = Vec2.zero();
+  a0 = 0;
 
-  constructor(c?: Vec2, a?: number) {
-    _ASSERT && console.assert(typeof c === 'undefined');
-    _ASSERT && console.assert(typeof a === 'undefined');
-    this.localCenter = Vec2.zero();
-    this.c = Vec2.zero();
-    this.a = 0;
-    this.alpha0 = 0;
-    this.c0 = Vec2.zero();
-    this.a0 = 0;
-  }
+  // /** @internal */
+  // recycle() {
+  //   this.localCenter.x = 0;
+  //   this.localCenter.y = 0;
+  //   this.c.x = 0;
+  //   this.c.y = 0;
+  //   this.a = 0;
+  //   this.alpha0 = 0;
+  //   this.c0.x = 0;
+  //   this.c0.y = 0;
+  //   this.a0 = 0;
+  // }
 
   setTransform(xf: Transform): void {
     const c = Transform.mulVec2(xf, this.localCenter);

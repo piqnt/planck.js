@@ -978,12 +978,8 @@ export class World {
     }
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   destroyContact(contact: Contact): void {
-    Contact.destroy(contact, this);
-
     // Remove from the world.
     if (contact.m_prev) {
       contact.m_prev.m_next = contact.m_next;
@@ -994,6 +990,8 @@ export class World {
     if (contact == this.m_contactList) {
       this.m_contactList = contact.m_next;
     }
+
+    Contact.destroy(contact, this);
 
     --this.m_contactCount;
   }

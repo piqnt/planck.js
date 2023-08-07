@@ -40,15 +40,16 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * Input parameters for TimeOfImpact.
  */
 export class TOIInput {
-  proxyA: DistanceProxy = new DistanceProxy();
-  proxyB: DistanceProxy = new DistanceProxy();
-  sweepA: Sweep = new Sweep();
-  sweepB: Sweep = new Sweep();
+  proxyA = new DistanceProxy();
+  proxyB = new DistanceProxy();
+  sweepA = new Sweep();
+  sweepB = new Sweep();
   /** defines sweep interval [0, tMax] */
   tMax: number | undefined;
 }
 
 export enum TOIOutputState {
+  e_unset = -1,
   e_unknown = 0,
   e_failed = 1,
   e_overlapped = 2,
@@ -60,8 +61,8 @@ export enum TOIOutputState {
  * Output parameters for TimeOfImpact.
  */
 export class TOIOutput {
-  state: TOIOutputState | undefined;
-  t: number | undefined;
+  state = TOIOutputState.e_unset;
+  t = -1;
 }
 
 stats.toiTime = 0;
@@ -183,8 +184,6 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
     while (true) {
       // Find the deepest point at t2. Store the witness point indices.
       let s2 = fcn.findMinSeparation(t2);
-      // const indexA = fcn.indexA;
-      // const indexB = fcn.indexB;
 
       // Is the final configuration separated?
       if (s2 > target + tolerance) {
@@ -204,8 +203,6 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
 
       // Compute the initial separation of the witness points.
       let s1 = fcn.evaluate(t1);
-      // const indexA = fcn.indexA;
-      // const indexB = fcn.indexB;
 
       // Check for initial overlap. This might happen if the root finder
       // runs out of iterations.
@@ -244,8 +241,6 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
         ++stats.toiRootIters;
 
         const s = fcn.evaluate(t);
-        const indexA = fcn.indexA;
-        const indexB = fcn.indexB;
 
         if (Math.abs(s - target) < tolerance) {
           // t2 holds a tentative value for t1
@@ -299,21 +294,23 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
 }
 
 enum SeparationFunctionType {
+  e_unset = -1,
   e_points = 1,
   e_faceA = 2,
   e_faceB = 3,
 }
 
 class SeparationFunction {
-  m_proxyA: DistanceProxy = new DistanceProxy();
-  m_proxyB: DistanceProxy = new DistanceProxy();
-  m_sweepA: Sweep;
-  m_sweepB: Sweep;
-  indexA: number;
-  indexB: number;
-  m_type: SeparationFunctionType;
-  m_localPoint: Vec2 = Vec2.zero();
-  m_axis: Vec2 = Vec2.zero();
+  // todo: pre-populate all these fields, and assign by copy?
+  m_proxyA: DistanceProxy = null;
+  m_proxyB: DistanceProxy = null;
+  m_sweepA: Sweep = null;
+  m_sweepB: Sweep = null;
+  indexA: number = -1;
+  indexB: number = -1;
+  m_type = SeparationFunctionType.e_unset;
+  m_localPoint = Vec2.zero();
+  m_axis = Vec2.zero();
 
   // TODO_ERIN might not need to return the separation
 
@@ -347,11 +344,11 @@ class SeparationFunction {
       const localPointB1 = proxyB.getVertex(cache.indexB[0]);
       const localPointB2 = proxyB.getVertex(cache.indexB[1]);
 
-      this.m_axis = Vec2.crossVec2Num(Vec2.sub(localPointB2, localPointB1), 1.0);
+      this.m_axis.setVec2(Vec2.crossVec2Num(Vec2.sub(localPointB2, localPointB1), 1.0));
       this.m_axis.normalize();
       const normal = Rot.mulVec2(xfB.q, this.m_axis);
 
-      this.m_localPoint = Vec2.mid(localPointB1, localPointB2);
+      this.m_localPoint.setVec2(Vec2.mid(localPointB1, localPointB2));
       const pointB = Transform.mulVec2(xfB, this.m_localPoint);
 
       const localPointA = proxyA.getVertex(cache.indexA[0]);
@@ -359,7 +356,7 @@ class SeparationFunction {
 
       let s = Vec2.dot(pointA, normal) - Vec2.dot(pointB, normal);
       if (s < 0.0) {
-        this.m_axis = Vec2.neg(this.m_axis);
+        this.m_axis.setMul(-1, this.m_axis);
         s = -s;
       }
       return s;
@@ -370,11 +367,11 @@ class SeparationFunction {
       const localPointA1 = this.m_proxyA.getVertex(cache.indexA[0]);
       const localPointA2 = this.m_proxyA.getVertex(cache.indexA[1]);
 
-      this.m_axis = Vec2.crossVec2Num(Vec2.sub(localPointA2, localPointA1), 1.0);
+      this.m_axis.setVec2(Vec2.crossVec2Num(Vec2.sub(localPointA2, localPointA1), 1.0));
       this.m_axis.normalize();
       const normal = Rot.mulVec2(xfA.q, this.m_axis);
 
-      this.m_localPoint = Vec2.mid(localPointA1, localPointA2);
+      this.m_localPoint.setVec2(Vec2.mid(localPointA1, localPointA2));
       const pointA = Transform.mulVec2(xfA, this.m_localPoint);
 
       const localPointB = this.m_proxyB.getVertex(cache.indexB[0]);
@@ -382,7 +379,7 @@ class SeparationFunction {
 
       let s = Vec2.dot(pointB, normal) - Vec2.dot(pointA, normal);
       if (s < 0.0) {
-        this.m_axis = Vec2.neg(this.m_axis);
+        this.m_axis.setMul(-1, this.m_axis);
         s = -s;
       }
       return s;
@@ -470,8 +467,6 @@ class SeparationFunction {
     return this.compute(false, t);
   }
 }
-
-const separationFunction_reuse = new SeparationFunction();
 
 // legacy exports
 TimeOfImpact.Input = TOIInput;

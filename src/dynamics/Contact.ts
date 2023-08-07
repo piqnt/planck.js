@@ -34,6 +34,7 @@ import { testOverlap } from '../collision/Distance';
 import { Fixture } from "./Fixture";
 import { Body } from "./Body";
 import { ContactImpulse, TimeStep } from "./Solver";
+import { Pool } from "../util/Pool";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -41,6 +42,25 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 // Solver debugging is normally disabled because the block solver sometimes has to deal with a poorly conditioned effective mass matrix.
 const DEBUG_SOLVER = false;
+
+const contactPool = new Pool<Contact>({
+  create() {
+    return new Contact();
+  },
+  release(contact: Contact) {
+    contact.recycle();
+  }
+});
+
+const manifoldPool = new Pool<Manifold>({
+  create() {
+    return new Manifold();
+  },
+  release(manifold: Manifold) {
+    manifold.recycle();
+  }
+});
+
 
 /**
  * A contact edge is used to connect bodies and contacts together in a contact
@@ -55,11 +75,18 @@ const DEBUG_SOLVER = false;
  */
 export class ContactEdge {
   contact: Contact;
-  prev: ContactEdge | undefined;
-  next: ContactEdge | undefined;
-  other: Body | undefined;
+  prev: ContactEdge | null = null;
+  next: ContactEdge | null = null;
+  other: Body | null = null;
   constructor(contact: Contact) {
     this.contact = contact;
+  }
+
+  /** @internal */
+  recycle() {
+    this.prev = null;
+    this.next = null;
+    this.other = null;
   }
 }
 
@@ -94,13 +121,24 @@ const s_registers = [];
 
 // TODO: merge with ManifoldPoint?
 export class VelocityConstraintPoint {
-  rA: Vec2 = Vec2.zero();
-  rB: Vec2 = Vec2.zero();
-  normalImpulse: number = 0;
-  tangentImpulse: number = 0;
-  normalMass: number = 0;
-  tangentMass: number = 0;
-  velocityBias: number = 0;
+  rA = Vec2.zero();
+  rB = Vec2.zero();
+  normalImpulse = 0;
+  tangentImpulse = 0;
+  normalMass = 0;
+  tangentMass = 0;
+  velocityBias = 0;
+
+  /** @internal */
+  recycle() {
+    this.rA.setZero();
+    this.rB.setZero();
+    this.normalImpulse = 0;
+    this.tangentImpulse = 0;
+    this.normalMass = 0;
+    this.tangentMass = 0;
+    this.velocityBias = 0;
+  }
 }
 
 /**
@@ -124,7 +162,7 @@ export class Contact {
   /** @internal */
   m_evaluateFcn: EvaluateFunction;
   /** @internal */
-  m_manifold: Manifold = new Manifold();
+  m_manifold: Manifold = manifoldPool.allocate();
   /** @internal */
   m_prev: Contact | null = null;
   /** @internal */
@@ -156,35 +194,37 @@ export class Contact {
   m_impulse: ContactImpulse = new ContactImpulse(this);
 
   // VelocityConstraint
-  /** @internal */ v_points: VelocityConstraintPoint[] = []; // [maxManifoldPoints];
-  /** @internal */ v_normal: Vec2 = Vec2.zero();
+  /** @internal */
+  v_points = [new VelocityConstraintPoint(), new VelocityConstraintPoint()]; // [maxManifoldPoints];
+  /** @internal */
+  v_normal = Vec2.zero();
   /** @internal */ v_normalMass: Mat22 = new Mat22();
   /** @internal */ v_K: Mat22 = new Mat22();
-  /** @internal */ v_pointCount: number;
-  /** @internal */ v_tangentSpeed: number | undefined;
-  /** @internal */ v_friction: number | undefined;
-  /** @internal */ v_restitution: number | undefined;
-  /** @internal */ v_invMassA: number | undefined;
-  /** @internal */ v_invMassB: number | undefined;
-  /** @internal */ v_invIA: number | undefined;
-  /** @internal */ v_invIB: number | undefined;
+  /** @internal */ v_pointCount = 0;
+  /** @internal */ v_tangentSpeed = 0;
+  /** @internal */ v_friction = 0;
+  /** @internal */ v_restitution = 0;
+  /** @internal */ v_invMassA = 0;
+  /** @internal */ v_invMassB = 0;
+  /** @internal */ v_invIA = 0;
+  /** @internal */ v_invIB = 0;
 
   // PositionConstraint
-  /** @internal */ p_localPoints: Vec2[] = []; // [maxManifoldPoints];
-  /** @internal */ p_localNormal: Vec2 = Vec2.zero();
-  /** @internal */ p_localPoint: Vec2 = Vec2.zero();
-  /** @internal */ p_localCenterA: Vec2 = Vec2.zero();
-  /** @internal */ p_localCenterB: Vec2 = Vec2.zero();
-  /** @internal */ p_type: ManifoldType | undefined;
-  /** @internal */ p_radiusA: number | undefined;
-  /** @internal */ p_radiusB: number | undefined;
-  /** @internal */ p_pointCount: number | undefined;
-  /** @internal */ p_invMassA: number | undefined;
-  /** @internal */ p_invMassB: number | undefined;
-  /** @internal */ p_invIA: number | undefined;
-  /** @internal */ p_invIB: number | undefined;
+  /** @internal */ p_localPoints = [Vec2.zero(), Vec2.zero()]; // [maxManifoldPoints];
+  /** @internal */ p_localNormal = Vec2.zero();
+  /** @internal */ p_localPoint = Vec2.zero();
+  /** @internal */ p_localCenterA = Vec2.zero();
+  /** @internal */ p_localCenterB = Vec2.zero();
+  /** @internal */ p_type = ManifoldType.e_unset;
+  /** @internal */ p_radiusA = 0;
+  /** @internal */ p_radiusB = 0;
+  /** @internal */ p_pointCount = 0;
+  /** @internal */ p_invMassA = 0;
+  /** @internal */ p_invMassB = 0;
+  /** @internal */ p_invIA = 0;
+  /** @internal */ p_invIB = 0;
 
-  constructor(fA: Fixture, indexA: number, fB: Fixture, indexB: number, evaluateFcn: EvaluateFunction) {
+  initialize(fA: Fixture, indexA: number, fB: Fixture, indexB: number, evaluateFcn: EvaluateFunction) {
     // Nodes for connecting bodies.
     this.m_nodeA = new ContactEdge(this);
     this.m_nodeB = new ContactEdge(this);
@@ -199,6 +239,66 @@ export class Contact {
 
     this.m_friction = mixFriction(this.m_fixtureA.m_friction, this.m_fixtureB.m_friction);
     this.m_restitution = mixRestitution(this.m_fixtureA.m_restitution, this.m_fixtureB.m_restitution);
+  }
+
+  recycle() {
+    this.m_nodeA.recycle();
+    this.m_nodeB.recycle();
+    this.m_fixtureA = null;
+    this.m_fixtureB = null;
+    this.m_indexA = -1;
+    this.m_indexB = -1;
+    this.m_evaluateFcn = null;
+    this.m_manifold.recycle();
+    this.m_prev = null;
+    this.m_next = null;
+    this.m_toi = 1;
+    this.m_toiCount = 0;
+    this.m_toiFlag = false;
+    this.m_friction = 0;
+    this.m_restitution = 0;
+    this.m_tangentSpeed = 0;
+    this.m_enabledFlag = true;
+    this.m_islandFlag = false;
+    this.m_touchingFlag = false;
+    this.m_filterFlag = false;
+    this.m_bulletHitFlag = false;
+
+    this.m_impulse.recycle();
+
+    // VelocityConstraint
+    for(const point of this.v_points) {
+      point.recycle();
+    }
+    this.v_normal.x = 0;
+    this.v_normal.y = 0;
+    this.v_normalMass.setZero();
+    this.v_K.setZero();
+    this.v_pointCount = 0;
+    this.v_tangentSpeed = 0;
+    this.v_friction = 0;
+    this.v_restitution = 0;
+    this.v_invMassA = 0;
+    this.v_invMassB = 0;
+    this.v_invIA = 0;
+    this.v_invIB = 0;
+
+    // PositionConstraint
+    for(const point of this.p_localPoints) {
+      point.setZero();
+    }
+    this.p_localNormal.setZero();
+    this.p_localPoint.setZero();
+    this.p_localCenterA.setZero();
+    this.p_localCenterB.setZero();
+    this.p_type = ManifoldType.e_unset;
+    this.p_radiusA = 0;
+    this.p_radiusB = 0;
+    this.p_pointCount = 0;
+    this.p_invMassA = 0;
+    this.p_invMassB = 0;
+    this.p_invIA = 0;
+    this.p_invIB = 0;
   }
 
   initConstraint(step: TimeStep): void {
@@ -234,38 +334,30 @@ export class Contact {
     this.p_invMassB = bodyB.m_invMass;
     this.p_invIA = bodyA.m_invI;
     this.p_invIB = bodyB.m_invI;
-    this.p_localCenterA = Vec2.clone(bodyA.m_sweep.localCenter);
-    this.p_localCenterB = Vec2.clone(bodyB.m_sweep.localCenter);
+    this.p_localCenterA.setVec2(bodyA.m_sweep.localCenter);
+    this.p_localCenterB.setVec2(bodyB.m_sweep.localCenter);
 
     this.p_radiusA = shapeA.m_radius;
     this.p_radiusB = shapeB.m_radius;
 
     this.p_type = manifold.type;
-    this.p_localNormal = Vec2.clone(manifold.localNormal);
-    this.p_localPoint = Vec2.clone(manifold.localPoint);
+    this.p_localNormal.setVec2(manifold.localNormal);
+    this.p_localPoint.setVec2(manifold.localPoint);
     this.p_pointCount = pointCount;
+
+    for (let j = 0; j < Settings.maxManifoldPoints; ++j) {
+      this.v_points[j].recycle();
+      this.p_localPoints[j].setZero()
+    }
 
     for (let j = 0; j < pointCount; ++j) {
       const cp = manifold.points[j];
-      const vcp = this.v_points[j] = new VelocityConstraintPoint();
-
+      const vcp = this.v_points[j];
       if (step.warmStarting) {
         vcp.normalImpulse = step.dtRatio * cp.normalImpulse;
         vcp.tangentImpulse = step.dtRatio * cp.tangentImpulse;
-
-      } else {
-        vcp.normalImpulse = 0.0;
-        vcp.tangentImpulse = 0.0;
       }
-
-      vcp.rA.setZero();
-      vcp.rB.setZero();
-      vcp.normalMass = 0.0;
-      vcp.tangentMass = 0.0;
-      vcp.velocityBias = 0.0;
-
-      this.p_localPoints[j] = Vec2.clone(cp.localPoint);
-
+      this.p_localPoints[j].setVec2(cp.localPoint);
     }
   }
 
@@ -286,7 +378,7 @@ export class Contact {
     const shapeA = this.m_fixtureA.getShape();
     const shapeB = this.m_fixtureB.getShape();
 
-    return this.m_manifold.getWorldManifold(worldManifold, bodyA.getTransform(),
+    return this.m_manifold.getWorldManifold(worldManifold ?? null, bodyA.getTransform(),
       shapeA.m_radius, bodyB.getTransform(), shapeB.m_radius);
   }
 
@@ -454,7 +546,7 @@ export class Contact {
     const xfA = bodyA.getTransform();
     const xfB = bodyB.getTransform();
 
-    let oldManifold;
+    let oldManifold: Manifold | null = null;
 
     // Is this contact a sensor?
     if (sensor) {
@@ -468,7 +560,7 @@ export class Contact {
 
       // TODO reuse manifold
       oldManifold = this.m_manifold;
-      this.m_manifold = new Manifold();
+      this.m_manifold = manifoldPool.allocate();
 
       this.evaluate(this.m_manifold, xfA, xfB);
       touching = this.m_manifold.pointCount > 0;
@@ -482,7 +574,7 @@ export class Contact {
 
         for (let j = 0; j < oldManifold.pointCount; ++j) {
           const omp = oldManifold.points[j];
-          if (omp.id.key == nmp.id.key) {
+          if (omp.id.key === nmp.id.key) {
             nmp.normalImpulse = omp.normalImpulse;
             nmp.tangentImpulse = omp.tangentImpulse;
             break;
@@ -508,6 +600,10 @@ export class Contact {
 
     if (!sensor && touching && listener) {
       listener.preSolve(this, oldManifold);
+    }
+
+    if (oldManifold) {
+      manifoldPool.release(oldManifold);
     }
   }
 
@@ -686,7 +782,8 @@ export class Contact {
     xfA.p.setCombine(1, cA, -1, Rot.mulVec2(xfA.q, localCenterA));
     xfB.p.setCombine(1, cB, -1, Rot.mulVec2(xfB.q, localCenterB));
 
-    const worldManifold = manifold.getWorldManifold(null, xfA, radiusA, xfB, radiusB);
+    const worldManifold = new WorldManifold();
+    manifold.getWorldManifold(worldManifold, xfA, radiusA, xfB, radiusB);
 
     this.v_normal.setVec2(worldManifold.normal);
 
@@ -1146,13 +1243,12 @@ export class Contact {
     const typeA = fixtureA.getType();
     const typeB = fixtureB.getType();
 
-    // TODO: pool contacts
-    let contact;
+    const contact = contactPool.allocate();
     let evaluateFcn;
     if (evaluateFcn = s_registers[typeA] && s_registers[typeA][typeB]) {
-      contact = new Contact(fixtureA, indexA, fixtureB, indexB, evaluateFcn);
+      contact.initialize(fixtureA, indexA, fixtureB, indexB, evaluateFcn);
     } else if (evaluateFcn = s_registers[typeB] && s_registers[typeB][typeA]) {
-      contact = new Contact(fixtureB, indexB, fixtureA, indexA, evaluateFcn);
+      contact.initialize(fixtureB, indexB, fixtureA, indexA, evaluateFcn);
     } else {
       return null;
     }
@@ -1242,12 +1338,14 @@ export class Contact {
       bodyB.setAwake(true);
     }
 
-    const typeA = fixtureA.getType();
-    const typeB = fixtureB.getType();
+    // const typeA = fixtureA.getType();
+    // const typeB = fixtureB.getType();
 
     // const destroyFcn = s_registers[typeA][typeB].destroyFcn;
     // if (typeof destroyFcn === 'function') {
     //   destroyFcn(contact);
     // }
+
+    contactPool.release(contact);
   }
 }

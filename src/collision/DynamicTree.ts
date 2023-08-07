@@ -239,9 +239,7 @@ export class DynamicTree<T> {
 
       const area = index.aabb.getPerimeter();
 
-      const combinedAABB = new AABB();
-      combinedAABB.combine(index.aabb, leafAABB);
-      const combinedArea = combinedAABB.getPerimeter();
+      const combinedArea = AABB.combinedPerimeter(index.aabb, leafAABB);
 
       // Cost of creating a new parent for this node and the new leaf
       const cost = 2.0 * combinedArea;
@@ -252,28 +250,20 @@ export class DynamicTree<T> {
       // Cost of descending into child1
       let cost1;
       if (child1.isLeaf()) {
-        const aabb = new AABB();
-        aabb.combine(leafAABB, child1.aabb);
-        cost1 = aabb.getPerimeter() + inheritanceCost;
+        cost1 = AABB.combinedPerimeter(child1.aabb, leafAABB) + inheritanceCost;
       } else {
-        const aabb = new AABB();
-        aabb.combine(leafAABB, child1.aabb);
         const oldArea = child1.aabb.getPerimeter();
-        const newArea = aabb.getPerimeter();
+        const newArea = AABB.combinedPerimeter(child1.aabb, leafAABB);
         cost1 = (newArea - oldArea) + inheritanceCost;
       }
 
       // Cost of descending into child2
       let cost2;
       if (child2.isLeaf()) {
-        const aabb = new AABB();
-        aabb.combine(leafAABB, child2.aabb);
-        cost2 = aabb.getPerimeter() + inheritanceCost;
+        cost2 = AABB.combinedPerimeter(child2.aabb, leafAABB) + inheritanceCost;
       } else {
-        const aabb = new AABB();
-        aabb.combine(leafAABB, child2.aabb);
         const oldArea = child2.aabb.getPerimeter();
-        const newArea = aabb.getPerimeter();
+        const newArea = AABB.combinedPerimeter(child2.aabb, leafAABB);
         cost2 = newArea - oldArea + inheritanceCost;
       }
 
@@ -625,9 +615,11 @@ export class DynamicTree<T> {
    * Validate this tree. For testing.
    */
   validate(): void {
+    if (!_ASSERT) return;
     this.validateStructure(this.m_root);
     this.validateMetrics(this.m_root);
-    _ASSERT && console.assert(this.getHeight() === this.computeHeight());
+
+    console.assert(this.getHeight() === this.computeHeight());
   }
 
   /**
@@ -687,9 +679,7 @@ export class DynamicTree<T> {
         const aabbi = nodes[i].aabb;
         for (let j = i + 1; j < count; ++j) {
           const aabbj = nodes[j].aabb;
-          const b = new AABB();
-          b.combine(aabbi, aabbj);
-          const cost = b.getPerimeter();
+          const cost = AABB.combinedPerimeter(aabbi, aabbj);
           if (cost < minCost) {
             iMin = i;
             jMin = j;

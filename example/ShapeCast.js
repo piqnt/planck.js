@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-const { Vec2, Transform, Math, World, Settings, ShapeCastInput, ShapeCastOutput, ShapeCast, DistanceInput, DistanceOutput, Distance, SimplexCache } = planck;
+const { Vec2, Transform, Math, World, Settings, ShapeCastInput, ShapeCastOutput, ShapeCast, DistanceInput, DistanceOutput, Distance, SimplexCache, DistanceProxy } = planck;
 
 var world = new World();
 
@@ -108,6 +108,8 @@ testbed.step = function() {
   );
 
   const distanceInput = new DistanceInput();
+  distanceInput.proxyA = new DistanceProxy();
+  distanceInput.proxyB = new DistanceProxy();
   distanceInput.proxyA.setVertices(vAs, countA, radiusA);
   distanceInput.proxyB.setVertices(vBs, countB, radiusB);
   distanceInput.transformA = transformA;

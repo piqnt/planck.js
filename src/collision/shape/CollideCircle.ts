@@ -63,8 +63,5 @@ export const CollideCircles = function (manifold: Manifold, circleA: CircleShape
   manifold.points[0].localPoint.setVec2(circleB.m_p);
 
   // manifold.points[0].id.key = 0;
-  manifold.points[0].id.cf.indexA = 0;
-  manifold.points[0].id.cf.typeA = ContactFeatureType.e_vertex;
-  manifold.points[0].id.cf.indexB = 0;
-  manifold.points[0].id.cf.typeB = ContactFeatureType.e_vertex;
+  manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex)
 }

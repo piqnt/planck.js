@@ -29,7 +29,7 @@ import { Body } from './Body';
 import type { Contact } from './Contact';
 import { Joint } from './Joint';
 import { TimeOfImpact, TOIInput, TOIOutput, TOIOutputState } from '../collision/TimeOfImpact';
-import { Distance, DistanceInput, DistanceOutput, SimplexCache } from '../collision/Distance';
+import { Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from '../collision/Distance';
 import { World } from "./World";
 
 
@@ -80,6 +80,11 @@ export class ContactImpulse {
     this.contact = contact;
     this.normals = [];
     this.tangents = [];
+  }
+
+  recycle() {
+    this.normals.length = 0;
+    this.tangents.length = 0;
   }
 
   get normalImpulses(): number[] {
@@ -320,9 +325,9 @@ export class Solver {
         w *= 1.0 / (1.0 + h * body.m_angularDamping);
       }
 
-      body.c_position.c = c;
+      body.c_position.c.setVec2(c);
       body.c_position.a = a;
-      body.c_velocity.v = v;
+      body.c_velocity.v.setVec2(v);
       body.c_velocity.w = w;
     }
 
@@ -793,6 +798,8 @@ export class Solver {
         const indexB = c.getChildIndexB();
 
         const input = new DistanceInput();
+        input.proxyA = new DistanceProxy();
+        input.proxyB = new DistanceProxy();      
         input.proxyA.set(fA.getShape(), indexA);
         input.proxyB.set(fB.getShape(), indexB);
         input.transformA = bA.getTransform();
@@ -861,15 +868,15 @@ export class Solver {
       c.addMul(h, v);
       a += h * w;
 
-      body.c_position.c = c;
+      body.c_position.c.setVec2(c);
       body.c_position.a = a;
-      body.c_velocity.v = v;
+      body.c_velocity.v.setVec2(v);
       body.c_velocity.w = w;
 
       // Sync bodies
-      body.m_sweep.c = c;
+      body.m_sweep.c.setVec2(c);
       body.m_sweep.a = a;
-      body.m_linearVelocity = v;
+      body.m_linearVelocity.setVec2(v);
       body.m_angularVelocity = w;
       body.synchronizeTransform();
     }

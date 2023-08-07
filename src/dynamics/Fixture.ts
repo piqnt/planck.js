@@ -124,7 +124,6 @@ export class Fixture {
   /** @internal */ m_shape: Shape;
   /** @internal */ m_next: Fixture | null;
   /** @internal */ m_proxies: FixtureProxy[];
-  /** @internal */ m_proxyCount: number;
   /** @internal */ m_userData: unknown;
 
   constructor(body: Body, def: FixtureDef);
@@ -159,7 +158,6 @@ export class Fixture {
     this.m_next = null;
 
     this.m_proxies = [];
-    this.m_proxyCount = 0;
 
     const childCount = this.m_shape.getChildCount();
     for (let i = 0; i < childCount; ++i) {
@@ -365,12 +363,12 @@ export class Fixture {
    * These support body activation/deactivation.
    */
   createProxies(broadPhase: BroadPhase, xf: Transform): void {
-    _ASSERT && console.assert(this.m_proxyCount == 0);
+    _ASSERT && console.assert(this.m_proxies.length == 0);
 
     // Create proxies in the broad-phase.
-    this.m_proxyCount = this.m_shape.getChildCount();
+    const childCount = this.m_shape.getChildCount();
 
-    for (let i = 0; i < this.m_proxyCount; ++i) {
+    for (let i = 0; i < childCount; ++i) {
       const proxy = this.m_proxies[i];
       this.m_shape.computeAABB(proxy.aabb, xf, i);
       proxy.proxyId = broadPhase.createProxy(proxy.aabb, proxy);
@@ -379,13 +377,14 @@ export class Fixture {
 
   destroyProxies(broadPhase: BroadPhase): void {
     // Destroy proxies in the broad-phase.
-    for (let i = 0; i < this.m_proxyCount; ++i) {
+    for (let i = 0; i < this.m_proxies.length; ++i) {
       const proxy = this.m_proxies[i];
       broadPhase.destroyProxy(proxy.proxyId);
       proxy.proxyId = null;
+      proxy.fixture = null;
     }
 
-    this.m_proxyCount = 0;
+    this.m_proxies.length = 0;
   }
 
   /**
@@ -393,7 +392,7 @@ export class Fixture {
    * next transformation).
    */
   synchronize(broadPhase: BroadPhase, xf1: Transform, xf2: Transform): void {
-    for (let i = 0; i < this.m_proxyCount; ++i) {
+    for (let i = 0; i < this.m_proxies.length; ++i) {
       const proxy = this.m_proxies[i];
       // Compute an AABB that covers the swept shape (may miss some rotation
       // effect).
@@ -476,7 +475,7 @@ export class Fixture {
 
     // Touch each proxy so that new pairs may be created
     const broadPhase = world.m_broadPhase;
-    for (let i = 0; i < this.m_proxyCount; ++i) {
+    for (let i = 0; i < this.m_proxies.length; ++i) {
       broadPhase.touchProxy(this.m_proxies[i].proxyId);
     }
   }
