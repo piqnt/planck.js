@@ -23,6 +23,16 @@ export function getBrowserInfo() {
 const startButton = document.getElementById("start") as HTMLButtonElement;
 const tbody = document.querySelector("tbody") as HTMLElement;
 const ratioHead = document.getElementById("ratio") as HTMLElement;
+const branchName = document.getElementById("branch-name") as HTMLElement;
+
+branchName.innerHTML = [
+  import.meta.env.VITE_GIT_BRANCH_NAME,
+  import.meta.env.VITE_GIT_COMMIT_HASH.slice(0, 7),
+  import.meta.env.VITE_GIT_COMMIT_DATE.slice(0, 19).replace("T", " "),
+  '\"' + import.meta.env.VITE_GIT_LAST_COMMIT_MESSAGE + '\"',
+].join("<br />");
+
+
 
 const testRows = prepareTests(tests).map((test: TestInterface) => {
     const row = document.createElement("tr");
