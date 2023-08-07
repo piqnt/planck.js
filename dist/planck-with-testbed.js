@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.0-beta.5
+ * Planck.js v1.0.0-beta.6
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
@@ -1574,9 +1574,9 @@ const canvas = function(type, attributes, plotter) {
   }
   return texture2;
 };
-const PIXEL_RATIO = window.devicePixelRatio || 1;
 let M;
 function memoizeDraw(callback, memoKey = () => null) {
+  const PIXEL_RATIO = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
   let lastRatio = 0;
   let lastSelection = void 0;
   let texture2 = Stage.canvas();
@@ -17717,14 +17717,11 @@ function findBody(world, point) {
     var body = null;
     var aabb = new AABB(point, point);
     world.queryAABB(aabb, function (fixture) {
-        if (body) {
-            return false;
-        }
         if (!fixture.getBody().isDynamic() || !fixture.testPoint(point)) {
-            return false;
+            return true;
         }
         body = fixture.getBody();
-        return true;
+        return false;
     });
     return body;
 }
