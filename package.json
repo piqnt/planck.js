@@ -95,7 +95,7 @@
     "dev": "vite",
     "vite-build": "vite build",
     "vite-preview": "vite preview",
-    "benchmark": "git log -n 1 && node --loader ts-node/esm ./benchmark/cli/index",
+    "benchmark": "git log -n 1 && vite-node ./benchmark/node",
     "typedoc": "typedoc --options typedoc.json"
   }
 }

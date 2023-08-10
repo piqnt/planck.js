@@ -1,6 +1,12 @@
-import { prepareTests, resultsToMarkdown, runTestAsync, TestResult, TestInterface } from "./benchmark";
-import { tests } from "./tests";
+import { prepareTests, resultsToMarkdown, runTestAsync, TestResult, TestInterface, TestFactory } from "./benchmark";
+import { box2dJsFactory } from "./tests/box2d-js";
+import { planckFactory } from "./tests/planck";
 
+export const tests: TestFactory[] = [
+  box2dJsFactory,
+  planckFactory,
+];
+  
 export function getBrowserInfo() {
     const ua = navigator.userAgent;
     let M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) ?? [];
