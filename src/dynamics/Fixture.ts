@@ -22,18 +22,22 @@
  * SOFTWARE.
  */
 
+import * as matrix from '../common/Matrix';
 import { options } from '../util/options';
 import { math as Math } from '../common/Math';
-import { Vec2, Vec2Value } from '../common/Vec2';
+import { Vec2Value } from '../common/Vec2';
 import { AABB, RayCastInput, RayCastOutput } from '../collision/AABB';
 import { Shape, ShapeType } from '../collision/Shape';
 import { Body, MassData } from "./Body";
 import { BroadPhase } from "../collision/BroadPhase";
-import { Transform } from "../common/Transform";
+import { TransformValue } from "../common/Transform";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
+const synchronize_aabb1 = new AABB();
+const synchronize_aabb2 = new AABB();
+const displacement = matrix.vec2(0, 0);
 
 /**
  * A fixture definition is used to create a fixture. This class defines an
@@ -214,7 +218,7 @@ export class Fixture {
    * concrete shape.
    */
   getType(): ShapeType {
-    return this.m_shape.getType();
+    return this.m_shape.m_type;
   }
 
   /**
@@ -362,7 +366,7 @@ export class Fixture {
   /**
    * These support body activation/deactivation.
    */
-  createProxies(broadPhase: BroadPhase, xf: Transform): void {
+  createProxies(broadPhase: BroadPhase, xf: TransformValue): void {
     _ASSERT && console.assert(this.m_proxies.length == 0);
 
     // Create proxies in the broad-phase.
@@ -391,19 +395,17 @@ export class Fixture {
    * Updates this fixture proxy in broad-phase (with combined AABB of current and
    * next transformation).
    */
-  synchronize(broadPhase: BroadPhase, xf1: Transform, xf2: Transform): void {
+  synchronize(broadPhase: BroadPhase, xf1: TransformValue, xf2: TransformValue): void {
     for (let i = 0; i < this.m_proxies.length; ++i) {
       const proxy = this.m_proxies[i];
       // Compute an AABB that covers the swept shape (may miss some rotation
       // effect).
-      const aabb1 = new AABB();
-      const aabb2 = new AABB();
-      this.m_shape.computeAABB(aabb1, xf1, proxy.childIndex);
-      this.m_shape.computeAABB(aabb2, xf2, proxy.childIndex);
+      this.m_shape.computeAABB(synchronize_aabb1, xf1, proxy.childIndex);
+      this.m_shape.computeAABB(synchronize_aabb2, xf2, proxy.childIndex);
 
-      proxy.aabb.combine(aabb1, aabb2);
+      proxy.aabb.combine(synchronize_aabb1, synchronize_aabb2);
 
-      const displacement = Vec2.sub(xf2.p, xf1.p);
+      matrix.diffVec2(displacement, xf2.p, xf1.p);
 
       broadPhase.moveProxy(proxy.proxyId, proxy.aabb, displacement);
     }

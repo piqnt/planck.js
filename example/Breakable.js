@@ -88,8 +88,6 @@ function Break() {
   var velocity1 = Vec2.add(breakVelocity, Vec2.cross(breakAngularVelocity, Vec2.sub(center1, center)));
   var velocity2 = Vec2.add(breakVelocity, Vec2.cross(breakAngularVelocity, Vec2.sub(center2, center)));
 
-  console.log(velocity1, velocity2);
-
   body1.setAngularVelocity(breakAngularVelocity);
   body1.setLinearVelocity(velocity1);
 

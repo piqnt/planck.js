@@ -22,8 +22,7 @@
  * SOFTWARE.
  */
 
-import { Vec2 } from '../common/Vec2';
-import { math as Math } from '../common/Math';
+import { Vec2Value } from '../common/Vec2';
 import { AABB, RayCastCallback, RayCastInput } from './AABB';
 import { DynamicTree, DynamicTreeQueryCallback } from './DynamicTree';
 import { FixtureProxy } from "../dynamics/Fixture";
@@ -122,7 +121,7 @@ export class BroadPhase {
    *
    * @param newOrigin The new origin with respect to the old origin
    */
-  shiftOrigin(newOrigin: Vec2): void {
+  shiftOrigin(newOrigin: Vec2Value): void {
     this.m_tree.shiftOrigin(newOrigin);
   }
 
@@ -149,7 +148,7 @@ export class BroadPhase {
    * Call moveProxy as many times as you like, then when you are done call
    * UpdatePairs to finalized the proxy pairs (for your time step).
    */
-  moveProxy(proxyId: number, aabb: AABB, displacement: Vec2): void {
+  moveProxy(proxyId: number, aabb: AABB, displacement: Vec2Value): void {
     _ASSERT && console.assert(AABB.isValid(aabb));
     const changed = this.m_tree.moveProxy(proxyId, aabb, displacement);
     if (changed) {

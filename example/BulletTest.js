@@ -21,14 +21,12 @@
  * SOFTWARE.
  */
 
-const { World, Vec2, Edge, Box, internal } = planck;
+const { World, Vec2, Edge, Box, stats } = planck;
 
 var world = new World(new Vec2(0, -10));
   
 const testbed = planck.testbed();
 testbed.start(world);
-
-var stats = internal.stats;
 
 var ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-10.0, 0.0), new Vec2(10.0, 0.0)), 0.0);
@@ -54,7 +52,7 @@ function Launch() {
   body.setLinearVelocity(new Vec2());
   body.setAngularVelocity(0.0);
 
-  x = Math.random(-1.0, 1.0);
+  x = Math.random() * 2 - 1;
   bullet.setTransform(new Vec2(x, 10.0), 0.0);
   bullet.setLinearVelocity(new Vec2(0.0, -50.0));
   bullet.setAngularVelocity(0.0);

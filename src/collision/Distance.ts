@@ -22,17 +22,25 @@
  * SOFTWARE.
  */
 
+import * as matrix from '../common/Matrix';
 import { Settings } from '../Settings';
 import { stats } from '../util/stats';
 import { Shape } from './Shape';
 import { math as Math } from '../common/Math';
-import { Vec2 } from '../common/Vec2';
+import { Vec2, Vec2Value } from '../common/Vec2';
 import { Rot } from '../common/Rot';
-import { Transform } from '../common/Transform';
+import { Transform, TransformValue } from '../common/Transform';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
+const temp = matrix.vec2(0, 0);
+const normal = matrix.vec2(0, 0);
+const e12 = matrix.vec2(0, 0);
+const e13 = matrix.vec2(0, 0);
+const e23 = matrix.vec2(0, 0);
+const temp1 = matrix.vec2(0, 0);
+const temp2 = matrix.vec2(0, 0);
 
 /**
  * GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
@@ -44,14 +52,21 @@ stats.gjkMaxIters = 0;
 
 /**
  * Input for Distance. You have to option to use the shape radii in the
- * computation.
+ * computation. Even
  */
 export class DistanceInput {
   proxyA: DistanceProxy = null;
   proxyB: DistanceProxy = null;
-  transformA: Transform = null;
-  transformB: Transform = null;
+  transformA: TransformValue = null;
+  transformB: TransformValue = null;
   useRadii = false;
+  recycle() {
+    // this.proxyA.recycle();
+    // this.proxyB.recycle();
+    // this.transformA.setIdentity();
+    // this.transformB.setIdentity();
+    // this.useRadii = false;
+  }
 }
 
 /**
@@ -59,12 +74,18 @@ export class DistanceInput {
  */
 export class DistanceOutput {
   /** closest point on shapeA */
-  pointA = Vec2.zero();
+  pointA = matrix.vec2(0, 0);
   /** closest point on shapeB */
-  pointB = Vec2.zero();
+  pointB = matrix.vec2(0, 0);
   distance = 0;
   /** iterations number of GJK iterations used */
   iterations = 0;
+  recycle() {
+    matrix.zeroVec2(this.pointA)
+    matrix.zeroVec2(this.pointB)
+    this.distance = 0;
+    this.iterations = 0;
+  }
 }
 
 /**
@@ -78,6 +99,12 @@ export class SimplexCache {
   /** vertices on shape B */
   indexB: number[] = [];
   count: number = 0;
+  recycle() {
+    this.metric = 0;
+    this.indexA.length = 0;
+    this.indexB.length = 0;
+    this.count = 0;
+  }
 }
 
 /**
@@ -94,7 +121,8 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
   const xfB = input.transformB;
 
   // Initialize the simplex.
-  const simplex = new Simplex();
+  // const simplex = new Simplex();
+  simplex.recycle();
   simplex.readCache(cache, proxyA, xfA, proxyB, xfB);
 
   // Get simplex vertices as an array.
@@ -128,7 +156,7 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
     const d = simplex.getSearchDirection();
 
     // Ensure the search direction is numerically fit.
-    if (d.lengthSquared() < Math.EPSILON * Math.EPSILON) {
+    if (matrix.lengthSqrVec2(d) < Math.EPSILON * Math.EPSILON) {
       // The origin is probably contained by a line segment
       // or triangle. Thus the shapes are overlapped.
 
@@ -141,13 +169,13 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
     // Compute a tentative new simplex vertex using support points.
     const vertex = vertices[simplex.m_count]; // SimplexVertex
 
-    vertex.indexA = proxyA.getSupport(Rot.mulTVec2(xfA.q, Vec2.neg(d)));
-    vertex.wA = Transform.mulVec2(xfA, proxyA.getVertex(vertex.indexA));
+    vertex.indexA = proxyA.getSupport(matrix.invRotVec2(temp, xfA.q, matrix.setMulVec2(temp, -1, d)));
+    matrix.transformVec2(vertex.wA, xfA, proxyA.getVertex(vertex.indexA));
 
-    vertex.indexB = proxyB.getSupport(Rot.mulTVec2(xfB.q, d));
-    vertex.wB = Transform.mulVec2(xfB, proxyB.getVertex(vertex.indexB));
+    vertex.indexB = proxyB.getSupport(matrix.invRotVec2(temp, xfB.q, d));
+    matrix.transformVec2(vertex.wB, xfB, proxyB.getVertex(vertex.indexB));
 
-    vertex.w = Vec2.sub(vertex.wB, vertex.wA);
+    matrix.diffVec2(vertex.w, vertex.wB, vertex.wA);
 
     // Iteration count is equated to the number of support point calls.
     ++iter;
@@ -176,7 +204,7 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
 
   // Prepare output.
   simplex.getWitnessPoints(output.pointA, output.pointB);
-  output.distance = Vec2.distance(output.pointA, output.pointB);
+  output.distance = matrix.distVec2(output.pointA, output.pointB);
   output.iterations = iter;
 
   // Cache the simplex.
@@ -191,16 +219,16 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
       // Shapes are still no overlapped.
       // Move the witness points to the outer surface.
       output.distance -= rA + rB;
-      const normal = Vec2.sub(output.pointB, output.pointA);
-      normal.normalize();
-      output.pointA.addMul(rA, normal);
-      output.pointB.subMul(rB, normal);
+      matrix.diffVec2(normal, output.pointB, output.pointA);
+      matrix.normalizeVec2(normal);
+      matrix.addMulVec2(output.pointA, rA, normal);
+      matrix.subMulVec2(output.pointB, rB, normal);
     } else {
       // Shapes are overlapped when radii are considered.
       // Move the witness points to the middle.
-      const p = Vec2.mid(output.pointA, output.pointB);
-      output.pointA.setVec2(p);
-      output.pointB.setVec2(p);
+      const p = matrix.diffVec2(temp, output.pointA, output.pointB);
+      matrix.copyVec2(output.pointA, p);
+      matrix.copyVec2(output.pointB, p);
       output.distance = 0.0;
     }
   }
@@ -210,10 +238,19 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
  * A distance proxy is used by the GJK algorithm. It encapsulates any shape.
  */
 export class DistanceProxy {
-  // vertices are assigned by reference not value
-  /** @internal */ m_vertices: Vec2[] = [];
+  /** @internal */ m_buffer = [matrix.vec2(0, 0), matrix.vec2(0, 0)];
+  /** @internal */ m_vertices: Vec2Value[] = [];
+  // todo: remove this?
   /** @internal */ m_count = 0;
   /** @internal */ m_radius = 0;
+
+  recycle() {
+    matrix.zeroVec2(this.m_buffer[0]);
+    matrix.zeroVec2(this.m_buffer[1]);
+    this.m_vertices.length = 0;
+    this.m_count = 0;
+    this.m_radius = 0;
+  }
 
   /**
    * Get the vertex count.
@@ -225,7 +262,7 @@ export class DistanceProxy {
   /**
    * Get a vertex by index. Used by Distance.
    */
-  getVertex(index: number): Vec2 {
+  getVertex(index: number): Vec2Value {
     _ASSERT && console.assert(0 <= index && index < this.m_count);
     return this.m_vertices[index];
   }
@@ -233,11 +270,11 @@ export class DistanceProxy {
   /**
    * Get the supporting vertex index in the given direction.
    */
-  getSupport(d: Vec2): number {
+  getSupport(d: Vec2Value): number {
     let bestIndex = -1;
     let bestValue = -Infinity;
     for (let i = 0; i < this.m_count; ++i) {
-      const value = Vec2.dot(this.m_vertices[i], d);
+      const value = matrix.dotVec2(this.m_vertices[i], d);
       if (value > bestValue) {
         bestIndex = i;
         bestValue = value;
@@ -249,7 +286,7 @@ export class DistanceProxy {
   /**
    * Get the supporting vertex in the given direction.
    */
-  getSupportVertex(d: Vec2): Vec2 {
+  getSupportVertex(d: Vec2Value): Vec2Value {
     return this.m_vertices[this.getSupport(d)];
   }
 
@@ -258,6 +295,7 @@ export class DistanceProxy {
    * while the proxy is in use.
    */
   set(shape: Shape, index: number): void {
+    // TODO remove, use shape instead
     _ASSERT && console.assert(typeof shape.computeDistanceProxy === 'function');
     shape.computeDistanceProxy(this, index);
   }
@@ -275,32 +313,40 @@ export class DistanceProxy {
 
 class SimplexVertex {
   /** support point in proxyA */
-  wA = Vec2.zero();
+  wA = matrix.vec2(0, 0);
   /** wA index */
   indexA = 0;
 
   /** support point in proxyB */
-  wB = Vec2.zero();
+  wB = matrix.vec2(0, 0);
   /** wB index */
   indexB = 0;
 
   /** wB - wA; */
-  w = Vec2.zero();
+  w = matrix.vec2(0, 0);
   /** barycentric coordinate for closest point */
   a = 0;
 
+  recycle() {
+    this.indexA = 0;
+    this.indexB = 0;
+    matrix.zeroVec2(this.wA)
+    matrix.zeroVec2(this.wB)
+    matrix.zeroVec2(this.w)
+    this.a = 0;
+  }
   set(v: SimplexVertex): void {
     this.indexA = v.indexA;
     this.indexB = v.indexB;
-    this.wA.x = v.wA.x;
-    this.wA.y = v.wA.y;
-    this.wB.x = v.wB.x;
-    this.wB.y = v.wB.y;
-    this.w.x = v.w.x;
-    this.w.y = v.w.y;
+    matrix.copyVec2(this.wA, v.wA);
+    matrix.copyVec2(this.wB, v.wB);
+    matrix.copyVec2(this.w, v.w);
     this.a = v.a;
   }
 }
+
+const searchDirection_reuse = matrix.vec2(0, 0);
+const closestPoint_reuse = matrix.vec2(0, 0);  
 
 class Simplex {
   m_v1 = new SimplexVertex();
@@ -308,6 +354,12 @@ class Simplex {
   m_v3 = new SimplexVertex();
   m_v = [this.m_v1, this.m_v2, this.m_v3];
   m_count: number;
+  recycle() {
+    this.m_v1.recycle();
+    this.m_v2.recycle();
+    this.m_v3.recycle();
+    this.m_count = 0;
+  }
 
   /** @internal */
   toString(): string {
@@ -334,7 +386,7 @@ class Simplex {
     }
   }
 
-  readCache(cache: SimplexCache, proxyA: DistanceProxy, transformA: Transform, proxyB: DistanceProxy, transformB: Transform): void {
+  readCache(cache: SimplexCache, proxyA: DistanceProxy, transformA: TransformValue, proxyB: DistanceProxy, transformB: TransformValue): void {
     _ASSERT && console.assert(cache.count <= 3);
 
     // Copy data from cache.
@@ -345,9 +397,9 @@ class Simplex {
       v.indexB = cache.indexB[i];
       const wALocal = proxyA.getVertex(v.indexA);
       const wBLocal = proxyB.getVertex(v.indexB);
-      v.wA = Transform.mulVec2(transformA, wALocal);
-      v.wB = Transform.mulVec2(transformB, wBLocal);
-      v.w = Vec2.sub(v.wB, v.wA);
+      matrix.transformVec2(v.wA, transformA, wALocal);
+      matrix.transformVec2(v.wB, transformB, wBLocal);
+      matrix.diffVec2(v.w,v.wB, v.wA);
       v.a = 0.0;
     }
 
@@ -356,8 +408,7 @@ class Simplex {
     if (this.m_count > 1) {
       const metric1 = cache.metric;
       const metric2 = this.getMetric();
-      if (metric2 < 0.5 * metric1 || 2.0 * metric1 < metric2
-        || metric2 < Math.EPSILON) {
+      if (metric2 < 0.5 * metric1 || 2.0 * metric1 < metric2 || metric2 < Math.EPSILON) {
         // Reset the simplex.
         this.m_count = 0;
       }
@@ -370,9 +421,9 @@ class Simplex {
       v.indexB = 0;
       const wALocal = proxyA.getVertex(0);
       const wBLocal = proxyB.getVertex(0);
-      v.wA = Transform.mulVec2(transformA, wALocal);
-      v.wB = Transform.mulVec2(transformB, wBLocal);
-      v.w = Vec2.sub(v.wB, v.wA);
+      matrix.transformVec2(v.wA, transformA, wALocal);
+      matrix.transformVec2(v.wB, transformB, wBLocal);
+      matrix.diffVec2(v.w,v.wB, v.wA);
       v.a = 1.0;
       this.m_count = 1;
     }
@@ -387,70 +438,78 @@ class Simplex {
     }
   }
 
-  getSearchDirection(): Vec2 {
+  getSearchDirection(): Vec2Value {
+    const v1 = this.m_v1;
+    const v2 = this.m_v2;
+    const v3 = this.m_v3;
     switch (this.m_count) {
       case 1:
-        return Vec2.neg(this.m_v1.w);
+        return matrix.setVec2(searchDirection_reuse, -v1.w.x, -v1.w.y);
 
       case 2: {
-        const e12 = Vec2.sub(this.m_v2.w, this.m_v1.w);
-        const sgn = Vec2.crossVec2Vec2(e12, Vec2.neg(this.m_v1.w));
+        matrix.diffVec2(e12, v2.w, v1.w);
+        const sgn = -matrix.crossVec2Vec2(e12, v1.w);
         if (sgn > 0.0) {
           // Origin is left of e12.
-          return Vec2.crossNumVec2(1.0, e12);
+          return matrix.setVec2(searchDirection_reuse, -e12.y, e12.x);
         } else {
           // Origin is right of e12.
-          return Vec2.crossVec2Num(e12, 1.0);
+          return matrix.setVec2(searchDirection_reuse, e12.y, -e12.x);
         }
       }
 
       default:
         _ASSERT && console.assert(false);
-        return Vec2.zero();
+        return matrix.zeroVec2(searchDirection_reuse);
     }
   }
 
-  getClosestPoint(): Vec2 {
+  getClosestPoint(): Vec2Value {
+    const v1 = this.m_v1;
+    const v2 = this.m_v2;
+    const v3 = this.m_v3;
     switch (this.m_count) {
       case 0:
         _ASSERT && console.assert(false);
-        return Vec2.zero();
+        return matrix.zeroVec2(closestPoint_reuse);
 
       case 1:
-        return Vec2.clone(this.m_v1.w);
+        return matrix.copyVec2(closestPoint_reuse, v1.w);
 
       case 2:
-        return Vec2.combine(this.m_v1.a, this.m_v1.w, this.m_v2.a, this.m_v2.w);
+        return  matrix.combineVec2(closestPoint_reuse, v1.a, v1.w, v2.a, v2.w);
 
       case 3:
-        return Vec2.zero();
+        return matrix.zeroVec2(closestPoint_reuse);
 
       default:
         _ASSERT && console.assert(false);
-        return Vec2.zero();
+        return matrix.zeroVec2(closestPoint_reuse);
     }
   }
 
-  getWitnessPoints(pA: Vec2, pB: Vec2): void {
+  getWitnessPoints(pA: Vec2Value, pB: Vec2Value): void {
+    const v1 = this.m_v1;
+    const v2 = this.m_v2;
+    const v3 = this.m_v3;
     switch (this.m_count) {
       case 0:
         _ASSERT && console.assert(false);
         break;
 
       case 1:
-        pA.setVec2(this.m_v1.wA);
-        pB.setVec2(this.m_v1.wB);
+        matrix.copyVec2(pA, v1.wA);
+        matrix.copyVec2(pB, v1.wB);
         break;
 
       case 2:
-        pA.setCombine(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
-        pB.setCombine(this.m_v1.a, this.m_v1.wB, this.m_v2.a, this.m_v2.wB);
+        matrix.combineVec2(pA, v1.a, v1.wA, v2.a, v2.wA);
+        matrix.combineVec2(pB, v1.a, v1.wB, v2.a, v2.wB);
         break;
 
       case 3:
-        pA.setCombine(this.m_v1.a, this.m_v1.wA, this.m_v2.a, this.m_v2.wA);
-        pA.addMul(this.m_v3.a, this.m_v3.wA);
-        pB.setVec2(pA);
+        pB.x = pA.x = v1.a * v1.wA.x + v2.a * v2.wA.x + v3.a * v3.wA.x;
+        pB.y = pA.y = v1.a * v1.wA.y + v2.a * v2.wA.y + v3.a * v3.wA.y;
         break;
 
       default:
@@ -469,11 +528,13 @@ class Simplex {
         return 0.0;
 
       case 2:
-        return Vec2.distance(this.m_v1.w, this.m_v2.w);
+        return matrix.distVec2(this.m_v1.w, this.m_v2.w);
 
       case 3:
-        return Vec2.crossVec2Vec2(Vec2.sub(this.m_v2.w, this.m_v1.w), Vec2.sub(this.m_v3.w,
-          this.m_v1.w));
+        return matrix.crossVec2Vec2(
+          matrix.diffVec2(temp1, this.m_v2.w, this.m_v1.w),
+          matrix.diffVec2(temp2, this.m_v3.w, this.m_v1.w),
+        );
 
       default:
         _ASSERT && console.assert(false);
@@ -525,10 +586,10 @@ class Simplex {
   solve2(): void {
     const w1 = this.m_v1.w;
     const w2 = this.m_v2.w;
-    const e12 = Vec2.sub(w2, w1);
+    matrix.diffVec2(e12, w2, w1);
 
     // w1 region
-    const d12_2 = -Vec2.dot(w1, e12);
+    const d12_2 = -matrix.dotVec2(w1, e12);
     if (d12_2 <= 0.0) {
       // a2 <= 0, so we clamp it to 0
       this.m_v1.a = 1.0;
@@ -537,7 +598,7 @@ class Simplex {
     }
 
     // w2 region
-    const d12_1 = Vec2.dot(w2, e12);
+    const d12_1 = matrix.dotVec2(w2, e12);
     if (d12_1 <= 0.0) {
       // a1 <= 0, so we clamp it to 0
       this.m_v2.a = 1.0;
@@ -567,9 +628,9 @@ class Simplex {
     // [1 1 ][a1] = [1]
     // [w1.e12 w2.e12][a2] = [0]
     // a3 = 0
-    const e12 = Vec2.sub(w2, w1);
-    const w1e12 = Vec2.dot(w1, e12);
-    const w2e12 = Vec2.dot(w2, e12);
+    matrix.diffVec2(e12, w2, w1);
+    const w1e12 = matrix.dotVec2(w1, e12);
+    const w2e12 = matrix.dotVec2(w2, e12);
     const d12_1 = w2e12;
     const d12_2 = -w1e12;
 
@@ -577,9 +638,9 @@ class Simplex {
     // [1 1 ][a1] = [1]
     // [w1.e13 w3.e13][a3] = [0]
     // a2 = 0
-    const e13 = Vec2.sub(w3, w1);
-    const w1e13 = Vec2.dot(w1, e13);
-    const w3e13 = Vec2.dot(w3, e13);
+    matrix.diffVec2(e13, w3, w1);
+    const w1e13 = matrix.dotVec2(w1, e13);
+    const w3e13 = matrix.dotVec2(w3, e13);
     const d13_1 = w3e13;
     const d13_2 = -w1e13;
 
@@ -587,18 +648,18 @@ class Simplex {
     // [1 1 ][a2] = [1]
     // [w2.e23 w3.e23][a3] = [0]
     // a1 = 0
-    const e23 = Vec2.sub(w3, w2);
-    const w2e23 = Vec2.dot(w2, e23);
-    const w3e23 = Vec2.dot(w3, e23);
+    matrix.diffVec2(e23, w3, w2);
+    const w2e23 = matrix.dotVec2(w2, e23);
+    const w3e23 = matrix.dotVec2(w3, e23);
     const d23_1 = w3e23;
     const d23_2 = -w2e23;
 
     // Triangle123
-    const n123 = Vec2.crossVec2Vec2(e12, e13);
+    const n123 = matrix.crossVec2Vec2(e12, e13);
 
-    const d123_1 = n123 * Vec2.crossVec2Vec2(w2, w3);
-    const d123_2 = n123 * Vec2.crossVec2Vec2(w3, w1);
-    const d123_3 = n123 * Vec2.crossVec2Vec2(w1, w2);
+    const d123_1 = n123 * matrix.crossVec2Vec2(w2, w3);
+    const d123_2 = n123 * matrix.crossVec2Vec2(w3, w1);
+    const d123_3 = n123 * matrix.crossVec2Vec2(w1, w2);
 
     // w1 region
     if (d12_2 <= 0.0 && d13_2 <= 0.0) {
@@ -661,21 +722,29 @@ class Simplex {
   }
 }
 
+const simplex = new Simplex();
+
+const input = new DistanceInput();
+input.proxyA = new DistanceProxy();
+input.proxyB = new DistanceProxy();
+const cache = new SimplexCache();
+const output = new DistanceOutput();
+
 /**
  * Determine if two generic shapes overlap.
  */
-export const testOverlap = function (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: Transform, xfB: Transform): boolean {
-  const input = new DistanceInput();
-  input.proxyA = new DistanceProxy();
-  input.proxyB = new DistanceProxy();
+export const testOverlap = function (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue): boolean {
+  input.recycle();
+  input.proxyA.recycle();
+  input.proxyB.recycle();
   input.proxyA.set(shapeA, indexA);
   input.proxyB.set(shapeB, indexB);
   input.transformA = xfA;
   input.transformB = xfB;
   input.useRadii = true;
 
-  const cache = new SimplexCache();
-  const output = new DistanceOutput();
+  output.recycle();
+  cache.recycle();
 
   Distance(output, cache, input);
 
@@ -695,8 +764,8 @@ Distance.Cache = SimplexCache;
 export class ShapeCastInput {
   proxyA: DistanceProxy = new DistanceProxy();
   proxyB: DistanceProxy = new DistanceProxy();
-  transformA: Transform | null = null;
-  transformB: Transform | null = null;
+  transformA: TransformValue | null = null;
+  transformB: TransformValue | null = null;
   translationB: Vec2 = Vec2.zero();
 }
 
@@ -751,7 +820,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
   let wA = Transform.mulVec2(xfA, proxyA.getVertex(indexA));
   let indexB = proxyB.getSupport(Rot.mulTVec2(xfB.q, r));
   let wB = Transform.mulVec2(xfB, proxyB.getVertex(indexB));
-  let v = Vec2.sub(wA, wB);
+  const v = Vec2.sub(wA, wB);
 
   // Sigma is the target distance between polygons
   const sigma = Math.max(Settings.polygonRadius, radius - Settings.polygonRadius);
@@ -828,7 +897,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
     }
 
     // Get search direction.
-    v = simplex.getClosestPoint();
+    v.setVec2(simplex.getClosestPoint());
 
     // Iteration count is equated to the number of support point calls.
     ++iter;

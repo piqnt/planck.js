@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+import * as matrix from '../common/Matrix';
 import { options } from '../util/options';
 import { Vec2, Vec2Value } from '../common/Vec2';
 import { Rot } from '../common/Rot';
@@ -45,6 +46,11 @@ export type BodyType = 'static' | 'kinematic' | 'dynamic';
 const STATIC = 'static';
 const KINEMATIC = 'kinematic';
 const DYNAMIC = 'dynamic';
+
+const oldCenter = matrix.vec2(0, 0);
+const localCenter = matrix.vec2(0, 0);
+const shift = matrix.vec2(0, 0);
+const xf = matrix.transform(0, 0, 0)
 
 export interface BodyDef {
   /**
@@ -137,7 +143,7 @@ export class MassData {
   /** The mass of the shape, usually in kilograms. */
   mass: number = 0;
   /** The position of the shape's centroid relative to the shape's origin. */
-  center: Vec2 = Vec2.zero();
+  center = Vec2.zero();
   /** The rotational inertia of the shape about the local origin. */
   I: number = 0;
 }
@@ -250,7 +256,7 @@ export class Body {
 
     // the body origin transform
     this.m_xf = Transform.identity();
-    this.m_xf.p = Vec2.clone(def.position);
+    this.m_xf.p.setVec2(def.position);
     this.m_xf.q.setAngle(def.angle);
 
     // the swept motion for CCD
@@ -589,8 +595,6 @@ export class Body {
    * Update fixtures in broad-phase.
    */
   synchronizeFixtures(): void {
-    const xf = Transform.identity();
-
     this.m_sweep.getTransform(xf, 0);
 
     const broadPhase = this.m_world.m_broadPhase;
@@ -605,7 +609,7 @@ export class Body {
   advance(alpha: number): void {
     // Advance to the new safe time. This doesn't sync the broad-phase.
     this.m_sweep.advance(alpha);
-    this.m_sweep.c.setVec2(this.m_sweep.c0);
+    matrix.copyVec2(this.m_sweep.c, this.m_sweep.c0);
     this.m_sweep.a = this.m_sweep.a0;
     this.m_sweep.getTransform(this.m_xf, 1);
   }
@@ -780,12 +784,12 @@ export class Body {
     this.m_invMass = 0.0;
     this.m_I = 0.0;
     this.m_invI = 0.0;
-    this.m_sweep.localCenter.setZero();
+    matrix.zeroVec2(this.m_sweep.localCenter);
 
     // Static and kinematic bodies have zero mass.
     if (this.isStatic() || this.isKinematic()) {
-      this.m_sweep.c0.setVec2(this.m_xf.p);
-      this.m_sweep.c.setVec2(this.m_xf.p);
+      matrix.copyVec2(this.m_sweep.c0, this.m_xf.p);
+      matrix.copyVec2(this.m_sweep.c, this.m_xf.p);
       this.m_sweep.a0 = this.m_sweep.a;
       return;
     }
@@ -793,7 +797,7 @@ export class Body {
     _ASSERT && console.assert(this.isDynamic());
 
     // Accumulate mass over all fixtures.
-    const localCenter = Vec2.zero();
+    matrix.zeroVec2(localCenter);
     for (let f = this.m_fixtureList; f; f = f.m_next) {
       if (f.m_density == 0.0) {
         continue;
@@ -802,14 +806,14 @@ export class Body {
       const massData = new MassData();
       f.getMassData(massData);
       this.m_mass += massData.mass;
-      localCenter.addMul(massData.mass, massData.center);
+      matrix.addMulVec2(localCenter, massData.mass, massData.center)
       this.m_I += massData.I;
     }
 
     // Compute center of mass.
     if (this.m_mass > 0.0) {
       this.m_invMass = 1.0 / this.m_mass;
-      localCenter.mul(this.m_invMass);
+      matrix.setMulVec2(localCenter, this.m_invMass, localCenter)
 
     } else {
       // Force all dynamic bodies to have a positive mass.
@@ -819,7 +823,7 @@ export class Body {
 
     if (this.m_I > 0.0 && this.m_fixedRotationFlag == false) {
       // Center the inertia about the center of mass.
-      this.m_I -= this.m_mass * Vec2.dot(localCenter, localCenter);
+      this.m_I -= this.m_mass * matrix.dotVec2(localCenter, localCenter);
       _ASSERT && console.assert(this.m_I > 0.0);
       this.m_invI = 1.0 / this.m_I;
 
@@ -829,12 +833,12 @@ export class Body {
     }
 
     // Move center of mass.
-    const oldCenter = Vec2.clone(this.m_sweep.c);
+    matrix.copyVec2(oldCenter, this.m_sweep.c);
     this.m_sweep.setLocalCenter(localCenter, this.m_xf);
 
     // Update center of mass velocity.
-    this.m_linearVelocity.add(Vec2.crossNumVec2(this.m_angularVelocity, Vec2.sub(
-      this.m_sweep.c, oldCenter)));
+    matrix.diffVec2(shift, this.m_sweep.c, oldCenter);
+    matrix.crossNumVec2(this.m_linearVelocity, this.m_angularVelocity, shift);
   }
 
   /**
@@ -867,18 +871,18 @@ export class Body {
     this.m_invMass = 1.0 / this.m_mass;
 
     if (massData.I > 0.0 && this.m_fixedRotationFlag == false) {
-      this.m_I = massData.I - this.m_mass
-        * Vec2.dot(massData.center, massData.center);
+      this.m_I = massData.I - this.m_mass * matrix.dotVec2(massData.center, massData.center);
       _ASSERT && console.assert(this.m_I > 0.0);
       this.m_invI = 1.0 / this.m_I;
     }
 
     // Move center of mass.
-    const oldCenter = Vec2.clone(this.m_sweep.c);
+    matrix.copyVec2(oldCenter, this.m_sweep.c);
     this.m_sweep.setLocalCenter(massData.center, this.m_xf);
 
     // Update center of mass velocity.
-    this.m_linearVelocity.add(Vec2.crossNumVec2(this.m_angularVelocity, Vec2.sub(this.m_sweep.c, oldCenter)));
+    matrix.diffVec2(shift, this.m_sweep.c, oldCenter);
+    matrix.crossNumVec2(this.m_linearVelocity, this.m_angularVelocity, shift);
   }
 
   /**

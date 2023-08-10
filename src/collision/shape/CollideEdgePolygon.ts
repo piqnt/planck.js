@@ -22,10 +22,9 @@
  * SOFTWARE.
  */
 
-import { math as Math } from '../../common/Math';
-import { Transform } from '../../common/Transform';
-import { Vec2 } from '../../common/Vec2';
-import { Rot } from '../../common/Rot';
+import * as matrix from '../../common/Matrix';
+import { TransformValue } from '../../common/Transform';
+import { Vec2, Vec2Value } from '../../common/Vec2';
 import { Settings } from '../../Settings';
 import { Contact } from '../../dynamics/Contact';
 import { Manifold, clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from '../Manifold';
@@ -41,22 +40,24 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
 
-function EdgePolygonContact(manifold: Manifold, xfA: Transform, fA: Fixture, indexA: number, xfB: Transform, fB: Fixture, indexB: number): void {
+function EdgePolygonContact(manifold: Manifold, xfA: TransformValue, fA: Fixture, indexA: number, xfB: TransformValue, fB: Fixture, indexB: number): void {
   _ASSERT && console.assert(fA.getType() == EdgeShape.TYPE);
   _ASSERT && console.assert(fB.getType() == PolygonShape.TYPE);
 
   CollideEdgePolygon(manifold, fA.getShape() as EdgeShape, xfA, fB.getShape() as PolygonShape, xfB);
 }
 
-function ChainPolygonContact(manifold: Manifold, xfA: Transform, fA: Fixture, indexA: number, xfB: Transform, fB: Fixture, indexB: number): void {
+// reused
+const edge_reuse = new EdgeShape();
+
+function ChainPolygonContact(manifold: Manifold, xfA: TransformValue, fA: Fixture, indexA: number, xfB: TransformValue, fB: Fixture, indexB: number): void {
   _ASSERT && console.assert(fA.getType() == ChainShape.TYPE);
   _ASSERT && console.assert(fB.getType() == PolygonShape.TYPE);
 
   const chain = fA.getShape() as ChainShape;
-  const edge = new EdgeShape();
-  chain.getChildEdge(edge, indexA);
+  chain.getChildEdge(edge_reuse, indexA);
 
-  CollideEdgePolygon(manifold, edge, xfA, fB.getShape() as PolygonShape, xfB);
+  CollideEdgePolygon(manifold, edge_reuse, xfA, fB.getShape() as PolygonShape, xfB);
 }
 
 enum EPAxisType {
@@ -85,9 +86,15 @@ class EPAxis {
  * This holds polygon B expressed in frame A.
  */
 class TempPolygon {
-  vertices: Vec2[] = []; // [Settings.maxPolygonVertices]
-  normals: Vec2[] = []; // [Settings.maxPolygonVertices];
+  vertices: Vec2Value[] = []; // [Settings.maxPolygonVertices]
+  normals: Vec2Value[] = []; // [Settings.maxPolygonVertices];
   count: number = 0;
+  constructor() {
+    for (let i = 0; i < Settings.maxPolygonVertices; i++) {
+      this.vertices.push(matrix.vec2(0, 0));
+      this.normals.push(matrix.vec2(0, 0));
+    }
+  }
 }
 
 /**
@@ -96,26 +103,49 @@ class TempPolygon {
 class ReferenceFace {
   i1: number;
   i2: number;
-  v1: Vec2;
-  v2: Vec2;
-  normal: Vec2 = Vec2.zero();
-  sideNormal1: Vec2 = Vec2.zero();
+  readonly v1 = matrix.vec2(0 ,0);
+  readonly v2 = matrix.vec2(0 ,0);
+  readonly normal = matrix.vec2(0 ,0);
+  readonly sideNormal1 = matrix.vec2(0 ,0);
   sideOffset1: number;
-  sideNormal2: Vec2 = Vec2.zero();
+  readonly sideNormal2 = matrix.vec2(0 ,0);
   sideOffset2: number;
+  recycle() {
+    matrix.zeroVec2(this.v1)
+    matrix.zeroVec2(this.v2)
+    matrix.zeroVec2(this.normal)
+    matrix.zeroVec2(this.sideNormal1)
+    matrix.zeroVec2(this.sideNormal2)
+  }
 }
 
 // reused
+const clipPoints1 = [ new ClipVertex(), new ClipVertex() ];
+const clipPoints2 = [ new ClipVertex(), new ClipVertex() ];
+const ie = [ new ClipVertex(), new ClipVertex() ];
 const edgeAxis = new EPAxis();
 const polygonAxis = new EPAxis();
 const polygonBA = new TempPolygon();
 const rf = new ReferenceFace();
+const centroidB = matrix.vec2(0, 0);
+const edge0 = matrix.vec2(0, 0);
+const edge1 = matrix.vec2(0, 0);
+const edge2 = matrix.vec2(0, 0);
+const xf = matrix.transform(0, 0, 0);
+const normal = matrix.vec2(0, 0);
+const normal0 = matrix.vec2(0, 0);
+const normal1 = matrix.vec2(0, 0);
+const normal2 = matrix.vec2(0, 0);
+const lowerLimit = matrix.vec2(0, 0);
+const upperLimit = matrix.vec2(0, 0);
+const perp = matrix.vec2(0, 0);
+const n = matrix.vec2(0, 0);
 
 /**
  * This function collides and edge and a polygon, taking into account edge
  * adjacency.
  */
-export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape, xfA: Transform, polygonB: PolygonShape, xfB: Transform): void {
+export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape, xfA: TransformValue, polygonB: PolygonShape, xfB: TransformValue): void {
   // Algorithm:
   // 1. Classify v1 and v2
   // 2. Classify polygon centroid as front or back
@@ -129,9 +159,8 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
   // let m_type1: VertexType;
   // let m_type2: VertexType;
 
-  const xf = Transform.mulTXf(xfA, xfB);
-
-  const centroidB = Transform.mulVec2(xf, polygonB.m_centroid);
+  matrix.invTransformTransform(xf, xfA, xfB);
+  matrix.transformVec2(centroidB, xf, polygonB.m_centroid);
 
   const v0 = edgeA.m_vertex0;
   const v1 = edgeA.m_vertex1;
@@ -141,154 +170,154 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
   const hasVertex0 = edgeA.m_hasVertex0;
   const hasVertex3 = edgeA.m_hasVertex3;
 
-  const edge1 = Vec2.sub(v2, v1);
-  edge1.normalize();
-  const normal1 = Vec2.neo(edge1.y, -edge1.x);
-  const offset1 = Vec2.dot(normal1, Vec2.sub(centroidB, v1));
+  matrix.diffVec2(edge1, v2, v1);
+  matrix.normalizeVec2(edge1);
+  matrix.setVec2(normal1, edge1.y, -edge1.x)
+  const offset1 = matrix.dotVec2(normal1, centroidB) - matrix.dotVec2(normal1, v1);
   let offset0 = 0.0;
   let offset2 = 0.0;
   let convex1 = false;
   let convex2 = false;
 
-  let normal0;
-  let normal2;
+  matrix.zeroVec2(normal0);
+  matrix.zeroVec2(normal2);
 
   // Is there a preceding edge?
   if (hasVertex0) {
-    const edge0 = Vec2.sub(v1, v0);
-    edge0.normalize();
-    normal0 = Vec2.neo(edge0.y, -edge0.x);
-    convex1 = Vec2.crossVec2Vec2(edge0, edge1) >= 0.0;
+    matrix.diffVec2(edge0, v1, v0);
+    matrix.normalizeVec2(edge0);
+    matrix.setVec2(normal0, edge0.y, -edge0.x);
+    convex1 = matrix.crossVec2Vec2(edge0, edge1) >= 0.0;
     offset0 = Vec2.dot(normal0, centroidB) - Vec2.dot(normal0, v0);
   }
 
   // Is there a following edge?
   if (hasVertex3) {
-    const edge2 = Vec2.sub(v3, v2);
-    edge2.normalize();
-    normal2 = Vec2.neo(edge2.y, -edge2.x);
+    matrix.diffVec2(edge2, v3, v2);
+    matrix.normalizeVec2(edge2);
+    matrix.setVec2(normal2, edge2.y, -edge2.x);
     convex2 = Vec2.crossVec2Vec2(edge1, edge2) > 0.0;
     offset2 = Vec2.dot(normal2, centroidB) - Vec2.dot(normal2, v2);
   }
 
-  let front;
-  const normal = Vec2.zero();
-  const lowerLimit = Vec2.zero();
-  const upperLimit = Vec2.zero();
+  let front: boolean;
+  matrix.zeroVec2(normal);
+  matrix.zeroVec2(lowerLimit);
+  matrix.zeroVec2(upperLimit);
 
   // Determine front or back collision. Determine collision normal limits.
   if (hasVertex0 && hasVertex3) {
     if (convex1 && convex2) {
       front = offset0 >= 0.0 || offset1 >= 0.0 || offset2 >= 0.0;
       if (front) {
-        normal.setVec2(normal1);
-        lowerLimit.setVec2(normal0);
-        upperLimit.setVec2(normal2);
+        matrix.copyVec2(normal, normal1);
+        matrix.copyVec2(lowerLimit, normal0);
+        matrix.copyVec2(upperLimit, normal2);
       } else {
-        normal.setMul(-1, normal1);
-        lowerLimit.setMul(-1, normal1);
-        upperLimit.setMul(-1, normal1);
+        matrix.setMulVec2(normal, -1, normal1);
+        matrix.setMulVec2(lowerLimit, -1, normal1);
+        matrix.setMulVec2(upperLimit, -1, normal1);
       }
     } else if (convex1) {
       front = offset0 >= 0.0 || (offset1 >= 0.0 && offset2 >= 0.0);
       if (front) {
-        normal.setVec2(normal1);
-        lowerLimit.setVec2(normal0);
-        upperLimit.setVec2(normal1);
+        matrix.copyVec2(normal, normal1);
+        matrix.copyVec2(lowerLimit, normal0);
+        matrix.copyVec2(upperLimit, normal1);
       } else {
-        normal.setMul(-1, normal1);
-        lowerLimit.setMul(-1, normal2);
-        upperLimit.setMul(-1, normal1);
+        matrix.setMulVec2(normal, -1, normal1);
+        matrix.setMulVec2(lowerLimit, -1, normal2);
+        matrix.setMulVec2(upperLimit, -1, normal1);
       }
     } else if (convex2) {
       front = offset2 >= 0.0 || (offset0 >= 0.0 && offset1 >= 0.0);
       if (front) {
-        normal.setVec2(normal1);
-        lowerLimit.setVec2(normal1);
-        upperLimit.setVec2(normal2);
+        matrix.copyVec2(normal, normal1);
+        matrix.copyVec2(lowerLimit, normal1);
+        matrix.copyVec2(upperLimit, normal2);
       } else {
-        normal.setMul(-1, normal1);
-        lowerLimit.setMul(-1, normal1);
-        upperLimit.setMul(-1, normal0);
+        matrix.setMulVec2(normal, -1, normal1);
+        matrix.setMulVec2(lowerLimit, -1, normal1);
+        matrix.setMulVec2(upperLimit, -1, normal0);
       }
     } else {
       front = offset0 >= 0.0 && offset1 >= 0.0 && offset2 >= 0.0;
       if (front) {
-        normal.setVec2(normal1);
-        lowerLimit.setVec2(normal1);
-        upperLimit.setVec2(normal1);
+        matrix.copyVec2(normal, normal1);
+        matrix.copyVec2(lowerLimit, normal1);
+        matrix.copyVec2(upperLimit, normal1);
       } else {
-        normal.setMul(-1, normal1);
-        lowerLimit.setMul(-1, normal2);
-        upperLimit.setMul(-1, normal0);
+        matrix.setMulVec2(normal, -1, normal1);
+        matrix.setMulVec2(lowerLimit, -1, normal2);
+        matrix.setMulVec2(upperLimit, -1, normal0);
       }
     }
   } else if (hasVertex0) {
     if (convex1) {
       front = offset0 >= 0.0 || offset1 >= 0.0;
       if (front) {
-        normal.setVec2(normal1);
-        lowerLimit.setVec2(normal0);
-        upperLimit.setMul(-1, normal1);
+        matrix.copyVec2(normal, normal1);
+        matrix.copyVec2(lowerLimit, normal0);
+        matrix.setMulVec2(upperLimit, -1, normal1);
       } else {
-        normal.setMul(-1, normal1);
-        lowerLimit.setVec2(normal1);
-        upperLimit.setMul(-1, normal1);
+        matrix.setMulVec2(normal, -1, normal1);
+        matrix.copyVec2(lowerLimit, normal1);
+        matrix.setMulVec2(upperLimit, -1, normal1);
       }
     } else {
       front = offset0 >= 0.0 && offset1 >= 0.0;
       if (front) {
-        normal.setVec2(normal1);
-        lowerLimit.setVec2(normal1);
-        upperLimit.setMul(-1, normal1);
+        matrix.copyVec2(normal, normal1);
+        matrix.copyVec2(lowerLimit, normal1);
+        matrix.setMulVec2(upperLimit, -1, normal1);
       } else {
-        normal.setMul(-1, normal1);
-        lowerLimit.setVec2(normal1);
-        upperLimit.setMul(-1, normal0);
+        matrix.setMulVec2(normal, -1, normal1);
+        matrix.copyVec2(lowerLimit, normal1);
+        matrix.setMulVec2(upperLimit, -1, normal0);
       }
     }
   } else if (hasVertex3) {
     if (convex2) {
       front = offset1 >= 0.0 || offset2 >= 0.0;
       if (front) {
-        normal.setVec2(normal1);
-        lowerLimit.setMul(-1, normal1);
-        upperLimit.setVec2(normal2);
+        matrix.copyVec2(normal, normal1);
+        matrix.setMulVec2(lowerLimit, -1, normal1);
+        matrix.copyVec2(upperLimit, normal2);
       } else {
-        normal.setMul(-1, normal1);
-        lowerLimit.setMul(-1, normal1);
-        upperLimit.setVec2(normal1);
+        matrix.setMulVec2(normal, -1, normal1);
+        matrix.setMulVec2(lowerLimit, -1, normal1);
+        matrix.copyVec2(upperLimit, normal1);
       }
     } else {
       front = offset1 >= 0.0 && offset2 >= 0.0;
       if (front) {
-        normal.setVec2(normal1);
-        lowerLimit.setMul(-1, normal1);
-        upperLimit.setVec2(normal1);
+        matrix.copyVec2(normal, normal1);
+        matrix.setMulVec2(lowerLimit, -1, normal1);
+        matrix.copyVec2(upperLimit, normal1);
       } else {
-        normal.setMul(-1, normal1);
-        lowerLimit.setMul(-1, normal2);
-        upperLimit.setVec2(normal1);
+        matrix.setMulVec2(normal, -1, normal1);
+        matrix.setMulVec2(lowerLimit, -1, normal2);
+        matrix.copyVec2(upperLimit, normal1);
       }
     }
   } else {
     front = offset1 >= 0.0;
     if (front) {
-      normal.setVec2(normal1);
-      lowerLimit.setMul(-1, normal1);
-      upperLimit.setMul(-1, normal1);
+      matrix.copyVec2(normal, normal1);
+      matrix.setMulVec2(lowerLimit, -1, normal1);
+      matrix.setMulVec2(upperLimit, -1, normal1);
     } else {
-      normal.setMul(-1, normal1);
-      lowerLimit.setVec2(normal1);
-      upperLimit.setVec2(normal1);
+      matrix.setMulVec2(normal, -1, normal1);
+      matrix.copyVec2(lowerLimit, normal1);
+      matrix.copyVec2(upperLimit, normal1);
     }
   }
 
   // Get polygonB in frameA
   polygonBA.count = polygonB.m_count;
   for (let i = 0; i < polygonB.m_count; ++i) {
-    polygonBA.vertices[i] = Transform.mulVec2(xf, polygonB.m_vertices[i]);
-    polygonBA.normals[i] = Rot.mulVec2(xf.q, polygonB.m_normals[i]);
+    matrix.transformVec2(polygonBA.vertices[i], xf, polygonB.m_vertices[i]);
+    matrix.rotVec2(polygonBA.normals[i], xf.q, polygonB.m_normals[i]);
   }
 
   const radius = polygonB.m_radius + edgeA.m_radius;
@@ -301,7 +330,8 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
     edgeAxis.separation = Infinity;
 
     for (let i = 0; i < polygonBA.count; ++i) {
-      const s = Vec2.dot(normal, Vec2.sub(polygonBA.vertices[i], v1));
+      const v = polygonBA.vertices[i];
+      const s = matrix.dotVec2(normal, v) - matrix.dotVec2(normal, v1);
       if (s < edgeAxis.separation) {
         edgeAxis.separation = s;
       }
@@ -323,13 +353,13 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
     polygonAxis.index = -1;
     polygonAxis.separation = -Infinity;
 
-    const perp = Vec2.neo(-normal.y, normal.x);
+    matrix.setVec2(perp, -normal.y, normal.x);
 
     for (let i = 0; i < polygonBA.count; ++i) {
-      const n = Vec2.neg(polygonBA.normals[i]);
+      matrix.setMulVec2(n, -1, polygonBA.normals[i]);
 
-      const s1 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v1));
-      const s2 = Vec2.dot(n, Vec2.sub(polygonBA.vertices[i], v2));
+      const s1 = matrix.dotVec2(n, polygonBA.vertices[i]) - matrix.dotVec2(n, v1);
+      const s2 = matrix.dotVec2(n, polygonBA.vertices[i]) - matrix.dotVec2(n, v2);
       const s = Math.min(s1, s2);
 
       if (s > radius) {
@@ -341,12 +371,12 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
       }
 
       // Adjacency
-      if (Vec2.dot(n, perp) >= 0.0) {
-        if (Vec2.dot(Vec2.sub(n, upperLimit), normal) < -Settings.angularSlop) {
+      if (matrix.dotVec2(n, perp) >= 0.0) {
+        if (matrix.dotVec2(n, normal) - matrix.dotVec2(upperLimit, normal) < -Settings.angularSlop) {
           continue;
         }
       } else {
-        if (Vec2.dot(Vec2.sub(n, lowerLimit), normal) < -Settings.angularSlop) {
+        if (matrix.dotVec2(n, normal) - matrix.dotVec2(lowerLimit, normal) < -Settings.angularSlop) {
           continue;
         }
       }
@@ -376,7 +406,7 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
     primaryAxis = edgeAxis;
   }
 
-  const ie = [ new ClipVertex(), new ClipVertex() ];
+  ie[0].recycle(), ie[1].recycle();
 
   if (primaryAxis.type == EPAxisType.e_edgeA) {
     manifold.type = ManifoldType.e_faceA;
@@ -384,9 +414,9 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
     // Search for the polygon normal that is most anti-parallel to the edge
     // normal.
     let bestIndex = 0;
-    let bestValue = Vec2.dot(normal, polygonBA.normals[0]);
+    let bestValue = matrix.dotVec2(normal, polygonBA.normals[0]);
     for (let i = 1; i < polygonBA.count; ++i) {
-      const value = Vec2.dot(normal, polygonBA.normals[i]);
+      const value = matrix.dotVec2(normal, polygonBA.normals[i]);
       if (value < bestValue) {
         bestValue = value;
         bestIndex = i;
@@ -396,50 +426,49 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
     const i1 = bestIndex;
     const i2 = i1 + 1 < polygonBA.count ? i1 + 1 : 0;
 
-    ie[0].v.setVec2(polygonBA.vertices[i1]);
+    matrix.copyVec2(ie[0].v, polygonBA.vertices[i1]);
     ie[0].id.setFeatures(0, ContactFeatureType.e_face, i1, ContactFeatureType.e_vertex);
 
-
-    ie[1].v.setVec2(polygonBA.vertices[i2]);
+    matrix.copyVec2(ie[1].v, polygonBA.vertices[i2]);
     ie[1].id.setFeatures(0, ContactFeatureType.e_face, i2, ContactFeatureType.e_vertex);
 
     if (front) {
       rf.i1 = 0;
       rf.i2 = 1;
-      rf.v1 = v1;
-      rf.v2 = v2;
-      rf.normal.setVec2(normal1);
+      matrix.copyVec2(rf.v1, v1);
+      matrix.copyVec2(rf.v2, v2);
+      matrix.copyVec2(rf.normal, normal1);
     } else {
       rf.i1 = 1;
       rf.i2 = 0;
-      rf.v1 = v2;
-      rf.v2 = v1;
-      rf.normal.setMul(-1, normal1);
+      matrix.copyVec2(rf.v1, v2);
+      matrix.copyVec2(rf.v2, v1);
+      matrix.setMulVec2(rf.normal, -1, normal1);
     }
   } else {
     manifold.type = ManifoldType.e_faceB;
 
-    ie[0].v.setVec2(v1);
+    matrix.copyVec2(ie[0].v, v1);
     ie[0].id.setFeatures(0, ContactFeatureType.e_vertex, primaryAxis.index, ContactFeatureType.e_face);
 
-    ie[1].v.setVec2(v2);
+    matrix.copyVec2(ie[1].v, v2);
     ie[1].id.setFeatures(0, ContactFeatureType.e_vertex, primaryAxis.index, ContactFeatureType.e_face);
 
     rf.i1 = primaryAxis.index;
     rf.i2 = rf.i1 + 1 < polygonBA.count ? rf.i1 + 1 : 0;
-    rf.v1 = polygonBA.vertices[rf.i1];
-    rf.v2 = polygonBA.vertices[rf.i2];
-    rf.normal.setVec2(polygonBA.normals[rf.i1]);
+    matrix.copyVec2(rf.v1, polygonBA.vertices[rf.i1]);
+    matrix.copyVec2(rf.v2, polygonBA.vertices[rf.i2]);
+    matrix.copyVec2(rf.normal, polygonBA.normals[rf.i1]);
   }
 
-  rf.sideNormal1.setNum(rf.normal.y, -rf.normal.x);
-  rf.sideNormal2.setMul(-1, rf.sideNormal1);
-  rf.sideOffset1 = Vec2.dot(rf.sideNormal1, rf.v1);
-  rf.sideOffset2 = Vec2.dot(rf.sideNormal2, rf.v2);
+  matrix.setVec2(rf.sideNormal1, rf.normal.y, -rf.normal.x);
+  matrix.setVec2(rf.sideNormal2, -rf.sideNormal1.x, -rf.sideNormal1.y);
+  rf.sideOffset1 = matrix.dotVec2(rf.sideNormal1, rf.v1);
+  rf.sideOffset2 = matrix.dotVec2(rf.sideNormal2, rf.v2);
 
   // Clip incident edge against extruded edge1 side edges.
-  const clipPoints1 = [ new ClipVertex(), new ClipVertex() ];
-  const clipPoints2 = [ new ClipVertex(), new ClipVertex() ];
+  clipPoints1[0].recycle(), clipPoints1[1].recycle();
+  clipPoints2[0].recycle(), clipPoints2[1].recycle();
 
   // Clip to box side 1
   const np1 = clipSegmentToLine(clipPoints1, ie, rf.sideNormal1, rf.sideOffset1, rf.i1);
@@ -457,26 +486,27 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
 
   // Now clipPoints2 contains the clipped points.
   if (primaryAxis.type == EPAxisType.e_edgeA) {
-    manifold.localNormal.setVec2(rf.normal);
-    manifold.localPoint.setVec2(rf.v1);
+    matrix.copyVec2(manifold.localNormal, rf.normal);
+    matrix.copyVec2(manifold.localPoint, rf.v1);
   } else {
-    manifold.localNormal.setVec2(polygonB.m_normals[rf.i1]);
-    manifold.localPoint.setVec2(polygonB.m_vertices[rf.i1]);
+    matrix.copyVec2(manifold.localNormal, polygonB.m_normals[rf.i1]);
+    matrix.copyVec2(manifold.localPoint, polygonB.m_vertices[rf.i1]);
   }
 
   let pointCount = 0;
   for (let i = 0; i < Settings.maxManifoldPoints; ++i) {
-    const separation = Vec2.dot(rf.normal, Vec2.sub(clipPoints2[i].v, rf.v1));
+    const separation = matrix.dotVec2(rf.normal, clipPoints2[i].v) - matrix.dotVec2(rf.normal, rf.v1);
 
     if (separation <= radius) {
       const cp = manifold.points[pointCount]; // ManifoldPoint
 
       if (primaryAxis.type == EPAxisType.e_edgeA) {
-        cp.localPoint.setVec2(Transform.mulTVec2(xf, clipPoints2[i].v));
+        matrix.invTransformVec2(cp.localPoint, xf, clipPoints2[i].v);
         cp.id.set(clipPoints2[i].id);
       } else {
-        cp.localPoint.setVec2(clipPoints2[i].v);
+        matrix.copyVec2(cp.localPoint, clipPoints2[i].v);
         cp.id.set(clipPoints2[i].id);
+        cp.id.swapFeatures();
       }
 
       ++pointCount;

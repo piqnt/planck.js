@@ -22,11 +22,12 @@
  * SOFTWARE.
  */
 
+import * as matrix from '../../common/Matrix';
 import type { MassData } from '../../dynamics/Body';
-import { AABB, RayCastOutput, RayCastInput } from '../AABB';
+import { RayCastOutput, RayCastInput, AABBValue } from '../AABB';
 import { DistanceProxy } from '../Distance';
 import { math as Math } from '../../common/Math';
-import { Transform } from '../../common/Transform';
+import { Transform, TransformValue } from '../../common/Transform';
 import { Rot } from '../../common/Rot';
 import { Vec2, Vec2Value } from '../../common/Vec2';
 import { Settings } from '../../Settings';
@@ -36,6 +37,12 @@ import { Shape } from '../Shape';
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
+const temp = matrix.vec2(0, 0);
+const e = matrix.vec2(0, 0);
+const e1 = matrix.vec2(0, 0);
+const e2 = matrix.vec2(0, 0);
+const center = matrix.vec2(0, 0);
+const s = matrix.vec2(0, 0);
 
 /**
  * A convex polygon. It is assumed that the interior of the polygon is to the
@@ -277,10 +284,10 @@ export class PolygonShape extends Shape {
 
     this.m_count = 4;
 
-    if (Vec2.isValid(center)) {
+    if (center && Vec2.isValid(center)) {
       angle = angle || 0;
 
-      this.m_centroid.setVec2(center);
+      matrix.copyVec2(this.m_centroid, center);
 
       const xf = Transform.identity();
       xf.p.setVec2(center);
@@ -301,11 +308,11 @@ export class PolygonShape extends Shape {
    * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
-  testPoint(xf: Transform, p: Vec2): boolean {
-    const pLocal = Rot.mulTVec2(xf.q, Vec2.sub(p, xf.p));
+  testPoint(xf: TransformValue, p: Vec2): boolean {
+    const pLocal = matrix.invTransformVec2(temp, xf, p);
 
     for (let i = 0; i < this.m_count; ++i) {
-      const dot = Vec2.dot(this.m_normals[i], Vec2.sub(pLocal, this.m_vertices[i]));
+      const dot = matrix.dotVec2(this.m_normals[i], pLocal) - matrix.dotVec2(this.m_normals[i], this.m_vertices[i]);
       if (dot > 0.0) {
         return false;
       }
@@ -365,7 +372,7 @@ export class PolygonShape extends Shape {
       // The use of epsilon here causes the assert on lower to trip
       // in some cases. Apparently the use of epsilon was to make edge
       // shapes work, but now those are handled separately.
-      // if (upper < lower - Math.EPSILON)
+      // if (upper < lower - matrix.EPSILON)
       if (upper < lower) {
         return false;
       }
@@ -390,22 +397,21 @@ export class PolygonShape extends Shape {
    * @param xf The world transform of the shape.
    * @param childIndex The child shape
    */
-  computeAABB(aabb: AABB, xf: Transform, childIndex: number): void {
+  computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void {
     let minX = Infinity;
     let minY = Infinity;
     let maxX = -Infinity;
     let maxY = -Infinity;
     for (let i = 0; i < this.m_count; ++i) {
-      const v = Transform.mulVec2(xf, this.m_vertices[i]);
+      const v = matrix.transformVec2(temp, xf, this.m_vertices[i]);
       minX = Math.min(minX, v.x);
       maxX = Math.max(maxX, v.x);
       minY = Math.min(minY, v.y);
       maxY = Math.max(maxY, v.y);
     }
 
-    aabb.lowerBound.setNum(minX, minY);
-    aabb.upperBound.setNum(maxX, maxY);
-    aabb.extend(this.m_radius);
+    matrix.setVec2(aabb.lowerBound, minX - this.m_radius, minY - this.m_radius);
+    matrix.setVec2(aabb.upperBound, maxX + this.m_radius, maxY + this.m_radius);
   }
 
   /**
@@ -442,34 +448,39 @@ export class PolygonShape extends Shape {
 
     _ASSERT && console.assert(this.m_count >= 3);
 
-    const center = Vec2.zero();
+    matrix.zeroVec2(center);
     let area = 0.0;
     let I = 0.0;
 
     // s is the reference point for forming triangles.
     // It's location doesn't change the result (except for rounding error).
-    const s = Vec2.zero();
+    matrix.zeroVec2(s);
 
     // This code would put the reference point inside the polygon.
     for (let i = 0; i < this.m_count; ++i) {
-      s.add(this.m_vertices[i]);
+      matrix.addVec2(s, this.m_vertices[i]);
     }
-    s.mul(1.0 / this.m_count);
+    matrix.setMulVec2(s, 1.0 / this.m_count, s);
 
     const k_inv3 = 1.0 / 3.0;
 
     for (let i = 0; i < this.m_count; ++i) {
       // Triangle vertices.
-      const e1 = Vec2.sub(this.m_vertices[i], s);
-      const e2 = i + 1 < this.m_count ? Vec2.sub(this.m_vertices[i + 1], s) : Vec2 .sub(this.m_vertices[0], s);
+      matrix.diffVec2(e1, this.m_vertices[i], s);
+      if ( i + 1 < this.m_count) {
+        matrix.diffVec2(e2, this.m_vertices[i + 1], s);
+      } else {
+        matrix.diffVec2(e2, this.m_vertices[0], s);
+      }
 
-      const D = Vec2.crossVec2Vec2(e1, e2);
+      const D = matrix.crossVec2Vec2(e1, e2);
 
       const triangleArea = 0.5 * D;
       area += triangleArea;
 
       // Area weighted centroid
-      center.addCombine(triangleArea * k_inv3, e1, triangleArea * k_inv3, e2);
+      matrix.combineVec2(center, 1, center, triangleArea * k_inv3, e1);
+      matrix.combineVec2(center, 1, center, triangleArea * k_inv3, e2);
 
       const ex1 = e1.x;
       const ey1 = e1.y;
@@ -487,14 +498,14 @@ export class PolygonShape extends Shape {
 
     // Center of mass
     _ASSERT && console.assert(area > Math.EPSILON);
-    center.mul(1.0 / area);
-    massData.center.setCombine(1, center, 1, s);
+    matrix.setMulVec2(center, 1.0 / area, center);
+    matrix.sumVec2(massData.center, center, s);
 
     // Inertia tensor relative to the local origin (point s).
     massData.I = density * I;
 
     // Shift to center of mass then to original body origin.
-    massData.I += massData.mass * (Vec2.dot(massData.center, massData.center) - Vec2.dot(center, center));
+    massData.I += massData.mass * (matrix.dotVec2(massData.center, massData.center) - matrix.dotVec2(center, center));
   }
 
   /**
@@ -506,15 +517,14 @@ export class PolygonShape extends Shape {
       const i1 = i;
       const i2 = i < this.m_count - 1 ? i1 + 1 : 0;
       const p = this.m_vertices[i1];
-      const e = Vec2.sub(this.m_vertices[i2], p);
+      matrix.diffVec2(e, this.m_vertices[i2], p);
 
       for (let j = 0; j < this.m_count; ++j) {
         if (j == i1 || j == i2) {
           continue;
         }
 
-        const v = Vec2.sub(this.m_vertices[j], p);
-        const c = Vec2.crossVec2Vec2(e, v);
+        const c = matrix.crossVec2Vec2(e, matrix.diffVec2(temp, this.m_vertices[j], p));
         if (c < 0.0) {
           return false;
         }

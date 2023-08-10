@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+import * as matrix from './Matrix';
 import { math as Math } from './Math';
 
 

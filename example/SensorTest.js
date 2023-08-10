@@ -119,7 +119,7 @@ testbed.step = function() {
     var position = body.getPosition();
 
     var d = Vec2.sub(center, position);
-    if (d.lengthSquared() < Math.EPSILON * Math.EPSILON) {
+    if (d.lengthSquared() < 1e-18) {
       continue;
     }
 

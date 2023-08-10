@@ -30,12 +30,17 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
+export interface RotValue {
+  s: number;
+  c: number;
+}
+
 export class Rot {
   s: number;
   c: number;
 
   /** Initialize from an angle in radians. */
-  constructor(angle?: number | Rot) {
+  constructor(angle?: number | RotValue) {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof Rot)) {
       return new Rot(angle);
     }
@@ -55,7 +60,7 @@ export class Rot {
     return obj;
   }
 
-  static clone(rot: Rot): Rot {
+  static clone(rot: RotValue): Rot {
     _ASSERT && Rot.assert(rot);
     const obj = Object.create(Rot.prototype);
     obj.s = rot.s;
@@ -87,7 +92,7 @@ export class Rot {
     this.c = 1.0;
   }
 
-  set(angle: number | Rot): void {
+  set(angle: number | RotValue): void {
     if (typeof angle === 'object') {
       _ASSERT && Rot.assert(angle);
       this.s = angle.s;
@@ -101,7 +106,7 @@ export class Rot {
     }
   }
 
-  setRot(angle: Rot): void {
+  setRot(angle: RotValue): void {
     _ASSERT && Rot.assert(angle);
     this.s = angle.s;
     this.c = angle.c;
@@ -131,9 +136,9 @@ export class Rot {
   }
 
   /** Multiply two rotations: q * r */
-  static mul(rot: Rot, m: Rot): Rot;
+  static mul(rot: RotValue, m: RotValue): Rot;
   /** Rotate a vector */
-  static mul(rot: Rot, m: Vec2): Vec2;
+  static mul(rot: RotValue, m: Vec2Value): Vec2;
   // tslint:disable-next-line:typedef
   static mul(rot, m) {
     _ASSERT && Rot.assert(rot);
@@ -155,7 +160,7 @@ export class Rot {
   }
 
   /** Multiply two rotations: q * r */
-  static mulRot(rot: Rot, m: Rot): Rot {
+  static mulRot(rot: RotValue, m: RotValue): Rot {
     _ASSERT && Rot.assert(rot);
     _ASSERT && Rot.assert(m);
     // [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
@@ -169,22 +174,22 @@ export class Rot {
   }
 
   /** Rotate a vector */
-  static mulVec2(rot: Rot, m: Vec2): Vec2 {
+  static mulVec2(rot: RotValue, m: Vec2Value): Vec2 {
     _ASSERT && Rot.assert(rot);
     _ASSERT && Vec2.assert(m);
     return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
   }
 
-  static mulSub(rot: Rot, v: Vec2, w: Vec2): Vec2 {
+  static mulSub(rot: RotValue, v: Vec2Value, w: Vec2Value): Vec2 {
     const x = rot.c * (v.x - w.x) - rot.s * (v.y - w.y);
     const y = rot.s * (v.x - w.x) + rot.c * (v.y - w.y);
     return Vec2.neo(x, y);
   }
 
   /** Transpose multiply two rotations: qT * r */
-  static mulT(rot: Rot, m: Rot): Rot;
+  static mulT(rot: RotValue, m: RotValue): Rot;
   /** Inverse rotate a vector */
-  static mulT(rot: Rot, m: Vec2): Vec2;
+  static mulT(rot: RotValue, m: Vec2Value): Vec2;
   // tslint:disable-next-line:typedef
   static mulT(rot, m) {
     if ('c' in m && 's' in m) {
@@ -205,7 +210,7 @@ export class Rot {
   }
 
   /** Transpose multiply two rotations: qT * r */
-  static mulTRot(rot: Rot, m: Rot): Rot {
+  static mulTRot(rot: RotValue, m: RotValue): Rot {
     _ASSERT && Rot.assert(m);
     // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
     // [-qs qc] [rs rc] [-qs*rc+qc*rs qs*rs+qc*rc]
@@ -218,7 +223,7 @@ export class Rot {
   }
 
   /** Inverse rotate a vector */
-  static mulTVec2(rot: Rot, m: Vec2Value): Vec2 {
+  static mulTVec2(rot: RotValue, m: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(m);
     return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
   }

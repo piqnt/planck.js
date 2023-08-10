@@ -23,17 +23,21 @@
  */
 
 import { Settings } from '../../Settings';
+import * as matrix from '../../common/Matrix';
 import { Shape } from '../Shape';
-import { Transform } from '../../common/Transform';
+import { Transform, TransformValue } from '../../common/Transform';
 import { Rot } from '../../common/Rot';
 import { Vec2, Vec2Value } from '../../common/Vec2';
-import { AABB, RayCastInput, RayCastOutput } from '../AABB';
+import { AABB, AABBValue, RayCastInput, RayCastOutput } from '../AABB';
 import { MassData } from '../../dynamics/Body';
 import { DistanceProxy } from '../Distance';
 
 
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
+
+const v1 = matrix.vec2(0, 0);
+const v2 = matrix.vec2(0, 0);
 
 /**
  * A line segment (edge) shape. These can be connected in chains or loops to
@@ -213,7 +217,7 @@ export class EdgeShape extends Shape {
    * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
-  testPoint(xf: Transform, p: Vec2Value): false {
+  testPoint(xf: TransformValue, p: Vec2Value): false {
     return false;
   }
 
@@ -291,12 +295,12 @@ export class EdgeShape extends Shape {
    * @param xf The world transform of the shape.
    * @param childIndex The child shape
    */
-  computeAABB(aabb: AABB, xf: Transform, childIndex: number): void {
-    const v1 = Transform.mulVec2(xf, this.m_vertex1);
-    const v2 = Transform.mulVec2(xf, this.m_vertex2);
+  computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void {
+    matrix.transformVec2(v1, xf, this.m_vertex1);
+    matrix.transformVec2(v2, xf, this.m_vertex2);
 
-    aabb.combinePoints(v1, v2);
-    aabb.extend(this.m_radius);
+    AABB.combinePoints(aabb, v1, v2);
+    AABB.extend(aabb, this.m_radius);
   }
 
   /**
@@ -308,13 +312,14 @@ export class EdgeShape extends Shape {
    */
   computeMass(massData: MassData, density?: number): void {
     massData.mass = 0.0;
-    massData.center.setCombine(0.5, this.m_vertex1, 0.5, this.m_vertex2);
+    matrix.combineVec2(massData.center, 0.5, this.m_vertex1, 0.5, this.m_vertex2);
     massData.I = 0.0;
   }
 
   computeDistanceProxy(proxy: DistanceProxy): void {
     proxy.m_vertices[0] = this.m_vertex1;
     proxy.m_vertices[1] = this.m_vertex2;
+    proxy.m_vertices.length = 2;
     proxy.m_count = 2;
     proxy.m_radius = this.m_radius;
   }

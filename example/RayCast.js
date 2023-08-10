@@ -25,7 +25,7 @@
 // NOTE: we are intentionally filtering one of the polygons, therefore
 // the ray will always miss one type of polygon.
 
-const { World, Vec2, Transform, RayCastInput, RayCastOutput, Edge, Circle, Polygon, Box, Math } = planck;
+const { World, Vec2, Transform, RayCastInput, RayCastOutput, Edge, Circle, Polygon, Box } = planck;
 
 // This callback finds the closest hit. Polygon 0 is filtered.
 var RayCastClosest = (function() {
@@ -139,6 +139,8 @@ var RayCastMultiple = (function() {
 const world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
+testbed.width = 40;
+testbed.height = 40;
 testbed.info("1-6: Drop new objects, Z: Change mode, X: Destroy an object");
 testbed.start(world);
 
@@ -152,9 +154,6 @@ var shapes = [];
 
 var angle = 0.0;
 var mode = CLOSEST;
-
-var ground = world.createBody();
-ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
 shapes[0] = new Polygon([
   new Vec2(-0.5, 0.0),
@@ -191,12 +190,12 @@ function createBody(index) {
     world.destroyBody(bodies.shift());
   }
 
-  var x = Math.random(-10.0, 10.0);
-  var y = Math.random(0.0, 20.0);
+  var x = Math.random() * 20 - 10;
+  var y = Math.random() * 20;
 
   var bd = {};
   bd.position = new Vec2(x, y);
-  bd.angle = Math.random(-Math.PI, Math.PI);
+  bd.angle = Math.random() * 2 * Math.PI - Math.PI;
   bd.userData = index;
 
   if (index === 4) {
@@ -244,6 +243,7 @@ testbed.keydown = function(code, char) {
       break;
     case '5':
       createBody(4);
+      break;
     case '6':
       createBody(5);
       break;
@@ -255,15 +255,15 @@ testbed.keydown = function(code, char) {
 function updateStatus() {
   switch (mode) {
     case CLOSEST:
-      testbed.status("Ray-cast mode", "closest - find closest fixture along the ray");
+      testbed.status("Ray-cast mode", "Closest - find closest fixture along the ray");
       break;
 
     case ANY:
-      testbed.status("Ray-cast mode", "any - check for obstruction");
+      testbed.status("Ray-cast mode", "Any - check for obstruction");
       break;
 
     case MULTIPLE:
-      testbed.status("Ray-cast mode", "multiple - gather multiple fixtures");
+      testbed.status("Ray-cast mode", "Multiple - gather multiple fixtures");
       break;
   }
 }
