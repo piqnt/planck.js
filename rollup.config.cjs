@@ -18,14 +18,14 @@ module.exports = [
     sourcemap: false,
     declaration: true,
   },
-  {
-    format: 'cjs',
-    src: 'src/main.ts',
-    dest: 'dist/planck.cjs',
-    minimize: false,
-    sourcemap: false,
-    declaration: false,
-  },
+  // {
+  //   format: 'cjs',
+  //   src: 'src/main.ts',
+  //   dest: 'dist/planck.cjs',
+  //   minimize: false,
+  //   sourcemap: false,
+  //   declaration: false,
+  // },
   {
     format: 'umd',
     src: 'src/main.ts',
@@ -42,14 +42,14 @@ module.exports = [
     sourcemap: false,
     declaration: true,
   },
-  {
-    format: 'cjs',
-    src: 'testbed/main.ts',
-    dest: 'dist/planck-with-testbed.cjs',
-    minimize: false,
-    sourcemap: false,
-    declaration: false,
-  },
+  // {
+  //   format: 'cjs',
+  //   src: 'testbed/main.ts',
+  //   dest: 'dist/planck-with-testbed.cjs',
+  //   minimize: false,
+  //   sourcemap: false,
+  //   declaration: false,
+  // },
   {
     format: 'umd',
     src: 'testbed/main.ts',
@@ -74,8 +74,8 @@ module.exports = [
           'ASSERT': JSON.stringify(false),
           '_ASSERT': JSON.stringify(false),
           // we are still compiling to ES5, so we keep constructor factories until v2
-          'CONSTRUCTOR_FACTORY': JSON.stringify(true),
-          '_CONSTRUCTOR_FACTORY': JSON.stringify(true),
+          'CONSTRUCTOR_FACTORY': JSON.stringify(false),
+          '_CONSTRUCTOR_FACTORY': JSON.stringify(false),
         },
       }),
       nodeResolve(),
@@ -86,36 +86,36 @@ module.exports = [
           declaration: options.declaration,
           declarationMap: options.declaration
         }),
-        transformers: {
-          afterDeclarations: [
-            declarationTransformer({
-              classes: [
-                'Vec2',
-                'Vec3',
-                'Rot',
-                'Transform',
-                'AABB',
-                'World',
-                'BoxShape',
-                'CircleShape',
-                'ChainShape',
-                'EdgeShape',
-                'PolygonShape',
-                'DistanceJoint',
-                'FrictionJoint',
-                'GearJoint',
-                'MotorJoint',
-                'MouseJoint',
-                'PrismaticJoint',
-                'PulleyJoint',
-                'RevoluteJoint',
-                'RopeJoint',
-                'WeldJoint',
-                'WheelJoint',
-              ]
-            })
-          ]
-        },
+        // transformers: {
+        //   afterDeclarations: [
+        //     declarationTransformer({
+        //       classes: [
+        //         'Vec2',
+        //         'Vec3',
+        //         'Rot',
+        //         'Transform',
+        //         'AABB',
+        //         'World',
+        //         'BoxShape',
+        //         'CircleShape',
+        //         'ChainShape',
+        //         'EdgeShape',
+        //         'PolygonShape',
+        //         'DistanceJoint',
+        //         'FrictionJoint',
+        //         'GearJoint',
+        //         'MotorJoint',
+        //         'MouseJoint',
+        //         'PrismaticJoint',
+        //         'PulleyJoint',
+        //         'RevoluteJoint',
+        //         'RopeJoint',
+        //         'WeldJoint',
+        //         'WheelJoint',
+        //       ]
+        //     })
+        //   ]
+        // },
       }),
       license({
         banner: licenseBanner,

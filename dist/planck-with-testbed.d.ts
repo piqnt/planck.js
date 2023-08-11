@@ -17,12 +17,6 @@ interface Vec2Value {
     x: number;
     y: number;
 }
-declare function Vec2(x: number, y: number): Vec2;
-declare function Vec2(obj: {
-    x: number;
-    y: number;
-}): Vec2;
-declare function Vec2(): Vec2;
 declare class Vec2 {
     x: number;
     y: number;
@@ -182,13 +176,6 @@ interface Vec3Value {
     y: number;
     z: number;
 }
-declare function Vec3(x: number, y: number, z: number): Vec3;
-declare function Vec3(obj: {
-    x: number;
-    y: number;
-    z: number;
-}): Vec3;
-declare function Vec3(): Vec3;
 declare class Vec3 {
     x: number;
     y: number;
@@ -324,7 +311,6 @@ interface RotValue {
     s: number;
     c: number;
 }
-declare function Rot(angle?: number | RotValue): Rot;
 declare class Rot {
     s: number;
     c: number;
@@ -368,12 +354,6 @@ type TransformValue = {
     p: Vec2Value;
     q: RotValue;
 };
-/**
- * A transform contains translation and rotation. It is used to represent the
- * position and orientation of rigid frames. Initialize using a position vector
- * and a rotation.
- */
-declare function Transform(position?: Vec2Value, rotation?: number): Transform;
 /**
  * A transform contains translation and rotation. It is used to represent the
  * position and orientation of rigid frames. Initialize using a position vector
@@ -432,7 +412,6 @@ interface AABBValue {
     lowerBound: Vec2Value;
     upperBound: Vec2Value;
 }
-declare function AABB(lower?: Vec2Value, upper?: Vec2Value): AABB;
 declare class AABB {
     lowerBound: Vec2;
     upperBound: Vec2;
@@ -1233,7 +1212,6 @@ type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2, fracti
  * Called for each fixture found in the query AABB. It may return `false` to terminate the query.
  */
 type WorldAABBQueryCallback = (fixture: Fixture) => boolean;
-declare function World(def?: WorldDef | Vec2 | null): World;
 declare class World {
     /**
      * @param def World definition or gravity vector.
@@ -2158,8 +2136,6 @@ declare abstract class Shape {
     abstract computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
 }
 type ShapeType = "circle" | "edge" | "polygon" | "chain";
-declare function CircleShape(position: Vec2Value, radius?: number): CircleShape;
-declare function CircleShape(radius?: number): CircleShape;
 declare class CircleShape extends Shape {
     static TYPE: "circle";
     m_type: "circle";
@@ -2211,12 +2187,6 @@ declare class CircleShape extends Shape {
     computeDistanceProxy(proxy: DistanceProxy): void;
 }
 declare const Circle: typeof CircleShape;
-/**
- * A line segment (edge) shape. These can be connected in chains or loops to
- * other edge shapes. The connectivity information is used to ensure correct
- * contact normals.
- */
-declare function EdgeShape(v1?: Vec2Value, v2?: Vec2Value): EdgeShape;
 /**
  * A line segment (edge) shape. These can be connected in chains or loops to
  * other edge shapes. The connectivity information is used to ensure correct
@@ -2305,13 +2275,6 @@ declare const Edge: typeof EdgeShape;
  * Settings.maxPolygonVertices. In most cases you should not need many vertices
  * for a convex polygon. extends Shape
  */
-declare function PolygonShape(vertices?: Vec2Value[]): PolygonShape;
-/**
- * A convex polygon. It is assumed that the interior of the polygon is to the
- * left of each edge. Polygons have a maximum number of vertices equal to
- * Settings.maxPolygonVertices. In most cases you should not need many vertices
- * for a convex polygon. extends Shape
- */
 declare class PolygonShape extends Shape {
     static TYPE: "polygon";
     m_type: "polygon";
@@ -2370,15 +2333,6 @@ declare class PolygonShape extends Shape {
     computeDistanceProxy(proxy: DistanceProxy): void;
 }
 declare const Polygon: typeof PolygonShape;
-/**
- * A chain shape is a free form sequence of line segments. The chain has
- * two-sided collision, so you can use inside and outside collision. Therefore,
- * you may use any winding order. Connectivity information is used to create
- * smooth collisions.
- *
- * WARNING: The chain will not collide properly if there are self-intersections.
- */
-declare function ChainShape(vertices?: Vec2Value[], loop?: boolean): ChainShape;
 /**
  * A chain shape is a free form sequence of line segments. The chain has
  * two-sided collision, so you can use inside and outside collision. Therefore,
@@ -2469,10 +2423,6 @@ declare const Chain: typeof ChainShape;
 /**
  * A rectangle polygon which extend PolygonShape.
  */
-declare function BoxShape(hx: number, hy: number, center?: Vec2Value, angle?: number): BoxShape;
-/**
- * A rectangle polygon which extend PolygonShape.
- */
 declare class BoxShape extends PolygonShape {
     static TYPE: "polygon";
     constructor(hx: number, hy: number, center?: Vec2Value, angle?: number);
@@ -2537,22 +2487,6 @@ interface DistanceJointDef extends JointDef, DistanceJointOpt {
      */
     localAnchorB: Vec2;
 }
-/**
- * A distance joint constrains two points on two bodies to remain at a fixed
- * distance from each other. You can view this as a massless, rigid rod.
- *
- * @param anchorA Anchor A in global coordination.
- * @param anchorB Anchor B in global coordination.
- */
-declare function DistanceJoint(def: DistanceJointDef): DistanceJoint;
-/**
- * A distance joint constrains two points on two bodies to remain at a fixed
- * distance from each other. You can view this as a massless, rigid rod.
- *
- * @param anchorA Anchor A in global coordination.
- * @param anchorB Anchor B in global coordination.
- */
-declare function DistanceJoint(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2): DistanceJoint;
 /**
  * A distance joint constrains two points on two bodies to remain at a fixed
  * distance from each other. You can view this as a massless, rigid rod.
@@ -2634,20 +2568,6 @@ interface FrictionJointDef extends JointDef, FrictionJointOpt {
      */
     localAnchorB: Vec2;
 }
-/**
- * Friction joint. This is used for top-down friction. It provides 2D
- * translational friction and angular friction.
- *
- * @param anchor Anchor in global coordination.
- */
-declare function FrictionJoint(def: FrictionJointDef): FrictionJoint;
-/**
- * Friction joint. This is used for top-down friction. It provides 2D
- * translational friction and angular friction.
- *
- * @param anchor Anchor in global coordination.
- */
-declare function FrictionJoint(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): FrictionJoint;
 /**
  * Friction joint. This is used for top-down friction. It provides 2D
  * translational friction and angular friction.
@@ -2770,24 +2690,6 @@ interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
      */
     referenceAngle: number;
 }
-/**
- * A revolute joint constrains two bodies to share a common point while they are
- * free to rotate about the point. The relative rotation about the shared point
- * is the joint angle. You can limit the relative rotation with a joint limit
- * that specifies a lower and upper angle. You can use a motor to drive the
- * relative rotation about the shared point. A maximum motor torque is provided
- * so that infinite forces are not generated.
- */
-declare function RevoluteJoint(def: RevoluteJointDef): RevoluteJoint;
-/**
- * A revolute joint constrains two bodies to share a common point while they are
- * free to rotate about the point. The relative rotation about the shared point
- * is the joint angle. You can limit the relative rotation with a joint limit
- * that specifies a lower and upper angle. You can use a motor to drive the
- * relative rotation about the shared point. A maximum motor torque is provided
- * so that infinite forces are not generated.
- */
-declare function RevoluteJoint(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RevoluteJoint;
 /**
  * A revolute joint constrains two bodies to share a common point while they are
  * free to rotate about the point. The relative rotation about the shared point
@@ -2957,20 +2859,6 @@ interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
  * joint limit to restrict the range of motion and a joint motor to drive the
  * motion or to model joint friction.
  */
-declare function PrismaticJoint(def: PrismaticJointDef): PrismaticJoint;
-/**
- * A prismatic joint. This joint provides one degree of freedom: translation
- * along an axis fixed in bodyA. Relative rotation is prevented. You can use a
- * joint limit to restrict the range of motion and a joint motor to drive the
- * motion or to model joint friction.
- */
-declare function PrismaticJoint(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): PrismaticJoint;
-/**
- * A prismatic joint. This joint provides one degree of freedom: translation
- * along an axis fixed in bodyA. Relative rotation is prevented. You can use a
- * joint limit to restrict the range of motion and a joint motor to drive the
- * motion or to model joint friction.
- */
 declare class PrismaticJoint extends Joint {
     static TYPE: "prismatic-joint";
     constructor(def: PrismaticJointDef);
@@ -3102,34 +2990,6 @@ interface GearJointDef extends JointDef, GearJointOpt {
  * This definition requires two existing revolute or prismatic joints (any
  * combination will work).
  */
-declare function GearJoint(def: GearJointDef): GearJoint;
-/**
- * A gear joint is used to connect two joints together. Either joint can be a
- * revolute or prismatic joint. You specify a gear ratio to bind the motions
- * together: coordinate1 + ratio * coordinate2 = constant
- *
- * The ratio can be negative or positive. If one joint is a revolute joint and
- * the other joint is a prismatic joint, then the ratio will have units of
- * length or units of 1/length. Warning: You have to manually destroy the gear
- * joint if joint1 or joint2 is destroyed.
- *
- * This definition requires two existing revolute or prismatic joints (any
- * combination will work).
- */
-declare function GearJoint(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
-/**
- * A gear joint is used to connect two joints together. Either joint can be a
- * revolute or prismatic joint. You specify a gear ratio to bind the motions
- * together: coordinate1 + ratio * coordinate2 = constant
- *
- * The ratio can be negative or positive. If one joint is a revolute joint and
- * the other joint is a prismatic joint, then the ratio will have units of
- * length or units of 1/length. Warning: You have to manually destroy the gear
- * joint if joint1 or joint2 is destroyed.
- *
- * This definition requires two existing revolute or prismatic joints (any
- * combination will work).
- */
 declare class GearJoint extends Joint {
     static TYPE: "gear-joint";
     constructor(def: GearJointDef);
@@ -3203,18 +3063,6 @@ interface MotorJointOpt extends JointOpt {
  */
 interface MotorJointDef extends JointDef, MotorJointOpt {
 }
-/**
- * A motor joint is used to control the relative motion between two bodies. A
- * typical usage is to control the movement of a dynamic body with respect to
- * the ground.
- */
-declare function MotorJoint(def: MotorJointDef): MotorJoint;
-/**
- * A motor joint is used to control the relative motion between two bodies. A
- * typical usage is to control the movement of a dynamic body with respect to
- * the ground.
- */
-declare function MotorJoint(def: MotorJointOpt, bodyA: Body, bodyB: Body): MotorJoint;
 /**
  * A motor joint is used to control the relative motion between two bodies. A
  * typical usage is to control the movement of a dynamic body with respect to
@@ -3313,26 +3161,6 @@ interface MouseJointDef extends JointDef, MouseJointOpt {
      */
     target: Vec2Value;
 }
-/**
- * A mouse joint is used to make a point on a body track a specified world
- * point. This a soft constraint with a maximum force. This allows the
- * constraint to stretch and without applying huge forces.
- *
- * NOTE: this joint is not documented in the manual because it was developed to
- * be used in the testbed. If you want to learn how to use the mouse joint, look
- * at the testbed.
- */
-declare function MouseJoint(def: MouseJointDef): MouseJoint;
-/**
- * A mouse joint is used to make a point on a body track a specified world
- * point. This a soft constraint with a maximum force. This allows the
- * constraint to stretch and without applying huge forces.
- *
- * NOTE: this joint is not documented in the manual because it was developed to
- * be used in the testbed. If you want to learn how to use the mouse joint, look
- * at the testbed.
- */
-declare function MouseJoint(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2): MouseJoint;
 /**
  * A mouse joint is used to make a point on a body track a specified world
  * point. This a soft constraint with a maximum force. This allows the
@@ -3454,30 +3282,6 @@ interface PulleyJointDef extends JointDef, PulleyJointOpt {
  * anchor points with static shapes to prevent one side from going to zero
  * length.
  */
-declare function PulleyJoint(def: PulleyJointDef): PulleyJoint;
-/**
- * The pulley joint is connected to two bodies and two fixed ground points. The
- * pulley supports a ratio such that: length1 + ratio * length2 <= constant
- *
- * Yes, the force transmitted is scaled by the ratio.
- *
- * Warning: the pulley joint can get a bit squirrelly by itself. They often work
- * better when combined with prismatic joints. You should also cover the the
- * anchor points with static shapes to prevent one side from going to zero
- * length.
- */
-declare function PulleyJoint(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number): PulleyJoint;
-/**
- * The pulley joint is connected to two bodies and two fixed ground points. The
- * pulley supports a ratio such that: length1 + ratio * length2 <= constant
- *
- * Yes, the force transmitted is scaled by the ratio.
- *
- * Warning: the pulley joint can get a bit squirrelly by itself. They often work
- * better when combined with prismatic joints. You should also cover the the
- * anchor points with static shapes to prevent one side from going to zero
- * length.
- */
 declare class PulleyJoint extends Joint {
     static TYPE: "pulley-joint";
     constructor(def: PulleyJointDef);
@@ -3578,30 +3382,6 @@ interface RopeJointDef extends JointDef, RopeJointOpt {
  * sponginess, so I chose not to implement it that way. See {@link DistanceJoint} if you
  * want to dynamically control length.
  */
-declare function RopeJoint(def: RopeJointDef): RopeJoint;
-/**
- * A rope joint enforces a maximum distance between two points on two bodies. It
- * has no other effect.
- *
- * Warning: if you attempt to change the maximum length during the simulation
- * you will get some non-physical behavior.
- *
- * A model that would allow you to dynamically modify the length would have some
- * sponginess, so I chose not to implement it that way. See {@link DistanceJoint} if you
- * want to dynamically control length.
- */
-declare function RopeJoint(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RopeJoint;
-/**
- * A rope joint enforces a maximum distance between two points on two bodies. It
- * has no other effect.
- *
- * Warning: if you attempt to change the maximum length during the simulation
- * you will get some non-physical behavior.
- *
- * A model that would allow you to dynamically modify the length would have some
- * sponginess, so I chose not to implement it that way. See {@link DistanceJoint} if you
- * want to dynamically control length.
- */
 declare class RopeJoint extends Joint {
     static TYPE: "rope-joint";
     constructor(def: RopeJointDef);
@@ -3688,16 +3468,6 @@ interface WeldJointDef extends JointDef, WeldJointOpt {
      */
     localAnchorB: Vec2;
 }
-/**
- * A weld joint essentially glues two bodies together. A weld joint may distort
- * somewhat because the island constraint solver is approximate.
- */
-declare function WeldJoint(def: WeldJointDef): WeldJoint;
-/**
- * A weld joint essentially glues two bodies together. A weld joint may distort
- * somewhat because the island constraint solver is approximate.
- */
-declare function WeldJoint(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): WeldJoint;
 /**
  * A weld joint essentially glues two bodies together. A weld joint may distort
  * somewhat because the island constraint solver is approximate.
@@ -3809,20 +3579,6 @@ interface WheelJointDef extends JointDef, WheelJointOpt {
      */
     localAxisA: Vec2;
 }
-/**
- * A wheel joint. This joint provides two degrees of freedom: translation along
- * an axis fixed in bodyA and rotation in the plane. In other words, it is a
- * point to line constraint with a rotational motor and a linear spring/damper.
- * This joint is designed for vehicle suspensions.
- */
-declare function WheelJoint(def: WheelJointDef): WheelJoint;
-/**
- * A wheel joint. This joint provides two degrees of freedom: translation along
- * an axis fixed in bodyA and rotation in the plane. In other words, it is a
- * point to line constraint with a rotational motor and a linear spring/damper.
- * This joint is designed for vehicle suspensions.
- */
-declare function WheelJoint(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): WheelJoint;
 /**
  * A wheel joint. This joint provides two degrees of freedom: translation along
  * an axis fixed in bodyA and rotation in the plane. In other words, it is a

@@ -7,12 +7,12 @@
     }
   },
   "compilerOptions": {
-    "module": "ES2015",
+    "module": "ES6",
     // "strictNullChecks": true,
     // "noImplicitAny": true,
     "lib": ["ES2015", "DOM"],
     "stripInternal": true,
-    "target": "ES5",
+    "target": "ES6",
     "esModuleInterop": true,
     "moduleResolution": "Node",
     "resolveJsonModule": true,
