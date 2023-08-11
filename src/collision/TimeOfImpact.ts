@@ -84,6 +84,9 @@ stats.toiMaxRootIters = 0;
 
 const distanceInput = new DistanceInput();
 const distanceOutput = new DistanceOutput();
+// this is passed to Distance and SeparationFunction
+const cache = new SimplexCache();
+
 const xfA = matrix.transform(0, 0, 0);
 const xfB = matrix.transform(0, 0, 0);
 const temp = matrix.vec2(0, 0);
@@ -95,7 +98,6 @@ const axisB = matrix.vec2(0, 0);
 const localPointA = matrix.vec2(0, 0);
 const localPointB = matrix.vec2(0, 0);
 
-const cache = new SimplexCache();
 
 /**
  * Compute the upper bound on time before two shapes penetrate. Time is
@@ -143,8 +145,8 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
   // const cache = new SimplexCache();
   cache.recycle();
 
-  distanceInput.proxyA = input.proxyA;
-  distanceInput.proxyB = input.proxyB;
+  distanceInput.proxyA.setVertices(proxyA.m_vertices, proxyA.m_count, proxyA.m_radius);
+  distanceInput.proxyB.setVertices(proxyB.m_vertices, proxyB.m_count, proxyB.m_radius);
   distanceInput.useRadii = false;
 
   // The outer loop progressively attempts to compute new separating axes.
@@ -155,8 +157,8 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
 
     // Get the distance between shapes. We can also use the results
     // to get a separating axis.
-    distanceInput.transformA = xfA;
-    distanceInput.transformB = xfB;
+    matrix.copyTransform(distanceInput.transformA, xfA);
+    matrix.copyTransform(distanceInput.transformB, xfB);
     Distance(distanceOutput, cache, distanceInput);
 
     // If the shapes are overlapped, we give up on continuous collision.
@@ -175,7 +177,7 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
     }
 
     // Initialize the separating axis.
-    fcn.initialize(cache, proxyA, sweepA, proxyB, sweepB, t1);
+    separationFunction.initialize(cache, proxyA, sweepA, proxyB, sweepB, t1);
 
     // if (false) {
     //   // Dump the curve seen by the root finder
@@ -203,7 +205,7 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
     let pushBackIter = 0;
     while (true) {
       // Find the deepest point at t2. Store the witness point indices.
-      let s2 = fcn.findMinSeparation(t2);
+      let s2 = separationFunction.findMinSeparation(t2);
 
       // Is the final configuration separated?
       if (s2 > target + tolerance) {
@@ -222,7 +224,7 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
       }
 
       // Compute the initial separation of the witness points.
-      let s1 = fcn.evaluate(t1);
+      let s1 = separationFunction.evaluate(t1);
 
       // Check for initial overlap. This might happen if the root finder
       // runs out of iterations.
@@ -260,7 +262,7 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
         ++rootIterCount;
         ++stats.toiRootIters;
 
-        const s = fcn.evaluate(t);
+        const s = separationFunction.evaluate(t);
 
         if (Math.abs(s - target) < tolerance) {
           // t2 holds a tentative value for t1
@@ -311,6 +313,8 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
   const time = Timer.diff(timer);
   stats.toiMaxTime = Math.max(stats.toiMaxTime, time);
   stats.toiTime += time;
+
+  separationFunction.recycle();
 }
 
 enum SeparationFunctionType {
@@ -321,34 +325,34 @@ enum SeparationFunctionType {
 }
 
 class SeparationFunction {
-  // todo: pre-populate all these fields, and assign by copy?
-  // readonly m_proxyA: DistanceProxy = new DistanceProxy();
-  // readonly m_proxyB: DistanceProxy = new DistanceProxy();
-  // readonly m_sweepA: Sweep = new Sweep();
-  // readonly m_sweepB: Sweep = new Sweep();
-
+  // input cache
+  // todo: maybe assign by copy instead of reference?
   m_proxyA: DistanceProxy = null;
   m_proxyB: DistanceProxy = null;
   m_sweepA: Sweep = null;
   m_sweepB: Sweep = null;
-  indexA: number = -1;
-  indexB: number = -1;
+
+  // initialize cache
   m_type = SeparationFunctionType.e_unset;
   m_localPoint = matrix.vec2(0, 0);
   m_axis = matrix.vec2(0, 0);
 
+  // compute output
+  indexA = -1;
+  indexB = -1;
+
   recycle() {
-    // this.m_proxyA.recycle();
-    // this.m_proxyB.recycle();
-    // this.m_sweepA.recycle();
-    // this.m_sweepB.recycle();
     this.m_proxyA = null;
     this.m_proxyB = null;
     this.m_sweepA = null;
     this.m_sweepB = null;
+
     this.m_type = SeparationFunctionType.e_unset;
     matrix.zeroVec2(this.m_localPoint)
     matrix.zeroVec2(this.m_axis)
+
+    this.indexA = -1;
+    this.indexB = -1;
   }
 
   // TODO_ERIN might not need to return the separation
@@ -503,7 +507,7 @@ class SeparationFunction {
   }
 }
 
-const fcn = new SeparationFunction();
+const separationFunction = new SeparationFunction();
 
 // legacy exports
 TimeOfImpact.Input = TOIInput;

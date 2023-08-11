@@ -39,10 +39,6 @@ export function rotation(angle: number): RotValue {
   return { s: Math.sin(angle), c: Math.cos(angle) };
 }
 
-export function transform(x: number, y: number, a: number): TransformValue {
-  return { p: vec2(x, y), q: rotation(a) };
-}
-
 export function setVec2(out: Vec2Value, x: number, y: number): Vec2Value {
   out.x = x;
   out.y = y;
@@ -216,6 +212,18 @@ export function rerotVec2(out: Vec2Value, before: RotValue, after: RotValue, v: 
   const y = after.s * x0 + after.c * y0;
   out.x = x;
   out.y = y;
+  return out;
+}
+
+export function transform(x: number, y: number, a: number): TransformValue {
+  return { p: vec2(x, y), q: rotation(a) };
+}
+
+export function copyTransform(out: TransformValue, transform: TransformValue): TransformValue {
+  out.p.x = transform.p.x;
+  out.p.y = transform.p.y;
+  out.q.s = transform.q.s;
+  out.q.c = transform.q.c;
   return out;
 }
 

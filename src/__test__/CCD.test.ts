@@ -2,10 +2,9 @@ import { describe, it, expect } from 'vitest';
 
 import { Vec2 } from '../common/Vec2';
 import { Transform } from '../common/Transform';
-import { Sweep } from '../common/Sweep';
 import { CircleShape } from '../collision/shape/CircleShape';
 import { TimeOfImpact, TOIInput, TOIOutput } from '../collision/TimeOfImpact';
-import { Distance, SimplexCache, DistanceOutput, DistanceInput, DistanceProxy } from '../collision/Distance';
+import { Distance, SimplexCache, DistanceOutput, DistanceInput } from '../collision/Distance';
 
 describe('CCD', function(): void {
 
@@ -13,12 +12,9 @@ describe('CCD', function(): void {
     var c1 = new CircleShape(1);
 
     var input = new DistanceInput();
-    input.proxyA = new DistanceProxy();
-    input.proxyB = new DistanceProxy();
     input.proxyA.set(c1, 0);
     input.proxyB.set(c1, 0);
-    input.transformA = new Transform(new Vec2(0, 0), 0);
-    input.transformB = new Transform(new Vec2(1.9, 0), 0);
+    input.transformB.p.setNum(1.9, 0);
     input.useRadii = true;
     var cache = new SimplexCache();
     var output = new DistanceOutput();
@@ -28,12 +24,10 @@ describe('CCD', function(): void {
     console.log(output);
 
     var input = new DistanceInput();
-    input.proxyA = new DistanceProxy();
-    input.proxyB = new DistanceProxy();
     input.proxyA.set(c1, 0);
     input.proxyB.set(c1, 0);
-    input.transformA = new Transform(new Vec2(0, 0), 0);
-    input.transformB = new Transform(new Vec2(2.1, 0), 0);
+    input.transformB.p.setNum(2.1, 0);
+
     input.useRadii = true;
     var cache = new SimplexCache();
     var output = new DistanceOutput();

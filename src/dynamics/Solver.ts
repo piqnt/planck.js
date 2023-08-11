@@ -29,7 +29,7 @@ import { Body } from './Body';
 import type { Contact } from './Contact';
 import { Joint } from './Joint';
 import { TimeOfImpact, TOIInput, TOIOutput, TOIOutputState } from '../collision/TimeOfImpact';
-import { Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from '../collision/Distance';
+import { Distance, DistanceInput, DistanceOutput, SimplexCache } from '../collision/Distance';
 import { World } from "./World";
 import { Sweep } from '../common/Sweep';
 
@@ -805,12 +805,10 @@ export class Solver {
         const indexB = c.getChildIndexB();
 
         const input = new DistanceInput();
-        input.proxyA = new DistanceProxy();
-        input.proxyB = new DistanceProxy();      
         input.proxyA.set(fA.getShape(), indexA);
         input.proxyB.set(fB.getShape(), indexB);
-        input.transformA = bA.getTransform();
-        input.transformB = bB.getTransform();
+        input.transformA.set(bA.getTransform());
+        input.transformB.set(bB.getTransform());
         input.useRadii = false;
 
         const output = new DistanceOutput();

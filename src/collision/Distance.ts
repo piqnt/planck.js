@@ -55,17 +55,17 @@ stats.gjkMaxIters = 0;
  * computation. Even
  */
 export class DistanceInput {
-  proxyA: DistanceProxy = null;
-  proxyB: DistanceProxy = null;
-  transformA: TransformValue = null;
-  transformB: TransformValue = null;
+  readonly proxyA = new DistanceProxy();
+  readonly proxyB = new DistanceProxy();
+  readonly transformA = Transform.identity();
+  readonly transformB = Transform.identity();
   useRadii = false;
   recycle() {
-    // this.proxyA.recycle();
-    // this.proxyB.recycle();
-    // this.transformA.setIdentity();
-    // this.transformB.setIdentity();
-    // this.useRadii = false;
+    this.proxyA.recycle();
+    this.proxyB.recycle();
+    this.transformA.setIdentity();
+    this.transformB.setIdentity();
+    this.useRadii = false;
   }
 }
 
@@ -238,15 +238,12 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
  * A distance proxy is used by the GJK algorithm. It encapsulates any shape.
  */
 export class DistanceProxy {
-  /** @internal */ m_buffer = [matrix.vec2(0, 0), matrix.vec2(0, 0)];
   /** @internal */ m_vertices: Vec2Value[] = [];
   // todo: remove this?
   /** @internal */ m_count = 0;
   /** @internal */ m_radius = 0;
 
   recycle() {
-    matrix.zeroVec2(this.m_buffer[0]);
-    matrix.zeroVec2(this.m_buffer[1]);
     this.m_vertices.length = 0;
     this.m_count = 0;
     this.m_radius = 0;
@@ -304,7 +301,7 @@ export class DistanceProxy {
    * Initialize the proxy using a vertex cloud and radius. The vertices
    * must remain in scope while the proxy is in use.
    */
-  setVertices(vertices: Vec2[], count: number, radius: number) {
+  setVertices(vertices: Vec2Value[], count: number, radius: number) {
     this.m_vertices = vertices;
     this.m_count = count;
     this.m_radius = radius;
@@ -725,8 +722,6 @@ class Simplex {
 const simplex = new Simplex();
 
 const input = new DistanceInput();
-input.proxyA = new DistanceProxy();
-input.proxyB = new DistanceProxy();
 const cache = new SimplexCache();
 const output = new DistanceOutput();
 
@@ -735,12 +730,10 @@ const output = new DistanceOutput();
  */
 export const testOverlap = function (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue): boolean {
   input.recycle();
-  input.proxyA.recycle();
-  input.proxyB.recycle();
   input.proxyA.set(shapeA, indexA);
   input.proxyB.set(shapeB, indexB);
-  input.transformA = xfA;
-  input.transformB = xfB;
+  matrix.copyTransform(input.transformA, xfA);
+  matrix.copyTransform(input.transformB, xfB);
   input.useRadii = true;
 
   output.recycle();
@@ -762,11 +755,18 @@ Distance.Cache = SimplexCache;
  * Input parameters for ShapeCast
  */
 export class ShapeCastInput {
-  proxyA: DistanceProxy = new DistanceProxy();
-  proxyB: DistanceProxy = new DistanceProxy();
-  transformA: TransformValue | null = null;
-  transformB: TransformValue | null = null;
-  translationB: Vec2 = Vec2.zero();
+  readonly proxyA = new DistanceProxy();
+  readonly proxyB = new DistanceProxy();
+  readonly transformA = Transform.identity();
+  readonly transformB = Transform.identity();
+  readonly translationB = Vec2.zero();
+  recycle() {
+    this.proxyA.recycle();
+    this.proxyB.recycle();
+    this.transformA.setIdentity();
+    this.transformB.setIdentity();
+    matrix.zeroVec2(this.translationB);
+  }
 }
 
 /**
@@ -775,13 +775,14 @@ export class ShapeCastInput {
 export class ShapeCastOutput {
   point: Vec2 = Vec2.zero();
   normal: Vec2 = Vec2.zero();
-  lambda: number;
-  iterations: number;
+  lambda = 1.0;
+  iterations = 0;
 }
 
 /**
  * Perform a linear shape cast of shape B moving and shape A fixed. Determines
  * the hit point, normal, and translation fraction.
+ * 
  * @returns true if hit, false if there is no hit or an initial overlap
  */
 //

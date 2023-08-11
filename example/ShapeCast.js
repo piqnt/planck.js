@@ -21,13 +21,13 @@
  * SOFTWARE.
  */
 
-const { Vec2, Transform, Math, World, Settings, ShapeCastInput, ShapeCastOutput, ShapeCast, DistanceInput, DistanceOutput, Distance, SimplexCache, DistanceProxy } = planck;
+const { Vec2, Transform, Math, World, Settings, ShapeCastInput, ShapeCastOutput, ShapeCast, DistanceInput, DistanceOutput, Distance, SimplexCache } = planck;
 
 var world = new World();
 
 const testbed = planck.testbed();
-testbed.width = 30
-testbed.height = 30
+testbed.width = 40
+testbed.height = 40
 testbed.start(world);
 
 const vAs = new Array(3).fill().map(() => Vec2.zero());
@@ -94,9 +94,9 @@ testbed.step = function() {
   const input = new ShapeCastInput();
   input.proxyA.setVertices(vAs, countA, radiusA);
   input.proxyB.setVertices(vBs, countB, radiusB);
-  input.transformA = transformA;
-  input.transformB = transformB;
-  input.translationB = translationB;
+  input.transformA.set(transformA);
+  input.transformB.set(transformB);
+  input.translationB.set(translationB);
 
   const output = new ShapeCastOutput();
 
@@ -108,12 +108,10 @@ testbed.step = function() {
   );
 
   const distanceInput = new DistanceInput();
-  distanceInput.proxyA = new DistanceProxy();
-  distanceInput.proxyB = new DistanceProxy();
   distanceInput.proxyA.setVertices(vAs, countA, radiusA);
   distanceInput.proxyB.setVertices(vBs, countB, radiusB);
-  distanceInput.transformA = transformA;
-  distanceInput.transformB = transformB2;
+  distanceInput.transformA.set(transformA);
+  distanceInput.transformB.set(transformB2);
   distanceInput.useRadii = false;
   const simplexCache = new SimplexCache();
   simplexCache.count = 0;

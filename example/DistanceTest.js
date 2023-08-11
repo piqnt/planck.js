@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-const { World, Vec2, Transform, Box, Distance, Math, DistanceProxy } = planck;
+const { World, Vec2, Transform, Box, Distance, Math } = planck;
 
 var DistanceInput = Distance.Input;
 var DistanceOutput = Distance.Output;
@@ -51,12 +51,10 @@ var fixB = bodyB.createFixture(polygonB);
 
 testbed.step = function() {
   var input = new DistanceInput();
-  input.proxyA = new DistanceProxy();
-  input.proxyB = new DistanceProxy();
   input.proxyA.set(polygonA, 0);
   input.proxyB.set(polygonB, 0);
-  input.transformA = transformA;
-  input.transformB = transformB;
+  input.transformA.set(transformA);
+  input.transformB.set(transformB);
   input.useRadii = true;
 
   var cache = new SimplexCache();
