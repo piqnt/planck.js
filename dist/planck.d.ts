@@ -3935,12 +3935,16 @@ declare class WheelJoint extends Joint {
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-// TODO merge with World options?
 /**
  * Tuning constants based on meters-kilograms-seconds (MKS) units.
  */
-// tslint:disable-next-line:no-unnecessary-class
 declare class Settings {
+    /**
+     * You can use this to change the length scale used by your game.
+     *
+     * For example for inches you could use 39.4.
+     */
+    static lengthUnitsPerMeter: number;
     // Collision
     /**
      * The maximum number of contact points between two convex shapes. Do not change
@@ -3968,7 +3972,6 @@ declare class Settings {
      * chosen to be numerically significant, but visually insignificant.
      */
     static linearSlop: number;
-    static get linearSlopSquared(): number;
     /**
      * A small angle used as a collision and constraint tolerance. Usually it is
      * chosen to be numerically significant, but visually insignificant.
@@ -4018,13 +4021,11 @@ declare class Settings {
      * to prevent numerical problems. You shouldn't need to adjust Settings.
      */
     static maxTranslation: number;
-    static get maxTranslationSquared(): number;
     /**
      * The maximum angular velocity of a body. This limit is very large and is used
      * to prevent numerical problems. You shouldn't need to adjust Settings.
      */
     static maxRotation: number;
-    static get maxRotationSquared(): number;
     /**
      * This scale factor controls how fast overlap is resolved. Ideally this would
      * be 1 so that overlap is removed in one time step. However using values close
@@ -4041,12 +4042,10 @@ declare class Settings {
      * A body cannot sleep if its linear velocity is above this tolerance.
      */
     static linearSleepTolerance: number;
-    static get linearSleepToleranceSqr(): number;
     /**
      * A body cannot sleep if its angular velocity is above this tolerance.
      */
     static angularSleepTolerance: number;
-    static get angularSleepToleranceSqr(): number;
 }
 /**
  * This describes the motion of a body/shape for TOI computation. Shapes are
@@ -7186,12 +7185,16 @@ declare namespace planck {
     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     * SOFTWARE.
     */
-    // TODO merge with World options?
     /**
      * Tuning constants based on meters-kilograms-seconds (MKS) units.
      */
-    // tslint:disable-next-line:no-unnecessary-class
     class Settings {
+        /**
+         * You can use this to change the length scale used by your game.
+         *
+         * For example for inches you could use 39.4.
+         */
+        static lengthUnitsPerMeter: number;
         // Collision
         /**
          * The maximum number of contact points between two convex shapes. Do not change
@@ -7219,7 +7222,6 @@ declare namespace planck {
          * chosen to be numerically significant, but visually insignificant.
          */
         static linearSlop: number;
-        static get linearSlopSquared(): number;
         /**
          * A small angle used as a collision and constraint tolerance. Usually it is
          * chosen to be numerically significant, but visually insignificant.
@@ -7269,13 +7271,11 @@ declare namespace planck {
          * to prevent numerical problems. You shouldn't need to adjust Settings.
          */
         static maxTranslation: number;
-        static get maxTranslationSquared(): number;
         /**
          * The maximum angular velocity of a body. This limit is very large and is used
          * to prevent numerical problems. You shouldn't need to adjust Settings.
          */
         static maxRotation: number;
-        static get maxRotationSquared(): number;
         /**
          * This scale factor controls how fast overlap is resolved. Ideally this would
          * be 1 so that overlap is removed in one time step. However using values close
@@ -7292,12 +7292,10 @@ declare namespace planck {
          * A body cannot sleep if its linear velocity is above this tolerance.
          */
         static linearSleepTolerance: number;
-        static get linearSleepToleranceSqr(): number;
         /**
          * A body cannot sleep if its angular velocity is above this tolerance.
          */
         static angularSleepTolerance: number;
-        static get angularSleepToleranceSqr(): number;
     }
     /**
      * This describes the motion of a body/shape for TOI computation. Shapes are

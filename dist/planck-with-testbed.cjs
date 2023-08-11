@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.0-beta.7
+ * Planck.js v1.0.0-beta.8
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
@@ -3646,19 +3646,12 @@ var AABB = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-// TODO merge with World options?
 /**
  * Tuning constants based on meters-kilograms-seconds (MKS) units.
  */
-// tslint:disable-next-line:no-unnecessary-class
 var Settings = /** @class */ (function () {
     function Settings() {
     }
-    Object.defineProperty(Settings, "linearSlopSquared", {
-        get: function () { return Settings.linearSlop * Settings.linearSlop; },
-        enumerable: false,
-        configurable: true
-    });
     Object.defineProperty(Settings, "polygonRadius", {
         /**
          * The radius of the polygon/edge shape skin. This should not be modified.
@@ -3670,26 +3663,12 @@ var Settings = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(Settings, "maxTranslationSquared", {
-        get: function () { return Settings.maxTranslation * Settings.maxTranslation; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Settings, "maxRotationSquared", {
-        get: function () { return Settings.maxRotation * Settings.maxRotation; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Settings, "linearSleepToleranceSqr", {
-        get: function () { return Math.pow(Settings.linearSleepTolerance, 2); },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Settings, "angularSleepToleranceSqr", {
-        get: function () { return Math.pow(Settings.angularSleepTolerance, 2); },
-        enumerable: false,
-        configurable: true
-    });
+    /**
+     * You can use this to change the length scale used by your game.
+     *
+     * For example for inches you could use 39.4.
+     */
+    Settings.lengthUnitsPerMeter = 1.0;
     // Collision
     /**
      * The maximum number of contact points between two convex shapes. Do not change
@@ -3785,6 +3764,194 @@ var Settings = /** @class */ (function () {
      */
     Settings.angularSleepTolerance = (2.0 / 180.0 * Math.PI);
     return Settings;
+}());
+/** @internal */
+var SettingsInternal = /** @class */ (function () {
+    function SettingsInternal() {
+    }
+    Object.defineProperty(SettingsInternal, "maxManifoldPoints", {
+        get: function () {
+            return Settings.maxManifoldPoints;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "maxPolygonVertices", {
+        get: function () {
+            return Settings.maxPolygonVertices;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "aabbExtension", {
+        get: function () {
+            return Settings.aabbExtension * Settings.lengthUnitsPerMeter;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "aabbMultiplier", {
+        get: function () {
+            return Settings.aabbMultiplier;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "linearSlop", {
+        get: function () {
+            return Settings.linearSlop * Settings.lengthUnitsPerMeter;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "linearSlopSquared", {
+        get: function () {
+            return Settings.linearSlop * Settings.lengthUnitsPerMeter * Settings.linearSlop * Settings.lengthUnitsPerMeter;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "angularSlop", {
+        get: function () {
+            return Settings.angularSlop;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "polygonRadius", {
+        get: function () {
+            return 2.0 * Settings.linearSlop;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "maxSubSteps", {
+        get: function () {
+            return Settings.maxSubSteps;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "maxTOIContacts", {
+        get: function () {
+            return Settings.maxTOIContacts;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "maxTOIIterations", {
+        get: function () {
+            return Settings.maxTOIIterations;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "maxDistnceIterations", {
+        get: function () {
+            return Settings.maxDistnceIterations;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "velocityThreshold", {
+        get: function () {
+            return Settings.velocityThreshold * Settings.lengthUnitsPerMeter;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "maxLinearCorrection", {
+        get: function () {
+            return Settings.maxLinearCorrection * Settings.lengthUnitsPerMeter;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "maxAngularCorrection", {
+        get: function () {
+            return Settings.maxAngularCorrection;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "maxTranslation", {
+        get: function () {
+            return Settings.maxTranslation * Settings.lengthUnitsPerMeter;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "maxTranslationSquared", {
+        get: function () {
+            return Settings.maxTranslation * Settings.lengthUnitsPerMeter * Settings.maxTranslation * Settings.lengthUnitsPerMeter;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "maxRotation", {
+        get: function () {
+            return Settings.maxRotation;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "maxRotationSquared", {
+        get: function () {
+            return Settings.maxRotation * Settings.maxRotation;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "baumgarte", {
+        get: function () {
+            return Settings.baumgarte;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "toiBaugarte", {
+        get: function () {
+            return Settings.toiBaugarte;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "timeToSleep", {
+        get: function () {
+            return Settings.timeToSleep;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "linearSleepTolerance", {
+        get: function () {
+            return Settings.linearSleepTolerance * Settings.lengthUnitsPerMeter;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "linearSleepToleranceSqr", {
+        get: function () {
+            return Settings.linearSleepTolerance * Settings.lengthUnitsPerMeter * Settings.linearSleepTolerance * Settings.lengthUnitsPerMeter;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "angularSleepTolerance", {
+        get: function () {
+            return Settings.angularSleepTolerance;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(SettingsInternal, "angularSleepToleranceSqr", {
+        get: function () {
+            return Settings.angularSleepTolerance * Settings.angularSleepTolerance;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return SettingsInternal;
 }());
 
 /*
@@ -4021,7 +4188,7 @@ var DynamicTree = /** @class */ (function () {
         var node = this.allocateNode();
         node.aabb.set(aabb);
         // Fatten the aabb.
-        AABB.extend(node.aabb, Settings.aabbExtension);
+        AABB.extend(node.aabb, SettingsInternal.aabbExtension);
         node.userData = userData;
         node.height = 0;
         this.insertLeaf(node);
@@ -4053,20 +4220,20 @@ var DynamicTree = /** @class */ (function () {
         node.aabb.set(aabb);
         // Extend AABB.
         aabb = node.aabb;
-        AABB.extend(aabb, Settings.aabbExtension);
+        AABB.extend(aabb, SettingsInternal.aabbExtension);
         // Predict AABB displacement.
         // const d = Vec2.mul(Settings.aabbMultiplier, displacement);
         if (d.x < 0.0) {
-            aabb.lowerBound.x += d.x * Settings.aabbMultiplier;
+            aabb.lowerBound.x += d.x * SettingsInternal.aabbMultiplier;
         }
         else {
-            aabb.upperBound.x += d.x * Settings.aabbMultiplier;
+            aabb.upperBound.x += d.x * SettingsInternal.aabbMultiplier;
         }
         if (d.y < 0.0) {
-            aabb.lowerBound.y += d.y * Settings.aabbMultiplier;
+            aabb.lowerBound.y += d.y * SettingsInternal.aabbMultiplier;
         }
         else {
-            aabb.upperBound.y += d.y * Settings.aabbMultiplier;
+            aabb.upperBound.y += d.y * SettingsInternal.aabbMultiplier;
         }
         this.insertLeaf(node);
         return true;
@@ -7115,7 +7282,7 @@ var Distance = function (output, cache, input) {
     simplex.readCache(cache, proxyA, xfA, proxyB, xfB);
     // Get simplex vertices as an array.
     var vertices = simplex.m_v;
-    var k_maxIters = Settings.maxDistnceIterations;
+    var k_maxIters = SettingsInternal.maxDistnceIterations;
     // These store the vertices of the last simplex so that we
     // can check for duplicates and prevent cycling.
     var saveA = [];
@@ -7693,8 +7860,8 @@ var ShapeCast = function (output, input) {
     output.point.setZero();
     var proxyA = input.proxyA;
     var proxyB = input.proxyB;
-    var radiusA = math.max(proxyA.m_radius, Settings.polygonRadius);
-    var radiusB = math.max(proxyB.m_radius, Settings.polygonRadius);
+    var radiusA = math.max(proxyA.m_radius, SettingsInternal.polygonRadius);
+    var radiusB = math.max(proxyB.m_radius, SettingsInternal.polygonRadius);
     var radius = radiusA + radiusB;
     var xfA = input.transformA;
     var xfB = input.transformB;
@@ -7713,8 +7880,8 @@ var ShapeCast = function (output, input) {
     var wB = Transform.mulVec2(xfB, proxyB.getVertex(indexB));
     var v = Vec2.sub(wA, wB);
     // Sigma is the target distance between polygons
-    var sigma = math.max(Settings.polygonRadius, radius - Settings.polygonRadius);
-    var tolerance = 0.5 * Settings.linearSlop;
+    var sigma = math.max(SettingsInternal.polygonRadius, radius - SettingsInternal.polygonRadius);
+    var tolerance = 0.5 * SettingsInternal.linearSlop;
     // Main iteration loop.
     var k_maxIters = 20;
     var iter = 0;
@@ -7906,10 +8073,10 @@ var TimeOfImpact = function (output, input) {
     sweepB.normalize();
     var tMax = input.tMax;
     var totalRadius = proxyA.m_radius + proxyB.m_radius;
-    var target = math.max(Settings.linearSlop, totalRadius - 3.0 * Settings.linearSlop);
-    var tolerance = 0.25 * Settings.linearSlop;
+    var target = math.max(SettingsInternal.linearSlop, totalRadius - 3.0 * SettingsInternal.linearSlop);
+    var tolerance = 0.25 * SettingsInternal.linearSlop;
     var t1 = 0.0;
-    var k_maxIterations = Settings.maxTOIIterations;
+    var k_maxIterations = SettingsInternal.maxTOIIterations;
     var iter = 0;
     // Prepare input for distance query.
     // const cache = new SimplexCache();
@@ -8038,7 +8205,7 @@ var TimeOfImpact = function (output, input) {
             }
             stats.toiMaxRootIters = math.max(stats.toiMaxRootIters, rootIterCount);
             ++pushBackIter;
-            if (pushBackIter === Settings.maxPolygonVertices) {
+            if (pushBackIter === SettingsInternal.maxPolygonVertices) {
                 break;
             }
         }
@@ -8537,13 +8704,13 @@ var Solver = /** @class */ (function () {
             // Check for large velocities
             setMulVec2(translation, h, v);
             var translationLengthSqr = lengthSqrVec2(translation);
-            if (translationLengthSqr > Settings.maxTranslationSquared) {
-                var ratio = Settings.maxTranslation / math.sqrt(translationLengthSqr);
+            if (translationLengthSqr > SettingsInternal.maxTranslationSquared) {
+                var ratio = SettingsInternal.maxTranslation / math.sqrt(translationLengthSqr);
                 scaleVec2(v, ratio);
             }
             var rotation = h * w;
-            if (rotation * rotation > Settings.maxRotationSquared) {
-                var ratio = Settings.maxRotation / math.abs(rotation);
+            if (rotation * rotation > SettingsInternal.maxRotationSquared) {
+                var ratio = SettingsInternal.maxRotation / math.abs(rotation);
                 w *= ratio;
             }
             // Integrate
@@ -8565,7 +8732,7 @@ var Solver = /** @class */ (function () {
             }
             // We can't expect minSpeparation >= -Settings.linearSlop because we don't
             // push the separation above -Settings.linearSlop.
-            var contactsOkay = minSeparation >= -3.0 * Settings.linearSlop;
+            var contactsOkay = minSeparation >= -3.0 * SettingsInternal.linearSlop;
             var jointsOkay = true;
             for (var j = 0; j < this.m_joints.length; ++j) {
                 var joint = this.m_joints[j];
@@ -8590,8 +8757,8 @@ var Solver = /** @class */ (function () {
         this.postSolveIsland();
         if (allowSleep) {
             var minSleepTime = Infinity;
-            var linTolSqr = Settings.linearSleepToleranceSqr;
-            var angTolSqr = Settings.angularSleepToleranceSqr;
+            var linTolSqr = SettingsInternal.linearSleepToleranceSqr;
+            var angTolSqr = SettingsInternal.angularSleepToleranceSqr;
             for (var i = 0; i < this.m_bodies.length; ++i) {
                 var body = this.m_bodies[i];
                 if (body.isStatic()) {
@@ -8608,7 +8775,7 @@ var Solver = /** @class */ (function () {
                     minSleepTime = math.min(minSleepTime, body.m_sleepTime);
                 }
             }
-            if (minSleepTime >= Settings.timeToSleep && positionSolved) {
+            if (minSleepTime >= SettingsInternal.timeToSleep && positionSolved) {
                 for (var i = 0; i < this.m_bodies.length; ++i) {
                     var body = this.m_bodies[i];
                     body.setAwake(false);
@@ -8645,7 +8812,7 @@ var Solver = /** @class */ (function () {
                     continue;
                 }
                 // Prevent excessive sub-stepping.
-                if (c_3.m_toiCount > Settings.maxSubSteps) {
+                if (c_3.m_toiCount > SettingsInternal.maxSubSteps) {
                     continue;
                 }
                 var alpha = 1.0;
@@ -8858,7 +9025,7 @@ var Solver = /** @class */ (function () {
             }
             // We can't expect minSpeparation >= -Settings.linearSlop because we don't
             // push the separation above -Settings.linearSlop.
-            var contactsOkay = minSeparation >= -1.5 * Settings.linearSlop;
+            var contactsOkay = minSeparation >= -1.5 * SettingsInternal.linearSlop;
             if (contactsOkay) {
                 break;
             }
@@ -8895,13 +9062,13 @@ var Solver = /** @class */ (function () {
             // Check for large velocities
             setMulVec2(translation, h, v);
             var translationLengthSqr = lengthSqrVec2(translation);
-            if (translationLengthSqr > Settings.maxTranslationSquared) {
-                var ratio = Settings.maxTranslation / math.sqrt(translationLengthSqr);
+            if (translationLengthSqr > SettingsInternal.maxTranslationSquared) {
+                var ratio = SettingsInternal.maxTranslation / math.sqrt(translationLengthSqr);
                 scaleVec2(v, ratio);
             }
             var rotation = h * w;
-            if (rotation * rotation > Settings.maxRotationSquared) {
-                var ratio = Settings.maxRotation / math.abs(rotation);
+            if (rotation * rotation > SettingsInternal.maxRotationSquared) {
+                var ratio = SettingsInternal.maxRotation / math.abs(rotation);
                 w *= ratio;
             }
             // Integrate
@@ -9786,7 +9953,7 @@ var Contact = /** @class */ (function () {
         copyVec2(this.p_localNormal, manifold.localNormal);
         copyVec2(this.p_localPoint, manifold.localPoint);
         this.p_pointCount = pointCount;
-        for (var j = 0; j < Settings.maxManifoldPoints; ++j) {
+        for (var j = 0; j < SettingsInternal.maxManifoldPoints; ++j) {
             this.v_points[j].recycle();
             zeroVec2(this.p_localPoints[j]);
         }
@@ -10107,9 +10274,9 @@ var Contact = /** @class */ (function () {
             diffVec2(rB, point, cB);
             // Track max constraint error.
             minSeparation = math.min(minSeparation, separation);
-            var baumgarte = toi ? Settings.toiBaugarte : Settings.baumgarte;
-            var linearSlop = Settings.linearSlop;
-            var maxLinearCorrection = Settings.maxLinearCorrection;
+            var baumgarte = toi ? SettingsInternal.toiBaugarte : SettingsInternal.baumgarte;
+            var linearSlop = SettingsInternal.linearSlop;
+            var maxLinearCorrection = SettingsInternal.maxLinearCorrection;
             // Prevent large corrections and allow slop.
             var C = math.clamp(baumgarte * (separation + linearSlop), -maxLinearCorrection, 0.0);
             // Compute the effective mass.
@@ -10186,7 +10353,7 @@ var Contact = /** @class */ (function () {
             vRel += dotVec2(this.v_normal, crossNumVec2(temp$2, wB, vcp.rB));
             vRel -= dotVec2(this.v_normal, vA);
             vRel -= dotVec2(this.v_normal, crossNumVec2(temp$2, wA, vcp.rA));
-            if (vRel < -Settings.velocityThreshold) {
+            if (vRel < -SettingsInternal.velocityThreshold) {
                 vcp.velocityBias = -this.v_restitution * vRel;
             }
         }
@@ -11665,7 +11832,7 @@ var EdgeShape = /** @class */ (function (_super) {
         }
         _this = _super.call(this) || this;
         _this.m_type = EdgeShape.TYPE;
-        _this.m_radius = Settings.polygonRadius;
+        _this.m_radius = SettingsInternal.polygonRadius;
         _this.m_vertex1 = v1 ? Vec2.clone(v1) : Vec2.zero();
         _this.m_vertex2 = v2 ? Vec2.clone(v2) : Vec2.zero();
         _this.m_vertex0 = Vec2.zero();
@@ -11936,7 +12103,7 @@ var ChainShape = /** @class */ (function (_super) {
         }
         _this = _super.call(this) || this;
         _this.m_type = ChainShape.TYPE;
-        _this.m_radius = Settings.polygonRadius;
+        _this.m_radius = SettingsInternal.polygonRadius;
         _this.m_vertices = [];
         _this.m_count = 0;
         _this.m_prevVertex = null;
@@ -12247,7 +12414,7 @@ var PolygonShape = /** @class */ (function (_super) {
         }
         _this = _super.call(this) || this;
         _this.m_type = PolygonShape.TYPE;
-        _this.m_radius = Settings.polygonRadius;
+        _this.m_radius = SettingsInternal.polygonRadius;
         _this.m_centroid = Vec2.zero();
         _this.m_vertices = [];
         _this.m_normals = [];
@@ -12326,14 +12493,14 @@ var PolygonShape = /** @class */ (function (_super) {
             this._setAsBox(1.0, 1.0);
             return;
         }
-        var n = math.min(vertices.length, Settings.maxPolygonVertices);
+        var n = math.min(vertices.length, SettingsInternal.maxPolygonVertices);
         // Perform welding and copy vertices into local buffer.
         var ps = []; // [Settings.maxPolygonVertices];
         for (var i = 0; i < n; ++i) {
             var v = vertices[i];
             var unique = true;
             for (var j = 0; j < ps.length; ++j) {
-                if (Vec2.distanceSquared(v, ps[j]) < 0.25 * Settings.linearSlopSquared) {
+                if (Vec2.distanceSquared(v, ps[j]) < 0.25 * SettingsInternal.linearSlopSquared) {
                     unique = false;
                     break;
                 }
@@ -13073,7 +13240,7 @@ var DistanceJoint = /** @class */ (function (_super) {
         this.m_u = Vec2.sub(Vec2.add(cB, this.m_rB), Vec2.add(cA, this.m_rA));
         // Handle singularity.
         var length = this.m_u.length();
-        if (length > Settings.linearSlop) {
+        if (length > SettingsInternal.linearSlop) {
             this.m_u.mul(1.0 / length);
         }
         else {
@@ -13164,7 +13331,7 @@ var DistanceJoint = /** @class */ (function (_super) {
         var length = u.normalize();
         var C = length - this.m_length;
         C = math
-            .clamp(C, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
+            .clamp(C, -SettingsInternal.maxLinearCorrection, SettingsInternal.maxLinearCorrection);
         var impulse = -this.m_mass * C;
         var P = Vec2.mulNumVec2(impulse, u);
         cA.subMul(this.m_invMassA, P);
@@ -13175,7 +13342,7 @@ var DistanceJoint = /** @class */ (function (_super) {
         this.m_bodyA.c_position.a = aA;
         this.m_bodyB.c_position.c.setVec2(cB);
         this.m_bodyB.c_position.a = aB;
-        return math.abs(C) < Settings.linearSlop;
+        return math.abs(C) < SettingsInternal.linearSlop;
     };
     DistanceJoint.TYPE = 'distance-joint';
     return DistanceJoint;
@@ -13970,7 +14137,7 @@ var RevoluteJoint = /** @class */ (function (_super) {
         }
         if (this.m_enableLimit && fixedRotation == false) {
             var jointAngle = aB - aA - this.m_referenceAngle; // float
-            if (math.abs(this.m_upperAngle - this.m_lowerAngle) < 2.0 * Settings.angularSlop) {
+            if (math.abs(this.m_upperAngle - this.m_lowerAngle) < 2.0 * SettingsInternal.angularSlop) {
                 this.m_limitState = equalLimits$1;
             }
             else if (jointAngle <= this.m_lowerAngle) {
@@ -14122,7 +14289,7 @@ var RevoluteJoint = /** @class */ (function (_super) {
             var limitImpulse = 0.0; // float
             if (this.m_limitState == equalLimits$1) {
                 // Prevent large angular corrections
-                var C = math.clamp(angle - this.m_lowerAngle, -Settings.maxAngularCorrection, Settings.maxAngularCorrection); // float
+                var C = math.clamp(angle - this.m_lowerAngle, -SettingsInternal.maxAngularCorrection, SettingsInternal.maxAngularCorrection); // float
                 limitImpulse = -this.m_motorMass * C;
                 angularError = math.abs(C);
             }
@@ -14130,14 +14297,14 @@ var RevoluteJoint = /** @class */ (function (_super) {
                 var C = angle - this.m_lowerAngle; // float
                 angularError = -C;
                 // Prevent large angular corrections and allow some slop.
-                C = math.clamp(C + Settings.angularSlop, -Settings.maxAngularCorrection, 0.0);
+                C = math.clamp(C + SettingsInternal.angularSlop, -SettingsInternal.maxAngularCorrection, 0.0);
                 limitImpulse = -this.m_motorMass * C;
             }
             else if (this.m_limitState == atUpperLimit$2) {
                 var C = angle - this.m_upperAngle; // float
                 angularError = C;
                 // Prevent large angular corrections and allow some slop.
-                C = math.clamp(C - Settings.angularSlop, 0.0, Settings.maxAngularCorrection);
+                C = math.clamp(C - SettingsInternal.angularSlop, 0.0, SettingsInternal.maxAngularCorrection);
                 limitImpulse = -this.m_motorMass * C;
             }
             aA -= this.m_invIA * limitImpulse;
@@ -14172,8 +14339,8 @@ var RevoluteJoint = /** @class */ (function (_super) {
         this.m_bodyA.c_position.a = aA;
         this.m_bodyB.c_position.c.setVec2(cB);
         this.m_bodyB.c_position.a = aB;
-        return positionError <= Settings.linearSlop
-            && angularError <= Settings.angularSlop;
+        return positionError <= SettingsInternal.linearSlop
+            && angularError <= SettingsInternal.angularSlop;
     };
     RevoluteJoint.TYPE = 'revolute-joint';
     return RevoluteJoint;
@@ -14602,7 +14769,7 @@ var PrismaticJoint = /** @class */ (function (_super) {
         // Compute motor and limit terms.
         if (this.m_enableLimit) {
             var jointTranslation = Vec2.dot(this.m_axis, d); // float
-            if (math.abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * Settings.linearSlop) {
+            if (math.abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * SettingsInternal.linearSlop) {
                 this.m_limitState = equalLimits;
             }
             else if (jointTranslation <= this.m_lowerTranslation) {
@@ -14761,8 +14928,8 @@ var PrismaticJoint = /** @class */ (function (_super) {
         C1.y = aB - aA - this.m_referenceAngle;
         var linearError = math.abs(C1.x); // float
         var angularError = math.abs(C1.y); // float
-        var linearSlop = Settings.linearSlop;
-        var maxLinearCorrection = Settings.maxLinearCorrection;
+        var linearSlop = SettingsInternal.linearSlop;
+        var maxLinearCorrection = SettingsInternal.maxLinearCorrection;
         var active = false; // bool
         var C2 = 0.0; // float
         if (this.m_enableLimit) {
@@ -14835,8 +15002,8 @@ var PrismaticJoint = /** @class */ (function (_super) {
         this.m_bodyA.c_position.a = aA;
         this.m_bodyB.c_position.c = cB;
         this.m_bodyB.c_position.a = aB;
-        return linearError <= Settings.linearSlop
-            && angularError <= Settings.angularSlop;
+        return linearError <= SettingsInternal.linearSlop
+            && angularError <= SettingsInternal.angularSlop;
     };
     PrismaticJoint.TYPE = 'prismatic-joint';
     return PrismaticJoint;
@@ -15253,7 +15420,7 @@ var GearJoint = /** @class */ (function (_super) {
         this.m_bodyD.c_position.c.setVec2(cD);
         this.m_bodyD.c_position.a = aD;
         // TODO_ERIN not implemented
-        return linearError < Settings.linearSlop;
+        return linearError < SettingsInternal.linearSlop;
     };
     GearJoint.TYPE = 'gear-joint';
     return GearJoint;
@@ -16030,13 +16197,13 @@ var PulleyJoint = /** @class */ (function (_super) {
         this.m_uB = Vec2.sub(Vec2.add(cB, this.m_rB), this.m_groundAnchorB);
         var lengthA = this.m_uA.length();
         var lengthB = this.m_uB.length();
-        if (lengthA > 10.0 * Settings.linearSlop) {
+        if (lengthA > 10.0 * SettingsInternal.linearSlop) {
             this.m_uA.mul(1.0 / lengthA);
         }
         else {
             this.m_uA.setZero();
         }
-        if (lengthB > 10.0 * Settings.linearSlop) {
+        if (lengthB > 10.0 * SettingsInternal.linearSlop) {
             this.m_uB.mul(1.0 / lengthB);
         }
         else {
@@ -16109,13 +16276,13 @@ var PulleyJoint = /** @class */ (function (_super) {
         var uB = Vec2.sub(Vec2.add(cB, this.m_rB), this.m_groundAnchorB);
         var lengthA = uA.length();
         var lengthB = uB.length();
-        if (lengthA > 10.0 * Settings.linearSlop) {
+        if (lengthA > 10.0 * SettingsInternal.linearSlop) {
             uA.mul(1.0 / lengthA);
         }
         else {
             uA.setZero();
         }
-        if (lengthB > 10.0 * Settings.linearSlop) {
+        if (lengthB > 10.0 * SettingsInternal.linearSlop) {
             uB.mul(1.0 / lengthB);
         }
         else {
@@ -16143,7 +16310,7 @@ var PulleyJoint = /** @class */ (function (_super) {
         this.m_bodyA.c_position.a = aA;
         this.m_bodyB.c_position.c = cB;
         this.m_bodyB.c_position.a = aB;
-        return linearError < Settings.linearSlop;
+        return linearError < SettingsInternal.linearSlop;
     };
     PulleyJoint.TYPE = 'pulley-joint';
     return PulleyJoint;
@@ -16319,7 +16486,7 @@ var RopeJoint = /** @class */ (function (_super) {
         else {
             this.m_state = inactiveLimit;
         }
-        if (this.m_length > Settings.linearSlop) {
+        if (this.m_length > SettingsInternal.linearSlop) {
             this.m_u.mul(1.0 / this.m_length);
         }
         else {
@@ -16396,7 +16563,7 @@ var RopeJoint = /** @class */ (function (_super) {
         u.subCombine(1, cA, 1, rA); // Vec2
         var length = u.normalize(); // float
         var C = length - this.m_maxLength; // float
-        C = math.clamp(C, 0.0, Settings.maxLinearCorrection);
+        C = math.clamp(C, 0.0, SettingsInternal.maxLinearCorrection);
         var impulse = -this.m_mass * C; // float
         var P = Vec2.mulNumVec2(impulse, u); // Vec2
         cA.subMul(this.m_invMassA, P);
@@ -16407,7 +16574,7 @@ var RopeJoint = /** @class */ (function (_super) {
         this.m_bodyA.c_position.a = aA;
         this.m_bodyB.c_position.c.setVec2(cB);
         this.m_bodyB.c_position.a = aB;
-        return length - this.m_maxLength < Settings.linearSlop;
+        return length - this.m_maxLength < SettingsInternal.linearSlop;
     };
     RopeJoint.TYPE = 'rope-joint';
     return RopeJoint;
@@ -16791,7 +16958,7 @@ var WeldJoint = /** @class */ (function (_super) {
         this.m_bodyA.c_position.a = aA;
         this.m_bodyB.c_position.c = cB;
         this.m_bodyB.c_position.a = aB;
-        return positionError <= Settings.linearSlop && angularError <= Settings.angularSlop;
+        return positionError <= SettingsInternal.linearSlop && angularError <= SettingsInternal.angularSlop;
     };
     WeldJoint.TYPE = 'weld-joint';
     return WeldJoint;
@@ -17262,7 +17429,7 @@ var WheelJoint = /** @class */ (function (_super) {
         this.m_bodyA.c_position.a = aA;
         this.m_bodyB.c_position.c.setVec2(cB);
         this.m_bodyB.c_position.a = aB;
-        return math.abs(C) <= Settings.linearSlop;
+        return math.abs(C) <= SettingsInternal.linearSlop;
     };
     WheelJoint.TYPE = 'wheel-joint';
     return WheelJoint;
@@ -17735,7 +17902,7 @@ var CollidePolygons = function (manifold, polyA, xfA, polyB, xfB) {
     var xf2;
     var edge1; // reference edge
     var flip;
-    var k_tol = 0.1 * Settings.linearSlop;
+    var k_tol = 0.1 * SettingsInternal.linearSlop;
     if (separationB > separationA + k_tol) {
         poly1 = polyB;
         poly2 = polyA;
@@ -17988,7 +18155,7 @@ var TempPolygon = /** @class */ (function () {
         this.vertices = []; // [Settings.maxPolygonVertices]
         this.normals = []; // [Settings.maxPolygonVertices];
         this.count = 0;
-        for (var i = 0; i < Settings.maxPolygonVertices; i++) {
+        for (var i = 0; i < SettingsInternal.maxPolygonVertices; i++) {
             this.vertices.push(vec2(0, 0));
             this.normals.push(vec2(0, 0));
         }
@@ -18261,12 +18428,12 @@ var CollideEdgePolygon = function (manifold, edgeA, xfA, polygonB, xfB) {
             }
             // Adjacency
             if (dotVec2(n, perp) >= 0.0) {
-                if (dotVec2(n, normal) - dotVec2(upperLimit, normal) < -Settings.angularSlop) {
+                if (dotVec2(n, normal) - dotVec2(upperLimit, normal) < -SettingsInternal.angularSlop) {
                     continue;
                 }
             }
             else {
-                if (dotVec2(n, normal) - dotVec2(lowerLimit, normal) < -Settings.angularSlop) {
+                if (dotVec2(n, normal) - dotVec2(lowerLimit, normal) < -SettingsInternal.angularSlop) {
                     continue;
                 }
             }
@@ -18349,12 +18516,12 @@ var CollideEdgePolygon = function (manifold, edgeA, xfA, polygonB, xfB) {
     clipPoints2[0].recycle(), clipPoints2[1].recycle();
     // Clip to box side 1
     var np1 = clipSegmentToLine(clipPoints1, ie, rf.sideNormal1, rf.sideOffset1, rf.i1);
-    if (np1 < Settings.maxManifoldPoints) {
+    if (np1 < SettingsInternal.maxManifoldPoints) {
         return;
     }
     // Clip to negative box side 1
     var np2 = clipSegmentToLine(clipPoints2, clipPoints1, rf.sideNormal2, rf.sideOffset2, rf.i2);
-    if (np2 < Settings.maxManifoldPoints) {
+    if (np2 < SettingsInternal.maxManifoldPoints) {
         return;
     }
     // Now clipPoints2 contains the clipped points.
@@ -18367,7 +18534,7 @@ var CollideEdgePolygon = function (manifold, edgeA, xfA, polygonB, xfB) {
         copyVec2(manifold.localPoint, polygonB.m_vertices[rf.i1]);
     }
     var pointCount = 0;
-    for (var i = 0; i < Settings.maxManifoldPoints; ++i) {
+    for (var i = 0; i < SettingsInternal.maxManifoldPoints; ++i) {
         var separation = dotVec2(rf.normal, clipPoints2[i].v) - dotVec2(rf.normal, rf.v1);
         if (separation <= radius) {
             var cp = manifold.points[pointCount]; // ManifoldPoint
@@ -18390,7 +18557,7 @@ var Math$1 = math;
 /** @deprecated Merged with main namespace */
 var internal = {
     CollidePolygons: CollidePolygons,
-    Settings: Settings,
+    Settings: SettingsInternal,
     Sweep: Sweep,
     Manifold: Manifold,
     Distance: Distance,
@@ -19167,6 +19334,7 @@ var planck = /*#__PURE__*/Object.freeze({
     WeldJoint: WeldJoint,
     WheelJoint: WheelJoint,
     Settings: Settings,
+    SettingsInternal: SettingsInternal,
     Sweep: Sweep,
     get ManifoldType () { return exports.ManifoldType; },
     get ContactFeatureType () { return exports.ContactFeatureType; },
@@ -19246,6 +19414,7 @@ exports.RopeJoint = RopeJoint;
 exports.Rot = Rot;
 exports.Serializer = Serializer;
 exports.Settings = Settings;
+exports.SettingsInternal = SettingsInternal;
 exports.Shape = Shape;
 exports.ShapeCast = ShapeCast;
 exports.ShapeCastInput = ShapeCastInput;
