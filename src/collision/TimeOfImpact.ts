@@ -23,7 +23,7 @@
  */
 
 import * as matrix from '../common/Matrix';
-import { Settings } from '../Settings';
+import { SettingsInternal as Settings } from '../Settings';
 import { stats } from '../util/stats';
 import Timer from '../util/Timer';
 import { math as Math } from '../common/Math';

@@ -27,7 +27,7 @@ import { ShapeType } from "../collision/Shape";
 import { math as Math } from '../common/Math';
 import { TransformValue } from '../common/Transform';
 import { Mat22 } from '../common/Mat22';
-import { Settings } from '../Settings';
+import { SettingsInternal as Settings } from '../Settings';
 import { Manifold, ManifoldType, WorldManifold } from '../collision/Manifold';
 import { testOverlap } from '../collision/Distance';
 import { Fixture } from "./Fixture";

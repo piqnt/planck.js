@@ -23,7 +23,7 @@
  */
 
 import * as matrix from '../common/Matrix';
-import { Settings } from '../Settings';
+import { SettingsInternal as Settings } from '../Settings';
 import { math as Math } from '../common/Math';
 import { Body } from './Body';
 import type { Contact } from './Contact';

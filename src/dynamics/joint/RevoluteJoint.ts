@@ -23,7 +23,7 @@
  */
 
 import { options } from '../../util/options';
-import { Settings } from '../../Settings';
+import { SettingsInternal as Settings } from '../../Settings';
 import { math as Math } from '../../common/Math';
 import { Vec2 } from '../../common/Vec2';
 import { Vec3 } from '../../common/Vec3';
