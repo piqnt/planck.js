@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { Settings } from '../Settings';
+import { SettingsInternal as Settings } from '../Settings';
 import { Pool } from '../util/Pool';
 import { Vec2, Vec2Value } from '../common/Vec2';
 import { AABB, RayCastCallback, RayCastInput } from './AABB';

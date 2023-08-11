@@ -28,7 +28,7 @@ import { AABBValue, RayCastOutput, RayCastInput, AABB } from '../AABB';
 import { DistanceProxy } from '../Distance';
 import { Transform, TransformValue } from '../../common/Transform';
 import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Settings } from '../../Settings';
+import { SettingsInternal as Settings } from '../../Settings';
 import { Shape } from '../Shape';
 import { EdgeShape } from './EdgeShape';
 

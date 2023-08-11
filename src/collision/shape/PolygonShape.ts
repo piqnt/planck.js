@@ -30,7 +30,7 @@ import { math as Math } from '../../common/Math';
 import { Transform, TransformValue } from '../../common/Transform';
 import { Rot } from '../../common/Rot';
 import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Settings } from '../../Settings';
+import { SettingsInternal as Settings } from '../../Settings';
 import { Shape } from '../Shape';
 
 

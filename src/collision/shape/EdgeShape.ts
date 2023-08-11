@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { Settings } from '../../Settings';
+import { SettingsInternal as Settings } from '../../Settings';
 import * as matrix from '../../common/Matrix';
 import { Shape } from '../Shape';
 import { Transform, TransformValue } from '../../common/Transform';
