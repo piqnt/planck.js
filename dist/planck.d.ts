@@ -177,6 +177,11 @@ declare class Vec2 {
     clamp(max: number): Vec2;
     static clamp(v: Vec2Value, max: number): Vec2;
 }
+interface Vec3Value {
+    x: number;
+    y: number;
+    z: number;
+}
 declare function Vec3(x: number, y: number, z: number): Vec3;
 declare function Vec3(obj: {
     x: number;
@@ -196,7 +201,7 @@ declare class Vec3 {
     });
     constructor();
     static zero(): Vec3;
-    static clone(v: Vec3): Vec3;
+    static clone(v: Vec3Value): Vec3;
     /**
      * Does this vector contain finite coordinates?
      */
@@ -204,23 +209,23 @@ declare class Vec3 {
     static assert(o: any): void;
     setZero(): Vec3;
     set(x: number, y: number, z: number): Vec3;
-    add(w: Vec3): Vec3;
-    sub(w: Vec3): Vec3;
+    add(w: Vec3Value): Vec3;
+    sub(w: Vec3Value): Vec3;
     mul(m: number): Vec3;
-    static areEqual(v: Vec3, w: Vec3): boolean;
+    static areEqual(v: Vec3Value, w: Vec3Value): boolean;
     /**
      * Perform the dot product on two vectors.
      */
-    static dot(v: Vec3, w: Vec3): number;
+    static dot(v: Vec3Value, w: Vec3Value): number;
     /**
      * Perform the cross product on two vectors. In 2D this produces a scalar.
      */
-    static cross(v: Vec3, w: Vec3): Vec3;
-    static add(v: Vec3, w: Vec3): Vec3;
-    static sub(v: Vec3, w: Vec3): Vec3;
-    static mul(v: Vec3, m: number): Vec3;
+    static cross(v: Vec3Value, w: Vec3Value): Vec3;
+    static add(v: Vec3Value, w: Vec3Value): Vec3;
+    static sub(v: Vec3Value, w: Vec3Value): Vec3;
+    static mul(v: Vec3Value, m: number): Vec3;
     neg(): Vec3;
-    static neg(v: Vec3): Vec3;
+    static neg(v: Vec3Value): Vec3;
 }
 /**
  * A 2-by-2 matrix. Stored in column-major order.
@@ -277,7 +282,7 @@ declare class Mat33 {
     ex: Vec3;
     ey: Vec3;
     ez: Vec3;
-    constructor(a: Vec3, b: Vec3, c: Vec3);
+    constructor(a: Vec3Value, b: Vec3Value, c: Vec3Value);
     constructor();
     static isValid(obj: any): boolean;
     static assert(o: any): void;
@@ -289,13 +294,13 @@ declare class Mat33 {
      * Solve A * x = b, where b is a column vector. This is more efficient than
      * computing the inverse in one-shot cases.
      */
-    solve33(v: Vec3): Vec3;
+    solve33(v: Vec3Value): Vec3;
     /**
      * Solve A * x = b, where b is a column vector. This is more efficient than
      * computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
      * equation.
      */
-    solve22(v: Vec2): Vec2;
+    solve22(v: Vec2Value): Vec2;
     /**
      * Get the inverse of this matrix as a 2-by-2. Returns the zero matrix if
      * singular.
@@ -309,26 +314,30 @@ declare class Mat33 {
     /**
      * Multiply a matrix times a vector.
      */
-    static mul(a: Mat33, b: Vec2): Vec2;
-    static mul(a: Mat33, b: Vec3): Vec3;
+    static mul(a: Mat33, b: Vec2Value): Vec2;
+    static mul(a: Mat33, b: Vec3Value): Vec3;
     static mulVec3(a: Mat33, b: Vec3): Vec3;
-    static mulVec2(a: Mat33, b: Vec2): Vec2;
+    static mulVec2(a: Mat33, b: Vec2Value): Vec2;
     static add(a: Mat33, b: Mat33): Mat33;
 }
-declare function Rot(angle?: number | Rot): Rot;
+interface RotValue {
+    s: number;
+    c: number;
+}
+declare function Rot(angle?: number | RotValue): Rot;
 declare class Rot {
     s: number;
     c: number;
     /** Initialize from an angle in radians. */
-    constructor(angle?: number | Rot);
-    static clone(rot: Rot): Rot;
+    constructor(angle?: number | RotValue);
+    static clone(rot: RotValue): Rot;
     static identity(): Rot;
     static isValid(obj: any): boolean;
     static assert(o: any): void;
     /** Set to the identity rotation. */
     setIdentity(): void;
-    set(angle: number | Rot): void;
-    setRot(angle: Rot): void;
+    set(angle: number | RotValue): void;
+    setRot(angle: RotValue): void;
     /** Set using an angle in radians. */
     setAngle(angle: number): void;
     /** Get the angle in radians. */
@@ -338,23 +347,27 @@ declare class Rot {
     /** Get the u-axis. */
     getYAxis(): Vec2;
     /** Multiply two rotations: q * r */
-    static mul(rot: Rot, m: Rot): Rot;
+    static mul(rot: RotValue, m: RotValue): Rot;
     /** Rotate a vector */
-    static mul(rot: Rot, m: Vec2): Vec2;
+    static mul(rot: RotValue, m: Vec2Value): Vec2;
     /** Multiply two rotations: q * r */
-    static mulRot(rot: Rot, m: Rot): Rot;
+    static mulRot(rot: RotValue, m: RotValue): Rot;
     /** Rotate a vector */
-    static mulVec2(rot: Rot, m: Vec2): Vec2;
-    static mulSub(rot: Rot, v: Vec2, w: Vec2): Vec2;
+    static mulVec2(rot: RotValue, m: Vec2Value): Vec2;
+    static mulSub(rot: RotValue, v: Vec2Value, w: Vec2Value): Vec2;
     /** Transpose multiply two rotations: qT * r */
-    static mulT(rot: Rot, m: Rot): Rot;
+    static mulT(rot: RotValue, m: RotValue): Rot;
     /** Inverse rotate a vector */
-    static mulT(rot: Rot, m: Vec2): Vec2;
+    static mulT(rot: RotValue, m: Vec2Value): Vec2;
     /** Transpose multiply two rotations: qT * r */
-    static mulTRot(rot: Rot, m: Rot): Rot;
+    static mulTRot(rot: RotValue, m: RotValue): Rot;
     /** Inverse rotate a vector */
-    static mulTVec2(rot: Rot, m: Vec2Value): Vec2;
+    static mulTVec2(rot: RotValue, m: Vec2Value): Vec2;
 }
+type TransformValue = {
+    p: Vec2Value;
+    q: RotValue;
+};
 /**
  * A transform contains translation and rotation. It is used to represent the
  * position and orientation of rigid frames. Initialize using a position vector
@@ -378,25 +391,25 @@ declare class Transform {
      * Set this to the identity transform.
      */
     setIdentity(): void;
-    set(position: Vec2, rotation: number): void;
-    set(xf: Transform): void;
+    set(position: Vec2Value, rotation: number): void;
+    set(xf: TransformValue): void;
     /**
      * Set this based on the position and angle.
      */
-    setNum(position: Vec2, rotation: number): void;
-    setTransform(xf: Transform): void;
+    setNum(position: Vec2Value, rotation: number): void;
+    setTransform(xf: TransformValue): void;
     static isValid(obj: any): boolean;
     static assert(o: any): void;
-    static mul(a: Transform, b: Vec2Value): Vec2;
-    static mul(a: Transform, b: Transform): Transform;
+    static mul(a: TransformValue, b: Vec2Value): Vec2;
+    static mul(a: TransformValue, b: TransformValue): Transform;
     static mulAll(a: Transform, b: Vec2Value[]): Vec2[];
     static mulAll(a: Transform, b: Transform[]): Transform[];
-    static mulVec2(a: Transform, b: Vec2Value): Vec2;
-    static mulXf(a: Transform, b: Transform): Transform;
-    static mulT(a: Transform, b: Vec2Value): Vec2;
-    static mulT(a: Transform, b: Transform): Transform;
-    static mulTVec2(a: Transform, b: Vec2Value): Vec2;
-    static mulTXf(a: Transform, b: Transform): Transform;
+    static mulVec2(a: TransformValue, b: Vec2Value): Vec2;
+    static mulXf(a: TransformValue, b: TransformValue): Transform;
+    static mulT(a: TransformValue, b: Vec2Value): Vec2;
+    static mulT(a: TransformValue, b: TransformValue): Transform;
+    static mulTVec2(a: TransformValue, b: Vec2Value): Vec2;
+    static mulTXf(a: TransformValue, b: TransformValue): Transform;
 }
 /**
  * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
@@ -414,6 +427,10 @@ type RayCastCallback = (subInput: RayCastInput, id: number) => number;
 interface RayCastOutput {
     normal: Vec2;
     fraction: number;
+}
+interface AABBValue {
+    lowerBound: Vec2Value;
+    upperBound: Vec2Value;
 }
 declare function AABB(lower?: Vec2Value, upper?: Vec2Value): AABB;
 declare class AABB {
@@ -446,59 +463,13 @@ declare class AABB {
     set(aabb: AABB): void;
     contains(aabb: AABB): boolean;
     extend(value: number): AABB;
-    static extend(aabb: AABB, value: number): void;
+    static extend(out: AABBValue, value: number): AABBValue;
     static testOverlap(a: AABB, b: AABB): boolean;
     static areEqual(a: AABB, b: AABB): boolean;
     static diff(a: AABB, b: AABB): number;
     rayCast(output: RayCastOutput, input: RayCastInput): boolean;
-}
-/*
-* Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
-*
-* This software is provided 'as-is', without any express or implied
-* warranty.  In no event will the authors be held liable for any damages
-* arising from the use of this software.
-* Permission is granted to anyone to use this software for any purpose,
-* including commercial applications, and to alter it and redistribute it
-* freely, subject to the following restrictions:
-* 1. The origin of this software must not be misrepresented; you must not
-* claim that you wrote the original software. If you use this software
-* in a product, an acknowledgment in the product documentation would be
-* appreciated but is not required.
-* 2. Altered source versions must be plainly marked as such, and must not be
-* misrepresented as being the original software.
-* 3. This notice may not be removed or altered from any source distribution.
-*/
-interface PoolOptions<T> {
-    max?: number;
-    create?: () => T;
-    /** Called when an object is being re-allocated. */
-    allocate?: (item: T) => void;
-    /** Called when an object is returned to pool. */
-    release?: (item: T) => void;
-    /** Called when an object is returned to the pool but will be disposed from pool. */
-    dispose?: (item: T) => T;
-}
-declare class Pool<T> {
-    _list: T[];
-    _max: number;
-    _createFn: () => T;
-    _hasCreateFn: boolean;
-    _createCount: number;
-    _allocateFn: (item: T) => void;
-    _hasAllocateFn: boolean;
-    _allocateCount: number;
-    _releaseFn: (item: T) => void;
-    _hasReleaseFn: boolean;
-    _releaseCount: number;
-    _disposeFn: (item: T) => T;
-    _hasDisposeFn: boolean;
-    _disposeCount: number;
-    constructor(opts: PoolOptions<T>);
-    max(n?: number): number | Pool<T>;
-    size(): number;
-    allocate(): T;
-    release(item: T): void;
+    static combinePoints(out: AABBValue, a: Vec2Value, b: Vec2Value): AABBValue;
+    static combinedPerimeter(a: AABBValue, b: AABBValue): number;
 }
 type DynamicTreeQueryCallback = (nodeId: number) => boolean;
 /**
@@ -534,7 +505,6 @@ declare class DynamicTree<T> {
     m_nodes: {
         [id: number]: TreeNode<T>;
     };
-    m_pool: Pool<TreeNode<T>>;
     constructor();
     /**
      * Get proxy user data.
@@ -570,7 +540,7 @@ declare class DynamicTree<T> {
      *
      * @return true if the proxy was re-inserted.
      */
-    moveProxy(id: number, aabb: AABB, d: Vec2): boolean;
+    moveProxy(id: number, aabb: AABB, d: Vec2Value): boolean;
     insertLeaf(leaf: TreeNode<T>): void;
     removeLeaf(leaf: TreeNode<T>): void;
     /**
@@ -612,7 +582,7 @@ declare class DynamicTree<T> {
      *
      * @param newOrigin The new origin with respect to the old origin
      */
-    shiftOrigin(newOrigin: Vec2): void;
+    shiftOrigin(newOrigin: Vec2Value): void;
     /**
      * Query an AABB for overlapping proxies. The callback class is called for each
      * proxy that overlaps the supplied AABB.
@@ -639,7 +609,6 @@ declare class DynamicTree<T> {
  */
 declare class BroadPhase {
     m_tree: DynamicTree<FixtureProxy>;
-    m_proxyCount: number;
     m_moveBuffer: number[];
     m_callback: (userDataA: any, userDataB: any) => void;
     m_queryProxyId: number;
@@ -693,7 +662,7 @@ declare class BroadPhase {
      *
      * @param newOrigin The new origin with respect to the old origin
      */
-    shiftOrigin(newOrigin: Vec2): void;
+    shiftOrigin(newOrigin: Vec2Value): void;
     /**
      * Create a proxy with an initial AABB. Pairs are not reported until UpdatePairs
      * is called.
@@ -707,7 +676,7 @@ declare class BroadPhase {
      * Call moveProxy as many times as you like, then when you are done call
      * UpdatePairs to finalized the proxy pairs (for your time step).
      */
-    moveProxy(proxyId: number, aabb: AABB, displacement: Vec2): void;
+    moveProxy(proxyId: number, aabb: AABB, displacement: Vec2Value): void;
     /**
      * Call to trigger a re-processing of it's pairs on the next call to
      * UpdatePairs.
@@ -875,13 +844,13 @@ declare class Fixture {
     /**
      * These support body activation/deactivation.
      */
-    createProxies(broadPhase: BroadPhase, xf: Transform): void;
+    createProxies(broadPhase: BroadPhase, xf: TransformValue): void;
     destroyProxies(broadPhase: BroadPhase): void;
     /**
      * Updates this fixture proxy in broad-phase (with combined AABB of current and
      * next transformation).
      */
-    synchronize(broadPhase: BroadPhase, xf1: Transform, xf2: Transform): void;
+    synchronize(broadPhase: BroadPhase, xf1: TransformValue, xf2: TransformValue): void;
     /**
      * Set the contact filtering data. This will not update contacts until the next
      * time step when either parent body is active and awake. This automatically
@@ -916,11 +885,13 @@ declare class Fixture {
     shouldCollide(that: Fixture): boolean;
 }
 declare enum ManifoldType {
+    e_unset = -1,
     e_circles = 0,
     e_faceA = 1,
     e_faceB = 2
 }
 declare enum ContactFeatureType {
+    e_unset = -1,
     e_vertex = 0,
     e_face = 1
 }
@@ -941,9 +912,10 @@ declare enum PointState {
  * Used for computing contact manifolds.
  */
 declare class ClipVertex {
-    v: Vec2;
+    v: Vec2Value;
     id: ContactID;
     set(o: ClipVertex): void;
+    recycle(): void;
 }
 /**
  * A manifold for two touching convex shapes. Manifolds are created in `evaluate`
@@ -956,31 +928,35 @@ declare class ClipVertex {
  * movement, which is critical for continuous physics. All contact scenarios
  * must be expressed in one of these types. This structure is stored across time
  * steps, so we keep it small.
- *
- * @prop type e_circle, e_faceA, e_faceB
- * @prop localPoint Usage depends on manifold type:<br>
- *       e_circles: the local center of circleA <br>
- *       e_faceA: the center of faceA <br>
- *       e_faceB: the center of faceB
- * @prop localNormal Usage depends on manifold type:<br>
- *       e_circles: not used <br>
- *       e_faceA: the normal on polygonA <br>
- *       e_faceB: the normal on polygonB
- * @prop points The points of contact {ManifoldPoint[]}
- * @prop pointCount The number of manifold points
  */
 declare class Manifold {
     type: ManifoldType;
-    localNormal: Vec2;
-    localPoint: Vec2;
+    /**
+     * Usage depends on manifold type:
+     * - circles: not used
+     * - faceA: the normal on polygonA
+     * - faceB: the normal on polygonB
+     */
+    localNormal: Vec2Value;
+    /**
+     * Usage depends on manifold type:
+     * - circles: the local center of circleA
+     * - faceA: the center of faceA
+     * - faceB: the center of faceB
+     */
+    localPoint: Vec2Value;
+    /** The points of contact */
     points: ManifoldPoint[];
+    /** The number of manifold points */
     pointCount: number;
+    set(that: Manifold): void;
+    recycle(): void;
     /**
      * Evaluate the manifold with supplied transforms. This assumes modest motion
      * from the original state. This does not change the point count, impulses, etc.
      * The radii must come from the shapes that generated the manifold.
      */
-    getWorldManifold(wm: WorldManifold | undefined, xfA: Transform, radiusA: number, xfB: Transform, radiusB: number): WorldManifold;
+    getWorldManifold(wm: WorldManifold | null, xfA: TransformValue, radiusA: number, xfB: TransformValue, radiusB: number): WorldManifold;
     static clipSegmentToLine: typeof clipSegmentToLine;
     static ClipVertex: typeof ClipVertex;
     static getPointStates: typeof getPointStates;
@@ -997,12 +973,12 @@ declare class Manifold {
  */
 declare class ManifoldPoint {
     /**
-     * Usage depends on manifold type.
-     *       e_circles: the local center of circleB,
-     *       e_faceA: the local center of cirlceB or the clip point of polygonB,
-     *       e_faceB: the clip point of polygonA.
+     * Usage depends on manifold type:
+     * - circles: the local center of circleB
+     * - faceA: the local center of circleB or the clip point of polygonB
+     * - faceB: the clip point of polygonA
      */
-    localPoint: Vec2;
+    localPoint: Vec2Value;
     /**
      * The non-penetration impulse
      */
@@ -1012,59 +988,48 @@ declare class ManifoldPoint {
      */
     tangentImpulse: number;
     /**
-     * Uniquely identifies a contact point between two shapes to facilatate warm starting
+     * Uniquely identifies a contact point between two shapes to facilitate warm starting
      */
-    id: ContactID;
+    readonly id: ContactID;
+    set(that: ManifoldPoint): void;
+    recycle(): void;
 }
 /**
  * Contact ids to facilitate warm starting.
+ *
+ * ContactFeature: The features that intersect to form the contact point.
  */
 declare class ContactID {
-    cf: ContactFeature;
     /**
      * Used to quickly compare contact ids.
      */
-    get key(): number;
-    set(o: ContactID): void;
-}
-/**
- * The features that intersect to form the contact point.
- */
-declare class ContactFeature {
-    /**
-     * Feature index on shapeA
-     */
+    key: number;
+    /** ContactFeature index on shapeA */
     indexA: number;
-    /**
-     * Feature index on shapeB
-     */
+    /** ContactFeature index on shapeB */
     indexB: number;
-    /**
-     * The feature type on shapeA
-     */
+    /** ContactFeature type on shapeA */
     typeA: ContactFeatureType;
-    /**
-     * The feature type on shapeB
-     */
+    /** ContactFeature type on shapeB */
     typeB: ContactFeatureType;
-    set(o: ContactFeature): void;
+    setFeatures(indexA: number, typeA: ContactFeatureType, indexB: number, typeB: ContactFeatureType): void;
+    set(that: ContactID): void;
+    swapFeatures(): void;
+    recycle(): void;
 }
 /**
  * This is used to compute the current state of a contact manifold.
  */
 declare class WorldManifold {
-    /**
-     * World vector pointing from A to B
-     */
-    normal: Vec2;
-    /**
-     * World contact point (point of intersection)
-     */
-    points: Vec2[]; // [maxManifoldPoints]
-    /**
-     * A negative value indicates overlap, in meters
-     */
+    /** World vector pointing from A to B */
+    normal: Vec2Value;
+    /** World contact point (point of intersection) */
+    points: Vec2Value[]; // [maxManifoldPoints]
+    /** A negative value indicates overlap, in meters */
     separations: number[]; // [maxManifoldPoints]
+    /** The number of manifold points */
+    pointCount: number;
+    recycle(): void;
 }
 /**
  * Compute the point states given two manifolds. The states pertain to the
@@ -1075,26 +1040,21 @@ declare function getPointStates(state1: PointState[], state2: PointState[], mani
 /**
  * Clipping for contact manifolds. Sutherland-Hodgman clipping.
  */
-declare function clipSegmentToLine(vOut: ClipVertex[], vIn: ClipVertex[], normal: Vec2, offset: number, vertexIndexA: number): number;
+declare function clipSegmentToLine(vOut: ClipVertex[], vIn: ClipVertex[], normal: Vec2Value, offset: number, vertexIndexA: number): number;
 /**
  * A contact edge is used to connect bodies and contacts together in a contact
  * graph where each body is a node and each contact is an edge. A contact edge
  * belongs to a doubly linked list maintained in each attached body. Each
  * contact has two contact nodes, one for each attached body.
- *
- * @prop {Contact} contact The contact
- * @prop {ContactEdge} prev The previous contact edge in the body's contact list
- * @prop {ContactEdge} next The next contact edge in the body's contact list
- * @prop {Body} other Provides quick access to the other body attached.
  */
 declare class ContactEdge {
     contact: Contact;
-    prev: ContactEdge | undefined;
-    next: ContactEdge | undefined;
-    other: Body | undefined;
+    prev: ContactEdge | null;
+    next: ContactEdge | null;
+    other: Body | null;
     constructor(contact: Contact);
 }
-type EvaluateFunction = (manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) => void;
+type EvaluateFunction = (manifold: Manifold, xfA: TransformValue, fixtureA: Fixture, indexA: number, xfB: TransformValue, fixtureB: Fixture, indexB: number) => void;
 /**
  * Friction mixing law. The idea is to allow either fixture to drive the
  * friction to zero. For example, anything slides on ice.
@@ -1107,13 +1067,14 @@ declare function mixFriction(friction1: number, friction2: number): number;
 declare function mixRestitution(restitution1: number, restitution2: number): number;
 // TODO: merge with ManifoldPoint?
 declare class VelocityConstraintPoint {
-    rA: Vec2;
-    rB: Vec2;
+    rA: Vec2Value;
+    rB: Vec2Value;
     normalImpulse: number;
     tangentImpulse: number;
     normalMass: number;
     tangentMass: number;
     velocityBias: number;
+    recycle(): void;
 }
 /**
  * The class manages contact between two shapes. A contact exists for each
@@ -1121,7 +1082,8 @@ declare class VelocityConstraintPoint {
  * object may exist that has no contact points.
  */
 declare class Contact {
-    constructor(fA: Fixture, indexA: number, fB: Fixture, indexB: number, evaluateFcn: EvaluateFunction);
+    initialize(fA: Fixture, indexA: number, fB: Fixture, indexB: number, evaluateFcn: EvaluateFunction): void;
+    recycle(): void;
     initConstraint(step: TimeStep): void;
     /**
      * Get the contact manifold. Do not modify the manifold unless you understand
@@ -1131,7 +1093,7 @@ declare class Contact {
     /**
      * Get the world manifold.
      */
-    getWorldManifold(worldManifold: WorldManifold | null | undefined): WorldManifold | undefined;
+    getWorldManifold(worldManifold: WorldManifold | null): WorldManifold | undefined;
     /**
      * Enable/disable this contact. This can be used inside the pre-solve contact
      * listener. The contact is only disabled for the current time step (or sub-step
@@ -1208,7 +1170,7 @@ declare class Contact {
     /**
      * Called by Update method, and implemented by subclasses.
      */
-    evaluate(manifold: Manifold, xfA: Transform, xfB: Transform): void;
+    evaluate(manifold: Manifold, xfA: TransformValue, xfB: TransformValue): void;
     /**
      * Updates the contact manifold and touching status.
      *
@@ -1535,6 +1497,7 @@ declare class ContactImpulse {
     private readonly normals;
     private readonly tangents;
     constructor(contact: Contact);
+    recycle(): void;
     get normalImpulses(): number[];
     get tangentImpulses(): number[];
 }
@@ -2019,39 +1982,38 @@ declare class Body {
  * computation. Even
  */
 declare class DistanceInput {
-    proxyA: DistanceProxy;
-    proxyB: DistanceProxy;
-    transformA: Transform | null;
-    transformB: Transform | null;
+    readonly proxyA: DistanceProxy;
+    readonly proxyB: DistanceProxy;
+    readonly transformA: Transform;
+    readonly transformB: Transform;
     useRadii: boolean;
+    recycle(): void;
 }
 /**
  * Output for Distance.
- *
- * @prop {Vec2} pointA closest point on shapeA
- * @prop {Vec2} pointB closest point on shapeB
- * @prop distance
- * @prop iterations number of GJK iterations used
  */
 declare class DistanceOutput {
-    pointA: Vec2;
-    pointB: Vec2;
+    /** closest point on shapeA */
+    pointA: Vec2Value;
+    /** closest point on shapeB */
+    pointB: Vec2Value;
     distance: number;
+    /** iterations number of GJK iterations used */
     iterations: number;
+    recycle(): void;
 }
 /**
  * Used to warm start Distance. Set count to zero on first call.
- *
- * @prop {number} metric length or area
- * @prop {array} indexA vertices on shape A
- * @prop {array} indexB vertices on shape B
- * @prop {number} count
  */
 declare class SimplexCache {
+    /** length or area */
     metric: number;
+    /** vertices on shape A */
     indexA: number[];
+    /** vertices on shape B */
     indexB: number[];
     count: number;
+    recycle(): void;
 }
 /**
  * Compute the closest points between two shapes. Supports any combination of:
@@ -2060,7 +2022,7 @@ declare class SimplexCache {
  */
 declare const Distance: {
     (output: DistanceOutput, cache: SimplexCache, input: DistanceInput): void;
-    testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: Transform, xfB: Transform) => boolean;
+    testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue) => boolean;
     Input: typeof DistanceInput;
     Output: typeof DistanceOutput;
     Proxy: typeof DistanceProxy;
@@ -2070,11 +2032,7 @@ declare const Distance: {
  * A distance proxy is used by the GJK algorithm. It encapsulates any shape.
  */
 declare class DistanceProxy {
-    /** internal */ m_buffer: Vec2[];
-    /** internal */ m_vertices: Vec2[];
-    /** internal */ m_count: number;
-    /** internal */ m_radius: number;
-    constructor();
+    recycle(): void;
     /**
      * Get the vertex count.
      */
@@ -2082,15 +2040,15 @@ declare class DistanceProxy {
     /**
      * Get a vertex by index. Used by Distance.
      */
-    getVertex(index: number): Vec2;
+    getVertex(index: number): Vec2Value;
     /**
      * Get the supporting vertex index in the given direction.
      */
-    getSupport(d: Vec2): number;
+    getSupport(d: Vec2Value): number;
     /**
      * Get the supporting vertex in the given direction.
      */
-    getSupportVertex(d: Vec2): Vec2;
+    getSupportVertex(d: Vec2Value): Vec2Value;
     /**
      * Initialize the proxy using the given shape. The shape must remain in scope
      * while the proxy is in use.
@@ -2100,21 +2058,22 @@ declare class DistanceProxy {
      * Initialize the proxy using a vertex cloud and radius. The vertices
      * must remain in scope while the proxy is in use.
      */
-    setVertices(vertices: Vec2[], count: number, radius: number): void;
+    setVertices(vertices: Vec2Value[], count: number, radius: number): void;
 }
 /**
  * Determine if two generic shapes overlap.
  */
-declare const testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: Transform, xfB: Transform) => boolean;
+declare const testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue) => boolean;
 /**
  * Input parameters for ShapeCast
  */
 declare class ShapeCastInput {
-    proxyA: DistanceProxy;
-    proxyB: DistanceProxy;
-    transformA: Transform | null;
-    transformB: Transform | null;
-    translationB: Vec2;
+    readonly proxyA: DistanceProxy;
+    readonly proxyB: DistanceProxy;
+    readonly transformA: Transform;
+    readonly transformB: Transform;
+    readonly translationB: Vec2;
+    recycle(): void;
 }
 /**
  * Output results for b2ShapeCast
@@ -2128,6 +2087,7 @@ declare class ShapeCastOutput {
 /**
  * Perform a linear shape cast of shape B moving and shape A fixed. Determines
  * the hit point, normal, and translation fraction.
+ *
  * @returns true if hit, false if there is no hit or an initial overlap
  */
 //
@@ -2168,7 +2128,7 @@ declare abstract class Shape {
      * @param xf The shape world transform.
      * @param p A point in world coordinates.
      */
-    abstract testPoint(xf: Transform, p: Vec2Value): boolean;
+    abstract testPoint(xf: TransformValue, p: Vec2Value): boolean;
     /**
      * Cast a ray against a child shape.
      *
@@ -2186,7 +2146,7 @@ declare abstract class Shape {
      * @param xf The world transform of the shape.
      * @param childIndex The child shape
      */
-    abstract computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
+    abstract computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void;
     /**
      * Compute the mass properties of this shape using its dimensions and density.
      * The inertia tensor is computed about the local origin.
@@ -2221,7 +2181,7 @@ declare class CircleShape extends Shape {
      * @param xf The shape world transform.
      * @param p A point in world coordinates.
      */
-    testPoint(xf: Transform, p: Vec2Value): boolean;
+    testPoint(xf: TransformValue, p: Vec2Value): boolean;
     /**
      * Cast a ray against a child shape.
      *
@@ -2239,7 +2199,7 @@ declare class CircleShape extends Shape {
      * @param xf The world transform of the shape.
      * @param childIndex The child shape
      */
-    computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
+    computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void;
     /**
      * Compute the mass properties of this shape using its dimensions and density.
      * The inertia tensor is computed about the local origin.
@@ -2309,7 +2269,7 @@ declare class EdgeShape extends Shape {
      * @param xf The shape world transform.
      * @param p A point in world coordinates.
      */
-    testPoint(xf: Transform, p: Vec2Value): false;
+    testPoint(xf: TransformValue, p: Vec2Value): false;
     /**
      * Cast a ray against a child shape.
      *
@@ -2327,7 +2287,7 @@ declare class EdgeShape extends Shape {
      * @param xf The world transform of the shape.
      * @param childIndex The child shape
      */
-    computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
+    computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void;
     /**
      * Compute the mass properties of this shape using its dimensions and density.
      * The inertia tensor is computed about the local origin.
@@ -2375,7 +2335,7 @@ declare class PolygonShape extends Shape {
      * @param xf The shape world transform.
      * @param p A point in world coordinates.
      */
-    testPoint(xf: Transform, p: Vec2): boolean;
+    testPoint(xf: TransformValue, p: Vec2): boolean;
     /**
      * Cast a ray against a child shape.
      *
@@ -2393,7 +2353,7 @@ declare class PolygonShape extends Shape {
      * @param xf The world transform of the shape.
      * @param childIndex The child shape
      */
-    computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
+    computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void;
     /**
      * Compute the mass properties of this shape using its dimensions and density.
      * The inertia tensor is computed about the local origin.
@@ -2474,7 +2434,7 @@ declare class ChainShape extends Shape {
      * @param xf The shape world transform.
      * @param p A point in world coordinates.
      */
-    testPoint(xf: Transform, p: Vec2Value): false;
+    testPoint(xf: TransformValue, p: Vec2Value): false;
     /**
      * Cast a ray against a child shape.
      *
@@ -2492,7 +2452,7 @@ declare class ChainShape extends Shape {
      * @param xf The world transform of the shape.
      * @param childIndex The child shape
      */
-    computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
+    computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void;
     /**
      * Compute the mass properties of this shape using its dimensions and density.
      * The inertia tensor is computed about the local origin.
@@ -2521,7 +2481,7 @@ declare const Box: typeof BoxShape;
 declare const CollideCircles: (manifold: Manifold, circleA: CircleShape, xfA: Transform, circleB: CircleShape, xfB: Transform) => void;
 // Compute contact points for edge versus circle.
 // This accounts for edge connectivity.
-declare const CollideEdgeCircle: (manifold: Manifold, edgeA: EdgeShape, xfA: Transform, circleB: CircleShape, xfB: Transform) => void;
+declare const CollideEdgeCircle: (manifold: Manifold, edgeA: EdgeShape, xfA: TransformValue, circleB: CircleShape, xfB: TransformValue) => void;
 /**
  *
  * Find edge normal of max separation on A - return if separating axis is found<br>
@@ -2532,13 +2492,13 @@ declare const CollideEdgeCircle: (manifold: Manifold, edgeA: EdgeShape, xfA: Tra
  *
  * The normal points from 1 to 2
  */
-declare const CollidePolygons: (manifold: Manifold, polyA: PolygonShape, xfA: Transform, polyB: PolygonShape, xfB: Transform) => void;
-declare const CollidePolygonCircle: (manifold: Manifold, polygonA: PolygonShape, xfA: Transform, circleB: CircleShape, xfB: Transform) => void;
+declare const CollidePolygons: (manifold: Manifold, polyA: PolygonShape, xfA: TransformValue, polyB: PolygonShape, xfB: TransformValue) => void;
+declare const CollidePolygonCircle: (manifold: Manifold, polygonA: PolygonShape, xfA: TransformValue, circleB: CircleShape, xfB: TransformValue) => void;
 /**
  * This function collides and edge and a polygon, taking into account edge
  * adjacency.
  */
-declare const CollideEdgePolygon: (manifold: Manifold, edgeA: EdgeShape, xfA: Transform, polygonB: PolygonShape, xfB: Transform) => void;
+declare const CollideEdgePolygon: (manifold: Manifold, edgeA: EdgeShape, xfA: TransformValue, polygonB: PolygonShape, xfB: TransformValue) => void;
 /**
  * Distance joint definition. This requires defining an anchor point on both
  * bodies and the non-zero length of the distance joint. The definition uses
@@ -4105,16 +4065,15 @@ declare class Sweep {
     alpha0: number;
     c0: Vec2;
     a0: number;
-    constructor(c?: Vec2, a?: number);
-    setTransform(xf: Transform): void;
-    setLocalCenter(localCenter: Vec2, xf: Transform): void;
+    setTransform(xf: TransformValue): void;
+    setLocalCenter(localCenter: Vec2Value, xf: TransformValue): void;
     /**
      * Get the interpolated transform at a specific time.
      *
      * @param xf
      * @param beta A factor in [0,1], where 0 indicates alpha0
      */
-    getTransform(xf: Transform, beta?: number): void;
+    getTransform(xf: TransformValue, beta?: number): void;
     /**
      * Advance the sweep forward, yielding a new initial state.
      *
@@ -4126,7 +4085,6 @@ declare class Sweep {
      * normalize the angles in radians to be between -pi and pi.
      */
     normalize(): void;
-    clone(): Sweep;
     set(that: Sweep): void;
 }
 /**
@@ -4138,9 +4096,11 @@ declare class TOIInput {
     sweepA: Sweep;
     sweepB: Sweep;
     /** defines sweep interval [0, tMax] */
-    tMax: number | undefined;
+    tMax: number;
+    recycle(): void;
 }
 declare enum TOIOutputState {
+    e_unset = -1,
     e_unknown = 0,
     e_failed = 1,
     e_overlapped = 2,
@@ -4151,8 +4111,9 @@ declare enum TOIOutputState {
  * Output parameters for TimeOfImpact.
  */
 declare class TOIOutput {
-    state: TOIOutputState | undefined;
-    t: number | undefined;
+    state: TOIOutputState;
+    t: number;
+    recycle(): void;
 }
 /**
  * Compute the upper bound on time before two shapes penetrate. Time is
@@ -4196,13 +4157,13 @@ declare const Math: Math & {
 };
 /** @deprecated Merged with main namespace */
 declare const internal: {
-    CollidePolygons: (manifold: Manifold, polyA: PolygonShape, xfA: Transform, polyB: PolygonShape, xfB: Transform) => void;
+    CollidePolygons: (manifold: Manifold, polyA: PolygonShape, xfA: TransformValue, polyB: PolygonShape, xfB: TransformValue) => void;
     Settings: typeof Settings;
     Sweep: typeof Sweep;
     Manifold: typeof Manifold;
     Distance: {
         (output: DistanceOutput, cache: SimplexCache, input: DistanceInput): void;
-        testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: Transform, xfB: Transform) => boolean;
+        testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue) => boolean;
         Input: typeof DistanceInput;
         Output: typeof DistanceOutput;
         Proxy: typeof DistanceProxy;
@@ -4402,6 +4363,11 @@ declare namespace planck {
         clamp(max: number): Vec2;
         static clamp(v: Vec2Value, max: number): Vec2;
     }
+    interface Vec3Value {
+        x: number;
+        y: number;
+        z: number;
+    }
     class Vec3 {
         x: number;
         y: number;
@@ -4414,7 +4380,7 @@ declare namespace planck {
         });
         constructor();
         static zero(): Vec3;
-        static clone(v: Vec3): Vec3;
+        static clone(v: Vec3Value): Vec3;
         /**
          * Does this vector contain finite coordinates?
          */
@@ -4422,23 +4388,23 @@ declare namespace planck {
         static assert(o: any): void;
         setZero(): Vec3;
         set(x: number, y: number, z: number): Vec3;
-        add(w: Vec3): Vec3;
-        sub(w: Vec3): Vec3;
+        add(w: Vec3Value): Vec3;
+        sub(w: Vec3Value): Vec3;
         mul(m: number): Vec3;
-        static areEqual(v: Vec3, w: Vec3): boolean;
+        static areEqual(v: Vec3Value, w: Vec3Value): boolean;
         /**
          * Perform the dot product on two vectors.
          */
-        static dot(v: Vec3, w: Vec3): number;
+        static dot(v: Vec3Value, w: Vec3Value): number;
         /**
          * Perform the cross product on two vectors. In 2D this produces a scalar.
          */
-        static cross(v: Vec3, w: Vec3): Vec3;
-        static add(v: Vec3, w: Vec3): Vec3;
-        static sub(v: Vec3, w: Vec3): Vec3;
-        static mul(v: Vec3, m: number): Vec3;
+        static cross(v: Vec3Value, w: Vec3Value): Vec3;
+        static add(v: Vec3Value, w: Vec3Value): Vec3;
+        static sub(v: Vec3Value, w: Vec3Value): Vec3;
+        static mul(v: Vec3Value, m: number): Vec3;
         neg(): Vec3;
-        static neg(v: Vec3): Vec3;
+        static neg(v: Vec3Value): Vec3;
     }
     /**
      * A 2-by-2 matrix. Stored in column-major order.
@@ -4495,7 +4461,7 @@ declare namespace planck {
         ex: Vec3;
         ey: Vec3;
         ez: Vec3;
-        constructor(a: Vec3, b: Vec3, c: Vec3);
+        constructor(a: Vec3Value, b: Vec3Value, c: Vec3Value);
         constructor();
         static isValid(obj: any): boolean;
         static assert(o: any): void;
@@ -4507,13 +4473,13 @@ declare namespace planck {
          * Solve A * x = b, where b is a column vector. This is more efficient than
          * computing the inverse in one-shot cases.
          */
-        solve33(v: Vec3): Vec3;
+        solve33(v: Vec3Value): Vec3;
         /**
          * Solve A * x = b, where b is a column vector. This is more efficient than
          * computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
          * equation.
          */
-        solve22(v: Vec2): Vec2;
+        solve22(v: Vec2Value): Vec2;
         /**
          * Get the inverse of this matrix as a 2-by-2. Returns the zero matrix if
          * singular.
@@ -4527,25 +4493,29 @@ declare namespace planck {
         /**
          * Multiply a matrix times a vector.
          */
-        static mul(a: Mat33, b: Vec2): Vec2;
-        static mul(a: Mat33, b: Vec3): Vec3;
+        static mul(a: Mat33, b: Vec2Value): Vec2;
+        static mul(a: Mat33, b: Vec3Value): Vec3;
         static mulVec3(a: Mat33, b: Vec3): Vec3;
-        static mulVec2(a: Mat33, b: Vec2): Vec2;
+        static mulVec2(a: Mat33, b: Vec2Value): Vec2;
         static add(a: Mat33, b: Mat33): Mat33;
+    }
+    interface RotValue {
+        s: number;
+        c: number;
     }
     class Rot {
         s: number;
         c: number;
         /** Initialize from an angle in radians. */
-        constructor(angle?: number | Rot);
-        static clone(rot: Rot): Rot;
+        constructor(angle?: number | RotValue);
+        static clone(rot: RotValue): Rot;
         static identity(): Rot;
         static isValid(obj: any): boolean;
         static assert(o: any): void;
         /** Set to the identity rotation. */
         setIdentity(): void;
-        set(angle: number | Rot): void;
-        setRot(angle: Rot): void;
+        set(angle: number | RotValue): void;
+        setRot(angle: RotValue): void;
         /** Set using an angle in radians. */
         setAngle(angle: number): void;
         /** Get the angle in radians. */
@@ -4555,23 +4525,27 @@ declare namespace planck {
         /** Get the u-axis. */
         getYAxis(): Vec2;
         /** Multiply two rotations: q * r */
-        static mul(rot: Rot, m: Rot): Rot;
+        static mul(rot: RotValue, m: RotValue): Rot;
         /** Rotate a vector */
-        static mul(rot: Rot, m: Vec2): Vec2;
+        static mul(rot: RotValue, m: Vec2Value): Vec2;
         /** Multiply two rotations: q * r */
-        static mulRot(rot: Rot, m: Rot): Rot;
+        static mulRot(rot: RotValue, m: RotValue): Rot;
         /** Rotate a vector */
-        static mulVec2(rot: Rot, m: Vec2): Vec2;
-        static mulSub(rot: Rot, v: Vec2, w: Vec2): Vec2;
+        static mulVec2(rot: RotValue, m: Vec2Value): Vec2;
+        static mulSub(rot: RotValue, v: Vec2Value, w: Vec2Value): Vec2;
         /** Transpose multiply two rotations: qT * r */
-        static mulT(rot: Rot, m: Rot): Rot;
+        static mulT(rot: RotValue, m: RotValue): Rot;
         /** Inverse rotate a vector */
-        static mulT(rot: Rot, m: Vec2): Vec2;
+        static mulT(rot: RotValue, m: Vec2Value): Vec2;
         /** Transpose multiply two rotations: qT * r */
-        static mulTRot(rot: Rot, m: Rot): Rot;
+        static mulTRot(rot: RotValue, m: RotValue): Rot;
         /** Inverse rotate a vector */
-        static mulTVec2(rot: Rot, m: Vec2Value): Vec2;
+        static mulTVec2(rot: RotValue, m: Vec2Value): Vec2;
     }
+    type TransformValue = {
+        p: Vec2Value;
+        q: RotValue;
+    };
     /**
      * A transform contains translation and rotation. It is used to represent the
      * position and orientation of rigid frames. Initialize using a position vector
@@ -4589,25 +4563,25 @@ declare namespace planck {
          * Set this to the identity transform.
          */
         setIdentity(): void;
-        set(position: Vec2, rotation: number): void;
-        set(xf: Transform): void;
+        set(position: Vec2Value, rotation: number): void;
+        set(xf: TransformValue): void;
         /**
          * Set this based on the position and angle.
          */
-        setNum(position: Vec2, rotation: number): void;
-        setTransform(xf: Transform): void;
+        setNum(position: Vec2Value, rotation: number): void;
+        setTransform(xf: TransformValue): void;
         static isValid(obj: any): boolean;
         static assert(o: any): void;
-        static mul(a: Transform, b: Vec2Value): Vec2;
-        static mul(a: Transform, b: Transform): Transform;
+        static mul(a: TransformValue, b: Vec2Value): Vec2;
+        static mul(a: TransformValue, b: TransformValue): Transform;
         static mulAll(a: Transform, b: Vec2Value[]): Vec2[];
         static mulAll(a: Transform, b: Transform[]): Transform[];
-        static mulVec2(a: Transform, b: Vec2Value): Vec2;
-        static mulXf(a: Transform, b: Transform): Transform;
-        static mulT(a: Transform, b: Vec2Value): Vec2;
-        static mulT(a: Transform, b: Transform): Transform;
-        static mulTVec2(a: Transform, b: Vec2Value): Vec2;
-        static mulTXf(a: Transform, b: Transform): Transform;
+        static mulVec2(a: TransformValue, b: Vec2Value): Vec2;
+        static mulXf(a: TransformValue, b: TransformValue): Transform;
+        static mulT(a: TransformValue, b: Vec2Value): Vec2;
+        static mulT(a: TransformValue, b: TransformValue): Transform;
+        static mulTVec2(a: TransformValue, b: Vec2Value): Vec2;
+        static mulTXf(a: TransformValue, b: TransformValue): Transform;
     }
     /**
      * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
@@ -4625,6 +4599,10 @@ declare namespace planck {
     interface RayCastOutput {
         normal: Vec2;
         fraction: number;
+    }
+    interface AABBValue {
+        lowerBound: Vec2Value;
+        upperBound: Vec2Value;
     }
     class AABB {
         lowerBound: Vec2;
@@ -4656,59 +4634,13 @@ declare namespace planck {
         set(aabb: AABB): void;
         contains(aabb: AABB): boolean;
         extend(value: number): AABB;
-        static extend(aabb: AABB, value: number): void;
+        static extend(out: AABBValue, value: number): AABBValue;
         static testOverlap(a: AABB, b: AABB): boolean;
         static areEqual(a: AABB, b: AABB): boolean;
         static diff(a: AABB, b: AABB): number;
         rayCast(output: RayCastOutput, input: RayCastInput): boolean;
-    }
-    /*
-    * Copyright (c) 2016-2018 Ali Shakiba http://shakiba.me/planck.js
-    *
-    * This software is provided 'as-is', without any express or implied
-    * warranty.  In no event will the authors be held liable for any damages
-    * arising from the use of this software.
-    * Permission is granted to anyone to use this software for any purpose,
-    * including commercial applications, and to alter it and redistribute it
-    * freely, subject to the following restrictions:
-    * 1. The origin of this software must not be misrepresented; you must not
-    * claim that you wrote the original software. If you use this software
-    * in a product, an acknowledgment in the product documentation would be
-    * appreciated but is not required.
-    * 2. Altered source versions must be plainly marked as such, and must not be
-    * misrepresented as being the original software.
-    * 3. This notice may not be removed or altered from any source distribution.
-    */
-    interface PoolOptions<T> {
-        max?: number;
-        create?: () => T;
-        /** Called when an object is being re-allocated. */
-        allocate?: (item: T) => void;
-        /** Called when an object is returned to pool. */
-        release?: (item: T) => void;
-        /** Called when an object is returned to the pool but will be disposed from pool. */
-        dispose?: (item: T) => T;
-    }
-    class Pool<T> {
-        _list: T[];
-        _max: number;
-        _createFn: () => T;
-        _hasCreateFn: boolean;
-        _createCount: number;
-        _allocateFn: (item: T) => void;
-        _hasAllocateFn: boolean;
-        _allocateCount: number;
-        _releaseFn: (item: T) => void;
-        _hasReleaseFn: boolean;
-        _releaseCount: number;
-        _disposeFn: (item: T) => T;
-        _hasDisposeFn: boolean;
-        _disposeCount: number;
-        constructor(opts: PoolOptions<T>);
-        max(n?: number): number | Pool<T>;
-        size(): number;
-        allocate(): T;
-        release(item: T): void;
+        static combinePoints(out: AABBValue, a: Vec2Value, b: Vec2Value): AABBValue;
+        static combinedPerimeter(a: AABBValue, b: AABBValue): number;
     }
     type DynamicTreeQueryCallback = (nodeId: number) => boolean;
     /**
@@ -4744,7 +4676,6 @@ declare namespace planck {
         m_nodes: {
             [id: number]: TreeNode<T>;
         };
-        m_pool: Pool<TreeNode<T>>;
         constructor();
         /**
          * Get proxy user data.
@@ -4780,7 +4711,7 @@ declare namespace planck {
          *
          * @return true if the proxy was re-inserted.
          */
-        moveProxy(id: number, aabb: AABB, d: Vec2): boolean;
+        moveProxy(id: number, aabb: AABB, d: Vec2Value): boolean;
         insertLeaf(leaf: TreeNode<T>): void;
         removeLeaf(leaf: TreeNode<T>): void;
         /**
@@ -4822,7 +4753,7 @@ declare namespace planck {
          *
          * @param newOrigin The new origin with respect to the old origin
          */
-        shiftOrigin(newOrigin: Vec2): void;
+        shiftOrigin(newOrigin: Vec2Value): void;
         /**
          * Query an AABB for overlapping proxies. The callback class is called for each
          * proxy that overlaps the supplied AABB.
@@ -4849,7 +4780,6 @@ declare namespace planck {
      */
     class BroadPhase {
         m_tree: DynamicTree<FixtureProxy>;
-        m_proxyCount: number;
         m_moveBuffer: number[];
         m_callback: (userDataA: any, userDataB: any) => void;
         m_queryProxyId: number;
@@ -4903,7 +4833,7 @@ declare namespace planck {
          *
          * @param newOrigin The new origin with respect to the old origin
          */
-        shiftOrigin(newOrigin: Vec2): void;
+        shiftOrigin(newOrigin: Vec2Value): void;
         /**
          * Create a proxy with an initial AABB. Pairs are not reported until UpdatePairs
          * is called.
@@ -4917,7 +4847,7 @@ declare namespace planck {
          * Call moveProxy as many times as you like, then when you are done call
          * UpdatePairs to finalized the proxy pairs (for your time step).
          */
-        moveProxy(proxyId: number, aabb: AABB, displacement: Vec2): void;
+        moveProxy(proxyId: number, aabb: AABB, displacement: Vec2Value): void;
         /**
          * Call to trigger a re-processing of it's pairs on the next call to
          * UpdatePairs.
@@ -5085,13 +5015,13 @@ declare namespace planck {
         /**
          * These support body activation/deactivation.
          */
-        createProxies(broadPhase: BroadPhase, xf: Transform): void;
+        createProxies(broadPhase: BroadPhase, xf: TransformValue): void;
         destroyProxies(broadPhase: BroadPhase): void;
         /**
          * Updates this fixture proxy in broad-phase (with combined AABB of current and
          * next transformation).
          */
-        synchronize(broadPhase: BroadPhase, xf1: Transform, xf2: Transform): void;
+        synchronize(broadPhase: BroadPhase, xf1: TransformValue, xf2: TransformValue): void;
         /**
          * Set the contact filtering data. This will not update contacts until the next
          * time step when either parent body is active and awake. This automatically
@@ -5126,11 +5056,13 @@ declare namespace planck {
         shouldCollide(that: Fixture): boolean;
     }
     enum ManifoldType {
+        e_unset = -1,
         e_circles = 0,
         e_faceA = 1,
         e_faceB = 2
     }
     enum ContactFeatureType {
+        e_unset = -1,
         e_vertex = 0,
         e_face = 1
     }
@@ -5151,9 +5083,10 @@ declare namespace planck {
      * Used for computing contact manifolds.
      */
     class ClipVertex {
-        v: Vec2;
+        v: Vec2Value;
         id: ContactID;
         set(o: ClipVertex): void;
+        recycle(): void;
     }
     /**
      * A manifold for two touching convex shapes. Manifolds are created in `evaluate`
@@ -5166,31 +5099,35 @@ declare namespace planck {
      * movement, which is critical for continuous physics. All contact scenarios
      * must be expressed in one of these types. This structure is stored across time
      * steps, so we keep it small.
-     *
-     * @prop type e_circle, e_faceA, e_faceB
-     * @prop localPoint Usage depends on manifold type:<br>
-     *       e_circles: the local center of circleA <br>
-     *       e_faceA: the center of faceA <br>
-     *       e_faceB: the center of faceB
-     * @prop localNormal Usage depends on manifold type:<br>
-     *       e_circles: not used <br>
-     *       e_faceA: the normal on polygonA <br>
-     *       e_faceB: the normal on polygonB
-     * @prop points The points of contact {ManifoldPoint[]}
-     * @prop pointCount The number of manifold points
      */
     class Manifold {
         type: ManifoldType;
-        localNormal: Vec2;
-        localPoint: Vec2;
+        /**
+         * Usage depends on manifold type:
+         * - circles: not used
+         * - faceA: the normal on polygonA
+         * - faceB: the normal on polygonB
+         */
+        localNormal: Vec2Value;
+        /**
+         * Usage depends on manifold type:
+         * - circles: the local center of circleA
+         * - faceA: the center of faceA
+         * - faceB: the center of faceB
+         */
+        localPoint: Vec2Value;
+        /** The points of contact */
         points: ManifoldPoint[];
+        /** The number of manifold points */
         pointCount: number;
+        set(that: Manifold): void;
+        recycle(): void;
         /**
          * Evaluate the manifold with supplied transforms. This assumes modest motion
          * from the original state. This does not change the point count, impulses, etc.
          * The radii must come from the shapes that generated the manifold.
          */
-        getWorldManifold(wm: WorldManifold | undefined, xfA: Transform, radiusA: number, xfB: Transform, radiusB: number): WorldManifold;
+        getWorldManifold(wm: WorldManifold | null, xfA: TransformValue, radiusA: number, xfB: TransformValue, radiusB: number): WorldManifold;
         static clipSegmentToLine: typeof clipSegmentToLine;
         static ClipVertex: typeof ClipVertex;
         static getPointStates: typeof getPointStates;
@@ -5207,12 +5144,12 @@ declare namespace planck {
      */
     class ManifoldPoint {
         /**
-         * Usage depends on manifold type.
-         *       e_circles: the local center of circleB,
-         *       e_faceA: the local center of cirlceB or the clip point of polygonB,
-         *       e_faceB: the clip point of polygonA.
+         * Usage depends on manifold type:
+         * - circles: the local center of circleB
+         * - faceA: the local center of circleB or the clip point of polygonB
+         * - faceB: the clip point of polygonA
          */
-        localPoint: Vec2;
+        localPoint: Vec2Value;
         /**
          * The non-penetration impulse
          */
@@ -5222,59 +5159,48 @@ declare namespace planck {
          */
         tangentImpulse: number;
         /**
-         * Uniquely identifies a contact point between two shapes to facilatate warm starting
+         * Uniquely identifies a contact point between two shapes to facilitate warm starting
          */
-        id: ContactID;
+        readonly id: ContactID;
+        set(that: ManifoldPoint): void;
+        recycle(): void;
     }
     /**
      * Contact ids to facilitate warm starting.
+     *
+     * ContactFeature: The features that intersect to form the contact point.
      */
     class ContactID {
-        cf: ContactFeature;
         /**
          * Used to quickly compare contact ids.
          */
-        get key(): number;
-        set(o: ContactID): void;
-    }
-    /**
-     * The features that intersect to form the contact point.
-     */
-    class ContactFeature {
-        /**
-         * Feature index on shapeA
-         */
+        key: number;
+        /** ContactFeature index on shapeA */
         indexA: number;
-        /**
-         * Feature index on shapeB
-         */
+        /** ContactFeature index on shapeB */
         indexB: number;
-        /**
-         * The feature type on shapeA
-         */
+        /** ContactFeature type on shapeA */
         typeA: ContactFeatureType;
-        /**
-         * The feature type on shapeB
-         */
+        /** ContactFeature type on shapeB */
         typeB: ContactFeatureType;
-        set(o: ContactFeature): void;
+        setFeatures(indexA: number, typeA: ContactFeatureType, indexB: number, typeB: ContactFeatureType): void;
+        set(that: ContactID): void;
+        swapFeatures(): void;
+        recycle(): void;
     }
     /**
      * This is used to compute the current state of a contact manifold.
      */
     class WorldManifold {
-        /**
-         * World vector pointing from A to B
-         */
-        normal: Vec2;
-        /**
-         * World contact point (point of intersection)
-         */
-        points: Vec2[]; // [maxManifoldPoints]
-        /**
-         * A negative value indicates overlap, in meters
-         */
+        /** World vector pointing from A to B */
+        normal: Vec2Value;
+        /** World contact point (point of intersection) */
+        points: Vec2Value[]; // [maxManifoldPoints]
+        /** A negative value indicates overlap, in meters */
         separations: number[]; // [maxManifoldPoints]
+        /** The number of manifold points */
+        pointCount: number;
+        recycle(): void;
     }
     /**
      * Compute the point states given two manifolds. The states pertain to the
@@ -5285,26 +5211,21 @@ declare namespace planck {
     /**
      * Clipping for contact manifolds. Sutherland-Hodgman clipping.
      */
-    function clipSegmentToLine(vOut: ClipVertex[], vIn: ClipVertex[], normal: Vec2, offset: number, vertexIndexA: number): number;
+    function clipSegmentToLine(vOut: ClipVertex[], vIn: ClipVertex[], normal: Vec2Value, offset: number, vertexIndexA: number): number;
     /**
      * A contact edge is used to connect bodies and contacts together in a contact
      * graph where each body is a node and each contact is an edge. A contact edge
      * belongs to a doubly linked list maintained in each attached body. Each
      * contact has two contact nodes, one for each attached body.
-     *
-     * @prop {Contact} contact The contact
-     * @prop {ContactEdge} prev The previous contact edge in the body's contact list
-     * @prop {ContactEdge} next The next contact edge in the body's contact list
-     * @prop {Body} other Provides quick access to the other body attached.
      */
     class ContactEdge {
         contact: Contact;
-        prev: ContactEdge | undefined;
-        next: ContactEdge | undefined;
-        other: Body | undefined;
+        prev: ContactEdge | null;
+        next: ContactEdge | null;
+        other: Body | null;
         constructor(contact: Contact);
     }
-    type EvaluateFunction = (manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number) => void;
+    type EvaluateFunction = (manifold: Manifold, xfA: TransformValue, fixtureA: Fixture, indexA: number, xfB: TransformValue, fixtureB: Fixture, indexB: number) => void;
     /**
      * Friction mixing law. The idea is to allow either fixture to drive the
      * friction to zero. For example, anything slides on ice.
@@ -5315,132 +5236,6 @@ declare namespace planck {
      * inelastic surface. For example, a superball bounces on anything.
      */
     function mixRestitution(restitution1: number, restitution2: number): number;
-    // TODO: merge with ManifoldPoint?
-    class VelocityConstraintPoint {
-        rA: Vec2;
-        rB: Vec2;
-        normalImpulse: number;
-        tangentImpulse: number;
-        normalMass: number;
-        tangentMass: number;
-        velocityBias: number;
-    }
-    /**
-     * The class manages contact between two shapes. A contact exists for each
-     * overlapping AABB in the broad-phase (except if filtered). Therefore a contact
-     * object may exist that has no contact points.
-     */
-    class Contact {
-        constructor(fA: Fixture, indexA: number, fB: Fixture, indexB: number, evaluateFcn: EvaluateFunction);
-        initConstraint(step: TimeStep): void;
-        /**
-         * Get the contact manifold. Do not modify the manifold unless you understand
-         * the internals of the library.
-         */
-        getManifold(): Manifold;
-        /**
-         * Get the world manifold.
-         */
-        getWorldManifold(worldManifold: WorldManifold | null | undefined): WorldManifold | undefined;
-        /**
-         * Enable/disable this contact. This can be used inside the pre-solve contact
-         * listener. The contact is only disabled for the current time step (or sub-step
-         * in continuous collisions).
-         */
-        setEnabled(flag: boolean): void;
-        /**
-         * Has this contact been disabled?
-         */
-        isEnabled(): boolean;
-        /**
-         * Is this contact touching?
-         */
-        isTouching(): boolean;
-        /**
-         * Get the next contact in the world's contact list.
-         */
-        getNext(): Contact | null;
-        /**
-         * Get fixture A in this contact.
-         */
-        getFixtureA(): Fixture;
-        /**
-         * Get fixture B in this contact.
-         */
-        getFixtureB(): Fixture;
-        /**
-         * Get the child primitive index for fixture A.
-         */
-        getChildIndexA(): number;
-        /**
-         * Get the child primitive index for fixture B.
-         */
-        getChildIndexB(): number;
-        /**
-         * Flag this contact for filtering. Filtering will occur the next time step.
-         */
-        flagForFiltering(): void;
-        /**
-         * Override the default friction mixture. You can call this in
-         * ContactListener.preSolve. This value persists until set or reset.
-         */
-        setFriction(friction: number): void;
-        /**
-         * Get the friction.
-         */
-        getFriction(): number;
-        /**
-         * Reset the friction mixture to the default value.
-         */
-        resetFriction(): void;
-        /**
-         * Override the default restitution mixture. You can call this in
-         * ContactListener.preSolve. The value persists until you set or reset.
-         */
-        setRestitution(restitution: number): void;
-        /**
-         * Get the restitution.
-         */
-        getRestitution(): number;
-        /**
-         * Reset the restitution to the default value.
-         */
-        resetRestitution(): void;
-        /**
-         * Set the desired tangent speed for a conveyor belt behavior. In meters per
-         * second.
-         */
-        setTangentSpeed(speed: number): void;
-        /**
-         * Get the desired tangent speed. In meters per second.
-         */
-        getTangentSpeed(): number;
-        /**
-         * Called by Update method, and implemented by subclasses.
-         */
-        evaluate(manifold: Manifold, xfA: Transform, xfB: Transform): void;
-        /**
-         * Updates the contact manifold and touching status.
-         *
-         * Note: do not assume the fixture AABBs are overlapping or are valid.
-         *
-         * @param listener.beginContact
-         * @param listener.endContact
-         * @param listener.preSolve
-         */
-        update(listener?: {
-            beginContact(contact: Contact): void;
-            endContact(contact: Contact): void;
-            preSolve(contact: Contact, oldManifold: Manifold): void;
-        }): void;
-        solvePositionConstraint(step: TimeStep): number;
-        solvePositionConstraintTOI(step: TimeStep, toiA: Body, toiB: Body): number;
-        private _solvePositionConstraint;
-        initVelocityConstraint(step: TimeStep): void;
-        warmStartConstraint(step: TimeStep): void;
-        storeConstraintImpulses(step: TimeStep): void;
-        solveVelocityConstraint(step: TimeStep): void;
-    }
     /**
      * @prop gravity [{ x : 0, y : 0}]
      * @prop allowSleep [true]
@@ -5718,571 +5513,43 @@ declare namespace planck {
         off(name: "remove-fixture", listener: (fixture: Fixture) => void): World;
         publish(name: string, arg1?: any, arg2?: any, arg3?: any): number;
     }
-    class TimeStep {
-        /** time step */
-        dt: number;
-        /** inverse time step (0 if dt == 0) */
-        inv_dt: number;
-        velocityIterations: number;
-        positionIterations: number;
-        warmStarting: boolean;
-        blockSolve: boolean;
-        /** timestep ratio for variable timestep */
-        inv_dt0: number;
-        /** dt * inv_dt0 */
-        dtRatio: number;
-        reset(dt: number): void;
-    }
-    /**
-     * Contact impulses for reporting. Impulses are used instead of forces because
-     * sub-step forces may approach infinity for rigid body collisions. These match
-     * up one-to-one with the contact points in Manifold.
-     */
-    class ContactImpulse {
-        // TODO: merge with Contact class?
-        private readonly contact;
-        private readonly normals;
-        private readonly tangents;
-        constructor(contact: Contact);
-        get normalImpulses(): number[];
-        get tangentImpulses(): number[];
-    }
-    /**
-     * Finds and solves islands. An island is a connected subset of the world.
-     */
-    class Solver {
-        m_world: World;
-        m_stack: Body[];
-        m_bodies: Body[];
-        m_contacts: Contact[];
-        m_joints: Joint[];
-        constructor(world: World);
-        clear(): void;
-        addBody(body: Body): void;
-        addContact(contact: Contact): void;
-        addJoint(joint: Joint): void;
-        solveWorld(step: TimeStep): void;
-        solveIsland(step: TimeStep): void;
-        /**
-         * Find TOI contacts and solve them.
-         */
-        solveWorldTOI(step: TimeStep): void;
-        solveIslandTOI(subStep: TimeStep, toiA: Body, toiB: Body): void;
-    }
-    /**
-     * A joint edge is used to connect bodies and joints together in a joint graph
-     * where each body is a node and each joint is an edge. A joint edge belongs to
-     * a doubly linked list maintained in each attached body. Each joint has two
-     * joint nodes, one for each attached body.
-     */
-    class JointEdge {
-        /**
-         * provides quick access to the other body attached.
-         */
-        other: Body | null;
-        /**
-         * the joint
-         */
-        joint: Joint | null;
-        /**
-         * prev the previous joint edge in the body's joint list
-         */
-        prev: JointEdge | null;
-        /**
-         * the next joint edge in the body's joint list
-         */
-        next: JointEdge | null;
-    }
-    /**
-     * Joint definitions are used to construct joints.
-     */
-    interface JointOpt {
-        /**
-         * Use this to attach application specific data to your joints.
-         */
-        userData?: any;
-        /**
-         * Set this flag to true if the attached bodies
-         * should collide.
-         */
-        collideConnected?: boolean;
-    }
-    /**
-     * Joint definitions are used to construct joints.
-     */
-    interface JointDef extends JointOpt {
-        /**
-         * The first attached body.
-         */
-        bodyA: Body;
-        /**
-         * The second attached body.
-         */
-        bodyB: Body;
-    }
-    /**
-     * The base joint class. Joints are used to constraint two bodies together in
-     * various fashions. Some joints also feature limits and motors.
-     */
-    abstract class Joint {
-        constructor(def: JointDef);
-        constructor(def: JointOpt, bodyA: Body, bodyB: Body);
-        /**
-         * Short-cut function to determine if either body is inactive.
-         */
-        isActive(): boolean;
-        /**
-         * Get the type of the concrete joint.
-         */
-        getType(): string;
-        /**
-         * Get the first body attached to this joint.
-         */
-        getBodyA(): Body;
-        /**
-         * Get the second body attached to this joint.
-         */
-        getBodyB(): Body;
-        /**
-         * Get the next joint the world joint list.
-         */
-        getNext(): Joint;
-        getUserData(): unknown;
-        setUserData(data: unknown): void;
-        /**
-         * Get collide connected. Note: modifying the collide connect flag won't work
-         * correctly because the flag is only checked when fixture AABBs begin to
-         * overlap.
-         */
-        getCollideConnected(): boolean;
-        /**
-         * Get the anchor point on bodyA in world coordinates.
-         */
-        abstract getAnchorA(): Vec2;
-        /**
-         * Get the anchor point on bodyB in world coordinates.
-         */
-        abstract getAnchorB(): Vec2;
-        /**
-         * Get the reaction force on bodyB at the joint anchor in Newtons.
-         */
-        abstract getReactionForce(inv_dt: number): Vec2;
-        /**
-         * Get the reaction torque on bodyB in N*m.
-         */
-        abstract getReactionTorque(inv_dt: number): number;
-        /**
-         * Shift the origin for any points stored in world coordinates.
-         */
-        shiftOrigin(newOrigin: Vec2): void;
-        abstract initVelocityConstraints(step: TimeStep): void;
-        abstract solveVelocityConstraints(step: TimeStep): void;
-        /**
-         * This returns true if the position errors are within tolerance.
-         */
-        abstract solvePositionConstraints(step: TimeStep): boolean;
-    }
-    type BodyType = "static" | "kinematic" | "dynamic";
-    interface BodyDef {
-        /**
-         * Body types are static, kinematic, or dynamic. Note: if a dynamic
-         * body would have zero mass, the mass is set to one.
-         */
-        type?: BodyType;
-        /**
-         * The world position of the body. Avoid creating bodies at the
-         * origin since this can lead to many overlapping shapes.
-         */
-        position?: Vec2;
-        /**
-         * The world angle of the body in radians.
-         */
-        angle?: number;
-        /**
-         * The linear velocity of the body's origin in world co-ordinates.
-         */
-        linearVelocity?: Vec2;
-        angularVelocity?: number;
-        /**
-         * Linear damping is use to reduce the linear velocity. The
-         * damping parameter can be larger than 1.0 but the damping effect becomes
-         * sensitive to the time step when the damping parameter is large.
-         * Units are 1/time
-         */
-        linearDamping?: number;
-        /**
-         * Angular damping is use to reduce the angular velocity.
-         * The damping parameter can be larger than 1.0 but the damping effect
-         * becomes sensitive to the time step when the damping parameter is large.
-         * Units are 1/time
-         */
-        angularDamping?: number;
-        /**
-         * Should this body be prevented from rotating? Useful for characters.
-         */
-        fixedRotation?: boolean;
-        /**
-         * Is this a fast moving body that should be prevented from
-         * tunneling through other moving bodies? Note that all bodies are
-         * prevented from tunneling through kinematic and static bodies. This
-         * setting is only considered on dynamic bodies. Warning: You should use
-         * this flag sparingly since it increases processing time.
-         */
-        bullet?: boolean;
-        gravityScale?: number;
-        /**
-         * Set this flag to false if this body should never fall asleep. Note that this increases CPU usage.
-         */
-        allowSleep?: boolean;
-        /**
-         * Is this body initially awake or sleeping?
-         */
-        awake?: boolean;
-        /**
-         * Does this body start out active?
-         */
-        active?: boolean;
-        userData?: any;
-    }
-    /**
-     * MassData This holds the mass data computed for a shape.
-     */
-    class MassData {
-        /** The mass of the shape, usually in kilograms. */
-        mass: number;
-        /** The position of the shape's centroid relative to the shape's origin. */
-        center: Vec2;
-        /** The rotational inertia of the shape about the local origin. */
-        I: number;
-    }
-    /**
-     * A rigid body composed of one or more fixtures.
-     *
-     * To create a new Body use {@link World.createBody}.
-     */
-    class Body {
-        /**
-         * A static body does not move under simulation and behaves as if it has infinite mass.
-         * Internally, zero is stored for the mass and the inverse mass.
-         * Static bodies can be moved manually by the user.
-         * A static body has zero velocity.
-         * Static bodies do not collide with other static or kinematic bodies.
-         */
-        static readonly STATIC: BodyType;
-        /**
-         * A kinematic body moves under simulation according to its velocity.
-         * Kinematic bodies do not respond to forces.
-         * They can be moved manually by the user, but normally a kinematic body is moved by setting its velocity.
-         * A kinematic body behaves as if it has infinite mass, however, zero is stored for the mass and the inverse mass.
-         * Kinematic bodies do not collide with other kinematic or static bodies.
-         */
-        static readonly KINEMATIC: BodyType;
-        /**
-         * A dynamic body is fully simulated.
-         * They can be moved manually by the user, but normally they move according to forces.
-         * A dynamic body can collide with all body types.
-         * A dynamic body always has finite, non-zero mass.
-         * If you try to set the mass of a dynamic body to zero, it will automatically acquire a mass of one kilogram and it won't rotate.
-         */
-        static readonly DYNAMIC: BodyType;
-        isWorldLocked(): boolean;
-        getWorld(): World;
-        getNext(): Body | null;
-        setUserData(data: any): void;
-        getUserData(): unknown;
-        getFixtureList(): Fixture | null;
-        getJointList(): JointEdge | null;
-        /**
-         * Warning: this list changes during the time step and you may miss some
-         * collisions if you don't use ContactListener.
-         */
-        getContactList(): ContactEdge | null;
-        isStatic(): boolean;
-        isDynamic(): boolean;
-        isKinematic(): boolean;
-        /**
-         * This will alter the mass and velocity.
-         */
-        setStatic(): Body;
-        setDynamic(): Body;
-        setKinematic(): Body;
-        isBullet(): boolean;
-        /**
-         * Should this body be treated like a bullet for continuous collision detection?
-         */
-        setBullet(flag: boolean): void;
-        isSleepingAllowed(): boolean;
-        setSleepingAllowed(flag: boolean): void;
-        isAwake(): boolean;
-        /**
-         * Set the sleep state of the body. A sleeping body has very low CPU cost.
-         *
-         * @param flag Set to true to wake the body, false to put it to sleep.
-         */
-        setAwake(flag: boolean): void;
-        isActive(): boolean;
-        /**
-         * Set the active state of the body. An inactive body is not simulated and
-         * cannot be collided with or woken up. If you pass a flag of true, all fixtures
-         * will be added to the broad-phase. If you pass a flag of false, all fixtures
-         * will be removed from the broad-phase and all contacts will be destroyed.
-         * Fixtures and joints are otherwise unaffected.
-         *
-         * You may continue to create/destroy fixtures and joints on inactive bodies.
-         * Fixtures on an inactive body are implicitly inactive and will not participate
-         * in collisions, ray-casts, or queries. Joints connected to an inactive body
-         * are implicitly inactive. An inactive body is still owned by a World object
-         * and remains
-         */
-        setActive(flag: boolean): void;
-        isFixedRotation(): boolean;
-        /**
-         * Set this body to have fixed rotation. This causes the mass to be reset.
-         */
-        setFixedRotation(flag: boolean): void;
-        /**
-         * Get the world transform for the body's origin.
-         */
-        getTransform(): Transform;
-        /**
-         * Set the position of the body's origin and rotation. Manipulating a body's
-         * transform may cause non-physical behavior. Note: contacts are updated on the
-         * next call to World.step.
-         *
-         * @param position The world position of the body's local origin.
-         * @param angle The world rotation in radians.
-         */
-        setTransform(position: Vec2, angle: number): void;
-        synchronizeTransform(): void;
-        /**
-         * Update fixtures in broad-phase.
-         */
-        synchronizeFixtures(): void;
-        /**
-         * Used in TOI.
-         */
-        advance(alpha: number): void;
-        /**
-         * Get the world position for the body's origin.
-         */
-        getPosition(): Vec2;
-        setPosition(p: Vec2): void;
-        /**
-         * Get the current world rotation angle in radians.
-         */
-        getAngle(): number;
-        setAngle(angle: number): void;
-        /**
-         * Get the world position of the center of mass.
-         */
-        getWorldCenter(): Vec2;
-        /**
-         * Get the local position of the center of mass.
-         */
-        getLocalCenter(): Vec2;
-        /**
-         * Get the linear velocity of the center of mass.
-         *
-         * @return the linear velocity of the center of mass.
-         */
-        getLinearVelocity(): Vec2;
-        /**
-         * Get the world linear velocity of a world point attached to this body.
-         *
-         * @param worldPoint A point in world coordinates.
-         */
-        getLinearVelocityFromWorldPoint(worldPoint: Vec2): Vec2;
-        /**
-         * Get the world velocity of a local point.
-         *
-         * @param localPoint A point in local coordinates.
-         */
-        getLinearVelocityFromLocalPoint(localPoint: Vec2): Vec2;
-        /**
-         * Set the linear velocity of the center of mass.
-         *
-         * @param v The new linear velocity of the center of mass.
-         */
-        setLinearVelocity(v: Vec2): void;
-        /**
-         * Get the angular velocity.
-         *
-         * @returns the angular velocity in radians/second.
-         */
-        getAngularVelocity(): number;
-        /**
-         * Set the angular velocity.
-         *
-         * @param omega The new angular velocity in radians/second.
-         */
-        setAngularVelocity(w: number): void;
-        getLinearDamping(): number;
-        setLinearDamping(linearDamping: number): void;
-        getAngularDamping(): number;
-        setAngularDamping(angularDamping: number): void;
-        getGravityScale(): number;
-        /**
-         * Scale the gravity applied to this body.
-         */
-        setGravityScale(scale: number): void;
-        /**
-         * Get the total mass of the body.
-         *
-         * @returns The mass, usually in kilograms (kg).
-         */
-        getMass(): number;
-        /**
-         * Get the rotational inertia of the body about the local origin.
-         *
-         * @return the rotational inertia, usually in kg-m^2.
-         */
-        getInertia(): number;
-        /**
-         * Copy the mass data of the body to data.
-         */
-        getMassData(data: MassData): void;
-        /**
-         * This resets the mass properties to the sum of the mass properties of the
-         * fixtures. This normally does not need to be called unless you called
-         * SetMassData to override the mass and you later want to reset the mass.
-         */
-        resetMassData(): void;
-        /**
-         * Set the mass properties to override the mass properties of the fixtures. Note
-         * that this changes the center of mass position. Note that creating or
-         * destroying fixtures can also alter the mass. This function has no effect if
-         * the body isn't dynamic.
-         *
-         * @param massData The mass properties.
-         */
-        setMassData(massData: MassData): void;
-        /**
-         * Apply a force at a world point. If the force is not applied at the center of
-         * mass, it will generate a torque and affect the angular velocity. This wakes
-         * up the body.
-         *
-         * @param force The world force vector, usually in Newtons (N).
-         * @param point The world position of the point of application.
-         * @param wake Also wake up the body
-         */
-        applyForce(force: Vec2, point: Vec2, wake?: boolean): void;
-        /**
-         * Apply a force to the center of mass. This wakes up the body.
-         *
-         * @param force The world force vector, usually in Newtons (N).
-         * @param wake Also wake up the body
-         */
-        applyForceToCenter(force: Vec2, wake?: boolean): void;
-        /**
-         * Apply a torque. This affects the angular velocity without affecting the
-         * linear velocity of the center of mass. This wakes up the body.
-         *
-         * @param torque About the z-axis (out of the screen), usually in N-m.
-         * @param wake Also wake up the body
-         */
-        applyTorque(torque: number, wake?: boolean): void;
-        /**
-         * Apply an impulse at a point. This immediately modifies the velocity. It also
-         * modifies the angular velocity if the point of application is not at the
-         * center of mass. This wakes up the body.
-         *
-         * @param impulse The world impulse vector, usually in N-seconds or kg-m/s.
-         * @param point The world position of the point of application.
-         * @param wake Also wake up the body
-         */
-        applyLinearImpulse(impulse: Vec2, point: Vec2, wake?: boolean): void;
-        /**
-         * Apply an angular impulse.
-         *
-         * @param impulse The angular impulse in units of kg*m*m/s
-         * @param wake Also wake up the body
-         */
-        applyAngularImpulse(impulse: number, wake?: boolean): void;
-        /**
-         * This is used to prevent connected bodies (by joints) from colliding,
-         * depending on the joint's collideConnected flag.
-         */
-        shouldCollide(that: Body): boolean;
-        /**
-         * Creates a fixture and attach it to this body.
-         *
-         * If the density is non-zero, this function automatically updates the mass of
-         * the body.
-         *
-         * Contacts are not created until the next time step.
-         *
-         * Warning: This function is locked during callbacks.
-         */
-        createFixture(def: FixtureDef): Fixture;
-        createFixture(shape: Shape, opt?: FixtureOpt): Fixture;
-        createFixture(shape: Shape, density?: number): Fixture;
-        /**
-         * Destroy a fixture. This removes the fixture from the broad-phase and destroys
-         * all contacts associated with this fixture. This will automatically adjust the
-         * mass of the body if the body is dynamic and the fixture has positive density.
-         * All fixtures attached to a body are implicitly destroyed when the body is
-         * destroyed.
-         *
-         * Warning: This function is locked during callbacks.
-         *
-         * @param fixture The fixture to be removed.
-         */
-        destroyFixture(fixture: Fixture): void;
-        /**
-         * Get the corresponding world point of a local point.
-         */
-        getWorldPoint(localPoint: Vec2): Vec2;
-        /**
-         * Get the corresponding world vector of a local vector.
-         */
-        getWorldVector(localVector: Vec2): Vec2;
-        /**
-         * Gets the corresponding local point of a world point.
-         */
-        getLocalPoint(worldPoint: Vec2Value): Vec2;
-        /**
-         * Gets the corresponding local vector of a world vector.
-         */
-        getLocalVector(worldVector: Vec2Value): Vec2;
-    }
     /**
      * Input for Distance. You have to option to use the shape radii in the
      * computation. Even
      */
     class DistanceInput {
-        proxyA: DistanceProxy;
-        proxyB: DistanceProxy;
-        transformA: Transform | null;
-        transformB: Transform | null;
+        readonly proxyA: DistanceProxy;
+        readonly proxyB: DistanceProxy;
+        readonly transformA: Transform;
+        readonly transformB: Transform;
         useRadii: boolean;
+        recycle(): void;
     }
     /**
      * Output for Distance.
-     *
-     * @prop {Vec2} pointA closest point on shapeA
-     * @prop {Vec2} pointB closest point on shapeB
-     * @prop distance
-     * @prop iterations number of GJK iterations used
      */
     class DistanceOutput {
-        pointA: Vec2;
-        pointB: Vec2;
+        /** closest point on shapeA */
+        pointA: Vec2Value;
+        /** closest point on shapeB */
+        pointB: Vec2Value;
         distance: number;
+        /** iterations number of GJK iterations used */
         iterations: number;
+        recycle(): void;
     }
     /**
      * Used to warm start Distance. Set count to zero on first call.
-     *
-     * @prop {number} metric length or area
-     * @prop {array} indexA vertices on shape A
-     * @prop {array} indexB vertices on shape B
-     * @prop {number} count
      */
     class SimplexCache {
+        /** length or area */
         metric: number;
+        /** vertices on shape A */
         indexA: number[];
+        /** vertices on shape B */
         indexB: number[];
         count: number;
+        recycle(): void;
     }
     /**
      * Compute the closest points between two shapes. Supports any combination of:
@@ -6291,7 +5558,7 @@ declare namespace planck {
      */
     const Distance: {
         (output: DistanceOutput, cache: SimplexCache, input: DistanceInput): void;
-        testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: Transform, xfB: Transform) => boolean;
+        testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue) => boolean;
         Input: typeof DistanceInput;
         Output: typeof DistanceOutput;
         Proxy: typeof DistanceProxy;
@@ -6301,11 +5568,7 @@ declare namespace planck {
      * A distance proxy is used by the GJK algorithm. It encapsulates any shape.
      */
     class DistanceProxy {
-        /** internal */ m_buffer: Vec2[];
-        /** internal */ m_vertices: Vec2[];
-        /** internal */ m_count: number;
-        /** internal */ m_radius: number;
-        constructor();
+        recycle(): void;
         /**
          * Get the vertex count.
          */
@@ -6313,15 +5576,15 @@ declare namespace planck {
         /**
          * Get a vertex by index. Used by Distance.
          */
-        getVertex(index: number): Vec2;
+        getVertex(index: number): Vec2Value;
         /**
          * Get the supporting vertex index in the given direction.
          */
-        getSupport(d: Vec2): number;
+        getSupport(d: Vec2Value): number;
         /**
          * Get the supporting vertex in the given direction.
          */
-        getSupportVertex(d: Vec2): Vec2;
+        getSupportVertex(d: Vec2Value): Vec2Value;
         /**
          * Initialize the proxy using the given shape. The shape must remain in scope
          * while the proxy is in use.
@@ -6331,21 +5594,22 @@ declare namespace planck {
          * Initialize the proxy using a vertex cloud and radius. The vertices
          * must remain in scope while the proxy is in use.
          */
-        setVertices(vertices: Vec2[], count: number, radius: number): void;
+        setVertices(vertices: Vec2Value[], count: number, radius: number): void;
     }
     /**
      * Determine if two generic shapes overlap.
      */
-    const testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: Transform, xfB: Transform) => boolean;
+    const testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue) => boolean;
     /**
      * Input parameters for ShapeCast
      */
     class ShapeCastInput {
-        proxyA: DistanceProxy;
-        proxyB: DistanceProxy;
-        transformA: Transform | null;
-        transformB: Transform | null;
-        translationB: Vec2;
+        readonly proxyA: DistanceProxy;
+        readonly proxyB: DistanceProxy;
+        readonly transformA: Transform;
+        readonly transformB: Transform;
+        readonly translationB: Vec2;
+        recycle(): void;
     }
     /**
      * Output results for b2ShapeCast
@@ -6359,6 +5623,7 @@ declare namespace planck {
     /**
      * Perform a linear shape cast of shape B moving and shape A fixed. Determines
      * the hit point, normal, and translation fraction.
+     *
      * @returns true if hit, false if there is no hit or an initial overlap
      */
     //
@@ -6366,69 +5631,6 @@ declare namespace planck {
     // Algorithm by Gino van den Bergen.
     // "Smooth Mesh Contacts with GJK" in Game Physics Pearls. 2010
     const ShapeCast: (output: ShapeCastOutput, input: ShapeCastInput) => boolean;
-    // todo make shape an interface
-    /**
-     * A shape is used for collision detection. You can create a shape however you
-     * like. Shapes used for simulation in World are created automatically when a
-     * Fixture is created. Shapes may encapsulate one or more child shapes.
-     */
-    abstract class Shape {
-        m_type: ShapeType;
-        /**
-         * Radius of a shape. For polygonal shapes this must be b2_polygonRadius.
-         * There is no support for making rounded polygons.
-         */
-        m_radius: number;
-        static isValid(obj: any): boolean;
-        abstract getRadius(): number;
-        /**
-         * Get the type of this shape. You can use this to down cast to the concrete
-         * shape.
-         *
-         * @return the shape type.
-         */
-        abstract getType(): ShapeType;
-        /**
-         * Get the number of child primitives.
-         */
-        abstract getChildCount(): number;
-        /**
-         * Test a point for containment in this shape. This only works for convex
-         * shapes.
-         *
-         * @param xf The shape world transform.
-         * @param p A point in world coordinates.
-         */
-        abstract testPoint(xf: Transform, p: Vec2Value): boolean;
-        /**
-         * Cast a ray against a child shape.
-         *
-         * @param output The ray-cast results.
-         * @param input The ray-cast input parameters.
-         * @param xf The transform to be applied to the shape.
-         * @param childIndex The child shape index
-         */
-        abstract rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;
-        /**
-         * Given a transform, compute the associated axis aligned bounding box for a
-         * child shape.
-         *
-         * @param aabb Returns the axis aligned box.
-         * @param xf The world transform of the shape.
-         * @param childIndex The child shape
-         */
-        abstract computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
-        /**
-         * Compute the mass properties of this shape using its dimensions and density.
-         * The inertia tensor is computed about the local origin.
-         *
-         * @param massData Returns the mass data for this shape.
-         * @param density The density in kilograms per meter squared.
-         */
-        abstract computeMass(massData: MassData, density?: number): void;
-        abstract computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
-    }
-    type ShapeType = "circle" | "edge" | "polygon" | "chain";
     class CircleShape extends Shape {
         static TYPE: "circle";
         m_type: "circle";
@@ -6450,7 +5652,7 @@ declare namespace planck {
          * @param xf The shape world transform.
          * @param p A point in world coordinates.
          */
-        testPoint(xf: Transform, p: Vec2Value): boolean;
+        testPoint(xf: TransformValue, p: Vec2Value): boolean;
         /**
          * Cast a ray against a child shape.
          *
@@ -6468,7 +5670,7 @@ declare namespace planck {
          * @param xf The world transform of the shape.
          * @param childIndex The child shape
          */
-        computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
+        computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void;
         /**
          * Compute the mass properties of this shape using its dimensions and density.
          * The inertia tensor is computed about the local origin.
@@ -6532,7 +5734,7 @@ declare namespace planck {
          * @param xf The shape world transform.
          * @param p A point in world coordinates.
          */
-        testPoint(xf: Transform, p: Vec2Value): false;
+        testPoint(xf: TransformValue, p: Vec2Value): false;
         /**
          * Cast a ray against a child shape.
          *
@@ -6550,7 +5752,7 @@ declare namespace planck {
          * @param xf The world transform of the shape.
          * @param childIndex The child shape
          */
-        computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
+        computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void;
         /**
          * Compute the mass properties of this shape using its dimensions and density.
          * The inertia tensor is computed about the local origin.
@@ -6591,7 +5793,7 @@ declare namespace planck {
          * @param xf The shape world transform.
          * @param p A point in world coordinates.
          */
-        testPoint(xf: Transform, p: Vec2): boolean;
+        testPoint(xf: TransformValue, p: Vec2): boolean;
         /**
          * Cast a ray against a child shape.
          *
@@ -6609,7 +5811,7 @@ declare namespace planck {
          * @param xf The world transform of the shape.
          * @param childIndex The child shape
          */
-        computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
+        computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void;
         /**
          * Compute the mass properties of this shape using its dimensions and density.
          * The inertia tensor is computed about the local origin.
@@ -6681,7 +5883,7 @@ declare namespace planck {
          * @param xf The shape world transform.
          * @param p A point in world coordinates.
          */
-        testPoint(xf: Transform, p: Vec2Value): false;
+        testPoint(xf: TransformValue, p: Vec2Value): false;
         /**
          * Cast a ray against a child shape.
          *
@@ -6699,7 +5901,7 @@ declare namespace planck {
          * @param xf The world transform of the shape.
          * @param childIndex The child shape
          */
-        computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
+        computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void;
         /**
          * Compute the mass properties of this shape using its dimensions and density.
          * The inertia tensor is computed about the local origin.
@@ -6724,7 +5926,7 @@ declare namespace planck {
     const CollideCircles: (manifold: Manifold, circleA: CircleShape, xfA: Transform, circleB: CircleShape, xfB: Transform) => void;
     // Compute contact points for edge versus circle.
     // This accounts for edge connectivity.
-    const CollideEdgeCircle: (manifold: Manifold, edgeA: EdgeShape, xfA: Transform, circleB: CircleShape, xfB: Transform) => void;
+    const CollideEdgeCircle: (manifold: Manifold, edgeA: EdgeShape, xfA: TransformValue, circleB: CircleShape, xfB: TransformValue) => void;
     /**
      *
      * Find edge normal of max separation on A - return if separating axis is found<br>
@@ -6735,13 +5937,13 @@ declare namespace planck {
      *
      * The normal points from 1 to 2
      */
-    const CollidePolygons: (manifold: Manifold, polyA: PolygonShape, xfA: Transform, polyB: PolygonShape, xfB: Transform) => void;
-    const CollidePolygonCircle: (manifold: Manifold, polygonA: PolygonShape, xfA: Transform, circleB: CircleShape, xfB: Transform) => void;
+    const CollidePolygons: (manifold: Manifold, polyA: PolygonShape, xfA: TransformValue, polyB: PolygonShape, xfB: TransformValue) => void;
+    const CollidePolygonCircle: (manifold: Manifold, polygonA: PolygonShape, xfA: TransformValue, circleB: CircleShape, xfB: TransformValue) => void;
     /**
      * This function collides and edge and a polygon, taking into account edge
      * adjacency.
      */
-    const CollideEdgePolygon: (manifold: Manifold, edgeA: EdgeShape, xfA: Transform, polygonB: PolygonShape, xfB: Transform) => void;
+    const CollideEdgePolygon: (manifold: Manifold, edgeA: EdgeShape, xfA: TransformValue, polygonB: PolygonShape, xfB: TransformValue) => void;
     /**
      * Distance joint definition. This requires defining an anchor point on both
      * bodies and the non-zero length of the distance joint. The definition uses
@@ -8114,16 +7316,15 @@ declare namespace planck {
         alpha0: number;
         c0: Vec2;
         a0: number;
-        constructor(c?: Vec2, a?: number);
-        setTransform(xf: Transform): void;
-        setLocalCenter(localCenter: Vec2, xf: Transform): void;
+        setTransform(xf: TransformValue): void;
+        setLocalCenter(localCenter: Vec2Value, xf: TransformValue): void;
         /**
          * Get the interpolated transform at a specific time.
          *
          * @param xf
          * @param beta A factor in [0,1], where 0 indicates alpha0
          */
-        getTransform(xf: Transform, beta?: number): void;
+        getTransform(xf: TransformValue, beta?: number): void;
         /**
          * Advance the sweep forward, yielding a new initial state.
          *
@@ -8135,7 +7336,6 @@ declare namespace planck {
          * normalize the angles in radians to be between -pi and pi.
          */
         normalize(): void;
-        clone(): Sweep;
         set(that: Sweep): void;
     }
     /**
@@ -8147,9 +7347,11 @@ declare namespace planck {
         sweepA: Sweep;
         sweepB: Sweep;
         /** defines sweep interval [0, tMax] */
-        tMax: number | undefined;
+        tMax: number;
+        recycle(): void;
     }
     enum TOIOutputState {
+        e_unset = -1,
         e_unknown = 0,
         e_failed = 1,
         e_overlapped = 2,
@@ -8160,8 +7362,9 @@ declare namespace planck {
      * Output parameters for TimeOfImpact.
      */
     class TOIOutput {
-        state: TOIOutputState | undefined;
-        t: number | undefined;
+        state: TOIOutputState;
+        t: number;
+        recycle(): void;
     }
     /**
      * Compute the upper bound on time before two shapes penetrate. Time is
@@ -8205,13 +7408,776 @@ declare namespace planck {
     };
     /** @deprecated Merged with main namespace */
     const internal: {
-        CollidePolygons: (manifold: Manifold, polyA: PolygonShape, xfA: Transform, polyB: PolygonShape, xfB: Transform) => void;
+        CollidePolygons: (manifold: Manifold, polyA: PolygonShape, xfA: TransformValue, polyB: PolygonShape, xfB: TransformValue) => void;
         Settings: typeof Settings;
         Sweep: typeof Sweep;
         Manifold: typeof Manifold;
         Distance: {
             (output: DistanceOutput, cache: SimplexCache, input: DistanceInput): void;
-            testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: Transform, xfB: Transform) => boolean;
+            testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue) => boolean;
+            Input: typeof DistanceInput;
+            Output: typeof DistanceOutput;
+            Proxy: typeof DistanceProxy;
+            Cache: typeof SimplexCache;
+        };
+        TimeOfImpact: {
+            (output: TOIOutput, input: TOIInput): void;
+            Input: typeof TOIInput;
+            Output: typeof TOIOutput;
+        };
+        DynamicTree: typeof DynamicTree;
+        stats: {
+            gjkCalls: number;
+            gjkIters: number;
+            gjkMaxIters: number;
+            toiTime: number;
+            toiMaxTime: number;
+            toiCalls: number;
+            toiIters: number;
+            toiMaxIters: number;
+            toiRootIters: number;
+            toiMaxRootIters: number;
+            toString(newline?: string): string;
+        };
+    };
+    // TODO: merge with ManifoldPoint?
+    class VelocityConstraintPoint {
+        rA: Vec2Value;
+        rB: Vec2Value;
+        normalImpulse: number;
+        tangentImpulse: number;
+        normalMass: number;
+        tangentMass: number;
+        velocityBias: number;
+        recycle(): void;
+    }
+    /**
+     * The class manages contact between two shapes. A contact exists for each
+     * overlapping AABB in the broad-phase (except if filtered). Therefore a contact
+     * object may exist that has no contact points.
+     */
+    class Contact {
+        initialize(fA: Fixture, indexA: number, fB: Fixture, indexB: number, evaluateFcn: EvaluateFunction): void;
+        recycle(): void;
+        initConstraint(step: TimeStep): void;
+        /**
+         * Get the contact manifold. Do not modify the manifold unless you understand
+         * the internals of the library.
+         */
+        getManifold(): Manifold;
+        /**
+         * Get the world manifold.
+         */
+        getWorldManifold(worldManifold: WorldManifold | null): WorldManifold | undefined;
+        /**
+         * Enable/disable this contact. This can be used inside the pre-solve contact
+         * listener. The contact is only disabled for the current time step (or sub-step
+         * in continuous collisions).
+         */
+        setEnabled(flag: boolean): void;
+        /**
+         * Has this contact been disabled?
+         */
+        isEnabled(): boolean;
+        /**
+         * Is this contact touching?
+         */
+        isTouching(): boolean;
+        /**
+         * Get the next contact in the world's contact list.
+         */
+        getNext(): Contact | null;
+        /**
+         * Get fixture A in this contact.
+         */
+        getFixtureA(): Fixture;
+        /**
+         * Get fixture B in this contact.
+         */
+        getFixtureB(): Fixture;
+        /**
+         * Get the child primitive index for fixture A.
+         */
+        getChildIndexA(): number;
+        /**
+         * Get the child primitive index for fixture B.
+         */
+        getChildIndexB(): number;
+        /**
+         * Flag this contact for filtering. Filtering will occur the next time step.
+         */
+        flagForFiltering(): void;
+        /**
+         * Override the default friction mixture. You can call this in
+         * ContactListener.preSolve. This value persists until set or reset.
+         */
+        setFriction(friction: number): void;
+        /**
+         * Get the friction.
+         */
+        getFriction(): number;
+        /**
+         * Reset the friction mixture to the default value.
+         */
+        resetFriction(): void;
+        /**
+         * Override the default restitution mixture. You can call this in
+         * ContactListener.preSolve. The value persists until you set or reset.
+         */
+        setRestitution(restitution: number): void;
+        /**
+         * Get the restitution.
+         */
+        getRestitution(): number;
+        /**
+         * Reset the restitution to the default value.
+         */
+        resetRestitution(): void;
+        /**
+         * Set the desired tangent speed for a conveyor belt behavior. In meters per
+         * second.
+         */
+        setTangentSpeed(speed: number): void;
+        /**
+         * Get the desired tangent speed. In meters per second.
+         */
+        getTangentSpeed(): number;
+        /**
+         * Called by Update method, and implemented by subclasses.
+         */
+        evaluate(manifold: Manifold, xfA: TransformValue, xfB: TransformValue): void;
+        /**
+         * Updates the contact manifold and touching status.
+         *
+         * Note: do not assume the fixture AABBs are overlapping or are valid.
+         *
+         * @param listener.beginContact
+         * @param listener.endContact
+         * @param listener.preSolve
+         */
+        update(listener?: {
+            beginContact(contact: Contact): void;
+            endContact(contact: Contact): void;
+            preSolve(contact: Contact, oldManifold: Manifold): void;
+        }): void;
+        solvePositionConstraint(step: TimeStep): number;
+        solvePositionConstraintTOI(step: TimeStep, toiA: Body, toiB: Body): number;
+        private _solvePositionConstraint;
+        initVelocityConstraint(step: TimeStep): void;
+        warmStartConstraint(step: TimeStep): void;
+        storeConstraintImpulses(step: TimeStep): void;
+        solveVelocityConstraint(step: TimeStep): void;
+    }
+    class TimeStep {
+        /** time step */
+        dt: number;
+        /** inverse time step (0 if dt == 0) */
+        inv_dt: number;
+        velocityIterations: number;
+        positionIterations: number;
+        warmStarting: boolean;
+        blockSolve: boolean;
+        /** timestep ratio for variable timestep */
+        inv_dt0: number;
+        /** dt * inv_dt0 */
+        dtRatio: number;
+        reset(dt: number): void;
+    }
+    /**
+     * Contact impulses for reporting. Impulses are used instead of forces because
+     * sub-step forces may approach infinity for rigid body collisions. These match
+     * up one-to-one with the contact points in Manifold.
+     */
+    class ContactImpulse {
+        // TODO: merge with Contact class?
+        private readonly contact;
+        private readonly normals;
+        private readonly tangents;
+        constructor(contact: Contact);
+        recycle(): void;
+        get normalImpulses(): number[];
+        get tangentImpulses(): number[];
+    }
+    /**
+     * Finds and solves islands. An island is a connected subset of the world.
+     */
+    class Solver {
+        m_world: World;
+        m_stack: Body[];
+        m_bodies: Body[];
+        m_contacts: Contact[];
+        m_joints: Joint[];
+        constructor(world: World);
+        clear(): void;
+        addBody(body: Body): void;
+        addContact(contact: Contact): void;
+        addJoint(joint: Joint): void;
+        solveWorld(step: TimeStep): void;
+        solveIsland(step: TimeStep): void;
+        /**
+         * Find TOI contacts and solve them.
+         */
+        solveWorldTOI(step: TimeStep): void;
+        solveIslandTOI(subStep: TimeStep, toiA: Body, toiB: Body): void;
+    }
+    /**
+     * A joint edge is used to connect bodies and joints together in a joint graph
+     * where each body is a node and each joint is an edge. A joint edge belongs to
+     * a doubly linked list maintained in each attached body. Each joint has two
+     * joint nodes, one for each attached body.
+     */
+    class JointEdge {
+        /**
+         * provides quick access to the other body attached.
+         */
+        other: Body | null;
+        /**
+         * the joint
+         */
+        joint: Joint | null;
+        /**
+         * prev the previous joint edge in the body's joint list
+         */
+        prev: JointEdge | null;
+        /**
+         * the next joint edge in the body's joint list
+         */
+        next: JointEdge | null;
+    }
+    /**
+     * Joint definitions are used to construct joints.
+     */
+    interface JointOpt {
+        /**
+         * Use this to attach application specific data to your joints.
+         */
+        userData?: any;
+        /**
+         * Set this flag to true if the attached bodies
+         * should collide.
+         */
+        collideConnected?: boolean;
+    }
+    /**
+     * Joint definitions are used to construct joints.
+     */
+    interface JointDef extends JointOpt {
+        /**
+         * The first attached body.
+         */
+        bodyA: Body;
+        /**
+         * The second attached body.
+         */
+        bodyB: Body;
+    }
+    /**
+     * The base joint class. Joints are used to constraint two bodies together in
+     * various fashions. Some joints also feature limits and motors.
+     */
+    abstract class Joint {
+        constructor(def: JointDef);
+        constructor(def: JointOpt, bodyA: Body, bodyB: Body);
+        /**
+         * Short-cut function to determine if either body is inactive.
+         */
+        isActive(): boolean;
+        /**
+         * Get the type of the concrete joint.
+         */
+        getType(): string;
+        /**
+         * Get the first body attached to this joint.
+         */
+        getBodyA(): Body;
+        /**
+         * Get the second body attached to this joint.
+         */
+        getBodyB(): Body;
+        /**
+         * Get the next joint the world joint list.
+         */
+        getNext(): Joint;
+        getUserData(): unknown;
+        setUserData(data: unknown): void;
+        /**
+         * Get collide connected. Note: modifying the collide connect flag won't work
+         * correctly because the flag is only checked when fixture AABBs begin to
+         * overlap.
+         */
+        getCollideConnected(): boolean;
+        /**
+         * Get the anchor point on bodyA in world coordinates.
+         */
+        abstract getAnchorA(): Vec2;
+        /**
+         * Get the anchor point on bodyB in world coordinates.
+         */
+        abstract getAnchorB(): Vec2;
+        /**
+         * Get the reaction force on bodyB at the joint anchor in Newtons.
+         */
+        abstract getReactionForce(inv_dt: number): Vec2;
+        /**
+         * Get the reaction torque on bodyB in N*m.
+         */
+        abstract getReactionTorque(inv_dt: number): number;
+        /**
+         * Shift the origin for any points stored in world coordinates.
+         */
+        shiftOrigin(newOrigin: Vec2): void;
+        abstract initVelocityConstraints(step: TimeStep): void;
+        abstract solveVelocityConstraints(step: TimeStep): void;
+        /**
+         * This returns true if the position errors are within tolerance.
+         */
+        abstract solvePositionConstraints(step: TimeStep): boolean;
+    }
+    type BodyType = "static" | "kinematic" | "dynamic";
+    interface BodyDef {
+        /**
+         * Body types are static, kinematic, or dynamic. Note: if a dynamic
+         * body would have zero mass, the mass is set to one.
+         */
+        type?: BodyType;
+        /**
+         * The world position of the body. Avoid creating bodies at the
+         * origin since this can lead to many overlapping shapes.
+         */
+        position?: Vec2;
+        /**
+         * The world angle of the body in radians.
+         */
+        angle?: number;
+        /**
+         * The linear velocity of the body's origin in world co-ordinates.
+         */
+        linearVelocity?: Vec2;
+        angularVelocity?: number;
+        /**
+         * Linear damping is use to reduce the linear velocity. The
+         * damping parameter can be larger than 1.0 but the damping effect becomes
+         * sensitive to the time step when the damping parameter is large.
+         * Units are 1/time
+         */
+        linearDamping?: number;
+        /**
+         * Angular damping is use to reduce the angular velocity.
+         * The damping parameter can be larger than 1.0 but the damping effect
+         * becomes sensitive to the time step when the damping parameter is large.
+         * Units are 1/time
+         */
+        angularDamping?: number;
+        /**
+         * Should this body be prevented from rotating? Useful for characters.
+         */
+        fixedRotation?: boolean;
+        /**
+         * Is this a fast moving body that should be prevented from
+         * tunneling through other moving bodies? Note that all bodies are
+         * prevented from tunneling through kinematic and static bodies. This
+         * setting is only considered on dynamic bodies. Warning: You should use
+         * this flag sparingly since it increases processing time.
+         */
+        bullet?: boolean;
+        gravityScale?: number;
+        /**
+         * Set this flag to false if this body should never fall asleep. Note that this increases CPU usage.
+         */
+        allowSleep?: boolean;
+        /**
+         * Is this body initially awake or sleeping?
+         */
+        awake?: boolean;
+        /**
+         * Does this body start out active?
+         */
+        active?: boolean;
+        userData?: any;
+    }
+    /**
+     * MassData This holds the mass data computed for a shape.
+     */
+    class MassData {
+        /** The mass of the shape, usually in kilograms. */
+        mass: number;
+        /** The position of the shape's centroid relative to the shape's origin. */
+        center: Vec2;
+        /** The rotational inertia of the shape about the local origin. */
+        I: number;
+    }
+    /**
+     * A rigid body composed of one or more fixtures.
+     *
+     * To create a new Body use {@link World.createBody}.
+     */
+    class Body {
+        /**
+         * A static body does not move under simulation and behaves as if it has infinite mass.
+         * Internally, zero is stored for the mass and the inverse mass.
+         * Static bodies can be moved manually by the user.
+         * A static body has zero velocity.
+         * Static bodies do not collide with other static or kinematic bodies.
+         */
+        static readonly STATIC: BodyType;
+        /**
+         * A kinematic body moves under simulation according to its velocity.
+         * Kinematic bodies do not respond to forces.
+         * They can be moved manually by the user, but normally a kinematic body is moved by setting its velocity.
+         * A kinematic body behaves as if it has infinite mass, however, zero is stored for the mass and the inverse mass.
+         * Kinematic bodies do not collide with other kinematic or static bodies.
+         */
+        static readonly KINEMATIC: BodyType;
+        /**
+         * A dynamic body is fully simulated.
+         * They can be moved manually by the user, but normally they move according to forces.
+         * A dynamic body can collide with all body types.
+         * A dynamic body always has finite, non-zero mass.
+         * If you try to set the mass of a dynamic body to zero, it will automatically acquire a mass of one kilogram and it won't rotate.
+         */
+        static readonly DYNAMIC: BodyType;
+        isWorldLocked(): boolean;
+        getWorld(): World;
+        getNext(): Body | null;
+        setUserData(data: any): void;
+        getUserData(): unknown;
+        getFixtureList(): Fixture | null;
+        getJointList(): JointEdge | null;
+        /**
+         * Warning: this list changes during the time step and you may miss some
+         * collisions if you don't use ContactListener.
+         */
+        getContactList(): ContactEdge | null;
+        isStatic(): boolean;
+        isDynamic(): boolean;
+        isKinematic(): boolean;
+        /**
+         * This will alter the mass and velocity.
+         */
+        setStatic(): Body;
+        setDynamic(): Body;
+        setKinematic(): Body;
+        isBullet(): boolean;
+        /**
+         * Should this body be treated like a bullet for continuous collision detection?
+         */
+        setBullet(flag: boolean): void;
+        isSleepingAllowed(): boolean;
+        setSleepingAllowed(flag: boolean): void;
+        isAwake(): boolean;
+        /**
+         * Set the sleep state of the body. A sleeping body has very low CPU cost.
+         *
+         * @param flag Set to true to wake the body, false to put it to sleep.
+         */
+        setAwake(flag: boolean): void;
+        isActive(): boolean;
+        /**
+         * Set the active state of the body. An inactive body is not simulated and
+         * cannot be collided with or woken up. If you pass a flag of true, all fixtures
+         * will be added to the broad-phase. If you pass a flag of false, all fixtures
+         * will be removed from the broad-phase and all contacts will be destroyed.
+         * Fixtures and joints are otherwise unaffected.
+         *
+         * You may continue to create/destroy fixtures and joints on inactive bodies.
+         * Fixtures on an inactive body are implicitly inactive and will not participate
+         * in collisions, ray-casts, or queries. Joints connected to an inactive body
+         * are implicitly inactive. An inactive body is still owned by a World object
+         * and remains
+         */
+        setActive(flag: boolean): void;
+        isFixedRotation(): boolean;
+        /**
+         * Set this body to have fixed rotation. This causes the mass to be reset.
+         */
+        setFixedRotation(flag: boolean): void;
+        /**
+         * Get the world transform for the body's origin.
+         */
+        getTransform(): Transform;
+        /**
+         * Set the position of the body's origin and rotation. Manipulating a body's
+         * transform may cause non-physical behavior. Note: contacts are updated on the
+         * next call to World.step.
+         *
+         * @param position The world position of the body's local origin.
+         * @param angle The world rotation in radians.
+         */
+        setTransform(position: Vec2, angle: number): void;
+        synchronizeTransform(): void;
+        /**
+         * Update fixtures in broad-phase.
+         */
+        synchronizeFixtures(): void;
+        /**
+         * Used in TOI.
+         */
+        advance(alpha: number): void;
+        /**
+         * Get the world position for the body's origin.
+         */
+        getPosition(): Vec2;
+        setPosition(p: Vec2): void;
+        /**
+         * Get the current world rotation angle in radians.
+         */
+        getAngle(): number;
+        setAngle(angle: number): void;
+        /**
+         * Get the world position of the center of mass.
+         */
+        getWorldCenter(): Vec2;
+        /**
+         * Get the local position of the center of mass.
+         */
+        getLocalCenter(): Vec2;
+        /**
+         * Get the linear velocity of the center of mass.
+         *
+         * @return the linear velocity of the center of mass.
+         */
+        getLinearVelocity(): Vec2;
+        /**
+         * Get the world linear velocity of a world point attached to this body.
+         *
+         * @param worldPoint A point in world coordinates.
+         */
+        getLinearVelocityFromWorldPoint(worldPoint: Vec2): Vec2;
+        /**
+         * Get the world velocity of a local point.
+         *
+         * @param localPoint A point in local coordinates.
+         */
+        getLinearVelocityFromLocalPoint(localPoint: Vec2): Vec2;
+        /**
+         * Set the linear velocity of the center of mass.
+         *
+         * @param v The new linear velocity of the center of mass.
+         */
+        setLinearVelocity(v: Vec2): void;
+        /**
+         * Get the angular velocity.
+         *
+         * @returns the angular velocity in radians/second.
+         */
+        getAngularVelocity(): number;
+        /**
+         * Set the angular velocity.
+         *
+         * @param omega The new angular velocity in radians/second.
+         */
+        setAngularVelocity(w: number): void;
+        getLinearDamping(): number;
+        setLinearDamping(linearDamping: number): void;
+        getAngularDamping(): number;
+        setAngularDamping(angularDamping: number): void;
+        getGravityScale(): number;
+        /**
+         * Scale the gravity applied to this body.
+         */
+        setGravityScale(scale: number): void;
+        /**
+         * Get the total mass of the body.
+         *
+         * @returns The mass, usually in kilograms (kg).
+         */
+        getMass(): number;
+        /**
+         * Get the rotational inertia of the body about the local origin.
+         *
+         * @return the rotational inertia, usually in kg-m^2.
+         */
+        getInertia(): number;
+        /**
+         * Copy the mass data of the body to data.
+         */
+        getMassData(data: MassData): void;
+        /**
+         * This resets the mass properties to the sum of the mass properties of the
+         * fixtures. This normally does not need to be called unless you called
+         * SetMassData to override the mass and you later want to reset the mass.
+         */
+        resetMassData(): void;
+        /**
+         * Set the mass properties to override the mass properties of the fixtures. Note
+         * that this changes the center of mass position. Note that creating or
+         * destroying fixtures can also alter the mass. This function has no effect if
+         * the body isn't dynamic.
+         *
+         * @param massData The mass properties.
+         */
+        setMassData(massData: MassData): void;
+        /**
+         * Apply a force at a world point. If the force is not applied at the center of
+         * mass, it will generate a torque and affect the angular velocity. This wakes
+         * up the body.
+         *
+         * @param force The world force vector, usually in Newtons (N).
+         * @param point The world position of the point of application.
+         * @param wake Also wake up the body
+         */
+        applyForce(force: Vec2, point: Vec2, wake?: boolean): void;
+        /**
+         * Apply a force to the center of mass. This wakes up the body.
+         *
+         * @param force The world force vector, usually in Newtons (N).
+         * @param wake Also wake up the body
+         */
+        applyForceToCenter(force: Vec2, wake?: boolean): void;
+        /**
+         * Apply a torque. This affects the angular velocity without affecting the
+         * linear velocity of the center of mass. This wakes up the body.
+         *
+         * @param torque About the z-axis (out of the screen), usually in N-m.
+         * @param wake Also wake up the body
+         */
+        applyTorque(torque: number, wake?: boolean): void;
+        /**
+         * Apply an impulse at a point. This immediately modifies the velocity. It also
+         * modifies the angular velocity if the point of application is not at the
+         * center of mass. This wakes up the body.
+         *
+         * @param impulse The world impulse vector, usually in N-seconds or kg-m/s.
+         * @param point The world position of the point of application.
+         * @param wake Also wake up the body
+         */
+        applyLinearImpulse(impulse: Vec2, point: Vec2, wake?: boolean): void;
+        /**
+         * Apply an angular impulse.
+         *
+         * @param impulse The angular impulse in units of kg*m*m/s
+         * @param wake Also wake up the body
+         */
+        applyAngularImpulse(impulse: number, wake?: boolean): void;
+        /**
+         * This is used to prevent connected bodies (by joints) from colliding,
+         * depending on the joint's collideConnected flag.
+         */
+        shouldCollide(that: Body): boolean;
+        /**
+         * Creates a fixture and attach it to this body.
+         *
+         * If the density is non-zero, this function automatically updates the mass of
+         * the body.
+         *
+         * Contacts are not created until the next time step.
+         *
+         * Warning: This function is locked during callbacks.
+         */
+        createFixture(def: FixtureDef): Fixture;
+        createFixture(shape: Shape, opt?: FixtureOpt): Fixture;
+        createFixture(shape: Shape, density?: number): Fixture;
+        /**
+         * Destroy a fixture. This removes the fixture from the broad-phase and destroys
+         * all contacts associated with this fixture. This will automatically adjust the
+         * mass of the body if the body is dynamic and the fixture has positive density.
+         * All fixtures attached to a body are implicitly destroyed when the body is
+         * destroyed.
+         *
+         * Warning: This function is locked during callbacks.
+         *
+         * @param fixture The fixture to be removed.
+         */
+        destroyFixture(fixture: Fixture): void;
+        /**
+         * Get the corresponding world point of a local point.
+         */
+        getWorldPoint(localPoint: Vec2): Vec2;
+        /**
+         * Get the corresponding world vector of a local vector.
+         */
+        getWorldVector(localVector: Vec2): Vec2;
+        /**
+         * Gets the corresponding local point of a world point.
+         */
+        getLocalPoint(worldPoint: Vec2Value): Vec2;
+        /**
+         * Gets the corresponding local vector of a world vector.
+         */
+        getLocalVector(worldVector: Vec2Value): Vec2;
+    }
+    // todo make shape an interface
+    /**
+     * A shape is used for collision detection. You can create a shape however you
+     * like. Shapes used for simulation in World are created automatically when a
+     * Fixture is created. Shapes may encapsulate one or more child shapes.
+     */
+    abstract class Shape {
+        m_type: ShapeType;
+        /**
+         * Radius of a shape. For polygonal shapes this must be b2_polygonRadius.
+         * There is no support for making rounded polygons.
+         */
+        m_radius: number;
+        static isValid(obj: any): boolean;
+        abstract getRadius(): number;
+        /**
+         * Get the type of this shape. You can use this to down cast to the concrete
+         * shape.
+         *
+         * @return the shape type.
+         */
+        abstract getType(): ShapeType;
+        /**
+         * Get the number of child primitives.
+         */
+        abstract getChildCount(): number;
+        /**
+         * Test a point for containment in this shape. This only works for convex
+         * shapes.
+         *
+         * @param xf The shape world transform.
+         * @param p A point in world coordinates.
+         */
+        abstract testPoint(xf: TransformValue, p: Vec2Value): boolean;
+        /**
+         * Cast a ray against a child shape.
+         *
+         * @param output The ray-cast results.
+         * @param input The ray-cast input parameters.
+         * @param xf The transform to be applied to the shape.
+         * @param childIndex The child shape index
+         */
+        abstract rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;
+        /**
+         * Given a transform, compute the associated axis aligned bounding box for a
+         * child shape.
+         *
+         * @param aabb Returns the axis aligned box.
+         * @param xf The world transform of the shape.
+         * @param childIndex The child shape
+         */
+        abstract computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void;
+        /**
+         * Compute the mass properties of this shape using its dimensions and density.
+         * The inertia tensor is computed about the local origin.
+         *
+         * @param massData Returns the mass data for this shape.
+         * @param density The density in kilograms per meter squared.
+         */
+        abstract computeMass(massData: MassData, density?: number): void;
+        abstract computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
+    }
+    type ShapeType = "circle" | "edge" | "polygon" | "chain";
+    const Math: Math & {
+        EPSILON: number;
+        isFinite: (x: unknown) => boolean;
+        assert: (x: any) => void;
+        nextPowerOfTwo: (x: number) => number;
+        isPowerOfTwo: (x: number) => boolean;
+        mod: (num: number, min?: number, max?: number) => number;
+        clamp: (num: number, min: number, max: number) => number;
+        random: (min?: number, max?: number) => number;
+    };
+    /** @deprecated Merged with main namespace */
+    const internal: {
+        CollidePolygons: (manifold: Manifold, polyA: PolygonShape, xfA: TransformValue, polyB: PolygonShape, xfB: TransformValue) => void;
+        Settings: typeof Settings;
+        Sweep: typeof Sweep;
+        Manifold: typeof Manifold;
+        Distance: {
+            (output: DistanceOutput, cache: SimplexCache, input: DistanceInput): void;
+            testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue) => boolean;
             Input: typeof DistanceInput;
             Output: typeof DistanceOutput;
             Proxy: typeof DistanceProxy;
@@ -8238,5 +8204,5 @@ declare namespace planck {
         };
     };
 }
-export { planck as default, Serializer, math, Vec2Value, Vec2, Vec3, Mat22, Mat33, Transform, Rot, RayCastInput, RayCastCallback, RayCastOutput, AABB, Shape, ShapeType, FixtureOpt, FixtureDef, FixtureProxy, Fixture, BodyType, BodyDef, MassData, Body, ContactEdge, EvaluateFunction, mixFriction, mixRestitution, VelocityConstraintPoint, Contact, JointEdge, JointOpt, JointDef, Joint, WorldDef, WorldRayCastCallback, WorldAABBQueryCallback, World, CircleShape, Circle, EdgeShape, Edge, PolygonShape, Polygon, ChainShape, Chain, BoxShape, Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJointOpt, DistanceJointDef, DistanceJoint, FrictionJointOpt, FrictionJointDef, FrictionJoint, GearJointOpt, GearJointDef, GearJoint, MotorJointOpt, MotorJointDef, MotorJoint, MouseJointOpt, MouseJointDef, MouseJoint, PrismaticJointOpt, PrismaticJointDef, PrismaticJoint, PulleyJointOpt, PulleyJointDef, PulleyJoint, RevoluteJointOpt, RevoluteJointDef, RevoluteJoint, RopeJointOpt, RopeJointDef, RopeJoint, WeldJointOpt, WeldJointDef, WeldJoint, WheelJointOpt, WheelJointDef, WheelJoint, Settings, Sweep, ManifoldType, ContactFeatureType, PointState, ClipVertex, Manifold, ManifoldPoint, ContactID, ContactFeature, WorldManifold, getPointStates, clipSegmentToLine, DistanceInput, DistanceOutput, SimplexCache, Distance, DistanceProxy, testOverlap, ShapeCastInput, ShapeCastOutput, ShapeCast, TOIInput, TOIOutputState, TOIOutput, TimeOfImpact, DynamicTreeQueryCallback, TreeNode, DynamicTree, stats, Math, internal };
+export { planck as default, Serializer, math, Vec2Value, Vec2, Vec3Value, Vec3, Mat22, Mat33, TransformValue, Transform, RotValue, Rot, RayCastInput, RayCastCallback, RayCastOutput, AABBValue, AABB, Shape, ShapeType, FixtureOpt, FixtureDef, FixtureProxy, Fixture, BodyType, BodyDef, MassData, Body, ContactEdge, EvaluateFunction, mixFriction, mixRestitution, VelocityConstraintPoint, Contact, JointEdge, JointOpt, JointDef, Joint, WorldDef, WorldRayCastCallback, WorldAABBQueryCallback, World, CircleShape, Circle, EdgeShape, Edge, PolygonShape, Polygon, ChainShape, Chain, BoxShape, Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJointOpt, DistanceJointDef, DistanceJoint, FrictionJointOpt, FrictionJointDef, FrictionJoint, GearJointOpt, GearJointDef, GearJoint, MotorJointOpt, MotorJointDef, MotorJoint, MouseJointOpt, MouseJointDef, MouseJoint, PrismaticJointOpt, PrismaticJointDef, PrismaticJoint, PulleyJointOpt, PulleyJointDef, PulleyJoint, RevoluteJointOpt, RevoluteJointDef, RevoluteJoint, RopeJointOpt, RopeJointDef, RopeJoint, WeldJointOpt, WeldJointDef, WeldJoint, WheelJointOpt, WheelJointDef, WheelJoint, Settings, Sweep, ManifoldType, ContactFeatureType, PointState, ClipVertex, Manifold, ManifoldPoint, ContactID, WorldManifold, getPointStates, clipSegmentToLine, DistanceInput, DistanceOutput, SimplexCache, Distance, DistanceProxy, testOverlap, ShapeCastInput, ShapeCastOutput, ShapeCast, TOIInput, TOIOutputState, TOIOutput, TimeOfImpact, DynamicTreeQueryCallback, TreeNode, DynamicTree, stats, Math, internal };
 //# sourceMappingURL=planck.d.ts.map
