@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
+import * as matrix from '../../common/Matrix';
 import { math as Math } from '../../common/Math';
-import { Transform } from '../../common/Transform';
-import { Vec2 } from '../../common/Vec2';
+import { TransformValue } from '../../common/Transform';
 import { Contact } from '../../dynamics/Contact';
 import { CircleShape } from './CircleShape';
 import { PolygonShape } from './PolygonShape';
@@ -37,18 +37,20 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
 
-function PolygonCircleContact(manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number): void {
+function PolygonCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: Fixture, indexA: number, xfB: TransformValue, fixtureB: Fixture, indexB: number): void {
   _ASSERT && console.assert(fixtureA.getType() == PolygonShape.TYPE);
   _ASSERT && console.assert(fixtureB.getType() == CircleShape.TYPE);
   CollidePolygonCircle(manifold, fixtureA.getShape() as PolygonShape, xfA, fixtureB.getShape() as CircleShape, xfB);
 }
 
-export const CollidePolygonCircle = function (manifold: Manifold, polygonA: PolygonShape, xfA: Transform, circleB: CircleShape, xfB: Transform): void {
+const cLocal = matrix.vec2(0, 0);
+const faceCenter = matrix.vec2(0, 0);
+
+export const CollidePolygonCircle = function (manifold: Manifold, polygonA: PolygonShape, xfA: TransformValue, circleB: CircleShape, xfB: TransformValue): void {
   manifold.pointCount = 0;
 
   // Compute circle position in the frame of the polygon.
-  const c = Transform.mulVec2(xfB, circleB.m_p);
-  const cLocal = Transform.mulTVec2(xfA, c);
+  matrix.retransformVec2(cLocal, xfB, xfA, circleB.m_p);
 
   // Find the min separating edge.
   let normalIndex = 0;
@@ -59,7 +61,7 @@ export const CollidePolygonCircle = function (manifold: Manifold, polygonA: Poly
   const normals = polygonA.m_normals;
 
   for (let i = 0; i < vertexCount; ++i) {
-    const s = Vec2.dot(normals[i], Vec2.sub(cLocal, vertices[i]));
+    const s = matrix.dotVec2(normals[i], cLocal) - matrix.dotVec2(normals[i], vertices[i]);
 
     if (s > radius) {
       // Early out.
@@ -82,9 +84,9 @@ export const CollidePolygonCircle = function (manifold: Manifold, polygonA: Poly
   if (separation < Math.EPSILON) {
     manifold.pointCount = 1;
     manifold.type = ManifoldType.e_faceA;
-    manifold.localNormal.setVec2(normals[normalIndex]);
-    manifold.localPoint.setCombine(0.5, v1, 0.5, v2);
-    manifold.points[0].localPoint.setVec2(circleB.m_p);
+    matrix.copyVec2(manifold.localNormal, normals[normalIndex]);
+    matrix.combineVec2(manifold.localPoint, 0.5, v1, 0.5, v2);
+    matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
@@ -92,48 +94,50 @@ export const CollidePolygonCircle = function (manifold: Manifold, polygonA: Poly
   }
 
   // Compute barycentric coordinates
-  const u1 = Vec2.dot(Vec2.sub(cLocal, v1), Vec2.sub(v2, v1));
-  const u2 = Vec2.dot(Vec2.sub(cLocal, v2), Vec2.sub(v1, v2));
+  // u1 = (cLocal - v1) dot (v2 - v1))
+  const u1 = matrix.dotVec2(cLocal, v2) - matrix.dotVec2(cLocal, v1) - matrix.dotVec2(v1, v2) + matrix.dotVec2(v1, v1);
+  // u2 = (cLocal - v2) dot (v1 - v2)
+  const u2 = matrix.dotVec2(cLocal, v1) - matrix.dotVec2(cLocal, v2) - matrix.dotVec2(v2, v1) + matrix.dotVec2(v2, v2);
   if (u1 <= 0.0) {
-    if (Vec2.distanceSquared(cLocal, v1) > radius * radius) {
+    if (matrix.distSqrVec2(cLocal, v1) > radius * radius) {
       return;
     }
 
     manifold.pointCount = 1;
     manifold.type = ManifoldType.e_faceA;
-    manifold.localNormal.setCombine(1, cLocal, -1, v1);
-    manifold.localNormal.normalize();
-    manifold.localPoint.setVec2(v1);
-    manifold.points[0].localPoint.setVec2(circleB.m_p);
+    matrix.diffVec2(manifold.localNormal, cLocal, v1);
+    matrix.normalizeVec2(manifold.localNormal);
+    matrix.copyVec2(manifold.localPoint, v1);
+    matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
   } else if (u2 <= 0.0) {
-    if (Vec2.distanceSquared(cLocal, v2) > radius * radius) {
+    if (matrix.distSqrVec2(cLocal, v2) > radius * radius) {
       return;
     }
 
     manifold.pointCount = 1;
     manifold.type = ManifoldType.e_faceA;
-    manifold.localNormal.setCombine(1, cLocal, -1, v2);
-    manifold.localNormal.normalize();
-    manifold.localPoint.setVec2(v2);
-    manifold.points[0].localPoint.setVec2(circleB.m_p);
+    matrix.diffVec2(manifold.localNormal, cLocal, v2);
+    matrix.normalizeVec2(manifold.localNormal);
+    matrix.copyVec2(manifold.localPoint, v2);
+    matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
   } else {
-    const faceCenter = Vec2.mid(v1, v2);
-    const separation = Vec2.dot(cLocal, normals[vertIndex1]) - Vec2.dot(faceCenter, normals[vertIndex1]);
+    matrix.combineVec2(faceCenter, 0.5, v1, 0.5, v2);
+    const separation = matrix.dotVec2(cLocal, normals[vertIndex1]) - matrix.dotVec2(faceCenter, normals[vertIndex1]);
     if (separation > radius) {
       return;
     }
 
     manifold.pointCount = 1;
     manifold.type = ManifoldType.e_faceA;
-    manifold.localNormal.setVec2(normals[vertIndex1]);
-    manifold.localPoint.setVec2(faceCenter);
-    manifold.points[0].localPoint.setVec2(circleB.m_p);
+    matrix.copyVec2(manifold.localNormal, normals[vertIndex1]);
+    matrix.copyVec2(manifold.localPoint, faceCenter);
+    matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);

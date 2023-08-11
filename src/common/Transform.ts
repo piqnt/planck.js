@@ -23,12 +23,17 @@
  */
 
 import { Vec2, Vec2Value } from './Vec2';
-import { Rot } from './Rot';
+import { Rot, RotValue } from './Rot';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
+
+export type TransformValue = {
+  p: Vec2Value;
+  q: RotValue;
+};
 
 /**
  * A transform contains translation and rotation. It is used to represent the
@@ -64,7 +69,7 @@ export class Transform {
   }
 
   /** @internal */
-  static neo(position: Vec2, rotation: Rot): Transform {
+  static neo(position: Vec2Value, rotation: Rot): Transform {
     const obj = Object.create(Transform.prototype);
     obj.p = Vec2.clone(position);
     obj.q = Rot.clone(rotation);
@@ -86,8 +91,8 @@ export class Transform {
     this.q.setIdentity();
   }
 
-  set(position: Vec2, rotation: number): void;
-  set(xf: Transform): void;
+  set(position: Vec2Value, rotation: number): void;
+  set(xf: TransformValue): void;
   /**
    * Set this based on the position and angle.
    */
@@ -105,12 +110,12 @@ export class Transform {
   /**
    * Set this based on the position and angle.
    */
-  setNum(position: Vec2, rotation: number) {
+  setNum(position: Vec2Value, rotation: number) {
     this.p.setVec2(position);
     this.q.setAngle(rotation);
   }
 
-  setTransform(xf: Transform): void {
+  setTransform(xf: TransformValue): void {
     this.p.setVec2(xf.p);
     this.q.setRot(xf.q);
   }
@@ -126,8 +131,8 @@ export class Transform {
     _ASSERT && console.assert(!Transform.isValid(o), 'Invalid Transform!', o);
   }
 
-  static mul(a: Transform, b: Vec2Value): Vec2;
-  static mul(a: Transform, b: Transform): Transform;
+  static mul(a: TransformValue, b: Vec2Value): Vec2;
+  static mul(a: TransformValue, b: TransformValue): Transform;
   // static mul(a: Transform, b: Vec2Value[]): Vec2[];
   // static mul(a: Transform, b: Transform[]): Transform[];
   // tslint:disable-next-line:typedef
@@ -151,7 +156,7 @@ export class Transform {
   static mulAll(a: Transform, b: Vec2Value[]): Vec2[];
   static mulAll(a: Transform, b: Transform[]): Transform[];
   // tslint:disable-next-line:typedef
-  static mulAll(a: Transform, b) {
+  static mulAll(a: TransformValue, b) {
     _ASSERT && Transform.assert(a);
     const arr = [];
     for (let i = 0; i < b.length; i++) {
@@ -162,14 +167,14 @@ export class Transform {
 
   /** @internal @deprecated */
   // tslint:disable-next-line:typedef
-  static mulFn(a: Transform) {
+  static mulFn(a: TransformValue) {
     _ASSERT && Transform.assert(a);
     return function(b: Vec2Value): Vec2 {
       return Transform.mul(a, b);
     };
   }
 
-  static mulVec2(a: Transform, b: Vec2Value): Vec2 {
+  static mulVec2(a: TransformValue, b: Vec2Value): Vec2 {
     _ASSERT && Transform.assert(a);
     _ASSERT && Vec2.assert(b);
     const x = (a.q.c * b.x - a.q.s * b.y) + a.p.x;
@@ -177,7 +182,7 @@ export class Transform {
     return Vec2.neo(x, y);
   }
 
-  static mulXf(a: Transform, b: Transform): Transform {
+  static mulXf(a: TransformValue, b: TransformValue): Transform {
     _ASSERT && Transform.assert(a);
     _ASSERT && Transform.assert(b);
     // v2 = A.q.Rot(B.q.Rot(v1) + B.p) + A.p
@@ -188,8 +193,8 @@ export class Transform {
     return xf;
   }
 
-  static mulT(a: Transform, b: Vec2Value): Vec2;
-  static mulT(a: Transform, b: Transform): Transform;
+  static mulT(a: TransformValue, b: Vec2Value): Vec2;
+  static mulT(a: TransformValue, b: TransformValue): Transform;
   // tslint:disable-next-line:typedef
   static mulT(a, b) {
     if ('x' in b && 'y' in b) {
@@ -200,7 +205,7 @@ export class Transform {
     }
   }
 
-  static mulTVec2(a: Transform, b: Vec2Value): Vec2 {
+  static mulTVec2(a: TransformValue, b: Vec2Value): Vec2 {
     _ASSERT && Transform.assert(a);
     _ASSERT && Vec2.assert(b);
     const px = b.x - a.p.x;
@@ -210,7 +215,7 @@ export class Transform {
     return Vec2.neo(x, y);
   }
 
-  static mulTXf(a: Transform, b: Transform): Transform {
+  static mulTXf(a: TransformValue, b: TransformValue): Transform {
     _ASSERT && Transform.assert(a);
     _ASSERT && Transform.assert(b);
     // v2 = A.q' * (B.q * v1 + B.p - A.p)

@@ -23,9 +23,9 @@
  */
 
 import type { MassData } from '../dynamics/Body';
-import { AABB, RayCastOutput, RayCastInput } from './AABB';
+import { RayCastOutput, RayCastInput, AABBValue } from './AABB';
 import { DistanceProxy } from './Distance';
-import type { Transform }  from '../common/Transform';
+import type { Transform, TransformValue }  from '../common/Transform';
 import type { Vec2Value }  from '../common/Vec2';
 
 // todo make shape an interface
@@ -84,7 +84,7 @@ export abstract class Shape {
    * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
-  abstract testPoint(xf: Transform, p: Vec2Value): boolean;
+  abstract testPoint(xf: TransformValue, p: Vec2Value): boolean;
 
   /**
    * Cast a ray against a child shape.
@@ -104,7 +104,7 @@ export abstract class Shape {
    * @param xf The world transform of the shape.
    * @param childIndex The child shape
    */
-  abstract computeAABB(aabb: AABB, xf: Transform, childIndex: number): void;
+  abstract computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void;
 
   /**
    * Compute the mass properties of this shape using its dimensions and density.

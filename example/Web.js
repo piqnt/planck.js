@@ -31,7 +31,6 @@ const testbed = planck.testbed();
 testbed.start(world);
 
 var ground = world.createBody();
-ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
 var bodies = [];
 var joints = [];

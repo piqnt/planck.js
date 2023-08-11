@@ -22,14 +22,16 @@
  * SOFTWARE.
  */
 
+import * as matrix from './Matrix';
 import { math as Math } from './Math';
-import { Vec2 } from './Vec2';
-import { Rot } from './Rot';
-import { Transform } from './Transform';
+import { Vec2, Vec2Value } from './Vec2';
+import { TransformValue } from './Transform';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
+
+const temp = matrix.vec2(0, 0);
 
 /**
  * This describes the motion of a body/shape for TOI computation. Shapes are
@@ -53,34 +55,30 @@ export class Sweep {
   c0 = Vec2.zero();
   a0 = 0;
 
-  // /** @internal */
-  // recycle() {
-  //   this.localCenter.x = 0;
-  //   this.localCenter.y = 0;
-  //   this.c.x = 0;
-  //   this.c.y = 0;
-  //   this.a = 0;
-  //   this.alpha0 = 0;
-  //   this.c0.x = 0;
-  //   this.c0.y = 0;
-  //   this.a0 = 0;
-  // }
-
-  setTransform(xf: Transform): void {
-    const c = Transform.mulVec2(xf, this.localCenter);
-    this.c.setVec2(c);
-    this.c0.setVec2(c);
-
-    this.a = xf.q.getAngle();
-    this.a0 = xf.q.getAngle();
+  /** @internal */
+  recycle() {
+    matrix.zeroVec2(this.localCenter)
+    matrix.zeroVec2(this.c)
+    this.a = 0;
+    this.alpha0 = 0;
+    matrix.zeroVec2(this.c0)
+    this.a0 = 0;
   }
 
-  setLocalCenter(localCenter: Vec2, xf: Transform): void {
-    this.localCenter.setVec2(localCenter);
+  setTransform(xf: TransformValue): void {
+    matrix.transformVec2(temp, xf, this.localCenter);
+    matrix.copyVec2(this.c, temp);
+    matrix.copyVec2(this.c0, temp);
 
-    const c = Transform.mulVec2(xf, this.localCenter);
-    this.c.setVec2(c);
-    this.c0.setVec2(c);
+    this.a = this.a0 = Math.atan2(xf.q.s, xf.q.c);
+  }
+
+  setLocalCenter(localCenter: Vec2Value, xf: TransformValue): void {
+    matrix.copyVec2(this.localCenter, localCenter);
+
+    matrix.transformVec2(temp, xf, this.localCenter);
+    matrix.copyVec2(this.c, temp);
+    matrix.copyVec2(this.c0, temp);
   }
 
   /**
@@ -89,12 +87,12 @@ export class Sweep {
    * @param xf
    * @param beta A factor in [0,1], where 0 indicates alpha0
    */
-  getTransform(xf: Transform, beta: number = 0): void {
-    xf.q.setAngle((1.0 - beta) * this.a0 + beta * this.a);
-    xf.p.setCombine((1.0 - beta), this.c0, beta, this.c);
+  getTransform(xf: TransformValue, beta: number = 0): void {
+    matrix.setRotAngle(xf.q, (1.0 - beta) * this.a0 + beta * this.a);
+    matrix.combineVec2(xf.p, (1.0 - beta), this.c0, beta, this.c);
 
     // shift to origin
-    xf.p.sub(Rot.mulVec2(xf.q, this.localCenter));
+    matrix.subVec2(xf.p, matrix.rotVec2(temp, xf.q, this.localCenter));
   }
 
   /**
@@ -105,14 +103,14 @@ export class Sweep {
   advance(alpha: number): void {
     _ASSERT && console.assert(this.alpha0 < 1.0);
     const beta = (alpha - this.alpha0) / (1.0 - this.alpha0);
-    this.c0.setCombine(beta, this.c, 1 - beta, this.c0);
+    matrix.combineVec2(this.c0, beta, this.c, 1 - beta, this.c0);
     this.a0 = beta * this.a + (1 - beta) * this.a0;
     this.alpha0 = alpha;
   }
 
   forward(): void {
     this.a0 = this.a;
-    this.c0.setVec2(this.c);
+    matrix.copyVec2(this.c0, this.c);
   }
 
   /**
@@ -124,23 +122,12 @@ export class Sweep {
     this.a0 = a0;
   }
 
-  clone(): Sweep {
-    const clone = new Sweep();
-    clone.localCenter.setVec2(this.localCenter);
-    clone.alpha0 = this.alpha0;
-    clone.a0 = this.a0;
-    clone.a = this.a;
-    clone.c0.setVec2(this.c0);
-    clone.c.setVec2(this.c);
-    return clone;
-  }
-
   set(that: Sweep): void {
-    this.localCenter.setVec2(that.localCenter);
-    this.alpha0 = that.alpha0;
-    this.a0 = that.a0;
+    matrix.copyVec2(this.localCenter, that.localCenter);
+    matrix.copyVec2(this.c, that.c);
     this.a = that.a;
-    this.c0.setVec2(that.c0);
-    this.c.setVec2(that.c);
+    this.alpha0 = that.alpha0;
+    matrix.copyVec2(this.c0, that.c0);
+    this.a0 = that.a0;
   }
 }

@@ -22,9 +22,8 @@
  * SOFTWARE.
  */
 
-import { Vec2 } from '../common/Vec2';
-import { Rot } from '../common/Rot';
-import { Transform } from '../common/Transform';
+import { Vec2, Vec2Value } from '../common/Vec2';
+import { TransformValue } from '../common/Transform';
 
 
 export class Position {
@@ -34,10 +33,24 @@ export class Position {
   /** angle */
   a = 0;
 
-
-  getTransform(xf: Transform, p: Vec2): Transform {
-    xf.q.setAngle(this.a);
-    xf.p.setVec2(Vec2.sub(this.c, Rot.mulVec2(xf.q, p)));
+  // todo: cache sin/cos
+  getTransform(xf: TransformValue, p: Vec2Value): TransformValue {
+    // xf.q = rotation(this.a);
+    // xf.p = this.c - xf.q * p
+    xf.q.c = Math.cos(this.a);
+    xf.q.s = Math.sin(this.a);
+    xf.p.x = this.c.x - (xf.q.c * p.x - xf.q.s * p.y);
+    xf.p.y = this.c.y - (xf.q.s * p.x + xf.q.c * p.y);
     return xf;
   }
+}
+
+export function getTransform(xf: TransformValue, p: Vec2Value, c: Vec2Value, a: number): TransformValue {
+  // xf.q = rotation(a);
+  // xf.p = this.c - xf.q * p
+  xf.q.c = Math.cos(a);
+  xf.q.s = Math.sin(a);
+  xf.p.x = c.x - (xf.q.c * p.x - xf.q.s * p.y);
+  xf.p.y = c.y - (xf.q.s * p.x + xf.q.c * p.y);
+  return xf;
 }

@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-import { Transform } from '../../common/Transform';
-import { Vec2 } from '../../common/Vec2';
+import { TransformValue } from '../../common/Transform';
+import * as matrix from '../../common/Matrix';
 import { Contact } from '../../dynamics/Contact';
 import { EdgeShape } from './EdgeShape';
 import { ChainShape } from './ChainShape';
@@ -38,7 +38,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
 
-function EdgeCircleContact(manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number): void {
+function EdgeCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: Fixture, indexA: number, xfB: TransformValue, fixtureB: Fixture, indexB: number): void {
   _ASSERT && console.assert(fixtureA.getType() == EdgeShape.TYPE);
   _ASSERT && console.assert(fixtureB.getType() == CircleShape.TYPE);
 
@@ -48,7 +48,7 @@ function EdgeCircleContact(manifold: Manifold, xfA: Transform, fixtureA: Fixture
   CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
 }
 
-function ChainCircleContact(manifold: Manifold, xfA: Transform, fixtureA: Fixture, indexA: number, xfB: Transform, fixtureB: Fixture, indexB: number): void {
+function ChainCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: Fixture, indexA: number, xfB: TransformValue, fixtureB: Fixture, indexB: number): void {
   _ASSERT && console.assert(fixtureA.getType() == ChainShape.TYPE);
   _ASSERT && console.assert(fixtureB.getType() == CircleShape.TYPE);
 
@@ -62,29 +62,36 @@ function ChainCircleContact(manifold: Manifold, xfA: Transform, fixtureA: Fixtur
   CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
 }
 
+const e = matrix.vec2(0, 0);
+const temp = matrix.vec2(0, 0);
+const e1 = matrix.vec2(0, 0);
+const e2 = matrix.vec2(0, 0);
+const Q = matrix.vec2(0, 0);
+const P = matrix.vec2(0, 0);
+const n = matrix.vec2(0, 0);
+
 // Compute contact points for edge versus circle.
 // This accounts for edge connectivity.
-export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape, xfA: Transform, circleB: CircleShape, xfB: Transform): void {
+export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape, xfA: TransformValue, circleB: CircleShape, xfB: TransformValue): void {
   manifold.pointCount = 0;
 
   // Compute circle in frame of edge
-  const Q = Transform.mulTVec2(xfA, Transform.mulVec2(xfB, circleB.m_p));
+  matrix.retransformVec2(Q, xfB, xfA, circleB.m_p);
 
   const A = edgeA.m_vertex1;
   const B = edgeA.m_vertex2;
-  const e = Vec2.sub(B, A);
+  matrix.diffVec2(e, B, A);
 
   // Barycentric coordinates
-  const u = Vec2.dot(e, Vec2.sub(B, Q));
-  const v = Vec2.dot(e, Vec2.sub(Q, A));
+  const u = matrix.dotVec2(e, B) - matrix.dotVec2(e, Q);
+  const v = matrix.dotVec2(e, Q) - matrix.dotVec2(e, A);
 
   const radius = edgeA.m_radius + circleB.m_radius;
 
   // Region A
   if (v <= 0.0) {
-    const P = Vec2.clone(A);
-    const d = Vec2.sub(Q, P);
-    const dd = Vec2.dot(d, d);
+    matrix.copyVec2(P, A);
+    const dd = matrix.distSqrVec2(Q, A);
     if (dd > radius * radius) {
       return;
     }
@@ -93,8 +100,8 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
     if (edgeA.m_hasVertex0) {
       const A1 = edgeA.m_vertex0;
       const B1 = A;
-      const e1 = Vec2.sub(B1, A1);
-      const u1 = Vec2.dot(e1, Vec2.sub(B1, Q));
+      matrix.diffVec2(e1, B1, A1);
+      const u1 = matrix.dotVec2(e1, B1) - matrix.dotVec2(e1, Q);
 
       // Is the circle in Region AB of the previous edge?
       if (u1 > 0.0) {
@@ -103,10 +110,10 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
     }
 
     manifold.type = ManifoldType.e_circles;
-    manifold.localNormal.setZero();
-    manifold.localPoint.setVec2(P);
+    matrix.zeroVec2(manifold.localNormal)
+    matrix.copyVec2(manifold.localPoint, P);
     manifold.pointCount = 1;
-    manifold.points[0].localPoint.setVec2(circleB.m_p);
+    matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
@@ -115,9 +122,8 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
 
   // Region B
   if (u <= 0.0) {
-    const P = Vec2.clone(B);
-    const d = Vec2.sub(Q, P);
-    const dd = Vec2.dot(d, d);
+    matrix.copyVec2(P, B);
+    const dd = matrix.distSqrVec2(Q, P);
     if (dd > radius * radius) {
       return;
     }
@@ -126,8 +132,8 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
     if (edgeA.m_hasVertex3) {
       const B2 = edgeA.m_vertex3;
       const A2 = B;
-      const e2 = Vec2.sub(B2, A2);
-      const v2 = Vec2.dot(e2, Vec2.sub(Q, A2));
+      matrix.diffVec2(e2, B2, A2);
+      const v2 = matrix.dotVec2(e2, Q) - matrix.dotVec2(e2, A2);
 
       // Is the circle in Region AB of the next edge?
       if (v2 > 0.0) {
@@ -136,10 +142,10 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
     }
 
     manifold.type = ManifoldType.e_circles;
-    manifold.localNormal.setZero();
-    manifold.localPoint.setVec2(P);
+    matrix.zeroVec2(manifold.localNormal)
+    matrix.copyVec2(manifold.localPoint, P);
     manifold.pointCount = 1;
-    manifold.points[0].localPoint.setVec2(circleB.m_p);
+    matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.setFeatures(1, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
@@ -148,26 +154,25 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
   }
 
   // Region AB
-  const den = Vec2.dot(e, e);
+  const den = matrix.lengthSqrVec2(e);
   _ASSERT && console.assert(den > 0.0);
-  const P = Vec2.combine(u / den, A, v / den, B);
-  const d = Vec2.sub(Q, P);
-  const dd = Vec2.dot(d, d);
+  matrix.combineVec2(P, u / den, A, v / den, B);
+  const dd = matrix.distSqrVec2(Q, P);
   if (dd > radius * radius) {
     return;
   }
 
-  const n = Vec2.neo(-e.y, e.x);
-  if (Vec2.dot(n, Vec2.sub(Q, A)) < 0.0) {
-    n.setNum(-n.x, -n.y);
+  matrix.crossNumVec2(n, 1, e);
+  if (matrix.dotVec2(n, Q) - matrix.dotVec2(n, A) < 0.0) {
+    matrix.negVec2(n);
   }
-  n.normalize();
+  matrix.normalizeVec2(n);
 
   manifold.type = ManifoldType.e_faceA;
-  manifold.localNormal.setVec2(n);
-  manifold.localPoint.setVec2(A);
+  matrix.copyVec2(manifold.localNormal, n);
+  matrix.copyVec2(manifold.localPoint, A);
   manifold.pointCount = 1;
-  manifold.points[0].localPoint.setVec2(circleB.m_p);
+  matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
   // manifold.points[0].id.key = 0;
   manifold.points[0].id.setFeatures(0, ContactFeatureType.e_face, 0, ContactFeatureType.e_vertex);

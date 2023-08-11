@@ -23,8 +23,8 @@
  */
 
 
+import * as matrix from '../../common/Matrix';
 import { Transform } from '../../common/Transform';
-import { Vec2 } from '../../common/Vec2';
 import { Contact } from '../../dynamics/Contact';
 import { CircleShape } from './CircleShape';
 import { Manifold, ContactFeatureType, ManifoldType } from "../Manifold";
@@ -42,13 +42,16 @@ function CircleCircleContact(manifold: Manifold, xfA: Transform, fixtureA: Fixtu
   CollideCircles(manifold, fixtureA.getShape() as CircleShape, xfA, fixtureB.getShape() as CircleShape, xfB);
 }
 
+const pA = matrix.vec2(0, 0);
+const pB = matrix.vec2(0, 0);
+
 export const CollideCircles = function (manifold: Manifold, circleA: CircleShape, xfA: Transform, circleB: CircleShape, xfB: Transform): void {
   manifold.pointCount = 0;
 
-  const pA = Transform.mulVec2(xfA, circleA.m_p);
-  const pB = Transform.mulVec2(xfB, circleB.m_p);
+  matrix.transformVec2(pA, xfA, circleA.m_p);
+  matrix.transformVec2(pB, xfB, circleB.m_p);
 
-  const distSqr = Vec2.distanceSquared(pB, pA);
+  const distSqr = matrix.distSqrVec2(pB, pA);
   const rA = circleA.m_radius;
   const rB = circleB.m_radius;
   const radius = rA + rB;
@@ -57,10 +60,10 @@ export const CollideCircles = function (manifold: Manifold, circleA: CircleShape
   }
 
   manifold.type = ManifoldType.e_circles;
-  manifold.localPoint.setVec2(circleA.m_p);
-  manifold.localNormal.setZero();
+  matrix.copyVec2(manifold.localPoint, circleA.m_p);
+  matrix.zeroVec2(manifold.localNormal)
   manifold.pointCount = 1;
-  manifold.points[0].localPoint.setVec2(circleB.m_p);
+  matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
   // manifold.points[0].id.key = 0;
   manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex)

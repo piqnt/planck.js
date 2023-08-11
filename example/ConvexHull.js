@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-const { World, Vec2, Polygon, Math } = planck;
+const { World, Vec2, Polygon } = planck;
 
 var world = new World();
 

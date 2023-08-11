@@ -22,10 +22,11 @@
  * SOFTWARE.
  */
 
+import * as matrix from '../../common/Matrix';
 import type { MassData } from '../../dynamics/Body';
-import { AABB, RayCastOutput, RayCastInput } from '../AABB';
+import { AABBValue, RayCastOutput, RayCastInput, AABB } from '../AABB';
 import { DistanceProxy } from '../Distance';
-import { Transform } from '../../common/Transform';
+import { Transform, TransformValue } from '../../common/Transform';
 import { Vec2, Vec2Value } from '../../common/Vec2';
 import { Settings } from '../../Settings';
 import { Shape } from '../Shape';
@@ -34,6 +35,9 @@ import { EdgeShape } from './EdgeShape';
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+
+const v1 = matrix.vec2(0, 0);
+const v2 = matrix.vec2(0, 0);
 
 
 /**
@@ -311,7 +315,7 @@ export class ChainShape extends Shape {
    * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
-  testPoint(xf: Transform, p: Vec2Value): false {
+  testPoint(xf: TransformValue, p: Vec2Value): false {
     return false;
   }
 
@@ -338,13 +342,13 @@ export class ChainShape extends Shape {
    * @param xf The world transform of the shape.
    * @param childIndex The child shape
    */
-  computeAABB(aabb: AABB, xf: Transform, childIndex: number): void {
+  computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void {
     _ASSERT && console.assert(0 <= childIndex && childIndex < this.m_count);
 
-    const v1 = Transform.mulVec2(xf, this.getVertex(childIndex));
-    const v2 = Transform.mulVec2(xf, this.getVertex(childIndex + 1));
+    matrix.transformVec2(v1, xf, this.getVertex(childIndex));
+    matrix.transformVec2(v2, xf, this.getVertex(childIndex + 1));
 
-    aabb.combinePoints(v1, v2);
+    AABB.combinePoints(aabb, v1, v2);
   }
 
   /**
@@ -358,7 +362,7 @@ export class ChainShape extends Shape {
    */
   computeMass(massData: MassData, density?: number): void {
     massData.mass = 0.0;
-    massData.center.setZero();
+    matrix.zeroVec2(massData.center)
     massData.I = 0.0;
   }
 

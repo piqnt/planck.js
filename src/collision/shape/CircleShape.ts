@@ -22,12 +22,13 @@
  * SOFTWARE.
  */
 
+import * as matrix from '../../common/Matrix';
 import { math as Math } from '../../common/Math';
 import { Rot } from '../../common/Rot';
 import { Vec2, Vec2Value } from '../../common/Vec2';
 import { Shape } from '../Shape';
-import { AABB, RayCastInput, RayCastOutput } from '../AABB';
-import { Transform } from '../../common/Transform';
+import { AABBValue, RayCastInput, RayCastOutput } from '../AABB';
+import { Transform, TransformValue } from '../../common/Transform';
 import { MassData } from '../../dynamics/Body';
 import { DistanceProxy } from '../Distance';
 
@@ -35,6 +36,7 @@ import { DistanceProxy } from '../Distance';
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
+const temp = matrix.vec2(0, 0);
 
 export class CircleShape extends Shape {
   static TYPE = 'circle' as const;
@@ -130,10 +132,9 @@ export class CircleShape extends Shape {
    * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
-  testPoint(xf: Transform, p: Vec2Value): boolean {
-    const center = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
-    const d = Vec2.sub(p, center);
-    return Vec2.dot(d, d) <= this.m_radius * this.m_radius;
+  testPoint(xf: TransformValue, p: Vec2Value): boolean {
+    const center = matrix.transformVec2(temp, xf, this.m_p)
+    return matrix.distSqrVec2(p, center) <= this.m_radius * this.m_radius;
   }
 
   /**
@@ -188,10 +189,11 @@ export class CircleShape extends Shape {
    * @param xf The world transform of the shape.
    * @param childIndex The child shape
    */
-  computeAABB(aabb: AABB, xf: Transform, childIndex: number): void {
-    const p = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
-    aabb.lowerBound.setNum(p.x - this.m_radius, p.y - this.m_radius);
-    aabb.upperBound.setNum(p.x + this.m_radius, p.y + this.m_radius);
+  computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void {
+    const p = matrix.transformVec2(temp, xf, this.m_p);
+
+    matrix.setVec2(aabb.lowerBound, p.x - this.m_radius, p.y - this.m_radius);
+    matrix.setVec2(aabb.upperBound, p.x + this.m_radius, p.y + this.m_radius);
   }
 
   /**
@@ -203,18 +205,17 @@ export class CircleShape extends Shape {
    */
   computeMass(massData: MassData, density: number): void {
     massData.mass = density * Math.PI * this.m_radius * this.m_radius;
-    massData.center.setVec2(this.m_p);
+    matrix.copyVec2(massData.center, this.m_p);
     // inertia about the local origin
-    massData.I = massData.mass
-        * (0.5 * this.m_radius * this.m_radius + Vec2.dot(this.m_p, this.m_p));
+    massData.I = massData.mass * (0.5 * this.m_radius * this.m_radius + matrix.lengthSqrVec2(this.m_p));
   }
 
   computeDistanceProxy(proxy: DistanceProxy): void {
     proxy.m_vertices[0] = this.m_p;
+    proxy.m_vertices.length = 1;
     proxy.m_count = 1;
     proxy.m_radius = this.m_radius;
   }
-
 }
 
 export const Circle = CircleShape;

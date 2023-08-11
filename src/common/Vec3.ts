@@ -22,12 +22,19 @@
  * SOFTWARE.
  */
 
+import * as matrix from './Matrix';
 import { math as Math } from './Math';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
+
+export interface Vec3Value {
+  x: number;
+  y: number;
+  z: number;
+}
 
 export class Vec3 {
   x: number;
@@ -93,7 +100,7 @@ export class Vec3 {
     return obj;
   }
 
-  static clone(v: Vec3): Vec3 {
+  static clone(v: Vec3Value): Vec3 {
     _ASSERT && Vec3.assert(v);
     return Vec3.neo(v.x, v.y, v.z);
   }
@@ -131,14 +138,14 @@ export class Vec3 {
     return this;
   }
 
-  add(w: Vec3): Vec3 {
+  add(w: Vec3Value): Vec3 {
     this.x += w.x;
     this.y += w.y;
     this.z += w.z;
     return this;
   }
 
-  sub(w: Vec3): Vec3 {
+  sub(w: Vec3Value): Vec3 {
     this.x -= w.x;
     this.y -= w.y;
     this.z -= w.z;
@@ -152,7 +159,7 @@ export class Vec3 {
     return this;
   }
 
-  static areEqual(v: Vec3, w: Vec3): boolean {
+  static areEqual(v: Vec3Value, w: Vec3Value): boolean {
     _ASSERT && Vec3.assert(v);
     _ASSERT && Vec3.assert(w);
     return v === w ||
@@ -164,14 +171,14 @@ export class Vec3 {
   /**
    * Perform the dot product on two vectors.
    */
-  static dot(v: Vec3, w: Vec3): number {
+  static dot(v: Vec3Value, w: Vec3Value): number {
     return v.x * w.x + v.y * w.y + v.z * w.z;
   }
 
   /**
    * Perform the cross product on two vectors. In 2D this produces a scalar.
    */
-  static cross(v: Vec3, w: Vec3): Vec3 {
+  static cross(v: Vec3Value, w: Vec3Value): Vec3 {
     return new Vec3(
       v.y * w.z - v.z * w.y,
       v.z * w.x - v.x * w.z,
@@ -179,15 +186,15 @@ export class Vec3 {
     );
   }
 
-  static add(v: Vec3, w: Vec3): Vec3 {
+  static add(v: Vec3Value, w: Vec3Value): Vec3 {
     return new Vec3(v.x + w.x, v.y + w.y, v.z + w.z);
   }
 
-  static sub(v: Vec3, w: Vec3): Vec3 {
+  static sub(v: Vec3Value, w: Vec3Value): Vec3 {
     return new Vec3(v.x - w.x, v.y - w.y, v.z - w.z);
   }
 
-  static mul(v: Vec3, m: number): Vec3 {
+  static mul(v: Vec3Value, m: number): Vec3 {
     return new Vec3(m * v.x, m * v.y, m * v.z);
   }
 
@@ -198,7 +205,7 @@ export class Vec3 {
     return this;
   }
 
-  static neg(v: Vec3): Vec3 {
+  static neg(v: Vec3Value): Vec3 {
     return new Vec3(-v.x, -v.y, -v.z);
   }
 }

@@ -24,8 +24,7 @@
 
 import { Settings } from '../Settings';
 import { Pool } from '../util/Pool';
-import { Vec2 } from '../common/Vec2';
-import { math as Math } from '../common/Math';
+import { Vec2, Vec2Value } from '../common/Vec2';
 import { AABB, RayCastCallback, RayCastInput } from './AABB';
 
 
@@ -62,6 +61,20 @@ export class TreeNode<T> {
   }
 }
 
+const poolTreeNode = new Pool<TreeNode<any>>({
+  create(): TreeNode<any> {
+    return new TreeNode();
+  },
+  release(node: TreeNode<any>) {
+    node.userData = null;
+    node.parent = null;
+    node.child1 = null;
+    node.child2 = null;
+    node.height = -1;
+    node.id = undefined;
+  }
+});
+
 /**
  * A dynamic AABB tree broad-phase, inspired by Nathanael Presson's btDbvt. A
  * dynamic tree arranges data in a binary tree to accelerate queries such as
@@ -79,18 +92,11 @@ export class DynamicTree<T> {
   m_nodes: {
     [id: number]: TreeNode<T>
   };
-  m_pool: Pool<TreeNode<T>>;
 
   constructor() {
     this.m_root = null;
     this.m_nodes = {};
     this.m_lastProxyId = 0;
-
-    this.m_pool = new Pool<TreeNode<T>>({
-      create(): TreeNode<T> {
-        return new TreeNode();
-      }
-    });
   }
 
   /**
@@ -116,22 +122,16 @@ export class DynamicTree<T> {
   }
 
   allocateNode(): TreeNode<T> {
-    const node = this.m_pool.allocate();
+    const node = poolTreeNode.allocate();
     node.id = ++this.m_lastProxyId;
-    node.userData = null;
-    node.parent = null;
-    node.child1 = null;
-    node.child2 = null;
-    node.height = -1;
     this.m_nodes[node.id] = node;
     return node;
   }
 
   freeNode(node: TreeNode<T>): void {
-    this.m_pool.release(node);
-    node.height = -1;
     // tslint:disable-next-line:no-dynamic-delete
     delete this.m_nodes[node.id];
+    poolTreeNode.release(node);
   }
 
   /**
@@ -180,7 +180,7 @@ export class DynamicTree<T> {
    *
    * @return true if the proxy was re-inserted.
    */
-  moveProxy(id: number, aabb: AABB, d: Vec2): boolean {
+  moveProxy(id: number, aabb: AABB, d: Vec2Value): boolean {
     _ASSERT && console.assert(AABB.isValid(aabb));
     _ASSERT && console.assert(!d || Vec2.isValid(d));
 
@@ -248,23 +248,19 @@ export class DynamicTree<T> {
       const inheritanceCost = 2.0 * (combinedArea - area);
 
       // Cost of descending into child1
-      let cost1;
-      if (child1.isLeaf()) {
-        cost1 = AABB.combinedPerimeter(child1.aabb, leafAABB) + inheritanceCost;
-      } else {
+      const newArea1 = AABB.combinedPerimeter(leafAABB, child1.aabb);
+      let cost1 = newArea1 + inheritanceCost;
+      if (!child1.isLeaf()) {
         const oldArea = child1.aabb.getPerimeter();
-        const newArea = AABB.combinedPerimeter(child1.aabb, leafAABB);
-        cost1 = (newArea - oldArea) + inheritanceCost;
+        cost1 -= oldArea;
       }
 
       // Cost of descending into child2
-      let cost2;
-      if (child2.isLeaf()) {
-        cost2 = AABB.combinedPerimeter(child2.aabb, leafAABB) + inheritanceCost;
-      } else {
+      const newArea2 = AABB.combinedPerimeter(leafAABB, child2.aabb);
+      let cost2 = newArea2 + inheritanceCost;
+      if (!child2.isLeaf()) {
         const oldArea = child2.aabb.getPerimeter();
-        const newArea = AABB.combinedPerimeter(child2.aabb, leafAABB);
-        cost2 = newArea - oldArea + inheritanceCost;
+        cost2 -= oldArea;
       }
 
       // Descend according to the minimum cost.
@@ -717,7 +713,7 @@ export class DynamicTree<T> {
    *
    * @param newOrigin The new origin with respect to the old origin
    */
-  shiftOrigin(newOrigin: Vec2): void {
+  shiftOrigin(newOrigin: Vec2Value): void {
     // Build array of leaves. Free the rest.
     let node;
     const it = this.iteratorPool.allocate().preorder(this.m_root);

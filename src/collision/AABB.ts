@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 
+import * as matrix from '../common/Matrix';
 import { math as Math } from '../common/Math';
 import { Vec2, Vec2Value } from '../common/Vec2';
 
@@ -160,11 +161,12 @@ export class AABB {
     return this;
   }
 
-  static extend(aabb: AABB, value: number): void {
-    aabb.lowerBound.x -= value;
-    aabb.lowerBound.y -= value;
-    aabb.upperBound.x += value;
-    aabb.upperBound.y += value;
+  static extend(out: AABBValue, value: number): AABBValue {
+    out.lowerBound.x -= value;
+    out.lowerBound.y -= value;
+    out.upperBound.x += value;
+    out.upperBound.y += value;
+    return out;
   }
 
   static testOverlap(a: AABB, b: AABB): boolean {
@@ -261,6 +263,14 @@ export class AABB {
   /** @internal */
   toString(): string {
     return JSON.stringify(this);
+  }
+
+  static combinePoints(out: AABBValue, a: Vec2Value, b: Vec2Value): AABBValue {
+    out.lowerBound.x = Math.min(a.x, b.x);
+    out.lowerBound.y = Math.min(a.y, b.y);
+    out.upperBound.x = Math.max(a.x, b.x);
+    out.upperBound.y = Math.max(a.y, b.y);
+    return out;
   }
 
   static combinedPerimeter(a: AABBValue, b: AABBValue) {
