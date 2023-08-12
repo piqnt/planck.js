@@ -149,34 +149,32 @@ wheelBack.createFixture(new Circle(0.4), wheelFD);
 var wheelFront = world.createDynamicBody(new Vec2(1.0, 0.4));
 wheelFront.createFixture(new Circle(0.4), wheelFD);
 
+const massWheelBack = wheelBack.getMass();
+const massWheelFront = wheelFront.getMass();
+
+const omega = 2.0 * Math.PI * HZ;
+
 var springBack = world.createJoint(new WheelJoint({
   motorSpeed : 0.0,
   maxMotorTorque : 20.0,
   enableMotor : true,
-  frequencyHz : HZ,
-  dampingRatio : ZETA
+  stiffness : massWheelBack * omega * omega,
+  damping : 2.0 * massWheelBack * ZETA * omega,
+  lowerTranslation : -0.25,
+  upperTranslation : 0.25,
+  enableLimit : true
 }, car, wheelBack, wheelBack.getPosition(), new Vec2(0.0, 1.0)));
 
 var springFront = world.createJoint(new WheelJoint({
   motorSpeed : 0.0,
   maxMotorTorque : 10.0,
   enableMotor : false,
-  frequencyHz : HZ,
-  dampingRatio : ZETA
+  stiffness : massWheelFront * omega * omega,
+  damping : 2.0 * massWheelFront * ZETA * omega,
+  lowerTranslation : -0.25,
+  upperTranslation : 0.25,
+  enableLimit : true
 }, car, wheelFront, wheelFront.getPosition(), new Vec2(0.0, 1.0)));
-
-testbed.keydown = function() {
-  if (testbed.activeKeys.down) {
-    HZ = Math.max(0.0, HZ - 1.0);
-    springBack.setSpringFrequencyHz(HZ);
-    springFront.setSpringFrequencyHz(HZ);
-
-  } else if (testbed.activeKeys.up) {
-    HZ += 1.0;
-    springBack.setSpringFrequencyHz(HZ);
-    springFront.setSpringFrequencyHz(HZ);
-  }
-};
 
 testbed.step = function() {
   if (testbed.activeKeys.right && testbed.activeKeys.left) {

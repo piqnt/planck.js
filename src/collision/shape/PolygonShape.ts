@@ -45,8 +45,8 @@ const center = matrix.vec2(0, 0);
 const s = matrix.vec2(0, 0);
 
 /**
- * A convex polygon. It is assumed that the interior of the polygon is to the
- * left of each edge. Polygons have a maximum number of vertices equal to
+ * A solid convex polygon. It is assumed that the interior of the polygon is to
+ * the left of each edge. Polygons have a maximum number of vertices equal to
  * Settings.maxPolygonVertices. In most cases you should not need many vertices
  * for a convex polygon. extends Shape
  */
@@ -323,6 +323,8 @@ export class PolygonShape extends Shape {
 
   /**
    * Cast a ray against a child shape.
+   * @note because the polygon is solid, rays that start inside do not hit
+   * because the normal is not defined.
    *
    * @param output The ray-cast results.
    * @param input The ray-cast input parameters.

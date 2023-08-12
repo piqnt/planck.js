@@ -38,6 +38,9 @@ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false 
 
 const temp = matrix.vec2(0, 0);
 
+/**
+ * A solid circle shape
+ */
 export class CircleShape extends Shape {
   static TYPE = 'circle' as const;
   m_type: 'circle';
@@ -139,6 +142,8 @@ export class CircleShape extends Shape {
 
   /**
    * Cast a ray against a child shape.
+   * @note because the circle is solid, rays that start inside do not hit
+   * because the normal is not defined.
    *
    * @param output The ray-cast results.
    * @param input The ray-cast input parameters.

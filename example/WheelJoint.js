@@ -21,68 +21,69 @@
  * SOFTWARE.
  */
 
-// Test the prismatic joint with limits and motor options.
+// Test the wheel joint with motor, spring, and limit options.
 
-const { World, Vec2, PrismaticJoint, Edge, Box, Circle } = planck;
+var { World, Vec2, Edge, Box, Circle, Polygon, RevoluteJoint, WheelJoint } = planck;
 
-var world = new World(new Vec2(0, -10));
+var testbed = planck.testbed();
 
-const testbed = planck.testbed();
-testbed.start(world);
+var world = new World({
+  gravity : new Vec2(0, -10)
+});
 
-var ENABLE_LIMIT = true;
-var ENABLE_MOTOR = false;
-var MOTOR_SPEED = 10;
+testbed.start(world); 
 
 var ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
+
+var enableLimit = true;
+var enableMotor = false;
+var motorSpeed = 0.0;
+
 var body = world.createBody({
   type : 'dynamic',
-  position : new Vec2(-10.0, 10.0),
-  angle : 0.5 * Math.PI,
+  position : new Vec2(0.0, 10.0),
   allowSleep : false
 });
-body.createFixture(new Box(1.0, 1.5), 5.0);
+body.createFixture(new Circle(2.0), 5.0);
 
-// Bouncy limit
-var joint = new PrismaticJoint({
-  motorSpeed : MOTOR_SPEED,
-  maxMotorForce : 10000.0,
-  enableMotor : ENABLE_MOTOR,
-  lowerTranslation : -10.0,
-  upperTranslation : 10.0,
-  enableLimit : ENABLE_LIMIT
-}, ground, body, new Vec2(0.0, 0.0), new Vec2(1.0, 0.0));
+var mass = body.getMass();
+var hertz = 1.0;
+var dampingRatio = 0.7;
+var omega = 2.0 * Math.PI * hertz;
+
+var joint = new WheelJoint({
+  motorSpeed : motorSpeed,
+  maxMotorTorque : 10000.0,
+  enableMotor : enableMotor,
+  stiffness : mass * omega * omega,
+  damping : 2.0 * mass * dampingRatio * omega,
+  lowerTranslation : -3.0,
+  upperTranslation : 3.0,
+  enableLimit : enableLimit
+}, ground, body, new Vec2(0.0, 10.0), new Vec2(0.0, 1.0));
 
 world.createJoint(joint);
 
 testbed.step = function() {
-  if (testbed.activeKeys.right && !testbed.activeKeys.left) {
-    joint.enableLimit(true);
-    joint.enableMotor(true);
-    joint.setMotorSpeed(+MOTOR_SPEED);
+  var torque = joint.getMotorTorque(testbed.hz);
+  testbed.status({
+    "Motor Torque" : torque,
+    "Motor Speed" : joint.getMotorSpeed(),
+  });
 
-  } else if (testbed.activeKeys.left && !testbed.activeKeys.right) {
-    joint.enableLimit(true);
+  if (testbed.activeKeys.right && testbed.activeKeys.left) {
+    joint.setMotorSpeed(0);
     joint.enableMotor(true);
-    joint.setMotorSpeed(-MOTOR_SPEED);
-
-  } else if (testbed.activeKeys.up && !testbed.activeKeys.down) {
-    joint.enableLimit(false);
+  } else if (testbed.activeKeys.right) {
+    joint.setMotorSpeed(-10);
     joint.enableMotor(true);
-    joint.setMotorSpeed(+MOTOR_SPEED);
-
-  } else if (testbed.activeKeys.down && !testbed.activeKeys.up) {
-    joint.enableLimit(false);
+  } else if (testbed.activeKeys.left) {
+    joint.setMotorSpeed(10);
     joint.enableMotor(true);
-    joint.setMotorSpeed(-MOTOR_SPEED);
-
   } else {
-    joint.enableLimit(true);
+    joint.setMotorSpeed(0);
     joint.enableMotor(false);
   }
-
-  var force = joint.getMotorForce(1 / 60);
-  testbed.status('Motor Force', force);
 };
