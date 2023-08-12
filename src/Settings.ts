@@ -137,7 +137,7 @@ export class Settings {
    * to 1 often lead to overshoot.
    */
   static baumgarte: number = 0.2;
-  static toiBaugarte: number = 0.75;
+  static toiBaumgarte: number = 0.75;
 
   // Sleep
 
@@ -219,8 +219,8 @@ export class SettingsInternal {
   static get baumgarte() {
     return Settings.baumgarte;
   }
-  static get toiBaugarte() {
-    return Settings.toiBaugarte;
+  static get toiBaumgarte() {
+    return Settings.toiBaumgarte;
   }
   static get timeToSleep() {
     return Settings.timeToSleep;

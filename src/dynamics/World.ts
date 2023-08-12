@@ -74,14 +74,16 @@ const WorldDefDefault: WorldDef = {
  * Callback function for ray casts, see {@link World.rayCast}.
  *
  * Called for each fixture found in the query. You control how the ray cast
- * proceeds by returning a float: return -1: ignore this fixture and continue
- * return 0: terminate the ray cast return fraction: clip the ray to this point
+ * proceeds by returning a float:
+ * return -1: ignore this fixture and continue
+ * return 0: terminate the ray cast
+ * return fraction: clip the ray to this point
  * return 1: don't clip the ray and continue
  *
  * @param fixture The fixture hit by the ray
  * @param point The point of initial intersection
  * @param normal The normal vector at the point of intersection
- * @param fraction
+ * @param fraction The fraction along the ray at the point of intersection
  *
  * @return -1 to filter, 0 to terminate, fraction to clip the ray for closest hit, 1 to continue
  */
@@ -105,7 +107,7 @@ export class World {
   /** @internal */ m_allowSleep: boolean;
   /** @internal */ m_gravity: Vec2;
   /** @internal */ m_clearForces: boolean;
-  /** @internal */ m_newFixture: boolean;
+  /** @internal */ m_newContacts: boolean;
   /** @internal */ m_locked: boolean;
   /** @internal */ m_warmStarting: boolean;
   /** @internal */ m_continuousPhysics: boolean;
@@ -156,7 +158,7 @@ export class World {
     this.m_gravity = Vec2.clone(def.gravity);
 
     this.m_clearForces = true;
-    this.m_newFixture = false;
+    this.m_newContacts = false;
     this.m_locked = false;
 
     // These are for debugging the solver.
@@ -792,9 +794,9 @@ export class World {
     positionIterations = positionIterations || this.m_positionIterations;
 
     // If new fixtures were added, we need to find the new contacts.
-    if (this.m_newFixture) {
+    if (this.m_newContacts) {
       this.findNewContacts();
-      this.m_newFixture = false;
+      this.m_newContacts = false;
     }
 
     this.m_locked = true;

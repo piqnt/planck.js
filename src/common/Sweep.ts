@@ -84,15 +84,15 @@ export class Sweep {
   /**
    * Get the interpolated transform at a specific time.
    *
-   * @param xf
+   * @param transform the output transform
    * @param beta A factor in [0,1], where 0 indicates alpha0
    */
-  getTransform(xf: TransformValue, beta: number = 0): void {
-    matrix.setRotAngle(xf.q, (1.0 - beta) * this.a0 + beta * this.a);
-    matrix.combineVec2(xf.p, (1.0 - beta), this.c0, beta, this.c);
+  getTransform(transform: TransformValue, beta: number = 0): void {
+    matrix.setRotAngle(transform.q, (1.0 - beta) * this.a0 + beta * this.a);
+    matrix.combineVec2(transform.p, (1.0 - beta), this.c0, beta, this.c);
 
     // shift to origin
-    matrix.subVec2(xf.p, matrix.rotVec2(temp, xf.q, this.localCenter));
+    matrix.subVec2(transform.p, matrix.rotVec2(temp, transform.q, this.localCenter));
   }
 
   /**

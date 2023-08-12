@@ -185,7 +185,7 @@ export class Solver {
         continue;
       }
 
-      if (seed.isAwake() == false || seed.isActive() == false) {
+      if (seed.isAwake() == false || seed.isEnabled() == false) {
         continue;
       }
 
@@ -205,7 +205,7 @@ export class Solver {
       while (stack.length > 0) {
         // Grab the next body off the stack and add it to the island.
         const b = stack.pop();
-        _ASSERT && console.assert(b.isActive() == true);
+        _ASSERT && console.assert(b.isEnabled() == true);
         this.addBody(b);
 
         // Make sure the body is awake (without resetting sleep timer).
@@ -262,7 +262,7 @@ export class Solver {
           const other = je.other;
 
           // Don't simulate joints connected to inactive bodies.
-          if (other.isActive() == false) {
+          if (other.isEnabled() == false) {
             continue;
           }
 

@@ -124,7 +124,7 @@ testbed.keydown = function(code, char) {
   case 'Z':
     for (var i = 0; i < bodies.length; i += 2) {
       var body = bodies[i];
-      body.setActive(!body.isActive());
+      body.setEnabled(!body.isEnabled());
     }
     break;
 
