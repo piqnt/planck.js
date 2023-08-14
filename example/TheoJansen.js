@@ -26,71 +26,71 @@
 
 const { World, Vec2, Edge, Circle, Box, Polygon, RevoluteJoint, DistanceJoint } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.start(world);
 
-var motorSpeed = 2.0;
-var motorOn = true;
+let motorSpeed = 2.0;
+let motorOn = true;
 
-var offset = new Vec2(0.0, 8.0);
-var pivot = new Vec2(0.0, 0.8);
+let offset = new Vec2(0.0, 8.0);
+let pivot = new Vec2(0.0, 0.8);
 
 // Ground
-var ground = world.createBody();
+let ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-50.0, 0.0), new Vec2(50.0, 0.0)), 0.0);
 ground.createFixture(new Edge(new Vec2(-50.0, 0.0), new Vec2(-50.0, 10.0)), 0.0);
 ground.createFixture(new Edge(new Vec2(50.0, 0.0), new Vec2(50.0, 10.0)), 0.0);
 
 // Balls
-for (var i = 0; i < 40; ++i) {
+for (let i = 0; i < 40; ++i) {
   world.createDynamicBody(new Vec2(-40.0 + 2.0 * i, 0.5)).createFixture(new Circle(0.25), 1.0);
 }
 
 // Chassis
-var chassis = world.createDynamicBody(Vec2.add(pivot, offset));
+let chassis = world.createDynamicBody(Vec2.add(pivot, offset));
 chassis.createFixture(new Box(2.5, 1.0), {
   density: 1.0,
   filterGroupIndex: -1
 });
 
-var wheel = world.createDynamicBody(Vec2.add(pivot, offset));
+let wheel = world.createDynamicBody(Vec2.add(pivot, offset));
 wheel.createFixture(new Circle(1.6), {
   density: 1.0,
   filterGroupIndex: -1
 });
 
-var motorjoint = world.createJoint(new RevoluteJoint({
+let motorjoint = world.createJoint(new RevoluteJoint({
   collideConnected: false,
   motorSpeed: motorSpeed,
   maxMotorTorque: 400.0,
   enableMotor: motorOn
 }, wheel, chassis, Vec2.add(pivot, offset)));
 
-var wheelAnchor = new Vec2(0.0, -0.8).add(pivot);
+let wheelAnchor = new Vec2(0.0, -0.8).add(pivot);
 
-CreateLeg(-1.0, wheelAnchor);
-CreateLeg(1.0, wheelAnchor);
+createLeg(-1.0, wheelAnchor);
+createLeg(1.0, wheelAnchor);
 
 wheel.setTransform(wheel.getPosition(), 120.0 * Math.PI / 180.0);
-CreateLeg(-1.0, wheelAnchor);
-CreateLeg(1.0, wheelAnchor);
+createLeg(-1.0, wheelAnchor);
+createLeg(1.0, wheelAnchor);
 
 wheel.setTransform(wheel.getPosition(), -120.0 * Math.PI / 180.0);
-CreateLeg(-1.0, wheelAnchor);
-CreateLeg(1.0, wheelAnchor);
+createLeg(-1.0, wheelAnchor);
+createLeg(1.0, wheelAnchor);
 
-function CreateLeg(s, wheelAnchor) {
+function createLeg(s, wheelAnchor) {
 
-  var p1 = new Vec2(5.4 * s, -6.1);
-  var p2 = new Vec2(7.2 * s, -1.2);
-  var p3 = new Vec2(4.3 * s, -1.9);
-  var p4 = new Vec2(3.1 * s, 0.8);
-  var p5 = new Vec2(6.0 * s, 1.5);
-  var p6 = new Vec2(2.5 * s, 3.7);
+  let p1 = new Vec2(5.4 * s, -6.1);
+  let p2 = new Vec2(7.2 * s, -1.2);
+  let p3 = new Vec2(4.3 * s, -1.9);
+  let p4 = new Vec2(3.1 * s, 0.8);
+  let p5 = new Vec2(6.0 * s, 1.5);
+  let p6 = new Vec2(2.5 * s, 3.7);
 
-  var poly1, poly2;
+  let poly1, poly2;
   if (s > 0.0) {
     poly1 = new Polygon([p1, p2, p3]);
     poly2 = new Polygon([new Vec2(), Vec2.sub(p5, p4), Vec2.sub(p6, p4)]);
@@ -100,7 +100,7 @@ function CreateLeg(s, wheelAnchor) {
     poly2 = new Polygon([new Vec2(), Vec2.sub(p6, p4), Vec2.sub(p5, p4)]);
   }
 
-  var body1 = world.createDynamicBody({
+  let body1 = world.createDynamicBody({
     position: offset,
     angularDamping: 10.0
   });
@@ -109,7 +109,7 @@ function CreateLeg(s, wheelAnchor) {
     filterGroupIndex: -1
   });
 
-  var body2 = world.createDynamicBody({
+  let body2 = world.createDynamicBody({
     position: Vec2.add(p4, offset),
     angularDamping: 10.0
   });
@@ -121,7 +121,7 @@ function CreateLeg(s, wheelAnchor) {
   // Using a soft distance constraint can reduce some jitter.
   // It also makes the structure seem a bit more fluid by
   // acting like a suspension system.
-  var djd = {
+  let djd = {
     dampingRatio: 0.5,
     frequencyHz: 10.0
   };

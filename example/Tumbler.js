@@ -21,18 +21,18 @@
  * SOFTWARE.
  */
 
-const { World, Vec2, Box, RevoluteJoint, Math } = planck;
+const { World, Vec2, Box, RevoluteJoint } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.start(world);
 
-var COUNT = 200;
+let COUNT = 200;
 
-var ground = world.createBody();
+let ground = world.createBody();
 
-var container = world.createDynamicBody({
+let container = world.createDynamicBody({
   allowSleep: false,
   position: new Vec2(0, 10)
 });
@@ -48,11 +48,11 @@ world.createJoint(new RevoluteJoint({
   enableMotor: true,
 }, ground, container, new Vec2(0, 10)));
 
-var shape = new Box(0.5, 0.5);
-var count = 0;
+let shape = new Box(0.5, 0.5);
+let count = 0;
 while (count < COUNT) {
-  var body = world.createDynamicBody();
-  body.setPosition(new Vec2(Math.random(-10, 10), 10 + Math.random(-10, 10)));
+  let body = world.createDynamicBody();
+  body.setPosition(new Vec2(Math.random() * 20 - 10, 10 + Math.random() * 20 - 10));
   body.createFixture(shape, 1);
   ++count;
 }

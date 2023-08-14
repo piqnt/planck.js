@@ -21,31 +21,32 @@
  * SOFTWARE.
  */
 
-const { Vec2, Rot, Transform, World, Edge, Circle, Box, Polygon } = planck;
+const { Vec2, World, Edge, Box } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.start(world);
 
 // Ground
-var ground = world.createBody();
+let ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-20.0, 0.0), new Vec2(20.0, 0.0)), 0.0);
 
 // Platform
-var platform = world
+let platform = world
   .createBody(new Vec2(-5.0, 5.0))
   .createFixture(new Box(10.0, 0.5), {friction : 0.8});
 
 // Boxes
-for (var i = 0; i < 5; ++i) {
-  world.createDynamicBody(new Vec2(-10.0 + 2.0 * i, 7.0))
+for (let i = 0; i < 5; ++i) {
+  world
+    .createDynamicBody(new Vec2(-10.0 + 2.0 * i, 7.0))
     .createFixture(new Box(0.5, 0.5), 20.0);
 }
 
 world.on('pre-solve', function(contact, oldManifold) {
-  var fixtureA = contact.getFixtureA();
-  var fixtureB = contact.getFixtureB();
+  let fixtureA = contact.getFixtureA();
+  let fixtureB = contact.getFixtureB();
 
   if (fixtureA == platform) {
     contact.setTangentSpeed(5.0);

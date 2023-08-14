@@ -130,7 +130,7 @@ export class Rot {
     return Vec2.neo(this.c, this.s);
   }
 
-  /** Get the u-axis. */
+  /** Get the y-axis. */
   getYAxis(): Vec2 {
     return Vec2.neo(-this.s, this.c);
   }
@@ -139,7 +139,7 @@ export class Rot {
   static mul(rot: RotValue, m: RotValue): Rot;
   /** Rotate a vector */
   static mul(rot: RotValue, m: Vec2Value): Vec2;
-  // tslint:disable-next-line:typedef
+  /** @internal */
   static mul(rot, m) {
     _ASSERT && Rot.assert(rot);
     if ('c' in m && 's' in m) {
@@ -190,7 +190,7 @@ export class Rot {
   static mulT(rot: RotValue, m: RotValue): Rot;
   /** Inverse rotate a vector */
   static mulT(rot: RotValue, m: Vec2Value): Vec2;
-  // tslint:disable-next-line:typedef
+  /** @internal */
   static mulT(rot, m) {
     if ('c' in m && 's' in m) {
       _ASSERT && Rot.assert(m);

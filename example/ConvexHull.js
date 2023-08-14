@@ -23,7 +23,7 @@
 
 const { World, Vec2, Polygon } = planck;
 
-var world = new World();
+let world = new World();
 
 const testbed = planck.testbed();
 
@@ -32,29 +32,29 @@ testbed.y = 0;
 testbed.start(world);
 testbed.info('X: Generate a new random convex hull, Z: Auto-generate');
 
-var COUNT = 8;
+let COUNT = 8;
 
-var auto = false;
-var points = [];
+let auto = false;
+let points = [];
 
-var shape;
+let shape;
 
-Generate();
+generate();
 
-function Generate() {
+function generate() {
 
-  var lowerBound = new Vec2(-8.0, -8.0);
-  var upperBound = new Vec2(8.0, 8.0);
+  let lowerBound = new Vec2(-8.0, -8.0);
+  let upperBound = new Vec2(8.0, 8.0);
 
   points.length = 0;
-  for (var i = 0; i < COUNT; ++i) {
-    var x = 10.0 * Math.random() - 5;
-    var y = 10.0 * Math.random() - 5;
+  for (let i = 0; i < COUNT; ++i) {
+    let x = 10.0 * Math.random() - 5;
+    let y = 10.0 * Math.random() - 5;
 
     // Clamp onto a square to help create collinearities.
     // This will stress the convex hull algorithm.
-    var v = Vec2.clamp(new Vec2(x, y), lowerBound, upperBound);
-    points.push(new Vec2(x, y));
+    let v = Vec2.clamp(new Vec2(x, y), lowerBound, upperBound);
+    points.push(v);
   }
 
   shape = new Polygon(points);
@@ -67,7 +67,7 @@ testbed.keydown = function(code, char) {
     break;
 
   case 'X':
-    Generate();
+    generate();
     break;
   }
 };
@@ -75,7 +75,7 @@ testbed.keydown = function(code, char) {
 testbed.step = function() {
   testbed.drawPolygon(shape.m_vertices, testbed.color(0.9, 0.9, 0.9));
 
-  for (var i = 0; i < points.length; ++i) {
+  for (let i = 0; i < points.length; ++i) {
     testbed.drawPoint(points[i], 3.0, testbed.color(0.3, 0.9, 0.3));
     // testbed.drawString(points[i] + new Vec2(0.05, 0.05), "%d", i);
   }
@@ -85,6 +85,6 @@ testbed.step = function() {
   // }
 
   if (auto) {
-    Generate();
+    generate();
   }
 };

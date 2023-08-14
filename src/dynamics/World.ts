@@ -928,7 +928,7 @@ export class World {
    */
   updateContacts(): void {
     // Update awake contacts.
-    let c;
+    let c: Contact;
     let next_c = this.m_contactList;
     while (c = next_c) {
       next_c = c.getNext();

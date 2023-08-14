@@ -23,26 +23,26 @@
 
 const { World, Vec2, Edge, Box, RevoluteJoint } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.start(world);
 
-var ground = world.createBody();
+let ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
-var shape = new Box(0.6, 0.125);
+let shape = new Box(0.6, 0.125);
 
-var y = 25.0;
-var prevBody = ground;
-for (var i = 0; i < 30; ++i) {
-  var body = world.createDynamicBody(new Vec2(0.5 + i, y));
+let y = 25.0;
+let prevBody = ground;
+for (let i = 0; i < 30; ++i) {
+  let body = world.createDynamicBody(new Vec2(0.5 + i, y));
   body.createFixture(shape, {
     density: 20.0,
     friction: 0.2,
   });
 
-  var anchor = new Vec2(i, y);
+  let anchor = new Vec2(i, y);
   world.createJoint(new RevoluteJoint({
     collideConnected: false,
   }, prevBody, body, anchor));

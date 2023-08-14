@@ -21,9 +21,9 @@
  * SOFTWARE.
  */
 
-var { World, Vec2, Circle, Edge } = planck;
+let { World, Vec2, Circle, Edge } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.info('X: Add/Remove heavy circle');
@@ -35,7 +35,7 @@ world.createDynamicBody(new Vec2(0.0, 2.5)).createFixture(new Circle(0.5), 10.0)
 
 world.createDynamicBody(new Vec2(0.0, 3.5)).createFixture(new Circle(0.5), 10.0);
 
-var heavy = null;
+let heavy = null;
 
 function toggleHeavy() {
   if (heavy) {

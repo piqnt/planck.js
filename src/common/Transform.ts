@@ -83,21 +83,18 @@ export class Transform {
     return obj;
   }
 
-  /**
-   * Set this to the identity transform.
-   */
+  /** Set this to the identity transform */
   setIdentity(): void {
     this.p.setZero();
     this.q.setIdentity();
   }
 
+  /** Set position and angle */
   set(position: Vec2Value, rotation: number): void;
+  /** Copy from another transform */
   set(xf: TransformValue): void;
-  /**
-   * Set this based on the position and angle.
-   */
-  // tslint:disable-next-line:typedef
-  set(a, b?) {
+  /** @internal */
+  set(a: any, b?: any) {
     if (typeof b === 'undefined') {
       this.p.set(a.p);
       this.q.set(a.q);
@@ -107,9 +104,7 @@ export class Transform {
     }
   }
 
-  /**
-   * Set this based on the position and angle.
-   */
+  /** Set position and angle */
   setNum(position: Vec2Value, rotation: number) {
     this.p.setVec2(position);
     this.q.setAngle(rotation);
@@ -135,9 +130,10 @@ export class Transform {
   static mul(a: TransformValue, b: TransformValue): Transform;
   // static mul(a: Transform, b: Vec2Value[]): Vec2[];
   // static mul(a: Transform, b: Transform[]): Transform[];
-  // tslint:disable-next-line:typedef
+  /** @internal */
   static mul(a, b) {
     if (Array.isArray(b)) {
+        // todo: this was used in examples, remove in the future
       _ASSERT && Transform.assert(a);
       const arr = [];
       for (let i = 0; i < b.length; i++) {
@@ -155,7 +151,7 @@ export class Transform {
 
   static mulAll(a: Transform, b: Vec2Value[]): Vec2[];
   static mulAll(a: Transform, b: Transform[]): Transform[];
-  // tslint:disable-next-line:typedef
+  /** @internal */
   static mulAll(a: TransformValue, b) {
     _ASSERT && Transform.assert(a);
     const arr = [];
@@ -166,8 +162,8 @@ export class Transform {
   }
 
   /** @internal @deprecated */
-  // tslint:disable-next-line:typedef
   static mulFn(a: TransformValue) {
+    // todo: this was used in examples, remove in the future
     _ASSERT && Transform.assert(a);
     return function(b: Vec2Value): Vec2 {
       return Transform.mul(a, b);
@@ -195,7 +191,7 @@ export class Transform {
 
   static mulT(a: TransformValue, b: Vec2Value): Vec2;
   static mulT(a: TransformValue, b: TransformValue): Transform;
-  // tslint:disable-next-line:typedef
+  /** @internal */
   static mulT(a, b) {
     if ('x' in b && 'y' in b) {
       return Transform.mulTVec2(a, b);

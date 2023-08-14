@@ -21,39 +21,39 @@
  * SOFTWARE.
  */
 
-const { Vec2, Rot, Transform, AABB, World, Edge, Box, Circle } = planck;
+const { Vec2, World, Edge, Box, Circle } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.start(world);
 
-var radius = 0.5;
-var top = 10.0 + 0.5;
-var bottom = 10.0 - 0.5;
+let radius = 0.5;
+let top = 10.0 + 0.5;
+let bottom = 10.0 - 0.5;
 
-var UNKNOWN = 0, ABOVE = +1, BELOW = -1;
+let UNKNOWN = 0, ABOVE = +1, BELOW = -1;
 
-var state = UNKNOWN;
+let state = UNKNOWN;
 
 // Ground
-var ground = world.createBody();
+let ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-20.0, 0.0), new Vec2(20.0, 0.0)), 0.0);
 
 // Platform
-var platform = world.createBody(new Vec2(0.0, 10.0));
-var platformFix = platform.createFixture(new Box(3.0, 0.5), 0.0);
+let platform = world.createBody(new Vec2(0.0, 10.0));
+let platformFix = platform.createFixture(new Box(3.0, 0.5), 0.0);
 
 // Actor
-var character = world.createDynamicBody(new Vec2(0.0, 12.0));
-var characterFix = character.createFixture(new Circle(radius), 20.0);
+let character = world.createDynamicBody(new Vec2(0.0, 12.0));
+let characterFix = character.createFixture(new Circle(radius), 20.0);
 character.setLinearVelocity(new Vec2(0.0, -50.0));
 
 world.on('pre-solve', function(contact, oldManifold) {
-  var fixA = contact.getFixtureA();
-  var fixB = contact.getFixtureB();
+  let fixA = contact.getFixtureA();
+  let fixB = contact.getFixtureB();
 
-  var isCharPlatformContact =
+  let isCharPlatformContact =
     fixA === platformFix && fixB === characterFix ||
     fixB === platformFix && fixA === characterFix;
 
@@ -61,10 +61,10 @@ world.on('pre-solve', function(contact, oldManifold) {
     return;
   }
 
-  if (0) {
+  if (false) {
     // if character is below platform
     // disable contact
-    var p = character.getPosition();
+    let p = character.getPosition();
 
     if (p.y < top + radius - 3.0 * /*linearSlop*/ 0.005) {
       contact.setEnabled(false);
@@ -72,7 +72,7 @@ world.on('pre-solve', function(contact, oldManifold) {
   } else {
     // if character is moving up
     // disable contact
-    var v = character.getLinearVelocity();
+    let v = character.getLinearVelocity();
     if (v.y > 0.0) {
       contact.setEnabled(false);
     }
@@ -80,6 +80,6 @@ world.on('pre-solve', function(contact, oldManifold) {
 });
 
 testbed.step = function(settings) {
-  var v = character.getLinearVelocity();
-  testbed.status("Character Linear Velocity", v.y);
+  let v = character.getLinearVelocity();
+  testbed.status('Character Linear Velocity', v.y);
 };

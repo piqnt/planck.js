@@ -28,81 +28,86 @@
 
 const { World, Vec2, Edge, Box, WeldJoint, Polygon, Circle } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.start(world);
 
-var COUNT = 8;
+let COUNT = 8;
 
-var ground = world.createBody();
+let ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
+{
+  let prevBody = ground;
+  for (let i = 0; i < COUNT; ++i) {
+    const body = world.createDynamicBody(new Vec2(-14.5 + 1.0 * i, 5.0));
+    body.createFixture(new Box(0.5, 0.125), 20.0);
 
-var prevBody = ground;
-for (var i = 0; i < COUNT; ++i) {
-  var body = world.createDynamicBody(new Vec2(-14.5 + 1.0 * i, 5.0));
-  body.createFixture(new Box(0.5, 0.125), 20.0);
-
-  var anchor = new Vec2(-15.0 + 1.0 * i, 5.0);
-  world.createJoint(new WeldJoint({}, prevBody, body, anchor));
-
-  prevBody = body;
-}
-
-var prevBody = ground;
-for (var i = 0; i < 3; ++i) {
-  var body = world.createDynamicBody(new Vec2(-14.0 + 2.0 * i, 15.0));
-  body.createFixture(new Box(1.0, 0.125), 20.0);
-
-  var anchor = new Vec2(-15.0 + 2.0 * i, 15.0);
-  world.createJoint(new WeldJoint({
-    frequencyHz: 5.0,
-    dampingRatio: 0.7,
-  }, prevBody, body, anchor));
-
-  prevBody = body;
-}
-
-var prevBody = ground;
-for (var i = 0; i < COUNT; ++i) {
-  var body = world.createDynamicBody(new Vec2(-4.5 + 1.0 * i, 5.0));
-  body.createFixture(new Box(0.5, 0.125), 20.0);
-
-  if (i > 0) {
-    var anchor = new Vec2(-5.0 + 1.0 * i, 5.0);
+    const anchor = new Vec2(-15.0 + 1.0 * i, 5.0);
     world.createJoint(new WeldJoint({}, prevBody, body, anchor));
+
+    prevBody = body;
   }
-
-  prevBody = body;
 }
+{
+  let prevBody = ground;
+  for (let i = 0; i < 3; ++i) {
+    let body = world.createDynamicBody(new Vec2(-14.0 + 2.0 * i, 15.0));
+    body.createFixture(new Box(1.0, 0.125), 20.0);
 
-var prevBody = ground;
-for (var i = 0; i < COUNT; ++i) {
-  var body = world.createDynamicBody(new Vec2(5.5 + 1.0 * i, 10.0));
-  body.createFixture(new Box(0.5, 0.125), 20.0);
-
-  if (i > 0) {
-    var anchor = new Vec2(5.0 + 1.0 * i, 10.0);
+    let anchor = new Vec2(-15.0 + 2.0 * i, 15.0);
     world.createJoint(new WeldJoint({
-      frequencyHz: 8.0,
+      frequencyHz: 5.0,
       dampingRatio: 0.7,
     }, prevBody, body, anchor));
+
+    prevBody = body;
+  }
+}
+{
+  let prevBody = ground;
+  for (let i = 0; i < COUNT; ++i) {
+    let body = world.createDynamicBody(new Vec2(-4.5 + 1.0 * i, 5.0));
+    body.createFixture(new Box(0.5, 0.125), 20.0);
+
+    if (i > 0) {
+      let anchor = new Vec2(-5.0 + 1.0 * i, 5.0);
+      world.createJoint(new WeldJoint({}, prevBody, body, anchor));
+    }
+
+    prevBody = body;
+  }
+}
+{
+  let prevBody = ground;
+  for (let i = 0; i < COUNT; ++i) {
+    let body = world.createDynamicBody(new Vec2(5.5 + 1.0 * i, 10.0));
+    body.createFixture(new Box(0.5, 0.125), 20.0);
+
+    if (i > 0) {
+      let anchor = new Vec2(5.0 + 1.0 * i, 10.0);
+      world.createJoint(new WeldJoint({
+        frequencyHz: 8.0,
+        dampingRatio: 0.7,
+      }, prevBody, body, anchor));
+    }
+
+    prevBody = body;
+  }
+}
+{
+  for (let i = 0; i < 2; ++i) {
+    let vertices = [];
+    vertices[0] = new Vec2(-0.5, 0.0);
+    vertices[1] = new Vec2(0.5, 0.0);
+    vertices[2] = new Vec2(0.0, 1.5);
+
+    let body = world.createDynamicBody(new Vec2(-8.0 + 8.0 * i, 12.0));
+    body.createFixture(new Polygon(vertices), 1.0);
   }
 
-  prevBody = body;
-}
-
-for (var i = 0; i < 2; ++i) {
-  var vertices = [];
-  vertices[0] = new Vec2(-0.5, 0.0);
-  vertices[1] = new Vec2(0.5, 0.0);
-  vertices[2] = new Vec2(0.0, 1.5);
-
-  var body = world.createDynamicBody(new Vec2(-8.0 + 8.0 * i, 12.0));
-  body.createFixture(new Polygon(vertices), 1.0);
-}
-
-for (var i = 0; i < 2; ++i) {
-  var body = world.createDynamicBody(new Vec2(-6.0 + 6.0 * i, 10.0));
-  body.createFixture(new Circle(0.5), 1.0);
+  for (let i = 0; i < 2; ++i) {
+    let body = world.createDynamicBody(new Vec2(-6.0 + 6.0 * i, 10.0));
+    body.createFixture(new Circle(0.5), 1.0);
+  }
 }

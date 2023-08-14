@@ -27,7 +27,7 @@ const { World, Vec2, Edge, Box, Circle, Polygon, RevoluteJoint, WheelJoint } = p
 
 const testbed = planck.testbed();
 
-var world = new World({
+let world = new World({
   gravity : new Vec2(0, -10)
 });
 
@@ -37,32 +37,32 @@ testbed.info('←/→: Accelerate car, ↑/↓: Change spring frequency');
 testbed.start(world);
 
 // wheel spring settings
-var HZ = 4.0;
-var ZETA = 0.7;
-var SPEED = 50.0;
+let HZ = 4.0;
+let ZETA = 0.7;
+let SPEED = 50.0;
 
-var ground = world.createBody();
+let ground = world.createBody();
 
-var groundFD = {
+let groundFD = {
   density : 0.0,
   friction : 0.6
 };
 
 ground.createFixture(new Edge(new Vec2(-20.0, 0.0), new Vec2(20.0, 0.0)), groundFD);
 
-var hs = [ 0.25, 1.0, 4.0, 0.0, 0.0, -1.0, -2.0, -2.0, -1.25, 0.0 ];
+let hs = [ 0.25, 1.0, 4.0, 0.0, 0.0, -1.0, -2.0, -2.0, -1.25, 0.0 ];
 
-var x = 20.0, y1 = 0.0, dx = 5.0;
+let x = 20.0, y1 = 0.0, dx = 5.0;
 
-for (var i = 0; i < 10; ++i) {
-  var y2 = hs[i];
+for (let i = 0; i < 10; ++i) {
+  let y2 = hs[i];
   ground.createFixture(new Edge(new Vec2(x, y1), new Vec2(x + dx, y2)), groundFD);
   y1 = y2;
   x += dx;
 }
 
-for (var i = 0; i < 10; ++i) {
-  var y2 = hs[i];
+for (let i = 0; i < 10; ++i) {
+  let y2 = hs[i];
   ground.createFixture(new Edge(new Vec2(x, y1), new Vec2(x + dx, y2)), groundFD);
   y1 = y2;
   x += dx;
@@ -83,7 +83,7 @@ x += 40.0;
 ground.createFixture(new Edge(new Vec2(x, 0.0), new Vec2(x, 20.0)), groundFD);
 
 // Teeter
-var teeter = world.createDynamicBody(new Vec2(140.0, 1.0));
+let teeter = world.createDynamicBody(new Vec2(140.0, 1.0));
 teeter.createFixture(new Box(10.0, 0.25), 1.0);
 world.createJoint(new RevoluteJoint({
   lowerAngle : -8.0 * Math.PI / 180.0,
@@ -94,13 +94,15 @@ world.createJoint(new RevoluteJoint({
 teeter.applyAngularImpulse(100.0, true);
 
 // Bridge
-var bridgeFD = {};
-bridgeFD.density = 1.0;
-bridgeFD.friction = 0.6;
+let bridgeFD = {
+  density : 1.0,
+  friction : 0.6
+};
 
-var prevBody = ground;
-for (var i = 0; i < 20; ++i) {
-  var bridgeBlock = world.createDynamicBody(new Vec2(161.0 + 2.0 * i, -0.125));
+let prevBody = ground;
+let i;
+for (i = 0; i < 20; ++i) {
+  let bridgeBlock = world.createDynamicBody(new Vec2(161.0 + 2.0 * i, -0.125));
   bridgeBlock.createFixture(new Box(1.0, 0.125), bridgeFD);
 
   world.createJoint(new RevoluteJoint({}, prevBody, bridgeBlock, new Vec2(160.0 + 2.0 * i, -0.125)));
@@ -111,7 +113,7 @@ for (var i = 0; i < 20; ++i) {
 world.createJoint(new RevoluteJoint({}, prevBody, ground, new Vec2(160.0 + 2.0 * i, -0.125)));
 
 // Boxes
-var box = new Box(0.5, 0.5);
+let box = new Box(0.5, 0.5);
 
 world.createDynamicBody(new Vec2(230.0, 0.5))
   .createFixture(box, 0.5);
@@ -129,7 +131,7 @@ world.createDynamicBody(new Vec2(230.0, 4.5))
   .createFixture(box, 0.5);
 
 // Car
-var car = world.createDynamicBody(new Vec2(0.0, 1.0));
+let car = world.createDynamicBody(new Vec2(0.0, 1.0));
 car.createFixture(new Polygon([
   new Vec2(-1.5, -0.5),
   new Vec2(1.5, -0.5),
@@ -139,17 +141,18 @@ car.createFixture(new Polygon([
   new Vec2(-1.5, 0.2)
 ]), 1.0);
 
-var wheelFD = {};
-wheelFD.density = 1.0;
-wheelFD.friction = 0.9;
+let wheelFD = {
+  density : 1.0,
+  friction : 0.9
+};
 
-var wheelBack = world.createDynamicBody(new Vec2(-1.0, 0.35));
+let wheelBack = world.createDynamicBody(new Vec2(-1.0, 0.35));
 wheelBack.createFixture(new Circle(0.4), wheelFD);
 
-var wheelFront = world.createDynamicBody(new Vec2(1.0, 0.4));
+let wheelFront = world.createDynamicBody(new Vec2(1.0, 0.4));
 wheelFront.createFixture(new Circle(0.4), wheelFD);
 
-var springBack = world.createJoint(new WheelJoint({
+let springBack = world.createJoint(new WheelJoint({
   motorSpeed : 0.0,
   maxMotorTorque : 20.0,
   enableMotor : true,
@@ -157,7 +160,7 @@ var springBack = world.createJoint(new WheelJoint({
   dampingRatio : ZETA
 }, car, wheelBack, wheelBack.getPosition(), new Vec2(0.0, 1.0)));
 
-var springFront = world.createJoint(new WheelJoint({
+let springFront = world.createJoint(new WheelJoint({
   motorSpeed : 0.0,
   maxMotorTorque : 10.0,
   enableMotor : false,
@@ -196,7 +199,7 @@ testbed.step = function() {
     springBack.enableMotor(false);
   }
 
-  var cp = car.getPosition();
+  let cp = car.getPosition();
   if (cp.x > testbed.x + 10) {
     testbed.x = cp.x - 10;
 

@@ -23,26 +23,26 @@
 
 const { Vec2, World, Edge, Polygon, Box, Circle, Math } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.start(world);
 
-var pause = false;
+let pause = false;
 
-var MAX_BODIES = 256;
+let MAX_BODIES = 256;
 
-var bodies = [];
-var shapes = [];
+let bodies = [];
+let shapes = [];
 
 {
-  var ground = world.createBody();
+  let ground = world.createBody();
 
-  var x1 = -20.0;
-  var y1 = 2.0 * Math.cos(x1 / 10.0 * Math.PI);
-  for (var i = 0; i < 80; ++i) {
-    var x2 = x1 + 0.5;
-    var y2 = 2.0 * Math.cos(x2 / 10.0 * Math.PI);
+  let x1 = -20.0;
+  let y1 = 2.0 * Math.cos(x1 / 10.0 * Math.PI);
+  for (let i = 0; i < 80; ++i) {
+    let x2 = x1 + 0.5;
+    let y2 = 2.0 * Math.cos(x2 / 10.0 * Math.PI);
 
     ground.createFixture(new Edge(new Vec2(x1, y1), new Vec2(x2, y2)), 0.0);
 
@@ -56,11 +56,11 @@ shapes[0] = new Polygon([new Vec2(-0.5, 0.0), new Vec2(0.5, 0.0), new Vec2(0.0, 
 shapes[1] = new Polygon([new Vec2(-0.1, 0.0), new Vec2(0.1, 0.0), new Vec2(0.0, 1.5)]);
 
 {
-  var w = 1.0;
-  var b = w / (2.0 + Math.sqrt(2.0));
-  var s = Math.sqrt(2.0) * b;
+  let w = 1.0;
+  let b = w / (2.0 + Math.sqrt(2.0));
+  let s = Math.sqrt(2.0) * b;
 
-  var vertices = [];
+  let vertices = [];
   vertices[0] = new Vec2(0.5 * s, 0.0);
   vertices[1] = new Vec2(0.5 * w, b);
   vertices[2] = new Vec2(0.5 * w, b + s);
@@ -77,33 +77,32 @@ shapes[3] = new Box(0.5, 0.5);
 
 shapes[4] = new Circle(0.5);
 
-var angle = 0.0;
+let angle = 0.0;
 
 function createItem(index) {
   if (bodies.length > MAX_BODIES) {
     world.destroyBody(bodies.shift());
   }
 
-  var bd = {};
-
-  var x = Math.random(-10.0, 10.0);
-  var y = Math.random(10.0, 20.0);
-
-  bd.position = new Vec2(x, y);
-  bd.angle = Math.random(-Math.PI, Math.PI);
-  bd.type = 'dynamic';
+  let bd = {
+    position: new Vec2(
+      Math.random(-10.0, 10.0),
+      Math.random(10.0, 20.0)
+    ),
+    angle: Math.random(-Math.PI, Math.PI),
+    type: 'dynamic',
+  };
 
   if (index === 4) {
     bd.angularDamping = 0.02;
   }
 
-  var body = world.createBody(bd);
+  let body = world.createBody(bd);
 
-  var fd = {};
-  fd.shape = shapes[index];
-  fd.friction = 0.3;
-  fd.density = 20.0;
-  body.createFixture(fd);
+  body.createFixture(shapes[index], {
+    density: 20.0,
+    friction: 0.3
+  });
 
   bodies.push(body);
 }
@@ -140,43 +139,43 @@ testbed.keydown = function(code, char) {
 
 testbed.info('1-5: Drop new object, X: Destroy an object');
 
-var RayCastListener = (function() {
-  var def = {};
+const rayCastResult = {
+  fixture: null,
+  point: null,
+  normal: null,
+};
 
-  def.callback = function(fixture, point, normal, fraction) {
-    def.fixture = fixture;
-    def.point = point;
-    def.normal = normal;
-    return fraction;
-  };
+function rayCastCallback (fixture, point, normal, fraction) {
+  rayCastResult.fixture = fixture;
+  rayCastResult.point = point;
+  rayCastResult.normal = normal;
+  return fraction;
+}
 
-  def.reset = function() {
-    def.fixture = null;
-    def.point = null;
-    def.normal = null;
-  };
-
-  return def;
-})();
+function rayCastReset () {
+  rayCastResult.fixture = null;
+  rayCastResult.point = null;
+  rayCastResult.normal = null;
+}
 
 testbed.step = function() {
-  var advanceRay = !pause; // settings.pause == 0 || settings.singleStep;
+  let advanceRay = !pause; // settings.pause == 0 || settings.singleStep;
 
-  var L = 25.0;
-  var point1 = new Vec2(0.0, 10.0);
-  var d = new Vec2(L * Math.cos(angle), -L * Math.abs(Math.sin(angle)));
-  var point2 = Vec2.add(point1, d);
+  let L = 25.0;
+  let point1 = new Vec2(0.0, 10.0);
+  let d = new Vec2(L * Math.cos(angle), -L * Math.abs(Math.sin(angle)));
+  let point2 = Vec2.add(point1, d);
 
-  RayCastListener.reset();
+  rayCastReset();
 
-  world.rayCast(point1, point2, RayCastListener.callback);
+  world.rayCast(point1, point2, rayCastCallback);
 
-  if (RayCastListener.fixture) {
-    testbed.drawPoint(RayCastListener.point, 5.0, testbed.color(0.4, 0.9, 0.4));
-    testbed.drawSegment(point1, RayCastListener.point, testbed.color(0.8, 0.8, 0.8));
+  if (rayCastResult.fixture) {
+    testbed.drawPoint(rayCastResult.point, 5.0, testbed.color(0.4, 0.9, 0.4));
+    testbed.drawSegment(point1, rayCastResult.point, testbed.color(0.8, 0.8, 0.8));
 
-    var head = Vec2.combine(1, RayCastListener.point, 0.5, RayCastListener.normal);
-    testbed.drawSegment(RayCastListener.point, head, testbed.color(0.9, 0.9, 0.4));
+    let head = Vec2.combine(1, rayCastResult.point, 2, rayCastResult.normal);
+    testbed.drawSegment(rayCastResult.point, head, testbed.color(0.9, 0.9, 0.4));
   } else {
     testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));
   }

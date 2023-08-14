@@ -21,56 +21,55 @@
  * SOFTWARE.
  */
 
-const { World, Vec2, Transform, Box, Distance, Math } = planck;
+const { World, Vec2, Transform, Box, Distance } = planck;
 
-var DistanceInput = Distance.Input;
-var DistanceOutput = Distance.Output;
-var SimplexCache = Distance.Cache;
+let DistanceInput = Distance.Input;
+let DistanceOutput = Distance.Output;
+let SimplexCache = Distance.Cache;
 
-var world = new World();
+let world = new World();
 
 const testbed = planck.testbed();
 testbed.start(world);    
 
-var transformA = new Transform();
-transformA.p.set(0.0, -0.2);
+let transformA = new Transform(new Vec2(0.0, -0.2));
 
-var polygonA = new Box(10.0, 0.2);
+let polygonA = new Box(10.0, 0.2);
 
-var positionB = new Vec2(12.017401, 0.13678508);
-var angleB = -0.0109265;
-var transformB = new Transform(positionB, angleB);
+let positionB = new Vec2(12.017401, 0.13678508);
+let angleB = -0.0109265;
+let transformB = new Transform(positionB, angleB);
 
-var polygonB = new Box(2.0, 0.1);
+let polygonB = new Box(2.0, 0.1);
 
-var bodyA = world.createBody();
-var fixA = bodyA.createFixture(polygonA);
+let bodyA = world.createBody();
+let fixA = bodyA.createFixture(polygonA);
 
-var bodyB = world.createBody();
-var fixB = bodyB.createFixture(polygonB);
+let bodyB = world.createBody();
+let fixB = bodyB.createFixture(polygonB);
 
 testbed.step = function() {
-  var input = new DistanceInput();
+  let input = new DistanceInput();
   input.proxyA.set(polygonA, 0);
   input.proxyB.set(polygonB, 0);
   input.transformA.set(transformA);
   input.transformB.set(transformB);
   input.useRadii = true;
 
-  var cache = new SimplexCache();
+  let cache = new SimplexCache();
 
-  var output = new DistanceOutput();
+  let output = new DistanceOutput();
 
   Distance(output, cache, input);
 
-  testbed.status("Distance", output.distance);
-  testbed.status("Iterations", output.iterations);
+  testbed.status('Distance', output.distance);
+  testbed.status('Iterations', output.iterations);
 
   bodyA.setTransform(transformA);
   bodyB.setTransform(transformB);
 
-  var x1 = output.pointA;
-  var x2 = output.pointB;
+  let x1 = output.pointA;
+  let x2 = output.pointB;
 
   testbed.drawPoint(x1, 4.0, testbed.color(1.0, 0.0, 0.0));
   testbed.drawPoint(x2, 4.0, testbed.color(1.0, 1.0, 0.0));

@@ -25,27 +25,27 @@ const { Vec2, World } = planck;
 
 const testbed = planck.testbed();
 
-    var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 testbed.info('Not implemented!');
 testbed.start(world);
-testbed.info("Z/X to adjust target angle");
+testbed.info('Z/X to adjust target angle');
 
-var /* Rope */rope;
-var /* float32 */angle;
+let /* Rope */rope;
+let /* float32 */angle;
 
-var N = 40;
-var vertices = [];
-var masses = [];
+let N = 40;
+let vertices = [];
+let masses = [];
 
-for (var i = 0; i < N; ++i) {
+for (let i = 0; i < N; ++i) {
   vertices[i].set(0.0, 20.0 - 0.25 * i);
   masses[i] = 1.0;
 }
 masses[0] = 0.0;
 masses[1] = 0.0;
 
-var def = {};
+let def = {};
 def.vertices = vertices;
 def.count = N;
 def.gravity.set(0.0, -10.0);
@@ -74,7 +74,7 @@ testbed.keydown = function(code, char) {
 };
 
 testbed.step = function(settings) {
-  var dt = settings.hz > 0.0 ? 1.0 / settings.hz : 0.0;
+  let dt = settings.hz > 0.0 ? 1.0 / settings.hz : 0.0;
 
   if (settings.pause == 1 && settings.singleStep == 0) {
     dt = 0.0;

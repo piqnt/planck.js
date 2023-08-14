@@ -21,31 +21,32 @@
  * SOFTWARE.
  */
 
+
 const { World, Vec2, Edge, Circle, Box, Polygon, RevoluteJoint } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.start(world);
 testbed.info('Z: Limits, X: Motor');
 
-var ground = world.createBody();
+let ground = world.createBody();
 
-var groundFD = {
+let groundFD = {
   filterCategoryBits: 2,
   filterMaskBits: 0xFFFF,
   filterGroupIndex: 0,
 };
 ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), groundFD);
 
-var rotator = world.createDynamicBody(new Vec2(-10.0, 20.0));
+let rotator = world.createDynamicBody(new Vec2(-10.0, 20.0));
 rotator.createFixture(new Circle(0.5), 5.0);
 
-var w = 100.0;
+let w = 100.0;
 rotator.setAngularVelocity(w);
 rotator.setLinearVelocity(new Vec2(-8.0 * w, 0.0));
 
-var joint = world.createJoint(new RevoluteJoint({
+let joint = world.createJoint(new RevoluteJoint({
   motorSpeed: 1.0 * Math.PI,
   maxMotorTorque: 10000.0,
   enableMotor: true,
@@ -55,13 +56,13 @@ var joint = world.createJoint(new RevoluteJoint({
   collideConnected: true,
 }, ground, rotator, new Vec2(-10.0, 12.0)));
 
-var ball = world.createDynamicBody(new Vec2(5.0, 30.0));
+let ball = world.createDynamicBody(new Vec2(5.0, 30.0));
 ball.createFixture(new Circle(3.0), {
   density: 5.0,
   // filterMaskBits: 1,
 });
 
-var platform = world.createBody({
+let platform = world.createBody({
   position: new Vec2(20.0, 10.0),
   type: 'dynamic',
   bullet: true,
@@ -75,7 +76,7 @@ world.createJoint(new RevoluteJoint({
 }, ground, platform, new Vec2(20.0, 10.0)));
 
 // Tests mass computation of a small object far from the origin
-var triangle = world.createDynamicBody();
+let triangle = world.createDynamicBody();
 
 triangle.createFixture(new Polygon([
   new Vec2(17.63, 36.31),
@@ -95,7 +96,7 @@ testbed.keydown = function(code, char) {
   }
 };
 
-testbed.step = function(settings) {
+testbed.step = function() {
   // if (stepCount++ == 360) {
   //   ball.setTransform(new Vec2(0.0, 0.5), 0.0);
   // }

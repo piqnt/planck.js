@@ -23,35 +23,35 @@
 
 const { World, Vec2, Transform, Manifold, CollidePolygons, Box } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.info('Use arrow keys to move and Z or X to rotate.');
 testbed.start(world);
 
-var polygonA = new Box(2, 4);
-var transformA = new Transform(new Vec2(0.0, 0.0), 0.0);
+let polygonA = new Box(2, 4);
+let transformA = new Transform(new Vec2(0.0, 0.0), 0.0);
 
-var polygonB = new Box(5, 5);
-var positionB = new Vec2(5, 4);
-var angleB = 1.9160721;
-var transformB = new Transform(positionB, angleB);
+let polygonB = new Box(5, 5);
+let positionB = new Vec2(5, 4);
+let angleB = 1.9160721;
+let transformB = new Transform(positionB, angleB);
 
 testbed.step = function() {
-  var manifold = new Manifold();
+  let manifold = new Manifold();
   new CollidePolygons(manifold, polygonA, transformA, polygonB, transformB);
 
-  var worldManifold = manifold.getWorldManifold(null, transformA, polygonA.getRadius(), transformB, polygonB.getRadius());
+  let worldManifold = manifold.getWorldManifold(null, transformA, polygonA.getRadius(), transformB, polygonB.getRadius());
 
   testbed.status('point count', manifold.pointCount);
 
-  var vA = polygonA.m_vertices.map(Transform.mulFn(transformA));
+  let vA = polygonA.m_vertices.map(v => Transform.mul(transformA, v));
   testbed.drawPolygon(vA, testbed.color(0.9, 0.9, 0.9));
 
-  var vB = polygonB.m_vertices.map(Transform.mulFn(transformB));
+  let vB = polygonB.m_vertices.map(v => Transform.mul(transformB, v));
   testbed.drawPolygon(vB, testbed.color(0.9, 0.9, 0.9));
 
-  for (var i = 0; i < manifold.pointCount; ++i) {
+  for (let i = 0; i < manifold.pointCount; ++i) {
     testbed.drawPoint(worldManifold.points[i], 4.0, testbed.color(0.9, 0.3, 0.3));
   }
 };

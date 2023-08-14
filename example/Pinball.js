@@ -26,13 +26,13 @@
 
 const { World, Vec2, Circle, Box, Chain, RevoluteJoint } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.start(world);
 
 // Ground body
-var ground = world.createBody();
+let ground = world.createBody();
 ground.createFixture(new Chain([
   new Vec2(0.0, -2.0),
   new Vec2(8.0, 6.0),
@@ -42,33 +42,38 @@ ground.createFixture(new Chain([
 ], true), 0.0);
 
 // Flippers
-var pLeft = new Vec2(-2.0, 0.0);
-var pRight = new Vec2(2.0, 0.0);
+let pLeft = new Vec2(-2.0, 0.0);
+let pRight = new Vec2(2.0, 0.0);
 
-var leftFlipper = world.createDynamicBody(new Vec2(-2.0, 0.0));
-var rightFlipper = world.createDynamicBody(new Vec2(2.0, 0.0));
+let leftFlipper = world.createDynamicBody(new Vec2(-2.0, 0.0));
+let rightFlipper = world.createDynamicBody(new Vec2(2.0, 0.0));
 
 leftFlipper.createFixture(new Box(1.75, 0.1), 1.0);
 rightFlipper.createFixture(new Box(1.75, 0.1), 1.0);
 
-var jd = {};
-jd.enableMotor = true;
-jd.maxMotorTorque = 1000.0;
-jd.enableLimit = true;
-jd.motorSpeed = 0.0;
+let jd = {
+  enableMotor: true,
+  maxMotorTorque: 1000.0,
+  enableLimit: true,
+  motorSpeed: 0.0,
+};
 
-jd.lowerAngle = -30.0 * Math.PI / 180.0;
-jd.upperAngle = 5.0 * Math.PI / 180.0;
-var leftJoint = new RevoluteJoint(jd, ground, leftFlipper, leftFlipper.getPosition());
+let leftJoint = new RevoluteJoint({
+  ...jd,
+  lowerAngle: -30.0 * Math.PI / 180.0,
+  upperAngle: 5.0 * Math.PI / 180.0,
+}, ground, leftFlipper, leftFlipper.getPosition());
 world.createJoint(leftJoint);
 
-jd.lowerAngle = -5.0 * Math.PI / 180.0;
-jd.upperAngle = 30.0 * Math.PI / 180.0;
-var rightJoint = new RevoluteJoint(jd, ground, rightFlipper, rightFlipper.getPosition());
+let rightJoint = new RevoluteJoint({
+  ...jd,
+  lowerAngle: -5.0 * Math.PI / 180.0,
+  upperAngle: 30.0 * Math.PI / 180.0,
+}, ground, rightFlipper, rightFlipper.getPosition());
 world.createJoint(rightJoint);
 
 // Circle character
-var ball = world.createBody({
+let ball = world.createBody({
   position : new Vec2(1.0, 15.0),
   type : 'dynamic',
   bullet : true
@@ -87,4 +92,4 @@ testbed.step = function() {
   } else {
     leftJoint.setMotorSpeed(-10.0);
   }
-}
+};

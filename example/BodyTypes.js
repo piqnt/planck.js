@@ -23,23 +23,23 @@
 
 const { Vec2, World, Edge, Box, RevoluteJoint, PrismaticJoint } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.info('Z: Dynamic, X: Static, C: Kinematic');
 testbed.start(world);
 
-var SPEED = 3.0;
+let SPEED = 3.0;
 
-var ground = world.createBody();
+let ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-20.0, 0.0), new Vec2(20.0, 0.0)));
 
 // Define attachment
-var attachment = world.createDynamicBody(new Vec2(0.0, 3.0));
+let attachment = world.createDynamicBody(new Vec2(0.0, 3.0));
 attachment.createFixture(new Box(0.5, 2.0), 2.0);
 
 // Define platform
-var platform = world.createDynamicBody(new Vec2(-4.0, 5.0));
+let platform = world.createDynamicBody(new Vec2(-4.0, 5.0));
 
 platform.createFixture(
   new Box(0.5, 4.0, new Vec2(4.0, 0.0), 0.5 * Math.PI),
@@ -60,7 +60,7 @@ world.createJoint(new PrismaticJoint({
 }, ground, platform, new Vec2(0.0, 5.0), new Vec2(1.0, 0.0)));
 
 // Create a payload
-var payload = world.createDynamicBody(new Vec2(0.0, 8.0));
+let payload = world.createDynamicBody(new Vec2(0.0, 8.0));
 payload.createFixture(
   new Box(0.75, 0.75),
   { friction : 0.6, density : 2.0 }
@@ -83,8 +83,8 @@ testbed.keydown = function(code, char) {
 testbed.step = function(settings) {
   // Drive the kinematic body.
   if (platform.isKinematic()) {
-    var p = platform.getTransform().p;
-    var v = platform.getLinearVelocity();
+    let p = platform.getTransform().p;
+    let v = platform.getLinearVelocity();
 
     if ((p.x < -10.0 && v.x < 0.0) || (p.x > 10.0 && v.x > 0.0)) {
       v.x = -v.x;

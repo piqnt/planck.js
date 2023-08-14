@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-import * as matrix from './Matrix';
 import { math as Math } from './Math';
 
 
@@ -414,26 +413,21 @@ export class Vec2 {
     return Vec2.neo(-v.y, v.x);
   }
 
-  /**
-   * Perform the dot product on two vectors.
-   */
+  /** Dot product on two vectors */
   static dot(v: Vec2Value, w: Vec2Value): number {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
     return v.x * w.x + v.y * w.y;
   }
 
+  /** Cross product between two vectors */
   static cross(v: Vec2Value, w: Vec2Value): number;
+  /** Cross product between a vector and a scalar */
   static cross(v: Vec2Value, w: number): Vec2;
+  /** Cross product between a scalar and a vector */
   static cross(v: number, w: Vec2Value): Vec2;
-  /**
-   * Perform the cross product on two vectors. In 2D this produces a scalar.
-   *
-   * Perform the cross product on a vector and a scalar. In 2D this produces a
-   * vector.
-   */
-  // tslint:disable-next-line:typedef
-  static cross(v, w) {
+  /** @internal */ 
+  static cross(v: any, w: any): any {
     if (typeof w === 'number') {
       _ASSERT && Vec2.assert(v);
       _ASSERT && Math.assert(w);
@@ -451,42 +445,33 @@ export class Vec2 {
     }
   }
 
-  /**
-   * Perform the cross product on two vectors. In 2D this produces a scalar.
-   */
+  /** Cross product on two vectors */
   static crossVec2Vec2(v: Vec2Value, w: Vec2Value): number {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
     return v.x * w.y - v.y * w.x;
   }
 
-  /**
-   * Perform the cross product on a vector and a scalar. In 2D this produces a
-   * vector.
-   */
+  /** Cross product on a vector and a scalar */
   static crossVec2Num(v: Vec2Value, w: number): Vec2 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Math.assert(w);
     return Vec2.neo(w * v.y, -w * v.x);
   }
 
-  /**
-   * Perform the cross product on a vector and a scalar. In 2D this produces a
-   * vector.
-   */
+  /** Cross product on a vector and a scalar */
   static crossNumVec2(v: number, w: Vec2Value): Vec2 {
     _ASSERT && Math.assert(v);
     _ASSERT && Vec2.assert(w);
     return Vec2.neo(-v * w.y, v * w.x);
   }
 
+  /** Returns `a + (v x w)` */
   static addCross(a: Vec2Value, v: Vec2Value, w: number): Vec2;
+  /** Returns `a + (v x w)` */
   static addCross(a: Vec2Value, v: number, w: Vec2Value): Vec2;
-  /**
-   * Returns `a + (v x w)`
-   */
-  // tslint:disable-next-line:typedef
-  static addCross(a, v, w) {
+  /** @internal */
+  static addCross(a: Vec2Value, v: any, w: any): Vec2 {
     if (typeof w === 'number') {
       _ASSERT && Vec2.assert(v);
       _ASSERT && Math.assert(w);
@@ -546,8 +531,8 @@ export class Vec2 {
 
   static mul(a: Vec2Value, b: number): Vec2;
   static mul(a: number, b: Vec2Value): Vec2;
-  // tslint:disable-next-line:typedef
-  static mul(a, b) {
+  /** @internal */
+  static mul(a: any, b: any): Vec2 {
     if (typeof a === 'object') {
       _ASSERT && Vec2.assert(a);
       _ASSERT && Math.assert(b);
@@ -623,16 +608,16 @@ export class Vec2 {
   }
 
   /**  @internal @deprecated */
-  // tslint:disable-next-line:typedef
   static scaleFn(x: number, y: number) {
+    // todo: this was used in examples, remove in the future
     return function(v: Vec2): Vec2 {
       return Vec2.neo(v.x * x, v.y * y);
     };
   }
 
   /**  @internal @deprecated */
-  // tslint:disable-next-line:typedef
   static translateFn(x: number, y: number) {
+    // todo: this was used in examples, remove in the future
     return function(v: Vec2): Vec2 {
       return Vec2.neo(v.x + x, v.y + y);
     };

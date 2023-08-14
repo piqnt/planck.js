@@ -25,20 +25,20 @@
 
 const { World, Vec2, RevoluteJoint, PrismaticJoint, Edge, Box } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.start(world);
 testbed.info('Z: Toggle friction, X: Toggle motor');
 
-var ground = world.createBody();
+let ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
 // Define crank.
-var crank = world.createDynamicBody(new Vec2(0.0, 7.0));
+let crank = world.createDynamicBody(new Vec2(0.0, 7.0));
 crank.createFixture(new Box(0.5, 2.0), 2.0);
 
-var joint1 = world.createJoint(new RevoluteJoint({
+let joint1 = world.createJoint(new RevoluteJoint({
   motorSpeed: Math.PI,
   maxMotorTorque: 10000.0,
   enableMotor: true
@@ -46,13 +46,13 @@ var joint1 = world.createJoint(new RevoluteJoint({
 
 
 // Define follower.
-var follower = world.createDynamicBody(new Vec2(0.0, 13.0));
+let follower = world.createDynamicBody(new Vec2(0.0, 13.0));
 follower.createFixture(new Box(0.5, 4.0), 2.0);
 
 world.createJoint(new RevoluteJoint({enableMotor: false}, crank, follower, new Vec2(0.0, 9.0)));
 
 // Define piston
-var piston = world.createBody({
+let piston = world.createBody({
   type: 'dynamic',
   fixedRotation: true,
   position: new Vec2(0.0, 17.0)
@@ -61,30 +61,30 @@ piston.createFixture(new Box(1.5, 1.5), 2.0);
 
 world.createJoint(new RevoluteJoint({}, follower, piston, new Vec2(0.0, 17.0)));
 
-var joint2 = world.createJoint(new PrismaticJoint({
+let joint2 = world.createJoint(new PrismaticJoint({
   maxMotorForce: 1000.0,
   enableMotor: true
 }, ground, piston, new Vec2(0.0, 17.0), new Vec2(0.0, 1.0)));
 
 // Create a payload
-var payload = world.createDynamicBody(new Vec2(0.0, 23.0));
+let payload = world.createDynamicBody(new Vec2(0.0, 23.0));
 payload.createFixture(new Box(1.5, 1.5), 2.0);
 
 testbed.keydown = function(code, char) {
   switch (char) {
-    case 'Z':
-      joint2.enableMotor(!joint2.isMotorEnabled());
-      joint2.getBodyB().setAwake(true);
-      break;
+  case 'Z':
+    joint2.enableMotor(!joint2.isMotorEnabled());
+    joint2.getBodyB().setAwake(true);
+    break;
 
-    case 'X':
-      joint1.enableMotor(!joint1.isMotorEnabled());
-      joint1.getBodyB().setAwake(true);
-      break;
+  case 'X':
+    joint1.enableMotor(!joint1.isMotorEnabled());
+    joint1.getBodyB().setAwake(true);
+    break;
   }
 };
 
 testbed.step = function() {
-  var torque = joint1.getMotorTorque(1 / 60);
-  testbed.status("Motor Torque", torque);
+  let torque = joint1.getMotorTorque(1 / 60);
+  testbed.status('Motor Torque', torque);
 };

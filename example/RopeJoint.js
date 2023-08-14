@@ -32,34 +32,37 @@
 
 const { Vec2, World, Edge, Box, RevoluteJoint, RopeJoint } = planck;
 
-var world = new World({x: 0, y: -10});
+let world = new World({x: 0, y: -10});
 
 const testbed = planck.testbed();
 testbed.info('X: Toggle the rope joint');
 testbed.start(world);
 
-var ground = world.createBody();
+let ground = world.createBody();
 
 ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
-var segmentDef = {};
-segmentDef.density = 20.0;
-segmentDef.friction = 0.2;
-segmentDef.filterCategoryBits = 0x0001;
-segmentDef.filterMaskBits = 0xFFFF & ~0x0002;
+let segmentDef = {
+  density: 20.0,
+  friction: 0.2,
+  filterCategoryBits: 0x0001,
+  filterMaskBits: 0xFFFF & ~0x0002,
+};
 
-var segmentJointDef = {};
-segmentJointDef.collideConnected = false;
+let segmentJointDef = {
+  collideConnected: false,
+};
 
-var N = 10;
-var y = 15.0;
+let N = 10;
+let y = 15.0;
 
-var prevBody = ground;
-for (var i = 0; i < N; ++i) {
-  var shape = new Box(0.5, 0.125);
-  var bd = {};
-  bd.type = 'dynamic';
-  bd.position = new Vec2(0.5 + 1.0 * i, y);
+let prevBody = ground;
+for (let i = 0; i < N; ++i) {
+  let shape = new Box(0.5, 0.125);
+  let bd = {
+    type: 'dynamic',
+    position: new Vec2(0.5 + 1.0 * i, y),
+  };
   if (i === N - 1) {
     shape = new Box(1.5, 1.5);
     segmentDef.density = 100.0;
@@ -68,21 +71,22 @@ for (var i = 0; i < N; ++i) {
     bd.angularDamping = 0.4;
   }
 
-  var body = world.createBody(bd);
+  let body = world.createBody(bd);
 
   body.createFixture(shape, segmentDef);
 
-  var anchor = new Vec2(i, y);
+  let anchor = new Vec2(i, y);
   world.createJoint(new RevoluteJoint(segmentJointDef, prevBody, body, anchor));
 
   prevBody = body;
 }
 
-var ropeJointDef = {};
-ropeJointDef.maxLength = N - 1.0 + 0.01;
-ropeJointDef.localAnchorA = new Vec2(0.0, y);
-ropeJointDef.localAnchorB = new Vec2(0, 0);
-var rope = world.createJoint(new RopeJoint(ropeJointDef, ground, prevBody));
+let ropeJointDef = {
+  maxLength: N - 1.0 + 0.01,
+  localAnchorA: new Vec2(0.0, y),
+  localAnchorB: new Vec2(0, 0),
+};
+let rope = world.createJoint(new RopeJoint(ropeJointDef, ground, prevBody));
 
 testbed.keydown = function(code, char) {
   if (char === 'X') {

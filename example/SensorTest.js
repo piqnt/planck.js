@@ -25,18 +25,18 @@
 
 const { World, Vec2, Circle, Box, Edge } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.start(world);
 
-var COUNT = 7;
+let COUNT = 7;
 
-var sensor;
-var bodies = [];
-var touching = [];
+let sensor;
+let bodies = [];
+let touching = [];
 
-var ground = world.createBody();
+let ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
 if (0) {
@@ -52,30 +52,30 @@ if (0) {
   });
 }
 
-var circle = new Circle(1.0);
+let circle = new Circle(1.0);
 
-for (var i = 0; i < COUNT; ++i) {
+for (let i = 0; i < COUNT; ++i) {
   touching[i] = { touching : false };
 
   bodies[i] = world.createDynamicBody(new Vec2(-10.0 + 3.0 * i, 20.0));
-  bodies[i].setUserData(touching[i])
+  bodies[i].setUserData(touching[i]);
   bodies[i].createFixture(circle, 1.0);
 }
 
 // Implement contact listener.
 world.on('begin-contact', function(contact) {
-  var fixtureA = contact.getFixtureA();
-  var fixtureB = contact.getFixtureB();
+  let fixtureA = contact.getFixtureA();
+  let fixtureB = contact.getFixtureB();
 
   if (fixtureA === sensor) {
-    var userData = fixtureB.getBody().getUserData();
+    let userData = fixtureB.getBody().getUserData();
     if (userData) {
       userData.touching = true;
     }
   }
 
   if (fixtureB === sensor) {
-    var userData = fixtureA.getBody().getUserData();
+    let userData = fixtureA.getBody().getUserData();
     if (userData) {
       userData.touching = true;
     }
@@ -84,18 +84,18 @@ world.on('begin-contact', function(contact) {
 
 // Implement contact listener.
 world.on('end-contact', function(contact) {
-  var fixtureA = contact.getFixtureA();
-  var fixtureB = contact.getFixtureB();
+  let fixtureA = contact.getFixtureA();
+  let fixtureB = contact.getFixtureB();
 
   if (fixtureA === sensor) {
-    var userData = fixtureB.getBody().getUserData();
+    let userData = fixtureB.getBody().getUserData();
     if (userData) {
       userData.touching = false;
     }
   }
 
   if (fixtureB === sensor) {
-    var userData = fixtureA.getBody().getUserData();
+    let userData = fixtureA.getBody().getUserData();
     if (userData) {
       userData.touching = false;
     }
@@ -105,26 +105,26 @@ world.on('end-contact', function(contact) {
 testbed.step = function() {
   // Traverse the contact results. Apply a force on shapes
   // that overlap the sensor.
-  for (var i = 0; i < COUNT; ++i) {
+  for (let i = 0; i < COUNT; ++i) {
     if (!touching[i].touching) {
       continue;
     }
 
-    var body = bodies[i];
-    var ground = sensor.getBody();
+    let body = bodies[i];
+    let ground = sensor.getBody();
 
-    var circle = sensor.getShape();
-    var center = ground.getWorldPoint(circle.getCenter());
+    let circle = sensor.getShape();
+    let center = ground.getWorldPoint(circle.getCenter());
 
-    var position = body.getPosition();
+    let position = body.getPosition();
 
-    var d = Vec2.sub(center, position);
+    let d = Vec2.sub(center, position);
     if (d.lengthSquared() < 1e-18) {
       continue;
     }
 
     d.normalize();
-    var F = Vec2.mul(d, 100.0);
+    let F = Vec2.mul(d, 100.0);
     body.applyForce(F, position, false);
   }
 };

@@ -23,22 +23,22 @@
 
 const { World, Vec2, Edge, Box, stats } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
   
 const testbed = planck.testbed();
 testbed.start(world);
 
-var ground = world.createBody();
+let ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-10.0, 0.0), new Vec2(10.0, 0.0)), 0.0);
 ground.createFixture(new Box(0.2, 1.0, new Vec2(0.5, 1.0), 0.0), 0.0);
 
-var body = world.createDynamicBody(new Vec2(0.0, 4.0));
+let body = world.createDynamicBody(new Vec2(0.0, 4.0));
 body.createFixture(new Box(2.0, 0.1), 1.0);
 
 // x = Math.random(-1.0, 1.0);
-var x = 0.20352793;
+let x = 0.20352793;
 
-var bullet = world.createBody({
+let bullet = world.createBody({
   type: 'dynamic',
   position: new Vec2(x, 10.0),
   bullet: true,
@@ -68,7 +68,7 @@ function Launch() {
   stats.toiMaxRootIters = 0;
 }
 
-var stepCount = 0;
+let stepCount = 0;
 testbed.step = function() {
   testbed.status(stats);
 

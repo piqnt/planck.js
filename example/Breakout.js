@@ -1,7 +1,7 @@
 const { World, Vec2, Circle, Box, Edge, Polygon } = planck;
 
-var WIDTH = 20;
-var HEIGHT = 26;
+let WIDTH = 20;
+let HEIGHT = 26;
 
 const testbed = planck.testbed();
 testbed.width = WIDTH;
@@ -18,24 +18,24 @@ testbed.keydown = function() {
   }
 };
 
-var physics = new Physics();
-var state = new State();
+const physics = new Physics();
+const state = new State();
 
 testbed.start(physics.world);
 
 function State() {
-  var state = this;
+  let state = this;
 
   state.state = '';
 
-  var _score = 0;
-  var _combo = 1;
-  var _time = 0;
-  var _createRowTime = 0;
-  var _fullPaddleTime = 0;
-  var _balls = [];
-  var _bricks = [];
-  var _drops = [];
+  let _score = 0;
+  let _combo = 1;
+  let _time = 0;
+  let _createRowTime = 0;
+  let _fullPaddleTime = 0;
+  let _balls = [];
+  let _bricks = [];
+  let _drops = [];
 
   function updateStatus() {
     if (state.state == 'gameover') {
@@ -92,7 +92,7 @@ function State() {
   }
 
   function createDrop(brick) {
-    var random = Math.random();
+    let random = Math.random();
     if (random < 0.06) {
       addDrop({i: brick.i, j: brick.j, type: '+', speed : dropSpeed()});
     } else if (random < 0.1) {
@@ -108,18 +108,18 @@ function State() {
   function createRow() {
     _createRowTime = _time + createRowTime();
 
-    var gameover = false;
+    let gameover = false;
     _bricks.forEach(function(brick) {
       brick.j++;
       physics.updateBrick(brick);
       gameover = gameover | brick >= 10;
     });
 
-    for (var i = 0; i < 7; i++) {
+    for (let i = 0; i < 7; i++) {
       if (Math.random() < 0.1) {
         continue;
       }
-      var one = _score + 1, four = Math.max(0, _score * 1.1 - 60);
+      let one = _score + 1, four = Math.max(0, _score * 1.1 - 60);
       if (Math.random() < one / (four + one)) {
         addBrick({type: 'normal', i: i, j: 0});
       } else {
@@ -238,29 +238,29 @@ function State() {
 
 function Physics() {
   
-  var world = this.world = new World();
+  let world = this.world = new World();
 
-  var bottomWall, paddle, balls = [], bricks = [], drops = [];
+  let bottomWall, paddle, balls = [], bricks = [], drops = [];
 
-  var BALL = 1, WALL = 2, BRICK = 4, DROP = 8, PADDLE = 16;
+  let BALL = 1, WALL = 2, BRICK = 4, DROP = 8, PADDLE = 16;
 
-  var ballFix = {
+  let ballFix = {
     friction: 0.0,
     restitution: 1.0,
     filterCategoryBits: BALL,
     filterMaskBits: PADDLE | WALL | BRICK
   };
 
-  var paddleFix = {filterCategoryBits: PADDLE, filterMaskBits: BALL | DROP};
-  var wallFix = {filterCategoryBits: WALL, filterMaskBits: BALL | DROP};
-  var brickFix = {filterCategoryBits: BRICK, filterMaskBits: BALL};
-  var dropFix = {filterCategoryBits: DROP, filterMaskBits: PADDLE | WALL};
+  let paddleFix = {filterCategoryBits: PADDLE, filterMaskBits: BALL | DROP};
+  let wallFix = {filterCategoryBits: WALL, filterMaskBits: BALL | DROP};
+  let brickFix = {filterCategoryBits: BRICK, filterMaskBits: BALL};
+  let dropFix = {filterCategoryBits: DROP, filterMaskBits: PADDLE | WALL};
 
-  var ballShape = new Circle(0.5);
-  var normalBrickShape = new Box(1.9 / 2, 1.9 / 2);
-  var smallBrickShape = new Box(0.9 / 2, 0.9 / 2);
+  let ballShape = new Circle(0.5);
+  let normalBrickShape = new Box(1.9 / 2, 1.9 / 2);
+  let smallBrickShape = new Box(0.9 / 2, 0.9 / 2);
 
-  var fullPaddleShape = new Polygon([
+  let fullPaddleShape = new Polygon([
     new Vec2(1.7, -0.2),
     new Vec2(1.8, -0.1),
     new Vec2(1.8, 0.1),
@@ -276,7 +276,7 @@ function Physics() {
   ]);
   fullPaddleShape.paddleWidth = 3.6;
 
-  var miniPaddleShape = new Polygon([
+  let miniPaddleShape = new Polygon([
     new Vec2(1.2, -0.1),
     new Vec2(1.2, 0.1),
     new Vec2(0.9, 0.4),
@@ -289,14 +289,14 @@ function Physics() {
   miniPaddleShape.paddleWidth = 2.4;
 
   world.on('pre-solve', function(contact) {
-    var fA = contact.getFixtureA(), bA = fA.getBody();
-    var fB = contact.getFixtureB(), bB = fB.getBody();
+    let fA = contact.getFixtureA(), bA = fA.getBody();
+    let fB = contact.getFixtureB(), bB = fB.getBody();
 
-    var ball = bA.isBall && bA || bB.isBall && bB;
-    var brick = bA.isBrick && bA || bB.isBrick && bB;
-    var bottom = bA.isBottom && bA || bB.isBottom && bB;
-    var paddle = bA.isPaddle && bA || bB.isPaddle && bB;
-    var drop = bA.isDrop && bA || bB.isDrop && bB;
+    let ball = bA.isBall && bA || bB.isBall && bB;
+    let brick = bA.isBrick && bA || bB.isBrick && bB;
+    let bottom = bA.isBottom && bA || bB.isBottom && bB;
+    let paddle = bA.isPaddle && bA || bB.isPaddle && bB;
+    let drop = bA.isDrop && bA || bB.isDrop && bB;
 
     // do not change world immediately
     setTimeout(function() {
@@ -341,7 +341,7 @@ function Physics() {
   }
 
   function createPaddle(shape) {
-    var p, v;
+    let p, v;
     if (paddle) {
       p = paddle.getPosition();
       v = paddle.getLinearVelocity();
@@ -360,7 +360,7 @@ function Physics() {
   }
 
   function createBall(pos) {
-    var body = world.createDynamicBody({
+    let body = world.createDynamicBody({
       bullet: true,
       angle: Math.random() * Math.PI * 2,
       position: pos
@@ -372,7 +372,7 @@ function Physics() {
   }
 
   function createBrick(shape, pos) {
-    var body = world.createBody(pos);
+    let body = world.createBody(pos);
     body.createFixture(shape, brickFix);
     body.isBrick = true;
     bricks.push(body);
@@ -380,7 +380,7 @@ function Physics() {
   }
 
   function createDrop(type) {
-    var body = world.createDynamicBody();
+    let body = world.createDynamicBody();
     if (type == '+') {
       body.createFixture(new Box(0.08, 0.32), dropFix);
       body.createFixture(new Box(0.32, 0.08), dropFix);
@@ -414,27 +414,27 @@ function Physics() {
   };
 
   this.addBrick = function(brick) {
-    var shape = brick.type == 'small' ? smallBrickShape : normalBrickShape;
-    var pos = new Vec2((brick.i - 3) * 2, 9 - brick.j * 2);
-    var body = brick.body = createBrick(shape, pos);
+    let shape = brick.type == 'small' ? smallBrickShape : normalBrickShape;
+    let pos = new Vec2((brick.i - 3) * 2, 9 - brick.j * 2);
+    let body = brick.body = createBrick(shape, pos);
     body.setUserData(brick);
   };
 
   this.addDrop = function(drop) {
-    var body = drop.body = createDrop(drop.type);
+    let body = drop.body = createDrop(drop.type);
     body.setUserData(drop);
     body.setPosition(new Vec2((drop.i - 3) * 2, 9 - drop.j * 2));
     body.setLinearVelocity(new Vec2(0, drop.speed));
   };
 
   this.addBall = function(ball) {
-    var body = ball.body = createBall();
+    let body = ball.body = createBall();
     body.setUserData(ball);
 
-    var oldball = balls[0];
+    let oldball = balls[0];
     if (oldball) {
       body.setPosition(oldball.getPosition());
-      body.setLinearVelocity(new Vec2(oldball.getLinearVelocity()).mul(-1));
+      body.setLinearVelocity(Vec2.neg(oldball.getLinearVelocity()));
     } else {
       body.setPosition(new Vec2(0, -5));
     }
@@ -449,9 +449,9 @@ function Physics() {
   };
 
   this.movePaddle = function(dir) {
-    var p = paddle.getPosition();
+    let p = paddle.getPosition();
     p = new Vec2(dir, 0).add(p);
-    p.x = Math.min(9 - paddle.paddleWidth / 2, Math.max(-(9 - paddle.paddleWidth / 2), p.x))
+    p.x = Math.min(9 - paddle.paddleWidth / 2, Math.max(-(9 - paddle.paddleWidth / 2), p.x));
     paddle.setPosition(p);
   };
 
@@ -463,9 +463,9 @@ function Physics() {
   };
 
   this.startGame = function() {
-    var ball = balls[0];
-    var a = Math.PI * Math.random() * 0.4 - 0.2;
-    var speed = ball.getUserData().speed;
+    let ball = balls[0];
+    let a = Math.PI * Math.random() * 0.4 - 0.2;
+    let speed = ball.getUserData().speed;
     ball.setLinearVelocity(new Vec2(speed * Math.sin(a), speed * Math.cos(a)));
   };
 
@@ -490,7 +490,7 @@ function Physics() {
 state.initGame();
 
 function removeFromArray(array, item) {
-  var i = array.indexOf(item);
+  let i = array.indexOf(item);
   if (i == -1) {
     return false;
   } else {

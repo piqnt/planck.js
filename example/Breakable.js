@@ -25,28 +25,28 @@
 
 const { World, Vec2, Edge, Box } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.start(world);
 
-var breakVelocity;
-var breakAngularVelocity;
+let breakVelocity;
+let breakAngularVelocity;
 
-var broke = false;
+let broke = false;
 
 // Ground body
-var ground = world.createBody();
+let ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
 // Breakable dynamic body
-var body1 = world.createDynamicBody(new Vec2(0.0, 40.0), 0.25 * Math.PI);
+let body1 = world.createDynamicBody(new Vec2(0.0, 40.0), 0.25 * Math.PI);
 
-var shape1 = new Box(0.5, 0.5, new Vec2(-0.5, 0.0), 0.0);
-var piece1 = body1.createFixture(shape1, 1.0);
+let shape1 = new Box(0.5, 0.5, new Vec2(-0.5, 0.0), 0.0);
+let piece1 = body1.createFixture(shape1, 1.0);
 
-var shape2 = new Box(0.5, 0.5, new Vec2(0.5, 0.0), 0.0);
-var piece2 = body1.createFixture(shape2, 1.0);
+let shape2 = new Box(0.5, 0.5, new Vec2(0.5, 0.0), 0.0);
+let piece2 = body1.createFixture(shape2, 1.0);
 
 world.on('post-solve', function (contact, impulse) {
   if (broke) {
@@ -55,10 +55,10 @@ world.on('post-solve', function (contact, impulse) {
   }
 
   // Should the body break?
-  var count = contact.getManifold().pointCount;
+  let count = contact.getManifold().pointCount;
 
-  var maxImpulse = 0.0;
-  for (var i = 0; i < count; ++i) {
+  let maxImpulse = 0.0;
+  for (let i = 0; i < count; ++i) {
     maxImpulse = Math.max(maxImpulse, impulse.normalImpulses[i]);
   }
 
@@ -72,21 +72,21 @@ world.on('post-solve', function (contact, impulse) {
 
 function Break() {
   // Create two bodies from one.
-  var center = body1.getWorldCenter();
+  let center = body1.getWorldCenter();
 
   body1.destroyFixture(piece2);
 
-  var body2 = world.createDynamicBody(body1.getPosition(), body1.getAngle());
+  let body2 = world.createDynamicBody(body1.getPosition(), body1.getAngle());
 
   piece2 = body2.createFixture(shape2, 1.0);
 
   // Compute consistent velocities for new bodies based on
   // cached velocity.
-  var center1 = body1.getWorldCenter();
-  var center2 = body2.getWorldCenter();
+  let center1 = body1.getWorldCenter();
+  let center2 = body2.getWorldCenter();
 
-  var velocity1 = Vec2.add(breakVelocity, Vec2.cross(breakAngularVelocity, Vec2.sub(center1, center)));
-  var velocity2 = Vec2.add(breakVelocity, Vec2.cross(breakAngularVelocity, Vec2.sub(center2, center)));
+  let velocity1 = Vec2.add(breakVelocity, Vec2.cross(breakAngularVelocity, Vec2.sub(center1, center)));
+  let velocity2 = Vec2.add(breakVelocity, Vec2.cross(breakAngularVelocity, Vec2.sub(center2, center)));
 
   body1.setAngularVelocity(breakAngularVelocity);
   body1.setLinearVelocity(velocity1);
@@ -102,4 +102,3 @@ testbed.step = function() {
     breakAngularVelocity = body1.getAngularVelocity();
   }
 };
-

@@ -23,19 +23,19 @@
 
 // The motor in this test gets smoother with higher velocity iterations.
 
-const { World, Vec2, PrismaticJoint, Edge, Box, Circle } = planck;
+const { World, Vec2, PrismaticJoint, Edge, Box } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.start(world);
 
-var MOTOR_SPEED = 10;
+let MOTOR_SPEED = 10;
 
-var ground = world.createBody();
+let ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
-var body = world.createBody({
+let body = world.createBody({
   type : 'dynamic',
   position : new Vec2(-10.0, 10.0),
   angle : 0.5 * Math.PI,
@@ -44,9 +44,9 @@ var body = world.createBody({
 body.createFixture(new Box(2.0, 0.5), 5.0);
 
 // Bouncy limit
-var axis = new Vec2(2.0, 1.0);
+let axis = new Vec2(2.0, 1.0);
 axis.normalize();
-var joint = new PrismaticJoint({
+let joint = new PrismaticJoint({
   motorSpeed : MOTOR_SPEED,
   maxMotorForce : 10000.0,
   enableMotor : true,
@@ -86,6 +86,6 @@ testbed.step = function() {
     joint.enableMotor(false);
   }
 
-  var force = joint.getMotorForce(1 / 60);
+  let force = joint.getMotorForce(1 / 60);
   testbed.status('Motor Force', force);
 };

@@ -23,7 +23,7 @@
 
 const { Vec2, World, Circle, Box, Math } = planck;
 
-var world = new World(new Vec2(0, 0));
+let world = new World(new Vec2(0, 0));
 
 const testbed = planck.testbed();
 testbed.y = 0;
@@ -31,14 +31,17 @@ testbed.hz = 60;
 testbed.speed = 1;
 testbed.start(world);
 
-var circle = new Circle(0.1);
+let circle = new Circle(0.1);
 
-for (var i = 0; i < 50; ++i) {
-  var pos = new Vec2(Math.random(0.0, -6.0), Math.random(-1.0, 1.0));
-  world.createDynamicBody(pos).createFixture(circle, 0.01);
+for (let i = 0; i < 50; ++i) {
+  let b = world.createBody({
+    type : 'dynamic',
+    position : new Vec2(Math.random() * -6, Math.random() * 2 - 1),
+  });
+  b.createFixture(circle, 0.01);
 }
 
-var box = world.createBody({
+let box = world.createBody({
   type : 'dynamic',
   position : new Vec2(-40.0, 0.0),
   bullet : true

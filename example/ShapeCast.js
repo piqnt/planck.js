@@ -21,13 +21,13 @@
  * SOFTWARE.
  */
 
-const { Vec2, Transform, Math, World, Settings, ShapeCastInput, ShapeCastOutput, ShapeCast, DistanceInput, DistanceOutput, Distance, SimplexCache } = planck;
+const { Vec2, Transform, World, Settings, ShapeCastInput, ShapeCastOutput, ShapeCast, DistanceInput, DistanceOutput, Distance, SimplexCache } = planck;
 
-var world = new World();
+let world = new World();
 
 const testbed = planck.testbed();
-testbed.width = 40
-testbed.height = 40
+testbed.width = 40;
+testbed.height = 40;
 testbed.start(world);
 
 const vAs = new Array(3).fill().map(() => Vec2.zero());
@@ -161,4 +161,4 @@ testbed.step = function() {
     const p2 = Vec2.add(p1, output.normal);
     testbed.drawSegment(p1, p2, testbed.color(0.9, 0.3, 0.3));
   }
-}
+};

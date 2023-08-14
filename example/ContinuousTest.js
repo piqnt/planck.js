@@ -21,24 +21,22 @@
  * SOFTWARE.
  */
 
-const { Vec2, Rot, Transform, Math, World, internal, Circle, Edge, Box } = planck;
+const { Vec2, Math, World, stats, Circle, Edge, Box } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.start(world);
 
-var stats = internal.stats;
+let bullet;
+let angularVelocity;
 
-var bullet;
-var angularVelocity;
-
-var ground = world.createBody(new Vec2(0.0, 0.0));
+let ground = world.createBody(new Vec2(0.0, 0.0));
 
 ground.createFixture(new Edge(new Vec2(-10.0, 0.0), new Vec2(10.0, 0.0)), 0.0);
 ground.createFixture(new Box(0.2, 1.0, new Vec2(0.5, 1.0), 0.0), 0.0);
 
-if (1) {
+if (true) {
   // angle = 0.1;
   bullet = world.createDynamicBody(new Vec2(0.0, 20.0));
   bullet.createFixture(new Box(2.0, 0.1), 1.0);
@@ -49,12 +47,13 @@ if (1) {
   bullet.setAngularVelocity(angularVelocity);
 
 } else {
-  var shape = new Circle(0.5);
+  let shape = new Circle(0.5);
 
-  var body = world.createDynamicBody(new Vec2(0.0, 2.0));
-  body.createFixture(shape, 1.0);
+  world
+    .createDynamicBody(new Vec2(0.0, 2.0))
+    .createFixture(shape, 1.0);
 
-  var body = world.createDynamicBody({
+  let body = world.createDynamicBody({
     bullet: true,
     position: new Vec2(0.0, 2.0),
   });
@@ -62,7 +61,7 @@ if (1) {
   body.setLinearVelocity(new Vec2(0.0, -100.0));
 }
 
-function Launch() {
+function launch() {
   stats.gjkCalls = 0;
   stats.gjkIters = 0;
   stats.gjkMaxIters = 0;
@@ -80,9 +79,9 @@ function Launch() {
   bullet.setAngularVelocity(angularVelocity);
 }
 
-Launch();
+launch();
 
-var stepCount = 0;
+let stepCount = 0;
 testbed.step = function() {
   testbed.status(stats);
 
@@ -97,6 +96,6 @@ testbed.step = function() {
   }
 
   if (stepCount++ % 60 == 0) {
-    Launch();
+    launch();
   }
 };

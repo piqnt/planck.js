@@ -38,7 +38,7 @@ export class Mat22 {
   constructor(a: number, b: number, c: number, d: number);
   constructor(a: { x: number; y: number }, b: { x: number; y: number });
   constructor();
-  // tslint:disable-next-line:typedef
+  /** @internal */
   constructor(a?, b?, c?, d?) {
     if (typeof a === 'object' && a !== null) {
       this.ex = Vec2.clone(a);
@@ -71,7 +71,7 @@ export class Mat22 {
   set(a: Mat22): void;
   set(a: Vec2, b: Vec2): void;
   set(a: number, b: number, c: number, d: number): void;
-  // tslint:disable-next-line:typedef
+  /** @internal */
   set(a, b?, c?, d?): void {
     if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
       && typeof d === 'number') {
@@ -149,7 +149,7 @@ export class Mat22 {
    */
   static mul(mx: Mat22, my: Mat22): Mat22;
   static mul(mx: Mat22, v: Vec2): Vec2;
-  // tslint:disable-next-line:typedef
+  /** @internal */
   static mul(mx, v) {
     if (v && 'x' in v && 'y' in v) {
       _ASSERT && Vec2.assert(v);
@@ -194,7 +194,7 @@ export class Mat22 {
    */
   static mulT(mx: Mat22, my: Mat22): Mat22;
   static mulT(mx: Mat22, v: Vec2): Vec2;
-  // tslint:disable-next-line:typedef
+  /** @internal */
   static mulT(mx, v) {
     if (v && 'x' in v && 'y' in v) { // Vec2
       _ASSERT && Vec2.assert(v);

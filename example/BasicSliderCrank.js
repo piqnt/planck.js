@@ -23,27 +23,28 @@
 
 // A basic slider crank created for GDC tutorial: Understanding Constraints
 
-const { Vec2, World, Edge, Circle, Box, Chain, Math, RevoluteJoint, PrismaticJoint } = planck;
+const { Vec2, World, Box, RevoluteJoint, PrismaticJoint } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
+testbed.y = -15;
 testbed.start(world);
 
-var ground = world.createBody(new Vec2(0.0, 17.0));
+let ground = world.createBody(new Vec2(0.0, 17.0));
 
 // Define crank.
-var crank = world.createDynamicBody(new Vec2(-8.0, 20.0));
+let crank = world.createDynamicBody(new Vec2(-8.0, 20.0));
 crank.createFixture(new Box(4.0, 1.0), 2.0);
 world.createJoint(new RevoluteJoint({}, ground, crank, new Vec2(-12.0, 20.0)));
 
 // Define connecting rod
-var rod = world.createDynamicBody(new Vec2(4.0, 20.0));
+let rod = world.createDynamicBody(new Vec2(4.0, 20.0));
 rod.createFixture(new Box(8.0, 1.0), 2.0);
 world.createJoint(new RevoluteJoint({}, crank, rod, new Vec2(-4.0, 20.0)));
 
 // Define piston
-var piston = world.createDynamicBody({
+let piston = world.createDynamicBody({
   fixedRotation : true,
   position : new Vec2(12.0, 20.0)
 });

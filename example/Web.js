@@ -23,19 +23,19 @@
 
 // This tests distance joints, body destruction, and joint destruction.
 
-const { World, Vec2, Edge, Box, DistanceJoint } = planck;
+const { World, Vec2, Box, DistanceJoint } = planck;
 
-var world = new World(new Vec2(0, -10));
+const world = new World();
 
 const testbed = planck.testbed();
 testbed.start(world);
 
-var ground = world.createBody();
+let ground = world.createBody();
 
-var bodies = [];
-var joints = [];
+const bodies = [];
+let joints = [];
 
-var box = new Box(0.5, 0.5);
+const box = new Box(0.5, 0.5);
 
 bodies[0] = world.createDynamicBody(new Vec2(-5.0, 5.0));
 bodies[0].createFixture(box, 5.0);
@@ -49,11 +49,13 @@ bodies[2].createFixture(box, 5.0);
 bodies[3] = world.createDynamicBody(new Vec2(-5.0, 15.0));
 bodies[3].createFixture(box, 5.0);
 
-var jd = {};
-jd.frequencyHz = 2.0;
-jd.dampingRatio = 0.0;
+const jd = {
+  frequencyHz: 2.0,
+  dampingRatio: 0.0  
+};
 
 world.createJoint(joints[0] = new DistanceJoint({
+  ...jd,
   bodyA: ground,
   localAnchorA: new Vec2(-10.0, 0.0),
   bodyB: bodies[0],
@@ -61,6 +63,7 @@ world.createJoint(joints[0] = new DistanceJoint({
 }));
 
 world.createJoint(joints[1] = new DistanceJoint({
+  ...jd,
   bodyA: ground,
   localAnchorA: new Vec2(10.0, 0.0),
   bodyB: bodies[1],
@@ -68,6 +71,7 @@ world.createJoint(joints[1] = new DistanceJoint({
 }));
 
 world.createJoint(joints[2] = new DistanceJoint({
+  ...jd,
   bodyA: ground,
   localAnchorA: new Vec2(10.0, 20.0),
   bodyB: bodies[2],
@@ -75,6 +79,7 @@ world.createJoint(joints[2] = new DistanceJoint({
 }));
 
 world.createJoint(joints[3] = new DistanceJoint({
+  ...jd,
   bodyA: ground,
   localAnchorA: new Vec2(-10.0, 20.0),
   bodyB: bodies[3],
@@ -82,6 +87,7 @@ world.createJoint(joints[3] = new DistanceJoint({
 }));
 
 world.createJoint(joints[4] = new DistanceJoint({
+  ...jd,
   bodyA: bodies[0],
   localAnchorA: new Vec2(0.5, 0.0),
   bodyB: bodies[1],
@@ -89,6 +95,7 @@ world.createJoint(joints[4] = new DistanceJoint({
 }));
 
 world.createJoint(joints[5] = new DistanceJoint({
+  ...jd,
   bodyA: bodies[1],
   localAnchorA: new Vec2(0.0, 0.5),
   bodyB: bodies[2],
@@ -96,6 +103,7 @@ world.createJoint(joints[5] = new DistanceJoint({
 }));
 
 world.createJoint(joints[6] = new DistanceJoint({
+  ...jd,
   bodyA: bodies[2],
   localAnchorA: new Vec2(-0.5, 0.0),
   bodyB: bodies[3],
@@ -103,6 +111,7 @@ world.createJoint(joints[6] = new DistanceJoint({
 }));
 
 world.createJoint(joints[7] = new DistanceJoint({
+  ...jd,
   bodyA: bodies[3],
   localAnchorA: new Vec2(0.0, -0.5),
   bodyB: bodies[0],
@@ -128,7 +137,7 @@ testbed.keydown = function(code, char) {
 testbed.info('This demonstrates a soft distance joint.\nX: Delete a body, Z: Delete a joint');
 
 world.on('remove-joint', function(joint) {
-  for (var i = 0; i < 8; ++i) {
+  for (let i = 0; i < 8; ++i) {
     joints = joints.filter(function(j) {
       return j !== joint;
     });

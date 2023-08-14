@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-import * as matrix from './Matrix';
 import { math as Math } from './Math';
 
 
@@ -44,7 +43,7 @@ export class Vec3 {
   constructor(x: number, y: number, z: number);
   constructor(obj: { x: number, y: number, z: number });
   constructor();
-  // tslint:disable-next-line:typedef
+  /** @internal */
   constructor(x?, y?, z?) {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof Vec3)) {
       return new Vec3(x, y, z);
@@ -110,9 +109,7 @@ export class Vec3 {
     return JSON.stringify(this);
   }
 
-  /**
-   * Does this vector contain finite coordinates?
-   */
+  /** Does this vector contain finite coordinates? */
   static isValid(obj: any): boolean {
     if (obj === null || typeof obj === 'undefined') {
       return false;
@@ -168,16 +165,12 @@ export class Vec3 {
       v.x === w.x && v.y === w.y && v.z === w.z;
   }
 
-  /**
-   * Perform the dot product on two vectors.
-   */
+  /** Dot product on two vectors */
   static dot(v: Vec3Value, w: Vec3Value): number {
     return v.x * w.x + v.y * w.y + v.z * w.z;
   }
 
-  /**
-   * Perform the cross product on two vectors. In 2D this produces a scalar.
-   */
+  /** Cross product on two vectors */
   static cross(v: Vec3Value, w: Vec3Value): Vec3 {
     return new Vec3(
       v.y * w.z - v.z * w.y,

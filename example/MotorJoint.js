@@ -27,24 +27,24 @@
 
 const { Vec2, World, MotorJoint, Box, Edge } = planck;
 
-var world = new World(new Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
 const testbed = planck.testbed();
 testbed.start(world);
 
-var time = 0;
+let time = 0;
 
-var ground = world.createBody();
+let ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-20.0, 0.0), new Vec2(20.0, 0.0)));
 
 // Define motorized body
-var body = world.createDynamicBody(new Vec2(0.0, 8.0));
+let body = world.createDynamicBody(new Vec2(0.0, 8.0));
 body.createFixture(new Box(2.0, 0.5), {
   friction : 0.6,
   density : 2.0
 });
 
-var joint = world.createJoint(new MotorJoint({
+let joint = world.createJoint(new MotorJoint({
   maxForce : 1000.0,
   maxTorque : 1000.0
 }, ground, body));
@@ -55,12 +55,9 @@ testbed.step = function (dt) {
   // }
   time += Math.min(dt, 100) / 1000;
 
-  var linearOffset = new Vec2();
-  linearOffset.x = 6.0 * Math.sin(2.0 * time);
-  linearOffset.y = 8.0 + 4.0 * Math.sin(1.0 * time);
-
-  var angularOffset = 4.0 * time;
-
-  joint.setLinearOffset(linearOffset);
-  joint.setAngularOffset(angularOffset);
+  joint.setLinearOffset(new Vec2(
+    6.0 * Math.sin(2.0 * time),
+    8.0 + 4.0 * Math.sin(1.0 * time),
+  ));
+  joint.setAngularOffset(4.0 * time);
 };
