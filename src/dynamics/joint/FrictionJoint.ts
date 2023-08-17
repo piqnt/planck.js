@@ -23,7 +23,7 @@
  */
 
 import { options } from '../../util/options';
-import { math as Math } from '../../common/Math';
+import { clamp } from '../../common/Math';
 import { Vec2 } from '../../common/Vec2';
 import { Mat22 } from '../../common/Mat22';
 import { Rot } from '../../common/Rot';
@@ -201,7 +201,7 @@ export class FrictionJoint extends Joint {
    * Set the maximum friction force in N.
    */
   setMaxForce(force: number): void {
-    _ASSERT && console.assert(Math.isFinite(force) && force >= 0.0);
+    _ASSERT && console.assert(Number.isFinite(force) && force >= 0.0);
     this.m_maxForce = force;
   }
 
@@ -216,7 +216,7 @@ export class FrictionJoint extends Joint {
    * Set the maximum friction torque in N*m.
    */
   setMaxTorque(torque: number): void {
-    _ASSERT && console.assert(Math.isFinite(torque) && torque >= 0.0);
+    _ASSERT && console.assert(Number.isFinite(torque) && torque >= 0.0);
     this.m_maxTorque = torque;
   }
 
@@ -351,8 +351,7 @@ export class FrictionJoint extends Joint {
 
       const oldImpulse = this.m_angularImpulse; // float
       const maxImpulse = h * this.m_maxTorque; // float
-      this.m_angularImpulse = Math.clamp(this.m_angularImpulse + impulse,
-          -maxImpulse, maxImpulse);
+      this.m_angularImpulse = clamp(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
       impulse = this.m_angularImpulse - oldImpulse;
 
       wA -= iA * impulse;

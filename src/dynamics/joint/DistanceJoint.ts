@@ -24,7 +24,7 @@
 
 import { options } from '../../util/options';
 import { SettingsInternal as Settings } from '../../Settings';
-import { math as Math } from '../../common/Math';
+import { clamp } from '../../common/Math';
 import { Vec2 } from '../../common/Vec2';
 import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
@@ -33,6 +33,8 @@ import { TimeStep } from "../Solver";
 
 
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+const math_abs = Math.abs;
+const math_PI = Math.PI;
 
 
 /**
@@ -136,7 +138,7 @@ export class DistanceJoint extends Joint {
     // Solver shared
     this.m_localAnchorA = Vec2.clone(anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.zero());
     this.m_localAnchorB = Vec2.clone(anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.zero());
-    this.m_length = Math.isFinite(def.length) ? def.length :
+    this.m_length = Number.isFinite(def.length) ? def.length :
       Vec2.distance(bodyA.getWorldPoint(this.m_localAnchorA), bodyB.getWorldPoint(this.m_localAnchorB));
     this.m_frequencyHz = def.frequencyHz;
     this.m_dampingRatio = def.dampingRatio;
@@ -339,7 +341,7 @@ export class DistanceJoint extends Joint {
       const C = length - this.m_length;
 
       // Frequency
-      const omega = 2.0 * Math.PI * this.m_frequencyHz;
+      const omega = 2.0 * math_PI * this.m_frequencyHz;
 
       // Damping coefficient
       const d = 2.0 * this.m_mass * this.m_dampingRatio * omega;
@@ -431,9 +433,7 @@ export class DistanceJoint extends Joint {
     const u = Vec2.sub(Vec2.add(cB, rB), Vec2.add(cA, rA));
 
     const length = u.normalize();
-    let C = length - this.m_length;
-    C = Math
-        .clamp(C, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
+    const C = clamp(length - this.m_length, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
 
     const impulse = -this.m_mass * C;
     const P = Vec2.mulNumVec2(impulse, u);
@@ -448,7 +448,7 @@ export class DistanceJoint extends Joint {
     this.m_bodyB.c_position.c.setVec2(cB);
     this.m_bodyB.c_position.a = aB;
 
-    return Math.abs(C) < Settings.linearSlop;
+    return math_abs(C) < Settings.linearSlop;
   }
 
 }

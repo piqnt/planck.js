@@ -24,7 +24,7 @@
 
 import * as matrix from '../common/Matrix';
 import { ShapeType } from "../collision/Shape";
-import { math as Math } from '../common/Math';
+import { clamp } from '../common/Math';
 import { TransformValue } from '../common/Transform';
 import { Mat22 } from '../common/Mat22';
 import { SettingsInternal as Settings } from '../Settings';
@@ -38,6 +38,10 @@ import { getTransform } from "./Position";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const math_abs = Math.abs;
+const math_sqrt = Math.sqrt;
+const math_max = Math.max;
+const math_min = Math.min;
 
 
 // Solver debugging is normally disabled because the block solver sometimes has to deal with a poorly conditioned effective mass matrix.
@@ -94,7 +98,7 @@ export type EvaluateFunction = (
  * friction to zero. For example, anything slides on ice.
  */
 export function mixFriction(friction1: number, friction2: number): number {
-  return Math.sqrt(friction1 * friction2);
+  return math_sqrt(friction1 * friction2);
 }
 
 /**
@@ -730,14 +734,14 @@ export class Contact {
       matrix.diffVec2(rB, point, cB);
 
       // Track max constraint error.
-      minSeparation = Math.min(minSeparation, separation);
+      minSeparation = math_min(minSeparation, separation);
 
       const baumgarte = toi ? Settings.toiBaugarte : Settings.baumgarte;
       const linearSlop = Settings.linearSlop;
       const maxLinearCorrection = Settings.maxLinearCorrection;
 
       // Prevent large corrections and allow slop.
-      const C = Math.clamp(baumgarte * (separation + linearSlop), -maxLinearCorrection, 0.0);
+      const C = clamp(baumgarte * (separation + linearSlop), -maxLinearCorrection, 0.0);
 
       // Compute the effective mass.
       const rnA = matrix.crossVec2Vec2(rA, normal);
@@ -996,7 +1000,7 @@ export class Contact {
 
       // Clamp the accumulated force
       const maxFriction = friction * vcp.normalImpulse;
-      const newImpulse = Math.clamp(vcp.tangentImpulse + lambda, -maxFriction, maxFriction);
+      const newImpulse = clamp(vcp.tangentImpulse + lambda, -maxFriction, maxFriction);
       lambda = newImpulse - vcp.tangentImpulse;
       vcp.tangentImpulse = newImpulse;
 
@@ -1027,7 +1031,7 @@ export class Contact {
         let lambda = -vcp.normalMass * (vn - vcp.velocityBias);
 
         // Clamp the accumulated impulse
-        const newImpulse = Math.max(vcp.normalImpulse + lambda, 0.0);
+        const newImpulse = math_max(vcp.normalImpulse + lambda, 0.0);
         lambda = newImpulse - vcp.normalImpulse;
         vcp.normalImpulse = newImpulse;
 
@@ -1171,8 +1175,8 @@ export class Contact {
             vn1 = matrix.dotVec2(dv1, normal);
             vn2 = matrix.dotVec2(dv2, normal);
 
-            _ASSERT && console.assert(Math.abs(vn1 - vcp1.velocityBias) < k_errorTol);
-            _ASSERT && console.assert(Math.abs(vn2 - vcp2.velocityBias) < k_errorTol);
+            _ASSERT && console.assert(math_abs(vn1 - vcp1.velocityBias) < k_errorTol);
+            _ASSERT && console.assert(math_abs(vn2 - vcp2.velocityBias) < k_errorTol);
           }
           break;
         }
@@ -1221,7 +1225,7 @@ export class Contact {
             // Compute normal velocity
             vn1 = matrix.dotVec2(dv1, normal);
 
-            _ASSERT && console.assert(Math.abs(vn1 - vcp1.velocityBias) < k_errorTol);
+            _ASSERT && console.assert(math_abs(vn1 - vcp1.velocityBias) < k_errorTol);
           }
           break;
         }
@@ -1270,7 +1274,7 @@ export class Contact {
             // Compute normal velocity
             vn2 = matrix.dotVec2(dv2, normal);
 
-            _ASSERT && console.assert(Math.abs(vn2 - vcp2.velocityBias) < k_errorTol);
+            _ASSERT && console.assert(math_abs(vn2 - vcp2.velocityBias) < k_errorTol);
           }
           break;
         }

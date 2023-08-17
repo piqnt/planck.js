@@ -26,6 +26,10 @@ import { Vec2, Vec2Value } from '../common/Vec2';
 import { TransformValue } from '../common/Transform';
 
 
+const math_sin = Math.sin;
+const math_cos = Math.cos;
+
+
 export class Position {
   /** location */
   c = Vec2.zero();
@@ -37,8 +41,8 @@ export class Position {
   getTransform(xf: TransformValue, p: Vec2Value): TransformValue {
     // xf.q = rotation(this.a);
     // xf.p = this.c - xf.q * p
-    xf.q.c = Math.cos(this.a);
-    xf.q.s = Math.sin(this.a);
+    xf.q.c = math_cos(this.a);
+    xf.q.s = math_sin(this.a);
     xf.p.x = this.c.x - (xf.q.c * p.x - xf.q.s * p.y);
     xf.p.y = this.c.y - (xf.q.s * p.x + xf.q.c * p.y);
     return xf;
@@ -48,8 +52,8 @@ export class Position {
 export function getTransform(xf: TransformValue, p: Vec2Value, c: Vec2Value, a: number): TransformValue {
   // xf.q = rotation(a);
   // xf.p = this.c - xf.q * p
-  xf.q.c = Math.cos(a);
-  xf.q.s = Math.sin(a);
+  xf.q.c = math_cos(a);
+  xf.q.s = math_sin(a);
   xf.p.x = c.x - (xf.q.c * p.x - xf.q.s * p.y);
   xf.p.y = c.y - (xf.q.s * p.x + xf.q.c * p.y);
   return xf;

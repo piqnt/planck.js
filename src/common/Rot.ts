@@ -23,12 +23,12 @@
  */
 
 import { Vec2, Vec2Value } from './Vec2';
-import { math as Math } from './Math';
-
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
-
+const math_sin = Math.sin;
+const math_cos = Math.cos;
+const math_atan2 = Math.atan2;
 
 export interface RotValue {
   s: number;
@@ -79,7 +79,7 @@ export class Rot {
     if (obj === null || typeof obj === 'undefined') {
       return false;
     }
-    return Math.isFinite(obj.s) && Math.isFinite(obj.c);
+    return Number.isFinite(obj.s) && Number.isFinite(obj.c);
   }
 
   static assert(o: any): void {
@@ -99,10 +99,10 @@ export class Rot {
       this.c = angle.c;
 
     } else {
-      _ASSERT && Math.assert(angle);
+      _ASSERT && console.assert(Number.isFinite(angle));
       // TODO_ERIN optimize
-      this.s = Math.sin(angle);
-      this.c = Math.cos(angle);
+      this.s = math_sin(angle);
+      this.c = math_cos(angle);
     }
   }
 
@@ -114,15 +114,15 @@ export class Rot {
 
   /** Set using an angle in radians. */
   setAngle(angle: number): void {
-    _ASSERT && Math.assert(angle);
+    _ASSERT && console.assert(Number.isFinite(angle));
     // TODO_ERIN optimize
-    this.s = Math.sin(angle);
-    this.c = Math.cos(angle);
+    this.s = math_sin(angle);
+    this.c = math_cos(angle);
   }
 
   /** Get the angle in radians. */
   getAngle(): number {
-    return Math.atan2(this.s, this.c);
+    return math_atan2(this.s, this.c);
   }
 
   /** Get the x-axis. */

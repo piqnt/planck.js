@@ -26,7 +26,6 @@ import * as matrix from '../common/Matrix';
 import { options } from '../util/options';
 import { Vec2, Vec2Value } from '../common/Vec2';
 import { Rot } from '../common/Rot';
-import { math as Math } from '../common/Math';
 import { Sweep } from '../common/Sweep';
 import { Transform } from '../common/Transform';
 import { Velocity } from './Velocity';
@@ -223,10 +222,10 @@ export class Body {
 
     _ASSERT && console.assert(Vec2.isValid(def.position));
     _ASSERT && console.assert(Vec2.isValid(def.linearVelocity));
-    _ASSERT && console.assert(Math.isFinite(def.angle));
-    _ASSERT && console.assert(Math.isFinite(def.angularVelocity));
-    _ASSERT && console.assert(Math.isFinite(def.angularDamping) && def.angularDamping >= 0.0);
-    _ASSERT && console.assert(Math.isFinite(def.linearDamping) && def.linearDamping >= 0.0);
+    _ASSERT && console.assert(Number.isFinite(def.angle));
+    _ASSERT && console.assert(Number.isFinite(def.angularVelocity));
+    _ASSERT && console.assert(Number.isFinite(def.angularDamping) && def.angularDamping >= 0.0);
+    _ASSERT && console.assert(Number.isFinite(def.linearDamping) && def.linearDamping >= 0.0);
 
     this.m_world = world;
 

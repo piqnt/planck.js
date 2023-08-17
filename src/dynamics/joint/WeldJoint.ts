@@ -24,7 +24,6 @@
 
 import { options } from '../../util/options';
 import { SettingsInternal as Settings } from '../../Settings';
-import { math as Math } from '../../common/Math';
 import { Vec2 } from '../../common/Vec2';
 import { Vec3 } from '../../common/Vec3';
 import { Mat33 } from '../../common/Mat33';
@@ -35,6 +34,8 @@ import { TimeStep } from "../Solver";
 
 
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+const math_abs = Math.abs;
+const math_PI = Math.PI;
 
 
 /**
@@ -133,7 +134,7 @@ export class WeldJoint extends Joint {
 
     this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
     this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
-    this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
+    this.m_referenceAngle = Number.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
 
     this.m_frequencyHz = def.frequencyHz;
     this.m_dampingRatio = def.dampingRatio;
@@ -350,7 +351,7 @@ export class WeldJoint extends Joint {
       const C = aB - aA - this.m_referenceAngle; // float
 
       // Frequency
-      const omega = 2.0 * Math.PI * this.m_frequencyHz; // float
+      const omega = 2.0 * math_PI * this.m_frequencyHz; // float
 
       // Damping coefficient
       const d = 2.0 * m * this.m_dampingRatio * omega; // float
@@ -516,7 +517,7 @@ export class WeldJoint extends Joint {
       const C2 = aB - aA - this.m_referenceAngle; // float
 
       positionError = C1.length();
-      angularError = Math.abs(C2);
+      angularError = math_abs(C2);
 
       const C = new Vec3(C1.x, C1.y, C2);
 

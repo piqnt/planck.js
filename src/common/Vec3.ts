@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-import { math as Math } from './Math';
-
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
@@ -114,7 +112,7 @@ export class Vec3 {
     if (obj === null || typeof obj === 'undefined') {
       return false;
     }
-    return Math.isFinite(obj.x) && Math.isFinite(obj.y) && Math.isFinite(obj.z);
+    return Number.isFinite(obj.x) && Number.isFinite(obj.y) && Number.isFinite(obj.z);
   }
 
   static assert(o: any): void {

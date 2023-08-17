@@ -35,7 +35,7 @@ import { Fixture } from "../../dynamics/Fixture";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
+const math_min = Math.min;
 
 Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
@@ -360,7 +360,7 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
 
       const s1 = matrix.dotVec2(n, polygonBA.vertices[i]) - matrix.dotVec2(n, v1);
       const s2 = matrix.dotVec2(n, polygonBA.vertices[i]) - matrix.dotVec2(n, v2);
-      const s = Math.min(s1, s2);
+      const s = math_min(s1, s2);
 
       if (s > radius) {
         // No collision

@@ -23,7 +23,7 @@
  */
 
 import * as matrix from '../../common/Matrix';
-import { math as Math } from '../../common/Math';
+import { EPSILON } from '../../common/Math';
 import { Rot } from '../../common/Rot';
 import { Vec2, Vec2Value } from '../../common/Vec2';
 import { Shape } from '../Shape';
@@ -33,8 +33,10 @@ import { MassData } from '../../dynamics/Body';
 import { DistanceProxy } from '../Distance';
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+const math_sqrt = Math.sqrt;
+const math_PI = Math.PI;
+
 
 const temp = matrix.vec2(0, 0);
 
@@ -162,12 +164,12 @@ export class CircleShape extends Shape {
     const sigma = c * c - rr * b;
 
     // Check for negative discriminant and short segment.
-    if (sigma < 0.0 || rr < Math.EPSILON) {
+    if (sigma < 0.0 || rr < EPSILON) {
       return false;
     }
 
     // Find the point of intersection of the line with the circle.
-    let a = -(c + Math.sqrt(sigma));
+    let a = -(c + math_sqrt(sigma));
 
     // Is the intersection point on the segment?
     if (0.0 <= a && a <= input.maxFraction * rr) {
@@ -204,7 +206,7 @@ export class CircleShape extends Shape {
    * @param density The density in kilograms per meter squared.
    */
   computeMass(massData: MassData, density: number): void {
-    massData.mass = density * Math.PI * this.m_radius * this.m_radius;
+    massData.mass = density * math_PI * this.m_radius * this.m_radius;
     matrix.copyVec2(massData.center, this.m_p);
     // inertia about the local origin
     massData.I = massData.mass * (0.5 * this.m_radius * this.m_radius + matrix.lengthSqrVec2(this.m_p));

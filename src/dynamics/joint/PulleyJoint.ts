@@ -24,7 +24,7 @@
 
 import { options } from '../../util/options';
 import { SettingsInternal as Settings } from '../../Settings';
-import { math as Math } from '../../common/Math';
+import { EPSILON } from '../../common/Math';
 import { Vec2 } from '../../common/Vec2';
 import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
@@ -34,6 +34,7 @@ import { TimeStep } from "../Solver";
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+const math_abs = Math.abs;
 
 
 /**
@@ -139,11 +140,11 @@ export class PulleyJoint extends Joint {
     this.m_groundAnchorB = groundB ? groundB : def.groundAnchorB || Vec2.neo(1.0, 1.0);
     this.m_localAnchorA = anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.neo(-1.0, 0.0);
     this.m_localAnchorB = anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.neo(1.0, 0.0);
-    this.m_lengthA = Math.isFinite(def.lengthA) ? def.lengthA : Vec2.distance(anchorA, groundA);
-    this.m_lengthB = Math.isFinite(def.lengthB) ? def.lengthB : Vec2.distance(anchorB, groundB);
-    this.m_ratio = Math.isFinite(ratio) ? ratio : def.ratio;
+    this.m_lengthA = Number.isFinite(def.lengthA) ? def.lengthA : Vec2.distance(anchorA, groundA);
+    this.m_lengthB = Number.isFinite(def.lengthB) ? def.lengthB : Vec2.distance(anchorB, groundB);
+    this.m_ratio = Number.isFinite(ratio) ? ratio : def.ratio;
 
-    _ASSERT && console.assert(ratio > Math.EPSILON);
+    _ASSERT && console.assert(ratio > EPSILON);
 
     this.m_constant = this.m_lengthA + this.m_ratio * this.m_lengthB;
 
@@ -435,7 +436,7 @@ export class PulleyJoint extends Joint {
     }
 
     const C = this.m_constant - lengthA - this.m_ratio * lengthB; // float
-    const linearError = Math.abs(C); // float
+    const linearError = math_abs(C); // float
 
     const impulse = -mass * C; // float
 

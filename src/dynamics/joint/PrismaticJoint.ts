@@ -24,7 +24,7 @@
 
 import { options } from '../../util/options';
 import { SettingsInternal as Settings } from '../../Settings';
-import { math as Math } from '../../common/Math';
+import { clamp } from '../../common/Math';
 import { Vec2 } from '../../common/Vec2';
 import { Vec3 } from '../../common/Vec3';
 import { Mat22 } from '../../common/Mat22';
@@ -37,6 +37,9 @@ import { TimeStep } from "../Solver";
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+const math_abs = Math.abs;
+const math_max = Math.max;
+const math_min = Math.min;
 
 
 const inactiveLimit = 0;
@@ -175,7 +178,7 @@ export class PrismaticJoint extends Joint {
     this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0));
     this.m_localXAxisA.normalize();
     this.m_localYAxisA = Vec2.crossNumVec2(1.0, this.m_localXAxisA);
-    this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
+    this.m_referenceAngle = Number.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
 
     this.m_impulse = new Vec3();
     this.m_motorMass = 0.0;
@@ -596,7 +599,7 @@ export class PrismaticJoint extends Joint {
     if (this.m_enableLimit) {
 
       const jointTranslation = Vec2.dot(this.m_axis, d); // float
-      if (Math.abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * Settings.linearSlop) {
+      if (math_abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * Settings.linearSlop) {
         this.m_limitState = equalLimits;
 
       } else if (jointTranslation <= this.m_lowerTranslation) {
@@ -671,7 +674,7 @@ export class PrismaticJoint extends Joint {
       let impulse = this.m_motorMass * (this.m_motorSpeed - Cdot);
       const oldImpulse = this.m_motorImpulse;
       const maxImpulse = step.dt * this.m_maxMotorForce;
-      this.m_motorImpulse = Math.clamp(this.m_motorImpulse + impulse,
+      this.m_motorImpulse = clamp(this.m_motorImpulse + impulse,
           -maxImpulse, maxImpulse);
       impulse = this.m_motorImpulse - oldImpulse;
 
@@ -704,9 +707,9 @@ export class PrismaticJoint extends Joint {
       this.m_impulse.add(df);
 
       if (this.m_limitState == atLowerLimit) {
-        this.m_impulse.z = Math.max(this.m_impulse.z, 0.0);
+        this.m_impulse.z = math_max(this.m_impulse.z, 0.0);
       } else if (this.m_limitState == atUpperLimit) {
-        this.m_impulse.z = Math.min(this.m_impulse.z, 0.0);
+        this.m_impulse.z = math_min(this.m_impulse.z, 0.0);
       }
 
       // f2(1:2) = invK(1:2,1:2) * (-Cdot(1:2) - K(1:2,3) * (f2(3) - f1(3))) +
@@ -785,8 +788,8 @@ export class PrismaticJoint extends Joint {
     C1.x = Vec2.dot(perp, d);
     C1.y = aB - aA - this.m_referenceAngle;
 
-    let linearError = Math.abs(C1.x); // float
-    const angularError = Math.abs(C1.y); // float
+    let linearError = math_abs(C1.x); // float
+    const angularError = math_abs(C1.y); // float
 
     const linearSlop = Settings.linearSlop;
     const maxLinearCorrection = Settings.maxLinearCorrection;
@@ -796,15 +799,15 @@ export class PrismaticJoint extends Joint {
     if (this.m_enableLimit) {
 
       const translation = Vec2.dot(axis, d); // float
-      if (Math.abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * linearSlop) {
+      if (math_abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * linearSlop) {
         // Prevent large angular corrections
-        C2 = Math.clamp(translation, -maxLinearCorrection, maxLinearCorrection);
-        linearError = Math.max(linearError, Math.abs(translation));
+        C2 = clamp(translation, -maxLinearCorrection, maxLinearCorrection);
+        linearError = math_max(linearError, math_abs(translation));
         active = true;
 
       } else if (translation <= this.m_lowerTranslation) {
         // Prevent large linear corrections and allow some slop.
-        C2 = Math.clamp(translation - this.m_lowerTranslation + linearSlop,
+        C2 = clamp(translation - this.m_lowerTranslation + linearSlop,
             -maxLinearCorrection, 0.0);
         linearError = Math
             .max(linearError, this.m_lowerTranslation - translation);
@@ -812,7 +815,7 @@ export class PrismaticJoint extends Joint {
 
       } else if (translation >= this.m_upperTranslation) {
         // Prevent large linear corrections and allow some slop.
-        C2 = Math.clamp(translation - this.m_upperTranslation - linearSlop, 0.0,
+        C2 = clamp(translation - this.m_upperTranslation - linearSlop, 0.0,
             maxLinearCorrection);
         linearError = Math
             .max(linearError, translation - this.m_upperTranslation);

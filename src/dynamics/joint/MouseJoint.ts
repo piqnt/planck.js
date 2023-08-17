@@ -23,7 +23,7 @@
  */
 
 import { options } from '../../util/options';
-import { math as Math } from '../../common/Math';
+import { EPSILON } from '../../common/Math';
 import { Vec2, Vec2Value } from '../../common/Vec2';
 import { Mat22 } from '../../common/Mat22';
 import { Rot } from '../../common/Rot';
@@ -35,6 +35,7 @@ import { TimeStep } from "../Solver";
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+const math_PI = Math.PI;
 
 
 /**
@@ -120,9 +121,9 @@ export class MouseJoint extends Joint {
 
     this.m_type = MouseJoint.TYPE;
 
-    _ASSERT && console.assert(Math.isFinite(def.maxForce) && def.maxForce >= 0.0);
-    _ASSERT && console.assert(Math.isFinite(def.frequencyHz) && def.frequencyHz >= 0.0);
-    _ASSERT && console.assert(Math.isFinite(def.dampingRatio) && def.dampingRatio >= 0.0);
+    _ASSERT && console.assert(Number.isFinite(def.maxForce) && def.maxForce >= 0.0);
+    _ASSERT && console.assert(Number.isFinite(def.frequencyHz) && def.frequencyHz >= 0.0);
+    _ASSERT && console.assert(Number.isFinite(def.dampingRatio) && def.dampingRatio >= 0.0);
 
     if (Vec2.isValid(target)) {
       this.m_targetA = Vec2.clone(target);
@@ -298,7 +299,7 @@ export class MouseJoint extends Joint {
     const mass = this.m_bodyB.getMass();
 
     // Frequency
-    const omega = 2.0 * Math.PI * this.m_frequencyHz;
+    const omega = 2.0 * math_PI * this.m_frequencyHz;
 
     // Damping coefficient
     const d = 2.0 * mass * this.m_dampingRatio * omega;
@@ -310,7 +311,7 @@ export class MouseJoint extends Joint {
     // gamma has units of inverse mass.
     // beta has units of inverse time.
     const h = step.dt;
-    _ASSERT && console.assert(d + h * k > Math.EPSILON);
+    _ASSERT && console.assert(d + h * k > EPSILON);
     this.m_gamma = h * (d + h * k);
     if (this.m_gamma != 0.0) {
       this.m_gamma = 1.0 / this.m_gamma;

@@ -27,6 +27,8 @@ import { options } from "../util/options";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const math_atan2 = Math.atan2;
+const math_exp = Math.exp;
 
 
 export interface RopeDef {
@@ -112,7 +114,7 @@ export class Rope {
       const a = Vec2.cross(d1, d2);
       const b = Vec2.dot(d1, d2);
 
-      this.m_as[i] = Math.atan2(a, b);
+      this.m_as[i] = math_atan2(a, b);
     }
 
     this.m_gravity = def.gravity;
@@ -135,7 +137,7 @@ export class Rope {
       return;
     }
 
-    const d = Math.exp(-h * this.m_damping);
+    const d = math_exp(-h * this.m_damping);
 
     for (let i = 0; i < this.m_count; ++i) {
       this.m_p0s[i] = this.m_ps[i];
@@ -219,7 +221,7 @@ export class Rope {
       const a = Vec2.cross(d1, d2);
       const b = Vec2.dot(d1, d2);
 
-      let angle = Math.atan2(a, b);
+      let angle = math_atan2(a, b);
 
       const Jd1 = Vec2.mul(Vec2.skew(d1), -1.0 / L1sqr);
       const Jd2 = Vec2.mul(Vec2.skew(d2), 1.0 / L2sqr);
@@ -237,13 +239,13 @@ export class Rope {
 
       let C = angle - this.m_as[i];
 
-      while (C > Math.PI) {
-        angle -= 2 * Math.PI;
+      while (C > math_PI) {
+        angle -= 2 * math_PI;
         C = angle - this.m_as[i];
       }
 
-      while (C < -Math.PI) {
-        angle += 2.0 * Math.PI;
+      while (C < -math_PI) {
+        angle += 2.0 * math_PI;
         C = angle - this.m_as[i];
       }
 

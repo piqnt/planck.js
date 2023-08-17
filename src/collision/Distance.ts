@@ -26,13 +26,15 @@ import * as matrix from '../common/Matrix';
 import { SettingsInternal as Settings } from '../Settings';
 import { stats } from '../util/stats';
 import { Shape } from './Shape';
-import { math as Math } from '../common/Math';
+import { EPSILON } from '../common/Math';
 import { Vec2, Vec2Value } from '../common/Vec2';
 import { Rot } from '../common/Rot';
 import { Transform, TransformValue } from '../common/Transform';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const math_max = Math.max;
+
 
 const temp = matrix.vec2(0, 0);
 const normal = matrix.vec2(0, 0);
@@ -156,7 +158,7 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
     const d = simplex.getSearchDirection();
 
     // Ensure the search direction is numerically fit.
-    if (matrix.lengthSqrVec2(d) < Math.EPSILON * Math.EPSILON) {
+    if (matrix.lengthSqrVec2(d) < EPSILON * EPSILON) {
       // The origin is probably contained by a line segment
       // or triangle. Thus the shapes are overlapped.
 
@@ -200,7 +202,7 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
     ++simplex.m_count;
   }
 
-  stats.gjkMaxIters = Math.max(stats.gjkMaxIters, iter);
+  stats.gjkMaxIters = math_max(stats.gjkMaxIters, iter);
 
   // Prepare output.
   simplex.getWitnessPoints(output.pointA, output.pointB);
@@ -215,7 +217,7 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
     const rA = proxyA.m_radius;
     const rB = proxyB.m_radius;
 
-    if (output.distance > rA + rB && output.distance > Math.EPSILON) {
+    if (output.distance > rA + rB && output.distance > EPSILON) {
       // Shapes are still no overlapped.
       // Move the witness points to the outer surface.
       output.distance -= rA + rB;
@@ -405,7 +407,7 @@ class Simplex {
     if (this.m_count > 1) {
       const metric1 = cache.metric;
       const metric2 = this.getMetric();
-      if (metric2 < 0.5 * metric1 || 2.0 * metric1 < metric2 || metric2 < Math.EPSILON) {
+      if (metric2 < 0.5 * metric1 || 2.0 * metric1 < metric2 || metric2 < EPSILON) {
         // Reset the simplex.
         this.m_count = 0;
       }
@@ -741,7 +743,7 @@ export const testOverlap = function (shapeA: Shape, indexA: number, shapeB: Shap
 
   Distance(output, cache, input);
 
-  return output.distance < 10.0 * Math.EPSILON;
+  return output.distance < 10.0 * EPSILON;
 }
 
 // legacy exports
@@ -798,8 +800,8 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
   const proxyA = input.proxyA;
   const proxyB = input.proxyB;
 
-  const radiusA = Math.max(proxyA.m_radius, Settings.polygonRadius);
-  const radiusB = Math.max(proxyB.m_radius, Settings.polygonRadius);
+  const radiusA = math_max(proxyA.m_radius, Settings.polygonRadius);
+  const radiusB = math_max(proxyB.m_radius, Settings.polygonRadius);
   const radius = radiusA + radiusB;
 
   const xfA = input.transformA;
@@ -824,7 +826,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
   const v = Vec2.sub(wA, wB);
 
   // Sigma is the target distance between polygons
-  const sigma = Math.max(Settings.polygonRadius, radius - Settings.polygonRadius);
+  const sigma = math_max(Settings.polygonRadius, radius - Settings.polygonRadius);
   const tolerance = 0.5 * Settings.linearSlop;
 
   // Main iteration loop.

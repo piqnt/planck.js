@@ -23,12 +23,14 @@
  */
 
 import * as matrix from './Matrix';
-import { math as Math } from './Math';
+import { mod } from './Math';
 import { Vec2, Vec2Value } from './Vec2';
 import { TransformValue } from './Transform';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const math_atan2 = Math.atan2;
+const math_PI = Math.PI;
 
 
 const temp = matrix.vec2(0, 0);
@@ -70,7 +72,7 @@ export class Sweep {
     matrix.copyVec2(this.c, temp);
     matrix.copyVec2(this.c0, temp);
 
-    this.a = this.a0 = Math.atan2(xf.q.s, xf.q.c);
+    this.a = this.a0 = math_atan2(xf.q.s, xf.q.c);
   }
 
   setLocalCenter(localCenter: Vec2Value, xf: TransformValue): void {
@@ -117,7 +119,7 @@ export class Sweep {
    * normalize the angles in radians to be between -pi and pi.
    */
   normalize(): void {
-    const a0 = Math.mod(this.a0, -Math.PI, +Math.PI);
+    const a0 = mod(this.a0, -math_PI, +math_PI);
     this.a -= this.a0 - a0;
     this.a0 = a0;
   }

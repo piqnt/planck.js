@@ -26,7 +26,7 @@ import * as matrix from '../../common/Matrix';
 import type { MassData } from '../../dynamics/Body';
 import { RayCastOutput, RayCastInput, AABBValue } from '../AABB';
 import { DistanceProxy } from '../Distance';
-import { math as Math } from '../../common/Math';
+import { EPSILON } from '../../common/Math';
 import { Transform, TransformValue } from '../../common/Transform';
 import { Rot } from '../../common/Rot';
 import { Vec2, Vec2Value } from '../../common/Vec2';
@@ -36,6 +36,8 @@ import { Shape } from '../Shape';
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+const math_max = Math.max;
+const math_min = Math.min;
 
 const temp = matrix.vec2(0, 0);
 const e = matrix.vec2(0, 0);
@@ -161,7 +163,7 @@ export class PolygonShape extends Shape {
       return;
     }
 
-    let n = Math.min(vertices.length, Settings.maxPolygonVertices);
+    let n = math_min(vertices.length, Settings.maxPolygonVertices);
 
     // Perform welding and copy vertices into local buffer.
     const ps: Vec2[] = []; // [Settings.maxPolygonVertices];
@@ -260,7 +262,7 @@ export class PolygonShape extends Shape {
       const i1 = i;
       const i2 = i + 1 < m ? i + 1 : 0;
       const edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
-      _ASSERT && console.assert(edge.lengthSquared() > Math.EPSILON * Math.EPSILON);
+      _ASSERT && console.assert(edge.lengthSquared() > EPSILON * EPSILON);
       this.m_normals[i] = Vec2.crossVec2Num(edge, 1.0);
       this.m_normals[i].normalize();
     }
@@ -404,10 +406,10 @@ export class PolygonShape extends Shape {
     let maxY = -Infinity;
     for (let i = 0; i < this.m_count; ++i) {
       const v = matrix.transformVec2(temp, xf, this.m_vertices[i]);
-      minX = Math.min(minX, v.x);
-      maxX = Math.max(maxX, v.x);
-      minY = Math.min(minY, v.y);
-      maxY = Math.max(maxY, v.y);
+      minX = math_min(minX, v.x);
+      maxX = math_max(maxX, v.x);
+      minY = math_min(minY, v.y);
+      maxY = math_max(maxY, v.y);
     }
 
     matrix.setVec2(aabb.lowerBound, minX - this.m_radius, minY - this.m_radius);
@@ -497,7 +499,7 @@ export class PolygonShape extends Shape {
     massData.mass = density * area;
 
     // Center of mass
-    _ASSERT && console.assert(area > Math.EPSILON);
+    _ASSERT && console.assert(area > EPSILON);
     matrix.setMulVec2(center, 1.0 / area, center);
     matrix.sumVec2(massData.center, center, s);
 
@@ -584,7 +586,7 @@ function ComputeCentroid(vs: Vec2[], count: number): Vec2 {
   }
 
   // Centroid
-  _ASSERT && console.assert(area > Math.EPSILON);
+  _ASSERT && console.assert(area > EPSILON);
   c.mul(1.0 / area);
   return c;
 }

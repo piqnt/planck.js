@@ -24,7 +24,7 @@
 
 import * as matrix from '../common/Matrix';
 import { SettingsInternal as Settings } from '../Settings';
-import { math as Math } from '../common/Math';
+import { EPSILON } from '../common/Math';
 import { Body } from './Body';
 import type { Contact } from './Contact';
 import { Joint } from './Joint';
@@ -35,6 +35,9 @@ import { Sweep } from '../common/Sweep';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const math_abs = Math.abs;
+const math_sqrt = Math.sqrt;
+const math_min = Math.min;
 
 
 export class TimeStep {
@@ -395,13 +398,13 @@ export class Solver {
       matrix.setMulVec2(translation, h, v);
       const translationLengthSqr = matrix.lengthSqrVec2(translation);
       if (translationLengthSqr > Settings.maxTranslationSquared) {
-        const ratio = Settings.maxTranslation / Math.sqrt(translationLengthSqr);
+        const ratio = Settings.maxTranslation / math_sqrt(translationLengthSqr);
         matrix.scaleVec2(v, ratio);
       }
 
       const rotation = h * w;
       if (rotation * rotation > Settings.maxRotationSquared) {
-        const ratio = Settings.maxRotation / Math.abs(rotation);
+        const ratio = Settings.maxRotation / math_abs(rotation);
         w *= ratio;
       }
 
@@ -422,7 +425,7 @@ export class Solver {
       for (let j = 0; j < this.m_contacts.length; ++j) {
         const contact = this.m_contacts[j];
         const separation = contact.solvePositionConstraint(step);
-        minSeparation = Math.min(minSeparation, separation);
+        minSeparation = math_min(minSeparation, separation);
       }
       // We can't expect minSpeparation >= -Settings.linearSlop because we don't
       // push the separation above -Settings.linearSlop.
@@ -474,7 +477,7 @@ export class Solver {
           minSleepTime = 0.0;
         } else {
           body.m_sleepTime += h;
-          minSleepTime = Math.min(minSleepTime, body.m_sleepTime);
+          minSleepTime = math_min(minSleepTime, body.m_sleepTime);
         }
       }
 
@@ -591,7 +594,7 @@ export class Solver {
           // Beta is the fraction of the remaining portion of the [time?].
           const beta = output.t;
           if (output.state == TOIOutputState.e_touching) {
-            alpha = Math.min(alpha0 + (1.0 - alpha0) * beta, 1.0);
+            alpha = math_min(alpha0 + (1.0 - alpha0) * beta, 1.0);
           } else {
             alpha = 1.0;
           }
@@ -607,7 +610,7 @@ export class Solver {
         }
       }
 
-      if (minContact == null || 1.0 - 10.0 * Math.EPSILON < minAlpha) {
+      if (minContact == null || 1.0 - 10.0 * EPSILON < minAlpha) {
         // No more TOI events. Done!
         world.m_stepComplete = true;
         break;
@@ -781,7 +784,7 @@ export class Solver {
       for (let j = 0; j < this.m_contacts.length; ++j) {
         const contact = this.m_contacts[j];
         const separation = contact.solvePositionConstraintTOI(subStep, toiA, toiB);
-        minSeparation = Math.min(minSeparation, separation);
+        minSeparation = math_min(minSeparation, separation);
       }
       // We can't expect minSpeparation >= -Settings.linearSlop because we don't
       // push the separation above -Settings.linearSlop.
@@ -860,13 +863,13 @@ export class Solver {
       matrix.setMulVec2(translation, h, v);
       const translationLengthSqr = matrix.lengthSqrVec2(translation);
       if (translationLengthSqr > Settings.maxTranslationSquared) {
-        const ratio = Settings.maxTranslation / Math.sqrt(translationLengthSqr);
+        const ratio = Settings.maxTranslation / math_sqrt(translationLengthSqr);
         matrix.scaleVec2(v, ratio);
       }
 
       const rotation = h * w;
       if (rotation * rotation > Settings.maxRotationSquared) {
-        const ratio = Settings.maxRotation / Math.abs(rotation);
+        const ratio = Settings.maxRotation / math_abs(rotation);
         w *= ratio;
       }
 

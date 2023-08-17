@@ -24,7 +24,7 @@
 
 import { options } from '../../util/options';
 import { SettingsInternal as Settings } from '../../Settings';
-import { math as Math } from '../../common/Math';
+import { } from '../../common/Math';
 import { Vec2 } from '../../common/Vec2';
 import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
@@ -143,7 +143,7 @@ export class GearJoint extends Joint {
 
     this.m_joint1 = joint1 ? joint1 : def.joint1;
     this.m_joint2 = joint2 ? joint2 : def.joint2;
-    this.m_ratio = Math.isFinite(ratio) ? ratio : def.ratio;
+    this.m_ratio = Number.isFinite(ratio) ? ratio : def.ratio;
 
     this.m_type1 = this.m_joint1.getType() as 'revolute-joint' | 'prismatic-joint';
     this.m_type2 = this.m_joint2.getType() as 'revolute-joint' | 'prismatic-joint';
@@ -284,7 +284,7 @@ export class GearJoint extends Joint {
    * Set the gear ratio.
    */
   setRatio(ratio: number): void {
-    _ASSERT && console.assert(Math.isFinite(ratio));
+    _ASSERT && console.assert(Number.isFinite(ratio));
     this.m_ratio = ratio;
   }
 

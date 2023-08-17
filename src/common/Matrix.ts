@@ -22,6 +22,11 @@
  * SOFTWARE.
  */
 
+const math_sin = Math.sin;
+const math_cos = Math.cos;
+const math_sqrt = Math.sqrt;
+
+
 import { RotValue } from "./Rot";
 import { TransformValue } from "./Transform";
 import { Vec2Value } from "./Vec2";
@@ -36,7 +41,7 @@ export function vec3(x: number, y: number, z: number): Vec3Value {
 }
 
 export function rotation(angle: number): RotValue {
-  return { s: Math.sin(angle), c: Math.cos(angle) };
+  return { s: math_sin(angle), c: math_cos(angle) };
 }
 
 export function setVec2(out: Vec2Value, x: number, y: number): Vec2Value {
@@ -118,7 +123,7 @@ export function combineVec2(out: Vec2Value, am: number, a: Vec2Value, bm: number
 }
 
 export function normalizeVec2Length(out: Vec2Value): number {
-  const length = Math.sqrt(out.x * out.x + out.y * out.y);
+  const length = math_sqrt(out.x * out.x + out.y * out.y);
   if (length !== 0) {
     const invLength = 1 / length;
     out.x *= invLength;
@@ -128,7 +133,7 @@ export function normalizeVec2Length(out: Vec2Value): number {
 }
 
 export function normalizeVec2(out: Vec2Value): Vec2Value {
-  const length = Math.sqrt(out.x * out.x + out.y * out.y);
+  const length = math_sqrt(out.x * out.x + out.y * out.y);
   if (length > 0) {
     const invLength = 1 / length;
     out.x *= invLength;
@@ -162,7 +167,7 @@ export function dotVec2(a: Vec2Value, b: Vec2Value): number {
 }
 
 export function lengthVec2(a: Vec2Value): number {
-  return Math.sqrt(a.x * a.x + a.y * a.y);
+  return math_sqrt(a.x * a.x + a.y * a.y);
 }
 
 export function lengthSqrVec2(a: Vec2Value): number {
@@ -172,7 +177,7 @@ export function lengthSqrVec2(a: Vec2Value): number {
 export function distVec2(a: Vec2Value, b: Vec2Value): number {
   const dx = a.x - b.x;
   const dy = a.y - b.y;
-  return Math.sqrt(dx * dx + dy * dy);
+  return math_sqrt(dx * dx + dy * dy);
 }
 
 export function distSqrVec2(a: Vec2Value, b: Vec2Value): number {
@@ -186,8 +191,8 @@ export function dotVec3(v: Vec3Value, w: Vec3Value): number {
 }
 
 export function setRotAngle(out: RotValue, a: number): RotValue {
-  out.c = Math.cos(a);
-  out.s = Math.sin(a);
+  out.c = math_cos(a);
+  out.s = math_sin(a);
   return out;
 }
 

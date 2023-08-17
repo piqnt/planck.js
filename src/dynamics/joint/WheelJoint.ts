@@ -24,7 +24,7 @@
 
 import { options } from '../../util/options';
 import { SettingsInternal as Settings } from '../../Settings';
-import { math as Math } from '../../common/Math';
+import { clamp } from '../../common/Math';
 import { Vec2 } from '../../common/Vec2';
 import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
@@ -33,6 +33,8 @@ import { TimeStep } from "../Solver";
 
 
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+const math_abs = Math.abs;
+const math_PI = Math.PI;
 
 
 /**
@@ -474,7 +476,7 @@ export class WheelJoint extends Joint {
         const C = Vec2.dot(d, this.m_ax); // float
 
         // Frequency
-        const omega = 2.0 * Math.PI * this.m_frequencyHz; // float
+        const omega = 2.0 * math_PI * this.m_frequencyHz; // float
 
         // Damping coefficient
         const damp = 2.0 * this.m_springMass * this.m_dampingRatio * omega; // float
@@ -576,7 +578,7 @@ export class WheelJoint extends Joint {
 
       const oldImpulse = this.m_motorImpulse; // float
       const maxImpulse = step.dt * this.m_maxMotorTorque; // float
-      this.m_motorImpulse = Math.clamp(this.m_motorImpulse + impulse,
+      this.m_motorImpulse = clamp(this.m_motorImpulse + impulse,
           -maxImpulse, maxImpulse);
       impulse = this.m_motorImpulse - oldImpulse;
 
@@ -657,7 +659,7 @@ export class WheelJoint extends Joint {
     this.m_bodyB.c_position.c.setVec2(cB);
     this.m_bodyB.c_position.a = aB;
 
-    return Math.abs(C) <= Settings.linearSlop;
+    return math_abs(C) <= Settings.linearSlop;
   }
 
 }

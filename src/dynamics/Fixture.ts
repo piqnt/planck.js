@@ -24,7 +24,6 @@
 
 import * as matrix from '../common/Matrix';
 import { options } from '../util/options';
-import { math as Math } from '../common/Math';
 import { Vec2Value } from '../common/Vec2';
 import { AABB, RayCastInput, RayCastOutput } from '../collision/AABB';
 import { Shape, ShapeType } from '../collision/Shape';
@@ -302,7 +301,7 @@ export class Fixture {
    * mass of the body. You must call Body.resetMassData to update the body's mass.
    */
   setDensity(density: number): void {
-    _ASSERT && console.assert(Math.isFinite(density) && density >= 0.0);
+    _ASSERT && console.assert(Number.isFinite(density) && density >= 0.0);
     this.m_density = density;
   }
 

@@ -24,7 +24,7 @@
 
 import { options } from '../../util/options';
 import { SettingsInternal as Settings } from '../../Settings';
-import { math as Math } from '../../common/Math';
+import { clamp } from '../../common/Math';
 import { Vec2 } from '../../common/Vec2';
 import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
@@ -33,6 +33,7 @@ import { TimeStep } from "../Solver";
 
 
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+const math_min = Math.min;
 
 
 const inactiveLimit = 0;
@@ -319,7 +320,7 @@ export class RopeJoint extends Joint {
 
     let impulse = -this.m_mass * Cdot; // float
     const oldImpulse = this.m_impulse; // float
-    this.m_impulse = Math.min(0.0, this.m_impulse + impulse);
+    this.m_impulse = math_min(0.0, this.m_impulse + impulse);
     impulse = this.m_impulse - oldImpulse;
 
     const P = Vec2.mulNumVec2(impulse, this.m_u); // Vec2
@@ -355,7 +356,7 @@ export class RopeJoint extends Joint {
     const length = u.normalize(); // float
     let C = length - this.m_maxLength; // float
 
-    C = Math.clamp(C, 0.0, Settings.maxLinearCorrection);
+    C = clamp(C, 0.0, Settings.maxLinearCorrection);
 
     const impulse = -this.m_mass * C; // float
     const P = Vec2.mulNumVec2(impulse, u); // Vec2

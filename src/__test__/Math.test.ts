@@ -1,28 +1,9 @@
 import { describe, it, expect } from 'vitest';
 
-import { math as Math } from '../common/Math';
 import { Vec2 } from '../common/Vec2';
 import { Vec3 } from '../common/Vec3';
 
 describe('Math', function(): void {
-
-  it('Math', function(): void {
-    expect(Math.isFinite(+'NaN')).equal(false);
-    expect(Math.isFinite(Infinity)).equal(false);
-    expect(Math.isFinite('0')).equal(false);
-    expect(Math.isFinite('')).equal(false);
-
-    expect(Math.isFinite(1)).equal(true);
-    expect(Math.isFinite(0)).equal(true);
-    expect(Math.isFinite(-1)).equal(true);
-
-    // InvSqrt
-    // NextPowerOfTwo
-    // IsPowerOfTwo
-    // clamp
-    // EPSILON
-  });
-
   it('Vec2', function(): void {
     var r, v = new Vec2();
     expect(v.x).equal(0);

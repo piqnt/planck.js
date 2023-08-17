@@ -29,6 +29,8 @@ import { FixtureProxy } from "../dynamics/Fixture";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const math_max = Math.max;
+const math_min = Math.min;
 
 
 /**
@@ -208,8 +210,8 @@ export class BroadPhase {
       return true;
     }
 
-    const proxyIdA = Math.min(proxyId, this.m_queryProxyId);
-    const proxyIdB = Math.max(proxyId, this.m_queryProxyId);
+    const proxyIdA = math_min(proxyId, this.m_queryProxyId);
+    const proxyIdB = math_max(proxyId, this.m_queryProxyId);
 
     // TODO: Skip any duplicate pairs.
 

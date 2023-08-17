@@ -23,7 +23,7 @@
  */
 
 import * as matrix from '../../common/Matrix';
-import { math as Math } from '../../common/Math';
+import { EPSILON } from '../../common/Math';
 import { TransformValue } from '../../common/Transform';
 import { Contact } from '../../dynamics/Contact';
 import { CircleShape } from './CircleShape';
@@ -81,7 +81,7 @@ export const CollidePolygonCircle = function (manifold: Manifold, polygonA: Poly
   const v2 = vertices[vertIndex2];
 
   // If the center is inside the polygon ...
-  if (separation < Math.EPSILON) {
+  if (separation < EPSILON) {
     manifold.pointCount = 1;
     manifold.type = ManifoldType.e_faceA;
     matrix.copyVec2(manifold.localNormal, normals[normalIndex]);

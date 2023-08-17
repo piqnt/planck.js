@@ -25,7 +25,10 @@
 import * as matrix from '../common/Matrix';
 import { Vec2Value } from '../common/Vec2';
 import { TransformValue } from '../common/Transform';
-import { math as Math } from '../common/Math';
+import { EPSILON } from '../common/Math';
+
+
+const math_sqrt = Math.sqrt;
 
 const pointA = matrix.vec2(0, 0);
 const pointB = matrix.vec2(0, 0);
@@ -161,8 +164,8 @@ export class Manifold {
         matrix.transformVec2(pointB, xfB, manifoldPoint.localPoint);
         matrix.diffVec2(dist, pointB, pointA);
         const lengthSqr = matrix.lengthSqrVec2(dist);
-          if (lengthSqr > Math.EPSILON * Math.EPSILON) {
-          const length = Math.sqrt(lengthSqr);
+          if (lengthSqr > EPSILON * EPSILON) {
+          const length = math_sqrt(lengthSqr);
           matrix.setMulVec2(normal, 1 / length, dist);
         }
         matrix.combineVec2(cA, 1, pointA, radiusA, normal);

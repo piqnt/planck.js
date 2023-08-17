@@ -22,11 +22,15 @@
  * SOFTWARE.
  */
 
-import { math as Math } from './Math';
+import { EPSILON } from "./Math";
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+const math_abs = Math.abs;
+const math_sqrt = Math.sqrt;
+const math_max = Math.max;
+const math_min = Math.min;
 
 
 export interface Vec2Value {
@@ -107,7 +111,7 @@ export class Vec2 {
     if (obj === null || typeof obj === 'undefined') {
       return false;
     }
-    return Math.isFinite(obj.x) && Math.isFinite(obj.y);
+    return Number.isFinite(obj.x) && Number.isFinite(obj.y);
   }
 
   static assert(o: any): void {
@@ -143,8 +147,8 @@ export class Vec2 {
       this.x = x.x;
       this.y = x.y;
     } else {
-      _ASSERT && Math.assert(x);
-      _ASSERT && Math.assert(y);
+      _ASSERT && console.assert(Number.isFinite(x));
+      _ASSERT && console.assert(Number.isFinite(y));
       this.x = x;
       this.y = y;
     }
@@ -157,8 +161,8 @@ export class Vec2 {
    * @returns this
    */
    setNum(x: number, y: number) {
-    _ASSERT && Math.assert(x);
-    _ASSERT && Math.assert(y);
+    _ASSERT && console.assert(Number.isFinite(x));
+    _ASSERT && console.assert(Number.isFinite(y));
     this.x = x;
     this.y = y;
 
@@ -194,9 +198,9 @@ export class Vec2 {
    * Set linear combination of v and w: `a * v + b * w`
    */
   setCombine(a: number, v: Vec2Value, b: number, w: Vec2Value): Vec2 {
-    _ASSERT && Math.assert(a);
+    _ASSERT && console.assert(Number.isFinite(a));
     _ASSERT && Vec2.assert(v);
-    _ASSERT && Math.assert(b);
+    _ASSERT && console.assert(Number.isFinite(b));
     _ASSERT && Vec2.assert(w);
     const x = a * v.x + b * w.x;
     const y = a * v.y + b * w.y;
@@ -208,7 +212,7 @@ export class Vec2 {
   }
 
   setMul(a: number, v: Vec2Value): Vec2 {
-    _ASSERT && Math.assert(a);
+    _ASSERT && console.assert(Number.isFinite(a));
     _ASSERT && Vec2.assert(v);
     const x = a * v.x;
     const y = a * v.y;
@@ -246,9 +250,9 @@ export class Vec2 {
    * Add linear combination of v and w: `a * v + b * w`
    */
   addCombine(a: number, v: Vec2Value, b: number, w: Vec2Value): Vec2 {
-    _ASSERT && Math.assert(a);
+    _ASSERT && console.assert(Number.isFinite(a));
     _ASSERT && Vec2.assert(v);
-    _ASSERT && Math.assert(b);
+    _ASSERT && console.assert(Number.isFinite(b));
     _ASSERT && Vec2.assert(w);
 
     const x = a * v.x + b * w.x;
@@ -261,7 +265,7 @@ export class Vec2 {
   }
 
   addMul(a: number, v: Vec2Value): Vec2 {
-    _ASSERT && Math.assert(a);
+    _ASSERT && console.assert(Number.isFinite(a));
     _ASSERT && Vec2.assert(v);
     const x = a * v.x;
     const y = a * v.y;
@@ -285,9 +289,9 @@ export class Vec2 {
    * Subtract linear combination of v and w: `a * v + b * w`
    */
   subCombine(a: number, v: Vec2Value, b: number, w: Vec2Value): Vec2 {
-    _ASSERT && Math.assert(a);
+    _ASSERT && console.assert(Number.isFinite(a));
     _ASSERT && Vec2.assert(v);
-    _ASSERT && Math.assert(b);
+    _ASSERT && console.assert(Number.isFinite(b));
     _ASSERT && Vec2.assert(w);
     const x = a * v.x + b * w.x;
     const y = a * v.y + b * w.y;
@@ -299,7 +303,7 @@ export class Vec2 {
   }
 
   subMul(a: number, v: Vec2Value): Vec2 {
-    _ASSERT && Math.assert(a);
+    _ASSERT && console.assert(Number.isFinite(a));
     _ASSERT && Vec2.assert(v);
     const x = a * v.x;
     const y = a * v.y;
@@ -327,7 +331,7 @@ export class Vec2 {
    * @returns this
    */
   mul(m: number): Vec2 {
-    _ASSERT && Math.assert(m);
+    _ASSERT && console.assert(Number.isFinite(m));
     this.x *= m;
     this.y *= m;
     return this;
@@ -356,7 +360,7 @@ export class Vec2 {
    */
   normalize(): number {
     const length = this.length();
-    if (length < Math.EPSILON) {
+    if (length < EPSILON) {
       return 0.0;
     }
     const invLength = 1.0 / length;
@@ -372,7 +376,7 @@ export class Vec2 {
    */
   static lengthOf(v: Vec2Value): number {
     _ASSERT && Vec2.assert(v);
-    return Math.sqrt(v.x * v.x + v.y * v.y);
+    return math_sqrt(v.x * v.x + v.y * v.y);
   }
 
   /**
@@ -388,7 +392,7 @@ export class Vec2 {
     _ASSERT && Vec2.assert(w);
     const dx = v.x - w.x;
     const dy = v.y - w.y;
-    return Math.sqrt(dx * dx + dy * dy);
+    return math_sqrt(dx * dx + dy * dy);
   }
 
   static distanceSquared(v: Vec2Value, w: Vec2Value): number {
@@ -430,11 +434,11 @@ export class Vec2 {
   static cross(v: any, w: any): any {
     if (typeof w === 'number') {
       _ASSERT && Vec2.assert(v);
-      _ASSERT && Math.assert(w);
+      _ASSERT && console.assert(Number.isFinite(w));
       return Vec2.neo(w * v.y, -w * v.x);
 
     } else if (typeof v === 'number') {
-      _ASSERT && Math.assert(v);
+      _ASSERT && console.assert(Number.isFinite(v));
       _ASSERT && Vec2.assert(w);
       return Vec2.neo(-v * w.y, v * w.x);
 
@@ -455,13 +459,13 @@ export class Vec2 {
   /** Cross product on a vector and a scalar */
   static crossVec2Num(v: Vec2Value, w: number): Vec2 {
     _ASSERT && Vec2.assert(v);
-    _ASSERT && Math.assert(w);
+    _ASSERT && console.assert(Number.isFinite(w));
     return Vec2.neo(w * v.y, -w * v.x);
   }
 
   /** Cross product on a vector and a scalar */
   static crossNumVec2(v: number, w: Vec2Value): Vec2 {
-    _ASSERT && Math.assert(v);
+    _ASSERT && console.assert(Number.isFinite(v));
     _ASSERT && Vec2.assert(w);
     return Vec2.neo(-v * w.y, v * w.x);
   }
@@ -474,11 +478,11 @@ export class Vec2 {
   static addCross(a: Vec2Value, v: any, w: any): Vec2 {
     if (typeof w === 'number') {
       _ASSERT && Vec2.assert(v);
-      _ASSERT && Math.assert(w);
+      _ASSERT && console.assert(Number.isFinite(w));
       return Vec2.neo(w * v.y + a.x, -w * v.x + a.y);
 
     } else if (typeof v === 'number') {
-      _ASSERT && Math.assert(v);
+      _ASSERT && console.assert(Number.isFinite(v));
       _ASSERT && Vec2.assert(w);
       return Vec2.neo(-v * w.y + a.x, v * w.x + a.y);
     }
@@ -491,7 +495,7 @@ export class Vec2 {
    */
   static addCrossVec2Num(a: Vec2Value, v: Vec2Value, w: number): Vec2 {
     _ASSERT && Vec2.assert(v);
-    _ASSERT && Math.assert(w);
+    _ASSERT && console.assert(Number.isFinite(w));
     return Vec2.neo(w * v.y + a.x, -w * v.x + a.y);
   }
 
@@ -499,7 +503,7 @@ export class Vec2 {
    * Returns `a + (v x w)`
    */
   static addCrossNumVec2(a: Vec2Value, v: number, w: Vec2Value): Vec2 {
-    _ASSERT && Math.assert(v);
+    _ASSERT && console.assert(Number.isFinite(v));
     _ASSERT && Vec2.assert(w);
     return Vec2.neo(-v * w.y + a.x, v * w.x + a.y);
   }
@@ -535,11 +539,11 @@ export class Vec2 {
   static mul(a: any, b: any): Vec2 {
     if (typeof a === 'object') {
       _ASSERT && Vec2.assert(a);
-      _ASSERT && Math.assert(b);
+      _ASSERT && console.assert(Number.isFinite(b));
       return Vec2.neo(a.x * b, a.y * b);
 
     } else if (typeof b === 'object') {
-      _ASSERT && Math.assert(a);
+      _ASSERT && console.assert(Number.isFinite(a));
       _ASSERT && Vec2.assert(b);
       return Vec2.neo(a * b.x, a * b.y);
     }
@@ -547,12 +551,12 @@ export class Vec2 {
 
   static mulVec2Num(a: Vec2Value, b: number): Vec2 {
     _ASSERT && Vec2.assert(a);
-    _ASSERT && Math.assert(b);
+    _ASSERT && console.assert(Number.isFinite(b));
     return Vec2.neo(a.x * b, a.y * b);
   }
 
   static mulNumVec2(a: number, b: Vec2Value): Vec2 {
-    _ASSERT && Math.assert(a);
+    _ASSERT && console.assert(Number.isFinite(a));
     _ASSERT && Vec2.assert(b);
     return Vec2.neo(a * b.x, a * b.y);
   }
@@ -570,7 +574,7 @@ export class Vec2 {
 
   static abs(v: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(v);
-    return Vec2.neo(Math.abs(v.x), Math.abs(v.y));
+    return Vec2.neo(math_abs(v.x), math_abs(v.y));
   }
 
   static mid(v: Vec2Value, w: Vec2Value): Vec2 {
@@ -582,19 +586,19 @@ export class Vec2 {
   static upper(v: Vec2Value, w: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
-    return Vec2.neo(Math.max(v.x, w.x), Math.max(v.y, w.y));
+    return Vec2.neo(math_max(v.x, w.x), math_max(v.y, w.y));
   }
 
   static lower(v: Vec2Value, w: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
-    return Vec2.neo(Math.min(v.x, w.x), Math.min(v.y, w.y));
+    return Vec2.neo(math_min(v.x, w.x), math_min(v.y, w.y));
   }
 
   clamp(max: number): Vec2 {
     const lengthSqr = this.x * this.x + this.y * this.y;
     if (lengthSqr > max * max) {
-      const scale = max / Math.sqrt(lengthSqr);
+      const scale = max / math_sqrt(lengthSqr);
       this.x *= scale;
       this.y *= scale;
     }

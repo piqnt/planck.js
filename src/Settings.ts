@@ -22,6 +22,9 @@
  * SOFTWARE.
  */
 
+const math_PI = Math.PI;
+
+
 /**
  * Tuning constants based on meters-kilograms-seconds (MKS) units.
  */
@@ -69,7 +72,7 @@ export class Settings {
    * A small angle used as a collision and constraint tolerance. Usually it is
    * chosen to be numerically significant, but visually insignificant.
    */
-  static angularSlop: number = (2.0 / 180.0 * Math.PI);
+  static angularSlop: number = (2.0 / 180.0 * math_PI);
 
   /**
    * The radius of the polygon/edge shape skin. This should not be modified.
@@ -117,7 +120,7 @@ export class Settings {
    * The maximum angular position correction used when solving constraints. This
    * helps to prevent overshoot.
    */
-  static maxAngularCorrection: number = (8.0 / 180.0 * Math.PI);
+  static maxAngularCorrection: number = (8.0 / 180.0 * math_PI);
 
   /**
    * The maximum linear velocity of a body. This limit is very large and is used
@@ -129,7 +132,7 @@ export class Settings {
    * The maximum angular velocity of a body. This limit is very large and is used
    * to prevent numerical problems. You shouldn't need to adjust Settings.
    */
-  static maxRotation: number = (0.5 * Math.PI);
+  static maxRotation: number = (0.5 * math_PI);
 
   /**
    * This scale factor controls how fast overlap is resolved. Ideally this would
@@ -154,7 +157,7 @@ export class Settings {
   /**
    * A body cannot sleep if its angular velocity is above this tolerance.
    */
-  static angularSleepTolerance: number = (2.0 / 180.0 * Math.PI);
+  static angularSleepTolerance: number = (2.0 / 180.0 * math_PI);
 }
 
 /** @internal */

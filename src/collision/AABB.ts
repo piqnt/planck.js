@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-import * as matrix from '../common/Matrix';
-import { math as Math } from '../common/Math';
+import { EPSILON } from '../common/Math';
 import { Vec2, Vec2Value } from '../common/Vec2';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
-
+const math_max = Math.max;
+const math_min = Math.min;
 
 /**
  * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
@@ -128,18 +128,18 @@ export class AABB {
     const lowerB = b.lowerBound;
     const upperB = b.upperBound;
 
-    const lowerX = Math.min(lowerA.x, lowerB.x);
-    const lowerY = Math.min(lowerA.y, lowerB.y);
-    const upperX = Math.max(upperB.x, upperA.x);
-    const upperY = Math.max(upperB.y, upperA.y);
+    const lowerX = math_min(lowerA.x, lowerB.x);
+    const lowerY = math_min(lowerA.y, lowerB.y);
+    const upperX = math_max(upperB.x, upperA.x);
+    const upperY = math_max(upperB.y, upperA.y);
 
     this.lowerBound.setNum(lowerX, lowerY);
     this.upperBound.setNum(upperX, upperY);
   }
 
   combinePoints(a: Vec2Value, b: Vec2Value): void {
-    this.lowerBound.setNum(Math.min(a.x, b.x), Math.min(a.y, b.y));
-    this.upperBound.setNum(Math.max(a.x, b.x), Math.max(a.y, b.y));
+    this.lowerBound.setNum(math_min(a.x, b.x), math_min(a.y, b.y));
+    this.upperBound.setNum(math_max(a.x, b.x), math_max(a.y, b.y));
   }
 
   set(aabb: AABB): void {
@@ -187,8 +187,8 @@ export class AABB {
   }
 
   static diff(a: AABB, b: AABB): number {
-    const wD = Math.max(0, Math.min(a.upperBound.x, b.upperBound.x) - Math.max(b.lowerBound.x, a.lowerBound.x));
-    const hD = Math.max(0, Math.min(a.upperBound.y, b.upperBound.y) - Math.max(b.lowerBound.y, a.lowerBound.y));
+    const wD = math_max(0, math_min(a.upperBound.x, b.upperBound.x) - math_max(b.lowerBound.x, a.lowerBound.x));
+    const hD = math_max(0, math_min(a.upperBound.y, b.upperBound.y) - math_max(b.lowerBound.y, a.lowerBound.y));
 
     const wA = a.upperBound.x - a.lowerBound.x;
     const hA = a.upperBound.y - a.lowerBound.y;
@@ -212,7 +212,7 @@ export class AABB {
     const normal = Vec2.zero();
 
     for (let f: 'x' | 'y' = 'x'; f !== null; f = (f === 'x' ? 'y' : null)) {
-      if (absD.x < Math.EPSILON) {
+      if (absD.x < EPSILON) {
         // Parallel.
         if (p[f] < this.lowerBound[f] || this.upperBound[f] < p[f]) {
           return false;
@@ -240,7 +240,7 @@ export class AABB {
         }
 
         // Pull the max down
-        tmax = Math.min(tmax, t2);
+        tmax = math_min(tmax, t2);
 
         if (tmin > tmax) {
           return false;
@@ -266,18 +266,18 @@ export class AABB {
   }
 
   static combinePoints(out: AABBValue, a: Vec2Value, b: Vec2Value): AABBValue {
-    out.lowerBound.x = Math.min(a.x, b.x);
-    out.lowerBound.y = Math.min(a.y, b.y);
-    out.upperBound.x = Math.max(a.x, b.x);
-    out.upperBound.y = Math.max(a.y, b.y);
+    out.lowerBound.x = math_min(a.x, b.x);
+    out.lowerBound.y = math_min(a.y, b.y);
+    out.upperBound.x = math_max(a.x, b.x);
+    out.upperBound.y = math_max(a.y, b.y);
     return out;
   }
 
   static combinedPerimeter(a: AABBValue, b: AABBValue) {
-    const lx = Math.min(a.lowerBound.x, b.lowerBound.x);
-    const ly = Math.min(a.lowerBound.y, b.lowerBound.y);
-    const ux = Math.max(a.upperBound.x, b.upperBound.x);
-    const uy = Math.max(a.upperBound.y, b.upperBound.y);
+    const lx = math_min(a.lowerBound.x, b.lowerBound.x);
+    const ly = math_min(a.lowerBound.y, b.lowerBound.y);
+    const ux = math_max(a.upperBound.x, b.upperBound.x);
+    const uy = math_max(a.upperBound.y, b.upperBound.y);
     return 2.0 * (ux - lx + uy - ly);  
   }
 }

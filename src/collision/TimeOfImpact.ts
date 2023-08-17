@@ -26,13 +26,15 @@ import * as matrix from '../common/Matrix';
 import { SettingsInternal as Settings } from '../Settings';
 import { stats } from '../util/stats';
 import Timer from '../util/Timer';
-import { math as Math } from '../common/Math';
 import { Sweep } from '../common/Sweep';
 import { Transform } from '../common/Transform';
 import { Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from './Distance';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const math_abs = Math.abs;
+const math_max = Math.max;
+
 
 /**
  * Input parameters for TimeOfImpact.
@@ -133,7 +135,7 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
   const tMax = input.tMax;
 
   const totalRadius = proxyA.m_radius + proxyB.m_radius;
-  const target = Math.max(Settings.linearSlop, totalRadius - 3.0 * Settings.linearSlop);
+  const target = math_max(Settings.linearSlop, totalRadius - 3.0 * Settings.linearSlop);
   const tolerance = 0.25 * Settings.linearSlop;
   _ASSERT && console.assert(target > tolerance);
 
@@ -264,7 +266,7 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
 
         const s = separationFunction.evaluate(t);
 
-        if (Math.abs(s - target) < tolerance) {
+        if (math_abs(s - target) < tolerance) {
           // t2 holds a tentative value for t1
           t2 = t;
           break;
@@ -284,7 +286,7 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
         }
       }
 
-      stats.toiMaxRootIters = Math.max(stats.toiMaxRootIters, rootIterCount);
+      stats.toiMaxRootIters = math_max(stats.toiMaxRootIters, rootIterCount);
 
       ++pushBackIter;
 
@@ -308,10 +310,10 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
     }
   }
 
-  stats.toiMaxIters = Math.max(stats.toiMaxIters, iter);
+  stats.toiMaxIters = math_max(stats.toiMaxIters, iter);
 
   const time = Timer.diff(timer);
-  stats.toiMaxTime = Math.max(stats.toiMaxTime, time);
+  stats.toiMaxTime = math_max(stats.toiMaxTime, time);
   stats.toiTime += time;
 
   separationFunction.recycle();

@@ -23,7 +23,7 @@
  */
 
 import { options } from '../../util/options';
-import { math as Math } from '../../common/Math';
+import { clamp } from '../../common/Math';
 import { Vec2 } from '../../common/Vec2';
 import { Mat22 } from '../../common/Mat22';
 import { Rot } from '../../common/Rot';
@@ -119,8 +119,8 @@ export class MotorJoint extends Joint {
 
     this.m_type = MotorJoint.TYPE;
 
-    this.m_linearOffset = Math.isFinite(def.linearOffset) ? def.linearOffset : bodyA.getLocalPoint(bodyB.getPosition());
-    this.m_angularOffset = Math.isFinite(def.angularOffset) ? def.angularOffset : bodyB.getAngle() - bodyA.getAngle();
+    this.m_linearOffset = Number.isFinite(def.linearOffset) ? def.linearOffset : bodyA.getLocalPoint(bodyB.getPosition());
+    this.m_angularOffset = Number.isFinite(def.angularOffset) ? def.angularOffset : bodyB.getAngle() - bodyA.getAngle();
 
     this.m_linearImpulse = Vec2.zero();
     this.m_angularImpulse = 0.0;
@@ -179,7 +179,7 @@ export class MotorJoint extends Joint {
    * Set the maximum friction force in N.
    */
   setMaxForce(force: number): void {
-    _ASSERT && console.assert(Math.isFinite(force) && force >= 0.0);
+    _ASSERT && console.assert(Number.isFinite(force) && force >= 0.0);
     this.m_maxForce = force;
   }
 
@@ -194,7 +194,7 @@ export class MotorJoint extends Joint {
    * Set the maximum friction torque in N*m.
    */
   setMaxTorque(torque: number): void {
-    _ASSERT && console.assert(Math.isFinite(torque) && torque >= 0.0);
+    _ASSERT && console.assert(Number.isFinite(torque) && torque >= 0.0);
     this.m_maxTorque = torque;
   }
 
@@ -209,7 +209,7 @@ export class MotorJoint extends Joint {
    * Set the position correction factor in the range [0,1].
    */
   setCorrectionFactor(factor: number): void {
-    _ASSERT && console.assert(Math.isFinite(factor) && 0.0 <= factor && factor <= 1.0);
+    _ASSERT && console.assert(Number.isFinite(factor) && 0.0 <= factor && factor <= 1.0);
     this.m_correctionFactor = factor;
   }
 
@@ -382,7 +382,7 @@ export class MotorJoint extends Joint {
 
       const oldImpulse = this.m_angularImpulse;
       const maxImpulse = h * this.m_maxTorque;
-      this.m_angularImpulse = Math.clamp(this.m_angularImpulse + impulse,
+      this.m_angularImpulse = clamp(this.m_angularImpulse + impulse,
           -maxImpulse, maxImpulse);
       impulse = this.m_angularImpulse - oldImpulse;
 

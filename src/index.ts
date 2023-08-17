@@ -1,6 +1,7 @@
 export * from './serializer/index';
 
-export * from './common/Math';
+/** @deprecated */
+export { math as Math } from './common/Math';
 
 export * from './common/Vec2';
 export * from './common/Vec3';
@@ -50,10 +51,6 @@ export * from './collision/Distance';
 export * from './collision/TimeOfImpact';
 export * from './collision/DynamicTree';
 export * from './util/stats';
-
-import { math } from './common/Math';
-
-export const Math = math;
 
 import { CollidePolygons } from './collision/shape/CollidePolygon';
 import { SettingsInternal as Settings } from './Settings';
