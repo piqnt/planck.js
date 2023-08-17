@@ -1,4 +1,4 @@
-import planck from '../dist/planck-with-testbed';
+import planck from '..';
 
 if (planck.testbed) {
   planck.testbed(function(testbed: planck.Testbed) {

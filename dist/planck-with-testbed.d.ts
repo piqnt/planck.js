@@ -3,16 +3,8 @@ declare namespace Serializer {
     var toJson: any;
     var fromJson: any;
 }
-declare const math: Math & {
-    EPSILON: number;
-    isFinite: (x: unknown) => boolean;
-    assert: (x: any) => void;
-    nextPowerOfTwo: (x: number) => number;
-    isPowerOfTwo: (x: number) => boolean;
-    mod: (num: number, min?: number, max?: number) => number;
-    clamp: (num: number, min: number, max: number) => number;
-    random: (min?: number, max?: number) => number;
-};
+/** @deprecated */
+declare const math: any;
 interface Vec2Value {
     x: number;
     y: number;
@@ -130,28 +122,23 @@ declare class Vec2 {
      * Get the skew vector such that dot(skew_vec, other) == cross(vec, other)
      */
     static skew(v: Vec2Value): Vec2;
-    /**
-     * Perform the dot product on two vectors.
-     */
+    /** Dot product on two vectors */
     static dot(v: Vec2Value, w: Vec2Value): number;
+    /** Cross product between two vectors */
     static cross(v: Vec2Value, w: Vec2Value): number;
+    /** Cross product between a vector and a scalar */
     static cross(v: Vec2Value, w: number): Vec2;
+    /** Cross product between a scalar and a vector */
     static cross(v: number, w: Vec2Value): Vec2;
-    /**
-     * Perform the cross product on two vectors. In 2D this produces a scalar.
-     */
+    /** Cross product on two vectors */
     static crossVec2Vec2(v: Vec2Value, w: Vec2Value): number;
-    /**
-     * Perform the cross product on a vector and a scalar. In 2D this produces a
-     * vector.
-     */
+    /** Cross product on a vector and a scalar */
     static crossVec2Num(v: Vec2Value, w: number): Vec2;
-    /**
-     * Perform the cross product on a vector and a scalar. In 2D this produces a
-     * vector.
-     */
+    /** Cross product on a vector and a scalar */
     static crossNumVec2(v: number, w: Vec2Value): Vec2;
+    /** Returns `a + (v x w)` */
     static addCross(a: Vec2Value, v: Vec2Value, w: number): Vec2;
+    /** Returns `a + (v x w)` */
     static addCross(a: Vec2Value, v: number, w: Vec2Value): Vec2;
     /**
      * Returns `a + (v x w)`
@@ -202,9 +189,7 @@ declare class Vec3 {
     constructor();
     static zero(): Vec3;
     static clone(v: Vec3Value): Vec3;
-    /**
-     * Does this vector contain finite coordinates?
-     */
+    /** Does this vector contain finite coordinates? */
     static isValid(obj: any): boolean;
     static assert(o: any): void;
     setZero(): Vec3;
@@ -213,13 +198,9 @@ declare class Vec3 {
     sub(w: Vec3Value): Vec3;
     mul(m: number): Vec3;
     static areEqual(v: Vec3Value, w: Vec3Value): boolean;
-    /**
-     * Perform the dot product on two vectors.
-     */
+    /** Dot product on two vectors */
     static dot(v: Vec3Value, w: Vec3Value): number;
-    /**
-     * Perform the cross product on two vectors. In 2D this produces a scalar.
-     */
+    /** Cross product on two vectors */
     static cross(v: Vec3Value, w: Vec3Value): Vec3;
     static add(v: Vec3Value, w: Vec3Value): Vec3;
     static sub(v: Vec3Value, w: Vec3Value): Vec3;
@@ -344,7 +325,7 @@ declare class Rot {
     getAngle(): number;
     /** Get the x-axis. */
     getXAxis(): Vec2;
-    /** Get the u-axis. */
+    /** Get the y-axis. */
     getYAxis(): Vec2;
     /** Multiply two rotations: q * r */
     static mul(rot: RotValue, m: RotValue): Rot;
@@ -387,15 +368,13 @@ declare class Transform {
     constructor(position?: Vec2Value, rotation?: number);
     static clone(xf: Transform): Transform;
     static identity(): Transform;
-    /**
-     * Set this to the identity transform.
-     */
+    /** Set this to the identity transform */
     setIdentity(): void;
+    /** Set position and angle */
     set(position: Vec2Value, rotation: number): void;
+    /** Copy from another transform */
     set(xf: TransformValue): void;
-    /**
-     * Set this based on the position and angle.
-     */
+    /** Set position and angle */
     setNum(position: Vec2Value, rotation: number): void;
     setTransform(xf: TransformValue): void;
     static isValid(obj: any): boolean;
@@ -2798,7 +2777,6 @@ declare function RevoluteJoint(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, 
  */
 declare class RevoluteJoint extends Joint {
     static TYPE: "revolute-joint";
-    // TODO enum
     constructor(def: RevoluteJointDef);
     constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
     /**
@@ -3912,29 +3890,6 @@ declare class WheelJoint extends Joint {
      */
     solvePositionConstraints(step: TimeStep): boolean;
 }
-/*
-* Planck.js
-* The MIT License
-* Copyright (c) 2021 Erin Catto, Ali Shakiba
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included in all
-* copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-* SOFTWARE.
-*/
 /**
  * Tuning constants based on meters-kilograms-seconds (MKS) units.
  */
@@ -4144,16 +4099,6 @@ declare const stats: {
     toiMaxRootIters: number;
     toString(newline?: string): string;
 };
-declare const Math: Math & {
-    EPSILON: number;
-    isFinite: (x: unknown) => boolean;
-    assert: (x: any) => void;
-    nextPowerOfTwo: (x: number) => number;
-    isPowerOfTwo: (x: number) => boolean;
-    mod: (num: number, min?: number, max?: number) => number;
-    clamp: (num: number, min: number, max: number) => number;
-    random: (min?: number, max?: number) => number;
-};
 /** @deprecated Merged with main namespace */
 declare const internal: {
     CollidePolygons: (manifold: Manifold, polyA: PolygonShape, xfA: TransformValue, polyB: PolygonShape, xfB: TransformValue) => void;
@@ -4270,6 +4215,7 @@ type TestbedCallback = (testbed?: Testbed) => (World | undefined);
 declare function testbed(callback: TestbedCallback): void;
 /** @deprecated */
 declare function testbed(options: TestbedOptions, callback: TestbedCallback): void;
+/** Returns testbed instance */
 declare function testbed(options?: TestbedOptions): Testbed;
 declare namespace planck {
     function Serializer(opts?: any): void;
@@ -4277,16 +4223,29 @@ declare namespace planck {
         var toJson: any;
         var fromJson: any;
     }
-    const math: Math & {
-        EPSILON: number;
-        isFinite: (x: unknown) => boolean;
-        assert: (x: any) => void;
-        nextPowerOfTwo: (x: number) => number;
-        isPowerOfTwo: (x: number) => boolean;
-        mod: (num: number, min?: number, max?: number) => number;
-        clamp: (num: number, min: number, max: number) => number;
-        random: (min?: number, max?: number) => number;
-    };
+    const EPSILON = 1e-9;
+    /**
+     * Next Largest Power of 2 Given a binary integer value x, the next largest
+     * power of 2 can be computed by a SWAR algorithm that recursively "folds" the
+     * upper bits into the lower bits. This process yields a bit vector with the
+     * same most significant 1 as x, but all 1's below it. Adding 1 to that value
+     * yields the next largest power of 2. For a 32-bit value:
+     */
+    function nextPowerOfTwo(x: number): number;
+    function isPowerOfTwo(x: number): boolean;
+    function mod(num: number, min?: number, max?: number): number;
+    /**
+     * Returns a min if num is less than min, and max if more than max, otherwise returns num.
+     */
+    function clamp(num: number, min: number, max: number): number;
+    /**
+     * Returns a random number between min and max when two arguments are provided.
+     * If one arg is provided between 0 to max.
+     * If one arg is passed between 0 to 1.
+     */
+    function random(min?: number, max?: number): number;
+    /** @deprecated */
+    const math: any;
     interface Vec2Value {
         x: number;
         y: number;
@@ -4398,28 +4357,23 @@ declare namespace planck {
          * Get the skew vector such that dot(skew_vec, other) == cross(vec, other)
          */
         static skew(v: Vec2Value): Vec2;
-        /**
-         * Perform the dot product on two vectors.
-         */
+        /** Dot product on two vectors */
         static dot(v: Vec2Value, w: Vec2Value): number;
+        /** Cross product between two vectors */
         static cross(v: Vec2Value, w: Vec2Value): number;
+        /** Cross product between a vector and a scalar */
         static cross(v: Vec2Value, w: number): Vec2;
+        /** Cross product between a scalar and a vector */
         static cross(v: number, w: Vec2Value): Vec2;
-        /**
-         * Perform the cross product on two vectors. In 2D this produces a scalar.
-         */
+        /** Cross product on two vectors */
         static crossVec2Vec2(v: Vec2Value, w: Vec2Value): number;
-        /**
-         * Perform the cross product on a vector and a scalar. In 2D this produces a
-         * vector.
-         */
+        /** Cross product on a vector and a scalar */
         static crossVec2Num(v: Vec2Value, w: number): Vec2;
-        /**
-         * Perform the cross product on a vector and a scalar. In 2D this produces a
-         * vector.
-         */
+        /** Cross product on a vector and a scalar */
         static crossNumVec2(v: number, w: Vec2Value): Vec2;
+        /** Returns `a + (v x w)` */
         static addCross(a: Vec2Value, v: Vec2Value, w: number): Vec2;
+        /** Returns `a + (v x w)` */
         static addCross(a: Vec2Value, v: number, w: Vec2Value): Vec2;
         /**
          * Returns `a + (v x w)`
@@ -4463,9 +4417,7 @@ declare namespace planck {
         constructor();
         static zero(): Vec3;
         static clone(v: Vec3Value): Vec3;
-        /**
-         * Does this vector contain finite coordinates?
-         */
+        /** Does this vector contain finite coordinates? */
         static isValid(obj: any): boolean;
         static assert(o: any): void;
         setZero(): Vec3;
@@ -4474,13 +4426,9 @@ declare namespace planck {
         sub(w: Vec3Value): Vec3;
         mul(m: number): Vec3;
         static areEqual(v: Vec3Value, w: Vec3Value): boolean;
-        /**
-         * Perform the dot product on two vectors.
-         */
+        /** Dot product on two vectors */
         static dot(v: Vec3Value, w: Vec3Value): number;
-        /**
-         * Perform the cross product on two vectors. In 2D this produces a scalar.
-         */
+        /** Cross product on two vectors */
         static cross(v: Vec3Value, w: Vec3Value): Vec3;
         static add(v: Vec3Value, w: Vec3Value): Vec3;
         static sub(v: Vec3Value, w: Vec3Value): Vec3;
@@ -4604,7 +4552,7 @@ declare namespace planck {
         getAngle(): number;
         /** Get the x-axis. */
         getXAxis(): Vec2;
-        /** Get the u-axis. */
+        /** Get the y-axis. */
         getYAxis(): Vec2;
         /** Multiply two rotations: q * r */
         static mul(rot: RotValue, m: RotValue): Rot;
@@ -4641,15 +4589,13 @@ declare namespace planck {
         constructor(position?: Vec2Value, rotation?: number);
         static clone(xf: Transform): Transform;
         static identity(): Transform;
-        /**
-         * Set this to the identity transform.
-         */
+        /** Set this to the identity transform */
         setIdentity(): void;
+        /** Set position and angle */
         set(position: Vec2Value, rotation: number): void;
+        /** Copy from another transform */
         set(xf: TransformValue): void;
-        /**
-         * Set this based on the position and angle.
-         */
+        /** Set position and angle */
         setNum(position: Vec2Value, rotation: number): void;
         setTransform(xf: TransformValue): void;
         static isValid(obj: any): boolean;
@@ -6996,7 +6942,6 @@ declare namespace planck {
      */
     class RevoluteJoint extends Joint {
         static TYPE: "revolute-joint";
-        // TODO enum
         constructor(def: RevoluteJointDef);
         constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
         /**
@@ -7964,29 +7909,6 @@ declare namespace planck {
          */
         solvePositionConstraints(step: TimeStep): boolean;
     }
-    /*
-    * Planck.js
-    * The MIT License
-    * Copyright (c) 2021 Erin Catto, Ali Shakiba
-    *
-    * Permission is hereby granted, free of charge, to any person obtaining a copy
-    * of this software and associated documentation files (the "Software"), to deal
-    * in the Software without restriction, including without limitation the rights
-    * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    * copies of the Software, and to permit persons to whom the Software is
-    * furnished to do so, subject to the following conditions:
-    *
-    * The above copyright notice and this permission notice shall be included in all
-    * copies or substantial portions of the Software.
-    *
-    * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    * SOFTWARE.
-    */
     /**
      * Tuning constants based on meters-kilograms-seconds (MKS) units.
      */
@@ -8196,16 +8118,6 @@ declare namespace planck {
         toiMaxRootIters: number;
         toString(newline?: string): string;
     };
-    const Math: Math & {
-        EPSILON: number;
-        isFinite: (x: unknown) => boolean;
-        assert: (x: any) => void;
-        nextPowerOfTwo: (x: number) => number;
-        isPowerOfTwo: (x: number) => boolean;
-        mod: (num: number, min?: number, max?: number) => number;
-        clamp: (num: number, min: number, max: number) => number;
-        random: (min?: number, max?: number) => number;
-    };
     /** @deprecated Merged with main namespace */
     const internal: {
         CollidePolygons: (manifold: Manifold, polyA: PolygonShape, xfA: TransformValue, polyB: PolygonShape, xfB: TransformValue) => void;
@@ -8322,7 +8234,9 @@ declare namespace planck {
     function testbed(callback: TestbedCallback): void;
     /** @deprecated */
     function testbed(options: TestbedOptions, callback: TestbedCallback): void;
+    /** Returns testbed instance */
     function testbed(options?: TestbedOptions): Testbed;
+    export { math as Math };
 }
-export { planck as default, Serializer, math, Vec2Value, Vec2, Vec3Value, Vec3, Mat22, Mat33, TransformValue, Transform, RotValue, Rot, RayCastInput, RayCastCallback, RayCastOutput, AABBValue, AABB, Shape, ShapeType, FixtureOpt, FixtureDef, FixtureProxy, Fixture, BodyType, BodyDef, MassData, Body, ContactEdge, EvaluateFunction, mixFriction, mixRestitution, VelocityConstraintPoint, Contact, JointEdge, JointOpt, JointDef, Joint, WorldDef, WorldRayCastCallback, WorldAABBQueryCallback, World, CircleShape, Circle, EdgeShape, Edge, PolygonShape, Polygon, ChainShape, Chain, BoxShape, Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJointOpt, DistanceJointDef, DistanceJoint, FrictionJointOpt, FrictionJointDef, FrictionJoint, GearJointOpt, GearJointDef, GearJoint, MotorJointOpt, MotorJointDef, MotorJoint, MouseJointOpt, MouseJointDef, MouseJoint, PrismaticJointOpt, PrismaticJointDef, PrismaticJoint, PulleyJointOpt, PulleyJointDef, PulleyJoint, RevoluteJointOpt, RevoluteJointDef, RevoluteJoint, RopeJointOpt, RopeJointDef, RopeJoint, WeldJointOpt, WeldJointDef, WeldJoint, WheelJointOpt, WheelJointDef, WheelJoint, Settings, Sweep, ManifoldType, ContactFeatureType, PointState, ClipVertex, Manifold, ManifoldPoint, ContactID, WorldManifold, getPointStates, clipSegmentToLine, DistanceInput, DistanceOutput, SimplexCache, Distance, DistanceProxy, testOverlap, ShapeCastInput, ShapeCastOutput, ShapeCast, TOIInput, TOIOutputState, TOIOutput, TimeOfImpact, DynamicTreeQueryCallback, TreeNode, DynamicTree, stats, Math, internal, ActiveKeys, Testbed, testbed };
+export { planck as default, Serializer, math as Math, Vec2Value, Vec2, Vec3Value, Vec3, Mat22, Mat33, TransformValue, Transform, RotValue, Rot, RayCastInput, RayCastCallback, RayCastOutput, AABBValue, AABB, Shape, ShapeType, FixtureOpt, FixtureDef, FixtureProxy, Fixture, BodyType, BodyDef, MassData, Body, ContactEdge, EvaluateFunction, mixFriction, mixRestitution, VelocityConstraintPoint, Contact, JointEdge, JointOpt, JointDef, Joint, WorldDef, WorldRayCastCallback, WorldAABBQueryCallback, World, CircleShape, Circle, EdgeShape, Edge, PolygonShape, Polygon, ChainShape, Chain, BoxShape, Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJointOpt, DistanceJointDef, DistanceJoint, FrictionJointOpt, FrictionJointDef, FrictionJoint, GearJointOpt, GearJointDef, GearJoint, MotorJointOpt, MotorJointDef, MotorJoint, MouseJointOpt, MouseJointDef, MouseJoint, PrismaticJointOpt, PrismaticJointDef, PrismaticJoint, PulleyJointOpt, PulleyJointDef, PulleyJoint, RevoluteJointOpt, RevoluteJointDef, RevoluteJoint, RopeJointOpt, RopeJointDef, RopeJoint, WeldJointOpt, WeldJointDef, WeldJoint, WheelJointOpt, WheelJointDef, WheelJoint, Settings, Sweep, ManifoldType, ContactFeatureType, PointState, ClipVertex, Manifold, ManifoldPoint, ContactID, WorldManifold, getPointStates, clipSegmentToLine, DistanceInput, DistanceOutput, SimplexCache, Distance, DistanceProxy, testOverlap, ShapeCastInput, ShapeCastOutput, ShapeCast, TOIInput, TOIOutputState, TOIOutput, TimeOfImpact, DynamicTreeQueryCallback, TreeNode, DynamicTree, stats, internal, ActiveKeys, Testbed, testbed };
 //# sourceMappingURL=planck-with-testbed.d.ts.map
