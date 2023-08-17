@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+const { execSync } = require('child_process');
 
 // this plugin serves the testbed when the url points to an example
 const TestbedPlugin = {

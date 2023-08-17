@@ -4,24 +4,24 @@ const replace =  require('@rollup/plugin-replace');
 const filesize =  require('rollup-plugin-filesize');
 const typescript =  require('rollup-plugin-ts');
 const { nodeResolve } =  require('@rollup/plugin-node-resolve');
-const declarationTransformer =  require('./build-utils/declarationTransformer.cjs');
 
-const licenseBanner =  require('./build-utils/license.cjs');
+const declarationTransformer =  require('./build-utils/declarationTransformer');
+const licenseBanner =  require('./build-utils/license');
 
 
 module.exports = [
   {
     format: 'es',
     src: 'src/main.ts',
-    dest: 'dist/planck.js',
+    dest: 'dist/planck.mjs',
     minimize: false,
     sourcemap: false,
     declaration: true,
   },
   {
-    format: 'cjs',
+    format: 'umd',
     src: 'src/main.ts',
-    dest: 'dist/planck.cjs',
+    dest: 'dist/planck.js',
     minimize: false,
     sourcemap: false,
     declaration: false,
@@ -37,15 +37,15 @@ module.exports = [
   {
     format: 'es',
     src: 'testbed/main.ts',
-    dest: 'dist/planck-with-testbed.js',
+    dest: 'dist/planck-with-testbed.mjs',
     minimize: false,
     sourcemap: false,
     declaration: true,
   },
   {
-    format: 'cjs',
+    format: 'umd',
     src: 'testbed/main.ts',
-    dest: 'dist/planck-with-testbed.cjs',
+    dest: 'dist/planck-with-testbed.js',
     minimize: false,
     sourcemap: false,
     declaration: false,
@@ -76,6 +76,7 @@ module.exports = [
           // we are still compiling to ES5, so we keep constructor factories until v2
           'CONSTRUCTOR_FACTORY': JSON.stringify(true),
           '_CONSTRUCTOR_FACTORY': JSON.stringify(true),
+          'PLANCK_VERSION': JSON.stringify(process.env.npm_package_version),
         },
       }),
       nodeResolve(),

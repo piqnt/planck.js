@@ -1,3 +1,10 @@
+const math_atan2 = Math.atan2;
+const math_abs = Math.abs;
+const math_sqrt = Math.sqrt;
+const math_PI = Math.PI;
+const math_max = Math.max;
+const math_min = Math.min;
+
 import Stage from 'stage-js';
 
 export * from '../src/index';
@@ -382,7 +389,7 @@ export class Testbed {
   drawPoint = (p: {x: number, y: number}, r: any, color: string): void => {
     this.buffer.push(function(ctx, ratio) {
       ctx.beginPath();
-      ctx.arc(p.x, p.y, 5  / ratio, 0, 2 * Math.PI);
+      ctx.arc(p.x, p.y, 5  / ratio, 0, 2 * math_PI);
       ctx.strokeStyle = color;
       ctx.stroke();
     });
@@ -392,7 +399,7 @@ export class Testbed {
   drawCircle = (p: {x: number, y: number}, r: number, color: string): void => {
     this.buffer.push(function(ctx) {
       ctx.beginPath();
-      ctx.arc(p.x, p.y, r, 0, 2 * Math.PI);
+      ctx.arc(p.x, p.y, r, 0, 2 * math_PI);
       ctx.strokeStyle = color;
       ctx.stroke();
     });
@@ -490,7 +497,7 @@ class PlanckStageNode extends Stage.Node {
 
     this.options.speed = opts.speed ?? this.options.speed;
     this.options.hz = opts.hz ?? this.options.speed;
-    if (Math.abs(this.options.hz) < 1) {
+    if (math_abs(this.options.hz) < 1) {
       this.options.hz = 1 / this.options.hz;
     }
     this.options.scaleY = opts.scaleY ?? this.options.scaleY;
@@ -634,7 +641,7 @@ class PlanckStageNode extends Stage.Node {
       this.size(w, h, ratio);
 
       ctx.scale(ratio, ratio);
-      ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+      ctx.arc(cx, cy, r, 0, 2 * math_PI);
       if (options.fill) {
         ctx.fillStyle = options.fill;
         ctx.fill();
@@ -660,7 +667,7 @@ class PlanckStageNode extends Stage.Node {
     const dx = v2.x - v1.x;
     const dy = v2.y - v1.y;
 
-    const length = Math.sqrt(dx * dx + dy * dy);
+    const length = math_sqrt(dx * dx + dy * dy);
 
     const texture = Stage.canvas(function (ctx) {
       // @ts-ignore
@@ -677,11 +684,11 @@ class PlanckStageNode extends Stage.Node {
       ctx.stroke();
     });
 
-    const minX = Math.min(v1.x, v2.x);
-    const minY = Math.min(options.scaleY * v1.y, options.scaleY * v2.y);
+    const minX = math_min(v1.x, v2.x);
+    const minY = math_min(options.scaleY * v1.y, options.scaleY * v2.y);
 
     const image = Stage.sprite(texture);
-    image.rotate(options.scaleY * Math.atan2(dy, dx));
+    image.rotate(options.scaleY * math_atan2(dy, dx));
     image.offset(minX - lw, minY - lw);
     const node = Stage.create().append(image);
     return node;
@@ -703,10 +710,10 @@ class PlanckStageNode extends Stage.Node {
     let maxY = -Infinity;
     for (let i = 0; i < vertices.length; ++i) {
       const v = vertices[i];
-      minX = Math.min(minX, v.x);
-      maxX = Math.max(maxX, v.x);
-      minY = Math.min(minY, options.scaleY * v.y);
-      maxY = Math.max(maxY, options.scaleY * v.y);
+      minX = math_min(minX, v.x);
+      maxX = math_max(maxX, v.x);
+      minY = math_min(minY, options.scaleY * v.y);
+      maxY = math_max(maxY, options.scaleY * v.y);
     }
 
     const width = maxX - minX;
@@ -767,10 +774,10 @@ class PlanckStageNode extends Stage.Node {
     let maxY = -Infinity;
     for (let i = 0; i < vertices.length; ++i) {
       const v = vertices[i];
-      minX = Math.min(minX, v.x);
-      maxX = Math.max(maxX, v.x);
-      minY = Math.min(minY, options.scaleY * v.y);
-      maxY = Math.max(maxY, options.scaleY * v.y);
+      minX = math_min(minX, v.x);
+      maxX = math_max(maxX, v.x);
+      minY = math_min(minY, options.scaleY * v.y);
+      maxY = math_max(maxY, options.scaleY * v.y);
     }
 
     const width = maxX - minX;
@@ -828,7 +835,9 @@ type TestbedCallback = (testbed?: Testbed) => (World | undefined);
 export function testbed(callback: TestbedCallback): void;
 /** @deprecated */
 export function testbed(options: TestbedOptions, callback: TestbedCallback): void;
+/** Returns testbed instance */
 export function testbed(options?: TestbedOptions): Testbed;
+/** @internal */
 export function testbed(a?: any, b?: any) {
   let callback: TestbedCallback | undefined;
   let options;
