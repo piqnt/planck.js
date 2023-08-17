@@ -435,7 +435,7 @@ export class Body {
     // Touch the proxies so that new contacts will be created (when appropriate)
     const broadPhase = this.m_world.m_broadPhase;
     for (let f = this.m_fixtureList; f; f = f.m_next) {
-      for (let i = 0; i < f.m_proxies.length; ++i) {
+      for (let i = 0; i < f.m_proxyCount; ++i) {
         broadPhase.touchProxy(f.m_proxies[i].proxyId);
       }
     }
