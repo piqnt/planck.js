@@ -17,6 +17,7 @@ import type {
   PolygonShape,
   ChainShape,
   CircleShape,
+  PulleyJoint,
 } from '../src';
 
 interface Point {
@@ -481,6 +482,7 @@ class PlanckStageNode extends Stage.Node {
   };
 
   private world: World;
+  private testbed: Testbed;
 
   constructor(world: World, opts: Partial<Options> = {}) {
     super();
@@ -496,6 +498,7 @@ class PlanckStageNode extends Stage.Node {
     this.options.lineWidth = 2 / this.options.ratio;
 
     this.world = world;
+    this.testbed = opts as Testbed;
 
     const timeStep = 1 / this.options.hz;
     let elapsedTime = 0;
@@ -605,56 +608,16 @@ class PlanckStageNode extends Stage.Node {
 
     for (let j = world.getJointList(); j; j = j.getNext()) {
       const type = j.getType();
-      const a = j.getAnchorA();
-      const b = j.getAnchorB();
-
-      let node = this.nodes.get(j);
-      if (!node) {
-        options.stroke = 'rgba(255,255,255,0.2)';
-
-        node = viewer.drawJoint(j, options);
-        node.pin('handle', 0.5);
-        node.appendTo(viewer);
-        this.nodes.set(j, node);
-      }
-
-      if (node) {
-        const cx = (a.x + b.x) * 0.5;
-        const cy = options.scaleY * (a.y + b.y) * 0.5;
-        const dx = a.x - b.x;
-        const dy = options.scaleY * (a.y - b.y);
-        const d = Math.sqrt(dx * dx + dy * dy);
-        node.width(d);
-        node.rotate(Math.atan2(dy, dx));
-        node.offset(cx, cy);
+      if (type == 'pulley-joint') {
+        this.testbed.drawSegment(j.getAnchorA(), (j as PulleyJoint).getGroundAnchorA(), 'rgba(255,255,255,0.5)');
+        this.testbed.drawSegment(j.getAnchorB(), (j as PulleyJoint).getGroundAnchorB(), 'rgba(255,255,255,0.5)');
+        this.testbed.drawSegment((j as PulleyJoint).getGroundAnchorB(), (j as PulleyJoint).getGroundAnchorA(), 'rgba(255,255,255,0.5)');
+      } else {
+        this.testbed.drawSegment(j.getAnchorA(), j.getAnchorB(), 'rgba(255,255,255,0.5)');
       }
     }
   }
 
-  drawJoint = (joint: Joint, options: Options) => {
-    const lw = options.lineWidth;
-    const ratio = options.ratio;
-
-    const length = 10;
-
-    const texture = Stage.canvas(function (ctx) {
-      // @ts-ignore
-      this.size(length + 2 * lw, 2 * lw, ratio);
-
-      ctx.scale(ratio, ratio);
-      ctx.beginPath();
-      ctx.moveTo(lw, lw);
-      ctx.lineTo(lw + length, lw);
-
-      ctx.lineCap = 'round';
-      ctx.lineWidth = options.lineWidth;
-      ctx.strokeStyle = options.stroke ?? '';
-      ctx.stroke();
-    });
-
-    const image = Stage.sprite(texture).stretch();
-    return image;
-  }
 
   drawCircle = (shape: CircleShape, options: Options) => {
     const lw = options.lineWidth;
