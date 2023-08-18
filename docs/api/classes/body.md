@@ -48,6 +48,7 @@ To create a new Body use [World.createBody](world.md#createbody).
 * [getNext](body.md#getnext)
 * [getPosition](body.md#getposition)
 * [getTransform](body.md#gettransform)
+* [getType](body.md#gettype)
 * [getUserData](body.md#getuserdata)
 * [getWorld](body.md#getworld)
 * [getWorldCenter](body.md#getworldcenter)
@@ -80,6 +81,7 @@ To create a new Body use [World.createBody](world.md#createbody).
 * [setSleepingAllowed](body.md#setsleepingallowed)
 * [setStatic](body.md#setstatic)
 * [setTransform](body.md#settransform)
+* [setType](body.md#settype)
 * [setUserData](body.md#setuserdata)
 * [shouldCollide](body.md#shouldcollide)
 * [synchronizeFixtures](body.md#synchronizefixtures)
@@ -591,6 +593,18 @@ Get the world transform for the body's origin.
 
 ___
 
+###  getType
+
+▸ **getType**(): *BodyType*
+
+*Defined in [src/dynamics/Body.ts:381](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Body.ts#L381)*
+
+Get the type of the body.
+
+**Returns:** *[BodyType](../globals.md#bodytype)*
+
+___
+
 ###  getUserData
 
 ▸ **getUserData**(): *unknown*
@@ -1048,6 +1062,24 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `position` | [Vec2](vec2.md) | The world position of the body's local origin. |
 `angle` | number | The world rotation in radians.  |
+
+**Returns:** *void*
+
+___
+
+###  setType
+
+▸ **setType**(`type`: [BodyType](../globals.md#bodytype)): *void*
+
+*Defined in [src/dynamics/Body.ts:388](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Body.ts#L388)*
+
+Set the type of the body to "static", "kinematic" or "dynamic".
+
+**Parameters:**
+
+Name | Type | Description |
+------ | ------ | ------ |
+`type` | [BodyType](../globals.md#bodytype) | The type of the body. |
 
 **Returns:** *void*
 
