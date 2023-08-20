@@ -1105,5 +1105,3 @@ ___
 ▸ **synchronizeTransform**(): *void*
 
 *Defined in [src/dynamics/Body.ts:586](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Body.ts#L586)*
-
-**Returns:** *void*
