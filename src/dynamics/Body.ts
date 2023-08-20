@@ -384,10 +384,17 @@ export class Body {
     return this;
   }
 
+  /**
+   * Get the type of the body.
+   */
   getType(): BodyType {
     return this.m_type;
   }
 
+  /**
+   * Set the type of the body to "static", "kinematic" or "dynamic".
+   * @param type The type of the body.
+   */
   setType(type: BodyType): void {
     _ASSERT && console.assert(type === STATIC || type === KINEMATIC || type === DYNAMIC);
     _ASSERT && console.assert(this.isWorldLocked() == false);
