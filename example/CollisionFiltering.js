@@ -28,7 +28,7 @@
 // The 3 large ones never collide.
 // The boxes don't collide with triangles (except if both are small).
 
-const { World, Vec2, Edge, Polygon, Box, Circle, PrismaticJoint } = planck;
+const { World, Vec2, Edge, Polygon, Box, Circle, PrismaticJoint, Testbed } = planck;
 
 let SMALL_GROUP = 1;
 let LARGE_GROUP = -1;
@@ -43,7 +43,7 @@ let CIRCLE_MAX = 0xFFFF;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 
 // Ground body

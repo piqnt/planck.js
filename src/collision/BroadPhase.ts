@@ -23,7 +23,7 @@
  */
 
 import { Vec2Value } from '../common/Vec2';
-import { AABB, RayCastCallback, RayCastInput } from './AABB';
+import { AABB, AABBValue, RayCastCallback, RayCastInput } from './AABB';
 import { DynamicTree, DynamicTreeQueryCallback } from './DynamicTree';
 import { FixtureProxy } from "../dynamics/Fixture";
 
@@ -99,7 +99,7 @@ export class BroadPhase {
    * Query an AABB for overlapping proxies. The callback class is called for each
    * proxy that overlaps the supplied AABB.
    */
-  query = (aabb: AABB, queryCallback: DynamicTreeQueryCallback): void => {
+  query = (aabb: AABBValue, queryCallback: DynamicTreeQueryCallback): void => {
     this.m_tree.query(aabb, queryCallback);
   }
 
@@ -131,7 +131,7 @@ export class BroadPhase {
    * Create a proxy with an initial AABB. Pairs are not reported until UpdatePairs
    * is called.
    */
-  createProxy(aabb: AABB, userData: FixtureProxy): number {
+  createProxy(aabb: AABBValue, userData: FixtureProxy): number {
     _ASSERT && console.assert(AABB.isValid(aabb));
     const proxyId = this.m_tree.createProxy(aabb, userData);
     this.bufferMove(proxyId);

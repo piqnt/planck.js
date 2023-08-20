@@ -21,9 +21,9 @@
  * SOFTWARE.
  */
 
-const { Vec2, World } = planck;
+const { Vec2, World, Testbed } = planck;
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 
 let world = new World(new Vec2(0, -10));
 

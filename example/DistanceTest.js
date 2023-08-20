@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-const { World, Vec2, Transform, Box, Distance } = planck;
+const { World, Vec2, Transform, Box, Distance, Testbed } = planck;
 
 let DistanceInput = Distance.Input;
 let DistanceOutput = Distance.Output;
@@ -29,7 +29,7 @@ let SimplexCache = Distance.Cache;
 
 let world = new World();
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);    
 
 let transformA = new Transform(new Vec2(0.0, -0.2));

@@ -21,11 +21,11 @@
  * SOFTWARE.
  */
 
-const { World, Transform, Box, TimeOfImpact, Sweep, TOIInput, TOIOutput, stats } = planck;
+const { World, Transform, Box, TimeOfImpact, Sweep, TOIInput, TOIOutput, stats, Testbed } = planck;
 
 let world = new World();
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.width = 80;
 testbed.height = 60;
 testbed.x = 0;

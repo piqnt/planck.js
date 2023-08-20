@@ -21,11 +21,11 @@
  * SOFTWARE.
  */
 
-const { Vec2, World, Circle, Box, PulleyJoint } = planck;
+const { Vec2, World, Circle, Box, PulleyJoint, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 
 let y = 16.0;

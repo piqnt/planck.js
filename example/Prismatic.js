@@ -23,11 +23,11 @@
 
 // The motor in this test gets smoother with higher velocity iterations.
 
-const { World, Vec2, PrismaticJoint, Edge, Box } = planck;
+const { World, Vec2, PrismaticJoint, Edge, Box, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 
 let MOTOR_SPEED = 10;

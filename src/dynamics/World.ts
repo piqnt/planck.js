@@ -29,7 +29,7 @@ import { Solver, ContactImpulse, TimeStep } from './Solver';
 import { Body, BodyDef } from './Body';
 import { Joint } from './Joint';
 import { Contact } from './Contact';
-import { AABB, RayCastInput, RayCastOutput } from "../collision/AABB";
+import { AABBValue, RayCastInput, RayCastOutput } from "../collision/AABB";
 import { Fixture, FixtureProxy } from "./Fixture";
 import { Manifold } from "../collision/Manifold";
 
@@ -378,7 +378,7 @@ export class World {
    * @param aabb The query box.
    * @param callback Called for each fixture found in the query AABB. It may return `false` to terminate the query.
    */
-  queryAABB(aabb: AABB, callback: WorldAABBQueryCallback): void {
+  queryAABB(aabb: AABBValue, callback: WorldAABBQueryCallback): void {
     _ASSERT && console.assert(typeof callback === 'function');
     const broadPhase = this.m_broadPhase;
     this.m_broadPhase.query(aabb, function(proxyId: number): boolean { // TODO GC

@@ -30,11 +30,11 @@
 // This test also shows how to use contact filtering. Filtering is configured
 // so that the payload does not collide with the chain.
 
-const { Vec2, World, Edge, Box, RevoluteJoint, RopeJoint } = planck;
+const { Vec2, World, Edge, Box, RevoluteJoint, RopeJoint, Testbed } = planck;
 
 let world = new World({x: 0, y: -10});
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.info('X: Toggle the rope joint');
 testbed.start(world);
 

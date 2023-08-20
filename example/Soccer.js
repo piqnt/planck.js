@@ -1,6 +1,6 @@
-const { World, Vec2, Circle, Chain, Settings } = planck;
+const { World, Vec2, Circle, Chain, Settings, Testbed } = planck;
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 
 let width = 10.00, height = 6.00;
 

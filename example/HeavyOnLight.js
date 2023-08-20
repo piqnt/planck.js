@@ -21,11 +21,11 @@
  * SOFTWARE.
  */
 
-const { Vec2, World, Edge, Circle } = planck;
+const { Vec2, World, Edge, Circle, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 
 world.createBody().createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)));

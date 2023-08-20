@@ -25,11 +25,11 @@
 // can be used to animate a dynamic body. With finite motor forces
 // the body can be blocked by collision with other bodies.
 
-const { Vec2, World, MotorJoint, Box, Edge } = planck;
+const { Vec2, World, MotorJoint, Box, Edge, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 
 let time = 0;

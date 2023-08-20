@@ -21,11 +21,11 @@
  * SOFTWARE.
  */
 
-const { Vec2, World, Circle, Box, Math } = planck;
+const { Vec2, World, Circle, Box, Math, Testbed } = planck;
 
 let world = new World(new Vec2(0, 0));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.y = 0;
 testbed.hz = 60;
 testbed.speed = 1;

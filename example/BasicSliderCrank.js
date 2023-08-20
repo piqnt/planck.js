@@ -23,11 +23,11 @@
 
 // A basic slider crank created for GDC tutorial: Understanding Constraints
 
-const { Vec2, World, Box, RevoluteJoint, PrismaticJoint } = planck;
+const { Vec2, World, Box, RevoluteJoint, PrismaticJoint, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.y = -15;
 testbed.start(world);
 

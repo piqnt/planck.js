@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.0-beta.9
+ * Planck.js v1.0.0-beta.10
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
@@ -14867,6 +14867,109 @@ var serializer = new Serializer();
 Serializer.toJson = serializer.toJson;
 Serializer.fromJson = serializer.fromJson;
 
+var Testbed = /** @class */ (function () {
+    function Testbed() {
+        /** World viewbox width. */
+        this.width = 80;
+        /** World viewbox height. */
+        this.height = 60;
+        /** World viewbox center vertical offset. */
+        this.x = 0;
+        /** World viewbox center horizontal offset. */
+        this.y = -10;
+        this.scaleY = -1;
+        /** World simulation step frequency */
+        this.hz = 60;
+        /** World simulation speed, default is 1 */
+        this.speed = 1;
+        this.ratio = 16;
+        this.background = '#222222';
+        this.activeKeys = {};
+        /** callback, to be implemented by user */
+        this.step = function (dt, t) {
+            return;
+        };
+        /** callback, to be implemented by user */
+        this.keydown = function (keyCode, label) {
+            return;
+        };
+        /** callback, to be implemented by user */
+        this.keyup = function (keyCode, label) {
+            return;
+        };
+        this.statusText = '';
+        this.statusMap = {};
+    }
+    Testbed.mount = function (options) {
+        throw new Error('Not implemented');
+    };
+    Testbed.prototype.status = function (a, b) {
+        if (typeof b !== 'undefined') {
+            var key_1 = a;
+            var value_1 = b;
+            if (typeof value_1 !== 'function' && typeof value_1 !== 'object') {
+                this.statusMap[key_1] = value_1;
+            }
+        }
+        else if (a && typeof a === 'object') {
+            // tslint:disable-next-line:no-for-in
+            for (var key_2 in a) {
+                var value_2 = a[key_2];
+                if (typeof value_2 !== 'function' && typeof value_2 !== 'object') {
+                    this.statusMap[key_2] = value_2;
+                }
+            }
+        }
+        else if (typeof a === 'string') {
+            this.statusText = a;
+        }
+        var newline = '\n';
+        var text = this.statusText || '';
+        for (var key in this.statusMap) {
+            var value = this.statusMap[key];
+            if (typeof value === 'function')
+                continue;
+            text += (text && newline) + key + ': ' + value;
+        }
+        this._status(text);
+    };
+    Testbed.prototype.info = function (text) {
+        this._info(text);
+    };
+    Testbed.prototype.color = function (r, g, b) {
+        r = r * 256 | 0;
+        g = g * 256 | 0;
+        b = b * 256 | 0;
+        return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+    };
+    return Testbed;
+}());
+/** @internal */
+function testbed(a, b) {
+    var callback;
+    var options;
+    if (typeof a === 'function') {
+        callback = a;
+        options = b;
+    }
+    else if (typeof b === 'function') {
+        callback = b;
+        options = a;
+    }
+    else {
+        options = a !== null && a !== void 0 ? a : b;
+    }
+    var testbed = Testbed.mount(options);
+    if (callback) {
+        // this is for backwards compatibility
+        var world = callback(testbed) || testbed.world;
+        testbed.start(world);
+    }
+    else {
+        return testbed;
+    }
+}
+
 /*
  * Planck.js
  * The MIT License
@@ -15848,9 +15951,10 @@ var internal = {
 
 var planck = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    internal: internal,
     Math: math,
     Serializer: Serializer,
+    Testbed: Testbed,
+    testbed: testbed,
     Vec2: Vec2,
     Vec3: Vec3,
     Mat22: Mat22,
@@ -15925,8 +16029,9 @@ var planck = /*#__PURE__*/Object.freeze({
     TimeOfImpact: TimeOfImpact,
     TreeNode: TreeNode,
     DynamicTree: DynamicTree,
-    stats: stats
+    stats: stats,
+    internal: internal
 });
 
-export { AABB, Body, Box, BoxShape, Chain, ChainShape, Circle, CircleShape, ClipVertex, CollideCircles, CollideEdgeCircle, CollideEdgePolygon, CollidePolygonCircle, CollidePolygons, Contact, ContactEdge, ContactFeatureType, ContactID, Distance, DistanceInput, DistanceJoint, DistanceOutput, DistanceProxy, DynamicTree, Edge, EdgeShape, Fixture, FixtureProxy, FrictionJoint, GearJoint, Joint, JointEdge, Manifold, ManifoldPoint, ManifoldType, MassData, Mat22, Mat33, math as Math, MotorJoint, MouseJoint, PointState, Polygon, PolygonShape, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, Rot, Serializer, Settings, SettingsInternal, Shape, ShapeCast, ShapeCastInput, ShapeCastOutput, SimplexCache, Sweep, TOIInput, TOIOutput, TOIOutputState, TimeOfImpact, Transform, TreeNode, Vec2, Vec3, VelocityConstraintPoint, WeldJoint, WheelJoint, World, WorldManifold, clipSegmentToLine, planck as default, getPointStates, internal, mixFriction, mixRestitution, stats, testOverlap };
+export { AABB, Body, Box, BoxShape, Chain, ChainShape, Circle, CircleShape, ClipVertex, CollideCircles, CollideEdgeCircle, CollideEdgePolygon, CollidePolygonCircle, CollidePolygons, Contact, ContactEdge, ContactFeatureType, ContactID, Distance, DistanceInput, DistanceJoint, DistanceOutput, DistanceProxy, DynamicTree, Edge, EdgeShape, Fixture, FixtureProxy, FrictionJoint, GearJoint, Joint, JointEdge, Manifold, ManifoldPoint, ManifoldType, MassData, Mat22, Mat33, math as Math, MotorJoint, MouseJoint, PointState, Polygon, PolygonShape, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, Rot, Serializer, Settings, SettingsInternal, Shape, ShapeCast, ShapeCastInput, ShapeCastOutput, SimplexCache, Sweep, TOIInput, TOIOutput, TOIOutputState, Testbed, TimeOfImpact, Transform, TreeNode, Vec2, Vec3, VelocityConstraintPoint, WeldJoint, WheelJoint, World, WorldManifold, clipSegmentToLine, planck as default, getPointStates, internal, mixFriction, mixRestitution, stats, testOverlap, testbed };
 //# sourceMappingURL=planck.mjs.map

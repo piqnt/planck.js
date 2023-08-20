@@ -23,11 +23,11 @@
 
 // This tests distance joints, body destruction, and joint destruction.
 
-const { World, Vec2, Box, DistanceJoint } = planck;
+const { World, Vec2, Box, DistanceJoint, Testbed } = planck;
 
 const world = new World();
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 
 let ground = world.createBody();

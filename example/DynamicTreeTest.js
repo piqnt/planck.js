@@ -3,11 +3,11 @@
  * Copyright (c) 2019 Erin Catto
  */
 
-const { World, Vec2, DynamicTree, AABB, Math } = planck;
+const { World, Vec2, DynamicTree, AABB, Math, Testbed } = planck;
 
 let world = new World();
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 
 let ACTOR_COUNT = 128;

@@ -26,11 +26,11 @@
 // So why not go ahead and use soft weld joints? They behave like a revolute
 // joint with a rotational spring.
 
-const { World, Vec2, Edge, Box, WeldJoint, Polygon, Circle } = planck;
+const { World, Vec2, Edge, Box, WeldJoint, Polygon, Circle, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 
 let COUNT = 8;

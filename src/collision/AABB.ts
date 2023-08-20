@@ -120,7 +120,7 @@ export class AABB {
   /**
    * Combine one or two AABB into this one.
    */
-  combine(a: AABB, b?: AABB): void {
+  combine(a: AABBValue, b?: AABBValue): void {
     b = b || this;
 
     const lowerA = a.lowerBound;
@@ -142,12 +142,12 @@ export class AABB {
     this.upperBound.setNum(math_max(a.x, b.x), math_max(a.y, b.y));
   }
 
-  set(aabb: AABB): void {
+  set(aabb: AABBValue): void {
     this.lowerBound.setNum(aabb.lowerBound.x, aabb.lowerBound.y);
     this.upperBound.setNum(aabb.upperBound.x, aabb.upperBound.y);
   }
 
-  contains(aabb: AABB): boolean {
+  contains(aabb: AABBValue): boolean {
     let result = true;
     result = result && this.lowerBound.x <= aabb.lowerBound.x;
     result = result && this.lowerBound.y <= aabb.lowerBound.y;
@@ -169,7 +169,7 @@ export class AABB {
     return out;
   }
 
-  static testOverlap(a: AABB, b: AABB): boolean {
+  static testOverlap(a: AABBValue, b: AABBValue): boolean {
     const d1x = b.lowerBound.x - a.upperBound.x;
     const d2x = a.lowerBound.x - b.upperBound.x;
 
@@ -182,11 +182,11 @@ export class AABB {
     return true;
   }
 
-  static areEqual(a: AABB, b: AABB): boolean {
+  static areEqual(a: AABBValue, b: AABBValue): boolean {
     return Vec2.areEqual(a.lowerBound, b.lowerBound) && Vec2.areEqual(a.upperBound, b.upperBound);
   }
 
-  static diff(a: AABB, b: AABB): number {
+  static diff(a: AABBValue, b: AABBValue): number {
     const wD = math_max(0, math_min(a.upperBound.x, b.upperBound.x) - math_max(b.lowerBound.x, a.lowerBound.x));
     const hD = math_max(0, math_min(a.upperBound.y, b.upperBound.y) - math_max(b.lowerBound.y, a.lowerBound.y));
 

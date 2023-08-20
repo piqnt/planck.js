@@ -3,11 +3,11 @@
  * Copyright (c) 2019 Erin Catto
  */
 
-const { Vec2, World, Edge, Box, Polygon, Circle, RevoluteJoint } = planck;
+const { Vec2, World, Edge, Box, Polygon, Circle, RevoluteJoint, Testbed } = planck;
 
 let world = new World(new Vec2(0, -4));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 
 let COUNT = 30;

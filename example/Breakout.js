@@ -1,9 +1,9 @@
-const { World, Vec2, Circle, Box, Edge, Polygon } = planck;
+const { World, Vec2, Circle, Box, Edge, Polygon, Testbed } = planck;
 
 let WIDTH = 20;
 let HEIGHT = 26;
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.width = WIDTH;
 testbed.height = HEIGHT * 1.12;
 testbed.ratio = 32;
