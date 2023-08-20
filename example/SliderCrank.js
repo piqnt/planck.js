@@ -23,11 +23,11 @@
 
 // A motor driven slider crank with joint friction.
 
-const { World, Vec2, RevoluteJoint, PrismaticJoint, Edge, Box } = planck;
+const { World, Vec2, RevoluteJoint, PrismaticJoint, Edge, Box, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 testbed.info('Z: Toggle friction, X: Toggle motor');
 

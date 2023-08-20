@@ -913,7 +913,7 @@ export class Body {
    * @param force The world force vector, usually in Newtons (N).
    * @param wake Also wake up the body
    */
-  applyForceToCenter(force: Vec2, wake: boolean = true): void {
+  applyForceToCenter(force: Vec2Value, wake: boolean = true): void {
     if (this.m_type != DYNAMIC) {
       return;
     }

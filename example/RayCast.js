@@ -25,7 +25,7 @@
 // NOTE: we are intentionally filtering one of the polygons, therefore
 // the ray will always miss one type of polygon.
 
-const { World, Vec2, Transform, Edge, Circle, Polygon, Box } = planck;
+const { World, Vec2, Transform, Edge, Circle, Polygon, Box, Testbed } = planck;
 
 // This callback finds the closest hit. Polygon 0 is filtered.
 let RayCastClosest = (function() {
@@ -138,7 +138,7 @@ let RayCastMultiple = (function() {
 
 const world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.width = 40;
 testbed.height = 40;
 testbed.info('1-6: Drop new objects, Z: Change mode, X: Destroy an object');

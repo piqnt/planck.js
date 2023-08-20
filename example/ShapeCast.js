@@ -21,11 +21,11 @@
  * SOFTWARE.
  */
 
-const { Vec2, Transform, World, Settings, ShapeCastInput, ShapeCastOutput, ShapeCast, DistanceInput, DistanceOutput, Distance, SimplexCache } = planck;
+const { Vec2, Transform, World, Settings, ShapeCastInput, ShapeCastOutput, ShapeCast, DistanceInput, DistanceOutput, Distance, SimplexCache, Testbed } = planck;
 
 let world = new World();
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.width = 40;
 testbed.height = 40;
 testbed.start(world);

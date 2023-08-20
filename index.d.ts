@@ -1,1 +1,1 @@
-export * from './dist/planck-with-testbed';
+export * from './dist/planck';

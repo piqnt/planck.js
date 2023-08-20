@@ -21,11 +21,11 @@
  * SOFTWARE.
  */
 
-const { World, Vec2, Transform, Manifold, CollidePolygons, Box } = planck;
+const { World, Vec2, Transform, Manifold, CollidePolygons, Box, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.info('Use arrow keys to move and Z or X to rotate.');
 testbed.start(world);
 

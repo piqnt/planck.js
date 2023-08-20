@@ -21,11 +21,11 @@
  * SOFTWARE.
  */
 
-const { Vec2, World, Edge, Box, RevoluteJoint, PrismaticJoint } = planck;
+const { Vec2, World, Edge, Box, RevoluteJoint, PrismaticJoint, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.info('Z: Dynamic, X: Static, C: Kinematic');
 testbed.start(world);
 

@@ -24,11 +24,11 @@
 // Inspired by a contribution by roman_m
 // Dimensions scooped from APE (http://www.cove.org/ape/index.htm)
 
-const { World, Vec2, Edge, Circle, Box, Polygon, RevoluteJoint, DistanceJoint } = planck;
+const { World, Vec2, Edge, Circle, Box, Polygon, RevoluteJoint, DistanceJoint, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 
 let motorSpeed = 2.0;

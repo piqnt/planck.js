@@ -21,11 +21,11 @@
  * SOFTWARE.
  */
 
-const { World, Vec2, Polygon } = planck;
+const { World, Vec2, Polygon, Testbed } = planck;
 
 let world = new World();
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 
 testbed.x = 0;
 testbed.y = 0;

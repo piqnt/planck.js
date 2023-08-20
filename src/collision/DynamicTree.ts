@@ -25,7 +25,7 @@
 import { SettingsInternal as Settings } from '../Settings';
 import { Pool } from '../util/Pool';
 import { Vec2, Vec2Value } from '../common/Vec2';
-import { AABB, RayCastCallback, RayCastInput } from './AABB';
+import { AABB, AABBValue, RayCastCallback, RayCastInput } from './AABB';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -142,7 +142,7 @@ export class DynamicTree<T> {
    *
    * Create a proxy. Provide a tight fitting AABB and a userData pointer.
    */
-  createProxy(aabb: AABB, userData: T): number {
+  createProxy(aabb: AABBValue, userData: T): number {
     _ASSERT && console.assert(AABB.isValid(aabb));
 
     const node = this.allocateNode();
@@ -182,7 +182,7 @@ export class DynamicTree<T> {
    *
    * @return true if the proxy was re-inserted.
    */
-  moveProxy(id: number, aabb: AABB, d: Vec2Value): boolean {
+  moveProxy(id: number, aabb: AABBValue, d: Vec2Value): boolean {
     _ASSERT && console.assert(AABB.isValid(aabb));
     _ASSERT && console.assert(!d || Vec2.isValid(d));
 
@@ -733,7 +733,7 @@ export class DynamicTree<T> {
    * Query an AABB for overlapping proxies. The callback class is called for each
    * proxy that overlaps the supplied AABB.
    */
-  query(aabb: AABB, queryCallback: DynamicTreeQueryCallback): void {
+  query(aabb: AABBValue, queryCallback: DynamicTreeQueryCallback): void {
     _ASSERT && console.assert(typeof queryCallback === 'function');
     const stack = this.stackPool.allocate();
 

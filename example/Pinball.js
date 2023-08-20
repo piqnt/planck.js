@@ -24,11 +24,11 @@
 // This tests bullet collision and provides an example of a gameplay scenario.
 // This also uses a loop shape.
 
-const { World, Vec2, Circle, Box, Chain, RevoluteJoint } = planck;
+const { World, Vec2, Circle, Box, Chain, RevoluteJoint, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 
 // Ground body

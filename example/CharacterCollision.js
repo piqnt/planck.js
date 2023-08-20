@@ -25,11 +25,11 @@
 // show how you should implement a character in your application.
 // Instead this is used to test smooth collision on edge chains.
 
-const { World, Vec2, Edge, Chain, Box, Polygon, Circle } = planck;
+const { World, Vec2, Edge, Chain, Box, Polygon, Circle, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.info(`
   This tests various character collision shapes.
   Limitation: square and hexagon can snag on aligned boxes.

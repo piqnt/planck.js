@@ -1,4 +1,5 @@
 export * from './serializer/index';
+export * from './util/Testbed';
 
 /** @deprecated */
 export { math as Math } from './common/Math';
@@ -52,23 +53,4 @@ export * from './collision/TimeOfImpact';
 export * from './collision/DynamicTree';
 export * from './util/stats';
 
-import { CollidePolygons } from './collision/shape/CollidePolygon';
-import { SettingsInternal as Settings } from './Settings';
-import { Sweep } from './common/Sweep';
-import { DynamicTree } from './collision/DynamicTree';
-import { Manifold } from './collision/Manifold';
-import { Distance } from './collision/Distance';
-import { TimeOfImpact } from './collision/TimeOfImpact';
-import { stats } from './util/stats';
-
-/** @deprecated Merged with main namespace */
-export const internal = {
-  CollidePolygons,
-  Settings,
-  Sweep,
-  Manifold,
-  Distance,
-  TimeOfImpact,
-  DynamicTree,
-  stats
-};
+export * from './internal';

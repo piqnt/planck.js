@@ -21,13 +21,13 @@
  * SOFTWARE.
  */
 
-const { World, Vec2, Edge, Polygon, Box, Circle, Math } = planck;
+const { World, Vec2, Edge, Polygon, Box, Circle, Math, Testbed } = planck;
 
 // This test shows collision processing and tests
 // deferred body destruction.
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 
 // Ground body

@@ -24,11 +24,11 @@
 // This stress tests the dynamic tree broad-phase. This also shows that tile
 // based collision is _not_ smooth due to Box2D not knowing about adjacency.
 
-const { World, Vec2, Box } = planck;
+const { World, Vec2, Box, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 
 let COUNT = 20;

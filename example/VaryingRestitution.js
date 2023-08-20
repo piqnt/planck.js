@@ -24,11 +24,11 @@
 // Note: even with a restitution of 1.0, there is some energy change
 // due to position correction.
 
-const { World, Vec2, Circle, Edge } = planck;
+const { World, Vec2, Circle, Edge, Testbed } = planck;
 
 const world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 
 const ground = world.createBody();

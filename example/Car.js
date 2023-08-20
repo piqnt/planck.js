@@ -23,9 +23,9 @@
 
 // This is a fun demo that shows off the wheel joint
 
-const { World, Vec2, Edge, Box, Circle, Polygon, RevoluteJoint, WheelJoint } = planck;
+const { World, Vec2, Edge, Box, Circle, Polygon, RevoluteJoint, WheelJoint, Testbed } = planck;
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 
 let world = new World({
   gravity : new Vec2(0, -10)

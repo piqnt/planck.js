@@ -22,11 +22,11 @@
  */
 
 // TODO_ERIN test joints on compounds.
-const { World, Vec2, Transform, Math, Edge, Circle, Polygon, Box } = planck;
+const { World, Vec2, Transform, Math, Edge, Circle, Polygon, Box, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 
 world.createBody(new Vec2(0.0, 0.0)).createFixture(new Edge(new Vec2(50.0, 0.0), new Vec2(-50.0, 0.0)), 0.0);

@@ -21,11 +21,11 @@
  * SOFTWARE.
  */
 
-let { World, Vec2, Circle, Edge } = planck;
+let { World, Vec2, Circle, Edge, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.info('X: Add/Remove heavy circle');
 testbed.start(world);
 

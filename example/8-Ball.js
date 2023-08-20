@@ -1,4 +1,4 @@
-const { Vec2, World, Circle, Settings, Polygon } = planck;
+const { Vec2, World, Circle, Settings, Polygon, Testbed } = planck;
 
 let SPI4 = Math.sin(Math.PI / 4), SPI3 = Math.sin(Math.PI / 3);
 
@@ -31,7 +31,7 @@ Settings.velocityThreshold = 0;
 
 let world = new World();
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.x = 0;
 testbed.y = 0;
 testbed.width = width * 1.2;

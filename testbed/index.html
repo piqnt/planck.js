@@ -42,26 +42,17 @@
     <script type="module">
       import list from '/example/list.json';
       {
-        const testbed = planck.testbed();
-
-        const playButton = document.getElementById('testbed-play');
-        const statusElement = document.getElementById('testbed-status');
-        const infoElement = document.getElementById('testbed-info');
         const reloadButton = document.getElementById('testbed-reload');
-        const exampleSelect = document.getElementById('testbed-select');
+        const listSelect = document.getElementById('testbed-select');
         const nextButton = document.getElementById('testbed-next');
-        const prevButton = document.getElementById('testbed-prev') ;
-
-        playButton.addEventListener('click', () => {
-          testbed.isPaused() ? testbed.resume() : testbed.pause();
-        });
+        const prevButton = document.getElementById('testbed-prev');
 
         reloadButton.addEventListener('click', function() {
           window.location.reload();
         });
 
-        exampleSelect.addEventListener('change', function() {
-          window.location.href = this.options[exampleSelect.selectedIndex].value;
+        listSelect.addEventListener('change', function() {
+          window.location.href = this.options[listSelect.selectedIndex].value;
         });
 
         for (const example of list){
@@ -69,7 +60,7 @@
           opt.value = '/example/' + example;
           opt.innerHTML = example;
           opt.selected = opt.value === window.location.pathname;
-          exampleSelect.appendChild(opt);
+          listSelect.appendChild(opt);
         }
 
         nextButton.addEventListener('click', function() {
@@ -81,50 +72,16 @@
         });
 
         function playNext(step) {
-          for (var i = 0; i < exampleSelect.options.length; i++) {
-            var index = (exampleSelect.selectedIndex + (1 + i) * step + exampleSelect.options.length) % exampleSelect.options.length;
+          for (var i = 0; i < listSelect.options.length; i++) {
+            var index = (listSelect.selectedIndex + (1 + i) * step + listSelect.options.length) % listSelect.options.length;
 
-            var option = exampleSelect.options[index];
+            var option = listSelect.options[index];
             if (option && option.value) {
               window.location.href = option.value;
               break;
             }
           }
         }
-
-        testbed._pause = () => {
-          playButton.classList.add('pause');
-          playButton.classList.remove('play');
-        };
-
-        testbed._resume = () => {
-          playButton.classList.add('play');
-          playButton.classList.remove('pause');
-        };
-
-        let lastStatus = '';
-        statusElement.innerText = lastStatus;
-        testbed._status = (text) => {
-          if (lastStatus === text) {
-            return;
-          }
-          lastStatus = text;
-          if (statusElement) {
-            statusElement.innerText = text;
-          }
-        };
-
-        let lastInfo = '';
-        infoElement.innerText = lastInfo;
-        testbed._info = (text) => {
-          if (lastInfo === text) {
-            return;
-          }
-          lastInfo = text;
-          if (infoElement) {
-            infoElement.innerText = text;
-          }
-        };
       }
     </script>
   </body>

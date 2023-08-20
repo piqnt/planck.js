@@ -1,4 +1,4 @@
-const { World, Vec2, Circle, Polygon } = planck;
+const { World, Vec2, Circle, Polygon, Testbed } = planck;
 
 let SHIP = 2;
 let BULLET = 4;
@@ -24,7 +24,7 @@ let allowFireTime = 0;
 
 let world = new World();
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.width = SPACE_WIDTH;
 testbed.height = SPACE_HEIGHT;
 testbed.step = tick;

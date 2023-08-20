@@ -23,11 +23,11 @@
 
 // This is used to test sensor shapes.
 
-const { World, Vec2, Circle, Box, Edge } = planck;
+const { World, Vec2, Circle, Box, Edge, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.start(world);
 
 let COUNT = 7;

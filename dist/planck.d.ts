@@ -3,8 +3,6 @@ declare namespace Serializer {
     var toJson: any;
     var fromJson: any;
 }
-/** @deprecated */
-declare const math: any;
 interface Vec2Value {
     x: number;
     y: number;
@@ -164,142 +162,65 @@ declare class Vec2 {
     clamp(max: number): Vec2;
     static clamp(v: Vec2Value, max: number): Vec2;
 }
-interface Vec3Value {
-    x: number;
-    y: number;
-    z: number;
-}
-declare function Vec3(x: number, y: number, z: number): Vec3;
-declare function Vec3(obj: {
-    x: number;
-    y: number;
-    z: number;
-}): Vec3;
-declare function Vec3(): Vec3;
-declare class Vec3 {
-    x: number;
-    y: number;
-    z: number;
-    constructor(x: number, y: number, z: number);
-    constructor(obj: {
-        x: number;
-        y: number;
-        z: number;
-    });
-    constructor();
-    static zero(): Vec3;
-    static clone(v: Vec3Value): Vec3;
-    /** Does this vector contain finite coordinates? */
-    static isValid(obj: any): boolean;
-    static assert(o: any): void;
-    setZero(): Vec3;
-    set(x: number, y: number, z: number): Vec3;
-    add(w: Vec3Value): Vec3;
-    sub(w: Vec3Value): Vec3;
-    mul(m: number): Vec3;
-    static areEqual(v: Vec3Value, w: Vec3Value): boolean;
-    /** Dot product on two vectors */
-    static dot(v: Vec3Value, w: Vec3Value): number;
-    /** Cross product on two vectors */
-    static cross(v: Vec3Value, w: Vec3Value): Vec3;
-    static add(v: Vec3Value, w: Vec3Value): Vec3;
-    static sub(v: Vec3Value, w: Vec3Value): Vec3;
-    static mul(v: Vec3Value, m: number): Vec3;
-    neg(): Vec3;
-    static neg(v: Vec3Value): Vec3;
-}
 /**
- * A 2-by-2 matrix. Stored in column-major order.
+ * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
  */
-declare class Mat22 {
-    ex: Vec2;
-    ey: Vec2;
-    constructor(a: number, b: number, c: number, d: number);
-    constructor(a: {
-        x: number;
-        y: number;
-    }, b: {
-        x: number;
-        y: number;
-    });
-    constructor();
-    static isValid(obj: any): boolean;
-    static assert(o: any): void;
-    set(a: Mat22): void;
-    set(a: Vec2, b: Vec2): void;
-    set(a: number, b: number, c: number, d: number): void;
-    setIdentity(): void;
-    setZero(): void;
-    getInverse(): Mat22;
-    /**
-     * Solve A * x = b, where b is a column vector. This is more efficient than
-     * computing the inverse in one-shot cases.
-     */
-    solve(v: Vec2): Vec2;
-    /**
-     * Multiply a matrix times a vector. If a rotation matrix is provided, then this
-     * transforms the vector from one frame to another.
-     */
-    static mul(mx: Mat22, my: Mat22): Mat22;
-    static mul(mx: Mat22, v: Vec2): Vec2;
-    static mulVec2(mx: Mat22, v: Vec2): Vec2;
-    static mulMat22(mx: Mat22, v: Mat22): Mat22;
-    /**
-     * Multiply a matrix transpose times a vector. If a rotation matrix is provided,
-     * then this transforms the vector from one frame to another (inverse
-     * transform).
-     */
-    static mulT(mx: Mat22, my: Mat22): Mat22;
-    static mulT(mx: Mat22, v: Vec2): Vec2;
-    static mulTVec2(mx: Mat22, v: Vec2): Vec2;
-    static mulTMat22(mx: Mat22, v: Mat22): Mat22;
-    static abs(mx: Mat22): Mat22;
-    static add(mx1: Mat22, mx2: Mat22): Mat22;
+interface RayCastInput {
+    p1: Vec2;
+    p2: Vec2;
+    maxFraction: number;
 }
+type RayCastCallback = (subInput: RayCastInput, id: number) => number;
 /**
- * A 3-by-3 matrix. Stored in column-major order.
+ * Ray-cast output data. The ray hits at `p1 + fraction * (p2 - p1)`,
+ * where `p1` and `p2` come from RayCastInput.
  */
-declare class Mat33 {
-    ex: Vec3;
-    ey: Vec3;
-    ez: Vec3;
-    constructor(a: Vec3Value, b: Vec3Value, c: Vec3Value);
-    constructor();
+interface RayCastOutput {
+    normal: Vec2;
+    fraction: number;
+}
+interface AABBValue {
+    lowerBound: Vec2Value;
+    upperBound: Vec2Value;
+}
+declare function AABB(lower?: Vec2Value, upper?: Vec2Value): AABB;
+declare class AABB {
+    lowerBound: Vec2;
+    upperBound: Vec2;
+    constructor(lower?: Vec2Value, upper?: Vec2Value);
+    /**
+     * Verify that the bounds are sorted.
+     */
+    isValid(): boolean;
     static isValid(obj: any): boolean;
     static assert(o: any): void;
     /**
-     * Set this matrix to all zeros.
+     * Get the center of the AABB.
      */
-    setZero(): Mat33;
+    getCenter(): Vec2;
     /**
-     * Solve A * x = b, where b is a column vector. This is more efficient than
-     * computing the inverse in one-shot cases.
+     * Get the extents of the AABB (half-widths).
      */
-    solve33(v: Vec3Value): Vec3;
+    getExtents(): Vec2;
     /**
-     * Solve A * x = b, where b is a column vector. This is more efficient than
-     * computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
-     * equation.
+     * Get the perimeter length.
      */
-    solve22(v: Vec2Value): Vec2;
+    getPerimeter(): number;
     /**
-     * Get the inverse of this matrix as a 2-by-2. Returns the zero matrix if
-     * singular.
+     * Combine one or two AABB into this one.
      */
-    getInverse22(M: Mat33): void;
-    /**
-     * Get the symmetric inverse of this matrix as a 3-by-3. Returns the zero matrix
-     * if singular.
-     */
-    getSymInverse33(M: Mat33): void;
-    /**
-     * Multiply a matrix times a vector.
-     */
-    static mul(a: Mat33, b: Vec2Value): Vec2;
-    static mul(a: Mat33, b: Vec3Value): Vec3;
-    static mulVec3(a: Mat33, b: Vec3): Vec3;
-    static mulVec2(a: Mat33, b: Vec2Value): Vec2;
-    static add(a: Mat33, b: Mat33): Mat33;
+    combine(a: AABBValue, b?: AABBValue): void;
+    combinePoints(a: Vec2Value, b: Vec2Value): void;
+    set(aabb: AABBValue): void;
+    contains(aabb: AABBValue): boolean;
+    extend(value: number): AABB;
+    static extend(out: AABBValue, value: number): AABBValue;
+    static testOverlap(a: AABBValue, b: AABBValue): boolean;
+    static areEqual(a: AABBValue, b: AABBValue): boolean;
+    static diff(a: AABBValue, b: AABBValue): number;
+    rayCast(output: RayCastOutput, input: RayCastInput): boolean;
+    static combinePoints(out: AABBValue, a: Vec2Value, b: Vec2Value): AABBValue;
+    static combinedPerimeter(a: AABBValue, b: AABBValue): number;
 }
 interface RotValue {
     s: number;
@@ -391,65 +312,186 @@ declare class Transform {
     static mulTXf(a: TransformValue, b: TransformValue): Transform;
 }
 /**
- * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
+ * Input for Distance. You have to option to use the shape radii in the
+ * computation. Even
  */
-interface RayCastInput {
-    p1: Vec2;
-    p2: Vec2;
-    maxFraction: number;
+declare class DistanceInput {
+    readonly proxyA: DistanceProxy;
+    readonly proxyB: DistanceProxy;
+    readonly transformA: Transform;
+    readonly transformB: Transform;
+    useRadii: boolean;
+    recycle(): void;
 }
-type RayCastCallback = (subInput: RayCastInput, id: number) => number;
 /**
- * Ray-cast output data. The ray hits at `p1 + fraction * (p2 - p1)`,
- * where `p1` and `p2` come from RayCastInput.
+ * Output for Distance.
  */
-interface RayCastOutput {
+declare class DistanceOutput {
+    /** closest point on shapeA */
+    pointA: Vec2Value;
+    /** closest point on shapeB */
+    pointB: Vec2Value;
+    distance: number;
+    /** iterations number of GJK iterations used */
+    iterations: number;
+    recycle(): void;
+}
+/**
+ * Used to warm start Distance. Set count to zero on first call.
+ */
+declare class SimplexCache {
+    /** length or area */
+    metric: number;
+    /** vertices on shape A */
+    indexA: number[];
+    /** vertices on shape B */
+    indexB: number[];
+    count: number;
+    recycle(): void;
+}
+/**
+ * Compute the closest points between two shapes. Supports any combination of:
+ * CircleShape, PolygonShape, EdgeShape. The simplex cache is input/output. On
+ * the first call set SimplexCache.count to zero.
+ */
+declare const Distance: {
+    (output: DistanceOutput, cache: SimplexCache, input: DistanceInput): void;
+    testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue) => boolean;
+    Input: typeof DistanceInput;
+    Output: typeof DistanceOutput;
+    Proxy: typeof DistanceProxy;
+    Cache: typeof SimplexCache;
+};
+/**
+ * A distance proxy is used by the GJK algorithm. It encapsulates any shape.
+ */
+declare class DistanceProxy {
+    recycle(): void;
+    /**
+     * Get the vertex count.
+     */
+    getVertexCount(): number;
+    /**
+     * Get a vertex by index. Used by Distance.
+     */
+    getVertex(index: number): Vec2Value;
+    /**
+     * Get the supporting vertex index in the given direction.
+     */
+    getSupport(d: Vec2Value): number;
+    /**
+     * Get the supporting vertex in the given direction.
+     */
+    getSupportVertex(d: Vec2Value): Vec2Value;
+    /**
+     * Initialize the proxy using the given shape. The shape must remain in scope
+     * while the proxy is in use.
+     */
+    set(shape: Shape, index: number): void;
+    /**
+     * Initialize the proxy using a vertex cloud and radius. The vertices
+     * must remain in scope while the proxy is in use.
+     */
+    setVertices(vertices: Vec2Value[], count: number, radius: number): void;
+}
+/**
+ * Determine if two generic shapes overlap.
+ */
+declare const testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue) => boolean;
+/**
+ * Input parameters for ShapeCast
+ */
+declare class ShapeCastInput {
+    readonly proxyA: DistanceProxy;
+    readonly proxyB: DistanceProxy;
+    readonly transformA: Transform;
+    readonly transformB: Transform;
+    readonly translationB: Vec2;
+    recycle(): void;
+}
+/**
+ * Output results for b2ShapeCast
+ */
+declare class ShapeCastOutput {
+    point: Vec2;
     normal: Vec2;
-    fraction: number;
+    lambda: number;
+    iterations: number;
 }
-interface AABBValue {
-    lowerBound: Vec2Value;
-    upperBound: Vec2Value;
-}
-declare function AABB(lower?: Vec2Value, upper?: Vec2Value): AABB;
-declare class AABB {
-    lowerBound: Vec2;
-    upperBound: Vec2;
-    constructor(lower?: Vec2Value, upper?: Vec2Value);
+/**
+ * Perform a linear shape cast of shape B moving and shape A fixed. Determines
+ * the hit point, normal, and translation fraction.
+ *
+ * @returns true if hit, false if there is no hit or an initial overlap
+ */
+//
+// GJK-raycast
+// Algorithm by Gino van den Bergen.
+// "Smooth Mesh Contacts with GJK" in Game Physics Pearls. 2010
+declare const ShapeCast: (output: ShapeCastOutput, input: ShapeCastInput) => boolean;
+// todo make shape an interface
+/**
+ * A shape is used for collision detection. You can create a shape however you
+ * like. Shapes used for simulation in World are created automatically when a
+ * Fixture is created. Shapes may encapsulate one or more child shapes.
+ */
+declare abstract class Shape {
+    m_type: ShapeType;
     /**
-     * Verify that the bounds are sorted.
+     * Radius of a shape. For polygonal shapes this must be b2_polygonRadius.
+     * There is no support for making rounded polygons.
      */
-    isValid(): boolean;
+    m_radius: number;
     static isValid(obj: any): boolean;
-    static assert(o: any): void;
+    abstract getRadius(): number;
     /**
-     * Get the center of the AABB.
+     * Get the type of this shape. You can use this to down cast to the concrete
+     * shape.
+     *
+     * @return the shape type.
      */
-    getCenter(): Vec2;
+    abstract getType(): ShapeType;
     /**
-     * Get the extents of the AABB (half-widths).
+     * Get the number of child primitives.
      */
-    getExtents(): Vec2;
+    abstract getChildCount(): number;
     /**
-     * Get the perimeter length.
+     * Test a point for containment in this shape. This only works for convex
+     * shapes.
+     *
+     * @param xf The shape world transform.
+     * @param p A point in world coordinates.
      */
-    getPerimeter(): number;
+    abstract testPoint(xf: TransformValue, p: Vec2Value): boolean;
     /**
-     * Combine one or two AABB into this one.
+     * Cast a ray against a child shape.
+     *
+     * @param output The ray-cast results.
+     * @param input The ray-cast input parameters.
+     * @param xf The transform to be applied to the shape.
+     * @param childIndex The child shape index
      */
-    combine(a: AABB, b?: AABB): void;
-    combinePoints(a: Vec2Value, b: Vec2Value): void;
-    set(aabb: AABB): void;
-    contains(aabb: AABB): boolean;
-    extend(value: number): AABB;
-    static extend(out: AABBValue, value: number): AABBValue;
-    static testOverlap(a: AABB, b: AABB): boolean;
-    static areEqual(a: AABB, b: AABB): boolean;
-    static diff(a: AABB, b: AABB): number;
-    rayCast(output: RayCastOutput, input: RayCastInput): boolean;
-    static combinePoints(out: AABBValue, a: Vec2Value, b: Vec2Value): AABBValue;
-    static combinedPerimeter(a: AABBValue, b: AABBValue): number;
+    abstract rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;
+    /**
+     * Given a transform, compute the associated axis aligned bounding box for a
+     * child shape.
+     *
+     * @param aabb Returns the axis aligned box.
+     * @param xf The world transform of the shape.
+     * @param childIndex The child shape
+     */
+    abstract computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void;
+    /**
+     * Compute the mass properties of this shape using its dimensions and density.
+     * The inertia tensor is computed about the local origin.
+     *
+     * @param massData Returns the mass data for this shape.
+     * @param density The density in kilograms per meter squared.
+     */
+    abstract computeMass(massData: MassData, density?: number): void;
+    abstract computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
 }
+type ShapeType = "circle" | "edge" | "polygon" | "chain";
 type DynamicTreeQueryCallback = (nodeId: number) => boolean;
 /**
  * A node in the dynamic tree. The client does not interact with this directly.
@@ -505,7 +547,7 @@ declare class DynamicTree<T> {
      *
      * Create a proxy. Provide a tight fitting AABB and a userData pointer.
      */
-    createProxy(aabb: AABB, userData: T): number;
+    createProxy(aabb: AABBValue, userData: T): number;
     /**
      * Destroy a proxy. This asserts if the id is invalid.
      */
@@ -519,7 +561,7 @@ declare class DynamicTree<T> {
      *
      * @return true if the proxy was re-inserted.
      */
-    moveProxy(id: number, aabb: AABB, d: Vec2Value): boolean;
+    moveProxy(id: number, aabb: AABBValue, d: Vec2Value): boolean;
     insertLeaf(leaf: TreeNode<T>): void;
     removeLeaf(leaf: TreeNode<T>): void;
     /**
@@ -566,7 +608,7 @@ declare class DynamicTree<T> {
      * Query an AABB for overlapping proxies. The callback class is called for each
      * proxy that overlaps the supplied AABB.
      */
-    query(aabb: AABB, queryCallback: DynamicTreeQueryCallback): void;
+    query(aabb: AABBValue, queryCallback: DynamicTreeQueryCallback): void;
     /**
      * Ray-cast against the proxies in the tree. This relies on the callback to
      * perform a exact ray-cast in the case were the proxy contains a shape. The
@@ -623,7 +665,7 @@ declare class BroadPhase {
      * Query an AABB for overlapping proxies. The callback class is called for each
      * proxy that overlaps the supplied AABB.
      */
-    query: (aabb: AABB, queryCallback: DynamicTreeQueryCallback) => void;
+    query: (aabb: AABBValue, queryCallback: DynamicTreeQueryCallback) => void;
     /**
      * Ray-cast against the proxies in the tree. This relies on the callback to
      * perform a exact ray-cast in the case were the proxy contains a shape. The
@@ -646,7 +688,7 @@ declare class BroadPhase {
      * Create a proxy with an initial AABB. Pairs are not reported until UpdatePairs
      * is called.
      */
-    createProxy(aabb: AABB, userData: FixtureProxy): number;
+    createProxy(aabb: AABBValue, userData: FixtureProxy): number;
     /**
      * Destroy a proxy. It is up to the client to remove any pairs.
      */
@@ -862,6 +904,119 @@ declare class Fixture {
      * overlap.
      */
     shouldCollide(that: Fixture): boolean;
+}
+/**
+ * A joint edge is used to connect bodies and joints together in a joint graph
+ * where each body is a node and each joint is an edge. A joint edge belongs to
+ * a doubly linked list maintained in each attached body. Each joint has two
+ * joint nodes, one for each attached body.
+ */
+declare class JointEdge {
+    /**
+     * provides quick access to the other body attached.
+     */
+    other: Body | null;
+    /**
+     * the joint
+     */
+    joint: Joint | null;
+    /**
+     * prev the previous joint edge in the body's joint list
+     */
+    prev: JointEdge | null;
+    /**
+     * the next joint edge in the body's joint list
+     */
+    next: JointEdge | null;
+}
+/**
+ * Joint definitions are used to construct joints.
+ */
+interface JointOpt {
+    /**
+     * Use this to attach application specific data to your joints.
+     */
+    userData?: any;
+    /**
+     * Set this flag to true if the attached bodies
+     * should collide.
+     */
+    collideConnected?: boolean;
+}
+/**
+ * Joint definitions are used to construct joints.
+ */
+interface JointDef extends JointOpt {
+    /**
+     * The first attached body.
+     */
+    bodyA: Body;
+    /**
+     * The second attached body.
+     */
+    bodyB: Body;
+}
+/**
+ * The base joint class. Joints are used to constraint two bodies together in
+ * various fashions. Some joints also feature limits and motors.
+ */
+declare abstract class Joint {
+    constructor(def: JointDef);
+    constructor(def: JointOpt, bodyA: Body, bodyB: Body);
+    /**
+     * Short-cut function to determine if either body is inactive.
+     */
+    isActive(): boolean;
+    /**
+     * Get the type of the concrete joint.
+     */
+    getType(): string;
+    /**
+     * Get the first body attached to this joint.
+     */
+    getBodyA(): Body;
+    /**
+     * Get the second body attached to this joint.
+     */
+    getBodyB(): Body;
+    /**
+     * Get the next joint the world joint list.
+     */
+    getNext(): Joint;
+    getUserData(): unknown;
+    setUserData(data: unknown): void;
+    /**
+     * Get collide connected. Note: modifying the collide connect flag won't work
+     * correctly because the flag is only checked when fixture AABBs begin to
+     * overlap.
+     */
+    getCollideConnected(): boolean;
+    /**
+     * Get the anchor point on bodyA in world coordinates.
+     */
+    abstract getAnchorA(): Vec2;
+    /**
+     * Get the anchor point on bodyB in world coordinates.
+     */
+    abstract getAnchorB(): Vec2;
+    /**
+     * Get the reaction force on bodyB at the joint anchor in Newtons.
+     */
+    abstract getReactionForce(inv_dt: number): Vec2;
+    /**
+     * Get the reaction torque on bodyB in N*m.
+     */
+    abstract getReactionTorque(inv_dt: number): number;
+    /**
+     * Shift the origin for any points stored in world coordinates.
+     */
+    shiftOrigin(newOrigin: Vec2): void;
+    abstract initVelocityConstraints(step: TimeStep): void;
+    abstract solveVelocityConstraints(step: TimeStep): void;
+    /**
+     * This returns true if the position errors are within tolerance.
+     */
+    abstract solvePositionConstraints(step: TimeStep): boolean;
 }
 declare enum ManifoldType {
     e_unset = -1,
@@ -1172,427 +1327,6 @@ declare class Contact {
     storeConstraintImpulses(step: TimeStep): void;
     solveVelocityConstraint(step: TimeStep): void;
 }
-/**
- * @prop gravity [{ x : 0, y : 0}]
- * @prop allowSleep [true]
- * @prop warmStarting [true]
- * @prop continuousPhysics [true]
- * @prop subStepping [false]
- * @prop blockSolve [true]
- * @prop velocityIterations [8] For the velocity constraint solver.
- * @prop positionIterations [3] For the position constraint solver.
- */
-interface WorldDef {
-    gravity?: Vec2;
-    allowSleep?: boolean;
-    warmStarting?: boolean;
-    continuousPhysics?: boolean;
-    subStepping?: boolean;
-    blockSolve?: boolean;
-    velocityIterations?: number;
-    positionIterations?: number;
-}
-/**
- * Callback function for ray casts, see {@link World.rayCast}.
- *
- * Called for each fixture found in the query. You control how the ray cast
- * proceeds by returning a float: return -1: ignore this fixture and continue
- * return 0: terminate the ray cast return fraction: clip the ray to this point
- * return 1: don't clip the ray and continue
- *
- * @param fixture The fixture hit by the ray
- * @param point The point of initial intersection
- * @param normal The normal vector at the point of intersection
- * @param fraction
- *
- * @return -1 to filter, 0 to terminate, fraction to clip the ray for closest hit, 1 to continue
- */
-type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) => number;
-/**
- * Called for each fixture found in the query AABB. It may return `false` to terminate the query.
- */
-type WorldAABBQueryCallback = (fixture: Fixture) => boolean;
-declare function World(def?: WorldDef | Vec2 | null): World;
-declare class World {
-    /**
-     * @param def World definition or gravity vector.
-     */
-    constructor(def?: WorldDef | Vec2 | null);
-    /**
-     * Get the world body list. With the returned body, use Body.getNext to get the
-     * next body in the world list. A null body indicates the end of the list.
-     *
-     * @return the head of the world body list.
-     */
-    getBodyList(): Body | null;
-    /**
-     * Get the world joint list. With the returned joint, use Joint.getNext to get
-     * the next joint in the world list. A null joint indicates the end of the list.
-     *
-     * @return the head of the world joint list.
-     */
-    getJointList(): Joint | null;
-    /**
-     * Get the world contact list. With the returned contact, use Contact.getNext to
-     * get the next contact in the world list. A null contact indicates the end of
-     * the list.
-     *
-     * Warning: contacts are created and destroyed in the middle of a time step.
-     * Use ContactListener to avoid missing contacts.
-     *
-     * @return the head of the world contact list.
-     */
-    getContactList(): Contact | null;
-    getBodyCount(): number;
-    getJointCount(): number;
-    /**
-     * Get the number of contacts (each may have 0 or more contact points).
-     */
-    getContactCount(): number;
-    /**
-     * Change the global gravity vector.
-     */
-    setGravity(gravity: Vec2): void;
-    /**
-     * Get the global gravity vector.
-     */
-    getGravity(): Vec2;
-    /**
-     * Is the world locked (in the middle of a time step).
-     */
-    isLocked(): boolean;
-    /**
-     * Enable/disable sleep.
-     */
-    setAllowSleeping(flag: boolean): void;
-    getAllowSleeping(): boolean;
-    /**
-     * Enable/disable warm starting. For testing.
-     */
-    setWarmStarting(flag: boolean): void;
-    getWarmStarting(): boolean;
-    /**
-     * Enable/disable continuous physics. For testing.
-     */
-    setContinuousPhysics(flag: boolean): void;
-    getContinuousPhysics(): boolean;
-    /**
-     * Enable/disable single stepped continuous physics. For testing.
-     */
-    setSubStepping(flag: boolean): void;
-    getSubStepping(): boolean;
-    /**
-     * Set flag to control automatic clearing of forces after each time step.
-     */
-    setAutoClearForces(flag: boolean): void;
-    /**
-     * Get the flag that controls automatic clearing of forces after each time step.
-     */
-    getAutoClearForces(): boolean;
-    /**
-     * Manually clear the force buffer on all bodies. By default, forces are cleared
-     * automatically after each call to step. The default behavior is modified by
-     * calling setAutoClearForces. The purpose of this function is to support
-     * sub-stepping. Sub-stepping is often used to maintain a fixed sized time step
-     * under a variable frame-rate. When you perform sub-stepping you will disable
-     * auto clearing of forces and instead call clearForces after all sub-steps are
-     * complete in one pass of your game loop.
-     *
-     * See {@link World.setAutoClearForces}
-     */
-    clearForces(): void;
-    /**
-     * Query the world for all fixtures that potentially overlap the provided AABB.
-     *
-     * @param aabb The query box.
-     * @param callback Called for each fixture found in the query AABB. It may return `false` to terminate the query.
-     */
-    queryAABB(aabb: AABB, callback: WorldAABBQueryCallback): void;
-    /**
-     * Ray-cast the world for all fixtures in the path of the ray. Your callback
-     * controls whether you get the closest point, any point, or n-points. The
-     * ray-cast ignores shapes that contain the starting point.
-     *
-     * @param point1 The ray starting point
-     * @param point2 The ray ending point
-     * @param callback A user implemented callback function.
-     */
-    rayCast(point1: Vec2, point2: Vec2, callback: WorldRayCastCallback): void;
-    /**
-     * Get the number of broad-phase proxies.
-     */
-    getProxyCount(): number;
-    /**
-     * Get the height of broad-phase dynamic tree.
-     */
-    getTreeHeight(): number;
-    /**
-     * Get the balance of broad-phase dynamic tree.
-     */
-    getTreeBalance(): number;
-    /**
-     * Get the quality metric of broad-phase dynamic tree. The smaller the better.
-     * The minimum is 1.
-     */
-    getTreeQuality(): number;
-    /**
-     * Shift the world origin. Useful for large worlds. The body shift formula is:
-     * position -= newOrigin
-     *
-     * @param newOrigin The new origin with respect to the old origin
-     */
-    shiftOrigin(newOrigin: Vec2): void;
-    /**
-     * Create a rigid body given a definition. No reference to the definition is
-     * retained.
-     *
-     * Warning: This function is locked during callbacks.
-     */
-    createBody(def?: BodyDef): Body;
-    createBody(position: Vec2, angle?: number): Body;
-    createDynamicBody(def?: BodyDef): Body;
-    createDynamicBody(position: Vec2, angle?: number): Body;
-    createKinematicBody(def?: BodyDef): Body;
-    createKinematicBody(position: Vec2, angle?: number): Body;
-    /**
-     * Destroy a rigid body given a definition. No reference to the definition is
-     * retained.
-     *
-     * Warning: This automatically deletes all associated shapes and joints.
-     *
-     * Warning: This function is locked during callbacks.
-     */
-    destroyBody(b: Body): boolean;
-    /**
-     * Create a joint to constrain bodies together. No reference to the definition
-     * is retained. This may cause the connected bodies to cease colliding.
-     *
-     * Warning: This function is locked during callbacks.
-     */
-    createJoint<T extends Joint>(joint: T): T | null;
-    /**
-     * Destroy a joint. This may cause the connected bodies to begin colliding.
-     * Warning: This function is locked during callbacks.
-     */
-    destroyJoint(joint: Joint): void;
-    /**
-     * Take a time step. This performs collision detection, integration, and
-     * constraint solution.
-     *
-     * Broad-phase, narrow-phase, solve and solve time of impacts.
-     *
-     * @param timeStep Time step, this should not vary.
-     */
-    step(timeStep: number, velocityIterations?: number, positionIterations?: number): void;
-    /**
-     * Called when two fixtures begin to touch.
-     *
-     * Implement contact callbacks to get contact information. You can use these
-     * results for things like sounds and game logic. You can also get contact
-     * results by traversing the contact lists after the time step. However, you
-     * might miss some contacts because continuous physics leads to sub-stepping.
-     * Additionally you may receive multiple callbacks for the same contact in a
-     * single time step. You should strive to make your callbacks efficient because
-     * there may be many callbacks per time step.
-     *
-     * Warning: You cannot create/destroy world entities inside these callbacks.
-     */
-    on(name: "begin-contact", listener: (contact: Contact) => void): World;
-    /**
-     * Called when two fixtures cease to touch.
-     *
-     * Implement contact callbacks to get contact information. You can use these
-     * results for things like sounds and game logic. You can also get contact
-     * results by traversing the contact lists after the time step. However, you
-     * might miss some contacts because continuous physics leads to sub-stepping.
-     * Additionally you may receive multiple callbacks for the same contact in a
-     * single time step. You should strive to make your callbacks efficient because
-     * there may be many callbacks per time step.
-     *
-     * Warning: You cannot create/destroy world entities inside these callbacks.
-     */
-    on(name: "end-contact", listener: (contact: Contact) => void): World;
-    /**
-     * This is called after a contact is updated. This allows you to inspect a
-     * contact before it goes to the solver. If you are careful, you can modify the
-     * contact manifold (e.g. disable contact). A copy of the old manifold is
-     * provided so that you can detect changes. Note: this is called only for awake
-     * bodies. Note: this is called even when the number of contact points is zero.
-     * Note: this is not called for sensors. Note: if you set the number of contact
-     * points to zero, you will not get an endContact callback. However, you may get
-     * a beginContact callback the next step.
-     *
-     * Warning: You cannot create/destroy world entities inside these callbacks.
-     */
-    on(name: "pre-solve", listener: (contact: Contact, oldManifold: Manifold) => void): World;
-    /**
-     * This lets you inspect a contact after the solver is finished. This is useful
-     * for inspecting impulses. Note: the contact manifold does not include time of
-     * impact impulses, which can be arbitrarily large if the sub-step is small.
-     * Hence the impulse is provided explicitly in a separate data structure. Note:
-     * this is only called for contacts that are touching, solid, and awake.
-     *
-     * Warning: You cannot create/destroy world entities inside these callbacks.
-     */
-    on(name: "post-solve", listener: (contact: Contact, impulse: ContactImpulse) => void): World;
-    /** Listener is called whenever a body is removed. */
-    on(name: "remove-body", listener: (body: Body) => void): World;
-    /** Listener is called whenever a joint is removed implicitly or explicitly. */
-    on(name: "remove-joint", listener: (joint: Joint) => void): World;
-    /** Listener is called whenever a fixture is removed implicitly or explicitly. */
-    on(name: "remove-fixture", listener: (fixture: Fixture) => void): World;
-    off(name: "begin-contact", listener: (contact: Contact) => void): World;
-    off(name: "end-contact", listener: (contact: Contact) => void): World;
-    off(name: "pre-solve", listener: (contact: Contact, oldManifold: Manifold) => void): World;
-    off(name: "post-solve", listener: (contact: Contact, impulse: ContactImpulse) => void): World;
-    off(name: "remove-body", listener: (body: Body) => void): World;
-    off(name: "remove-joint", listener: (joint: Joint) => void): World;
-    off(name: "remove-fixture", listener: (fixture: Fixture) => void): World;
-    publish(name: string, arg1?: any, arg2?: any, arg3?: any): number;
-}
-declare class TimeStep {
-    /** time step */
-    dt: number;
-    /** inverse time step (0 if dt == 0) */
-    inv_dt: number;
-    velocityIterations: number;
-    positionIterations: number;
-    warmStarting: boolean;
-    blockSolve: boolean;
-    /** timestep ratio for variable timestep */
-    inv_dt0: number;
-    /** dt * inv_dt0 */
-    dtRatio: number;
-    reset(dt: number): void;
-}
-/**
- * Contact impulses for reporting. Impulses are used instead of forces because
- * sub-step forces may approach infinity for rigid body collisions. These match
- * up one-to-one with the contact points in Manifold.
- */
-declare class ContactImpulse {
-    // TODO: merge with Contact class?
-    private readonly contact;
-    private readonly normals;
-    private readonly tangents;
-    constructor(contact: Contact);
-    recycle(): void;
-    get normalImpulses(): number[];
-    get tangentImpulses(): number[];
-}
-/**
- * A joint edge is used to connect bodies and joints together in a joint graph
- * where each body is a node and each joint is an edge. A joint edge belongs to
- * a doubly linked list maintained in each attached body. Each joint has two
- * joint nodes, one for each attached body.
- */
-declare class JointEdge {
-    /**
-     * provides quick access to the other body attached.
-     */
-    other: Body | null;
-    /**
-     * the joint
-     */
-    joint: Joint | null;
-    /**
-     * prev the previous joint edge in the body's joint list
-     */
-    prev: JointEdge | null;
-    /**
-     * the next joint edge in the body's joint list
-     */
-    next: JointEdge | null;
-}
-/**
- * Joint definitions are used to construct joints.
- */
-interface JointOpt {
-    /**
-     * Use this to attach application specific data to your joints.
-     */
-    userData?: any;
-    /**
-     * Set this flag to true if the attached bodies
-     * should collide.
-     */
-    collideConnected?: boolean;
-}
-/**
- * Joint definitions are used to construct joints.
- */
-interface JointDef extends JointOpt {
-    /**
-     * The first attached body.
-     */
-    bodyA: Body;
-    /**
-     * The second attached body.
-     */
-    bodyB: Body;
-}
-/**
- * The base joint class. Joints are used to constraint two bodies together in
- * various fashions. Some joints also feature limits and motors.
- */
-declare abstract class Joint {
-    constructor(def: JointDef);
-    constructor(def: JointOpt, bodyA: Body, bodyB: Body);
-    /**
-     * Short-cut function to determine if either body is inactive.
-     */
-    isActive(): boolean;
-    /**
-     * Get the type of the concrete joint.
-     */
-    getType(): string;
-    /**
-     * Get the first body attached to this joint.
-     */
-    getBodyA(): Body;
-    /**
-     * Get the second body attached to this joint.
-     */
-    getBodyB(): Body;
-    /**
-     * Get the next joint the world joint list.
-     */
-    getNext(): Joint;
-    getUserData(): unknown;
-    setUserData(data: unknown): void;
-    /**
-     * Get collide connected. Note: modifying the collide connect flag won't work
-     * correctly because the flag is only checked when fixture AABBs begin to
-     * overlap.
-     */
-    getCollideConnected(): boolean;
-    /**
-     * Get the anchor point on bodyA in world coordinates.
-     */
-    abstract getAnchorA(): Vec2;
-    /**
-     * Get the anchor point on bodyB in world coordinates.
-     */
-    abstract getAnchorB(): Vec2;
-    /**
-     * Get the reaction force on bodyB at the joint anchor in Newtons.
-     */
-    abstract getReactionForce(inv_dt: number): Vec2;
-    /**
-     * Get the reaction torque on bodyB in N*m.
-     */
-    abstract getReactionTorque(inv_dt: number): number;
-    /**
-     * Shift the origin for any points stored in world coordinates.
-     */
-    shiftOrigin(newOrigin: Vec2): void;
-    abstract initVelocityConstraints(step: TimeStep): void;
-    abstract solveVelocityConstraints(step: TimeStep): void;
-    /**
-     * This returns true if the position errors are within tolerance.
-     */
-    abstract solvePositionConstraints(step: TimeStep): boolean;
-}
 type BodyType = "static" | "kinematic" | "dynamic";
 interface BodyDef {
     /**
@@ -1883,7 +1617,7 @@ declare class Body {
      * @param force The world force vector, usually in Newtons (N).
      * @param wake Also wake up the body
      */
-    applyForceToCenter(force: Vec2, wake?: boolean): void;
+    applyForceToCenter(force: Vec2Value, wake?: boolean): void;
     /**
      * Apply a torque. This affects the angular velocity without affecting the
      * linear velocity of the center of mass. This wakes up the body.
@@ -1956,187 +1690,531 @@ declare class Body {
      */
     getLocalVector(worldVector: Vec2Value): Vec2;
 }
+declare class TimeStep {
+    /** time step */
+    dt: number;
+    /** inverse time step (0 if dt == 0) */
+    inv_dt: number;
+    velocityIterations: number;
+    positionIterations: number;
+    warmStarting: boolean;
+    blockSolve: boolean;
+    /** timestep ratio for variable timestep */
+    inv_dt0: number;
+    /** dt * inv_dt0 */
+    dtRatio: number;
+    reset(dt: number): void;
+}
 /**
- * Input for Distance. You have to option to use the shape radii in the
- * computation. Even
+ * Contact impulses for reporting. Impulses are used instead of forces because
+ * sub-step forces may approach infinity for rigid body collisions. These match
+ * up one-to-one with the contact points in Manifold.
  */
-declare class DistanceInput {
-    readonly proxyA: DistanceProxy;
-    readonly proxyB: DistanceProxy;
-    readonly transformA: Transform;
-    readonly transformB: Transform;
-    useRadii: boolean;
+declare class ContactImpulse {
+    // TODO: merge with Contact class?
+    private readonly contact;
+    private readonly normals;
+    private readonly tangents;
+    constructor(contact: Contact);
     recycle(): void;
+    get normalImpulses(): number[];
+    get tangentImpulses(): number[];
 }
 /**
- * Output for Distance.
+ * @prop gravity [{ x : 0, y : 0}]
+ * @prop allowSleep [true]
+ * @prop warmStarting [true]
+ * @prop continuousPhysics [true]
+ * @prop subStepping [false]
+ * @prop blockSolve [true]
+ * @prop velocityIterations [8] For the velocity constraint solver.
+ * @prop positionIterations [3] For the position constraint solver.
  */
-declare class DistanceOutput {
-    /** closest point on shapeA */
-    pointA: Vec2Value;
-    /** closest point on shapeB */
-    pointB: Vec2Value;
-    distance: number;
-    /** iterations number of GJK iterations used */
-    iterations: number;
-    recycle(): void;
+interface WorldDef {
+    gravity?: Vec2;
+    allowSleep?: boolean;
+    warmStarting?: boolean;
+    continuousPhysics?: boolean;
+    subStepping?: boolean;
+    blockSolve?: boolean;
+    velocityIterations?: number;
+    positionIterations?: number;
 }
 /**
- * Used to warm start Distance. Set count to zero on first call.
- */
-declare class SimplexCache {
-    /** length or area */
-    metric: number;
-    /** vertices on shape A */
-    indexA: number[];
-    /** vertices on shape B */
-    indexB: number[];
-    count: number;
-    recycle(): void;
-}
-/**
- * Compute the closest points between two shapes. Supports any combination of:
- * CircleShape, PolygonShape, EdgeShape. The simplex cache is input/output. On
- * the first call set SimplexCache.count to zero.
- */
-declare const Distance: {
-    (output: DistanceOutput, cache: SimplexCache, input: DistanceInput): void;
-    testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue) => boolean;
-    Input: typeof DistanceInput;
-    Output: typeof DistanceOutput;
-    Proxy: typeof DistanceProxy;
-    Cache: typeof SimplexCache;
-};
-/**
- * A distance proxy is used by the GJK algorithm. It encapsulates any shape.
- */
-declare class DistanceProxy {
-    recycle(): void;
-    /**
-     * Get the vertex count.
-     */
-    getVertexCount(): number;
-    /**
-     * Get a vertex by index. Used by Distance.
-     */
-    getVertex(index: number): Vec2Value;
-    /**
-     * Get the supporting vertex index in the given direction.
-     */
-    getSupport(d: Vec2Value): number;
-    /**
-     * Get the supporting vertex in the given direction.
-     */
-    getSupportVertex(d: Vec2Value): Vec2Value;
-    /**
-     * Initialize the proxy using the given shape. The shape must remain in scope
-     * while the proxy is in use.
-     */
-    set(shape: Shape, index: number): void;
-    /**
-     * Initialize the proxy using a vertex cloud and radius. The vertices
-     * must remain in scope while the proxy is in use.
-     */
-    setVertices(vertices: Vec2Value[], count: number, radius: number): void;
-}
-/**
- * Determine if two generic shapes overlap.
- */
-declare const testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue) => boolean;
-/**
- * Input parameters for ShapeCast
- */
-declare class ShapeCastInput {
-    readonly proxyA: DistanceProxy;
-    readonly proxyB: DistanceProxy;
-    readonly transformA: Transform;
-    readonly transformB: Transform;
-    readonly translationB: Vec2;
-    recycle(): void;
-}
-/**
- * Output results for b2ShapeCast
- */
-declare class ShapeCastOutput {
-    point: Vec2;
-    normal: Vec2;
-    lambda: number;
-    iterations: number;
-}
-/**
- * Perform a linear shape cast of shape B moving and shape A fixed. Determines
- * the hit point, normal, and translation fraction.
+ * Callback function for ray casts, see {@link World.rayCast}.
  *
- * @returns true if hit, false if there is no hit or an initial overlap
+ * Called for each fixture found in the query. You control how the ray cast
+ * proceeds by returning a float: return -1: ignore this fixture and continue
+ * return 0: terminate the ray cast return fraction: clip the ray to this point
+ * return 1: don't clip the ray and continue
+ *
+ * @param fixture The fixture hit by the ray
+ * @param point The point of initial intersection
+ * @param normal The normal vector at the point of intersection
+ * @param fraction
+ *
+ * @return -1 to filter, 0 to terminate, fraction to clip the ray for closest hit, 1 to continue
  */
-//
-// GJK-raycast
-// Algorithm by Gino van den Bergen.
-// "Smooth Mesh Contacts with GJK" in Game Physics Pearls. 2010
-declare const ShapeCast: (output: ShapeCastOutput, input: ShapeCastInput) => boolean;
-// todo make shape an interface
+type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) => number;
 /**
- * A shape is used for collision detection. You can create a shape however you
- * like. Shapes used for simulation in World are created automatically when a
- * Fixture is created. Shapes may encapsulate one or more child shapes.
+ * Called for each fixture found in the query AABB. It may return `false` to terminate the query.
  */
-declare abstract class Shape {
-    m_type: ShapeType;
+type WorldAABBQueryCallback = (fixture: Fixture) => boolean;
+declare function World(def?: WorldDef | Vec2 | null): World;
+declare class World {
     /**
-     * Radius of a shape. For polygonal shapes this must be b2_polygonRadius.
-     * There is no support for making rounded polygons.
+     * @param def World definition or gravity vector.
      */
-    m_radius: number;
-    static isValid(obj: any): boolean;
-    abstract getRadius(): number;
+    constructor(def?: WorldDef | Vec2 | null);
     /**
-     * Get the type of this shape. You can use this to down cast to the concrete
-     * shape.
+     * Get the world body list. With the returned body, use Body.getNext to get the
+     * next body in the world list. A null body indicates the end of the list.
      *
-     * @return the shape type.
+     * @return the head of the world body list.
      */
-    abstract getType(): ShapeType;
+    getBodyList(): Body | null;
     /**
-     * Get the number of child primitives.
-     */
-    abstract getChildCount(): number;
-    /**
-     * Test a point for containment in this shape. This only works for convex
-     * shapes.
+     * Get the world joint list. With the returned joint, use Joint.getNext to get
+     * the next joint in the world list. A null joint indicates the end of the list.
      *
-     * @param xf The shape world transform.
-     * @param p A point in world coordinates.
+     * @return the head of the world joint list.
      */
-    abstract testPoint(xf: TransformValue, p: Vec2Value): boolean;
+    getJointList(): Joint | null;
     /**
-     * Cast a ray against a child shape.
+     * Get the world contact list. With the returned contact, use Contact.getNext to
+     * get the next contact in the world list. A null contact indicates the end of
+     * the list.
      *
-     * @param output The ray-cast results.
-     * @param input The ray-cast input parameters.
-     * @param xf The transform to be applied to the shape.
-     * @param childIndex The child shape index
+     * Warning: contacts are created and destroyed in the middle of a time step.
+     * Use ContactListener to avoid missing contacts.
+     *
+     * @return the head of the world contact list.
      */
-    abstract rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;
+    getContactList(): Contact | null;
+    getBodyCount(): number;
+    getJointCount(): number;
     /**
-     * Given a transform, compute the associated axis aligned bounding box for a
-     * child shape.
-     *
-     * @param aabb Returns the axis aligned box.
-     * @param xf The world transform of the shape.
-     * @param childIndex The child shape
+     * Get the number of contacts (each may have 0 or more contact points).
      */
-    abstract computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void;
+    getContactCount(): number;
     /**
-     * Compute the mass properties of this shape using its dimensions and density.
-     * The inertia tensor is computed about the local origin.
-     *
-     * @param massData Returns the mass data for this shape.
-     * @param density The density in kilograms per meter squared.
+     * Change the global gravity vector.
      */
-    abstract computeMass(massData: MassData, density?: number): void;
-    abstract computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
+    setGravity(gravity: Vec2): void;
+    /**
+     * Get the global gravity vector.
+     */
+    getGravity(): Vec2;
+    /**
+     * Is the world locked (in the middle of a time step).
+     */
+    isLocked(): boolean;
+    /**
+     * Enable/disable sleep.
+     */
+    setAllowSleeping(flag: boolean): void;
+    getAllowSleeping(): boolean;
+    /**
+     * Enable/disable warm starting. For testing.
+     */
+    setWarmStarting(flag: boolean): void;
+    getWarmStarting(): boolean;
+    /**
+     * Enable/disable continuous physics. For testing.
+     */
+    setContinuousPhysics(flag: boolean): void;
+    getContinuousPhysics(): boolean;
+    /**
+     * Enable/disable single stepped continuous physics. For testing.
+     */
+    setSubStepping(flag: boolean): void;
+    getSubStepping(): boolean;
+    /**
+     * Set flag to control automatic clearing of forces after each time step.
+     */
+    setAutoClearForces(flag: boolean): void;
+    /**
+     * Get the flag that controls automatic clearing of forces after each time step.
+     */
+    getAutoClearForces(): boolean;
+    /**
+     * Manually clear the force buffer on all bodies. By default, forces are cleared
+     * automatically after each call to step. The default behavior is modified by
+     * calling setAutoClearForces. The purpose of this function is to support
+     * sub-stepping. Sub-stepping is often used to maintain a fixed sized time step
+     * under a variable frame-rate. When you perform sub-stepping you will disable
+     * auto clearing of forces and instead call clearForces after all sub-steps are
+     * complete in one pass of your game loop.
+     *
+     * See {@link World.setAutoClearForces}
+     */
+    clearForces(): void;
+    /**
+     * Query the world for all fixtures that potentially overlap the provided AABB.
+     *
+     * @param aabb The query box.
+     * @param callback Called for each fixture found in the query AABB. It may return `false` to terminate the query.
+     */
+    queryAABB(aabb: AABBValue, callback: WorldAABBQueryCallback): void;
+    /**
+     * Ray-cast the world for all fixtures in the path of the ray. Your callback
+     * controls whether you get the closest point, any point, or n-points. The
+     * ray-cast ignores shapes that contain the starting point.
+     *
+     * @param point1 The ray starting point
+     * @param point2 The ray ending point
+     * @param callback A user implemented callback function.
+     */
+    rayCast(point1: Vec2, point2: Vec2, callback: WorldRayCastCallback): void;
+    /**
+     * Get the number of broad-phase proxies.
+     */
+    getProxyCount(): number;
+    /**
+     * Get the height of broad-phase dynamic tree.
+     */
+    getTreeHeight(): number;
+    /**
+     * Get the balance of broad-phase dynamic tree.
+     */
+    getTreeBalance(): number;
+    /**
+     * Get the quality metric of broad-phase dynamic tree. The smaller the better.
+     * The minimum is 1.
+     */
+    getTreeQuality(): number;
+    /**
+     * Shift the world origin. Useful for large worlds. The body shift formula is:
+     * position -= newOrigin
+     *
+     * @param newOrigin The new origin with respect to the old origin
+     */
+    shiftOrigin(newOrigin: Vec2): void;
+    /**
+     * Create a rigid body given a definition. No reference to the definition is
+     * retained.
+     *
+     * Warning: This function is locked during callbacks.
+     */
+    createBody(def?: BodyDef): Body;
+    createBody(position: Vec2, angle?: number): Body;
+    createDynamicBody(def?: BodyDef): Body;
+    createDynamicBody(position: Vec2, angle?: number): Body;
+    createKinematicBody(def?: BodyDef): Body;
+    createKinematicBody(position: Vec2, angle?: number): Body;
+    /**
+     * Destroy a rigid body given a definition. No reference to the definition is
+     * retained.
+     *
+     * Warning: This automatically deletes all associated shapes and joints.
+     *
+     * Warning: This function is locked during callbacks.
+     */
+    destroyBody(b: Body): boolean;
+    /**
+     * Create a joint to constrain bodies together. No reference to the definition
+     * is retained. This may cause the connected bodies to cease colliding.
+     *
+     * Warning: This function is locked during callbacks.
+     */
+    createJoint<T extends Joint>(joint: T): T | null;
+    /**
+     * Destroy a joint. This may cause the connected bodies to begin colliding.
+     * Warning: This function is locked during callbacks.
+     */
+    destroyJoint(joint: Joint): void;
+    /**
+     * Take a time step. This performs collision detection, integration, and
+     * constraint solution.
+     *
+     * Broad-phase, narrow-phase, solve and solve time of impacts.
+     *
+     * @param timeStep Time step, this should not vary.
+     */
+    step(timeStep: number, velocityIterations?: number, positionIterations?: number): void;
+    /**
+     * Called when two fixtures begin to touch.
+     *
+     * Implement contact callbacks to get contact information. You can use these
+     * results for things like sounds and game logic. You can also get contact
+     * results by traversing the contact lists after the time step. However, you
+     * might miss some contacts because continuous physics leads to sub-stepping.
+     * Additionally you may receive multiple callbacks for the same contact in a
+     * single time step. You should strive to make your callbacks efficient because
+     * there may be many callbacks per time step.
+     *
+     * Warning: You cannot create/destroy world entities inside these callbacks.
+     */
+    on(name: "begin-contact", listener: (contact: Contact) => void): World;
+    /**
+     * Called when two fixtures cease to touch.
+     *
+     * Implement contact callbacks to get contact information. You can use these
+     * results for things like sounds and game logic. You can also get contact
+     * results by traversing the contact lists after the time step. However, you
+     * might miss some contacts because continuous physics leads to sub-stepping.
+     * Additionally you may receive multiple callbacks for the same contact in a
+     * single time step. You should strive to make your callbacks efficient because
+     * there may be many callbacks per time step.
+     *
+     * Warning: You cannot create/destroy world entities inside these callbacks.
+     */
+    on(name: "end-contact", listener: (contact: Contact) => void): World;
+    /**
+     * This is called after a contact is updated. This allows you to inspect a
+     * contact before it goes to the solver. If you are careful, you can modify the
+     * contact manifold (e.g. disable contact). A copy of the old manifold is
+     * provided so that you can detect changes. Note: this is called only for awake
+     * bodies. Note: this is called even when the number of contact points is zero.
+     * Note: this is not called for sensors. Note: if you set the number of contact
+     * points to zero, you will not get an endContact callback. However, you may get
+     * a beginContact callback the next step.
+     *
+     * Warning: You cannot create/destroy world entities inside these callbacks.
+     */
+    on(name: "pre-solve", listener: (contact: Contact, oldManifold: Manifold) => void): World;
+    /**
+     * This lets you inspect a contact after the solver is finished. This is useful
+     * for inspecting impulses. Note: the contact manifold does not include time of
+     * impact impulses, which can be arbitrarily large if the sub-step is small.
+     * Hence the impulse is provided explicitly in a separate data structure. Note:
+     * this is only called for contacts that are touching, solid, and awake.
+     *
+     * Warning: You cannot create/destroy world entities inside these callbacks.
+     */
+    on(name: "post-solve", listener: (contact: Contact, impulse: ContactImpulse) => void): World;
+    /** Listener is called whenever a body is removed. */
+    on(name: "remove-body", listener: (body: Body) => void): World;
+    /** Listener is called whenever a joint is removed implicitly or explicitly. */
+    on(name: "remove-joint", listener: (joint: Joint) => void): World;
+    /** Listener is called whenever a fixture is removed implicitly or explicitly. */
+    on(name: "remove-fixture", listener: (fixture: Fixture) => void): World;
+    off(name: "begin-contact", listener: (contact: Contact) => void): World;
+    off(name: "end-contact", listener: (contact: Contact) => void): World;
+    off(name: "pre-solve", listener: (contact: Contact, oldManifold: Manifold) => void): World;
+    off(name: "post-solve", listener: (contact: Contact, impulse: ContactImpulse) => void): World;
+    off(name: "remove-body", listener: (body: Body) => void): World;
+    off(name: "remove-joint", listener: (joint: Joint) => void): World;
+    off(name: "remove-fixture", listener: (fixture: Fixture) => void): World;
+    publish(name: string, arg1?: any, arg2?: any, arg3?: any): number;
 }
-type ShapeType = "circle" | "edge" | "polygon" | "chain";
+interface Style {
+    stroke?: string;
+    fill?: string;
+}
+type KEY = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "right" | "left" | "up" | "down" | "fire";
+type ActiveKeys = {
+    [key in KEY]?: boolean;
+};
+type TestbedMountOptions = {};
+declare abstract class Testbed {
+    static mount(options?: TestbedMountOptions): Testbed;
+    /** World viewbox width. */
+    width: number;
+    /** World viewbox height. */
+    height: number;
+    /** World viewbox center vertical offset. */
+    x: number;
+    /** World viewbox center horizontal offset. */
+    y: number;
+    scaleY: number;
+    /** World simulation step frequency */
+    hz: number;
+    /** World simulation speed, default is 1 */
+    speed: number;
+    ratio: number;
+    background: string;
+    mouseForce?: number;
+    activeKeys: ActiveKeys;
+    /** callback, to be implemented by user */
+    step: (dt: number, t: number) => void;
+    /** callback, to be implemented by user */
+    keydown: (keyCode: number, label: string) => void;
+    /** callback, to be implemented by user */
+    keyup: (keyCode: number, label: string) => void;
+    private statusText;
+    private statusMap;
+    status(name: string, value: any): void;
+    status(value: object | string): void;
+    info(text: string): void;
+    color(r: number, g: number, b: number): string;
+    abstract drawPoint(p: {
+        x: number;
+        y: number;
+    }, r: any, color: string): void;
+    abstract drawCircle(p: {
+        x: number;
+        y: number;
+    }, r: number, color: string): void;
+    abstract drawEdge(a: {
+        x: number;
+        y: number;
+    }, b: {
+        x: number;
+        y: number;
+    }, color: string): void;
+    abstract drawSegment(a: {
+        x: number;
+        y: number;
+    }, b: {
+        x: number;
+        y: number;
+    }, color: string): void;
+    abstract drawPolygon(points: Array<{
+        x: number;
+        y: number;
+    }>, color: string): void;
+    abstract drawAABB(aabb: AABBValue, color: string): void;
+    abstract start(world: World): void;
+    abstract findOne(query: string): (Body | Joint | Fixture | null);
+    abstract findAll(query: string): (Body | Joint | Fixture)[];
+}
+type TestbedFactoryOptions = string | {};
+/** @deprecated */
+type TestbedCallback = (testbed: Testbed) => (World | undefined);
+/** @deprecated */
+declare function testbed(callback: TestbedCallback): void;
+/** @deprecated */
+declare function testbed(options: TestbedFactoryOptions, callback: TestbedCallback): void;
+/** @deprecated */
+declare const math: any;
+interface Vec3Value {
+    x: number;
+    y: number;
+    z: number;
+}
+declare function Vec3(x: number, y: number, z: number): Vec3;
+declare function Vec3(obj: {
+    x: number;
+    y: number;
+    z: number;
+}): Vec3;
+declare function Vec3(): Vec3;
+declare class Vec3 {
+    x: number;
+    y: number;
+    z: number;
+    constructor(x: number, y: number, z: number);
+    constructor(obj: {
+        x: number;
+        y: number;
+        z: number;
+    });
+    constructor();
+    static zero(): Vec3;
+    static clone(v: Vec3Value): Vec3;
+    /** Does this vector contain finite coordinates? */
+    static isValid(obj: any): boolean;
+    static assert(o: any): void;
+    setZero(): Vec3;
+    set(x: number, y: number, z: number): Vec3;
+    add(w: Vec3Value): Vec3;
+    sub(w: Vec3Value): Vec3;
+    mul(m: number): Vec3;
+    static areEqual(v: Vec3Value, w: Vec3Value): boolean;
+    /** Dot product on two vectors */
+    static dot(v: Vec3Value, w: Vec3Value): number;
+    /** Cross product on two vectors */
+    static cross(v: Vec3Value, w: Vec3Value): Vec3;
+    static add(v: Vec3Value, w: Vec3Value): Vec3;
+    static sub(v: Vec3Value, w: Vec3Value): Vec3;
+    static mul(v: Vec3Value, m: number): Vec3;
+    neg(): Vec3;
+    static neg(v: Vec3Value): Vec3;
+}
+/**
+ * A 2-by-2 matrix. Stored in column-major order.
+ */
+declare class Mat22 {
+    ex: Vec2;
+    ey: Vec2;
+    constructor(a: number, b: number, c: number, d: number);
+    constructor(a: {
+        x: number;
+        y: number;
+    }, b: {
+        x: number;
+        y: number;
+    });
+    constructor();
+    static isValid(obj: any): boolean;
+    static assert(o: any): void;
+    set(a: Mat22): void;
+    set(a: Vec2, b: Vec2): void;
+    set(a: number, b: number, c: number, d: number): void;
+    setIdentity(): void;
+    setZero(): void;
+    getInverse(): Mat22;
+    /**
+     * Solve A * x = b, where b is a column vector. This is more efficient than
+     * computing the inverse in one-shot cases.
+     */
+    solve(v: Vec2): Vec2;
+    /**
+     * Multiply a matrix times a vector. If a rotation matrix is provided, then this
+     * transforms the vector from one frame to another.
+     */
+    static mul(mx: Mat22, my: Mat22): Mat22;
+    static mul(mx: Mat22, v: Vec2): Vec2;
+    static mulVec2(mx: Mat22, v: Vec2): Vec2;
+    static mulMat22(mx: Mat22, v: Mat22): Mat22;
+    /**
+     * Multiply a matrix transpose times a vector. If a rotation matrix is provided,
+     * then this transforms the vector from one frame to another (inverse
+     * transform).
+     */
+    static mulT(mx: Mat22, my: Mat22): Mat22;
+    static mulT(mx: Mat22, v: Vec2): Vec2;
+    static mulTVec2(mx: Mat22, v: Vec2): Vec2;
+    static mulTMat22(mx: Mat22, v: Mat22): Mat22;
+    static abs(mx: Mat22): Mat22;
+    static add(mx1: Mat22, mx2: Mat22): Mat22;
+}
+/**
+ * A 3-by-3 matrix. Stored in column-major order.
+ */
+declare class Mat33 {
+    ex: Vec3;
+    ey: Vec3;
+    ez: Vec3;
+    constructor(a: Vec3Value, b: Vec3Value, c: Vec3Value);
+    constructor();
+    static isValid(obj: any): boolean;
+    static assert(o: any): void;
+    /**
+     * Set this matrix to all zeros.
+     */
+    setZero(): Mat33;
+    /**
+     * Solve A * x = b, where b is a column vector. This is more efficient than
+     * computing the inverse in one-shot cases.
+     */
+    solve33(v: Vec3Value): Vec3;
+    /**
+     * Solve A * x = b, where b is a column vector. This is more efficient than
+     * computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
+     * equation.
+     */
+    solve22(v: Vec2Value): Vec2;
+    /**
+     * Get the inverse of this matrix as a 2-by-2. Returns the zero matrix if
+     * singular.
+     */
+    getInverse22(M: Mat33): void;
+    /**
+     * Get the symmetric inverse of this matrix as a 3-by-3. Returns the zero matrix
+     * if singular.
+     */
+    getSymInverse33(M: Mat33): void;
+    /**
+     * Multiply a matrix times a vector.
+     */
+    static mul(a: Mat33, b: Vec2Value): Vec2;
+    static mul(a: Mat33, b: Vec3Value): Vec3;
+    static mulVec3(a: Mat33, b: Vec3): Vec3;
+    static mulVec2(a: Mat33, b: Vec2Value): Vec2;
+    static add(a: Mat33, b: Mat33): Mat33;
+}
 declare function CircleShape(position: Vec2Value, radius?: number): CircleShape;
 declare function CircleShape(radius?: number): CircleShape;
 declare class CircleShape extends Shape {
@@ -3310,7 +3388,7 @@ declare function MouseJoint(def: MouseJointDef): MouseJoint;
  * be used in the testbed. If you want to learn how to use the mouse joint, look
  * at the testbed.
  */
-declare function MouseJoint(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2): MouseJoint;
+declare function MouseJoint(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2Value): MouseJoint;
 /**
  * A mouse joint is used to make a point on a body track a specified world
  * point. This a soft constraint with a maximum force. This allows the
@@ -3323,7 +3401,7 @@ declare function MouseJoint(def: MouseJointOpt, bodyA: Body, bodyB: Body, target
 declare class MouseJoint extends Joint {
     static TYPE: "mouse-joint";
     constructor(def: MouseJointDef);
-    constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2);
+    constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2Value);
     /**
      * Use this to update the target point.
      */
@@ -4139,29 +4217,6 @@ declare namespace planck {
         var toJson: any;
         var fromJson: any;
     }
-    const EPSILON = 1e-9;
-    /**
-     * Next Largest Power of 2 Given a binary integer value x, the next largest
-     * power of 2 can be computed by a SWAR algorithm that recursively "folds" the
-     * upper bits into the lower bits. This process yields a bit vector with the
-     * same most significant 1 as x, but all 1's below it. Adding 1 to that value
-     * yields the next largest power of 2. For a 32-bit value:
-     */
-    function nextPowerOfTwo(x: number): number;
-    function isPowerOfTwo(x: number): boolean;
-    function mod(num: number, min?: number, max?: number): number;
-    /**
-     * Returns a min if num is less than min, and max if more than max, otherwise returns num.
-     */
-    function clamp(num: number, min: number, max: number): number;
-    /**
-     * Returns a random number between min and max when two arguments are provided.
-     * If one arg is provided between 0 to max.
-     * If one arg is passed between 0 to 1.
-     */
-    function random(min?: number, max?: number): number;
-    /** @deprecated */
-    const math: any;
     interface Vec2Value {
         x: number;
         y: number;
@@ -4315,135 +4370,64 @@ declare namespace planck {
         clamp(max: number): Vec2;
         static clamp(v: Vec2Value, max: number): Vec2;
     }
-    interface Vec3Value {
-        x: number;
-        y: number;
-        z: number;
-    }
-    class Vec3 {
-        x: number;
-        y: number;
-        z: number;
-        constructor(x: number, y: number, z: number);
-        constructor(obj: {
-            x: number;
-            y: number;
-            z: number;
-        });
-        constructor();
-        static zero(): Vec3;
-        static clone(v: Vec3Value): Vec3;
-        /** Does this vector contain finite coordinates? */
-        static isValid(obj: any): boolean;
-        static assert(o: any): void;
-        setZero(): Vec3;
-        set(x: number, y: number, z: number): Vec3;
-        add(w: Vec3Value): Vec3;
-        sub(w: Vec3Value): Vec3;
-        mul(m: number): Vec3;
-        static areEqual(v: Vec3Value, w: Vec3Value): boolean;
-        /** Dot product on two vectors */
-        static dot(v: Vec3Value, w: Vec3Value): number;
-        /** Cross product on two vectors */
-        static cross(v: Vec3Value, w: Vec3Value): Vec3;
-        static add(v: Vec3Value, w: Vec3Value): Vec3;
-        static sub(v: Vec3Value, w: Vec3Value): Vec3;
-        static mul(v: Vec3Value, m: number): Vec3;
-        neg(): Vec3;
-        static neg(v: Vec3Value): Vec3;
-    }
     /**
-     * A 2-by-2 matrix. Stored in column-major order.
+     * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
      */
-    class Mat22 {
-        ex: Vec2;
-        ey: Vec2;
-        constructor(a: number, b: number, c: number, d: number);
-        constructor(a: {
-            x: number;
-            y: number;
-        }, b: {
-            x: number;
-            y: number;
-        });
-        constructor();
-        static isValid(obj: any): boolean;
-        static assert(o: any): void;
-        set(a: Mat22): void;
-        set(a: Vec2, b: Vec2): void;
-        set(a: number, b: number, c: number, d: number): void;
-        setIdentity(): void;
-        setZero(): void;
-        getInverse(): Mat22;
-        /**
-         * Solve A * x = b, where b is a column vector. This is more efficient than
-         * computing the inverse in one-shot cases.
-         */
-        solve(v: Vec2): Vec2;
-        /**
-         * Multiply a matrix times a vector. If a rotation matrix is provided, then this
-         * transforms the vector from one frame to another.
-         */
-        static mul(mx: Mat22, my: Mat22): Mat22;
-        static mul(mx: Mat22, v: Vec2): Vec2;
-        static mulVec2(mx: Mat22, v: Vec2): Vec2;
-        static mulMat22(mx: Mat22, v: Mat22): Mat22;
-        /**
-         * Multiply a matrix transpose times a vector. If a rotation matrix is provided,
-         * then this transforms the vector from one frame to another (inverse
-         * transform).
-         */
-        static mulT(mx: Mat22, my: Mat22): Mat22;
-        static mulT(mx: Mat22, v: Vec2): Vec2;
-        static mulTVec2(mx: Mat22, v: Vec2): Vec2;
-        static mulTMat22(mx: Mat22, v: Mat22): Mat22;
-        static abs(mx: Mat22): Mat22;
-        static add(mx1: Mat22, mx2: Mat22): Mat22;
+    interface RayCastInput {
+        p1: Vec2;
+        p2: Vec2;
+        maxFraction: number;
     }
+    type RayCastCallback = (subInput: RayCastInput, id: number) => number;
     /**
-     * A 3-by-3 matrix. Stored in column-major order.
+     * Ray-cast output data. The ray hits at `p1 + fraction * (p2 - p1)`,
+     * where `p1` and `p2` come from RayCastInput.
      */
-    class Mat33 {
-        ex: Vec3;
-        ey: Vec3;
-        ez: Vec3;
-        constructor(a: Vec3Value, b: Vec3Value, c: Vec3Value);
-        constructor();
+    interface RayCastOutput {
+        normal: Vec2;
+        fraction: number;
+    }
+    interface AABBValue {
+        lowerBound: Vec2Value;
+        upperBound: Vec2Value;
+    }
+    class AABB {
+        lowerBound: Vec2;
+        upperBound: Vec2;
+        constructor(lower?: Vec2Value, upper?: Vec2Value);
+        /**
+         * Verify that the bounds are sorted.
+         */
+        isValid(): boolean;
         static isValid(obj: any): boolean;
         static assert(o: any): void;
         /**
-         * Set this matrix to all zeros.
+         * Get the center of the AABB.
          */
-        setZero(): Mat33;
+        getCenter(): Vec2;
         /**
-         * Solve A * x = b, where b is a column vector. This is more efficient than
-         * computing the inverse in one-shot cases.
+         * Get the extents of the AABB (half-widths).
          */
-        solve33(v: Vec3Value): Vec3;
+        getExtents(): Vec2;
         /**
-         * Solve A * x = b, where b is a column vector. This is more efficient than
-         * computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
-         * equation.
+         * Get the perimeter length.
          */
-        solve22(v: Vec2Value): Vec2;
+        getPerimeter(): number;
         /**
-         * Get the inverse of this matrix as a 2-by-2. Returns the zero matrix if
-         * singular.
+         * Combine one or two AABB into this one.
          */
-        getInverse22(M: Mat33): void;
-        /**
-         * Get the symmetric inverse of this matrix as a 3-by-3. Returns the zero matrix
-         * if singular.
-         */
-        getSymInverse33(M: Mat33): void;
-        /**
-         * Multiply a matrix times a vector.
-         */
-        static mul(a: Mat33, b: Vec2Value): Vec2;
-        static mul(a: Mat33, b: Vec3Value): Vec3;
-        static mulVec3(a: Mat33, b: Vec3): Vec3;
-        static mulVec2(a: Mat33, b: Vec2Value): Vec2;
-        static add(a: Mat33, b: Mat33): Mat33;
+        combine(a: AABBValue, b?: AABBValue): void;
+        combinePoints(a: Vec2Value, b: Vec2Value): void;
+        set(aabb: AABBValue): void;
+        contains(aabb: AABBValue): boolean;
+        extend(value: number): AABB;
+        static extend(out: AABBValue, value: number): AABBValue;
+        static testOverlap(a: AABBValue, b: AABBValue): boolean;
+        static areEqual(a: AABBValue, b: AABBValue): boolean;
+        static diff(a: AABBValue, b: AABBValue): number;
+        rayCast(output: RayCastOutput, input: RayCastInput): boolean;
+        static combinePoints(out: AABBValue, a: Vec2Value, b: Vec2Value): AABBValue;
+        static combinedPerimeter(a: AABBValue, b: AABBValue): number;
     }
     interface RotValue {
         s: number;
@@ -4528,64 +4512,186 @@ declare namespace planck {
         static mulTXf(a: TransformValue, b: TransformValue): Transform;
     }
     /**
-     * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
+     * Input for Distance. You have to option to use the shape radii in the
+     * computation. Even
      */
-    interface RayCastInput {
-        p1: Vec2;
-        p2: Vec2;
-        maxFraction: number;
+    class DistanceInput {
+        readonly proxyA: DistanceProxy;
+        readonly proxyB: DistanceProxy;
+        readonly transformA: Transform;
+        readonly transformB: Transform;
+        useRadii: boolean;
+        recycle(): void;
     }
-    type RayCastCallback = (subInput: RayCastInput, id: number) => number;
     /**
-     * Ray-cast output data. The ray hits at `p1 + fraction * (p2 - p1)`,
-     * where `p1` and `p2` come from RayCastInput.
+     * Output for Distance.
      */
-    interface RayCastOutput {
+    class DistanceOutput {
+        /** closest point on shapeA */
+        pointA: Vec2Value;
+        /** closest point on shapeB */
+        pointB: Vec2Value;
+        distance: number;
+        /** iterations number of GJK iterations used */
+        iterations: number;
+        recycle(): void;
+    }
+    /**
+     * Used to warm start Distance. Set count to zero on first call.
+     */
+    class SimplexCache {
+        /** length or area */
+        metric: number;
+        /** vertices on shape A */
+        indexA: number[];
+        /** vertices on shape B */
+        indexB: number[];
+        count: number;
+        recycle(): void;
+    }
+    /**
+     * Compute the closest points between two shapes. Supports any combination of:
+     * CircleShape, PolygonShape, EdgeShape. The simplex cache is input/output. On
+     * the first call set SimplexCache.count to zero.
+     */
+    const Distance: {
+        (output: DistanceOutput, cache: SimplexCache, input: DistanceInput): void;
+        testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue) => boolean;
+        Input: typeof DistanceInput;
+        Output: typeof DistanceOutput;
+        Proxy: typeof DistanceProxy;
+        Cache: typeof SimplexCache;
+    };
+    /**
+     * A distance proxy is used by the GJK algorithm. It encapsulates any shape.
+     */
+    class DistanceProxy {
+        recycle(): void;
+        /**
+         * Get the vertex count.
+         */
+        getVertexCount(): number;
+        /**
+         * Get a vertex by index. Used by Distance.
+         */
+        getVertex(index: number): Vec2Value;
+        /**
+         * Get the supporting vertex index in the given direction.
+         */
+        getSupport(d: Vec2Value): number;
+        /**
+         * Get the supporting vertex in the given direction.
+         */
+        getSupportVertex(d: Vec2Value): Vec2Value;
+        /**
+         * Initialize the proxy using the given shape. The shape must remain in scope
+         * while the proxy is in use.
+         */
+        set(shape: Shape, index: number): void;
+        /**
+         * Initialize the proxy using a vertex cloud and radius. The vertices
+         * must remain in scope while the proxy is in use.
+         */
+        setVertices(vertices: Vec2Value[], count: number, radius: number): void;
+    }
+    /**
+     * Determine if two generic shapes overlap.
+     */
+    const testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue) => boolean;
+    /**
+     * Input parameters for ShapeCast
+     */
+    class ShapeCastInput {
+        readonly proxyA: DistanceProxy;
+        readonly proxyB: DistanceProxy;
+        readonly transformA: Transform;
+        readonly transformB: Transform;
+        readonly translationB: Vec2;
+        recycle(): void;
+    }
+    /**
+     * Output results for b2ShapeCast
+     */
+    class ShapeCastOutput {
+        point: Vec2;
         normal: Vec2;
-        fraction: number;
+        lambda: number;
+        iterations: number;
     }
-    interface AABBValue {
-        lowerBound: Vec2Value;
-        upperBound: Vec2Value;
-    }
-    class AABB {
-        lowerBound: Vec2;
-        upperBound: Vec2;
-        constructor(lower?: Vec2Value, upper?: Vec2Value);
+    /**
+     * Perform a linear shape cast of shape B moving and shape A fixed. Determines
+     * the hit point, normal, and translation fraction.
+     *
+     * @returns true if hit, false if there is no hit or an initial overlap
+     */
+    //
+    // GJK-raycast
+    // Algorithm by Gino van den Bergen.
+    // "Smooth Mesh Contacts with GJK" in Game Physics Pearls. 2010
+    const ShapeCast: (output: ShapeCastOutput, input: ShapeCastInput) => boolean;
+    // todo make shape an interface
+    /**
+     * A shape is used for collision detection. You can create a shape however you
+     * like. Shapes used for simulation in World are created automatically when a
+     * Fixture is created. Shapes may encapsulate one or more child shapes.
+     */
+    abstract class Shape {
+        m_type: ShapeType;
         /**
-         * Verify that the bounds are sorted.
+         * Radius of a shape. For polygonal shapes this must be b2_polygonRadius.
+         * There is no support for making rounded polygons.
          */
-        isValid(): boolean;
+        m_radius: number;
         static isValid(obj: any): boolean;
-        static assert(o: any): void;
+        abstract getRadius(): number;
         /**
-         * Get the center of the AABB.
+         * Get the type of this shape. You can use this to down cast to the concrete
+         * shape.
+         *
+         * @return the shape type.
          */
-        getCenter(): Vec2;
+        abstract getType(): ShapeType;
         /**
-         * Get the extents of the AABB (half-widths).
+         * Get the number of child primitives.
          */
-        getExtents(): Vec2;
+        abstract getChildCount(): number;
         /**
-         * Get the perimeter length.
+         * Test a point for containment in this shape. This only works for convex
+         * shapes.
+         *
+         * @param xf The shape world transform.
+         * @param p A point in world coordinates.
          */
-        getPerimeter(): number;
+        abstract testPoint(xf: TransformValue, p: Vec2Value): boolean;
         /**
-         * Combine one or two AABB into this one.
+         * Cast a ray against a child shape.
+         *
+         * @param output The ray-cast results.
+         * @param input The ray-cast input parameters.
+         * @param xf The transform to be applied to the shape.
+         * @param childIndex The child shape index
          */
-        combine(a: AABB, b?: AABB): void;
-        combinePoints(a: Vec2Value, b: Vec2Value): void;
-        set(aabb: AABB): void;
-        contains(aabb: AABB): boolean;
-        extend(value: number): AABB;
-        static extend(out: AABBValue, value: number): AABBValue;
-        static testOverlap(a: AABB, b: AABB): boolean;
-        static areEqual(a: AABB, b: AABB): boolean;
-        static diff(a: AABB, b: AABB): number;
-        rayCast(output: RayCastOutput, input: RayCastInput): boolean;
-        static combinePoints(out: AABBValue, a: Vec2Value, b: Vec2Value): AABBValue;
-        static combinedPerimeter(a: AABBValue, b: AABBValue): number;
+        abstract rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;
+        /**
+         * Given a transform, compute the associated axis aligned bounding box for a
+         * child shape.
+         *
+         * @param aabb Returns the axis aligned box.
+         * @param xf The world transform of the shape.
+         * @param childIndex The child shape
+         */
+        abstract computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void;
+        /**
+         * Compute the mass properties of this shape using its dimensions and density.
+         * The inertia tensor is computed about the local origin.
+         *
+         * @param massData Returns the mass data for this shape.
+         * @param density The density in kilograms per meter squared.
+         */
+        abstract computeMass(massData: MassData, density?: number): void;
+        abstract computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
     }
+    type ShapeType = "circle" | "edge" | "polygon" | "chain";
     type DynamicTreeQueryCallback = (nodeId: number) => boolean;
     /**
      * A node in the dynamic tree. The client does not interact with this directly.
@@ -4641,7 +4747,7 @@ declare namespace planck {
          *
          * Create a proxy. Provide a tight fitting AABB and a userData pointer.
          */
-        createProxy(aabb: AABB, userData: T): number;
+        createProxy(aabb: AABBValue, userData: T): number;
         /**
          * Destroy a proxy. This asserts if the id is invalid.
          */
@@ -4655,7 +4761,7 @@ declare namespace planck {
          *
          * @return true if the proxy was re-inserted.
          */
-        moveProxy(id: number, aabb: AABB, d: Vec2Value): boolean;
+        moveProxy(id: number, aabb: AABBValue, d: Vec2Value): boolean;
         insertLeaf(leaf: TreeNode<T>): void;
         removeLeaf(leaf: TreeNode<T>): void;
         /**
@@ -4702,7 +4808,7 @@ declare namespace planck {
          * Query an AABB for overlapping proxies. The callback class is called for each
          * proxy that overlaps the supplied AABB.
          */
-        query(aabb: AABB, queryCallback: DynamicTreeQueryCallback): void;
+        query(aabb: AABBValue, queryCallback: DynamicTreeQueryCallback): void;
         /**
          * Ray-cast against the proxies in the tree. This relies on the callback to
          * perform a exact ray-cast in the case were the proxy contains a shape. The
@@ -4759,7 +4865,7 @@ declare namespace planck {
          * Query an AABB for overlapping proxies. The callback class is called for each
          * proxy that overlaps the supplied AABB.
          */
-        query: (aabb: AABB, queryCallback: DynamicTreeQueryCallback) => void;
+        query: (aabb: AABBValue, queryCallback: DynamicTreeQueryCallback) => void;
         /**
          * Ray-cast against the proxies in the tree. This relies on the callback to
          * perform a exact ray-cast in the case were the proxy contains a shape. The
@@ -4782,7 +4888,7 @@ declare namespace planck {
          * Create a proxy with an initial AABB. Pairs are not reported until UpdatePairs
          * is called.
          */
-        createProxy(aabb: AABB, userData: FixtureProxy): number;
+        createProxy(aabb: AABBValue, userData: FixtureProxy): number;
         /**
          * Destroy a proxy. It is up to the client to remove any pairs.
          */
@@ -4999,6 +5105,119 @@ declare namespace planck {
          */
         shouldCollide(that: Fixture): boolean;
     }
+    /**
+     * A joint edge is used to connect bodies and joints together in a joint graph
+     * where each body is a node and each joint is an edge. A joint edge belongs to
+     * a doubly linked list maintained in each attached body. Each joint has two
+     * joint nodes, one for each attached body.
+     */
+    class JointEdge {
+        /**
+         * provides quick access to the other body attached.
+         */
+        other: Body | null;
+        /**
+         * the joint
+         */
+        joint: Joint | null;
+        /**
+         * prev the previous joint edge in the body's joint list
+         */
+        prev: JointEdge | null;
+        /**
+         * the next joint edge in the body's joint list
+         */
+        next: JointEdge | null;
+    }
+    /**
+     * Joint definitions are used to construct joints.
+     */
+    interface JointOpt {
+        /**
+         * Use this to attach application specific data to your joints.
+         */
+        userData?: any;
+        /**
+         * Set this flag to true if the attached bodies
+         * should collide.
+         */
+        collideConnected?: boolean;
+    }
+    /**
+     * Joint definitions are used to construct joints.
+     */
+    interface JointDef extends JointOpt {
+        /**
+         * The first attached body.
+         */
+        bodyA: Body;
+        /**
+         * The second attached body.
+         */
+        bodyB: Body;
+    }
+    /**
+     * The base joint class. Joints are used to constraint two bodies together in
+     * various fashions. Some joints also feature limits and motors.
+     */
+    abstract class Joint {
+        constructor(def: JointDef);
+        constructor(def: JointOpt, bodyA: Body, bodyB: Body);
+        /**
+         * Short-cut function to determine if either body is inactive.
+         */
+        isActive(): boolean;
+        /**
+         * Get the type of the concrete joint.
+         */
+        getType(): string;
+        /**
+         * Get the first body attached to this joint.
+         */
+        getBodyA(): Body;
+        /**
+         * Get the second body attached to this joint.
+         */
+        getBodyB(): Body;
+        /**
+         * Get the next joint the world joint list.
+         */
+        getNext(): Joint;
+        getUserData(): unknown;
+        setUserData(data: unknown): void;
+        /**
+         * Get collide connected. Note: modifying the collide connect flag won't work
+         * correctly because the flag is only checked when fixture AABBs begin to
+         * overlap.
+         */
+        getCollideConnected(): boolean;
+        /**
+         * Get the anchor point on bodyA in world coordinates.
+         */
+        abstract getAnchorA(): Vec2;
+        /**
+         * Get the anchor point on bodyB in world coordinates.
+         */
+        abstract getAnchorB(): Vec2;
+        /**
+         * Get the reaction force on bodyB at the joint anchor in Newtons.
+         */
+        abstract getReactionForce(inv_dt: number): Vec2;
+        /**
+         * Get the reaction torque on bodyB in N*m.
+         */
+        abstract getReactionTorque(inv_dt: number): number;
+        /**
+         * Shift the origin for any points stored in world coordinates.
+         */
+        shiftOrigin(newOrigin: Vec2): void;
+        abstract initVelocityConstraints(step: TimeStep): void;
+        abstract solveVelocityConstraints(step: TimeStep): void;
+        /**
+         * This returns true if the position errors are within tolerance.
+         */
+        abstract solvePositionConstraints(step: TimeStep): boolean;
+    }
     enum ManifoldType {
         e_unset = -1,
         e_circles = 0,
@@ -5180,401 +5399,159 @@ declare namespace planck {
      * inelastic surface. For example, a superball bounces on anything.
      */
     function mixRestitution(restitution1: number, restitution2: number): number;
+    const EPSILON = 1e-9;
     /**
-     * @prop gravity [{ x : 0, y : 0}]
-     * @prop allowSleep [true]
-     * @prop warmStarting [true]
-     * @prop continuousPhysics [true]
-     * @prop subStepping [false]
-     * @prop blockSolve [true]
-     * @prop velocityIterations [8] For the velocity constraint solver.
-     * @prop positionIterations [3] For the position constraint solver.
+     * Next Largest Power of 2 Given a binary integer value x, the next largest
+     * power of 2 can be computed by a SWAR algorithm that recursively "folds" the
+     * upper bits into the lower bits. This process yields a bit vector with the
+     * same most significant 1 as x, but all 1's below it. Adding 1 to that value
+     * yields the next largest power of 2. For a 32-bit value:
      */
-    interface WorldDef {
-        gravity?: Vec2;
-        allowSleep?: boolean;
-        warmStarting?: boolean;
-        continuousPhysics?: boolean;
-        subStepping?: boolean;
-        blockSolve?: boolean;
-        velocityIterations?: number;
-        positionIterations?: number;
+    function nextPowerOfTwo(x: number): number;
+    function isPowerOfTwo(x: number): boolean;
+    function mod(num: number, min?: number, max?: number): number;
+    /**
+     * Returns a min if num is less than min, and max if more than max, otherwise returns num.
+     */
+    function clamp(num: number, min: number, max: number): number;
+    /**
+     * Returns a random number between min and max when two arguments are provided.
+     * If one arg is provided between 0 to max.
+     * If one arg is passed between 0 to 1.
+     */
+    function random(min?: number, max?: number): number;
+    /** @deprecated */
+    const math: any;
+    interface Vec3Value {
+        x: number;
+        y: number;
+        z: number;
+    }
+    class Vec3 {
+        x: number;
+        y: number;
+        z: number;
+        constructor(x: number, y: number, z: number);
+        constructor(obj: {
+            x: number;
+            y: number;
+            z: number;
+        });
+        constructor();
+        static zero(): Vec3;
+        static clone(v: Vec3Value): Vec3;
+        /** Does this vector contain finite coordinates? */
+        static isValid(obj: any): boolean;
+        static assert(o: any): void;
+        setZero(): Vec3;
+        set(x: number, y: number, z: number): Vec3;
+        add(w: Vec3Value): Vec3;
+        sub(w: Vec3Value): Vec3;
+        mul(m: number): Vec3;
+        static areEqual(v: Vec3Value, w: Vec3Value): boolean;
+        /** Dot product on two vectors */
+        static dot(v: Vec3Value, w: Vec3Value): number;
+        /** Cross product on two vectors */
+        static cross(v: Vec3Value, w: Vec3Value): Vec3;
+        static add(v: Vec3Value, w: Vec3Value): Vec3;
+        static sub(v: Vec3Value, w: Vec3Value): Vec3;
+        static mul(v: Vec3Value, m: number): Vec3;
+        neg(): Vec3;
+        static neg(v: Vec3Value): Vec3;
     }
     /**
-     * Callback function for ray casts, see {@link World.rayCast}.
-     *
-     * Called for each fixture found in the query. You control how the ray cast
-     * proceeds by returning a float: return -1: ignore this fixture and continue
-     * return 0: terminate the ray cast return fraction: clip the ray to this point
-     * return 1: don't clip the ray and continue
-     *
-     * @param fixture The fixture hit by the ray
-     * @param point The point of initial intersection
-     * @param normal The normal vector at the point of intersection
-     * @param fraction
-     *
-     * @return -1 to filter, 0 to terminate, fraction to clip the ray for closest hit, 1 to continue
+     * A 2-by-2 matrix. Stored in column-major order.
      */
-    type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) => number;
-    /**
-     * Called for each fixture found in the query AABB. It may return `false` to terminate the query.
-     */
-    type WorldAABBQueryCallback = (fixture: Fixture) => boolean;
-    class World {
+    class Mat22 {
+        ex: Vec2;
+        ey: Vec2;
+        constructor(a: number, b: number, c: number, d: number);
+        constructor(a: {
+            x: number;
+            y: number;
+        }, b: {
+            x: number;
+            y: number;
+        });
+        constructor();
+        static isValid(obj: any): boolean;
+        static assert(o: any): void;
+        set(a: Mat22): void;
+        set(a: Vec2, b: Vec2): void;
+        set(a: number, b: number, c: number, d: number): void;
+        setIdentity(): void;
+        setZero(): void;
+        getInverse(): Mat22;
         /**
-         * @param def World definition or gravity vector.
+         * Solve A * x = b, where b is a column vector. This is more efficient than
+         * computing the inverse in one-shot cases.
          */
-        constructor(def?: WorldDef | Vec2 | null);
+        solve(v: Vec2): Vec2;
         /**
-         * Get the world body list. With the returned body, use Body.getNext to get the
-         * next body in the world list. A null body indicates the end of the list.
-         *
-         * @return the head of the world body list.
+         * Multiply a matrix times a vector. If a rotation matrix is provided, then this
+         * transforms the vector from one frame to another.
          */
-        getBodyList(): Body | null;
+        static mul(mx: Mat22, my: Mat22): Mat22;
+        static mul(mx: Mat22, v: Vec2): Vec2;
+        static mulVec2(mx: Mat22, v: Vec2): Vec2;
+        static mulMat22(mx: Mat22, v: Mat22): Mat22;
         /**
-         * Get the world joint list. With the returned joint, use Joint.getNext to get
-         * the next joint in the world list. A null joint indicates the end of the list.
-         *
-         * @return the head of the world joint list.
+         * Multiply a matrix transpose times a vector. If a rotation matrix is provided,
+         * then this transforms the vector from one frame to another (inverse
+         * transform).
          */
-        getJointList(): Joint | null;
-        /**
-         * Get the world contact list. With the returned contact, use Contact.getNext to
-         * get the next contact in the world list. A null contact indicates the end of
-         * the list.
-         *
-         * Warning: contacts are created and destroyed in the middle of a time step.
-         * Use ContactListener to avoid missing contacts.
-         *
-         * @return the head of the world contact list.
-         */
-        getContactList(): Contact | null;
-        getBodyCount(): number;
-        getJointCount(): number;
-        /**
-         * Get the number of contacts (each may have 0 or more contact points).
-         */
-        getContactCount(): number;
-        /**
-         * Change the global gravity vector.
-         */
-        setGravity(gravity: Vec2): void;
-        /**
-         * Get the global gravity vector.
-         */
-        getGravity(): Vec2;
-        /**
-         * Is the world locked (in the middle of a time step).
-         */
-        isLocked(): boolean;
-        /**
-         * Enable/disable sleep.
-         */
-        setAllowSleeping(flag: boolean): void;
-        getAllowSleeping(): boolean;
-        /**
-         * Enable/disable warm starting. For testing.
-         */
-        setWarmStarting(flag: boolean): void;
-        getWarmStarting(): boolean;
-        /**
-         * Enable/disable continuous physics. For testing.
-         */
-        setContinuousPhysics(flag: boolean): void;
-        getContinuousPhysics(): boolean;
-        /**
-         * Enable/disable single stepped continuous physics. For testing.
-         */
-        setSubStepping(flag: boolean): void;
-        getSubStepping(): boolean;
-        /**
-         * Set flag to control automatic clearing of forces after each time step.
-         */
-        setAutoClearForces(flag: boolean): void;
-        /**
-         * Get the flag that controls automatic clearing of forces after each time step.
-         */
-        getAutoClearForces(): boolean;
-        /**
-         * Manually clear the force buffer on all bodies. By default, forces are cleared
-         * automatically after each call to step. The default behavior is modified by
-         * calling setAutoClearForces. The purpose of this function is to support
-         * sub-stepping. Sub-stepping is often used to maintain a fixed sized time step
-         * under a variable frame-rate. When you perform sub-stepping you will disable
-         * auto clearing of forces and instead call clearForces after all sub-steps are
-         * complete in one pass of your game loop.
-         *
-         * See {@link World.setAutoClearForces}
-         */
-        clearForces(): void;
-        /**
-         * Query the world for all fixtures that potentially overlap the provided AABB.
-         *
-         * @param aabb The query box.
-         * @param callback Called for each fixture found in the query AABB. It may return `false` to terminate the query.
-         */
-        queryAABB(aabb: AABB, callback: WorldAABBQueryCallback): void;
-        /**
-         * Ray-cast the world for all fixtures in the path of the ray. Your callback
-         * controls whether you get the closest point, any point, or n-points. The
-         * ray-cast ignores shapes that contain the starting point.
-         *
-         * @param point1 The ray starting point
-         * @param point2 The ray ending point
-         * @param callback A user implemented callback function.
-         */
-        rayCast(point1: Vec2, point2: Vec2, callback: WorldRayCastCallback): void;
-        /**
-         * Get the number of broad-phase proxies.
-         */
-        getProxyCount(): number;
-        /**
-         * Get the height of broad-phase dynamic tree.
-         */
-        getTreeHeight(): number;
-        /**
-         * Get the balance of broad-phase dynamic tree.
-         */
-        getTreeBalance(): number;
-        /**
-         * Get the quality metric of broad-phase dynamic tree. The smaller the better.
-         * The minimum is 1.
-         */
-        getTreeQuality(): number;
-        /**
-         * Shift the world origin. Useful for large worlds. The body shift formula is:
-         * position -= newOrigin
-         *
-         * @param newOrigin The new origin with respect to the old origin
-         */
-        shiftOrigin(newOrigin: Vec2): void;
-        /**
-         * Create a rigid body given a definition. No reference to the definition is
-         * retained.
-         *
-         * Warning: This function is locked during callbacks.
-         */
-        createBody(def?: BodyDef): Body;
-        createBody(position: Vec2, angle?: number): Body;
-        createDynamicBody(def?: BodyDef): Body;
-        createDynamicBody(position: Vec2, angle?: number): Body;
-        createKinematicBody(def?: BodyDef): Body;
-        createKinematicBody(position: Vec2, angle?: number): Body;
-        /**
-         * Destroy a rigid body given a definition. No reference to the definition is
-         * retained.
-         *
-         * Warning: This automatically deletes all associated shapes and joints.
-         *
-         * Warning: This function is locked during callbacks.
-         */
-        destroyBody(b: Body): boolean;
-        /**
-         * Create a joint to constrain bodies together. No reference to the definition
-         * is retained. This may cause the connected bodies to cease colliding.
-         *
-         * Warning: This function is locked during callbacks.
-         */
-        createJoint<T extends Joint>(joint: T): T | null;
-        /**
-         * Destroy a joint. This may cause the connected bodies to begin colliding.
-         * Warning: This function is locked during callbacks.
-         */
-        destroyJoint(joint: Joint): void;
-        /**
-         * Take a time step. This performs collision detection, integration, and
-         * constraint solution.
-         *
-         * Broad-phase, narrow-phase, solve and solve time of impacts.
-         *
-         * @param timeStep Time step, this should not vary.
-         */
-        step(timeStep: number, velocityIterations?: number, positionIterations?: number): void;
-        /**
-         * Called when two fixtures begin to touch.
-         *
-         * Implement contact callbacks to get contact information. You can use these
-         * results for things like sounds and game logic. You can also get contact
-         * results by traversing the contact lists after the time step. However, you
-         * might miss some contacts because continuous physics leads to sub-stepping.
-         * Additionally you may receive multiple callbacks for the same contact in a
-         * single time step. You should strive to make your callbacks efficient because
-         * there may be many callbacks per time step.
-         *
-         * Warning: You cannot create/destroy world entities inside these callbacks.
-         */
-        on(name: "begin-contact", listener: (contact: Contact) => void): World;
-        /**
-         * Called when two fixtures cease to touch.
-         *
-         * Implement contact callbacks to get contact information. You can use these
-         * results for things like sounds and game logic. You can also get contact
-         * results by traversing the contact lists after the time step. However, you
-         * might miss some contacts because continuous physics leads to sub-stepping.
-         * Additionally you may receive multiple callbacks for the same contact in a
-         * single time step. You should strive to make your callbacks efficient because
-         * there may be many callbacks per time step.
-         *
-         * Warning: You cannot create/destroy world entities inside these callbacks.
-         */
-        on(name: "end-contact", listener: (contact: Contact) => void): World;
-        /**
-         * This is called after a contact is updated. This allows you to inspect a
-         * contact before it goes to the solver. If you are careful, you can modify the
-         * contact manifold (e.g. disable contact). A copy of the old manifold is
-         * provided so that you can detect changes. Note: this is called only for awake
-         * bodies. Note: this is called even when the number of contact points is zero.
-         * Note: this is not called for sensors. Note: if you set the number of contact
-         * points to zero, you will not get an endContact callback. However, you may get
-         * a beginContact callback the next step.
-         *
-         * Warning: You cannot create/destroy world entities inside these callbacks.
-         */
-        on(name: "pre-solve", listener: (contact: Contact, oldManifold: Manifold) => void): World;
-        /**
-         * This lets you inspect a contact after the solver is finished. This is useful
-         * for inspecting impulses. Note: the contact manifold does not include time of
-         * impact impulses, which can be arbitrarily large if the sub-step is small.
-         * Hence the impulse is provided explicitly in a separate data structure. Note:
-         * this is only called for contacts that are touching, solid, and awake.
-         *
-         * Warning: You cannot create/destroy world entities inside these callbacks.
-         */
-        on(name: "post-solve", listener: (contact: Contact, impulse: ContactImpulse) => void): World;
-        /** Listener is called whenever a body is removed. */
-        on(name: "remove-body", listener: (body: Body) => void): World;
-        /** Listener is called whenever a joint is removed implicitly or explicitly. */
-        on(name: "remove-joint", listener: (joint: Joint) => void): World;
-        /** Listener is called whenever a fixture is removed implicitly or explicitly. */
-        on(name: "remove-fixture", listener: (fixture: Fixture) => void): World;
-        off(name: "begin-contact", listener: (contact: Contact) => void): World;
-        off(name: "end-contact", listener: (contact: Contact) => void): World;
-        off(name: "pre-solve", listener: (contact: Contact, oldManifold: Manifold) => void): World;
-        off(name: "post-solve", listener: (contact: Contact, impulse: ContactImpulse) => void): World;
-        off(name: "remove-body", listener: (body: Body) => void): World;
-        off(name: "remove-joint", listener: (joint: Joint) => void): World;
-        off(name: "remove-fixture", listener: (fixture: Fixture) => void): World;
-        publish(name: string, arg1?: any, arg2?: any, arg3?: any): number;
+        static mulT(mx: Mat22, my: Mat22): Mat22;
+        static mulT(mx: Mat22, v: Vec2): Vec2;
+        static mulTVec2(mx: Mat22, v: Vec2): Vec2;
+        static mulTMat22(mx: Mat22, v: Mat22): Mat22;
+        static abs(mx: Mat22): Mat22;
+        static add(mx1: Mat22, mx2: Mat22): Mat22;
     }
     /**
-     * Input for Distance. You have to option to use the shape radii in the
-     * computation. Even
+     * A 3-by-3 matrix. Stored in column-major order.
      */
-    class DistanceInput {
-        readonly proxyA: DistanceProxy;
-        readonly proxyB: DistanceProxy;
-        readonly transformA: Transform;
-        readonly transformB: Transform;
-        useRadii: boolean;
-        recycle(): void;
-    }
-    /**
-     * Output for Distance.
-     */
-    class DistanceOutput {
-        /** closest point on shapeA */
-        pointA: Vec2Value;
-        /** closest point on shapeB */
-        pointB: Vec2Value;
-        distance: number;
-        /** iterations number of GJK iterations used */
-        iterations: number;
-        recycle(): void;
-    }
-    /**
-     * Used to warm start Distance. Set count to zero on first call.
-     */
-    class SimplexCache {
-        /** length or area */
-        metric: number;
-        /** vertices on shape A */
-        indexA: number[];
-        /** vertices on shape B */
-        indexB: number[];
-        count: number;
-        recycle(): void;
-    }
-    /**
-     * Compute the closest points between two shapes. Supports any combination of:
-     * CircleShape, PolygonShape, EdgeShape. The simplex cache is input/output. On
-     * the first call set SimplexCache.count to zero.
-     */
-    const Distance: {
-        (output: DistanceOutput, cache: SimplexCache, input: DistanceInput): void;
-        testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue) => boolean;
-        Input: typeof DistanceInput;
-        Output: typeof DistanceOutput;
-        Proxy: typeof DistanceProxy;
-        Cache: typeof SimplexCache;
-    };
-    /**
-     * A distance proxy is used by the GJK algorithm. It encapsulates any shape.
-     */
-    class DistanceProxy {
-        recycle(): void;
+    class Mat33 {
+        ex: Vec3;
+        ey: Vec3;
+        ez: Vec3;
+        constructor(a: Vec3Value, b: Vec3Value, c: Vec3Value);
+        constructor();
+        static isValid(obj: any): boolean;
+        static assert(o: any): void;
         /**
-         * Get the vertex count.
+         * Set this matrix to all zeros.
          */
-        getVertexCount(): number;
+        setZero(): Mat33;
         /**
-         * Get a vertex by index. Used by Distance.
+         * Solve A * x = b, where b is a column vector. This is more efficient than
+         * computing the inverse in one-shot cases.
          */
-        getVertex(index: number): Vec2Value;
+        solve33(v: Vec3Value): Vec3;
         /**
-         * Get the supporting vertex index in the given direction.
+         * Solve A * x = b, where b is a column vector. This is more efficient than
+         * computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
+         * equation.
          */
-        getSupport(d: Vec2Value): number;
+        solve22(v: Vec2Value): Vec2;
         /**
-         * Get the supporting vertex in the given direction.
+         * Get the inverse of this matrix as a 2-by-2. Returns the zero matrix if
+         * singular.
          */
-        getSupportVertex(d: Vec2Value): Vec2Value;
+        getInverse22(M: Mat33): void;
         /**
-         * Initialize the proxy using the given shape. The shape must remain in scope
-         * while the proxy is in use.
+         * Get the symmetric inverse of this matrix as a 3-by-3. Returns the zero matrix
+         * if singular.
          */
-        set(shape: Shape, index: number): void;
+        getSymInverse33(M: Mat33): void;
         /**
-         * Initialize the proxy using a vertex cloud and radius. The vertices
-         * must remain in scope while the proxy is in use.
+         * Multiply a matrix times a vector.
          */
-        setVertices(vertices: Vec2Value[], count: number, radius: number): void;
+        static mul(a: Mat33, b: Vec2Value): Vec2;
+        static mul(a: Mat33, b: Vec3Value): Vec3;
+        static mulVec3(a: Mat33, b: Vec3): Vec3;
+        static mulVec2(a: Mat33, b: Vec2Value): Vec2;
+        static add(a: Mat33, b: Mat33): Mat33;
     }
-    /**
-     * Determine if two generic shapes overlap.
-     */
-    const testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue) => boolean;
-    /**
-     * Input parameters for ShapeCast
-     */
-    class ShapeCastInput {
-        readonly proxyA: DistanceProxy;
-        readonly proxyB: DistanceProxy;
-        readonly transformA: Transform;
-        readonly transformB: Transform;
-        readonly translationB: Vec2;
-        recycle(): void;
-    }
-    /**
-     * Output results for b2ShapeCast
-     */
-    class ShapeCastOutput {
-        point: Vec2;
-        normal: Vec2;
-        lambda: number;
-        iterations: number;
-    }
-    /**
-     * Perform a linear shape cast of shape B moving and shape A fixed. Determines
-     * the hit point, normal, and translation fraction.
-     *
-     * @returns true if hit, false if there is no hit or an initial overlap
-     */
-    //
-    // GJK-raycast
-    // Algorithm by Gino van den Bergen.
-    // "Smooth Mesh Contacts with GJK" in Game Physics Pearls. 2010
-    const ShapeCast: (output: ShapeCastOutput, input: ShapeCastInput) => boolean;
     class CircleShape extends Shape {
         static TYPE: "circle";
         m_type: "circle";
@@ -6611,7 +6588,7 @@ declare namespace planck {
     class MouseJoint extends Joint {
         static TYPE: "mouse-joint";
         constructor(def: MouseJointDef);
-        constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2);
+        constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2Value);
         /**
          * Use this to update the target point.
          */
@@ -7477,171 +7454,6 @@ declare namespace planck {
         storeConstraintImpulses(step: TimeStep): void;
         solveVelocityConstraint(step: TimeStep): void;
     }
-    class TimeStep {
-        /** time step */
-        dt: number;
-        /** inverse time step (0 if dt == 0) */
-        inv_dt: number;
-        velocityIterations: number;
-        positionIterations: number;
-        warmStarting: boolean;
-        blockSolve: boolean;
-        /** timestep ratio for variable timestep */
-        inv_dt0: number;
-        /** dt * inv_dt0 */
-        dtRatio: number;
-        reset(dt: number): void;
-    }
-    /**
-     * Contact impulses for reporting. Impulses are used instead of forces because
-     * sub-step forces may approach infinity for rigid body collisions. These match
-     * up one-to-one with the contact points in Manifold.
-     */
-    class ContactImpulse {
-        // TODO: merge with Contact class?
-        private readonly contact;
-        private readonly normals;
-        private readonly tangents;
-        constructor(contact: Contact);
-        recycle(): void;
-        get normalImpulses(): number[];
-        get tangentImpulses(): number[];
-    }
-    /**
-     * Finds and solves islands. An island is a connected subset of the world.
-     */
-    class Solver {
-        m_world: World;
-        m_stack: Body[];
-        m_bodies: Body[];
-        m_contacts: Contact[];
-        m_joints: Joint[];
-        constructor(world: World);
-        clear(): void;
-        addBody(body: Body): void;
-        addContact(contact: Contact): void;
-        addJoint(joint: Joint): void;
-        solveWorld(step: TimeStep): void;
-        solveIsland(step: TimeStep): void;
-        /**
-         * Find TOI contacts and solve them.
-         */
-        solveWorldTOI(step: TimeStep): void;
-        solveIslandTOI(subStep: TimeStep, toiA: Body, toiB: Body): void;
-    }
-    /**
-     * A joint edge is used to connect bodies and joints together in a joint graph
-     * where each body is a node and each joint is an edge. A joint edge belongs to
-     * a doubly linked list maintained in each attached body. Each joint has two
-     * joint nodes, one for each attached body.
-     */
-    class JointEdge {
-        /**
-         * provides quick access to the other body attached.
-         */
-        other: Body | null;
-        /**
-         * the joint
-         */
-        joint: Joint | null;
-        /**
-         * prev the previous joint edge in the body's joint list
-         */
-        prev: JointEdge | null;
-        /**
-         * the next joint edge in the body's joint list
-         */
-        next: JointEdge | null;
-    }
-    /**
-     * Joint definitions are used to construct joints.
-     */
-    interface JointOpt {
-        /**
-         * Use this to attach application specific data to your joints.
-         */
-        userData?: any;
-        /**
-         * Set this flag to true if the attached bodies
-         * should collide.
-         */
-        collideConnected?: boolean;
-    }
-    /**
-     * Joint definitions are used to construct joints.
-     */
-    interface JointDef extends JointOpt {
-        /**
-         * The first attached body.
-         */
-        bodyA: Body;
-        /**
-         * The second attached body.
-         */
-        bodyB: Body;
-    }
-    /**
-     * The base joint class. Joints are used to constraint two bodies together in
-     * various fashions. Some joints also feature limits and motors.
-     */
-    abstract class Joint {
-        constructor(def: JointDef);
-        constructor(def: JointOpt, bodyA: Body, bodyB: Body);
-        /**
-         * Short-cut function to determine if either body is inactive.
-         */
-        isActive(): boolean;
-        /**
-         * Get the type of the concrete joint.
-         */
-        getType(): string;
-        /**
-         * Get the first body attached to this joint.
-         */
-        getBodyA(): Body;
-        /**
-         * Get the second body attached to this joint.
-         */
-        getBodyB(): Body;
-        /**
-         * Get the next joint the world joint list.
-         */
-        getNext(): Joint;
-        getUserData(): unknown;
-        setUserData(data: unknown): void;
-        /**
-         * Get collide connected. Note: modifying the collide connect flag won't work
-         * correctly because the flag is only checked when fixture AABBs begin to
-         * overlap.
-         */
-        getCollideConnected(): boolean;
-        /**
-         * Get the anchor point on bodyA in world coordinates.
-         */
-        abstract getAnchorA(): Vec2;
-        /**
-         * Get the anchor point on bodyB in world coordinates.
-         */
-        abstract getAnchorB(): Vec2;
-        /**
-         * Get the reaction force on bodyB at the joint anchor in Newtons.
-         */
-        abstract getReactionForce(inv_dt: number): Vec2;
-        /**
-         * Get the reaction torque on bodyB in N*m.
-         */
-        abstract getReactionTorque(inv_dt: number): number;
-        /**
-         * Shift the origin for any points stored in world coordinates.
-         */
-        shiftOrigin(newOrigin: Vec2): void;
-        abstract initVelocityConstraints(step: TimeStep): void;
-        abstract solveVelocityConstraints(step: TimeStep): void;
-        /**
-         * This returns true if the position errors are within tolerance.
-         */
-        abstract solvePositionConstraints(step: TimeStep): boolean;
-    }
     type BodyType = "static" | "kinematic" | "dynamic";
     interface BodyDef {
         /**
@@ -7932,7 +7744,7 @@ declare namespace planck {
          * @param force The world force vector, usually in Newtons (N).
          * @param wake Also wake up the body
          */
-        applyForceToCenter(force: Vec2, wake?: boolean): void;
+        applyForceToCenter(force: Vec2Value, wake?: boolean): void;
         /**
          * Apply a torque. This affects the angular velocity without affecting the
          * linear velocity of the center of mass. This wakes up the body.
@@ -8005,105 +7817,415 @@ declare namespace planck {
          */
         getLocalVector(worldVector: Vec2Value): Vec2;
     }
-    // todo make shape an interface
-    /**
-     * A shape is used for collision detection. You can create a shape however you
-     * like. Shapes used for simulation in World are created automatically when a
-     * Fixture is created. Shapes may encapsulate one or more child shapes.
-     */
-    abstract class Shape {
-        m_type: ShapeType;
-        /**
-         * Radius of a shape. For polygonal shapes this must be b2_polygonRadius.
-         * There is no support for making rounded polygons.
-         */
-        m_radius: number;
-        static isValid(obj: any): boolean;
-        abstract getRadius(): number;
-        /**
-         * Get the type of this shape. You can use this to down cast to the concrete
-         * shape.
-         *
-         * @return the shape type.
-         */
-        abstract getType(): ShapeType;
-        /**
-         * Get the number of child primitives.
-         */
-        abstract getChildCount(): number;
-        /**
-         * Test a point for containment in this shape. This only works for convex
-         * shapes.
-         *
-         * @param xf The shape world transform.
-         * @param p A point in world coordinates.
-         */
-        abstract testPoint(xf: TransformValue, p: Vec2Value): boolean;
-        /**
-         * Cast a ray against a child shape.
-         *
-         * @param output The ray-cast results.
-         * @param input The ray-cast input parameters.
-         * @param xf The transform to be applied to the shape.
-         * @param childIndex The child shape index
-         */
-        abstract rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;
-        /**
-         * Given a transform, compute the associated axis aligned bounding box for a
-         * child shape.
-         *
-         * @param aabb Returns the axis aligned box.
-         * @param xf The world transform of the shape.
-         * @param childIndex The child shape
-         */
-        abstract computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void;
-        /**
-         * Compute the mass properties of this shape using its dimensions and density.
-         * The inertia tensor is computed about the local origin.
-         *
-         * @param massData Returns the mass data for this shape.
-         * @param density The density in kilograms per meter squared.
-         */
-        abstract computeMass(massData: MassData, density?: number): void;
-        abstract computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
+    class TimeStep {
+        /** time step */
+        dt: number;
+        /** inverse time step (0 if dt == 0) */
+        inv_dt: number;
+        velocityIterations: number;
+        positionIterations: number;
+        warmStarting: boolean;
+        blockSolve: boolean;
+        /** timestep ratio for variable timestep */
+        inv_dt0: number;
+        /** dt * inv_dt0 */
+        dtRatio: number;
+        reset(dt: number): void;
     }
-    type ShapeType = "circle" | "edge" | "polygon" | "chain";
-    /** @deprecated Merged with main namespace */
-    const internal: {
-        CollidePolygons: (manifold: Manifold, polyA: PolygonShape, xfA: TransformValue, polyB: PolygonShape, xfB: TransformValue) => void;
-        Settings: typeof Settings;
-        Sweep: typeof Sweep;
-        Manifold: typeof Manifold;
-        Distance: {
-            (output: DistanceOutput, cache: SimplexCache, input: DistanceInput): void;
-            testOverlap: (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue) => boolean;
-            Input: typeof DistanceInput;
-            Output: typeof DistanceOutput;
-            Proxy: typeof DistanceProxy;
-            Cache: typeof SimplexCache;
-        };
-        TimeOfImpact: {
-            (output: TOIOutput, input: TOIInput): void;
-            Input: typeof TOIInput;
-            Output: typeof TOIOutput;
-        };
-        DynamicTree: typeof DynamicTree;
-        stats: {
-            gjkCalls: number;
-            gjkIters: number;
-            gjkMaxIters: number;
-            toiTime: number;
-            toiMaxTime: number;
-            toiCalls: number;
-            toiIters: number;
-            toiMaxIters: number;
-            toiRootIters: number;
-            toiMaxRootIters: number;
-            toString(newline?: string): string;
-        };
+    /**
+     * Contact impulses for reporting. Impulses are used instead of forces because
+     * sub-step forces may approach infinity for rigid body collisions. These match
+     * up one-to-one with the contact points in Manifold.
+     */
+    class ContactImpulse {
+        // TODO: merge with Contact class?
+        private readonly contact;
+        private readonly normals;
+        private readonly tangents;
+        constructor(contact: Contact);
+        recycle(): void;
+        get normalImpulses(): number[];
+        get tangentImpulses(): number[];
+    }
+    /**
+     * Finds and solves islands. An island is a connected subset of the world.
+     */
+    class Solver {
+        m_world: World;
+        m_stack: Body[];
+        m_bodies: Body[];
+        m_contacts: Contact[];
+        m_joints: Joint[];
+        constructor(world: World);
+        clear(): void;
+        addBody(body: Body): void;
+        addContact(contact: Contact): void;
+        addJoint(joint: Joint): void;
+        solveWorld(step: TimeStep): void;
+        solveIsland(step: TimeStep): void;
+        /**
+         * Find TOI contacts and solve them.
+         */
+        solveWorldTOI(step: TimeStep): void;
+        solveIslandTOI(subStep: TimeStep, toiA: Body, toiB: Body): void;
+    }
+    /**
+     * @prop gravity [{ x : 0, y : 0}]
+     * @prop allowSleep [true]
+     * @prop warmStarting [true]
+     * @prop continuousPhysics [true]
+     * @prop subStepping [false]
+     * @prop blockSolve [true]
+     * @prop velocityIterations [8] For the velocity constraint solver.
+     * @prop positionIterations [3] For the position constraint solver.
+     */
+    interface WorldDef {
+        gravity?: Vec2;
+        allowSleep?: boolean;
+        warmStarting?: boolean;
+        continuousPhysics?: boolean;
+        subStepping?: boolean;
+        blockSolve?: boolean;
+        velocityIterations?: number;
+        positionIterations?: number;
+    }
+    /**
+     * Callback function for ray casts, see {@link World.rayCast}.
+     *
+     * Called for each fixture found in the query. You control how the ray cast
+     * proceeds by returning a float: return -1: ignore this fixture and continue
+     * return 0: terminate the ray cast return fraction: clip the ray to this point
+     * return 1: don't clip the ray and continue
+     *
+     * @param fixture The fixture hit by the ray
+     * @param point The point of initial intersection
+     * @param normal The normal vector at the point of intersection
+     * @param fraction
+     *
+     * @return -1 to filter, 0 to terminate, fraction to clip the ray for closest hit, 1 to continue
+     */
+    type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) => number;
+    /**
+     * Called for each fixture found in the query AABB. It may return `false` to terminate the query.
+     */
+    type WorldAABBQueryCallback = (fixture: Fixture) => boolean;
+    class World {
+        /**
+         * @param def World definition or gravity vector.
+         */
+        constructor(def?: WorldDef | Vec2 | null);
+        /**
+         * Get the world body list. With the returned body, use Body.getNext to get the
+         * next body in the world list. A null body indicates the end of the list.
+         *
+         * @return the head of the world body list.
+         */
+        getBodyList(): Body | null;
+        /**
+         * Get the world joint list. With the returned joint, use Joint.getNext to get
+         * the next joint in the world list. A null joint indicates the end of the list.
+         *
+         * @return the head of the world joint list.
+         */
+        getJointList(): Joint | null;
+        /**
+         * Get the world contact list. With the returned contact, use Contact.getNext to
+         * get the next contact in the world list. A null contact indicates the end of
+         * the list.
+         *
+         * Warning: contacts are created and destroyed in the middle of a time step.
+         * Use ContactListener to avoid missing contacts.
+         *
+         * @return the head of the world contact list.
+         */
+        getContactList(): Contact | null;
+        getBodyCount(): number;
+        getJointCount(): number;
+        /**
+         * Get the number of contacts (each may have 0 or more contact points).
+         */
+        getContactCount(): number;
+        /**
+         * Change the global gravity vector.
+         */
+        setGravity(gravity: Vec2): void;
+        /**
+         * Get the global gravity vector.
+         */
+        getGravity(): Vec2;
+        /**
+         * Is the world locked (in the middle of a time step).
+         */
+        isLocked(): boolean;
+        /**
+         * Enable/disable sleep.
+         */
+        setAllowSleeping(flag: boolean): void;
+        getAllowSleeping(): boolean;
+        /**
+         * Enable/disable warm starting. For testing.
+         */
+        setWarmStarting(flag: boolean): void;
+        getWarmStarting(): boolean;
+        /**
+         * Enable/disable continuous physics. For testing.
+         */
+        setContinuousPhysics(flag: boolean): void;
+        getContinuousPhysics(): boolean;
+        /**
+         * Enable/disable single stepped continuous physics. For testing.
+         */
+        setSubStepping(flag: boolean): void;
+        getSubStepping(): boolean;
+        /**
+         * Set flag to control automatic clearing of forces after each time step.
+         */
+        setAutoClearForces(flag: boolean): void;
+        /**
+         * Get the flag that controls automatic clearing of forces after each time step.
+         */
+        getAutoClearForces(): boolean;
+        /**
+         * Manually clear the force buffer on all bodies. By default, forces are cleared
+         * automatically after each call to step. The default behavior is modified by
+         * calling setAutoClearForces. The purpose of this function is to support
+         * sub-stepping. Sub-stepping is often used to maintain a fixed sized time step
+         * under a variable frame-rate. When you perform sub-stepping you will disable
+         * auto clearing of forces and instead call clearForces after all sub-steps are
+         * complete in one pass of your game loop.
+         *
+         * See {@link World.setAutoClearForces}
+         */
+        clearForces(): void;
+        /**
+         * Query the world for all fixtures that potentially overlap the provided AABB.
+         *
+         * @param aabb The query box.
+         * @param callback Called for each fixture found in the query AABB. It may return `false` to terminate the query.
+         */
+        queryAABB(aabb: AABBValue, callback: WorldAABBQueryCallback): void;
+        /**
+         * Ray-cast the world for all fixtures in the path of the ray. Your callback
+         * controls whether you get the closest point, any point, or n-points. The
+         * ray-cast ignores shapes that contain the starting point.
+         *
+         * @param point1 The ray starting point
+         * @param point2 The ray ending point
+         * @param callback A user implemented callback function.
+         */
+        rayCast(point1: Vec2, point2: Vec2, callback: WorldRayCastCallback): void;
+        /**
+         * Get the number of broad-phase proxies.
+         */
+        getProxyCount(): number;
+        /**
+         * Get the height of broad-phase dynamic tree.
+         */
+        getTreeHeight(): number;
+        /**
+         * Get the balance of broad-phase dynamic tree.
+         */
+        getTreeBalance(): number;
+        /**
+         * Get the quality metric of broad-phase dynamic tree. The smaller the better.
+         * The minimum is 1.
+         */
+        getTreeQuality(): number;
+        /**
+         * Shift the world origin. Useful for large worlds. The body shift formula is:
+         * position -= newOrigin
+         *
+         * @param newOrigin The new origin with respect to the old origin
+         */
+        shiftOrigin(newOrigin: Vec2): void;
+        /**
+         * Create a rigid body given a definition. No reference to the definition is
+         * retained.
+         *
+         * Warning: This function is locked during callbacks.
+         */
+        createBody(def?: BodyDef): Body;
+        createBody(position: Vec2, angle?: number): Body;
+        createDynamicBody(def?: BodyDef): Body;
+        createDynamicBody(position: Vec2, angle?: number): Body;
+        createKinematicBody(def?: BodyDef): Body;
+        createKinematicBody(position: Vec2, angle?: number): Body;
+        /**
+         * Destroy a rigid body given a definition. No reference to the definition is
+         * retained.
+         *
+         * Warning: This automatically deletes all associated shapes and joints.
+         *
+         * Warning: This function is locked during callbacks.
+         */
+        destroyBody(b: Body): boolean;
+        /**
+         * Create a joint to constrain bodies together. No reference to the definition
+         * is retained. This may cause the connected bodies to cease colliding.
+         *
+         * Warning: This function is locked during callbacks.
+         */
+        createJoint<T extends Joint>(joint: T): T | null;
+        /**
+         * Destroy a joint. This may cause the connected bodies to begin colliding.
+         * Warning: This function is locked during callbacks.
+         */
+        destroyJoint(joint: Joint): void;
+        /**
+         * Take a time step. This performs collision detection, integration, and
+         * constraint solution.
+         *
+         * Broad-phase, narrow-phase, solve and solve time of impacts.
+         *
+         * @param timeStep Time step, this should not vary.
+         */
+        step(timeStep: number, velocityIterations?: number, positionIterations?: number): void;
+        /**
+         * Called when two fixtures begin to touch.
+         *
+         * Implement contact callbacks to get contact information. You can use these
+         * results for things like sounds and game logic. You can also get contact
+         * results by traversing the contact lists after the time step. However, you
+         * might miss some contacts because continuous physics leads to sub-stepping.
+         * Additionally you may receive multiple callbacks for the same contact in a
+         * single time step. You should strive to make your callbacks efficient because
+         * there may be many callbacks per time step.
+         *
+         * Warning: You cannot create/destroy world entities inside these callbacks.
+         */
+        on(name: "begin-contact", listener: (contact: Contact) => void): World;
+        /**
+         * Called when two fixtures cease to touch.
+         *
+         * Implement contact callbacks to get contact information. You can use these
+         * results for things like sounds and game logic. You can also get contact
+         * results by traversing the contact lists after the time step. However, you
+         * might miss some contacts because continuous physics leads to sub-stepping.
+         * Additionally you may receive multiple callbacks for the same contact in a
+         * single time step. You should strive to make your callbacks efficient because
+         * there may be many callbacks per time step.
+         *
+         * Warning: You cannot create/destroy world entities inside these callbacks.
+         */
+        on(name: "end-contact", listener: (contact: Contact) => void): World;
+        /**
+         * This is called after a contact is updated. This allows you to inspect a
+         * contact before it goes to the solver. If you are careful, you can modify the
+         * contact manifold (e.g. disable contact). A copy of the old manifold is
+         * provided so that you can detect changes. Note: this is called only for awake
+         * bodies. Note: this is called even when the number of contact points is zero.
+         * Note: this is not called for sensors. Note: if you set the number of contact
+         * points to zero, you will not get an endContact callback. However, you may get
+         * a beginContact callback the next step.
+         *
+         * Warning: You cannot create/destroy world entities inside these callbacks.
+         */
+        on(name: "pre-solve", listener: (contact: Contact, oldManifold: Manifold) => void): World;
+        /**
+         * This lets you inspect a contact after the solver is finished. This is useful
+         * for inspecting impulses. Note: the contact manifold does not include time of
+         * impact impulses, which can be arbitrarily large if the sub-step is small.
+         * Hence the impulse is provided explicitly in a separate data structure. Note:
+         * this is only called for contacts that are touching, solid, and awake.
+         *
+         * Warning: You cannot create/destroy world entities inside these callbacks.
+         */
+        on(name: "post-solve", listener: (contact: Contact, impulse: ContactImpulse) => void): World;
+        /** Listener is called whenever a body is removed. */
+        on(name: "remove-body", listener: (body: Body) => void): World;
+        /** Listener is called whenever a joint is removed implicitly or explicitly. */
+        on(name: "remove-joint", listener: (joint: Joint) => void): World;
+        /** Listener is called whenever a fixture is removed implicitly or explicitly. */
+        on(name: "remove-fixture", listener: (fixture: Fixture) => void): World;
+        off(name: "begin-contact", listener: (contact: Contact) => void): World;
+        off(name: "end-contact", listener: (contact: Contact) => void): World;
+        off(name: "pre-solve", listener: (contact: Contact, oldManifold: Manifold) => void): World;
+        off(name: "post-solve", listener: (contact: Contact, impulse: ContactImpulse) => void): World;
+        off(name: "remove-body", listener: (body: Body) => void): World;
+        off(name: "remove-joint", listener: (joint: Joint) => void): World;
+        off(name: "remove-fixture", listener: (fixture: Fixture) => void): World;
+        publish(name: string, arg1?: any, arg2?: any, arg3?: any): number;
+    }
+    interface Style {
+        stroke?: string;
+        fill?: string;
+    }
+    type KEY = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "right" | "left" | "up" | "down" | "fire";
+    type ActiveKeys = {
+        [key in KEY]?: boolean;
     };
+    type TestbedMountOptions = {};
+    abstract class Testbed {
+        static mount(options?: TestbedMountOptions): Testbed;
+        /** World viewbox width. */
+        width: number;
+        /** World viewbox height. */
+        height: number;
+        /** World viewbox center vertical offset. */
+        x: number;
+        /** World viewbox center horizontal offset. */
+        y: number;
+        scaleY: number;
+        /** World simulation step frequency */
+        hz: number;
+        /** World simulation speed, default is 1 */
+        speed: number;
+        ratio: number;
+        background: string;
+        mouseForce?: number;
+        activeKeys: ActiveKeys;
+        /** callback, to be implemented by user */
+        step: (dt: number, t: number) => void;
+        /** callback, to be implemented by user */
+        keydown: (keyCode: number, label: string) => void;
+        /** callback, to be implemented by user */
+        keyup: (keyCode: number, label: string) => void;
+        private statusText;
+        private statusMap;
+        status(name: string, value: any): void;
+        status(value: object | string): void;
+        info(text: string): void;
+        color(r: number, g: number, b: number): string;
+        abstract drawPoint(p: {
+            x: number;
+            y: number;
+        }, r: any, color: string): void;
+        abstract drawCircle(p: {
+            x: number;
+            y: number;
+        }, r: number, color: string): void;
+        abstract drawEdge(a: {
+            x: number;
+            y: number;
+        }, b: {
+            x: number;
+            y: number;
+        }, color: string): void;
+        abstract drawSegment(a: {
+            x: number;
+            y: number;
+        }, b: {
+            x: number;
+            y: number;
+        }, color: string): void;
+        abstract drawPolygon(points: Array<{
+            x: number;
+            y: number;
+        }>, color: string): void;
+        abstract drawAABB(aabb: AABBValue, color: string): void;
+        abstract start(world: World): void;
+        abstract findOne(query: string): (Body | Joint | Fixture | null);
+        abstract findAll(query: string): (Body | Joint | Fixture)[];
+    }
+    type TestbedFactoryOptions = string | {};
+    /** @deprecated */
+    type TestbedCallback = (testbed: Testbed) => (World | undefined);
+    /** @deprecated */
+    function testbed(callback: TestbedCallback): void;
+    /** @deprecated */
+    function testbed(options: TestbedFactoryOptions, callback: TestbedCallback): void;
     /** @deprecated */
     export { math as Math };
 }
-export { planck as default, Serializer, math as Math, Vec2Value, Vec2, Vec3Value, Vec3, Mat22, Mat33, TransformValue, Transform, RotValue, Rot, RayCastInput, RayCastCallback, RayCastOutput, AABBValue, AABB, Shape, ShapeType, FixtureOpt, FixtureDef, FixtureProxy, Fixture, BodyType, BodyDef, MassData, Body, ContactEdge, EvaluateFunction, mixFriction, mixRestitution, VelocityConstraintPoint, Contact, JointEdge, JointOpt, JointDef, Joint, WorldDef, WorldRayCastCallback, WorldAABBQueryCallback, World, CircleShape, Circle, EdgeShape, Edge, PolygonShape, Polygon, ChainShape, Chain, BoxShape, Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJointOpt, DistanceJointDef, DistanceJoint, FrictionJointOpt, FrictionJointDef, FrictionJoint, GearJointOpt, GearJointDef, GearJoint, MotorJointOpt, MotorJointDef, MotorJoint, MouseJointOpt, MouseJointDef, MouseJoint, PrismaticJointOpt, PrismaticJointDef, PrismaticJoint, PulleyJointOpt, PulleyJointDef, PulleyJoint, RevoluteJointOpt, RevoluteJointDef, RevoluteJoint, RopeJointOpt, RopeJointDef, RopeJoint, WeldJointOpt, WeldJointDef, WeldJoint, WheelJointOpt, WheelJointDef, WheelJoint, Settings, Sweep, ManifoldType, ContactFeatureType, PointState, ClipVertex, Manifold, ManifoldPoint, ContactID, WorldManifold, getPointStates, clipSegmentToLine, DistanceInput, DistanceOutput, SimplexCache, Distance, DistanceProxy, testOverlap, ShapeCastInput, ShapeCastOutput, ShapeCast, TOIInput, TOIOutputState, TOIOutput, TimeOfImpact, DynamicTreeQueryCallback, TreeNode, DynamicTree, stats, internal };
+export { planck as default, Serializer, Style, ActiveKeys, Testbed, testbed, math as Math, Vec2Value, Vec2, Vec3Value, Vec3, Mat22, Mat33, TransformValue, Transform, RotValue, Rot, RayCastInput, RayCastCallback, RayCastOutput, AABBValue, AABB, Shape, ShapeType, FixtureOpt, FixtureDef, FixtureProxy, Fixture, BodyType, BodyDef, MassData, Body, ContactEdge, EvaluateFunction, mixFriction, mixRestitution, VelocityConstraintPoint, Contact, JointEdge, JointOpt, JointDef, Joint, WorldDef, WorldRayCastCallback, WorldAABBQueryCallback, World, CircleShape, Circle, EdgeShape, Edge, PolygonShape, Polygon, ChainShape, Chain, BoxShape, Box, CollideCircles, CollideEdgeCircle, CollidePolygons, CollidePolygonCircle, CollideEdgePolygon, DistanceJointOpt, DistanceJointDef, DistanceJoint, FrictionJointOpt, FrictionJointDef, FrictionJoint, GearJointOpt, GearJointDef, GearJoint, MotorJointOpt, MotorJointDef, MotorJoint, MouseJointOpt, MouseJointDef, MouseJoint, PrismaticJointOpt, PrismaticJointDef, PrismaticJoint, PulleyJointOpt, PulleyJointDef, PulleyJoint, RevoluteJointOpt, RevoluteJointDef, RevoluteJoint, RopeJointOpt, RopeJointDef, RopeJoint, WeldJointOpt, WeldJointDef, WeldJoint, WheelJointOpt, WheelJointDef, WheelJoint, Settings, Sweep, ManifoldType, ContactFeatureType, PointState, ClipVertex, Manifold, ManifoldPoint, ContactID, WorldManifold, getPointStates, clipSegmentToLine, DistanceInput, DistanceOutput, SimplexCache, Distance, DistanceProxy, testOverlap, ShapeCastInput, ShapeCastOutput, ShapeCast, TOIInput, TOIOutputState, TOIOutput, TimeOfImpact, DynamicTreeQueryCallback, TreeNode, DynamicTree, stats, internal };
 //# sourceMappingURL=planck.d.ts.map

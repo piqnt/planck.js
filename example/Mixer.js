@@ -1,8 +1,8 @@
-const { Vec2, World, Edge, Circle, Box, Chain, Math } = planck;
+const { Vec2, World, Edge, Circle, Box, Chain, Math, Testbed, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
-const testbed = planck.testbed();
+const testbed = Testbed.mount();
 testbed.y = 0;
 testbed.start(world);
 
