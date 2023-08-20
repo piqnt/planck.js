@@ -384,16 +384,10 @@ export class Body {
     return this;
   }
 
-  /**
-   * @internal
-   */
   getType(): BodyType {
     return this.m_type;
   }
 
-  /**
-   * @internal
-   */
   setType(type: BodyType): void {
     _ASSERT && console.assert(type === STATIC || type === KINEMATIC || type === DYNAMIC);
     _ASSERT && console.assert(this.isWorldLocked() == false);
