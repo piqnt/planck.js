@@ -37,19 +37,19 @@ import { World } from "./World";
 import { ContactEdge } from "./Contact";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
 export type BodyType = 'static' | 'kinematic' | 'dynamic';
 
-const STATIC = 'static';
-const KINEMATIC = 'kinematic';
-const DYNAMIC = 'dynamic';
+/** @internal */ const STATIC = 'static';
+/** @internal */ const KINEMATIC = 'kinematic';
+/** @internal */ const DYNAMIC = 'dynamic';
 
-const oldCenter = matrix.vec2(0, 0);
-const localCenter = matrix.vec2(0, 0);
-const shift = matrix.vec2(0, 0);
-const xf = matrix.transform(0, 0, 0)
+/** @internal */ const oldCenter = matrix.vec2(0, 0);
+/** @internal */ const localCenter = matrix.vec2(0, 0);
+/** @internal */ const shift = matrix.vec2(0, 0);
+/** @internal */ const xf = matrix.transform(0, 0, 0)
 
 export interface BodyDef {
   /**
@@ -113,7 +113,7 @@ export interface BodyDef {
   userData?: any;
 }
 
-const BodyDefDefault: BodyDef = {
+/** @internal */ const BodyDefDefault: BodyDef = {
   type : STATIC,
   position : Vec2.zero(),
   angle : 0.0,
@@ -1011,9 +1011,7 @@ export class Body {
     return true;
   }
 
-  /**
-   * @internal Used for deserialize.
-   */
+  /** @internal Used for deserialize. */
   _addFixture(fixture: Fixture): Fixture {
     _ASSERT && console.assert(this.isWorldLocked() == false);
 

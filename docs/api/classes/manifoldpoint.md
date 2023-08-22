@@ -18,33 +18,38 @@ contact forces, especially for high speed collisions.
 
 ### Properties
 
-* [id](manifoldpoint.md#id)
+* [id](manifoldpoint.md#readonly-id)
 * [localPoint](manifoldpoint.md#localpoint)
 * [normalImpulse](manifoldpoint.md#normalimpulse)
 * [tangentImpulse](manifoldpoint.md#tangentimpulse)
 
+### Methods
+
+* [recycle](manifoldpoint.md#recycle)
+* [set](manifoldpoint.md#set)
+
 ## Properties
 
-###  id
+### `Readonly` id
 
 • **id**: *[ContactID](contactid.md)‹›* = new ContactID()
 
-*Defined in [src/collision/Manifold.ts:178](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L178)*
+*Defined in [collision/Manifold.ts:248](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L248)*
 
-Uniquely identifies a contact point between two shapes to facilatate warm starting
+Uniquely identifies a contact point between two shapes to facilitate warm starting
 
 ___
 
 ###  localPoint
 
-• **localPoint**: *[Vec2](vec2.md)‹›* = Vec2.zero()
+• **localPoint**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
-*Defined in [src/collision/Manifold.ts:166](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L166)*
+*Defined in [collision/Manifold.ts:236](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L236)*
 
-Usage depends on manifold type.
-      e_circles: the local center of circleB,
-      e_faceA: the local center of cirlceB or the clip point of polygonB,
-      e_faceB: the clip point of polygonA.
+Usage depends on manifold type:
+- circles: the local center of circleB
+- faceA: the local center of circleB or the clip point of polygonB
+- faceB: the clip point of polygonA
 
 ___
 
@@ -52,7 +57,7 @@ ___
 
 • **normalImpulse**: *number* = 0
 
-*Defined in [src/collision/Manifold.ts:170](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L170)*
+*Defined in [collision/Manifold.ts:240](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L240)*
 
 The non-penetration impulse
 
@@ -62,6 +67,32 @@ ___
 
 • **tangentImpulse**: *number* = 0
 
-*Defined in [src/collision/Manifold.ts:174](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L174)*
+*Defined in [collision/Manifold.ts:244](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L244)*
 
 The friction impulse
+
+## Methods
+
+###  recycle
+
+▸ **recycle**(): *void*
+
+*Defined in [collision/Manifold.ts:257](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L257)*
+
+**Returns:** *void*
+
+___
+
+###  set
+
+▸ **set**(`that`: [ManifoldPoint](manifoldpoint.md)): *void*
+
+*Defined in [collision/Manifold.ts:250](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L250)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`that` | [ManifoldPoint](manifoldpoint.md) |
+
+**Returns:** *void*

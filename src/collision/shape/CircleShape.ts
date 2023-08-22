@@ -33,12 +33,11 @@ import { MassData } from '../../dynamics/Body';
 import { DistanceProxy } from '../Distance';
 
 
-const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
-const math_sqrt = Math.sqrt;
-const math_PI = Math.PI;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const math_sqrt = Math.sqrt;
+/** @internal */ const math_PI = Math.PI;
 
-
-const temp = matrix.vec2(0, 0);
+/** @internal */ const temp = matrix.vec2(0, 0);
 
 export class CircleShape extends Shape {
   static TYPE = 'circle' as const;
@@ -107,8 +106,7 @@ export class CircleShape extends Shape {
   }
 
   /**
-   * @internal
-   * @deprecated Shapes should be treated as immutable.
+   * @internal @deprecated Shapes should be treated as immutable.
    *
    * clone the concrete shape.
    */

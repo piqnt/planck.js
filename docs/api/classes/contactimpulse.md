@@ -21,13 +21,17 @@ up one-to-one with the contact points in Manifold.
 * [normalImpulses](contactimpulse.md#normalimpulses)
 * [tangentImpulses](contactimpulse.md#tangentimpulses)
 
+### Methods
+
+* [recycle](contactimpulse.md#recycle)
+
 ## Constructors
 
 ###  constructor
 
 \+ **new ContactImpulse**(`contact`: [Contact](contact.md)): *[ContactImpulse](contactimpulse.md)*
 
-*Defined in [src/dynamics/Solver.ts:79](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L79)*
+*Defined in [dynamics/Solver.ts:89](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Solver.ts#L89)*
 
 **Parameters:**
 
@@ -43,7 +47,7 @@ Name | Type |
 
 • **get normalImpulses**(): *number[]*
 
-*Defined in [src/dynamics/Solver.ts:87](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L87)*
+*Defined in [dynamics/Solver.ts:102](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Solver.ts#L102)*
 
 **Returns:** *number[]*
 
@@ -53,6 +57,16 @@ ___
 
 • **get tangentImpulses**(): *number[]*
 
-*Defined in [src/dynamics/Solver.ts:97](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Solver.ts#L97)*
+*Defined in [dynamics/Solver.ts:112](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Solver.ts#L112)*
 
 **Returns:** *number[]*
+
+## Methods
+
+###  recycle
+
+▸ **recycle**(): *void*
+
+*Defined in [dynamics/Solver.ts:97](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Solver.ts#L97)*
+
+**Returns:** *void*

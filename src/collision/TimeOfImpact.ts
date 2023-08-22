@@ -31,9 +31,9 @@ import { Transform } from '../common/Transform';
 import { Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from './Distance';
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const math_abs = Math.abs;
-const math_max = Math.max;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const math_abs = Math.abs;
+/** @internal */ const math_max = Math.max;
 
 
 /**
@@ -84,21 +84,21 @@ stats.toiMaxIters = 0;
 stats.toiRootIters = 0;
 stats.toiMaxRootIters = 0;
 
-const distanceInput = new DistanceInput();
-const distanceOutput = new DistanceOutput();
+/** @internal */ const distanceInput = new DistanceInput();
+/** @internal */ const distanceOutput = new DistanceOutput();
 // this is passed to Distance and SeparationFunction
-const cache = new SimplexCache();
+/** @internal */ const cache = new SimplexCache();
 
-const xfA = matrix.transform(0, 0, 0);
-const xfB = matrix.transform(0, 0, 0);
-const temp = matrix.vec2(0, 0);
-const pointA = matrix.vec2(0, 0);
-const pointB = matrix.vec2(0, 0);
-const normal = matrix.vec2(0, 0);
-const axisA = matrix.vec2(0, 0);
-const axisB = matrix.vec2(0, 0);
-const localPointA = matrix.vec2(0, 0);
-const localPointB = matrix.vec2(0, 0);
+/** @internal */ const xfA = matrix.transform(0, 0, 0);
+/** @internal */ const xfB = matrix.transform(0, 0, 0);
+/** @internal */ const temp = matrix.vec2(0, 0);
+/** @internal */ const pointA = matrix.vec2(0, 0);
+/** @internal */ const pointB = matrix.vec2(0, 0);
+/** @internal */ const normal = matrix.vec2(0, 0);
+/** @internal */ const axisA = matrix.vec2(0, 0);
+/** @internal */ const axisB = matrix.vec2(0, 0);
+/** @internal */ const localPointA = matrix.vec2(0, 0);
+/** @internal */ const localPointB = matrix.vec2(0, 0);
 
 
 /**
@@ -509,7 +509,7 @@ class SeparationFunction {
   }
 }
 
-const separationFunction = new SeparationFunction();
+/** @internal */ const separationFunction = new SeparationFunction();
 
 // legacy exports
 TimeOfImpact.Input = TOIInput;

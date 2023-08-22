@@ -28,12 +28,12 @@ import { Vec2, Vec2Value } from './Vec2';
 import { TransformValue } from './Transform';
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const math_atan2 = Math.atan2;
-const math_PI = Math.PI;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const math_atan2 = Math.atan2;
+/** @internal */ const math_PI = Math.PI;
 
 
-const temp = matrix.vec2(0, 0);
+/** @internal */ const temp = matrix.vec2(0, 0);
 
 /**
  * This describes the motion of a body/shape for TOI computation. Shapes are

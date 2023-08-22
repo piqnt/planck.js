@@ -37,17 +37,17 @@ import { Pool } from "../util/Pool";
 import { getTransform } from "./Position";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const math_abs = Math.abs;
-const math_sqrt = Math.sqrt;
-const math_max = Math.max;
-const math_min = Math.min;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const math_abs = Math.abs;
+/** @internal */ const math_sqrt = Math.sqrt;
+/** @internal */ const math_max = Math.max;
+/** @internal */ const math_min = Math.min;
 
 
 // Solver debugging is normally disabled because the block solver sometimes has to deal with a poorly conditioned effective mass matrix.
-const DEBUG_SOLVER = false;
+/** @internal */ const DEBUG_SOLVER = false;
 
-const contactPool = new Pool<Contact>({
+/** @internal */ const contactPool = new Pool<Contact>({
   create() {
     return new Contact();
   },
@@ -56,9 +56,9 @@ const contactPool = new Pool<Contact>({
   }
 });
 
-const oldManifold = new Manifold();
+/** @internal */ const oldManifold = new Manifold();
 
-const worldManifold = new WorldManifold();
+/** @internal */ const worldManifold = new WorldManifold();
 
 /**
  * A contact edge is used to connect bodies and contacts together in a contact
@@ -110,7 +110,7 @@ export function mixRestitution(restitution1: number, restitution2: number): numb
 }
 
 // TODO: move this to Settings?
-const s_registers = [];
+/** @internal */ const s_registers = [];
 
 // TODO: merge with ManifoldPoint?
 export class VelocityConstraintPoint {
@@ -133,32 +133,32 @@ export class VelocityConstraintPoint {
   }
 }
 
-const cA = matrix.vec2(0, 0);
-const vA = matrix.vec2(0, 0);
-const cB = matrix.vec2(0, 0);
-const vB = matrix.vec2(0, 0);
-const tangent = matrix.vec2(0, 0);
-const xfA = matrix.transform(0, 0, 0);
-const xfB = matrix.transform(0, 0, 0);
-const pointA = matrix.vec2(0, 0);
-const pointB = matrix.vec2(0, 0);
-const clipPoint = matrix.vec2(0, 0);
-const planePoint = matrix.vec2(0, 0);
-const rA = matrix.vec2(0, 0);
-const rB = matrix.vec2(0, 0);
-const P = matrix.vec2(0, 0);
-const normal = matrix.vec2(0, 0);
-const point = matrix.vec2(0, 0);
-const dv = matrix.vec2(0, 0);
-const dv1 = matrix.vec2(0, 0);
-const dv2 = matrix.vec2(0, 0);
-const b = matrix.vec2(0, 0);
-const a = matrix.vec2(0, 0);
-const x = matrix.vec2(0, 0);
-const d = matrix.vec2(0, 0);
-const P1 = matrix.vec2(0, 0);
-const P2 = matrix.vec2(0, 0);
-const temp = matrix.vec2(0, 0);
+/** @internal */ const cA = matrix.vec2(0, 0);
+/** @internal */ const vA = matrix.vec2(0, 0);
+/** @internal */ const cB = matrix.vec2(0, 0);
+/** @internal */ const vB = matrix.vec2(0, 0);
+/** @internal */ const tangent = matrix.vec2(0, 0);
+/** @internal */ const xfA = matrix.transform(0, 0, 0);
+/** @internal */ const xfB = matrix.transform(0, 0, 0);
+/** @internal */ const pointA = matrix.vec2(0, 0);
+/** @internal */ const pointB = matrix.vec2(0, 0);
+/** @internal */ const clipPoint = matrix.vec2(0, 0);
+/** @internal */ const planePoint = matrix.vec2(0, 0);
+/** @internal */ const rA = matrix.vec2(0, 0);
+/** @internal */ const rB = matrix.vec2(0, 0);
+/** @internal */ const P = matrix.vec2(0, 0);
+/** @internal */ const normal = matrix.vec2(0, 0);
+/** @internal */ const point = matrix.vec2(0, 0);
+/** @internal */ const dv = matrix.vec2(0, 0);
+/** @internal */ const dv1 = matrix.vec2(0, 0);
+/** @internal */ const dv2 = matrix.vec2(0, 0);
+/** @internal */ const b = matrix.vec2(0, 0);
+/** @internal */ const a = matrix.vec2(0, 0);
+/** @internal */ const x = matrix.vec2(0, 0);
+/** @internal */ const d = matrix.vec2(0, 0);
+/** @internal */ const P1 = matrix.vec2(0, 0);
+/** @internal */ const P2 = matrix.vec2(0, 0);
+/** @internal */ const temp = matrix.vec2(0, 0);
 
 /**
  * The class manages contact between two shapes. A contact exists for each
@@ -244,6 +244,7 @@ export class Contact {
   /** @internal */ p_invIA = 0;
   /** @internal */ p_invIB = 0;
 
+  /** @internal */ 
   initialize(fA: Fixture, indexA: number, fB: Fixture, indexB: number, evaluateFcn: EvaluateFunction) {
     this.m_fixtureA = fA;
     this.m_fixtureB = fB;
@@ -257,6 +258,7 @@ export class Contact {
     this.m_restitution = mixRestitution(this.m_fixtureA.m_restitution, this.m_fixtureB.m_restitution);
   }
 
+  /** @internal */ 
   recycle() {
     this.m_nodeA.recycle();
     this.m_nodeB.recycle();
@@ -1328,17 +1330,13 @@ export class Contact {
     velocityB.w = wB;
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   static addType(type1: ShapeType, type2: ShapeType, callback: EvaluateFunction): void {
     s_registers[type1] = s_registers[type1] || {};
     s_registers[type1][type2] = callback;
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   static create(fixtureA: Fixture, indexA: number, fixtureB: Fixture, indexB: number): Contact | null {
     const typeA = fixtureA.m_shape.m_type;
     const typeB = fixtureB.m_shape.m_type;

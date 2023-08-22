@@ -33,9 +33,9 @@ import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
-const math_PI = Math.PI;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const math_PI = Math.PI;
 
 
 /**
@@ -71,7 +71,7 @@ export interface MouseJointDef extends JointDef, MouseJointOpt {
   target: Vec2Value;
 }
 
-const DEFAULTS = {
+/** @internal */ const DEFAULTS = {
   maxForce : 0.0,
   frequencyHz : 5.0,
   dampingRatio : 0.7

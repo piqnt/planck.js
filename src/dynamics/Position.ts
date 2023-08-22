@@ -26,8 +26,8 @@ import { Vec2, Vec2Value } from '../common/Vec2';
 import { TransformValue } from '../common/Transform';
 
 
-const math_sin = Math.sin;
-const math_cos = Math.cos;
+/** @internal */ const math_sin = Math.sin;
+/** @internal */ const math_cos = Math.cos;
 
 
 export class Position {

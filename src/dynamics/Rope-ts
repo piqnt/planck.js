@@ -26,9 +26,9 @@ import { Vec2 } from "../index";
 import { options } from "../util/options";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const math_atan2 = Math.atan2;
-const math_exp = Math.exp;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const math_atan2 = Math.atan2;
+/** @internal */ const math_exp = Math.exp;
 
 
 export interface RopeDef {

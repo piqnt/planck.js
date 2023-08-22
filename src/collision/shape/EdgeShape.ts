@@ -33,11 +33,11 @@ import { MassData } from '../../dynamics/Body';
 import { DistanceProxy } from '../Distance';
 
 
-const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
-const v1 = matrix.vec2(0, 0);
-const v2 = matrix.vec2(0, 0);
+/** @internal */ const v1 = matrix.vec2(0, 0);
+/** @internal */ const v2 = matrix.vec2(0, 0);
 
 /**
  * A line segment (edge) shape. These can be connected in chains or loops to
@@ -185,8 +185,7 @@ export class EdgeShape extends Shape {
   }
 
   /**
-   * @internal
-   * @deprecated Shapes should be treated as immutable.
+   * @internal @deprecated Shapes should be treated as immutable.
    *
    * clone the concrete shape.
    */

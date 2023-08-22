@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-const math_sin = Math.sin;
-const math_cos = Math.cos;
-const math_sqrt = Math.sqrt;
+/** @internal */ const math_sin = Math.sin;
+/** @internal */ const math_cos = Math.cos;
+/** @internal */ const math_sqrt = Math.sqrt;
 
 
 import { RotValue } from "./Rot";

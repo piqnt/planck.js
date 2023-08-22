@@ -34,7 +34,7 @@ collideConnected in JointDef.
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [src/dynamics/Joint.ts:78](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L78)*
+*Defined in [dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L77)*
 
 The first attached body.
 
@@ -46,7 +46,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [src/dynamics/Joint.ts:82](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L82)*
+*Defined in [dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L81)*
 
 The second attached body.
 
@@ -60,7 +60,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:69](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L69)*
+*Defined in [dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -71,7 +71,7 @@ ___
 
 • **localAnchorA**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [src/dynamics/joint/RopeJoint.ts:60](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/RopeJoint.ts#L60)*
+*Defined in [dynamics/joint/RopeJoint.ts:66](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/RopeJoint.ts#L66)*
 
 The local anchor point relative to bodyA's origin.
 
@@ -81,7 +81,7 @@ ___
 
 • **localAnchorB**: *[Vec2](../classes/vec2.md)*
 
-*Defined in [src/dynamics/joint/RopeJoint.ts:64](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/RopeJoint.ts#L64)*
+*Defined in [dynamics/joint/RopeJoint.ts:70](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/RopeJoint.ts#L70)*
 
 The local anchor point relative to bodyB's origin.
 
@@ -93,7 +93,7 @@ ___
 
 *Inherited from [RopeJointOpt](ropejointopt.md).[maxLength](ropejointopt.md#optional-maxlength)*
 
-*Defined in [src/dynamics/joint/RopeJoint.ts:49](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/RopeJoint.ts#L49)*
+*Defined in [dynamics/joint/RopeJoint.ts:55](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/RopeJoint.ts#L55)*
 
 The maximum length of the rope.
 Warning: this must be larger than linearSlop or the joint will have no effect.
@@ -108,6 +108,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [src/dynamics/Joint.ts:64](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L64)*
+*Defined in [dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

@@ -32,9 +32,9 @@ import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
-const math_abs = Math.abs;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const math_abs = Math.abs;
 
 
 /**
@@ -79,7 +79,7 @@ export interface PulleyJointDef extends JointDef, PulleyJointOpt {
   ratio: number;
 }
 
-const DEFAULTS = {
+/** @internal */ const DEFAULTS = {
   collideConnected : true
 };
 

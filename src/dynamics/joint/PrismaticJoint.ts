@@ -35,17 +35,20 @@ import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
-const math_abs = Math.abs;
-const math_max = Math.max;
-const math_min = Math.min;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const math_abs = Math.abs;
+/** @internal */ const math_max = Math.max;
+/** @internal */ const math_min = Math.min;
 
 
-const inactiveLimit = 0;
-const atLowerLimit = 1;
-const atUpperLimit = 2;
-const equalLimits = 3;
+/** @internal */ enum LimitState {
+  inactiveLimit = 0,
+  atLowerLimit = 1,
+  atUpperLimit = 2,
+  equalLimits = 3,   
+}
+
 
 /**
  * Prismatic joint definition. This requires defining a line of motion using an
@@ -109,7 +112,7 @@ export interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
   referenceAngle: number;
 }
 
-const DEFAULTS = {
+/** @internal */ const DEFAULTS = {
   enableLimit : false,
   lowerTranslation : 0.0,
   upperTranslation : 0.0,
@@ -190,7 +193,7 @@ export class PrismaticJoint extends Joint {
     this.m_motorSpeed = def.motorSpeed;
     this.m_enableLimit = def.enableLimit;
     this.m_enableMotor = def.enableMotor;
-    this.m_limitState = inactiveLimit;
+    this.m_limitState = LimitState.inactiveLimit;
 
     this.m_axis = Vec2.zero();
     this.m_perp = Vec2.zero();
@@ -600,27 +603,27 @@ export class PrismaticJoint extends Joint {
 
       const jointTranslation = Vec2.dot(this.m_axis, d); // float
       if (math_abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * Settings.linearSlop) {
-        this.m_limitState = equalLimits;
+        this.m_limitState = LimitState.equalLimits;
 
       } else if (jointTranslation <= this.m_lowerTranslation) {
-        if (this.m_limitState != atLowerLimit) {
-          this.m_limitState = atLowerLimit;
+        if (this.m_limitState != LimitState.atLowerLimit) {
+          this.m_limitState = LimitState.atLowerLimit;
           this.m_impulse.z = 0.0;
         }
 
       } else if (jointTranslation >= this.m_upperTranslation) {
-        if (this.m_limitState != atUpperLimit) {
-          this.m_limitState = atUpperLimit;
+        if (this.m_limitState != LimitState.atUpperLimit) {
+          this.m_limitState = LimitState.atUpperLimit;
           this.m_impulse.z = 0.0;
         }
 
       } else {
-        this.m_limitState = inactiveLimit;
+        this.m_limitState = LimitState.inactiveLimit;
         this.m_impulse.z = 0.0;
       }
 
     } else {
-      this.m_limitState = inactiveLimit;
+      this.m_limitState = LimitState.inactiveLimit;
       this.m_impulse.z = 0.0;
     }
 
@@ -668,7 +671,7 @@ export class PrismaticJoint extends Joint {
     const iB = this.m_invIB;
 
     // Solve linear motor constraint.
-    if (this.m_enableMotor && this.m_limitState != equalLimits) {
+    if (this.m_enableMotor && this.m_limitState != LimitState.equalLimits) {
       const Cdot = Vec2.dot(this.m_axis, Vec2.sub(vB, vA)) + this.m_a2 * wB
           - this.m_a1 * wA;
       let impulse = this.m_motorMass * (this.m_motorSpeed - Cdot);
@@ -694,7 +697,7 @@ export class PrismaticJoint extends Joint {
     Cdot1.x -= Vec2.dot(this.m_perp, vA) + this.m_s1 * wA;
     Cdot1.y = wB - wA;
 
-    if (this.m_enableLimit && this.m_limitState != inactiveLimit) {
+    if (this.m_enableLimit && this.m_limitState != LimitState.inactiveLimit) {
       // Solve prismatic and limit constraint in block form.
       let Cdot2 = 0;
       Cdot2 += Vec2.dot(this.m_axis, vB) + this.m_a2 * wB;
@@ -706,9 +709,9 @@ export class PrismaticJoint extends Joint {
       let df = this.m_K.solve33(Vec3.neg(Cdot)); // Vec3
       this.m_impulse.add(df);
 
-      if (this.m_limitState == atLowerLimit) {
+      if (this.m_limitState == LimitState.atLowerLimit) {
         this.m_impulse.z = math_max(this.m_impulse.z, 0.0);
-      } else if (this.m_limitState == atUpperLimit) {
+      } else if (this.m_limitState == LimitState.atUpperLimit) {
         this.m_impulse.z = math_min(this.m_impulse.z, 0.0);
       }
 

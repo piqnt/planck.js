@@ -34,8 +34,8 @@ import { Fixture, FixtureProxy } from "./Fixture";
 import { Manifold } from "../collision/Manifold";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -59,7 +59,7 @@ export interface WorldDef {
   positionIterations?: number;
 }
 
-const WorldDefDefault: WorldDef = {
+/** @internal */ const WorldDefDefault: WorldDef = {
   gravity : Vec2.zero(),
   allowSleep : true,
   warmStarting : true,
@@ -474,9 +474,7 @@ export class World {
     this.m_broadPhase.shiftOrigin(newOrigin);
   }
 
-  /**
-   * @internal Used for deserialize.
-   */
+  /** @internal Used for deserialize. */
   _addBody(body: Body): void {
     _ASSERT && console.assert(this.isLocked() === false);
     if (this.isLocked()) {
@@ -1109,30 +1107,22 @@ export class World {
     return listeners.length;
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   beginContact(contact: Contact): void {
     this.publish('begin-contact', contact);
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   endContact(contact: Contact): void {
     this.publish('end-contact', contact);
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   preSolve(contact: Contact, oldManifold: Manifold): void {
     this.publish('pre-solve', contact, oldManifold);
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   postSolve(contact: Contact, impulse: ContactImpulse): void {
     this.publish('post-solve', contact, impulse);
   }

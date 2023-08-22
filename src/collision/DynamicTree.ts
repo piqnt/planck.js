@@ -28,9 +28,9 @@ import { Vec2, Vec2Value } from '../common/Vec2';
 import { AABB, AABBValue, RayCastCallback, RayCastInput } from './AABB';
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const math_abs = Math.abs;
-const math_max = Math.max;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const math_abs = Math.abs;
+/** @internal */ const math_max = Math.max;
 
 
 export type DynamicTreeQueryCallback = (nodeId: number) => boolean;
@@ -63,7 +63,7 @@ export class TreeNode<T> {
   }
 }
 
-const poolTreeNode = new Pool<TreeNode<any>>({
+/** @internal */ const poolTreeNode = new Pool<TreeNode<any>>({
   create(): TreeNode<any> {
     return new TreeNode();
   },
@@ -872,6 +872,7 @@ export class DynamicTree<T> {
 
 }
 
+/** @internal */
 class Iterator<T> {
   parents: Array<TreeNode<T>> = [];
   states: number[] = [];

@@ -34,10 +34,10 @@ import { World } from "./World";
 import { Sweep } from '../common/Sweep';
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const math_abs = Math.abs;
-const math_sqrt = Math.sqrt;
-const math_min = Math.min;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const math_abs = Math.abs;
+/** @internal */ const math_sqrt = Math.sqrt;
+/** @internal */ const math_min = Math.min;
 
 
 export class TimeStep {
@@ -66,15 +66,15 @@ export class TimeStep {
 }
 
 // reuse
-const s_subStep = new TimeStep();
-const c = matrix.vec2(0, 0);
-const v = matrix.vec2(0, 0);
-const translation = matrix.vec2(0, 0);
-const input = new TOIInput();
-const output = new TOIOutput();
-const backup = new Sweep();
-const backup1 = new Sweep();
-const backup2 = new Sweep();
+/** @internal */ const s_subStep = new TimeStep();
+/** @internal */ const c = matrix.vec2(0, 0);
+/** @internal */ const v = matrix.vec2(0, 0);
+/** @internal */ const translation = matrix.vec2(0, 0);
+/** @internal */ const input = new TOIInput();
+/** @internal */ const output = new TOIOutput();
+/** @internal */ const backup = new Sweep();
+/** @internal */ const backup1 = new Sweep();
+/** @internal */ const backup2 = new Sweep();
 
 /**
  * Contact impulses for reporting. Impulses are used instead of forces because

@@ -32,9 +32,9 @@ import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
-const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
-const math_abs = Math.abs;
-const math_PI = Math.PI;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const math_abs = Math.abs;
+/** @internal */ const math_PI = Math.PI;
 
 
 /**
@@ -76,7 +76,7 @@ export interface DistanceJointDef extends JointDef, DistanceJointOpt {
   localAnchorB: Vec2;
 }
 
-const DEFAULTS = {
+/** @internal */ const DEFAULTS = {
   frequencyHz : 0.0,
   dampingRatio : 0.0
 };

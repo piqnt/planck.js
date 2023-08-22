@@ -24,6 +24,7 @@
 
 import { Vec2 } from './Vec2';
 
+/** @internal */
 export class Jacobian {
   linear: Vec2;
   angularA: number;

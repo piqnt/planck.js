@@ -10,13 +10,13 @@ Fixture is created. Shapes may encapsulate one or more child shapes.
 
 * **Shape**
 
-  ↳ [CircleShape](circleshape.md)
+  ↳ [PolygonShape](polygonshape.md)
 
   ↳ [EdgeShape](edgeshape.md)
 
-  ↳ [PolygonShape](polygonshape.md)
-
   ↳ [ChainShape](chainshape.md)
+
+  ↳ [CircleShape](circleshape.md)
 
 ## Index
 
@@ -31,8 +31,8 @@ Fixture is created. Shapes may encapsulate one or more child shapes.
 * [computeDistanceProxy](shape.md#abstract-computedistanceproxy)
 * [computeMass](shape.md#abstract-computemass)
 * [getChildCount](shape.md#abstract-getchildcount)
-* [getRadius](shape.md#getradius)
-* [getType](shape.md#gettype)
+* [getRadius](shape.md#abstract-getradius)
+* [getType](shape.md#abstract-gettype)
 * [rayCast](shape.md#abstract-raycast)
 * [testPoint](shape.md#abstract-testpoint)
 * [isValid](shape.md#static-isvalid)
@@ -43,7 +43,10 @@ Fixture is created. Shapes may encapsulate one or more child shapes.
 
 • **m_radius**: *number*
 
-*Defined in [src/collision/Shape.ts:39](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L39)*
+*Defined in [collision/Shape.ts:45](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Shape.ts#L45)*
+
+Radius of a shape. For polygonal shapes this must be b2_polygonRadius.
+There is no support for making rounded polygons.
 
 ___
 
@@ -51,15 +54,15 @@ ___
 
 • **m_type**: *[ShapeType](../globals.md#shapetype)*
 
-*Defined in [src/collision/Shape.ts:38](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L38)*
+*Defined in [collision/Shape.ts:39](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Shape.ts#L39)*
 
 ## Methods
 
 ### `Abstract` computeAABB
 
-▸ **computeAABB**(`aabb`: [AABB](aabb.md), `xf`: [Transform](transform.md), `childIndex`: number): *void*
+▸ **computeAABB**(`aabb`: [AABBValue](../interfaces/aabbvalue.md), `xf`: [TransformValue](../globals.md#transformvalue), `childIndex`: number): *void*
 
-*Defined in [src/collision/Shape.ts:116](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L116)*
+*Defined in [collision/Shape.ts:106](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Shape.ts#L106)*
 
 Given a transform, compute the associated axis aligned bounding box for a
 child shape.
@@ -68,8 +71,8 @@ child shape.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`aabb` | [AABB](aabb.md) | Returns the axis aligned box. |
-`xf` | [Transform](transform.md) | The world transform of the shape. |
+`aabb` | [AABBValue](../interfaces/aabbvalue.md) | Returns the axis aligned box. |
+`xf` | [TransformValue](../globals.md#transformvalue) | The world transform of the shape. |
 `childIndex` | number | The child shape  |
 
 **Returns:** *void*
@@ -80,7 +83,7 @@ ___
 
 ▸ **computeDistanceProxy**(`proxy`: [DistanceProxy](distanceproxy.md), `childIndex`: number): *void*
 
-*Defined in [src/collision/Shape.ts:127](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L127)*
+*Defined in [collision/Shape.ts:117](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Shape.ts#L117)*
 
 **Parameters:**
 
@@ -97,7 +100,7 @@ ___
 
 ▸ **computeMass**(`massData`: [MassData](massdata.md), `density?`: number): *void*
 
-*Defined in [src/collision/Shape.ts:125](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L125)*
+*Defined in [collision/Shape.ts:115](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Shape.ts#L115)*
 
 Compute the mass properties of this shape using its dimensions and density.
 The inertia tensor is computed about the local origin.
@@ -117,7 +120,7 @@ ___
 
 ▸ **getChildCount**(): *number*
 
-*Defined in [src/collision/Shape.ts:87](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L87)*
+*Defined in [collision/Shape.ts:77](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Shape.ts#L77)*
 
 Get the number of child primitives.
 
@@ -125,21 +128,21 @@ Get the number of child primitives.
 
 ___
 
-###  getRadius
+### `Abstract` getRadius
 
 ▸ **getRadius**(): *number*
 
-*Defined in [src/collision/Shape.ts:62](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L62)*
+*Defined in [collision/Shape.ts:57](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Shape.ts#L57)*
 
 **Returns:** *number*
 
 ___
 
-###  getType
+### `Abstract` getType
 
 ▸ **getType**(): *[ShapeType](../globals.md#shapetype)*
 
-*Defined in [src/collision/Shape.ts:72](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L72)*
+*Defined in [collision/Shape.ts:65](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Shape.ts#L65)*
 
 Get the type of this shape. You can use this to down cast to the concrete
 shape.
@@ -154,7 +157,7 @@ ___
 
 ▸ **rayCast**(`output`: [RayCastOutput](../interfaces/raycastoutput.md), `input`: [RayCastInput](../interfaces/raycastinput.md), `xf`: [Transform](transform.md), `childIndex`: number): *boolean*
 
-*Defined in [src/collision/Shape.ts:106](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L106)*
+*Defined in [collision/Shape.ts:96](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Shape.ts#L96)*
 
 Cast a ray against a child shape.
 
@@ -173,9 +176,9 @@ ___
 
 ### `Abstract` testPoint
 
-▸ **testPoint**(`xf`: [Transform](transform.md), `p`: [Vec2](vec2.md)): *boolean*
+▸ **testPoint**(`xf`: [TransformValue](../globals.md#transformvalue), `p`: [Vec2Value](../interfaces/vec2value.md)): *boolean*
 
-*Defined in [src/collision/Shape.ts:96](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L96)*
+*Defined in [collision/Shape.ts:86](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Shape.ts#L86)*
 
 Test a point for containment in this shape. This only works for convex
 shapes.
@@ -184,8 +187,8 @@ shapes.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`xf` | [Transform](transform.md) | The shape world transform. |
-`p` | [Vec2](vec2.md) | A point in world coordinates.  |
+`xf` | [TransformValue](../globals.md#transformvalue) | The shape world transform. |
+`p` | [Vec2Value](../interfaces/vec2value.md) | A point in world coordinates.  |
 
 **Returns:** *boolean*
 
@@ -193,14 +196,14 @@ ___
 
 ### `Static` isValid
 
-▸ **isValid**(`shape`: [Shape](shape.md) | null | undefined): *shape is Shape*
+▸ **isValid**(`obj`: any): *boolean*
 
-*Defined in [src/collision/Shape.ts:58](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Shape.ts#L58)*
+*Defined in [collision/Shape.ts:50](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Shape.ts#L50)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`shape` | [Shape](shape.md) &#124; null &#124; undefined |
+`obj` | any |
 
-**Returns:** *shape is Shape*
+**Returns:** *boolean*

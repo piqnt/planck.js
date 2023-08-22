@@ -15,18 +15,32 @@ Output parameters for TimeOfImpact.
 * [state](toioutput.md#state)
 * [t](toioutput.md#t)
 
+### Methods
+
+* [recycle](toioutput.md#recycle)
+
 ## Properties
 
 ###  state
 
-• **state**: *[TOIOutputState](../enums/toioutputstate.md) | undefined*
+• **state**: *[TOIOutputState](../enums/toioutputstate.md)* = TOIOutputState.e_unset
 
-*Defined in [src/collision/TimeOfImpact.ts:67](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L67)*
+*Defined in [collision/TimeOfImpact.ts:71](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/TimeOfImpact.ts#L71)*
 
 ___
 
 ###  t
 
-• **t**: *number | undefined*
+• **t**: *number* = -1
 
-*Defined in [src/collision/TimeOfImpact.ts:68](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L68)*
+*Defined in [collision/TimeOfImpact.ts:72](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/TimeOfImpact.ts#L72)*
+
+## Methods
+
+###  recycle
+
+▸ **recycle**(): *void*
+
+*Defined in [collision/TimeOfImpact.ts:73](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/TimeOfImpact.ts#L73)*
+
+**Returns:** *void*

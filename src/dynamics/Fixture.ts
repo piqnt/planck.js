@@ -32,11 +32,11 @@ import { BroadPhase } from "../collision/BroadPhase";
 import { TransformValue } from "../common/Transform";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-const synchronize_aabb1 = new AABB();
-const synchronize_aabb2 = new AABB();
-const displacement = matrix.vec2(0, 0);
+/** @internal */ const synchronize_aabb1 = new AABB();
+/** @internal */ const synchronize_aabb2 = new AABB();
+/** @internal */ const displacement = matrix.vec2(0, 0);
 
 /**
  * A fixture definition is used to create a fixture. This class defines an
@@ -80,7 +80,7 @@ export interface FixtureDef extends FixtureOpt {
   shape: Shape;
 }
 
-const FixtureDefDefault: FixtureOpt = {
+/** @internal */ const FixtureDefDefault: FixtureOpt = {
   userData : null,
   friction : 0.2,
   restitution : 0.0,
@@ -175,10 +175,7 @@ export class Fixture {
     this.m_userData = def.userData;
   }
 
-  /**
-   * Re-setup fixture.
-   * @internal
-   */
+  /** @internal Re-setup fixture. */
   _reset(): void {
     const body = this.getBody();
     const broadPhase = body.m_world.m_broadPhase;

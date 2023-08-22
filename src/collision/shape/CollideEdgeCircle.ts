@@ -32,13 +32,13 @@ import { Manifold, ContactFeatureType, ManifoldType } from "../Manifold";
 import { Fixture } from "../../dynamics/Fixture";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
 Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
 
-function EdgeCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: Fixture, indexA: number, xfB: TransformValue, fixtureB: Fixture, indexB: number): void {
+/** @internal */ function EdgeCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: Fixture, indexA: number, xfB: TransformValue, fixtureB: Fixture, indexB: number): void {
   _ASSERT && console.assert(fixtureA.getType() == EdgeShape.TYPE);
   _ASSERT && console.assert(fixtureB.getType() == CircleShape.TYPE);
 
@@ -62,13 +62,13 @@ function ChainCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: F
   CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
 }
 
-const e = matrix.vec2(0, 0);
-const temp = matrix.vec2(0, 0);
-const e1 = matrix.vec2(0, 0);
-const e2 = matrix.vec2(0, 0);
-const Q = matrix.vec2(0, 0);
-const P = matrix.vec2(0, 0);
-const n = matrix.vec2(0, 0);
+/** @internal */ const e = matrix.vec2(0, 0);
+/** @internal */ const temp = matrix.vec2(0, 0);
+/** @internal */ const e1 = matrix.vec2(0, 0);
+/** @internal */ const e2 = matrix.vec2(0, 0);
+/** @internal */ const Q = matrix.vec2(0, 0);
+/** @internal */ const P = matrix.vec2(0, 0);
+/** @internal */ const n = matrix.vec2(0, 0);
 
 // Compute contact points for edge versus circle.
 // This accounts for edge connectivity.

@@ -65,8 +65,7 @@ export abstract class Shape {
   abstract getType(): ShapeType;
 
   /**
-   * @internal
-   * @deprecated Shapes should be treated as immutable.
+   * @internal @deprecated Shapes should be treated as immutable.
    *
    * clone the concrete shape.
    */

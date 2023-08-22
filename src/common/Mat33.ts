@@ -26,7 +26,7 @@ import { Vec2, Vec2Value } from './Vec2';
 import { Vec3, Vec3Value } from './Vec3';
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
 /**

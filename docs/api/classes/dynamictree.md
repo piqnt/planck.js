@@ -30,7 +30,6 @@ pointers.
 
 * [m_lastProxyId](dynamictree.md#m_lastproxyid)
 * [m_nodes](dynamictree.md#m_nodes)
-* [m_pool](dynamictree.md#m_pool)
 * [m_root](dynamictree.md#m_root)
 
 ### Methods
@@ -63,7 +62,7 @@ pointers.
 
 \+ **new DynamicTree**(): *[DynamicTree](dynamictree.md)*
 
-*Defined in [src/collision/DynamicTree.ts:82](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L82)*
+*Defined in [collision/DynamicTree.ts:96](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L96)*
 
 **Returns:** *[DynamicTree](dynamictree.md)*
 
@@ -73,7 +72,7 @@ pointers.
 
 • **m_lastProxyId**: *number*
 
-*Defined in [src/collision/DynamicTree.ts:78](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L78)*
+*Defined in [collision/DynamicTree.ts:93](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L93)*
 
 ___
 
@@ -81,7 +80,7 @@ ___
 
 • **m_nodes**: *object*
 
-*Defined in [src/collision/DynamicTree.ts:79](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L79)*
+*Defined in [collision/DynamicTree.ts:94](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L94)*
 
 #### Type declaration:
 
@@ -89,19 +88,11 @@ ___
 
 ___
 
-###  m_pool
-
-• **m_pool**: *[Pool](pool.md)‹[TreeNode](treenode.md)‹T››*
-
-*Defined in [src/collision/DynamicTree.ts:82](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L82)*
-
-___
-
 ###  m_root
 
 • **m_root**: *[TreeNode](treenode.md)‹T›*
 
-*Defined in [src/collision/DynamicTree.ts:77](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L77)*
+*Defined in [collision/DynamicTree.ts:92](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L92)*
 
 ## Methods
 
@@ -109,7 +100,7 @@ ___
 
 ▸ **allocateNode**(): *[TreeNode](treenode.md)‹T›*
 
-*Defined in [src/collision/DynamicTree.ts:118](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L118)*
+*Defined in [collision/DynamicTree.ts:126](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L126)*
 
 **Returns:** *[TreeNode](treenode.md)‹T›*
 
@@ -119,7 +110,7 @@ ___
 
 ▸ **balance**(`iA`: [TreeNode](treenode.md)‹T›): *[TreeNode](treenode.md)‹T›*
 
-*Defined in [src/collision/DynamicTree.ts:395](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L395)*
+*Defined in [collision/DynamicTree.ts:383](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L383)*
 
 Perform a left or right rotation if node A is imbalanced. Returns the new
 root index.
@@ -138,7 +129,7 @@ ___
 
 ▸ **computeHeight**(`id?`: number): *number*
 
-*Defined in [src/collision/DynamicTree.ts:544](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L544)*
+*Defined in [collision/DynamicTree.ts:532](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L532)*
 
 Compute the height of a sub-tree.
 
@@ -154,9 +145,9 @@ ___
 
 ###  createProxy
 
-▸ **createProxy**(`aabb`: [AABB](aabb.md), `userData`: T): *number*
+▸ **createProxy**(`aabb`: [AABBValue](../interfaces/aabbvalue.md), `userData`: T): *number*
 
-*Defined in [src/collision/DynamicTree.ts:143](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L143)*
+*Defined in [collision/DynamicTree.ts:145](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L145)*
 
 Create a proxy in the tree as a leaf node. We return the index of the node
 instead of a pointer so that we can grow the node pool.
@@ -167,7 +158,7 @@ Create a proxy. Provide a tight fitting AABB and a userData pointer.
 
 Name | Type |
 ------ | ------ |
-`aabb` | [AABB](aabb.md) |
+`aabb` | [AABBValue](../interfaces/aabbvalue.md) |
 `userData` | T |
 
 **Returns:** *number*
@@ -178,7 +169,7 @@ ___
 
 ▸ **destroyProxy**(`id`: number): *void*
 
-*Defined in [src/collision/DynamicTree.ts:164](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L164)*
+*Defined in [collision/DynamicTree.ts:166](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L166)*
 
 Destroy a proxy. This asserts if the id is invalid.
 
@@ -196,7 +187,7 @@ ___
 
 ▸ **freeNode**(`node`: [TreeNode](treenode.md)‹T›): *void*
 
-*Defined in [src/collision/DynamicTree.ts:130](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L130)*
+*Defined in [collision/DynamicTree.ts:133](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L133)*
 
 **Parameters:**
 
@@ -212,7 +203,7 @@ ___
 
 ▸ **getAreaRatio**(): *number*
 
-*Defined in [src/collision/DynamicTree.ts:516](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L516)*
+*Defined in [collision/DynamicTree.ts:504](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L504)*
 
 Get the ratio of the sum of the node areas to the root area.
 
@@ -224,7 +215,7 @@ ___
 
 ▸ **getFatAABB**(`id`: number): *[AABB](aabb.md)*
 
-*Defined in [src/collision/DynamicTree.ts:112](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L112)*
+*Defined in [collision/DynamicTree.ts:120](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L120)*
 
 Get the fat AABB for a node id.
 
@@ -244,7 +235,7 @@ ___
 
 ▸ **getHeight**(): *number*
 
-*Defined in [src/collision/DynamicTree.ts:505](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L505)*
+*Defined in [collision/DynamicTree.ts:493](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L493)*
 
 Compute the height of the binary tree in O(N) time. Should not be called
 often.
@@ -257,7 +248,7 @@ ___
 
 ▸ **getMaxBalance**(): *number*
 
-*Defined in [src/collision/DynamicTree.ts:638](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L638)*
+*Defined in [collision/DynamicTree.ts:627](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L627)*
 
 Get the maximum balance of an node in the tree. The balance is the difference
 in height of the two children of a node.
@@ -270,7 +261,7 @@ ___
 
 ▸ **getUserData**(`id`: number): *T*
 
-*Defined in [src/collision/DynamicTree.ts:101](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L101)*
+*Defined in [collision/DynamicTree.ts:109](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L109)*
 
 Get proxy user data.
 
@@ -290,7 +281,7 @@ ___
 
 ▸ **insertLeaf**(`leaf`: [TreeNode](treenode.md)‹T›): *void*
 
-*Defined in [src/collision/DynamicTree.ts:224](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L224)*
+*Defined in [collision/DynamicTree.ts:226](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L226)*
 
 **Parameters:**
 
@@ -304,9 +295,9 @@ ___
 
 ###  moveProxy
 
-▸ **moveProxy**(`id`: number, `aabb`: [AABB](aabb.md), `d`: [Vec2](vec2.md)): *boolean*
+▸ **moveProxy**(`id`: number, `aabb`: [AABBValue](../interfaces/aabbvalue.md), `d`: [Vec2Value](../interfaces/vec2value.md)): *boolean*
 
-*Defined in [src/collision/DynamicTree.ts:183](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L183)*
+*Defined in [collision/DynamicTree.ts:185](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L185)*
 
 Move a proxy with a swepted AABB. If the proxy has moved outside of its
 fattened AABB, then the proxy is removed from the tree and re-inserted.
@@ -317,8 +308,8 @@ Otherwise the function returns immediately.
 Name | Type | Description |
 ------ | ------ | ------ |
 `id` | number | - |
-`aabb` | [AABB](aabb.md) | - |
-`d` | [Vec2](vec2.md) | Displacement  |
+`aabb` | [AABBValue](../interfaces/aabbvalue.md) | - |
+`d` | [Vec2Value](../interfaces/vec2value.md) | Displacement  |
 
 **Returns:** *boolean*
 
@@ -328,9 +319,9 @@ ___
 
 ###  query
 
-▸ **query**(`aabb`: [AABB](aabb.md), `queryCallback`: [DynamicTreeQueryCallback](../globals.md#dynamictreequerycallback)): *void*
+▸ **query**(`aabb`: [AABBValue](../interfaces/aabbvalue.md), `queryCallback`: [DynamicTreeQueryCallback](../globals.md#dynamictreequerycallback)): *void*
 
-*Defined in [src/collision/DynamicTree.ts:749](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L749)*
+*Defined in [collision/DynamicTree.ts:736](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L736)*
 
 Query an AABB for overlapping proxies. The callback class is called for each
 proxy that overlaps the supplied AABB.
@@ -339,7 +330,7 @@ proxy that overlaps the supplied AABB.
 
 Name | Type |
 ------ | ------ |
-`aabb` | [AABB](aabb.md) |
+`aabb` | [AABBValue](../interfaces/aabbvalue.md) |
 `queryCallback` | [DynamicTreeQueryCallback](../globals.md#dynamictreequerycallback) |
 
 **Returns:** *void*
@@ -350,7 +341,7 @@ ___
 
 ▸ **rayCast**(`input`: [RayCastInput](../interfaces/raycastinput.md), `rayCastCallback`: [RayCastCallback](../globals.md#raycastcallback)): *void*
 
-*Defined in [src/collision/DynamicTree.ts:786](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L786)*
+*Defined in [collision/DynamicTree.ts:773](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L773)*
 
 Ray-cast against the proxies in the tree. This relies on the callback to
 perform a exact ray-cast in the case were the proxy contains a shape. The
@@ -373,7 +364,7 @@ ___
 
 ▸ **rebuildBottomUp**(): *void*
 
-*Defined in [src/collision/DynamicTree.ts:660](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L660)*
+*Defined in [collision/DynamicTree.ts:649](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L649)*
 
 Build an optimal tree. Very expensive. For testing.
 
@@ -385,7 +376,7 @@ ___
 
 ▸ **removeLeaf**(`leaf`: [TreeNode](treenode.md)‹T›): *void*
 
-*Defined in [src/collision/DynamicTree.ts:344](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L344)*
+*Defined in [collision/DynamicTree.ts:332](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L332)*
 
 **Parameters:**
 
@@ -399,9 +390,9 @@ ___
 
 ###  shiftOrigin
 
-▸ **shiftOrigin**(`newOrigin`: [Vec2](vec2.md)): *void*
+▸ **shiftOrigin**(`newOrigin`: [Vec2Value](../interfaces/vec2value.md)): *void*
 
-*Defined in [src/collision/DynamicTree.ts:731](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L731)*
+*Defined in [collision/DynamicTree.ts:718](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L718)*
 
 Shift the world origin. Useful for large worlds. The shift formula is:
 position -= newOrigin
@@ -410,7 +401,7 @@ position -= newOrigin
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`newOrigin` | [Vec2](vec2.md) | The new origin with respect to the old origin  |
+`newOrigin` | [Vec2Value](../interfaces/vec2value.md) | The new origin with respect to the old origin  |
 
 **Returns:** *void*
 
@@ -420,7 +411,7 @@ ___
 
 ▸ **validate**(): *void*
 
-*Defined in [src/collision/DynamicTree.ts:627](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L627)*
+*Defined in [collision/DynamicTree.ts:615](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L615)*
 
 Validate this tree. For testing.
 
@@ -432,7 +423,7 @@ ___
 
 ▸ **validateMetrics**(`node`: [TreeNode](treenode.md)‹T›): *void*
 
-*Defined in [src/collision/DynamicTree.ts:592](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L592)*
+*Defined in [collision/DynamicTree.ts:580](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L580)*
 
 **Parameters:**
 
@@ -448,7 +439,7 @@ ___
 
 ▸ **validateStructure**(`node`: [TreeNode](treenode.md)‹T›): *void*
 
-*Defined in [src/collision/DynamicTree.ts:563](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/DynamicTree.ts#L563)*
+*Defined in [collision/DynamicTree.ts:551](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/DynamicTree.ts#L551)*
 
 **Parameters:**
 

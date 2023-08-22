@@ -32,8 +32,8 @@ import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -63,7 +63,7 @@ export interface FrictionJointDef extends JointDef, FrictionJointOpt {
   localAnchorB: Vec2;
 }
 
-const DEFAULTS = {
+/** @internal */ const DEFAULTS = {
   maxForce : 0.0,
   maxTorque : 0.0,
 };

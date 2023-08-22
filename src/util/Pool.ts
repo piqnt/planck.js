@@ -16,6 +16,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
+/** @internal */
 export interface PoolOptions<T> {
   max?: number,
   create?: () => T,
@@ -27,6 +28,7 @@ export interface PoolOptions<T> {
   dispose?: (item: T) => T,
 }
 
+/** @internal */
 export class Pool<T> {
   _list: T[] = [];
   _max: number = Infinity;
@@ -108,7 +110,6 @@ export class Pool<T> {
     }
   }
 
-  /** @internal */
   toString(): string {
     return " +" + this._createCount + " >" + this._allocateCount + " <" + this._releaseCount + " -"
       + this._disposeCount + " =" + this._list.length + "/" + this._max;

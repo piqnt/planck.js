@@ -17,31 +17,42 @@ Used for computing contact manifolds.
 
 ### Methods
 
+* [recycle](clipvertex.md#recycle)
 * [set](clipvertex.md#set)
 
 ## Properties
 
 ###  id
 
-• **id**: *[ContactID](contactid.md)‹›* = new ContactID()
+• **id**: *[ContactID](contactid.md)* = new ContactID()
 
-*Defined in [src/collision/Manifold.ts:312](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L312)*
+*Defined in [collision/Manifold.ts:74](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L74)*
 
 ___
 
 ###  v
 
-• **v**: *[Vec2](vec2.md)‹›* = Vec2.zero()
+• **v**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
-*Defined in [src/collision/Manifold.ts:311](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L311)*
+*Defined in [collision/Manifold.ts:73](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L73)*
 
 ## Methods
+
+###  recycle
+
+▸ **recycle**(): *void*
+
+*Defined in [collision/Manifold.ts:80](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L80)*
+
+**Returns:** *void*
+
+___
 
 ###  set
 
 ▸ **set**(`o`: [ClipVertex](clipvertex.md)): *void*
 
-*Defined in [src/collision/Manifold.ts:314](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L314)*
+*Defined in [collision/Manifold.ts:76](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L76)*
 
 **Parameters:**
 

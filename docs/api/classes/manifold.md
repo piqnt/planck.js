@@ -13,22 +13,6 @@ movement, which is critical for continuous physics. All contact scenarios
 must be expressed in one of these types. This structure is stored across time
 steps, so we keep it small.
 
-**`prop`** type e_circle, e_faceA, e_faceB
-
-**`prop`** localPoint Usage depends on manifold type:<br>
-      e_circles: the local center of circleA <br>
-      e_faceA: the center of faceA <br>
-      e_faceB: the center of faceB
-
-**`prop`** localNormal Usage depends on manifold type:<br>
-      e_circles: not used <br>
-      e_faceA: the normal on polygonA <br>
-      e_faceB: the normal on polygonB
-
-**`prop`** points The points of contact {ManifoldPoint[]}
-
-**`prop`** pointCount The number of manifold points
-
 ## Hierarchy
 
 * **Manifold**
@@ -42,26 +26,42 @@ steps, so we keep it small.
 * [pointCount](manifold.md#pointcount)
 * [points](manifold.md#points)
 * [type](manifold.md#type)
+* [ClipVertex](manifold.md#static-clipvertex)
+* [PointState](manifold.md#static-pointstate)
+* [clipSegmentToLine](manifold.md#static-clipsegmenttoline)
+* [getPointStates](manifold.md#static-getpointstates)
 
 ### Methods
 
 * [getWorldManifold](manifold.md#getworldmanifold)
+* [recycle](manifold.md#recycle)
+* [set](manifold.md#set)
 
 ## Properties
 
 ###  localNormal
 
-• **localNormal**: *[Vec2](vec2.md)* = Vec2.zero()
+• **localNormal**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
-*Defined in [src/collision/Manifold.ts:67](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L67)*
+*Defined in [collision/Manifold.ts:107](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L107)*
+
+Usage depends on manifold type:
+- circles: not used
+- faceA: the normal on polygonA
+- faceB: the normal on polygonB
 
 ___
 
 ###  localPoint
 
-• **localPoint**: *[Vec2](vec2.md)* = Vec2.zero()
+• **localPoint**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
-*Defined in [src/collision/Manifold.ts:68](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L68)*
+*Defined in [collision/Manifold.ts:115](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L115)*
+
+Usage depends on manifold type:
+- circles: the local center of circleA
+- faceA: the center of faceA
+- faceB: the center of faceB
 
 ___
 
@@ -69,7 +69,9 @@ ___
 
 • **pointCount**: *number* = 0
 
-*Defined in [src/collision/Manifold.ts:70](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L70)*
+*Defined in [collision/Manifold.ts:121](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L121)*
+
+The number of manifold points
 
 ___
 
@@ -77,7 +79,9 @@ ___
 
 • **points**: *[ManifoldPoint](manifoldpoint.md)[]* = [ new ManifoldPoint(), new ManifoldPoint() ]
 
-*Defined in [src/collision/Manifold.ts:69](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L69)*
+*Defined in [collision/Manifold.ts:118](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L118)*
+
+The points of contact
 
 ___
 
@@ -85,15 +89,47 @@ ___
 
 • **type**: *[ManifoldType](../enums/manifoldtype.md)*
 
-*Defined in [src/collision/Manifold.ts:66](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L66)*
+*Defined in [collision/Manifold.ts:99](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L99)*
+
+___
+
+### `Static` ClipVertex
+
+▪ **ClipVertex**: *[ClipVertex](clipvertex.md)* = ClipVertex
+
+*Defined in [collision/Manifold.ts:215](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L215)*
+
+___
+
+### `Static` PointState
+
+▪ **PointState**: *[PointState](../enums/pointstate.md)* = PointState
+
+*Defined in [collision/Manifold.ts:217](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L217)*
+
+___
+
+### `Static` clipSegmentToLine
+
+▪ **clipSegmentToLine**: *[clipSegmentToLine](../globals.md#clipsegmenttoline)* = clipSegmentToLine
+
+*Defined in [collision/Manifold.ts:214](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L214)*
+
+___
+
+### `Static` getPointStates
+
+▪ **getPointStates**: *[getPointStates](../globals.md#getpointstates)* = getPointStates
+
+*Defined in [collision/Manifold.ts:216](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L216)*
 
 ## Methods
 
 ###  getWorldManifold
 
-▸ **getWorldManifold**(`wm`: [WorldManifold](worldmanifold.md) | undefined, `xfA`: [Transform](transform.md), `radiusA`: number, `xfB`: [Transform](transform.md), `radiusB`: number): *[WorldManifold](worldmanifold.md)*
+▸ **getWorldManifold**(`wm`: [WorldManifold](worldmanifold.md) | null, `xfA`: [TransformValue](../globals.md#transformvalue), `radiusA`: number, `xfB`: [TransformValue](../globals.md#transformvalue), `radiusB`: number): *[WorldManifold](worldmanifold.md)*
 
-*Defined in [src/collision/Manifold.ts:77](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L77)*
+*Defined in [collision/Manifold.ts:146](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L146)*
 
 Evaluate the manifold with supplied transforms. This assumes modest motion
 from the original state. This does not change the point count, impulses, etc.
@@ -103,10 +139,36 @@ The radii must come from the shapes that generated the manifold.
 
 Name | Type |
 ------ | ------ |
-`wm` | [WorldManifold](worldmanifold.md) &#124; undefined |
-`xfA` | [Transform](transform.md) |
+`wm` | [WorldManifold](worldmanifold.md) &#124; null |
+`xfA` | [TransformValue](../globals.md#transformvalue) |
 `radiusA` | number |
-`xfB` | [Transform](transform.md) |
+`xfB` | [TransformValue](../globals.md#transformvalue) |
 `radiusB` | number |
 
 **Returns:** *[WorldManifold](worldmanifold.md)*
+
+___
+
+###  recycle
+
+▸ **recycle**(): *void*
+
+*Defined in [collision/Manifold.ts:132](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L132)*
+
+**Returns:** *void*
+
+___
+
+###  set
+
+▸ **set**(`that`: [Manifold](manifold.md)): *void*
+
+*Defined in [collision/Manifold.ts:123](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L123)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`that` | [Manifold](manifold.md) |
+
+**Returns:** *void*

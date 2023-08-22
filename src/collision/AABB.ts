@@ -26,10 +26,10 @@ import { EPSILON } from '../common/Math';
 import { Vec2, Vec2Value } from '../common/Vec2';
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
-const math_max = Math.max;
-const math_min = Math.min;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const math_max = Math.max;
+/** @internal */ const math_min = Math.min;
 
 /**
  * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
@@ -260,8 +260,7 @@ export class AABB {
     return true;
   }
 
-  /** @internal */
-  toString(): string {
+  /** @internal */ toString(): string {
     return JSON.stringify(this);
   }
 

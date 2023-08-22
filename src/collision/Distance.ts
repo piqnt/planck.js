@@ -32,17 +32,17 @@ import { Rot } from '../common/Rot';
 import { Transform, TransformValue } from '../common/Transform';
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const math_max = Math.max;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const math_max = Math.max;
 
 
-const temp = matrix.vec2(0, 0);
-const normal = matrix.vec2(0, 0);
-const e12 = matrix.vec2(0, 0);
-const e13 = matrix.vec2(0, 0);
-const e23 = matrix.vec2(0, 0);
-const temp1 = matrix.vec2(0, 0);
-const temp2 = matrix.vec2(0, 0);
+/** @internal */ const temp = matrix.vec2(0, 0);
+/** @internal */ const normal = matrix.vec2(0, 0);
+/** @internal */ const e12 = matrix.vec2(0, 0);
+/** @internal */ const e13 = matrix.vec2(0, 0);
+/** @internal */ const e23 = matrix.vec2(0, 0);
+/** @internal */ const temp1 = matrix.vec2(0, 0);
+/** @internal */ const temp2 = matrix.vec2(0, 0);
 
 /**
  * GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
@@ -129,7 +129,7 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
 
   // Get simplex vertices as an array.
   const vertices = simplex.m_v;
-  const k_maxIters = Settings.maxDistnceIterations;
+  const k_maxIters = Settings.maxDistanceIterations;
 
   // These store the vertices of the last simplex so that we
   // can check for duplicates and prevent cycling.
@@ -344,8 +344,8 @@ class SimplexVertex {
   }
 }
 
-const searchDirection_reuse = matrix.vec2(0, 0);
-const closestPoint_reuse = matrix.vec2(0, 0);  
+/** @internal */ const searchDirection_reuse = matrix.vec2(0, 0);
+/** @internal */ const closestPoint_reuse = matrix.vec2(0, 0);  
 
 class Simplex {
   m_v1 = new SimplexVertex();
@@ -360,8 +360,7 @@ class Simplex {
     this.m_count = 0;
   }
 
-  /** @internal */
-  toString(): string {
+  /** @internal */ toString(): string {
     if (this.m_count === 3) {
       return ["+" + this.m_count,
         this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y,
@@ -721,11 +720,11 @@ class Simplex {
   }
 }
 
-const simplex = new Simplex();
+/** @internal */ const simplex = new Simplex();
 
-const input = new DistanceInput();
-const cache = new SimplexCache();
-const output = new DistanceOutput();
+/** @internal */ const input = new DistanceInput();
+/** @internal */ const cache = new SimplexCache();
+/** @internal */ const output = new DistanceOutput();
 
 /**
  * Determine if two generic shapes overlap.

@@ -26,7 +26,7 @@ import type { Vec2 }  from '../common/Vec2';
 import type { Body }  from './Body';
 import { TimeStep } from "./Solver";
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 /**
  * A joint edge is used to connect bodies and joints together in a joint graph
@@ -81,7 +81,7 @@ export interface JointDef extends JointOpt {
   bodyB: Body;
 }
 
-const DEFAULTS = {
+/** @internal */ const DEFAULTS = {
   userData : null,
   collideConnected : false
 };

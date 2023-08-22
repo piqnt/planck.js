@@ -41,7 +41,7 @@
 
 • **allowSleep**? : *boolean*
 
-*Defined in [src/dynamics/World.ts:53](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/World.ts#L53)*
+*Defined in [dynamics/World.ts:53](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/World.ts#L53)*
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 • **blockSolve**? : *boolean*
 
-*Defined in [src/dynamics/World.ts:57](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/World.ts#L57)*
+*Defined in [dynamics/World.ts:57](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/World.ts#L57)*
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 • **continuousPhysics**? : *boolean*
 
-*Defined in [src/dynamics/World.ts:55](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/World.ts#L55)*
+*Defined in [dynamics/World.ts:55](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/World.ts#L55)*
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 • **gravity**? : *[Vec2](../classes/vec2.md)*
 
-*Defined in [src/dynamics/World.ts:52](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/World.ts#L52)*
+*Defined in [dynamics/World.ts:52](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/World.ts#L52)*
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 • **positionIterations**? : *number*
 
-*Defined in [src/dynamics/World.ts:59](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/World.ts#L59)*
+*Defined in [dynamics/World.ts:59](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/World.ts#L59)*
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 • **subStepping**? : *boolean*
 
-*Defined in [src/dynamics/World.ts:56](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/World.ts#L56)*
+*Defined in [dynamics/World.ts:56](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/World.ts#L56)*
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 • **velocityIterations**? : *number*
 
-*Defined in [src/dynamics/World.ts:58](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/World.ts#L58)*
+*Defined in [dynamics/World.ts:58](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/World.ts#L58)*
 
 ___
 
@@ -97,4 +97,4 @@ ___
 
 • **warmStarting**? : *boolean*
 
-*Defined in [src/dynamics/World.ts:54](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/World.ts#L54)*
+*Defined in [dynamics/World.ts:54](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/World.ts#L54)*

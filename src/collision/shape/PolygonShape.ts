@@ -34,17 +34,17 @@ import { SettingsInternal as Settings } from '../../Settings';
 import { Shape } from '../Shape';
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
-const math_max = Math.max;
-const math_min = Math.min;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const math_max = Math.max;
+/** @internal */ const math_min = Math.min;
 
-const temp = matrix.vec2(0, 0);
-const e = matrix.vec2(0, 0);
-const e1 = matrix.vec2(0, 0);
-const e2 = matrix.vec2(0, 0);
-const center = matrix.vec2(0, 0);
-const s = matrix.vec2(0, 0);
+/** @internal */ const temp = matrix.vec2(0, 0);
+/** @internal */ const e = matrix.vec2(0, 0);
+/** @internal */ const e1 = matrix.vec2(0, 0);
+/** @internal */ const e2 = matrix.vec2(0, 0);
+/** @internal */ const center = matrix.vec2(0, 0);
+/** @internal */ const s = matrix.vec2(0, 0);
 
 /**
  * A convex polygon. It is assumed that the interior of the polygon is to the
@@ -114,8 +114,7 @@ export class PolygonShape extends Shape {
   }
 
   /**
-   * @internal
-   * @deprecated Shapes should be treated as immutable.
+   * @internal @deprecated Shapes should be treated as immutable.
    *
    * clone the concrete shape.
    */
@@ -141,8 +140,7 @@ export class PolygonShape extends Shape {
     return 1;
   }
 
-  /** @internal */
-  _reset(): void {
+  /** @internal */ _reset(): void {
     this._set(this.m_vertices);
   }
 
@@ -268,11 +266,10 @@ export class PolygonShape extends Shape {
     }
 
     // Compute the polygon centroid.
-    this.m_centroid = ComputeCentroid(this.m_vertices, m);
+    this.m_centroid = computeCentroid(this.m_vertices, m);
   }
 
-  /** @internal */
-  _setAsBox(hx: number, hy: number, center?: Vec2Value, angle?: number): void {
+  /** @internal */ _setAsBox(hx: number, hy: number, center?: Vec2Value, angle?: number): void {
     // start with right-bottom, counter-clockwise, as in Gift wrapping algorithm in PolygonShape._set()
     this.m_vertices[0] = Vec2.neo(hx, -hy);
     this.m_vertices[1] = Vec2.neo(hx, hy);
@@ -546,7 +543,7 @@ export class PolygonShape extends Shape {
   }
 }
 
-function ComputeCentroid(vs: Vec2[], count: number): Vec2 {
+/** @internal */ function computeCentroid(vs: Vec2[], count: number): Vec2 {
   _ASSERT && console.assert(count >= 3);
 
   const c = Vec2.zero();

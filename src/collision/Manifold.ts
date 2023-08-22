@@ -28,16 +28,16 @@ import { TransformValue } from '../common/Transform';
 import { EPSILON } from '../common/Math';
 
 
-const math_sqrt = Math.sqrt;
+/** @internal */ const math_sqrt = Math.sqrt;
 
-const pointA = matrix.vec2(0, 0);
-const pointB = matrix.vec2(0, 0);
-const temp = matrix.vec2(0, 0);
-const cA = matrix.vec2(0, 0);
-const cB = matrix.vec2(0, 0);
-const dist = matrix.vec2(0, 0);
-const planePoint = matrix.vec2(0, 0);
-const clipPoint = matrix.vec2(0, 0);
+/** @internal */ const pointA = matrix.vec2(0, 0);
+/** @internal */ const pointB = matrix.vec2(0, 0);
+/** @internal */ const temp = matrix.vec2(0, 0);
+/** @internal */ const cA = matrix.vec2(0, 0);
+/** @internal */ const cB = matrix.vec2(0, 0);
+/** @internal */ const dist = matrix.vec2(0, 0);
+/** @internal */ const planePoint = matrix.vec2(0, 0);
+/** @internal */ const clipPoint = matrix.vec2(0, 0);
 
 export enum ManifoldType {
   e_unset = -1,

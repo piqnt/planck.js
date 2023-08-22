@@ -31,29 +31,29 @@ import { PolygonShape } from './PolygonShape';
 import { Fixture } from "../../dynamics/Fixture";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
-const incidentEdge = [ new ClipVertex(), new ClipVertex() ];
-const clipPoints1 = [ new ClipVertex(), new ClipVertex() ];
-const clipPoints2 = [ new ClipVertex(), new ClipVertex() ];
-const clipSegmentToLineNormal = matrix.vec2(0, 0);
-const v1 = matrix.vec2(0, 0);
-const n = matrix.vec2(0, 0);
-const xf = matrix.transform(0, 0, 0);
-const temp = matrix.vec2(0, 0);
-const v11 = matrix.vec2(0, 0);
-const v12 = matrix.vec2(0, 0);
-const localTangent = matrix.vec2(0, 0);
-const localNormal = matrix.vec2(0, 0);
-const planePoint = matrix.vec2(0, 0);
-const tangent = matrix.vec2(0, 0);
-const normal = matrix.vec2(0, 0);
-const normal1 = matrix.vec2(0, 0);
+/** @internal */ const incidentEdge = [ new ClipVertex(), new ClipVertex() ];
+/** @internal */ const clipPoints1 = [ new ClipVertex(), new ClipVertex() ];
+/** @internal */ const clipPoints2 = [ new ClipVertex(), new ClipVertex() ];
+/** @internal */ const clipSegmentToLineNormal = matrix.vec2(0, 0);
+/** @internal */ const v1 = matrix.vec2(0, 0);
+/** @internal */ const n = matrix.vec2(0, 0);
+/** @internal */ const xf = matrix.transform(0, 0, 0);
+/** @internal */ const temp = matrix.vec2(0, 0);
+/** @internal */ const v11 = matrix.vec2(0, 0);
+/** @internal */ const v12 = matrix.vec2(0, 0);
+/** @internal */ const localTangent = matrix.vec2(0, 0);
+/** @internal */ const localNormal = matrix.vec2(0, 0);
+/** @internal */ const planePoint = matrix.vec2(0, 0);
+/** @internal */ const tangent = matrix.vec2(0, 0);
+/** @internal */ const normal = matrix.vec2(0, 0);
+/** @internal */ const normal1 = matrix.vec2(0, 0);
 
 
 Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
 
-function PolygonContact(
+/** @internal */ function PolygonContact(
   manifold: Manifold,
   xfA: TransformValue,
   fixtureA: Fixture,
@@ -67,7 +67,7 @@ function PolygonContact(
   CollidePolygons(manifold, fixtureA.getShape() as PolygonShape, xfA, fixtureB.getShape() as PolygonShape, xfB);
 }
 
-interface MaxSeparation {
+/** @internal */ interface MaxSeparation {
   maxSeparation: number;
   bestIndex: number;
 }
@@ -76,7 +76,7 @@ interface MaxSeparation {
  * Find the max separation between poly1 and poly2 using edge normals from
  * poly1.
  */
-function findMaxSeparation(
+/** @internal */ function findMaxSeparation(
   poly1: PolygonShape,
   xf1: TransformValue,
   poly2: PolygonShape,
@@ -118,7 +118,7 @@ function findMaxSeparation(
   output.bestIndex = bestIndex;
 }
 
-function findIncidentEdge(
+/** @internal */ function findIncidentEdge(
   clipVertex: ClipVertex[],
   poly1: PolygonShape,
   xf1: TransformValue,
@@ -159,7 +159,7 @@ function findIncidentEdge(
   clipVertex[1].id.setFeatures(edge1, ContactFeatureType.e_face, i2, ContactFeatureType.e_vertex);
 }
 
-const maxSeparation = {
+/** @internal */ const maxSeparation = {
   maxSeparation: 0,
   bestIndex: 0,
 };

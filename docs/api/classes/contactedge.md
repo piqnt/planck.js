@@ -7,14 +7,6 @@ graph where each body is a node and each contact is an edge. A contact edge
 belongs to a doubly linked list maintained in each attached body. Each
 contact has two contact nodes, one for each attached body.
 
-**`prop`** {Contact} contact The contact
-
-**`prop`** {ContactEdge} prev The previous contact edge in the body's contact list
-
-**`prop`** {ContactEdge} next The next contact edge in the body's contact list
-
-**`prop`** {Body} other Provides quick access to the other body attached.
-
 ## Hierarchy
 
 * **ContactEdge**
@@ -38,7 +30,7 @@ contact has two contact nodes, one for each attached body.
 
 \+ **new ContactEdge**(`contact`: [Contact](contact.md)): *[ContactEdge](contactedge.md)*
 
-*Defined in [src/dynamics/Contact.ts:60](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Contact.ts#L60)*
+*Defined in [dynamics/Contact.ts:73](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Contact.ts#L73)*
 
 **Parameters:**
 
@@ -54,28 +46,28 @@ Name | Type |
 
 • **contact**: *[Contact](contact.md)*
 
-*Defined in [src/dynamics/Contact.ts:57](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Contact.ts#L57)*
+*Defined in [dynamics/Contact.ts:70](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Contact.ts#L70)*
 
 ___
 
 ###  next
 
-• **next**: *[ContactEdge](contactedge.md) | undefined*
+• **next**: *[ContactEdge](contactedge.md) | null* = null
 
-*Defined in [src/dynamics/Contact.ts:59](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Contact.ts#L59)*
+*Defined in [dynamics/Contact.ts:72](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Contact.ts#L72)*
 
 ___
 
 ###  other
 
-• **other**: *[Body](body.md) | undefined*
+• **other**: *[Body](body.md) | null* = null
 
-*Defined in [src/dynamics/Contact.ts:60](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Contact.ts#L60)*
+*Defined in [dynamics/Contact.ts:73](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Contact.ts#L73)*
 
 ___
 
 ###  prev
 
-• **prev**: *[ContactEdge](contactedge.md) | undefined*
+• **prev**: *[ContactEdge](contactedge.md) | null* = null
 
-*Defined in [src/dynamics/Contact.ts:58](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Contact.ts#L58)*
+*Defined in [dynamics/Contact.ts:71](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Contact.ts#L71)*

@@ -1,3 +1,4 @@
+/** @internal */
 export const options = function<T>(input: T, defaults: object): T {
   if (input === null || typeof input === 'undefined') {
     // tslint:disable-next-line:no-object-literal-type-assertion

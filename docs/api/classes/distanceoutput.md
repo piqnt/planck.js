@@ -4,14 +4,6 @@
 
 Output for Distance.
 
-**`prop`** {Vec2} pointA closest point on shapeA
-
-**`prop`** {Vec2} pointB closest point on shapeB
-
-**`prop`** distance
-
-**`prop`** iterations number of GJK iterations used
-
 ## Hierarchy
 
 * **DistanceOutput**
@@ -25,34 +17,54 @@ Output for Distance.
 * [pointA](distanceoutput.md#pointa)
 * [pointB](distanceoutput.md#pointb)
 
+### Methods
+
+* [recycle](distanceoutput.md#recycle)
+
 ## Properties
 
 ###  distance
 
-• **distance**: *number*
+• **distance**: *number* = 0
 
-*Defined in [src/collision/Distance.ts:70](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L70)*
+*Defined in [collision/Distance.ts:82](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L82)*
 
 ___
 
 ###  iterations
 
-• **iterations**: *number*
+• **iterations**: *number* = 0
 
-*Defined in [src/collision/Distance.ts:71](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L71)*
+*Defined in [collision/Distance.ts:84](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L84)*
+
+iterations number of GJK iterations used
 
 ___
 
 ###  pointA
 
-• **pointA**: *[Vec2](vec2.md)* = Vec2.zero()
+• **pointA**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
-*Defined in [src/collision/Distance.ts:68](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L68)*
+*Defined in [collision/Distance.ts:79](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L79)*
+
+closest point on shapeA
 
 ___
 
 ###  pointB
 
-• **pointB**: *[Vec2](vec2.md)* = Vec2.zero()
+• **pointB**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
-*Defined in [src/collision/Distance.ts:69](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L69)*
+*Defined in [collision/Distance.ts:81](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L81)*
+
+closest point on shapeB
+
+## Methods
+
+###  recycle
+
+▸ **recycle**(): *void*
+
+*Defined in [collision/Distance.ts:85](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L85)*
+
+**Returns:** *void*

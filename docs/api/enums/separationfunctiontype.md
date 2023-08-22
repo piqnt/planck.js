@@ -9,6 +9,7 @@
 * [e_faceA](separationfunctiontype.md#e_facea)
 * [e_faceB](separationfunctiontype.md#e_faceb)
 * [e_points](separationfunctiontype.md#e_points)
+* [e_unset](separationfunctiontype.md#e_unset)
 
 ## Enumeration members
 
@@ -16,7 +17,7 @@
 
 • **e_faceA**: = 2
 
-*Defined in [src/collision/TimeOfImpact.ts:307](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L307)*
+*Defined in [collision/TimeOfImpact.ts:325](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/TimeOfImpact.ts#L325)*
 
 ___
 
@@ -24,7 +25,7 @@ ___
 
 • **e_faceB**: = 3
 
-*Defined in [src/collision/TimeOfImpact.ts:308](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L308)*
+*Defined in [collision/TimeOfImpact.ts:326](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/TimeOfImpact.ts#L326)*
 
 ___
 
@@ -32,4 +33,12 @@ ___
 
 • **e_points**: = 1
 
-*Defined in [src/collision/TimeOfImpact.ts:306](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L306)*
+*Defined in [collision/TimeOfImpact.ts:324](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/TimeOfImpact.ts#L324)*
+
+___
+
+###  e_unset
+
+• **e_unset**: = -1
+
+*Defined in [collision/TimeOfImpact.ts:323](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/TimeOfImpact.ts#L323)*

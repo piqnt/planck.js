@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-const math_random = Math.random;
+/** @internal */ const math_random = Math.random;
 
 
 export const EPSILON = 1e-9;
@@ -31,6 +31,7 @@ export const EPSILON = 1e-9;
 export const isFinite = Number.isFinite;
 
 /**
+ * @deprecated
  * Next Largest Power of 2 Given a binary integer value x, the next largest
  * power of 2 can be computed by a SWAR algorithm that recursively "folds" the
  * upper bits into the lower bits. This process yields a bit vector with the
@@ -46,10 +47,12 @@ export function nextPowerOfTwo(x: number): number {
   return x + 1;
 }
 
+/** @deprecated */
 export function isPowerOfTwo(x: number): boolean {
   return x > 0 && (x & (x - 1)) === 0;
 }
 
+/** @deprecated */
 export function mod(num: number, min?: number, max?: number): number {
   if (typeof min === 'undefined') {
     max = 1;
@@ -68,6 +71,7 @@ export function mod(num: number, min?: number, max?: number): number {
 }
 
 /**
+ * @deprecated
  * Returns a min if num is less than min, and max if more than max, otherwise returns num.
  */
 export function clamp(num: number, min: number, max: number): number {
@@ -81,6 +85,7 @@ export function clamp(num: number, min: number, max: number): number {
 }
 
 /**
+ * @deprecated
  * Returns a random number between min and max when two arguments are provided.
  * If one arg is provided between 0 to max.
  * If one arg is passed between 0 to 1.
@@ -96,7 +101,7 @@ export function random(min?: number, max?: number): number {
   return min === max ? min : math_random() * (max - min) + min;
 }
 
-/** @deprecated */
+/** @ignore */
 export const math = Object.create(Math);
 math.EPSILON = EPSILON;
 math.isFinite = isFinite;

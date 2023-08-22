@@ -32,14 +32,15 @@ import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
-const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
-const math_min = Math.min;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const math_min = Math.min;
 
-
-const inactiveLimit = 0;
-const atLowerLimit = 1;
-const atUpperLimit = 2;
-const equalLimits = 3;
+/** @internal */ enum LimitState {
+  inactiveLimit = 0,
+  atLowerLimit = 1,
+  atUpperLimit = 2,
+  equalLimits = 3,
+}
 
 /**
  * Rope joint definition. This requires two body anchor points and a maximum
@@ -69,7 +70,7 @@ export interface RopeJointDef extends JointDef, RopeJointOpt {
   localAnchorB: Vec2;
 }
 
-const DEFAULTS = {
+/** @internal */ const DEFAULTS = {
   maxLength : 0.0,
 };
 
@@ -131,7 +132,7 @@ export class RopeJoint extends Joint {
     this.m_mass = 0.0;
     this.m_impulse = 0.0;
     this.m_length = 0.0;
-    this.m_state = inactiveLimit;
+    this.m_state = LimitState.inactiveLimit;
 
     // Limit:
     // C = norm(pB - pA) - L
@@ -257,9 +258,9 @@ export class RopeJoint extends Joint {
 
     const C = this.m_length - this.m_maxLength; // float
     if (C > 0.0) {
-      this.m_state = atUpperLimit;
+      this.m_state = LimitState.atUpperLimit;
     } else {
-      this.m_state = inactiveLimit;
+      this.m_state = LimitState.inactiveLimit;
     }
 
     if (this.m_length > Settings.linearSlop) {

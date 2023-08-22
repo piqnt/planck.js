@@ -34,8 +34,8 @@ import { PrismaticJoint } from './PrismaticJoint';
 import { TimeStep } from "../Solver";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -61,7 +61,7 @@ export interface GearJointDef extends JointDef, GearJointOpt {
   joint2: RevoluteJoint | PrismaticJoint;
 }
 
-const DEFAULTS = {
+/** @internal */ const DEFAULTS = {
   ratio : 1.0
 };
 

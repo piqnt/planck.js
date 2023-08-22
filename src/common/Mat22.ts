@@ -25,7 +25,7 @@
 import { Vec2 } from './Vec2';
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
 /**

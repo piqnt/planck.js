@@ -9,6 +9,7 @@
 * [e_circles](manifoldtype.md#e_circles)
 * [e_faceA](manifoldtype.md#e_facea)
 * [e_faceB](manifoldtype.md#e_faceb)
+* [e_unset](manifoldtype.md#e_unset)
 
 ## Enumeration members
 
@@ -16,7 +17,7 @@
 
 • **e_circles**: = 0
 
-*Defined in [src/collision/Manifold.ts:31](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L31)*
+*Defined in [collision/Manifold.ts:44](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L44)*
 
 ___
 
@@ -24,7 +25,7 @@ ___
 
 • **e_faceA**: = 1
 
-*Defined in [src/collision/Manifold.ts:32](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L32)*
+*Defined in [collision/Manifold.ts:45](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L45)*
 
 ___
 
@@ -32,4 +33,12 @@ ___
 
 • **e_faceB**: = 2
 
-*Defined in [src/collision/Manifold.ts:33](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L33)*
+*Defined in [collision/Manifold.ts:46](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L46)*
+
+___
+
+###  e_unset
+
+• **e_unset**: = -1
+
+*Defined in [collision/Manifold.ts:43](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Manifold.ts#L43)*

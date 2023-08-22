@@ -33,11 +33,11 @@ import { Shape } from '../Shape';
 import { EdgeShape } from './EdgeShape';
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
-const v1 = matrix.vec2(0, 0);
-const v2 = matrix.vec2(0, 0);
+/** @internal */ const v1 = matrix.vec2(0, 0);
+/** @internal */ const v2 = matrix.vec2(0, 0);
 
 
 /**
@@ -182,7 +182,6 @@ export class ChainShape extends Shape {
    * Create a chain with isolated end vertices.
    *
    * @param vertices an array of vertices, these are copied
-   * @param count the vertex count
    */
   _createChain(vertices: Vec2Value[]): ChainShape {
     _ASSERT && console.assert(this.m_vertices.length == 0 && this.m_count == 0);
@@ -242,8 +241,7 @@ export class ChainShape extends Shape {
   }
 
   /**
-   * @internal
-   * @deprecated Shapes should be treated as immutable.
+   * @internal @deprecated Shapes should be treated as immutable.
    *
    * clone the concrete shape.
    */

@@ -30,7 +30,7 @@ Motor joint definition.
 
 • **angularOffset**? : *number*
 
-*Defined in [src/dynamics/joint/MotorJoint.ts:46](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/MotorJoint.ts#L46)*
+*Defined in [dynamics/joint/MotorJoint.ts:46](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/MotorJoint.ts#L46)*
 
 The bodyB angle minus bodyA angle in radians.
 
@@ -42,7 +42,7 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:69](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L69)*
+*Defined in [dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -53,7 +53,7 @@ ___
 
 • **correctionFactor**? : *number*
 
-*Defined in [src/dynamics/joint/MotorJoint.ts:58](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/MotorJoint.ts#L58)*
+*Defined in [dynamics/joint/MotorJoint.ts:58](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/MotorJoint.ts#L58)*
 
 Position correction factor in the range [0,1].
 
@@ -63,7 +63,7 @@ ___
 
 • **linearOffset**? : *[Vec2](../classes/vec2.md)*
 
-*Defined in [src/dynamics/joint/MotorJoint.ts:62](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/MotorJoint.ts#L62)*
+*Defined in [dynamics/joint/MotorJoint.ts:62](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/MotorJoint.ts#L62)*
 
 Position of bodyB minus the position of bodyA, in bodyA's frame, in meters.
 
@@ -73,7 +73,7 @@ ___
 
 • **maxForce**? : *number*
 
-*Defined in [src/dynamics/joint/MotorJoint.ts:50](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/MotorJoint.ts#L50)*
+*Defined in [dynamics/joint/MotorJoint.ts:50](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/MotorJoint.ts#L50)*
 
 The maximum motor force in N.
 
@@ -83,7 +83,7 @@ ___
 
 • **maxTorque**? : *number*
 
-*Defined in [src/dynamics/joint/MotorJoint.ts:54](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/MotorJoint.ts#L54)*
+*Defined in [dynamics/joint/MotorJoint.ts:54](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/MotorJoint.ts#L54)*
 
 The maximum motor torque in N-m.
 
@@ -95,6 +95,6 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [src/dynamics/Joint.ts:64](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L64)*
+*Defined in [dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

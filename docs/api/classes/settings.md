@@ -4,6 +4,8 @@
 
 Tuning constants based on meters-kilograms-seconds (MKS) units.
 
+Some tolerances are absolute and some are relative. Absolute tolerances use MKS units.
+
 ## Hierarchy
 
 * **Settings**
@@ -17,10 +19,11 @@ Tuning constants based on meters-kilograms-seconds (MKS) units.
 * [angularSleepTolerance](settings.md#static-angularsleeptolerance)
 * [angularSlop](settings.md#static-angularslop)
 * [baumgarte](settings.md#static-baumgarte)
+* [lengthUnitsPerMeter](settings.md#static-lengthunitspermeter)
 * [linearSleepTolerance](settings.md#static-linearsleeptolerance)
 * [linearSlop](settings.md#static-linearslop)
 * [maxAngularCorrection](settings.md#static-maxangularcorrection)
-* [maxDistnceIterations](settings.md#static-maxdistnceiterations)
+* [maxDistanceIterations](settings.md#static-maxdistanceiterations)
 * [maxLinearCorrection](settings.md#static-maxlinearcorrection)
 * [maxManifoldPoints](settings.md#static-maxmanifoldpoints)
 * [maxPolygonVertices](settings.md#static-maxpolygonvertices)
@@ -35,11 +38,6 @@ Tuning constants based on meters-kilograms-seconds (MKS) units.
 
 ### Accessors
 
-* [angularSleepToleranceSqr](settings.md#static-angularsleeptolerancesqr)
-* [linearSleepToleranceSqr](settings.md#static-linearsleeptolerancesqr)
-* [linearSlopSquared](settings.md#static-linearslopsquared)
-* [maxRotationSquared](settings.md#static-maxrotationsquared)
-* [maxTranslationSquared](settings.md#static-maxtranslationsquared)
 * [polygonRadius](settings.md#static-polygonradius)
 
 ## Properties
@@ -48,7 +46,7 @@ Tuning constants based on meters-kilograms-seconds (MKS) units.
 
 ▪ **aabbExtension**: *number* = 0.1
 
-*Defined in [src/Settings.ts:49](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L49)*
+*Defined in [Settings.ts:58](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L58)*
 
 This is used to fatten AABBs in the dynamic tree. This allows proxies to move
 by a small amount without triggering a tree adjustment. This is in meters.
@@ -59,7 +57,7 @@ ___
 
 ▪ **aabbMultiplier**: *number* = 2
 
-*Defined in [src/Settings.ts:56](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L56)*
+*Defined in [Settings.ts:65](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L65)*
 
 This is used to fatten AABBs in the dynamic tree. This is used to predict the
 future position based on the current displacement. This is a dimensionless
@@ -69,9 +67,9 @@ ___
 
 ### `Static` angularSleepTolerance
 
-▪ **angularSleepTolerance**: *number* = (2.0 / 180.0 * Math.PI)
+▪ **angularSleepTolerance**: *number* = (2.0 / 180.0 * math_PI)
 
-*Defined in [src/Settings.ts:157](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L157)*
+*Defined in [Settings.ts:162](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L162)*
 
 A body cannot sleep if its angular velocity is above this tolerance.
 
@@ -79,9 +77,9 @@ ___
 
 ### `Static` angularSlop
 
-▪ **angularSlop**: *number* = (2.0 / 180.0 * Math.PI)
+▪ **angularSlop**: *number* = (2.0 / 180.0 * math_PI)
 
-*Defined in [src/Settings.ts:69](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L69)*
+*Defined in [Settings.ts:77](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L77)*
 
 A small angle used as a collision and constraint tolerance. Usually it is
 chosen to be numerically significant, but visually insignificant.
@@ -92,7 +90,7 @@ ___
 
 ▪ **baumgarte**: *number* = 0.2
 
-*Defined in [src/Settings.ts:138](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L138)*
+*Defined in [Settings.ts:144](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L144)*
 
 This scale factor controls how fast overlap is resolved. Ideally this would
 be 1 so that overlap is removed in one time step. However using values close
@@ -100,11 +98,23 @@ to 1 often lead to overshoot.
 
 ___
 
+### `Static` lengthUnitsPerMeter
+
+▪ **lengthUnitsPerMeter**: *number* = 1
+
+*Defined in [Settings.ts:39](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L39)*
+
+You can use this to change the length scale used by your game.
+
+For example for inches you could use 39.4.
+
+___
+
 ### `Static` linearSleepTolerance
 
 ▪ **linearSleepTolerance**: *number* = 0.01
 
-*Defined in [src/Settings.ts:151](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L151)*
+*Defined in [Settings.ts:157](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L157)*
 
 A body cannot sleep if its linear velocity is above this tolerance.
 
@@ -114,7 +124,7 @@ ___
 
 ▪ **linearSlop**: *number* = 0.005
 
-*Defined in [src/Settings.ts:62](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L62)*
+*Defined in [Settings.ts:71](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L71)*
 
 A small length used as a collision and constraint tolerance. Usually it is
 chosen to be numerically significant, but visually insignificant.
@@ -123,20 +133,20 @@ ___
 
 ### `Static` maxAngularCorrection
 
-▪ **maxAngularCorrection**: *number* = (8.0 / 180.0 * Math.PI)
+▪ **maxAngularCorrection**: *number* = (8.0 / 180.0 * math_PI)
 
-*Defined in [src/Settings.ts:117](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L117)*
+*Defined in [Settings.ts:125](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L125)*
 
 The maximum angular position correction used when solving constraints. This
 helps to prevent overshoot.
 
 ___
 
-### `Static` maxDistnceIterations
+### `Static` maxDistanceIterations
 
-▪ **maxDistnceIterations**: *number* = 20
+▪ **maxDistanceIterations**: *number* = 20
 
-*Defined in [src/Settings.ts:99](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L99)*
+*Defined in [Settings.ts:107](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L107)*
 
 Maximum iterations to find Distance.
 
@@ -146,7 +156,7 @@ ___
 
 ▪ **maxLinearCorrection**: *number* = 0.2
 
-*Defined in [src/Settings.ts:111](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L111)*
+*Defined in [Settings.ts:119](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L119)*
 
 The maximum linear position correction used when solving constraints. This
 helps to prevent overshoot.
@@ -157,7 +167,7 @@ ___
 
 ▪ **maxManifoldPoints**: *number* = 2
 
-*Defined in [src/Settings.ts:37](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L37)*
+*Defined in [Settings.ts:46](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L46)*
 
 The maximum number of contact points between two convex shapes. Do not change
 this value.
@@ -168,7 +178,7 @@ ___
 
 ▪ **maxPolygonVertices**: *number* = 12
 
-*Defined in [src/Settings.ts:43](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L43)*
+*Defined in [Settings.ts:52](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L52)*
 
 The maximum number of vertices on a convex polygon. You cannot increase this
 too much because BlockAllocator has a maximum object size.
@@ -177,9 +187,9 @@ ___
 
 ### `Static` maxRotation
 
-▪ **maxRotation**: *number* = (0.5 * Math.PI)
+▪ **maxRotation**: *number* = (0.5 * math_PI)
 
-*Defined in [src/Settings.ts:130](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L130)*
+*Defined in [Settings.ts:137](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L137)*
 
 The maximum angular velocity of a body. This limit is very large and is used
 to prevent numerical problems. You shouldn't need to adjust Settings.
@@ -190,7 +200,7 @@ ___
 
 ▪ **maxSubSteps**: *number* = 8
 
-*Defined in [src/Settings.ts:82](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L82)*
+*Defined in [Settings.ts:90](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L90)*
 
 Maximum number of sub-steps per contact in continuous physics simulation.
 
@@ -200,7 +210,7 @@ ___
 
 ▪ **maxTOIContacts**: *number* = 32
 
-*Defined in [src/Settings.ts:89](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L89)*
+*Defined in [Settings.ts:97](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L97)*
 
 Maximum number of contacts to be handled to solve a TOI impact.
 
@@ -210,7 +220,7 @@ ___
 
 ▪ **maxTOIIterations**: *number* = 20
 
-*Defined in [src/Settings.ts:94](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L94)*
+*Defined in [Settings.ts:102](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L102)*
 
 Maximum iterations to solve a TOI.
 
@@ -220,7 +230,7 @@ ___
 
 ▪ **maxTranslation**: *number* = 2
 
-*Defined in [src/Settings.ts:123](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L123)*
+*Defined in [Settings.ts:131](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L131)*
 
 The maximum linear velocity of a body. This limit is very large and is used
 to prevent numerical problems. You shouldn't need to adjust Settings.
@@ -231,7 +241,7 @@ ___
 
 ▪ **timeToSleep**: *number* = 0.5
 
-*Defined in [src/Settings.ts:146](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L146)*
+*Defined in [Settings.ts:152](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L152)*
 
 The time that a body must be still before it will go to sleep.
 
@@ -241,7 +251,7 @@ ___
 
 ▪ **toiBaugarte**: *number* = 0.75
 
-*Defined in [src/Settings.ts:139](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L139)*
+*Defined in [Settings.ts:145](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L145)*
 
 ___
 
@@ -249,68 +259,18 @@ ___
 
 ▪ **velocityThreshold**: *number* = 1
 
-*Defined in [src/Settings.ts:105](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L105)*
+*Defined in [Settings.ts:113](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L113)*
 
 A velocity threshold for elastic collisions. Any collision with a relative
 linear velocity below this threshold will be treated as inelastic.
 
 ## Accessors
 
-### `Static` angularSleepToleranceSqr
-
-• **get angularSleepToleranceSqr**(): *number*
-
-*Defined in [src/Settings.ts:158](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L158)*
-
-**Returns:** *number*
-
-___
-
-### `Static` linearSleepToleranceSqr
-
-• **get linearSleepToleranceSqr**(): *number*
-
-*Defined in [src/Settings.ts:152](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L152)*
-
-**Returns:** *number*
-
-___
-
-### `Static` linearSlopSquared
-
-• **get linearSlopSquared**(): *number*
-
-*Defined in [src/Settings.ts:63](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L63)*
-
-**Returns:** *number*
-
-___
-
-### `Static` maxRotationSquared
-
-• **get maxRotationSquared**(): *number*
-
-*Defined in [src/Settings.ts:131](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L131)*
-
-**Returns:** *number*
-
-___
-
-### `Static` maxTranslationSquared
-
-• **get maxTranslationSquared**(): *number*
-
-*Defined in [src/Settings.ts:124](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L124)*
-
-**Returns:** *number*
-
-___
-
 ### `Static` polygonRadius
 
 • **get polygonRadius**(): *number*
 
-*Defined in [src/Settings.ts:77](https://github.com/shakiba/planck.js/blob/acc3bd8/src/Settings.ts#L77)*
+*Defined in [Settings.ts:85](https://github.com/shakiba/planck.js/blob/1bc1208/src/Settings.ts#L85)*
 
 The radius of the polygon/edge shape skin. This should not be modified.
 Making this smaller means polygons will have an insufficient buffer for

@@ -107,6 +107,7 @@ function findBody(world: World, point: Point) {
   return body;
 }
 
+/** @internal */
 class StageTestbed extends Testbed {
   private canvas: any;
   private stage: any;

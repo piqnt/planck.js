@@ -32,8 +32,8 @@ import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -67,7 +67,7 @@ export interface MotorJointOpt extends JointOpt {
 export interface MotorJointDef extends JointDef, MotorJointOpt {
 }
 
-const DEFAULTS = {
+/** @internal */ const DEFAULTS = {
   maxForce : 1.0,
   maxTorque : 1.0,
   correctionFactor : 0.3

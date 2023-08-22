@@ -64,6 +64,7 @@ var __assign = function() {
     return __assign.apply(this, arguments);
 };
 
+/** @internal */
 var options = function (input, defaults) {
     if (input === null || typeof input === 'undefined') {
         // tslint:disable-next-line:no-object-literal-type-assertion
@@ -111,11 +112,12 @@ var options = function (input, defaults) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_random = Math.random;
+/** @internal */ var math_random = Math.random;
 var EPSILON = 1e-9;
 /** @internal @deprecated */
 var isFinite = Number.isFinite;
 /**
+ * @deprecated
  * Next Largest Power of 2 Given a binary integer value x, the next largest
  * power of 2 can be computed by a SWAR algorithm that recursively "folds" the
  * upper bits into the lower bits. This process yields a bit vector with the
@@ -130,9 +132,11 @@ function nextPowerOfTwo(x) {
     x |= (x >> 16);
     return x + 1;
 }
+/** @deprecated */
 function isPowerOfTwo(x) {
     return x > 0 && (x & (x - 1)) === 0;
 }
+/** @deprecated */
 function mod(num, min, max) {
     if (typeof min === 'undefined') {
         max = 1;
@@ -152,6 +156,7 @@ function mod(num, min, max) {
     }
 }
 /**
+ * @deprecated
  * Returns a min if num is less than min, and max if more than max, otherwise returns num.
  */
 function clamp(num, min, max) {
@@ -166,6 +171,7 @@ function clamp(num, min, max) {
     }
 }
 /**
+ * @deprecated
  * Returns a random number between min and max when two arguments are provided.
  * If one arg is provided between 0 to max.
  * If one arg is passed between 0 to 1.
@@ -181,7 +187,7 @@ function random(min, max) {
     }
     return min === max ? min : math_random() * (max - min) + min;
 }
-/** @deprecated */
+/** @ignore */
 var math = Object.create(Math);
 math.EPSILON = EPSILON;
 math.isFinite = isFinite;
@@ -214,10 +220,10 @@ math.random = random;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_abs$9 = Math.abs;
-var math_sqrt$5 = Math.sqrt;
-var math_max$8 = Math.max;
-var math_min$8 = Math.min;
+/** @internal */ var math_abs$9 = Math.abs;
+/** @internal */ var math_sqrt$5 = Math.sqrt;
+/** @internal */ var math_max$8 = Math.max;
+/** @internal */ var math_min$8 = Math.min;
 var Vec2 = /** @class */ (function () {
     // tslint:disable-next-line:typedef
     function Vec2(x, y) {
@@ -332,10 +338,7 @@ var Vec2 = /** @class */ (function () {
         this.y = value.y;
         return this;
     };
-    /**
-     * @internal
-     * @deprecated Use setCombine or setMul
-     */
+    /** @internal @deprecated Use setCombine or setMul */
     Vec2.prototype.wSet = function (a, v, b, w) {
         if (typeof b !== 'undefined' || typeof w !== 'undefined') {
             return this.setCombine(a, v, b, w);
@@ -372,10 +375,7 @@ var Vec2 = /** @class */ (function () {
         this.y += w.y;
         return this;
     };
-    /**
-     * @internal
-     * @deprecated Use addCombine or addMul
-     */
+    /** @internal @deprecated Use addCombine or addMul */
     Vec2.prototype.wAdd = function (a, v, b, w) {
         if (typeof b !== 'undefined' || typeof w !== 'undefined') {
             return this.addCombine(a, v, b, w);
@@ -669,8 +669,8 @@ var Vec2 = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_max$7 = Math.max;
-var math_min$7 = Math.min;
+/** @internal */ var math_max$7 = Math.max;
+/** @internal */ var math_min$7 = Math.min;
 var AABB = /** @class */ (function () {
     function AABB(lower, upper) {
         if (!(this instanceof AABB)) {
@@ -835,8 +835,7 @@ var AABB = /** @class */ (function () {
         output.normal = normal;
         return true;
     };
-    /** @internal */
-    AABB.prototype.toString = function () {
+    /** @internal */ AABB.prototype.toString = function () {
         return JSON.stringify(this);
     };
     AABB.combinePoints = function (out, a, b) {
@@ -879,9 +878,11 @@ var AABB = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_PI$6 = Math.PI;
+/** @internal */ var math_PI$6 = Math.PI;
 /**
  * Tuning constants based on meters-kilograms-seconds (MKS) units.
+ *
+ * Some tolerances are absolute and some are relative. Absolute tolerances use MKS units.
  */
 var Settings = /** @class */ (function () {
     function Settings() {
@@ -951,7 +952,7 @@ var Settings = /** @class */ (function () {
     /**
      * Maximum iterations to find Distance.
      */
-    Settings.maxDistnceIterations = 20;
+    Settings.maxDistanceIterations = 20;
     /**
      * A velocity threshold for elastic collisions. Any collision with a relative
      * linear velocity below this threshold will be treated as inelastic.
@@ -1080,9 +1081,9 @@ var SettingsInternal = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(SettingsInternal, "maxDistnceIterations", {
+    Object.defineProperty(SettingsInternal, "maxDistanceIterations", {
         get: function () {
-            return Settings.maxDistnceIterations;
+            return Settings.maxDistanceIterations;
         },
         enumerable: false,
         configurable: true
@@ -1205,6 +1206,7 @@ var SettingsInternal = /** @class */ (function () {
  * misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  */
+/** @internal */
 var Pool = /** @class */ (function () {
     function Pool(opts) {
         this._list = [];
@@ -1274,7 +1276,6 @@ var Pool = /** @class */ (function () {
             }
         }
     };
-    /** @internal */
     Pool.prototype.toString = function () {
         return " +" + this._createCount + " >" + this._allocateCount + " <" + this._releaseCount + " -"
             + this._disposeCount + " =" + this._list.length + "/" + this._max;
@@ -1305,8 +1306,8 @@ var Pool = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_abs$8 = Math.abs;
-var math_max$6 = Math.max;
+/** @internal */ var math_abs$8 = Math.abs;
+/** @internal */ var math_max$6 = Math.max;
 /**
  * A node in the dynamic tree. The client does not interact with this directly.
  */
@@ -1331,7 +1332,7 @@ var TreeNode = /** @class */ (function () {
     };
     return TreeNode;
 }());
-var poolTreeNode = new Pool({
+/** @internal */ var poolTreeNode = new Pool({
     create: function () {
         return new TreeNode();
     },
@@ -1975,6 +1976,7 @@ var DynamicTree = /** @class */ (function () {
     };
     return DynamicTree;
 }());
+/** @internal */
 var Iterator = /** @class */ (function () {
     function Iterator() {
         this.parents = [];
@@ -2044,8 +2046,8 @@ var Iterator = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_max$5 = Math.max;
-var math_min$6 = Math.min;
+/** @internal */ var math_max$5 = Math.max;
+/** @internal */ var math_min$6 = Math.min;
 /**
  * The broad-phase wraps and extends a dynamic-tree to keep track of moved
  * objects and query them on update.
@@ -2232,9 +2234,9 @@ var BroadPhase = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_sin$2 = Math.sin;
-var math_cos$2 = Math.cos;
-var math_sqrt$4 = Math.sqrt;
+/** @internal */ var math_sin$2 = Math.sin;
+/** @internal */ var math_cos$2 = Math.cos;
+/** @internal */ var math_sqrt$4 = Math.sqrt;
 function vec2(x, y) {
     return { x: x, y: y };
 }
@@ -2455,9 +2457,9 @@ function invTransformTransform(out, a, b) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_sin$1 = Math.sin;
-var math_cos$1 = Math.cos;
-var math_atan2$1 = Math.atan2;
+/** @internal */ var math_sin$1 = Math.sin;
+/** @internal */ var math_cos$1 = Math.cos;
+/** @internal */ var math_atan2$1 = Math.atan2;
 var Rot = /** @class */ (function () {
     /** Initialize from an angle in radians. */
     function Rot(angle) {
@@ -2631,9 +2633,9 @@ var Rot = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_atan2 = Math.atan2;
-var math_PI$5 = Math.PI;
-var temp$6 = vec2(0, 0);
+/** @internal */ var math_atan2 = Math.atan2;
+/** @internal */ var math_PI$5 = Math.PI;
+/** @internal */ var temp$6 = vec2(0, 0);
 /**
  * This describes the motion of a body/shape for TOI computation. Shapes are
  * defined with respect to the body origin, which may not coincide with the
@@ -2943,8 +2945,8 @@ var Velocity = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_sin = Math.sin;
-var math_cos = Math.cos;
+/** @internal */ var math_sin = Math.sin;
+/** @internal */ var math_cos = Math.cos;
 var Position = /** @class */ (function () {
     function Position() {
         /** location */
@@ -3038,10 +3040,10 @@ var Shape = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var synchronize_aabb1 = new AABB();
-var synchronize_aabb2 = new AABB();
-var displacement = vec2(0, 0);
-var FixtureDefDefault = {
+/** @internal */ var synchronize_aabb1 = new AABB();
+/** @internal */ var synchronize_aabb2 = new AABB();
+/** @internal */ var displacement = vec2(0, 0);
+/** @internal */ var FixtureDefDefault = {
     userData: null,
     friction: 0.2,
     restitution: 0.0,
@@ -3102,10 +3104,7 @@ var Fixture = /** @class */ (function () {
         }
         this.m_userData = def.userData;
     }
-    /**
-     * Re-setup fixture.
-     * @internal
-     */
+    /** @internal Re-setup fixture. */
     Fixture.prototype._reset = function () {
         var body = this.getBody();
         var broadPhase = body.m_world.m_broadPhase;
@@ -3408,14 +3407,14 @@ var Fixture = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var STATIC = 'static';
-var KINEMATIC = 'kinematic';
-var DYNAMIC = 'dynamic';
-var oldCenter = vec2(0, 0);
-var localCenter = vec2(0, 0);
-var shift = vec2(0, 0);
-var xf$2 = transform(0, 0, 0);
-var BodyDefDefault = {
+/** @internal */ var STATIC = 'static';
+/** @internal */ var KINEMATIC = 'kinematic';
+/** @internal */ var DYNAMIC = 'dynamic';
+/** @internal */ var oldCenter = vec2(0, 0);
+/** @internal */ var localCenter = vec2(0, 0);
+/** @internal */ var shift = vec2(0, 0);
+/** @internal */ var xf$2 = transform(0, 0, 0);
+/** @internal */ var BodyDefDefault = {
     type: STATIC,
     position: Vec2.zero(),
     angle: 0.0,
@@ -3580,13 +3579,14 @@ var Body = /** @class */ (function () {
         return this;
     };
     /**
-     * @internal
+     * Get the type of the body.
      */
     Body.prototype.getType = function () {
         return this.m_type;
     };
     /**
-     * @internal
+     * Set the type of the body to "static", "kinematic" or "dynamic".
+     * @param type The type of the body.
      */
     Body.prototype.setType = function (type) {
         if (this.isWorldLocked() == true) {
@@ -4120,9 +4120,7 @@ var Body = /** @class */ (function () {
         }
         return true;
     };
-    /**
-     * @internal Used for deserialize.
-     */
+    /** @internal Used for deserialize. */
     Body.prototype._addFixture = function (fixture) {
         if (this.isWorldLocked() == true) {
             return null;
@@ -4397,12 +4395,15 @@ var stats = {
     }
 };
 
+/** @internal */
 var now = function () {
     return Date.now();
 };
+/** @internal */
 var diff = function (time) {
     return Date.now() - time;
 };
+/** @internal */
 var Timer = {
     now: now,
     diff: diff,
@@ -4431,14 +4432,14 @@ var Timer = {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_max$4 = Math.max;
-var temp$5 = vec2(0, 0);
-var normal$4 = vec2(0, 0);
-var e12 = vec2(0, 0);
-var e13 = vec2(0, 0);
-var e23 = vec2(0, 0);
-var temp1 = vec2(0, 0);
-var temp2 = vec2(0, 0);
+/** @internal */ var math_max$4 = Math.max;
+/** @internal */ var temp$5 = vec2(0, 0);
+/** @internal */ var normal$4 = vec2(0, 0);
+/** @internal */ var e12 = vec2(0, 0);
+/** @internal */ var e13 = vec2(0, 0);
+/** @internal */ var e23 = vec2(0, 0);
+/** @internal */ var temp1 = vec2(0, 0);
+/** @internal */ var temp2 = vec2(0, 0);
 /**
  * GJK using Voronoi regions (Christer Ericson) and Barycentric coordinates.
  */
@@ -4525,7 +4526,7 @@ var Distance = function (output, cache, input) {
     simplex.readCache(cache, proxyA, xfA, proxyB, xfB);
     // Get simplex vertices as an array.
     var vertices = simplex.m_v;
-    var k_maxIters = SettingsInternal.maxDistnceIterations;
+    var k_maxIters = SettingsInternal.maxDistanceIterations;
     // These store the vertices of the last simplex so that we
     // can check for duplicates and prevent cycling.
     var saveA = [];
@@ -4711,8 +4712,8 @@ var SimplexVertex = /** @class */ (function () {
     };
     return SimplexVertex;
 }());
-var searchDirection_reuse = vec2(0, 0);
-var closestPoint_reuse = vec2(0, 0);
+/** @internal */ var searchDirection_reuse = vec2(0, 0);
+/** @internal */ var closestPoint_reuse = vec2(0, 0);
 var Simplex = /** @class */ (function () {
     function Simplex() {
         this.m_v1 = new SimplexVertex();
@@ -4726,8 +4727,7 @@ var Simplex = /** @class */ (function () {
         this.m_v3.recycle();
         this.m_count = 0;
     };
-    /** @internal */
-    Simplex.prototype.toString = function () {
+    /** @internal */ Simplex.prototype.toString = function () {
         if (this.m_count === 3) {
             return ["+" + this.m_count,
                 this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y,
@@ -5029,10 +5029,10 @@ var Simplex = /** @class */ (function () {
     };
     return Simplex;
 }());
-var simplex = new Simplex();
-var input$1 = new DistanceInput();
-var cache$1 = new SimplexCache();
-var output$1 = new DistanceOutput();
+/** @internal */ var simplex = new Simplex();
+/** @internal */ var input$1 = new DistanceInput();
+/** @internal */ var cache$1 = new SimplexCache();
+/** @internal */ var output$1 = new DistanceOutput();
 /**
  * Determine if two generic shapes overlap.
  */
@@ -5226,8 +5226,8 @@ var ShapeCast = function (output, input) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_abs$7 = Math.abs;
-var math_max$3 = Math.max;
+/** @internal */ var math_abs$7 = Math.abs;
+/** @internal */ var math_max$3 = Math.max;
 /**
  * Input parameters for TimeOfImpact.
  */
@@ -5277,20 +5277,20 @@ stats.toiIters = 0;
 stats.toiMaxIters = 0;
 stats.toiRootIters = 0;
 stats.toiMaxRootIters = 0;
-var distanceInput = new DistanceInput();
-var distanceOutput = new DistanceOutput();
+/** @internal */ var distanceInput = new DistanceInput();
+/** @internal */ var distanceOutput = new DistanceOutput();
 // this is passed to Distance and SeparationFunction
-var cache = new SimplexCache();
-var xfA$1 = transform(0, 0, 0);
-var xfB$1 = transform(0, 0, 0);
-var temp$4 = vec2(0, 0);
-var pointA$2 = vec2(0, 0);
-var pointB$2 = vec2(0, 0);
-var normal$3 = vec2(0, 0);
-var axisA = vec2(0, 0);
-var axisB = vec2(0, 0);
-var localPointA = vec2(0, 0);
-var localPointB = vec2(0, 0);
+/** @internal */ var cache = new SimplexCache();
+/** @internal */ var xfA$1 = transform(0, 0, 0);
+/** @internal */ var xfB$1 = transform(0, 0, 0);
+/** @internal */ var temp$4 = vec2(0, 0);
+/** @internal */ var pointA$2 = vec2(0, 0);
+/** @internal */ var pointB$2 = vec2(0, 0);
+/** @internal */ var normal$3 = vec2(0, 0);
+/** @internal */ var axisA = vec2(0, 0);
+/** @internal */ var axisB = vec2(0, 0);
+/** @internal */ var localPointA = vec2(0, 0);
+/** @internal */ var localPointB = vec2(0, 0);
 /**
  * Compute the upper bound on time before two shapes penetrate. Time is
  * represented as a fraction between [0,tMax]. This uses a swept separating axis
@@ -5625,7 +5625,7 @@ var SeparationFunction = /** @class */ (function () {
     };
     return SeparationFunction;
 }());
-var separationFunction = new SeparationFunction();
+/** @internal */ var separationFunction = new SeparationFunction();
 // legacy exports
 TimeOfImpact.Input = TOIInput;
 TimeOfImpact.Output = TOIOutput;
@@ -5653,9 +5653,9 @@ TimeOfImpact.Output = TOIOutput;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_abs$6 = Math.abs;
-var math_sqrt$3 = Math.sqrt;
-var math_min$5 = Math.min;
+/** @internal */ var math_abs$6 = Math.abs;
+/** @internal */ var math_sqrt$3 = Math.sqrt;
+/** @internal */ var math_min$5 = Math.min;
 var TimeStep = /** @class */ (function () {
     function TimeStep() {
         /** time step */
@@ -5682,15 +5682,15 @@ var TimeStep = /** @class */ (function () {
     return TimeStep;
 }());
 // reuse
-var s_subStep = new TimeStep();
-var c = vec2(0, 0);
-var v = vec2(0, 0);
-var translation = vec2(0, 0);
-var input = new TOIInput();
-var output = new TOIOutput();
-var backup = new Sweep();
-var backup1 = new Sweep();
-var backup2 = new Sweep();
+/** @internal */ var s_subStep = new TimeStep();
+/** @internal */ var c = vec2(0, 0);
+/** @internal */ var v = vec2(0, 0);
+/** @internal */ var translation = vec2(0, 0);
+/** @internal */ var input = new TOIInput();
+/** @internal */ var output = new TOIOutput();
+/** @internal */ var backup = new Sweep();
+/** @internal */ var backup1 = new Sweep();
+/** @internal */ var backup2 = new Sweep();
 /**
  * Contact impulses for reporting. Impulses are used instead of forces because
  * sub-step forces may approach infinity for rigid body collisions. These match
@@ -6544,15 +6544,15 @@ var Mat22 = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_sqrt$2 = Math.sqrt;
-var pointA$1 = vec2(0, 0);
-var pointB$1 = vec2(0, 0);
-var temp$3 = vec2(0, 0);
-var cA$1 = vec2(0, 0);
-var cB$1 = vec2(0, 0);
-var dist = vec2(0, 0);
-var planePoint$2 = vec2(0, 0);
-var clipPoint$1 = vec2(0, 0);
+/** @internal */ var math_sqrt$2 = Math.sqrt;
+/** @internal */ var pointA$1 = vec2(0, 0);
+/** @internal */ var pointB$1 = vec2(0, 0);
+/** @internal */ var temp$3 = vec2(0, 0);
+/** @internal */ var cA$1 = vec2(0, 0);
+/** @internal */ var cB$1 = vec2(0, 0);
+/** @internal */ var dist = vec2(0, 0);
+/** @internal */ var planePoint$2 = vec2(0, 0);
+/** @internal */ var clipPoint$1 = vec2(0, 0);
 var ManifoldType;
 (function (ManifoldType) {
     ManifoldType[ManifoldType["e_unset"] = -1] = "e_unset";
@@ -6922,10 +6922,10 @@ function clipSegmentToLine(vOut, vIn, normal, offset, vertexIndexA) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_sqrt$1 = Math.sqrt;
-var math_max$2 = Math.max;
-var math_min$4 = Math.min;
-var contactPool = new Pool({
+/** @internal */ var math_sqrt$1 = Math.sqrt;
+/** @internal */ var math_max$2 = Math.max;
+/** @internal */ var math_min$4 = Math.min;
+/** @internal */ var contactPool = new Pool({
     create: function () {
         return new Contact();
     },
@@ -6933,8 +6933,8 @@ var contactPool = new Pool({
         contact.recycle();
     }
 });
-var oldManifold = new Manifold();
-var worldManifold = new WorldManifold();
+/** @internal */ var oldManifold = new Manifold();
+/** @internal */ var worldManifold = new WorldManifold();
 /**
  * A contact edge is used to connect bodies and contacts together in a contact
  * graph where each body is a node and each contact is an edge. A contact edge
@@ -6971,7 +6971,7 @@ function mixRestitution(restitution1, restitution2) {
     return restitution1 > restitution2 ? restitution1 : restitution2;
 }
 // TODO: move this to Settings?
-var s_registers = [];
+/** @internal */ var s_registers = [];
 // TODO: merge with ManifoldPoint?
 var VelocityConstraintPoint = /** @class */ (function () {
     function VelocityConstraintPoint() {
@@ -6994,32 +6994,32 @@ var VelocityConstraintPoint = /** @class */ (function () {
     };
     return VelocityConstraintPoint;
 }());
-var cA = vec2(0, 0);
-var vA = vec2(0, 0);
-var cB = vec2(0, 0);
-var vB = vec2(0, 0);
-var tangent$1 = vec2(0, 0);
-var xfA = transform(0, 0, 0);
-var xfB = transform(0, 0, 0);
-var pointA = vec2(0, 0);
-var pointB = vec2(0, 0);
-var clipPoint = vec2(0, 0);
-var planePoint$1 = vec2(0, 0);
-var rA = vec2(0, 0);
-var rB = vec2(0, 0);
-var P$1 = vec2(0, 0);
-var normal$2 = vec2(0, 0);
-var point = vec2(0, 0);
-var dv = vec2(0, 0);
-var dv1 = vec2(0, 0);
-var dv2 = vec2(0, 0);
-var b = vec2(0, 0);
-var a = vec2(0, 0);
-var x = vec2(0, 0);
-var d = vec2(0, 0);
-var P1 = vec2(0, 0);
-var P2 = vec2(0, 0);
-var temp$2 = vec2(0, 0);
+/** @internal */ var cA = vec2(0, 0);
+/** @internal */ var vA = vec2(0, 0);
+/** @internal */ var cB = vec2(0, 0);
+/** @internal */ var vB = vec2(0, 0);
+/** @internal */ var tangent$1 = vec2(0, 0);
+/** @internal */ var xfA = transform(0, 0, 0);
+/** @internal */ var xfB = transform(0, 0, 0);
+/** @internal */ var pointA = vec2(0, 0);
+/** @internal */ var pointB = vec2(0, 0);
+/** @internal */ var clipPoint = vec2(0, 0);
+/** @internal */ var planePoint$1 = vec2(0, 0);
+/** @internal */ var rA = vec2(0, 0);
+/** @internal */ var rB = vec2(0, 0);
+/** @internal */ var P$1 = vec2(0, 0);
+/** @internal */ var normal$2 = vec2(0, 0);
+/** @internal */ var point = vec2(0, 0);
+/** @internal */ var dv = vec2(0, 0);
+/** @internal */ var dv1 = vec2(0, 0);
+/** @internal */ var dv2 = vec2(0, 0);
+/** @internal */ var b = vec2(0, 0);
+/** @internal */ var a = vec2(0, 0);
+/** @internal */ var x = vec2(0, 0);
+/** @internal */ var d = vec2(0, 0);
+/** @internal */ var P1 = vec2(0, 0);
+/** @internal */ var P2 = vec2(0, 0);
+/** @internal */ var temp$2 = vec2(0, 0);
 /**
  * The class manages contact between two shapes. A contact exists for each
  * overlapping AABB in the broad-phase (except if filtered). Therefore a contact
@@ -7102,6 +7102,7 @@ var Contact = /** @class */ (function () {
         /** @internal */ this.p_invIA = 0;
         /** @internal */ this.p_invIB = 0;
     }
+    /** @internal */
     Contact.prototype.initialize = function (fA, indexA, fB, indexB, evaluateFcn) {
         this.m_fixtureA = fA;
         this.m_fixtureB = fB;
@@ -7111,6 +7112,7 @@ var Contact = /** @class */ (function () {
         this.m_friction = mixFriction(this.m_fixtureA.m_friction, this.m_fixtureB.m_friction);
         this.m_restitution = mixRestitution(this.m_fixtureA.m_restitution, this.m_fixtureB.m_restitution);
     };
+    /** @internal */
     Contact.prototype.recycle = function () {
         this.m_nodeA.recycle();
         this.m_nodeB.recycle();
@@ -7967,16 +7969,12 @@ var Contact = /** @class */ (function () {
         copyVec2(velocityB.v, vB);
         velocityB.w = wB;
     };
-    /**
-     * @internal
-     */
+    /** @internal */
     Contact.addType = function (type1, type2, callback) {
         s_registers[type1] = s_registers[type1] || {};
         s_registers[type1][type2] = callback;
     };
-    /**
-     * @internal
-     */
+    /** @internal */
     Contact.create = function (fixtureA, indexA, fixtureB, indexB) {
         var typeA = fixtureA.m_shape.m_type;
         var typeB = fixtureB.m_shape.m_type;
@@ -8094,7 +8092,7 @@ var Contact = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var WorldDefDefault = {
+/** @internal */ var WorldDefDefault = {
     gravity: Vec2.zero(),
     allowSleep: true,
     warmStarting: true,
@@ -8399,9 +8397,7 @@ var World = /** @class */ (function () {
         }
         this.m_broadPhase.shiftOrigin(newOrigin);
     };
-    /**
-     * @internal Used for deserialize.
-     */
+    /** @internal Used for deserialize. */
     World.prototype._addBody = function (body) {
         if (this.isLocked()) {
             return;
@@ -8854,27 +8850,19 @@ var World = /** @class */ (function () {
         }
         return listeners.length;
     };
-    /**
-     * @internal
-     */
+    /** @internal */
     World.prototype.beginContact = function (contact) {
         this.publish('begin-contact', contact);
     };
-    /**
-     * @internal
-     */
+    /** @internal */
     World.prototype.endContact = function (contact) {
         this.publish('end-contact', contact);
     };
-    /**
-     * @internal
-     */
+    /** @internal */
     World.prototype.preSolve = function (contact, oldManifold) {
         this.publish('pre-solve', contact, oldManifold);
     };
-    /**
-     * @internal
-     */
+    /** @internal */
     World.prototype.postSolve = function (contact, impulse) {
         this.publish('post-solve', contact, impulse);
     };
@@ -9061,8 +9049,8 @@ var Vec3 = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var v1$2 = vec2(0, 0);
-var v2$1 = vec2(0, 0);
+/** @internal */ var v1$2 = vec2(0, 0);
+/** @internal */ var v2$1 = vec2(0, 0);
 /**
  * A line segment (edge) shape. These can be connected in chains or loops to
  * other edge shapes. The connectivity information is used to ensure correct
@@ -9179,8 +9167,7 @@ var EdgeShape = /** @class */ (function (_super) {
         return this;
     };
     /**
-     * @internal
-     * @deprecated Shapes should be treated as immutable.
+     * @internal @deprecated Shapes should be treated as immutable.
      *
      * clone the concrete shape.
      */
@@ -9329,8 +9316,8 @@ var Edge = EdgeShape;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var v1$1 = vec2(0, 0);
-var v2 = vec2(0, 0);
+/** @internal */ var v1$1 = vec2(0, 0);
+/** @internal */ var v2 = vec2(0, 0);
 /**
  * A chain shape is a free form sequence of line segments. The chain has
  * two-sided collision, so you can use inside and outside collision. Therefore,
@@ -9445,7 +9432,6 @@ var ChainShape = /** @class */ (function (_super) {
      * Create a chain with isolated end vertices.
      *
      * @param vertices an array of vertices, these are copied
-     * @param count the vertex count
      */
     ChainShape.prototype._createChain = function (vertices) {
         for (var i = 1; i < vertices.length; ++i) {
@@ -9495,8 +9481,7 @@ var ChainShape = /** @class */ (function (_super) {
         return this.m_nextVertex;
     };
     /**
-     * @internal
-     * @deprecated Shapes should be treated as immutable.
+     * @internal @deprecated Shapes should be treated as immutable.
      *
      * clone the concrete shape.
      */
@@ -9637,14 +9622,14 @@ var Chain = ChainShape;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_max$1 = Math.max;
-var math_min$3 = Math.min;
-var temp$1 = vec2(0, 0);
-var e$1 = vec2(0, 0);
-var e1$1 = vec2(0, 0);
-var e2$1 = vec2(0, 0);
-var center = vec2(0, 0);
-var s = vec2(0, 0);
+/** @internal */ var math_max$1 = Math.max;
+/** @internal */ var math_min$3 = Math.min;
+/** @internal */ var temp$1 = vec2(0, 0);
+/** @internal */ var e$1 = vec2(0, 0);
+/** @internal */ var e1$1 = vec2(0, 0);
+/** @internal */ var e2$1 = vec2(0, 0);
+/** @internal */ var center = vec2(0, 0);
+/** @internal */ var s = vec2(0, 0);
 /**
  * A convex polygon. It is assumed that the interior of the polygon is to the
  * left of each edge. Polygons have a maximum number of vertices equal to
@@ -9697,8 +9682,7 @@ var PolygonShape = /** @class */ (function (_super) {
         return this.m_radius;
     };
     /**
-     * @internal
-     * @deprecated Shapes should be treated as immutable.
+     * @internal @deprecated Shapes should be treated as immutable.
      *
      * clone the concrete shape.
      */
@@ -9722,8 +9706,7 @@ var PolygonShape = /** @class */ (function (_super) {
     PolygonShape.prototype.getChildCount = function () {
         return 1;
     };
-    /** @internal */
-    PolygonShape.prototype._reset = function () {
+    /** @internal */ PolygonShape.prototype._reset = function () {
         this._set(this.m_vertices);
     };
     /**
@@ -9822,10 +9805,9 @@ var PolygonShape = /** @class */ (function (_super) {
             this.m_normals[i].normalize();
         }
         // Compute the polygon centroid.
-        this.m_centroid = ComputeCentroid(this.m_vertices, m);
+        this.m_centroid = computeCentroid(this.m_vertices, m);
     };
-    /** @internal */
-    PolygonShape.prototype._setAsBox = function (hx, hy, center, angle) {
+    /** @internal */ PolygonShape.prototype._setAsBox = function (hx, hy, center, angle) {
         // start with right-bottom, counter-clockwise, as in Gift wrapping algorithm in PolygonShape._set()
         this.m_vertices[0] = Vec2.neo(hx, -hy);
         this.m_vertices[1] = Vec2.neo(hx, hy);
@@ -10033,7 +10015,7 @@ var PolygonShape = /** @class */ (function (_super) {
     PolygonShape.TYPE = 'polygon';
     return PolygonShape;
 }(Shape));
-function ComputeCentroid(vs, count) {
+/** @internal */ function computeCentroid(vs, count) {
     var c = Vec2.zero();
     var area = 0.0;
     // pRef is the reference point for forming triangles.
@@ -10127,9 +10109,9 @@ var Box = BoxShape;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_sqrt = Math.sqrt;
-var math_PI$4 = Math.PI;
-var temp = vec2(0, 0);
+/** @internal */ var math_sqrt = Math.sqrt;
+/** @internal */ var math_PI$4 = Math.PI;
+/** @internal */ var temp = vec2(0, 0);
 var CircleShape = /** @class */ (function (_super) {
     __extends(CircleShape, _super);
     // tslint:disable-next-line:typedef
@@ -10180,8 +10162,7 @@ var CircleShape = /** @class */ (function (_super) {
         return this.m_p;
     };
     /**
-     * @internal
-     * @deprecated Shapes should be treated as immutable.
+     * @internal @deprecated Shapes should be treated as immutable.
      *
      * clone the concrete shape.
      */
@@ -10306,9 +10287,9 @@ var Circle = CircleShape;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_abs$5 = Math.abs;
-var math_PI$3 = Math.PI;
-var DEFAULTS$a = {
+/** @internal */ var math_abs$5 = Math.abs;
+/** @internal */ var math_PI$3 = Math.PI;
+/** @internal */ var DEFAULTS$a = {
     frequencyHz: 0.0,
     dampingRatio: 0.0
 };
@@ -10621,7 +10602,7 @@ var DistanceJoint = /** @class */ (function (_super) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var DEFAULTS$9 = {
+/** @internal */ var DEFAULTS$9 = {
     maxForce: 0.0,
     maxTorque: 0.0,
 };
@@ -11085,16 +11066,16 @@ var Mat33 = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_abs$4 = Math.abs;
+/** @internal */ var math_abs$4 = Math.abs;
 // todo: use string?
-var RevoluteJointLimitState;
-(function (RevoluteJointLimitState) {
-    RevoluteJointLimitState[RevoluteJointLimitState["inactiveLimit"] = 0] = "inactiveLimit";
-    RevoluteJointLimitState[RevoluteJointLimitState["atLowerLimit"] = 1] = "atLowerLimit";
-    RevoluteJointLimitState[RevoluteJointLimitState["atUpperLimit"] = 2] = "atUpperLimit";
-    RevoluteJointLimitState[RevoluteJointLimitState["equalLimits"] = 3] = "equalLimits";
-})(RevoluteJointLimitState || (RevoluteJointLimitState = {}));
-var DEFAULTS$8 = {
+/** @internal */ var LimitState$2;
+(function (LimitState) {
+    LimitState[LimitState["inactiveLimit"] = 0] = "inactiveLimit";
+    LimitState[LimitState["atLowerLimit"] = 1] = "atLowerLimit";
+    LimitState[LimitState["atUpperLimit"] = 2] = "atUpperLimit";
+    LimitState[LimitState["equalLimits"] = 3] = "equalLimits";
+})(LimitState$2 || (LimitState$2 = {}));
+/** @internal */ var DEFAULTS$8 = {
     lowerAngle: 0.0,
     upperAngle: 0.0,
     maxMotorTorque: 0.0,
@@ -11120,10 +11101,11 @@ var RevoluteJoint = /** @class */ (function (_super) {
         if (!(_this instanceof RevoluteJoint)) {
             return new RevoluteJoint(def, bodyA, bodyB, anchor);
         }
+        def = def !== null && def !== void 0 ? def : {};
         _this = _super.call(this, def, bodyA, bodyB) || this;
         // effective mass for point-to-point constraint.
         /** @internal */ _this.m_mass = new Mat33();
-        /** @internal */ _this.m_limitState = RevoluteJointLimitState.inactiveLimit;
+        /** @internal */ _this.m_limitState = LimitState$2.inactiveLimit;
         bodyA = _this.m_bodyA;
         bodyB = _this.m_bodyB;
         _this.m_type = RevoluteJoint.TYPE;
@@ -11412,27 +11394,27 @@ var RevoluteJoint = /** @class */ (function (_super) {
         if (this.m_enableLimit && fixedRotation == false) {
             var jointAngle = aB - aA - this.m_referenceAngle;
             if (math_abs$4(this.m_upperAngle - this.m_lowerAngle) < 2.0 * SettingsInternal.angularSlop) {
-                this.m_limitState = RevoluteJointLimitState.equalLimits;
+                this.m_limitState = LimitState$2.equalLimits;
             }
             else if (jointAngle <= this.m_lowerAngle) {
-                if (this.m_limitState != RevoluteJointLimitState.atLowerLimit) {
+                if (this.m_limitState != LimitState$2.atLowerLimit) {
                     this.m_impulse.z = 0.0;
                 }
-                this.m_limitState = RevoluteJointLimitState.atLowerLimit;
+                this.m_limitState = LimitState$2.atLowerLimit;
             }
             else if (jointAngle >= this.m_upperAngle) {
-                if (this.m_limitState != RevoluteJointLimitState.atUpperLimit) {
+                if (this.m_limitState != LimitState$2.atUpperLimit) {
                     this.m_impulse.z = 0.0;
                 }
-                this.m_limitState = RevoluteJointLimitState.atUpperLimit;
+                this.m_limitState = LimitState$2.atUpperLimit;
             }
             else {
-                this.m_limitState = RevoluteJointLimitState.inactiveLimit;
+                this.m_limitState = LimitState$2.inactiveLimit;
                 this.m_impulse.z = 0.0;
             }
         }
         else {
-            this.m_limitState = RevoluteJointLimitState.inactiveLimit;
+            this.m_limitState = LimitState$2.inactiveLimit;
         }
         if (step.warmStarting) {
             // Scale impulses to support a variable time step.
@@ -11464,7 +11446,7 @@ var RevoluteJoint = /** @class */ (function (_super) {
         var iB = this.m_invIB;
         var fixedRotation = (iA + iB === 0.0);
         // Solve motor constraint.
-        if (this.m_enableMotor && this.m_limitState != RevoluteJointLimitState.equalLimits && fixedRotation == false) {
+        if (this.m_enableMotor && this.m_limitState != LimitState$2.equalLimits && fixedRotation == false) {
             var Cdot = wB - wA - this.m_motorSpeed;
             var impulse = -this.m_motorMass * Cdot;
             var oldImpulse = this.m_motorImpulse;
@@ -11475,17 +11457,17 @@ var RevoluteJoint = /** @class */ (function (_super) {
             wB += iB * impulse;
         }
         // Solve limit constraint.
-        if (this.m_enableLimit && this.m_limitState != RevoluteJointLimitState.inactiveLimit && fixedRotation == false) {
+        if (this.m_enableLimit && this.m_limitState != LimitState$2.inactiveLimit && fixedRotation == false) {
             var Cdot1 = Vec2.zero();
             Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
             Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
             var Cdot2 = wB - wA;
             var Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
             var impulse = Vec3.neg(this.m_mass.solve33(Cdot));
-            if (this.m_limitState == RevoluteJointLimitState.equalLimits) {
+            if (this.m_limitState == LimitState$2.equalLimits) {
                 this.m_impulse.add(impulse);
             }
-            else if (this.m_limitState == RevoluteJointLimitState.atLowerLimit) {
+            else if (this.m_limitState == LimitState$2.atLowerLimit) {
                 var newImpulse = this.m_impulse.z + impulse.z;
                 if (newImpulse < 0.0) {
                     var rhs = Vec2.combine(-1, Cdot1, this.m_impulse.z, Vec2.neo(this.m_mass.ez.x, this.m_mass.ez.y));
@@ -11501,7 +11483,7 @@ var RevoluteJoint = /** @class */ (function (_super) {
                     this.m_impulse.add(impulse);
                 }
             }
-            else if (this.m_limitState == RevoluteJointLimitState.atUpperLimit) {
+            else if (this.m_limitState == LimitState$2.atUpperLimit) {
                 var newImpulse = this.m_impulse.z + impulse.z;
                 if (newImpulse > 0.0) {
                     var rhs = Vec2.combine(-1, Cdot1, this.m_impulse.z, Vec2.neo(this.m_mass.ez.x, this.m_mass.ez.y));
@@ -11555,23 +11537,23 @@ var RevoluteJoint = /** @class */ (function (_super) {
         var positionError = 0.0;
         var fixedRotation = (this.m_invIA + this.m_invIB == 0.0);
         // Solve angular limit constraint.
-        if (this.m_enableLimit && this.m_limitState != RevoluteJointLimitState.inactiveLimit && fixedRotation == false) {
+        if (this.m_enableLimit && this.m_limitState != LimitState$2.inactiveLimit && fixedRotation == false) {
             var angle = aB - aA - this.m_referenceAngle;
             var limitImpulse = 0.0;
-            if (this.m_limitState == RevoluteJointLimitState.equalLimits) {
+            if (this.m_limitState == LimitState$2.equalLimits) {
                 // Prevent large angular corrections
                 var C = clamp(angle - this.m_lowerAngle, -SettingsInternal.maxAngularCorrection, SettingsInternal.maxAngularCorrection);
                 limitImpulse = -this.m_motorMass * C;
                 angularError = math_abs$4(C);
             }
-            else if (this.m_limitState == RevoluteJointLimitState.atLowerLimit) {
+            else if (this.m_limitState == LimitState$2.atLowerLimit) {
                 var C = angle - this.m_lowerAngle;
                 angularError = -C;
                 // Prevent large angular corrections and allow some slop.
                 C = clamp(C + SettingsInternal.angularSlop, -SettingsInternal.maxAngularCorrection, 0.0);
                 limitImpulse = -this.m_motorMass * C;
             }
-            else if (this.m_limitState == RevoluteJointLimitState.atUpperLimit) {
+            else if (this.m_limitState == LimitState$2.atUpperLimit) {
                 var C = angle - this.m_upperAngle;
                 angularError = C;
                 // Prevent large angular corrections and allow some slop.
@@ -11639,14 +11621,17 @@ var RevoluteJoint = /** @class */ (function (_super) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_abs$3 = Math.abs;
-var math_max = Math.max;
-var math_min$2 = Math.min;
-var inactiveLimit$1 = 0;
-var atLowerLimit = 1;
-var atUpperLimit$1 = 2;
-var equalLimits = 3;
-var DEFAULTS$7 = {
+/** @internal */ var math_abs$3 = Math.abs;
+/** @internal */ var math_max = Math.max;
+/** @internal */ var math_min$2 = Math.min;
+/** @internal */ var LimitState$1;
+(function (LimitState) {
+    LimitState[LimitState["inactiveLimit"] = 0] = "inactiveLimit";
+    LimitState[LimitState["atLowerLimit"] = 1] = "atLowerLimit";
+    LimitState[LimitState["atUpperLimit"] = 2] = "atUpperLimit";
+    LimitState[LimitState["equalLimits"] = 3] = "equalLimits";
+})(LimitState$1 || (LimitState$1 = {}));
+/** @internal */ var DEFAULTS$7 = {
     enableLimit: false,
     lowerTranslation: 0.0,
     upperTranslation: 0.0,
@@ -11688,7 +11673,7 @@ var PrismaticJoint = /** @class */ (function (_super) {
         _this.m_motorSpeed = def.motorSpeed;
         _this.m_enableLimit = def.enableLimit;
         _this.m_enableMotor = def.enableMotor;
-        _this.m_limitState = inactiveLimit$1;
+        _this.m_limitState = LimitState$1.inactiveLimit;
         _this.m_axis = Vec2.zero();
         _this.m_perp = Vec2.zero();
         _this.m_K = new Mat33();
@@ -12043,27 +12028,27 @@ var PrismaticJoint = /** @class */ (function (_super) {
         if (this.m_enableLimit) {
             var jointTranslation = Vec2.dot(this.m_axis, d); // float
             if (math_abs$3(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * SettingsInternal.linearSlop) {
-                this.m_limitState = equalLimits;
+                this.m_limitState = LimitState$1.equalLimits;
             }
             else if (jointTranslation <= this.m_lowerTranslation) {
-                if (this.m_limitState != atLowerLimit) {
-                    this.m_limitState = atLowerLimit;
+                if (this.m_limitState != LimitState$1.atLowerLimit) {
+                    this.m_limitState = LimitState$1.atLowerLimit;
                     this.m_impulse.z = 0.0;
                 }
             }
             else if (jointTranslation >= this.m_upperTranslation) {
-                if (this.m_limitState != atUpperLimit$1) {
-                    this.m_limitState = atUpperLimit$1;
+                if (this.m_limitState != LimitState$1.atUpperLimit) {
+                    this.m_limitState = LimitState$1.atUpperLimit;
                     this.m_impulse.z = 0.0;
                 }
             }
             else {
-                this.m_limitState = inactiveLimit$1;
+                this.m_limitState = LimitState$1.inactiveLimit;
                 this.m_impulse.z = 0.0;
             }
         }
         else {
-            this.m_limitState = inactiveLimit$1;
+            this.m_limitState = LimitState$1.inactiveLimit;
             this.m_impulse.z = 0.0;
         }
         if (this.m_enableMotor == false) {
@@ -12103,7 +12088,7 @@ var PrismaticJoint = /** @class */ (function (_super) {
         var iA = this.m_invIA;
         var iB = this.m_invIB;
         // Solve linear motor constraint.
-        if (this.m_enableMotor && this.m_limitState != equalLimits) {
+        if (this.m_enableMotor && this.m_limitState != LimitState$1.equalLimits) {
             var Cdot = Vec2.dot(this.m_axis, Vec2.sub(vB, vA)) + this.m_a2 * wB
                 - this.m_a1 * wA;
             var impulse = this.m_motorMass * (this.m_motorSpeed - Cdot);
@@ -12123,7 +12108,7 @@ var PrismaticJoint = /** @class */ (function (_super) {
         Cdot1.x += Vec2.dot(this.m_perp, vB) + this.m_s2 * wB;
         Cdot1.x -= Vec2.dot(this.m_perp, vA) + this.m_s1 * wA;
         Cdot1.y = wB - wA;
-        if (this.m_enableLimit && this.m_limitState != inactiveLimit$1) {
+        if (this.m_enableLimit && this.m_limitState != LimitState$1.inactiveLimit) {
             // Solve prismatic and limit constraint in block form.
             var Cdot2 = 0;
             Cdot2 += Vec2.dot(this.m_axis, vB) + this.m_a2 * wB;
@@ -12132,10 +12117,10 @@ var PrismaticJoint = /** @class */ (function (_super) {
             var f1 = Vec3.clone(this.m_impulse);
             var df = this.m_K.solve33(Vec3.neg(Cdot)); // Vec3
             this.m_impulse.add(df);
-            if (this.m_limitState == atLowerLimit) {
+            if (this.m_limitState == LimitState$1.atLowerLimit) {
                 this.m_impulse.z = math_max(this.m_impulse.z, 0.0);
             }
-            else if (this.m_limitState == atUpperLimit$1) {
+            else if (this.m_limitState == LimitState$1.atUpperLimit) {
                 this.m_impulse.z = math_min$2(this.m_impulse.z, 0.0);
             }
             // f2(1:2) = invK(1:2,1:2) * (-Cdot(1:2) - K(1:2,3) * (f2(3) - f1(3))) +
@@ -12305,7 +12290,7 @@ var PrismaticJoint = /** @class */ (function (_super) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var DEFAULTS$6 = {
+/** @internal */ var DEFAULTS$6 = {
     ratio: 1.0
 };
 /**
@@ -12722,7 +12707,7 @@ var GearJoint = /** @class */ (function (_super) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var DEFAULTS$5 = {
+/** @internal */ var DEFAULTS$5 = {
     maxForce: 1.0,
     maxTorque: 1.0,
     correctionFactor: 0.3
@@ -13020,8 +13005,8 @@ var MotorJoint = /** @class */ (function (_super) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_PI$2 = Math.PI;
-var DEFAULTS$4 = {
+/** @internal */ var math_PI$2 = Math.PI;
+/** @internal */ var DEFAULTS$4 = {
     maxForce: 0.0,
     frequencyHz: 5.0,
     dampingRatio: 0.7
@@ -13295,8 +13280,8 @@ var MouseJoint = /** @class */ (function (_super) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_abs$2 = Math.abs;
-var DEFAULTS$3 = {
+/** @internal */ var math_abs$2 = Math.abs;
+/** @internal */ var DEFAULTS$3 = {
     collideConnected: true
 };
 /**
@@ -13614,10 +13599,15 @@ var PulleyJoint = /** @class */ (function (_super) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_min$1 = Math.min;
-var inactiveLimit = 0;
-var atUpperLimit = 2;
-var DEFAULTS$2 = {
+/** @internal */ var math_min$1 = Math.min;
+/** @internal */ var LimitState;
+(function (LimitState) {
+    LimitState[LimitState["inactiveLimit"] = 0] = "inactiveLimit";
+    LimitState[LimitState["atLowerLimit"] = 1] = "atLowerLimit";
+    LimitState[LimitState["atUpperLimit"] = 2] = "atUpperLimit";
+    LimitState[LimitState["equalLimits"] = 3] = "equalLimits";
+})(LimitState || (LimitState = {}));
+/** @internal */ var DEFAULTS$2 = {
     maxLength: 0.0,
 };
 /**
@@ -13650,7 +13640,7 @@ var RopeJoint = /** @class */ (function (_super) {
         _this.m_mass = 0.0;
         _this.m_impulse = 0.0;
         _this.m_length = 0.0;
-        _this.m_state = inactiveLimit;
+        _this.m_state = LimitState.inactiveLimit;
         return _this;
         // Limit:
         // C = norm(pB - pA) - L
@@ -13757,10 +13747,10 @@ var RopeJoint = /** @class */ (function (_super) {
         this.m_length = this.m_u.length();
         var C = this.m_length - this.m_maxLength; // float
         if (C > 0.0) {
-            this.m_state = atUpperLimit;
+            this.m_state = LimitState.atUpperLimit;
         }
         else {
-            this.m_state = inactiveLimit;
+            this.m_state = LimitState.inactiveLimit;
         }
         if (this.m_length > SettingsInternal.linearSlop) {
             this.m_u.mul(1.0 / this.m_length);
@@ -13879,9 +13869,9 @@ var RopeJoint = /** @class */ (function (_super) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_abs$1 = Math.abs;
-var math_PI$1 = Math.PI;
-var DEFAULTS$1 = {
+/** @internal */ var math_abs$1 = Math.abs;
+/** @internal */ var math_PI$1 = Math.PI;
+/** @internal */ var DEFAULTS$1 = {
     frequencyHz: 0.0,
     dampingRatio: 0.0,
 };
@@ -14265,9 +14255,9 @@ var WeldJoint = /** @class */ (function (_super) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_abs = Math.abs;
-var math_PI = Math.PI;
-var DEFAULTS = {
+/** @internal */ var math_abs = Math.abs;
+/** @internal */ var math_PI = Math.PI;
+/** @internal */ var DEFAULTS = {
     enableMotor: false,
     maxMotorTorque: 0.0,
     motorSpeed: 0.0,
@@ -14994,11 +14984,11 @@ function testbed(a, b) {
  * SOFTWARE.
  */
 Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
-function CircleCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
+/** @internal */ function CircleCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
     CollideCircles(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
 }
-var pA = vec2(0, 0);
-var pB = vec2(0, 0);
+/** @internal */ var pA = vec2(0, 0);
+/** @internal */ var pB = vec2(0, 0);
 var CollideCircles = function (manifold, circleA, xfA, circleB, xfB) {
     manifold.pointCount = 0;
     transformVec2(pA, xfA, circleA.m_p);
@@ -15044,7 +15034,7 @@ var CollideCircles = function (manifold, circleA, xfA, circleB, xfB) {
  */
 Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
-function EdgeCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
+/** @internal */ function EdgeCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
     var shapeA = fixtureA.getShape();
     var shapeB = fixtureB.getShape();
     CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
@@ -15057,12 +15047,12 @@ function ChainCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, inde
     var shapeB = fixtureB.getShape();
     CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
 }
-var e = vec2(0, 0);
-var e1 = vec2(0, 0);
-var e2 = vec2(0, 0);
-var Q = vec2(0, 0);
-var P = vec2(0, 0);
-var n$2 = vec2(0, 0);
+/** @internal */ var e = vec2(0, 0);
+/** @internal */ var e1 = vec2(0, 0);
+/** @internal */ var e2 = vec2(0, 0);
+/** @internal */ var Q = vec2(0, 0);
+/** @internal */ var P = vec2(0, 0);
+/** @internal */ var n$2 = vec2(0, 0);
 // Compute contact points for edge versus circle.
 // This accounts for edge connectivity.
 var CollideEdgeCircle = function (manifold, edgeA, xfA, circleB, xfB) {
@@ -15174,30 +15164,30 @@ var CollideEdgeCircle = function (manifold, edgeA, xfA, circleB, xfB) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var incidentEdge = [new ClipVertex(), new ClipVertex()];
-var clipPoints1$1 = [new ClipVertex(), new ClipVertex()];
-var clipPoints2$1 = [new ClipVertex(), new ClipVertex()];
-var clipSegmentToLineNormal = vec2(0, 0);
-var v1 = vec2(0, 0);
-var n$1 = vec2(0, 0);
-var xf$1 = transform(0, 0, 0);
-var v11 = vec2(0, 0);
-var v12 = vec2(0, 0);
-var localTangent = vec2(0, 0);
-var localNormal = vec2(0, 0);
-var planePoint = vec2(0, 0);
-var tangent = vec2(0, 0);
-var normal$1 = vec2(0, 0);
-var normal1$1 = vec2(0, 0);
+/** @internal */ var incidentEdge = [new ClipVertex(), new ClipVertex()];
+/** @internal */ var clipPoints1$1 = [new ClipVertex(), new ClipVertex()];
+/** @internal */ var clipPoints2$1 = [new ClipVertex(), new ClipVertex()];
+/** @internal */ var clipSegmentToLineNormal = vec2(0, 0);
+/** @internal */ var v1 = vec2(0, 0);
+/** @internal */ var n$1 = vec2(0, 0);
+/** @internal */ var xf$1 = transform(0, 0, 0);
+/** @internal */ var v11 = vec2(0, 0);
+/** @internal */ var v12 = vec2(0, 0);
+/** @internal */ var localTangent = vec2(0, 0);
+/** @internal */ var localNormal = vec2(0, 0);
+/** @internal */ var planePoint = vec2(0, 0);
+/** @internal */ var tangent = vec2(0, 0);
+/** @internal */ var normal$1 = vec2(0, 0);
+/** @internal */ var normal1$1 = vec2(0, 0);
 Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
-function PolygonContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
+/** @internal */ function PolygonContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
     CollidePolygons(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
 }
 /**
  * Find the max separation between poly1 and poly2 using edge normals from
  * poly1.
  */
-function findMaxSeparation(poly1, xf1, poly2, xf2, output) {
+/** @internal */ function findMaxSeparation(poly1, xf1, poly2, xf2, output) {
     var count1 = poly1.m_count;
     var count2 = poly2.m_count;
     var n1s = poly1.m_normals;
@@ -15227,7 +15217,7 @@ function findMaxSeparation(poly1, xf1, poly2, xf2, output) {
     output.maxSeparation = maxSeparation;
     output.bestIndex = bestIndex;
 }
-function findIncidentEdge(clipVertex, poly1, xf1, edge1, poly2, xf2) {
+/** @internal */ function findIncidentEdge(clipVertex, poly1, xf1, edge1, poly2, xf2) {
     var normals1 = poly1.m_normals;
     var count2 = poly2.m_count;
     var vertices2 = poly2.m_vertices;
@@ -15252,7 +15242,7 @@ function findIncidentEdge(clipVertex, poly1, xf1, edge1, poly2, xf2) {
     transformVec2(clipVertex[1].v, xf2, vertices2[i2]);
     clipVertex[1].id.setFeatures(edge1, ContactFeatureType.e_face, i2, ContactFeatureType.e_vertex);
 }
-var maxSeparation = {
+/** @internal */ var maxSeparation = {
     maxSeparation: 0,
     bestIndex: 0,
 };
@@ -15384,11 +15374,11 @@ var CollidePolygons = function (manifold, polyA, xfA, polyB, xfB) {
  * SOFTWARE.
  */
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
-function PolygonCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
+/** @internal */ function PolygonCircleContact(manifold, xfA, fixtureA, indexA, xfB, fixtureB, indexB) {
     CollidePolygonCircle(manifold, fixtureA.getShape(), xfA, fixtureB.getShape(), xfB);
 }
-var cLocal = vec2(0, 0);
-var faceCenter = vec2(0, 0);
+/** @internal */ var cLocal = vec2(0, 0);
+/** @internal */ var faceCenter = vec2(0, 0);
 var CollidePolygonCircle = function (manifold, polygonA, xfA, circleB, xfB) {
     manifold.pointCount = 0;
     // Compute circle position in the frame of the polygon.
@@ -15497,27 +15487,27 @@ var CollidePolygonCircle = function (manifold, polygonA, xfA, circleB, xfB) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-var math_min = Math.min;
+/** @internal */ var math_min = Math.min;
 Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
-function EdgePolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
+/** @internal */ function EdgePolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
     CollideEdgePolygon(manifold, fA.getShape(), xfA, fB.getShape(), xfB);
 }
 // reused
-var edge_reuse = new EdgeShape();
-function ChainPolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
+/** @internal */ var edge_reuse = new EdgeShape();
+/** @internal */ function ChainPolygonContact(manifold, xfA, fA, indexA, xfB, fB, indexB) {
     var chain = fA.getShape();
     chain.getChildEdge(edge_reuse, indexA);
     CollideEdgePolygon(manifold, edge_reuse, xfA, fB.getShape(), xfB);
 }
-var EPAxisType;
+/** @internal */ var EPAxisType;
 (function (EPAxisType) {
     EPAxisType[EPAxisType["e_unknown"] = -1] = "e_unknown";
     EPAxisType[EPAxisType["e_edgeA"] = 1] = "e_edgeA";
     EPAxisType[EPAxisType["e_edgeB"] = 2] = "e_edgeB";
 })(EPAxisType || (EPAxisType = {}));
 // unused?
-var VertexType;
+/** @internal */ var VertexType;
 (function (VertexType) {
     VertexType[VertexType["e_isolated"] = 0] = "e_isolated";
     VertexType[VertexType["e_concave"] = 1] = "e_concave";
@@ -15526,7 +15516,7 @@ var VertexType;
 /**
  * This structure is used to keep track of the best separating axis.
  */
-var EPAxis = /** @class */ (function () {
+/** @internal */ var EPAxis = /** @class */ (function () {
     function EPAxis() {
     }
     return EPAxis;
@@ -15534,7 +15524,7 @@ var EPAxis = /** @class */ (function () {
 /**
  * This holds polygon B expressed in frame A.
  */
-var TempPolygon = /** @class */ (function () {
+/** @internal */ var TempPolygon = /** @class */ (function () {
     function TempPolygon() {
         this.vertices = []; // [Settings.maxPolygonVertices]
         this.normals = []; // [Settings.maxPolygonVertices];
@@ -15549,7 +15539,7 @@ var TempPolygon = /** @class */ (function () {
 /**
  * Reference face used for clipping
  */
-var ReferenceFace = /** @class */ (function () {
+/** @internal */ var ReferenceFace = /** @class */ (function () {
     function ReferenceFace() {
         this.v1 = vec2(0, 0);
         this.v2 = vec2(0, 0);
@@ -15567,26 +15557,26 @@ var ReferenceFace = /** @class */ (function () {
     return ReferenceFace;
 }());
 // reused
-var clipPoints1 = [new ClipVertex(), new ClipVertex()];
-var clipPoints2 = [new ClipVertex(), new ClipVertex()];
-var ie = [new ClipVertex(), new ClipVertex()];
-var edgeAxis = new EPAxis();
-var polygonAxis = new EPAxis();
-var polygonBA = new TempPolygon();
-var rf = new ReferenceFace();
-var centroidB = vec2(0, 0);
-var edge0 = vec2(0, 0);
-var edge1 = vec2(0, 0);
-var edge2 = vec2(0, 0);
-var xf = transform(0, 0, 0);
-var normal = vec2(0, 0);
-var normal0 = vec2(0, 0);
-var normal1 = vec2(0, 0);
-var normal2 = vec2(0, 0);
-var lowerLimit = vec2(0, 0);
-var upperLimit = vec2(0, 0);
-var perp = vec2(0, 0);
-var n = vec2(0, 0);
+/** @internal */ var clipPoints1 = [new ClipVertex(), new ClipVertex()];
+/** @internal */ var clipPoints2 = [new ClipVertex(), new ClipVertex()];
+/** @internal */ var ie = [new ClipVertex(), new ClipVertex()];
+/** @internal */ var edgeAxis = new EPAxis();
+/** @internal */ var polygonAxis = new EPAxis();
+/** @internal */ var polygonBA = new TempPolygon();
+/** @internal */ var rf = new ReferenceFace();
+/** @internal */ var centroidB = vec2(0, 0);
+/** @internal */ var edge0 = vec2(0, 0);
+/** @internal */ var edge1 = vec2(0, 0);
+/** @internal */ var edge2 = vec2(0, 0);
+/** @internal */ var xf = transform(0, 0, 0);
+/** @internal */ var normal = vec2(0, 0);
+/** @internal */ var normal0 = vec2(0, 0);
+/** @internal */ var normal1 = vec2(0, 0);
+/** @internal */ var normal2 = vec2(0, 0);
+/** @internal */ var lowerLimit = vec2(0, 0);
+/** @internal */ var upperLimit = vec2(0, 0);
+/** @internal */ var perp = vec2(0, 0);
+/** @internal */ var n = vec2(0, 0);
 /**
  * This function collides and edge and a polygon, taking into account edge
  * adjacency.

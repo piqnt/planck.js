@@ -28,9 +28,9 @@ import { DynamicTree, DynamicTreeQueryCallback } from './DynamicTree';
 import { FixtureProxy } from "../dynamics/Fixture";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const math_max = Math.max;
-const math_min = Math.min;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const math_max = Math.max;
+/** @internal */ const math_min = Math.min;
 
 
 /**

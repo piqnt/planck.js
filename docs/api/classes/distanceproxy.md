@@ -10,82 +10,23 @@ A distance proxy is used by the GJK algorithm. It encapsulates any shape.
 
 ## Index
 
-### Constructors
-
-* [constructor](distanceproxy.md#constructor)
-
-### Properties
-
-* [m_buffer](distanceproxy.md#m_buffer)
-* [m_count](distanceproxy.md#m_count)
-* [m_radius](distanceproxy.md#m_radius)
-* [m_vertices](distanceproxy.md#m_vertices)
-
 ### Methods
 
 * [getSupport](distanceproxy.md#getsupport)
 * [getSupportVertex](distanceproxy.md#getsupportvertex)
 * [getVertex](distanceproxy.md#getvertex)
 * [getVertexCount](distanceproxy.md#getvertexcount)
+* [recycle](distanceproxy.md#recycle)
 * [set](distanceproxy.md#set)
-
-## Constructors
-
-###  constructor
-
-\+ **new DistanceProxy**(): *[DistanceProxy](distanceproxy.md)*
-
-*Defined in [src/collision/Distance.ts:235](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L235)*
-
-**Returns:** *[DistanceProxy](distanceproxy.md)*
-
-## Properties
-
-###  m_buffer
-
-• **m_buffer**: *[Vec2](vec2.md)[]*
-
-*Defined in [src/collision/Distance.ts:232](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L232)*
-
-internal
-
-___
-
-###  m_count
-
-• **m_count**: *number*
-
-*Defined in [src/collision/Distance.ts:234](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L234)*
-
-internal
-
-___
-
-###  m_radius
-
-• **m_radius**: *number*
-
-*Defined in [src/collision/Distance.ts:235](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L235)*
-
-internal
-
-___
-
-###  m_vertices
-
-• **m_vertices**: *[Vec2](vec2.md)[]*
-
-*Defined in [src/collision/Distance.ts:233](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L233)*
-
-internal
+* [setVertices](distanceproxy.md#setvertices)
 
 ## Methods
 
 ###  getSupport
 
-▸ **getSupport**(`d`: [Vec2](vec2.md)): *number*
+▸ **getSupport**(`d`: [Vec2Value](../interfaces/vec2value.md)): *number*
 
-*Defined in [src/collision/Distance.ts:263](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L263)*
+*Defined in [collision/Distance.ts:272](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L272)*
 
 Get the supporting vertex index in the given direction.
 
@@ -93,7 +34,7 @@ Get the supporting vertex index in the given direction.
 
 Name | Type |
 ------ | ------ |
-`d` | [Vec2](vec2.md) |
+`d` | [Vec2Value](../interfaces/vec2value.md) |
 
 **Returns:** *number*
 
@@ -101,9 +42,9 @@ ___
 
 ###  getSupportVertex
 
-▸ **getSupportVertex**(`d`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
+▸ **getSupportVertex**(`d`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2Value](../interfaces/vec2value.md)*
 
-*Defined in [src/collision/Distance.ts:279](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L279)*
+*Defined in [collision/Distance.ts:288](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L288)*
 
 Get the supporting vertex in the given direction.
 
@@ -111,17 +52,17 @@ Get the supporting vertex in the given direction.
 
 Name | Type |
 ------ | ------ |
-`d` | [Vec2](vec2.md) |
+`d` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *[Vec2Value](../interfaces/vec2value.md)*
 
 ___
 
 ###  getVertex
 
-▸ **getVertex**(`index`: number): *[Vec2](vec2.md)*
+▸ **getVertex**(`index`: number): *[Vec2Value](../interfaces/vec2value.md)*
 
-*Defined in [src/collision/Distance.ts:255](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L255)*
+*Defined in [collision/Distance.ts:264](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L264)*
 
 Get a vertex by index. Used by Distance.
 
@@ -131,7 +72,7 @@ Name | Type |
 ------ | ------ |
 `index` | number |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *[Vec2Value](../interfaces/vec2value.md)*
 
 ___
 
@@ -139,7 +80,7 @@ ___
 
 ▸ **getVertexCount**(): *number*
 
-*Defined in [src/collision/Distance.ts:248](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L248)*
+*Defined in [collision/Distance.ts:257](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L257)*
 
 Get the vertex count.
 
@@ -147,11 +88,21 @@ Get the vertex count.
 
 ___
 
+###  recycle
+
+▸ **recycle**(): *void*
+
+*Defined in [collision/Distance.ts:248](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L248)*
+
+**Returns:** *void*
+
+___
+
 ###  set
 
 ▸ **set**(`shape`: [Shape](shape.md), `index`: number): *void*
 
-*Defined in [src/collision/Distance.ts:287](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L287)*
+*Defined in [collision/Distance.ts:296](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L296)*
 
 Initialize the proxy using the given shape. The shape must remain in scope
 while the proxy is in use.
@@ -162,5 +113,26 @@ Name | Type |
 ------ | ------ |
 `shape` | [Shape](shape.md) |
 `index` | number |
+
+**Returns:** *void*
+
+___
+
+###  setVertices
+
+▸ **setVertices**(`vertices`: [Vec2Value](../interfaces/vec2value.md)[], `count`: number, `radius`: number): *void*
+
+*Defined in [collision/Distance.ts:306](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L306)*
+
+Initialize the proxy using a vertex cloud and radius. The vertices
+must remain in scope while the proxy is in use.
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`vertices` | [Vec2Value](../interfaces/vec2value.md)[] |
+`count` | number |
+`radius` | number |
 
 **Returns:** *void*

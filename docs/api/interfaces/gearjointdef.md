@@ -32,7 +32,7 @@ Gear joint definition.
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [src/dynamics/Joint.ts:78](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L78)*
+*Defined in [dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L77)*
 
 The first attached body.
 
@@ -44,7 +44,7 @@ ___
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
 
-*Defined in [src/dynamics/Joint.ts:82](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L82)*
+*Defined in [dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L81)*
 
 The second attached body.
 
@@ -58,7 +58,7 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:69](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L69)*
+*Defined in [dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -69,7 +69,7 @@ ___
 
 • **joint1**: *[RevoluteJoint](../classes/revolutejoint.md) | [PrismaticJoint](../classes/prismaticjoint.md)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:57](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L57)*
+*Defined in [dynamics/joint/GearJoint.ts:57](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/GearJoint.ts#L57)*
 
 The first revolute/prismatic joint attached to the gear joint.
 
@@ -79,7 +79,7 @@ ___
 
 • **joint2**: *[RevoluteJoint](../classes/revolutejoint.md) | [PrismaticJoint](../classes/prismaticjoint.md)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:61](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L61)*
+*Defined in [dynamics/joint/GearJoint.ts:61](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/GearJoint.ts#L61)*
 
 The second prismatic/revolute joint attached to the gear joint.
 
@@ -91,7 +91,7 @@ ___
 
 *Inherited from [GearJointOpt](gearjointopt.md).[ratio](gearjointopt.md#optional-ratio)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:48](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/GearJoint.ts#L48)*
+*Defined in [dynamics/joint/GearJoint.ts:48](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/GearJoint.ts#L48)*
 
 The gear ratio. See [GearJoint](../classes/gearjoint.md) for explanation.
 
@@ -105,6 +105,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [src/dynamics/Joint.ts:64](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L64)*
+*Defined in [dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

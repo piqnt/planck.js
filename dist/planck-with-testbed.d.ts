@@ -1216,8 +1216,6 @@ declare class VelocityConstraintPoint {
  * object may exist that has no contact points.
  */
 declare class Contact {
-    initialize(fA: Fixture, indexA: number, fB: Fixture, indexB: number, evaluateFcn: EvaluateFunction): void;
-    recycle(): void;
     initConstraint(step: TimeStep): void;
     /**
      * Get the contact manifold. Do not modify the manifold unless you understand
@@ -1451,6 +1449,15 @@ declare class Body {
     setStatic(): Body;
     setDynamic(): Body;
     setKinematic(): Body;
+    /**
+     * Get the type of the body.
+     */
+    getType(): BodyType;
+    /**
+     * Set the type of the body to "static", "kinematic" or "dynamic".
+     * @param type The type of the body.
+     */
+    setType(type: BodyType): void;
     isBullet(): boolean;
     /**
      * Should this body be treated like a bullet for continuous collision detection?
@@ -2076,7 +2083,7 @@ type TestbedCallback = (testbed: Testbed) => (World | undefined);
 declare function testbed(callback: TestbedCallback): void;
 /** @deprecated */
 declare function testbed(options: TestbedFactoryOptions, callback: TestbedCallback): void;
-/** @deprecated */
+/** @ignore */
 declare const math: any;
 interface Vec3Value {
     x: number;
@@ -3970,6 +3977,8 @@ declare class WheelJoint extends Joint {
 }
 /**
  * Tuning constants based on meters-kilograms-seconds (MKS) units.
+ *
+ * Some tolerances are absolute and some are relative. Absolute tolerances use MKS units.
  */
 declare class Settings {
     /**
@@ -4033,7 +4042,7 @@ declare class Settings {
     /**
      * Maximum iterations to find Distance.
      */
-    static maxDistnceIterations: number;
+    static maxDistanceIterations: number;
     /**
      * A velocity threshold for elastic collisions. Any collision with a relative
      * linear velocity below this threshold will be treated as inelastic.
@@ -5416,8 +5425,6 @@ declare namespace planck {
      * object may exist that has no contact points.
      */
     class Contact {
-        initialize(fA: Fixture, indexA: number, fB: Fixture, indexB: number, evaluateFcn: EvaluateFunction): void;
-        recycle(): void;
         initConstraint(step: TimeStep): void;
         /**
          * Get the contact manifold. Do not modify the manifold unless you understand
@@ -5651,6 +5658,15 @@ declare namespace planck {
         setStatic(): Body;
         setDynamic(): Body;
         setKinematic(): Body;
+        /**
+         * Get the type of the body.
+         */
+        getType(): BodyType;
+        /**
+         * Set the type of the body to "static", "kinematic" or "dynamic".
+         * @param type The type of the body.
+         */
+        setType(type: BodyType): void;
         isBullet(): boolean;
         /**
          * Should this body be treated like a bullet for continuous collision detection?
@@ -6299,6 +6315,7 @@ declare namespace planck {
     function testbed(options: TestbedFactoryOptions, callback: TestbedCallback): void;
     const EPSILON = 1e-9;
     /**
+     * @deprecated
      * Next Largest Power of 2 Given a binary integer value x, the next largest
      * power of 2 can be computed by a SWAR algorithm that recursively "folds" the
      * upper bits into the lower bits. This process yields a bit vector with the
@@ -6306,19 +6323,23 @@ declare namespace planck {
      * yields the next largest power of 2. For a 32-bit value:
      */
     function nextPowerOfTwo(x: number): number;
+    /** @deprecated */
     function isPowerOfTwo(x: number): boolean;
+    /** @deprecated */
     function mod(num: number, min?: number, max?: number): number;
     /**
+     * @deprecated
      * Returns a min if num is less than min, and max if more than max, otherwise returns num.
      */
     function clamp(num: number, min: number, max: number): number;
     /**
+     * @deprecated
      * Returns a random number between min and max when two arguments are provided.
      * If one arg is provided between 0 to max.
      * If one arg is passed between 0 to 1.
      */
     function random(min?: number, max?: number): number;
-    /** @deprecated */
+    /** @ignore */
     const math: any;
     interface Vec3Value {
         x: number;
@@ -7983,6 +8004,8 @@ declare namespace planck {
     }
     /**
      * Tuning constants based on meters-kilograms-seconds (MKS) units.
+     *
+     * Some tolerances are absolute and some are relative. Absolute tolerances use MKS units.
      */
     class Settings {
         /**
@@ -8046,7 +8069,7 @@ declare namespace planck {
         /**
          * Maximum iterations to find Distance.
          */
-        static maxDistnceIterations: number;
+        static maxDistanceIterations: number;
         /**
          * A velocity threshold for elastic collisions. Any collision with a relative
          * linear velocity below this threshold will be treated as inelastic.

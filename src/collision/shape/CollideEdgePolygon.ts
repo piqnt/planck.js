@@ -34,13 +34,13 @@ import { PolygonShape } from './PolygonShape';
 import { Fixture } from "../../dynamics/Fixture";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const math_min = Math.min;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const math_min = Math.min;
 
 Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
 
-function EdgePolygonContact(manifold: Manifold, xfA: TransformValue, fA: Fixture, indexA: number, xfB: TransformValue, fB: Fixture, indexB: number): void {
+/** @internal */ function EdgePolygonContact(manifold: Manifold, xfA: TransformValue, fA: Fixture, indexA: number, xfB: TransformValue, fB: Fixture, indexB: number): void {
   _ASSERT && console.assert(fA.getType() == EdgeShape.TYPE);
   _ASSERT && console.assert(fB.getType() == PolygonShape.TYPE);
 
@@ -48,9 +48,9 @@ function EdgePolygonContact(manifold: Manifold, xfA: TransformValue, fA: Fixture
 }
 
 // reused
-const edge_reuse = new EdgeShape();
+/** @internal */ const edge_reuse = new EdgeShape();
 
-function ChainPolygonContact(manifold: Manifold, xfA: TransformValue, fA: Fixture, indexA: number, xfB: TransformValue, fB: Fixture, indexB: number): void {
+/** @internal */ function ChainPolygonContact(manifold: Manifold, xfA: TransformValue, fA: Fixture, indexA: number, xfB: TransformValue, fB: Fixture, indexB: number): void {
   _ASSERT && console.assert(fA.getType() == ChainShape.TYPE);
   _ASSERT && console.assert(fB.getType() == PolygonShape.TYPE);
 
@@ -60,14 +60,14 @@ function ChainPolygonContact(manifold: Manifold, xfA: TransformValue, fA: Fixtur
   CollideEdgePolygon(manifold, edge_reuse, xfA, fB.getShape() as PolygonShape, xfB);
 }
 
-enum EPAxisType {
+/** @internal */ enum EPAxisType {
   e_unknown = -1,
   e_edgeA = 1,
   e_edgeB = 2,
 }
 
 // unused?
-enum VertexType {
+/** @internal */ enum VertexType {
  e_isolated = 0,
  e_concave = 1,
  e_convex = 2,
@@ -76,7 +76,7 @@ enum VertexType {
 /**
  * This structure is used to keep track of the best separating axis.
  */
-class EPAxis {
+/** @internal */ class EPAxis {
   type: EPAxisType;
   index: number;
   separation: number;
@@ -85,7 +85,7 @@ class EPAxis {
 /**
  * This holds polygon B expressed in frame A.
  */
-class TempPolygon {
+/** @internal */ class TempPolygon {
   vertices: Vec2Value[] = []; // [Settings.maxPolygonVertices]
   normals: Vec2Value[] = []; // [Settings.maxPolygonVertices];
   count: number = 0;
@@ -100,7 +100,7 @@ class TempPolygon {
 /**
  * Reference face used for clipping
  */
-class ReferenceFace {
+/** @internal */ class ReferenceFace {
   i1: number;
   i2: number;
   readonly v1 = matrix.vec2(0 ,0);
@@ -120,26 +120,26 @@ class ReferenceFace {
 }
 
 // reused
-const clipPoints1 = [ new ClipVertex(), new ClipVertex() ];
-const clipPoints2 = [ new ClipVertex(), new ClipVertex() ];
-const ie = [ new ClipVertex(), new ClipVertex() ];
-const edgeAxis = new EPAxis();
-const polygonAxis = new EPAxis();
-const polygonBA = new TempPolygon();
-const rf = new ReferenceFace();
-const centroidB = matrix.vec2(0, 0);
-const edge0 = matrix.vec2(0, 0);
-const edge1 = matrix.vec2(0, 0);
-const edge2 = matrix.vec2(0, 0);
-const xf = matrix.transform(0, 0, 0);
-const normal = matrix.vec2(0, 0);
-const normal0 = matrix.vec2(0, 0);
-const normal1 = matrix.vec2(0, 0);
-const normal2 = matrix.vec2(0, 0);
-const lowerLimit = matrix.vec2(0, 0);
-const upperLimit = matrix.vec2(0, 0);
-const perp = matrix.vec2(0, 0);
-const n = matrix.vec2(0, 0);
+/** @internal */ const clipPoints1 = [ new ClipVertex(), new ClipVertex() ];
+/** @internal */ const clipPoints2 = [ new ClipVertex(), new ClipVertex() ];
+/** @internal */ const ie = [ new ClipVertex(), new ClipVertex() ];
+/** @internal */ const edgeAxis = new EPAxis();
+/** @internal */ const polygonAxis = new EPAxis();
+/** @internal */ const polygonBA = new TempPolygon();
+/** @internal */ const rf = new ReferenceFace();
+/** @internal */ const centroidB = matrix.vec2(0, 0);
+/** @internal */ const edge0 = matrix.vec2(0, 0);
+/** @internal */ const edge1 = matrix.vec2(0, 0);
+/** @internal */ const edge2 = matrix.vec2(0, 0);
+/** @internal */ const xf = matrix.transform(0, 0, 0);
+/** @internal */ const normal = matrix.vec2(0, 0);
+/** @internal */ const normal0 = matrix.vec2(0, 0);
+/** @internal */ const normal1 = matrix.vec2(0, 0);
+/** @internal */ const normal2 = matrix.vec2(0, 0);
+/** @internal */ const lowerLimit = matrix.vec2(0, 0);
+/** @internal */ const upperLimit = matrix.vec2(0, 0);
+/** @internal */ const perp = matrix.vec2(0, 0);
+/** @internal */ const n = matrix.vec2(0, 0);
 
 /**
  * This function collides and edge and a polygon, taking into account edge

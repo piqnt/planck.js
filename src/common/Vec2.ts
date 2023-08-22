@@ -25,12 +25,12 @@
 import { EPSILON } from "./Math";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
-const math_abs = Math.abs;
-const math_sqrt = Math.sqrt;
-const math_max = Math.max;
-const math_min = Math.min;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const math_abs = Math.abs;
+/** @internal */ const math_sqrt = Math.sqrt;
+/** @internal */ const math_max = Math.max;
+/** @internal */ const math_min = Math.min;
 
 
 export interface Vec2Value {
@@ -182,10 +182,7 @@ export class Vec2 {
     return this;
   }
 
-  /**
-   * @internal
-   * @deprecated Use setCombine or setMul
-   */
+  /** @internal @deprecated Use setCombine or setMul */
   wSet(a: number, v: Vec2Value, b?: number, w?: Vec2Value): Vec2 {
     if (typeof b !== 'undefined' || typeof w !== 'undefined') {
       return this.setCombine(a, v, b, w);
@@ -234,10 +231,7 @@ export class Vec2 {
     return this;
   }
 
-  /**
-   * @internal
-   * @deprecated Use addCombine or addMul
-   */
+  /** @internal @deprecated Use addCombine or addMul */
   wAdd(a: number, v: Vec2Value, b?: number, w?: Vec2Value): Vec2 {
     if (typeof b !== 'undefined' || typeof w !== 'undefined') {
       return this.addCombine(a, v, b, w);

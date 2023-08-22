@@ -4,14 +4,6 @@
 
 Used to warm start Distance. Set count to zero on first call.
 
-**`prop`** {number} metric length or area
-
-**`prop`** {array} indexA vertices on shape A
-
-**`prop`** {array} indexB vertices on shape B
-
-**`prop`** {number} count
-
 ## Hierarchy
 
 * **SimplexCache**
@@ -25,13 +17,17 @@ Used to warm start Distance. Set count to zero on first call.
 * [indexB](simplexcache.md#indexb)
 * [metric](simplexcache.md#metric)
 
+### Methods
+
+* [recycle](simplexcache.md#recycle)
+
 ## Properties
 
 ###  count
 
 • **count**: *number* = 0
 
-*Defined in [src/collision/Distance.ts:86](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L86)*
+*Defined in [collision/Distance.ts:103](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L103)*
 
 ___
 
@@ -39,7 +35,9 @@ ___
 
 • **indexA**: *number[]* = []
 
-*Defined in [src/collision/Distance.ts:84](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L84)*
+*Defined in [collision/Distance.ts:100](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L100)*
+
+vertices on shape A
 
 ___
 
@@ -47,7 +45,9 @@ ___
 
 • **indexB**: *number[]* = []
 
-*Defined in [src/collision/Distance.ts:85](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L85)*
+*Defined in [collision/Distance.ts:102](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L102)*
+
+vertices on shape B
 
 ___
 
@@ -55,4 +55,16 @@ ___
 
 • **metric**: *number* = 0
 
-*Defined in [src/collision/Distance.ts:83](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L83)*
+*Defined in [collision/Distance.ts:98](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L98)*
+
+length or area
+
+## Methods
+
+###  recycle
+
+▸ **recycle**(): *void*
+
+*Defined in [collision/Distance.ts:104](https://github.com/shakiba/planck.js/blob/1bc1208/src/collision/Distance.ts#L104)*
+
+**Returns:** *void*
