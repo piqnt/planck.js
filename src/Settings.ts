@@ -22,11 +22,13 @@
  * SOFTWARE.
  */
 
-const math_PI = Math.PI;
+/** @internal */ const math_PI = Math.PI;
 
 
 /**
  * Tuning constants based on meters-kilograms-seconds (MKS) units.
+ * 
+ * Some tolerances are absolute and some are relative. Absolute tolerances use MKS units.
  */
 export class Settings {
   /**
@@ -87,7 +89,7 @@ export class Settings {
    */
   static maxSubSteps: number = 8;
 
-// Dynamics
+  // Dynamics
 
   /**
    * Maximum number of contacts to be handled to solve a TOI impact.
@@ -102,7 +104,7 @@ export class Settings {
   /**
    * Maximum iterations to find Distance.
    */
-  static maxDistnceIterations: number = 20;
+  static maxDistanceIterations: number = 20;
 
   /**
    * A velocity threshold for elastic collisions. Any collision with a relative
@@ -195,8 +197,8 @@ export class SettingsInternal {
   static get maxTOIIterations() {
     return Settings.maxTOIIterations;
   }
-  static get maxDistnceIterations() {
-    return Settings.maxDistnceIterations;
+  static get maxDistanceIterations() {
+    return Settings.maxDistanceIterations;
   }
   static get velocityThreshold() {
     return Settings.velocityThreshold * Settings.lengthUnitsPerMeter;
