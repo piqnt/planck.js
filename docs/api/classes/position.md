@@ -23,7 +23,7 @@
 
 • **a**: *number* = 0
 
-*Defined in [dynamics/Position.ts:38](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Position.ts#L38)*
+*Defined in [dynamics/Position.ts:38](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Position.ts#L38)*
 
 angle
 
@@ -33,7 +33,7 @@ ___
 
 • **c**: *[Vec2](vec2.md)‹›* = Vec2.zero()
 
-*Defined in [dynamics/Position.ts:35](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Position.ts#L35)*
+*Defined in [dynamics/Position.ts:35](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Position.ts#L35)*
 
 location
 
@@ -43,7 +43,7 @@ location
 
 ▸ **getTransform**(`xf`: [TransformValue](../globals.md#transformvalue), `p`: [Vec2Value](../interfaces/vec2value.md)): *[TransformValue](../globals.md#transformvalue)*
 
-*Defined in [dynamics/Position.ts:41](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Position.ts#L41)*
+*Defined in [dynamics/Position.ts:41](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Position.ts#L41)*
 
 **Parameters:**
 

@@ -40,7 +40,7 @@
 
 • **x**: *number*
 
-*Defined in [common/Vec3.ts:37](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L37)*
+*Defined in [common/Vec3.ts:37](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L37)*
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 • **y**: *number*
 
-*Defined in [common/Vec3.ts:38](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L38)*
+*Defined in [common/Vec3.ts:38](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L38)*
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 • **z**: *number*
 
-*Defined in [common/Vec3.ts:39](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L39)*
+*Defined in [common/Vec3.ts:39](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L39)*
 
 ## Methods
 
@@ -64,7 +64,7 @@ ___
 
 ▸ **add**(`w`: [Vec3Value](../interfaces/vec3value.md)): *[Vec3](vec3.md)*
 
-*Defined in [common/Vec3.ts:136](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L136)*
+*Defined in [common/Vec3.ts:136](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L136)*
 
 **Parameters:**
 
@@ -80,7 +80,7 @@ ___
 
 ▸ **mul**(`m`: number): *[Vec3](vec3.md)*
 
-*Defined in [common/Vec3.ts:150](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L150)*
+*Defined in [common/Vec3.ts:150](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L150)*
 
 **Parameters:**
 
@@ -96,7 +96,7 @@ ___
 
 ▸ **neg**(): *[Vec3](vec3.md)*
 
-*Defined in [common/Vec3.ts:192](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L192)*
+*Defined in [common/Vec3.ts:192](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L192)*
 
 **Returns:** *[Vec3](vec3.md)*
 
@@ -106,7 +106,7 @@ ___
 
 ▸ **set**(`x`: number, `y`: number, `z`: number): *[Vec3](vec3.md)*
 
-*Defined in [common/Vec3.ts:129](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L129)*
+*Defined in [common/Vec3.ts:129](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L129)*
 
 **Parameters:**
 
@@ -124,7 +124,7 @@ ___
 
 ▸ **setZero**(): *[Vec3](vec3.md)*
 
-*Defined in [common/Vec3.ts:122](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L122)*
+*Defined in [common/Vec3.ts:122](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L122)*
 
 **Returns:** *[Vec3](vec3.md)*
 
@@ -134,7 +134,7 @@ ___
 
 ▸ **sub**(`w`: [Vec3Value](../interfaces/vec3value.md)): *[Vec3](vec3.md)*
 
-*Defined in [common/Vec3.ts:143](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L143)*
+*Defined in [common/Vec3.ts:143](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L143)*
 
 **Parameters:**
 
@@ -150,7 +150,7 @@ ___
 
 ▸ **add**(`v`: [Vec3Value](../interfaces/vec3value.md), `w`: [Vec3Value](../interfaces/vec3value.md)): *[Vec3](vec3.md)*
 
-*Defined in [common/Vec3.ts:180](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L180)*
+*Defined in [common/Vec3.ts:180](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L180)*
 
 **Parameters:**
 
@@ -167,7 +167,7 @@ ___
 
 ▸ **areEqual**(`v`: [Vec3Value](../interfaces/vec3value.md), `w`: [Vec3Value](../interfaces/vec3value.md)): *boolean*
 
-*Defined in [common/Vec3.ts:157](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L157)*
+*Defined in [common/Vec3.ts:157](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L157)*
 
 **Parameters:**
 
@@ -184,7 +184,7 @@ ___
 
 ▸ **assert**(`o`: any): *void*
 
-*Defined in [common/Vec3.ts:118](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L118)*
+*Defined in [common/Vec3.ts:118](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L118)*
 
 **Parameters:**
 
@@ -200,7 +200,7 @@ ___
 
 ▸ **clone**(`v`: [Vec3Value](../interfaces/vec3value.md)): *[Vec3](vec3.md)*
 
-*Defined in [common/Vec3.ts:100](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L100)*
+*Defined in [common/Vec3.ts:100](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L100)*
 
 **Parameters:**
 
@@ -216,7 +216,7 @@ ___
 
 ▸ **cross**(`v`: [Vec3Value](../interfaces/vec3value.md), `w`: [Vec3Value](../interfaces/vec3value.md)): *[Vec3](vec3.md)*
 
-*Defined in [common/Vec3.ts:172](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L172)*
+*Defined in [common/Vec3.ts:172](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L172)*
 
 Cross product on two vectors
 
@@ -235,7 +235,7 @@ ___
 
 ▸ **dot**(`v`: [Vec3Value](../interfaces/vec3value.md), `w`: [Vec3Value](../interfaces/vec3value.md)): *number*
 
-*Defined in [common/Vec3.ts:167](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L167)*
+*Defined in [common/Vec3.ts:167](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L167)*
 
 Dot product on two vectors
 
@@ -254,7 +254,7 @@ ___
 
 ▸ **isValid**(`obj`: any): *boolean*
 
-*Defined in [common/Vec3.ts:111](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L111)*
+*Defined in [common/Vec3.ts:111](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L111)*
 
 Does this vector contain finite coordinates?
 
@@ -272,7 +272,7 @@ ___
 
 ▸ **mul**(`v`: [Vec3Value](../interfaces/vec3value.md), `m`: number): *[Vec3](vec3.md)*
 
-*Defined in [common/Vec3.ts:188](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L188)*
+*Defined in [common/Vec3.ts:188](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L188)*
 
 **Parameters:**
 
@@ -289,7 +289,7 @@ ___
 
 ▸ **neg**(`v`: [Vec3Value](../interfaces/vec3value.md)): *[Vec3](vec3.md)*
 
-*Defined in [common/Vec3.ts:199](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L199)*
+*Defined in [common/Vec3.ts:199](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L199)*
 
 **Parameters:**
 
@@ -305,7 +305,7 @@ ___
 
 ▸ **sub**(`v`: [Vec3Value](../interfaces/vec3value.md), `w`: [Vec3Value](../interfaces/vec3value.md)): *[Vec3](vec3.md)*
 
-*Defined in [common/Vec3.ts:184](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L184)*
+*Defined in [common/Vec3.ts:184](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L184)*
 
 **Parameters:**
 
@@ -322,6 +322,6 @@ ___
 
 ▸ **zero**(): *[Vec3](vec3.md)*
 
-*Defined in [common/Vec3.ts:92](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Vec3.ts#L92)*
+*Defined in [common/Vec3.ts:92](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec3.ts#L92)*
 
 **Returns:** *[Vec3](vec3.md)*

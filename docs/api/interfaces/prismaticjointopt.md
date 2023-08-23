@@ -38,7 +38,7 @@ game.
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L68)*
+*Defined in [dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -49,7 +49,7 @@ ___
 
 • **enableLimit**? : *boolean*
 
-*Defined in [dynamics/joint/PrismaticJoint.ts:65](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/PrismaticJoint.ts#L65)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:65](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/PrismaticJoint.ts#L65)*
 
 Enable/disable the joint limit.
 
@@ -59,7 +59,7 @@ ___
 
 • **enableMotor**? : *boolean*
 
-*Defined in [dynamics/joint/PrismaticJoint.ts:77](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/PrismaticJoint.ts#L77)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:77](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/PrismaticJoint.ts#L77)*
 
 Enable/disable the joint motor.
 
@@ -69,7 +69,7 @@ ___
 
 • **lowerTranslation**? : *number*
 
-*Defined in [dynamics/joint/PrismaticJoint.ts:69](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/PrismaticJoint.ts#L69)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:69](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/PrismaticJoint.ts#L69)*
 
 The lower translation limit, usually in meters.
 
@@ -79,7 +79,7 @@ ___
 
 • **maxMotorForce**? : *number*
 
-*Defined in [dynamics/joint/PrismaticJoint.ts:81](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/PrismaticJoint.ts#L81)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:81](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/PrismaticJoint.ts#L81)*
 
 The maximum motor torque, usually in N-m.
 
@@ -89,7 +89,7 @@ ___
 
 • **motorSpeed**? : *number*
 
-*Defined in [dynamics/joint/PrismaticJoint.ts:85](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/PrismaticJoint.ts#L85)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:85](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/PrismaticJoint.ts#L85)*
 
 The desired motor speed in radians per second.
 
@@ -99,7 +99,7 @@ ___
 
 • **upperTranslation**? : *number*
 
-*Defined in [dynamics/joint/PrismaticJoint.ts:73](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/PrismaticJoint.ts#L73)*
+*Defined in [dynamics/joint/PrismaticJoint.ts:73](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/PrismaticJoint.ts#L73)*
 
 The upper translation limit, usually in meters.
 
@@ -111,6 +111,6 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L63)*
+*Defined in [dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

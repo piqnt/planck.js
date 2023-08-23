@@ -30,7 +30,7 @@
 
 *Inherited from [FixtureOpt](fixtureopt.md).[density](fixtureopt.md#optional-density)*
 
-*Defined in [dynamics/Fixture.ts:58](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Fixture.ts#L58)*
+*Defined in [dynamics/Fixture.ts:58](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Fixture.ts#L58)*
 
 The density, usually in kg/m^2
 
@@ -42,7 +42,7 @@ ___
 
 *Inherited from [FixtureOpt](fixtureopt.md).[filterCategoryBits](fixtureopt.md#optional-filtercategorybits)*
 
-*Defined in [dynamics/Fixture.ts:72](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Fixture.ts#L72)*
+*Defined in [dynamics/Fixture.ts:72](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Fixture.ts#L72)*
 
 Collision category bit or bits that this fixture belongs to.
 If groupIndex is zero or not matching, then at least one bit in this fixture categoryBits should match other fixture maskBits and vice versa.
@@ -55,7 +55,7 @@ ___
 
 *Inherited from [FixtureOpt](fixtureopt.md).[filterGroupIndex](fixtureopt.md#optional-filtergroupindex)*
 
-*Defined in [dynamics/Fixture.ts:67](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Fixture.ts#L67)*
+*Defined in [dynamics/Fixture.ts:67](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Fixture.ts#L67)*
 
 Zero, positive or negative collision group.
 Fixtures with same positive groupIndex always collide and fixtures with same negative groupIndex never collide.
@@ -68,7 +68,7 @@ ___
 
 *Inherited from [FixtureOpt](fixtureopt.md).[filterMaskBits](fixtureopt.md#optional-filtermaskbits)*
 
-*Defined in [dynamics/Fixture.ts:76](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Fixture.ts#L76)*
+*Defined in [dynamics/Fixture.ts:76](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Fixture.ts#L76)*
 
 Collision category bit or bits that this fixture accept for collision.
 
@@ -80,7 +80,7 @@ ___
 
 *Inherited from [FixtureOpt](fixtureopt.md).[friction](fixtureopt.md#optional-friction)*
 
-*Defined in [dynamics/Fixture.ts:50](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Fixture.ts#L50)*
+*Defined in [dynamics/Fixture.ts:50](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Fixture.ts#L50)*
 
 The friction coefficient, usually in the range [0,1]
 
@@ -92,7 +92,7 @@ ___
 
 *Inherited from [FixtureOpt](fixtureopt.md).[isSensor](fixtureopt.md#optional-issensor)*
 
-*Defined in [dynamics/Fixture.ts:62](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Fixture.ts#L62)*
+*Defined in [dynamics/Fixture.ts:62](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Fixture.ts#L62)*
 
 A sensor shape collects contact information but never generates a collision response.
 
@@ -104,7 +104,7 @@ ___
 
 *Inherited from [FixtureOpt](fixtureopt.md).[restitution](fixtureopt.md#optional-restitution)*
 
-*Defined in [dynamics/Fixture.ts:54](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Fixture.ts#L54)*
+*Defined in [dynamics/Fixture.ts:54](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Fixture.ts#L54)*
 
 The restitution (elasticity) usually in the range [0,1]
 
@@ -114,7 +114,7 @@ ___
 
 • **shape**: *[Shape](../classes/shape.md)*
 
-*Defined in [dynamics/Fixture.ts:80](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Fixture.ts#L80)*
+*Defined in [dynamics/Fixture.ts:80](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Fixture.ts#L80)*
 
 ___
 
@@ -124,4 +124,4 @@ ___
 
 *Inherited from [FixtureOpt](fixtureopt.md).[userData](fixtureopt.md#optional-userdata)*
 
-*Defined in [dynamics/Fixture.ts:46](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Fixture.ts#L46)*
+*Defined in [dynamics/Fixture.ts:46](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Fixture.ts#L46)*

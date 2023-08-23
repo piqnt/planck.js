@@ -26,7 +26,7 @@ joint nodes, one for each attached body.
 
 • **joint**: *[Joint](joint.md) | null* = null
 
-*Defined in [dynamics/Joint.ts:45](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L45)*
+*Defined in [dynamics/Joint.ts:45](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L45)*
 
 the joint
 
@@ -36,7 +36,7 @@ ___
 
 • **next**: *[JointEdge](jointedge.md) | null* = null
 
-*Defined in [dynamics/Joint.ts:53](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L53)*
+*Defined in [dynamics/Joint.ts:53](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L53)*
 
 the next joint edge in the body's joint list
 
@@ -46,7 +46,7 @@ ___
 
 • **other**: *[Body](body.md) | null* = null
 
-*Defined in [dynamics/Joint.ts:41](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L41)*
+*Defined in [dynamics/Joint.ts:41](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L41)*
 
 provides quick access to the other body attached.
 
@@ -56,6 +56,6 @@ ___
 
 • **prev**: *[JointEdge](jointedge.md) | null* = null
 
-*Defined in [dynamics/Joint.ts:49](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L49)*
+*Defined in [dynamics/Joint.ts:49](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L49)*
 
 prev the previous joint edge in the body's joint list

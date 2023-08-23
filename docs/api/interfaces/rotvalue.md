@@ -19,7 +19,7 @@
 
 • **c**: *number*
 
-*Defined in [common/Rot.ts:35](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Rot.ts#L35)*
+*Defined in [common/Rot.ts:35](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Rot.ts#L35)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **s**: *number*
 
-*Defined in [common/Rot.ts:34](https://github.com/shakiba/planck.js/blob/1bc1208/src/common/Rot.ts#L34)*
+*Defined in [common/Rot.ts:34](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Rot.ts#L34)*

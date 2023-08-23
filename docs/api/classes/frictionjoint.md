@@ -56,7 +56,7 @@ translational friction and angular friction.
 
 *Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [dynamics/joint/FrictionJoint.ts:101](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/FrictionJoint.ts#L101)*
+*Defined in [dynamics/joint/FrictionJoint.ts:101](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/FrictionJoint.ts#L101)*
 
 **Parameters:**
 
@@ -70,7 +70,7 @@ Name | Type |
 
 *Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [dynamics/joint/FrictionJoint.ts:103](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/FrictionJoint.ts#L103)*
+*Defined in [dynamics/joint/FrictionJoint.ts:103](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/FrictionJoint.ts#L103)*
 
 **Parameters:**
 
@@ -89,7 +89,7 @@ Name | Type |
 
 ▪ **TYPE**: *"friction-joint"* = 'friction-joint' as const
 
-*Defined in [dynamics/joint/FrictionJoint.ts:78](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/FrictionJoint.ts#L78)*
+*Defined in [dynamics/joint/FrictionJoint.ts:78](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/FrictionJoint.ts#L78)*
 
 ## Methods
 
@@ -99,7 +99,7 @@ Name | Type |
 
 *Overrides [Joint](joint.md).[getAnchorA](joint.md#abstract-getanchora)*
 
-*Defined in [dynamics/joint/FrictionJoint.ts:233](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/FrictionJoint.ts#L233)*
+*Defined in [dynamics/joint/FrictionJoint.ts:233](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/FrictionJoint.ts#L233)*
 
 Get the anchor point on bodyA in world coordinates.
 
@@ -113,7 +113,7 @@ ___
 
 *Overrides [Joint](joint.md).[getAnchorB](joint.md#abstract-getanchorb)*
 
-*Defined in [dynamics/joint/FrictionJoint.ts:240](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/FrictionJoint.ts#L240)*
+*Defined in [dynamics/joint/FrictionJoint.ts:240](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/FrictionJoint.ts#L240)*
 
 Get the anchor point on bodyB in world coordinates.
 
@@ -127,7 +127,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getBodyA](joint.md#getbodya)*
 
-*Defined in [dynamics/Joint.ts:145](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L145)*
+*Defined in [dynamics/Joint.ts:145](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L145)*
 
 Get the first body attached to this joint.
 
@@ -141,7 +141,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getBodyB](joint.md#getbodyb)*
 
-*Defined in [dynamics/Joint.ts:152](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L152)*
+*Defined in [dynamics/Joint.ts:152](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L152)*
 
 Get the second body attached to this joint.
 
@@ -155,7 +155,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getCollideConnected](joint.md#getcollideconnected)*
 
-*Defined in [dynamics/Joint.ts:176](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L176)*
+*Defined in [dynamics/Joint.ts:176](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L176)*
 
 Get collide connected. Note: modifying the collide connect flag won't work
 correctly because the flag is only checked when fixture AABBs begin to
@@ -169,7 +169,7 @@ ___
 
 ▸ **getLocalAnchorA**(): *[Vec2](vec2.md)*
 
-*Defined in [dynamics/joint/FrictionJoint.ts:189](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/FrictionJoint.ts#L189)*
+*Defined in [dynamics/joint/FrictionJoint.ts:189](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/FrictionJoint.ts#L189)*
 
 The local anchor point relative to bodyA's origin.
 
@@ -181,7 +181,7 @@ ___
 
 ▸ **getLocalAnchorB**(): *[Vec2](vec2.md)*
 
-*Defined in [dynamics/joint/FrictionJoint.ts:196](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/FrictionJoint.ts#L196)*
+*Defined in [dynamics/joint/FrictionJoint.ts:196](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/FrictionJoint.ts#L196)*
 
 The local anchor point relative to bodyB's origin.
 
@@ -193,7 +193,7 @@ ___
 
 ▸ **getMaxForce**(): *number*
 
-*Defined in [dynamics/joint/FrictionJoint.ts:211](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/FrictionJoint.ts#L211)*
+*Defined in [dynamics/joint/FrictionJoint.ts:211](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/FrictionJoint.ts#L211)*
 
 Get the maximum friction force in N.
 
@@ -205,7 +205,7 @@ ___
 
 ▸ **getMaxTorque**(): *number*
 
-*Defined in [dynamics/joint/FrictionJoint.ts:226](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/FrictionJoint.ts#L226)*
+*Defined in [dynamics/joint/FrictionJoint.ts:226](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/FrictionJoint.ts#L226)*
 
 Get the maximum friction torque in N*m.
 
@@ -219,7 +219,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getNext](joint.md#getnext)*
 
-*Defined in [dynamics/Joint.ts:159](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L159)*
+*Defined in [dynamics/Joint.ts:159](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L159)*
 
 Get the next joint the world joint list.
 
@@ -233,7 +233,7 @@ ___
 
 *Overrides [Joint](joint.md).[getReactionForce](joint.md#abstract-getreactionforce)*
 
-*Defined in [dynamics/joint/FrictionJoint.ts:247](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/FrictionJoint.ts#L247)*
+*Defined in [dynamics/joint/FrictionJoint.ts:247](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/FrictionJoint.ts#L247)*
 
 Get the reaction force on bodyB at the joint anchor in Newtons.
 
@@ -253,7 +253,7 @@ ___
 
 *Overrides [Joint](joint.md).[getReactionTorque](joint.md#abstract-getreactiontorque)*
 
-*Defined in [dynamics/joint/FrictionJoint.ts:254](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/FrictionJoint.ts#L254)*
+*Defined in [dynamics/joint/FrictionJoint.ts:254](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/FrictionJoint.ts#L254)*
 
 Get the reaction torque on bodyB in N*m.
 
@@ -273,7 +273,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getType](joint.md#gettype)*
 
-*Defined in [dynamics/Joint.ts:138](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L138)*
+*Defined in [dynamics/Joint.ts:138](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L138)*
 
 Get the type of the concrete joint.
 
@@ -287,7 +287,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getUserData](joint.md#getuserdata)*
 
-*Defined in [dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L163)*
+*Defined in [dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L163)*
 
 **Returns:** *unknown*
 
@@ -299,7 +299,7 @@ ___
 
 *Overrides [Joint](joint.md).[initVelocityConstraints](joint.md#abstract-initvelocityconstraints)*
 
-*Defined in [dynamics/joint/FrictionJoint.ts:258](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/FrictionJoint.ts#L258)*
+*Defined in [dynamics/joint/FrictionJoint.ts:258](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/FrictionJoint.ts#L258)*
 
 **Parameters:**
 
@@ -317,7 +317,7 @@ ___
 
 *Inherited from [Joint](joint.md).[isActive](joint.md#isactive)*
 
-*Defined in [dynamics/Joint.ts:131](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L131)*
+*Defined in [dynamics/Joint.ts:131](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L131)*
 
 Short-cut function to determine if either body is inactive.
 
@@ -329,7 +329,7 @@ ___
 
 ▸ **setMaxForce**(`force`: number): *void*
 
-*Defined in [dynamics/joint/FrictionJoint.ts:203](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/FrictionJoint.ts#L203)*
+*Defined in [dynamics/joint/FrictionJoint.ts:203](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/FrictionJoint.ts#L203)*
 
 Set the maximum friction force in N.
 
@@ -347,7 +347,7 @@ ___
 
 ▸ **setMaxTorque**(`torque`: number): *void*
 
-*Defined in [dynamics/joint/FrictionJoint.ts:218](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/FrictionJoint.ts#L218)*
+*Defined in [dynamics/joint/FrictionJoint.ts:218](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/FrictionJoint.ts#L218)*
 
 Set the maximum friction torque in N*m.
 
@@ -367,7 +367,7 @@ ___
 
 *Inherited from [Joint](joint.md).[setUserData](joint.md#setuserdata)*
 
-*Defined in [dynamics/Joint.ts:167](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L167)*
+*Defined in [dynamics/Joint.ts:167](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L167)*
 
 **Parameters:**
 
@@ -385,7 +385,7 @@ ___
 
 *Inherited from [Joint](joint.md).[shiftOrigin](joint.md#shiftorigin)*
 
-*Defined in [dynamics/Joint.ts:203](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/Joint.ts#L203)*
+*Defined in [dynamics/Joint.ts:203](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L203)*
 
 Shift the origin for any points stored in world coordinates.
 
@@ -405,7 +405,7 @@ ___
 
 *Overrides [Joint](joint.md).[solvePositionConstraints](joint.md#abstract-solvepositionconstraints)*
 
-*Defined in [dynamics/joint/FrictionJoint.ts:395](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/FrictionJoint.ts#L395)*
+*Defined in [dynamics/joint/FrictionJoint.ts:395](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/FrictionJoint.ts#L395)*
 
 This returns true if the position errors are within tolerance.
 
@@ -425,7 +425,7 @@ ___
 
 *Overrides [Joint](joint.md).[solveVelocityConstraints](joint.md#abstract-solvevelocityconstraints)*
 
-*Defined in [dynamics/joint/FrictionJoint.ts:334](https://github.com/shakiba/planck.js/blob/1bc1208/src/dynamics/joint/FrictionJoint.ts#L334)*
+*Defined in [dynamics/joint/FrictionJoint.ts:334](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/FrictionJoint.ts#L334)*
 
 **Parameters:**
 

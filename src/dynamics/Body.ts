@@ -138,13 +138,13 @@ export interface BodyDef {
 /**
  * MassData This holds the mass data computed for a shape.
  */
-export class MassData {
+export interface MassData {
   /** The mass of the shape, usually in kilograms. */
-  mass: number = 0;
+  mass: number;
   /** The position of the shape's centroid relative to the shape's origin. */
-  center = Vec2.zero();
+  center: Vec2Value;
   /** The rotational inertia of the shape about the local origin. */
-  I: number = 0;
+  I: number;
 }
 
 /**
@@ -770,7 +770,7 @@ export class Body {
   getMassData(data: MassData): void {
     data.mass = this.m_mass;
     data.I = this.getInertia();
-    data.center.setVec2(this.m_sweep.localCenter);
+    matrix.copyVec2(data.center, this.m_sweep.localCenter);
   }
 
   /**
@@ -803,7 +803,11 @@ export class Body {
         continue;
       }
 
-      const massData = new MassData();
+      const massData: MassData = {
+        mass: 0,
+        center: matrix.vec2(0, 0),
+        I: 0
+      };
       f.getMassData(massData);
       this.m_mass += massData.mass;
       matrix.addMulVec2(localCenter, massData.mass, massData.center)

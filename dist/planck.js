@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.0-beta.10
+ * Planck.js v1.0.0-beta.11
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
@@ -3437,20 +3437,6 @@
         userData: null
     };
     /**
-     * MassData This holds the mass data computed for a shape.
-     */
-    var MassData = /** @class */ (function () {
-        function MassData() {
-            /** The mass of the shape, usually in kilograms. */
-            this.mass = 0;
-            /** The position of the shape's centroid relative to the shape's origin. */
-            this.center = Vec2.zero();
-            /** The rotational inertia of the shape about the local origin. */
-            this.I = 0;
-        }
-        return MassData;
-    }());
-    /**
      * A rigid body composed of one or more fixtures.
      *
      * To create a new Body use {@link World.createBody}.
@@ -3910,7 +3896,7 @@
         Body.prototype.getMassData = function (data) {
             data.mass = this.m_mass;
             data.I = this.getInertia();
-            data.center.setVec2(this.m_sweep.localCenter);
+            copyVec2(data.center, this.m_sweep.localCenter);
         };
         /**
          * This resets the mass properties to the sum of the mass properties of the
@@ -3937,7 +3923,11 @@
                 if (f.m_density == 0.0) {
                     continue;
                 }
-                var massData = new MassData();
+                var massData = {
+                    mass: 0,
+                    center: vec2(0, 0),
+                    I: 0
+                };
                 f.getMassData(massData);
                 this.m_mass += massData.mass;
                 addMulVec2(localCenter, massData.mass, massData.center);
@@ -4108,8 +4098,11 @@
             }
         };
         /**
-         * This is used to prevent connected bodies (by joints) from colliding,
-         * depending on the joint's collideConnected flag.
+         * This is used to test if two bodies should collide.
+         *
+         * Bodies do not collide when:
+         * - Neither of them is dynamic
+         * - They are connected by a joint with collideConnected == false
          */
         Body.prototype.shouldCollide = function (that) {
             // At least one body should be dynamic.
@@ -15961,7 +15954,6 @@
         Shape: Shape,
         FixtureProxy: FixtureProxy,
         Fixture: Fixture,
-        MassData: MassData,
         Body: Body,
         ContactEdge: ContactEdge,
         mixFriction: mixFriction,
@@ -16062,7 +16054,6 @@
     exports.JointEdge = JointEdge;
     exports.Manifold = Manifold;
     exports.ManifoldPoint = ManifoldPoint;
-    exports.MassData = MassData;
     exports.Mat22 = Mat22;
     exports.Mat33 = Mat33;
     exports.Math = math;

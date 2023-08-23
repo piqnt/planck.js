@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.0-beta.10
+ * Planck.js v1.0.0-beta.11
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
@@ -3431,20 +3431,6 @@ var Fixture = /** @class */ (function () {
     userData: null
 };
 /**
- * MassData This holds the mass data computed for a shape.
- */
-var MassData = /** @class */ (function () {
-    function MassData() {
-        /** The mass of the shape, usually in kilograms. */
-        this.mass = 0;
-        /** The position of the shape's centroid relative to the shape's origin. */
-        this.center = Vec2.zero();
-        /** The rotational inertia of the shape about the local origin. */
-        this.I = 0;
-    }
-    return MassData;
-}());
-/**
  * A rigid body composed of one or more fixtures.
  *
  * To create a new Body use {@link World.createBody}.
@@ -3904,7 +3890,7 @@ var Body = /** @class */ (function () {
     Body.prototype.getMassData = function (data) {
         data.mass = this.m_mass;
         data.I = this.getInertia();
-        data.center.setVec2(this.m_sweep.localCenter);
+        copyVec2(data.center, this.m_sweep.localCenter);
     };
     /**
      * This resets the mass properties to the sum of the mass properties of the
@@ -3931,7 +3917,11 @@ var Body = /** @class */ (function () {
             if (f.m_density == 0.0) {
                 continue;
             }
-            var massData = new MassData();
+            var massData = {
+                mass: 0,
+                center: vec2(0, 0),
+                I: 0
+            };
             f.getMassData(massData);
             this.m_mass += massData.mass;
             addMulVec2(localCenter, massData.mass, massData.center);
@@ -4102,8 +4092,11 @@ var Body = /** @class */ (function () {
         }
     };
     /**
-     * This is used to prevent connected bodies (by joints) from colliding,
-     * depending on the joint's collideConnected flag.
+     * This is used to test if two bodies should collide.
+     *
+     * Bodies do not collide when:
+     * - Neither of them is dynamic
+     * - They are connected by a joint with collideConnected == false
      */
     Body.prototype.shouldCollide = function (that) {
         // At least one body should be dynamic.
@@ -15955,7 +15948,6 @@ var planck = /*#__PURE__*/Object.freeze({
     Shape: Shape,
     FixtureProxy: FixtureProxy,
     Fixture: Fixture,
-    MassData: MassData,
     Body: Body,
     ContactEdge: ContactEdge,
     mixFriction: mixFriction,
@@ -16023,5 +16015,5 @@ var planck = /*#__PURE__*/Object.freeze({
     internal: internal
 });
 
-export { AABB, Body, Box, BoxShape, Chain, ChainShape, Circle, CircleShape, ClipVertex, CollideCircles, CollideEdgeCircle, CollideEdgePolygon, CollidePolygonCircle, CollidePolygons, Contact, ContactEdge, ContactFeatureType, ContactID, Distance, DistanceInput, DistanceJoint, DistanceOutput, DistanceProxy, DynamicTree, Edge, EdgeShape, Fixture, FixtureProxy, FrictionJoint, GearJoint, Joint, JointEdge, Manifold, ManifoldPoint, ManifoldType, MassData, Mat22, Mat33, math as Math, MotorJoint, MouseJoint, PointState, Polygon, PolygonShape, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, Rot, Serializer, Settings, SettingsInternal, Shape, ShapeCast, ShapeCastInput, ShapeCastOutput, SimplexCache, Sweep, TOIInput, TOIOutput, TOIOutputState, Testbed, TimeOfImpact, Transform, TreeNode, Vec2, Vec3, VelocityConstraintPoint, WeldJoint, WheelJoint, World, WorldManifold, clipSegmentToLine, planck as default, getPointStates, internal, mixFriction, mixRestitution, stats, testOverlap, testbed };
+export { AABB, Body, Box, BoxShape, Chain, ChainShape, Circle, CircleShape, ClipVertex, CollideCircles, CollideEdgeCircle, CollideEdgePolygon, CollidePolygonCircle, CollidePolygons, Contact, ContactEdge, ContactFeatureType, ContactID, Distance, DistanceInput, DistanceJoint, DistanceOutput, DistanceProxy, DynamicTree, Edge, EdgeShape, Fixture, FixtureProxy, FrictionJoint, GearJoint, Joint, JointEdge, Manifold, ManifoldPoint, ManifoldType, Mat22, Mat33, math as Math, MotorJoint, MouseJoint, PointState, Polygon, PolygonShape, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, Rot, Serializer, Settings, SettingsInternal, Shape, ShapeCast, ShapeCastInput, ShapeCastOutput, SimplexCache, Sweep, TOIInput, TOIOutput, TOIOutputState, Testbed, TimeOfImpact, Transform, TreeNode, Vec2, Vec3, VelocityConstraintPoint, WeldJoint, WheelJoint, World, WorldManifold, clipSegmentToLine, planck as default, getPointStates, internal, mixFriction, mixRestitution, stats, testOverlap, testbed };
 //# sourceMappingURL=planck.mjs.map
