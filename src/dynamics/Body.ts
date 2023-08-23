@@ -992,8 +992,11 @@ export class Body {
   }
 
   /**
-   * This is used to prevent connected bodies (by joints) from colliding,
-   * depending on the joint's collideConnected flag.
+   * This is used to test if two bodies should collide.
+   * 
+   * Bodies do not collide when:
+   * - Neither of them is dynamic
+   * - They are connected by a joint with collideConnected == false
    */
   shouldCollide(that: Body): boolean {
     // At least one body should be dynamic.
