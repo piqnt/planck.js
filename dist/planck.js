@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.0-beta.12
+ * Planck.js v1.0.0-beta.13
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
@@ -2641,7 +2641,7 @@
      */
     /** @internal */ var math_atan2 = Math.atan2;
     /** @internal */ var math_PI$5 = Math.PI;
-    /** @internal */ var temp$6 = vec2(0, 0);
+    /** @internal */ var temp$7 = vec2(0, 0);
     /**
      * This describes the motion of a body/shape for TOI computation. Shapes are
      * defined with respect to the body origin, which may not coincide with the
@@ -2671,16 +2671,16 @@
             this.a0 = 0;
         };
         Sweep.prototype.setTransform = function (xf) {
-            transformVec2(temp$6, xf, this.localCenter);
-            copyVec2(this.c, temp$6);
-            copyVec2(this.c0, temp$6);
+            transformVec2(temp$7, xf, this.localCenter);
+            copyVec2(this.c, temp$7);
+            copyVec2(this.c0, temp$7);
             this.a = this.a0 = math_atan2(xf.q.s, xf.q.c);
         };
         Sweep.prototype.setLocalCenter = function (localCenter, xf) {
             copyVec2(this.localCenter, localCenter);
-            transformVec2(temp$6, xf, this.localCenter);
-            copyVec2(this.c, temp$6);
-            copyVec2(this.c0, temp$6);
+            transformVec2(temp$7, xf, this.localCenter);
+            copyVec2(this.c, temp$7);
+            copyVec2(this.c0, temp$7);
         };
         /**
          * Get the interpolated transform at a specific time.
@@ -2693,7 +2693,7 @@
             setRotAngle(xf.q, (1.0 - beta) * this.a0 + beta * this.a);
             combineVec2(xf.p, (1.0 - beta), this.c0, beta, this.c);
             // shift to origin
-            subVec2(xf.p, rotVec2(temp$6, xf.q, this.localCenter));
+            subVec2(xf.p, rotVec2(temp$7, xf.q, this.localCenter));
         };
         /**
          * Advance the sweep forward, yielding a new initial state.
@@ -3419,6 +3419,7 @@
     /** @internal */ var oldCenter = vec2(0, 0);
     /** @internal */ var localCenter = vec2(0, 0);
     /** @internal */ var shift = vec2(0, 0);
+    /** @internal */ var temp$6 = vec2(0, 0);
     /** @internal */ var xf$2 = transform(0, 0, 0);
     /** @internal */ var BodyDefDefault = {
         type: STATIC,
@@ -3959,7 +3960,8 @@
             this.m_sweep.setLocalCenter(localCenter, this.m_xf);
             // Update center of mass velocity.
             diffVec2(shift, this.m_sweep.c, oldCenter);
-            crossNumVec2(this.m_linearVelocity, this.m_angularVelocity, shift);
+            crossNumVec2(temp$6, this.m_angularVelocity, shift);
+            addVec2(this.m_linearVelocity, temp$6);
         };
         /**
          * Set the mass properties to override the mass properties of the fixtures. Note
