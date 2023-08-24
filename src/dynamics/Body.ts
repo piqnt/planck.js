@@ -518,8 +518,8 @@ export class Body {
       for (let f = this.m_fixtureList; f; f = f.m_next) {
         f.createProxies(broadPhase, this.m_xf);
       }
-      // Contacts are created the next time step.
-
+		  // Contacts are created at the beginning of the next
+		  this.m_world.m_newFixture = true;
     } else {
       // Destroy all proxies.
       const broadPhase = this.m_world.m_broadPhase;
