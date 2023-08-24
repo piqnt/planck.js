@@ -585,6 +585,7 @@ export class Body {
     for (let f = this.m_fixtureList; f; f = f.m_next) {
       f.synchronize(broadPhase, this.m_xf, this.m_xf);
     }
+    this.setAwake(true);
   }
 
   synchronizeTransform(): void {
