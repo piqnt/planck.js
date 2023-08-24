@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.0-beta.11
+ * Planck.js v1.0.0-beta.12
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
@@ -3681,7 +3681,8 @@
                 for (var f = this.m_fixtureList; f; f = f.m_next) {
                     f.createProxies(broadPhase, this.m_xf);
                 }
-                // Contacts are created the next time step.
+                // Contacts are created at the beginning of the next
+                this.m_world.m_newFixture = true;
             }
             else {
                 // Destroy all proxies.
@@ -3737,6 +3738,7 @@
             for (var f = this.m_fixtureList; f; f = f.m_next) {
                 f.synchronize(broadPhase, this.m_xf, this.m_xf);
             }
+            this.setAwake(true);
         };
         Body.prototype.synchronizeTransform = function () {
             this.m_sweep.getTransform(this.m_xf, 1);
