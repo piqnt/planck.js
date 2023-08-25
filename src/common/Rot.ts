@@ -31,12 +31,16 @@ import { Vec2, Vec2Value } from './Vec2';
 /** @internal */ const math_atan2 = Math.atan2;
 
 export interface RotValue {
+  /** sin(angle) */
   s: number;
+  /** cos(angle) */
   c: number;
 }
 
 export class Rot {
+  /** sin(angle) */
   s: number;
+  /** cos(angle) */
   c: number;
 
   /** Initialize from an angle in radians. */
