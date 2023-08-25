@@ -81,9 +81,12 @@ export interface WorldDef {
  * @param fixture The fixture hit by the ray
  * @param point The point of initial intersection
  * @param normal The normal vector at the point of intersection
- * @param fraction
+ * @param fraction The fraction along the ray at the point of intersection
  *
- * @return -1 to filter, 0 to terminate, fraction to clip the ray for closest hit, 1 to continue
+ * @return `-1` to ignore the current fixture and continue
+ * @return `0` to terminate the ray cast
+ * @return `fraction` to clip the raycast at current point
+ * @return `1` don't clip the ray and continue
  */
 export type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) => number;
 
