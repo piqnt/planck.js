@@ -1,4 +1,4 @@
-const { Vec2, World, Edge, Circle, Box, Chain, Math, Testbed, Testbed } = planck;
+const { Vec2, World, Edge, Circle, Box, Chain, Math, Testbed } = planck;
 
 let world = new World(new Vec2(0, -10));
 
