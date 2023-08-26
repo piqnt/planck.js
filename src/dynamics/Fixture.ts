@@ -429,6 +429,7 @@ export class Fixture {
 
   setFilterGroupIndex(groupIndex: number): void {
     this.m_filterGroupIndex = groupIndex;
+    this.refilter();
   }
 
   getFilterCategoryBits(): number {
@@ -437,6 +438,7 @@ export class Fixture {
 
   setFilterCategoryBits(categoryBits: number): void {
     this.m_filterCategoryBits = categoryBits;
+    this.refilter();
   }
 
   getFilterMaskBits(): number {
@@ -445,6 +447,7 @@ export class Fixture {
 
   setFilterMaskBits(maskBits: number): void {
     this.m_filterMaskBits = maskBits;
+    this.refilter();
   }
 
   /**
