@@ -150,7 +150,6 @@ export class WheelJoint extends Joint {
 
   constructor(def: WheelJointDef);
   constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
-  /** @internal */
   constructor(def: WheelJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value, axis?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof WheelJoint)) {

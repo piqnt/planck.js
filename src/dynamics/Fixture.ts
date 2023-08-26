@@ -134,8 +134,8 @@ export class Fixture {
   constructor(body: Body, def: FixtureDef);
   constructor(body: Body, shape: Shape, def?: FixtureOpt);
   constructor(body: Body, shape: Shape, density?: number);
-  // tslint:disable-next-line:typedef
-  /** @internal */ constructor(body: Body, shape?, def?) {
+  /** @internal */
+  constructor(body: Body, shape?, def?) {
     if (shape.shape) {
       def = shape;
       shape = shape.shape;

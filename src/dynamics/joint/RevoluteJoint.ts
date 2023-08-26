@@ -164,7 +164,6 @@ export class RevoluteJoint extends Joint {
 
   constructor(def: RevoluteJointDef);
   constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
-  /** @internal */
   constructor(def: RevoluteJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof RevoluteJoint)) {

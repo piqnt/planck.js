@@ -41,7 +41,6 @@ export class Vec3 {
   constructor(x: number, y: number, z: number);
   constructor(obj: { x: number, y: number, z: number });
   constructor();
-  /** @internal */
   constructor(x?, y?, z?) {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof Vec3)) {
       return new Vec3(x, y, z);

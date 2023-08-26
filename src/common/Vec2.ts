@@ -424,7 +424,6 @@ export class Vec2 {
   static cross(v: Vec2Value, w: number): Vec2;
   /** Cross product between a scalar and a vector */
   static cross(v: number, w: Vec2Value): Vec2;
-  /** @internal */ 
   static cross(v: any, w: any): any {
     if (typeof w === 'number') {
       _ASSERT && Vec2.assert(v);
@@ -468,7 +467,6 @@ export class Vec2 {
   static addCross(a: Vec2Value, v: Vec2Value, w: number): Vec2;
   /** Returns `a + (v x w)` */
   static addCross(a: Vec2Value, v: number, w: Vec2Value): Vec2;
-  /** @internal */
   static addCross(a: Vec2Value, v: any, w: any): Vec2 {
     if (typeof w === 'number') {
       _ASSERT && Vec2.assert(v);
@@ -529,7 +527,6 @@ export class Vec2 {
 
   static mul(a: Vec2Value, b: number): Vec2;
   static mul(a: number, b: Vec2Value): Vec2;
-  /** @internal */
   static mul(a: any, b: any): Vec2 {
     if (typeof a === 'object') {
       _ASSERT && Vec2.assert(a);

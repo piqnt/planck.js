@@ -143,7 +143,6 @@ export class Rot {
   static mul(rot: RotValue, m: RotValue): Rot;
   /** Rotate a vector */
   static mul(rot: RotValue, m: Vec2Value): Vec2;
-  /** @internal */
   static mul(rot, m) {
     _ASSERT && Rot.assert(rot);
     if ('c' in m && 's' in m) {
@@ -194,7 +193,6 @@ export class Rot {
   static mulT(rot: RotValue, m: RotValue): Rot;
   /** Inverse rotate a vector */
   static mulT(rot: RotValue, m: Vec2Value): Vec2;
-  /** @internal */
   static mulT(rot, m) {
     if ('c' in m && 's' in m) {
       _ASSERT && Rot.assert(m);

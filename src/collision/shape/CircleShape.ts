@@ -48,7 +48,6 @@ export class CircleShape extends Shape {
 
   constructor(position: Vec2Value, radius?: number);
   constructor(radius?: number);
-  /** @internal */
   constructor(a: any, b?: any) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof CircleShape)) {

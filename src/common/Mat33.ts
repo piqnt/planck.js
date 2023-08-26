@@ -39,7 +39,6 @@ export class Mat33 {
 
   constructor(a: Vec3Value, b: Vec3Value, c: Vec3Value);
   constructor();
-  /** @internal */
   constructor(a?: Vec3Value, b?: Vec3Value, c?: Vec3Value) {
     if (typeof a === 'object' && a !== null) {
       this.ex = Vec3.clone(a);
@@ -190,7 +189,6 @@ export class Mat33 {
    */
   static mul(a: Mat33, b: Vec2Value): Vec2;
   static mul(a: Mat33, b: Vec3Value): Vec3;
-  /** @internal */
   static mul(a, b) {
     _ASSERT && Mat33.assert(a);
     if (b && 'z' in b && 'y' in b && 'x' in b) {

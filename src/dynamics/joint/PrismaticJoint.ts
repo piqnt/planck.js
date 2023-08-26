@@ -163,7 +163,6 @@ export class PrismaticJoint extends Joint {
 
   constructor(def: PrismaticJointDef);
   constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
-  /** @internal */
   constructor(def: PrismaticJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value, axis?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof PrismaticJoint)) {

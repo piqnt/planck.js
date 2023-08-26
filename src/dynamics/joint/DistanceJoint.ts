@@ -84,9 +84,6 @@ export interface DistanceJointDef extends JointDef, DistanceJointOpt {
 /**
  * A distance joint constrains two points on two bodies to remain at a fixed
  * distance from each other. You can view this as a massless, rigid rod.
- *
- * @param anchorA Anchor A in global coordination.
- * @param anchorB Anchor B in global coordination.
  */
 export class DistanceJoint extends Joint {
   static TYPE = 'distance-joint' as const;
@@ -113,9 +110,15 @@ export class DistanceJoint extends Joint {
   /** @internal */ m_invIB: number;
   /** @internal */ m_mass: number;
 
+  /**
+   * @param def DistanceJoint definition.
+   */
   constructor(def: DistanceJointDef);
+  /**
+   * @param anchorA Anchor A in global coordination.
+   * @param anchorB Anchor B in global coordination.
+   */
   constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2Value, anchorB: Vec2Value);
-  /** @internal */
   constructor(def: DistanceJointDef, bodyA?: Body, bodyB?: Body, anchorA?: Vec2Value, anchorB?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof DistanceJoint)) {

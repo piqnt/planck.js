@@ -93,7 +93,6 @@ export class Transform {
   set(position: Vec2Value, rotation: number): void;
   /** Copy from another transform */
   set(xf: TransformValue): void;
-  /** @internal */
   set(a: any, b?: any) {
     if (typeof b === 'undefined') {
       this.p.set(a.p);
@@ -130,7 +129,6 @@ export class Transform {
   static mul(a: TransformValue, b: TransformValue): Transform;
   // static mul(a: Transform, b: Vec2Value[]): Vec2[];
   // static mul(a: Transform, b: Transform[]): Transform[];
-  /** @internal */
   static mul(a, b) {
     if (Array.isArray(b)) {
         // todo: this was used in examples, remove in the future
@@ -151,7 +149,6 @@ export class Transform {
 
   static mulAll(a: Transform, b: Vec2Value[]): Vec2[];
   static mulAll(a: Transform, b: Transform[]): Transform[];
-  /** @internal */
   static mulAll(a: TransformValue, b) {
     _ASSERT && Transform.assert(a);
     const arr = [];
@@ -191,7 +188,6 @@ export class Transform {
 
   static mulT(a: TransformValue, b: Vec2Value): Vec2;
   static mulT(a: TransformValue, b: TransformValue): Transform;
-  /** @internal */
   static mulT(a, b) {
     if ('x' in b && 'y' in b) {
       return Transform.mulTVec2(a, b);

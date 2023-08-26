@@ -71,8 +71,6 @@ export interface FrictionJointDef extends JointDef, FrictionJointOpt {
 /**
  * Friction joint. This is used for top-down friction. It provides 2D
  * translational friction and angular friction.
- *
- * @param anchor Anchor in global coordination.
  */
 export class FrictionJoint extends Joint {
   static TYPE = 'friction-joint' as const;
@@ -101,8 +99,10 @@ export class FrictionJoint extends Joint {
   /** @internal */ m_angularMass: number;
 
   constructor(def: FrictionJointDef);
+  /**
+   * @param anchor Anchor in global coordination.
+   */
   constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
-  /** @internal */
   constructor(def: FrictionJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof FrictionJoint)) {

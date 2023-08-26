@@ -111,7 +111,6 @@ export class MouseJoint extends Joint {
 
   constructor(def: MouseJointDef);
   constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2Value);
-  /** @internal */
   constructor(def: MouseJointDef, bodyA?: Body, bodyB?: Body, target?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof MouseJoint)) {

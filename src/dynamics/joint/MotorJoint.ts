@@ -106,7 +106,6 @@ export class MotorJoint extends Joint {
 
   constructor(def: MotorJointDef);
   constructor(def: MotorJointOpt, bodyA: Body, bodyB: Body);
-  /** @internal */
   constructor(def: MotorJointDef | MotorJointOpt, bodyA?: Body, bodyB?: Body) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof MotorJoint)) {
