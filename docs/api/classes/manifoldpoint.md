@@ -34,8 +34,6 @@ contact forces, especially for high speed collisions.
 
 • **id**: *[ContactID](contactid.md)‹›* = new ContactID()
 
-*Defined in [src/collision/Manifold.ts:248](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L248)*
-
 Uniquely identifies a contact point between two shapes to facilitate warm starting
 
 ___
@@ -43,8 +41,6 @@ ___
 ###  localPoint
 
 • **localPoint**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
-
-*Defined in [src/collision/Manifold.ts:236](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L236)*
 
 Usage depends on manifold type:
 - circles: the local center of circleB
@@ -57,8 +53,6 @@ ___
 
 • **normalImpulse**: *number* = 0
 
-*Defined in [src/collision/Manifold.ts:240](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L240)*
-
 The non-penetration impulse
 
 ___
@@ -66,8 +60,6 @@ ___
 ###  tangentImpulse
 
 • **tangentImpulse**: *number* = 0
-
-*Defined in [src/collision/Manifold.ts:244](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L244)*
 
 The friction impulse
 
@@ -77,8 +69,6 @@ The friction impulse
 
 ▸ **recycle**(): *void*
 
-*Defined in [src/collision/Manifold.ts:257](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L257)*
-
 **Returns:** *void*
 
 ___
@@ -86,8 +76,6 @@ ___
 ###  set
 
 ▸ **set**(`that`: [ManifoldPoint](manifoldpoint.md)): *void*
-
-*Defined in [src/collision/Manifold.ts:250](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L250)*
 
 **Parameters:**
 

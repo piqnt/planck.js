@@ -20,20 +20,14 @@
 
 • **x**: *number*
 
-*Defined in [src/common/Vec3.ts:31](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L31)*
-
 ___
 
 ###  y
 
 • **y**: *number*
 
-*Defined in [src/common/Vec3.ts:32](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L32)*
-
 ___
 
 ###  z
 
 • **z**: *number*
-
-*Defined in [src/common/Vec3.ts:33](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L33)*

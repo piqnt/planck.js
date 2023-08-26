@@ -42,8 +42,6 @@ joints will be broken.
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L68)*
-
 Set this flag to true if the attached bodies
 should collide.
 
@@ -53,8 +51,6 @@ ___
 
 • **enableLimit**? : *boolean*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:83](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L83)*
-
 A flag to enable joint limits.
 
 ___
@@ -62,8 +58,6 @@ ___
 ### `Optional` enableMotor
 
 • **enableMotor**? : *boolean*
-
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:87](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L87)*
 
 A flag to enable the joint motor.
 
@@ -73,8 +67,6 @@ ___
 
 • **lowerAngle**? : *number*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:66](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L66)*
-
 The lower angle for the joint limit (radians).
 
 ___
@@ -82,8 +74,6 @@ ___
 ### `Optional` maxMotorTorque
 
 • **maxMotorTorque**? : *number*
-
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:75](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L75)*
 
 The maximum motor torque used to achieve the desired motor speed. Usually
 in N-m.
@@ -94,8 +84,6 @@ ___
 
 • **motorSpeed**? : *number*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:79](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L79)*
-
 The desired motor speed. Usually in radians per second.
 
 ___
@@ -103,8 +91,6 @@ ___
 ### `Optional` upperAngle
 
 • **upperAngle**? : *number*
-
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:70](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L70)*
 
 The upper angle for the joint limit (radians).
 
@@ -115,7 +101,5 @@ ___
 • **userData**? : *any*
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
-
-*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

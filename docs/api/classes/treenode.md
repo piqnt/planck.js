@@ -38,8 +38,6 @@ A node in the dynamic tree. The client does not interact with this directly.
 
 \+ **new TreeNode**(`id?`: number): *[TreeNode](treenode.md)*
 
-*Defined in [src/collision/DynamicTree.ts:50](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/DynamicTree.ts#L50)*
-
 **Parameters:**
 
 Name | Type |
@@ -54,8 +52,6 @@ Name | Type |
 
 • **aabb**: *[AABB](aabb.md)* = new AABB()
 
-*Defined in [src/collision/DynamicTree.ts:44](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/DynamicTree.ts#L44)*
-
 Enlarged AABB
 
 ___
@@ -64,23 +60,17 @@ ___
 
 • **child1**: *[TreeNode](treenode.md)‹T›* = null
 
-*Defined in [src/collision/DynamicTree.ts:47](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/DynamicTree.ts#L47)*
-
 ___
 
 ###  child2
 
 • **child2**: *[TreeNode](treenode.md)‹T›* = null
 
-*Defined in [src/collision/DynamicTree.ts:48](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/DynamicTree.ts#L48)*
-
 ___
 
 ###  height
 
 • **height**: *number* = -1
-
-*Defined in [src/collision/DynamicTree.ts:50](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/DynamicTree.ts#L50)*
 
 0: leaf, -1: free node
 
@@ -90,15 +80,11 @@ ___
 
 • **id**: *number*
 
-*Defined in [src/collision/DynamicTree.ts:42](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/DynamicTree.ts#L42)*
-
 ___
 
 ###  parent
 
 • **parent**: *[TreeNode](treenode.md)‹T›* = null
-
-*Defined in [src/collision/DynamicTree.ts:46](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/DynamicTree.ts#L46)*
 
 ___
 
@@ -106,14 +92,10 @@ ___
 
 • **userData**: *T* = null
 
-*Defined in [src/collision/DynamicTree.ts:45](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/DynamicTree.ts#L45)*
-
 ## Methods
 
 ###  isLeaf
 
 ▸ **isLeaf**(): *boolean*
-
-*Defined in [src/collision/DynamicTree.ts:61](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/DynamicTree.ts#L61)*
 
 **Returns:** *boolean*

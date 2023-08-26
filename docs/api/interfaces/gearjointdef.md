@@ -32,8 +32,6 @@ Gear joint definition.
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [src/dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L77)*
-
 The first attached body.
 
 ___
@@ -43,8 +41,6 @@ ___
 • **bodyB**: *[Body](../classes/body.md)*
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
-
-*Defined in [src/dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L81)*
 
 The second attached body.
 
@@ -58,8 +54,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L68)*
-
 Set this flag to true if the attached bodies
 should collide.
 
@@ -69,8 +63,6 @@ ___
 
 • **joint1**: *[RevoluteJoint](../classes/revolutejoint.md) | [PrismaticJoint](../classes/prismaticjoint.md)*
 
-*Defined in [src/dynamics/joint/GearJoint.ts:57](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/GearJoint.ts#L57)*
-
 The first revolute/prismatic joint attached to the gear joint.
 
 ___
@@ -78,8 +70,6 @@ ___
 ###  joint2
 
 • **joint2**: *[RevoluteJoint](../classes/revolutejoint.md) | [PrismaticJoint](../classes/prismaticjoint.md)*
-
-*Defined in [src/dynamics/joint/GearJoint.ts:61](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/GearJoint.ts#L61)*
 
 The second prismatic/revolute joint attached to the gear joint.
 
@@ -90,8 +80,6 @@ ___
 • **ratio**? : *number*
 
 *Inherited from [GearJointOpt](gearjointopt.md).[ratio](gearjointopt.md#optional-ratio)*
-
-*Defined in [src/dynamics/joint/GearJoint.ts:48](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/GearJoint.ts#L48)*
 
 The gear ratio. See [GearJoint](../classes/gearjoint.md) for explanation.
 
@@ -104,7 +92,5 @@ ___
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
-
-*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

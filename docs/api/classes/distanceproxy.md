@@ -26,8 +26,6 @@ A distance proxy is used by the GJK algorithm. It encapsulates any shape.
 
 ▸ **getSupport**(`d`: [Vec2Value](../interfaces/vec2value.md)): *number*
 
-*Defined in [src/collision/Distance.ts:272](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L272)*
-
 Get the supporting vertex index in the given direction.
 
 **Parameters:**
@@ -43,8 +41,6 @@ ___
 ###  getSupportVertex
 
 ▸ **getSupportVertex**(`d`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2Value](../interfaces/vec2value.md)*
-
-*Defined in [src/collision/Distance.ts:288](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L288)*
 
 Get the supporting vertex in the given direction.
 
@@ -62,8 +58,6 @@ ___
 
 ▸ **getVertex**(`index`: number): *[Vec2Value](../interfaces/vec2value.md)*
 
-*Defined in [src/collision/Distance.ts:264](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L264)*
-
 Get a vertex by index. Used by Distance.
 
 **Parameters:**
@@ -80,8 +74,6 @@ ___
 
 ▸ **getVertexCount**(): *number*
 
-*Defined in [src/collision/Distance.ts:257](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L257)*
-
 Get the vertex count.
 
 **Returns:** *number*
@@ -92,8 +84,6 @@ ___
 
 ▸ **recycle**(): *void*
 
-*Defined in [src/collision/Distance.ts:248](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L248)*
-
 **Returns:** *void*
 
 ___
@@ -101,8 +91,6 @@ ___
 ###  set
 
 ▸ **set**(`shape`: [Shape](shape.md), `index`: number): *void*
-
-*Defined in [src/collision/Distance.ts:296](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L296)*
 
 Initialize the proxy using the given shape. The shape must remain in scope
 while the proxy is in use.
@@ -121,8 +109,6 @@ ___
 ###  setVertices
 
 ▸ **setVertices**(`vertices`: [Vec2Value](../interfaces/vec2value.md)[], `count`: number, `radius`: number): *void*
-
-*Defined in [src/collision/Distance.ts:306](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L306)*
 
 Initialize the proxy using a vertex cloud and radius. The vertices
 must remain in scope while the proxy is in use.

@@ -30,8 +30,6 @@ contact has two contact nodes, one for each attached body.
 
 \+ **new ContactEdge**(`contact`: [Contact](contact.md)): *[ContactEdge](contactedge.md)*
 
-*Defined in [src/dynamics/Contact.ts:73](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L73)*
-
 **Parameters:**
 
 Name | Type |
@@ -46,15 +44,11 @@ Name | Type |
 
 • **contact**: *[Contact](contact.md)*
 
-*Defined in [src/dynamics/Contact.ts:70](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L70)*
-
 ___
 
 ###  next
 
 • **next**: *[ContactEdge](contactedge.md) | null* = null
-
-*Defined in [src/dynamics/Contact.ts:72](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L72)*
 
 ___
 
@@ -62,12 +56,8 @@ ___
 
 • **other**: *[Body](body.md) | null* = null
 
-*Defined in [src/dynamics/Contact.ts:73](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L73)*
-
 ___
 
 ###  prev
 
 • **prev**: *[ContactEdge](contactedge.md) | null* = null
-
-*Defined in [src/dynamics/Contact.ts:71](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L71)*

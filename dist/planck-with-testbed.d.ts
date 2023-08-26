@@ -2394,7 +2394,6 @@ declare class PolygonShape extends Shape {
     m_normals: Vec2[]; // [Settings.maxPolygonVertices]
     m_count: number;
     m_radius: number;
-    // @ts-ignore
     constructor(vertices?: Vec2Value[]);
     getType(): "polygon";
     getRadius(): number;
@@ -2605,39 +2604,37 @@ interface DistanceJointDef extends JointDef, DistanceJointOpt {
     /**
      * The local anchor point relative to bodyA's origin.
      */
-    localAnchorA: Vec2;
+    localAnchorA: Vec2Value;
     /**
      * The local anchor point relative to bodyB's origin.
      */
-    localAnchorB: Vec2;
+    localAnchorB: Vec2Value;
 }
 /**
  * A distance joint constrains two points on two bodies to remain at a fixed
  * distance from each other. You can view this as a massless, rigid rod.
- *
- * @param anchorA Anchor A in global coordination.
- * @param anchorB Anchor B in global coordination.
  */
 declare function DistanceJoint(def: DistanceJointDef): DistanceJoint;
 /**
  * A distance joint constrains two points on two bodies to remain at a fixed
  * distance from each other. You can view this as a massless, rigid rod.
- *
- * @param anchorA Anchor A in global coordination.
- * @param anchorB Anchor B in global coordination.
  */
-declare function DistanceJoint(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2): DistanceJoint;
+declare function DistanceJoint(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2Value, anchorB: Vec2Value): DistanceJoint;
 /**
  * A distance joint constrains two points on two bodies to remain at a fixed
  * distance from each other. You can view this as a massless, rigid rod.
- *
- * @param anchorA Anchor A in global coordination.
- * @param anchorB Anchor B in global coordination.
  */
 declare class DistanceJoint extends Joint {
     static TYPE: "distance-joint";
+    /**
+     * @param def DistanceJoint definition.
+     */
     constructor(def: DistanceJointDef);
-    constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2);
+    /**
+     * @param anchorA Anchor A in global coordination.
+     * @param anchorB Anchor B in global coordination.
+     */
+    constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2Value, anchorB: Vec2Value);
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -2711,27 +2708,24 @@ interface FrictionJointDef extends JointDef, FrictionJointOpt {
 /**
  * Friction joint. This is used for top-down friction. It provides 2D
  * translational friction and angular friction.
- *
- * @param anchor Anchor in global coordination.
  */
 declare function FrictionJoint(def: FrictionJointDef): FrictionJoint;
 /**
  * Friction joint. This is used for top-down friction. It provides 2D
  * translational friction and angular friction.
- *
- * @param anchor Anchor in global coordination.
  */
-declare function FrictionJoint(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): FrictionJoint;
+declare function FrictionJoint(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value): FrictionJoint;
 /**
  * Friction joint. This is used for top-down friction. It provides 2D
  * translational friction and angular friction.
- *
- * @param anchor Anchor in global coordination.
  */
 declare class FrictionJoint extends Joint {
     static TYPE: "friction-joint";
     constructor(def: FrictionJointDef);
-    constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+    /**
+     * @param anchor Anchor in global coordination.
+     */
+    constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -2834,11 +2828,11 @@ interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
     /**
      * The local anchor point relative to bodyA's origin.
      */
-    localAnchorA: Vec2;
+    localAnchorA: Vec2Value;
     /**
      * The local anchor point relative to bodyB's origin.
      */
-    localAnchorB: Vec2;
+    localAnchorB: Vec2Value;
     /**
      * The bodyB angle minus bodyA angle in the reference state (radians).
      */
@@ -2861,7 +2855,7 @@ declare function RevoluteJoint(def: RevoluteJointDef): RevoluteJoint;
  * relative rotation about the shared point. A maximum motor torque is provided
  * so that infinite forces are not generated.
  */
-declare function RevoluteJoint(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RevoluteJoint;
+declare function RevoluteJoint(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value): RevoluteJoint;
 /**
  * A revolute joint constrains two bodies to share a common point while they are
  * free to rotate about the point. The relative rotation about the shared point
@@ -2873,7 +2867,7 @@ declare function RevoluteJoint(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, 
 declare class RevoluteJoint extends Joint {
     static TYPE: "revolute-joint";
     constructor(def: RevoluteJointDef);
-    constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+    constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -3009,15 +3003,15 @@ interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
     /**
      * The local anchor point relative to bodyA's origin.
      */
-    localAnchorA: Vec2;
+    localAnchorA: Vec2Value;
     /**
      * The local anchor point relative to bodyB's origin.
      */
-    localAnchorB: Vec2;
+    localAnchorB: Vec2Value;
     /**
      * The local translation unit axis in bodyA.
      */
-    localAxisA: Vec2;
+    localAxisA: Vec2Value;
     /**
      * referenceAngle The constrained angle between the bodies:
      * bodyB_angle - bodyA_angle.
@@ -3037,7 +3031,7 @@ declare function PrismaticJoint(def: PrismaticJointDef): PrismaticJoint;
  * joint limit to restrict the range of motion and a joint motor to drive the
  * motion or to model joint friction.
  */
-declare function PrismaticJoint(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): PrismaticJoint;
+declare function PrismaticJoint(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value): PrismaticJoint;
 /**
  * A prismatic joint. This joint provides one degree of freedom: translation
  * along an axis fixed in bodyA. Relative rotation is prevented. You can use a
@@ -3047,7 +3041,7 @@ declare function PrismaticJoint(def: PrismaticJointOpt, bodyA: Body, bodyB: Body
 declare class PrismaticJoint extends Joint {
     static TYPE: "prismatic-joint";
     constructor(def: PrismaticJointDef);
-    constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
+    constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -3269,7 +3263,7 @@ interface MotorJointOpt extends JointOpt {
     /**
      * Position of bodyB minus the position of bodyA, in bodyA's frame, in meters.
      */
-    linearOffset?: Vec2;
+    linearOffset?: Vec2Value;
 }
 /**
  * Motor joint definition.
@@ -3324,7 +3318,7 @@ declare class MotorJoint extends Joint {
     /**
      * Set/get the target linear offset, in frame A, in meters.
      */
-    setLinearOffset(linearOffset: Vec2): void;
+    setLinearOffset(linearOffset: Vec2Value): void;
     getLinearOffset(): Vec2;
     /**
      * Set/get the target angular offset, in radians.
@@ -3391,6 +3385,9 @@ interface MouseJointDef extends JointDef, MouseJointOpt {
  * point. This a soft constraint with a maximum force. This allows the
  * constraint to stretch and without applying huge forces.
  *
+ * You need to call setTarget(target) every time that mouse is
+ * moved, to track the new location of the mouse.
+ *
  * NOTE: this joint is not documented in the manual because it was developed to
  * be used in the testbed. If you want to learn how to use the mouse joint, look
  * at the testbed.
@@ -3401,6 +3398,9 @@ declare function MouseJoint(def: MouseJointDef): MouseJoint;
  * point. This a soft constraint with a maximum force. This allows the
  * constraint to stretch and without applying huge forces.
  *
+ * You need to call setTarget(target) every time that mouse is
+ * moved, to track the new location of the mouse.
+ *
  * NOTE: this joint is not documented in the manual because it was developed to
  * be used in the testbed. If you want to learn how to use the mouse joint, look
  * at the testbed.
@@ -3410,6 +3410,9 @@ declare function MouseJoint(def: MouseJointOpt, bodyA: Body, bodyB: Body, target
  * A mouse joint is used to make a point on a body track a specified world
  * point. This a soft constraint with a maximum force. This allows the
  * constraint to stretch and without applying huge forces.
+ *
+ * You need to call setTarget(target) every time that mouse is
+ * moved, to track the new location of the mouse.
  *
  * NOTE: this joint is not documented in the manual because it was developed to
  * be used in the testbed. If you want to learn how to use the mouse joint, look
@@ -3490,19 +3493,19 @@ interface PulleyJointDef extends JointDef, PulleyJointOpt {
     /**
      * The first ground anchor in world coordinates. This point never moves.
      */
-    groundAnchorA: Vec2;
+    groundAnchorA: Vec2Value;
     /**
      * The second ground anchor in world coordinates. This point never moves.
      */
-    groundAnchorB: Vec2;
+    groundAnchorB: Vec2Value;
     /**
      * The local anchor point relative to bodyA's origin.
      */
-    localAnchorA: Vec2;
+    localAnchorA: Vec2Value;
     /**
      * The local anchor point relative to bodyB's origin.
      */
-    localAnchorB: Vec2;
+    localAnchorB: Vec2Value;
     /**
      * The reference length for the segment attached to bodyA.
      */
@@ -3539,7 +3542,7 @@ declare function PulleyJoint(def: PulleyJointDef): PulleyJoint;
  * anchor points with static shapes to prevent one side from going to zero
  * length.
  */
-declare function PulleyJoint(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number): PulleyJoint;
+declare function PulleyJoint(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2Value, groundB: Vec2Value, anchorA: Vec2Value, anchorB: Vec2Value, ratio: number): PulleyJoint;
 /**
  * The pulley joint is connected to two bodies and two fixed ground points. The
  * pulley supports a ratio such that: length1 + ratio * length2 <= constant
@@ -3554,7 +3557,7 @@ declare function PulleyJoint(def: PulleyJointOpt, bodyA: Body, bodyB: Body, grou
 declare class PulleyJoint extends Joint {
     static TYPE: "pulley-joint";
     constructor(def: PulleyJointDef);
-    constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number);
+    constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2Value, groundB: Vec2Value, anchorA: Vec2Value, anchorB: Vec2Value, ratio: number);
     _serialize(): object;
     /**
      * Get the first ground anchor.
@@ -3589,7 +3592,7 @@ declare class PulleyJoint extends Joint {
      *
      * @param newOrigin
      */
-    shiftOrigin(newOrigin: Vec2): void;
+    shiftOrigin(newOrigin: Vec2Value): void;
     /**
      * Get the anchor point on bodyA in world coordinates.
      */
@@ -3634,11 +3637,11 @@ interface RopeJointDef extends JointDef, RopeJointOpt {
     /**
      * The local anchor point relative to bodyA's origin.
      */
-    localAnchorA: Vec2;
+    localAnchorA: Vec2Value;
     /**
      * The local anchor point relative to bodyB's origin.
      */
-    localAnchorB: Vec2;
+    localAnchorB: Vec2Value;
 }
 /**
  * A rope joint enforces a maximum distance between two points on two bodies. It
@@ -3663,7 +3666,7 @@ declare function RopeJoint(def: RopeJointDef): RopeJoint;
  * sponginess, so I chose not to implement it that way. See {@link DistanceJoint} if you
  * want to dynamically control length.
  */
-declare function RopeJoint(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): RopeJoint;
+declare function RopeJoint(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value): RopeJoint;
 /**
  * A rope joint enforces a maximum distance between two points on two bodies. It
  * has no other effect.
@@ -3678,7 +3681,7 @@ declare function RopeJoint(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: 
 declare class RopeJoint extends Joint {
     static TYPE: "rope-joint";
     constructor(def: RopeJointDef);
-    constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+    constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -3755,11 +3758,11 @@ interface WeldJointDef extends JointDef, WeldJointOpt {
     /**
      * The local anchor point relative to bodyA's origin.
      */
-    localAnchorA: Vec2;
+    localAnchorA: Vec2Value;
     /**
      * The local anchor point relative to bodyB's origin.
      */
-    localAnchorB: Vec2;
+    localAnchorB: Vec2Value;
 }
 /**
  * A weld joint essentially glues two bodies together. A weld joint may distort
@@ -3770,7 +3773,7 @@ declare function WeldJoint(def: WeldJointDef): WeldJoint;
  * A weld joint essentially glues two bodies together. A weld joint may distort
  * somewhat because the island constraint solver is approximate.
  */
-declare function WeldJoint(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2): WeldJoint;
+declare function WeldJoint(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value): WeldJoint;
 /**
  * A weld joint essentially glues two bodies together. A weld joint may distort
  * somewhat because the island constraint solver is approximate.
@@ -3778,7 +3781,7 @@ declare function WeldJoint(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: 
 declare class WeldJoint extends Joint {
     static TYPE: "weld-joint";
     constructor(def: WeldJointDef);
-    constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+    constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -3872,15 +3875,15 @@ interface WheelJointDef extends JointDef, WheelJointOpt {
     /**
      * The local anchor point relative to bodyA's origin.
      */
-    localAnchorA: Vec2;
+    localAnchorA: Vec2Value;
     /**
      * The local anchor point relative to bodyB's origin.
      */
-    localAnchorB: Vec2;
+    localAnchorB: Vec2Value;
     /**
      * The local translation axis in bodyA.
      */
-    localAxisA: Vec2;
+    localAxisA: Vec2Value;
 }
 /**
  * A wheel joint. This joint provides two degrees of freedom: translation along
@@ -3895,7 +3898,7 @@ declare function WheelJoint(def: WheelJointDef): WheelJoint;
  * point to line constraint with a rotational motor and a linear spring/damper.
  * This joint is designed for vehicle suspensions.
  */
-declare function WheelJoint(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2): WheelJoint;
+declare function WheelJoint(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value): WheelJoint;
 /**
  * A wheel joint. This joint provides two degrees of freedom: translation along
  * an axis fixed in bodyA and rotation in the plane. In other words, it is a
@@ -3905,7 +3908,7 @@ declare function WheelJoint(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor
 declare class WheelJoint extends Joint {
     static TYPE: "wheel-joint";
     constructor(def: WheelJointDef);
-    constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
+    constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -6638,7 +6641,6 @@ declare namespace planck {
         m_normals: Vec2[]; // [Settings.maxPolygonVertices]
         m_count: number;
         m_radius: number;
-        // @ts-ignore
         constructor(vertices?: Vec2Value[]);
         getType(): "polygon";
         getRadius(): number;
@@ -6836,23 +6838,27 @@ declare namespace planck {
         /**
          * The local anchor point relative to bodyA's origin.
          */
-        localAnchorA: Vec2;
+        localAnchorA: Vec2Value;
         /**
          * The local anchor point relative to bodyB's origin.
          */
-        localAnchorB: Vec2;
+        localAnchorB: Vec2Value;
     }
     /**
      * A distance joint constrains two points on two bodies to remain at a fixed
      * distance from each other. You can view this as a massless, rigid rod.
-     *
-     * @param anchorA Anchor A in global coordination.
-     * @param anchorB Anchor B in global coordination.
      */
     class DistanceJoint extends Joint {
         static TYPE: "distance-joint";
+        /**
+         * @param def DistanceJoint definition.
+         */
         constructor(def: DistanceJointDef);
-        constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2);
+        /**
+         * @param anchorA Anchor A in global coordination.
+         * @param anchorB Anchor B in global coordination.
+         */
+        constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2Value, anchorB: Vec2Value);
         /**
          * The local anchor point relative to bodyA's origin.
          */
@@ -6926,13 +6932,14 @@ declare namespace planck {
     /**
      * Friction joint. This is used for top-down friction. It provides 2D
      * translational friction and angular friction.
-     *
-     * @param anchor Anchor in global coordination.
      */
     class FrictionJoint extends Joint {
         static TYPE: "friction-joint";
         constructor(def: FrictionJointDef);
-        constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+        /**
+         * @param anchor Anchor in global coordination.
+         */
+        constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
         /**
          * The local anchor point relative to bodyA's origin.
          */
@@ -7035,11 +7042,11 @@ declare namespace planck {
         /**
          * The local anchor point relative to bodyA's origin.
          */
-        localAnchorA: Vec2;
+        localAnchorA: Vec2Value;
         /**
          * The local anchor point relative to bodyB's origin.
          */
-        localAnchorB: Vec2;
+        localAnchorB: Vec2Value;
         /**
          * The bodyB angle minus bodyA angle in the reference state (radians).
          */
@@ -7056,7 +7063,7 @@ declare namespace planck {
     class RevoluteJoint extends Joint {
         static TYPE: "revolute-joint";
         constructor(def: RevoluteJointDef);
-        constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+        constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
         /**
          * The local anchor point relative to bodyA's origin.
          */
@@ -7192,15 +7199,15 @@ declare namespace planck {
         /**
          * The local anchor point relative to bodyA's origin.
          */
-        localAnchorA: Vec2;
+        localAnchorA: Vec2Value;
         /**
          * The local anchor point relative to bodyB's origin.
          */
-        localAnchorB: Vec2;
+        localAnchorB: Vec2Value;
         /**
          * The local translation unit axis in bodyA.
          */
-        localAxisA: Vec2;
+        localAxisA: Vec2Value;
         /**
          * referenceAngle The constrained angle between the bodies:
          * bodyB_angle - bodyA_angle.
@@ -7216,7 +7223,7 @@ declare namespace planck {
     class PrismaticJoint extends Joint {
         static TYPE: "prismatic-joint";
         constructor(def: PrismaticJointDef);
-        constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
+        constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
         /**
          * The local anchor point relative to bodyA's origin.
          */
@@ -7410,7 +7417,7 @@ declare namespace planck {
         /**
          * Position of bodyB minus the position of bodyA, in bodyA's frame, in meters.
          */
-        linearOffset?: Vec2;
+        linearOffset?: Vec2Value;
     }
     /**
      * Motor joint definition.
@@ -7453,7 +7460,7 @@ declare namespace planck {
         /**
          * Set/get the target linear offset, in frame A, in meters.
          */
-        setLinearOffset(linearOffset: Vec2): void;
+        setLinearOffset(linearOffset: Vec2Value): void;
         getLinearOffset(): Vec2;
         /**
          * Set/get the target angular offset, in radians.
@@ -7519,6 +7526,9 @@ declare namespace planck {
      * A mouse joint is used to make a point on a body track a specified world
      * point. This a soft constraint with a maximum force. This allows the
      * constraint to stretch and without applying huge forces.
+     *
+     * You need to call setTarget(target) every time that mouse is
+     * moved, to track the new location of the mouse.
      *
      * NOTE: this joint is not documented in the manual because it was developed to
      * be used in the testbed. If you want to learn how to use the mouse joint, look
@@ -7599,19 +7609,19 @@ declare namespace planck {
         /**
          * The first ground anchor in world coordinates. This point never moves.
          */
-        groundAnchorA: Vec2;
+        groundAnchorA: Vec2Value;
         /**
          * The second ground anchor in world coordinates. This point never moves.
          */
-        groundAnchorB: Vec2;
+        groundAnchorB: Vec2Value;
         /**
          * The local anchor point relative to bodyA's origin.
          */
-        localAnchorA: Vec2;
+        localAnchorA: Vec2Value;
         /**
          * The local anchor point relative to bodyB's origin.
          */
-        localAnchorB: Vec2;
+        localAnchorB: Vec2Value;
         /**
          * The reference length for the segment attached to bodyA.
          */
@@ -7639,7 +7649,7 @@ declare namespace planck {
     class PulleyJoint extends Joint {
         static TYPE: "pulley-joint";
         constructor(def: PulleyJointDef);
-        constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number);
+        constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2Value, groundB: Vec2Value, anchorA: Vec2Value, anchorB: Vec2Value, ratio: number);
         _serialize(): object;
         /**
          * Get the first ground anchor.
@@ -7674,7 +7684,7 @@ declare namespace planck {
          *
          * @param newOrigin
          */
-        shiftOrigin(newOrigin: Vec2): void;
+        shiftOrigin(newOrigin: Vec2Value): void;
         /**
          * Get the anchor point on bodyA in world coordinates.
          */
@@ -7719,11 +7729,11 @@ declare namespace planck {
         /**
          * The local anchor point relative to bodyA's origin.
          */
-        localAnchorA: Vec2;
+        localAnchorA: Vec2Value;
         /**
          * The local anchor point relative to bodyB's origin.
          */
-        localAnchorB: Vec2;
+        localAnchorB: Vec2Value;
     }
     /**
      * A rope joint enforces a maximum distance between two points on two bodies. It
@@ -7739,7 +7749,7 @@ declare namespace planck {
     class RopeJoint extends Joint {
         static TYPE: "rope-joint";
         constructor(def: RopeJointDef);
-        constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+        constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
         /**
          * The local anchor point relative to bodyA's origin.
          */
@@ -7816,11 +7826,11 @@ declare namespace planck {
         /**
          * The local anchor point relative to bodyA's origin.
          */
-        localAnchorA: Vec2;
+        localAnchorA: Vec2Value;
         /**
          * The local anchor point relative to bodyB's origin.
          */
-        localAnchorB: Vec2;
+        localAnchorB: Vec2Value;
     }
     /**
      * A weld joint essentially glues two bodies together. A weld joint may distort
@@ -7829,7 +7839,7 @@ declare namespace planck {
     class WeldJoint extends Joint {
         static TYPE: "weld-joint";
         constructor(def: WeldJointDef);
-        constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
+        constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
         /**
          * The local anchor point relative to bodyA's origin.
          */
@@ -7923,15 +7933,15 @@ declare namespace planck {
         /**
          * The local anchor point relative to bodyA's origin.
          */
-        localAnchorA: Vec2;
+        localAnchorA: Vec2Value;
         /**
          * The local anchor point relative to bodyB's origin.
          */
-        localAnchorB: Vec2;
+        localAnchorB: Vec2Value;
         /**
          * The local translation axis in bodyA.
          */
-        localAxisA: Vec2;
+        localAxisA: Vec2Value;
     }
     /**
      * A wheel joint. This joint provides two degrees of freedom: translation along
@@ -7942,7 +7952,7 @@ declare namespace planck {
     class WheelJoint extends Joint {
         static TYPE: "wheel-joint";
         constructor(def: WheelJointDef);
-        constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
+        constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
         /**
          * The local anchor point relative to bodyA's origin.
          */

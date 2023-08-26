@@ -8,6 +8,10 @@
 
 ## Index
 
+### Constructors
+
+* [constructor](vec3.md#constructor)
+
 ### Properties
 
 * [x](vec3.md#x)
@@ -34,13 +38,45 @@
 * [sub](vec3.md#static-sub)
 * [zero](vec3.md#static-zero)
 
+## Constructors
+
+###  constructor
+
+\+ **new Vec3**(`x`: number, `y`: number, `z`: number): *[Vec3](vec3.md)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`x` | number |
+`y` | number |
+`z` | number |
+
+**Returns:** *[Vec3](vec3.md)*
+
+\+ **new Vec3**(`obj`: object): *[Vec3](vec3.md)*
+
+**Parameters:**
+
+▪ **obj**: *object*
+
+Name | Type |
+------ | ------ |
+`x` | number |
+`y` | number |
+`z` | number |
+
+**Returns:** *[Vec3](vec3.md)*
+
+\+ **new Vec3**(): *[Vec3](vec3.md)*
+
+**Returns:** *[Vec3](vec3.md)*
+
 ## Properties
 
 ###  x
 
 • **x**: *number*
-
-*Defined in [src/common/Vec3.ts:37](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L37)*
 
 ___
 
@@ -48,23 +84,17 @@ ___
 
 • **y**: *number*
 
-*Defined in [src/common/Vec3.ts:38](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L38)*
-
 ___
 
 ###  z
 
 • **z**: *number*
 
-*Defined in [src/common/Vec3.ts:39](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L39)*
-
 ## Methods
 
 ###  add
 
 ▸ **add**(`w`: [Vec3Value](../interfaces/vec3value.md)): *[Vec3](vec3.md)*
-
-*Defined in [src/common/Vec3.ts:136](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L136)*
 
 **Parameters:**
 
@@ -80,8 +110,6 @@ ___
 
 ▸ **mul**(`m`: number): *[Vec3](vec3.md)*
 
-*Defined in [src/common/Vec3.ts:150](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L150)*
-
 **Parameters:**
 
 Name | Type |
@@ -96,8 +124,6 @@ ___
 
 ▸ **neg**(): *[Vec3](vec3.md)*
 
-*Defined in [src/common/Vec3.ts:192](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L192)*
-
 **Returns:** *[Vec3](vec3.md)*
 
 ___
@@ -105,8 +131,6 @@ ___
 ###  set
 
 ▸ **set**(`x`: number, `y`: number, `z`: number): *[Vec3](vec3.md)*
-
-*Defined in [src/common/Vec3.ts:129](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L129)*
 
 **Parameters:**
 
@@ -124,8 +148,6 @@ ___
 
 ▸ **setZero**(): *[Vec3](vec3.md)*
 
-*Defined in [src/common/Vec3.ts:122](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L122)*
-
 **Returns:** *[Vec3](vec3.md)*
 
 ___
@@ -133,8 +155,6 @@ ___
 ###  sub
 
 ▸ **sub**(`w`: [Vec3Value](../interfaces/vec3value.md)): *[Vec3](vec3.md)*
-
-*Defined in [src/common/Vec3.ts:143](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L143)*
 
 **Parameters:**
 
@@ -149,8 +169,6 @@ ___
 ### `Static` add
 
 ▸ **add**(`v`: [Vec3Value](../interfaces/vec3value.md), `w`: [Vec3Value](../interfaces/vec3value.md)): *[Vec3](vec3.md)*
-
-*Defined in [src/common/Vec3.ts:180](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L180)*
 
 **Parameters:**
 
@@ -167,8 +185,6 @@ ___
 
 ▸ **areEqual**(`v`: [Vec3Value](../interfaces/vec3value.md), `w`: [Vec3Value](../interfaces/vec3value.md)): *boolean*
 
-*Defined in [src/common/Vec3.ts:157](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L157)*
-
 **Parameters:**
 
 Name | Type |
@@ -184,8 +200,6 @@ ___
 
 ▸ **assert**(`o`: any): *void*
 
-*Defined in [src/common/Vec3.ts:118](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L118)*
-
 **Parameters:**
 
 Name | Type |
@@ -200,8 +214,6 @@ ___
 
 ▸ **clone**(`v`: [Vec3Value](../interfaces/vec3value.md)): *[Vec3](vec3.md)*
 
-*Defined in [src/common/Vec3.ts:100](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L100)*
-
 **Parameters:**
 
 Name | Type |
@@ -215,8 +227,6 @@ ___
 ### `Static` cross
 
 ▸ **cross**(`v`: [Vec3Value](../interfaces/vec3value.md), `w`: [Vec3Value](../interfaces/vec3value.md)): *[Vec3](vec3.md)*
-
-*Defined in [src/common/Vec3.ts:172](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L172)*
 
 Cross product on two vectors
 
@@ -235,8 +245,6 @@ ___
 
 ▸ **dot**(`v`: [Vec3Value](../interfaces/vec3value.md), `w`: [Vec3Value](../interfaces/vec3value.md)): *number*
 
-*Defined in [src/common/Vec3.ts:167](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L167)*
-
 Dot product on two vectors
 
 **Parameters:**
@@ -254,8 +262,6 @@ ___
 
 ▸ **isValid**(`obj`: any): *boolean*
 
-*Defined in [src/common/Vec3.ts:111](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L111)*
-
 Does this vector contain finite coordinates?
 
 **Parameters:**
@@ -272,8 +278,6 @@ ___
 
 ▸ **mul**(`v`: [Vec3Value](../interfaces/vec3value.md), `m`: number): *[Vec3](vec3.md)*
 
-*Defined in [src/common/Vec3.ts:188](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L188)*
-
 **Parameters:**
 
 Name | Type |
@@ -289,8 +293,6 @@ ___
 
 ▸ **neg**(`v`: [Vec3Value](../interfaces/vec3value.md)): *[Vec3](vec3.md)*
 
-*Defined in [src/common/Vec3.ts:199](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L199)*
-
 **Parameters:**
 
 Name | Type |
@@ -304,8 +306,6 @@ ___
 ### `Static` sub
 
 ▸ **sub**(`v`: [Vec3Value](../interfaces/vec3value.md), `w`: [Vec3Value](../interfaces/vec3value.md)): *[Vec3](vec3.md)*
-
-*Defined in [src/common/Vec3.ts:184](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L184)*
 
 **Parameters:**
 
@@ -321,7 +321,5 @@ ___
 ### `Static` zero
 
 ▸ **zero**(): *[Vec3](vec3.md)*
-
-*Defined in [src/common/Vec3.ts:92](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec3.ts#L92)*
 
 **Returns:** *[Vec3](vec3.md)*

@@ -29,15 +29,11 @@ computation. Even
 
 • **proxyA**: *[DistanceProxy](distanceproxy.md)‹›* = new DistanceProxy()
 
-*Defined in [src/collision/Distance.ts:60](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L60)*
-
 ___
 
 ### `Readonly` proxyB
 
 • **proxyB**: *[DistanceProxy](distanceproxy.md)‹›* = new DistanceProxy()
-
-*Defined in [src/collision/Distance.ts:61](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L61)*
 
 ___
 
@@ -45,15 +41,11 @@ ___
 
 • **transformA**: *[Transform](transform.md)‹›* = Transform.identity()
 
-*Defined in [src/collision/Distance.ts:62](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L62)*
-
 ___
 
 ### `Readonly` transformB
 
 • **transformB**: *[Transform](transform.md)‹›* = Transform.identity()
-
-*Defined in [src/collision/Distance.ts:63](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L63)*
 
 ___
 
@@ -61,14 +53,10 @@ ___
 
 • **useRadii**: *boolean* = false
 
-*Defined in [src/collision/Distance.ts:64](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L64)*
-
 ## Methods
 
 ###  recycle
 
 ▸ **recycle**(): *void*
-
-*Defined in [src/collision/Distance.ts:65](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L65)*
 
 **Returns:** *void*

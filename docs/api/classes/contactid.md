@@ -33,8 +33,6 @@ ContactFeature: The features that intersect to form the contact point.
 
 • **indexA**: *number* = -1
 
-*Defined in [src/collision/Manifold.ts:278](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L278)*
-
 ContactFeature index on shapeA
 
 ___
@@ -42,8 +40,6 @@ ___
 ###  indexB
 
 • **indexB**: *number* = -1
-
-*Defined in [src/collision/Manifold.ts:281](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L281)*
 
 ContactFeature index on shapeB
 
@@ -53,8 +49,6 @@ ___
 
 • **key**: *number* = -1
 
-*Defined in [src/collision/Manifold.ts:275](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L275)*
-
 Used to quickly compare contact ids.
 
 ___
@@ -62,8 +56,6 @@ ___
 ###  typeA
 
 • **typeA**: *[ContactFeatureType](../enums/contactfeaturetype.md)* = ContactFeatureType.e_unset
-
-*Defined in [src/collision/Manifold.ts:284](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L284)*
 
 ContactFeature type on shapeA
 
@@ -73,8 +65,6 @@ ___
 
 • **typeB**: *[ContactFeatureType](../enums/contactfeaturetype.md)* = ContactFeatureType.e_unset
 
-*Defined in [src/collision/Manifold.ts:287](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L287)*
-
 ContactFeature type on shapeB
 
 ## Methods
@@ -83,8 +73,6 @@ ContactFeature type on shapeB
 
 ▸ **recycle**(): *void*
 
-*Defined in [src/collision/Manifold.ts:317](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L317)*
-
 **Returns:** *void*
 
 ___
@@ -92,8 +80,6 @@ ___
 ###  set
 
 ▸ **set**(`that`: [ContactID](contactid.md)): *void*
-
-*Defined in [src/collision/Manifold.ts:297](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L297)*
 
 **Parameters:**
 
@@ -108,8 +94,6 @@ ___
 ###  setFeatures
 
 ▸ **setFeatures**(`indexA`: number, `typeA`: [ContactFeatureType](../enums/contactfeaturetype.md), `indexB`: number, `typeB`: [ContactFeatureType](../enums/contactfeaturetype.md)): *void*
-
-*Defined in [src/collision/Manifold.ts:289](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L289)*
 
 **Parameters:**
 
@@ -127,7 +111,5 @@ ___
 ###  swapFeatures
 
 ▸ **swapFeatures**(): *void*
-
-*Defined in [src/collision/Manifold.ts:305](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L305)*
 
 **Returns:** *void*

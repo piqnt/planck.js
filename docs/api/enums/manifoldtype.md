@@ -17,15 +17,11 @@
 
 • **e_circles**: = 0
 
-*Defined in [src/collision/Manifold.ts:44](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L44)*
-
 ___
 
 ###  e_faceA
 
 • **e_faceA**: = 1
-
-*Defined in [src/collision/Manifold.ts:45](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L45)*
 
 ___
 
@@ -33,12 +29,8 @@ ___
 
 • **e_faceB**: = 2
 
-*Defined in [src/collision/Manifold.ts:46](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L46)*
-
 ___
 
 ###  e_unset
 
 • **e_unset**: = -1
-
-*Defined in [src/collision/Manifold.ts:43](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L43)*

@@ -16,20 +16,14 @@
 
 • **e_face**: = 1
 
-*Defined in [src/collision/Manifold.ts:52](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L52)*
-
 ___
 
 ###  e_unset
 
 • **e_unset**: = -1
 
-*Defined in [src/collision/Manifold.ts:50](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L50)*
-
 ___
 
 ###  e_vertex
 
 • **e_vertex**: = 0
-
-*Defined in [src/collision/Manifold.ts:51](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L51)*

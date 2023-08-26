@@ -31,8 +31,6 @@ up one-to-one with the contact points in Manifold.
 
 \+ **new ContactImpulse**(`contact`: [Contact](contact.md)): *[ContactImpulse](contactimpulse.md)*
 
-*Defined in [src/dynamics/Solver.ts:89](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Solver.ts#L89)*
-
 **Parameters:**
 
 Name | Type |
@@ -47,8 +45,6 @@ Name | Type |
 
 • **get normalImpulses**(): *number[]*
 
-*Defined in [src/dynamics/Solver.ts:102](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Solver.ts#L102)*
-
 **Returns:** *number[]*
 
 ___
@@ -57,8 +53,6 @@ ___
 
 • **get tangentImpulses**(): *number[]*
 
-*Defined in [src/dynamics/Solver.ts:112](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Solver.ts#L112)*
-
 **Returns:** *number[]*
 
 ## Methods
@@ -66,7 +60,5 @@ ___
 ###  recycle
 
 ▸ **recycle**(): *void*
-
-*Defined in [src/dynamics/Solver.ts:97](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Solver.ts#L97)*
 
 **Returns:** *void*

@@ -19,12 +19,8 @@
 
 • **x**: *number*
 
-*Defined in [src/common/Vec2.ts:37](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec2.ts#L37)*
-
 ___
 
 ###  y
 
 • **y**: *number*
-
-*Defined in [src/common/Vec2.ts:38](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Vec2.ts#L38)*

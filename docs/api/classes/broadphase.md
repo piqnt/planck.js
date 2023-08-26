@@ -45,8 +45,6 @@ objects and query them on update.
 
 • **m_callback**: *function*
 
-*Defined in [src/collision/BroadPhase.ts:44](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L44)*
-
 #### Type declaration:
 
 ▸ (`userDataA`: any, `userDataB`: any): *void*
@@ -64,15 +62,11 @@ ___
 
 • **m_moveBuffer**: *number[]* = []
 
-*Defined in [src/collision/BroadPhase.ts:42](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L42)*
-
 ___
 
 ###  m_queryProxyId
 
 • **m_queryProxyId**: *number*
-
-*Defined in [src/collision/BroadPhase.ts:45](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L45)*
 
 ___
 
@@ -80,15 +74,11 @@ ___
 
 • **m_tree**: *[DynamicTree](dynamictree.md)‹[FixtureProxy](fixtureproxy.md)›* = new DynamicTree<FixtureProxy>()
 
-*Defined in [src/collision/BroadPhase.ts:41](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L41)*
-
 ## Methods
 
 ###  bufferMove
 
 ▸ **bufferMove**(`proxyId`: number): *void*
-
-*Defined in [src/collision/BroadPhase.ts:169](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L169)*
 
 **Parameters:**
 
@@ -103,8 +93,6 @@ ___
 ###  createProxy
 
 ▸ **createProxy**(`aabb`: [AABBValue](../interfaces/aabbvalue.md), `userData`: [FixtureProxy](fixtureproxy.md)): *number*
-
-*Defined in [src/collision/BroadPhase.ts:134](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L134)*
 
 Create a proxy with an initial AABB. Pairs are not reported until UpdatePairs
 is called.
@@ -124,8 +112,6 @@ ___
 
 ▸ **destroyProxy**(`proxyId`: number): *void*
 
-*Defined in [src/collision/BroadPhase.ts:144](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L144)*
-
 Destroy a proxy. It is up to the client to remove any pairs.
 
 **Parameters:**
@@ -141,8 +127,6 @@ ___
 ###  getFatAABB
 
 ▸ **getFatAABB**(`proxyId`: number): *[AABB](aabb.md)*
-
-*Defined in [src/collision/BroadPhase.ts:66](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L66)*
 
 Get the fat AABB for a proxy.
 
@@ -160,8 +144,6 @@ ___
 
 ▸ **getProxyCount**(): *number*
 
-*Defined in [src/collision/BroadPhase.ts:73](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L73)*
-
 Get the number of proxies.
 
 **Returns:** *number*
@@ -171,8 +153,6 @@ ___
 ###  getTreeBalance
 
 ▸ **getTreeBalance**(): *number*
-
-*Defined in [src/collision/BroadPhase.ts:87](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L87)*
 
 Get the balance (integer) of the embedded tree.
 
@@ -184,8 +164,6 @@ ___
 
 ▸ **getTreeHeight**(): *number*
 
-*Defined in [src/collision/BroadPhase.ts:80](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L80)*
-
 Get the height of the embedded tree.
 
 **Returns:** *number*
@@ -196,8 +174,6 @@ ___
 
 ▸ **getTreeQuality**(): *number*
 
-*Defined in [src/collision/BroadPhase.ts:94](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L94)*
-
 Get the quality metric of the embedded tree.
 
 **Returns:** *number*
@@ -207,8 +183,6 @@ ___
 ###  getUserData
 
 ▸ **getUserData**(`proxyId`: number): *[FixtureProxy](fixtureproxy.md)*
-
-*Defined in [src/collision/BroadPhase.ts:50](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L50)*
 
 Get user data from a proxy. Returns null if the id is invalid.
 
@@ -225,8 +199,6 @@ ___
 ###  moveProxy
 
 ▸ **moveProxy**(`proxyId`: number, `aabb`: [AABB](aabb.md), `displacement`: [Vec2Value](../interfaces/vec2value.md)): *void*
-
-*Defined in [src/collision/BroadPhase.ts:153](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L153)*
 
 Call moveProxy as many times as you like, then when you are done call
 UpdatePairs to finalized the proxy pairs (for your time step).
@@ -247,8 +219,6 @@ ___
 
 ▸ **query**(`aabb`: [AABBValue](../interfaces/aabbvalue.md), `queryCallback`: [DynamicTreeQueryCallback](../globals.md#dynamictreequerycallback)): *void*
 
-*Defined in [src/collision/BroadPhase.ts:102](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L102)*
-
 Query an AABB for overlapping proxies. The callback class is called for each
 proxy that overlaps the supplied AABB.
 
@@ -267,8 +237,6 @@ ___
 
 ▸ **queryCallback**(`proxyId`: number): *boolean*
 
-*Defined in [src/collision/BroadPhase.ts:207](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L207)*
-
 **Parameters:**
 
 Name | Type |
@@ -282,8 +250,6 @@ ___
 ###  rayCast
 
 ▸ **rayCast**(`input`: [RayCastInput](../interfaces/raycastinput.md), `rayCastCallback`: [RayCastCallback](../globals.md#raycastcallback)): *void*
-
-*Defined in [src/collision/BroadPhase.ts:116](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L116)*
 
 Ray-cast against the proxies in the tree. This relies on the callback to
 perform a exact ray-cast in the case were the proxy contains a shape. The
@@ -306,8 +272,6 @@ ___
 
 ▸ **shiftOrigin**(`newOrigin`: [Vec2Value](../interfaces/vec2value.md)): *void*
 
-*Defined in [src/collision/BroadPhase.ts:126](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L126)*
-
 Shift the world origin. Useful for large worlds. The shift formula is:
 position -= newOrigin
 
@@ -324,8 +288,6 @@ ___
 ###  testOverlap
 
 ▸ **testOverlap**(`proxyIdA`: number, `proxyIdB`: number): *boolean*
-
-*Defined in [src/collision/BroadPhase.ts:57](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L57)*
 
 Test overlap of fat AABBs.
 
@@ -344,8 +306,6 @@ ___
 
 ▸ **touchProxy**(`proxyId`: number): *void*
 
-*Defined in [src/collision/BroadPhase.ts:165](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L165)*
-
 Call to trigger a re-processing of it's pairs on the next call to
 UpdatePairs.
 
@@ -363,8 +323,6 @@ ___
 
 ▸ **unbufferMove**(`proxyId`: number): *void*
 
-*Defined in [src/collision/BroadPhase.ts:173](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L173)*
-
 **Parameters:**
 
 Name | Type |
@@ -378,8 +336,6 @@ ___
 ###  updatePairs
 
 ▸ **updatePairs**(`addPairCallback`: function): *void*
-
-*Defined in [src/collision/BroadPhase.ts:184](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/BroadPhase.ts#L184)*
 
 Update the pairs. This results in pair callbacks. This can only add pairs.
 

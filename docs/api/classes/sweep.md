@@ -38,8 +38,6 @@ of mass position.
 
 • **a**: *number* = 0
 
-*Defined in [src/common/Sweep.ts:52](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Sweep.ts#L52)*
-
 World angle
 
 ___
@@ -48,15 +46,11 @@ ___
 
 • **a0**: *number* = 0
 
-*Defined in [src/common/Sweep.ts:58](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Sweep.ts#L58)*
-
 ___
 
 ###  alpha0
 
 • **alpha0**: *number* = 0
-
-*Defined in [src/common/Sweep.ts:55](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Sweep.ts#L55)*
 
 Fraction of the current time step in the range [0,1], c0 and a0 are c and a at alpha0.
 
@@ -66,8 +60,6 @@ ___
 
 • **c**: *Vec2‹›* = Vec2.zero()
 
-*Defined in [src/common/Sweep.ts:49](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Sweep.ts#L49)*
-
 World center position
 
 ___
@@ -76,15 +68,11 @@ ___
 
 • **c0**: *Vec2‹›* = Vec2.zero()
 
-*Defined in [src/common/Sweep.ts:57](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Sweep.ts#L57)*
-
 ___
 
 ###  localCenter
 
 • **localCenter**: *Vec2‹›* = Vec2.zero()
-
-*Defined in [src/common/Sweep.ts:46](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Sweep.ts#L46)*
 
 Local center of mass position
 
@@ -93,8 +81,6 @@ Local center of mass position
 ###  advance
 
 ▸ **advance**(`alpha`: number): *void*
-
-*Defined in [src/common/Sweep.ts:105](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Sweep.ts#L105)*
 
 Advance the sweep forward, yielding a new initial state.
 
@@ -112,8 +98,6 @@ ___
 
 ▸ **forward**(): *void*
 
-*Defined in [src/common/Sweep.ts:113](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Sweep.ts#L113)*
-
 **Returns:** *void*
 
 ___
@@ -121,8 +105,6 @@ ___
 ###  getTransform
 
 ▸ **getTransform**(`xf`: [TransformValue](../globals.md#transformvalue), `beta`: number): *void*
-
-*Defined in [src/common/Sweep.ts:92](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Sweep.ts#L92)*
 
 Get the interpolated transform at a specific time.
 
@@ -141,8 +123,6 @@ ___
 
 ▸ **normalize**(): *void*
 
-*Defined in [src/common/Sweep.ts:121](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Sweep.ts#L121)*
-
 normalize the angles in radians to be between -pi and pi.
 
 **Returns:** *void*
@@ -152,8 +132,6 @@ ___
 ###  set
 
 ▸ **set**(`that`: [Sweep](sweep.md)): *void*
-
-*Defined in [src/common/Sweep.ts:127](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Sweep.ts#L127)*
 
 **Parameters:**
 
@@ -169,8 +147,6 @@ ___
 
 ▸ **setLocalCenter**(`localCenter`: [Vec2Value](../interfaces/vec2value.md), `xf`: [TransformValue](../globals.md#transformvalue)): *void*
 
-*Defined in [src/common/Sweep.ts:78](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Sweep.ts#L78)*
-
 **Parameters:**
 
 Name | Type |
@@ -185,8 +161,6 @@ ___
 ###  setTransform
 
 ▸ **setTransform**(`xf`: [TransformValue](../globals.md#transformvalue)): *void*
-
-*Defined in [src/common/Sweep.ts:70](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Sweep.ts#L70)*
 
 **Parameters:**
 

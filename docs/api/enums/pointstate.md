@@ -19,8 +19,6 @@ This is used for determining the state of contact points.
 
 • **addState**: = 1
 
-*Defined in [src/collision/Manifold.ts:62](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L62)*
-
 Point was added in the update
 
 ___
@@ -28,8 +26,6 @@ ___
 ###  nullState
 
 • **nullState**: = 0
-
-*Defined in [src/collision/Manifold.ts:60](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L60)*
 
 Point does not exist
 
@@ -39,8 +35,6 @@ ___
 
 • **persistState**: = 2
 
-*Defined in [src/collision/Manifold.ts:64](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L64)*
-
 Point persisted across the update
 
 ___
@@ -48,7 +42,5 @@ ___
 ###  removeState
 
 • **removeState**: = 3
-
-*Defined in [src/collision/Manifold.ts:66](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L66)*
 
 Point was removed in the update

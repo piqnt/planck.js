@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.0-beta.14
+ * Planck.js v1.0.0-beta.15
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
@@ -523,7 +523,6 @@
         Vec2.dot = function (v, w) {
             return v.x * w.x + v.y * w.y;
         };
-        /** @internal */
         Vec2.cross = function (v, w) {
             if (typeof w === 'number') {
                 return Vec2.neo(w * v.y, -w * v.x);
@@ -547,7 +546,6 @@
         Vec2.crossNumVec2 = function (v, w) {
             return Vec2.neo(-v * w.y, v * w.x);
         };
-        /** @internal */
         Vec2.addCross = function (a, v, w) {
             if (typeof w === 'number') {
                 return Vec2.neo(w * v.y + a.x, -w * v.x + a.y);
@@ -586,7 +584,6 @@
         Vec2.sub = function (v, w) {
             return Vec2.neo(v.x - w.x, v.y - w.y);
         };
-        /** @internal */
         Vec2.mul = function (a, b) {
             if (typeof a === 'object') {
                 return Vec2.neo(a.x * b, a.y * b);
@@ -2546,7 +2543,6 @@
         Rot.prototype.getYAxis = function () {
             return Vec2.neo(-this.s, this.c);
         };
-        /** @internal */
         Rot.mul = function (rot, m) {
             if ('c' in m && 's' in m) {
                 // [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
@@ -2582,7 +2578,6 @@
             var y = rot.s * (v.x - w.x) + rot.c * (v.y - w.y);
             return Vec2.neo(x, y);
         };
-        /** @internal */
         Rot.mulT = function (rot, m) {
             if ('c' in m && 's' in m) {
                 // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
@@ -2795,7 +2790,6 @@
             this.p.setZero();
             this.q.setIdentity();
         };
-        /** @internal */
         Transform.prototype.set = function (a, b) {
             if (typeof b === 'undefined') {
                 this.p.set(a.p);
@@ -2825,7 +2819,6 @@
         };
         // static mul(a: Transform, b: Vec2Value[]): Vec2[];
         // static mul(a: Transform, b: Transform[]): Transform[];
-        /** @internal */
         Transform.mul = function (a, b) {
             if (Array.isArray(b)) {
                 var arr = [];
@@ -2841,7 +2834,6 @@
                 return Transform.mulXf(a, b);
             }
         };
-        /** @internal */
         Transform.mulAll = function (a, b) {
             var arr = [];
             for (var i = 0; i < b.length; i++) {
@@ -2868,7 +2860,6 @@
             xf.p = Vec2.add(Rot.mulVec2(a.q, b.p), a.p);
             return xf;
         };
-        /** @internal */
         Transform.mulT = function (a, b) {
             if ('x' in b && 'y' in b) {
                 return Transform.mulTVec2(a, b);
@@ -3079,8 +3070,8 @@
      * To create a new Fixture use {@link Body.createFixture}.
      */
     var Fixture = /** @class */ (function () {
-        // tslint:disable-next-line:typedef
-        /** @internal */ function Fixture(body, shape, def) {
+        /** @internal */
+        function Fixture(body, shape, def) {
             if (shape.shape) {
                 def = shape;
                 shape = shape.shape;
@@ -6380,7 +6371,6 @@
      * A 2-by-2 matrix. Stored in column-major order.
      */
     var Mat22 = /** @class */ (function () {
-        /** @internal */
         function Mat22(a, b, c, d) {
             if (typeof a === 'object' && a !== null) {
                 this.ex = Vec2.clone(a);
@@ -6407,7 +6397,6 @@
         };
         Mat22.assert = function (o) {
         };
-        /** @internal */
         Mat22.prototype.set = function (a, b, c, d) {
             if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
                 && typeof d === 'number') {
@@ -6470,7 +6459,6 @@
             w.y = det * (a * v.y - c * v.x);
             return w;
         };
-        /** @internal */
         Mat22.mul = function (mx, v) {
             if (v && 'x' in v && 'y' in v) {
                 var x = mx.ex.x * v.x + mx.ey.x * v.y;
@@ -6499,7 +6487,6 @@
             var d = mx.ex.y * v.ey.x + mx.ey.y * v.ey.y;
             return new Mat22(a, b, c, d);
         };
-        /** @internal */
         Mat22.mulT = function (mx, v) {
             if (v && 'x' in v && 'y' in v) { // Vec2
                 return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
@@ -8899,7 +8886,6 @@
      * SOFTWARE.
      */
     var Vec3 = /** @class */ (function () {
-        /** @internal */
         function Vec3(x, y, z) {
             if (!(this instanceof Vec3)) {
                 return new Vec3(x, y, z);
@@ -9644,7 +9630,6 @@
      */
     var PolygonShape = /** @class */ (function (_super) {
         __extends(PolygonShape, _super);
-        // @ts-ignore
         function PolygonShape(vertices) {
             var _this = this;
             // @ts-ignore
@@ -10120,7 +10105,6 @@
     /** @internal */ var temp = vec2(0, 0);
     var CircleShape = /** @class */ (function (_super) {
         __extends(CircleShape, _super);
-        // tslint:disable-next-line:typedef
         function CircleShape(a, b) {
             var _this = this;
             // @ts-ignore
@@ -10302,9 +10286,6 @@
     /**
      * A distance joint constrains two points on two bodies to remain at a fixed
      * distance from each other. You can view this as a massless, rigid rod.
-     *
-     * @param anchorA Anchor A in global coordination.
-     * @param anchorB Anchor B in global coordination.
      */
     var DistanceJoint = /** @class */ (function (_super) {
         __extends(DistanceJoint, _super);
@@ -10487,8 +10468,7 @@
             }
             var crAu = Vec2.crossVec2Vec2(this.m_rA, this.m_u);
             var crBu = Vec2.crossVec2Vec2(this.m_rB, this.m_u);
-            var invMass = this.m_invMassA + this.m_invIA * crAu * crAu + this.m_invMassB
-                + this.m_invIB * crBu * crBu;
+            var invMass = this.m_invMassA + this.m_invIA * crAu * crAu + this.m_invMassB + this.m_invIB * crBu * crBu;
             // Compute the effective mass matrix.
             this.m_mass = invMass != 0.0 ? 1.0 / invMass : 0.0;
             if (this.m_frequencyHz > 0.0) {
@@ -10537,8 +10517,7 @@
             var vpA = Vec2.add(vA, Vec2.crossNumVec2(wA, this.m_rA));
             var vpB = Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB));
             var Cdot = Vec2.dot(this.m_u, vpB) - Vec2.dot(this.m_u, vpA);
-            var impulse = -this.m_mass
-                * (Cdot + this.m_bias + this.m_gamma * this.m_impulse);
+            var impulse = -this.m_mass * (Cdot + this.m_bias + this.m_gamma * this.m_impulse);
             this.m_impulse += impulse;
             var P = Vec2.mulNumVec2(impulse, this.m_u);
             vA.subMul(this.m_invMassA, P);
@@ -10615,8 +10594,6 @@
     /**
      * Friction joint. This is used for top-down friction. It provides 2D
      * translational friction and angular friction.
-     *
-     * @param anchor Anchor in global coordination.
      */
     var FrictionJoint = /** @class */ (function (_super) {
         __extends(FrictionJoint, _super);
@@ -10815,13 +10792,13 @@
             var mB = this.m_invMassB;
             var iA = this.m_invIA;
             var iB = this.m_invIB;
-            var h = step.dt; // float
+            var h = step.dt;
             // Solve angular friction
             {
-                var Cdot = wB - wA; // float
-                var impulse = -this.m_angularMass * Cdot; // float
-                var oldImpulse = this.m_angularImpulse; // float
-                var maxImpulse = h * this.m_maxTorque; // float
+                var Cdot = wB - wA;
+                var impulse = -this.m_angularMass * Cdot;
+                var oldImpulse = this.m_angularImpulse;
+                var maxImpulse = h * this.m_maxTorque;
                 this.m_angularImpulse = clamp(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = this.m_angularImpulse - oldImpulse;
                 wA -= iA * impulse;
@@ -10829,11 +10806,11 @@
             }
             // Solve linear friction
             {
-                var Cdot = Vec2.sub(Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB)), Vec2.add(vA, Vec2.crossNumVec2(wA, this.m_rA))); // Vec2
-                var impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot)); // Vec2
-                var oldImpulse = this.m_linearImpulse; // Vec2
+                var Cdot = Vec2.sub(Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB)), Vec2.add(vA, Vec2.crossNumVec2(wA, this.m_rA)));
+                var impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
+                var oldImpulse = this.m_linearImpulse;
                 this.m_linearImpulse.add(impulse);
-                var maxImpulse = h * this.m_maxForce; // float
+                var maxImpulse = h * this.m_maxForce;
                 if (this.m_linearImpulse.lengthSquared() > maxImpulse * maxImpulse) {
                     this.m_linearImpulse.normalize();
                     this.m_linearImpulse.mul(maxImpulse);
@@ -10886,7 +10863,6 @@
      * A 3-by-3 matrix. Stored in column-major order.
      */
     var Mat33 = /** @class */ (function () {
-        /** @internal */
         function Mat33(a, b, c) {
             if (typeof a === 'object' && a !== null) {
                 this.ex = Vec3.clone(a);
@@ -11018,7 +10994,6 @@
             M.ez.y = M.ey.z;
             M.ez.z = det * (a11 * a22 - a12 * a12);
         };
-        /** @internal */
         Mat33.mul = function (a, b) {
             if (b && 'z' in b && 'y' in b && 'x' in b) {
                 var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
@@ -11099,7 +11074,6 @@
      */
     var RevoluteJoint = /** @class */ (function (_super) {
         __extends(RevoluteJoint, _super);
-        // @ts-ignore
         function RevoluteJoint(def, bodyA, bodyB, anchor) {
             var _a, _b, _c, _d, _e, _f;
             var _this = this;
@@ -11109,11 +11083,10 @@
             }
             def = def !== null && def !== void 0 ? def : {};
             _this = _super.call(this, def, bodyA, bodyB) || this;
-            // effective mass for point-to-point constraint.
-            /** @internal */ _this.m_mass = new Mat33();
-            /** @internal */ _this.m_limitState = LimitState$2.inactiveLimit;
             bodyA = _this.m_bodyA;
             bodyB = _this.m_bodyB;
+            _this.m_mass = new Mat33();
+            _this.m_limitState = LimitState$2.inactiveLimit;
             _this.m_type = RevoluteJoint.TYPE;
             if (Vec2.isValid(anchor)) {
                 _this.m_localAnchorA = bodyA.getLocalPoint(anchor);
@@ -11842,18 +11815,17 @@
         PrismaticJoint.prototype.getJointSpeed = function () {
             var bA = this.m_bodyA;
             var bB = this.m_bodyB;
-            var rA = Rot.mulVec2(bA.m_xf.q, Vec2.sub(this.m_localAnchorA, bA.m_sweep.localCenter)); // Vec2
-            var rB = Rot.mulVec2(bB.m_xf.q, Vec2.sub(this.m_localAnchorB, bB.m_sweep.localCenter)); // Vec2
-            var p1 = Vec2.add(bA.m_sweep.c, rA); // Vec2
-            var p2 = Vec2.add(bB.m_sweep.c, rB); // Vec2
-            var d = Vec2.sub(p2, p1); // Vec2
-            var axis = Rot.mulVec2(bA.m_xf.q, this.m_localXAxisA); // Vec2
-            var vA = bA.m_linearVelocity; // Vec2
-            var vB = bB.m_linearVelocity; // Vec2
-            var wA = bA.m_angularVelocity; // float
-            var wB = bB.m_angularVelocity; // float
-            var speed = Vec2.dot(d, Vec2.crossNumVec2(wA, axis))
-                + Vec2.dot(axis, Vec2.sub(Vec2.addCrossNumVec2(vB, wB, rB), Vec2.addCrossNumVec2(vA, wA, rA))); // float
+            var rA = Rot.mulVec2(bA.m_xf.q, Vec2.sub(this.m_localAnchorA, bA.m_sweep.localCenter));
+            var rB = Rot.mulVec2(bB.m_xf.q, Vec2.sub(this.m_localAnchorB, bB.m_sweep.localCenter));
+            var p1 = Vec2.add(bA.m_sweep.c, rA);
+            var p2 = Vec2.add(bB.m_sweep.c, rB);
+            var d = Vec2.sub(p2, p1);
+            var axis = Rot.mulVec2(bA.m_xf.q, this.m_localXAxisA);
+            var vA = bA.m_linearVelocity;
+            var vB = bB.m_linearVelocity;
+            var wA = bA.m_angularVelocity;
+            var wB = bB.m_angularVelocity;
+            var speed = Vec2.dot(d, Vec2.crossNumVec2(wA, axis)) + Vec2.dot(axis, Vec2.sub(Vec2.addCrossNumVec2(vB, wB, rB), Vec2.addCrossNumVec2(vA, wA, rA)));
             return speed;
         };
         /**
@@ -12032,7 +12004,7 @@
             }
             // Compute motor and limit terms.
             if (this.m_enableLimit) {
-                var jointTranslation = Vec2.dot(this.m_axis, d); // float
+                var jointTranslation = Vec2.dot(this.m_axis, d);
                 if (math_abs$4(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * SettingsInternal.linearSlop) {
                     this.m_limitState = LimitState$1.equalLimits;
                 }
@@ -12121,7 +12093,7 @@
                 Cdot2 -= Vec2.dot(this.m_axis, vA) + this.m_a1 * wA;
                 var Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
                 var f1 = Vec3.clone(this.m_impulse);
-                var df = this.m_K.solve33(Vec3.neg(Cdot)); // Vec3
+                var df = this.m_K.solve33(Vec3.neg(Cdot));
                 this.m_impulse.add(df);
                 if (this.m_limitState == LimitState$1.atLowerLimit) {
                     this.m_impulse.z = math_max$1(this.m_impulse.z, 0.0);
@@ -12131,14 +12103,14 @@
                 }
                 // f2(1:2) = invK(1:2,1:2) * (-Cdot(1:2) - K(1:2,3) * (f2(3) - f1(3))) +
                 // f1(1:2)
-                var b = Vec2.combine(-1, Cdot1, -(this.m_impulse.z - f1.z), Vec2.neo(this.m_K.ez.x, this.m_K.ez.y)); // Vec2
-                var f2r = Vec2.add(this.m_K.solve22(b), Vec2.neo(f1.x, f1.y)); // Vec2
+                var b = Vec2.combine(-1, Cdot1, -(this.m_impulse.z - f1.z), Vec2.neo(this.m_K.ez.x, this.m_K.ez.y));
+                var f2r = Vec2.add(this.m_K.solve22(b), Vec2.neo(f1.x, f1.y));
                 this.m_impulse.x = f2r.x;
                 this.m_impulse.y = f2r.y;
                 df = Vec3.sub(this.m_impulse, f1);
-                var P = Vec2.combine(df.x, this.m_perp, df.z, this.m_axis); // Vec2
-                var LA = df.x * this.m_s1 + df.y + df.z * this.m_a1; // float
-                var LB = df.x * this.m_s2 + df.y + df.z * this.m_a2; // float
+                var P = Vec2.combine(df.x, this.m_perp, df.z, this.m_axis);
+                var LA = df.x * this.m_s1 + df.y + df.z * this.m_a1;
+                var LB = df.x * this.m_s2 + df.y + df.z * this.m_a2;
                 vA.subMul(mA, P);
                 wA -= iA * LA;
                 vB.addMul(mB, P);
@@ -12146,12 +12118,12 @@
             }
             else {
                 // Limit is inactive, just solve the prismatic constraint in block form.
-                var df = this.m_K.solve22(Vec2.neg(Cdot1)); // Vec2
+                var df = this.m_K.solve22(Vec2.neg(Cdot1));
                 this.m_impulse.x += df.x;
                 this.m_impulse.y += df.y;
-                var P = Vec2.mulNumVec2(df.x, this.m_perp); // Vec2
-                var LA = df.x * this.m_s1 + df.y; // float
-                var LB = df.x * this.m_s2 + df.y; // float
+                var P = Vec2.mulNumVec2(df.x, this.m_perp);
+                var LA = df.x * this.m_s1 + df.y;
+                var LB = df.x * this.m_s2 + df.y;
                 vA.subMul(mA, P);
                 wA -= iA * LA;
                 vB.addMul(mB, P);
@@ -12177,27 +12149,27 @@
             var iA = this.m_invIA;
             var iB = this.m_invIB;
             // Compute fresh Jacobians
-            var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA)); // Vec2
-            var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB)); // Vec2
-            var d = Vec2.sub(Vec2.add(cB, rB), Vec2.add(cA, rA)); // Vec2
-            var axis = Rot.mulVec2(qA, this.m_localXAxisA); // Vec2
-            var a1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), axis); // float
-            var a2 = Vec2.crossVec2Vec2(rB, axis); // float
-            var perp = Rot.mulVec2(qA, this.m_localYAxisA); // Vec2
-            var s1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), perp); // float
-            var s2 = Vec2.crossVec2Vec2(rB, perp); // float
+            var rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+            var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+            var d = Vec2.sub(Vec2.add(cB, rB), Vec2.add(cA, rA));
+            var axis = Rot.mulVec2(qA, this.m_localXAxisA);
+            var a1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), axis);
+            var a2 = Vec2.crossVec2Vec2(rB, axis);
+            var perp = Rot.mulVec2(qA, this.m_localYAxisA);
+            var s1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), perp);
+            var s2 = Vec2.crossVec2Vec2(rB, perp);
             var impulse = new Vec3();
-            var C1 = Vec2.zero(); // Vec2
+            var C1 = Vec2.zero();
             C1.x = Vec2.dot(perp, d);
             C1.y = aB - aA - this.m_referenceAngle;
-            var linearError = math_abs$4(C1.x); // float
-            var angularError = math_abs$4(C1.y); // float
+            var linearError = math_abs$4(C1.x);
+            var angularError = math_abs$4(C1.y);
             var linearSlop = SettingsInternal.linearSlop;
             var maxLinearCorrection = SettingsInternal.maxLinearCorrection;
             var active = false; // bool
-            var C2 = 0.0; // float
+            var C2 = 0.0;
             if (this.m_enableLimit) {
-                var translation = Vec2.dot(axis, d); // float
+                var translation = Vec2.dot(axis, d);
                 if (math_abs$4(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * linearSlop) {
                     // Prevent large angular corrections
                     C2 = clamp(translation, -maxLinearCorrection, maxLinearCorrection);
@@ -12220,16 +12192,16 @@
                 }
             }
             if (active) {
-                var k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2; // float
-                var k12 = iA * s1 + iB * s2; // float
-                var k13 = iA * s1 * a1 + iB * s2 * a2; // float
-                var k22 = iA + iB; // float
+                var k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2;
+                var k12 = iA * s1 + iB * s2;
+                var k13 = iA * s1 * a1 + iB * s2 * a2;
+                var k22 = iA + iB;
                 if (k22 == 0.0) {
                     // For fixed rotation
                     k22 = 1.0;
                 }
-                var k23 = iA * a1 + iB * a2; // float
-                var k33 = mA + mB + iA * a1 * a1 + iB * a2 * a2; // float
+                var k23 = iA * a1 + iB * a2;
+                var k33 = mA + mB + iA * a1 * a1 + iB * a2 * a2;
                 var K = new Mat33();
                 K.ex.set(k11, k12, k13);
                 K.ey.set(k12, k22, k23);
@@ -12241,23 +12213,23 @@
                 impulse = K.solve33(Vec3.neg(C));
             }
             else {
-                var k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2; // float
-                var k12 = iA * s1 + iB * s2; // float
-                var k22 = iA + iB; // float
+                var k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2;
+                var k12 = iA * s1 + iB * s2;
+                var k22 = iA + iB;
                 if (k22 == 0.0) {
                     k22 = 1.0;
                 }
                 var K = new Mat22();
                 K.ex.setNum(k11, k12);
                 K.ey.setNum(k12, k22);
-                var impulse1 = K.solve(Vec2.neg(C1)); // Vec2
+                var impulse1 = K.solve(Vec2.neg(C1));
                 impulse.x = impulse1.x;
                 impulse.y = impulse1.y;
                 impulse.z = 0.0;
             }
-            var P = Vec2.combine(impulse.x, perp, impulse.z, axis); // Vec2
-            var LA = impulse.x * s1 + impulse.y + impulse.z * a1; // float
-            var LB = impulse.x * s2 + impulse.y + impulse.z * a2; // float
+            var P = Vec2.combine(impulse.x, perp, impulse.z, axis);
+            var LA = impulse.x * s1 + impulse.y + impulse.z * a1;
+            var LB = impulse.x * s2 + impulse.y + impulse.z * a2;
             cA.subMul(mA, P);
             aA -= iA * LA;
             cB.addMul(mB, P);
@@ -12477,7 +12449,7 @@
          * Get the reaction torque on bodyB in N*m.
          */
         GearJoint.prototype.getReactionTorque = function (inv_dt) {
-            var L = this.m_impulse * this.m_JwA; // float
+            var L = this.m_impulse * this.m_JwA;
             return inv_dt * L;
         };
         GearJoint.prototype.initVelocityConstraints = function (step) {
@@ -12517,9 +12489,9 @@
                 this.m_mass += this.m_iA + this.m_iC;
             }
             else {
-                var u = Rot.mulVec2(qC, this.m_localAxisC); // Vec2
-                var rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC); // Vec2
-                var rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA); // Vec2
+                var u = Rot.mulVec2(qC, this.m_localAxisC);
+                var rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC);
+                var rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA);
                 this.m_JvAC = u;
                 this.m_JwC = Vec2.crossVec2Vec2(rC, u);
                 this.m_JwA = Vec2.crossVec2Vec2(rA, u);
@@ -12532,9 +12504,9 @@
                 this.m_mass += this.m_ratio * this.m_ratio * (this.m_iB + this.m_iD);
             }
             else {
-                var u = Rot.mulVec2(qD, this.m_localAxisD); // Vec2
-                var rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD); // Vec2
-                var rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB); // Vec2
+                var u = Rot.mulVec2(qD, this.m_localAxisD);
+                var rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD);
+                var rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB);
                 this.m_JvBD = Vec2.mulNumVec2(this.m_ratio, u);
                 this.m_JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u);
                 this.m_JwB = this.m_ratio * Vec2.crossVec2Vec2(rB, u);
@@ -12573,11 +12545,9 @@
             var wC = this.m_bodyC.c_velocity.w;
             var vD = this.m_bodyD.c_velocity.v;
             var wD = this.m_bodyD.c_velocity.w;
-            var Cdot = Vec2.dot(this.m_JvAC, vA) - Vec2.dot(this.m_JvAC, vC)
-                + Vec2.dot(this.m_JvBD, vB) - Vec2.dot(this.m_JvBD, vD); // float
-            Cdot += (this.m_JwA * wA - this.m_JwC * wC)
-                + (this.m_JwB * wB - this.m_JwD * wD);
-            var impulse = -this.m_mass * Cdot; // float
+            var Cdot = Vec2.dot(this.m_JvAC, vA) - Vec2.dot(this.m_JvAC, vC) + Vec2.dot(this.m_JvBD, vB) - Vec2.dot(this.m_JvBD, vD);
+            Cdot += (this.m_JwA * wA - this.m_JwC * wC) + (this.m_JwB * wB - this.m_JwD * wD);
+            var impulse = -this.m_mass * Cdot;
             this.m_impulse += impulse;
             vA.addMul(this.m_mA * impulse, this.m_JvAC);
             wA += this.m_iA * impulse * this.m_JwA;
@@ -12630,15 +12600,15 @@
                 coordinateA = aA - aC - this.m_referenceAngleA;
             }
             else {
-                var u = Rot.mulVec2(qC, this.m_localAxisC); // Vec2
-                var rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC); // Vec2
-                var rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA); // Vec2
+                var u = Rot.mulVec2(qC, this.m_localAxisC);
+                var rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC);
+                var rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA);
                 JvAC = u;
                 JwC = Vec2.crossVec2Vec2(rC, u);
                 JwA = Vec2.crossVec2Vec2(rA, u);
                 mass += this.m_mC + this.m_mA + this.m_iC * JwC * JwC + this.m_iA * JwA * JwA;
-                var pC = Vec2.sub(this.m_localAnchorC, this.m_lcC); // Vec2
-                var pA = Rot.mulTVec2(qC, Vec2.add(rA, Vec2.sub(cA, cC))); // Vec2
+                var pC = Vec2.sub(this.m_localAnchorC, this.m_lcC);
+                var pA = Rot.mulTVec2(qC, Vec2.add(rA, Vec2.sub(cA, cC)));
                 coordinateA = Vec2.dot(Vec2.sub(pA, pC), this.m_localAxisC);
             }
             if (this.m_type2 == RevoluteJoint.TYPE) {
@@ -12655,15 +12625,13 @@
                 JvBD = Vec2.mulNumVec2(this.m_ratio, u);
                 JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u);
                 JwB = this.m_ratio * Vec2.crossVec2Vec2(rB, u);
-                mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD
-                    * JwD * JwD + this.m_iB * JwB * JwB;
-                var pD = Vec2.sub(this.m_localAnchorD, this.m_lcD); // Vec2
-                var pB = Rot.mulTVec2(qD, Vec2.add(rB, Vec2.sub(cB, cD))); // Vec2
-                coordinateB = Vec2.dot(pB, this.m_localAxisD)
-                    - Vec2.dot(pD, this.m_localAxisD);
+                mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD * JwD * JwD + this.m_iB * JwB * JwB;
+                var pD = Vec2.sub(this.m_localAnchorD, this.m_lcD);
+                var pB = Rot.mulTVec2(qD, Vec2.add(rB, Vec2.sub(cB, cD)));
+                coordinateB = Vec2.dot(pB, this.m_localAxisD) - Vec2.dot(pD, this.m_localAxisD);
             }
-            var C = (coordinateA + this.m_ratio * coordinateB) - this.m_constant; // float
-            var impulse = 0.0; // float
+            var C = (coordinateA + this.m_ratio * coordinateB) - this.m_constant;
+            var impulse = 0.0;
             if (mass > 0.0) {
                 impulse = -C / mass;
             }
@@ -12736,7 +12704,7 @@
             bodyA = _this.m_bodyA;
             bodyB = _this.m_bodyB;
             _this.m_type = MotorJoint.TYPE;
-            _this.m_linearOffset = Number.isFinite(def.linearOffset) ? def.linearOffset : bodyA.getLocalPoint(bodyB.getPosition());
+            _this.m_linearOffset = Number.isFinite(def.linearOffset) ? Vec2.clone(def.linearOffset) : bodyA.getLocalPoint(bodyB.getPosition());
             _this.m_angularOffset = Number.isFinite(def.angularOffset) ? def.angularOffset : bodyB.getAngle() - bodyA.getAngle();
             _this.m_linearImpulse = Vec2.zero();
             _this.m_angularImpulse = 0.0;
@@ -12823,11 +12791,10 @@
          * Set/get the target linear offset, in frame A, in meters.
          */
         MotorJoint.prototype.setLinearOffset = function (linearOffset) {
-            if (linearOffset.x != this.m_linearOffset.x
-                || linearOffset.y != this.m_linearOffset.y) {
+            if (linearOffset.x != this.m_linearOffset.x || linearOffset.y != this.m_linearOffset.y) {
                 this.m_bodyA.setAwake(true);
                 this.m_bodyB.setAwake(true);
-                this.m_linearOffset = linearOffset;
+                this.m_linearOffset.set(linearOffset);
             }
         };
         MotorJoint.prototype.getLinearOffset = function () {
@@ -13022,6 +12989,9 @@
      * point. This a soft constraint with a maximum force. This allows the
      * constraint to stretch and without applying huge forces.
      *
+     * You need to call setTarget(target) every time that mouse is
+     * moved, to track the new location of the mouse.
+     *
      * NOTE: this joint is not documented in the manual because it was developed to
      * be used in the testbed. If you want to learn how to use the mouse joint, look
      * at the testbed.
@@ -13104,7 +13074,7 @@
             if (Vec2.areEqual(target, this.m_targetA))
                 return;
             this.m_bodyB.setAwake(true);
-            this.m_targetA = Vec2.clone(target);
+            this.m_targetA.set(target);
         };
         MouseJoint.prototype.getTarget = function () {
             return this.m_targetA;
@@ -13314,10 +13284,10 @@
             bodyA = _this.m_bodyA;
             bodyB = _this.m_bodyB;
             _this.m_type = PulleyJoint.TYPE;
-            _this.m_groundAnchorA = groundA ? groundA : def.groundAnchorA || Vec2.neo(-1.0, 1.0);
-            _this.m_groundAnchorB = groundB ? groundB : def.groundAnchorB || Vec2.neo(1.0, 1.0);
-            _this.m_localAnchorA = anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.neo(-1.0, 0.0);
-            _this.m_localAnchorB = anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.neo(1.0, 0.0);
+            _this.m_groundAnchorA = Vec2.clone(groundA ? groundA : def.groundAnchorA || Vec2.neo(-1.0, 1.0));
+            _this.m_groundAnchorB = Vec2.clone(groundB ? groundB : def.groundAnchorB || Vec2.neo(1.0, 1.0));
+            _this.m_localAnchorA = Vec2.clone(anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.neo(-1.0, 0.0));
+            _this.m_localAnchorB = Vec2.clone(anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.neo(1.0, 0.0));
             _this.m_lengthA = Number.isFinite(def.lengthA) ? def.lengthA : Vec2.distance(anchorA, groundA);
             _this.m_lengthB = Number.isFinite(def.lengthB) ? def.lengthB : Vec2.distance(anchorB, groundB);
             _this.m_ratio = Number.isFinite(ratio) ? ratio : def.ratio;
@@ -13476,10 +13446,10 @@
                 this.m_uB.setZero();
             }
             // Compute effective mass.
-            var ruA = Vec2.crossVec2Vec2(this.m_rA, this.m_uA); // float
-            var ruB = Vec2.crossVec2Vec2(this.m_rB, this.m_uB); // float
-            var mA = this.m_invMassA + this.m_invIA * ruA * ruA; // float
-            var mB = this.m_invMassB + this.m_invIB * ruB * ruB; // float
+            var ruA = Vec2.crossVec2Vec2(this.m_rA, this.m_uA);
+            var ruB = Vec2.crossVec2Vec2(this.m_rB, this.m_uB);
+            var mA = this.m_invMassA + this.m_invIA * ruA * ruA;
+            var mB = this.m_invMassB + this.m_invIB * ruB * ruB;
             this.m_mass = mA + this.m_ratio * this.m_ratio * mB;
             if (this.m_mass > 0.0) {
                 this.m_mass = 1.0 / this.m_mass;
@@ -13510,12 +13480,11 @@
             var wB = this.m_bodyB.c_velocity.w;
             var vpA = Vec2.add(vA, Vec2.crossNumVec2(wA, this.m_rA));
             var vpB = Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB));
-            var Cdot = -Vec2.dot(this.m_uA, vpA) - this.m_ratio
-                * Vec2.dot(this.m_uB, vpB); // float
-            var impulse = -this.m_mass * Cdot; // float
+            var Cdot = -Vec2.dot(this.m_uA, vpA) - this.m_ratio * Vec2.dot(this.m_uB, vpB);
+            var impulse = -this.m_mass * Cdot;
             this.m_impulse += impulse;
-            var PA = Vec2.mulNumVec2(-impulse, this.m_uA); // Vec2
-            var PB = Vec2.mulNumVec2(-this.m_ratio * impulse, this.m_uB); // Vec2
+            var PA = Vec2.mulNumVec2(-impulse, this.m_uA);
+            var PB = Vec2.mulNumVec2(-this.m_ratio * impulse, this.m_uB);
             vA.addMul(this.m_invMassA, PA);
             wA += this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, PA);
             vB.addMul(this.m_invMassB, PB);
@@ -13557,17 +13526,17 @@
             // Compute effective mass.
             var ruA = Vec2.crossVec2Vec2(rA, uA);
             var ruB = Vec2.crossVec2Vec2(rB, uB);
-            var mA = this.m_invMassA + this.m_invIA * ruA * ruA; // float
-            var mB = this.m_invMassB + this.m_invIB * ruB * ruB; // float
-            var mass = mA + this.m_ratio * this.m_ratio * mB; // float
+            var mA = this.m_invMassA + this.m_invIA * ruA * ruA;
+            var mB = this.m_invMassB + this.m_invIB * ruB * ruB;
+            var mass = mA + this.m_ratio * this.m_ratio * mB;
             if (mass > 0.0) {
                 mass = 1.0 / mass;
             }
-            var C = this.m_constant - lengthA - this.m_ratio * lengthB; // float
-            var linearError = math_abs$3(C); // float
-            var impulse = -mass * C; // float
-            var PA = Vec2.mulNumVec2(-impulse, uA); // Vec2
-            var PB = Vec2.mulNumVec2(-this.m_ratio * impulse, uB); // Vec2
+            var C = this.m_constant - lengthA - this.m_ratio * lengthB;
+            var linearError = math_abs$3(C);
+            var impulse = -mass * C;
+            var PA = Vec2.mulNumVec2(-impulse, uA);
+            var PB = Vec2.mulNumVec2(-this.m_ratio * impulse, uB);
             cA.addMul(this.m_invMassA, PA);
             aA += this.m_invIA * Vec2.crossVec2Vec2(rA, PA);
             cB.addMul(this.m_invMassB, PB);
@@ -13640,8 +13609,8 @@
             bodyA = _this.m_bodyA;
             bodyB = _this.m_bodyB;
             _this.m_type = RopeJoint.TYPE;
-            _this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.neo(-1.0, 0.0);
-            _this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.neo(1.0, 0.0);
+            _this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.neo(-1.0, 0.0));
+            _this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.neo(1.0, 0.0));
             _this.m_maxLength = def.maxLength;
             _this.m_mass = 0.0;
             _this.m_impulse = 0.0;
@@ -13749,9 +13718,9 @@
             this.m_rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
             this.m_u = Vec2.zero();
             this.m_u.addCombine(1, cB, 1, this.m_rB);
-            this.m_u.subCombine(1, cA, 1, this.m_rA); // Vec2
+            this.m_u.subCombine(1, cA, 1, this.m_rA);
             this.m_length = this.m_u.length();
-            var C = this.m_length - this.m_maxLength; // float
+            var C = this.m_length - this.m_maxLength;
             if (C > 0.0) {
                 this.m_state = LimitState.atUpperLimit;
             }
@@ -13768,10 +13737,9 @@
                 return;
             }
             // Compute effective mass.
-            var crA = Vec2.crossVec2Vec2(this.m_rA, this.m_u); // float
-            var crB = Vec2.crossVec2Vec2(this.m_rB, this.m_u); // float
-            var invMass = this.m_invMassA + this.m_invIA * crA * crA + this.m_invMassB
-                + this.m_invIB * crB * crB; // float
+            var crA = Vec2.crossVec2Vec2(this.m_rA, this.m_u);
+            var crB = Vec2.crossVec2Vec2(this.m_rB, this.m_u);
+            var invMass = this.m_invMassA + this.m_invIA * crA * crA + this.m_invMassB + this.m_invIB * crB * crB;
             this.m_mass = invMass != 0.0 ? 1.0 / invMass : 0.0;
             if (step.warmStarting) {
                 // Scale the impulse to support a variable time step.
@@ -13796,19 +13764,19 @@
             var vB = this.m_bodyB.c_velocity.v;
             var wB = this.m_bodyB.c_velocity.w;
             // Cdot = dot(u, v + cross(w, r))
-            var vpA = Vec2.addCrossNumVec2(vA, wA, this.m_rA); // Vec2
-            var vpB = Vec2.addCrossNumVec2(vB, wB, this.m_rB); // Vec2
-            var C = this.m_length - this.m_maxLength; // float
-            var Cdot = Vec2.dot(this.m_u, Vec2.sub(vpB, vpA)); // float
+            var vpA = Vec2.addCrossNumVec2(vA, wA, this.m_rA);
+            var vpB = Vec2.addCrossNumVec2(vB, wB, this.m_rB);
+            var C = this.m_length - this.m_maxLength;
+            var Cdot = Vec2.dot(this.m_u, Vec2.sub(vpB, vpA));
             // Predictive constraint.
             if (C < 0.0) {
                 Cdot += step.inv_dt * C;
             }
-            var impulse = -this.m_mass * Cdot; // float
-            var oldImpulse = this.m_impulse; // float
+            var impulse = -this.m_mass * Cdot;
+            var oldImpulse = this.m_impulse;
             this.m_impulse = math_min$2(0.0, this.m_impulse + impulse);
             impulse = this.m_impulse - oldImpulse;
-            var P = Vec2.mulNumVec2(impulse, this.m_u); // Vec2
+            var P = Vec2.mulNumVec2(impulse, this.m_u);
             vA.subMul(this.m_invMassA, P);
             wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
             vB.addMul(this.m_invMassB, P);
@@ -13822,22 +13790,22 @@
          * This returns true if the position errors are within tolerance.
          */
         RopeJoint.prototype.solvePositionConstraints = function (step) {
-            var cA = this.m_bodyA.c_position.c; // Vec2
-            var aA = this.m_bodyA.c_position.a; // float
-            var cB = this.m_bodyB.c_position.c; // Vec2
-            var aB = this.m_bodyB.c_position.a; // float
+            var cA = this.m_bodyA.c_position.c;
+            var aA = this.m_bodyA.c_position.a;
+            var cB = this.m_bodyB.c_position.c;
+            var aB = this.m_bodyB.c_position.a;
             var qA = Rot.neo(aA);
             var qB = Rot.neo(aB);
             var rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_localCenterA);
             var rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
             var u = Vec2.zero();
             u.addCombine(1, cB, 1, rB);
-            u.subCombine(1, cA, 1, rA); // Vec2
-            var length = u.normalize(); // float
-            var C = length - this.m_maxLength; // float
+            u.subCombine(1, cA, 1, rA);
+            var length = u.normalize();
+            var C = length - this.m_maxLength;
             C = clamp(C, 0.0, SettingsInternal.maxLinearCorrection);
-            var impulse = -this.m_mass * C; // float
-            var P = Vec2.mulNumVec2(impulse, u); // Vec2
+            var impulse = -this.m_mass * C;
+            var P = Vec2.mulNumVec2(impulse, u);
             cA.subMul(this.m_invMassA, P);
             aA -= this.m_invIA * Vec2.crossVec2Vec2(rA, P);
             cB.addMul(this.m_invMassB, P);
@@ -13907,14 +13875,14 @@
             _this.m_bias = 0.0;
             _this.m_gamma = 0.0;
             // Solver temp
-            _this.m_rA; // Vec2
-            _this.m_rB; // Vec2
-            _this.m_localCenterA; // Vec2
-            _this.m_localCenterB; // Vec2
-            _this.m_invMassA; // float
-            _this.m_invMassB; // float
-            _this.m_invIA; // float
-            _this.m_invIB; // float
+            _this.m_rA;
+            _this.m_rB;
+            _this.m_localCenterA;
+            _this.m_localCenterB;
+            _this.m_invMassA;
+            _this.m_invMassB;
+            _this.m_invIA;
+            _this.m_invIB;
             _this.m_mass = new Mat33();
             return _this;
             // Point-to-point constraint
@@ -14075,17 +14043,17 @@
             K.ez.z = iA + iB;
             if (this.m_frequencyHz > 0.0) {
                 K.getInverse22(this.m_mass);
-                var invM = iA + iB; // float
-                var m = invM > 0.0 ? 1.0 / invM : 0.0; // float
-                var C = aB - aA - this.m_referenceAngle; // float
+                var invM = iA + iB;
+                var m = invM > 0.0 ? 1.0 / invM : 0.0;
+                var C = aB - aA - this.m_referenceAngle;
                 // Frequency
-                var omega = 2.0 * math_PI$2 * this.m_frequencyHz; // float
+                var omega = 2.0 * math_PI$2 * this.m_frequencyHz;
                 // Damping coefficient
-                var d = 2.0 * m * this.m_dampingRatio * omega; // float
+                var d = 2.0 * m * this.m_dampingRatio * omega;
                 // Spring stiffness
-                var k = m * omega * omega; // float
+                var k = m * omega * omega;
                 // magic formulas
-                var h = step.dt; // float
+                var h = step.dt;
                 this.m_gamma = h * (d + h * k);
                 this.m_gamma = this.m_gamma != 0.0 ? 1.0 / this.m_gamma : 0.0;
                 this.m_bias = C * h * k * this.m_gamma;
@@ -14125,23 +14093,22 @@
             var vB = this.m_bodyB.c_velocity.v;
             var wB = this.m_bodyB.c_velocity.w;
             var mA = this.m_invMassA;
-            var mB = this.m_invMassB; // float
+            var mB = this.m_invMassB;
             var iA = this.m_invIA;
-            var iB = this.m_invIB; // float
+            var iB = this.m_invIB;
             if (this.m_frequencyHz > 0.0) {
-                var Cdot2 = wB - wA; // float
-                var impulse2 = -this.m_mass.ez.z
-                    * (Cdot2 + this.m_bias + this.m_gamma * this.m_impulse.z); // float
+                var Cdot2 = wB - wA;
+                var impulse2 = -this.m_mass.ez.z * (Cdot2 + this.m_bias + this.m_gamma * this.m_impulse.z);
                 this.m_impulse.z += impulse2;
                 wA -= iA * impulse2;
                 wB += iB * impulse2;
                 var Cdot1 = Vec2.zero();
                 Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
-                Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA)); // Vec2
-                var impulse1 = Vec2.neg(Mat33.mulVec2(this.m_mass, Cdot1)); // Vec2
+                Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
+                var impulse1 = Vec2.neg(Mat33.mulVec2(this.m_mass, Cdot1));
                 this.m_impulse.x += impulse1.x;
                 this.m_impulse.y += impulse1.y;
-                var P = Vec2.clone(impulse1); // Vec2
+                var P = Vec2.clone(impulse1);
                 vA.subMul(mA, P);
                 wA -= iA * Vec2.crossVec2Vec2(this.m_rA, P);
                 vB.addMul(mB, P);
@@ -14150,10 +14117,10 @@
             else {
                 var Cdot1 = Vec2.zero();
                 Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
-                Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA)); // Vec2
-                var Cdot2 = wB - wA; // float
-                var Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2); // Vec3
-                var impulse = Vec3.neg(Mat33.mulVec3(this.m_mass, Cdot)); // Vec3
+                Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
+                var Cdot2 = wB - wA;
+                var Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
+                var impulse = Vec3.neg(Mat33.mulVec3(this.m_mass, Cdot));
                 this.m_impulse.add(impulse);
                 var P = Vec2.neo(impulse.x, impulse.y);
                 vA.subMul(mA, P);
@@ -14197,10 +14164,10 @@
             if (this.m_frequencyHz > 0.0) {
                 var C1 = Vec2.zero();
                 C1.addCombine(1, cB, 1, rB);
-                C1.subCombine(1, cA, 1, rA); // Vec2
+                C1.subCombine(1, cA, 1, rA);
                 positionError = C1.length();
                 angularError = 0.0;
-                var P = Vec2.neg(K.solve22(C1)); // Vec2
+                var P = Vec2.neg(K.solve22(C1));
                 cA.subMul(mA, P);
                 aA -= iA * Vec2.crossVec2Vec2(rA, P);
                 cB.addMul(mB, P);
@@ -14210,7 +14177,7 @@
                 var C1 = Vec2.zero();
                 C1.addCombine(1, cB, 1, rB);
                 C1.subCombine(1, cA, 1, rA);
-                var C2 = aB - aA - this.m_referenceAngle; // float
+                var C2 = aB - aA - this.m_referenceAngle;
                 positionError = C1.length();
                 angularError = math_abs$2(C2);
                 var C = new Vec3(C1.x, C1.y, C2);
@@ -14278,7 +14245,6 @@
      */
     var WheelJoint = /** @class */ (function (_super) {
         __extends(WheelJoint, _super);
-        // @ts-ignore
         function WheelJoint(def, bodyA, bodyB, anchor, axis) {
             var _this = this;
             // @ts-ignore
@@ -14287,15 +14253,26 @@
             }
             def = options(def, DEFAULTS);
             _this = _super.call(this, def, bodyA, bodyB) || this;
-            /** @internal */ _this.m_ax = Vec2.zero();
-            /** @internal */ _this.m_ay = Vec2.zero();
             bodyA = _this.m_bodyA;
             bodyB = _this.m_bodyB;
+            _this.m_ax = Vec2.zero();
+            _this.m_ay = Vec2.zero();
             _this.m_type = WheelJoint.TYPE;
             _this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
             _this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
-            // @ts-ignore localAxis
-            _this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || def.localAxis || Vec2.neo(1.0, 0.0));
+            if (Vec2.isValid(axis)) {
+                _this.m_localXAxisA = bodyA.getLocalVector(axis);
+            }
+            else if (Vec2.isValid(def.localAxisA)) {
+                _this.m_localXAxisA = Vec2.clone(def.localAxisA);
+            }
+            else if (Vec2.isValid(def.localAxis)) {
+                // localAxis is renamed to localAxisA, this is for backward compatibility
+                _this.m_localXAxisA = Vec2.clone(def.localAxis);
+            }
+            else {
+                _this.m_localXAxisA = Vec2.neo(1.0, 0.0);
+            }
             _this.m_localYAxisA = Vec2.crossNumVec2(1.0, _this.m_localXAxisA);
             _this.m_mass = 0.0;
             _this.m_impulse = 0.0;
@@ -14396,11 +14373,11 @@
         WheelJoint.prototype.getJointTranslation = function () {
             var bA = this.m_bodyA;
             var bB = this.m_bodyB;
-            var pA = bA.getWorldPoint(this.m_localAnchorA); // Vec2
-            var pB = bB.getWorldPoint(this.m_localAnchorB); // Vec2
-            var d = Vec2.sub(pB, pA); // Vec2
-            var axis = bA.getWorldVector(this.m_localXAxisA); // Vec2
-            var translation = Vec2.dot(d, axis); // float
+            var pA = bA.getWorldPoint(this.m_localAnchorA);
+            var pB = bB.getWorldPoint(this.m_localAnchorB);
+            var d = Vec2.sub(pB, pA);
+            var axis = bA.getWorldVector(this.m_localXAxisA);
+            var translation = Vec2.dot(d, axis);
             return translation;
         };
         /**
@@ -14513,9 +14490,9 @@
             this.m_invIA = this.m_bodyA.m_invI;
             this.m_invIB = this.m_bodyB.m_invI;
             var mA = this.m_invMassA;
-            var mB = this.m_invMassB; // float
+            var mB = this.m_invMassB;
             var iA = this.m_invIA;
-            var iB = this.m_invIB; // float
+            var iB = this.m_invIB;
             var cA = this.m_bodyA.c_position.c;
             var aA = this.m_bodyA.c_position.a;
             var vA = this.m_bodyA.c_velocity.v;
@@ -14531,7 +14508,7 @@
             var rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
             var d = Vec2.zero();
             d.addCombine(1, cB, 1, rB);
-            d.subCombine(1, cA, 1, rA); // Vec2
+            d.subCombine(1, cA, 1, rA);
             // Point to line constraint
             {
                 this.m_ay = Rot.mulVec2(qA, this.m_localYAxisA);
@@ -14552,18 +14529,18 @@
                 this.m_sAx = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_ax);
                 this.m_sBx = Vec2.crossVec2Vec2(rB, this.m_ax);
                 var invMass = mA + mB + iA * this.m_sAx * this.m_sAx + iB * this.m_sBx
-                    * this.m_sBx; // float
+                    * this.m_sBx;
                 if (invMass > 0.0) {
                     this.m_springMass = 1.0 / invMass;
-                    var C = Vec2.dot(d, this.m_ax); // float
+                    var C = Vec2.dot(d, this.m_ax);
                     // Frequency
-                    var omega = 2.0 * math_PI$1 * this.m_frequencyHz; // float
+                    var omega = 2.0 * math_PI$1 * this.m_frequencyHz;
                     // Damping coefficient
-                    var damp = 2.0 * this.m_springMass * this.m_dampingRatio * omega; // float
+                    var damp = 2.0 * this.m_springMass * this.m_dampingRatio * omega;
                     // Spring stiffness
-                    var k = this.m_springMass * omega * omega; // float
+                    var k = this.m_springMass * omega * omega;
                     // magic formulas
-                    var h = step.dt; // float
+                    var h = step.dt;
                     this.m_gamma = h * (damp + h * k);
                     if (this.m_gamma > 0.0) {
                         this.m_gamma = 1.0 / this.m_gamma;
@@ -14614,23 +14591,21 @@
         };
         WheelJoint.prototype.solveVelocityConstraints = function (step) {
             var mA = this.m_invMassA;
-            var mB = this.m_invMassB; // float
+            var mB = this.m_invMassB;
             var iA = this.m_invIA;
-            var iB = this.m_invIB; // float
+            var iB = this.m_invIB;
             var vA = this.m_bodyA.c_velocity.v;
             var wA = this.m_bodyA.c_velocity.w;
             var vB = this.m_bodyB.c_velocity.v;
             var wB = this.m_bodyB.c_velocity.w;
             // Solve spring constraint
             {
-                var Cdot = Vec2.dot(this.m_ax, vB) - Vec2.dot(this.m_ax, vA) + this.m_sBx
-                    * wB - this.m_sAx * wA; // float
-                var impulse = -this.m_springMass
-                    * (Cdot + this.m_bias + this.m_gamma * this.m_springImpulse); // float
+                var Cdot = Vec2.dot(this.m_ax, vB) - Vec2.dot(this.m_ax, vA) + this.m_sBx * wB - this.m_sAx * wA;
+                var impulse = -this.m_springMass * (Cdot + this.m_bias + this.m_gamma * this.m_springImpulse);
                 this.m_springImpulse += impulse;
-                var P = Vec2.mulNumVec2(impulse, this.m_ax); // Vec2
-                var LA = impulse * this.m_sAx; // float
-                var LB = impulse * this.m_sBx; // float
+                var P = Vec2.mulNumVec2(impulse, this.m_ax);
+                var LA = impulse * this.m_sAx;
+                var LB = impulse * this.m_sBx;
                 vA.subMul(mA, P);
                 wA -= iA * LA;
                 vB.addMul(mB, P);
@@ -14638,10 +14613,10 @@
             }
             // Solve rotational motor constraint
             {
-                var Cdot = wB - wA - this.m_motorSpeed; // float
-                var impulse = -this.m_motorMass * Cdot; // float
-                var oldImpulse = this.m_motorImpulse; // float
-                var maxImpulse = step.dt * this.m_maxMotorTorque; // float
+                var Cdot = wB - wA - this.m_motorSpeed;
+                var impulse = -this.m_motorMass * Cdot;
+                var oldImpulse = this.m_motorImpulse;
+                var maxImpulse = step.dt * this.m_maxMotorTorque;
                 this.m_motorImpulse = clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = this.m_motorImpulse - oldImpulse;
                 wA -= iA * impulse;
@@ -14649,13 +14624,12 @@
             }
             // Solve point to line constraint
             {
-                var Cdot = Vec2.dot(this.m_ay, vB) - Vec2.dot(this.m_ay, vA) + this.m_sBy
-                    * wB - this.m_sAy * wA; // float
-                var impulse = -this.m_mass * Cdot; // float
+                var Cdot = Vec2.dot(this.m_ay, vB) - Vec2.dot(this.m_ay, vA) + this.m_sBy * wB - this.m_sAy * wA;
+                var impulse = -this.m_mass * Cdot;
                 this.m_impulse += impulse;
-                var P = Vec2.mulNumVec2(impulse, this.m_ay); // Vec2
-                var LA = impulse * this.m_sAy; // float
-                var LB = impulse * this.m_sBy; // float
+                var P = Vec2.mulNumVec2(impulse, this.m_ay);
+                var LA = impulse * this.m_sAy;
+                var LB = impulse * this.m_sBy;
                 vA.subMul(mA, P);
                 wA -= iA * LA;
                 vB.addMul(mB, P);
@@ -14682,21 +14656,14 @@
             d.addCombine(1, cB, 1, rB);
             d.subCombine(1, cA, 1, rA);
             var ay = Rot.mulVec2(qA, this.m_localYAxisA);
-            var sAy = Vec2.crossVec2Vec2(Vec2.add(d, rA), ay); // float
-            var sBy = Vec2.crossVec2Vec2(rB, ay); // float
-            var C = Vec2.dot(d, ay); // float
-            var k = this.m_invMassA + this.m_invMassB + this.m_invIA * this.m_sAy
-                * this.m_sAy + this.m_invIB * this.m_sBy * this.m_sBy; // float
-            var impulse; // float
-            if (k != 0.0) {
-                impulse = -C / k;
-            }
-            else {
-                impulse = 0.0;
-            }
-            var P = Vec2.mulNumVec2(impulse, ay); // Vec2
-            var LA = impulse * sAy; // float
-            var LB = impulse * sBy; // float
+            var sAy = Vec2.crossVec2Vec2(Vec2.add(d, rA), ay);
+            var sBy = Vec2.crossVec2Vec2(rB, ay);
+            var C = Vec2.dot(d, ay);
+            var k = this.m_invMassA + this.m_invMassB + this.m_invIA * this.m_sAy * this.m_sAy + this.m_invIB * this.m_sBy * this.m_sBy;
+            var impulse = k != 0.0 ? -C / k : 0.0;
+            var P = Vec2.mulNumVec2(impulse, ay);
+            var LA = impulse * sAy;
+            var LB = impulse * sBy;
             cA.subMul(this.m_invMassA, P);
             aA -= this.m_invIA * LA;
             cB.addMul(this.m_invMassB, P);
@@ -15782,7 +15749,7 @@
             }
         }
         // If no valid normal can be found than this edge should not collide.
-        // @ts-ignore
+        // @ts-ignore todo: why we need this if here?
         if (edgeAxis.type == EPAxisType.e_unknown) {
             return;
         }

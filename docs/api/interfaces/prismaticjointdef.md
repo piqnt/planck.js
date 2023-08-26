@@ -44,8 +44,6 @@ game.
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [src/dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L77)*
-
 The first attached body.
 
 ___
@@ -55,8 +53,6 @@ ___
 • **bodyB**: *[Body](../classes/body.md)*
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
-
-*Defined in [src/dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L81)*
 
 The second attached body.
 
@@ -70,8 +66,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L68)*
-
 Set this flag to true if the attached bodies
 should collide.
 
@@ -83,8 +77,6 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[enableLimit](prismaticjointopt.md#optional-enablelimit)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:65](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/PrismaticJoint.ts#L65)*
-
 Enable/disable the joint limit.
 
 ___
@@ -95,8 +87,6 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[enableMotor](prismaticjointopt.md#optional-enablemotor)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:77](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/PrismaticJoint.ts#L77)*
-
 Enable/disable the joint motor.
 
 ___
@@ -104,8 +94,6 @@ ___
 ###  localAnchorA
 
 • **localAnchorA**: *[Vec2Value](vec2value.md)*
-
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:99](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/PrismaticJoint.ts#L99)*
 
 The local anchor point relative to bodyA's origin.
 
@@ -115,8 +103,6 @@ ___
 
 • **localAnchorB**: *[Vec2Value](vec2value.md)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:103](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/PrismaticJoint.ts#L103)*
-
 The local anchor point relative to bodyB's origin.
 
 ___
@@ -124,8 +110,6 @@ ___
 ###  localAxisA
 
 • **localAxisA**: *[Vec2Value](vec2value.md)*
-
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:107](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/PrismaticJoint.ts#L107)*
 
 The local translation unit axis in bodyA.
 
@@ -137,8 +121,6 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[lowerTranslation](prismaticjointopt.md#optional-lowertranslation)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:69](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/PrismaticJoint.ts#L69)*
-
 The lower translation limit, usually in meters.
 
 ___
@@ -148,8 +130,6 @@ ___
 • **maxMotorForce**? : *number*
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[maxMotorForce](prismaticjointopt.md#optional-maxmotorforce)*
-
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:81](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/PrismaticJoint.ts#L81)*
 
 The maximum motor torque, usually in N-m.
 
@@ -161,8 +141,6 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[motorSpeed](prismaticjointopt.md#optional-motorspeed)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:85](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/PrismaticJoint.ts#L85)*
-
 The desired motor speed in radians per second.
 
 ___
@@ -170,8 +148,6 @@ ___
 ###  referenceAngle
 
 • **referenceAngle**: *number*
-
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:112](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/PrismaticJoint.ts#L112)*
 
 referenceAngle The constrained angle between the bodies:
 bodyB_angle - bodyA_angle.
@@ -184,8 +160,6 @@ ___
 
 *Inherited from [PrismaticJointOpt](prismaticjointopt.md).[upperTranslation](prismaticjointopt.md#optional-uppertranslation)*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:73](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/PrismaticJoint.ts#L73)*
-
 The upper translation limit, usually in meters.
 
 ___
@@ -197,7 +171,5 @@ ___
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
-
-*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

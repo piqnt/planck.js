@@ -29,8 +29,6 @@ Friction joint definition.
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L68)*
-
 Set this flag to true if the attached bodies
 should collide.
 
@@ -40,8 +38,6 @@ ___
 
 • **maxForce**? : *number*
 
-*Defined in [src/dynamics/joint/FrictionJoint.ts:46](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/FrictionJoint.ts#L46)*
-
 The maximum friction force in N.
 
 ___
@@ -49,8 +45,6 @@ ___
 ### `Optional` maxTorque
 
 • **maxTorque**? : *number*
-
-*Defined in [src/dynamics/joint/FrictionJoint.ts:50](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/FrictionJoint.ts#L50)*
 
 The maximum friction torque in N-m.
 
@@ -61,7 +55,5 @@ ___
 • **userData**? : *any*
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
-
-*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

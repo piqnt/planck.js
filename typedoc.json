@@ -18,6 +18,7 @@
     "testbed/*",
     "dist/*"
   ],
+  "disableSources": true,
   "excludeExternals": true,
   "excludePrivate": true,
   "stripInternal": true,

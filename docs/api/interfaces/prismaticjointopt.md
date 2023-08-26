@@ -38,8 +38,6 @@ game.
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L68)*
-
 Set this flag to true if the attached bodies
 should collide.
 
@@ -49,8 +47,6 @@ ___
 
 • **enableLimit**? : *boolean*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:65](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/PrismaticJoint.ts#L65)*
-
 Enable/disable the joint limit.
 
 ___
@@ -58,8 +54,6 @@ ___
 ### `Optional` enableMotor
 
 • **enableMotor**? : *boolean*
-
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:77](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/PrismaticJoint.ts#L77)*
 
 Enable/disable the joint motor.
 
@@ -69,8 +63,6 @@ ___
 
 • **lowerTranslation**? : *number*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:69](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/PrismaticJoint.ts#L69)*
-
 The lower translation limit, usually in meters.
 
 ___
@@ -78,8 +70,6 @@ ___
 ### `Optional` maxMotorForce
 
 • **maxMotorForce**? : *number*
-
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:81](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/PrismaticJoint.ts#L81)*
 
 The maximum motor torque, usually in N-m.
 
@@ -89,8 +79,6 @@ ___
 
 • **motorSpeed**? : *number*
 
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:85](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/PrismaticJoint.ts#L85)*
-
 The desired motor speed in radians per second.
 
 ___
@@ -98,8 +86,6 @@ ___
 ### `Optional` upperTranslation
 
 • **upperTranslation**? : *number*
-
-*Defined in [src/dynamics/joint/PrismaticJoint.ts:73](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/PrismaticJoint.ts#L73)*
 
 The upper translation limit, usually in meters.
 
@@ -110,7 +96,5 @@ ___
 • **userData**? : *any*
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
-
-*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.
