@@ -24,7 +24,7 @@
 
 import { options } from '../../util/options';
 import { clamp } from '../../common/Math';
-import { Vec2 } from '../../common/Vec2';
+import { Vec2, Vec2Value } from '../../common/Vec2';
 import { Mat22 } from '../../common/Mat22';
 import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
@@ -59,7 +59,7 @@ export interface MotorJointOpt extends JointOpt {
   /**
    * Position of bodyB minus the position of bodyA, in bodyA's frame, in meters.
    */
-  linearOffset?: Vec2;
+  linearOffset?: Vec2Value;
 }
 /**
  * Motor joint definition.
@@ -106,6 +106,7 @@ export class MotorJoint extends Joint {
 
   constructor(def: MotorJointDef);
   constructor(def: MotorJointOpt, bodyA: Body, bodyB: Body);
+  /** @internal */
   constructor(def: MotorJointDef | MotorJointOpt, bodyA?: Body, bodyB?: Body) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof MotorJoint)) {
@@ -119,7 +120,7 @@ export class MotorJoint extends Joint {
 
     this.m_type = MotorJoint.TYPE;
 
-    this.m_linearOffset = Number.isFinite(def.linearOffset) ? def.linearOffset : bodyA.getLocalPoint(bodyB.getPosition());
+    this.m_linearOffset = Number.isFinite(def.linearOffset) ? Vec2.clone(def.linearOffset) : bodyA.getLocalPoint(bodyB.getPosition());
     this.m_angularOffset = Number.isFinite(def.angularOffset) ? def.angularOffset : bodyB.getAngle() - bodyA.getAngle();
 
     this.m_linearImpulse = Vec2.zero();
@@ -223,12 +224,11 @@ export class MotorJoint extends Joint {
   /**
    * Set/get the target linear offset, in frame A, in meters.
    */
-  setLinearOffset(linearOffset: Vec2): void {
-    if (linearOffset.x != this.m_linearOffset.x
-        || linearOffset.y != this.m_linearOffset.y) {
+  setLinearOffset(linearOffset: Vec2Value): void {
+    if (linearOffset.x != this.m_linearOffset.x || linearOffset.y != this.m_linearOffset.y) {
       this.m_bodyA.setAwake(true);
       this.m_bodyB.setAwake(true);
-      this.m_linearOffset = linearOffset;
+      this.m_linearOffset.set(linearOffset);
     }
   }
 
@@ -382,8 +382,7 @@ export class MotorJoint extends Joint {
 
       const oldImpulse = this.m_angularImpulse;
       const maxImpulse = h * this.m_maxTorque;
-      this.m_angularImpulse = clamp(this.m_angularImpulse + impulse,
-          -maxImpulse, maxImpulse);
+      this.m_angularImpulse = clamp(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
       impulse = this.m_angularImpulse - oldImpulse;
 
       wA -= iA * impulse;

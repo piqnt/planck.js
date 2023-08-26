@@ -25,7 +25,7 @@
 import { options } from '../../util/options';
 import { SettingsInternal as Settings } from '../../Settings';
 import { clamp } from '../../common/Math';
-import { Vec2 } from '../../common/Vec2';
+import { Vec2, Vec2Value } from '../../common/Vec2';
 import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
 import { Body } from '../Body';
@@ -69,11 +69,11 @@ export interface DistanceJointDef extends JointDef, DistanceJointOpt {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  localAnchorA: Vec2;
+  localAnchorA: Vec2Value;
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  localAnchorB: Vec2;
+  localAnchorB: Vec2Value;
 }
 
 /** @internal */ const DEFAULTS = {
@@ -114,8 +114,9 @@ export class DistanceJoint extends Joint {
   /** @internal */ m_mass: number;
 
   constructor(def: DistanceJointDef);
-  constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2, anchorB: Vec2);
-  constructor(def: DistanceJointDef, bodyA?: Body, bodyB?: Body, anchorA?: Vec2, anchorB?: Vec2) {
+  constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2Value, anchorB: Vec2Value);
+  /** @internal */
+  constructor(def: DistanceJointDef, bodyA?: Body, bodyB?: Body, anchorA?: Vec2Value, anchorB?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof DistanceJoint)) {
       return new DistanceJoint(def, bodyA, bodyB, anchorA, anchorB);
@@ -194,10 +195,10 @@ export class DistanceJoint extends Joint {
 
   /** @internal */
   _setAnchors(def: {
-    anchorA?: Vec2,
-    localAnchorA?: Vec2,
-    anchorB?: Vec2,
-    localAnchorB?: Vec2,
+    anchorA?: Vec2Value,
+    localAnchorA?: Vec2Value,
+    anchorB?: Vec2Value,
+    localAnchorB?: Vec2Value,
     length?: number,
   }): void {
     if (def.anchorA) {
@@ -331,8 +332,7 @@ export class DistanceJoint extends Joint {
 
     const crAu = Vec2.crossVec2Vec2(this.m_rA, this.m_u);
     const crBu = Vec2.crossVec2Vec2(this.m_rB, this.m_u);
-    let invMass = this.m_invMassA + this.m_invIA * crAu * crAu + this.m_invMassB
-        + this.m_invIB * crBu * crBu;
+    let invMass = this.m_invMassA + this.m_invIA * crAu * crAu + this.m_invMassB + this.m_invIB * crBu * crBu;
 
     // Compute the effective mass matrix.
     this.m_mass = invMass != 0.0 ? 1.0 / invMass : 0.0;
@@ -395,8 +395,7 @@ export class DistanceJoint extends Joint {
     const vpB = Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB));
     const Cdot = Vec2.dot(this.m_u, vpB) - Vec2.dot(this.m_u, vpA);
 
-    const impulse = -this.m_mass
-        * (Cdot + this.m_bias + this.m_gamma * this.m_impulse);
+    const impulse = -this.m_mass * (Cdot + this.m_bias + this.m_gamma * this.m_impulse);
     this.m_impulse += impulse;
 
     const P = Vec2.mulNumVec2(impulse, this.m_u);

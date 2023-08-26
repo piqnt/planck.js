@@ -48,8 +48,8 @@ export class CircleShape extends Shape {
 
   constructor(position: Vec2Value, radius?: number);
   constructor(radius?: number);
-  // tslint:disable-next-line:typedef
-  constructor(a, b?) {
+  /** @internal */
+  constructor(a: any, b?: any) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof CircleShape)) {
       return new CircleShape(a, b);

@@ -24,7 +24,7 @@
 
 import { options } from '../../util/options';
 import { SettingsInternal as Settings } from '../../Settings';
-import { Vec2 } from '../../common/Vec2';
+import { Vec2, Vec2Value } from '../../common/Vec2';
 import { Vec3 } from '../../common/Vec3';
 import { Mat33 } from '../../common/Mat33';
 import { Rot } from '../../common/Rot';
@@ -74,11 +74,11 @@ export interface WeldJointDef extends JointDef, WeldJointOpt {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  localAnchorA: Vec2;
+  localAnchorA: Vec2Value;
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  localAnchorB: Vec2;
+  localAnchorB: Vec2Value;
 }
 
 /** @internal */ const DEFAULTS = {
@@ -118,8 +118,9 @@ export class WeldJoint extends Joint {
   /** @internal */ m_mass: Mat33;
 
   constructor(def: WeldJointDef);
-  constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
-  constructor(def: WeldJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2) {
+  constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+  /** @internal */
+  constructor(def: WeldJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof WeldJoint)) {
       return new WeldJoint(def, bodyA, bodyB, anchor);
@@ -145,14 +146,14 @@ export class WeldJoint extends Joint {
     this.m_gamma = 0.0;
 
     // Solver temp
-    this.m_rA; // Vec2
-    this.m_rB; // Vec2
-    this.m_localCenterA; // Vec2
-    this.m_localCenterB; // Vec2
-    this.m_invMassA; // float
-    this.m_invMassB; // float
-    this.m_invIA; // float
-    this.m_invIB; // float
+    this.m_rA;
+    this.m_rB;
+    this.m_localCenterA;
+    this.m_localCenterB;
+    this.m_invMassA;
+    this.m_invMassB;
+    this.m_invIA;
+    this.m_invIB;
     this.m_mass = new Mat33();
 
     // Point-to-point constraint
@@ -198,10 +199,10 @@ export class WeldJoint extends Joint {
 
   /** @internal */
   _setAnchors(def: {
-    anchorA?: Vec2,
-    localAnchorA?: Vec2,
-    anchorB?: Vec2,
-    localAnchorB?: Vec2,
+    anchorA?: Vec2Value,
+    localAnchorA?: Vec2Value,
+    anchorB?: Vec2Value,
+    localAnchorB?: Vec2Value,
   }): void {
     if (def.anchorA) {
       this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
@@ -345,22 +346,22 @@ export class WeldJoint extends Joint {
     if (this.m_frequencyHz > 0.0) {
       K.getInverse22(this.m_mass);
 
-      let invM = iA + iB; // float
-      const m = invM > 0.0 ? 1.0 / invM : 0.0; // float
+      let invM = iA + iB;
+      const m = invM > 0.0 ? 1.0 / invM : 0.0;
 
-      const C = aB - aA - this.m_referenceAngle; // float
+      const C = aB - aA - this.m_referenceAngle;
 
       // Frequency
-      const omega = 2.0 * math_PI * this.m_frequencyHz; // float
+      const omega = 2.0 * math_PI * this.m_frequencyHz;
 
       // Damping coefficient
-      const d = 2.0 * m * this.m_dampingRatio * omega; // float
+      const d = 2.0 * m * this.m_dampingRatio * omega;
 
       // Spring stiffness
-      const k = m * omega * omega; // float
+      const k = m * omega * omega;
 
       // magic formulas
-      const h = step.dt; // float
+      const h = step.dt;
       this.m_gamma = h * (d + h * k);
       this.m_gamma = this.m_gamma != 0.0 ? 1.0 / this.m_gamma : 0.0;
       this.m_bias = C * h * k * this.m_gamma;
@@ -406,15 +407,14 @@ export class WeldJoint extends Joint {
     let wB = this.m_bodyB.c_velocity.w;
 
     const mA = this.m_invMassA;
-    const mB = this.m_invMassB; // float
+    const mB = this.m_invMassB;
     const iA = this.m_invIA;
-    const iB = this.m_invIB; // float
+    const iB = this.m_invIB;
 
     if (this.m_frequencyHz > 0.0) {
-      const Cdot2 = wB - wA; // float
+      const Cdot2 = wB - wA;
 
-      const impulse2 = -this.m_mass.ez.z
-          * (Cdot2 + this.m_bias + this.m_gamma * this.m_impulse.z); // float
+      const impulse2 = -this.m_mass.ez.z * (Cdot2 + this.m_bias + this.m_gamma * this.m_impulse.z);
       this.m_impulse.z += impulse2;
 
       wA -= iA * impulse2;
@@ -422,13 +422,13 @@ export class WeldJoint extends Joint {
 
       const Cdot1 = Vec2.zero();
       Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
-      Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA)); // Vec2
+      Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
 
-      const impulse1 = Vec2.neg(Mat33.mulVec2(this.m_mass, Cdot1)); // Vec2
+      const impulse1 = Vec2.neg(Mat33.mulVec2(this.m_mass, Cdot1));
       this.m_impulse.x += impulse1.x;
       this.m_impulse.y += impulse1.y;
 
-      const P = Vec2.clone(impulse1); // Vec2
+      const P = Vec2.clone(impulse1);
 
       vA.subMul(mA, P);
       wA -= iA * Vec2.crossVec2Vec2(this.m_rA, P);
@@ -438,11 +438,11 @@ export class WeldJoint extends Joint {
     } else {
       const Cdot1 = Vec2.zero();
       Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
-      Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA)); // Vec2
-      const Cdot2 = wB - wA; // float
-      const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2); // Vec3
+      Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
+      const Cdot2 = wB - wA;
+      const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
 
-      const impulse = Vec3.neg(Mat33.mulVec3(this.m_mass, Cdot)); // Vec3
+      const impulse = Vec3.neg(Mat33.mulVec3(this.m_mass, Cdot));
       this.m_impulse.add(impulse);
 
       const P = Vec2.neo(impulse.x, impulse.y);
@@ -497,12 +497,12 @@ export class WeldJoint extends Joint {
     if (this.m_frequencyHz > 0.0) {
       const C1 = Vec2.zero();
       C1.addCombine(1, cB, 1, rB);
-      C1.subCombine(1, cA, 1, rA); // Vec2
+      C1.subCombine(1, cA, 1, rA);
 
       positionError = C1.length();
       angularError = 0.0;
 
-      const P = Vec2.neg(K.solve22(C1)); // Vec2
+      const P = Vec2.neg(K.solve22(C1));
 
       cA.subMul(mA, P);
       aA -= iA * Vec2.crossVec2Vec2(rA, P);
@@ -514,7 +514,7 @@ export class WeldJoint extends Joint {
       C1.addCombine(1, cB, 1, rB);
       C1.subCombine(1, cA, 1, rA);
 
-      const C2 = aB - aA - this.m_referenceAngle; // float
+      const C2 = aB - aA - this.m_referenceAngle;
 
       positionError = C1.length();
       angularError = math_abs(C2);

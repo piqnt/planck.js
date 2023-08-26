@@ -25,7 +25,7 @@
 import { options } from '../../util/options';
 import { SettingsInternal as Settings } from '../../Settings';
 import { clamp } from '../../common/Math';
-import { Vec2 } from '../../common/Vec2';
+import { Vec2, Vec2Value } from '../../common/Vec2';
 import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
 import { Body } from '../Body';
@@ -63,11 +63,11 @@ export interface RopeJointDef extends JointDef, RopeJointOpt {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  localAnchorA: Vec2;
+  localAnchorA: Vec2Value;
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  localAnchorB: Vec2;
+  localAnchorB: Vec2Value;
 }
 
 /** @internal */ const DEFAULTS = {
@@ -111,8 +111,9 @@ export class RopeJoint extends Joint {
   /** @internal */ m_invIB: number;
 
   constructor(def: RopeJointDef);
-  constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
-  constructor(def: RopeJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2) {
+  constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+  /** @internal */
+  constructor(def: RopeJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof RopeJoint)) {
       return new RopeJoint(def, bodyA, bodyB, anchor);
@@ -124,8 +125,8 @@ export class RopeJoint extends Joint {
     bodyB = this.m_bodyB;
 
     this.m_type = RopeJoint.TYPE;
-    this.m_localAnchorA = anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.neo(-1.0, 0.0);
-    this.m_localAnchorB = anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.neo(1.0, 0.0);
+    this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.neo(-1.0, 0.0));
+    this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.neo(1.0, 0.0));
 
     this.m_maxLength = def.maxLength;
 
@@ -252,11 +253,11 @@ export class RopeJoint extends Joint {
     this.m_rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
     this.m_u = Vec2.zero();
     this.m_u.addCombine(1, cB, 1, this.m_rB);
-    this.m_u.subCombine(1, cA, 1, this.m_rA); // Vec2
+    this.m_u.subCombine(1, cA, 1, this.m_rA);
 
     this.m_length = this.m_u.length();
 
-    const C = this.m_length - this.m_maxLength; // float
+    const C = this.m_length - this.m_maxLength;
     if (C > 0.0) {
       this.m_state = LimitState.atUpperLimit;
     } else {
@@ -273,10 +274,9 @@ export class RopeJoint extends Joint {
     }
 
     // Compute effective mass.
-    const crA = Vec2.crossVec2Vec2(this.m_rA, this.m_u); // float
-    const crB = Vec2.crossVec2Vec2(this.m_rB, this.m_u); // float
-    const invMass = this.m_invMassA + this.m_invIA * crA * crA + this.m_invMassB
-        + this.m_invIB * crB * crB; // float
+    const crA = Vec2.crossVec2Vec2(this.m_rA, this.m_u);
+    const crB = Vec2.crossVec2Vec2(this.m_rB, this.m_u);
+    const invMass = this.m_invMassA + this.m_invIA * crA * crA + this.m_invMassB + this.m_invIB * crB * crB;
 
     this.m_mass = invMass != 0.0 ? 1.0 / invMass : 0.0;
 
@@ -309,22 +309,22 @@ export class RopeJoint extends Joint {
     let wB = this.m_bodyB.c_velocity.w;
 
     // Cdot = dot(u, v + cross(w, r))
-    const vpA = Vec2.addCrossNumVec2(vA, wA, this.m_rA); // Vec2
-    const vpB = Vec2.addCrossNumVec2(vB, wB, this.m_rB); // Vec2
-    const C = this.m_length - this.m_maxLength; // float
-    let Cdot = Vec2.dot(this.m_u, Vec2.sub(vpB, vpA)); // float
+    const vpA = Vec2.addCrossNumVec2(vA, wA, this.m_rA);
+    const vpB = Vec2.addCrossNumVec2(vB, wB, this.m_rB);
+    const C = this.m_length - this.m_maxLength;
+    let Cdot = Vec2.dot(this.m_u, Vec2.sub(vpB, vpA));
 
     // Predictive constraint.
     if (C < 0.0) {
       Cdot += step.inv_dt * C;
     }
 
-    let impulse = -this.m_mass * Cdot; // float
-    const oldImpulse = this.m_impulse; // float
+    let impulse = -this.m_mass * Cdot;
+    const oldImpulse = this.m_impulse;
     this.m_impulse = math_min(0.0, this.m_impulse + impulse);
     impulse = this.m_impulse - oldImpulse;
 
-    const P = Vec2.mulNumVec2(impulse, this.m_u); // Vec2
+    const P = Vec2.mulNumVec2(impulse, this.m_u);
     vA.subMul(this.m_invMassA, P);
     wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
     vB.addMul(this.m_invMassB, P);
@@ -340,10 +340,10 @@ export class RopeJoint extends Joint {
    * This returns true if the position errors are within tolerance.
    */
   solvePositionConstraints(step: TimeStep): boolean {
-    const cA = this.m_bodyA.c_position.c; // Vec2
-    let aA = this.m_bodyA.c_position.a; // float
-    const cB = this.m_bodyB.c_position.c; // Vec2
-    let aB = this.m_bodyB.c_position.a; // float
+    const cA = this.m_bodyA.c_position.c;
+    let aA = this.m_bodyA.c_position.a;
+    const cB = this.m_bodyB.c_position.c;
+    let aB = this.m_bodyB.c_position.a;
 
     const qA = Rot.neo(aA);
     const qB = Rot.neo(aB);
@@ -352,15 +352,15 @@ export class RopeJoint extends Joint {
     const rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
     const u = Vec2.zero();
     u.addCombine(1, cB, 1, rB);
-    u.subCombine(1, cA, 1, rA); // Vec2
+    u.subCombine(1, cA, 1, rA);
 
-    const length = u.normalize(); // float
-    let C = length - this.m_maxLength; // float
+    const length = u.normalize();
+    let C = length - this.m_maxLength;
 
     C = clamp(C, 0.0, Settings.maxLinearCorrection);
 
-    const impulse = -this.m_mass * C; // float
-    const P = Vec2.mulNumVec2(impulse, u); // Vec2
+    const impulse = -this.m_mass * C;
+    const P = Vec2.mulNumVec2(impulse, u);
 
     cA.subMul(this.m_invMassA, P);
     aA -= this.m_invIA * Vec2.crossVec2Vec2(rA, P);

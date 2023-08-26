@@ -24,7 +24,7 @@
 
 import { options } from '../../util/options';
 import { clamp } from '../../common/Math';
-import { Vec2 } from '../../common/Vec2';
+import { Vec2, Vec2Value } from '../../common/Vec2';
 import { Mat22 } from '../../common/Mat22';
 import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
@@ -101,8 +101,9 @@ export class FrictionJoint extends Joint {
   /** @internal */ m_angularMass: number;
 
   constructor(def: FrictionJointDef);
-  constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
-  constructor(def: FrictionJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2) {
+  constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+  /** @internal */
+  constructor(def: FrictionJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof FrictionJoint)) {
       return new FrictionJoint(def, bodyA, bodyB, anchor);
@@ -164,10 +165,10 @@ export class FrictionJoint extends Joint {
 
   /** @internal */
   _setAnchors(def: {
-    anchorA?: Vec2,
-    localAnchorA?: Vec2,
-    anchorB?: Vec2,
-    localAnchorB?: Vec2,
+    anchorA?: Vec2Value,
+    localAnchorA?: Vec2Value,
+    anchorB?: Vec2Value,
+    localAnchorB?: Vec2Value,
   }): void {
     if (def.anchorA) {
       this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
@@ -342,15 +343,15 @@ export class FrictionJoint extends Joint {
     const iA = this.m_invIA;
     const iB = this.m_invIB;
 
-    const h = step.dt; // float
+    const h = step.dt;
 
     // Solve angular friction
     {
-      const Cdot = wB - wA; // float
-      let impulse = -this.m_angularMass * Cdot; // float
+      const Cdot = wB - wA;
+      let impulse = -this.m_angularMass * Cdot;
 
-      const oldImpulse = this.m_angularImpulse; // float
-      const maxImpulse = h * this.m_maxTorque; // float
+      const oldImpulse = this.m_angularImpulse;
+      const maxImpulse = h * this.m_maxTorque;
       this.m_angularImpulse = clamp(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
       impulse = this.m_angularImpulse - oldImpulse;
 
@@ -360,14 +361,16 @@ export class FrictionJoint extends Joint {
 
     // Solve linear friction
     {
-      const Cdot = Vec2.sub(Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB)), Vec2.add(vA,
-          Vec2.crossNumVec2(wA, this.m_rA))); // Vec2
+      const Cdot = Vec2.sub(
+        Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB)),
+        Vec2.add(vA, Vec2.crossNumVec2(wA, this.m_rA))
+      );
 
-      let impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot)); // Vec2
-      const oldImpulse = this.m_linearImpulse; // Vec2
+      let impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
+      const oldImpulse = this.m_linearImpulse;
       this.m_linearImpulse.add(impulse);
 
-      const maxImpulse = h * this.m_maxForce; // float
+      const maxImpulse = h * this.m_maxForce;
 
       if (this.m_linearImpulse.lengthSquared() > maxImpulse * maxImpulse) {
         this.m_linearImpulse.normalize();

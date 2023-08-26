@@ -82,6 +82,9 @@ export interface MouseJointDef extends JointDef, MouseJointOpt {
  * point. This a soft constraint with a maximum force. This allows the
  * constraint to stretch and without applying huge forces.
  *
+ * You need to call setTarget(target) every time that mouse is 
+ * moved, to track the new location of the mouse.
+ *
  * NOTE: this joint is not documented in the manual because it was developed to
  * be used in the testbed. If you want to learn how to use the mouse joint, look
  * at the testbed.
@@ -108,6 +111,7 @@ export class MouseJoint extends Joint {
 
   constructor(def: MouseJointDef);
   constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2Value);
+  /** @internal */
   constructor(def: MouseJointDef, bodyA?: Body, bodyB?: Body, target?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof MouseJoint)) {
@@ -197,7 +201,7 @@ export class MouseJoint extends Joint {
   setTarget(target: Vec2Value): void {
     if (Vec2.areEqual(target, this.m_targetA)) return;
     this.m_bodyB.setAwake(true);
-    this.m_targetA = Vec2.clone(target);
+    this.m_targetA.set(target);
   }
 
   getTarget(): Vec2 {

@@ -123,6 +123,7 @@ export class GearJoint extends Joint {
 
   constructor(def: GearJointDef);
   constructor(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number);
+  /** @internal */
   constructor(def: GearJointDef, bodyA?: Body, bodyB?: Body, joint1?: RevoluteJoint | PrismaticJoint, joint2?: RevoluteJoint | PrismaticJoint, ratio?: number) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof GearJoint)) {
@@ -136,10 +137,8 @@ export class GearJoint extends Joint {
 
     this.m_type = GearJoint.TYPE;
 
-    _ASSERT && console.assert(joint1.m_type === RevoluteJoint.TYPE
-        || joint1.m_type === PrismaticJoint.TYPE);
-    _ASSERT && console.assert(joint2.m_type === RevoluteJoint.TYPE
-        || joint2.m_type === PrismaticJoint.TYPE);
+    _ASSERT && console.assert(joint1.m_type === RevoluteJoint.TYPE || joint1.m_type === PrismaticJoint.TYPE);
+    _ASSERT && console.assert(joint2.m_type === RevoluteJoint.TYPE || joint2.m_type === PrismaticJoint.TYPE);
 
     this.m_joint1 = joint1 ? joint1 : def.joint1;
     this.m_joint2 = joint2 ? joint2 : def.joint2;
@@ -320,7 +319,7 @@ export class GearJoint extends Joint {
    * Get the reaction torque on bodyB in N*m.
    */
   getReactionTorque(inv_dt: number): number {
-    const L = this.m_impulse * this.m_JwA; // float
+    const L = this.m_impulse * this.m_JwA;
     return inv_dt * L;
   }
 
@@ -367,9 +366,9 @@ export class GearJoint extends Joint {
       this.m_JwC = 1.0;
       this.m_mass += this.m_iA + this.m_iC;
     } else {
-      const u = Rot.mulVec2(qC, this.m_localAxisC); // Vec2
-      const rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC); // Vec2
-      const rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA); // Vec2
+      const u = Rot.mulVec2(qC, this.m_localAxisC);
+      const rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC);
+      const rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA);
       this.m_JvAC = u;
       this.m_JwC = Vec2.crossVec2Vec2(rC, u);
       this.m_JwA = Vec2.crossVec2Vec2(rA, u);
@@ -382,9 +381,9 @@ export class GearJoint extends Joint {
       this.m_JwD = this.m_ratio;
       this.m_mass += this.m_ratio * this.m_ratio * (this.m_iB + this.m_iD);
     } else {
-      const u = Rot.mulVec2(qD, this.m_localAxisD); // Vec2
-      const rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD); // Vec2
-      const rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB); // Vec2
+      const u = Rot.mulVec2(qD, this.m_localAxisD);
+      const rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD);
+      const rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB);
       this.m_JvBD = Vec2.mulNumVec2(this.m_ratio, u);
       this.m_JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u);
       this.m_JwB = this.m_ratio * Vec2.crossVec2Vec2(rB, u);
@@ -431,12 +430,10 @@ export class GearJoint extends Joint {
     const vD = this.m_bodyD.c_velocity.v;
     let wD = this.m_bodyD.c_velocity.w;
 
-    let Cdot = Vec2.dot(this.m_JvAC, vA) - Vec2.dot(this.m_JvAC, vC)
-        + Vec2.dot(this.m_JvBD, vB) - Vec2.dot(this.m_JvBD, vD); // float
-    Cdot += (this.m_JwA * wA - this.m_JwC * wC)
-        + (this.m_JwB * wB - this.m_JwD * wD);
+    let Cdot = Vec2.dot(this.m_JvAC, vA) - Vec2.dot(this.m_JvAC, vC) + Vec2.dot(this.m_JvBD, vB) - Vec2.dot(this.m_JvBD, vD);
+    Cdot += (this.m_JwA * wA - this.m_JwC * wC) + (this.m_JwB * wB - this.m_JwD * wD);
 
-    const impulse = -this.m_mass * Cdot; // float
+    const impulse = -this.m_mass * Cdot;
     this.m_impulse += impulse;
 
     vA.addMul(this.m_mA * impulse, this.m_JvAC);
@@ -497,16 +494,16 @@ export class GearJoint extends Joint {
 
       coordinateA = aA - aC - this.m_referenceAngleA;
     } else {
-      const u = Rot.mulVec2(qC, this.m_localAxisC); // Vec2
-      const rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC); // Vec2
-      const rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA); // Vec2
+      const u = Rot.mulVec2(qC, this.m_localAxisC);
+      const rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC);
+      const rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA);
       JvAC = u;
       JwC = Vec2.crossVec2Vec2(rC, u);
       JwA = Vec2.crossVec2Vec2(rA, u);
       mass += this.m_mC + this.m_mA + this.m_iC * JwC * JwC + this.m_iA * JwA * JwA;
 
-      const pC = Vec2.sub(this.m_localAnchorC, this.m_lcC); // Vec2
-      const pA = Rot.mulTVec2(qC, Vec2.add(rA, Vec2.sub(cA, cC))); // Vec2
+      const pC = Vec2.sub(this.m_localAnchorC, this.m_lcC);
+      const pA = Rot.mulTVec2(qC, Vec2.add(rA, Vec2.sub(cA, cC)));
       coordinateA = Vec2.dot(Vec2.sub(pA, pC), this.m_localAxisC);
     }
 
@@ -524,18 +521,16 @@ export class GearJoint extends Joint {
       JvBD = Vec2.mulNumVec2(this.m_ratio, u);
       JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u);
       JwB = this.m_ratio * Vec2.crossVec2Vec2(rB, u);
-      mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD
-          * JwD * JwD + this.m_iB * JwB * JwB;
+      mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD * JwD * JwD + this.m_iB * JwB * JwB;
 
-      const pD = Vec2.sub(this.m_localAnchorD, this.m_lcD); // Vec2
-      const pB = Rot.mulTVec2(qD, Vec2.add(rB, Vec2.sub(cB, cD))); // Vec2
-      coordinateB = Vec2.dot(pB, this.m_localAxisD)
-          - Vec2.dot(pD, this.m_localAxisD);
+      const pD = Vec2.sub(this.m_localAnchorD, this.m_lcD);
+      const pB = Rot.mulTVec2(qD, Vec2.add(rB, Vec2.sub(cB, cD)));
+      coordinateB = Vec2.dot(pB, this.m_localAxisD) - Vec2.dot(pD, this.m_localAxisD);
     }
 
-    const C = (coordinateA + this.m_ratio * coordinateB) - this.m_constant; // float
+    const C = (coordinateA + this.m_ratio * coordinateB) - this.m_constant;
 
-    let impulse = 0.0; // float
+    let impulse = 0.0;
     if (mass > 0.0) {
       impulse = -C / mass;
     }

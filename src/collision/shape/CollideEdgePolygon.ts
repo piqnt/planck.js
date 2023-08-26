@@ -339,7 +339,7 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
   }
 
   // If no valid normal can be found than this edge should not collide.
-  // @ts-ignore
+  // @ts-ignore todo: why we need this if here?
   if (edgeAxis.type == EPAxisType.e_unknown) {
     return;
   }

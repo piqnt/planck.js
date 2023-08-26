@@ -24,7 +24,7 @@
 
 import { SettingsInternal as Settings } from '../../Settings';
 import { clamp } from '../../common/Math';
-import { Vec2 } from '../../common/Vec2';
+import { Vec2, Vec2Value } from '../../common/Vec2';
 import { Vec3 } from '../../common/Vec3';
 import { Mat22 } from '../../common/Mat22';
 import { Mat33 } from '../../common/Mat33';
@@ -103,11 +103,11 @@ export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  localAnchorA: Vec2;
+  localAnchorA: Vec2Value;
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  localAnchorB: Vec2;
+  localAnchorB: Vec2Value;
   /**
    * The bodyB angle minus bodyA angle in the reference state (radians).
    */
@@ -157,15 +157,15 @@ export class RevoluteJoint extends Joint {
   /** @internal */ m_invIA: number;
   /** @internal */ m_invIB: number;
   // effective mass for point-to-point constraint.
-  /** @internal */ m_mass: Mat33 = new Mat33();
+  /** @internal */ m_mass: Mat33;
   // effective mass for motor/limit angular constraint.
   /** @internal */ m_motorMass: number;
-  /** @internal */ m_limitState: number = LimitState.inactiveLimit;
+  /** @internal */ m_limitState: number;
 
   constructor(def: RevoluteJointDef);
-  constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
-  // @ts-ignore
-  constructor(def: RevoluteJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2) {
+  constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+  /** @internal */
+  constructor(def: RevoluteJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof RevoluteJoint)) {
       return new RevoluteJoint(def, bodyA, bodyB, anchor);
@@ -175,6 +175,9 @@ export class RevoluteJoint extends Joint {
     super(def, bodyA, bodyB);
     bodyA = this.m_bodyA;
     bodyB = this.m_bodyB;
+
+    this.m_mass = new Mat33();
+    this.m_limitState = LimitState.inactiveLimit
 
     this.m_type = RevoluteJoint.TYPE;
 
@@ -256,10 +259,10 @@ export class RevoluteJoint extends Joint {
 
   /** @internal */
   _setAnchors(def: {
-    anchorA?: Vec2,
-    localAnchorA?: Vec2,
-    anchorB?: Vec2,
-    localAnchorB?: Vec2,
+    anchorA?: Vec2Value,
+    localAnchorA?: Vec2Value,
+    anchorB?: Vec2Value,
+    localAnchorB?: Vec2Value,
   }): void {
     if (def.anchorA) {
       this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
@@ -682,8 +685,7 @@ export class RevoluteJoint extends Joint {
 
       if (this.m_limitState == LimitState.equalLimits) {
         // Prevent large angular corrections
-        const C = clamp(angle - this.m_lowerAngle,
-            -Settings.maxAngularCorrection, Settings.maxAngularCorrection);
+        const C = clamp(angle - this.m_lowerAngle, -Settings.maxAngularCorrection, Settings.maxAngularCorrection);
         limitImpulse = -this.m_motorMass * C;
         angularError = math_abs(C);
 
@@ -700,8 +702,7 @@ export class RevoluteJoint extends Joint {
         angularError = C;
 
         // Prevent large angular corrections and allow some slop.
-        C = clamp(C - Settings.angularSlop, 0.0,
-            Settings.maxAngularCorrection);
+        C = clamp(C - Settings.angularSlop, 0.0, Settings.maxAngularCorrection);
         limitImpulse = -this.m_motorMass * C;
       }
 

@@ -62,7 +62,6 @@ export class PolygonShape extends Shape {
   m_count: number;
   m_radius: number;
 
-  // @ts-ignore
   constructor(vertices?: Vec2Value[]) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof PolygonShape)) {

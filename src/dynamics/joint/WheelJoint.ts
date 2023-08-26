@@ -25,7 +25,7 @@
 import { options } from '../../util/options';
 import { SettingsInternal as Settings } from '../../Settings';
 import { clamp } from '../../common/Math';
-import { Vec2 } from '../../common/Vec2';
+import { Vec2, Vec2Value } from '../../common/Vec2';
 import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
 import { Body } from '../Body';
@@ -79,15 +79,18 @@ export interface WheelJointDef extends JointDef, WheelJointOpt {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  localAnchorA: Vec2;
+  localAnchorA: Vec2Value;
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  localAnchorB: Vec2;
+  localAnchorB: Vec2Value;
   /**
    * The local translation axis in bodyA.
    */
-  localAxisA: Vec2;
+  localAxisA: Vec2Value;
+
+  /** @internal renamed to localAxisA */
+  localAxis?: Vec2Value;
 }
 
 /** @internal */ const DEFAULTS = {
@@ -138,17 +141,17 @@ export class WheelJoint extends Joint {
   /** @internal */ m_invIA: number;
   /** @internal */ m_invIB: number;
 
-  /** @internal */ m_ax: Vec2 = Vec2.zero();
-  /** @internal */ m_ay: Vec2 = Vec2.zero();
+  /** @internal */ m_ax: Vec2;
+  /** @internal */ m_ay: Vec2;
   /** @internal */ m_sAx: number;
   /** @internal */ m_sBx: number;
   /** @internal */ m_sAy: number;
   /** @internal */ m_sBy: number;
 
   constructor(def: WheelJointDef);
-  constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
-  // @ts-ignore
-  constructor(def: WheelJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2, axis?: Vec2) {
+  constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
+  /** @internal */
+  constructor(def: WheelJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value, axis?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof WheelJoint)) {
       return new WheelJoint(def, bodyA, bodyB, anchor, axis);
@@ -159,12 +162,25 @@ export class WheelJoint extends Joint {
     bodyA = this.m_bodyA;
     bodyB = this.m_bodyB;
 
+    this.m_ax = Vec2.zero();
+    this.m_ay = Vec2.zero();
+
     this.m_type = WheelJoint.TYPE;
 
     this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
     this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
-    // @ts-ignore localAxis
-    this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || def.localAxis || Vec2.neo(1.0, 0.0));
+
+    if (Vec2.isValid(axis)) {
+      this.m_localXAxisA = bodyA.getLocalVector(axis);
+    } else if (Vec2.isValid(def.localAxisA)) {
+      this.m_localXAxisA = Vec2.clone(def.localAxisA);
+    } else if (Vec2.isValid(def.localAxis)) {
+      // localAxis is renamed to localAxisA, this is for backward compatibility
+      this.m_localXAxisA = Vec2.clone(def.localAxis);
+    } else {
+      this.m_localXAxisA = Vec2.neo(1.0, 0.0);
+    }
+
     this.m_localYAxisA = Vec2.crossNumVec2(1.0, this.m_localXAxisA);
 
     this.m_mass = 0.0;
@@ -235,11 +251,11 @@ export class WheelJoint extends Joint {
 
   /** @internal */
   _setAnchors(def: {
-    anchorA?: Vec2,
-    localAnchorA?: Vec2,
-    anchorB?: Vec2,
-    localAnchorB?: Vec2,
-    localAxisA?: Vec2,
+    anchorA?: Vec2Value,
+    localAnchorA?: Vec2Value,
+    anchorB?: Vec2Value,
+    localAnchorB?: Vec2Value,
+    localAxisA?: Vec2Value,
   }): void {
     if (def.anchorA) {
       this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
@@ -287,12 +303,12 @@ export class WheelJoint extends Joint {
     const bA = this.m_bodyA;
     const bB = this.m_bodyB;
 
-    const pA = bA.getWorldPoint(this.m_localAnchorA); // Vec2
-    const pB = bB.getWorldPoint(this.m_localAnchorB); // Vec2
-    const d = Vec2.sub(pB, pA); // Vec2
-    const axis = bA.getWorldVector(this.m_localXAxisA); // Vec2
+    const pA = bA.getWorldPoint(this.m_localAnchorA);
+    const pB = bB.getWorldPoint(this.m_localAnchorB);
+    const d = Vec2.sub(pB, pA);
+    const axis = bA.getWorldVector(this.m_localXAxisA);
 
-    const translation = Vec2.dot(d, axis); // float
+    const translation = Vec2.dot(d, axis);
     return translation;
   }
 
@@ -420,9 +436,9 @@ export class WheelJoint extends Joint {
     this.m_invIB = this.m_bodyB.m_invI;
 
     const mA = this.m_invMassA;
-    const mB = this.m_invMassB; // float
+    const mB = this.m_invMassB;
     const iA = this.m_invIA;
-    const iB = this.m_invIB; // float
+    const iB = this.m_invIB;
 
     const cA = this.m_bodyA.c_position.c;
     const aA = this.m_bodyA.c_position.a;
@@ -442,7 +458,7 @@ export class WheelJoint extends Joint {
     const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     const d = Vec2.zero();
     d.addCombine(1, cB, 1, rB);
-    d.subCombine(1, cA, 1, rA); // Vec2
+    d.subCombine(1, cA, 1, rA);
 
     // Point to line constraint
     {
@@ -468,24 +484,24 @@ export class WheelJoint extends Joint {
       this.m_sBx = Vec2.crossVec2Vec2(rB, this.m_ax);
 
       const invMass = mA + mB + iA * this.m_sAx * this.m_sAx + iB * this.m_sBx
-          * this.m_sBx; // float
+          * this.m_sBx;
 
       if (invMass > 0.0) {
         this.m_springMass = 1.0 / invMass;
 
-        const C = Vec2.dot(d, this.m_ax); // float
+        const C = Vec2.dot(d, this.m_ax);
 
         // Frequency
-        const omega = 2.0 * math_PI * this.m_frequencyHz; // float
+        const omega = 2.0 * math_PI * this.m_frequencyHz;
 
         // Damping coefficient
-        const damp = 2.0 * this.m_springMass * this.m_dampingRatio * omega; // float
+        const damp = 2.0 * this.m_springMass * this.m_dampingRatio * omega;
 
         // Spring stiffness
-        const k = this.m_springMass * omega * omega; // float
+        const k = this.m_springMass * omega * omega;
 
         // magic formulas
-        const h = step.dt; // float
+        const h = step.dt;
         this.m_gamma = h * (damp + h * k);
         if (this.m_gamma > 0.0) {
           this.m_gamma = 1.0 / this.m_gamma;
@@ -543,9 +559,9 @@ export class WheelJoint extends Joint {
 
   solveVelocityConstraints(step: TimeStep): void {
     const mA = this.m_invMassA;
-    const mB = this.m_invMassB; // float
+    const mB = this.m_invMassB;
     const iA = this.m_invIA;
-    const iB = this.m_invIB; // float
+    const iB = this.m_invIB;
 
     const vA = this.m_bodyA.c_velocity.v;
     let wA = this.m_bodyA.c_velocity.w;
@@ -554,15 +570,13 @@ export class WheelJoint extends Joint {
 
     // Solve spring constraint
     {
-      const Cdot = Vec2.dot(this.m_ax, vB) - Vec2.dot(this.m_ax, vA) + this.m_sBx
-          * wB - this.m_sAx * wA; // float
-      const impulse = -this.m_springMass
-          * (Cdot + this.m_bias + this.m_gamma * this.m_springImpulse); // float
+      const Cdot = Vec2.dot(this.m_ax, vB) - Vec2.dot(this.m_ax, vA) + this.m_sBx * wB - this.m_sAx * wA;
+      const impulse = -this.m_springMass * (Cdot + this.m_bias + this.m_gamma * this.m_springImpulse);
       this.m_springImpulse += impulse;
 
-      const P = Vec2.mulNumVec2(impulse, this.m_ax); // Vec2
-      const LA = impulse * this.m_sAx; // float
-      const LB = impulse * this.m_sBx; // float
+      const P = Vec2.mulNumVec2(impulse, this.m_ax);
+      const LA = impulse * this.m_sAx;
+      const LB = impulse * this.m_sBx;
 
       vA.subMul(mA, P);
       wA -= iA * LA;
@@ -573,13 +587,12 @@ export class WheelJoint extends Joint {
 
     // Solve rotational motor constraint
     {
-      const Cdot = wB - wA - this.m_motorSpeed; // float
-      let impulse = -this.m_motorMass * Cdot; // float
+      const Cdot = wB - wA - this.m_motorSpeed;
+      let impulse = -this.m_motorMass * Cdot;
 
-      const oldImpulse = this.m_motorImpulse; // float
-      const maxImpulse = step.dt * this.m_maxMotorTorque; // float
-      this.m_motorImpulse = clamp(this.m_motorImpulse + impulse,
-          -maxImpulse, maxImpulse);
+      const oldImpulse = this.m_motorImpulse;
+      const maxImpulse = step.dt * this.m_maxMotorTorque;
+      this.m_motorImpulse = clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
       impulse = this.m_motorImpulse - oldImpulse;
 
       wA -= iA * impulse;
@@ -588,14 +601,13 @@ export class WheelJoint extends Joint {
 
     // Solve point to line constraint
     {
-      const Cdot = Vec2.dot(this.m_ay, vB) - Vec2.dot(this.m_ay, vA) + this.m_sBy
-          * wB - this.m_sAy * wA; // float
-      const impulse = -this.m_mass * Cdot; // float
+      const Cdot = Vec2.dot(this.m_ay, vB) - Vec2.dot(this.m_ay, vA) + this.m_sBy * wB - this.m_sAy * wA;
+      const impulse = -this.m_mass * Cdot;
       this.m_impulse += impulse;
 
-      const P = Vec2.mulNumVec2(impulse, this.m_ay); // Vec2
-      const LA = impulse * this.m_sAy; // float
-      const LB = impulse * this.m_sBy; // float
+      const P = Vec2.mulNumVec2(impulse, this.m_ay);
+      const LA = impulse * this.m_sAy;
+      const LB = impulse * this.m_sBy;
 
       vA.subMul(mA, P);
       wA -= iA * LA;
@@ -630,24 +642,18 @@ export class WheelJoint extends Joint {
 
     const ay = Rot.mulVec2(qA, this.m_localYAxisA);
 
-    const sAy = Vec2.crossVec2Vec2(Vec2.add(d, rA), ay); // float
-    const sBy = Vec2.crossVec2Vec2(rB, ay); // float
+    const sAy = Vec2.crossVec2Vec2(Vec2.add(d, rA), ay);
+    const sBy = Vec2.crossVec2Vec2(rB, ay);
 
-    const C = Vec2.dot(d, ay); // float
+    const C = Vec2.dot(d, ay);
 
-    const k = this.m_invMassA + this.m_invMassB + this.m_invIA * this.m_sAy
-        * this.m_sAy + this.m_invIB * this.m_sBy * this.m_sBy; // float
+    const k = this.m_invMassA + this.m_invMassB + this.m_invIA * this.m_sAy * this.m_sAy + this.m_invIB * this.m_sBy * this.m_sBy;
 
-    let impulse; // float
-    if (k != 0.0) {
-      impulse = -C / k;
-    } else {
-      impulse = 0.0;
-    }
+    const impulse = k != 0.0 ? -C / k : 0.0;
 
-    const P = Vec2.mulNumVec2(impulse, ay); // Vec2
-    const LA = impulse * sAy; // float
-    const LB = impulse * sBy; // float
+    const P = Vec2.mulNumVec2(impulse, ay);
+    const LA = impulse * sAy;
+    const LB = impulse * sBy;
 
     cA.subMul(this.m_invMassA, P);
     aA -= this.m_invIA * LA;
