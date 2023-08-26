@@ -87,6 +87,7 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:types": "tsd --typings=./dist/planck.d.ts && tsd --typings=./dist/planck-with-testbed.d.ts",
+    "preflight": "npm run lint && npm run test:types && npm run test",
     "build": "rollup -c",
     "watch": "rollup -c --watch",
     "testbed": "npm run dev",
