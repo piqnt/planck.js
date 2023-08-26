@@ -29,7 +29,7 @@ computation. Even
 
 • **proxyA**: *[DistanceProxy](distanceproxy.md)‹›* = new DistanceProxy()
 
-*Defined in [collision/Distance.ts:60](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L60)*
+*Defined in [src/collision/Distance.ts:60](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L60)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **proxyB**: *[DistanceProxy](distanceproxy.md)‹›* = new DistanceProxy()
 
-*Defined in [collision/Distance.ts:61](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L61)*
+*Defined in [src/collision/Distance.ts:61](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L61)*
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 • **transformA**: *[Transform](transform.md)‹›* = Transform.identity()
 
-*Defined in [collision/Distance.ts:62](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L62)*
+*Defined in [src/collision/Distance.ts:62](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L62)*
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 • **transformB**: *[Transform](transform.md)‹›* = Transform.identity()
 
-*Defined in [collision/Distance.ts:63](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L63)*
+*Defined in [src/collision/Distance.ts:63](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L63)*
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 • **useRadii**: *boolean* = false
 
-*Defined in [collision/Distance.ts:64](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L64)*
+*Defined in [src/collision/Distance.ts:64](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L64)*
 
 ## Methods
 
@@ -69,6 +69,6 @@ ___
 
 ▸ **recycle**(): *void*
 
-*Defined in [collision/Distance.ts:65](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L65)*
+*Defined in [src/collision/Distance.ts:65](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L65)*
 
 **Returns:** *void*

@@ -47,7 +47,7 @@
 
 • **activeKeys**: *[ActiveKeys](../globals.md#activekeys)*
 
-*Defined in [util/Testbed.ts:51](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L51)*
+*Defined in [src/util/Testbed.ts:51](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L51)*
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 • **background**: *string* = "#222222"
 
-*Defined in [util/Testbed.ts:48](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L48)*
+*Defined in [src/util/Testbed.ts:48](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L48)*
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 • **height**: *number* = 60
 
-*Defined in [util/Testbed.ts:31](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L31)*
+*Defined in [src/util/Testbed.ts:31](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L31)*
 
 World viewbox height.
 
@@ -73,7 +73,7 @@ ___
 
 • **hz**: *number* = 60
 
-*Defined in [util/Testbed.ts:42](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L42)*
+*Defined in [src/util/Testbed.ts:42](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L42)*
 
 World simulation step frequency
 
@@ -83,7 +83,7 @@ ___
 
 • **mouseForce**? : *number*
 
-*Defined in [util/Testbed.ts:50](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L50)*
+*Defined in [src/util/Testbed.ts:50](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L50)*
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 • **ratio**: *number* = 16
 
-*Defined in [util/Testbed.ts:47](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L47)*
+*Defined in [src/util/Testbed.ts:47](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L47)*
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 • **scaleY**: *number* = -1
 
-*Defined in [util/Testbed.ts:39](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L39)*
+*Defined in [src/util/Testbed.ts:39](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L39)*
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 • **speed**: *number* = 1
 
-*Defined in [util/Testbed.ts:45](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L45)*
+*Defined in [src/util/Testbed.ts:45](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L45)*
 
 World simulation speed, default is 1
 
@@ -117,7 +117,7 @@ ___
 
 • **width**: *number* = 80
 
-*Defined in [util/Testbed.ts:28](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L28)*
+*Defined in [src/util/Testbed.ts:28](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L28)*
 
 World viewbox width.
 
@@ -127,7 +127,7 @@ ___
 
 • **x**: *number* = 0
 
-*Defined in [util/Testbed.ts:34](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L34)*
+*Defined in [src/util/Testbed.ts:34](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L34)*
 
 World viewbox center vertical offset.
 
@@ -137,7 +137,7 @@ ___
 
 • **y**: *number* = -10
 
-*Defined in [util/Testbed.ts:37](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L37)*
+*Defined in [src/util/Testbed.ts:37](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L37)*
 
 World viewbox center horizontal offset.
 
@@ -147,7 +147,7 @@ World viewbox center horizontal offset.
 
 ▸ **color**(`r`: number, `g`: number, `b`: number): *string*
 
-*Defined in [util/Testbed.ts:107](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L107)*
+*Defined in [src/util/Testbed.ts:107](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L107)*
 
 **Parameters:**
 
@@ -165,7 +165,7 @@ ___
 
 ▸ **drawAABB**(`aabb`: [AABBValue](../interfaces/aabbvalue.md), `color`: string): *void*
 
-*Defined in [util/Testbed.ts:119](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L119)*
+*Defined in [src/util/Testbed.ts:119](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L119)*
 
 **Parameters:**
 
@@ -182,7 +182,7 @@ ___
 
 ▸ **drawCircle**(`p`: object, `r`: number, `color`: string): *void*
 
-*Defined in [util/Testbed.ts:115](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L115)*
+*Defined in [src/util/Testbed.ts:115](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L115)*
 
 **Parameters:**
 
@@ -205,7 +205,7 @@ ___
 
 ▸ **drawEdge**(`a`: object, `b`: object, `color`: string): *void*
 
-*Defined in [util/Testbed.ts:116](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L116)*
+*Defined in [src/util/Testbed.ts:116](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L116)*
 
 **Parameters:**
 
@@ -233,7 +233,7 @@ ___
 
 ▸ **drawPoint**(`p`: object, `r`: any, `color`: string): *void*
 
-*Defined in [util/Testbed.ts:114](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L114)*
+*Defined in [src/util/Testbed.ts:114](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L114)*
 
 **Parameters:**
 
@@ -256,7 +256,7 @@ ___
 
 ▸ **drawPolygon**(`points`: Array‹object›, `color`: string): *void*
 
-*Defined in [util/Testbed.ts:118](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L118)*
+*Defined in [src/util/Testbed.ts:118](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L118)*
 
 **Parameters:**
 
@@ -273,7 +273,7 @@ ___
 
 ▸ **drawSegment**(`a`: object, `b`: object, `color`: string): *void*
 
-*Defined in [util/Testbed.ts:117](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L117)*
+*Defined in [src/util/Testbed.ts:117](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L117)*
 
 **Parameters:**
 
@@ -301,7 +301,7 @@ ___
 
 ▸ **findAll**(`query`: string): *([Fixture](fixture.md)‹› | [Body](body.md)‹› | [Joint](joint.md)‹›)[]*
 
-*Defined in [util/Testbed.ts:136](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L136)*
+*Defined in [src/util/Testbed.ts:136](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L136)*
 
 **Parameters:**
 
@@ -317,7 +317,7 @@ ___
 
 ▸ **findOne**(`query`: string): *[Fixture](fixture.md)‹› | [Body](body.md)‹› | [Joint](joint.md)‹›*
 
-*Defined in [util/Testbed.ts:135](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L135)*
+*Defined in [src/util/Testbed.ts:135](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L135)*
 
 **Parameters:**
 
@@ -333,7 +333,7 @@ ___
 
 ▸ **info**(`text`: string): *void*
 
-*Defined in [util/Testbed.ts:103](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L103)*
+*Defined in [src/util/Testbed.ts:103](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L103)*
 
 **Parameters:**
 
@@ -349,7 +349,7 @@ ___
 
 ▸ **keydown**(`keyCode`: number, `label`: string): *void*
 
-*Defined in [util/Testbed.ts:59](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L59)*
+*Defined in [src/util/Testbed.ts:59](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L59)*
 
 callback, to be implemented by user
 
@@ -368,7 +368,7 @@ ___
 
 ▸ **keyup**(`keyCode`: number, `label`: string): *void*
 
-*Defined in [util/Testbed.ts:64](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L64)*
+*Defined in [src/util/Testbed.ts:64](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L64)*
 
 callback, to be implemented by user
 
@@ -385,15 +385,15 @@ ___
 
 ### `Abstract` start
 
-▸ **start**(`world`: [World](world.md)): *void*
+▸ **start**(`world`: World): *void*
 
-*Defined in [util/Testbed.ts:121](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L121)*
+*Defined in [src/util/Testbed.ts:121](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L121)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`world` | [World](world.md) |
+`world` | World |
 
 **Returns:** *void*
 
@@ -403,7 +403,7 @@ ___
 
 ▸ **status**(`name`: string, `value`: any): *void*
 
-*Defined in [util/Testbed.ts:71](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L71)*
+*Defined in [src/util/Testbed.ts:71](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L71)*
 
 **Parameters:**
 
@@ -416,7 +416,7 @@ Name | Type |
 
 ▸ **status**(`value`: object | string): *void*
 
-*Defined in [util/Testbed.ts:72](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L72)*
+*Defined in [src/util/Testbed.ts:72](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L72)*
 
 **Parameters:**
 
@@ -432,7 +432,7 @@ ___
 
 ▸ **step**(`dt`: number, `t`: number): *void*
 
-*Defined in [util/Testbed.ts:54](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L54)*
+*Defined in [src/util/Testbed.ts:54](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L54)*
 
 callback, to be implemented by user
 
@@ -449,9 +449,9 @@ ___
 
 ### `Static` mount
 
-▸ **mount**(`options?`: [TestbedMountOptions](../globals.md#testbedmountoptions)): *[Testbed](testbed.md)*
+▸ **mount**(`options?`: [TestbedMountOptions](../globals.md#testbedmountoptions)): *Testbed*
 
-*Defined in [util/Testbed.ts:23](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L23)*
+*Defined in [src/util/Testbed.ts:23](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L23)*
 
 **Parameters:**
 
@@ -459,4 +459,4 @@ Name | Type |
 ------ | ------ |
 `options?` | [TestbedMountOptions](../globals.md#testbedmountoptions) |
 
-**Returns:** *[Testbed](testbed.md)*
+**Returns:** *Testbed*

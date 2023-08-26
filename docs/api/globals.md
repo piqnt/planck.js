@@ -138,6 +138,7 @@
 * [EPSILON](globals.md#const-epsilon)
 * [Edge](globals.md#const-edge)
 * [Polygon](globals.md#const-polygon)
+* [world](globals.md#const-world)
 
 ### Functions
 
@@ -173,7 +174,7 @@
 
 Ƭ **ActiveKeys**: *object*
 
-*Defined in [util/Testbed.ts:18](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L18)*
+*Defined in [src/util/Testbed.ts:18](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L18)*
 
 #### Type declaration:
 
@@ -183,7 +184,7 @@ ___
 
 Ƭ **BodyType**: *"static" | "kinematic" | "dynamic"*
 
-*Defined in [dynamics/Body.ts:43](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Body.ts#L43)*
+*Defined in [src/dynamics/Body.ts:43](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Body.ts#L43)*
 
 ___
 
@@ -191,7 +192,7 @@ ___
 
 Ƭ **DynamicTreeQueryCallback**: *function*
 
-*Defined in [collision/DynamicTree.ts:36](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/DynamicTree.ts#L36)*
+*Defined in [src/collision/DynamicTree.ts:36](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/DynamicTree.ts#L36)*
 
 #### Type declaration:
 
@@ -209,7 +210,7 @@ ___
 
 Ƭ **EvaluateFunction**: *function*
 
-*Defined in [dynamics/Contact.ts:86](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Contact.ts#L86)*
+*Defined in [src/dynamics/Contact.ts:86](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L86)*
 
 #### Type declaration:
 
@@ -233,7 +234,7 @@ ___
 
 Ƭ **KEY**: *"0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "right" | "left" | "up" | "down" | "fire"*
 
-*Defined in [util/Testbed.ts:12](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L12)*
+*Defined in [src/util/Testbed.ts:12](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L12)*
 
 ___
 
@@ -241,7 +242,7 @@ ___
 
 Ƭ **RayCastCallback**: *function*
 
-*Defined in [collision/AABB.ts:43](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/AABB.ts#L43)*
+*Defined in [src/collision/AABB.ts:43](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/AABB.ts#L43)*
 
 #### Type declaration:
 
@@ -260,7 +261,7 @@ ___
 
 Ƭ **ShapeType**: *"circle" | "edge" | "polygon" | "chain"*
 
-*Defined in [collision/Shape.ts:121](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Shape.ts#L121)*
+*Defined in [src/collision/Shape.ts:121](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Shape.ts#L121)*
 
 ___
 
@@ -268,19 +269,19 @@ ___
 
 Ƭ **TestbedCallback**: *function*
 
-*Defined in [util/Testbed.ts:142](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L142)*
+*Defined in [src/util/Testbed.ts:142](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L142)*
 
 **`deprecated`** 
 
 #### Type declaration:
 
-▸ (`testbed`: [Testbed](classes/testbed.md)): *[World](classes/world.md)*
+▸ (`testbed`: Testbed): *World*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`testbed` | [Testbed](classes/testbed.md) |
+`testbed` | Testbed |
 
 ___
 
@@ -288,7 +289,7 @@ ___
 
 Ƭ **TestbedFactoryOptions**: *string | object*
 
-*Defined in [util/Testbed.ts:139](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L139)*
+*Defined in [src/util/Testbed.ts:139](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L139)*
 
 ___
 
@@ -296,7 +297,7 @@ ___
 
 Ƭ **TestbedMountOptions**: *object*
 
-*Defined in [util/Testbed.ts:20](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/Testbed.ts#L20)*
+*Defined in [src/util/Testbed.ts:20](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L20)*
 
 #### Type declaration:
 
@@ -306,7 +307,7 @@ ___
 
 Ƭ **TransformValue**: *object*
 
-*Defined in [common/Transform.ts:33](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Transform.ts#L33)*
+*Defined in [src/common/Transform.ts:33](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Transform.ts#L33)*
 
 #### Type declaration:
 
@@ -320,7 +321,7 @@ ___
 
 Ƭ **WorldAABBQueryCallback**: *function*
 
-*Defined in [dynamics/World.ts:93](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/World.ts#L93)*
+*Defined in [src/dynamics/World.ts:96](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/World.ts#L96)*
 
 Called for each fixture found in the query AABB. It may return `false` to terminate the query.
 
@@ -340,7 +341,7 @@ ___
 
 Ƭ **WorldRayCastCallback**: *function*
 
-*Defined in [dynamics/World.ts:88](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/World.ts#L88)*
+*Defined in [src/dynamics/World.ts:91](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/World.ts#L91)*
 
 Callback function for ray casts, see [World.rayCast](classes/world.md#raycast).
 
@@ -355,21 +356,27 @@ return 1: don't clip the ray and continue
 
 **`param`** The normal vector at the point of intersection
 
-**`param`** 
+**`param`** The fraction along the ray at the point of intersection
 
-**`returns`** -1 to filter, 0 to terminate, fraction to clip the ray for closest hit, 1 to continue
+**`returns`** `-1` to ignore the current fixture and continue
+
+**`returns`** `0` to terminate the ray cast
+
+**`returns`** `fraction` to clip the raycast at current point
+
+**`returns`** `1` don't clip the ray and continue
 
 #### Type declaration:
 
-▸ (`fixture`: [Fixture](classes/fixture.md), `point`: [Vec2](classes/vec2.md), `normal`: [Vec2](classes/vec2.md), `fraction`: number): *number*
+▸ (`fixture`: [Fixture](classes/fixture.md), `point`: Vec2, `normal`: Vec2, `fraction`: number): *number*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `fixture` | [Fixture](classes/fixture.md) |
-`point` | [Vec2](classes/vec2.md) |
-`normal` | [Vec2](classes/vec2.md) |
+`point` | Vec2 |
+`normal` | Vec2 |
 `fraction` | number |
 
 ## Variables
@@ -378,7 +385,9 @@ Name | Type |
 
 • **Box**: *[BoxShape](classes/boxshape.md)* = BoxShape
 
-*Defined in [collision/shape/BoxShape.ts:50](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/BoxShape.ts#L50)*
+*Defined in [example/Debug.ts:1](https://github.com/shakiba/planck.js/blob/ae24904/example/Debug.ts#L1)*
+
+*Defined in [src/collision/shape/BoxShape.ts:50](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/BoxShape.ts#L50)*
 
 ___
 
@@ -386,7 +395,7 @@ ___
 
 • **Chain**: *[ChainShape](classes/chainshape.md)* = ChainShape
 
-*Defined in [collision/shape/ChainShape.ts:376](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/ChainShape.ts#L376)*
+*Defined in [src/collision/shape/ChainShape.ts:376](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/ChainShape.ts#L376)*
 
 ___
 
@@ -394,7 +403,7 @@ ___
 
 • **Circle**: *[CircleShape](classes/circleshape.md)* = CircleShape
 
-*Defined in [collision/shape/CircleShape.ts:221](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/CircleShape.ts#L221)*
+*Defined in [src/collision/shape/CircleShape.ts:221](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/CircleShape.ts#L221)*
 
 ___
 
@@ -402,7 +411,7 @@ ___
 
 • **EPSILON**: *1e-9* = 1e-9
 
-*Defined in [common/Math.ts:28](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Math.ts#L28)*
+*Defined in [src/common/Math.ts:28](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Math.ts#L28)*
 
 ___
 
@@ -410,7 +419,7 @@ ___
 
 • **Edge**: *[EdgeShape](classes/edgeshape.md)* = EdgeShape
 
-*Defined in [collision/shape/EdgeShape.ts:327](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L327)*
+*Defined in [src/collision/shape/EdgeShape.ts:327](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L327)*
 
 ___
 
@@ -418,7 +427,15 @@ ___
 
 • **Polygon**: *[PolygonShape](classes/polygonshape.md)* = PolygonShape
 
-*Defined in [collision/shape/PolygonShape.ts:591](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/PolygonShape.ts#L591)*
+*Defined in [src/collision/shape/PolygonShape.ts:591](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/PolygonShape.ts#L591)*
+
+___
+
+### `Const` world
+
+• **world**: *World‹›* = new World()
+
+*Defined in [example/Debug.ts:5](https://github.com/shakiba/planck.js/blob/ae24904/example/Debug.ts#L5)*
 
 ## Functions
 
@@ -426,7 +443,7 @@ ___
 
 ▸ **ChainCircleContact**(`manifold`: [Manifold](classes/manifold.md), `xfA`: [TransformValue](globals.md#transformvalue), `fixtureA`: [Fixture](classes/fixture.md), `indexA`: number, `xfB`: [TransformValue](globals.md#transformvalue), `fixtureB`: [Fixture](classes/fixture.md), `indexB`: number): *void*
 
-*Defined in [collision/shape/CollideEdgeCircle.ts:51](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/CollideEdgeCircle.ts#L51)*
+*Defined in [src/collision/shape/CollideEdgeCircle.ts:51](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/CollideEdgeCircle.ts#L51)*
 
 **Parameters:**
 
@@ -448,7 +465,7 @@ ___
 
 ▸ **CollideCircles**(`manifold`: [Manifold](classes/manifold.md), `circleA`: [CircleShape](classes/circleshape.md), `xfA`: [Transform](classes/transform.md), `circleB`: [CircleShape](classes/circleshape.md), `xfB`: [Transform](classes/transform.md)): *void*
 
-*Defined in [collision/shape/CollideCircle.ts:48](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/CollideCircle.ts#L48)*
+*Defined in [src/collision/shape/CollideCircle.ts:48](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/CollideCircle.ts#L48)*
 
 **Parameters:**
 
@@ -468,7 +485,7 @@ ___
 
 ▸ **CollideEdgeCircle**(`manifold`: [Manifold](classes/manifold.md), `edgeA`: [EdgeShape](classes/edgeshape.md), `xfA`: [TransformValue](globals.md#transformvalue), `circleB`: [CircleShape](classes/circleshape.md), `xfB`: [TransformValue](globals.md#transformvalue)): *void*
 
-*Defined in [collision/shape/CollideEdgeCircle.ts:75](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/CollideEdgeCircle.ts#L75)*
+*Defined in [src/collision/shape/CollideEdgeCircle.ts:75](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/CollideEdgeCircle.ts#L75)*
 
 **Parameters:**
 
@@ -488,7 +505,7 @@ ___
 
 ▸ **CollideEdgePolygon**(`manifold`: [Manifold](classes/manifold.md), `edgeA`: [EdgeShape](classes/edgeshape.md), `xfA`: [TransformValue](globals.md#transformvalue), `polygonB`: [PolygonShape](classes/polygonshape.md), `xfB`: [TransformValue](globals.md#transformvalue)): *void*
 
-*Defined in [collision/shape/CollideEdgePolygon.ts:148](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/CollideEdgePolygon.ts#L148)*
+*Defined in [src/collision/shape/CollideEdgePolygon.ts:148](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/CollideEdgePolygon.ts#L148)*
 
 This function collides and edge and a polygon, taking into account edge
 adjacency.
@@ -511,7 +528,7 @@ ___
 
 ▸ **CollidePolygonCircle**(`manifold`: [Manifold](classes/manifold.md), `polygonA`: [PolygonShape](classes/polygonshape.md), `xfA`: [TransformValue](globals.md#transformvalue), `circleB`: [CircleShape](classes/circleshape.md), `xfB`: [TransformValue](globals.md#transformvalue)): *void*
 
-*Defined in [collision/shape/CollideCirclePolygon.ts:49](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/CollideCirclePolygon.ts#L49)*
+*Defined in [src/collision/shape/CollideCirclePolygon.ts:49](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/CollideCirclePolygon.ts#L49)*
 
 **Parameters:**
 
@@ -531,7 +548,7 @@ ___
 
 ▸ **CollidePolygons**(`manifold`: [Manifold](classes/manifold.md), `polyA`: [PolygonShape](classes/polygonshape.md), `xfA`: [TransformValue](globals.md#transformvalue), `polyB`: [PolygonShape](classes/polygonshape.md), `xfB`: [TransformValue](globals.md#transformvalue)): *void*
 
-*Defined in [collision/shape/CollidePolygon.ts:177](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/CollidePolygon.ts#L177)*
+*Defined in [src/collision/shape/CollidePolygon.ts:177](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/CollidePolygon.ts#L177)*
 
 Find edge normal of max separation on A - return if separating axis is found<br>
 Find edge normal of max separation on B - return if separation axis is found<br>
@@ -559,7 +576,7 @@ ___
 
 ▸ **Distance**(`output`: [DistanceOutput](classes/distanceoutput.md), `cache`: [SimplexCache](classes/simplexcache.md), `input`: [DistanceInput](classes/distanceinput.md)): *void*
 
-*Defined in [collision/Distance.ts:117](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L117)*
+*Defined in [src/collision/Distance.ts:117](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L117)*
 
 Compute the closest points between two shapes. Supports any combination of:
 CircleShape, PolygonShape, EdgeShape. The simplex cache is input/output. On
@@ -581,7 +598,7 @@ ___
 
 ▸ **ShapeCast**(`output`: [ShapeCastOutput](classes/shapecastoutput.md), `input`: [ShapeCastInput](classes/shapecastinput.md)): *boolean*
 
-*Defined in [collision/Distance.ts:793](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L793)*
+*Defined in [src/collision/Distance.ts:793](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L793)*
 
 Perform a linear shape cast of shape B moving and shape A fixed. Determines
 the hit point, normal, and translation fraction.
@@ -603,7 +620,7 @@ ___
 
 ▸ **TimeOfImpact**(`output`: [TOIOutput](classes/toioutput.md), `input`: [TOIInput](classes/toiinput.md)): *void*
 
-*Defined in [collision/TimeOfImpact.ts:116](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/TimeOfImpact.ts#L116)*
+*Defined in [src/collision/TimeOfImpact.ts:116](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/TimeOfImpact.ts#L116)*
 
 Compute the upper bound on time before two shapes penetrate. Time is
 represented as a fraction between [0,tMax]. This uses a swept separating axis
@@ -631,7 +648,7 @@ ___
 
 ▸ **clamp**(`num`: number, `min`: number, `max`: number): *number*
 
-*Defined in [common/Math.ts:77](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Math.ts#L77)*
+*Defined in [src/common/Math.ts:77](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Math.ts#L77)*
 
 **`deprecated`** 
 Returns a min if num is less than min, and max if more than max, otherwise returns num.
@@ -652,7 +669,7 @@ ___
 
 ▸ **clipSegmentToLine**(`vOut`: [ClipVertex](classes/clipvertex.md)[], `vIn`: [ClipVertex](classes/clipvertex.md)[], `normal`: [Vec2Value](interfaces/vec2value.md), `offset`: number, `vertexIndexA`: number): *number*
 
-*Defined in [collision/Manifold.ts:402](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Manifold.ts#L402)*
+*Defined in [src/collision/Manifold.ts:402](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L402)*
 
 Clipping for contact manifolds. Sutherland-Hodgman clipping.
 
@@ -674,7 +691,7 @@ ___
 
 ▸ **getPointStates**(`state1`: [PointState](enums/pointstate.md)[], `state2`: [PointState](enums/pointstate.md)[], `manifold1`: [Manifold](classes/manifold.md), `manifold2`: [Manifold](classes/manifold.md)): *void*
 
-*Defined in [collision/Manifold.ts:357](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Manifold.ts#L357)*
+*Defined in [src/collision/Manifold.ts:357](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L357)*
 
 Compute the point states given two manifolds. The states pertain to the
 transition from manifold1 to manifold2. So state1 is either persist or remove
@@ -697,7 +714,7 @@ ___
 
 ▸ **getTransform**(`xf`: [TransformValue](globals.md#transformvalue), `p`: [Vec2Value](interfaces/vec2value.md), `c`: [Vec2Value](interfaces/vec2value.md), `a`: number): *[TransformValue](globals.md#transformvalue)*
 
-*Defined in [dynamics/Position.ts:52](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Position.ts#L52)*
+*Defined in [src/dynamics/Position.ts:52](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Position.ts#L52)*
 
 **Parameters:**
 
@@ -716,7 +733,7 @@ ___
 
 ▸ **isPowerOfTwo**(`x`: number): *boolean*
 
-*Defined in [common/Math.ts:51](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Math.ts#L51)*
+*Defined in [src/common/Math.ts:51](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Math.ts#L51)*
 
 **`deprecated`** 
 
@@ -734,7 +751,7 @@ ___
 
 ▸ **mixFriction**(`friction1`: number, `friction2`: number): *number*
 
-*Defined in [dynamics/Contact.ts:100](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Contact.ts#L100)*
+*Defined in [src/dynamics/Contact.ts:100](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L100)*
 
 Friction mixing law. The idea is to allow either fixture to drive the
 friction to zero. For example, anything slides on ice.
@@ -754,7 +771,7 @@ ___
 
 ▸ **mixRestitution**(`restitution1`: number, `restitution2`: number): *number*
 
-*Defined in [dynamics/Contact.ts:108](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Contact.ts#L108)*
+*Defined in [src/dynamics/Contact.ts:108](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L108)*
 
 Restitution mixing law. The idea is allow for anything to bounce off an
 inelastic surface. For example, a superball bounces on anything.
@@ -774,7 +791,7 @@ ___
 
 ▸ **mod**(`num`: number, `min?`: number, `max?`: number): *number*
 
-*Defined in [common/Math.ts:56](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Math.ts#L56)*
+*Defined in [src/common/Math.ts:56](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Math.ts#L56)*
 
 **`deprecated`** 
 
@@ -794,7 +811,7 @@ ___
 
 ▸ **nextPowerOfTwo**(`x`: number): *number*
 
-*Defined in [common/Math.ts:41](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Math.ts#L41)*
+*Defined in [src/common/Math.ts:41](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Math.ts#L41)*
 
 **`deprecated`** 
 Next Largest Power of 2 Given a binary integer value x, the next largest
@@ -817,7 +834,7 @@ ___
 
 ▸ **random**(`min?`: number, `max?`: number): *number*
 
-*Defined in [common/Math.ts:93](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Math.ts#L93)*
+*Defined in [src/common/Math.ts:93](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Math.ts#L93)*
 
 **`deprecated`** 
 Returns a random number between min and max when two arguments are provided.
@@ -839,7 +856,7 @@ ___
 
 ▸ **testOverlap**(`shapeA`: [Shape](classes/shape.md), `indexA`: number, `shapeB`: [Shape](classes/shape.md), `indexB`: number, `xfA`: [TransformValue](globals.md#transformvalue), `xfB`: [TransformValue](globals.md#transformvalue)): *boolean*
 
-*Defined in [collision/Distance.ts:732](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L732)*
+*Defined in [src/collision/Distance.ts:732](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L732)*
 
 Determine if two generic shapes overlap.
 
@@ -862,7 +879,7 @@ Name | Type |
 
 ### ▪ **internal**: *object*
 
-*Defined in [internal.ts:11](https://github.com/shakiba/planck.js/blob/5b96d95/src/internal.ts#L11)*
+*Defined in [src/internal.ts:11](https://github.com/shakiba/planck.js/blob/ae24904/src/internal.ts#L11)*
 
 **`deprecated`** Merged with main namespace
 
@@ -870,49 +887,49 @@ Name | Type |
 
 • **CollidePolygons**: *CollidePolygons*
 
-*Defined in [internal.ts:12](https://github.com/shakiba/planck.js/blob/5b96d95/src/internal.ts#L12)*
+*Defined in [src/internal.ts:12](https://github.com/shakiba/planck.js/blob/ae24904/src/internal.ts#L12)*
 
 ###  Distance
 
 • **Distance**: *Distance*
 
-*Defined in [internal.ts:16](https://github.com/shakiba/planck.js/blob/5b96d95/src/internal.ts#L16)*
+*Defined in [src/internal.ts:16](https://github.com/shakiba/planck.js/blob/ae24904/src/internal.ts#L16)*
 
 ###  DynamicTree
 
 • **DynamicTree**: *[DynamicTree](classes/dynamictree.md)*
 
-*Defined in [internal.ts:18](https://github.com/shakiba/planck.js/blob/5b96d95/src/internal.ts#L18)*
+*Defined in [src/internal.ts:18](https://github.com/shakiba/planck.js/blob/ae24904/src/internal.ts#L18)*
 
 ###  Manifold
 
 • **Manifold**: *[Manifold](classes/manifold.md)*
 
-*Defined in [internal.ts:15](https://github.com/shakiba/planck.js/blob/5b96d95/src/internal.ts#L15)*
+*Defined in [src/internal.ts:15](https://github.com/shakiba/planck.js/blob/ae24904/src/internal.ts#L15)*
 
 ###  Settings
 
 • **Settings**: *SettingsInternal*
 
-*Defined in [internal.ts:13](https://github.com/shakiba/planck.js/blob/5b96d95/src/internal.ts#L13)*
+*Defined in [src/internal.ts:13](https://github.com/shakiba/planck.js/blob/ae24904/src/internal.ts#L13)*
 
 ###  Sweep
 
 • **Sweep**: *[Sweep](classes/sweep.md)*
 
-*Defined in [internal.ts:14](https://github.com/shakiba/planck.js/blob/5b96d95/src/internal.ts#L14)*
+*Defined in [src/internal.ts:14](https://github.com/shakiba/planck.js/blob/ae24904/src/internal.ts#L14)*
 
 ###  TimeOfImpact
 
 • **TimeOfImpact**: *TimeOfImpact*
 
-*Defined in [internal.ts:17](https://github.com/shakiba/planck.js/blob/5b96d95/src/internal.ts#L17)*
+*Defined in [src/internal.ts:17](https://github.com/shakiba/planck.js/blob/ae24904/src/internal.ts#L17)*
 
 ###  stats
 
 • **stats**: *object*
 
-*Defined in [internal.ts:19](https://github.com/shakiba/planck.js/blob/5b96d95/src/internal.ts#L19)*
+*Defined in [src/internal.ts:19](https://github.com/shakiba/planck.js/blob/ae24904/src/internal.ts#L19)*
 
 #### Type declaration:
 
@@ -944,73 +961,73 @@ ___
 
 ### ▪ **stats**: *object*
 
-*Defined in [util/stats.ts:1](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/stats.ts#L1)*
+*Defined in [src/util/stats.ts:1](https://github.com/shakiba/planck.js/blob/ae24904/src/util/stats.ts#L1)*
 
 ###  gjkCalls
 
 • **gjkCalls**: *number* = 0
 
-*Defined in [util/stats.ts:2](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/stats.ts#L2)*
+*Defined in [src/util/stats.ts:2](https://github.com/shakiba/planck.js/blob/ae24904/src/util/stats.ts#L2)*
 
 ###  gjkIters
 
 • **gjkIters**: *number* = 0
 
-*Defined in [util/stats.ts:3](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/stats.ts#L3)*
+*Defined in [src/util/stats.ts:3](https://github.com/shakiba/planck.js/blob/ae24904/src/util/stats.ts#L3)*
 
 ###  gjkMaxIters
 
 • **gjkMaxIters**: *number* = 0
 
-*Defined in [util/stats.ts:4](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/stats.ts#L4)*
+*Defined in [src/util/stats.ts:4](https://github.com/shakiba/planck.js/blob/ae24904/src/util/stats.ts#L4)*
 
 ###  toiCalls
 
 • **toiCalls**: *number* = 0
 
-*Defined in [util/stats.ts:8](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/stats.ts#L8)*
+*Defined in [src/util/stats.ts:8](https://github.com/shakiba/planck.js/blob/ae24904/src/util/stats.ts#L8)*
 
 ###  toiIters
 
 • **toiIters**: *number* = 0
 
-*Defined in [util/stats.ts:9](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/stats.ts#L9)*
+*Defined in [src/util/stats.ts:9](https://github.com/shakiba/planck.js/blob/ae24904/src/util/stats.ts#L9)*
 
 ###  toiMaxIters
 
 • **toiMaxIters**: *number* = 0
 
-*Defined in [util/stats.ts:10](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/stats.ts#L10)*
+*Defined in [src/util/stats.ts:10](https://github.com/shakiba/planck.js/blob/ae24904/src/util/stats.ts#L10)*
 
 ###  toiMaxRootIters
 
 • **toiMaxRootIters**: *number* = 0
 
-*Defined in [util/stats.ts:12](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/stats.ts#L12)*
+*Defined in [src/util/stats.ts:12](https://github.com/shakiba/planck.js/blob/ae24904/src/util/stats.ts#L12)*
 
 ###  toiMaxTime
 
 • **toiMaxTime**: *number* = 0
 
-*Defined in [util/stats.ts:7](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/stats.ts#L7)*
+*Defined in [src/util/stats.ts:7](https://github.com/shakiba/planck.js/blob/ae24904/src/util/stats.ts#L7)*
 
 ###  toiRootIters
 
 • **toiRootIters**: *number* = 0
 
-*Defined in [util/stats.ts:11](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/stats.ts#L11)*
+*Defined in [src/util/stats.ts:11](https://github.com/shakiba/planck.js/blob/ae24904/src/util/stats.ts#L11)*
 
 ###  toiTime
 
 • **toiTime**: *number* = 0
 
-*Defined in [util/stats.ts:6](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/stats.ts#L6)*
+*Defined in [src/util/stats.ts:6](https://github.com/shakiba/planck.js/blob/ae24904/src/util/stats.ts#L6)*
 
 ###  toString
 
 ▸ **toString**(`newline?`: string): *string*
 
-*Defined in [util/stats.ts:14](https://github.com/shakiba/planck.js/blob/5b96d95/src/util/stats.ts#L14)*
+*Defined in [src/util/stats.ts:14](https://github.com/shakiba/planck.js/blob/ae24904/src/util/stats.ts#L14)*
 
 **Parameters:**
 

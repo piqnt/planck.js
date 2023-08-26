@@ -53,7 +53,7 @@ contact normals.
 
 \+ **new EdgeShape**(`v1?`: [Vec2Value](../interfaces/vec2value.md), `v2?`: [Vec2Value](../interfaces/vec2value.md)): *[EdgeShape](edgeshape.md)*
 
-*Defined in [collision/shape/EdgeShape.ts:62](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L62)*
+*Defined in [src/collision/shape/EdgeShape.ts:62](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L62)*
 
 **Parameters:**
 
@@ -70,7 +70,7 @@ Name | Type |
 
 • **m_hasVertex0**: *boolean*
 
-*Defined in [collision/shape/EdgeShape.ts:61](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L61)*
+*Defined in [src/collision/shape/EdgeShape.ts:61](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L61)*
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 • **m_hasVertex3**: *boolean*
 
-*Defined in [collision/shape/EdgeShape.ts:62](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L62)*
+*Defined in [src/collision/shape/EdgeShape.ts:62](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L62)*
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 *Overrides [Shape](shape.md).[m_radius](shape.md#m_radius)*
 
-*Defined in [collision/shape/EdgeShape.ts:51](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L51)*
+*Defined in [src/collision/shape/EdgeShape.ts:51](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L51)*
 
 ___
 
@@ -98,39 +98,39 @@ ___
 
 *Overrides [Shape](shape.md).[m_type](shape.md#m_type)*
 
-*Defined in [collision/shape/EdgeShape.ts:49](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L49)*
+*Defined in [src/collision/shape/EdgeShape.ts:49](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L49)*
 
 ___
 
 ###  m_vertex0
 
-• **m_vertex0**: *[Vec2](vec2.md)*
+• **m_vertex0**: *Vec2*
 
-*Defined in [collision/shape/EdgeShape.ts:59](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L59)*
+*Defined in [src/collision/shape/EdgeShape.ts:59](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L59)*
 
 ___
 
 ###  m_vertex1
 
-• **m_vertex1**: *[Vec2](vec2.md)*
+• **m_vertex1**: *Vec2*
 
-*Defined in [collision/shape/EdgeShape.ts:54](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L54)*
+*Defined in [src/collision/shape/EdgeShape.ts:54](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L54)*
 
 ___
 
 ###  m_vertex2
 
-• **m_vertex2**: *[Vec2](vec2.md)*
+• **m_vertex2**: *Vec2*
 
-*Defined in [collision/shape/EdgeShape.ts:55](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L55)*
+*Defined in [src/collision/shape/EdgeShape.ts:55](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L55)*
 
 ___
 
 ###  m_vertex3
 
-• **m_vertex3**: *[Vec2](vec2.md)*
+• **m_vertex3**: *Vec2*
 
-*Defined in [collision/shape/EdgeShape.ts:60](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L60)*
+*Defined in [src/collision/shape/EdgeShape.ts:60](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L60)*
 
 ___
 
@@ -138,15 +138,15 @@ ___
 
 ▪ **TYPE**: *"edge"* = 'edge' as const
 
-*Defined in [collision/shape/EdgeShape.ts:48](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L48)*
+*Defined in [src/collision/shape/EdgeShape.ts:48](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L48)*
 
 ## Methods
 
 ###  _set
 
-▸ **_set**(`v1`: [Vec2](vec2.md), `v2`: [Vec2](vec2.md)): *[EdgeShape](edgeshape.md)*
+▸ **_set**(`v1`: Vec2, `v2`: Vec2): *[EdgeShape](edgeshape.md)*
 
-*Defined in [collision/shape/EdgeShape.ts:179](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L179)*
+*Defined in [src/collision/shape/EdgeShape.ts:179](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L179)*
 
 Set this as an isolated edge.
 
@@ -154,8 +154,8 @@ Set this as an isolated edge.
 
 Name | Type |
 ------ | ------ |
-`v1` | [Vec2](vec2.md) |
-`v2` | [Vec2](vec2.md) |
+`v1` | Vec2 |
+`v2` | Vec2 |
 
 **Returns:** *[EdgeShape](edgeshape.md)*
 
@@ -167,7 +167,7 @@ ___
 
 *Overrides [Shape](shape.md).[computeAABB](shape.md#abstract-computeaabb)*
 
-*Defined in [collision/shape/EdgeShape.ts:297](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L297)*
+*Defined in [src/collision/shape/EdgeShape.ts:297](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L297)*
 
 Given a transform, compute the associated axis aligned bounding box for a
 child shape.
@@ -190,7 +190,7 @@ ___
 
 *Overrides [Shape](shape.md).[computeDistanceProxy](shape.md#abstract-computedistanceproxy)*
 
-*Defined in [collision/shape/EdgeShape.ts:318](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L318)*
+*Defined in [src/collision/shape/EdgeShape.ts:318](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L318)*
 
 **Parameters:**
 
@@ -208,7 +208,7 @@ ___
 
 *Overrides [Shape](shape.md).[computeMass](shape.md#abstract-computemass)*
 
-*Defined in [collision/shape/EdgeShape.ts:312](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L312)*
+*Defined in [src/collision/shape/EdgeShape.ts:312](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L312)*
 
 Compute the mass properties of this shape using its dimensions and density.
 The inertia tensor is computed about the local origin.
@@ -230,7 +230,7 @@ ___
 
 *Overrides [Shape](shape.md).[getChildCount](shape.md#abstract-getchildcount)*
 
-*Defined in [collision/shape/EdgeShape.ts:208](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L208)*
+*Defined in [src/collision/shape/EdgeShape.ts:208](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L208)*
 
 Get the number of child primitives.
 
@@ -240,25 +240,25 @@ ___
 
 ###  getNextVertex
 
-▸ **getNextVertex**(): *[Vec2](vec2.md)*
+▸ **getNextVertex**(): *Vec2*
 
-*Defined in [collision/shape/EdgeShape.ts:146](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L146)*
+*Defined in [src/collision/shape/EdgeShape.ts:146](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L146)*
 
 Optional next vertex, used for smooth collision.
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ###  getPrevVertex
 
-▸ **getPrevVertex**(): *[Vec2](vec2.md)*
+▸ **getPrevVertex**(): *Vec2*
 
-*Defined in [collision/shape/EdgeShape.ts:172](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L172)*
+*Defined in [src/collision/shape/EdgeShape.ts:172](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L172)*
 
 Optional prev vertex, used for smooth collision.
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
@@ -268,7 +268,7 @@ ___
 
 *Overrides [Shape](shape.md).[getRadius](shape.md#abstract-getradius)*
 
-*Defined in [collision/shape/EdgeShape.ts:116](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L116)*
+*Defined in [src/collision/shape/EdgeShape.ts:116](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L116)*
 
 **Returns:** *number*
 
@@ -280,7 +280,7 @@ ___
 
 *Overrides [Shape](shape.md).[getType](shape.md#abstract-gettype)*
 
-*Defined in [collision/shape/EdgeShape.ts:120](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L120)*
+*Defined in [src/collision/shape/EdgeShape.ts:120](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L120)*
 
 **Returns:** *"edge"*
 
@@ -292,7 +292,7 @@ ___
 
 *Overrides [Shape](shape.md).[rayCast](shape.md#abstract-raycast)*
 
-*Defined in [collision/shape/EdgeShape.ts:231](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L231)*
+*Defined in [src/collision/shape/EdgeShape.ts:231](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L231)*
 
 Cast a ray against a child shape.
 
@@ -311,9 +311,9 @@ ___
 
 ###  setNextVertex
 
-▸ **setNextVertex**(`v?`: [Vec2](vec2.md)): *[EdgeShape](edgeshape.md)*
+▸ **setNextVertex**(`v?`: Vec2): *[EdgeShape](edgeshape.md)*
 
-*Defined in [collision/shape/EdgeShape.ts:132](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L132)*
+*Defined in [src/collision/shape/EdgeShape.ts:132](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L132)*
 
 Optional next vertex, used for smooth collision.
 
@@ -321,7 +321,7 @@ Optional next vertex, used for smooth collision.
 
 Name | Type |
 ------ | ------ |
-`v?` | [Vec2](vec2.md) |
+`v?` | Vec2 |
 
 **Returns:** *[EdgeShape](edgeshape.md)*
 
@@ -329,9 +329,9 @@ ___
 
 ###  setPrevVertex
 
-▸ **setPrevVertex**(`v?`: [Vec2](vec2.md)): *[EdgeShape](edgeshape.md)*
+▸ **setPrevVertex**(`v?`: Vec2): *[EdgeShape](edgeshape.md)*
 
-*Defined in [collision/shape/EdgeShape.ts:158](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L158)*
+*Defined in [src/collision/shape/EdgeShape.ts:158](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L158)*
 
 Optional prev vertex, used for smooth collision.
 
@@ -339,7 +339,7 @@ Optional prev vertex, used for smooth collision.
 
 Name | Type |
 ------ | ------ |
-`v?` | [Vec2](vec2.md) |
+`v?` | Vec2 |
 
 **Returns:** *[EdgeShape](edgeshape.md)*
 
@@ -351,7 +351,7 @@ ___
 
 *Overrides [Shape](shape.md).[testPoint](shape.md#abstract-testpoint)*
 
-*Defined in [collision/shape/EdgeShape.ts:219](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/shape/EdgeShape.ts#L219)*
+*Defined in [src/collision/shape/EdgeShape.ts:219](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/shape/EdgeShape.ts#L219)*
 
 Test a point for containment in this shape. This only works for convex
 shapes.
@@ -373,7 +373,7 @@ ___
 
 *Inherited from [Shape](shape.md).[isValid](shape.md#static-isvalid)*
 
-*Defined in [collision/Shape.ts:50](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Shape.ts#L50)*
+*Defined in [src/collision/Shape.ts:50](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Shape.ts#L50)*
 
 **Parameters:**
 

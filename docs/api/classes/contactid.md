@@ -33,7 +33,7 @@ ContactFeature: The features that intersect to form the contact point.
 
 • **indexA**: *number* = -1
 
-*Defined in [collision/Manifold.ts:278](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Manifold.ts#L278)*
+*Defined in [src/collision/Manifold.ts:278](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L278)*
 
 ContactFeature index on shapeA
 
@@ -43,7 +43,7 @@ ___
 
 • **indexB**: *number* = -1
 
-*Defined in [collision/Manifold.ts:281](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Manifold.ts#L281)*
+*Defined in [src/collision/Manifold.ts:281](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L281)*
 
 ContactFeature index on shapeB
 
@@ -53,7 +53,7 @@ ___
 
 • **key**: *number* = -1
 
-*Defined in [collision/Manifold.ts:275](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Manifold.ts#L275)*
+*Defined in [src/collision/Manifold.ts:275](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L275)*
 
 Used to quickly compare contact ids.
 
@@ -63,7 +63,7 @@ ___
 
 • **typeA**: *[ContactFeatureType](../enums/contactfeaturetype.md)* = ContactFeatureType.e_unset
 
-*Defined in [collision/Manifold.ts:284](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Manifold.ts#L284)*
+*Defined in [src/collision/Manifold.ts:284](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L284)*
 
 ContactFeature type on shapeA
 
@@ -73,7 +73,7 @@ ___
 
 • **typeB**: *[ContactFeatureType](../enums/contactfeaturetype.md)* = ContactFeatureType.e_unset
 
-*Defined in [collision/Manifold.ts:287](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Manifold.ts#L287)*
+*Defined in [src/collision/Manifold.ts:287](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L287)*
 
 ContactFeature type on shapeB
 
@@ -83,7 +83,7 @@ ContactFeature type on shapeB
 
 ▸ **recycle**(): *void*
 
-*Defined in [collision/Manifold.ts:317](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Manifold.ts#L317)*
+*Defined in [src/collision/Manifold.ts:317](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L317)*
 
 **Returns:** *void*
 
@@ -93,7 +93,7 @@ ___
 
 ▸ **set**(`that`: [ContactID](contactid.md)): *void*
 
-*Defined in [collision/Manifold.ts:297](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Manifold.ts#L297)*
+*Defined in [src/collision/Manifold.ts:297](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L297)*
 
 **Parameters:**
 
@@ -109,7 +109,7 @@ ___
 
 ▸ **setFeatures**(`indexA`: number, `typeA`: [ContactFeatureType](../enums/contactfeaturetype.md), `indexB`: number, `typeB`: [ContactFeatureType](../enums/contactfeaturetype.md)): *void*
 
-*Defined in [collision/Manifold.ts:289](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Manifold.ts#L289)*
+*Defined in [src/collision/Manifold.ts:289](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L289)*
 
 **Parameters:**
 
@@ -128,6 +128,6 @@ ___
 
 ▸ **swapFeatures**(): *void*
 
-*Defined in [collision/Manifold.ts:305](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Manifold.ts#L305)*
+*Defined in [src/collision/Manifold.ts:305](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L305)*
 
 **Returns:** *void*

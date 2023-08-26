@@ -27,7 +27,7 @@ Output for Distance.
 
 • **distance**: *number* = 0
 
-*Defined in [collision/Distance.ts:82](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L82)*
+*Defined in [src/collision/Distance.ts:82](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L82)*
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 • **iterations**: *number* = 0
 
-*Defined in [collision/Distance.ts:84](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L84)*
+*Defined in [src/collision/Distance.ts:84](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L84)*
 
 iterations number of GJK iterations used
 
@@ -45,7 +45,7 @@ ___
 
 • **pointA**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
-*Defined in [collision/Distance.ts:79](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L79)*
+*Defined in [src/collision/Distance.ts:79](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L79)*
 
 closest point on shapeA
 
@@ -55,7 +55,7 @@ ___
 
 • **pointB**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
-*Defined in [collision/Distance.ts:81](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L81)*
+*Defined in [src/collision/Distance.ts:81](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L81)*
 
 closest point on shapeB
 
@@ -65,6 +65,6 @@ closest point on shapeB
 
 ▸ **recycle**(): *void*
 
-*Defined in [collision/Distance.ts:85](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L85)*
+*Defined in [src/collision/Distance.ts:85](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L85)*
 
 **Returns:** *void*

@@ -35,7 +35,7 @@ A 3-by-3 matrix. Stored in column-major order.
 
 • **ex**: *[Vec3](vec3.md)*
 
-*Defined in [common/Mat33.ts:36](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Mat33.ts#L36)*
+*Defined in [src/common/Mat33.ts:36](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Mat33.ts#L36)*
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 • **ey**: *[Vec3](vec3.md)*
 
-*Defined in [common/Mat33.ts:37](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Mat33.ts#L37)*
+*Defined in [src/common/Mat33.ts:37](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Mat33.ts#L37)*
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 • **ez**: *[Vec3](vec3.md)*
 
-*Defined in [common/Mat33.ts:38](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Mat33.ts#L38)*
+*Defined in [src/common/Mat33.ts:38](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Mat33.ts#L38)*
 
 ## Methods
 
@@ -59,7 +59,7 @@ ___
 
 ▸ **getInverse22**(`M`: [Mat33](mat33.md)): *void*
 
-*Defined in [common/Mat33.ts:139](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Mat33.ts#L139)*
+*Defined in [src/common/Mat33.ts:139](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Mat33.ts#L139)*
 
 Get the inverse of this matrix as a 2-by-2. Returns the zero matrix if
 singular.
@@ -78,7 +78,7 @@ ___
 
 ▸ **getSymInverse33**(`M`: [Mat33](mat33.md)): *void*
 
-*Defined in [common/Mat33.ts:163](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Mat33.ts#L163)*
+*Defined in [src/common/Mat33.ts:163](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Mat33.ts#L163)*
 
 Get the symmetric inverse of this matrix as a 3-by-3. Returns the zero matrix
 if singular.
@@ -97,7 +97,7 @@ ___
 
 ▸ **setZero**(): *[Mat33](mat33.md)*
 
-*Defined in [common/Mat33.ts:74](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Mat33.ts#L74)*
+*Defined in [src/common/Mat33.ts:74](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Mat33.ts#L74)*
 
 Set this matrix to all zeros.
 
@@ -107,9 +107,9 @@ ___
 
 ###  solve22
 
-▸ **solve22**(`v`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **solve22**(`v`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Mat33.ts:120](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Mat33.ts#L120)*
+*Defined in [src/common/Mat33.ts:120](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Mat33.ts#L120)*
 
 Solve A * x = b, where b is a column vector. This is more efficient than
 computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
@@ -121,7 +121,7 @@ Name | Type |
 ------ | ------ |
 `v` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 ▸ **solve33**(`v`: [Vec3Value](../interfaces/vec3value.md)): *[Vec3](vec3.md)*
 
-*Defined in [common/Mat33.ts:85](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Mat33.ts#L85)*
+*Defined in [src/common/Mat33.ts:85](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Mat33.ts#L85)*
 
 Solve A * x = b, where b is a column vector. This is more efficient than
 computing the inverse in one-shot cases.
@@ -148,7 +148,7 @@ ___
 
 ▸ **add**(`a`: [Mat33](mat33.md), `b`: [Mat33](mat33.md)): *[Mat33](mat33.md)*
 
-*Defined in [common/Mat33.ts:230](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Mat33.ts#L230)*
+*Defined in [src/common/Mat33.ts:230](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Mat33.ts#L230)*
 
 **Parameters:**
 
@@ -165,7 +165,7 @@ ___
 
 ▸ **assert**(`o`: any): *void*
 
-*Defined in [common/Mat33.ts:67](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Mat33.ts#L67)*
+*Defined in [src/common/Mat33.ts:67](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Mat33.ts#L67)*
 
 **Parameters:**
 
@@ -181,7 +181,7 @@ ___
 
 ▸ **isValid**(`obj`: any): *boolean*
 
-*Defined in [common/Mat33.ts:60](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Mat33.ts#L60)*
+*Defined in [src/common/Mat33.ts:60](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Mat33.ts#L60)*
 
 **Parameters:**
 
@@ -195,9 +195,9 @@ ___
 
 ### `Static` mulVec2
 
-▸ **mulVec2**(`a`: [Mat33](mat33.md), `b`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **mulVec2**(`a`: [Mat33](mat33.md), `b`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Mat33.ts:222](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Mat33.ts#L222)*
+*Defined in [src/common/Mat33.ts:222](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Mat33.ts#L222)*
 
 **Parameters:**
 
@@ -206,7 +206,7 @@ Name | Type |
 `a` | [Mat33](mat33.md) |
 `b` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
@@ -214,7 +214,7 @@ ___
 
 ▸ **mulVec3**(`a`: [Mat33](mat33.md), `b`: [Vec3](vec3.md)): *[Vec3](vec3.md)*
 
-*Defined in [common/Mat33.ts:213](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Mat33.ts#L213)*
+*Defined in [src/common/Mat33.ts:213](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Mat33.ts#L213)*
 
 **Parameters:**
 

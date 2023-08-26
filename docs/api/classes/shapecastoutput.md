@@ -23,7 +23,7 @@ Output results for b2ShapeCast
 
 • **iterations**: *number* = 0
 
-*Defined in [collision/Distance.ts:780](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L780)*
+*Defined in [src/collision/Distance.ts:780](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L780)*
 
 ___
 
@@ -31,20 +31,20 @@ ___
 
 • **lambda**: *number* = 1
 
-*Defined in [collision/Distance.ts:779](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L779)*
+*Defined in [src/collision/Distance.ts:779](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L779)*
 
 ___
 
 ###  normal
 
-• **normal**: *[Vec2](vec2.md)* = Vec2.zero()
+• **normal**: *Vec2* = Vec2.zero()
 
-*Defined in [collision/Distance.ts:778](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L778)*
+*Defined in [src/collision/Distance.ts:778](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L778)*
 
 ___
 
 ###  point
 
-• **point**: *[Vec2](vec2.md)* = Vec2.zero()
+• **point**: *Vec2* = Vec2.zero()
 
-*Defined in [collision/Distance.ts:777](https://github.com/shakiba/planck.js/blob/5b96d95/src/collision/Distance.ts#L777)*
+*Defined in [src/collision/Distance.ts:777](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L777)*

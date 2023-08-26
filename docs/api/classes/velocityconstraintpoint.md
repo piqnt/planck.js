@@ -28,7 +28,7 @@
 
 • **normalImpulse**: *number* = 0
 
-*Defined in [dynamics/Contact.ts:119](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Contact.ts#L119)*
+*Defined in [src/dynamics/Contact.ts:119](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L119)*
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 • **normalMass**: *number* = 0
 
-*Defined in [dynamics/Contact.ts:121](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Contact.ts#L121)*
+*Defined in [src/dynamics/Contact.ts:121](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L121)*
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 • **rA**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
-*Defined in [dynamics/Contact.ts:117](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Contact.ts#L117)*
+*Defined in [src/dynamics/Contact.ts:117](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L117)*
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 • **rB**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
-*Defined in [dynamics/Contact.ts:118](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Contact.ts#L118)*
+*Defined in [src/dynamics/Contact.ts:118](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L118)*
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 • **tangentImpulse**: *number* = 0
 
-*Defined in [dynamics/Contact.ts:120](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Contact.ts#L120)*
+*Defined in [src/dynamics/Contact.ts:120](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L120)*
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 • **tangentMass**: *number* = 0
 
-*Defined in [dynamics/Contact.ts:122](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Contact.ts#L122)*
+*Defined in [src/dynamics/Contact.ts:122](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L122)*
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 • **velocityBias**: *number* = 0
 
-*Defined in [dynamics/Contact.ts:123](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Contact.ts#L123)*
+*Defined in [src/dynamics/Contact.ts:123](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L123)*
 
 ## Methods
 
@@ -84,6 +84,6 @@ ___
 
 ▸ **recycle**(): *void*
 
-*Defined in [dynamics/Contact.ts:125](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Contact.ts#L125)*
+*Defined in [src/dynamics/Contact.ts:125](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L125)*
 
 **Returns:** *void*

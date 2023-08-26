@@ -59,7 +59,7 @@ the ground.
 
 *Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [dynamics/joint/MotorJoint.ts:105](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L105)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:105](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L105)*
 
 **Parameters:**
 
@@ -73,7 +73,7 @@ Name | Type |
 
 *Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [dynamics/joint/MotorJoint.ts:107](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L107)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:107](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L107)*
 
 **Parameters:**
 
@@ -91,35 +91,35 @@ Name | Type |
 
 ▪ **TYPE**: *"motor-joint"* = 'motor-joint' as const
 
-*Defined in [dynamics/joint/MotorJoint.ts:82](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L82)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:82](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L82)*
 
 ## Methods
 
 ###  getAnchorA
 
-▸ **getAnchorA**(): *[Vec2](vec2.md)*
+▸ **getAnchorA**(): *Vec2*
 
 *Overrides [Joint](joint.md).[getAnchorA](joint.md#abstract-getanchora)*
 
-*Defined in [dynamics/joint/MotorJoint.ts:257](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L257)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:257](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L257)*
 
 Get the anchor point on bodyA in world coordinates.
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ###  getAnchorB
 
-▸ **getAnchorB**(): *[Vec2](vec2.md)*
+▸ **getAnchorB**(): *Vec2*
 
 *Overrides [Joint](joint.md).[getAnchorB](joint.md#abstract-getanchorb)*
 
-*Defined in [dynamics/joint/MotorJoint.ts:264](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L264)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:264](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L264)*
 
 Get the anchor point on bodyB in world coordinates.
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 ▸ **getAngularOffset**(): *number*
 
-*Defined in [dynamics/joint/MotorJoint.ts:250](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L250)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:250](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L250)*
 
 **Returns:** *number*
 
@@ -139,7 +139,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getBodyA](joint.md#getbodya)*
 
-*Defined in [dynamics/Joint.ts:145](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L145)*
+*Defined in [src/dynamics/Joint.ts:145](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L145)*
 
 Get the first body attached to this joint.
 
@@ -153,7 +153,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getBodyB](joint.md#getbodyb)*
 
-*Defined in [dynamics/Joint.ts:152](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L152)*
+*Defined in [src/dynamics/Joint.ts:152](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L152)*
 
 Get the second body attached to this joint.
 
@@ -167,7 +167,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getCollideConnected](joint.md#getcollideconnected)*
 
-*Defined in [dynamics/Joint.ts:176](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L176)*
+*Defined in [src/dynamics/Joint.ts:176](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L176)*
 
 Get collide connected. Note: modifying the collide connect flag won't work
 correctly because the flag is only checked when fixture AABBs begin to
@@ -181,7 +181,7 @@ ___
 
 ▸ **getCorrectionFactor**(): *number*
 
-*Defined in [dynamics/joint/MotorJoint.ts:219](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L219)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:219](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L219)*
 
 Get the position correction factor in the range [0,1].
 
@@ -191,11 +191,11 @@ ___
 
 ###  getLinearOffset
 
-▸ **getLinearOffset**(): *[Vec2](vec2.md)*
+▸ **getLinearOffset**(): *Vec2*
 
-*Defined in [dynamics/joint/MotorJoint.ts:235](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L235)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:235](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L235)*
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
@@ -203,7 +203,7 @@ ___
 
 ▸ **getMaxForce**(): *number*
 
-*Defined in [dynamics/joint/MotorJoint.ts:189](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L189)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:189](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L189)*
 
 Get the maximum friction force in N.
 
@@ -215,7 +215,7 @@ ___
 
 ▸ **getMaxTorque**(): *number*
 
-*Defined in [dynamics/joint/MotorJoint.ts:204](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L204)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:204](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L204)*
 
 Get the maximum friction torque in N*m.
 
@@ -229,7 +229,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getNext](joint.md#getnext)*
 
-*Defined in [dynamics/Joint.ts:159](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L159)*
+*Defined in [src/dynamics/Joint.ts:159](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L159)*
 
 Get the next joint the world joint list.
 
@@ -239,11 +239,11 @@ ___
 
 ###  getReactionForce
 
-▸ **getReactionForce**(`inv_dt`: number): *[Vec2](vec2.md)*
+▸ **getReactionForce**(`inv_dt`: number): *Vec2*
 
 *Overrides [Joint](joint.md).[getReactionForce](joint.md#abstract-getreactionforce)*
 
-*Defined in [dynamics/joint/MotorJoint.ts:271](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L271)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:271](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L271)*
 
 Get the reaction force on bodyB at the joint anchor in Newtons.
 
@@ -253,7 +253,7 @@ Name | Type |
 ------ | ------ |
 `inv_dt` | number |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
@@ -263,7 +263,7 @@ ___
 
 *Overrides [Joint](joint.md).[getReactionTorque](joint.md#abstract-getreactiontorque)*
 
-*Defined in [dynamics/joint/MotorJoint.ts:278](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L278)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:278](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L278)*
 
 Get the reaction torque on bodyB in N*m.
 
@@ -283,7 +283,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getType](joint.md#gettype)*
 
-*Defined in [dynamics/Joint.ts:138](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L138)*
+*Defined in [src/dynamics/Joint.ts:138](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L138)*
 
 Get the type of the concrete joint.
 
@@ -297,7 +297,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getUserData](joint.md#getuserdata)*
 
-*Defined in [dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L163)*
+*Defined in [src/dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L163)*
 
 **Returns:** *unknown*
 
@@ -309,7 +309,7 @@ ___
 
 *Overrides [Joint](joint.md).[initVelocityConstraints](joint.md#abstract-initvelocityconstraints)*
 
-*Defined in [dynamics/joint/MotorJoint.ts:282](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L282)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:282](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L282)*
 
 **Parameters:**
 
@@ -327,7 +327,7 @@ ___
 
 *Inherited from [Joint](joint.md).[isActive](joint.md#isactive)*
 
-*Defined in [dynamics/Joint.ts:131](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L131)*
+*Defined in [src/dynamics/Joint.ts:131](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L131)*
 
 Short-cut function to determine if either body is inactive.
 
@@ -339,7 +339,7 @@ ___
 
 ▸ **setAngularOffset**(`angularOffset`: number): *void*
 
-*Defined in [dynamics/joint/MotorJoint.ts:242](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L242)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:242](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L242)*
 
 Set/get the target angular offset, in radians.
 
@@ -357,7 +357,7 @@ ___
 
 ▸ **setCorrectionFactor**(`factor`: number): *void*
 
-*Defined in [dynamics/joint/MotorJoint.ts:211](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L211)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:211](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L211)*
 
 Set the position correction factor in the range [0,1].
 
@@ -373,9 +373,9 @@ ___
 
 ###  setLinearOffset
 
-▸ **setLinearOffset**(`linearOffset`: [Vec2](vec2.md)): *void*
+▸ **setLinearOffset**(`linearOffset`: Vec2): *void*
 
-*Defined in [dynamics/joint/MotorJoint.ts:226](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L226)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:226](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L226)*
 
 Set/get the target linear offset, in frame A, in meters.
 
@@ -383,7 +383,7 @@ Set/get the target linear offset, in frame A, in meters.
 
 Name | Type |
 ------ | ------ |
-`linearOffset` | [Vec2](vec2.md) |
+`linearOffset` | Vec2 |
 
 **Returns:** *void*
 
@@ -393,7 +393,7 @@ ___
 
 ▸ **setMaxForce**(`force`: number): *void*
 
-*Defined in [dynamics/joint/MotorJoint.ts:181](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L181)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:181](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L181)*
 
 Set the maximum friction force in N.
 
@@ -411,7 +411,7 @@ ___
 
 ▸ **setMaxTorque**(`torque`: number): *void*
 
-*Defined in [dynamics/joint/MotorJoint.ts:196](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L196)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:196](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L196)*
 
 Set the maximum friction torque in N*m.
 
@@ -431,7 +431,7 @@ ___
 
 *Inherited from [Joint](joint.md).[setUserData](joint.md#setuserdata)*
 
-*Defined in [dynamics/Joint.ts:167](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L167)*
+*Defined in [src/dynamics/Joint.ts:167](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L167)*
 
 **Parameters:**
 
@@ -445,11 +445,11 @@ ___
 
 ###  shiftOrigin
 
-▸ **shiftOrigin**(`newOrigin`: [Vec2](vec2.md)): *void*
+▸ **shiftOrigin**(`newOrigin`: Vec2): *void*
 
 *Inherited from [Joint](joint.md).[shiftOrigin](joint.md#shiftorigin)*
 
-*Defined in [dynamics/Joint.ts:203](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L203)*
+*Defined in [src/dynamics/Joint.ts:203](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L203)*
 
 Shift the origin for any points stored in world coordinates.
 
@@ -457,7 +457,7 @@ Shift the origin for any points stored in world coordinates.
 
 Name | Type |
 ------ | ------ |
-`newOrigin` | [Vec2](vec2.md) |
+`newOrigin` | Vec2 |
 
 **Returns:** *void*
 
@@ -469,7 +469,7 @@ ___
 
 *Overrides [Joint](joint.md).[solvePositionConstraints](joint.md#abstract-solvepositionconstraints)*
 
-*Defined in [dynamics/joint/MotorJoint.ts:426](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L426)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:426](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L426)*
 
 This returns true if the position errors are within tolerance.
 
@@ -489,7 +489,7 @@ ___
 
 *Overrides [Joint](joint.md).[solveVelocityConstraints](joint.md#abstract-solvevelocityconstraints)*
 
-*Defined in [dynamics/joint/MotorJoint.ts:364](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MotorJoint.ts#L364)*
+*Defined in [src/dynamics/joint/MotorJoint.ts:364](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MotorJoint.ts#L364)*
 
 **Parameters:**
 

@@ -73,7 +73,7 @@
 
 \+ **new Vec2**(`x`: number, `y`: number): *[Vec2](vec2.md)*
 
-*Defined in [common/Vec2.ts:43](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L43)*
+*Defined in [src/common/Vec2.ts:43](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L43)*
 
 **Parameters:**
 
@@ -86,7 +86,7 @@ Name | Type |
 
 \+ **new Vec2**(`obj`: object): *[Vec2](vec2.md)*
 
-*Defined in [common/Vec2.ts:45](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L45)*
+*Defined in [src/common/Vec2.ts:45](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L45)*
 
 **Parameters:**
 
@@ -101,7 +101,7 @@ Name | Type |
 
 \+ **new Vec2**(): *[Vec2](vec2.md)*
 
-*Defined in [common/Vec2.ts:46](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L46)*
+*Defined in [src/common/Vec2.ts:46](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L46)*
 
 **Returns:** *[Vec2](vec2.md)*
 
@@ -111,7 +111,7 @@ Name | Type |
 
 • **x**: *number*
 
-*Defined in [common/Vec2.ts:42](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L42)*
+*Defined in [src/common/Vec2.ts:42](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L42)*
 
 ___
 
@@ -119,15 +119,15 @@ ___
 
 • **y**: *number*
 
-*Defined in [common/Vec2.ts:43](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L43)*
+*Defined in [src/common/Vec2.ts:43](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L43)*
 
 ## Methods
 
 ###  add
 
-▸ **add**(`w`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **add**(`w`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:227](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L227)*
+*Defined in [src/common/Vec2.ts:227](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L227)*
 
 Add a vector to this vector.
 
@@ -137,7 +137,7 @@ Name | Type |
 ------ | ------ |
 `w` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 this
 
@@ -145,9 +145,9 @@ ___
 
 ###  addCombine
 
-▸ **addCombine**(`a`: number, `v`: [Vec2Value](../interfaces/vec2value.md), `b`: number, `w`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **addCombine**(`a`: number, `v`: [Vec2Value](../interfaces/vec2value.md), `b`: number, `w`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:246](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L246)*
+*Defined in [src/common/Vec2.ts:246](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L246)*
 
 Add linear combination of v and w: `a * v + b * w`
 
@@ -160,15 +160,15 @@ Name | Type |
 `b` | number |
 `w` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ###  addMul
 
-▸ **addMul**(`a`: number, `v`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **addMul**(`a`: number, `v`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:261](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L261)*
+*Defined in [src/common/Vec2.ts:261](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L261)*
 
 **Parameters:**
 
@@ -177,15 +177,15 @@ Name | Type |
 `a` | number |
 `v` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ###  clamp
 
-▸ **clamp**(`max`: number): *[Vec2](vec2.md)*
+▸ **clamp**(`max`: number): *Vec2*
 
-*Defined in [common/Vec2.ts:592](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L592)*
+*Defined in [src/common/Vec2.ts:592](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L592)*
 
 **Parameters:**
 
@@ -193,17 +193,17 @@ Name | Type |
 ------ | ------ |
 `max` | number |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ###  clone
 
-▸ **clone**(): *[Vec2](vec2.md)*
+▸ **clone**(): *Vec2*
 
-*Defined in [common/Vec2.ts:121](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L121)*
+*Defined in [src/common/Vec2.ts:121](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L121)*
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
@@ -211,7 +211,7 @@ ___
 
 ▸ **length**(): *number*
 
-*Defined in [common/Vec2.ts:339](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L339)*
+*Defined in [src/common/Vec2.ts:339](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L339)*
 
 Get the length of this vector (the norm).
 
@@ -225,7 +225,7 @@ ___
 
 ▸ **lengthSquared**(): *number*
 
-*Defined in [common/Vec2.ts:346](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L346)*
+*Defined in [src/common/Vec2.ts:346](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L346)*
 
 Get the length squared.
 
@@ -235,9 +235,9 @@ ___
 
 ###  mul
 
-▸ **mul**(`m`: number): *[Vec2](vec2.md)*
+▸ **mul**(`m`: number): *Vec2*
 
-*Defined in [common/Vec2.ts:327](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L327)*
+*Defined in [src/common/Vec2.ts:327](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L327)*
 
 Multiply this vector by a scalar.
 
@@ -247,7 +247,7 @@ Name | Type |
 ------ | ------ |
 `m` | number |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 this
 
@@ -255,11 +255,11 @@ ___
 
 ###  neg
 
-▸ **neg**(): *[Vec2](vec2.md)*
+▸ **neg**(): *Vec2*
 
-*Defined in [common/Vec2.ts:558](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L558)*
+*Defined in [src/common/Vec2.ts:558](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L558)*
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
@@ -267,7 +267,7 @@ ___
 
 ▸ **normalize**(): *number*
 
-*Defined in [common/Vec2.ts:355](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L355)*
+*Defined in [src/common/Vec2.ts:355](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L355)*
 
 Convert this vector into a unit vector.
 
@@ -279,9 +279,9 @@ ___
 
 ###  set
 
-▸ **set**(`x`: number, `y`: number): *[Vec2](vec2.md)*
+▸ **set**(`x`: number, `y`: number): *Vec2*
 
-*Defined in [common/Vec2.ts:136](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L136)*
+*Defined in [src/common/Vec2.ts:136](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L136)*
 
 Set this vector to some specified coordinates.
 
@@ -292,13 +292,13 @@ Name | Type |
 `x` | number |
 `y` | number |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 this
 
-▸ **set**(`value`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **set**(`value`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:137](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L137)*
+*Defined in [src/common/Vec2.ts:137](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L137)*
 
 Set this vector to some specified coordinates.
 
@@ -308,7 +308,7 @@ Name | Type |
 ------ | ------ |
 `value` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 this
 
@@ -316,9 +316,9 @@ ___
 
 ###  setCombine
 
-▸ **setCombine**(`a`: number, `v`: [Vec2Value](../interfaces/vec2value.md), `b`: number, `w`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **setCombine**(`a`: number, `v`: [Vec2Value](../interfaces/vec2value.md), `b`: number, `w`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:197](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L197)*
+*Defined in [src/common/Vec2.ts:197](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L197)*
 
 Set linear combination of v and w: `a * v + b * w`
 
@@ -331,15 +331,15 @@ Name | Type |
 `b` | number |
 `w` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ###  setMul
 
-▸ **setMul**(`a`: number, `v`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **setMul**(`a`: number, `v`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:211](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L211)*
+*Defined in [src/common/Vec2.ts:211](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L211)*
 
 **Parameters:**
 
@@ -348,7 +348,7 @@ Name | Type |
 `a` | number |
 `v` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
@@ -356,7 +356,7 @@ ___
 
 ▸ **setNum**(`x`: number, `y`: number): *this*
 
-*Defined in [common/Vec2.ts:163](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L163)*
+*Defined in [src/common/Vec2.ts:163](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L163)*
 
 Set this vector to some specified coordinates.
 
@@ -377,7 +377,7 @@ ___
 
 ▸ **setVec2**(`value`: [Vec2Value](../interfaces/vec2value.md)): *this*
 
-*Defined in [common/Vec2.ts:177](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L177)*
+*Defined in [src/common/Vec2.ts:177](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L177)*
 
 Set this vector to some specified coordinates.
 
@@ -395,13 +395,13 @@ ___
 
 ###  setZero
 
-▸ **setZero**(): *[Vec2](vec2.md)*
+▸ **setZero**(): *Vec2*
 
-*Defined in [common/Vec2.ts:130](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L130)*
+*Defined in [src/common/Vec2.ts:130](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L130)*
 
 Set this vector to all zeros.
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 this
 
@@ -409,9 +409,9 @@ ___
 
 ###  sub
 
-▸ **sub**(`w`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **sub**(`w`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:315](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L315)*
+*Defined in [src/common/Vec2.ts:315](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L315)*
 
 Subtract a vector from this vector
 
@@ -421,7 +421,7 @@ Name | Type |
 ------ | ------ |
 `w` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 this
 
@@ -429,9 +429,9 @@ ___
 
 ###  subCombine
 
-▸ **subCombine**(`a`: number, `v`: [Vec2Value](../interfaces/vec2value.md), `b`: number, `w`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **subCombine**(`a`: number, `v`: [Vec2Value](../interfaces/vec2value.md), `b`: number, `w`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:285](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L285)*
+*Defined in [src/common/Vec2.ts:285](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L285)*
 
 Subtract linear combination of v and w: `a * v + b * w`
 
@@ -444,15 +444,15 @@ Name | Type |
 `b` | number |
 `w` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ###  subMul
 
-▸ **subMul**(`a`: number, `v`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **subMul**(`a`: number, `v`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:299](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L299)*
+*Defined in [src/common/Vec2.ts:299](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L299)*
 
 **Parameters:**
 
@@ -461,15 +461,15 @@ Name | Type |
 `a` | number |
 `v` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ###  wSub
 
-▸ **wSub**(`a`: number, `v`: [Vec2Value](../interfaces/vec2value.md), `b?`: number, `w?`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **wSub**(`a`: number, `v`: [Vec2Value](../interfaces/vec2value.md), `b?`: number, `w?`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:275](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L275)*
+*Defined in [src/common/Vec2.ts:275](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L275)*
 
 **`deprecated`** Use subCombine or subMul
 
@@ -482,15 +482,15 @@ Name | Type |
 `b?` | number |
 `w?` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Static` abs
 
-▸ **abs**(`v`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **abs**(`v`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:569](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L569)*
+*Defined in [src/common/Vec2.ts:569](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L569)*
 
 **Parameters:**
 
@@ -498,15 +498,15 @@ Name | Type |
 ------ | ------ |
 `v` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Static` add
 
-▸ **add**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **add**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:505](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L505)*
+*Defined in [src/common/Vec2.ts:505](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L505)*
 
 **Parameters:**
 
@@ -515,15 +515,15 @@ Name | Type |
 `v` | [Vec2Value](../interfaces/vec2value.md) |
 `w` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Static` addCrossNumVec2
 
-▸ **addCrossNumVec2**(`a`: [Vec2Value](../interfaces/vec2value.md), `v`: number, `w`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **addCrossNumVec2**(`a`: [Vec2Value](../interfaces/vec2value.md), `v`: number, `w`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:499](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L499)*
+*Defined in [src/common/Vec2.ts:499](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L499)*
 
 Returns `a + (v x w)`
 
@@ -535,15 +535,15 @@ Name | Type |
 `v` | number |
 `w` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Static` addCrossVec2Num
 
-▸ **addCrossVec2Num**(`a`: [Vec2Value](../interfaces/vec2value.md), `v`: [Vec2Value](../interfaces/vec2value.md), `w`: number): *[Vec2](vec2.md)*
+▸ **addCrossVec2Num**(`a`: [Vec2Value](../interfaces/vec2value.md), `v`: [Vec2Value](../interfaces/vec2value.md), `w`: number): *Vec2*
 
-*Defined in [common/Vec2.ts:490](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L490)*
+*Defined in [src/common/Vec2.ts:490](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L490)*
 
 Returns `a + (v x w)`
 
@@ -555,7 +555,7 @@ Name | Type |
 `v` | [Vec2Value](../interfaces/vec2value.md) |
 `w` | number |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
@@ -563,7 +563,7 @@ ___
 
 ▸ **areEqual**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: [Vec2Value](../interfaces/vec2value.md)): *boolean*
 
-*Defined in [common/Vec2.ts:400](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L400)*
+*Defined in [src/common/Vec2.ts:400](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L400)*
 
 **Parameters:**
 
@@ -580,7 +580,7 @@ ___
 
 ▸ **assert**(`o`: any): *void*
 
-*Defined in [common/Vec2.ts:117](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L117)*
+*Defined in [src/common/Vec2.ts:117](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L117)*
 
 **Parameters:**
 
@@ -594,9 +594,9 @@ ___
 
 ### `Static` clamp
 
-▸ **clamp**(`v`: [Vec2Value](../interfaces/vec2value.md), `max`: number): *[Vec2](vec2.md)*
+▸ **clamp**(`v`: [Vec2Value](../interfaces/vec2value.md), `max`: number): *Vec2*
 
-*Defined in [common/Vec2.ts:602](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L602)*
+*Defined in [src/common/Vec2.ts:602](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L602)*
 
 **Parameters:**
 
@@ -605,15 +605,15 @@ Name | Type |
 `v` | [Vec2Value](../interfaces/vec2value.md) |
 `max` | number |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Static` clone
 
-▸ **clone**(`v`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **clone**(`v`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:97](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L97)*
+*Defined in [src/common/Vec2.ts:97](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L97)*
 
 **Parameters:**
 
@@ -621,34 +621,34 @@ Name | Type |
 ------ | ------ |
 `v` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Static` combine
 
-▸ **combine**(`a`: number, `v`: [Vec2](vec2.md), `b`: number, `w`: [Vec2](vec2.md)): *[Vec2](vec2.md)*
+▸ **combine**(`a`: number, `v`: Vec2, `b`: number, `w`: Vec2): *Vec2*
 
-*Defined in [common/Vec2.ts:520](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L520)*
+*Defined in [src/common/Vec2.ts:520](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L520)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `a` | number |
-`v` | [Vec2](vec2.md) |
+`v` | Vec2 |
 `b` | number |
-`w` | [Vec2](vec2.md) |
+`w` | Vec2 |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Static` crossNumVec2
 
-▸ **crossNumVec2**(`v`: number, `w`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **crossNumVec2**(`v`: number, `w`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:461](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L461)*
+*Defined in [src/common/Vec2.ts:461](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L461)*
 
 Cross product on a vector and a scalar
 
@@ -659,15 +659,15 @@ Name | Type |
 `v` | number |
 `w` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Static` crossVec2Num
 
-▸ **crossVec2Num**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: number): *[Vec2](vec2.md)*
+▸ **crossVec2Num**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: number): *Vec2*
 
-*Defined in [common/Vec2.ts:454](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L454)*
+*Defined in [src/common/Vec2.ts:454](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L454)*
 
 Cross product on a vector and a scalar
 
@@ -678,7 +678,7 @@ Name | Type |
 `v` | [Vec2Value](../interfaces/vec2value.md) |
 `w` | number |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
@@ -686,7 +686,7 @@ ___
 
 ▸ **crossVec2Vec2**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: [Vec2Value](../interfaces/vec2value.md)): *number*
 
-*Defined in [common/Vec2.ts:447](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L447)*
+*Defined in [src/common/Vec2.ts:447](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L447)*
 
 Cross product on two vectors
 
@@ -705,7 +705,7 @@ ___
 
 ▸ **distance**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: [Vec2Value](../interfaces/vec2value.md)): *number*
 
-*Defined in [common/Vec2.ts:384](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L384)*
+*Defined in [src/common/Vec2.ts:384](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L384)*
 
 **Parameters:**
 
@@ -722,7 +722,7 @@ ___
 
 ▸ **distanceSquared**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: [Vec2Value](../interfaces/vec2value.md)): *number*
 
-*Defined in [common/Vec2.ts:392](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L392)*
+*Defined in [src/common/Vec2.ts:392](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L392)*
 
 **Parameters:**
 
@@ -739,7 +739,7 @@ ___
 
 ▸ **dot**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: [Vec2Value](../interfaces/vec2value.md)): *number*
 
-*Defined in [common/Vec2.ts:415](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L415)*
+*Defined in [src/common/Vec2.ts:415](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L415)*
 
 Dot product on two vectors
 
@@ -758,7 +758,7 @@ ___
 
 ▸ **isValid**(`obj`: any): *boolean*
 
-*Defined in [common/Vec2.ts:110](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L110)*
+*Defined in [src/common/Vec2.ts:110](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L110)*
 
 Does this vector contain finite coordinates?
 
@@ -776,7 +776,7 @@ ___
 
 ▸ **lengthOf**(`v`: [Vec2Value](../interfaces/vec2value.md)): *number*
 
-*Defined in [common/Vec2.ts:371](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L371)*
+*Defined in [src/common/Vec2.ts:371](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L371)*
 
 Get the length of this vector (the norm).
 
@@ -796,7 +796,7 @@ ___
 
 ▸ **lengthSquared**(`v`: [Vec2Value](../interfaces/vec2value.md)): *number*
 
-*Defined in [common/Vec2.ts:379](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L379)*
+*Defined in [src/common/Vec2.ts:379](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L379)*
 
 Get the length squared.
 
@@ -812,9 +812,9 @@ ___
 
 ### `Static` lower
 
-▸ **lower**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **lower**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:586](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L586)*
+*Defined in [src/common/Vec2.ts:586](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L586)*
 
 **Parameters:**
 
@@ -823,15 +823,15 @@ Name | Type |
 `v` | [Vec2Value](../interfaces/vec2value.md) |
 `w` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Static` mid
 
-▸ **mid**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **mid**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:574](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L574)*
+*Defined in [src/common/Vec2.ts:574](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L574)*
 
 **Parameters:**
 
@@ -840,15 +840,15 @@ Name | Type |
 `v` | [Vec2Value](../interfaces/vec2value.md) |
 `w` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Static` mulNumVec2
 
-▸ **mulNumVec2**(`a`: number, `b`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **mulNumVec2**(`a`: number, `b`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:552](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L552)*
+*Defined in [src/common/Vec2.ts:552](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L552)*
 
 **Parameters:**
 
@@ -857,15 +857,15 @@ Name | Type |
 `a` | number |
 `b` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Static` mulVec2Num
 
-▸ **mulVec2Num**(`a`: [Vec2Value](../interfaces/vec2value.md), `b`: number): *[Vec2](vec2.md)*
+▸ **mulVec2Num**(`a`: [Vec2Value](../interfaces/vec2value.md), `b`: number): *Vec2*
 
-*Defined in [common/Vec2.ts:546](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L546)*
+*Defined in [src/common/Vec2.ts:546](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L546)*
 
 **Parameters:**
 
@@ -874,15 +874,15 @@ Name | Type |
 `a` | [Vec2Value](../interfaces/vec2value.md) |
 `b` | number |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Static` neg
 
-▸ **neg**(`v`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **neg**(`v`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:564](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L564)*
+*Defined in [src/common/Vec2.ts:564](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L564)*
 
 **Parameters:**
 
@@ -890,15 +890,15 @@ Name | Type |
 ------ | ------ |
 `v` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Static` skew
 
-▸ **skew**(`v`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **skew**(`v`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:409](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L409)*
+*Defined in [src/common/Vec2.ts:409](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L409)*
 
 Get the skew vector such that dot(skew_vec, other) == cross(vec, other)
 
@@ -908,15 +908,15 @@ Name | Type |
 ------ | ------ |
 `v` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Static` sub
 
-▸ **sub**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **sub**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:524](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L524)*
+*Defined in [src/common/Vec2.ts:524](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L524)*
 
 **Parameters:**
 
@@ -925,15 +925,15 @@ Name | Type |
 `v` | [Vec2Value](../interfaces/vec2value.md) |
 `w` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Static` upper
 
-▸ **upper**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: [Vec2Value](../interfaces/vec2value.md)): *[Vec2](vec2.md)*
+▸ **upper**(`v`: [Vec2Value](../interfaces/vec2value.md), `w`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [common/Vec2.ts:580](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L580)*
+*Defined in [src/common/Vec2.ts:580](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L580)*
 
 **Parameters:**
 
@@ -942,14 +942,14 @@ Name | Type |
 `v` | [Vec2Value](../interfaces/vec2value.md) |
 `w` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Static` zero
 
-▸ **zero**(): *[Vec2](vec2.md)*
+▸ **zero**(): *Vec2*
 
-*Defined in [common/Vec2.ts:82](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Vec2.ts#L82)*
+*Defined in [src/common/Vec2.ts:82](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Vec2.ts#L82)*
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*

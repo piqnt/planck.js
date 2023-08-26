@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.0-beta.13
+ * Planck.js v1.0.0-beta.14
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
@@ -3326,18 +3326,21 @@
         };
         Fixture.prototype.setFilterGroupIndex = function (groupIndex) {
             this.m_filterGroupIndex = groupIndex;
+            this.refilter();
         };
         Fixture.prototype.getFilterCategoryBits = function () {
             return this.m_filterCategoryBits;
         };
         Fixture.prototype.setFilterCategoryBits = function (categoryBits) {
             this.m_filterCategoryBits = categoryBits;
+            this.refilter();
         };
         Fixture.prototype.getFilterMaskBits = function () {
             return this.m_filterMaskBits;
         };
         Fixture.prototype.setFilterMaskBits = function (maskBits) {
             this.m_filterMaskBits = maskBits;
+            this.refilter();
         };
         /**
          * Call this if you want to establish collision that was previously disabled by

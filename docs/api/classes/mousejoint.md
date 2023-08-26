@@ -61,7 +61,7 @@ at the testbed.
 
 *Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [dynamics/joint/MouseJoint.ts:107](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L107)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:107](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L107)*
 
 **Parameters:**
 
@@ -75,7 +75,7 @@ Name | Type |
 
 *Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
 
-*Defined in [dynamics/joint/MouseJoint.ts:109](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L109)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:109](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L109)*
 
 **Parameters:**
 
@@ -94,35 +94,35 @@ Name | Type |
 
 ▪ **TYPE**: *"mouse-joint"* = 'mouse-joint' as const
 
-*Defined in [dynamics/joint/MouseJoint.ts:90](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L90)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:90](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L90)*
 
 ## Methods
 
 ###  getAnchorA
 
-▸ **getAnchorA**(): *[Vec2](vec2.md)*
+▸ **getAnchorA**(): *Vec2*
 
 *Overrides [Joint](joint.md).[getAnchorA](joint.md#abstract-getanchora)*
 
-*Defined in [dynamics/joint/MouseJoint.ts:252](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L252)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:252](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L252)*
 
 Get the anchor point on bodyA in world coordinates.
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ###  getAnchorB
 
-▸ **getAnchorB**(): *[Vec2](vec2.md)*
+▸ **getAnchorB**(): *Vec2*
 
 *Overrides [Joint](joint.md).[getAnchorB](joint.md#abstract-getanchorb)*
 
-*Defined in [dynamics/joint/MouseJoint.ts:259](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L259)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:259](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L259)*
 
 Get the anchor point on bodyB in world coordinates.
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getBodyA](joint.md#getbodya)*
 
-*Defined in [dynamics/Joint.ts:145](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L145)*
+*Defined in [src/dynamics/Joint.ts:145](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L145)*
 
 Get the first body attached to this joint.
 
@@ -146,7 +146,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getBodyB](joint.md#getbodyb)*
 
-*Defined in [dynamics/Joint.ts:152](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L152)*
+*Defined in [src/dynamics/Joint.ts:152](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L152)*
 
 Get the second body attached to this joint.
 
@@ -160,7 +160,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getCollideConnected](joint.md#getcollideconnected)*
 
-*Defined in [dynamics/Joint.ts:176](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L176)*
+*Defined in [src/dynamics/Joint.ts:176](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L176)*
 
 Get collide connected. Note: modifying the collide connect flag won't work
 correctly because the flag is only checked when fixture AABBs begin to
@@ -174,7 +174,7 @@ ___
 
 ▸ **getDampingRatio**(): *number*
 
-*Defined in [dynamics/joint/MouseJoint.ts:245](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L245)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:245](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L245)*
 
 Get the damping ratio (dimensionless).
 
@@ -186,7 +186,7 @@ ___
 
 ▸ **getFrequency**(): *number*
 
-*Defined in [dynamics/joint/MouseJoint.ts:231](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L231)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:231](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L231)*
 
 Get the frequency in Hertz.
 
@@ -198,7 +198,7 @@ ___
 
 ▸ **getMaxForce**(): *number*
 
-*Defined in [dynamics/joint/MouseJoint.ts:217](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L217)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:217](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L217)*
 
 Get the maximum force in Newtons.
 
@@ -212,7 +212,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getNext](joint.md#getnext)*
 
-*Defined in [dynamics/Joint.ts:159](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L159)*
+*Defined in [src/dynamics/Joint.ts:159](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L159)*
 
 Get the next joint the world joint list.
 
@@ -222,11 +222,11 @@ ___
 
 ###  getReactionForce
 
-▸ **getReactionForce**(`inv_dt`: number): *[Vec2](vec2.md)*
+▸ **getReactionForce**(`inv_dt`: number): *Vec2*
 
 *Overrides [Joint](joint.md).[getReactionForce](joint.md#abstract-getreactionforce)*
 
-*Defined in [dynamics/joint/MouseJoint.ts:266](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L266)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:266](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L266)*
 
 Get the reaction force on bodyB at the joint anchor in Newtons.
 
@@ -236,7 +236,7 @@ Name | Type |
 ------ | ------ |
 `inv_dt` | number |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
@@ -246,7 +246,7 @@ ___
 
 *Overrides [Joint](joint.md).[getReactionTorque](joint.md#abstract-getreactiontorque)*
 
-*Defined in [dynamics/joint/MouseJoint.ts:273](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L273)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:273](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L273)*
 
 Get the reaction torque on bodyB in N*m.
 
@@ -262,11 +262,11 @@ ___
 
 ###  getTarget
 
-▸ **getTarget**(): *[Vec2](vec2.md)*
+▸ **getTarget**(): *Vec2*
 
-*Defined in [dynamics/joint/MouseJoint.ts:203](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L203)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:203](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L203)*
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
@@ -276,7 +276,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getType](joint.md#gettype)*
 
-*Defined in [dynamics/Joint.ts:138](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L138)*
+*Defined in [src/dynamics/Joint.ts:138](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L138)*
 
 Get the type of the concrete joint.
 
@@ -290,7 +290,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getUserData](joint.md#getuserdata)*
 
-*Defined in [dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L163)*
+*Defined in [src/dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L163)*
 
 **Returns:** *unknown*
 
@@ -302,7 +302,7 @@ ___
 
 *Overrides [Joint](joint.md).[initVelocityConstraints](joint.md#abstract-initvelocityconstraints)*
 
-*Defined in [dynamics/joint/MouseJoint.ts:284](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L284)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:284](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L284)*
 
 **Parameters:**
 
@@ -320,7 +320,7 @@ ___
 
 *Inherited from [Joint](joint.md).[isActive](joint.md#isactive)*
 
-*Defined in [dynamics/Joint.ts:131](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L131)*
+*Defined in [src/dynamics/Joint.ts:131](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L131)*
 
 Short-cut function to determine if either body is inactive.
 
@@ -332,7 +332,7 @@ ___
 
 ▸ **setDampingRatio**(`ratio`: number): *void*
 
-*Defined in [dynamics/joint/MouseJoint.ts:238](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L238)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:238](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L238)*
 
 Set the damping ratio (dimensionless).
 
@@ -350,7 +350,7 @@ ___
 
 ▸ **setFrequency**(`hz`: number): *void*
 
-*Defined in [dynamics/joint/MouseJoint.ts:224](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L224)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:224](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L224)*
 
 Set the frequency in Hertz.
 
@@ -368,7 +368,7 @@ ___
 
 ▸ **setMaxForce**(`force`: number): *void*
 
-*Defined in [dynamics/joint/MouseJoint.ts:210](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L210)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:210](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L210)*
 
 Set the maximum force in Newtons.
 
@@ -386,7 +386,7 @@ ___
 
 ▸ **setTarget**(`target`: [Vec2Value](../interfaces/vec2value.md)): *void*
 
-*Defined in [dynamics/joint/MouseJoint.ts:197](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L197)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:197](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L197)*
 
 Use this to update the target point.
 
@@ -406,7 +406,7 @@ ___
 
 *Inherited from [Joint](joint.md).[setUserData](joint.md#setuserdata)*
 
-*Defined in [dynamics/Joint.ts:167](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Joint.ts#L167)*
+*Defined in [src/dynamics/Joint.ts:167](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L167)*
 
 **Parameters:**
 
@@ -424,7 +424,7 @@ ___
 
 *Overrides [Joint](joint.md).[shiftOrigin](joint.md#shiftorigin)*
 
-*Defined in [dynamics/joint/MouseJoint.ts:280](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L280)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:280](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L280)*
 
 Shift the origin for any points stored in world coordinates.
 
@@ -444,7 +444,7 @@ ___
 
 *Overrides [Joint](joint.md).[solvePositionConstraints](joint.md#abstract-solvepositionconstraints)*
 
-*Defined in [dynamics/joint/MouseJoint.ts:390](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L390)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:390](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L390)*
 
 This returns true if the position errors are within tolerance.
 
@@ -464,7 +464,7 @@ ___
 
 *Overrides [Joint](joint.md).[solveVelocityConstraints](joint.md#abstract-solvevelocityconstraints)*
 
-*Defined in [dynamics/joint/MouseJoint.ts:359](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/joint/MouseJoint.ts#L359)*
+*Defined in [src/dynamics/joint/MouseJoint.ts:359](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/MouseJoint.ts#L359)*
 
 **Parameters:**
 

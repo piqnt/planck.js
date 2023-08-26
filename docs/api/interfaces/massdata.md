@@ -22,7 +22,7 @@ MassData This holds the mass data computed for a shape.
 
 • **I**: *number*
 
-*Defined in [dynamics/Body.ts:147](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Body.ts#L147)*
+*Defined in [src/dynamics/Body.ts:148](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Body.ts#L148)*
 
 The rotational inertia of the shape about the local origin.
 
@@ -32,7 +32,7 @@ ___
 
 • **center**: *[Vec2Value](vec2value.md)*
 
-*Defined in [dynamics/Body.ts:145](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Body.ts#L145)*
+*Defined in [src/dynamics/Body.ts:146](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Body.ts#L146)*
 
 The position of the shape's centroid relative to the shape's origin.
 
@@ -42,6 +42,6 @@ ___
 
 • **mass**: *number*
 
-*Defined in [dynamics/Body.ts:143](https://github.com/shakiba/planck.js/blob/5b96d95/src/dynamics/Body.ts#L143)*
+*Defined in [src/dynamics/Body.ts:144](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Body.ts#L144)*
 
 The mass of the shape, usually in kilograms.

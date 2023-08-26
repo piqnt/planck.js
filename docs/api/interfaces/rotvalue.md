@@ -19,7 +19,9 @@
 
 • **c**: *number*
 
-*Defined in [common/Rot.ts:35](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Rot.ts#L35)*
+*Defined in [src/common/Rot.ts:37](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L37)*
+
+cos(angle)
 
 ___
 
@@ -27,4 +29,6 @@ ___
 
 • **s**: *number*
 
-*Defined in [common/Rot.ts:34](https://github.com/shakiba/planck.js/blob/5b96d95/src/common/Rot.ts#L34)*
+*Defined in [src/common/Rot.ts:35](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L35)*
+
+sin(angle)
