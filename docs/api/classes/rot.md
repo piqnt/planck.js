@@ -42,7 +42,7 @@
 
 \+ **new Rot**(`angle?`: number | [RotValue](../interfaces/rotvalue.md)): *[Rot](rot.md)*
 
-*Defined in [src/common/Rot.ts:44](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L44)*
+*Defined in [src/common/Rot.ts:44](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L44)*
 
 Initialize from an angle in radians.
 
@@ -60,7 +60,7 @@ Name | Type |
 
 • **c**: *number*
 
-*Defined in [src/common/Rot.ts:44](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L44)*
+*Defined in [src/common/Rot.ts:44](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L44)*
 
 cos(angle)
 
@@ -70,7 +70,7 @@ ___
 
 • **s**: *number*
 
-*Defined in [src/common/Rot.ts:42](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L42)*
+*Defined in [src/common/Rot.ts:42](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L42)*
 
 sin(angle)
 
@@ -80,7 +80,7 @@ sin(angle)
 
 ▸ **getAngle**(): *number*
 
-*Defined in [src/common/Rot.ts:128](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L128)*
+*Defined in [src/common/Rot.ts:128](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L128)*
 
 Get the angle in radians.
 
@@ -92,7 +92,7 @@ ___
 
 ▸ **getXAxis**(): *Vec2*
 
-*Defined in [src/common/Rot.ts:133](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L133)*
+*Defined in [src/common/Rot.ts:133](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L133)*
 
 Get the x-axis.
 
@@ -104,7 +104,7 @@ ___
 
 ▸ **getYAxis**(): *Vec2*
 
-*Defined in [src/common/Rot.ts:138](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L138)*
+*Defined in [src/common/Rot.ts:138](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L138)*
 
 Get the y-axis.
 
@@ -116,7 +116,7 @@ ___
 
 ▸ **set**(`angle`: number | [RotValue](../interfaces/rotvalue.md)): *void*
 
-*Defined in [src/common/Rot.ts:99](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L99)*
+*Defined in [src/common/Rot.ts:99](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L99)*
 
 **Parameters:**
 
@@ -132,7 +132,7 @@ ___
 
 ▸ **setAngle**(`angle`: number): *void*
 
-*Defined in [src/common/Rot.ts:120](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L120)*
+*Defined in [src/common/Rot.ts:120](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L120)*
 
 Set using an angle in radians.
 
@@ -150,7 +150,7 @@ ___
 
 ▸ **setIdentity**(): *void*
 
-*Defined in [src/common/Rot.ts:94](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L94)*
+*Defined in [src/common/Rot.ts:94](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L94)*
 
 Set to the identity rotation.
 
@@ -162,7 +162,7 @@ ___
 
 ▸ **setRot**(`angle`: [RotValue](../interfaces/rotvalue.md)): *void*
 
-*Defined in [src/common/Rot.ts:113](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L113)*
+*Defined in [src/common/Rot.ts:113](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L113)*
 
 **Parameters:**
 
@@ -178,7 +178,7 @@ ___
 
 ▸ **assert**(`o`: any): *void*
 
-*Defined in [src/common/Rot.ts:89](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L89)*
+*Defined in [src/common/Rot.ts:89](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L89)*
 
 **Parameters:**
 
@@ -194,7 +194,7 @@ ___
 
 ▸ **clone**(`rot`: [RotValue](../interfaces/rotvalue.md)): *[Rot](rot.md)*
 
-*Defined in [src/common/Rot.ts:67](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L67)*
+*Defined in [src/common/Rot.ts:67](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L67)*
 
 **Parameters:**
 
@@ -210,7 +210,7 @@ ___
 
 ▸ **identity**(): *[Rot](rot.md)*
 
-*Defined in [src/common/Rot.ts:75](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L75)*
+*Defined in [src/common/Rot.ts:75](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L75)*
 
 **Returns:** *[Rot](rot.md)*
 
@@ -220,7 +220,7 @@ ___
 
 ▸ **isValid**(`obj`: any): *boolean*
 
-*Defined in [src/common/Rot.ts:82](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L82)*
+*Defined in [src/common/Rot.ts:82](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L82)*
 
 **Parameters:**
 
@@ -236,7 +236,7 @@ ___
 
 ▸ **mulRot**(`rot`: [RotValue](../interfaces/rotvalue.md), `m`: [RotValue](../interfaces/rotvalue.md)): *[Rot](rot.md)*
 
-*Defined in [src/common/Rot.ts:167](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L167)*
+*Defined in [src/common/Rot.ts:167](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L167)*
 
 Multiply two rotations: q * r
 
@@ -255,7 +255,7 @@ ___
 
 ▸ **mulSub**(`rot`: [RotValue](../interfaces/rotvalue.md), `v`: [Vec2Value](../interfaces/vec2value.md), `w`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [src/common/Rot.ts:187](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L187)*
+*Defined in [src/common/Rot.ts:187](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L187)*
 
 **Parameters:**
 
@@ -273,7 +273,7 @@ ___
 
 ▸ **mulTRot**(`rot`: [RotValue](../interfaces/rotvalue.md), `m`: [RotValue](../interfaces/rotvalue.md)): *[Rot](rot.md)*
 
-*Defined in [src/common/Rot.ts:217](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L217)*
+*Defined in [src/common/Rot.ts:217](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L217)*
 
 Transpose multiply two rotations: qT * r
 
@@ -292,7 +292,7 @@ ___
 
 ▸ **mulTVec2**(`rot`: [RotValue](../interfaces/rotvalue.md), `m`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [src/common/Rot.ts:230](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L230)*
+*Defined in [src/common/Rot.ts:230](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L230)*
 
 Inverse rotate a vector
 
@@ -311,7 +311,7 @@ ___
 
 ▸ **mulVec2**(`rot`: [RotValue](../interfaces/rotvalue.md), `m`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
-*Defined in [src/common/Rot.ts:181](https://github.com/shakiba/planck.js/blob/ae24904/src/common/Rot.ts#L181)*
+*Defined in [src/common/Rot.ts:181](https://github.com/shakiba/planck.js/blob/6ab76c7/src/common/Rot.ts#L181)*
 
 Rotate a vector
 

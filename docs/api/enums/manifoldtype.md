@@ -17,7 +17,7 @@
 
 • **e_circles**: = 0
 
-*Defined in [src/collision/Manifold.ts:44](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L44)*
+*Defined in [src/collision/Manifold.ts:44](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L44)*
 
 ___
 
@@ -25,7 +25,7 @@ ___
 
 • **e_faceA**: = 1
 
-*Defined in [src/collision/Manifold.ts:45](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L45)*
+*Defined in [src/collision/Manifold.ts:45](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L45)*
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **e_faceB**: = 2
 
-*Defined in [src/collision/Manifold.ts:46](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L46)*
+*Defined in [src/collision/Manifold.ts:46](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L46)*
 
 ___
 
@@ -41,4 +41,4 @@ ___
 
 • **e_unset**: = -1
 
-*Defined in [src/collision/Manifold.ts:43](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L43)*
+*Defined in [src/collision/Manifold.ts:43](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L43)*

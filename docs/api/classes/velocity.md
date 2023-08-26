@@ -19,7 +19,7 @@
 
 • **v**: *Vec2‹›* = Vec2.zero()
 
-*Defined in [src/dynamics/Velocity.ts:29](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Velocity.ts#L29)*
+*Defined in [src/dynamics/Velocity.ts:29](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Velocity.ts#L29)*
 
 linear
 
@@ -29,6 +29,6 @@ ___
 
 • **w**: *number* = 0
 
-*Defined in [src/dynamics/Velocity.ts:32](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Velocity.ts#L32)*
+*Defined in [src/dynamics/Velocity.ts:32](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Velocity.ts#L32)*
 
 angular

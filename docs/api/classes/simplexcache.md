@@ -27,7 +27,7 @@ Used to warm start Distance. Set count to zero on first call.
 
 • **count**: *number* = 0
 
-*Defined in [src/collision/Distance.ts:103](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L103)*
+*Defined in [src/collision/Distance.ts:103](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L103)*
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 • **indexA**: *number[]* = []
 
-*Defined in [src/collision/Distance.ts:100](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L100)*
+*Defined in [src/collision/Distance.ts:100](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L100)*
 
 vertices on shape A
 
@@ -45,7 +45,7 @@ ___
 
 • **indexB**: *number[]* = []
 
-*Defined in [src/collision/Distance.ts:102](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L102)*
+*Defined in [src/collision/Distance.ts:102](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L102)*
 
 vertices on shape B
 
@@ -55,7 +55,7 @@ ___
 
 • **metric**: *number* = 0
 
-*Defined in [src/collision/Distance.ts:98](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L98)*
+*Defined in [src/collision/Distance.ts:98](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L98)*
 
 length or area
 
@@ -65,6 +65,6 @@ length or area
 
 ▸ **recycle**(): *void*
 
-*Defined in [src/collision/Distance.ts:104](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L104)*
+*Defined in [src/collision/Distance.ts:104](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L104)*
 
 **Returns:** *void*

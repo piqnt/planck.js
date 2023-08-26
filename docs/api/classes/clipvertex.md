@@ -26,7 +26,7 @@ Used for computing contact manifolds.
 
 • **id**: *[ContactID](contactid.md)* = new ContactID()
 
-*Defined in [src/collision/Manifold.ts:74](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L74)*
+*Defined in [src/collision/Manifold.ts:74](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L74)*
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 • **v**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
-*Defined in [src/collision/Manifold.ts:73](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L73)*
+*Defined in [src/collision/Manifold.ts:73](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L73)*
 
 ## Methods
 
@@ -42,7 +42,7 @@ ___
 
 ▸ **recycle**(): *void*
 
-*Defined in [src/collision/Manifold.ts:80](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L80)*
+*Defined in [src/collision/Manifold.ts:80](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L80)*
 
 **Returns:** *void*
 
@@ -52,7 +52,7 @@ ___
 
 ▸ **set**(`o`: [ClipVertex](clipvertex.md)): *void*
 
-*Defined in [src/collision/Manifold.ts:76](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Manifold.ts#L76)*
+*Defined in [src/collision/Manifold.ts:76](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Manifold.ts#L76)*
 
 **Parameters:**
 

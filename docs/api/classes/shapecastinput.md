@@ -28,7 +28,7 @@ Input parameters for ShapeCast
 
 • **proxyA**: *[DistanceProxy](distanceproxy.md)‹›* = new DistanceProxy()
 
-*Defined in [src/collision/Distance.ts:759](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L759)*
+*Defined in [src/collision/Distance.ts:759](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L759)*
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 • **proxyB**: *[DistanceProxy](distanceproxy.md)‹›* = new DistanceProxy()
 
-*Defined in [src/collision/Distance.ts:760](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L760)*
+*Defined in [src/collision/Distance.ts:760](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L760)*
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 • **transformA**: *[Transform](transform.md)‹›* = Transform.identity()
 
-*Defined in [src/collision/Distance.ts:761](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L761)*
+*Defined in [src/collision/Distance.ts:761](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L761)*
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 • **transformB**: *[Transform](transform.md)‹›* = Transform.identity()
 
-*Defined in [src/collision/Distance.ts:762](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L762)*
+*Defined in [src/collision/Distance.ts:762](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L762)*
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 • **translationB**: *Vec2‹›* = Vec2.zero()
 
-*Defined in [src/collision/Distance.ts:763](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L763)*
+*Defined in [src/collision/Distance.ts:763](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L763)*
 
 ## Methods
 
@@ -68,6 +68,6 @@ ___
 
 ▸ **recycle**(): *void*
 
-*Defined in [src/collision/Distance.ts:764](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/Distance.ts#L764)*
+*Defined in [src/collision/Distance.ts:764](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/Distance.ts#L764)*
 
 **Returns:** *void*

@@ -47,7 +47,7 @@ Joint definitions are used to construct joints.
 
 • **bodyA**: *[Body](../classes/body.md)*
 
-*Defined in [src/dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L77)*
+*Defined in [src/dynamics/Joint.ts:77](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L77)*
 
 The first attached body.
 
@@ -57,7 +57,7 @@ ___
 
 • **bodyB**: *[Body](../classes/body.md)*
 
-*Defined in [src/dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L81)*
+*Defined in [src/dynamics/Joint.ts:81](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L81)*
 
 The second attached body.
 
@@ -69,7 +69,7 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L68)*
+*Defined in [src/dynamics/Joint.ts:68](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L68)*
 
 Set this flag to true if the attached bodies
 should collide.
@@ -82,6 +82,6 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
-*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L63)*
+*Defined in [src/dynamics/Joint.ts:63](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L63)*
 
 Use this to attach application specific data to your joints.

@@ -28,7 +28,7 @@ Input parameters for TimeOfImpact.
 
 • **proxyA**: *[DistanceProxy](distanceproxy.md)‹›* = new DistanceProxy()
 
-*Defined in [src/collision/TimeOfImpact.ts:43](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/TimeOfImpact.ts#L43)*
+*Defined in [src/collision/TimeOfImpact.ts:43](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/TimeOfImpact.ts#L43)*
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 • **proxyB**: *[DistanceProxy](distanceproxy.md)‹›* = new DistanceProxy()
 
-*Defined in [src/collision/TimeOfImpact.ts:44](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/TimeOfImpact.ts#L44)*
+*Defined in [src/collision/TimeOfImpact.ts:44](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/TimeOfImpact.ts#L44)*
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 • **sweepA**: *[Sweep](sweep.md)‹›* = new Sweep()
 
-*Defined in [src/collision/TimeOfImpact.ts:45](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/TimeOfImpact.ts#L45)*
+*Defined in [src/collision/TimeOfImpact.ts:45](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/TimeOfImpact.ts#L45)*
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 • **sweepB**: *[Sweep](sweep.md)‹›* = new Sweep()
 
-*Defined in [src/collision/TimeOfImpact.ts:46](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/TimeOfImpact.ts#L46)*
+*Defined in [src/collision/TimeOfImpact.ts:46](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/TimeOfImpact.ts#L46)*
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 • **tMax**: *number*
 
-*Defined in [src/collision/TimeOfImpact.ts:48](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/TimeOfImpact.ts#L48)*
+*Defined in [src/collision/TimeOfImpact.ts:48](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/TimeOfImpact.ts#L48)*
 
 defines sweep interval [0, tMax]
 
@@ -70,6 +70,6 @@ defines sweep interval [0, tMax]
 
 ▸ **recycle**(): *void*
 
-*Defined in [src/collision/TimeOfImpact.ts:49](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/TimeOfImpact.ts#L49)*
+*Defined in [src/collision/TimeOfImpact.ts:49](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/TimeOfImpact.ts#L49)*
 
 **Returns:** *void*

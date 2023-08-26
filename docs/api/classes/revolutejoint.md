@@ -17,10 +17,6 @@ so that infinite forces are not generated.
 
 ## Index
 
-### Constructors
-
-* [constructor](revolutejoint.md#constructor)
-
 ### Properties
 
 * [TYPE](revolutejoint.md#static-type)
@@ -61,48 +57,13 @@ so that infinite forces are not generated.
 * [solvePositionConstraints](revolutejoint.md#solvepositionconstraints)
 * [solveVelocityConstraints](revolutejoint.md#solvevelocityconstraints)
 
-## Constructors
-
-###  constructor
-
-\+ **new RevoluteJoint**(`def`: [RevoluteJointDef](../interfaces/revolutejointdef.md)): *[RevoluteJoint](revolutejoint.md)*
-
-*Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
-
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:163](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L163)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`def` | [RevoluteJointDef](../interfaces/revolutejointdef.md) |
-
-**Returns:** *[RevoluteJoint](revolutejoint.md)*
-
-\+ **new RevoluteJoint**(`def`: [RevoluteJointOpt](../interfaces/revolutejointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md), `anchor`: Vec2): *[RevoluteJoint](revolutejoint.md)*
-
-*Overrides [Joint](joint.md).[constructor](joint.md#constructor)*
-
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:165](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L165)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`def` | [RevoluteJointOpt](../interfaces/revolutejointopt.md) |
-`bodyA` | [Body](body.md) |
-`bodyB` | [Body](body.md) |
-`anchor` | Vec2 |
-
-**Returns:** *[RevoluteJoint](revolutejoint.md)*
-
 ## Properties
 
 ### `Static` TYPE
 
 ▪ **TYPE**: *"revolute-joint"* = 'revolute-joint' as const
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:135](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L135)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:135](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L135)*
 
 ## Methods
 
@@ -110,7 +71,7 @@ Name | Type |
 
 ▸ **enableLimit**(`flag`: boolean): *void*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:381](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L381)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:384](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L384)*
 
 Enable/disable the joint limit.
 
@@ -128,7 +89,7 @@ ___
 
 ▸ **enableMotor**(`flag`: boolean): *void*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:326](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L326)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:329](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L329)*
 
 Enable/disable the joint motor.
 
@@ -148,7 +109,7 @@ ___
 
 *Overrides [Joint](joint.md).[getAnchorA](joint.md#abstract-getanchora)*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:422](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L422)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:425](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L425)*
 
 Get the anchor point on bodyA in world coordinates.
 
@@ -162,7 +123,7 @@ ___
 
 *Overrides [Joint](joint.md).[getAnchorB](joint.md#abstract-getanchorb)*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:429](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L429)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:432](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L432)*
 
 Get the anchor point on bodyB in world coordinates.
 
@@ -176,7 +137,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getBodyA](joint.md#getbodya)*
 
-*Defined in [src/dynamics/Joint.ts:145](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L145)*
+*Defined in [src/dynamics/Joint.ts:145](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L145)*
 
 Get the first body attached to this joint.
 
@@ -190,7 +151,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getBodyB](joint.md#getbodyb)*
 
-*Defined in [src/dynamics/Joint.ts:152](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L152)*
+*Defined in [src/dynamics/Joint.ts:152](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L152)*
 
 Get the second body attached to this joint.
 
@@ -204,7 +165,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getCollideConnected](joint.md#getcollideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:176](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L176)*
+*Defined in [src/dynamics/Joint.ts:176](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L176)*
 
 Get collide connected. Note: modifying the collide connect flag won't work
 correctly because the flag is only checked when fixture AABBs begin to
@@ -218,7 +179,7 @@ ___
 
 ▸ **getJointAngle**(): *number*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:301](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L301)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:304](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L304)*
 
 Get the current joint angle in radians.
 
@@ -230,7 +191,7 @@ ___
 
 ▸ **getJointSpeed**(): *number*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:310](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L310)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:313](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L313)*
 
 Get the current joint angle speed in radians per second.
 
@@ -242,7 +203,7 @@ ___
 
 ▸ **getLocalAnchorA**(): *Vec2*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:280](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L280)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:283](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L283)*
 
 The local anchor point relative to bodyA's origin.
 
@@ -254,7 +215,7 @@ ___
 
 ▸ **getLocalAnchorB**(): *Vec2*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:287](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L287)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:290](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L290)*
 
 The local anchor point relative to bodyB's origin.
 
@@ -266,7 +227,7 @@ ___
 
 ▸ **getLowerLimit**(): *number*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:393](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L393)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:396](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L396)*
 
 Get the lower joint limit in radians.
 
@@ -278,7 +239,7 @@ ___
 
 ▸ **getMaxMotorTorque**(): *number*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:367](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L367)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:370](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L370)*
 
 **Returns:** *number*
 
@@ -288,7 +249,7 @@ ___
 
 ▸ **getMotorSpeed**(): *number*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:353](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L353)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:356](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L356)*
 
 Get the motor speed in radians per second.
 
@@ -300,7 +261,7 @@ ___
 
 ▸ **getMotorTorque**(`inv_dt`: number): *number*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:336](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L336)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:339](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L339)*
 
 Get the current motor torque given the inverse time step. Unit is N*m.
 
@@ -320,7 +281,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getNext](joint.md#getnext)*
 
-*Defined in [src/dynamics/Joint.ts:159](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L159)*
+*Defined in [src/dynamics/Joint.ts:159](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L159)*
 
 Get the next joint the world joint list.
 
@@ -334,7 +295,7 @@ ___
 
 *Overrides [Joint](joint.md).[getReactionForce](joint.md#abstract-getreactionforce)*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:436](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L436)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:439](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L439)*
 
 Get the reaction force given the inverse time step. Unit is N.
 
@@ -354,7 +315,7 @@ ___
 
 *Overrides [Joint](joint.md).[getReactionTorque](joint.md#abstract-getreactiontorque)*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:444](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L444)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:447](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L447)*
 
 Get the reaction torque due to the joint limit given the inverse time step.
 Unit is N*m.
@@ -373,7 +334,7 @@ ___
 
 ▸ **getReferenceAngle**(): *number*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:294](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L294)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:297](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L297)*
 
 Get the reference angle.
 
@@ -387,7 +348,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getType](joint.md#gettype)*
 
-*Defined in [src/dynamics/Joint.ts:138](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L138)*
+*Defined in [src/dynamics/Joint.ts:138](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L138)*
 
 Get the type of the concrete joint.
 
@@ -399,7 +360,7 @@ ___
 
 ▸ **getUpperLimit**(): *number*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:400](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L400)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:403](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L403)*
 
 Get the upper joint limit in radians.
 
@@ -413,7 +374,7 @@ ___
 
 *Inherited from [Joint](joint.md).[getUserData](joint.md#getuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L163)*
+*Defined in [src/dynamics/Joint.ts:163](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L163)*
 
 **Returns:** *unknown*
 
@@ -425,7 +386,7 @@ ___
 
 *Overrides [Joint](joint.md).[initVelocityConstraints](joint.md#abstract-initvelocityconstraints)*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:448](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L448)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:451](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L451)*
 
 **Parameters:**
 
@@ -443,7 +404,7 @@ ___
 
 *Inherited from [Joint](joint.md).[isActive](joint.md#isactive)*
 
-*Defined in [src/dynamics/Joint.ts:131](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L131)*
+*Defined in [src/dynamics/Joint.ts:131](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L131)*
 
 Short-cut function to determine if either body is inactive.
 
@@ -455,7 +416,7 @@ ___
 
 ▸ **isLimitEnabled**(): *boolean*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:374](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L374)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:377](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L377)*
 
 Is the joint limit enabled?
 
@@ -467,7 +428,7 @@ ___
 
 ▸ **isMotorEnabled**(): *boolean*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:319](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L319)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:322](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L322)*
 
 Is the joint motor enabled?
 
@@ -479,7 +440,7 @@ ___
 
 ▸ **setLimits**(`lower`: number, `upper`: number): *void*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:407](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L407)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:410](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L410)*
 
 Set the joint limits in radians.
 
@@ -498,7 +459,7 @@ ___
 
 ▸ **setMaxMotorTorque**(`torque`: number): *void*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:360](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L360)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:363](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L363)*
 
 Set the maximum motor torque, usually in N-m.
 
@@ -516,7 +477,7 @@ ___
 
 ▸ **setMotorSpeed**(`speed`: number): *void*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:343](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L343)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:346](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L346)*
 
 Set the motor speed in radians per second.
 
@@ -536,7 +497,7 @@ ___
 
 *Inherited from [Joint](joint.md).[setUserData](joint.md#setuserdata)*
 
-*Defined in [src/dynamics/Joint.ts:167](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L167)*
+*Defined in [src/dynamics/Joint.ts:167](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L167)*
 
 **Parameters:**
 
@@ -554,7 +515,7 @@ ___
 
 *Inherited from [Joint](joint.md).[shiftOrigin](joint.md#shiftorigin)*
 
-*Defined in [src/dynamics/Joint.ts:203](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Joint.ts#L203)*
+*Defined in [src/dynamics/Joint.ts:203](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Joint.ts#L203)*
 
 Shift the origin for any points stored in world coordinates.
 
@@ -574,7 +535,7 @@ ___
 
 *Overrides [Joint](joint.md).[solvePositionConstraints](joint.md#abstract-solvepositionconstraints)*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:664](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L664)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:667](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L667)*
 
 This returns true if the position errors are within tolerance.
 
@@ -594,7 +555,7 @@ ___
 
 *Overrides [Joint](joint.md).[solveVelocityConstraints](joint.md#abstract-solvevelocityconstraints)*
 
-*Defined in [src/dynamics/joint/RevoluteJoint.ts:556](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/joint/RevoluteJoint.ts#L556)*
+*Defined in [src/dynamics/joint/RevoluteJoint.ts:559](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/joint/RevoluteJoint.ts#L559)*
 
 **Parameters:**
 

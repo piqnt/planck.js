@@ -19,7 +19,7 @@
 
 • **fill**? : *string*
 
-*Defined in [src/util/Testbed.ts:9](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L9)*
+*Defined in [src/util/Testbed.ts:9](https://github.com/shakiba/planck.js/blob/6ab76c7/src/util/Testbed.ts#L9)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **stroke**? : *string*
 
-*Defined in [src/util/Testbed.ts:8](https://github.com/shakiba/planck.js/blob/ae24904/src/util/Testbed.ts#L8)*
+*Defined in [src/util/Testbed.ts:8](https://github.com/shakiba/planck.js/blob/6ab76c7/src/util/Testbed.ts#L8)*

@@ -19,7 +19,7 @@
 
 • **lowerBound**: *[Vec2Value](vec2value.md)*
 
-*Defined in [src/collision/AABB.ts:55](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/AABB.ts#L55)*
+*Defined in [src/collision/AABB.ts:55](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/AABB.ts#L55)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **upperBound**: *[Vec2Value](vec2value.md)*
 
-*Defined in [src/collision/AABB.ts:56](https://github.com/shakiba/planck.js/blob/ae24904/src/collision/AABB.ts#L56)*
+*Defined in [src/collision/AABB.ts:56](https://github.com/shakiba/planck.js/blob/6ab76c7/src/collision/AABB.ts#L56)*

@@ -49,7 +49,7 @@ object may exist that has no contact points.
 
 ▸ **evaluate**(`manifold`: [Manifold](manifold.md), `xfA`: [TransformValue](../globals.md#transformvalue), `xfB`: [TransformValue](../globals.md#transformvalue)): *void*
 
-*Defined in [src/dynamics/Contact.ts:544](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L544)*
+*Defined in [src/dynamics/Contact.ts:544](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L544)*
 
 Called by Update method, and implemented by subclasses.
 
@@ -69,7 +69,7 @@ ___
 
 ▸ **flagForFiltering**(): *void*
 
-*Defined in [src/dynamics/Contact.ts:472](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L472)*
+*Defined in [src/dynamics/Contact.ts:472](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L472)*
 
 Flag this contact for filtering. Filtering will occur the next time step.
 
@@ -81,7 +81,7 @@ ___
 
 ▸ **getChildIndexA**(): *number*
 
-*Defined in [src/dynamics/Contact.ts:458](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L458)*
+*Defined in [src/dynamics/Contact.ts:458](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L458)*
 
 Get the child primitive index for fixture A.
 
@@ -93,7 +93,7 @@ ___
 
 ▸ **getChildIndexB**(): *number*
 
-*Defined in [src/dynamics/Contact.ts:465](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L465)*
+*Defined in [src/dynamics/Contact.ts:465](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L465)*
 
 Get the child primitive index for fixture B.
 
@@ -105,7 +105,7 @@ ___
 
 ▸ **getFixtureA**(): *[Fixture](fixture.md)*
 
-*Defined in [src/dynamics/Contact.ts:444](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L444)*
+*Defined in [src/dynamics/Contact.ts:444](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L444)*
 
 Get fixture A in this contact.
 
@@ -117,7 +117,7 @@ ___
 
 ▸ **getFixtureB**(): *[Fixture](fixture.md)*
 
-*Defined in [src/dynamics/Contact.ts:451](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L451)*
+*Defined in [src/dynamics/Contact.ts:451](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L451)*
 
 Get fixture B in this contact.
 
@@ -129,7 +129,7 @@ ___
 
 ▸ **getFriction**(): *number*
 
-*Defined in [src/dynamics/Contact.ts:487](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L487)*
+*Defined in [src/dynamics/Contact.ts:487](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L487)*
 
 Get the friction.
 
@@ -141,7 +141,7 @@ ___
 
 ▸ **getManifold**(): *[Manifold](manifold.md)*
 
-*Defined in [src/dynamics/Contact.ts:386](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L386)*
+*Defined in [src/dynamics/Contact.ts:386](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L386)*
 
 Get the contact manifold. Do not modify the manifold unless you understand
 the internals of the library.
@@ -154,7 +154,7 @@ ___
 
 ▸ **getNext**(): *[Contact](contact.md) | null*
 
-*Defined in [src/dynamics/Contact.ts:437](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L437)*
+*Defined in [src/dynamics/Contact.ts:437](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L437)*
 
 Get the next contact in the world's contact list.
 
@@ -166,7 +166,7 @@ ___
 
 ▸ **getRestitution**(): *number*
 
-*Defined in [src/dynamics/Contact.ts:512](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L512)*
+*Defined in [src/dynamics/Contact.ts:512](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L512)*
 
 Get the restitution.
 
@@ -178,7 +178,7 @@ ___
 
 ▸ **getTangentSpeed**(): *number*
 
-*Defined in [src/dynamics/Contact.ts:537](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L537)*
+*Defined in [src/dynamics/Contact.ts:537](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L537)*
 
 Get the desired tangent speed. In meters per second.
 
@@ -190,7 +190,7 @@ ___
 
 ▸ **getWorldManifold**(`worldManifold`: [WorldManifold](worldmanifold.md) | null): *[WorldManifold](worldmanifold.md) | undefined*
 
-*Defined in [src/dynamics/Contact.ts:393](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L393)*
+*Defined in [src/dynamics/Contact.ts:393](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L393)*
 
 Get the world manifold.
 
@@ -208,7 +208,7 @@ ___
 
 ▸ **initConstraint**(`step`: [TimeStep](timestep.md)): *void*
 
-*Defined in [src/dynamics/Contact.ts:321](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L321)*
+*Defined in [src/dynamics/Contact.ts:321](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L321)*
 
 **Parameters:**
 
@@ -224,7 +224,7 @@ ___
 
 ▸ **initVelocityConstraint**(`step`: [TimeStep](timestep.md)): *void*
 
-*Defined in [src/dynamics/Contact.ts:774](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L774)*
+*Defined in [src/dynamics/Contact.ts:774](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L774)*
 
 **Parameters:**
 
@@ -240,7 +240,7 @@ ___
 
 ▸ **isEnabled**(): *boolean*
 
-*Defined in [src/dynamics/Contact.ts:423](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L423)*
+*Defined in [src/dynamics/Contact.ts:423](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L423)*
 
 Has this contact been disabled?
 
@@ -252,7 +252,7 @@ ___
 
 ▸ **isTouching**(): *boolean*
 
-*Defined in [src/dynamics/Contact.ts:430](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L430)*
+*Defined in [src/dynamics/Contact.ts:430](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L430)*
 
 Is this contact touching?
 
@@ -264,7 +264,7 @@ ___
 
 ▸ **resetFriction**(): *void*
 
-*Defined in [src/dynamics/Contact.ts:494](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L494)*
+*Defined in [src/dynamics/Contact.ts:494](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L494)*
 
 Reset the friction mixture to the default value.
 
@@ -276,7 +276,7 @@ ___
 
 ▸ **resetRestitution**(): *void*
 
-*Defined in [src/dynamics/Contact.ts:519](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L519)*
+*Defined in [src/dynamics/Contact.ts:519](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L519)*
 
 Reset the restitution to the default value.
 
@@ -288,7 +288,7 @@ ___
 
 ▸ **setEnabled**(`flag`: boolean): *void*
 
-*Defined in [src/dynamics/Contact.ts:416](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L416)*
+*Defined in [src/dynamics/Contact.ts:416](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L416)*
 
 Enable/disable this contact. This can be used inside the pre-solve contact
 listener. The contact is only disabled for the current time step (or sub-step
@@ -308,7 +308,7 @@ ___
 
 ▸ **setFriction**(`friction`: number): *void*
 
-*Defined in [src/dynamics/Contact.ts:480](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L480)*
+*Defined in [src/dynamics/Contact.ts:480](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L480)*
 
 Override the default friction mixture. You can call this in
 ContactListener.preSolve. This value persists until set or reset.
@@ -327,7 +327,7 @@ ___
 
 ▸ **setRestitution**(`restitution`: number): *void*
 
-*Defined in [src/dynamics/Contact.ts:505](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L505)*
+*Defined in [src/dynamics/Contact.ts:505](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L505)*
 
 Override the default restitution mixture. You can call this in
 ContactListener.preSolve. The value persists until you set or reset.
@@ -346,7 +346,7 @@ ___
 
 ▸ **setTangentSpeed**(`speed`: number): *void*
 
-*Defined in [src/dynamics/Contact.ts:530](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L530)*
+*Defined in [src/dynamics/Contact.ts:530](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L530)*
 
 Set the desired tangent speed for a conveyor belt behavior. In meters per
 second.
@@ -365,7 +365,7 @@ ___
 
 ▸ **solvePositionConstraint**(`step`: [TimeStep](timestep.md)): *number*
 
-*Defined in [src/dynamics/Contact.ts:643](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L643)*
+*Defined in [src/dynamics/Contact.ts:643](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L643)*
 
 **Parameters:**
 
@@ -381,7 +381,7 @@ ___
 
 ▸ **solvePositionConstraintTOI**(`step`: [TimeStep](timestep.md), `toiA`: [Body](body.md), `toiB`: [Body](body.md)): *number*
 
-*Defined in [src/dynamics/Contact.ts:647](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L647)*
+*Defined in [src/dynamics/Contact.ts:647](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L647)*
 
 **Parameters:**
 
@@ -399,7 +399,7 @@ ___
 
 ▸ **solveVelocityConstraint**(`step`: [TimeStep](timestep.md)): *void*
 
-*Defined in [src/dynamics/Contact.ts:957](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L957)*
+*Defined in [src/dynamics/Contact.ts:957](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L957)*
 
 **Parameters:**
 
@@ -415,7 +415,7 @@ ___
 
 ▸ **storeConstraintImpulses**(`step`: [TimeStep](timestep.md)): *void*
 
-*Defined in [src/dynamics/Contact.ts:949](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L949)*
+*Defined in [src/dynamics/Contact.ts:949](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L949)*
 
 **Parameters:**
 
@@ -431,7 +431,7 @@ ___
 
 ▸ **update**(`listener?`: object): *void*
 
-*Defined in [src/dynamics/Contact.ts:560](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L560)*
+*Defined in [src/dynamics/Contact.ts:560](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L560)*
 
 Updates the contact manifold and touching status.
 
@@ -455,7 +455,7 @@ ___
 
 ▸ **warmStartConstraint**(`step`: [TimeStep](timestep.md)): *void*
 
-*Defined in [src/dynamics/Contact.ts:906](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Contact.ts#L906)*
+*Defined in [src/dynamics/Contact.ts:906](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Contact.ts#L906)*
 
 **Parameters:**
 

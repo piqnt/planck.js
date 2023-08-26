@@ -27,7 +27,7 @@ This proxy is used internally to connect shape children to the broad-phase.
 
 \+ **new FixtureProxy**(`fixture`: [Fixture](fixture.md), `childIndex`: number): *[FixtureProxy](fixtureproxy.md)*
 
-*Defined in [src/dynamics/Fixture.ts:102](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Fixture.ts#L102)*
+*Defined in [src/dynamics/Fixture.ts:102](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Fixture.ts#L102)*
 
 **Parameters:**
 
@@ -44,7 +44,7 @@ Name | Type |
 
 • **aabb**: *[AABB](aabb.md)*
 
-*Defined in [src/dynamics/Fixture.ts:99](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Fixture.ts#L99)*
+*Defined in [src/dynamics/Fixture.ts:99](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Fixture.ts#L99)*
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 • **childIndex**: *number*
 
-*Defined in [src/dynamics/Fixture.ts:101](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Fixture.ts#L101)*
+*Defined in [src/dynamics/Fixture.ts:101](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Fixture.ts#L101)*
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 • **fixture**: *[Fixture](fixture.md)*
 
-*Defined in [src/dynamics/Fixture.ts:100](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Fixture.ts#L100)*
+*Defined in [src/dynamics/Fixture.ts:100](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Fixture.ts#L100)*
 
 ___
 
@@ -68,4 +68,4 @@ ___
 
 • **proxyId**: *number*
 
-*Defined in [src/dynamics/Fixture.ts:102](https://github.com/shakiba/planck.js/blob/ae24904/src/dynamics/Fixture.ts#L102)*
+*Defined in [src/dynamics/Fixture.ts:102](https://github.com/shakiba/planck.js/blob/6ab76c7/src/dynamics/Fixture.ts#L102)*
