@@ -49,10 +49,7 @@ let joint = world.createJoint(new MotorJoint({
   maxTorque : 1000.0
 }, ground, body));
 
-testbed.step = function (dt) {
-  // if (m_go && settings.hz > 0.0) {
-  //   time += 1.0 / settings.hz;
-  // }
+testbed.step = function(dt) {
   time += Math.min(dt, 100) / 1000;
 
   joint.setLinearOffset(new Vec2(

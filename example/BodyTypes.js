@@ -80,7 +80,7 @@ testbed.keydown = function(code, char) {
   }
 };
 
-testbed.step = function(settings) {
+testbed.step = function() {
   // Drive the kinematic body.
   if (platform.isKinematic()) {
     let p = platform.getTransform().p;

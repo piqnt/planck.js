@@ -70,7 +70,7 @@ let jointB3 = world.createJoint(new PrismaticJoint({
 let jointB4 = world.createJoint(new GearJoint({}, gearB1, gearB2, jointB1, jointB2, radius2 / radius1));
 let jointB5 = world.createJoint(new GearJoint({}, gearB2, plankB1, jointB2, jointB3, -1.0 / radius2));
 
-testbed.step = function step() {
+testbed.step = function() {
   let ratio, value;
 
   ratio = jointB4.getRatio();

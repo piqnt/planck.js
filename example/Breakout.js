@@ -135,19 +135,18 @@ function State() {
     }
   }
 
-  testbed.step = function(t) {
-    _time += t = Math.min(t, 50);
-
+  testbed.step = function(dt) {
+    _time += dt = Math.min(dt, 50);
 
     if (state.state !== 'playing' && state.state !== 'ready') {
       return;
     }
 
     if (testbed.activeKeys.left && !testbed.activeKeys.right) {
-      physics.movePaddle(-paddleSpeed() * t / 1000);
+      physics.movePaddle(-paddleSpeed() * dt / 1000);
 
     } else if (!testbed.activeKeys.left && testbed.activeKeys.right) {
-      physics.movePaddle(+paddleSpeed() * t / 1000);
+      physics.movePaddle(+paddleSpeed() * dt / 1000);
     }
 
     if (state.state !== 'playing') {
@@ -164,7 +163,7 @@ function State() {
       fullPaddle();
     }
 
-    physics.tick(t);
+    physics.tick(dt);
   };
 
   state.hitBrick = function(brick) {

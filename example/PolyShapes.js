@@ -135,7 +135,7 @@ testbed.keydown = function(code, char) {
 
 testbed.info('1-5: Drop new objects, Z: Activate/deactivate some bodies, X: Destroy an object');
 
-testbed.step = function step() {
+testbed.step = function() {
   AABBQueryListener.reset();
   let aabb = new AABB();
   AABBQueryListener.circle.computeAABB(aabb, AABBQueryListener.transform, 0);

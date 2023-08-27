@@ -73,9 +73,7 @@ testbed.keydown = function(code, char) {
   }
 };
 
-testbed.step = function(settings) {
-  let dt = settings.hz > 0.0 ? 1.0 / settings.hz : 0.0;
-
+testbed.step = function(dt) {
   if (settings.pause == 1 && settings.singleStep == 0) {
     dt = 0.0;
   }

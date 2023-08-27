@@ -79,7 +79,7 @@ world.on('pre-solve', function(contact, oldManifold) {
   }
 });
 
-testbed.step = function(settings) {
+testbed.step = function() {
   let v = character.getLinearVelocity();
   testbed.status('Character Linear Velocity', v.y);
 };

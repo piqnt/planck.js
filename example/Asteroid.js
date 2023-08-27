@@ -27,7 +27,6 @@ let world = new World();
 const testbed = Testbed.mount();
 testbed.width = SPACE_WIDTH;
 testbed.height = SPACE_HEIGHT;
-testbed.step = tick;
 testbed.ratio = 64;
 testbed.y = 0;
 testbed.start(world);
@@ -114,7 +113,7 @@ function setupShip() {
 }
 
 let globalTime = 0;
-function tick(dt) {
+testbed.step = function(dt) {
   globalTime += dt;
 
   if (shipBody) {
