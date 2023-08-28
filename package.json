@@ -26,6 +26,7 @@
     "Oliver Zell"
   ],
   "type": "commonjs",
+  "sideEffects": ["./dist/planck-with-testbed.*"],
   "module": "dist/planck.mjs",
   "main": "dist/planck.js",
   "jsdelivr": "dist/planck.min.js",
