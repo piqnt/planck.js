@@ -889,7 +889,8 @@ export class Body {
 
     // Update center of mass velocity.
     matrix.diffVec2(shift, this.m_sweep.c, oldCenter);
-    matrix.crossNumVec2(this.m_linearVelocity, this.m_angularVelocity, shift);
+    matrix.crossNumVec2(temp, this.m_angularVelocity, shift);
+    matrix.addVec2(this.m_linearVelocity, temp);
   }
 
   /**

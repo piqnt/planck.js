@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.0-beta.15
+ * Planck.js v1.0.0-beta.16
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
@@ -3989,7 +3989,8 @@
             this.m_sweep.setLocalCenter(massData.center, this.m_xf);
             // Update center of mass velocity.
             diffVec2(shift, this.m_sweep.c, oldCenter);
-            crossNumVec2(this.m_linearVelocity, this.m_angularVelocity, shift);
+            crossNumVec2(temp$6, this.m_angularVelocity, shift);
+            addVec2(this.m_linearVelocity, temp$6);
         };
         /**
          * Apply a force at a world point. If the force is not applied at the center of
