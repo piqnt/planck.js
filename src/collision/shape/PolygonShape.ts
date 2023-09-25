@@ -510,7 +510,7 @@ export class PolygonShape extends Shape {
    * Validate convexity. This is a very time consuming operation.
    * @returns true if valid
    */
-  validate(): boolean {
+  static validate(): boolean {
     for (let i = 0; i < this.m_count; ++i) {
       const i1 = i;
       const i2 = i < this.m_count - 1 ? i1 + 1 : 0;
