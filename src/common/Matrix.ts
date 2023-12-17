@@ -122,6 +122,12 @@ export function combineVec2(out: Vec2Value, am: number, a: Vec2Value, bm: number
   return out;
 }
 
+export function combine3Vec2(out: Vec2Value, am: number, a: Vec2Value, bm: number, b: Vec2Value, cm: number, c: Vec2Value): Vec2Value {
+  out.x = am * a.x + bm * b.x + cm * c.x;
+  out.y = am * a.y + bm * b.y + cm * c.y;
+  return out;
+}
+
 export function normalizeVec2Length(out: Vec2Value): number {
   const length = math_sqrt(out.x * out.x + out.y * out.y);
   if (length !== 0) {

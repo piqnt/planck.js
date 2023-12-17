@@ -506,8 +506,8 @@ class Simplex {
         break;
 
       case 3:
-        pB.x = pA.x = v1.a * v1.wA.x + v2.a * v2.wA.x + v3.a * v3.wA.x;
-        pB.y = pA.y = v1.a * v1.wA.y + v2.a * v2.wA.y + v3.a * v3.wA.y;
+        matrix.combine3Vec2(pA, v1.a, v1.wA, v2.a, v2.wA, v3.a, v3.wA);
+        matrix.copyVec2(pB, pA);
         break;
 
       default:
