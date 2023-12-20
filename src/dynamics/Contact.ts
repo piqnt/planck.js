@@ -1146,13 +1146,11 @@ export class Contact {
           matrix.setMulVec2(P2, d.y, normal);
 
           // vA.subCombine(mA, P1, mA, P2);
-          matrix.subMulVec2(vA, mA, P1);
-          matrix.subMulVec2(vA, mA, P2);
+          matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
           wA -= iA * (matrix.crossVec2Vec2(vcp1.rA, P1) + matrix.crossVec2Vec2(vcp2.rA, P2));
 
           // vB.addCombine(mB, P1, mB, P2);
-          matrix.addMulVec2(vB, mB, P1);
-          matrix.addMulVec2(vB, mB, P2);
+          matrix.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
           wB += iB * (matrix.crossVec2Vec2(vcp1.rB, P1) + matrix.crossVec2Vec2(vcp2.rB, P2));
 
           // Accumulate
@@ -1203,13 +1201,11 @@ export class Contact {
           matrix.setMulVec2(P2, d.y, normal);
 
           // vA.subCombine(mA, P1, mA, P2);
-          matrix.subMulVec2(vA, mA, P1);
-          matrix.subMulVec2(vA, mA, P2);
+          matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
           wA -= iA * (matrix.crossVec2Vec2(vcp1.rA, P1) + matrix.crossVec2Vec2(vcp2.rA, P2));
 
           // vB.addCombine(mB, P1, mB, P2);
-          matrix.addMulVec2(vB, mB, P1);
-          matrix.addMulVec2(vB, mB, P2);
+          matrix.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
           wB += iB * (matrix.crossVec2Vec2(vcp1.rB, P1) + matrix.crossVec2Vec2(vcp2.rB, P2));
 
           // Accumulate
@@ -1252,13 +1248,11 @@ export class Contact {
           matrix.setMulVec2(P2, d.y, normal);
 
           // vA.subCombine(mA, P1, mA, P2);
-          matrix.subMulVec2(vA, mA, P1);
-          matrix.subMulVec2(vA, mA, P2);
+          matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
           wA -= iA * (matrix.crossVec2Vec2(vcp1.rA, P1) + matrix.crossVec2Vec2(vcp2.rA, P2));
 
           // vB.addCombine(mB, P1, mB, P2);
-          matrix.addMulVec2(vB, mB, P1);
-          matrix.addMulVec2(vB, mB, P2);
+          matrix.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
           wB += iB * (matrix.crossVec2Vec2(vcp1.rB, P1) + matrix.crossVec2Vec2(vcp2.rB, P2));
 
           // Accumulate
@@ -1301,13 +1295,11 @@ export class Contact {
           matrix.setMulVec2(P2, d.y, normal);
 
           // vA.subCombine(mA, P1, mA, P2);
-          matrix.subMulVec2(vA, mA, P1);
-          matrix.subMulVec2(vA, mA, P2);
+          matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
           wA -= iA * (matrix.crossVec2Vec2(vcp1.rA, P1) + matrix.crossVec2Vec2(vcp2.rA, P2));
 
           // vB.addCombine(mB, P1, mB, P2);
-          matrix.addMulVec2(vB, mB, P1);
-          matrix.addMulVec2(vB, mB, P2);
+          matrix.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
           wB += iB * (matrix.crossVec2Vec2(vcp1.rB, P1) + matrix.crossVec2Vec2(vcp2.rB, P2));
 
           // Accumulate

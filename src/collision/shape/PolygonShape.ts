@@ -477,8 +477,8 @@ export class PolygonShape extends Shape {
       area += triangleArea;
 
       // Area weighted centroid
-      matrix.combineVec2(center, 1, center, triangleArea * k_inv3, e1);
-      matrix.combineVec2(center, 1, center, triangleArea * k_inv3, e2);
+      matrix.combineVec2(temp, triangleArea * k_inv3, e1, triangleArea * k_inv3, e2);
+      matrix.addVec2(center, temp);
 
       const ex1 = e1.x;
       const ey1 = e1.y;
@@ -576,9 +576,8 @@ export class PolygonShape extends Shape {
     area += triangleArea;
 
     // Area weighted centroid
-    c.addMul(triangleArea * inv3, p1);
-    c.addMul(triangleArea * inv3, p2);
-    c.addMul(triangleArea * inv3, p3);
+    matrix.combine3Vec2(temp, 1, p1, 1, p2, 1, p3);
+    matrix.addMulVec2(c, triangleArea * inv3, temp);
   }
 
   // Centroid
