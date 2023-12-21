@@ -1,10 +1,12 @@
 import Stage from 'stage-js';
 
+import type { Vec2Value } from '../src/common/Vec2';
 import type { World } from "../src/dynamics/World";
 import type { Joint } from "../src/dynamics/Joint";
 import type { Fixture } from "../src/dynamics/Fixture";
 import type { Body } from "../src/dynamics/Body";
 import type { AABBValue } from "../src/collision/AABB";
+import type { Style } from '../src/util/Testbed';
 import { Testbed } from '../src/util/Testbed';
 import type { EdgeShape } from "../src/collision/shape/EdgeShape";
 import type { PolygonShape } from "../src/collision/shape/PolygonShape";
@@ -20,15 +22,6 @@ const math_PI = Math.PI;
 const math_max = Math.max;
 const math_min = Math.min;
 
-interface Point {
-  x: number;
-  y: number;
-}
-
-interface Style {
-  stroke?: string;
-  fill?: string;
-}
 
 let mounted: StageTestbed | null = null;
 
@@ -91,7 +84,7 @@ const getStyle = function(obj: Body | Fixture | Joint): Style {
   return obj['render'] ?? obj['style'] ?? {};
 };
 
-function findBody(world: World, point: Point) {
+function findBody(world: World, point: Vec2Value) {
   let body: Body | null = null;
   const aabb = {
     lowerBound: point,
@@ -203,7 +196,7 @@ class StageTestbed extends Testbed {
 
     worldNode.attr('spy', true);
 
-    worldNode.on(Stage.Mouse.START, (point: Point) => {
+    worldNode.on(Stage.Mouse.START, (point: Vec2Value) => {
       point = { x: point.x, y: testbed.scaleY * point.y };
       if (targetBody) {
         return;
@@ -223,7 +216,7 @@ class StageTestbed extends Testbed {
       }
     });
 
-    worldNode.on(Stage.Mouse.MOVE, (point: Point) => {
+    worldNode.on(Stage.Mouse.MOVE, (point: Vec2Value) => {
       point = { x: point.x, y: testbed.scaleY * point.y };
       if (mouseJoint) {
         mouseJoint.setTarget(point);
@@ -233,7 +226,7 @@ class StageTestbed extends Testbed {
       mouseMove.y = point.y;
     });
 
-    worldNode.on(Stage.Mouse.END, (point: Point) => {
+    worldNode.on(Stage.Mouse.END, (point: Vec2Value) => {
       point = { x: point.x, y: testbed.scaleY * point.y };
       if (mouseJoint) {
         world.destroyJoint(mouseJoint);
@@ -250,7 +243,7 @@ class StageTestbed extends Testbed {
       }
     });
 
-    worldNode.on(Stage.Mouse.CANCEL, (point: Point) => {
+    worldNode.on(Stage.Mouse.CANCEL, (point: Vec2Value) => {
       point = { x: point.x, y: testbed.scaleY * point.y };
       if (mouseJoint) {
         world.destroyJoint(mouseJoint);
