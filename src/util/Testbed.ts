@@ -20,8 +20,24 @@ export type ActiveKeys = { [key in KEY]?: boolean };
 type TestbedMountOptions = {};
 
 export abstract class Testbed {
+  /**
+   * Mount testbed.
+   * 
+   * If you need to customize testbed before starting, use `Testbed.mount()` and `Testbed.start()` separately.
+   */
   static mount(options?: TestbedMountOptions): Testbed {
     throw new Error('Not implemented');
+  }
+
+  /**
+   * Start simulation, and mount testbed if needed.
+   * 
+   * If you need to customize testbed before starting, use `Testbed.mount().start()` separately.
+   */
+  static start(world: World): Testbed {
+    const testbed = Testbed.mount();
+    testbed.start(world);
+    return testbed;
   }
 
   /** World viewbox width. */
