@@ -23,7 +23,7 @@
  */
 
 import { options } from '../util/options';
-import { Vec2 } from '../common/Vec2';
+import { Vec2, Vec2Value } from '../common/Vec2';
 import { BroadPhase } from '../collision/BroadPhase';
 import { Solver, ContactImpulse, TimeStep } from './Solver';
 import { Body, BodyDef } from './Body';
@@ -38,28 +38,33 @@ import { Manifold } from "../collision/Manifold";
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
-/**
- * @prop gravity [{ x : 0, y : 0}]
- * @prop allowSleep [true]
- * @prop warmStarting [true]
- * @prop continuousPhysics [true]
- * @prop subStepping [false]
- * @prop blockSolve [true]
- * @prop velocityIterations [8] For the velocity constraint solver.
- * @prop positionIterations [3] For the position constraint solver.
- */
 export interface WorldDef {
+  /** [default: { x : 0, y : 0}] */
   gravity?: Vec2;
+
+  /** [default: true] */
   allowSleep?: boolean;
+
+  /** [default: true] */
   warmStarting?: boolean;
+
+  /** [default: true] */
   continuousPhysics?: boolean;
+
+  /** [default: false] */
   subStepping?: boolean;
+
+  /** [default: true] */
   blockSolve?: boolean;
+
+  /** @internal [8] For the velocity constraint solver. */
   velocityIterations?: number;
+
+  /** @internal [3] For the position constraint solver. */
   positionIterations?: number;
 }
 
-/** @internal */ const WorldDefDefault: WorldDef = {
+/** @internal */ const DEFAULTS: WorldDef = {
   gravity : Vec2.zero(),
   allowSleep : true,
   warmStarting : true,
@@ -134,11 +139,13 @@ export class World {
     this.s_step = new TimeStep();
 
 
-    if (def && Vec2.isValid(def)) {
+    if (!def) {
+      def = {};
+    } else if (Vec2.isValid(def)) {
       def = { gravity: def as Vec2 };
     }
 
-    def = options(def, WorldDefDefault) as WorldDef;
+    def = options(def, DEFAULTS) as WorldDef;
 
     this.m_solver = new Solver(this);
 
@@ -272,8 +279,8 @@ export class World {
   /**
    * Change the global gravity vector.
    */
-  setGravity(gravity: Vec2): void {
-    this.m_gravity = gravity;
+  setGravity(gravity: Vec2Value): void {
+    this.m_gravity.set(gravity);
   }
 
   /**
@@ -458,7 +465,7 @@ export class World {
    *
    * @param newOrigin The new origin with respect to the old origin
    */
-  shiftOrigin(newOrigin: Vec2): void {
+  shiftOrigin(newOrigin: Vec2Value): void {
     _ASSERT && console.assert(this.m_locked == false);
     if (this.m_locked) {
       return;
@@ -501,7 +508,7 @@ export class World {
    * Warning: This function is locked during callbacks.
    */
   createBody(def?: BodyDef): Body;
-  createBody(position: Vec2, angle?: number): Body;
+  createBody(position: Vec2Value, angle?: number): Body;
   // tslint:disable-next-line:typedef
   /** @internal */ createBody(arg1?, arg2?) {
     _ASSERT && console.assert(this.isLocked() == false);
@@ -523,7 +530,7 @@ export class World {
   }
 
   createDynamicBody(def?: BodyDef): Body;
-  createDynamicBody(position: Vec2, angle?: number): Body;
+  createDynamicBody(position: Vec2Value, angle?: number): Body;
   // tslint:disable-next-line:typedef
   /** @internal */ createDynamicBody(arg1?, arg2?) {
     let def: BodyDef = {};
@@ -538,7 +545,7 @@ export class World {
   }
 
   createKinematicBody(def?: BodyDef): Body;
-  createKinematicBody(position: Vec2, angle?: number): Body;
+  createKinematicBody(position: Vec2Value, angle?: number): Body;
   // tslint:disable-next-line:typedef
   createKinematicBody(arg1?, arg2?) {
     let def: BodyDef = {};

@@ -62,7 +62,7 @@ export interface BodyDef {
    * The world position of the body. Avoid creating bodies at the
    * origin since this can lead to many overlapping shapes.
    */
-  position?: Vec2;
+  position?: Vec2Value;
   /**
    * The world angle of the body in radians.
    */
@@ -70,7 +70,7 @@ export interface BodyDef {
   /**
    * The linear velocity of the body's origin in world co-ordinates.
    */
-  linearVelocity?: Vec2;
+  linearVelocity?: Vec2Value;
   angularVelocity?: number;
   /**
    * Linear damping is use to reduce the linear velocity. The
@@ -573,7 +573,7 @@ export class Body {
    * @param position The world position of the body's local origin.
    * @param angle The world rotation in radians.
    */
-  setTransform(position: Vec2, angle: number): void {
+  setTransform(position: Vec2Value, angle: number): void {
     _ASSERT && console.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
       return;
@@ -623,7 +623,7 @@ export class Body {
     return this.m_xf.p;
   }
 
-  setPosition(p: Vec2): void {
+  setPosition(p: Vec2Value): void {
     this.setTransform(p, this.m_sweep.a);
   }
 
@@ -666,7 +666,7 @@ export class Body {
    *
    * @param worldPoint A point in world coordinates.
    */
-  getLinearVelocityFromWorldPoint(worldPoint: Vec2): Vec2 {
+  getLinearVelocityFromWorldPoint(worldPoint: Vec2Value): Vec2 {
     const localCenter = Vec2.sub(worldPoint, this.m_sweep.c);
     return Vec2.add(this.m_linearVelocity, Vec2.crossNumVec2(this.m_angularVelocity,
       localCenter));
@@ -677,7 +677,7 @@ export class Body {
    *
    * @param localPoint A point in local coordinates.
    */
-  getLinearVelocityFromLocalPoint(localPoint: Vec2): Vec2 {
+  getLinearVelocityFromLocalPoint(localPoint: Vec2Value): Vec2 {
     return this.getLinearVelocityFromWorldPoint(this.getWorldPoint(localPoint));
   }
 
@@ -686,7 +686,7 @@ export class Body {
    *
    * @param v The new linear velocity of the center of mass.
    */
-  setLinearVelocity(v: Vec2): void {
+  setLinearVelocity(v: Vec2Value): void {
     if (this.m_type == STATIC) {
       return;
     }
@@ -902,7 +902,7 @@ export class Body {
    * @param point The world position of the point of application.
    * @param wake Also wake up the body
    */
-  applyForce(force: Vec2, point: Vec2, wake: boolean = true): void {
+  applyForce(force: Vec2Value, point: Vec2Value, wake: boolean = true): void {
     if (this.m_type != DYNAMIC) {
       return;
     }
@@ -964,7 +964,7 @@ export class Body {
    * @param point The world position of the point of application.
    * @param wake Also wake up the body
    */
-  applyLinearImpulse(impulse: Vec2, point: Vec2, wake: boolean = true): void {
+  applyLinearImpulse(impulse: Vec2Value, point: Vec2Value, wake: boolean = true): void {
     if (this.m_type != DYNAMIC) {
       return;
     }
@@ -1150,14 +1150,14 @@ export class Body {
   /**
    * Get the corresponding world point of a local point.
    */
-  getWorldPoint(localPoint: Vec2): Vec2 {
+  getWorldPoint(localPoint: Vec2Value): Vec2 {
     return Transform.mulVec2(this.m_xf, localPoint);
   }
 
   /**
    * Get the corresponding world vector of a local vector.
    */
-  getWorldVector(localVector: Vec2): Vec2 {
+  getWorldVector(localVector: Vec2Value): Vec2 {
     return Rot.mulVec2(this.m_xf.q, localVector);
   }
 

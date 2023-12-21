@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import type { Vec2 }  from '../common/Vec2';
+import type { Vec2, Vec2Value }  from '../common/Vec2';
 import type { Body }  from './Body';
 import { TimeStep } from "./Solver";
 
@@ -200,7 +200,7 @@ export abstract class Joint {
   /**
    * Shift the origin for any points stored in world coordinates.
    */
-  shiftOrigin(newOrigin: Vec2): void {}
+  shiftOrigin(newOrigin: Vec2Value): void {}
 
   abstract initVelocityConstraints(step: TimeStep): void;
 
