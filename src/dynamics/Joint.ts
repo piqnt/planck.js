@@ -25,6 +25,7 @@
 import type { Vec2, Vec2Value }  from '../common/Vec2';
 import type { Body }  from './Body';
 import { TimeStep } from "./Solver";
+import { Style } from '../util/Testbed';
 
 /** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
@@ -107,6 +108,9 @@ export abstract class Joint {
 
   /** @internal */ m_islandFlag: boolean = false;
   /** @internal */ m_userData: unknown;
+
+  /** Styling for dev-tools. */
+  style: Style = {};
 
   constructor(def: JointDef);
   constructor(def: JointOpt, bodyA: Body, bodyB: Body);

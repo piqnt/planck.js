@@ -30,6 +30,7 @@ import { Shape, ShapeType } from '../collision/Shape';
 import { Body, MassData } from "./Body";
 import { BroadPhase } from "../collision/BroadPhase";
 import { TransformValue } from "../common/Transform";
+import { Style } from '../util/Testbed';
 
 
 /** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -130,6 +131,9 @@ export class Fixture {
   // 0 indicates inactive state, this is not the same as m_proxies.length
   /** @internal */ m_proxyCount: number;
   /** @internal */ m_userData: unknown;
+
+  /** Styling for dev-tools. */
+  style: Style = {};
 
   constructor(body: Body, def: FixtureDef);
   constructor(body: Body, shape: Shape, def?: FixtureOpt);

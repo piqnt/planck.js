@@ -27,6 +27,7 @@ import { RayCastOutput, RayCastInput, AABBValue } from './AABB';
 import { DistanceProxy } from './Distance';
 import type { Transform, TransformValue }  from '../common/Transform';
 import type { Vec2Value }  from '../common/Vec2';
+import { Style } from '../util/Testbed';
 
 // todo make shape an interface
 
@@ -43,6 +44,9 @@ export abstract class Shape {
    * There is no support for making rounded polygons.
    */
   m_radius: number;
+
+  /** Styling for dev-tools. */
+  style: Style = {};
 
   /** @internal */
   abstract _reset(): void;

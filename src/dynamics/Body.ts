@@ -35,6 +35,7 @@ import { Shape } from '../collision/Shape';
 import { JointEdge } from "./Joint";
 import { World } from "./World";
 import { ContactEdge } from "./Contact";
+import { Style } from '../util/Testbed';
 
 
 /** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -216,6 +217,9 @@ export class Body {
   /** @internal */ m_prev: Body | null;
   /** @internal */ m_next: Body | null;
   /** @internal */ m_destroyed: boolean;
+
+  /** Styling for dev-tools. */
+  style: Style = {};
 
   /** @internal */
   constructor(world: World, def: BodyDef) {
