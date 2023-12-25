@@ -37,6 +37,10 @@ various fashions. Some joints also feature limits and motors.
 
 * [constructor](joint.md#constructor)
 
+### Properties
+
+* [style](joint.md#style)
+
 ### Methods
 
 * [getAnchorA](joint.md#abstract-getanchora)
@@ -81,6 +85,14 @@ Name | Type |
 `bodyB` | [Body](body.md) |
 
 **Returns:** *[Joint](joint.md)*
+
+## Properties
+
+###  style
+
+• **style**: *[Style](../interfaces/style.md)*
+
+Styling for dev-tools.
 
 ## Methods
 
@@ -236,7 +248,7 @@ ___
 
 ###  shiftOrigin
 
-▸ **shiftOrigin**(`newOrigin`: Vec2): *void*
+▸ **shiftOrigin**(`newOrigin`: [Vec2Value](../interfaces/vec2value.md)): *void*
 
 Shift the origin for any points stored in world coordinates.
 
@@ -244,7 +256,7 @@ Shift the origin for any points stored in world coordinates.
 
 Name | Type |
 ------ | ------ |
-`newOrigin` | Vec2 |
+`newOrigin` | [Vec2Value](../interfaces/vec2value.md) |
 
 **Returns:** *void*
 

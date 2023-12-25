@@ -26,6 +26,7 @@ length.
 
 ### Properties
 
+* [style](pulleyjoint.md#style)
 * [TYPE](pulleyjoint.md#static-type)
 
 ### Methods
@@ -91,6 +92,16 @@ Name | Type |
 **Returns:** *[PulleyJoint](pulleyjoint.md)*
 
 ## Properties
+
+###  style
+
+• **style**: *[Style](../interfaces/style.md)*
+
+*Inherited from [Joint](joint.md).[style](joint.md#style)*
+
+Styling for dev-tools.
+
+___
 
 ### `Static` TYPE
 

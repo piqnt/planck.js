@@ -27,6 +27,7 @@ at the testbed.
 
 ### Properties
 
+* [style](mousejoint.md#style)
 * [TYPE](mousejoint.md#static-type)
 
 ### Methods
@@ -88,6 +89,16 @@ Name | Type |
 **Returns:** *[MouseJoint](mousejoint.md)*
 
 ## Properties
+
+###  style
+
+• **style**: *[Style](../interfaces/style.md)*
+
+*Inherited from [Joint](joint.md).[style](joint.md#style)*
+
+Styling for dev-tools.
+
+___
 
 ### `Static` TYPE
 

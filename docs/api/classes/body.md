@@ -14,6 +14,7 @@ To create a new Body use {@link World.createBody}.
 
 ### Properties
 
+* [style](body.md#style)
 * [DYNAMIC](body.md#static-readonly-dynamic)
 * [KINEMATIC](body.md#static-readonly-kinematic)
 * [STATIC](body.md#static-readonly-static)
@@ -89,6 +90,14 @@ To create a new Body use {@link World.createBody}.
 
 ## Properties
 
+###  style
+
+• **style**: *[Style](../interfaces/style.md)*
+
+Styling for dev-tools.
+
+___
+
 ### `Static` `Readonly` DYNAMIC
 
 ▪ **DYNAMIC**: *[BodyType](../globals.md#bodytype)* = "dynamic"
@@ -160,7 +169,7 @@ ___
 
 ###  applyForce
 
-▸ **applyForce**(`force`: Vec2, `point`: Vec2, `wake`: boolean): *void*
+▸ **applyForce**(`force`: [Vec2Value](../interfaces/vec2value.md), `point`: [Vec2Value](../interfaces/vec2value.md), `wake`: boolean): *void*
 
 Apply a force at a world point. If the force is not applied at the center of
 mass, it will generate a torque and affect the angular velocity. This wakes
@@ -170,8 +179,8 @@ up the body.
 
 Name | Type | Default | Description |
 ------ | ------ | ------ | ------ |
-`force` | Vec2 | - | The world force vector, usually in Newtons (N). |
-`point` | Vec2 | - | The world position of the point of application. |
+`force` | [Vec2Value](../interfaces/vec2value.md) | - | The world force vector, usually in Newtons (N). |
+`point` | [Vec2Value](../interfaces/vec2value.md) | - | The world position of the point of application. |
 `wake` | boolean | true | Also wake up the body  |
 
 **Returns:** *void*
@@ -197,7 +206,7 @@ ___
 
 ###  applyLinearImpulse
 
-▸ **applyLinearImpulse**(`impulse`: Vec2, `point`: Vec2, `wake`: boolean): *void*
+▸ **applyLinearImpulse**(`impulse`: [Vec2Value](../interfaces/vec2value.md), `point`: [Vec2Value](../interfaces/vec2value.md), `wake`: boolean): *void*
 
 Apply an impulse at a point. This immediately modifies the velocity. It also
 modifies the angular velocity if the point of application is not at the
@@ -207,8 +216,8 @@ center of mass. This wakes up the body.
 
 Name | Type | Default | Description |
 ------ | ------ | ------ | ------ |
-`impulse` | Vec2 | - | The world impulse vector, usually in N-seconds or kg-m/s. |
-`point` | Vec2 | - | The world position of the point of application. |
+`impulse` | [Vec2Value](../interfaces/vec2value.md) | - | The world impulse vector, usually in N-seconds or kg-m/s. |
+`point` | [Vec2Value](../interfaces/vec2value.md) | - | The world position of the point of application. |
 `wake` | boolean | true | Also wake up the body  |
 
 **Returns:** *void*
@@ -399,7 +408,7 @@ ___
 
 ###  getLinearVelocityFromLocalPoint
 
-▸ **getLinearVelocityFromLocalPoint**(`localPoint`: Vec2): *Vec2*
+▸ **getLinearVelocityFromLocalPoint**(`localPoint`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
 Get the world velocity of a local point.
 
@@ -407,7 +416,7 @@ Get the world velocity of a local point.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`localPoint` | Vec2 | A point in local coordinates.  |
+`localPoint` | [Vec2Value](../interfaces/vec2value.md) | A point in local coordinates.  |
 
 **Returns:** *Vec2*
 
@@ -415,7 +424,7 @@ ___
 
 ###  getLinearVelocityFromWorldPoint
 
-▸ **getLinearVelocityFromWorldPoint**(`worldPoint`: Vec2): *Vec2*
+▸ **getLinearVelocityFromWorldPoint**(`worldPoint`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
 Get the world linear velocity of a world point attached to this body.
 
@@ -423,7 +432,7 @@ Get the world linear velocity of a world point attached to this body.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`worldPoint` | Vec2 | A point in world coordinates.  |
+`worldPoint` | [Vec2Value](../interfaces/vec2value.md) | A point in world coordinates.  |
 
 **Returns:** *Vec2*
 
@@ -565,7 +574,7 @@ ___
 
 ###  getWorldPoint
 
-▸ **getWorldPoint**(`localPoint`: Vec2): *Vec2*
+▸ **getWorldPoint**(`localPoint`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
 Get the corresponding world point of a local point.
 
@@ -573,7 +582,7 @@ Get the corresponding world point of a local point.
 
 Name | Type |
 ------ | ------ |
-`localPoint` | Vec2 |
+`localPoint` | [Vec2Value](../interfaces/vec2value.md) |
 
 **Returns:** *Vec2*
 
@@ -581,7 +590,7 @@ ___
 
 ###  getWorldVector
 
-▸ **getWorldVector**(`localVector`: Vec2): *Vec2*
+▸ **getWorldVector**(`localVector`: [Vec2Value](../interfaces/vec2value.md)): *Vec2*
 
 Get the corresponding world vector of a local vector.
 
@@ -589,7 +598,7 @@ Get the corresponding world vector of a local vector.
 
 Name | Type |
 ------ | ------ |
-`localVector` | Vec2 |
+`localVector` | [Vec2Value](../interfaces/vec2value.md) |
 
 **Returns:** *Vec2*
 
@@ -845,7 +854,7 @@ ___
 
 ###  setLinearVelocity
 
-▸ **setLinearVelocity**(`v`: Vec2): *void*
+▸ **setLinearVelocity**(`v`: [Vec2Value](../interfaces/vec2value.md)): *void*
 
 Set the linear velocity of the center of mass.
 
@@ -853,7 +862,7 @@ Set the linear velocity of the center of mass.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`v` | Vec2 | The new linear velocity of the center of mass.  |
+`v` | [Vec2Value](../interfaces/vec2value.md) | The new linear velocity of the center of mass.  |
 
 **Returns:** *void*
 
@@ -880,13 +889,13 @@ ___
 
 ###  setPosition
 
-▸ **setPosition**(`p`: Vec2): *void*
+▸ **setPosition**(`p`: [Vec2Value](../interfaces/vec2value.md)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`p` | Vec2 |
+`p` | [Vec2Value](../interfaces/vec2value.md) |
 
 **Returns:** *void*
 
@@ -918,7 +927,7 @@ ___
 
 ###  setTransform
 
-▸ **setTransform**(`position`: Vec2, `angle`: number): *void*
+▸ **setTransform**(`position`: [Vec2Value](../interfaces/vec2value.md), `angle`: number): *void*
 
 Set the position of the body's origin and rotation. Manipulating a body's
 transform may cause non-physical behavior. Note: contacts are updated on the
@@ -928,7 +937,7 @@ next call to World.step.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`position` | Vec2 | The world position of the body's local origin. |
+`position` | [Vec2Value](../interfaces/vec2value.md) | The world position of the body's local origin. |
 `angle` | number | The world rotation in radians.  |
 
 **Returns:** *void*

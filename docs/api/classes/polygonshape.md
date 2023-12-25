@@ -29,6 +29,7 @@ for a convex polygon. extends Shape
 * [m_radius](polygonshape.md#m_radius)
 * [m_type](polygonshape.md#m_type)
 * [m_vertices](polygonshape.md#m_vertices)
+* [style](polygonshape.md#style)
 * [TYPE](polygonshape.md#static-type)
 
 ### Methods
@@ -97,6 +98,16 @@ ___
 ###  m_vertices
 
 • **m_vertices**: *Vec2[]*
+
+___
+
+###  style
+
+• **style**: *[Style](../interfaces/style.md)*
+
+*Inherited from [Shape](shape.md).[style](shape.md#style)*
+
+Styling for dev-tools.
 
 ___
 

@@ -14,6 +14,10 @@ To create a new Fixture use [Body.createFixture](body.md#createfixture).
 
 ## Index
 
+### Properties
+
+* [style](fixture.md#style)
+
 ### Methods
 
 * [createProxies](fixture.md#createproxies)
@@ -46,6 +50,14 @@ To create a new Fixture use [Body.createFixture](body.md#createfixture).
 * [shouldCollide](fixture.md#shouldcollide)
 * [synchronize](fixture.md#synchronize)
 * [testPoint](fixture.md#testpoint)
+
+## Properties
+
+###  style
+
+• **style**: *[Style](../interfaces/style.md)*
+
+Styling for dev-tools.
 
 ## Methods
 

@@ -119,13 +119,13 @@ Name | Type |
 
 **Returns:** *[Body](body.md)*
 
-▸ **createKinematicBody**(`position`: Vec2, `angle?`: number): *[Body](body.md)*
+▸ **createKinematicBody**(`position`: [Vec2Value](../interfaces/vec2value.md), `angle?`: number): *[Body](body.md)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`position` | Vec2 |
+`position` | [Vec2Value](../interfaces/vec2value.md) |
 `angle?` | number |
 
 **Returns:** *[Body](body.md)*
@@ -773,7 +773,7 @@ ___
 
 ###  setGravity
 
-▸ **setGravity**(`gravity`: Vec2): *void*
+▸ **setGravity**(`gravity`: [Vec2Value](../interfaces/vec2value.md)): *void*
 
 Change the global gravity vector.
 
@@ -781,7 +781,7 @@ Change the global gravity vector.
 
 Name | Type |
 ------ | ------ |
-`gravity` | Vec2 |
+`gravity` | [Vec2Value](../interfaces/vec2value.md) |
 
 **Returns:** *void*
 
@@ -821,7 +821,7 @@ ___
 
 ###  shiftOrigin
 
-▸ **shiftOrigin**(`newOrigin`: Vec2): *void*
+▸ **shiftOrigin**(`newOrigin`: [Vec2Value](../interfaces/vec2value.md)): *void*
 
 Shift the world origin. Useful for large worlds. The body shift formula is:
 position -= newOrigin
@@ -830,7 +830,7 @@ position -= newOrigin
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`newOrigin` | Vec2 | The new origin with respect to the old origin  |
+`newOrigin` | [Vec2Value](../interfaces/vec2value.md) | The new origin with respect to the old origin  |
 
 **Returns:** *void*
 

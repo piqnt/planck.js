@@ -40,6 +40,7 @@
 * [status](testbed.md#status)
 * [step](testbed.md#step)
 * [mount](testbed.md#static-mount)
+* [start](testbed.md#static-start)
 
 ## Properties
 
@@ -263,7 +264,7 @@ ___
 
 ### `Abstract` findAll
 
-▸ **findAll**(`query`: string): *([Fixture](fixture.md)‹› | [Body](body.md)‹› | [Joint](joint.md)‹›)[]*
+▸ **findAll**(`query`: string): *([Body](body.md)‹› | [Joint](joint.md)‹› | [Fixture](fixture.md)‹›)[]*
 
 **Parameters:**
 
@@ -271,13 +272,13 @@ Name | Type |
 ------ | ------ |
 `query` | string |
 
-**Returns:** *([Fixture](fixture.md)‹› | [Body](body.md)‹› | [Joint](joint.md)‹›)[]*
+**Returns:** *([Body](body.md)‹› | [Joint](joint.md)‹› | [Fixture](fixture.md)‹›)[]*
 
 ___
 
 ### `Abstract` findOne
 
-▸ **findOne**(`query`: string): *[Fixture](fixture.md)‹› | [Body](body.md)‹› | [Joint](joint.md)‹›*
+▸ **findOne**(`query`: string): *[Body](body.md)‹› | [Joint](joint.md)‹› | [Fixture](fixture.md)‹›*
 
 **Parameters:**
 
@@ -285,7 +286,7 @@ Name | Type |
 ------ | ------ |
 `query` | string |
 
-**Returns:** *[Fixture](fixture.md)‹› | [Body](body.md)‹› | [Joint](joint.md)‹›*
+**Returns:** *[Body](body.md)‹› | [Joint](joint.md)‹› | [Fixture](fixture.md)‹›*
 
 ___
 
@@ -397,10 +398,32 @@ ___
 
 ▸ **mount**(`options?`: [TestbedMountOptions](../globals.md#testbedmountoptions)): *Testbed*
 
+Mount testbed.
+
+If you need to customize testbed before starting, use `Testbed.mount()` and `Testbed.start()` separately.
+
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `options?` | [TestbedMountOptions](../globals.md#testbedmountoptions) |
+
+**Returns:** *Testbed*
+
+___
+
+### `Static` start
+
+▸ **start**(`world`: World): *Testbed*
+
+Start simulation, and mount testbed if needed.
+
+If you need to customize testbed before starting, use `Testbed.mount().start()` separately.
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`world` | World |
 
 **Returns:** *Testbed*

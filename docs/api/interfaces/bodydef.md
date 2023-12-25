@@ -115,7 +115,7 @@ ___
 
 ### `Optional` linearVelocity
 
-• **linearVelocity**? : *Vec2*
+• **linearVelocity**? : *[Vec2Value](vec2value.md)*
 
 The linear velocity of the body's origin in world co-ordinates.
 
@@ -123,7 +123,7 @@ ___
 
 ### `Optional` position
 
-• **position**? : *Vec2*
+• **position**? : *[Vec2Value](vec2value.md)*
 
 The world position of the body. Avoid creating bodies at the
 origin since this can lead to many overlapping shapes.

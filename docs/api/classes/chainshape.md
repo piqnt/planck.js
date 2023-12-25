@@ -32,6 +32,7 @@ WARNING: The chain will not collide properly if there are self-intersections.
 * [m_radius](chainshape.md#m_radius)
 * [m_type](chainshape.md#m_type)
 * [m_vertices](chainshape.md#m_vertices)
+* [style](chainshape.md#style)
 * [TYPE](chainshape.md#static-type)
 
 ### Methods
@@ -125,6 +126,16 @@ ___
 ###  m_vertices
 
 • **m_vertices**: *Vec2[]*
+
+___
+
+###  style
+
+• **style**: *[Style](../interfaces/style.md)*
+
+*Inherited from [Shape](shape.md).[style](shape.md#style)*
+
+Styling for dev-tools.
 
 ___
 

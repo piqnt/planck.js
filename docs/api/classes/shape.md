@@ -24,6 +24,7 @@ Fixture is created. Shapes may encapsulate one or more child shapes.
 
 * [m_radius](shape.md#m_radius)
 * [m_type](shape.md#m_type)
+* [style](shape.md#style)
 
 ### Methods
 
@@ -51,6 +52,14 @@ ___
 ###  m_type
 
 • **m_type**: *[ShapeType](../globals.md#shapetype)*
+
+___
+
+###  style
+
+• **style**: *[Style](../interfaces/style.md)*
+
+Styling for dev-tools.
 
 ## Methods
 

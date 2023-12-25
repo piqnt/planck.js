@@ -19,6 +19,7 @@
 * [m_p](circleshape.md#m_p)
 * [m_radius](circleshape.md#m_radius)
 * [m_type](circleshape.md#m_type)
+* [style](circleshape.md#style)
 * [TYPE](circleshape.md#static-type)
 
 ### Methods
@@ -80,6 +81,16 @@ ___
 • **m_type**: *"circle"*
 
 *Overrides [Shape](shape.md).[m_type](shape.md#m_type)*
+
+___
+
+###  style
+
+• **style**: *[Style](../interfaces/style.md)*
+
+*Inherited from [Shape](shape.md).[style](shape.md#style)*
+
+Styling for dev-tools.
 
 ___
 

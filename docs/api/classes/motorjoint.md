@@ -20,6 +20,7 @@ the ground.
 
 ### Properties
 
+* [style](motorjoint.md#style)
 * [TYPE](motorjoint.md#static-type)
 
 ### Methods
@@ -82,6 +83,16 @@ Name | Type |
 **Returns:** *[MotorJoint](motorjoint.md)*
 
 ## Properties
+
+###  style
+
+• **style**: *[Style](../interfaces/style.md)*
+
+*Inherited from [Joint](joint.md).[style](joint.md#style)*
+
+Styling for dev-tools.
+
+___
 
 ### `Static` TYPE
 
@@ -393,7 +404,7 @@ ___
 
 ###  shiftOrigin
 
-▸ **shiftOrigin**(`newOrigin`: Vec2): *void*
+▸ **shiftOrigin**(`newOrigin`: [Vec2Value](../interfaces/vec2value.md)): *void*
 
 *Inherited from [Joint](joint.md).[shiftOrigin](joint.md#shiftorigin)*
 
@@ -403,7 +414,7 @@ Shift the origin for any points stored in world coordinates.
 
 Name | Type |
 ------ | ------ |
-`newOrigin` | Vec2 |
+`newOrigin` | [Vec2Value](../interfaces/vec2value.md) |
 
 **Returns:** *void*
 

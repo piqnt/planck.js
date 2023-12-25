@@ -28,6 +28,7 @@ contact normals.
 * [m_vertex1](edgeshape.md#m_vertex1)
 * [m_vertex2](edgeshape.md#m_vertex2)
 * [m_vertex3](edgeshape.md#m_vertex3)
+* [style](edgeshape.md#style)
 * [TYPE](edgeshape.md#static-type)
 
 ### Methods
@@ -113,6 +114,16 @@ ___
 ###  m_vertex3
 
 • **m_vertex3**: *Vec2*
+
+___
+
+###  style
+
+• **style**: *[Style](../interfaces/style.md)*
+
+*Inherited from [Shape](shape.md).[style](shape.md#style)*
+
+Styling for dev-tools.
 
 ___
 

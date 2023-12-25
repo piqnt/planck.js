@@ -5,8 +5,6 @@
 Friction joint. This is used for top-down friction. It provides 2D
 translational friction and angular friction.
 
-**`param`** Anchor in global coordination.
-
 ## Hierarchy
 
 * [Joint](joint.md)
@@ -21,6 +19,7 @@ translational friction and angular friction.
 
 ### Properties
 
+* [style](frictionjoint.md#style)
 * [TYPE](frictionjoint.md#static-type)
 
 ### Methods
@@ -70,16 +69,26 @@ Name | Type |
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`def` | [FrictionJointOpt](../interfaces/frictionjointopt.md) |
-`bodyA` | [Body](body.md) |
-`bodyB` | [Body](body.md) |
-`anchor` | [Vec2Value](../interfaces/vec2value.md) |
+Name | Type | Description |
+------ | ------ | ------ |
+`def` | [FrictionJointOpt](../interfaces/frictionjointopt.md) | - |
+`bodyA` | [Body](body.md) | - |
+`bodyB` | [Body](body.md) | - |
+`anchor` | [Vec2Value](../interfaces/vec2value.md) | Anchor in global coordination.  |
 
 **Returns:** *[FrictionJoint](frictionjoint.md)*
 
 ## Properties
+
+###  style
+
+• **style**: *[Style](../interfaces/style.md)*
+
+*Inherited from [Joint](joint.md).[style](joint.md#style)*
+
+Styling for dev-tools.
+
+___
 
 ### `Static` TYPE
 
@@ -337,7 +346,7 @@ ___
 
 ###  shiftOrigin
 
-▸ **shiftOrigin**(`newOrigin`: Vec2): *void*
+▸ **shiftOrigin**(`newOrigin`: [Vec2Value](../interfaces/vec2value.md)): *void*
 
 *Inherited from [Joint](joint.md).[shiftOrigin](joint.md#shiftorigin)*
 
@@ -347,7 +356,7 @@ Shift the origin for any points stored in world coordinates.
 
 Name | Type |
 ------ | ------ |
-`newOrigin` | Vec2 |
+`newOrigin` | [Vec2Value](../interfaces/vec2value.md) |
 
 **Returns:** *void*
 

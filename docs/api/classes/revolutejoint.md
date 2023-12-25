@@ -23,6 +23,7 @@ so that infinite forces are not generated.
 
 ### Properties
 
+* [style](revolutejoint.md#style)
 * [TYPE](revolutejoint.md#static-type)
 
 ### Methods
@@ -93,6 +94,16 @@ Name | Type |
 **Returns:** *[RevoluteJoint](revolutejoint.md)*
 
 ## Properties
+
+###  style
+
+• **style**: *[Style](../interfaces/style.md)*
+
+*Inherited from [Joint](joint.md).[style](joint.md#style)*
+
+Styling for dev-tools.
+
+___
 
 ### `Static` TYPE
 
@@ -484,7 +495,7 @@ ___
 
 ###  shiftOrigin
 
-▸ **shiftOrigin**(`newOrigin`: Vec2): *void*
+▸ **shiftOrigin**(`newOrigin`: [Vec2Value](../interfaces/vec2value.md)): *void*
 
 *Inherited from [Joint](joint.md).[shiftOrigin](joint.md#shiftorigin)*
 
@@ -494,7 +505,7 @@ Shift the origin for any points stored in world coordinates.
 
 Name | Type |
 ------ | ------ |
-`newOrigin` | Vec2 |
+`newOrigin` | [Vec2Value](../interfaces/vec2value.md) |
 
 **Returns:** *void*
 

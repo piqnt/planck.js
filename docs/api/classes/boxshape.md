@@ -24,6 +24,7 @@ A rectangle polygon which extend PolygonShape.
 * [m_radius](boxshape.md#m_radius)
 * [m_type](boxshape.md#m_type)
 * [m_vertices](boxshape.md#m_vertices)
+* [style](boxshape.md#style)
 * [TYPE](boxshape.md#static-type)
 
 ### Methods
@@ -109,6 +110,16 @@ ___
 • **m_vertices**: *Vec2[]*
 
 *Inherited from [PolygonShape](polygonshape.md).[m_vertices](polygonshape.md#m_vertices)*
+
+___
+
+###  style
+
+• **style**: *[Style](../interfaces/style.md)*
+
+*Inherited from [Shape](shape.md).[style](shape.md#style)*
+
+Styling for dev-tools.
 
 ___
 
