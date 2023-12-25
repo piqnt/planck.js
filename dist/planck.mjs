@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.0-beta.16
+ * Planck.js v1.0.0-beta.17
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
@@ -2305,6 +2305,11 @@ function combineVec2(out, am, a, bm, b) {
     out.y = am * a.y + bm * b.y;
     return out;
 }
+function combine3Vec2(out, am, a, bm, b, cm, c) {
+    out.x = am * a.x + bm * b.x + cm * c.x;
+    out.y = am * a.y + bm * b.y + cm * c.y;
+    return out;
+}
 function normalizeVec2Length(out) {
     var length = math_sqrt$4(out.x * out.x + out.y * out.y);
     if (length !== 0) {
@@ -2998,6 +3003,8 @@ function getTransform(xf, p, c, a) {
  */
 var Shape = /** @class */ (function () {
     function Shape() {
+        /** Styling for dev-tools. */
+        this.style = {};
     }
     Shape.isValid = function (obj) {
         if (obj === null || typeof obj === 'undefined') {
@@ -3066,6 +3073,8 @@ var FixtureProxy = /** @class */ (function () {
 var Fixture = /** @class */ (function () {
     /** @internal */
     function Fixture(body, shape, def) {
+        /** Styling for dev-tools. */
+        this.style = {};
         if (shape.shape) {
             def = shape;
             shape = shape.shape;
@@ -3433,6 +3442,8 @@ var Fixture = /** @class */ (function () {
 var Body = /** @class */ (function () {
     /** @internal */
     function Body(world, def) {
+        /** Styling for dev-tools. */
+        this.style = {};
         def = options(def, BodyDefDefault);
         this.m_world = world;
         this.m_awakeFlag = def.awake;
@@ -4305,6 +4316,8 @@ var Joint = /** @class */ (function () {
         /** @internal */ this.m_edgeA = new JointEdge();
         /** @internal */ this.m_edgeB = new JointEdge();
         /** @internal */ this.m_islandFlag = false;
+        /** Styling for dev-tools. */
+        this.style = {};
         bodyA = 'bodyA' in def ? def.bodyA : bodyA;
         bodyB = 'bodyB' in def ? def.bodyB : bodyB;
         this.m_bodyA = bodyA;
@@ -4844,8 +4857,8 @@ var Simplex = /** @class */ (function () {
                 combineVec2(pB, v1.a, v1.wB, v2.a, v2.wB);
                 break;
             case 3:
-                pB.x = pA.x = v1.a * v1.wA.x + v2.a * v2.wA.x + v3.a * v3.wA.x;
-                pB.y = pA.y = v1.a * v1.wA.y + v2.a * v2.wA.y + v3.a * v3.wA.y;
+                combine3Vec2(pA, v1.a, v1.wA, v2.a, v2.wA, v3.a, v3.wA);
+                copyVec2(pB, pA);
                 break;
         }
     };
@@ -7848,12 +7861,10 @@ var Contact = /** @class */ (function () {
                     setMulVec2(P1, d.x, normal$2);
                     setMulVec2(P2, d.y, normal$2);
                     // vA.subCombine(mA, P1, mA, P2);
-                    subMulVec2(vA, mA, P1);
-                    subMulVec2(vA, mA, P2);
+                    combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
                     wA -= iA * (crossVec2Vec2(vcp1.rA, P1) + crossVec2Vec2(vcp2.rA, P2));
                     // vB.addCombine(mB, P1, mB, P2);
-                    addMulVec2(vB, mB, P1);
-                    addMulVec2(vB, mB, P2);
+                    combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
                     wB += iB * (crossVec2Vec2(vcp1.rB, P1) + crossVec2Vec2(vcp2.rB, P2));
                     // Accumulate
                     vcp1.normalImpulse = x.x;
@@ -7877,12 +7888,10 @@ var Contact = /** @class */ (function () {
                     setMulVec2(P1, d.x, normal$2);
                     setMulVec2(P2, d.y, normal$2);
                     // vA.subCombine(mA, P1, mA, P2);
-                    subMulVec2(vA, mA, P1);
-                    subMulVec2(vA, mA, P2);
+                    combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
                     wA -= iA * (crossVec2Vec2(vcp1.rA, P1) + crossVec2Vec2(vcp2.rA, P2));
                     // vB.addCombine(mB, P1, mB, P2);
-                    addMulVec2(vB, mB, P1);
-                    addMulVec2(vB, mB, P2);
+                    combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
                     wB += iB * (crossVec2Vec2(vcp1.rB, P1) + crossVec2Vec2(vcp2.rB, P2));
                     // Accumulate
                     vcp1.normalImpulse = x.x;
@@ -7906,12 +7915,10 @@ var Contact = /** @class */ (function () {
                     setMulVec2(P1, d.x, normal$2);
                     setMulVec2(P2, d.y, normal$2);
                     // vA.subCombine(mA, P1, mA, P2);
-                    subMulVec2(vA, mA, P1);
-                    subMulVec2(vA, mA, P2);
+                    combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
                     wA -= iA * (crossVec2Vec2(vcp1.rA, P1) + crossVec2Vec2(vcp2.rA, P2));
                     // vB.addCombine(mB, P1, mB, P2);
-                    addMulVec2(vB, mB, P1);
-                    addMulVec2(vB, mB, P2);
+                    combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
                     wB += iB * (crossVec2Vec2(vcp1.rB, P1) + crossVec2Vec2(vcp2.rB, P2));
                     // Accumulate
                     vcp1.normalImpulse = x.x;
@@ -7935,12 +7942,10 @@ var Contact = /** @class */ (function () {
                     setMulVec2(P1, d.x, normal$2);
                     setMulVec2(P2, d.y, normal$2);
                     // vA.subCombine(mA, P1, mA, P2);
-                    subMulVec2(vA, mA, P1);
-                    subMulVec2(vA, mA, P2);
+                    combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
                     wA -= iA * (crossVec2Vec2(vcp1.rA, P1) + crossVec2Vec2(vcp2.rA, P2));
                     // vB.addCombine(mB, P1, mB, P2);
-                    addMulVec2(vB, mB, P1);
-                    addMulVec2(vB, mB, P2);
+                    combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
                     wB += iB * (crossVec2Vec2(vcp1.rB, P1) + crossVec2Vec2(vcp2.rB, P2));
                     // Accumulate
                     vcp1.normalImpulse = x.x;
@@ -8080,7 +8085,7 @@ var Contact = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/** @internal */ var WorldDefDefault = {
+/** @internal */ var DEFAULTS$b = {
     gravity: Vec2.zero(),
     allowSleep: true,
     warmStarting: true,
@@ -8099,10 +8104,13 @@ var World = /** @class */ (function () {
             return new World(def);
         }
         this.s_step = new TimeStep();
-        if (def && Vec2.isValid(def)) {
+        if (!def) {
+            def = {};
+        }
+        else if (Vec2.isValid(def)) {
             def = { gravity: def };
         }
-        def = options(def, WorldDefDefault);
+        def = options(def, DEFAULTS$b);
         this.m_solver = new Solver(this);
         this.m_broadPhase = new BroadPhase();
         this.m_contactList = null;
@@ -8210,7 +8218,7 @@ var World = /** @class */ (function () {
      * Change the global gravity vector.
      */
     World.prototype.setGravity = function (gravity) {
-        this.m_gravity = gravity;
+        this.m_gravity.set(gravity);
     };
     /**
      * Get the global gravity vector.
@@ -9949,8 +9957,8 @@ var PolygonShape = /** @class */ (function (_super) {
             var triangleArea = 0.5 * D;
             area += triangleArea;
             // Area weighted centroid
-            combineVec2(center, 1, center, triangleArea * k_inv3, e1$1);
-            combineVec2(center, 1, center, triangleArea * k_inv3, e2$1);
+            combineVec2(temp$1, triangleArea * k_inv3, e1$1, triangleArea * k_inv3, e2$1);
+            addVec2(center, temp$1);
             var ex1 = e1$1.x;
             var ey1 = e1$1.y;
             var ex2 = e2$1.x;
@@ -10020,9 +10028,8 @@ var PolygonShape = /** @class */ (function (_super) {
         var triangleArea = 0.5 * D;
         area += triangleArea;
         // Area weighted centroid
-        c.addMul(triangleArea * inv3, p1);
-        c.addMul(triangleArea * inv3, p2);
-        c.addMul(triangleArea * inv3, p3);
+        combine3Vec2(temp$1, 1, p1, 1, p2, 1, p3);
+        addMulVec2(c, triangleArea * inv3, temp$1);
     }
     c.mul(1.0 / area);
     return c;
@@ -14858,8 +14865,23 @@ var Testbed = /** @class */ (function () {
         this.statusText = '';
         this.statusMap = {};
     }
+    /**
+     * Mount testbed.
+     *
+     * If you need to customize testbed before starting, use `Testbed.mount()` and `Testbed.start()` separately.
+     */
     Testbed.mount = function (options) {
         throw new Error('Not implemented');
+    };
+    /**
+     * Start simulation, and mount testbed if needed.
+     *
+     * If you need to customize testbed before starting, use `Testbed.mount().start()` separately.
+     */
+    Testbed.start = function (world) {
+        var testbed = Testbed.mount();
+        testbed.start(world);
+        return testbed;
     };
     Testbed.prototype.status = function (a, b) {
         if (typeof b !== 'undefined') {

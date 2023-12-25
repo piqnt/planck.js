@@ -446,6 +446,8 @@ declare abstract class Shape {
      * There is no support for making rounded polygons.
      */
     m_radius: number;
+    /** Styling for dev-tools. */
+    style: Style;
     static isValid(obj: any): boolean;
     abstract getRadius(): number;
     /**
@@ -773,6 +775,8 @@ declare class FixtureProxy {
  * To create a new Fixture use {@link Body.createFixture}.
  */
 declare class Fixture {
+    /** Styling for dev-tools. */
+    style: Style;
     constructor(body: Body, def: FixtureDef);
     constructor(body: Body, shape: Shape, def?: FixtureOpt);
     constructor(body: Body, shape: Shape, density?: number);
@@ -965,6 +969,8 @@ interface JointDef extends JointOpt {
  * various fashions. Some joints also feature limits and motors.
  */
 declare abstract class Joint {
+    /** Styling for dev-tools. */
+    style: Style;
     constructor(def: JointDef);
     constructor(def: JointOpt, bodyA: Body, bodyB: Body);
     /**
@@ -1014,7 +1020,7 @@ declare abstract class Joint {
     /**
      * Shift the origin for any points stored in world coordinates.
      */
-    shiftOrigin(newOrigin: Vec2): void;
+    shiftOrigin(newOrigin: Vec2Value): void;
     abstract initVelocityConstraints(step: TimeStep): void;
     abstract solveVelocityConstraints(step: TimeStep): void;
     /**
@@ -1340,7 +1346,7 @@ interface BodyDef {
      * The world position of the body. Avoid creating bodies at the
      * origin since this can lead to many overlapping shapes.
      */
-    position?: Vec2;
+    position?: Vec2Value;
     /**
      * The world angle of the body in radians.
      */
@@ -1348,7 +1354,7 @@ interface BodyDef {
     /**
      * The linear velocity of the body's origin in world co-ordinates.
      */
-    linearVelocity?: Vec2;
+    linearVelocity?: Vec2Value;
     angularVelocity?: number;
     /**
      * Linear damping is use to reduce the linear velocity. The
@@ -1432,6 +1438,8 @@ declare class Body {
      * If you try to set the mass of a dynamic body to zero, it will automatically acquire a mass of one kilogram and it won't rotate.
      */
     static readonly DYNAMIC: BodyType;
+    /** Styling for dev-tools. */
+    style: Style;
     isWorldLocked(): boolean;
     getWorld(): World;
     getNext(): Body | null;
@@ -1508,7 +1516,7 @@ declare class Body {
      * @param position The world position of the body's local origin.
      * @param angle The world rotation in radians.
      */
-    setTransform(position: Vec2, angle: number): void;
+    setTransform(position: Vec2Value, angle: number): void;
     synchronizeTransform(): void;
     /**
      * Update fixtures in broad-phase.
@@ -1522,7 +1530,7 @@ declare class Body {
      * Get the world position for the body's origin.
      */
     getPosition(): Vec2;
-    setPosition(p: Vec2): void;
+    setPosition(p: Vec2Value): void;
     /**
      * Get the current world rotation angle in radians.
      */
@@ -1547,19 +1555,19 @@ declare class Body {
      *
      * @param worldPoint A point in world coordinates.
      */
-    getLinearVelocityFromWorldPoint(worldPoint: Vec2): Vec2;
+    getLinearVelocityFromWorldPoint(worldPoint: Vec2Value): Vec2;
     /**
      * Get the world velocity of a local point.
      *
      * @param localPoint A point in local coordinates.
      */
-    getLinearVelocityFromLocalPoint(localPoint: Vec2): Vec2;
+    getLinearVelocityFromLocalPoint(localPoint: Vec2Value): Vec2;
     /**
      * Set the linear velocity of the center of mass.
      *
      * @param v The new linear velocity of the center of mass.
      */
-    setLinearVelocity(v: Vec2): void;
+    setLinearVelocity(v: Vec2Value): void;
     /**
      * Get the angular velocity.
      *
@@ -1621,7 +1629,7 @@ declare class Body {
      * @param point The world position of the point of application.
      * @param wake Also wake up the body
      */
-    applyForce(force: Vec2, point: Vec2, wake?: boolean): void;
+    applyForce(force: Vec2Value, point: Vec2Value, wake?: boolean): void;
     /**
      * Apply a force to the center of mass. This wakes up the body.
      *
@@ -1646,7 +1654,7 @@ declare class Body {
      * @param point The world position of the point of application.
      * @param wake Also wake up the body
      */
-    applyLinearImpulse(impulse: Vec2, point: Vec2, wake?: boolean): void;
+    applyLinearImpulse(impulse: Vec2Value, point: Vec2Value, wake?: boolean): void;
     /**
      * Apply an angular impulse.
      *
@@ -1690,11 +1698,11 @@ declare class Body {
     /**
      * Get the corresponding world point of a local point.
      */
-    getWorldPoint(localPoint: Vec2): Vec2;
+    getWorldPoint(localPoint: Vec2Value): Vec2;
     /**
      * Get the corresponding world vector of a local vector.
      */
-    getWorldVector(localVector: Vec2): Vec2;
+    getWorldVector(localVector: Vec2Value): Vec2;
     /**
      * Gets the corresponding local point of a world point.
      */
@@ -1734,25 +1742,19 @@ declare class ContactImpulse {
     get normalImpulses(): number[];
     get tangentImpulses(): number[];
 }
-/**
- * @prop gravity [{ x : 0, y : 0}]
- * @prop allowSleep [true]
- * @prop warmStarting [true]
- * @prop continuousPhysics [true]
- * @prop subStepping [false]
- * @prop blockSolve [true]
- * @prop velocityIterations [8] For the velocity constraint solver.
- * @prop positionIterations [3] For the position constraint solver.
- */
 interface WorldDef {
+    /** [default: { x : 0, y : 0}] */
     gravity?: Vec2;
+    /** [default: true] */
     allowSleep?: boolean;
+    /** [default: true] */
     warmStarting?: boolean;
+    /** [default: true] */
     continuousPhysics?: boolean;
+    /** [default: false] */
     subStepping?: boolean;
+    /** [default: true] */
     blockSolve?: boolean;
-    velocityIterations?: number;
-    positionIterations?: number;
 }
 /**
  * Callback function for ray casts, see {@link World.rayCast}.
@@ -1817,7 +1819,7 @@ declare class World {
     /**
      * Change the global gravity vector.
      */
-    setGravity(gravity: Vec2): void;
+    setGravity(gravity: Vec2Value): void;
     /**
      * Get the global gravity vector.
      */
@@ -1906,7 +1908,7 @@ declare class World {
      *
      * @param newOrigin The new origin with respect to the old origin
      */
-    shiftOrigin(newOrigin: Vec2): void;
+    shiftOrigin(newOrigin: Vec2Value): void;
     /**
      * Create a rigid body given a definition. No reference to the definition is
      * retained.
@@ -1914,11 +1916,11 @@ declare class World {
      * Warning: This function is locked during callbacks.
      */
     createBody(def?: BodyDef): Body;
-    createBody(position: Vec2, angle?: number): Body;
+    createBody(position: Vec2Value, angle?: number): Body;
     createDynamicBody(def?: BodyDef): Body;
-    createDynamicBody(position: Vec2, angle?: number): Body;
+    createDynamicBody(position: Vec2Value, angle?: number): Body;
     createKinematicBody(def?: BodyDef): Body;
-    createKinematicBody(position: Vec2, angle?: number): Body;
+    createKinematicBody(position: Vec2Value, angle?: number): Body;
     /**
      * Destroy a rigid body given a definition. No reference to the definition is
      * retained.
@@ -2025,7 +2027,18 @@ type ActiveKeys = {
 };
 type TestbedMountOptions = {};
 declare abstract class Testbed {
+    /**
+     * Mount testbed.
+     *
+     * If you need to customize testbed before starting, use `Testbed.mount()` and `Testbed.start()` separately.
+     */
     static mount(options?: TestbedMountOptions): Testbed;
+    /**
+     * Start simulation, and mount testbed if needed.
+     *
+     * If you need to customize testbed before starting, use `Testbed.mount().start()` separately.
+     */
+    static start(world: World): Testbed;
     /** World viewbox width. */
     width: number;
     /** World viewbox height. */
@@ -4668,6 +4681,8 @@ declare namespace planck {
          * There is no support for making rounded polygons.
          */
         m_radius: number;
+        /** Styling for dev-tools. */
+        style: Style;
         static isValid(obj: any): boolean;
         abstract getRadius(): number;
         /**
@@ -4995,6 +5010,8 @@ declare namespace planck {
      * To create a new Fixture use {@link Body.createFixture}.
      */
     class Fixture {
+        /** Styling for dev-tools. */
+        style: Style;
         constructor(body: Body, def: FixtureDef);
         constructor(body: Body, shape: Shape, def?: FixtureOpt);
         constructor(body: Body, shape: Shape, density?: number);
@@ -5187,6 +5204,8 @@ declare namespace planck {
      * various fashions. Some joints also feature limits and motors.
      */
     abstract class Joint {
+        /** Styling for dev-tools. */
+        style: Style;
         constructor(def: JointDef);
         constructor(def: JointOpt, bodyA: Body, bodyB: Body);
         /**
@@ -5236,7 +5255,7 @@ declare namespace planck {
         /**
          * Shift the origin for any points stored in world coordinates.
          */
-        shiftOrigin(newOrigin: Vec2): void;
+        shiftOrigin(newOrigin: Vec2Value): void;
         abstract initVelocityConstraints(step: TimeStep): void;
         abstract solveVelocityConstraints(step: TimeStep): void;
         /**
@@ -5562,7 +5581,7 @@ declare namespace planck {
          * The world position of the body. Avoid creating bodies at the
          * origin since this can lead to many overlapping shapes.
          */
-        position?: Vec2;
+        position?: Vec2Value;
         /**
          * The world angle of the body in radians.
          */
@@ -5570,7 +5589,7 @@ declare namespace planck {
         /**
          * The linear velocity of the body's origin in world co-ordinates.
          */
-        linearVelocity?: Vec2;
+        linearVelocity?: Vec2Value;
         angularVelocity?: number;
         /**
          * Linear damping is use to reduce the linear velocity. The
@@ -5654,6 +5673,8 @@ declare namespace planck {
          * If you try to set the mass of a dynamic body to zero, it will automatically acquire a mass of one kilogram and it won't rotate.
          */
         static readonly DYNAMIC: BodyType;
+        /** Styling for dev-tools. */
+        style: Style;
         isWorldLocked(): boolean;
         getWorld(): World;
         getNext(): Body | null;
@@ -5730,7 +5751,7 @@ declare namespace planck {
          * @param position The world position of the body's local origin.
          * @param angle The world rotation in radians.
          */
-        setTransform(position: Vec2, angle: number): void;
+        setTransform(position: Vec2Value, angle: number): void;
         synchronizeTransform(): void;
         /**
          * Update fixtures in broad-phase.
@@ -5744,7 +5765,7 @@ declare namespace planck {
          * Get the world position for the body's origin.
          */
         getPosition(): Vec2;
-        setPosition(p: Vec2): void;
+        setPosition(p: Vec2Value): void;
         /**
          * Get the current world rotation angle in radians.
          */
@@ -5769,19 +5790,19 @@ declare namespace planck {
          *
          * @param worldPoint A point in world coordinates.
          */
-        getLinearVelocityFromWorldPoint(worldPoint: Vec2): Vec2;
+        getLinearVelocityFromWorldPoint(worldPoint: Vec2Value): Vec2;
         /**
          * Get the world velocity of a local point.
          *
          * @param localPoint A point in local coordinates.
          */
-        getLinearVelocityFromLocalPoint(localPoint: Vec2): Vec2;
+        getLinearVelocityFromLocalPoint(localPoint: Vec2Value): Vec2;
         /**
          * Set the linear velocity of the center of mass.
          *
          * @param v The new linear velocity of the center of mass.
          */
-        setLinearVelocity(v: Vec2): void;
+        setLinearVelocity(v: Vec2Value): void;
         /**
          * Get the angular velocity.
          *
@@ -5843,7 +5864,7 @@ declare namespace planck {
          * @param point The world position of the point of application.
          * @param wake Also wake up the body
          */
-        applyForce(force: Vec2, point: Vec2, wake?: boolean): void;
+        applyForce(force: Vec2Value, point: Vec2Value, wake?: boolean): void;
         /**
          * Apply a force to the center of mass. This wakes up the body.
          *
@@ -5868,7 +5889,7 @@ declare namespace planck {
          * @param point The world position of the point of application.
          * @param wake Also wake up the body
          */
-        applyLinearImpulse(impulse: Vec2, point: Vec2, wake?: boolean): void;
+        applyLinearImpulse(impulse: Vec2Value, point: Vec2Value, wake?: boolean): void;
         /**
          * Apply an angular impulse.
          *
@@ -5912,11 +5933,11 @@ declare namespace planck {
         /**
          * Get the corresponding world point of a local point.
          */
-        getWorldPoint(localPoint: Vec2): Vec2;
+        getWorldPoint(localPoint: Vec2Value): Vec2;
         /**
          * Get the corresponding world vector of a local vector.
          */
-        getWorldVector(localVector: Vec2): Vec2;
+        getWorldVector(localVector: Vec2Value): Vec2;
         /**
          * Gets the corresponding local point of a world point.
          */
@@ -5978,25 +5999,19 @@ declare namespace planck {
         solveWorldTOI(step: TimeStep): void;
         solveIslandTOI(subStep: TimeStep, toiA: Body, toiB: Body): void;
     }
-    /**
-     * @prop gravity [{ x : 0, y : 0}]
-     * @prop allowSleep [true]
-     * @prop warmStarting [true]
-     * @prop continuousPhysics [true]
-     * @prop subStepping [false]
-     * @prop blockSolve [true]
-     * @prop velocityIterations [8] For the velocity constraint solver.
-     * @prop positionIterations [3] For the position constraint solver.
-     */
     interface WorldDef {
+        /** [default: { x : 0, y : 0}] */
         gravity?: Vec2;
+        /** [default: true] */
         allowSleep?: boolean;
+        /** [default: true] */
         warmStarting?: boolean;
+        /** [default: true] */
         continuousPhysics?: boolean;
+        /** [default: false] */
         subStepping?: boolean;
+        /** [default: true] */
         blockSolve?: boolean;
-        velocityIterations?: number;
-        positionIterations?: number;
     }
     /**
      * Callback function for ray casts, see {@link World.rayCast}.
@@ -6060,7 +6075,7 @@ declare namespace planck {
         /**
          * Change the global gravity vector.
          */
-        setGravity(gravity: Vec2): void;
+        setGravity(gravity: Vec2Value): void;
         /**
          * Get the global gravity vector.
          */
@@ -6149,7 +6164,7 @@ declare namespace planck {
          *
          * @param newOrigin The new origin with respect to the old origin
          */
-        shiftOrigin(newOrigin: Vec2): void;
+        shiftOrigin(newOrigin: Vec2Value): void;
         /**
          * Create a rigid body given a definition. No reference to the definition is
          * retained.
@@ -6157,11 +6172,11 @@ declare namespace planck {
          * Warning: This function is locked during callbacks.
          */
         createBody(def?: BodyDef): Body;
-        createBody(position: Vec2, angle?: number): Body;
+        createBody(position: Vec2Value, angle?: number): Body;
         createDynamicBody(def?: BodyDef): Body;
-        createDynamicBody(position: Vec2, angle?: number): Body;
+        createDynamicBody(position: Vec2Value, angle?: number): Body;
         createKinematicBody(def?: BodyDef): Body;
-        createKinematicBody(position: Vec2, angle?: number): Body;
+        createKinematicBody(position: Vec2Value, angle?: number): Body;
         /**
          * Destroy a rigid body given a definition. No reference to the definition is
          * retained.
@@ -6268,7 +6283,18 @@ declare namespace planck {
     };
     type TestbedMountOptions = {};
     abstract class Testbed {
+        /**
+         * Mount testbed.
+         *
+         * If you need to customize testbed before starting, use `Testbed.mount()` and `Testbed.start()` separately.
+         */
         static mount(options?: TestbedMountOptions): Testbed;
+        /**
+         * Start simulation, and mount testbed if needed.
+         *
+         * If you need to customize testbed before starting, use `Testbed.mount().start()` separately.
+         */
+        static start(world: World): Testbed;
         /** World viewbox width. */
         width: number;
         /** World viewbox height. */
