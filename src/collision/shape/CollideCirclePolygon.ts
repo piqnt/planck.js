@@ -85,7 +85,7 @@ export const CollidePolygonCircle = function (manifold: Manifold, polygonA: Poly
     manifold.pointCount = 1;
     manifold.type = ManifoldType.e_faceA;
     matrix.copyVec2(manifold.localNormal, normals[normalIndex]);
-    matrix.combineVec2(manifold.localPoint, 0.5, v1, 0.5, v2);
+    matrix.combine2Vec2(manifold.localPoint, 0.5, v1, 0.5, v2);
     matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
     // manifold.points[0].id.key = 0;
@@ -105,7 +105,7 @@ export const CollidePolygonCircle = function (manifold: Manifold, polygonA: Poly
 
     manifold.pointCount = 1;
     manifold.type = ManifoldType.e_faceA;
-    matrix.diffVec2(manifold.localNormal, cLocal, v1);
+    matrix.subVec2(manifold.localNormal, cLocal, v1);
     matrix.normalizeVec2(manifold.localNormal);
     matrix.copyVec2(manifold.localPoint, v1);
     matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
@@ -119,7 +119,7 @@ export const CollidePolygonCircle = function (manifold: Manifold, polygonA: Poly
 
     manifold.pointCount = 1;
     manifold.type = ManifoldType.e_faceA;
-    matrix.diffVec2(manifold.localNormal, cLocal, v2);
+    matrix.subVec2(manifold.localNormal, cLocal, v2);
     matrix.normalizeVec2(manifold.localNormal);
     matrix.copyVec2(manifold.localPoint, v2);
     matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
@@ -127,7 +127,7 @@ export const CollidePolygonCircle = function (manifold: Manifold, polygonA: Poly
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
   } else {
-    matrix.combineVec2(faceCenter, 0.5, v1, 0.5, v2);
+    matrix.combine2Vec2(faceCenter, 0.5, v1, 0.5, v2);
     const separation = matrix.dotVec2(cLocal, normals[vertIndex1]) - matrix.dotVec2(faceCenter, normals[vertIndex1]);
     if (separation > radius) {
       return;

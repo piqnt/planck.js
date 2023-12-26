@@ -91,10 +91,10 @@ export class Sweep {
    */
   getTransform(xf: TransformValue, beta: number = 0): void {
     matrix.setRotAngle(xf.q, (1.0 - beta) * this.a0 + beta * this.a);
-    matrix.combineVec2(xf.p, (1.0 - beta), this.c0, beta, this.c);
+    matrix.combine2Vec2(xf.p, (1.0 - beta), this.c0, beta, this.c);
 
     // shift to origin
-    matrix.subVec2(xf.p, matrix.rotVec2(temp, xf.q, this.localCenter));
+    matrix.minusVec2(xf.p, matrix.rotVec2(temp, xf.q, this.localCenter));
   }
 
   /**
@@ -105,7 +105,7 @@ export class Sweep {
   advance(alpha: number): void {
     _ASSERT && console.assert(this.alpha0 < 1.0);
     const beta = (alpha - this.alpha0) / (1.0 - this.alpha0);
-    matrix.combineVec2(this.c0, beta, this.c, 1 - beta, this.c0);
+    matrix.combine2Vec2(this.c0, beta, this.c, 1 - beta, this.c0);
     this.a0 = beta * this.a + (1 - beta) * this.a0;
     this.alpha0 = alpha;
   }

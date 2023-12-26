@@ -159,7 +159,7 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
   // let m_type1: VertexType;
   // let m_type2: VertexType;
 
-  matrix.invTransformTransform(xf, xfA, xfB);
+  matrix.detransformTransform(xf, xfA, xfB);
   matrix.transformVec2(centroidB, xf, polygonB.m_centroid);
 
   const v0 = edgeA.m_vertex0;
@@ -170,7 +170,7 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
   const hasVertex0 = edgeA.m_hasVertex0;
   const hasVertex3 = edgeA.m_hasVertex3;
 
-  matrix.diffVec2(edge1, v2, v1);
+  matrix.subVec2(edge1, v2, v1);
   matrix.normalizeVec2(edge1);
   matrix.setVec2(normal1, edge1.y, -edge1.x)
   const offset1 = matrix.dotVec2(normal1, centroidB) - matrix.dotVec2(normal1, v1);
@@ -184,7 +184,7 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
 
   // Is there a preceding edge?
   if (hasVertex0) {
-    matrix.diffVec2(edge0, v1, v0);
+    matrix.subVec2(edge0, v1, v0);
     matrix.normalizeVec2(edge0);
     matrix.setVec2(normal0, edge0.y, -edge0.x);
     convex1 = matrix.crossVec2Vec2(edge0, edge1) >= 0.0;
@@ -193,7 +193,7 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
 
   // Is there a following edge?
   if (hasVertex3) {
-    matrix.diffVec2(edge2, v3, v2);
+    matrix.subVec2(edge2, v3, v2);
     matrix.normalizeVec2(edge2);
     matrix.setVec2(normal2, edge2.y, -edge2.x);
     convex2 = Vec2.crossVec2Vec2(edge1, edge2) > 0.0;
@@ -214,9 +214,9 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
         matrix.copyVec2(lowerLimit, normal0);
         matrix.copyVec2(upperLimit, normal2);
       } else {
-        matrix.setMulVec2(normal, -1, normal1);
-        matrix.setMulVec2(lowerLimit, -1, normal1);
-        matrix.setMulVec2(upperLimit, -1, normal1);
+        matrix.scaleVec2(normal, -1, normal1);
+        matrix.scaleVec2(lowerLimit, -1, normal1);
+        matrix.scaleVec2(upperLimit, -1, normal1);
       }
     } else if (convex1) {
       front = offset0 >= 0.0 || (offset1 >= 0.0 && offset2 >= 0.0);
@@ -225,9 +225,9 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
         matrix.copyVec2(lowerLimit, normal0);
         matrix.copyVec2(upperLimit, normal1);
       } else {
-        matrix.setMulVec2(normal, -1, normal1);
-        matrix.setMulVec2(lowerLimit, -1, normal2);
-        matrix.setMulVec2(upperLimit, -1, normal1);
+        matrix.scaleVec2(normal, -1, normal1);
+        matrix.scaleVec2(lowerLimit, -1, normal2);
+        matrix.scaleVec2(upperLimit, -1, normal1);
       }
     } else if (convex2) {
       front = offset2 >= 0.0 || (offset0 >= 0.0 && offset1 >= 0.0);
@@ -236,9 +236,9 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
         matrix.copyVec2(lowerLimit, normal1);
         matrix.copyVec2(upperLimit, normal2);
       } else {
-        matrix.setMulVec2(normal, -1, normal1);
-        matrix.setMulVec2(lowerLimit, -1, normal1);
-        matrix.setMulVec2(upperLimit, -1, normal0);
+        matrix.scaleVec2(normal, -1, normal1);
+        matrix.scaleVec2(lowerLimit, -1, normal1);
+        matrix.scaleVec2(upperLimit, -1, normal0);
       }
     } else {
       front = offset0 >= 0.0 && offset1 >= 0.0 && offset2 >= 0.0;
@@ -247,9 +247,9 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
         matrix.copyVec2(lowerLimit, normal1);
         matrix.copyVec2(upperLimit, normal1);
       } else {
-        matrix.setMulVec2(normal, -1, normal1);
-        matrix.setMulVec2(lowerLimit, -1, normal2);
-        matrix.setMulVec2(upperLimit, -1, normal0);
+        matrix.scaleVec2(normal, -1, normal1);
+        matrix.scaleVec2(lowerLimit, -1, normal2);
+        matrix.scaleVec2(upperLimit, -1, normal0);
       }
     }
   } else if (hasVertex0) {
@@ -258,22 +258,22 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
       if (front) {
         matrix.copyVec2(normal, normal1);
         matrix.copyVec2(lowerLimit, normal0);
-        matrix.setMulVec2(upperLimit, -1, normal1);
+        matrix.scaleVec2(upperLimit, -1, normal1);
       } else {
-        matrix.setMulVec2(normal, -1, normal1);
+        matrix.scaleVec2(normal, -1, normal1);
         matrix.copyVec2(lowerLimit, normal1);
-        matrix.setMulVec2(upperLimit, -1, normal1);
+        matrix.scaleVec2(upperLimit, -1, normal1);
       }
     } else {
       front = offset0 >= 0.0 && offset1 >= 0.0;
       if (front) {
         matrix.copyVec2(normal, normal1);
         matrix.copyVec2(lowerLimit, normal1);
-        matrix.setMulVec2(upperLimit, -1, normal1);
+        matrix.scaleVec2(upperLimit, -1, normal1);
       } else {
-        matrix.setMulVec2(normal, -1, normal1);
+        matrix.scaleVec2(normal, -1, normal1);
         matrix.copyVec2(lowerLimit, normal1);
-        matrix.setMulVec2(upperLimit, -1, normal0);
+        matrix.scaleVec2(upperLimit, -1, normal0);
       }
     }
   } else if (hasVertex3) {
@@ -281,22 +281,22 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
       front = offset1 >= 0.0 || offset2 >= 0.0;
       if (front) {
         matrix.copyVec2(normal, normal1);
-        matrix.setMulVec2(lowerLimit, -1, normal1);
+        matrix.scaleVec2(lowerLimit, -1, normal1);
         matrix.copyVec2(upperLimit, normal2);
       } else {
-        matrix.setMulVec2(normal, -1, normal1);
-        matrix.setMulVec2(lowerLimit, -1, normal1);
+        matrix.scaleVec2(normal, -1, normal1);
+        matrix.scaleVec2(lowerLimit, -1, normal1);
         matrix.copyVec2(upperLimit, normal1);
       }
     } else {
       front = offset1 >= 0.0 && offset2 >= 0.0;
       if (front) {
         matrix.copyVec2(normal, normal1);
-        matrix.setMulVec2(lowerLimit, -1, normal1);
+        matrix.scaleVec2(lowerLimit, -1, normal1);
         matrix.copyVec2(upperLimit, normal1);
       } else {
-        matrix.setMulVec2(normal, -1, normal1);
-        matrix.setMulVec2(lowerLimit, -1, normal2);
+        matrix.scaleVec2(normal, -1, normal1);
+        matrix.scaleVec2(lowerLimit, -1, normal2);
         matrix.copyVec2(upperLimit, normal1);
       }
     }
@@ -304,10 +304,10 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
     front = offset1 >= 0.0;
     if (front) {
       matrix.copyVec2(normal, normal1);
-      matrix.setMulVec2(lowerLimit, -1, normal1);
-      matrix.setMulVec2(upperLimit, -1, normal1);
+      matrix.scaleVec2(lowerLimit, -1, normal1);
+      matrix.scaleVec2(upperLimit, -1, normal1);
     } else {
-      matrix.setMulVec2(normal, -1, normal1);
+      matrix.scaleVec2(normal, -1, normal1);
       matrix.copyVec2(lowerLimit, normal1);
       matrix.copyVec2(upperLimit, normal1);
     }
@@ -356,7 +356,7 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
     matrix.setVec2(perp, -normal.y, normal.x);
 
     for (let i = 0; i < polygonBA.count; ++i) {
-      matrix.setMulVec2(n, -1, polygonBA.normals[i]);
+      matrix.scaleVec2(n, -1, polygonBA.normals[i]);
 
       const s1 = matrix.dotVec2(n, polygonBA.vertices[i]) - matrix.dotVec2(n, v1);
       const s2 = matrix.dotVec2(n, polygonBA.vertices[i]) - matrix.dotVec2(n, v2);
@@ -443,7 +443,7 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
       rf.i2 = 0;
       matrix.copyVec2(rf.v1, v2);
       matrix.copyVec2(rf.v2, v1);
-      matrix.setMulVec2(rf.normal, -1, normal1);
+      matrix.scaleVec2(rf.normal, -1, normal1);
     }
   } else {
     manifold.type = ManifoldType.e_faceB;
@@ -501,7 +501,7 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
       const cp = manifold.points[pointCount]; // ManifoldPoint
 
       if (primaryAxis.type == EPAxisType.e_edgeA) {
-        matrix.invTransformVec2(cp.localPoint, xf, clipPoints2[i].v);
+        matrix.detransformVec2(cp.localPoint, xf, clipPoints2[i].v);
         cp.id.set(clipPoints2[i].id);
       } else {
         matrix.copyVec2(cp.localPoint, clipPoints2[i].v);

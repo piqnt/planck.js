@@ -162,16 +162,16 @@ export class Manifold {
         const manifoldPoint = this.points[0];
         matrix.transformVec2(pointA, xfA, this.localPoint);
         matrix.transformVec2(pointB, xfB, manifoldPoint.localPoint);
-        matrix.diffVec2(dist, pointB, pointA);
+        matrix.subVec2(dist, pointB, pointA);
         const lengthSqr = matrix.lengthSqrVec2(dist);
           if (lengthSqr > EPSILON * EPSILON) {
           const length = math_sqrt(lengthSqr);
-          matrix.setMulVec2(normal, 1 / length, dist);
+          matrix.scaleVec2(normal, 1 / length, dist);
         }
-        matrix.combineVec2(cA, 1, pointA, radiusA, normal);
-        matrix.combineVec2(cB, 1, pointB, -radiusB, normal);
-        matrix.combineVec2(points[0], 0.5, cA, 0.5, cB);
-        separations[0] = matrix.dotVec2(matrix.diffVec2(temp, cB, cA), normal);
+        matrix.combine2Vec2(cA, 1, pointA, radiusA, normal);
+        matrix.combine2Vec2(cB, 1, pointB, -radiusB, normal);
+        matrix.combine2Vec2(points[0], 0.5, cA, 0.5, cB);
+        separations[0] = matrix.dotVec2(matrix.subVec2(temp, cB, cA), normal);
         break;
       }
 
@@ -182,10 +182,10 @@ export class Manifold {
         for (let i = 0; i < this.pointCount; ++i) {
           const manifoldPoint = this.points[i];
           matrix.transformVec2(clipPoint, xfB, manifoldPoint.localPoint);
-          matrix.combineVec2(cA, 1, clipPoint, radiusA - matrix.dotVec2(matrix.diffVec2(temp, clipPoint, planePoint), normal), normal);
-          matrix.combineVec2(cB, 1, clipPoint, -radiusB, normal);
-          matrix.combineVec2(points[i], 0.5, cA, 0.5, cB);
-          separations[i] = matrix.dotVec2(matrix.diffVec2(temp, cB, cA), normal);
+          matrix.combine2Vec2(cA, 1, clipPoint, radiusA - matrix.dotVec2(matrix.subVec2(temp, clipPoint, planePoint), normal), normal);
+          matrix.combine2Vec2(cB, 1, clipPoint, -radiusB, normal);
+          matrix.combine2Vec2(points[i], 0.5, cA, 0.5, cB);
+          separations[i] = matrix.dotVec2(matrix.subVec2(temp, cB, cA), normal);
         }
         break;
       }
@@ -197,10 +197,10 @@ export class Manifold {
         for (let i = 0; i < this.pointCount; ++i) {
           const manifoldPoint = this.points[i];
           matrix.transformVec2(clipPoint, xfA, manifoldPoint.localPoint);
-          matrix.combineVec2(cB, 1, clipPoint, radiusB - matrix.dotVec2(matrix.diffVec2(temp, clipPoint, planePoint), normal), normal);
-          matrix.combineVec2(cA, 1, clipPoint, -radiusA, normal);
-          matrix.combineVec2(points[i], 0.5, cA, 0.5, cB);
-          separations[i] = matrix.dotVec2(matrix.diffVec2(temp, cA, cB), normal);
+          matrix.combine2Vec2(cB, 1, clipPoint, radiusB - matrix.dotVec2(matrix.subVec2(temp, clipPoint, planePoint), normal), normal);
+          matrix.combine2Vec2(cA, 1, clipPoint, -radiusA, normal);
+          matrix.combine2Vec2(points[i], 0.5, cA, 0.5, cB);
+          separations[i] = matrix.dotVec2(matrix.subVec2(temp, cA, cB), normal);
         }
         // Ensure normal points from A to B.
         matrix.negVec2(normal);
@@ -423,7 +423,7 @@ export function clipSegmentToLine(
   if (distance0 * distance1 < 0.0) {
     // Find intersection point of edge and plane
     const interp = distance0 / (distance0 - distance1);
-    matrix.combineVec2(vOut[numOut].v, 1 - interp, vIn[0].v, interp, vIn[1].v);
+    matrix.combine2Vec2(vOut[numOut].v, 1 - interp, vIn[0].v, interp, vIn[1].v);
 
     // VertexA is hitting edgeB.
     vOut[numOut].id.setFeatures(vertexIndexA, ContactFeatureType.e_vertex, vIn[0].id.indexB, ContactFeatureType.e_face);

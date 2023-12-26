@@ -171,13 +171,13 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
     // Compute a tentative new simplex vertex using support points.
     const vertex = vertices[simplex.m_count]; // SimplexVertex
 
-    vertex.indexA = proxyA.getSupport(matrix.invRotVec2(temp, xfA.q, matrix.setMulVec2(temp, -1, d)));
+    vertex.indexA = proxyA.getSupport(matrix.derotVec2(temp, xfA.q, matrix.scaleVec2(temp, -1, d)));
     matrix.transformVec2(vertex.wA, xfA, proxyA.getVertex(vertex.indexA));
 
-    vertex.indexB = proxyB.getSupport(matrix.invRotVec2(temp, xfB.q, d));
+    vertex.indexB = proxyB.getSupport(matrix.derotVec2(temp, xfB.q, d));
     matrix.transformVec2(vertex.wB, xfB, proxyB.getVertex(vertex.indexB));
 
-    matrix.diffVec2(vertex.w, vertex.wB, vertex.wA);
+    matrix.subVec2(vertex.w, vertex.wB, vertex.wA);
 
     // Iteration count is equated to the number of support point calls.
     ++iter;
@@ -221,14 +221,14 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
       // Shapes are still no overlapped.
       // Move the witness points to the outer surface.
       output.distance -= rA + rB;
-      matrix.diffVec2(normal, output.pointB, output.pointA);
+      matrix.subVec2(normal, output.pointB, output.pointA);
       matrix.normalizeVec2(normal);
-      matrix.addMulVec2(output.pointA, rA, normal);
-      matrix.subMulVec2(output.pointB, rB, normal);
+      matrix.plusScaleVec2(output.pointA, rA, normal);
+      matrix.minusScaleVec2(output.pointB, rB, normal);
     } else {
       // Shapes are overlapped when radii are considered.
       // Move the witness points to the middle.
-      const p = matrix.diffVec2(temp, output.pointA, output.pointB);
+      const p = matrix.subVec2(temp, output.pointA, output.pointB);
       matrix.copyVec2(output.pointA, p);
       matrix.copyVec2(output.pointB, p);
       output.distance = 0.0;
@@ -397,7 +397,7 @@ class Simplex {
       const wBLocal = proxyB.getVertex(v.indexB);
       matrix.transformVec2(v.wA, transformA, wALocal);
       matrix.transformVec2(v.wB, transformB, wBLocal);
-      matrix.diffVec2(v.w,v.wB, v.wA);
+      matrix.subVec2(v.w,v.wB, v.wA);
       v.a = 0.0;
     }
 
@@ -421,7 +421,7 @@ class Simplex {
       const wBLocal = proxyB.getVertex(0);
       matrix.transformVec2(v.wA, transformA, wALocal);
       matrix.transformVec2(v.wB, transformB, wBLocal);
-      matrix.diffVec2(v.w,v.wB, v.wA);
+      matrix.subVec2(v.w,v.wB, v.wA);
       v.a = 1.0;
       this.m_count = 1;
     }
@@ -445,7 +445,7 @@ class Simplex {
         return matrix.setVec2(searchDirection_reuse, -v1.w.x, -v1.w.y);
 
       case 2: {
-        matrix.diffVec2(e12, v2.w, v1.w);
+        matrix.subVec2(e12, v2.w, v1.w);
         const sgn = -matrix.crossVec2Vec2(e12, v1.w);
         if (sgn > 0.0) {
           // Origin is left of e12.
@@ -475,7 +475,7 @@ class Simplex {
         return matrix.copyVec2(closestPoint_reuse, v1.w);
 
       case 2:
-        return  matrix.combineVec2(closestPoint_reuse, v1.a, v1.w, v2.a, v2.w);
+        return  matrix.combine2Vec2(closestPoint_reuse, v1.a, v1.w, v2.a, v2.w);
 
       case 3:
         return matrix.zeroVec2(closestPoint_reuse);
@@ -501,8 +501,8 @@ class Simplex {
         break;
 
       case 2:
-        matrix.combineVec2(pA, v1.a, v1.wA, v2.a, v2.wA);
-        matrix.combineVec2(pB, v1.a, v1.wB, v2.a, v2.wB);
+        matrix.combine2Vec2(pA, v1.a, v1.wA, v2.a, v2.wA);
+        matrix.combine2Vec2(pB, v1.a, v1.wB, v2.a, v2.wB);
         break;
 
       case 3:
@@ -530,8 +530,8 @@ class Simplex {
 
       case 3:
         return matrix.crossVec2Vec2(
-          matrix.diffVec2(temp1, this.m_v2.w, this.m_v1.w),
-          matrix.diffVec2(temp2, this.m_v3.w, this.m_v1.w),
+          matrix.subVec2(temp1, this.m_v2.w, this.m_v1.w),
+          matrix.subVec2(temp2, this.m_v3.w, this.m_v1.w),
         );
 
       default:
@@ -584,7 +584,7 @@ class Simplex {
   solve2(): void {
     const w1 = this.m_v1.w;
     const w2 = this.m_v2.w;
-    matrix.diffVec2(e12, w2, w1);
+    matrix.subVec2(e12, w2, w1);
 
     // w1 region
     const d12_2 = -matrix.dotVec2(w1, e12);
@@ -626,7 +626,7 @@ class Simplex {
     // [1 1 ][a1] = [1]
     // [w1.e12 w2.e12][a2] = [0]
     // a3 = 0
-    matrix.diffVec2(e12, w2, w1);
+    matrix.subVec2(e12, w2, w1);
     const w1e12 = matrix.dotVec2(w1, e12);
     const w2e12 = matrix.dotVec2(w2, e12);
     const d12_1 = w2e12;
@@ -636,7 +636,7 @@ class Simplex {
     // [1 1 ][a1] = [1]
     // [w1.e13 w3.e13][a3] = [0]
     // a2 = 0
-    matrix.diffVec2(e13, w3, w1);
+    matrix.subVec2(e13, w3, w1);
     const w1e13 = matrix.dotVec2(w1, e13);
     const w3e13 = matrix.dotVec2(w3, e13);
     const d13_1 = w3e13;
@@ -646,7 +646,7 @@ class Simplex {
     // [1 1 ][a2] = [1]
     // [w2.e23 w3.e23][a3] = [0]
     // a1 = 0
-    matrix.diffVec2(e23, w3, w2);
+    matrix.subVec2(e23, w3, w2);
     const w2e23 = matrix.dotVec2(w2, e23);
     const w3e23 = matrix.dotVec2(w3, e23);
     const d23_1 = w3e23;

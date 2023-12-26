@@ -816,14 +816,14 @@ export class Body {
       };
       f.getMassData(massData);
       this.m_mass += massData.mass;
-      matrix.addMulVec2(localCenter, massData.mass, massData.center)
+      matrix.plusScaleVec2(localCenter, massData.mass, massData.center)
       this.m_I += massData.I;
     }
 
     // Compute center of mass.
     if (this.m_mass > 0.0) {
       this.m_invMass = 1.0 / this.m_mass;
-      matrix.setMulVec2(localCenter, this.m_invMass, localCenter)
+      matrix.scaleVec2(localCenter, this.m_invMass, localCenter)
 
     } else {
       // Force all dynamic bodies to have a positive mass.
@@ -847,9 +847,9 @@ export class Body {
     this.m_sweep.setLocalCenter(localCenter, this.m_xf);
 
     // Update center of mass velocity.
-    matrix.diffVec2(shift, this.m_sweep.c, oldCenter);
+    matrix.subVec2(shift, this.m_sweep.c, oldCenter);
     matrix.crossNumVec2(temp, this.m_angularVelocity, shift);
-    matrix.addVec2(this.m_linearVelocity, temp);
+    matrix.plusVec2(this.m_linearVelocity, temp);
   }
 
   /**
@@ -892,9 +892,9 @@ export class Body {
     this.m_sweep.setLocalCenter(massData.center, this.m_xf);
 
     // Update center of mass velocity.
-    matrix.diffVec2(shift, this.m_sweep.c, oldCenter);
+    matrix.subVec2(shift, this.m_sweep.c, oldCenter);
     matrix.crossNumVec2(temp, this.m_angularVelocity, shift);
-    matrix.addVec2(this.m_linearVelocity, temp);
+    matrix.plusVec2(this.m_linearVelocity, temp);
   }
 
   /**

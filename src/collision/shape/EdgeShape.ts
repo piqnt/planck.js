@@ -311,7 +311,7 @@ export class EdgeShape extends Shape {
    */
   computeMass(massData: MassData, density?: number): void {
     massData.mass = 0.0;
-    matrix.combineVec2(massData.center, 0.5, this.m_vertex1, 0.5, this.m_vertex2);
+    matrix.combine2Vec2(massData.center, 0.5, this.m_vertex1, 0.5, this.m_vertex2);
     massData.I = 0.0;
   }
 

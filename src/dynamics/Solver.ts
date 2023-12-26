@@ -319,8 +319,8 @@ export class Solver {
 
       if (body.isDynamic()) {
         // Integrate velocities.
-        matrix.addMulVec2(v, h * body.m_gravityScale, gravity);
-        matrix.addMulVec2(v, h * body.m_invMass, body.m_force);
+        matrix.plusScaleVec2(v, h * body.m_gravityScale, gravity);
+        matrix.plusScaleVec2(v, h * body.m_invMass, body.m_force);
         w += h * body.m_invI * body.m_torque;
         /**
          * <pre>
@@ -333,7 +333,7 @@ export class Solver {
          * v2 = v1 * 1 / (1 + c * dt)
          * </pre>
          */
-        matrix.setMulVec2(v, 1.0 / (1.0 + h * body.m_linearDamping), v)
+        matrix.scaleVec2(v, 1.0 / (1.0 + h * body.m_linearDamping), v)
         w *= 1.0 / (1.0 + h * body.m_angularDamping);
       }
 
@@ -395,11 +395,11 @@ export class Solver {
       let w = body.c_velocity.w;
 
       // Check for large velocities
-      matrix.setMulVec2(translation, h, v);
+      matrix.scaleVec2(translation, h, v);
       const translationLengthSqr = matrix.lengthSqrVec2(translation);
       if (translationLengthSqr > Settings.maxTranslationSquared) {
         const ratio = Settings.maxTranslation / math_sqrt(translationLengthSqr);
-        matrix.scaleVec2(v, ratio);
+        matrix.mulVec2(v, ratio);
       }
 
       const rotation = h * w;
@@ -409,7 +409,7 @@ export class Solver {
       }
 
       // Integrate
-      matrix.addMulVec2(c, h, v);
+      matrix.plusScaleVec2(c, h, v);
       a += h * w;
 
       matrix.copyVec2(body.c_position.c, c);
@@ -860,11 +860,11 @@ export class Solver {
       let w = body.c_velocity.w;
 
       // Check for large velocities
-      matrix.setMulVec2(translation, h, v);
+      matrix.scaleVec2(translation, h, v);
       const translationLengthSqr = matrix.lengthSqrVec2(translation);
       if (translationLengthSqr > Settings.maxTranslationSquared) {
         const ratio = Settings.maxTranslation / math_sqrt(translationLengthSqr);
-        matrix.scaleVec2(v, ratio);
+        matrix.mulVec2(v, ratio);
       }
 
       const rotation = h * w;
@@ -874,7 +874,7 @@ export class Solver {
       }
 
       // Integrate
-      matrix.addMulVec2(c, h, v);
+      matrix.plusScaleVec2(c, h, v);
       a += h * w;
 
       matrix.copyVec2(body.c_position.c, c);

@@ -80,7 +80,7 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
 
   const A = edgeA.m_vertex1;
   const B = edgeA.m_vertex2;
-  matrix.diffVec2(e, B, A);
+  matrix.subVec2(e, B, A);
 
   // Barycentric coordinates
   const u = matrix.dotVec2(e, B) - matrix.dotVec2(e, Q);
@@ -100,7 +100,7 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
     if (edgeA.m_hasVertex0) {
       const A1 = edgeA.m_vertex0;
       const B1 = A;
-      matrix.diffVec2(e1, B1, A1);
+      matrix.subVec2(e1, B1, A1);
       const u1 = matrix.dotVec2(e1, B1) - matrix.dotVec2(e1, Q);
 
       // Is the circle in Region AB of the previous edge?
@@ -132,7 +132,7 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
     if (edgeA.m_hasVertex3) {
       const B2 = edgeA.m_vertex3;
       const A2 = B;
-      matrix.diffVec2(e2, B2, A2);
+      matrix.subVec2(e2, B2, A2);
       const v2 = matrix.dotVec2(e2, Q) - matrix.dotVec2(e2, A2);
 
       // Is the circle in Region AB of the next edge?
@@ -156,7 +156,7 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
   // Region AB
   const den = matrix.lengthSqrVec2(e);
   _ASSERT && console.assert(den > 0.0);
-  matrix.combineVec2(P, u / den, A, v / den, B);
+  matrix.combine2Vec2(P, u / den, A, v / den, B);
   const dd = matrix.distSqrVec2(Q, P);
   if (dd > radius * radius) {
     return;

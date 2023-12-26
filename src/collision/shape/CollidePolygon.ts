@@ -89,7 +89,7 @@ Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
   const v1s = poly1.m_vertices;
   const v2s = poly2.m_vertices;
 
-  matrix.invTransformTransform(xf, xf2, xf1);
+  matrix.detransformTransform(xf, xf2, xf1);
 
   let bestIndex = 0;
   let maxSeparation = -Infinity;
@@ -234,11 +234,11 @@ export const CollidePolygons = function (
   matrix.copyVec2(v11, vertices1[iv1]);
   matrix.copyVec2(v12, vertices1[iv2]);
 
-  matrix.diffVec2(localTangent, v12, v11);
+  matrix.subVec2(localTangent, v12, v11);
   matrix.normalizeVec2(localTangent);
 
   matrix.crossVec2Num(localNormal, localTangent, 1.0);
-  matrix.combineVec2(planePoint, 0.5, v11, 0.5, v12);
+  matrix.combine2Vec2(planePoint, 0.5, v11, 0.5, v12);
 
   matrix.rotVec2(tangent, xf1.q, localTangent);
   matrix.crossVec2Num(normal, tangent, 1.0);
@@ -283,7 +283,7 @@ export const CollidePolygons = function (
 
     if (separation <= totalRadius) {
       const cp = manifold.points[pointCount];
-      matrix.invTransformVec2(cp.localPoint, xf2, clipPoints2[i].v);
+      matrix.detransformVec2(cp.localPoint, xf2, clipPoints2[i].v);
       cp.id.set(clipPoints2[i].id);
       if (flip) {
         // Swap features

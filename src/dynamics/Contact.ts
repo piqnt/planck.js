@@ -698,10 +698,10 @@ export class Contact {
         case ManifoldType.e_circles: {
           matrix.transformVec2(pointA, xfA, this.p_localPoint);
           matrix.transformVec2(pointB, xfB, this.p_localPoints[0]);
-          matrix.diffVec2(normal, pointB, pointA);
+          matrix.subVec2(normal, pointB, pointA);
           matrix.normalizeVec2(normal);
 
-          matrix.combineVec2(point, 0.5, pointA, 0.5, pointB);
+          matrix.combine2Vec2(point, 0.5, pointA, 0.5, pointB);
           separation = matrix.dotVec2(pointB, normal) - matrix.dotVec2(pointA, normal) - this.p_radiusA - this.p_radiusB;
           break;
         }
@@ -732,8 +732,8 @@ export class Contact {
         }
       }
 
-      matrix.diffVec2(rA, point, cA);
-      matrix.diffVec2(rB, point, cB);
+      matrix.subVec2(rA, point, cA);
+      matrix.subVec2(rB, point, cB);
 
       // Track max constraint error.
       minSeparation = math_min(minSeparation, separation);
@@ -753,12 +753,12 @@ export class Contact {
       // Compute normal impulse
       const impulse = K > 0.0 ? -C / K : 0.0;
 
-      matrix.setMulVec2(P, impulse, normal);
+      matrix.scaleVec2(P, impulse, normal);
 
-      matrix.subMulVec2(cA, mA, P);
+      matrix.minusScaleVec2(cA, mA, P);
       aA -= iA * matrix.crossVec2Vec2(rA, P);
 
-      matrix.addMulVec2(cB, mB, P);
+      matrix.plusScaleVec2(cB, mB, P);
       aB += iB * matrix.crossVec2Vec2(rB, P);
     }
 
@@ -820,8 +820,8 @@ export class Contact {
       const vcp = this.v_points[j]; // VelocityConstraintPoint
       const wmp = worldManifold.points[j];
 
-      matrix.diffVec2(vcp.rA, wmp, cA);
-      matrix.diffVec2(vcp.rB, wmp, cB);
+      matrix.subVec2(vcp.rA, wmp, cA);
+      matrix.subVec2(vcp.rB, wmp, cB);
 
       const rnA = matrix.crossVec2Vec2(vcp.rA, this.v_normal);
       const rnB = matrix.crossVec2Vec2(vcp.rB, this.v_normal);
@@ -932,12 +932,12 @@ export class Contact {
     for (let j = 0; j < this.v_pointCount; ++j) {
       const vcp = this.v_points[j]; // VelocityConstraintPoint
 
-      matrix.combineVec2(P, vcp.normalImpulse, normal, vcp.tangentImpulse, tangent);
+      matrix.combine2Vec2(P, vcp.normalImpulse, normal, vcp.tangentImpulse, tangent);
 
       wA -= iA * matrix.crossVec2Vec2(vcp.rA, P);
-      matrix.subMulVec2(vA, mA, P);
+      matrix.minusScaleVec2(vA, mA, P);
       wB += iB * matrix.crossVec2Vec2(vcp.rB, P);
-      matrix.addMulVec2(vB, mB, P);
+      matrix.plusScaleVec2(vB, mB, P);
     }
 
     matrix.copyVec2(velocityA.v, vA);
@@ -991,10 +991,10 @@ export class Contact {
 
       // Relative velocity at contact
       matrix.zeroVec2(dv);
-      matrix.addVec2(dv, vB);
-      matrix.addVec2(dv, matrix.crossNumVec2(temp, wB, vcp.rB));
-      matrix.subVec2(dv, vA);
-      matrix.subVec2(dv, matrix.crossNumVec2(temp, wA, vcp.rA));
+      matrix.plusVec2(dv, vB);
+      matrix.plusVec2(dv, matrix.crossNumVec2(temp, wB, vcp.rB));
+      matrix.minusVec2(dv, vA);
+      matrix.minusVec2(dv, matrix.crossNumVec2(temp, wA, vcp.rA));
 
       // Compute tangent force
       const vt = matrix.dotVec2(dv, tangent) - this.v_tangentSpeed;
@@ -1007,12 +1007,12 @@ export class Contact {
       vcp.tangentImpulse = newImpulse;
 
       // Apply contact impulse
-      matrix.setMulVec2(P, lambda, tangent);
+      matrix.scaleVec2(P, lambda, tangent);
 
-      matrix.subMulVec2(vA, mA, P);
+      matrix.minusScaleVec2(vA, mA, P);
       wA -= iA * matrix.crossVec2Vec2(vcp.rA, P);
 
-      matrix.addMulVec2(vB, mB, P);
+      matrix.plusScaleVec2(vB, mB, P);
       wB += iB * matrix.crossVec2Vec2(vcp.rB, P);
     }
 
@@ -1023,10 +1023,10 @@ export class Contact {
 
         // Relative velocity at contact
         matrix.zeroVec2(dv);
-        matrix.addVec2(dv, vB);
-        matrix.addVec2(dv, matrix.crossNumVec2(temp, wB, vcp.rB));
-        matrix.subVec2(dv, vA);
-        matrix.subVec2(dv, matrix.crossNumVec2(temp, wA, vcp.rA));
+        matrix.plusVec2(dv, vB);
+        matrix.plusVec2(dv, matrix.crossNumVec2(temp, wB, vcp.rB));
+        matrix.minusVec2(dv, vA);
+        matrix.minusVec2(dv, matrix.crossNumVec2(temp, wA, vcp.rA));
 
         // Compute normal impulse
         const vn = matrix.dotVec2(dv, normal);
@@ -1038,12 +1038,12 @@ export class Contact {
         vcp.normalImpulse = newImpulse;
 
         // Apply contact impulse
-        matrix.setMulVec2(P, lambda, normal);
+        matrix.scaleVec2(P, lambda, normal);
 
-        matrix.subMulVec2(vA, mA, P);
+        matrix.minusScaleVec2(vA, mA, P);
         wA -= iA * matrix.crossVec2Vec2(vcp.rA, P);
 
-        matrix.addMulVec2(vB, mB, P);
+        matrix.plusScaleVec2(vB, mB, P);
         wB += iB * matrix.crossVec2Vec2(vcp.rB, P);
       }
     } else {
@@ -1096,17 +1096,17 @@ export class Contact {
       // Relative velocity at contact
       // let dv1 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp1.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp1.rA));
       matrix.zeroVec2(dv1);
-      matrix.addVec2(dv1, vB);
-      matrix.addVec2(dv1, matrix.crossNumVec2(temp, wB, vcp1.rB));
-      matrix.subVec2(dv1, vA);
-      matrix.subVec2(dv1, matrix.crossNumVec2(temp, wA, vcp1.rA));
+      matrix.plusVec2(dv1, vB);
+      matrix.plusVec2(dv1, matrix.crossNumVec2(temp, wB, vcp1.rB));
+      matrix.minusVec2(dv1, vA);
+      matrix.minusVec2(dv1, matrix.crossNumVec2(temp, wA, vcp1.rA));
 
       // let dv2 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp2.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp2.rA));
       matrix.zeroVec2(dv2);
-      matrix.addVec2(dv2, vB);
-      matrix.addVec2(dv2, matrix.crossNumVec2(temp, wB, vcp2.rB));
-      matrix.subVec2(dv2, vA);
-      matrix.subVec2(dv2, matrix.crossNumVec2(temp, wA, vcp2.rA));
+      matrix.plusVec2(dv2, vB);
+      matrix.plusVec2(dv2, matrix.crossNumVec2(temp, wB, vcp2.rB));
+      matrix.minusVec2(dv2, vA);
+      matrix.minusVec2(dv2, matrix.crossNumVec2(temp, wA, vcp2.rA));
 
       // Compute normal velocity
       let vn1 = matrix.dotVec2(dv1, normal);
@@ -1139,11 +1139,11 @@ export class Contact {
 
         if (x.x >= 0.0 && x.y >= 0.0) {
           // Get the incremental impulse
-          matrix.diffVec2(d, x, a)
+          matrix.subVec2(d, x, a)
 
           // Apply incremental impulse
-          matrix.setMulVec2(P1, d.x, normal);
-          matrix.setMulVec2(P2, d.y, normal);
+          matrix.scaleVec2(P1, d.x, normal);
+          matrix.scaleVec2(P2, d.y, normal);
 
           // vA.subCombine(mA, P1, mA, P2);
           matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
@@ -1160,16 +1160,16 @@ export class Contact {
           if (DEBUG_SOLVER) {
             // Postconditions
             matrix.zeroVec2(dv1);
-            matrix.addVec2(dv1, vB);
-            matrix.addVec2(dv1, matrix.crossNumVec2(temp, wB, vcp1.rB));
-            matrix.subVec2(dv1, vA);
-            matrix.subVec2(dv1, matrix.crossNumVec2(temp, wA, vcp1.rA));
+            matrix.plusVec2(dv1, vB);
+            matrix.plusVec2(dv1, matrix.crossNumVec2(temp, wB, vcp1.rB));
+            matrix.minusVec2(dv1, vA);
+            matrix.minusVec2(dv1, matrix.crossNumVec2(temp, wA, vcp1.rA));
 
             matrix.zeroVec2(dv2);
-            matrix.addVec2(dv2, vB);
-            matrix.addVec2(dv2, matrix.crossNumVec2(temp, wB, vcp2.rB));
-            matrix.subVec2(dv2, vA);
-            matrix.subVec2(dv2, matrix.crossNumVec2(temp, wA, vcp2.rA));
+            matrix.plusVec2(dv2, vB);
+            matrix.plusVec2(dv2, matrix.crossNumVec2(temp, wB, vcp2.rB));
+            matrix.minusVec2(dv2, vA);
+            matrix.minusVec2(dv2, matrix.crossNumVec2(temp, wA, vcp2.rA));
 
             // Compute normal velocity
             vn1 = matrix.dotVec2(dv1, normal);
@@ -1194,11 +1194,11 @@ export class Contact {
 
         if (x.x >= 0.0 && vn2 >= 0.0) {
           // Get the incremental impulse
-          matrix.diffVec2(d, x, a);
+          matrix.subVec2(d, x, a);
 
           // Apply incremental impulse
-          matrix.setMulVec2(P1, d.x, normal);
-          matrix.setMulVec2(P2, d.y, normal);
+          matrix.scaleVec2(P1, d.x, normal);
+          matrix.scaleVec2(P2, d.y, normal);
 
           // vA.subCombine(mA, P1, mA, P2);
           matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
@@ -1215,10 +1215,10 @@ export class Contact {
           if (DEBUG_SOLVER) {
             // Postconditions
             matrix.zeroVec2(dv1);
-            matrix.addVec2(dv1, vB);
-            matrix.addVec2(dv1, matrix.crossNumVec2(temp, wB, vcp1.rB));
-            matrix.subVec2(dv1, vA);
-            matrix.subVec2(dv1, matrix.crossNumVec2(temp, wA, vcp1.rA));
+            matrix.plusVec2(dv1, vB);
+            matrix.plusVec2(dv1, matrix.crossNumVec2(temp, wB, vcp1.rB));
+            matrix.minusVec2(dv1, vA);
+            matrix.minusVec2(dv1, matrix.crossNumVec2(temp, wA, vcp1.rA));
 
             // Compute normal velocity
             vn1 = matrix.dotVec2(dv1, normal);
@@ -1241,11 +1241,11 @@ export class Contact {
 
         if (x.y >= 0.0 && vn1 >= 0.0) {
           // Resubstitute for the incremental impulse
-          matrix.diffVec2(d, x, a);
+          matrix.subVec2(d, x, a);
 
           // Apply incremental impulse
-          matrix.setMulVec2(P1, d.x, normal);
-          matrix.setMulVec2(P2, d.y, normal);
+          matrix.scaleVec2(P1, d.x, normal);
+          matrix.scaleVec2(P2, d.y, normal);
 
           // vA.subCombine(mA, P1, mA, P2);
           matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
@@ -1262,10 +1262,10 @@ export class Contact {
           if (DEBUG_SOLVER) {
             // Postconditions
             matrix.zeroVec2(dv2);
-            matrix.addVec2(dv2, vB);
-            matrix.addVec2(dv2, matrix.crossNumVec2(temp, wB, vcp2.rB));
-            matrix.subVec2(dv2, vA);
-            matrix.subVec2(dv2, matrix.crossNumVec2(temp, wA, vcp2.rA));
+            matrix.plusVec2(dv2, vB);
+            matrix.plusVec2(dv2, matrix.crossNumVec2(temp, wB, vcp2.rB));
+            matrix.minusVec2(dv2, vA);
+            matrix.minusVec2(dv2, matrix.crossNumVec2(temp, wA, vcp2.rA));
 
             // Compute normal velocity
             vn2 = matrix.dotVec2(dv2, normal);
@@ -1288,11 +1288,11 @@ export class Contact {
 
         if (vn1 >= 0.0 && vn2 >= 0.0) {
           // Resubstitute for the incremental impulse
-          matrix.diffVec2(d, x, a);
+          matrix.subVec2(d, x, a);
 
           // Apply incremental impulse
-          matrix.setMulVec2(P1, d.x, normal);
-          matrix.setMulVec2(P2, d.y, normal);
+          matrix.scaleVec2(P1, d.x, normal);
+          matrix.scaleVec2(P2, d.y, normal);
 
           // vA.subCombine(mA, P1, mA, P2);
           matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);

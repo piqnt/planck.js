@@ -377,7 +377,7 @@ class SeparationFunction {
       const localPointB = this.m_proxyB.getVertex(cache.indexB[0]);
       matrix.transformVec2(pointA, xfA, localPointA);
       matrix.transformVec2(pointB, xfB, localPointB);
-      matrix.diffVec2(this.m_axis, pointB, pointA);
+      matrix.subVec2(this.m_axis, pointB, pointA);
       const s = matrix.normalizeVec2Length(this.m_axis);
       return s;
 
@@ -387,11 +387,11 @@ class SeparationFunction {
       const localPointB1 = proxyB.getVertex(cache.indexB[0]);
       const localPointB2 = proxyB.getVertex(cache.indexB[1]);
 
-      matrix.crossVec2Num(this.m_axis, matrix.diffVec2(temp, localPointB2, localPointB1), 1.0);
+      matrix.crossVec2Num(this.m_axis, matrix.subVec2(temp, localPointB2, localPointB1), 1.0);
       matrix.normalizeVec2(this.m_axis);
       matrix.rotVec2(normal, xfB.q, this.m_axis);
 
-      matrix.combineVec2(this.m_localPoint, 0.5, localPointB1, 0.5, localPointB2);
+      matrix.combine2Vec2(this.m_localPoint, 0.5, localPointB1, 0.5, localPointB2);
       matrix.transformVec2(pointB, xfB, this.m_localPoint);
 
       const localPointA = proxyA.getVertex(cache.indexA[0]);
@@ -410,11 +410,11 @@ class SeparationFunction {
       const localPointA1 = this.m_proxyA.getVertex(cache.indexA[0]);
       const localPointA2 = this.m_proxyA.getVertex(cache.indexA[1]);
 
-      matrix.crossVec2Num(this.m_axis, matrix.diffVec2(temp, localPointA2, localPointA1), 1.0);
+      matrix.crossVec2Num(this.m_axis, matrix.subVec2(temp, localPointA2, localPointA1), 1.0);
       matrix.normalizeVec2(this.m_axis);
       matrix.rotVec2(normal, xfA.q, this.m_axis);
 
-      matrix.combineVec2(this.m_localPoint, 0.5, localPointA1, 0.5, localPointA2);
+      matrix.combine2Vec2(this.m_localPoint, 0.5, localPointA1, 0.5, localPointA2);
       matrix.transformVec2(pointA, xfA, this.m_localPoint);
 
       const localPointB = this.m_proxyB.getVertex(cache.indexB[0]);
@@ -437,8 +437,8 @@ class SeparationFunction {
     switch (this.m_type) {
       case SeparationFunctionType.e_points: {
         if (find) {
-          matrix.invRotVec2(axisA, xfA.q, this.m_axis);
-          matrix.invRotVec2(axisB, xfB.q, matrix.setMulVec2(temp, -1, this.m_axis));
+          matrix.derotVec2(axisA, xfA.q, this.m_axis);
+          matrix.derotVec2(axisB, xfB.q, matrix.scaleVec2(temp, -1, this.m_axis));
 
           this.indexA = this.m_proxyA.getSupport(axisA);
           this.indexB = this.m_proxyB.getSupport(axisB);
@@ -459,7 +459,7 @@ class SeparationFunction {
         matrix.transformVec2(pointA, xfA, this.m_localPoint);
 
         if (find) {
-          matrix.invRotVec2(axisB, xfB.q, matrix.setMulVec2(temp, -1, normal));
+          matrix.derotVec2(axisB, xfB.q, matrix.scaleVec2(temp, -1, normal));
 
           this.indexA = -1;
           this.indexB = this.m_proxyB.getSupport(axisB);
@@ -477,7 +477,7 @@ class SeparationFunction {
         matrix.transformVec2(pointB, xfB, this.m_localPoint);
 
         if (find) {
-          matrix.invRotVec2(axisA, xfA.q, matrix.setMulVec2(temp, -1, normal));
+          matrix.derotVec2(axisA, xfA.q, matrix.scaleVec2(temp, -1, normal));
 
           this.indexB = -1;
           this.indexA = this.m_proxyA.getSupport(axisA);

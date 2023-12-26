@@ -68,55 +68,55 @@ export function negVec2(out: Vec2Value): Vec2Value {
   return out;
 }
 
-export function addVec2(out: Vec2Value, w: Vec2Value): Vec2Value {
+export function plusVec2(out: Vec2Value, w: Vec2Value): Vec2Value {
   out.x += w.x;
   out.y += w.y;
   return out;
 }
 
-export function sumVec2(out: Vec2Value, v: Vec2Value, w: Vec2Value): Vec2Value {
+export function addVec2(out: Vec2Value, v: Vec2Value, w: Vec2Value): Vec2Value {
   out.x = v.x + w.x;
   out.y = v.x + w.y;
   return out;
 }
 
-export function subVec2(out: Vec2Value, w: Vec2Value): Vec2Value {
+export function minusVec2(out: Vec2Value, w: Vec2Value): Vec2Value {
   out.x -= w.x;
   out.y -= w.y;
   return out;
 }
 
-export function diffVec2(out: Vec2Value, v: Vec2Value, w: Vec2Value): Vec2Value {
+export function subVec2(out: Vec2Value, v: Vec2Value, w: Vec2Value): Vec2Value {
   out.x = v.x - w.x;
   out.y = v.y - w.y;
   return out;
 }
 
-export function scaleVec2(out: Vec2Value, m: number): Vec2Value {
+export function mulVec2(out: Vec2Value, m: number): Vec2Value {
   out.x *= m;
   out.y *= m;
   return out;
 }
 
-export function setMulVec2(out: Vec2Value, m: number, w: Vec2Value): Vec2Value {
+export function scaleVec2(out: Vec2Value, m: number, w: Vec2Value): Vec2Value {
   out.x = m * w.x;
   out.y = m * w.y;
   return out;
 }
 
-export function addMulVec2(out: Vec2Value, m: number, w: Vec2Value): Vec2Value {
+export function plusScaleVec2(out: Vec2Value, m: number, w: Vec2Value): Vec2Value {
   out.x += m * w.x;
   out.y += m * w.y;
   return out;
 }
 
-export function subMulVec2(out: Vec2Value, m: number, w: Vec2Value): Vec2Value {
+export function minusScaleVec2(out: Vec2Value, m: number, w: Vec2Value): Vec2Value {
   out.x -= m * w.x;
   out.y -= m * w.y;
   return out;
 }
 
-export function combineVec2(out: Vec2Value, am: number, a: Vec2Value, bm: number, b: Vec2Value): Vec2Value {
+export function combine2Vec2(out: Vec2Value, am: number, a: Vec2Value, bm: number, b: Vec2Value): Vec2Value {
   out.x = am * a.x + bm * b.x;
   out.y = am * a.y + bm * b.y;
   return out;
@@ -208,7 +208,7 @@ export function rotVec2(out: Vec2Value, q: RotValue, v: Vec2Value): Vec2Value {
   return out;
 }
 
-export function invRotVec2(out: Vec2Value, q: RotValue, v: Vec2Value): Vec2Value {
+export function derotVec2(out: Vec2Value, q: RotValue, v: Vec2Value): Vec2Value {
   const x = q.c * v.x + q.s * v.y;
   const y = -q.s * v.x + q.c * v.y;
   out.x = x;
@@ -246,7 +246,7 @@ export function transformVec2(out: Vec2Value, xf: TransformValue, v: Vec2Value):
   return out;
 }
 
-export function invTransformVec2(out: Vec2Value, xf: TransformValue, v: Vec2Value): Vec2Value {
+export function detransformVec2(out: Vec2Value, xf: TransformValue, v: Vec2Value): Vec2Value {
   const px = v.x - xf.p.x;
   const py = v.y - xf.p.y;
   const x = (xf.q.c * px + xf.q.s * py);
@@ -268,7 +268,7 @@ export function retransformVec2(out: Vec2Value, from: TransformValue, to: Transf
   return out;
 }
 
-export function invTransformTransform(out: TransformValue, a: TransformValue, b: TransformValue): TransformValue {
+export function detransformTransform(out: TransformValue, a: TransformValue, b: TransformValue): TransformValue {
   const c = a.q.c * b.q.c + a.q.s * b.q.s;
   const s = a.q.c * b.q.s - a.q.s * b.q.c;
   const x = a.q.c * (b.p.x - a.p.x) + a.q.s * (b.p.y - a.p.y);

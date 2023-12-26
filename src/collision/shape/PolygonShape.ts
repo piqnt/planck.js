@@ -307,7 +307,7 @@ export class PolygonShape extends Shape {
    * @param p A point in world coordinates.
    */
   testPoint(xf: TransformValue, p: Vec2): boolean {
-    const pLocal = matrix.invTransformVec2(temp, xf, p);
+    const pLocal = matrix.detransformVec2(temp, xf, p);
 
     for (let i = 0; i < this.m_count; ++i) {
       const dot = matrix.dotVec2(this.m_normals[i], pLocal) - matrix.dotVec2(this.m_normals[i], this.m_vertices[i]);
@@ -456,19 +456,19 @@ export class PolygonShape extends Shape {
 
     // This code would put the reference point inside the polygon.
     for (let i = 0; i < this.m_count; ++i) {
-      matrix.addVec2(s, this.m_vertices[i]);
+      matrix.plusVec2(s, this.m_vertices[i]);
     }
-    matrix.setMulVec2(s, 1.0 / this.m_count, s);
+    matrix.scaleVec2(s, 1.0 / this.m_count, s);
 
     const k_inv3 = 1.0 / 3.0;
 
     for (let i = 0; i < this.m_count; ++i) {
       // Triangle vertices.
-      matrix.diffVec2(e1, this.m_vertices[i], s);
+      matrix.subVec2(e1, this.m_vertices[i], s);
       if ( i + 1 < this.m_count) {
-        matrix.diffVec2(e2, this.m_vertices[i + 1], s);
+        matrix.subVec2(e2, this.m_vertices[i + 1], s);
       } else {
-        matrix.diffVec2(e2, this.m_vertices[0], s);
+        matrix.subVec2(e2, this.m_vertices[0], s);
       }
 
       const D = matrix.crossVec2Vec2(e1, e2);
@@ -477,8 +477,8 @@ export class PolygonShape extends Shape {
       area += triangleArea;
 
       // Area weighted centroid
-      matrix.combineVec2(temp, triangleArea * k_inv3, e1, triangleArea * k_inv3, e2);
-      matrix.addVec2(center, temp);
+      matrix.combine2Vec2(temp, triangleArea * k_inv3, e1, triangleArea * k_inv3, e2);
+      matrix.plusVec2(center, temp);
 
       const ex1 = e1.x;
       const ey1 = e1.y;
@@ -496,8 +496,8 @@ export class PolygonShape extends Shape {
 
     // Center of mass
     _ASSERT && console.assert(area > EPSILON);
-    matrix.setMulVec2(center, 1.0 / area, center);
-    matrix.sumVec2(massData.center, center, s);
+    matrix.scaleVec2(center, 1.0 / area, center);
+    matrix.addVec2(massData.center, center, s);
 
     // Inertia tensor relative to the local origin (point s).
     massData.I = density * I;
@@ -515,14 +515,14 @@ export class PolygonShape extends Shape {
       const i1 = i;
       const i2 = i < this.m_count - 1 ? i1 + 1 : 0;
       const p = this.m_vertices[i1];
-      matrix.diffVec2(e, this.m_vertices[i2], p);
+      matrix.subVec2(e, this.m_vertices[i2], p);
 
       for (let j = 0; j < this.m_count; ++j) {
         if (j == i1 || j == i2) {
           continue;
         }
 
-        const c = matrix.crossVec2Vec2(e, matrix.diffVec2(temp, this.m_vertices[j], p));
+        const c = matrix.crossVec2Vec2(e, matrix.subVec2(temp, this.m_vertices[j], p));
         if (c < 0.0) {
           return false;
         }
@@ -577,7 +577,7 @@ export class PolygonShape extends Shape {
 
     // Area weighted centroid
     matrix.combine3Vec2(temp, 1, p1, 1, p2, 1, p3);
-    matrix.addMulVec2(c, triangleArea * inv3, temp);
+    matrix.plusScaleVec2(c, triangleArea * inv3, temp);
   }
 
   // Centroid
