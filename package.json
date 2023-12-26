@@ -1,8 +1,8 @@
 {
   "name": "planck",
-  "version": "1.0.0-beta.18",
+  "version": "1.0.0-beta.19",
   "description": "2D JavaScript/TypeScript physics engine for cross-platform HTML5 game development",
-  "homepage": "https://github.com/shakiba/planck.js",
+  "homepage": "https://github.com/piqnt/planck.js",
   "keywords": [
     "box2d",
     "html5",
@@ -17,7 +17,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/shakiba/planck.js.git"
+    "url": "git://github.com/piqnt/planck.js.git"
   },
   "author": "Ali Shakiba",
   "contributors": [
