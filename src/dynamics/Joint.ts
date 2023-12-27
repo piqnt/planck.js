@@ -218,4 +218,17 @@ export abstract class Joint {
    */
   abstract solvePositionConstraints(step: TimeStep): boolean;
 
+  /**
+   * @hidden @experimental
+   * Update joint with new props.
+   */
+  abstract _reset(def: Partial<JointDef>): void;
+
+  /**
+   * @internal @deprecated
+   * Temporary for backward compatibility, will be removed.
+   */
+  _resetAnchors(def: any): void {
+    return this._reset(def);
+  }
 }

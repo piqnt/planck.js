@@ -54,6 +54,7 @@ export interface RopeJointOpt extends JointOpt {
    */
   maxLength?: number;
 }
+
 /**
  * Rope joint definition. This requires two body anchor points and a maximum
  * lengths. Note: by default the connected objects will not collide. see
@@ -164,6 +165,13 @@ export class RopeJoint extends Joint {
     data.bodyB = restore(Body, data.bodyB, world);
     const joint = new RopeJoint(data);
     return joint;
+  }
+
+  /** @hidden */
+  _reset(def: Partial<RopeJointDef>): void {
+    if (Number.isFinite(def.maxLength)) {
+      this.m_maxLength = def.maxLength;
+    }
   }
 
   /**

@@ -112,6 +112,9 @@ export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
    * The bodyB angle minus bodyA angle in the reference state (radians).
    */
   referenceAngle: number;
+
+  /** @internal */ anchorA: Vec2Value;
+  /** @internal */ anchorB: Vec2Value;
 }
 
 /** @internal */ const DEFAULTS = {
@@ -256,23 +259,38 @@ export class RevoluteJoint extends Joint {
     return joint;
   }
 
-  /** @internal */
-  _setAnchors(def: {
-    anchorA?: Vec2Value,
-    localAnchorA?: Vec2Value,
-    anchorB?: Vec2Value,
-    localAnchorB?: Vec2Value,
-  }): void {
+  /** @hidden */
+  _reset(def: Partial<RevoluteJointDef>): void {
     if (def.anchorA) {
       this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
       this.m_localAnchorA.setVec2(def.localAnchorA);
     }
-
     if (def.anchorB) {
       this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
       this.m_localAnchorB.setVec2(def.localAnchorB);
+    }
+    if (Number.isFinite(def.referenceAngle)) {
+      this.m_referenceAngle = def.referenceAngle;
+    }
+    if (def.enableLimit !== undefined) {
+      this.m_enableLimit = def.enableLimit;
+    }
+    if (Number.isFinite(def.lowerAngle)) {
+      this.m_lowerAngle = def.lowerAngle;
+    }
+    if (Number.isFinite(def.upperAngle)) {
+      this.m_upperAngle = def.upperAngle;
+    }
+    if (Number.isFinite(def.maxMotorTorque)) {
+      this.m_maxMotorTorque = def.maxMotorTorque;
+    }
+    if (Number.isFinite(def.motorSpeed)) {
+      this.m_motorSpeed = def.motorSpeed;
+    }
+    if (def.enableMotor !== undefined) {
+      this.m_enableMotor = def.enableMotor;
     }
   }
 

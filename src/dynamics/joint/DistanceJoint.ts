@@ -74,6 +74,9 @@ export interface DistanceJointDef extends JointDef, DistanceJointOpt {
    * The local anchor point relative to bodyB's origin.
    */
   localAnchorB: Vec2Value;
+
+  /** @internal */ anchorA: Vec2Value;
+  /** @internal */ anchorB: Vec2Value;
 }
 
 /** @internal */ const DEFAULTS = {
@@ -196,14 +199,8 @@ export class DistanceJoint extends Joint {
     return joint;
   }
 
-  /** @internal */
-  _setAnchors(def: {
-    anchorA?: Vec2Value,
-    localAnchorA?: Vec2Value,
-    anchorB?: Vec2Value,
-    localAnchorB?: Vec2Value,
-    length?: number,
-  }): void {
+  /** @hidden */
+  _reset(def: Partial<DistanceJointDef>): void {
     if (def.anchorA) {
       this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
@@ -224,6 +221,12 @@ export class DistanceJoint extends Joint {
           this.m_bodyA.getWorldPoint(this.m_localAnchorA),
           this.m_bodyB.getWorldPoint(this.m_localAnchorB)
       );
+    }
+    if (Number.isFinite(def.frequencyHz)) {
+      this.m_frequencyHz = def.frequencyHz;
+    }
+    if (Number.isFinite(def.dampingRatio)) {
+      this.m_dampingRatio = def.dampingRatio;
     }
   }
 

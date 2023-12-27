@@ -59,6 +59,7 @@ export interface MouseJointOpt extends JointOpt {
    */
   dampingRatio?: number;
 }
+
 /**
  * Mouse joint definition. This requires a world target point, tuning
  * parameters, and the time step.
@@ -192,6 +193,19 @@ export class MouseJoint extends Joint {
       joint.m_localAnchorB = data._localAnchorB;
     }
     return joint;
+  }
+
+  /** @hidden */
+  _reset(def: Partial<MouseJointDef>): void {
+    if (Number.isFinite(def.maxForce)) {
+      this.m_maxForce = def.maxForce;
+    }
+    if (Number.isFinite(def.frequencyHz)) {
+      this.m_frequencyHz = def.frequencyHz;
+    }
+    if (Number.isFinite(def.dampingRatio)) {
+      this.m_dampingRatio = def.dampingRatio;
+    }
   }
 
   /**

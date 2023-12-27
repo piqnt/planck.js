@@ -67,6 +67,7 @@ export interface WheelJointOpt extends JointOpt {
    */
   dampingRatio?: number;
 }
+
 /**
  * Wheel joint definition. This requires defining a line of motion using an axis
  * and an anchor point. The definition uses local anchor points and a local axis
@@ -91,6 +92,9 @@ export interface WheelJointDef extends JointDef, WheelJointOpt {
 
   /** @internal renamed to localAxisA */
   localAxis?: Vec2Value;
+
+  /** @internal */ anchorA: Vec2Value;
+  /** @internal */ anchorB: Vec2Value;
 }
 
 /** @internal */ const DEFAULTS = {
@@ -248,29 +252,36 @@ export class WheelJoint extends Joint {
     return joint;
   }
 
-  /** @internal */
-  _setAnchors(def: {
-    anchorA?: Vec2Value,
-    localAnchorA?: Vec2Value,
-    anchorB?: Vec2Value,
-    localAnchorB?: Vec2Value,
-    localAxisA?: Vec2Value,
-  }): void {
+  /** @hidden */
+  _reset(def: Partial<WheelJointDef>): void {
     if (def.anchorA) {
       this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
       this.m_localAnchorA.setVec2(def.localAnchorA);
     }
-
     if (def.anchorB) {
       this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
       this.m_localAnchorB.setVec2(def.localAnchorB);
     }
-
     if (def.localAxisA) {
       this.m_localXAxisA.setVec2(def.localAxisA);
       this.m_localYAxisA.setVec2(Vec2.crossNumVec2(1.0, def.localAxisA));
+    }
+    if (def.enableMotor !== undefined) {
+      this.m_enableMotor = def.enableMotor;
+    }
+    if (Number.isFinite(def.maxMotorTorque)) {
+      this.m_maxMotorTorque = def.maxMotorTorque;
+    }
+    if (Number.isFinite(def.motorSpeed)) {
+      this.m_motorSpeed = def.motorSpeed;
+    }
+    if (Number.isFinite(def.frequencyHz)) {
+      this.m_frequencyHz = def.frequencyHz;
+    }
+    if (Number.isFinite(def.dampingRatio)) {
+      this.m_dampingRatio = def.dampingRatio;
     }
   }
 

@@ -44,6 +44,7 @@ import { TimeStep } from "../Solver";
 // tslint:disable-next-line:no-empty-interface
 export interface PulleyJointOpt extends JointOpt {
 }
+
 /**
  * Pulley joint definition. This requires two ground anchors, two dynamic body
  * anchor points, and a pulley ratio.
@@ -77,6 +78,9 @@ export interface PulleyJointDef extends JointDef, PulleyJointOpt {
    * The pulley ratio, used to simulate a block-and-tackle.
    */
   ratio: number;
+
+  /** @hidden */ anchorA?: Vec2Value;
+  /** @hidden */ anchorB?: Vec2Value;
 }
 
 /** @internal */ const DEFAULTS = {
@@ -188,6 +192,35 @@ export class PulleyJoint extends Joint {
     data.bodyB = restore(Body, data.bodyB, world);
     const joint = new PulleyJoint(data);
     return joint;
+  }
+
+  /** @hidden */
+  _reset(def: Partial<PulleyJointDef>): void {
+    if (Vec2.isValid(def.groundAnchorA)) {
+      this.m_groundAnchorA.set(def.groundAnchorA);
+    }
+    if (Vec2.isValid(def.groundAnchorB)) {
+      this.m_groundAnchorB.set(def.groundAnchorB);
+    }
+    if (Vec2.isValid(def.localAnchorA)) {
+      this.m_localAnchorA.set(def.localAnchorA);
+    } else if (Vec2.isValid(def.anchorA)) {
+      this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+    }
+    if (Vec2.isValid(def.localAnchorB)) {
+      this.m_localAnchorB.set(def.localAnchorB);
+    } else if (Vec2.isValid(def.anchorB)) {
+      this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+    }
+    if (Number.isFinite(def.lengthA)) {
+      this.m_lengthA = def.lengthA;
+    }
+    if (Number.isFinite(def.lengthB)) {
+      this.m_lengthB = def.lengthB;
+    }
+    if (Number.isFinite(def.ratio)) {
+      this.m_ratio = def.ratio;
+    }
   }
 
   /**

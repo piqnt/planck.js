@@ -49,7 +49,6 @@ import { TimeStep } from "../Solver";
   equalLimits = 3,   
 }
 
-
 /**
  * Prismatic joint definition. This requires defining a line of motion using an
  * axis and an anchor point. The definition uses local anchor points and a local
@@ -84,6 +83,7 @@ export interface PrismaticJointOpt extends JointOpt {
    */
   motorSpeed?: number;
 }
+
 /**
  * Prismatic joint definition. This requires defining a line of motion using an
  * axis and an anchor point. The definition uses local anchor points and a local
@@ -110,6 +110,9 @@ export interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
    * bodyB_angle - bodyA_angle.
    */
   referenceAngle: number;
+
+  /** @internal */ anchorA: Vec2Value;
+  /** @internal */ anchorB: Vec2Value;
 }
 
 /** @internal */ const DEFAULTS = {
@@ -306,29 +309,42 @@ export class PrismaticJoint extends Joint {
     return joint;
   }
 
-  /** @internal */
-  _setAnchors(def: {
-    anchorA?: Vec2Value,
-    localAnchorA?: Vec2Value,
-    anchorB?: Vec2Value,
-    localAnchorB?: Vec2Value,
-    localAxisA?: Vec2Value,
-  }): void {
+  /** @hidden */
+  _reset(def: Partial<PrismaticJointDef>): void {
     if (def.anchorA) {
       this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
       this.m_localAnchorA.setVec2(def.localAnchorA);
     }
-
     if (def.anchorB) {
       this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
       this.m_localAnchorB.setVec2(def.localAnchorB);
     }
-
     if (def.localAxisA) {
       this.m_localXAxisA.setVec2(def.localAxisA);
       this.m_localYAxisA.setVec2(Vec2.crossNumVec2(1.0, def.localAxisA));
+    }
+    if (Number.isFinite(def.referenceAngle)) {
+      this.m_referenceAngle = def.referenceAngle;
+    }
+    if (typeof def.enableLimit !== 'undefined') {
+      this.m_enableLimit = !!def.enableLimit;
+    }
+    if (Number.isFinite(def.lowerTranslation)) {
+      this.m_lowerTranslation = def.lowerTranslation;
+    }
+    if (Number.isFinite(def.upperTranslation)) {
+      this.m_upperTranslation = def.upperTranslation;
+    }
+    if (typeof def.enableMotor !== 'undefined') {
+      this.m_enableMotor = !!def.enableMotor;
+    }
+    if (Number.isFinite(def.maxMotorForce)) {
+      this.m_maxMotorForce = def.maxMotorForce;
+    }
+    if (Number.isFinite(def.motorSpeed)) {
+      this.m_motorSpeed = def.motorSpeed;
     }
   }
 

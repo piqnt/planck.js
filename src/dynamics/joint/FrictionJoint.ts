@@ -49,6 +49,7 @@ export interface FrictionJointOpt extends JointOpt {
    */
   maxTorque?: number;
 }
+
 /**
  * Friction joint definition.
  */
@@ -56,11 +57,14 @@ export interface FrictionJointDef extends JointDef, FrictionJointOpt {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  localAnchorA: Vec2;
+  localAnchorA: Vec2Value;
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  localAnchorB: Vec2;
+  localAnchorB: Vec2Value;
+
+  /** @internal */ anchorA: Vec2Value;
+  /** @internal */ anchorB: Vec2Value;
 }
 
 /** @internal */ const DEFAULTS = {
@@ -163,26 +167,25 @@ export class FrictionJoint extends Joint {
     return joint;
   }
 
-  /** @internal */
-  _setAnchors(def: {
-    anchorA?: Vec2Value,
-    localAnchorA?: Vec2Value,
-    anchorB?: Vec2Value,
-    localAnchorB?: Vec2Value,
-  }): void {
+  /** @hidden */
+  _reset(def: Partial<FrictionJointDef>): void {
     if (def.anchorA) {
       this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
       this.m_localAnchorA.setVec2(def.localAnchorA);
     }
-
     if (def.anchorB) {
       this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
       this.m_localAnchorB.setVec2(def.localAnchorB);
     }
+    if (Number.isFinite(def.maxForce)) {
+      this.m_maxForce = def.maxForce;
+    }
+    if (Number.isFinite(def.maxTorque)) {
+      this.m_maxTorque = def.maxTorque;
+    }
   }
-
 
   /**
    * The local anchor point relative to bodyA's origin.

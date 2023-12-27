@@ -47,6 +47,7 @@ export interface GearJointOpt extends JointOpt {
    */
   ratio?: number;
 }
+
 /**
  * Gear joint definition.
  */
@@ -262,6 +263,14 @@ export class GearJoint extends Joint {
     const joint = new GearJoint(data);
     // if (data._constant) joint.m_constant = data._constant;
     return joint;
+  }
+
+  /** @hidden */
+  _reset(def: Partial<GearJointDef>): void {
+    // todo: implement other fields
+    if (Number.isFinite(def.ratio)) {
+      this.m_ratio = def.ratio;
+    }
   }
 
   /**

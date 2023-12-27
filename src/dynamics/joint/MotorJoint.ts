@@ -61,6 +61,7 @@ export interface MotorJointOpt extends JointOpt {
    */
   linearOffset?: Vec2Value;
 }
+
 /**
  * Motor joint definition.
  */
@@ -119,7 +120,7 @@ export class MotorJoint extends Joint {
 
     this.m_type = MotorJoint.TYPE;
 
-    this.m_linearOffset = Number.isFinite(def.linearOffset) ? Vec2.clone(def.linearOffset) : bodyA.getLocalPoint(bodyB.getPosition());
+    this.m_linearOffset = Vec2.isValid(def.linearOffset) ? Vec2.clone(def.linearOffset) : bodyA.getLocalPoint(bodyB.getPosition());
     this.m_angularOffset = Number.isFinite(def.angularOffset) ? def.angularOffset : bodyB.getAngle() - bodyA.getAngle();
 
     this.m_linearImpulse = Vec2.zero();
@@ -171,8 +172,23 @@ export class MotorJoint extends Joint {
     return joint;
   }
 
-  /** @internal */
-  _setAnchors(def: {}): void {
+  /** @hidden */
+  _reset(def: Partial<MotorJointDef>): void {
+    if (Number.isFinite(def.angularOffset)) {
+      this.m_angularOffset = def.angularOffset;
+    }
+    if (Number.isFinite(def.maxForce)) {
+      this.m_maxForce = def.maxForce;
+    }
+    if (Number.isFinite(def.maxTorque)) {
+      this.m_maxTorque = def.maxTorque;
+    }
+    if (Number.isFinite(def.correctionFactor)) {
+      this.m_correctionFactor = def.correctionFactor;
+    }
+    if (Vec2.isValid(def.linearOffset)) {
+      this.m_linearOffset.set(def.linearOffset);      
+    }
   }
 
   /**
