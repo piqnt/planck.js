@@ -135,6 +135,9 @@ export class Fixture {
   /** Styling for dev-tools. */
   style: Style = {};
 
+  /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+  appData: Record<string, any> = {};
+
   constructor(body: Body, def: FixtureDef);
   constructor(body: Body, shape: Shape, def?: FixtureOpt);
   constructor(body: Body, shape: Shape, density?: number);

@@ -112,6 +112,9 @@ export abstract class Joint {
   /** Styling for dev-tools. */
   style: Style = {};
 
+  /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+  appData: Record<string, any> = {};
+
   constructor(def: JointDef);
   constructor(def: JointOpt, bodyA: Body, bodyB: Body);
   constructor(def: JointDef | JointOpt, bodyA?: Body, bodyB?: Body) {

@@ -48,6 +48,9 @@ export abstract class Shape {
   /** Styling for dev-tools. */
   style: Style = {};
 
+  /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+  appData: Record<string, any> = {};
+
   /** @internal */
   abstract _reset(): void;
 

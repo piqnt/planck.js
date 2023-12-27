@@ -221,6 +221,9 @@ export class Body {
   /** Styling for dev-tools. */
   style: Style = {};
 
+  /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+  appData: Record<string, any> = {};
+
   /** @internal */
   constructor(world: World, def: BodyDef) {
     def = options(def, BodyDefDefault);
