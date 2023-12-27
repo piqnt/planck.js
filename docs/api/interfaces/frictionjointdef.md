@@ -62,7 +62,7 @@ ___
 
 ###  localAnchorA
 
-• **localAnchorA**: *Vec2*
+• **localAnchorA**: *[Vec2Value](vec2value.md)*
 
 The local anchor point relative to bodyA's origin.
 
@@ -70,7 +70,7 @@ ___
 
 ###  localAnchorB
 
-• **localAnchorB**: *Vec2*
+• **localAnchorB**: *[Vec2Value](vec2value.md)*
 
 The local anchor point relative to bodyB's origin.
 

@@ -6,16 +6,6 @@ Weld joint definition. You need to specify local anchor points where they are
 attached and the relative body angle. The position of the anchor points is
 important for computing the reaction torque.
 
-**`prop`** {float} frequencyHz
-
-**`prop`** {float} dampingRatio
-
-**`prop`** {Vec2} localAnchorA
-
-**`prop`** {Vec2} localAnchorB
-
-**`prop`** {float} referenceAngle
-
 ## Hierarchy
 
 * [JointOpt](jointopt.md)

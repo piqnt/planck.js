@@ -448,6 +448,8 @@ declare abstract class Shape {
     m_radius: number;
     /** Styling for dev-tools. */
     style: Style;
+    /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+    appData: Record<string, any>;
     static isValid(obj: any): boolean;
     abstract getRadius(): number;
     /**
@@ -777,6 +779,8 @@ declare class FixtureProxy {
 declare class Fixture {
     /** Styling for dev-tools. */
     style: Style;
+    /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+    appData: Record<string, any>;
     constructor(body: Body, def: FixtureDef);
     constructor(body: Body, shape: Shape, def?: FixtureOpt);
     constructor(body: Body, shape: Shape, density?: number);
@@ -971,6 +975,8 @@ interface JointDef extends JointOpt {
 declare abstract class Joint {
     /** Styling for dev-tools. */
     style: Style;
+    /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+    appData: Record<string, any>;
     constructor(def: JointDef);
     constructor(def: JointOpt, bodyA: Body, bodyB: Body);
     /**
@@ -1027,6 +1033,11 @@ declare abstract class Joint {
      * This returns true if the position errors are within tolerance.
      */
     abstract solvePositionConstraints(step: TimeStep): boolean;
+    /**
+     * @hidden @experimental
+     * Update joint with new props.
+     */
+    abstract _reset(def: Partial<JointDef>): void;
 }
 declare enum ManifoldType {
     e_unset = -1,
@@ -1440,6 +1451,8 @@ declare class Body {
     static readonly DYNAMIC: BodyType;
     /** Styling for dev-tools. */
     style: Style;
+    /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+    appData: Record<string, any>;
     isWorldLocked(): boolean;
     getWorld(): World;
     getNext(): Body | null;
@@ -2648,6 +2661,8 @@ declare class DistanceJoint extends Joint {
      * @param anchorB Anchor B in global coordination.
      */
     constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2Value, anchorB: Vec2Value);
+    /** @hidden */
+    _reset(def: Partial<DistanceJointDef>): void;
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -2712,11 +2727,11 @@ interface FrictionJointDef extends JointDef, FrictionJointOpt {
     /**
      * The local anchor point relative to bodyA's origin.
      */
-    localAnchorA: Vec2;
+    localAnchorA: Vec2Value;
     /**
      * The local anchor point relative to bodyB's origin.
      */
-    localAnchorB: Vec2;
+    localAnchorB: Vec2Value;
 }
 /**
  * Friction joint. This is used for top-down friction. It provides 2D
@@ -2739,6 +2754,8 @@ declare class FrictionJoint extends Joint {
      * @param anchor Anchor in global coordination.
      */
     constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+    /** @hidden */
+    _reset(def: Partial<FrictionJointDef>): void;
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -2881,6 +2898,8 @@ declare class RevoluteJoint extends Joint {
     static TYPE: "revolute-joint";
     constructor(def: RevoluteJointDef);
     constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+    /** @hidden */
+    _reset(def: Partial<RevoluteJointDef>): void;
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -3055,6 +3074,8 @@ declare class PrismaticJoint extends Joint {
     static TYPE: "prismatic-joint";
     constructor(def: PrismaticJointDef);
     constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
+    /** @hidden */
+    _reset(def: Partial<PrismaticJointDef>): void;
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -3214,6 +3235,8 @@ declare class GearJoint extends Joint {
     static TYPE: "gear-joint";
     constructor(def: GearJointDef);
     constructor(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number);
+    /** @hidden */
+    _reset(def: Partial<GearJointDef>): void;
     /**
      * Get the first joint.
      */
@@ -3304,6 +3327,8 @@ declare class MotorJoint extends Joint {
     static TYPE: "motor-joint";
     constructor(def: MotorJointDef);
     constructor(def: MotorJointOpt, bodyA: Body, bodyB: Body);
+    /** @hidden */
+    _reset(def: Partial<MotorJointDef>): void;
     /**
      * Set the maximum friction force in N.
      */
@@ -3435,6 +3460,8 @@ declare class MouseJoint extends Joint {
     static TYPE: "mouse-joint";
     constructor(def: MouseJointDef);
     constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2Value);
+    /** @hidden */
+    _reset(def: Partial<MouseJointDef>): void;
     /**
      * Use this to update the target point.
      */
@@ -3531,6 +3558,8 @@ interface PulleyJointDef extends JointDef, PulleyJointOpt {
      * The pulley ratio, used to simulate a block-and-tackle.
      */
     ratio: number;
+    /** @hidden */ anchorA?: Vec2Value;
+    /** @hidden */ anchorB?: Vec2Value;
 }
 /**
  * The pulley joint is connected to two bodies and two fixed ground points. The
@@ -3572,6 +3601,8 @@ declare class PulleyJoint extends Joint {
     constructor(def: PulleyJointDef);
     constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2Value, groundB: Vec2Value, anchorA: Vec2Value, anchorB: Vec2Value, ratio: number);
     _serialize(): object;
+    /** @hidden */
+    _reset(def: Partial<PulleyJointDef>): void;
     /**
      * Get the first ground anchor.
      */
@@ -3695,6 +3726,8 @@ declare class RopeJoint extends Joint {
     static TYPE: "rope-joint";
     constructor(def: RopeJointDef);
     constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+    /** @hidden */
+    _reset(def: Partial<RopeJointDef>): void;
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -3739,13 +3772,6 @@ declare class RopeJoint extends Joint {
  * Weld joint definition. You need to specify local anchor points where they are
  * attached and the relative body angle. The position of the anchor points is
  * important for computing the reaction torque.
- *
- * @prop {float} frequencyHz
- * @prop {float} dampingRatio
- *
- * @prop {Vec2} localAnchorA
- * @prop {Vec2} localAnchorB
- * @prop {float} referenceAngle
  */
 interface WeldJointOpt extends JointOpt {
     /**
@@ -3795,6 +3821,8 @@ declare class WeldJoint extends Joint {
     static TYPE: "weld-joint";
     constructor(def: WeldJointDef);
     constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+    /** @hidden */
+    _reset(def: Partial<WeldJointDef>): void;
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -3922,6 +3950,8 @@ declare class WheelJoint extends Joint {
     static TYPE: "wheel-joint";
     constructor(def: WheelJointDef);
     constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
+    /** @hidden */
+    _reset(def: Partial<WheelJointDef>): void;
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -4683,6 +4713,8 @@ declare namespace planck {
         m_radius: number;
         /** Styling for dev-tools. */
         style: Style;
+        /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+        appData: Record<string, any>;
         static isValid(obj: any): boolean;
         abstract getRadius(): number;
         /**
@@ -5012,6 +5044,8 @@ declare namespace planck {
     class Fixture {
         /** Styling for dev-tools. */
         style: Style;
+        /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+        appData: Record<string, any>;
         constructor(body: Body, def: FixtureDef);
         constructor(body: Body, shape: Shape, def?: FixtureOpt);
         constructor(body: Body, shape: Shape, density?: number);
@@ -5206,6 +5240,8 @@ declare namespace planck {
     abstract class Joint {
         /** Styling for dev-tools. */
         style: Style;
+        /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+        appData: Record<string, any>;
         constructor(def: JointDef);
         constructor(def: JointOpt, bodyA: Body, bodyB: Body);
         /**
@@ -5262,6 +5298,11 @@ declare namespace planck {
          * This returns true if the position errors are within tolerance.
          */
         abstract solvePositionConstraints(step: TimeStep): boolean;
+        /**
+         * @hidden @experimental
+         * Update joint with new props.
+         */
+        abstract _reset(def: Partial<JointDef>): void;
     }
     enum ManifoldType {
         e_unset = -1,
@@ -5675,6 +5716,8 @@ declare namespace planck {
         static readonly DYNAMIC: BodyType;
         /** Styling for dev-tools. */
         style: Style;
+        /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+        appData: Record<string, any>;
         isWorldLocked(): boolean;
         getWorld(): World;
         getNext(): Body | null;
@@ -6885,6 +6928,8 @@ declare namespace planck {
          * @param anchorB Anchor B in global coordination.
          */
         constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2Value, anchorB: Vec2Value);
+        /** @hidden */
+        _reset(def: Partial<DistanceJointDef>): void;
         /**
          * The local anchor point relative to bodyA's origin.
          */
@@ -6949,11 +6994,11 @@ declare namespace planck {
         /**
          * The local anchor point relative to bodyA's origin.
          */
-        localAnchorA: Vec2;
+        localAnchorA: Vec2Value;
         /**
          * The local anchor point relative to bodyB's origin.
          */
-        localAnchorB: Vec2;
+        localAnchorB: Vec2Value;
     }
     /**
      * Friction joint. This is used for top-down friction. It provides 2D
@@ -6966,6 +7011,8 @@ declare namespace planck {
          * @param anchor Anchor in global coordination.
          */
         constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+        /** @hidden */
+        _reset(def: Partial<FrictionJointDef>): void;
         /**
          * The local anchor point relative to bodyA's origin.
          */
@@ -7090,6 +7137,8 @@ declare namespace planck {
         static TYPE: "revolute-joint";
         constructor(def: RevoluteJointDef);
         constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+        /** @hidden */
+        _reset(def: Partial<RevoluteJointDef>): void;
         /**
          * The local anchor point relative to bodyA's origin.
          */
@@ -7250,6 +7299,8 @@ declare namespace planck {
         static TYPE: "prismatic-joint";
         constructor(def: PrismaticJointDef);
         constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
+        /** @hidden */
+        _reset(def: Partial<PrismaticJointDef>): void;
         /**
          * The local anchor point relative to bodyA's origin.
          */
@@ -7381,6 +7432,8 @@ declare namespace planck {
         static TYPE: "gear-joint";
         constructor(def: GearJointDef);
         constructor(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number);
+        /** @hidden */
+        _reset(def: Partial<GearJointDef>): void;
         /**
          * Get the first joint.
          */
@@ -7459,6 +7512,8 @@ declare namespace planck {
         static TYPE: "motor-joint";
         constructor(def: MotorJointDef);
         constructor(def: MotorJointOpt, bodyA: Body, bodyB: Body);
+        /** @hidden */
+        _reset(def: Partial<MotorJointDef>): void;
         /**
          * Set the maximum friction force in N.
          */
@@ -7564,6 +7619,8 @@ declare namespace planck {
         static TYPE: "mouse-joint";
         constructor(def: MouseJointDef);
         constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2Value);
+        /** @hidden */
+        _reset(def: Partial<MouseJointDef>): void;
         /**
          * Use this to update the target point.
          */
@@ -7660,6 +7717,8 @@ declare namespace planck {
          * The pulley ratio, used to simulate a block-and-tackle.
          */
         ratio: number;
+        /** @hidden */ anchorA?: Vec2Value;
+        /** @hidden */ anchorB?: Vec2Value;
     }
     /**
      * The pulley joint is connected to two bodies and two fixed ground points. The
@@ -7677,6 +7736,8 @@ declare namespace planck {
         constructor(def: PulleyJointDef);
         constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2Value, groundB: Vec2Value, anchorA: Vec2Value, anchorB: Vec2Value, ratio: number);
         _serialize(): object;
+        /** @hidden */
+        _reset(def: Partial<PulleyJointDef>): void;
         /**
          * Get the first ground anchor.
          */
@@ -7776,6 +7837,8 @@ declare namespace planck {
         static TYPE: "rope-joint";
         constructor(def: RopeJointDef);
         constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+        /** @hidden */
+        _reset(def: Partial<RopeJointDef>): void;
         /**
          * The local anchor point relative to bodyA's origin.
          */
@@ -7820,13 +7883,6 @@ declare namespace planck {
      * Weld joint definition. You need to specify local anchor points where they are
      * attached and the relative body angle. The position of the anchor points is
      * important for computing the reaction torque.
-     *
-     * @prop {float} frequencyHz
-     * @prop {float} dampingRatio
-     *
-     * @prop {Vec2} localAnchorA
-     * @prop {Vec2} localAnchorB
-     * @prop {float} referenceAngle
      */
     interface WeldJointOpt extends JointOpt {
         /**
@@ -7866,6 +7922,8 @@ declare namespace planck {
         static TYPE: "weld-joint";
         constructor(def: WeldJointDef);
         constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+        /** @hidden */
+        _reset(def: Partial<WeldJointDef>): void;
         /**
          * The local anchor point relative to bodyA's origin.
          */
@@ -7979,6 +8037,8 @@ declare namespace planck {
         static TYPE: "wheel-joint";
         constructor(def: WheelJointDef);
         constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
+        /** @hidden */
+        _reset(def: Partial<WheelJointDef>): void;
         /**
          * The local anchor point relative to bodyA's origin.
          */

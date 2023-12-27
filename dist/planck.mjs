@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.0-beta.19
+ * Planck.js v1.0.0-beta.20
  * @license The MIT license
  * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
@@ -3005,6 +3005,8 @@ var Shape = /** @class */ (function () {
     function Shape() {
         /** Styling for dev-tools. */
         this.style = {};
+        /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+        this.appData = {};
     }
     Shape.isValid = function (obj) {
         if (obj === null || typeof obj === 'undefined') {
@@ -3075,6 +3077,8 @@ var Fixture = /** @class */ (function () {
     function Fixture(body, shape, def) {
         /** Styling for dev-tools. */
         this.style = {};
+        /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+        this.appData = {};
         if (shape.shape) {
             def = shape;
             shape = shape.shape;
@@ -3444,6 +3448,8 @@ var Body = /** @class */ (function () {
     function Body(world, def) {
         /** Styling for dev-tools. */
         this.style = {};
+        /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+        this.appData = {};
         def = options(def, BodyDefDefault);
         this.m_world = world;
         this.m_awakeFlag = def.awake;
@@ -4318,6 +4324,8 @@ var Joint = /** @class */ (function () {
         /** @internal */ this.m_islandFlag = false;
         /** Styling for dev-tools. */
         this.style = {};
+        /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+        this.appData = {};
         bodyA = 'bodyA' in def ? def.bodyA : bodyA;
         bodyB = 'bodyB' in def ? def.bodyB : bodyB;
         this.m_bodyA = bodyA;
@@ -4373,6 +4381,13 @@ var Joint = /** @class */ (function () {
      * Shift the origin for any points stored in world coordinates.
      */
     Joint.prototype.shiftOrigin = function (newOrigin) { };
+    /**
+     * @internal @deprecated
+     * Temporary for backward compatibility, will be removed.
+     */
+    Joint.prototype._resetAnchors = function (def) {
+        return this._reset(def);
+    };
     return Joint;
 }());
 
@@ -10357,8 +10372,8 @@ var DistanceJoint = /** @class */ (function (_super) {
         var joint = new DistanceJoint(data);
         return joint;
     };
-    /** @internal */
-    DistanceJoint.prototype._setAnchors = function (def) {
+    /** @hidden */
+    DistanceJoint.prototype._reset = function (def) {
         if (def.anchorA) {
             this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
         }
@@ -10377,6 +10392,12 @@ var DistanceJoint = /** @class */ (function (_super) {
         else if (def.length < 0) ;
         else if (def.anchorA || def.anchorA || def.anchorA || def.anchorA) {
             this.m_length = Vec2.distance(this.m_bodyA.getWorldPoint(this.m_localAnchorA), this.m_bodyB.getWorldPoint(this.m_localAnchorB));
+        }
+        if (Number.isFinite(def.frequencyHz)) {
+            this.m_frequencyHz = def.frequencyHz;
+        }
+        if (Number.isFinite(def.dampingRatio)) {
+            this.m_dampingRatio = def.dampingRatio;
         }
     };
     /**
@@ -10650,8 +10671,8 @@ var FrictionJoint = /** @class */ (function (_super) {
         var joint = new FrictionJoint(data);
         return joint;
     };
-    /** @internal */
-    FrictionJoint.prototype._setAnchors = function (def) {
+    /** @hidden */
+    FrictionJoint.prototype._reset = function (def) {
         if (def.anchorA) {
             this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
         }
@@ -10663,6 +10684,12 @@ var FrictionJoint = /** @class */ (function (_super) {
         }
         else if (def.localAnchorB) {
             this.m_localAnchorB.setVec2(def.localAnchorB);
+        }
+        if (Number.isFinite(def.maxForce)) {
+            this.m_maxForce = def.maxForce;
+        }
+        if (Number.isFinite(def.maxTorque)) {
+            this.m_maxTorque = def.maxTorque;
         }
     };
     /**
@@ -11161,8 +11188,8 @@ var RevoluteJoint = /** @class */ (function (_super) {
         var joint = new RevoluteJoint(data);
         return joint;
     };
-    /** @internal */
-    RevoluteJoint.prototype._setAnchors = function (def) {
+    /** @hidden */
+    RevoluteJoint.prototype._reset = function (def) {
         if (def.anchorA) {
             this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
         }
@@ -11174,6 +11201,27 @@ var RevoluteJoint = /** @class */ (function (_super) {
         }
         else if (def.localAnchorB) {
             this.m_localAnchorB.setVec2(def.localAnchorB);
+        }
+        if (Number.isFinite(def.referenceAngle)) {
+            this.m_referenceAngle = def.referenceAngle;
+        }
+        if (def.enableLimit !== undefined) {
+            this.m_enableLimit = def.enableLimit;
+        }
+        if (Number.isFinite(def.lowerAngle)) {
+            this.m_lowerAngle = def.lowerAngle;
+        }
+        if (Number.isFinite(def.upperAngle)) {
+            this.m_upperAngle = def.upperAngle;
+        }
+        if (Number.isFinite(def.maxMotorTorque)) {
+            this.m_maxMotorTorque = def.maxMotorTorque;
+        }
+        if (Number.isFinite(def.motorSpeed)) {
+            this.m_motorSpeed = def.motorSpeed;
+        }
+        if (def.enableMotor !== undefined) {
+            this.m_enableMotor = def.enableMotor;
         }
     };
     /**
@@ -11757,8 +11805,8 @@ var PrismaticJoint = /** @class */ (function (_super) {
         var joint = new PrismaticJoint(data);
         return joint;
     };
-    /** @internal */
-    PrismaticJoint.prototype._setAnchors = function (def) {
+    /** @hidden */
+    PrismaticJoint.prototype._reset = function (def) {
         if (def.anchorA) {
             this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
         }
@@ -11774,6 +11822,27 @@ var PrismaticJoint = /** @class */ (function (_super) {
         if (def.localAxisA) {
             this.m_localXAxisA.setVec2(def.localAxisA);
             this.m_localYAxisA.setVec2(Vec2.crossNumVec2(1.0, def.localAxisA));
+        }
+        if (Number.isFinite(def.referenceAngle)) {
+            this.m_referenceAngle = def.referenceAngle;
+        }
+        if (typeof def.enableLimit !== 'undefined') {
+            this.m_enableLimit = !!def.enableLimit;
+        }
+        if (Number.isFinite(def.lowerTranslation)) {
+            this.m_lowerTranslation = def.lowerTranslation;
+        }
+        if (Number.isFinite(def.upperTranslation)) {
+            this.m_upperTranslation = def.upperTranslation;
+        }
+        if (typeof def.enableMotor !== 'undefined') {
+            this.m_enableMotor = !!def.enableMotor;
+        }
+        if (Number.isFinite(def.maxMotorForce)) {
+            this.m_maxMotorForce = def.maxMotorForce;
+        }
+        if (Number.isFinite(def.motorSpeed)) {
+            this.m_motorSpeed = def.motorSpeed;
         }
     };
     /**
@@ -12405,6 +12474,13 @@ var GearJoint = /** @class */ (function (_super) {
         // if (data._constant) joint.m_constant = data._constant;
         return joint;
     };
+    /** @hidden */
+    GearJoint.prototype._reset = function (def) {
+        // todo: implement other fields
+        if (Number.isFinite(def.ratio)) {
+            this.m_ratio = def.ratio;
+        }
+    };
     /**
      * Get the first joint.
      */
@@ -12706,7 +12782,7 @@ var MotorJoint = /** @class */ (function (_super) {
         bodyA = _this.m_bodyA;
         bodyB = _this.m_bodyB;
         _this.m_type = MotorJoint.TYPE;
-        _this.m_linearOffset = Number.isFinite(def.linearOffset) ? Vec2.clone(def.linearOffset) : bodyA.getLocalPoint(bodyB.getPosition());
+        _this.m_linearOffset = Vec2.isValid(def.linearOffset) ? Vec2.clone(def.linearOffset) : bodyA.getLocalPoint(bodyB.getPosition());
         _this.m_angularOffset = Number.isFinite(def.angularOffset) ? def.angularOffset : bodyB.getAngle() - bodyA.getAngle();
         _this.m_linearImpulse = Vec2.zero();
         _this.m_angularImpulse = 0.0;
@@ -12750,8 +12826,23 @@ var MotorJoint = /** @class */ (function (_super) {
         var joint = new MotorJoint(data);
         return joint;
     };
-    /** @internal */
-    MotorJoint.prototype._setAnchors = function (def) {
+    /** @hidden */
+    MotorJoint.prototype._reset = function (def) {
+        if (Number.isFinite(def.angularOffset)) {
+            this.m_angularOffset = def.angularOffset;
+        }
+        if (Number.isFinite(def.maxForce)) {
+            this.m_maxForce = def.maxForce;
+        }
+        if (Number.isFinite(def.maxTorque)) {
+            this.m_maxTorque = def.maxTorque;
+        }
+        if (Number.isFinite(def.correctionFactor)) {
+            this.m_correctionFactor = def.correctionFactor;
+        }
+        if (Vec2.isValid(def.linearOffset)) {
+            this.m_linearOffset.set(def.linearOffset);
+        }
     };
     /**
      * Set the maximum friction force in N.
@@ -13069,6 +13160,18 @@ var MouseJoint = /** @class */ (function (_super) {
         }
         return joint;
     };
+    /** @hidden */
+    MouseJoint.prototype._reset = function (def) {
+        if (Number.isFinite(def.maxForce)) {
+            this.m_maxForce = def.maxForce;
+        }
+        if (Number.isFinite(def.frequencyHz)) {
+            this.m_frequencyHz = def.frequencyHz;
+        }
+        if (Number.isFinite(def.dampingRatio)) {
+            this.m_dampingRatio = def.dampingRatio;
+        }
+    };
     /**
      * Use this to update the target point.
      */
@@ -13331,6 +13434,36 @@ var PulleyJoint = /** @class */ (function (_super) {
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new PulleyJoint(data);
         return joint;
+    };
+    /** @hidden */
+    PulleyJoint.prototype._reset = function (def) {
+        if (Vec2.isValid(def.groundAnchorA)) {
+            this.m_groundAnchorA.set(def.groundAnchorA);
+        }
+        if (Vec2.isValid(def.groundAnchorB)) {
+            this.m_groundAnchorB.set(def.groundAnchorB);
+        }
+        if (Vec2.isValid(def.localAnchorA)) {
+            this.m_localAnchorA.set(def.localAnchorA);
+        }
+        else if (Vec2.isValid(def.anchorA)) {
+            this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+        }
+        if (Vec2.isValid(def.localAnchorB)) {
+            this.m_localAnchorB.set(def.localAnchorB);
+        }
+        else if (Vec2.isValid(def.anchorB)) {
+            this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+        }
+        if (Number.isFinite(def.lengthA)) {
+            this.m_lengthA = def.lengthA;
+        }
+        if (Number.isFinite(def.lengthB)) {
+            this.m_lengthB = def.lengthB;
+        }
+        if (Number.isFinite(def.ratio)) {
+            this.m_ratio = def.ratio;
+        }
     };
     /**
      * Get the first ground anchor.
@@ -13647,6 +13780,12 @@ var RopeJoint = /** @class */ (function (_super) {
         var joint = new RopeJoint(data);
         return joint;
     };
+    /** @hidden */
+    RopeJoint.prototype._reset = function (def) {
+        if (Number.isFinite(def.maxLength)) {
+            this.m_maxLength = def.maxLength;
+        }
+    };
     /**
      * The local anchor point relative to bodyA's origin.
      */
@@ -13922,8 +14061,8 @@ var WeldJoint = /** @class */ (function (_super) {
         var joint = new WeldJoint(data);
         return joint;
     };
-    /** @internal */
-    WeldJoint.prototype._setAnchors = function (def) {
+    /** @hidden */
+    WeldJoint.prototype._reset = function (def) {
         if (def.anchorA) {
             this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
         }
@@ -13935,6 +14074,12 @@ var WeldJoint = /** @class */ (function (_super) {
         }
         else if (def.localAnchorB) {
             this.m_localAnchorB.setVec2(def.localAnchorB);
+        }
+        if (Number.isFinite(def.frequencyHz)) {
+            this.m_frequencyHz = def.frequencyHz;
+        }
+        if (Number.isFinite(def.dampingRatio)) {
+            this.m_dampingRatio = def.dampingRatio;
         }
     };
     /**
@@ -14332,8 +14477,8 @@ var WheelJoint = /** @class */ (function (_super) {
         var joint = new WheelJoint(data);
         return joint;
     };
-    /** @internal */
-    WheelJoint.prototype._setAnchors = function (def) {
+    /** @hidden */
+    WheelJoint.prototype._reset = function (def) {
         if (def.anchorA) {
             this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
         }
@@ -14349,6 +14494,21 @@ var WheelJoint = /** @class */ (function (_super) {
         if (def.localAxisA) {
             this.m_localXAxisA.setVec2(def.localAxisA);
             this.m_localYAxisA.setVec2(Vec2.crossNumVec2(1.0, def.localAxisA));
+        }
+        if (def.enableMotor !== undefined) {
+            this.m_enableMotor = def.enableMotor;
+        }
+        if (Number.isFinite(def.maxMotorTorque)) {
+            this.m_maxMotorTorque = def.maxMotorTorque;
+        }
+        if (Number.isFinite(def.motorSpeed)) {
+            this.m_motorSpeed = def.motorSpeed;
+        }
+        if (Number.isFinite(def.frequencyHz)) {
+            this.m_frequencyHz = def.frequencyHz;
+        }
+        if (Number.isFinite(def.dampingRatio)) {
+            this.m_dampingRatio = def.dampingRatio;
         }
     };
     /**
