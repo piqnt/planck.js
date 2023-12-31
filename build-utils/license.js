@@ -3,7 +3,7 @@ const version = process.env.npm_package_version;
 module.exports = `
 Planck.js v${version}
 @license The MIT license
-@copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
+@copyright Copyright (c) 2023 Erin Catto, Ali Shakiba
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

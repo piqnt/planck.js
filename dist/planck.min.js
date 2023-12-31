@@ -1,7 +1,7 @@
 /**
- * Planck.js v1.0.0-beta.20
+ * Planck.js v1.0.0
  * @license The MIT license
- * @copyright Copyright (c) 2021 Erin Catto, Ali Shakiba
+ * @copyright Copyright (c) 2023 Erin Catto, Ali Shakiba
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
