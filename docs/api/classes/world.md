@@ -15,6 +15,8 @@
 ### Methods
 
 * [clearForces](world.md#clearforces)
+* [createBody](world.md#createbody)
+* [createDynamicBody](world.md#createdynamicbody)
 * [createJoint](world.md#createjoint)
 * [createKinematicBody](world.md#createkinematicbody)
 * [destroyBody](world.md#destroybody)
@@ -81,6 +83,61 @@ complete in one pass of your game loop.
 See [World.setAutoClearForces](world.md#setautoclearforces)
 
 **Returns:** *void*
+
+___
+
+###  createBody
+
+▸ **createBody**(`def?`: [BodyDef](../interfaces/bodydef.md)): *[Body](body.md)*
+
+Create a rigid body given a definition. No reference to the definition is
+retained.
+
+Warning: This function is locked during callbacks.
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`def?` | [BodyDef](../interfaces/bodydef.md) |
+
+**Returns:** *[Body](body.md)*
+
+▸ **createBody**(`position`: [Vec2Value](../interfaces/vec2value.md), `angle?`: number): *[Body](body.md)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`position` | [Vec2Value](../interfaces/vec2value.md) |
+`angle?` | number |
+
+**Returns:** *[Body](body.md)*
+
+___
+
+###  createDynamicBody
+
+▸ **createDynamicBody**(`def?`: [BodyDef](../interfaces/bodydef.md)): *[Body](body.md)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`def?` | [BodyDef](../interfaces/bodydef.md) |
+
+**Returns:** *[Body](body.md)*
+
+▸ **createDynamicBody**(`position`: [Vec2Value](../interfaces/vec2value.md), `angle?`: number): *[Body](body.md)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`position` | [Vec2Value](../interfaces/vec2value.md) |
+`angle?` | number |
+
+**Returns:** *[Body](body.md)*
 
 ___
 

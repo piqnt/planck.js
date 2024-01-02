@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.0
+ * Planck.js v1.0.1
  * @license The MIT license
  * @copyright Copyright (c) 2023 Erin Catto, Ali Shakiba
  *
@@ -263,7 +263,7 @@ var Vec2 = /** @class */ (function () {
         obj.y = 0;
         return obj;
     };
-    /** @internal */
+    /** @hidden */
     Vec2.neo = function (x, y) {
         var obj = Object.create(Vec2.prototype);
         obj.x = x;
@@ -273,7 +273,7 @@ var Vec2 = /** @class */ (function () {
     Vec2.clone = function (v) {
         return Vec2.neo(v.x, v.y);
     };
-    /** @internal */
+    /** @hidden */
     Vec2.prototype.toString = function () {
         return JSON.stringify(this);
     };
@@ -563,7 +563,7 @@ var Vec2 = /** @class */ (function () {
     Vec2.add = function (v, w) {
         return Vec2.neo(v.x + w.x, v.y + w.y);
     };
-    /** @internal @deprecated */
+    /** @hidden @deprecated */
     Vec2.wAdd = function (a, v, b, w) {
         if (typeof b !== 'undefined' || typeof w !== 'undefined') {
             return Vec2.combine(a, v, b, w);
@@ -626,14 +626,14 @@ var Vec2 = /** @class */ (function () {
         r.clamp(max);
         return r;
     };
-    /**  @internal @deprecated */
+    /**  @hidden @deprecated */
     Vec2.scaleFn = function (x, y) {
         // todo: this was used in examples, remove in the future
         return function (v) {
             return Vec2.neo(v.x * x, v.y * y);
         };
     };
-    /**  @internal @deprecated */
+    /**  @hidden @deprecated */
     Vec2.translateFn = function (x, y) {
         // todo: this was used in examples, remove in the future
         return function (v) {
@@ -832,7 +832,8 @@ var AABB = /** @class */ (function () {
         output.normal = normal;
         return true;
     };
-    /** @internal */ AABB.prototype.toString = function () {
+    /** @hidden */
+    AABB.prototype.toString = function () {
         return JSON.stringify(this);
     };
     AABB.combinePoints = function (out, a, b) {
@@ -2478,7 +2479,7 @@ var Rot = /** @class */ (function () {
             this.setIdentity();
         }
     }
-    /** @internal */
+    /** @hidden */
     Rot.neo = function (angle) {
         var obj = Object.create(Rot.prototype);
         obj.setAngle(angle);
@@ -2771,7 +2772,7 @@ var Transform = /** @class */ (function () {
         obj.q = Rot.clone(xf.q);
         return obj;
     };
-    /** @internal */
+    /** @hidden */
     Transform.neo = function (position, rotation) {
         var obj = Object.create(Transform.prototype);
         obj.p = Vec2.clone(position);
@@ -2840,7 +2841,7 @@ var Transform = /** @class */ (function () {
         }
         return arr;
     };
-    /** @internal @deprecated */
+    /** @hidden @deprecated */
     Transform.mulFn = function (a) {
         return function (b) {
             return Transform.mul(a, b);
@@ -3108,7 +3109,7 @@ var Fixture = /** @class */ (function () {
         }
         this.m_userData = def.userData;
     }
-    /** @internal Re-setup fixture. */
+    /** @hidden Re-setup fixture. */
     Fixture.prototype._reset = function () {
         var body = this.getBody();
         var broadPhase = body.m_world.m_broadPhase;
@@ -6408,7 +6409,7 @@ var Mat22 = /** @class */ (function () {
             this.ey = Vec2.zero();
         }
     }
-    /** @internal */
+    /** @hidden */
     Mat22.prototype.toString = function () {
         return JSON.stringify(this);
     };
@@ -8423,7 +8424,7 @@ var World = /** @class */ (function () {
         ++this.m_bodyCount;
     };
     // tslint:disable-next-line:typedef
-    /** @internal */ World.prototype.createBody = function (arg1, arg2) {
+    World.prototype.createBody = function (arg1, arg2) {
         if (this.isLocked()) {
             return null;
         }
@@ -8440,7 +8441,7 @@ var World = /** @class */ (function () {
         return body;
     };
     // tslint:disable-next-line:typedef
-    /** @internal */ World.prototype.createDynamicBody = function (arg1, arg2) {
+    World.prototype.createDynamicBody = function (arg1, arg2) {
         var def = {};
         if (!arg1) ;
         else if (Vec2.isValid(arg1)) {
@@ -8940,7 +8941,7 @@ var Vec3 = /** @class */ (function () {
         obj.z = data.z;
         return obj;
     };
-    /** @internal */
+    /** @hidden */
     Vec3.neo = function (x, y, z) {
         var obj = Object.create(Vec3.prototype);
         obj.x = x;
@@ -8958,7 +8959,7 @@ var Vec3 = /** @class */ (function () {
     Vec3.clone = function (v) {
         return Vec3.neo(v.x, v.y, v.z);
     };
-    /** @internal */
+    /** @hidden */
     Vec3.prototype.toString = function () {
         return JSON.stringify(this);
     };
@@ -9108,7 +9109,7 @@ var EdgeShape = /** @class */ (function (_super) {
         }
         return shape;
     };
-    /** @internal */
+    /** @hidden */
     EdgeShape.prototype._reset = function () {
         // noop
     };
@@ -9459,7 +9460,7 @@ var ChainShape = /** @class */ (function (_super) {
         this.m_nextVertex = null;
         return this;
     };
-    /** @internal */
+    /** @hidden */
     ChainShape.prototype._reset = function () {
         if (this.m_isLoop) {
             this._createLoop(this.m_vertices);
@@ -9715,7 +9716,8 @@ var PolygonShape = /** @class */ (function (_super) {
     PolygonShape.prototype.getChildCount = function () {
         return 1;
     };
-    /** @internal */ PolygonShape.prototype._reset = function () {
+    /** @hidden */
+    PolygonShape.prototype._reset = function () {
         this._set(this.m_vertices);
     };
     /**
@@ -10155,7 +10157,7 @@ var CircleShape = /** @class */ (function (_super) {
     CircleShape._deserialize = function (data) {
         return new CircleShape(data.p, data.radius);
     };
-    /** @internal */
+    /** @hidden */
     CircleShape.prototype._reset = function () {
         // noop
     };
@@ -10904,7 +10906,7 @@ var Mat33 = /** @class */ (function () {
             this.ez = Vec3.zero();
         }
     }
-    /** @internal */
+    /** @hidden */
     Mat33.prototype.toString = function () {
         return JSON.stringify(this);
     };

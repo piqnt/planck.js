@@ -4,7 +4,7 @@
 
 A rigid body composed of one or more fixtures.
 
-To create a new Body use {@link World.createBody}.
+To create a new Body use [World.createBody](world.md#createbody).
 
 ## Hierarchy
 

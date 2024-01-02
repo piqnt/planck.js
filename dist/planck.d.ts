@@ -23,7 +23,11 @@ declare class Vec2 {
     });
     constructor();
     static zero(): Vec2;
+    /** @hidden */
+    static neo(x: number, y: number): Vec2;
     static clone(v: Vec2Value): Vec2;
+    /** @hidden */
+    toString(): string;
     /**
      * Does this vector contain finite coordinates?
      */
@@ -147,6 +151,8 @@ declare class Vec2 {
      */
     static addCrossNumVec2(a: Vec2Value, v: number, w: Vec2Value): Vec2;
     static add(v: Vec2Value, w: Vec2Value): Vec2;
+    /** @hidden @deprecated */
+    static wAdd(a: number, v: Vec2, b: number, w: Vec2): Vec2;
     static combine(a: number, v: Vec2, b: number, w: Vec2): Vec2;
     static sub(v: Vec2Value, w: Vec2Value): Vec2;
     static mul(a: Vec2Value, b: number): Vec2;
@@ -161,6 +167,10 @@ declare class Vec2 {
     static lower(v: Vec2Value, w: Vec2Value): Vec2;
     clamp(max: number): Vec2;
     static clamp(v: Vec2Value, max: number): Vec2;
+    /**  @hidden @deprecated */
+    static scaleFn(x: number, y: number): (v: Vec2) => Vec2;
+    /**  @hidden @deprecated */
+    static translateFn(x: number, y: number): (v: Vec2) => Vec2;
 }
 /**
  * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
@@ -219,6 +229,8 @@ declare class AABB {
     static areEqual(a: AABBValue, b: AABBValue): boolean;
     static diff(a: AABBValue, b: AABBValue): number;
     rayCast(output: RayCastOutput, input: RayCastInput): boolean;
+    /** @hidden */
+    toString(): string;
     static combinePoints(out: AABBValue, a: Vec2Value, b: Vec2Value): AABBValue;
     static combinedPerimeter(a: AABBValue, b: AABBValue): number;
 }
@@ -236,6 +248,8 @@ declare class Rot {
     c: number;
     /** Initialize from an angle in radians. */
     constructor(angle?: number | RotValue);
+    /** @hidden */
+    static neo(angle: number): Rot;
     static clone(rot: RotValue): Rot;
     static identity(): Rot;
     static isValid(obj: any): boolean;
@@ -292,6 +306,8 @@ declare class Transform {
     q: Rot;
     constructor(position?: Vec2Value, rotation?: number);
     static clone(xf: Transform): Transform;
+    /** @hidden */
+    static neo(position: Vec2Value, rotation: Rot): Transform;
     static identity(): Transform;
     /** Set this to the identity transform */
     setIdentity(): void;
@@ -308,6 +324,8 @@ declare class Transform {
     static mul(a: TransformValue, b: TransformValue): Transform;
     static mulAll(a: Transform, b: Vec2Value[]): Vec2[];
     static mulAll(a: Transform, b: Transform[]): Transform[];
+    /** @hidden @deprecated */
+    static mulFn(a: TransformValue): (b: Vec2Value) => Vec2;
     static mulVec2(a: TransformValue, b: Vec2Value): Vec2;
     static mulXf(a: TransformValue, b: TransformValue): Transform;
     static mulT(a: TransformValue, b: Vec2Value): Vec2;
@@ -450,6 +468,8 @@ declare abstract class Shape {
     style: Style;
     /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
     appData: Record<string, any>;
+    /** @hidden */
+    abstract _reset(): void;
     static isValid(obj: any): boolean;
     abstract getRadius(): number;
     /**
@@ -784,6 +804,8 @@ declare class Fixture {
     constructor(body: Body, def: FixtureDef);
     constructor(body: Body, shape: Shape, def?: FixtureOpt);
     constructor(body: Body, shape: Shape, density?: number);
+    /** @hidden Re-setup fixture. */
+    _reset(): void;
     /**
      * Get the type of the child shape. You can use this to down cast to the
      * concrete shape.
@@ -2144,8 +2166,12 @@ declare class Vec3 {
         z: number;
     });
     constructor();
+    /** @hidden */
+    static neo(x: number, y: number, z: number): Vec3;
     static zero(): Vec3;
     static clone(v: Vec3Value): Vec3;
+    /** @hidden */
+    toString(): string;
     /** Does this vector contain finite coordinates? */
     static isValid(obj: any): boolean;
     static assert(o: any): void;
@@ -2180,6 +2206,8 @@ declare class Mat22 {
         y: number;
     });
     constructor();
+    /** @hidden */
+    toString(): string;
     static isValid(obj: any): boolean;
     static assert(o: any): void;
     set(a: Mat22): void;
@@ -2222,6 +2250,8 @@ declare class Mat33 {
     ez: Vec3;
     constructor(a: Vec3Value, b: Vec3Value, c: Vec3Value);
     constructor();
+    /** @hidden */
+    toString(): string;
     static isValid(obj: any): boolean;
     static assert(o: any): void;
     /**
@@ -2267,6 +2297,8 @@ declare class CircleShape extends Shape {
     m_radius: number;
     constructor(position: Vec2Value, radius?: number);
     constructor(radius?: number);
+    /** @hidden */
+    _reset(): void;
     getType(): "circle";
     getRadius(): number;
     getCenter(): Vec2;
@@ -2336,6 +2368,8 @@ declare class EdgeShape extends Shape {
     m_hasVertex0: boolean;
     m_hasVertex3: boolean;
     constructor(v1?: Vec2Value, v2?: Vec2Value);
+    /** @hidden */
+    _reset(): void;
     getRadius(): number;
     getType(): "edge";
     /**
@@ -2427,6 +2461,8 @@ declare class PolygonShape extends Shape {
      * Get the number of child primitives.
      */
     getChildCount(): 1;
+    /** @hidden */
+    _reset(): void;
     /**
      * Test a point for containment in this shape. This only works for convex
      * shapes.
@@ -2504,6 +2540,8 @@ declare class ChainShape extends Shape {
     // }
     getType(): "chain";
     getRadius(): number;
+    /** @hidden */
+    _reset(): void;
     /**
      * Establish connectivity to a vertex that precedes the first vertex. Don't call
      * this for loops.
@@ -4296,7 +4334,11 @@ declare namespace planck {
         });
         constructor();
         static zero(): Vec2;
+        /** @hidden */
+        static neo(x: number, y: number): Vec2;
         static clone(v: Vec2Value): Vec2;
+        /** @hidden */
+        toString(): string;
         /**
          * Does this vector contain finite coordinates?
          */
@@ -4420,6 +4462,8 @@ declare namespace planck {
          */
         static addCrossNumVec2(a: Vec2Value, v: number, w: Vec2Value): Vec2;
         static add(v: Vec2Value, w: Vec2Value): Vec2;
+        /** @hidden @deprecated */
+        static wAdd(a: number, v: Vec2, b: number, w: Vec2): Vec2;
         static combine(a: number, v: Vec2, b: number, w: Vec2): Vec2;
         static sub(v: Vec2Value, w: Vec2Value): Vec2;
         static mul(a: Vec2Value, b: number): Vec2;
@@ -4434,6 +4478,10 @@ declare namespace planck {
         static lower(v: Vec2Value, w: Vec2Value): Vec2;
         clamp(max: number): Vec2;
         static clamp(v: Vec2Value, max: number): Vec2;
+        /**  @hidden @deprecated */
+        static scaleFn(x: number, y: number): (v: Vec2) => Vec2;
+        /**  @hidden @deprecated */
+        static translateFn(x: number, y: number): (v: Vec2) => Vec2;
     }
     /**
      * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
@@ -4491,6 +4539,8 @@ declare namespace planck {
         static areEqual(a: AABBValue, b: AABBValue): boolean;
         static diff(a: AABBValue, b: AABBValue): number;
         rayCast(output: RayCastOutput, input: RayCastInput): boolean;
+        /** @hidden */
+        toString(): string;
         static combinePoints(out: AABBValue, a: Vec2Value, b: Vec2Value): AABBValue;
         static combinedPerimeter(a: AABBValue, b: AABBValue): number;
     }
@@ -4507,6 +4557,8 @@ declare namespace planck {
         c: number;
         /** Initialize from an angle in radians. */
         constructor(angle?: number | RotValue);
+        /** @hidden */
+        static neo(angle: number): Rot;
         static clone(rot: RotValue): Rot;
         static identity(): Rot;
         static isValid(obj: any): boolean;
@@ -4557,6 +4609,8 @@ declare namespace planck {
         q: Rot;
         constructor(position?: Vec2Value, rotation?: number);
         static clone(xf: Transform): Transform;
+        /** @hidden */
+        static neo(position: Vec2Value, rotation: Rot): Transform;
         static identity(): Transform;
         /** Set this to the identity transform */
         setIdentity(): void;
@@ -4573,6 +4627,8 @@ declare namespace planck {
         static mul(a: TransformValue, b: TransformValue): Transform;
         static mulAll(a: Transform, b: Vec2Value[]): Vec2[];
         static mulAll(a: Transform, b: Transform[]): Transform[];
+        /** @hidden @deprecated */
+        static mulFn(a: TransformValue): (b: Vec2Value) => Vec2;
         static mulVec2(a: TransformValue, b: Vec2Value): Vec2;
         static mulXf(a: TransformValue, b: TransformValue): Transform;
         static mulT(a: TransformValue, b: Vec2Value): Vec2;
@@ -4715,6 +4771,8 @@ declare namespace planck {
         style: Style;
         /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
         appData: Record<string, any>;
+        /** @hidden */
+        abstract _reset(): void;
         static isValid(obj: any): boolean;
         abstract getRadius(): number;
         /**
@@ -5049,6 +5107,8 @@ declare namespace planck {
         constructor(body: Body, def: FixtureDef);
         constructor(body: Body, shape: Shape, def?: FixtureOpt);
         constructor(body: Body, shape: Shape, density?: number);
+        /** @hidden Re-setup fixture. */
+        _reset(): void;
         /**
          * Get the type of the child shape. You can use this to down cast to the
          * concrete shape.
@@ -5529,8 +5589,12 @@ declare namespace planck {
             z: number;
         });
         constructor();
+        /** @hidden */
+        static neo(x: number, y: number, z: number): Vec3;
         static zero(): Vec3;
         static clone(v: Vec3Value): Vec3;
+        /** @hidden */
+        toString(): string;
         /** Does this vector contain finite coordinates? */
         static isValid(obj: any): boolean;
         static assert(o: any): void;
@@ -5565,6 +5629,8 @@ declare namespace planck {
             y: number;
         });
         constructor();
+        /** @hidden */
+        toString(): string;
         static isValid(obj: any): boolean;
         static assert(o: any): void;
         set(a: Mat22): void;
@@ -5607,6 +5673,8 @@ declare namespace planck {
         ez: Vec3;
         constructor(a: Vec3Value, b: Vec3Value, c: Vec3Value);
         constructor();
+        /** @hidden */
+        toString(): string;
         static isValid(obj: any): boolean;
         static assert(o: any): void;
         /**
@@ -5650,6 +5718,8 @@ declare namespace planck {
         m_radius: number;
         constructor(position: Vec2Value, radius?: number);
         constructor(radius?: number);
+        /** @hidden */
+        _reset(): void;
         getType(): "circle";
         getRadius(): number;
         getCenter(): Vec2;
@@ -5713,6 +5783,8 @@ declare namespace planck {
         m_hasVertex0: boolean;
         m_hasVertex3: boolean;
         constructor(v1?: Vec2Value, v2?: Vec2Value);
+        /** @hidden */
+        _reset(): void;
         getRadius(): number;
         getType(): "edge";
         /**
@@ -5797,6 +5869,8 @@ declare namespace planck {
          * Get the number of child primitives.
          */
         getChildCount(): 1;
+        /** @hidden */
+        _reset(): void;
         /**
          * Test a point for containment in this shape. This only works for convex
          * shapes.
@@ -5865,6 +5939,8 @@ declare namespace planck {
         // }
         getType(): "chain";
         getRadius(): number;
+        /** @hidden */
+        _reset(): void;
         /**
          * Establish connectivity to a vertex that precedes the first vertex. Don't call
          * this for loops.
