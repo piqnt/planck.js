@@ -205,7 +205,7 @@ export class ChainShape extends Shape {
     return this;
   }
 
-  /** @internal */
+  /** @hidden */
   _reset(): void {
     if (this.m_isLoop) {
       this._createLoop(this.m_vertices);

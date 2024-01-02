@@ -260,7 +260,8 @@ export class AABB {
     return true;
   }
 
-  /** @internal */ toString(): string {
+  /** @hidden */
+  toString(): string {
     return JSON.stringify(this);
   }
 

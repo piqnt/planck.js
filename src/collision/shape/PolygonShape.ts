@@ -139,7 +139,8 @@ export class PolygonShape extends Shape {
     return 1;
   }
 
-  /** @internal */ _reset(): void {
+  /** @hidden */
+  _reset(): void {
     this._set(this.m_vertices);
   }
 

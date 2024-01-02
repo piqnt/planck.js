@@ -51,7 +51,7 @@ export abstract class Shape {
   /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
   appData: Record<string, any> = {};
 
-  /** @internal */
+  /** @hidden */
   abstract _reset(): void;
 
   static isValid(obj: any): boolean {

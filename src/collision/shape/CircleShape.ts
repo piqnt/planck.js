@@ -87,7 +87,7 @@ export class CircleShape extends Shape {
     return new CircleShape(data.p, data.radius);
   }
 
-  /** @internal */
+  /** @hidden */
   _reset(): void {
     // noop
   }

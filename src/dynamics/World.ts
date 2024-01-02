@@ -510,7 +510,7 @@ export class World {
   createBody(def?: BodyDef): Body;
   createBody(position: Vec2Value, angle?: number): Body;
   // tslint:disable-next-line:typedef
-  /** @internal */ createBody(arg1?, arg2?) {
+  createBody(arg1?, arg2?) {
     _ASSERT && console.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return null;
@@ -532,7 +532,7 @@ export class World {
   createDynamicBody(def?: BodyDef): Body;
   createDynamicBody(position: Vec2Value, angle?: number): Body;
   // tslint:disable-next-line:typedef
-  /** @internal */ createDynamicBody(arg1?, arg2?) {
+  createDynamicBody(arg1?, arg2?) {
     let def: BodyDef = {};
     if (!arg1) {
     } else if (Vec2.isValid(arg1)) {

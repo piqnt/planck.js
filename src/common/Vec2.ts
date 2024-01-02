@@ -86,7 +86,7 @@ export class Vec2 {
     return obj;
   }
 
-  /** @internal */
+  /** @hidden */
   static neo(x: number, y: number): Vec2 {
     const obj = Object.create(Vec2.prototype);
     obj.x = x;
@@ -99,7 +99,7 @@ export class Vec2 {
     return Vec2.neo(v.x, v.y);
   }
 
-  /** @internal */
+  /** @hidden */
   toString(): string {
     return JSON.stringify(this);
   }
@@ -506,7 +506,7 @@ export class Vec2 {
     return Vec2.neo(v.x + w.x, v.y + w.y);
   }
 
-  /** @internal @deprecated */
+  /** @hidden @deprecated */
   static wAdd(a: number, v: Vec2, b: number, w: Vec2): Vec2 {
     if (typeof b !== 'undefined' || typeof w !== 'undefined') {
       return Vec2.combine(a, v, b, w);
@@ -602,7 +602,7 @@ export class Vec2 {
     return r;
   }
 
-  /**  @internal @deprecated */
+  /**  @hidden @deprecated */
   static scaleFn(x: number, y: number) {
     // todo: this was used in examples, remove in the future
     return function(v: Vec2): Vec2 {
@@ -610,7 +610,7 @@ export class Vec2 {
     };
   }
 
-  /**  @internal @deprecated */
+  /**  @hidden @deprecated */
   static translateFn(x: number, y: number) {
     // todo: this was used in examples, remove in the future
     return function(v: Vec2): Vec2 {

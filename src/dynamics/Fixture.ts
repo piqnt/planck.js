@@ -182,7 +182,7 @@ export class Fixture {
     this.m_userData = def.userData;
   }
 
-  /** @internal Re-setup fixture. */
+  /** @hidden Re-setup fixture. */
   _reset(): void {
     const body = this.getBody();
     const broadPhase = body.m_world.m_broadPhase;

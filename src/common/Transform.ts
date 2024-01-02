@@ -68,7 +68,7 @@ export class Transform {
     return obj;
   }
 
-  /** @internal */
+  /** @hidden */
   static neo(position: Vec2Value, rotation: Rot): Transform {
     const obj = Object.create(Transform.prototype);
     obj.p = Vec2.clone(position);
@@ -158,7 +158,7 @@ export class Transform {
     return arr;
   }
 
-  /** @internal @deprecated */
+  /** @hidden @deprecated */
   static mulFn(a: TransformValue) {
     // todo: this was used in examples, remove in the future
     _ASSERT && Transform.assert(a);

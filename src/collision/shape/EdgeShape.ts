@@ -108,7 +108,7 @@ export class EdgeShape extends Shape {
     return shape;
   }
 
-  /** @internal */
+  /** @hidden */
   _reset(): void {
     // noop
   }

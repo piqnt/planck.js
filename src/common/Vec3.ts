@@ -79,7 +79,7 @@ export class Vec3 {
     return obj;
   }
 
-  /** @internal */
+  /** @hidden */
   static neo(x: number, y: number, z: number): Vec3 {
     const obj = Object.create(Vec3.prototype);
     obj.x = x;
@@ -101,7 +101,7 @@ export class Vec3 {
     return Vec3.neo(v.x, v.y, v.z);
   }
 
-  /** @internal */
+  /** @hidden */
   toString(): string {
     return JSON.stringify(this);
   }

@@ -57,7 +57,7 @@ export class Rot {
     }
   }
 
-  /** @internal */
+  /** @hidden */
   static neo(angle: number): Rot {
     const obj = Object.create(Rot.prototype);
     obj.setAngle(angle);

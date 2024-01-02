@@ -51,7 +51,7 @@ export class Mat33 {
     }
   }
 
-  /** @internal */
+  /** @hidden */
   toString(): string {
     return JSON.stringify(this);
   }
