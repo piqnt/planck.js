@@ -63,8 +63,8 @@ export interface FrictionJointDef extends JointDef, FrictionJointOpt {
    */
   localAnchorB: Vec2Value;
 
-  /** @internal */ anchorA: Vec2Value;
-  /** @internal */ anchorB: Vec2Value;
+  /** @internal */ anchorA?: Vec2Value;
+  /** @internal */ anchorB?: Vec2Value;
 }
 
 /** @internal */ const DEFAULTS = {

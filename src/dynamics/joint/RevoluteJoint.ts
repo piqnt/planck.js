@@ -113,8 +113,8 @@ export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
    */
   referenceAngle: number;
 
-  /** @internal */ anchorA: Vec2Value;
-  /** @internal */ anchorB: Vec2Value;
+  /** @internal */ anchorA?: Vec2Value;
+  /** @internal */ anchorB?: Vec2Value;
 }
 
 /** @internal */ const DEFAULTS = {
