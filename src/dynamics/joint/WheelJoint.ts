@@ -93,8 +93,8 @@ export interface WheelJointDef extends JointDef, WheelJointOpt {
   /** @internal renamed to localAxisA */
   localAxis?: Vec2Value;
 
-  /** @internal */ anchorA: Vec2Value;
-  /** @internal */ anchorB: Vec2Value;
+  /** @internal */ anchorA?: Vec2Value;
+  /** @internal */ anchorB?: Vec2Value;
 }
 
 /** @internal */ const DEFAULTS = {
