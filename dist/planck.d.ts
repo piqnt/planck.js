@@ -1,8 +1,3 @@
-declare function Serializer(opts?: any): void;
-declare namespace Serializer {
-    var toJson: any;
-    var fromJson: any;
-}
 interface Vec2Value {
     x: number;
     y: number;
@@ -172,68 +167,6 @@ declare class Vec2 {
     /**  @hidden @deprecated */
     static translateFn(x: number, y: number): (v: Vec2) => Vec2;
 }
-/**
- * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
- */
-interface RayCastInput {
-    p1: Vec2;
-    p2: Vec2;
-    maxFraction: number;
-}
-type RayCastCallback = (subInput: RayCastInput, id: number) => number;
-/**
- * Ray-cast output data. The ray hits at `p1 + fraction * (p2 - p1)`,
- * where `p1` and `p2` come from RayCastInput.
- */
-interface RayCastOutput {
-    normal: Vec2;
-    fraction: number;
-}
-interface AABBValue {
-    lowerBound: Vec2Value;
-    upperBound: Vec2Value;
-}
-declare function AABB(lower?: Vec2Value, upper?: Vec2Value): AABB;
-declare class AABB {
-    lowerBound: Vec2;
-    upperBound: Vec2;
-    constructor(lower?: Vec2Value, upper?: Vec2Value);
-    /**
-     * Verify that the bounds are sorted.
-     */
-    isValid(): boolean;
-    static isValid(obj: any): boolean;
-    static assert(o: any): void;
-    /**
-     * Get the center of the AABB.
-     */
-    getCenter(): Vec2;
-    /**
-     * Get the extents of the AABB (half-widths).
-     */
-    getExtents(): Vec2;
-    /**
-     * Get the perimeter length.
-     */
-    getPerimeter(): number;
-    /**
-     * Combine one or two AABB into this one.
-     */
-    combine(a: AABBValue, b?: AABBValue): void;
-    combinePoints(a: Vec2Value, b: Vec2Value): void;
-    set(aabb: AABBValue): void;
-    contains(aabb: AABBValue): boolean;
-    extend(value: number): AABB;
-    static extend(out: AABBValue, value: number): AABBValue;
-    static testOverlap(a: AABBValue, b: AABBValue): boolean;
-    static areEqual(a: AABBValue, b: AABBValue): boolean;
-    static diff(a: AABBValue, b: AABBValue): number;
-    rayCast(output: RayCastOutput, input: RayCastInput): boolean;
-    /** @hidden */
-    toString(): string;
-    static combinePoints(out: AABBValue, a: Vec2Value, b: Vec2Value): AABBValue;
-    static combinedPerimeter(a: AABBValue, b: AABBValue): number;
-}
 interface RotValue {
     /** sin(angle) */
     s: number;
@@ -332,6 +265,68 @@ declare class Transform {
     static mulT(a: TransformValue, b: TransformValue): Transform;
     static mulTVec2(a: TransformValue, b: Vec2Value): Vec2;
     static mulTXf(a: TransformValue, b: TransformValue): Transform;
+}
+/**
+ * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
+ */
+interface RayCastInput {
+    p1: Vec2;
+    p2: Vec2;
+    maxFraction: number;
+}
+type RayCastCallback = (subInput: RayCastInput, id: number) => number;
+/**
+ * Ray-cast output data. The ray hits at `p1 + fraction * (p2 - p1)`,
+ * where `p1` and `p2` come from RayCastInput.
+ */
+interface RayCastOutput {
+    normal: Vec2;
+    fraction: number;
+}
+interface AABBValue {
+    lowerBound: Vec2Value;
+    upperBound: Vec2Value;
+}
+declare function AABB(lower?: Vec2Value, upper?: Vec2Value): AABB;
+declare class AABB {
+    lowerBound: Vec2;
+    upperBound: Vec2;
+    constructor(lower?: Vec2Value, upper?: Vec2Value);
+    /**
+     * Verify that the bounds are sorted.
+     */
+    isValid(): boolean;
+    static isValid(obj: any): boolean;
+    static assert(o: any): void;
+    /**
+     * Get the center of the AABB.
+     */
+    getCenter(): Vec2;
+    /**
+     * Get the extents of the AABB (half-widths).
+     */
+    getExtents(): Vec2;
+    /**
+     * Get the perimeter length.
+     */
+    getPerimeter(): number;
+    /**
+     * Combine one or two AABB into this one.
+     */
+    combine(a: AABBValue, b?: AABBValue): void;
+    combinePoints(a: Vec2Value, b: Vec2Value): void;
+    set(aabb: AABBValue): void;
+    contains(aabb: AABBValue): boolean;
+    extend(value: number): AABB;
+    static extend(out: AABBValue, value: number): AABBValue;
+    static testOverlap(a: AABBValue, b: AABBValue): boolean;
+    static areEqual(a: AABBValue, b: AABBValue): boolean;
+    static diff(a: AABBValue, b: AABBValue): number;
+    rayCast(output: RayCastOutput, input: RayCastInput): boolean;
+    /** @hidden */
+    toString(): string;
+    static combinePoints(out: AABBValue, a: Vec2Value, b: Vec2Value): AABBValue;
+    static combinedPerimeter(a: AABBValue, b: AABBValue): number;
 }
 /**
  * Input for Distance. You have to option to use the shape radii in the
@@ -451,6 +446,217 @@ declare class ShapeCastOutput {
 // Algorithm by Gino van den Bergen.
 // "Smooth Mesh Contacts with GJK" in Game Physics Pearls. 2010
 declare const ShapeCast: (output: ShapeCastOutput, input: ShapeCastInput) => boolean;
+/**
+ * A joint edge is used to connect bodies and joints together in a joint graph
+ * where each body is a node and each joint is an edge. A joint edge belongs to
+ * a doubly linked list maintained in each attached body. Each joint has two
+ * joint nodes, one for each attached body.
+ */
+declare class JointEdge {
+    /**
+     * provides quick access to the other body attached.
+     */
+    other: Body | null;
+    /**
+     * the joint
+     */
+    joint: Joint | null;
+    /**
+     * prev the previous joint edge in the body's joint list
+     */
+    prev: JointEdge | null;
+    /**
+     * the next joint edge in the body's joint list
+     */
+    next: JointEdge | null;
+}
+/**
+ * Joint definitions are used to construct joints.
+ */
+interface JointOpt {
+    /**
+     * Use this to attach application specific data to your joints.
+     */
+    userData?: any;
+    /**
+     * Set this flag to true if the attached bodies
+     * should collide.
+     */
+    collideConnected?: boolean;
+}
+/**
+ * Joint definitions are used to construct joints.
+ */
+interface JointDef extends JointOpt {
+    /**
+     * The first attached body.
+     */
+    bodyA: Body;
+    /**
+     * The second attached body.
+     */
+    bodyB: Body;
+}
+/**
+ * The base joint class. Joints are used to constraint two bodies together in
+ * various fashions. Some joints also feature limits and motors.
+ */
+declare abstract class Joint {
+    /** Styling for dev-tools. */
+    style: Style;
+    /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+    appData: Record<string, any>;
+    constructor(def: JointDef);
+    constructor(def: JointOpt, bodyA: Body, bodyB: Body);
+    /**
+     * Short-cut function to determine if either body is inactive.
+     */
+    isActive(): boolean;
+    /**
+     * Get the type of the concrete joint.
+     */
+    getType(): string;
+    /**
+     * Get the first body attached to this joint.
+     */
+    getBodyA(): Body;
+    /**
+     * Get the second body attached to this joint.
+     */
+    getBodyB(): Body;
+    /**
+     * Get the next joint the world joint list.
+     */
+    getNext(): Joint;
+    getUserData(): unknown;
+    setUserData(data: unknown): void;
+    /**
+     * Get collide connected. Note: modifying the collide connect flag won't work
+     * correctly because the flag is only checked when fixture AABBs begin to
+     * overlap.
+     */
+    getCollideConnected(): boolean;
+    /**
+     * Get the anchor point on bodyA in world coordinates.
+     */
+    abstract getAnchorA(): Vec2;
+    /**
+     * Get the anchor point on bodyB in world coordinates.
+     */
+    abstract getAnchorB(): Vec2;
+    /**
+     * Get the reaction force on bodyB at the joint anchor in Newtons.
+     */
+    abstract getReactionForce(inv_dt: number): Vec2;
+    /**
+     * Get the reaction torque on bodyB in N*m.
+     */
+    abstract getReactionTorque(inv_dt: number): number;
+    /**
+     * Shift the origin for any points stored in world coordinates.
+     */
+    shiftOrigin(newOrigin: Vec2Value): void;
+    abstract initVelocityConstraints(step: TimeStep): void;
+    abstract solveVelocityConstraints(step: TimeStep): void;
+    /**
+     * This returns true if the position errors are within tolerance.
+     */
+    abstract solvePositionConstraints(step: TimeStep): boolean;
+    /**
+     * @hidden @experimental
+     * Update joint with new props.
+     */
+    abstract _reset(def: Partial<JointDef>): void;
+}
+interface Style {
+    stroke?: string;
+    fill?: string;
+}
+type KEY = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "right" | "left" | "up" | "down" | "fire";
+type ActiveKeys = {
+    [key in KEY]?: boolean;
+};
+type TestbedMountOptions = {};
+declare abstract class Testbed {
+    /**
+     * Mount testbed.
+     *
+     * If you need to customize testbed before starting, use `Testbed.mount()` and `Testbed.start()` separately.
+     */
+    static mount(options?: TestbedMountOptions): Testbed;
+    /**
+     * Start simulation, and mount testbed if needed.
+     *
+     * If you need to customize testbed before starting, use `Testbed.mount().start()` separately.
+     */
+    static start(world: World): Testbed;
+    /** World viewbox width. */
+    width: number;
+    /** World viewbox height. */
+    height: number;
+    /** World viewbox center vertical offset. */
+    x: number;
+    /** World viewbox center horizontal offset. */
+    y: number;
+    scaleY: number;
+    /** World simulation step frequency */
+    hz: number;
+    /** World simulation speed, default is 1 */
+    speed: number;
+    ratio: number;
+    background: string;
+    mouseForce?: number;
+    activeKeys: ActiveKeys;
+    /** callback, to be implemented by user */
+    step: (dt: number, t: number) => void;
+    /** callback, to be implemented by user */
+    keydown: (keyCode: number, label: string) => void;
+    /** callback, to be implemented by user */
+    keyup: (keyCode: number, label: string) => void;
+    private statusText;
+    private statusMap;
+    status(name: string, value: any): void;
+    status(value: object | string): void;
+    info(text: string): void;
+    color(r: number, g: number, b: number): string;
+    abstract drawPoint(p: {
+        x: number;
+        y: number;
+    }, r: any, color: string): void;
+    abstract drawCircle(p: {
+        x: number;
+        y: number;
+    }, r: number, color: string): void;
+    abstract drawEdge(a: {
+        x: number;
+        y: number;
+    }, b: {
+        x: number;
+        y: number;
+    }, color: string): void;
+    abstract drawSegment(a: {
+        x: number;
+        y: number;
+    }, b: {
+        x: number;
+        y: number;
+    }, color: string): void;
+    abstract drawPolygon(points: Array<{
+        x: number;
+        y: number;
+    }>, color: string): void;
+    abstract drawAABB(aabb: AABBValue, color: string): void;
+    abstract start(world: World): void;
+    abstract findOne(query: string): (Body | Joint | Fixture | null);
+    abstract findAll(query: string): (Body | Joint | Fixture)[];
+}
+type TestbedFactoryOptions = string | {};
+/** @deprecated */
+type TestbedCallback = (testbed: Testbed) => (World | undefined);
+/** @deprecated */
+declare function testbed(callback: TestbedCallback): void;
+/** @deprecated */
+declare function testbed(options: TestbedFactoryOptions, callback: TestbedCallback): void;
 // todo make shape an interface
 /**
  * A shape is used for collision detection. You can create a shape however you
@@ -938,128 +1144,6 @@ declare class Fixture {
      * overlap.
      */
     shouldCollide(that: Fixture): boolean;
-}
-/**
- * A joint edge is used to connect bodies and joints together in a joint graph
- * where each body is a node and each joint is an edge. A joint edge belongs to
- * a doubly linked list maintained in each attached body. Each joint has two
- * joint nodes, one for each attached body.
- */
-declare class JointEdge {
-    /**
-     * provides quick access to the other body attached.
-     */
-    other: Body | null;
-    /**
-     * the joint
-     */
-    joint: Joint | null;
-    /**
-     * prev the previous joint edge in the body's joint list
-     */
-    prev: JointEdge | null;
-    /**
-     * the next joint edge in the body's joint list
-     */
-    next: JointEdge | null;
-}
-/**
- * Joint definitions are used to construct joints.
- */
-interface JointOpt {
-    /**
-     * Use this to attach application specific data to your joints.
-     */
-    userData?: any;
-    /**
-     * Set this flag to true if the attached bodies
-     * should collide.
-     */
-    collideConnected?: boolean;
-}
-/**
- * Joint definitions are used to construct joints.
- */
-interface JointDef extends JointOpt {
-    /**
-     * The first attached body.
-     */
-    bodyA: Body;
-    /**
-     * The second attached body.
-     */
-    bodyB: Body;
-}
-/**
- * The base joint class. Joints are used to constraint two bodies together in
- * various fashions. Some joints also feature limits and motors.
- */
-declare abstract class Joint {
-    /** Styling for dev-tools. */
-    style: Style;
-    /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
-    appData: Record<string, any>;
-    constructor(def: JointDef);
-    constructor(def: JointOpt, bodyA: Body, bodyB: Body);
-    /**
-     * Short-cut function to determine if either body is inactive.
-     */
-    isActive(): boolean;
-    /**
-     * Get the type of the concrete joint.
-     */
-    getType(): string;
-    /**
-     * Get the first body attached to this joint.
-     */
-    getBodyA(): Body;
-    /**
-     * Get the second body attached to this joint.
-     */
-    getBodyB(): Body;
-    /**
-     * Get the next joint the world joint list.
-     */
-    getNext(): Joint;
-    getUserData(): unknown;
-    setUserData(data: unknown): void;
-    /**
-     * Get collide connected. Note: modifying the collide connect flag won't work
-     * correctly because the flag is only checked when fixture AABBs begin to
-     * overlap.
-     */
-    getCollideConnected(): boolean;
-    /**
-     * Get the anchor point on bodyA in world coordinates.
-     */
-    abstract getAnchorA(): Vec2;
-    /**
-     * Get the anchor point on bodyB in world coordinates.
-     */
-    abstract getAnchorB(): Vec2;
-    /**
-     * Get the reaction force on bodyB at the joint anchor in Newtons.
-     */
-    abstract getReactionForce(inv_dt: number): Vec2;
-    /**
-     * Get the reaction torque on bodyB in N*m.
-     */
-    abstract getReactionTorque(inv_dt: number): number;
-    /**
-     * Shift the origin for any points stored in world coordinates.
-     */
-    shiftOrigin(newOrigin: Vec2Value): void;
-    abstract initVelocityConstraints(step: TimeStep): void;
-    abstract solveVelocityConstraints(step: TimeStep): void;
-    /**
-     * This returns true if the position errors are within tolerance.
-     */
-    abstract solvePositionConstraints(step: TimeStep): boolean;
-    /**
-     * @hidden @experimental
-     * Update joint with new props.
-     */
-    abstract _reset(def: Partial<JointDef>): void;
 }
 declare enum ManifoldType {
     e_unset = -1,
@@ -2052,95 +2136,26 @@ declare class World {
     off(name: "remove-fixture", listener: (fixture: Fixture) => void): World;
     publish(name: string, arg1?: any, arg2?: any, arg3?: any): number;
 }
-interface Style {
-    stroke?: string;
-    fill?: string;
-}
-type KEY = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "right" | "left" | "up" | "down" | "fire";
-type ActiveKeys = {
-    [key in KEY]?: boolean;
+// dummy types
+type DataType = any;
+type ObjectType = any;
+type ClassName = any;
+type SerializedType = object[];
+type SerializerOptions = {
+    rootClass: ClassName;
+    preSerialize?: (obj: ObjectType) => DataType;
+    postSerialize?: (data: DataType, obj: any) => DataType;
+    preDeserialize?: (data: DataType) => DataType;
+    postDeserialize?: (obj: ObjectType, data: DataType) => ObjectType;
 };
-type TestbedMountOptions = {};
-declare abstract class Testbed {
-    /**
-     * Mount testbed.
-     *
-     * If you need to customize testbed before starting, use `Testbed.mount()` and `Testbed.start()` separately.
-     */
-    static mount(options?: TestbedMountOptions): Testbed;
-    /**
-     * Start simulation, and mount testbed if needed.
-     *
-     * If you need to customize testbed before starting, use `Testbed.mount().start()` separately.
-     */
-    static start(world: World): Testbed;
-    /** World viewbox width. */
-    width: number;
-    /** World viewbox height. */
-    height: number;
-    /** World viewbox center vertical offset. */
-    x: number;
-    /** World viewbox center horizontal offset. */
-    y: number;
-    scaleY: number;
-    /** World simulation step frequency */
-    hz: number;
-    /** World simulation speed, default is 1 */
-    speed: number;
-    ratio: number;
-    background: string;
-    mouseForce?: number;
-    activeKeys: ActiveKeys;
-    /** callback, to be implemented by user */
-    step: (dt: number, t: number) => void;
-    /** callback, to be implemented by user */
-    keydown: (keyCode: number, label: string) => void;
-    /** callback, to be implemented by user */
-    keyup: (keyCode: number, label: string) => void;
-    private statusText;
-    private statusMap;
-    status(name: string, value: any): void;
-    status(value: object | string): void;
-    info(text: string): void;
-    color(r: number, g: number, b: number): string;
-    abstract drawPoint(p: {
-        x: number;
-        y: number;
-    }, r: any, color: string): void;
-    abstract drawCircle(p: {
-        x: number;
-        y: number;
-    }, r: number, color: string): void;
-    abstract drawEdge(a: {
-        x: number;
-        y: number;
-    }, b: {
-        x: number;
-        y: number;
-    }, color: string): void;
-    abstract drawSegment(a: {
-        x: number;
-        y: number;
-    }, b: {
-        x: number;
-        y: number;
-    }, color: string): void;
-    abstract drawPolygon(points: Array<{
-        x: number;
-        y: number;
-    }>, color: string): void;
-    abstract drawAABB(aabb: AABBValue, color: string): void;
-    abstract start(world: World): void;
-    abstract findOne(query: string): (Body | Joint | Fixture | null);
-    abstract findAll(query: string): (Body | Joint | Fixture)[];
+declare class Serializer<T> {
+    private options;
+    constructor(options: SerializerOptions);
+    toJson: (root: T) => SerializedType;
+    fromJson: (json: SerializedType) => T;
+    static toJson: (root: World) => SerializedType;
+    static fromJson: (json: SerializedType) => World;
 }
-type TestbedFactoryOptions = string | {};
-/** @deprecated */
-type TestbedCallback = (testbed: Testbed) => (World | undefined);
-/** @deprecated */
-declare function testbed(callback: TestbedCallback): void;
-/** @deprecated */
-declare function testbed(options: TestbedFactoryOptions, callback: TestbedCallback): void;
 /** @ignore */
 declare const math: any;
 interface Vec3Value {
@@ -2611,6 +2626,7 @@ declare function BoxShape(hx: number, hy: number, center?: Vec2Value, angle?: nu
  * A rectangle polygon which extend PolygonShape.
  */
 declare class BoxShape extends PolygonShape {
+    // note that box is serialized/deserialized as polygon
     static TYPE: "polygon";
     constructor(hx: number, hy: number, center?: Vec2Value, angle?: number);
 }
@@ -3638,7 +3654,6 @@ declare class PulleyJoint extends Joint {
     static TYPE: "pulley-joint";
     constructor(def: PulleyJointDef);
     constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2Value, groundB: Vec2Value, anchorA: Vec2Value, anchorB: Vec2Value, ratio: number);
-    _serialize(): object;
     /** @hidden */
     _reset(def: Partial<PulleyJointDef>): void;
     /**
@@ -4315,11 +4330,6 @@ declare const internal: {
     };
 };
 declare namespace planck {
-    function Serializer(opts?: any): void;
-    namespace Serializer {
-        var toJson: any;
-        var fromJson: any;
-    }
     interface Vec2Value {
         x: number;
         y: number;
@@ -4483,67 +4493,6 @@ declare namespace planck {
         /**  @hidden @deprecated */
         static translateFn(x: number, y: number): (v: Vec2) => Vec2;
     }
-    /**
-     * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
-     */
-    interface RayCastInput {
-        p1: Vec2;
-        p2: Vec2;
-        maxFraction: number;
-    }
-    type RayCastCallback = (subInput: RayCastInput, id: number) => number;
-    /**
-     * Ray-cast output data. The ray hits at `p1 + fraction * (p2 - p1)`,
-     * where `p1` and `p2` come from RayCastInput.
-     */
-    interface RayCastOutput {
-        normal: Vec2;
-        fraction: number;
-    }
-    interface AABBValue {
-        lowerBound: Vec2Value;
-        upperBound: Vec2Value;
-    }
-    class AABB {
-        lowerBound: Vec2;
-        upperBound: Vec2;
-        constructor(lower?: Vec2Value, upper?: Vec2Value);
-        /**
-         * Verify that the bounds are sorted.
-         */
-        isValid(): boolean;
-        static isValid(obj: any): boolean;
-        static assert(o: any): void;
-        /**
-         * Get the center of the AABB.
-         */
-        getCenter(): Vec2;
-        /**
-         * Get the extents of the AABB (half-widths).
-         */
-        getExtents(): Vec2;
-        /**
-         * Get the perimeter length.
-         */
-        getPerimeter(): number;
-        /**
-         * Combine one or two AABB into this one.
-         */
-        combine(a: AABBValue, b?: AABBValue): void;
-        combinePoints(a: Vec2Value, b: Vec2Value): void;
-        set(aabb: AABBValue): void;
-        contains(aabb: AABBValue): boolean;
-        extend(value: number): AABB;
-        static extend(out: AABBValue, value: number): AABBValue;
-        static testOverlap(a: AABBValue, b: AABBValue): boolean;
-        static areEqual(a: AABBValue, b: AABBValue): boolean;
-        static diff(a: AABBValue, b: AABBValue): number;
-        rayCast(output: RayCastOutput, input: RayCastInput): boolean;
-        /** @hidden */
-        toString(): string;
-        static combinePoints(out: AABBValue, a: Vec2Value, b: Vec2Value): AABBValue;
-        static combinedPerimeter(a: AABBValue, b: AABBValue): number;
-    }
     interface RotValue {
         /** sin(angle) */
         s: number;
@@ -4635,6 +4584,67 @@ declare namespace planck {
         static mulT(a: TransformValue, b: TransformValue): Transform;
         static mulTVec2(a: TransformValue, b: Vec2Value): Vec2;
         static mulTXf(a: TransformValue, b: TransformValue): Transform;
+    }
+    /**
+     * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
+     */
+    interface RayCastInput {
+        p1: Vec2;
+        p2: Vec2;
+        maxFraction: number;
+    }
+    type RayCastCallback = (subInput: RayCastInput, id: number) => number;
+    /**
+     * Ray-cast output data. The ray hits at `p1 + fraction * (p2 - p1)`,
+     * where `p1` and `p2` come from RayCastInput.
+     */
+    interface RayCastOutput {
+        normal: Vec2;
+        fraction: number;
+    }
+    interface AABBValue {
+        lowerBound: Vec2Value;
+        upperBound: Vec2Value;
+    }
+    class AABB {
+        lowerBound: Vec2;
+        upperBound: Vec2;
+        constructor(lower?: Vec2Value, upper?: Vec2Value);
+        /**
+         * Verify that the bounds are sorted.
+         */
+        isValid(): boolean;
+        static isValid(obj: any): boolean;
+        static assert(o: any): void;
+        /**
+         * Get the center of the AABB.
+         */
+        getCenter(): Vec2;
+        /**
+         * Get the extents of the AABB (half-widths).
+         */
+        getExtents(): Vec2;
+        /**
+         * Get the perimeter length.
+         */
+        getPerimeter(): number;
+        /**
+         * Combine one or two AABB into this one.
+         */
+        combine(a: AABBValue, b?: AABBValue): void;
+        combinePoints(a: Vec2Value, b: Vec2Value): void;
+        set(aabb: AABBValue): void;
+        contains(aabb: AABBValue): boolean;
+        extend(value: number): AABB;
+        static extend(out: AABBValue, value: number): AABBValue;
+        static testOverlap(a: AABBValue, b: AABBValue): boolean;
+        static areEqual(a: AABBValue, b: AABBValue): boolean;
+        static diff(a: AABBValue, b: AABBValue): number;
+        rayCast(output: RayCastOutput, input: RayCastInput): boolean;
+        /** @hidden */
+        toString(): string;
+        static combinePoints(out: AABBValue, a: Vec2Value, b: Vec2Value): AABBValue;
+        static combinedPerimeter(a: AABBValue, b: AABBValue): number;
     }
     /**
      * Input for Distance. You have to option to use the shape radii in the
@@ -4754,6 +4764,217 @@ declare namespace planck {
     // Algorithm by Gino van den Bergen.
     // "Smooth Mesh Contacts with GJK" in Game Physics Pearls. 2010
     const ShapeCast: (output: ShapeCastOutput, input: ShapeCastInput) => boolean;
+    /**
+     * A joint edge is used to connect bodies and joints together in a joint graph
+     * where each body is a node and each joint is an edge. A joint edge belongs to
+     * a doubly linked list maintained in each attached body. Each joint has two
+     * joint nodes, one for each attached body.
+     */
+    class JointEdge {
+        /**
+         * provides quick access to the other body attached.
+         */
+        other: Body | null;
+        /**
+         * the joint
+         */
+        joint: Joint | null;
+        /**
+         * prev the previous joint edge in the body's joint list
+         */
+        prev: JointEdge | null;
+        /**
+         * the next joint edge in the body's joint list
+         */
+        next: JointEdge | null;
+    }
+    /**
+     * Joint definitions are used to construct joints.
+     */
+    interface JointOpt {
+        /**
+         * Use this to attach application specific data to your joints.
+         */
+        userData?: any;
+        /**
+         * Set this flag to true if the attached bodies
+         * should collide.
+         */
+        collideConnected?: boolean;
+    }
+    /**
+     * Joint definitions are used to construct joints.
+     */
+    interface JointDef extends JointOpt {
+        /**
+         * The first attached body.
+         */
+        bodyA: Body;
+        /**
+         * The second attached body.
+         */
+        bodyB: Body;
+    }
+    /**
+     * The base joint class. Joints are used to constraint two bodies together in
+     * various fashions. Some joints also feature limits and motors.
+     */
+    abstract class Joint {
+        /** Styling for dev-tools. */
+        style: Style;
+        /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+        appData: Record<string, any>;
+        constructor(def: JointDef);
+        constructor(def: JointOpt, bodyA: Body, bodyB: Body);
+        /**
+         * Short-cut function to determine if either body is inactive.
+         */
+        isActive(): boolean;
+        /**
+         * Get the type of the concrete joint.
+         */
+        getType(): string;
+        /**
+         * Get the first body attached to this joint.
+         */
+        getBodyA(): Body;
+        /**
+         * Get the second body attached to this joint.
+         */
+        getBodyB(): Body;
+        /**
+         * Get the next joint the world joint list.
+         */
+        getNext(): Joint;
+        getUserData(): unknown;
+        setUserData(data: unknown): void;
+        /**
+         * Get collide connected. Note: modifying the collide connect flag won't work
+         * correctly because the flag is only checked when fixture AABBs begin to
+         * overlap.
+         */
+        getCollideConnected(): boolean;
+        /**
+         * Get the anchor point on bodyA in world coordinates.
+         */
+        abstract getAnchorA(): Vec2;
+        /**
+         * Get the anchor point on bodyB in world coordinates.
+         */
+        abstract getAnchorB(): Vec2;
+        /**
+         * Get the reaction force on bodyB at the joint anchor in Newtons.
+         */
+        abstract getReactionForce(inv_dt: number): Vec2;
+        /**
+         * Get the reaction torque on bodyB in N*m.
+         */
+        abstract getReactionTorque(inv_dt: number): number;
+        /**
+         * Shift the origin for any points stored in world coordinates.
+         */
+        shiftOrigin(newOrigin: Vec2Value): void;
+        abstract initVelocityConstraints(step: TimeStep): void;
+        abstract solveVelocityConstraints(step: TimeStep): void;
+        /**
+         * This returns true if the position errors are within tolerance.
+         */
+        abstract solvePositionConstraints(step: TimeStep): boolean;
+        /**
+         * @hidden @experimental
+         * Update joint with new props.
+         */
+        abstract _reset(def: Partial<JointDef>): void;
+    }
+    interface Style {
+        stroke?: string;
+        fill?: string;
+    }
+    type KEY = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "right" | "left" | "up" | "down" | "fire";
+    type ActiveKeys = {
+        [key in KEY]?: boolean;
+    };
+    type TestbedMountOptions = {};
+    abstract class Testbed {
+        /**
+         * Mount testbed.
+         *
+         * If you need to customize testbed before starting, use `Testbed.mount()` and `Testbed.start()` separately.
+         */
+        static mount(options?: TestbedMountOptions): Testbed;
+        /**
+         * Start simulation, and mount testbed if needed.
+         *
+         * If you need to customize testbed before starting, use `Testbed.mount().start()` separately.
+         */
+        static start(world: World): Testbed;
+        /** World viewbox width. */
+        width: number;
+        /** World viewbox height. */
+        height: number;
+        /** World viewbox center vertical offset. */
+        x: number;
+        /** World viewbox center horizontal offset. */
+        y: number;
+        scaleY: number;
+        /** World simulation step frequency */
+        hz: number;
+        /** World simulation speed, default is 1 */
+        speed: number;
+        ratio: number;
+        background: string;
+        mouseForce?: number;
+        activeKeys: ActiveKeys;
+        /** callback, to be implemented by user */
+        step: (dt: number, t: number) => void;
+        /** callback, to be implemented by user */
+        keydown: (keyCode: number, label: string) => void;
+        /** callback, to be implemented by user */
+        keyup: (keyCode: number, label: string) => void;
+        private statusText;
+        private statusMap;
+        status(name: string, value: any): void;
+        status(value: object | string): void;
+        info(text: string): void;
+        color(r: number, g: number, b: number): string;
+        abstract drawPoint(p: {
+            x: number;
+            y: number;
+        }, r: any, color: string): void;
+        abstract drawCircle(p: {
+            x: number;
+            y: number;
+        }, r: number, color: string): void;
+        abstract drawEdge(a: {
+            x: number;
+            y: number;
+        }, b: {
+            x: number;
+            y: number;
+        }, color: string): void;
+        abstract drawSegment(a: {
+            x: number;
+            y: number;
+        }, b: {
+            x: number;
+            y: number;
+        }, color: string): void;
+        abstract drawPolygon(points: Array<{
+            x: number;
+            y: number;
+        }>, color: string): void;
+        abstract drawAABB(aabb: AABBValue, color: string): void;
+        abstract start(world: World): void;
+        abstract findOne(query: string): (Body | Joint | Fixture | null);
+        abstract findAll(query: string): (Body | Joint | Fixture)[];
+    }
+    type TestbedFactoryOptions = string | {};
+    /** @deprecated */
+    type TestbedCallback = (testbed: Testbed) => (World | undefined);
+    /** @deprecated */
+    function testbed(callback: TestbedCallback): void;
+    /** @deprecated */
+    function testbed(options: TestbedFactoryOptions, callback: TestbedCallback): void;
     // todo make shape an interface
     /**
      * A shape is used for collision detection. You can create a shape however you
@@ -5241,128 +5462,6 @@ declare namespace planck {
          * overlap.
          */
         shouldCollide(that: Fixture): boolean;
-    }
-    /**
-     * A joint edge is used to connect bodies and joints together in a joint graph
-     * where each body is a node and each joint is an edge. A joint edge belongs to
-     * a doubly linked list maintained in each attached body. Each joint has two
-     * joint nodes, one for each attached body.
-     */
-    class JointEdge {
-        /**
-         * provides quick access to the other body attached.
-         */
-        other: Body | null;
-        /**
-         * the joint
-         */
-        joint: Joint | null;
-        /**
-         * prev the previous joint edge in the body's joint list
-         */
-        prev: JointEdge | null;
-        /**
-         * the next joint edge in the body's joint list
-         */
-        next: JointEdge | null;
-    }
-    /**
-     * Joint definitions are used to construct joints.
-     */
-    interface JointOpt {
-        /**
-         * Use this to attach application specific data to your joints.
-         */
-        userData?: any;
-        /**
-         * Set this flag to true if the attached bodies
-         * should collide.
-         */
-        collideConnected?: boolean;
-    }
-    /**
-     * Joint definitions are used to construct joints.
-     */
-    interface JointDef extends JointOpt {
-        /**
-         * The first attached body.
-         */
-        bodyA: Body;
-        /**
-         * The second attached body.
-         */
-        bodyB: Body;
-    }
-    /**
-     * The base joint class. Joints are used to constraint two bodies together in
-     * various fashions. Some joints also feature limits and motors.
-     */
-    abstract class Joint {
-        /** Styling for dev-tools. */
-        style: Style;
-        /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
-        appData: Record<string, any>;
-        constructor(def: JointDef);
-        constructor(def: JointOpt, bodyA: Body, bodyB: Body);
-        /**
-         * Short-cut function to determine if either body is inactive.
-         */
-        isActive(): boolean;
-        /**
-         * Get the type of the concrete joint.
-         */
-        getType(): string;
-        /**
-         * Get the first body attached to this joint.
-         */
-        getBodyA(): Body;
-        /**
-         * Get the second body attached to this joint.
-         */
-        getBodyB(): Body;
-        /**
-         * Get the next joint the world joint list.
-         */
-        getNext(): Joint;
-        getUserData(): unknown;
-        setUserData(data: unknown): void;
-        /**
-         * Get collide connected. Note: modifying the collide connect flag won't work
-         * correctly because the flag is only checked when fixture AABBs begin to
-         * overlap.
-         */
-        getCollideConnected(): boolean;
-        /**
-         * Get the anchor point on bodyA in world coordinates.
-         */
-        abstract getAnchorA(): Vec2;
-        /**
-         * Get the anchor point on bodyB in world coordinates.
-         */
-        abstract getAnchorB(): Vec2;
-        /**
-         * Get the reaction force on bodyB at the joint anchor in Newtons.
-         */
-        abstract getReactionForce(inv_dt: number): Vec2;
-        /**
-         * Get the reaction torque on bodyB in N*m.
-         */
-        abstract getReactionTorque(inv_dt: number): number;
-        /**
-         * Shift the origin for any points stored in world coordinates.
-         */
-        shiftOrigin(newOrigin: Vec2Value): void;
-        abstract initVelocityConstraints(step: TimeStep): void;
-        abstract solveVelocityConstraints(step: TimeStep): void;
-        /**
-         * This returns true if the position errors are within tolerance.
-         */
-        abstract solvePositionConstraints(step: TimeStep): boolean;
-        /**
-         * @hidden @experimental
-         * Update joint with new props.
-         */
-        abstract _reset(def: Partial<JointDef>): void;
     }
     enum ManifoldType {
         e_unset = -1,
@@ -6006,6 +6105,7 @@ declare namespace planck {
      * A rectangle polygon which extend PolygonShape.
      */
     class BoxShape extends PolygonShape {
+        // note that box is serialized/deserialized as polygon
         static TYPE: "polygon";
         constructor(hx: number, hy: number, center?: Vec2Value, angle?: number);
     }
@@ -6891,7 +6991,6 @@ declare namespace planck {
         static TYPE: "pulley-joint";
         constructor(def: PulleyJointDef);
         constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2Value, groundB: Vec2Value, anchorA: Vec2Value, anchorB: Vec2Value, ratio: number);
-        _serialize(): object;
         /** @hidden */
         _reset(def: Partial<PulleyJointDef>): void;
         /**
@@ -8350,95 +8449,26 @@ declare namespace planck {
         off(name: "remove-fixture", listener: (fixture: Fixture) => void): World;
         publish(name: string, arg1?: any, arg2?: any, arg3?: any): number;
     }
-    interface Style {
-        stroke?: string;
-        fill?: string;
-    }
-    type KEY = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "right" | "left" | "up" | "down" | "fire";
-    type ActiveKeys = {
-        [key in KEY]?: boolean;
+    // dummy types
+    type DataType = any;
+    type ObjectType = any;
+    type ClassName = any;
+    type SerializedType = object[];
+    type SerializerOptions = {
+        rootClass: ClassName;
+        preSerialize?: (obj: ObjectType) => DataType;
+        postSerialize?: (data: DataType, obj: any) => DataType;
+        preDeserialize?: (data: DataType) => DataType;
+        postDeserialize?: (obj: ObjectType, data: DataType) => ObjectType;
     };
-    type TestbedMountOptions = {};
-    abstract class Testbed {
-        /**
-         * Mount testbed.
-         *
-         * If you need to customize testbed before starting, use `Testbed.mount()` and `Testbed.start()` separately.
-         */
-        static mount(options?: TestbedMountOptions): Testbed;
-        /**
-         * Start simulation, and mount testbed if needed.
-         *
-         * If you need to customize testbed before starting, use `Testbed.mount().start()` separately.
-         */
-        static start(world: World): Testbed;
-        /** World viewbox width. */
-        width: number;
-        /** World viewbox height. */
-        height: number;
-        /** World viewbox center vertical offset. */
-        x: number;
-        /** World viewbox center horizontal offset. */
-        y: number;
-        scaleY: number;
-        /** World simulation step frequency */
-        hz: number;
-        /** World simulation speed, default is 1 */
-        speed: number;
-        ratio: number;
-        background: string;
-        mouseForce?: number;
-        activeKeys: ActiveKeys;
-        /** callback, to be implemented by user */
-        step: (dt: number, t: number) => void;
-        /** callback, to be implemented by user */
-        keydown: (keyCode: number, label: string) => void;
-        /** callback, to be implemented by user */
-        keyup: (keyCode: number, label: string) => void;
-        private statusText;
-        private statusMap;
-        status(name: string, value: any): void;
-        status(value: object | string): void;
-        info(text: string): void;
-        color(r: number, g: number, b: number): string;
-        abstract drawPoint(p: {
-            x: number;
-            y: number;
-        }, r: any, color: string): void;
-        abstract drawCircle(p: {
-            x: number;
-            y: number;
-        }, r: number, color: string): void;
-        abstract drawEdge(a: {
-            x: number;
-            y: number;
-        }, b: {
-            x: number;
-            y: number;
-        }, color: string): void;
-        abstract drawSegment(a: {
-            x: number;
-            y: number;
-        }, b: {
-            x: number;
-            y: number;
-        }, color: string): void;
-        abstract drawPolygon(points: Array<{
-            x: number;
-            y: number;
-        }>, color: string): void;
-        abstract drawAABB(aabb: AABBValue, color: string): void;
-        abstract start(world: World): void;
-        abstract findOne(query: string): (Body | Joint | Fixture | null);
-        abstract findAll(query: string): (Body | Joint | Fixture)[];
+    class Serializer<T> {
+        private options;
+        constructor(options: SerializerOptions);
+        toJson: (root: T) => SerializedType;
+        fromJson: (json: SerializedType) => T;
+        static toJson: (root: World) => SerializedType;
+        static fromJson: (json: SerializedType) => World;
     }
-    type TestbedFactoryOptions = string | {};
-    /** @deprecated */
-    type TestbedCallback = (testbed: Testbed) => (World | undefined);
-    /** @deprecated */
-    function testbed(callback: TestbedCallback): void;
-    /** @deprecated */
-    function testbed(options: TestbedFactoryOptions, callback: TestbedCallback): void;
     /** @deprecated */
     export { math as Math };
 }

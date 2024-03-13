@@ -168,6 +168,7 @@ export class PulleyJoint extends Joint {
     // cross(r2, u2)^2)
   }
 
+  /** @internal */
   _serialize(): object {
     return {
       type: this.m_type,

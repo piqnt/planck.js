@@ -99,7 +99,7 @@ type DeserializeChildCallback = (classHint: any, obj: any, context: any) => any;
 type ClassDeserializerMethod = (data: any, context: any, deserialize: DeserializeChildCallback) => any;
 
 export class Serializer<T> {
-  options: SerializerOptions;
+  private options: SerializerOptions;
   constructor(options: SerializerOptions) {
     this.options = {
       ...DEFAULT_OPTIONS,

@@ -31,7 +31,6 @@ length.
 
 ### Methods
 
-* [_serialize](pulleyjoint.md#_serialize)
 * [getAnchorA](pulleyjoint.md#getanchora)
 * [getAnchorB](pulleyjoint.md#getanchorb)
 * [getBodyA](pulleyjoint.md#getbodya)
@@ -108,14 +107,6 @@ ___
 ▪ **TYPE**: *"pulley-joint"* = 'pulley-joint' as const
 
 ## Methods
-
-###  _serialize
-
-▸ **_serialize**(): *object*
-
-**Returns:** *object*
-
-___
 
 ###  getAnchorA
 

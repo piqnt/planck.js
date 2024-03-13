@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.1
+ * Planck.js v1.0.2
  * @license The MIT license
  * @copyright Copyright (c) 2023 Erin Catto, Ali Shakiba
  *
@@ -10082,49 +10082,6 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
      * SOFTWARE.
      */
-    /**
-     * A rectangle polygon which extend PolygonShape.
-     */
-    var BoxShape = /** @class */ (function (_super) {
-        __extends(BoxShape, _super);
-        function BoxShape(hx, hy, center, angle) {
-            var _this = this;
-            // @ts-ignore
-            if (!(_this instanceof BoxShape)) {
-                return new BoxShape(hx, hy, center, angle);
-            }
-            _this = _super.call(this) || this;
-            _this._setAsBox(hx, hy, center, angle);
-            return _this;
-        }
-        BoxShape.TYPE = 'polygon';
-        return BoxShape;
-    }(PolygonShape));
-    var Box = BoxShape;
-
-    /*
-     * Planck.js
-     * The MIT License
-     * Copyright (c) 2021 Erin Catto, Ali Shakiba
-     *
-     * Permission is hereby granted, free of charge, to any person obtaining a copy
-     * of this software and associated documentation files (the "Software"), to deal
-     * in the Software without restriction, including without limitation the rights
-     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     * copies of the Software, and to permit persons to whom the Software is
-     * furnished to do so, subject to the following conditions:
-     *
-     * The above copyright notice and this permission notice shall be included in all
-     * copies or substantial portions of the Software.
-     *
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-     * SOFTWARE.
-     */
     /** @internal */ var math_sqrt = Math.sqrt;
     /** @internal */ var math_PI$4 = Math.PI;
     /** @internal */ var temp = vec2(0, 0);
@@ -13420,6 +13377,7 @@
             // = invMass1 + invI1 * cross(r1, u1)^2 + ratio^2 * (invMass2 + invI2 *
             // cross(r2, u2)^2)
         }
+        /** @internal */
         PulleyJoint.prototype._serialize = function () {
             return {
                 type: this.m_type,
@@ -14848,157 +14806,185 @@
         return WheelJoint;
     }(Joint));
 
+    var _a;
     var SID = 0;
-    function Serializer(opts) {
-        var _a;
-        opts = opts || {};
-        var rootClass = opts.rootClass || World;
-        var preSerialize = opts.preSerialize || function (obj) { return obj; };
-        var postSerialize = opts.postSerialize || function (data, obj) { return data; };
-        var preDeserialize = opts.preDeserialize || function (data) { return data; };
-        var postDeserialize = opts.postDeserialize || function (obj, data) { return obj; };
-        // This is used to create ref objects during serialize
-        var refTypes = {
-            World: World,
-            Body: Body,
-            Joint: Joint,
-            Fixture: Fixture,
-            Shape: Shape,
-        };
-        // This is used by restore to deserialize objects and refs
-        var restoreTypes = __assign({ Vec2: Vec2,
-            Vec3: Vec3 }, refTypes);
-        var CLASS_BY_TYPE_PROP = (_a = {},
-            _a[Body.STATIC] = Body,
-            _a[Body.DYNAMIC] = Body,
-            _a[Body.KINEMATIC] = Body,
-            _a[ChainShape.TYPE] = ChainShape,
-            _a[BoxShape.TYPE] = BoxShape,
-            _a[EdgeShape.TYPE] = EdgeShape,
-            _a[PolygonShape.TYPE] = PolygonShape,
-            _a[CircleShape.TYPE] = CircleShape,
-            _a[DistanceJoint.TYPE] = DistanceJoint,
-            _a[FrictionJoint.TYPE] = FrictionJoint,
-            _a[GearJoint.TYPE] = GearJoint,
-            _a[MotorJoint.TYPE] = MotorJoint,
-            _a[MouseJoint.TYPE] = MouseJoint,
-            _a[PrismaticJoint.TYPE] = PrismaticJoint,
-            _a[PulleyJoint.TYPE] = PulleyJoint,
-            _a[RevoluteJoint.TYPE] = RevoluteJoint,
-            _a[RopeJoint.TYPE] = RopeJoint,
-            _a[WeldJoint.TYPE] = WeldJoint,
-            _a[WheelJoint.TYPE] = WheelJoint,
-            _a);
-        this.toJson = function (root) {
-            var json = [];
-            var queue = [root];
-            var refMap = {};
-            function storeRef(value, typeName) {
-                value.__sid = value.__sid || ++SID;
-                if (!refMap[value.__sid]) {
-                    queue.push(value);
-                    var index = json.length + queue.length;
-                    var ref = {
-                        refIndex: index,
-                        refType: typeName
-                    };
-                    refMap[value.__sid] = ref;
+    // Classes to be serialized as reference objects
+    var SERIALIZE_REF_TYPES = {
+        'World': World,
+        'Body': Body,
+        'Joint': Joint,
+        'Fixture': Fixture,
+        'Shape': Shape,
+    };
+    // For deserializing reference objects by reference type
+    var DESERIALIZE_BY_REF_TYPE = {
+        'Vec2': Vec2,
+        'Vec3': Vec3,
+        'World': World,
+        'Body': Body,
+        'Joint': Joint,
+        'Fixture': Fixture,
+        'Shape': Shape,
+    };
+    // For deserializing data objects by type field
+    var DESERIALIZE_BY_TYPE_FIELD = (_a = {},
+        _a[Body.STATIC] = Body,
+        _a[Body.DYNAMIC] = Body,
+        _a[Body.KINEMATIC] = Body,
+        _a[ChainShape.TYPE] = ChainShape,
+        // [BoxShape.TYPE]: BoxShape,
+        _a[PolygonShape.TYPE] = PolygonShape,
+        _a[EdgeShape.TYPE] = EdgeShape,
+        _a[CircleShape.TYPE] = CircleShape,
+        _a[DistanceJoint.TYPE] = DistanceJoint,
+        _a[FrictionJoint.TYPE] = FrictionJoint,
+        _a[GearJoint.TYPE] = GearJoint,
+        _a[MotorJoint.TYPE] = MotorJoint,
+        _a[MouseJoint.TYPE] = MouseJoint,
+        _a[PrismaticJoint.TYPE] = PrismaticJoint,
+        _a[PulleyJoint.TYPE] = PulleyJoint,
+        _a[RevoluteJoint.TYPE] = RevoluteJoint,
+        _a[RopeJoint.TYPE] = RopeJoint,
+        _a[WeldJoint.TYPE] = WeldJoint,
+        _a[WheelJoint.TYPE] = WheelJoint,
+        _a);
+    var DEFAULT_OPTIONS = {
+        rootClass: World,
+        preSerialize: function (obj) { return obj; },
+        postSerialize: function (data, obj) { return data; },
+        preDeserialize: function (data) { return data; },
+        postDeserialize: function (obj, data) { return obj; },
+    };
+    var Serializer = /** @class */ (function () {
+        function Serializer(options) {
+            var _this = this;
+            this.toJson = function (root) {
+                var preSerialize = _this.options.preSerialize;
+                var postSerialize = _this.options.postSerialize;
+                var json = [];
+                // Breadth-first ref serialization queue
+                var refQueue = [root];
+                var refMemoById = {};
+                function addToRefQueue(value, typeName) {
+                    value.__sid = value.__sid || ++SID;
+                    if (!refMemoById[value.__sid]) {
+                        refQueue.push(value);
+                        var index = json.length + refQueue.length;
+                        var ref = {
+                            refIndex: index,
+                            refType: typeName
+                        };
+                        refMemoById[value.__sid] = ref;
+                    }
+                    return refMemoById[value.__sid];
                 }
-                return refMap[value.__sid];
-            }
-            function serialize(obj) {
-                obj = preSerialize(obj);
-                var data = obj._serialize();
-                data = postSerialize(data, obj);
-                return data;
-            }
-            function toJson(value, top) {
-                if (typeof value !== 'object' || value === null) {
-                    return value;
+                function serializeWithHooks(obj) {
+                    obj = preSerialize(obj);
+                    var data = obj._serialize();
+                    data = postSerialize(data, obj);
+                    return data;
                 }
-                if (typeof value._serialize === 'function') {
-                    if (value !== top) {
-                        // tslint:disable-next-line:no-for-in
-                        for (var typeName in refTypes) {
-                            if (value instanceof refTypes[typeName]) {
-                                return storeRef(value, typeName);
+                // traverse the object graph
+                // ref objects are pushed into the queue
+                // other objects are serialize in-place 
+                function traverse(value, noRefType) {
+                    if (noRefType === void 0) { noRefType = false; }
+                    if (typeof value !== 'object' || value === null) {
+                        return value;
+                    }
+                    // object with _serialize function
+                    if (typeof value._serialize === 'function') {
+                        if (!noRefType) {
+                            for (var typeName in SERIALIZE_REF_TYPES) {
+                                if (value instanceof SERIALIZE_REF_TYPES[typeName]) {
+                                    return addToRefQueue(value, typeName);
+                                }
                             }
                         }
+                        // object with _serialize function
+                        value = serializeWithHooks(value);
                     }
-                    value = serialize(value);
-                }
-                if (Array.isArray(value)) {
-                    var newValue = [];
-                    for (var key = 0; key < value.length; key++) {
-                        newValue[key] = toJson(value[key]);
-                    }
-                    value = newValue;
-                }
-                else {
-                    var newValue = {};
-                    // tslint:disable-next-line:no-for-in
-                    for (var key in value) {
-                        if (value.hasOwnProperty(key)) {
-                            newValue[key] = toJson(value[key]);
+                    // recursive for arrays any objects
+                    if (Array.isArray(value)) {
+                        var newValue = [];
+                        for (var key = 0; key < value.length; key++) {
+                            newValue[key] = traverse(value[key]);
                         }
+                        value = newValue;
                     }
-                    value = newValue;
+                    else {
+                        var newValue = {};
+                        for (var key in value) {
+                            if (value.hasOwnProperty(key)) {
+                                newValue[key] = traverse(value[key]);
+                            }
+                        }
+                        value = newValue;
+                    }
+                    return value;
                 }
-                return value;
-            }
-            while (queue.length) {
-                var obj = queue.shift();
-                var str = toJson(obj, obj);
-                json.push(str);
-            }
-            return json;
-        };
-        this.fromJson = function (json) {
-            var refMap = {};
-            function findDeserilizer(data, cls) {
-                if (!cls || !cls._deserialize) {
-                    cls = CLASS_BY_TYPE_PROP[data.type];
+                while (refQueue.length) {
+                    var obj = refQueue.shift();
+                    var str = traverse(obj, true);
+                    json.push(str);
                 }
-                return cls && cls._deserialize;
-            }
-            /**
-             * Deserialize a data object.
-             */
-            function deserialize(cls, data, ctx) {
-                var deserializer = findDeserilizer(data, cls);
-                if (!deserializer) {
-                    return;
+                return json;
+            };
+            this.fromJson = function (json) {
+                var preDeserialize = _this.options.preDeserialize;
+                var postDeserialize = _this.options.postDeserialize;
+                var rootClass = _this.options.rootClass;
+                var deserializedRefMemoByIndex = {};
+                function deserializeWithHooks(classHint, data, context) {
+                    if (!classHint || !classHint._deserialize) {
+                        classHint = DESERIALIZE_BY_TYPE_FIELD[data.type];
+                    }
+                    var deserializer = classHint && classHint._deserialize;
+                    if (!deserializer) {
+                        return;
+                    }
+                    data = preDeserialize(data);
+                    var classDeserializeFn = classHint._deserialize;
+                    var obj = classDeserializeFn(data, context, deserializeChild);
+                    obj = postDeserialize(obj, data);
+                    return obj;
                 }
-                data = preDeserialize(data);
-                var obj = deserializer(data, ctx, restoreRef);
-                obj = postDeserialize(obj, data);
-                return obj;
-            }
-            /**
-             * Restore a ref object or deserialize a data object.
-             *
-             * This is passed as callback to class deserializers.
-             */
-            function restoreRef(cls, ref, ctx) {
-                if (!ref.refIndex) {
-                    return cls && cls._deserialize && deserialize(cls, ref, ctx);
+                /**
+                 * Recursive callback function to  deserialize a child data object or reference object.
+                 *
+                 * @param classHint suggested class to deserialize obj to
+                 * @param dataOrRef data or reference object
+                 * @param context for example world when deserializing bodies and joints
+                 */
+                function deserializeChild(classHint, dataOrRef, context) {
+                    var isRefObject = dataOrRef.refIndex && dataOrRef.refType;
+                    if (!isRefObject) {
+                        return deserializeWithHooks(classHint, dataOrRef, context);
+                    }
+                    var ref = dataOrRef;
+                    if (DESERIALIZE_BY_REF_TYPE[ref.refType]) {
+                        classHint = DESERIALIZE_BY_REF_TYPE[ref.refType];
+                    }
+                    var refIndex = ref.refIndex;
+                    if (!deserializedRefMemoByIndex[refIndex]) {
+                        var data = json[refIndex];
+                        var obj = deserializeWithHooks(classHint, data, context);
+                        deserializedRefMemoByIndex[refIndex] = obj;
+                    }
+                    return deserializedRefMemoByIndex[refIndex];
                 }
-                cls = restoreTypes[ref.refType] || cls;
-                var index = ref.refIndex;
-                if (!refMap[index]) {
-                    var data = json[index];
-                    var obj = deserialize(cls, data, ctx);
-                    refMap[index] = obj;
-                }
-                return refMap[index];
-            }
-            var root = rootClass._deserialize(json[0], null, restoreRef);
-            return root;
-        };
-    }
-    var serializer = new Serializer();
-    Serializer.toJson = serializer.toJson;
-    Serializer.fromJson = serializer.fromJson;
+                var root = deserializeWithHooks(rootClass, json[0], null);
+                return root;
+            };
+            this.options = __assign(__assign({}, DEFAULT_OPTIONS), options);
+        }
+        return Serializer;
+    }());
+    var worldSerializer = new Serializer({
+        rootClass: World,
+    });
+    Serializer.fromJson = worldSerializer.fromJson;
+    Serializer.toJson = worldSerializer.toJson;
 
     var Testbed = /** @class */ (function () {
         function Testbed() {
@@ -15117,6 +15103,50 @@
             return testbed;
         }
     }
+
+    /*
+     * Planck.js
+     * The MIT License
+     * Copyright (c) 2021 Erin Catto, Ali Shakiba
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining a copy
+     * of this software and associated documentation files (the "Software"), to deal
+     * in the Software without restriction, including without limitation the rights
+     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     * copies of the Software, and to permit persons to whom the Software is
+     * furnished to do so, subject to the following conditions:
+     *
+     * The above copyright notice and this permission notice shall be included in all
+     * copies or substantial portions of the Software.
+     *
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     * SOFTWARE.
+     */
+    /**
+     * A rectangle polygon which extend PolygonShape.
+     */
+    var BoxShape = /** @class */ (function (_super) {
+        __extends(BoxShape, _super);
+        function BoxShape(hx, hy, center, angle) {
+            var _this = this;
+            // @ts-ignore
+            if (!(_this instanceof BoxShape)) {
+                return new BoxShape(hx, hy, center, angle);
+            }
+            _this = _super.call(this) || this;
+            _this._setAsBox(hx, hy, center, angle);
+            return _this;
+        }
+        // note that box is serialized/deserialized as polygon
+        BoxShape.TYPE = 'polygon';
+        return BoxShape;
+    }(PolygonShape));
+    var Box = BoxShape;
 
     /*
      * Planck.js
