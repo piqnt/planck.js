@@ -20,37 +20,37 @@ planck.testbed('Particles', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
 
   var world = new pl.World({
-    gravity: Vec2(0, -10),
+    gravity: new Vec2(0, -10),
   });
 
   var ground = world.createBody();
 
   {
-    const shape = pl.Polygon([
-      Vec2(-4, -1),
-      Vec2(4, -1),
-      Vec2(4, 0),
-      Vec2(-4, 0)
+    const shape = new pl.Polygon([
+      new Vec2(-4, -1),
+      new Vec2(4, -1),
+      new Vec2(4, 0),
+      new Vec2(-4, 0)
     ]);
     ground.createFixture(shape, 0.0);
   }
 
   {
-    const shape = pl.Polygon([
-      Vec2(-4, -0.1),
-      Vec2(-2, -0.1),
-      Vec2(-2, 2),
-      Vec2(-4, 3)
+    const shape = new pl.Polygon([
+      new Vec2(-4, -0.1),
+      new Vec2(-2, -0.1),
+      new Vec2(-2, 2),
+      new Vec2(-4, 3)
     ]);
     ground.createFixture(shape, 0.0);
   }
 
   {
-    const shape = pl.Polygon([
-      Vec2(2, -0.1),
-      Vec2(4, -0.1),
-      Vec2(4, 3),
-      Vec2(2, 2)
+    const shape = new pl.Polygon([
+      new Vec2(2, -0.1),
+      new Vec2(4, -0.1),
+      new Vec2(4, 3),
+      new Vec2(2, 2)
     ]);
     ground.createFixture(shape, 0.0);
   }
@@ -63,7 +63,7 @@ planck.testbed('Particles', function(testbed) {
 
   const group = particleSystem.createParticleGroup({
     flags: particleType,
-    shape: pl.Circle(Vec2(0, 3), 2)
+    shape: new pl.Circle(new Vec2(0, 3), 2)
   });
   // if (pd.flags & b2_colorMixingParticle) {
   //    ColorParticleGroup(group, 0); // TODO
@@ -71,7 +71,7 @@ planck.testbed('Particles', function(testbed) {
 
   {
     const body = world.createDynamicBody();
-    const shape = pl.Circle(Vec2(0, 8), 0.5);
+    const shape = new pl.Circle(new Vec2(0, 8), 0.5);
     body.createFixture(shape, 0.5);
   }
 

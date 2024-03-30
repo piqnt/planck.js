@@ -24,37 +24,37 @@ planck.testbed('RigidPaticles', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
 
   var world = new pl.World({
-    gravity: Vec2(0, -10),
+    gravity: new Vec2(0, -10),
   });
 
   var ground = world.createBody();
 
   {
-    const shape = pl.Polygon([
-      Vec2(-4, -1),
-      Vec2(4, -1),
-      Vec2(4, 0),
-      Vec2(-4, 0)
+    const shape = new pl.Polygon([
+      new Vec2(-4, -1),
+      new Vec2(4, -1),
+      new Vec2(4, 0),
+      new Vec2(-4, 0)
     ]);
     ground.createFixture(shape, 0.0);
   }
 
   {
-    const shape = pl.Polygon([
-      Vec2(-4, -0.1),
-      Vec2(-2, -0.1),
-      Vec2(-2, 2),
-      Vec2(-4, 2)
+    const shape = new pl.Polygon([
+      new Vec2(-4, -0.1),
+      new Vec2(-2, -0.1),
+      new Vec2(-2, 2),
+      new Vec2(-4, 2)
     ]);
     ground.createFixture(shape, 0.0);
   }
 
   {
-    const shape = pl.Polygon([
-      Vec2(2, -0.1),
-      Vec2(4, -0.1),
-      Vec2(4, 2),
-      Vec2(2, 2)
+    const shape = new pl.Polygon([
+      new Vec2(2, -0.1),
+      new Vec2(4, -0.1),
+      new Vec2(4, 2),
+      new Vec2(2, 2)
     ]);
     ground.createFixture(shape, 0.0);
   }
@@ -65,30 +65,30 @@ planck.testbed('RigidPaticles', function(testbed) {
 
   particleSystem.createParticleGroup({
     groupFlags: b2_rigidParticleGroup | b2_solidParticleGroup,
-    shape: pl.Circle(Vec2(0, 3), 0.5)
+    shape: new pl.Circle(new Vec2(0, 3), 0.5)
     // color: (255, 0, 0, 255) // TODO
   });
 
   particleSystem.createParticleGroup({
     groupFlags: b2_rigidParticleGroup | b2_solidParticleGroup,
-    shape: pl.Circle(Vec2(-1, 3), 0.5)
+    shape: new pl.Circle(new Vec2(-1, 3), 0.5)
     // color: (0, 255, 0, 255); // TODO
   });
 
   {
     particleSystem.createParticleGroup({
       groupFlags: b2_rigidParticleGroup | b2_solidParticleGroup,
-      position: Vec2(1, 4),
+      position: new Vec2(1, 4),
       angle: -0.5,
       angularVelocity: 2.0,
-      shape: pl.Box(1, 0.5)
+      shape: new pl.Box(1, 0.5)
       // color: (0, 0, 255, 255); // TODO
     });
   }
 
   {
     const body = world.createDynamicBody();
-    const shape = pl.Circle(Vec2(0, 8), 0.5);
+    const shape = new pl.Circle(new Vec2(0, 8), 0.5);
     body.createFixture(shape, 0.5);
   }
 

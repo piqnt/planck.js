@@ -20,15 +20,15 @@ planck.testbed('DamBreak', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
 
   var world = new pl.World({
-    gravity: Vec2(0, -10),
+    gravity: new Vec2(0, -10),
   });
 
   var ground = world.createBody();
   var shape = new pl.Chain([
-    Vec2(-2, 0),
-    Vec2(2, 0),
-    Vec2(2, 4),
-    Vec2(-2, 4)
+    new Vec2(-2, 0),
+    new Vec2(2, 0),
+    new Vec2(2, 4),
+    new Vec2(-2, 4)
   ], true);
   ground.createFixture(shape, 0);
 
@@ -39,7 +39,7 @@ planck.testbed('DamBreak', function(testbed) {
 
   var group = particleSystem.createParticleGroup({
     // flags: TestMain::GetParticleParameterValue(), // TODO
-    shape: pl.Box(0.8, 1.0, Vec2(-1.2, 1.01), 0)
+    shape: new pl.Box(0.8, 1.0, new Vec2(-1.2, 1.01), 0)
   })
   // if (pd.flags & b2_colorMixingParticle) { // TODO
   // 	ColorParticleGroup(group, 0);

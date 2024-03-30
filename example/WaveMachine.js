@@ -20,7 +20,7 @@ planck.testbed('WaveMachine', function(testbed) {
   var pl = planck, Vec2 = pl.Vec2;
 
   var world = new pl.World({
-    gravity: Vec2(0, -10),
+    gravity: new Vec2(0, -10),
   });
 
   var ground = world.createBody();
@@ -28,19 +28,19 @@ planck.testbed('WaveMachine', function(testbed) {
   var body = world.createBody({
     type: 'dynamic',
     allowSleep: false,
-    position: Vec2(0, 1)
+    position: new Vec2(0, 1)
   });
 
-  body.createFixture(pl.Box(0.05, 1.00, Vec2( 2, 0), 0), 5);
-  body.createFixture(pl.Box(0.05, 1.00, Vec2(-2, 0), 0), 5);
-  body.createFixture(pl.Box(2.00, 0.05, Vec2( 0, 1), 0), 5);
-  body.createFixture(pl.Box(2.00, 0.05, Vec2( 0,-1), 0), 5);
+  body.createFixture(new pl.Box(0.05, 1.00, new Vec2( 2, 0), 0), 5);
+  body.createFixture(new pl.Box(0.05, 1.00, new Vec2(-2, 0), 0), 5);
+  body.createFixture(new pl.Box(2.00, 0.05, new Vec2( 0, 1), 0), 5);
+  body.createFixture(new pl.Box(2.00, 0.05, new Vec2( 0,-1), 0), 5);
 
-  var joint = world.createJoint(pl.RevoluteJoint({
+  var joint = world.createJoint(new pl.RevoluteJoint({
     bodyA: ground,
     bodyB: body,
-    localAnchorA: Vec2(0, 1),
-    localAnchorB: Vec2(0, 0),
+    localAnchorA: new Vec2(0, 1),
+    localAnchorB: new Vec2(0, 0),
     referenceAngle: 0,
     motorSpeed: 0.05 * Math.PI,
     maxMotorTorque: 1e7,
@@ -52,7 +52,7 @@ planck.testbed('WaveMachine', function(testbed) {
     dampingStrength: 0.2,
   });
   
-  var box = new pl.Box(0.9, 0.9, Vec2(0, 1), 0);
+  var box = new pl.Box(0.9, 0.9, new Vec2(0, 1), 0);
   var particleGroup = particleSystem.createParticleGroup({
     shape: box,
   });
