@@ -556,6 +556,20 @@ class  WorldStageNode extends Stage.Node {
       }
     }
 
+    // TODO
+    for (let p = world.getParticleSystemList(); p; p = p.getNext()) {
+      const positions = p.getPositionBuffer();
+      if (!positions) continue;
+      const radius = p.getRadius();
+
+      if (p.ui) {
+        p.ui.remove();
+      }
+      const a = viewer.drawParticles(positions, p.m_count, options);
+      a.appendTo(viewer);
+      p.ui = a;
+    }
+
     for (let j = world.getJointList(); j; j = j.getNext()) {
       const type = j.getType();
       if (type == 'pulley-joint') {
@@ -765,4 +779,28 @@ class  WorldStageNode extends Stage.Node {
     const node = Stage.create().append(image);
     return node;
   }
+
+  drawParticles(positions: Vec2Value[], count: number, options) {
+    const ratio = options.ratio;
+    if (!positions.length) {
+      return;
+    }
+  
+    const size = 100; // TODO
+    const texture = Stage.canvas(function(ctx) {
+      this.size(size * 2, size * 2, ratio);
+  
+      ctx.clearRect(0, 0, size * 2, size * 2);
+      ctx.fillStyle = '#0077ff';
+      for (let i = 0; i < count; i++) {
+        const p = positions[i];
+        ctx.fillRect(p.x * ratio + size * ratio, options.scaleY * p.y * ratio + size * ratio, 1, 1);
+      }
+    })
+  
+    const image = Stage.image(texture);
+    image.offset(-size, -size);
+    const node = Stage.create().append(image);
+    return node;
+  };
 }
