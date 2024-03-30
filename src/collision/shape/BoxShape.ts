@@ -22,18 +22,23 @@
  * SOFTWARE.
  */
 
-import type Vec2 from '../../common/Vec2';
-import PolygonShape from './PolygonShape';
+import type { Vec2Value } from '../../common/Vec2';
+import { PolygonShape } from './PolygonShape';
+
+
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+
 
 /**
  * A rectangle polygon which extend PolygonShape.
  */
-export default class BoxShape extends PolygonShape {
+export class BoxShape extends PolygonShape {
+  // note that box is serialized/deserialized as polygon
   static TYPE = 'polygon' as const;
 
-  constructor(hx: number, hy: number, center?: Vec2, angle?: number) {
+  constructor(hx: number, hy: number, center?: Vec2Value, angle?: number) {
     // @ts-ignore
-    if (!(this instanceof BoxShape)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof BoxShape)) {
       return new BoxShape(hx, hy, center, angle);
     }
 
@@ -42,3 +47,5 @@ export default class BoxShape extends PolygonShape {
     this._setAsBox(hx, hy, center, angle);
   }
 }
+
+export const Box = BoxShape;

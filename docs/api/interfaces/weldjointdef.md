@@ -36,8 +36,6 @@ important for computing the reaction torque.
 
 *Inherited from [JointDef](jointdef.md).[bodyA](jointdef.md#bodya)*
 
-*Defined in [src/dynamics/Joint.ts:78](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L78)*
-
 The first attached body.
 
 ___
@@ -47,8 +45,6 @@ ___
 • **bodyB**: *[Body](../classes/body.md)*
 
 *Inherited from [JointDef](jointdef.md).[bodyB](jointdef.md#bodyb)*
-
-*Defined in [src/dynamics/Joint.ts:82](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L82)*
 
 The second attached body.
 
@@ -62,8 +58,6 @@ ___
 
 *Overrides [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:69](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L69)*
-
 Set this flag to true if the attached bodies
 should collide.
 
@@ -75,8 +69,6 @@ ___
 
 *Inherited from [WeldJointOpt](weldjointopt.md).[dampingRatio](weldjointopt.md#optional-dampingratio)*
 
-*Defined in [src/dynamics/joint/WeldJoint.ts:58](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WeldJoint.ts#L58)*
-
 The damping ratio. 0 = no damping, 1 = critical damping.
 
 ___
@@ -87,8 +79,6 @@ ___
 
 *Inherited from [WeldJointOpt](weldjointopt.md).[frequencyHz](weldjointopt.md#optional-frequencyhz)*
 
-*Defined in [src/dynamics/joint/WeldJoint.ts:54](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WeldJoint.ts#L54)*
-
 The mass-spring-damper frequency in Hertz. Rotation only. Disable softness
 with a value of 0.
 
@@ -96,9 +86,7 @@ ___
 
 ###  localAnchorA
 
-• **localAnchorA**: *[Vec2](../classes/vec2.md)*
-
-*Defined in [src/dynamics/joint/WeldJoint.ts:73](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WeldJoint.ts#L73)*
+• **localAnchorA**: *[Vec2Value](vec2value.md)*
 
 The local anchor point relative to bodyA's origin.
 
@@ -106,9 +94,7 @@ ___
 
 ###  localAnchorB
 
-• **localAnchorB**: *[Vec2](../classes/vec2.md)*
-
-*Defined in [src/dynamics/joint/WeldJoint.ts:77](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WeldJoint.ts#L77)*
+• **localAnchorB**: *[Vec2Value](vec2value.md)*
 
 The local anchor point relative to bodyB's origin.
 
@@ -119,8 +105,6 @@ ___
 • **referenceAngle**? : *number*
 
 *Inherited from [WeldJointOpt](weldjointopt.md).[referenceAngle](weldjointopt.md#optional-referenceangle)*
-
-*Defined in [src/dynamics/joint/WeldJoint.ts:62](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/WeldJoint.ts#L62)*
 
 The bodyB angle minus bodyA angle in the reference state (radians).
 
@@ -133,7 +117,5 @@ ___
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
 
 *Overrides [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
-
-*Defined in [src/dynamics/Joint.ts:64](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L64)*
 
 Use this to attach application specific data to your joints.

@@ -22,13 +22,22 @@
  * SOFTWARE.
  */
 
-// TODO merge with World options?
+/** @internal */ const math_PI = Math.PI;
+
 
 /**
  * Tuning constants based on meters-kilograms-seconds (MKS) units.
+ * 
+ * Some tolerances are absolute and some are relative. Absolute tolerances use MKS units.
  */
-// tslint:disable-next-line:no-unnecessary-class
-export default class Settings {
+export class Settings {
+  /**
+   * You can use this to change the length scale used by your game.
+   * 
+   * For example for inches you could use 39.4.
+   */
+  static lengthUnitsPerMeter = 1.0;
+  
   // Collision
   /**
    * The maximum number of contact points between two convex shapes. Do not change
@@ -60,13 +69,12 @@ export default class Settings {
    * chosen to be numerically significant, but visually insignificant.
    */
   static linearSlop: number = 0.005;
-  static get linearSlopSquared(): number { return Settings.linearSlop * Settings.linearSlop; }
 
   /**
    * A small angle used as a collision and constraint tolerance. Usually it is
    * chosen to be numerically significant, but visually insignificant.
    */
-  static angularSlop: number = (2.0 / 180.0 * Math.PI);
+  static angularSlop: number = (2.0 / 180.0 * math_PI);
 
   /**
    * The radius of the polygon/edge shape skin. This should not be modified.
@@ -81,7 +89,7 @@ export default class Settings {
    */
   static maxSubSteps: number = 8;
 
-// Dynamics
+  // Dynamics
 
   /**
    * Maximum number of contacts to be handled to solve a TOI impact.
@@ -96,7 +104,7 @@ export default class Settings {
   /**
    * Maximum iterations to find Distance.
    */
-  static maxDistnceIterations: number = 20;
+  static maxDistanceIterations: number = 20;
 
   /**
    * A velocity threshold for elastic collisions. Any collision with a relative
@@ -114,21 +122,19 @@ export default class Settings {
    * The maximum angular position correction used when solving constraints. This
    * helps to prevent overshoot.
    */
-  static maxAngularCorrection: number = (8.0 / 180.0 * Math.PI);
+  static maxAngularCorrection: number = (8.0 / 180.0 * math_PI);
 
   /**
    * The maximum linear velocity of a body. This limit is very large and is used
    * to prevent numerical problems. You shouldn't need to adjust Settings.
    */
   static maxTranslation: number = 2.0;
-  static get maxTranslationSquared(): number { return Settings.maxTranslation * Settings.maxTranslation; }
 
   /**
    * The maximum angular velocity of a body. This limit is very large and is used
    * to prevent numerical problems. You shouldn't need to adjust Settings.
    */
-  static maxRotation: number = (0.5 * Math.PI);
-  static get maxRotationSquared(): number { return Settings.maxRotation * Settings.maxRotation; }
+  static maxRotation: number = (0.5 * math_PI);
 
   /**
    * This scale factor controls how fast overlap is resolved. Ideally this would
@@ -181,12 +187,91 @@ export default class Settings {
    * A body cannot sleep if its linear velocity is above this tolerance.
    */
   static linearSleepTolerance: number = 0.01;
-  static get linearSleepToleranceSqr(): number { return Math.pow(Settings.linearSleepTolerance, 2); }
 
   /**
    * A body cannot sleep if its angular velocity is above this tolerance.
    */
-  static angularSleepTolerance: number = (2.0 / 180.0 * Math.PI);
-  static get angularSleepToleranceSqr(): number { return Math.pow(Settings.angularSleepTolerance, 2); }
+  static angularSleepTolerance: number = (2.0 / 180.0 * math_PI);
+}
 
+/** @internal */
+export class SettingsInternal {
+  static get maxManifoldPoints() {
+    return Settings.maxManifoldPoints;
+  }
+  static get maxPolygonVertices() {
+    return Settings.maxPolygonVertices;
+  }
+  static get aabbExtension() {
+    return Settings.aabbExtension * Settings.lengthUnitsPerMeter;
+  }
+  static get aabbMultiplier() {
+    return Settings.aabbMultiplier;
+  }
+  static get linearSlop() {
+    return Settings.linearSlop * Settings.lengthUnitsPerMeter;
+  }
+  static get linearSlopSquared() {
+    return Settings.linearSlop * Settings.lengthUnitsPerMeter * Settings.linearSlop * Settings.lengthUnitsPerMeter;
+  }
+  static get angularSlop() {
+    return Settings.angularSlop;
+  }
+  static get polygonRadius() {
+    return 2.0 * Settings.linearSlop;
+  }
+  static get maxSubSteps() {
+    return Settings.maxSubSteps;
+  }
+  static get maxTOIContacts() {
+    return Settings.maxTOIContacts;
+  }
+  static get maxTOIIterations() {
+    return Settings.maxTOIIterations;
+  }
+  static get maxDistanceIterations() {
+    return Settings.maxDistanceIterations;
+  }
+  static get velocityThreshold() {
+    return Settings.velocityThreshold * Settings.lengthUnitsPerMeter;
+  }
+  static get maxLinearCorrection() {
+    return Settings.maxLinearCorrection * Settings.lengthUnitsPerMeter;
+  }
+  static get maxAngularCorrection() {
+    return Settings.maxAngularCorrection;
+  }
+  static get maxTranslation() {
+    return Settings.maxTranslation * Settings.lengthUnitsPerMeter;
+  }
+  static get maxTranslationSquared() {
+    return Settings.maxTranslation * Settings.lengthUnitsPerMeter * Settings.maxTranslation * Settings.lengthUnitsPerMeter;
+  }
+  static get maxRotation() {
+    return Settings.maxRotation;
+  }
+  static get maxRotationSquared() {
+    return Settings.maxRotation * Settings.maxRotation;
+  }
+  static get baumgarte() {
+    return Settings.baumgarte;
+  }
+  static get toiBaugarte() {
+    return Settings.toiBaugarte;
+  }
+  static get timeToSleep() {
+    return Settings.timeToSleep;
+  }
+  static get linearSleepTolerance() {
+    return Settings.linearSleepTolerance * Settings.lengthUnitsPerMeter;
+  }
+  static get linearSleepToleranceSqr() {
+    return Settings.linearSleepTolerance * Settings.lengthUnitsPerMeter * Settings.linearSleepTolerance * Settings.lengthUnitsPerMeter;
+  }
+  static get angularSleepTolerance() {
+    return Settings.angularSleepTolerance;
+  }
+  static get angularSleepToleranceSqr() {
+    return Settings.angularSleepTolerance * Settings.angularSleepTolerance;
+  }
 }

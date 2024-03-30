@@ -4,6 +4,8 @@
 
 Contact ids to facilitate warm starting.
 
+ContactFeature: The features that intersect to form the contact point.
+
 ## Hierarchy
 
 * **ContactID**
@@ -12,48 +14,102 @@ Contact ids to facilitate warm starting.
 
 ### Properties
 
-* [cf](contactid.md#cf)
-
-### Accessors
-
+* [indexA](contactid.md#indexa)
+* [indexB](contactid.md#indexb)
 * [key](contactid.md#key)
+* [typeA](contactid.md#typea)
+* [typeB](contactid.md#typeb)
 
 ### Methods
 
+* [recycle](contactid.md#recycle)
 * [set](contactid.md#set)
+* [setFeatures](contactid.md#setfeatures)
+* [swapFeatures](contactid.md#swapfeatures)
 
 ## Properties
 
-###  cf
+###  indexA
 
-• **cf**: *[ContactFeature](contactfeature.md)* = new ContactFeature()
+• **indexA**: *number* = -1
 
-*Defined in [src/collision/Manifold.ts:185](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L185)*
+ContactFeature index on shapeA
 
-## Accessors
+___
+
+###  indexB
+
+• **indexB**: *number* = -1
+
+ContactFeature index on shapeB
+
+___
 
 ###  key
 
-• **get key**(): *number*
-
-*Defined in [src/collision/Manifold.ts:190](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L190)*
+• **key**: *number* = -1
 
 Used to quickly compare contact ids.
 
-**Returns:** *number*
+___
+
+###  typeA
+
+• **typeA**: *[ContactFeatureType](../enums/contactfeaturetype.md)* = ContactFeatureType.e_unset
+
+ContactFeature type on shapeA
+
+___
+
+###  typeB
+
+• **typeB**: *[ContactFeatureType](../enums/contactfeaturetype.md)* = ContactFeatureType.e_unset
+
+ContactFeature type on shapeB
 
 ## Methods
 
+###  recycle
+
+▸ **recycle**(): *void*
+
+**Returns:** *void*
+
+___
+
 ###  set
 
-▸ **set**(`o`: [ContactID](contactid.md)): *void*
-
-*Defined in [src/collision/Manifold.ts:194](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L194)*
+▸ **set**(`that`: [ContactID](contactid.md)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`o` | [ContactID](contactid.md) |
+`that` | [ContactID](contactid.md) |
+
+**Returns:** *void*
+
+___
+
+###  setFeatures
+
+▸ **setFeatures**(`indexA`: number, `typeA`: [ContactFeatureType](../enums/contactfeaturetype.md), `indexB`: number, `typeB`: [ContactFeatureType](../enums/contactfeaturetype.md)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`indexA` | number |
+`typeA` | [ContactFeatureType](../enums/contactfeaturetype.md) |
+`indexB` | number |
+`typeB` | [ContactFeatureType](../enums/contactfeaturetype.md) |
+
+**Returns:** *void*
+
+___
+
+###  swapFeatures
+
+▸ **swapFeatures**(): *void*
 
 **Returns:** *void*

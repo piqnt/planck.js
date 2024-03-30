@@ -29,9 +29,10 @@
 * [isValid](aabb.md#isvalid)
 * [rayCast](aabb.md#raycast)
 * [set](aabb.md#set)
-* [toString](aabb.md#tostring)
 * [areEqual](aabb.md#static-areequal)
 * [assert](aabb.md#static-assert)
+* [combinePoints](aabb.md#static-combinepoints)
+* [combinedPerimeter](aabb.md#static-combinedperimeter)
 * [diff](aabb.md#static-diff)
 * [extend](aabb.md#static-extend)
 * [isValid](aabb.md#static-isvalid)
@@ -41,16 +42,14 @@
 
 ###  constructor
 
-\+ **new AABB**(`lower?`: [Vec2](vec2.md), `upper?`: [Vec2](vec2.md)): *[AABB](aabb.md)*
-
-*Defined in [src/collision/AABB.ts:56](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L56)*
+\+ **new AABB**(`lower?`: [Vec2Value](../interfaces/vec2value.md), `upper?`: [Vec2Value](../interfaces/vec2value.md)): *[AABB](aabb.md)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`lower?` | [Vec2](vec2.md) |
-`upper?` | [Vec2](vec2.md) |
+`lower?` | [Vec2Value](../interfaces/vec2value.md) |
+`upper?` | [Vec2Value](../interfaces/vec2value.md) |
 
 **Returns:** *[AABB](aabb.md)*
 
@@ -58,25 +57,19 @@ Name | Type |
 
 ###  lowerBound
 
-• **lowerBound**: *[Vec2](vec2.md)*
-
-*Defined in [src/collision/AABB.ts:55](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L55)*
+• **lowerBound**: *Vec2*
 
 ___
 
 ###  upperBound
 
-• **upperBound**: *[Vec2](vec2.md)*
-
-*Defined in [src/collision/AABB.ts:56](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L56)*
+• **upperBound**: *Vec2*
 
 ## Methods
 
 ###  combine
 
-▸ **combine**(`a`: [AABB](aabb.md), `b?`: [AABB](aabb.md)): *void*
-
-*Defined in [src/collision/AABB.ts:121](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L121)*
+▸ **combine**(`a`: [AABBValue](../interfaces/aabbvalue.md), `b?`: [AABBValue](../interfaces/aabbvalue.md)): *void*
 
 Combine one or two AABB into this one.
 
@@ -84,8 +77,8 @@ Combine one or two AABB into this one.
 
 Name | Type |
 ------ | ------ |
-`a` | [AABB](aabb.md) |
-`b?` | [AABB](aabb.md) |
+`a` | [AABBValue](../interfaces/aabbvalue.md) |
+`b?` | [AABBValue](../interfaces/aabbvalue.md) |
 
 **Returns:** *void*
 
@@ -93,16 +86,14 @@ ___
 
 ###  combinePoints
 
-▸ **combinePoints**(`a`: [Vec2](vec2.md), `b`: [Vec2](vec2.md)): *void*
-
-*Defined in [src/collision/AABB.ts:138](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L138)*
+▸ **combinePoints**(`a`: [Vec2Value](../interfaces/vec2value.md), `b`: [Vec2Value](../interfaces/vec2value.md)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`a` | [Vec2](vec2.md) |
-`b` | [Vec2](vec2.md) |
+`a` | [Vec2Value](../interfaces/vec2value.md) |
+`b` | [Vec2Value](../interfaces/vec2value.md) |
 
 **Returns:** *void*
 
@@ -110,15 +101,13 @@ ___
 
 ###  contains
 
-▸ **contains**(`aabb`: [AABB](aabb.md)): *boolean*
-
-*Defined in [src/collision/AABB.ts:148](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L148)*
+▸ **contains**(`aabb`: [AABBValue](../interfaces/aabbvalue.md)): *boolean*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`aabb` | [AABB](aabb.md) |
+`aabb` | [AABBValue](../interfaces/aabbvalue.md) |
 
 **Returns:** *boolean*
 
@@ -127,8 +116,6 @@ ___
 ###  extend
 
 ▸ **extend**(`value`: number): *[AABB](aabb.md)*
-
-*Defined in [src/collision/AABB.ts:157](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L157)*
 
 **Parameters:**
 
@@ -142,33 +129,27 @@ ___
 
 ###  getCenter
 
-▸ **getCenter**(): *[Vec2](vec2.md)*
-
-*Defined in [src/collision/AABB.ts:100](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L100)*
+▸ **getCenter**(): *Vec2*
 
 Get the center of the AABB.
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ###  getExtents
 
-▸ **getExtents**(): *[Vec2](vec2.md)*
-
-*Defined in [src/collision/AABB.ts:107](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L107)*
+▸ **getExtents**(): *Vec2*
 
 Get the extents of the AABB (half-widths).
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ###  getPerimeter
 
 ▸ **getPerimeter**(): *number*
-
-*Defined in [src/collision/AABB.ts:114](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L114)*
 
 Get the perimeter length.
 
@@ -180,8 +161,6 @@ ___
 
 ▸ **isValid**(): *boolean*
 
-*Defined in [src/collision/AABB.ts:79](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L79)*
-
 Verify that the bounds are sorted.
 
 **Returns:** *boolean*
@@ -191,8 +170,6 @@ ___
 ###  rayCast
 
 ▸ **rayCast**(`output`: [RayCastOutput](../interfaces/raycastoutput.md), `input`: [RayCastInput](../interfaces/raycastinput.md)): *boolean*
-
-*Defined in [src/collision/AABB.ts:199](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L199)*
 
 **Parameters:**
 
@@ -207,42 +184,28 @@ ___
 
 ###  set
 
-▸ **set**(`aabb`: [AABB](aabb.md)): *void*
-
-*Defined in [src/collision/AABB.ts:143](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L143)*
+▸ **set**(`aabb`: [AABBValue](../interfaces/aabbvalue.md)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`aabb` | [AABB](aabb.md) |
+`aabb` | [AABBValue](../interfaces/aabbvalue.md) |
 
 **Returns:** *void*
 
 ___
 
-###  toString
-
-▸ **toString**(): *string*
-
-*Defined in [src/collision/AABB.ts:260](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L260)*
-
-**Returns:** *string*
-
-___
-
 ### `Static` areEqual
 
-▸ **areEqual**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *boolean*
-
-*Defined in [src/collision/AABB.ts:182](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L182)*
+▸ **areEqual**(`a`: [AABBValue](../interfaces/aabbvalue.md), `b`: [AABBValue](../interfaces/aabbvalue.md)): *boolean*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`a` | [AABB](aabb.md) |
-`b` | [AABB](aabb.md) |
+`a` | [AABBValue](../interfaces/aabbvalue.md) |
+`b` | [AABBValue](../interfaces/aabbvalue.md) |
 
 **Returns:** *boolean*
 
@@ -251,8 +214,6 @@ ___
 ### `Static` assert
 
 ▸ **assert**(`o`: any): *void*
-
-*Defined in [src/collision/AABB.ts:89](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L89)*
 
 **Parameters:**
 
@@ -264,18 +225,47 @@ Name | Type |
 
 ___
 
-### `Static` diff
+### `Static` combinePoints
 
-▸ **diff**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *number*
-
-*Defined in [src/collision/AABB.ts:186](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L186)*
+▸ **combinePoints**(`out`: [AABBValue](../interfaces/aabbvalue.md), `a`: [Vec2Value](../interfaces/vec2value.md), `b`: [Vec2Value](../interfaces/vec2value.md)): *[AABBValue](../interfaces/aabbvalue.md)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`a` | [AABB](aabb.md) |
-`b` | [AABB](aabb.md) |
+`out` | [AABBValue](../interfaces/aabbvalue.md) |
+`a` | [Vec2Value](../interfaces/vec2value.md) |
+`b` | [Vec2Value](../interfaces/vec2value.md) |
+
+**Returns:** *[AABBValue](../interfaces/aabbvalue.md)*
+
+___
+
+### `Static` combinedPerimeter
+
+▸ **combinedPerimeter**(`a`: [AABBValue](../interfaces/aabbvalue.md), `b`: [AABBValue](../interfaces/aabbvalue.md)): *number*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`a` | [AABBValue](../interfaces/aabbvalue.md) |
+`b` | [AABBValue](../interfaces/aabbvalue.md) |
+
+**Returns:** *number*
+
+___
+
+### `Static` diff
+
+▸ **diff**(`a`: [AABBValue](../interfaces/aabbvalue.md), `b`: [AABBValue](../interfaces/aabbvalue.md)): *number*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`a` | [AABBValue](../interfaces/aabbvalue.md) |
+`b` | [AABBValue](../interfaces/aabbvalue.md) |
 
 **Returns:** *number*
 
@@ -283,32 +273,28 @@ ___
 
 ### `Static` extend
 
-▸ **extend**(`aabb`: [AABB](aabb.md), `value`: number): *void*
-
-*Defined in [src/collision/AABB.ts:162](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L162)*
+▸ **extend**(`out`: [AABBValue](../interfaces/aabbvalue.md), `value`: number): *[AABBValue](../interfaces/aabbvalue.md)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`aabb` | [AABB](aabb.md) |
+`out` | [AABBValue](../interfaces/aabbvalue.md) |
 `value` | number |
 
-**Returns:** *void*
+**Returns:** *[AABBValue](../interfaces/aabbvalue.md)*
 
 ___
 
 ### `Static` isValid
 
-▸ **isValid**(`aabb`: any): *boolean*
-
-*Defined in [src/collision/AABB.ts:83](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L83)*
+▸ **isValid**(`obj`: any): *boolean*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`aabb` | any |
+`obj` | any |
 
 **Returns:** *boolean*
 
@@ -316,15 +302,13 @@ ___
 
 ### `Static` testOverlap
 
-▸ **testOverlap**(`a`: [AABB](aabb.md), `b`: [AABB](aabb.md)): *boolean*
-
-*Defined in [src/collision/AABB.ts:169](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L169)*
+▸ **testOverlap**(`a`: [AABBValue](../interfaces/aabbvalue.md), `b`: [AABBValue](../interfaces/aabbvalue.md)): *boolean*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`a` | [AABB](aabb.md) |
-`b` | [AABB](aabb.md) |
+`a` | [AABBValue](../interfaces/aabbvalue.md) |
+`b` | [AABBValue](../interfaces/aabbvalue.md) |
 
 **Returns:** *boolean*

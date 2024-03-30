@@ -22,27 +22,32 @@
  * SOFTWARE.
  */
 
-import common from '../../util/common';
-import options from '../../util/options';
-import Settings from '../../Settings';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Vec3 from '../../common/Vec3';
-import Mat22 from '../../common/Mat22';
-import Mat33 from '../../common/Mat33';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { SettingsInternal as Settings } from '../../Settings';
+import { clamp } from '../../common/Math';
+import { Vec2, Vec2Value } from '../../common/Vec2';
+import { Vec3 } from '../../common/Vec3';
+import { Mat22 } from '../../common/Mat22';
+import { Mat33 } from '../../common/Mat33';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const math_abs = Math.abs;
+/** @internal */ const math_max = Math.max;
+/** @internal */ const math_min = Math.min;
 
 
-const inactiveLimit = 0;
-const atLowerLimit = 1;
-const atUpperLimit = 2;
-const equalLimits = 3;
+/** @internal */ enum LimitState {
+  inactiveLimit = 0,
+  atLowerLimit = 1,
+  atUpperLimit = 2,
+  equalLimits = 3,   
+}
 
 /**
  * Prismatic joint definition. This requires defining a line of motion using an
@@ -78,6 +83,7 @@ export interface PrismaticJointOpt extends JointOpt {
    */
   motorSpeed?: number;
 }
+
 /**
  * Prismatic joint definition. This requires defining a line of motion using an
  * axis and an anchor point. The definition uses local anchor points and a local
@@ -90,23 +96,26 @@ export interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  localAnchorA: Vec2;
+  localAnchorA: Vec2Value;
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  localAnchorB: Vec2;
+  localAnchorB: Vec2Value;
   /**
    * The local translation unit axis in bodyA.
    */
-  localAxisA: Vec2;
+  localAxisA: Vec2Value;
   /**
    * referenceAngle The constrained angle between the bodies:
    * bodyB_angle - bodyA_angle.
    */
   referenceAngle: number;
+
+  /** @internal */ anchorA?: Vec2Value;
+  /** @internal */ anchorB?: Vec2Value;
 }
 
-const DEFAULTS = {
+/** @internal */ const DEFAULTS = {
   enableLimit : false,
   lowerTranslation : 0.0,
   upperTranslation : 0.0,
@@ -121,7 +130,7 @@ const DEFAULTS = {
  * joint limit to restrict the range of motion and a joint motor to drive the
  * motion or to model joint friction.
  */
-export default class PrismaticJoint extends Joint {
+export class PrismaticJoint extends Joint {
   static TYPE = 'prismatic-joint' as const;
 
   /** @internal */ m_type: 'prismatic-joint';
@@ -156,10 +165,10 @@ export default class PrismaticJoint extends Joint {
   /** @internal */ m_K: Mat33;
 
   constructor(def: PrismaticJointDef);
-  constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2, axis: Vec2);
-  constructor(def: PrismaticJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2, axis?: Vec2) {
+  constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
+  constructor(def: PrismaticJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value, axis?: Vec2Value) {
     // @ts-ignore
-    if (!(this instanceof PrismaticJoint)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof PrismaticJoint)) {
       return new PrismaticJoint(def, bodyA, bodyB, anchor, axis);
     }
 
@@ -175,7 +184,7 @@ export default class PrismaticJoint extends Joint {
     this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0));
     this.m_localXAxisA.normalize();
     this.m_localYAxisA = Vec2.crossNumVec2(1.0, this.m_localXAxisA);
-    this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
+    this.m_referenceAngle = Number.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
 
     this.m_impulse = new Vec3();
     this.m_motorMass = 0.0;
@@ -187,7 +196,7 @@ export default class PrismaticJoint extends Joint {
     this.m_motorSpeed = def.motorSpeed;
     this.m_enableLimit = def.enableLimit;
     this.m_enableMotor = def.enableMotor;
-    this.m_limitState = inactiveLimit;
+    this.m_limitState = LimitState.inactiveLimit;
 
     this.m_axis = Vec2.zero();
     this.m_perp = Vec2.zero();
@@ -300,29 +309,42 @@ export default class PrismaticJoint extends Joint {
     return joint;
   }
 
-  /** @internal */
-  _setAnchors(def: {
-    anchorA?: Vec2,
-    localAnchorA?: Vec2,
-    anchorB?: Vec2,
-    localAnchorB?: Vec2,
-    localAxisA?: Vec2,
-  }): void {
+  /** @hidden */
+  _reset(def: Partial<PrismaticJointDef>): void {
     if (def.anchorA) {
       this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
       this.m_localAnchorA.setVec2(def.localAnchorA);
     }
-
     if (def.anchorB) {
       this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
       this.m_localAnchorB.setVec2(def.localAnchorB);
     }
-
     if (def.localAxisA) {
       this.m_localXAxisA.setVec2(def.localAxisA);
       this.m_localYAxisA.setVec2(Vec2.crossNumVec2(1.0, def.localAxisA));
+    }
+    if (Number.isFinite(def.referenceAngle)) {
+      this.m_referenceAngle = def.referenceAngle;
+    }
+    if (typeof def.enableLimit !== 'undefined') {
+      this.m_enableLimit = !!def.enableLimit;
+    }
+    if (Number.isFinite(def.lowerTranslation)) {
+      this.m_lowerTranslation = def.lowerTranslation;
+    }
+    if (Number.isFinite(def.upperTranslation)) {
+      this.m_upperTranslation = def.upperTranslation;
+    }
+    if (typeof def.enableMotor !== 'undefined') {
+      this.m_enableMotor = !!def.enableMotor;
+    }
+    if (Number.isFinite(def.maxMotorForce)) {
+      this.m_maxMotorForce = def.maxMotorForce;
+    }
+    if (Number.isFinite(def.motorSpeed)) {
+      this.m_motorSpeed = def.motorSpeed;
     }
   }
 
@@ -374,20 +396,19 @@ export default class PrismaticJoint extends Joint {
     const bA = this.m_bodyA;
     const bB = this.m_bodyB;
 
-    const rA = Rot.mulVec2(bA.m_xf.q, Vec2.sub(this.m_localAnchorA, bA.m_sweep.localCenter)); // Vec2
-    const rB = Rot.mulVec2(bB.m_xf.q, Vec2.sub(this.m_localAnchorB, bB.m_sweep.localCenter)); // Vec2
-    const p1 = Vec2.add(bA.m_sweep.c, rA); // Vec2
-    const p2 = Vec2.add(bB.m_sweep.c, rB); // Vec2
-    const d = Vec2.sub(p2, p1); // Vec2
-    const axis = Rot.mulVec2(bA.m_xf.q, this.m_localXAxisA); // Vec2
+    const rA = Rot.mulVec2(bA.m_xf.q, Vec2.sub(this.m_localAnchorA, bA.m_sweep.localCenter));
+    const rB = Rot.mulVec2(bB.m_xf.q, Vec2.sub(this.m_localAnchorB, bB.m_sweep.localCenter));
+    const p1 = Vec2.add(bA.m_sweep.c, rA);
+    const p2 = Vec2.add(bB.m_sweep.c, rB);
+    const d = Vec2.sub(p2, p1);
+    const axis = Rot.mulVec2(bA.m_xf.q, this.m_localXAxisA);
 
-    const vA = bA.m_linearVelocity; // Vec2
-    const vB = bB.m_linearVelocity; // Vec2
-    const wA = bA.m_angularVelocity; // float
-    const wB = bB.m_angularVelocity; // float
+    const vA = bA.m_linearVelocity;
+    const vB = bB.m_linearVelocity;
+    const wA = bA.m_angularVelocity;
+    const wB = bB.m_angularVelocity;
 
-    const speed = Vec2.dot(d, Vec2.crossNumVec2(wA, axis))
-        + Vec2.dot(axis, Vec2.sub(Vec2.addCrossNumVec2(vB, wB, rB), Vec2.addCrossNumVec2(vA, wA, rA))); // float
+    const speed = Vec2.dot(d, Vec2.crossNumVec2(wA, axis)) + Vec2.dot(axis, Vec2.sub(Vec2.addCrossNumVec2(vB, wB, rB), Vec2.addCrossNumVec2(vA, wA, rA)));
     return speed;
   }
 
@@ -428,7 +449,7 @@ export default class PrismaticJoint extends Joint {
    * Set the joint limits, usually in meters.
    */
   setLimits(lower: number, upper: number): void {
-    _ASSERT && common.assert(lower <= upper);
+    _ASSERT && console.assert(lower <= upper);
     if (lower != this.m_lowerTranslation || upper != this.m_upperTranslation) {
       this.m_bodyA.setAwake(true);
       this.m_bodyB.setAwake(true);
@@ -449,6 +470,7 @@ export default class PrismaticJoint extends Joint {
    * Enable/disable the joint motor.
    */
   enableMotor(flag: boolean): void {
+    if (flag == this.m_enableMotor) return;
     this.m_bodyA.setAwake(true);
     this.m_bodyB.setAwake(true);
     this.m_enableMotor = flag;
@@ -458,6 +480,7 @@ export default class PrismaticJoint extends Joint {
    * Set the motor speed, usually in meters per second.
    */
   setMotorSpeed(speed: number): void {
+    if (speed == this.m_motorSpeed) return;
     this.m_bodyA.setAwake(true);
     this.m_bodyB.setAwake(true);
     this.m_motorSpeed = speed;
@@ -467,6 +490,7 @@ export default class PrismaticJoint extends Joint {
    * Set the maximum motor force, usually in N.
    */
   setMaxMotorForce(force: number): void {
+    if (force == this.m_maxMotorForce) return;
     this.m_bodyA.setAwake(true);
     this.m_bodyB.setAwake(true);
     this.m_maxMotorForce = force;
@@ -592,29 +616,29 @@ export default class PrismaticJoint extends Joint {
     // Compute motor and limit terms.
     if (this.m_enableLimit) {
 
-      const jointTranslation = Vec2.dot(this.m_axis, d); // float
-      if (Math.abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * Settings.linearSlop) {
-        this.m_limitState = equalLimits;
+      const jointTranslation = Vec2.dot(this.m_axis, d);
+      if (math_abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * Settings.linearSlop) {
+        this.m_limitState = LimitState.equalLimits;
 
       } else if (jointTranslation <= this.m_lowerTranslation) {
-        if (this.m_limitState != atLowerLimit) {
-          this.m_limitState = atLowerLimit;
+        if (this.m_limitState != LimitState.atLowerLimit) {
+          this.m_limitState = LimitState.atLowerLimit;
           this.m_impulse.z = 0.0;
         }
 
       } else if (jointTranslation >= this.m_upperTranslation) {
-        if (this.m_limitState != atUpperLimit) {
-          this.m_limitState = atUpperLimit;
+        if (this.m_limitState != LimitState.atUpperLimit) {
+          this.m_limitState = LimitState.atUpperLimit;
           this.m_impulse.z = 0.0;
         }
 
       } else {
-        this.m_limitState = inactiveLimit;
+        this.m_limitState = LimitState.inactiveLimit;
         this.m_impulse.z = 0.0;
       }
 
     } else {
-      this.m_limitState = inactiveLimit;
+      this.m_limitState = LimitState.inactiveLimit;
       this.m_impulse.z = 0.0;
     }
 
@@ -662,13 +686,13 @@ export default class PrismaticJoint extends Joint {
     const iB = this.m_invIB;
 
     // Solve linear motor constraint.
-    if (this.m_enableMotor && this.m_limitState != equalLimits) {
+    if (this.m_enableMotor && this.m_limitState != LimitState.equalLimits) {
       const Cdot = Vec2.dot(this.m_axis, Vec2.sub(vB, vA)) + this.m_a2 * wB
           - this.m_a1 * wA;
       let impulse = this.m_motorMass * (this.m_motorSpeed - Cdot);
       const oldImpulse = this.m_motorImpulse;
       const maxImpulse = step.dt * this.m_maxMotorForce;
-      this.m_motorImpulse = Math.clamp(this.m_motorImpulse + impulse,
+      this.m_motorImpulse = clamp(this.m_motorImpulse + impulse,
           -maxImpulse, maxImpulse);
       impulse = this.m_motorImpulse - oldImpulse;
 
@@ -688,7 +712,7 @@ export default class PrismaticJoint extends Joint {
     Cdot1.x -= Vec2.dot(this.m_perp, vA) + this.m_s1 * wA;
     Cdot1.y = wB - wA;
 
-    if (this.m_enableLimit && this.m_limitState != inactiveLimit) {
+    if (this.m_enableLimit && this.m_limitState != LimitState.inactiveLimit) {
       // Solve prismatic and limit constraint in block form.
       let Cdot2 = 0;
       Cdot2 += Vec2.dot(this.m_axis, vB) + this.m_a2 * wB;
@@ -697,27 +721,27 @@ export default class PrismaticJoint extends Joint {
       const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
 
       const f1 = Vec3.clone(this.m_impulse);
-      let df = this.m_K.solve33(Vec3.neg(Cdot)); // Vec3
+      let df = this.m_K.solve33(Vec3.neg(Cdot));
       this.m_impulse.add(df);
 
-      if (this.m_limitState == atLowerLimit) {
-        this.m_impulse.z = Math.max(this.m_impulse.z, 0.0);
-      } else if (this.m_limitState == atUpperLimit) {
-        this.m_impulse.z = Math.min(this.m_impulse.z, 0.0);
+      if (this.m_limitState == LimitState.atLowerLimit) {
+        this.m_impulse.z = math_max(this.m_impulse.z, 0.0);
+      } else if (this.m_limitState == LimitState.atUpperLimit) {
+        this.m_impulse.z = math_min(this.m_impulse.z, 0.0);
       }
 
       // f2(1:2) = invK(1:2,1:2) * (-Cdot(1:2) - K(1:2,3) * (f2(3) - f1(3))) +
       // f1(1:2)
-      const b = Vec2.combine(-1, Cdot1, -(this.m_impulse.z - f1.z), Vec2.neo(this.m_K.ez.x, this.m_K.ez.y)); // Vec2
-      const f2r = Vec2.add(this.m_K.solve22(b), Vec2.neo(f1.x, f1.y)); // Vec2
+      const b = Vec2.combine(-1, Cdot1, -(this.m_impulse.z - f1.z), Vec2.neo(this.m_K.ez.x, this.m_K.ez.y));
+      const f2r = Vec2.add(this.m_K.solve22(b), Vec2.neo(f1.x, f1.y));
       this.m_impulse.x = f2r.x;
       this.m_impulse.y = f2r.y;
 
       df = Vec3.sub(this.m_impulse, f1);
 
-      const P = Vec2.combine(df.x, this.m_perp, df.z, this.m_axis); // Vec2
-      const LA = df.x * this.m_s1 + df.y + df.z * this.m_a1; // float
-      const LB = df.x * this.m_s2 + df.y + df.z * this.m_a2; // float
+      const P = Vec2.combine(df.x, this.m_perp, df.z, this.m_axis);
+      const LA = df.x * this.m_s1 + df.y + df.z * this.m_a1;
+      const LB = df.x * this.m_s2 + df.y + df.z * this.m_a2;
 
       vA.subMul(mA, P);
       wA -= iA * LA;
@@ -726,13 +750,13 @@ export default class PrismaticJoint extends Joint {
       wB += iB * LB;
     } else {
       // Limit is inactive, just solve the prismatic constraint in block form.
-      const df = this.m_K.solve22(Vec2.neg(Cdot1)); // Vec2
+      const df = this.m_K.solve22(Vec2.neg(Cdot1));
       this.m_impulse.x += df.x;
       this.m_impulse.y += df.y;
 
-      const P = Vec2.mulNumVec2(df.x, this.m_perp); // Vec2
-      const LA = df.x * this.m_s1 + df.y; // float
-      const LB = df.x * this.m_s2 + df.y; // float
+      const P = Vec2.mulNumVec2(df.x, this.m_perp);
+      const LA = df.x * this.m_s1 + df.y;
+      const LB = df.x * this.m_s2 + df.y;
 
       vA.subMul(mA, P);
       wA -= iA * LA;
@@ -765,43 +789,43 @@ export default class PrismaticJoint extends Joint {
     const iB = this.m_invIB;
 
     // Compute fresh Jacobians
-    const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA)); // Vec2
-    const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB)); // Vec2
-    const d = Vec2.sub(Vec2.add(cB, rB), Vec2.add(cA, rA)); // Vec2
+    const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+    const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    const d = Vec2.sub(Vec2.add(cB, rB), Vec2.add(cA, rA));
 
-    const axis = Rot.mulVec2(qA, this.m_localXAxisA); // Vec2
-    const a1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), axis); // float
-    const a2 = Vec2.crossVec2Vec2(rB, axis); // float
-    const perp = Rot.mulVec2(qA, this.m_localYAxisA); // Vec2
+    const axis = Rot.mulVec2(qA, this.m_localXAxisA);
+    const a1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), axis);
+    const a2 = Vec2.crossVec2Vec2(rB, axis);
+    const perp = Rot.mulVec2(qA, this.m_localYAxisA);
 
-    const s1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), perp); // float
-    const s2 = Vec2.crossVec2Vec2(rB, perp); // float
+    const s1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), perp);
+    const s2 = Vec2.crossVec2Vec2(rB, perp);
 
     let impulse = new Vec3();
-    const C1 = Vec2.zero(); // Vec2
+    const C1 = Vec2.zero();
     C1.x = Vec2.dot(perp, d);
     C1.y = aB - aA - this.m_referenceAngle;
 
-    let linearError = Math.abs(C1.x); // float
-    const angularError = Math.abs(C1.y); // float
+    let linearError = math_abs(C1.x);
+    const angularError = math_abs(C1.y);
 
     const linearSlop = Settings.linearSlop;
     const maxLinearCorrection = Settings.maxLinearCorrection;
 
     let active = false; // bool
-    let C2 = 0.0; // float
+    let C2 = 0.0;
     if (this.m_enableLimit) {
 
-      const translation = Vec2.dot(axis, d); // float
-      if (Math.abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * linearSlop) {
+      const translation = Vec2.dot(axis, d);
+      if (math_abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * linearSlop) {
         // Prevent large angular corrections
-        C2 = Math.clamp(translation, -maxLinearCorrection, maxLinearCorrection);
-        linearError = Math.max(linearError, Math.abs(translation));
+        C2 = clamp(translation, -maxLinearCorrection, maxLinearCorrection);
+        linearError = math_max(linearError, math_abs(translation));
         active = true;
 
       } else if (translation <= this.m_lowerTranslation) {
         // Prevent large linear corrections and allow some slop.
-        C2 = Math.clamp(translation - this.m_lowerTranslation + linearSlop,
+        C2 = clamp(translation - this.m_lowerTranslation + linearSlop,
             -maxLinearCorrection, 0.0);
         linearError = Math
             .max(linearError, this.m_lowerTranslation - translation);
@@ -809,7 +833,7 @@ export default class PrismaticJoint extends Joint {
 
       } else if (translation >= this.m_upperTranslation) {
         // Prevent large linear corrections and allow some slop.
-        C2 = Math.clamp(translation - this.m_upperTranslation - linearSlop, 0.0,
+        C2 = clamp(translation - this.m_upperTranslation - linearSlop, 0.0,
             maxLinearCorrection);
         linearError = Math
             .max(linearError, translation - this.m_upperTranslation);
@@ -818,16 +842,16 @@ export default class PrismaticJoint extends Joint {
     }
 
     if (active) {
-      const k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2; // float
-      const k12 = iA * s1 + iB * s2; // float
-      const k13 = iA * s1 * a1 + iB * s2 * a2; // float
-      let k22 = iA + iB; // float
+      const k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2;
+      const k12 = iA * s1 + iB * s2;
+      const k13 = iA * s1 * a1 + iB * s2 * a2;
+      let k22 = iA + iB;
       if (k22 == 0.0) {
         // For fixed rotation
         k22 = 1.0;
       }
-      const k23 = iA * a1 + iB * a2; // float
-      const k33 = mA + mB + iA * a1 * a1 + iB * a2 * a2; // float
+      const k23 = iA * a1 + iB * a2;
+      const k33 = mA + mB + iA * a1 * a1 + iB * a2 * a2;
 
       const K = new Mat33();
       K.ex.set(k11, k12, k13);
@@ -841,9 +865,9 @@ export default class PrismaticJoint extends Joint {
 
       impulse = K.solve33(Vec3.neg(C));
     } else {
-      const k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2; // float
-      const k12 = iA * s1 + iB * s2; // float
-      let k22 = iA + iB; // float
+      const k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2;
+      const k12 = iA * s1 + iB * s2;
+      let k22 = iA + iB;
       if (k22 == 0.0) {
         k22 = 1.0;
       }
@@ -852,15 +876,15 @@ export default class PrismaticJoint extends Joint {
       K.ex.setNum(k11, k12);
       K.ey.setNum(k12, k22);
 
-      const impulse1 = K.solve(Vec2.neg(C1)); // Vec2
+      const impulse1 = K.solve(Vec2.neg(C1));
       impulse.x = impulse1.x;
       impulse.y = impulse1.y;
       impulse.z = 0.0;
     }
 
-    const P = Vec2.combine(impulse.x, perp, impulse.z, axis); // Vec2
-    const LA = impulse.x * s1 + impulse.y + impulse.z * a1; // float
-    const LB = impulse.x * s2 + impulse.y + impulse.z * a2; // float
+    const P = Vec2.combine(impulse.x, perp, impulse.z, axis);
+    const LA = impulse.x * s1 + impulse.y + impulse.z * a1;
+    const LB = impulse.x * s2 + impulse.y + impulse.z * a2;
 
     cA.subMul(mA, P);
     aA -= iA * LA;

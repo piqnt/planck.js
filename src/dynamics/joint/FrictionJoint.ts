@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-import common from '../../util/common';
-import options from '../../util/options';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Mat22 from '../../common/Mat22';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { clamp } from '../../common/Math';
+import { Vec2, Vec2Value } from '../../common/Vec2';
+import { Mat22 } from '../../common/Mat22';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -49,6 +49,7 @@ export interface FrictionJointOpt extends JointOpt {
    */
   maxTorque?: number;
 }
+
 /**
  * Friction joint definition.
  */
@@ -56,14 +57,17 @@ export interface FrictionJointDef extends JointDef, FrictionJointOpt {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  localAnchorA: Vec2;
+  localAnchorA: Vec2Value;
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  localAnchorB: Vec2;
+  localAnchorB: Vec2Value;
+
+  /** @internal */ anchorA?: Vec2Value;
+  /** @internal */ anchorB?: Vec2Value;
 }
 
-const DEFAULTS = {
+/** @internal */ const DEFAULTS = {
   maxForce : 0.0,
   maxTorque : 0.0,
 };
@@ -71,10 +75,8 @@ const DEFAULTS = {
 /**
  * Friction joint. This is used for top-down friction. It provides 2D
  * translational friction and angular friction.
- *
- * @param anchor Anchor in global coordination.
  */
-export default class FrictionJoint extends Joint {
+export class FrictionJoint extends Joint {
   static TYPE = 'friction-joint' as const;
 
   /** @internal */ m_type: 'friction-joint';
@@ -101,10 +103,13 @@ export default class FrictionJoint extends Joint {
   /** @internal */ m_angularMass: number;
 
   constructor(def: FrictionJointDef);
-  constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
-  constructor(def: FrictionJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2) {
+  /**
+   * @param anchor Anchor in global coordination.
+   */
+  constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+  constructor(def: FrictionJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
     // @ts-ignore
-    if (!(this instanceof FrictionJoint)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof FrictionJoint)) {
       return new FrictionJoint(def, bodyA, bodyB, anchor);
     }
 
@@ -162,26 +167,25 @@ export default class FrictionJoint extends Joint {
     return joint;
   }
 
-  /** @internal */
-  _setAnchors(def: {
-    anchorA?: Vec2,
-    localAnchorA?: Vec2,
-    anchorB?: Vec2,
-    localAnchorB?: Vec2,
-  }): void {
+  /** @hidden */
+  _reset(def: Partial<FrictionJointDef>): void {
     if (def.anchorA) {
       this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
       this.m_localAnchorA.setVec2(def.localAnchorA);
     }
-
     if (def.anchorB) {
       this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
       this.m_localAnchorB.setVec2(def.localAnchorB);
     }
+    if (Number.isFinite(def.maxForce)) {
+      this.m_maxForce = def.maxForce;
+    }
+    if (Number.isFinite(def.maxTorque)) {
+      this.m_maxTorque = def.maxTorque;
+    }
   }
-
 
   /**
    * The local anchor point relative to bodyA's origin.
@@ -201,7 +205,7 @@ export default class FrictionJoint extends Joint {
    * Set the maximum friction force in N.
    */
   setMaxForce(force: number): void {
-    _ASSERT && common.assert(Math.isFinite(force) && force >= 0.0);
+    _ASSERT && console.assert(Number.isFinite(force) && force >= 0.0);
     this.m_maxForce = force;
   }
 
@@ -216,7 +220,7 @@ export default class FrictionJoint extends Joint {
    * Set the maximum friction torque in N*m.
    */
   setMaxTorque(torque: number): void {
-    _ASSERT && common.assert(Math.isFinite(torque) && torque >= 0.0);
+    _ASSERT && console.assert(Number.isFinite(torque) && torque >= 0.0);
     this.m_maxTorque = torque;
   }
 
@@ -342,17 +346,16 @@ export default class FrictionJoint extends Joint {
     const iA = this.m_invIA;
     const iB = this.m_invIB;
 
-    const h = step.dt; // float
+    const h = step.dt;
 
     // Solve angular friction
     {
-      const Cdot = wB - wA; // float
-      let impulse = -this.m_angularMass * Cdot; // float
+      const Cdot = wB - wA;
+      let impulse = -this.m_angularMass * Cdot;
 
-      const oldImpulse = this.m_angularImpulse; // float
-      const maxImpulse = h * this.m_maxTorque; // float
-      this.m_angularImpulse = Math.clamp(this.m_angularImpulse + impulse,
-          -maxImpulse, maxImpulse);
+      const oldImpulse = this.m_angularImpulse;
+      const maxImpulse = h * this.m_maxTorque;
+      this.m_angularImpulse = clamp(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
       impulse = this.m_angularImpulse - oldImpulse;
 
       wA -= iA * impulse;
@@ -361,14 +364,16 @@ export default class FrictionJoint extends Joint {
 
     // Solve linear friction
     {
-      const Cdot = Vec2.sub(Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB)), Vec2.add(vA,
-          Vec2.crossNumVec2(wA, this.m_rA))); // Vec2
+      const Cdot = Vec2.sub(
+        Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB)),
+        Vec2.add(vA, Vec2.crossNumVec2(wA, this.m_rA))
+      );
 
-      let impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot)); // Vec2
-      const oldImpulse = this.m_linearImpulse; // Vec2
+      let impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
+      const oldImpulse = this.m_linearImpulse;
       this.m_linearImpulse.add(impulse);
 
-      const maxImpulse = h * this.m_maxForce; // float
+      const maxImpulse = h * this.m_maxForce;
 
       if (this.m_linearImpulse.lengthSquared() > maxImpulse * maxImpulse) {
         this.m_linearImpulse.normalize();

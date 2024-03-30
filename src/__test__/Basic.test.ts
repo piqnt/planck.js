@@ -1,8 +1,8 @@
-import { expect } from 'chai';
+import { describe, it, expect } from 'vitest';
 
-import Vec2 from '../common/Vec2';
-import Circle from '../collision/shape/CircleShape';
-import World from '../dynamics/World';
+import { Vec2 } from '../common/Vec2';
+import { CircleShape } from '../collision/shape/CircleShape';
+import { World } from '../dynamics/World';
 
 import '../collision/shape/CollideCircle';
 
@@ -12,7 +12,7 @@ describe('Basic', function(): void {
 
     var world = new World();
 
-    var circle = new Circle(1);
+    var circle = new CircleShape(1);
 
     var b1 = world.createBody({
       position : new Vec2(0, 0),

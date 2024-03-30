@@ -21,44 +21,44 @@
  * SOFTWARE.
  */
 
-planck.testbed('Pulleys', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, -10));
+const { Vec2, World, Circle, Box, PulleyJoint, Testbed } = planck;
 
-  var y = 16.0;
-  var L = 12.0;
-  var a = 1.0;
-  var b = 2.0;
+let world = new World(new Vec2(0, -10));
 
-  var ground = world.createBody();
+const testbed = Testbed.mount();
+testbed.start(world);
 
-  // ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
+let y = 16.0;
+let L = 12.0;
+let a = 1.0;
+let b = 2.0;
 
-  ground.createFixture(pl.Circle(Vec2(-10.0, y + b + L), 2.0), 0.0);
-  ground.createFixture(pl.Circle(Vec2(10.0, y + b + L), 2.0), 0.0);
+let ground = world.createBody();
 
-  var shape = pl.Box(a, b);
+// ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
-  // bd.fixedRotation = true;
-  var box1 = world.createDynamicBody(Vec2(-10.0, y));
-  box1.createFixture(shape, 5.0);
+ground.createFixture(new Circle(new Vec2(-10.0, y + b + L), 2.0), 0.0);
+ground.createFixture(new Circle(new Vec2(10.0, y + b + L), 2.0), 0.0);
 
-  var box2 = world.createDynamicBody(Vec2(10.0, y));
-  box2.createFixture(shape, 5.0);
+let shape = new Box(a, b);
 
-  var anchor1 = Vec2(-10.0, y + b);
-  var anchor2 = Vec2(10.0, y + b);
-  var groundAnchor1 = Vec2(-10.0, y + b + L);
-  var groundAnchor2 = Vec2(10.0, y + b + L);
+// bd.fixedRotation = true;
+let box1 = world.createDynamicBody(new Vec2(-10.0, y));
+box1.createFixture(shape, 5.0);
 
-  var joint1 = world.createJoint(pl.PulleyJoint({}, box1, box2, groundAnchor1, groundAnchor2, anchor1, anchor2, 1.5));
+let box2 = world.createDynamicBody(new Vec2(10.0, y));
+box2.createFixture(shape, 5.0);
 
-  testbed.step = function() {
-    var ratio = joint1.getRatio();
-    var L = joint1.getCurrentLengthA() + ratio * joint1.getCurrentLengthB();
-    testbed.status('ratio', ratio);
-    testbed.status('L (L1 * ratio + L2)', L);
-  };
+let anchor1 = new Vec2(-10.0, y + b);
+let anchor2 = new Vec2(10.0, y + b);
+let groundAnchor1 = new Vec2(-10.0, y + b + L);
+let groundAnchor2 = new Vec2(10.0, y + b + L);
 
-  return world;
-});
+let joint1 = world.createJoint(new PulleyJoint({}, box1, box2, groundAnchor1, groundAnchor2, anchor1, anchor2, 1.5));
+
+testbed.step = function() {
+  let ratio = joint1.getRatio();
+  let L = joint1.getCurrentLengthA() + ratio * joint1.getCurrentLengthB();
+  testbed.status('ratio', ratio);
+  testbed.status('L (L1 * ratio + L2)', L);
+};

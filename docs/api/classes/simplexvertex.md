@@ -19,15 +19,14 @@
 
 ### Methods
 
+* [recycle](simplexvertex.md#recycle)
 * [set](simplexvertex.md#set)
 
 ## Properties
 
 ###  a
 
-• **a**: *number*
-
-*Defined in [src/collision/Distance.ts:308](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L308)*
+• **a**: *number* = 0
 
 barycentric coordinate for closest point
 
@@ -35,9 +34,7 @@ ___
 
 ###  indexA
 
-• **indexA**: *number*
-
-*Defined in [src/collision/Distance.ts:298](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L298)*
+• **indexA**: *number* = 0
 
 wA index
 
@@ -45,9 +42,7 @@ ___
 
 ###  indexB
 
-• **indexB**: *number*
-
-*Defined in [src/collision/Distance.ts:303](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L303)*
+• **indexB**: *number* = 0
 
 wB index
 
@@ -55,9 +50,7 @@ ___
 
 ###  w
 
-• **w**: *[Vec2](vec2.md)* = Vec2.zero()
-
-*Defined in [src/collision/Distance.ts:306](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L306)*
+• **w**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
 wB - wA;
 
@@ -65,9 +58,7 @@ ___
 
 ###  wA
 
-• **wA**: *[Vec2](vec2.md)* = Vec2.zero()
-
-*Defined in [src/collision/Distance.ts:296](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L296)*
+• **wA**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
 support point in proxyA
 
@@ -75,19 +66,23 @@ ___
 
 ###  wB
 
-• **wB**: *[Vec2](vec2.md)* = Vec2.zero()
-
-*Defined in [src/collision/Distance.ts:301](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L301)*
+• **wB**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
 support point in proxyB
 
 ## Methods
 
+###  recycle
+
+▸ **recycle**(): *void*
+
+**Returns:** *void*
+
+___
+
 ###  set
 
 ▸ **set**(`v`: [SimplexVertex](simplexvertex.md)): *void*
-
-*Defined in [src/collision/Distance.ts:310](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L310)*
 
 **Parameters:**
 

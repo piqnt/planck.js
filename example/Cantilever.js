@@ -25,61 +25,68 @@
 // You will have to use a high number of iterations to make them stiff.
 // So why not go ahead and use soft weld joints? They behave like a revolute
 // joint with a rotational spring.
-planck.testbed('Cantilever', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, -10));
 
-  var COUNT = 8;
+const { World, Vec2, Edge, Box, WeldJoint, Polygon, Circle, Testbed } = planck;
 
-  var ground = world.createBody();
-  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
+let world = new World(new Vec2(0, -10));
 
-  var prevBody = ground;
-  for (var i = 0; i < COUNT; ++i) {
-    var body = world.createDynamicBody(Vec2(-14.5 + 1.0 * i, 5.0));
-    body.createFixture(pl.Box(0.5, 0.125), 20.0);
+const testbed = Testbed.mount();
+testbed.start(world);
 
-    var anchor = Vec2(-15.0 + 1.0 * i, 5.0);
-    world.createJoint(pl.WeldJoint({}, prevBody, body, anchor));
+let COUNT = 8;
+
+let ground = world.createBody();
+ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
+{
+  let prevBody = ground;
+  for (let i = 0; i < COUNT; ++i) {
+    const body = world.createDynamicBody(new Vec2(-14.5 + 1.0 * i, 5.0));
+    body.createFixture(new Box(0.5, 0.125), 20.0);
+
+    const anchor = new Vec2(-15.0 + 1.0 * i, 5.0);
+    world.createJoint(new WeldJoint({}, prevBody, body, anchor));
 
     prevBody = body;
   }
+}
+{
+  let prevBody = ground;
+  for (let i = 0; i < 3; ++i) {
+    let body = world.createDynamicBody(new Vec2(-14.0 + 2.0 * i, 15.0));
+    body.createFixture(new Box(1.0, 0.125), 20.0);
 
-  var prevBody = ground;
-  for (var i = 0; i < 3; ++i) {
-    var body = world.createDynamicBody(Vec2(-14.0 + 2.0 * i, 15.0));
-    body.createFixture(pl.Box(1.0, 0.125), 20.0);
-
-    var anchor = Vec2(-15.0 + 2.0 * i, 15.0);
-    world.createJoint(pl.WeldJoint({
+    let anchor = new Vec2(-15.0 + 2.0 * i, 15.0);
+    world.createJoint(new WeldJoint({
       frequencyHz: 5.0,
       dampingRatio: 0.7,
     }, prevBody, body, anchor));
 
     prevBody = body;
   }
-
-  var prevBody = ground;
-  for (var i = 0; i < COUNT; ++i) {
-    var body = world.createDynamicBody(Vec2(-4.5 + 1.0 * i, 5.0));
-    body.createFixture(pl.Box(0.5, 0.125), 20.0);
+}
+{
+  let prevBody = ground;
+  for (let i = 0; i < COUNT; ++i) {
+    let body = world.createDynamicBody(new Vec2(-4.5 + 1.0 * i, 5.0));
+    body.createFixture(new Box(0.5, 0.125), 20.0);
 
     if (i > 0) {
-      var anchor = Vec2(-5.0 + 1.0 * i, 5.0);
-      world.createJoint(pl.WeldJoint({}, prevBody, body, anchor));
+      let anchor = new Vec2(-5.0 + 1.0 * i, 5.0);
+      world.createJoint(new WeldJoint({}, prevBody, body, anchor));
     }
 
     prevBody = body;
   }
-
-  var prevBody = ground;
-  for (var i = 0; i < COUNT; ++i) {
-    var body = world.createDynamicBody(Vec2(5.5 + 1.0 * i, 10.0));
-    body.createFixture(pl.Box(0.5, 0.125), 20.0);
+}
+{
+  let prevBody = ground;
+  for (let i = 0; i < COUNT; ++i) {
+    let body = world.createDynamicBody(new Vec2(5.5 + 1.0 * i, 10.0));
+    body.createFixture(new Box(0.5, 0.125), 20.0);
 
     if (i > 0) {
-      var anchor = Vec2(5.0 + 1.0 * i, 10.0);
-      world.createJoint(pl.WeldJoint({
+      let anchor = new Vec2(5.0 + 1.0 * i, 10.0);
+      world.createJoint(new WeldJoint({
         frequencyHz: 8.0,
         dampingRatio: 0.7,
       }, prevBody, body, anchor));
@@ -87,21 +94,20 @@ planck.testbed('Cantilever', function(testbed) {
 
     prevBody = body;
   }
+}
+{
+  for (let i = 0; i < 2; ++i) {
+    let vertices = [];
+    vertices[0] = new Vec2(-0.5, 0.0);
+    vertices[1] = new Vec2(0.5, 0.0);
+    vertices[2] = new Vec2(0.0, 1.5);
 
-  for (var i = 0; i < 2; ++i) {
-    var vertices = [];
-    vertices[0] = Vec2(-0.5, 0.0);
-    vertices[1] = Vec2(0.5, 0.0);
-    vertices[2] = Vec2(0.0, 1.5);
-
-    var body = world.createDynamicBody(Vec2(-8.0 + 8.0 * i, 12.0));
-    body.createFixture(pl.Polygon(vertices), 1.0);
+    let body = world.createDynamicBody(new Vec2(-8.0 + 8.0 * i, 12.0));
+    body.createFixture(new Polygon(vertices), 1.0);
   }
 
-  for (var i = 0; i < 2; ++i) {
-    var body = world.createDynamicBody(Vec2(-6.0 + 6.0 * i, 10.0));
-    body.createFixture(pl.Circle(0.5), 1.0);
+  for (let i = 0; i < 2; ++i) {
+    let body = world.createDynamicBody(new Vec2(-6.0 + 6.0 * i, 10.0));
+    body.createFixture(new Circle(0.5), 1.0);
   }
-
-  return world;
-});
+}

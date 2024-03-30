@@ -21,81 +21,89 @@
  * SOFTWARE.
  */
 
-planck.testbed('Dominos', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, -10));
+const { Vec2, World, Edge, Box, RevoluteJoint, DistanceJoint, Circle, Testbed } = planck;
 
-  testbed.width = 40;
-  testbed.height = 40;
+let world = new World(new Vec2(0, -10));
 
-  var b1 = world.createBody();
-  b1.createFixture(pl.Edge(Vec2(-40, 0), Vec2(40, 0)), 0);
+const testbed = Testbed.mount();
+testbed.width = 50;
+testbed.height = 50;
+testbed.start(world);
 
-  var ground = world.createBody(Vec2(-1.5, 10));
-  ground.createFixture(pl.Box(6, 0.25), 0);
+let ground = world.createBody();
+ground.createFixture(new Edge(new Vec2(-40, 0), new Vec2(40, 0)), 0);
 
-  var columnShape = pl.Box(0.1, 1);
+world
+  .createBody(new Vec2(-1.5, 10))
+  .createFixture(new Box(6, 0.25), 0);
 
-  var fd = {};
-  fd.density = 20;
-  fd.friction = 0.1;
+let columnShape = new Box(0.1, 1);
 
-  for (var i = 0; i < 10; ++i) {
-    var body = world.createDynamicBody(Vec2(-6 + 1 * i, 11.25));
-    body.createFixture(columnShape, fd);
-  }
+for (let i = 0; i < 10; ++i) {
+  world
+    .createDynamicBody(new Vec2(-6 + 1 * i, 11.25))
+    .createFixture(columnShape, {
+      density: 20,
+      friction: 0.1,
+    });
+}
 
-  var ground = world.createBody(Vec2(1, 6));
-  ground.createFixture(pl.Box(7, 0.25, Vec2(), 0.3), 0);
+world
+  .createBody(new Vec2(1, 6))
+  .createFixture(new Box(7, 0.25, new Vec2(), 0.3), 0);
 
-  var b2 = world.createBody(Vec2(-7, 4));
-  b2.createFixture(pl.Box(0.25, 1.5), 0);
+let b2 = world.createBody(new Vec2(-7, 4));
+b2.createFixture(new Box(0.25, 1.5), 0);
 
-  var b3 = world.createDynamicBody(Vec2(-0.9, 1), -0.15);
-  b3.createFixture(pl.Box(6, 0.125), 10);
+let b3 = world.createDynamicBody(new Vec2(-0.9, 1), -0.15);
+b3.createFixture(new Box(6, 0.125), 10);
 
-  var jd = {};
-  jd.collideConnected = true;
-  world.createJoint(pl.RevoluteJoint(jd, b1, b3, Vec2(-2, 1)));
+let jd = {
+  collideConnected: true,
+};
 
-  var b4 = world.createDynamicBody(Vec2(-10, 15));
-  b4.createFixture(pl.Box(0.25, 0.25), 10);
+world.createJoint(new RevoluteJoint(jd, ground, b3, new Vec2(-2, 1)));
 
-  world.createJoint(pl.RevoluteJoint(jd, b2, b4, Vec2(-7, 15)));
+let b4 = world.createDynamicBody(new Vec2(-10, 15));
+b4.createFixture(new Box(0.25, 0.25), 10);
 
-  var b5 = world.createDynamicBody(Vec2(6.5, 3));
+world.createJoint(new RevoluteJoint(jd, b2, b4, new Vec2(-7, 15)));
 
-  var fd = {};
-  fd.density = 10;
-  fd.friction = 0.1;
+let b5 = world.createDynamicBody(new Vec2(6.5, 3));
 
-  b5.createFixture(pl.Box(1, 0.1, Vec2(0, -0.9), 0), fd);
-  b5.createFixture(pl.Box(0.1, 1, Vec2(-0.9, 0), 0), fd);
-  b5.createFixture(pl.Box(0.1, 1, Vec2(0.9, 0), 0), fd);
+{
+  let fd = {
+    density: 10,
+    friction: 0.1,
+  };
 
-  world.createJoint(pl.RevoluteJoint(jd, b1, b5, Vec2(6, 2)));
+  b5.createFixture(new Box(1, 0.1, new Vec2(0, -0.9), 0), fd);
+  b5.createFixture(new Box(0.1, 1, new Vec2(-0.9, 0), 0), fd);
+  b5.createFixture(new Box(0.1, 1, new Vec2(0.9, 0), 0), fd);
+}
 
-  var b6 = world.createDynamicBody(Vec2(6.5, 4.1));
-  b6.createFixture(pl.Box(1, 0.1), 30);
+world.createJoint(new RevoluteJoint(jd, ground, b5, new Vec2(6, 2)));
 
-  world.createJoint(pl.RevoluteJoint(jd, b5, b6, Vec2(7.5, 4)));
+let b6 = world.createDynamicBody(new Vec2(6.5, 4.1));
+b6.createFixture(new Box(1, 0.1), 30);
 
-  var b7 = world.createDynamicBody(Vec2(7.4, 1));
-  b7.createFixture(pl.Box(0.1, 1), 10);
+world.createJoint(new RevoluteJoint(jd, b5, b6, new Vec2(7.5, 4)));
 
-  world.createJoint(pl.DistanceJoint({
-    bodyA: b3,
-    localAnchorA: Vec2(6, 0),
-    bodyB: b7,
-    localAnchorB: Vec2(0, -1)
-  }));
+let b7 = world.createDynamicBody(new Vec2(7.4, 1));
+b7.createFixture(new Box(0.1, 1), 10);
 
-  var radius = 0.2;
-  var circleShape = pl.Circle(radius);
-  for (var i = 0; i < 4; ++i) {
-    var body = world.createDynamicBody(Vec2(5.9 + 2 * radius * i, 2.4));
+world.createJoint(new DistanceJoint({
+  bodyA: b3,
+  localAnchorA: new Vec2(6, 0),
+  bodyB: b7,
+  localAnchorB: new Vec2(0, -1)
+}));
+
+{
+  let radius = 0.2;
+  let circleShape = new Circle(radius);
+  for (let i = 0; i < 4; ++i) {
+    let body = world.createDynamicBody(new Vec2(5.9 + 2 * radius * i, 2.4));
     body.createFixture(circleShape, 10);
   }
-
-  return world;
-});
+}

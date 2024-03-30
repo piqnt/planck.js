@@ -1,39 +1,61 @@
-import babel from '@rollup/plugin-babel';
-import { terser } from "rollup-plugin-terser";
-import license from 'rollup-plugin-license';
-import replace from '@rollup/plugin-replace';
-import filesize from 'rollup-plugin-filesize';
-import typescript from 'rollup-plugin-ts';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
-import declarationTransformer from './declarationTransformer';
+const { terser } =  require('rollup-plugin-terser');
+const license =  require('rollup-plugin-license');
+const replace =  require('@rollup/plugin-replace');
+const filesize =  require('rollup-plugin-filesize');
+const typescript =  require('rollup-plugin-ts');
+const { nodeResolve } =  require('@rollup/plugin-node-resolve');
 
-import licenseBanner from './license';
+const declarationTransformer =  require('./build-utils/declarationTransformer');
+const licenseBanner =  require('./build-utils/license');
 
 
-export default [
+module.exports = [
   {
-    src: 'src/index.ts',
-    dest: 'dist/planck.js',
+    format: 'es',
+    src: 'src/main.ts',
+    dest: 'dist/planck.mjs',
     minimize: false,
+    sourcemap: false,
     declaration: true,
   },
   {
-    src: 'src/index.ts',
-    dest: 'dist/planck.min.js',
-    minimize: true,
+    format: 'umd',
+    src: 'src/main.ts',
+    dest: 'dist/planck.js',
+    minimize: false,
+    sourcemap: false,
     declaration: false,
   },
   {
-    src: 'testbed/index.ts',
-    dest: 'dist/planck-with-testbed.js',
+    format: 'umd',
+    src: 'src/main.ts',
+    dest: 'dist/planck.min.js',
+    minimize: true,
+    sourcemap: true,
+    declaration: false,
+  },
+  {
+    format: 'es',
+    src: 'testbed/main.ts',
+    dest: 'dist/planck-with-testbed.mjs',
     minimize: false,
+    sourcemap: false,
     declaration: true,
   },
   {
-    src: 'testbed/index.ts',
+    format: 'umd',
+    src: 'testbed/main.ts',
+    dest: 'dist/planck-with-testbed.js',
+    minimize: false,
+    sourcemap: false,
+    declaration: false,
+  },
+  {
+    format: 'umd',
+    src: 'testbed/main.ts',
     dest: 'dist/planck-with-testbed.min.js',
     minimize: true,
+    sourcemap: true,
     declaration: false,
   }
 ].map(options => {
@@ -42,25 +64,28 @@ export default [
     output: {
       name: 'planck',
       file: options.dest,
-      format: 'umd',
+      format: options.format,
       sourcemap: true,
     },
     plugins: [
       replace({
         preventAssignment: true,
         values: {
-          'DEBUG': JSON.stringify(false),
           'ASSERT': JSON.stringify(false),
+          '_ASSERT': JSON.stringify(false),
+          // we are still compiling to ES5, so we keep constructor factories until v2
+          'CONSTRUCTOR_FACTORY': JSON.stringify(true),
+          '_CONSTRUCTOR_FACTORY': JSON.stringify(true),
+          'PLANCK_VERSION': JSON.stringify(process.env.npm_package_version),
         },
       }),
       nodeResolve(),
-      commonjs({
-        include: ['node_modules/stage-js/**']
-      }),
       typescript({
+        sourceMap: false,
         tsconfig: resolvedConfig => ({
           ...resolvedConfig,
-          declaration: options.declaration
+          declaration: options.declaration,
+          declarationMap: options.declaration
         }),
         transformers: {
           afterDeclarations: [
@@ -92,10 +117,6 @@ export default [
             })
           ]
         },
-      }),
-      babel({
-        babelHelpers: 'runtime',
-        exclude: 'node_modules/**',
       }),
       license({
         banner: licenseBanner,

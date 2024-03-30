@@ -37,6 +37,10 @@ various fashions. Some joints also feature limits and motors.
 
 * [constructor](joint.md#constructor)
 
+### Properties
+
+* [style](joint.md#style)
+
 ### Methods
 
 * [getAnchorA](joint.md#abstract-getanchora)
@@ -62,8 +66,6 @@ various fashions. Some joints also feature limits and motors.
 
 \+ **new Joint**(`def`: [JointDef](../interfaces/jointdef.md)): *[Joint](joint.md)*
 
-*Defined in [src/dynamics/Joint.ts:110](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L110)*
-
 **Parameters:**
 
 Name | Type |
@@ -73,8 +75,6 @@ Name | Type |
 **Returns:** *[Joint](joint.md)*
 
 \+ **new Joint**(`def`: [JointOpt](../interfaces/jointopt.md), `bodyA`: [Body](body.md), `bodyB`: [Body](body.md)): *[Joint](joint.md)*
-
-*Defined in [src/dynamics/Joint.ts:112](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L112)*
 
 **Parameters:**
 
@@ -86,37 +86,39 @@ Name | Type |
 
 **Returns:** *[Joint](joint.md)*
 
+## Properties
+
+###  style
+
+• **style**: *[Style](../interfaces/style.md)*
+
+Styling for dev-tools.
+
 ## Methods
 
 ### `Abstract` getAnchorA
 
-▸ **getAnchorA**(): *[Vec2](vec2.md)*
-
-*Defined in [src/dynamics/Joint.ts:197](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L197)*
+▸ **getAnchorA**(): *Vec2*
 
 Get the anchor point on bodyA in world coordinates.
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Abstract` getAnchorB
 
-▸ **getAnchorB**(): *[Vec2](vec2.md)*
-
-*Defined in [src/dynamics/Joint.ts:202](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L202)*
+▸ **getAnchorB**(): *Vec2*
 
 Get the anchor point on bodyB in world coordinates.
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ###  getBodyA
 
 ▸ **getBodyA**(): *[Body](body.md)*
-
-*Defined in [src/dynamics/Joint.ts:159](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L159)*
 
 Get the first body attached to this joint.
 
@@ -128,8 +130,6 @@ ___
 
 ▸ **getBodyB**(): *[Body](body.md)*
 
-*Defined in [src/dynamics/Joint.ts:166](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L166)*
-
 Get the second body attached to this joint.
 
 **Returns:** *[Body](body.md)*
@@ -139,8 +139,6 @@ ___
 ###  getCollideConnected
 
 ▸ **getCollideConnected**(): *boolean*
-
-*Defined in [src/dynamics/Joint.ts:190](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L190)*
 
 Get collide connected. Note: modifying the collide connect flag won't work
 correctly because the flag is only checked when fixture AABBs begin to
@@ -154,8 +152,6 @@ ___
 
 ▸ **getNext**(): *[Joint](joint.md)*
 
-*Defined in [src/dynamics/Joint.ts:173](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L173)*
-
 Get the next joint the world joint list.
 
 **Returns:** *[Joint](joint.md)*
@@ -164,9 +160,7 @@ ___
 
 ### `Abstract` getReactionForce
 
-▸ **getReactionForce**(`inv_dt`: number): *[Vec2](vec2.md)*
-
-*Defined in [src/dynamics/Joint.ts:207](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L207)*
+▸ **getReactionForce**(`inv_dt`: number): *Vec2*
 
 Get the reaction force on bodyB at the joint anchor in Newtons.
 
@@ -176,15 +170,13 @@ Name | Type |
 ------ | ------ |
 `inv_dt` | number |
 
-**Returns:** *[Vec2](vec2.md)*
+**Returns:** *Vec2*
 
 ___
 
 ### `Abstract` getReactionTorque
 
 ▸ **getReactionTorque**(`inv_dt`: number): *number*
-
-*Defined in [src/dynamics/Joint.ts:212](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L212)*
 
 Get the reaction torque on bodyB in N*m.
 
@@ -202,8 +194,6 @@ ___
 
 ▸ **getType**(): *string*
 
-*Defined in [src/dynamics/Joint.ts:152](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L152)*
-
 Get the type of the concrete joint.
 
 **Returns:** *string*
@@ -214,8 +204,6 @@ ___
 
 ▸ **getUserData**(): *unknown*
 
-*Defined in [src/dynamics/Joint.ts:177](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L177)*
-
 **Returns:** *unknown*
 
 ___
@@ -223,8 +211,6 @@ ___
 ### `Abstract` initVelocityConstraints
 
 ▸ **initVelocityConstraints**(`step`: [TimeStep](timestep.md)): *void*
-
-*Defined in [src/dynamics/Joint.ts:219](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L219)*
 
 **Parameters:**
 
@@ -240,8 +226,6 @@ ___
 
 ▸ **isActive**(): *boolean*
 
-*Defined in [src/dynamics/Joint.ts:145](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L145)*
-
 Short-cut function to determine if either body is inactive.
 
 **Returns:** *boolean*
@@ -251,8 +235,6 @@ ___
 ###  setUserData
 
 ▸ **setUserData**(`data`: unknown): *void*
-
-*Defined in [src/dynamics/Joint.ts:181](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L181)*
 
 **Parameters:**
 
@@ -266,9 +248,7 @@ ___
 
 ###  shiftOrigin
 
-▸ **shiftOrigin**(`newOrigin`: [Vec2](vec2.md)): *void*
-
-*Defined in [src/dynamics/Joint.ts:217](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L217)*
+▸ **shiftOrigin**(`newOrigin`: [Vec2Value](../interfaces/vec2value.md)): *void*
 
 Shift the origin for any points stored in world coordinates.
 
@@ -276,7 +256,7 @@ Shift the origin for any points stored in world coordinates.
 
 Name | Type |
 ------ | ------ |
-`newOrigin` | [Vec2](vec2.md) |
+`newOrigin` | [Vec2Value](../interfaces/vec2value.md) |
 
 **Returns:** *void*
 
@@ -285,8 +265,6 @@ ___
 ### `Abstract` solvePositionConstraints
 
 ▸ **solvePositionConstraints**(`step`: [TimeStep](timestep.md)): *boolean*
-
-*Defined in [src/dynamics/Joint.ts:226](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L226)*
 
 This returns true if the position errors are within tolerance.
 
@@ -303,8 +281,6 @@ ___
 ### `Abstract` solveVelocityConstraints
 
 ▸ **solveVelocityConstraints**(`step`: [TimeStep](timestep.md)): *void*
-
-*Defined in [src/dynamics/Joint.ts:221](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L221)*
 
 **Parameters:**
 

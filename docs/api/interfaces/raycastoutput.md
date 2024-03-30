@@ -22,12 +22,8 @@ where `p1` and `p2` come from RayCastInput.
 
 • **fraction**: *number*
 
-*Defined in [src/collision/AABB.ts:51](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L51)*
-
 ___
 
 ###  normal
 
-• **normal**: *[Vec2](../classes/vec2.md)*
-
-*Defined in [src/collision/AABB.ts:50](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/AABB.ts#L50)*
+• **normal**: *Vec2*

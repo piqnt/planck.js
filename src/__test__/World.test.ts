@@ -1,8 +1,8 @@
-import { expect } from 'chai';
+import { describe, it, expect } from 'vitest';
 
-import Vec2 from '../common/Vec2';
-import World from '../dynamics/World';
-import Box from '../collision/shape/BoxShape';
+import { Vec2 } from '../common/Vec2';
+import { World } from '../dynamics/World';
+import { BoxShape } from '../collision/shape/BoxShape';
 
 // registers Box-Box collision
 import '../collision/shape/CollidePolygon';
@@ -24,7 +24,7 @@ describe('World', function(): void {
     });
 
     // The extents are the half-widths of the box.
-    var groundBox = new Box(50.0, 10.0);
+    var groundBox = new BoxShape(50.0, 10.0);
     // Add the ground fixture to the ground body.
     groundBody.createFixture(groundBox, 0.0);
 
@@ -35,7 +35,7 @@ describe('World', function(): void {
     });
 
     // Define another box shape for our dynamic body.
-    var dynamicBox = new Box(1.0, 1.0);
+    var dynamicBox = new BoxShape(1.0, 1.0);
     // Add the shape to the body.
     body.createFixture(dynamicBox, {
       // Set the box density to be non-zero, so it will be dynamic.

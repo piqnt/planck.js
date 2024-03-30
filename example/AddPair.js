@@ -21,29 +21,31 @@
  * SOFTWARE.
  */
 
-planck.testbed('AddPair', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, 0));
+const { Vec2, World, Circle, Box, Math, Testbed } = planck;
 
-  testbed.y = 0;
-  testbed.hz = 60;
-  testbed.speed = 0.5;
+let world = new World(new Vec2(0, 0));
 
-  var circle = pl.Circle(0.1);
+const testbed = Testbed.mount();
+testbed.y = 0;
+testbed.hz = 60;
+testbed.speed = 1;
+testbed.start(world);
 
-  for (var i = 0; i < 50; ++i) {
-    var pos = Vec2(pl.Math.random(0.0, -6.0), pl.Math.random(-1.0, 1.0));
-    world.createDynamicBody(pos).createFixture(circle, 0.01);
-  }
+let circle = new Circle(0.1);
 
-  var box = world.createBody({
+for (let i = 0; i < 50; ++i) {
+  let b = world.createBody({
     type : 'dynamic',
-    position : Vec2(-40.0, 0.0),
-    bullet : true
+    position : new Vec2(Math.random() * -6, Math.random() * 2 - 1),
   });
+  b.createFixture(circle, 0.01);
+}
 
-  box.createFixture(pl.Box(1.5, 1.5), 1.0);
-  box.setLinearVelocity(Vec2(100.0, 0.0));
-
-  return world;
+let box = world.createBody({
+  type : 'dynamic',
+  position : new Vec2(-40.0, 0.0),
+  bullet : true
 });
+
+box.createFixture(new Box(1.5, 1.5), 1.0);
+box.setLinearVelocity(new Vec2(100.0, 0.0));

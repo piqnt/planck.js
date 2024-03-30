@@ -22,26 +22,24 @@
  * SOFTWARE.
  */
 
-import common from '../util/common';
-import Vec2 from './Vec2';
-import Vec3 from './Vec3';
+import { Vec2, Vec2Value } from './Vec2';
+import { Vec3, Vec3Value } from './Vec3';
 
 
-const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
 /**
  * A 3-by-3 matrix. Stored in column-major order.
  */
-export default class Mat33 {
+export class Mat33 {
   ex: Vec3;
   ey: Vec3;
   ez: Vec3;
 
-  constructor(a: Vec3, b: Vec3, c: Vec3);
+  constructor(a: Vec3Value, b: Vec3Value, c: Vec3Value);
   constructor();
-  constructor(a?: Vec3, b?: Vec3, c?: Vec3) {
+  constructor(a?: Vec3Value, b?: Vec3Value, c?: Vec3Value) {
     if (typeof a === 'object' && a !== null) {
       this.ex = Vec3.clone(a);
       this.ey = Vec3.clone(b);
@@ -53,7 +51,7 @@ export default class Mat33 {
     }
   }
 
-  /** @internal */
+  /** @hidden */
   toString(): string {
     return JSON.stringify(this);
   }
@@ -66,11 +64,7 @@ export default class Mat33 {
   }
 
   static assert(o: any): void {
-    if (!_ASSERT) return;
-    if (!Mat33.isValid(o)) {
-      _DEBUG && common.debug(o);
-      throw new Error('Invalid Mat33!');
-    }
+    _ASSERT && console.assert(!Mat33.isValid(o), 'Invalid Mat33!', o);
   }
 
   /**
@@ -87,15 +81,33 @@ export default class Mat33 {
    * Solve A * x = b, where b is a column vector. This is more efficient than
    * computing the inverse in one-shot cases.
    */
-  solve33(v: Vec3): Vec3 {
-    let det = Vec3.dot(this.ex, Vec3.cross(this.ey, this.ez));
+  solve33(v: Vec3Value): Vec3 {
+    // let det = matrix.dotVec3(this.ex, matrix.newCrossVec3(this.ey, this.ez));
+    let cross_x = this.ey.y * this.ez.z - this.ey.z * this.ez.y;
+    let cross_y = this.ey.z * this.ez.x - this.ey.x * this.ez.z;
+    let cross_z = this.ey.x * this.ez.y - this.ey.y * this.ez.x;
+    let det = this.ex.x * cross_x + this.ex.y * cross_y + this.ex.z * cross_z;
     if (det !== 0.0) {
       det = 1.0 / det;
     }
     const r = new Vec3();
-    r.x = det * Vec3.dot(v, Vec3.cross(this.ey, this.ez));
-    r.y = det * Vec3.dot(this.ex, Vec3.cross(v, this.ez));
-    r.z = det * Vec3.dot(this.ex, Vec3.cross(this.ey, v));
+    // r.x = det * matrix.dotVec3(v, matrix.newCrossVec3(this.ey, this.ez));
+    cross_x = this.ey.y * this.ez.z - this.ey.z * this.ez.y;
+    cross_y = this.ey.z * this.ez.x - this.ey.x * this.ez.z;
+    cross_z = this.ey.x * this.ez.y - this.ey.y * this.ez.x;
+    r.x = det * (v.x * cross_x + v.y * cross_y + v.z * cross_z);
+
+    // r.y = det * matrix.dotVec3(this.ex, matrix.newCrossVec3(v, this.ez));
+    cross_x = v.y * this.ez.z - v.z * this.ez.y;
+    cross_y = v.z * this.ez.x - v.x * this.ez.z;
+    cross_z = v.x * this.ez.y - v.y * this.ez.x;
+    r.y = det * (this.ex.x * cross_x + this.ex.y * cross_y + this.ex.z * cross_z);
+
+    // r.z = det * matrix.dotVec3(this.ex, matrix.newCrossVec3(this.ey, v));
+    cross_x = this.ey.y * v.z - this.ey.z * v.y;
+    cross_y = this.ey.z * v.x - this.ey.x * v.z;
+    cross_z = this.ey.x * v.y - this.ey.y * v.x;
+    r.z = det * (this.ex.x * cross_x + this.ex.y * cross_y + this.ex.z * cross_z);
     return r;
   }
 
@@ -104,7 +116,7 @@ export default class Mat33 {
    * computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
    * equation.
    */
-  solve22(v: Vec2): Vec2 {
+  solve22(v: Vec2Value): Vec2 {
     const a11 = this.ex.x;
     const a12 = this.ey.x;
     const a21 = this.ex.y;
@@ -175,9 +187,8 @@ export default class Mat33 {
   /**
    * Multiply a matrix times a vector.
    */
-  static mul(a: Mat33, b: Vec2): Vec2;
-  static mul(a: Mat33, b: Vec3): Vec3;
-  // tslint:disable-next-line:typedef
+  static mul(a: Mat33, b: Vec2Value): Vec2;
+  static mul(a: Mat33, b: Vec3Value): Vec3;
   static mul(a, b) {
     _ASSERT && Mat33.assert(a);
     if (b && 'z' in b && 'y' in b && 'x' in b) {
@@ -194,7 +205,7 @@ export default class Mat33 {
       return Vec2.neo(x, y);
     }
 
-    _ASSERT && common.assert(false);
+    _ASSERT && console.assert(false);
   }
 
   static mulVec3(a: Mat33, b: Vec3): Vec3 {
@@ -206,7 +217,7 @@ export default class Mat33 {
     return new Vec3(x, y, z);
   }
 
-  static mulVec2(a: Mat33, b: Vec2): Vec2 {
+  static mulVec2(a: Mat33, b: Vec2Value): Vec2 {
     _ASSERT && Mat33.assert(a);
     _ASSERT && Vec2.assert(b);
     const x = a.ex.x * b.x + a.ey.x * b.y;

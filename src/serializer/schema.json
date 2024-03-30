@@ -131,6 +131,7 @@
         "enableMotor": { "type": "boolean" },
         "maxMotorTorque": { "type": "number" },
         "motorSpeed": { "type": "number" },
+        "maxMotorForce": { "type": "number" },
 
         "referenceAngle": { "type": "number" },
 

@@ -21,57 +21,56 @@
  * SOFTWARE.
  */
 
-planck.testbed('ShapeEditing', function(testbed) {
-  testbed.info('C: Create a shape, X: Destroy a shape, Z: Sensor');
+const { World, Vec2, Edge, Circle, Box, Testbed } = planck;
 
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, -10));
+let world = new World(new Vec2(0, -10));
 
-  var sensor = true;
+const testbed = Testbed.mount();
+testbed.info('C: Create a shape, X: Destroy a shape, Z: Sensor');
+testbed.start(world);
 
-  var ground = world.createBody();
-  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)), 0.0);
+let sensor = true;
 
-  var body = world.createDynamicBody(Vec2(0.0, 10.0));
+let ground = world.createBody();
+ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
-  var fixture1 = body.createFixture(pl.Box(4.0, 4.0, Vec2(0.0, 0.0), 0.0), 10.0);
-  var fixture2 = null;
+let body = world.createDynamicBody(new Vec2(0.0, 10.0));
 
-  testbed.keydown = function(code, char) {
-    switch (char) {
-    case 'C':
-      if (fixture2 == null) {
-        var shape = pl.Circle(Vec2(0.5, -4.0), 3.0);
-        fixture2 = body.createFixture(shape, 10.0);
-        body.setAwake(true);
-        fixture2.setSensor(sensor);
-      }
-      break;
+let fixture1 = body.createFixture(new Box(4.0, 4.0, new Vec2(0.0, 0.0), 0.0), 10.0);
+let fixture2 = null;
 
-    case 'X':
-      if (fixture2 != null) {
-        body.destroyFixture(fixture2);
-        fixture2 = null;
-        body.setAwake(true);
-      }
-      break;
-
-    case 'Z':
-      if (fixture2 != null) {
-        sensor = !sensor;
-        fixture2.setSensor(sensor);
-      }
-      break;
+testbed.keydown = function(code, char) {
+  switch (char) {
+  case 'C':
+    if (fixture2 == null) {
+      let shape = new Circle(new Vec2(0.5, -4.0), 3.0);
+      fixture2 = body.createFixture(shape, 10.0);
+      body.setAwake(true);
+      fixture2.setSensor(sensor);
     }
+    break;
 
-    updateStatus();
-  };
+  case 'X':
+    if (fixture2 != null) {
+      body.destroyFixture(fixture2);
+      fixture2 = null;
+      body.setAwake(true);
+    }
+    break;
 
-  function updateStatus() {
-    testbed.status('Sensor', sensor);
+  case 'Z':
+    if (fixture2 != null) {
+      sensor = !sensor;
+      fixture2.setSensor(sensor);
+    }
+    break;
   }
 
   updateStatus();
+};
 
-  return world;
-});
+function updateStatus() {
+  testbed.status('Sensor', sensor);
+}
+
+updateStatus();

@@ -22,9 +22,10 @@
  * SOFTWARE.
  */
 
-import Vec2 from './Vec2';
+import { Vec2 } from './Vec2';
 
-export default class Jacobian {
+/** @internal */
+export class Jacobian {
   linear: Vec2;
   angularA: number;
   angularB: number;

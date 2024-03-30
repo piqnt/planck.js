@@ -13,43 +13,39 @@ computation. Even
 
 ### Properties
 
-* [proxyA](distanceinput.md#proxya)
-* [proxyB](distanceinput.md#proxyb)
-* [transformA](distanceinput.md#transforma)
-* [transformB](distanceinput.md#transformb)
+* [proxyA](distanceinput.md#readonly-proxya)
+* [proxyB](distanceinput.md#readonly-proxyb)
+* [transformA](distanceinput.md#readonly-transforma)
+* [transformB](distanceinput.md#readonly-transformb)
 * [useRadii](distanceinput.md#useradii)
+
+### Methods
+
+* [recycle](distanceinput.md#recycle)
 
 ## Properties
 
-###  proxyA
+### `Readonly` proxyA
 
-• **proxyA**: *[DistanceProxy](distanceproxy.md)* = new DistanceProxy()
-
-*Defined in [src/collision/Distance.ts:52](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L52)*
+• **proxyA**: *[DistanceProxy](distanceproxy.md)‹›* = new DistanceProxy()
 
 ___
 
-###  proxyB
+### `Readonly` proxyB
 
-• **proxyB**: *[DistanceProxy](distanceproxy.md)* = new DistanceProxy()
-
-*Defined in [src/collision/Distance.ts:53](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L53)*
+• **proxyB**: *[DistanceProxy](distanceproxy.md)‹›* = new DistanceProxy()
 
 ___
 
-###  transformA
+### `Readonly` transformA
 
-• **transformA**: *[Transform](transform.md) | null* = null
-
-*Defined in [src/collision/Distance.ts:54](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L54)*
+• **transformA**: *[Transform](transform.md)‹›* = Transform.identity()
 
 ___
 
-###  transformB
+### `Readonly` transformB
 
-• **transformB**: *[Transform](transform.md) | null* = null
-
-*Defined in [src/collision/Distance.ts:55](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L55)*
+• **transformB**: *[Transform](transform.md)‹›* = Transform.identity()
 
 ___
 
@@ -57,4 +53,10 @@ ___
 
 • **useRadii**: *boolean* = false
 
-*Defined in [src/collision/Distance.ts:56](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Distance.ts#L56)*
+## Methods
+
+###  recycle
+
+▸ **recycle**(): *void*
+
+**Returns:** *void*

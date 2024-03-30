@@ -23,47 +23,52 @@
  * SOFTWARE.
  */
 
-import options from '../util/options';
-import common from '../util/common';
-import Vec2 from '../common/Vec2';
-import BroadPhase from '../collision/BroadPhase';
-import Solver, { ContactImpulse, TimeStep } from './Solver';
-import Body, { BodyDef } from './Body';
-import Joint from './Joint';
-import Contact from './Contact';
-import AABB, { RayCastInput, RayCastOutput } from "../collision/AABB";
-import Fixture, { FixtureProxy } from "./Fixture";
-import Manifold from "../collision/Manifold";
+import { options } from '../util/options';
+import { Vec2, Vec2Value } from '../common/Vec2';
+import { BroadPhase } from '../collision/BroadPhase';
+import { Solver, ContactImpulse, TimeStep } from './Solver';
+import { Body, BodyDef } from './Body';
+import { Joint } from './Joint';
+import { Contact } from './Contact';
+import { AABBValue, RayCastInput, RayCastOutput } from "../collision/AABB";
+import { Fixture, FixtureProxy } from "./Fixture";
+import { Manifold } from "../collision/Manifold";
 import { b2CalculateParticleIterations } from '../particle/Particle';
 import b2ParticleSystem, { b2ParticleSystemDef, ParticleAABBQueryCallback, ParticleRayCastCallback } from '../particle/ParticleSystem';
 import { b2ParticleGroup } from '../particle/ParticleGroup';
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
-/**
- * @prop gravity [{ x : 0, y : 0}]
- * @prop allowSleep [true]
- * @prop warmStarting [true]
- * @prop continuousPhysics [true]
- * @prop subStepping [false]
- * @prop blockSolve [true]
- * @prop velocityIterations [8] For the velocity constraint solver.
- * @prop positionIterations [3] For the position constraint solver.
- */
 export interface WorldDef {
+  /** [default: { x : 0, y : 0}] */
   gravity?: Vec2;
+
+  /** [default: true] */
   allowSleep?: boolean;
+
+  /** [default: true] */
   warmStarting?: boolean;
+
+  /** [default: true] */
   continuousPhysics?: boolean;
+
+  /** [default: false] */
   subStepping?: boolean;
+
+  /** [default: true] */
   blockSolve?: boolean;
+
+  /** @internal [8] For the velocity constraint solver. */
   velocityIterations?: number;
+
+  /** @internal [3] For the position constraint solver. */
   positionIterations?: number;
 }
 
-const WorldDefDefault: WorldDef = {
+/** @internal */ const DEFAULTS: WorldDef = {
   gravity : Vec2.zero(),
   allowSleep : true,
   warmStarting : true,
@@ -85,9 +90,12 @@ const WorldDefDefault: WorldDef = {
  * @param fixture The fixture hit by the ray
  * @param point The point of initial intersection
  * @param normal The normal vector at the point of intersection
- * @param fraction
+ * @param fraction The fraction along the ray at the point of intersection
  *
- * @return -1 to filter, 0 to terminate, fraction to clip the ray for closest hit, 1 to continue
+ * @return `-1` to ignore the current fixture and continue
+ * @return `0` to terminate the ray cast
+ * @return `fraction` to clip the raycast at current point
+ * @return `1` don't clip the ray and continue
  */
 export type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) => number;
 
@@ -96,7 +104,7 @@ export type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2,
  */
 export type WorldAABBQueryCallback = (fixture: Fixture) => boolean;
 
-export default class World {
+export class World {
   /** @internal */ m_solver: Solver;
   /** @internal */ m_broadPhase: BroadPhase;
   /** @internal */ m_contactList: Contact | null;
@@ -129,15 +137,20 @@ export default class World {
    * @param def World definition or gravity vector.
    */
   constructor(def?: WorldDef | Vec2 | null) {
-    if (!(this instanceof World)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof World)) {
       return new World(def);
     }
 
-    if (def && Vec2.isValid(def)) {
+    this.s_step = new TimeStep();
+
+
+    if (!def) {
+      def = {};
+    } else if (Vec2.isValid(def)) {
       def = { gravity: def as Vec2 };
     }
 
-    def = options(def, WorldDefDefault) as WorldDef;
+    def = options(def, DEFAULTS) as WorldDef;
 
     this.m_solver = new Solver(this);
 
@@ -287,8 +300,8 @@ export default class World {
   /**
    * Change the global gravity vector.
    */
-  setGravity(gravity: Vec2): void {
-    this.m_gravity = gravity;
+  setGravity(gravity: Vec2Value): void {
+    this.m_gravity.set(gravity);
   }
 
   /**
@@ -396,8 +409,8 @@ export default class World {
    * @param aabb The query box.
    * @param callback Called for each fixture found in the query AABB. It may return `false` to terminate the query.
    */
-  queryAABB(aabb: AABB, callback: WorldAABBQueryCallback): void {
-    _ASSERT && common.assert(typeof callback === 'function');
+  queryAABB(aabb: AABBValue, callback: WorldAABBQueryCallback): void {
+    _ASSERT && console.assert(typeof callback === 'function');
     const broadPhase = this.m_broadPhase;
     this.m_broadPhase.query(aabb, function(proxyId: number): boolean { // TODO GC
       const proxy = broadPhase.getUserData(proxyId);
@@ -412,7 +425,7 @@ export default class World {
    */
   // TODO is API change ok?
   queryAABBParticles(
-    aabb: AABB,
+    aabb: AABBValue,
     callback: ParticleAABBQueryCallback,
     shouldQueryParticleSystem = (particleSystem: b2ParticleSystem) => true
   ) {
@@ -449,7 +462,7 @@ export default class World {
    * @param callback A user implemented callback function.
    */
   rayCast(point1: Vec2, point2: Vec2, callback: WorldRayCastCallback): void {
-    _ASSERT && common.assert(typeof callback === 'function');
+    _ASSERT && console.assert(typeof callback === 'function');
     const broadPhase = this.m_broadPhase;
 
     this.m_broadPhase.rayCast({
@@ -525,8 +538,8 @@ export default class World {
    *
    * @param newOrigin The new origin with respect to the old origin
    */
-  shiftOrigin(newOrigin: Vec2): void {
-    _ASSERT && common.assert(this.m_locked == false);
+  shiftOrigin(newOrigin: Vec2Value): void {
+    _ASSERT && console.assert(this.m_locked == false);
     if (this.m_locked) {
       return;
     }
@@ -544,11 +557,9 @@ export default class World {
     this.m_broadPhase.shiftOrigin(newOrigin);
   }
 
-  /**
-   * @internal Used for deserialize.
-   */
+  /** @internal Used for deserialize. */
   _addBody(body: Body): void {
-    _ASSERT && common.assert(this.isLocked() === false);
+    _ASSERT && console.assert(this.isLocked() === false);
     if (this.isLocked()) {
       return;
     }
@@ -570,10 +581,10 @@ export default class World {
    * Warning: This function is locked during callbacks.
    */
   createBody(def?: BodyDef): Body;
-  createBody(position: Vec2, angle?: number): Body;
+  createBody(position: Vec2Value, angle?: number): Body;
   // tslint:disable-next-line:typedef
   createBody(arg1?, arg2?) {
-    _ASSERT && common.assert(this.isLocked() == false);
+    _ASSERT && console.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return null;
     }
@@ -592,7 +603,7 @@ export default class World {
   }
 
   createDynamicBody(def?: BodyDef): Body;
-  createDynamicBody(position: Vec2, angle?: number): Body;
+  createDynamicBody(position: Vec2Value, angle?: number): Body;
   // tslint:disable-next-line:typedef
   createDynamicBody(arg1?, arg2?) {
     let def: BodyDef = {};
@@ -607,7 +618,7 @@ export default class World {
   }
 
   createKinematicBody(def?: BodyDef): Body;
-  createKinematicBody(position: Vec2, angle?: number): Body;
+  createKinematicBody(position: Vec2Value, angle?: number): Body;
   // tslint:disable-next-line:typedef
   createKinematicBody(arg1?, arg2?) {
     let def: BodyDef = {};
@@ -630,8 +641,8 @@ export default class World {
    * Warning: This function is locked during callbacks.
    */
   destroyBody(b: Body): boolean {
-    _ASSERT && common.assert(this.m_bodyCount > 0);
-    _ASSERT && common.assert(this.isLocked() == false);
+    _ASSERT && console.assert(this.m_bodyCount > 0);
+    _ASSERT && console.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return;
     }
@@ -707,9 +718,9 @@ export default class World {
    * Warning: This function is locked during callbacks.
    */
   createJoint<T extends Joint>(joint: T): T | null {
-    _ASSERT && common.assert(!!joint.m_bodyA);
-    _ASSERT && common.assert(!!joint.m_bodyB);
-    _ASSERT && common.assert(this.isLocked() == false);
+    _ASSERT && console.assert(!!joint.m_bodyA);
+    _ASSERT && console.assert(!!joint.m_bodyB);
+    _ASSERT && console.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return null;
     }
@@ -761,7 +772,7 @@ export default class World {
    * Warning: This function is locked during callbacks.
    */
   destroyJoint(joint: Joint): void {
-    _ASSERT && common.assert(this.isLocked() == false);
+    _ASSERT && console.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return;
     }
@@ -819,7 +830,7 @@ export default class World {
     joint.m_edgeB.prev = null;
     joint.m_edgeB.next = null;
 
-    _ASSERT && common.assert(this.m_jointCount > 0);
+    _ASSERT && console.assert(this.m_jointCount > 0);
     --this.m_jointCount;
 
     // If the joint prevents collisions, then flag any contacts for filtering.
@@ -848,7 +859,7 @@ export default class World {
    * Warning: This function is locked during callbacks.
    */
   createParticleSystem(def: b2ParticleSystemDef = {}): b2ParticleSystem | null {
-    _ASSERT && common.assert(this.isLocked() == false);
+    _ASSERT && console.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return null;
     }
@@ -873,8 +884,8 @@ export default class World {
    * Warning: This function is locked during callbacks.
    */
   destroyParticleSystem(p: b2ParticleSystem): void {
-    _ASSERT && common.assert(this.m_particleSystemList != null);
-    _ASSERT && common.assert(this.isLocked() == false);
+    _ASSERT && console.assert(this.m_particleSystemList != null);
+    _ASSERT && console.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return;
     }
@@ -897,7 +908,7 @@ export default class World {
   }
 
   /** @internal */
-  s_step: TimeStep = new TimeStep(); // reuse
+  s_step: TimeStep; // reuse
 
   /**
    * Take a time step. This performs collision detection, integration, and
@@ -1021,14 +1032,16 @@ export default class World {
    * Call this method to find new contacts.
    */
   findNewContacts(): void {
-    this.m_broadPhase.updatePairs(this.createContact);
+    this.m_broadPhase.updatePairs(
+      (proxyA: FixtureProxy, proxyB: FixtureProxy) => this.createContact(proxyA, proxyB)
+    );
   }
 
   /**
    * @internal
    * Callback for broad-phase.
    */
-  createContact = (proxyA: FixtureProxy, proxyB: FixtureProxy): void => {
+  createContact(proxyA: FixtureProxy, proxyB: FixtureProxy): void {
     const fixtureA = proxyA.fixture;
     const fixtureB = proxyB.fixture;
 
@@ -1098,7 +1111,7 @@ export default class World {
    */
   updateContacts(): void {
     // Update awake contacts.
-    let c;
+    let c: Contact;
     let next_c = this.m_contactList;
     while (c = next_c) {
       next_c = c.getNext();
@@ -1148,12 +1161,8 @@ export default class World {
     }
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   destroyContact(contact: Contact): void {
-    Contact.destroy(contact, this);
-
     // Remove from the world.
     if (contact.m_prev) {
       contact.m_prev.m_next = contact.m_next;
@@ -1164,6 +1173,8 @@ export default class World {
     if (contact == this.m_contactList) {
       this.m_contactList = contact.m_next;
     }
+
+    Contact.destroy(contact, this);
 
     --this.m_contactCount;
   }
@@ -1285,30 +1296,22 @@ export default class World {
     return listeners.length;
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   beginContact(contact: Contact): void {
     this.publish('begin-contact', contact);
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   endContact(contact: Contact): void {
     this.publish('end-contact', contact);
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   preSolve(contact: Contact, oldManifold: Manifold): void {
     this.publish('pre-solve', contact, oldManifold);
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   postSolve(contact: Contact, impulse: ContactImpulse): void {
     this.publish('post-solve', contact, impulse);
   }

@@ -17,31 +17,34 @@ Used for computing contact manifolds.
 
 ### Methods
 
+* [recycle](clipvertex.md#recycle)
 * [set](clipvertex.md#set)
 
 ## Properties
 
 ###  id
 
-• **id**: *[ContactID](contactid.md)‹›* = new ContactID()
-
-*Defined in [src/collision/Manifold.ts:312](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L312)*
+• **id**: *[ContactID](contactid.md)* = new ContactID()
 
 ___
 
 ###  v
 
-• **v**: *[Vec2](vec2.md)‹›* = Vec2.zero()
-
-*Defined in [src/collision/Manifold.ts:311](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L311)*
+• **v**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
 ## Methods
+
+###  recycle
+
+▸ **recycle**(): *void*
+
+**Returns:** *void*
+
+___
 
 ###  set
 
 ▸ **set**(`o`: [ClipVertex](clipvertex.md)): *void*
-
-*Defined in [src/collision/Manifold.ts:314](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L314)*
 
 **Parameters:**
 

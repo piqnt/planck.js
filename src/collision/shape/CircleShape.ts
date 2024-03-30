@@ -23,31 +23,35 @@
  * SOFTWARE.
  */
 
-import common from '../../util/common';
-import Math from '../../common/Math';
-import Rot from '../../common/Rot';
-import Vec2 from '../../common/Vec2';
-import Shape from '../Shape';
-import AABB, { RayCastInput, RayCastOutput } from '../AABB';
-import Transform from '../../common/Transform';
+import * as matrix from '../../common/Matrix';
+import { EPSILON } from '../../common/Math';
+import { Rot } from '../../common/Rot';
+import { Vec2, Vec2Value } from '../../common/Vec2';
+import { Shape } from '../Shape';
+import { AABBValue, RayCastInput, RayCastOutput } from '../AABB';
+import { Transform, TransformValue } from '../../common/Transform';
 import { MassData } from '../../dynamics/Body';
 import { DistanceProxy } from '../Distance';
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const math_sqrt = Math.sqrt;
+/** @internal */ const math_PI = Math.PI;
 
+/** @internal */ const temp = matrix.vec2(0, 0);
 
-export default class CircleShape extends Shape {
+export class CircleShape extends Shape {
   static TYPE = 'circle' as const;
+  m_type: 'circle';
 
   m_p: Vec2;
+  m_radius: number;
 
-  constructor(position: Vec2, radius?: number);
+  constructor(position: Vec2Value, radius?: number);
   constructor(radius?: number);
-  // tslint:disable-next-line:typedef
-  constructor(a, b?) {
+  constructor(a: any, b?: any) {
     // @ts-ignore
-    if (!(this instanceof CircleShape)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof CircleShape)) {
       return new CircleShape(a, b);
     }
 
@@ -84,7 +88,15 @@ export default class CircleShape extends Shape {
     return new CircleShape(data.p, data.radius);
   }
 
-  // TODO: already defined in Shape
+  /** @hidden */
+  _reset(): void {
+    // noop
+  }
+
+  getType(): 'circle' {
+    return this.m_type;
+  }
+
   getRadius(): number {
     return this.m_radius;
   }
@@ -93,14 +105,8 @@ export default class CircleShape extends Shape {
     return this.m_p;
   }
 
-  getVertex(index: 0): Vec2 {
-    _ASSERT && common.assert(index == 0);
-    return this.m_p;
-  }
-
   /**
-   * @internal
-   * @deprecated Shapes should be treated as immutable.
+   * @internal @deprecated Shapes should be treated as immutable.
    *
    * clone the concrete shape.
    */
@@ -126,10 +132,9 @@ export default class CircleShape extends Shape {
    * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
-  testPoint(xf: Transform, p: Vec2): boolean {
-    const center = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
-    const d = Vec2.sub(p, center);
-    return Vec2.dot(d, d) <= this.m_radius * this.m_radius;
+  testPoint(xf: TransformValue, p: Vec2Value): boolean {
+    const center = matrix.transformVec2(temp, xf, this.m_p)
+    return matrix.distSqrVec2(p, center) <= this.m_radius * this.m_radius;
   }
 
   /**
@@ -175,12 +180,12 @@ export default class CircleShape extends Shape {
     const sigma = c * c - rr * b;
 
     // Check for negative discriminant and short segment.
-    if (sigma < 0.0 || rr < Math.EPSILON) {
+    if (sigma < 0.0 || rr < EPSILON) {
       return false;
     }
 
     // Find the point of intersection of the line with the circle.
-    let a = -(c + Math.sqrt(sigma));
+    let a = -(c + math_sqrt(sigma));
 
     // Is the intersection point on the segment?
     if (0.0 <= a && a <= input.maxFraction * rr) {
@@ -202,10 +207,11 @@ export default class CircleShape extends Shape {
    * @param xf The world transform of the shape.
    * @param childIndex The child shape
    */
-  computeAABB(aabb: AABB, xf: Transform, childIndex: number): void {
-    const p = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
-    aabb.lowerBound.setNum(p.x - this.m_radius, p.y - this.m_radius);
-    aabb.upperBound.setNum(p.x + this.m_radius, p.y + this.m_radius);
+  computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void {
+    const p = matrix.transformVec2(temp, xf, this.m_p);
+
+    matrix.setVec2(aabb.lowerBound, p.x - this.m_radius, p.y - this.m_radius);
+    matrix.setVec2(aabb.upperBound, p.x + this.m_radius, p.y + this.m_radius);
   }
 
   /**
@@ -216,17 +222,18 @@ export default class CircleShape extends Shape {
    * @param density The density in kilograms per meter squared.
    */
   computeMass(massData: MassData, density: number): void {
-    massData.mass = density * Math.PI * this.m_radius * this.m_radius;
-    massData.center = this.m_p;
+    massData.mass = density * math_PI * this.m_radius * this.m_radius;
+    matrix.copyVec2(massData.center, this.m_p);
     // inertia about the local origin
-    massData.I = massData.mass
-        * (0.5 * this.m_radius * this.m_radius + Vec2.dot(this.m_p, this.m_p));
+    massData.I = massData.mass * (0.5 * this.m_radius * this.m_radius + matrix.lengthSqrVec2(this.m_p));
   }
 
   computeDistanceProxy(proxy: DistanceProxy): void {
-    proxy.m_vertices.push(this.m_p);
+    proxy.m_vertices[0] = this.m_p;
+    proxy.m_vertices.length = 1;
     proxy.m_count = 1;
     proxy.m_radius = this.m_radius;
   }
-
 }
+
+export const Circle = CircleShape;

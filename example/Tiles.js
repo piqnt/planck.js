@@ -23,26 +23,31 @@
 
 // This stress tests the dynamic tree broad-phase. This also shows that tile
 // based collision is _not_ smooth due to Box2D not knowing about adjacency.
-planck.testbed('Tiles', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = pl.World(Vec2(0, -10));
 
-  var COUNT = 20;
+const { World, Vec2, Box, Testbed } = planck;
 
-  var fixtureCount = 0;
+let world = new World(new Vec2(0, -10));
 
-  var a = 0.5;
-  var ground = world.createBody(Vec2(0, -a));
+const testbed = Testbed.mount();
+testbed.start(world);
 
-  if (1) {
-    var N = 200;
-    var M = 10;
-    var position = Vec2();
+let COUNT = 20;
+
+let fixtureCount = 0;
+
+{
+  let a = 0.5;
+  let ground = world.createBody(new Vec2(0, -a));
+
+  if (true) {
+    let N = 200;
+    let M = 10;
+    let position = new Vec2();
     position.y = 0.0;
-    for (var j = 0; j < M; ++j) {
+    for (let j = 0; j < M; ++j) {
       position.x = -N * a;
-      for (var i = 0; i < N; ++i) {
-        ground.createFixture(pl.Box(a, a, position, 0.0), 0.0);
+      for (let i = 0; i < N; ++i) {
+        ground.createFixture(new Box(a, a, position, 0.0), 0.0);
         ++fixtureCount;
         position.x += 2.0 * a;
       }
@@ -50,36 +55,37 @@ planck.testbed('Tiles', function(testbed) {
     }
 
   } else {
-    var N = 200;
-    var M = 10;
-    var position = Vec2();
+    let N = 200;
+    let M = 10;
+    let position = new Vec2();
     position.x = -N * a;
-    for (var i = 0; i < N; ++i) {
+    for (let i = 0; i < N; ++i) {
       position.y = 0.0;
-      for (var j = 0; j < M; ++j) {
-        ground.createFixture(pl.Box(a, a, position, 0.0), 0.0);
+      for (let j = 0; j < M; ++j) {
+        ground.createFixture(new Box(a, a, position, 0.0), 0.0);
         position.y -= 2.0 * a;
       }
       position.x += 2.0 * a;
     }
   }
+}
+{
+  let a = 0.5;
+  let shape = new Box(a, a);
 
-  var a = 0.5;
-  var shape = pl.Box(a, a);
+  let x = new Vec2(-7.0, 0.75);
+  let y = new Vec2();
+  let deltaX = new Vec2(0.5625, 1.25);
+  let deltaY = new Vec2(1.125, 0.0);
 
-  var x = Vec2(-7.0, 0.75);
-  var y = Vec2();
-  var deltaX = Vec2(0.5625, 1.25);
-  var deltaY = Vec2(1.125, 0.0);
-
-  for (var i = 0; i < COUNT; ++i) {
+  for (let i = 0; i < COUNT; ++i) {
     y.set(x);
 
-    for (var j = i; j < COUNT; ++j) {
+    for (let j = i; j < COUNT; ++j) {
 
       // bd.allowSleep = !(i == 0 && j == 0)
 
-      var body = world.createDynamicBody(y);
+      let body = world.createDynamicBody(y);
       body.createFixture(shape, 5.0);
       ++fixtureCount;
       y.add(deltaY);
@@ -87,25 +93,22 @@ planck.testbed('Tiles', function(testbed) {
 
     x.add(deltaX);
   }
+}
+let createTime = Date.now();
 
-  var createTime = Date.now();
+testbed.step = function() {
+  let height = world.getTreeHeight();
+  let leafCount = world.getProxyCount();
+  let minimumNodeCount = 2 * leafCount - 1;
+  let minimumHeight = Math.ceil(Math.log(minimumNodeCount) / Math.log(2.0));
 
-  testbed.step = function() {
-    var height = world.getTreeHeight();
-    var leafCount = world.getProxyCount();
-    var minimumNodeCount = 2 * leafCount - 1;
-    var minimumHeight = Math.ceil(Math.log(minimumNodeCount) / Math.log(2.0));
+  testbed.status('dynamic tree height', height);
+  testbed.status('min', minimumHeight);
+  testbed.status('create time', createTime + 'ms');
+  testbed.status('fixture count', fixtureCount);
 
-    testbed.status("dynamic tree height", height);
-    testbed.status("min", minimumHeight);
-    testbed.status("create time", createTime + "ms");
-    testbed.status("fixture count", fixtureCount);
-
-    // var tree = world.m_broadPhase.m_tree;
-    // if (stepCount++ == 400) {
-    // tree.rebuildBottomUp();
-    // }
-  };
-
-  return world;
-});
+  // let tree = world.m_broadPhase.m_tree;
+  // if (stepCount++ == 400) {
+  // tree.rebuildBottomUp();
+  // }
+};

@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-import common from '../util/common';
-import type Vec2 from '../common/Vec2';
-import type Body from './Body';
+import type { Vec2, Vec2Value }  from '../common/Vec2';
+import type { Body }  from './Body';
 import { TimeStep } from "./Solver";
+import { Style } from '../util/Testbed';
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 /**
  * A joint edge is used to connect bodies and joints together in a joint graph
@@ -82,7 +82,7 @@ export interface JointDef extends JointOpt {
   bodyB: Body;
 }
 
-const DEFAULTS = {
+/** @internal */ const DEFAULTS = {
   userData : null,
   collideConnected : false
 };
@@ -91,7 +91,7 @@ const DEFAULTS = {
  * The base joint class. Joints are used to constraint two bodies together in
  * various fashions. Some joints also feature limits and motors.
  */
-export default abstract class Joint {
+export abstract class Joint {
 
   /** @internal */ m_type: string = 'unknown-joint';
 
@@ -109,15 +109,21 @@ export default abstract class Joint {
   /** @internal */ m_islandFlag: boolean = false;
   /** @internal */ m_userData: unknown;
 
+  /** Styling for dev-tools. */
+  style: Style = {};
+
+  /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
+  appData: Record<string, any> = {};
+
   constructor(def: JointDef);
   constructor(def: JointOpt, bodyA: Body, bodyB: Body);
   constructor(def: JointDef | JointOpt, bodyA?: Body, bodyB?: Body) {
     bodyA = 'bodyA' in def ? def.bodyA : bodyA;
     bodyB = 'bodyB' in def ? def.bodyB : bodyB;
 
-    _ASSERT && common.assert(!!bodyA);
-    _ASSERT && common.assert(!!bodyB);
-    _ASSERT && common.assert(bodyA != bodyB);
+    _ASSERT && console.assert(!!bodyA);
+    _ASSERT && console.assert(!!bodyB);
+    _ASSERT && console.assert(bodyA != bodyB);
 
     this.m_bodyA = bodyA!;
     this.m_bodyB = bodyB!;
@@ -201,7 +207,7 @@ export default abstract class Joint {
   /**
    * Shift the origin for any points stored in world coordinates.
    */
-  shiftOrigin(newOrigin: Vec2): void {}
+  shiftOrigin(newOrigin: Vec2Value): void {}
 
   abstract initVelocityConstraints(step: TimeStep): void;
 
@@ -212,4 +218,17 @@ export default abstract class Joint {
    */
   abstract solvePositionConstraints(step: TimeStep): boolean;
 
+  /**
+   * @hidden @experimental
+   * Update joint with new props.
+   */
+  abstract _reset(def: Partial<JointDef>): void;
+
+  /**
+   * @internal @deprecated
+   * Temporary for backward compatibility, will be removed.
+   */
+  _resetAnchors(def: any): void {
+    return this._reset(def);
+  }
 }

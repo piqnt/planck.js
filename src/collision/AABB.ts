@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-import common from '../util/common';
-import Math from '../common/Math';
-import Vec2 from '../common/Vec2';
+import { EPSILON } from '../common/Math';
+import { Vec2, Vec2Value } from '../common/Vec2';
 
 
-const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const math_max = Math.max;
+/** @internal */ const math_min = Math.min;
 
 /**
  * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
@@ -51,12 +51,17 @@ export interface RayCastOutput {
   fraction: number;
 }
 
-export default class AABB {
+export interface AABBValue {
+  lowerBound: Vec2Value;
+  upperBound: Vec2Value;
+}
+
+export class AABB {
   lowerBound: Vec2;
   upperBound: Vec2;
 
-  constructor(lower?: Vec2, upper?: Vec2) {
-    if (!(this instanceof AABB)) {
+  constructor(lower?: Vec2Value, upper?: Vec2Value) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof AABB)) {
       return new AABB(lower, upper);
     }
 
@@ -88,11 +93,7 @@ export default class AABB {
   }
 
   static assert(o: any): void {
-    if (!_ASSERT) return;
-    if (!AABB.isValid(o)) {
-      _DEBUG && common.debug(o);
-      throw new Error('Invalid AABB!');
-    }
+    _ASSERT && console.assert(!AABB.isValid(o), 'Invalid AABB!', o);
   }
 
   /**
@@ -119,7 +120,7 @@ export default class AABB {
   /**
    * Combine one or two AABB into this one.
    */
-  combine(a: AABB, b?: AABB): void {
+  combine(a: AABBValue, b?: AABBValue): void {
     b = b || this;
 
     const lowerA = a.lowerBound;
@@ -127,26 +128,26 @@ export default class AABB {
     const lowerB = b.lowerBound;
     const upperB = b.upperBound;
 
-    const lowerX = Math.min(lowerA.x, lowerB.x);
-    const lowerY = Math.min(lowerA.y, lowerB.y);
-    const upperX = Math.max(upperB.x, upperA.x);
-    const upperY = Math.max(upperB.y, upperA.y);
+    const lowerX = math_min(lowerA.x, lowerB.x);
+    const lowerY = math_min(lowerA.y, lowerB.y);
+    const upperX = math_max(upperB.x, upperA.x);
+    const upperY = math_max(upperB.y, upperA.y);
 
     this.lowerBound.setNum(lowerX, lowerY);
     this.upperBound.setNum(upperX, upperY);
   }
 
-  combinePoints(a: Vec2, b: Vec2): void {
-    this.lowerBound.setNum(Math.min(a.x, b.x), Math.min(a.y, b.y));
-    this.upperBound.setNum(Math.max(a.x, b.x), Math.max(a.y, b.y));
+  combinePoints(a: Vec2Value, b: Vec2Value): void {
+    this.lowerBound.setNum(math_min(a.x, b.x), math_min(a.y, b.y));
+    this.upperBound.setNum(math_max(a.x, b.x), math_max(a.y, b.y));
   }
 
-  set(aabb: AABB): void {
+  set(aabb: AABBValue): void {
     this.lowerBound.setNum(aabb.lowerBound.x, aabb.lowerBound.y);
     this.upperBound.setNum(aabb.upperBound.x, aabb.upperBound.y);
   }
 
-  contains(aabb: AABB): boolean {
+  contains(aabb: AABBValue): boolean {
     let result = true;
     result = result && this.lowerBound.x <= aabb.lowerBound.x;
     result = result && this.lowerBound.y <= aabb.lowerBound.y;
@@ -160,14 +161,15 @@ export default class AABB {
     return this;
   }
 
-  static extend(aabb: AABB, value: number): void {
-    aabb.lowerBound.x -= value;
-    aabb.lowerBound.y -= value;
-    aabb.upperBound.x += value;
-    aabb.upperBound.y += value;
+  static extend(out: AABBValue, value: number): AABBValue {
+    out.lowerBound.x -= value;
+    out.lowerBound.y -= value;
+    out.upperBound.x += value;
+    out.upperBound.y += value;
+    return out;
   }
 
-  static testOverlap(a: AABB, b: AABB): boolean {
+  static testOverlap(a: AABBValue, b: AABBValue): boolean {
     const d1x = b.lowerBound.x - a.upperBound.x;
     const d2x = a.lowerBound.x - b.upperBound.x;
 
@@ -180,13 +182,13 @@ export default class AABB {
     return true;
   }
 
-  static areEqual(a: AABB, b: AABB): boolean {
+  static areEqual(a: AABBValue, b: AABBValue): boolean {
     return Vec2.areEqual(a.lowerBound, b.lowerBound) && Vec2.areEqual(a.upperBound, b.upperBound);
   }
 
-  static diff(a: AABB, b: AABB): number {
-    const wD = Math.max(0, Math.min(a.upperBound.x, b.upperBound.x) - Math.max(b.lowerBound.x, a.lowerBound.x));
-    const hD = Math.max(0, Math.min(a.upperBound.y, b.upperBound.y) - Math.max(b.lowerBound.y, a.lowerBound.y));
+  static diff(a: AABBValue, b: AABBValue): number {
+    const wD = math_max(0, math_min(a.upperBound.x, b.upperBound.x) - math_max(b.lowerBound.x, a.lowerBound.x));
+    const hD = math_max(0, math_min(a.upperBound.y, b.upperBound.y) - math_max(b.lowerBound.y, a.lowerBound.y));
 
     const wA = a.upperBound.x - a.lowerBound.x;
     const hA = a.upperBound.y - a.lowerBound.y;
@@ -210,7 +212,7 @@ export default class AABB {
     const normal = Vec2.zero();
 
     for (let f: 'x' | 'y' = 'x'; f !== null; f = (f === 'x' ? 'y' : null)) {
-      if (absD.x < Math.EPSILON) {
+      if (absD.x < EPSILON) {
         // Parallel.
         if (p[f] < this.lowerBound[f] || this.upperBound[f] < p[f]) {
           return false;
@@ -238,7 +240,7 @@ export default class AABB {
         }
 
         // Pull the max down
-        tmax = Math.min(tmax, t2);
+        tmax = math_min(tmax, t2);
 
         if (tmin > tmax) {
           return false;
@@ -258,8 +260,24 @@ export default class AABB {
     return true;
   }
 
-  /** @internal */
+  /** @hidden */
   toString(): string {
     return JSON.stringify(this);
+  }
+
+  static combinePoints(out: AABBValue, a: Vec2Value, b: Vec2Value): AABBValue {
+    out.lowerBound.x = math_min(a.x, b.x);
+    out.lowerBound.y = math_min(a.y, b.y);
+    out.upperBound.x = math_max(a.x, b.x);
+    out.upperBound.y = math_max(a.y, b.y);
+    return out;
+  }
+
+  static combinedPerimeter(a: AABBValue, b: AABBValue) {
+    const lx = math_min(a.lowerBound.x, b.lowerBound.x);
+    const ly = math_min(a.lowerBound.y, b.lowerBound.y);
+    const ux = math_max(a.upperBound.x, b.upperBound.x);
+    const uy = math_max(a.upperBound.y, b.upperBound.y);
+    return 2.0 * (ux - lx + uy - ly);  
   }
 }

@@ -21,85 +21,86 @@
  * SOFTWARE.
  */
 
-planck.testbed('Confined', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World();
+const { World, Vec2, Edge, Circle, Testbed } = planck;
 
-  var e_columnCount = 0;
-  var e_rowCount = 0;
-  var ground = world.createBody();
+let world = new World();
 
-  // Floor
-  ground.createFixture(pl.Edge(Vec2(-10, 0), Vec2(10, 0)), 0);
+const testbed = Testbed.mount();
+testbed.start(world);
 
-  // Left wall
-  ground.createFixture(pl.Edge(Vec2(-10, 0), Vec2(-10, 20)), 0);
+let e_columnCount = 0;
+let e_rowCount = 0;
+let ground = world.createBody();
 
-  // Right wall
-  ground.createFixture(pl.Edge(Vec2(10, 0), Vec2(10, 20)), 0);
+// Floor
+ground.createFixture(new Edge(new Vec2(-10, 0), new Vec2(10, 0)), 0);
 
-  // Roof
-  ground.createFixture(pl.Edge(Vec2(-10, 20), Vec2(10, 20)), 0);
+// Left wall
+ground.createFixture(new Edge(new Vec2(-10, 0), new Vec2(-10, 20)), 0);
 
-  var radius = 0.5;
-  var shape = pl.Circle(radius);
+// Right wall
+ground.createFixture(new Edge(new Vec2(10, 0), new Vec2(10, 20)), 0);
 
-  var fd = {};
-  fd.density = 1.0;
-  fd.friction = 0.1;
+// Roof
+ground.createFixture(new Edge(new Vec2(-10, 20), new Vec2(10, 20)), 0);
 
-  for (var j = 0; j < e_columnCount; ++j) {
-    for (var i = 0; i < e_rowCount; ++i) {
-      var body = world.createDynamicBody(Vec2(-10 + (2.1 * j + 1 + 0.01 * i) * radius, (2 * i + 1) * radius));
-      body.createFixture(shape, fd);
+let radius = 0.5;
+let shape = new Circle(radius);
+
+let fd = {
+  density : 1.0,
+  friction : 0.1
+};
+
+for (let j = 0; j < e_columnCount; ++j) {
+  for (let i = 0; i < e_rowCount; ++i) {
+    let body = world.createDynamicBody(new Vec2(-10 + (2.1 * j + 1 + 0.01 * i) * radius, (2 * i + 1) * radius));
+    body.createFixture(shape, fd);
+  }
+}
+
+function CreateCircle() {
+  let body = world.createDynamicBody(new Vec2(Math.random() * 10 - 5, Math.random() * 10 + 5));
+  // bd.allowSleep = false;
+  body.createFixture(new Circle(Math.random() * 2.5 + 0.5), {
+    density : 1.0,
+    friction : 0.0
+  });
+}
+
+testbed.keydown = function(code, char) {
+  if (testbed.activeKeys.fire) {
+    CreateCircle();
+  }
+};
+
+let stepCount = 0;
+testbed.step = function() {
+  let sleeping = true;
+  for (let b = world.getBodyList(); b; b = b.getNext()) {
+    if (b.isDynamic() && b.isAwake()) {
+      sleeping = false;
     }
   }
 
-  function CreateCircle() {
-    var body = world.createDynamicBody(Vec2(Math.random() * 10 - 5, Math.random() * 10 + 5));
-    // bd.allowSleep = false;
-    body.createFixture(pl.Circle(Math.random() * 2.5 + 0.5), {
-      density : 1.0,
-      friction : 0.0
-    });
+  // ?
+  // if (stepCount++ == 180) {
+  //   stepCount += 0;
+  // }
+
+  if (sleeping) {
+    CreateCircle();
   }
 
-  testbed.keydown = function(code, char) {
-    if (testbed.activeKeys.fire) {
-      CreateCircle();
-    }
-  };
-
-  var stepCount = 0;
-  testbed.step = function() {
-    var sleeping = true;
-    for (var b = world.getBodyList(); b; b = b.getNext()) {
-      if (b.isDynamic() && b.isAwake()) {
-        sleeping = false;
-      }
-    }
-
-    // ?
-    // if (stepCount++ == 180) {
-    //   stepCount += 0;
-    // }
-
-    if (sleeping) {
-      CreateCircle();
-    }
-
-    // for (var b = world.getBodyList(); b; b = b.getNext()) {
-    //   if (!b.isDynamic()) {
-    //     continue;
-    //   }
-    //
-    //   var p = b.getPosition();
-    //   if (p.x <= -10.0 || 10.0 <= p.x || p.y <= 0.0 || 20.0 <= p.y) {
-    //     // why?
-    //     p.x += 0.0;
-    //   }
-    // }
-  };
-
-  return world;
-});
+  // for (let b = world.getBodyList(); b; b = b.getNext()) {
+  //   if (!b.isDynamic()) {
+  //     continue;
+  //   }
+  //
+  //   let p = b.getPosition();
+  //   if (p.x <= -10.0 || 10.0 <= p.x || p.y <= 0.0 || 20.0 <= p.y) {
+  //     // why?
+  //     p.x += 0.0;
+  //   }
+  // }
+};

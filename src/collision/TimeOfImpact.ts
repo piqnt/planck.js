@@ -22,37 +22,41 @@
  * SOFTWARE.
  */
 
-import Settings from '../Settings';
-
-import common from '../util/common';
-import stats from '../util/stats';
+import * as matrix from '../common/Matrix';
+import { SettingsInternal as Settings } from '../Settings';
+import { stats } from '../util/stats';
 import Timer from '../util/Timer';
-
-import Math from '../common/Math';
-import Vec2 from '../common/Vec2';
-import Rot from '../common/Rot';
-import Sweep from '../common/Sweep';
-import Transform from '../common/Transform';
-
-import Distance, { DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from './Distance';
+import { Sweep } from '../common/Sweep';
+import { Transform } from '../common/Transform';
+import { Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from './Distance';
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const math_abs = Math.abs;
+/** @internal */ const math_max = Math.max;
 
 
 /**
  * Input parameters for TimeOfImpact.
  */
 export class TOIInput {
-  proxyA: DistanceProxy = new DistanceProxy();
-  proxyB: DistanceProxy = new DistanceProxy();
-  sweepA: Sweep = new Sweep();
-  sweepB: Sweep = new Sweep();
+  proxyA = new DistanceProxy();
+  proxyB = new DistanceProxy();
+  sweepA = new Sweep();
+  sweepB = new Sweep();
   /** defines sweep interval [0, tMax] */
-  tMax: number | undefined;
+  tMax: number;
+  recycle() {
+    this.proxyA.recycle();
+    this.proxyB.recycle();
+    this.sweepA.recycle();
+    this.sweepB.recycle();
+    this.tMax = -1;
+  }
 }
 
 export enum TOIOutputState {
+  e_unset = -1,
   e_unknown = 0,
   e_failed = 1,
   e_overlapped = 2,
@@ -64,8 +68,12 @@ export enum TOIOutputState {
  * Output parameters for TimeOfImpact.
  */
 export class TOIOutput {
-  state: TOIOutputState | undefined;
-  t: number | undefined;
+  state = TOIOutputState.e_unset;
+  t = -1;
+  recycle() {
+    this.state = TOIOutputState.e_unset;
+    this.t = -1;
+  }
 }
 
 stats.toiTime = 0;
@@ -76,10 +84,27 @@ stats.toiMaxIters = 0;
 stats.toiRootIters = 0;
 stats.toiMaxRootIters = 0;
 
+/** @internal */ const distanceInput = new DistanceInput();
+/** @internal */ const distanceOutput = new DistanceOutput();
+// this is passed to Distance and SeparationFunction
+/** @internal */ const cache = new SimplexCache();
+
+/** @internal */ const xfA = matrix.transform(0, 0, 0);
+/** @internal */ const xfB = matrix.transform(0, 0, 0);
+/** @internal */ const temp = matrix.vec2(0, 0);
+/** @internal */ const pointA = matrix.vec2(0, 0);
+/** @internal */ const pointB = matrix.vec2(0, 0);
+/** @internal */ const normal = matrix.vec2(0, 0);
+/** @internal */ const axisA = matrix.vec2(0, 0);
+/** @internal */ const axisB = matrix.vec2(0, 0);
+/** @internal */ const localPointA = matrix.vec2(0, 0);
+/** @internal */ const localPointB = matrix.vec2(0, 0);
+
+
 /**
  * Compute the upper bound on time before two shapes penetrate. Time is
  * represented as a fraction between [0,tMax]. This uses a swept separating axis
- * and may miss some intermediate, non-tunneling collision. If you change the
+ * and may miss some intermediate, non-tunneling collisions. If you change the
  * time interval, you should call this function again.
  *
  * Note: use Distance to compute the contact point and normal at the time of
@@ -88,7 +113,7 @@ stats.toiMaxRootIters = 0;
  * CCD via the local separating axis method. This seeks progression by computing
  * the largest time at which separation is maintained.
  */
-export default function TimeOfImpact(output: TOIOutput, input: TOIInput): void {
+export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void {
   const timer = Timer.now();
 
   ++stats.toiCalls;
@@ -110,35 +135,32 @@ export default function TimeOfImpact(output: TOIOutput, input: TOIInput): void {
   const tMax = input.tMax;
 
   const totalRadius = proxyA.m_radius + proxyB.m_radius;
-  const target = Math.max(Settings.linearSlop, totalRadius - 3.0 * Settings.linearSlop);
+  const target = math_max(Settings.linearSlop, totalRadius - 3.0 * Settings.linearSlop);
   const tolerance = 0.25 * Settings.linearSlop;
-  _ASSERT && common.assert(target > tolerance);
+  _ASSERT && console.assert(target > tolerance);
 
   let t1 = 0.0;
   const k_maxIterations = Settings.maxTOIIterations;
   let iter = 0;
 
   // Prepare input for distance query.
-  const cache = new SimplexCache();
+  // const cache = new SimplexCache();
+  cache.recycle();
 
-  const distanceInput = new DistanceInput();
-  distanceInput.proxyA = input.proxyA;
-  distanceInput.proxyB = input.proxyB;
+  distanceInput.proxyA.setVertices(proxyA.m_vertices, proxyA.m_count, proxyA.m_radius);
+  distanceInput.proxyB.setVertices(proxyB.m_vertices, proxyB.m_count, proxyB.m_radius);
   distanceInput.useRadii = false;
 
   // The outer loop progressively attempts to compute new separating axes.
   // This loop terminates when an axis is repeated (no progress is made).
   while (true) {
-    const xfA = Transform.identity();
-    const xfB = Transform.identity();
     sweepA.getTransform(xfA, t1);
     sweepB.getTransform(xfB, t1);
 
     // Get the distance between shapes. We can also use the results
     // to get a separating axis.
-    distanceInput.transformA = xfA;
-    distanceInput.transformB = xfB;
-    const distanceOutput = new DistanceOutput();
+    matrix.copyTransform(distanceInput.transformA, xfA);
+    matrix.copyTransform(distanceInput.transformB, xfB);
     Distance(distanceOutput, cache, distanceInput);
 
     // If the shapes are overlapped, we give up on continuous collision.
@@ -157,8 +179,7 @@ export default function TimeOfImpact(output: TOIOutput, input: TOIInput): void {
     }
 
     // Initialize the separating axis.
-    const fcn = new SeparationFunction();
-    fcn.initialize(cache, proxyA, sweepA, proxyB, sweepB, t1);
+    separationFunction.initialize(cache, proxyA, sweepA, proxyB, sweepB, t1);
 
     // if (false) {
     //   // Dump the curve seen by the root finder
@@ -186,9 +207,7 @@ export default function TimeOfImpact(output: TOIOutput, input: TOIInput): void {
     let pushBackIter = 0;
     while (true) {
       // Find the deepest point at t2. Store the witness point indices.
-      let s2 = fcn.findMinSeparation(t2);
-      // const indexA = fcn.indexA;
-      // const indexB = fcn.indexB;
+      let s2 = separationFunction.findMinSeparation(t2);
 
       // Is the final configuration separated?
       if (s2 > target + tolerance) {
@@ -207,9 +226,7 @@ export default function TimeOfImpact(output: TOIOutput, input: TOIInput): void {
       }
 
       // Compute the initial separation of the witness points.
-      let s1 = fcn.evaluate(t1);
-      // const indexA = fcn.indexA;
-      // const indexB = fcn.indexB;
+      let s1 = separationFunction.evaluate(t1);
 
       // Check for initial overlap. This might happen if the root finder
       // runs out of iterations.
@@ -247,11 +264,9 @@ export default function TimeOfImpact(output: TOIOutput, input: TOIInput): void {
         ++rootIterCount;
         ++stats.toiRootIters;
 
-        const s = fcn.evaluate(t);
-        const indexA = fcn.indexA;
-        const indexB = fcn.indexB;
+        const s = separationFunction.evaluate(t);
 
-        if (Math.abs(s - target) < tolerance) {
+        if (math_abs(s - target) < tolerance) {
           // t2 holds a tentative value for t1
           t2 = t;
           break;
@@ -271,7 +286,7 @@ export default function TimeOfImpact(output: TOIOutput, input: TOIInput): void {
         }
       }
 
-      stats.toiMaxRootIters = Math.max(stats.toiMaxRootIters, rootIterCount);
+      stats.toiMaxRootIters = math_max(stats.toiMaxRootIters, rootIterCount);
 
       ++pushBackIter;
 
@@ -295,43 +310,64 @@ export default function TimeOfImpact(output: TOIOutput, input: TOIInput): void {
     }
   }
 
-  stats.toiMaxIters = Math.max(stats.toiMaxIters, iter);
+  stats.toiMaxIters = math_max(stats.toiMaxIters, iter);
 
   const time = Timer.diff(timer);
-  stats.toiMaxTime = Math.max(stats.toiMaxTime, time);
+  stats.toiMaxTime = math_max(stats.toiMaxTime, time);
   stats.toiTime += time;
+
+  separationFunction.recycle();
 }
 
 enum SeparationFunctionType {
+  e_unset = -1,
   e_points = 1,
   e_faceA = 2,
   e_faceB = 3,
 }
 
 class SeparationFunction {
-  m_proxyA: DistanceProxy = new DistanceProxy();
-  m_proxyB: DistanceProxy = new DistanceProxy();
-  m_sweepA: Sweep;
-  m_sweepB: Sweep;
-  indexA: number;
-  indexB: number;
-  m_type: SeparationFunctionType;
-  m_localPoint: Vec2 = Vec2.zero();
-  m_axis: Vec2 = Vec2.zero();
+  // input cache
+  // todo: maybe assign by copy instead of reference?
+  m_proxyA: DistanceProxy = null;
+  m_proxyB: DistanceProxy = null;
+  m_sweepA: Sweep = null;
+  m_sweepB: Sweep = null;
+
+  // initialize cache
+  m_type = SeparationFunctionType.e_unset;
+  m_localPoint = matrix.vec2(0, 0);
+  m_axis = matrix.vec2(0, 0);
+
+  // compute output
+  indexA = -1;
+  indexB = -1;
+
+  recycle() {
+    this.m_proxyA = null;
+    this.m_proxyB = null;
+    this.m_sweepA = null;
+    this.m_sweepB = null;
+
+    this.m_type = SeparationFunctionType.e_unset;
+    matrix.zeroVec2(this.m_localPoint)
+    matrix.zeroVec2(this.m_axis)
+
+    this.indexA = -1;
+    this.indexB = -1;
+  }
 
   // TODO_ERIN might not need to return the separation
 
   initialize(cache: SimplexCache, proxyA: DistanceProxy, sweepA: Sweep, proxyB: DistanceProxy, sweepB: Sweep, t1: number): number {
+    const count = cache.count;
+    _ASSERT && console.assert(0 < count && count < 3);
+
     this.m_proxyA = proxyA;
     this.m_proxyB = proxyB;
-    const count = cache.count;
-    _ASSERT && common.assert(0 < count && count < 3);
-
     this.m_sweepA = sweepA;
     this.m_sweepB = sweepB;
 
-    const xfA = Transform.identity();
-    const xfB = Transform.identity();
     this.m_sweepA.getTransform(xfA, t1);
     this.m_sweepB.getTransform(xfB, t1);
 
@@ -339,10 +375,10 @@ class SeparationFunction {
       this.m_type = SeparationFunctionType.e_points;
       const localPointA = this.m_proxyA.getVertex(cache.indexA[0]);
       const localPointB = this.m_proxyB.getVertex(cache.indexB[0]);
-      const pointA = Transform.mulVec2(xfA, localPointA);
-      const pointB = Transform.mulVec2(xfB, localPointB);
-      this.m_axis.setCombine(1, pointB, -1, pointA);
-      const s = this.m_axis.normalize();
+      matrix.transformVec2(pointA, xfA, localPointA);
+      matrix.transformVec2(pointB, xfB, localPointB);
+      matrix.subVec2(this.m_axis, pointB, pointA);
+      const s = matrix.normalizeVec2Length(this.m_axis);
       return s;
 
     } else if (cache.indexA[0] === cache.indexA[1]) {
@@ -351,19 +387,19 @@ class SeparationFunction {
       const localPointB1 = proxyB.getVertex(cache.indexB[0]);
       const localPointB2 = proxyB.getVertex(cache.indexB[1]);
 
-      this.m_axis = Vec2.crossVec2Num(Vec2.sub(localPointB2, localPointB1), 1.0);
-      this.m_axis.normalize();
-      const normal = Rot.mulVec2(xfB.q, this.m_axis);
+      matrix.crossVec2Num(this.m_axis, matrix.subVec2(temp, localPointB2, localPointB1), 1.0);
+      matrix.normalizeVec2(this.m_axis);
+      matrix.rotVec2(normal, xfB.q, this.m_axis);
 
-      this.m_localPoint = Vec2.mid(localPointB1, localPointB2);
-      const pointB = Transform.mulVec2(xfB, this.m_localPoint);
+      matrix.combine2Vec2(this.m_localPoint, 0.5, localPointB1, 0.5, localPointB2);
+      matrix.transformVec2(pointB, xfB, this.m_localPoint);
 
       const localPointA = proxyA.getVertex(cache.indexA[0]);
       const pointA = Transform.mulVec2(xfA, localPointA);
 
-      let s = Vec2.dot(pointA, normal) - Vec2.dot(pointB, normal);
+      let s = matrix.dotVec2(pointA, normal) - matrix.dotVec2(pointB, normal);
       if (s < 0.0) {
-        this.m_axis = Vec2.neg(this.m_axis);
+        matrix.negVec2(this.m_axis);
         s = -s;
       }
       return s;
@@ -374,19 +410,19 @@ class SeparationFunction {
       const localPointA1 = this.m_proxyA.getVertex(cache.indexA[0]);
       const localPointA2 = this.m_proxyA.getVertex(cache.indexA[1]);
 
-      this.m_axis = Vec2.crossVec2Num(Vec2.sub(localPointA2, localPointA1), 1.0);
-      this.m_axis.normalize();
-      const normal = Rot.mulVec2(xfA.q, this.m_axis);
+      matrix.crossVec2Num(this.m_axis, matrix.subVec2(temp, localPointA2, localPointA1), 1.0);
+      matrix.normalizeVec2(this.m_axis);
+      matrix.rotVec2(normal, xfA.q, this.m_axis);
 
-      this.m_localPoint = Vec2.mid(localPointA1, localPointA2);
-      const pointA = Transform.mulVec2(xfA, this.m_localPoint);
+      matrix.combine2Vec2(this.m_localPoint, 0.5, localPointA1, 0.5, localPointA2);
+      matrix.transformVec2(pointA, xfA, this.m_localPoint);
 
       const localPointB = this.m_proxyB.getVertex(cache.indexB[0]);
-      const pointB = Transform.mulVec2(xfB, localPointB);
+      matrix.transformVec2(pointB, xfB, localPointB);
 
-      let s = Vec2.dot(pointB, normal) - Vec2.dot(pointA, normal);
+      let s = matrix.dotVec2(pointB, normal) - matrix.dotVec2(pointA, normal);
       if (s < 0.0) {
-        this.m_axis = Vec2.neg(this.m_axis);
+        matrix.negVec2(this.m_axis);
         s = -s;
       }
       return s;
@@ -395,69 +431,67 @@ class SeparationFunction {
 
   compute(find: boolean, t: number): number {
     // It was findMinSeparation and evaluate
-    const xfA = Transform.identity();
-    const xfB = Transform.identity();
     this.m_sweepA.getTransform(xfA, t);
     this.m_sweepB.getTransform(xfB, t);
 
     switch (this.m_type) {
       case SeparationFunctionType.e_points: {
         if (find) {
-          const axisA = Rot.mulTVec2(xfA.q, this.m_axis);
-          const axisB = Rot.mulTVec2(xfB.q, Vec2.neg(this.m_axis));
+          matrix.derotVec2(axisA, xfA.q, this.m_axis);
+          matrix.derotVec2(axisB, xfB.q, matrix.scaleVec2(temp, -1, this.m_axis));
 
           this.indexA = this.m_proxyA.getSupport(axisA);
           this.indexB = this.m_proxyB.getSupport(axisB);
         }
 
-        const localPointA = this.m_proxyA.getVertex(this.indexA);
-        const localPointB = this.m_proxyB.getVertex(this.indexB);
+        matrix.copyVec2(localPointA, this.m_proxyA.getVertex(this.indexA));
+        matrix.copyVec2(localPointB, this.m_proxyB.getVertex(this.indexB));
 
-        const pointA = Transform.mulVec2(xfA, localPointA);
-        const pointB = Transform.mulVec2(xfB, localPointB);
+        matrix.transformVec2(pointA, xfA, localPointA);
+        matrix.transformVec2(pointB, xfB, localPointB);
 
-        const sep = Vec2.dot(pointB, this.m_axis) - Vec2.dot(pointA, this.m_axis);
+        const sep = matrix.dotVec2(pointB, this.m_axis) - matrix.dotVec2(pointA, this.m_axis);
         return sep;
       }
 
       case SeparationFunctionType.e_faceA: {
-        const normal = Rot.mulVec2(xfA.q, this.m_axis);
-        const pointA = Transform.mulVec2(xfA, this.m_localPoint);
+        matrix.rotVec2(normal, xfA.q, this.m_axis);
+        matrix.transformVec2(pointA, xfA, this.m_localPoint);
 
         if (find) {
-          const axisB = Rot.mulTVec2(xfB.q, Vec2.neg(normal));
+          matrix.derotVec2(axisB, xfB.q, matrix.scaleVec2(temp, -1, normal));
 
           this.indexA = -1;
           this.indexB = this.m_proxyB.getSupport(axisB);
         }
 
-        const localPointB = this.m_proxyB.getVertex(this.indexB);
-        const pointB = Transform.mulVec2(xfB, localPointB);
+        matrix.copyVec2(localPointB, this.m_proxyB.getVertex(this.indexB));
+        matrix.transformVec2(pointB, xfB, localPointB);
 
-        const sep = Vec2.dot(pointB, normal) - Vec2.dot(pointA, normal);
+        const sep = matrix.dotVec2(pointB, normal) - matrix.dotVec2(pointA, normal);
         return sep;
       }
 
       case SeparationFunctionType.e_faceB: {
-        const normal = Rot.mulVec2(xfB.q, this.m_axis);
-        const pointB = Transform.mulVec2(xfB, this.m_localPoint);
+        matrix.rotVec2(normal, xfB.q, this.m_axis);
+        matrix.transformVec2(pointB, xfB, this.m_localPoint);
 
         if (find) {
-          const axisA = Rot.mulTVec2(xfA.q, Vec2.neg(normal));
+          matrix.derotVec2(axisA, xfA.q, matrix.scaleVec2(temp, -1, normal));
 
           this.indexB = -1;
           this.indexA = this.m_proxyA.getSupport(axisA);
         }
 
-        const localPointA = this.m_proxyA.getVertex(this.indexA);
-        const pointA = Transform.mulVec2(xfA, localPointA);
+        matrix.copyVec2(localPointA, this.m_proxyA.getVertex(this.indexA));
+        matrix.transformVec2(pointA, xfA, localPointA);
 
-        const sep = Vec2.dot(pointA, normal) - Vec2.dot(pointB, normal);
+        const sep = matrix.dotVec2(pointA, normal) - matrix.dotVec2(pointB, normal);
         return sep;
       }
 
       default:
-        _ASSERT && common.assert(false);
+        _ASSERT && console.assert(false);
         if (find) {
           this.indexA = -1;
           this.indexB = -1;
@@ -474,3 +508,9 @@ class SeparationFunction {
     return this.compute(false, t);
   }
 }
+
+/** @internal */ const separationFunction = new SeparationFunction();
+
+// legacy exports
+TimeOfImpact.Input = TOIInput;
+TimeOfImpact.Output = TOIOutput;

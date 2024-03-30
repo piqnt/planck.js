@@ -8,10 +8,6 @@
 
 ## Index
 
-### Constructors
-
-* [constructor](position.md#constructor)
-
 ### Properties
 
 * [a](position.md#a)
@@ -21,23 +17,11 @@
 
 * [getTransform](position.md#gettransform)
 
-## Constructors
-
-###  constructor
-
-\+ **new Position**(): *[Position](position.md)*
-
-*Defined in [src/dynamics/Position.ts:35](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Position.ts#L35)*
-
-**Returns:** *[Position](position.md)*
-
 ## Properties
 
 ###  a
 
-• **a**: *number*
-
-*Defined in [src/dynamics/Position.ts:35](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Position.ts#L35)*
+• **a**: *number* = 0
 
 angle
 
@@ -45,9 +29,7 @@ ___
 
 ###  c
 
-• **c**: *[Vec2](vec2.md)*
-
-*Defined in [src/dynamics/Position.ts:32](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Position.ts#L32)*
+• **c**: *Vec2‹›* = Vec2.zero()
 
 location
 
@@ -55,15 +37,13 @@ location
 
 ###  getTransform
 
-▸ **getTransform**(`xf`: [Transform](transform.md), `p`: [Vec2](vec2.md)): *[Transform](transform.md)*
-
-*Defined in [src/dynamics/Position.ts:42](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Position.ts#L42)*
+▸ **getTransform**(`xf`: [TransformValue](../globals.md#transformvalue), `p`: [Vec2Value](../interfaces/vec2value.md)): *[TransformValue](../globals.md#transformvalue)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`xf` | [Transform](transform.md) |
-`p` | [Vec2](vec2.md) |
+`xf` | [TransformValue](../globals.md#transformvalue) |
+`p` | [Vec2Value](../interfaces/vec2value.md) |
 
-**Returns:** *[Transform](transform.md)*
+**Returns:** *[TransformValue](../globals.md#transformvalue)*

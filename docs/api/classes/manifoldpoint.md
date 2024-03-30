@@ -18,41 +18,40 @@ contact forces, especially for high speed collisions.
 
 ### Properties
 
-* [id](manifoldpoint.md#id)
+* [id](manifoldpoint.md#readonly-id)
 * [localPoint](manifoldpoint.md#localpoint)
 * [normalImpulse](manifoldpoint.md#normalimpulse)
 * [tangentImpulse](manifoldpoint.md#tangentimpulse)
 
+### Methods
+
+* [recycle](manifoldpoint.md#recycle)
+* [set](manifoldpoint.md#set)
+
 ## Properties
 
-###  id
+### `Readonly` id
 
 • **id**: *[ContactID](contactid.md)‹›* = new ContactID()
 
-*Defined in [src/collision/Manifold.ts:178](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L178)*
-
-Uniquely identifies a contact point between two shapes to facilatate warm starting
+Uniquely identifies a contact point between two shapes to facilitate warm starting
 
 ___
 
 ###  localPoint
 
-• **localPoint**: *[Vec2](vec2.md)‹›* = Vec2.zero()
+• **localPoint**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
-*Defined in [src/collision/Manifold.ts:166](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L166)*
-
-Usage depends on manifold type.
-      e_circles: the local center of circleB,
-      e_faceA: the local center of cirlceB or the clip point of polygonB,
-      e_faceB: the clip point of polygonA.
+Usage depends on manifold type:
+- circles: the local center of circleB
+- faceA: the local center of circleB or the clip point of polygonB
+- faceB: the clip point of polygonA
 
 ___
 
 ###  normalImpulse
 
 • **normalImpulse**: *number* = 0
-
-*Defined in [src/collision/Manifold.ts:170](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L170)*
 
 The non-penetration impulse
 
@@ -62,6 +61,26 @@ ___
 
 • **tangentImpulse**: *number* = 0
 
-*Defined in [src/collision/Manifold.ts:174](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L174)*
-
 The friction impulse
+
+## Methods
+
+###  recycle
+
+▸ **recycle**(): *void*
+
+**Returns:** *void*
+
+___
+
+###  set
+
+▸ **set**(`that`: [ManifoldPoint](manifoldpoint.md)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`that` | [ManifoldPoint](manifoldpoint.md) |
+
+**Returns:** *void*

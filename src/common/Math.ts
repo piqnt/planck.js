@@ -22,85 +22,38 @@
  * SOFTWARE.
  */
 
-import common from '../util/common';
+/** @internal */ const math_random = Math.random;
 
 
-const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+export const EPSILON = 1e-9;
 
+/** @internal @deprecated */
+export const isFinite = Number.isFinite;
 
-const math: Math & {
-  readonly EPSILON: number;
-  /**
-   * This function is used to ensure that a floating point number is not a NaN or
-   * infinity.
-   */
-  isFinite(x: any): boolean;
-  assert(x: any): void;
-  /**
-   * This is a approximate yet fast inverse square-root (todo).
-   */
-  invSqrt(x: number): number;
-  /**
-   * Next Largest Power of 2 Given a binary integer value x, the next largest
-   * power of 2 can be computed by a SWAR algorithm that recursively "folds" the
-   * upper bits into the lower bits. This process yields a bit vector with the
-   * same most significant 1 as x, but all 1's below it. Adding 1 to that value
-   * yields the next largest power of 2. For a 32-bit value:
-   */
-  nextPowerOfTwo(x: number): number;
-  isPowerOfTwo(x: number): boolean;
-  mod(num: number, min?: number, max?: number): number;
-  /**
-   * Returns a min if num is less than min, and max if more than max, otherwise returns num.
-   */
-  clamp(num: number, min: number, max: number): number;
-  /**
-   * Returns a random number between min and max when two arguments are provided.
-   * If one arg is provided between 0 to max.
-   * If one arg is passed between 0 to 1.
-   */
-  random(min?: number, max?: number): number;
-} = Object.create(Math);
-
-export default math;
-
-// @ts-ignore
-// noinspection JSConstantReassignment
-math.EPSILON = 1e-9; // TODO
-
-math.isFinite = function(x: unknown): boolean {
-  return (typeof x === 'number') && isFinite(x) && !isNaN(x);
-};
-
-math.assert = function(x: any): void {
-  if (!_ASSERT) return;
-  if (!math.isFinite(x)) {
-    _DEBUG && common.debug(x);
-    throw new Error('Invalid Number!');
-  }
-};
-
-math.invSqrt = function(x: number): number {
-  // TODO:
-  return 1 / Math.sqrt(x);
-};
-
-math.nextPowerOfTwo = function(x: number): number {
-  // TODO
+/**
+ * @deprecated
+ * Next Largest Power of 2 Given a binary integer value x, the next largest
+ * power of 2 can be computed by a SWAR algorithm that recursively "folds" the
+ * upper bits into the lower bits. This process yields a bit vector with the
+ * same most significant 1 as x, but all 1's below it. Adding 1 to that value
+ * yields the next largest power of 2. For a 32-bit value:
+ */
+export function nextPowerOfTwo(x: number): number {
   x |= (x >> 1);
   x |= (x >> 2);
   x |= (x >> 4);
   x |= (x >> 8);
   x |= (x >> 16);
   return x + 1;
-};
+}
 
-math.isPowerOfTwo = function(x: number): boolean {
+/** @deprecated */
+export function isPowerOfTwo(x: number): boolean {
   return x > 0 && (x & (x - 1)) === 0;
-};
+}
 
-math.mod = function(num: number, min?: number, max?: number): number {
+/** @deprecated */
+export function mod(num: number, min?: number, max?: number): number {
   if (typeof min === 'undefined') {
     max = 1;
     min = 0;
@@ -115,9 +68,13 @@ math.mod = function(num: number, min?: number, max?: number): number {
     num = (num - max) % (min - max);
     return num + (num <= 0 ? min : max);
   }
-};
+}
 
-math.clamp = function(num: number, min: number, max: number): number {
+/**
+ * @deprecated
+ * Returns a min if num is less than min, and max if more than max, otherwise returns num.
+ */
+export function clamp(num: number, min: number, max: number): number {
   if (num < min) {
     return min;
   } else if (num > max) {
@@ -125,9 +82,15 @@ math.clamp = function(num: number, min: number, max: number): number {
   } else {
     return num;
   }
-};
+}
 
-math.random = function(min?: number, max?: number): number {
+/**
+ * @deprecated
+ * Returns a random number between min and max when two arguments are provided.
+ * If one arg is provided between 0 to max.
+ * If one arg is passed between 0 to 1.
+ */
+export function random(min?: number, max?: number): number {
   if (typeof min === 'undefined') {
     max = 1;
     min = 0;
@@ -135,5 +98,15 @@ math.random = function(min?: number, max?: number): number {
     max = min;
     min = 0;
   }
-  return min === max ? min : Math.random() * (max - min) + min;
-};
+  return min === max ? min : math_random() * (max - min) + min;
+}
+
+/** @ignore */
+export const math = Object.create(Math);
+math.EPSILON = EPSILON;
+math.isFinite = isFinite;
+math.nextPowerOfTwo = nextPowerOfTwo;
+math.isPowerOfTwo = isPowerOfTwo;
+math.mod = mod;
+math.clamp = clamp;
+math.random = random;

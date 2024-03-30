@@ -22,18 +22,19 @@
  * SOFTWARE.
  */
 
-import common from '../../util/common';
-import options from '../../util/options';
-import Settings from '../../Settings';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { SettingsInternal as Settings } from '../../Settings';
+import { EPSILON } from '../../common/Math';
+import { Vec2, Vec2Value } from '../../common/Vec2';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const math_abs = Math.abs;
 
 
 /**
@@ -43,6 +44,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 // tslint:disable-next-line:no-empty-interface
 export interface PulleyJointOpt extends JointOpt {
 }
+
 /**
  * Pulley joint definition. This requires two ground anchors, two dynamic body
  * anchor points, and a pulley ratio.
@@ -51,19 +53,19 @@ export interface PulleyJointDef extends JointDef, PulleyJointOpt {
   /**
    * The first ground anchor in world coordinates. This point never moves.
    */
-  groundAnchorA: Vec2;
+  groundAnchorA: Vec2Value;
   /**
    * The second ground anchor in world coordinates. This point never moves.
    */
-  groundAnchorB: Vec2;
+  groundAnchorB: Vec2Value;
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  localAnchorA: Vec2;
+  localAnchorA: Vec2Value;
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  localAnchorB: Vec2;
+  localAnchorB: Vec2Value;
   /**
    * The reference length for the segment attached to bodyA.
    */
@@ -76,9 +78,12 @@ export interface PulleyJointDef extends JointDef, PulleyJointOpt {
    * The pulley ratio, used to simulate a block-and-tackle.
    */
   ratio: number;
+
+  /** @hidden */ anchorA?: Vec2Value;
+  /** @hidden */ anchorB?: Vec2Value;
 }
 
-const DEFAULTS = {
+/** @internal */ const DEFAULTS = {
   collideConnected : true
 };
 
@@ -93,7 +98,7 @@ const DEFAULTS = {
  * anchor points with static shapes to prevent one side from going to zero
  * length.
  */
-export default class PulleyJoint extends Joint {
+export class PulleyJoint extends Joint {
   static TYPE = 'pulley-joint' as const;
   // static MIN_PULLEY_LENGTH: number = 2.0; // TODO where this is used?
 
@@ -122,10 +127,10 @@ export default class PulleyJoint extends Joint {
   /** @internal */ m_mass: number;
 
   constructor(def: PulleyJointDef);
-  constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2, groundB: Vec2, anchorA: Vec2, anchorB: Vec2, ratio: number);
-  constructor(def: PulleyJointDef, bodyA?: Body, bodyB?: Body, groundA?: Vec2, groundB?: Vec2, anchorA?: Vec2, anchorB?: Vec2, ratio?: number) {
+  constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2Value, groundB: Vec2Value, anchorA: Vec2Value, anchorB: Vec2Value, ratio: number);
+  constructor(def: PulleyJointDef, bodyA?: Body, bodyB?: Body, groundA?: Vec2Value, groundB?: Vec2Value, anchorA?: Vec2Value, anchorB?: Vec2Value, ratio?: number) {
     // @ts-ignore
-    if (!(this instanceof PulleyJoint)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof PulleyJoint)) {
       return new PulleyJoint(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, ratio);
     }
 
@@ -135,15 +140,15 @@ export default class PulleyJoint extends Joint {
     bodyB = this.m_bodyB;
 
     this.m_type = PulleyJoint.TYPE;
-    this.m_groundAnchorA = groundA ? groundA : def.groundAnchorA || Vec2.neo(-1.0, 1.0);
-    this.m_groundAnchorB = groundB ? groundB : def.groundAnchorB || Vec2.neo(1.0, 1.0);
-    this.m_localAnchorA = anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.neo(-1.0, 0.0);
-    this.m_localAnchorB = anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.neo(1.0, 0.0);
-    this.m_lengthA = Math.isFinite(def.lengthA) ? def.lengthA : Vec2.distance(anchorA, groundA);
-    this.m_lengthB = Math.isFinite(def.lengthB) ? def.lengthB : Vec2.distance(anchorB, groundB);
-    this.m_ratio = Math.isFinite(ratio) ? ratio : def.ratio;
+    this.m_groundAnchorA = Vec2.clone(groundA ? groundA : def.groundAnchorA || Vec2.neo(-1.0, 1.0));
+    this.m_groundAnchorB = Vec2.clone(groundB ? groundB : def.groundAnchorB || Vec2.neo(1.0, 1.0));
+    this.m_localAnchorA = Vec2.clone(anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.neo(-1.0, 0.0));
+    this.m_localAnchorB = Vec2.clone(anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.neo(1.0, 0.0));
+    this.m_lengthA = Number.isFinite(def.lengthA) ? def.lengthA : Vec2.distance(anchorA, groundA);
+    this.m_lengthB = Number.isFinite(def.lengthB) ? def.lengthB : Vec2.distance(anchorB, groundB);
+    this.m_ratio = Number.isFinite(ratio) ? ratio : def.ratio;
 
-    _ASSERT && common.assert(ratio > Math.EPSILON);
+    _ASSERT && console.assert(ratio > EPSILON);
 
     this.m_constant = this.m_lengthA + this.m_ratio * this.m_lengthB;
 
@@ -163,6 +168,7 @@ export default class PulleyJoint extends Joint {
     // cross(r2, u2)^2)
   }
 
+  /** @internal */
   _serialize(): object {
     return {
       type: this.m_type,
@@ -187,6 +193,35 @@ export default class PulleyJoint extends Joint {
     data.bodyB = restore(Body, data.bodyB, world);
     const joint = new PulleyJoint(data);
     return joint;
+  }
+
+  /** @hidden */
+  _reset(def: Partial<PulleyJointDef>): void {
+    if (Vec2.isValid(def.groundAnchorA)) {
+      this.m_groundAnchorA.set(def.groundAnchorA);
+    }
+    if (Vec2.isValid(def.groundAnchorB)) {
+      this.m_groundAnchorB.set(def.groundAnchorB);
+    }
+    if (Vec2.isValid(def.localAnchorA)) {
+      this.m_localAnchorA.set(def.localAnchorA);
+    } else if (Vec2.isValid(def.anchorA)) {
+      this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+    }
+    if (Vec2.isValid(def.localAnchorB)) {
+      this.m_localAnchorB.set(def.localAnchorB);
+    } else if (Vec2.isValid(def.anchorB)) {
+      this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+    }
+    if (Number.isFinite(def.lengthA)) {
+      this.m_lengthA = def.lengthA;
+    }
+    if (Number.isFinite(def.lengthB)) {
+      this.m_lengthB = def.lengthB;
+    }
+    if (Number.isFinite(def.ratio)) {
+      this.m_ratio = def.ratio;
+    }
   }
 
   /**
@@ -247,7 +282,7 @@ export default class PulleyJoint extends Joint {
    *
    * @param newOrigin
    */
-  shiftOrigin(newOrigin: Vec2): void {
+  shiftOrigin(newOrigin: Vec2Value): void {
     this.m_groundAnchorA.sub(newOrigin);
     this.m_groundAnchorB.sub(newOrigin);
   }
@@ -324,11 +359,11 @@ export default class PulleyJoint extends Joint {
     }
 
     // Compute effective mass.
-    const ruA = Vec2.crossVec2Vec2(this.m_rA, this.m_uA); // float
-    const ruB = Vec2.crossVec2Vec2(this.m_rB, this.m_uB); // float
+    const ruA = Vec2.crossVec2Vec2(this.m_rA, this.m_uA);
+    const ruB = Vec2.crossVec2Vec2(this.m_rB, this.m_uB);
 
-    const mA = this.m_invMassA + this.m_invIA * ruA * ruA; // float
-    const mB = this.m_invMassB + this.m_invIB * ruB * ruB; // float
+    const mA = this.m_invMassA + this.m_invIA * ruA * ruA;
+    const mB = this.m_invMassB + this.m_invIB * ruB * ruB;
 
     this.m_mass = mA + this.m_ratio * this.m_ratio * mB;
 
@@ -369,13 +404,12 @@ export default class PulleyJoint extends Joint {
     const vpA = Vec2.add(vA, Vec2.crossNumVec2(wA, this.m_rA));
     const vpB = Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB));
 
-    const Cdot = -Vec2.dot(this.m_uA, vpA) - this.m_ratio
-        * Vec2.dot(this.m_uB, vpB); // float
-    const impulse = -this.m_mass * Cdot; // float
+    const Cdot = -Vec2.dot(this.m_uA, vpA) - this.m_ratio * Vec2.dot(this.m_uB, vpB);
+    const impulse = -this.m_mass * Cdot;
     this.m_impulse += impulse;
 
-    const PA = Vec2.mulNumVec2(-impulse, this.m_uA); // Vec2
-    const PB = Vec2.mulNumVec2(-this.m_ratio * impulse, this.m_uB); // Vec2
+    const PA = Vec2.mulNumVec2(-impulse, this.m_uA);
+    const PB = Vec2.mulNumVec2(-this.m_ratio * impulse, this.m_uB);
     vA.addMul(this.m_invMassA, PA);
     wA += this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, PA);
     vB.addMul(this.m_invMassB, PB);
@@ -425,22 +459,22 @@ export default class PulleyJoint extends Joint {
     const ruA = Vec2.crossVec2Vec2(rA, uA);
     const ruB = Vec2.crossVec2Vec2(rB, uB);
 
-    const mA = this.m_invMassA + this.m_invIA * ruA * ruA; // float
-    const mB = this.m_invMassB + this.m_invIB * ruB * ruB; // float
+    const mA = this.m_invMassA + this.m_invIA * ruA * ruA;
+    const mB = this.m_invMassB + this.m_invIB * ruB * ruB;
 
-    let mass = mA + this.m_ratio * this.m_ratio * mB; // float
+    let mass = mA + this.m_ratio * this.m_ratio * mB;
 
     if (mass > 0.0) {
       mass = 1.0 / mass;
     }
 
-    const C = this.m_constant - lengthA - this.m_ratio * lengthB; // float
-    const linearError = Math.abs(C); // float
+    const C = this.m_constant - lengthA - this.m_ratio * lengthB;
+    const linearError = math_abs(C);
 
-    const impulse = -mass * C; // float
+    const impulse = -mass * C;
 
-    const PA = Vec2.mulNumVec2(-impulse, uA); // Vec2
-    const PB = Vec2.mulNumVec2(-this.m_ratio * impulse, uB); // Vec2
+    const PA = Vec2.mulNumVec2(-impulse, uA);
+    const PB = Vec2.mulNumVec2(-this.m_ratio * impulse, uB);
 
     cA.addMul(this.m_invMassA, PA);
     aA += this.m_invIA * Vec2.crossVec2Vec2(rA, PA);

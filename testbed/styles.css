@@ -34,7 +34,7 @@ a:hover {
 	color: #444;
 	font-size: 20px;
 	text-shadow: 0 1px rgba(255, 255, 255, 0.5);
-	margin: 3px 0 0;
+	margin: 6px;
 }
 
 .title a {
@@ -57,7 +57,7 @@ a:hover {
 	cursor: pointer;
 }
 
-.control .play .pause, .control .pause .play {
+.control .play .play, .control .pause .pause {
 	display: none;
 }
 
@@ -144,15 +144,16 @@ select {
 		background: #333;
 		color: #fff;
 	}
-  .control a {
-    color: #ddd;
-  }
-	#status {
+	.control a {
+		color: #ddd;
+	}
+	.output {
 		position: absolute;
 		bottom: 0;
 		left: 0;
 		padding: 1em 0.5em;
 		color: #dddddd;
 		pointer-events: none;
+		font-family: 'Courier New', Courier, monospace;
 	}
 }

@@ -21,86 +21,77 @@
  * SOFTWARE.
  */
 
-planck.testbed('TimeOfImpact', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2, Transform = pl.Transform;
+const { World, Transform, Box, TimeOfImpact, Sweep, TOIInput, TOIOutput, stats, Testbed } = planck;
 
-  var Sweep = pl.Sweep;
-  var TimeOfImpact = pl.TimeOfImpact;
-  var TOIInput = TimeOfImpact.Input;
-  var TOIOutput = TimeOfImpact.Output;
+let world = new World();
 
-  var world = new pl.World();
+const testbed = Testbed.mount();
+testbed.width = 80;
+testbed.height = 60;
+testbed.x = 0;
+testbed.y = 0;
+testbed.start(world);
 
-  testbed.width = 80;
-  testbed.height = 60;
-  testbed.x = 0;
-  testbed.y = 0;
+let shapeA = new Box(25.0, 5.0);
+let sweepA = new Sweep();
+sweepA.c0.set(0, 0);
+sweepA.a0 = 0.1;
+sweepA.c.set(sweepA.c0);
+sweepA.a = sweepA.a0;
+sweepA.localCenter.setZero();
 
-  var shapeA = pl.Box(25.0, 5.0);
-  var sweepA = new Sweep();
-  sweepA.c0.set(0, 0);
-  sweepA.a0 = 0.1;
-  sweepA.c.set(sweepA.c0);
-  sweepA.a = sweepA.a0;
-  sweepA.localCenter.setZero();
+let shapeB = new Box(2.5, 2.5);
+let sweepB = new Sweep();
+sweepB.c0.set(20, 20);
+sweepB.a0 = 0.1; // - 162.0 * Math.PI;
+sweepB.c.set(-20, -20);
+sweepB.a = 3.1; // - 162.0 * Math.PI;
+sweepB.localCenter.setZero();
 
-  var shapeB = pl.Box(2.5, 2.5);
-  var sweepB = new Sweep();
-  sweepB.c0.set(20, 20);
-  sweepB.a0 = 0.1; // - 162.0 * Math.PI;
-  sweepB.c.set(-20, -20);
-  sweepB.a = 3.1; // - 162.0 * Math.PI;
-  sweepB.localCenter.setZero();
+// sweepB.a0 -= 300.0 * Math.PI;
+// sweepB.a -= 300.0 * Math.PI;
 
-  // sweepB.a0 -= 300.0 * Math.PI;
-  // sweepB.a -= 300.0 * Math.PI;
+let input = new TOIInput();
+input.proxyA.set(shapeA, 0);
+input.sweepA.set(sweepA);
+input.proxyB.set(shapeB, 0);
+input.sweepB.set(sweepB);
+input.tMax = 1.0;
 
-  var input = new TOIInput();
-  input.proxyA.set(shapeA, 0);
-  input.sweepA.set(sweepA);
-  input.proxyB.set(shapeB, 0);
-  input.sweepB.set(sweepB);
-  input.tMax = 1.0;
+let output = new TOIOutput();
 
-  var output = new TOIOutput();
+TimeOfImpact(output, input);
 
-  TimeOfImpact(output, input);
+testbed.step = function() {
+  // "max toi iters = %d, max root iters = %d", b2_toiMaxIters, b2_toiMaxRootIters
 
-  testbed.step = function() {
+  testbed.status('toi', output.t);
+  testbed.status(stats);
 
-    // "max toi iters = %d, max root iters = %d", b2_toiMaxIters, b2_toiMaxRootIters
+  let vertices = [];
 
-    testbed.status('toi', output.t);
-    testbed.status(pl.internal.stats);
+  let transformB = new Transform();
 
-    var vertices = [];
+  for (let t = 0.1; t < 1.0; t += 0.1) {
+    sweepB.getTransform(transformB, t);
+    vertices = shapeB.m_vertices.map(v => Transform.mul(transformB, v));
+    testbed.drawPolygon(vertices, testbed.color(0.2, 0.2, 0.2));
+  }
 
-    var transformB = new Transform();
+  let transformA = new Transform();
+  sweepA.getTransform(transformA, 0.0);
+  vertices = shapeA.m_vertices.map(v => Transform.mul(transformA, v));
+  testbed.drawPolygon(vertices, testbed.color(0.7, 0.7, 0.7));
 
-    for (var t = 0.1; t < 1.0; t += 0.1) {
-      sweepB.getTransform(transformB, t);
-      vertices = shapeB.m_vertices.map(Transform.mulFn(transformB));
-      testbed.drawPolygon(vertices, testbed.color(0.2, 0.2, 0.2));
-    }
+  sweepB.getTransform(transformB, 0.0);
+  vertices = shapeB.m_vertices.map(v => Transform.mul(transformB, v));
+  testbed.drawPolygon(vertices, testbed.color(1, 1, 1));
 
-    var transformA = new Transform();
-    sweepA.getTransform(transformA, 0.0);
-    vertices = shapeA.m_vertices.map(Transform.mulFn(transformA));
-    testbed.drawPolygon(vertices, testbed.color(0.7, 0.7, 0.7));
+  sweepB.getTransform(transformB, output.t);
+  vertices = shapeB.m_vertices.map(v => Transform.mul(transformB, v));
+  testbed.drawPolygon(vertices, testbed.color(1, 0, 0));
 
-    sweepB.getTransform(transformB, 0.0);
-    vertices = shapeB.m_vertices.map(Transform.mulFn(transformB));
-    testbed.drawPolygon(vertices, testbed.color(1, 1, 1));
-
-    sweepB.getTransform(transformB, output.t);
-    vertices = shapeB.m_vertices.map(Transform.mulFn(transformB));
-    testbed.drawPolygon(vertices, testbed.color(1, 0, 0));
-
-    sweepB.getTransform(transformB, 1.0);
-    vertices = shapeB.m_vertices.map(Transform.mulFn(transformB));
-    testbed.drawPolygon(vertices, testbed.color(1, 1, 1));
-
-  };
-
-  return world;
-});
+  sweepB.getTransform(transformB, 1.0);
+  vertices = shapeB.m_vertices.map(v => Transform.mul(transformB, v));
+  testbed.drawPolygon(vertices, testbed.color(1, 1, 1));
+};

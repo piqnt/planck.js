@@ -22,27 +22,30 @@
  * SOFTWARE.
  */
 
-import common from '../../util/common';
-import options from '../../util/options';
-import Settings from '../../Settings';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Vec3 from '../../common/Vec3';
-import Mat22 from '../../common/Mat22';
-import Mat33 from '../../common/Mat33';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { SettingsInternal as Settings } from '../../Settings';
+import { clamp } from '../../common/Math';
+import { Vec2, Vec2Value } from '../../common/Vec2';
+import { Vec3 } from '../../common/Vec3';
+import { Mat22 } from '../../common/Mat22';
+import { Mat33 } from '../../common/Mat33';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const math_abs = Math.abs;
 
 
-const inactiveLimit = 0;
-const atLowerLimit = 1;
-const atUpperLimit = 2;
-const equalLimits = 3;
+// todo: use string?
+/** @internal */ enum LimitState {
+  inactiveLimit = 0,
+  atLowerLimit = 1,
+  atUpperLimit = 2,
+  equalLimits = 3,
+}  
 
 /**
  * Revolute joint definition. This requires defining an anchor point where the
@@ -83,6 +86,7 @@ export interface RevoluteJointOpt extends JointOpt {
    */
   enableMotor?: boolean;
 }
+
 /**
  * Revolute joint definition. This requires defining an anchor point where the
  * bodies are joined. The definition uses local anchor points so that the
@@ -99,18 +103,21 @@ export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  localAnchorA: Vec2;
+  localAnchorA: Vec2Value;
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  localAnchorB: Vec2;
+  localAnchorB: Vec2Value;
   /**
    * The bodyB angle minus bodyA angle in the reference state (radians).
    */
   referenceAngle: number;
+
+  /** @internal */ anchorA?: Vec2Value;
+  /** @internal */ anchorB?: Vec2Value;
 }
 
-const DEFAULTS = {
+/** @internal */ const DEFAULTS = {
   lowerAngle : 0.0,
   upperAngle : 0.0,
   maxMotorTorque : 0.0,
@@ -127,7 +134,7 @@ const DEFAULTS = {
  * relative rotation about the shared point. A maximum motor torque is provided
  * so that infinite forces are not generated.
  */
-export default class RevoluteJoint extends Joint {
+export class RevoluteJoint extends Joint {
   static TYPE = 'revolute-joint' as const;
 
   /** @internal */ m_type: 'revolute-joint';
@@ -153,40 +160,60 @@ export default class RevoluteJoint extends Joint {
   /** @internal */ m_invIA: number;
   /** @internal */ m_invIB: number;
   // effective mass for point-to-point constraint.
-  /** @internal */ m_mass: Mat33 = new Mat33();
+  /** @internal */ m_mass: Mat33;
   // effective mass for motor/limit angular constraint.
   /** @internal */ m_motorMass: number;
-  /** @internal */ m_limitState: number = inactiveLimit; // TODO enum
+  /** @internal */ m_limitState: number;
 
   constructor(def: RevoluteJointDef);
-  constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2);
-  // @ts-ignore
-  constructor(def: RevoluteJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2) {
+  constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+  constructor(def: RevoluteJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
     // @ts-ignore
-    if (!(this instanceof RevoluteJoint)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof RevoluteJoint)) {
       return new RevoluteJoint(def, bodyA, bodyB, anchor);
     }
 
-    def = options(def, DEFAULTS);
+    def = def ?? {} as RevoluteJointDef;
     super(def, bodyA, bodyB);
     bodyA = this.m_bodyA;
     bodyB = this.m_bodyB;
 
+    this.m_mass = new Mat33();
+    this.m_limitState = LimitState.inactiveLimit
+
     this.m_type = RevoluteJoint.TYPE;
 
-    this.m_localAnchorA =  Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
-    this.m_localAnchorB =  Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
-    this.m_referenceAngle = Math.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
+    if (Vec2.isValid(anchor)) {
+      this.m_localAnchorA = bodyA.getLocalPoint(anchor);
+    } else if (Vec2.isValid(def.localAnchorA)) {
+      this.m_localAnchorA = Vec2.clone(def.localAnchorA);
+    } else {
+      this.m_localAnchorA = Vec2.zero();
+    }
+
+    if (Vec2.isValid(anchor)) {
+      this.m_localAnchorB = bodyB.getLocalPoint(anchor);
+    } else if (Vec2.isValid(def.localAnchorB)) {
+      this.m_localAnchorB = Vec2.clone(def.localAnchorB);
+    } else {
+      this.m_localAnchorB = Vec2.zero();
+    }
+
+    if (Number.isFinite(def.referenceAngle)) {
+      this.m_referenceAngle = def.referenceAngle;
+    } else {
+      this.m_referenceAngle = bodyB.getAngle() - bodyA.getAngle();
+    }
 
     this.m_impulse = new Vec3();
     this.m_motorImpulse = 0.0;
 
-    this.m_lowerAngle = def.lowerAngle;
-    this.m_upperAngle = def.upperAngle;
-    this.m_maxMotorTorque = def.maxMotorTorque;
-    this.m_motorSpeed = def.motorSpeed;
-    this.m_enableLimit = def.enableLimit;
-    this.m_enableMotor = def.enableMotor;
+    this.m_lowerAngle = def.lowerAngle ?? DEFAULTS.lowerAngle;
+    this.m_upperAngle = def.upperAngle ?? DEFAULTS.upperAngle;
+    this.m_maxMotorTorque = def.maxMotorTorque ?? DEFAULTS.maxMotorTorque;
+    this.m_motorSpeed = def.motorSpeed ?? DEFAULTS.motorSpeed;
+    this.m_enableLimit = def.enableLimit ?? DEFAULTS.enableLimit;
+    this.m_enableMotor = def.enableMotor ?? DEFAULTS.enableMotor;
 
     // Point-to-point constraint
     // C = p2 - p1
@@ -232,23 +259,38 @@ export default class RevoluteJoint extends Joint {
     return joint;
   }
 
-  /** @internal */
-  _setAnchors(def: {
-    anchorA?: Vec2,
-    localAnchorA?: Vec2,
-    anchorB?: Vec2,
-    localAnchorB?: Vec2,
-  }): void {
+  /** @hidden */
+  _reset(def: Partial<RevoluteJointDef>): void {
     if (def.anchorA) {
       this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
       this.m_localAnchorA.setVec2(def.localAnchorA);
     }
-
     if (def.anchorB) {
       this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
       this.m_localAnchorB.setVec2(def.localAnchorB);
+    }
+    if (Number.isFinite(def.referenceAngle)) {
+      this.m_referenceAngle = def.referenceAngle;
+    }
+    if (def.enableLimit !== undefined) {
+      this.m_enableLimit = def.enableLimit;
+    }
+    if (Number.isFinite(def.lowerAngle)) {
+      this.m_lowerAngle = def.lowerAngle;
+    }
+    if (Number.isFinite(def.upperAngle)) {
+      this.m_upperAngle = def.upperAngle;
+    }
+    if (Number.isFinite(def.maxMotorTorque)) {
+      this.m_maxMotorTorque = def.maxMotorTorque;
+    }
+    if (Number.isFinite(def.motorSpeed)) {
+      this.m_motorSpeed = def.motorSpeed;
+    }
+    if (def.enableMotor !== undefined) {
+      this.m_enableMotor = def.enableMotor;
     }
   }
 
@@ -302,6 +344,7 @@ export default class RevoluteJoint extends Joint {
    * Enable/disable the joint motor.
    */
   enableMotor(flag: boolean): void {
+    if (flag == this.m_enableMotor) return;
     this.m_bodyA.setAwake(true);
     this.m_bodyB.setAwake(true);
     this.m_enableMotor = flag;
@@ -318,6 +361,7 @@ export default class RevoluteJoint extends Joint {
    * Set the motor speed in radians per second.
    */
   setMotorSpeed(speed: number): void {
+    if (speed == this.m_motorSpeed) return;
     this.m_bodyA.setAwake(true);
     this.m_bodyB.setAwake(true);
     this.m_motorSpeed = speed;
@@ -334,6 +378,7 @@ export default class RevoluteJoint extends Joint {
    * Set the maximum motor torque, usually in N-m.
    */
   setMaxMotorTorque(torque: number): void {
+    if (torque == this.m_maxMotorTorque) return;
     this.m_bodyA.setAwake(true);
     this.m_bodyB.setAwake(true);
     this.m_maxMotorTorque = torque;
@@ -380,7 +425,7 @@ export default class RevoluteJoint extends Joint {
    * Set the joint limits in radians.
    */
   setLimits(lower: number, upper: number): void {
-    _ASSERT && common.assert(lower <= upper);
+    _ASSERT && console.assert(lower <= upper);
 
     if (lower != this.m_lowerAngle || upper != this.m_upperAngle) {
       this.m_bodyA.setAwake(true);
@@ -452,20 +497,17 @@ export default class RevoluteJoint extends Joint {
     // [ -r1y*iA-r2y*iB, r1x*iA+r2x*iB, iA+iB]
 
     const mA = this.m_invMassA;
-    const mB = this.m_invMassB; // float
+    const mB = this.m_invMassB;
     const iA = this.m_invIA;
-    const iB = this.m_invIB; // float
+    const iB = this.m_invIB;
 
-    const fixedRotation = (iA + iB === 0.0); // bool
+    const fixedRotation = (iA + iB === 0.0);
 
-    this.m_mass.ex.x = mA + mB + this.m_rA.y * this.m_rA.y * iA + this.m_rB.y
-        * this.m_rB.y * iB;
-    this.m_mass.ey.x = -this.m_rA.y * this.m_rA.x * iA - this.m_rB.y
-        * this.m_rB.x * iB;
+    this.m_mass.ex.x = mA + mB + this.m_rA.y * this.m_rA.y * iA + this.m_rB.y * this.m_rB.y * iB;
+    this.m_mass.ey.x = -this.m_rA.y * this.m_rA.x * iA - this.m_rB.y  * this.m_rB.x * iB;
     this.m_mass.ez.x = -this.m_rA.y * iA - this.m_rB.y * iB;
     this.m_mass.ex.y = this.m_mass.ey.x;
-    this.m_mass.ey.y = mA + mB + this.m_rA.x * this.m_rA.x * iA + this.m_rB.x
-        * this.m_rB.x * iB;
+    this.m_mass.ey.y = mA + mB + this.m_rA.x * this.m_rA.x * iA + this.m_rB.x * this.m_rB.x * iB;
     this.m_mass.ez.y = this.m_rA.x * iA + this.m_rB.x * iB;
     this.m_mass.ex.z = this.m_mass.ez.x;
     this.m_mass.ey.z = this.m_mass.ez.y;
@@ -481,30 +523,30 @@ export default class RevoluteJoint extends Joint {
     }
 
     if (this.m_enableLimit && fixedRotation == false) {
-      const jointAngle = aB - aA - this.m_referenceAngle; // float
+      const jointAngle = aB - aA - this.m_referenceAngle;
 
-      if (Math.abs(this.m_upperAngle - this.m_lowerAngle) < 2.0 * Settings.angularSlop) {
-        this.m_limitState = equalLimits;
+      if (math_abs(this.m_upperAngle - this.m_lowerAngle) < 2.0 * Settings.angularSlop) {
+        this.m_limitState = LimitState.equalLimits;
 
       } else if (jointAngle <= this.m_lowerAngle) {
-        if (this.m_limitState != atLowerLimit) {
+        if (this.m_limitState != LimitState.atLowerLimit) {
           this.m_impulse.z = 0.0;
         }
-        this.m_limitState = atLowerLimit;
+        this.m_limitState = LimitState.atLowerLimit;
 
       } else if (jointAngle >= this.m_upperAngle) {
-        if (this.m_limitState != atUpperLimit) {
+        if (this.m_limitState != LimitState.atUpperLimit) {
           this.m_impulse.z = 0.0;
         }
-        this.m_limitState = atUpperLimit;
+        this.m_limitState = LimitState.atUpperLimit;
 
       } else {
-        this.m_limitState = inactiveLimit;
+        this.m_limitState = LimitState.inactiveLimit;
         this.m_impulse.z = 0.0;
       }
 
     } else {
-      this.m_limitState = inactiveLimit;
+      this.m_limitState = LimitState.inactiveLimit;
     }
 
     if (step.warmStarting) {
@@ -538,21 +580,19 @@ export default class RevoluteJoint extends Joint {
     let wB = this.m_bodyB.c_velocity.w;
 
     const mA = this.m_invMassA;
-    const mB = this.m_invMassB; // float
+    const mB = this.m_invMassB;
     const iA = this.m_invIA;
-    const iB = this.m_invIB; // float
+    const iB = this.m_invIB;
 
-    const fixedRotation = (iA + iB === 0.0); // bool
+    const fixedRotation = (iA + iB === 0.0);
 
     // Solve motor constraint.
-    if (this.m_enableMotor && this.m_limitState != equalLimits
-        && fixedRotation == false) {
-      const Cdot = wB - wA - this.m_motorSpeed; // float
-      let impulse = -this.m_motorMass * Cdot; // float
-      const oldImpulse = this.m_motorImpulse; // float
-      const maxImpulse = step.dt * this.m_maxMotorTorque; // float
-      this.m_motorImpulse = Math.clamp(this.m_motorImpulse + impulse,
-          -maxImpulse, maxImpulse);
+    if (this.m_enableMotor && this.m_limitState != LimitState.equalLimits && fixedRotation == false) {
+      const Cdot = wB - wA - this.m_motorSpeed;
+      let impulse = -this.m_motorMass * Cdot;
+      const oldImpulse = this.m_motorImpulse;
+      const maxImpulse = step.dt * this.m_maxMotorTorque;
+      this.m_motorImpulse = clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
       impulse = this.m_motorImpulse - oldImpulse;
 
       wA -= iA * impulse;
@@ -560,25 +600,24 @@ export default class RevoluteJoint extends Joint {
     }
 
     // Solve limit constraint.
-    if (this.m_enableLimit && this.m_limitState != inactiveLimit
-        && fixedRotation == false) {
+    if (this.m_enableLimit && this.m_limitState != LimitState.inactiveLimit && fixedRotation == false) {
       const Cdot1 = Vec2.zero();
       Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
       Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
-      const Cdot2 = wB - wA; // float
+      const Cdot2 = wB - wA;
       const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
 
-      const impulse = Vec3.neg(this.m_mass.solve33(Cdot)); // Vec3
+      const impulse = Vec3.neg(this.m_mass.solve33(Cdot));
 
-      if (this.m_limitState == equalLimits) {
+      if (this.m_limitState == LimitState.equalLimits) {
         this.m_impulse.add(impulse);
 
-      } else if (this.m_limitState == atLowerLimit) {
-        const newImpulse = this.m_impulse.z + impulse.z; // float
+      } else if (this.m_limitState == LimitState.atLowerLimit) {
+        const newImpulse = this.m_impulse.z + impulse.z;
 
         if (newImpulse < 0.0) {
-          const rhs = Vec2.combine(-1, Cdot1, this.m_impulse.z, Vec2.neo(this.m_mass.ez.x, this.m_mass.ez.y)); // Vec2
-          const reduced = this.m_mass.solve22(rhs); // Vec2
+          const rhs = Vec2.combine(-1, Cdot1, this.m_impulse.z, Vec2.neo(this.m_mass.ez.x, this.m_mass.ez.y));
+          const reduced = this.m_mass.solve22(rhs);
           impulse.x = reduced.x;
           impulse.y = reduced.y;
           impulse.z = -this.m_impulse.z;
@@ -590,12 +629,12 @@ export default class RevoluteJoint extends Joint {
           this.m_impulse.add(impulse);
         }
 
-      } else if (this.m_limitState == atUpperLimit) {
-        const newImpulse = this.m_impulse.z + impulse.z; // float
+      } else if (this.m_limitState == LimitState.atUpperLimit) {
+        const newImpulse = this.m_impulse.z + impulse.z;
 
         if (newImpulse > 0.0) {
-          const rhs = Vec2.combine(-1, Cdot1, this.m_impulse.z, Vec2.neo(this.m_mass.ez.x, this.m_mass.ez.y)); // Vec2
-          const reduced = this.m_mass.solve22(rhs); // Vec2
+          const rhs = Vec2.combine(-1, Cdot1, this.m_impulse.z, Vec2.neo(this.m_mass.ez.x, this.m_mass.ez.y));
+          const reduced = this.m_mass.solve22(rhs);
           impulse.x = reduced.x;
           impulse.y = reduced.y;
           impulse.z = -this.m_impulse.z;
@@ -621,7 +660,7 @@ export default class RevoluteJoint extends Joint {
       const Cdot = Vec2.zero();
       Cdot.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
       Cdot.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
-      const impulse = this.m_mass.solve22(Vec2.neg(Cdot)); // Vec2
+      const impulse = this.m_mass.solve22(Vec2.neg(Cdot));
 
       this.m_impulse.x += impulse.x;
       this.m_impulse.y += impulse.y;
@@ -651,40 +690,36 @@ export default class RevoluteJoint extends Joint {
     const qA = Rot.neo(aA);
     const qB = Rot.neo(aB);
 
-    let angularError = 0.0; // float
-    let positionError = 0.0; // float
+    let angularError = 0.0;
+    let positionError = 0.0;
 
-    const fixedRotation = (this.m_invIA + this.m_invIB == 0.0); // bool
+    const fixedRotation = (this.m_invIA + this.m_invIB == 0.0);
 
     // Solve angular limit constraint.
-    if (this.m_enableLimit && this.m_limitState != inactiveLimit
-        && fixedRotation == false) {
-      const angle = aB - aA - this.m_referenceAngle; // float
-      let limitImpulse = 0.0; // float
+    if (this.m_enableLimit && this.m_limitState != LimitState.inactiveLimit && fixedRotation == false) {
+      const angle = aB - aA - this.m_referenceAngle;
+      let limitImpulse = 0.0;
 
-      if (this.m_limitState == equalLimits) {
+      if (this.m_limitState == LimitState.equalLimits) {
         // Prevent large angular corrections
-        const C = Math.clamp(angle - this.m_lowerAngle,
-            -Settings.maxAngularCorrection, Settings.maxAngularCorrection); // float
+        const C = clamp(angle - this.m_lowerAngle, -Settings.maxAngularCorrection, Settings.maxAngularCorrection);
         limitImpulse = -this.m_motorMass * C;
-        angularError = Math.abs(C);
+        angularError = math_abs(C);
 
-      } else if (this.m_limitState == atLowerLimit) {
-        let C = angle - this.m_lowerAngle; // float
+      } else if (this.m_limitState == LimitState.atLowerLimit) {
+        let C = angle - this.m_lowerAngle;
         angularError = -C;
 
         // Prevent large angular corrections and allow some slop.
-        C = Math.clamp(C + Settings.angularSlop, -Settings.maxAngularCorrection,
-            0.0);
+        C = clamp(C + Settings.angularSlop, -Settings.maxAngularCorrection, 0.0);
         limitImpulse = -this.m_motorMass * C;
 
-      } else if (this.m_limitState == atUpperLimit) {
-        let C = angle - this.m_upperAngle; // float
+      } else if (this.m_limitState == LimitState.atUpperLimit) {
+        let C = angle - this.m_upperAngle;
         angularError = C;
 
         // Prevent large angular corrections and allow some slop.
-        C = Math.clamp(C - Settings.angularSlop, 0.0,
-            Settings.maxAngularCorrection);
+        C = clamp(C - Settings.angularSlop, 0.0, Settings.maxAngularCorrection);
         limitImpulse = -this.m_motorMass * C;
       }
 
@@ -696,8 +731,8 @@ export default class RevoluteJoint extends Joint {
     {
       qA.setAngle(aA);
       qB.setAngle(aB);
-      const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA)); // Vec2
-      const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB)); // Vec2
+      const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
+      const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
 
       const C = Vec2.zero();
       C.addCombine(1, cB, 1, rB);
@@ -705,9 +740,9 @@ export default class RevoluteJoint extends Joint {
       positionError = C.length();
 
       const mA = this.m_invMassA;
-      const mB = this.m_invMassB; // float
+      const mB = this.m_invMassB;
       const iA = this.m_invIA;
-      const iB = this.m_invIB; // float
+      const iB = this.m_invIB;
 
       const K = new Mat22();
       K.ex.x = mA + mB + iA * rA.y * rA.y + iB * rB.y * rB.y;
@@ -715,7 +750,7 @@ export default class RevoluteJoint extends Joint {
       K.ey.x = K.ex.y;
       K.ey.y = mA + mB + iA * rA.x * rA.x + iB * rB.x * rB.x;
 
-      const impulse = Vec2.neg(K.solve(C)); // Vec2
+      const impulse = Vec2.neg(K.solve(C));
 
       cA.subMul(mA, impulse);
       aA -= iA * Vec2.crossVec2Vec2(rA, impulse);
@@ -729,8 +764,7 @@ export default class RevoluteJoint extends Joint {
     this.m_bodyB.c_position.c.setVec2(cB);
     this.m_bodyB.c_position.a = aB;
 
-    return positionError <= Settings.linearSlop
-        && angularError <= Settings.angularSlop;
+    return positionError <= Settings.linearSlop && angularError <= Settings.angularSlop;
   }
 
 }

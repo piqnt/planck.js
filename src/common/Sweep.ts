@@ -22,15 +22,18 @@
  * SOFTWARE.
  */
 
-import common from '../util/common';
-import Math from './Math';
-import Vec2 from './Vec2';
-import Rot from './Rot';
-import Transform from './Transform';
+import * as matrix from './Matrix';
+import { mod } from './Math';
+import { Vec2, Vec2Value } from './Vec2';
+import { TransformValue } from './Transform';
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const math_atan2 = Math.atan2;
+/** @internal */ const math_PI = Math.PI;
 
+
+/** @internal */ const temp = matrix.vec2(0, 0);
 
 /**
  * This describes the motion of a body/shape for TOI computation. Shapes are
@@ -38,48 +41,46 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * center of mass. However, to support dynamics we must interpolate the center
  * of mass position.
  */
-export default class Sweep {
+export class Sweep {
   /** Local center of mass position */
-  localCenter: Vec2;
+  localCenter = Vec2.zero();
 
   /** World center position */
-  c: Vec2;
+  c = Vec2.zero();
 
   /** World angle */
-  a: number;
+  a = 0;
 
   /** Fraction of the current time step in the range [0,1], c0 and a0 are c and a at alpha0. */
-  alpha0: number;
+  alpha0 = 0;
 
-  c0: Vec2;
-  a0: number;
+  c0 = Vec2.zero();
+  a0 = 0;
 
-  constructor(c?: Vec2, a?: number) {
-    _ASSERT && common.assert(typeof c === 'undefined');
-    _ASSERT && common.assert(typeof a === 'undefined');
-    this.localCenter = Vec2.zero();
-    this.c = Vec2.zero();
+  /** @internal */
+  recycle() {
+    matrix.zeroVec2(this.localCenter)
+    matrix.zeroVec2(this.c)
     this.a = 0;
     this.alpha0 = 0;
-    this.c0 = Vec2.zero();
+    matrix.zeroVec2(this.c0)
     this.a0 = 0;
   }
 
-  setTransform(xf: Transform): void {
-    const c = Transform.mulVec2(xf, this.localCenter);
-    this.c.setVec2(c);
-    this.c0.setVec2(c);
+  setTransform(xf: TransformValue): void {
+    matrix.transformVec2(temp, xf, this.localCenter);
+    matrix.copyVec2(this.c, temp);
+    matrix.copyVec2(this.c0, temp);
 
-    this.a = xf.q.getAngle();
-    this.a0 = xf.q.getAngle();
+    this.a = this.a0 = math_atan2(xf.q.s, xf.q.c);
   }
 
-  setLocalCenter(localCenter: Vec2, xf: Transform): void {
-    this.localCenter.setVec2(localCenter);
+  setLocalCenter(localCenter: Vec2Value, xf: TransformValue): void {
+    matrix.copyVec2(this.localCenter, localCenter);
 
-    const c = Transform.mulVec2(xf, this.localCenter);
-    this.c.setVec2(c);
-    this.c0.setVec2(c);
+    matrix.transformVec2(temp, xf, this.localCenter);
+    matrix.copyVec2(this.c, temp);
+    matrix.copyVec2(this.c0, temp);
   }
 
   /**
@@ -88,12 +89,12 @@ export default class Sweep {
    * @param xf
    * @param beta A factor in [0,1], where 0 indicates alpha0
    */
-  getTransform(xf: Transform, beta: number = 0): void {
-    xf.q.setAngle((1.0 - beta) * this.a0 + beta * this.a);
-    xf.p.setCombine((1.0 - beta), this.c0, beta, this.c);
+  getTransform(xf: TransformValue, beta: number = 0): void {
+    matrix.setRotAngle(xf.q, (1.0 - beta) * this.a0 + beta * this.a);
+    matrix.combine2Vec2(xf.p, (1.0 - beta), this.c0, beta, this.c);
 
     // shift to origin
-    xf.p.sub(Rot.mulVec2(xf.q, this.localCenter));
+    matrix.minusVec2(xf.p, matrix.rotVec2(temp, xf.q, this.localCenter));
   }
 
   /**
@@ -102,44 +103,33 @@ export default class Sweep {
    * @param alpha The new initial time
    */
   advance(alpha: number): void {
-    _ASSERT && common.assert(this.alpha0 < 1.0);
+    _ASSERT && console.assert(this.alpha0 < 1.0);
     const beta = (alpha - this.alpha0) / (1.0 - this.alpha0);
-    this.c0.setCombine(beta, this.c, 1 - beta, this.c0);
+    matrix.combine2Vec2(this.c0, beta, this.c, 1 - beta, this.c0);
     this.a0 = beta * this.a + (1 - beta) * this.a0;
     this.alpha0 = alpha;
   }
 
   forward(): void {
     this.a0 = this.a;
-    this.c0.setVec2(this.c);
+    matrix.copyVec2(this.c0, this.c);
   }
 
   /**
    * normalize the angles in radians to be between -pi and pi.
    */
   normalize(): void {
-    const a0 = Math.mod(this.a0, -Math.PI, +Math.PI);
+    const a0 = mod(this.a0, -math_PI, +math_PI);
     this.a -= this.a0 - a0;
     this.a0 = a0;
   }
 
-  clone(): Sweep {
-    const clone = new Sweep();
-    clone.localCenter.setVec2(this.localCenter);
-    clone.alpha0 = this.alpha0;
-    clone.a0 = this.a0;
-    clone.a = this.a;
-    clone.c0.setVec2(this.c0);
-    clone.c.setVec2(this.c);
-    return clone;
-  }
-
   set(that: Sweep): void {
-    this.localCenter.setVec2(that.localCenter);
-    this.alpha0 = that.alpha0;
-    this.a0 = that.a0;
+    matrix.copyVec2(this.localCenter, that.localCenter);
+    matrix.copyVec2(this.c, that.c);
     this.a = that.a;
-    this.c0.setVec2(that.c0);
-    this.c.setVec2(that.c);
+    this.alpha0 = that.alpha0;
+    matrix.copyVec2(this.c0, that.c0);
+    this.a0 = that.a0;
   }
 }

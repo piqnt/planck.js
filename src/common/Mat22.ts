@@ -22,25 +22,22 @@
  * SOFTWARE.
  */
 
-import common from '../util/common';
-import Vec2 from './Vec2';
+import { Vec2 } from './Vec2';
 
 
-const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 
 /**
  * A 2-by-2 matrix. Stored in column-major order.
  */
-export default class Mat22 {
+export class Mat22 {
   ex: Vec2;
   ey: Vec2;
 
   constructor(a: number, b: number, c: number, d: number);
   constructor(a: { x: number; y: number }, b: { x: number; y: number });
   constructor();
-  // tslint:disable-next-line:typedef
   constructor(a?, b?, c?, d?) {
     if (typeof a === 'object' && a !== null) {
       this.ex = Vec2.clone(a);
@@ -54,7 +51,7 @@ export default class Mat22 {
     }
   }
 
-  /** @internal */
+  /** @hidden */
   toString(): string {
     return JSON.stringify(this);
   }
@@ -67,17 +64,12 @@ export default class Mat22 {
   }
 
   static assert(o: any): void {
-    if (!_ASSERT) return;
-    if (!Mat22.isValid(o)) {
-      _DEBUG && common.debug(o);
-      throw new Error('Invalid Mat22!');
-    }
+    _ASSERT && console.assert(!Mat22.isValid(o), 'Invalid Mat22!', o);
   }
 
   set(a: Mat22): void;
   set(a: Vec2, b: Vec2): void;
   set(a: number, b: number, c: number, d: number): void;
-  // tslint:disable-next-line:typedef
   set(a, b?, c?, d?): void {
     if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
       && typeof d === 'number') {
@@ -94,7 +86,7 @@ export default class Mat22 {
       this.ey.setVec2(a.ey);
 
     } else {
-      _ASSERT && common.assert(false);
+      _ASSERT && console.assert(false);
     }
   }
 
@@ -155,7 +147,6 @@ export default class Mat22 {
    */
   static mul(mx: Mat22, my: Mat22): Mat22;
   static mul(mx: Mat22, v: Vec2): Vec2;
-  // tslint:disable-next-line:typedef
   static mul(mx, v) {
     if (v && 'x' in v && 'y' in v) {
       _ASSERT && Vec2.assert(v);
@@ -173,7 +164,7 @@ export default class Mat22 {
       return new Mat22(a, b, c, d);
     }
 
-    _ASSERT && common.assert(false);
+    _ASSERT && console.assert(false);
   }
 
   static mulVec2(mx: Mat22, v: Vec2): Vec2 {
@@ -200,7 +191,6 @@ export default class Mat22 {
    */
   static mulT(mx: Mat22, my: Mat22): Mat22;
   static mulT(mx: Mat22, v: Vec2): Vec2;
-  // tslint:disable-next-line:typedef
   static mulT(mx, v) {
     if (v && 'x' in v && 'y' in v) { // Vec2
       _ASSERT && Vec2.assert(v);
@@ -213,7 +203,7 @@ export default class Mat22 {
       return new Mat22(c1, c2);
     }
 
-    _ASSERT && common.assert(false);
+    _ASSERT && console.assert(false);
   }
 
   static mulTVec2(mx: Mat22, v: Vec2): Vec2 {

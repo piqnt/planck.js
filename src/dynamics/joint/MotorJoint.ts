@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-import common from '../../util/common';
-import options from '../../util/options';
-import Math from '../../common/Math';
-import Vec2 from '../../common/Vec2';
-import Mat22 from '../../common/Mat22';
-import Rot from '../../common/Rot';
-import Joint, { JointOpt, JointDef } from '../Joint';
-import Body from '../Body';
+import { options } from '../../util/options';
+import { clamp } from '../../common/Math';
+import { Vec2, Vec2Value } from '../../common/Vec2';
+import { Mat22 } from '../../common/Mat22';
+import { Rot } from '../../common/Rot';
+import { Joint, JointOpt, JointDef } from '../Joint';
+import { Body } from '../Body';
 import { TimeStep } from "../Solver";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -59,15 +59,16 @@ export interface MotorJointOpt extends JointOpt {
   /**
    * Position of bodyB minus the position of bodyA, in bodyA's frame, in meters.
    */
-  linearOffset?: Vec2;
+  linearOffset?: Vec2Value;
 }
+
 /**
  * Motor joint definition.
  */
 export interface MotorJointDef extends JointDef, MotorJointOpt {
 }
 
-const DEFAULTS = {
+/** @internal */ const DEFAULTS = {
   maxForce : 1.0,
   maxTorque : 1.0,
   correctionFactor : 0.3
@@ -78,7 +79,7 @@ const DEFAULTS = {
  * typical usage is to control the movement of a dynamic body with respect to
  * the ground.
  */
-export default class MotorJoint extends Joint {
+export class MotorJoint extends Joint {
   static TYPE = 'motor-joint' as const;
 
   /** @internal */ m_type: 'motor-joint';
@@ -108,7 +109,7 @@ export default class MotorJoint extends Joint {
   constructor(def: MotorJointOpt, bodyA: Body, bodyB: Body);
   constructor(def: MotorJointDef | MotorJointOpt, bodyA?: Body, bodyB?: Body) {
     // @ts-ignore
-    if (!(this instanceof MotorJoint)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof MotorJoint)) {
       return new MotorJoint(def, bodyA, bodyB);
     }
 
@@ -119,8 +120,8 @@ export default class MotorJoint extends Joint {
 
     this.m_type = MotorJoint.TYPE;
 
-    this.m_linearOffset = Math.isFinite(def.linearOffset) ? def.linearOffset : bodyA.getLocalPoint(bodyB.getPosition());
-    this.m_angularOffset = Math.isFinite(def.angularOffset) ? def.angularOffset : bodyB.getAngle() - bodyA.getAngle();
+    this.m_linearOffset = Vec2.isValid(def.linearOffset) ? Vec2.clone(def.linearOffset) : bodyA.getLocalPoint(bodyB.getPosition());
+    this.m_angularOffset = Number.isFinite(def.angularOffset) ? def.angularOffset : bodyB.getAngle() - bodyA.getAngle();
 
     this.m_linearImpulse = Vec2.zero();
     this.m_angularImpulse = 0.0;
@@ -135,6 +136,9 @@ export default class MotorJoint extends Joint {
     // J = [-I -r1_skew I r2_skew ]
     // Identity used:
     // w k % (rx i + ry j) = w * (-ry i + rx j)
+    //
+    // r1 = offset - c1
+    // r2 = -c2
 
     // Angle constraint
     // Cdot = w2 - w1
@@ -168,15 +172,30 @@ export default class MotorJoint extends Joint {
     return joint;
   }
 
-  /** @internal */
-  _setAnchors(def: {}): void {
+  /** @hidden */
+  _reset(def: Partial<MotorJointDef>): void {
+    if (Number.isFinite(def.angularOffset)) {
+      this.m_angularOffset = def.angularOffset;
+    }
+    if (Number.isFinite(def.maxForce)) {
+      this.m_maxForce = def.maxForce;
+    }
+    if (Number.isFinite(def.maxTorque)) {
+      this.m_maxTorque = def.maxTorque;
+    }
+    if (Number.isFinite(def.correctionFactor)) {
+      this.m_correctionFactor = def.correctionFactor;
+    }
+    if (Vec2.isValid(def.linearOffset)) {
+      this.m_linearOffset.set(def.linearOffset);      
+    }
   }
 
   /**
    * Set the maximum friction force in N.
    */
   setMaxForce(force: number): void {
-    _ASSERT && common.assert(Math.isFinite(force) && force >= 0.0);
+    _ASSERT && console.assert(Number.isFinite(force) && force >= 0.0);
     this.m_maxForce = force;
   }
 
@@ -191,7 +210,7 @@ export default class MotorJoint extends Joint {
    * Set the maximum friction torque in N*m.
    */
   setMaxTorque(torque: number): void {
-    _ASSERT && common.assert(Math.isFinite(torque) && torque >= 0.0);
+    _ASSERT && console.assert(Number.isFinite(torque) && torque >= 0.0);
     this.m_maxTorque = torque;
   }
 
@@ -206,7 +225,7 @@ export default class MotorJoint extends Joint {
    * Set the position correction factor in the range [0,1].
    */
   setCorrectionFactor(factor: number): void {
-    _ASSERT && common.assert(Math.isFinite(factor) && 0.0 <= factor && factor <= 1.0);
+    _ASSERT && console.assert(Number.isFinite(factor) && 0.0 <= factor && factor <= 1.0);
     this.m_correctionFactor = factor;
   }
 
@@ -220,12 +239,11 @@ export default class MotorJoint extends Joint {
   /**
    * Set/get the target linear offset, in frame A, in meters.
    */
-  setLinearOffset(linearOffset: Vec2): void {
-    if (linearOffset.x != this.m_linearOffset.x
-        || linearOffset.y != this.m_linearOffset.y) {
+  setLinearOffset(linearOffset: Vec2Value): void {
+    if (linearOffset.x != this.m_linearOffset.x || linearOffset.y != this.m_linearOffset.y) {
       this.m_bodyA.setAwake(true);
       this.m_bodyB.setAwake(true);
-      this.m_linearOffset = linearOffset;
+      this.m_linearOffset.set(linearOffset);
     }
   }
 
@@ -298,11 +316,10 @@ export default class MotorJoint extends Joint {
     const qB = Rot.neo(aB);
 
     // Compute the effective mass matrix.
-    this.m_rA = Rot.mulVec2(qA, Vec2.neg(this.m_localCenterA));
+    this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_linearOffset, this.m_localCenterA));
     this.m_rB = Rot.mulVec2(qB, Vec2.neg(this.m_localCenterB));
 
     // J = [-I -r1_skew I r2_skew]
-    // [ 0 -1 0 1]
     // r_skew = [-ry; rx]
 
     // Matlab
@@ -315,6 +332,7 @@ export default class MotorJoint extends Joint {
     const iA = this.m_invIA;
     const iB = this.m_invIB;
 
+    // Upper 2 by 2 of K for point to point
     const K = new Mat22();
     K.ex.x = mA + mB + iA * this.m_rA.y * this.m_rA.y + iB * this.m_rB.y * this.m_rB.y;
     K.ex.y = -iA * this.m_rA.x * this.m_rA.y - iB * this.m_rB.x * this.m_rB.y;
@@ -331,7 +349,6 @@ export default class MotorJoint extends Joint {
     this.m_linearError = Vec2.zero();
     this.m_linearError.addCombine(1, cB, 1, this.m_rB);
     this.m_linearError.subCombine(1, cA, 1, this.m_rA);
-    this.m_linearError.sub(Rot.mulVec2(qA, this.m_linearOffset));
 
     this.m_angularError = aB - aA - this.m_angularOffset;
 
@@ -380,8 +397,7 @@ export default class MotorJoint extends Joint {
 
       const oldImpulse = this.m_angularImpulse;
       const maxImpulse = h * this.m_maxTorque;
-      this.m_angularImpulse = Math.clamp(this.m_angularImpulse + impulse,
-          -maxImpulse, maxImpulse);
+      this.m_angularImpulse = clamp(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
       impulse = this.m_angularImpulse - oldImpulse;
 
       wA -= iA * impulse;

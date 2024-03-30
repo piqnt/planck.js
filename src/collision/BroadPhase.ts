@@ -22,24 +22,23 @@
  * SOFTWARE.
  */
 
-import common from '../util/common';
-import Vec2 from '../common/Vec2';
-import Math from '../common/Math';
-import AABB, { RayCastCallback, RayCastInput } from './AABB';
-import DynamicTree, { DynamicTreeQueryCallback } from './DynamicTree';
+import { Vec2Value } from '../common/Vec2';
+import { AABB, AABBValue, RayCastCallback, RayCastInput } from './AABB';
+import { DynamicTree, DynamicTreeQueryCallback } from './DynamicTree';
 import { FixtureProxy } from "../dynamics/Fixture";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const math_max = Math.max;
+/** @internal */ const math_min = Math.min;
 
 
 /**
  * The broad-phase wraps and extends a dynamic-tree to keep track of moved
  * objects and query them on update.
  */
-export default class BroadPhase {
+export class BroadPhase {
   m_tree: DynamicTree<FixtureProxy> = new DynamicTree<FixtureProxy>();
-  m_proxyCount: number = 0;
   m_moveBuffer: number[] = [];
 
   m_callback: (userDataA: any, userDataB: any) => void;
@@ -72,7 +71,7 @@ export default class BroadPhase {
    * Get the number of proxies.
    */
   getProxyCount(): number {
-    return this.m_proxyCount;
+    return this.m_moveBuffer.length;
   }
 
   /**
@@ -100,7 +99,7 @@ export default class BroadPhase {
    * Query an AABB for overlapping proxies. The callback class is called for each
    * proxy that overlaps the supplied AABB.
    */
-  query = (aabb: AABB, queryCallback: DynamicTreeQueryCallback): void => {
+  query = (aabb: AABBValue, queryCallback: DynamicTreeQueryCallback): void => {
     this.m_tree.query(aabb, queryCallback);
   }
 
@@ -124,7 +123,7 @@ export default class BroadPhase {
    *
    * @param newOrigin The new origin with respect to the old origin
    */
-  shiftOrigin(newOrigin: Vec2): void {
+  shiftOrigin(newOrigin: Vec2Value): void {
     this.m_tree.shiftOrigin(newOrigin);
   }
 
@@ -132,10 +131,9 @@ export default class BroadPhase {
    * Create a proxy with an initial AABB. Pairs are not reported until UpdatePairs
    * is called.
    */
-  createProxy(aabb: AABB, userData: FixtureProxy): number {
-    _ASSERT && common.assert(AABB.isValid(aabb));
+  createProxy(aabb: AABBValue, userData: FixtureProxy): number {
+    _ASSERT && console.assert(AABB.isValid(aabb));
     const proxyId = this.m_tree.createProxy(aabb, userData);
-    this.m_proxyCount++;
     this.bufferMove(proxyId);
     return proxyId;
   }
@@ -145,7 +143,6 @@ export default class BroadPhase {
    */
   destroyProxy(proxyId: number): void {
     this.unbufferMove(proxyId);
-    this.m_proxyCount--;
     this.m_tree.destroyProxy(proxyId);
   }
 
@@ -153,8 +150,8 @@ export default class BroadPhase {
    * Call moveProxy as many times as you like, then when you are done call
    * UpdatePairs to finalized the proxy pairs (for your time step).
    */
-  moveProxy(proxyId: number, aabb: AABB, displacement: Vec2): void {
-    _ASSERT && common.assert(AABB.isValid(aabb));
+  moveProxy(proxyId: number, aabb: AABB, displacement: Vec2Value): void {
+    _ASSERT && console.assert(AABB.isValid(aabb));
     const changed = this.m_tree.moveProxy(proxyId, aabb, displacement);
     if (changed) {
       this.bufferMove(proxyId);
@@ -185,7 +182,7 @@ export default class BroadPhase {
    * Update the pairs. This results in pair callbacks. This can only add pairs.
    */
   updatePairs(addPairCallback: (userDataA: FixtureProxy, userDataB: FixtureProxy) => void): void {
-    _ASSERT && common.assert(typeof addPairCallback === 'function');
+    _ASSERT && console.assert(typeof addPairCallback === 'function');
     this.m_callback = addPairCallback;
 
     // Perform tree queries for all moving proxies.
@@ -213,8 +210,8 @@ export default class BroadPhase {
       return true;
     }
 
-    const proxyIdA = Math.min(proxyId, this.m_queryProxyId);
-    const proxyIdB = Math.max(proxyId, this.m_queryProxyId);
+    const proxyIdA = math_min(proxyId, this.m_queryProxyId);
+    const proxyIdB = math_max(proxyId, this.m_queryProxyId);
 
     // TODO: Skip any duplicate pairs.
 

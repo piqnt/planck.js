@@ -18,44 +18,46 @@ Input parameters for TimeOfImpact.
 * [sweepB](toiinput.md#sweepb)
 * [tMax](toiinput.md#tmax)
 
+### Methods
+
+* [recycle](toiinput.md#recycle)
+
 ## Properties
 
 ###  proxyA
 
-• **proxyA**: *[DistanceProxy](distanceproxy.md)* = new DistanceProxy()
-
-*Defined in [src/collision/TimeOfImpact.ts:47](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L47)*
+• **proxyA**: *[DistanceProxy](distanceproxy.md)‹›* = new DistanceProxy()
 
 ___
 
 ###  proxyB
 
-• **proxyB**: *[DistanceProxy](distanceproxy.md)* = new DistanceProxy()
-
-*Defined in [src/collision/TimeOfImpact.ts:48](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L48)*
+• **proxyB**: *[DistanceProxy](distanceproxy.md)‹›* = new DistanceProxy()
 
 ___
 
 ###  sweepA
 
-• **sweepA**: *[Sweep](sweep.md)* = new Sweep()
-
-*Defined in [src/collision/TimeOfImpact.ts:49](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L49)*
+• **sweepA**: *[Sweep](sweep.md)‹›* = new Sweep()
 
 ___
 
 ###  sweepB
 
-• **sweepB**: *[Sweep](sweep.md)* = new Sweep()
-
-*Defined in [src/collision/TimeOfImpact.ts:50](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L50)*
+• **sweepB**: *[Sweep](sweep.md)‹›* = new Sweep()
 
 ___
 
 ###  tMax
 
-• **tMax**: *number | undefined*
-
-*Defined in [src/collision/TimeOfImpact.ts:52](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/TimeOfImpact.ts#L52)*
+• **tMax**: *number*
 
 defines sweep interval [0, tMax]
+
+## Methods
+
+###  recycle
+
+▸ **recycle**(): *void*
+
+**Returns:** *void*

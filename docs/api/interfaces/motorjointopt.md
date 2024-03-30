@@ -30,8 +30,6 @@ Motor joint definition.
 
 • **angularOffset**? : *number*
 
-*Defined in [src/dynamics/joint/MotorJoint.ts:46](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/MotorJoint.ts#L46)*
-
 The bodyB angle minus bodyA angle in radians.
 
 ___
@@ -42,8 +40,6 @@ ___
 
 *Inherited from [JointOpt](jointopt.md).[collideConnected](jointopt.md#optional-collideconnected)*
 
-*Defined in [src/dynamics/Joint.ts:69](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L69)*
-
 Set this flag to true if the attached bodies
 should collide.
 
@@ -53,17 +49,13 @@ ___
 
 • **correctionFactor**? : *number*
 
-*Defined in [src/dynamics/joint/MotorJoint.ts:58](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/MotorJoint.ts#L58)*
-
 Position correction factor in the range [0,1].
 
 ___
 
 ### `Optional` linearOffset
 
-• **linearOffset**? : *[Vec2](../classes/vec2.md)*
-
-*Defined in [src/dynamics/joint/MotorJoint.ts:62](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/MotorJoint.ts#L62)*
+• **linearOffset**? : *[Vec2Value](vec2value.md)*
 
 Position of bodyB minus the position of bodyA, in bodyA's frame, in meters.
 
@@ -73,8 +65,6 @@ ___
 
 • **maxForce**? : *number*
 
-*Defined in [src/dynamics/joint/MotorJoint.ts:50](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/MotorJoint.ts#L50)*
-
 The maximum motor force in N.
 
 ___
@@ -82,8 +72,6 @@ ___
 ### `Optional` maxTorque
 
 • **maxTorque**? : *number*
-
-*Defined in [src/dynamics/joint/MotorJoint.ts:54](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/joint/MotorJoint.ts#L54)*
 
 The maximum motor torque in N-m.
 
@@ -94,7 +82,5 @@ ___
 • **userData**? : *any*
 
 *Inherited from [JointOpt](jointopt.md).[userData](jointopt.md#optional-userdata)*
-
-*Defined in [src/dynamics/Joint.ts:64](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/Joint.ts#L64)*
 
 Use this to attach application specific data to your joints.

@@ -2,22 +2,6 @@
 
 # Interface: WorldDef
 
-**`prop`** gravity [{ x : 0, y : 0}]
-
-**`prop`** allowSleep [true]
-
-**`prop`** warmStarting [true]
-
-**`prop`** continuousPhysics [true]
-
-**`prop`** subStepping [false]
-
-**`prop`** blockSolve [true]
-
-**`prop`** velocityIterations [8] For the velocity constraint solver.
-
-**`prop`** positionIterations [3] For the position constraint solver.
-
 ## Hierarchy
 
 * **WorldDef**
@@ -30,9 +14,7 @@
 * [blockSolve](worlddef.md#optional-blocksolve)
 * [continuousPhysics](worlddef.md#optional-continuousphysics)
 * [gravity](worlddef.md#optional-gravity)
-* [positionIterations](worlddef.md#optional-positioniterations)
 * [subStepping](worlddef.md#optional-substepping)
-* [velocityIterations](worlddef.md#optional-velocityiterations)
 * [warmStarting](worlddef.md#optional-warmstarting)
 
 ## Properties
@@ -41,7 +23,7 @@
 
 • **allowSleep**? : *boolean*
 
-*Defined in [src/dynamics/World.ts:53](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/World.ts#L53)*
+[default: true]
 
 ___
 
@@ -49,7 +31,7 @@ ___
 
 • **blockSolve**? : *boolean*
 
-*Defined in [src/dynamics/World.ts:57](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/World.ts#L57)*
+[default: true]
 
 ___
 
@@ -57,23 +39,15 @@ ___
 
 • **continuousPhysics**? : *boolean*
 
-*Defined in [src/dynamics/World.ts:55](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/World.ts#L55)*
+[default: true]
 
 ___
 
 ### `Optional` gravity
 
-• **gravity**? : *[Vec2](../classes/vec2.md)*
+• **gravity**? : *Vec2*
 
-*Defined in [src/dynamics/World.ts:52](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/World.ts#L52)*
-
-___
-
-### `Optional` positionIterations
-
-• **positionIterations**? : *number*
-
-*Defined in [src/dynamics/World.ts:59](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/World.ts#L59)*
+[default: { x : 0, y : 0}]
 
 ___
 
@@ -81,15 +55,7 @@ ___
 
 • **subStepping**? : *boolean*
 
-*Defined in [src/dynamics/World.ts:56](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/World.ts#L56)*
-
-___
-
-### `Optional` velocityIterations
-
-• **velocityIterations**? : *number*
-
-*Defined in [src/dynamics/World.ts:58](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/World.ts#L58)*
+[default: false]
 
 ___
 
@@ -97,4 +63,4 @@ ___
 
 • **warmStarting**? : *boolean*
 
-*Defined in [src/dynamics/World.ts:54](https://github.com/shakiba/planck.js/blob/acc3bd8/src/dynamics/World.ts#L54)*
+[default: true]

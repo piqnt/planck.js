@@ -5,8 +5,22 @@
   "out": "./docs/api/",
   "mode": "file",
   "includeDeclarations": false,
-  "exclude": "**/*.test-d.ts",
+  "exclude": [
+    "**/*.test-d.ts",
+    "**/*.test.ts",
+    "**/*.test.js",
+    "**/index.ts",
+    "**/main.ts",
+    "src/util/options*",
+    "src/util/Pool*",
+    "src/util/Timer*",
+    "src/common/Matrix*",
+    "testbed/*",
+    "dist/*"
+  ],
+  "disableSources": true,
   "excludeExternals": true,
   "excludePrivate": true,
-  "stripInternal": true
+  "stripInternal": true,
+  "excludeNotExported": true
 }

@@ -22,15 +22,18 @@
  * SOFTWARE.
  */
 
-import common from '../util/common';
-import Math from './Math';
+
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
 
 
-const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+export interface Vec3Value {
+  x: number;
+  y: number;
+  z: number;
+}
 
-
-export default class Vec3 {
+export class Vec3 {
   x: number;
   y: number;
   z: number;
@@ -38,9 +41,8 @@ export default class Vec3 {
   constructor(x: number, y: number, z: number);
   constructor(obj: { x: number, y: number, z: number });
   constructor();
-  // tslint:disable-next-line:typedef
   constructor(x?, y?, z?) {
-    if (!(this instanceof Vec3)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof Vec3)) {
       return new Vec3(x, y, z);
     }
     if (typeof x === 'undefined') {
@@ -77,7 +79,7 @@ export default class Vec3 {
     return obj;
   }
 
-  /** @internal */
+  /** @hidden */
   static neo(x: number, y: number, z: number): Vec3 {
     const obj = Object.create(Vec3.prototype);
     obj.x = x;
@@ -94,32 +96,26 @@ export default class Vec3 {
     return obj;
   }
 
-  static clone(v: Vec3): Vec3 {
+  static clone(v: Vec3Value): Vec3 {
     _ASSERT && Vec3.assert(v);
     return Vec3.neo(v.x, v.y, v.z);
   }
 
-  /** @internal */
+  /** @hidden */
   toString(): string {
     return JSON.stringify(this);
   }
 
-  /**
-   * Does this vector contain finite coordinates?
-   */
+  /** Does this vector contain finite coordinates? */
   static isValid(obj: any): boolean {
     if (obj === null || typeof obj === 'undefined') {
       return false;
     }
-    return Math.isFinite(obj.x) && Math.isFinite(obj.y) && Math.isFinite(obj.z);
+    return Number.isFinite(obj.x) && Number.isFinite(obj.y) && Number.isFinite(obj.z);
   }
 
   static assert(o: any): void {
-    if (!_ASSERT) return;
-    if (!Vec3.isValid(o)) {
-      _DEBUG && common.debug(o);
-      throw new Error('Invalid Vec3!');
-    }
+    _ASSERT && console.assert(!Vec3.isValid(o), 'Invalid Vec3!', o);
   }
 
   setZero(): Vec3 {
@@ -136,14 +132,14 @@ export default class Vec3 {
     return this;
   }
 
-  add(w: Vec3): Vec3 {
+  add(w: Vec3Value): Vec3 {
     this.x += w.x;
     this.y += w.y;
     this.z += w.z;
     return this;
   }
 
-  sub(w: Vec3): Vec3 {
+  sub(w: Vec3Value): Vec3 {
     this.x -= w.x;
     this.y -= w.y;
     this.z -= w.z;
@@ -157,7 +153,7 @@ export default class Vec3 {
     return this;
   }
 
-  static areEqual(v: Vec3, w: Vec3): boolean {
+  static areEqual(v: Vec3Value, w: Vec3Value): boolean {
     _ASSERT && Vec3.assert(v);
     _ASSERT && Vec3.assert(w);
     return v === w ||
@@ -166,17 +162,13 @@ export default class Vec3 {
       v.x === w.x && v.y === w.y && v.z === w.z;
   }
 
-  /**
-   * Perform the dot product on two vectors.
-   */
-  static dot(v: Vec3, w: Vec3): number {
+  /** Dot product on two vectors */
+  static dot(v: Vec3Value, w: Vec3Value): number {
     return v.x * w.x + v.y * w.y + v.z * w.z;
   }
 
-  /**
-   * Perform the cross product on two vectors. In 2D this produces a scalar.
-   */
-  static cross(v: Vec3, w: Vec3): Vec3 {
+  /** Cross product on two vectors */
+  static cross(v: Vec3Value, w: Vec3Value): Vec3 {
     return new Vec3(
       v.y * w.z - v.z * w.y,
       v.z * w.x - v.x * w.z,
@@ -184,15 +176,15 @@ export default class Vec3 {
     );
   }
 
-  static add(v: Vec3, w: Vec3): Vec3 {
+  static add(v: Vec3Value, w: Vec3Value): Vec3 {
     return new Vec3(v.x + w.x, v.y + w.y, v.z + w.z);
   }
 
-  static sub(v: Vec3, w: Vec3): Vec3 {
+  static sub(v: Vec3Value, w: Vec3Value): Vec3 {
     return new Vec3(v.x - w.x, v.y - w.y, v.z - w.z);
   }
 
-  static mul(v: Vec3, m: number): Vec3 {
+  static mul(v: Vec3Value, m: number): Vec3 {
     return new Vec3(m * v.x, m * v.y, m * v.z);
   }
 
@@ -203,7 +195,7 @@ export default class Vec3 {
     return this;
   }
 
-  static neg(v: Vec3): Vec3 {
+  static neg(v: Vec3Value): Vec3 {
     return new Vec3(-v.x, -v.y, -v.z);
   }
 }

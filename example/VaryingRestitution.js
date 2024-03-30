@@ -23,24 +23,25 @@
 
 // Note: even with a restitution of 1.0, there is some energy change
 // due to position correction.
-planck.testbed('VaryingRestitution', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, -10));
 
-  var ground = world.createBody();
-  ground.createFixture(pl.Edge(Vec2(-40.0, 0.0), Vec2(40.0, 0.0)));
+const { World, Vec2, Circle, Edge, Testbed } = planck;
 
-  var restitution = [ 0.0, 0.1, 0.3, 0.5, 0.75, 0.9, 1.0 ];
+const world = new World(new Vec2(0, -10));
 
-  var circle = pl.Circle(1.0);
+const testbed = Testbed.mount();
+testbed.start(world);
 
-  for (var i = 0; i < restitution.length; ++i) {
-    var ball = world.createDynamicBody(Vec2(-10.0 + 3.0 * i, 20.0));
-    ball.createFixture(circle, {
-      density: 1.0,
-      restitution: restitution[i]
-    });
-  }
+const ground = world.createBody();
+ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)));
 
-  return world;
-});
+const restitution = [ 0.0, 0.1, 0.3, 0.5, 0.75, 0.9, 1.0 ];
+
+const circle = new Circle(1.0);
+
+for (let i = 0; i < restitution.length; ++i) {
+  const ball = world.createDynamicBody(new Vec2(-10.0 + 3.0 * i, 20.0));
+  ball.createFixture(circle, {
+    density: 1.0,
+    restitution: restitution[i]
+  });
+}

@@ -21,68 +21,67 @@
  * SOFTWARE.
  */
 
-planck.testbed('Mobile', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2;
-  var world = new pl.World(Vec2(0, -1));
+const { Vec2, World, Box, RevoluteJoint, Testbed } = planck;
 
-  testbed.y = -15;
-  testbed.width = 20;
-  testbed.height = 20;
-  testbed.ratio = 40;
+let world = new World(new Vec2(0, -1));
 
-  var DEPTH = 4;
-  var DENSITY = 20.0;
+const testbed = Testbed.mount();
+testbed.y = -15;
+testbed.width = 20;
+testbed.height = 20;
+testbed.ratio = 40;
+testbed.start(world);
 
-  var ground = world.createBody(Vec2(0.0, 20.0));
+let DEPTH = 4;
+let DENSITY = 20.0;
 
-  var a = 0.5;
-  var h = Vec2(0.0, a);
+let ground = world.createBody(new Vec2(0.0, 20.0));
 
-  var root = addNode(ground, Vec2(), 0, 3.0, a);
+let a = 0.5;
+let h = new Vec2(0.0, a);
 
-  world.createJoint(pl.RevoluteJoint({
-    bodyA: ground,
-    bodyB: root,
-    localAnchorA: Vec2(),
-    localAnchorB: h,
-  }, ground, root));
+let root = addNode(ground, new Vec2(), 0, 3.0, a);
 
-  function addNode(parent, localAnchor, depth, offset, a) {
+world.createJoint(new RevoluteJoint({
+  bodyA: ground,
+  bodyB: root,
+  localAnchorA: new Vec2(0, 0),
+  localAnchorB: h,
+}, ground, root));
 
-    var h = Vec2(0.0, a);
+function addNode(parent, localAnchor, depth, offset, a) {
 
-    var parent = world.createBody({
-      type : 'dynamic',
-      position : Vec2.add(parent.getPosition(), localAnchor).sub(h)
-    });
+  let h = new Vec2(0.0, a);
 
-    parent.createFixture(pl.Box(0.25 * a, a), DENSITY);
+  let node = world.createBody({
+    type : 'dynamic',
+    position : new Vec2(parent.getPosition()).add(localAnchor).sub(h)
+  });
 
-    if (depth === DEPTH) {
-      return parent;
-    }
+  node.createFixture(new Box(0.25 * a, a), DENSITY);
 
-    var left = Vec2(offset, -a);
-    var right = Vec2(-offset, -a);
-    var leftChild = addNode(parent, left, depth + 1, 0.5 * offset, a);
-    var rightChild = addNode(parent, right, depth + 1, 0.5 * offset, a);
-
-    world.createJoint(pl.RevoluteJoint({
-      bodyA: parent,
-      bodyB: leftChild,
-      localAnchorA: left,
-      localAnchorB: h,
-    }, parent, leftChild));
-
-    world.createJoint(pl.RevoluteJoint({
-      bodyA: parent,
-      bodyB: rightChild,
-      localAnchorA: right,
-      localAnchorB: h,
-    }, parent, rightChild));
-
-    return parent;
+  if (depth === DEPTH) {
+    return node;
   }
 
-  return world;
-});
+  let left = new Vec2(offset, -a);
+  let right = new Vec2(-offset, -a);
+  let leftChild = addNode(node, left, depth + 1, 0.5 * offset, a);
+  let rightChild = addNode(node, right, depth + 1, 0.5 * offset, a);
+
+  world.createJoint(new RevoluteJoint({
+    bodyA: node,
+    bodyB: leftChild,
+    localAnchorA: left,
+    localAnchorB: h,
+  }, node, leftChild));
+
+  world.createJoint(new RevoluteJoint({
+    bodyA: node,
+    bodyB: rightChild,
+    localAnchorA: right,
+    localAnchorB: h,
+  }, node, rightChild));
+
+  return node;
+}

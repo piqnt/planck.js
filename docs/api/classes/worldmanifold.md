@@ -13,26 +13,35 @@ This is used to compute the current state of a contact manifold.
 ### Properties
 
 * [normal](worldmanifold.md#normal)
+* [pointCount](worldmanifold.md#pointcount)
 * [points](worldmanifold.md#points)
 * [separations](worldmanifold.md#separations)
+
+### Methods
+
+* [recycle](worldmanifold.md#recycle)
 
 ## Properties
 
 ###  normal
 
-• **normal**: *[Vec2](vec2.md)*
-
-*Defined in [src/collision/Manifold.ts:235](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L235)*
+• **normal**: *[Vec2Value](../interfaces/vec2value.md)* = matrix.vec2(0, 0)
 
 World vector pointing from A to B
 
 ___
 
+###  pointCount
+
+• **pointCount**: *number* = 0
+
+The number of manifold points
+
+___
+
 ###  points
 
-• **points**: *[Vec2](vec2.md)[]* = []
-
-*Defined in [src/collision/Manifold.ts:239](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L239)*
+• **points**: *[Vec2Value](../interfaces/vec2value.md)[]* = [matrix.vec2(0, 0), matrix.vec2(0, 0)]
 
 World contact point (point of intersection)
 
@@ -40,8 +49,14 @@ ___
 
 ###  separations
 
-• **separations**: *number[]* = []
-
-*Defined in [src/collision/Manifold.ts:243](https://github.com/shakiba/planck.js/blob/acc3bd8/src/collision/Manifold.ts#L243)*
+• **separations**: *number[]* = [0, 0]
 
 A negative value indicates overlap, in meters
+
+## Methods
+
+###  recycle
+
+▸ **recycle**(): *void*
+
+**Returns:** *void*

@@ -21,87 +21,84 @@
  * SOFTWARE.
  */
 
-planck.testbed('DistanceTest', function(testbed) {
-  var pl = planck, Vec2 = pl.Vec2, Transform = pl.Transform;
+const { World, Vec2, Transform, Box, Distance, Testbed } = planck;
 
-  var Distance = pl.Distance;
-  var DistanceInput = Distance.Input;
-  var DistanceOutput = Distance.Output;
-  var SimplexCache = Distance.Cache;
+let DistanceInput = Distance.Input;
+let DistanceOutput = Distance.Output;
+let SimplexCache = Distance.Cache;
 
-  var world = pl.World();
+let world = new World();
 
-  var transformA = pl.Transform();
-  transformA.p.set(0.0, -0.2);
+const testbed = Testbed.mount();
+testbed.start(world);    
 
-  var polygonA = pl.Box(10.0, 0.2);
+let transformA = new Transform(new Vec2(0.0, -0.2));
 
-  var positionB = Vec2(12.017401, 0.13678508);
-  var angleB = -0.0109265;
-  var transformB = pl.Transform(positionB, angleB);
+let polygonA = new Box(10.0, 0.2);
 
-  var polygonB = pl.Box(2.0, 0.1);
+let positionB = new Vec2(12.017401, 0.13678508);
+let angleB = -0.0109265;
+let transformB = new Transform(positionB, angleB);
 
-  var bodyA = world.createBody();
-  var fixA = bodyA.createFixture(polygonA);
+let polygonB = new Box(2.0, 0.1);
 
-  var bodyB = world.createBody();
-  var fixB = bodyB.createFixture(polygonB);
+let bodyA = world.createBody();
+let fixA = bodyA.createFixture(polygonA);
 
-  testbed.step = function() {
-    var input = new DistanceInput();
-    input.proxyA.set(polygonA, 0);
-    input.proxyB.set(polygonB, 0);
-    input.transformA = transformA;
-    input.transformB = transformB;
-    input.useRadii = true;
+let bodyB = world.createBody();
+let fixB = bodyB.createFixture(polygonB);
 
-    var cache = new SimplexCache();
+testbed.step = function() {
+  let input = new DistanceInput();
+  input.proxyA.set(polygonA, 0);
+  input.proxyB.set(polygonB, 0);
+  input.transformA.set(transformA);
+  input.transformB.set(transformB);
+  input.useRadii = true;
 
-    var output = new DistanceOutput();
+  let cache = new SimplexCache();
 
-    Distance(output, cache, input);
+  let output = new DistanceOutput();
 
-    testbed.status("Distance", output.distance);
-    testbed.status("Iterations", output.iterations);
+  Distance(output, cache, input);
 
-    bodyA.setTransform(transformA);
-    bodyB.setTransform(transformB);
+  testbed.status('Distance', output.distance);
+  testbed.status('Iterations', output.iterations);
 
-    var x1 = output.pointA;
-    var x2 = output.pointB;
+  bodyA.setTransform(transformA);
+  bodyB.setTransform(transformB);
 
-    testbed.drawPoint(x1, 4.0, testbed.color(1.0, 0.0, 0.0));
-    testbed.drawPoint(x2, 4.0, testbed.color(1.0, 1.0, 0.0));
-  };
+  let x1 = output.pointA;
+  let x2 = output.pointB;
 
-  testbed.keydown = function() {
-    if (testbed.activeKeys['left']) {
-      positionB.x -= 0.1;
-    }
+  testbed.drawPoint(x1, 4.0, testbed.color(1.0, 0.0, 0.0));
+  testbed.drawPoint(x2, 4.0, testbed.color(1.0, 1.0, 0.0));
+};
 
-    if (testbed.activeKeys['right']) {
-      positionB.x += 0.1;
-    }
+testbed.keydown = function() {
+  if (testbed.activeKeys['left']) {
+    positionB.x -= 0.1;
+  }
 
-    if (testbed.activeKeys['down']) {
-      positionB.y -= 0.1;
-    }
+  if (testbed.activeKeys['right']) {
+    positionB.x += 0.1;
+  }
 
-    if (testbed.activeKeys['up']) {
-      positionB.y += 0.1;
-    }
+  if (testbed.activeKeys['down']) {
+    positionB.y -= 0.1;
+  }
 
-    if (testbed.activeKeys['Z']) {
-      angleB += 0.1;
-    }
+  if (testbed.activeKeys['up']) {
+    positionB.y += 0.1;
+  }
 
-    if (testbed.activeKeys['X']) {
-      angleB -= 0.1;
-    }
+  if (testbed.activeKeys['Z']) {
+    angleB += 0.1;
+  }
 
-    transformB.set(positionB, angleB);
-  };
+  if (testbed.activeKeys['X']) {
+    angleB -= 0.1;
+  }
 
-  return world;
-});
+  transformB.set(positionB, angleB);
+};

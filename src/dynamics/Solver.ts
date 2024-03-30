@@ -23,21 +23,23 @@
  * SOFTWARE.
  */
 
-import Settings from '../Settings';
-import common from '../util/common';
-import Vec2 from '../common/Vec2';
-import Math from '../common/Math';
-import Body from './Body';
-import Contact from './Contact';
-import Joint from './Joint';
-import TimeOfImpact, { TOIInput, TOIOutput, TOIOutputState } from '../collision/TimeOfImpact';
-import Distance, { DistanceInput, DistanceOutput, SimplexCache } from '../collision/Distance';
-import World from "./World";
-import Transform from '../common/Transform';
+import * as matrix from '../common/Matrix';
+import { SettingsInternal as Settings } from '../Settings';
+import { EPSILON } from '../common/Math';
+import { Body } from './Body';
+import type { Contact } from './Contact';
+import { Joint } from './Joint';
+import { TimeOfImpact, TOIInput, TOIOutput, TOIOutputState } from '../collision/TimeOfImpact';
+import { Distance, DistanceInput, DistanceOutput, SimplexCache } from '../collision/Distance';
+import { World } from "./World";
+import { Transform } from '../common/Transform';
+import { Sweep } from '../common/Sweep';
 
 
-const _DEBUG = typeof DEBUG === 'undefined' ? false : DEBUG;
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const math_abs = Math.abs;
+/** @internal */ const math_sqrt = Math.sqrt;
+/** @internal */ const math_min = Math.min;
 
 
 export class TimeStep {
@@ -68,7 +70,15 @@ export class TimeStep {
 }
 
 // reuse
-const s_subStep = new TimeStep();
+/** @internal */ const s_subStep = new TimeStep();
+/** @internal */ const c = matrix.vec2(0, 0);
+/** @internal */ const v = matrix.vec2(0, 0);
+/** @internal */ const translation = matrix.vec2(0, 0);
+/** @internal */ const input = new TOIInput();
+/** @internal */ const output = new TOIOutput();
+/** @internal */ const backup = new Sweep();
+/** @internal */ const backup1 = new Sweep();
+/** @internal */ const backup2 = new Sweep();
 
 /**
  * Contact impulses for reporting. Impulses are used instead of forces because
@@ -86,6 +96,11 @@ export class ContactImpulse {
     this.contact = contact;
     this.normals = [];
     this.tangents = [];
+  }
+
+  recycle() {
+    this.normals.length = 0;
+    this.tangents.length = 0;
   }
 
   get normalImpulses(): number[] {
@@ -112,7 +127,7 @@ export class ContactImpulse {
 /**
  * Finds and solves islands. An island is a connected subset of the world.
  */
-export default class Solver {
+export class Solver {
   m_world: World;
   m_stack: Body[];
   m_bodies: Body[];
@@ -135,7 +150,7 @@ export default class Solver {
   }
 
   addBody(body: Body): void {
-    _ASSERT && common.assert(body instanceof Body, 'Not a Body!', body);
+    _ASSERT && console.assert(body instanceof Body, 'Not a Body!', body);
     this.m_bodies.push(body);
     // why?
     // body.c_position.c.setZero();
@@ -145,12 +160,12 @@ export default class Solver {
   }
 
   addContact(contact: Contact): void {
-    _ASSERT && common.assert(contact instanceof Contact, 'Not a Contact!', contact);
+    // _ASSERT && console.assert(contact instanceof Contact, 'Not a Contact!', contact);
     this.m_contacts.push(contact);
   }
 
   addJoint(joint: Joint): void {
-    _ASSERT && common.assert(joint instanceof Joint, 'Not a Joint!', joint);
+    _ASSERT && console.assert(joint instanceof Joint, 'Not a Joint!', joint);
     this.m_joints.push(joint);
   }
 
@@ -202,11 +217,11 @@ export default class Solver {
       while (stack.length > 0) {
         // Grab the next body off the stack and add it to the island.
         const b = stack.pop();
-        _ASSERT && common.assert(b.isActive() == true);
+        _ASSERT && console.assert(b.isActive() == true);
         this.addBody(b);
 
-        // Make sure the body is awake.
-        b.setAwake(true);
+        // Make sure the body is awake (without resetting sleep timer).
+        b.m_awakeFlag = true;
 
         // To keep islands as small as possible, we don't
         // propagate islands across static bodies.
@@ -245,7 +260,7 @@ export default class Solver {
             continue;
           }
 
-          // _ASSERT && common.assert(stack.length < world.m_bodyCount);
+          // _ASSERT && console.assert(stack.length < world.m_bodyCount);
           stack.push(other);
           other.m_islandFlag = true;
         }
@@ -270,7 +285,7 @@ export default class Solver {
             continue;
           }
 
-          // _ASSERT && common.assert(stack.length < world.m_bodyCount);
+          // _ASSERT && console.assert(stack.length < world.m_bodyCount);
           stack.push(other);
           other.m_islandFlag = true;
         }
@@ -302,19 +317,19 @@ export default class Solver {
     for (let i = 0; i < this.m_bodies.length; ++i) {
       const body = this.m_bodies[i];
 
-      const c = Vec2.clone(body.m_sweep.c);
+      matrix.copyVec2(c, body.m_sweep.c);
       const a = body.m_sweep.a;
-      const v = Vec2.clone(body.m_linearVelocity);
+      matrix.copyVec2(v, body.m_linearVelocity);
       let w = body.m_angularVelocity;
 
       // Store positions for continuous collision.
-      body.m_sweep.c0.setVec2(body.m_sweep.c);
+      matrix.copyVec2(body.m_sweep.c0, body.m_sweep.c);
       body.m_sweep.a0 = body.m_sweep.a;
 
       if (body.isDynamic()) {
         // Integrate velocities.
-        v.addMul(h * body.m_gravityScale, gravity);
-        v.addMul(h * body.m_invMass, body.m_force);
+        matrix.plusScaleVec2(v, h * body.m_gravityScale, gravity);
+        matrix.plusScaleVec2(v, h * body.m_invMass, body.m_force);
         w += h * body.m_invI * body.m_torque;
         /**
          * <pre>
@@ -327,13 +342,13 @@ export default class Solver {
          * v2 = v1 * 1 / (1 + c * dt)
          * </pre>
          */
-        v.mul(1.0 / (1.0 + h * body.m_linearDamping));
+        matrix.scaleVec2(v, 1.0 / (1.0 + h * body.m_linearDamping), v)
         w *= 1.0 / (1.0 + h * body.m_angularDamping);
       }
 
-      body.c_position.c = c;
+      matrix.copyVec2(body.c_position.c, c);
       body.c_position.a = a;
-      body.c_velocity.v = v;
+      matrix.copyVec2(body.c_velocity.v, v);
       body.c_velocity.w = w;
     }
 
@@ -342,14 +357,10 @@ export default class Solver {
       contact.initConstraint(step);
     }
 
-    _DEBUG && this.printBodies('M: ');
-
     for (let i = 0; i < this.m_contacts.length; ++i) {
       const contact = this.m_contacts[i];
       contact.initVelocityConstraint(step);
     }
-
-    _DEBUG && this.printBodies('R: ');
 
     if (step.warmStarting) {
       // Warm start.
@@ -359,14 +370,10 @@ export default class Solver {
       }
     }
 
-    _DEBUG && this.printBodies('Q: ');
-
     for (let i = 0; i < this.m_joints.length; ++i) {
       const joint = this.m_joints[i];
       joint.initVelocityConstraints(step);
     }
-
-    _DEBUG && this.printBodies('E: ');
 
     // Solve velocity constraints
     for (let i = 0; i < step.velocityIterations; ++i) {
@@ -381,49 +388,44 @@ export default class Solver {
       }
     }
 
-    _DEBUG && this.printBodies('D: ');
-
     // Store impulses for warm starting
     for (let i = 0; i < this.m_contacts.length; ++i) {
       const contact = this.m_contacts[i];
       contact.storeConstraintImpulses(step);
     }
 
-    _DEBUG && this.printBodies('C: ');
-
     // Integrate positions
     for (let i = 0; i < this.m_bodies.length; ++i) {
       const body = this.m_bodies[i];
 
-      const c = Vec2.clone(body.c_position.c);
+      matrix.copyVec2(c, body.c_position.c);
       let a = body.c_position.a;
-      const v = Vec2.clone(body.c_velocity.v);
+      matrix.copyVec2(v, body.c_velocity.v);
       let w = body.c_velocity.w;
 
       // Check for large velocities
-      const translation = Vec2.mulNumVec2(h, v);
-      if (Vec2.lengthSquared(translation) > Settings.maxTranslationSquared) {
-        const ratio = Settings.maxTranslation / translation.length();
-        v.mul(ratio);
+      matrix.scaleVec2(translation, h, v);
+      const translationLengthSqr = matrix.lengthSqrVec2(translation);
+      if (translationLengthSqr > Settings.maxTranslationSquared) {
+        const ratio = Settings.maxTranslation / math_sqrt(translationLengthSqr);
+        matrix.mulVec2(v, ratio);
       }
 
       const rotation = h * w;
       if (rotation * rotation > Settings.maxRotationSquared) {
-        const ratio = Settings.maxRotation / Math.abs(rotation);
+        const ratio = Settings.maxRotation / math_abs(rotation);
         w *= ratio;
       }
 
       // Integrate
-      c.addMul(h, v);
+      matrix.plusScaleVec2(c, h, v);
       a += h * w;
 
-      body.c_position.c.setVec2(c);
+      matrix.copyVec2(body.c_position.c, c);
       body.c_position.a = a;
-      body.c_velocity.v.setVec2(v);
+      matrix.copyVec2(body.c_velocity.v, v);
       body.c_velocity.w = w;
     }
-
-    _DEBUG && this.printBodies('B: ');
 
     // Solve position constraints
     let positionSolved = false;
@@ -432,7 +434,7 @@ export default class Solver {
       for (let j = 0; j < this.m_contacts.length; ++j) {
         const contact = this.m_contacts[j];
         const separation = contact.solvePositionConstraint(step);
-        minSeparation = Math.min(minSeparation, separation);
+        minSeparation = math_min(minSeparation, separation);
       }
       // We can't expect minSpeparation >= -Settings.linearSlop because we don't
       // push the separation above -Settings.linearSlop.
@@ -452,15 +454,13 @@ export default class Solver {
       }
     }
 
-    _DEBUG && this.printBodies('L: ');
-
     // Copy state buffers back to the bodies
     for (let i = 0; i < this.m_bodies.length; ++i) {
       const body = this.m_bodies[i];
 
-      body.m_sweep.c.setVec2(body.c_position.c);
+      matrix.copyVec2(body.m_sweep.c, body.c_position.c);
       body.m_sweep.a = body.c_position.a;
-      body.m_linearVelocity.setVec2(body.c_velocity.v);
+      matrix.copyVec2(body.m_linearVelocity, body.c_velocity.v);
       body.m_angularVelocity = body.c_velocity.w;
       body.synchronizeTransform();
     }
@@ -481,12 +481,12 @@ export default class Solver {
 
         if ((body.m_autoSleepFlag == false)
           || (body.m_angularVelocity * body.m_angularVelocity > angTolSqr)
-          || (Vec2.lengthSquared(body.m_linearVelocity) > linTolSqr)) {
+          || (matrix.lengthSqrVec2(body.m_linearVelocity) > linTolSqr)) {
           body.m_sleepTime = 0.0;
           minSleepTime = 0.0;
         } else {
           body.m_sleepTime += h;
-          minSleepTime = Math.min(minSleepTime, body.m_sleepTime);
+          minSleepTime = math_min(minSleepTime, body.m_sleepTime);
         }
       }
 
@@ -496,14 +496,6 @@ export default class Solver {
           body.setAwake(false);
         }
       }
-    }
-  }
-
-  /** @internal */
-  printBodies(tag: string): void {
-    for (let i = 0; i < this.m_bodies.length; ++i) {
-      const b = this.m_bodies[i];
-      common.debug(tag, b.c_position.a, b.c_position.c.x, b.c_position.c.y, b.c_velocity.w, b.c_velocity.v.x, b.c_velocity.v.y);
     }
   }
 
@@ -531,7 +523,7 @@ export default class Solver {
     // Find TOI events and solve them.
     while (true) {
       // Find the first TOI.
-      let minContact = null; // Contact
+      let minContact: Contact | null = null;
       let minAlpha = 1.0;
 
       for (let c = world.m_contactList; c; c = c.m_next) {
@@ -561,7 +553,7 @@ export default class Solver {
           const bA = fA.getBody();
           const bB = fB.getBody();
 
-          _ASSERT && common.assert(bA.isDynamic() || bB.isDynamic());
+          _ASSERT && console.assert(bA.isDynamic() || bB.isDynamic());
 
           const activeA = bA.isAwake() && !bA.isStatic();
           const activeB = bB.isAwake() && !bB.isStatic();
@@ -591,7 +583,7 @@ export default class Solver {
             bB.m_sweep.advance(alpha0);
           }
 
-          _ASSERT && common.assert(alpha0 < 1.0);
+          _ASSERT && console.assert(alpha0 < 1.0);
 
           const indexA = c.getChildIndexA();
           const indexB = c.getChildIndexB();
@@ -600,20 +592,18 @@ export default class Solver {
           const sweepB = bB.m_sweep;
 
           // Compute the time of impact in interval [0, minTOI]
-          const input = new TOIInput(); // TODO: reuse
           input.proxyA.set(fA.getShape(), indexA);
           input.proxyB.set(fB.getShape(), indexB);
           input.sweepA.set(bA.m_sweep);
           input.sweepB.set(bB.m_sweep);
           input.tMax = 1.0;
 
-          const output = new TOIOutput(); // TODO: reuse
           TimeOfImpact(output, input);
 
           // Beta is the fraction of the remaining portion of the [time?].
           const beta = output.t;
           if (output.state == TOIOutputState.e_touching) {
-            alpha = Math.min(alpha0 + (1.0 - alpha0) * beta, 1.0);
+            alpha = math_min(alpha0 + (1.0 - alpha0) * beta, 1.0);
           } else {
             alpha = 1.0;
           }
@@ -629,7 +619,7 @@ export default class Solver {
         }
       }
 
-      if (minContact == null || 1.0 - 10.0 * Math.EPSILON < minAlpha) {
+      if (minContact == null || 1.0 - 10.0 * EPSILON < minAlpha) {
         // No more TOI events. Done!
         world.m_stepComplete = true;
         break;
@@ -641,8 +631,8 @@ export default class Solver {
       const bA = fA.getBody();
       const bB = fB.getBody();
 
-      const backup1 = bA.m_sweep.clone();
-      const backup2 = bB.m_sweep.clone();
+      backup1.set(bA.m_sweep);
+      backup2.set(bB.m_sweep);
 
       bA.advance(minAlpha);
       bB.advance(minAlpha);
@@ -706,7 +696,7 @@ export default class Solver {
             }
 
             // Tentatively advance the body to the TOI.
-            const backup = other.m_sweep.clone();
+            backup.set(other.m_sweep);
             if (other.m_islandFlag == false) {
               other.advance(minAlpha);
             }
@@ -781,24 +771,16 @@ export default class Solver {
         break;
       }
     }
-
-    if (_DEBUG) for (let b = world.m_bodyList; b; b = b.m_next) {
-      const c = b.m_sweep.c;
-      const a = b.m_sweep.a;
-      const v = b.m_linearVelocity;
-      const w = b.m_angularVelocity;
-    }
   }
 
   solveIslandTOI(subStep: TimeStep, toiA: Body, toiB: Body): void {
-    const world = this.m_world;
 
     // Initialize the body state.
     for (let i = 0; i < this.m_bodies.length; ++i) {
       const body = this.m_bodies[i];
-      body.c_position.c.setVec2(body.m_sweep.c);
+      matrix.copyVec2(body.c_position.c, body.m_sweep.c);
       body.c_position.a = body.m_sweep.a;
-      body.c_velocity.v.setVec2(body.m_linearVelocity);
+      matrix.copyVec2(body.c_velocity.v, body.m_linearVelocity);
       body.c_velocity.w = body.m_angularVelocity;
     }
 
@@ -813,7 +795,7 @@ export default class Solver {
       for (let j = 0; j < this.m_contacts.length; ++j) {
         const contact = this.m_contacts[j];
         const separation = contact.solvePositionConstraintTOI(subStep, toiA, toiB);
-        minSeparation = Math.min(minSeparation, separation);
+        minSeparation = math_min(minSeparation, separation);
       }
       // We can't expect minSpeparation >= -Settings.linearSlop because we don't
       // push the separation above -Settings.linearSlop.
@@ -839,8 +821,8 @@ export default class Solver {
         const input = new DistanceInput();
         input.proxyA.set(fA.getShape(), indexA);
         input.proxyB.set(fB.getShape(), indexB);
-        input.transformA = bA.getTransform();
-        input.transformB = bB.getTransform();
+        input.transformA.set(bA.getTransform());
+        input.transformB.set(bB.getTransform());
         input.useRadii = false;
 
         const output = new DistanceOutput();
@@ -854,9 +836,9 @@ export default class Solver {
     }
 
     // Leap of faith to new safe state.
-    toiA.m_sweep.c0.setVec2(toiA.c_position.c);
+    matrix.copyVec2(toiA.m_sweep.c0, toiA.c_position.c);
     toiA.m_sweep.a0 = toiA.c_position.a;
-    toiB.m_sweep.c0.setVec2(toiB.c_position.c);
+    matrix.copyVec2(toiB.m_sweep.c0, toiB.c_position.c);
     toiB.m_sweep.a0 = toiB.c_position.a;
 
     // No warm starting is needed for TOI events because warm
@@ -883,37 +865,38 @@ export default class Solver {
     for (let i = 0; i < this.m_bodies.length; ++i) {
       const body = this.m_bodies[i];
 
-      const c = Vec2.clone(body.c_position.c);
+      matrix.copyVec2(c, body.c_position.c);
       let a = body.c_position.a;
-      const v = Vec2.clone(body.c_velocity.v);
+      matrix.copyVec2(v, body.c_velocity.v);
       let w = body.c_velocity.w;
 
       // Check for large velocities
-      const translation = Vec2.mulNumVec2(h, v);
-      if (Vec2.dot(translation, translation) > Settings.maxTranslationSquared) {
-        const ratio = Settings.maxTranslation / translation.length();
-        v.mul(ratio);
+      matrix.scaleVec2(translation, h, v);
+      const translationLengthSqr = matrix.lengthSqrVec2(translation);
+      if (translationLengthSqr > Settings.maxTranslationSquared) {
+        const ratio = Settings.maxTranslation / math_sqrt(translationLengthSqr);
+        matrix.mulVec2(v, ratio);
       }
 
       const rotation = h * w;
       if (rotation * rotation > Settings.maxRotationSquared) {
-        const ratio = Settings.maxRotation / Math.abs(rotation);
+        const ratio = Settings.maxRotation / math_abs(rotation);
         w *= ratio;
       }
 
       // Integrate
-      c.addMul(h, v);
+      matrix.plusScaleVec2(c, h, v);
       a += h * w;
 
-      body.c_position.c = c;
+      matrix.copyVec2(body.c_position.c, c);
       body.c_position.a = a;
-      body.c_velocity.v = v;
+      matrix.copyVec2(body.c_velocity.v, v);
       body.c_velocity.w = w;
 
       // Sync bodies
-      body.m_sweep.c = c;
+      matrix.copyVec2(body.m_sweep.c, c);
       body.m_sweep.a = a;
-      body.m_linearVelocity = v;
+      matrix.copyVec2(body.m_linearVelocity, v);
       body.m_angularVelocity = w;
       body.synchronizeTransform();
     }
@@ -929,3 +912,6 @@ export default class Solver {
     }
   }
 }
+
+// @ts-ignore
+Solver.TimeStep = TimeStep;

@@ -23,18 +23,22 @@
  * SOFTWARE.
  */
 
+import * as matrix from '../../common/Matrix';
 import type { MassData } from '../../dynamics/Body';
-import AABB, { RayCastOutput, RayCastInput } from '../AABB';
+import { AABBValue, RayCastOutput, RayCastInput, AABB } from '../AABB';
 import { DistanceProxy } from '../Distance';
-import common from '../../util/common';
-import Transform from '../../common/Transform';
-import Vec2 from '../../common/Vec2';
-import Settings from '../../Settings';
-import Shape from '../Shape';
-import EdgeShape from './EdgeShape';
+import { Transform, TransformValue } from '../../common/Transform';
+import { Vec2, Vec2Value } from '../../common/Vec2';
+import { SettingsInternal as Settings } from '../../Settings';
+import { Shape } from '../Shape';
+import { EdgeShape } from './EdgeShape';
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+
+/** @internal */ const v1 = matrix.vec2(0, 0);
+/** @internal */ const v2 = matrix.vec2(0, 0);
 
 
 /**
@@ -45,8 +49,11 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  *
  * WARNING: The chain will not collide properly if there are self-intersections.
  */
-export default class ChainShape extends Shape {
+export class ChainShape extends Shape {
   static TYPE = 'chain' as const;
+  m_type: 'chain';
+
+  m_radius: number;
 
   m_vertices: Vec2[];
   m_count: number;
@@ -57,9 +64,9 @@ export default class ChainShape extends Shape {
 
   m_isLoop: boolean;
 
-  constructor(vertices?: Vec2[], loop?: boolean) {
+  constructor(vertices?: Vec2Value[], loop?: boolean) {
     // @ts-ignore
-    if (!(this instanceof ChainShape)) {
+    if (_CONSTRUCTOR_FACTORY && !(this instanceof ChainShape)) {
       return new ChainShape(vertices, loop);
     }
 
@@ -107,7 +114,7 @@ export default class ChainShape extends Shape {
 
   /** @internal */
   static _deserialize(data: any, fixture: any, restore: any): ChainShape {
-    const vertices = [] as Vec2[];
+    const vertices: Vec2[] = [];
     if (data.vertices) {
       for (let i = 0; i < data.vertices.length; i++) {
         vertices.push(restore(Vec2, data.vertices[i]));
@@ -128,6 +135,14 @@ export default class ChainShape extends Shape {
   //   this.m_count = 0;
   // }
 
+  getType(): 'chain' {
+    return this.m_type;
+  }
+
+  getRadius(): number {
+    return this.m_radius;
+  }
+
   /**
    * @internal
    * Create a loop. This automatically adjusts connectivity.
@@ -135,14 +150,18 @@ export default class ChainShape extends Shape {
    * @param vertices an array of vertices, these are copied
    * @param count the vertex count
    */
-  _createLoop(vertices: Vec2[]): ChainShape {
-    _ASSERT && common.assert(this.m_vertices.length == 0 && this.m_count == 0);
-    _ASSERT && common.assert(vertices.length >= 3);
+  _createLoop(vertices: Vec2Value[]): ChainShape {
+    _ASSERT && console.assert(this.m_vertices.length == 0 && this.m_count == 0);
+    _ASSERT && console.assert(vertices.length >= 3);
+    if (vertices.length < 3) {
+      return;
+    }
+
     for (let i = 1; i < vertices.length; ++i) {
       const v1 = vertices[i - 1];
       const v2 = vertices[i];
       // If the code crashes here, it means your vertices are too close together.
-      _ASSERT && common.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
+      _ASSERT && console.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
     }
 
     this.m_vertices = [];
@@ -164,16 +183,15 @@ export default class ChainShape extends Shape {
    * Create a chain with isolated end vertices.
    *
    * @param vertices an array of vertices, these are copied
-   * @param count the vertex count
    */
-  _createChain(vertices: Vec2[]): ChainShape {
-    _ASSERT && common.assert(this.m_vertices.length == 0 && this.m_count == 0);
-    _ASSERT && common.assert(vertices.length >= 2);
+  _createChain(vertices: Vec2Value[]): ChainShape {
+    _ASSERT && console.assert(this.m_vertices.length == 0 && this.m_count == 0);
+    _ASSERT && console.assert(vertices.length >= 2);
     for (let i = 1; i < vertices.length; ++i) {
       // If the code crashes here, it means your vertices are too close together.
       const v1 = vertices[i - 1];
       const v2 = vertices[i];
-      _ASSERT && common.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
+      _ASSERT && console.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
     }
 
     this.m_count = vertices.length;
@@ -188,7 +206,7 @@ export default class ChainShape extends Shape {
     return this;
   }
 
-  /** @internal */
+  /** @hidden */
   _reset(): void {
     if (this.m_isLoop) {
       this._createLoop(this.m_vertices);
@@ -224,8 +242,7 @@ export default class ChainShape extends Shape {
   }
 
   /**
-   * @internal
-   * @deprecated Shapes should be treated as immutable.
+   * @internal @deprecated Shapes should be treated as immutable.
    *
    * clone the concrete shape.
    */
@@ -251,7 +268,7 @@ export default class ChainShape extends Shape {
 
   // Get a child edge.
   getChildEdge(edge: EdgeShape, childIndex: number): void {
-    _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count - 1);
+    _ASSERT && console.assert(0 <= childIndex && childIndex < this.m_count - 1);
     edge.m_type = EdgeShape.TYPE;
     edge.m_radius = this.m_radius;
 
@@ -276,7 +293,7 @@ export default class ChainShape extends Shape {
   }
 
   getVertex(index: number): Vec2 {
-    _ASSERT && common.assert(0 <= index && index <= this.m_count);
+    _ASSERT && console.assert(0 <= index && index <= this.m_count);
     if (index < this.m_count) {
       return this.m_vertices[index];
     } else {
@@ -297,7 +314,7 @@ export default class ChainShape extends Shape {
    * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
-  testPoint(xf: Transform, p: Vec2): false {
+  testPoint(xf: TransformValue, p: Vec2Value): false {
     return false;
   }
 
@@ -326,7 +343,7 @@ export default class ChainShape extends Shape {
    * @param childIndex The child shape index
    */
   rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean {
-    _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
+    _ASSERT && console.assert(0 <= childIndex && childIndex < this.m_count);
 
     const edgeShape = new EdgeShape(this.getVertex(childIndex), this.getVertex(childIndex + 1));
     return edgeShape.rayCast(output, input, xf, 0);
@@ -340,13 +357,13 @@ export default class ChainShape extends Shape {
    * @param xf The world transform of the shape.
    * @param childIndex The child shape
    */
-  computeAABB(aabb: AABB, xf: Transform, childIndex: number): void {
-    _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
+  computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void {
+    _ASSERT && console.assert(0 <= childIndex && childIndex < this.m_count);
 
-    const v1 = Transform.mulVec2(xf, this.getVertex(childIndex));
-    const v2 = Transform.mulVec2(xf, this.getVertex(childIndex + 1));
+    matrix.transformVec2(v1, xf, this.getVertex(childIndex));
+    matrix.transformVec2(v2, xf, this.getVertex(childIndex + 1));
 
-    aabb.combinePoints(v1, v2);
+    AABB.combinePoints(aabb, v1, v2);
   }
 
   /**
@@ -360,16 +377,17 @@ export default class ChainShape extends Shape {
    */
   computeMass(massData: MassData, density?: number): void {
     massData.mass = 0.0;
-    massData.center = Vec2.zero();
+    matrix.zeroVec2(massData.center)
     massData.I = 0.0;
   }
 
   computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void {
-    _ASSERT && common.assert(0 <= childIndex && childIndex < this.m_count);
-    proxy.m_buffer[0] = this.getVertex(childIndex);
-    proxy.m_buffer[1] = this.getVertex(childIndex + 1);
-    proxy.m_vertices = proxy.m_buffer;
+    _ASSERT && console.assert(0 <= childIndex && childIndex < this.m_count);
+    proxy.m_vertices[0] = this.getVertex(childIndex);
+    proxy.m_vertices[1] = this.getVertex(childIndex + 1);
     proxy.m_count = 2;
     proxy.m_radius = this.m_radius;
   }
 }
+
+export const Chain = ChainShape;
