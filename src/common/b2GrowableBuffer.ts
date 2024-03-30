@@ -23,7 +23,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
  * A simple array-like container, similar to std::vector.
  * If we ever start using stl, we should replace this with std::vector.
  */
-export default class b2GrowableBuffer<T> {
+export class b2GrowableBuffer<T> {
 
   data: T[] | null;
 //  count: number;

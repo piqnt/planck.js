@@ -17,7 +17,7 @@
 */
 
 import { Vec2 } from '../common/Vec2';
-import StackQueue from './StackQueue';
+import { StackQueue } from './StackQueue';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -44,7 +44,7 @@ class VoronoiDiagramTask {
   }
 }
 
-export default class VoronoiDiagram {
+export class VoronoiDiagram {
 
   private m_generatorBuffer: Generator[];
   private m_generatorCapacity: number;

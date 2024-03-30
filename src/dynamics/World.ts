@@ -34,7 +34,7 @@ import { AABBValue, RayCastInput, RayCastOutput } from "../collision/AABB";
 import { Fixture, FixtureProxy } from "./Fixture";
 import { Manifold } from "../collision/Manifold";
 import { b2CalculateParticleIterations } from '../particle/Particle';
-import b2ParticleSystem, { b2ParticleSystemDef, ParticleAABBQueryCallback, ParticleRayCastCallback } from '../particle/ParticleSystem';
+import { b2ParticleSystem, b2ParticleSystemDef, ParticleAABBQueryCallback, ParticleRayCastCallback } from '../particle/ParticleSystem';
 import { b2ParticleGroup } from '../particle/ParticleGroup';
 
 

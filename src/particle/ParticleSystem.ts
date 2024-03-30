@@ -30,8 +30,9 @@ import { invSqrt, clamp } from '../common/Math';
 import { Rot } from '../common/Rot';
 import { SettingsInternal as Settings } from '../Settings';
 import { World } from '../dynamics/World';
-import b2GrowableBuffer from '../common/b2GrowableBuffer';
-import b2SlabAllocator from '../common/b2SlabAllocator';
+import { VoronoiDiagram } from './VoronoiDiagram';
+import { b2GrowableBuffer } from '../common/b2GrowableBuffer';
+import { b2SlabAllocator } from '../common/b2SlabAllocator';
 import { CircleShape } from '../collision/shape/CircleShape';
 import { ChainShape } from '../collision/shape/ChainShape';
 import { EdgeShape } from '../collision/shape/EdgeShape';
@@ -42,7 +43,6 @@ import { EdgeShape } from '../collision/shape/EdgeShape';
  * Either use assemblyscript in the future or replace casts by faster methods
  */
 import 'assemblyscript/std/portable';
-import VoronoiDiagram from './VoronoiDiagram';
 
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -1103,7 +1103,7 @@ const b2ParticleSystemDefDefault: b2ParticleSystemDef = {
   lifetimeGranularity: 1.0 / 60.0,
 };
 
-export default class b2ParticleSystem {
+export class b2ParticleSystem {
   /** @internal */ m_paused: boolean;
   /** @internal */ m_timestamp: number;
   /** @internal */ m_allParticleFlags: number;

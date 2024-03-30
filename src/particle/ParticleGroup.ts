@@ -19,7 +19,7 @@
 import { Vec2 } from "../common/Vec2";
 import { Transform } from "../common/Transform";
 import { Shape } from "../collision/Shape";
-import b2ParticleSystem from "./ParticleSystem";
+import { b2ParticleSystem } from "./ParticleSystem";
 import { b2ParticleColor } from "./Particle";
 
 

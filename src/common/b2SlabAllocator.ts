@@ -6,7 +6,7 @@ import { Pool } from "../util/Pool";
  * 
  * TODO this currently leaks memory (because the objects never gets freed)
  */
-export default class b2SlabAllocator<T> {
+export class b2SlabAllocator<T> {
 
   private pool: Pool<T>;
   private create: () => T;

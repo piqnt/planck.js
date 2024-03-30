@@ -21,7 +21,7 @@ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
 // TODO proper implementation
 
-export default class StackQueue<T> {
+export class StackQueue<T> {
 
   private queue = new Array<T>();
 
