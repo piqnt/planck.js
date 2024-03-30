@@ -328,7 +328,7 @@ export class ChainShape extends Shape {
    * @param childIndex The child shape index
    * @return returns the distance from the current shape.
    */
-  computeDistance(xf: Transform, p: Vec2, normal: Vec2, childIndex: number) {
+  computeDistance(xf: Transform, p: Vec2Value, normal: Vec2, childIndex: number) {
     const edge = new EdgeShape();
     this.getChildEdge(edge, childIndex);
     return edge.computeDistance(xf, p, normal, 0);

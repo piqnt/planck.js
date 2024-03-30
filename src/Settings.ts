@@ -259,6 +259,36 @@ export class SettingsInternal {
   static get toiBaugarte() {
     return Settings.toiBaugarte;
   }
+  static get b2_invalidParticleIndex() {
+    return Settings.b2_invalidParticleIndex;
+  }
+  static get b2_maxParticleIndex() {
+    return Settings.b2_maxParticleIndex;
+  }
+  static get b2_particleStride() {
+    return Settings.b2_particleStride;
+  }
+  static get b2_minParticleWeight() {
+    return Settings.b2_minParticleWeight;
+  }
+  static get b2_maxParticlePressure() {
+    return Settings.b2_maxParticlePressure;
+  }
+  static get b2_maxParticleForce() {
+    return Settings.b2_maxParticleForce;
+  }
+  static get b2_maxTriadDistance() {
+    return Settings.b2_maxTriadDistance;
+  }
+  static get b2_maxTriadDistanceSquared() {
+    return Settings.b2_maxTriadDistanceSquared;
+  }
+  static get b2_minParticleSystemBufferCapacity() {
+    return Settings.b2_minParticleSystemBufferCapacity;
+  }
+  static get b2_barrierCollisionTime() {
+    return Settings.b2_barrierCollisionTime;
+  }
   static get timeToSleep() {
     return Settings.timeToSleep;
   }

@@ -330,7 +330,7 @@ export class PolygonShape extends Shape {
    * @param normal returns the direction in which the distance increases.
    * @return returns the distance from the current shape.
    */
-  computeDistance(xf: Transform, p: Vec2, normal: Vec2, childIndex: number) {
+  computeDistance(xf: Transform, p: Vec2Value, normal: Vec2, childIndex: number) {
     const pLocal = Rot.mulTVec2(xf.q, Vec2.sub(p, xf.p));
     let maxDistance = -Infinity;
     let normalForMaxDistance = pLocal;

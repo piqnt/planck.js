@@ -230,7 +230,7 @@ export class EdgeShape extends Shape {
    * @param normal returns the direction in which the distance increases.
    * @return returns the distance from the current shape.
    */
-  computeDistance(xf: Transform, p: Vec2, normal: Vec2, childIndex: number) {
+  computeDistance(xf: Transform, p: Vec2Value, normal: Vec2, childIndex: number) {
     const v1 = Transform.mulVec2(xf, this.m_vertex1);
     const v2 = Transform.mulVec2(xf, this.m_vertex2);
 

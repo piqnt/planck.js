@@ -16,7 +16,6 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-import common from '../util/common';
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
@@ -138,7 +137,7 @@ export default class b2GrowableBuffer<T> {
   }
 
   setCount(newCount: number) {
-    _ASSERT && common.assert(0 <= newCount && newCount <= this.data.length);
+    _ASSERT && console.assert(0 <= newCount && newCount <= this.data.length);
     this.data.length = newCount;
   }
 

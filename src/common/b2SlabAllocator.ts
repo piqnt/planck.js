@@ -1,4 +1,4 @@
-import Pool from "../util/Pool";
+import { Pool } from "../util/Pool";
 
 /**
  * TODO this is currently just an object pool imitating the b2SlabAllocator

@@ -16,8 +16,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-import Vec2 from '../common/Vec2';
-import common from '../util/common';
+import { Vec2 } from '../common/Vec2';
 import StackQueue from './StackQueue';
 
 
@@ -78,7 +77,7 @@ export default class VoronoiDiagram {
    * @param necessary whether to callback for nodes associated with the generator.
    */
   addGenerator(center: Vec2, tag: number, necessary: boolean) {
-    _ASSERT && common.assert(this.m_generatorCount < this.m_generatorCapacity);
+    _ASSERT && console.assert(this.m_generatorCount < this.m_generatorCapacity);
     const g = this.m_generatorBuffer[this.m_generatorCount++];
     g.center = center;
     g.tag = tag;
@@ -92,7 +91,7 @@ export default class VoronoiDiagram {
    * @param margin margin for which the range of the diagram is extended.
    */
   generate(radius: number, margin: number) {
-    _ASSERT && common.assert(this.m_diagram == null);
+    _ASSERT && console.assert(this.m_diagram == null);
     const inverseRadius = 1 / radius;
     let lower = Vec2.neo(Infinity, Infinity);
     let upper = Vec2.neo(-Infinity, -Infinity);

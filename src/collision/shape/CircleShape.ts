@@ -146,7 +146,7 @@ export class CircleShape extends Shape {
    * @param normal returns the direction in which the distance increases.
    * @return returns the distance from the current shape.
    */
-  computeDistance(transform: Transform, p: Vec2, normal: Vec2, childIndex: number) {
+  computeDistance(transform: Transform, p: Vec2Value, normal: Vec2, childIndex: number) {
     const center = Vec2.add(transform.p, Rot.mulVec2(transform.q, this.m_p));
     const d = Vec2.sub(p, center);
     const d1 = d.length();

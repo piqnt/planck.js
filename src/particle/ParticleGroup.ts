@@ -16,10 +16,9 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-import common from "../util/common";
-import Vec2 from "../common/Vec2";
-import Transform from "../common/Transform";
-import Shape from "../collision/Shape";
+import { Vec2 } from "../common/Vec2";
+import { Transform } from "../common/Transform";
+import { Shape } from "../collision/Shape";
 import b2ParticleSystem from "./ParticleSystem";
 import { b2ParticleColor } from "./Particle";
 
@@ -291,7 +290,7 @@ export class b2ParticleGroup {
 
   /** Set the construction flags for the group. */
   setGroupFlags(flags: number) {
-    common.assert((flags & b2ParticleGroupFlag.b2_particleGroupInternalMask) == 0);
+    console.assert((flags & b2ParticleGroupFlag.b2_particleGroupInternalMask) == 0);
     flags |= this.m_groupFlags & b2ParticleGroupFlag.b2_particleGroupInternalMask;
     this.m_system.setGroupFlags(this, flags);
   }
@@ -394,7 +393,7 @@ export class b2ParticleGroup {
    * @warning This function is locked during callbacks.
    */
   destroyParticles(callDestructionListener = false) {
-    _ASSERT && common.assert(this.m_system.m_world.isLocked() == false);
+    _ASSERT && console.assert(this.m_system.m_world.isLocked() == false);
     if (this.m_system.m_world.isLocked()) {
       return;
     }

@@ -25,7 +25,7 @@
 
 import * as matrix from '../common/Matrix';
 import { options } from '../util/options';
-import { Vec2Value } from '../common/Vec2';
+import { Vec2, Vec2Value } from '../common/Vec2';
 import { AABB, RayCastInput, RayCastOutput } from '../collision/AABB';
 import { Shape, ShapeType } from '../collision/Shape';
 import { Body, MassData } from "./Body";
@@ -356,7 +356,7 @@ export class Fixture {
    * @return returns the distance from the current shape.
    */
   // TODO remove normal as paramenter and return [distance: number, normal: Vec2] directly
-  computeDistance(p: Vec2, normal: Vec2, childIndex: number): number {
+  computeDistance(p: Vec2Value, normal: Vec2, childIndex: number): number {
     return this.m_shape.computeDistance(this.m_body.getTransform(), p, normal, childIndex);
   }
 

@@ -27,7 +27,7 @@ import type { MassData } from '../dynamics/Body';
 import { RayCastOutput, RayCastInput, AABBValue } from './AABB';
 import { DistanceProxy } from './Distance';
 import type { Transform, TransformValue }  from '../common/Transform';
-import type { Vec2Value }  from '../common/Vec2';
+import type { Vec2, Vec2Value }  from '../common/Vec2';
 import { Style } from '../util/Testbed';
 
 // todo make shape an interface
@@ -102,7 +102,7 @@ export abstract class Shape {
    * @param normal returns the direction in which the distance increases.
    * @return returns the distance from the current shape.
    */
-	abstract computeDistance(xf: Transform, p: Vec2, normal: Vec2, childIndex: number): number;
+	abstract computeDistance(xf: Transform, p: Vec2Value, normal: Vec2, childIndex: number): number;
 
   /**
    * Cast a ray against a child shape.

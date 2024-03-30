@@ -16,10 +16,10 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-import Math from '../common/Math'
-import Vec2 from '../common/Vec2';
+import { clamp } from '../common/Math'
+import { Vec2 } from '../common/Vec2';
 import { b2ParticleGroup } from './ParticleGroup';
-import Settings from '../Settings';
+import { SettingsInternal as Settings } from '../Settings';
 
 const {
   b2_invalidParticleIndex,
@@ -379,7 +379,7 @@ export function b2CalculateParticleIterations(
   const B2_RADIUS_THRESHOLD = 0.01;
   const iterations =
     Math.ceil(Math.sqrt(gravity / (B2_RADIUS_THRESHOLD * radius)) * timeStep);
-  return Math.clamp(iterations, 1, B2_MAX_RECOMMENDED_PARTICLE_ITERATIONS);
+  return clamp(iterations, 1, B2_MAX_RECOMMENDED_PARTICLE_ITERATIONS);
 }
 
 /**

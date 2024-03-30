@@ -30,6 +30,12 @@ export const EPSILON = 1e-9;
 /** @internal @deprecated */
 export const isFinite = Number.isFinite;
 
+/** @deprecated */
+export function invSqrt(x: number): number {
+  // TODO:
+  return 1 / Math.sqrt(x);
+};
+
 /**
  * @deprecated
  * Next Largest Power of 2 Given a binary integer value x, the next largest
@@ -105,6 +111,7 @@ export function random(min?: number, max?: number): number {
 export const math = Object.create(Math);
 math.EPSILON = EPSILON;
 math.isFinite = isFinite;
+math.invSqrt = invSqrt;
 math.nextPowerOfTwo = nextPowerOfTwo;
 math.isPowerOfTwo = isPowerOfTwo;
 math.mod = mod;

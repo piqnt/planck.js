@@ -16,26 +16,25 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-import Body from '../dynamics/Body';
-import Fixture from '../dynamics/Fixture';
-import Vec2 from '../common/Vec2';
-import Shape from '../collision/Shape';
-import Transform from '../common/Transform';
+import { Body } from '../dynamics/Body';
+import { Fixture } from '../dynamics/Fixture';
+import { Vec2 } from '../common/Vec2';
+import { Shape } from '../collision/Shape';
+import { Transform } from '../common/Transform';
 import { TimeStep } from '../dynamics/Solver';
-import options from '../util/options';
+import { options } from '../util/options';
 import { b2ParticleColor, b2ParticleHandle, ParticleDef, ParticleDefDefault, ParticleFlag } from './Particle';
-import common from '../util/common';
-import AABB, { RayCastInput, RayCastOutput } from '../collision/AABB';
+import { AABB, AABBValue, RayCastInput, RayCastOutput } from '../collision/AABB';
 import { b2ParticleGroup, b2ParticleGroupDef, b2ParticleGroupFlag, ParticleGroupDefDefault } from './ParticleGroup';
-import math from '../common/Math';
-import Rot from '../common/Rot';
-import Settings from '../Settings';
-import World from '../dynamics/World';
+import { invSqrt, clamp } from '../common/Math';
+import { Rot } from '../common/Rot';
+import { SettingsInternal as Settings } from '../Settings';
+import { World } from '../dynamics/World';
 import b2GrowableBuffer from '../common/b2GrowableBuffer';
 import b2SlabAllocator from '../common/b2SlabAllocator';
-import CircleShape from '../collision/shape/CircleShape';
-import ChainShape from '../collision/shape/ChainShape';
-import EdgeShape from '../collision/shape/EdgeShape';
+import { CircleShape } from '../collision/shape/CircleShape';
+import { ChainShape } from '../collision/shape/ChainShape';
+import { EdgeShape } from '../collision/shape/EdgeShape';
 
 /**
  * TODO
@@ -235,7 +234,7 @@ class b2ParticleContact {
 // public:
 
   setIndices(a: number, b: number) {
-    _ASSERT && common.assert(a <= b2_maxParticleIndex && b <= b2_maxParticleIndex);
+    _ASSERT && console.assert(a <= b2_maxParticleIndex && b <= b2_maxParticleIndex);
     this.indexA = a;
     this.indexB = b;
   }
@@ -534,7 +533,7 @@ class InsideBoundsEnumerator {
       this.m_proxyBuffer = proxyBuffer;
       this.m_first = first;
       this.m_last = last;
-      _ASSERT && common.assert(this.m_first <= this.m_last);
+      _ASSERT && console.assert(this.m_first <= this.m_last);
     }
 
   /**
@@ -547,8 +546,8 @@ class InsideBoundsEnumerator {
       const xTag = first.tag & xMask; // TODO cast to u32?
       if (_ASSERT) {
         const yTag = first.tag & yMask;
-        common.assert(yTag >= this.m_yLower);
-        common.assert(yTag <= this.m_yUpper);
+        console.assert(yTag >= this.m_yLower);
+        console.assert(yTag <= this.m_yUpper);
       }
       if (xTag >= this.m_xLower && xTag <= this.m_xUpper) {
         return this.m_proxyBuffer.getData()[this.m_first++].index;
@@ -737,7 +736,7 @@ class FixedSetAllocator {
     this.clear();
     if (count) {
       this.m_buffer = new Array(count); // TODO probably not performant
-      _ASSERT && common.assert(!!this.m_buffer);
+      _ASSERT && console.assert(!!this.m_buffer);
       this.m_valid = new Array(count).fill(1);
       this.m_count = count;
     }
@@ -760,7 +759,7 @@ class FixedSetAllocator {
 
 	/** Invalidate an item from the set by index. */
 	invalidate(itemIndex: number) {
-		_ASSERT && common.assert(!!this.m_valid);
+		_ASSERT && console.assert(!!this.m_valid);
 		this.m_valid[itemIndex] = 0;
 	}
 
@@ -776,7 +775,7 @@ class FixedSetAllocator {
 
 	/** Reduce the number of items in the set. */
 	protected setCount(count: number) {
-		_ASSERT && common.assert(count <= this.m_count);
+		_ASSERT && console.assert(count <= this.m_count);
 		this.m_count = count;
 	}
 
@@ -1207,7 +1206,7 @@ export default class b2ParticleSystem {
     this.m_pairBuffer = new b2GrowableBuffer();
     this.m_triadBuffer = new b2GrowableBuffer();
 
-    _ASSERT && common.assert(!!def);
+    _ASSERT && console.assert(!!def);
     this.m_paused = false;
     this.m_timestamp = 0;
     this.m_allParticleFlags = 0;
@@ -1217,7 +1216,7 @@ export default class b2ParticleSystem {
     this.m_hasForce = false;
     this.m_iterationIndex = 0;
 
-    _ASSERT && common.assert(def.lifetimeGranularity > 0.0);
+    _ASSERT && console.assert(def.lifetimeGranularity > 0.0);
     this.m_def = def;
 
     this.setStrictContactCheck(def.strictContactCheck);
@@ -1290,7 +1289,7 @@ export default class b2ParticleSystem {
   createParticle(def: ParticleDef) {
     def = options(def, ParticleDefDefault);
 
-    _ASSERT && common.assert(this.m_world.isLocked() == false);
+    _ASSERT && console.assert(this.m_world.isLocked() == false);
     if (this.m_world.isLocked()) {
       return 0;
     }
@@ -1365,7 +1364,7 @@ export default class b2ParticleSystem {
       if (group.m_firstIndex < group.m_lastIndex) {
         // Move particles in the group just before the new particle.
         this.rotateBuffer(group.m_firstIndex, group.m_lastIndex, index);
-        _ASSERT && common.assert(group.m_lastIndex == index);
+        _ASSERT && console.assert(group.m_lastIndex == index);
         // Update the index range of the group to contain the new particle.
         group.m_lastIndex = index + 1;
       } else {
@@ -1384,7 +1383,7 @@ export default class b2ParticleSystem {
    * Please see #b2ParticleHandle for why you might want a handle.
    */
   getParticleHandleFromIndex(index: number): b2ParticleHandle {
-    _ASSERT && common.assert(index >= 0 && index < this.getParticleCount() &&
+    _ASSERT && console.assert(index >= 0 && index < this.getParticleCount() &&
          index != b2_invalidParticleIndex);
     this.m_handleIndexBuffer.data = this.requestBuffer(this.m_handleIndexBuffer.data);
     let handle = this.m_handleIndexBuffer.data[index];
@@ -1393,7 +1392,7 @@ export default class b2ParticleSystem {
     }
     // Create a handle.
     handle = this.m_handleAllocator.allocate();
-    _ASSERT && common.assert(!!handle);
+    _ASSERT && console.assert(!!handle);
     handle.setIndex(index);
     this.m_handleIndexBuffer.data[index] = handle;
     return handle;
@@ -1425,9 +1424,9 @@ export default class b2ParticleSystem {
    */
 /*  destroyOldestParticle(index: number, callDestructionListener: boolean) { // LATER
     const particleCount = this.getParticleCount();
-    _ASSERT && common.assert(index >= 0 && index < particleCount);
+    _ASSERT && console.assert(index >= 0 && index < particleCount);
     // Make sure particle lifetime tracking is enabled.
-    _ASSERT && common.assert(this.m_indexByExpirationTimeBuffer.data);
+    _ASSERT && console.assert(this.m_indexByExpirationTimeBuffer.data);
     // Destroy the oldest particle (preferring to destroy finite
     // lifetime particles first) to free a slot in the buffer.
     const oldestFiniteLifetimeParticle =
@@ -1455,7 +1454,7 @@ export default class b2ParticleSystem {
    */
 /*  destroyParticlesInShape(shape: Shape, xf: Transform, // LATER
                   callDestructionListener = false) {
-    _ASSERT && common.assert(this.m_world.isLocked() == false);
+    _ASSERT && console.assert(this.m_world.isLocked() == false);
     if (this.m_world.isLocked()) {
       return 0;
     }
@@ -1486,7 +1485,7 @@ export default class b2ParticleSystem {
         if (particleSystem != this.m_system)
           return false;
   
-        _ASSERT && common.assert(index >=0 && index < this.m_system.m_count);
+        _ASSERT && console.assert(index >=0 && index < this.m_system.m_count);
         if (this.m_shape.testPoint(this.m_xf,
                      this.m_system.m_positionBuffer.data[index])) {
           this.m_system.destroyParticle(index, this.m_callDestructionListener);
@@ -1514,7 +1513,7 @@ export default class b2ParticleSystem {
   createParticleGroup(groupDef: b2ParticleGroupDef): b2ParticleGroup {
     groupDef = options(groupDef, ParticleGroupDefDefault)
 
-    _ASSERT && common.assert(this.m_world.isLocked() == false);
+    _ASSERT && console.assert(this.m_world.isLocked() == false);
     if (this.m_world.isLocked()) {
       return null;
     }
@@ -1529,7 +1528,7 @@ export default class b2ParticleSystem {
     //         groupDef.shapes, groupDef.shapeCount, groupDef, transform);
     // }
     if (groupDef.particleCount) {
-      _ASSERT && common.assert(!!groupDef.positionData);
+      _ASSERT && console.assert(!!groupDef.positionData);
       for (let i = 0; i < groupDef.particleCount; i++) {
         const p = groupDef.positionData[i];
         this.createParticleForGroup(groupDef, transform, p);
@@ -1577,17 +1576,17 @@ export default class b2ParticleSystem {
    * @warning This function is locked during callbacks.
    */
   joinParticleGroups(groupA: b2ParticleGroup, groupB: b2ParticleGroup) {
-    _ASSERT && common.assert(this.m_world.isLocked() == false);
+    _ASSERT && console.assert(this.m_world.isLocked() == false);
     if (this.m_world.isLocked()) {
       return;
     }
   
-    _ASSERT && common.assert(groupA != groupB);
+    _ASSERT && console.assert(groupA != groupB);
     this.rotateBuffer(groupB.m_firstIndex, groupB.m_lastIndex, this.m_count);
-    _ASSERT && common.assert(groupB.m_lastIndex == this.m_count);
+    _ASSERT && console.assert(groupB.m_lastIndex == this.m_count);
     this.rotateBuffer(groupA.m_firstIndex, groupA.m_lastIndex,
            groupB.m_firstIndex);
-    _ASSERT && common.assert(groupA.m_lastIndex == groupB.m_firstIndex);
+    _ASSERT && console.assert(groupA.m_lastIndex == groupB.m_firstIndex);
   
     // Create pairs and triads connecting groupA and groupB.
     class JoinParticleGroupsFilter extends ConnectionFilter {
@@ -1681,7 +1680,7 @@ export default class b2ParticleSystem {
    * oldest particles in the system.
    */
   setMaxParticleCount(count: number) {
-    _ASSERT && common.assert(this.m_count <= count);
+    _ASSERT && console.assert(this.m_count <= count);
     this.m_def.maxCount = count;
   }
 
@@ -2080,7 +2079,7 @@ void b2ParticleSystem::SetUserDataBuffer(void** buffer, int32 capacity)
    * living forever until it's manually destroyed by the application.
    */
 /*  setParticleLifetime(index: number, lifetime: number) { // LATER
-    _ASSERT && common.assert(this.validateParticleIndex(index));
+    _ASSERT && console.assert(this.validateParticleIndex(index));
     const initializeExpirationTimes =
       this.m_indexByExpirationTimeBuffer.data == null;
     this.m_expirationTimeBuffer.data = RequestBuffer( // TODO
@@ -2113,7 +2112,7 @@ void b2ParticleSystem::SetUserDataBuffer(void** buffer, int32 capacity)
    * infinite lifetime.
    */
 /*  getParticleLifetime(index: number): number { // LATER
-    _ASSERT && common.assert(this.validateParticleIndex(index));
+    _ASSERT && console.assert(this.validateParticleIndex(index));
     return this.expirationTimeToLifetime(this.getExpirationTimeBuffer()[index]);
   }*/
 
@@ -2245,7 +2244,7 @@ void b2ParticleSystem::SetUserDataBuffer(void** buffer, int32 capacity)
       for (let i = firstIndex; i < lastIndex; i++) {
         flags |= this.m_flagsBuffer.data[i];
       }
-      common.assert(this.forceCanBeApplied(flags));
+      console.assert(this.forceCanBeApplied(flags));
     }
   
     // Early out if force does nothing (optimization).
@@ -2272,7 +2271,7 @@ void b2ParticleSystem::SetUserDataBuffer(void** buffer, int32 capacity)
    * @param callback a user implemented callback class.
    * @param aabb the query box.
    */
-  queryAABB(callback: ParticleAABBQueryCallback, aabb: AABB) {
+  queryAABB(callback: ParticleAABBQueryCallback, aabb: AABBValue) {
     if (this.m_proxyBuffer.getCount() == 0) {
       return;
     }
@@ -2349,7 +2348,7 @@ void b2ParticleSystem::SetUserDataBuffer(void** buffer, int32 capacity)
       const p2 = Vec2.dot(p, p);
       const determinant = pv * pv - v2 * (p2 - this.m_squaredDiameter);
       if (determinant >= 0) {
-        const sqrtDeterminant = math.sqrt(determinant);
+        const sqrtDeterminant = Math.sqrt(determinant);
         // find a solution between 0 and fraction
         let t = (-pv - sqrtDeterminant) / v2;
         if (t > fraction) {
@@ -2364,7 +2363,7 @@ void b2ParticleSystem::SetUserDataBuffer(void** buffer, int32 capacity)
         const n = Vec2.combine(1, p, t, v);
         n.normalize();
         const f = callback(this, i, Vec2.combine(1, point1, t, v), n, t);
-        fraction = math.min(fraction, f);
+        fraction = Math.min(fraction, f);
         if (fraction <= 0) {
           break;
         }
@@ -2379,7 +2378,7 @@ void b2ParticleSystem::SetUserDataBuffer(void** buffer, int32 capacity)
    */
   computeAABB(aabb: AABB) {
     const particleCount = this.getParticleCount();
-    _ASSERT && common.assert(!!aabb);
+    _ASSERT && console.assert(!!aabb);
     aabb.lowerBound.x = +Infinity;
     aabb.lowerBound.y = +Infinity;
     aabb.upperBound.x = -Infinity;
@@ -2551,7 +2550,7 @@ private:
   // Reallocate a buffer
   private reallocateBuffer<T>(oldBuffer: T[], oldCapacity: number,
                         newCapacity: number): T[] {
-    _ASSERT && common.assert(newCapacity > oldCapacity);
+    _ASSERT && console.assert(newCapacity > oldCapacity);
     // T* newBuffer = (T*) m_world->m_blockAllocator.Allocate(
     //   sizeof(T) * newCapacity);
     // if (oldBuffer)
@@ -2572,11 +2571,11 @@ private:
     buffer: T[], userSuppliedCapacity: number, oldCapacity: number,
     newCapacity: number, deferred: boolean)
   {
-    _ASSERT && common.assert(newCapacity > oldCapacity);
+    _ASSERT && console.assert(newCapacity > oldCapacity);
     // A 'deferred' buffer is reallocated only if it is not NULL.
     // If 'userSuppliedCapacity' is not zero, buffer is user supplied and must
     // be kept.
-    _ASSERT && common.assert(!userSuppliedCapacity || newCapacity <= userSuppliedCapacity);
+    _ASSERT && console.assert(!userSuppliedCapacity || newCapacity <= userSuppliedCapacity);
     if ((!deferred || buffer) && !userSuppliedCapacity) {
       buffer = this.reallocateBuffer(buffer, oldCapacity, newCapacity);
     }
@@ -2587,7 +2586,7 @@ private:
     buffer: UserOverridableBuffer<T>, oldCapacity: number, newCapacity: number,
     deferred: boolean)
   {
-    _ASSERT && common.assert(newCapacity > oldCapacity);
+    _ASSERT && console.assert(newCapacity > oldCapacity);
     return this._reallocateBuffer(buffer.data, buffer.userSuppliedCapacity,
                 oldCapacity, newCapacity, deferred);
   }
@@ -2612,7 +2611,7 @@ private:
    * pool for handle allocation.
    */
   reallocateHandleBuffers(newCapacity: number) {
-    _ASSERT && common.assert(newCapacity > this.m_internalAllocatedCapacity);
+    _ASSERT && console.assert(newCapacity > this.m_internalAllocatedCapacity);
     // Reallocate a new handle / index map buffer, copying old handle pointers
     // is fine since they're kept around.
     this.m_handleIndexBuffer.data = this.reallocateUserOverridableBuffer(
@@ -2711,7 +2710,7 @@ private:
       if (shape.getType() == EdgeShape.TYPE) {
         edge = shape as EdgeShape;
       } else {
-        _ASSERT && common.assert(shape.getType() == ChainShape.TYPE);
+        _ASSERT && console.assert(shape.getType() == ChainShape.TYPE);
         (shape as ChainShape).getChildEdge(edge, childIndex); // TODO edge is null
       }
       const d = Vec2.sub(edge.m_vertex2, edge.m_vertex1);
@@ -2734,11 +2733,11 @@ private:
     }
     const identity = Transform.identity();
     const aabb = new AABB();
-    _ASSERT && common.assert(shape.getChildCount() == 1);
+    _ASSERT && console.assert(shape.getChildCount() == 1);
     shape.computeAABB(aabb, identity, 0);
-    for (let y = math.floor(aabb.lowerBound.y / stride) * stride;
+    for (let y = Math.floor(aabb.lowerBound.y / stride) * stride;
       y < aabb.upperBound.y; y += stride) {
-      for (let x = math.floor(aabb.lowerBound.x / stride) * stride;
+      for (let x = Math.floor(aabb.lowerBound.x / stride) * stride;
         x < aabb.upperBound.x; x += stride) {
           const p = Vec2.neo(x, y);
           if (shape.testPoint(identity, p)) {
@@ -2760,7 +2759,7 @@ private:
       this.createParticlesFillShapeForGroup(shape, groupDef, xf);
       break;
     default:
-      _ASSERT && common.assert(false);
+      _ASSERT && console.assert(false);
       break;
     }
   }
@@ -2897,8 +2896,8 @@ private:
   }
   // Only called from SolveZombie() or JoinParticleGroups().
   destroyParticleGroup(group: b2ParticleGroup) {
-    _ASSERT && common.assert(this.m_groupCount > 0);
-    _ASSERT && common.assert(!!group);
+    _ASSERT && console.assert(this.m_groupCount > 0);
+    _ASSERT && console.assert(!!group);
 
     this.m_world.publish('remove-particle-group', group);
 
@@ -2934,7 +2933,7 @@ private:
     // Any particles in each pair/triad should satisfy the following:
     // * filter.IsNeeded returns true
     // * have one of k_pairFlags/k_triadsFlags
-    _ASSERT && common.assert(firstIndex <= lastIndex);
+    _ASSERT && console.assert(firstIndex <= lastIndex);
     let particleFlags = 0;
     for (let i = firstIndex; i < lastIndex; i++) {
       particleFlags |= this.m_flagsBuffer.data[i];
@@ -2961,7 +2960,7 @@ private:
           pair.indexA = a;
           pair.indexB = b;
           pair.flags = contact.getFlags();
-          pair.strength = math.min(
+          pair.strength = Math.min(
             groupA ? groupA.m_strength : 1,
             groupB ? groupB.m_strength : 1);
           pair.distance = Vec2.distance(this.m_positionBuffer.data[a],
@@ -3014,7 +3013,7 @@ private:
           triad.indexB = b;
           triad.indexC = c;
           triad.flags = af | bf | cf;
-          triad.strength = math.min(
+          triad.strength = Math.min(
             groupA ? groupA.m_strength : 1,
             groupB ? groupB.m_strength : 1,
             groupC ? groupC.m_strength : 1);
@@ -3108,7 +3107,7 @@ private:
       if (listA.count < listB.count) {
         [listA, listB] = [listB, listA];
       }
-      _ASSERT && common.assert(listA.count >= listB.count);
+      _ASSERT && console.assert(listA.count >= listB.count);
       b2ParticleSystem.mergeParticleLists(listA, listB);
     }
   }
@@ -3121,7 +3120,7 @@ private:
     //     listB => b1 => b2 => NULL
     // to
     //     listA => listB => b1 => b2 => a1 => a2 => a3 => NULL
-    _ASSERT && common.assert(listA != listB);
+    _ASSERT && console.assert(listA != listB);
     for (let b = listB;;) { // TODO refactor?
       b.list = listA;
       const nextB = b.next;
@@ -3172,9 +3171,9 @@ private:
     //     node => NULL
     // to
     //     list => node => a1 => a2 => a3 => NULL
-    _ASSERT && common.assert(node != list);
-    _ASSERT && common.assert(node.list == node);
-    _ASSERT && common.assert(node.count == 1);
+    _ASSERT && console.assert(node != list);
+    _ASSERT && console.assert(node.list == node);
+    _ASSERT && console.assert(node.count == 1);
     node.list = list;
     node.next = list.next;
     list.next = node;
@@ -3196,11 +3195,11 @@ private:
       if (!list.count || list == survivingList) {
         continue;
       }
-      _ASSERT && common.assert(list.list == list);
+      _ASSERT && console.assert(list.list == list);
       const newGroup = this.createParticleGroup(def);
       for (let node = list; node; node = node.next) {
         const oldIndex = node.index;
-        _ASSERT && common.assert(!(this.m_flagsBuffer.data[oldIndex] & ParticleFlag.b2_zombieParticle));
+        _ASSERT && console.assert(!(this.m_flagsBuffer.data[oldIndex] & ParticleFlag.b2_zombieParticle));
         const newIndex = this.cloneParticle(oldIndex, newGroup);
         this.m_flagsBuffer.data[oldIndex] |= ParticleFlag.b2_zombieParticle;
         node.index = newIndex;
@@ -3285,7 +3284,7 @@ private:
       this.m_accumulationBuffer[a] += w;
       this.m_accumulationBuffer[b] += w;
     }
-    _ASSERT && common.assert(!!this.m_depthBuffer);
+    _ASSERT && console.assert(!!this.m_depthBuffer);
     for (let i = 0; i < groupsToUpdateCount; i++) {
       const group = groupsToUpdate[i];
       for (let i = group.m_firstIndex; i < group.m_lastIndex; i++) {
@@ -3296,7 +3295,7 @@ private:
     // The number of iterations is equal to particle number from the deepest
     // particle to the nearest surface particle, and in general it is smaller
     // than sqrt of total particle number.
-    const iterationCount = i32(math.sqrt(this.m_count));
+    const iterationCount = i32(Math.sqrt(this.m_count));
     for (let t = 0; t < iterationCount; t++) {
       let updated = false;
       for (let k = 0; k < contactGroupsCount; k++) {
@@ -3377,7 +3376,7 @@ private:
       return;
     }
     if (distBtParticlesSq < this.m_squaredDiameter) {
-      const invD = math.invSqrt(distBtParticlesSq);
+      const invD = invSqrt(distBtParticlesSq);
       const contact = contacts.append(new b2ParticleContact());
       contact.setIndices(a, b);
       contact.setFlags(this.m_flagsBuffer.data[a] | this.m_flagsBuffer.data[b]);
@@ -4286,7 +4285,7 @@ private:
             } else {
               const det = e1 * e1 - 4 * e0 * e2;
               if (det < 0) continue;
-              const sqrtDet = math.sqrt(det);
+              const sqrtDet = Math.sqrt(det);
               let t1 = (- e1 - sqrtDet) / (2 * e2);
               let t2 = (- e1 + sqrtDet) / (2 * e2);
               if (t1 > t2) {
@@ -4373,7 +4372,7 @@ private:
           const h =
             (wh + pressurePerWeight * (w - b2_minParticleWeight)) /
             (w + relaxation);
-          this.m_staticPressureBuffer[i] = math.clamp(h, 0.0, maxPressure);
+          this.m_staticPressureBuffer[i] = clamp(h, 0.0, maxPressure);
         } else {
           this.m_staticPressureBuffer[i] = 0;
         }
@@ -4406,8 +4405,8 @@ private:
     const maxPressure = b2_maxParticlePressure * criticalPressure;
     for (let i = 0; i < this.m_count; i++) {
       const w = this.m_weightBuffer[i];
-      const h = pressurePerWeight * math.max(0.0, w - b2_minParticleWeight);
-      this.m_accumulationBuffer[i] = math.min(h, maxPressure);
+      const h = pressurePerWeight * Math.max(0.0, w - b2_minParticleWeight);
+      this.m_accumulationBuffer[i] = Math.min(h, maxPressure);
     }
     // ignores particles which have their own repulsive force
     if (this.m_allParticleFlags & b2ParticleSystem.k_noPressureFlags) {
@@ -4419,7 +4418,7 @@ private:
     }
     // static pressure
     if (this.m_allParticleFlags & ParticleFlag.b2_staticPressureParticle) {
-      _ASSERT && common.assert(!!this.m_staticPressureBuffer);
+      _ASSERT && console.assert(!!this.m_staticPressureBuffer);
       for (let i = 0; i < this.m_count; i++) {
         if (this.m_flagsBuffer.data[i] & ParticleFlag.b2_staticPressureParticle) {
           this.m_accumulationBuffer[i] += this.m_staticPressureBuffer[i];
@@ -4470,7 +4469,7 @@ private:
       const vn = Vec2.dot(v, n);
       if (vn < 0) {
         const damping =
-          math.max(linearDamping * w, math.min(-quadraticDamping * vn, 0.5)); // TODO use clamp?
+          Math.max(linearDamping * w, Math.min(-quadraticDamping * vn, 0.5)); // TODO use clamp?
         const f = Vec2.mul(damping * m * vn, n);
         this.m_velocityBuffer.data[a].addMul(this.getParticleInvMass(), f);
         b.applyLinearImpulse(Vec2.neg(f), p, true);
@@ -4486,7 +4485,7 @@ private:
       const vn = Vec2.dot(v, n);
       if (vn < 0) {
         const damping =
-          math.max(linearDamping * w, math.min(-quadraticDamping * vn, 0.5)); // TODO use clamp?
+          Math.max(linearDamping * w, Math.min(-quadraticDamping * vn, 0.5)); // TODO use clamp?
         const f = Vec2.mul(damping * vn, n);
         this.m_velocityBuffer.data[a].add(f);
         this.m_velocityBuffer.data[b].sub(f);
@@ -4525,7 +4524,7 @@ private:
                   b.getMass() * b.getLocalCenter().lengthSquared(),
               b.getWorldCenter(),
               p, n);
-          const f = damping * math.min(w, 1.0) * this.computeDampingImpulse(
+          const f = damping * Math.min(w, 1.0) * this.computeDampingImpulse(
             invMassA, invInertiaA, tangentDistanceA,
             invMassB, invInertiaB, tangentDistanceB,
             vn);
@@ -4660,7 +4659,7 @@ private:
         r.s = Vec2.cross(oa, pa) + Vec2.cross(ob, pb) + Vec2.cross(oc, pc);
         r.c = Vec2.dot(oa, pa) + Vec2.dot(ob, pb) + Vec2.dot(oc, pc);
         const r2 = r.s * r.s + r.c * r.c;
-        const invR = math.invSqrt(r2);
+        const invR = invSqrt(r2);
         r.s *= invR;
         r.c *= invR;
         const strength = elasticStrength * triad.strength;
@@ -4694,7 +4693,7 @@ private:
     }
   }
   solveTensile(step: TimeStep) {
-    _ASSERT && common.assert(!!this.m_accumulation2Buffer);
+    _ASSERT && console.assert(!!this.m_accumulation2Buffer);
     for (let i = 0; i < this.m_count; i++) {
       this.m_accumulation2Buffer[i] = Vec2.zero(); // TODO would setZero() also be ok?
     }
@@ -4725,7 +4724,7 @@ private:
         const n = contact.getNormal();
         const h = this.m_weightBuffer[a] + this.m_weightBuffer[b];
         const s = Vec2.sub(this.m_accumulation2Buffer[b], this.m_accumulation2Buffer[a]);
-        const fn = math.min(
+        const fn = Math.min(
             pressureStrength * (h - 2) + normalStrength * Vec2.dot(s, n),
             maxVelocityVariation) * w;
         const f = Vec2.mul(fn, n);
@@ -4802,7 +4801,7 @@ private:
   }
   solveSolid(step: TimeStep) {
     // applies extra repulsive force from solid particle groups
-    _ASSERT && common.assert(!!this.m_depthBuffer);
+    _ASSERT && console.assert(!!this.m_depthBuffer);
     const ejectionStrength = step.inv_dt * this.m_def.ejectionStrength;
     for (let k = 0; k < this.m_contactBuffer.getCount(); k++) {
       const contact = this.m_contactBuffer.getData()[k];
@@ -4827,7 +4826,7 @@ private:
   }
   // solveColorMixing() { // LATER
   //   // mixes color between contacting particles
-  //   _ASSERT && common.assert(!!this.m_colorBuffer.data);
+  //   _ASSERT && console.assert(!!this.m_colorBuffer.data);
   //   const colorMixing128 = (int32) (128 * this.m_def.colorMixingStrength);
   //   if (colorMixing128) {
   //     for (let k = 0; k < this.m_contactBuffer.getCount(); k++) {
@@ -4997,8 +4996,8 @@ private:
       for (let i = group.m_firstIndex; i < group.m_lastIndex; i++) {
         let j = newIndices[i];
         if (j >= 0) {
-          firstIndex = math.min(firstIndex, j);
-          lastIndex = math.max(lastIndex, j + 1);
+          firstIndex = Math.min(firstIndex, j);
+          lastIndex = Math.max(lastIndex, j + 1);
         } else {
           modified = true;
         }
@@ -5043,8 +5042,8 @@ private:
    * SetParticleLifetime().
    */
 /*  solveLifetimes(step: TimeStep) { // LATER
-    _ASSERT && common.assert(this.m_expirationTimeBuffer.data);
-    _ASSERT && common.assert(this.m_indexByExpirationTimeBuffer.data);
+    _ASSERT && console.assert(this.m_expirationTimeBuffer.data);
+    _ASSERT && console.assert(this.m_indexByExpirationTimeBuffer.data);
     // Update the time elapsed.
     this.m_timeElapsed = this.lifetimeToExpirationTime(step.dt);
     // Get the floor (non-fractional component) of the elapsed time.
@@ -5094,7 +5093,7 @@ private:
     if (start == mid || mid == end) {
       return;
     }
-    _ASSERT && common.assert(mid >= start && mid <= end);
+    _ASSERT && console.assert(mid >= start && mid <= end);
     function newIndices(i: number) {
       if (i < start) {
         return i;
@@ -5260,7 +5259,7 @@ private:
 
   setUserOverridableBuffer<T>(
     buffer: UserOverridableBuffer<T>, newData: T[], newCapacity: number) {
-    _ASSERT && common.assert((newData && !!newCapacity) || (!newData && !newCapacity));
+    _ASSERT && console.assert((newData && !!newCapacity) || (!newData && !newCapacity));
     if (!buffer.userSuppliedCapacity && buffer.data) {
       // this.m_world.m_blockAllocator.Free(
       //   buffer.data, sizeof(T) * this.m_internalAllocatedCapacity);

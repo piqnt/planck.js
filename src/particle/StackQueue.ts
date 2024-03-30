@@ -16,8 +16,6 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-import common from '../util/common';
-
 
 const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
@@ -32,7 +30,7 @@ export default class StackQueue<T> {
   }
 
   pop() {
-    _ASSERT && common.assert(this.queue.length > 0);
+    _ASSERT && console.assert(this.queue.length > 0);
     this.queue.shift();
   }
 
