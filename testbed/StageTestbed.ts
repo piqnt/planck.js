@@ -14,6 +14,7 @@ import type { ChainShape } from "../src/collision/shape/ChainShape";
 import type { CircleShape } from "../src/collision/shape/CircleShape";
 import type { PulleyJoint } from "../src/dynamics/joint/PulleyJoint";
 import { MouseJoint } from "../src/dynamics/joint/MouseJoint";
+import { b2ParticleSystem } from '../src/particle/ParticleSystem';
 
 const math_atan2 = Math.atan2;
 const math_abs = Math.abs;
@@ -420,6 +421,7 @@ interface WorldStageOptions {
 
 class  WorldStageNode extends Stage.Node {
   private nodes = new WeakMap<Body | Fixture | Joint, Stage.Node>();
+  private particleContext = new WeakMap<b2ParticleSystem, CanvasRenderingContext2D>();
 
   private options: WorldStageOptions = {
     speed: 1,
@@ -562,12 +564,22 @@ class  WorldStageNode extends Stage.Node {
       if (!positions) continue;
       const radius = p.getRadius();
 
-      if (p.ui) {
-        p.ui.remove();
+      let ctx = this.particleContext.get(p);
+      if (!ctx) {
+        const size = 100; // TODO
+        const texture = Stage.canvas(function(context) {
+          ctx = context;
+          this.size(size * 2, size * 2, options.ratio);
+        });
+        const image = Stage.image(texture);
+        image.offset(-size, -size);
+        const node = Stage.create().append(image);
+        Stage.create().append(node).appendTo(viewer);
+        this.particleContext.set(p, ctx);
       }
-      const a = viewer.drawParticles(positions, p.m_count, options);
-      a.appendTo(viewer);
-      p.ui = a;
+
+      viewer.drawParticles(ctx, positions, p.m_count, options);
+      viewer.touch();
     }
 
     for (let j = world.getJointList(); j; j = j.getNext()) {
@@ -780,27 +792,19 @@ class  WorldStageNode extends Stage.Node {
     return node;
   }
 
-  drawParticles(positions: Vec2Value[], count: number, options) {
+  drawParticles(ctx: CanvasRenderingContext2D, positions: Vec2Value[], count: number, options) {
     const ratio = options.ratio;
     if (!positions.length) {
       return;
     }
   
     const size = 100; // TODO
-    const texture = Stage.canvas(function(ctx) {
-      this.size(size * 2, size * 2, ratio);
   
-      ctx.clearRect(0, 0, size * 2, size * 2);
-      ctx.fillStyle = '#0077ff';
-      for (let i = 0; i < count; i++) {
-        const p = positions[i];
-        ctx.fillRect(p.x * ratio + size * ratio, options.scaleY * p.y * ratio + size * ratio, 1, 1);
-      }
-    })
-  
-    const image = Stage.image(texture);
-    image.offset(-size, -size);
-    const node = Stage.create().append(image);
-    return node;
+    ctx.clearRect(0, 0, size * 2 * ratio, size * 2 * ratio);
+    ctx.fillStyle = '#0077ff';
+    for (let i = 0; i < count; i++) {
+      const p = positions[i];
+      ctx.fillRect(p.x * ratio + size * ratio, options.scaleY * p.y * ratio + size * ratio, 1, 1);
+    }
   };
 }
