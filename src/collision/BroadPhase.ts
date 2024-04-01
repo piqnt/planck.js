@@ -111,7 +111,7 @@ export class BroadPhase {
    * number of proxies in the tree.
    *
    * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
-   * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
+   * @param rayCastCallback A function that is called for each proxy that is hit by the ray. If the return value is a positive number it will update the maxFraction of the ray cast input, and if it is zero it will terminate they ray cast.
    */
   rayCast(input: RayCastInput, rayCastCallback: RayCastCallback): void {
     this.m_tree.rayCast(input, rayCastCallback);

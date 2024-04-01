@@ -319,10 +319,14 @@ ___
 
 Callback function for ray casts, see [World.rayCast](classes/world.md#raycast).
 
-Called for each fixture found in the query. You control how the ray cast
-proceeds by returning a float: return -1: ignore this fixture and continue
-return 0: terminate the ray cast return fraction: clip the ray to this point
-return 1: don't clip the ray and continue
+Called for each fixture found in the query.
+The returned value replaces the ray-cast input maxFraction.
+You control how the ray cast proceeds by returning a numeric/float value.
+
+- `0` to terminate the ray cast
+- `fraction` to clip the ray cast at current point
+- `1` don't clip the ray and continue
+- `-1` (or anything else) to continue
 
 **`param`** The fixture hit by the ray
 
@@ -332,13 +336,7 @@ return 1: don't clip the ray and continue
 
 **`param`** The fraction along the ray at the point of intersection
 
-**`returns`** `-1` to ignore the current fixture and continue
-
-**`returns`** `0` to terminate the ray cast
-
-**`returns`** `fraction` to clip the raycast at current point
-
-**`returns`** `1` don't clip the ray and continue
+**`returns`** A number to update the maxFraction
 
 #### Type declaration:
 

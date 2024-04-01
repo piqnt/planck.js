@@ -768,7 +768,7 @@ export class DynamicTree<T> {
    * number of proxies in the tree.
    *
    * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
-   * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
+   * @param rayCastCallback A function that is called for each proxy that is hit by the ray. If the return value is a positive number it will update the maxFraction of the ray cast input, and if it is zero it will terminate they ray cast.
    */
   rayCast(input: RayCastInput, rayCastCallback: RayCastCallback): void {
     // TODO: GC
@@ -825,10 +825,8 @@ export class DynamicTree<T> {
 
         if (value === 0.0) {
           // The client has terminated the ray cast.
-          return;
-        }
-
-        if (value > 0.0) {
+          break;
+        } else if (value > 0.0) {
           // update segment bounding box.
           maxFraction = value;
           t = Vec2.combine((1 - maxFraction), p1, maxFraction, p2);

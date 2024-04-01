@@ -774,7 +774,7 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `point1` | Vec2 | The ray starting point |
 `point2` | Vec2 | The ray ending point |
-`callback` | [WorldRayCastCallback](../globals.md#worldraycastcallback) | A user implemented callback function.  |
+`callback` | [WorldRayCastCallback](../globals.md#worldraycastcallback) | A function that is called for each fixture that is hit by the ray. You control how the ray cast proceeds by returning a numeric/float value.  |
 
 **Returns:** *void*
 
