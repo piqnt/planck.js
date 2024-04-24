@@ -167,38 +167,23 @@ export class VelocityConstraintPoint {
  */
 export class Contact {
   // Nodes for connecting bodies.
-  /** @internal */
-  m_nodeA = new ContactEdge(this);
-  /** @internal */
-  m_nodeB = new ContactEdge(this);
-  /** @internal */
-  m_fixtureA: Fixture | null = null;
-  /** @internal */
-  m_fixtureB: Fixture | null = null;
-  /** @internal */
-  m_indexA = -1;
-  /** @internal */
-  m_indexB = -1;
-  /** @internal */
-  m_evaluateFcn: EvaluateFunction | null = null;
-  /** @internal */
-  m_manifold: Manifold = new Manifold();
-  /** @internal */
-  m_prev: Contact | null = null;
-  /** @internal */
-  m_next: Contact | null = null;
-  /** @internal */
-  m_toi = 1.0;
-  /** @internal */
-  m_toiCount = 0;
-  /** @internal This contact has a valid TOI in m_toi */
-  m_toiFlag = false;
-  /** @internal */
-  m_friction = 0.0;
-  /** @internal */
-  m_restitution = 0.0;
-  /** @internal */
-  m_tangentSpeed = 0.0;
+  /** @internal */ m_nodeA = new ContactEdge(this);
+  /** @internal */ m_nodeB = new ContactEdge(this);
+  /** @internal */ m_fixtureA: Fixture | null = null;
+  /** @internal */ m_fixtureB: Fixture | null = null;
+  /** @internal */ m_indexA = -1;
+  /** @internal */ m_indexB = -1;
+  /** @internal */ m_evaluateFcn: EvaluateFunction | null = null;
+  /** @internal */ m_manifold: Manifold = new Manifold();
+  /** @internal */ m_prev: Contact | null = null;
+  /** @internal */ m_next: Contact | null = null;
+  /** @internal */ m_toi = 1.0;
+  /** @internal */ m_toiCount = 0;
+  // This contact has a valid TOI in m_toi
+  /** @internal */ m_toiFlag = false;
+  /** @internal */ m_friction = 0.0;
+  /** @internal */ m_restitution = 0.0;
+  /** @internal */ m_tangentSpeed = 0.0;
   /** @internal This contact can be disabled (by user) */
   m_enabledFlag = true;
   /** @internal Used when crawling contact graph when forming islands. */
@@ -214,10 +199,8 @@ export class Contact {
   m_impulse: ContactImpulse = new ContactImpulse(this);
 
   // VelocityConstraint
-  /** @internal */
-  v_points = [new VelocityConstraintPoint(), new VelocityConstraintPoint()]; // [maxManifoldPoints];
-  /** @internal */
-  v_normal = matrix.vec2(0, 0);
+  /** @internal */ v_points = [new VelocityConstraintPoint(), new VelocityConstraintPoint()]; // [maxManifoldPoints];
+  /** @internal */ v_normal = matrix.vec2(0, 0);
   /** @internal */ v_normalMass: Mat22 = new Mat22();
   /** @internal */ v_K: Mat22 = new Mat22();
   /** @internal */ v_pointCount = 0;

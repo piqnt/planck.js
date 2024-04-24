@@ -11,7 +11,6 @@ testbed.x = 0;
 testbed.y = 0;
 testbed.width = width * 1.6;
 testbed.height = height * 1.6;
-testbed.ratio = 60;
 testbed.mouseForce = -120;
 
 Settings.velocityThreshold = 0;

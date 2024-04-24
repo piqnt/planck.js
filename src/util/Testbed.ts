@@ -60,7 +60,6 @@ export abstract class Testbed {
   /** World simulation speed, default is 1 */
   speed: number = 1;
 
-  ratio: number = 16;
   background: string = '#222222';
 
   mouseForce?: number;

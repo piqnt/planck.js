@@ -6,7 +6,6 @@ let HEIGHT = 26;
 const testbed = Testbed.mount();
 testbed.width = WIDTH;
 testbed.height = HEIGHT * 1.12;
-testbed.ratio = 32;
 testbed.y = 0;
 testbed.keydown = function() {
   if (testbed.activeKeys.fire) {

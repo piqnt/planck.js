@@ -27,7 +27,6 @@ let world = new World();
 const testbed = Testbed.mount();
 testbed.width = SPACE_WIDTH;
 testbed.height = SPACE_HEIGHT;
-testbed.ratio = 64;
 testbed.y = 0;
 testbed.start(world);
 

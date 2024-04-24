@@ -30,7 +30,6 @@ const testbed = Testbed.mount();
 testbed.y = -15;
 testbed.width = 20;
 testbed.height = 20;
-testbed.ratio = 40;
 testbed.start(world);
 
 let DEPTH = 4;

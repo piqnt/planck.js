@@ -25,6 +25,28 @@ const math_min = Math.min;
 
 let mounted: StageTestbed | null = null;
 
+/** @internal */
+function memo() {
+  const memory: any = [];
+  function recall(...rest: any[]) {
+    let equal = memory.length === rest.length;
+    for (let i = 0; equal && i < rest.length; i++) {
+      equal = equal && memory[i] === rest[i];
+      memory[i] = rest[i];
+    }
+    memory.length = rest.length;
+    return equal;
+  }
+  function reset() {
+    memory.length = 0;
+    // void 0;
+  }
+  return {
+    recall,
+    reset,
+  };
+}
+
 Testbed.mount = () => {
   if (mounted) {
     return mounted;
@@ -102,8 +124,8 @@ function findBody(world: World, point: Vec2Value) {
 
 /** @internal */
 class StageTestbed extends Testbed {
-  private canvas: any;
-  private stage: any;
+  private canvas: HTMLCanvasElement;
+  private stage: Stage.Root;
   private paused: boolean = false;
   private lastDrawHash = "";
   private newDrawHash = "";
@@ -117,14 +139,14 @@ class StageTestbed extends Testbed {
     const testbed = this;
     this.canvas = canvas;
 
-    stage.on(Stage.Mouse.START, () => {
+    stage.on(Stage.POINTER_START, () => {
       window.focus();
       // @ts-ignore
       document.activeElement?.blur();
       canvas.focus();
     });
 
-    (stage as any).MAX_ELAPSE = 1000 / 30;
+    stage.MAX_ELAPSE = 1000 / 30;
 
     stage.on('resume', () => {
       this.paused = false;
@@ -135,22 +157,25 @@ class StageTestbed extends Testbed {
       this._pause();
     });
 
-    const drawingTexture = new Stage.Texture();
-    stage.append(Stage.sprite(drawingTexture));
+    const drawingTexture = new Stage.CanvasTexture();
+    drawingTexture.draw = (ctx: CanvasRenderingContext2D) => {
+      const pixelRatio = 2 * drawingTexture.getOptimalPixelRatio();
+      ctx.save();
+      ctx.transform(1, 0, 0, this.scaleY, -this.x, -this.y);
+      ctx.lineWidth = 3 / pixelRatio;
+      ctx.lineCap = 'round';
+      for (let drawing = this.buffer.shift(); drawing; drawing = this.buffer.shift()) {
+        drawing(ctx, pixelRatio);
+      }
+      ctx.restore();
+    };
+
+    const drawingElement = Stage.sprite(drawingTexture);
+    stage.append(drawingElement);
     stage.tick(() => {
       this.buffer.length = 0;
     }, true);
 
-    drawingTexture.draw = (ctx: CanvasRenderingContext2D) => {
-      ctx.save();
-      ctx.transform(1, 0, 0, this.scaleY, -this.x, -this.y);
-      ctx.lineWidth = 2  / this.ratio;
-      ctx.lineCap = 'round';
-      for (let drawing = this.buffer.shift(); drawing; drawing = this.buffer.shift()) {
-        drawing(ctx, this.ratio);
-      }
-      ctx.restore();
-    };
 
     stage.background(this.background);
     stage.viewbox(this.width, this.height);
@@ -196,7 +221,7 @@ class StageTestbed extends Testbed {
 
     worldNode.attr('spy', true);
 
-    worldNode.on(Stage.Mouse.START, (point: Vec2Value) => {
+    worldNode.on(Stage.POINTER_START, (point: Vec2Value) => {
       point = { x: point.x, y: testbed.scaleY * point.y };
       if (targetBody) {
         return;
@@ -216,7 +241,7 @@ class StageTestbed extends Testbed {
       }
     });
 
-    worldNode.on(Stage.Mouse.MOVE, (point: Vec2Value) => {
+    worldNode.on(Stage.POINTER_MOVE, (point: Vec2Value) => {
       point = { x: point.x, y: testbed.scaleY * point.y };
       if (mouseJoint) {
         mouseJoint.setTarget(point);
@@ -226,7 +251,7 @@ class StageTestbed extends Testbed {
       mouseMove.y = point.y;
     });
 
-    worldNode.on(Stage.Mouse.END, (point: Vec2Value) => {
+    worldNode.on(Stage.POINTER_END, (point: Vec2Value) => {
       point = { x: point.x, y: testbed.scaleY * point.y };
       if (mouseJoint) {
         world.destroyJoint(mouseJoint);
@@ -243,7 +268,7 @@ class StageTestbed extends Testbed {
       }
     });
 
-    worldNode.on(Stage.Mouse.CANCEL, (point: Vec2Value) => {
+    worldNode.on(Stage.POINTER_CANCEL, (point: Vec2Value) => {
       point = { x: point.x, y: testbed.scaleY * point.y };
       if (mouseJoint) {
         world.destroyJoint(mouseJoint);
@@ -328,7 +353,7 @@ class StageTestbed extends Testbed {
     this.focus();
   }
 
-  drawPoint(p: {x: number, y: number}, r: any, color: string): void {
+  drawPoint(p: {x: number, y: number}, r: number, color: string): void {
     this.buffer.push(function(ctx, ratio) {
       ctx.beginPath();
       ctx.arc(p.x, p.y, 5  / ratio, 0, 2 * math_PI);
@@ -412,7 +437,6 @@ interface WorldStageOptions {
   speed: number;
   hz: number;
   scaleY: number;
-  ratio: number;
   lineWidth: number;
   stroke: string | undefined;
   fill: string | undefined;
@@ -425,8 +449,7 @@ class  WorldStageNode extends Stage.Node {
     speed: 1,
     hz: 60,
     scaleY: -1,
-    ratio: 16,
-    lineWidth: 1,
+    lineWidth: 3,
     stroke: undefined,
     fill: undefined
   };
@@ -438,14 +461,11 @@ class  WorldStageNode extends Stage.Node {
     super();
     this.label('Planck');
 
-    this.options.speed = opts.speed ?? this.options.speed;
-    this.options.hz = opts.hz ?? this.options.speed;
+    this.options = { ...this.options, ...opts };
+
     if (math_abs(this.options.hz) < 1) {
       this.options.hz = 1 / this.options.hz;
     }
-    this.options.scaleY = opts.scaleY ?? this.options.scaleY;
-    this.options.ratio = opts.ratio ?? this.options.ratio;
-    this.options.lineWidth = 2 / this.options.ratio;
 
     this.world = world;
     this.testbed = opts as Testbed;
@@ -568,20 +588,27 @@ class  WorldStageNode extends Stage.Node {
     }
   }
 
-
   drawCircle(shape: CircleShape, options: WorldStageOptions) {
-    const lw = options.lineWidth;
-    const ratio = options.ratio;
+    let offsetX = 0;
+    let offsetY = 0;
+    const offsetMemo = memo();
 
-    const r = shape.m_radius;
-    const cx = r + lw;
-    const cy = r + lw;
-    const w = r * 2 + lw * 2;
-    const h = r * 2 + lw * 2;
+    const texture = Stage.canvas();
+    texture.setDrawer(function () {
+      const ctx = this.getContext();
+      const ratio = 2 * this.getOptimalPixelRatio();
+      const lw = options.lineWidth / ratio;
 
-    const texture = Stage.canvas(function (ctx) {
-      // @ts-ignore
-      this.size(w, h, ratio);
+      const r = shape.m_radius;
+      const cx = r + lw;
+      const cy = r + lw;
+      const w = r * 2 + lw * 2;
+      const h = r * 2 + lw * 2;
+
+      offsetX = shape.m_p.x - cx;
+      offsetY = options.scaleY * shape.m_p.y - cy
+
+      this.setSize(w, h, ratio);
 
       ctx.scale(ratio, ratio);
       ctx.arc(cx, cy, r, 0, 2 * math_PI);
@@ -590,31 +617,50 @@ class  WorldStageNode extends Stage.Node {
         ctx.fill();
       }
       ctx.lineTo(cx, cy);
-      ctx.lineWidth = options.lineWidth;
+      ctx.lineWidth = options.lineWidth / ratio;
       ctx.strokeStyle = options.stroke ?? '';
       ctx.stroke();
     });
-    const image = Stage.sprite(texture)
-      .offset(shape.m_p.x - cx, options.scaleY * shape.m_p.y - cy);
-    const node = Stage.create().append(image);
+
+    const sprite = Stage.sprite(texture);
+    sprite.tick(() => {
+      if (!offsetMemo.recall(offsetX, offsetY)) {
+        sprite.offset(offsetX, offsetY);
+      }
+    });
+
+    const node = Stage.layout().append(sprite);
     return node;
   }
 
   drawEdge(edge: EdgeShape, options: WorldStageOptions) {
-    const lw = options.lineWidth;
-    const ratio = options.ratio;
+    let offsetX = 0;
+    let offsetY = 0;
+    let offsetA = 0
+    const offsetMemo = memo();
 
-    const v1 = edge.m_vertex1;
-    const v2 = edge.m_vertex2;
+    const texture = Stage.canvas();
+    texture.setDrawer(function () {
+      const ctx = this.getContext();
+      const ratio = 2 * this.getOptimalPixelRatio();
+      const lw = options.lineWidth / ratio;
 
-    const dx = v2.x - v1.x;
-    const dy = v2.y - v1.y;
+      const v1 = edge.m_vertex1;
+      const v2 = edge.m_vertex2;
 
-    const length = math_sqrt(dx * dx + dy * dy);
+      const dx = v2.x - v1.x;
+      const dy = v2.y - v1.y;
 
-    const texture = Stage.canvas(function (ctx) {
-      // @ts-ignore
-      this.size(length + 2 * lw, 2 * lw, ratio);
+      const length = math_sqrt(dx * dx + dy * dy);
+
+      this.setSize(length + 2 * lw, 2 * lw, ratio);
+
+      const minX = math_min(v1.x, v2.x);
+      const minY = math_min(options.scaleY * v1.y, options.scaleY * v2.y);
+  
+      offsetX = minX - lw;
+      offsetY = minY - lw;
+      offsetA = options.scaleY * math_atan2(dy, dx);
 
       ctx.scale(ratio, ratio);
       ctx.beginPath();
@@ -622,49 +668,58 @@ class  WorldStageNode extends Stage.Node {
       ctx.lineTo(lw + length, lw);
 
       ctx.lineCap = 'round';
-      ctx.lineWidth = options.lineWidth;
+      ctx.lineWidth = options.lineWidth / ratio;
       ctx.strokeStyle = options.stroke ?? '';
       ctx.stroke();
     });
 
-    const minX = math_min(v1.x, v2.x);
-    const minY = math_min(options.scaleY * v1.y, options.scaleY * v2.y);
-
-    const image = Stage.sprite(texture);
-    image.rotate(options.scaleY * math_atan2(dy, dx));
-    image.offset(minX - lw, minY - lw);
-    const node = Stage.create().append(image);
+    const sprite = Stage.sprite(texture);
+    sprite.tick(() => {
+      if(!offsetMemo.recall(offsetX, offsetY, offsetA)) {
+        sprite.offset(offsetX, offsetY);
+        sprite.rotate(offsetA);
+      }
+    });
+    const node = Stage.layout().append(sprite);
     return node;
   }
 
   drawPolygon(shape: PolygonShape, options: WorldStageOptions) {
-    const lw = options.lineWidth;
-    const ratio = options.ratio;
+    let offsetX = 0;
+    let offsetY = 0;
+    const offsetMemo = memo();
 
-    const vertices = shape.m_vertices;
+    const texture = Stage.canvas();
+    texture.setDrawer(function () {
+      const ctx = this.getContext();
+      const ratio = 2 * this.getOptimalPixelRatio();
+      const lw = options.lineWidth / ratio;
 
-    if (!vertices.length) {
-      return;
-    }
+      const vertices = shape.m_vertices;
 
-    let minX = Infinity;
-    let minY = Infinity;
-    let maxX = -Infinity;
-    let maxY = -Infinity;
-    for (let i = 0; i < vertices.length; ++i) {
-      const v = vertices[i];
-      minX = math_min(minX, v.x);
-      maxX = math_max(maxX, v.x);
-      minY = math_min(minY, options.scaleY * v.y);
-      maxY = math_max(maxY, options.scaleY * v.y);
-    }
+      if (!vertices.length) {
+        return;
+      }
+  
+      let minX = Infinity;
+      let minY = Infinity;
+      let maxX = -Infinity;
+      let maxY = -Infinity;
+      for (let i = 0; i < vertices.length; ++i) {
+        const v = vertices[i];
+        minX = math_min(minX, v.x);
+        maxX = math_max(maxX, v.x);
+        minY = math_min(minY, options.scaleY * v.y);
+        maxY = math_max(maxY, options.scaleY * v.y);
+      }
+  
+      const width = maxX - minX;
+      const height = maxY - minY;
 
-    const width = maxX - minX;
-    const height = maxY - minY;
+      offsetX = minX;
+      offsetY = minY;
 
-    const texture = Stage.canvas(function (ctx: CanvasRenderingContext2D) {
-      // @ts-ignore
-      this.size(width + 2 * lw, height + 2 * lw, ratio);
+      this.setSize(width + 2 * lw, height + 2 * lw, ratio);
 
       ctx.scale(ratio, ratio);
       ctx.beginPath();
@@ -690,45 +745,58 @@ class  WorldStageNode extends Stage.Node {
       }
 
       ctx.lineCap = 'round';
-      ctx.lineWidth = options.lineWidth;
+      ctx.lineWidth = options.lineWidth / ratio;
       ctx.strokeStyle = options.stroke ?? '';
       ctx.stroke();
     });
 
-    const image = Stage.sprite(texture);
-    image.offset(minX - lw, minY - lw);
-    const node = Stage.create().append(image);
+    const sprite = Stage.sprite(texture);
+    sprite.tick(() => {
+      if(!offsetMemo.recall(offsetX, offsetY)) {
+        sprite.offset(offsetX, offsetY);
+      }
+    });
+
+    const node = Stage.layout().append(sprite);
     return node;
   }
 
   drawChain(shape: ChainShape, options: WorldStageOptions) {
-    const lw = options.lineWidth;
-    const ratio = options.ratio;
+    let offsetX = 0;
+    let offsetY = 0;
+    const offsetMemo = memo();
 
-    const vertices = shape.m_vertices;
+    const texture = Stage.canvas();
+    texture.setDrawer(function () {
+      const ctx = this.getContext();
+      const ratio = 2 * this.getOptimalPixelRatio();
+      const lw = options.lineWidth / ratio;
 
-    if (!vertices.length) {
-      return;
-    }
+      const vertices = shape.m_vertices;
 
-    let minX = Infinity;
-    let minY = Infinity;
-    let maxX = -Infinity;
-    let maxY = -Infinity;
-    for (let i = 0; i < vertices.length; ++i) {
-      const v = vertices[i];
-      minX = math_min(minX, v.x);
-      maxX = math_max(maxX, v.x);
-      minY = math_min(minY, options.scaleY * v.y);
-      maxY = math_max(maxY, options.scaleY * v.y);
-    }
+      if (!vertices.length) {
+        return;
+      }
+  
+      let minX = Infinity;
+      let minY = Infinity;
+      let maxX = -Infinity;
+      let maxY = -Infinity;
+      for (let i = 0; i < vertices.length; ++i) {
+        const v = vertices[i];
+        minX = math_min(minX, v.x);
+        maxX = math_max(maxX, v.x);
+        minY = math_min(minY, options.scaleY * v.y);
+        maxY = math_max(maxY, options.scaleY * v.y);
+      }
+  
+      const width = maxX - minX;
+      const height = maxY - minY;
 
-    const width = maxX - minX;
-    const height = maxY - minY;
+      offsetX = minX;
+      offsetY = minY;
 
-    const texture = Stage.canvas(function (ctx) {
-      // @ts-ignore
-      this.size(width + 2 * lw, height + 2 * lw, ratio);
+      this.setSize(width + 2 * lw, height + 2 * lw, ratio);
 
       ctx.scale(ratio, ratio);
       ctx.beginPath();
@@ -755,14 +823,19 @@ class  WorldStageNode extends Stage.Node {
       }
 
       ctx.lineCap = 'round';
-      ctx.lineWidth = options.lineWidth;
+      ctx.lineWidth = options.lineWidth / ratio;
       ctx.strokeStyle = options.stroke ?? '';
       ctx.stroke();
     });
 
-    const image = Stage.sprite(texture);
-    image.offset(minX - lw, minY - lw);
-    const node = Stage.create().append(image);
+    const sprite = Stage.sprite(texture);
+    sprite.tick(() => {
+      if(!offsetMemo.recall(offsetX, offsetY)) {
+        sprite.offset(offsetX, offsetY);
+      }
+    });
+
+    const node = Stage.layout().append(sprite);
     return node;
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.2
+ * Planck.js v1.0.3
  * @license The MIT license
  * @copyright Copyright (c) 2023 Erin Catto, Ali Shakiba
  *
@@ -118,7 +118,7 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
      * SOFTWARE.
      */
-    /** @internal */ var math_random = Math.random;
+    /** @internal */ var math_random$1 = Math.random;
     var EPSILON = 1e-9;
     /** @internal @deprecated */
     var isFinite = Number.isFinite;
@@ -165,7 +165,7 @@
      * @deprecated
      * Returns a min if num is less than min, and max if more than max, otherwise returns num.
      */
-    function clamp(num, min, max) {
+    function clamp$1(num, min, max) {
         if (num < min) {
             return min;
         }
@@ -182,7 +182,7 @@
      * If one arg is provided between 0 to max.
      * If one arg is passed between 0 to 1.
      */
-    function random(min, max) {
+    function random$1(min, max) {
         if (typeof min === 'undefined') {
             max = 1;
             min = 0;
@@ -191,7 +191,7 @@
             max = min;
             min = 0;
         }
-        return min === max ? min : math_random() * (max - min) + min;
+        return min === max ? min : math_random$1() * (max - min) + min;
     }
     /** @ignore */
     var math$1 = Object.create(Math);
@@ -200,8 +200,8 @@
     math$1.nextPowerOfTwo = nextPowerOfTwo;
     math$1.isPowerOfTwo = isPowerOfTwo;
     math$1.mod = mod;
-    math$1.clamp = clamp;
-    math$1.random = random;
+    math$1.clamp = clamp$1;
+    math$1.random = random$1;
 
     /*
      * Planck.js
@@ -227,7 +227,7 @@
      * SOFTWARE.
      */
     /** @internal */ var math_abs$a = Math.abs;
-    /** @internal */ var math_sqrt$6 = Math.sqrt;
+    /** @internal */ var math_sqrt$7 = Math.sqrt;
     /** @internal */ var math_max$9 = Math.max;
     /** @internal */ var math_min$9 = Math.min;
     var Vec2 = /** @class */ (function () {
@@ -492,7 +492,7 @@
          * For performance, use this instead of lengthSquared (if possible).
          */
         Vec2.lengthOf = function (v) {
-            return math_sqrt$6(v.x * v.x + v.y * v.y);
+            return math_sqrt$7(v.x * v.x + v.y * v.y);
         };
         /**
          * Get the length squared.
@@ -503,7 +503,7 @@
         Vec2.distance = function (v, w) {
             var dx = v.x - w.x;
             var dy = v.y - w.y;
-            return math_sqrt$6(dx * dx + dy * dy);
+            return math_sqrt$7(dx * dx + dy * dy);
         };
         Vec2.distanceSquared = function (v, w) {
             var dx = v.x - w.x;
@@ -621,7 +621,7 @@
         Vec2.prototype.clamp = function (max) {
             var lengthSqr = this.x * this.x + this.y * this.y;
             if (lengthSqr > max * max) {
-                var scale = max / math_sqrt$6(lengthSqr);
+                var scale = max / math_sqrt$7(lengthSqr);
                 this.x *= scale;
                 this.y *= scale;
             }
@@ -1918,7 +1918,7 @@
          * number of proxies in the tree.
          *
          * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
-         * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
+         * @param rayCastCallback A function that is called for each proxy that is hit by the ray. If the return value is a positive number it will update the maxFraction of the ray cast input, and if it is zero it will terminate they ray cast.
          */
         DynamicTree.prototype.rayCast = function (input, rayCastCallback) {
             var p1 = input.p1;
@@ -1961,9 +1961,9 @@
                     var value = rayCastCallback(subInput, node.id);
                     if (value === 0.0) {
                         // The client has terminated the ray cast.
-                        return;
+                        break;
                     }
-                    if (value > 0.0) {
+                    else if (value > 0.0) {
                         // update segment bounding box.
                         maxFraction = value;
                         t = Vec2.combine((1 - maxFraction), p1, maxFraction, p2);
@@ -2135,7 +2135,7 @@
          * number of proxies in the tree.
          *
          * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
-         * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
+         * @param rayCastCallback A function that is called for each proxy that is hit by the ray. If the return value is a positive number it will update the maxFraction of the ray cast input, and if it is zero it will terminate they ray cast.
          */
         BroadPhase.prototype.rayCast = function (input, rayCastCallback) {
             this.m_tree.rayCast(input, rayCastCallback);
@@ -2240,7 +2240,7 @@
      */
     /** @internal */ var math_sin$2 = Math.sin;
     /** @internal */ var math_cos$2 = Math.cos;
-    /** @internal */ var math_sqrt$5 = Math.sqrt;
+    /** @internal */ var math_sqrt$6 = Math.sqrt;
     function vec2(x, y) {
         return { x: x, y: y };
     }
@@ -2318,7 +2318,7 @@
         return out;
     }
     function normalizeVec2Length(out) {
-        var length = math_sqrt$5(out.x * out.x + out.y * out.y);
+        var length = math_sqrt$6(out.x * out.x + out.y * out.y);
         if (length !== 0) {
             var invLength = 1 / length;
             out.x *= invLength;
@@ -2327,7 +2327,7 @@
         return length;
     }
     function normalizeVec2(out) {
-        var length = math_sqrt$5(out.x * out.x + out.y * out.y);
+        var length = math_sqrt$6(out.x * out.x + out.y * out.y);
         if (length > 0) {
             var invLength = 1 / length;
             out.x *= invLength;
@@ -2361,7 +2361,7 @@
     function distVec2(a, b) {
         var dx = a.x - b.x;
         var dy = a.y - b.y;
-        return math_sqrt$5(dx * dx + dy * dy);
+        return math_sqrt$6(dx * dx + dy * dy);
     }
     function distSqrVec2(a, b) {
         var dx = a.x - b.x;
@@ -5681,7 +5681,7 @@
      * SOFTWARE.
      */
     /** @internal */ var math_abs$7 = Math.abs;
-    /** @internal */ var math_sqrt$4 = Math.sqrt;
+    /** @internal */ var math_sqrt$5 = Math.sqrt;
     /** @internal */ var math_min$6 = Math.min;
     var TimeStep = /** @class */ (function () {
         function TimeStep() {
@@ -5980,7 +5980,7 @@
                 scaleVec2(translation, h, v);
                 var translationLengthSqr = lengthSqrVec2(translation);
                 if (translationLengthSqr > SettingsInternal.maxTranslationSquared) {
-                    var ratio = SettingsInternal.maxTranslation / math_sqrt$4(translationLengthSqr);
+                    var ratio = SettingsInternal.maxTranslation / math_sqrt$5(translationLengthSqr);
                     mulVec2(v, ratio);
                 }
                 var rotation = h * w;
@@ -6338,7 +6338,7 @@
                 scaleVec2(translation, h, v);
                 var translationLengthSqr = lengthSqrVec2(translation);
                 if (translationLengthSqr > SettingsInternal.maxTranslationSquared) {
-                    var ratio = SettingsInternal.maxTranslation / math_sqrt$4(translationLengthSqr);
+                    var ratio = SettingsInternal.maxTranslation / math_sqrt$5(translationLengthSqr);
                     mulVec2(v, ratio);
                 }
                 var rotation = h * w;
@@ -6567,7 +6567,7 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
      * SOFTWARE.
      */
-    /** @internal */ var math_sqrt$3 = Math.sqrt;
+    /** @internal */ var math_sqrt$4 = Math.sqrt;
     /** @internal */ var pointA$1 = vec2(0, 0);
     /** @internal */ var pointB$1 = vec2(0, 0);
     /** @internal */ var temp$3 = vec2(0, 0);
@@ -6693,7 +6693,7 @@
                     subVec2(dist, pointB$1, pointA$1);
                     var lengthSqr = lengthSqrVec2(dist);
                     if (lengthSqr > EPSILON * EPSILON) {
-                        var length_1 = math_sqrt$3(lengthSqr);
+                        var length_1 = math_sqrt$4(lengthSqr);
                         scaleVec2(normal, 1 / length_1, dist);
                     }
                     combine2Vec2(cA$1, 1, pointA$1, radiusA, normal);
@@ -6945,7 +6945,7 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
      * SOFTWARE.
      */
-    /** @internal */ var math_sqrt$2 = Math.sqrt;
+    /** @internal */ var math_sqrt$3 = Math.sqrt;
     /** @internal */ var math_max$3 = Math.max;
     /** @internal */ var math_min$5 = Math.min;
     /** @internal */ var contactPool = new Pool({
@@ -6984,7 +6984,7 @@
      * friction to zero. For example, anything slides on ice.
      */
     function mixFriction(friction1, friction2) {
-        return math_sqrt$2(friction1 * friction2);
+        return math_sqrt$3(friction1 * friction2);
     }
     /**
      * Restitution mixing law. The idea is allow for anything to bounce off an
@@ -7051,38 +7051,23 @@
     var Contact = /** @class */ (function () {
         function Contact() {
             // Nodes for connecting bodies.
-            /** @internal */
-            this.m_nodeA = new ContactEdge(this);
-            /** @internal */
-            this.m_nodeB = new ContactEdge(this);
-            /** @internal */
-            this.m_fixtureA = null;
-            /** @internal */
-            this.m_fixtureB = null;
-            /** @internal */
-            this.m_indexA = -1;
-            /** @internal */
-            this.m_indexB = -1;
-            /** @internal */
-            this.m_evaluateFcn = null;
-            /** @internal */
-            this.m_manifold = new Manifold();
-            /** @internal */
-            this.m_prev = null;
-            /** @internal */
-            this.m_next = null;
-            /** @internal */
-            this.m_toi = 1.0;
-            /** @internal */
-            this.m_toiCount = 0;
-            /** @internal This contact has a valid TOI in m_toi */
-            this.m_toiFlag = false;
-            /** @internal */
-            this.m_friction = 0.0;
-            /** @internal */
-            this.m_restitution = 0.0;
-            /** @internal */
-            this.m_tangentSpeed = 0.0;
+            /** @internal */ this.m_nodeA = new ContactEdge(this);
+            /** @internal */ this.m_nodeB = new ContactEdge(this);
+            /** @internal */ this.m_fixtureA = null;
+            /** @internal */ this.m_fixtureB = null;
+            /** @internal */ this.m_indexA = -1;
+            /** @internal */ this.m_indexB = -1;
+            /** @internal */ this.m_evaluateFcn = null;
+            /** @internal */ this.m_manifold = new Manifold();
+            /** @internal */ this.m_prev = null;
+            /** @internal */ this.m_next = null;
+            /** @internal */ this.m_toi = 1.0;
+            /** @internal */ this.m_toiCount = 0;
+            // This contact has a valid TOI in m_toi
+            /** @internal */ this.m_toiFlag = false;
+            /** @internal */ this.m_friction = 0.0;
+            /** @internal */ this.m_restitution = 0.0;
+            /** @internal */ this.m_tangentSpeed = 0.0;
             /** @internal This contact can be disabled (by user) */
             this.m_enabledFlag = true;
             /** @internal Used when crawling contact graph when forming islands. */
@@ -7096,10 +7081,8 @@
             /** @internal Contact reporting impulse object cache */
             this.m_impulse = new ContactImpulse(this);
             // VelocityConstraint
-            /** @internal */
-            this.v_points = [new VelocityConstraintPoint(), new VelocityConstraintPoint()]; // [maxManifoldPoints];
-            /** @internal */
-            this.v_normal = vec2(0, 0);
+            /** @internal */ this.v_points = [new VelocityConstraintPoint(), new VelocityConstraintPoint()]; // [maxManifoldPoints];
+            /** @internal */ this.v_normal = vec2(0, 0);
             /** @internal */ this.v_normalMass = new Mat22();
             /** @internal */ this.v_K = new Mat22();
             /** @internal */ this.v_pointCount = 0;
@@ -7555,7 +7538,7 @@
                 var linearSlop = SettingsInternal.linearSlop;
                 var maxLinearCorrection = SettingsInternal.maxLinearCorrection;
                 // Prevent large corrections and allow slop.
-                var C = clamp(baumgarte * (separation + linearSlop), -maxLinearCorrection, 0.0);
+                var C = clamp$1(baumgarte * (separation + linearSlop), -maxLinearCorrection, 0.0);
                 // Compute the effective mass.
                 var rnA = crossVec2Vec2(rA, normal$2);
                 var rnB = crossVec2Vec2(rB, normal$2);
@@ -7762,7 +7745,7 @@
                 var lambda = vcp.tangentMass * (-vt);
                 // Clamp the accumulated force
                 var maxFriction = friction * vcp.normalImpulse;
-                var newImpulse = clamp(vcp.tangentImpulse + lambda, -maxFriction, maxFriction);
+                var newImpulse = clamp$1(vcp.tangentImpulse + lambda, -maxFriction, maxFriction);
                 lambda = newImpulse - vcp.tangentImpulse;
                 vcp.tangentImpulse = newImpulse;
                 // Apply contact impulse
@@ -8347,7 +8330,7 @@
          *
          * @param point1 The ray starting point
          * @param point2 The ray ending point
-         * @param callback A user implemented callback function.
+         * @param callback A function that is called for each fixture that is hit by the ray. You control how the ray cast proceeds by returning a numeric/float value.
          */
         World.prototype.rayCast = function (point1, point2, callback) {
             var broadPhase = this.m_broadPhase;
@@ -10082,7 +10065,7 @@
      * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
      * SOFTWARE.
      */
-    /** @internal */ var math_sqrt$1 = Math.sqrt;
+    /** @internal */ var math_sqrt$2 = Math.sqrt;
     /** @internal */ var math_PI$5 = Math.PI;
     /** @internal */ var temp = vec2(0, 0);
     var CircleShape = /** @class */ (function (_super) {
@@ -10188,7 +10171,7 @@
                 return false;
             }
             // Find the point of intersection of the line with the circle.
-            var a = -(c + math_sqrt$1(sigma));
+            var a = -(c + math_sqrt$2(sigma));
             // Is the intersection point on the segment?
             if (0.0 <= a && a <= input.maxFraction * rr) {
                 a /= rr;
@@ -10535,7 +10518,7 @@
             var rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
             var u = Vec2.sub(Vec2.add(cB, rB), Vec2.add(cA, rA));
             var length = u.normalize();
-            var C = clamp(length - this.m_length, -SettingsInternal.maxLinearCorrection, SettingsInternal.maxLinearCorrection);
+            var C = clamp$1(length - this.m_length, -SettingsInternal.maxLinearCorrection, SettingsInternal.maxLinearCorrection);
             var impulse = -this.m_mass * C;
             var P = Vec2.mulNumVec2(impulse, u);
             cA.subMul(this.m_invMassA, P);
@@ -10793,7 +10776,7 @@
                 var impulse = -this.m_angularMass * Cdot;
                 var oldImpulse = this.m_angularImpulse;
                 var maxImpulse = h * this.m_maxTorque;
-                this.m_angularImpulse = clamp(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
+                this.m_angularImpulse = clamp$1(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = this.m_angularImpulse - oldImpulse;
                 wA -= iA * impulse;
                 wB += iB * impulse;
@@ -11445,7 +11428,7 @@
                 var impulse = -this.m_motorMass * Cdot;
                 var oldImpulse = this.m_motorImpulse;
                 var maxImpulse = step.dt * this.m_maxMotorTorque;
-                this.m_motorImpulse = clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
+                this.m_motorImpulse = clamp$1(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = this.m_motorImpulse - oldImpulse;
                 wA -= iA * impulse;
                 wB += iB * impulse;
@@ -11536,7 +11519,7 @@
                 var limitImpulse = 0.0;
                 if (this.m_limitState == LimitState$2.equalLimits) {
                     // Prevent large angular corrections
-                    var C = clamp(angle - this.m_lowerAngle, -SettingsInternal.maxAngularCorrection, SettingsInternal.maxAngularCorrection);
+                    var C = clamp$1(angle - this.m_lowerAngle, -SettingsInternal.maxAngularCorrection, SettingsInternal.maxAngularCorrection);
                     limitImpulse = -this.m_motorMass * C;
                     angularError = math_abs$5(C);
                 }
@@ -11544,14 +11527,14 @@
                     var C = angle - this.m_lowerAngle;
                     angularError = -C;
                     // Prevent large angular corrections and allow some slop.
-                    C = clamp(C + SettingsInternal.angularSlop, -SettingsInternal.maxAngularCorrection, 0.0);
+                    C = clamp$1(C + SettingsInternal.angularSlop, -SettingsInternal.maxAngularCorrection, 0.0);
                     limitImpulse = -this.m_motorMass * C;
                 }
                 else if (this.m_limitState == LimitState$2.atUpperLimit) {
                     var C = angle - this.m_upperAngle;
                     angularError = C;
                     // Prevent large angular corrections and allow some slop.
-                    C = clamp(C - SettingsInternal.angularSlop, 0.0, SettingsInternal.maxAngularCorrection);
+                    C = clamp$1(C - SettingsInternal.angularSlop, 0.0, SettingsInternal.maxAngularCorrection);
                     limitImpulse = -this.m_motorMass * C;
                 }
                 aA -= this.m_invIA * limitImpulse;
@@ -12108,7 +12091,7 @@
                 var impulse = this.m_motorMass * (this.m_motorSpeed - Cdot);
                 var oldImpulse = this.m_motorImpulse;
                 var maxImpulse = step.dt * this.m_maxMotorForce;
-                this.m_motorImpulse = clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
+                this.m_motorImpulse = clamp$1(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = this.m_motorImpulse - oldImpulse;
                 var P = Vec2.mulNumVec2(impulse, this.m_axis);
                 var LA = impulse * this.m_a1;
@@ -12208,20 +12191,20 @@
                 var translation = Vec2.dot(axis, d);
                 if (math_abs$4(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * linearSlop) {
                     // Prevent large angular corrections
-                    C2 = clamp(translation, -maxLinearCorrection, maxLinearCorrection);
+                    C2 = clamp$1(translation, -maxLinearCorrection, maxLinearCorrection);
                     linearError = math_max$1(linearError, math_abs$4(translation));
                     active = true;
                 }
                 else if (translation <= this.m_lowerTranslation) {
                     // Prevent large linear corrections and allow some slop.
-                    C2 = clamp(translation - this.m_lowerTranslation + linearSlop, -maxLinearCorrection, 0.0);
+                    C2 = clamp$1(translation - this.m_lowerTranslation + linearSlop, -maxLinearCorrection, 0.0);
                     linearError = Math
                         .max(linearError, this.m_lowerTranslation - translation);
                     active = true;
                 }
                 else if (translation >= this.m_upperTranslation) {
                     // Prevent large linear corrections and allow some slop.
-                    C2 = clamp(translation - this.m_upperTranslation - linearSlop, 0.0, maxLinearCorrection);
+                    C2 = clamp$1(translation - this.m_upperTranslation - linearSlop, 0.0, maxLinearCorrection);
                     linearError = Math
                         .max(linearError, translation - this.m_upperTranslation);
                     active = true;
@@ -12976,7 +12959,7 @@
                 var impulse = -this.m_angularMass * Cdot;
                 var oldImpulse = this.m_angularImpulse;
                 var maxImpulse = h * this.m_maxTorque;
-                this.m_angularImpulse = clamp(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
+                this.m_angularImpulse = clamp$1(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = this.m_angularImpulse - oldImpulse;
                 wA -= iA * impulse;
                 wB += iB * impulse;
@@ -13910,7 +13893,7 @@
             u.subCombine(1, cA, 1, rA);
             var length = u.normalize();
             var C = length - this.m_maxLength;
-            C = clamp(C, 0.0, SettingsInternal.maxLinearCorrection);
+            C = clamp$1(C, 0.0, SettingsInternal.maxLinearCorrection);
             var impulse = -this.m_mass * C;
             var P = Vec2.mulNumVec2(impulse, u);
             cA.subMul(this.m_invMassA, P);
@@ -14745,7 +14728,7 @@
                 var impulse = -this.m_motorMass * Cdot;
                 var oldImpulse = this.m_motorImpulse;
                 var maxImpulse = step.dt * this.m_maxMotorTorque;
-                this.m_motorImpulse = clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
+                this.m_motorImpulse = clamp$1(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
                 impulse = this.m_motorImpulse - oldImpulse;
                 wA -= iA * impulse;
                 wB += iB * impulse;
@@ -15001,7 +14984,6 @@
             this.hz = 60;
             /** World simulation speed, default is 1 */
             this.speed = 1;
-            this.ratio = 16;
             this.background = '#222222';
             this.activeKeys = {};
             /** callback, to be implemented by user */
@@ -16127,22 +16109,66 @@
         stats: stats$1
     };
 
-    var __defProp = Object.defineProperty;
-    var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-    var __publicField = (obj, key, value) => {
-      __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-      return value;
-    };
-    const stats = {
-      create: 0,
-      tick: 0,
-      node: 0,
-      draw: 0,
-      fps: 0
-    };
+    const math_random = Math.random;
+    const math_sqrt$1 = Math.sqrt;
+    function random(min, max) {
+      if (typeof min === "undefined") {
+        max = 1;
+        min = 0;
+      } else if (typeof max === "undefined") {
+        max = min;
+        min = 0;
+      }
+      return min == max ? min : math_random() * (max - min) + min;
+    }
+    function wrap(num, min, max) {
+      if (typeof min === "undefined") {
+        max = 1;
+        min = 0;
+      } else if (typeof max === "undefined") {
+        max = min;
+        min = 0;
+      }
+      if (max > min) {
+        num = (num - min) % (max - min);
+        return num + (num < 0 ? max : min);
+      } else {
+        num = (num - max) % (min - max);
+        return num + (num <= 0 ? min : max);
+      }
+    }
+    function clamp(num, min, max) {
+      if (num < min) {
+        return min;
+      } else if (num > max) {
+        return max;
+      } else {
+        return num;
+      }
+    }
+    function length(x, y) {
+      return math_sqrt$1(x * x + y * y);
+    }
+    const math = Object.create(Math);
+    math.random = random;
+    math.wrap = wrap;
+    math.clamp = clamp;
+    math.length = length;
+    math.rotate = wrap;
+    math.limit = clamp;
     class Matrix {
       constructor(a, b, c, d, e, f) {
-        this.reset(a, b, c, d, e, f);
+        this.a = 1;
+        this.b = 0;
+        this.c = 0;
+        this.d = 1;
+        this.e = 0;
+        this.f = 0;
+        if (typeof a === "object") {
+          this.reset(a);
+        } else {
+          this.reset(a, b, c, d, e, f);
+        }
       }
       toString() {
         return "[" + this.a + ", " + this.b + ", " + this.c + ", " + this.d + ", " + this.e + ", " + this.f + "]";
@@ -16153,13 +16179,19 @@
       reset(a, b, c, d, e, f) {
         this._dirty = true;
         if (typeof a === "object") {
-          this.a = a.a, this.d = a.d;
-          this.b = a.b, this.c = a.c;
-          this.e = a.e, this.f = a.f;
+          this.a = a.a;
+          this.d = a.d;
+          this.b = a.b;
+          this.c = a.c;
+          this.e = a.e;
+          this.f = a.f;
         } else {
-          this.a = a || 1, this.d = d || 1;
-          this.b = b || 0, this.c = c || 0;
-          this.e = e || 0, this.f = f || 0;
+          this.a = typeof a === "number" ? a : 1;
+          this.b = typeof b === "number" ? b : 0;
+          this.c = typeof c === "number" ? c : 0;
+          this.d = typeof d === "number" ? d : 1;
+          this.e = typeof e === "number" ? e : 0;
+          this.f = typeof f === "number" ? f : 0;
         }
         return this;
       }
@@ -16178,14 +16210,14 @@
           return this;
         }
         this._dirty = true;
-        var u = angle ? Math.cos(angle) : 1;
-        var v = angle ? Math.sin(angle) : 0;
-        var a = u * this.a - v * this.b;
-        var b = u * this.b + v * this.a;
-        var c = u * this.c - v * this.d;
-        var d = u * this.d + v * this.c;
-        var e = u * this.e - v * this.f;
-        var f = u * this.f + v * this.e;
+        const u = angle ? Math.cos(angle) : 1;
+        const v = angle ? Math.sin(angle) : 0;
+        const a = u * this.a - v * this.b;
+        const b = u * this.b + v * this.a;
+        const c = u * this.c - v * this.d;
+        const d = u * this.d + v * this.c;
+        const e = u * this.e - v * this.f;
+        const f = u * this.f + v * this.e;
         this.a = a;
         this.b = b;
         this.c = c;
@@ -16221,12 +16253,12 @@
           return this;
         }
         this._dirty = true;
-        var a = this.a + this.b * x;
-        var b = this.b + this.a * y;
-        var c = this.c + this.d * x;
-        var d = this.d + this.c * y;
-        var e = this.e + this.f * x;
-        var f = this.f + this.e * y;
+        const a = this.a + this.b * x;
+        const b = this.b + this.a * y;
+        const c = this.c + this.d * x;
+        const d = this.d + this.c * y;
+        const e = this.e + this.f * x;
+        const f = this.f + this.e * y;
         this.a = a;
         this.b = b;
         this.c = c;
@@ -16237,13 +16269,12 @@
       }
       concat(m) {
         this._dirty = true;
-        var n = this;
-        var a = n.a * m.a + n.b * m.c;
-        var b = n.b * m.d + n.a * m.b;
-        var c = n.c * m.a + n.d * m.c;
-        var d = n.d * m.d + n.c * m.b;
-        var e = n.e * m.a + m.e + n.f * m.c;
-        var f = n.f * m.d + m.f + n.e * m.b;
+        const a = this.a * m.a + this.b * m.c;
+        const b = this.b * m.d + this.a * m.b;
+        const c = this.c * m.a + this.d * m.c;
+        const d = this.d * m.d + this.c * m.b;
+        const e = this.e * m.a + m.e + this.f * m.c;
+        const f = this.f * m.d + m.f + this.e * m.b;
         this.a = a;
         this.b = b;
         this.c = c;
@@ -16255,8 +16286,10 @@
       inverse() {
         if (this._dirty) {
           this._dirty = false;
-          this.inverted = this.inverted || new Matrix();
-          var z = this.a * this.d - this.b * this.c;
+          if (!this.inverted) {
+            this.inverted = new Matrix();
+          }
+          const z = this.a * this.d - this.b * this.c;
           this.inverted.a = this.d / z;
           this.inverted.b = -this.b / z;
           this.inverted.c = -this.c / z;
@@ -16267,181 +16300,755 @@
         return this.inverted;
       }
       map(p, q) {
-        q = q || {};
+        q = q || { x: 0, y: 0 };
         q.x = this.a * p.x + this.c * p.y + this.e;
         q.y = this.b * p.x + this.d * p.y + this.f;
         return q;
       }
       mapX(x, y) {
-        if (typeof x === "object")
-          y = x.y, x = x.x;
+        if (typeof x === "object") {
+          y = x.y;
+          x = x.x;
+        }
         return this.a * x + this.c * y + this.e;
       }
       mapY(x, y) {
-        if (typeof x === "object")
-          y = x.y, x = x.x;
+        if (typeof x === "object") {
+          y = x.y;
+          x = x.x;
+        }
         return this.b * x + this.d * y + this.f;
       }
     }
-    var iid$1 = 0;
-    function Pin(owner) {
-      this._owner = owner;
-      this._parent = null;
-      this._relativeMatrix = new Matrix();
-      this._absoluteMatrix = new Matrix();
-      this.reset();
+    const objectToString = Object.prototype.toString;
+    function isFn(value) {
+      const str = objectToString.call(value);
+      return str === "[object Function]" || str === "[object GeneratorFunction]" || str === "[object AsyncFunction]";
     }
-    Pin.prototype.reset = function() {
-      this._textureAlpha = 1;
-      this._alpha = 1;
-      this._width = 0;
-      this._height = 0;
-      this._scaleX = 1;
-      this._scaleY = 1;
-      this._skewX = 0;
-      this._skewY = 0;
-      this._rotation = 0;
-      this._pivoted = false;
-      this._pivotX = null;
-      this._pivotY = null;
-      this._handled = false;
-      this._handleX = 0;
-      this._handleY = 0;
-      this._aligned = false;
-      this._alignX = 0;
-      this._alignY = 0;
-      this._offsetX = 0;
-      this._offsetY = 0;
-      this._boxX = 0;
-      this._boxY = 0;
-      this._boxWidth = this._width;
-      this._boxHeight = this._height;
-      this._ts_translate = ++iid$1;
-      this._ts_transform = ++iid$1;
-      this._ts_matrix = ++iid$1;
+    function isHash(value) {
+      return objectToString.call(value) === "[object Object]" && value.constructor === Object;
+    }
+    const stats = {
+      create: 0,
+      tick: 0,
+      node: 0,
+      draw: 0,
+      fps: 0
     };
-    Pin.prototype._update = function() {
-      this._parent = this._owner._parent && this._owner._parent._pin;
-      if (this._handled && this._mo_handle != this._ts_transform) {
-        this._mo_handle = this._ts_transform;
-        this._ts_translate = ++iid$1;
-      }
-      if (this._aligned && this._parent && this._mo_align != this._parent._ts_transform) {
-        this._mo_align = this._parent._ts_transform;
-        this._ts_translate = ++iid$1;
-      }
-      return this;
+    const uid = function() {
+      return Date.now().toString(36) + Math.random().toString(36).slice(2);
     };
-    Pin.prototype.toString = function() {
-      return this._owner + " (" + (this._parent ? this._parent._owner : null) + ")";
+    class Texture {
+      constructor() {
+        this.uid = "texture:" + uid();
+        this.sx = 0;
+        this.sy = 0;
+        this.dx = 0;
+        this.dy = 0;
+      }
+      // Geometrical values
+      setSourceCoordinate(x, y) {
+        this.sx = x;
+        this.sy = y;
+      }
+      // Geometrical values
+      setSourceDimension(w, h) {
+        this.sw = w;
+        this.sh = h;
+      }
+      // Geometrical values
+      setDestinationCoordinate(x, y) {
+        this.dx = x;
+        this.dy = y;
+      }
+      // Geometrical values
+      setDestinationDimension(w, h) {
+        this.dw = w;
+        this.dh = h;
+      }
+      draw(context, x1, y1, w1, h1, x2, y2, w2, h2) {
+        let sx = this.sx;
+        let sy = this.sy;
+        let sw = this.sw;
+        let sh = this.sh;
+        let dx = this.dx;
+        let dy = this.dy;
+        let dw = this.dw;
+        let dh = this.dh;
+        if (typeof x1 === "number" || typeof y1 === "number" || typeof w1 === "number" || typeof h1 === "number" || typeof x2 === "number" || typeof y2 === "number" || typeof w2 === "number" || typeof h2 === "number") {
+          if (typeof x2 === "number" || typeof y2 === "number" || typeof w2 === "number" || typeof h2 === "number") {
+            sx += x1;
+            sy += y1;
+            sw = w1 ?? sw;
+            sh = h1 ?? sh;
+            dx += x2;
+            dy += y2;
+            dw = w2 ?? dw;
+            dh = h2 ?? dh;
+          } else {
+            dx += x1;
+            dy += y1;
+            dw = w1;
+            dh = h1;
+          }
+        }
+        this.drawWithNormalizedArgs(context, sx, sy, sw, sh, dx, dy, dw, dh);
+      }
+    }
+    class ImageTexture extends Texture {
+      constructor(source, pixelRatio) {
+        super();
+        this._pixelRatio = 1;
+        if (typeof source === "object") {
+          this.setSourceImage(source, pixelRatio);
+        }
+      }
+      setSourceImage(image2, pixelRatio = 1) {
+        this._source = image2;
+        this._pixelRatio = pixelRatio;
+      }
+      getWidth() {
+        return this._source.width / this._pixelRatio;
+      }
+      getHeight() {
+        return this._source.height / this._pixelRatio;
+      }
+      /** @internal */
+      prerender(context) {
+        return false;
+      }
+      /** @internal */
+      drawWithNormalizedArgs(context, sx, sy, sw, sh, dx, dy, dw, dh) {
+        const image2 = this._source;
+        if (image2 === null || typeof image2 !== "object") {
+          return;
+        }
+        sw = sw ?? this.getWidth();
+        sh = sh ?? this.getHeight();
+        dw = dw ?? sw;
+        dh = dh ?? sh;
+        sx *= this._pixelRatio;
+        sy *= this._pixelRatio;
+        sw *= this._pixelRatio;
+        sh *= this._pixelRatio;
+        try {
+          stats.draw++;
+          context.drawImage(image2, sx, sy, sw, sh, dx, dy, dw, dh);
+        } catch (ex) {
+          if (!this._draw_failed) {
+            console.log("Unable to draw: ", image2);
+            console.log(ex);
+            this._draw_failed = true;
+          }
+        }
+      }
+    }
+    class PipeTexture extends Texture {
+      constructor(source) {
+        super();
+        this._source = source;
+      }
+      setSourceTexture(texture2) {
+        this._source = texture2;
+      }
+      getWidth() {
+        return this.dw ?? this.sw ?? this._source.getWidth();
+      }
+      getHeight() {
+        return this.dh ?? this.sh ?? this._source.getHeight();
+      }
+      /** @internal */
+      prerender(context) {
+        return this._source.prerender(context);
+      }
+      /** @internal */
+      drawWithNormalizedArgs(context, sx, sy, sw, sh, dx, dy, dw, dh) {
+        const texture2 = this._source;
+        if (texture2 === null || typeof texture2 !== "object") {
+          return;
+        }
+        texture2.draw(context, sx, sy, sw, sh, dx, dy, dw, dh);
+      }
+    }
+    class Atlas extends ImageTexture {
+      constructor(def = {}) {
+        super();
+        this.pipeSpriteTexture = (def2) => {
+          const map = this._map;
+          const ppu = this._ppu;
+          const trim = this._trim;
+          if (!def2) {
+            return void 0;
+          }
+          def2 = Object.assign({}, def2);
+          if (isFn(map)) {
+            def2 = map(def2);
+          }
+          if (ppu != 1) {
+            def2.x *= ppu;
+            def2.y *= ppu;
+            def2.width *= ppu;
+            def2.height *= ppu;
+            def2.top *= ppu;
+            def2.bottom *= ppu;
+            def2.left *= ppu;
+            def2.right *= ppu;
+          }
+          if (trim != 0) {
+            def2.x += trim;
+            def2.y += trim;
+            def2.width -= 2 * trim;
+            def2.height -= 2 * trim;
+            def2.top -= trim;
+            def2.bottom -= trim;
+            def2.left -= trim;
+            def2.right -= trim;
+          }
+          const texture2 = new PipeTexture(this);
+          texture2.top = def2.top;
+          texture2.bottom = def2.bottom;
+          texture2.left = def2.left;
+          texture2.right = def2.right;
+          texture2.setSourceCoordinate(def2.x, def2.y);
+          texture2.setSourceDimension(def2.width, def2.height);
+          return texture2;
+        };
+        this.findSpriteDefinition = (query) => {
+          const textures = this._textures;
+          if (textures) {
+            if (isFn(textures)) {
+              return textures(query);
+            } else if (isHash(textures)) {
+              return textures[query];
+            }
+          }
+        };
+        this.select = (query) => {
+          if (!query) {
+            return new TextureSelection(new PipeTexture(this));
+          }
+          const textureDefinition = this.findSpriteDefinition(query);
+          if (textureDefinition) {
+            return new TextureSelection(textureDefinition, this);
+          }
+        };
+        this.name = def.name;
+        this._ppu = def.ppu || def.ratio || 1;
+        this._trim = def.trim || 0;
+        this._map = def.map || def.filter;
+        this._textures = def.textures;
+        if (typeof def.image === "object" && isHash(def.image)) {
+          this._imageSrc = def.image.src || def.image.url;
+          if (typeof def.image.ratio === "number") {
+            this._pixelRatio = def.image.ratio;
+          }
+        } else {
+          if (typeof def.imagePath === "string") {
+            this._imageSrc = def.imagePath;
+          } else if (typeof def.image === "string") {
+            this._imageSrc = def.image;
+          }
+          if (typeof def.imageRatio === "number") {
+            this._pixelRatio = def.imageRatio;
+          }
+        }
+        deprecatedWarning(def);
+      }
+      async load() {
+        if (this._imageSrc) {
+          const image2 = await asyncLoadImage(this._imageSrc);
+          this.setSourceImage(image2, this._pixelRatio);
+        }
+      }
+    }
+    function asyncLoadImage(src) {
+      return new Promise(function(resolve, reject) {
+        const img = new Image();
+        img.onload = function() {
+          resolve(img);
+        };
+        img.onerror = function(error) {
+          console.error("Loading failed: " + src);
+          reject(error);
+        };
+        img.src = src;
+      });
+    }
+    function deprecatedWarning(def) {
+      if ("filter" in def)
+        console.warn("'filter' field of atlas definition is deprecated");
+      if ("cutouts" in def)
+        console.warn("'cutouts' field of atlas definition is deprecated");
+      if ("sprites" in def)
+        console.warn("'sprites' field of atlas definition is deprecated");
+      if ("factory" in def)
+        console.warn("'factory' field of atlas definition is deprecated");
+      if ("ratio" in def)
+        console.warn("'ratio' field of atlas definition is deprecated");
+      if ("imagePath" in def)
+        console.warn("'imagePath' field of atlas definition is deprecated");
+      if ("imageRatio" in def)
+        console.warn("'imageRatio' field of atlas definition is deprecated");
+      if (typeof def.image === "object" && "url" in def.image)
+        console.warn("'image.url' field of atlas definition is deprecated");
+    }
+    function isAtlasSpriteDefinition(selection) {
+      return typeof selection === "object" && isHash(selection) && "number" === typeof selection.width && "number" === typeof selection.height;
+    }
+    class TextureSelection {
+      constructor(selection, atlas2) {
+        this.selection = selection;
+        this.atlas = atlas2;
+      }
+      /**
+       * @internal
+       * Resolves the selection to a texture.
+       */
+      resolve(selection, subquery) {
+        if (!selection) {
+          return NO_TEXTURE;
+        } else if (Array.isArray(selection)) {
+          return this.resolve(selection[0]);
+        } else if (selection instanceof Texture) {
+          return selection;
+        } else if (isAtlasSpriteDefinition(selection)) {
+          if (!this.atlas) {
+            return NO_TEXTURE;
+          }
+          return this.atlas.pipeSpriteTexture(selection);
+        } else if (typeof selection === "object" && isHash(selection) && typeof subquery !== "undefined") {
+          return this.resolve(selection[subquery]);
+        } else if (typeof selection === "function" && isFn(selection)) {
+          return this.resolve(selection(subquery));
+        } else if (typeof selection === "string") {
+          if (!this.atlas) {
+            return NO_TEXTURE;
+          }
+          return this.resolve(this.atlas.findSpriteDefinition(selection));
+        }
+      }
+      one(subquery) {
+        return this.resolve(this.selection, subquery);
+      }
+      array(arr) {
+        const array = Array.isArray(arr) ? arr : [];
+        if (Array.isArray(this.selection)) {
+          for (let i = 0; i < this.selection.length; i++) {
+            array[i] = this.resolve(this.selection[i]);
+          }
+        } else {
+          array[0] = this.resolve(this.selection);
+        }
+        return array;
+      }
+    }
+    const NO_TEXTURE = new class extends Texture {
+      getWidth() {
+        return 0;
+      }
+      getHeight() {
+        return 0;
+      }
+      prerender(context) {
+        return false;
+      }
+      drawWithNormalizedArgs(context, sx, sy, sw, sh, dx, dy, dw, dh) {
+      }
+      constructor() {
+        super();
+        this.setSourceDimension(0, 0);
+      }
+      setSourceCoordinate(x, y) {
+      }
+      setSourceDimension(w, h) {
+      }
+      setDestinationCoordinate(x, y) {
+      }
+      setDestinationDimension(w, h) {
+      }
+      draw() {
+      }
+    }();
+    const NO_SELECTION = new TextureSelection(NO_TEXTURE);
+    const ATLAS_MEMO_BY_NAME = {};
+    const ATLAS_ARRAY = [];
+    const atlas = async function(def) {
+      let atlas2;
+      if (def instanceof Atlas) {
+        atlas2 = def;
+      } else {
+        atlas2 = new Atlas(def);
+      }
+      if (atlas2.name) {
+        ATLAS_MEMO_BY_NAME[atlas2.name] = atlas2;
+      }
+      ATLAS_ARRAY.push(atlas2);
+      await atlas2.load();
+      return atlas2;
     };
-    Pin.prototype.absoluteMatrix = function() {
-      this._update();
-      var ts = Math.max(
-        this._ts_transform,
-        this._ts_translate,
-        this._parent ? this._parent._ts_matrix : 0
-      );
-      if (this._mo_abs == ts) {
-        return this._absoluteMatrix;
+    const texture = function(query) {
+      if ("string" !== typeof query) {
+        return new TextureSelection(query);
       }
-      this._mo_abs = ts;
-      var abs2 = this._absoluteMatrix;
-      abs2.reset(this.relativeMatrix());
-      this._parent && abs2.concat(this._parent._absoluteMatrix);
-      this._ts_matrix = ++iid$1;
-      return abs2;
+      let result = null;
+      const colonIndex = query.indexOf(":");
+      if (colonIndex > 0 && query.length > colonIndex + 1) {
+        const atlas2 = ATLAS_MEMO_BY_NAME[query.slice(0, colonIndex)];
+        result = atlas2 && atlas2.select(query.slice(colonIndex + 1));
+      }
+      if (!result) {
+        const atlas2 = ATLAS_MEMO_BY_NAME[query];
+        result = atlas2 && atlas2.select();
+      }
+      if (!result) {
+        for (let i = 0; i < ATLAS_ARRAY.length; i++) {
+          result = ATLAS_ARRAY[i].select(query);
+          if (result) {
+            break;
+          }
+        }
+      }
+      if (!result) {
+        console.error("Texture not found: " + query);
+        result = NO_SELECTION;
+      }
+      return result;
     };
-    Pin.prototype.relativeMatrix = function() {
-      this._update();
-      var ts = Math.max(
-        this._ts_transform,
-        this._ts_translate,
-        this._parent ? this._parent._ts_transform : 0
-      );
-      if (this._mo_rel == ts) {
-        return this._relativeMatrix;
+    class ResizableTexture extends Texture {
+      constructor(source, mode) {
+        super();
+        this._source = source;
+        this._resizeMode = mode;
       }
-      this._mo_rel = ts;
-      var rel2 = this._relativeMatrix;
-      rel2.identity();
-      if (this._pivoted) {
-        rel2.translate(-this._pivotX * this._width, -this._pivotY * this._height);
+      getWidth() {
+        return this.dw ?? this._source.getWidth();
       }
-      rel2.scale(this._scaleX, this._scaleY);
-      rel2.skew(this._skewX, this._skewY);
-      rel2.rotate(this._rotation);
-      if (this._pivoted) {
-        rel2.translate(this._pivotX * this._width, this._pivotY * this._height);
+      getHeight() {
+        return this.dh ?? this._source.getHeight();
       }
-      if (this._pivoted) {
+      /** @internal */
+      prerender(context) {
+        return false;
+      }
+      drawWithNormalizedArgs(context, sx, sy, sw, sh, dx, dy, dw, dh) {
+        const texture2 = this._source;
+        if (texture2 === null || typeof texture2 !== "object") {
+          return;
+        }
+        let outWidth = dw;
+        let outHeight = dh;
+        const left = Number.isFinite(texture2.left) ? texture2.left : 0;
+        const right = Number.isFinite(texture2.right) ? texture2.right : 0;
+        const top = Number.isFinite(texture2.top) ? texture2.top : 0;
+        const bottom = Number.isFinite(texture2.bottom) ? texture2.bottom : 0;
+        const width = texture2.getWidth() - left - right;
+        const height = texture2.getHeight() - top - bottom;
+        if (!this._innerSize) {
+          outWidth = Math.max(outWidth - left - right, 0);
+          outHeight = Math.max(outHeight - top - bottom, 0);
+        }
+        if (top > 0 && left > 0) {
+          texture2.draw(context, 0, 0, left, top, 0, 0, left, top);
+        }
+        if (bottom > 0 && left > 0) {
+          texture2.draw(context, 0, height + top, left, bottom, 0, outHeight + top, left, bottom);
+        }
+        if (top > 0 && right > 0) {
+          texture2.draw(context, width + left, 0, right, top, outWidth + left, 0, right, top);
+        }
+        if (bottom > 0 && right > 0) {
+          texture2.draw(
+            context,
+            width + left,
+            height + top,
+            right,
+            bottom,
+            outWidth + left,
+            outHeight + top,
+            right,
+            bottom
+          );
+        }
+        if (this._resizeMode === "stretch") {
+          if (top > 0) {
+            texture2.draw(context, left, 0, width, top, left, 0, outWidth, top);
+          }
+          if (bottom > 0) {
+            texture2.draw(
+              context,
+              left,
+              height + top,
+              width,
+              bottom,
+              left,
+              outHeight + top,
+              outWidth,
+              bottom
+            );
+          }
+          if (left > 0) {
+            texture2.draw(context, 0, top, left, height, 0, top, left, outHeight);
+          }
+          if (right > 0) {
+            texture2.draw(
+              context,
+              width + left,
+              top,
+              right,
+              height,
+              outWidth + left,
+              top,
+              right,
+              outHeight
+            );
+          }
+          texture2.draw(context, left, top, width, height, left, top, outWidth, outHeight);
+        } else if (this._resizeMode === "tile") {
+          let l = left;
+          let r = outWidth;
+          let w;
+          while (r > 0) {
+            w = Math.min(width, r);
+            r -= width;
+            let t = top;
+            let b = outHeight;
+            let h;
+            while (b > 0) {
+              h = Math.min(height, b);
+              b -= height;
+              texture2.draw(context, left, top, w, h, l, t, w, h);
+              if (r <= 0) {
+                if (left) {
+                  texture2.draw(context, 0, top, left, h, 0, t, left, h);
+                }
+                if (right) {
+                  texture2.draw(context, width + left, top, right, h, l + w, t, right, h);
+                }
+              }
+              t += h;
+            }
+            if (top) {
+              texture2.draw(context, left, 0, w, top, l, 0, w, top);
+            }
+            if (bottom) {
+              texture2.draw(context, left, height + top, w, bottom, l, t, w, bottom);
+            }
+            l += w;
+          }
+        }
+      }
+    }
+    function getPixelRatio() {
+      return typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
+    }
+    function isValidFitMode(value) {
+      return value && (value === "cover" || value === "contain" || value === "fill" || value === "in" || value === "in-pad" || value === "out" || value === "out-crop");
+    }
+    let iid$1 = 0;
+    class Pin {
+      /** @internal */
+      constructor(owner) {
+        this.uid = "pin:" + uid();
+        this._owner = owner;
+        this._parent = null;
+        this._relativeMatrix = new Matrix();
+        this._absoluteMatrix = new Matrix();
+        this.reset();
+      }
+      reset() {
+        this._textureAlpha = 1;
+        this._alpha = 1;
+        this._width = 0;
+        this._height = 0;
+        this._scaleX = 1;
+        this._scaleY = 1;
+        this._skewX = 0;
+        this._skewY = 0;
+        this._rotation = 0;
+        this._pivoted = false;
+        this._pivotX = 0;
+        this._pivotY = 0;
+        this._handled = false;
+        this._handleX = 0;
+        this._handleY = 0;
+        this._aligned = false;
+        this._alignX = 0;
+        this._alignY = 0;
+        this._offsetX = 0;
+        this._offsetY = 0;
         this._boxX = 0;
         this._boxY = 0;
         this._boxWidth = this._width;
         this._boxHeight = this._height;
-      } else {
-        var p, q;
-        if (rel2.a > 0 && rel2.c > 0 || rel2.a < 0 && rel2.c < 0) {
-          p = 0, q = rel2.a * this._width + rel2.c * this._height;
-        } else {
-          p = rel2.a * this._width, q = rel2.c * this._height;
+        this._ts_translate = ++iid$1;
+        this._ts_transform = ++iid$1;
+        this._ts_matrix = ++iid$1;
+      }
+      /** @internal */
+      _update() {
+        this._parent = this._owner._parent && this._owner._parent._pin;
+        if (this._handled && this._mo_handle != this._ts_transform) {
+          this._mo_handle = this._ts_transform;
+          this._ts_translate = ++iid$1;
         }
-        if (p > q) {
-          this._boxX = q;
-          this._boxWidth = p - q;
-        } else {
-          this._boxX = p;
-          this._boxWidth = q - p;
+        if (this._aligned && this._parent && this._mo_align != this._parent._ts_transform) {
+          this._mo_align = this._parent._ts_transform;
+          this._ts_translate = ++iid$1;
         }
-        if (rel2.b > 0 && rel2.d > 0 || rel2.b < 0 && rel2.d < 0) {
-          p = 0, q = rel2.b * this._width + rel2.d * this._height;
-        } else {
-          p = rel2.b * this._width, q = rel2.d * this._height;
+        return this;
+      }
+      toString() {
+        return this._owner + " (" + (this._parent ? this._parent._owner : null) + ")";
+      }
+      // TODO: ts fields require refactoring
+      absoluteMatrix() {
+        this._update();
+        const ts = Math.max(
+          this._ts_transform,
+          this._ts_translate,
+          this._parent ? this._parent._ts_matrix : 0
+        );
+        if (this._mo_abs == ts) {
+          return this._absoluteMatrix;
         }
-        if (p > q) {
-          this._boxY = q;
-          this._boxHeight = p - q;
+        this._mo_abs = ts;
+        const abs = this._absoluteMatrix;
+        abs.reset(this.relativeMatrix());
+        this._parent && abs.concat(this._parent._absoluteMatrix);
+        this._ts_matrix = ++iid$1;
+        return abs;
+      }
+      relativeMatrix() {
+        this._update();
+        const ts = Math.max(
+          this._ts_transform,
+          this._ts_translate,
+          this._parent ? this._parent._ts_transform : 0
+        );
+        if (this._mo_rel == ts) {
+          return this._relativeMatrix;
+        }
+        this._mo_rel = ts;
+        const rel = this._relativeMatrix;
+        rel.identity();
+        if (this._pivoted) {
+          rel.translate(-this._pivotX * this._width, -this._pivotY * this._height);
+        }
+        rel.scale(this._scaleX, this._scaleY);
+        rel.skew(this._skewX, this._skewY);
+        rel.rotate(this._rotation);
+        if (this._pivoted) {
+          rel.translate(this._pivotX * this._width, this._pivotY * this._height);
+        }
+        if (this._pivoted) {
+          this._boxX = 0;
+          this._boxY = 0;
+          this._boxWidth = this._width;
+          this._boxHeight = this._height;
         } else {
-          this._boxY = p;
-          this._boxHeight = q - p;
+          let p;
+          let q;
+          if (rel.a > 0 && rel.c > 0 || rel.a < 0 && rel.c < 0) {
+            p = 0;
+            q = rel.a * this._width + rel.c * this._height;
+          } else {
+            p = rel.a * this._width;
+            q = rel.c * this._height;
+          }
+          if (p > q) {
+            this._boxX = q;
+            this._boxWidth = p - q;
+          } else {
+            this._boxX = p;
+            this._boxWidth = q - p;
+          }
+          if (rel.b > 0 && rel.d > 0 || rel.b < 0 && rel.d < 0) {
+            p = 0;
+            q = rel.b * this._width + rel.d * this._height;
+          } else {
+            p = rel.b * this._width;
+            q = rel.d * this._height;
+          }
+          if (p > q) {
+            this._boxY = q;
+            this._boxHeight = p - q;
+          } else {
+            this._boxY = p;
+            this._boxHeight = q - p;
+          }
+        }
+        this._x = this._offsetX;
+        this._y = this._offsetY;
+        this._x -= this._boxX + this._handleX * this._boxWidth;
+        this._y -= this._boxY + this._handleY * this._boxHeight;
+        if (this._aligned && this._parent) {
+          this._parent.relativeMatrix();
+          this._x += this._alignX * this._parent._width;
+          this._y += this._alignY * this._parent._height;
+        }
+        rel.translate(this._x, this._y);
+        return this._relativeMatrix;
+      }
+      /** @internal */
+      get(key) {
+        if (typeof getters[key] === "function") {
+          return getters[key](this);
         }
       }
-      this._x = this._offsetX;
-      this._y = this._offsetY;
-      this._x -= this._boxX + this._handleX * this._boxWidth;
-      this._y -= this._boxY + this._handleY * this._boxHeight;
-      if (this._aligned && this._parent) {
-        this._parent.relativeMatrix();
-        this._x += this._alignX * this._parent._width;
-        this._y += this._alignY * this._parent._height;
-      }
-      rel2.translate(this._x, this._y);
-      return this._relativeMatrix;
-    };
-    Pin.prototype.get = function(key) {
-      if (typeof getters[key] === "function") {
-        return getters[key](this);
-      }
-    };
-    Pin.prototype.set = function(a, b) {
-      if (typeof a === "string") {
-        if (typeof setters[a] === "function" && typeof b !== "undefined") {
-          setters[a](this, b);
+      // TODO: Use defineProperty instead? What about multi-field pinning?
+      /** @internal */
+      set(a, b) {
+        if (typeof a === "string") {
+          if (typeof setters[a] === "function" && typeof b !== "undefined") {
+            setters[a](this, b);
+          }
+        } else if (typeof a === "object") {
+          for (b in a) {
+            if (typeof setters[b] === "function" && typeof a[b] !== "undefined") {
+              setters[b](this, a[b], a);
+            }
+          }
         }
-      } else if (typeof a === "object") {
-        for (b in a) {
-          if (typeof setters[b] === "function" && typeof a[b] !== "undefined") {
-            setters[b](this, a[b], a);
+        if (this._owner) {
+          this._owner._ts_pin = ++iid$1;
+          this._owner.touch();
+        }
+        return this;
+      }
+      // todo: should this be public?
+      /** @internal */
+      fit(width, height, mode) {
+        this._ts_transform = ++iid$1;
+        if (mode === "contain") {
+          mode = "in-pad";
+        }
+        if (mode === "cover") {
+          mode = "out-crop";
+        }
+        if (typeof width === "number") {
+          this._scaleX = width / this._unscaled_width;
+          this._width = this._unscaled_width;
+        }
+        if (typeof height === "number") {
+          this._scaleY = height / this._unscaled_height;
+          this._height = this._unscaled_height;
+        }
+        if (typeof width === "number" && typeof height === "number" && typeof mode === "string") {
+          if (mode === "fill")
+            ;
+          else if (mode === "out" || mode === "out-crop") {
+            this._scaleX = this._scaleY = Math.max(this._scaleX, this._scaleY);
+          } else if (mode === "in" || mode === "in-pad") {
+            this._scaleX = this._scaleY = Math.min(this._scaleX, this._scaleY);
+          }
+          if (mode === "out-crop" || mode === "in-pad") {
+            this._width = width / this._scaleX;
+            this._height = height / this._scaleY;
           }
         }
       }
-      if (this._owner) {
-        this._owner._ts_pin = ++iid$1;
-        this._owner.touch();
-      }
-      return this;
-    };
-    var getters = {
+    }
+    const getters = {
       alpha: function(pin) {
         return pin._alpha;
       },
@@ -16460,7 +17067,7 @@
       boxHeight: function(pin) {
         return pin._boxHeight;
       },
-      // scale : function(pin) {
+      // scale : function(pin: Pin) {
       // },
       scaleX: function(pin) {
         return pin._scaleX;
@@ -16468,7 +17075,7 @@
       scaleY: function(pin) {
         return pin._scaleY;
       },
-      // skew : function(pin) {
+      // skew : function(pin: Pin) {
       // },
       skewX: function(pin) {
         return pin._skewX;
@@ -16479,7 +17086,7 @@
       rotation: function(pin) {
         return pin._rotation;
       },
-      // pivot : function(pin) {
+      // pivot : function(pin: Pin) {
       // },
       pivotX: function(pin) {
         return pin._pivotX;
@@ -16487,7 +17094,7 @@
       pivotY: function(pin) {
         return pin._pivotY;
       },
-      // offset : function(pin) {
+      // offset : function(pin: Pin) {
       // },
       offsetX: function(pin) {
         return pin._offsetX;
@@ -16495,7 +17102,7 @@
       offsetY: function(pin) {
         return pin._offsetY;
       },
-      // align : function(pin) {
+      // align : function(pin: Pin) {
       // },
       alignX: function(pin) {
         return pin._alignX;
@@ -16503,7 +17110,7 @@
       alignY: function(pin) {
         return pin._alignY;
       },
-      // handle : function(pin) {
+      // handle : function(pin: Pin) {
       // },
       handleX: function(pin) {
         return pin._handleX;
@@ -16512,7 +17119,7 @@
         return pin._handleY;
       }
     };
-    var setters = {
+    const setters = {
       alpha: function(pin, value) {
         pin._alpha = value;
       },
@@ -16520,12 +17127,12 @@
         pin._textureAlpha = value;
       },
       width: function(pin, value) {
-        pin._width_ = value;
+        pin._unscaled_width = value;
         pin._width = value;
         pin._ts_transform = ++iid$1;
       },
       height: function(pin, value) {
-        pin._height_ = value;
+        pin._unscaled_height = value;
         pin._height = value;
         pin._ts_transform = ++iid$1;
       },
@@ -16625,32 +17232,32 @@
           } else if (value == "out") {
             value = "out-crop";
           }
-          scaleTo(pin, all.resizeWidth, all.resizeHeight, value);
+          pin.fit(all.resizeWidth, all.resizeHeight, value);
         }
       },
       resizeWidth: function(pin, value, all) {
         if (!all || !all.resizeMode) {
-          scaleTo(pin, value, null);
+          pin.fit(value, null);
         }
       },
       resizeHeight: function(pin, value, all) {
         if (!all || !all.resizeMode) {
-          scaleTo(pin, null, value);
+          pin.fit(null, value);
         }
       },
       scaleMode: function(pin, value, all) {
         if (all) {
-          scaleTo(pin, all.scaleWidth, all.scaleHeight, value);
+          pin.fit(all.scaleWidth, all.scaleHeight, value);
         }
       },
       scaleWidth: function(pin, value, all) {
         if (!all || !all.scaleMode) {
-          scaleTo(pin, value, null);
+          pin.fit(value, null);
         }
       },
       scaleHeight: function(pin, value, all) {
         if (!all || !all.scaleMode) {
-          scaleTo(pin, null, value);
+          pin.fit(null, value);
         }
       },
       matrix: function(pin, value) {
@@ -16663,1324 +17270,136 @@
         this.rotation(pin, 0);
       }
     };
-    Pin.prototype.scaleTo = function(width, height, mode) {
-      scaleTo(this, width, height, mode);
-    };
-    function scaleTo(pin, width, height, mode) {
-      var w = typeof width === "number";
-      var h = typeof height === "number";
-      var m = typeof mode === "string";
-      pin._ts_transform = ++iid$1;
-      if (w) {
-        pin._scaleX = width / pin._width_;
-        pin._width = pin._width_;
-      }
-      if (h) {
-        pin._scaleY = height / pin._height_;
-        pin._height = pin._height_;
-      }
-      if (w && h && m) {
-        if (mode == "out" || mode == "out-crop") {
-          pin._scaleX = pin._scaleY = Math.max(pin._scaleX, pin._scaleY);
-        } else if (mode == "in" || mode == "in-pad") {
-          pin._scaleX = pin._scaleY = Math.min(pin._scaleX, pin._scaleY);
-        }
-        if (mode == "out-crop" || mode == "in-pad") {
-          pin._width = width / pin._scaleX;
-          pin._height = height / pin._scaleY;
-        }
-      }
-    }
-    Pin._add_shortcuts = function(prototype) {
-      prototype.size = function(w, h) {
-        this.pin("width", w);
-        this.pin("height", h);
-        return this;
-      };
-      prototype.width = function(w) {
-        if (typeof w === "undefined") {
-          return this.pin("width");
-        }
-        this.pin("width", w);
-        return this;
-      };
-      prototype.height = function(h) {
-        if (typeof h === "undefined") {
-          return this.pin("height");
-        }
-        this.pin("height", h);
-        return this;
-      };
-      prototype.offset = function(a, b) {
-        if (typeof a === "object")
-          b = a.y, a = a.x;
-        this.pin("offsetX", a);
-        this.pin("offsetY", b);
-        return this;
-      };
-      prototype.rotate = function(a) {
-        this.pin("rotation", a);
-        return this;
-      };
-      prototype.skew = function(a, b) {
-        if (typeof a === "object")
-          b = a.y, a = a.x;
-        else if (typeof b === "undefined")
-          b = a;
-        this.pin("skewX", a);
-        this.pin("skewY", b);
-        return this;
-      };
-      prototype.scale = function(a, b) {
-        if (typeof a === "object")
-          b = a.y, a = a.x;
-        else if (typeof b === "undefined")
-          b = a;
-        this.pin("scaleX", a);
-        this.pin("scaleY", b);
-        return this;
-      };
-      prototype.alpha = function(a, ta) {
-        this.pin("alpha", a);
-        if (typeof ta !== "undefined") {
-          this.pin("textureAlpha", ta);
-        }
-        return this;
-      };
-    };
-    var iid = 0;
-    stats.create = 0;
-    function assertType(obj) {
-      if (obj && obj instanceof Node) {
-        return obj;
-      }
-      throw "Invalid node: " + obj;
-    }
-    const create = function() {
-      return new Node();
-    };
-    function Node() {
-      stats.create++;
-      this._pin = new Pin(this);
-    }
-    Node.prototype.matrix = function(relative) {
-      if (relative === true) {
-        return this._pin.relativeMatrix();
-      }
-      return this._pin.absoluteMatrix();
-    };
-    Node.prototype.pin = function(a, b) {
-      if (typeof a === "object") {
-        this._pin.set(a);
-        return this;
-      } else if (typeof a === "string") {
-        if (typeof b === "undefined") {
-          return this._pin.get(a);
-        } else {
-          this._pin.set(a, b);
-          return this;
-        }
-      } else if (typeof a === "undefined") {
-        return this._pin;
-      }
-    };
-    Node.prototype.scaleTo = function(a, b, c) {
-      if (typeof a === "object")
-        c = b, b = a.y, a = a.x;
-      this._pin.scaleTo(a, b, c);
-      return this;
-    };
-    Pin._add_shortcuts(Node.prototype);
-    Node.prototype._label = "";
-    Node.prototype._visible = true;
-    Node.prototype._parent = null;
-    Node.prototype._next = null;
-    Node.prototype._prev = null;
-    Node.prototype._first = null;
-    Node.prototype._last = null;
-    Node.prototype._attrs = null;
-    Node.prototype._flags = null;
-    Node.prototype.toString = function() {
-      return "[" + this._label + "]";
-    };
-    Node.prototype.id = function(id) {
-      return this.label(id);
-    };
-    Node.prototype.label = function(label) {
-      if (typeof label === "undefined") {
-        return this._label;
-      }
-      this._label = label;
-      return this;
-    };
-    Node.prototype.attr = function(name, value) {
-      if (typeof value === "undefined") {
-        return this._attrs !== null ? this._attrs[name] : void 0;
-      }
-      (this._attrs !== null ? this._attrs : this._attrs = {})[name] = value;
-      return this;
-    };
-    Node.prototype.visible = function(visible) {
-      if (typeof visible === "undefined") {
-        return this._visible;
-      }
-      this._visible = visible;
-      this._parent && (this._parent._ts_children = ++iid);
-      this._ts_pin = ++iid;
-      this.touch();
-      return this;
-    };
-    Node.prototype.hide = function() {
-      return this.visible(false);
-    };
-    Node.prototype.show = function() {
-      return this.visible(true);
-    };
-    Node.prototype.parent = function() {
-      return this._parent;
-    };
-    Node.prototype.next = function(visible) {
-      var next = this._next;
-      while (next && visible && !next._visible) {
-        next = next._next;
-      }
-      return next;
-    };
-    Node.prototype.prev = function(visible) {
-      var prev = this._prev;
-      while (prev && visible && !prev._visible) {
-        prev = prev._prev;
-      }
-      return prev;
-    };
-    Node.prototype.first = function(visible) {
-      var next = this._first;
-      while (next && visible && !next._visible) {
-        next = next._next;
-      }
-      return next;
-    };
-    Node.prototype.last = function(visible) {
-      var prev = this._last;
-      while (prev && visible && !prev._visible) {
-        prev = prev._prev;
-      }
-      return prev;
-    };
-    Node.prototype.visit = function(visitor, data) {
-      var reverse = visitor.reverse;
-      var visible = visitor.visible;
-      if (visitor.start && visitor.start(this, data)) {
-        return;
-      }
-      var child, next = reverse ? this.last(visible) : this.first(visible);
-      while (child = next) {
-        next = reverse ? child.prev(visible) : child.next(visible);
-        if (child.visit(visitor, data)) {
-          return true;
-        }
-      }
-      return visitor.end && visitor.end(this, data);
-    };
-    Node.prototype.append = function(child, more) {
-      if (Array.isArray(child))
-        for (var i = 0; i < child.length; i++)
-          append(this, child[i]);
-      else if (typeof more !== "undefined")
-        for (var i = 0; i < arguments.length; i++)
-          append(this, arguments[i]);
-      else if (typeof child !== "undefined")
-        append(this, child);
-      return this;
-    };
-    Node.prototype.prepend = function(child, more) {
-      if (Array.isArray(child))
-        for (var i = child.length - 1; i >= 0; i--)
-          prepend(this, child[i]);
-      else if (typeof more !== "undefined")
-        for (var i = arguments.length - 1; i >= 0; i--)
-          prepend(this, arguments[i]);
-      else if (typeof child !== "undefined")
-        prepend(this, child);
-      return this;
-    };
-    Node.prototype.appendTo = function(parent) {
-      append(parent, this);
-      return this;
-    };
-    Node.prototype.prependTo = function(parent) {
-      prepend(parent, this);
-      return this;
-    };
-    Node.prototype.insertNext = function(sibling, more) {
-      if (Array.isArray(sibling))
-        for (var i = 0; i < sibling.length; i++)
-          insertAfter(sibling[i], this);
-      else if (typeof more !== "undefined")
-        for (var i = 0; i < arguments.length; i++)
-          insertAfter(arguments[i], this);
-      else if (typeof sibling !== "undefined")
-        insertAfter(sibling, this);
-      return this;
-    };
-    Node.prototype.insertPrev = function(sibling, more) {
-      if (Array.isArray(sibling))
-        for (var i = sibling.length - 1; i >= 0; i--)
-          insertBefore(sibling[i], this);
-      else if (typeof more !== "undefined")
-        for (var i = arguments.length - 1; i >= 0; i--)
-          insertBefore(arguments[i], this);
-      else if (typeof sibling !== "undefined")
-        insertBefore(sibling, this);
-      return this;
-    };
-    Node.prototype.insertAfter = function(prev) {
-      insertAfter(this, prev);
-      return this;
-    };
-    Node.prototype.insertBefore = function(next) {
-      insertBefore(this, next);
-      return this;
-    };
-    function append(parent, child) {
-      assertType(child);
-      assertType(parent);
-      child.remove();
-      if (parent._last) {
-        parent._last._next = child;
-        child._prev = parent._last;
-      }
-      child._parent = parent;
-      parent._last = child;
-      if (!parent._first) {
-        parent._first = child;
-      }
-      child._parent._flag(child, true);
-      child._ts_parent = ++iid;
-      parent._ts_children = ++iid;
-      parent.touch();
-    }
-    function prepend(parent, child) {
-      assertType(child);
-      assertType(parent);
-      child.remove();
-      if (parent._first) {
-        parent._first._prev = child;
-        child._next = parent._first;
-      }
-      child._parent = parent;
-      parent._first = child;
-      if (!parent._last) {
-        parent._last = child;
-      }
-      child._parent._flag(child, true);
-      child._ts_parent = ++iid;
-      parent._ts_children = ++iid;
-      parent.touch();
-    }
-    function insertBefore(self, next) {
-      assertType(self);
-      assertType(next);
-      self.remove();
-      var parent = next._parent;
-      var prev = next._prev;
-      next._prev = self;
-      prev && (prev._next = self) || parent && (parent._first = self);
-      self._parent = parent;
-      self._prev = prev;
-      self._next = next;
-      self._parent._flag(self, true);
-      self._ts_parent = ++iid;
-      self.touch();
-    }
-    function insertAfter(self, prev) {
-      assertType(self);
-      assertType(prev);
-      self.remove();
-      var parent = prev._parent;
-      var next = prev._next;
-      prev._next = self;
-      next && (next._prev = self) || parent && (parent._last = self);
-      self._parent = parent;
-      self._prev = prev;
-      self._next = next;
-      self._parent._flag(self, true);
-      self._ts_parent = ++iid;
-      self.touch();
-    }
-    Node.prototype.remove = function(child, more) {
-      if (typeof child !== "undefined") {
-        if (Array.isArray(child)) {
-          for (var i = 0; i < child.length; i++)
-            assertType(child[i]).remove();
-        } else if (typeof more !== "undefined") {
-          for (var i = 0; i < arguments.length; i++)
-            assertType(arguments[i]).remove();
-        } else {
-          assertType(child).remove();
-        }
-        return this;
-      }
-      if (this._prev) {
-        this._prev._next = this._next;
-      }
-      if (this._next) {
-        this._next._prev = this._prev;
-      }
-      if (this._parent) {
-        if (this._parent._first === this) {
-          this._parent._first = this._next;
-        }
-        if (this._parent._last === this) {
-          this._parent._last = this._prev;
-        }
-        this._parent._flag(this, false);
-        this._parent._ts_children = ++iid;
-        this._parent.touch();
-      }
-      this._prev = this._next = this._parent = null;
-      this._ts_parent = ++iid;
-      return this;
-    };
-    Node.prototype.empty = function() {
-      var child, next = this._first;
-      while (child = next) {
-        next = child._next;
-        child._prev = child._next = child._parent = null;
-        this._flag(child, false);
-      }
-      this._first = this._last = null;
-      this._ts_children = ++iid;
-      this.touch();
-      return this;
-    };
-    Node.prototype._ts_touch = null;
-    Node.prototype.touch = function() {
-      this._ts_touch = ++iid;
-      this._parent && this._parent.touch();
-      return this;
-    };
-    Node.prototype._flag = function(obj, name) {
-      if (typeof name === "undefined") {
-        return this._flags !== null && this._flags[obj] || 0;
-      }
-      if (typeof obj === "string") {
-        if (name) {
-          this._flags = this._flags || {};
-          if (!this._flags[obj] && this._parent) {
-            this._parent._flag(obj, true);
-          }
-          this._flags[obj] = (this._flags[obj] || 0) + 1;
-        } else if (this._flags && this._flags[obj] > 0) {
-          if (this._flags[obj] == 1 && this._parent) {
-            this._parent._flag(obj, false);
-          }
-          this._flags[obj] = this._flags[obj] - 1;
-        }
-      }
-      if (typeof obj === "object") {
-        if (obj._flags) {
-          for (var type in obj._flags) {
-            if (obj._flags[type] > 0) {
-              this._flag(type, name);
-            }
-          }
-        }
-      }
-      return this;
-    };
-    Node.prototype.hitTest = function(hit) {
-      var width = this._pin._width;
-      var height = this._pin._height;
-      return hit.x >= 0 && hit.x <= width && hit.y >= 0 && hit.y <= height;
-    };
-    Node.prototype._textures = null;
-    Node.prototype._alpha = 1;
-    Node.prototype.render = function(context) {
-      if (!this._visible) {
-        return;
-      }
-      stats.node++;
-      var m = this.matrix();
-      context.setTransform(m.a, m.b, m.c, m.d, m.e, m.f);
-      this._alpha = this._pin._alpha * (this._parent ? this._parent._alpha : 1);
-      var alpha = this._pin._textureAlpha * this._alpha;
-      if (context.globalAlpha != alpha) {
-        context.globalAlpha = alpha;
-      }
-      if (this._textures !== null) {
-        for (var i = 0, n = this._textures.length; i < n; i++) {
-          this._textures[i].draw(context);
-        }
-      }
-      if (context.globalAlpha != this._alpha) {
-        context.globalAlpha = this._alpha;
-      }
-      var child, next = this._first;
-      while (child = next) {
-        next = child._next;
-        child.render(context);
-      }
-    };
-    Node.prototype._tickBefore = null;
-    Node.prototype._tickAfter = null;
-    Node.prototype.MAX_ELAPSE = Infinity;
-    Node.prototype._tick = function(elapsed, now, last) {
-      if (!this._visible) {
-        return;
-      }
-      if (elapsed > this.MAX_ELAPSE) {
-        elapsed = this.MAX_ELAPSE;
-      }
-      var ticked = false;
-      if (this._tickBefore !== null) {
-        for (var i = 0; i < this._tickBefore.length; i++) {
-          stats.tick++;
-          var tickFn = this._tickBefore[i];
-          ticked = tickFn.call(this, elapsed, now, last) === true || ticked;
-        }
-      }
-      var child, next = this._first;
-      while (child = next) {
-        next = child._next;
-        if (child._flag("_tick")) {
-          ticked = child._tick(elapsed, now, last) === true ? true : ticked;
-        }
-      }
-      if (this._tickAfter !== null) {
-        for (var i = 0; i < this._tickAfter.length; i++) {
-          stats.tick++;
-          var tickFn = this._tickAfter[i];
-          ticked = tickFn.call(this, elapsed, now, last) === true || ticked;
-        }
-      }
-      return ticked;
-    };
-    Node.prototype.tick = function(ticker, before) {
-      if (typeof ticker !== "function") {
-        return;
-      }
-      if (before) {
-        if (this._tickBefore === null) {
-          this._tickBefore = [];
-        }
-        this._tickBefore.push(ticker);
-      } else {
-        if (this._tickAfter === null) {
-          this._tickAfter = [];
-        }
-        this._tickAfter.push(ticker);
-      }
-      this._flag("_tick", this._tickAfter !== null && this._tickAfter.length > 0 || this._tickBefore !== null && this._tickBefore.length > 0);
-    };
-    Node.prototype.untick = function(ticker) {
-      if (typeof ticker !== "function") {
-        return;
-      }
-      var i;
-      if (this._tickBefore !== null && (i = this._tickBefore.indexOf(ticker)) >= 0) {
-        this._tickBefore.splice(i, 1);
-      }
-      if (this._tickAfter !== null && (i = this._tickAfter.indexOf(ticker)) >= 0) {
-        this._tickAfter.splice(i, 1);
-      }
-    };
-    Node.prototype.timeout = function(fn, time) {
-      this.setTimeout(fn, time);
-    };
-    Node.prototype.setTimeout = function(fn, time) {
-      function timer(t) {
-        if ((time -= t) < 0) {
-          this.untick(timer);
-          fn.call(this);
-        } else {
-          return true;
-        }
-      }
-      this.tick(timer);
-      return timer;
-    };
-    Node.prototype.clearTimeout = function(timer) {
-      this.untick(timer);
-    };
-    Node.prototype._listeners = null;
-    Node.prototype._event_callback = function(name, on) {
-      this._flag(name, on);
-    };
-    Node.prototype.on = function(types, listener) {
-      if (!types || !types.length || typeof listener !== "function") {
-        return this;
-      }
-      if (this._listeners === null) {
-        this._listeners = {};
-      }
-      var isarray = typeof types !== "string" && typeof types.join === "function";
-      if (types = (isarray ? types.join(" ") : types).match(/\S+/g)) {
-        for (var i = 0; i < types.length; i++) {
-          var type = types[i];
-          this._listeners[type] = this._listeners[type] || [];
-          this._listeners[type].push(listener);
-          if (typeof this._event_callback === "function") {
-            this._event_callback(type, true);
-          }
-        }
-      }
-      return this;
-    };
-    Node.prototype.off = function(types, listener) {
-      if (!types || !types.length || typeof listener !== "function") {
-        return this;
-      }
-      if (this._listeners === null) {
-        return this;
-      }
-      var isarray = typeof types !== "string" && typeof types.join === "function";
-      if (types = (isarray ? types.join(" ") : types).match(/\S+/g)) {
-        for (var i = 0; i < types.length; i++) {
-          var type = types[i], all = this._listeners[type], index;
-          if (all && (index = all.indexOf(listener)) >= 0) {
-            all.splice(index, 1);
-            if (!all.length) {
-              delete this._listeners[type];
-            }
-            if (typeof this._event_callback === "function") {
-              this._event_callback(type, false);
-            }
-          }
-        }
-      }
-      return this;
-    };
-    Node.prototype.listeners = function(type) {
-      return this._listeners && this._listeners[type];
-    };
-    Node.prototype.publish = function(name, args) {
-      var listeners = this.listeners(name);
-      if (!listeners || !listeners.length) {
-        return 0;
-      }
-      for (var l = 0; l < listeners.length; l++) {
-        listeners[l].apply(this, args);
-      }
-      return listeners.length;
-    };
-    Node.prototype.trigger = function(name, args) {
-      this.publish(name, args);
-      return this;
-    };
-    var native = Math;
-    const math = Object.create(Math);
-    math.random = function(min, max) {
-      if (typeof min === "undefined") {
-        max = 1, min = 0;
-      } else if (typeof max === "undefined") {
-        max = min, min = 0;
-      }
-      return min == max ? min : native.random() * (max - min) + min;
-    };
-    math.wrap = function(num, min, max) {
-      if (typeof min === "undefined") {
-        max = 1, min = 0;
-      } else if (typeof max === "undefined") {
-        max = min, min = 0;
-      }
-      if (max > min) {
-        num = (num - min) % (max - min);
-        return num + (num < 0 ? max : min);
-      } else {
-        num = (num - max) % (min - max);
-        return num + (num <= 0 ? min : max);
-      }
-    };
-    math.clamp = function(num, min, max) {
-      if (num < min) {
-        return min;
-      } else if (num > max) {
-        return max;
-      } else {
-        return num;
-      }
-    };
-    math.length = function(x, y) {
-      return native.sqrt(x * x + y * y);
-    };
-    math.rotate = math.wrap;
-    math.limit = math.clamp;
-    const isFn = function(value) {
-      var str = Object.prototype.toString.call(value);
-      return str === "[object Function]" || str === "[object GeneratorFunction]" || str === "[object AsyncFunction]";
-    };
-    const isHash = function(value) {
-      return Object.prototype.toString.call(value) === "[object Object]" && value.constructor === Object;
-    };
-    class Texture {
-      constructor(texture2, ratio) {
-        if (typeof texture2 === "object") {
-          this.src(texture2, ratio);
-        }
-      }
-      pipe() {
-        return new Texture(this);
-      }
-      /**
-       * Signatures: (texture), (x, y, w, h), (w, h)
-       */
-      src(x, y, w, h) {
-        if (typeof x === "object") {
-          var drawable = x, ratio = y || 1;
-          this._image = drawable;
-          this._sx = this._dx = 0;
-          this._sy = this._dy = 0;
-          this._sw = this._dw = drawable.width / ratio;
-          this._sh = this._dh = drawable.height / ratio;
-          this.width = drawable.width / ratio;
-          this.height = drawable.height / ratio;
-          this.ratio = ratio;
-        } else {
-          if (typeof w === "undefined") {
-            w = x, h = y;
-          } else {
-            this._sx = x, this._sy = y;
-          }
-          this._sw = this._dw = w;
-          this._sh = this._dh = h;
-          this.width = w;
-          this.height = h;
-        }
-        return this;
-      }
-      /**
-       * Signatures: (x, y, w, h), (x, y)
-       */
-      dest(x, y, w, h) {
-        this._dx = x, this._dy = y;
-        this._dx = x, this._dy = y;
-        if (typeof w !== "undefined") {
-          this._dw = w, this._dh = h;
-          this.width = w, this.height = h;
-        }
-        return this;
-      }
-      draw(context, x1, y1, x2, y2, x3, y3, x4, y4) {
-        var drawable = this._image;
-        if (drawable === null || typeof drawable !== "object") {
-          return;
-        }
-        var sx = this._sx, sy = this._sy;
-        var sw = this._sw, sh = this._sh;
-        var dx = this._dx, dy = this._dy;
-        var dw = this._dw, dh = this._dh;
-        if (typeof x3 !== "undefined") {
-          x1 = math.clamp(x1, 0, this._sw), x2 = math.clamp(x2, 0, this._sw - x1);
-          y1 = math.clamp(y1, 0, this._sh), y2 = math.clamp(y2, 0, this._sh - y1);
-          sx += x1, sy += y1, sw = x2, sh = y2;
-          dx = x3, dy = y3, dw = x4, dh = y4;
-        } else if (typeof x2 !== "undefined") {
-          dx = x1, dy = y1, dw = x2, dh = y2;
-        } else if (typeof x1 !== "undefined") {
-          dw = x1, dh = y1;
-        }
-        var ratio = this.ratio || 1;
-        sx *= ratio, sy *= ratio, sw *= ratio, sh *= ratio;
-        try {
-          if (typeof drawable.draw === "function") {
-            drawable.draw(context, sx, sy, sw, sh, dx, dy, dw, dh);
-          } else {
-            stats.draw++;
-            context.drawImage(drawable, sx, sy, sw, sh, dx, dy, dw, dh);
-          }
-        } catch (ex) {
-          if (!drawable._draw_failed) {
-            console.log("Unable to draw: ", drawable);
-            console.log(ex);
-            drawable._draw_failed = true;
-          }
-        }
-      }
-    }
-    var NO_TEXTURE = new class extends Texture {
-      constructor() {
-        super();
-        __publicField(this, "pipe", function() {
-          return this;
-        });
-        __publicField(this, "src", function() {
-          return this;
-        });
-        __publicField(this, "dest", function() {
-          return this;
-        });
-        __publicField(this, "draw", function() {
-        });
-        this.x = this.y = this.width = this.height = 0;
-      }
-    }();
-    var NO_SELECTION = new Selection(NO_TEXTURE);
-    function preloadImage(src) {
-      console.log("Loading image: " + src);
-      return new Promise(function(resolve, reject) {
-        const img = new Image();
-        img.onload = function() {
-          console.log("Image loaded: " + src);
-          resolve(img);
-        };
-        img.onerror = function(error) {
-          console.log("Loading failed: " + src);
-          reject(error);
-        };
-        img.src = src;
-      });
-    }
-    var _atlases_map = {};
-    var _atlases_arr = [];
-    const atlas = async function(def) {
-      var atlas2 = isFn(def.draw) ? def : new Atlas(def);
-      if (def.name) {
-        _atlases_map[def.name] = atlas2;
-      }
-      _atlases_arr.push(atlas2);
-      deprecated(def, "imagePath");
-      deprecated(def, "imageRatio");
-      var url = def.imagePath;
-      var ratio = def.imageRatio || 1;
-      if ("string" === typeof def.image) {
-        url = def.image;
-      } else if (isHash(def.image)) {
-        url = def.image.src || def.image.url;
-        ratio = def.image.ratio || ratio;
-      }
-      if (url) {
-        const image2 = await preloadImage(url);
-        atlas2.src(image2, ratio);
-      }
-      return atlas2;
-    };
-    class Atlas extends Texture {
-      constructor(def) {
-        super();
-        var atlas2 = this;
-        deprecated(def, "filter");
-        deprecated(def, "cutouts");
-        deprecated(def, "sprites");
-        deprecated(def, "factory");
-        var map = def.map || def.filter;
-        var ppu = def.ppu || def.ratio || 1;
-        var trim = def.trim || 0;
-        var textures = def.textures;
-        var factory = def.factory;
-        var cutouts = def.cutouts || def.sprites;
-        function make(def2) {
-          if (!def2 || isFn(def2.draw)) {
-            return def2;
-          }
-          def2 = Object.assign({}, def2);
-          if (isFn(map)) {
-            def2 = map(def2);
-          }
-          if (ppu != 1) {
-            def2.x *= ppu, def2.y *= ppu;
-            def2.width *= ppu, def2.height *= ppu;
-            def2.top *= ppu, def2.bottom *= ppu;
-            def2.left *= ppu, def2.right *= ppu;
-          }
-          if (trim != 0) {
-            def2.x += trim, def2.y += trim;
-            def2.width -= 2 * trim, def2.height -= 2 * trim;
-            def2.top -= trim, def2.bottom -= trim;
-            def2.left -= trim, def2.right -= trim;
-          }
-          var texture2 = atlas2.pipe();
-          texture2.top = def2.top, texture2.bottom = def2.bottom;
-          texture2.left = def2.left, texture2.right = def2.right;
-          texture2.src(def2.x, def2.y, def2.width, def2.height);
-          return texture2;
-        }
-        function find(query) {
-          if (textures) {
-            if (isFn(textures)) {
-              return textures(query);
-            } else if (isHash(textures)) {
-              return textures[query];
-            }
-          }
-          if (cutouts) {
-            var result = null, n = 0;
-            for (var i = 0; i < cutouts.length; i++) {
-              if (string.startsWith(cutouts[i].name, query)) {
-                if (n === 0) {
-                  result = cutouts[i];
-                } else if (n === 1) {
-                  result = [result, cutouts[i]];
-                } else {
-                  result.push(cutouts[i]);
-                }
-                n++;
-              }
-            }
-            if (n === 0 && isFn(factory)) {
-              result = function(subquery) {
-                return factory(query + (subquery ? subquery : ""));
-              };
-            }
-            return result;
-          }
-        }
-        this.select = function(query) {
-          if (!query) {
-            return new Selection(this.pipe());
-          }
-          var found = find(query);
-          if (found) {
-            return new Selection(found, find, make);
-          }
-        };
-      }
-    }
-    function Selection(result, find, make) {
-      function link(result2, subquery) {
-        if (!result2) {
-          return NO_TEXTURE;
-        } else if (isFn(result2.draw)) {
-          return result2;
-        } else if (isHash(result2) && "number" === typeof result2.width && "number" === typeof result2.height && isFn(make)) {
-          return make(result2);
-        } else if (isHash(result2) && "undefined" !== typeof subquery) {
-          return link(result2[subquery]);
-        } else if (isFn(result2)) {
-          return link(result2(subquery));
-        } else if (Array.isArray(result2)) {
-          return link(result2[0]);
-        } else if ("string" === typeof result2 && isFn(find)) {
-          return link(find(result2));
-        }
-      }
-      this.one = function(subquery) {
-        return link(result, subquery);
-      };
-      this.array = function(arr) {
-        var array = Array.isArray(arr) ? arr : [];
-        if (Array.isArray(result)) {
-          for (var i = 0; i < result.length; i++) {
-            array[i] = link(result[i]);
-          }
-        } else {
-          array[0] = link(result);
-        }
-        return array;
-      };
-    }
-    const texture = function(query) {
-      if (!("string" === typeof query)) {
-        return new Selection(query);
-      }
-      var result = null, atlas2, i;
-      if ((i = query.indexOf(":")) > 0 && query.length > i + 1) {
-        atlas2 = _atlases_map[query.slice(0, i)];
-        result = atlas2 && atlas2.select(query.slice(i + 1));
-      }
-      if (!result && (atlas2 = _atlases_map[query])) {
-        result = atlas2.select();
-      }
-      for (i = 0; !result && i < _atlases_arr.length; i++) {
-        result = _atlases_arr[i].select(query);
-      }
-      if (!result) {
-        console.error("Texture not found: " + query);
-        result = NO_SELECTION;
-      }
-      return result;
-    };
-    function deprecated(hash, name, msg) {
-      if (name in hash)
-        console.log(msg ? msg.replace("%name", name) : "'" + name + "' field of texture atlas is deprecated.");
-    }
-    const canvas = function(type, attributes, plotter) {
-      if (typeof type === "string") {
-        if (typeof attributes === "object")
-          ;
-        else {
-          if (typeof attributes === "function") {
-            plotter = attributes;
-          }
-          attributes = {};
-        }
-      } else {
-        if (typeof type === "function") {
-          plotter = type;
-        }
-        attributes = {};
-        type = "2d";
-      }
-      var canvas2 = document.createElement("canvas");
-      var context = canvas2.getContext(type, attributes);
-      var texture2 = new Texture(canvas2);
-      texture2.context = function() {
-        return context;
-      };
-      texture2.size = function(width, height, ratio) {
-        ratio = ratio || 1;
-        canvas2.width = width * ratio;
-        canvas2.height = height * ratio;
-        this.src(canvas2, ratio);
-        return this;
-      };
-      texture2.canvas = function(fn) {
-        if (typeof fn === "function") {
-          fn.call(this, context);
-        } else if (typeof fn === "undefined" && typeof plotter === "function") {
-          plotter.call(this, context);
-        }
-        return this;
-      };
-      if (typeof plotter === "function") {
-        plotter.call(texture2, context);
-      }
-      return texture2;
-    };
-    let M;
-    function memoizeDraw(callback, memoKey = () => null) {
-      const PIXEL_RATIO = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
-      let lastRatio = 0;
-      let lastSelection = void 0;
-      let texture2 = Stage.canvas();
-      let sprite2 = Stage.sprite();
-      let first = true;
-      sprite2.tick(function() {
-        let m = this._parent.matrix();
-        if (first) {
-          first = false;
-          if (!(m = M)) {
-            return;
-          }
-        }
-        M = m;
-        let newRatio = Math.max(Math.abs(m.a), Math.abs(m.b));
-        let rationChange = lastRatio / newRatio;
-        if (lastRatio === 0 || rationChange > 1.25 || rationChange < 0.8) {
-          const newSelection = memoKey();
-          if (lastSelection !== newSelection) {
-            lastRatio = newRatio;
-            callback(2.5 * newRatio / PIXEL_RATIO, texture2, sprite2);
-            sprite2.texture(texture2);
-            sprite2.__timestamp = Date.now();
-          }
-        }
-      }, false);
-      return sprite2;
-    }
-    class Mouse {
-      constructor() {
-        __publicField(this, "x", 0);
-        __publicField(this, "y", 0);
-        __publicField(this, "ratio", 1);
-        __publicField(this, "stage");
-        __publicField(this, "elem");
-        __publicField(this, "clicklist", []);
-        __publicField(this, "cancellist", []);
-        __publicField(this, "handleStart", (event) => {
-          event.preventDefault();
-          this.locate(event);
-          this.publish(event.type, event);
-          this.lookup("click", this.clicklist);
-          this.lookup("mousecancel", this.cancellist);
-        });
-        __publicField(this, "handleMove", (event) => {
-          event.preventDefault();
-          this.locate(event);
-          this.publish(event.type, event);
-        });
-        __publicField(this, "handleEnd", (event) => {
-          event.preventDefault();
-          this.publish(event.type, event);
-          if (this.clicklist.length) {
-            this.publish("click", event, this.clicklist);
-          }
-          this.cancellist.length = 0;
-        });
-        __publicField(this, "handleCancel", (event) => {
-          if (this.cancellist.length) {
-            this.publish("mousecancel", event, this.cancellist);
-          }
-          this.clicklist.length = 0;
-        });
-        __publicField(this, "toString", function() {
-          return (this.x | 0) + "x" + (this.y | 0);
-        });
-        __publicField(this, "locate", function(event) {
-          const elem = this.elem;
-          let x;
-          let y;
-          if (event.touches && event.touches.length) {
-            x = event.touches[0].clientX;
-            y = event.touches[0].clientY;
-          } else {
-            x = event.clientX;
-            y = event.clientY;
-          }
-          var rect = elem.getBoundingClientRect();
-          x -= rect.left;
-          y -= rect.top;
-          x -= elem.clientLeft | 0;
-          y -= elem.clientTop | 0;
-          this.x = x * this.ratio;
-          this.y = y * this.ratio;
-        });
-        __publicField(this, "lookup", function(type, collect) {
-          this.type = type;
-          this.root = this.stage;
-          this.event = null;
-          collect.length = 0;
-          this.collect = collect;
-          this.root.visit({
-            reverse: true,
-            visible: true,
-            start: this.visitStart,
-            end: this.visitEnd
-          }, this);
-        });
-        __publicField(this, "publish", function(type, event, targets) {
-          this.type = type;
-          this.root = this.stage;
-          this.event = event;
-          this.collect = false;
-          this.timeStamp = Date.now();
-          if (type !== "mousemove" && type !== "touchmove") {
-            console.log(this.type + " " + this);
-          }
-          if (targets) {
-            while (targets.length)
-              if (this.visitEnd(targets.shift()))
-                break;
-            targets.length = 0;
-          } else {
-            this.root.visit({
-              reverse: true,
-              visible: true,
-              start: this.visitStart,
-              end: this.visitEnd
-            }, this);
-          }
-        });
-        __publicField(this, "visitStart", (node) => {
-          return !node._flag(this.type);
-        });
-        __publicField(this, "visitEnd", (node) => {
-          rel.raw = this.event;
-          rel.type = this.type;
-          rel.timeStamp = this.timeStamp;
-          rel.abs.x = this.x;
-          rel.abs.y = this.y;
-          var listeners = node.listeners(this.type);
-          if (!listeners) {
-            return;
-          }
-          node.matrix().inverse().map(this, rel);
-          if (!(node === this.root || node.attr("spy") || node.hitTest(rel))) {
-            return;
-          }
-          if (this.collect) {
-            this.collect.push(node);
-          }
-          if (this.event) {
-            var cancel = false;
-            for (var l = 0; l < listeners.length; l++) {
-              cancel = listeners[l].call(node, rel) ? true : cancel;
-            }
-            return cancel;
-          }
-        });
-      }
-      mount(stage, elem) {
-        this.stage = stage;
-        this.elem = elem;
-        this.ratio = stage.viewport().ratio || 1;
-        stage.on("viewport", (size) => {
-          this.ratio = size.ratio ?? this.ratio;
-        });
-        elem.addEventListener("touchstart", this.handleStart);
-        elem.addEventListener("touchend", this.handleEnd);
-        elem.addEventListener("touchmove", this.handleMove);
-        elem.addEventListener("touchcancel", this.handleCancel);
-        elem.addEventListener("mousedown", this.handleStart);
-        elem.addEventListener("mouseup", this.handleEnd);
-        elem.addEventListener("mousemove", this.handleMove);
-        document.addEventListener("mouseup", this.handleCancel);
-        window.addEventListener("blur", this.handleCancel);
-        return this;
-      }
-      unmount() {
-        const elem = this.elem;
-        elem.removeEventListener("touchstart", this.handleStart);
-        elem.removeEventListener("touchend", this.handleEnd);
-        elem.removeEventListener("touchmove", this.handleMove);
-        elem.removeEventListener("touchcancel", this.handleCancel);
-        elem.removeEventListener("mousedown", this.handleStart);
-        elem.removeEventListener("mouseup", this.handleEnd);
-        elem.removeEventListener("mousemove", this.handleMove);
-        document.removeEventListener("mouseup", this.handleCancel);
-        window.removeEventListener("blur", this.handleCancel);
-        return this;
-      }
-    }
-    __publicField(Mouse, "CLICK", "click");
-    __publicField(Mouse, "START", "touchstart mousedown");
-    __publicField(Mouse, "MOVE", "touchmove mousemove");
-    __publicField(Mouse, "END", "touchend mouseup");
-    __publicField(Mouse, "CANCEL", "touchcancel mousecancel");
-    var rel = {}, abs = {};
-    defineValue(rel, "clone", function(obj) {
-      obj = obj || {}, obj.x = this.x, obj.y = this.y;
-      return obj;
-    });
-    defineValue(rel, "toString", function() {
-      return (this.x | 0) + "x" + (this.y | 0) + " (" + this.abs + ")";
-    });
-    defineValue(rel, "abs", abs);
-    defineValue(abs, "clone", function(obj) {
-      obj = obj || {}, obj.x = this.x, obj.y = this.y;
-      return obj;
-    });
-    defineValue(abs, "toString", function() {
-      return (this.x | 0) + "x" + (this.y | 0);
-    });
-    function defineValue(obj, name, value) {
-      Object.defineProperty(obj, name, {
-        value
-      });
-    }
     function IDENTITY(x) {
       return x;
     }
-    var _cache = {};
-    var _modes = {};
-    var _easings = {};
+    const LOOKUP_CACHE = {};
+    const MODE_BY_NAME = {};
+    const EASE_BY_NAME = {};
     class Easing {
-      static get(token, fallback = IDENTITY) {
+      static get(token, fallback) {
+        fallback = fallback || IDENTITY;
         if (typeof token === "function") {
           return token;
         }
         if (typeof token !== "string") {
           return fallback;
         }
-        var fn = _cache[token];
-        if (fn) {
-          return fn;
+        let easeFn = LOOKUP_CACHE[token];
+        if (easeFn) {
+          return easeFn;
         }
-        var match = /^(\w+)(-(in|out|in-out|out-in))?(\((.*)\))?$/i.exec(token);
-        if (!match || !match.length) {
+        const tokens = /^(\w+)(-(in|out|in-out|out-in))?(\((.*)\))?$/i.exec(token);
+        if (!tokens || !tokens.length) {
           return fallback;
         }
-        var easing = _easings[match[1]];
-        var mode = _modes[match[3]];
-        var params = match[5];
-        if (easing && easing.fn) {
-          fn = easing.fn;
-        } else if (easing && easing.fc) {
-          fn = easing.fc.apply(easing.fc, params && params.replace(/\s+/, "").split(","));
+        const easeName = tokens[1];
+        const easing = EASE_BY_NAME[easeName];
+        const modeName = tokens[3];
+        const modeFn = MODE_BY_NAME[modeName];
+        const params = tokens[5];
+        if (!easing) {
+          easeFn = fallback;
+        } else if ("fn" in easing && typeof easing.fn === "function") {
+          easeFn = easing.fn;
+        } else if ("fc" in easing && typeof easing.fc === "function") {
+          const args = params ? params.replace(/\s+/, "").split(",") : void 0;
+          easeFn = easing.fc.apply(easing.fc, args);
         } else {
-          fn = fallback;
+          easeFn = fallback;
         }
-        if (mode) {
-          fn = mode.fn(fn);
+        if (modeFn) {
+          easeFn = modeFn(easeFn);
         }
-        _cache[token] = fn;
-        return fn;
+        LOOKUP_CACHE[token] = easeFn;
+        return easeFn;
       }
-      static add(data) {
-        var names = (data.name || data.mode).split(/\s+/);
-        for (var i = 0; i < names.length; i++) {
-          var name = names[i];
-          if (name) {
-            (data.name ? _easings : _modes)[name] = data;
-          }
+    }
+    function addMode(name, fn) {
+      MODE_BY_NAME[name] = fn;
+    }
+    function addEaseFn(data) {
+      const names = data.name.split(/\s+/);
+      for (let i = 0; i < names.length; i++) {
+        const key = names[i];
+        if (key) {
+          EASE_BY_NAME[key] = data;
         }
       }
     }
-    Easing.add({
-      mode: "in",
-      fn: function(f) {
-        return f;
-      }
+    addMode("in", function(f) {
+      return f;
     });
-    Easing.add({
-      mode: "out",
-      fn: function(f) {
-        return function(t) {
-          return 1 - f(1 - t);
-        };
-      }
+    addMode("out", function(f) {
+      return function(t) {
+        return 1 - f(1 - t);
+      };
     });
-    Easing.add({
-      mode: "in-out",
-      fn: function(f) {
-        return function(t) {
-          return t < 0.5 ? f(2 * t) / 2 : 1 - f(2 * (1 - t)) / 2;
-        };
-      }
+    addMode("in-out", function(f) {
+      return function(t) {
+        return t < 0.5 ? f(2 * t) / 2 : 1 - f(2 * (1 - t)) / 2;
+      };
     });
-    Easing.add({
-      mode: "out-in",
-      fn: function(f) {
-        return function(t) {
-          return t < 0.5 ? 1 - f(2 * (1 - t)) / 2 : f(2 * t) / 2;
-        };
-      }
+    addMode("out-in", function(f) {
+      return function(t) {
+        return t < 0.5 ? 1 - f(2 * (1 - t)) / 2 : f(2 * t) / 2;
+      };
     });
-    Easing.add({
+    addEaseFn({
       name: "linear",
       fn: function(t) {
         return t;
       }
     });
-    Easing.add({
+    addEaseFn({
       name: "quad",
       fn: function(t) {
         return t * t;
       }
     });
-    Easing.add({
+    addEaseFn({
       name: "cubic",
       fn: function(t) {
         return t * t * t;
       }
     });
-    Easing.add({
+    addEaseFn({
       name: "quart",
       fn: function(t) {
         return t * t * t * t;
       }
     });
-    Easing.add({
+    addEaseFn({
       name: "quint",
       fn: function(t) {
         return t * t * t * t * t;
       }
     });
-    Easing.add({
+    addEaseFn({
       name: "sin sine",
       fn: function(t) {
         return 1 - Math.cos(t * Math.PI / 2);
       }
     });
-    Easing.add({
+    addEaseFn({
       name: "exp expo",
       fn: function(t) {
         return t == 0 ? 0 : Math.pow(2, 10 * (t - 1));
       }
     });
-    Easing.add({
+    addEaseFn({
       name: "circle circ",
       fn: function(t) {
         return 1 - Math.sqrt(1 - t * t);
       }
     });
-    Easing.add({
+    addEaseFn({
       name: "bounce",
       fn: function(t) {
         return t < 1 / 2.75 ? 7.5625 * t * t : t < 2 / 2.75 ? 7.5625 * (t -= 1.5 / 2.75) * t + 0.75 : t < 2.5 / 2.75 ? 7.5625 * (t -= 2.25 / 2.75) * t + 0.9375 : 7.5625 * (t -= 2.625 / 2.75) * t + 0.984375;
       }
     });
-    Easing.add({
+    addEaseFn({
       name: "poly",
       fc: function(e) {
         return function(t) {
@@ -17988,18 +17407,18 @@
         };
       }
     });
-    Easing.add({
+    addEaseFn({
       name: "elastic",
       fc: function(a, p) {
         p = p || 0.45;
         a = a || 1;
-        var s = p / (2 * Math.PI) * Math.asin(1 / a);
+        const s = p / (2 * Math.PI) * Math.asin(1 / a);
         return function(t) {
           return 1 + a * Math.pow(2, -10 * t) * Math.sin((t - s) * (2 * Math.PI) / p);
         };
       }
     });
-    Easing.add({
+    addEaseFn({
       name: "back",
       fc: function(s) {
         s = typeof s !== "undefined" ? s : 1.70158;
@@ -18008,97 +17427,41 @@
         };
       }
     });
-    Node.prototype.tween = function(a, b, c) {
-      let options;
-      if (typeof a === "object" && a !== null) {
-        options = a;
-      } else if (typeof a === "number" && typeof b === "number") {
-        options = {
-          duration: a,
-          delay: b,
-          append: c
-        };
-      } else if (typeof a === "number") {
-        options = {
-          duration: a,
-          delay: 0,
-          append: b
-        };
-      } else {
-        options = {
-          duration: 400,
-          delay: 0,
-          append: a
-        };
-      }
-      if (!this._tweens) {
-        this._tweens = [];
-        var ticktime = 0;
-        this.tick(function(elapsed, now, last) {
-          if (!this._tweens.length) {
-            return false;
-          }
-          var ignore = ticktime != last;
-          ticktime = now;
-          if (ignore) {
-            return true;
-          }
-          var head = this._tweens[0];
-          var ended = head.tick(this, elapsed, now, last);
-          if (ended) {
-            if (head === this._tweens[0]) {
-              this._tweens.shift();
-            }
-            var next = head.finish();
-            if (next) {
-              this._tweens.unshift(next);
-            }
-          }
-          return true;
-        }, true);
-      }
-      this.touch();
-      if (!options.append) {
-        this._tweens.length = 0;
-      }
-      var tween = new Tween(this, options);
-      this._tweens.push(tween);
-      return tween;
-    };
-    class Tween {
+    class Transition {
       constructor(owner, options = {}) {
-        __publicField(this, "_ending", []);
+        this.uid = "transition:" + uid();
+        this._ending = [];
         this._end = {};
         this._duration = options.duration || 400;
         this._delay = options.delay || 0;
         this._owner = owner;
         this._time = 0;
       }
-      // @internal
+      /** @internal */
       tick(node, elapsed, now, last) {
         this._time += elapsed;
         if (this._time < this._delay) {
           return;
         }
-        var time = this._time - this._delay;
+        const time = this._time - this._delay;
         if (!this._start) {
           this._start = {};
-          for (var key in this._end) {
+          for (const key in this._end) {
             this._start[key] = this._owner.pin(key);
           }
         }
-        var p = Math.min(time / this._duration, 1);
-        var ended = p >= 1;
+        let p = Math.min(time / this._duration, 1);
+        const ended = p >= 1;
         if (typeof this._easing == "function") {
           p = this._easing(p);
         }
-        var q = 1 - p;
-        for (var key in this._end) {
+        const q = 1 - p;
+        for (const key in this._end) {
           this._owner.pin(key, this._start[key] * q + this._end[key] * p);
         }
         return ended;
       }
-      // @internal
+      /** @internal */
       finish() {
         this._ending.forEach((callback) => {
           try {
@@ -18109,8 +17472,20 @@
         });
         return this._next;
       }
-      tween(duration, delay) {
-        return this._next = new Tween(this._owner, duration, delay);
+      tween(a, b) {
+        let options;
+        if (typeof a === "object" && a !== null) {
+          options = a;
+        } else {
+          options = {};
+          if (typeof a === "number") {
+            options.duration = a;
+            if (typeof b === "number") {
+              options.delay = b;
+            }
+          }
+        }
+        return this._next = new Transition(this._owner, options);
       }
       duration(duration) {
         this._duration = duration;
@@ -18144,7 +17519,7 @@
       }
       pin(a, b) {
         if (typeof a === "object") {
-          for (var attr in a) {
+          for (const attr in a) {
             pinning(this._owner, this._end, attr, a[attr]);
           }
         } else if (typeof b !== "undefined") {
@@ -18160,9 +17535,70 @@
         return this;
       }
       /**
-       * @deprecated this doesn't do anything anymore, call tween on the node instead.
+       * @deprecated this doesn't do anything anymore, call transition on the node instead.
        */
       clear(forward) {
+        return this;
+      }
+      size(w, h) {
+        this.pin("width", w);
+        this.pin("height", h);
+        return this;
+      }
+      width(w) {
+        if (typeof w === "undefined") {
+          return this.pin("width");
+        }
+        this.pin("width", w);
+        return this;
+      }
+      height(h) {
+        if (typeof h === "undefined") {
+          return this.pin("height");
+        }
+        this.pin("height", h);
+        return this;
+      }
+      offset(a, b) {
+        if (typeof a === "object") {
+          b = a.y;
+          a = a.x;
+        }
+        this.pin("offsetX", a);
+        this.pin("offsetY", b);
+        return this;
+      }
+      rotate(a) {
+        this.pin("rotation", a);
+        return this;
+      }
+      skew(a, b) {
+        if (typeof a === "object") {
+          b = a.y;
+          a = a.x;
+        } else if (typeof b === "undefined") {
+          b = a;
+        }
+        this.pin("skewX", a);
+        this.pin("skewY", b);
+        return this;
+      }
+      scale(a, b) {
+        if (typeof a === "object") {
+          b = a.y;
+          a = a.x;
+        } else if (typeof b === "undefined") {
+          b = a;
+        }
+        this.pin("scaleX", a);
+        this.pin("scaleY", b);
+        return this;
+      }
+      alpha(a, ta) {
+        this.pin("alpha", a);
+        if (typeof ta !== "undefined") {
+          this.pin("textureAlpha", ta);
+        }
         return this;
       }
     }
@@ -18174,50 +17610,1320 @@
         map[key + "Y"] = value;
       }
     }
-    Pin._add_shortcuts(Tween.prototype);
-    const _stages = [];
+    let iid = 0;
+    stats.create = 0;
+    function assertType(obj) {
+      if (obj && obj instanceof Node) {
+        return obj;
+      }
+      throw "Invalid node: " + obj;
+    }
+    const create = function() {
+      return layout();
+    };
+    const layer = function() {
+      return maximize();
+    };
+    const box = function() {
+      return minimize();
+    };
+    const layout = function() {
+      return new Node();
+    };
+    const row = function(align) {
+      return layout().row(align).label("Row");
+    };
+    const column = function(align) {
+      return layout().column(align).label("Column");
+    };
+    const minimize = function() {
+      return layout().minimize().label("Minimize");
+    };
+    const maximize = function() {
+      return layout().maximize().label("Maximize");
+    };
+    class Node {
+      constructor() {
+        this.uid = "node:" + uid();
+        this._label = "";
+        this._parent = null;
+        this._next = null;
+        this._prev = null;
+        this._first = null;
+        this._last = null;
+        this._visible = true;
+        this._alpha = 1;
+        this._padding = 0;
+        this._spacing = 0;
+        this._pin = new Pin(this);
+        this._listeners = {};
+        this._attrs = {};
+        this._flags = {};
+        this._transitions = [];
+        this._tickBefore = [];
+        this._tickAfter = [];
+        this.MAX_ELAPSE = Infinity;
+        this._transitionTickInitied = false;
+        this._transitionTickLastTime = 0;
+        this._transitionTick = (elapsed, now, last) => {
+          if (!this._transitions.length) {
+            return false;
+          }
+          const ignore = this._transitionTickLastTime !== last;
+          this._transitionTickLastTime = now;
+          if (ignore) {
+            return true;
+          }
+          const head = this._transitions[0];
+          const ended = head.tick(this, elapsed, now, last);
+          if (ended) {
+            if (head === this._transitions[0]) {
+              this._transitions.shift();
+            }
+            const next = head.finish();
+            if (next) {
+              this._transitions.unshift(next);
+            }
+          }
+          return true;
+        };
+        stats.create++;
+      }
+      matrix(relative = false) {
+        if (relative === true) {
+          return this._pin.relativeMatrix();
+        }
+        return this._pin.absoluteMatrix();
+      }
+      /** @internal */
+      getPixelRatio() {
+        var _a;
+        const m = (_a = this._parent) == null ? void 0 : _a.matrix();
+        const pixelRatio = !m ? 1 : Math.max(Math.abs(m.a), Math.abs(m.b)) / getPixelRatio();
+        return pixelRatio;
+      }
+      pin(a, b) {
+        if (typeof a === "object") {
+          this._pin.set(a);
+          return this;
+        } else if (typeof a === "string") {
+          if (typeof b === "undefined") {
+            return this._pin.get(a);
+          } else {
+            this._pin.set(a, b);
+            return this;
+          }
+        } else if (typeof a === "undefined") {
+          return this._pin;
+        }
+      }
+      fit(a, b, c) {
+        if (typeof a === "object") {
+          c = b;
+          b = a.y;
+          a = a.x;
+        }
+        this._pin.fit(a, b, c);
+        return this;
+      }
+      /** @hidden @deprecated Use fit */
+      scaleTo(a, b, c) {
+        return this.fit(a, b, c);
+      }
+      toString() {
+        return "[" + this._label + "]";
+      }
+      /** @deprecated Use label() */
+      id(id) {
+        return this.label(id);
+      }
+      label(label) {
+        if (typeof label === "undefined") {
+          return this._label;
+        }
+        this._label = label;
+        return this;
+      }
+      attr(name, value) {
+        if (typeof value === "undefined") {
+          return this._attrs !== null ? this._attrs[name] : void 0;
+        }
+        (this._attrs !== null ? this._attrs : this._attrs = {})[name] = value;
+        return this;
+      }
+      visible(visible) {
+        if (typeof visible === "undefined") {
+          return this._visible;
+        }
+        this._visible = visible;
+        this._parent && (this._parent._ts_children = ++iid);
+        this._ts_pin = ++iid;
+        this.touch();
+        return this;
+      }
+      hide() {
+        this.visible(false);
+        return this;
+      }
+      show() {
+        this.visible(true);
+        return this;
+      }
+      parent() {
+        return this._parent;
+      }
+      next(visible) {
+        let next = this._next;
+        while (next && visible && !next._visible) {
+          next = next._next;
+        }
+        return next;
+      }
+      prev(visible) {
+        let prev = this._prev;
+        while (prev && visible && !prev._visible) {
+          prev = prev._prev;
+        }
+        return prev;
+      }
+      first(visible) {
+        let next = this._first;
+        while (next && visible && !next._visible) {
+          next = next._next;
+        }
+        return next;
+      }
+      last(visible) {
+        let prev = this._last;
+        while (prev && visible && !prev._visible) {
+          prev = prev._prev;
+        }
+        return prev;
+      }
+      visit(visitor, payload) {
+        const reverse = visitor.reverse;
+        const visible = visitor.visible;
+        if (visitor.start && visitor.start(this, payload)) {
+          return;
+        }
+        let child;
+        let next = reverse ? this.last(visible) : this.first(visible);
+        while (child = next) {
+          next = reverse ? child.prev(visible) : child.next(visible);
+          if (child.visit(visitor, payload)) {
+            return true;
+          }
+        }
+        return visitor.end && visitor.end(this, payload);
+      }
+      append(child, more) {
+        if (Array.isArray(child)) {
+          for (let i = 0; i < child.length; i++) {
+            Node.append(this, child[i]);
+          }
+        } else if (typeof more !== "undefined") {
+          for (let i = 0; i < arguments.length; i++) {
+            Node.append(this, arguments[i]);
+          }
+        } else if (typeof child !== "undefined")
+          Node.append(this, child);
+        return this;
+      }
+      prepend(child, more) {
+        if (Array.isArray(child)) {
+          for (let i = child.length - 1; i >= 0; i--) {
+            Node.prepend(this, child[i]);
+          }
+        } else if (typeof more !== "undefined") {
+          for (let i = arguments.length - 1; i >= 0; i--) {
+            Node.prepend(this, arguments[i]);
+          }
+        } else if (typeof child !== "undefined")
+          Node.prepend(this, child);
+        return this;
+      }
+      appendTo(parent) {
+        Node.append(parent, this);
+        return this;
+      }
+      prependTo(parent) {
+        Node.prepend(parent, this);
+        return this;
+      }
+      insertNext(sibling, more) {
+        if (Array.isArray(sibling)) {
+          for (let i = 0; i < sibling.length; i++) {
+            Node.insertAfter(sibling[i], this);
+          }
+        } else if (typeof more !== "undefined") {
+          for (let i = 0; i < arguments.length; i++) {
+            Node.insertAfter(arguments[i], this);
+          }
+        } else if (typeof sibling !== "undefined") {
+          Node.insertAfter(sibling, this);
+        }
+        return this;
+      }
+      insertPrev(sibling, more) {
+        if (Array.isArray(sibling)) {
+          for (let i = sibling.length - 1; i >= 0; i--) {
+            Node.insertBefore(sibling[i], this);
+          }
+        } else if (typeof more !== "undefined") {
+          for (let i = arguments.length - 1; i >= 0; i--) {
+            Node.insertBefore(arguments[i], this);
+          }
+        } else if (typeof sibling !== "undefined") {
+          Node.insertBefore(sibling, this);
+        }
+        return this;
+      }
+      insertAfter(prev) {
+        Node.insertAfter(this, prev);
+        return this;
+      }
+      insertBefore(next) {
+        Node.insertBefore(this, next);
+        return this;
+      }
+      /** @internal */
+      static append(parent, child) {
+        assertType(child);
+        assertType(parent);
+        child.remove();
+        if (parent._last) {
+          parent._last._next = child;
+          child._prev = parent._last;
+        }
+        child._parent = parent;
+        parent._last = child;
+        if (!parent._first) {
+          parent._first = child;
+        }
+        child._parent._flag(child, true);
+        child._ts_parent = ++iid;
+        parent._ts_children = ++iid;
+        parent.touch();
+      }
+      /** @internal */
+      static prepend(parent, child) {
+        assertType(child);
+        assertType(parent);
+        child.remove();
+        if (parent._first) {
+          parent._first._prev = child;
+          child._next = parent._first;
+        }
+        child._parent = parent;
+        parent._first = child;
+        if (!parent._last) {
+          parent._last = child;
+        }
+        child._parent._flag(child, true);
+        child._ts_parent = ++iid;
+        parent._ts_children = ++iid;
+        parent.touch();
+      }
+      /** @internal */
+      static insertBefore(self, next) {
+        assertType(self);
+        assertType(next);
+        self.remove();
+        const parent = next._parent;
+        const prev = next._prev;
+        if (!parent) {
+          return;
+        }
+        next._prev = self;
+        prev && (prev._next = self) || parent && (parent._first = self);
+        self._parent = parent;
+        self._prev = prev;
+        self._next = next;
+        self._parent._flag(self, true);
+        self._ts_parent = ++iid;
+        self.touch();
+      }
+      /** @internal */
+      static insertAfter(self, prev) {
+        assertType(self);
+        assertType(prev);
+        self.remove();
+        const parent = prev._parent;
+        const next = prev._next;
+        if (!parent) {
+          return;
+        }
+        prev._next = self;
+        next && (next._prev = self) || parent && (parent._last = self);
+        self._parent = parent;
+        self._prev = prev;
+        self._next = next;
+        self._parent._flag(self, true);
+        self._ts_parent = ++iid;
+        self.touch();
+      }
+      remove(child, more) {
+        if (typeof child !== "undefined") {
+          if (Array.isArray(child)) {
+            for (let i = 0; i < child.length; i++) {
+              assertType(child[i]).remove();
+            }
+          } else if (typeof more !== "undefined") {
+            for (let i = 0; i < arguments.length; i++) {
+              assertType(arguments[i]).remove();
+            }
+          } else {
+            assertType(child).remove();
+          }
+          return this;
+        }
+        if (this._prev) {
+          this._prev._next = this._next;
+        }
+        if (this._next) {
+          this._next._prev = this._prev;
+        }
+        if (this._parent) {
+          if (this._parent._first === this) {
+            this._parent._first = this._next;
+          }
+          if (this._parent._last === this) {
+            this._parent._last = this._prev;
+          }
+          this._parent._flag(this, false);
+          this._parent._ts_children = ++iid;
+          this._parent.touch();
+        }
+        this._prev = this._next = this._parent = null;
+        this._ts_parent = ++iid;
+        return this;
+      }
+      empty() {
+        let child = null;
+        let next = this._first;
+        while (child = next) {
+          next = child._next;
+          child._prev = child._next = child._parent = null;
+          this._flag(child, false);
+        }
+        this._first = this._last = null;
+        this._ts_children = ++iid;
+        this.touch();
+        return this;
+      }
+      touch() {
+        this._ts_touch = ++iid;
+        this._parent && this._parent.touch();
+        return this;
+      }
+      /** @internal Deep flag, used for optimizing event distribution. */
+      _flag(key, value) {
+        if (typeof value === "undefined") {
+          return this._flags !== null && this._flags[key] || 0;
+        }
+        if (typeof key === "string") {
+          if (value) {
+            this._flags = this._flags || {};
+            if (!this._flags[key] && this._parent) {
+              this._parent._flag(key, true);
+            }
+            this._flags[key] = (this._flags[key] || 0) + 1;
+          } else if (this._flags && this._flags[key] > 0) {
+            if (this._flags[key] == 1 && this._parent) {
+              this._parent._flag(key, false);
+            }
+            this._flags[key] = this._flags[key] - 1;
+          }
+        }
+        if (typeof key === "object") {
+          if (key._flags) {
+            for (const type in key._flags) {
+              if (key._flags[type] > 0) {
+                this._flag(type, value);
+              }
+            }
+          }
+        }
+        return this;
+      }
+      /** @internal */
+      hitTest(hit) {
+        const width = this._pin._width;
+        const height = this._pin._height;
+        return hit.x >= 0 && hit.x <= width && hit.y >= 0 && hit.y <= height;
+      }
+      prerender() {
+        if (!this._visible) {
+          return;
+        }
+        let child;
+        let next = this._first;
+        while (child = next) {
+          next = child._next;
+          child.prerender();
+        }
+      }
+      render(context) {
+        if (!this._visible) {
+          return;
+        }
+        stats.node++;
+        const m = this.matrix();
+        context.setTransform(m.a, m.b, m.c, m.d, m.e, m.f);
+        this._alpha = this._pin._alpha * (this._parent ? this._parent._alpha : 1);
+        const alpha = this._pin._textureAlpha * this._alpha;
+        if (context.globalAlpha != alpha) {
+          context.globalAlpha = alpha;
+        }
+        if (this._textures) {
+          for (let i = 0, n = this._textures.length; i < n; i++) {
+            this._textures[i].draw(context);
+          }
+        }
+        if (context.globalAlpha != this._alpha) {
+          context.globalAlpha = this._alpha;
+        }
+        let child;
+        let next = this._first;
+        while (child = next) {
+          next = child._next;
+          child.render(context);
+        }
+      }
+      /** @internal */
+      _tick(elapsed, now, last) {
+        if (!this._visible) {
+          return;
+        }
+        if (elapsed > this.MAX_ELAPSE) {
+          elapsed = this.MAX_ELAPSE;
+        }
+        let ticked = false;
+        if (this._tickBefore !== null) {
+          for (let i = 0; i < this._tickBefore.length; i++) {
+            stats.tick++;
+            const tickFn = this._tickBefore[i];
+            ticked = tickFn.call(this, elapsed, now, last) === true || ticked;
+          }
+        }
+        let child;
+        let next = this._first;
+        while (child = next) {
+          next = child._next;
+          if (child._flag("_tick")) {
+            ticked = child._tick(elapsed, now, last) === true ? true : ticked;
+          }
+        }
+        if (this._tickAfter !== null) {
+          for (let i = 0; i < this._tickAfter.length; i++) {
+            stats.tick++;
+            const tickFn = this._tickAfter[i];
+            ticked = tickFn.call(this, elapsed, now, last) === true || ticked;
+          }
+        }
+        return ticked;
+      }
+      tick(callback, before = false) {
+        var _a, _b;
+        if (typeof callback !== "function") {
+          return;
+        }
+        if (before) {
+          if (this._tickBefore === null) {
+            this._tickBefore = [];
+          }
+          this._tickBefore.push(callback);
+        } else {
+          if (this._tickAfter === null) {
+            this._tickAfter = [];
+          }
+          this._tickAfter.push(callback);
+        }
+        const hasTickListener = ((_a = this._tickAfter) == null ? void 0 : _a.length) > 0 || ((_b = this._tickBefore) == null ? void 0 : _b.length) > 0;
+        this._flag("_tick", hasTickListener);
+      }
+      untick(callback) {
+        if (typeof callback !== "function") {
+          return;
+        }
+        let i;
+        if (this._tickBefore !== null && (i = this._tickBefore.indexOf(callback)) >= 0) {
+          this._tickBefore.splice(i, 1);
+        }
+        if (this._tickAfter !== null && (i = this._tickAfter.indexOf(callback)) >= 0) {
+          this._tickAfter.splice(i, 1);
+        }
+      }
+      timeout(callback, time) {
+        this.setTimeout(callback, time);
+      }
+      setTimeout(callback, time) {
+        function timer(t) {
+          if ((time -= t) < 0) {
+            this.untick(timer);
+            callback.call(this);
+          } else {
+            return true;
+          }
+        }
+        this.tick(timer);
+        return timer;
+      }
+      clearTimeout(timer) {
+        this.untick(timer);
+      }
+      on(type, listener) {
+        if (!type || !type.length || typeof listener !== "function") {
+          return this;
+        }
+        if (typeof type !== "string" && typeof type.join === "function") {
+          for (let i = 0; i < type.length; i++) {
+            this.on(type[i], listener);
+          }
+        } else if (typeof type === "string" && type.indexOf(" ") > -1) {
+          type = type.match(/\S+/g);
+          for (let i = 0; i < type.length; i++) {
+            this._on(type[i], listener);
+          }
+        } else if (typeof type === "string") {
+          this._on(type, listener);
+        } else
+          ;
+        return this;
+      }
+      /** @internal */
+      _on(type, listener) {
+        if (typeof type !== "string" && typeof listener !== "function") {
+          return;
+        }
+        this._listeners[type] = this._listeners[type] || [];
+        this._listeners[type].push(listener);
+        this._flag(type, true);
+      }
+      off(type, listener) {
+        if (!type || !type.length || typeof listener !== "function") {
+          return this;
+        }
+        if (typeof type !== "string" && typeof type.join === "function") {
+          for (let i = 0; i < type.length; i++) {
+            this.off(type[i], listener);
+          }
+        } else if (typeof type === "string" && type.indexOf(" ") > -1) {
+          type = type.match(/\S+/g);
+          for (let i = 0; i < type.length; i++) {
+            this._off(type[i], listener);
+          }
+        } else if (typeof type === "string") {
+          this._off(type, listener);
+        } else
+          ;
+        return this;
+      }
+      /** @internal */
+      _off(type, listener) {
+        if (typeof type !== "string" && typeof listener !== "function") {
+          return;
+        }
+        const listeners = this._listeners[type];
+        if (!listeners || !listeners.length) {
+          return;
+        }
+        const index = listeners.indexOf(listener);
+        if (index >= 0) {
+          listeners.splice(index, 1);
+          this._flag(type, false);
+        }
+      }
+      listeners(type) {
+        return this._listeners[type];
+      }
+      publish(name, args) {
+        const listeners = this.listeners(name);
+        if (!listeners || !listeners.length) {
+          return 0;
+        }
+        for (let l = 0; l < listeners.length; l++) {
+          listeners[l].apply(this, args);
+        }
+        return listeners.length;
+      }
+      /** @hidden @deprecated @internal */
+      trigger(name, args) {
+        this.publish(name, args);
+        return this;
+      }
+      size(w, h) {
+        this.pin("width", w);
+        this.pin("height", h);
+        return this;
+      }
+      width(w) {
+        if (typeof w === "undefined") {
+          return this.pin("width");
+        }
+        this.pin("width", w);
+        return this;
+      }
+      height(h) {
+        if (typeof h === "undefined") {
+          return this.pin("height");
+        }
+        this.pin("height", h);
+        return this;
+      }
+      offset(a, b) {
+        if (typeof a === "object") {
+          b = a.y;
+          a = a.x;
+        }
+        this.pin("offsetX", a);
+        this.pin("offsetY", b);
+        return this;
+      }
+      rotate(a) {
+        this.pin("rotation", a);
+        return this;
+      }
+      skew(a, b) {
+        if (typeof a === "object") {
+          b = a.y;
+          a = a.x;
+        } else if (typeof b === "undefined")
+          b = a;
+        this.pin("skewX", a);
+        this.pin("skewY", b);
+        return this;
+      }
+      scale(a, b) {
+        if (typeof a === "object") {
+          b = a.y;
+          a = a.x;
+        } else if (typeof b === "undefined")
+          b = a;
+        this.pin("scaleX", a);
+        this.pin("scaleY", b);
+        return this;
+      }
+      alpha(a, ta) {
+        this.pin("alpha", a);
+        if (typeof ta !== "undefined") {
+          this.pin("textureAlpha", ta);
+        }
+        return this;
+      }
+      tween(a, b, c) {
+        let options;
+        if (typeof a === "object" && a !== null) {
+          options = a;
+        } else {
+          options = {};
+          if (typeof a === "number") {
+            options.duration = a;
+            if (typeof b === "number") {
+              options.delay = b;
+              if (typeof c === "boolean") {
+                options.append = c;
+              }
+            } else if (typeof b === "boolean") {
+              options.append = b;
+            }
+          } else if (typeof a === "boolean") {
+            options.append = a;
+          }
+        }
+        if (!this._transitionTickInitied) {
+          this.tick(this._transitionTick, true);
+          this._transitionTickInitied = true;
+        }
+        this.touch();
+        if (!options.append) {
+          this._transitions.length = 0;
+        }
+        const transition = new Transition(this, options);
+        this._transitions.push(transition);
+        return transition;
+      }
+      row(align) {
+        this.align("row", align);
+        return this;
+      }
+      column(align) {
+        this.align("column", align);
+        return this;
+      }
+      align(type, align) {
+        this._padding = this._padding;
+        this._spacing = this._spacing;
+        this._layoutTicker && this.untick(this._layoutTicker);
+        this.tick(
+          this._layoutTicker = () => {
+            if (this._mo_seq == this._ts_touch) {
+              return;
+            }
+            this._mo_seq = this._ts_touch;
+            const alignChildren = this._mo_seqAlign != this._ts_children;
+            this._mo_seqAlign = this._ts_children;
+            let width = 0;
+            let height = 0;
+            let child;
+            let next = this.first(true);
+            let first = true;
+            while (child = next) {
+              next = child.next(true);
+              child.matrix(true);
+              const w = child.pin("boxWidth");
+              const h = child.pin("boxHeight");
+              if (type == "column") {
+                !first && (height += this._spacing);
+                child.pin("offsetY") != height && child.pin("offsetY", height);
+                width = Math.max(width, w);
+                height = height + h;
+                alignChildren && child.pin("alignX", align);
+              } else if (type == "row") {
+                !first && (width += this._spacing);
+                child.pin("offsetX") != width && child.pin("offsetX", width);
+                width = width + w;
+                height = Math.max(height, h);
+                alignChildren && child.pin("alignY", align);
+              }
+              first = false;
+            }
+            width += 2 * this._padding;
+            height += 2 * this._padding;
+            this.pin("width") != width && this.pin("width", width);
+            this.pin("height") != height && this.pin("height", height);
+          }
+        );
+        return this;
+      }
+      /** @deprecated Use minimize() */
+      box() {
+        return this.minimize();
+      }
+      /** @deprecated Use minimize() */
+      layer() {
+        return this.maximize();
+      }
+      /**
+       * Set size to match largest child size.
+       */
+      minimize() {
+        this._padding = this._padding;
+        this._layoutTicker && this.untick(this._layoutTicker);
+        this.tick(
+          this._layoutTicker = () => {
+            if (this._mo_box == this._ts_touch) {
+              return;
+            }
+            this._mo_box = this._ts_touch;
+            let width = 0;
+            let height = 0;
+            let child;
+            let next = this.first(true);
+            while (child = next) {
+              next = child.next(true);
+              child.matrix(true);
+              const w = child.pin("boxWidth");
+              const h = child.pin("boxHeight");
+              width = Math.max(width, w);
+              height = Math.max(height, h);
+            }
+            width += 2 * this._padding;
+            height += 2 * this._padding;
+            this.pin("width") != width && this.pin("width", width);
+            this.pin("height") != height && this.pin("height", height);
+          }
+        );
+        return this;
+      }
+      /**
+       * Set size to match parent size.
+       */
+      maximize() {
+        this._layoutTicker && this.untick(this._layoutTicker);
+        this.tick(
+          this._layoutTicker = () => {
+            const parent = this.parent();
+            if (parent) {
+              const width = parent.pin("width");
+              if (this.pin("width") != width) {
+                this.pin("width", width);
+              }
+              const height = parent.pin("height");
+              if (this.pin("height") != height) {
+                this.pin("height", height);
+              }
+            }
+          },
+          true
+        );
+        return this;
+      }
+      // TODO: move padding to pin
+      /**
+       * Set cell spacing for layout.
+       */
+      padding(pad) {
+        this._padding = pad;
+        return this;
+      }
+      /**
+       * Set cell spacing for row and column layout.
+       */
+      spacing(space) {
+        this._spacing = space;
+        return this;
+      }
+    }
+    const sprite = function(frame) {
+      const sprite2 = new Sprite();
+      frame && sprite2.texture(frame);
+      return sprite2;
+    };
+    class Sprite extends Node {
+      constructor() {
+        super();
+        this.prerenderContext = {};
+        this.label("Sprite");
+        this._textures = [];
+        this._image = null;
+      }
+      texture(frame) {
+        this._image = texture(frame).one();
+        if (this._image) {
+          this.pin("width", this._image.getWidth());
+          this.pin("height", this._image.getHeight());
+          this._textures[0] = new PipeTexture(this._image);
+          this._textures.length = 1;
+        } else {
+          this.pin("width", 0);
+          this.pin("height", 0);
+          this._textures.length = 0;
+        }
+        return this;
+      }
+      /** @deprecated */
+      image(frame) {
+        return this.texture(frame);
+      }
+      tile(inner = false) {
+        const texture2 = new ResizableTexture(this._image, "tile");
+        this._textures[0] = texture2;
+        return this;
+      }
+      stretch(inner = false) {
+        const texture2 = new ResizableTexture(this._image, "stretch");
+        this._textures[0] = texture2;
+        return this;
+      }
+      prerender() {
+        if (!this._visible) {
+          return;
+        }
+        if (this._image) {
+          const pixelRatio = this.getPixelRatio();
+          this.prerenderContext.pixelRatio = pixelRatio;
+          const updated = this._image.prerender(this.prerenderContext);
+          if (updated === true) {
+            const w = this._image.getWidth();
+            const h = this._image.getHeight();
+            this.size(w, h);
+          }
+        }
+        super.prerender();
+      }
+      render(context) {
+        const texture2 = this._textures[0];
+        if (texture2 == null ? void 0 : texture2["_resizeMode"]) {
+          texture2.dw = this.pin("width");
+          texture2.dh = this.pin("height");
+        }
+        super.render(context);
+      }
+    }
+    const image = sprite;
+    const Image$1 = Sprite;
+    class CanvasTexture extends ImageTexture {
+      constructor() {
+        super(document.createElement("canvas"));
+        this._lastPixelRatio = 0;
+      }
+      /**
+       * Note: provided width and height will be texture size, and canvas size is texture size multiply by pixelRatio.
+       */
+      setSize(textureWidth, textureHeight, pixelRatio = 1) {
+        this._source.width = textureWidth * pixelRatio;
+        this._source.height = textureHeight * pixelRatio;
+        this._pixelRatio = pixelRatio;
+      }
+      getContext(type = "2d", attributes) {
+        return this._source.getContext(type, attributes);
+      }
+      /**
+       * @experimental
+       *
+       * This is the ratio of screen pixel to this canvas pixel.
+       */
+      getOptimalPixelRatio() {
+        return Math.ceil(this._lastPixelRatio);
+      }
+      setMemoizer(memoizer) {
+        this._memoizer = memoizer;
+      }
+      setDrawer(drawer) {
+        this._drawer = drawer;
+      }
+      /** @internal */
+      prerender(context) {
+        const newPixelRatio = context.pixelRatio;
+        const lastPixelRatio = this._lastPixelRatio;
+        const pixelRationChange = lastPixelRatio / newPixelRatio;
+        const pixelRatioChanged = lastPixelRatio === 0 || pixelRationChange > 1.25 || pixelRationChange < 0.8;
+        if (pixelRatioChanged) {
+          this._lastPixelRatio = newPixelRatio;
+        }
+        const newMemoKey = this._memoizer ? this._memoizer.call(this) : null;
+        const memoKeyChanged = this._lastMemoKey !== newMemoKey;
+        if (pixelRatioChanged || memoKeyChanged) {
+          this._lastMemoKey = newMemoKey;
+          this._lastPixelRatio = newPixelRatio;
+          if (typeof this._drawer === "function") {
+            this._drawer.call(this);
+          }
+          return true;
+        }
+      }
+      /** @hidden @deprecated */
+      size(width, height, pixelRatio) {
+        this.setSize(width, height, pixelRatio);
+        return this;
+      }
+      /** @hidden @deprecated */
+      context(type = "2d", attributes) {
+        return this.getContext(type, attributes);
+      }
+      /** @hidden @deprecated */
+      canvas(legacyTextureDrawer) {
+        if (typeof legacyTextureDrawer === "function") {
+          legacyTextureDrawer.call(this, this.getContext());
+        } else if (typeof legacyTextureDrawer === "undefined") {
+          if (typeof this._drawer === "function") {
+            this._drawer.call(this);
+          }
+        }
+        return this;
+      }
+    }
+    function canvas(type, attributes, legacyTextureDrawer) {
+      if (typeof type === "function") {
+        const texture2 = new CanvasTexture();
+        legacyTextureDrawer = type;
+        texture2.setDrawer(function() {
+          legacyTextureDrawer.call(texture2, texture2.getContext());
+        });
+        return texture2;
+      } else if (typeof attributes === "function") {
+        const texture2 = new CanvasTexture();
+        legacyTextureDrawer = attributes;
+        texture2.setDrawer(function() {
+          legacyTextureDrawer.call(texture2, texture2.getContext(type));
+        });
+        return texture2;
+      } else if (typeof legacyTextureDrawer === "function") {
+        const texture2 = new CanvasTexture();
+        texture2.setDrawer(function() {
+          legacyTextureDrawer.call(texture2, texture2.getContext(type, attributes));
+        });
+        return texture2;
+      } else {
+        const texture2 = new CanvasTexture();
+        return texture2;
+      }
+    }
+    function memoizeDraw(legacySpriteDrawer, legacySpriteMemoizer = () => null) {
+      const sprite2 = new Sprite();
+      const texture2 = new CanvasTexture();
+      sprite2.texture(texture2);
+      texture2.setDrawer(function() {
+        legacySpriteDrawer(2.5 * texture2._lastPixelRatio, texture2, sprite2);
+      });
+      texture2.setMemoizer(legacySpriteMemoizer);
+      return sprite2;
+    }
+    const POINTER_CLICK = "click";
+    const POINTER_START = "touchstart mousedown";
+    const POINTER_MOVE = "touchmove mousemove";
+    const POINTER_END = "touchend mouseup";
+    const POINTER_CANCEL = "touchcancel mousecancel";
+    class EventPoint {
+      clone(obj) {
+        if (obj) {
+          obj.x = this.x;
+          obj.y = this.y;
+        } else {
+          obj = {
+            x: this.x,
+            y: this.y
+          };
+        }
+        return obj;
+      }
+      toString() {
+        return (this.x | 0) + "x" + (this.y | 0);
+      }
+    }
+    class PointerSyntheticEvent {
+      constructor() {
+        this.abs = new EventPoint();
+      }
+      clone(obj) {
+        if (obj) {
+          obj.x = this.x;
+          obj.y = this.y;
+        } else {
+          obj = {
+            x: this.x,
+            y: this.y
+          };
+        }
+        return obj;
+      }
+      toString() {
+        return this.type + ": " + (this.x | 0) + "x" + (this.y | 0);
+      }
+    }
+    class VisitPayload {
+      constructor() {
+        this.type = "";
+        this.x = 0;
+        this.y = 0;
+        this.timeStamp = -1;
+        this.event = null;
+        this.root = null;
+        this.collected = null;
+      }
+      toString() {
+        return this.type + ": " + (this.x | 0) + "x" + (this.y | 0);
+      }
+    }
+    const syntheticEvent = new PointerSyntheticEvent();
+    const PAYLOAD = new VisitPayload();
+    class Pointer {
+      constructor() {
+        this.ratio = 1;
+        this.clickList = [];
+        this.cancelList = [];
+        this.handleStart = (event) => {
+          event.preventDefault();
+          this.localPoint(event);
+          this.dispatchEvent(event.type, event);
+          this.findTargets("click", this.clickList);
+          this.findTargets("mousecancel", this.cancelList);
+        };
+        this.handleMove = (event) => {
+          event.preventDefault();
+          this.localPoint(event);
+          this.dispatchEvent(event.type, event);
+        };
+        this.handleEnd = (event) => {
+          event.preventDefault();
+          this.dispatchEvent(event.type, event);
+          if (this.clickList.length) {
+            this.dispatchEvent("click", event, this.clickList);
+          }
+          this.cancelList.length = 0;
+        };
+        this.handleCancel = (event) => {
+          if (this.cancelList.length) {
+            this.dispatchEvent("mousecancel", event, this.cancelList);
+          }
+          this.clickList.length = 0;
+        };
+        this.visitStart = (node, payload) => {
+          return !node._flag(payload.type);
+        };
+        this.visitEnd = (node, payload) => {
+          syntheticEvent.raw = payload.event;
+          syntheticEvent.type = payload.type;
+          syntheticEvent.timeStamp = payload.timeStamp;
+          syntheticEvent.abs.x = payload.x;
+          syntheticEvent.abs.y = payload.y;
+          const listeners = node.listeners(payload.type);
+          if (!listeners) {
+            return;
+          }
+          node.matrix().inverse().map(payload, syntheticEvent);
+          const isEventTarget = node === payload.root || node.attr("spy") || node.hitTest(syntheticEvent);
+          if (!isEventTarget) {
+            return;
+          }
+          if (payload.collected) {
+            payload.collected.push(node);
+          }
+          if (payload.event) {
+            let cancel = false;
+            for (let l = 0; l < listeners.length; l++) {
+              cancel = listeners[l].call(node, syntheticEvent) ? true : cancel;
+            }
+            return cancel;
+          }
+        };
+      }
+      mount(stage, elem) {
+        this.stage = stage;
+        this.elem = elem;
+        this.ratio = stage.viewport().ratio || 1;
+        stage.on("viewport", (viewport) => {
+          this.ratio = viewport.ratio ?? this.ratio;
+        });
+        elem.addEventListener("touchstart", this.handleStart);
+        elem.addEventListener("touchend", this.handleEnd);
+        elem.addEventListener("touchmove", this.handleMove);
+        elem.addEventListener("touchcancel", this.handleCancel);
+        elem.addEventListener("mousedown", this.handleStart);
+        elem.addEventListener("mouseup", this.handleEnd);
+        elem.addEventListener("mousemove", this.handleMove);
+        document.addEventListener("mouseup", this.handleCancel);
+        window.addEventListener("blur", this.handleCancel);
+        return this;
+      }
+      unmount() {
+        const elem = this.elem;
+        elem.removeEventListener("touchstart", this.handleStart);
+        elem.removeEventListener("touchend", this.handleEnd);
+        elem.removeEventListener("touchmove", this.handleMove);
+        elem.removeEventListener("touchcancel", this.handleCancel);
+        elem.removeEventListener("mousedown", this.handleStart);
+        elem.removeEventListener("mouseup", this.handleEnd);
+        elem.removeEventListener("mousemove", this.handleMove);
+        document.removeEventListener("mouseup", this.handleCancel);
+        window.removeEventListener("blur", this.handleCancel);
+        return this;
+      }
+      /**
+       * Computer the location of the pointer event in the canvas coordination
+       */
+      localPoint(event) {
+        var _a;
+        const elem = this.elem;
+        let x;
+        let y;
+        if ((_a = event.touches) == null ? void 0 : _a.length) {
+          x = event.touches[0].clientX;
+          y = event.touches[0].clientY;
+        } else {
+          x = event.clientX;
+          y = event.clientY;
+        }
+        const rect = elem.getBoundingClientRect();
+        x -= rect.left;
+        y -= rect.top;
+        x -= elem.clientLeft | 0;
+        y -= elem.clientTop | 0;
+        PAYLOAD.x = x * this.ratio;
+        PAYLOAD.y = y * this.ratio;
+      }
+      /**
+       * Find eligible target for and event type, used to keep trace nodes to dispatch click event
+       */
+      findTargets(type, result) {
+        const payload = PAYLOAD;
+        payload.type = type;
+        payload.root = this.stage;
+        payload.event = null;
+        payload.collected = result;
+        payload.collected.length = 0;
+        this.stage.visit(
+          {
+            reverse: true,
+            visible: true,
+            start: this.visitStart,
+            end: this.visitEnd
+          },
+          payload
+        );
+      }
+      dispatchEvent(type, event, targets) {
+        const payload = PAYLOAD;
+        payload.type = type;
+        payload.root = this.stage;
+        payload.event = event;
+        payload.timeStamp = Date.now();
+        payload.collected = null;
+        if (targets) {
+          while (targets.length) {
+            const node = targets.shift();
+            if (this.visitEnd(node, payload)) {
+              break;
+            }
+          }
+          targets.length = 0;
+        } else {
+          this.stage.visit(
+            {
+              reverse: true,
+              visible: true,
+              start: this.visitStart,
+              end: this.visitEnd
+            },
+            payload
+          );
+        }
+      }
+    }
+    const Mouse = {
+      CLICK: "click",
+      START: "touchstart mousedown",
+      MOVE: "touchmove mousemove",
+      END: "touchend mouseup",
+      CANCEL: "touchcancel mousecancel"
+    };
+    const ROOTS = [];
     const pause = function() {
-      for (let i = _stages.length - 1; i >= 0; i--) {
-        _stages[i].pause();
+      for (let i = ROOTS.length - 1; i >= 0; i--) {
+        ROOTS[i].pause();
       }
     };
     const resume = function() {
-      for (let i = _stages.length - 1; i >= 0; i--) {
-        _stages[i].resume();
+      for (let i = ROOTS.length - 1; i >= 0; i--) {
+        ROOTS[i].resume();
       }
     };
     const mount = function(configs = {}) {
-      let root = new Root();
+      const root = new Root();
       root.mount(configs);
-      root.mouse = new Mouse().mount(root, root.dom);
+      root.pointer = new Pointer().mount(root, root.dom);
       return root;
     };
     class Root extends Node {
       constructor() {
         super();
-        __publicField(this, "canvas", null);
-        __publicField(this, "dom", null);
-        __publicField(this, "context", null);
-        __publicField(this, "pixelWidth", -1);
-        __publicField(this, "pixelHeight", -1);
-        __publicField(this, "pixelRatio", 1);
-        __publicField(this, "drawingWidth", 0);
-        __publicField(this, "drawingHeight", 0);
-        __publicField(this, "mounted", false);
-        __publicField(this, "paused", false);
-        __publicField(this, "sleep", false);
-        __publicField(this, "mount", (configs = {}) => {
+        this.canvas = null;
+        this.dom = null;
+        this.context = null;
+        this.pixelWidth = -1;
+        this.pixelHeight = -1;
+        this.pixelRatio = 1;
+        this.drawingWidth = 0;
+        this.drawingHeight = 0;
+        this.mounted = false;
+        this.paused = false;
+        this.sleep = false;
+        this.mount = (configs = {}) => {
           if (typeof configs.canvas === "string") {
             this.canvas = document.getElementById(configs.canvas);
+            if (!this.canvas) {
+              console.error("Canvas element not found: ", configs.canvas);
+            }
           } else if (configs.canvas instanceof HTMLCanvasElement) {
             this.canvas = configs.canvas;
-          } else if (configs.canvas)
-            ;
+          } else if (configs.canvas) {
+            console.error("Unknown value for canvas:", configs.canvas);
+          }
           if (!this.canvas) {
             this.canvas = document.getElementById("cutjs") || document.getElementById("stage");
           }
           if (!this.canvas) {
-            console.log("Creating Canvas...");
             this.canvas = document.createElement("canvas");
             Object.assign(this.canvas.style, {
               position: "absolute",
@@ -18229,31 +18935,39 @@
               width: "100%",
               height: "100%"
             });
-            let body = document.body;
+            const body = document.body;
             body.insertBefore(this.canvas, body.firstChild);
           }
           this.dom = this.canvas;
           this.context = this.canvas.getContext("2d");
-          this.devicePixelRatio = window.devicePixelRatio || 1;
-          this.backingStoreRatio = this.context.webkitBackingStorePixelRatio || this.context.mozBackingStorePixelRatio || this.context.msBackingStorePixelRatio || this.context.oBackingStorePixelRatio || this.context.backingStorePixelRatio || 1;
+          const devicePixelRatio = window.devicePixelRatio || 1;
+          const backingStorePixelRatio = (
+            // @ts-ignore
+            this.context.webkitBackingStorePixelRatio || // @ts-ignore
+            this.context.mozBackingStorePixelRatio || // @ts-ignore
+            this.context.msBackingStorePixelRatio || // @ts-ignore
+            this.context.oBackingStorePixelRatio || // @ts-ignore
+            this.context.backingStorePixelRatio || 1
+          );
+          this.devicePixelRatio = devicePixelRatio;
+          this.backingStoreRatio = backingStorePixelRatio;
           this.pixelRatio = this.devicePixelRatio / this.backingStoreRatio;
           this.mounted = true;
-          _stages.push(this);
-          this.requestFrame(this.onFrame);
-        });
-        __publicField(this, "frameRequested", false);
-        __publicField(this, "requestFrame", () => {
+          ROOTS.push(this);
+          this.requestFrame();
+        };
+        this.frameRequested = false;
+        this.requestFrame = () => {
           if (!this.frameRequested) {
             this.frameRequested = true;
             requestAnimationFrame(this.onFrame);
           }
-        });
-        __publicField(this, "lastTime", 0);
-        __publicField(this, "_mo_touch", null);
-        // monitor touch
-        __publicField(this, "onFrame", (now) => {
+        };
+        this._lastFrameTime = 0;
+        this._mo_touch = null;
+        this.onFrame = (now) => {
           this.frameRequested = false;
-          if (!this.mounted) {
+          if (!this.mounted || !this.canvas || !this.context) {
             return;
           }
           this.requestFrame();
@@ -18267,7 +18981,6 @@
             if (this.canvas.width !== this.drawingWidth || this.canvas.height !== this.drawingHeight) {
               this.canvas.width = this.drawingWidth;
               this.canvas.height = this.drawingHeight;
-              console.log("Resize: [" + this.drawingWidth + ", " + this.drawingHeight + "] = " + this.pixelRatio + " x [" + this.pixelWidth + ", " + this.pixelHeight + "]");
               this.viewport({
                 width: this.drawingWidth,
                 height: this.drawingHeight,
@@ -18275,13 +18988,14 @@
               });
             }
           }
-          let last = this.lastTime || now;
-          let elapsed = now - last;
+          const last = this._lastFrameTime || now;
+          const elapsed = now - last;
           if (!this.mounted || this.paused || this.sleep) {
             return;
           }
-          this.lastTime = now;
-          let tickRequest = this._tick(elapsed, now, last);
+          this._lastFrameTime = now;
+          this.prerender();
+          const tickRequest = this._tick(elapsed, now, last);
           if (this._mo_touch != this._ts_touch) {
             this._mo_touch = this._ts_touch;
             this.sleep = false;
@@ -18296,7 +19010,7 @@
             this.sleep = true;
           }
           stats.fps = elapsed ? 1e3 / elapsed : 0;
-        });
+        };
         this.label("Root");
       }
       resume() {
@@ -18315,33 +19029,30 @@
         this.paused = true;
         return this;
       }
+      /** @internal */
       touch() {
         if (this.sleep || this.paused) {
           this.requestFrame();
         }
         this.sleep = false;
-        return Node.prototype.touch();
+        return super.touch();
       }
       unmount() {
         var _a;
         this.mounted = false;
-        let index = _stages.indexOf(this);
+        const index = ROOTS.indexOf(this);
         if (index >= 0) {
-          _stages.splice(index, 1);
+          ROOTS.splice(index, 1);
         }
-        (_a = this.mouse) == null ? void 0 : _a.unmount();
+        (_a = this.pointer) == null ? void 0 : _a.unmount();
         return this;
       }
       background(color) {
-        this.dom.style.backgroundColor = color;
+        if (this.dom) {
+          this.dom.style.backgroundColor = color;
+        }
         return this;
       }
-      /**
-       * Set/Get viewport.
-       * This is used along with viewbox to determine the scale and position of the viewbox within the viewport.
-       * Viewport is the size of the container, for example size of the canvas element.
-       * Viewbox is provided by the user, and is the ideal size of the content.
-       */
       viewport(width, height, ratio) {
         if (typeof width === "undefined") {
           return Object.assign({}, this._viewport);
@@ -18352,30 +19063,25 @@
           height = options.height;
           ratio = options.ratio;
         }
-        this._viewport = {
-          width,
-          height,
-          ratio: ratio || 1
-        };
-        this.viewbox();
-        let data = Object.assign({}, this._viewport);
-        this.visit({
-          start: function(node) {
-            if (!node._flag("viewport")) {
-              return true;
+        if (typeof width === "number" && typeof height === "number") {
+          this._viewport = {
+            width,
+            height,
+            ratio: typeof ratio === "number" ? ratio : 1
+          };
+          this.viewbox();
+          const data = Object.assign({}, this._viewport);
+          this.visit({
+            start: function(node) {
+              if (!node._flag("viewport")) {
+                return true;
+              }
+              node.publish("viewport", [data]);
             }
-            node.publish("viewport", [data]);
-          }
-        });
+          });
+        }
         return this;
       }
-      /**
-       * Set viewbox.
-       * 
-       * @param {mode} string - One of: 'in-pad' (like css object-fit: 'contain'), 'in', 'out-crop' (like css object-fit: 'cover'), 'out'
-       */
-      // TODO: static/fixed viewbox
-      // TODO: use css object-fit values
       viewbox(width, height, mode) {
         if (typeof width === "number" && typeof height === "number") {
           this._viewbox = {
@@ -18396,14 +19102,15 @@
         this.rescale();
         return this;
       }
+      /** @internal */
       rescale() {
-        let viewbox = this._viewbox;
-        let viewport = this._viewport;
-        let camera = this._camera;
+        const viewbox = this._viewbox;
+        const viewport = this._viewport;
+        const camera = this._camera;
         if (viewport && viewbox) {
           const viewportWidth = viewport.width;
           const viewportHeight = viewport.height;
-          const viewboxMode = /^(in|out|in-pad|out-crop)$/.test(viewbox.mode) ? viewbox.mode : "in-pad";
+          const viewboxMode = isValidFitMode(viewbox.mode) ? viewbox.mode : "in-pad";
           const viewboxWidth = viewbox.width;
           const viewboxHeight = viewbox.height;
           this.pin({
@@ -18431,450 +19138,222 @@
         return this;
       }
     }
-    const sprite = function(frame) {
-      var sprite2 = new Sprite();
-      frame && sprite2.texture(frame);
-      return sprite2;
-    };
-    Sprite._super = Node;
-    Sprite.prototype = Object.create(Sprite._super.prototype);
-    function Sprite() {
-      Sprite._super.call(this);
-      this.label("Sprite");
-      this._textures = [];
-      this._image = null;
-    }
-    Sprite.prototype.texture = function(frame) {
-      this._image = texture(frame).one();
-      this.pin("width", this._image ? this._image.width : 0);
-      this.pin("height", this._image ? this._image.height : 0);
-      this._textures[0] = this._image.pipe();
-      this._textures.length = 1;
-      return this;
-    };
-    Sprite.prototype.tile = function(inner) {
-      this._repeat(false, inner);
-      return this;
-    };
-    Sprite.prototype.stretch = function(inner) {
-      this._repeat(true, inner);
-      return this;
-    };
-    Sprite.prototype._repeat = function(stretch, inner) {
-      var self = this;
-      this.untick(this._repeatTicker);
-      this.tick(this._repeatTicker = function() {
-        if (this._mo_stretch == this._pin._ts_transform) {
-          return;
-        }
-        this._mo_stretch = this._pin._ts_transform;
-        var width = this.pin("width");
-        var height = this.pin("height");
-        this._textures.length = repeat(this._image, width, height, stretch, inner, insert);
-      });
-      function insert(i, sx, sy, sw, sh, dx, dy, dw, dh) {
-        var repeat2 = self._textures.length > i ? self._textures[i] : self._textures[i] = self._image.pipe();
-        repeat2.src(sx, sy, sw, sh);
-        repeat2.dest(dx, dy, dw, dh);
-      }
-    };
-    function repeat(img, owidth, oheight, stretch, inner, insert) {
-      var width = img.width;
-      var height = img.height;
-      var left = img.left;
-      var right = img.right;
-      var top = img.top;
-      var bottom = img.bottom;
-      left = typeof left === "number" && left === left ? left : 0;
-      right = typeof right === "number" && right === right ? right : 0;
-      top = typeof top === "number" && top === top ? top : 0;
-      bottom = typeof bottom === "number" && bottom === bottom ? bottom : 0;
-      width = width - left - right;
-      height = height - top - bottom;
-      if (!inner) {
-        owidth = Math.max(owidth - left - right, 0);
-        oheight = Math.max(oheight - top - bottom, 0);
-      }
-      var i = 0;
-      if (top > 0 && left > 0)
-        insert(i++, 0, 0, left, top, 0, 0, left, top);
-      if (bottom > 0 && left > 0)
-        insert(i++, 0, height + top, left, bottom, 0, oheight + top, left, bottom);
-      if (top > 0 && right > 0)
-        insert(i++, width + left, 0, right, top, owidth + left, 0, right, top);
-      if (bottom > 0 && right > 0)
-        insert(
-          i++,
-          width + left,
-          height + top,
-          right,
-          bottom,
-          owidth + left,
-          oheight + top,
-          right,
-          bottom
-        );
-      if (stretch) {
-        if (top > 0)
-          insert(i++, left, 0, width, top, left, 0, owidth, top);
-        if (bottom > 0)
-          insert(
-            i++,
-            left,
-            height + top,
-            width,
-            bottom,
-            left,
-            oheight + top,
-            owidth,
-            bottom
-          );
-        if (left > 0)
-          insert(i++, 0, top, left, height, 0, top, left, oheight);
-        if (right > 0)
-          insert(
-            i++,
-            width + left,
-            top,
-            right,
-            height,
-            owidth + left,
-            top,
-            right,
-            oheight
-          );
-        insert(i++, left, top, width, height, left, top, owidth, oheight);
-      } else {
-        var l = left, r = owidth, w;
-        while (r > 0) {
-          w = Math.min(width, r), r -= width;
-          var t = top, b = oheight, h;
-          while (b > 0) {
-            h = Math.min(height, b), b -= height;
-            insert(i++, left, top, w, h, l, t, w, h);
-            if (r <= 0) {
-              if (left)
-                insert(i++, 0, top, left, h, 0, t, left, h);
-              if (right)
-                insert(i++, width + left, top, right, h, l + w, t, right, h);
-            }
-            t += h;
-          }
-          if (top)
-            insert(i++, left, 0, w, top, l, 0, w, top);
-          if (bottom)
-            insert(i++, left, height + top, w, bottom, l, t, w, bottom);
-          l += w;
-        }
-      }
-      return i;
-    }
-    Sprite.prototype.image = Sprite.prototype.texture;
-    const image = sprite;
-    const Image$1 = Sprite;
     const anim = function(frames, fps) {
-      var anim2 = new Anim();
+      const anim2 = new Anim();
       anim2.frames(frames).gotoFrame(0);
       fps && anim2.fps(fps);
       return anim2;
     };
-    Anim._super = Node;
-    Anim.prototype = Object.create(Anim._super.prototype);
     const FPS = 15;
-    function Anim() {
-      Anim._super.call(this);
-      this.label("Anim");
-      this._textures = [];
-      this._fps = FPS;
-      this._ft = 1e3 / this._fps;
-      this._time = -1;
-      this._repeat = 0;
-      this._index = 0;
-      this._frames = [];
-      var lastTime = 0;
-      this.tick(function(t, now, last) {
-        if (this._time < 0 || this._frames.length <= 1) {
-          return;
-        }
-        var ignore = lastTime != last;
-        lastTime = now;
-        if (ignore) {
+    class Anim extends Node {
+      constructor() {
+        super();
+        this.label("Anim");
+        this._textures = [];
+        this._fps = FPS;
+        this._ft = 1e3 / this._fps;
+        this._time = -1;
+        this._repeat = 0;
+        this._index = 0;
+        this._frames = [];
+        let lastTime = 0;
+        this.tick(function(t, now, last) {
+          if (this._time < 0 || this._frames.length <= 1) {
+            return;
+          }
+          const ignore = lastTime != last;
+          lastTime = now;
+          if (ignore) {
+            return true;
+          }
+          this._time += t;
+          if (this._time < this._ft) {
+            return true;
+          }
+          const n = this._time / this._ft | 0;
+          this._time -= n * this._ft;
+          this.moveFrame(n);
+          if (this._repeat > 0 && (this._repeat -= n) <= 0) {
+            this.stop();
+            this._callback && this._callback();
+            return false;
+          }
           return true;
+        }, false);
+      }
+      fps(fps) {
+        if (typeof fps === "undefined") {
+          return this._fps;
         }
-        this._time += t;
-        if (this._time < this._ft) {
-          return true;
-        }
-        var n = this._time / this._ft | 0;
-        this._time -= n * this._ft;
-        this.moveFrame(n);
-        if (this._repeat > 0 && (this._repeat -= n) <= 0) {
-          this.stop();
-          this._callback && this._callback();
-          return false;
-        }
-        return true;
-      }, false);
-    }
-    Anim.prototype.fps = function(fps) {
-      if (typeof fps === "undefined") {
-        return this._fps;
-      }
-      this._fps = fps > 0 ? fps : FPS;
-      this._ft = 1e3 / this._fps;
-      return this;
-    };
-    Anim.prototype.setFrames = function(a, b, c) {
-      return this.frames(a, b, c);
-    };
-    Anim.prototype.frames = function(frames) {
-      this._index = 0;
-      this._frames = texture(frames).array();
-      this.touch();
-      return this;
-    };
-    Anim.prototype.length = function() {
-      return this._frames ? this._frames.length : 0;
-    };
-    Anim.prototype.gotoFrame = function(frame, resize) {
-      this._index = math.wrap(frame, this._frames.length) | 0;
-      resize = resize || !this._textures[0];
-      this._textures[0] = this._frames[this._index];
-      if (resize) {
-        this.pin("width", this._textures[0].width);
-        this.pin("height", this._textures[0].height);
-      }
-      this.touch();
-      return this;
-    };
-    Anim.prototype.moveFrame = function(move) {
-      return this.gotoFrame(this._index + move);
-    };
-    Anim.prototype.repeat = function(repeat2, callback) {
-      this._repeat = repeat2 * this._frames.length - 1;
-      this._callback = callback;
-      this.play();
-      return this;
-    };
-    Anim.prototype.play = function(frame) {
-      if (typeof frame !== "undefined") {
-        this.gotoFrame(frame);
-        this._time = 0;
-      } else if (this._time < 0) {
-        this._time = 0;
-      }
-      this.touch();
-      return this;
-    };
-    Anim.prototype.stop = function(frame) {
-      this._time = -1;
-      if (typeof frame !== "undefined") {
-        this.gotoFrame(frame);
-      }
-      return this;
-    };
-    const string$1 = function(frames) {
-      return new Str().frames(frames);
-    };
-    Str._super = Node;
-    Str.prototype = Object.create(Str._super.prototype);
-    function Str() {
-      Str._super.call(this);
-      this.label("String");
-      this._textures = [];
-    }
-    Str.prototype.setFont = function(a, b, c) {
-      return this.frames(a, b, c);
-    };
-    Str.prototype.frames = function(frames) {
-      this._textures = [];
-      if (typeof frames == "string") {
-        frames = texture(frames);
-        this._item = function(value) {
-          return frames.one(value);
-        };
-      } else if (typeof frames === "object") {
-        this._item = function(value) {
-          return frames[value];
-        };
-      } else if (typeof frames === "function") {
-        this._item = frames;
-      }
-      return this;
-    };
-    Str.prototype.setValue = function(a, b, c) {
-      return this.value(a, b, c);
-    };
-    Str.prototype.value = function(value) {
-      if (typeof value === "undefined") {
-        return this._value;
-      }
-      if (this._value === value) {
+        this._fps = fps > 0 ? fps : FPS;
+        this._ft = 1e3 / this._fps;
         return this;
       }
-      this._value = value;
-      if (value === null) {
-        value = "";
-      } else if (typeof value !== "string" && !Array.isArray(value)) {
-        value = value.toString();
+      /** @deprecated Use frames */
+      setFrames(frames) {
+        return this.frames(frames);
       }
-      this._spacing = this._spacing || 0;
-      var width = 0, height = 0;
-      for (var i = 0; i < value.length; i++) {
-        var texture2 = this._textures[i] = this._item(value[i]);
-        width += i > 0 ? this._spacing : 0;
-        texture2.dest(width, 0);
-        width = width + texture2.width;
-        height = Math.max(height, texture2.height);
+      frames(frames) {
+        this._index = 0;
+        this._frames = texture(frames).array();
+        this.touch();
+        return this;
       }
-      this.pin("width", width);
-      this.pin("height", height);
-      this._textures.length = value.length;
-      return this;
-    };
-    const row = function(align) {
-      return create().row(align).label("Row");
-    };
-    Node.prototype.row = function(align) {
-      this.align("row", align);
-      return this;
-    };
-    const column = function(align) {
-      return create().column(align).label("Row");
-    };
-    Node.prototype.column = function(align) {
-      this.align("column", align);
-      return this;
-    };
-    Node.prototype.align = function(type, align) {
-      this._padding = this._padding || 0;
-      this._spacing = this._spacing || 0;
-      this.untick(this._layoutTiker);
-      this.tick(this._layoutTiker = function() {
-        if (this._mo_seq == this._ts_touch) {
-          return;
+      length() {
+        return this._frames ? this._frames.length : 0;
+      }
+      gotoFrame(frame, resize = false) {
+        this._index = math.wrap(frame, this._frames.length) | 0;
+        resize = resize || !this._textures[0];
+        this._textures[0] = this._frames[this._index];
+        if (resize) {
+          this.pin("width", this._textures[0].getWidth());
+          this.pin("height", this._textures[0].getHeight());
         }
-        this._mo_seq = this._ts_touch;
-        var alignChildren = this._mo_seqAlign != this._ts_children;
-        this._mo_seqAlign = this._ts_children;
-        var width = 0, height = 0;
-        var child, next = this.first(true);
-        var first = true;
-        while (child = next) {
-          next = child.next(true);
-          child.matrix(true);
-          var w = child.pin("boxWidth");
-          var h = child.pin("boxHeight");
-          if (type == "column") {
-            !first && (height += this._spacing);
-            child.pin("offsetY") != height && child.pin("offsetY", height);
-            width = Math.max(width, w);
-            height = height + h;
-            alignChildren && child.pin("alignX", align);
-          } else if (type == "row") {
-            !first && (width += this._spacing);
-            child.pin("offsetX") != width && child.pin("offsetX", width);
-            width = width + w;
-            height = Math.max(height, h);
-            alignChildren && child.pin("alignY", align);
-          }
-          first = false;
+        this.touch();
+        return this;
+      }
+      moveFrame(move) {
+        return this.gotoFrame(this._index + move);
+      }
+      repeat(repeat, callback) {
+        this._repeat = repeat * this._frames.length - 1;
+        this._callback = callback;
+        this.play();
+        return this;
+      }
+      play(frame) {
+        if (typeof frame !== "undefined") {
+          this.gotoFrame(frame);
+          this._time = 0;
+        } else if (this._time < 0) {
+          this._time = 0;
         }
-        width += 2 * this._padding;
-        height += 2 * this._padding;
-        this.pin("width") != width && this.pin("width", width);
-        this.pin("height") != height && this.pin("height", height);
-      });
-      return this;
-    };
-    const box = function() {
-      return create().box().label("Box");
-    };
-    Node.prototype.box = function() {
-      this._padding = this._padding || 0;
-      this.untick(this._layoutTiker);
-      this.tick(this._layoutTiker = function() {
-        if (this._mo_box == this._ts_touch) {
-          return;
+        this.touch();
+        return this;
+      }
+      stop(frame) {
+        this._time = -1;
+        if (typeof frame !== "undefined") {
+          this.gotoFrame(frame);
         }
-        this._mo_box = this._ts_touch;
-        var width = 0, height = 0;
-        var child, next = this.first(true);
-        while (child = next) {
-          next = child.next(true);
-          child.matrix(true);
-          var w = child.pin("boxWidth");
-          var h = child.pin("boxHeight");
-          width = Math.max(width, w);
-          height = Math.max(height, h);
+        return this;
+      }
+    }
+    const string = function(chars) {
+      return new Str().frames(chars);
+    };
+    class Str extends Node {
+      constructor() {
+        super();
+        this.label("String");
+        this._textures = [];
+      }
+      /** @deprecated Use frames */
+      setFont(frames) {
+        return this.frames(frames);
+      }
+      frames(frames) {
+        this._textures = [];
+        if (typeof frames == "string") {
+          const selection = texture(frames);
+          this._font = function(value) {
+            return selection.one(value);
+          };
+        } else if (typeof frames === "object") {
+          this._font = function(value) {
+            return frames[value];
+          };
+        } else if (typeof frames === "function") {
+          this._font = frames;
         }
-        width += 2 * this._padding;
-        height += 2 * this._padding;
-        this.pin("width") != width && this.pin("width", width);
-        this.pin("height") != height && this.pin("height", height);
-      });
-      return this;
-    };
-    const layer = function() {
-      return create().layer().label("Layer");
-    };
-    Node.prototype.layer = function() {
-      this.untick(this._layoutTiker);
-      this.tick(this._layoutTiker = function() {
-        var parent = this.parent();
-        if (parent) {
-          var width = parent.pin("width");
-          if (this.pin("width") != width) {
-            this.pin("width", width);
-          }
-          var height = parent.pin("height");
-          if (this.pin("height") != height) {
-            this.pin("height", height);
-          }
+        return this;
+      }
+      /** @deprecated Use value */
+      setValue(value) {
+        return this.value(value);
+      }
+      value(value) {
+        if (typeof value === "undefined") {
+          return this._value;
         }
-      }, true);
-      return this;
-    };
-    Node.prototype.padding = function(pad) {
-      this._padding = pad;
-      return this;
-    };
-    Node.prototype.spacing = function(space) {
-      this._spacing = space;
-      return this;
-    };
-    const Stage$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+        if (this._value === value) {
+          return this;
+        }
+        this._value = value;
+        if (value === null) {
+          value = "";
+        } else if (typeof value !== "string" && !Array.isArray(value)) {
+          value = value.toString();
+        }
+        this._spacing = this._spacing || 0;
+        let width = 0;
+        let height = 0;
+        for (let i = 0; i < value.length; i++) {
+          const v = value[i];
+          const texture2 = this._textures[i] = this._font(typeof v === "string" ? v : v + "");
+          width += i > 0 ? this._spacing : 0;
+          texture2.setDestinationCoordinate(width, 0);
+          width = width + texture2.getWidth();
+          height = Math.max(height, texture2.getHeight());
+        }
+        this.pin("width", width);
+        this.pin("height", height);
+        this._textures.length = value.length;
+        return this;
+      }
+    }
+    const Stage = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
       __proto__: null,
       Anim,
       Atlas,
+      CanvasTexture,
       Image: Image$1,
+      ImageTexture,
       Math: math,
       Matrix,
       Mouse,
       Node,
+      POINTER_CANCEL,
+      POINTER_CLICK,
+      POINTER_END,
+      POINTER_MOVE,
+      POINTER_START,
       Pin,
+      PipeTexture,
+      Pointer,
+      ResizableTexture,
       Root,
       Sprite,
       Str,
       Texture,
-      Tween,
+      TextureSelection,
+      Transition,
       anim,
       atlas,
       box,
       canvas,
+      clamp,
       column,
       create,
       image,
+      isValidFitMode,
       layer,
+      layout,
+      length,
       math,
+      maximize,
       memoizeDraw,
+      minimize,
       mount,
       pause,
+      random,
       resume,
       row,
       sprite,
-      string: string$1,
-      texture
+      string,
+      texture,
+      wrap
     }, Symbol.toStringTag, { value: "Module" }));
 
     var math_atan2 = Math.atan2;
@@ -18884,6 +19363,31 @@
     var math_max = Math.max;
     var math_min = Math.min;
     var mounted = null;
+    /** @internal */
+    function memo() {
+        var memory = [];
+        function recall() {
+            var rest = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                rest[_i] = arguments[_i];
+            }
+            var equal = memory.length === rest.length;
+            for (var i = 0; equal && i < rest.length; i++) {
+                equal = equal && memory[i] === rest[i];
+                memory[i] = rest[i];
+            }
+            memory.length = rest.length;
+            return equal;
+        }
+        function reset() {
+            memory.length = 0;
+            // void 0;
+        }
+        return {
+            recall: recall,
+            reset: reset,
+        };
+    }
     Testbed.mount = function () {
         if (mounted) {
             return mounted;
@@ -18962,12 +19466,12 @@
         }
         StageTestbed.prototype.start = function (world) {
             var _this = this;
-            var stage = this.stage = Stage$1.mount();
+            var stage = this.stage = Stage.mount();
             var canvas = this.canvas = stage.dom;
             // eslint-disable-next-line @typescript-eslint/no-this-alias
             var testbed = this;
             this.canvas = canvas;
-            stage.on(Stage$1.Mouse.START, function () {
+            stage.on(Stage.POINTER_START, function () {
                 var _a;
                 window.focus();
                 // @ts-ignore
@@ -18983,21 +19487,23 @@
                 _this.paused = true;
                 _this._pause();
             });
-            var drawingTexture = new Stage$1.Texture();
-            stage.append(Stage$1.sprite(drawingTexture));
-            stage.tick(function () {
-                _this.buffer.length = 0;
-            }, true);
+            var drawingTexture = new Stage.CanvasTexture();
             drawingTexture.draw = function (ctx) {
+                var pixelRatio = 2 * drawingTexture.getOptimalPixelRatio();
                 ctx.save();
                 ctx.transform(1, 0, 0, _this.scaleY, -_this.x, -_this.y);
-                ctx.lineWidth = 2 / _this.ratio;
+                ctx.lineWidth = 3 / pixelRatio;
                 ctx.lineCap = 'round';
                 for (var drawing = _this.buffer.shift(); drawing; drawing = _this.buffer.shift()) {
-                    drawing(ctx, _this.ratio);
+                    drawing(ctx, pixelRatio);
                 }
                 ctx.restore();
             };
+            var drawingElement = Stage.sprite(drawingTexture);
+            stage.append(drawingElement);
+            stage.tick(function () {
+                _this.buffer.length = 0;
+            }, true);
             stage.background(this.background);
             stage.viewbox(this.width, this.height);
             stage.pin('alignX', -0.5);
@@ -19032,7 +19538,7 @@
             var targetBody = null;
             var mouseMove = { x: 0, y: 0 };
             worldNode.attr('spy', true);
-            worldNode.on(Stage$1.Mouse.START, function (point) {
+            worldNode.on(Stage.POINTER_START, function (point) {
                 point = { x: point.x, y: testbed.scaleY * point.y };
                 if (targetBody) {
                     return;
@@ -19049,7 +19555,7 @@
                     world.createJoint(mouseJoint);
                 }
             });
-            worldNode.on(Stage$1.Mouse.MOVE, function (point) {
+            worldNode.on(Stage.POINTER_MOVE, function (point) {
                 point = { x: point.x, y: testbed.scaleY * point.y };
                 if (mouseJoint) {
                     mouseJoint.setTarget(point);
@@ -19057,7 +19563,7 @@
                 mouseMove.x = point.x;
                 mouseMove.y = point.y;
             });
-            worldNode.on(Stage$1.Mouse.END, function (point) {
+            worldNode.on(Stage.POINTER_END, function (point) {
                 point = { x: point.x, y: testbed.scaleY * point.y };
                 if (mouseJoint) {
                     world.destroyJoint(mouseJoint);
@@ -19073,7 +19579,7 @@
                     targetBody = null;
                 }
             });
-            worldNode.on(Stage$1.Mouse.CANCEL, function (point) {
+            worldNode.on(Stage.POINTER_CANCEL, function (point) {
                 point = { x: point.x, y: testbed.scaleY * point.y };
                 if (mouseJoint) {
                     world.destroyJoint(mouseJoint);
@@ -19221,27 +19727,21 @@
         __extends(WorldStageNode, _super);
         function WorldStageNode(world, opts) {
             if (opts === void 0) { opts = {}; }
-            var _a, _b, _c, _d;
             var _this = _super.call(this) || this;
             _this.nodes = new WeakMap();
             _this.options = {
                 speed: 1,
                 hz: 60,
                 scaleY: -1,
-                ratio: 16,
-                lineWidth: 1,
+                lineWidth: 3,
                 stroke: undefined,
                 fill: undefined
             };
             _this.label('Planck');
-            _this.options.speed = (_a = opts.speed) !== null && _a !== void 0 ? _a : _this.options.speed;
-            _this.options.hz = (_b = opts.hz) !== null && _b !== void 0 ? _b : _this.options.speed;
+            _this.options = __assign(__assign({}, _this.options), opts);
             if (math_abs(_this.options.hz) < 1) {
                 _this.options.hz = 1 / _this.options.hz;
             }
-            _this.options.scaleY = (_c = opts.scaleY) !== null && _c !== void 0 ? _c : _this.options.scaleY;
-            _this.options.ratio = (_d = opts.ratio) !== null && _d !== void 0 ? _d : _this.options.ratio;
-            _this.options.lineWidth = 2 / _this.options.ratio;
             _this.world = world;
             _this.testbed = opts;
             var timeStep = 1 / _this.options.hz;
@@ -19362,17 +19862,23 @@
             }
         };
         WorldStageNode.prototype.drawCircle = function (shape, options) {
-            var lw = options.lineWidth;
-            var ratio = options.ratio;
-            var r = shape.m_radius;
-            var cx = r + lw;
-            var cy = r + lw;
-            var w = r * 2 + lw * 2;
-            var h = r * 2 + lw * 2;
-            var texture = Stage$1.canvas(function (ctx) {
+            var offsetX = 0;
+            var offsetY = 0;
+            var offsetMemo = memo();
+            var texture = Stage.canvas();
+            texture.setDrawer(function () {
                 var _a;
-                // @ts-ignore
-                this.size(w, h, ratio);
+                var ctx = this.getContext();
+                var ratio = 2 * this.getOptimalPixelRatio();
+                var lw = options.lineWidth / ratio;
+                var r = shape.m_radius;
+                var cx = r + lw;
+                var cy = r + lw;
+                var w = r * 2 + lw * 2;
+                var h = r * 2 + lw * 2;
+                offsetX = shape.m_p.x - cx;
+                offsetY = options.scaleY * shape.m_p.y - cy;
+                this.setSize(w, h, ratio);
                 ctx.scale(ratio, ratio);
                 ctx.arc(cx, cy, r, 0, 2 * math_PI);
                 if (options.fill) {
@@ -19380,68 +19886,90 @@
                     ctx.fill();
                 }
                 ctx.lineTo(cx, cy);
-                ctx.lineWidth = options.lineWidth;
+                ctx.lineWidth = options.lineWidth / ratio;
                 ctx.strokeStyle = (_a = options.stroke) !== null && _a !== void 0 ? _a : '';
                 ctx.stroke();
             });
-            var image = Stage$1.sprite(texture)
-                .offset(shape.m_p.x - cx, options.scaleY * shape.m_p.y - cy);
-            var node = Stage$1.create().append(image);
+            var sprite = Stage.sprite(texture);
+            sprite.tick(function () {
+                if (!offsetMemo.recall(offsetX, offsetY)) {
+                    sprite.offset(offsetX, offsetY);
+                }
+            });
+            var node = Stage.layout().append(sprite);
             return node;
         };
         WorldStageNode.prototype.drawEdge = function (edge, options) {
-            var lw = options.lineWidth;
-            var ratio = options.ratio;
-            var v1 = edge.m_vertex1;
-            var v2 = edge.m_vertex2;
-            var dx = v2.x - v1.x;
-            var dy = v2.y - v1.y;
-            var length = math_sqrt(dx * dx + dy * dy);
-            var texture = Stage$1.canvas(function (ctx) {
+            var offsetX = 0;
+            var offsetY = 0;
+            var offsetA = 0;
+            var offsetMemo = memo();
+            var texture = Stage.canvas();
+            texture.setDrawer(function () {
                 var _a;
-                // @ts-ignore
-                this.size(length + 2 * lw, 2 * lw, ratio);
+                var ctx = this.getContext();
+                var ratio = 2 * this.getOptimalPixelRatio();
+                var lw = options.lineWidth / ratio;
+                var v1 = edge.m_vertex1;
+                var v2 = edge.m_vertex2;
+                var dx = v2.x - v1.x;
+                var dy = v2.y - v1.y;
+                var length = math_sqrt(dx * dx + dy * dy);
+                this.setSize(length + 2 * lw, 2 * lw, ratio);
+                var minX = math_min(v1.x, v2.x);
+                var minY = math_min(options.scaleY * v1.y, options.scaleY * v2.y);
+                offsetX = minX - lw;
+                offsetY = minY - lw;
+                offsetA = options.scaleY * math_atan2(dy, dx);
                 ctx.scale(ratio, ratio);
                 ctx.beginPath();
                 ctx.moveTo(lw, lw);
                 ctx.lineTo(lw + length, lw);
                 ctx.lineCap = 'round';
-                ctx.lineWidth = options.lineWidth;
+                ctx.lineWidth = options.lineWidth / ratio;
                 ctx.strokeStyle = (_a = options.stroke) !== null && _a !== void 0 ? _a : '';
                 ctx.stroke();
             });
-            var minX = math_min(v1.x, v2.x);
-            var minY = math_min(options.scaleY * v1.y, options.scaleY * v2.y);
-            var image = Stage$1.sprite(texture);
-            image.rotate(options.scaleY * math_atan2(dy, dx));
-            image.offset(minX - lw, minY - lw);
-            var node = Stage$1.create().append(image);
+            var sprite = Stage.sprite(texture);
+            sprite.tick(function () {
+                if (!offsetMemo.recall(offsetX, offsetY, offsetA)) {
+                    sprite.offset(offsetX, offsetY);
+                    sprite.rotate(offsetA);
+                }
+            });
+            var node = Stage.layout().append(sprite);
             return node;
         };
         WorldStageNode.prototype.drawPolygon = function (shape, options) {
-            var lw = options.lineWidth;
-            var ratio = options.ratio;
-            var vertices = shape.m_vertices;
-            if (!vertices.length) {
-                return;
-            }
-            var minX = Infinity;
-            var minY = Infinity;
-            var maxX = -Infinity;
-            var maxY = -Infinity;
-            for (var i = 0; i < vertices.length; ++i) {
-                var v = vertices[i];
-                minX = math_min(minX, v.x);
-                maxX = math_max(maxX, v.x);
-                minY = math_min(minY, options.scaleY * v.y);
-                maxY = math_max(maxY, options.scaleY * v.y);
-            }
-            var width = maxX - minX;
-            var height = maxY - minY;
-            var texture = Stage$1.canvas(function (ctx) {
+            var offsetX = 0;
+            var offsetY = 0;
+            var offsetMemo = memo();
+            var texture = Stage.canvas();
+            texture.setDrawer(function () {
                 var _a;
-                // @ts-ignore
-                this.size(width + 2 * lw, height + 2 * lw, ratio);
+                var ctx = this.getContext();
+                var ratio = 2 * this.getOptimalPixelRatio();
+                var lw = options.lineWidth / ratio;
+                var vertices = shape.m_vertices;
+                if (!vertices.length) {
+                    return;
+                }
+                var minX = Infinity;
+                var minY = Infinity;
+                var maxX = -Infinity;
+                var maxY = -Infinity;
+                for (var i = 0; i < vertices.length; ++i) {
+                    var v = vertices[i];
+                    minX = math_min(minX, v.x);
+                    maxX = math_max(maxX, v.x);
+                    minY = math_min(minY, options.scaleY * v.y);
+                    maxY = math_max(maxY, options.scaleY * v.y);
+                }
+                var width = maxX - minX;
+                var height = maxY - minY;
+                offsetX = minX;
+                offsetY = minY;
+                this.setSize(width + 2 * lw, height + 2 * lw, ratio);
                 ctx.scale(ratio, ratio);
                 ctx.beginPath();
                 for (var i = 0; i < vertices.length; ++i) {
@@ -19462,39 +19990,49 @@
                     ctx.closePath();
                 }
                 ctx.lineCap = 'round';
-                ctx.lineWidth = options.lineWidth;
+                ctx.lineWidth = options.lineWidth / ratio;
                 ctx.strokeStyle = (_a = options.stroke) !== null && _a !== void 0 ? _a : '';
                 ctx.stroke();
             });
-            var image = Stage$1.sprite(texture);
-            image.offset(minX - lw, minY - lw);
-            var node = Stage$1.create().append(image);
+            var sprite = Stage.sprite(texture);
+            sprite.tick(function () {
+                if (!offsetMemo.recall(offsetX, offsetY)) {
+                    sprite.offset(offsetX, offsetY);
+                }
+            });
+            var node = Stage.layout().append(sprite);
             return node;
         };
         WorldStageNode.prototype.drawChain = function (shape, options) {
-            var lw = options.lineWidth;
-            var ratio = options.ratio;
-            var vertices = shape.m_vertices;
-            if (!vertices.length) {
-                return;
-            }
-            var minX = Infinity;
-            var minY = Infinity;
-            var maxX = -Infinity;
-            var maxY = -Infinity;
-            for (var i = 0; i < vertices.length; ++i) {
-                var v = vertices[i];
-                minX = math_min(minX, v.x);
-                maxX = math_max(maxX, v.x);
-                minY = math_min(minY, options.scaleY * v.y);
-                maxY = math_max(maxY, options.scaleY * v.y);
-            }
-            var width = maxX - minX;
-            var height = maxY - minY;
-            var texture = Stage$1.canvas(function (ctx) {
+            var offsetX = 0;
+            var offsetY = 0;
+            var offsetMemo = memo();
+            var texture = Stage.canvas();
+            texture.setDrawer(function () {
                 var _a;
-                // @ts-ignore
-                this.size(width + 2 * lw, height + 2 * lw, ratio);
+                var ctx = this.getContext();
+                var ratio = 2 * this.getOptimalPixelRatio();
+                var lw = options.lineWidth / ratio;
+                var vertices = shape.m_vertices;
+                if (!vertices.length) {
+                    return;
+                }
+                var minX = Infinity;
+                var minY = Infinity;
+                var maxX = -Infinity;
+                var maxY = -Infinity;
+                for (var i = 0; i < vertices.length; ++i) {
+                    var v = vertices[i];
+                    minX = math_min(minX, v.x);
+                    maxX = math_max(maxX, v.x);
+                    minY = math_min(minY, options.scaleY * v.y);
+                    maxY = math_max(maxY, options.scaleY * v.y);
+                }
+                var width = maxX - minX;
+                var height = maxY - minY;
+                offsetX = minX;
+                offsetY = minY;
+                this.setSize(width + 2 * lw, height + 2 * lw, ratio);
                 ctx.scale(ratio, ratio);
                 ctx.beginPath();
                 for (var i = 0; i < vertices.length; ++i) {
@@ -19514,17 +20052,21 @@
                     ctx.closePath();
                 }
                 ctx.lineCap = 'round';
-                ctx.lineWidth = options.lineWidth;
+                ctx.lineWidth = options.lineWidth / ratio;
                 ctx.strokeStyle = (_a = options.stroke) !== null && _a !== void 0 ? _a : '';
                 ctx.stroke();
             });
-            var image = Stage$1.sprite(texture);
-            image.offset(minX - lw, minY - lw);
-            var node = Stage$1.create().append(image);
+            var sprite = Stage.sprite(texture);
+            sprite.tick(function () {
+                if (!offsetMemo.recall(offsetX, offsetY)) {
+                    sprite.offset(offsetX, offsetY);
+                }
+            });
+            var node = Stage.layout().append(sprite);
             return node;
         };
         return WorldStageNode;
-    }(Stage$1.Node));
+    }(Stage.Node));
 
     var planck = /*#__PURE__*/Object.freeze({
         __proto__: null,

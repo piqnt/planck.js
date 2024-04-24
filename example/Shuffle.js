@@ -14,7 +14,6 @@ testbed.x = 0;
 testbed.y = 0;
 testbed.width = width * 1.5;
 testbed.height = height * 1.5;
-testbed.ratio = 50;
 testbed.mouseForce = -100;
 testbed.start(world);
 

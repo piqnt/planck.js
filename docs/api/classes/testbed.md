@@ -15,7 +15,6 @@
 * [height](testbed.md#height)
 * [hz](testbed.md#hz)
 * [mouseForce](testbed.md#optional-mouseforce)
-* [ratio](testbed.md#ratio)
 * [scaleY](testbed.md#scaley)
 * [speed](testbed.md#speed)
 * [width](testbed.md#width)
@@ -75,12 +74,6 @@ ___
 ### `Optional` mouseForce
 
 • **mouseForce**? : *number*
-
-___
-
-###  ratio
-
-• **ratio**: *number* = 16
 
 ___
 

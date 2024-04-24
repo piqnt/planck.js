@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.2
+ * Planck.js v1.0.3
  * @license The MIT license
  * @copyright Copyright (c) 2023 Erin Catto, Ali Shakiba
  *
@@ -1918,7 +1918,7 @@
          * number of proxies in the tree.
          *
          * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
-         * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
+         * @param rayCastCallback A function that is called for each proxy that is hit by the ray. If the return value is a positive number it will update the maxFraction of the ray cast input, and if it is zero it will terminate they ray cast.
          */
         DynamicTree.prototype.rayCast = function (input, rayCastCallback) {
             var p1 = input.p1;
@@ -1961,9 +1961,9 @@
                     var value = rayCastCallback(subInput, node.id);
                     if (value === 0.0) {
                         // The client has terminated the ray cast.
-                        return;
+                        break;
                     }
-                    if (value > 0.0) {
+                    else if (value > 0.0) {
                         // update segment bounding box.
                         maxFraction = value;
                         t = Vec2.combine((1 - maxFraction), p1, maxFraction, p2);
@@ -2135,7 +2135,7 @@
          * number of proxies in the tree.
          *
          * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
-         * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
+         * @param rayCastCallback A function that is called for each proxy that is hit by the ray. If the return value is a positive number it will update the maxFraction of the ray cast input, and if it is zero it will terminate they ray cast.
          */
         BroadPhase.prototype.rayCast = function (input, rayCastCallback) {
             this.m_tree.rayCast(input, rayCastCallback);
@@ -7051,38 +7051,23 @@
     var Contact = /** @class */ (function () {
         function Contact() {
             // Nodes for connecting bodies.
-            /** @internal */
-            this.m_nodeA = new ContactEdge(this);
-            /** @internal */
-            this.m_nodeB = new ContactEdge(this);
-            /** @internal */
-            this.m_fixtureA = null;
-            /** @internal */
-            this.m_fixtureB = null;
-            /** @internal */
-            this.m_indexA = -1;
-            /** @internal */
-            this.m_indexB = -1;
-            /** @internal */
-            this.m_evaluateFcn = null;
-            /** @internal */
-            this.m_manifold = new Manifold();
-            /** @internal */
-            this.m_prev = null;
-            /** @internal */
-            this.m_next = null;
-            /** @internal */
-            this.m_toi = 1.0;
-            /** @internal */
-            this.m_toiCount = 0;
-            /** @internal This contact has a valid TOI in m_toi */
-            this.m_toiFlag = false;
-            /** @internal */
-            this.m_friction = 0.0;
-            /** @internal */
-            this.m_restitution = 0.0;
-            /** @internal */
-            this.m_tangentSpeed = 0.0;
+            /** @internal */ this.m_nodeA = new ContactEdge(this);
+            /** @internal */ this.m_nodeB = new ContactEdge(this);
+            /** @internal */ this.m_fixtureA = null;
+            /** @internal */ this.m_fixtureB = null;
+            /** @internal */ this.m_indexA = -1;
+            /** @internal */ this.m_indexB = -1;
+            /** @internal */ this.m_evaluateFcn = null;
+            /** @internal */ this.m_manifold = new Manifold();
+            /** @internal */ this.m_prev = null;
+            /** @internal */ this.m_next = null;
+            /** @internal */ this.m_toi = 1.0;
+            /** @internal */ this.m_toiCount = 0;
+            // This contact has a valid TOI in m_toi
+            /** @internal */ this.m_toiFlag = false;
+            /** @internal */ this.m_friction = 0.0;
+            /** @internal */ this.m_restitution = 0.0;
+            /** @internal */ this.m_tangentSpeed = 0.0;
             /** @internal This contact can be disabled (by user) */
             this.m_enabledFlag = true;
             /** @internal Used when crawling contact graph when forming islands. */
@@ -7096,10 +7081,8 @@
             /** @internal Contact reporting impulse object cache */
             this.m_impulse = new ContactImpulse(this);
             // VelocityConstraint
-            /** @internal */
-            this.v_points = [new VelocityConstraintPoint(), new VelocityConstraintPoint()]; // [maxManifoldPoints];
-            /** @internal */
-            this.v_normal = vec2(0, 0);
+            /** @internal */ this.v_points = [new VelocityConstraintPoint(), new VelocityConstraintPoint()]; // [maxManifoldPoints];
+            /** @internal */ this.v_normal = vec2(0, 0);
             /** @internal */ this.v_normalMass = new Mat22();
             /** @internal */ this.v_K = new Mat22();
             /** @internal */ this.v_pointCount = 0;
@@ -8347,7 +8330,7 @@
          *
          * @param point1 The ray starting point
          * @param point2 The ray ending point
-         * @param callback A user implemented callback function.
+         * @param callback A function that is called for each fixture that is hit by the ray. You control how the ray cast proceeds by returning a numeric/float value.
          */
         World.prototype.rayCast = function (point1, point2, callback) {
             var broadPhase = this.m_broadPhase;
@@ -15001,7 +14984,6 @@
             this.hz = 60;
             /** World simulation speed, default is 1 */
             this.speed = 1;
-            this.ratio = 16;
             this.background = '#222222';
             this.activeKeys = {};
             /** callback, to be implemented by user */

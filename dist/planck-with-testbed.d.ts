@@ -603,7 +603,6 @@ declare abstract class Testbed {
     hz: number;
     /** World simulation speed, default is 1 */
     speed: number;
-    ratio: number;
     background: string;
     mouseForce?: number;
     activeKeys: ActiveKeys;
@@ -851,7 +850,7 @@ declare class DynamicTree<T> {
      * number of proxies in the tree.
      *
      * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
-     * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
+     * @param rayCastCallback A function that is called for each proxy that is hit by the ray. If the return value is a positive number it will update the maxFraction of the ray cast input, and if it is zero it will terminate they ray cast.
      */
     rayCast(input: RayCastInput, rayCastCallback: RayCastCallback): void;
     private inputPool;
@@ -908,7 +907,7 @@ declare class BroadPhase {
      * number of proxies in the tree.
      *
      * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
-     * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
+     * @param rayCastCallback A function that is called for each proxy that is hit by the ray. If the return value is a positive number it will update the maxFraction of the ray cast input, and if it is zero it will terminate they ray cast.
      */
     rayCast(input: RayCastInput, rayCastCallback: RayCastCallback): void;
     /**
@@ -1878,20 +1877,21 @@ interface WorldDef {
 /**
  * Callback function for ray casts, see {@link World.rayCast}.
  *
- * Called for each fixture found in the query. You control how the ray cast
- * proceeds by returning a float: return -1: ignore this fixture and continue
- * return 0: terminate the ray cast return fraction: clip the ray to this point
- * return 1: don't clip the ray and continue
+ * Called for each fixture found in the query.
+ * The returned value replaces the ray-cast input maxFraction.
+ * You control how the ray cast proceeds by returning a numeric/float value.
+ *
+ * - `0` to terminate the ray cast
+ * - `fraction` to clip the ray cast at current point
+ * - `1` don't clip the ray and continue
+ * - `-1` (or anything else) to continue
  *
  * @param fixture The fixture hit by the ray
  * @param point The point of initial intersection
  * @param normal The normal vector at the point of intersection
  * @param fraction The fraction along the ray at the point of intersection
  *
- * @return `-1` to ignore the current fixture and continue
- * @return `0` to terminate the ray cast
- * @return `fraction` to clip the raycast at current point
- * @return `1` don't clip the ray and continue
+ * @returns A number to update the maxFraction
  */
 type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) => number;
 /**
@@ -2001,7 +2001,7 @@ declare class World {
      *
      * @param point1 The ray starting point
      * @param point2 The ray ending point
-     * @param callback A user implemented callback function.
+     * @param callback A function that is called for each fixture that is hit by the ray. You control how the ray cast proceeds by returning a numeric/float value.
      */
     rayCast(point1: Vec2, point2: Vec2, callback: WorldRayCastCallback): void;
     /**
@@ -4921,7 +4921,6 @@ declare namespace planck {
         hz: number;
         /** World simulation speed, default is 1 */
         speed: number;
-        ratio: number;
         background: string;
         mouseForce?: number;
         activeKeys: ActiveKeys;
@@ -5169,7 +5168,7 @@ declare namespace planck {
          * number of proxies in the tree.
          *
          * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
-         * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
+         * @param rayCastCallback A function that is called for each proxy that is hit by the ray. If the return value is a positive number it will update the maxFraction of the ray cast input, and if it is zero it will terminate they ray cast.
          */
         rayCast(input: RayCastInput, rayCastCallback: RayCastCallback): void;
         private inputPool;
@@ -5226,7 +5225,7 @@ declare namespace planck {
          * number of proxies in the tree.
          *
          * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
-         * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
+         * @param rayCastCallback A function that is called for each proxy that is hit by the ray. If the return value is a positive number it will update the maxFraction of the ray cast input, and if it is zero it will terminate they ray cast.
          */
         rayCast(input: RayCastInput, rayCastCallback: RayCastCallback): void;
         /**
@@ -6218,20 +6217,21 @@ declare namespace planck {
     /**
      * Callback function for ray casts, see {@link World.rayCast}.
      *
-     * Called for each fixture found in the query. You control how the ray cast
-     * proceeds by returning a float: return -1: ignore this fixture and continue
-     * return 0: terminate the ray cast return fraction: clip the ray to this point
-     * return 1: don't clip the ray and continue
+     * Called for each fixture found in the query.
+     * The returned value replaces the ray-cast input maxFraction.
+     * You control how the ray cast proceeds by returning a numeric/float value.
+     *
+     * - `0` to terminate the ray cast
+     * - `fraction` to clip the ray cast at current point
+     * - `1` don't clip the ray and continue
+     * - `-1` (or anything else) to continue
      *
      * @param fixture The fixture hit by the ray
      * @param point The point of initial intersection
      * @param normal The normal vector at the point of intersection
      * @param fraction The fraction along the ray at the point of intersection
      *
-     * @return `-1` to ignore the current fixture and continue
-     * @return `0` to terminate the ray cast
-     * @return `fraction` to clip the raycast at current point
-     * @return `1` don't clip the ray and continue
+     * @returns A number to update the maxFraction
      */
     type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) => number;
     /**
@@ -6340,7 +6340,7 @@ declare namespace planck {
          *
          * @param point1 The ray starting point
          * @param point2 The ray ending point
-         * @param callback A user implemented callback function.
+         * @param callback A function that is called for each fixture that is hit by the ray. You control how the ray cast proceeds by returning a numeric/float value.
          */
         rayCast(point1: Vec2, point2: Vec2, callback: WorldRayCastCallback): void;
         /**
