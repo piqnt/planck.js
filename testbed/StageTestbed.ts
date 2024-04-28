@@ -61,22 +61,28 @@ Testbed.mount = () => {
   const statusElement = document.getElementById('testbed-status');
   const infoElement = document.getElementById('testbed-info');
 
-  playButton.addEventListener('click', () => {
-    mounted.isPaused() ? mounted.resume() : mounted.pause();
-  });
+  if (playButton) {
+    playButton.addEventListener('click', () => {
+      mounted.isPaused() ? mounted.resume() : mounted.pause();
+    });
 
-  mounted._pause = () => {
-    playButton.classList.add('pause');
-    playButton.classList.remove('play');
-  };
+    mounted._pause = () => {
+      playButton.classList.add('pause');
+      playButton.classList.remove('play');
+    };
 
-  mounted._resume = () => {
-    playButton.classList.add('play');
-    playButton.classList.remove('pause');
-  };
+    mounted._resume = () => {
+      playButton.classList.add('play');
+      playButton.classList.remove('pause');
+    };
+  } else {
+    console.log("Please create a button with id='testbed-play'");
+  }
 
   let lastStatus = '';
-  statusElement.innerText = lastStatus;
+  if (statusElement) {
+    statusElement.innerText = lastStatus;
+  }
   mounted._status = (text: string) => {
     if (lastStatus === text) {
       return;
@@ -88,7 +94,9 @@ Testbed.mount = () => {
   };
 
   let lastInfo = '';
-  infoElement.innerText = lastInfo;
+  if (infoElement) {
+    infoElement.innerText = lastInfo;
+  }
   mounted._info = (text: string) => {
     if (lastInfo === text) {
       return;
