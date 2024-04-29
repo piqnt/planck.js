@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "name": "planck-docs",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "next dev --port 5001",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.0.1",
+    "eslint-config-next": "^13.4.9",
+    "next": "^13.4.9",
+    "nextra": "latest",
+    "nextra-theme-docs": "^2.8.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "18.11.10",
+    "typescript": "^4.9.3"
+  }
+}

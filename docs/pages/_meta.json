@@ -1,0 +1,37 @@
+{
+  "index": "Introduction",
+  "hello-world": "Getting Started",
+  "core-concepts": "Core Concepts",
+  "api-conventions": "API Conventions",
+  "body": "Body",
+  "fixture": "Fixture",
+  "shape": "Shape",
+  "joint": "Joint",
+  "world": "World",
+  "contacts": "Contacts",
+  "collision": "Collision",
+  "install": "Install",
+  "testbed": "Testbed",
+  "rendering": "Rendering",
+  "credits": "Credits & License",
+  "references-resources": "References & Resources",
+  "limitations": "Limitations",
+  "api-reference": {
+    "title": "API Reference ↗",
+    "type": "page",
+    "href": "https://github.com/piqnt/planck.js/blob/master/docs/api/",
+    "newWindow": true
+  },
+  "github": {
+    "title": "GitHub ↗",
+    "type": "page",
+    "href": "https://github.com/piqnt/planck.js/",
+    "newWindow": true
+  },
+  "discord": {
+    "title": "Discord ↗",
+    "type": "page",
+    "href": "https://discord.gg/znjh6J7",
+    "newWindow": true
+  }
+}
