@@ -11,7 +11,7 @@ all of the associated bodies.
 ```js
 const query = new AABB(
   new Vec2(-1, -1),
-  new Vec2(-1, -1),
+  new Vec2(1, 1),
 );
 myWorld.queryAABB(query, function(fixture) {
   let body = fixture.getBody();
