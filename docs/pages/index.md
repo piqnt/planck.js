@@ -1,6 +1,6 @@
 #### Planck.js
 
-Planck.js is JavaScript/TypeScript rewrite of Box2D C++ physics engine for cross-platform game development.
+Planck.js is JavaScript/TypeScript rewrite of the [Box2D](https://box2d.org/) C++ physics engine for cross-platform game development.
 
 #### Box2D
 
