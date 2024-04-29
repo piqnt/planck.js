@@ -41,7 +41,7 @@ when you are done with them.
 
 #### Body Factory
 Bodies are created and destroyed using a body factory provided by the
-world class. This lets the world create the body and add the body to the 
+`World` class. This lets the world create the body and add the body to the 
 world data structure.
 
 ```js
@@ -68,7 +68,7 @@ manage shape and joint references.
 
 Let's go over some of the key members of the body definition.
 
-####3 Body Type
+##### Body Type
 As discussed at the beginning of this chapter, there are three different
 body types: static, kinematic, and dynamic. You should specify the
 body type at creation because changing the body type later is expensive.
@@ -94,8 +94,8 @@ A body has two main points of interest. The first point is the body's
 origin. Fixtures and joints are attached relative to the body's origin.
 The second point of interest is the center of mass. The center of mass
 is determined from mass distribution of the attached shapes or is
-explicitly set with MassData. Much of Planck.js's internal computations
-use the center of mass position. For example Body stores the linear
+explicitly set with `MassData`. Much of Planck.js's internal computations
+use the center of mass position. For example `Body` stores the linear
 velocity for the center of mass.
 
 When you are building the body definition, you may not know where the
@@ -315,7 +315,7 @@ body.isFixedRotation(); // boolean
 
 ##### Position and Velocity
 You can access the position and rotation of a body. This is common when
-rendering your associated game actor. You can also set the position,
+rendering your associated game actor. You can also set the position and rotation,
 although this is less common since you will normally use Planck.js to
 simulate movement.
 
@@ -373,14 +373,14 @@ if (myBody.isAwake()) {
 The body class has some utility functions to help you transform points
 and vectors between local and world space.
 
-A localPoint is a coordination relative to body's origin.
-A worldPoint is a coordination relative to world's origin.
+A `localPoint` is a coordinate relative to the body's origin.
+A `worldPoint` is a coordinate relative to the world's origin.
 
-A localVector is a vector between two points relative to body's origin.
-A worldVector is a vector between two points relative to world's origin.
+A `localVector` is a vector between two points relative to the body's origin.
+A `worldVector` is a vector between two points relative to the world's origin.
 
-Here point means a point's 2D coordination, vector means the vector between two points.
-In point conversion both position and angel of body are considered, in vector conversion only angle.
+Here "point" means a point's 2D coordinate, "vector" means the vector between two points.
+In point conversion both position and angle of body are considered, in vector conversion only angle.
 
 ```js
 body.getWorldPoint(localPoint); // Vec2

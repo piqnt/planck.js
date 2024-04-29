@@ -83,5 +83,5 @@ while (node) {
 }
 ```
 
-Obviously to make this work, gameCrazyBodyDestroyer must be honest about
+Obviously to make this work, `gameCrazyBodyDestroyer()` must be honest about
 what it has destroyed.

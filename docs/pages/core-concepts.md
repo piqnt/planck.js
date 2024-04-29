@@ -5,10 +5,10 @@ document.
 
 #### World
 A physics world is a collection of bodies, fixtures, and constraints that interact together.
-World also manages running simulation.
+`World` also manages running simulation.
 
 #### Shape
-A shape is 2D geometrical object, such as a circle or polygon.
+A shape is a 2D geometrical object, such as a circle or polygon.
 
 #### Rigid Body
 A chunk of matter that is so strong that the distance between any two bits of matter on the chunk is constant.
@@ -27,7 +27,7 @@ At this point the body can only rotate about the pin, so the constraint has remo
 
 #### Contact Constraint
 A special constraint designed to prevent penetration of rigid bodies and to simulate friction and restitution.
-You do not create contact constraints; they are created automatically by when two objects might collide.
+You do not create contact constraints; they are created automatically when two objects might collide.
 
 #### Joint
 This is a constraint used to hold two or more bodies together. There are several joint types implemented in the library: revolute, prismatic, distance, and more.

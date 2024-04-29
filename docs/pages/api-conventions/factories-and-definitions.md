@@ -1,6 +1,6 @@
 ### Factories and Definitions
 
-To create a Body or a Joint, you need to call the factory functions on World:
+To create a `Body` or a `Joint`, you need to call the factory functions on World:
 
 ```js
 body = world.createBody(bodyDef);
@@ -21,14 +21,14 @@ the number of function parameters small, provide sensible defaults, and
 reduce the number of accessors.
 
 Since fixtures must be parented to a body, they are created and
-destroyed using a factory method on Body:
+destroyed using a factory method on `Body`:
 
 ```js
 let fixture = body.createFixture(fixtureDef);
 body.destroyFixture(fixture);
 ```
 
-There is also shortcut to create a fixture directly from the shape and
+There is also a shortcut to create a fixture directly from the shape and
 density.
 
 ```js

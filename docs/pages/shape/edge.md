@@ -7,7 +7,7 @@ one of two colliding shapes have volume. Edge shapes have no volume, so
 edge-edge collision is not possible.
 
 ```js
-// This an edge shape.
+// This is an edge shape.
 let edge = new Edge(new Vec2(0, 0), new Vec2(1, 0));
 ```
 

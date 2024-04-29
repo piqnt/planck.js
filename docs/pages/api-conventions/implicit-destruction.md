@@ -25,10 +25,10 @@ going to be implicitly destroyed.
 world.on('remove-joint', function(joint) {
   // remove all references to joint.  
 });
-world.on('remove-fixture', function(joint) {
+world.on('remove-fixture', function(fixture) {
   // remove all references to fixture.
 });
-world.on('remove-body', function(joint) {
+world.on('remove-body', function(body) {
   // bodies are not removed implicitly,
   // but the world publishes this event if a body is removed
 })

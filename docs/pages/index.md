@@ -7,7 +7,7 @@ Planck.js is JavaScript/TypeScript rewrite of the [Box2D](https://box2d.org/) C+
 Box2D is a 2D rigid-body physics simulation library for games. You can use it in your games to make objects move in realistic ways and make the game world more interactive.
 From the game engine's point of view, a physics engine is just a system for procedural animation.
 
-Planck.js documentation is based on Box2D manual with adjustments and addition for JavaScript. Both projects names are used interchangeably in the documentation.
+Planck.js documentation is based on the Box2D manual with adjustments and additions for JavaScript. Both projects' names are used interchangeably in the documentation.
 
 #### Before You Start
 

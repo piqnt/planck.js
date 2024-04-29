@@ -7,7 +7,7 @@ eliminate ghost collisions and provide two-sided collision.
 ![Chain Shape](../images/chain_shape.svg)
 
 ```js
-// This a chain shape with isolated vertices
+// This is a chain shape with isolated vertices
 let vs = [
   Vec2(1.7, 0),
   Vec2(1, 0.25),

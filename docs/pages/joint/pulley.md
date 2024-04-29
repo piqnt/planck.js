@@ -18,9 +18,9 @@ this to create mechanical leverage.
 length1 + ratio * length2 == constant
 ```
 
-For example, if the ratio is 2, then length1 will vary at twice the rate
-of length2. Also the force in the rope attached to body1 will have half
-the constraint force as the rope attached to body2.
+For example, if the ratio is 2, then `length1` will vary at twice the rate
+of `length2`. Also the force in the rope attached to `body1` will have half
+the constraint force as the rope attached to `body2`.
 
 ![Pulley Joint](../images/pulley_joint.gif)
 
