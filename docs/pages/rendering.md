@@ -18,8 +18,9 @@ class Renderer {
     this.world = world;
 
     // Add listeners
-    world.on('remove-fixture', this.removeBody);
-    world.on('remove-body', this.removeFixture);
+    world.on('remove-body', this.removeBody);
+    world.on('remove-joint', this.removeJoint);
+    world.on('remove-fixture', this.removeFixture);
 
     // Start frame loop
     this.started = true;
@@ -28,15 +29,16 @@ class Renderer {
 
   stop() {
     // Remove listeners
-    world.off('remove-fixture', this.removeBody);
-    world.off('remove-body', this.removeFixture);
+    world.off('remove-body', this.removeBody);
+    world.off('remove-joint', this.removeJoint);
+    world.off('remove-fixture', this.removeFixture);
 
     // Stop next frame
     this.started = false;
   }
 
   // Game loop
-  loop(dt) {
+  loop(timeStamp) {
     if (!this.started) {
       return;
     }
@@ -44,6 +46,8 @@ class Renderer {
     // In each frame call world.step with fixed timeStep
     // This is a simplified implementation, in a more advanced implementation
     // you need to use elapsed time since last frame and call step more than once if needed.
+    // When called by requestAnimationFrame() you'll get a timestamp as argument,
+    // https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
     this.world.step(1 / 60);
 
     // Iterate over bodies
@@ -61,7 +65,7 @@ class Renderer {
     }
 
     // Request a new frame
-    window.requestAnimationFrame(this.loop);
+    window.requestAnimationFrame(this.loop.bind(this));
   }
 
   renderBody(body) {
@@ -115,4 +119,3 @@ stability.
  - [Phaser 3 with Planck.js](https://www.emanueleferonato.com/2019/10/12/use-box2d-physics-in-your-phaser-3-projects-with-planck-js-javascript-physics-engine/) by Emanuele Feronato
 - [P5.js integration](https://sites.google.com/site/professorcookga/planck-box2d-physics-for-javascript-p5) by Robert Cook
 - [RealPeha/planck-renderer](https://github.com/RealPeha/planck-renderer)
- 
