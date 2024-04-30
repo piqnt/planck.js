@@ -6,7 +6,7 @@ have 3 or more vertices.
 
 ![Convex and Concave Polygons](../images/convex_concave.gif)
 
-Polygons vertices are stored with a counter clockwise winding (CCW). We
+Polygon vertices are stored with a counter-clockwise winding (CCW). We
 must be careful because the notion of CCW is with respect to a
 right-handed coordinate system with the z-axis pointing out of the
 plane. This might turn out to be clockwise on your screen, depending on

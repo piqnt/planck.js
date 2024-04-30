@@ -42,4 +42,4 @@ myWorld.rayCast(Vec2(-1, 0), Vec2(3, 1), function(fixture, point, normal, fracti
 > **Caution**:
 > Due to round-off errors, ray casts can sneak through small cracks
 > between polygons in your static environment. If this is not acceptable
-> in your application, trying slightly overlapping your polygons.
+> in your application, try slightly overlapping your polygons.

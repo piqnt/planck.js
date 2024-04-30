@@ -10,7 +10,7 @@ const world = new World();
 const testbed = Testbed.start(world);
 ```
 
-If you need to access testbed instance before starting simulation you can mount testbed first, and later start simulation.
+If you need to access the testbed instance before starting simulation you can mount the testbed first, and later start simulation.
 
 ```js
 // Mount testbed

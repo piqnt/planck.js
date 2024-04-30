@@ -1,6 +1,6 @@
 ### Fixture
-Shapes are only have geometrical coordination, they don't have physical properties and don't know about body's transformation, so may be used independently of the physics simulation.
-Fixture class is used to attach shapes to bodies. A body may have zero or more fixtures. A
+Shapes only have geometrical coordinates, they don't have physical properties and don't know about the body's transformation, so may be used independently of the physics simulation.
+The `Fixture` class is used to attach shapes to bodies. A body may have zero or more fixtures. A
 body with multiple fixtures is sometimes called a *compound body.*
 
 Fixtures hold the following:
@@ -145,8 +145,8 @@ Collision groups let you specify an integral group index. You can have
 all fixtures with the same group index always collide (positive index)
 or never collide (negative index). Group indices are usually used for
 things that are somehow related, like the parts of a bicycle. In the
-following example, fixture1 and fixture2 always collide, but fixture3
-and fixture4 never collide.
+following example, `fixture1` and `fixture2` always collide, but `fixture3`
+and `fixture4` never collide.
 
 ```js
 fixture1Def.filterGroupIndex = 2;
@@ -156,7 +156,7 @@ fixture4Def.filterGroupIndex = -8;
 ```
 
 Collisions between fixtures of different group indices are filtered
-according the category and mask bits. In other words, group filtering
+according to the category and mask bits. In other words, group filtering
 has higher precedence than category filtering.
 
 Note that additional collision filtering occurs in Planck.js. Here is a

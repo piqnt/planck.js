@@ -24,9 +24,17 @@ To use testbed from CDN, add the following script tag to your HTML file.
 
 ```html
 <html><body>
-  <script src="https://cdn.jsdelivr.net/npm/planck/dist/planck-with-testbed.min.js" />
+  <span id="testbed-info"></span>
+  <span id="testbed-status"></span>
+  <button id="testbed-play">Play</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/planck/dist/planck-with-testbed.min.js"></script>
   <script>
     const { World, Testbed } = planck;
+    const world = new World();
+
+    const testbed = Testbed.mount();
+    testbed.start(world);
   </script>
 </body></html>
 ```

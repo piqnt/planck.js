@@ -1,5 +1,5 @@
 ### Collision
-The Collision classes includes shapes and functions that operate on them.
+The Collision classes include shapes and functions that operate on them.
 The module also contains a dynamic tree and broad-phase to acceleration
 collision processing of large systems.
 
@@ -25,15 +25,15 @@ improve stacking stability.
 Normally you don't need to compute contact manifolds directly, however
 you will likely use the results produced in the simulation.
 
-The Manifold structure holds a normal vector and up to two contact
+The `Manifold` structure holds a normal vector and up to two contact
 points. The normal and points are held in local coordinates. As a
 convenience for the contact solver, each point stores the normal and
 tangential (friction) impulses.
 
-The data stored in Manifold is optimized for internal use. If you need
-this data, it is usually best to use the WorldManifold structure to
+The data stored in `Manifold` is optimized for internal use. If you need
+this data, it is usually best to use the `WorldManifold` structure to
 generate the world coordinates of the contact normal and points. You
-need to provide a Manifold and the shape transforms and radii.
+need to provide a `Manifold` and the shape transforms and radii.
 
 ```js
 let worldManifold = manifold.getWorldManifold(null, transformA, shapeA.m_radius, transformB, shapeB.m_radius)
@@ -48,7 +48,7 @@ Notice that the world manifold uses the point count from the original
 manifold.
 
 During simulation shapes may move and the manifolds may change. Points
-may be added or removed. You can detect this using GetPointStates.
+may be added or removed. You can detect this using `GetPointStates()`.
 
 ```js
 let state1 = []; // [PointState]
@@ -63,7 +63,7 @@ if (state1[0] == PointState.removeState) {
 #### Distance
 The `Distance` function can be used to compute the distance between two
 shapes. The distance function needs both shapes to be converted into a
-DistanceProxy. There is also some caching used to warm start the
+`DistanceProxy`. There is also some caching used to warm start the
 distance function for repeated calls.
 
 ![Distance Function](./images/distance.svg)
@@ -99,15 +99,15 @@ may be cases where collisions are missed for small rotations. Normally,
 these missed rotational collisions should not harm game play. They tend
 to be glancing collisions.
 
-The function requires two shapes (converted to DistanceProxy) and two
-Sweep structures. The sweep structure defines the initial and final
+The function requires two shapes (converted to `DistanceProxy`) and two
+`Sweep` structures. The sweep structure defines the initial and final
 transforms of the shapes.
 
 You can use fixed rotations to perform a *shape cast*. In this case, the
 time of impact function will not miss any collisions.
 
 ### Dynamic Tree
-The DynamicTree class is used by Planck.js to organize large numbers of
+The `DynamicTree` class is used by Planck.js to organize large numbers of
 shapes efficiently. The class does not know about shapes. Instead it
 operates on axis-aligned bounding boxes (AABBs) with user data pointers.
 
@@ -133,7 +133,7 @@ be skipped.
 ![Overlap Test](./images/overlap_test.svg)
 
 Normally you will not use the dynamic tree directly. Rather you will go
-through the World class for ray casts and region queries. If you plan
+through the `World` class for ray casts and region queries. If you plan
 to instantiate your own dynamic tree, you can learn how to use it by
 looking at how Planck.js uses it.
 
@@ -143,7 +143,7 @@ and broad-phase. In the narrow-phase we compute contact points between
 pairs of shapes. Imagine we have N shapes. Using brute force, we would
 need to perform the narrow-phase for N*N/2 pairs.
 
-The BroadPhase class reduces this load by using a dynamic tree for
+The `BroadPhase` class reduces this load by using a dynamic tree for
 pair management. This greatly reduces the number of narrow-phase calls.
 
 Normally you do not interact with the broad-phase directly. Instead,

@@ -17,7 +17,7 @@ const world = new World();
 Planck.js is available on [jsDelivr](https://www.jsdelivr.com/package/npm/planck), [cdnjs](https://cdnjs.com/libraries/planck), and [unpkg](https://unpkg.com/planck/).
 
 ```html
-  <script src="https://cdn.jsdelivr.net/npm/planck/dist/planck.min.js" />
+  <script src="https://cdn.jsdelivr.net/npm/planck/dist/planck.min.js"></script>
   <script>
     const { World } = planck;
     const world = new World();
@@ -41,7 +41,11 @@ testbed.start(world);
 
 ```html
 <html><body>
-  <script src="https://cdn.jsdelivr.net/npm/planck/dist/planck-with-testbed.min.js" />
+  <span id="testbed-info"></span>
+  <span id="testbed-status"></span>
+  <button id="testbed-play">Play</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/planck/dist/planck-with-testbed.min.js"></script>
   <script>
     const { World, Testbed } = planck;
     const world = new World();

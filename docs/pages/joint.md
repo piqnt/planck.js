@@ -4,7 +4,7 @@ Typical examples in games include ragdolls, teeters, and pulleys. Joints
 can be combined in many different ways to create interesting motions.
 
 Some joints provide limits so you can control the range of motion. Some
-joint provide motors which can be used to drive the joint at a
+joints provide motors which can be used to drive the joint at a
 prescribed speed until a prescribed force/torque is exceeded.
 
 Joint motors can be used in many ways. You can use motors to control
@@ -17,14 +17,14 @@ too strong.
 
 ### Joint Definition
 Each joint type has a definition that derives from JointDef. All
-joints are connected between two different bodies. One body may static.
+joints are connected between two different bodies. One body may be static.
 Joints between static and/or kinematic bodies are allowed, but have no
 effect and use some processing time.
 
 You can specify user data for any joint type and you can provide a flag
 to prevent the attached bodies from colliding with each other. This is
-actually the default behavior and you must set the collideConnected
-to `true` to allow collision between to connected bodies.
+actually the default behavior and you must set `collideConnected`
+to `true` to allow collision between two connected bodies.
 
 Many joint definitions require that you provide some geometric data.
 Often a joint will be defined by anchor points. These are points fixed
@@ -35,8 +35,8 @@ occurrence when a game is saved and reloaded. Additionally, some joint
 definitions need to know the default relative angle between the bodies.
 This is necessary to constrain rotation correctly.
 
-[Initializing the geometric data can be tedious, so many joints have
-constructor that use the current body transforms to remove
+Initializing the geometric data can be tedious, so many joints have a
+constructor that uses the current body transforms to remove
 much of the work. However, these initialization functions should usually
 only be used for prototyping. Production code should define the geometry
 directly. This will make joint behavior more robust.
@@ -66,7 +66,7 @@ myWorld.destroyJoint(joint);
 joint = null;
 ```
 
-It is always good to nullify your variable after they are destroyed. This
+It is always good to nullify your variables after they are destroyed. This
 will make the program crash in a controlled manner if you try to reuse
 the variable.
 

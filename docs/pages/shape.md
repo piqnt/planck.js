@@ -17,8 +17,8 @@ Keep in mind that a shape does not know about bodies and stand apart
 from the dynamics system. In Planck.js shapes are considered immutable.
 When a shape is attached to a body using a fixture, the
 shapes move rigidly with the host body. In summary:
-- When a shape is **not** attached to a body, you can view it's vertices as being expressed in world-space.
-- When a shape is attached to a body, you can view it's vertices as being expressed in local coordinates.
+- When a shape is **not** attached to a body, you can view its vertices as being expressed in world-space.
+- When a shape is attached to a body, you can view its vertices as being expressed in local coordinates.
 
 #### Geometric Queries
 You can perform a couple geometric queries on a single shape.
@@ -28,7 +28,7 @@ You can test a point for overlap with a shape. You provide a transform
 for the shape and a world point.
 
 ```js
-let transform = Transfrom.identity();
+let transform = Transform.identity();
 let point = Vec2(5, 2);
 
 let hit = shape.testPoint(transform, point);
@@ -47,7 +47,7 @@ only check a single edge at a time.
 >
 
 ```js
-let transform = Transfrom.identity();
+let transform = Transform.identity();
 
 let input = {}; // RayCastInput
 input.p1 = Vec2(0, 0);
@@ -81,4 +81,4 @@ Transform xfA = ..., xfB = ...;
 bool overlap = TestOverlap(shapeA, indexA, shapeB, indexB, xfA, xfB);
 ```
 
-Again you must provide child indices to for the case of chain shapes.
+Again you must provide child indices for the case of chain shapes.
