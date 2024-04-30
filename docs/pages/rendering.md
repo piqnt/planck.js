@@ -38,7 +38,7 @@ class Renderer {
   }
 
   // Game loop
-  loop(timeStamp) {
+  loop = (timeStamp) => {
     if (!this.started) {
       return;
     }
@@ -65,7 +65,7 @@ class Renderer {
     }
 
     // Request a new frame
-    window.requestAnimationFrame(this.loop.bind(this));
+    window.requestAnimationFrame(this.loop);
   }
 
   renderBody(body) {
