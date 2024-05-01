@@ -1,4 +1,8 @@
-### Fixture
+---
+showOutline: false
+---
+
+## Fixture
 Shapes only have geometrical coordinates, they don't have physical properties and don't know about the body's transformation, so may be used independently of the physics simulation.
 The `Fixture` class is used to attach shapes to bodies. A body may have zero or more fixtures. A
 body with multiple fixtures is sometimes called a *compound body.*
@@ -14,7 +18,7 @@ Fixtures hold the following:
 
 These are described in the following sections.
 
-#### Fixture Creation
+### Fixture Creation
 Fixtures are created by initializing a fixture definition and then
 passing the definition to the parent body.
 
@@ -38,7 +42,7 @@ the body destruction take care of destroying the attached fixtures.
 myBody.destroyFixture(myFixture);
 ```
 
-##### Density
+### Density
 The fixture density is used to compute the mass properties of the parent
 body. The density can be zero or positive. You should generally use
 similar densities for all your fixtures. This will improve stacking
@@ -52,7 +56,7 @@ fixture.setDensity(5);
 body.resetMassData();
 ```
 
-##### Friction
+### Friction
 Friction is used to make objects slide along each other realistically.
 Planck.js supports static and dynamic friction, but uses the same parameter
 for both. Friction is simulated accurately in Planck.js and the friction
@@ -76,7 +80,7 @@ You can override the default mixed friction using
 `contact.setFriction`. This is usually done in the contact listener
 callback.
 
-##### Restitution
+### Restitution
 Restitution is used to make objects bounce. The restitution value is
 usually set to be between 0 and 1. Consider dropping a ball on a table.
 A value of zero means the ball won't bounce. This is called an
@@ -102,7 +106,7 @@ approximately. This is because Planck.js uses an iterative solver. Planck.js
 also uses inelastic collisions when the collision velocity is small.
 This is done to prevent jitter. See `Settings.velocityThreshold`.
 
-##### Filtering
+### Filtering
 Collision filtering allows you to prevent collision between fixtures.
 For example, say you make a character that rides a bicycle. You want the
 bicycle to collide with the terrain and the character to collide with
@@ -172,7 +176,7 @@ an existing fixture using fixture.getFilterData and
 fixture.setFilterData. Note that changing the filter data will not
 add or remove contacts until the next time step (see the World class).
 
-#### Sensors
+### Sensors
 Sometimes game logic needs to know when two fixtures overlap yet there
 should be no collision response. This is done by using sensors. A sensor
 is a fixture that detects collision but does not produce a response.

@@ -1,4 +1,8 @@
-### Collision
+---
+showOutline: false
+---
+
+## Collision
 The Collision classes include shapes and functions that operate on them.
 The module also contains a dynamic tree and broad-phase to acceleration
 collision processing of large systems.
@@ -12,7 +16,7 @@ engine, so the using the collision module by itself may feel limited for
 some applications. Likewise, I will not make a strong effort to document
 it or polish the APIs.
 
-#### Contact Manifolds
+### Contact Manifolds
 Planck.js has functions to compute contact points for overlapping shapes. If
 we consider circle-circle or circle-polygon, we can only get one contact
 point and normal. In the case of polygon-polygon we can get two points.
@@ -20,7 +24,7 @@ These points share the same normal vector so Planck.js groups them into a
 manifold structure. The contact solver takes advantage of this to
 improve stacking stability.
 
-![Contact Manifold](./images/manifolds.svg)
+![Contact Manifold](/images/manifolds.svg)
 
 Normally you don't need to compute contact manifolds directly, however
 you will likely use the results produced in the simulation.
@@ -60,19 +64,19 @@ if (state1[0] == PointState.removeState) {
 }
 ```
 
-#### Distance
+### Distance
 The `Distance` function can be used to compute the distance between two
 shapes. The distance function needs both shapes to be converted into a
 `DistanceProxy`. There is also some caching used to warm start the
 distance function for repeated calls.
 
-![Distance Function](./images/distance.svg)
+![Distance Function](/images/distance.svg)
 
-#### Time of Impact
+### Time of Impact
 If two shapes are moving fast, they may *tunnel* through each other in a
 single time step.
 
-![Tunneling](./images/tunneling2.svg)
+![Tunneling](/images/tunneling2.svg)
 
 The `TimeOfImpact` function is used to determine the time when two
 moving shapes collide. This is called the *time of impact* (TOI). The
@@ -90,9 +94,9 @@ ensures the shapes do not cross on that axis. This might miss collisions
 that are clear at the final positions. While this approach may miss some
 collisions, it is very fast and adequate for tunnel prevention.
 
-![Captured Collision](./images/captured_toi.svg)
+![Captured Collision](/images/captured_toi.svg)
 
-![Missed Collision](./images/missed_toi.svg)
+![Missed Collision](/images/missed_toi.svg)
 
 It is difficult to put a restriction on the rotation magnitude. There
 may be cases where collisions are missed for small rotations. Normally,
@@ -106,7 +110,7 @@ transforms of the shapes.
 You can use fixed rotations to perform a *shape cast*. In this case, the
 time of impact function will not miss any collisions.
 
-### Dynamic Tree
+## Dynamic Tree
 The `DynamicTree` class is used by Planck.js to organize large numbers of
 shapes efficiently. The class does not know about shapes. Instead it
 operates on axis-aligned bounding boxes (AABBs) with user data pointers.
@@ -128,16 +132,16 @@ A region query uses the tree to find all leaf AABBs that overlap a query
 AABB. This is faster than a brute force approach because many shapes can
 be skipped.
 
-![Raycast](./images/raycast.svg)
+![Raycast](/images/raycast.svg)
 
-![Overlap Test](./images/overlap_test.svg)
+![Overlap Test](/images/overlap_test.svg)
 
 Normally you will not use the dynamic tree directly. Rather you will go
 through the `World` class for ray casts and region queries. If you plan
 to instantiate your own dynamic tree, you can learn how to use it by
 looking at how Planck.js uses it.
 
-### Broad-phase
+## Broad-phase
 Collision processing in a physics step can be divided into narrow-phase
 and broad-phase. In the narrow-phase we compute contact points between
 pairs of shapes. Imagine we have N shapes. Using brute force, we would

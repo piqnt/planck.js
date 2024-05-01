@@ -1,4 +1,8 @@
-### Units
+---
+showOutline: false
+---
+
+## Units
 Planck.js works with floating point numbers and tolerances have to be used to make Planck.js perform well.
 These tolerances have been tuned to work well with meters-kilogram-second (MKS) units.
 In particular, Planck.js has been tuned to work well with moving shapes between 0.1 and 10 units (meters).

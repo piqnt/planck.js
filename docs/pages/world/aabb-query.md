@@ -1,4 +1,8 @@
-### AABB Queries
+---
+showOutline: false
+---
+
+## AABB Queries
 Sometimes you want to determine all the shapes in a region. The World
 class has a fast O(log N) method for this using the broad-phase data
 structure. You provide an AABB in world coordinates and an

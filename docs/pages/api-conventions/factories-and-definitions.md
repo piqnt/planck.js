@@ -1,4 +1,8 @@
-### Factories and Definitions
+---
+showOutline: false
+---
+
+## Factories and Definitions
 
 To create a `Body` or a `Joint`, you need to call the factory functions on World:
 

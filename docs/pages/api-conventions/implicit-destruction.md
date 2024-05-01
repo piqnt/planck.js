@@ -1,4 +1,8 @@
-### Implicit Destruction
+---
+showOutline: false
+---
+
+## Implicit Destruction
 
 Often when using Planck.js you will create and destroy many bodies, shapes,
 and joints. Managing these entities is somewhat automated by Planck.js. If

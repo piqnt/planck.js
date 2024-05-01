@@ -1,8 +1,9 @@
 {
-  "name": "Planck.js API Doc",
-  "readme": "./docs/API.md",
+  "name": "API Reference",
+  "readme": "./docs/pages/misc/api-reference.md",
   "inputFiles": ["./src", "./testbed"],
-  "out": "./docs/api/",
+  "out": "./docs/pages/api/",
+  "publicPath": "/api/",
   "mode": "file",
   "includeDeclarations": false,
   "exclude": [
@@ -16,11 +17,13 @@
     "src/util/Timer*",
     "src/common/Matrix*",
     "testbed/*",
+    "docs/*",
     "dist/*"
   ],
   "disableSources": true,
   "excludeExternals": true,
   "excludePrivate": true,
   "stripInternal": true,
-  "excludeNotExported": true
+  "excludeNotExported": true,
+  "hideBreadcrumbs": true
 }

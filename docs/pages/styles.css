@@ -1,9 +1,0 @@
-p img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.dark p img {
-  filter: invert(0.8);
-}

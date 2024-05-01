@@ -1,4 +1,8 @@
-### Weld Joint
+---
+showOutline: false
+---
+
+## Weld Joint
 The weld joint attempts to constrain all relative motion between two
 bodies. See the Cantilever.js in the testbed to see how the weld joint
 behaves.

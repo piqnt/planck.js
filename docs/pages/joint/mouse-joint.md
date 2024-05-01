@@ -1,4 +1,8 @@
-### Mouse Joint
+---
+showOutline: false
+---
+
+## Mouse Joint
 The mouse joint is used in the testbed to manipulate bodies with the
 mouse. It attempts to drive a point on a body towards the current
 position of the cursor. There is no restriction on rotation.

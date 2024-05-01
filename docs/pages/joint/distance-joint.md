@@ -1,5 +1,8 @@
+---
+showOutline: false
+---
 
-### Distance Joint
+## Distance Joint
 One of the simplest joints is a distance joint which says that the
 distance between two points on two bodies must be constant. When you
 specify a distance joint the two bodies should already be in place. Then
@@ -7,7 +10,7 @@ you specify the two anchor points in world coordinates. The first anchor
 point is connected to body 1, and the second anchor point is connected
 to body 2. These points imply the length of the distance constraint.
 
-![Distance Joint](../images/distance_joint.gif)
+![Distance Joint](/images/distance_joint.gif)
 
 Here is an example of a distance joint definition. In this case we
 decide to allow the bodies to collide.

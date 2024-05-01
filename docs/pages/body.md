@@ -1,4 +1,8 @@
-### Body
+---
+showOutline: false
+---
+
+## Body
 Bodies have position, angle, and velocity. You can apply forces, torques, and
 impulses to bodies. Bodies can be `static`, `kinematic`, or `dynamic`. Here
 are the body type definitions:
@@ -39,7 +43,7 @@ query the body positions to update the positions of your graphical
 entities. You should also keep body references so you can destroy them
 when you are done with them.
 
-#### Body Factory
+## Body Factory
 Bodies are created and destroyed using a body factory provided by the
 `World` class. This lets the world create the body and add the body to the 
 world data structure.
@@ -64,11 +68,11 @@ When you destroy a body, the attached fixtures and joints are
 automatically destroyed. This has important implications for how you
 manage shape and joint references.
 
-#### Body Definition
+## Body Definition
 
 Let's go over some of the key members of the body definition.
 
-##### Body Type
+### Body Type
 As discussed at the beginning of this chapter, there are three different
 body types: static, kinematic, and dynamic. You should specify the
 body type at creation because changing the body type later is expensive.
@@ -81,7 +85,7 @@ world.createBody({
 
 Default body type is static, static bodies don't move in simulations.
 
-##### Position and Angle
+### Position and Angle
 The body definition gives you the chance to initialize the position of
 the body on creation. This has far better performance than creating the
 body at the world origin and then moving the body.
@@ -117,7 +121,7 @@ A rigid body is also a frame of reference. You can define fixtures and
 joints in that frame. Those fixtures and joint anchors never move in the
 local frame of the body.
 
-##### Damping
+### Damping
 Damping is used to reduce the world velocity of bodies. Damping is
 different than friction because friction only occurs with contact.
 Damping is not a replacement for friction and the two effects should be
@@ -140,7 +144,7 @@ values the damping effect is mostly independent of the time step. At
 larger damping values, the damping effect will vary with the time step.
 This is not an issue if you use a fixed time step (recommended).
 
-##### Gravity Scale
+### Gravity Scale
 You can use the gravity scale to adjust the gravity on a single body. Be
 careful though, increased gravity can decrease stability.
 
@@ -151,7 +155,7 @@ world.createBody({
 });
 ```
 
-##### Sleep Parameters
+### Sleep Parameters
 It is expensive to simulate bodies, so the less we have to simulate the better.
 When a body comes to rest we would like to stop simulating it.
 
@@ -171,7 +175,7 @@ world.createBody({
 });
 ```
 
-##### Fixed Rotation
+### Fixed Rotation
 You may want a body, such as a character, to have a fixed
 rotation. Such a body should not rotate, even under load. You can use
 the fixed rotation setting to achieve this:
@@ -185,7 +189,7 @@ world.createBody({
 The fixed rotation flag causes the rotational inertia and its inverse to
 be set to zero.
 
-##### Bullets
+### Bullets
 Game simulation usually generates a sequence of images that are played
 at some frame rate. This is called discrete simulation. In discrete
 simulation, rigid bodies can move by a large amount in one time step. If
@@ -220,7 +224,7 @@ world.createBody({
 
 The bullet flag only affects dynamic bodies.
 
-##### Activation
+### Activation
 You may wish a body to be created but not participate in collision or
 dynamics. This state is similar to sleeping except the body will not be
 woken by other bodies and the body's fixtures will not be placed in the
@@ -243,7 +247,7 @@ Note that activating a body is almost as expensive as creating the body
 from scratch. So you should not use activation for streaming worlds. Use
 creation/destruction for streaming worlds to save memory.
 
-##### User Data
+### User Data
 User data is an untyped reference. This gives you a hook to link your
 application objects to bodies.
 
@@ -253,12 +257,12 @@ world.createBody({
 });
 ```
 
-#### Using a Body
+## Using a Body
 After creating a body, there are many operations you can perform on the
 body. These include setting mass properties, accessing position and
 velocity, applying forces, and transforming points and vectors.
 
-##### Mass Data
+### Mass Data
 A body has mass (scalar), center of mass (2-vector), and rotational
 inertia (scalar). For static bodies, the mass and rotational inertia are
 set to zero. When a body has fixed rotation, its rotational inertia is
@@ -289,7 +293,7 @@ body.getLocalCenter(); // Vec2
 body.getMassData(massData);
 ```
 
-##### State Information
+### State Information
 There are many aspects to the body's state. You can access this state
 data efficiently through the following functions:
 
@@ -313,7 +317,7 @@ body.setFixedRotation(flag);
 body.isFixedRotation(); // boolean
 ```
 
-##### Position and Velocity
+### Position and Velocity
 You can access the position and rotation of a body. This is common when
 rendering your associated game actor. You can also set the position and rotation,
 although this is less common since you will normally use Planck.js to
@@ -346,7 +350,7 @@ You can access the linear and angular velocity. The linear velocity is
 for the center of mass. Therefore, the linear velocity may change if the
 mass properties change.
 
-##### Forces and Impulses
+### Forces and Impulses
 You can apply forces, torques (rotational force), and impulses to a body.
 When you apply a force or an impulse, you provide a world point where the load is applied.
 This often results in a torque about the center of mass.
@@ -369,7 +373,7 @@ if (myBody.isAwake()) {
 }
 ```
 
-##### Coordinate Transformations
+### Coordinate Transformations
 The body class has some utility functions to help you transform points
 and vectors between local and world space.
 
@@ -390,7 +394,7 @@ body.getWorldVector(localVector); // Vec2
 body.getLocalVector(worldVector); // Vec2
 ```
 
-##### Accessing Fixtures, Joints, and Contacts
+### Accessing Fixtures, Joints, and Contacts
 You can iterate over a body's fixtures.
 
 ```js

@@ -1,0 +1,14 @@
+p img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dark p img {
+  filter: invert(0.8);
+}
+
+.vocs_Sidebar_sectionTitle {
+  font-weight: var(--vocs-fontWeight_medium);
+  color: var(--vocs-color_text3);
+}

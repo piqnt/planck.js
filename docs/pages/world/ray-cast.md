@@ -1,4 +1,8 @@
-### Ray Casts
+---
+showOutline: false
+---
+
+## Ray Casts
 You can use ray casts to do line-of-sight checks, fire guns, etc. You
 perform a ray cast by implementing a callback class and providing the
 start and end points. The world class calls your class with each fixture

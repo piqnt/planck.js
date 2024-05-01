@@ -22,6 +22,7 @@ yarn-error.log*
 
 # production
 build
+/docs/dist
 
 # next.js
 .next/

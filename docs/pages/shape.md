@@ -1,4 +1,9 @@
-### Shapes
+---
+showOutline: false
+---
+
+## Shape
+
 Shapes describe collision geometry and may be used independently of
 physics simulation. At a minimum, you should understand how to create
 shapes that can be later attached to rigid bodies.
@@ -20,10 +25,12 @@ shapes move rigidly with the host body. In summary:
 - When a shape is **not** attached to a body, you can view its vertices as being expressed in world-space.
 - When a shape is attached to a body, you can view its vertices as being expressed in local coordinates.
 
-#### Geometric Queries
+### Geometric Queries
+
 You can perform a couple geometric queries on a single shape.
 
 #### Shape Point Test
+
 You can test a point for overlap with a shape. You provide a transform
 for the shape and a world point.
 
@@ -37,6 +44,7 @@ let hit = shape.testPoint(transform, point);
 Edge and chain shapes always return false, even if the chain is a loop.
 
 #### Shape Ray Cast
+
 You can cast a ray at a shape to get the point of first intersection and normal
 vector. A child index is included for chain shapes because the ray cast will 
 only check a single edge at a time.
@@ -67,6 +75,7 @@ if (hit) {
 ```
 
 #### Pairwise Functions
+
 The Collision module contains functions that take a pair of shapes and compute some results. These include:
 - Overlap
 - Contact manifolds
@@ -74,6 +83,7 @@ The Collision module contains functions that take a pair of shapes and compute s
 - Time of impact
 
 #### Overlap
+
 You can test two shapes for overlap using this function:
 
 ```js

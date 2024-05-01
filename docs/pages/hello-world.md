@@ -1,8 +1,12 @@
-### Getting Started
+---
+showOutline: false
+---
+
+## Hello World
 
 In this section we will walk through a simple example to set up the physics world, and create a platform and a small box.
 
-#### Creating a World
+### Creating a World
 Every Planck.js program begins with the creation of a World object.
 World is the physics hub that manages objects, their physical interactions, and runs simulation.
 
@@ -16,7 +20,7 @@ let world = new World({
 
 Now that we have our physics world set up, let's start adding some stuff to it.
 
-#### Creating a platform
+### Creating a platform
 
 We will create a platform using the following steps:
 
@@ -60,7 +64,7 @@ However, you can attach all static fixtures to a single static body.
 A static body has zero mass by definition, so we don't need to specify density in this case.
 Later we will see how to use a fixture's properties to customize its physical behavior.
 
-#### Creating a dynamic box
+### Creating a dynamic box
 Creating a dynamic box is similar to the platform. The main difference, besides dimensions, is that for a dynamic body we need to specify mass properties.
 
 First we create the body using `createBody`. By default bodies are static, so we should set the body's `type` at construction time to make the body dynamic.
@@ -95,7 +99,7 @@ You can add as many fixtures as you like to a body. Each one contributes to the 
 Box dimensions are specified as the **half-width** and **half-height** (like a circler radius).
 So in this case the ground box is 2 units wide (x-axis) and 2 units tall (y-axis).
 
-#### Units
+### Units
 Planck.js by default is tuned for meters, kilograms, and seconds. So you can consider the dimensions to be in meters.
 Planck.js generally works best when objects are the size of typical real world objects. For example, a barrel is about 1 meter tall.
 Due to the limitations of floating point arithmetic, using Planck.js to model the movement of glaciers or dust particles is not a good idea.

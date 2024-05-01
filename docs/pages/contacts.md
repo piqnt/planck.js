@@ -1,4 +1,8 @@
-# Contacts
+---
+showOutline: false
+---
+
+## Contacts
 Contacts are objects created by Planck.js to manage collision between two
 fixtures. If the fixture has children, such as a chain shape, then a
 contact exists for each relevant child. There are different kinds of
@@ -9,36 +13,36 @@ circle-circle collision.
 
 Here is some terminology associated with contacts.
 
-#### contact point
+#### Contact Point
 A contact point is a point where two shapes touch. Planck.js approximates
 contact with a small number of points.
 
-#### contact normal
+#### Contact Normal
 A contact normal is a unit vector that points from one shape to another.
 By convention, the normal points from fixtureA to fixtureB.
 
-#### contact separation
+#### Contact Separation
 Separation is the opposite of penetration. Separation is negative when
 shapes overlap. It is possible that future versions of Planck.js will create
 contact points with positive separation, so you may want to check the
 sign when contact points are reported.
 
-#### contact manifold
+#### Contact Manifold
 Contact between two convex polygons may generate up to 2 contact points.
 Both of these points use the same normal, so they are grouped into a
 contact manifold, which is an approximation of a continuous region of
 contact.
 
-#### normal impulse
+#### Normal Impulse
 The normal force is the force applied at a contact point to prevent the
 shapes from penetrating. For convenience, Planck.js works with impulses. The
 normal impulse is just the normal force multiplied by the time step.
 
-#### tangent impulse
+#### Tangent Impulse
 The tangent force is generated at a contact point to simulate friction.
 For convenience, this is stored as an impulse.
 
-#### contact ids
+#### Contact Ids
 Planck.js tries to re-use the contact force results from a time step as the
 initial guess for the next time step. Planck.js uses contact ids to match
 contact points across time steps. The ids contain geometric features
@@ -56,7 +60,7 @@ contact right away if the shapes are not touching, or we can just wait
 until the AABBs stop overlapping. Planck.js takes the latter approach
 because it lets the system cache information to improve performance.
 
-### Contact Class
+## Contact Class
 As mentioned before, the contact class is created and destroyed by
 Planck.js. Contact objects are not created by the user. However, you are
 able to access the contact class and interact with it.
@@ -99,7 +103,7 @@ let actorA = bodyA.getUserData();
 You can disable a contact. This only works inside the
 `pre-solve` event, discussed below.
 
-### Accessing Contacts
+## Accessing Contacts
 You can get access to contacts in several ways. You can access the
 contacts directly on the world and body structures. You can also
 implement a contact listener.
@@ -130,7 +134,7 @@ described below.
 > contacts that occur in the middle of the time step. Use
 > ContactListener to get the most accurate results.
 
-### Contact Events
+## Contact Events
 You can receive contact data by adding event listeners to world. The
 World supports several events: begin-contact, end-contact, pre-solve,
 and post-solve.
@@ -158,16 +162,16 @@ world.on('pre-solve', function(contact, contactImpulse) {
 At run-time you can create an instance of the listener and register it
 with world.on(). You can remove listener using world.off() function.
 
-#### Begin Contact Event
+### Begin Contact Event
 This is called when two fixtures begin to overlap. This is called for
 sensors and non-sensors. This event can only occur inside the time step.
 
-####  End Contact Event
+### End Contact Event
 This is called when two fixtures cease to overlap. This is called for
 sensors and non-sensors. This may be called when a body is destroyed, so
 this event can occur outside the time step.
 
-#### Pre-Solve Event
+### Pre-Solve Event
 This is called after collision detection, but before collision
 resolution. This gives you a chance to disable the contact based on the
 current configuration. For example, you can implement a one-sided
@@ -216,7 +220,7 @@ world.on('pre-solve', function(contact, oldManifold) {
 });
 ```
 
-#### Post-Solve Event
+### Post-Solve Event
 The post solve event is where you can gather collision impulse results.
 If you don't care about the impulses, you should probably just implement
 the pre-solve event.
@@ -274,7 +278,7 @@ for (let i = 0; i < nuke.length; i++) {
 }
 ```
 
-### Contact Filtering
+## Contact Filtering
 Often in a game you don't want all objects to collide. For example, you
 may want to create a door that only certain characters can pass through.
 This is called contact filtering, because some interactions are filtered

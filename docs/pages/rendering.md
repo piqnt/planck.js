@@ -1,4 +1,8 @@
-### Rendering and Simulation
+---
+showOutline: false
+---
+
+### Rendering
 
 Planck.js is a physics engine and it can be used with any graphics library or ui framework for rendering.
 
@@ -100,6 +104,7 @@ renderer.start(world);
 ```
 
 ### Pixels and Coordinate Systems
+
 Planck.js uses MKS (meters, kilograms, and seconds) units and
 radians for angles, however rendering is done in pixels.
 So you need to transformation world geometry into screen and vice versa.

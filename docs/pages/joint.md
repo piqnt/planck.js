@@ -1,4 +1,8 @@
-# Joint
+---
+showOutline: false
+---
+
+## Joint
 Joints are used to constrain bodies to the world or to each other.
 Typical examples in games include ragdolls, teeters, and pulleys. Joints
 can be combined in many different ways to create interesting motions.

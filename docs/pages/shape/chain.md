@@ -1,10 +1,14 @@
-### Chain Shapes
+---
+showOutline: false
+---
+
+## Chain Shapes
 
 The chain shape provides an efficient way to connect many edges together
 to construct your static game worlds. Chain shapes automatically
 eliminate ghost collisions and provide two-sided collision.
 
-![Chain Shape](../images/chain_shape.svg)
+![Chain Shape](/images/chain_shape.svg)
 
 ```js
 // This is a chain shape with isolated vertices
@@ -40,7 +44,7 @@ might not. The code that prevents ghost collisions assumes there are no
 self-intersections of the chain. Also, very close vertices can cause
 problems. Make sure all your edges are longer than Settings.linearSlop (5mm).
 
-![Self Intersection](../images/self_intersect.svg)
+![Self Intersection](/images/self_intersect.svg)
 
 Each edge in the chain is treated as a child shape and can be accessed
 by index. When a chain shape is connected to a body, each edge gets its

@@ -1,4 +1,9 @@
-### Simulation
+---
+showOutline: false
+---
+
+## Simulation
+
 The world class is used to drive the simulation. You specify a time step
 and a velocity and position iteration count. For example:
 
@@ -39,7 +44,9 @@ myWorld.clearForces();
 
 
 [todo: clean up next section, it is duplicate]
+
 ### Simulating the World
+
 Planck.js uses a computational algorithm called an integrator. Integrators
 simulate the physics equations at discrete points of time. This goes
 along with the traditional game loop where we essentially have a flip

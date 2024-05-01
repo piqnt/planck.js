@@ -1,3 +1,7 @@
+---
+showOutline: false
+---
+
 #### Credits
 
 Box2D is a popular C++ 2D rigid-body physics engine created by Erin Catto. Box2D is used in several popular games, such as Angry Birds, Limbo and Crayon Physics, as well as game development tools and libraries such as Apple's SpriteKit.

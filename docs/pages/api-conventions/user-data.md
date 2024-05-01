@@ -1,4 +1,8 @@
-### User Data
+---
+showOutline: false
+---
+
+## User Data
 The `Fixture`, `Body`, and `Joint` classes allow you to attach user data.
 
 This is handy to implement game-logic and rendering.
