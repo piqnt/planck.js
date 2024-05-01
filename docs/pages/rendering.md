@@ -51,7 +51,7 @@ class Renderer {
     this.world.step(1 / 60);
 
     // Iterate over bodies
-    for (let body = world.getBodyList(); body; body = body.getNext()) {
+    for (let body = this.world.getBodyList(); body; body = body.getNext()) {
       this.renderBody(body);
       // ... and fixtures
       for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
@@ -60,7 +60,7 @@ class Renderer {
     }
 
     // Iterate over joints
-    for (let joint = world.getJointList(); joint; joint = joint.getNext()) {
+    for (let joint = this.world.getJointList(); joint; joint = joint.getNext()) {
       this.renderJoint(joint);
     }
 
