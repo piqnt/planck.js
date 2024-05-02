@@ -7,7 +7,7 @@ A revolute joint forces two bodies to share a common anchor point, often
 called a hinge point. The revolute joint has a single degree of freedom:
 the relative rotation of the two bodies. This is called the joint angle.
 
-![Revolute Joint](/images/revolute_joint.gif)
+![Revolute Joint](/planck.js/docs/images/revolute_joint.gif)
 
 To specify a revolute you need to provide two bodies and a single anchor
 point in world space. The initialization function assumes that the

@@ -11,14 +11,15 @@ export default defineConfig({
     { text: 'Discord', link: 'https://discord.gg/znjh6J7'},
   ],
   sidebar: [
+    { link: "/", text: "Introduction" },
     {
-      text: 'Getting Started',
+      text: 'Get Started',
       collapsed: true,
       items: [
-        { link: "/", text: "Introduction" },
-        { link: "/install", text: "Install" },
+        { link: "/run-your-code", text: "Run Your Code" },
         { link: "/hello-world", text: "Hello World" },
         { link: "/core-concepts", text: "Core Concepts" },
+        { link: "/install", text: "Install" },
       ],
     },
 

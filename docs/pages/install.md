@@ -2,27 +2,18 @@
 showOutline: false
 ---
 
-## Get Started
+## Install
 
-### Running Your Code
-
-Planck.js is a physics simulation library, and it doesn't draw anything.
-
-[Piqnt](https://piqnt.com/) is an online playground for Planck.js. You can explore [examples](https://piqnt.com/planck.js/), inspect and edit them, or create new ones.
-
-[Testbed](./testbed) is a simple tool (included in the project repository) to visualize and interact with physics simulation. Testbed is compatible with Piqnt playground.
-
-You can use Planck.js with any game engines or frameworks, or use an existing integrations. See [Simulation](./world/simulation) and [Rendering](./rendering) page for more information.
-
-### Install
+Planck can be installed or downloaded from NPM or a CDN.
 
 #### NPM
 
+First install the package.
 ```sh
 npm install planck
 ```
 
-Import the library in your code:
+Then import the library in your code:
 
 ```js
 import { World } from 'planck';
@@ -30,7 +21,15 @@ import { World } from 'planck';
 const world = new World();
 ```
 
-Import the library with testbed:
+You can alternatively import planck namespace to access all classes:
+
+```js
+import planck from 'planck';
+
+const world = new planck.World();
+```
+
+To use testbed you need to import `planck/with-testbed` instead:
 
 ```js
 import { World, Testbed } from 'planck/with-testbed';
@@ -53,6 +52,8 @@ Planck.js is available on [jsDelivr](https://www.jsdelivr.com/package/npm/planck
     const world = new World();
   </script>
 ```
+
+To use testbed you need to use `planck-with-testbed.min.js` instead:
 
 ```html
 <html><body>

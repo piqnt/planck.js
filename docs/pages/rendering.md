@@ -2,7 +2,7 @@
 showOutline: false
 ---
 
-### Rendering
+## Rendering
 
 Planck.js is a physics engine and it can be used with any graphics library or ui framework for rendering.
 

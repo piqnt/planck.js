@@ -24,7 +24,7 @@ These points share the same normal vector so Planck.js groups them into a
 manifold structure. The contact solver takes advantage of this to
 improve stacking stability.
 
-![Contact Manifold](/images/manifolds.svg)
+![Contact Manifold](/planck.js/docs/images/manifolds.svg)
 
 Normally you don't need to compute contact manifolds directly, however
 you will likely use the results produced in the simulation.
@@ -70,13 +70,13 @@ shapes. The distance function needs both shapes to be converted into a
 `DistanceProxy`. There is also some caching used to warm start the
 distance function for repeated calls.
 
-![Distance Function](/images/distance.svg)
+![Distance Function](/planck.js/docs/images/distance.svg)
 
 ### Time of Impact
 If two shapes are moving fast, they may *tunnel* through each other in a
 single time step.
 
-![Tunneling](/images/tunneling2.svg)
+![Tunneling](/planck.js/docs/images/tunneling2.svg)
 
 The `TimeOfImpact` function is used to determine the time when two
 moving shapes collide. This is called the *time of impact* (TOI). The
@@ -94,9 +94,9 @@ ensures the shapes do not cross on that axis. This might miss collisions
 that are clear at the final positions. While this approach may miss some
 collisions, it is very fast and adequate for tunnel prevention.
 
-![Captured Collision](/images/captured_toi.svg)
+![Captured Collision](/planck.js/docs/images/captured_toi.svg)
 
-![Missed Collision](/images/missed_toi.svg)
+![Missed Collision](/planck.js/docs/images/missed_toi.svg)
 
 It is difficult to put a restriction on the rotation magnitude. There
 may be cases where collisions are missed for small rotations. Normally,
@@ -132,9 +132,9 @@ A region query uses the tree to find all leaf AABBs that overlap a query
 AABB. This is faster than a brute force approach because many shapes can
 be skipped.
 
-![Raycast](/images/raycast.svg)
+![Raycast](/planck.js/docs/images/raycast.svg)
 
-![Overlap Test](/images/overlap_test.svg)
+![Overlap Test](/planck.js/docs/images/overlap_test.svg)
 
 Normally you will not use the dynamic tree directly. Rather you will go
 through the `World` class for ray casts and region queries. If you plan

@@ -12,3 +12,31 @@ p img {
   font-weight: var(--vocs-fontWeight_medium);
   color: var(--vocs-color_text3);
 }
+
+.vocs_Sidebar_section {
+  border-bottom: none !important;
+  border-top: none !important;
+}
+
+.vocs_Sidebar_level {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.vocs_Sidebar_level .vocs_Sidebar_sectionHeader {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.vocs_Sidebar_level .vocs_Sidebar_items {
+  padding-left: 12px;
+}
+
+.vocs_Sidebar_items {
+  padding-top: var(--vocs-space_4) !important;
+  padding-bottom: var(--vocs-space_4) !important;
+}
+
+.vocs_Sidebar_group {
+  padding-top: var(--vocs-space_12);
+}
