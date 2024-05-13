@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Wheel Joint
 The wheel joint restricts a point on bodyB to a line on bodyA. The wheel

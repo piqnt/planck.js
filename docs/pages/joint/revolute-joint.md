@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Revolute Joint
 A revolute joint forces two bodies to share a common anchor point, often

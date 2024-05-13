@@ -54,13 +54,13 @@ import { Shape } from '../Shape';
  */
 export class PolygonShape extends Shape {
   static TYPE = 'polygon' as const;
-  m_type: 'polygon';
+  /** @hidden */ m_type: 'polygon';
 
-  m_centroid: Vec2;
-  m_vertices: Vec2[]; // [Settings.maxPolygonVertices]
-  m_normals: Vec2[]; // [Settings.maxPolygonVertices]
-  m_count: number;
-  m_radius: number;
+  /** @hidden */ m_centroid: Vec2;
+  /** @hidden */ m_vertices: Vec2[]; // [Settings.maxPolygonVertices]
+  /** @hidden */ m_normals: Vec2[]; // [Settings.maxPolygonVertices]
+  /** @hidden */ m_count: number;
+  /** @hidden */ m_radius: number;
 
   constructor(vertices?: Vec2Value[]) {
     // @ts-ignore

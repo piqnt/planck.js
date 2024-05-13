@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Prismatic Joint
 A prismatic joint allows for relative translation of two bodies along a

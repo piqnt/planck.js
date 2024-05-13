@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 # Class: CircleShape
 
@@ -18,9 +15,6 @@ showOutline: false
 
 ### Properties
 
-* [m_p](/api/classes/circleshape#m_p)
-* [m_radius](/api/classes/circleshape#m_radius)
-* [m_type](/api/classes/circleshape#m_type)
 * [style](/api/classes/circleshape#style)
 * [TYPE](/api/classes/circleshape#static-type)
 
@@ -63,28 +57,6 @@ Name | Type |
 **Returns:** *[CircleShape](/api/classes/circleshape)*
 
 ## Properties
-
-###  m_p
-
-• **m_p**: *Vec2*
-
-___
-
-###  m_radius
-
-• **m_radius**: *number*
-
-*Overrides [Shape](/api/classes/shape).[m_radius](/api/classes/shape#m_radius)*
-
-___
-
-###  m_type
-
-• **m_type**: *"circle"*
-
-*Overrides [Shape](/api/classes/shape).[m_type](/api/classes/shape#m_type)*
-
-___
 
 ###  style
 

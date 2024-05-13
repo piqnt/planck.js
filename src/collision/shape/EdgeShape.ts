@@ -46,20 +46,20 @@ import { DistanceProxy } from '../Distance';
  */
 export class EdgeShape extends Shape {
   static TYPE = 'edge' as const;
-  m_type: 'edge';
+  /** @hidden */ m_type: 'edge';
 
-  m_radius: number;
+  /** @hidden */ m_radius: number;
 
   // These are the edge vertices
-  m_vertex1: Vec2;
-  m_vertex2: Vec2;
+  /** @hidden */ m_vertex1: Vec2;
+  /** @hidden */ m_vertex2: Vec2;
 
   // Optional adjacent vertices. These are used for smooth collision.
   // Used by chain shape.
-  m_vertex0: Vec2;
-  m_vertex3: Vec2;
-  m_hasVertex0: boolean;
-  m_hasVertex3: boolean;
+  /** @hidden */ m_vertex0: Vec2;
+  /** @hidden */ m_vertex3: Vec2;
+  /** @hidden */ m_hasVertex0: boolean;
+  /** @hidden */ m_hasVertex3: boolean;
 
   constructor(v1?: Vec2Value, v2?: Vec2Value) {
     // @ts-ignore

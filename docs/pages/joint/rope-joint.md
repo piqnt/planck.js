@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Rope Joint
 The rope joint restricts the maximum distance between two points. This

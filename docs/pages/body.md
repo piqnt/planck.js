@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Body
 Bodies have position, angle, and velocity. You can apply forces, torques, and

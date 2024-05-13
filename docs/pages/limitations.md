@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Limitations
 Planck.js uses several approximations to simulate rigid body physics

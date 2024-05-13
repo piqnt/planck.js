@@ -36,15 +36,15 @@ export class BoxShape extends PolygonShape {
   // note that box is serialized/deserialized as polygon
   static TYPE = 'polygon' as const;
 
-  constructor(hx: number, hy: number, center?: Vec2Value, angle?: number) {
+  constructor(halfWidth: number, halfHeight: number, center?: Vec2Value, angle?: number) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof BoxShape)) {
-      return new BoxShape(hx, hy, center, angle);
+      return new BoxShape(halfWidth, halfHeight, center, angle);
     }
 
     super();
 
-    this._setAsBox(hx, hy, center, angle);
+    this._setAsBox(halfWidth, halfHeight, center, angle);
   }
 }
 

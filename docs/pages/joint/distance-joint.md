@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Distance Joint
 One of the simplest joints is a distance joint which says that the

@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Polygon Shapes
 Polygon shapes are solid convex polygons. A polygon is convex when all
@@ -46,8 +43,8 @@ let polygon = new Polygon(vertices);
 The polygon shape has some convenience functions to create boxes.
 
 ```js
-new Box(hx, hy);
-new Box(hx, hy, centerVec2, angle);
+new Box(halfWidth, halfHeight);
+new Box(halfWidth, halfHeight, center, angle);
 ```
 
 Polygons inherit a radius from Shape. The radius creates a skin around

@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## World
 The `World` class contains the bodies and joints. It manages all aspects

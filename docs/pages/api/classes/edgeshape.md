@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 # Class: EdgeShape
 
@@ -22,14 +19,6 @@ contact normals.
 
 ### Properties
 
-* [m_hasVertex0](/api/classes/edgeshape#m_hasvertex0)
-* [m_hasVertex3](/api/classes/edgeshape#m_hasvertex3)
-* [m_radius](/api/classes/edgeshape#m_radius)
-* [m_type](/api/classes/edgeshape#m_type)
-* [m_vertex0](/api/classes/edgeshape#m_vertex0)
-* [m_vertex1](/api/classes/edgeshape#m_vertex1)
-* [m_vertex2](/api/classes/edgeshape#m_vertex2)
-* [m_vertex3](/api/classes/edgeshape#m_vertex3)
 * [style](/api/classes/edgeshape#style)
 * [TYPE](/api/classes/edgeshape#static-type)
 
@@ -66,58 +55,6 @@ Name | Type |
 **Returns:** *[EdgeShape](/api/classes/edgeshape)*
 
 ## Properties
-
-###  m_hasVertex0
-
-• **m_hasVertex0**: *boolean*
-
-___
-
-###  m_hasVertex3
-
-• **m_hasVertex3**: *boolean*
-
-___
-
-###  m_radius
-
-• **m_radius**: *number*
-
-*Overrides [Shape](/api/classes/shape).[m_radius](/api/classes/shape#m_radius)*
-
-___
-
-###  m_type
-
-• **m_type**: *"edge"*
-
-*Overrides [Shape](/api/classes/shape).[m_type](/api/classes/shape#m_type)*
-
-___
-
-###  m_vertex0
-
-• **m_vertex0**: *Vec2*
-
-___
-
-###  m_vertex1
-
-• **m_vertex1**: *Vec2*
-
-___
-
-###  m_vertex2
-
-• **m_vertex2**: *Vec2*
-
-___
-
-###  m_vertex3
-
-• **m_vertex3**: *Vec2*
-
-___
 
 ###  style
 

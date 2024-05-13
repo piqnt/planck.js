@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Ray Casts
 You can use ray casts to do line-of-sight checks, fire guns, etc. You

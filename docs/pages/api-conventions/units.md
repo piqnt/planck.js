@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Units
 Planck.js works with floating point numbers and tolerances have to be used to make Planck.js perform well.

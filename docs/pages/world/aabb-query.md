@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## AABB Queries
 Sometimes you want to determine all the shapes in a region. The World

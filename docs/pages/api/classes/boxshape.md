@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 # Class: BoxShape
 
@@ -20,12 +17,6 @@ A rectangle polygon which extend PolygonShape.
 
 ### Properties
 
-* [m_centroid](/api/classes/boxshape#m_centroid)
-* [m_count](/api/classes/boxshape#m_count)
-* [m_normals](/api/classes/boxshape#m_normals)
-* [m_radius](/api/classes/boxshape#m_radius)
-* [m_type](/api/classes/boxshape#m_type)
-* [m_vertices](/api/classes/boxshape#m_vertices)
 * [style](/api/classes/boxshape#style)
 * [TYPE](/api/classes/boxshape#static-type)
 
@@ -46,7 +37,7 @@ A rectangle polygon which extend PolygonShape.
 
 ###  constructor
 
-\+ **new BoxShape**(`hx`: number, `hy`: number, `center?`: [Vec2Value](/api/interfaces/vec2value), `angle?`: number): *[BoxShape](/api/classes/boxshape)*
+\+ **new BoxShape**(`halfWidth`: number, `halfHeight`: number, `center?`: [Vec2Value](/api/interfaces/vec2value), `angle?`: number): *[BoxShape](/api/classes/boxshape)*
 
 *Overrides [PolygonShape](/api/classes/polygonshape).[constructor](/api/classes/polygonshape#constructor)*
 
@@ -54,66 +45,14 @@ A rectangle polygon which extend PolygonShape.
 
 Name | Type |
 ------ | ------ |
-`hx` | number |
-`hy` | number |
+`halfWidth` | number |
+`halfHeight` | number |
 `center?` | [Vec2Value](/api/interfaces/vec2value) |
 `angle?` | number |
 
 **Returns:** *[BoxShape](/api/classes/boxshape)*
 
 ## Properties
-
-###  m_centroid
-
-• **m_centroid**: *Vec2*
-
-*Inherited from [PolygonShape](/api/classes/polygonshape).[m_centroid](/api/classes/polygonshape#m_centroid)*
-
-___
-
-###  m_count
-
-• **m_count**: *number*
-
-*Inherited from [PolygonShape](/api/classes/polygonshape).[m_count](/api/classes/polygonshape#m_count)*
-
-___
-
-###  m_normals
-
-• **m_normals**: *Vec2[]*
-
-*Inherited from [PolygonShape](/api/classes/polygonshape).[m_normals](/api/classes/polygonshape#m_normals)*
-
-___
-
-###  m_radius
-
-• **m_radius**: *number*
-
-*Inherited from [PolygonShape](/api/classes/polygonshape).[m_radius](/api/classes/polygonshape#m_radius)*
-
-*Overrides [Shape](/api/classes/shape).[m_radius](/api/classes/shape#m_radius)*
-
-___
-
-###  m_type
-
-• **m_type**: *"polygon"*
-
-*Inherited from [PolygonShape](/api/classes/polygonshape).[m_type](/api/classes/polygonshape#m_type)*
-
-*Overrides [Shape](/api/classes/shape).[m_type](/api/classes/shape#m_type)*
-
-___
-
-###  m_vertices
-
-• **m_vertices**: *Vec2[]*
-
-*Inherited from [PolygonShape](/api/classes/polygonshape).[m_vertices](/api/classes/polygonshape#m_vertices)*
-
-___
 
 ###  style
 

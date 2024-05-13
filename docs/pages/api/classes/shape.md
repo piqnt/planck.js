@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 # Class: Shape
 
@@ -24,8 +21,6 @@ Fixture is created. Shapes may encapsulate one or more child shapes.
 
 ### Properties
 
-* [m_radius](/api/classes/shape#m_radius)
-* [m_type](/api/classes/shape#m_type)
 * [style](/api/classes/shape#style)
 
 ### Methods
@@ -41,21 +36,6 @@ Fixture is created. Shapes may encapsulate one or more child shapes.
 * [isValid](/api/classes/shape#static-isvalid)
 
 ## Properties
-
-###  m_radius
-
-• **m_radius**: *number*
-
-Radius of a shape. For polygonal shapes this must be b2_polygonRadius.
-There is no support for making rounded polygons.
-
-___
-
-###  m_type
-
-• **m_type**: *[ShapeType](/api/globals#shapetype)*
-
-___
 
 ###  style
 

@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 # Interface: Vec3Value
 

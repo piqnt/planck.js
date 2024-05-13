@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Edge Shapes
 Edge shapes are line segments. These are provided to assist in making a

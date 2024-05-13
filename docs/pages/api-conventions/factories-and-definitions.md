@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Factories and Definitions
 

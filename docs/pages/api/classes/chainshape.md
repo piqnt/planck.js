@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 # Class: ChainShape
 
@@ -25,15 +22,6 @@ WARNING: The chain will not collide properly if there are self-intersections.
 
 ### Properties
 
-* [m_count](/api/classes/chainshape#m_count)
-* [m_hasNextVertex](/api/classes/chainshape#m_hasnextvertex)
-* [m_hasPrevVertex](/api/classes/chainshape#m_hasprevvertex)
-* [m_isLoop](/api/classes/chainshape#m_isloop)
-* [m_nextVertex](/api/classes/chainshape#m_nextvertex)
-* [m_prevVertex](/api/classes/chainshape#m_prevvertex)
-* [m_radius](/api/classes/chainshape#m_radius)
-* [m_type](/api/classes/chainshape#m_type)
-* [m_vertices](/api/classes/chainshape#m_vertices)
 * [style](/api/classes/chainshape#style)
 * [TYPE](/api/classes/chainshape#static-type)
 
@@ -72,64 +60,6 @@ Name | Type |
 **Returns:** *[ChainShape](/api/classes/chainshape)*
 
 ## Properties
-
-###  m_count
-
-• **m_count**: *number*
-
-___
-
-###  m_hasNextVertex
-
-• **m_hasNextVertex**: *boolean*
-
-___
-
-###  m_hasPrevVertex
-
-• **m_hasPrevVertex**: *boolean*
-
-___
-
-###  m_isLoop
-
-• **m_isLoop**: *boolean*
-
-___
-
-###  m_nextVertex
-
-• **m_nextVertex**: *Vec2 | null*
-
-___
-
-###  m_prevVertex
-
-• **m_prevVertex**: *Vec2 | null*
-
-___
-
-###  m_radius
-
-• **m_radius**: *number*
-
-*Overrides [Shape](/api/classes/shape).[m_radius](/api/classes/shape#m_radius)*
-
-___
-
-###  m_type
-
-• **m_type**: *"chain"*
-
-*Overrides [Shape](/api/classes/shape).[m_type](/api/classes/shape#m_type)*
-
-___
-
-###  m_vertices
-
-• **m_vertices**: *Vec2[]*
-
-___
 
 ###  style
 

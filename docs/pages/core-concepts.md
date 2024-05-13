@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Core Concepts
 Planck.js works with several fundamental concepts and objects. We briefly

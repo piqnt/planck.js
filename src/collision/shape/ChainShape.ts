@@ -50,18 +50,18 @@ import { EdgeShape } from './EdgeShape';
  */
 export class ChainShape extends Shape {
   static TYPE = 'chain' as const;
-  m_type: 'chain';
+  /** @hidden */ m_type: 'chain';
 
-  m_radius: number;
+  /** @hidden */ m_radius: number;
 
-  m_vertices: Vec2[];
-  m_count: number;
-  m_prevVertex: Vec2 | null;
-  m_nextVertex: Vec2 | null;
-  m_hasPrevVertex: boolean;
-  m_hasNextVertex: boolean;
+  /** @hidden */ m_vertices: Vec2[];
+  /** @hidden */ m_count: number;
+  /** @hidden */ m_prevVertex: Vec2 | null;
+  /** @hidden */ m_nextVertex: Vec2 | null;
+  /** @hidden */ m_hasPrevVertex: boolean;
+  /** @hidden */ m_hasNextVertex: boolean;
 
-  m_isLoop: boolean;
+  /** @hidden */ m_isLoop: boolean;
 
   constructor(vertices?: Vec2Value[], loop?: boolean) {
     // @ts-ignore

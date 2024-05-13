@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Contacts
 Contacts are objects created by Planck.js to manage collision between two

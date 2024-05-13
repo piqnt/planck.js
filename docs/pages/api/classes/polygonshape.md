@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 # Class: PolygonShape
 
@@ -25,12 +22,6 @@ for a convex polygon. extends Shape
 
 ### Properties
 
-* [m_centroid](/api/classes/polygonshape#m_centroid)
-* [m_count](/api/classes/polygonshape#m_count)
-* [m_normals](/api/classes/polygonshape#m_normals)
-* [m_radius](/api/classes/polygonshape#m_radius)
-* [m_type](/api/classes/polygonshape#m_type)
-* [m_vertices](/api/classes/polygonshape#m_vertices)
 * [style](/api/classes/polygonshape#style)
 * [TYPE](/api/classes/polygonshape#static-type)
 
@@ -62,46 +53,6 @@ Name | Type |
 **Returns:** *[PolygonShape](/api/classes/polygonshape)*
 
 ## Properties
-
-###  m_centroid
-
-• **m_centroid**: *Vec2*
-
-___
-
-###  m_count
-
-• **m_count**: *number*
-
-___
-
-###  m_normals
-
-• **m_normals**: *Vec2[]*
-
-___
-
-###  m_radius
-
-• **m_radius**: *number*
-
-*Overrides [Shape](/api/classes/shape).[m_radius](/api/classes/shape#m_radius)*
-
-___
-
-###  m_type
-
-• **m_type**: *"polygon"*
-
-*Overrides [Shape](/api/classes/shape).[m_type](/api/classes/shape#m_type)*
-
-___
-
-###  m_vertices
-
-• **m_vertices**: *Vec2[]*
-
-___
 
 ###  style
 

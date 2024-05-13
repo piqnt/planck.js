@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Joint
 Joints are used to constrain bodies to the world or to each other.

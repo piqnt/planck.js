@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ### References
 - [Erin Catto's Publications](https://box2d.org/publications/)

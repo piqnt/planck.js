@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Gear Joint
 If you want to create a sophisticated mechanical contraption you might

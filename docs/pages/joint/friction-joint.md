@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Friction Joint
 The friction joint is used for top-down friction. The joint provides 2D

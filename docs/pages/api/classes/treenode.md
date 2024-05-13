@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 # Class: TreeNode ‹**T**›
 

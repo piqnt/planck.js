@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Collision
 The Collision classes include shapes and functions that operate on them.

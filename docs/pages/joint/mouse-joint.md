@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Mouse Joint
 The mouse joint is used in the testbed to manipulate bodies with the

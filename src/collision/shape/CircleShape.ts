@@ -41,10 +41,10 @@ import { DistanceProxy } from '../Distance';
 
 export class CircleShape extends Shape {
   static TYPE = 'circle' as const;
-  m_type: 'circle';
+  /** @hidden */ m_type: 'circle';
 
-  m_p: Vec2;
-  m_radius: number;
+  /** @hidden */ m_p: Vec2;
+  /** @hidden */ m_radius: number;
 
   constructor(position: Vec2Value, radius?: number);
   constructor(radius?: number);

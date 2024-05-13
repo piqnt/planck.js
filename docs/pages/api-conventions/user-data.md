@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## User Data
 The `Fixture`, `Body`, and `Joint` classes allow you to attach user data.

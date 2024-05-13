@@ -37,9 +37,10 @@ import { Style } from '../util/Testbed';
  * Fixture is created. Shapes may encapsulate one or more child shapes.
  */
 export abstract class Shape {
-  m_type: ShapeType;
+  /** @hidden */ m_type: ShapeType;
 
   /**
+   * @hidden
    * Radius of a shape. For polygonal shapes this must be b2_polygonRadius.
    * There is no support for making rounded polygons.
    */

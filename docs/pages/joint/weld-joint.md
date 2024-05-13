@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Weld Joint
 The weld joint attempts to constrain all relative motion between two

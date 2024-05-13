@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Circle Shapes
 Circle shapes have a position and radius. Circles are solid. You cannot

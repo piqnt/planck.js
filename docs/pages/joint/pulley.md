@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Pulley Joint
 A pulley is used to create an idealized pulley. The pulley connects two

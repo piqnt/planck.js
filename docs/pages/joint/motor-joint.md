@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Motor Joint
 A motor joint lets you control the motion of a body by specifying target

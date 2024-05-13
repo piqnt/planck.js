@@ -1,6 +1,3 @@
----
-showOutline: false
----
 
 ## Fixture
 Shapes only have geometrical coordinates, they don't have physical properties and don't know about the body's transformation, so may be used independently of the physics simulation.
