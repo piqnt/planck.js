@@ -208,7 +208,7 @@ export class Mat33 {
     _ASSERT && console.assert(false);
   }
 
-  static mulVec3(a: Mat33, b: Vec3): Vec3 {
+  static mulVec3(a: Mat33, b: Vec3Value): Vec3 {
     _ASSERT && Mat33.assert(a);
     _ASSERT && Vec3.assert(b);
     const x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;

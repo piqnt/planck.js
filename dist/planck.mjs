@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.3
+ * Planck.js v1.0.4
  * @license The MIT license
  * @copyright Copyright (c) 2023 Erin Catto, Ali Shakiba
  *
@@ -9457,6 +9457,7 @@ var ChainShape = /** @class */ (function (_super) {
      * this for loops.
      */
     ChainShape.prototype.setPrevVertex = function (prevVertex) {
+        // todo: copy or reference
         this.m_prevVertex = prevVertex;
         this.m_hasPrevVertex = true;
     };
@@ -9468,6 +9469,7 @@ var ChainShape = /** @class */ (function (_super) {
      * this for loops.
      */
     ChainShape.prototype.setNextVertex = function (nextVertex) {
+        // todo: copy or reference
         this.m_nextVertex = nextVertex;
         this.m_hasNextVertex = true;
     };
@@ -14996,17 +14998,15 @@ var Testbed = /** @class */ (function () {
         this.statusMap = {};
     }
     /**
-     * Mount testbed.
-     *
-     * If you need to customize testbed before starting, use `Testbed.mount()` and `Testbed.start()` separately.
+     * Mounts testbed. Call start with a world to start simulation and rendering.
      */
     Testbed.mount = function (options) {
         throw new Error('Not implemented');
     };
     /**
-     * Start simulation, and mount testbed if needed.
+     * Mounts testbed if needed, then starts simulation and rendering.
      *
-     * If you need to customize testbed before starting, use `Testbed.mount().start()` separately.
+     * If you need to customize testbed before starting, first run `const testbed = Testbed.mount()` and then `testbed.start()`.
      */
     Testbed.start = function (world) {
         var testbed = Testbed.mount();
@@ -15108,14 +15108,21 @@ function testbed(a, b) {
  */
 var BoxShape = /** @class */ (function (_super) {
     __extends(BoxShape, _super);
-    function BoxShape(hx, hy, center, angle) {
+    /**
+     *
+     * @param halfWidth
+     * @param halfHeight
+     * @param center coordinate of the center of the box relative to the body
+     * @param angle angle of the box relative to the body
+     */
+    function BoxShape(halfWidth, halfHeight, center, angle) {
         var _this = this;
         // @ts-ignore
         if (!(_this instanceof BoxShape)) {
-            return new BoxShape(hx, hy, center, angle);
+            return new BoxShape(halfWidth, halfHeight, center, angle);
         }
         _this = _super.call(this) || this;
-        _this._setAsBox(hx, hy, center, angle);
+        _this._setAsBox(halfWidth, halfHeight, center, angle);
         return _this;
     }
     // note that box is serialized/deserialized as polygon

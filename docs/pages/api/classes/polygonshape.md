@@ -182,7 +182,7 @@ ___
 
 ###  testPoint
 
-▸ **testPoint**(`xf`: [TransformValue](/api/globals#transformvalue), `p`: Vec2): *boolean*
+▸ **testPoint**(`xf`: [TransformValue](/api/globals#transformvalue), `p`: [Vec2Value](/api/interfaces/vec2value)): *boolean*
 
 *Overrides [Shape](/api/classes/shape).[testPoint](/api/classes/shape#abstract-testpoint)*
 
@@ -194,7 +194,7 @@ shapes.
 Name | Type | Description |
 ------ | ------ | ------ |
 `xf` | [TransformValue](/api/globals#transformvalue) | The shape world transform. |
-`p` | Vec2 | A point in world coordinates.  |
+`p` | [Vec2Value](/api/interfaces/vec2value) | A point in world coordinates.  |
 
 **Returns:** *boolean*
 

@@ -40,7 +40,7 @@ import { Manifold } from "../collision/Manifold";
 
 export interface WorldDef {
   /** [default: { x : 0, y : 0}] */
-  gravity?: Vec2;
+  gravity?: Vec2Value;
 
   /** [default: true] */
   allowSleep?: boolean;
@@ -407,7 +407,7 @@ export class World {
    * @param point2 The ray ending point
    * @param callback A function that is called for each fixture that is hit by the ray. You control how the ray cast proceeds by returning a numeric/float value.
    */
-  rayCast(point1: Vec2, point2: Vec2, callback: WorldRayCastCallback): void {
+  rayCast(point1: Vec2Value, point2: Vec2Value, callback: WorldRayCastCallback): void {
     _ASSERT && console.assert(typeof callback === 'function');
     const broadPhase = this.m_broadPhase;
 

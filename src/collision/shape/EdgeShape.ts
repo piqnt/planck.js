@@ -122,14 +122,14 @@ export class EdgeShape extends Shape {
   }
 
   /** @internal @deprecated */
-  setNext(v?: Vec2): EdgeShape {
+  setNext(v?: Vec2Value): EdgeShape {
     return this.setNextVertex(v);
   }
 
   /**
    * Optional next vertex, used for smooth collision.
    */
-  setNextVertex(v?: Vec2): EdgeShape {
+  setNextVertex(v?: Vec2Value): EdgeShape {
     if (v) {
       this.m_vertex3.setVec2(v);
       this.m_hasVertex3 = true;
@@ -148,14 +148,14 @@ export class EdgeShape extends Shape {
   }
 
   /** @internal @deprecated */
-  setPrev(v?: Vec2): EdgeShape {
+  setPrev(v?: Vec2Value): EdgeShape {
     return this.setPrevVertex(v);
   }
 
   /**
    * Optional prev vertex, used for smooth collision.
    */
-  setPrevVertex(v?: Vec2): EdgeShape {
+  setPrevVertex(v?: Vec2Value): EdgeShape {
     if (v) {
       this.m_vertex0.setVec2(v);
       this.m_hasVertex0 = true;
@@ -176,7 +176,7 @@ export class EdgeShape extends Shape {
   /**
    * Set this as an isolated edge.
    */
-  _set(v1: Vec2, v2: Vec2): EdgeShape {
+  _set(v1: Vec2Value, v2: Vec2Value): EdgeShape {
     this.m_vertex1.setVec2(v1);
     this.m_vertex2.setVec2(v2);
     this.m_hasVertex0 = false;

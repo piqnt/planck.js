@@ -111,14 +111,14 @@ Name | Type |
 
 **Returns:** *void*
 
-▸ **set**(`a`: Vec2, `b`: Vec2): *void*
+▸ **set**(`a`: [Vec2Value](/api/interfaces/vec2value), `b`: [Vec2Value](/api/interfaces/vec2value)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`a` | Vec2 |
-`b` | Vec2 |
+`a` | [Vec2Value](/api/interfaces/vec2value) |
+`b` | [Vec2Value](/api/interfaces/vec2value) |
 
 **Returns:** *void*
 
@@ -155,7 +155,7 @@ ___
 
 ###  solve
 
-▸ **solve**(`v`: Vec2): *Vec2*
+▸ **solve**(`v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
 
 Solve A * x = b, where b is a column vector. This is more efficient than
 computing the inverse in one-shot cases.
@@ -164,7 +164,7 @@ computing the inverse in one-shot cases.
 
 Name | Type |
 ------ | ------ |
-`v` | Vec2 |
+`v` | [Vec2Value](/api/interfaces/vec2value) |
 
 **Returns:** *Vec2*
 
@@ -243,14 +243,14 @@ Name | Type |
 
 **Returns:** *[Mat22](/api/classes/mat22)*
 
-▸ **mul**(`mx`: [Mat22](/api/classes/mat22), `v`: Vec2): *Vec2*
+▸ **mul**(`mx`: [Mat22](/api/classes/mat22), `v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `mx` | [Mat22](/api/classes/mat22) |
-`v` | Vec2 |
+`v` | [Vec2Value](/api/interfaces/vec2value) |
 
 **Returns:** *Vec2*
 
@@ -288,14 +288,14 @@ Name | Type |
 
 **Returns:** *[Mat22](/api/classes/mat22)*
 
-▸ **mulT**(`mx`: [Mat22](/api/classes/mat22), `v`: Vec2): *Vec2*
+▸ **mulT**(`mx`: [Mat22](/api/classes/mat22), `v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `mx` | [Mat22](/api/classes/mat22) |
-`v` | Vec2 |
+`v` | [Vec2Value](/api/interfaces/vec2value) |
 
 **Returns:** *Vec2*
 
@@ -318,14 +318,14 @@ ___
 
 ### `Static` mulTVec2
 
-▸ **mulTVec2**(`mx`: [Mat22](/api/classes/mat22), `v`: Vec2): *Vec2*
+▸ **mulTVec2**(`mx`: [Mat22](/api/classes/mat22), `v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `mx` | [Mat22](/api/classes/mat22) |
-`v` | Vec2 |
+`v` | [Vec2Value](/api/interfaces/vec2value) |
 
 **Returns:** *Vec2*
 
@@ -333,13 +333,13 @@ ___
 
 ### `Static` mulVec2
 
-▸ **mulVec2**(`mx`: [Mat22](/api/classes/mat22), `v`: Vec2): *Vec2*
+▸ **mulVec2**(`mx`: [Mat22](/api/classes/mat22), `v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `mx` | [Mat22](/api/classes/mat22) |
-`v` | Vec2 |
+`v` | [Vec2Value](/api/interfaces/vec2value) |
 
 **Returns:** *Vec2*

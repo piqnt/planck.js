@@ -761,7 +761,7 @@ ___
 
 ###  rayCast
 
-▸ **rayCast**(`point1`: Vec2, `point2`: Vec2, `callback`: [WorldRayCastCallback](/api/globals#worldraycastcallback)): *void*
+▸ **rayCast**(`point1`: [Vec2Value](/api/interfaces/vec2value), `point2`: [Vec2Value](/api/interfaces/vec2value), `callback`: [WorldRayCastCallback](/api/globals#worldraycastcallback)): *void*
 
 Ray-cast the world for all fixtures in the path of the ray. Your callback
 controls whether you get the closest point, any point, or n-points. The
@@ -771,8 +771,8 @@ ray-cast ignores shapes that contain the starting point.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`point1` | Vec2 | The ray starting point |
-`point2` | Vec2 | The ray ending point |
+`point1` | [Vec2Value](/api/interfaces/vec2value) | The ray starting point |
+`point2` | [Vec2Value](/api/interfaces/vec2value) | The ray ending point |
 `callback` | [WorldRayCastCallback](/api/globals#worldraycastcallback) | A function that is called for each fixture that is hit by the ray. You control how the ray cast proceeds by returning a numeric/float value.  |
 
 **Returns:** *void*

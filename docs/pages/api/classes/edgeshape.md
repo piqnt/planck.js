@@ -74,7 +74,7 @@ ___
 
 ###  _set
 
-▸ **_set**(`v1`: Vec2, `v2`: Vec2): *[EdgeShape](/api/classes/edgeshape)*
+▸ **_set**(`v1`: [Vec2Value](/api/interfaces/vec2value), `v2`: [Vec2Value](/api/interfaces/vec2value)): *[EdgeShape](/api/classes/edgeshape)*
 
 Set this as an isolated edge.
 
@@ -82,8 +82,8 @@ Set this as an isolated edge.
 
 Name | Type |
 ------ | ------ |
-`v1` | Vec2 |
-`v2` | Vec2 |
+`v1` | [Vec2Value](/api/interfaces/vec2value) |
+`v2` | [Vec2Value](/api/interfaces/vec2value) |
 
 **Returns:** *[EdgeShape](/api/classes/edgeshape)*
 
@@ -221,7 +221,7 @@ ___
 
 ###  setNextVertex
 
-▸ **setNextVertex**(`v?`: Vec2): *[EdgeShape](/api/classes/edgeshape)*
+▸ **setNextVertex**(`v?`: [Vec2Value](/api/interfaces/vec2value)): *[EdgeShape](/api/classes/edgeshape)*
 
 Optional next vertex, used for smooth collision.
 
@@ -229,7 +229,7 @@ Optional next vertex, used for smooth collision.
 
 Name | Type |
 ------ | ------ |
-`v?` | Vec2 |
+`v?` | [Vec2Value](/api/interfaces/vec2value) |
 
 **Returns:** *[EdgeShape](/api/classes/edgeshape)*
 
@@ -237,7 +237,7 @@ ___
 
 ###  setPrevVertex
 
-▸ **setPrevVertex**(`v?`: Vec2): *[EdgeShape](/api/classes/edgeshape)*
+▸ **setPrevVertex**(`v?`: [Vec2Value](/api/interfaces/vec2value)): *[EdgeShape](/api/classes/edgeshape)*
 
 Optional prev vertex, used for smooth collision.
 
@@ -245,7 +245,7 @@ Optional prev vertex, used for smooth collision.
 
 Name | Type |
 ------ | ------ |
-`v?` | Vec2 |
+`v?` | [Vec2Value](/api/interfaces/vec2value) |
 
 **Returns:** *[EdgeShape](/api/classes/edgeshape)*
 

@@ -390,9 +390,7 @@ ___
 
 ▸ **mount**(`options?`: [TestbedMountOptions](/api/globals#testbedmountoptions)): *Testbed*
 
-Mount testbed.
-
-If you need to customize testbed before starting, use `Testbed.mount()` and `Testbed.start()` separately.
+Mounts testbed. Call start with a world to start simulation and rendering.
 
 **Parameters:**
 
@@ -408,9 +406,9 @@ ___
 
 ▸ **start**(`world`: World): *Testbed*
 
-Start simulation, and mount testbed if needed.
+Mounts testbed if needed, then starts simulation and rendering.
 
-If you need to customize testbed before starting, use `Testbed.mount().start()` separately.
+If you need to customize testbed before starting, first run `const testbed = Testbed.mount()` and then `testbed.start()`.
 
 **Parameters:**
 

@@ -47,6 +47,8 @@ new Box(halfWidth, halfHeight);
 new Box(halfWidth, halfHeight, center, angle);
 ```
 
+`center` is the local position of the center of the box shape, and `angle` is its rotation. When not provided, center and angle of the box are `{x: 0, y: 0}` and `0` (relative to the body's origin and angle).
+
 Polygons inherit a radius from Shape. The radius creates a skin around
 the polygon. The skin is used in stacking scenarios to keep polygons
 slightly separated. This allows continuous collision to work against the

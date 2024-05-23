@@ -43,12 +43,12 @@ A rectangle polygon which extend PolygonShape.
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`halfWidth` | number |
-`halfHeight` | number |
-`center?` | [Vec2Value](/api/interfaces/vec2value) |
-`angle?` | number |
+Name | Type | Description |
+------ | ------ | ------ |
+`halfWidth` | number | - |
+`halfHeight` | number | - |
+`center?` | [Vec2Value](/api/interfaces/vec2value) | coordinate of the center of the box relative to the body |
+`angle?` | number | angle of the box relative to the body  |
 
 **Returns:** *[BoxShape](/api/classes/boxshape)*
 
@@ -198,7 +198,7 @@ ___
 
 ###  testPoint
 
-▸ **testPoint**(`xf`: [TransformValue](/api/globals#transformvalue), `p`: Vec2): *boolean*
+▸ **testPoint**(`xf`: [TransformValue](/api/globals#transformvalue), `p`: [Vec2Value](/api/interfaces/vec2value)): *boolean*
 
 *Inherited from [PolygonShape](/api/classes/polygonshape).[testPoint](/api/classes/polygonshape#testpoint)*
 
@@ -212,7 +212,7 @@ shapes.
 Name | Type | Description |
 ------ | ------ | ------ |
 `xf` | [TransformValue](/api/globals#transformvalue) | The shape world transform. |
-`p` | Vec2 | A point in world coordinates.  |
+`p` | [Vec2Value](/api/interfaces/vec2value) | A point in world coordinates.  |
 
 **Returns:** *boolean*
 

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { Vec2 } from './Vec2';
+import { Vec2, Vec2Value } from './Vec2';
 
 
 /** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -68,7 +68,7 @@ export class Mat22 {
   }
 
   set(a: Mat22): void;
-  set(a: Vec2, b: Vec2): void;
+  set(a: Vec2Value, b: Vec2Value): void;
   set(a: number, b: number, c: number, d: number): void;
   set(a, b?, c?, d?): void {
     if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
@@ -125,7 +125,7 @@ export class Mat22 {
    * Solve A * x = b, where b is a column vector. This is more efficient than
    * computing the inverse in one-shot cases.
    */
-  solve(v: Vec2): Vec2 {
+  solve(v: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(v);
     const a = this.ex.x;
     const b = this.ey.x;
@@ -146,7 +146,7 @@ export class Mat22 {
    * transforms the vector from one frame to another.
    */
   static mul(mx: Mat22, my: Mat22): Mat22;
-  static mul(mx: Mat22, v: Vec2): Vec2;
+  static mul(mx: Mat22, v: Vec2Value): Vec2;
   static mul(mx, v) {
     if (v && 'x' in v && 'y' in v) {
       _ASSERT && Vec2.assert(v);
@@ -167,7 +167,7 @@ export class Mat22 {
     _ASSERT && console.assert(false);
   }
 
-  static mulVec2(mx: Mat22, v: Vec2): Vec2 {
+  static mulVec2(mx: Mat22, v: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(v);
     const x = mx.ex.x * v.x + mx.ey.x * v.y;
     const y = mx.ex.y * v.x + mx.ey.y * v.y;
@@ -190,7 +190,7 @@ export class Mat22 {
    * transform).
    */
   static mulT(mx: Mat22, my: Mat22): Mat22;
-  static mulT(mx: Mat22, v: Vec2): Vec2;
+  static mulT(mx: Mat22, v: Vec2Value): Vec2;
   static mulT(mx, v) {
     if (v && 'x' in v && 'y' in v) { // Vec2
       _ASSERT && Vec2.assert(v);
@@ -206,7 +206,7 @@ export class Mat22 {
     _ASSERT && console.assert(false);
   }
 
-  static mulTVec2(mx: Mat22, v: Vec2): Vec2 {
+  static mulTVec2(mx: Mat22, v: Vec2Value): Vec2 {
     _ASSERT && Mat22.assert(mx);
     _ASSERT && Vec2.assert(v);
     return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));

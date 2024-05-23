@@ -44,7 +44,7 @@ ___
 
 ### `Optional` gravity
 
-• **gravity**? : *Vec2*
+• **gravity**? : *[Vec2Value](/api/interfaces/vec2value)*
 
 [default: { x : 0, y : 0}]
 

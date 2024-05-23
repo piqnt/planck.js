@@ -35,8 +35,8 @@ import { Vec2, Vec2Value } from '../common/Vec2';
  * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
  */
 export interface RayCastInput {
-  p1: Vec2;
-  p2: Vec2;
+  p1: Vec2Value;
+  p2: Vec2Value;
   maxFraction: number;
 }
 

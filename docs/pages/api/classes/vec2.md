@@ -593,16 +593,16 @@ ___
 
 ### `Static` combine
 
-▸ **combine**(`a`: number, `v`: Vec2, `b`: number, `w`: Vec2): *Vec2*
+▸ **combine**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value), `b`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `a` | number |
-`v` | Vec2 |
+`v` | [Vec2Value](/api/interfaces/vec2value) |
 `b` | number |
-`w` | Vec2 |
+`w` | [Vec2Value](/api/interfaces/vec2value) |
 
 **Returns:** *Vec2*
 

@@ -147,8 +147,8 @@ declare class Vec2 {
     static addCrossNumVec2(a: Vec2Value, v: number, w: Vec2Value): Vec2;
     static add(v: Vec2Value, w: Vec2Value): Vec2;
     /** @hidden @deprecated */
-    static wAdd(a: number, v: Vec2, b: number, w: Vec2): Vec2;
-    static combine(a: number, v: Vec2, b: number, w: Vec2): Vec2;
+    static wAdd(a: number, v: Vec2Value, b: number, w: Vec2Value): Vec2;
+    static combine(a: number, v: Vec2Value, b: number, w: Vec2Value): Vec2;
     static sub(v: Vec2Value, w: Vec2Value): Vec2;
     static mul(a: Vec2Value, b: number): Vec2;
     static mul(a: number, b: Vec2Value): Vec2;
@@ -163,9 +163,9 @@ declare class Vec2 {
     clamp(max: number): Vec2;
     static clamp(v: Vec2Value, max: number): Vec2;
     /**  @hidden @deprecated */
-    static scaleFn(x: number, y: number): (v: Vec2) => Vec2;
+    static scaleFn(x: number, y: number): (v: Vec2Value) => Vec2;
     /**  @hidden @deprecated */
-    static translateFn(x: number, y: number): (v: Vec2) => Vec2;
+    static translateFn(x: number, y: number): (v: Vec2Value) => Vec2;
 }
 interface RotValue {
     /** sin(angle) */
@@ -270,8 +270,8 @@ declare class Transform {
  * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
  */
 interface RayCastInput {
-    p1: Vec2;
-    p2: Vec2;
+    p1: Vec2Value;
+    p2: Vec2Value;
     maxFraction: number;
 }
 type RayCastCallback = (subInput: RayCastInput, id: number) => number;
@@ -579,15 +579,13 @@ type ActiveKeys = {
 type TestbedMountOptions = {};
 declare abstract class Testbed {
     /**
-     * Mount testbed.
-     *
-     * If you need to customize testbed before starting, use `Testbed.mount()` and `Testbed.start()` separately.
+     * Mounts testbed. Call start with a world to start simulation and rendering.
      */
     static mount(options?: TestbedMountOptions): Testbed;
     /**
-     * Start simulation, and mount testbed if needed.
+     * Mounts testbed if needed, then starts simulation and rendering.
      *
-     * If you need to customize testbed before starting, use `Testbed.mount().start()` separately.
+     * If you need to customize testbed before starting, first run `const testbed = Testbed.mount()` and then `testbed.start()`.
      */
     static start(world: World): Testbed;
     /** World viewbox width. */
@@ -663,8 +661,9 @@ declare function testbed(options: TestbedFactoryOptions, callback: TestbedCallba
  * Fixture is created. Shapes may encapsulate one or more child shapes.
  */
 declare abstract class Shape {
-    m_type: ShapeType;
+    /** @hidden */ m_type: ShapeType;
     /**
+     * @hidden
      * Radius of a shape. For polygonal shapes this must be b2_polygonRadius.
      * There is no support for making rounded polygons.
      */
@@ -1862,7 +1861,7 @@ declare class ContactImpulse {
 }
 interface WorldDef {
     /** [default: { x : 0, y : 0}] */
-    gravity?: Vec2;
+    gravity?: Vec2Value;
     /** [default: true] */
     allowSleep?: boolean;
     /** [default: true] */
@@ -2003,7 +2002,7 @@ declare class World {
      * @param point2 The ray ending point
      * @param callback A function that is called for each fixture that is hit by the ray. You control how the ray cast proceeds by returning a numeric/float value.
      */
-    rayCast(point1: Vec2, point2: Vec2, callback: WorldRayCastCallback): void;
+    rayCast(point1: Vec2Value, point2: Vec2Value, callback: WorldRayCastCallback): void;
     /**
      * Get the number of broad-phase proxies.
      */
@@ -2226,7 +2225,7 @@ declare class Mat22 {
     static isValid(obj: any): boolean;
     static assert(o: any): void;
     set(a: Mat22): void;
-    set(a: Vec2, b: Vec2): void;
+    set(a: Vec2Value, b: Vec2Value): void;
     set(a: number, b: number, c: number, d: number): void;
     setIdentity(): void;
     setZero(): void;
@@ -2235,14 +2234,14 @@ declare class Mat22 {
      * Solve A * x = b, where b is a column vector. This is more efficient than
      * computing the inverse in one-shot cases.
      */
-    solve(v: Vec2): Vec2;
+    solve(v: Vec2Value): Vec2;
     /**
      * Multiply a matrix times a vector. If a rotation matrix is provided, then this
      * transforms the vector from one frame to another.
      */
     static mul(mx: Mat22, my: Mat22): Mat22;
-    static mul(mx: Mat22, v: Vec2): Vec2;
-    static mulVec2(mx: Mat22, v: Vec2): Vec2;
+    static mul(mx: Mat22, v: Vec2Value): Vec2;
+    static mulVec2(mx: Mat22, v: Vec2Value): Vec2;
     static mulMat22(mx: Mat22, v: Mat22): Mat22;
     /**
      * Multiply a matrix transpose times a vector. If a rotation matrix is provided,
@@ -2250,8 +2249,8 @@ declare class Mat22 {
      * transform).
      */
     static mulT(mx: Mat22, my: Mat22): Mat22;
-    static mulT(mx: Mat22, v: Vec2): Vec2;
-    static mulTVec2(mx: Mat22, v: Vec2): Vec2;
+    static mulT(mx: Mat22, v: Vec2Value): Vec2;
+    static mulTVec2(mx: Mat22, v: Vec2Value): Vec2;
     static mulTMat22(mx: Mat22, v: Mat22): Mat22;
     static abs(mx: Mat22): Mat22;
     static add(mx1: Mat22, mx2: Mat22): Mat22;
@@ -2299,7 +2298,7 @@ declare class Mat33 {
      */
     static mul(a: Mat33, b: Vec2Value): Vec2;
     static mul(a: Mat33, b: Vec3Value): Vec3;
-    static mulVec3(a: Mat33, b: Vec3): Vec3;
+    static mulVec3(a: Mat33, b: Vec3Value): Vec3;
     static mulVec2(a: Mat33, b: Vec2Value): Vec2;
     static add(a: Mat33, b: Mat33): Mat33;
 }
@@ -2307,9 +2306,9 @@ declare function CircleShape(position: Vec2Value, radius?: number): CircleShape;
 declare function CircleShape(radius?: number): CircleShape;
 declare class CircleShape extends Shape {
     static TYPE: "circle";
-    m_type: "circle";
-    m_p: Vec2;
-    m_radius: number;
+    /** @hidden */ m_type: "circle";
+    /** @hidden */ m_p: Vec2;
+    /** @hidden */ m_radius: number;
     constructor(position: Vec2Value, radius?: number);
     constructor(radius?: number);
     /** @hidden */
@@ -2371,17 +2370,17 @@ declare function EdgeShape(v1?: Vec2Value, v2?: Vec2Value): EdgeShape;
  */
 declare class EdgeShape extends Shape {
     static TYPE: "edge";
-    m_type: "edge";
-    m_radius: number;
+    /** @hidden */ m_type: "edge";
+    /** @hidden */ m_radius: number;
     // These are the edge vertices
-    m_vertex1: Vec2;
-    m_vertex2: Vec2;
+    /** @hidden */ m_vertex1: Vec2;
+    /** @hidden */ m_vertex2: Vec2;
     // Optional adjacent vertices. These are used for smooth collision.
     // Used by chain shape.
-    m_vertex0: Vec2;
-    m_vertex3: Vec2;
-    m_hasVertex0: boolean;
-    m_hasVertex3: boolean;
+    /** @hidden */ m_vertex0: Vec2;
+    /** @hidden */ m_vertex3: Vec2;
+    /** @hidden */ m_hasVertex0: boolean;
+    /** @hidden */ m_hasVertex3: boolean;
     constructor(v1?: Vec2Value, v2?: Vec2Value);
     /** @hidden */
     _reset(): void;
@@ -2390,7 +2389,7 @@ declare class EdgeShape extends Shape {
     /**
      * Optional next vertex, used for smooth collision.
      */
-    setNextVertex(v?: Vec2): EdgeShape;
+    setNextVertex(v?: Vec2Value): EdgeShape;
     /**
      * Optional next vertex, used for smooth collision.
      */
@@ -2398,7 +2397,7 @@ declare class EdgeShape extends Shape {
     /**
      * Optional prev vertex, used for smooth collision.
      */
-    setPrevVertex(v?: Vec2): EdgeShape;
+    setPrevVertex(v?: Vec2Value): EdgeShape;
     /**
      * Optional prev vertex, used for smooth collision.
      */
@@ -2406,7 +2405,7 @@ declare class EdgeShape extends Shape {
     /**
      * Set this as an isolated edge.
      */
-    _set(v1: Vec2, v2: Vec2): EdgeShape;
+    _set(v1: Vec2Value, v2: Vec2Value): EdgeShape;
     /**
      * Get the number of child primitives.
      */
@@ -2463,12 +2462,12 @@ declare function PolygonShape(vertices?: Vec2Value[]): PolygonShape;
  */
 declare class PolygonShape extends Shape {
     static TYPE: "polygon";
-    m_type: "polygon";
-    m_centroid: Vec2;
-    m_vertices: Vec2[]; // [Settings.maxPolygonVertices]
-    m_normals: Vec2[]; // [Settings.maxPolygonVertices]
-    m_count: number;
-    m_radius: number;
+    /** @hidden */ m_type: "polygon";
+    /** @hidden */ m_centroid: Vec2;
+    /** @hidden */ m_vertices: Vec2[]; // [Settings.maxPolygonVertices]
+    /** @hidden */ m_normals: Vec2[]; // [Settings.maxPolygonVertices]
+    /** @hidden */ m_count: number;
+    /** @hidden */ m_radius: number;
     constructor(vertices?: Vec2Value[]);
     getType(): "polygon";
     getRadius(): number;
@@ -2485,7 +2484,7 @@ declare class PolygonShape extends Shape {
      * @param xf The shape world transform.
      * @param p A point in world coordinates.
      */
-    testPoint(xf: TransformValue, p: Vec2): boolean;
+    testPoint(xf: TransformValue, p: Vec2Value): boolean;
     /**
      * Cast a ray against a child shape.
      *
@@ -2539,15 +2538,15 @@ declare function ChainShape(vertices?: Vec2Value[], loop?: boolean): ChainShape;
  */
 declare class ChainShape extends Shape {
     static TYPE: "chain";
-    m_type: "chain";
-    m_radius: number;
-    m_vertices: Vec2[];
-    m_count: number;
-    m_prevVertex: Vec2 | null;
-    m_nextVertex: Vec2 | null;
-    m_hasPrevVertex: boolean;
-    m_hasNextVertex: boolean;
-    m_isLoop: boolean;
+    /** @hidden */ m_type: "chain";
+    /** @hidden */ m_radius: number;
+    /** @hidden */ m_vertices: Vec2[];
+    /** @hidden */ m_count: number;
+    /** @hidden */ m_prevVertex: Vec2 | null;
+    /** @hidden */ m_nextVertex: Vec2 | null;
+    /** @hidden */ m_hasPrevVertex: boolean;
+    /** @hidden */ m_hasNextVertex: boolean;
+    /** @hidden */ m_isLoop: boolean;
     constructor(vertices?: Vec2Value[], loop?: boolean);
     // clear() {
     //   this.m_vertices.length = 0;
@@ -2621,14 +2620,21 @@ declare const Chain: typeof ChainShape;
 /**
  * A rectangle polygon which extend PolygonShape.
  */
-declare function BoxShape(hx: number, hy: number, center?: Vec2Value, angle?: number): BoxShape;
+declare function BoxShape(halfWidth: number, halfHeight: number, center?: Vec2Value, angle?: number): BoxShape;
 /**
  * A rectangle polygon which extend PolygonShape.
  */
 declare class BoxShape extends PolygonShape {
     // note that box is serialized/deserialized as polygon
     static TYPE: "polygon";
-    constructor(hx: number, hy: number, center?: Vec2Value, angle?: number);
+    /**
+     *
+     * @param halfWidth
+     * @param halfHeight
+     * @param center coordinate of the center of the box relative to the body
+     * @param angle angle of the box relative to the body
+     */
+    constructor(halfWidth: number, halfHeight: number, center?: Vec2Value, angle?: number);
 }
 declare const Box: typeof BoxShape;
 declare const CollideCircles: (manifold: Manifold, circleA: CircleShape, xfA: Transform, circleB: CircleShape, xfB: Transform) => void;
@@ -4473,8 +4479,8 @@ declare namespace planck {
         static addCrossNumVec2(a: Vec2Value, v: number, w: Vec2Value): Vec2;
         static add(v: Vec2Value, w: Vec2Value): Vec2;
         /** @hidden @deprecated */
-        static wAdd(a: number, v: Vec2, b: number, w: Vec2): Vec2;
-        static combine(a: number, v: Vec2, b: number, w: Vec2): Vec2;
+        static wAdd(a: number, v: Vec2Value, b: number, w: Vec2Value): Vec2;
+        static combine(a: number, v: Vec2Value, b: number, w: Vec2Value): Vec2;
         static sub(v: Vec2Value, w: Vec2Value): Vec2;
         static mul(a: Vec2Value, b: number): Vec2;
         static mul(a: number, b: Vec2Value): Vec2;
@@ -4489,9 +4495,9 @@ declare namespace planck {
         clamp(max: number): Vec2;
         static clamp(v: Vec2Value, max: number): Vec2;
         /**  @hidden @deprecated */
-        static scaleFn(x: number, y: number): (v: Vec2) => Vec2;
+        static scaleFn(x: number, y: number): (v: Vec2Value) => Vec2;
         /**  @hidden @deprecated */
-        static translateFn(x: number, y: number): (v: Vec2) => Vec2;
+        static translateFn(x: number, y: number): (v: Vec2Value) => Vec2;
     }
     interface RotValue {
         /** sin(angle) */
@@ -4589,8 +4595,8 @@ declare namespace planck {
      * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
      */
     interface RayCastInput {
-        p1: Vec2;
-        p2: Vec2;
+        p1: Vec2Value;
+        p2: Vec2Value;
         maxFraction: number;
     }
     type RayCastCallback = (subInput: RayCastInput, id: number) => number;
@@ -4897,15 +4903,13 @@ declare namespace planck {
     type TestbedMountOptions = {};
     abstract class Testbed {
         /**
-         * Mount testbed.
-         *
-         * If you need to customize testbed before starting, use `Testbed.mount()` and `Testbed.start()` separately.
+         * Mounts testbed. Call start with a world to start simulation and rendering.
          */
         static mount(options?: TestbedMountOptions): Testbed;
         /**
-         * Start simulation, and mount testbed if needed.
+         * Mounts testbed if needed, then starts simulation and rendering.
          *
-         * If you need to customize testbed before starting, use `Testbed.mount().start()` separately.
+         * If you need to customize testbed before starting, first run `const testbed = Testbed.mount()` and then `testbed.start()`.
          */
         static start(world: World): Testbed;
         /** World viewbox width. */
@@ -4981,8 +4985,9 @@ declare namespace planck {
      * Fixture is created. Shapes may encapsulate one or more child shapes.
      */
     abstract class Shape {
-        m_type: ShapeType;
+        /** @hidden */ m_type: ShapeType;
         /**
+         * @hidden
          * Radius of a shape. For polygonal shapes this must be b2_polygonRadius.
          * There is no support for making rounded polygons.
          */
@@ -5732,7 +5737,7 @@ declare namespace planck {
         static isValid(obj: any): boolean;
         static assert(o: any): void;
         set(a: Mat22): void;
-        set(a: Vec2, b: Vec2): void;
+        set(a: Vec2Value, b: Vec2Value): void;
         set(a: number, b: number, c: number, d: number): void;
         setIdentity(): void;
         setZero(): void;
@@ -5741,14 +5746,14 @@ declare namespace planck {
          * Solve A * x = b, where b is a column vector. This is more efficient than
          * computing the inverse in one-shot cases.
          */
-        solve(v: Vec2): Vec2;
+        solve(v: Vec2Value): Vec2;
         /**
          * Multiply a matrix times a vector. If a rotation matrix is provided, then this
          * transforms the vector from one frame to another.
          */
         static mul(mx: Mat22, my: Mat22): Mat22;
-        static mul(mx: Mat22, v: Vec2): Vec2;
-        static mulVec2(mx: Mat22, v: Vec2): Vec2;
+        static mul(mx: Mat22, v: Vec2Value): Vec2;
+        static mulVec2(mx: Mat22, v: Vec2Value): Vec2;
         static mulMat22(mx: Mat22, v: Mat22): Mat22;
         /**
          * Multiply a matrix transpose times a vector. If a rotation matrix is provided,
@@ -5756,8 +5761,8 @@ declare namespace planck {
          * transform).
          */
         static mulT(mx: Mat22, my: Mat22): Mat22;
-        static mulT(mx: Mat22, v: Vec2): Vec2;
-        static mulTVec2(mx: Mat22, v: Vec2): Vec2;
+        static mulT(mx: Mat22, v: Vec2Value): Vec2;
+        static mulTVec2(mx: Mat22, v: Vec2Value): Vec2;
         static mulTMat22(mx: Mat22, v: Mat22): Mat22;
         static abs(mx: Mat22): Mat22;
         static add(mx1: Mat22, mx2: Mat22): Mat22;
@@ -5805,15 +5810,15 @@ declare namespace planck {
          */
         static mul(a: Mat33, b: Vec2Value): Vec2;
         static mul(a: Mat33, b: Vec3Value): Vec3;
-        static mulVec3(a: Mat33, b: Vec3): Vec3;
+        static mulVec3(a: Mat33, b: Vec3Value): Vec3;
         static mulVec2(a: Mat33, b: Vec2Value): Vec2;
         static add(a: Mat33, b: Mat33): Mat33;
     }
     class CircleShape extends Shape {
         static TYPE: "circle";
-        m_type: "circle";
-        m_p: Vec2;
-        m_radius: number;
+        /** @hidden */ m_type: "circle";
+        /** @hidden */ m_p: Vec2;
+        /** @hidden */ m_radius: number;
         constructor(position: Vec2Value, radius?: number);
         constructor(radius?: number);
         /** @hidden */
@@ -5869,17 +5874,17 @@ declare namespace planck {
      */
     class EdgeShape extends Shape {
         static TYPE: "edge";
-        m_type: "edge";
-        m_radius: number;
+        /** @hidden */ m_type: "edge";
+        /** @hidden */ m_radius: number;
         // These are the edge vertices
-        m_vertex1: Vec2;
-        m_vertex2: Vec2;
+        /** @hidden */ m_vertex1: Vec2;
+        /** @hidden */ m_vertex2: Vec2;
         // Optional adjacent vertices. These are used for smooth collision.
         // Used by chain shape.
-        m_vertex0: Vec2;
-        m_vertex3: Vec2;
-        m_hasVertex0: boolean;
-        m_hasVertex3: boolean;
+        /** @hidden */ m_vertex0: Vec2;
+        /** @hidden */ m_vertex3: Vec2;
+        /** @hidden */ m_hasVertex0: boolean;
+        /** @hidden */ m_hasVertex3: boolean;
         constructor(v1?: Vec2Value, v2?: Vec2Value);
         /** @hidden */
         _reset(): void;
@@ -5888,7 +5893,7 @@ declare namespace planck {
         /**
          * Optional next vertex, used for smooth collision.
          */
-        setNextVertex(v?: Vec2): EdgeShape;
+        setNextVertex(v?: Vec2Value): EdgeShape;
         /**
          * Optional next vertex, used for smooth collision.
          */
@@ -5896,7 +5901,7 @@ declare namespace planck {
         /**
          * Optional prev vertex, used for smooth collision.
          */
-        setPrevVertex(v?: Vec2): EdgeShape;
+        setPrevVertex(v?: Vec2Value): EdgeShape;
         /**
          * Optional prev vertex, used for smooth collision.
          */
@@ -5904,7 +5909,7 @@ declare namespace planck {
         /**
          * Set this as an isolated edge.
          */
-        _set(v1: Vec2, v2: Vec2): EdgeShape;
+        _set(v1: Vec2Value, v2: Vec2Value): EdgeShape;
         /**
          * Get the number of child primitives.
          */
@@ -5954,12 +5959,12 @@ declare namespace planck {
      */
     class PolygonShape extends Shape {
         static TYPE: "polygon";
-        m_type: "polygon";
-        m_centroid: Vec2;
-        m_vertices: Vec2[]; // [Settings.maxPolygonVertices]
-        m_normals: Vec2[]; // [Settings.maxPolygonVertices]
-        m_count: number;
-        m_radius: number;
+        /** @hidden */ m_type: "polygon";
+        /** @hidden */ m_centroid: Vec2;
+        /** @hidden */ m_vertices: Vec2[]; // [Settings.maxPolygonVertices]
+        /** @hidden */ m_normals: Vec2[]; // [Settings.maxPolygonVertices]
+        /** @hidden */ m_count: number;
+        /** @hidden */ m_radius: number;
         constructor(vertices?: Vec2Value[]);
         getType(): "polygon";
         getRadius(): number;
@@ -5976,7 +5981,7 @@ declare namespace planck {
          * @param xf The shape world transform.
          * @param p A point in world coordinates.
          */
-        testPoint(xf: TransformValue, p: Vec2): boolean;
+        testPoint(xf: TransformValue, p: Vec2Value): boolean;
         /**
          * Cast a ray against a child shape.
          *
@@ -6021,15 +6026,15 @@ declare namespace planck {
      */
     class ChainShape extends Shape {
         static TYPE: "chain";
-        m_type: "chain";
-        m_radius: number;
-        m_vertices: Vec2[];
-        m_count: number;
-        m_prevVertex: Vec2 | null;
-        m_nextVertex: Vec2 | null;
-        m_hasPrevVertex: boolean;
-        m_hasNextVertex: boolean;
-        m_isLoop: boolean;
+        /** @hidden */ m_type: "chain";
+        /** @hidden */ m_radius: number;
+        /** @hidden */ m_vertices: Vec2[];
+        /** @hidden */ m_count: number;
+        /** @hidden */ m_prevVertex: Vec2 | null;
+        /** @hidden */ m_nextVertex: Vec2 | null;
+        /** @hidden */ m_hasPrevVertex: boolean;
+        /** @hidden */ m_hasNextVertex: boolean;
+        /** @hidden */ m_isLoop: boolean;
         constructor(vertices?: Vec2Value[], loop?: boolean);
         // clear() {
         //   this.m_vertices.length = 0;
@@ -6106,7 +6111,14 @@ declare namespace planck {
     class BoxShape extends PolygonShape {
         // note that box is serialized/deserialized as polygon
         static TYPE: "polygon";
-        constructor(hx: number, hy: number, center?: Vec2Value, angle?: number);
+        /**
+         *
+         * @param halfWidth
+         * @param halfHeight
+         * @param center coordinate of the center of the box relative to the body
+         * @param angle angle of the box relative to the body
+         */
+        constructor(halfWidth: number, halfHeight: number, center?: Vec2Value, angle?: number);
     }
     const Box: typeof BoxShape;
     const CollideCircles: (manifold: Manifold, circleA: CircleShape, xfA: Transform, circleB: CircleShape, xfB: Transform) => void;
@@ -8176,7 +8188,7 @@ declare namespace planck {
     }
     interface WorldDef {
         /** [default: { x : 0, y : 0}] */
-        gravity?: Vec2;
+        gravity?: Vec2Value;
         /** [default: true] */
         allowSleep?: boolean;
         /** [default: true] */
@@ -8316,7 +8328,7 @@ declare namespace planck {
          * @param point2 The ray ending point
          * @param callback A function that is called for each fixture that is hit by the ray. You control how the ray cast proceeds by returning a numeric/float value.
          */
-        rayCast(point1: Vec2, point2: Vec2, callback: WorldRayCastCallback): void;
+        rayCast(point1: Vec2Value, point2: Vec2Value, callback: WorldRayCastCallback): void;
         /**
          * Get the number of broad-phase proxies.
          */

@@ -219,6 +219,7 @@ export class ChainShape extends Shape {
    * this for loops.
    */
   setPrevVertex(prevVertex: Vec2): void {
+    // todo: copy or reference
     this.m_prevVertex = prevVertex;
     this.m_hasPrevVertex = true;
   }
@@ -232,6 +233,7 @@ export class ChainShape extends Shape {
    * this for loops.
    */
   setNextVertex(nextVertex: Vec2): void {
+    // todo: copy or reference
     this.m_nextVertex = nextVertex;
     this.m_hasNextVertex = true;
   }

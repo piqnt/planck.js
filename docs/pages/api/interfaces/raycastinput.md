@@ -25,10 +25,10 @@ ___
 
 ###  p1
 
-• **p1**: *Vec2*
+• **p1**: *[Vec2Value](/api/interfaces/vec2value)*
 
 ___
 
 ###  p2
 
-• **p2**: *Vec2*
+• **p2**: *[Vec2Value](/api/interfaces/vec2value)*

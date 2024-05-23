@@ -240,13 +240,13 @@ ___
 
 ### `Static` mulVec3
 
-▸ **mulVec3**(`a`: [Mat33](/api/classes/mat33), `b`: [Vec3](/api/classes/vec3)): *[Vec3](/api/classes/vec3)*
+▸ **mulVec3**(`a`: [Mat33](/api/classes/mat33), `b`: [Vec3Value](/api/interfaces/vec3value)): *[Vec3](/api/classes/vec3)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `a` | [Mat33](/api/classes/mat33) |
-`b` | [Vec3](/api/classes/vec3) |
+`b` | [Vec3Value](/api/interfaces/vec3value) |
 
 **Returns:** *[Vec3](/api/classes/vec3)*

@@ -307,7 +307,7 @@ export class PolygonShape extends Shape {
    * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
-  testPoint(xf: TransformValue, p: Vec2): boolean {
+  testPoint(xf: TransformValue, p: Vec2Value): boolean {
     const pLocal = matrix.detransformVec2(temp, xf, p);
 
     for (let i = 0; i < this.m_count; ++i) {

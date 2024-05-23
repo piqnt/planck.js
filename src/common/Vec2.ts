@@ -507,7 +507,7 @@ export class Vec2 {
   }
 
   /** @hidden @deprecated */
-  static wAdd(a: number, v: Vec2, b: number, w: Vec2): Vec2 {
+  static wAdd(a: number, v: Vec2Value, b: number, w: Vec2Value): Vec2 {
     if (typeof b !== 'undefined' || typeof w !== 'undefined') {
       return Vec2.combine(a, v, b, w);
     } else {
@@ -515,7 +515,7 @@ export class Vec2 {
     }
   }
 
-  static combine(a: number, v: Vec2, b: number, w: Vec2): Vec2 {
+  static combine(a: number, v: Vec2Value, b: number, w: Vec2Value): Vec2 {
     return Vec2.zero().setCombine(a, v, b, w);
   }
 
@@ -605,7 +605,7 @@ export class Vec2 {
   /**  @hidden @deprecated */
   static scaleFn(x: number, y: number) {
     // todo: this was used in examples, remove in the future
-    return function(v: Vec2): Vec2 {
+    return function(v: Vec2Value): Vec2 {
       return Vec2.neo(v.x * x, v.y * y);
     };
   }
@@ -613,7 +613,7 @@ export class Vec2 {
   /**  @hidden @deprecated */
   static translateFn(x: number, y: number) {
     // todo: this was used in examples, remove in the future
-    return function(v: Vec2): Vec2 {
+    return function(v: Vec2Value): Vec2 {
       return Vec2.neo(v.x + x, v.y + y);
     };
   }
