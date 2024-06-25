@@ -26,7 +26,9 @@
     "Oliver Zell"
   ],
   "type": "commonjs",
-  "sideEffects": ["./dist/planck-with-testbed.*"],
+  "sideEffects": [
+    "./dist/planck-with-testbed.*"
+  ],
   "module": "dist/planck.mjs",
   "main": "dist/planck.js",
   "jsdelivr": "dist/planck.min.js",
@@ -69,7 +71,6 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "handlebars": "^4.7.6",
-    "is-core-module": "^2.2.0",
     "rollup": "^2.77.4",
     "rollup-plugin-filesize": "^9.1.1",
     "rollup-plugin-license": "^2.3.0",
