@@ -20,18 +20,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import planck from "../src/main";
 
 const { Vec2, Math, World, stats, Circle, Edge, Box, Testbed } = planck;
 
-let world = new World(new Vec2(0, -10));
+const world = new World(new Vec2(0, -10));
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
-let bullet;
-let angularVelocity;
+let bullet: planck.Body;
+let angularVelocity: number;
 
-let ground = world.createBody(new Vec2(0.0, 0.0));
+const ground = world.createBody(new Vec2(0.0, 0.0));
 
 ground.createFixture(new Edge(new Vec2(-10.0, 0.0), new Vec2(10.0, 0.0)), 0.0);
 ground.createFixture(new Box(0.2, 1.0, new Vec2(0.5, 1.0), 0.0), 0.0);
@@ -45,15 +46,12 @@ if (true) {
   // angularVelocity = 46.661274;
   bullet.setLinearVelocity(new Vec2(0.0, -100.0));
   bullet.setAngularVelocity(angularVelocity);
-
 } else {
-  let shape = new Circle(0.5);
+  const shape = new Circle(0.5);
 
-  world
-    .createDynamicBody(new Vec2(0.0, 2.0))
-    .createFixture(shape, 1.0);
+  world.createDynamicBody(new Vec2(0.0, 2.0)).createFixture(shape, 1.0);
 
-  let body = world.createDynamicBody({
+  const body = world.createDynamicBody({
     bullet: true,
     position: new Vec2(0.0, 2.0),
   });
@@ -82,7 +80,7 @@ function launch() {
 launch();
 
 let stepCount = 0;
-testbed.step = function() {
+testbed.step = function () {
   testbed.status(stats);
 
   if (stats.gjkCalls > 0) {
