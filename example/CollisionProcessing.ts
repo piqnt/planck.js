@@ -21,61 +21,85 @@
  * SOFTWARE.
  */
 
+import planck from "../src/main";
+
 const { World, Vec2, Edge, Polygon, Box, Circle, Math, Testbed } = planck;
 
 // This test shows collision processing and tests
 // deferred body destruction.
-let world = new World(new Vec2(0, -10));
+const world = new World(new Vec2(0, -10));
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
 // Ground body
-world.createBody().createFixture(new Edge(new Vec2(-50.0, 0.0), new Vec2(50.0, 0.0)));
+world
+  .createBody()
+  .createFixture(new Edge(new Vec2(-50.0, 0.0), new Vec2(50.0, 0.0)));
 
-let xLo = -5.0, xHi = 5.0;
-let yLo = 2.0, yHi = 35.0;
+const xLo = -5.0,
+  xHi = 5.0;
+const yLo = 2.0,
+  yHi = 35.0;
 
 // Small triangle
-let body1 = world.createDynamicBody(new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi)));
-body1.createFixture(new Polygon([new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 2.0)]), 1.0);
+const body1 = world.createDynamicBody(
+  new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi))
+);
+body1.createFixture(
+  new Polygon([new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 2.0)]),
+  1.0
+);
 
 // Large triangle (recycle definitions)
-let body2 = world.createDynamicBody(new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi)));
-body2.createFixture(new Polygon([new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 2.0)]), 1.0);
+const body2 = world.createDynamicBody(
+  new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi))
+);
+body2.createFixture(
+  new Polygon([new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 2.0)]),
+  1.0
+);
 
 // Small box
-let body3 = world.createDynamicBody(new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi)));
+const body3 = world.createDynamicBody(
+  new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi))
+);
 body3.createFixture(new Box(1.0, 0.5), 1.0);
 
 // Large box (recycle definitions)
-let body4 = world.createDynamicBody(new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi)));
+const body4 = world.createDynamicBody(
+  new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi))
+);
 body4.createFixture(new Box(2.0, 1.0), 1.0);
 
 // Small circle
-let body5 = world.createDynamicBody(new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi)));
+const body5 = world.createDynamicBody(
+  new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi))
+);
 body5.createFixture(new Circle(1.0), 1.0);
 
 // Large circle
-let body6 = world.createDynamicBody(new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi)));
+const body6 = world.createDynamicBody(
+  new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi))
+);
 body6.createFixture(new Circle(2.0), 1.0);
 
-let points = [];
+const points: any[] = [];
 
-world.on('pre-solve', function(contact, oldManifold) {
-  let manifold = contact.getManifold();
+world.on("pre-solve", function (contact, oldManifold) {
+  const manifold = contact.getManifold();
 
   if (manifold.pointCount == 0) {
     return;
   }
 
-  let fixtureA = contact.getFixtureA();
-  let fixtureB = contact.getFixtureB();
+  const fixtureA = contact.getFixtureA();
+  const fixtureB = contact.getFixtureB();
 
-  let worldManifold = contact.getWorldManifold();
+  const worldManifold = contact.getWorldManifold(null);
 
   for (let i = 0; i < manifold.pointCount; ++i) {
-    let cp = {};
+    const cp: any = {};
     cp.fixtureA = fixtureA;
     cp.fixtureB = fixtureB;
     cp.position = worldManifold.points[i];
@@ -88,25 +112,24 @@ world.on('pre-solve', function(contact, oldManifold) {
   }
 });
 
-let bomb = null;
-let MAX_NUKE = 6;
+const bomb = null;
+const MAX_NUKE = 6;
 
-testbed.step = function() {
-
+testbed.step = function () {
   // We are going to destroy some bodies according to contact
   // points. We must buffer the bodies that should be destroyed
   // because they may belong to multiple contact points.
-  let nuke = [];
+  const nuke = [];
 
   // Traverse the contact results. Destroy bodies that
   // are touching heavier bodies.
   for (let i = 0; i < points.length && nuke.length < MAX_NUKE; ++i) {
-    let point = points[i];
+    const point = points[i];
 
-    let body1 = point.fixtureA.getBody();
-    let body2 = point.fixtureB.getBody();
-    let mass1 = body1.getMass();
-    let mass2 = body2.getMass();
+    const body1 = point.fixtureA.getBody();
+    const body2 = point.fixtureB.getBody();
+    const mass1 = body1.getMass();
+    const mass2 = body2.getMass();
 
     if (mass1 > 0.0 && mass2 > 0.0) {
       if (mass2 > mass1) {
@@ -118,7 +141,7 @@ testbed.step = function() {
   }
 
   for (let i = 0; i < nuke.length; i++) {
-    let b = nuke[i];
+    const b = nuke[i];
     if (b != bomb) {
       world.destroyBody(b);
     }
