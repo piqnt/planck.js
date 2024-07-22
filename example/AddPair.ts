@@ -20,8 +20,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import planck from "../src/main";
 
-const { Vec2, World, Circle, Box, Math, Testbed } = planck;
+const { Vec2, World, Circle, Box, Testbed } = planck;
 
 const world = new World(new Vec2(0, 0));
 
@@ -33,7 +34,7 @@ testbed.start(world);
 
 const circle = new Circle(0.1);
 
-for (const i = 0; i < 50; ++i) {
+for (let i = 0; i < 50; ++i) {
   const b = world.createBody({
     type : 'dynamic',
     position : new Vec2(Math.random() * -6, Math.random() * 2 - 1),
@@ -49,3 +50,5 @@ const box = world.createBody({
 
 box.createFixture(new Box(1.5, 1.5), 1.0);
 box.setLinearVelocity(new Vec2(100.0, 0.0));
+
+export {}
