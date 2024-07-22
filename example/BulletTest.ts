@@ -20,26 +20,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import planck from "../src/main";
 
 const { World, Vec2, Edge, Box, stats, Testbed } = planck;
 
-let world = new World(new Vec2(0, -10));
-  
+const world = new World(new Vec2(0, -10));
+
 const testbed = Testbed.mount();
 testbed.start(world);
 
-let ground = world.createBody();
+const ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-10.0, 0.0), new Vec2(10.0, 0.0)), 0.0);
 ground.createFixture(new Box(0.2, 1.0, new Vec2(0.5, 1.0), 0.0), 0.0);
 
-let body = world.createDynamicBody(new Vec2(0.0, 4.0));
+const body = world.createDynamicBody(new Vec2(0.0, 4.0));
 body.createFixture(new Box(2.0, 0.1), 1.0);
 
 // x = Math.random(-1.0, 1.0);
 let x = 0.20352793;
 
-let bullet = world.createBody({
-  type: 'dynamic',
+const bullet = world.createBody({
+  type: "dynamic",
   position: new Vec2(x, 10.0),
   bullet: true,
 });
@@ -69,7 +70,7 @@ function Launch() {
 }
 
 let stepCount = 0;
-testbed.step = function() {
+testbed.step = function () {
   testbed.status(stats);
 
   // if (stats.gjkCalls > 0) {
