@@ -154,7 +154,12 @@ const rayCastResult = {
   normal: null,
 };
 
-function rayCastCallback(fixture, point, normal, fraction) {
+function rayCastCallback(
+  fixture: planck.Fixture,
+  point: Vec2,
+  normal: Vec2,
+  fraction: number
+) {
   rayCastResult.fixture = fixture;
   rayCastResult.point = point;
   rayCastResult.normal = normal;
