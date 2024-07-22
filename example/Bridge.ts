@@ -2,26 +2,28 @@
  * MIT License
  * Copyright (c) 2019 Erin Catto
  */
+import planck from "../src/main";
 
-const { Vec2, World, Edge, Box, Polygon, Circle, RevoluteJoint, Testbed } = planck;
+const { Vec2, World, Edge, Box, Polygon, Circle, RevoluteJoint, Testbed } =
+  planck;
 
-let world = new World(new Vec2(0, -4));
+const world = new World(new Vec2(0, -4));
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
-let COUNT = 30;
+const COUNT = 30;
 
-let middle;
+let middle: planck.Body;
 
-let ground = world.createBody();
+const ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
-let bridgeRect = new Box(0.5, 0.125);
+const bridgeRect = new Box(0.5, 0.125);
 
-let bridgeFD = {
+const bridgeFD = {
   density: 20.0,
-  friction: 0.2
+  friction: 0.2,
 };
 
 let prevBody = ground;
@@ -44,11 +46,15 @@ world.createJoint(new RevoluteJoint({}, prevBody, ground, anchor));
 for (let i = 0; i < 2; ++i) {
   const body = world.createDynamicBody(new Vec2(-8.0 + 8.0 * i, 12.0));
 
-  let vertices = [new Vec2(-0.5, 0.0), new Vec2(0.5, 0.0), new Vec2(0.0, 1.5)];
+  const vertices = [
+    new Vec2(-0.5, 0.0),
+    new Vec2(0.5, 0.0),
+    new Vec2(0.0, 1.5),
+  ];
   body.createFixture(new Polygon(vertices), 1.0);
 }
 
-let shape = new Circle(0.5);
+const shape = new Circle(0.5);
 for (let i = 0; i < 3; ++i) {
   const body = world.createDynamicBody(new Vec2(-6.0 + 6.0 * i, 10.0));
   body.createFixture(shape, 1.0);
