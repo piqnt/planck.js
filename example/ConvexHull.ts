@@ -44,9 +44,6 @@ let shape: planck.PolygonShape;
 generate();
 
 function generate() {
-  const lowerBound = new Vec2(-8.0, -8.0);
-  const upperBound = new Vec2(8.0, 8.0);
-
   points.length = 0;
   for (let i = 0; i < COUNT; ++i) {
     const x = 10.0 * Math.random() - 5;
