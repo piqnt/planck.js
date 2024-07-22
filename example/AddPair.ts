@@ -50,5 +50,3 @@ const box = world.createBody({
 
 box.createFixture(new Box(1.5, 1.5), 1.0);
 box.setLinearVelocity(new Vec2(100.0, 0.0));
-
-export {}

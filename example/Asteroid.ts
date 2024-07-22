@@ -1,3 +1,5 @@
+import planck from "../src/main";
+
 const { World, Vec2, Circle, Polygon, Testbed } = planck;
 
 const SHIP = 2;
@@ -7,7 +9,7 @@ const ASTEROID = 4;
 const SPACE_WIDTH = 16;
 const SPACE_HEIGHT = 9;
 
-const SHIP_SIZE = 0.30;
+const SHIP_SIZE = 0.3;
 const FIRE_RELOAD_TIME = 100;
 const BULLET_LIFE_TIME = 2000;
 
@@ -15,12 +17,12 @@ const asteroidRadius = 0.9;
 const asteroidSpeed = 2;
 const asteroidLevels = 4;
 
-let level;
-let lives;
-let gameover;
+let level: number;
+let lives: number;
+let gameover: boolean;
 
-const allowCrashTime = 0;
-const allowFireTime = 0;
+let allowCrashTime = 0;
+let allowFireTime = 0;
 
 const world = new World();
 
@@ -34,14 +36,14 @@ const asteroidBodies = [];
 const bulletBodies = [];
 let shipBody;
 
-testbed.keydown = function(code, char) {
+testbed.keydown = function () {
   if (testbed.activeKeys.fire) {
     gameover && start();
   }
 };
 
 // Todo: check if several bullets hit the same asteroid in the same time step
-world.on('pre-solve', function(contact) {
+world.on("pre-solve", function (contact) {
   const fixtureA = contact.getFixtureA();
   const fixtureB = contact.getFixtureB();
 
@@ -55,11 +57,8 @@ world.on('pre-solve', function(contact) {
 
   if ((aship || bship) && allowCrashTime < globalTime) {
     // Ship collided with something
-    const ship = aship ? bodyA : bodyB;
-    const asteroid = !aship ? bodyA : bodyB;
-
     setTimeout(function () {
-      crash(ship, asteroid);
+      crash();
     }, 1);
   }
 
@@ -79,7 +78,7 @@ function start() {
   level = 1;
   lives = 3;
   uiStatus();
-  setupShip(true);
+  setupShip();
   addAsteroids();
   uiStart();
 }
@@ -91,32 +90,34 @@ function end() {
 
 function setupShip() {
   shipBody = world.createBody({
-    type : 'dynamic',
-    angularDamping : 2.0,
-    linearDamping : 0.5,
-    position : new Vec2(),
+    type: "dynamic",
+    angularDamping: 2.0,
+    linearDamping: 0.5,
+    position: new Vec2(),
   });
 
-  shipBody.createFixture(new Polygon([
-    new Vec2(-0.15, -0.15),
-    new Vec2(0, -0.1),
-    new Vec2(0.15, -0.15),
-    new Vec2(0, 0.2)
-  ]), {
-    density : 1000,
-    filterCategoryBits : SHIP,
-    filterMaskBits : ASTEROID
-  });
+  shipBody.createFixture(
+    new Polygon([
+      new Vec2(-0.15, -0.15),
+      new Vec2(0, -0.1),
+      new Vec2(0.15, -0.15),
+      new Vec2(0, 0.2),
+    ]),
+    {
+      density: 1000,
+      filterCategoryBits: SHIP,
+      filterMaskBits: ASTEROID,
+    }
+  );
 
   allowCrashTime = globalTime + 2000;
 }
 
-const globalTime = 0;
-testbed.step = function(dt) {
+let globalTime = 0;
+testbed.step = function (dt) {
   globalTime += dt;
 
   if (shipBody) {
-
     // Set velocities
     if (testbed.activeKeys.left && !testbed.activeKeys.right) {
       shipBody.applyAngularImpulse(0.1, true);
@@ -133,7 +134,6 @@ testbed.step = function(dt) {
 
     // Fire
     if (testbed.activeKeys.fire && globalTime > allowFireTime) {
-
       const magnitude = 2;
       const angle = shipBody.Getangle + Math.PI / 2;
 
@@ -142,11 +142,11 @@ testbed.step = function(dt) {
         // mass : 0.05,
         position: shipBody.getWorldPoint(new Vec2(0, SHIP_SIZE)),
         linearVelocity: shipBody.getWorldVector(new Vec2(0, magnitude)),
-        bullet: true
+        bullet: true,
       });
       bulletBody.createFixture(new Circle(0.05), {
         filterCategoryBits: BULLET,
-        filterMaskBits: ASTEROID
+        filterMaskBits: ASTEROID,
       });
       bulletBodies.push(bulletBody);
 
@@ -154,13 +154,17 @@ testbed.step = function(dt) {
       allowFireTime = globalTime + FIRE_RELOAD_TIME;
 
       // Remember when we should delete this bullet
-      bulletBody.dieTime = globalTime + BULLET_LIFE_TIME;
+      // bulletBody.die = globalTime + BULLET_LIFE_TIME;
+      bulletBody.setUserData({
+        ...((bulletBody.getUserData() as any) || {}),
+        die: globalTime + BULLET_LIFE_TIME,
+      });
     }
 
     wrap(shipBody);
   }
 
-  for (const i = 0; i !== bulletBodies.length; i++) {
+  for (let i = 0; i !== bulletBodies.length; i++) {
     const bulletBody = bulletBodies[i];
 
     // If the bullet is old, delete it
@@ -173,12 +177,11 @@ testbed.step = function(dt) {
     wrap(bulletBody);
   }
 
-  for (const i = 0; i !== asteroidBodies.length; i++) {
+  for (let i = 0; i !== asteroidBodies.length; i++) {
     const asteroidBody = asteroidBodies[i];
     wrap(asteroidBody);
   }
-
-}
+};
 
 // Adds some asteroids to the scene.
 function addAsteroids() {
@@ -188,14 +191,16 @@ function addAsteroids() {
     // asteroidBody.uiRemove();
   }
 
-  for (const i = 0; i < level; i++) {
+  for (let i = 0; i < level; i++) {
     const shipPosition = shipBody.getPosition();
-    const x = shipPosition.x;
-    const y = shipPosition.y;
+    let x = shipPosition.x;
+    let y = shipPosition.y;
 
     // Aviod the ship!
-    while (Math.abs(x - shipPosition.x) < asteroidRadius * 2
-        && Math.abs(y - shipPosition.y) < asteroidRadius * 2) {
+    while (
+      Math.abs(x - shipPosition.x) < asteroidRadius * 2 &&
+      Math.abs(y - shipPosition.y) < asteroidRadius * 2
+    ) {
       x = rand(SPACE_WIDTH);
       y = rand(SPACE_HEIGHT);
     }
@@ -206,42 +211,54 @@ function addAsteroids() {
 
     // Create asteroid body
     const asteroidBody = makeAsteroidBody(x, y, vx, vy, va, 0);
-    asteroidBody.level = 1;
+    // asteroidBody.level = 1;
+    asteroidBody.setUserData({
+      ...((asteroidBody.getUserData() as any) || {}),
+      level: 1,
+    });
   }
 }
 
-function asteroidLevelRadius(level) {
-  return asteroidRadius * (asteroidLevels - level) / asteroidLevels;
+function asteroidLevelRadius(level: number) {
+  return (asteroidRadius * (asteroidLevels - level)) / asteroidLevels;
 }
 
-function makeAsteroidBody(x, y, vx, vy, va, level) {
+function makeAsteroidBody(
+  x: number,
+  y: number,
+  vx: number,
+  vy: number,
+  va: number,
+  level: number
+) {
   const asteroidBody = world.createKinematicBody({
     // mass : 10,
-    position : new Vec2(x, y),
-    linearVelocity : new Vec2(vx, vy),
-    angularVelocity : va
+    position: new Vec2(x, y),
+    linearVelocity: new Vec2(vx, vy),
+    angularVelocity: va,
   });
   asteroidBodies.push(asteroidBody);
 
   const radius = asteroidLevelRadius(level);
 
-  const n = 8, path = [];
-  for (const i = 0; i < n; i++) {
-    const a = i * 2 * Math.PI / n;
+  const n = 8,
+    path = [];
+  for (let i = 0; i < n; i++) {
+    const a = (i * 2 * Math.PI) / n;
     const x = radius * (Math.sin(a) + rand(0.3));
     const y = radius * (Math.cos(a) + rand(0.3));
     path.push(new Vec2(x, y));
   }
 
   asteroidBody.createFixture(new Polygon(path), {
-    filterCategoryBits : ASTEROID,
-    filterMaskBits : BULLET | SHIP
+    filterCategoryBits: ASTEROID,
+    filterMaskBits: BULLET | SHIP,
   });
 
   return asteroidBody;
 }
 
-function crash(ship, asteroid) {
+function crash() {
   if (!shipBody) return;
 
   lives--;
@@ -255,17 +272,16 @@ function crash(ship, asteroid) {
     end();
     return;
   }
-  setTimeout(function() {
+  setTimeout(function () {
     // Add ship again
     setupShip();
   }, 1000);
 }
 
-function hit(asteroidBody, bulletBody) {
+function hit(asteroidBody: planck.Body, bulletBody: planck.Body) {
   const aidx = asteroidBodies.indexOf(asteroidBody);
   const bidx = bulletBodies.indexOf(bulletBody);
   if (aidx != -1 && bidx != -1) {
-
     // Remove asteroid
     world.destroyBody(asteroidBody);
     asteroidBodies.splice(aidx, 1);
@@ -287,28 +303,35 @@ function hit(asteroidBody, bulletBody) {
   }
 }
 
-function splitAsteroid(parent) {
-  if (parent.level < 4) {
-    const angleDisturb = Math.PI / 2 * Math.random();
-    for (const i = 0; i < 4; i++) {
-      const angle = Math.PI / 2 * i + angleDisturb;
+function splitAsteroid(parent: planck.Body) {
+  const parentLevel: number = (parent.getUserData() as any).level;
+  if (parentLevel < 4) {
+    const angleDisturb = (Math.PI / 2) * Math.random();
+    for (let i = 0; i < 4; i++) {
+      const angle = (Math.PI / 2) * i + angleDisturb;
 
-      const r = asteroidLevelRadius(0) - asteroidLevelRadius(parent.level);
-      const sp = parent.getWorldPoint(new Vec2(r * Math.cos(angle), r * Math.sin(angle)));
+      const r = asteroidLevelRadius(0) - asteroidLevelRadius(parentLevel);
+      const sp = parent.getWorldPoint(
+        new Vec2(r * Math.cos(angle), r * Math.sin(angle))
+      );
 
       const vx = rand(asteroidSpeed);
       const vy = rand(asteroidSpeed);
       const va = rand(asteroidSpeed);
 
-      const child = makeAsteroidBody(sp.x, sp.y, vx, vy, va, parent.level);
-      child.level = parent.level + 1;
+      const child = makeAsteroidBody(sp.x, sp.y, vx, vy, va, parentLevel);
+      // child.level = parent.level + 1;
+      child.setUserData({
+        ...((child.getUserData() as any) || {}),
+        level: parentLevel + 1,
+      });
       child.setAngle(rand() * Math.PI);
     }
   }
 }
 
 // If the body is out of space bounds, wrap it to the other side
-function wrap(body) {
+function wrap(body: planck.Body) {
   const p = body.getPosition();
   p.x = wrapNumber(p.x, -SPACE_WIDTH / 2, SPACE_WIDTH / 2);
   p.y = wrapNumber(p.y, -SPACE_HEIGHT / 2, SPACE_HEIGHT / 2);
@@ -316,10 +339,10 @@ function wrap(body) {
 }
 
 function wrapNumber(num, min, max) {
-  if (typeof min === 'undefined') {
-    max = 1, min = 0;
-  } else if (typeof max === 'undefined') {
-    max = min, min = 0;
+  if (typeof min === "undefined") {
+    (max = 1), (min = 0);
+  } else if (typeof max === "undefined") {
+    (max = min), (min = 0);
   }
   if (max > min) {
     num = (num - min) % (max - min);
@@ -331,23 +354,23 @@ function wrapNumber(num, min, max) {
 }
 
 // Returns a random number between -0.5 and 0.5
-function rand(value) {
+function rand(value?: number) {
   return (Math.random() - 0.5) * (value || 1);
 }
 
 function uiStart() {
-  console.log('Game started');
+  console.log("Game started");
 }
 
 function uiEnd() {
-  console.log('Game over');
-  testbed.status('Game Over!');
+  console.log("Game over");
+  testbed.status("Game Over!");
 }
 
 function uiStatus() {
-  console.log('Level: ' + level + ' Lives: ' + lives);
-  testbed.status('Level', level);
-  testbed.status('Lives', lives);
+  console.log("Level: " + level + " Lives: " + lives);
+  testbed.status("Level", level);
+  testbed.status("Lives", lives);
 }
 
 start();
