@@ -1,28 +1,28 @@
 const { World, Vec2, Circle, Polygon, Testbed } = planck;
 
-let SHIP = 2;
-let BULLET = 4;
-let ASTEROID = 4;
+const SHIP = 2;
+const BULLET = 4;
+const ASTEROID = 4;
 
-let SPACE_WIDTH = 16;
-let SPACE_HEIGHT = 9;
+const SPACE_WIDTH = 16;
+const SPACE_HEIGHT = 9;
 
-let SHIP_SIZE = 0.30;
-let FIRE_RELOAD_TIME = 100;
-let BULLET_LIFE_TIME = 2000;
+const SHIP_SIZE = 0.30;
+const FIRE_RELOAD_TIME = 100;
+const BULLET_LIFE_TIME = 2000;
 
-let asteroidRadius = 0.9;
-let asteroidSpeed = 2;
-let asteroidLevels = 4;
+const asteroidRadius = 0.9;
+const asteroidSpeed = 2;
+const asteroidLevels = 4;
 
 let level;
 let lives;
 let gameover;
 
-let allowCrashTime = 0;
-let allowFireTime = 0;
+const allowCrashTime = 0;
+const allowFireTime = 0;
 
-let world = new World();
+const world = new World();
 
 const testbed = Testbed.mount();
 testbed.width = SPACE_WIDTH;
@@ -30,8 +30,8 @@ testbed.height = SPACE_HEIGHT;
 testbed.y = 0;
 testbed.start(world);
 
-let asteroidBodies = [];
-let bulletBodies = [];
+const asteroidBodies = [];
+const bulletBodies = [];
 let shipBody;
 
 testbed.keydown = function(code, char) {
@@ -42,21 +42,21 @@ testbed.keydown = function(code, char) {
 
 // Todo: check if several bullets hit the same asteroid in the same time step
 world.on('pre-solve', function(contact) {
-  let fixtureA = contact.getFixtureA();
-  let fixtureB = contact.getFixtureB();
+  const fixtureA = contact.getFixtureA();
+  const fixtureB = contact.getFixtureB();
 
-  let bodyA = contact.getFixtureA().getBody();
-  let bodyB = contact.getFixtureB().getBody();
+  const bodyA = contact.getFixtureA().getBody();
+  const bodyB = contact.getFixtureB().getBody();
 
-  let aship = bodyA === shipBody;
-  let bship = bodyB === shipBody;
-  let abullet = fixtureA.getFilterCategoryBits() & BULLET;
-  let bbullet = fixtureB.getFilterCategoryBits() & BULLET;
+  const aship = bodyA === shipBody;
+  const bship = bodyB === shipBody;
+  const abullet = fixtureA.getFilterCategoryBits() & BULLET;
+  const bbullet = fixtureB.getFilterCategoryBits() & BULLET;
 
   if ((aship || bship) && allowCrashTime < globalTime) {
     // Ship collided with something
-    let ship = aship ? bodyA : bodyB;
-    let asteroid = !aship ? bodyA : bodyB;
+    const ship = aship ? bodyA : bodyB;
+    const asteroid = !aship ? bodyA : bodyB;
 
     setTimeout(function () {
       crash(ship, asteroid);
@@ -65,8 +65,8 @@ world.on('pre-solve', function(contact) {
 
   if (abullet || bbullet) {
     // Bullet collided with something
-    let bullet = abullet ? bodyA : bodyB;
-    let asteroid = !abullet ? bodyA : bodyB;
+    const bullet = abullet ? bodyA : bodyB;
+    const asteroid = !abullet ? bodyA : bodyB;
 
     setTimeout(function () {
       hit(bullet, asteroid);
@@ -111,7 +111,7 @@ function setupShip() {
   allowCrashTime = globalTime + 2000;
 }
 
-let globalTime = 0;
+const globalTime = 0;
 testbed.step = function(dt) {
   globalTime += dt;
 
@@ -160,7 +160,7 @@ testbed.step = function(dt) {
     wrap(shipBody);
   }
 
-  for (let i = 0; i !== bulletBodies.length; i++) {
+  for (const i = 0; i !== bulletBodies.length; i++) {
     const bulletBody = bulletBodies[i];
 
     // If the bullet is old, delete it
@@ -173,8 +173,8 @@ testbed.step = function(dt) {
     wrap(bulletBody);
   }
 
-  for (let i = 0; i !== asteroidBodies.length; i++) {
-    let asteroidBody = asteroidBodies[i];
+  for (const i = 0; i !== asteroidBodies.length; i++) {
+    const asteroidBody = asteroidBodies[i];
     wrap(asteroidBody);
   }
 
@@ -188,10 +188,10 @@ function addAsteroids() {
     // asteroidBody.uiRemove();
   }
 
-  for (let i = 0; i < level; i++) {
-    let shipPosition = shipBody.getPosition();
-    let x = shipPosition.x;
-    let y = shipPosition.y;
+  for (const i = 0; i < level; i++) {
+    const shipPosition = shipBody.getPosition();
+    const x = shipPosition.x;
+    const y = shipPosition.y;
 
     // Aviod the ship!
     while (Math.abs(x - shipPosition.x) < asteroidRadius * 2
@@ -200,9 +200,9 @@ function addAsteroids() {
       y = rand(SPACE_HEIGHT);
     }
 
-    let vx = rand(asteroidSpeed);
-    let vy = rand(asteroidSpeed);
-    let va = rand(asteroidSpeed);
+    const vx = rand(asteroidSpeed);
+    const vy = rand(asteroidSpeed);
+    const va = rand(asteroidSpeed);
 
     // Create asteroid body
     const asteroidBody = makeAsteroidBody(x, y, vx, vy, va, 0);
@@ -215,7 +215,7 @@ function asteroidLevelRadius(level) {
 }
 
 function makeAsteroidBody(x, y, vx, vy, va, level) {
-  let asteroidBody = world.createKinematicBody({
+  const asteroidBody = world.createKinematicBody({
     // mass : 10,
     position : new Vec2(x, y),
     linearVelocity : new Vec2(vx, vy),
@@ -223,11 +223,11 @@ function makeAsteroidBody(x, y, vx, vy, va, level) {
   });
   asteroidBodies.push(asteroidBody);
 
-  let radius = asteroidLevelRadius(level);
+  const radius = asteroidLevelRadius(level);
 
-  let n = 8, path = [];
-  for (let i = 0; i < n; i++) {
-    let a = i * 2 * Math.PI / n;
+  const n = 8, path = [];
+  for (const i = 0; i < n; i++) {
+    const a = i * 2 * Math.PI / n;
     const x = radius * (Math.sin(a) + rand(0.3));
     const y = radius * (Math.cos(a) + rand(0.3));
     path.push(new Vec2(x, y));
@@ -262,8 +262,8 @@ function crash(ship, asteroid) {
 }
 
 function hit(asteroidBody, bulletBody) {
-  let aidx = asteroidBodies.indexOf(asteroidBody);
-  let bidx = bulletBodies.indexOf(bulletBody);
+  const aidx = asteroidBodies.indexOf(asteroidBody);
+  const bidx = bulletBodies.indexOf(bulletBody);
   if (aidx != -1 && bidx != -1) {
 
     // Remove asteroid
@@ -289,18 +289,18 @@ function hit(asteroidBody, bulletBody) {
 
 function splitAsteroid(parent) {
   if (parent.level < 4) {
-    let angleDisturb = Math.PI / 2 * Math.random();
-    for (let i = 0; i < 4; i++) {
-      let angle = Math.PI / 2 * i + angleDisturb;
+    const angleDisturb = Math.PI / 2 * Math.random();
+    for (const i = 0; i < 4; i++) {
+      const angle = Math.PI / 2 * i + angleDisturb;
 
-      let r = asteroidLevelRadius(0) - asteroidLevelRadius(parent.level);
-      let sp = parent.getWorldPoint(new Vec2(r * Math.cos(angle), r * Math.sin(angle)));
+      const r = asteroidLevelRadius(0) - asteroidLevelRadius(parent.level);
+      const sp = parent.getWorldPoint(new Vec2(r * Math.cos(angle), r * Math.sin(angle)));
 
-      let vx = rand(asteroidSpeed);
-      let vy = rand(asteroidSpeed);
-      let va = rand(asteroidSpeed);
+      const vx = rand(asteroidSpeed);
+      const vy = rand(asteroidSpeed);
+      const va = rand(asteroidSpeed);
 
-      let child = makeAsteroidBody(sp.x, sp.y, vx, vy, va, parent.level);
+      const child = makeAsteroidBody(sp.x, sp.y, vx, vy, va, parent.level);
       child.level = parent.level + 1;
       child.setAngle(rand() * Math.PI);
     }
@@ -309,7 +309,7 @@ function splitAsteroid(parent) {
 
 // If the body is out of space bounds, wrap it to the other side
 function wrap(body) {
-  let p = body.getPosition();
+  const p = body.getPosition();
   p.x = wrapNumber(p.x, -SPACE_WIDTH / 2, SPACE_WIDTH / 2);
   p.y = wrapNumber(p.y, -SPACE_HEIGHT / 2, SPACE_HEIGHT / 2);
   body.setPosition(p);

@@ -9,3 +9,5 @@ testbed.y = 0;
 testbed.start(world);
 
 testbed.info('This is a template, update the code and implement something here!');
+
+export {}
