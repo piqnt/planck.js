@@ -145,7 +145,7 @@ function Actor() {
   this.proxyId;
 }
 
-function getRandomAABB(aabb) {
+function getRandomAABB(aabb: planck.AABB) {
   const w = new Vec2(2.0 * proxyExtent, 2.0 * proxyExtent);
   // aabb.lowerBound.x = -proxyExtent;
   // aabb.lowerBound.y = -proxyExtent + worldExtent;
@@ -154,7 +154,7 @@ function getRandomAABB(aabb) {
   aabb.upperBound = Vec2.add(w, aabb.lowerBound);
 }
 
-function moveAABB(aabb) {
+function moveAABB(aabb: planck.AABB) {
   const d = new Vec2(Math.random(-0.5, 0.5), Math.random(-0.5, 0.5));
   // d.x = 2.0;
   // d.y = 0.0;
@@ -166,7 +166,7 @@ function moveAABB(aabb) {
   const max = new Vec2(worldExtent, 2.0 * worldExtent);
 
   /// NEED TO FIX THIS
-  const c = Vec2.clamp(c0, min, max);
+  const c = Vec2.clampVec2(c0, min, max);
 
   aabb.lowerBound.add(c).sub(c0);
   aabb.upperBound.add(c).sub(c0);
