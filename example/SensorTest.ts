@@ -22,21 +22,22 @@
  */
 
 // This is used to test sensor shapes.
+import planck from "../src/main";
 
 const { World, Vec2, Circle, Box, Edge, Testbed } = planck;
 
-let world = new World(new Vec2(0, -10));
+const world = new World(new Vec2(0, -10));
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
-let COUNT = 7;
+const COUNT = 7;
 
-let sensor;
-let bodies = [];
-let touching = [];
+let sensor: planck.Fixture;
+const bodies = [];
+const touching = [];
 
-let ground = world.createBody();
+const ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
 if (0) {
@@ -44,7 +45,6 @@ if (0) {
     shape: new Box(10.0, 2.0, new Vec2(0.0, 20.0), 0.0),
     isSensor: true,
   });
-
 } else {
   sensor = ground.createFixture({
     shape: new Circle(new Vec2(0.0, 10.0), 5.0),
@@ -52,10 +52,10 @@ if (0) {
   });
 }
 
-let circle = new Circle(1.0);
+const circle = new Circle(1.0);
 
 for (let i = 0; i < COUNT; ++i) {
-  touching[i] = { touching : false };
+  touching[i] = { touching: false };
 
   bodies[i] = world.createDynamicBody(new Vec2(-10.0 + 3.0 * i, 20.0));
   bodies[i].setUserData(touching[i]);
@@ -63,19 +63,19 @@ for (let i = 0; i < COUNT; ++i) {
 }
 
 // Implement contact listener.
-world.on('begin-contact', function(contact) {
-  let fixtureA = contact.getFixtureA();
-  let fixtureB = contact.getFixtureB();
+world.on("begin-contact", function (contact) {
+  const fixtureA = contact.getFixtureA();
+  const fixtureB = contact.getFixtureB();
 
   if (fixtureA === sensor) {
-    let userData = fixtureB.getBody().getUserData();
+    const userData = fixtureB.getBody().getUserData() as any;
     if (userData) {
       userData.touching = true;
     }
   }
 
   if (fixtureB === sensor) {
-    let userData = fixtureA.getBody().getUserData();
+    const userData = fixtureA.getBody().getUserData() as any;
     if (userData) {
       userData.touching = true;
     }
@@ -83,26 +83,26 @@ world.on('begin-contact', function(contact) {
 });
 
 // Implement contact listener.
-world.on('end-contact', function(contact) {
-  let fixtureA = contact.getFixtureA();
-  let fixtureB = contact.getFixtureB();
+world.on("end-contact", function (contact) {
+  const fixtureA = contact.getFixtureA();
+  const fixtureB = contact.getFixtureB();
 
   if (fixtureA === sensor) {
-    let userData = fixtureB.getBody().getUserData();
+    const userData = fixtureB.getBody().getUserData() as any;
     if (userData) {
       userData.touching = false;
     }
   }
 
   if (fixtureB === sensor) {
-    let userData = fixtureA.getBody().getUserData();
+    const userData = fixtureA.getBody().getUserData() as any;
     if (userData) {
       userData.touching = false;
     }
   }
 });
 
-testbed.step = function() {
+testbed.step = function () {
   // Traverse the contact results. Apply a force on shapes
   // that overlap the sensor.
   for (let i = 0; i < COUNT; ++i) {
@@ -110,21 +110,23 @@ testbed.step = function() {
       continue;
     }
 
-    let body = bodies[i];
-    let ground = sensor.getBody();
+    const body = bodies[i];
+    const ground = sensor.getBody();
 
-    let circle = sensor.getShape();
-    let center = ground.getWorldPoint(circle.getCenter());
+    const circle = sensor.getShape();
 
-    let position = body.getPosition();
+    /// NEED TO FIX THIS
+    const center = ground.getWorldPoint(circle.getCenter());
 
-    let d = Vec2.sub(center, position);
+    const position = body.getPosition();
+
+    const d = Vec2.sub(center, position);
     if (d.lengthSquared() < 1e-18) {
       continue;
     }
 
     d.normalize();
-    let F = Vec2.mul(d, 100.0);
+    const F = Vec2.mul(d, 100.0);
     body.applyForce(F, position, false);
   }
 };
