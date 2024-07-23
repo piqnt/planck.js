@@ -21,26 +21,43 @@
  * SOFTWARE.
  */
 
-const { Vec2, Transform, World, Settings, ShapeCastInput, ShapeCastOutput, ShapeCast, DistanceInput, DistanceOutput, Distance, SimplexCache, Testbed } = planck;
+import planck from "../src/main";
 
-let world = new World();
+const {
+  Vec2,
+  Transform,
+  World,
+  Settings,
+  ShapeCastInput,
+  ShapeCastOutput,
+  ShapeCast,
+  DistanceInput,
+  DistanceOutput,
+  Distance,
+  SimplexCache,
+  Testbed,
+} = planck;
+
+const world = new World();
 
 const testbed = Testbed.mount();
 testbed.width = 40;
 testbed.height = 40;
 testbed.start(world);
 
-const vAs = new Array(3).fill().map(() => Vec2.zero());
-let countA;
-let radiusA;
+const vAs = new Array(3).fill(null).map(() => Vec2.zero());
+let countA: number;
+let radiusA: number;
 
-const vBs = new Array(Settings.maxPolygonVertices).fill().map(() => Vec2.zero());
-let countB;
-let radiusB;
+const vBs = new Array(Settings.maxPolygonVertices)
+  .fill(null)
+  .map(() => Vec2.zero());
+let countB: number;
+let radiusB: number;
 
-let transformA;
-let transformB;
-let translationB;
+let transformA: planck.Transform;
+let transformB: planck.Transform;
+let translationB: planck.Vec2;
 
 if (true) {
   vAs[0].set(-0.5, 1.0);
@@ -88,7 +105,7 @@ if (true) {
   translationB = new Vec2(0.0, 0.0399999991);
 }
 
-testbed.step = function() {
+testbed.step = function () {
   const transformB = Transform.identity();
 
   const input = new ShapeCastInput();
@@ -116,7 +133,7 @@ testbed.step = function() {
   const simplexCache = new SimplexCache();
   simplexCache.count = 0;
   const distanceOutput = new DistanceOutput();
-  
+
   Distance(distanceOutput, simplexCache, distanceInput);
 
   testbed.status({
@@ -134,7 +151,10 @@ testbed.step = function() {
   if (countA == 1) {
     testbed.drawCircle(vertices[0], radiusA, testbed.color(0.9, 0.9, 0.9));
   } else {
-    testbed.drawPolygon(vertices.slice(0, countA), testbed.color(0.9, 0.9, 0.9));
+    testbed.drawPolygon(
+      vertices.slice(0, countA),
+      testbed.color(0.9, 0.9, 0.9)
+    );
   }
 
   for (let i = 0; i < countB; ++i) {
@@ -143,7 +163,10 @@ testbed.step = function() {
   if (countB == 1) {
     testbed.drawCircle(vertices[0], radiusB, testbed.color(0.5, 0.9, 0.5));
   } else {
-    testbed.drawPolygon(vertices.slice(0, countB), testbed.color(0.5, 0.9, 0.5));
+    testbed.drawPolygon(
+      vertices.slice(0, countB),
+      testbed.color(0.5, 0.9, 0.5)
+    );
   }
 
   for (let i = 0; i < countB; ++i) {
@@ -152,7 +175,10 @@ testbed.step = function() {
   if (countB == 1) {
     testbed.drawCircle(vertices[0], radiusB, testbed.color(0.5, 0.7, 0.9));
   } else {
-    testbed.drawPolygon(vertices.slice(0, countB), testbed.color(0.5, 0.7, 0.9));
+    testbed.drawPolygon(
+      vertices.slice(0, countB),
+      testbed.color(0.5, 0.7, 0.9)
+    );
   }
 
   if (hit) {
