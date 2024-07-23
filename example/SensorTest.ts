@@ -113,7 +113,7 @@ testbed.step = function () {
     const body = bodies[i];
     const ground = sensor.getBody();
 
-    const circle = sensor.getShape();
+    const circle = sensor.getShape() as planck.CircleShape;
 
     /// NEED TO FIX THIS
     const center = ground.getWorldPoint(circle.getCenter());

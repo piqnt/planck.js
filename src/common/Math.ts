@@ -24,7 +24,6 @@
 
 /** @internal */ const math_random = Math.random;
 
-
 export const EPSILON = 1e-9;
 
 /** @internal @deprecated */
@@ -39,11 +38,11 @@ export const isFinite = Number.isFinite;
  * yields the next largest power of 2. For a 32-bit value:
  */
 export function nextPowerOfTwo(x: number): number {
-  x |= (x >> 1);
-  x |= (x >> 2);
-  x |= (x >> 4);
-  x |= (x >> 8);
-  x |= (x >> 16);
+  x |= x >> 1;
+  x |= x >> 2;
+  x |= x >> 4;
+  x |= x >> 8;
+  x |= x >> 16;
   return x + 1;
 }
 
@@ -54,10 +53,10 @@ export function isPowerOfTwo(x: number): boolean {
 
 /** @deprecated */
 export function mod(num: number, min?: number, max?: number): number {
-  if (typeof min === 'undefined') {
+  if (typeof min === "undefined") {
     max = 1;
     min = 0;
-  } else if (typeof max === 'undefined') {
+  } else if (typeof max === "undefined") {
     max = min;
     min = 0;
   }
@@ -91,10 +90,10 @@ export function clamp(num: number, min: number, max: number): number {
  * If one arg is passed between 0 to 1.
  */
 export function random(min?: number, max?: number): number {
-  if (typeof min === 'undefined') {
+  if (typeof min === "undefined") {
     max = 1;
     min = 0;
-  } else if (typeof max === 'undefined') {
+  } else if (typeof max === "undefined") {
     max = min;
     min = 0;
   }

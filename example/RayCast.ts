@@ -347,28 +347,28 @@ testbed.step = function () {
     angle += (0.25 * Math.PI) / 180.0;
   }
 
-  // if (false) {
-  //   // This case was failing.
-  //   const shape = new Box(22.875, 3.0);
+  if (false) {
+    // This case was failing.
+    const shape = new Box(22.875, 3.0);
 
-  //   const input: any = {}; // RayCastInput
-  //   input.p1 = new Vec2(10.2725, 1.71372);
-  //   input.p2 = new Vec2(10.2353, 2.21807);
-  //   // input.maxFraction = 0.567623;
-  //   input.maxFraction = 0.56762173;
+    const input: planck.RayCastInput = {} as any; // RayCastInput
+    input.p1 = new Vec2(10.2725, 1.71372);
+    input.p2 = new Vec2(10.2353, 2.21807);
+    // input.maxFraction = 0.567623;
+    input.maxFraction = 0.56762173;
 
-  //   const xf = new Transform(new Vec2(23.0, 5.0));
+    const xf = new Transform(new Vec2(23.0, 5.0));
 
-  //   const output = {}; // RayCastOutput
-  //   let hit = shape.rayCast(output, input, xf);
-  //   hit = false;
+    const output: planck.RayCastOutput = {} as any; // RayCastOutput
+    let hit = shape.rayCast(output, input, xf, 0);
+    hit = false;
 
-  //   const color = testbed.color(1.0, 1.0, 1.0);
-  //   const vs = shape.vertices.map((v) => Transform.mul(xf, v));
+    const color = testbed.color(1.0, 1.0, 1.0);
+    const vs = shape.m_vertices.map((v: planck.Vec2) => Transform.mul(xf, v));
 
-  //   testbed.drawPolygon(vs, color);
-  //   testbed.drawSegment(input.p1, input.p2, color);
-  // }
+    testbed.drawPolygon(vs, color);
+    testbed.drawSegment(input.p1, input.p2, color);
+  }
 };
 
 updateStatus();

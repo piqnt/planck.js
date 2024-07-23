@@ -22,21 +22,20 @@
  * SOFTWARE.
  */
 
-import { options } from '../util/options';
-import { Vec2, Vec2Value } from '../common/Vec2';
-import { BroadPhase } from '../collision/BroadPhase';
-import { Solver, ContactImpulse, TimeStep } from './Solver';
-import { Body, BodyDef } from './Body';
-import { Joint } from './Joint';
-import { Contact } from './Contact';
+import { options } from "../util/options";
+import { Vec2, Vec2Value } from "../common/Vec2";
+import { BroadPhase } from "../collision/BroadPhase";
+import { Solver, ContactImpulse, TimeStep } from "./Solver";
+import { Body, BodyDef } from "./Body";
+import { Joint } from "./Joint";
+import { Contact } from "./Contact";
 import { AABBValue, RayCastInput, RayCastOutput } from "../collision/AABB";
 import { Fixture, FixtureProxy } from "./Fixture";
 import { Manifold } from "../collision/Manifold";
 
-
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
-
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY =
+  typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 export interface WorldDef {
   /** [default: { x : 0, y : 0}] */
@@ -65,14 +64,14 @@ export interface WorldDef {
 }
 
 /** @internal */ const DEFAULTS: WorldDef = {
-  gravity : Vec2.zero(),
-  allowSleep : true,
-  warmStarting : true,
-  continuousPhysics : true,
-  subStepping : false,
-  blockSolve : true,
-  velocityIterations : 8,
-  positionIterations : 3
+  gravity: Vec2.zero(),
+  allowSleep: true,
+  warmStarting: true,
+  continuousPhysics: true,
+  subStepping: false,
+  blockSolve: true,
+  velocityIterations: 8,
+  positionIterations: 3,
 };
 
 /**
@@ -81,7 +80,7 @@ export interface WorldDef {
  * Called for each fixture found in the query.
  * The returned value replaces the ray-cast input maxFraction.
  * You control how the ray cast proceeds by returning a numeric/float value.
- * 
+ *
  * - `0` to terminate the ray cast
  * - `fraction` to clip the ray cast at current point
  * - `1` don't clip the ray and continue
@@ -94,7 +93,12 @@ export interface WorldDef {
  *
  * @returns A number to update the maxFraction
  */
-export type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) => number;
+export type WorldRayCastCallback = (
+  fixture: Fixture,
+  point: Vec2,
+  normal: Vec2,
+  fraction: number
+) => number;
 
 /**
  * Called for each fixture found in the query AABB. It may return `false` to terminate the query.
@@ -126,19 +130,18 @@ export class World {
 
   // TODO
   /** @internal */ _listeners: {
-    [key: string]: any[]
+    [key: string]: any[];
   };
 
   /**
    * @param def World definition or gravity vector.
    */
-  constructor(def?: WorldDef | Vec2 | null) {
+  constructor(def?: WorldDef | Vec2Value | null) {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof World)) {
       return new World(def);
     }
 
     this.s_step = new TimeStep();
-
 
     if (!def) {
       def = {};
@@ -193,7 +196,7 @@ export class World {
 
     for (let j = this.getJointList(); j; j = j.getNext()) {
       // @ts-ignore
-      if (typeof j._serialize === 'function') {
+      if (typeof j._serialize === "function") {
         joints.push(j);
       }
     }
@@ -390,9 +393,10 @@ export class World {
    * @param callback Called for each fixture found in the query AABB. It may return `false` to terminate the query.
    */
   queryAABB(aabb: AABBValue, callback: WorldAABBQueryCallback): void {
-    _ASSERT && console.assert(typeof callback === 'function');
+    _ASSERT && console.assert(typeof callback === "function");
     const broadPhase = this.m_broadPhase;
-    this.m_broadPhase.query(aabb, function(proxyId: number): boolean { // TODO GC
+    this.m_broadPhase.query(aabb, function (proxyId: number): boolean {
+      // TODO GC
       const proxy = broadPhase.getUserData(proxyId);
       return callback(proxy.fixture);
     });
@@ -407,28 +411,39 @@ export class World {
    * @param point2 The ray ending point
    * @param callback A function that is called for each fixture that is hit by the ray. You control how the ray cast proceeds by returning a numeric/float value.
    */
-  rayCast(point1: Vec2Value, point2: Vec2Value, callback: WorldRayCastCallback): void {
-    _ASSERT && console.assert(typeof callback === 'function');
+  rayCast(
+    point1: Vec2Value,
+    point2: Vec2Value,
+    callback: WorldRayCastCallback
+  ): void {
+    _ASSERT && console.assert(typeof callback === "function");
     const broadPhase = this.m_broadPhase;
 
-    this.m_broadPhase.rayCast({
-      maxFraction : 1.0,
-      p1 : point1,
-      p2 : point2
-    }, function(input: RayCastInput, proxyId: number): number { // TODO GC
-      const proxy = broadPhase.getUserData(proxyId);
-      const fixture = proxy.fixture;
-      const index = proxy.childIndex;
-      // @ts-ignore
-      const output: RayCastOutput = {}; // TODO GC
-      const hit = fixture.rayCast(output, input, index);
-      if (hit) {
-        const fraction = output.fraction;
-        const point = Vec2.add(Vec2.mulNumVec2((1.0 - fraction), input.p1), Vec2.mulNumVec2(fraction, input.p2));
-        return callback(fixture, point, output.normal, fraction);
+    this.m_broadPhase.rayCast(
+      {
+        maxFraction: 1.0,
+        p1: point1,
+        p2: point2,
+      },
+      function (input: RayCastInput, proxyId: number): number {
+        // TODO GC
+        const proxy = broadPhase.getUserData(proxyId);
+        const fixture = proxy.fixture;
+        const index = proxy.childIndex;
+        // @ts-ignore
+        const output: RayCastOutput = {}; // TODO GC
+        const hit = fixture.rayCast(output, input, index);
+        if (hit) {
+          const fraction = output.fraction;
+          const point = Vec2.add(
+            Vec2.mulNumVec2(1.0 - fraction, input.p1),
+            Vec2.mulNumVec2(fraction, input.p2)
+          );
+          return callback(fixture, point, output.normal, fraction);
+        }
+        return input.maxFraction;
       }
-      return input.maxFraction;
-    });
+    );
   }
 
   /**
@@ -520,8 +535,8 @@ export class World {
     let def: BodyDef = {};
     if (!arg1) {
     } else if (Vec2.isValid(arg1)) {
-      def = { position : arg1, angle: arg2 };
-    } else if (typeof arg1 === 'object') {
+      def = { position: arg1, angle: arg2 };
+    } else if (typeof arg1 === "object") {
       def = arg1;
     }
 
@@ -537,11 +552,11 @@ export class World {
     let def: BodyDef = {};
     if (!arg1) {
     } else if (Vec2.isValid(arg1)) {
-      def = { position : arg1, angle: arg2 };
-    } else if (typeof arg1 === 'object') {
+      def = { position: arg1, angle: arg2 };
+    } else if (typeof arg1 === "object") {
       def = arg1;
     }
-    def.type = 'dynamic';
+    def.type = "dynamic";
     return this.createBody(def);
   }
 
@@ -552,11 +567,11 @@ export class World {
     let def: BodyDef = {};
     if (!arg1) {
     } else if (Vec2.isValid(arg1)) {
-      def = { position : arg1, angle: arg2 };
-    } else if (typeof arg1 === 'object') {
+      def = { position: arg1, angle: arg2 };
+    } else if (typeof arg1 === "object") {
       def = arg1;
     }
-    def.type = 'kinematic';
+    def.type = "kinematic";
     return this.createBody(def);
   }
 
@@ -585,7 +600,7 @@ export class World {
       const je0 = je;
       je = je.next;
 
-      this.publish('remove-joint', je0.joint);
+      this.publish("remove-joint", je0.joint);
       this.destroyJoint(je0.joint);
 
       b.m_jointList = je;
@@ -610,7 +625,7 @@ export class World {
       const f0 = f;
       f = f.m_next;
 
-      this.publish('remove-fixture', f0);
+      this.publish("remove-fixture", f0);
       f0.destroyProxies(this.m_broadPhase);
 
       b.m_fixtureList = f;
@@ -634,7 +649,7 @@ export class World {
 
     --this.m_bodyCount;
 
-    this.publish('remove-body', b);
+    this.publish("remove-body", b);
 
     return true;
   }
@@ -775,7 +790,7 @@ export class World {
       }
     }
 
-    this.publish('remove-joint', joint);
+    this.publish("remove-joint", joint);
   }
 
   /** @internal */
@@ -789,8 +804,12 @@ export class World {
    *
    * @param timeStep Time step, this should not vary.
    */
-  step(timeStep: number, velocityIterations?: number, positionIterations?: number): void {
-    this.publish('pre-step', timeStep);
+  step(
+    timeStep: number,
+    velocityIterations?: number,
+    positionIterations?: number
+  ): void {
+    this.publish("pre-step", timeStep);
 
     if ((velocityIterations | 0) !== velocityIterations) {
       // TODO: remove this in future
@@ -850,7 +869,7 @@ export class World {
 
     this.m_locked = false;
 
-    this.publish('post-step', timeStep);
+    this.publish("post-step", timeStep);
   }
 
   /**
@@ -859,7 +878,8 @@ export class World {
    */
   findNewContacts(): void {
     this.m_broadPhase.updatePairs(
-      (proxyA: FixtureProxy, proxyB: FixtureProxy) => this.createContact(proxyA, proxyB)
+      (proxyA: FixtureProxy, proxyB: FixtureProxy) =>
+        this.createContact(proxyA, proxyB)
     );
   }
 
@@ -939,7 +959,7 @@ export class World {
     // Update awake contacts.
     let c: Contact;
     let next_c = this.m_contactList;
-    while (c = next_c) {
+    while ((c = next_c)) {
       next_c = c.getNext();
       const fixtureA = c.getFixtureA();
       const fixtureB = c.getFixtureB();
@@ -1005,7 +1025,6 @@ export class World {
     --this.m_contactCount;
   }
 
-
   /**
    * Called when two fixtures begin to touch.
    *
@@ -1019,7 +1038,7 @@ export class World {
    *
    * Warning: You cannot create/destroy world entities inside these callbacks.
    */
-  on(name: 'begin-contact', listener: (contact: Contact) => void): World;
+  on(name: "begin-contact", listener: (contact: Contact) => void): World;
   /**
    * Called when two fixtures cease to touch.
    *
@@ -1033,7 +1052,7 @@ export class World {
    *
    * Warning: You cannot create/destroy world entities inside these callbacks.
    */
-  on(name: 'end-contact', listener: (contact: Contact) => void): World;
+  on(name: "end-contact", listener: (contact: Contact) => void): World;
   /**
    * This is called after a contact is updated. This allows you to inspect a
    * contact before it goes to the solver. If you are careful, you can modify the
@@ -1046,7 +1065,10 @@ export class World {
    *
    * Warning: You cannot create/destroy world entities inside these callbacks.
    */
-  on(name: 'pre-solve', listener: (contact: Contact, oldManifold: Manifold) => void): World;
+  on(
+    name: "pre-solve",
+    listener: (contact: Contact, oldManifold: Manifold) => void
+  ): World;
   /**
    * This lets you inspect a contact after the solver is finished. This is useful
    * for inspecting impulses. Note: the contact manifold does not include time of
@@ -1056,19 +1078,22 @@ export class World {
    *
    * Warning: You cannot create/destroy world entities inside these callbacks.
    */
-  on(name: 'post-solve', listener: (contact: Contact, impulse: ContactImpulse) => void): World;
+  on(
+    name: "post-solve",
+    listener: (contact: Contact, impulse: ContactImpulse) => void
+  ): World;
   /** Listener is called whenever a body is removed. */
-  on(name: 'remove-body', listener: (body: Body) => void): World;
+  on(name: "remove-body", listener: (body: Body) => void): World;
   /** Listener is called whenever a joint is removed implicitly or explicitly. */
-  on(name: 'remove-joint', listener: (joint: Joint) => void): World;
+  on(name: "remove-joint", listener: (joint: Joint) => void): World;
   /** Listener is called whenever a fixture is removed implicitly or explicitly. */
-  on(name: 'remove-fixture', listener: (fixture: Fixture) => void): World;
+  on(name: "remove-fixture", listener: (fixture: Fixture) => void): World;
   /**
    * Register an event listener.
    */
   // tslint:disable-next-line:typedef
   on(name, listener) {
-    if (typeof name !== 'string' || typeof listener !== 'function') {
+    if (typeof name !== "string" || typeof listener !== "function") {
       return this;
     }
     if (!this._listeners) {
@@ -1081,19 +1106,25 @@ export class World {
     return this;
   }
 
-  off(name: 'begin-contact', listener: (contact: Contact) => void): World;
-  off(name: 'end-contact', listener: (contact: Contact) => void): World;
-  off(name: 'pre-solve', listener: (contact: Contact, oldManifold: Manifold) => void): World;
-  off(name: 'post-solve', listener: (contact: Contact, impulse: ContactImpulse) => void): World;
-  off(name: 'remove-body', listener: (body: Body) => void): World;
-  off(name: 'remove-joint', listener: (joint: Joint) => void): World;
-  off(name: 'remove-fixture', listener: (fixture: Fixture) => void): World;
+  off(name: "begin-contact", listener: (contact: Contact) => void): World;
+  off(name: "end-contact", listener: (contact: Contact) => void): World;
+  off(
+    name: "pre-solve",
+    listener: (contact: Contact, oldManifold: Manifold) => void
+  ): World;
+  off(
+    name: "post-solve",
+    listener: (contact: Contact, impulse: ContactImpulse) => void
+  ): World;
+  off(name: "remove-body", listener: (body: Body) => void): World;
+  off(name: "remove-joint", listener: (joint: Joint) => void): World;
+  off(name: "remove-fixture", listener: (fixture: Fixture) => void): World;
   /**
    * Remove an event listener.
    */
   // tslint:disable-next-line:typedef
   off(name, listener) {
-    if (typeof name !== 'string' || typeof listener !== 'function') {
+    if (typeof name !== "string" || typeof listener !== "function") {
       return this;
     }
     const listeners = this._listeners && this._listeners[name];
@@ -1120,22 +1151,22 @@ export class World {
 
   /** @internal */
   beginContact(contact: Contact): void {
-    this.publish('begin-contact', contact);
+    this.publish("begin-contact", contact);
   }
 
   /** @internal */
   endContact(contact: Contact): void {
-    this.publish('end-contact', contact);
+    this.publish("end-contact", contact);
   }
 
   /** @internal */
   preSolve(contact: Contact, oldManifold: Manifold): void {
-    this.publish('pre-solve', contact, oldManifold);
+    this.publish("pre-solve", contact, oldManifold);
   }
 
   /** @internal */
   postSolve(contact: Contact, impulse: ContactImpulse): void {
-    this.publish('post-solve', contact, impulse);
+    this.publish("post-solve", contact, impulse);
   }
 
   /**

@@ -165,7 +165,6 @@ function moveAABB(aabb: planck.AABB) {
   const min = new Vec2(-worldExtent, 0.0);
   const max = new Vec2(worldExtent, 2.0 * worldExtent);
 
-  /// NEED TO FIX THIS
   const c = Vec2.clampVec2(c0, min, max);
 
   aabb.lowerBound.add(c).sub(c0);
