@@ -67,9 +67,8 @@ testbed.step = function () {
   testbed.status("Distance", output.distance);
   testbed.status("Iterations", output.iterations);
 
-  /// NEED TO FIX THIS
-  bodyA.setTransform(transformA);
-  bodyB.setTransform(transformB);
+  bodyA.setTransform(transformA.p, transformA.q.getAngle());
+  bodyB.setTransform(transformB.p, transformB.q.getAngle());
 
   const x1 = output.pointA;
   const x2 = output.pointB;
