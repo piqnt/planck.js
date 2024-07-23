@@ -270,7 +270,7 @@ ___
 ▸ **setFriction**(`friction`: number): *void*
 
 Override the default friction mixture. You can call this in
-ContactListener.preSolve. This value persists until set or reset.
+"pre-solve" callback. This value persists until set or reset.
 
 **Parameters:**
 
@@ -287,7 +287,7 @@ ___
 ▸ **setRestitution**(`restitution`: number): *void*
 
 Override the default restitution mixture. You can call this in
-ContactListener.preSolve. The value persists until you set or reset.
+"pre-solve" callback. The value persists until you set or reset.
 
 **Parameters:**
 

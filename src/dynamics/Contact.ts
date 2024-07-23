@@ -458,7 +458,7 @@ export class Contact {
 
   /**
    * Override the default friction mixture. You can call this in
-   * ContactListener.preSolve. This value persists until set or reset.
+   * "pre-solve" callback. This value persists until set or reset.
    */
   setFriction(friction: number): void {
     this.m_friction = friction;
@@ -483,7 +483,7 @@ export class Contact {
 
   /**
    * Override the default restitution mixture. You can call this in
-   * ContactListener.preSolve. The value persists until you set or reset.
+   * "pre-solve" callback. The value persists until you set or reset.
    */
   setRestitution(restitution: number): void {
     this.m_restitution = restitution;

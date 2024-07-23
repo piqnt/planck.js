@@ -178,16 +178,15 @@ so you will need to disable the contact every time-step. The pre-solve
 event may be fired multiple times per time-step per contact due to
 continuous collision detection.
 
-```js
-void PreSolve(Contact* contact, Manifold* oldManifold)
-{
+```ts
+world.on('pre-solve', function(contact: Contact, oldManifold: Manifold) {
   WorldManifold worldManifold;
   contact.getWorldManifold(&worldManifold);
   if (worldManifold.normal.y < -0.5)
   {
     contact.setEnabled(false);
   }
-}
+});
 ```
 
 The pre-solve event is also a good place to determine the point state
