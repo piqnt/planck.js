@@ -1,19 +1,19 @@
-import { defineConfig } from 'vocs';
+import { defineConfig } from "vocs";
 
 export default defineConfig({
-  title: 'Planck.js',
-  rootDir: '.',
+  title: "Planck.js",
+  rootDir: ".",
   basePath: "/planck.js/docs/",
   baseUrl: "/planck.js/docs/",
-  topNav: [ 
-    { text: 'API Reference', link: '/api/'},
-    { text: 'GitHub', link: 'https://github.com/piqnt/planck.js/'},
-    { text: 'Discord', link: 'https://discord.gg/znjh6J7'},
+  topNav: [
+    { text: "API Reference", link: "/api/" },
+    { text: "GitHub", link: "https://github.com/piqnt/planck.js/" },
+    { text: "Discord", link: "https://discord.gg/znjh6J7" },
   ],
   sidebar: [
     { link: "/", text: "Introduction" },
     {
-      text: 'Get Started',
+      text: "Get Started",
       collapsed: true,
       items: [
         { link: "/run-your-code", text: "Run Your Code" },
@@ -24,12 +24,18 @@ export default defineConfig({
     },
 
     {
-      text: 'API Conventions',
+      text: "API Conventions",
       collapsed: true,
       items: [
         { link: "/api-conventions/units", text: "Units" },
-        { link: "/api-conventions/factories-and-definitions", text: "Factories and Definitions" },
-        { link: "/api-conventions/implicit-destruction", text: "Implicit Destruction" },
+        {
+          link: "/api-conventions/factories-and-definitions",
+          text: "Factories and Definitions",
+        },
+        {
+          link: "/api-conventions/implicit-destruction",
+          text: "Implicit Destruction",
+        },
         { link: "/api-conventions/user-data", text: "User Data" },
       ],
     },
@@ -39,7 +45,7 @@ export default defineConfig({
     { link: "/fixture", text: "Fixture" },
 
     {
-      text: 'Shape',
+      text: "Shape",
       collapsed: true,
       link: "/shape",
       items: [
@@ -52,7 +58,7 @@ export default defineConfig({
     },
 
     {
-      text: 'Joint',
+      text: "Joint",
       collapsed: true,
       link: "/joint",
       items: [
@@ -84,4 +90,5 @@ export default defineConfig({
     { link: "/references-resources", text: "References & Resources" },
     { link: "/credits", text: "Credits & License" },
   ],
-})
+  head: () => <script src="/plank.js/docs/messenger.js" />,
+});
