@@ -84,4 +84,5 @@ export default defineConfig({
     { link: "/references-resources", text: "References & Resources" },
     { link: "/credits", text: "Credits & License" },
   ],
+  head: () => <script src="/plank.js/docs/messenger.js" />,
 })
