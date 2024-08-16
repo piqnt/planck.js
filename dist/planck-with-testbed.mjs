@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.4
+ * Planck.js v1.0.5
  * @license The MIT license
  * @copyright Copyright (c) 2023 Erin Catto, Ali Shakiba
  *
@@ -7304,7 +7304,7 @@ var Contact = /** @class */ (function () {
     };
     /**
      * Override the default friction mixture. You can call this in
-     * ContactListener.preSolve. This value persists until set or reset.
+     * "pre-solve" callback. This value persists until set or reset.
      */
     Contact.prototype.setFriction = function (friction) {
         this.m_friction = friction;
@@ -7327,7 +7327,7 @@ var Contact = /** @class */ (function () {
     };
     /**
      * Override the default restitution mixture. You can call this in
-     * ContactListener.preSolve. The value persists until you set or reset.
+     * "pre-solve" callback. The value persists until you set or reset.
      */
     Contact.prototype.setRestitution = function (restitution) {
         this.m_restitution = restitution;
@@ -16110,6 +16110,30 @@ var internal = {
     stats: stats$1
 };
 
+/**
+ * Stage.js 1.0.0-alpha.3
+ *
+ * @copyright Copyright (c) 2024 Ali Shakiba
+ * @license The MIT License (MIT)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 const math_random = Math.random;
 const math_sqrt$1 = Math.sqrt;
 function random(min, max) {
@@ -16673,7 +16697,7 @@ const NO_TEXTURE = new class extends Texture {
 const NO_SELECTION = new TextureSelection(NO_TEXTURE);
 const ATLAS_MEMO_BY_NAME = {};
 const ATLAS_ARRAY = [];
-const atlas = async function(def) {
+async function atlas(def) {
   let atlas2;
   if (def instanceof Atlas) {
     atlas2 = def;
@@ -16686,8 +16710,8 @@ const atlas = async function(def) {
   ATLAS_ARRAY.push(atlas2);
   await atlas2.load();
   return atlas2;
-};
-const texture = function(query) {
+}
+function texture(query) {
   if ("string" !== typeof query) {
     return new TextureSelection(query);
   }
@@ -16714,7 +16738,7 @@ const texture = function(query) {
     result = NO_SELECTION;
   }
   return result;
-};
+}
 class ResizableTexture extends Texture {
   constructor(source, mode) {
     super();
@@ -17619,30 +17643,30 @@ function assertType(obj) {
   }
   throw "Invalid node: " + obj;
 }
-const create = function() {
+function create() {
   return layout();
-};
-const layer = function() {
+}
+function layer() {
   return maximize();
-};
-const box = function() {
+}
+function box() {
   return minimize();
-};
-const layout = function() {
+}
+function layout() {
   return new Node();
-};
-const row = function(align) {
+}
+function row(align) {
   return layout().row(align).label("Row");
-};
-const column = function(align) {
+}
+function column(align) {
   return layout().column(align).label("Column");
-};
-const minimize = function() {
+}
+function minimize() {
   return layout().minimize().label("Minimize");
-};
-const maximize = function() {
+}
+function maximize() {
   return layout().maximize().label("Maximize");
-};
+}
 class Node {
   constructor() {
     this.uid = "node:" + uid();
@@ -18476,14 +18500,16 @@ class Node {
     return this;
   }
 }
-const sprite = function(frame) {
+function sprite(frame) {
   const sprite2 = new Sprite();
   frame && sprite2.texture(frame);
   return sprite2;
-};
+}
 class Sprite extends Node {
   constructor() {
     super();
+    this._tiled = false;
+    this._stretched = false;
     this.prerenderContext = {};
     this.label("Sprite");
     this._textures = [];
@@ -18494,7 +18520,13 @@ class Sprite extends Node {
     if (this._image) {
       this.pin("width", this._image.getWidth());
       this.pin("height", this._image.getHeight());
-      this._textures[0] = new PipeTexture(this._image);
+      if (this._tiled) {
+        this._textures[0] = new ResizableTexture(this._image, "tile");
+      } else if (this._stretched) {
+        this._textures[0] = new ResizableTexture(this._image, "stretch");
+      } else {
+        this._textures[0] = new PipeTexture(this._image);
+      }
       this._textures.length = 1;
     } else {
       this.pin("width", 0);
@@ -18508,11 +18540,13 @@ class Sprite extends Node {
     return this.texture(frame);
   }
   tile(inner = false) {
+    this._tiled = true;
     const texture2 = new ResizableTexture(this._image, "tile");
     this._textures[0] = texture2;
     return this;
   }
   stretch(inner = false) {
+    this._stretched = true;
     const texture2 = new ResizableTexture(this._image, "stretch");
     this._textures[0] = texture2;
     return this;
@@ -18880,22 +18914,22 @@ const Mouse = {
   CANCEL: "touchcancel mousecancel"
 };
 const ROOTS = [];
-const pause = function() {
+function pause() {
   for (let i = ROOTS.length - 1; i >= 0; i--) {
     ROOTS[i].pause();
   }
-};
-const resume = function() {
+}
+function resume() {
   for (let i = ROOTS.length - 1; i >= 0; i--) {
     ROOTS[i].resume();
   }
-};
-const mount = function(configs = {}) {
+}
+function mount(configs = {}) {
   const root = new Root();
   root.mount(configs);
   root.pointer = new Pointer().mount(root, root.dom);
   return root;
-};
+}
 class Root extends Node {
   constructor() {
     super();
@@ -19139,12 +19173,12 @@ class Root extends Node {
     return this;
   }
 }
-const anim = function(frames, fps) {
+function anim(frames, fps) {
   const anim2 = new Anim();
   anim2.frames(frames).gotoFrame(0);
   fps && anim2.fps(fps);
   return anim2;
-};
+}
 const FPS = 15;
 class Anim extends Node {
   constructor() {
@@ -19241,10 +19275,10 @@ class Anim extends Node {
     return this;
   }
 }
-const string = function(chars) {
-  return new Str().frames(chars);
-};
-class Str extends Node {
+function monotype(chars) {
+  return new Monotype().frames(chars);
+}
+class Monotype extends Node {
   constructor() {
     super();
     this.label("String");
@@ -19304,6 +19338,8 @@ class Str extends Node {
     return this;
   }
 }
+const string = monotype;
+const Str = Monotype;
 const Stage = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   Anim,
@@ -19313,6 +19349,7 @@ const Stage = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePropert
   ImageTexture,
   Math: math,
   Matrix,
+  Monotype,
   Mouse,
   Node,
   POINTER_CANCEL,
@@ -19346,6 +19383,7 @@ const Stage = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePropert
   maximize,
   memoizeDraw,
   minimize,
+  monotype,
   mount,
   pause,
   random,

@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.4
+ * Planck.js v1.0.5
  * @license The MIT license
  * @copyright Copyright (c) 2023 Erin Catto, Ali Shakiba
  *
@@ -7304,7 +7304,7 @@ var Contact = /** @class */ (function () {
     };
     /**
      * Override the default friction mixture. You can call this in
-     * ContactListener.preSolve. This value persists until set or reset.
+     * "pre-solve" callback. This value persists until set or reset.
      */
     Contact.prototype.setFriction = function (friction) {
         this.m_friction = friction;
@@ -7327,7 +7327,7 @@ var Contact = /** @class */ (function () {
     };
     /**
      * Override the default restitution mixture. You can call this in
-     * ContactListener.preSolve. The value persists until you set or reset.
+     * "pre-solve" callback. The value persists until you set or reset.
      */
     Contact.prototype.setRestitution = function (restitution) {
         this.m_restitution = restitution;

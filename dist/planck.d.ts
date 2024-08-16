@@ -1391,7 +1391,7 @@ declare class Contact {
     flagForFiltering(): void;
     /**
      * Override the default friction mixture. You can call this in
-     * ContactListener.preSolve. This value persists until set or reset.
+     * "pre-solve" callback. This value persists until set or reset.
      */
     setFriction(friction: number): void;
     /**
@@ -1404,7 +1404,7 @@ declare class Contact {
     resetFriction(): void;
     /**
      * Override the default restitution mixture. You can call this in
-     * ContactListener.preSolve. The value persists until you set or reset.
+     * "pre-solve" callback. The value persists until you set or reset.
      */
     setRestitution(restitution: number): void;
     /**
@@ -2104,8 +2104,8 @@ declare class World {
      * provided so that you can detect changes. Note: this is called only for awake
      * bodies. Note: this is called even when the number of contact points is zero.
      * Note: this is not called for sensors. Note: if you set the number of contact
-     * points to zero, you will not get an endContact callback. However, you may get
-     * a beginContact callback the next step.
+     * points to zero, you will not get an end-contact callback. However, you may get
+     * a begin-contact callback the next step.
      *
      * Warning: You cannot create/destroy world entities inside these callbacks.
      */
@@ -7696,7 +7696,7 @@ declare namespace planck {
         flagForFiltering(): void;
         /**
          * Override the default friction mixture. You can call this in
-         * ContactListener.preSolve. This value persists until set or reset.
+         * "pre-solve" callback. This value persists until set or reset.
          */
         setFriction(friction: number): void;
         /**
@@ -7709,7 +7709,7 @@ declare namespace planck {
         resetFriction(): void;
         /**
          * Override the default restitution mixture. You can call this in
-         * ContactListener.preSolve. The value persists until you set or reset.
+         * "pre-solve" callback. The value persists until you set or reset.
          */
         setRestitution(restitution: number): void;
         /**
@@ -8430,8 +8430,8 @@ declare namespace planck {
          * provided so that you can detect changes. Note: this is called only for awake
          * bodies. Note: this is called even when the number of contact points is zero.
          * Note: this is not called for sensors. Note: if you set the number of contact
-         * points to zero, you will not get an endContact callback. However, you may get
-         * a beginContact callback the next step.
+         * points to zero, you will not get an end-contact callback. However, you may get
+         * a begin-contact callback the next step.
          *
          * Warning: You cannot create/destroy world entities inside these callbacks.
          */
