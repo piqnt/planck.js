@@ -22,18 +22,17 @@
  * SOFTWARE.
  */
 
-import * as matrix from '../common/Matrix';
-import { options } from '../util/options';
-import { Vec2Value } from '../common/Vec2';
-import { AABB, RayCastInput, RayCastOutput } from '../collision/AABB';
-import { Shape, ShapeType } from '../collision/Shape';
+import * as matrix from "../common/Matrix";
+import { options } from "../util/options";
+import { Vec2Value } from "../common/Vec2";
+import { AABB, RayCastInput, RayCastOutput } from "../collision/AABB";
+import { Shape, ShapeType } from "../collision/Shape";
 import { Body, MassData } from "./Body";
 import { BroadPhase } from "../collision/BroadPhase";
 import { TransformValue } from "../common/Transform";
-import { Style } from '../util/Testbed';
+import { Style } from "../util/Testbed";
 
-
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 /** @internal */ const synchronize_aabb1 = new AABB();
 /** @internal */ const synchronize_aabb2 = new AABB();
@@ -82,15 +81,15 @@ export interface FixtureDef extends FixtureOpt {
 }
 
 /** @internal */ const FixtureDefDefault: FixtureOpt = {
-  userData : null,
-  friction : 0.2,
-  restitution : 0.0,
-  density : 0.0,
-  isSensor : false,
+  userData: null,
+  friction: 0.2,
+  restitution: 0.0,
+  density: 0.0,
+  isSensor: false,
 
-  filterGroupIndex : 0,
-  filterCategoryBits : 0x0001,
-  filterMaskBits : 0xFFFF
+  filterGroupIndex: 0,
+  filterCategoryBits: 0x0001,
+  filterMaskBits: 0xffff,
 };
 
 /**
@@ -146,9 +145,8 @@ export class Fixture {
     if (shape.shape) {
       def = shape;
       shape = shape.shape;
-
-    } else if (typeof def === 'number') {
-      def = {density : def};
+    } else if (typeof def === "number") {
+      def = { density: def };
     }
 
     def = options(def, FixtureDefDefault);
@@ -272,10 +270,30 @@ export class Fixture {
   }
 
   /**
+   * Get a field of user data
+   * @experimental @hidden
+   */
+
+  getUserDataField(key: string): any {
+    return this.m_userData?.[key];
+  }
+
+  /**
    * Set the user data. Use this to store your application specific data.
    */
   setUserData(data: unknown): void {
     this.m_userData = data;
+  }
+
+  /**
+   * Change value of a field of user data.
+   * @experimental @hidden
+   */
+  setUserDataField(key: string, value: any): void {
+    if (this.m_userData === null) {
+      this.m_userData = {};
+    }
+    this.m_userData[key] = value;
   }
 
   /**
@@ -349,8 +367,17 @@ export class Fixture {
   /**
    * Cast a ray against this shape.
    */
-  rayCast(output: RayCastOutput, input: RayCastInput, childIndex: number): boolean {
-    return this.m_shape.rayCast(output, input, this.m_body.getTransform(), childIndex);
+  rayCast(
+    output: RayCastOutput,
+    input: RayCastInput,
+    childIndex: number
+  ): boolean {
+    return this.m_shape.rayCast(
+      output,
+      input,
+      this.m_body.getTransform(),
+      childIndex
+    );
   }
 
   /**
@@ -367,7 +394,8 @@ export class Fixture {
    * more accurate AABB, compute it using the shape and the body transform.
    */
   getAABB(childIndex: number): AABB {
-    _ASSERT && console.assert(0 <= childIndex && childIndex < this.m_proxies.length);
+    _ASSERT &&
+      console.assert(0 <= childIndex && childIndex < this.m_proxies.length);
     return this.m_proxies[childIndex].aabb;
   }
 
@@ -402,7 +430,11 @@ export class Fixture {
    * Updates this fixture proxy in broad-phase (with combined AABB of current and
    * next transformation).
    */
-  synchronize(broadPhase: BroadPhase, xf1: TransformValue, xf2: TransformValue): void {
+  synchronize(
+    broadPhase: BroadPhase,
+    xf1: TransformValue,
+    xf2: TransformValue
+  ): void {
     for (let i = 0; i < this.m_proxyCount; ++i) {
       const proxy = this.m_proxies[i];
       // Compute an AABB that covers the swept shape (may miss some rotation
@@ -423,7 +455,11 @@ export class Fixture {
    * time step when either parent body is active and awake. This automatically
    * calls refilter.
    */
-  setFilterData(filter: { groupIndex: number, categoryBits: number, maskBits: number }): void {
+  setFilterData(filter: {
+    groupIndex: number;
+    categoryBits: number;
+    maskBits: number;
+  }): void {
     this.m_filterGroupIndex = filter.groupIndex;
     this.m_filterCategoryBits = filter.categoryBits;
     this.m_filterMaskBits = filter.maskBits;
@@ -503,8 +539,10 @@ export class Fixture {
    * overlap.
    */
   shouldCollide(that: Fixture): boolean {
-
-    if (that.m_filterGroupIndex === this.m_filterGroupIndex && that.m_filterGroupIndex !== 0) {
+    if (
+      that.m_filterGroupIndex === this.m_filterGroupIndex &&
+      that.m_filterGroupIndex !== 0
+    ) {
       return that.m_filterGroupIndex > 0;
     }
 
