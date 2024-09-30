@@ -1,3 +1,4 @@
+const { ScriptTarget } = require('typescript');
 const { terser } =  require('rollup-plugin-terser');
 const license =  require('rollup-plugin-license');
 const replace =  require('@rollup/plugin-replace');
@@ -59,6 +60,12 @@ module.exports = [
     declaration: false,
   }
 ].map(options => {
+  let target = ScriptTarget.ES5;
+  let constructorFactory = true;
+  if (options.format === 'es') {
+    target = ScriptTarget.ES2015;
+    constructorFactory = false;
+  }
   const config = {
     input: options.src,
     output: {
@@ -73,9 +80,8 @@ module.exports = [
         values: {
           'ASSERT': JSON.stringify(false),
           '_ASSERT': JSON.stringify(false),
-          // we are still compiling to ES5, so we keep constructor factories until v2
-          'CONSTRUCTOR_FACTORY': JSON.stringify(true),
-          '_CONSTRUCTOR_FACTORY': JSON.stringify(true),
+          'CONSTRUCTOR_FACTORY': JSON.stringify(constructorFactory),
+          '_CONSTRUCTOR_FACTORY': JSON.stringify(constructorFactory),
           'PLANCK_VERSION': JSON.stringify(process.env.npm_package_version),
         },
       }),
@@ -84,6 +90,7 @@ module.exports = [
         sourceMap: false,
         tsconfig: resolvedConfig => ({
           ...resolvedConfig,
+          target: target,
           declaration: options.declaration,
           declarationMap: options.declaration
         }),
