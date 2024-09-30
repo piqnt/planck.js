@@ -1,6 +1,6 @@
 {
   "name": "planck",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "2D JavaScript/TypeScript physics engine for cross-platform HTML5 game development",
   "homepage": "https://github.com/piqnt/planck.js",
   "keywords": [
@@ -51,7 +51,7 @@
     "node": ">=14.0"
   },
   "peerDependencies": {
-    "stage-js": "^1.0.0-alpha.3"
+    "stage-js": "^1.0.0-alpha.5"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.13.0",

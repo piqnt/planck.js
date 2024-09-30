@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.5
+ * Planck.js v1.0.6
  * @license The MIT license
  * @copyright Copyright (c) 2023 Erin Catto, Ali Shakiba
  *
@@ -45,7 +45,7 @@ var extendStatics = function(d, b) {
     return extendStatics(d, b);
 };
 
-function __extends(d, b) {
+function __extends$a(d, b) {
     if (typeof b !== "function" && b !== null)
         throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
     extendStatics(d, b);
@@ -53,15 +53,15 @@ function __extends(d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 }
 
-var __assign = function() {
-    __assign = Object.assign || function __assign(t) {
+var __assign$1 = function() {
+    __assign$1 = Object.assign || function __assign(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
             for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
         }
         return t;
     };
-    return __assign.apply(this, arguments);
+    return __assign$1.apply(this, arguments);
 };
 
 /** @internal */
@@ -70,7 +70,7 @@ var options = function (input, defaults) {
         // tslint:disable-next-line:no-object-literal-type-assertion
         input = {};
     }
-    var output = __assign({}, input);
+    var output = __assign$1({}, input);
     // tslint:disable-next-line:no-for-in
     for (var key in defaults) {
         if (defaults.hasOwnProperty(key) && typeof input[key] === 'undefined') {
@@ -9051,7 +9051,7 @@ var Vec3 = /** @class */ (function () {
  * contact normals.
  */
 var EdgeShape = /** @class */ (function (_super) {
-    __extends(EdgeShape, _super);
+    __extends$a(EdgeShape, _super);
     function EdgeShape(v1, v2) {
         var _this = this;
         // @ts-ignore
@@ -9321,7 +9321,7 @@ var Edge = EdgeShape;
  * WARNING: The chain will not collide properly if there are self-intersections.
  */
 var ChainShape = /** @class */ (function (_super) {
-    __extends(ChainShape, _super);
+    __extends$a(ChainShape, _super);
     function ChainShape(vertices, loop) {
         var _this = this;
         // @ts-ignore
@@ -9633,7 +9633,7 @@ var Chain = ChainShape;
  * for a convex polygon. extends Shape
  */
 var PolygonShape = /** @class */ (function (_super) {
-    __extends(PolygonShape, _super);
+    __extends$a(PolygonShape, _super);
     function PolygonShape(vertices) {
         var _this = this;
         // @ts-ignore
@@ -10065,7 +10065,7 @@ var Polygon = PolygonShape;
 /** @internal */ var math_PI$5 = Math.PI;
 /** @internal */ var temp = vec2(0, 0);
 var CircleShape = /** @class */ (function (_super) {
-    __extends(CircleShape, _super);
+    __extends$a(CircleShape, _super);
     function CircleShape(a, b) {
         var _this = this;
         // @ts-ignore
@@ -10249,7 +10249,7 @@ var Circle = CircleShape;
  * distance from each other. You can view this as a massless, rigid rod.
  */
 var DistanceJoint = /** @class */ (function (_super) {
-    __extends(DistanceJoint, _super);
+    __extends$a(DistanceJoint, _super);
     function DistanceJoint(def, bodyA, bodyB, anchorA, anchorB) {
         var _this = this;
         // @ts-ignore
@@ -10310,7 +10310,7 @@ var DistanceJoint = /** @class */ (function (_super) {
     };
     /** @internal */
     DistanceJoint._deserialize = function (data, world, restore) {
-        data = __assign({}, data);
+        data = __assign$1({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new DistanceJoint(data);
@@ -10563,7 +10563,7 @@ var DistanceJoint = /** @class */ (function (_super) {
  * translational friction and angular friction.
  */
 var FrictionJoint = /** @class */ (function (_super) {
-    __extends(FrictionJoint, _super);
+    __extends$a(FrictionJoint, _super);
     function FrictionJoint(def, bodyA, bodyB, anchor) {
         var _this = this;
         // @ts-ignore
@@ -10609,7 +10609,7 @@ var FrictionJoint = /** @class */ (function (_super) {
     };
     /** @internal */
     FrictionJoint._deserialize = function (data, world, restore) {
-        data = __assign({}, data);
+        data = __assign$1({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new FrictionJoint(data);
@@ -11046,7 +11046,7 @@ var Mat33 = /** @class */ (function () {
  * so that infinite forces are not generated.
  */
 var RevoluteJoint = /** @class */ (function (_super) {
-    __extends(RevoluteJoint, _super);
+    __extends$a(RevoluteJoint, _super);
     function RevoluteJoint(def, bodyA, bodyB, anchor) {
         var _a, _b, _c, _d, _e, _f;
         var _this = this;
@@ -11126,7 +11126,7 @@ var RevoluteJoint = /** @class */ (function (_super) {
     };
     /** @internal */
     RevoluteJoint._deserialize = function (data, world, restore) {
-        data = __assign({}, data);
+        data = __assign$1({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new RevoluteJoint(data);
@@ -11619,7 +11619,7 @@ var RevoluteJoint = /** @class */ (function (_super) {
  * motion or to model joint friction.
  */
 var PrismaticJoint = /** @class */ (function (_super) {
-    __extends(PrismaticJoint, _super);
+    __extends$a(PrismaticJoint, _super);
     function PrismaticJoint(def, bodyA, bodyB, anchor, axis) {
         var _this = this;
         // @ts-ignore
@@ -11742,7 +11742,7 @@ var PrismaticJoint = /** @class */ (function (_super) {
     };
     /** @internal */
     PrismaticJoint._deserialize = function (data, world, restore) {
-        data = __assign({}, data);
+        data = __assign$1({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         data.localAxisA = Vec2.clone(data.localAxisA);
@@ -12300,7 +12300,7 @@ var PrismaticJoint = /** @class */ (function (_super) {
  * combination will work).
  */
 var GearJoint = /** @class */ (function (_super) {
-    __extends(GearJoint, _super);
+    __extends$a(GearJoint, _super);
     function GearJoint(def, bodyA, bodyB, joint1, joint2, ratio) {
         var _this = this;
         // @ts-ignore
@@ -12409,7 +12409,7 @@ var GearJoint = /** @class */ (function (_super) {
     };
     /** @internal */
     GearJoint._deserialize = function (data, world, restore) {
-        data = __assign({}, data);
+        data = __assign$1({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         data.joint1 = restore(Joint, data.joint1, world);
@@ -12714,7 +12714,7 @@ var GearJoint = /** @class */ (function (_super) {
  * the ground.
  */
 var MotorJoint = /** @class */ (function (_super) {
-    __extends(MotorJoint, _super);
+    __extends$a(MotorJoint, _super);
     function MotorJoint(def, bodyA, bodyB) {
         var _this = this;
         // @ts-ignore
@@ -12764,7 +12764,7 @@ var MotorJoint = /** @class */ (function (_super) {
     };
     /** @internal */
     MotorJoint._deserialize = function (data, world, restore) {
-        data = __assign({}, data);
+        data = __assign$1({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new MotorJoint(data);
@@ -13034,7 +13034,7 @@ var MotorJoint = /** @class */ (function (_super) {
  * at the testbed.
  */
 var MouseJoint = /** @class */ (function (_super) {
-    __extends(MouseJoint, _super);
+    __extends$a(MouseJoint, _super);
     function MouseJoint(def, bodyA, bodyB, target) {
         var _this = this;
         // @ts-ignore
@@ -13094,7 +13094,7 @@ var MouseJoint = /** @class */ (function (_super) {
     };
     /** @internal */
     MouseJoint._deserialize = function (data, world, restore) {
-        data = __assign({}, data);
+        data = __assign$1({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         data.target = Vec2.clone(data.target);
@@ -13321,7 +13321,7 @@ var MouseJoint = /** @class */ (function (_super) {
  * length.
  */
 var PulleyJoint = /** @class */ (function (_super) {
-    __extends(PulleyJoint, _super);
+    __extends$a(PulleyJoint, _super);
     function PulleyJoint(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, ratio) {
         var _this = this;
         // @ts-ignore
@@ -13374,7 +13374,7 @@ var PulleyJoint = /** @class */ (function (_super) {
     };
     /** @internal */
     PulleyJoint._deserialize = function (data, world, restore) {
-        data = __assign({}, data);
+        data = __assign$1({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new PulleyJoint(data);
@@ -13677,7 +13677,7 @@ var PulleyJoint = /** @class */ (function (_super) {
  * want to dynamically control length.
  */
 var RopeJoint = /** @class */ (function (_super) {
-    __extends(RopeJoint, _super);
+    __extends$a(RopeJoint, _super);
     function RopeJoint(def, bodyA, bodyB, anchor) {
         var _this = this;
         // @ts-ignore
@@ -13719,7 +13719,7 @@ var RopeJoint = /** @class */ (function (_super) {
     };
     /** @internal */
     RopeJoint._deserialize = function (data, world, restore) {
-        data = __assign({}, data);
+        data = __assign$1({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new RopeJoint(data);
@@ -13940,7 +13940,7 @@ var RopeJoint = /** @class */ (function (_super) {
  * somewhat because the island constraint solver is approximate.
  */
 var WeldJoint = /** @class */ (function (_super) {
-    __extends(WeldJoint, _super);
+    __extends$a(WeldJoint, _super);
     function WeldJoint(def, bodyA, bodyB, anchor) {
         var _this = this;
         // @ts-ignore
@@ -14000,7 +14000,7 @@ var WeldJoint = /** @class */ (function (_super) {
     };
     /** @internal */
     WeldJoint._deserialize = function (data, world, restore) {
-        data = __assign({}, data);
+        data = __assign$1({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new WeldJoint(data);
@@ -14336,7 +14336,7 @@ var WeldJoint = /** @class */ (function (_super) {
  * This joint is designed for vehicle suspensions.
  */
 var WheelJoint = /** @class */ (function (_super) {
-    __extends(WheelJoint, _super);
+    __extends$a(WheelJoint, _super);
     function WheelJoint(def, bodyA, bodyB, anchor, axis) {
         var _this = this;
         // @ts-ignore
@@ -14416,7 +14416,7 @@ var WheelJoint = /** @class */ (function (_super) {
     };
     /** @internal */
     WheelJoint._deserialize = function (data, world, restore) {
-        data = __assign({}, data);
+        data = __assign$1({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new WheelJoint(data);
@@ -14955,7 +14955,7 @@ var Serializer = /** @class */ (function () {
             var root = deserializeWithHooks(rootClass, json[0], null);
             return root;
         };
-        this.options = __assign(__assign({}, DEFAULT_OPTIONS), options);
+        this.options = __assign$1(__assign$1({}, DEFAULT_OPTIONS), options);
     }
     return Serializer;
 }());
@@ -15107,7 +15107,7 @@ function testbed(a, b) {
  * A rectangle polygon which extend PolygonShape.
  */
 var BoxShape = /** @class */ (function (_super) {
-    __extends(BoxShape, _super);
+    __extends$a(BoxShape, _super);
     /**
      *
      * @param halfWidth
@@ -16111,7 +16111,7 @@ var internal = {
 };
 
 /**
- * Stage.js 1.0.0-alpha.3
+ * Stage.js 1.0.0-alpha.5
  *
  * @copyright Copyright (c) 2024 Ali Shakiba
  * @license The MIT License (MIT)
@@ -16134,8 +16134,8 @@ var internal = {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-const math_random = Math.random;
-const math_sqrt$1 = Math.sqrt;
+var math_random = Math.random;
+var math_sqrt$1 = Math.sqrt;
 function random(min, max) {
   if (typeof min === "undefined") {
     max = 1;
@@ -16174,180 +16174,184 @@ function clamp(num, min, max) {
 function length(x, y) {
   return math_sqrt$1(x * x + y * y);
 }
-const math = Object.create(Math);
+var math = Object.create(Math);
 math.random = random;
 math.wrap = wrap;
 math.clamp = clamp;
 math.length = length;
 math.rotate = wrap;
 math.limit = clamp;
-class Matrix {
-  constructor(a, b, c, d, e, f) {
-    this.a = 1;
-    this.b = 0;
-    this.c = 0;
-    this.d = 1;
-    this.e = 0;
-    this.f = 0;
-    if (typeof a === "object") {
-      this.reset(a);
-    } else {
-      this.reset(a, b, c, d, e, f);
-    }
-  }
-  toString() {
-    return "[" + this.a + ", " + this.b + ", " + this.c + ", " + this.d + ", " + this.e + ", " + this.f + "]";
-  }
-  clone() {
-    return new Matrix(this.a, this.b, this.c, this.d, this.e, this.f);
-  }
-  reset(a, b, c, d, e, f) {
-    this._dirty = true;
-    if (typeof a === "object") {
-      this.a = a.a;
-      this.d = a.d;
-      this.b = a.b;
-      this.c = a.c;
-      this.e = a.e;
-      this.f = a.f;
-    } else {
-      this.a = typeof a === "number" ? a : 1;
-      this.b = typeof b === "number" ? b : 0;
-      this.c = typeof c === "number" ? c : 0;
-      this.d = typeof d === "number" ? d : 1;
-      this.e = typeof e === "number" ? e : 0;
-      this.f = typeof f === "number" ? f : 0;
-    }
-    return this;
-  }
-  identity() {
-    this._dirty = true;
-    this.a = 1;
-    this.b = 0;
-    this.c = 0;
-    this.d = 1;
-    this.e = 0;
-    this.f = 0;
-    return this;
-  }
-  rotate(angle) {
-    if (!angle) {
-      return this;
-    }
-    this._dirty = true;
-    const u = angle ? Math.cos(angle) : 1;
-    const v = angle ? Math.sin(angle) : 0;
-    const a = u * this.a - v * this.b;
-    const b = u * this.b + v * this.a;
-    const c = u * this.c - v * this.d;
-    const d = u * this.d + v * this.c;
-    const e = u * this.e - v * this.f;
-    const f = u * this.f + v * this.e;
-    this.a = a;
-    this.b = b;
-    this.c = c;
-    this.d = d;
-    this.e = e;
-    this.f = f;
-    return this;
-  }
-  translate(x, y) {
-    if (!x && !y) {
-      return this;
-    }
-    this._dirty = true;
-    this.e += x;
-    this.f += y;
-    return this;
-  }
-  scale(x, y) {
-    if (!(x - 1) && !(y - 1)) {
-      return this;
-    }
-    this._dirty = true;
-    this.a *= x;
-    this.b *= y;
-    this.c *= x;
-    this.d *= y;
-    this.e *= x;
-    this.f *= y;
-    return this;
-  }
-  skew(x, y) {
-    if (!x && !y) {
-      return this;
-    }
-    this._dirty = true;
-    const a = this.a + this.b * x;
-    const b = this.b + this.a * y;
-    const c = this.c + this.d * x;
-    const d = this.d + this.c * y;
-    const e = this.e + this.f * x;
-    const f = this.f + this.e * y;
-    this.a = a;
-    this.b = b;
-    this.c = c;
-    this.d = d;
-    this.e = e;
-    this.f = f;
-    return this;
-  }
-  concat(m) {
-    this._dirty = true;
-    const a = this.a * m.a + this.b * m.c;
-    const b = this.b * m.d + this.a * m.b;
-    const c = this.c * m.a + this.d * m.c;
-    const d = this.d * m.d + this.c * m.b;
-    const e = this.e * m.a + m.e + this.f * m.c;
-    const f = this.f * m.d + m.f + this.e * m.b;
-    this.a = a;
-    this.b = b;
-    this.c = c;
-    this.d = d;
-    this.e = e;
-    this.f = f;
-    return this;
-  }
-  inverse() {
-    if (this._dirty) {
-      this._dirty = false;
-      if (!this.inverted) {
-        this.inverted = new Matrix();
+var Matrix = (
+  /** @class */
+  function() {
+    function Matrix2(a, b, c, d, e, f) {
+      this.a = 1;
+      this.b = 0;
+      this.c = 0;
+      this.d = 1;
+      this.e = 0;
+      this.f = 0;
+      if (typeof a === "object") {
+        this.reset(a);
+      } else {
+        this.reset(a, b, c, d, e, f);
       }
-      const z = this.a * this.d - this.b * this.c;
-      this.inverted.a = this.d / z;
-      this.inverted.b = -this.b / z;
-      this.inverted.c = -this.c / z;
-      this.inverted.d = this.a / z;
-      this.inverted.e = (this.c * this.f - this.e * this.d) / z;
-      this.inverted.f = (this.e * this.b - this.a * this.f) / z;
     }
-    return this.inverted;
-  }
-  map(p, q) {
-    q = q || { x: 0, y: 0 };
-    q.x = this.a * p.x + this.c * p.y + this.e;
-    q.y = this.b * p.x + this.d * p.y + this.f;
-    return q;
-  }
-  mapX(x, y) {
-    if (typeof x === "object") {
-      y = x.y;
-      x = x.x;
-    }
-    return this.a * x + this.c * y + this.e;
-  }
-  mapY(x, y) {
-    if (typeof x === "object") {
-      y = x.y;
-      x = x.x;
-    }
-    return this.b * x + this.d * y + this.f;
-  }
-}
-const objectToString = Object.prototype.toString;
+    Matrix2.prototype.toString = function() {
+      return "[" + this.a + ", " + this.b + ", " + this.c + ", " + this.d + ", " + this.e + ", " + this.f + "]";
+    };
+    Matrix2.prototype.clone = function() {
+      return new Matrix2(this.a, this.b, this.c, this.d, this.e, this.f);
+    };
+    Matrix2.prototype.reset = function(a, b, c, d, e, f) {
+      this._dirty = true;
+      if (typeof a === "object") {
+        this.a = a.a;
+        this.d = a.d;
+        this.b = a.b;
+        this.c = a.c;
+        this.e = a.e;
+        this.f = a.f;
+      } else {
+        this.a = typeof a === "number" ? a : 1;
+        this.b = typeof b === "number" ? b : 0;
+        this.c = typeof c === "number" ? c : 0;
+        this.d = typeof d === "number" ? d : 1;
+        this.e = typeof e === "number" ? e : 0;
+        this.f = typeof f === "number" ? f : 0;
+      }
+      return this;
+    };
+    Matrix2.prototype.identity = function() {
+      this._dirty = true;
+      this.a = 1;
+      this.b = 0;
+      this.c = 0;
+      this.d = 1;
+      this.e = 0;
+      this.f = 0;
+      return this;
+    };
+    Matrix2.prototype.rotate = function(angle) {
+      if (!angle) {
+        return this;
+      }
+      this._dirty = true;
+      var u = angle ? Math.cos(angle) : 1;
+      var v = angle ? Math.sin(angle) : 0;
+      var a = u * this.a - v * this.b;
+      var b = u * this.b + v * this.a;
+      var c = u * this.c - v * this.d;
+      var d = u * this.d + v * this.c;
+      var e = u * this.e - v * this.f;
+      var f = u * this.f + v * this.e;
+      this.a = a;
+      this.b = b;
+      this.c = c;
+      this.d = d;
+      this.e = e;
+      this.f = f;
+      return this;
+    };
+    Matrix2.prototype.translate = function(x, y) {
+      if (!x && !y) {
+        return this;
+      }
+      this._dirty = true;
+      this.e += x;
+      this.f += y;
+      return this;
+    };
+    Matrix2.prototype.scale = function(x, y) {
+      if (!(x - 1) && !(y - 1)) {
+        return this;
+      }
+      this._dirty = true;
+      this.a *= x;
+      this.b *= y;
+      this.c *= x;
+      this.d *= y;
+      this.e *= x;
+      this.f *= y;
+      return this;
+    };
+    Matrix2.prototype.skew = function(x, y) {
+      if (!x && !y) {
+        return this;
+      }
+      this._dirty = true;
+      var a = this.a + this.b * x;
+      var b = this.b + this.a * y;
+      var c = this.c + this.d * x;
+      var d = this.d + this.c * y;
+      var e = this.e + this.f * x;
+      var f = this.f + this.e * y;
+      this.a = a;
+      this.b = b;
+      this.c = c;
+      this.d = d;
+      this.e = e;
+      this.f = f;
+      return this;
+    };
+    Matrix2.prototype.concat = function(m) {
+      this._dirty = true;
+      var a = this.a * m.a + this.b * m.c;
+      var b = this.b * m.d + this.a * m.b;
+      var c = this.c * m.a + this.d * m.c;
+      var d = this.d * m.d + this.c * m.b;
+      var e = this.e * m.a + m.e + this.f * m.c;
+      var f = this.f * m.d + m.f + this.e * m.b;
+      this.a = a;
+      this.b = b;
+      this.c = c;
+      this.d = d;
+      this.e = e;
+      this.f = f;
+      return this;
+    };
+    Matrix2.prototype.inverse = function() {
+      if (this._dirty) {
+        this._dirty = false;
+        if (!this.inverted) {
+          this.inverted = new Matrix2();
+        }
+        var z = this.a * this.d - this.b * this.c;
+        this.inverted.a = this.d / z;
+        this.inverted.b = -this.b / z;
+        this.inverted.c = -this.c / z;
+        this.inverted.d = this.a / z;
+        this.inverted.e = (this.c * this.f - this.e * this.d) / z;
+        this.inverted.f = (this.e * this.b - this.a * this.f) / z;
+      }
+      return this.inverted;
+    };
+    Matrix2.prototype.map = function(p, q) {
+      q = q || { x: 0, y: 0 };
+      q.x = this.a * p.x + this.c * p.y + this.e;
+      q.y = this.b * p.x + this.d * p.y + this.f;
+      return q;
+    };
+    Matrix2.prototype.mapX = function(x, y) {
+      if (typeof x === "object") {
+        y = x.y;
+        x = x.x;
+      }
+      return this.a * x + this.c * y + this.e;
+    };
+    Matrix2.prototype.mapY = function(x, y) {
+      if (typeof x === "object") {
+        y = x.y;
+        x = x.x;
+      }
+      return this.b * x + this.d * y + this.f;
+    };
+    return Matrix2;
+  }()
+);
+var objectToString = Object.prototype.toString;
 function isFn(value) {
-  const str = objectToString.call(value);
+  var str = objectToString.call(value);
   return str === "[object Function]" || str === "[object GeneratorFunction]" || str === "[object AsyncFunction]";
 }
 function isHash(value) {
@@ -16360,235 +16364,439 @@ const stats = {
   draw: 0,
   fps: 0
 };
-const uid = function() {
+var uid = function() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2);
 };
-class Texture {
-  constructor() {
-    this.uid = "texture:" + uid();
-    this.sx = 0;
-    this.sy = 0;
-    this.dx = 0;
-    this.dy = 0;
-  }
-  // Geometrical values
-  setSourceCoordinate(x, y) {
-    this.sx = x;
-    this.sy = y;
-  }
-  // Geometrical values
-  setSourceDimension(w, h) {
-    this.sw = w;
-    this.sh = h;
-  }
-  // Geometrical values
-  setDestinationCoordinate(x, y) {
-    this.dx = x;
-    this.dy = y;
-  }
-  // Geometrical values
-  setDestinationDimension(w, h) {
-    this.dw = w;
-    this.dh = h;
-  }
-  draw(context, x1, y1, w1, h1, x2, y2, w2, h2) {
-    let sx = this.sx;
-    let sy = this.sy;
-    let sw = this.sw;
-    let sh = this.sh;
-    let dx = this.dx;
-    let dy = this.dy;
-    let dw = this.dw;
-    let dh = this.dh;
-    if (typeof x1 === "number" || typeof y1 === "number" || typeof w1 === "number" || typeof h1 === "number" || typeof x2 === "number" || typeof y2 === "number" || typeof w2 === "number" || typeof h2 === "number") {
-      if (typeof x2 === "number" || typeof y2 === "number" || typeof w2 === "number" || typeof h2 === "number") {
-        sx += x1;
-        sy += y1;
-        sw = w1 ?? sw;
-        sh = h1 ?? sh;
-        dx += x2;
-        dy += y2;
-        dw = w2 ?? dw;
-        dh = h2 ?? dh;
-      } else {
-        dx += x1;
-        dy += y1;
-        dw = w1;
-        dh = h1;
-      }
+var Texture = (
+  /** @class */
+  function() {
+    function Texture2() {
+      this.uid = "texture:" + uid();
+      this.sx = 0;
+      this.sy = 0;
+      this.dx = 0;
+      this.dy = 0;
     }
-    this.drawWithNormalizedArgs(context, sx, sy, sw, sh, dx, dy, dw, dh);
-  }
-}
-class ImageTexture extends Texture {
-  constructor(source, pixelRatio) {
-    super();
-    this._pixelRatio = 1;
-    if (typeof source === "object") {
-      this.setSourceImage(source, pixelRatio);
-    }
-  }
-  setSourceImage(image2, pixelRatio = 1) {
-    this._source = image2;
-    this._pixelRatio = pixelRatio;
-  }
-  getWidth() {
-    return this._source.width / this._pixelRatio;
-  }
-  getHeight() {
-    return this._source.height / this._pixelRatio;
-  }
-  /** @internal */
-  prerender(context) {
-    return false;
-  }
-  /** @internal */
-  drawWithNormalizedArgs(context, sx, sy, sw, sh, dx, dy, dw, dh) {
-    const image2 = this._source;
-    if (image2 === null || typeof image2 !== "object") {
-      return;
-    }
-    sw = sw ?? this.getWidth();
-    sh = sh ?? this.getHeight();
-    dw = dw ?? sw;
-    dh = dh ?? sh;
-    sx *= this._pixelRatio;
-    sy *= this._pixelRatio;
-    sw *= this._pixelRatio;
-    sh *= this._pixelRatio;
-    try {
-      stats.draw++;
-      context.drawImage(image2, sx, sy, sw, sh, dx, dy, dw, dh);
-    } catch (ex) {
-      if (!this._draw_failed) {
-        console.log("Unable to draw: ", image2);
-        console.log(ex);
-        this._draw_failed = true;
-      }
-    }
-  }
-}
-class PipeTexture extends Texture {
-  constructor(source) {
-    super();
-    this._source = source;
-  }
-  setSourceTexture(texture2) {
-    this._source = texture2;
-  }
-  getWidth() {
-    return this.dw ?? this.sw ?? this._source.getWidth();
-  }
-  getHeight() {
-    return this.dh ?? this.sh ?? this._source.getHeight();
-  }
-  /** @internal */
-  prerender(context) {
-    return this._source.prerender(context);
-  }
-  /** @internal */
-  drawWithNormalizedArgs(context, sx, sy, sw, sh, dx, dy, dw, dh) {
-    const texture2 = this._source;
-    if (texture2 === null || typeof texture2 !== "object") {
-      return;
-    }
-    texture2.draw(context, sx, sy, sw, sh, dx, dy, dw, dh);
-  }
-}
-class Atlas extends ImageTexture {
-  constructor(def = {}) {
-    super();
-    this.pipeSpriteTexture = (def2) => {
-      const map = this._map;
-      const ppu = this._ppu;
-      const trim = this._trim;
-      if (!def2) {
-        return void 0;
-      }
-      def2 = Object.assign({}, def2);
-      if (isFn(map)) {
-        def2 = map(def2);
-      }
-      if (ppu != 1) {
-        def2.x *= ppu;
-        def2.y *= ppu;
-        def2.width *= ppu;
-        def2.height *= ppu;
-        def2.top *= ppu;
-        def2.bottom *= ppu;
-        def2.left *= ppu;
-        def2.right *= ppu;
-      }
-      if (trim != 0) {
-        def2.x += trim;
-        def2.y += trim;
-        def2.width -= 2 * trim;
-        def2.height -= 2 * trim;
-        def2.top -= trim;
-        def2.bottom -= trim;
-        def2.left -= trim;
-        def2.right -= trim;
-      }
-      const texture2 = new PipeTexture(this);
-      texture2.top = def2.top;
-      texture2.bottom = def2.bottom;
-      texture2.left = def2.left;
-      texture2.right = def2.right;
-      texture2.setSourceCoordinate(def2.x, def2.y);
-      texture2.setSourceDimension(def2.width, def2.height);
-      return texture2;
+    Texture2.prototype.setSourceCoordinate = function(x, y) {
+      this.sx = x;
+      this.sy = y;
     };
-    this.findSpriteDefinition = (query) => {
-      const textures = this._textures;
-      if (textures) {
-        if (isFn(textures)) {
-          return textures(query);
-        } else if (isHash(textures)) {
-          return textures[query];
+    Texture2.prototype.setSourceDimension = function(w, h) {
+      this.sw = w;
+      this.sh = h;
+    };
+    Texture2.prototype.setDestinationCoordinate = function(x, y) {
+      this.dx = x;
+      this.dy = y;
+    };
+    Texture2.prototype.setDestinationDimension = function(w, h) {
+      this.dw = w;
+      this.dh = h;
+    };
+    Texture2.prototype.draw = function(context, x1, y1, w1, h1, x2, y2, w2, h2) {
+      var sx = this.sx;
+      var sy = this.sy;
+      var sw = this.sw;
+      var sh = this.sh;
+      var dx = this.dx;
+      var dy = this.dy;
+      var dw = this.dw;
+      var dh = this.dh;
+      if (typeof x1 === "number" || typeof y1 === "number" || typeof w1 === "number" || typeof h1 === "number" || typeof x2 === "number" || typeof y2 === "number" || typeof w2 === "number" || typeof h2 === "number") {
+        if (typeof x2 === "number" || typeof y2 === "number" || typeof w2 === "number" || typeof h2 === "number") {
+          sx += x1;
+          sy += y1;
+          sw = w1 !== null && w1 !== void 0 ? w1 : sw;
+          sh = h1 !== null && h1 !== void 0 ? h1 : sh;
+          dx += x2;
+          dy += y2;
+          dw = w2 !== null && w2 !== void 0 ? w2 : dw;
+          dh = h2 !== null && h2 !== void 0 ? h2 : dh;
+        } else {
+          dx += x1;
+          dy += y1;
+          dw = w1;
+          dh = h1;
+        }
+      }
+      this.drawWithNormalizedArgs(context, sx, sy, sw, sh, dx, dy, dw, dh);
+    };
+    return Texture2;
+  }()
+);
+var __extends$9 = function() {
+  var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
+      d2.__proto__ = b2;
+    } || function(d2, b2) {
+      for (var p in b2)
+        if (Object.prototype.hasOwnProperty.call(b2, p))
+          d2[p] = b2[p];
+    };
+    return extendStatics(d, b);
+  };
+  return function(d, b) {
+    if (typeof b !== "function" && b !== null)
+      throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
+var ImageTexture = (
+  /** @class */
+  function(_super) {
+    __extends$9(ImageTexture2, _super);
+    function ImageTexture2(source, pixelRatio) {
+      var _this = _super.call(this) || this;
+      _this._pixelRatio = 1;
+      if (typeof source === "object") {
+        _this.setSourceImage(source, pixelRatio);
+      }
+      return _this;
+    }
+    ImageTexture2.prototype.setSourceImage = function(image2, pixelRatio) {
+      if (pixelRatio === void 0) {
+        pixelRatio = 1;
+      }
+      this._source = image2;
+      this._pixelRatio = pixelRatio;
+    };
+    ImageTexture2.prototype.getWidth = function() {
+      return this._source.width / this._pixelRatio;
+    };
+    ImageTexture2.prototype.getHeight = function() {
+      return this._source.height / this._pixelRatio;
+    };
+    ImageTexture2.prototype.prerender = function(context) {
+      return false;
+    };
+    ImageTexture2.prototype.drawWithNormalizedArgs = function(context, sx, sy, sw, sh, dx, dy, dw, dh) {
+      var image2 = this._source;
+      if (image2 === null || typeof image2 !== "object") {
+        return;
+      }
+      sw = sw !== null && sw !== void 0 ? sw : this.getWidth();
+      sh = sh !== null && sh !== void 0 ? sh : this.getHeight();
+      dw = dw !== null && dw !== void 0 ? dw : sw;
+      dh = dh !== null && dh !== void 0 ? dh : sh;
+      sx *= this._pixelRatio;
+      sy *= this._pixelRatio;
+      sw *= this._pixelRatio;
+      sh *= this._pixelRatio;
+      try {
+        stats.draw++;
+        context.drawImage(image2, sx, sy, sw, sh, dx, dy, dw, dh);
+      } catch (ex) {
+        if (!this._draw_failed) {
+          console.log("Unable to draw: ", image2);
+          console.log(ex);
+          this._draw_failed = true;
         }
       }
     };
-    this.select = (query) => {
-      if (!query) {
-        return new TextureSelection(new PipeTexture(this));
-      }
-      const textureDefinition = this.findSpriteDefinition(query);
-      if (textureDefinition) {
-        return new TextureSelection(textureDefinition, this);
-      }
+    return ImageTexture2;
+  }(Texture)
+);
+var __extends$8 = function() {
+  var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
+      d2.__proto__ = b2;
+    } || function(d2, b2) {
+      for (var p in b2)
+        if (Object.prototype.hasOwnProperty.call(b2, p))
+          d2[p] = b2[p];
     };
-    this.name = def.name;
-    this._ppu = def.ppu || def.ratio || 1;
-    this._trim = def.trim || 0;
-    this._map = def.map || def.filter;
-    this._textures = def.textures;
-    if (typeof def.image === "object" && isHash(def.image)) {
-      this._imageSrc = def.image.src || def.image.url;
-      if (typeof def.image.ratio === "number") {
-        this._pixelRatio = def.image.ratio;
+    return extendStatics(d, b);
+  };
+  return function(d, b) {
+    if (typeof b !== "function" && b !== null)
+      throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
+var PipeTexture = (
+  /** @class */
+  function(_super) {
+    __extends$8(PipeTexture2, _super);
+    function PipeTexture2(source) {
+      var _this = _super.call(this) || this;
+      _this._source = source;
+      return _this;
+    }
+    PipeTexture2.prototype.setSourceTexture = function(texture2) {
+      this._source = texture2;
+    };
+    PipeTexture2.prototype.getWidth = function() {
+      var _a, _b;
+      return (_b = (_a = this.dw) !== null && _a !== void 0 ? _a : this.sw) !== null && _b !== void 0 ? _b : this._source.getWidth();
+    };
+    PipeTexture2.prototype.getHeight = function() {
+      var _a, _b;
+      return (_b = (_a = this.dh) !== null && _a !== void 0 ? _a : this.sh) !== null && _b !== void 0 ? _b : this._source.getHeight();
+    };
+    PipeTexture2.prototype.prerender = function(context) {
+      return this._source.prerender(context);
+    };
+    PipeTexture2.prototype.drawWithNormalizedArgs = function(context, sx, sy, sw, sh, dx, dy, dw, dh) {
+      var texture2 = this._source;
+      if (texture2 === null || typeof texture2 !== "object") {
+        return;
       }
-    } else {
-      if (typeof def.imagePath === "string") {
-        this._imageSrc = def.imagePath;
-      } else if (typeof def.image === "string") {
-        this._imageSrc = def.image;
-      }
-      if (typeof def.imageRatio === "number") {
-        this._pixelRatio = def.imageRatio;
+      texture2.draw(context, sx, sy, sw, sh, dx, dy, dw, dh);
+    };
+    return PipeTexture2;
+  }(Texture)
+);
+var __extends$7 = function() {
+  var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
+      d2.__proto__ = b2;
+    } || function(d2, b2) {
+      for (var p in b2)
+        if (Object.prototype.hasOwnProperty.call(b2, p))
+          d2[p] = b2[p];
+    };
+    return extendStatics(d, b);
+  };
+  return function(d, b) {
+    if (typeof b !== "function" && b !== null)
+      throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
+var __awaiter$1 = function(thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function(resolve) {
+      resolve(value);
+    });
+  }
+  return new (P || (P = Promise))(function(resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
       }
     }
-    deprecatedWarning(def);
-  }
-  async load() {
-    if (this._imageSrc) {
-      const image2 = await asyncLoadImage(this._imageSrc);
-      this.setSourceImage(image2, this._pixelRatio);
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
     }
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+var __generator$1 = function(thisArg, body) {
+  var _ = { label: 0, sent: function() {
+    if (t[0] & 1)
+      throw t[1];
+    return t[1];
+  }, trys: [], ops: [] }, f, y, t, g;
+  return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() {
+    return this;
+  }), g;
+  function verb(n) {
+    return function(v) {
+      return step([n, v]);
+    };
   }
-}
+  function step(op) {
+    if (f)
+      throw new TypeError("Generator is already executing.");
+    while (_)
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
+          return t;
+        if (y = 0, t)
+          op = [op[0] & 2, t.value];
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+          case 4:
+            _.label++;
+            return { value: op[1], done: false };
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+          case 7:
+            op = _.ops.pop();
+            _.trys.pop();
+            continue;
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+              _.ops.push(op);
+              break;
+            }
+            if (t[2])
+              _.ops.pop();
+            _.trys.pop();
+            continue;
+        }
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    if (op[0] & 5)
+      throw op[1];
+    return { value: op[0] ? op[1] : void 0, done: true };
+  }
+};
+var Atlas = (
+  /** @class */
+  function(_super) {
+    __extends$7(Atlas2, _super);
+    function Atlas2(def) {
+      if (def === void 0) {
+        def = {};
+      }
+      var _this = _super.call(this) || this;
+      _this.pipeSpriteTexture = function(def2) {
+        var map = _this._map;
+        var ppu = _this._ppu;
+        var trim = _this._trim;
+        if (!def2) {
+          return void 0;
+        }
+        def2 = Object.assign({}, def2);
+        if (isFn(map)) {
+          def2 = map(def2);
+        }
+        if (ppu != 1) {
+          def2.x *= ppu;
+          def2.y *= ppu;
+          def2.width *= ppu;
+          def2.height *= ppu;
+          def2.top *= ppu;
+          def2.bottom *= ppu;
+          def2.left *= ppu;
+          def2.right *= ppu;
+        }
+        if (trim != 0) {
+          def2.x += trim;
+          def2.y += trim;
+          def2.width -= 2 * trim;
+          def2.height -= 2 * trim;
+          def2.top -= trim;
+          def2.bottom -= trim;
+          def2.left -= trim;
+          def2.right -= trim;
+        }
+        var texture2 = new PipeTexture(_this);
+        texture2.top = def2.top;
+        texture2.bottom = def2.bottom;
+        texture2.left = def2.left;
+        texture2.right = def2.right;
+        texture2.setSourceCoordinate(def2.x, def2.y);
+        texture2.setSourceDimension(def2.width, def2.height);
+        return texture2;
+      };
+      _this.findSpriteDefinition = function(query) {
+        var textures = _this._textures;
+        if (textures) {
+          if (isFn(textures)) {
+            return textures(query);
+          } else if (isHash(textures)) {
+            return textures[query];
+          }
+        }
+      };
+      _this.select = function(query) {
+        if (!query) {
+          return new TextureSelection(new PipeTexture(_this));
+        }
+        var textureDefinition = _this.findSpriteDefinition(query);
+        if (textureDefinition) {
+          return new TextureSelection(textureDefinition, _this);
+        }
+      };
+      _this.name = def.name;
+      _this._ppu = def.ppu || def.ratio || 1;
+      _this._trim = def.trim || 0;
+      _this._map = def.map || def.filter;
+      _this._textures = def.textures;
+      if (typeof def.image === "object" && isHash(def.image)) {
+        _this._imageSrc = def.image.src || def.image.url;
+        if (typeof def.image.ratio === "number") {
+          _this._pixelRatio = def.image.ratio;
+        }
+      } else {
+        if (typeof def.imagePath === "string") {
+          _this._imageSrc = def.imagePath;
+        } else if (typeof def.image === "string") {
+          _this._imageSrc = def.image;
+        }
+        if (typeof def.imageRatio === "number") {
+          _this._pixelRatio = def.imageRatio;
+        }
+      }
+      deprecatedWarning(def);
+      return _this;
+    }
+    Atlas2.prototype.load = function() {
+      return __awaiter$1(this, void 0, void 0, function() {
+        var image2;
+        return __generator$1(this, function(_a) {
+          switch (_a.label) {
+            case 0:
+              if (!this._imageSrc)
+                return [3, 2];
+              return [4, asyncLoadImage(this._imageSrc)];
+            case 1:
+              image2 = _a.sent();
+              this.setSourceImage(image2, this._pixelRatio);
+              _a.label = 2;
+            case 2:
+              return [
+                2
+                /*return*/
+              ];
+          }
+        });
+      });
+    };
+    return Atlas2;
+  }(ImageTexture)
+);
 function asyncLoadImage(src) {
   return new Promise(function(resolve, reject) {
-    const img = new Image();
+    var img = new Image();
     img.onload = function() {
       resolve(img);
     };
@@ -16617,116 +16825,253 @@ function deprecatedWarning(def) {
   if (typeof def.image === "object" && "url" in def.image)
     console.warn("'image.url' field of atlas definition is deprecated");
 }
+var __extends$6 = function() {
+  var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
+      d2.__proto__ = b2;
+    } || function(d2, b2) {
+      for (var p in b2)
+        if (Object.prototype.hasOwnProperty.call(b2, p))
+          d2[p] = b2[p];
+    };
+    return extendStatics(d, b);
+  };
+  return function(d, b) {
+    if (typeof b !== "function" && b !== null)
+      throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
+var __awaiter = function(thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function(resolve) {
+      resolve(value);
+    });
+  }
+  return new (P || (P = Promise))(function(resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+var __generator = function(thisArg, body) {
+  var _ = { label: 0, sent: function() {
+    if (t[0] & 1)
+      throw t[1];
+    return t[1];
+  }, trys: [], ops: [] }, f, y, t, g;
+  return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() {
+    return this;
+  }), g;
+  function verb(n) {
+    return function(v) {
+      return step([n, v]);
+    };
+  }
+  function step(op) {
+    if (f)
+      throw new TypeError("Generator is already executing.");
+    while (_)
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
+          return t;
+        if (y = 0, t)
+          op = [op[0] & 2, t.value];
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+          case 4:
+            _.label++;
+            return { value: op[1], done: false };
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+          case 7:
+            op = _.ops.pop();
+            _.trys.pop();
+            continue;
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+              _.ops.push(op);
+              break;
+            }
+            if (t[2])
+              _.ops.pop();
+            _.trys.pop();
+            continue;
+        }
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    if (op[0] & 5)
+      throw op[1];
+    return { value: op[0] ? op[1] : void 0, done: true };
+  }
+};
 function isAtlasSpriteDefinition(selection) {
   return typeof selection === "object" && isHash(selection) && "number" === typeof selection.width && "number" === typeof selection.height;
 }
-class TextureSelection {
-  constructor(selection, atlas2) {
-    this.selection = selection;
-    this.atlas = atlas2;
-  }
-  /**
-   * @internal
-   * Resolves the selection to a texture.
-   */
-  resolve(selection, subquery) {
-    if (!selection) {
-      return NO_TEXTURE;
-    } else if (Array.isArray(selection)) {
-      return this.resolve(selection[0]);
-    } else if (selection instanceof Texture) {
-      return selection;
-    } else if (isAtlasSpriteDefinition(selection)) {
-      if (!this.atlas) {
-        return NO_TEXTURE;
-      }
-      return this.atlas.pipeSpriteTexture(selection);
-    } else if (typeof selection === "object" && isHash(selection) && typeof subquery !== "undefined") {
-      return this.resolve(selection[subquery]);
-    } else if (typeof selection === "function" && isFn(selection)) {
-      return this.resolve(selection(subquery));
-    } else if (typeof selection === "string") {
-      if (!this.atlas) {
-        return NO_TEXTURE;
-      }
-      return this.resolve(this.atlas.findSpriteDefinition(selection));
+var TextureSelection = (
+  /** @class */
+  function() {
+    function TextureSelection2(selection, atlas2) {
+      this.selection = selection;
+      this.atlas = atlas2;
     }
-  }
-  one(subquery) {
-    return this.resolve(this.selection, subquery);
-  }
-  array(arr) {
-    const array = Array.isArray(arr) ? arr : [];
-    if (Array.isArray(this.selection)) {
-      for (let i = 0; i < this.selection.length; i++) {
-        array[i] = this.resolve(this.selection[i]);
+    TextureSelection2.prototype.resolve = function(selection, subquery) {
+      if (!selection) {
+        return NO_TEXTURE;
+      } else if (Array.isArray(selection)) {
+        return this.resolve(selection[0]);
+      } else if (selection instanceof Texture) {
+        return selection;
+      } else if (isAtlasSpriteDefinition(selection)) {
+        if (!this.atlas) {
+          return NO_TEXTURE;
+        }
+        return this.atlas.pipeSpriteTexture(selection);
+      } else if (typeof selection === "object" && isHash(selection) && typeof subquery !== "undefined") {
+        return this.resolve(selection[subquery]);
+      } else if (typeof selection === "function" && isFn(selection)) {
+        return this.resolve(selection(subquery));
+      } else if (typeof selection === "string") {
+        if (!this.atlas) {
+          return NO_TEXTURE;
+        }
+        return this.resolve(this.atlas.findSpriteDefinition(selection));
       }
-    } else {
-      array[0] = this.resolve(this.selection);
-    }
-    return array;
+    };
+    TextureSelection2.prototype.one = function(subquery) {
+      return this.resolve(this.selection, subquery);
+    };
+    TextureSelection2.prototype.array = function(arr) {
+      var array = Array.isArray(arr) ? arr : [];
+      if (Array.isArray(this.selection)) {
+        for (var i = 0; i < this.selection.length; i++) {
+          array[i] = this.resolve(this.selection[i]);
+        }
+      } else {
+        array[0] = this.resolve(this.selection);
+      }
+      return array;
+    };
+    return TextureSelection2;
+  }()
+);
+var NO_TEXTURE = new /** @class */
+(function(_super) {
+  __extends$6(class_1, _super);
+  function class_1() {
+    var _this = _super.call(this) || this;
+    _this.setSourceDimension(0, 0);
+    return _this;
   }
-}
-const NO_TEXTURE = new class extends Texture {
-  getWidth() {
+  class_1.prototype.getWidth = function() {
     return 0;
-  }
-  getHeight() {
+  };
+  class_1.prototype.getHeight = function() {
     return 0;
-  }
-  prerender(context) {
+  };
+  class_1.prototype.prerender = function(context) {
     return false;
-  }
-  drawWithNormalizedArgs(context, sx, sy, sw, sh, dx, dy, dw, dh) {
-  }
-  constructor() {
-    super();
-    this.setSourceDimension(0, 0);
-  }
-  setSourceCoordinate(x, y) {
-  }
-  setSourceDimension(w, h) {
-  }
-  setDestinationCoordinate(x, y) {
-  }
-  setDestinationDimension(w, h) {
-  }
-  draw() {
-  }
-}();
-const NO_SELECTION = new TextureSelection(NO_TEXTURE);
-const ATLAS_MEMO_BY_NAME = {};
-const ATLAS_ARRAY = [];
-async function atlas(def) {
-  let atlas2;
-  if (def instanceof Atlas) {
-    atlas2 = def;
-  } else {
-    atlas2 = new Atlas(def);
-  }
-  if (atlas2.name) {
-    ATLAS_MEMO_BY_NAME[atlas2.name] = atlas2;
-  }
-  ATLAS_ARRAY.push(atlas2);
-  await atlas2.load();
-  return atlas2;
+  };
+  class_1.prototype.drawWithNormalizedArgs = function(context, sx, sy, sw, sh, dx, dy, dw, dh) {
+  };
+  class_1.prototype.setSourceCoordinate = function(x, y) {
+  };
+  class_1.prototype.setSourceDimension = function(w, h) {
+  };
+  class_1.prototype.setDestinationCoordinate = function(x, y) {
+  };
+  class_1.prototype.setDestinationDimension = function(w, h) {
+  };
+  class_1.prototype.draw = function() {
+  };
+  return class_1;
+}(Texture))();
+var NO_SELECTION = new TextureSelection(NO_TEXTURE);
+var ATLAS_MEMO_BY_NAME = {};
+var ATLAS_ARRAY = [];
+function atlas(def) {
+  return __awaiter(this, void 0, Promise, function() {
+    var atlas2;
+    return __generator(this, function(_a) {
+      switch (_a.label) {
+        case 0:
+          if (def instanceof Atlas) {
+            atlas2 = def;
+          } else {
+            atlas2 = new Atlas(def);
+          }
+          if (atlas2.name) {
+            ATLAS_MEMO_BY_NAME[atlas2.name] = atlas2;
+          }
+          ATLAS_ARRAY.push(atlas2);
+          return [4, atlas2.load()];
+        case 1:
+          _a.sent();
+          return [2, atlas2];
+      }
+    });
+  });
 }
 function texture(query) {
   if ("string" !== typeof query) {
     return new TextureSelection(query);
   }
-  let result = null;
-  const colonIndex = query.indexOf(":");
+  var result = null;
+  var colonIndex = query.indexOf(":");
   if (colonIndex > 0 && query.length > colonIndex + 1) {
-    const atlas2 = ATLAS_MEMO_BY_NAME[query.slice(0, colonIndex)];
-    result = atlas2 && atlas2.select(query.slice(colonIndex + 1));
+    var atlas_1 = ATLAS_MEMO_BY_NAME[query.slice(0, colonIndex)];
+    result = atlas_1 && atlas_1.select(query.slice(colonIndex + 1));
   }
   if (!result) {
-    const atlas2 = ATLAS_MEMO_BY_NAME[query];
-    result = atlas2 && atlas2.select();
+    var atlas_2 = ATLAS_MEMO_BY_NAME[query];
+    result = atlas_2 && atlas_2.select();
   }
   if (!result) {
-    for (let i = 0; i < ATLAS_ARRAY.length; i++) {
+    for (var i = 0; i < ATLAS_ARRAY.length; i++) {
       result = ATLAS_ARRAY[i].select(query);
       if (result) {
         break;
@@ -16739,341 +17084,327 @@ function texture(query) {
   }
   return result;
 }
-class ResizableTexture extends Texture {
-  constructor(source, mode) {
-    super();
-    this._source = source;
-    this._resizeMode = mode;
-  }
-  getWidth() {
-    return this.dw ?? this._source.getWidth();
-  }
-  getHeight() {
-    return this.dh ?? this._source.getHeight();
-  }
-  /** @internal */
-  prerender(context) {
-    return false;
-  }
-  drawWithNormalizedArgs(context, sx, sy, sw, sh, dx, dy, dw, dh) {
-    const texture2 = this._source;
-    if (texture2 === null || typeof texture2 !== "object") {
-      return;
+var __extends$5 = function() {
+  var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
+      d2.__proto__ = b2;
+    } || function(d2, b2) {
+      for (var p in b2)
+        if (Object.prototype.hasOwnProperty.call(b2, p))
+          d2[p] = b2[p];
+    };
+    return extendStatics(d, b);
+  };
+  return function(d, b) {
+    if (typeof b !== "function" && b !== null)
+      throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() {
+      this.constructor = d;
     }
-    let outWidth = dw;
-    let outHeight = dh;
-    const left = Number.isFinite(texture2.left) ? texture2.left : 0;
-    const right = Number.isFinite(texture2.right) ? texture2.right : 0;
-    const top = Number.isFinite(texture2.top) ? texture2.top : 0;
-    const bottom = Number.isFinite(texture2.bottom) ? texture2.bottom : 0;
-    const width = texture2.getWidth() - left - right;
-    const height = texture2.getHeight() - top - bottom;
-    if (!this._innerSize) {
-      outWidth = Math.max(outWidth - left - right, 0);
-      outHeight = Math.max(outHeight - top - bottom, 0);
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
+var ResizableTexture = (
+  /** @class */
+  function(_super) {
+    __extends$5(ResizableTexture2, _super);
+    function ResizableTexture2(source, mode) {
+      var _this = _super.call(this) || this;
+      _this._source = source;
+      _this._resizeMode = mode;
+      return _this;
     }
-    if (top > 0 && left > 0) {
-      texture2.draw(context, 0, 0, left, top, 0, 0, left, top);
-    }
-    if (bottom > 0 && left > 0) {
-      texture2.draw(context, 0, height + top, left, bottom, 0, outHeight + top, left, bottom);
-    }
-    if (top > 0 && right > 0) {
-      texture2.draw(context, width + left, 0, right, top, outWidth + left, 0, right, top);
-    }
-    if (bottom > 0 && right > 0) {
-      texture2.draw(
-        context,
-        width + left,
-        height + top,
-        right,
-        bottom,
-        outWidth + left,
-        outHeight + top,
-        right,
-        bottom
-      );
-    }
-    if (this._resizeMode === "stretch") {
-      if (top > 0) {
-        texture2.draw(context, left, 0, width, top, left, 0, outWidth, top);
+    ResizableTexture2.prototype.getWidth = function() {
+      var _a;
+      return (_a = this.dw) !== null && _a !== void 0 ? _a : this._source.getWidth();
+    };
+    ResizableTexture2.prototype.getHeight = function() {
+      var _a;
+      return (_a = this.dh) !== null && _a !== void 0 ? _a : this._source.getHeight();
+    };
+    ResizableTexture2.prototype.prerender = function(context) {
+      return false;
+    };
+    ResizableTexture2.prototype.drawWithNormalizedArgs = function(context, sx, sy, sw, sh, dx, dy, dw, dh) {
+      var texture2 = this._source;
+      if (texture2 === null || typeof texture2 !== "object") {
+        return;
       }
-      if (bottom > 0) {
-        texture2.draw(
-          context,
-          left,
-          height + top,
-          width,
-          bottom,
-          left,
-          outHeight + top,
-          outWidth,
-          bottom
-        );
+      var outWidth = dw;
+      var outHeight = dh;
+      var left = Number.isFinite(texture2.left) ? texture2.left : 0;
+      var right = Number.isFinite(texture2.right) ? texture2.right : 0;
+      var top = Number.isFinite(texture2.top) ? texture2.top : 0;
+      var bottom = Number.isFinite(texture2.bottom) ? texture2.bottom : 0;
+      var width = texture2.getWidth() - left - right;
+      var height = texture2.getHeight() - top - bottom;
+      if (!this._innerSize) {
+        outWidth = Math.max(outWidth - left - right, 0);
+        outHeight = Math.max(outHeight - top - bottom, 0);
       }
-      if (left > 0) {
-        texture2.draw(context, 0, top, left, height, 0, top, left, outHeight);
+      if (top > 0 && left > 0) {
+        texture2.draw(context, 0, 0, left, top, 0, 0, left, top);
       }
-      if (right > 0) {
-        texture2.draw(
-          context,
-          width + left,
-          top,
-          right,
-          height,
-          outWidth + left,
-          top,
-          right,
-          outHeight
-        );
+      if (bottom > 0 && left > 0) {
+        texture2.draw(context, 0, height + top, left, bottom, 0, outHeight + top, left, bottom);
       }
-      texture2.draw(context, left, top, width, height, left, top, outWidth, outHeight);
-    } else if (this._resizeMode === "tile") {
-      let l = left;
-      let r = outWidth;
-      let w;
-      while (r > 0) {
-        w = Math.min(width, r);
-        r -= width;
-        let t = top;
-        let b = outHeight;
-        let h;
-        while (b > 0) {
-          h = Math.min(height, b);
-          b -= height;
-          texture2.draw(context, left, top, w, h, l, t, w, h);
-          if (r <= 0) {
-            if (left) {
-              texture2.draw(context, 0, top, left, h, 0, t, left, h);
+      if (top > 0 && right > 0) {
+        texture2.draw(context, width + left, 0, right, top, outWidth + left, 0, right, top);
+      }
+      if (bottom > 0 && right > 0) {
+        texture2.draw(context, width + left, height + top, right, bottom, outWidth + left, outHeight + top, right, bottom);
+      }
+      if (this._resizeMode === "stretch") {
+        if (top > 0) {
+          texture2.draw(context, left, 0, width, top, left, 0, outWidth, top);
+        }
+        if (bottom > 0) {
+          texture2.draw(context, left, height + top, width, bottom, left, outHeight + top, outWidth, bottom);
+        }
+        if (left > 0) {
+          texture2.draw(context, 0, top, left, height, 0, top, left, outHeight);
+        }
+        if (right > 0) {
+          texture2.draw(context, width + left, top, right, height, outWidth + left, top, right, outHeight);
+        }
+        texture2.draw(context, left, top, width, height, left, top, outWidth, outHeight);
+      } else if (this._resizeMode === "tile") {
+        var l = left;
+        var r = outWidth;
+        var w = void 0;
+        while (r > 0) {
+          w = Math.min(width, r);
+          r -= width;
+          var t = top;
+          var b = outHeight;
+          var h = void 0;
+          while (b > 0) {
+            h = Math.min(height, b);
+            b -= height;
+            texture2.draw(context, left, top, w, h, l, t, w, h);
+            if (r <= 0) {
+              if (left) {
+                texture2.draw(context, 0, top, left, h, 0, t, left, h);
+              }
+              if (right) {
+                texture2.draw(context, width + left, top, right, h, l + w, t, right, h);
+              }
             }
-            if (right) {
-              texture2.draw(context, width + left, top, right, h, l + w, t, right, h);
-            }
+            t += h;
           }
-          t += h;
+          if (top) {
+            texture2.draw(context, left, 0, w, top, l, 0, w, top);
+          }
+          if (bottom) {
+            texture2.draw(context, left, height + top, w, bottom, l, t, w, bottom);
+          }
+          l += w;
         }
-        if (top) {
-          texture2.draw(context, left, 0, w, top, l, 0, w, top);
-        }
-        if (bottom) {
-          texture2.draw(context, left, height + top, w, bottom, l, t, w, bottom);
-        }
-        l += w;
       }
-    }
-  }
-}
+    };
+    return ResizableTexture2;
+  }(Texture)
+);
 function getPixelRatio() {
   return typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
 }
 function isValidFitMode(value) {
   return value && (value === "cover" || value === "contain" || value === "fill" || value === "in" || value === "in-pad" || value === "out" || value === "out-crop");
 }
-let iid$1 = 0;
-class Pin {
-  /** @internal */
-  constructor(owner) {
-    this.uid = "pin:" + uid();
-    this._owner = owner;
-    this._parent = null;
-    this._relativeMatrix = new Matrix();
-    this._absoluteMatrix = new Matrix();
-    this.reset();
-  }
-  reset() {
-    this._textureAlpha = 1;
-    this._alpha = 1;
-    this._width = 0;
-    this._height = 0;
-    this._scaleX = 1;
-    this._scaleY = 1;
-    this._skewX = 0;
-    this._skewY = 0;
-    this._rotation = 0;
-    this._pivoted = false;
-    this._pivotX = 0;
-    this._pivotY = 0;
-    this._handled = false;
-    this._handleX = 0;
-    this._handleY = 0;
-    this._aligned = false;
-    this._alignX = 0;
-    this._alignY = 0;
-    this._offsetX = 0;
-    this._offsetY = 0;
-    this._boxX = 0;
-    this._boxY = 0;
-    this._boxWidth = this._width;
-    this._boxHeight = this._height;
-    this._ts_translate = ++iid$1;
-    this._ts_transform = ++iid$1;
-    this._ts_matrix = ++iid$1;
-  }
-  /** @internal */
-  _update() {
-    this._parent = this._owner._parent && this._owner._parent._pin;
-    if (this._handled && this._mo_handle != this._ts_transform) {
-      this._mo_handle = this._ts_transform;
-      this._ts_translate = ++iid$1;
+var iid$1 = 0;
+var Pin = (
+  /** @class */
+  function() {
+    function Pin2(owner) {
+      this.uid = "pin:" + uid();
+      this._owner = owner;
+      this._parent = null;
+      this._relativeMatrix = new Matrix();
+      this._absoluteMatrix = new Matrix();
+      this.reset();
     }
-    if (this._aligned && this._parent && this._mo_align != this._parent._ts_transform) {
-      this._mo_align = this._parent._ts_transform;
-      this._ts_translate = ++iid$1;
-    }
-    return this;
-  }
-  toString() {
-    return this._owner + " (" + (this._parent ? this._parent._owner : null) + ")";
-  }
-  // TODO: ts fields require refactoring
-  absoluteMatrix() {
-    this._update();
-    const ts = Math.max(
-      this._ts_transform,
-      this._ts_translate,
-      this._parent ? this._parent._ts_matrix : 0
-    );
-    if (this._mo_abs == ts) {
-      return this._absoluteMatrix;
-    }
-    this._mo_abs = ts;
-    const abs = this._absoluteMatrix;
-    abs.reset(this.relativeMatrix());
-    this._parent && abs.concat(this._parent._absoluteMatrix);
-    this._ts_matrix = ++iid$1;
-    return abs;
-  }
-  relativeMatrix() {
-    this._update();
-    const ts = Math.max(
-      this._ts_transform,
-      this._ts_translate,
-      this._parent ? this._parent._ts_transform : 0
-    );
-    if (this._mo_rel == ts) {
-      return this._relativeMatrix;
-    }
-    this._mo_rel = ts;
-    const rel = this._relativeMatrix;
-    rel.identity();
-    if (this._pivoted) {
-      rel.translate(-this._pivotX * this._width, -this._pivotY * this._height);
-    }
-    rel.scale(this._scaleX, this._scaleY);
-    rel.skew(this._skewX, this._skewY);
-    rel.rotate(this._rotation);
-    if (this._pivoted) {
-      rel.translate(this._pivotX * this._width, this._pivotY * this._height);
-    }
-    if (this._pivoted) {
+    Pin2.prototype.reset = function() {
+      this._textureAlpha = 1;
+      this._alpha = 1;
+      this._width = 0;
+      this._height = 0;
+      this._scaleX = 1;
+      this._scaleY = 1;
+      this._skewX = 0;
+      this._skewY = 0;
+      this._rotation = 0;
+      this._pivoted = false;
+      this._pivotX = 0;
+      this._pivotY = 0;
+      this._handled = false;
+      this._handleX = 0;
+      this._handleY = 0;
+      this._aligned = false;
+      this._alignX = 0;
+      this._alignY = 0;
+      this._offsetX = 0;
+      this._offsetY = 0;
       this._boxX = 0;
       this._boxY = 0;
       this._boxWidth = this._width;
       this._boxHeight = this._height;
-    } else {
-      let p;
-      let q;
-      if (rel.a > 0 && rel.c > 0 || rel.a < 0 && rel.c < 0) {
-        p = 0;
-        q = rel.a * this._width + rel.c * this._height;
+      this._ts_translate = ++iid$1;
+      this._ts_transform = ++iid$1;
+      this._ts_matrix = ++iid$1;
+    };
+    Pin2.prototype._update = function() {
+      this._parent = this._owner._parent && this._owner._parent._pin;
+      if (this._handled && this._mo_handle != this._ts_transform) {
+        this._mo_handle = this._ts_transform;
+        this._ts_translate = ++iid$1;
+      }
+      if (this._aligned && this._parent && this._mo_align != this._parent._ts_transform) {
+        this._mo_align = this._parent._ts_transform;
+        this._ts_translate = ++iid$1;
+      }
+      return this;
+    };
+    Pin2.prototype.toString = function() {
+      return this._owner + " (" + (this._parent ? this._parent._owner : null) + ")";
+    };
+    Pin2.prototype.absoluteMatrix = function() {
+      this._update();
+      var ts = Math.max(this._ts_transform, this._ts_translate, this._parent ? this._parent._ts_matrix : 0);
+      if (this._mo_abs == ts) {
+        return this._absoluteMatrix;
+      }
+      this._mo_abs = ts;
+      var abs = this._absoluteMatrix;
+      abs.reset(this.relativeMatrix());
+      this._parent && abs.concat(this._parent._absoluteMatrix);
+      this._ts_matrix = ++iid$1;
+      return abs;
+    };
+    Pin2.prototype.relativeMatrix = function() {
+      this._update();
+      var ts = Math.max(this._ts_transform, this._ts_translate, this._parent ? this._parent._ts_transform : 0);
+      if (this._mo_rel == ts) {
+        return this._relativeMatrix;
+      }
+      this._mo_rel = ts;
+      var rel = this._relativeMatrix;
+      rel.identity();
+      if (this._pivoted) {
+        rel.translate(-this._pivotX * this._width, -this._pivotY * this._height);
+      }
+      rel.scale(this._scaleX, this._scaleY);
+      rel.skew(this._skewX, this._skewY);
+      rel.rotate(this._rotation);
+      if (this._pivoted) {
+        rel.translate(this._pivotX * this._width, this._pivotY * this._height);
+      }
+      if (this._pivoted) {
+        this._boxX = 0;
+        this._boxY = 0;
+        this._boxWidth = this._width;
+        this._boxHeight = this._height;
       } else {
-        p = rel.a * this._width;
-        q = rel.c * this._height;
-      }
-      if (p > q) {
-        this._boxX = q;
-        this._boxWidth = p - q;
-      } else {
-        this._boxX = p;
-        this._boxWidth = q - p;
-      }
-      if (rel.b > 0 && rel.d > 0 || rel.b < 0 && rel.d < 0) {
-        p = 0;
-        q = rel.b * this._width + rel.d * this._height;
-      } else {
-        p = rel.b * this._width;
-        q = rel.d * this._height;
-      }
-      if (p > q) {
-        this._boxY = q;
-        this._boxHeight = p - q;
-      } else {
-        this._boxY = p;
-        this._boxHeight = q - p;
-      }
-    }
-    this._x = this._offsetX;
-    this._y = this._offsetY;
-    this._x -= this._boxX + this._handleX * this._boxWidth;
-    this._y -= this._boxY + this._handleY * this._boxHeight;
-    if (this._aligned && this._parent) {
-      this._parent.relativeMatrix();
-      this._x += this._alignX * this._parent._width;
-      this._y += this._alignY * this._parent._height;
-    }
-    rel.translate(this._x, this._y);
-    return this._relativeMatrix;
-  }
-  /** @internal */
-  get(key) {
-    if (typeof getters[key] === "function") {
-      return getters[key](this);
-    }
-  }
-  // TODO: Use defineProperty instead? What about multi-field pinning?
-  /** @internal */
-  set(a, b) {
-    if (typeof a === "string") {
-      if (typeof setters[a] === "function" && typeof b !== "undefined") {
-        setters[a](this, b);
-      }
-    } else if (typeof a === "object") {
-      for (b in a) {
-        if (typeof setters[b] === "function" && typeof a[b] !== "undefined") {
-          setters[b](this, a[b], a);
+        var p = void 0;
+        var q = void 0;
+        if (rel.a > 0 && rel.c > 0 || rel.a < 0 && rel.c < 0) {
+          p = 0;
+          q = rel.a * this._width + rel.c * this._height;
+        } else {
+          p = rel.a * this._width;
+          q = rel.c * this._height;
+        }
+        if (p > q) {
+          this._boxX = q;
+          this._boxWidth = p - q;
+        } else {
+          this._boxX = p;
+          this._boxWidth = q - p;
+        }
+        if (rel.b > 0 && rel.d > 0 || rel.b < 0 && rel.d < 0) {
+          p = 0;
+          q = rel.b * this._width + rel.d * this._height;
+        } else {
+          p = rel.b * this._width;
+          q = rel.d * this._height;
+        }
+        if (p > q) {
+          this._boxY = q;
+          this._boxHeight = p - q;
+        } else {
+          this._boxY = p;
+          this._boxHeight = q - p;
         }
       }
-    }
-    if (this._owner) {
-      this._owner._ts_pin = ++iid$1;
-      this._owner.touch();
-    }
-    return this;
-  }
-  // todo: should this be public?
-  /** @internal */
-  fit(width, height, mode) {
-    this._ts_transform = ++iid$1;
-    if (mode === "contain") {
-      mode = "in-pad";
-    }
-    if (mode === "cover") {
-      mode = "out-crop";
-    }
-    if (typeof width === "number") {
-      this._scaleX = width / this._unscaled_width;
-      this._width = this._unscaled_width;
-    }
-    if (typeof height === "number") {
-      this._scaleY = height / this._unscaled_height;
-      this._height = this._unscaled_height;
-    }
-    if (typeof width === "number" && typeof height === "number" && typeof mode === "string") {
-      if (mode === "fill")
-        ;
-      else if (mode === "out" || mode === "out-crop") {
-        this._scaleX = this._scaleY = Math.max(this._scaleX, this._scaleY);
-      } else if (mode === "in" || mode === "in-pad") {
-        this._scaleX = this._scaleY = Math.min(this._scaleX, this._scaleY);
+      this._x = this._offsetX;
+      this._y = this._offsetY;
+      this._x -= this._boxX + this._handleX * this._boxWidth;
+      this._y -= this._boxY + this._handleY * this._boxHeight;
+      if (this._aligned && this._parent) {
+        this._parent.relativeMatrix();
+        this._x += this._alignX * this._parent._width;
+        this._y += this._alignY * this._parent._height;
       }
-      if (mode === "out-crop" || mode === "in-pad") {
-        this._width = width / this._scaleX;
-        this._height = height / this._scaleY;
+      rel.translate(this._x, this._y);
+      return this._relativeMatrix;
+    };
+    Pin2.prototype.get = function(key) {
+      if (typeof getters[key] === "function") {
+        return getters[key](this);
       }
-    }
-  }
-}
-const getters = {
+    };
+    Pin2.prototype.set = function(a, b) {
+      if (typeof a === "string") {
+        if (typeof setters[a] === "function" && typeof b !== "undefined") {
+          setters[a](this, b);
+        }
+      } else if (typeof a === "object") {
+        for (b in a) {
+          if (typeof setters[b] === "function" && typeof a[b] !== "undefined") {
+            setters[b](this, a[b], a);
+          }
+        }
+      }
+      if (this._owner) {
+        this._owner._ts_pin = ++iid$1;
+        this._owner.touch();
+      }
+      return this;
+    };
+    Pin2.prototype.fit = function(width, height, mode) {
+      this._ts_transform = ++iid$1;
+      if (mode === "contain") {
+        mode = "in-pad";
+      }
+      if (mode === "cover") {
+        mode = "out-crop";
+      }
+      if (typeof width === "number") {
+        this._scaleX = width / this._unscaled_width;
+        this._width = this._unscaled_width;
+      }
+      if (typeof height === "number") {
+        this._scaleY = height / this._unscaled_height;
+        this._height = this._unscaled_height;
+      }
+      if (typeof width === "number" && typeof height === "number" && typeof mode === "string") {
+        if (mode === "fill")
+          ;
+        else if (mode === "out" || mode === "out-crop") {
+          this._scaleX = this._scaleY = Math.max(this._scaleX, this._scaleY);
+        } else if (mode === "in" || mode === "in-pad") {
+          this._scaleX = this._scaleY = Math.min(this._scaleX, this._scaleY);
+        }
+        if (mode === "out-crop" || mode === "in-pad") {
+          this._width = width / this._scaleX;
+          this._height = height / this._scaleY;
+        }
+      }
+    };
+    return Pin2;
+  }()
+);
+var getters = {
   alpha: function(pin) {
     return pin._alpha;
   },
@@ -17144,7 +17475,7 @@ const getters = {
     return pin._handleY;
   }
 };
-const setters = {
+var setters = {
   alpha: function(pin, value) {
     pin._alpha = value;
   },
@@ -17298,55 +17629,61 @@ const setters = {
 function IDENTITY(x) {
   return x;
 }
-const LOOKUP_CACHE = {};
-const MODE_BY_NAME = {};
-const EASE_BY_NAME = {};
-class Easing {
-  static get(token, fallback) {
-    fallback = fallback || IDENTITY;
-    if (typeof token === "function") {
-      return token;
+var LOOKUP_CACHE = {};
+var MODE_BY_NAME = {};
+var EASE_BY_NAME = {};
+var Easing = (
+  /** @class */
+  function() {
+    function Easing2() {
     }
-    if (typeof token !== "string") {
-      return fallback;
-    }
-    let easeFn = LOOKUP_CACHE[token];
-    if (easeFn) {
+    Easing2.get = function(token, fallback) {
+      fallback = fallback || IDENTITY;
+      if (typeof token === "function") {
+        return token;
+      }
+      if (typeof token !== "string") {
+        return fallback;
+      }
+      var easeFn = LOOKUP_CACHE[token];
+      if (easeFn) {
+        return easeFn;
+      }
+      var tokens = /^(\w+)(-(in|out|in-out|out-in))?(\((.*)\))?$/i.exec(token);
+      if (!tokens || !tokens.length) {
+        return fallback;
+      }
+      var easeName = tokens[1];
+      var easing = EASE_BY_NAME[easeName];
+      var modeName = tokens[3];
+      var modeFn = MODE_BY_NAME[modeName];
+      var params = tokens[5];
+      if (!easing) {
+        easeFn = fallback;
+      } else if ("fn" in easing && typeof easing.fn === "function") {
+        easeFn = easing.fn;
+      } else if ("fc" in easing && typeof easing.fc === "function") {
+        var args = params ? params.replace(/\s+/, "").split(",") : void 0;
+        easeFn = easing.fc.apply(easing.fc, args);
+      } else {
+        easeFn = fallback;
+      }
+      if (modeFn) {
+        easeFn = modeFn(easeFn);
+      }
+      LOOKUP_CACHE[token] = easeFn;
       return easeFn;
-    }
-    const tokens = /^(\w+)(-(in|out|in-out|out-in))?(\((.*)\))?$/i.exec(token);
-    if (!tokens || !tokens.length) {
-      return fallback;
-    }
-    const easeName = tokens[1];
-    const easing = EASE_BY_NAME[easeName];
-    const modeName = tokens[3];
-    const modeFn = MODE_BY_NAME[modeName];
-    const params = tokens[5];
-    if (!easing) {
-      easeFn = fallback;
-    } else if ("fn" in easing && typeof easing.fn === "function") {
-      easeFn = easing.fn;
-    } else if ("fc" in easing && typeof easing.fc === "function") {
-      const args = params ? params.replace(/\s+/, "").split(",") : void 0;
-      easeFn = easing.fc.apply(easing.fc, args);
-    } else {
-      easeFn = fallback;
-    }
-    if (modeFn) {
-      easeFn = modeFn(easeFn);
-    }
-    LOOKUP_CACHE[token] = easeFn;
-    return easeFn;
-  }
-}
+    };
+    return Easing2;
+  }()
+);
 function addMode(name, fn) {
   MODE_BY_NAME[name] = fn;
 }
 function addEaseFn(data) {
-  const names = data.name.split(/\s+/);
-  for (let i = 0; i < names.length; i++) {
-    const key = names[i];
+  var names = data.name.split(/\s+/);
+  for (var i = 0; i < names.length; i++) {
+    var key = names[i];
     if (key) {
       EASE_BY_NAME[key] = data;
     }
@@ -17437,7 +17774,7 @@ addEaseFn({
   fc: function(a, p) {
     p = p || 0.45;
     a = a || 1;
-    const s = p / (2 * Math.PI) * Math.asin(1 / a);
+    var s = p / (2 * Math.PI) * Math.asin(1 / a);
     return function(t) {
       return 1 + a * Math.pow(2, -10 * t) * Math.sin((t - s) * (2 * Math.PI) / p);
     };
@@ -17452,181 +17789,181 @@ addEaseFn({
     };
   }
 });
-class Transition {
-  constructor(owner, options = {}) {
-    this.uid = "transition:" + uid();
-    this._ending = [];
-    this._end = {};
-    this._duration = options.duration || 400;
-    this._delay = options.delay || 0;
-    this._owner = owner;
-    this._time = 0;
-  }
-  /** @internal */
-  tick(node, elapsed, now, last) {
-    this._time += elapsed;
-    if (this._time < this._delay) {
-      return;
-    }
-    const time = this._time - this._delay;
-    if (!this._start) {
-      this._start = {};
-      for (const key in this._end) {
-        this._start[key] = this._owner.pin(key);
+var Transition = (
+  /** @class */
+  function() {
+    function Transition2(owner, options) {
+      if (options === void 0) {
+        options = {};
       }
+      this.uid = "transition:" + uid();
+      this._ending = [];
+      this._end = {};
+      this._duration = options.duration || 400;
+      this._delay = options.delay || 0;
+      this._owner = owner;
+      this._time = 0;
     }
-    let p = Math.min(time / this._duration, 1);
-    const ended = p >= 1;
-    if (typeof this._easing == "function") {
-      p = this._easing(p);
-    }
-    const q = 1 - p;
-    for (const key in this._end) {
-      this._owner.pin(key, this._start[key] * q + this._end[key] * p);
-    }
-    return ended;
-  }
-  /** @internal */
-  finish() {
-    this._ending.forEach((callback) => {
-      try {
-        callback.call(this._owner);
-      } catch (e) {
-        console.error(e);
+    Transition2.prototype.tick = function(node, elapsed, now, last) {
+      this._time += elapsed;
+      if (this._time < this._delay) {
+        return;
       }
-    });
-    return this._next;
-  }
-  tween(a, b) {
-    let options;
-    if (typeof a === "object" && a !== null) {
-      options = a;
-    } else {
-      options = {};
-      if (typeof a === "number") {
-        options.duration = a;
-        if (typeof b === "number") {
-          options.delay = b;
+      var time = this._time - this._delay;
+      if (!this._start) {
+        this._start = {};
+        for (var key in this._end) {
+          this._start[key] = this._owner.pin(key);
         }
       }
-    }
-    return this._next = new Transition(this._owner, options);
-  }
-  duration(duration) {
-    this._duration = duration;
-    return this;
-  }
-  delay(delay) {
-    this._delay = delay;
-    return this;
-  }
-  ease(easing) {
-    this._easing = Easing.get(easing);
-    return this;
-  }
-  done(fn) {
-    this._ending.push(fn);
-    return this;
-  }
-  hide() {
-    this._ending.push(function() {
-      this.hide();
-    });
-    this._hide = true;
-    return this;
-  }
-  remove() {
-    this._ending.push(function() {
-      this.remove();
-    });
-    this._remove = true;
-    return this;
-  }
-  pin(a, b) {
-    if (typeof a === "object") {
-      for (const attr in a) {
-        pinning(this._owner, this._end, attr, a[attr]);
+      var p = Math.min(time / this._duration, 1);
+      var ended = p >= 1;
+      if (typeof this._easing == "function") {
+        p = this._easing(p);
       }
-    } else if (typeof b !== "undefined") {
-      pinning(this._owner, this._end, a, b);
-    }
-    return this;
-  }
-  /**
-   * @deprecated Use .done(fn) instead.
-   */
-  then(fn) {
-    this.done(fn);
-    return this;
-  }
-  /**
-   * @deprecated this doesn't do anything anymore, call transition on the node instead.
-   */
-  clear(forward) {
-    return this;
-  }
-  size(w, h) {
-    this.pin("width", w);
-    this.pin("height", h);
-    return this;
-  }
-  width(w) {
-    if (typeof w === "undefined") {
-      return this.pin("width");
-    }
-    this.pin("width", w);
-    return this;
-  }
-  height(h) {
-    if (typeof h === "undefined") {
-      return this.pin("height");
-    }
-    this.pin("height", h);
-    return this;
-  }
-  offset(a, b) {
-    if (typeof a === "object") {
-      b = a.y;
-      a = a.x;
-    }
-    this.pin("offsetX", a);
-    this.pin("offsetY", b);
-    return this;
-  }
-  rotate(a) {
-    this.pin("rotation", a);
-    return this;
-  }
-  skew(a, b) {
-    if (typeof a === "object") {
-      b = a.y;
-      a = a.x;
-    } else if (typeof b === "undefined") {
-      b = a;
-    }
-    this.pin("skewX", a);
-    this.pin("skewY", b);
-    return this;
-  }
-  scale(a, b) {
-    if (typeof a === "object") {
-      b = a.y;
-      a = a.x;
-    } else if (typeof b === "undefined") {
-      b = a;
-    }
-    this.pin("scaleX", a);
-    this.pin("scaleY", b);
-    return this;
-  }
-  alpha(a, ta) {
-    this.pin("alpha", a);
-    if (typeof ta !== "undefined") {
-      this.pin("textureAlpha", ta);
-    }
-    return this;
-  }
-}
+      var q = 1 - p;
+      for (var key in this._end) {
+        this._owner.pin(key, this._start[key] * q + this._end[key] * p);
+      }
+      return ended;
+    };
+    Transition2.prototype.finish = function() {
+      var _this = this;
+      this._ending.forEach(function(callback) {
+        try {
+          callback.call(_this._owner);
+        } catch (e) {
+          console.error(e);
+        }
+      });
+      return this._next;
+    };
+    Transition2.prototype.tween = function(a, b) {
+      var options;
+      if (typeof a === "object" && a !== null) {
+        options = a;
+      } else {
+        options = {};
+        if (typeof a === "number") {
+          options.duration = a;
+          if (typeof b === "number") {
+            options.delay = b;
+          }
+        }
+      }
+      return this._next = new Transition2(this._owner, options);
+    };
+    Transition2.prototype.duration = function(duration) {
+      this._duration = duration;
+      return this;
+    };
+    Transition2.prototype.delay = function(delay) {
+      this._delay = delay;
+      return this;
+    };
+    Transition2.prototype.ease = function(easing) {
+      this._easing = Easing.get(easing);
+      return this;
+    };
+    Transition2.prototype.done = function(fn) {
+      this._ending.push(fn);
+      return this;
+    };
+    Transition2.prototype.hide = function() {
+      this._ending.push(function() {
+        this.hide();
+      });
+      this._hide = true;
+      return this;
+    };
+    Transition2.prototype.remove = function() {
+      this._ending.push(function() {
+        this.remove();
+      });
+      this._remove = true;
+      return this;
+    };
+    Transition2.prototype.pin = function(a, b) {
+      if (typeof a === "object") {
+        for (var attr in a) {
+          pinning(this._owner, this._end, attr, a[attr]);
+        }
+      } else if (typeof b !== "undefined") {
+        pinning(this._owner, this._end, a, b);
+      }
+      return this;
+    };
+    Transition2.prototype.then = function(fn) {
+      this.done(fn);
+      return this;
+    };
+    Transition2.prototype.clear = function(forward) {
+      return this;
+    };
+    Transition2.prototype.size = function(w, h) {
+      this.pin("width", w);
+      this.pin("height", h);
+      return this;
+    };
+    Transition2.prototype.width = function(w) {
+      if (typeof w === "undefined") {
+        return this.pin("width");
+      }
+      this.pin("width", w);
+      return this;
+    };
+    Transition2.prototype.height = function(h) {
+      if (typeof h === "undefined") {
+        return this.pin("height");
+      }
+      this.pin("height", h);
+      return this;
+    };
+    Transition2.prototype.offset = function(a, b) {
+      if (typeof a === "object") {
+        b = a.y;
+        a = a.x;
+      }
+      this.pin("offsetX", a);
+      this.pin("offsetY", b);
+      return this;
+    };
+    Transition2.prototype.rotate = function(a) {
+      this.pin("rotation", a);
+      return this;
+    };
+    Transition2.prototype.skew = function(a, b) {
+      if (typeof a === "object") {
+        b = a.y;
+        a = a.x;
+      } else if (typeof b === "undefined") {
+        b = a;
+      }
+      this.pin("skewX", a);
+      this.pin("skewY", b);
+      return this;
+    };
+    Transition2.prototype.scale = function(a, b) {
+      if (typeof a === "object") {
+        b = a.y;
+        a = a.x;
+      } else if (typeof b === "undefined") {
+        b = a;
+      }
+      this.pin("scaleX", a);
+      this.pin("scaleY", b);
+      return this;
+    };
+    Transition2.prototype.alpha = function(a, ta) {
+      this.pin("alpha", a);
+      if (typeof ta !== "undefined") {
+        this.pin("textureAlpha", ta);
+      }
+      return this;
+    };
+    return Transition2;
+  }()
+);
 function pinning(node, map, key, value) {
   if (typeof node.pin(key) === "number") {
     map[key] = value;
@@ -17635,7 +17972,7 @@ function pinning(node, map, key, value) {
     map[key + "Y"] = value;
   }
 }
-let iid = 0;
+var iid = 0;
 stats.create = 0;
 function assertType(obj) {
   if (obj && obj instanceof Node) {
@@ -17667,745 +18004,741 @@ function minimize() {
 function maximize() {
   return layout().maximize().label("Maximize");
 }
-class Node {
-  constructor() {
-    this.uid = "node:" + uid();
-    this._label = "";
-    this._parent = null;
-    this._next = null;
-    this._prev = null;
-    this._first = null;
-    this._last = null;
-    this._visible = true;
-    this._alpha = 1;
-    this._padding = 0;
-    this._spacing = 0;
-    this._pin = new Pin(this);
-    this._listeners = {};
-    this._attrs = {};
-    this._flags = {};
-    this._transitions = [];
-    this._tickBefore = [];
-    this._tickAfter = [];
-    this.MAX_ELAPSE = Infinity;
-    this._transitionTickInitied = false;
-    this._transitionTickLastTime = 0;
-    this._transitionTick = (elapsed, now, last) => {
-      if (!this._transitions.length) {
-        return false;
-      }
-      const ignore = this._transitionTickLastTime !== last;
-      this._transitionTickLastTime = now;
-      if (ignore) {
+var Node = (
+  /** @class */
+  function() {
+    function Node2() {
+      var _this = this;
+      this.uid = "node:" + uid();
+      this._label = "";
+      this._parent = null;
+      this._next = null;
+      this._prev = null;
+      this._first = null;
+      this._last = null;
+      this._visible = true;
+      this._alpha = 1;
+      this._padding = 0;
+      this._spacing = 0;
+      this._pin = new Pin(this);
+      this._listeners = {};
+      this._attrs = {};
+      this._flags = {};
+      this._transitions = [];
+      this._tickBefore = [];
+      this._tickAfter = [];
+      this.MAX_ELAPSE = Infinity;
+      this._transitionTickInitied = false;
+      this._transitionTickLastTime = 0;
+      this._transitionTick = function(elapsed, now, last) {
+        if (!_this._transitions.length) {
+          return false;
+        }
+        var ignore = _this._transitionTickLastTime !== last;
+        _this._transitionTickLastTime = now;
+        if (ignore) {
+          return true;
+        }
+        var head = _this._transitions[0];
+        var ended = head.tick(_this, elapsed, now, last);
+        if (ended) {
+          if (head === _this._transitions[0]) {
+            _this._transitions.shift();
+          }
+          var next = head.finish();
+          if (next) {
+            _this._transitions.unshift(next);
+          }
+        }
         return true;
+      };
+      stats.create++;
+    }
+    Node2.prototype.matrix = function(relative) {
+      if (relative === void 0) {
+        relative = false;
       }
-      const head = this._transitions[0];
-      const ended = head.tick(this, elapsed, now, last);
-      if (ended) {
-        if (head === this._transitions[0]) {
-          this._transitions.shift();
-        }
-        const next = head.finish();
-        if (next) {
-          this._transitions.unshift(next);
-        }
+      if (relative === true) {
+        return this._pin.relativeMatrix();
       }
-      return true;
+      return this._pin.absoluteMatrix();
     };
-    stats.create++;
-  }
-  matrix(relative = false) {
-    if (relative === true) {
-      return this._pin.relativeMatrix();
-    }
-    return this._pin.absoluteMatrix();
-  }
-  /** @internal */
-  getPixelRatio() {
-    var _a;
-    const m = (_a = this._parent) == null ? void 0 : _a.matrix();
-    const pixelRatio = !m ? 1 : Math.max(Math.abs(m.a), Math.abs(m.b)) / getPixelRatio();
-    return pixelRatio;
-  }
-  pin(a, b) {
-    if (typeof a === "object") {
-      this._pin.set(a);
-      return this;
-    } else if (typeof a === "string") {
-      if (typeof b === "undefined") {
-        return this._pin.get(a);
-      } else {
-        this._pin.set(a, b);
+    Node2.prototype.getPixelRatio = function() {
+      var _a;
+      var m = (_a = this._parent) === null || _a === void 0 ? void 0 : _a.matrix();
+      var pixelRatio = !m ? 1 : Math.max(Math.abs(m.a), Math.abs(m.b)) / getPixelRatio();
+      return pixelRatio;
+    };
+    Node2.prototype.pin = function(a, b) {
+      if (typeof a === "object") {
+        this._pin.set(a);
         return this;
+      } else if (typeof a === "string") {
+        if (typeof b === "undefined") {
+          return this._pin.get(a);
+        } else {
+          this._pin.set(a, b);
+          return this;
+        }
+      } else if (typeof a === "undefined") {
+        return this._pin;
       }
-    } else if (typeof a === "undefined") {
-      return this._pin;
-    }
-  }
-  fit(a, b, c) {
-    if (typeof a === "object") {
-      c = b;
-      b = a.y;
-      a = a.x;
-    }
-    this._pin.fit(a, b, c);
-    return this;
-  }
-  /** @hidden @deprecated Use fit */
-  scaleTo(a, b, c) {
-    return this.fit(a, b, c);
-  }
-  toString() {
-    return "[" + this._label + "]";
-  }
-  /** @deprecated Use label() */
-  id(id) {
-    return this.label(id);
-  }
-  label(label) {
-    if (typeof label === "undefined") {
-      return this._label;
-    }
-    this._label = label;
-    return this;
-  }
-  attr(name, value) {
-    if (typeof value === "undefined") {
-      return this._attrs !== null ? this._attrs[name] : void 0;
-    }
-    (this._attrs !== null ? this._attrs : this._attrs = {})[name] = value;
-    return this;
-  }
-  visible(visible) {
-    if (typeof visible === "undefined") {
-      return this._visible;
-    }
-    this._visible = visible;
-    this._parent && (this._parent._ts_children = ++iid);
-    this._ts_pin = ++iid;
-    this.touch();
-    return this;
-  }
-  hide() {
-    this.visible(false);
-    return this;
-  }
-  show() {
-    this.visible(true);
-    return this;
-  }
-  parent() {
-    return this._parent;
-  }
-  next(visible) {
-    let next = this._next;
-    while (next && visible && !next._visible) {
-      next = next._next;
-    }
-    return next;
-  }
-  prev(visible) {
-    let prev = this._prev;
-    while (prev && visible && !prev._visible) {
-      prev = prev._prev;
-    }
-    return prev;
-  }
-  first(visible) {
-    let next = this._first;
-    while (next && visible && !next._visible) {
-      next = next._next;
-    }
-    return next;
-  }
-  last(visible) {
-    let prev = this._last;
-    while (prev && visible && !prev._visible) {
-      prev = prev._prev;
-    }
-    return prev;
-  }
-  visit(visitor, payload) {
-    const reverse = visitor.reverse;
-    const visible = visitor.visible;
-    if (visitor.start && visitor.start(this, payload)) {
-      return;
-    }
-    let child;
-    let next = reverse ? this.last(visible) : this.first(visible);
-    while (child = next) {
-      next = reverse ? child.prev(visible) : child.next(visible);
-      if (child.visit(visitor, payload)) {
-        return true;
+    };
+    Node2.prototype.fit = function(a, b, c) {
+      if (typeof a === "object") {
+        c = b;
+        b = a.y;
+        a = a.x;
       }
-    }
-    return visitor.end && visitor.end(this, payload);
-  }
-  append(child, more) {
-    if (Array.isArray(child)) {
-      for (let i = 0; i < child.length; i++) {
-        Node.append(this, child[i]);
+      this._pin.fit(a, b, c);
+      return this;
+    };
+    Node2.prototype.scaleTo = function(a, b, c) {
+      return this.fit(a, b, c);
+    };
+    Node2.prototype.toString = function() {
+      return "[" + this._label + "]";
+    };
+    Node2.prototype.id = function(id) {
+      return this.label(id);
+    };
+    Node2.prototype.label = function(label) {
+      if (typeof label === "undefined") {
+        return this._label;
       }
-    } else if (typeof more !== "undefined") {
-      for (let i = 0; i < arguments.length; i++) {
-        Node.append(this, arguments[i]);
+      this._label = label;
+      return this;
+    };
+    Node2.prototype.attr = function(name, value) {
+      if (typeof value === "undefined") {
+        return this._attrs !== null ? this._attrs[name] : void 0;
       }
-    } else if (typeof child !== "undefined")
-      Node.append(this, child);
-    return this;
-  }
-  prepend(child, more) {
-    if (Array.isArray(child)) {
-      for (let i = child.length - 1; i >= 0; i--) {
-        Node.prepend(this, child[i]);
+      (this._attrs !== null ? this._attrs : this._attrs = {})[name] = value;
+      return this;
+    };
+    Node2.prototype.visible = function(visible) {
+      if (typeof visible === "undefined") {
+        return this._visible;
       }
-    } else if (typeof more !== "undefined") {
-      for (let i = arguments.length - 1; i >= 0; i--) {
-        Node.prepend(this, arguments[i]);
+      this._visible = visible;
+      this._parent && (this._parent._ts_children = ++iid);
+      this._ts_pin = ++iid;
+      this.touch();
+      return this;
+    };
+    Node2.prototype.hide = function() {
+      this.visible(false);
+      return this;
+    };
+    Node2.prototype.show = function() {
+      this.visible(true);
+      return this;
+    };
+    Node2.prototype.parent = function() {
+      return this._parent;
+    };
+    Node2.prototype.next = function(visible) {
+      var next = this._next;
+      while (next && visible && !next._visible) {
+        next = next._next;
       }
-    } else if (typeof child !== "undefined")
-      Node.prepend(this, child);
-    return this;
-  }
-  appendTo(parent) {
-    Node.append(parent, this);
-    return this;
-  }
-  prependTo(parent) {
-    Node.prepend(parent, this);
-    return this;
-  }
-  insertNext(sibling, more) {
-    if (Array.isArray(sibling)) {
-      for (let i = 0; i < sibling.length; i++) {
-        Node.insertAfter(sibling[i], this);
+      return next;
+    };
+    Node2.prototype.prev = function(visible) {
+      var prev = this._prev;
+      while (prev && visible && !prev._visible) {
+        prev = prev._prev;
       }
-    } else if (typeof more !== "undefined") {
-      for (let i = 0; i < arguments.length; i++) {
-        Node.insertAfter(arguments[i], this);
+      return prev;
+    };
+    Node2.prototype.first = function(visible) {
+      var next = this._first;
+      while (next && visible && !next._visible) {
+        next = next._next;
       }
-    } else if (typeof sibling !== "undefined") {
-      Node.insertAfter(sibling, this);
-    }
-    return this;
-  }
-  insertPrev(sibling, more) {
-    if (Array.isArray(sibling)) {
-      for (let i = sibling.length - 1; i >= 0; i--) {
-        Node.insertBefore(sibling[i], this);
+      return next;
+    };
+    Node2.prototype.last = function(visible) {
+      var prev = this._last;
+      while (prev && visible && !prev._visible) {
+        prev = prev._prev;
       }
-    } else if (typeof more !== "undefined") {
-      for (let i = arguments.length - 1; i >= 0; i--) {
-        Node.insertBefore(arguments[i], this);
+      return prev;
+    };
+    Node2.prototype.visit = function(visitor, payload) {
+      var reverse = visitor.reverse;
+      var visible = visitor.visible;
+      if (visitor.start && visitor.start(this, payload)) {
+        return;
       }
-    } else if (typeof sibling !== "undefined") {
-      Node.insertBefore(sibling, this);
-    }
-    return this;
-  }
-  insertAfter(prev) {
-    Node.insertAfter(this, prev);
-    return this;
-  }
-  insertBefore(next) {
-    Node.insertBefore(this, next);
-    return this;
-  }
-  /** @internal */
-  static append(parent, child) {
-    assertType(child);
-    assertType(parent);
-    child.remove();
-    if (parent._last) {
-      parent._last._next = child;
-      child._prev = parent._last;
-    }
-    child._parent = parent;
-    parent._last = child;
-    if (!parent._first) {
-      parent._first = child;
-    }
-    child._parent._flag(child, true);
-    child._ts_parent = ++iid;
-    parent._ts_children = ++iid;
-    parent.touch();
-  }
-  /** @internal */
-  static prepend(parent, child) {
-    assertType(child);
-    assertType(parent);
-    child.remove();
-    if (parent._first) {
-      parent._first._prev = child;
-      child._next = parent._first;
-    }
-    child._parent = parent;
-    parent._first = child;
-    if (!parent._last) {
-      parent._last = child;
-    }
-    child._parent._flag(child, true);
-    child._ts_parent = ++iid;
-    parent._ts_children = ++iid;
-    parent.touch();
-  }
-  /** @internal */
-  static insertBefore(self, next) {
-    assertType(self);
-    assertType(next);
-    self.remove();
-    const parent = next._parent;
-    const prev = next._prev;
-    if (!parent) {
-      return;
-    }
-    next._prev = self;
-    prev && (prev._next = self) || parent && (parent._first = self);
-    self._parent = parent;
-    self._prev = prev;
-    self._next = next;
-    self._parent._flag(self, true);
-    self._ts_parent = ++iid;
-    self.touch();
-  }
-  /** @internal */
-  static insertAfter(self, prev) {
-    assertType(self);
-    assertType(prev);
-    self.remove();
-    const parent = prev._parent;
-    const next = prev._next;
-    if (!parent) {
-      return;
-    }
-    prev._next = self;
-    next && (next._prev = self) || parent && (parent._last = self);
-    self._parent = parent;
-    self._prev = prev;
-    self._next = next;
-    self._parent._flag(self, true);
-    self._ts_parent = ++iid;
-    self.touch();
-  }
-  remove(child, more) {
-    if (typeof child !== "undefined") {
+      var child;
+      var next = reverse ? this.last(visible) : this.first(visible);
+      while (child = next) {
+        next = reverse ? child.prev(visible) : child.next(visible);
+        if (child.visit(visitor, payload)) {
+          return true;
+        }
+      }
+      return visitor.end && visitor.end(this, payload);
+    };
+    Node2.prototype.append = function(child, more) {
       if (Array.isArray(child)) {
-        for (let i = 0; i < child.length; i++) {
-          assertType(child[i]).remove();
+        for (var i = 0; i < child.length; i++) {
+          Node2.append(this, child[i]);
         }
       } else if (typeof more !== "undefined") {
-        for (let i = 0; i < arguments.length; i++) {
-          assertType(arguments[i]).remove();
+        for (var i = 0; i < arguments.length; i++) {
+          Node2.append(this, arguments[i]);
         }
-      } else {
-        assertType(child).remove();
+      } else if (typeof child !== "undefined")
+        Node2.append(this, child);
+      return this;
+    };
+    Node2.prototype.prepend = function(child, more) {
+      if (Array.isArray(child)) {
+        for (var i = child.length - 1; i >= 0; i--) {
+          Node2.prepend(this, child[i]);
+        }
+      } else if (typeof more !== "undefined") {
+        for (var i = arguments.length - 1; i >= 0; i--) {
+          Node2.prepend(this, arguments[i]);
+        }
+      } else if (typeof child !== "undefined")
+        Node2.prepend(this, child);
+      return this;
+    };
+    Node2.prototype.appendTo = function(parent) {
+      Node2.append(parent, this);
+      return this;
+    };
+    Node2.prototype.prependTo = function(parent) {
+      Node2.prepend(parent, this);
+      return this;
+    };
+    Node2.prototype.insertNext = function(sibling, more) {
+      if (Array.isArray(sibling)) {
+        for (var i = 0; i < sibling.length; i++) {
+          Node2.insertAfter(sibling[i], this);
+        }
+      } else if (typeof more !== "undefined") {
+        for (var i = 0; i < arguments.length; i++) {
+          Node2.insertAfter(arguments[i], this);
+        }
+      } else if (typeof sibling !== "undefined") {
+        Node2.insertAfter(sibling, this);
       }
       return this;
-    }
-    if (this._prev) {
-      this._prev._next = this._next;
-    }
-    if (this._next) {
-      this._next._prev = this._prev;
-    }
-    if (this._parent) {
-      if (this._parent._first === this) {
-        this._parent._first = this._next;
-      }
-      if (this._parent._last === this) {
-        this._parent._last = this._prev;
-      }
-      this._parent._flag(this, false);
-      this._parent._ts_children = ++iid;
-      this._parent.touch();
-    }
-    this._prev = this._next = this._parent = null;
-    this._ts_parent = ++iid;
-    return this;
-  }
-  empty() {
-    let child = null;
-    let next = this._first;
-    while (child = next) {
-      next = child._next;
-      child._prev = child._next = child._parent = null;
-      this._flag(child, false);
-    }
-    this._first = this._last = null;
-    this._ts_children = ++iid;
-    this.touch();
-    return this;
-  }
-  touch() {
-    this._ts_touch = ++iid;
-    this._parent && this._parent.touch();
-    return this;
-  }
-  /** @internal Deep flag, used for optimizing event distribution. */
-  _flag(key, value) {
-    if (typeof value === "undefined") {
-      return this._flags !== null && this._flags[key] || 0;
-    }
-    if (typeof key === "string") {
-      if (value) {
-        this._flags = this._flags || {};
-        if (!this._flags[key] && this._parent) {
-          this._parent._flag(key, true);
+    };
+    Node2.prototype.insertPrev = function(sibling, more) {
+      if (Array.isArray(sibling)) {
+        for (var i = sibling.length - 1; i >= 0; i--) {
+          Node2.insertBefore(sibling[i], this);
         }
-        this._flags[key] = (this._flags[key] || 0) + 1;
-      } else if (this._flags && this._flags[key] > 0) {
-        if (this._flags[key] == 1 && this._parent) {
-          this._parent._flag(key, false);
+      } else if (typeof more !== "undefined") {
+        for (var i = arguments.length - 1; i >= 0; i--) {
+          Node2.insertBefore(arguments[i], this);
         }
-        this._flags[key] = this._flags[key] - 1;
+      } else if (typeof sibling !== "undefined") {
+        Node2.insertBefore(sibling, this);
       }
-    }
-    if (typeof key === "object") {
-      if (key._flags) {
-        for (const type in key._flags) {
-          if (key._flags[type] > 0) {
-            this._flag(type, value);
+      return this;
+    };
+    Node2.prototype.insertAfter = function(prev) {
+      Node2.insertAfter(this, prev);
+      return this;
+    };
+    Node2.prototype.insertBefore = function(next) {
+      Node2.insertBefore(this, next);
+      return this;
+    };
+    Node2.append = function(parent, child) {
+      assertType(child);
+      assertType(parent);
+      child.remove();
+      if (parent._last) {
+        parent._last._next = child;
+        child._prev = parent._last;
+      }
+      child._parent = parent;
+      parent._last = child;
+      if (!parent._first) {
+        parent._first = child;
+      }
+      child._parent._flag(child, true);
+      child._ts_parent = ++iid;
+      parent._ts_children = ++iid;
+      parent.touch();
+    };
+    Node2.prepend = function(parent, child) {
+      assertType(child);
+      assertType(parent);
+      child.remove();
+      if (parent._first) {
+        parent._first._prev = child;
+        child._next = parent._first;
+      }
+      child._parent = parent;
+      parent._first = child;
+      if (!parent._last) {
+        parent._last = child;
+      }
+      child._parent._flag(child, true);
+      child._ts_parent = ++iid;
+      parent._ts_children = ++iid;
+      parent.touch();
+    };
+    Node2.insertBefore = function(self, next) {
+      assertType(self);
+      assertType(next);
+      self.remove();
+      var parent = next._parent;
+      var prev = next._prev;
+      if (!parent) {
+        return;
+      }
+      next._prev = self;
+      prev && (prev._next = self) || parent && (parent._first = self);
+      self._parent = parent;
+      self._prev = prev;
+      self._next = next;
+      self._parent._flag(self, true);
+      self._ts_parent = ++iid;
+      self.touch();
+    };
+    Node2.insertAfter = function(self, prev) {
+      assertType(self);
+      assertType(prev);
+      self.remove();
+      var parent = prev._parent;
+      var next = prev._next;
+      if (!parent) {
+        return;
+      }
+      prev._next = self;
+      next && (next._prev = self) || parent && (parent._last = self);
+      self._parent = parent;
+      self._prev = prev;
+      self._next = next;
+      self._parent._flag(self, true);
+      self._ts_parent = ++iid;
+      self.touch();
+    };
+    Node2.prototype.remove = function(child, more) {
+      if (typeof child !== "undefined") {
+        if (Array.isArray(child)) {
+          for (var i = 0; i < child.length; i++) {
+            assertType(child[i]).remove();
+          }
+        } else if (typeof more !== "undefined") {
+          for (var i = 0; i < arguments.length; i++) {
+            assertType(arguments[i]).remove();
+          }
+        } else {
+          assertType(child).remove();
+        }
+        return this;
+      }
+      if (this._prev) {
+        this._prev._next = this._next;
+      }
+      if (this._next) {
+        this._next._prev = this._prev;
+      }
+      if (this._parent) {
+        if (this._parent._first === this) {
+          this._parent._first = this._next;
+        }
+        if (this._parent._last === this) {
+          this._parent._last = this._prev;
+        }
+        this._parent._flag(this, false);
+        this._parent._ts_children = ++iid;
+        this._parent.touch();
+      }
+      this._prev = this._next = this._parent = null;
+      this._ts_parent = ++iid;
+      return this;
+    };
+    Node2.prototype.empty = function() {
+      var child = null;
+      var next = this._first;
+      while (child = next) {
+        next = child._next;
+        child._prev = child._next = child._parent = null;
+        this._flag(child, false);
+      }
+      this._first = this._last = null;
+      this._ts_children = ++iid;
+      this.touch();
+      return this;
+    };
+    Node2.prototype.touch = function() {
+      this._ts_touch = ++iid;
+      this._parent && this._parent.touch();
+      return this;
+    };
+    Node2.prototype._flag = function(key, value) {
+      if (typeof value === "undefined") {
+        return this._flags !== null && this._flags[key] || 0;
+      }
+      if (typeof key === "string") {
+        if (value) {
+          this._flags = this._flags || {};
+          if (!this._flags[key] && this._parent) {
+            this._parent._flag(key, true);
+          }
+          this._flags[key] = (this._flags[key] || 0) + 1;
+        } else if (this._flags && this._flags[key] > 0) {
+          if (this._flags[key] == 1 && this._parent) {
+            this._parent._flag(key, false);
+          }
+          this._flags[key] = this._flags[key] - 1;
+        }
+      }
+      if (typeof key === "object") {
+        if (key._flags) {
+          for (var type in key._flags) {
+            if (key._flags[type] > 0) {
+              this._flag(type, value);
+            }
           }
         }
       }
-    }
-    return this;
-  }
-  /** @internal */
-  hitTest(hit) {
-    const width = this._pin._width;
-    const height = this._pin._height;
-    return hit.x >= 0 && hit.x <= width && hit.y >= 0 && hit.y <= height;
-  }
-  prerender() {
-    if (!this._visible) {
-      return;
-    }
-    let child;
-    let next = this._first;
-    while (child = next) {
-      next = child._next;
-      child.prerender();
-    }
-  }
-  render(context) {
-    if (!this._visible) {
-      return;
-    }
-    stats.node++;
-    const m = this.matrix();
-    context.setTransform(m.a, m.b, m.c, m.d, m.e, m.f);
-    this._alpha = this._pin._alpha * (this._parent ? this._parent._alpha : 1);
-    const alpha = this._pin._textureAlpha * this._alpha;
-    if (context.globalAlpha != alpha) {
-      context.globalAlpha = alpha;
-    }
-    if (this._textures) {
-      for (let i = 0, n = this._textures.length; i < n; i++) {
-        this._textures[i].draw(context);
-      }
-    }
-    if (context.globalAlpha != this._alpha) {
-      context.globalAlpha = this._alpha;
-    }
-    let child;
-    let next = this._first;
-    while (child = next) {
-      next = child._next;
-      child.render(context);
-    }
-  }
-  /** @internal */
-  _tick(elapsed, now, last) {
-    if (!this._visible) {
-      return;
-    }
-    if (elapsed > this.MAX_ELAPSE) {
-      elapsed = this.MAX_ELAPSE;
-    }
-    let ticked = false;
-    if (this._tickBefore !== null) {
-      for (let i = 0; i < this._tickBefore.length; i++) {
-        stats.tick++;
-        const tickFn = this._tickBefore[i];
-        ticked = tickFn.call(this, elapsed, now, last) === true || ticked;
-      }
-    }
-    let child;
-    let next = this._first;
-    while (child = next) {
-      next = child._next;
-      if (child._flag("_tick")) {
-        ticked = child._tick(elapsed, now, last) === true ? true : ticked;
-      }
-    }
-    if (this._tickAfter !== null) {
-      for (let i = 0; i < this._tickAfter.length; i++) {
-        stats.tick++;
-        const tickFn = this._tickAfter[i];
-        ticked = tickFn.call(this, elapsed, now, last) === true || ticked;
-      }
-    }
-    return ticked;
-  }
-  tick(callback, before = false) {
-    var _a, _b;
-    if (typeof callback !== "function") {
-      return;
-    }
-    if (before) {
-      if (this._tickBefore === null) {
-        this._tickBefore = [];
-      }
-      this._tickBefore.push(callback);
-    } else {
-      if (this._tickAfter === null) {
-        this._tickAfter = [];
-      }
-      this._tickAfter.push(callback);
-    }
-    const hasTickListener = ((_a = this._tickAfter) == null ? void 0 : _a.length) > 0 || ((_b = this._tickBefore) == null ? void 0 : _b.length) > 0;
-    this._flag("_tick", hasTickListener);
-  }
-  untick(callback) {
-    if (typeof callback !== "function") {
-      return;
-    }
-    let i;
-    if (this._tickBefore !== null && (i = this._tickBefore.indexOf(callback)) >= 0) {
-      this._tickBefore.splice(i, 1);
-    }
-    if (this._tickAfter !== null && (i = this._tickAfter.indexOf(callback)) >= 0) {
-      this._tickAfter.splice(i, 1);
-    }
-  }
-  timeout(callback, time) {
-    this.setTimeout(callback, time);
-  }
-  setTimeout(callback, time) {
-    function timer(t) {
-      if ((time -= t) < 0) {
-        this.untick(timer);
-        callback.call(this);
-      } else {
-        return true;
-      }
-    }
-    this.tick(timer);
-    return timer;
-  }
-  clearTimeout(timer) {
-    this.untick(timer);
-  }
-  on(type, listener) {
-    if (!type || !type.length || typeof listener !== "function") {
       return this;
-    }
-    if (typeof type !== "string" && typeof type.join === "function") {
-      for (let i = 0; i < type.length; i++) {
-        this.on(type[i], listener);
+    };
+    Node2.prototype.hitTest = function(hit) {
+      var width = this._pin._width;
+      var height = this._pin._height;
+      return hit.x >= 0 && hit.x <= width && hit.y >= 0 && hit.y <= height;
+    };
+    Node2.prototype.prerender = function() {
+      if (!this._visible) {
+        return;
       }
-    } else if (typeof type === "string" && type.indexOf(" ") > -1) {
-      type = type.match(/\S+/g);
-      for (let i = 0; i < type.length; i++) {
-        this._on(type[i], listener);
+      var child;
+      var next = this._first;
+      while (child = next) {
+        next = child._next;
+        child.prerender();
       }
-    } else if (typeof type === "string") {
-      this._on(type, listener);
-    } else
-      ;
-    return this;
-  }
-  /** @internal */
-  _on(type, listener) {
-    if (typeof type !== "string" && typeof listener !== "function") {
-      return;
-    }
-    this._listeners[type] = this._listeners[type] || [];
-    this._listeners[type].push(listener);
-    this._flag(type, true);
-  }
-  off(type, listener) {
-    if (!type || !type.length || typeof listener !== "function") {
-      return this;
-    }
-    if (typeof type !== "string" && typeof type.join === "function") {
-      for (let i = 0; i < type.length; i++) {
-        this.off(type[i], listener);
+    };
+    Node2.prototype.render = function(context) {
+      if (!this._visible) {
+        return;
       }
-    } else if (typeof type === "string" && type.indexOf(" ") > -1) {
-      type = type.match(/\S+/g);
-      for (let i = 0; i < type.length; i++) {
-        this._off(type[i], listener);
+      stats.node++;
+      var m = this.matrix();
+      context.setTransform(m.a, m.b, m.c, m.d, m.e, m.f);
+      this._alpha = this._pin._alpha * (this._parent ? this._parent._alpha : 1);
+      var alpha = this._pin._textureAlpha * this._alpha;
+      if (context.globalAlpha != alpha) {
+        context.globalAlpha = alpha;
       }
-    } else if (typeof type === "string") {
-      this._off(type, listener);
-    } else
-      ;
-    return this;
-  }
-  /** @internal */
-  _off(type, listener) {
-    if (typeof type !== "string" && typeof listener !== "function") {
-      return;
-    }
-    const listeners = this._listeners[type];
-    if (!listeners || !listeners.length) {
-      return;
-    }
-    const index = listeners.indexOf(listener);
-    if (index >= 0) {
-      listeners.splice(index, 1);
-      this._flag(type, false);
-    }
-  }
-  listeners(type) {
-    return this._listeners[type];
-  }
-  publish(name, args) {
-    const listeners = this.listeners(name);
-    if (!listeners || !listeners.length) {
-      return 0;
-    }
-    for (let l = 0; l < listeners.length; l++) {
-      listeners[l].apply(this, args);
-    }
-    return listeners.length;
-  }
-  /** @hidden @deprecated @internal */
-  trigger(name, args) {
-    this.publish(name, args);
-    return this;
-  }
-  size(w, h) {
-    this.pin("width", w);
-    this.pin("height", h);
-    return this;
-  }
-  width(w) {
-    if (typeof w === "undefined") {
-      return this.pin("width");
-    }
-    this.pin("width", w);
-    return this;
-  }
-  height(h) {
-    if (typeof h === "undefined") {
-      return this.pin("height");
-    }
-    this.pin("height", h);
-    return this;
-  }
-  offset(a, b) {
-    if (typeof a === "object") {
-      b = a.y;
-      a = a.x;
-    }
-    this.pin("offsetX", a);
-    this.pin("offsetY", b);
-    return this;
-  }
-  rotate(a) {
-    this.pin("rotation", a);
-    return this;
-  }
-  skew(a, b) {
-    if (typeof a === "object") {
-      b = a.y;
-      a = a.x;
-    } else if (typeof b === "undefined")
-      b = a;
-    this.pin("skewX", a);
-    this.pin("skewY", b);
-    return this;
-  }
-  scale(a, b) {
-    if (typeof a === "object") {
-      b = a.y;
-      a = a.x;
-    } else if (typeof b === "undefined")
-      b = a;
-    this.pin("scaleX", a);
-    this.pin("scaleY", b);
-    return this;
-  }
-  alpha(a, ta) {
-    this.pin("alpha", a);
-    if (typeof ta !== "undefined") {
-      this.pin("textureAlpha", ta);
-    }
-    return this;
-  }
-  tween(a, b, c) {
-    let options;
-    if (typeof a === "object" && a !== null) {
-      options = a;
-    } else {
-      options = {};
-      if (typeof a === "number") {
-        options.duration = a;
-        if (typeof b === "number") {
-          options.delay = b;
-          if (typeof c === "boolean") {
-            options.append = c;
-          }
-        } else if (typeof b === "boolean") {
-          options.append = b;
+      if (this._textures) {
+        for (var i = 0, n = this._textures.length; i < n; i++) {
+          this._textures[i].draw(context);
         }
-      } else if (typeof a === "boolean") {
-        options.append = a;
       }
-    }
-    if (!this._transitionTickInitied) {
-      this.tick(this._transitionTick, true);
-      this._transitionTickInitied = true;
-    }
-    this.touch();
-    if (!options.append) {
-      this._transitions.length = 0;
-    }
-    const transition = new Transition(this, options);
-    this._transitions.push(transition);
-    return transition;
-  }
-  row(align) {
-    this.align("row", align);
-    return this;
-  }
-  column(align) {
-    this.align("column", align);
-    return this;
-  }
-  align(type, align) {
-    this._padding = this._padding;
-    this._spacing = this._spacing;
-    this._layoutTicker && this.untick(this._layoutTicker);
-    this.tick(
-      this._layoutTicker = () => {
-        if (this._mo_seq == this._ts_touch) {
+      if (context.globalAlpha != this._alpha) {
+        context.globalAlpha = this._alpha;
+      }
+      var child;
+      var next = this._first;
+      while (child = next) {
+        next = child._next;
+        child.render(context);
+      }
+    };
+    Node2.prototype._tick = function(elapsed, now, last) {
+      if (!this._visible) {
+        return;
+      }
+      if (elapsed > this.MAX_ELAPSE) {
+        elapsed = this.MAX_ELAPSE;
+      }
+      var ticked = false;
+      if (this._tickBefore !== null) {
+        for (var i = 0; i < this._tickBefore.length; i++) {
+          stats.tick++;
+          var tickFn = this._tickBefore[i];
+          ticked = tickFn.call(this, elapsed, now, last) === true || ticked;
+        }
+      }
+      var child;
+      var next = this._first;
+      while (child = next) {
+        next = child._next;
+        if (child._flag("_tick")) {
+          ticked = child._tick(elapsed, now, last) === true ? true : ticked;
+        }
+      }
+      if (this._tickAfter !== null) {
+        for (var i = 0; i < this._tickAfter.length; i++) {
+          stats.tick++;
+          var tickFn = this._tickAfter[i];
+          ticked = tickFn.call(this, elapsed, now, last) === true || ticked;
+        }
+      }
+      return ticked;
+    };
+    Node2.prototype.tick = function(callback, before) {
+      var _a, _b;
+      if (before === void 0) {
+        before = false;
+      }
+      if (typeof callback !== "function") {
+        return;
+      }
+      if (before) {
+        if (this._tickBefore === null) {
+          this._tickBefore = [];
+        }
+        this._tickBefore.push(callback);
+      } else {
+        if (this._tickAfter === null) {
+          this._tickAfter = [];
+        }
+        this._tickAfter.push(callback);
+      }
+      var hasTickListener = ((_a = this._tickAfter) === null || _a === void 0 ? void 0 : _a.length) > 0 || ((_b = this._tickBefore) === null || _b === void 0 ? void 0 : _b.length) > 0;
+      this._flag("_tick", hasTickListener);
+    };
+    Node2.prototype.untick = function(callback) {
+      if (typeof callback !== "function") {
+        return;
+      }
+      var i;
+      if (this._tickBefore !== null && (i = this._tickBefore.indexOf(callback)) >= 0) {
+        this._tickBefore.splice(i, 1);
+      }
+      if (this._tickAfter !== null && (i = this._tickAfter.indexOf(callback)) >= 0) {
+        this._tickAfter.splice(i, 1);
+      }
+    };
+    Node2.prototype.timeout = function(callback, time) {
+      this.setTimeout(callback, time);
+    };
+    Node2.prototype.setTimeout = function(callback, time) {
+      function timer(t) {
+        if ((time -= t) < 0) {
+          this.untick(timer);
+          callback.call(this);
+        } else {
+          return true;
+        }
+      }
+      this.tick(timer);
+      return timer;
+    };
+    Node2.prototype.clearTimeout = function(timer) {
+      this.untick(timer);
+    };
+    Node2.prototype.on = function(type, listener) {
+      if (!type || !type.length || typeof listener !== "function") {
+        return this;
+      }
+      if (typeof type !== "string" && typeof type.join === "function") {
+        for (var i = 0; i < type.length; i++) {
+          this.on(type[i], listener);
+        }
+      } else if (typeof type === "string" && type.indexOf(" ") > -1) {
+        type = type.match(/\S+/g);
+        for (var i = 0; i < type.length; i++) {
+          this._on(type[i], listener);
+        }
+      } else if (typeof type === "string") {
+        this._on(type, listener);
+      } else
+        ;
+      return this;
+    };
+    Node2.prototype._on = function(type, listener) {
+      if (typeof type !== "string" && typeof listener !== "function") {
+        return;
+      }
+      this._listeners[type] = this._listeners[type] || [];
+      this._listeners[type].push(listener);
+      this._flag(type, true);
+    };
+    Node2.prototype.off = function(type, listener) {
+      if (!type || !type.length || typeof listener !== "function") {
+        return this;
+      }
+      if (typeof type !== "string" && typeof type.join === "function") {
+        for (var i = 0; i < type.length; i++) {
+          this.off(type[i], listener);
+        }
+      } else if (typeof type === "string" && type.indexOf(" ") > -1) {
+        type = type.match(/\S+/g);
+        for (var i = 0; i < type.length; i++) {
+          this._off(type[i], listener);
+        }
+      } else if (typeof type === "string") {
+        this._off(type, listener);
+      } else
+        ;
+      return this;
+    };
+    Node2.prototype._off = function(type, listener) {
+      if (typeof type !== "string" && typeof listener !== "function") {
+        return;
+      }
+      var listeners = this._listeners[type];
+      if (!listeners || !listeners.length) {
+        return;
+      }
+      var index = listeners.indexOf(listener);
+      if (index >= 0) {
+        listeners.splice(index, 1);
+        this._flag(type, false);
+      }
+    };
+    Node2.prototype.listeners = function(type) {
+      return this._listeners[type];
+    };
+    Node2.prototype.publish = function(name, args) {
+      var listeners = this.listeners(name);
+      if (!listeners || !listeners.length) {
+        return 0;
+      }
+      for (var l = 0; l < listeners.length; l++) {
+        listeners[l].apply(this, args);
+      }
+      return listeners.length;
+    };
+    Node2.prototype.trigger = function(name, args) {
+      this.publish(name, args);
+      return this;
+    };
+    Node2.prototype.size = function(w, h) {
+      this.pin("width", w);
+      this.pin("height", h);
+      return this;
+    };
+    Node2.prototype.width = function(w) {
+      if (typeof w === "undefined") {
+        return this.pin("width");
+      }
+      this.pin("width", w);
+      return this;
+    };
+    Node2.prototype.height = function(h) {
+      if (typeof h === "undefined") {
+        return this.pin("height");
+      }
+      this.pin("height", h);
+      return this;
+    };
+    Node2.prototype.offset = function(a, b) {
+      if (typeof a === "object") {
+        b = a.y;
+        a = a.x;
+      }
+      this.pin("offsetX", a);
+      this.pin("offsetY", b);
+      return this;
+    };
+    Node2.prototype.rotate = function(a) {
+      this.pin("rotation", a);
+      return this;
+    };
+    Node2.prototype.skew = function(a, b) {
+      if (typeof a === "object") {
+        b = a.y;
+        a = a.x;
+      } else if (typeof b === "undefined")
+        b = a;
+      this.pin("skewX", a);
+      this.pin("skewY", b);
+      return this;
+    };
+    Node2.prototype.scale = function(a, b) {
+      if (typeof a === "object") {
+        b = a.y;
+        a = a.x;
+      } else if (typeof b === "undefined")
+        b = a;
+      this.pin("scaleX", a);
+      this.pin("scaleY", b);
+      return this;
+    };
+    Node2.prototype.alpha = function(a, ta) {
+      this.pin("alpha", a);
+      if (typeof ta !== "undefined") {
+        this.pin("textureAlpha", ta);
+      }
+      return this;
+    };
+    Node2.prototype.tween = function(a, b, c) {
+      var options;
+      if (typeof a === "object" && a !== null) {
+        options = a;
+      } else {
+        options = {};
+        if (typeof a === "number") {
+          options.duration = a;
+          if (typeof b === "number") {
+            options.delay = b;
+            if (typeof c === "boolean") {
+              options.append = c;
+            }
+          } else if (typeof b === "boolean") {
+            options.append = b;
+          }
+        } else if (typeof a === "boolean") {
+          options.append = a;
+        }
+      }
+      if (!this._transitionTickInitied) {
+        this.tick(this._transitionTick, true);
+        this._transitionTickInitied = true;
+      }
+      this.touch();
+      if (!options.append) {
+        this._transitions.length = 0;
+      }
+      var transition = new Transition(this, options);
+      this._transitions.push(transition);
+      return transition;
+    };
+    Node2.prototype.row = function(align) {
+      this.align("row", align);
+      return this;
+    };
+    Node2.prototype.column = function(align) {
+      this.align("column", align);
+      return this;
+    };
+    Node2.prototype.align = function(type, align) {
+      var _this = this;
+      this._padding = this._padding;
+      this._spacing = this._spacing;
+      this._layoutTicker && this.untick(this._layoutTicker);
+      this.tick(this._layoutTicker = function() {
+        if (_this._mo_seq == _this._ts_touch) {
           return;
         }
-        this._mo_seq = this._ts_touch;
-        const alignChildren = this._mo_seqAlign != this._ts_children;
-        this._mo_seqAlign = this._ts_children;
-        let width = 0;
-        let height = 0;
-        let child;
-        let next = this.first(true);
-        let first = true;
+        _this._mo_seq = _this._ts_touch;
+        var alignChildren = _this._mo_seqAlign != _this._ts_children;
+        _this._mo_seqAlign = _this._ts_children;
+        var width = 0;
+        var height = 0;
+        var child;
+        var next = _this.first(true);
+        var first = true;
         while (child = next) {
           next = child.next(true);
           child.matrix(true);
-          const w = child.pin("boxWidth");
-          const h = child.pin("boxHeight");
+          var w = child.pin("boxWidth");
+          var h = child.pin("boxHeight");
           if (type == "column") {
-            !first && (height += this._spacing);
+            !first && (height += _this._spacing);
             child.pin("offsetY") != height && child.pin("offsetY", height);
             width = Math.max(width, w);
             height = height + h;
             alignChildren && child.pin("alignX", align);
           } else if (type == "row") {
-            !first && (width += this._spacing);
+            !first && (width += _this._spacing);
             child.pin("offsetX") != width && child.pin("offsetX", width);
             width = width + w;
             height = Math.max(height, h);
@@ -18413,271 +18746,309 @@ class Node {
           }
           first = false;
         }
-        width += 2 * this._padding;
-        height += 2 * this._padding;
-        this.pin("width") != width && this.pin("width", width);
-        this.pin("height") != height && this.pin("height", height);
-      }
-    );
-    return this;
-  }
-  /** @deprecated Use minimize() */
-  box() {
-    return this.minimize();
-  }
-  /** @deprecated Use minimize() */
-  layer() {
-    return this.maximize();
-  }
-  /**
-   * Set size to match largest child size.
-   */
-  minimize() {
-    this._padding = this._padding;
-    this._layoutTicker && this.untick(this._layoutTicker);
-    this.tick(
-      this._layoutTicker = () => {
-        if (this._mo_box == this._ts_touch) {
+        width += 2 * _this._padding;
+        height += 2 * _this._padding;
+        _this.pin("width") != width && _this.pin("width", width);
+        _this.pin("height") != height && _this.pin("height", height);
+      });
+      return this;
+    };
+    Node2.prototype.box = function() {
+      return this.minimize();
+    };
+    Node2.prototype.layer = function() {
+      return this.maximize();
+    };
+    Node2.prototype.minimize = function() {
+      var _this = this;
+      this._padding = this._padding;
+      this._layoutTicker && this.untick(this._layoutTicker);
+      this.tick(this._layoutTicker = function() {
+        if (_this._mo_box == _this._ts_touch) {
           return;
         }
-        this._mo_box = this._ts_touch;
-        let width = 0;
-        let height = 0;
-        let child;
-        let next = this.first(true);
+        _this._mo_box = _this._ts_touch;
+        var width = 0;
+        var height = 0;
+        var child;
+        var next = _this.first(true);
         while (child = next) {
           next = child.next(true);
           child.matrix(true);
-          const w = child.pin("boxWidth");
-          const h = child.pin("boxHeight");
+          var w = child.pin("boxWidth");
+          var h = child.pin("boxHeight");
           width = Math.max(width, w);
           height = Math.max(height, h);
         }
-        width += 2 * this._padding;
-        height += 2 * this._padding;
-        this.pin("width") != width && this.pin("width", width);
-        this.pin("height") != height && this.pin("height", height);
-      }
-    );
-    return this;
-  }
-  /**
-   * Set size to match parent size.
-   */
-  maximize() {
-    this._layoutTicker && this.untick(this._layoutTicker);
-    this.tick(
-      this._layoutTicker = () => {
-        const parent = this.parent();
+        width += 2 * _this._padding;
+        height += 2 * _this._padding;
+        _this.pin("width") != width && _this.pin("width", width);
+        _this.pin("height") != height && _this.pin("height", height);
+      });
+      return this;
+    };
+    Node2.prototype.maximize = function() {
+      var _this = this;
+      this._layoutTicker && this.untick(this._layoutTicker);
+      this.tick(this._layoutTicker = function() {
+        var parent = _this.parent();
         if (parent) {
-          const width = parent.pin("width");
-          if (this.pin("width") != width) {
-            this.pin("width", width);
+          var width = parent.pin("width");
+          if (_this.pin("width") != width) {
+            _this.pin("width", width);
           }
-          const height = parent.pin("height");
-          if (this.pin("height") != height) {
-            this.pin("height", height);
+          var height = parent.pin("height");
+          if (_this.pin("height") != height) {
+            _this.pin("height", height);
           }
         }
-      },
-      true
-    );
-    return this;
-  }
-  // TODO: move padding to pin
-  /**
-   * Set cell spacing for layout.
-   */
-  padding(pad) {
-    this._padding = pad;
-    return this;
-  }
-  /**
-   * Set cell spacing for row and column layout.
-   */
-  spacing(space) {
-    this._spacing = space;
-    return this;
-  }
-}
+      }, true);
+      return this;
+    };
+    Node2.prototype.padding = function(pad) {
+      this._padding = pad;
+      return this;
+    };
+    Node2.prototype.spacing = function(space) {
+      this._spacing = space;
+      return this;
+    };
+    return Node2;
+  }()
+);
+var __extends$4 = function() {
+  var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
+      d2.__proto__ = b2;
+    } || function(d2, b2) {
+      for (var p in b2)
+        if (Object.prototype.hasOwnProperty.call(b2, p))
+          d2[p] = b2[p];
+    };
+    return extendStatics(d, b);
+  };
+  return function(d, b) {
+    if (typeof b !== "function" && b !== null)
+      throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
 function sprite(frame) {
-  const sprite2 = new Sprite();
+  var sprite2 = new Sprite();
   frame && sprite2.texture(frame);
   return sprite2;
 }
-class Sprite extends Node {
-  constructor() {
-    super();
-    this._tiled = false;
-    this._stretched = false;
-    this.prerenderContext = {};
-    this.label("Sprite");
-    this._textures = [];
-    this._image = null;
-  }
-  texture(frame) {
-    this._image = texture(frame).one();
-    if (this._image) {
-      this.pin("width", this._image.getWidth());
-      this.pin("height", this._image.getHeight());
-      if (this._tiled) {
-        this._textures[0] = new ResizableTexture(this._image, "tile");
-      } else if (this._stretched) {
-        this._textures[0] = new ResizableTexture(this._image, "stretch");
+var Sprite = (
+  /** @class */
+  function(_super) {
+    __extends$4(Sprite2, _super);
+    function Sprite2() {
+      var _this = _super.call(this) || this;
+      _this._tiled = false;
+      _this._stretched = false;
+      _this.prerenderContext = {};
+      _this.label("Sprite");
+      _this._textures = [];
+      _this._image = null;
+      return _this;
+    }
+    Sprite2.prototype.texture = function(frame) {
+      this._image = texture(frame).one();
+      if (this._image) {
+        this.pin("width", this._image.getWidth());
+        this.pin("height", this._image.getHeight());
+        if (this._tiled) {
+          this._textures[0] = new ResizableTexture(this._image, "tile");
+        } else if (this._stretched) {
+          this._textures[0] = new ResizableTexture(this._image, "stretch");
+        } else {
+          this._textures[0] = new PipeTexture(this._image);
+        }
+        this._textures.length = 1;
       } else {
-        this._textures[0] = new PipeTexture(this._image);
+        this.pin("width", 0);
+        this.pin("height", 0);
+        this._textures.length = 0;
       }
-      this._textures.length = 1;
-    } else {
-      this.pin("width", 0);
-      this.pin("height", 0);
-      this._textures.length = 0;
-    }
-    return this;
-  }
-  /** @deprecated */
-  image(frame) {
-    return this.texture(frame);
-  }
-  tile(inner = false) {
-    this._tiled = true;
-    const texture2 = new ResizableTexture(this._image, "tile");
-    this._textures[0] = texture2;
-    return this;
-  }
-  stretch(inner = false) {
-    this._stretched = true;
-    const texture2 = new ResizableTexture(this._image, "stretch");
-    this._textures[0] = texture2;
-    return this;
-  }
-  prerender() {
-    if (!this._visible) {
-      return;
-    }
-    if (this._image) {
-      const pixelRatio = this.getPixelRatio();
-      this.prerenderContext.pixelRatio = pixelRatio;
-      const updated = this._image.prerender(this.prerenderContext);
-      if (updated === true) {
-        const w = this._image.getWidth();
-        const h = this._image.getHeight();
-        this.size(w, h);
+      return this;
+    };
+    Sprite2.prototype.image = function(frame) {
+      return this.texture(frame);
+    };
+    Sprite2.prototype.tile = function(inner) {
+      this._tiled = true;
+      var texture2 = new ResizableTexture(this._image, "tile");
+      this._textures[0] = texture2;
+      return this;
+    };
+    Sprite2.prototype.stretch = function(inner) {
+      this._stretched = true;
+      var texture2 = new ResizableTexture(this._image, "stretch");
+      this._textures[0] = texture2;
+      return this;
+    };
+    Sprite2.prototype.prerender = function() {
+      if (!this._visible) {
+        return;
       }
-    }
-    super.prerender();
-  }
-  render(context) {
-    const texture2 = this._textures[0];
-    if (texture2 == null ? void 0 : texture2["_resizeMode"]) {
-      texture2.dw = this.pin("width");
-      texture2.dh = this.pin("height");
-    }
-    super.render(context);
-  }
-}
-const image = sprite;
-const Image$1 = Sprite;
-class CanvasTexture extends ImageTexture {
-  constructor() {
-    super(document.createElement("canvas"));
-    this._lastPixelRatio = 0;
-  }
-  /**
-   * Note: provided width and height will be texture size, and canvas size is texture size multiply by pixelRatio.
-   */
-  setSize(textureWidth, textureHeight, pixelRatio = 1) {
-    this._source.width = textureWidth * pixelRatio;
-    this._source.height = textureHeight * pixelRatio;
-    this._pixelRatio = pixelRatio;
-  }
-  getContext(type = "2d", attributes) {
-    return this._source.getContext(type, attributes);
-  }
-  /**
-   * @experimental
-   *
-   * This is the ratio of screen pixel to this canvas pixel.
-   */
-  getOptimalPixelRatio() {
-    return Math.ceil(this._lastPixelRatio);
-  }
-  setMemoizer(memoizer) {
-    this._memoizer = memoizer;
-  }
-  setDrawer(drawer) {
-    this._drawer = drawer;
-  }
-  /** @internal */
-  prerender(context) {
-    const newPixelRatio = context.pixelRatio;
-    const lastPixelRatio = this._lastPixelRatio;
-    const pixelRationChange = lastPixelRatio / newPixelRatio;
-    const pixelRatioChanged = lastPixelRatio === 0 || pixelRationChange > 1.25 || pixelRationChange < 0.8;
-    if (pixelRatioChanged) {
-      this._lastPixelRatio = newPixelRatio;
-    }
-    const newMemoKey = this._memoizer ? this._memoizer.call(this) : null;
-    const memoKeyChanged = this._lastMemoKey !== newMemoKey;
-    if (pixelRatioChanged || memoKeyChanged) {
-      this._lastMemoKey = newMemoKey;
-      this._lastPixelRatio = newPixelRatio;
-      if (typeof this._drawer === "function") {
-        this._drawer.call(this);
+      if (this._image) {
+        var pixelRatio = this.getPixelRatio();
+        this.prerenderContext.pixelRatio = pixelRatio;
+        var updated = this._image.prerender(this.prerenderContext);
+        if (updated === true) {
+          var w = this._image.getWidth();
+          var h = this._image.getHeight();
+          this.size(w, h);
+        }
       }
-      return true;
-    }
-  }
-  /** @hidden @deprecated */
-  size(width, height, pixelRatio) {
-    this.setSize(width, height, pixelRatio);
-    return this;
-  }
-  /** @hidden @deprecated */
-  context(type = "2d", attributes) {
-    return this.getContext(type, attributes);
-  }
-  /** @hidden @deprecated */
-  canvas(legacyTextureDrawer) {
-    if (typeof legacyTextureDrawer === "function") {
-      legacyTextureDrawer.call(this, this.getContext());
-    } else if (typeof legacyTextureDrawer === "undefined") {
-      if (typeof this._drawer === "function") {
-        this._drawer.call(this);
+      _super.prototype.prerender.call(this);
+    };
+    Sprite2.prototype.render = function(context) {
+      var texture2 = this._textures[0];
+      if (texture2 === null || texture2 === void 0 ? void 0 : texture2["_resizeMode"]) {
+        texture2.dw = this.pin("width");
+        texture2.dh = this.pin("height");
       }
+      _super.prototype.render.call(this, context);
+    };
+    return Sprite2;
+  }(Node)
+);
+var image = sprite;
+var Image$1 = Sprite;
+var __extends$3 = function() {
+  var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
+      d2.__proto__ = b2;
+    } || function(d2, b2) {
+      for (var p in b2)
+        if (Object.prototype.hasOwnProperty.call(b2, p))
+          d2[p] = b2[p];
+    };
+    return extendStatics(d, b);
+  };
+  return function(d, b) {
+    if (typeof b !== "function" && b !== null)
+      throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() {
+      this.constructor = d;
     }
-    return this;
-  }
-}
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
+var CanvasTexture = (
+  /** @class */
+  function(_super) {
+    __extends$3(CanvasTexture2, _super);
+    function CanvasTexture2() {
+      var _this = _super.call(this, document.createElement("canvas")) || this;
+      _this._lastPixelRatio = 0;
+      return _this;
+    }
+    CanvasTexture2.prototype.setSize = function(textureWidth, textureHeight, pixelRatio) {
+      if (pixelRatio === void 0) {
+        pixelRatio = 1;
+      }
+      this._source.width = textureWidth * pixelRatio;
+      this._source.height = textureHeight * pixelRatio;
+      this._pixelRatio = pixelRatio;
+    };
+    CanvasTexture2.prototype.getContext = function(type, attributes) {
+      if (type === void 0) {
+        type = "2d";
+      }
+      return this._source.getContext(type, attributes);
+    };
+    CanvasTexture2.prototype.getOptimalPixelRatio = function() {
+      return Math.ceil(this._lastPixelRatio);
+    };
+    CanvasTexture2.prototype.setMemoizer = function(memoizer) {
+      this._memoizer = memoizer;
+    };
+    CanvasTexture2.prototype.setDrawer = function(drawer) {
+      this._drawer = drawer;
+    };
+    CanvasTexture2.prototype.prerender = function(context) {
+      var newPixelRatio = context.pixelRatio;
+      var lastPixelRatio = this._lastPixelRatio;
+      var pixelRationChange = lastPixelRatio / newPixelRatio;
+      var pixelRatioChanged = lastPixelRatio === 0 || pixelRationChange > 1.25 || pixelRationChange < 0.8;
+      if (pixelRatioChanged) {
+        this._lastPixelRatio = newPixelRatio;
+      }
+      var newMemoKey = this._memoizer ? this._memoizer.call(this) : null;
+      var memoKeyChanged = this._lastMemoKey !== newMemoKey;
+      if (pixelRatioChanged || memoKeyChanged) {
+        this._lastMemoKey = newMemoKey;
+        this._lastPixelRatio = newPixelRatio;
+        if (typeof this._drawer === "function") {
+          this._drawer.call(this);
+        }
+        return true;
+      }
+    };
+    CanvasTexture2.prototype.size = function(width, height, pixelRatio) {
+      this.setSize(width, height, pixelRatio);
+      return this;
+    };
+    CanvasTexture2.prototype.context = function(type, attributes) {
+      if (type === void 0) {
+        type = "2d";
+      }
+      return this.getContext(type, attributes);
+    };
+    CanvasTexture2.prototype.canvas = function(legacyTextureDrawer) {
+      if (typeof legacyTextureDrawer === "function") {
+        legacyTextureDrawer.call(this, this.getContext());
+      } else if (typeof legacyTextureDrawer === "undefined") {
+        if (typeof this._drawer === "function") {
+          this._drawer.call(this);
+        }
+      }
+      return this;
+    };
+    return CanvasTexture2;
+  }(ImageTexture)
+);
 function canvas(type, attributes, legacyTextureDrawer) {
   if (typeof type === "function") {
-    const texture2 = new CanvasTexture();
+    var texture_1 = new CanvasTexture();
     legacyTextureDrawer = type;
-    texture2.setDrawer(function() {
-      legacyTextureDrawer.call(texture2, texture2.getContext());
+    texture_1.setDrawer(function() {
+      legacyTextureDrawer.call(texture_1, texture_1.getContext());
     });
-    return texture2;
+    return texture_1;
   } else if (typeof attributes === "function") {
-    const texture2 = new CanvasTexture();
+    var texture_2 = new CanvasTexture();
     legacyTextureDrawer = attributes;
-    texture2.setDrawer(function() {
-      legacyTextureDrawer.call(texture2, texture2.getContext(type));
+    texture_2.setDrawer(function() {
+      legacyTextureDrawer.call(texture_2, texture_2.getContext(type));
     });
-    return texture2;
+    return texture_2;
   } else if (typeof legacyTextureDrawer === "function") {
-    const texture2 = new CanvasTexture();
-    texture2.setDrawer(function() {
-      legacyTextureDrawer.call(texture2, texture2.getContext(type, attributes));
+    var texture_3 = new CanvasTexture();
+    texture_3.setDrawer(function() {
+      legacyTextureDrawer.call(texture_3, texture_3.getContext(type, attributes));
     });
-    return texture2;
+    return texture_3;
   } else {
-    const texture2 = new CanvasTexture();
+    var texture2 = new CanvasTexture();
     return texture2;
   }
 }
-function memoizeDraw(legacySpriteDrawer, legacySpriteMemoizer = () => null) {
-  const sprite2 = new Sprite();
-  const texture2 = new CanvasTexture();
+function memoizeDraw(legacySpriteDrawer, legacySpriteMemoizer) {
+  if (legacySpriteMemoizer === void 0) {
+    legacySpriteMemoizer = function() {
+      return null;
+    };
+  }
+  var sprite2 = new Sprite();
+  var texture2 = new CanvasTexture();
   sprite2.texture(texture2);
   texture2.setDrawer(function() {
     legacySpriteDrawer(2.5 * texture2._lastPixelRatio, texture2, sprite2);
@@ -18685,661 +19056,765 @@ function memoizeDraw(legacySpriteDrawer, legacySpriteMemoizer = () => null) {
   texture2.setMemoizer(legacySpriteMemoizer);
   return sprite2;
 }
-const POINTER_CLICK = "click";
-const POINTER_START = "touchstart mousedown";
-const POINTER_MOVE = "touchmove mousemove";
-const POINTER_END = "touchend mouseup";
-const POINTER_CANCEL = "touchcancel mousecancel";
-class EventPoint {
-  clone(obj) {
-    if (obj) {
-      obj.x = this.x;
-      obj.y = this.y;
-    } else {
-      obj = {
-        x: this.x,
-        y: this.y
-      };
+var POINTER_CLICK = "click";
+var POINTER_START = "touchstart mousedown";
+var POINTER_MOVE = "touchmove mousemove";
+var POINTER_END = "touchend mouseup";
+var POINTER_CANCEL = "touchcancel mousecancel";
+var EventPoint = (
+  /** @class */
+  function() {
+    function EventPoint2() {
     }
-    return obj;
-  }
-  toString() {
-    return (this.x | 0) + "x" + (this.y | 0);
-  }
-}
-class PointerSyntheticEvent {
-  constructor() {
-    this.abs = new EventPoint();
-  }
-  clone(obj) {
-    if (obj) {
-      obj.x = this.x;
-      obj.y = this.y;
-    } else {
-      obj = {
-        x: this.x,
-        y: this.y
-      };
+    EventPoint2.prototype.clone = function(obj) {
+      if (obj) {
+        obj.x = this.x;
+        obj.y = this.y;
+      } else {
+        obj = {
+          x: this.x,
+          y: this.y
+        };
+      }
+      return obj;
+    };
+    EventPoint2.prototype.toString = function() {
+      return (this.x | 0) + "x" + (this.y | 0);
+    };
+    return EventPoint2;
+  }()
+);
+var PointerSyntheticEvent = (
+  /** @class */
+  function() {
+    function PointerSyntheticEvent2() {
+      this.abs = new EventPoint();
     }
-    return obj;
-  }
-  toString() {
-    return this.type + ": " + (this.x | 0) + "x" + (this.y | 0);
-  }
-}
-class VisitPayload {
-  constructor() {
-    this.type = "";
-    this.x = 0;
-    this.y = 0;
-    this.timeStamp = -1;
-    this.event = null;
-    this.root = null;
-    this.collected = null;
-  }
-  toString() {
-    return this.type + ": " + (this.x | 0) + "x" + (this.y | 0);
-  }
-}
-const syntheticEvent = new PointerSyntheticEvent();
-const PAYLOAD = new VisitPayload();
-class Pointer {
-  constructor() {
-    this.ratio = 1;
-    this.clickList = [];
-    this.cancelList = [];
-    this.handleStart = (event) => {
-      event.preventDefault();
-      this.localPoint(event);
-      this.dispatchEvent(event.type, event);
-      this.findTargets("click", this.clickList);
-      this.findTargets("mousecancel", this.cancelList);
-    };
-    this.handleMove = (event) => {
-      event.preventDefault();
-      this.localPoint(event);
-      this.dispatchEvent(event.type, event);
-    };
-    this.handleEnd = (event) => {
-      event.preventDefault();
-      this.dispatchEvent(event.type, event);
-      if (this.clickList.length) {
-        this.dispatchEvent("click", event, this.clickList);
+    PointerSyntheticEvent2.prototype.clone = function(obj) {
+      if (obj) {
+        obj.x = this.x;
+        obj.y = this.y;
+      } else {
+        obj = {
+          x: this.x,
+          y: this.y
+        };
       }
-      this.cancelList.length = 0;
+      return obj;
     };
-    this.handleCancel = (event) => {
-      if (this.cancelList.length) {
-        this.dispatchEvent("mousecancel", event, this.cancelList);
-      }
-      this.clickList.length = 0;
+    PointerSyntheticEvent2.prototype.toString = function() {
+      return this.type + ": " + (this.x | 0) + "x" + (this.y | 0);
     };
-    this.visitStart = (node, payload) => {
-      return !node._flag(payload.type);
+    return PointerSyntheticEvent2;
+  }()
+);
+var VisitPayload = (
+  /** @class */
+  function() {
+    function VisitPayload2() {
+      this.type = "";
+      this.x = 0;
+      this.y = 0;
+      this.timeStamp = -1;
+      this.event = null;
+      this.root = null;
+      this.collected = null;
+    }
+    VisitPayload2.prototype.toString = function() {
+      return this.type + ": " + (this.x | 0) + "x" + (this.y | 0);
     };
-    this.visitEnd = (node, payload) => {
-      syntheticEvent.raw = payload.event;
-      syntheticEvent.type = payload.type;
-      syntheticEvent.timeStamp = payload.timeStamp;
-      syntheticEvent.abs.x = payload.x;
-      syntheticEvent.abs.y = payload.y;
-      const listeners = node.listeners(payload.type);
-      if (!listeners) {
-        return;
-      }
-      node.matrix().inverse().map(payload, syntheticEvent);
-      const isEventTarget = node === payload.root || node.attr("spy") || node.hitTest(syntheticEvent);
-      if (!isEventTarget) {
-        return;
-      }
-      if (payload.collected) {
-        payload.collected.push(node);
-      }
-      if (payload.event) {
-        let cancel = false;
-        for (let l = 0; l < listeners.length; l++) {
-          cancel = listeners[l].call(node, syntheticEvent) ? true : cancel;
+    return VisitPayload2;
+  }()
+);
+var syntheticEvent = new PointerSyntheticEvent();
+var PAYLOAD = new VisitPayload();
+var Pointer = (
+  /** @class */
+  function() {
+    function Pointer2() {
+      var _this = this;
+      this.ratio = 1;
+      this.clickList = [];
+      this.cancelList = [];
+      this.handleStart = function(event) {
+        event.preventDefault();
+        _this.localPoint(event);
+        _this.dispatchEvent(event.type, event);
+        _this.findTargets("click", _this.clickList);
+        _this.findTargets("mousecancel", _this.cancelList);
+      };
+      this.handleMove = function(event) {
+        event.preventDefault();
+        _this.localPoint(event);
+        _this.dispatchEvent(event.type, event);
+      };
+      this.handleEnd = function(event) {
+        event.preventDefault();
+        _this.dispatchEvent(event.type, event);
+        if (_this.clickList.length) {
+          _this.dispatchEvent("click", event, _this.clickList);
         }
-        return cancel;
-      }
-    };
-  }
-  mount(stage, elem) {
-    this.stage = stage;
-    this.elem = elem;
-    this.ratio = stage.viewport().ratio || 1;
-    stage.on("viewport", (viewport) => {
-      this.ratio = viewport.ratio ?? this.ratio;
-    });
-    elem.addEventListener("touchstart", this.handleStart);
-    elem.addEventListener("touchend", this.handleEnd);
-    elem.addEventListener("touchmove", this.handleMove);
-    elem.addEventListener("touchcancel", this.handleCancel);
-    elem.addEventListener("mousedown", this.handleStart);
-    elem.addEventListener("mouseup", this.handleEnd);
-    elem.addEventListener("mousemove", this.handleMove);
-    document.addEventListener("mouseup", this.handleCancel);
-    window.addEventListener("blur", this.handleCancel);
-    return this;
-  }
-  unmount() {
-    const elem = this.elem;
-    elem.removeEventListener("touchstart", this.handleStart);
-    elem.removeEventListener("touchend", this.handleEnd);
-    elem.removeEventListener("touchmove", this.handleMove);
-    elem.removeEventListener("touchcancel", this.handleCancel);
-    elem.removeEventListener("mousedown", this.handleStart);
-    elem.removeEventListener("mouseup", this.handleEnd);
-    elem.removeEventListener("mousemove", this.handleMove);
-    document.removeEventListener("mouseup", this.handleCancel);
-    window.removeEventListener("blur", this.handleCancel);
-    return this;
-  }
-  /**
-   * Computer the location of the pointer event in the canvas coordination
-   */
-  localPoint(event) {
-    var _a;
-    const elem = this.elem;
-    let x;
-    let y;
-    if ((_a = event.touches) == null ? void 0 : _a.length) {
-      x = event.touches[0].clientX;
-      y = event.touches[0].clientY;
-    } else {
-      x = event.clientX;
-      y = event.clientY;
+        _this.cancelList.length = 0;
+      };
+      this.handleCancel = function(event) {
+        if (_this.cancelList.length) {
+          _this.dispatchEvent("mousecancel", event, _this.cancelList);
+        }
+        _this.clickList.length = 0;
+      };
+      this.visitStart = function(node, payload) {
+        return !node._flag(payload.type);
+      };
+      this.visitEnd = function(node, payload) {
+        syntheticEvent.raw = payload.event;
+        syntheticEvent.type = payload.type;
+        syntheticEvent.timeStamp = payload.timeStamp;
+        syntheticEvent.abs.x = payload.x;
+        syntheticEvent.abs.y = payload.y;
+        var listeners = node.listeners(payload.type);
+        if (!listeners) {
+          return;
+        }
+        node.matrix().inverse().map(payload, syntheticEvent);
+        var isEventTarget = node === payload.root || node.attr("spy") || node.hitTest(syntheticEvent);
+        if (!isEventTarget) {
+          return;
+        }
+        if (payload.collected) {
+          payload.collected.push(node);
+        }
+        if (payload.event) {
+          var cancel = false;
+          for (var l = 0; l < listeners.length; l++) {
+            cancel = listeners[l].call(node, syntheticEvent) ? true : cancel;
+          }
+          return cancel;
+        }
+      };
     }
-    const rect = elem.getBoundingClientRect();
-    x -= rect.left;
-    y -= rect.top;
-    x -= elem.clientLeft | 0;
-    y -= elem.clientTop | 0;
-    PAYLOAD.x = x * this.ratio;
-    PAYLOAD.y = y * this.ratio;
-  }
-  /**
-   * Find eligible target for and event type, used to keep trace nodes to dispatch click event
-   */
-  findTargets(type, result) {
-    const payload = PAYLOAD;
-    payload.type = type;
-    payload.root = this.stage;
-    payload.event = null;
-    payload.collected = result;
-    payload.collected.length = 0;
-    this.stage.visit(
-      {
+    Pointer2.prototype.mount = function(stage, elem) {
+      var _this = this;
+      this.stage = stage;
+      this.elem = elem;
+      this.ratio = stage.viewport().ratio || 1;
+      stage.on("viewport", function(viewport) {
+        var _a;
+        _this.ratio = (_a = viewport.ratio) !== null && _a !== void 0 ? _a : _this.ratio;
+      });
+      elem.addEventListener("touchstart", this.handleStart);
+      elem.addEventListener("touchend", this.handleEnd);
+      elem.addEventListener("touchmove", this.handleMove);
+      elem.addEventListener("touchcancel", this.handleCancel);
+      elem.addEventListener("mousedown", this.handleStart);
+      elem.addEventListener("mouseup", this.handleEnd);
+      elem.addEventListener("mousemove", this.handleMove);
+      document.addEventListener("mouseup", this.handleCancel);
+      window.addEventListener("blur", this.handleCancel);
+      return this;
+    };
+    Pointer2.prototype.unmount = function() {
+      var elem = this.elem;
+      elem.removeEventListener("touchstart", this.handleStart);
+      elem.removeEventListener("touchend", this.handleEnd);
+      elem.removeEventListener("touchmove", this.handleMove);
+      elem.removeEventListener("touchcancel", this.handleCancel);
+      elem.removeEventListener("mousedown", this.handleStart);
+      elem.removeEventListener("mouseup", this.handleEnd);
+      elem.removeEventListener("mousemove", this.handleMove);
+      document.removeEventListener("mouseup", this.handleCancel);
+      window.removeEventListener("blur", this.handleCancel);
+      return this;
+    };
+    Pointer2.prototype.localPoint = function(event) {
+      var _a;
+      var elem = this.elem;
+      var x;
+      var y;
+      if ((_a = event.touches) === null || _a === void 0 ? void 0 : _a.length) {
+        x = event.touches[0].clientX;
+        y = event.touches[0].clientY;
+      } else {
+        x = event.clientX;
+        y = event.clientY;
+      }
+      var rect = elem.getBoundingClientRect();
+      x -= rect.left;
+      y -= rect.top;
+      x -= elem.clientLeft | 0;
+      y -= elem.clientTop | 0;
+      PAYLOAD.x = x * this.ratio;
+      PAYLOAD.y = y * this.ratio;
+    };
+    Pointer2.prototype.findTargets = function(type, result) {
+      var payload = PAYLOAD;
+      payload.type = type;
+      payload.root = this.stage;
+      payload.event = null;
+      payload.collected = result;
+      payload.collected.length = 0;
+      this.stage.visit({
         reverse: true,
         visible: true,
         start: this.visitStart,
         end: this.visitEnd
-      },
-      payload
-    );
-  }
-  dispatchEvent(type, event, targets) {
-    const payload = PAYLOAD;
-    payload.type = type;
-    payload.root = this.stage;
-    payload.event = event;
-    payload.timeStamp = Date.now();
-    payload.collected = null;
-    if (targets) {
-      while (targets.length) {
-        const node = targets.shift();
-        if (this.visitEnd(node, payload)) {
-          break;
+      }, payload);
+    };
+    Pointer2.prototype.dispatchEvent = function(type, event, targets) {
+      var payload = PAYLOAD;
+      payload.type = type;
+      payload.root = this.stage;
+      payload.event = event;
+      payload.timeStamp = Date.now();
+      payload.collected = null;
+      if (targets) {
+        while (targets.length) {
+          var node = targets.shift();
+          if (this.visitEnd(node, payload)) {
+            break;
+          }
         }
-      }
-      targets.length = 0;
-    } else {
-      this.stage.visit(
-        {
+        targets.length = 0;
+      } else {
+        this.stage.visit({
           reverse: true,
           visible: true,
           start: this.visitStart,
           end: this.visitEnd
-        },
-        payload
-      );
-    }
-  }
-}
-const Mouse = {
+        }, payload);
+      }
+    };
+    return Pointer2;
+  }()
+);
+var Mouse = {
   CLICK: "click",
   START: "touchstart mousedown",
   MOVE: "touchmove mousemove",
   END: "touchend mouseup",
   CANCEL: "touchcancel mousecancel"
 };
-const ROOTS = [];
+var __extends$2 = function() {
+  var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
+      d2.__proto__ = b2;
+    } || function(d2, b2) {
+      for (var p in b2)
+        if (Object.prototype.hasOwnProperty.call(b2, p))
+          d2[p] = b2[p];
+    };
+    return extendStatics(d, b);
+  };
+  return function(d, b) {
+    if (typeof b !== "function" && b !== null)
+      throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
+var __assign = function() {
+  __assign = Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+      for (var p in s)
+        if (Object.prototype.hasOwnProperty.call(s, p))
+          t[p] = s[p];
+    }
+    return t;
+  };
+  return __assign.apply(this, arguments);
+};
+var ROOTS = [];
 function pause() {
-  for (let i = ROOTS.length - 1; i >= 0; i--) {
+  for (var i = ROOTS.length - 1; i >= 0; i--) {
     ROOTS[i].pause();
   }
 }
 function resume() {
-  for (let i = ROOTS.length - 1; i >= 0; i--) {
+  for (var i = ROOTS.length - 1; i >= 0; i--) {
     ROOTS[i].resume();
   }
 }
-function mount(configs = {}) {
-  const root = new Root();
+function mount(configs) {
+  if (configs === void 0) {
+    configs = {};
+  }
+  var root = new Root();
   root.mount(configs);
   root.pointer = new Pointer().mount(root, root.dom);
   return root;
 }
-class Root extends Node {
-  constructor() {
-    super();
-    this.canvas = null;
-    this.dom = null;
-    this.context = null;
-    this.pixelWidth = -1;
-    this.pixelHeight = -1;
-    this.pixelRatio = 1;
-    this.drawingWidth = 0;
-    this.drawingHeight = 0;
-    this.mounted = false;
-    this.paused = false;
-    this.sleep = false;
-    this.mount = (configs = {}) => {
-      if (typeof configs.canvas === "string") {
-        this.canvas = document.getElementById(configs.canvas);
-        if (!this.canvas) {
-          console.error("Canvas element not found: ", configs.canvas);
+var Root = (
+  /** @class */
+  function(_super) {
+    __extends$2(Root2, _super);
+    function Root2() {
+      var _this = _super.call(this) || this;
+      _this.canvas = null;
+      _this.dom = null;
+      _this.context = null;
+      _this.pixelWidth = -1;
+      _this.pixelHeight = -1;
+      _this.pixelRatio = 1;
+      _this.drawingWidth = 0;
+      _this.drawingHeight = 0;
+      _this.mounted = false;
+      _this.paused = false;
+      _this.sleep = false;
+      _this.mount = function(configs) {
+        if (configs === void 0) {
+          configs = {};
         }
-      } else if (configs.canvas instanceof HTMLCanvasElement) {
-        this.canvas = configs.canvas;
-      } else if (configs.canvas) {
-        console.error("Unknown value for canvas:", configs.canvas);
-      }
-      if (!this.canvas) {
-        this.canvas = document.getElementById("cutjs") || document.getElementById("stage");
-      }
-      if (!this.canvas) {
-        this.canvas = document.createElement("canvas");
-        Object.assign(this.canvas.style, {
-          position: "absolute",
-          display: "block",
-          top: "0",
-          left: "0",
-          bottom: "0",
-          right: "0",
-          width: "100%",
-          height: "100%"
-        });
-        const body = document.body;
-        body.insertBefore(this.canvas, body.firstChild);
-      }
-      this.dom = this.canvas;
-      this.context = this.canvas.getContext("2d");
-      const devicePixelRatio = window.devicePixelRatio || 1;
-      const backingStorePixelRatio = (
-        // @ts-ignore
-        this.context.webkitBackingStorePixelRatio || // @ts-ignore
-        this.context.mozBackingStorePixelRatio || // @ts-ignore
-        this.context.msBackingStorePixelRatio || // @ts-ignore
-        this.context.oBackingStorePixelRatio || // @ts-ignore
-        this.context.backingStorePixelRatio || 1
-      );
-      this.devicePixelRatio = devicePixelRatio;
-      this.backingStoreRatio = backingStorePixelRatio;
-      this.pixelRatio = this.devicePixelRatio / this.backingStoreRatio;
-      this.mounted = true;
-      ROOTS.push(this);
-      this.requestFrame();
-    };
-    this.frameRequested = false;
-    this.requestFrame = () => {
-      if (!this.frameRequested) {
-        this.frameRequested = true;
-        requestAnimationFrame(this.onFrame);
-      }
-    };
-    this._lastFrameTime = 0;
-    this._mo_touch = null;
-    this.onFrame = (now) => {
-      this.frameRequested = false;
-      if (!this.mounted || !this.canvas || !this.context) {
-        return;
-      }
-      this.requestFrame();
-      const newPixelWidth = this.canvas.clientWidth;
-      const newPixelHeight = this.canvas.clientHeight;
-      if (this.pixelWidth !== newPixelWidth || this.pixelHeight !== newPixelHeight) {
-        this.pixelWidth = newPixelWidth;
-        this.pixelHeight = newPixelHeight;
-        this.drawingWidth = newPixelWidth * this.pixelRatio;
-        this.drawingHeight = newPixelHeight * this.pixelRatio;
-        if (this.canvas.width !== this.drawingWidth || this.canvas.height !== this.drawingHeight) {
-          this.canvas.width = this.drawingWidth;
-          this.canvas.height = this.drawingHeight;
-          this.viewport({
-            width: this.drawingWidth,
-            height: this.drawingHeight,
-            ratio: this.pixelRatio
-          });
-        }
-      }
-      const last = this._lastFrameTime || now;
-      const elapsed = now - last;
-      if (!this.mounted || this.paused || this.sleep) {
-        return;
-      }
-      this._lastFrameTime = now;
-      this.prerender();
-      const tickRequest = this._tick(elapsed, now, last);
-      if (this._mo_touch != this._ts_touch) {
-        this._mo_touch = this._ts_touch;
-        this.sleep = false;
-        if (this.drawingWidth > 0 && this.drawingHeight > 0) {
-          this.context.setTransform(1, 0, 0, 1, 0, 0);
-          this.context.clearRect(0, 0, this.drawingWidth, this.drawingHeight);
-          this.render(this.context);
-        }
-      } else if (tickRequest) {
-        this.sleep = false;
-      } else {
-        this.sleep = true;
-      }
-      stats.fps = elapsed ? 1e3 / elapsed : 0;
-    };
-    this.label("Root");
-  }
-  resume() {
-    if (this.sleep || this.paused) {
-      this.requestFrame();
-    }
-    this.paused = false;
-    this.sleep = false;
-    this.publish("resume");
-    return this;
-  }
-  pause() {
-    if (!this.paused) {
-      this.publish("pause");
-    }
-    this.paused = true;
-    return this;
-  }
-  /** @internal */
-  touch() {
-    if (this.sleep || this.paused) {
-      this.requestFrame();
-    }
-    this.sleep = false;
-    return super.touch();
-  }
-  unmount() {
-    var _a;
-    this.mounted = false;
-    const index = ROOTS.indexOf(this);
-    if (index >= 0) {
-      ROOTS.splice(index, 1);
-    }
-    (_a = this.pointer) == null ? void 0 : _a.unmount();
-    return this;
-  }
-  background(color) {
-    if (this.dom) {
-      this.dom.style.backgroundColor = color;
-    }
-    return this;
-  }
-  viewport(width, height, ratio) {
-    if (typeof width === "undefined") {
-      return Object.assign({}, this._viewport);
-    }
-    if (typeof width === "object") {
-      const options = width;
-      width = options.width;
-      height = options.height;
-      ratio = options.ratio;
-    }
-    if (typeof width === "number" && typeof height === "number") {
-      this._viewport = {
-        width,
-        height,
-        ratio: typeof ratio === "number" ? ratio : 1
-      };
-      this.viewbox();
-      const data = Object.assign({}, this._viewport);
-      this.visit({
-        start: function(node) {
-          if (!node._flag("viewport")) {
-            return true;
+        if (typeof configs.canvas === "string") {
+          _this.canvas = document.getElementById(configs.canvas);
+          if (!_this.canvas) {
+            console.error("Canvas element not found: ", configs.canvas);
           }
-          node.publish("viewport", [data]);
+        } else if (configs.canvas instanceof HTMLCanvasElement) {
+          _this.canvas = configs.canvas;
+        } else if (configs.canvas) {
+          console.error("Unknown value for canvas:", configs.canvas);
         }
-      });
-    }
-    return this;
-  }
-  viewbox(width, height, mode) {
-    if (typeof width === "number" && typeof height === "number") {
-      this._viewbox = {
-        width,
-        height,
-        mode
+        if (!_this.canvas) {
+          _this.canvas = document.getElementById("cutjs") || document.getElementById("stage");
+        }
+        if (!_this.canvas) {
+          _this.canvas = document.createElement("canvas");
+          Object.assign(_this.canvas.style, {
+            position: "absolute",
+            display: "block",
+            top: "0",
+            left: "0",
+            bottom: "0",
+            right: "0",
+            width: "100%",
+            height: "100%"
+          });
+          var body = document.body;
+          body.insertBefore(_this.canvas, body.firstChild);
+        }
+        _this.dom = _this.canvas;
+        _this.context = _this.canvas.getContext("2d");
+        var devicePixelRatio = window.devicePixelRatio || 1;
+        var backingStorePixelRatio = (
+          // @ts-ignore
+          _this.context.webkitBackingStorePixelRatio || // @ts-ignore
+          _this.context.mozBackingStorePixelRatio || // @ts-ignore
+          _this.context.msBackingStorePixelRatio || // @ts-ignore
+          _this.context.oBackingStorePixelRatio || // @ts-ignore
+          _this.context.backingStorePixelRatio || 1
+        );
+        _this.devicePixelRatio = devicePixelRatio;
+        _this.backingStoreRatio = backingStorePixelRatio;
+        _this.pixelRatio = _this.devicePixelRatio / _this.backingStoreRatio;
+        _this.mounted = true;
+        ROOTS.push(_this);
+        _this.requestFrame();
       };
-    } else if (typeof width === "object" && width !== null) {
-      this._viewbox = {
-        ...width
+      _this.frameRequested = false;
+      _this.requestFrame = function() {
+        if (!_this.frameRequested) {
+          _this.frameRequested = true;
+          requestAnimationFrame(_this.onFrame);
+        }
       };
+      _this._lastFrameTime = 0;
+      _this._mo_touch = null;
+      _this.onFrame = function(now) {
+        _this.frameRequested = false;
+        if (!_this.mounted || !_this.canvas || !_this.context) {
+          return;
+        }
+        _this.requestFrame();
+        var newPixelWidth = _this.canvas.clientWidth;
+        var newPixelHeight = _this.canvas.clientHeight;
+        if (_this.pixelWidth !== newPixelWidth || _this.pixelHeight !== newPixelHeight) {
+          _this.pixelWidth = newPixelWidth;
+          _this.pixelHeight = newPixelHeight;
+          _this.drawingWidth = newPixelWidth * _this.pixelRatio;
+          _this.drawingHeight = newPixelHeight * _this.pixelRatio;
+          if (_this.canvas.width !== _this.drawingWidth || _this.canvas.height !== _this.drawingHeight) {
+            _this.canvas.width = _this.drawingWidth;
+            _this.canvas.height = _this.drawingHeight;
+            _this.viewport({
+              width: _this.drawingWidth,
+              height: _this.drawingHeight,
+              ratio: _this.pixelRatio
+            });
+          }
+        }
+        var last = _this._lastFrameTime || now;
+        var elapsed = now - last;
+        if (!_this.mounted || _this.paused || _this.sleep) {
+          return;
+        }
+        _this._lastFrameTime = now;
+        _this.prerender();
+        var tickRequest = _this._tick(elapsed, now, last);
+        if (_this._mo_touch != _this._ts_touch) {
+          _this._mo_touch = _this._ts_touch;
+          _this.sleep = false;
+          if (_this.drawingWidth > 0 && _this.drawingHeight > 0) {
+            _this.context.setTransform(1, 0, 0, 1, 0, 0);
+            _this.context.clearRect(0, 0, _this.drawingWidth, _this.drawingHeight);
+            _this.render(_this.context);
+          }
+        } else if (tickRequest) {
+          _this.sleep = false;
+        } else {
+          _this.sleep = true;
+        }
+        stats.fps = elapsed ? 1e3 / elapsed : 0;
+      };
+      _this.label("Root");
+      return _this;
     }
-    this.rescale();
-    return this;
-  }
-  camera(matrix) {
-    this._camera = matrix;
-    this.rescale();
-    return this;
-  }
-  /** @internal */
-  rescale() {
-    const viewbox = this._viewbox;
-    const viewport = this._viewport;
-    const camera = this._camera;
-    if (viewport && viewbox) {
-      const viewportWidth = viewport.width;
-      const viewportHeight = viewport.height;
-      const viewboxMode = isValidFitMode(viewbox.mode) ? viewbox.mode : "in-pad";
-      const viewboxWidth = viewbox.width;
-      const viewboxHeight = viewbox.height;
-      this.pin({
-        width: viewboxWidth,
-        height: viewboxHeight
-      });
-      this.scaleTo(viewportWidth, viewportHeight, viewboxMode);
-      const viewboxX = viewbox.x || 0;
-      const viewboxY = viewbox.y || 0;
-      const cameraZoom = (camera == null ? void 0 : camera.a) || 1;
-      const cameraX = (camera == null ? void 0 : camera.e) || 0;
-      const cameraY = (camera == null ? void 0 : camera.f) || 0;
-      const scaleX = this.pin("scaleX");
-      const scaleY = this.pin("scaleY");
-      this.pin("scaleX", scaleX * cameraZoom);
-      this.pin("scaleY", scaleY * cameraZoom);
-      this.pin("offsetX", cameraX - viewboxX * scaleX * cameraZoom);
-      this.pin("offsetY", cameraY - viewboxY * scaleY * cameraZoom);
-    } else if (viewport) {
-      this.pin({
-        width: viewport.width,
-        height: viewport.height
-      });
+    Root2.prototype.resume = function() {
+      if (this.sleep || this.paused) {
+        this.requestFrame();
+      }
+      this.paused = false;
+      this.sleep = false;
+      this.publish("resume");
+      return this;
+    };
+    Root2.prototype.pause = function() {
+      if (!this.paused) {
+        this.publish("pause");
+      }
+      this.paused = true;
+      return this;
+    };
+    Root2.prototype.touch = function() {
+      if (this.sleep || this.paused) {
+        this.requestFrame();
+      }
+      this.sleep = false;
+      return _super.prototype.touch.call(this);
+    };
+    Root2.prototype.unmount = function() {
+      var _a;
+      this.mounted = false;
+      var index = ROOTS.indexOf(this);
+      if (index >= 0) {
+        ROOTS.splice(index, 1);
+      }
+      (_a = this.pointer) === null || _a === void 0 ? void 0 : _a.unmount();
+      return this;
+    };
+    Root2.prototype.background = function(color) {
+      if (this.dom) {
+        this.dom.style.backgroundColor = color;
+      }
+      return this;
+    };
+    Root2.prototype.viewport = function(width, height, ratio) {
+      if (typeof width === "undefined") {
+        return Object.assign({}, this._viewport);
+      }
+      if (typeof width === "object") {
+        var options = width;
+        width = options.width;
+        height = options.height;
+        ratio = options.ratio;
+      }
+      if (typeof width === "number" && typeof height === "number") {
+        this._viewport = {
+          width,
+          height,
+          ratio: typeof ratio === "number" ? ratio : 1
+        };
+        this.viewbox();
+        var data_1 = Object.assign({}, this._viewport);
+        this.visit({
+          start: function(node) {
+            if (!node._flag("viewport")) {
+              return true;
+            }
+            node.publish("viewport", [data_1]);
+          }
+        });
+      }
+      return this;
+    };
+    Root2.prototype.viewbox = function(width, height, mode) {
+      if (typeof width === "number" && typeof height === "number") {
+        this._viewbox = {
+          width,
+          height,
+          mode
+        };
+      } else if (typeof width === "object" && width !== null) {
+        this._viewbox = __assign({}, width);
+      }
+      this.rescale();
+      return this;
+    };
+    Root2.prototype.camera = function(matrix) {
+      this._camera = matrix;
+      this.rescale();
+      return this;
+    };
+    Root2.prototype.rescale = function() {
+      var viewbox = this._viewbox;
+      var viewport = this._viewport;
+      var camera = this._camera;
+      if (viewport && viewbox) {
+        var viewportWidth = viewport.width;
+        var viewportHeight = viewport.height;
+        var viewboxMode = isValidFitMode(viewbox.mode) ? viewbox.mode : "in-pad";
+        var viewboxWidth = viewbox.width;
+        var viewboxHeight = viewbox.height;
+        this.pin({
+          width: viewboxWidth,
+          height: viewboxHeight
+        });
+        this.scaleTo(viewportWidth, viewportHeight, viewboxMode);
+        var viewboxX = viewbox.x || 0;
+        var viewboxY = viewbox.y || 0;
+        var cameraZoom = (camera === null || camera === void 0 ? void 0 : camera.a) || 1;
+        var cameraX = (camera === null || camera === void 0 ? void 0 : camera.e) || 0;
+        var cameraY = (camera === null || camera === void 0 ? void 0 : camera.f) || 0;
+        var scaleX = this.pin("scaleX");
+        var scaleY = this.pin("scaleY");
+        this.pin("scaleX", scaleX * cameraZoom);
+        this.pin("scaleY", scaleY * cameraZoom);
+        this.pin("offsetX", cameraX - viewboxX * scaleX * cameraZoom);
+        this.pin("offsetY", cameraY - viewboxY * scaleY * cameraZoom);
+      } else if (viewport) {
+        this.pin({
+          width: viewport.width,
+          height: viewport.height
+        });
+      }
+      return this;
+    };
+    return Root2;
+  }(Node)
+);
+var __extends$1 = function() {
+  var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
+      d2.__proto__ = b2;
+    } || function(d2, b2) {
+      for (var p in b2)
+        if (Object.prototype.hasOwnProperty.call(b2, p))
+          d2[p] = b2[p];
+    };
+    return extendStatics(d, b);
+  };
+  return function(d, b) {
+    if (typeof b !== "function" && b !== null)
+      throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() {
+      this.constructor = d;
     }
-    return this;
-  }
-}
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
 function anim(frames, fps) {
-  const anim2 = new Anim();
+  var anim2 = new Anim();
   anim2.frames(frames).gotoFrame(0);
   fps && anim2.fps(fps);
   return anim2;
 }
-const FPS = 15;
-class Anim extends Node {
-  constructor() {
-    super();
-    this.label("Anim");
-    this._textures = [];
-    this._fps = FPS;
-    this._ft = 1e3 / this._fps;
-    this._time = -1;
-    this._repeat = 0;
-    this._index = 0;
-    this._frames = [];
-    let lastTime = 0;
-    this.tick(function(t, now, last) {
-      if (this._time < 0 || this._frames.length <= 1) {
-        return;
-      }
-      const ignore = lastTime != last;
-      lastTime = now;
-      if (ignore) {
+var FPS = 15;
+var Anim = (
+  /** @class */
+  function(_super) {
+    __extends$1(Anim2, _super);
+    function Anim2() {
+      var _this = _super.call(this) || this;
+      _this.label("Anim");
+      _this._textures = [];
+      _this._fps = FPS;
+      _this._ft = 1e3 / _this._fps;
+      _this._time = -1;
+      _this._repeat = 0;
+      _this._index = 0;
+      _this._frames = [];
+      var lastTime = 0;
+      _this.tick(function(t, now, last) {
+        if (this._time < 0 || this._frames.length <= 1) {
+          return;
+        }
+        var ignore = lastTime != last;
+        lastTime = now;
+        if (ignore) {
+          return true;
+        }
+        this._time += t;
+        if (this._time < this._ft) {
+          return true;
+        }
+        var n = this._time / this._ft | 0;
+        this._time -= n * this._ft;
+        this.moveFrame(n);
+        if (this._repeat > 0 && (this._repeat -= n) <= 0) {
+          this.stop();
+          this._callback && this._callback();
+          return false;
+        }
         return true;
+      }, false);
+      return _this;
+    }
+    Anim2.prototype.fps = function(fps) {
+      if (typeof fps === "undefined") {
+        return this._fps;
       }
-      this._time += t;
-      if (this._time < this._ft) {
-        return true;
+      this._fps = fps > 0 ? fps : FPS;
+      this._ft = 1e3 / this._fps;
+      return this;
+    };
+    Anim2.prototype.setFrames = function(frames) {
+      return this.frames(frames);
+    };
+    Anim2.prototype.frames = function(frames) {
+      this._index = 0;
+      this._frames = texture(frames).array();
+      this.touch();
+      return this;
+    };
+    Anim2.prototype.length = function() {
+      return this._frames ? this._frames.length : 0;
+    };
+    Anim2.prototype.gotoFrame = function(frame, resize) {
+      if (resize === void 0) {
+        resize = false;
       }
-      const n = this._time / this._ft | 0;
-      this._time -= n * this._ft;
-      this.moveFrame(n);
-      if (this._repeat > 0 && (this._repeat -= n) <= 0) {
-        this.stop();
-        this._callback && this._callback();
-        return false;
+      this._index = math.wrap(frame, this._frames.length) | 0;
+      resize = resize || !this._textures[0];
+      this._textures[0] = this._frames[this._index];
+      if (resize) {
+        this.pin("width", this._textures[0].getWidth());
+        this.pin("height", this._textures[0].getHeight());
       }
-      return true;
-    }, false);
-  }
-  fps(fps) {
-    if (typeof fps === "undefined") {
-      return this._fps;
+      this.touch();
+      return this;
+    };
+    Anim2.prototype.moveFrame = function(move) {
+      return this.gotoFrame(this._index + move);
+    };
+    Anim2.prototype.repeat = function(repeat, callback) {
+      this._repeat = repeat * this._frames.length - 1;
+      this._callback = callback;
+      this.play();
+      return this;
+    };
+    Anim2.prototype.play = function(frame) {
+      if (typeof frame !== "undefined") {
+        this.gotoFrame(frame);
+        this._time = 0;
+      } else if (this._time < 0) {
+        this._time = 0;
+      }
+      this.touch();
+      return this;
+    };
+    Anim2.prototype.stop = function(frame) {
+      this._time = -1;
+      if (typeof frame !== "undefined") {
+        this.gotoFrame(frame);
+      }
+      return this;
+    };
+    return Anim2;
+  }(Node)
+);
+var __extends = function() {
+  var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
+      d2.__proto__ = b2;
+    } || function(d2, b2) {
+      for (var p in b2)
+        if (Object.prototype.hasOwnProperty.call(b2, p))
+          d2[p] = b2[p];
+    };
+    return extendStatics(d, b);
+  };
+  return function(d, b) {
+    if (typeof b !== "function" && b !== null)
+      throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() {
+      this.constructor = d;
     }
-    this._fps = fps > 0 ? fps : FPS;
-    this._ft = 1e3 / this._fps;
-    return this;
-  }
-  /** @deprecated Use frames */
-  setFrames(frames) {
-    return this.frames(frames);
-  }
-  frames(frames) {
-    this._index = 0;
-    this._frames = texture(frames).array();
-    this.touch();
-    return this;
-  }
-  length() {
-    return this._frames ? this._frames.length : 0;
-  }
-  gotoFrame(frame, resize = false) {
-    this._index = math.wrap(frame, this._frames.length) | 0;
-    resize = resize || !this._textures[0];
-    this._textures[0] = this._frames[this._index];
-    if (resize) {
-      this.pin("width", this._textures[0].getWidth());
-      this.pin("height", this._textures[0].getHeight());
-    }
-    this.touch();
-    return this;
-  }
-  moveFrame(move) {
-    return this.gotoFrame(this._index + move);
-  }
-  repeat(repeat, callback) {
-    this._repeat = repeat * this._frames.length - 1;
-    this._callback = callback;
-    this.play();
-    return this;
-  }
-  play(frame) {
-    if (typeof frame !== "undefined") {
-      this.gotoFrame(frame);
-      this._time = 0;
-    } else if (this._time < 0) {
-      this._time = 0;
-    }
-    this.touch();
-    return this;
-  }
-  stop(frame) {
-    this._time = -1;
-    if (typeof frame !== "undefined") {
-      this.gotoFrame(frame);
-    }
-    return this;
-  }
-}
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
 function monotype(chars) {
   return new Monotype().frames(chars);
 }
-class Monotype extends Node {
-  constructor() {
-    super();
-    this.label("String");
-    this._textures = [];
-  }
-  /** @deprecated Use frames */
-  setFont(frames) {
-    return this.frames(frames);
-  }
-  frames(frames) {
-    this._textures = [];
-    if (typeof frames == "string") {
-      const selection = texture(frames);
-      this._font = function(value) {
-        return selection.one(value);
-      };
-    } else if (typeof frames === "object") {
-      this._font = function(value) {
-        return frames[value];
-      };
-    } else if (typeof frames === "function") {
-      this._font = frames;
+var Monotype = (
+  /** @class */
+  function(_super) {
+    __extends(Monotype2, _super);
+    function Monotype2() {
+      var _this = _super.call(this) || this;
+      _this.label("String");
+      _this._textures = [];
+      return _this;
     }
-    return this;
-  }
-  /** @deprecated Use value */
-  setValue(value) {
-    return this.value(value);
-  }
-  value(value) {
-    if (typeof value === "undefined") {
-      return this._value;
-    }
-    if (this._value === value) {
+    Monotype2.prototype.setFont = function(frames) {
+      return this.frames(frames);
+    };
+    Monotype2.prototype.frames = function(frames) {
+      this._textures = [];
+      if (typeof frames == "string") {
+        var selection_1 = texture(frames);
+        this._font = function(value) {
+          return selection_1.one(value);
+        };
+      } else if (typeof frames === "object") {
+        this._font = function(value) {
+          return frames[value];
+        };
+      } else if (typeof frames === "function") {
+        this._font = frames;
+      }
       return this;
-    }
-    this._value = value;
-    if (value === null) {
-      value = "";
-    } else if (typeof value !== "string" && !Array.isArray(value)) {
-      value = value.toString();
-    }
-    this._spacing = this._spacing || 0;
-    let width = 0;
-    let height = 0;
-    for (let i = 0; i < value.length; i++) {
-      const v = value[i];
-      const texture2 = this._textures[i] = this._font(typeof v === "string" ? v : v + "");
-      width += i > 0 ? this._spacing : 0;
-      texture2.setDestinationCoordinate(width, 0);
-      width = width + texture2.getWidth();
-      height = Math.max(height, texture2.getHeight());
-    }
-    this.pin("width", width);
-    this.pin("height", height);
-    this._textures.length = value.length;
-    return this;
-  }
-}
-const string = monotype;
-const Str = Monotype;
+    };
+    Monotype2.prototype.setValue = function(value) {
+      return this.value(value);
+    };
+    Monotype2.prototype.value = function(value) {
+      if (typeof value === "undefined") {
+        return this._value;
+      }
+      if (this._value === value) {
+        return this;
+      }
+      this._value = value;
+      if (value === null) {
+        value = "";
+      } else if (typeof value !== "string" && !Array.isArray(value)) {
+        value = value.toString();
+      }
+      this._spacing = this._spacing || 0;
+      var width = 0;
+      var height = 0;
+      for (var i = 0; i < value.length; i++) {
+        var v = value[i];
+        var texture_1 = this._textures[i] = this._font(typeof v === "string" ? v : v + "");
+        width += i > 0 ? this._spacing : 0;
+        texture_1.setDestinationCoordinate(width, 0);
+        width = width + texture_1.getWidth();
+        height = Math.max(height, texture_1.getHeight());
+      }
+      this.pin("width", width);
+      this.pin("height", height);
+      this._textures.length = value.length;
+      return this;
+    };
+    return Monotype2;
+  }(Node)
+);
+var string = monotype;
+var Str = Monotype;
 const Stage = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   Anim,
@@ -19502,7 +19977,7 @@ function findBody(world, point) {
 }
 /** @internal */
 var StageTestbed = /** @class */ (function (_super) {
-    __extends(StageTestbed, _super);
+    __extends$a(StageTestbed, _super);
     function StageTestbed() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.paused = false;
@@ -19772,7 +20247,7 @@ var StageTestbed = /** @class */ (function (_super) {
     return StageTestbed;
 }(Testbed));
 var WorldStageNode = /** @class */ (function (_super) {
-    __extends(WorldStageNode, _super);
+    __extends$a(WorldStageNode, _super);
     function WorldStageNode(world, opts) {
         if (opts === void 0) { opts = {}; }
         var _this = _super.call(this) || this;
@@ -19786,7 +20261,7 @@ var WorldStageNode = /** @class */ (function (_super) {
             fill: undefined
         };
         _this.label('Planck');
-        _this.options = __assign(__assign({}, _this.options), opts);
+        _this.options = __assign$1(__assign$1({}, _this.options), opts);
         if (math_abs(_this.options.hz) < 1) {
             _this.options.hz = 1 / _this.options.hz;
         }
