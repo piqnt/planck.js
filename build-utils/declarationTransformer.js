@@ -133,6 +133,10 @@ function createNodeWithFactories(factory, node) {
   ];
 }
 
+const FACTORY_DEPRECATION_COMMENT = `*
+ * @deprecated Use the 'new' keyword.
+ `;
+
 function createFunctionDeclaration(factory, node, parameters) {
   const result = factory.createFunctionDeclaration(
     undefined,
@@ -147,11 +151,26 @@ function createFunctionDeclaration(factory, node, parameters) {
     ),
     undefined
   );
-  return copyComments(result, node);
+  return copyComments(result, node, FACTORY_DEPRECATION_COMMENT);
 }
 
-function copyComments(node, original) {
-  ts.setSyntheticLeadingComments(node, ts.getSyntheticLeadingComments(original));
+function copyComments(node, original, deprecation) {
+  let leadingComment = ts.getSyntheticLeadingComments(original)
+  if (deprecation) {
+    leadingComment = leadingComment
+      ?.map(comment => ({
+        ...comment,
+        text: comment.text + deprecation,
+      }))
+      ?? [{
+        kind: 3,
+        pos: -1,
+        end: -1,
+        hasTrailingNewLine: true,
+        text: deprecation,
+      }];
+  }
+  ts.setSyntheticLeadingComments(node, leadingComment);
   ts.setSyntheticTrailingComments(node, ts.getSyntheticTrailingComments(original));
   return node;
 }
