@@ -9,10 +9,6 @@ function visitor(factory, node, options) {
       !isClassIncluded(node.name.escapedText, options)) {
     return node;
   }
-  // if (isClassDerived(node)) {
-  //   // workaround for https://github.com/microsoft/TypeScript/issues/46503
-  //   return splitClassIntoConstAndInterface(factory, node);
-  // }
   return createNodeWithFactories(factory, node);
 }
 
@@ -20,122 +16,16 @@ function isClassIncluded(className, options) {
   return options.classes.includes(className);
 }
 
-function isClassDerived(node) {
-  return node.heritageClauses[0] !== undefined;
-}
-
-function splitClassIntoConstAndInterface(factory, node) {
-  return [
-    createConstNodeWithStaticMethods(factory, node),
-    createInterfaceWithMethods(factory, node)
-  ];
-}
-
-function createConstNodeWithStaticMethods(factory, node) {
-  return factory.createVariableStatement(
-    [factory.createModifier(ts.SyntaxKind.DeclareKeyword)],
-    factory.createVariableDeclarationList(
-      [factory.createVariableDeclaration(
-        node.name,
-        undefined,
-        factory.createTypeLiteralNode([
-          // constructors
-          ...node.members
-            .filter(ts.isConstructorDeclaration)
-            .flatMap(member => [
-              factory.createConstructSignature(
-                undefined,
-                member.parameters,
-                factory.createTypeReferenceNode(
-                  node.name,
-                  undefined
-                )
-              ),
-              factory.createCallSignature(
-                undefined,
-                member.parameters,
-                factory.createTypeReferenceNode(
-                  node.name,
-                  undefined
-                )
-              )
-            ].map(node => copyComments(node, member))
-          ),
-          // static properties
-          ...node.members
-            .filter(member => hasModifier(ts.SyntaxKind.StaticKeyword, member))
-            .filter(member => !hasModifier(ts.SyntaxKind.PrivateKeyword, member))
-            .map(member => declarationToSignature(factory, member))
-          ]
-        ),
-        undefined
-      )],
-      ts.NodeFlags.Const | ts.NodeFlags.Ambient | ts.NodeFlags.ContextFlags
-    )
-  );
-}
-
-function createInterfaceWithMethods(factory, node) {
-  const result = factory.createInterfaceDeclaration(
-    undefined,
-    [factory.createModifier(ts.SyntaxKind.DeclareKeyword)],
-    node.name,
-    undefined,
-    node.heritageClauses,
-    // instance properties
-    node.members
-      .filter(member => !ts.isConstructorDeclaration(member))
-      .filter(member => !hasModifier(ts.SyntaxKind.StaticKeyword, member))
-      .filter(member => !hasModifier(ts.SyntaxKind.PrivateKeyword, member))
-      .map(member => declarationToSignature(factory, member))
-  );
-  return copyComments(result, node);
-}
-
-function hasModifier(kind, node) {
-  return node.modifiers?.some?.(modifier => modifier.kind === kind);
-}
-
-function declarationToSignature(factory, node) {
-  let result;
-  switch (node.kind) {
-    case ts.SyntaxKind.PropertyDeclaration:
-      result = factory.createPropertySignature(
-        undefined,
-        node.name,
-        undefined,
-        node.type
-      );
-      break;
-    case ts.SyntaxKind.MethodDeclaration:
-      result = factory.createMethodSignature(
-        undefined,
-        node.name,
-        undefined,
-        undefined,
-        node.parameters,
-        node.type
-      );
-      break;
-    default:
-      throw new Error(`Could not convert node of kind ${node.kind} to signature.`);
-  }
-  return copyComments(result, node);
-}
-
 function createNodeWithFactories(factory, node) {
   return [
     ...node.members
       .filter(ts.isConstructorDeclaration)
       .map(member => member.parameters)
-      .map(parameters => createFunctionDeclaration(factory, node, parameters)),
+      .map(parameters => createFunctionDeclaration(factory, node, parameters))
+      .map(node => addFactoryDeprecationToComment(node)),
     node
   ];
 }
-
-const FACTORY_DEPRECATION_COMMENT = `*
- * @deprecated Use the 'new' keyword.
- `;
 
 function createFunctionDeclaration(factory, node, parameters) {
   const result = factory.createFunctionDeclaration(
@@ -151,26 +41,36 @@ function createFunctionDeclaration(factory, node, parameters) {
     ),
     undefined
   );
-  return copyComments(result, node, FACTORY_DEPRECATION_COMMENT);
+  return copyComments(result, node);
 }
 
-function copyComments(node, original, deprecation) {
-  let leadingComment = ts.getSyntheticLeadingComments(original)
-  if (deprecation) {
-    leadingComment = leadingComment
-      ?.map(comment => ({
-        ...comment,
-        text: comment.text + deprecation,
-      }))
-      ?? [{
-        kind: 3,
-        pos: -1,
-        end: -1,
-        hasTrailingNewLine: true,
-        text: deprecation,
-      }];
-  }
-  ts.setSyntheticLeadingComments(node, leadingComment);
+function copyComments(node, original) {
+  ts.setSyntheticLeadingComments(node, ts.getSyntheticLeadingComments(original));
   ts.setSyntheticTrailingComments(node, ts.getSyntheticTrailingComments(original));
+  return node;
+}
+
+const FACTORY_DEPRECATION_SUFFIX = `*
+ * @deprecated Use the 'new' keyword.
+ `;
+
+const EMPTY_COMMENTS_FALLBACK = [{
+  kind: 3,
+  pos: -1,
+  end: -1,
+  hasTrailingNewLine: true,
+  text: '',
+}];
+
+function addFactoryDeprecationToComment(node) {
+  const comments = ts.getSyntheticLeadingComments(node) ?? EMPTY_COMMENTS_FALLBACK;
+  
+  const commentsWithDeprecation = comments
+    .map(comment => ({
+      ...comment,
+      text: comment.text + FACTORY_DEPRECATION_SUFFIX,
+    }));
+  
+  ts.setSyntheticLeadingComments(node, commentsWithDeprecation);
   return node;
 }
