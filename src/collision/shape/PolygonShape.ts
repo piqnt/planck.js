@@ -271,15 +271,15 @@ export class PolygonShape extends Shape {
 
   /** @internal */ _setAsBox(hx: number, hy: number, center?: Vec2Value, angle?: number): void {
     // start with right-bottom, counter-clockwise, as in Gift wrapping algorithm in PolygonShape._set()
-    this.m_vertices[0] = Vec2.neo(hx, -hy);
-    this.m_vertices[1] = Vec2.neo(hx, hy);
-    this.m_vertices[2] = Vec2.neo(-hx, hy);
-    this.m_vertices[3] = Vec2.neo(-hx, -hy);
+    this.m_vertices[0] = Vec2.create(hx, -hy);
+    this.m_vertices[1] = Vec2.create(hx, hy);
+    this.m_vertices[2] = Vec2.create(-hx, hy);
+    this.m_vertices[3] = Vec2.create(-hx, -hy);
 
-    this.m_normals[0] = Vec2.neo(1.0, 0.0);
-    this.m_normals[1] = Vec2.neo(0.0, 1.0);
-    this.m_normals[2] = Vec2.neo(-1.0, 0.0);
-    this.m_normals[3] = Vec2.neo(0.0, -1.0);
+    this.m_normals[0] = Vec2.create(1.0, 0.0);
+    this.m_normals[1] = Vec2.create(0.0, 1.0);
+    this.m_normals[2] = Vec2.create(-1.0, 0.0);
+    this.m_normals[3] = Vec2.create(0.0, -1.0);
 
     this.m_count = 4;
 

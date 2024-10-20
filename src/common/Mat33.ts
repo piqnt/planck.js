@@ -90,7 +90,7 @@ export class Mat33 {
     if (det !== 0.0) {
       det = 1.0 / det;
     }
-    const r = new Vec3();
+    const r = Vec3.create();
     // r.x = det * matrix.dotVec3(v, matrix.newCrossVec3(this.ey, this.ez));
     cross_x = this.ey.y * this.ez.z - this.ey.z * this.ez.y;
     cross_y = this.ey.z * this.ez.x - this.ey.x * this.ez.z;
@@ -196,13 +196,13 @@ export class Mat33 {
       const x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
       const y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
       const z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
-      return new Vec3(x, y, z);
+      return Vec3.create(x, y, z);
 
     } else if (b && 'y' in b && 'x' in b) {
       _ASSERT && Vec2.assert(b);
       const x = a.ex.x * b.x + a.ey.x * b.y;
       const y = a.ex.y * b.x + a.ey.y * b.y;
-      return Vec2.neo(x, y);
+      return Vec2.create(x, y);
     }
 
     _ASSERT && console.assert(false);
@@ -214,7 +214,7 @@ export class Mat33 {
     const x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
     const y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
     const z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
-    return new Vec3(x, y, z);
+    return Vec3.create(x, y, z);
   }
 
   static mulVec2(a: Mat33, b: Vec2Value): Vec2 {
@@ -222,7 +222,7 @@ export class Mat33 {
     _ASSERT && Vec2.assert(b);
     const x = a.ex.x * b.x + a.ey.x * b.y;
     const y = a.ex.y * b.x + a.ey.y * b.y;
-    return Vec2.neo(x, y);
+    return Vec2.create(x, y);
   }
 
   static add(a: Mat33, b: Mat33): Mat33 {

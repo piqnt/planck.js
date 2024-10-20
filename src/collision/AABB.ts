@@ -100,14 +100,14 @@ export class AABB {
    * Get the center of the AABB.
    */
   getCenter(): Vec2 {
-    return Vec2.neo((this.lowerBound.x + this.upperBound.x) * 0.5, (this.lowerBound.y + this.upperBound.y) * 0.5);
+    return Vec2.create((this.lowerBound.x + this.upperBound.x) * 0.5, (this.lowerBound.y + this.upperBound.y) * 0.5);
   }
 
   /**
    * Get the extents of the AABB (half-widths).
    */
   getExtents(): Vec2 {
-    return Vec2.neo((this.upperBound.x - this.lowerBound.x) * 0.5, (this.upperBound.y - this.lowerBound.y) * 0.5);
+    return Vec2.create((this.upperBound.x - this.lowerBound.x) * 0.5, (this.upperBound.y - this.lowerBound.y) * 0.5);
   }
 
   /**

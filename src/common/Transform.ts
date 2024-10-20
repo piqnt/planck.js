@@ -172,7 +172,7 @@ export class Transform {
     _ASSERT && Vec2.assert(b);
     const x = (a.q.c * b.x - a.q.s * b.y) + a.p.x;
     const y = (a.q.s * b.x + a.q.c * b.y) + a.p.y;
-    return Vec2.neo(x, y);
+    return Vec2.create(x, y);
   }
 
   static mulXf(a: TransformValue, b: TransformValue): Transform {
@@ -204,7 +204,7 @@ export class Transform {
     const py = b.y - a.p.y;
     const x = (a.q.c * px + a.q.s * py);
     const y = (-a.q.s * px + a.q.c * py);
-    return Vec2.neo(x, y);
+    return Vec2.create(x, y);
   }
 
   static mulTXf(a: TransformValue, b: TransformValue): Transform {

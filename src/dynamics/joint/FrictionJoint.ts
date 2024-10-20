@@ -316,7 +316,7 @@ export class FrictionJoint extends Joint {
       this.m_linearImpulse.mul(step.dtRatio);
       this.m_angularImpulse *= step.dtRatio;
 
-      const P = Vec2.neo(this.m_linearImpulse.x, this.m_linearImpulse.y);
+      const P = Vec2.create(this.m_linearImpulse.x, this.m_linearImpulse.y);
 
       vA.subMul(mA, P);
       wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_angularImpulse);

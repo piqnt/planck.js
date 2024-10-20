@@ -131,12 +131,12 @@ export class Rot {
 
   /** Get the x-axis. */
   getXAxis(): Vec2 {
-    return Vec2.neo(this.c, this.s);
+    return Vec2.create(this.c, this.s);
   }
 
   /** Get the y-axis. */
   getYAxis(): Vec2 {
-    return Vec2.neo(-this.s, this.c);
+    return Vec2.create(-this.s, this.c);
   }
 
   /** Multiply two rotations: q * r */
@@ -158,7 +158,7 @@ export class Rot {
 
     } else if ('x' in m && 'y' in m) {
       _ASSERT && Vec2.assert(m);
-      return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
+      return Vec2.create(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
     }
   }
 
@@ -180,13 +180,13 @@ export class Rot {
   static mulVec2(rot: RotValue, m: Vec2Value): Vec2 {
     _ASSERT && Rot.assert(rot);
     _ASSERT && Vec2.assert(m);
-    return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
+    return Vec2.create(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
   }
 
   static mulSub(rot: RotValue, v: Vec2Value, w: Vec2Value): Vec2 {
     const x = rot.c * (v.x - w.x) - rot.s * (v.y - w.y);
     const y = rot.s * (v.x - w.x) + rot.c * (v.y - w.y);
-    return Vec2.neo(x, y);
+    return Vec2.create(x, y);
   }
 
   /** Transpose multiply two rotations: qT * r */
@@ -207,7 +207,7 @@ export class Rot {
 
     } else if ('x' in m && 'y' in m) {
       _ASSERT && Vec2.assert(m);
-      return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
+      return Vec2.create(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
     }
   }
 
@@ -227,6 +227,6 @@ export class Rot {
   /** Inverse rotate a vector */
   static mulTVec2(rot: RotValue, m: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(m);
-    return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
+    return Vec2.create(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
   }
 }

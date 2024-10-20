@@ -43,8 +43,8 @@ export class Mat22 {
       this.ex = Vec2.clone(a);
       this.ey = Vec2.clone(b);
     } else if (typeof a === 'number') {
-      this.ex = Vec2.neo(a, c);
-      this.ey = Vec2.neo(b, d);
+      this.ex = Vec2.create(a, c);
+      this.ey = Vec2.create(b, d);
     } else {
       this.ex = Vec2.zero();
       this.ey = Vec2.zero();
@@ -152,7 +152,7 @@ export class Mat22 {
       _ASSERT && Vec2.assert(v);
       const x = mx.ex.x * v.x + mx.ey.x * v.y;
       const y = mx.ex.y * v.x + mx.ey.y * v.y;
-      return Vec2.neo(x, y);
+      return Vec2.create(x, y);
 
     } else if (v && 'ex' in v && 'ey' in v) { // Mat22
       _ASSERT && Mat22.assert(v);
@@ -171,7 +171,7 @@ export class Mat22 {
     _ASSERT && Vec2.assert(v);
     const x = mx.ex.x * v.x + mx.ey.x * v.y;
     const y = mx.ex.y * v.x + mx.ey.y * v.y;
-    return Vec2.neo(x, y);
+    return Vec2.create(x, y);
   }
 
   static mulMat22(mx: Mat22, v: Mat22): Mat22 {
@@ -194,12 +194,12 @@ export class Mat22 {
   static mulT(mx, v) {
     if (v && 'x' in v && 'y' in v) { // Vec2
       _ASSERT && Vec2.assert(v);
-      return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
+      return Vec2.create(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
 
     } else if (v && 'ex' in v && 'ey' in v) { // Mat22
       _ASSERT && Mat22.assert(v);
-      const c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
-      const c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
+      const c1 = Vec2.create(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
+      const c2 = Vec2.create(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
       return new Mat22(c1, c2);
     }
 
@@ -209,14 +209,14 @@ export class Mat22 {
   static mulTVec2(mx: Mat22, v: Vec2Value): Vec2 {
     _ASSERT && Mat22.assert(mx);
     _ASSERT && Vec2.assert(v);
-    return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
+    return Vec2.create(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
   }
 
   static mulTMat22(mx: Mat22, v: Mat22): Mat22 {
     _ASSERT && Mat22.assert(mx);
     _ASSERT && Mat22.assert(v);
-    const c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
-    const c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
+    const c1 = Vec2.create(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
+    const c2 = Vec2.create(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
     return new Mat22(c1, c2);
   }
 

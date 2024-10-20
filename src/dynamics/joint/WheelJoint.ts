@@ -181,7 +181,7 @@ export class WheelJoint extends Joint {
       // localAxis is renamed to localAxisA, this is for backward compatibility
       this.m_localXAxisA = Vec2.clone(def.localAxis);
     } else {
-      this.m_localXAxisA = Vec2.neo(1.0, 0.0);
+      this.m_localXAxisA = Vec2.create(1.0, 0.0);
     }
 
     this.m_localYAxisA = Vec2.crossNumVec2(1.0, this.m_localXAxisA);

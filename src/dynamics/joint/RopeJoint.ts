@@ -125,8 +125,8 @@ export class RopeJoint extends Joint {
     bodyB = this.m_bodyB;
 
     this.m_type = RopeJoint.TYPE;
-    this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.neo(-1.0, 0.0));
-    this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.neo(1.0, 0.0));
+    this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.create(-1.0, 0.0));
+    this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.create(1.0, 0.0));
 
     this.m_maxLength = def.maxLength;
 

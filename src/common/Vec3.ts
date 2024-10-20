@@ -39,11 +39,14 @@ export class Vec3 {
   z: number;
 
   constructor(x: number, y: number, z: number);
+  /**
+   * @deprecated Use explicit number arguments to construct
+   */
   constructor(obj: { x: number, y: number, z: number });
   constructor();
   constructor(x?, y?, z?) {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof Vec3)) {
-      return new Vec3(x, y, z);
+      return Vec3.create(x, y, z);
     }
     if (typeof x === 'undefined') {
       this.x = 0;
@@ -59,6 +62,17 @@ export class Vec3 {
       this.z = z;
     }
     _ASSERT && Vec3.assert(this);
+  }
+
+  /**
+   * create a new Vec2
+   */
+  static create(x: number=0, y: number=0, z: number=0): Vec3 {
+    const obj = Object.create(Vec3.prototype);
+    obj.x = x;
+    obj.y = y;
+    obj.z = z;
+    return obj;
   }
 
   /** @internal */
@@ -79,15 +93,6 @@ export class Vec3 {
     return obj;
   }
 
-  /** @hidden */
-  static neo(x: number, y: number, z: number): Vec3 {
-    const obj = Object.create(Vec3.prototype);
-    obj.x = x;
-    obj.y = y;
-    obj.z = z;
-    return obj;
-  }
-
   static zero(): Vec3 {
     const obj = Object.create(Vec3.prototype);
     obj.x = 0;
@@ -98,7 +103,7 @@ export class Vec3 {
 
   static clone(v: Vec3Value): Vec3 {
     _ASSERT && Vec3.assert(v);
-    return Vec3.neo(v.x, v.y, v.z);
+    return Vec3.create(v.x, v.y, v.z);
   }
 
   /** @hidden */
@@ -169,23 +174,19 @@ export class Vec3 {
 
   /** Cross product on two vectors */
   static cross(v: Vec3Value, w: Vec3Value): Vec3 {
-    return new Vec3(
-      v.y * w.z - v.z * w.y,
-      v.z * w.x - v.x * w.z,
-      v.x * w.y - v.y * w.x
-    );
+    return Vec3.create(v.y * w.z - v.z * w.y, v.z * w.x - v.x * w.z, v.x * w.y - v.y * w.x);
   }
 
   static add(v: Vec3Value, w: Vec3Value): Vec3 {
-    return new Vec3(v.x + w.x, v.y + w.y, v.z + w.z);
+    return Vec3.create(v.x + w.x, v.y + w.y, v.z + w.z);
   }
 
   static sub(v: Vec3Value, w: Vec3Value): Vec3 {
-    return new Vec3(v.x - w.x, v.y - w.y, v.z - w.z);
+    return Vec3.create(v.x - w.x, v.y - w.y, v.z - w.z);
   }
 
   static mul(v: Vec3Value, m: number): Vec3 {
-    return new Vec3(m * v.x, m * v.y, m * v.z);
+    return Vec3.create(m * v.x, m * v.y, m * v.z);
   }
 
   neg(): Vec3 {
@@ -196,6 +197,6 @@ export class Vec3 {
   }
 
   static neg(v: Vec3Value): Vec3 {
-    return new Vec3(-v.x, -v.y, -v.z);
+    return Vec3.create(-v.x, -v.y, -v.z);
   }
 }

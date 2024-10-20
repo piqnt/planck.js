@@ -16,25 +16,25 @@ describe('DistanceJoint', function(): void {
     var box = new BoxShape(1, 1);
 
     var b1 = world.createBody({
-      position : new Vec2(0, 0),
+      position : Vec2.create(0, 0),
       type : 'dynamic'
     });
     b1.createFixture(circle);
 
     var b2 = world.createBody({
-      position : new Vec2(10, 0),
+      position : Vec2.create(10, 0),
       type : 'dynamic'
     });
     b2.createFixture(box);
 
-    var joint = new DistanceJoint({}, b1, b2, new Vec2(1, 0), new Vec2(9, -1));
+    var joint = new DistanceJoint({}, b1, b2, Vec2.create(1, 0), Vec2.create(9, -1));
     world.createJoint(joint);
 
-    expect(joint.getLocalAnchorA()).deep.equal(new Vec2(1, 0));
-    expect(joint.getLocalAnchorB()).deep.equal(new Vec2(-1, -1));
+    expect(joint.getLocalAnchorA()).deep.equal(Vec2.create(1, 0));
+    expect(joint.getLocalAnchorB()).deep.equal(Vec2.create(-1, -1));
 
-    expect(joint.getAnchorA()).deep.equal(new Vec2(1, 0));
-    expect(joint.getAnchorB()).deep.equal(new Vec2(9, -1));
+    expect(joint.getAnchorA()).deep.equal(Vec2.create(1, 0));
+    expect(joint.getAnchorB()).deep.equal(Vec2.create(9, -1));
 
   });
 
@@ -45,21 +45,21 @@ describe('DistanceJoint', function(): void {
     var box = new BoxShape(1, 1);
 
     var b1 = world.createBody({
-      position : new Vec2(0, 0),
+      position : Vec2.create(0, 0),
       type : 'dynamic'
     });
     b1.createFixture(circle);
 
     var b2 = world.createBody({
-      position : new Vec2(10, 0),
+      position : Vec2.create(10, 0),
       type : 'dynamic'
     });
     b2.createFixture(box);
 
-    var joint = new DistanceJoint({}, b1, b2, new Vec2(1, 0), new Vec2(9, -1));
+    var joint = new DistanceJoint({}, b1, b2, Vec2.create(1, 0), Vec2.create(9, -1));
     world.createJoint(joint);
 
-    b2.applyForceToCenter(new Vec2(500, 0), true);
+    b2.applyForceToCenter(Vec2.create(500, 0), true);
     world.step(1 / 10);
 
     expect(b1.getPosition().x).closeTo(2, 1e-1);

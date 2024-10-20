@@ -181,12 +181,12 @@ export class PrismaticJoint extends Joint {
 
     this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
     this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
-    this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0));
+    this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.create(1.0, 0.0));
     this.m_localXAxisA.normalize();
     this.m_localYAxisA = Vec2.crossNumVec2(1.0, this.m_localXAxisA);
     this.m_referenceAngle = Number.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
 
-    this.m_impulse = new Vec3();
+    this.m_impulse = Vec3.create();
     this.m_motorMass = 0.0;
     this.m_motorImpulse = 0.0;
 
@@ -718,7 +718,7 @@ export class PrismaticJoint extends Joint {
       Cdot2 += Vec2.dot(this.m_axis, vB) + this.m_a2 * wB;
       Cdot2 -= Vec2.dot(this.m_axis, vA) + this.m_a1 * wA;
 
-      const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
+      const Cdot = Vec3.create(Cdot1.x, Cdot1.y, Cdot2);
 
       const f1 = Vec3.clone(this.m_impulse);
       let df = this.m_K.solve33(Vec3.neg(Cdot));
@@ -732,8 +732,8 @@ export class PrismaticJoint extends Joint {
 
       // f2(1:2) = invK(1:2,1:2) * (-Cdot(1:2) - K(1:2,3) * (f2(3) - f1(3))) +
       // f1(1:2)
-      const b = Vec2.combine(-1, Cdot1, -(this.m_impulse.z - f1.z), Vec2.neo(this.m_K.ez.x, this.m_K.ez.y));
-      const f2r = Vec2.add(this.m_K.solve22(b), Vec2.neo(f1.x, f1.y));
+      const b = Vec2.combine(-1, Cdot1, -(this.m_impulse.z - f1.z), Vec2.create(this.m_K.ez.x, this.m_K.ez.y));
+      const f2r = Vec2.add(this.m_K.solve22(b), Vec2.create(f1.x, f1.y));
       this.m_impulse.x = f2r.x;
       this.m_impulse.y = f2r.y;
 
@@ -801,7 +801,7 @@ export class PrismaticJoint extends Joint {
     const s1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), perp);
     const s2 = Vec2.crossVec2Vec2(rB, perp);
 
-    let impulse = new Vec3();
+    let impulse = Vec3.create();
     const C1 = Vec2.zero();
     C1.x = Vec2.dot(perp, d);
     C1.y = aB - aA - this.m_referenceAngle;
@@ -858,7 +858,7 @@ export class PrismaticJoint extends Joint {
       K.ey.set(k12, k22, k23);
       K.ez.set(k13, k23, k33);
 
-      const C = new Vec3();
+      const C = Vec3.create();
       C.x = C1.x;
       C.y = C1.y;
       C.z = C2;

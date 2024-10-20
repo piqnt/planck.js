@@ -43,12 +43,15 @@ export class Vec2 {
   y: number;
 
   constructor(x: number, y: number);
+  /**
+   * @deprecated Use explicit number arguments to construct
+   */
   constructor(obj: { x: number, y: number });
   constructor();
   // tslint:disable-next-line:typedef
   constructor(x?, y?) {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof Vec2)) {
-      return new Vec2(x, y);
+      return Vec2.create(x, y);
     }
     if (typeof x === 'undefined') {
       this.x = 0;
@@ -61,6 +64,16 @@ export class Vec2 {
       this.y = y;
     }
     _ASSERT && Vec2.assert(this);
+  }
+
+  /**
+   * create a new Vec2
+   */
+  static create(x: number=0, y: number=0): Vec2 {
+    const obj = Object.create(Vec2.prototype);
+    obj.x = x;
+    obj.y = y;
+    return obj;
   }
 
   /** @internal */
@@ -86,17 +99,9 @@ export class Vec2 {
     return obj;
   }
 
-  /** @hidden */
-  static neo(x: number, y: number): Vec2 {
-    const obj = Object.create(Vec2.prototype);
-    obj.x = x;
-    obj.y = y;
-    return obj;
-  }
-
   static clone(v: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(v);
-    return Vec2.neo(v.x, v.y);
+    return Vec2.create(v.x, v.y);
   }
 
   /** @hidden */
@@ -408,7 +413,7 @@ export class Vec2 {
    */
   static skew(v: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(v);
-    return Vec2.neo(-v.y, v.x);
+    return Vec2.create(-v.y, v.x);
   }
 
   /** Dot product on two vectors */
@@ -428,12 +433,12 @@ export class Vec2 {
     if (typeof w === 'number') {
       _ASSERT && Vec2.assert(v);
       _ASSERT && console.assert(Number.isFinite(w));
-      return Vec2.neo(w * v.y, -w * v.x);
+      return Vec2.create(w * v.y, -w * v.x);
 
     } else if (typeof v === 'number') {
       _ASSERT && console.assert(Number.isFinite(v));
       _ASSERT && Vec2.assert(w);
-      return Vec2.neo(-v * w.y, v * w.x);
+      return Vec2.create(-v * w.y, v * w.x);
 
     } else {
       _ASSERT && Vec2.assert(v);
@@ -453,14 +458,14 @@ export class Vec2 {
   static crossVec2Num(v: Vec2Value, w: number): Vec2 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && console.assert(Number.isFinite(w));
-    return Vec2.neo(w * v.y, -w * v.x);
+    return Vec2.create(w * v.y, -w * v.x);
   }
 
   /** Cross product on a vector and a scalar */
   static crossNumVec2(v: number, w: Vec2Value): Vec2 {
     _ASSERT && console.assert(Number.isFinite(v));
     _ASSERT && Vec2.assert(w);
-    return Vec2.neo(-v * w.y, v * w.x);
+    return Vec2.create(-v * w.y, v * w.x);
   }
 
   /** Returns `a + (v x w)` */
@@ -471,12 +476,12 @@ export class Vec2 {
     if (typeof w === 'number') {
       _ASSERT && Vec2.assert(v);
       _ASSERT && console.assert(Number.isFinite(w));
-      return Vec2.neo(w * v.y + a.x, -w * v.x + a.y);
+      return Vec2.create(w * v.y + a.x, -w * v.x + a.y);
 
     } else if (typeof v === 'number') {
       _ASSERT && console.assert(Number.isFinite(v));
       _ASSERT && Vec2.assert(w);
-      return Vec2.neo(-v * w.y + a.x, v * w.x + a.y);
+      return Vec2.create(-v * w.y + a.x, v * w.x + a.y);
     }
 
     _ASSERT && console.assert(false);
@@ -488,7 +493,7 @@ export class Vec2 {
   static addCrossVec2Num(a: Vec2Value, v: Vec2Value, w: number): Vec2 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && console.assert(Number.isFinite(w));
-    return Vec2.neo(w * v.y + a.x, -w * v.x + a.y);
+    return Vec2.create(w * v.y + a.x, -w * v.x + a.y);
   }
 
   /**
@@ -497,13 +502,13 @@ export class Vec2 {
   static addCrossNumVec2(a: Vec2Value, v: number, w: Vec2Value): Vec2 {
     _ASSERT && console.assert(Number.isFinite(v));
     _ASSERT && Vec2.assert(w);
-    return Vec2.neo(-v * w.y + a.x, v * w.x + a.y);
+    return Vec2.create(-v * w.y + a.x, v * w.x + a.y);
   }
 
   static add(v: Vec2Value, w: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
-    return Vec2.neo(v.x + w.x, v.y + w.y);
+    return Vec2.create(v.x + w.x, v.y + w.y);
   }
 
   /** @hidden @deprecated */
@@ -522,7 +527,7 @@ export class Vec2 {
   static sub(v: Vec2Value, w: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
-    return Vec2.neo(v.x - w.x, v.y - w.y);
+    return Vec2.create(v.x - w.x, v.y - w.y);
   }
 
   static mul(a: Vec2Value, b: number): Vec2;
@@ -531,25 +536,25 @@ export class Vec2 {
     if (typeof a === 'object') {
       _ASSERT && Vec2.assert(a);
       _ASSERT && console.assert(Number.isFinite(b));
-      return Vec2.neo(a.x * b, a.y * b);
+      return Vec2.create(a.x * b, a.y * b);
 
     } else if (typeof b === 'object') {
       _ASSERT && console.assert(Number.isFinite(a));
       _ASSERT && Vec2.assert(b);
-      return Vec2.neo(a * b.x, a * b.y);
+      return Vec2.create(a * b.x, a * b.y);
     }
   }
 
   static mulVec2Num(a: Vec2Value, b: number): Vec2 {
     _ASSERT && Vec2.assert(a);
     _ASSERT && console.assert(Number.isFinite(b));
-    return Vec2.neo(a.x * b, a.y * b);
+    return Vec2.create(a.x * b, a.y * b);
   }
 
   static mulNumVec2(a: number, b: Vec2Value): Vec2 {
     _ASSERT && console.assert(Number.isFinite(a));
     _ASSERT && Vec2.assert(b);
-    return Vec2.neo(a * b.x, a * b.y);
+    return Vec2.create(a * b.x, a * b.y);
   }
 
   neg(): Vec2 {
@@ -560,30 +565,30 @@ export class Vec2 {
 
   static neg(v: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(v);
-    return Vec2.neo(-v.x, -v.y);
+    return Vec2.create(-v.x, -v.y);
   }
 
   static abs(v: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(v);
-    return Vec2.neo(math_abs(v.x), math_abs(v.y));
+    return Vec2.create(math_abs(v.x), math_abs(v.y));
   }
 
   static mid(v: Vec2Value, w: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
-    return Vec2.neo((v.x + w.x) * 0.5, (v.y + w.y) * 0.5);
+    return Vec2.create((v.x + w.x) * 0.5, (v.y + w.y) * 0.5);
   }
 
   static upper(v: Vec2Value, w: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
-    return Vec2.neo(math_max(v.x, w.x), math_max(v.y, w.y));
+    return Vec2.create(math_max(v.x, w.x), math_max(v.y, w.y));
   }
 
   static lower(v: Vec2Value, w: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
-    return Vec2.neo(math_min(v.x, w.x), math_min(v.y, w.y));
+    return Vec2.create(math_min(v.x, w.x), math_min(v.y, w.y));
   }
 
   clamp(max: number): Vec2 {
@@ -597,7 +602,7 @@ export class Vec2 {
   }
 
   static clamp(v: Vec2Value, max: number): Vec2 {
-    const r = Vec2.neo(v.x, v.y);
+    const r = Vec2.create(v.x, v.y);
     r.clamp(max);
     return r;
   }
@@ -606,7 +611,7 @@ export class Vec2 {
   static scaleFn(x: number, y: number) {
     // todo: this was used in examples, remove in the future
     return function(v: Vec2Value): Vec2 {
-      return Vec2.neo(v.x * x, v.y * y);
+      return Vec2.create(v.x * x, v.y * y);
     };
   }
 
@@ -614,7 +619,7 @@ export class Vec2 {
   static translateFn(x: number, y: number) {
     // todo: this was used in examples, remove in the future
     return function(v: Vec2Value): Vec2 {
-      return Vec2.neo(v.x + x, v.y + y);
+      return Vec2.create(v.x + x, v.y + y);
     };
   }
 }

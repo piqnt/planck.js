@@ -136,7 +136,7 @@ export class WeldJoint extends Joint {
     this.m_frequencyHz = def.frequencyHz;
     this.m_dampingRatio = def.dampingRatio;
 
-    this.m_impulse = new Vec3();
+    this.m_impulse = Vec3.create();
 
     this.m_bias = 0.0;
     this.m_gamma = 0.0;
@@ -280,7 +280,7 @@ export class WeldJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.neo(this.m_impulse.x, this.m_impulse.y).mul(inv_dt);
+    return Vec2.create(this.m_impulse.x, this.m_impulse.y).mul(inv_dt);
   }
 
   /**
@@ -378,7 +378,7 @@ export class WeldJoint extends Joint {
       // Scale impulses to support a variable time step.
       this.m_impulse.mul(step.dtRatio);
 
-      const P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
+      const P = Vec2.create(this.m_impulse.x, this.m_impulse.y);
 
       vA.subMul(mA, P);
       wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_impulse.z);
@@ -436,12 +436,12 @@ export class WeldJoint extends Joint {
       Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
       Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
       const Cdot2 = wB - wA;
-      const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
+      const Cdot = Vec3.create(Cdot1.x, Cdot1.y, Cdot2);
 
       const impulse = Vec3.neg(Mat33.mulVec3(this.m_mass, Cdot));
       this.m_impulse.add(impulse);
 
-      const P = Vec2.neo(impulse.x, impulse.y);
+      const P = Vec2.create(impulse.x, impulse.y);
 
       vA.subMul(mA, P);
       wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + impulse.z);
@@ -515,9 +515,9 @@ export class WeldJoint extends Joint {
       positionError = C1.length();
       angularError = math_abs(C2);
 
-      const C = new Vec3(C1.x, C1.y, C2);
+      const C = Vec3.create(C1.x, C1.y, C2);
 
-      let impulse = new Vec3();
+      let impulse = Vec3.create();
       if (K.ez.z > 0.0) {
         impulse = Vec3.neg(K.solve33(C));
       } else {
@@ -525,7 +525,7 @@ export class WeldJoint extends Joint {
         impulse.set(impulse2.x, impulse2.y, 0.0);
       }
 
-      const P = Vec2.neo(impulse.x, impulse.y);
+      const P = Vec2.create(impulse.x, impulse.y);
 
       cA.subMul(mA, P);
       aA -= iA * (Vec2.crossVec2Vec2(rA, P) + impulse.z);

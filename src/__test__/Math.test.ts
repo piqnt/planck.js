@@ -5,7 +5,7 @@ import { Vec3 } from '../common/Vec3';
 
 describe('Math', function(): void {
   it('Vec2', function(): void {
-    var r, v = new Vec2();
+    var r, v = Vec2.create();
     expect(v.x).equal(0);
     expect(v.y).equal(0);
 
@@ -23,11 +23,11 @@ describe('Math', function(): void {
     expect(v.x).equal(0);
     expect(v.y).equal(0);
 
-    v.add(new Vec2(3, 2));
+    v.add(Vec2.create(3, 2));
     expect(v.x).equal(3);
     expect(v.y).equal(2);
 
-    v.sub(new Vec2(2, 1));
+    v.sub(Vec2.create(2, 1));
     expect(v.x).equal(1);
     expect(v.y).equal(1);
 
@@ -43,17 +43,17 @@ describe('Math', function(): void {
     expect(r.x).equal(-3);
     expect(r.y).equal(2);
 
-    r = Vec2.dot(v, new Vec2(2, 3));
+    r = Vec2.dot(v, Vec2.create(2, 3));
     expect(r).equal(13);
 
-    r = Vec2.crossVec2Vec2(v, new Vec2(2, 3));
+    r = Vec2.crossVec2Vec2(v, Vec2.create(2, 3));
     expect(r).equal(0);
 
     r = Vec2.crossVec2Num(v, 5);
     expect(r.x).equal(15);
     expect(r.y).equal(-10);
 
-    r = Vec2.clamp(new Vec2(6, 8), 5);
+    r = Vec2.clamp(Vec2.create(6, 8), 5);
     expect(r.x).closeTo(3, 1e-12);
     expect(r.y).closeTo(4, 1e-12);
 
@@ -62,12 +62,12 @@ describe('Math', function(): void {
   it('Vec3', function(): void {
     return;
 
-    let r, v = new Vec3();
+    let r, v = Vec3.create();
     expect(v.x).equal(0);
     expect(v.y).equal(0);
     expect(v.z).equal(0);
 
-    v = new Vec3(3, 4, 5);
+    v = Vec3.create(3, 4, 5);
     expect(v.x).equal(3);
     expect(v.y).equal(4);
     expect(v.z).equal(5);
@@ -77,12 +77,12 @@ describe('Math', function(): void {
     expect(v.y).equal(0);
     expect(v.z).equal(0);
 
-    v.add(new Vec3(3, 2, 1));
+    v.add(Vec3.create(3, 2, 1));
     expect(v.x).equal(3);
     expect(v.y).equal(2);
     expect(v.z).equal(1);
 
-    v.sub(new Vec3(0, 1, 2));
+    v.sub(Vec3.create(0, 1, 2));
     expect(v.x).equal(3);
     expect(v.y).equal(1);
     expect(v.z).equal(-1);
@@ -97,10 +97,10 @@ describe('Math', function(): void {
     expect(v.y).equal(3);
     expect(v.z).equal(4);
 
-    r = Vec3.dot(v, new Vec3(2, 0, -1));
+    r = Vec3.dot(v, Vec3.create(2, 0, -1));
     expect(r).equal(0);
 
-    r = Vec3.cross(v, new Vec3(2, 0, -1));
+    r = Vec3.cross(v, Vec3.create(2, 0, -1));
     expect(r.x).equal(-3);
     expect(r.y).equal(10);
     expect(r.z).equal(-6);

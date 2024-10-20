@@ -140,10 +140,10 @@ export class PulleyJoint extends Joint {
     bodyB = this.m_bodyB;
 
     this.m_type = PulleyJoint.TYPE;
-    this.m_groundAnchorA = Vec2.clone(groundA ? groundA : def.groundAnchorA || Vec2.neo(-1.0, 1.0));
-    this.m_groundAnchorB = Vec2.clone(groundB ? groundB : def.groundAnchorB || Vec2.neo(1.0, 1.0));
-    this.m_localAnchorA = Vec2.clone(anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.neo(-1.0, 0.0));
-    this.m_localAnchorB = Vec2.clone(anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.neo(1.0, 0.0));
+    this.m_groundAnchorA = Vec2.clone(groundA ? groundA : def.groundAnchorA || Vec2.create(-1.0, 1.0));
+    this.m_groundAnchorB = Vec2.clone(groundB ? groundB : def.groundAnchorB || Vec2.create(1.0, 1.0));
+    this.m_localAnchorA = Vec2.clone(anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.create(-1.0, 0.0));
+    this.m_localAnchorB = Vec2.clone(anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.create(1.0, 0.0));
     this.m_lengthA = Number.isFinite(def.lengthA) ? def.lengthA : Vec2.distance(anchorA, groundA);
     this.m_lengthB = Number.isFinite(def.lengthB) ? def.lengthB : Vec2.distance(anchorB, groundB);
     this.m_ratio = Number.isFinite(ratio) ? ratio : def.ratio;

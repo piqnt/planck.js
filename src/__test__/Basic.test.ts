@@ -15,7 +15,7 @@ describe('Basic', function(): void {
     var circle = new CircleShape(1);
 
     var b1 = world.createBody({
-      position : new Vec2(0, 0),
+      position : Vec2.create(0, 0),
       type : 'dynamic'
     });
 
@@ -25,14 +25,14 @@ describe('Basic', function(): void {
     expect(b1.getWorld()).equal(world);
     expect(world.getBodyList()).equal(b1);
 
-    b1.applyForceToCenter(new Vec2(1, 0), true);
+    b1.applyForceToCenter(Vec2.create(1, 0), true);
 
     var b2 = world.createBody({
-      position : new Vec2(2, 0),
+      position : Vec2.create(2, 0),
       type : 'dynamic'
     });
     b2.createFixture(circle);
-    b2.applyForceToCenter(new Vec2(-1, 0), true);
+    b2.applyForceToCenter(Vec2.create(-1, 0), true);
 
     world.step(1 / 20);
 

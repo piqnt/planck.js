@@ -44,8 +44,8 @@ describe('CCD', function(): void {
     input.proxyA.set(c1, 0);
     input.proxyB.set(c1, 0);
 
-    input.sweepA.setTransform(new Transform(new Vec2(0, 0), 0));
-    input.sweepB.setTransform(new Transform(new Vec2(1.9, 0), 0));
+    input.sweepA.setTransform(new Transform(Vec2.create(0, 0), 0));
+    input.sweepB.setTransform(new Transform(Vec2.create(1.9, 0), 0));
 
     input.tMax = 1.0;
 
@@ -54,12 +54,12 @@ describe('CCD', function(): void {
     TimeOfImpact(output, input);
     console.log(output.t, output.state);
 
-    input.sweepB.setTransform(new Transform(new Vec2(2, 0), 0));
+    input.sweepB.setTransform(new Transform(Vec2.create(2, 0), 0));
 
     TimeOfImpact(output, input);
     console.log(output.t, output.state);
 
-    input.sweepB.setTransform(new Transform(new Vec2(2.1, 0), 0));
+    input.sweepB.setTransform(new Transform(Vec2.create(2.1, 0), 0));
 
     TimeOfImpact(output, input);
     console.log(output.t, output.state);

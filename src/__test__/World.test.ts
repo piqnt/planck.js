@@ -12,7 +12,7 @@ describe('World', function(): void {
   // This is the Box2D HelloWorld unit test translated to planck.js
   it('simulates gravity', function(): void {
     // Define the gravity vector.
-    var gravity = new Vec2(0.0, -10.0);
+    var gravity = Vec2.create(0.0, -10.0);
 
     // Construct a world object, which will hold and simulate the rigid bodies.
     var world = new World(gravity);
@@ -20,7 +20,7 @@ describe('World', function(): void {
     // Call the body factory.
     // The body is also added to the world.
     var groundBody = world.createBody({
-      position: new Vec2(0.0, -10.0)
+      position: Vec2.create(0.0, -10.0)
     });
 
     // The extents are the half-widths of the box.
@@ -30,7 +30,7 @@ describe('World', function(): void {
 
     // Define the dynamic body. We set its position and call the body factory.
     var body = world.createBody({
-      position: new Vec2(0.0, 4.0),
+      position: Vec2.create(0.0, 4.0),
       type: 'dynamic'
     });
 
