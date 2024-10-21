@@ -413,7 +413,7 @@ export class MotorJoint extends Joint {
 
       let impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
       const oldImpulse = Vec2.clone(this.m_linearImpulse);
-      Vec2.add(this.m_linearImpulse, impulse);
+      Vec2.add(this.m_linearImpulse, impulse, this.m_linearImpulse);
 
       const maxImpulse = h * this.m_maxForce;
 

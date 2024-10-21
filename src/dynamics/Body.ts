@@ -918,7 +918,7 @@ export class Body {
     }
     // Don't accumulate a force if the body is sleeping.
     if (this.m_awakeFlag) {
-      Vec2.add(this.m_force, force);
+      Vec2.add(this.m_force, force, this.m_force);
       this.m_torque += Vec2.crossVec2Vec2(Vec2.sub(point, this.m_sweep.c), force);
     }
   }
@@ -938,7 +938,7 @@ export class Body {
     }
     // Don't accumulate a force if the body is sleeping
     if (this.m_awakeFlag) {
-      Vec2.add(this.m_force, force);
+      Vec2.add(this.m_force, force, this.m_force);
     }
   }
 

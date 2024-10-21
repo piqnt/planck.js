@@ -555,7 +555,7 @@ export class PolygonShape extends Shape {
   if (false) {
     // This code would put the reference point inside the polygon.
     for (let i = 0; i < count; ++i) {
-      Vec2.add(pRef, vs[i]);
+      Vec2.add(pRef, vs[i], pRef);
     }
     pRef.mul(1.0 / count);
   }
