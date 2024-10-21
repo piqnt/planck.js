@@ -42,27 +42,12 @@ export class Vec2 {
   x: number;
   y: number;
 
-  constructor(x: number, y: number);
-  /**
-   * @deprecated Use explicit number arguments to construct
-   */
-  constructor(obj: { x: number, y: number });
-  constructor();
-  // tslint:disable-next-line:typedef
-  constructor(x?, y?) {
+  constructor(x: number=0, y: number=0) {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof Vec2)) {
       return Vec2.create(x, y);
     }
-    if (typeof x === 'undefined') {
-      this.x = 0;
-      this.y = 0;
-    } else if (typeof x === 'object') {
-      this.x = x.x;
-      this.y = x.y;
-    } else {
-      this.x = x;
-      this.y = y;
-    }
+    this.x = x;
+    this.y = y;
     _ASSERT && Vec2.assert(this);
   }
 

@@ -38,34 +38,18 @@ export class Vec3 {
   y: number;
   z: number;
 
-  constructor(x: number, y: number, z: number);
-  /**
-   * @deprecated Use explicit number arguments to construct
-   */
-  constructor(obj: { x: number, y: number, z: number });
-  constructor();
-  constructor(x?, y?, z?) {
+  constructor(x: number=0, y: number=0, z: number=0) {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof Vec3)) {
       return Vec3.create(x, y, z);
     }
-    if (typeof x === 'undefined') {
-      this.x = 0;
-      this.y = 0;
-      this.z = 0;
-    } else if (typeof x === 'object') {
-      this.x = x.x;
-      this.y = x.y;
-      this.z = x.z;
-    } else {
-      this.x = x;
-      this.y = y;
-      this.z = z;
-    }
+    this.x = x;
+    this.y = y;
+    this.z = z;
     _ASSERT && Vec3.assert(this);
   }
 
   /**
-   * create a new Vec2
+   * create a new Vec3
    */
   static create(x: number=0, y: number=0, z: number=0): Vec3 {
     const obj = Object.create(Vec3.prototype);
