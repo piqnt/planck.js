@@ -108,18 +108,6 @@ export class Vec2 {
     return JSON.stringify(this);
   }
 
-  /**
-   * Set this vector to some specified coordinates.
-   * @deprecated Use Vec2.set or Vec2.copy instead
-   *
-   * @returns this
-   */
-  setVec2(value: Vec2Value) {
-    _ASSERT && Vec2.assert(value);
-    this.x = value.x;
-    this.y = value.y;
-    return this;
-  }
 
   /**
    * Does this vector contain finite coordinates?
@@ -173,30 +161,6 @@ export class Vec2 {
   }
 
   /**
-   * Set this vector to some specified coordinates.
-   *
-   * @deprecated Use Vec2.set(out, x, y)
-   * @returns this
-   */
-   setNum(x: number, y: number) {
-    _ASSERT && console.assert(Number.isFinite(x));
-    _ASSERT && console.assert(Number.isFinite(y));
-    this.x = x;
-    this.y = y;
-
-    return this;
-  }
-
-  /** @internal @deprecated Use setCombine or setMul */
-  wSet(a: number, v: Vec2Value, b?: number, w?: Vec2Value): Vec2 {
-    if (typeof b !== 'undefined' || typeof w !== 'undefined') {
-      return this.setCombine(a, v, b, w);
-    } else {
-      return this.setMul(a, v);
-    }
-  }
-
-  /**
    * Set linear combination of v and w: `a * v + b * w`
    */
   setCombine(a: number, v: Vec2Value, b: number, w: Vec2Value): Vec2 {
@@ -236,14 +200,6 @@ export class Vec2 {
     return this;
   }
 
-  /** @internal @deprecated Use addCombine or addMul */
-  wAdd(a: number, v: Vec2Value, b?: number, w?: Vec2Value): Vec2 {
-    if (typeof b !== 'undefined' || typeof w !== 'undefined') {
-      return this.addCombine(a, v, b, w);
-    } else {
-      return this.addMul(a, v);
-    }
-  }
 
   /**
    * Add linear combination of v and w: `a * v + b * w`
@@ -273,16 +229,6 @@ export class Vec2 {
     this.y += y;
     return this;
   }
-
-  /**
-   * @deprecated Use subCombine or subMul
-   */
-  wSub(a: number, v: Vec2Value, b?: number, w?: Vec2Value): Vec2 {
-    if (typeof b !== 'undefined' || typeof w !== 'undefined') {
-      return this.subCombine(a, v, b, w);
-    } else {
-      return this.subMul(a, v);
-    }}
 
   /**
    * Subtract linear combination of v and w: `a * v + b * w`
@@ -511,15 +457,6 @@ export class Vec2 {
     return Vec2.create(v.x + w.x, v.y + w.y);
   }
 
-  /** @hidden @deprecated */
-  static wAdd(a: number, v: Vec2Value, b: number, w: Vec2Value): Vec2 {
-    if (typeof b !== 'undefined' || typeof w !== 'undefined') {
-      return Vec2.combine(a, v, b, w);
-    } else {
-      return Vec2.mulNumVec2(a, v);
-    }
-  }
-
   static combine(a: number, v: Vec2Value, b: number, w: Vec2Value): Vec2 {
     return Vec2.zero().setCombine(a, v, b, w);
   }
@@ -607,19 +544,4 @@ export class Vec2 {
     return r;
   }
 
-  /**  @hidden @deprecated */
-  static scaleFn(x: number, y: number) {
-    // todo: this was used in examples, remove in the future
-    return function(v: Vec2Value): Vec2 {
-      return Vec2.create(v.x * x, v.y * y);
-    };
-  }
-
-  /**  @hidden @deprecated */
-  static translateFn(x: number, y: number) {
-    // todo: this was used in examples, remove in the future
-    return function(v: Vec2Value): Vec2 {
-      return Vec2.create(v.x + x, v.y + y);
-    };
-  }
 }
