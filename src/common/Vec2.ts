@@ -82,7 +82,7 @@ export class Vec2 {
     return out;
   }
 
-  static set(out: Vec2Value, x: number, y: number): Vec2Value {
+  static set(x: number, y: number, out: Vec2Value): Vec2Value {
     _ASSERT && Vec2.assert(out);
     out.x = x;
     out.y = y;
