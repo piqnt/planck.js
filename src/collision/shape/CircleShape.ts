@@ -191,8 +191,8 @@ export class CircleShape extends Shape {
   computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void {
     const p = matrix.transformVec2(temp, xf, this.m_p);
 
-    Vec2.set(aabb.lowerBound, p.x - this.m_radius, p.y - this.m_radius);
-    Vec2.set(aabb.upperBound, p.x + this.m_radius, p.y + this.m_radius);
+    Vec2.set(p.x - this.m_radius, p.y - this.m_radius, aabb.lowerBound);
+    Vec2.set(p.x + this.m_radius, p.y + this.m_radius, aabb.upperBound);
   }
 
   /**

@@ -407,7 +407,7 @@ export class Vec2 {
   static add(v: Vec2Value, w: Vec2Value, out:Vec2Value=Vec2.create()): Vec2Value {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
-    return Vec2.set(out, v.x + w.x, v.y + w.y);
+    return Vec2.set(v.x + w.x, v.y + w.y, out);
   }
 
   static combine(a: number, v: Vec2Value, b: number, w: Vec2Value): Vec2Value {

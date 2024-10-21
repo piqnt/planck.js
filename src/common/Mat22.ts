@@ -73,8 +73,8 @@ export class Mat22 {
   set(a, b?, c?, d?): void {
     if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
       && typeof d === 'number') {
-      Vec2.set(this.ex, a, c);
-      Vec2.set(this.ey, b, d);
+      Vec2.set(a, c, this.ex);
+      Vec2.set(b, d, this.ey);
 
     } else if (typeof a === 'object' && typeof b === 'object') {
       Vec2.copy(a, this.ex);

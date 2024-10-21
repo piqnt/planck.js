@@ -333,7 +333,7 @@ export class DistanceJoint extends Joint {
     if (length > Settings.linearSlop) {
       this.m_u.mul(1.0 / length);
     } else {
-      Vec2.set(this.m_u, 0.0, 0.0);
+      Vec2.set(0.0, 0.0, this.m_u);
     }
 
     const crAu = Vec2.crossVec2Vec2(this.m_rA, this.m_u);

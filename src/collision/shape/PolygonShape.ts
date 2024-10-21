@@ -409,8 +409,8 @@ export class PolygonShape extends Shape {
       maxY = math_max(maxY, v.y);
     }
 
-    Vec2.set(aabb.lowerBound, minX - this.m_radius, minY - this.m_radius);
-    Vec2.set(aabb.upperBound, maxX + this.m_radius, maxY + this.m_radius);
+    Vec2.set(minX - this.m_radius, minY - this.m_radius, aabb.lowerBound);
+    Vec2.set(maxX + this.m_radius, maxY + this.m_radius, aabb.upperBound);
   }
 
   /**

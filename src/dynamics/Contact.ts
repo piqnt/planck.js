@@ -853,8 +853,8 @@ export class Contact {
       const k_maxConditionNumber = 1000.0;
       if (k11 * k11 < k_maxConditionNumber * (k11 * k22 - k12 * k12)) {
         // K is safe to invert.
-        Vec2.set(this.v_K.ex, k11, k12);
-        Vec2.set(this.v_K.ey, k12, k22);
+        Vec2.set(k11, k12, this.v_K.ex);
+        Vec2.set(k12, k22, this.v_K.ey);
         // this.v_normalMass.set(this.v_K.getInverse());
         const a = this.v_K.ex.x;
         const b = this.v_K.ey.x;
@@ -1074,7 +1074,7 @@ export class Contact {
       const vcp1 = this.v_points[0]; // VelocityConstraintPoint
       const vcp2 = this.v_points[1]; // VelocityConstraintPoint
 
-      Vec2.set(a, vcp1.normalImpulse, vcp2.normalImpulse);
+      Vec2.set(vcp1.normalImpulse, vcp2.normalImpulse, a);
       _ASSERT && console.assert(a.x >= 0.0 && a.y >= 0.0);
 
       // Relative velocity at contact
@@ -1096,7 +1096,7 @@ export class Contact {
       let vn1 = matrix.dotVec2(dv1, normal);
       let vn2 = matrix.dotVec2(dv2, normal);
 
-      Vec2.set(b, vn1 - vcp1.velocityBias, vn2 - vcp2.velocityBias);
+      Vec2.set(vn1 - vcp1.velocityBias, vn2 - vcp2.velocityBias, b);
 
       // Compute b'
       // b.sub(Mat22.mulVec2(this.v_K, a));

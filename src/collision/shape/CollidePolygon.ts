@@ -259,7 +259,7 @@ export const CollidePolygons = function (
   clipPoints2[0].recycle(), clipPoints2[1].recycle();
 
   // Clip to box side 1
-  Vec2.set(clipSegmentToLineNormal, -tangent.x, -tangent.y);
+  Vec2.set(-tangent.x, -tangent.y, clipSegmentToLineNormal);
   const np1 = clipSegmentToLine(clipPoints1, incidentEdge, clipSegmentToLineNormal, sideOffset1, iv1);
 
   if (np1 < 2) {
@@ -267,7 +267,7 @@ export const CollidePolygons = function (
   }
 
   // Clip to negative box side 1
-  Vec2.set(clipSegmentToLineNormal, tangent.x, tangent.y);
+  Vec2.set(tangent.x, tangent.y, clipSegmentToLineNormal);
   const np2 = clipSegmentToLine(clipPoints2, clipPoints1, clipSegmentToLineNormal, sideOffset2, iv2);
 
   if (np2 < 2) {
