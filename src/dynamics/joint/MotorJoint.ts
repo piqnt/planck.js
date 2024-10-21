@@ -366,7 +366,7 @@ export class MotorJoint extends Joint {
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_angularImpulse);
 
     } else {
-      this.m_linearImpulse.setZero();
+      Vec2.setZero(this.m_linearImpulse);
       this.m_angularImpulse = 0.0;
     }
 

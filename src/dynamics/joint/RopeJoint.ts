@@ -274,7 +274,7 @@ export class RopeJoint extends Joint {
     if (this.m_length > Settings.linearSlop) {
       this.m_u.mul(1.0 / this.m_length);
     } else {
-      this.m_u.setZero();
+      Vec2.setZero(this.m_u);
       this.m_mass = 0.0;
       this.m_impulse = 0.0;
       return;

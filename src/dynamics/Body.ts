@@ -420,7 +420,7 @@ export class Body {
     this.resetMassData();
 
     if (this.m_type == STATIC) {
-      this.m_linearVelocity.setZero();
+      Vec2.setZero(this.m_linearVelocity);
       this.m_angularVelocity = 0.0;
       this.m_sweep.forward();
       this.synchronizeFixtures();
@@ -428,7 +428,7 @@ export class Body {
 
     this.setAwake(true);
 
-    this.m_force.setZero();
+    Vec2.setZero(this.m_force);
     this.m_torque = 0.0;
 
     // Delete the attached contacts.
@@ -489,7 +489,7 @@ export class Body {
       this.m_sleepTime = 0.0;
       this.m_linearVelocity.setZero();
       this.m_angularVelocity = 0.0;
-      this.m_force.setZero();
+      Vec2.setZero(this.m_force);
       this.m_torque = 0.0;
     }
   }

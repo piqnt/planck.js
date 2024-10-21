@@ -378,7 +378,7 @@ export class World {
    */
   clearForces(): void {
     for (let body = this.m_bodyList; body; body = body.getNext()) {
-      body.m_force.setZero();
+      Vec2.setZero(body.m_force);
       body.m_torque = 0.0;
     }
   }

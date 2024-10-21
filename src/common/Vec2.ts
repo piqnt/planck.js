@@ -123,41 +123,15 @@ export class Vec2 {
     _ASSERT && console.assert(!Vec2.isValid(o), 'Invalid Vec2!', o);
   }
 
-  clone(): Vec2 {
-    return Vec2.clone(this);
-  }
-
   /**
    * Set this vector to all zeros.
    *
-   * @returns this
+   * @returns Vec2
    */
-  setZero(): Vec2 {
-    this.x = 0.0;
-    this.y = 0.0;
-    return this;
-  }
-
-  set(x: number, y: number): Vec2;
-  set(value: Vec2Value): Vec2;
-  /**
-   * Set this vector to some specified coordinates.
-   *
-   * @returns this
-   */
-  // tslint:disable-next-line:typedef
-  set(x, y?) {
-    if (typeof x === 'object') {
-      _ASSERT && Vec2.assert(x);
-      this.x = x.x;
-      this.y = x.y;
-    } else {
-      _ASSERT && console.assert(Number.isFinite(x));
-      _ASSERT && console.assert(Number.isFinite(y));
-      this.x = x;
-      this.y = y;
-    }
-    return this;
+  static setZero(out: Vec2Value): Vec2 {
+    out.x = 0.0;
+    out.y = 0.0;
+    return out;
   }
 
   /**

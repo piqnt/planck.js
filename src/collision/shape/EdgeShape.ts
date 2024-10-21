@@ -134,7 +134,7 @@ export class EdgeShape extends Shape {
       Vec2.copy(this.m_vertex3, v);
       this.m_hasVertex3 = true;
     } else {
-      this.m_vertex3.setZero();
+      Vec2.setZero(this.m_vertex3);
       this.m_hasVertex3 = false;
     }
     return this;
@@ -160,7 +160,7 @@ export class EdgeShape extends Shape {
       Vec2.copy(this.m_vertex0, v);
       this.m_hasVertex0 = true;
     } else {
-      this.m_vertex0.setZero();
+      Vec2.setZero(this.m_vertex0);
       this.m_hasVertex0 = false;
     }
     return this;

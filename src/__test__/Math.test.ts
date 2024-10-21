@@ -19,7 +19,7 @@ describe('Math', function(): void {
     expect(v.x).closeTo(3 / 5, 1e-12);
     expect(v.y).closeTo(4 / 5, 1e-12);
 
-    v.setZero();
+    Vec2.setZero(v);
     expect(v.x).equal(0);
     expect(v.y).equal(0);
 

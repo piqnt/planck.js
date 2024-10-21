@@ -85,7 +85,7 @@ export class Transform {
 
   /** Set this to the identity transform */
   setIdentity(): void {
-    this.p.setZero();
+    Vec2.setZero(this.p);
     this.q.setIdentity();
   }
 

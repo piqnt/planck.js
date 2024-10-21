@@ -234,7 +234,7 @@ export class AABB {
 
         // Push the min up
         if (t1 > tmin) {
-          normal.setZero();
+          Vec2.setZero(normal);
           normal[f] = s;
           tmin = t1;
         }

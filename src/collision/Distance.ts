@@ -793,8 +793,8 @@ export class ShapeCastOutput {
 export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput): boolean {
   output.iterations = 0;
   output.lambda = 1.0;
-  output.normal.setZero();
-  output.point.setZero();
+  Vec2.setZero(output.normal);
+  Vec2.setZero(output.point);
 
   const proxyA = input.proxyA;
   const proxyB = input.proxyB;

@@ -204,12 +204,12 @@ export class PulleyJoint extends Joint {
       Vec2.copy(this.m_groundAnchorB, def.groundAnchorB);
     }
     if (Vec2.isValid(def.localAnchorA)) {
-      this.m_localAnchorA.set(def.localAnchorA);
+      Vec2.copy(this.m_localAnchorA, def.localAnchorA);
     } else if (Vec2.isValid(def.anchorA)) {
       Vec2.copy(this.m_localAnchorA, this.m_bodyA.getLocalPoint(def.anchorA));
     }
     if (Vec2.isValid(def.localAnchorB)) {
-      this.m_localAnchorB.set(def.localAnchorB);
+      Vec2.copy(this.m_localAnchorB, def.localAnchorB);
     } else if (Vec2.isValid(def.anchorB)) {
       Vec2.copy(this.m_localAnchorB, this.m_bodyB.getLocalPoint(def.anchorB));
     }
@@ -349,13 +349,13 @@ export class PulleyJoint extends Joint {
     if (lengthA > 10.0 * Settings.linearSlop) {
       this.m_uA.mul(1.0 / lengthA);
     } else {
-      this.m_uA.setZero();
+      Vec2.setZero(this.m_uA);
     }
 
     if (lengthB > 10.0 * Settings.linearSlop) {
       this.m_uB.mul(1.0 / lengthB);
     } else {
-      this.m_uB.setZero();
+      Vec2.setZero(this.m_uB);
     }
 
     // Compute effective mass.
@@ -446,13 +446,13 @@ export class PulleyJoint extends Joint {
     if (lengthA > 10.0 * Settings.linearSlop) {
       uA.mul(1.0 / lengthA);
     } else {
-      uA.setZero();
+      Vec2.setZero(uA);
     }
 
     if (lengthB > 10.0 * Settings.linearSlop) {
       uB.mul(1.0 / lengthB);
     } else {
-      uB.setZero();
+      Vec2.setZero(uB);
     }
 
     // Compute effective mass.

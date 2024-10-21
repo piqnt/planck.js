@@ -366,7 +366,7 @@ export class MouseJoint extends Joint {
       wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, this.m_impulse);
 
     } else {
-      this.m_impulse.setZero();
+      Vec2.setZero(this.m_impulse);
     }
 
     Vec2.copy(velocity.v, vB);
