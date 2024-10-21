@@ -14,7 +14,7 @@ describe('CCD', function(): void {
     var input = new DistanceInput();
     input.proxyA.set(c1, 0);
     input.proxyB.set(c1, 0);
-    input.transformB.p.setNum(1.9, 0);
+    Vec2.set(input.transformB.p, 1.9, 0);
     input.useRadii = true;
     var cache = new SimplexCache();
     var output = new DistanceOutput();
@@ -26,7 +26,7 @@ describe('CCD', function(): void {
     var input = new DistanceInput();
     input.proxyA.set(c1, 0);
     input.proxyB.set(c1, 0);
-    input.transformB.p.setNum(2.1, 0);
+    Vec2.set(input.transformB.p, 2.1, 0);
 
     input.useRadii = true;
     var cache = new SimplexCache();

@@ -44,6 +44,9 @@ export function rotation(angle: number): RotValue {
   return { s: math_sin(angle), c: math_cos(angle) };
 }
 
+/**
+ * @deprecated Use Vec2.set(out, x, y)
+ */
 export function setVec2(out: Vec2Value, x: number, y: number): Vec2Value {
   out.x = x;
   out.y = y;

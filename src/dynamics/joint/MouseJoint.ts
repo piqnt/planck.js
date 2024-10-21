@@ -214,7 +214,7 @@ export class MouseJoint extends Joint {
   setTarget(target: Vec2Value): void {
     if (Vec2.areEqual(target, this.m_targetA)) return;
     this.m_bodyB.setAwake(true);
-    this.m_targetA.set(target);
+    Vec2.copy(this.m_targetA, target);
   }
 
   getTarget(): Vec2 {
@@ -353,7 +353,7 @@ export class MouseJoint extends Joint {
 
     this.m_mass = K.getInverse();
 
-    this.m_C.setVec2(cB);
+    Vec2.copy(this.m_C, cB);
     this.m_C.addCombine(1, this.m_rB, -1, this.m_targetA);
     this.m_C.mul(this.m_beta);
 
@@ -369,7 +369,7 @@ export class MouseJoint extends Joint {
       this.m_impulse.setZero();
     }
 
-    velocity.v.setVec2(vB);
+    Vec2.copy(velocity.v, vB);
     velocity.w = wB;
   }
 
@@ -397,7 +397,7 @@ export class MouseJoint extends Joint {
     vB.addMul(this.m_invMassB, impulse);
     wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, impulse);
 
-    velocity.v.setVec2(vB);
+    Vec2.copy(velocity.v, vB);
     velocity.w = wB;
   }
 

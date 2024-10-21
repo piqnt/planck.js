@@ -187,7 +187,7 @@ export class MotorJoint extends Joint {
       this.m_correctionFactor = def.correctionFactor;
     }
     if (Vec2.isValid(def.linearOffset)) {
-      this.m_linearOffset.set(def.linearOffset);      
+      Vec2.copy(this.m_linearOffset, def.linearOffset);      
     }
   }
 
@@ -243,7 +243,7 @@ export class MotorJoint extends Joint {
     if (linearOffset.x != this.m_linearOffset.x || linearOffset.y != this.m_linearOffset.y) {
       this.m_bodyA.setAwake(true);
       this.m_bodyB.setAwake(true);
-      this.m_linearOffset.set(linearOffset);
+      Vec2.copy(this.m_linearOffset, linearOffset);
     }
   }
 

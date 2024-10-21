@@ -303,9 +303,9 @@ export class RopeJoint extends Joint {
       this.m_impulse = 0.0;
     }
 
-    this.m_bodyA.c_velocity.v.setVec2(vA);
+    Vec2.copy(this.m_bodyA.c_velocity.v, vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.setVec2(vB);
+    Vec2.copy(this.m_bodyB.c_velocity.v, vB);
     this.m_bodyB.c_velocity.w = wB;
   }
 
@@ -374,9 +374,9 @@ export class RopeJoint extends Joint {
     cB.addMul(this.m_invMassB, P);
     aB += this.m_invIB * Vec2.crossVec2Vec2(rB, P);
 
-    this.m_bodyA.c_position.c.setVec2(cA);
+    Vec2.copy(this.m_bodyA.c_position.c, cA);
     this.m_bodyA.c_position.a = aA;
-    this.m_bodyB.c_position.c.setVec2(cB);
+    Vec2.copy(this.m_bodyB.c_position.c, cB);
     this.m_bodyB.c_position.a = aB;
 
     return length - this.m_maxLength < Settings.linearSlop;

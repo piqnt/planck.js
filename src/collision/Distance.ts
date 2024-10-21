@@ -442,17 +442,17 @@ class Simplex {
     const v3 = this.m_v3;
     switch (this.m_count) {
       case 1:
-        return matrix.setVec2(searchDirection_reuse, -v1.w.x, -v1.w.y);
+        return Vec2.set(searchDirection_reuse, -v1.w.x, -v1.w.y);
 
       case 2: {
         matrix.subVec2(e12, v2.w, v1.w);
         const sgn = -matrix.crossVec2Vec2(e12, v1.w);
         if (sgn > 0.0) {
           // Origin is left of e12.
-          return matrix.setVec2(searchDirection_reuse, -e12.y, e12.x);
+          return Vec2.set(searchDirection_reuse, -e12.y, e12.x);
         } else {
           // Origin is right of e12.
-          return matrix.setVec2(searchDirection_reuse, e12.y, -e12.x);
+          return Vec2.set(searchDirection_reuse, e12.y, -e12.x);
         }
       }
 
@@ -899,7 +899,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
     }
 
     // Get search direction.
-    v.setVec2(simplex.getClosestPoint());
+    Vec2.copy(v, simplex.getClosestPoint());
 
     // Iteration count is equated to the number of support point calls.
     ++iter;

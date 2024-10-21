@@ -170,14 +170,14 @@ export class FrictionJoint extends Joint {
   /** @hidden */
   _reset(def: Partial<FrictionJointDef>): void {
     if (def.anchorA) {
-      this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
+      Vec2.copy(this.m_localAnchorA, this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
-      this.m_localAnchorA.setVec2(def.localAnchorA);
+      Vec2.copy(this.m_localAnchorA, def.localAnchorA);
     }
     if (def.anchorB) {
-      this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
+      Vec2.copy(this.m_localAnchorB, this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
-      this.m_localAnchorB.setVec2(def.localAnchorB);
+      Vec2.copy(this.m_localAnchorB, def.localAnchorB);
     }
     if (Number.isFinite(def.maxForce)) {
       this.m_maxForce = def.maxForce;

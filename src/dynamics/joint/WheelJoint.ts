@@ -255,18 +255,18 @@ export class WheelJoint extends Joint {
   /** @hidden */
   _reset(def: Partial<WheelJointDef>): void {
     if (def.anchorA) {
-      this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
+      Vec2.copy(this.m_localAnchorA, this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
-      this.m_localAnchorA.setVec2(def.localAnchorA);
+      Vec2.copy(this.m_localAnchorA, def.localAnchorA);
     }
     if (def.anchorB) {
-      this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
+      Vec2.copy(this.m_localAnchorB, this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
-      this.m_localAnchorB.setVec2(def.localAnchorB);
+      Vec2.copy(this.m_localAnchorB, def.localAnchorB);
     }
     if (def.localAxisA) {
-      this.m_localXAxisA.setVec2(def.localAxisA);
-      this.m_localYAxisA.setVec2(Vec2.crossNumVec2(1.0, def.localAxisA));
+      Vec2.copy(this.m_localXAxisA, def.localAxisA);
+      Vec2.copy(this.m_localYAxisA, Vec2.crossNumVec2(1.0, def.localAxisA));
     }
     if (def.enableMotor !== undefined) {
       this.m_enableMotor = def.enableMotor;
@@ -561,9 +561,9 @@ export class WheelJoint extends Joint {
       this.m_motorImpulse = 0.0;
     }
 
-    this.m_bodyA.c_velocity.v.setVec2(vA);
+    Vec2.copy(this.m_bodyA.c_velocity.v, vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.setVec2(vB);
+    Vec2.copy(this.m_bodyB.c_velocity.v, vB);
     this.m_bodyB.c_velocity.w = wB;
   }
 
@@ -626,9 +626,9 @@ export class WheelJoint extends Joint {
       wB += iB * LB;
     }
 
-    this.m_bodyA.c_velocity.v.setVec2(vA);
+    Vec2.copy(this.m_bodyA.c_velocity.v, vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.setVec2(vB);
+    Vec2.copy(this.m_bodyB.c_velocity.v, vB);
     this.m_bodyB.c_velocity.w = wB;
   }
 
@@ -670,9 +670,9 @@ export class WheelJoint extends Joint {
     cB.addMul(this.m_invMassB, P);
     aB += this.m_invIB * LB;
 
-    this.m_bodyA.c_position.c.setVec2(cA);
+    Vec2.copy(this.m_bodyA.c_position.c, cA);
     this.m_bodyA.c_position.a = aA;
-    this.m_bodyB.c_position.c.setVec2(cB);
+    Vec2.copy(this.m_bodyB.c_position.c, cB);
     this.m_bodyB.c_position.a = aB;
 
     return math_abs(C) <= Settings.linearSlop;

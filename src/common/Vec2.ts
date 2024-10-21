@@ -99,6 +99,20 @@ export class Vec2 {
     return obj;
   }
 
+  static copy(out: Vec2Value, v: Vec2Value): Vec2Value {
+    _ASSERT && Vec2.assert(out) && Vec2.assert(v);
+    out.x = v.x;
+    out.y = v.y;
+    return out;
+  }
+
+  static set(out: Vec2Value, x: number, y: number): Vec2Value {
+    _ASSERT && Vec2.assert(out);
+    out.x = x;
+    out.y = y;
+    return out;
+  }
+
   static clone(v: Vec2Value): Vec2 {
     _ASSERT && Vec2.assert(v);
     return Vec2.create(v.x, v.y);
@@ -107,6 +121,19 @@ export class Vec2 {
   /** @hidden */
   toString(): string {
     return JSON.stringify(this);
+  }
+
+  /**
+   * Set this vector to some specified coordinates.
+   * @deprecated Use Vec2.set or Vec2.copy instead
+   *
+   * @returns this
+   */
+  setVec2(value: Vec2Value) {
+    _ASSERT && Vec2.assert(value);
+    this.x = value.x;
+    this.y = value.y;
+    return this;
   }
 
   /**
@@ -163,6 +190,7 @@ export class Vec2 {
   /**
    * Set this vector to some specified coordinates.
    *
+   * @deprecated Use Vec2.set(out, x, y)
    * @returns this
    */
    setNum(x: number, y: number) {
@@ -170,19 +198,6 @@ export class Vec2 {
     _ASSERT && console.assert(Number.isFinite(y));
     this.x = x;
     this.y = y;
-
-    return this;
-  }
-
-  /**
-   * Set this vector to some specified coordinates.
-   *
-   * @returns this
-   */
-  setVec2(value: Vec2Value) {
-    _ASSERT && Vec2.assert(value);
-    this.x = value.x;
-    this.y = value.y;
 
     return this;
   }

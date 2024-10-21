@@ -73,17 +73,17 @@ export class Mat22 {
   set(a, b?, c?, d?): void {
     if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
       && typeof d === 'number') {
-      this.ex.setNum(a, c);
-      this.ey.setNum(b, d);
+      Vec2.set(this.ex, a, c);
+      Vec2.set(this.ey, b, d);
 
     } else if (typeof a === 'object' && typeof b === 'object') {
-      this.ex.setVec2(a);
-      this.ey.setVec2(b);
+      Vec2.copy(this.ex, a);
+      Vec2.copy(this.ey, b);
 
     } else if (typeof a === 'object') {
       _ASSERT && Mat22.assert(a);
-      this.ex.setVec2(a.ex);
-      this.ey.setVec2(a.ey);
+      Vec2.copy(this.ex, a.ex);
+      Vec2.copy(this.ey, a.ey);
 
     } else {
       _ASSERT && console.assert(false);

@@ -418,13 +418,13 @@ export class GearJoint extends Joint {
       this.m_impulse = 0.0;
     }
 
-    this.m_bodyA.c_velocity.v.setVec2(vA);
+    Vec2.copy(this.m_bodyA.c_velocity.v, vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.setVec2(vB);
+    Vec2.copy(this.m_bodyB.c_velocity.v, vB);
     this.m_bodyB.c_velocity.w = wB;
-    this.m_bodyC.c_velocity.v.setVec2(vC);
+    Vec2.copy(this.m_bodyC.c_velocity.v, vC);
     this.m_bodyC.c_velocity.w = wC;
-    this.m_bodyD.c_velocity.v.setVec2(vD);
+    Vec2.copy(this.m_bodyD.c_velocity.v, vD);
     this.m_bodyD.c_velocity.w = wD;
   }
 
@@ -453,13 +453,13 @@ export class GearJoint extends Joint {
     vD.subMul(this.m_mD * impulse, this.m_JvBD);
     wD -= this.m_iD * impulse * this.m_JwD;
 
-    this.m_bodyA.c_velocity.v.setVec2(vA);
+    Vec2.copy(this.m_bodyA.c_velocity.v, vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.setVec2(vB);
+    Vec2.copy(this.m_bodyB.c_velocity.v, vB);
     this.m_bodyB.c_velocity.w = wB;
-    this.m_bodyC.c_velocity.v.setVec2(vC);
+    Vec2.copy(this.m_bodyC.c_velocity.v, vC);
     this.m_bodyC.c_velocity.w = wC;
-    this.m_bodyD.c_velocity.v.setVec2(vD);
+    Vec2.copy(this.m_bodyD.c_velocity.v, vD);
     this.m_bodyD.c_velocity.w = wD;
   }
 
@@ -552,13 +552,13 @@ export class GearJoint extends Joint {
     cD.subMul(this.m_mD * impulse, JvBD);
     aD -= this.m_iD * impulse * JwD;
 
-    this.m_bodyA.c_position.c.setVec2(cA);
+    Vec2.copy(this.m_bodyA.c_position.c, cA);
     this.m_bodyA.c_position.a = aA;
-    this.m_bodyB.c_position.c.setVec2(cB);
+    Vec2.copy(this.m_bodyB.c_position.c, cB);
     this.m_bodyB.c_position.a = aB;
-    this.m_bodyC.c_position.c.setVec2(cC);
+    Vec2.copy(this.m_bodyC.c_position.c, cC);
     this.m_bodyC.c_position.a = aC;
-    this.m_bodyD.c_position.c.setVec2(cD);
+    Vec2.copy(this.m_bodyD.c_position.c, cD);
     this.m_bodyD.c_position.a = aD;
 
     // TODO_ERIN not implemented

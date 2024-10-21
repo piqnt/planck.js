@@ -61,7 +61,7 @@ export class CircleShape extends Shape {
     this.m_radius = 1;
 
     if (typeof a === 'object' && Vec2.isValid(a)) {
-      this.m_p.setVec2(a);
+      Vec2.copy(this.m_p, a);
 
       if (typeof b === 'number') {
         this.m_radius = b;
@@ -191,8 +191,8 @@ export class CircleShape extends Shape {
   computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void {
     const p = matrix.transformVec2(temp, xf, this.m_p);
 
-    matrix.setVec2(aabb.lowerBound, p.x - this.m_radius, p.y - this.m_radius);
-    matrix.setVec2(aabb.upperBound, p.x + this.m_radius, p.y + this.m_radius);
+    Vec2.set(aabb.lowerBound, p.x - this.m_radius, p.y - this.m_radius);
+    Vec2.set(aabb.upperBound, p.x + this.m_radius, p.y + this.m_radius);
   }
 
   /**

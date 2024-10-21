@@ -23,7 +23,7 @@
  */
 
 import * as matrix from '../common/Matrix';
-import { Vec2Value } from '../common/Vec2';
+import { Vec2, Vec2Value } from '../common/Vec2';
 import { TransformValue } from '../common/Transform';
 import { EPSILON } from '../common/Math';
 
@@ -158,7 +158,7 @@ export class Manifold {
 
     switch (this.type) {
       case ManifoldType.e_circles: {
-        matrix.setVec2(normal, 1.0, 0.0);
+        Vec2.set(normal, 1.0, 0.0);
         const manifoldPoint = this.points[0];
         matrix.transformVec2(pointA, xfA, this.localPoint);
         matrix.transformVec2(pointB, xfB, manifoldPoint.localPoint);

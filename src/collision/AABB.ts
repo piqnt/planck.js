@@ -69,12 +69,12 @@ export class AABB {
     this.upperBound = Vec2.zero();
 
     if (typeof lower === 'object') {
-      this.lowerBound.setVec2(lower);
+      Vec2.copy(this.lowerBound, lower);
     }
     if (typeof upper === 'object') {
-      this.upperBound.setVec2(upper);
+      Vec2.copy(this.upperBound, upper);
     } else if (typeof lower === 'object') {
-      this.upperBound.setVec2(lower);
+      Vec2.copy(this.upperBound, lower);
     }
   }
 
@@ -133,18 +133,18 @@ export class AABB {
     const upperX = math_max(upperB.x, upperA.x);
     const upperY = math_max(upperB.y, upperA.y);
 
-    this.lowerBound.setNum(lowerX, lowerY);
-    this.upperBound.setNum(upperX, upperY);
+    Vec2.set(this.lowerBound, lowerX, lowerY);
+    Vec2.set(this.upperBound, upperX, upperY);
   }
 
   combinePoints(a: Vec2Value, b: Vec2Value): void {
-    this.lowerBound.setNum(math_min(a.x, b.x), math_min(a.y, b.y));
-    this.upperBound.setNum(math_max(a.x, b.x), math_max(a.y, b.y));
+    Vec2.set(this.lowerBound, math_min(a.x, b.x), math_min(a.y, b.y));
+    Vec2.set(this.upperBound, math_max(a.x, b.x), math_max(a.y, b.y));
   }
 
   set(aabb: AABBValue): void {
-    this.lowerBound.setNum(aabb.lowerBound.x, aabb.lowerBound.y);
-    this.upperBound.setNum(aabb.upperBound.x, aabb.upperBound.y);
+    Vec2.set(this.lowerBound, aabb.lowerBound.x, aabb.lowerBound.y);
+    Vec2.set(this.upperBound, aabb.upperBound.x, aabb.upperBound.y);
   }
 
   contains(aabb: AABBValue): boolean {

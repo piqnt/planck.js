@@ -198,20 +198,20 @@ export class PulleyJoint extends Joint {
   /** @hidden */
   _reset(def: Partial<PulleyJointDef>): void {
     if (Vec2.isValid(def.groundAnchorA)) {
-      this.m_groundAnchorA.set(def.groundAnchorA);
+      Vec2.copy(this.m_groundAnchorA, def.groundAnchorA);
     }
     if (Vec2.isValid(def.groundAnchorB)) {
-      this.m_groundAnchorB.set(def.groundAnchorB);
+      Vec2.copy(this.m_groundAnchorB, def.groundAnchorB);
     }
     if (Vec2.isValid(def.localAnchorA)) {
       this.m_localAnchorA.set(def.localAnchorA);
     } else if (Vec2.isValid(def.anchorA)) {
-      this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+      Vec2.copy(this.m_localAnchorA, this.m_bodyA.getLocalPoint(def.anchorA));
     }
     if (Vec2.isValid(def.localAnchorB)) {
       this.m_localAnchorB.set(def.localAnchorB);
     } else if (Vec2.isValid(def.anchorB)) {
-      this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+      Vec2.copy(this.m_localAnchorB, this.m_bodyB.getLocalPoint(def.anchorB));
     }
     if (Number.isFinite(def.lengthA)) {
       this.m_lengthA = def.lengthA;
