@@ -69,12 +69,12 @@ export class AABB {
     this.upperBound = Vec2.zero();
 
     if (typeof lower === 'object') {
-      Vec2.copy(this.lowerBound, lower);
+      Vec2.copy(lower, this.lowerBound);
     }
     if (typeof upper === 'object') {
-      Vec2.copy(this.upperBound, upper);
+      Vec2.copy(upper, this.upperBound);
     } else if (typeof lower === 'object') {
-      Vec2.copy(this.upperBound, lower);
+      Vec2.copy(lower, this.upperBound);
     }
   }
 

@@ -122,7 +122,7 @@ export class PolygonShape extends Shape {
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
     clone.m_count = this.m_count;
-    Vec2.copy(clone.m_centroid, this.m_centroid);
+    Vec2.copy(this.m_centroid, clone.m_centroid);
     for (let i = 0; i < this.m_count; i++) {
       clone.m_vertices.push(this.m_vertices[i].clone());
     }
@@ -289,7 +289,7 @@ export class PolygonShape extends Shape {
       matrix.copyVec2(this.m_centroid, center);
 
       const xf = Transform.identity();
-      Vec2.copy(xf.p, center);
+      Vec2.copy(center, xf.p);
       xf.q.setAngle(angle);
 
       // Transform vertices and normals.

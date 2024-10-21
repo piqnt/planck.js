@@ -54,7 +54,7 @@ export class Transform {
     this.p = Vec2.zero();
     this.q = Rot.identity();
     if (typeof position !== 'undefined') {
-      Vec2.copy(this.p, position);
+      Vec2.copy(position, this.p);
     }
     if (typeof rotation !== 'undefined') {
       this.q.setAngle(rotation);
@@ -95,22 +95,22 @@ export class Transform {
   set(xf: TransformValue): void;
   set(a: any, b?: any) {
     if (typeof b === 'undefined') {
-      Vec2.copy(this.p, a.p);
+      Vec2.copy(a.p, this.p);
       this.q.set(a.q);
     } else {
-      Vec2.copy(this.p, a);
+      Vec2.copy(a, this.p);
       this.q.set(b);
     }
   }
 
   /** Set position and angle */
   setNum(position: Vec2Value, rotation: number) {
-    Vec2.copy(this.p, position);
+    Vec2.copy(position, this.p);
     this.q.setAngle(rotation);
   }
 
   setTransform(xf: TransformValue): void {
-    Vec2.copy(this.p, xf.p);
+    Vec2.copy(xf.p, this.p);
     this.q.setRot(xf.q);
   }
 
@@ -214,7 +214,7 @@ export class Transform {
     // = A.q' * B.q * v1 + A.q' * (B.p - A.p)
     const xf = Transform.identity();
     xf.q.setRot(Rot.mulTRot(a.q, b.q));
-    Vec2.copy(xf.p, Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)));
+    Vec2.copy(Rot.mulTVec2(a.q, Vec2.sub(b.p, a.p)), xf.p);
     return xf;
   }
 }

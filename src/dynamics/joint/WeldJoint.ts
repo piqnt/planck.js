@@ -196,14 +196,14 @@ export class WeldJoint extends Joint {
   /** @hidden */
   _reset(def: Partial<WeldJointDef>): void {
     if (def.anchorA) {
-      Vec2.copy(this.m_localAnchorA, this.m_bodyA.getLocalPoint(def.anchorA));
+      Vec2.copy(this.m_bodyA.getLocalPoint(def.anchorA), this.m_localAnchorA);
     } else if (def.localAnchorA) {
-      Vec2.copy(this.m_localAnchorA, def.localAnchorA);
+      Vec2.copy(def.localAnchorA, this.m_localAnchorA);
     }
     if (def.anchorB) {
-      Vec2.copy(this.m_localAnchorB, this.m_bodyB.getLocalPoint(def.anchorB));
+      Vec2.copy(this.m_bodyB.getLocalPoint(def.anchorB), this.m_localAnchorB);
     } else if (def.localAnchorB) {
-      Vec2.copy(this.m_localAnchorB, def.localAnchorB);
+      Vec2.copy(def.localAnchorB, this.m_localAnchorB);
     }
     if (Number.isFinite(def.frequencyHz)) {
       this.m_frequencyHz = def.frequencyHz;

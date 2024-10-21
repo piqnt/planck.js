@@ -202,15 +202,15 @@ export class DistanceJoint extends Joint {
   /** @hidden */
   _reset(def: Partial<DistanceJointDef>): void {
     if (def.anchorA) {
-      Vec2.copy(this.m_localAnchorA, this.m_bodyA.getLocalPoint(def.anchorA));
+      Vec2.copy(this.m_bodyA.getLocalPoint(def.anchorA), this.m_localAnchorA);
     } else if (def.localAnchorA) {
-      Vec2.copy(this.m_localAnchorA, def.localAnchorA);
+      Vec2.copy(def.localAnchorA, this.m_localAnchorA);
     }
 
     if (def.anchorB) {
-      Vec2.copy(this.m_localAnchorB, this.m_bodyB.getLocalPoint(def.anchorB));
+      Vec2.copy(this.m_bodyB.getLocalPoint(def.anchorB), this.m_localAnchorB);
     } else if (def.localAnchorB) {
-      Vec2.copy(this.m_localAnchorB, def.localAnchorB);
+      Vec2.copy(def.localAnchorB, this.m_localAnchorB);
     }
 
     if (def.length > 0) {
@@ -384,9 +384,9 @@ export class DistanceJoint extends Joint {
       this.m_impulse = 0.0;
     }
 
-    Vec2.copy(this.m_bodyA.c_velocity.v, vA);
+    Vec2.copy(vA, this.m_bodyA.c_velocity.v);
     this.m_bodyA.c_velocity.w = wA;
-    Vec2.copy(this.m_bodyB.c_velocity.v, vB);
+    Vec2.copy(vB, this.m_bodyB.c_velocity.v);
     this.m_bodyB.c_velocity.w = wB;
   }
 
@@ -410,9 +410,9 @@ export class DistanceJoint extends Joint {
     vB.addMul(this.m_invMassB, P);
     wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
 
-    Vec2.copy(this.m_bodyA.c_velocity.v, vA);
+    Vec2.copy(vA, this.m_bodyA.c_velocity.v);
     this.m_bodyA.c_velocity.w = wA;
-    Vec2.copy(this.m_bodyB.c_velocity.v, vB);
+    Vec2.copy(vB, this.m_bodyB.c_velocity.v);
     this.m_bodyB.c_velocity.w = wB;
   }
 
@@ -448,9 +448,9 @@ export class DistanceJoint extends Joint {
     cB.addMul(this.m_invMassB, P);
     aB += this.m_invIB * Vec2.crossVec2Vec2(rB, P);
 
-    Vec2.copy(this.m_bodyA.c_position.c, cA);
+    Vec2.copy(cA, this.m_bodyA.c_position.c);
     this.m_bodyA.c_position.a = aA;
-    Vec2.copy(this.m_bodyB.c_position.c, cB);
+    Vec2.copy(cB, this.m_bodyB.c_position.c);
     this.m_bodyB.c_position.a = aB;
 
     return math_abs(C) < Settings.linearSlop;

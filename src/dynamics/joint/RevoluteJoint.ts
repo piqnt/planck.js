@@ -262,14 +262,14 @@ export class RevoluteJoint extends Joint {
   /** @hidden */
   _reset(def: Partial<RevoluteJointDef>): void {
     if (def.anchorA) {
-      Vec2.copy(this.m_localAnchorA, this.m_bodyA.getLocalPoint(def.anchorA));
+      Vec2.copy(this.m_bodyA.getLocalPoint(def.anchorA), this.m_localAnchorA);
     } else if (def.localAnchorA) {
-      Vec2.copy(this.m_localAnchorA, def.localAnchorA);
+      Vec2.copy(def.localAnchorA, this.m_localAnchorA);
     }
     if (def.anchorB) {
-      Vec2.copy(this.m_localAnchorB, this.m_bodyB.getLocalPoint(def.anchorB));
+      Vec2.copy(this.m_bodyB.getLocalPoint(def.anchorB), this.m_localAnchorB);
     } else if (def.localAnchorB) {
-      Vec2.copy(this.m_localAnchorB, def.localAnchorB);
+      Vec2.copy(def.localAnchorB, this.m_localAnchorB);
     }
     if (Number.isFinite(def.referenceAngle)) {
       this.m_referenceAngle = def.referenceAngle;
@@ -759,9 +759,9 @@ export class RevoluteJoint extends Joint {
       aB += iB * Vec2.crossVec2Vec2(rB, impulse);
     }
 
-    Vec2.copy(this.m_bodyA.c_position.c, cA);
+    Vec2.copy(cA, this.m_bodyA.c_position.c);
     this.m_bodyA.c_position.a = aA;
-    Vec2.copy(this.m_bodyB.c_position.c, cB);
+    Vec2.copy(cB, this.m_bodyB.c_position.c);
     this.m_bodyB.c_position.a = aB;
 
     return positionError <= Settings.linearSlop && angularError <= Settings.angularSlop;

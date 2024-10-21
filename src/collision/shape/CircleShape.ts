@@ -61,7 +61,7 @@ export class CircleShape extends Shape {
     this.m_radius = 1;
 
     if (typeof a === 'object' && Vec2.isValid(a)) {
-      Vec2.copy(this.m_p, a);
+      Vec2.copy(a, this.m_p);
 
       if (typeof b === 'number') {
         this.m_radius = b;

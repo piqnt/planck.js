@@ -131,7 +131,7 @@ export class EdgeShape extends Shape {
    */
   setNextVertex(v?: Vec2Value): EdgeShape {
     if (v) {
-      Vec2.copy(this.m_vertex3, v);
+      Vec2.copy(v, this.m_vertex3);
       this.m_hasVertex3 = true;
     } else {
       Vec2.setZero(this.m_vertex3);
@@ -157,7 +157,7 @@ export class EdgeShape extends Shape {
    */
   setPrevVertex(v?: Vec2Value): EdgeShape {
     if (v) {
-      Vec2.copy(this.m_vertex0, v);
+      Vec2.copy(v, this.m_vertex0);
       this.m_hasVertex0 = true;
     } else {
       Vec2.setZero(this.m_vertex0);
@@ -177,8 +177,8 @@ export class EdgeShape extends Shape {
    * Set this as an isolated edge.
    */
   _set(v1: Vec2Value, v2: Vec2Value): EdgeShape {
-    Vec2.copy(this.m_vertex1, v1);
-    Vec2.copy(this.m_vertex2, v2);
+    Vec2.copy(v1, this.m_vertex1);
+    Vec2.copy(v2, this.m_vertex2);
     this.m_hasVertex0 = false;
     this.m_hasVertex3 = false;
     return this;
@@ -193,10 +193,10 @@ export class EdgeShape extends Shape {
     const clone = new EdgeShape();
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
-    Vec2.copy(clone.m_vertex1, this.m_vertex1);
-    Vec2.copy(clone.m_vertex2, this.m_vertex2);
-    Vec2.copy(clone.m_vertex0, this.m_vertex0);
-    Vec2.copy(clone.m_vertex3, this.m_vertex3);
+    Vec2.copy(this.m_vertex1, clone.m_vertex1);
+    Vec2.copy(this.m_vertex2, clone.m_vertex2);
+    Vec2.copy(this.m_vertex0, clone.m_vertex0);
+    Vec2.copy(this.m_vertex3, clone.m_vertex3);
     clone.m_hasVertex0 = this.m_hasVertex0;
     clone.m_hasVertex3 = this.m_hasVertex3;
     return clone;

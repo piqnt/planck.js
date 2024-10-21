@@ -899,7 +899,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
     }
 
     // Get search direction.
-    Vec2.copy(v, simplex.getClosestPoint());
+    Vec2.copy(simplex.getClosestPoint(), v);
 
     // Iteration count is equated to the number of support point calls.
     ++iter;

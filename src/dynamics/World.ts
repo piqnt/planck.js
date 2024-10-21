@@ -281,7 +281,7 @@ export class World {
    * Change the global gravity vector.
    */
   setGravity(gravity: Vec2Value): void {
-    Vec2.copy(this.m_gravity, gravity);
+    Vec2.copy(gravity, this.m_gravity);
   }
 
   /**

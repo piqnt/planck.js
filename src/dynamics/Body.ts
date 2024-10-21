@@ -263,7 +263,7 @@ export class Body {
 
     // the body origin transform
     this.m_xf = Transform.identity();
-    Vec2.copy(this.m_xf.p, def.position);
+    Vec2.copy(def.position, this.m_xf.p);
     this.m_xf.q.setAngle(def.angle);
 
     // the swept motion for CCD
@@ -700,7 +700,7 @@ export class Body {
     if (Vec2.dot(v, v) > 0.0) {
       this.setAwake(true);
     }
-    Vec2.copy(this.m_linearVelocity, v);
+    Vec2.copy(v, this.m_linearVelocity);
   }
 
   /**

@@ -77,13 +77,13 @@ export class Mat22 {
       Vec2.set(this.ey, b, d);
 
     } else if (typeof a === 'object' && typeof b === 'object') {
-      Vec2.copy(this.ex, a);
-      Vec2.copy(this.ey, b);
+      Vec2.copy(a, this.ex);
+      Vec2.copy(b, this.ey);
 
     } else if (typeof a === 'object') {
       _ASSERT && Mat22.assert(a);
-      Vec2.copy(this.ex, a.ex);
-      Vec2.copy(this.ey, a.ey);
+      Vec2.copy(a.ex, this.ex);
+      Vec2.copy(a.ey, this.ey);
 
     } else {
       _ASSERT && console.assert(false);

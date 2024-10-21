@@ -312,18 +312,18 @@ export class PrismaticJoint extends Joint {
   /** @hidden */
   _reset(def: Partial<PrismaticJointDef>): void {
     if (def.anchorA) {
-      Vec2.copy(this.m_localAnchorA, this.m_bodyA.getLocalPoint(def.anchorA));
+      Vec2.copy(this.m_bodyA.getLocalPoint(def.anchorA), this.m_localAnchorA);
     } else if (def.localAnchorA) {
-      Vec2.copy(this.m_localAnchorA, def.localAnchorA);
+      Vec2.copy(def.localAnchorA, this.m_localAnchorA);
     }
     if (def.anchorB) {
-      Vec2.copy(this.m_localAnchorB, this.m_bodyB.getLocalPoint(def.anchorB));
+      Vec2.copy(this.m_bodyB.getLocalPoint(def.anchorB), this.m_localAnchorB);
     } else if (def.localAnchorB) {
-      Vec2.copy(this.m_localAnchorB, def.localAnchorB);
+      Vec2.copy(def.localAnchorB, this.m_localAnchorB);
     }
     if (def.localAxisA) {
-      Vec2.copy(this.m_localXAxisA, def.localAxisA);
-      Vec2.copy(this.m_localYAxisA, Vec2.crossNumVec2(1.0, def.localAxisA));
+      Vec2.copy(def.localAxisA, this.m_localXAxisA);
+      Vec2.copy(Vec2.crossNumVec2(1.0, def.localAxisA), this.m_localYAxisA);
     }
     if (Number.isFinite(def.referenceAngle)) {
       this.m_referenceAngle = def.referenceAngle;
@@ -668,9 +668,9 @@ export class PrismaticJoint extends Joint {
       this.m_motorImpulse = 0.0;
     }
 
-    Vec2.copy(this.m_bodyA.c_velocity.v, vA);
+    Vec2.copy(vA, this.m_bodyA.c_velocity.v);
     this.m_bodyA.c_velocity.w = wA;
-    Vec2.copy(this.m_bodyB.c_velocity.v, vB);
+    Vec2.copy(vB, this.m_bodyB.c_velocity.v);
     this.m_bodyB.c_velocity.w = wB;
   }
 
