@@ -371,7 +371,7 @@ export class FrictionJoint extends Joint {
 
       let impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
       const oldImpulse = this.m_linearImpulse;
-      this.m_linearImpulse.add(impulse);
+      Vec2.add(this.m_linearImpulse, impulse);
 
       const maxImpulse = h * this.m_maxForce;
 

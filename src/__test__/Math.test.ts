@@ -23,7 +23,7 @@ describe('Math', function(): void {
     expect(v.x).equal(0);
     expect(v.y).equal(0);
 
-    v.add(Vec2.create(3, 2));
+    Vec2.add(v, Vec2.create(3, 2));
     expect(v.x).equal(3);
     expect(v.y).equal(2);
 

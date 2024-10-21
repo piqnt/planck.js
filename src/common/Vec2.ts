@@ -162,18 +162,6 @@ export class Vec2 {
     return this;
   }
 
-  /**
-   * Add a vector to this vector.
-   *
-   * @returns this
-   */
-  add(w: Vec2Value): Vec2 {
-    _ASSERT && Vec2.assert(w);
-    this.x += w.x;
-    this.y += w.y;
-    return this;
-  }
-
 
   /**
    * Add linear combination of v and w: `a * v + b * w`
