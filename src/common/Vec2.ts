@@ -440,12 +440,6 @@ export class Vec2 {
     return Vec2.set(a * b.x, a * b.y, out);
   }
 
-  neg(): Vec2Value {
-    this.x = -this.x;
-    this.y = -this.y;
-    return this;
-  }
-
   static neg(v: Vec2Value, out: Vec2Value=Vec2.create()): Vec2Value {
     _ASSERT && Vec2.assert(v);
     return Vec2.set(-v.x, -v.y, out);
@@ -472,16 +466,6 @@ export class Vec2 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
     return Vec2.set(math_min(v.x, w.x), math_min(v.y, w.y), out);
-  }
-
-  clamp(max: number): Vec2Value {
-    const lengthSqr = this.x * this.x + this.y * this.y;
-    if (lengthSqr > max * max) {
-      const scale = max / math_sqrt(lengthSqr);
-      this.x *= scale;
-      this.y *= scale;
-    }
-    return this;
   }
 
   static clamp(v: Vec2Value, max: number, out: Vec2Value=Vec2.create()): Vec2Value {

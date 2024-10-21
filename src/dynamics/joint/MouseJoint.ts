@@ -384,14 +384,14 @@ export class MouseJoint extends Joint {
     Vec2.add(Cdot, vB, Cdot);
 
     Cdot.addCombine(1, this.m_C, this.m_gamma, this.m_impulse);
-    Cdot.neg();
+    Vec2.neg(Cdot, Cdot);
 
     let impulse = Mat22.mulVec2(this.m_mass, Cdot);
 
     const oldImpulse = Vec2.clone(this.m_impulse);
     Vec2.add(this.m_impulse, impulse, this.m_impulse);
     const maxImpulse = step.dt * this.m_maxForce;
-    this.m_impulse.clamp(maxImpulse);
+    Vec2.clamp(this.m_impulse, maxImpulse, this.m_impulse);
     impulse = Vec2.sub(this.m_impulse, oldImpulse);
 
     vB.addMul(this.m_invMassB, impulse);

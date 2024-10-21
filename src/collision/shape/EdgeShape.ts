@@ -279,7 +279,8 @@ export class EdgeShape extends Shape {
 
     output.fraction = t;
     if (numerator > 0.0) {
-      output.normal = Rot.mulVec2(xf.q, normal).neg();
+      const tmp = Rot.mulVec2(xf.q, normal);
+      output.normal = Vec2.neg(tmp, output.normal);
     } else {
       output.normal = Rot.mulVec2(xf.q, normal);
     }
