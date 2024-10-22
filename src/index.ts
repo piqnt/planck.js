@@ -4,7 +4,7 @@ export * from './util/Testbed';
 /** @deprecated */
 export { math as Math } from './common/Math';
 
-export * from './common/Vec2';
+export * as Vec2 from './common/Vec2';
 export * from './common/Vec3';
 export * from './common/Mat22';
 export * from './common/Mat33';
