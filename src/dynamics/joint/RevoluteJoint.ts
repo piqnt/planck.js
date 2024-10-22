@@ -454,7 +454,7 @@ export class RevoluteJoint extends Joint {
    * Get the reaction force given the inverse time step. Unit is N.
    */
   getReactionForce(inv_dt: number): Vec2Value {
-    return Vec2.create(this.m_impulse.x, this.m_impulse.y).mul(inv_dt);
+    return Vec2.scale(this.m_impulse, inv_dt);
   }
 
   /**
@@ -551,7 +551,7 @@ export class RevoluteJoint extends Joint {
 
     if (step.warmStarting) {
       // Scale impulses to support a variable time step.
-      this.m_impulse.mul(step.dtRatio);
+      Vec2.scale(this.m_impulse, step.dtRatio, this.m_impulse);
       this.m_motorImpulse *= step.dtRatio;
 
       const P = Vec2.create(this.m_impulse.x, this.m_impulse.y);

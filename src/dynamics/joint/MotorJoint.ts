@@ -354,7 +354,7 @@ export class MotorJoint extends Joint {
 
     if (step.warmStarting) {
       // Scale impulses to support a variable time step.
-      this.m_linearImpulse.mul(step.dtRatio);
+      Vec2.scale(this.m_linearImpulse, step.dtRatio, this.m_linearImpulse);
       this.m_angularImpulse *= step.dtRatio;
 
       const P = Vec2.create(this.m_linearImpulse.x, this.m_linearImpulse.y);

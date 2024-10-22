@@ -131,12 +131,12 @@ export class Vec2 {
   static scale(v: Vec2Value, a: number, out: Vec2Value=Vec2.create()): Vec2Value {
     _ASSERT && console.assert(Number.isFinite(a));
     _ASSERT && Vec2.assert(v);
+
     const x = a * v.x;
     const y = a * v.y;
 
     return Vec2.set(x, y, out);
   }
-
 
   /**
    * Add linear combination of v and w: `a * v + b * w`
@@ -204,18 +204,6 @@ export class Vec2 {
     _ASSERT && Vec2.assert(w);
     this.x -= w.x;
     this.y -= w.y;
-    return this;
-  }
-
-  /**
-   * Multiply this vector by a scalar.
-   *
-   * @returns this
-   */
-  mul(m: number): Vec2Value {
-    _ASSERT && console.assert(Number.isFinite(m));
-    this.x *= m;
-    this.y *= m;
     return this;
   }
 

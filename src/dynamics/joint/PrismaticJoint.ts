@@ -532,7 +532,8 @@ export class PrismaticJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2Value {
-    return Vec2.combine(this.m_impulse.x, this.m_perp, this.m_motorImpulse + this.m_impulse.z, this.m_axis).mul(inv_dt);
+    const f = Vec2.combine(this.m_impulse.x, this.m_perp, this.m_motorImpulse + this.m_impulse.z, this.m_axis);
+    return Vec2.scale(f, inv_dt, f);
   }
 
   /**
@@ -648,7 +649,7 @@ export class PrismaticJoint extends Joint {
 
     if (step.warmStarting) {
       // Account for variable time step.
-      this.m_impulse.mul(step.dtRatio);
+      Vec2.scale(this.m_impulse, step.dtRatio, this.m_impulse);
       this.m_motorImpulse *= step.dtRatio;
 
       const P = Vec2.combine(this.m_impulse.x, this.m_perp, this.m_motorImpulse

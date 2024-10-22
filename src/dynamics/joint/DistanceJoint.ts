@@ -293,7 +293,8 @@ export class DistanceJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2Value {
-    return Vec2.mulNumVec2(this.m_impulse, this.m_u).mul(inv_dt);
+    const f = Vec2.mulNumVec2(this.m_impulse, this.m_u);
+    return Vec2.scale(f, inv_dt, f);
   }
 
   /**
@@ -331,7 +332,7 @@ export class DistanceJoint extends Joint {
     // Handle singularity.
     const length = Vec2.length(this.m_u);
     if (length > Settings.linearSlop) {
-      this.m_u.mul(1.0 / length);
+      Vec2.scale(this.m_u, 1.0 / length, this.m_u);
     } else {
       Vec2.set(0.0, 0.0, this.m_u);
     }

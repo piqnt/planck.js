@@ -280,7 +280,7 @@ export class WeldJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2Value {
-    return Vec2.create(this.m_impulse.x, this.m_impulse.y).mul(inv_dt);
+    return Vec2.scale(this.m_impulse, inv_dt);
   }
 
   /**
@@ -376,7 +376,7 @@ export class WeldJoint extends Joint {
 
     if (step.warmStarting) {
       // Scale impulses to support a variable time step.
-      this.m_impulse.mul(step.dtRatio);
+      Vec2.scale(this.m_impulse, step.dtRatio, this.m_impulse);
 
       const P = Vec2.create(this.m_impulse.x, this.m_impulse.y);
 

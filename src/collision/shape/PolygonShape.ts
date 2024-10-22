@@ -557,7 +557,7 @@ export class PolygonShape extends Shape {
     for (let i = 0; i < count; ++i) {
       Vec2.add(pRef, vs[i], pRef);
     }
-    pRef.mul(1.0 / count);
+    Vec2.scale(pRef, 1.0 / count, pRef);
   }
 
   const inv3 = 1.0 / 3.0;
@@ -583,8 +583,7 @@ export class PolygonShape extends Shape {
 
   // Centroid
   _ASSERT && console.assert(area > EPSILON);
-  c.mul(1.0 / area);
-  return c;
+  return Vec2.scale(c, 1.0 / area, c);
 }
 
 export const Polygon = PolygonShape;

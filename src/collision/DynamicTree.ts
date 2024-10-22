@@ -204,7 +204,7 @@ export class DynamicTree<T> {
     AABB.extend(aabb, Settings.aabbExtension);
 
     // Predict AABB displacement.
-    // const d = Vec2.mul(Settings.aabbMultiplier, displacement);
+    // const d = Vec2.scale(displacement, Settings.aabbMultiplier);
 
     if (d.x < 0.0) {
       aabb.lowerBound.x += d.x * Settings.aabbMultiplier;

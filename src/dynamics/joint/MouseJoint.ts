@@ -355,13 +355,13 @@ export class MouseJoint extends Joint {
 
     Vec2.copy(cB, this.m_C);
     this.m_C.addCombine(1, this.m_rB, -1, this.m_targetA);
-    this.m_C.mul(this.m_beta);
+    Vec2.scale(this.m_C, this.m_beta, this.m_C);
 
     // Cheat with some damping
     wB *= 0.98;
 
     if (step.warmStarting) {
-      this.m_impulse.mul(step.dtRatio);
+      Vec2.scale(this.m_impulse, step.dtRatio, this.m_impulse);
       vB.addMul(this.m_invMassB, this.m_impulse);
       wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, this.m_impulse);
 

@@ -427,7 +427,8 @@ export class WheelJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2Value {
-    return Vec2.combine(this.m_impulse, this.m_ay, this.m_springImpulse, this.m_ax).mul(inv_dt);
+    const f = Vec2.combine(this.m_impulse, this.m_ay, this.m_springImpulse, this.m_ax)
+    return Vec2.scale(f, inv_dt, f);
   }
 
   /**

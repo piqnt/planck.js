@@ -156,7 +156,7 @@ export class Mat22 {
 
     } else if (v && 'ex' in v && 'ey' in v) { // Mat22
       _ASSERT && Mat22.assert(v);
-      // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+      // return new Mat22(Vec2.scale(v.ex, mx), Vec2.scale(v.ey, mx));
       const a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
       const b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
       const c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;
@@ -176,7 +176,7 @@ export class Mat22 {
 
   static mulMat22(mx: Mat22, v: Mat22): Mat22 {
     _ASSERT && Mat22.assert(v);
-    // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
+    // return new Mat22(Vec2.scale(v.ex, mx), Vec2.scale(v.ey, mx));
     const a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
     const b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
     const c = mx.ex.y * v.ex.x + mx.ey.y * v.ex.y;

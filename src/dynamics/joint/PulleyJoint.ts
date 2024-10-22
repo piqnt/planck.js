@@ -305,7 +305,8 @@ export class PulleyJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2Value {
-    return Vec2.mulNumVec2(this.m_impulse, this.m_uB).mul(inv_dt);
+    const f = Vec2.mulNumVec2(this.m_impulse, this.m_uB);
+    return Vec2.scale(f, inv_dt, f);
   }
 
   /**
@@ -347,13 +348,13 @@ export class PulleyJoint extends Joint {
     const lengthB = Vec2.length(this.m_uB);
 
     if (lengthA > 10.0 * Settings.linearSlop) {
-      this.m_uA.mul(1.0 / lengthA);
+      Vec2.scale(this.m_uA, 1.0 / lengthA, this.m_uA);
     } else {
       Vec2.setZero(this.m_uA);
     }
 
     if (lengthB > 10.0 * Settings.linearSlop) {
-      this.m_uB.mul(1.0 / lengthB);
+      Vec2.scale(this.m_uB, 1.0 / lengthB, this.m_uB);
     } else {
       Vec2.setZero(this.m_uB);
     }
@@ -444,13 +445,13 @@ export class PulleyJoint extends Joint {
     const lengthB = Vec2.length(uB);
 
     if (lengthA > 10.0 * Settings.linearSlop) {
-      uA.mul(1.0 / lengthA);
+      Vec2.scale(uA, 1.0 / lengthA, uA);
     } else {
       Vec2.setZero(uA);
     }
 
     if (lengthB > 10.0 * Settings.linearSlop) {
-      uB.mul(1.0 / lengthB);
+      Vec2.scale(uB, 1.0 / lengthB, uB);
     } else {
       Vec2.setZero(uB);
     }

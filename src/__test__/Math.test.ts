@@ -31,7 +31,7 @@ describe('Math', function(): void {
     expect(v.x).equal(1);
     expect(v.y).equal(1);
 
-    v.mul(5);
+    Vec2.scale(v, 5, v);
     expect(v.x).equal(5);
     expect(v.y).equal(5);
 

@@ -225,7 +225,8 @@ export class RopeJoint extends Joint {
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
   getReactionForce(inv_dt: number): Vec2Value {
-    return Vec2.mulNumVec2(this.m_impulse, this.m_u).mul(inv_dt);
+    const f = Vec2.mulNumVec2(this.m_impulse, this.m_u);
+    return Vec2.scale(f, inv_dt, f);
   }
 
   /**
@@ -272,7 +273,7 @@ export class RopeJoint extends Joint {
     }
 
     if (this.m_length > Settings.linearSlop) {
-      this.m_u.mul(1.0 / this.m_length);
+      Vec2.scale(this.m_u, 1.0 / this.m_length, this.m_u);
     } else {
       Vec2.setZero(this.m_u);
       this.m_mass = 0.0;
