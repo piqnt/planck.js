@@ -12,8 +12,8 @@ describe('Math', function(): void {
     Vec2.set(3, 4, v);
     expect(v.x).equal(3);
     expect(v.y).equal(4);
-    expect(v.length()).equal(5);
-    expect(v.lengthSquared()).equal(25);
+    expect(Vec2.length(v)).equal(5);
+    expect(Vec2.lengthSquared(v)).equal(25);
 
     Vec2.normalize(v, v);
     expect(v.x).closeTo(3 / 5, 1e-12);

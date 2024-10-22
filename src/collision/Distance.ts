@@ -831,7 +831,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
   // Main iteration loop.
   const k_maxIters = 20;
   let iter = 0;
-  while (iter < k_maxIters && v.length() - sigma > tolerance) {
+  while (iter < k_maxIters && Vec2.length(v) - sigma > tolerance) {
     _ASSERT && console.assert(simplex.m_count < 3);
 
     output.iterations += 1;
@@ -915,7 +915,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
   const pointB = Vec2.zero();
   simplex.getWitnessPoints(pointB, pointA);
 
-  if (v.lengthSquared() > 0.0) {
+  if (Vec2.lengthSquared(v) > 0.0) {
     n.setMul(-1, v);
     Vec2.normalize(n, n);
   }

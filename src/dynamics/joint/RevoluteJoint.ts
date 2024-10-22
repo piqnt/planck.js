@@ -737,7 +737,7 @@ export class RevoluteJoint extends Joint {
       const C = Vec2.zero();
       C.addCombine(1, cB, 1, rB);
       C.subCombine(1, cA, 1, rA);
-      positionError = C.length();
+      positionError = Vec2.length(C);
 
       const mA = this.m_invMassA;
       const mB = this.m_invMassB;

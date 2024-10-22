@@ -227,7 +227,7 @@ export class PolygonShape extends Shape {
         }
 
         // Collinearity check
-        if (c === 0.0 && v.lengthSquared() > r.lengthSquared()) {
+        if (c === 0.0 && Vec2.lengthSquared(v) > Vec2.lengthSquared(r)) {
           ie = j;
         }
       }
@@ -260,7 +260,7 @@ export class PolygonShape extends Shape {
       const i1 = i;
       const i2 = i + 1 < m ? i + 1 : 0;
       const edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
-      _ASSERT && console.assert(edge.lengthSquared() > EPSILON * EPSILON);
+      _ASSERT && console.assert(Vec2.lengthSquared(edge) > EPSILON * EPSILON);
       this.m_normals[i] = Vec2.crossVec2Num(edge, 1.0);
       Vec2.normlize(this.m_normals[i], this.m_normals[i]);
     }

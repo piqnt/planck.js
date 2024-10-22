@@ -219,28 +219,12 @@ export class Vec2 {
   }
 
   /**
-   * Get the length of this vector (the norm).
-   *
-   * For performance, use this instead of lengthSquared (if possible).
-   */
-  length(): number {
-    return Vec2.lengthOf(this);
-  }
-
-  /**
-   * Get the length squared.
-   */
-  lengthSquared(): number {
-    return Vec2.lengthSquared(this);
-  }
-
-  /**
    * Convert this vector into a unit vector.
    *
    * @returns old length
    */
   static normalize(v: Vec2Value, out: Vec2Value=Vec2.create()): number {
-    const length = Vec2.lengthOf(v);
+    const length = Vec2.length(v);
     if (length < EPSILON) {
       return 0.0;
     }
@@ -251,11 +235,11 @@ export class Vec2 {
   }
 
   /**
-   * Get the length of this vector (the norm).
+   * Get the length of this vector's normal.
    *
    * For performance, use this instead of lengthSquared (if possible).
    */
-  static lengthOf(v: Vec2Value): number {
+  static length(v: Vec2Value): number {
     _ASSERT && Vec2.assert(v);
     return math_sqrt(v.x * v.x + v.y * v.y);
   }

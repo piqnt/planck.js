@@ -329,7 +329,7 @@ export class DistanceJoint extends Joint {
     this.m_u = Vec2.sub(Vec2.add(cB, this.m_rB), Vec2.add(cA, this.m_rA));
 
     // Handle singularity.
-    const length = this.m_u.length();
+    const length = Vec2.length(this.m_u);
     if (length > Settings.linearSlop) {
       this.m_u.mul(1.0 / length);
     } else {

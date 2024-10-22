@@ -343,8 +343,8 @@ export class PulleyJoint extends Joint {
     this.m_uA = Vec2.sub(Vec2.add(cA, this.m_rA), this.m_groundAnchorA);
     this.m_uB = Vec2.sub(Vec2.add(cB, this.m_rB), this.m_groundAnchorB);
 
-    const lengthA = this.m_uA.length();
-    const lengthB = this.m_uB.length();
+    const lengthA = Vec2.length(this.m_uA);
+    const lengthB = Vec2.length(this.m_uB);
 
     if (lengthA > 10.0 * Settings.linearSlop) {
       this.m_uA.mul(1.0 / lengthA);
@@ -440,8 +440,8 @@ export class PulleyJoint extends Joint {
     const uA = Vec2.sub(Vec2.add(cA, this.m_rA), this.m_groundAnchorA);
     const uB = Vec2.sub(Vec2.add(cB, this.m_rB), this.m_groundAnchorB);
 
-    const lengthA = uA.length();
-    const lengthB = uB.length();
+    const lengthA = Vec2.length(uA);
+    const lengthB = Vec2.length(uB);
 
     if (lengthA > 10.0 * Settings.linearSlop) {
       uA.mul(1.0 / lengthA);

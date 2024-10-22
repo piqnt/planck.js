@@ -375,7 +375,7 @@ export class FrictionJoint extends Joint {
 
       const maxImpulse = h * this.m_maxForce;
 
-      if (this.m_linearImpulse.lengthSquared() > maxImpulse * maxImpulse) {
+      if (Vec2.lengthSquared(this.m_linearImpulse) > maxImpulse * maxImpulse) {
         Vec2.normalize(this.m_linearImpulse, this.m_linearImpulse);
         this.m_linearImpulse.mul(maxImpulse);
       }

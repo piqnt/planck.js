@@ -776,7 +776,7 @@ export class DynamicTree<T> {
     const p1 = input.p1;
     const p2 = input.p2;
     const r = Vec2.sub(p2, p1);
-    _ASSERT && console.assert(r.lengthSquared() > 0.0);
+    _ASSERT && console.assert(Vec2.lengthSquared(r) > 0.0);
     Vec2.normalize(r, r);
 
     // v is perpendicular to the segment.

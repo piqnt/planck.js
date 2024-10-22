@@ -262,7 +262,7 @@ export class RopeJoint extends Joint {
     this.m_u.addCombine(1, cB, 1, this.m_rB);
     this.m_u.subCombine(1, cA, 1, this.m_rA);
 
-    this.m_length = this.m_u.length();
+    this.m_length = Vec2.length(this.m_u);
 
     const C = this.m_length - this.m_maxLength;
     if (C > 0.0) {

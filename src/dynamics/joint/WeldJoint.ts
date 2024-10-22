@@ -495,7 +495,7 @@ export class WeldJoint extends Joint {
       C1.addCombine(1, cB, 1, rB);
       C1.subCombine(1, cA, 1, rA);
 
-      positionError = C1.length();
+      positionError = Vec2.length(C1);
       angularError = 0.0;
 
       const P = Vec2.neg(K.solve22(C1));
@@ -512,7 +512,7 @@ export class WeldJoint extends Joint {
 
       const C2 = aB - aA - this.m_referenceAngle;
 
-      positionError = C1.length();
+      positionError = Vec2.length(C1);
       angularError = math_abs(C2);
 
       const C = Vec3.create(C1.x, C1.y, C2);
