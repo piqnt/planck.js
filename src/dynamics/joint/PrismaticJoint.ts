@@ -570,7 +570,7 @@ export class PrismaticJoint extends Joint {
     const d = Vec2.zero();
 
     Vec2.addCombine(d, 1, cB, 1, rB, d);
-    d.subCombine(1, cA, 1, rA);
+    Vec2.subCombine(d, 1, cA, 1, rA, d);
 
     const mA = this.m_invMassA;
     const mB = this.m_invMassB;

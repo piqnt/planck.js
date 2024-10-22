@@ -434,7 +434,8 @@ export class WeldJoint extends Joint {
     } else {
       const Cdot1 = Vec2.zero();
       Vec2.addCombine(Cdot1, 1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB), Cdot1);
-      Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
+      Vec2.subCombine(Cdot1, 1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA), Cdot1);
+
       const Cdot2 = wB - wA;
       const Cdot = Vec3.create(Cdot1.x, Cdot1.y, Cdot2);
 
@@ -493,7 +494,7 @@ export class WeldJoint extends Joint {
     if (this.m_frequencyHz > 0.0) {
       const C1 = Vec2.zero();
       Vec2.addCombine(C1, 1, cB, 1, rB, C1);
-      C1.subCombine(1, cA, 1, rA);
+      Vec2.subCombine(C1, 1, cA, 1, rA, C1);
 
       positionError = Vec2.length(C1);
       angularError = 0.0;
@@ -508,7 +509,7 @@ export class WeldJoint extends Joint {
     } else {
       const C1 = Vec2.zero();
       Vec2.addCombine(C1, 1, cB, 1, rB, C1);
-      C1.subCombine(1, cA, 1, rA);
+      Vec2.subCombine(C1, 1, cA, 1, rA, C1);
 
       const C2 = aB - aA - this.m_referenceAngle;
 

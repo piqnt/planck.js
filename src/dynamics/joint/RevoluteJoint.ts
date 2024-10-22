@@ -603,7 +603,8 @@ export class RevoluteJoint extends Joint {
     if (this.m_enableLimit && this.m_limitState != LimitState.inactiveLimit && fixedRotation == false) {
       const Cdot1 = Vec2.zero();
       const Cdot1 = Vec2.addCombine(Cdot1, 1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB), Cdot1);
-      Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
+      Vec2.subCombine(Cdot1, 1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA), Cdot1);
+
       const Cdot2 = wB - wA;
       const Cdot = Vec3.create(Cdot1.x, Cdot1.y, Cdot2);
 
@@ -737,7 +738,8 @@ export class RevoluteJoint extends Joint {
 
       const C = Vec2.zero();
       Vec2.addCombine(C, 1, cB, 1, rB, C);
-      C.subCombine(1, cA, 1, rA);
+      Vec2.subCombine(C, 1, cA, 1, rA, C);
+
       positionError = Vec2.length(C);
 
       const mA = this.m_invMassA;

@@ -348,7 +348,7 @@ export class MotorJoint extends Joint {
 
     this.m_linearError = Vec2.zero();
     Vec2.addCombine(this.m_linearError, 1, cB, 1, this.m_rB, this.m_linearError);
-    this.m_linearError.subCombine(1, cA, 1, this.m_rA);
+    Vec2.subCombine(this.m_linearError, 1, cA, 1, this.m_rA, this.m_linearError);
 
     this.m_angularError = aB - aA - this.m_angularOffset;
 
@@ -408,7 +408,8 @@ export class MotorJoint extends Joint {
     {
       const Cdot = Vec2.zero();
       Vec2.addCombine(Cdot, 1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB), Cdot);
-      Cdot.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
+      Vec2.subCombine(Cdot, 1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA), Cdot);
+
       Cdot.addMul(inv_h * this.m_correctionFactor, this.m_linearError);
 
       let impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
