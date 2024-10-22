@@ -380,10 +380,10 @@ export class PulleyJoint extends Joint {
       const PA = Vec2.mulNumVec2(-this.m_impulse, this.m_uA);
       const PB = Vec2.mulNumVec2(-this.m_ratio * this.m_impulse, this.m_uB);
 
-      vA.addMul(this.m_invMassA, PA);
+      Vec.addMul(vA, this.m_invMassA, PA, vA);
       wA += this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, PA);
 
-      vB.addMul(this.m_invMassB, PB);
+      Vec2.addMul(vB, this.m_invMassB, PB, vB);
       wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, PB);
 
     } else {
@@ -411,9 +411,9 @@ export class PulleyJoint extends Joint {
 
     const PA = Vec2.mulNumVec2(-impulse, this.m_uA);
     const PB = Vec2.mulNumVec2(-this.m_ratio * impulse, this.m_uB);
-    vA.addMul(this.m_invMassA, PA);
+    Vec2.addMul(vA, this.m_invMassA, PA, vA);
     wA += this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, PA);
-    vB.addMul(this.m_invMassB, PB);
+    Vec2.addMul(vB, this.m_invMassB, PB, vB);
     wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, PB);
 
     this.m_bodyA.c_velocity.v = vA;
@@ -477,9 +477,9 @@ export class PulleyJoint extends Joint {
     const PA = Vec2.mulNumVec2(-impulse, uA);
     const PB = Vec2.mulNumVec2(-this.m_ratio * impulse, uB);
 
-    cA.addMul(this.m_invMassA, PA);
+    Vec2.addMul(cA, this.m_invMassA, PA, cA);
     aA += this.m_invIA * Vec2.crossVec2Vec2(rA, PA);
-    cB.addMul(this.m_invMassB, PB);
+    Vec2.addMul(cB, this.m_invMassB, PB, cB);
     aB += this.m_invIB * Vec2.crossVec2Vec2(rB, PB);
 
     this.m_bodyA.c_position.c = cA;

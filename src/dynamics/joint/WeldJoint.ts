@@ -380,10 +380,10 @@ export class WeldJoint extends Joint {
 
       const P = Vec2.create(this.m_impulse.x, this.m_impulse.y);
 
-      vA.subMul(mA, P);
+      Vec2.subMul(vA, mA, P, vA);
       wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_impulse.z);
 
-      vB.addMul(mB, P);
+      Vec2.addMul(vB, mB, P, vB);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_impulse.z);
 
     } else {
@@ -426,10 +426,10 @@ export class WeldJoint extends Joint {
 
       const P = Vec2.clone(impulse1);
 
-      vA.subMul(mA, P);
+      Vec2.subMul(vA, mA, P, vA);
       wA -= iA * Vec2.crossVec2Vec2(this.m_rA, P);
 
-      vB.addMul(mB, P);
+      Vec2.addMul(vB, mB, P, vB);
       wB += iB * Vec2.crossVec2Vec2(this.m_rB, P);
     } else {
       const Cdot1 = Vec2.zero();
@@ -444,10 +444,10 @@ export class WeldJoint extends Joint {
 
       const P = Vec2.create(impulse.x, impulse.y);
 
-      vA.subMul(mA, P);
+      Vec2.subMul(vA, mA, P, vA);
       wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + impulse.z);
 
-      vB.addMul(mB, P);
+      Vec2.addMul(vB, mB, P, vB);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + impulse.z);
     }
 
@@ -501,10 +501,10 @@ export class WeldJoint extends Joint {
 
       const P = Vec2.neg(K.solve22(C1));
 
-      cA.subMul(mA, P);
+      Ve2.subMul(cA, mA, P, cA);
       aA -= iA * Vec2.crossVec2Vec2(rA, P);
 
-      cB.addMul(mB, P);
+      Vec2.addMul(cB, mB, P, cB);
       aB += iB * Vec2.crossVec2Vec2(rB, P);
     } else {
       const C1 = Vec2.zero();
@@ -528,10 +528,10 @@ export class WeldJoint extends Joint {
 
       const P = Vec2.create(impulse.x, impulse.y);
 
-      cA.subMul(mA, P);
+      Vec2.subMul(cA, mA, P, cA);
       aA -= iA * (Vec2.crossVec2Vec2(rA, P) + impulse.z);
 
-      cB.addMul(mB, P);
+      Vec2.addMul(cB, mB, P, cB);
       aB += iB * (Vec2.crossVec2Vec2(rB, P) + impulse.z);
     }
 

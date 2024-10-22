@@ -550,10 +550,10 @@ export class WheelJoint extends Joint {
       const LA = this.m_impulse * this.m_sAy + this.m_springImpulse * this.m_sAx + this.m_motorImpulse;
       const LB = this.m_impulse * this.m_sBy + this.m_springImpulse * this.m_sBx + this.m_motorImpulse;
 
-      vA.subMul(this.m_invMassA, P);
+      Vec2.subMul(vA, this.m_invMassA, P, vA);
       wA -= this.m_invIA * LA;
 
-      vB.addMul(this.m_invMassB, P);
+      Vec2.addMul(vB, this.m_invMassB, P, vB);
       wB += this.m_invIB * LB;
 
     } else {
@@ -589,10 +589,10 @@ export class WheelJoint extends Joint {
       const LA = impulse * this.m_sAx;
       const LB = impulse * this.m_sBx;
 
-      vA.subMul(mA, P);
+      Vec2.subMul(vA, mA, P, vA);
       wA -= iA * LA;
 
-      vB.addMul(mB, P);
+      Vec2.addMul(vB, mB, P, vB);
       wB += iB * LB;
     }
 
@@ -620,10 +620,10 @@ export class WheelJoint extends Joint {
       const LA = impulse * this.m_sAy;
       const LB = impulse * this.m_sBy;
 
-      vA.subMul(mA, P);
+      Vec2.subMul(vA, mA, P, vA);
       wA -= iA * LA;
 
-      vB.addMul(mB, P);
+      Vec2.addMul(vB, mB, P, vB);
       wB += iB * LB;
     }
 
@@ -666,9 +666,9 @@ export class WheelJoint extends Joint {
     const LA = impulse * sAy;
     const LB = impulse * sBy;
 
-    cA.subMul(this.m_invMassA, P);
+    Vec2.subMul(cA, this.m_invMassA, P, cA);
     aA -= this.m_invIA * LA;
-    cB.addMul(this.m_invMassB, P);
+    Vec2.addMul(cB, this.m_invMassB, P, cB);
     aB += this.m_invIB * LB;
 
     Vec2.copy(cA, this.m_bodyA.c_position.c);

@@ -374,11 +374,10 @@ export class DistanceJoint extends Joint {
       this.m_impulse *= step.dtRatio;
 
       const P = Vec2.mulNumVec2(this.m_impulse, this.m_u);
-
-      vA.subMul(this.m_invMassA, P);
+      Vec2.subMul(vA, this.m_invMassA, P, vA);
       wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
 
-      vB.addMul(this.m_invMassB, P);
+      Vec2.addMul(vB, this.m_invMassB, P, vB);
       wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
 
     } else {
@@ -406,9 +405,9 @@ export class DistanceJoint extends Joint {
     this.m_impulse += impulse;
 
     const P = Vec2.mulNumVec2(impulse, this.m_u);
-    vA.subMul(this.m_invMassA, P);
+    Vec2.subMul(vA, this.m_invMassA, P, vA);
     wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
-    vB.addMul(this.m_invMassB, P);
+    Vec2.addMul(vB, this.m_invMassB, P, vB);
     wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
 
     Vec2.copy(vA, this.m_bodyA.c_velocity.v);
@@ -444,9 +443,9 @@ export class DistanceJoint extends Joint {
     const impulse = -this.m_mass * C;
     const P = Vec2.mulNumVec2(impulse, u);
 
-    cA.subMul(this.m_invMassA, P);
+    Vec2.subMul(cA, this.m_invMassA, P, cA);
     aA -= this.m_invIA * Vec2.crossVec2Vec2(rA, P);
-    cB.addMul(this.m_invMassB, P);
+    Vec2.addMul(cB, this.m_invMassB, P, cB);
     aB += this.m_invIB * Vec2.crossVec2Vec2(rB, P);
 
     Vec2.copy(cA, this.m_bodyA.c_position.c);

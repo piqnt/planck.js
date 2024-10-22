@@ -981,7 +981,7 @@ export class Body {
 
     // Don't accumulate velocity if the body is sleeping
     if (this.m_awakeFlag) {
-      this.m_linearVelocity.addMul(this.m_invMass, impulse);
+      Vec2.addMul(this.m_linearVelocity, this.m_invMass, impulse, this.m_linearVelocity);
       this.m_angularVelocity += this.m_invI * Vec2.crossVec2Vec2(Vec2.sub(point, this.m_sweep.c), impulse);
     }
   }

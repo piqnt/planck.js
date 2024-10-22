@@ -42,14 +42,6 @@ export class Vec2 {
   x: number;
   y: number;
 
-  constructor(x: number=0, y: number=0) {
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof Vec2)) {
-      return Vec2.create(x, y);
-    }
-    this.x = x;
-    this.y = y;
-    _ASSERT && Vec2.assert(this);
-  }
 
   /**
    * create a new Vec2
@@ -154,15 +146,16 @@ export class Vec2 {
     return Vec2.set(src.x + x, src.y + y, out);
   }
 
-  addMul(a: number, v: Vec2Value): Vec2Value {
+  /**
+   *  out = src + (a * v)
+   */
+  static addMul(src: Vec2Value, a: number, v: Vec2Value, out: Vec2Value=Vec2.create()): Vec2Value {
     _ASSERT && console.assert(Number.isFinite(a));
     _ASSERT && Vec2.assert(v);
     const x = a * v.x;
     const y = a * v.y;
 
-    this.x += x;
-    this.y += y;
-    return this;
+    return Vec2.set(src.x + x, src.y + y, out);
   }
 
   /**
@@ -173,22 +166,23 @@ export class Vec2 {
     _ASSERT && Vec2.assert(v);
     _ASSERT && console.assert(Number.isFinite(b));
     _ASSERT && Vec2.assert(w);
-    
+
     const x = a * v.x + b * w.x;
     const y = a * v.y + b * w.y;
 
     return Vec2.set(src.x - x, src.y - y, out);
   }
 
-  subMul(a: number, v: Vec2Value): Vec2Value {
+  /**
+   *  out = src - (a * v)
+   */
+  static subMul(src: Vec2Value, a: number, v: Vec2Value, out: Vec2Value=Vec2.create()): Vec2Value {
     _ASSERT && console.assert(Number.isFinite(a));
     _ASSERT && Vec2.assert(v);
     const x = a * v.x;
     const y = a * v.y;
 
-    this.x -= x;
-    this.y -= y;
-    return this;
+    return Vec2.set(src.x - x, src.y - y, out);
   }
 
   /**
@@ -215,7 +209,7 @@ export class Vec2 {
     }
     const invLength = 1.0 / length;
 
-    Vec2.set(v.x * invLength, v.y * invLengthx, out)
+    Vec2.set(v.x * invLength, v.y * invLength, out)
     return length;
   }
 
@@ -425,7 +419,7 @@ export class Vec2 {
     return Vec2.set((v.x + w.x) * 0.5, (v.y + w.y) * 0.5, out);
   }
 
-  static upper(v: Vec2Value, w: Vec2Value, out: Vec2Value=Vec2.create(): Vec2Value {
+  static upper(v: Vec2Value, w: Vec2Value, out: Vec2Value=Vec2.create()): Vec2Value {
     _ASSERT && Vec2.assert(v);
     _ASSERT && Vec2.assert(w);
     return Vec2.set(math_max(v.x, w.x), math_max(v.y, w.y), out);

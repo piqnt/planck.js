@@ -359,10 +359,10 @@ export class MotorJoint extends Joint {
 
       const P = Vec2.create(this.m_linearImpulse.x, this.m_linearImpulse.y);
 
-      vA.subMul(mA, P);
+      Vec2.subMul(vA, mA, P, vA);
       wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_angularImpulse);
 
-      vB.addMul(mB, P);
+      Vec2.addMul(vB, mB, P, vB);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_angularImpulse);
 
     } else {
@@ -410,7 +410,7 @@ export class MotorJoint extends Joint {
       Vec2.addCombine(Cdot, 1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB), Cdot);
       Vec2.subCombine(Cdot, 1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA), Cdot);
 
-      Cdot.addMul(inv_h * this.m_correctionFactor, this.m_linearError);
+      Vec2.addMul(Cdot, inv_h * this.m_correctionFactor, this.m_linearError, Cdot);
 
       let impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
       const oldImpulse = Vec2.clone(this.m_linearImpulse);
@@ -422,10 +422,10 @@ export class MotorJoint extends Joint {
 
       impulse = Vec2.sub(this.m_linearImpulse, oldImpulse);
 
-      vA.subMul(mA, impulse);
+      Vec2.subMul(vA, mA, impulse, vA);
       wA -= iA * Vec2.crossVec2Vec2(this.m_rA, impulse);
 
-      vB.addMul(mB, impulse);
+      Vec2.addMul(vB, mB, impulse, vB);
       wB += iB * Vec2.crossVec2Vec2(this.m_rB, impulse);
     }
 

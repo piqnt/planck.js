@@ -403,16 +403,16 @@ export class GearJoint extends Joint {
     this.m_mass = this.m_mass > 0.0 ? 1.0 / this.m_mass : 0.0;
 
     if (step.warmStarting) {
-      vA.addMul(this.m_mA * this.m_impulse, this.m_JvAC);
+      Vec2.addMul(vA, this.m_mA * this.m_impulse, this.m_JvAC, vA);
       wA += this.m_iA * this.m_impulse * this.m_JwA;
 
-      vB.addMul(this.m_mB * this.m_impulse, this.m_JvBD);
+      Vec2.addMul(vB, this.m_mB * this.m_impulse, this.m_JvBD, vB);
       wB += this.m_iB * this.m_impulse * this.m_JwB;
 
-      vC.subMul(this.m_mC * this.m_impulse, this.m_JvAC);
+      Vec2.subMul(vC, this.m_mC * this.m_impulse, this.m_JvAC, vC);
       wC -= this.m_iC * this.m_impulse * this.m_JwC;
 
-      vD.subMul(this.m_mD * this.m_impulse, this.m_JvBD);
+      Vec2.subMul(vD, this.m_mD * this.m_impulse, this.m_JvBD, vD);
       wD -= this.m_iD * this.m_impulse * this.m_JwD;
 
     } else {
@@ -445,13 +445,13 @@ export class GearJoint extends Joint {
     const impulse = -this.m_mass * Cdot;
     this.m_impulse += impulse;
 
-    vA.addMul(this.m_mA * impulse, this.m_JvAC);
+    Vec2.addMul(vA, this.m_mA * impulse, this.m_JvAC, vA);
     wA += this.m_iA * impulse * this.m_JwA;
-    vB.addMul(this.m_mB * impulse, this.m_JvBD);
+    Vec2.addMul(vB, this.m_mB * impulse, this.m_JvBD, vB);
     wB += this.m_iB * impulse * this.m_JwB;
-    vC.subMul(this.m_mC * impulse, this.m_JvAC);
+    Vec2.subMul(vC, this.m_mC * impulse, this.m_JvAC, vC);
     wC -= this.m_iC * impulse * this.m_JwC;
-    vD.subMul(this.m_mD * impulse, this.m_JvBD);
+    Vec2.subMul(vD, this.m_mD * impulse, this.m_JvBD, vD);
     wD -= this.m_iD * impulse * this.m_JwD;
 
     Vec2.copy(vA, this.m_bodyA.c_velocity.v);
@@ -544,13 +544,13 @@ export class GearJoint extends Joint {
       impulse = -C / mass;
     }
 
-    cA.addMul(this.m_mA * impulse, JvAC);
+    Vec2.addMul(cA, this.m_mA * impulse, JvAC, cA);
     aA += this.m_iA * impulse * JwA;
-    cB.addMul(this.m_mB * impulse, JvBD);
+    Vec2.addMul(cB, this.m_mB * impulse, JvBD, cB);
     aB += this.m_iB * impulse * JwB;
-    cC.subMul(this.m_mC * impulse, JvAC);
+    Vec2.subMul(cC, this.m_mC * impulse, JvAC, cC);
     aC -= this.m_iC * impulse * JwC;
-    cD.subMul(this.m_mD * impulse, JvBD);
+    Vec2.subMul(cD, this.m_mD * impulse, JvBD, cD);
     aD -= this.m_iD * impulse * JwD;
 
     Vec2.copy(cA, this.m_bodyA.c_position.c);

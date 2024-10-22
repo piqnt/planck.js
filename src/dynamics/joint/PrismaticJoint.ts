@@ -660,10 +660,10 @@ export class PrismaticJoint extends Joint {
       const LB = this.m_impulse.x * this.m_s2 + this.m_impulse.y
           + (this.m_motorImpulse + this.m_impulse.z) * this.m_a2;
 
-      vA.subMul(mA, P);
+      Vec2.subMul(vA, mA, P, vA);
       wA -= iA * LA;
 
-      vB.addMul(mB, P);
+      Vec2.addMul(vB, mB, P, vB);
       wB += iB * LB;
     } else {
       this.m_impulse.setZero();
@@ -702,10 +702,10 @@ export class PrismaticJoint extends Joint {
       const LA = impulse * this.m_a1;
       const LB = impulse * this.m_a2;
 
-      vA.subMul(mA, P);
+      Vec2.subMul(vA, mA, P, vA);
       wA -= iA * LA;
 
-      vB.addMul(mB, P);
+      Vec2.addMul(vB, mB, P, vB);
       wB += iB * LB;
     }
 
@@ -745,10 +745,10 @@ export class PrismaticJoint extends Joint {
       const LA = df.x * this.m_s1 + df.y + df.z * this.m_a1;
       const LB = df.x * this.m_s2 + df.y + df.z * this.m_a2;
 
-      vA.subMul(mA, P);
+      Vec2.subMul(vA, mA, P, vA);
       wA -= iA * LA;
 
-      vB.addMul(mB, P);
+      Vec2.addMul(vB, mB, P, vB);
       wB += iB * LB;
     } else {
       // Limit is inactive, just solve the prismatic constraint in block form.
@@ -760,10 +760,10 @@ export class PrismaticJoint extends Joint {
       const LA = df.x * this.m_s1 + df.y;
       const LB = df.x * this.m_s2 + df.y;
 
-      vA.subMul(mA, P);
+      Vec2.subMul(vA, mA, P, vA);
       wA -= iA * LA;
 
-      vB.addMul(mB, P);
+      Vec2.addMul(vB, mB, P, vB);
       wB += iB * LB;
     }
 
@@ -888,9 +888,9 @@ export class PrismaticJoint extends Joint {
     const LA = impulse.x * s1 + impulse.y + impulse.z * a1;
     const LB = impulse.x * s2 + impulse.y + impulse.z * a2;
 
-    cA.subMul(mA, P);
+    Vec2.subMul(cA, mA, P, cA);
     aA -= iA * LA;
-    cB.addMul(mB, P);
+    Vec2.addMul(cB, mB, P, cB);
     aB += iB * LB;
 
     this.m_bodyA.c_position.c = cA;

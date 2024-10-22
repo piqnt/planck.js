@@ -318,10 +318,10 @@ export class FrictionJoint extends Joint {
 
       const P = Vec2.create(this.m_linearImpulse.x, this.m_linearImpulse.y);
 
-      vA.subMul(mA, P);
+      Vec2.subMul(vA, mA, P, vA);
       wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_angularImpulse);
 
-      vB.addMul(mB, P);
+      Vec2.addMul(vB, mB, P, vB);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_angularImpulse);
 
     } else {
@@ -382,10 +382,10 @@ export class FrictionJoint extends Joint {
 
       impulse = Vec2.sub(this.m_linearImpulse, oldImpulse);
 
-      vA.subMul(mA, impulse);
+      Vec2.subMul(vA, mA, impulse, vA);
       wA -= iA * Vec2.crossVec2Vec2(this.m_rA, impulse);
 
-      vB.addMul(mB, impulse);
+      Vec2.addMul(vB, mB, impulse, vB);
       wB += iB * Vec2.crossVec2Vec2(this.m_rB, impulse);
     }
 

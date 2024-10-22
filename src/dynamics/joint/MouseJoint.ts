@@ -363,9 +363,8 @@ export class MouseJoint extends Joint {
 
     if (step.warmStarting) {
       Vec2.scale(this.m_impulse, step.dtRatio, this.m_impulse);
-      vB.addMul(this.m_invMassB, this.m_impulse);
+      Vec2.addMul(vB, this.m_invMassB, this.m_impulse, vB);
       wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, this.m_impulse);
-
     } else {
       Vec2.setZero(this.m_impulse);
     }
@@ -395,7 +394,7 @@ export class MouseJoint extends Joint {
     Vec2.clamp(this.m_impulse, maxImpulse, this.m_impulse);
     impulse = Vec2.sub(this.m_impulse, oldImpulse);
 
-    vB.addMul(this.m_invMassB, impulse);
+    Vec2.addMul(vB, this.m_invMassB, impulse, vB);
     wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, impulse);
 
     Vec2.copy(vB, velocity.v);

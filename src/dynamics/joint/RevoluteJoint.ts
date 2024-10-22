@@ -556,10 +556,10 @@ export class RevoluteJoint extends Joint {
 
       const P = Vec2.create(this.m_impulse.x, this.m_impulse.y);
 
-      vA.subMul(mA, P);
+      Vec2.subMul(vA, mA, P, vA);
       wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_motorImpulse + this.m_impulse.z);
 
-      vB.addMul(mB, P);
+      Vec2.addMul(vB, mB, P, vB);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_motorImpulse + this.m_impulse.z);
 
     } else {
@@ -650,10 +650,10 @@ export class RevoluteJoint extends Joint {
 
       const P = Vec2.create(impulse.x, impulse.y);
 
-      vA.subMul(mA, P);
+      Vec2.subMul(vA, mA, P, vA);
       wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + impulse.z);
 
-      vB.addMul(mB, P);
+      Vec2.addMul(vB, mB, P, vB);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + impulse.z);
 
     } else {
@@ -667,10 +667,10 @@ export class RevoluteJoint extends Joint {
       this.m_impulse.x += impulse.x;
       this.m_impulse.y += impulse.y;
 
-      vA.subMul(mA, impulse);
+      Vec2.subMul(vA, mA, impulse, vA);
       wA -= iA * Vec2.crossVec2Vec2(this.m_rA, impulse);
 
-      vB.addMul(mB, impulse);
+      Vec2.addMul(vB, mB, impulse, vB);
       wB += iB * Vec2.crossVec2Vec2(this.m_rB, impulse);
     }
 
@@ -755,10 +755,10 @@ export class RevoluteJoint extends Joint {
 
       const impulse = Vec2.neg(K.solve(C));
 
-      cA.subMul(mA, impulse);
+      Vec2.subMul(cA, mA, impulse, cA);
       aA -= iA * Vec2.crossVec2Vec2(rA, impulse);
 
-      cB.addMul(mB, impulse);
+      Vec2.addMul(cB, mB, impulse, cB);
       aB += iB * Vec2.crossVec2Vec2(rB, impulse);
     }
 
