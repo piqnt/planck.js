@@ -354,7 +354,8 @@ export class MouseJoint extends Joint {
     this.m_mass = K.getInverse();
 
     Vec2.copy(cB, this.m_C);
-    this.m_C.addCombine(1, this.m_rB, -1, this.m_targetA);
+
+    Vec2.addCombine(this.m_C, 1, this.m_rB, -1, this.m_targetA, this.m_C);
     Vec2.scale(this.m_C, this.m_beta, this.m_C);
 
     // Cheat with some damping
@@ -383,7 +384,7 @@ export class MouseJoint extends Joint {
     const Cdot = Vec2.crossNumVec2(wB, this.m_rB);
     Vec2.add(Cdot, vB, Cdot);
 
-    Cdot.addCombine(1, this.m_C, this.m_gamma, this.m_impulse);
+    Vec2.addCombine(Cdot, 1, this.m_C, this.m_gamma, this.m_impulse, Cdot);
     Vec2.neg(Cdot, Cdot);
 
     let impulse = Mat22.mulVec2(this.m_mass, Cdot);

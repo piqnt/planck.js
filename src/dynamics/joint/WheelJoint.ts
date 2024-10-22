@@ -468,7 +468,7 @@ export class WheelJoint extends Joint {
     const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
     const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     const d = Vec2.zero();
-    d.addCombine(1, cB, 1, rB);
+    Vec2.addCombine(d, 1, cB, 1, rB, d);
     d.subCombine(1, cA, 1, rA);
 
     // Point to line constraint
@@ -648,7 +648,7 @@ export class WheelJoint extends Joint {
     const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
     const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
     const d = Vec2.zero();
-    d.addCombine(1, cB, 1, rB);
+    Vec2.addCombine(d, 1, cB, 1, rB, d);
     d.subCombine(1, cA, 1, rA);
 
     const ay = Rot.mulVec2(qA, this.m_localYAxisA);

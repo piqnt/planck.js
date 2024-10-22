@@ -359,7 +359,7 @@ export class RopeJoint extends Joint {
     const rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_localCenterA);
     const rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
     const u = Vec2.zero();
-    u.addCombine(1, cB, 1, rB);
+    Vec2.addCombine(u, 1, cB, 1, rB, u);
     u.subCombine(1, cA, 1, rA);
 
     const length = Vec2.normalize(u, u);

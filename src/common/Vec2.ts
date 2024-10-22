@@ -139,21 +139,19 @@ export class Vec2 {
   }
 
   /**
-   * Add linear combination of v and w: `a * v + b * w`
+   * Add linear combination of v and w: `src + (a * v + b * w)`
    */
-  addCombine(a: number, v: Vec2Value, b: number, w: Vec2Value): Vec2Value {
+  static addCombine(src: Vec2Value, a: number, v: Vec2Value, b: number, w: Vec2Value, out: Vec2Value=Vec2.create()): Vec2Value {
     _ASSERT && console.assert(Number.isFinite(a));
     _ASSERT && Vec2.assert(v);
+    _ASSERT && Vec2.assert(src);
     _ASSERT && console.assert(Number.isFinite(b));
     _ASSERT && Vec2.assert(w);
 
     const x = a * v.x + b * w.x;
     const y = a * v.y + b * w.y;
 
-    // `this` may be `w`
-    this.x += x;
-    this.y += y;
-    return this;
+    return Vec2.set(src.x + x, src.y + y, out);
   }
 
   addMul(a: number, v: Vec2Value): Vec2Value {

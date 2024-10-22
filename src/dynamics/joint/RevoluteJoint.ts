@@ -602,7 +602,7 @@ export class RevoluteJoint extends Joint {
     // Solve limit constraint.
     if (this.m_enableLimit && this.m_limitState != LimitState.inactiveLimit && fixedRotation == false) {
       const Cdot1 = Vec2.zero();
-      Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
+      const Cdot1 = Vec2.addCombine(Cdot1, 1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB), Cdot1);
       Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
       const Cdot2 = wB - wA;
       const Cdot = Vec3.create(Cdot1.x, Cdot1.y, Cdot2);
@@ -658,8 +658,9 @@ export class RevoluteJoint extends Joint {
     } else {
       // Solve point-to-point constraint
       const Cdot = Vec2.zero();
-      Cdot.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
-      Cdot.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
+      Vec2.addCombine(Cdot, 1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB), Cdot);
+      Vec2.addCombine(Cdot, 1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA), Cdot);
+
       const impulse = this.m_mass.solve22(Vec2.neg(Cdot));
 
       this.m_impulse.x += impulse.x;
@@ -735,7 +736,7 @@ export class RevoluteJoint extends Joint {
       const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
 
       const C = Vec2.zero();
-      C.addCombine(1, cB, 1, rB);
+      Vec2.addCombine(C, 1, cB, 1, rB, C);
       C.subCombine(1, cA, 1, rA);
       positionError = Vec2.length(C);
 
