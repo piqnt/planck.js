@@ -51,13 +51,13 @@ export class EdgeShape extends Shape {
   /** @hidden */ m_radius: number;
 
   // These are the edge vertices
-  /** @hidden */ m_vertex1: Vec2;
-  /** @hidden */ m_vertex2: Vec2;
+  /** @hidden */ m_vertex1: Vec2Value;
+  /** @hidden */ m_vertex2: Vec2Value;
 
   // Optional adjacent vertices. These are used for smooth collision.
   // Used by chain shape.
-  /** @hidden */ m_vertex0: Vec2;
-  /** @hidden */ m_vertex3: Vec2;
+  /** @hidden */ m_vertex0: Vec2Value;
+  /** @hidden */ m_vertex3: Vec2Value;
   /** @hidden */ m_hasVertex0: boolean;
   /** @hidden */ m_hasVertex3: boolean;
 
@@ -143,7 +143,7 @@ export class EdgeShape extends Shape {
   /**
    * Optional next vertex, used for smooth collision.
    */
-  getNextVertex(): Vec2 {
+  getNextVertex(): Vec2Value {
     return this.m_vertex3;
   }
 
@@ -169,7 +169,7 @@ export class EdgeShape extends Shape {
   /**
    * Optional prev vertex, used for smooth collision.
    */
-  getPrevVertex(): Vec2 {
+  getPrevVertex(): Vec2Value {
     return this.m_vertex0;
   }
 

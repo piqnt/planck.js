@@ -43,7 +43,7 @@ export class CircleShape extends Shape {
   static TYPE = 'circle' as const;
   /** @hidden */ m_type: 'circle';
 
-  /** @hidden */ m_p: Vec2;
+  /** @hidden */ m_p: Vec2Value;
   /** @hidden */ m_radius: number;
 
   constructor(position: Vec2Value, radius?: number);
@@ -100,7 +100,7 @@ export class CircleShape extends Shape {
     return this.m_radius;
   }
 
-  getCenter(): Vec2 {
+  getCenter(): Vec2Value {
     return this.m_p;
   }
 

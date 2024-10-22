@@ -116,7 +116,7 @@ export class Mat33 {
    * computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
    * equation.
    */
-  solve22(v: Vec2Value): Vec2 {
+  solve22(v: Vec2Value): Vec2Value {
     const a11 = this.ex.x;
     const a12 = this.ey.x;
     const a21 = this.ex.y;
@@ -187,7 +187,7 @@ export class Mat33 {
   /**
    * Multiply a matrix times a vector.
    */
-  static mul(a: Mat33, b: Vec2Value): Vec2;
+  static mul(a: Mat33, b: Vec2Value): Vec2Value;
   static mul(a: Mat33, b: Vec3Value): Vec3;
   static mul(a, b) {
     _ASSERT && Mat33.assert(a);
@@ -217,7 +217,7 @@ export class Mat33 {
     return Vec3.create(x, y, z);
   }
 
-  static mulVec2(a: Mat33, b: Vec2Value): Vec2 {
+  static mulVec2(a: Mat33, b: Vec2Value): Vec2Value {
     _ASSERT && Mat33.assert(a);
     _ASSERT && Vec2.assert(b);
     const x = a.ex.x * b.x + a.ey.x * b.y;

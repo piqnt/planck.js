@@ -56,9 +56,9 @@ export class PolygonShape extends Shape {
   static TYPE = 'polygon' as const;
   /** @hidden */ m_type: 'polygon';
 
-  /** @hidden */ m_centroid: Vec2;
-  /** @hidden */ m_vertices: Vec2[]; // [Settings.maxPolygonVertices]
-  /** @hidden */ m_normals: Vec2[]; // [Settings.maxPolygonVertices]
+  /** @hidden */ m_centroid: Vec2Value;
+  /** @hidden */ m_vertices: Vec2Value[]; // [Settings.maxPolygonVertices]
+  /** @hidden */ m_normals: Vec2Value[]; // [Settings.maxPolygonVertices]
   /** @hidden */ m_count: number;
   /** @hidden */ m_radius: number;
 
@@ -93,7 +93,7 @@ export class PolygonShape extends Shape {
 
   /** @internal */
   static _deserialize(data: any, fixture: any, restore: any): PolygonShape {
-    const vertices: Vec2[] = [];
+    const vertices: Vec2Value[] = [];
     if (data.vertices) {
       for (let i = 0; i < data.vertices.length; i++) {
         vertices.push(restore(Vec2, data.vertices[i]));
@@ -164,7 +164,7 @@ export class PolygonShape extends Shape {
     let n = math_min(vertices.length, Settings.maxPolygonVertices);
 
     // Perform welding and copy vertices into local buffer.
-    const ps: Vec2[] = []; // [Settings.maxPolygonVertices];
+    const ps: Vec2Value[] = []; // [Settings.maxPolygonVertices];
     for (let i = 0; i < n; ++i) {
       const v = vertices[i];
 
@@ -543,7 +543,7 @@ export class PolygonShape extends Shape {
   }
 }
 
-/** @internal */ function computeCentroid(vs: Vec2[], count: number): Vec2 {
+/** @internal */ function computeCentroid(vs: Vec2Value[], count: number): Vec2Value {
   _ASSERT && console.assert(count >= 3);
 
   const c = Vec2.zero();

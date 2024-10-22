@@ -42,7 +42,7 @@ export type TransformValue = {
  */
 export class Transform {
   /** position */
-  p: Vec2;
+  p: Vec2Value;
 
   /** rotation */
   q: Rot;
@@ -125,9 +125,9 @@ export class Transform {
     _ASSERT && console.assert(!Transform.isValid(o), 'Invalid Transform!', o);
   }
 
-  static mul(a: TransformValue, b: Vec2Value): Vec2;
+  static mul(a: TransformValue, b: Vec2Value): Vec2Value;
   static mul(a: TransformValue, b: TransformValue): Transform;
-  // static mul(a: Transform, b: Vec2Value[]): Vec2[];
+  // static mul(a: Transform, b: Vec2Value[]): Vec2Value[];
   // static mul(a: Transform, b: Transform[]): Transform[];
   static mul(a, b) {
     if (Array.isArray(b)) {
@@ -147,7 +147,7 @@ export class Transform {
     }
   }
 
-  static mulAll(a: Transform, b: Vec2Value[]): Vec2[];
+  static mulAll(a: Transform, b: Vec2Value[]): Vec2Value[];
   static mulAll(a: Transform, b: Transform[]): Transform[];
   static mulAll(a: TransformValue, b) {
     _ASSERT && Transform.assert(a);
@@ -162,12 +162,12 @@ export class Transform {
   static mulFn(a: TransformValue) {
     // todo: this was used in examples, remove in the future
     _ASSERT && Transform.assert(a);
-    return function(b: Vec2Value): Vec2 {
+    return function(b: Vec2Value): Vec2Value {
       return Transform.mul(a, b);
     };
   }
 
-  static mulVec2(a: TransformValue, b: Vec2Value): Vec2 {
+  static mulVec2(a: TransformValue, b: Vec2Value): Vec2Value {
     _ASSERT && Transform.assert(a);
     _ASSERT && Vec2.assert(b);
     const x = (a.q.c * b.x - a.q.s * b.y) + a.p.x;
@@ -186,7 +186,7 @@ export class Transform {
     return xf;
   }
 
-  static mulT(a: TransformValue, b: Vec2Value): Vec2;
+  static mulT(a: TransformValue, b: Vec2Value): Vec2Value;
   static mulT(a: TransformValue, b: TransformValue): Transform;
   static mulT(a, b) {
     if ('x' in b && 'y' in b) {
@@ -197,7 +197,7 @@ export class Transform {
     }
   }
 
-  static mulTVec2(a: TransformValue, b: Vec2Value): Vec2 {
+  static mulTVec2(a: TransformValue, b: Vec2Value): Vec2Value {
     _ASSERT && Transform.assert(a);
     _ASSERT && Vec2.assert(b);
     const px = b.x - a.p.x;

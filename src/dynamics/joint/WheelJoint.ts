@@ -115,10 +115,10 @@ export class WheelJoint extends Joint {
   static TYPE = 'wheel-joint' as const;
 
   /** @internal */ m_type: 'wheel-joint';
-  /** @internal */ m_localAnchorA: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
-  /** @internal */ m_localXAxisA: Vec2;
-  /** @internal */ m_localYAxisA: Vec2;
+  /** @internal */ m_localAnchorA: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
+  /** @internal */ m_localXAxisA: Vec2Value;
+  /** @internal */ m_localYAxisA: Vec2Value;
 
   /** @internal */ m_mass: number;
   /** @internal */ m_impulse: number;
@@ -138,15 +138,15 @@ export class WheelJoint extends Joint {
   /** @internal */ m_gamma: number;
 
   // Solver temp
-  /** @internal */ m_localCenterA: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_localCenterA: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
   /** @internal */ m_invMassA: number;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIA: number;
   /** @internal */ m_invIB: number;
 
-  /** @internal */ m_ax: Vec2;
-  /** @internal */ m_ay: Vec2;
+  /** @internal */ m_ax: Vec2Value;
+  /** @internal */ m_ay: Vec2Value;
   /** @internal */ m_sAx: number;
   /** @internal */ m_sBx: number;
   /** @internal */ m_sAy: number;
@@ -288,21 +288,21 @@ export class WheelJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA(): Vec2 {
+  getLocalAnchorA(): Vec2Value {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB(): Vec2 {
+  getLocalAnchorB(): Vec2Value {
     return this.m_localAnchorB;
   }
 
   /**
    * The local joint axis relative to bodyA.
    */
-  getLocalAxisA(): Vec2 {
+  getLocalAxisA(): Vec2Value {
     return this.m_localXAxisA;
   }
 
@@ -412,21 +412,21 @@ export class WheelJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
+  getReactionForce(inv_dt: number): Vec2Value {
     return Vec2.combine(this.m_impulse, this.m_ay, this.m_springImpulse, this.m_ax).mul(inv_dt);
   }
 

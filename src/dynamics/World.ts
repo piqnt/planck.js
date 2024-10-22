@@ -94,7 +94,7 @@ export interface WorldDef {
  *
  * @returns A number to update the maxFraction
  */
-export type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) => number;
+export type WorldRayCastCallback = (fixture: Fixture, point: Vec2Value, normal: Vec2Value, fraction: number) => number;
 
 /**
  * Called for each fixture found in the query AABB. It may return `false` to terminate the query.
@@ -112,7 +112,7 @@ export class World {
   /** @internal */ m_jointCount: number;
   /** @internal */ m_stepComplete: boolean;
   /** @internal */ m_allowSleep: boolean;
-  /** @internal */ m_gravity: Vec2;
+  /** @internal */ m_gravity: Vec2Value;
   /** @internal */ m_clearForces: boolean;
   /** @internal */ m_newFixture: boolean;
   /** @internal */ m_locked: boolean;
@@ -132,7 +132,7 @@ export class World {
   /**
    * @param def World definition or gravity vector.
    */
-  constructor(def?: WorldDef | Vec2 | null) {
+  constructor(def?: WorldDef | Vec2Value | null) {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof World)) {
       return new World(def);
     }
@@ -143,7 +143,7 @@ export class World {
     if (!def) {
       def = {};
     } else if (Vec2.isValid(def)) {
-      def = { gravity: def as Vec2 };
+      def = { gravity: def as Vec2Value };
     }
 
     def = options(def, DEFAULTS) as WorldDef;
@@ -287,7 +287,7 @@ export class World {
   /**
    * Get the global gravity vector.
    */
-  getGravity(): Vec2 {
+  getGravity(): Vec2Value {
     return this.m_gravity;
   }
 

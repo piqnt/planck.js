@@ -103,10 +103,10 @@ export class PulleyJoint extends Joint {
   // static MIN_PULLEY_LENGTH: number = 2.0; // TODO where this is used?
 
   /** @internal */ m_type: 'pulley-joint';
-  /** @internal */ m_groundAnchorA: Vec2;
-  /** @internal */ m_groundAnchorB: Vec2;
-  /** @internal */ m_localAnchorA: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_groundAnchorA: Vec2Value;
+  /** @internal */ m_groundAnchorB: Vec2Value;
+  /** @internal */ m_localAnchorA: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
   /** @internal */ m_lengthA: number;
   /** @internal */ m_lengthB: number;
   /** @internal */ m_ratio: number;
@@ -114,12 +114,12 @@ export class PulleyJoint extends Joint {
   /** @internal */ m_impulse: number;
 
   // Solver temp
-  /** @internal */ m_uA: Vec2;
-  /** @internal */ m_uB: Vec2;
-  /** @internal */ m_rA: Vec2;
-  /** @internal */ m_rB: Vec2;
-  /** @internal */ m_localCenterA: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_uA: Vec2Value;
+  /** @internal */ m_uB: Vec2Value;
+  /** @internal */ m_rA: Vec2Value;
+  /** @internal */ m_rB: Vec2Value;
+  /** @internal */ m_localCenterA: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
   /** @internal */ m_invMassA: number;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIA: number;
@@ -227,14 +227,14 @@ export class PulleyJoint extends Joint {
   /**
    * Get the first ground anchor.
    */
-  getGroundAnchorA(): Vec2 {
+  getGroundAnchorA(): Vec2Value {
     return this.m_groundAnchorA;
   }
 
   /**
    * Get the second ground anchor.
    */
-  getGroundAnchorB(): Vec2 {
+  getGroundAnchorB(): Vec2Value {
     return this.m_groundAnchorB;
   }
 
@@ -290,21 +290,21 @@ export class PulleyJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
+  getReactionForce(inv_dt: number): Vec2Value {
     return Vec2.mulNumVec2(this.m_impulse, this.m_uB).mul(inv_dt);
   }
 

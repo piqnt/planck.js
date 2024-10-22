@@ -88,24 +88,24 @@ export class GearJoint extends Joint {
   /** @internal */ m_type1: 'revolute-joint' | 'prismatic-joint';
   /** @internal */ m_type2: 'revolute-joint' | 'prismatic-joint';
   /** @internal */ m_bodyC: Body;
-  /** @internal */ m_localAnchorC: Vec2;
-  /** @internal */ m_localAnchorA: Vec2;
+  /** @internal */ m_localAnchorC: Vec2Value;
+  /** @internal */ m_localAnchorA: Vec2Value;
   /** @internal */ m_referenceAngleA: number;
-  /** @internal */ m_localAxisC: Vec2;
+  /** @internal */ m_localAxisC: Vec2Value;
   /** @internal */ m_bodyD: Body;
-  /** @internal */ m_localAnchorD: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_localAnchorD: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
   /** @internal */ m_referenceAngleB: number;
-  /** @internal */ m_localAxisD: Vec2;
+  /** @internal */ m_localAxisD: Vec2Value;
   /** @internal */ m_ratio: number;
   /** @internal */ m_constant: number;
   /** @internal */ m_impulse: number;
 
   // Solver temp
-  /** @internal */ m_lcA: Vec2;
-  /** @internal */ m_lcB: Vec2;
-  /** @internal */ m_lcC: Vec2;
-  /** @internal */ m_lcD: Vec2;
+  /** @internal */ m_lcA: Vec2Value;
+  /** @internal */ m_lcB: Vec2Value;
+  /** @internal */ m_lcC: Vec2Value;
+  /** @internal */ m_lcD: Vec2Value;
   /** @internal */ m_mA: number;
   /** @internal */ m_mB: number;
   /** @internal */ m_mC: number;
@@ -114,8 +114,8 @@ export class GearJoint extends Joint {
   /** @internal */ m_iB: number;
   /** @internal */ m_iC: number;
   /** @internal */ m_iD: number;
-  /** @internal */ m_JvAC: Vec2;
-  /** @internal */ m_JvBD: Vec2;
+  /** @internal */ m_JvAC: Vec2Value;
+  /** @internal */ m_JvBD: Vec2Value;
   /** @internal */ m_JwA: number;
   /** @internal */ m_JwB: number;
   /** @internal */ m_JwC: number;
@@ -305,21 +305,21 @@ export class GearJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
+  getReactionForce(inv_dt: number): Vec2Value {
     return Vec2.mulNumVec2(this.m_impulse, this.m_JvAC).mul(inv_dt);
   }
 
@@ -486,8 +486,8 @@ export class GearJoint extends Joint {
     let coordinateA: number;
     let coordinateB: number;
 
-    let JvAC: Vec2;
-    let JvBD: Vec2;
+    let JvAC: Vec2Value;
+    let JvBD: Vec2Value;
     let JwA: number;
     let JwB: number;
     let JwC: number;

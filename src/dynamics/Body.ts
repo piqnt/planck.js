@@ -203,9 +203,9 @@ export class Body {
   // position and velocity correction
   /** @internal */ c_velocity: Velocity;
   /** @internal */ c_position: Position;
-  /** @internal */ m_force: Vec2;
+  /** @internal */ m_force: Vec2Value;
   /** @internal */ m_torque: number;
-  /** @internal */ m_linearVelocity: Vec2;
+  /** @internal */ m_linearVelocity: Vec2Value;
   /** @internal */ m_angularVelocity: number;
   /** @internal */ m_linearDamping: number;
   /** @internal */ m_angularDamping: number;
@@ -626,7 +626,7 @@ export class Body {
   /**
    * Get the world position for the body's origin.
    */
-  getPosition(): Vec2 {
+  getPosition(): Vec2Value {
     return this.m_xf.p;
   }
 
@@ -648,14 +648,14 @@ export class Body {
   /**
    * Get the world position of the center of mass.
    */
-  getWorldCenter(): Vec2 {
+  getWorldCenter(): Vec2Value {
     return this.m_sweep.c;
   }
 
   /**
    * Get the local position of the center of mass.
    */
-  getLocalCenter(): Vec2 {
+  getLocalCenter(): Vec2Value {
     return this.m_sweep.localCenter;
   }
 
@@ -664,7 +664,7 @@ export class Body {
    *
    * @return the linear velocity of the center of mass.
    */
-  getLinearVelocity(): Vec2 {
+  getLinearVelocity(): Vec2Value {
     return this.m_linearVelocity;
   }
 
@@ -673,7 +673,7 @@ export class Body {
    *
    * @param worldPoint A point in world coordinates.
    */
-  getLinearVelocityFromWorldPoint(worldPoint: Vec2Value): Vec2 {
+  getLinearVelocityFromWorldPoint(worldPoint: Vec2Value): Vec2Value {
     const localCenter = Vec2.sub(worldPoint, this.m_sweep.c);
     return Vec2.add(this.m_linearVelocity, Vec2.crossNumVec2(this.m_angularVelocity,
       localCenter));
@@ -684,7 +684,7 @@ export class Body {
    *
    * @param localPoint A point in local coordinates.
    */
-  getLinearVelocityFromLocalPoint(localPoint: Vec2Value): Vec2 {
+  getLinearVelocityFromLocalPoint(localPoint: Vec2Value): Vec2Value {
     return this.getLinearVelocityFromWorldPoint(this.getWorldPoint(localPoint));
   }
 
@@ -1157,28 +1157,28 @@ export class Body {
   /**
    * Get the corresponding world point of a local point.
    */
-  getWorldPoint(localPoint: Vec2Value): Vec2 {
+  getWorldPoint(localPoint: Vec2Value): Vec2Value {
     return Transform.mulVec2(this.m_xf, localPoint);
   }
 
   /**
    * Get the corresponding world vector of a local vector.
    */
-  getWorldVector(localVector: Vec2Value): Vec2 {
+  getWorldVector(localVector: Vec2Value): Vec2Value {
     return Rot.mulVec2(this.m_xf.q, localVector);
   }
 
   /**
    * Gets the corresponding local point of a world point.
    */
-  getLocalPoint(worldPoint: Vec2Value): Vec2 {
+  getLocalPoint(worldPoint: Vec2Value): Vec2Value {
     return Transform.mulTVec2(this.m_xf, worldPoint);
   }
 
   /**
    * Gets the corresponding local vector of a world vector.
    */
-  getLocalVector(worldVector: Vec2Value): Vec2 {
+  getLocalVector(worldVector: Vec2Value): Vec2Value {
     return Rot.mulTVec2(this.m_xf.q, worldVector);
   }
 }

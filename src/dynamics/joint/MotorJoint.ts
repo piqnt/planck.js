@@ -83,20 +83,20 @@ export class MotorJoint extends Joint {
   static TYPE = 'motor-joint' as const;
 
   /** @internal */ m_type: 'motor-joint';
-  /** @internal */ m_linearOffset: Vec2;
+  /** @internal */ m_linearOffset: Vec2Value;
   /** @internal */ m_angularOffset: number;
-  /** @internal */ m_linearImpulse: Vec2;
+  /** @internal */ m_linearImpulse: Vec2Value;
   /** @internal */ m_angularImpulse: number;
   /** @internal */ m_maxForce: number;
   /** @internal */ m_maxTorque: number;
   /** @internal */ m_correctionFactor: number;
 
   // Solver temp
-  /** @internal */ m_rA: Vec2;
-  /** @internal */ m_rB: Vec2;
-  /** @internal */ m_localCenterA: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
-  /** @internal */ m_linearError: Vec2;
+  /** @internal */ m_rA: Vec2Value;
+  /** @internal */ m_rB: Vec2Value;
+  /** @internal */ m_localCenterA: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
+  /** @internal */ m_linearError: Vec2Value;
   /** @internal */ m_angularError: number;
   /** @internal */ m_invMassA: number;
   /** @internal */ m_invMassB: number;
@@ -247,7 +247,7 @@ export class MotorJoint extends Joint {
     }
   }
 
-  getLinearOffset(): Vec2 {
+  getLinearOffset(): Vec2Value {
     return this.m_linearOffset;
   }
 
@@ -269,21 +269,21 @@ export class MotorJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getPosition();
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getPosition();
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
+  getReactionForce(inv_dt: number): Vec2Value {
     return Vec2.mulNumVec2(inv_dt, this.m_linearImpulse);
   }
 

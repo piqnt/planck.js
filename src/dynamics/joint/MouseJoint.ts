@@ -94,21 +94,21 @@ export class MouseJoint extends Joint {
   static TYPE = 'mouse-joint' as const;
 
   /** @internal */ m_type: 'mouse-joint';
-  /** @internal */ m_targetA: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_targetA: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
   /** @internal */ m_maxForce: number;
-  /** @internal */ m_impulse: Vec2;
+  /** @internal */ m_impulse: Vec2Value;
   /** @internal */ m_frequencyHz: number;
   /** @internal */ m_dampingRatio: number;
   /** @internal */ m_beta: number;
   /** @internal */ m_gamma: number;
   // Solver temp
-  /** @internal */ m_rB: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_rB: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIB: number;
   /** @internal */ m_mass: Mat22;
-  /** @internal */ m_C: Vec2;
+  /** @internal */ m_C: Vec2Value;
 
   constructor(def: MouseJointDef);
   constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2Value);
@@ -217,7 +217,7 @@ export class MouseJoint extends Joint {
     Vec2.copy(target, this.m_targetA);
   }
 
-  getTarget(): Vec2 {
+  getTarget(): Vec2Value {
     return this.m_targetA;
   }
 
@@ -266,21 +266,21 @@ export class MouseJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return Vec2.clone(this.m_targetA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
+  getReactionForce(inv_dt: number): Vec2Value {
     return Vec2.mulNumVec2(inv_dt, this.m_impulse);
   }
 

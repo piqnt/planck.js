@@ -47,7 +47,7 @@ export type RayCastCallback = (subInput: RayCastInput, id: number) => number;
  * where `p1` and `p2` come from RayCastInput.
  */
 export interface RayCastOutput {
-  normal: Vec2;
+  normal: Vec2Value;
   fraction: number;
 }
 
@@ -57,8 +57,8 @@ export interface AABBValue {
 }
 
 export class AABB {
-  lowerBound: Vec2;
-  upperBound: Vec2;
+  lowerBound: Vec2Value;
+  upperBound: Vec2Value;
 
   constructor(lower?: Vec2Value, upper?: Vec2Value) {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof AABB)) {
@@ -99,14 +99,14 @@ export class AABB {
   /**
    * Get the center of the AABB.
    */
-  getCenter(): Vec2 {
+  getCenter(): Vec2Value {
     return Vec2.create((this.lowerBound.x + this.upperBound.x) * 0.5, (this.lowerBound.y + this.upperBound.y) * 0.5);
   }
 
   /**
    * Get the extents of the AABB (half-widths).
    */
-  getExtents(): Vec2 {
+  getExtents(): Vec2Value {
     return Vec2.create((this.upperBound.x - this.lowerBound.x) * 0.5, (this.upperBound.y - this.lowerBound.y) * 0.5);
   }
 

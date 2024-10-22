@@ -134,10 +134,10 @@ export class PrismaticJoint extends Joint {
   static TYPE = 'prismatic-joint' as const;
 
   /** @internal */ m_type: 'prismatic-joint';
-  /** @internal */ m_localAnchorA: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
-  /** @internal */ m_localXAxisA: Vec2;
-  /** @internal */ m_localYAxisA: Vec2;
+  /** @internal */ m_localAnchorA: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
+  /** @internal */ m_localXAxisA: Vec2Value;
+  /** @internal */ m_localYAxisA: Vec2Value;
   /** @internal */ m_referenceAngle: number;
   /** @internal */ m_impulse: Vec3;
   /** @internal */ m_motorMass: number;
@@ -149,11 +149,11 @@ export class PrismaticJoint extends Joint {
   /** @internal */ m_enableLimit: boolean;
   /** @internal */ m_enableMotor: boolean;
   /** @internal */ m_limitState: number; // TODO enum
-  /** @internal */ m_axis: Vec2;
-  /** @internal */ m_perp: Vec2;
+  /** @internal */ m_axis: Vec2Value;
+  /** @internal */ m_perp: Vec2Value;
   // Solver temp
-  /** @internal */ m_localCenterA: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_localCenterA: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
   /** @internal */ m_invMassA: number;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIA: number;
@@ -351,21 +351,21 @@ export class PrismaticJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA(): Vec2 {
+  getLocalAnchorA(): Vec2Value {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB(): Vec2 {
+  getLocalAnchorB(): Vec2Value {
     return this.m_localAnchorB;
   }
 
   /**
    * The local joint axis relative to bodyA.
    */
-  getLocalAxisA(): Vec2 {
+  getLocalAxisA(): Vec2Value {
     return this.m_localXAxisA;
   }
 
@@ -517,21 +517,21 @@ export class PrismaticJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
+  getReactionForce(inv_dt: number): Vec2Value {
     return Vec2.combine(this.m_impulse.x, this.m_perp, this.m_motorImpulse + this.m_impulse.z, this.m_axis).mul(inv_dt);
   }
 
