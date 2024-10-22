@@ -4,11 +4,11 @@ import { TestFactory } from "../benchmark";
 
 export const planckFactory: TestFactory = (gravity, edgeV1, edgeV2, edgeDensity) => {
     const world = new World({
-        gravity: new Vec2(gravity.x, gravity.y),
+        gravity: Vec2.create(gravity.x, gravity.y),
     });
     const ground = world.createBody({});
 
-    const edgeShape = new Edge(new Vec2(edgeV1.x, edgeV1.y), new Vec2(edgeV2.x, edgeV2.y));
+    const edgeShape = new Edge(Vec2.create(edgeV1.x, edgeV1.y), Vec2.create(edgeV2.x, edgeV2.y));
     ground.createFixture(edgeShape as any, edgeDensity);
 
     return {
@@ -19,7 +19,7 @@ export const planckFactory: TestFactory = (gravity, edgeV1, edgeV2, edgeDensity)
         createBoxBody(shape: any, x: number, y: number, density: number) {
             const body = world.createBody({
                 type: "dynamic",
-                position: new Vec2(x, y),
+                position: Vec2.create(x, y),
             });
             body.createFixture(shape, density);
         },
