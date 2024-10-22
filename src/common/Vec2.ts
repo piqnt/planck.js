@@ -125,15 +125,16 @@ export class Vec2 {
     return out;
   }
 
-  setMul(a: number, v: Vec2Value): Vec2Value {
+  /**
+   * scale a vector by a number
+   */
+  static scale(v: Vec2Value, a: number, out: Vec2Value=Vec2.create()): Vec2Value {
     _ASSERT && console.assert(Number.isFinite(a));
     _ASSERT && Vec2.assert(v);
     const x = a * v.x;
     const y = a * v.y;
 
-    this.x = x;
-    this.y = y;
-    return this;
+    return Vec2.set(x, y, out);
   }
 
 

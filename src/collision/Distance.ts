@@ -859,7 +859,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
         return false;
       }
 
-      n.setMul(-1, v);
+      Vec2.scale(v, -1, n);
       simplex.m_count = 0;
     }
 
@@ -916,7 +916,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
   simplex.getWitnessPoints(pointB, pointA);
 
   if (Vec2.lengthSquared(v) > 0.0) {
-    n.setMul(-1, v);
+    Vec2.scale(v, -1, n);
     Vec2.normalize(n, n);
   }
 
