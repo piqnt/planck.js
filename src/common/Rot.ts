@@ -22,7 +22,8 @@
  * SOFTWARE.
  */
 
-import { Vec2, Vec2Value } from './Vec2';
+import { Vec2Value } from './Vec2';
+import * as Vec2 from '../common/Vec2';
 
 /** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;

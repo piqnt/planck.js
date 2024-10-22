@@ -29,7 +29,8 @@ import { DistanceProxy } from '../Distance';
 import { EPSILON } from '../../common/Math';
 import { Transform, TransformValue } from '../../common/Transform';
 import { Rot } from '../../common/Rot';
-import { Vec2, Vec2Value } from '../../common/Vec2';
+import { Vec2Value } from '../../common/Vec2';
+import * as Vec2 from '../../common/Vec2';
 import { SettingsInternal as Settings } from '../../Settings';
 import { Shape } from '../Shape';
 
@@ -124,10 +125,10 @@ export class PolygonShape extends Shape {
     clone.m_count = this.m_count;
     Vec2.copy(this.m_centroid, clone.m_centroid);
     for (let i = 0; i < this.m_count; i++) {
-      clone.m_vertices.push(this.m_vertices[i].clone());
+      clone.m_vertices.push(Vec2.clone(this.m_vertices[i]));
     }
     for (let i = 0; i < this.m_normals.length; i++) {
-      clone.m_normals.push(this.m_normals[i].clone());
+      clone.m_normals.push(Vec2.clone(this.m_normals[i]));
     }
     return clone;
   }
@@ -262,7 +263,7 @@ export class PolygonShape extends Shape {
       const edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
       _ASSERT && console.assert(Vec2.lengthSquared(edge) > EPSILON * EPSILON);
       this.m_normals[i] = Vec2.crossVec2Num(edge, 1.0);
-      Vec2.normlize(this.m_normals[i], this.m_normals[i]);
+      Vec2.normalize(this.m_normals[i], this.m_normals[i]);
     }
 
     // Compute the polygon centroid.

@@ -27,7 +27,8 @@ import { SettingsInternal as Settings } from '../Settings';
 import { stats } from '../util/stats';
 import { Shape } from './Shape';
 import { EPSILON } from '../common/Math';
-import { Vec2, Vec2Value } from '../common/Vec2';
+import { Vec2Value } from '../common/Vec2';
+import * as Vec2 from '../common/Vec2';
 import { Rot } from '../common/Rot';
 import { Transform, TransformValue } from '../common/Transform';
 
@@ -774,8 +775,8 @@ export class ShapeCastInput {
  * Output results for b2ShapeCast
  */
 export class ShapeCastOutput {
-  point: Vec2 = Vec2.zero();
-  normal: Vec2 = Vec2.zero();
+  point: Vec2Value = Vec2.zero();
+  normal: Vec2Value = Vec2.zero();
   lambda = 1.0;
   iterations = 0;
 }

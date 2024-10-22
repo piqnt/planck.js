@@ -22,7 +22,8 @@
  * SOFTWARE.
  */
 
-import type { Vec2, Vec2Value }  from '../common/Vec2';
+import type { Vec2Value }  from '../common/Vec2';
+import * as Vec2 from '../common/Vec2';
 import type { Body }  from './Body';
 import { TimeStep } from "./Solver";
 import { Style } from '../util/Testbed';

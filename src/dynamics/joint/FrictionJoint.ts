@@ -24,7 +24,8 @@
 
 import { options } from '../../util/options';
 import { clamp } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
+import { Vec2Value } from '../../common/Vec2';
+import * as Vec2 from '../../common/Vec2';
 import { Mat22 } from '../../common/Mat22';
 import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';

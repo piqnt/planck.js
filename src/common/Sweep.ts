@@ -24,7 +24,8 @@
 
 import * as matrix from './Matrix';
 import { mod } from './Math';
-import { Vec2, Vec2Value } from './Vec2';
+import { Vec2Value } from './Vec2';
+import * as Vec2 from '../common/Vec2';
 import { TransformValue } from './Transform';
 
 

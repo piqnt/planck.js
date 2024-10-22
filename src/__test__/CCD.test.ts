@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { Vec2 } from '../common/Vec2';
+import * as Vec2 from '../common/Vec2';
 import { Transform } from '../common/Transform';
 import { CircleShape } from '../collision/shape/CircleShape';
 import { TimeOfImpact, TOIInput, TOIOutput } from '../collision/TimeOfImpact';

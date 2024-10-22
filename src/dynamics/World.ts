@@ -23,7 +23,8 @@
  */
 
 import { options } from '../util/options';
-import { Vec2, Vec2Value } from '../common/Vec2';
+import { Vec2Value } from '../common/Vec2';
+import * as Vec2 from '../common/Vec2';
 import { BroadPhase } from '../collision/BroadPhase';
 import { Solver, ContactImpulse, TimeStep } from './Solver';
 import { Body, BodyDef } from './Body';
@@ -473,9 +474,9 @@ export class World {
     }
 
     for (let b = this.m_bodyList; b; b = b.m_next) {
-      b.m_xf.p.sub(newOrigin);
-      b.m_sweep.c0.sub(newOrigin);
-      b.m_sweep.c.sub(newOrigin);
+      Vec2.sub(b.m_xf.p, newOrigin, b.m_xf.p);
+      Vec2.sub(b.m_sweep.c0, newOrigin, b.m_sweep.c0);
+      Vec2.sub(b.m_sweep.c, newOrigin, b.m_sweep.c);
     }
 
     for (let j = this.m_jointList; j; j = j.m_next) {

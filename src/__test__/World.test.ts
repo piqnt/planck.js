@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { Vec2 } from '../common/Vec2';
+import * as Vec2 from '../common/Vec2';
 import { World } from '../dynamics/World';
 import { BoxShape } from '../collision/shape/BoxShape';
 

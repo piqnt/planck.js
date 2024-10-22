@@ -23,7 +23,8 @@
  */
 
 import * as matrix from '../common/Matrix';
-import { Vec2, Vec2Value } from '../common/Vec2';
+import { Vec2Value } from '../common/Vec2';
+import * as Vec2 from '../common/Vec2';
 import { TransformValue } from '../common/Transform';
 import { EPSILON } from '../common/Math';
 

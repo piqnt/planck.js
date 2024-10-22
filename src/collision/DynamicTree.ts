@@ -24,7 +24,8 @@
 
 import { SettingsInternal as Settings } from '../Settings';
 import { Pool } from '../util/Pool';
-import { Vec2, Vec2Value } from '../common/Vec2';
+import { Vec2Value } from '../common/Vec2';
+import * as Vec2 from '../common/Vec2';
 import { AABB, AABBValue, RayCastCallback, RayCastInput } from './AABB';
 
 

@@ -24,7 +24,8 @@
 
 import { options } from '../../util/options';
 import { EPSILON } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
+import { Vec2Value } from '../../common/Vec2';
+import * as Vec2 from '../../common/Vec2';
 import { Mat22 } from '../../common/Mat22';
 import { Rot } from '../../common/Rot';
 import { Transform } from '../../common/Transform';
@@ -295,7 +296,7 @@ export class MouseJoint extends Joint {
    * Shift the origin for any points stored in world coordinates.
    */
   shiftOrigin(newOrigin: Vec2Value): void {
-    this.m_targetA.sub(newOrigin);
+    Vec2.sub(this.m_targetA, newOrigin, this.m_targetA);
   }
 
   initVelocityConstraints(step: TimeStep): void {

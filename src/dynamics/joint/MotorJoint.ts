@@ -24,7 +24,8 @@
 
 import { options } from '../../util/options';
 import { clamp } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
+import { Vec2Value } from '../../common/Vec2';
+import * as Vec2 from '../../common/Vec2';
 import { Mat22 } from '../../common/Mat22';
 import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
@@ -418,7 +419,7 @@ export class MotorJoint extends Joint {
 
       const maxImpulse = h * this.m_maxForce;
 
-      this.m_linearImpulse.clamp(maxImpulse);
+      Vec2.clamp(this.m_linearImpulse, maxImpulse, this.m_linearImpulse);
 
       impulse = Vec2.sub(this.m_linearImpulse, oldImpulse);
 

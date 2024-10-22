@@ -1,7 +1,7 @@
 const { default: Ajv } = await import('ajv');
 import { describe, it, expect } from 'vitest';
 
-const { Vec2 }  = await import( '../../common/Vec2');
+import * as Vec2 from '../../common/Vec2';
 const { CircleShape }  = await import( '../../collision/shape/CircleShape');
 const { BoxShape }  = await import( '../../collision/shape/BoxShape');
 const { DistanceJoint }  = await import( '../../dynamics/joint/DistanceJoint');

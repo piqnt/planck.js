@@ -25,7 +25,8 @@
 import * as matrix from '../../common/Matrix';
 import { EPSILON } from '../../common/Math';
 import { Rot } from '../../common/Rot';
-import { Vec2, Vec2Value } from '../../common/Vec2';
+import { Vec2Value } from '../../common/Vec2';
+import * as Vec2 from '../../common/Vec2';
 import { Shape } from '../Shape';
 import { AABBValue, RayCastInput, RayCastOutput } from '../AABB';
 import { Transform, TransformValue } from '../../common/Transform';
@@ -113,7 +114,7 @@ export class CircleShape extends Shape {
     const clone = new CircleShape();
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
-    clone.m_p = this.m_p.clone();
+    clone.m_p = Vec2.clone(this.m_p);
     return clone;
   }
 

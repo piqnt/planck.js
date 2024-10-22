@@ -25,7 +25,8 @@
 import { options } from '../../util/options';
 import { SettingsInternal as Settings } from '../../Settings';
 import { } from '../../common/Math';
-import { Vec2 } from '../../common/Vec2';
+import { Vec2Value } from '../../common/Vec2';
+import * as Vec2 from '../../common/Vec2';
 import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
 import { Body } from '../Body';

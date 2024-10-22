@@ -22,7 +22,8 @@
  * SOFTWARE.
  */
 
-import { Vec2, Vec2Value } from './Vec2';
+import { Vec2Value } from './Vec2';
+import * as Vec2 from '../common/Vec2';
 import { Vec3, Vec3Value } from './Vec3';
 
 

@@ -25,7 +25,8 @@
 import { options } from '../../util/options';
 import { SettingsInternal as Settings } from '../../Settings';
 import { EPSILON } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
+import { Vec2Value } from '../../common/Vec2';
+import * as Vec2 from '../../common/Vec2';
 import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
 import { Body } from '../Body';
@@ -283,8 +284,8 @@ export class PulleyJoint extends Joint {
    * @param newOrigin
    */
   shiftOrigin(newOrigin: Vec2Value): void {
-    this.m_groundAnchorA.sub(newOrigin);
-    this.m_groundAnchorB.sub(newOrigin);
+    Vec2.sub(this.m_groundAnchorA, newOrigin, this.m_groundAnchorA);
+    Vec2.sub(this.m_groundAnchorB, newOrigin, this.m_groundAnchorB);
   }
 
   /**
@@ -380,7 +381,7 @@ export class PulleyJoint extends Joint {
       const PA = Vec2.mulNumVec2(-this.m_impulse, this.m_uA);
       const PB = Vec2.mulNumVec2(-this.m_ratio * this.m_impulse, this.m_uB);
 
-      Vec.addMul(vA, this.m_invMassA, PA, vA);
+      Vec2.addMul(vA, this.m_invMassA, PA, vA);
       wA += this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, PA);
 
       Vec2.addMul(vB, this.m_invMassB, PB, vB);

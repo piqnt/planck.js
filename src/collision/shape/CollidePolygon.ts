@@ -24,7 +24,7 @@
 
 import { TransformValue } from '../../common/Transform';
 import * as matrix from '../../common/Matrix';
-import { Vec2 } from '../../common/Vec2';
+import * as Vec2 from '../../common/Vec2';
 import { SettingsInternal as Settings } from '../../Settings';
 import { Manifold, clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from '../Manifold';
 import { Contact } from '../../dynamics/Contact';

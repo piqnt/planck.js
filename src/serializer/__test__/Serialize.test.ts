@@ -1,7 +1,7 @@
 // import util from 'util';
 import { describe, it, expect } from 'vitest';
 
-import { Vec2 } from '../../common/Vec2';
+import * as Vec2 from '../../common/Vec2';
 import { CircleShape } from '../../collision/shape/CircleShape';
 import { BoxShape } from '../../collision/shape/BoxShape';
 import { DistanceJoint } from '../../dynamics/joint/DistanceJoint';

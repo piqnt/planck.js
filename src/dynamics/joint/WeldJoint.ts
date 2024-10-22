@@ -24,7 +24,8 @@
 
 import { options } from '../../util/options';
 import { SettingsInternal as Settings } from '../../Settings';
-import { Vec2, Vec2Value } from '../../common/Vec2';
+import { Vec2Value } from '../../common/Vec2';
+import * as Vec2 from '../../common/Vec2';
 import { Vec3 } from '../../common/Vec3';
 import { Mat33 } from '../../common/Mat33';
 import { Rot } from '../../common/Rot';
@@ -501,7 +502,7 @@ export class WeldJoint extends Joint {
 
       const P = Vec2.neg(K.solve22(C1));
 
-      Ve2.subMul(cA, mA, P, cA);
+      Vec2.subMul(cA, mA, P, cA);
       aA -= iA * Vec2.crossVec2Vec2(rA, P);
 
       Vec2.addMul(cB, mB, P, cB);

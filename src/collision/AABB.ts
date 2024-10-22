@@ -23,7 +23,8 @@
  */
 
 import { EPSILON } from '../common/Math';
-import { Vec2, Vec2Value } from '../common/Vec2';
+import { Vec2Value } from '../common/Vec2';
+import * as Vec2 from '../common/Vec2';
 
 
 /** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;

@@ -27,7 +27,7 @@ import { ShapeType } from "../collision/Shape";
 import { clamp } from '../common/Math';
 import { TransformValue } from '../common/Transform';
 import { Mat22 } from '../common/Mat22';
-import { Vec2 } from '../common/Vec2';
+import * as Vec2 from '../common/Vec2';
 import { SettingsInternal as Settings } from '../Settings';
 import { Manifold, ManifoldType, WorldManifold } from '../collision/Manifold';
 import { testOverlap } from '../collision/Distance';

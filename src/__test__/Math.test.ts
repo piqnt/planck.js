@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { Vec2 } from '../common/Vec2';
+import * as Vec2 from '../common/Vec2';
 import { Vec3 } from '../common/Vec3';
 
 describe('Math', function(): void {
@@ -27,7 +27,7 @@ describe('Math', function(): void {
     expect(v.x).equal(3);
     expect(v.y).equal(2);
 
-    v.sub(Vec2.create(2, 1));
+    Vec2.sub(v, Vec2.create(2, 1), v);
     expect(v.x).equal(1);
     expect(v.y).equal(1);
 

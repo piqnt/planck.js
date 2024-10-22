@@ -24,7 +24,8 @@
 
 import { SettingsInternal as Settings } from '../../Settings';
 import { clamp } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
+import { Vec2Value } from '../../common/Vec2';
+import * as Vec2 from '../../common/Vec2';
 import { Vec3 } from '../../common/Vec3';
 import { Mat22 } from '../../common/Mat22';
 import { Mat33 } from '../../common/Mat33';
@@ -602,7 +603,7 @@ export class RevoluteJoint extends Joint {
     // Solve limit constraint.
     if (this.m_enableLimit && this.m_limitState != LimitState.inactiveLimit && fixedRotation == false) {
       const Cdot1 = Vec2.zero();
-      const Cdot1 = Vec2.addCombine(Cdot1, 1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB), Cdot1);
+      Vec2.addCombine(Cdot1, 1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB), Cdot1);
       Vec2.subCombine(Cdot1, 1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA), Cdot1);
 
       const Cdot2 = wB - wA;

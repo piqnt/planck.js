@@ -24,7 +24,8 @@
 
 import * as matrix from '../common/Matrix';
 import { options } from '../util/options';
-import { Vec2, Vec2Value } from '../common/Vec2';
+import { Vec2Value } from '../common/Vec2';
+import * as Vec2 from '../common/Vec2';
 import { Rot } from '../common/Rot';
 import { Sweep } from '../common/Sweep';
 import { Transform } from '../common/Transform';
@@ -487,7 +488,7 @@ export class Body {
     } else {
       this.m_awakeFlag = false;
       this.m_sleepTime = 0.0;
-      this.m_linearVelocity.setZero();
+      Vec2.setZero(this.m_linearVelocity);
       this.m_angularVelocity = 0.0;
       Vec2.setZero(this.m_force);
       this.m_torque = 0.0;
