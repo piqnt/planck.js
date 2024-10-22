@@ -173,7 +173,7 @@ export class CircleShape extends Shape {
       a /= rr;
       output.fraction = a;
       output.normal = Vec2.add(s, Vec2.mulNumVec2(a, r));
-      output.normal.normalize();
+      Vec2.normalize(output.normal, output.normal);
       return true;
     }
 

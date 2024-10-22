@@ -844,7 +844,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
     const p = Vec2.sub(wA, wB);
 
     // -v is a normal at p
-    v.normalize();
+    Vec2.normalize(v, v);
 
     // Intersect ray with plane
     const vp = Vec2.dot(v, p);
@@ -917,7 +917,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
 
   if (v.lengthSquared() > 0.0) {
     n.setMul(-1, v);
-    n.normalize();
+    Vec2.normalize(n, n);
   }
 
   output.point = Vec2.combine(1, pointA, radiusA, n);

@@ -262,7 +262,7 @@ export class PolygonShape extends Shape {
       const edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
       _ASSERT && console.assert(edge.lengthSquared() > EPSILON * EPSILON);
       this.m_normals[i] = Vec2.crossVec2Num(edge, 1.0);
-      this.m_normals[i].normalize();
+      Vec2.normlize(this.m_normals[i], this.m_normals[i]);
     }
 
     // Compute the polygon centroid.

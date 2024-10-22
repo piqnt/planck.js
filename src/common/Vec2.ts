@@ -239,14 +239,14 @@ export class Vec2 {
    *
    * @returns old length
    */
-  normalize(): number {
-    const length = this.length();
+  static normalize(v: Vec2Value, out: Vec2Value=Vec2.create()): number {
+    const length = Vec2.lengthOf(v);
     if (length < EPSILON) {
       return 0.0;
     }
     const invLength = 1.0 / length;
-    this.x *= invLength;
-    this.y *= invLength;
+
+    Vec2.set(v.x * invLength, v.y * invLengthx, out)
     return length;
   }
 

@@ -437,7 +437,7 @@ export class DistanceJoint extends Joint {
     const rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
     const u = Vec2.sub(Vec2.add(cB, rB), Vec2.add(cA, rA));
 
-    const length = u.normalize();
+    const length = Vec2.normalize(u, u);
     const C = clamp(length - this.m_length, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
 
     const impulse = -this.m_mass * C;

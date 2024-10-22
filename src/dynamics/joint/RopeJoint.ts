@@ -361,7 +361,7 @@ export class RopeJoint extends Joint {
     u.addCombine(1, cB, 1, rB);
     u.subCombine(1, cA, 1, rA);
 
-    const length = u.normalize();
+    const length = Vec2.normalize(u, u);
     let C = length - this.m_maxLength;
 
     C = clamp(C, 0.0, Settings.maxLinearCorrection);
