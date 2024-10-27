@@ -14,6 +14,8 @@
     "no-var": "off",
     "prefer-rest-params": "off",
     "prefer-spread": "off",
+    "quotes": ["warn", "double"],
+    "semi": ["warn", "always"],
 
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/ban-types": "off",
