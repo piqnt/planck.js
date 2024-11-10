@@ -7,6 +7,7 @@ import type { Body } from "../dynamics/Body";
 export interface Style {
   stroke?: string;
   fill?: string;
+  lineWidth?: number;
 }
 
 type KEY = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' |
