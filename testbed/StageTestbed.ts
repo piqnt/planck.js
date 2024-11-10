@@ -332,6 +332,45 @@ class StageTestbed extends Testbed {
   _resume() {
   }
 
+  private statusText = '';
+  private statusMap: Record<string, any> = {};
+
+  status(name: string, value: any): void;
+  status(value: object | string): void;
+  status(a: any, b?: any) {
+    if (typeof b !== 'undefined') {
+      const key = a;
+      const value = b;
+      if (typeof value !== 'function' && typeof value !== 'object') {
+        this.statusMap[key] = value;
+      }
+    } else if (a && typeof a === 'object') {
+      // tslint:disable-next-line:no-for-in
+      for (const key in a) {
+        const value = a[key];
+        if (typeof value !== 'function' && typeof value !== 'object') {
+          this.statusMap[key] = value;
+        }
+      }
+    } else if (typeof a === 'string') {
+      this.statusText = a;
+    }
+
+    var newline = '\n';
+    var text = this.statusText || '';
+    for (var key in this.statusMap) {
+      var value = this.statusMap[key];
+      if (typeof value === 'function') continue;
+      text += (text && newline) + key + ': ' + value;
+    }
+
+    this._status(text);
+  }
+
+  info(text: string): void {
+    this._info(text);
+  }
+
   /** @internal */
   _status(string: string) {
   }

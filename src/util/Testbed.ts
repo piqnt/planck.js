@@ -50,6 +50,7 @@ export abstract class Testbed {
   /** World viewbox center horizontal offset. */
   y: number = -10;
 
+  /** @hidden */
   scaleY: number = -1;
 
   /** World simulation step frequency */
@@ -78,44 +79,10 @@ export abstract class Testbed {
     return;
   };
 
-  private statusText = '';
-  private statusMap: Record<string, any> = {};
+  abstract status(name: string, value: any): void;
+  abstract status(value: object | string): void;
 
-  status(name: string, value: any): void;
-  status(value: object | string): void;
-  status(a: any, b?: any) {
-    if (typeof b !== 'undefined') {
-      const key = a;
-      const value = b;
-      if (typeof value !== 'function' && typeof value !== 'object') {
-        this.statusMap[key] = value;
-      }
-    } else if (a && typeof a === 'object') {
-      // tslint:disable-next-line:no-for-in
-      for (const key in a) {
-        const value = a[key];
-        if (typeof value !== 'function' && typeof value !== 'object') {
-          this.statusMap[key] = value;
-        }
-      }
-    } else if (typeof a === 'string') {
-      this.statusText = a;
-    }
-
-    var newline = '\n';
-    var text = this.statusText || '';
-    for (var key in this.statusMap) {
-      var value = this.statusMap[key];
-      if (typeof value === 'function') continue;
-      text += (text && newline) + key + ': ' + value;
-    }
-
-    this._status(text);
-  }
-
-  info(text: string): void {
-    this._info(text);
-  }
+  abstract info(text: string): void;
 
   color(r: number, g: number, b: number): string {
     r = r * 256 | 0;
@@ -132,18 +99,6 @@ export abstract class Testbed {
   abstract drawAABB(aabb: AABBValue, color: string): void;
 
   abstract start(world: World): void;
-
-  /** @internal */
-  abstract _pause(): void;
-
-  /** @internal */
-  abstract _resume(): void;
-
-  /** @internal */
-  abstract _status(string: string): void;
-
-  /** @internal */  
-  abstract _info(text: string): void;
 
   abstract findOne(query: string): (Body | Joint | Fixture | null);
   abstract findAll(query: string): (Body | Joint | Fixture)[];
