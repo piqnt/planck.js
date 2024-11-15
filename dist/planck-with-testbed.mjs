@@ -11992,7 +11992,6 @@ var PrismaticJoint = /** @class */ (function (_super) {
             this.m_perp = Rot.mulVec2(qA, this.m_localYAxisA);
             this.m_s1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_perp);
             this.m_s2 = Vec2.crossVec2Vec2(rB, this.m_perp);
-            Vec2.crossVec2Vec2(rA, this.m_perp);
             var k11 = mA + mB + iA * this.m_s1 * this.m_s1 + iB * this.m_s2 * this.m_s2;
             var k12 = iA * this.m_s1 + iB * this.m_s2;
             var k13 = iA * this.m_s1 * this.m_a1 + iB * this.m_s2 * this.m_a2;
