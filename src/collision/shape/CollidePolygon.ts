@@ -40,7 +40,6 @@ import { Fixture } from "../../dynamics/Fixture";
 /** @internal */ const v1 = matrix.vec2(0, 0);
 /** @internal */ const n = matrix.vec2(0, 0);
 /** @internal */ const xf = matrix.transform(0, 0, 0);
-/** @internal */ const temp = matrix.vec2(0, 0);
 /** @internal */ const v11 = matrix.vec2(0, 0);
 /** @internal */ const v12 = matrix.vec2(0, 0);
 /** @internal */ const localTangent = matrix.vec2(0, 0);
