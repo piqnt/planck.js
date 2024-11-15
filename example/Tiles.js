@@ -106,9 +106,4 @@ testbed.step = function() {
   testbed.status('min', minimumHeight);
   testbed.status('create time', createTime + 'ms');
   testbed.status('fixture count', fixtureCount);
-
-  // let tree = world.m_broadPhase.m_tree;
-  // if (stepCount++ == 400) {
-  // tree.rebuildBottomUp();
-  // }
 };

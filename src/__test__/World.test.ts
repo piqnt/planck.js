@@ -63,8 +63,6 @@ describe('World', function(): void {
       // Now print the position and angle of the body.
       position = body.getPosition();
       angle = body.getAngle();
-
-      // console.log("%s %s %s", position.x.toFixed(4), position.y.toFixed(4), angle.toFixed(4));
     }
 
     expect(position.x).closeTo(0.0, 1e-5);

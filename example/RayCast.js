@@ -101,7 +101,6 @@ let RayCastAny = (function() {
 // the closest fixture.
 let RayCastMultiple = (function() {
   let def = {};
-  // let MAX_COUNT = 3;
 
   def.reset = function() {
     def.points = [];
@@ -329,7 +328,6 @@ testbed.step = function() {
     let input = {}; // RayCastInput
     input.p1 = new Vec2(10.2725, 1.71372);
     input.p2 = new Vec2(10.2353, 2.21807);
-    // input.maxFraction = 0.567623;
     input.maxFraction = 0.56762173;
 
     let xf = new Transform(new Vec2(23.0, 5.0));

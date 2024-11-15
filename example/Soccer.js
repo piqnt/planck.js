@@ -95,7 +95,6 @@ world.on('post-solve', function(contact) {
     if (ball && goal) {
       ball.setPosition(new Vec2(0, 0));
       ball.setLinearVelocity(new Vec2(0, 0));
-      // world.destroyBody(ball);
     }
   }, 1);
 });

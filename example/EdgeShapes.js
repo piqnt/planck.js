@@ -159,7 +159,7 @@ function rayCastReset () {
 }
 
 testbed.step = function() {
-  let advanceRay = !pause; // settings.pause == 0 || settings.singleStep;
+  let advanceRay = !pause;
 
   let L = 25.0;
   let point1 = new Vec2(0.0, 10.0);

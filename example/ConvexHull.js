@@ -77,12 +77,7 @@ testbed.step = function() {
 
   for (let i = 0; i < points.length; ++i) {
     testbed.drawPoint(points[i], 3.0, testbed.color(0.3, 0.9, 0.3));
-    // testbed.drawString(points[i] + new Vec2(0.05, 0.05), "%d", i);
   }
-
-  // if (shape.validate() == false) {
-  //   m_textLine += 0;
-  // }
 
   if (auto) {
     generate();

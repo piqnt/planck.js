@@ -181,24 +181,6 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
     // Initialize the separating axis.
     separationFunction.initialize(cache, proxyA, sweepA, proxyB, sweepB, t1);
 
-    // if (false) {
-    //   // Dump the curve seen by the root finder
-    //   const N = 100;
-    //   const dx = 1.0 / N;
-    //   const xs = []; // [ N + 1 ];
-    //   const fs = []; // [ N + 1 ];
-    //   const x = 0.0;
-    //   for (const i = 0; i <= N; ++i) {
-    //     sweepA.getTransform(xfA, x);
-    //     sweepB.getTransform(xfB, x);
-    //     const f = fcn.evaluate(xfA, xfB) - target;
-    //     printf("%g %g\n", x, f);
-    //     xs[i] = x;
-    //     fs[i] = f;
-    //     x += dx;
-    //   }
-    // }
-
     // Compute the TOI on the separating axis. We do this by successively
     // resolving the deepest point. This loop is bounded by the number of
     // vertices.

@@ -185,7 +185,6 @@ function addAsteroids() {
   while (asteroidBodies.length) {
     const asteroidBody = asteroidBodies.shift();
     world.destroyBody(asteroidBody);
-    // asteroidBody.uiRemove();
   }
 
   for (let i = 0; i < level; i++) {
@@ -269,12 +268,10 @@ function hit(asteroidBody, bulletBody) {
     // Remove asteroid
     world.destroyBody(asteroidBody);
     asteroidBodies.splice(aidx, 1);
-    // asteroidBody.uiRemove();
 
     // Remove bullet
     world.destroyBody(bulletBody);
     bulletBodies.splice(bidx, 1);
-    // bulletBody.uiRemove();
 
     // Add new sub-asteroids
     splitAsteroid(asteroidBody);

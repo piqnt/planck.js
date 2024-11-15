@@ -35,14 +35,12 @@ let b = 2.0;
 
 let ground = world.createBody();
 
-// ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
 ground.createFixture(new Circle(new Vec2(-10.0, y + b + L), 2.0), 0.0);
 ground.createFixture(new Circle(new Vec2(10.0, y + b + L), 2.0), 0.0);
 
 let shape = new Box(a, b);
 
-// bd.fixedRotation = true;
 let box1 = world.createDynamicBody(new Vec2(-10.0, y));
 box1.createFixture(shape, 5.0);
 

@@ -164,7 +164,7 @@ export class PolygonShape extends Shape {
     let n = math_min(vertices.length, Settings.maxPolygonVertices);
 
     // Perform welding and copy vertices into local buffer.
-    const ps: Vec2[] = []; // [Settings.maxPolygonVertices];
+    const ps: Vec2[] = [];
     for (let i = 0; i < n; ++i) {
       const v = vertices[i];
 
@@ -203,7 +203,7 @@ export class PolygonShape extends Shape {
       }
     }
 
-    const hull = [] as number[]; // [Settings.maxPolygonVertices];
+    const hull = [] as number[];
     let m = 0;
     let ih = i0;
 

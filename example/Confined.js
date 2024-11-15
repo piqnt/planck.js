@@ -61,7 +61,7 @@ for (let j = 0; j < e_columnCount; ++j) {
 
 function CreateCircle() {
   let body = world.createDynamicBody(new Vec2(Math.random() * 10 - 5, Math.random() * 10 + 5));
-  // bd.allowSleep = false;
+
   body.createFixture(new Circle(Math.random() * 2.5 + 0.5), {
     density : 1.0,
     friction : 0.0
@@ -91,16 +91,4 @@ testbed.step = function() {
   if (sleeping) {
     CreateCircle();
   }
-
-  // for (let b = world.getBodyList(); b; b = b.getNext()) {
-  //   if (!b.isDynamic()) {
-  //     continue;
-  //   }
-  //
-  //   let p = b.getPosition();
-  //   if (p.x <= -10.0 || 10.0 <= p.x || p.y <= 0.0 || 20.0 <= p.y) {
-  //     // why?
-  //     p.x += 0.0;
-  //   }
-  // }
 };

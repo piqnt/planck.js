@@ -854,7 +854,7 @@ export class Contact {
         // K is safe to invert.
         this.v_K.ex.setNum(k11, k12);
         this.v_K.ey.setNum(k12, k22);
-        // this.v_normalMass.set(this.v_K.getInverse());
+
         const a = this.v_K.ex.x;
         const b = this.v_K.ey.x;
         const c = this.v_K.ex.y;
@@ -1084,7 +1084,7 @@ export class Contact {
       matrix.minusVec2(dv1, vA);
       matrix.minusVec2(dv1, matrix.crossNumVec2(temp, wA, vcp1.rA));
 
-      // let dv2 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp2.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp2.rA));
+
       matrix.zeroVec2(dv2);
       matrix.plusVec2(dv2, vB);
       matrix.plusVec2(dv2, matrix.crossNumVec2(temp, wB, vcp2.rB));
@@ -1098,12 +1098,10 @@ export class Contact {
       matrix.setVec2(b, vn1 - vcp1.velocityBias, vn2 - vcp2.velocityBias);
 
       // Compute b'
-      // b.sub(Mat22.mulVec2(this.v_K, a));
       b.x -= this.v_K.ex.x * a.x + this.v_K.ey.x * a.y;
       b.y -= this.v_K.ex.y * a.x + this.v_K.ey.y * a.y;
 
       const k_errorTol = 1e-3;
-      // NOT_USED(k_errorTol);
 
       while (true) {
         //
@@ -1128,11 +1126,11 @@ export class Contact {
           matrix.scaleVec2(P1, d.x, normal);
           matrix.scaleVec2(P2, d.y, normal);
 
-          // vA.subCombine(mA, P1, mA, P2);
+
           matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
           wA -= iA * (matrix.crossVec2Vec2(vcp1.rA, P1) + matrix.crossVec2Vec2(vcp2.rA, P2));
 
-          // vB.addCombine(mB, P1, mB, P2);
+
           matrix.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
           wB += iB * (matrix.crossVec2Vec2(vcp1.rB, P1) + matrix.crossVec2Vec2(vcp2.rB, P2));
 
@@ -1183,11 +1181,11 @@ export class Contact {
           matrix.scaleVec2(P1, d.x, normal);
           matrix.scaleVec2(P2, d.y, normal);
 
-          // vA.subCombine(mA, P1, mA, P2);
+
           matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
           wA -= iA * (matrix.crossVec2Vec2(vcp1.rA, P1) + matrix.crossVec2Vec2(vcp2.rA, P2));
 
-          // vB.addCombine(mB, P1, mB, P2);
+
           matrix.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
           wB += iB * (matrix.crossVec2Vec2(vcp1.rB, P1) + matrix.crossVec2Vec2(vcp2.rB, P2));
 
@@ -1230,11 +1228,11 @@ export class Contact {
           matrix.scaleVec2(P1, d.x, normal);
           matrix.scaleVec2(P2, d.y, normal);
 
-          // vA.subCombine(mA, P1, mA, P2);
+
           matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
           wA -= iA * (matrix.crossVec2Vec2(vcp1.rA, P1) + matrix.crossVec2Vec2(vcp2.rA, P2));
 
-          // vB.addCombine(mB, P1, mB, P2);
+
           matrix.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
           wB += iB * (matrix.crossVec2Vec2(vcp1.rB, P1) + matrix.crossVec2Vec2(vcp2.rB, P2));
 
@@ -1277,11 +1275,11 @@ export class Contact {
           matrix.scaleVec2(P1, d.x, normal);
           matrix.scaleVec2(P2, d.y, normal);
 
-          // vA.subCombine(mA, P1, mA, P2);
+
           matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
           wA -= iA * (matrix.crossVec2Vec2(vcp1.rA, P1) + matrix.crossVec2Vec2(vcp2.rA, P2));
 
-          // vB.addCombine(mB, P1, mB, P2);
+
           matrix.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
           wB += iB * (matrix.crossVec2Vec2(vcp1.rB, P1) + matrix.crossVec2Vec2(vcp2.rB, P2));
 
@@ -1408,14 +1406,6 @@ export class Contact {
       bodyA.setAwake(true);
       bodyB.setAwake(true);
     }
-
-    // const typeA = fixtureA.getType();
-    // const typeB = fixtureB.getType();
-
-    // const destroyFcn = s_registers[typeA][typeB].destroyFcn;
-    // if (typeof destroyFcn === 'function') {
-    //   destroyFcn(contact);
-    // }
 
     contactPool.release(contact);
   }

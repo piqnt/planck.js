@@ -82,7 +82,6 @@ export class Mat33 {
    * computing the inverse in one-shot cases.
    */
   solve33(v: Vec3Value): Vec3 {
-    // let det = matrix.dotVec3(this.ex, matrix.newCrossVec3(this.ey, this.ez));
     let cross_x = this.ey.y * this.ez.z - this.ey.z * this.ez.y;
     let cross_y = this.ey.z * this.ez.x - this.ey.x * this.ez.z;
     let cross_z = this.ey.x * this.ez.y - this.ey.y * this.ez.x;
@@ -91,19 +90,16 @@ export class Mat33 {
       det = 1.0 / det;
     }
     const r = new Vec3();
-    // r.x = det * matrix.dotVec3(v, matrix.newCrossVec3(this.ey, this.ez));
     cross_x = this.ey.y * this.ez.z - this.ey.z * this.ez.y;
     cross_y = this.ey.z * this.ez.x - this.ey.x * this.ez.z;
     cross_z = this.ey.x * this.ez.y - this.ey.y * this.ez.x;
     r.x = det * (v.x * cross_x + v.y * cross_y + v.z * cross_z);
 
-    // r.y = det * matrix.dotVec3(this.ex, matrix.newCrossVec3(v, this.ez));
     cross_x = v.y * this.ez.z - v.z * this.ez.y;
     cross_y = v.z * this.ez.x - v.x * this.ez.z;
     cross_z = v.x * this.ez.y - v.y * this.ez.x;
     r.y = det * (this.ex.x * cross_x + this.ex.y * cross_y + this.ex.z * cross_z);
 
-    // r.z = det * matrix.dotVec3(this.ex, matrix.newCrossVec3(this.ey, v));
     cross_x = this.ey.y * v.z - this.ey.z * v.y;
     cross_y = this.ey.z * v.x - this.ey.x * v.z;
     cross_z = this.ey.x * v.y - this.ey.y * v.x;

@@ -35,7 +35,6 @@ ground.createFixture(new Box(0.2, 1.0, new Vec2(0.5, 1.0), 0.0), 0.0);
 let body = world.createDynamicBody(new Vec2(0.0, 4.0));
 body.createFixture(new Box(2.0, 0.1), 1.0);
 
-// x = Math.random(-1.0, 1.0);
 let x = 0.20352793;
 
 let bullet = world.createBody({

@@ -6,7 +6,6 @@ import { Shape } from '../collision/Shape';
 import { Vec2 } from '../common/Vec2';
 import { Vec3 } from '../common/Vec3';
 import { ChainShape } from "../collision/shape/ChainShape";
-// import { BoxShape } from "../collision/shape/BoxShape";
 import { EdgeShape } from "../collision/shape/EdgeShape";
 import { PolygonShape } from "../collision/shape/PolygonShape";
 import { CircleShape } from "../collision/shape/CircleShape";

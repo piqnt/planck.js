@@ -97,10 +97,5 @@ testbed.keydown = function(code, char) {
 };
 
 testbed.step = function() {
-  // if (stepCount++ == 360) {
-  //   ball.setTransform(new Vec2(0.0, 0.5), 0.0);
-  // }
-
   testbed.status('Motor Torque', joint.getMotorTorque(testbed.hz));
-  // testbed.status('Motor Force', joint.getMaxForce());
 };

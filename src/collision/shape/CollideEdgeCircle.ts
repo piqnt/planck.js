@@ -147,7 +147,6 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
     manifold.pointCount = 1;
     matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
-    // manifold.points[0].id.key = 0;
     manifold.points[0].id.setFeatures(1, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
 
     return;
@@ -174,6 +173,5 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
   manifold.pointCount = 1;
   matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
-  // manifold.points[0].id.key = 0;
   manifold.points[0].id.setFeatures(0, ContactFeatureType.e_face, 0, ContactFeatureType.e_vertex);
 }

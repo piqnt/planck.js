@@ -1,4 +1,3 @@
-// import util from 'util';
 import { describe, it, expect } from 'vitest';
 
 import { Vec2 } from '../../common/Vec2';
