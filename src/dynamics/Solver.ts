@@ -357,7 +357,7 @@ export class Solver {
       // Warm start.
       for (let i = 0; i < this.m_contacts.length; ++i) {
         const contact = this.m_contacts[i];
-        contact.warmStartConstraint(step);
+        contact.warmStartConstraint();
       }
     }
 
@@ -382,7 +382,7 @@ export class Solver {
     // Store impulses for warm starting
     for (let i = 0; i < this.m_contacts.length; ++i) {
       const contact = this.m_contacts[i];
-      contact.storeConstraintImpulses(step);
+      contact.storeConstraintImpulses();
     }
 
     // Integrate positions
@@ -424,7 +424,7 @@ export class Solver {
       let minSeparation = 0.0;
       for (let j = 0; j < this.m_contacts.length; ++j) {
         const contact = this.m_contacts[j];
-        const separation = contact.solvePositionConstraint(step);
+        const separation = contact.solvePositionConstraint();
         minSeparation = math_min(minSeparation, separation);
       }
       // We can't expect minSpeparation >= -Settings.linearSlop because we don't
@@ -783,7 +783,7 @@ export class Solver {
       let minSeparation = 0.0;
       for (let j = 0; j < this.m_contacts.length; ++j) {
         const contact = this.m_contacts[j];
-        const separation = contact.solvePositionConstraintTOI(subStep, toiA, toiB);
+        const separation = contact.solvePositionConstraintTOI(toiA, toiB);
         minSeparation = math_min(minSeparation, separation);
       }
       // We can't expect minSpeparation >= -Settings.linearSlop because we don't

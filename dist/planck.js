@@ -5946,7 +5946,7 @@
                 // Warm start.
                 for (var i = 0; i < this.m_contacts.length; ++i) {
                     var contact = this.m_contacts[i];
-                    contact.warmStartConstraint(step);
+                    contact.warmStartConstraint();
                 }
             }
             for (var i = 0; i < this.m_joints.length; ++i) {
@@ -5967,7 +5967,7 @@
             // Store impulses for warm starting
             for (var i = 0; i < this.m_contacts.length; ++i) {
                 var contact = this.m_contacts[i];
-                contact.storeConstraintImpulses(step);
+                contact.storeConstraintImpulses();
             }
             // Integrate positions
             for (var i = 0; i < this.m_bodies.length; ++i) {
@@ -6002,7 +6002,7 @@
                 var minSeparation = 0.0;
                 for (var j = 0; j < this.m_contacts.length; ++j) {
                     var contact = this.m_contacts[j];
-                    var separation = contact.solvePositionConstraint(step);
+                    var separation = contact.solvePositionConstraint();
                     minSeparation = math_min$5(minSeparation, separation);
                 }
                 // We can't expect minSpeparation >= -Settings.linearSlop because we don't
@@ -6295,7 +6295,7 @@
                 var minSeparation = 0.0;
                 for (var j = 0; j < this.m_contacts.length; ++j) {
                     var contact = this.m_contacts[j];
-                    var separation = contact.solvePositionConstraintTOI(subStep, toiA, toiB);
+                    var separation = contact.solvePositionConstraintTOI(toiA, toiB);
                     minSeparation = math_min$5(minSeparation, separation);
                 }
                 // We can't expect minSpeparation >= -Settings.linearSlop because we don't
@@ -7452,13 +7452,13 @@
                 listener.preSolve(this, oldManifold);
             }
         };
-        Contact.prototype.solvePositionConstraint = function (step) {
-            return this._solvePositionConstraint(step, null, null);
+        Contact.prototype.solvePositionConstraint = function () {
+            return this._solvePositionConstraint(null, null);
         };
-        Contact.prototype.solvePositionConstraintTOI = function (step, toiA, toiB) {
-            return this._solvePositionConstraint(step, toiA, toiB);
+        Contact.prototype.solvePositionConstraintTOI = function (toiA, toiB) {
+            return this._solvePositionConstraint(toiA, toiB);
         };
-        Contact.prototype._solvePositionConstraint = function (step, toiA, toiB) {
+        Contact.prototype._solvePositionConstraint = function (toiA, toiB) {
             var toi = toiA !== null && toiB !== null ? true : false;
             var minSeparation = 0.0;
             var fixtureA = this.m_fixtureA;
@@ -7663,7 +7663,7 @@
             copyVec2(velocityB.v, vB);
             velocityB.w = wB;
         };
-        Contact.prototype.warmStartConstraint = function (step) {
+        Contact.prototype.warmStartConstraint = function () {
             var fixtureA = this.m_fixtureA;
             var fixtureB = this.m_fixtureB;
             if (fixtureA === null || fixtureB === null)
@@ -7699,7 +7699,7 @@
             copyVec2(velocityB.v, vB);
             velocityB.w = wB;
         };
-        Contact.prototype.storeConstraintImpulses = function (step) {
+        Contact.prototype.storeConstraintImpulses = function () {
             var manifold = this.m_manifold;
             for (var j = 0; j < this.v_pointCount; ++j) {
                 manifold.points[j].normalImpulse = this.v_points[j].normalImpulse;
