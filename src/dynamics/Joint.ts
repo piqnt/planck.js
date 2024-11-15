@@ -82,11 +82,6 @@ export interface JointDef extends JointOpt {
   bodyB: Body;
 }
 
-/** @internal */ const DEFAULTS = {
-  userData : null,
-  collideConnected : false
-};
-
 /**
  * The base joint class. Joints are used to constraint two bodies together in
  * various fashions. Some joints also feature limits and motors.
