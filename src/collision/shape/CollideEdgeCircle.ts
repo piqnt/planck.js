@@ -63,7 +63,6 @@ function ChainCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: F
 }
 
 /** @internal */ const e = matrix.vec2(0, 0);
-/** @internal */ const temp = matrix.vec2(0, 0);
 /** @internal */ const e1 = matrix.vec2(0, 0);
 /** @internal */ const e2 = matrix.vec2(0, 0);
 /** @internal */ const Q = matrix.vec2(0, 0);
