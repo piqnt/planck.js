@@ -623,15 +623,15 @@ export class Contact {
     }
   }
 
-  solvePositionConstraint(step: TimeStep): number {
-    return this._solvePositionConstraint(step, null, null);
+  solvePositionConstraint(): number {
+    return this._solvePositionConstraint(null, null);
   }
 
-  solvePositionConstraintTOI(step: TimeStep, toiA: Body, toiB: Body): number {
-    return this._solvePositionConstraint(step, toiA, toiB);
+  solvePositionConstraintTOI(toiA: Body, toiB: Body): number {
+    return this._solvePositionConstraint(toiA, toiB);
   }
 
-  private _solvePositionConstraint(step: TimeStep, toiA: Body | null, toiB: Body | null): number {
+  private _solvePositionConstraint(toiA: Body | null, toiB: Body | null): number {
     const toi = toiA !== null && toiB !== null ? true : false;
     let minSeparation = 0.0;
 
@@ -642,8 +642,6 @@ export class Contact {
     const bodyB = fixtureB.m_body;
     if (bodyA === null || bodyB === null) return minSeparation;
 
-    const velocityA = bodyA.c_velocity;
-    const velocityB = bodyB.c_velocity;
     const positionA = bodyA.c_position;
     const positionB = bodyB.c_position;
 
@@ -886,7 +884,7 @@ export class Contact {
     velocityB.w = wB;
   }
 
-  warmStartConstraint(step: TimeStep): void {
+  warmStartConstraint(): void {
     const fixtureA = this.m_fixtureA;
     const fixtureB = this.m_fixtureB;
     if (fixtureA === null || fixtureB === null) return;
@@ -896,8 +894,6 @@ export class Contact {
 
     const velocityA = bodyA.c_velocity;
     const velocityB = bodyB.c_velocity;
-    const positionA = bodyA.c_position;
-    const positionB = bodyB.c_position;
 
     const mA = this.v_invMassA;
     const iA = this.v_invIA;
@@ -929,7 +925,7 @@ export class Contact {
     velocityB.w = wB;
   }
 
-  storeConstraintImpulses(step: TimeStep): void {
+  storeConstraintImpulses(): void {
     const manifold = this.m_manifold;
     for (let j = 0; j < this.v_pointCount; ++j) {
       manifold.points[j].normalImpulse = this.v_points[j].normalImpulse;
@@ -946,10 +942,8 @@ export class Contact {
     if (bodyA === null || bodyB === null) return;
 
     const velocityA = bodyA.c_velocity;
-    const positionA = bodyA.c_position;
 
     const velocityB = bodyB.c_velocity;
-    const positionB = bodyB.c_position;
 
     const mA = this.v_invMassA;
     const iA = this.v_invIA;

@@ -1442,12 +1442,12 @@ declare class Contact {
         endContact(contact: Contact): void;
         preSolve(contact: Contact, oldManifold: Manifold): void;
     }): void;
-    solvePositionConstraint(step: TimeStep): number;
-    solvePositionConstraintTOI(step: TimeStep, toiA: Body, toiB: Body): number;
+    solvePositionConstraint(): number;
+    solvePositionConstraintTOI(toiA: Body, toiB: Body): number;
     private _solvePositionConstraint;
     initVelocityConstraint(step: TimeStep): void;
-    warmStartConstraint(step: TimeStep): void;
-    storeConstraintImpulses(step: TimeStep): void;
+    warmStartConstraint(): void;
+    storeConstraintImpulses(): void;
     solveVelocityConstraint(step: TimeStep): void;
 }
 type BodyType = "static" | "kinematic" | "dynamic";
@@ -5766,12 +5766,12 @@ declare namespace planck {
             endContact(contact: Contact): void;
             preSolve(contact: Contact, oldManifold: Manifold): void;
         }): void;
-        solvePositionConstraint(step: TimeStep): number;
-        solvePositionConstraintTOI(step: TimeStep, toiA: Body, toiB: Body): number;
+        solvePositionConstraint(): number;
+        solvePositionConstraintTOI(toiA: Body, toiB: Body): number;
         private _solvePositionConstraint;
         initVelocityConstraint(step: TimeStep): void;
-        warmStartConstraint(step: TimeStep): void;
-        storeConstraintImpulses(step: TimeStep): void;
+        warmStartConstraint(): void;
+        storeConstraintImpulses(): void;
         solveVelocityConstraint(step: TimeStep): void;
     }
     type BodyType = "static" | "kinematic" | "dynamic";

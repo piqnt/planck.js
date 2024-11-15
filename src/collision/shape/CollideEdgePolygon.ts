@@ -66,13 +66,6 @@ Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
   e_edgeB = 2,
 }
 
-// unused?
-/** @internal */ enum VertexType {
- e_isolated = 0,
- e_concave = 1,
- e_convex = 2,
-}
-
 /**
  * This structure is used to keep track of the best separating axis.
  */

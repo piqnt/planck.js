@@ -4820,7 +4820,6 @@ var Simplex = /** @class */ (function () {
     Simplex.prototype.getSearchDirection = function () {
         var v1 = this.m_v1;
         var v2 = this.m_v2;
-        this.m_v3;
         switch (this.m_count) {
             case 1:
                 return setVec2(searchDirection_reuse, -v1.w.x, -v1.w.y);
@@ -4843,7 +4842,6 @@ var Simplex = /** @class */ (function () {
     Simplex.prototype.getClosestPoint = function () {
         var v1 = this.m_v1;
         var v2 = this.m_v2;
-        this.m_v3;
         switch (this.m_count) {
             case 0:
                 return zeroVec2(closestPoint_reuse);
@@ -5940,7 +5938,7 @@ var Solver = /** @class */ (function () {
             // Warm start.
             for (var i = 0; i < this.m_contacts.length; ++i) {
                 var contact = this.m_contacts[i];
-                contact.warmStartConstraint(step);
+                contact.warmStartConstraint();
             }
         }
         for (var i = 0; i < this.m_joints.length; ++i) {
@@ -5961,7 +5959,7 @@ var Solver = /** @class */ (function () {
         // Store impulses for warm starting
         for (var i = 0; i < this.m_contacts.length; ++i) {
             var contact = this.m_contacts[i];
-            contact.storeConstraintImpulses(step);
+            contact.storeConstraintImpulses();
         }
         // Integrate positions
         for (var i = 0; i < this.m_bodies.length; ++i) {
@@ -5996,7 +5994,7 @@ var Solver = /** @class */ (function () {
             var minSeparation = 0.0;
             for (var j = 0; j < this.m_contacts.length; ++j) {
                 var contact = this.m_contacts[j];
-                var separation = contact.solvePositionConstraint(step);
+                var separation = contact.solvePositionConstraint();
                 minSeparation = math_min$5(minSeparation, separation);
             }
             // We can't expect minSpeparation >= -Settings.linearSlop because we don't
@@ -6123,8 +6121,6 @@ var Solver = /** @class */ (function () {
                     }
                     var indexA = c_3.getChildIndexA();
                     var indexB = c_3.getChildIndexB();
-                    bA_1.m_sweep;
-                    bB_1.m_sweep;
                     // Compute the time of impact in interval [0, minTOI]
                     input.proxyA.set(fA_1.getShape(), indexA);
                     input.proxyB.set(fB_1.getShape(), indexB);
@@ -6289,7 +6285,7 @@ var Solver = /** @class */ (function () {
             var minSeparation = 0.0;
             for (var j = 0; j < this.m_contacts.length; ++j) {
                 var contact = this.m_contacts[j];
-                var separation = contact.solvePositionConstraintTOI(subStep, toiA, toiB);
+                var separation = contact.solvePositionConstraintTOI(toiA, toiB);
                 minSeparation = math_min$5(minSeparation, separation);
             }
             // We can't expect minSpeparation >= -Settings.linearSlop because we don't
@@ -7446,13 +7442,13 @@ var Contact = /** @class */ (function () {
             listener.preSolve(this, oldManifold);
         }
     };
-    Contact.prototype.solvePositionConstraint = function (step) {
-        return this._solvePositionConstraint(step, null, null);
+    Contact.prototype.solvePositionConstraint = function () {
+        return this._solvePositionConstraint(null, null);
     };
-    Contact.prototype.solvePositionConstraintTOI = function (step, toiA, toiB) {
-        return this._solvePositionConstraint(step, toiA, toiB);
+    Contact.prototype.solvePositionConstraintTOI = function (toiA, toiB) {
+        return this._solvePositionConstraint(toiA, toiB);
     };
-    Contact.prototype._solvePositionConstraint = function (step, toiA, toiB) {
+    Contact.prototype._solvePositionConstraint = function (toiA, toiB) {
         var toi = toiA !== null && toiB !== null ? true : false;
         var minSeparation = 0.0;
         var fixtureA = this.m_fixtureA;
@@ -7463,8 +7459,6 @@ var Contact = /** @class */ (function () {
         var bodyB = fixtureB.m_body;
         if (bodyA === null || bodyB === null)
             return minSeparation;
-        bodyA.c_velocity;
-        bodyB.c_velocity;
         var positionA = bodyA.c_position;
         var positionB = bodyB.c_position;
         var localCenterA = this.p_localCenterA;
@@ -7657,7 +7651,7 @@ var Contact = /** @class */ (function () {
         copyVec2(velocityB.v, vB);
         velocityB.w = wB;
     };
-    Contact.prototype.warmStartConstraint = function (step) {
+    Contact.prototype.warmStartConstraint = function () {
         var fixtureA = this.m_fixtureA;
         var fixtureB = this.m_fixtureB;
         if (fixtureA === null || fixtureB === null)
@@ -7668,8 +7662,6 @@ var Contact = /** @class */ (function () {
             return;
         var velocityA = bodyA.c_velocity;
         var velocityB = bodyB.c_velocity;
-        bodyA.c_position;
-        bodyB.c_position;
         var mA = this.v_invMassA;
         var iA = this.v_invIA;
         var mB = this.v_invMassB;
@@ -7693,7 +7685,7 @@ var Contact = /** @class */ (function () {
         copyVec2(velocityB.v, vB);
         velocityB.w = wB;
     };
-    Contact.prototype.storeConstraintImpulses = function (step) {
+    Contact.prototype.storeConstraintImpulses = function () {
         var manifold = this.m_manifold;
         for (var j = 0; j < this.v_pointCount; ++j) {
             manifold.points[j].normalImpulse = this.v_points[j].normalImpulse;
@@ -7710,9 +7702,7 @@ var Contact = /** @class */ (function () {
         if (bodyA === null || bodyB === null)
             return;
         var velocityA = bodyA.c_velocity;
-        bodyA.c_position;
         var velocityB = bodyB.c_velocity;
-        bodyB.c_position;
         var mA = this.v_invMassA;
         var iA = this.v_invIA;
         var mB = this.v_invMassB;
@@ -12002,7 +11992,6 @@ var PrismaticJoint = /** @class */ (function (_super) {
             this.m_perp = Rot.mulVec2(qA, this.m_localYAxisA);
             this.m_s1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_perp);
             this.m_s2 = Vec2.crossVec2Vec2(rB, this.m_perp);
-            Vec2.crossVec2Vec2(rA, this.m_perp);
             var k11 = mA + mB + iA * this.m_s1 * this.m_s1 + iB * this.m_s2 * this.m_s2;
             var k12 = iA * this.m_s1 + iB * this.m_s2;
             var k13 = iA * this.m_s1 * this.m_a1 + iB * this.m_s2 * this.m_a2;
@@ -15677,13 +15666,6 @@ Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
     EPAxisType[EPAxisType["e_edgeA"] = 1] = "e_edgeA";
     EPAxisType[EPAxisType["e_edgeB"] = 2] = "e_edgeB";
 })(EPAxisType || (EPAxisType = {}));
-// unused?
-/** @internal */ var VertexType;
-(function (VertexType) {
-    VertexType[VertexType["e_isolated"] = 0] = "e_isolated";
-    VertexType[VertexType["e_concave"] = 1] = "e_concave";
-    VertexType[VertexType["e_convex"] = 2] = "e_convex";
-})(VertexType || (VertexType = {}));
 /**
  * This structure is used to keep track of the best separating axis.
  */
