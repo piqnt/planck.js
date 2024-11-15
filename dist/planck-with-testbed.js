@@ -6129,8 +6129,6 @@
                         }
                         var indexA = c_3.getChildIndexA();
                         var indexB = c_3.getChildIndexB();
-                        bA_1.m_sweep;
-                        bB_1.m_sweep;
                         // Compute the time of impact in interval [0, minTOI]
                         input.proxyA.set(fA_1.getShape(), indexA);
                         input.proxyB.set(fB_1.getShape(), indexB);

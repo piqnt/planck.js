@@ -579,9 +579,6 @@ export class Solver {
           const indexA = c.getChildIndexA();
           const indexB = c.getChildIndexB();
 
-          const sweepA = bA.m_sweep;
-          const sweepB = bB.m_sweep;
-
           // Compute the time of impact in interval [0, minTOI]
           input.proxyA.set(fA.getShape(), indexA);
           input.proxyB.set(fB.getShape(), indexB);
