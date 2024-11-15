@@ -4826,7 +4826,6 @@
         Simplex.prototype.getSearchDirection = function () {
             var v1 = this.m_v1;
             var v2 = this.m_v2;
-            this.m_v3;
             switch (this.m_count) {
                 case 1:
                     return setVec2(searchDirection_reuse, -v1.w.x, -v1.w.y);
@@ -4849,7 +4848,6 @@
         Simplex.prototype.getClosestPoint = function () {
             var v1 = this.m_v1;
             var v2 = this.m_v2;
-            this.m_v3;
             switch (this.m_count) {
                 case 0:
                     return zeroVec2(closestPoint_reuse);
