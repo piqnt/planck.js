@@ -7463,8 +7463,6 @@ var Contact = /** @class */ (function () {
         var bodyB = fixtureB.m_body;
         if (bodyA === null || bodyB === null)
             return minSeparation;
-        bodyA.c_velocity;
-        bodyB.c_velocity;
         var positionA = bodyA.c_position;
         var positionB = bodyB.c_position;
         var localCenterA = this.p_localCenterA;
@@ -7668,8 +7666,6 @@ var Contact = /** @class */ (function () {
             return;
         var velocityA = bodyA.c_velocity;
         var velocityB = bodyB.c_velocity;
-        bodyA.c_position;
-        bodyB.c_position;
         var mA = this.v_invMassA;
         var iA = this.v_invIA;
         var mB = this.v_invMassB;
@@ -7710,9 +7706,7 @@ var Contact = /** @class */ (function () {
         if (bodyA === null || bodyB === null)
             return;
         var velocityA = bodyA.c_velocity;
-        bodyA.c_position;
         var velocityB = bodyB.c_velocity;
-        bodyB.c_position;
         var mA = this.v_invMassA;
         var iA = this.v_invIA;
         var mB = this.v_invMassB;

@@ -642,8 +642,6 @@ export class Contact {
     const bodyB = fixtureB.m_body;
     if (bodyA === null || bodyB === null) return minSeparation;
 
-    const velocityA = bodyA.c_velocity;
-    const velocityB = bodyB.c_velocity;
     const positionA = bodyA.c_position;
     const positionB = bodyB.c_position;
 
@@ -896,8 +894,6 @@ export class Contact {
 
     const velocityA = bodyA.c_velocity;
     const velocityB = bodyB.c_velocity;
-    const positionA = bodyA.c_position;
-    const positionB = bodyB.c_position;
 
     const mA = this.v_invMassA;
     const iA = this.v_invIA;
@@ -946,10 +942,8 @@ export class Contact {
     if (bodyA === null || bodyB === null) return;
 
     const velocityA = bodyA.c_velocity;
-    const positionA = bodyA.c_position;
 
     const velocityB = bodyB.c_velocity;
-    const positionB = bodyB.c_position;
 
     const mA = this.v_invMassA;
     const iA = this.v_invIA;
