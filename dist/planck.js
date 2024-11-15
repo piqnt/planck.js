@@ -15677,13 +15677,6 @@
         EPAxisType[EPAxisType["e_edgeA"] = 1] = "e_edgeA";
         EPAxisType[EPAxisType["e_edgeB"] = 2] = "e_edgeB";
     })(EPAxisType || (EPAxisType = {}));
-    // unused?
-    /** @internal */ var VertexType;
-    (function (VertexType) {
-        VertexType[VertexType["e_isolated"] = 0] = "e_isolated";
-        VertexType[VertexType["e_concave"] = 1] = "e_concave";
-        VertexType[VertexType["e_convex"] = 2] = "e_convex";
-    })(VertexType || (VertexType = {}));
     /**
      * This structure is used to keep track of the best separating axis.
      */
