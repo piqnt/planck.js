@@ -122,11 +122,10 @@ export class Serializer<T> {
       if (!refMemoById[value.__sid]) {
         refQueue.push(value);
         const index = json.length + refQueue.length;
-        const ref = {
+        refMemoById[value.__sid] = {
           refIndex: index,
           refType: typeName
         };
-        refMemoById[value.__sid] = ref;
       }
       return refMemoById[value.__sid];
     }
@@ -227,15 +226,12 @@ export class Serializer<T> {
       const refIndex = ref.refIndex;
       if (!deserializedRefMemoByIndex[refIndex]) {
         const data = json[refIndex];
-        const obj = deserializeWithHooks(classHint, data, context);
-        deserializedRefMemoByIndex[refIndex] = obj;
+        deserializedRefMemoByIndex[refIndex] = deserializeWithHooks(classHint, data, context);
       }
       return deserializedRefMemoByIndex[refIndex];
     }
 
-    const root = deserializeWithHooks(rootClass, json[0], null);
-
-    return root;
+    return deserializeWithHooks(rootClass, json[0], null);
   };
 
   static toJson: (root: World) => SerializedType;

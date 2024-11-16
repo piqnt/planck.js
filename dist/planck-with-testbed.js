@@ -5549,8 +5549,7 @@
                 transformVec2(pointA$2, xfA$1, localPointA_1);
                 transformVec2(pointB$2, xfB$1, localPointB_1);
                 subVec2(this.m_axis, pointB$2, pointA$2);
-                var s = normalizeVec2Length(this.m_axis);
-                return s;
+                return normalizeVec2Length(this.m_axis);
             }
             else if (cache.indexA[0] === cache.indexA[1]) {
                 // Two points on B and one on A.
@@ -5607,8 +5606,7 @@
                     copyVec2(localPointB, this.m_proxyB.getVertex(this.indexB));
                     transformVec2(pointA$2, xfA$1, localPointA);
                     transformVec2(pointB$2, xfB$1, localPointB);
-                    var sep = dotVec2(pointB$2, this.m_axis) - dotVec2(pointA$2, this.m_axis);
-                    return sep;
+                    return dotVec2(pointB$2, this.m_axis) - dotVec2(pointA$2, this.m_axis);
                 }
                 case SeparationFunctionType.e_faceA: {
                     rotVec2(normal$3, xfA$1.q, this.m_axis);
@@ -5620,8 +5618,7 @@
                     }
                     copyVec2(localPointB, this.m_proxyB.getVertex(this.indexB));
                     transformVec2(pointB$2, xfB$1, localPointB);
-                    var sep = dotVec2(pointB$2, normal$3) - dotVec2(pointA$2, normal$3);
-                    return sep;
+                    return dotVec2(pointB$2, normal$3) - dotVec2(pointA$2, normal$3);
                 }
                 case SeparationFunctionType.e_faceB: {
                     rotVec2(normal$3, xfB$1.q, this.m_axis);
@@ -5633,8 +5630,7 @@
                     }
                     copyVec2(localPointA, this.m_proxyA.getVertex(this.indexA));
                     transformVec2(pointA$2, xfA$1, localPointA);
-                    var sep = dotVec2(pointA$2, normal$3) - dotVec2(pointB$2, normal$3);
-                    return sep;
+                    return dotVec2(pointA$2, normal$3) - dotVec2(pointB$2, normal$3);
                 }
                 default:
                     if (find) {
@@ -14855,11 +14851,10 @@
                     if (!refMemoById[value.__sid]) {
                         refQueue.push(value);
                         var index = json.length + refQueue.length;
-                        var ref = {
+                        refMemoById[value.__sid] = {
                             refIndex: index,
                             refType: typeName
                         };
-                        refMemoById[value.__sid] = ref;
                     }
                     return refMemoById[value.__sid];
                 }
@@ -14953,13 +14948,11 @@
                     var refIndex = ref.refIndex;
                     if (!deserializedRefMemoByIndex[refIndex]) {
                         var data = json[refIndex];
-                        var obj = deserializeWithHooks(classHint, data, context);
-                        deserializedRefMemoByIndex[refIndex] = obj;
+                        deserializedRefMemoByIndex[refIndex] = deserializeWithHooks(classHint, data, context);
                     }
                     return deserializedRefMemoByIndex[refIndex];
                 }
-                var root = deserializeWithHooks(rootClass, json[0], null);
-                return root;
+                return deserializeWithHooks(rootClass, json[0], null);
             };
             this.options = __assign$1(__assign$1({}, DEFAULT_OPTIONS), options);
         }
