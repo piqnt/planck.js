@@ -30,6 +30,7 @@ import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
 import { Body } from '../Body';
 import { TimeStep } from "../Solver";
+import { ConstrainedBodiesJoint } from '../ConstrainedBodiesJoint';
 
 
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
@@ -88,7 +89,7 @@ export interface DistanceJointDef extends JointDef, DistanceJointOpt {
  * A distance joint constrains two points on two bodies to remain at a fixed
  * distance from each other. You can view this as a massless, rigid rod.
  */
-export class DistanceJoint extends Joint {
+export class DistanceJoint extends Joint implements ConstrainedBodiesJoint{
   static TYPE = 'distance-joint' as const;
 
   // Solver shared
@@ -304,12 +305,7 @@ export class DistanceJoint extends Joint {
   }
 
   initVelocityConstraints(step: TimeStep): void {
-    this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
-    this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
-    this.m_invMassA = this.m_bodyA.m_invMass;
-    this.m_invMassB = this.m_bodyB.m_invMass;
-    this.m_invIA = this.m_bodyA.m_invI;
-    this.m_invIB = this.m_bodyB.m_invI;
+    this.initializeMassAndInertiaConstraints(this)
 
     const cA = this.m_bodyA.c_position.c;
     const aA = this.m_bodyA.c_position.a;

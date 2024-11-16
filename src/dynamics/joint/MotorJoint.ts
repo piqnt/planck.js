@@ -30,6 +30,7 @@ import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
 import { Body } from '../Body';
 import { TimeStep } from "../Solver";
+import { ConstrainedBodiesJoint } from '../ConstrainedBodiesJoint';
 
 
 /** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -79,7 +80,7 @@ export interface MotorJointDef extends JointDef, MotorJointOpt {
  * typical usage is to control the movement of a dynamic body with respect to
  * the ground.
  */
-export class MotorJoint extends Joint {
+export class MotorJoint extends Joint implements ConstrainedBodiesJoint{
   static TYPE = 'motor-joint' as const;
 
   /** @internal */ m_type: 'motor-joint';
@@ -295,12 +296,7 @@ export class MotorJoint extends Joint {
   }
 
   initVelocityConstraints(step: TimeStep): void {
-    this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
-    this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
-    this.m_invMassA = this.m_bodyA.m_invMass;
-    this.m_invMassB = this.m_bodyB.m_invMass;
-    this.m_invIA = this.m_bodyA.m_invI;
-    this.m_invIB = this.m_bodyB.m_invI;
+    this.initializeMassAndInertiaConstraints(this)
 
     const cA = this.m_bodyA.c_position.c;
     const aA = this.m_bodyA.c_position.a;

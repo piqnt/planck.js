@@ -32,6 +32,7 @@ import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
 import { Body } from '../Body';
 import { TimeStep } from "../Solver";
+import { ConstrainedBodiesJoint } from '../ConstrainedBodiesJoint';
 
 
 /** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -134,7 +135,7 @@ export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
  * relative rotation about the shared point. A maximum motor torque is provided
  * so that infinite forces are not generated.
  */
-export class RevoluteJoint extends Joint {
+export class RevoluteJoint extends Joint implements ConstrainedBodiesJoint{
   static TYPE = 'revolute-joint' as const;
 
   /** @internal */ m_type: 'revolute-joint';
@@ -466,12 +467,7 @@ export class RevoluteJoint extends Joint {
   }
 
   initVelocityConstraints(step: TimeStep): void {
-    this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
-    this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
-    this.m_invMassA = this.m_bodyA.m_invMass;
-    this.m_invMassB = this.m_bodyB.m_invMass;
-    this.m_invIA = this.m_bodyA.m_invI;
-    this.m_invIB = this.m_bodyB.m_invI;
+    this.initializeMassAndInertiaConstraints(this)
 
     const aA = this.m_bodyA.c_position.a;
     const vA = this.m_bodyA.c_velocity.v;

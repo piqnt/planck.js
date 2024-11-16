@@ -30,6 +30,7 @@ import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
 import { Body } from '../Body';
 import { TimeStep } from "../Solver";
+import { ConstrainedBodiesJoint } from '../ConstrainedBodiesJoint';
 
 
 /** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -76,7 +77,7 @@ export interface FrictionJointDef extends JointDef, FrictionJointOpt {
  * Friction joint. This is used for top-down friction. It provides 2D
  * translational friction and angular friction.
  */
-export class FrictionJoint extends Joint {
+export class FrictionJoint extends Joint implements ConstrainedBodiesJoint{
   static TYPE = 'friction-joint' as const;
 
   /** @internal */ m_type: 'friction-joint';
@@ -260,12 +261,7 @@ export class FrictionJoint extends Joint {
   }
 
   initVelocityConstraints(step: TimeStep): void {
-    this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
-    this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
-    this.m_invMassA = this.m_bodyA.m_invMass;
-    this.m_invMassB = this.m_bodyB.m_invMass;
-    this.m_invIA = this.m_bodyA.m_invI;
-    this.m_invIB = this.m_bodyB.m_invI;
+    this.initializeMassAndInertiaConstraints(this)
 
     const aA = this.m_bodyA.c_position.a;
     const vA = this.m_bodyA.c_velocity.v;

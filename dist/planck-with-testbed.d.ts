@@ -446,6 +446,14 @@ declare class ShapeCastOutput {
 // Algorithm by Gino van den Bergen.
 // "Smooth Mesh Contacts with GJK" in Game Physics Pearls. 2010
 declare const ShapeCast: (output: ShapeCastOutput, input: ShapeCastInput) => boolean;
+interface ConstrainedBodiesJoint {
+    m_localCenterA: Vec2;
+    m_localCenterB: Vec2;
+    m_invMassA: number;
+    m_invMassB: number;
+    m_invIA: number;
+    m_invIB: number;
+}
 /**
  * A joint edge is used to connect bodies and joints together in a joint graph
  * where each body is a node and each joint is an edge. A joint edge belongs to
@@ -556,6 +564,7 @@ declare abstract class Joint {
      * Shift the origin for any points stored in world coordinates.
      */
     shiftOrigin(newOrigin: Vec2Value): void;
+    initializeMassAndInertiaConstraints(jointInstance: Joint & ConstrainedBodiesJoint): void;
     abstract initVelocityConstraints(step: TimeStep): void;
     abstract solveVelocityConstraints(step: TimeStep): void;
     /**
@@ -2710,7 +2719,7 @@ declare function DistanceJoint(def: DistanceJointOpt, bodyA: Body, bodyB: Body, 
  * A distance joint constrains two points on two bodies to remain at a fixed
  * distance from each other. You can view this as a massless, rigid rod.
  */
-declare class DistanceJoint extends Joint {
+declare class DistanceJoint extends Joint implements ConstrainedBodiesJoint {
     static TYPE: "distance-joint";
     /**
      * @param def DistanceJoint definition.
@@ -2807,7 +2816,7 @@ declare function FrictionJoint(def: FrictionJointOpt, bodyA: Body, bodyB: Body, 
  * Friction joint. This is used for top-down friction. It provides 2D
  * translational friction and angular friction.
  */
-declare class FrictionJoint extends Joint {
+declare class FrictionJoint extends Joint implements ConstrainedBodiesJoint {
     static TYPE: "friction-joint";
     constructor(def: FrictionJointDef);
     /**
@@ -2954,7 +2963,7 @@ declare function RevoluteJoint(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, 
  * relative rotation about the shared point. A maximum motor torque is provided
  * so that infinite forces are not generated.
  */
-declare class RevoluteJoint extends Joint {
+declare class RevoluteJoint extends Joint implements ConstrainedBodiesJoint {
     static TYPE: "revolute-joint";
     constructor(def: RevoluteJointDef);
     constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
@@ -3130,7 +3139,7 @@ declare function PrismaticJoint(def: PrismaticJointOpt, bodyA: Body, bodyB: Body
  * joint limit to restrict the range of motion and a joint motor to drive the
  * motion or to model joint friction.
  */
-declare class PrismaticJoint extends Joint {
+declare class PrismaticJoint extends Joint implements ConstrainedBodiesJoint {
     static TYPE: "prismatic-joint";
     constructor(def: PrismaticJointDef);
     constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
@@ -3383,7 +3392,7 @@ declare function MotorJoint(def: MotorJointOpt, bodyA: Body, bodyB: Body): Motor
  * typical usage is to control the movement of a dynamic body with respect to
  * the ground.
  */
-declare class MotorJoint extends Joint {
+declare class MotorJoint extends Joint implements ConstrainedBodiesJoint {
     static TYPE: "motor-joint";
     constructor(def: MotorJointDef);
     constructor(def: MotorJointOpt, bodyA: Body, bodyB: Body);
@@ -3656,7 +3665,7 @@ declare function PulleyJoint(def: PulleyJointOpt, bodyA: Body, bodyB: Body, grou
  * anchor points with static shapes to prevent one side from going to zero
  * length.
  */
-declare class PulleyJoint extends Joint {
+declare class PulleyJoint extends Joint implements ConstrainedBodiesJoint {
     static TYPE: "pulley-joint";
     constructor(def: PulleyJointDef);
     constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2Value, groundB: Vec2Value, anchorA: Vec2Value, anchorB: Vec2Value, ratio: number);
@@ -3781,7 +3790,7 @@ declare function RopeJoint(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: 
  * sponginess, so I chose not to implement it that way. See {@link DistanceJoint} if you
  * want to dynamically control length.
  */
-declare class RopeJoint extends Joint {
+declare class RopeJoint extends Joint implements ConstrainedBodiesJoint {
     static TYPE: "rope-joint";
     constructor(def: RopeJointDef);
     constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
@@ -3876,7 +3885,7 @@ declare function WeldJoint(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: 
  * A weld joint essentially glues two bodies together. A weld joint may distort
  * somewhat because the island constraint solver is approximate.
  */
-declare class WeldJoint extends Joint {
+declare class WeldJoint extends Joint implements ConstrainedBodiesJoint {
     static TYPE: "weld-joint";
     constructor(def: WeldJointDef);
     constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
@@ -4005,7 +4014,7 @@ declare function WheelJoint(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor
  * point to line constraint with a rotational motor and a linear spring/damper.
  * This joint is designed for vehicle suspensions.
  */
-declare class WheelJoint extends Joint {
+declare class WheelJoint extends Joint implements ConstrainedBodiesJoint {
     static TYPE: "wheel-joint";
     constructor(def: WheelJointDef);
     constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
@@ -4770,6 +4779,14 @@ declare namespace planck {
     // Algorithm by Gino van den Bergen.
     // "Smooth Mesh Contacts with GJK" in Game Physics Pearls. 2010
     const ShapeCast: (output: ShapeCastOutput, input: ShapeCastInput) => boolean;
+    interface ConstrainedBodiesJoint {
+        m_localCenterA: Vec2;
+        m_localCenterB: Vec2;
+        m_invMassA: number;
+        m_invMassB: number;
+        m_invIA: number;
+        m_invIB: number;
+    }
     /**
      * A joint edge is used to connect bodies and joints together in a joint graph
      * where each body is a node and each joint is an edge. A joint edge belongs to
@@ -4880,6 +4897,7 @@ declare namespace planck {
          * Shift the origin for any points stored in world coordinates.
          */
         shiftOrigin(newOrigin: Vec2Value): void;
+        initializeMassAndInertiaConstraints(jointInstance: Joint & ConstrainedBodiesJoint): void;
         abstract initVelocityConstraints(step: TimeStep): void;
         abstract solveVelocityConstraints(step: TimeStep): void;
         /**
@@ -7036,7 +7054,7 @@ declare namespace planck {
      * A distance joint constrains two points on two bodies to remain at a fixed
      * distance from each other. You can view this as a massless, rigid rod.
      */
-    class DistanceJoint extends Joint {
+    class DistanceJoint extends Joint implements ConstrainedBodiesJoint {
         static TYPE: "distance-joint";
         /**
          * @param def DistanceJoint definition.
@@ -7123,7 +7141,7 @@ declare namespace planck {
      * Friction joint. This is used for top-down friction. It provides 2D
      * translational friction and angular friction.
      */
-    class FrictionJoint extends Joint {
+    class FrictionJoint extends Joint implements ConstrainedBodiesJoint {
         static TYPE: "friction-joint";
         constructor(def: FrictionJointDef);
         /**
@@ -7252,7 +7270,7 @@ declare namespace planck {
      * relative rotation about the shared point. A maximum motor torque is provided
      * so that infinite forces are not generated.
      */
-    class RevoluteJoint extends Joint {
+    class RevoluteJoint extends Joint implements ConstrainedBodiesJoint {
         static TYPE: "revolute-joint";
         constructor(def: RevoluteJointDef);
         constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
@@ -7414,7 +7432,7 @@ declare namespace planck {
      * joint limit to restrict the range of motion and a joint motor to drive the
      * motion or to model joint friction.
      */
-    class PrismaticJoint extends Joint {
+    class PrismaticJoint extends Joint implements ConstrainedBodiesJoint {
         static TYPE: "prismatic-joint";
         constructor(def: PrismaticJointDef);
         constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
@@ -7627,7 +7645,7 @@ declare namespace planck {
      * typical usage is to control the movement of a dynamic body with respect to
      * the ground.
      */
-    class MotorJoint extends Joint {
+    class MotorJoint extends Joint implements ConstrainedBodiesJoint {
         static TYPE: "motor-joint";
         constructor(def: MotorJointDef);
         constructor(def: MotorJointOpt, bodyA: Body, bodyB: Body);
@@ -7850,7 +7868,7 @@ declare namespace planck {
      * anchor points with static shapes to prevent one side from going to zero
      * length.
      */
-    class PulleyJoint extends Joint {
+    class PulleyJoint extends Joint implements ConstrainedBodiesJoint {
         static TYPE: "pulley-joint";
         constructor(def: PulleyJointDef);
         constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2Value, groundB: Vec2Value, anchorA: Vec2Value, anchorB: Vec2Value, ratio: number);
@@ -7951,7 +7969,7 @@ declare namespace planck {
      * sponginess, so I chose not to implement it that way. See {@link DistanceJoint} if you
      * want to dynamically control length.
      */
-    class RopeJoint extends Joint {
+    class RopeJoint extends Joint implements ConstrainedBodiesJoint {
         static TYPE: "rope-joint";
         constructor(def: RopeJointDef);
         constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
@@ -8036,7 +8054,7 @@ declare namespace planck {
      * A weld joint essentially glues two bodies together. A weld joint may distort
      * somewhat because the island constraint solver is approximate.
      */
-    class WeldJoint extends Joint {
+    class WeldJoint extends Joint implements ConstrainedBodiesJoint {
         static TYPE: "weld-joint";
         constructor(def: WeldJointDef);
         constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
@@ -8151,7 +8169,7 @@ declare namespace planck {
      * point to line constraint with a rotational motor and a linear spring/damper.
      * This joint is designed for vehicle suspensions.
      */
-    class WheelJoint extends Joint {
+    class WheelJoint extends Joint implements ConstrainedBodiesJoint {
         static TYPE: "wheel-joint";
         constructor(def: WheelJointDef);
         constructor(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);

@@ -4382,6 +4382,14 @@ var Joint = /** @class */ (function () {
      * Shift the origin for any points stored in world coordinates.
      */
     Joint.prototype.shiftOrigin = function (newOrigin) { };
+    Joint.prototype.initializeMassAndInertiaConstraints = function (jointInstance) {
+        jointInstance.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
+        jointInstance.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
+        jointInstance.m_invMassA = this.m_bodyA.m_invMass;
+        jointInstance.m_invMassB = this.m_bodyB.m_invMass;
+        jointInstance.m_invIA = this.m_bodyA.m_invI;
+        jointInstance.m_invIB = this.m_bodyB.m_invI;
+    };
     /**
      * @internal @deprecated
      * Temporary for backward compatibility, will be removed.
@@ -10406,12 +10414,7 @@ var DistanceJoint = /** @class */ (function (_super) {
         return 0.0;
     };
     DistanceJoint.prototype.initVelocityConstraints = function (step) {
-        this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
-        this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
-        this.m_invMassA = this.m_bodyA.m_invMass;
-        this.m_invMassB = this.m_bodyB.m_invMass;
-        this.m_invIA = this.m_bodyA.m_invI;
-        this.m_invIB = this.m_bodyB.m_invI;
+        this.initializeMassAndInertiaConstraints(this);
         var cA = this.m_bodyA.c_position.c;
         var aA = this.m_bodyA.c_position.a;
         var vA = this.m_bodyA.c_velocity.v;
@@ -10697,12 +10700,7 @@ var FrictionJoint = /** @class */ (function (_super) {
         return inv_dt * this.m_angularImpulse;
     };
     FrictionJoint.prototype.initVelocityConstraints = function (step) {
-        this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
-        this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
-        this.m_invMassA = this.m_bodyA.m_invMass;
-        this.m_invMassB = this.m_bodyB.m_invMass;
-        this.m_invIA = this.m_bodyA.m_invI;
-        this.m_invIB = this.m_bodyB.m_invI;
+        this.initializeMassAndInertiaConstraints(this);
         var aA = this.m_bodyA.c_position.a;
         var vA = this.m_bodyA.c_velocity.v;
         var wA = this.m_bodyA.c_velocity.w;
@@ -11320,12 +11318,7 @@ var RevoluteJoint = /** @class */ (function (_super) {
         return inv_dt * this.m_impulse.z;
     };
     RevoluteJoint.prototype.initVelocityConstraints = function (step) {
-        this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
-        this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
-        this.m_invMassA = this.m_bodyA.m_invMass;
-        this.m_invMassB = this.m_bodyB.m_invMass;
-        this.m_invIA = this.m_bodyA.m_invI;
-        this.m_invIB = this.m_bodyB.m_invI;
+        this.initializeMassAndInertiaConstraints(this);
         var aA = this.m_bodyA.c_position.a;
         var vA = this.m_bodyA.c_velocity.v;
         var wA = this.m_bodyA.c_velocity.w;
@@ -11960,12 +11953,7 @@ var PrismaticJoint = /** @class */ (function (_super) {
         return inv_dt * this.m_impulse.y;
     };
     PrismaticJoint.prototype.initVelocityConstraints = function (step) {
-        this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
-        this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
-        this.m_invMassA = this.m_bodyA.m_invMass;
-        this.m_invMassB = this.m_bodyB.m_invMass;
-        this.m_invIA = this.m_bodyA.m_invI;
-        this.m_invIB = this.m_bodyB.m_invI;
+        this.initializeMassAndInertiaConstraints(this);
         var cA = this.m_bodyA.c_position.c;
         var aA = this.m_bodyA.c_position.a;
         var vA = this.m_bodyA.c_velocity.v;
@@ -12875,12 +12863,7 @@ var MotorJoint = /** @class */ (function (_super) {
         return inv_dt * this.m_angularImpulse;
     };
     MotorJoint.prototype.initVelocityConstraints = function (step) {
-        this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
-        this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
-        this.m_invMassA = this.m_bodyA.m_invMass;
-        this.m_invMassB = this.m_bodyB.m_invMass;
-        this.m_invIA = this.m_bodyA.m_invI;
-        this.m_invIB = this.m_bodyB.m_invI;
+        this.initializeMassAndInertiaConstraints(this);
         var cA = this.m_bodyA.c_position.c;
         var aA = this.m_bodyA.c_position.a;
         var vA = this.m_bodyA.c_velocity.v;
@@ -13490,12 +13473,7 @@ var PulleyJoint = /** @class */ (function (_super) {
         return 0.0;
     };
     PulleyJoint.prototype.initVelocityConstraints = function (step) {
-        this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
-        this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
-        this.m_invMassA = this.m_bodyA.m_invMass;
-        this.m_invMassB = this.m_bodyB.m_invMass;
-        this.m_invIA = this.m_bodyA.m_invI;
-        this.m_invIB = this.m_bodyB.m_invI;
+        this.initializeMassAndInertiaConstraints(this);
         var cA = this.m_bodyA.c_position.c;
         var aA = this.m_bodyA.c_position.a;
         var vA = this.m_bodyA.c_velocity.v;
@@ -13784,12 +13762,7 @@ var RopeJoint = /** @class */ (function (_super) {
         return 0.0;
     };
     RopeJoint.prototype.initVelocityConstraints = function (step) {
-        this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
-        this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
-        this.m_invMassA = this.m_bodyA.m_invMass;
-        this.m_invMassB = this.m_bodyB.m_invMass;
-        this.m_invIA = this.m_bodyA.m_invI;
-        this.m_invIB = this.m_bodyB.m_invI;
+        this.initializeMassAndInertiaConstraints(this);
         var cA = this.m_bodyA.c_position.c;
         var aA = this.m_bodyA.c_position.a;
         var vA = this.m_bodyA.c_velocity.v;
@@ -14094,12 +14067,7 @@ var WeldJoint = /** @class */ (function (_super) {
         return inv_dt * this.m_impulse.z;
     };
     WeldJoint.prototype.initVelocityConstraints = function (step) {
-        this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
-        this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
-        this.m_invMassA = this.m_bodyA.m_invMass;
-        this.m_invMassB = this.m_bodyB.m_invMass;
-        this.m_invIA = this.m_bodyA.m_invI;
-        this.m_invIB = this.m_bodyB.m_invI;
+        this.initializeMassAndInertiaConstraints(this);
         var aA = this.m_bodyA.c_position.a;
         var vA = this.m_bodyA.c_velocity.v;
         var wA = this.m_bodyA.c_velocity.w;
@@ -14590,12 +14558,7 @@ var WheelJoint = /** @class */ (function (_super) {
         return inv_dt * this.m_motorImpulse;
     };
     WheelJoint.prototype.initVelocityConstraints = function (step) {
-        this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
-        this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
-        this.m_invMassA = this.m_bodyA.m_invMass;
-        this.m_invMassB = this.m_bodyB.m_invMass;
-        this.m_invIA = this.m_bodyA.m_invI;
-        this.m_invIB = this.m_bodyB.m_invI;
+        this.initializeMassAndInertiaConstraints(this);
         var mA = this.m_invMassA;
         var mB = this.m_invMassB;
         var iA = this.m_invIA;
