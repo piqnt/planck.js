@@ -378,8 +378,7 @@ class SeparationFunction {
       matrix.transformVec2(pointA, xfA, localPointA);
       matrix.transformVec2(pointB, xfB, localPointB);
       matrix.subVec2(this.m_axis, pointB, pointA);
-      const s = matrix.normalizeVec2Length(this.m_axis);
-      return s;
+      return matrix.normalizeVec2Length(this.m_axis);
 
     } else if (cache.indexA[0] === cache.indexA[1]) {
       // Two points on B and one on A.
@@ -450,8 +449,7 @@ class SeparationFunction {
         matrix.transformVec2(pointA, xfA, localPointA);
         matrix.transformVec2(pointB, xfB, localPointB);
 
-        const sep = matrix.dotVec2(pointB, this.m_axis) - matrix.dotVec2(pointA, this.m_axis);
-        return sep;
+        return matrix.dotVec2(pointB, this.m_axis) - matrix.dotVec2(pointA, this.m_axis);
       }
 
       case SeparationFunctionType.e_faceA: {
@@ -468,8 +466,7 @@ class SeparationFunction {
         matrix.copyVec2(localPointB, this.m_proxyB.getVertex(this.indexB));
         matrix.transformVec2(pointB, xfB, localPointB);
 
-        const sep = matrix.dotVec2(pointB, normal) - matrix.dotVec2(pointA, normal);
-        return sep;
+        return matrix.dotVec2(pointB, normal) - matrix.dotVec2(pointA, normal);
       }
 
       case SeparationFunctionType.e_faceB: {
@@ -486,8 +483,7 @@ class SeparationFunction {
         matrix.copyVec2(localPointA, this.m_proxyA.getVertex(this.indexA));
         matrix.transformVec2(pointA, xfA, localPointA);
 
-        const sep = matrix.dotVec2(pointA, normal) - matrix.dotVec2(pointB, normal);
-        return sep;
+        return matrix.dotVec2(pointA, normal) - matrix.dotVec2(pointB, normal);
       }
 
       default:
