@@ -26,6 +26,7 @@ import type { Vec2, Vec2Value }  from '../common/Vec2';
 import type { Body }  from './Body';
 import { TimeStep } from "./Solver";
 import { Style } from '../util/Testbed';
+import { ConstrainedBodiesJoint } from './ConstrainedBodiesJoint';
 
 /** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
 
@@ -208,6 +209,15 @@ export abstract class Joint {
    * Shift the origin for any points stored in world coordinates.
    */
   shiftOrigin(newOrigin: Vec2Value): void {}
+
+  initializeMassAndInertiaConstraints(jointInstance: Joint & ConstrainedBodiesJoint ) : void {
+    jointInstance.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
+    jointInstance.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
+    jointInstance.m_invMassA = this.m_bodyA.m_invMass;
+    jointInstance.m_invMassB = this.m_bodyB.m_invMass;
+    jointInstance.m_invIA = this.m_bodyA.m_invI;
+    jointInstance.m_invIB = this.m_bodyB.m_invI;
+  }
 
   abstract initVelocityConstraints(step: TimeStep): void;
 

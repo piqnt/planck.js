@@ -30,6 +30,7 @@ import { Rot } from '../../common/Rot';
 import { Joint, JointOpt, JointDef } from '../Joint';
 import { Body } from '../Body';
 import { TimeStep } from "../Solver";
+import { ConstrainedBodiesJoint } from '../ConstrainedBodiesJoint';
 
 
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
@@ -86,7 +87,7 @@ export interface RopeJointDef extends JointDef, RopeJointOpt {
  * sponginess, so I chose not to implement it that way. See {@link DistanceJoint} if you
  * want to dynamically control length.
  */
-export class RopeJoint extends Joint {
+export class RopeJoint extends Joint implements ConstrainedBodiesJoint{
   static TYPE = 'rope-joint' as const;
 
   /** @internal */ m_type: 'rope-joint';
@@ -236,12 +237,7 @@ export class RopeJoint extends Joint {
   }
 
   initVelocityConstraints(step: TimeStep): void {
-    this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
-    this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
-    this.m_invMassA = this.m_bodyA.m_invMass;
-    this.m_invMassB = this.m_bodyB.m_invMass;
-    this.m_invIA = this.m_bodyA.m_invI;
-    this.m_invIB = this.m_bodyB.m_invI;
+    this.initializeMassAndInertiaConstraints(this)
 
     const cA = this.m_bodyA.c_position.c;
     const aA = this.m_bodyA.c_position.a;
