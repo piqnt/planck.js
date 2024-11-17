@@ -160,21 +160,21 @@ ___
 
 ###  getNextVertex
 
-▸ **getNextVertex**(): *Vec2*
+▸ **getNextVertex**(): *[Vec2](/api/classes/vec2)*
 
 Optional next vertex, used for smooth collision.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  getPrevVertex
 
-▸ **getPrevVertex**(): *Vec2*
+▸ **getPrevVertex**(): *[Vec2](/api/classes/vec2)*
 
 Optional prev vertex, used for smooth collision.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 

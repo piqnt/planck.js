@@ -16,7 +16,7 @@
 
 ###  v
 
-• **v**: *Vec2‹›* = Vec2.zero()
+• **v**: *[Vec2](/api/classes/vec2)‹›* = Vec2.zero()
 
 linear
 

@@ -28,7 +28,7 @@ ___
 
 ###  c
 
-• **c**: *Vec2‹›* = Vec2.zero()
+• **c**: *[Vec2](/api/classes/vec2)‹›* = Vec2.zero()
 
 location
 

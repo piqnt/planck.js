@@ -166,17 +166,17 @@ ___
 
 ###  getNextVertex
 
-▸ **getNextVertex**(): *Vec2*
+▸ **getNextVertex**(): *[Vec2](/api/classes/vec2)*
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  getPrevVertex
 
-▸ **getPrevVertex**(): *Vec2*
+▸ **getPrevVertex**(): *[Vec2](/api/classes/vec2)*
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 ###  getVertex
 
-▸ **getVertex**(`index`: number): *Vec2*
+▸ **getVertex**(`index`: number): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -210,7 +210,7 @@ Name | Type |
 ------ | ------ |
 `index` | number |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -245,7 +245,7 @@ ___
 
 ###  setNextVertex
 
-▸ **setNextVertex**(`nextVertex`: Vec2): *void*
+▸ **setNextVertex**(`nextVertex`: [Vec2](/api/classes/vec2)): *void*
 
 Establish connectivity to a vertex that follows the last vertex. Don't call
 this for loops.
@@ -254,7 +254,7 @@ this for loops.
 
 Name | Type |
 ------ | ------ |
-`nextVertex` | Vec2 |
+`nextVertex` | [Vec2](/api/classes/vec2) |
 
 **Returns:** *void*
 
@@ -262,7 +262,7 @@ ___
 
 ###  setPrevVertex
 
-▸ **setPrevVertex**(`prevVertex`: Vec2): *void*
+▸ **setPrevVertex**(`prevVertex`: [Vec2](/api/classes/vec2)): *void*
 
 Establish connectivity to a vertex that precedes the first vertex. Don't call
 this for loops.
@@ -271,7 +271,7 @@ this for loops.
 
 Name | Type |
 ------ | ------ |
-`prevVertex` | Vec2 |
+`prevVertex` | [Vec2](/api/classes/vec2) |
 
 **Returns:** *void*
 

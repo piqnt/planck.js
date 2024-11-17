@@ -571,6 +571,7 @@ declare abstract class Joint {
 interface Style {
     stroke?: string;
     fill?: string;
+    lineWidth?: number;
 }
 type KEY = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "right" | "left" | "up" | "down" | "fire";
 type ActiveKeys = {
@@ -596,6 +597,7 @@ declare abstract class Testbed {
     x: number;
     /** World viewbox center horizontal offset. */
     y: number;
+    /** @hidden */
     scaleY: number;
     /** World simulation step frequency */
     hz: number;
@@ -610,11 +612,9 @@ declare abstract class Testbed {
     keydown: (keyCode: number, label: string) => void;
     /** callback, to be implemented by user */
     keyup: (keyCode: number, label: string) => void;
-    private statusText;
-    private statusMap;
-    status(name: string, value: any): void;
-    status(value: object | string): void;
-    info(text: string): void;
+    abstract status(name: string, value: any): void;
+    abstract status(value: object | string): void;
+    abstract info(text: string): void;
     color(r: number, g: number, b: number): string;
     abstract drawPoint(p: {
         x: number;
@@ -4895,6 +4895,7 @@ declare namespace planck {
     interface Style {
         stroke?: string;
         fill?: string;
+        lineWidth?: number;
     }
     type KEY = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "right" | "left" | "up" | "down" | "fire";
     type ActiveKeys = {
@@ -4920,6 +4921,7 @@ declare namespace planck {
         x: number;
         /** World viewbox center horizontal offset. */
         y: number;
+        /** @hidden */
         scaleY: number;
         /** World simulation step frequency */
         hz: number;
@@ -4934,11 +4936,9 @@ declare namespace planck {
         keydown: (keyCode: number, label: string) => void;
         /** callback, to be implemented by user */
         keyup: (keyCode: number, label: string) => void;
-        private statusText;
-        private statusMap;
-        status(name: string, value: any): void;
-        status(value: object | string): void;
-        info(text: string): void;
+        abstract status(name: string, value: any): void;
+        abstract status(value: object | string): void;
+        abstract info(text: string): void;
         color(r: number, g: number, b: number): string;
         abstract drawPoint(p: {
             x: number;

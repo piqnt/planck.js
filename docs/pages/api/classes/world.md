@@ -55,13 +55,13 @@
 
 ###  constructor
 
-\+ **new World**(`def?`: [WorldDef](/api/interfaces/worlddef) | Vec2 | null): *[World](/api/classes/world)*
+\+ **new World**(`def?`: [WorldDef](/api/interfaces/worlddef) | [Vec2](/api/classes/vec2) | null): *[World](/api/classes/world)*
 
 **Parameters:**
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`def?` | [WorldDef](/api/interfaces/worlddef) &#124; Vec2 &#124; null | World definition or gravity vector.  |
+`def?` | [WorldDef](/api/interfaces/worlddef) &#124; [Vec2](/api/classes/vec2) &#124; null | World definition or gravity vector.  |
 
 **Returns:** *[World](/api/classes/world)*
 
@@ -302,11 +302,11 @@ ___
 
 ###  getGravity
 
-▸ **getGravity**(): *Vec2*
+▸ **getGravity**(): *[Vec2](/api/classes/vec2)*
 
 Get the global gravity vector.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -400,7 +400,7 @@ ___
 
 ###  off
 
-▸ **off**(`name`: "begin-contact", `listener`: function): *World*
+▸ **off**(`name`: "begin-contact", `listener`: function): *[World](/api/classes/world)*
 
 Remove an event listener.
 
@@ -418,9 +418,9 @@ Name | Type |
 ------ | ------ |
 `contact` | [Contact](/api/classes/contact) |
 
-**Returns:** *World*
+**Returns:** *[World](/api/classes/world)*
 
-▸ **off**(`name`: "end-contact", `listener`: function): *World*
+▸ **off**(`name`: "end-contact", `listener`: function): *[World](/api/classes/world)*
 
 Remove an event listener.
 
@@ -438,9 +438,9 @@ Name | Type |
 ------ | ------ |
 `contact` | [Contact](/api/classes/contact) |
 
-**Returns:** *World*
+**Returns:** *[World](/api/classes/world)*
 
-▸ **off**(`name`: "pre-solve", `listener`: function): *World*
+▸ **off**(`name`: "pre-solve", `listener`: function): *[World](/api/classes/world)*
 
 Remove an event listener.
 
@@ -459,9 +459,9 @@ Name | Type |
 `contact` | [Contact](/api/classes/contact) |
 `oldManifold` | [Manifold](/api/classes/manifold) |
 
-**Returns:** *World*
+**Returns:** *[World](/api/classes/world)*
 
-▸ **off**(`name`: "post-solve", `listener`: function): *World*
+▸ **off**(`name`: "post-solve", `listener`: function): *[World](/api/classes/world)*
 
 Remove an event listener.
 
@@ -480,9 +480,9 @@ Name | Type |
 `contact` | [Contact](/api/classes/contact) |
 `impulse` | [ContactImpulse](/api/classes/contactimpulse) |
 
-**Returns:** *World*
+**Returns:** *[World](/api/classes/world)*
 
-▸ **off**(`name`: "remove-body", `listener`: function): *World*
+▸ **off**(`name`: "remove-body", `listener`: function): *[World](/api/classes/world)*
 
 Remove an event listener.
 
@@ -500,9 +500,9 @@ Name | Type |
 ------ | ------ |
 `body` | [Body](/api/classes/body) |
 
-**Returns:** *World*
+**Returns:** *[World](/api/classes/world)*
 
-▸ **off**(`name`: "remove-joint", `listener`: function): *World*
+▸ **off**(`name`: "remove-joint", `listener`: function): *[World](/api/classes/world)*
 
 Remove an event listener.
 
@@ -520,9 +520,9 @@ Name | Type |
 ------ | ------ |
 `joint` | [Joint](/api/classes/joint) |
 
-**Returns:** *World*
+**Returns:** *[World](/api/classes/world)*
 
-▸ **off**(`name`: "remove-fixture", `listener`: function): *World*
+▸ **off**(`name`: "remove-fixture", `listener`: function): *[World](/api/classes/world)*
 
 Remove an event listener.
 
@@ -540,13 +540,13 @@ Name | Type |
 ------ | ------ |
 `fixture` | [Fixture](/api/classes/fixture) |
 
-**Returns:** *World*
+**Returns:** *[World](/api/classes/world)*
 
 ___
 
 ###  on
 
-▸ **on**(`name`: "begin-contact", `listener`: function): *World*
+▸ **on**(`name`: "begin-contact", `listener`: function): *[World](/api/classes/world)*
 
 Called when two fixtures begin to touch.
 
@@ -574,9 +574,9 @@ Name | Type |
 ------ | ------ |
 `contact` | [Contact](/api/classes/contact) |
 
-**Returns:** *World*
+**Returns:** *[World](/api/classes/world)*
 
-▸ **on**(`name`: "end-contact", `listener`: function): *World*
+▸ **on**(`name`: "end-contact", `listener`: function): *[World](/api/classes/world)*
 
 Called when two fixtures cease to touch.
 
@@ -604,9 +604,9 @@ Name | Type |
 ------ | ------ |
 `contact` | [Contact](/api/classes/contact) |
 
-**Returns:** *World*
+**Returns:** *[World](/api/classes/world)*
 
-▸ **on**(`name`: "pre-solve", `listener`: function): *World*
+▸ **on**(`name`: "pre-solve", `listener`: function): *[World](/api/classes/world)*
 
 This is called after a contact is updated. This allows you to inspect a
 contact before it goes to the solver. If you are careful, you can modify the
@@ -634,9 +634,9 @@ Name | Type |
 `contact` | [Contact](/api/classes/contact) |
 `oldManifold` | [Manifold](/api/classes/manifold) |
 
-**Returns:** *World*
+**Returns:** *[World](/api/classes/world)*
 
-▸ **on**(`name`: "post-solve", `listener`: function): *World*
+▸ **on**(`name`: "post-solve", `listener`: function): *[World](/api/classes/world)*
 
 This lets you inspect a contact after the solver is finished. This is useful
 for inspecting impulses. Note: the contact manifold does not include time of
@@ -661,9 +661,9 @@ Name | Type |
 `contact` | [Contact](/api/classes/contact) |
 `impulse` | [ContactImpulse](/api/classes/contactimpulse) |
 
-**Returns:** *World*
+**Returns:** *[World](/api/classes/world)*
 
-▸ **on**(`name`: "remove-body", `listener`: function): *World*
+▸ **on**(`name`: "remove-body", `listener`: function): *[World](/api/classes/world)*
 
 Listener is called whenever a body is removed.
 
@@ -681,9 +681,9 @@ Name | Type |
 ------ | ------ |
 `body` | [Body](/api/classes/body) |
 
-**Returns:** *World*
+**Returns:** *[World](/api/classes/world)*
 
-▸ **on**(`name`: "remove-joint", `listener`: function): *World*
+▸ **on**(`name`: "remove-joint", `listener`: function): *[World](/api/classes/world)*
 
 Listener is called whenever a joint is removed implicitly or explicitly.
 
@@ -701,9 +701,9 @@ Name | Type |
 ------ | ------ |
 `joint` | [Joint](/api/classes/joint) |
 
-**Returns:** *World*
+**Returns:** *[World](/api/classes/world)*
 
-▸ **on**(`name`: "remove-fixture", `listener`: function): *World*
+▸ **on**(`name`: "remove-fixture", `listener`: function): *[World](/api/classes/world)*
 
 Listener is called whenever a fixture is removed implicitly or explicitly.
 
@@ -721,7 +721,7 @@ Name | Type |
 ------ | ------ |
 `fixture` | [Fixture](/api/classes/fixture) |
 
-**Returns:** *World*
+**Returns:** *[World](/api/classes/world)*
 
 ___
 

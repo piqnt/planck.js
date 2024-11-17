@@ -83,21 +83,21 @@ ___
 
 ###  getXAxis
 
-▸ **getXAxis**(): *Vec2*
+▸ **getXAxis**(): *[Vec2](/api/classes/vec2)*
 
 Get the x-axis.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  getYAxis
 
-▸ **getYAxis**(): *Vec2*
+▸ **getYAxis**(): *[Vec2](/api/classes/vec2)*
 
 Get the y-axis.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -220,7 +220,7 @@ Name | Type |
 
 **Returns:** *[Rot](/api/classes/rot)*
 
-▸ **mul**(`rot`: [RotValue](/api/interfaces/rotvalue), `m`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mul**(`rot`: [RotValue](/api/interfaces/rotvalue), `m`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Rotate a vector
 
@@ -231,7 +231,7 @@ Name | Type |
 `rot` | [RotValue](/api/interfaces/rotvalue) |
 `m` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -254,7 +254,7 @@ ___
 
 ### `Static` mulSub
 
-▸ **mulSub**(`rot`: [RotValue](/api/interfaces/rotvalue), `v`: [Vec2Value](/api/interfaces/vec2value), `w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mulSub**(`rot`: [RotValue](/api/interfaces/rotvalue), `v`: [Vec2Value](/api/interfaces/vec2value), `w`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -264,7 +264,7 @@ Name | Type |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 `w` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -283,7 +283,7 @@ Name | Type |
 
 **Returns:** *[Rot](/api/classes/rot)*
 
-▸ **mulT**(`rot`: [RotValue](/api/interfaces/rotvalue), `m`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mulT**(`rot`: [RotValue](/api/interfaces/rotvalue), `m`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Inverse rotate a vector
 
@@ -294,7 +294,7 @@ Name | Type |
 `rot` | [RotValue](/api/interfaces/rotvalue) |
 `m` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -317,7 +317,7 @@ ___
 
 ### `Static` mulTVec2
 
-▸ **mulTVec2**(`rot`: [RotValue](/api/interfaces/rotvalue), `m`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mulTVec2**(`rot`: [RotValue](/api/interfaces/rotvalue), `m`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Inverse rotate a vector
 
@@ -328,13 +328,13 @@ Name | Type |
 `rot` | [RotValue](/api/interfaces/rotvalue) |
 `m` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` mulVec2
 
-▸ **mulVec2**(`rot`: [RotValue](/api/interfaces/rotvalue), `m`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mulVec2**(`rot`: [RotValue](/api/interfaces/rotvalue), `m`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Rotate a vector
 
@@ -345,4 +345,4 @@ Name | Type |
 `rot` | [RotValue](/api/interfaces/rotvalue) |
 `m` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*

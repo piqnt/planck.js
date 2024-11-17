@@ -133,9 +133,9 @@ ___
 
 ###  getCenter
 
-▸ **getCenter**(): *Vec2*
+▸ **getCenter**(): *[Vec2](/api/classes/vec2)*
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 

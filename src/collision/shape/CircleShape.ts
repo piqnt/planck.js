@@ -132,7 +132,7 @@ export class CircleShape extends Shape {
    * @param p A point in world coordinates.
    */
   testPoint(xf: TransformValue, p: Vec2Value): boolean {
-    const center = matrix.transformVec2(temp, xf, this.m_p)
+    const center = matrix.transformVec2(temp, xf, this.m_p);
     return matrix.distSqrVec2(p, center) <= this.m_radius * this.m_radius;
   }
 

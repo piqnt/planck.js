@@ -137,7 +137,6 @@
 * [EPSILON](/api/globals#const-epsilon)
 * [Edge](/api/globals#const-edge)
 * [Polygon](/api/globals#const-polygon)
-* [world](/api/globals#const-world)
 
 ### Functions
 
@@ -258,13 +257,13 @@ ___
 
 #### Type declaration:
 
-▸ (`testbed`: Testbed): *World*
+▸ (`testbed`: [Testbed](/api/classes/testbed)): *[World](/api/classes/world)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`testbed` | Testbed |
+`testbed` | [Testbed](/api/classes/testbed) |
 
 ___
 
@@ -339,15 +338,15 @@ You control how the ray cast proceeds by returning a numeric/float value.
 
 #### Type declaration:
 
-▸ (`fixture`: [Fixture](/api/classes/fixture), `point`: Vec2, `normal`: Vec2, `fraction`: number): *number*
+▸ (`fixture`: [Fixture](/api/classes/fixture), `point`: [Vec2](/api/classes/vec2), `normal`: [Vec2](/api/classes/vec2), `fraction`: number): *number*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `fixture` | [Fixture](/api/classes/fixture) |
-`point` | Vec2 |
-`normal` | Vec2 |
+`point` | [Vec2](/api/classes/vec2) |
+`normal` | [Vec2](/api/classes/vec2) |
 `fraction` | number |
 
 ## Variables
@@ -385,12 +384,6 @@ ___
 ### `Const` Polygon
 
 • **Polygon**: *[PolygonShape](/api/classes/polygonshape)* = PolygonShape
-
-___
-
-### `Const` world
-
-• **world**: *World‹›* = new World()
 
 ## Functions
 

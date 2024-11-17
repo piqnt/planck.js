@@ -49,7 +49,7 @@ ___
 
 ### `Readonly` translationB
 
-• **translationB**: *Vec2‹›* = Vec2.zero()
+• **translationB**: *[Vec2](/api/classes/vec2)‹›* = Vec2.zero()
 
 ## Methods
 

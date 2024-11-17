@@ -57,7 +57,7 @@ ___
 
 ###  c
 
-• **c**: *Vec2‹›* = Vec2.zero()
+• **c**: *[Vec2](/api/classes/vec2)‹›* = Vec2.zero()
 
 World center position
 
@@ -65,13 +65,13 @@ ___
 
 ###  c0
 
-• **c0**: *Vec2‹›* = Vec2.zero()
+• **c0**: *[Vec2](/api/classes/vec2)‹›* = Vec2.zero()
 
 ___
 
 ###  localCenter
 
-• **localCenter**: *Vec2‹›* = Vec2.zero()
+• **localCenter**: *[Vec2](/api/classes/vec2)‹›* = Vec2.zero()
 
 Local center of mass position
 

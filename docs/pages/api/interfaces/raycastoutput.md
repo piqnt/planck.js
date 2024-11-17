@@ -25,4 +25,4 @@ ___
 
 ###  normal
 
-• **normal**: *Vec2*
+• **normal**: *[Vec2](/api/classes/vec2)*

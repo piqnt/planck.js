@@ -57,7 +57,7 @@ Name | Type |
 
 ###  p
 
-• **p**: *Vec2*
+• **p**: *[Vec2](/api/classes/vec2)*
 
 position
 
@@ -193,7 +193,7 @@ ___
 
 ### `Static` mul
 
-▸ **mul**(`a`: [TransformValue](/api/globals#transformvalue), `b`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mul**(`a`: [TransformValue](/api/globals#transformvalue), `b`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -202,7 +202,7 @@ Name | Type |
 `a` | [TransformValue](/api/globals#transformvalue) |
 `b` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ▸ **mul**(`a`: [TransformValue](/api/globals#transformvalue), `b`: [TransformValue](/api/globals#transformvalue)): *[Transform](/api/classes/transform)*
 
@@ -219,7 +219,7 @@ ___
 
 ### `Static` mulAll
 
-▸ **mulAll**(`a`: [Transform](/api/classes/transform), `b`: [Vec2Value](/api/interfaces/vec2value)[]): *Vec2[]*
+▸ **mulAll**(`a`: [Transform](/api/classes/transform), `b`: [Vec2Value](/api/interfaces/vec2value)[]): *[Vec2](/api/classes/vec2)[]*
 
 **Parameters:**
 
@@ -228,7 +228,7 @@ Name | Type |
 `a` | [Transform](/api/classes/transform) |
 `b` | [Vec2Value](/api/interfaces/vec2value)[] |
 
-**Returns:** *Vec2[]*
+**Returns:** *[Vec2](/api/classes/vec2)[]*
 
 ▸ **mulAll**(`a`: [Transform](/api/classes/transform), `b`: [Transform](/api/classes/transform)[]): *[Transform](/api/classes/transform)[]*
 
@@ -245,7 +245,7 @@ ___
 
 ### `Static` mulT
 
-▸ **mulT**(`a`: [TransformValue](/api/globals#transformvalue), `b`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mulT**(`a`: [TransformValue](/api/globals#transformvalue), `b`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -254,7 +254,7 @@ Name | Type |
 `a` | [TransformValue](/api/globals#transformvalue) |
 `b` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ▸ **mulT**(`a`: [TransformValue](/api/globals#transformvalue), `b`: [TransformValue](/api/globals#transformvalue)): *[Transform](/api/classes/transform)*
 
@@ -271,7 +271,7 @@ ___
 
 ### `Static` mulTVec2
 
-▸ **mulTVec2**(`a`: [TransformValue](/api/globals#transformvalue), `b`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mulTVec2**(`a`: [TransformValue](/api/globals#transformvalue), `b`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -280,7 +280,7 @@ Name | Type |
 `a` | [TransformValue](/api/globals#transformvalue) |
 `b` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -301,7 +301,7 @@ ___
 
 ### `Static` mulVec2
 
-▸ **mulVec2**(`a`: [TransformValue](/api/globals#transformvalue), `b`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mulVec2**(`a`: [TransformValue](/api/globals#transformvalue), `b`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -310,7 +310,7 @@ Name | Type |
 `a` | [TransformValue](/api/globals#transformvalue) |
 `b` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 

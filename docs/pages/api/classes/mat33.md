@@ -119,7 +119,7 @@ ___
 
 ###  solve22
 
-▸ **solve22**(`v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **solve22**(`v`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Solve A * x = b, where b is a column vector. This is more efficient than
 computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
@@ -131,7 +131,7 @@ Name | Type |
 ------ | ------ |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -197,7 +197,7 @@ ___
 
 ### `Static` mul
 
-▸ **mul**(`a`: [Mat33](/api/classes/mat33), `b`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mul**(`a`: [Mat33](/api/classes/mat33), `b`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Multiply a matrix times a vector.
 
@@ -208,7 +208,7 @@ Name | Type |
 `a` | [Mat33](/api/classes/mat33) |
 `b` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ▸ **mul**(`a`: [Mat33](/api/classes/mat33), `b`: [Vec3Value](/api/interfaces/vec3value)): *[Vec3](/api/classes/vec3)*
 
@@ -225,7 +225,7 @@ ___
 
 ### `Static` mulVec2
 
-▸ **mulVec2**(`a`: [Mat33](/api/classes/mat33), `b`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mulVec2**(`a`: [Mat33](/api/classes/mat33), `b`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -234,7 +234,7 @@ Name | Type |
 `a` | [Mat33](/api/classes/mat33) |
 `b` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 

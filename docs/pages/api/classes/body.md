@@ -395,11 +395,11 @@ ___
 
 ###  getLinearVelocity
 
-▸ **getLinearVelocity**(): *Vec2*
+▸ **getLinearVelocity**(): *[Vec2](/api/classes/vec2)*
 
 Get the linear velocity of the center of mass.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 the linear velocity of the center of mass.
 
@@ -407,7 +407,7 @@ ___
 
 ###  getLinearVelocityFromLocalPoint
 
-▸ **getLinearVelocityFromLocalPoint**(`localPoint`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **getLinearVelocityFromLocalPoint**(`localPoint`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Get the world velocity of a local point.
 
@@ -417,13 +417,13 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `localPoint` | [Vec2Value](/api/interfaces/vec2value) | A point in local coordinates.  |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  getLinearVelocityFromWorldPoint
 
-▸ **getLinearVelocityFromWorldPoint**(`worldPoint`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **getLinearVelocityFromWorldPoint**(`worldPoint`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Get the world linear velocity of a world point attached to this body.
 
@@ -433,23 +433,23 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `worldPoint` | [Vec2Value](/api/interfaces/vec2value) | A point in world coordinates.  |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  getLocalCenter
 
-▸ **getLocalCenter**(): *Vec2*
+▸ **getLocalCenter**(): *[Vec2](/api/classes/vec2)*
 
 Get the local position of the center of mass.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  getLocalPoint
 
-▸ **getLocalPoint**(`worldPoint`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **getLocalPoint**(`worldPoint`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Gets the corresponding local point of a world point.
 
@@ -459,13 +459,13 @@ Name | Type |
 ------ | ------ |
 `worldPoint` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  getLocalVector
 
-▸ **getLocalVector**(`worldVector`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **getLocalVector**(`worldVector`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Gets the corresponding local vector of a world vector.
 
@@ -475,7 +475,7 @@ Name | Type |
 ------ | ------ |
 `worldVector` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -517,11 +517,11 @@ ___
 
 ###  getPosition
 
-▸ **getPosition**(): *Vec2*
+▸ **getPosition**(): *[Vec2](/api/classes/vec2)*
 
 Get the world position for the body's origin.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -555,25 +555,25 @@ ___
 
 ###  getWorld
 
-▸ **getWorld**(): *World*
+▸ **getWorld**(): *[World](/api/classes/world)*
 
-**Returns:** *World*
+**Returns:** *[World](/api/classes/world)*
 
 ___
 
 ###  getWorldCenter
 
-▸ **getWorldCenter**(): *Vec2*
+▸ **getWorldCenter**(): *[Vec2](/api/classes/vec2)*
 
 Get the world position of the center of mass.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  getWorldPoint
 
-▸ **getWorldPoint**(`localPoint`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **getWorldPoint**(`localPoint`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Get the corresponding world point of a local point.
 
@@ -583,13 +583,13 @@ Name | Type |
 ------ | ------ |
 `localPoint` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  getWorldVector
 
-▸ **getWorldVector**(`localVector`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **getWorldVector**(`localVector`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Get the corresponding world vector of a local vector.
 
@@ -599,7 +599,7 @@ Name | Type |
 ------ | ------ |
 `localVector` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 

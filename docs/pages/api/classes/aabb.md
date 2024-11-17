@@ -56,13 +56,13 @@ Name | Type |
 
 ###  lowerBound
 
-• **lowerBound**: *Vec2*
+• **lowerBound**: *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  upperBound
 
-• **upperBound**: *Vec2*
+• **upperBound**: *[Vec2](/api/classes/vec2)*
 
 ## Methods
 
@@ -128,21 +128,21 @@ ___
 
 ###  getCenter
 
-▸ **getCenter**(): *Vec2*
+▸ **getCenter**(): *[Vec2](/api/classes/vec2)*
 
 Get the center of the AABB.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  getExtents
 
-▸ **getExtents**(): *Vec2*
+▸ **getExtents**(): *[Vec2](/api/classes/vec2)*
 
 Get the extents of the AABB (half-widths).
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 

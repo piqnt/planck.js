@@ -97,21 +97,21 @@ Styling for dev-tools.
 
 ### `Abstract` getAnchorA
 
-▸ **getAnchorA**(): *Vec2*
+▸ **getAnchorA**(): *[Vec2](/api/classes/vec2)*
 
 Get the anchor point on bodyA in world coordinates.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Abstract` getAnchorB
 
-▸ **getAnchorB**(): *Vec2*
+▸ **getAnchorB**(): *[Vec2](/api/classes/vec2)*
 
 Get the anchor point on bodyB in world coordinates.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 ### `Abstract` getReactionForce
 
-▸ **getReactionForce**(`inv_dt`: number): *Vec2*
+▸ **getReactionForce**(`inv_dt`: number): *[Vec2](/api/classes/vec2)*
 
 Get the reaction force on bodyB at the joint anchor in Newtons.
 
@@ -169,7 +169,7 @@ Name | Type |
 ------ | ------ |
 `inv_dt` | number |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 

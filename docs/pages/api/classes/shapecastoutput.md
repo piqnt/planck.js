@@ -32,10 +32,10 @@ ___
 
 ###  normal
 
-• **normal**: *Vec2* = Vec2.zero()
+• **normal**: *[Vec2](/api/classes/vec2)* = Vec2.zero()
 
 ___
 
 ###  point
 
-• **point**: *Vec2* = Vec2.zero()
+• **point**: *[Vec2](/api/classes/vec2)* = Vec2.zero()

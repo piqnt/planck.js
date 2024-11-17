@@ -97,25 +97,25 @@ ___
 
 ###  getAnchorA
 
-▸ **getAnchorA**(): *Vec2*
+▸ **getAnchorA**(): *[Vec2](/api/classes/vec2)*
 
 *Overrides [Joint](/api/classes/joint).[getAnchorA](/api/classes/joint#abstract-getanchora)*
 
 Get the anchor point on bodyA in world coordinates.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  getAnchorB
 
-▸ **getAnchorB**(): *Vec2*
+▸ **getAnchorB**(): *[Vec2](/api/classes/vec2)*
 
 *Overrides [Joint](/api/classes/joint).[getAnchorB](/api/classes/joint#abstract-getanchorb)*
 
 Get the anchor point on bodyB in world coordinates.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -159,21 +159,21 @@ ___
 
 ###  getLocalAnchorA
 
-▸ **getLocalAnchorA**(): *Vec2*
+▸ **getLocalAnchorA**(): *[Vec2](/api/classes/vec2)*
 
 The local anchor point relative to bodyA's origin.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  getLocalAnchorB
 
-▸ **getLocalAnchorB**(): *Vec2*
+▸ **getLocalAnchorB**(): *[Vec2](/api/classes/vec2)*
 
 The local anchor point relative to bodyB's origin.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -211,7 +211,7 @@ ___
 
 ###  getReactionForce
 
-▸ **getReactionForce**(`inv_dt`: number): *Vec2*
+▸ **getReactionForce**(`inv_dt`: number): *[Vec2](/api/classes/vec2)*
 
 *Overrides [Joint](/api/classes/joint).[getReactionForce](/api/classes/joint#abstract-getreactionforce)*
 
@@ -223,7 +223,7 @@ Name | Type |
 ------ | ------ |
 `inv_dt` | number |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 

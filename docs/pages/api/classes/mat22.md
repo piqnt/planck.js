@@ -81,13 +81,13 @@ Name | Type |
 
 ###  ex
 
-• **ex**: *Vec2*
+• **ex**: *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  ey
 
-• **ey**: *Vec2*
+• **ey**: *[Vec2](/api/classes/vec2)*
 
 ## Methods
 
@@ -155,7 +155,7 @@ ___
 
 ###  solve
 
-▸ **solve**(`v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **solve**(`v`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Solve A * x = b, where b is a column vector. This is more efficient than
 computing the inverse in one-shot cases.
@@ -166,7 +166,7 @@ Name | Type |
 ------ | ------ |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -243,7 +243,7 @@ Name | Type |
 
 **Returns:** *[Mat22](/api/classes/mat22)*
 
-▸ **mul**(`mx`: [Mat22](/api/classes/mat22), `v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mul**(`mx`: [Mat22](/api/classes/mat22), `v`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -252,7 +252,7 @@ Name | Type |
 `mx` | [Mat22](/api/classes/mat22) |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -288,7 +288,7 @@ Name | Type |
 
 **Returns:** *[Mat22](/api/classes/mat22)*
 
-▸ **mulT**(`mx`: [Mat22](/api/classes/mat22), `v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mulT**(`mx`: [Mat22](/api/classes/mat22), `v`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -297,7 +297,7 @@ Name | Type |
 `mx` | [Mat22](/api/classes/mat22) |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -318,7 +318,7 @@ ___
 
 ### `Static` mulTVec2
 
-▸ **mulTVec2**(`mx`: [Mat22](/api/classes/mat22), `v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mulTVec2**(`mx`: [Mat22](/api/classes/mat22), `v`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -327,13 +327,13 @@ Name | Type |
 `mx` | [Mat22](/api/classes/mat22) |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` mulVec2
 
-▸ **mulVec2**(`mx`: [Mat22](/api/classes/mat22), `v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mulVec2**(`mx`: [Mat22](/api/classes/mat22), `v`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -342,4 +342,4 @@ Name | Type |
 `mx` | [Mat22](/api/classes/mat22) |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*

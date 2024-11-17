@@ -117,7 +117,7 @@ ___
 
 ###  add
 
-▸ **add**(`w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **add**(`w`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Add a vector to this vector.
 
@@ -127,7 +127,7 @@ Name | Type |
 ------ | ------ |
 `w` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 this
 
@@ -135,7 +135,7 @@ ___
 
 ###  addCombine
 
-▸ **addCombine**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value), `b`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **addCombine**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value), `b`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Add linear combination of v and w: `a * v + b * w`
 
@@ -148,13 +148,13 @@ Name | Type |
 `b` | number |
 `w` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  addMul
 
-▸ **addMul**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **addMul**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -163,13 +163,13 @@ Name | Type |
 `a` | number |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  clamp
 
-▸ **clamp**(`max`: number): *Vec2*
+▸ **clamp**(`max`: number): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -177,15 +177,15 @@ Name | Type |
 ------ | ------ |
 `max` | number |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  clone
 
-▸ **clone**(): *Vec2*
+▸ **clone**(): *[Vec2](/api/classes/vec2)*
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -213,7 +213,7 @@ ___
 
 ###  mul
 
-▸ **mul**(`m`: number): *Vec2*
+▸ **mul**(`m`: number): *[Vec2](/api/classes/vec2)*
 
 Multiply this vector by a scalar.
 
@@ -223,7 +223,7 @@ Name | Type |
 ------ | ------ |
 `m` | number |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 this
 
@@ -231,9 +231,9 @@ ___
 
 ###  neg
 
-▸ **neg**(): *Vec2*
+▸ **neg**(): *[Vec2](/api/classes/vec2)*
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -251,7 +251,7 @@ ___
 
 ###  set
 
-▸ **set**(`x`: number, `y`: number): *Vec2*
+▸ **set**(`x`: number, `y`: number): *[Vec2](/api/classes/vec2)*
 
 Set this vector to some specified coordinates.
 
@@ -262,11 +262,11 @@ Name | Type |
 `x` | number |
 `y` | number |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 this
 
-▸ **set**(`value`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **set**(`value`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Set this vector to some specified coordinates.
 
@@ -276,7 +276,7 @@ Name | Type |
 ------ | ------ |
 `value` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 this
 
@@ -284,7 +284,7 @@ ___
 
 ###  setCombine
 
-▸ **setCombine**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value), `b`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **setCombine**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value), `b`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Set linear combination of v and w: `a * v + b * w`
 
@@ -297,13 +297,13 @@ Name | Type |
 `b` | number |
 `w` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  setMul
 
-▸ **setMul**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **setMul**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -312,7 +312,7 @@ Name | Type |
 `a` | number |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -355,11 +355,11 @@ ___
 
 ###  setZero
 
-▸ **setZero**(): *Vec2*
+▸ **setZero**(): *[Vec2](/api/classes/vec2)*
 
 Set this vector to all zeros.
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 this
 
@@ -367,7 +367,7 @@ ___
 
 ###  sub
 
-▸ **sub**(`w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **sub**(`w`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Subtract a vector from this vector
 
@@ -377,7 +377,7 @@ Name | Type |
 ------ | ------ |
 `w` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 this
 
@@ -385,7 +385,7 @@ ___
 
 ###  subCombine
 
-▸ **subCombine**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value), `b`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **subCombine**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value), `b`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Subtract linear combination of v and w: `a * v + b * w`
 
@@ -398,13 +398,13 @@ Name | Type |
 `b` | number |
 `w` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  subMul
 
-▸ **subMul**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **subMul**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -413,13 +413,13 @@ Name | Type |
 `a` | number |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ###  wSub
 
-▸ **wSub**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value), `b?`: number, `w?`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **wSub**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value), `b?`: number, `w?`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **`deprecated`** Use subCombine or subMul
 
@@ -432,13 +432,13 @@ Name | Type |
 `b?` | number |
 `w?` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` abs
 
-▸ **abs**(`v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **abs**(`v`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -446,13 +446,13 @@ Name | Type |
 ------ | ------ |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` add
 
-▸ **add**(`v`: [Vec2Value](/api/interfaces/vec2value), `w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **add**(`v`: [Vec2Value](/api/interfaces/vec2value), `w`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -461,13 +461,13 @@ Name | Type |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 `w` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` addCross
 
-▸ **addCross**(`a`: [Vec2Value](/api/interfaces/vec2value), `v`: [Vec2Value](/api/interfaces/vec2value), `w`: number): *Vec2*
+▸ **addCross**(`a`: [Vec2Value](/api/interfaces/vec2value), `v`: [Vec2Value](/api/interfaces/vec2value), `w`: number): *[Vec2](/api/classes/vec2)*
 
 Returns `a + (v x w)`
 
@@ -479,9 +479,9 @@ Name | Type |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 `w` | number |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
-▸ **addCross**(`a`: [Vec2Value](/api/interfaces/vec2value), `v`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **addCross**(`a`: [Vec2Value](/api/interfaces/vec2value), `v`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Returns `a + (v x w)`
 
@@ -493,13 +493,13 @@ Name | Type |
 `v` | number |
 `w` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` addCrossNumVec2
 
-▸ **addCrossNumVec2**(`a`: [Vec2Value](/api/interfaces/vec2value), `v`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **addCrossNumVec2**(`a`: [Vec2Value](/api/interfaces/vec2value), `v`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Returns `a + (v x w)`
 
@@ -511,13 +511,13 @@ Name | Type |
 `v` | number |
 `w` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` addCrossVec2Num
 
-▸ **addCrossVec2Num**(`a`: [Vec2Value](/api/interfaces/vec2value), `v`: [Vec2Value](/api/interfaces/vec2value), `w`: number): *Vec2*
+▸ **addCrossVec2Num**(`a`: [Vec2Value](/api/interfaces/vec2value), `v`: [Vec2Value](/api/interfaces/vec2value), `w`: number): *[Vec2](/api/classes/vec2)*
 
 Returns `a + (v x w)`
 
@@ -529,7 +529,7 @@ Name | Type |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 `w` | number |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -564,7 +564,7 @@ ___
 
 ### `Static` clamp
 
-▸ **clamp**(`v`: [Vec2Value](/api/interfaces/vec2value), `max`: number): *Vec2*
+▸ **clamp**(`v`: [Vec2Value](/api/interfaces/vec2value), `max`: number): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -573,13 +573,13 @@ Name | Type |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 `max` | number |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` clone
 
-▸ **clone**(`v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **clone**(`v`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -587,13 +587,13 @@ Name | Type |
 ------ | ------ |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` combine
 
-▸ **combine**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value), `b`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **combine**(`a`: number, `v`: [Vec2Value](/api/interfaces/vec2value), `b`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -604,7 +604,7 @@ Name | Type |
 `b` | number |
 `w` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -623,7 +623,7 @@ Name | Type |
 
 **Returns:** *number*
 
-▸ **cross**(`v`: [Vec2Value](/api/interfaces/vec2value), `w`: number): *Vec2*
+▸ **cross**(`v`: [Vec2Value](/api/interfaces/vec2value), `w`: number): *[Vec2](/api/classes/vec2)*
 
 Cross product between a vector and a scalar
 
@@ -634,9 +634,9 @@ Name | Type |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 `w` | number |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
-▸ **cross**(`v`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **cross**(`v`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Cross product between a scalar and a vector
 
@@ -647,13 +647,13 @@ Name | Type |
 `v` | number |
 `w` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` crossNumVec2
 
-▸ **crossNumVec2**(`v`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **crossNumVec2**(`v`: number, `w`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Cross product on a vector and a scalar
 
@@ -664,13 +664,13 @@ Name | Type |
 `v` | number |
 `w` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` crossVec2Num
 
-▸ **crossVec2Num**(`v`: [Vec2Value](/api/interfaces/vec2value), `w`: number): *Vec2*
+▸ **crossVec2Num**(`v`: [Vec2Value](/api/interfaces/vec2value), `w`: number): *[Vec2](/api/classes/vec2)*
 
 Cross product on a vector and a scalar
 
@@ -681,7 +681,7 @@ Name | Type |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 `w` | number |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
@@ -801,7 +801,7 @@ ___
 
 ### `Static` lower
 
-▸ **lower**(`v`: [Vec2Value](/api/interfaces/vec2value), `w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **lower**(`v`: [Vec2Value](/api/interfaces/vec2value), `w`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -810,13 +810,13 @@ Name | Type |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 `w` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` mid
 
-▸ **mid**(`v`: [Vec2Value](/api/interfaces/vec2value), `w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mid**(`v`: [Vec2Value](/api/interfaces/vec2value), `w`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -825,13 +825,13 @@ Name | Type |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 `w` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` mul
 
-▸ **mul**(`a`: [Vec2Value](/api/interfaces/vec2value), `b`: number): *Vec2*
+▸ **mul**(`a`: [Vec2Value](/api/interfaces/vec2value), `b`: number): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -840,9 +840,9 @@ Name | Type |
 `a` | [Vec2Value](/api/interfaces/vec2value) |
 `b` | number |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
-▸ **mul**(`a`: number, `b`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mul**(`a`: number, `b`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -851,13 +851,13 @@ Name | Type |
 `a` | number |
 `b` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` mulNumVec2
 
-▸ **mulNumVec2**(`a`: number, `b`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **mulNumVec2**(`a`: number, `b`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -866,13 +866,13 @@ Name | Type |
 `a` | number |
 `b` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` mulVec2Num
 
-▸ **mulVec2Num**(`a`: [Vec2Value](/api/interfaces/vec2value), `b`: number): *Vec2*
+▸ **mulVec2Num**(`a`: [Vec2Value](/api/interfaces/vec2value), `b`: number): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -881,13 +881,13 @@ Name | Type |
 `a` | [Vec2Value](/api/interfaces/vec2value) |
 `b` | number |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` neg
 
-▸ **neg**(`v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **neg**(`v`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -895,13 +895,13 @@ Name | Type |
 ------ | ------ |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` skew
 
-▸ **skew**(`v`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **skew**(`v`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 Get the skew vector such that dot(skew_vec, other) == cross(vec, other)
 
@@ -911,13 +911,13 @@ Name | Type |
 ------ | ------ |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` sub
 
-▸ **sub**(`v`: [Vec2Value](/api/interfaces/vec2value), `w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **sub**(`v`: [Vec2Value](/api/interfaces/vec2value), `w`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -926,13 +926,13 @@ Name | Type |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 `w` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` upper
 
-▸ **upper**(`v`: [Vec2Value](/api/interfaces/vec2value), `w`: [Vec2Value](/api/interfaces/vec2value)): *Vec2*
+▸ **upper**(`v`: [Vec2Value](/api/interfaces/vec2value), `w`: [Vec2Value](/api/interfaces/vec2value)): *[Vec2](/api/classes/vec2)*
 
 **Parameters:**
 
@@ -941,12 +941,12 @@ Name | Type |
 `v` | [Vec2Value](/api/interfaces/vec2value) |
 `w` | [Vec2Value](/api/interfaces/vec2value) |
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*
 
 ___
 
 ### `Static` zero
 
-▸ **zero**(): *Vec2*
+▸ **zero**(): *[Vec2](/api/classes/vec2)*
 
-**Returns:** *Vec2*
+**Returns:** *[Vec2](/api/classes/vec2)*

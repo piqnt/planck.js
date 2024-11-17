@@ -14,7 +14,6 @@
 * [height](/api/classes/testbed#height)
 * [hz](/api/classes/testbed#hz)
 * [mouseForce](/api/classes/testbed#optional-mouseforce)
-* [scaleY](/api/classes/testbed#scaley)
 * [speed](/api/classes/testbed#speed)
 * [width](/api/classes/testbed#width)
 * [x](/api/classes/testbed#x)
@@ -31,11 +30,11 @@
 * [drawSegment](/api/classes/testbed#abstract-drawsegment)
 * [findAll](/api/classes/testbed#abstract-findall)
 * [findOne](/api/classes/testbed#abstract-findone)
-* [info](/api/classes/testbed#info)
+* [info](/api/classes/testbed#abstract-info)
 * [keydown](/api/classes/testbed#keydown)
 * [keyup](/api/classes/testbed#keyup)
 * [start](/api/classes/testbed#abstract-start)
-* [status](/api/classes/testbed#status)
+* [status](/api/classes/testbed#abstract-status)
 * [step](/api/classes/testbed#step)
 * [mount](/api/classes/testbed#static-mount)
 * [start](/api/classes/testbed#static-start)
@@ -73,12 +72,6 @@ ___
 ### `Optional` mouseForce
 
 • **mouseForce**? : *number*
-
-___
-
-###  scaleY
-
-• **scaleY**: *number* = -1
 
 ___
 
@@ -282,7 +275,7 @@ Name | Type |
 
 ___
 
-###  info
+### `Abstract` info
 
 ▸ **info**(`text`: string): *void*
 
@@ -332,19 +325,19 @@ ___
 
 ### `Abstract` start
 
-▸ **start**(`world`: World): *void*
+▸ **start**(`world`: [World](/api/classes/world)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`world` | World |
+`world` | [World](/api/classes/world) |
 
 **Returns:** *void*
 
 ___
 
-###  status
+### `Abstract` status
 
 ▸ **status**(`name`: string, `value`: any): *void*
 
@@ -388,7 +381,7 @@ ___
 
 ### `Static` mount
 
-▸ **mount**(`options?`: [TestbedMountOptions](/api/globals#testbedmountoptions)): *Testbed*
+▸ **mount**(`options?`: [TestbedMountOptions](/api/globals#testbedmountoptions)): *[Testbed](/api/classes/testbed)*
 
 Mounts testbed. Call start with a world to start simulation and rendering.
 
@@ -398,13 +391,13 @@ Name | Type |
 ------ | ------ |
 `options?` | [TestbedMountOptions](/api/globals#testbedmountoptions) |
 
-**Returns:** *Testbed*
+**Returns:** *[Testbed](/api/classes/testbed)*
 
 ___
 
 ### `Static` start
 
-▸ **start**(`world`: World): *Testbed*
+▸ **start**(`world`: [World](/api/classes/world)): *[Testbed](/api/classes/testbed)*
 
 Mounts testbed if needed, then starts simulation and rendering.
 
@@ -414,6 +407,6 @@ If you need to customize testbed before starting, first run `const testbed = Tes
 
 Name | Type |
 ------ | ------ |
-`world` | World |
+`world` | [World](/api/classes/world) |
 
-**Returns:** *Testbed*
+**Returns:** *[Testbed](/api/classes/testbed)*

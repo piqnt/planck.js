@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.6
+ * Planck.js v1.0.7
  * @license The MIT license
  * @copyright Copyright (c) 2023 Erin Catto, Ali Shakiba
  *
@@ -14975,6 +14975,7 @@ var Testbed = /** @class */ (function () {
         this.x = 0;
         /** World viewbox center horizontal offset. */
         this.y = -10;
+        /** @hidden */
         this.scaleY = -1;
         /** World simulation step frequency */
         this.hz = 60;
@@ -14994,8 +14995,6 @@ var Testbed = /** @class */ (function () {
         this.keyup = function (keyCode, label) {
             return;
         };
-        this.statusText = '';
-        this.statusMap = {};
     }
     /**
      * Mounts testbed. Call start with a world to start simulation and rendering.
@@ -15012,39 +15011,6 @@ var Testbed = /** @class */ (function () {
         var testbed = Testbed.mount();
         testbed.start(world);
         return testbed;
-    };
-    Testbed.prototype.status = function (a, b) {
-        if (typeof b !== 'undefined') {
-            var key_1 = a;
-            var value_1 = b;
-            if (typeof value_1 !== 'function' && typeof value_1 !== 'object') {
-                this.statusMap[key_1] = value_1;
-            }
-        }
-        else if (a && typeof a === 'object') {
-            // tslint:disable-next-line:no-for-in
-            for (var key_2 in a) {
-                var value_2 = a[key_2];
-                if (typeof value_2 !== 'function' && typeof value_2 !== 'object') {
-                    this.statusMap[key_2] = value_2;
-                }
-            }
-        }
-        else if (typeof a === 'string') {
-            this.statusText = a;
-        }
-        var newline = '\n';
-        var text = this.statusText || '';
-        for (var key in this.statusMap) {
-            var value = this.statusMap[key];
-            if (typeof value === 'function')
-                continue;
-            text += (text && newline) + key + ': ' + value;
-        }
-        this._status(text);
-    };
-    Testbed.prototype.info = function (text) {
-        this._info(text);
     };
     Testbed.prototype.color = function (r, g, b) {
         r = r * 256 | 0;

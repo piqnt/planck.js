@@ -36,13 +36,13 @@ Finds and solves islands. An island is a connected subset of the world.
 
 ###  constructor
 
-\+ **new Solver**(`world`: World): *[Solver](/api/classes/solver)*
+\+ **new Solver**(`world`: [World](/api/classes/world)): *[Solver](/api/classes/solver)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`world` | World |
+`world` | [World](/api/classes/world) |
 
 **Returns:** *[Solver](/api/classes/solver)*
 
@@ -74,7 +74,7 @@ ___
 
 ###  m_world
 
-• **m_world**: *World*
+• **m_world**: *[World](/api/classes/world)*
 
 ## Methods
 
