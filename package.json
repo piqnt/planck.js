@@ -66,6 +66,7 @@
     "@typescript-eslint/parser": "^5.2.0",
     "@vitest/coverage-v8": "^0.34.1",
     "ajv": "^6.10.2",
+    "dts-bundle-generator": "^9.5.1",
     "dtslint": "^3.6.9",
     "eslint": "^8.1.0",
     "esm": "^3.2.25",
@@ -97,6 +98,7 @@
     "vite-build": "vite build",
     "vite-preview": "vite preview",
     "benchmark": "git log -n 1 && vite-node ./benchmark/node",
+    "typedef": "dts-bundle-generator ./types/main.ts -o ./dist/planck.d.ts --no-banner",
     "typedoc": "typedoc --options typedoc.json"
   }
 }
