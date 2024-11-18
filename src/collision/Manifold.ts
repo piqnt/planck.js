@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-import * as matrix from '../common/Matrix';
-import { Vec2Value } from '../common/Vec2';
-import { TransformValue } from '../common/Transform';
-import { EPSILON } from '../common/Math';
+import * as matrix from "../common/Matrix";
+import { Vec2Value } from "../common/Vec2";
+import { TransformValue } from "../common/Transform";
+import { EPSILON } from "../common/Math";
 
 
 /** @internal */ const math_sqrt = Math.sqrt;
@@ -78,7 +78,7 @@ export enum ContactFeatureType {
     this.id.set(o.id);
   }
   recycle() {
-    matrix.zeroVec2(this.v)
+    matrix.zeroVec2(this.v);
     this.id.recycle();
   }
 }
@@ -131,8 +131,8 @@ export class Manifold {
 
   recycle(): void {
     this.type = ManifoldType.e_unset;
-    matrix.zeroVec2(this.localNormal)
-    matrix.zeroVec2(this.localPoint)
+    matrix.zeroVec2(this.localNormal);
+    matrix.zeroVec2(this.localPoint);
     this.pointCount = 0;
     this.points[0].recycle();
     this.points[1].recycle();
@@ -255,7 +255,7 @@ export class ManifoldPoint {
   }
 
   recycle(): void {
-    matrix.zeroVec2(this.localPoint)
+    matrix.zeroVec2(this.localPoint);
     this.normalImpulse = 0;
     this.tangentImpulse = 0;
     this.id.recycle();
@@ -291,7 +291,7 @@ export class ContactID {
     this.indexB = indexB;
     this.typeA = typeA;
     this.typeB = typeB;
-    this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64
+    this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64;
   }
 
   set(that: ContactID): void {
@@ -299,7 +299,7 @@ export class ContactID {
     this.indexB = that.indexB;
     this.typeA = that.typeA;
     this.typeB = that.typeB;
-    this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64
+    this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64;
   }
 
   swapFeatures(): void {
@@ -311,7 +311,7 @@ export class ContactID {
     this.indexB = indexA;
     this.typeA = typeB;
     this.typeB = typeA;
-    this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64
+    this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64;
   }
 
   recycle(): void {
@@ -340,7 +340,7 @@ export class WorldManifold {
   pointCount = 0;
 
   recycle() {
-    matrix.zeroVec2(this.normal)
+    matrix.zeroVec2(this.normal);
     matrix.zeroVec2(this.points[0]);
     matrix.zeroVec2(this.points[1]);
     this.separations[0] = 0;

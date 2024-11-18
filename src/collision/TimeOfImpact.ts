@@ -22,16 +22,16 @@
  * SOFTWARE.
  */
 
-import * as matrix from '../common/Matrix';
-import { SettingsInternal as Settings } from '../Settings';
-import { stats } from '../util/stats';
-import Timer from '../util/Timer';
-import { Sweep } from '../common/Sweep';
-import { Transform } from '../common/Transform';
-import { Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from './Distance';
+import * as matrix from "../common/Matrix";
+import { SettingsInternal as Settings } from "../Settings";
+import { stats } from "../util/stats";
+import Timer from "../util/Timer";
+import { Sweep } from "../common/Sweep";
+import { Transform } from "../common/Transform";
+import { Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from "./Distance";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_max = Math.max;
 
@@ -317,7 +317,7 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
   stats.toiTime += time;
 
   separationFunction.recycle();
-}
+};
 
 enum SeparationFunctionType {
   e_unset = -1,
@@ -350,8 +350,8 @@ class SeparationFunction {
     this.m_sweepB = null;
 
     this.m_type = SeparationFunctionType.e_unset;
-    matrix.zeroVec2(this.m_localPoint)
-    matrix.zeroVec2(this.m_axis)
+    matrix.zeroVec2(this.m_localPoint);
+    matrix.zeroVec2(this.m_axis);
 
     this.indexA = -1;
     this.indexB = -1;

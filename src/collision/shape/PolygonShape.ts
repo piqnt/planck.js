@@ -22,20 +22,20 @@
  * SOFTWARE.
  */
 
-import * as matrix from '../../common/Matrix';
-import type { MassData } from '../../dynamics/Body';
-import { RayCastOutput, RayCastInput, AABBValue } from '../AABB';
-import { DistanceProxy } from '../Distance';
-import { EPSILON } from '../../common/Math';
-import { Transform, TransformValue } from '../../common/Transform';
-import { Rot } from '../../common/Rot';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { SettingsInternal as Settings } from '../../Settings';
-import { Shape } from '../Shape';
+import * as matrix from "../../common/Matrix";
+import type { MassData } from "../../dynamics/Body";
+import { RayCastOutput, RayCastInput, AABBValue } from "../AABB";
+import { DistanceProxy } from "../Distance";
+import { EPSILON } from "../../common/Math";
+import { Transform, TransformValue } from "../../common/Transform";
+import { Rot } from "../../common/Rot";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { SettingsInternal as Settings } from "../../Settings";
+import { Shape } from "../Shape";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
 
@@ -53,8 +53,8 @@ import { Shape } from '../Shape';
  * for a convex polygon. extends Shape
  */
 export class PolygonShape extends Shape {
-  static TYPE = 'polygon' as const;
-  /** @hidden */ m_type: 'polygon';
+  static TYPE = "polygon" as const;
+  /** @hidden */ m_type: "polygon";
 
   /** @hidden */ m_centroid: Vec2;
   /** @hidden */ m_vertices: Vec2[]; // [Settings.maxPolygonVertices]
@@ -104,7 +104,7 @@ export class PolygonShape extends Shape {
     return shape;
   }
 
-  getType(): 'polygon' {
+  getType(): "polygon" {
     return this.m_type;
   }
 

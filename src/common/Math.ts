@@ -54,10 +54,10 @@ export function isPowerOfTwo(x: number): boolean {
 
 /** @deprecated */
 export function mod(num: number, min?: number, max?: number): number {
-  if (typeof min === 'undefined') {
+  if (typeof min === "undefined") {
     max = 1;
     min = 0;
-  } else if (typeof max === 'undefined') {
+  } else if (typeof max === "undefined") {
     max = min;
     min = 0;
   }
@@ -91,10 +91,10 @@ export function clamp(num: number, min: number, max: number): number {
  * If one arg is passed between 0 to 1.
  */
 export function random(min?: number, max?: number): number {
-  if (typeof min === 'undefined') {
+  if (typeof min === "undefined") {
     max = 1;
     min = 0;
-  } else if (typeof max === 'undefined') {
+  } else if (typeof max === "undefined") {
     max = min;
     min = 0;
   }

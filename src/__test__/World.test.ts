@@ -1,16 +1,16 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from "vitest";
 
-import { Vec2 } from '../common/Vec2';
-import { World } from '../dynamics/World';
-import { BoxShape } from '../collision/shape/BoxShape';
+import { Vec2 } from "../common/Vec2";
+import { World } from "../dynamics/World";
+import { BoxShape } from "../collision/shape/BoxShape";
 
 // registers Box-Box collision
-import '../collision/shape/CollidePolygon';
+import "../collision/shape/CollidePolygon";
 
-describe('World', function(): void {
+describe("World", function(): void {
 
   // This is the Box2D HelloWorld unit test translated to planck.js
-  it('simulates gravity', function(): void {
+  it("simulates gravity", function(): void {
     // Define the gravity vector.
     var gravity = new Vec2(0.0, -10.0);
 
@@ -31,7 +31,7 @@ describe('World', function(): void {
     // Define the dynamic body. We set its position and call the body factory.
     var body = world.createBody({
       position: new Vec2(0.0, 4.0),
-      type: 'dynamic'
+      type: "dynamic"
     });
 
     // Define another box shape for our dynamic body.

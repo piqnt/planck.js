@@ -22,21 +22,21 @@
  * SOFTWARE.
  */
 
-import { options } from '../../util/options';
-import { SettingsInternal as Settings } from '../../Settings';
-import { clamp } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Vec3 } from '../../common/Vec3';
-import { Mat22 } from '../../common/Mat22';
-import { Mat33 } from '../../common/Mat33';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { options } from "../../util/options";
+import { SettingsInternal as Settings } from "../../Settings";
+import { clamp } from "../../common/Math";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Vec3 } from "../../common/Vec3";
+import { Mat22 } from "../../common/Mat22";
+import { Mat33 } from "../../common/Mat33";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
@@ -131,9 +131,9 @@ export interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
  * motion or to model joint friction.
  */
 export class PrismaticJoint extends Joint {
-  static TYPE = 'prismatic-joint' as const;
+  static TYPE = "prismatic-joint" as const;
 
-  /** @internal */ m_type: 'prismatic-joint';
+  /** @internal */ m_type: "prismatic-joint";
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
   /** @internal */ m_localXAxisA: Vec2;
@@ -328,7 +328,7 @@ export class PrismaticJoint extends Joint {
     if (Number.isFinite(def.referenceAngle)) {
       this.m_referenceAngle = def.referenceAngle;
     }
-    if (typeof def.enableLimit !== 'undefined') {
+    if (typeof def.enableLimit !== "undefined") {
       this.m_enableLimit = !!def.enableLimit;
     }
     if (Number.isFinite(def.lowerTranslation)) {
@@ -337,7 +337,7 @@ export class PrismaticJoint extends Joint {
     if (Number.isFinite(def.upperTranslation)) {
       this.m_upperTranslation = def.upperTranslation;
     }
-    if (typeof def.enableMotor !== 'undefined') {
+    if (typeof def.enableMotor !== "undefined") {
       this.m_enableMotor = !!def.enableMotor;
     }
     if (Number.isFinite(def.maxMotorForce)) {

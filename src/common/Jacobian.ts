@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { Vec2 } from './Vec2';
+import { Vec2 } from "./Vec2";
 
 /** @internal */
 export class Jacobian {

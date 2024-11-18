@@ -22,17 +22,17 @@
  * SOFTWARE.
  */
 
-import { options } from '../../util/options';
-import { SettingsInternal as Settings } from '../../Settings';
-import { clamp } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { options } from "../../util/options";
+import { SettingsInternal as Settings } from "../../Settings";
+import { clamp } from "../../common/Math";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_min = Math.min;
 
 /** @internal */ enum LimitState {
@@ -87,9 +87,9 @@ export interface RopeJointDef extends JointDef, RopeJointOpt {
  * want to dynamically control length.
  */
 export class RopeJoint extends Joint {
-  static TYPE = 'rope-joint' as const;
+  static TYPE = "rope-joint" as const;
 
-  /** @internal */ m_type: 'rope-joint';
+  /** @internal */ m_type: "rope-joint";
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
 

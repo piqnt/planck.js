@@ -22,19 +22,19 @@
  * SOFTWARE.
  */
 
-import * as matrix from '../../common/Matrix';
-import { TransformValue } from '../../common/Transform';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { SettingsInternal as Settings } from '../../Settings';
-import { Contact } from '../../dynamics/Contact';
-import { Manifold, clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from '../Manifold';
-import { EdgeShape } from './EdgeShape';
-import { ChainShape } from './ChainShape';
-import { PolygonShape } from './PolygonShape';
+import * as matrix from "../../common/Matrix";
+import { TransformValue } from "../../common/Transform";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { SettingsInternal as Settings } from "../../Settings";
+import { Contact } from "../../dynamics/Contact";
+import { Manifold, clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from "../Manifold";
+import { EdgeShape } from "./EdgeShape";
+import { ChainShape } from "./ChainShape";
+import { PolygonShape } from "./PolygonShape";
 import { Fixture } from "../../dynamics/Fixture";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_min = Math.min;
 
 Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
@@ -111,11 +111,11 @@ Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
   readonly sideNormal2 = matrix.vec2(0 ,0);
   sideOffset2: number;
   recycle() {
-    matrix.zeroVec2(this.v1)
-    matrix.zeroVec2(this.v2)
-    matrix.zeroVec2(this.normal)
-    matrix.zeroVec2(this.sideNormal1)
-    matrix.zeroVec2(this.sideNormal2)
+    matrix.zeroVec2(this.v1);
+    matrix.zeroVec2(this.v2);
+    matrix.zeroVec2(this.normal);
+    matrix.zeroVec2(this.sideNormal1);
+    matrix.zeroVec2(this.sideNormal2);
   }
 }
 
@@ -172,7 +172,7 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
 
   matrix.subVec2(edge1, v2, v1);
   matrix.normalizeVec2(edge1);
-  matrix.setVec2(normal1, edge1.y, -edge1.x)
+  matrix.setVec2(normal1, edge1.y, -edge1.x);
   const offset1 = matrix.dotVec2(normal1, centroidB) - matrix.dotVec2(normal1, v1);
   let offset0 = 0.0;
   let offset2 = 0.0;
@@ -514,4 +514,4 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
   }
 
   manifold.pointCount = pointCount;
-}
+};

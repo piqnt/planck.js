@@ -22,20 +22,20 @@
  * SOFTWARE.
  */
 
-import { options } from '../../util/options';
-import { SettingsInternal as Settings } from '../../Settings';
-import { } from '../../common/Math';
-import { Vec2 } from '../../common/Vec2';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
-import { RevoluteJoint } from './RevoluteJoint';
-import { PrismaticJoint } from './PrismaticJoint';
+import { options } from "../../util/options";
+import { SettingsInternal as Settings } from "../../Settings";
+import { } from "../../common/Math";
+import { Vec2 } from "../../common/Vec2";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
+import { RevoluteJoint } from "./RevoluteJoint";
+import { PrismaticJoint } from "./PrismaticJoint";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -80,13 +80,13 @@ export interface GearJointDef extends JointDef, GearJointOpt {
  * combination will work).
  */
 export class GearJoint extends Joint {
-  static TYPE = 'gear-joint' as const;
+  static TYPE = "gear-joint" as const;
 
-  /** @internal */ m_type: 'gear-joint';
+  /** @internal */ m_type: "gear-joint";
   /** @internal */ m_joint1: RevoluteJoint | PrismaticJoint;
   /** @internal */ m_joint2: RevoluteJoint | PrismaticJoint;
-  /** @internal */ m_type1: 'revolute-joint' | 'prismatic-joint';
-  /** @internal */ m_type2: 'revolute-joint' | 'prismatic-joint';
+  /** @internal */ m_type1: "revolute-joint" | "prismatic-joint";
+  /** @internal */ m_type2: "revolute-joint" | "prismatic-joint";
   /** @internal */ m_bodyC: Body;
   /** @internal */ m_localAnchorC: Vec2;
   /** @internal */ m_localAnchorA: Vec2;
@@ -144,8 +144,8 @@ export class GearJoint extends Joint {
     this.m_joint2 = joint2 ? joint2 : def.joint2;
     this.m_ratio = Number.isFinite(ratio) ? ratio : def.ratio;
 
-    this.m_type1 = this.m_joint1.getType() as 'revolute-joint' | 'prismatic-joint';
-    this.m_type2 = this.m_joint2.getType() as 'revolute-joint' | 'prismatic-joint';
+    this.m_type1 = this.m_joint1.getType() as "revolute-joint" | "prismatic-joint";
+    this.m_type2 = this.m_joint2.getType() as "revolute-joint" | "prismatic-joint";
 
     // joint1 connects body A to body C
     // joint2 connects body B to body D

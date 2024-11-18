@@ -10,11 +10,11 @@ export interface Style {
   lineWidth?: number;
 }
 
-type KEY = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' |
-  '8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' |
-  'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' |
-  'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' |
-  'Z' | 'right' | 'left' | 'up' | 'down' | 'fire';
+type KEY = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" |
+  "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F" | "G" |
+  "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" |
+  "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" |
+  "Z" | "right" | "left" | "up" | "down" | "fire";
 
 export type ActiveKeys = { [key in KEY]?: boolean };
 
@@ -25,7 +25,7 @@ export abstract class Testbed {
    * Mounts testbed. Call start with a world to start simulation and rendering.
    */
   static mount(options?: TestbedMountOptions): Testbed {
-    throw new Error('Not implemented');
+    throw new Error("Not implemented");
   }
 
   /**
@@ -60,7 +60,7 @@ export abstract class Testbed {
   /** World simulation speed, default is 1 */
   speed: number = 1;
 
-  background: string = '#222222';
+  background: string = "#222222";
 
   mouseForce?: number;
   activeKeys: ActiveKeys = {};
@@ -89,7 +89,7 @@ export abstract class Testbed {
     r = r * 256 | 0;
     g = g * 256 | 0;
     b = b * 256 | 0;
-    return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+    return "rgb(" + r + ", " + g + ", " + b + ")";
   }
 
   abstract drawPoint(p: {x: number, y: number}, r: any, color: string): void;
@@ -118,10 +118,10 @@ export function testbed(options: TestbedFactoryOptions, callback: TestbedCallbac
 export function testbed(a?: any, b?: any) {
   let callback: TestbedCallback | undefined;
   let options;
-  if (typeof a === 'function') {
+  if (typeof a === "function") {
     callback = a;
     options = b;
-  } else if (typeof b === 'function') {
+  } else if (typeof b === "function") {
     callback = b;
     options = a;
   } else {

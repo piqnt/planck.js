@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-import { Vec2, Vec2Value } from './Vec2';
+import { Vec2, Vec2Value } from "./Vec2";
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_sin = Math.sin;
 /** @internal */ const math_cos = Math.cos;
 /** @internal */ const math_atan2 = Math.atan2;
@@ -48,9 +48,9 @@ export class Rot {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof Rot)) {
       return new Rot(angle);
     }
-    if (typeof angle === 'number') {
+    if (typeof angle === "number") {
       this.setAngle(angle);
-    } else if (typeof angle === 'object') {
+    } else if (typeof angle === "object") {
       this.setRot(angle);
     } else {
       this.setIdentity();
@@ -80,14 +80,14 @@ export class Rot {
   }
 
   static isValid(obj: any): boolean {
-    if (obj === null || typeof obj === 'undefined') {
+    if (obj === null || typeof obj === "undefined") {
       return false;
     }
     return Number.isFinite(obj.s) && Number.isFinite(obj.c);
   }
 
   static assert(o: any): void {
-    _ASSERT && console.assert(!Rot.isValid(o), 'Invalid Rot!', o);
+    _ASSERT && console.assert(!Rot.isValid(o), "Invalid Rot!", o);
   }
 
   /** Set to the identity rotation. */
@@ -97,7 +97,7 @@ export class Rot {
   }
 
   set(angle: number | RotValue): void {
-    if (typeof angle === 'object') {
+    if (typeof angle === "object") {
       _ASSERT && Rot.assert(angle);
       this.s = angle.s;
       this.c = angle.c;
@@ -145,7 +145,7 @@ export class Rot {
   static mul(rot: RotValue, m: Vec2Value): Vec2;
   static mul(rot, m) {
     _ASSERT && Rot.assert(rot);
-    if ('c' in m && 's' in m) {
+    if ("c" in m && "s" in m) {
       _ASSERT && Rot.assert(m);
       // [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
       // [qs qc] [rs rc] [qs*rc+qc*rs -qs*rs+qc*rc]
@@ -156,7 +156,7 @@ export class Rot {
       qr.c = rot.c * m.c - rot.s * m.s;
       return qr;
 
-    } else if ('x' in m && 'y' in m) {
+    } else if ("x" in m && "y" in m) {
       _ASSERT && Vec2.assert(m);
       return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
     }
@@ -194,7 +194,7 @@ export class Rot {
   /** Inverse rotate a vector */
   static mulT(rot: RotValue, m: Vec2Value): Vec2;
   static mulT(rot, m) {
-    if ('c' in m && 's' in m) {
+    if ("c" in m && "s" in m) {
       _ASSERT && Rot.assert(m);
       // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
       // [-qs qc] [rs rc] [-qs*rc+qc*rs qs*rs+qc*rc]
@@ -205,7 +205,7 @@ export class Rot {
       qr.c = rot.c * m.c + rot.s * m.s;
       return qr;
 
-    } else if ('x' in m && 'y' in m) {
+    } else if ("x" in m && "y" in m) {
       _ASSERT && Vec2.assert(m);
       return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
     }

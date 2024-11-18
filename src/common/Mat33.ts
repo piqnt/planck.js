@@ -22,11 +22,11 @@
  * SOFTWARE.
  */
 
-import { Vec2, Vec2Value } from './Vec2';
-import { Vec3, Vec3Value } from './Vec3';
+import { Vec2, Vec2Value } from "./Vec2";
+import { Vec3, Vec3Value } from "./Vec3";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 
 /**
@@ -40,7 +40,7 @@ export class Mat33 {
   constructor(a: Vec3Value, b: Vec3Value, c: Vec3Value);
   constructor();
   constructor(a?: Vec3Value, b?: Vec3Value, c?: Vec3Value) {
-    if (typeof a === 'object' && a !== null) {
+    if (typeof a === "object" && a !== null) {
       this.ex = Vec3.clone(a);
       this.ey = Vec3.clone(b);
       this.ez = Vec3.clone(c);
@@ -57,14 +57,14 @@ export class Mat33 {
   }
 
   static isValid(obj: any): boolean {
-    if (obj === null || typeof obj === 'undefined') {
+    if (obj === null || typeof obj === "undefined") {
       return false;
     }
     return Vec3.isValid(obj.ex) && Vec3.isValid(obj.ey) && Vec3.isValid(obj.ez);
   }
 
   static assert(o: any): void {
-    _ASSERT && console.assert(!Mat33.isValid(o), 'Invalid Mat33!', o);
+    _ASSERT && console.assert(!Mat33.isValid(o), "Invalid Mat33!", o);
   }
 
   /**
@@ -191,14 +191,14 @@ export class Mat33 {
   static mul(a: Mat33, b: Vec3Value): Vec3;
   static mul(a, b) {
     _ASSERT && Mat33.assert(a);
-    if (b && 'z' in b && 'y' in b && 'x' in b) {
+    if (b && "z" in b && "y" in b && "x" in b) {
       _ASSERT && Vec3.assert(b);
       const x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
       const y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
       const z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
       return new Vec3(x, y, z);
 
-    } else if (b && 'y' in b && 'x' in b) {
+    } else if (b && "y" in b && "x" in b) {
       _ASSERT && Vec2.assert(b);
       const x = a.ex.x * b.x + a.ey.x * b.y;
       const y = a.ex.y * b.x + a.ey.y * b.y;

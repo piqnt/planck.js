@@ -54,17 +54,17 @@ export class Pool<T> {
     this._max = opts.max || this._max;
 
     this._createFn = opts.create;
-    this._hasCreateFn = typeof this._createFn === 'function';
+    this._hasCreateFn = typeof this._createFn === "function";
     this._allocateFn = opts.allocate;
-    this._hasAllocateFn = typeof this._allocateFn === 'function';
+    this._hasAllocateFn = typeof this._allocateFn === "function";
     this._releaseFn = opts.release;
-    this._hasReleaseFn = typeof this._releaseFn === 'function';
+    this._hasReleaseFn = typeof this._releaseFn === "function";
     this._disposeFn = opts.dispose;
-    this._hasDisposeFn = typeof this._disposeFn === 'function';
+    this._hasDisposeFn = typeof this._disposeFn === "function";
   }
 
   max(n?: number): number | Pool<T> {
-    if (typeof n === 'number') {
+    if (typeof n === "number") {
       this._max = n;
       return this;
     }

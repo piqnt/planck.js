@@ -22,36 +22,36 @@
  * SOFTWARE.
  */
 
-import * as matrix from '../common/Matrix';
-import { options } from '../util/options';
-import { Vec2, Vec2Value } from '../common/Vec2';
-import { Rot } from '../common/Rot';
-import { Sweep } from '../common/Sweep';
-import { Transform } from '../common/Transform';
-import { Velocity } from './Velocity';
-import { Position } from './Position';
-import { Fixture, FixtureDef, FixtureOpt } from './Fixture';
-import { Shape } from '../collision/Shape';
+import * as matrix from "../common/Matrix";
+import { options } from "../util/options";
+import { Vec2, Vec2Value } from "../common/Vec2";
+import { Rot } from "../common/Rot";
+import { Sweep } from "../common/Sweep";
+import { Transform } from "../common/Transform";
+import { Velocity } from "./Velocity";
+import { Position } from "./Position";
+import { Fixture, FixtureDef, FixtureOpt } from "./Fixture";
+import { Shape } from "../collision/Shape";
 import { JointEdge } from "./Joint";
 import { World } from "./World";
 import { ContactEdge } from "./Contact";
-import { Style } from '../util/Testbed';
+import { Style } from "../util/Testbed";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 
-export type BodyType = 'static' | 'kinematic' | 'dynamic';
+export type BodyType = "static" | "kinematic" | "dynamic";
 
-/** @internal */ const STATIC = 'static';
-/** @internal */ const KINEMATIC = 'kinematic';
-/** @internal */ const DYNAMIC = 'dynamic';
+/** @internal */ const STATIC = "static";
+/** @internal */ const KINEMATIC = "kinematic";
+/** @internal */ const DYNAMIC = "dynamic";
 
 /** @internal */ const oldCenter = matrix.vec2(0, 0);
 /** @internal */ const localCenter = matrix.vec2(0, 0);
 /** @internal */ const shift = matrix.vec2(0, 0);
 /** @internal */ const temp = matrix.vec2(0, 0);
-/** @internal */ const xf = matrix.transform(0, 0, 0)
+/** @internal */ const xf = matrix.transform(0, 0, 0);
 
 export interface BodyDef {
   /**
@@ -162,7 +162,7 @@ export class Body {
    * A static body has zero velocity.
    * Static bodies do not collide with other static or kinematic bodies.
    */
-  static readonly STATIC: BodyType = 'static';
+  static readonly STATIC: BodyType = "static";
   /**
    * A kinematic body moves under simulation according to its velocity.
    * Kinematic bodies do not respond to forces.
@@ -170,7 +170,7 @@ export class Body {
    * A kinematic body behaves as if it has infinite mass, however, zero is stored for the mass and the inverse mass.
    * Kinematic bodies do not collide with other kinematic or static bodies.
    */
-  static readonly KINEMATIC: BodyType = 'kinematic';
+  static readonly KINEMATIC: BodyType = "kinematic";
 
   /**
    * A dynamic body is fully simulated.
@@ -179,7 +179,7 @@ export class Body {
    * A dynamic body always has finite, non-zero mass.
    * If you try to set the mass of a dynamic body to zero, it will automatically acquire a mass of one kilogram and it won't rotate.
    */
-  static readonly DYNAMIC: BodyType = 'dynamic';
+  static readonly DYNAMIC: BodyType = "dynamic";
 
   /** @internal */ m_world: World;
   /** @internal */ m_awakeFlag: boolean;
@@ -819,14 +819,14 @@ export class Body {
       };
       f.getMassData(massData);
       this.m_mass += massData.mass;
-      matrix.plusScaleVec2(localCenter, massData.mass, massData.center)
+      matrix.plusScaleVec2(localCenter, massData.mass, massData.center);
       this.m_I += massData.I;
     }
 
     // Compute center of mass.
     if (this.m_mass > 0.0) {
       this.m_invMass = 1.0 / this.m_mass;
-      matrix.scaleVec2(localCenter, this.m_invMass, localCenter)
+      matrix.scaleVec2(localCenter, this.m_invMass, localCenter);
 
     } else {
       // Force all dynamic bodies to have a positive mass.
@@ -1148,7 +1148,7 @@ export class Body {
     fixture.m_body = null;
     fixture.m_next = null;
 
-    this.m_world.publish('remove-fixture', fixture);
+    this.m_world.publish("remove-fixture", fixture);
 
     // Reset the mass data.
     this.resetMassData();

@@ -22,19 +22,19 @@
  * SOFTWARE.
  */
 
-import { options } from '../../util/options';
-import { EPSILON } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Mat22 } from '../../common/Mat22';
-import { Rot } from '../../common/Rot';
-import { Transform } from '../../common/Transform';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { options } from "../../util/options";
+import { EPSILON } from "../../common/Math";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Mat22 } from "../../common/Mat22";
+import { Rot } from "../../common/Rot";
+import { Transform } from "../../common/Transform";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_PI = Math.PI;
 
 
@@ -91,9 +91,9 @@ export interface MouseJointDef extends JointDef, MouseJointOpt {
  * at the testbed.
  */
 export class MouseJoint extends Joint {
-  static TYPE = 'mouse-joint' as const;
+  static TYPE = "mouse-joint" as const;
 
-  /** @internal */ m_type: 'mouse-joint';
+  /** @internal */ m_type: "mouse-joint";
   /** @internal */ m_targetA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
   /** @internal */ m_maxForce: number;

@@ -1,15 +1,15 @@
-import * as sinon from 'sinon';
-import { describe, it, expect, vi } from 'vitest';
+import * as sinon from "sinon";
+import { describe, it, expect, vi } from "vitest";
 
-import { Vec2 } from '../common/Vec2';
-import { AABB } from '../collision/AABB';
-import { DynamicTree } from '../collision/DynamicTree';
-import { BroadPhase } from '../collision/BroadPhase';
+import { Vec2 } from "../common/Vec2";
+import { AABB } from "../collision/AABB";
+import { DynamicTree } from "../collision/DynamicTree";
+import { BroadPhase } from "../collision/BroadPhase";
 
 
-describe('Collision', function(): void {
+describe("Collision", function(): void {
 
-  it('AABB', function(): void {
+  it("AABB", function(): void {
     var r, o = new AABB();
     expect(o.isValid()).equal(true);
 
@@ -48,18 +48,18 @@ describe('Collision', function(): void {
     // rayCast
   });
 
-  it('DynamicTree', function(): void {
+  it("DynamicTree", function(): void {
     var tree = new DynamicTree();
 
-    var foo = tree.createProxy(new AABB(new Vec2(0, 0), new Vec2(1, 1)), 'foo');
-    var bar = tree.createProxy(new AABB(new Vec2(1, 1), new Vec2(2, 2)), 'bar');
-    var baz = tree.createProxy(new AABB(new Vec2(2, 2), new Vec2(3, 3)), 'baz');
+    var foo = tree.createProxy(new AABB(new Vec2(0, 0), new Vec2(1, 1)), "foo");
+    var bar = tree.createProxy(new AABB(new Vec2(1, 1), new Vec2(2, 2)), "bar");
+    var baz = tree.createProxy(new AABB(new Vec2(2, 2), new Vec2(3, 3)), "baz");
 
     expect(tree.getHeight()).equal(2);
 
-    expect(tree.getUserData(foo)).equal('foo');
-    expect(tree.getUserData(bar)).equal('bar');
-    expect(tree.getUserData(baz)).equal('baz');
+    expect(tree.getUserData(foo)).equal("foo");
+    expect(tree.getUserData(bar)).equal("bar");
+    expect(tree.getUserData(baz)).equal("baz");
 
     expect(tree.getFatAABB(foo).upperBound.x).be.above(1);
     expect(tree.getFatAABB(foo).upperBound.y).be.above(1);
@@ -101,35 +101,35 @@ describe('Collision', function(): void {
 
   });
 
-  it('BroadPhase', function(): void {
+  it("BroadPhase", function(): void {
     var bp = new BroadPhase();
 
     var AddPair = sinon.spy();
     var callback = AddPair;
 
     // @ts-ignore
-    var foo = bp.createProxy(new AABB(new Vec2(0, 0), new Vec2(1, 1)), 'foo');
+    var foo = bp.createProxy(new AABB(new Vec2(0, 0), new Vec2(1, 1)), "foo");
     // @ts-ignore
-    var bar = bp.createProxy(new AABB(new Vec2(2, 2), new Vec2(3, 3)), 'bar');
+    var bar = bp.createProxy(new AABB(new Vec2(2, 2), new Vec2(3, 3)), "bar");
 
     bp.updatePairs(callback);
     expect(AddPair.callCount).equal(0);
 
     // @ts-ignore
-    var baz = bp.createProxy(new AABB(new Vec2(1, 1), new Vec2(2, 2)), 'baz');
+    var baz = bp.createProxy(new AABB(new Vec2(1, 1), new Vec2(2, 2)), "baz");
 
     AddPair.resetHistory();
     bp.updatePairs(callback);
     expect(AddPair.callCount).equal(2);
-    expect(AddPair.calledWith('bar', 'baz')).equal(true);
-    expect(AddPair.calledWith('foo', 'baz')).equal(true);
+    expect(AddPair.calledWith("bar", "baz")).equal(true);
+    expect(AddPair.calledWith("foo", "baz")).equal(true);
 
     bp.moveProxy(baz, new AABB(new Vec2(0.5, 0.5), new Vec2(1.5, 1.5)), new Vec2());
 
     AddPair.resetHistory();
     bp.updatePairs(callback);
     expect(AddPair.callCount).equal(1);
-    expect(AddPair.calledWith('foo', 'baz')).equal(true);
+    expect(AddPair.calledWith("foo", "baz")).equal(true);
 
   });
 

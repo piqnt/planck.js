@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-import type { MassData } from '../dynamics/Body';
-import { RayCastOutput, RayCastInput, AABBValue } from './AABB';
-import { DistanceProxy } from './Distance';
-import type { Transform, TransformValue }  from '../common/Transform';
-import type { Vec2Value }  from '../common/Vec2';
-import { Style } from '../util/Testbed';
+import type { MassData } from "../dynamics/Body";
+import { RayCastOutput, RayCastInput, AABBValue } from "./AABB";
+import { DistanceProxy } from "./Distance";
+import type { Transform, TransformValue }  from "../common/Transform";
+import type { Vec2Value }  from "../common/Vec2";
+import { Style } from "../util/Testbed";
 
 // todo make shape an interface
 
@@ -56,10 +56,10 @@ export abstract class Shape {
   abstract _reset(): void;
 
   static isValid(obj: any): boolean {
-    if (obj === null || typeof obj === 'undefined') {
+    if (obj === null || typeof obj === "undefined") {
       return false;
     }
-    return typeof obj.m_type === 'string' && typeof obj.m_radius === 'number';
+    return typeof obj.m_type === "string" && typeof obj.m_radius === "number";
   }
 
   abstract getRadius(): number;

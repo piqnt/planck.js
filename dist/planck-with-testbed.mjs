@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.7
+ * Planck.js v1.0.8
  * @license The MIT license
  * @copyright Copyright (c) 2023 Erin Catto, Ali Shakiba
  *
@@ -66,22 +66,22 @@ var __assign$1 = function() {
 
 /** @internal */
 var options = function (input, defaults) {
-    if (input === null || typeof input === 'undefined') {
+    if (input === null || typeof input === "undefined") {
         // tslint:disable-next-line:no-object-literal-type-assertion
         input = {};
     }
     var output = __assign$1({}, input);
     // tslint:disable-next-line:no-for-in
     for (var key in defaults) {
-        if (defaults.hasOwnProperty(key) && typeof input[key] === 'undefined') {
+        if (defaults.hasOwnProperty(key) && typeof input[key] === "undefined") {
             output[key] = defaults[key];
         }
     }
-    if (typeof Object.getOwnPropertySymbols === 'function') {
+    if (typeof Object.getOwnPropertySymbols === "function") {
         var symbols = Object.getOwnPropertySymbols(defaults);
         for (var i = 0; i < symbols.length; i++) {
             var symbol = symbols[i];
-            if (defaults.propertyIsEnumerable(symbol) && typeof input[symbol] === 'undefined') {
+            if (defaults.propertyIsEnumerable(symbol) && typeof input[symbol] === "undefined") {
                 output[symbol] = defaults[symbol];
             }
         }
@@ -138,11 +138,11 @@ function isPowerOfTwo(x) {
 }
 /** @deprecated */
 function mod(num, min, max) {
-    if (typeof min === 'undefined') {
+    if (typeof min === "undefined") {
         max = 1;
         min = 0;
     }
-    else if (typeof max === 'undefined') {
+    else if (typeof max === "undefined") {
         max = min;
         min = 0;
     }
@@ -177,11 +177,11 @@ function clamp$1(num, min, max) {
  * If one arg is passed between 0 to 1.
  */
 function random$1(min, max) {
-    if (typeof min === 'undefined') {
+    if (typeof min === "undefined") {
         max = 1;
         min = 0;
     }
-    else if (typeof max === 'undefined') {
+    else if (typeof max === "undefined") {
         max = min;
         min = 0;
     }
@@ -230,11 +230,11 @@ var Vec2 = /** @class */ (function () {
         if (!(this instanceof Vec2)) {
             return new Vec2(x, y);
         }
-        if (typeof x === 'undefined') {
+        if (typeof x === "undefined") {
             this.x = 0;
             this.y = 0;
         }
-        else if (typeof x === 'object') {
+        else if (typeof x === "object") {
             this.x = x.x;
             this.y = x.y;
         }
@@ -281,7 +281,7 @@ var Vec2 = /** @class */ (function () {
      * Does this vector contain finite coordinates?
      */
     Vec2.isValid = function (obj) {
-        if (obj === null || typeof obj === 'undefined') {
+        if (obj === null || typeof obj === "undefined") {
             return false;
         }
         return Number.isFinite(obj.x) && Number.isFinite(obj.y);
@@ -308,7 +308,7 @@ var Vec2 = /** @class */ (function () {
      */
     // tslint:disable-next-line:typedef
     Vec2.prototype.set = function (x, y) {
-        if (typeof x === 'object') {
+        if (typeof x === "object") {
             this.x = x.x;
             this.y = x.y;
         }
@@ -340,7 +340,7 @@ var Vec2 = /** @class */ (function () {
     };
     /** @internal @deprecated Use setCombine or setMul */
     Vec2.prototype.wSet = function (a, v, b, w) {
-        if (typeof b !== 'undefined' || typeof w !== 'undefined') {
+        if (typeof b !== "undefined" || typeof w !== "undefined") {
             return this.setCombine(a, v, b, w);
         }
         else {
@@ -377,7 +377,7 @@ var Vec2 = /** @class */ (function () {
     };
     /** @internal @deprecated Use addCombine or addMul */
     Vec2.prototype.wAdd = function (a, v, b, w) {
-        if (typeof b !== 'undefined' || typeof w !== 'undefined') {
+        if (typeof b !== "undefined" || typeof w !== "undefined") {
             return this.addCombine(a, v, b, w);
         }
         else {
@@ -406,7 +406,7 @@ var Vec2 = /** @class */ (function () {
      * @deprecated Use subCombine or subMul
      */
     Vec2.prototype.wSub = function (a, v, b, w) {
-        if (typeof b !== 'undefined' || typeof w !== 'undefined') {
+        if (typeof b !== "undefined" || typeof w !== "undefined") {
             return this.subCombine(a, v, b, w);
         }
         else {
@@ -505,7 +505,7 @@ var Vec2 = /** @class */ (function () {
         return dx * dx + dy * dy;
     };
     Vec2.areEqual = function (v, w) {
-        return v === w || typeof w === 'object' && w !== null && v.x === w.x && v.y === w.y;
+        return v === w || typeof w === "object" && w !== null && v.x === w.x && v.y === w.y;
     };
     /**
      * Get the skew vector such that dot(skew_vec, other) == cross(vec, other)
@@ -518,10 +518,10 @@ var Vec2 = /** @class */ (function () {
         return v.x * w.x + v.y * w.y;
     };
     Vec2.cross = function (v, w) {
-        if (typeof w === 'number') {
+        if (typeof w === "number") {
             return Vec2.neo(w * v.y, -w * v.x);
         }
-        else if (typeof v === 'number') {
+        else if (typeof v === "number") {
             return Vec2.neo(-v * w.y, v * w.x);
         }
         else {
@@ -541,10 +541,10 @@ var Vec2 = /** @class */ (function () {
         return Vec2.neo(-v * w.y, v * w.x);
     };
     Vec2.addCross = function (a, v, w) {
-        if (typeof w === 'number') {
+        if (typeof w === "number") {
             return Vec2.neo(w * v.y + a.x, -w * v.x + a.y);
         }
-        else if (typeof v === 'number') {
+        else if (typeof v === "number") {
             return Vec2.neo(-v * w.y + a.x, v * w.x + a.y);
         }
     };
@@ -565,7 +565,7 @@ var Vec2 = /** @class */ (function () {
     };
     /** @hidden @deprecated */
     Vec2.wAdd = function (a, v, b, w) {
-        if (typeof b !== 'undefined' || typeof w !== 'undefined') {
+        if (typeof b !== "undefined" || typeof w !== "undefined") {
             return Vec2.combine(a, v, b, w);
         }
         else {
@@ -579,10 +579,10 @@ var Vec2 = /** @class */ (function () {
         return Vec2.neo(v.x - w.x, v.y - w.y);
     };
     Vec2.mul = function (a, b) {
-        if (typeof a === 'object') {
+        if (typeof a === "object") {
             return Vec2.neo(a.x * b, a.y * b);
         }
-        else if (typeof b === 'object') {
+        else if (typeof b === "object") {
             return Vec2.neo(a * b.x, a * b.y);
         }
     };
@@ -675,13 +675,13 @@ var AABB = /** @class */ (function () {
         }
         this.lowerBound = Vec2.zero();
         this.upperBound = Vec2.zero();
-        if (typeof lower === 'object') {
+        if (typeof lower === "object") {
             this.lowerBound.setVec2(lower);
         }
-        if (typeof upper === 'object') {
+        if (typeof upper === "object") {
             this.upperBound.setVec2(upper);
         }
-        else if (typeof lower === 'object') {
+        else if (typeof lower === "object") {
             this.upperBound.setVec2(lower);
         }
     }
@@ -692,7 +692,7 @@ var AABB = /** @class */ (function () {
         return AABB.isValid(this);
     };
     AABB.isValid = function (obj) {
-        if (obj === null || typeof obj === 'undefined') {
+        if (obj === null || typeof obj === "undefined") {
             return false;
         }
         return Vec2.isValid(obj.lowerBound) && Vec2.isValid(obj.upperBound) && Vec2.sub(obj.upperBound, obj.lowerBound).lengthSquared() >= 0;
@@ -790,7 +790,7 @@ var AABB = /** @class */ (function () {
         var d = Vec2.sub(input.p2, input.p1);
         var absD = Vec2.abs(d);
         var normal = Vec2.zero();
-        for (var f = 'x'; f !== null; f = (f === 'x' ? 'y' : null)) {
+        for (var f = "x"; f !== null; f = (f === "x" ? "y" : null)) {
             if (absD.x < EPSILON) {
                 // Parallel.
                 if (p[f] < this.lowerBound[f] || this.upperBound[f] < p[f]) {
@@ -1220,16 +1220,16 @@ var Pool = /** @class */ (function () {
         this._list = [];
         this._max = opts.max || this._max;
         this._createFn = opts.create;
-        this._hasCreateFn = typeof this._createFn === 'function';
+        this._hasCreateFn = typeof this._createFn === "function";
         this._allocateFn = opts.allocate;
-        this._hasAllocateFn = typeof this._allocateFn === 'function';
+        this._hasAllocateFn = typeof this._allocateFn === "function";
         this._releaseFn = opts.release;
-        this._hasReleaseFn = typeof this._releaseFn === 'function';
+        this._hasReleaseFn = typeof this._releaseFn === "function";
         this._disposeFn = opts.dispose;
-        this._hasDisposeFn = typeof this._disposeFn === 'function';
+        this._hasDisposeFn = typeof this._disposeFn === "function";
     }
     Pool.prototype.max = function (n) {
-        if (typeof n === 'number') {
+        if (typeof n === "number") {
             this._max = n;
             return this;
         }
@@ -1733,7 +1733,7 @@ var DynamicTree = /** @class */ (function () {
      */
     DynamicTree.prototype.computeHeight = function (id) {
         var node;
-        if (typeof id !== 'undefined') {
+        if (typeof id !== "undefined") {
             node = this.m_nodes[id];
         }
         else {
@@ -2469,10 +2469,10 @@ var Rot = /** @class */ (function () {
         if (!(this instanceof Rot)) {
             return new Rot(angle);
         }
-        if (typeof angle === 'number') {
+        if (typeof angle === "number") {
             this.setAngle(angle);
         }
-        else if (typeof angle === 'object') {
+        else if (typeof angle === "object") {
             this.setRot(angle);
         }
         else {
@@ -2498,7 +2498,7 @@ var Rot = /** @class */ (function () {
         return obj;
     };
     Rot.isValid = function (obj) {
-        if (obj === null || typeof obj === 'undefined') {
+        if (obj === null || typeof obj === "undefined") {
             return false;
         }
         return Number.isFinite(obj.s) && Number.isFinite(obj.c);
@@ -2511,7 +2511,7 @@ var Rot = /** @class */ (function () {
         this.c = 1.0;
     };
     Rot.prototype.set = function (angle) {
-        if (typeof angle === 'object') {
+        if (typeof angle === "object") {
             this.s = angle.s;
             this.c = angle.c;
         }
@@ -2544,7 +2544,7 @@ var Rot = /** @class */ (function () {
         return Vec2.neo(-this.s, this.c);
     };
     Rot.mul = function (rot, m) {
-        if ('c' in m && 's' in m) {
+        if ("c" in m && "s" in m) {
             // [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
             // [qs qc] [rs rc] [qs*rc+qc*rs -qs*rs+qc*rc]
             // s = qs * rc + qc * rs
@@ -2554,7 +2554,7 @@ var Rot = /** @class */ (function () {
             qr.c = rot.c * m.c - rot.s * m.s;
             return qr;
         }
-        else if ('x' in m && 'y' in m) {
+        else if ("x" in m && "y" in m) {
             return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
         }
     };
@@ -2579,7 +2579,7 @@ var Rot = /** @class */ (function () {
         return Vec2.neo(x, y);
     };
     Rot.mulT = function (rot, m) {
-        if ('c' in m && 's' in m) {
+        if ("c" in m && "s" in m) {
             // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
             // [-qs qc] [rs rc] [-qs*rc+qc*rs qs*rs+qc*rc]
             // s = qc * rs - qs * rc
@@ -2589,7 +2589,7 @@ var Rot = /** @class */ (function () {
             qr.c = rot.c * m.c + rot.s * m.s;
             return qr;
         }
-        else if ('x' in m && 'y' in m) {
+        else if ("x" in m && "y" in m) {
             return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
         }
     };
@@ -2759,10 +2759,10 @@ var Transform = /** @class */ (function () {
         }
         this.p = Vec2.zero();
         this.q = Rot.identity();
-        if (typeof position !== 'undefined') {
+        if (typeof position !== "undefined") {
             this.p.setVec2(position);
         }
-        if (typeof rotation !== 'undefined') {
+        if (typeof rotation !== "undefined") {
             this.q.setAngle(rotation);
         }
     }
@@ -2791,7 +2791,7 @@ var Transform = /** @class */ (function () {
         this.q.setIdentity();
     };
     Transform.prototype.set = function (a, b) {
-        if (typeof b === 'undefined') {
+        if (typeof b === "undefined") {
             this.p.set(a.p);
             this.q.set(a.q);
         }
@@ -2810,7 +2810,7 @@ var Transform = /** @class */ (function () {
         this.q.setRot(xf.q);
     };
     Transform.isValid = function (obj) {
-        if (obj === null || typeof obj === 'undefined') {
+        if (obj === null || typeof obj === "undefined") {
             return false;
         }
         return Vec2.isValid(obj.p) && Rot.isValid(obj.q);
@@ -2827,10 +2827,10 @@ var Transform = /** @class */ (function () {
             }
             return arr;
         }
-        else if ('x' in b && 'y' in b) {
+        else if ("x" in b && "y" in b) {
             return Transform.mulVec2(a, b);
         }
-        else if ('p' in b && 'q' in b) {
+        else if ("p" in b && "q" in b) {
             return Transform.mulXf(a, b);
         }
     };
@@ -2861,10 +2861,10 @@ var Transform = /** @class */ (function () {
         return xf;
     };
     Transform.mulT = function (a, b) {
-        if ('x' in b && 'y' in b) {
+        if ("x" in b && "y" in b) {
             return Transform.mulTVec2(a, b);
         }
-        else if ('p' in b && 'q' in b) {
+        else if ("p" in b && "q" in b) {
             return Transform.mulTXf(a, b);
         }
     };
@@ -3010,10 +3010,10 @@ var Shape = /** @class */ (function () {
         this.appData = {};
     }
     Shape.isValid = function (obj) {
-        if (obj === null || typeof obj === 'undefined') {
+        if (obj === null || typeof obj === "undefined") {
             return false;
         }
-        return typeof obj.m_type === 'string' && typeof obj.m_radius === 'number';
+        return typeof obj.m_type === "string" && typeof obj.m_radius === "number";
     };
     return Shape;
 }());
@@ -3084,7 +3084,7 @@ var Fixture = /** @class */ (function () {
             def = shape;
             shape = shape.shape;
         }
-        else if (typeof def === 'number') {
+        else if (typeof def === "number") {
             def = { density: def };
         }
         def = options(def, FixtureDefDefault);
@@ -3415,9 +3415,9 @@ var Fixture = /** @class */ (function () {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/** @internal */ var STATIC = 'static';
-/** @internal */ var KINEMATIC = 'kinematic';
-/** @internal */ var DYNAMIC = 'dynamic';
+/** @internal */ var STATIC = "static";
+/** @internal */ var KINEMATIC = "kinematic";
+/** @internal */ var DYNAMIC = "dynamic";
 /** @internal */ var oldCenter = vec2(0, 0);
 /** @internal */ var localCenter = vec2(0, 0);
 /** @internal */ var shift = vec2(0, 0);
@@ -4206,7 +4206,7 @@ var Body = /** @class */ (function () {
         }
         fixture.m_body = null;
         fixture.m_next = null;
-        this.m_world.publish('remove-fixture', fixture);
+        this.m_world.publish("remove-fixture", fixture);
         // Reset the mass data.
         this.resetMassData();
     };
@@ -4241,7 +4241,7 @@ var Body = /** @class */ (function () {
      * A static body has zero velocity.
      * Static bodies do not collide with other static or kinematic bodies.
      */
-    Body.STATIC = 'static';
+    Body.STATIC = "static";
     /**
      * A kinematic body moves under simulation according to its velocity.
      * Kinematic bodies do not respond to forces.
@@ -4249,7 +4249,7 @@ var Body = /** @class */ (function () {
      * A kinematic body behaves as if it has infinite mass, however, zero is stored for the mass and the inverse mass.
      * Kinematic bodies do not collide with other kinematic or static bodies.
      */
-    Body.KINEMATIC = 'kinematic';
+    Body.KINEMATIC = "kinematic";
     /**
      * A dynamic body is fully simulated.
      * They can be moved manually by the user, but normally they move according to forces.
@@ -4257,7 +4257,7 @@ var Body = /** @class */ (function () {
      * A dynamic body always has finite, non-zero mass.
      * If you try to set the mass of a dynamic body to zero, it will automatically acquire a mass of one kilogram and it won't rotate.
      */
-    Body.DYNAMIC = 'dynamic';
+    Body.DYNAMIC = "dynamic";
     return Body;
 }());
 
@@ -4317,7 +4317,7 @@ var JointEdge = /** @class */ (function () {
  */
 var Joint = /** @class */ (function () {
     function Joint(def, bodyA, bodyB) {
-        /** @internal */ this.m_type = 'unknown-joint';
+        /** @internal */ this.m_type = "unknown-joint";
         /** @internal */ this.m_prev = null;
         /** @internal */ this.m_next = null;
         /** @internal */ this.m_edgeA = new JointEdge();
@@ -4327,8 +4327,8 @@ var Joint = /** @class */ (function () {
         this.style = {};
         /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
         this.appData = {};
-        bodyA = 'bodyA' in def ? def.bodyA : bodyA;
-        bodyB = 'bodyB' in def ? def.bodyB : bodyB;
+        bodyA = "bodyA" in def ? def.bodyA : bodyA;
+        bodyB = "bodyB" in def ? def.bodyB : bodyB;
         this.m_bodyA = bodyA;
         this.m_bodyB = bodyB;
         this.m_collideConnected = !!def.collideConnected;
@@ -4404,12 +4404,12 @@ var stats$1 = {
     toiRootIters: 0,
     toiMaxRootIters: 0,
     toString: function (newline) {
-        newline = typeof newline === 'string' ? newline : '\n';
+        newline = typeof newline === "string" ? newline : "\n";
         var string = "";
         // tslint:disable-next-line:no-for-in
         for (var name_1 in this) {
-            if (typeof this[name_1] !== 'function' && typeof this[name_1] !== 'object') {
-                string += name_1 + ': ' + this[name_1] + newline;
+            if (typeof this[name_1] !== "function" && typeof this[name_1] !== "object") {
+                string += name_1 + ": " + this[name_1] + newline;
             }
         }
         return string;
@@ -6396,11 +6396,11 @@ Solver.TimeStep = TimeStep;
  */
 var Mat22 = /** @class */ (function () {
     function Mat22(a, b, c, d) {
-        if (typeof a === 'object' && a !== null) {
+        if (typeof a === "object" && a !== null) {
             this.ex = Vec2.clone(a);
             this.ey = Vec2.clone(b);
         }
-        else if (typeof a === 'number') {
+        else if (typeof a === "number") {
             this.ex = Vec2.neo(a, c);
             this.ey = Vec2.neo(b, d);
         }
@@ -6414,7 +6414,7 @@ var Mat22 = /** @class */ (function () {
         return JSON.stringify(this);
     };
     Mat22.isValid = function (obj) {
-        if (obj === null || typeof obj === 'undefined') {
+        if (obj === null || typeof obj === "undefined") {
             return false;
         }
         return Vec2.isValid(obj.ex) && Vec2.isValid(obj.ey);
@@ -6422,16 +6422,16 @@ var Mat22 = /** @class */ (function () {
     Mat22.assert = function (o) {
     };
     Mat22.prototype.set = function (a, b, c, d) {
-        if (typeof a === 'number' && typeof b === 'number' && typeof c === 'number'
-            && typeof d === 'number') {
+        if (typeof a === "number" && typeof b === "number" && typeof c === "number"
+            && typeof d === "number") {
             this.ex.setNum(a, c);
             this.ey.setNum(b, d);
         }
-        else if (typeof a === 'object' && typeof b === 'object') {
+        else if (typeof a === "object" && typeof b === "object") {
             this.ex.setVec2(a);
             this.ey.setVec2(b);
         }
-        else if (typeof a === 'object') {
+        else if (typeof a === "object") {
             this.ex.setVec2(a.ex);
             this.ey.setVec2(a.ey);
         }
@@ -6484,12 +6484,12 @@ var Mat22 = /** @class */ (function () {
         return w;
     };
     Mat22.mul = function (mx, v) {
-        if (v && 'x' in v && 'y' in v) {
+        if (v && "x" in v && "y" in v) {
             var x = mx.ex.x * v.x + mx.ey.x * v.y;
             var y = mx.ex.y * v.x + mx.ey.y * v.y;
             return Vec2.neo(x, y);
         }
-        else if (v && 'ex' in v && 'ey' in v) { // Mat22
+        else if (v && "ex" in v && "ey" in v) { // Mat22
             // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
             var a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
             var b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
@@ -6512,10 +6512,10 @@ var Mat22 = /** @class */ (function () {
         return new Mat22(a, b, c, d);
     };
     Mat22.mulT = function (mx, v) {
-        if (v && 'x' in v && 'y' in v) { // Vec2
+        if (v && "x" in v && "y" in v) { // Vec2
             return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
         }
-        else if (v && 'ex' in v && 'ey' in v) { // Mat22
+        else if (v && "ex" in v && "ey" in v) { // Mat22
             var c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
             var c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
             return new Mat22(c1, c2);
@@ -7435,7 +7435,7 @@ var Contact = /** @class */ (function () {
             }
         }
         this.m_touchingFlag = touching;
-        var hasListener = typeof listener === 'object' && listener !== null;
+        var hasListener = typeof listener === "object" && listener !== null;
         if (!wasTouching && touching && hasListener) {
             listener.beginContact(this);
         }
@@ -8142,7 +8142,7 @@ var World = /** @class */ (function () {
         }
         for (var j = this.getJointList(); j; j = j.getNext()) {
             // @ts-ignore
-            if (typeof j._serialize === 'function') {
+            if (typeof j._serialize === "function") {
                 joints.push(j);
             }
         }
@@ -8416,7 +8416,7 @@ var World = /** @class */ (function () {
         else if (Vec2.isValid(arg1)) {
             def = { position: arg1, angle: arg2 };
         }
-        else if (typeof arg1 === 'object') {
+        else if (typeof arg1 === "object") {
             def = arg1;
         }
         var body = new Body(this, def);
@@ -8430,10 +8430,10 @@ var World = /** @class */ (function () {
         else if (Vec2.isValid(arg1)) {
             def = { position: arg1, angle: arg2 };
         }
-        else if (typeof arg1 === 'object') {
+        else if (typeof arg1 === "object") {
             def = arg1;
         }
-        def.type = 'dynamic';
+        def.type = "dynamic";
         return this.createBody(def);
     };
     // tslint:disable-next-line:typedef
@@ -8443,10 +8443,10 @@ var World = /** @class */ (function () {
         else if (Vec2.isValid(arg1)) {
             def = { position: arg1, angle: arg2 };
         }
-        else if (typeof arg1 === 'object') {
+        else if (typeof arg1 === "object") {
             def = arg1;
         }
-        def.type = 'kinematic';
+        def.type = "kinematic";
         return this.createBody(def);
     };
     /**
@@ -8469,7 +8469,7 @@ var World = /** @class */ (function () {
         while (je) {
             var je0 = je;
             je = je.next;
-            this.publish('remove-joint', je0.joint);
+            this.publish("remove-joint", je0.joint);
             this.destroyJoint(je0.joint);
             b.m_jointList = je;
         }
@@ -8488,7 +8488,7 @@ var World = /** @class */ (function () {
         while (f) {
             var f0 = f;
             f = f.m_next;
-            this.publish('remove-fixture', f0);
+            this.publish("remove-fixture", f0);
             f0.destroyProxies(this.m_broadPhase);
             b.m_fixtureList = f;
         }
@@ -8505,7 +8505,7 @@ var World = /** @class */ (function () {
         }
         b.m_destroyed = true;
         --this.m_bodyCount;
-        this.publish('remove-body', b);
+        this.publish("remove-body", b);
         return true;
     };
     /**
@@ -8615,7 +8615,7 @@ var World = /** @class */ (function () {
                 edge = edge.next;
             }
         }
-        this.publish('remove-joint', joint);
+        this.publish("remove-joint", joint);
     };
     /**
      * Take a time step. This performs collision detection, integration, and
@@ -8626,7 +8626,7 @@ var World = /** @class */ (function () {
      * @param timeStep Time step, this should not vary.
      */
     World.prototype.step = function (timeStep, velocityIterations, positionIterations) {
-        this.publish('pre-step', timeStep);
+        this.publish("pre-step", timeStep);
         if ((velocityIterations | 0) !== velocityIterations) {
             // TODO: remove this in future
             velocityIterations = 0;
@@ -8672,7 +8672,7 @@ var World = /** @class */ (function () {
             this.clearForces();
         }
         this.m_locked = false;
-        this.publish('post-step', timeStep);
+        this.publish("post-step", timeStep);
     };
     /**
      * @internal
@@ -8805,7 +8805,7 @@ var World = /** @class */ (function () {
      */
     // tslint:disable-next-line:typedef
     World.prototype.on = function (name, listener) {
-        if (typeof name !== 'string' || typeof listener !== 'function') {
+        if (typeof name !== "string" || typeof listener !== "function") {
             return this;
         }
         if (!this._listeners) {
@@ -8822,7 +8822,7 @@ var World = /** @class */ (function () {
      */
     // tslint:disable-next-line:typedef
     World.prototype.off = function (name, listener) {
-        if (typeof name !== 'string' || typeof listener !== 'function') {
+        if (typeof name !== "string" || typeof listener !== "function") {
             return this;
         }
         var listeners = this._listeners && this._listeners[name];
@@ -8847,19 +8847,19 @@ var World = /** @class */ (function () {
     };
     /** @internal */
     World.prototype.beginContact = function (contact) {
-        this.publish('begin-contact', contact);
+        this.publish("begin-contact", contact);
     };
     /** @internal */
     World.prototype.endContact = function (contact) {
-        this.publish('end-contact', contact);
+        this.publish("end-contact", contact);
     };
     /** @internal */
     World.prototype.preSolve = function (contact, oldManifold) {
-        this.publish('pre-solve', contact, oldManifold);
+        this.publish("pre-solve", contact, oldManifold);
     };
     /** @internal */
     World.prototype.postSolve = function (contact, impulse) {
-        this.publish('post-solve', contact, impulse);
+        this.publish("post-solve", contact, impulse);
     };
     return World;
 }());
@@ -8892,12 +8892,12 @@ var Vec3 = /** @class */ (function () {
         if (!(this instanceof Vec3)) {
             return new Vec3(x, y, z);
         }
-        if (typeof x === 'undefined') {
+        if (typeof x === "undefined") {
             this.x = 0;
             this.y = 0;
             this.z = 0;
         }
-        else if (typeof x === 'object') {
+        else if (typeof x === "object") {
             this.x = x.x;
             this.y = x.y;
             this.z = x.z;
@@ -8948,7 +8948,7 @@ var Vec3 = /** @class */ (function () {
     };
     /** Does this vector contain finite coordinates? */
     Vec3.isValid = function (obj) {
-        if (obj === null || typeof obj === 'undefined') {
+        if (obj === null || typeof obj === "undefined") {
             return false;
         }
         return Number.isFinite(obj.x) && Number.isFinite(obj.y) && Number.isFinite(obj.z);
@@ -8987,8 +8987,8 @@ var Vec3 = /** @class */ (function () {
     };
     Vec3.areEqual = function (v, w) {
         return v === w ||
-            typeof v === 'object' && v !== null &&
-                typeof w === 'object' && w !== null &&
+            typeof v === "object" && v !== null &&
+                typeof w === "object" && w !== null &&
                 v.x === w.x && v.y === w.y && v.z === w.z;
     };
     /** Dot product on two vectors */
@@ -9282,7 +9282,7 @@ var EdgeShape = /** @class */ (function (_super) {
         proxy.m_count = 2;
         proxy.m_radius = this.m_radius;
     };
-    EdgeShape.TYPE = 'edge';
+    EdgeShape.TYPE = "edge";
     return EdgeShape;
 }(Shape));
 var Edge = EdgeShape;
@@ -9590,7 +9590,7 @@ var ChainShape = /** @class */ (function (_super) {
         proxy.m_count = 2;
         proxy.m_radius = this.m_radius;
     };
-    ChainShape.TYPE = 'chain';
+    ChainShape.TYPE = "chain";
     return ChainShape;
 }(Shape));
 var Chain = ChainShape;
@@ -10008,7 +10008,7 @@ var PolygonShape = /** @class */ (function (_super) {
         proxy.m_count = this.m_count;
         proxy.m_radius = this.m_radius;
     };
-    PolygonShape.TYPE = 'polygon';
+    PolygonShape.TYPE = "polygon";
     return PolygonShape;
 }(Shape));
 /** @internal */ function computeCentroid(vs, count) {
@@ -10076,13 +10076,13 @@ var CircleShape = /** @class */ (function (_super) {
         _this.m_type = CircleShape.TYPE;
         _this.m_p = Vec2.zero();
         _this.m_radius = 1;
-        if (typeof a === 'object' && Vec2.isValid(a)) {
+        if (typeof a === "object" && Vec2.isValid(a)) {
             _this.m_p.setVec2(a);
-            if (typeof b === 'number') {
+            if (typeof b === "number") {
                 _this.m_radius = b;
             }
         }
-        else if (typeof a === 'number') {
+        else if (typeof a === "number") {
             _this.m_radius = a;
         }
         return _this;
@@ -10210,7 +10210,7 @@ var CircleShape = /** @class */ (function (_super) {
         proxy.m_count = 1;
         proxy.m_radius = this.m_radius;
     };
-    CircleShape.TYPE = 'circle';
+    CircleShape.TYPE = "circle";
     return CircleShape;
 }(Shape));
 var Circle = CircleShape;
@@ -10257,7 +10257,7 @@ var DistanceJoint = /** @class */ (function (_super) {
             return new DistanceJoint(def, bodyA, bodyB, anchorA, anchorB);
         }
         // order of constructor arguments is changed in v0.2
-        if (bodyB && anchorA && ('m_type' in anchorA) && ('x' in bodyB) && ('y' in bodyB)) {
+        if (bodyB && anchorA && ("m_type" in anchorA) && ("x" in bodyB) && ("y" in bodyB)) {
             var temp = bodyB;
             bodyB = anchorA;
             anchorA = temp;
@@ -10527,7 +10527,7 @@ var DistanceJoint = /** @class */ (function (_super) {
         this.m_bodyB.c_position.a = aB;
         return math_abs$6(C) < SettingsInternal.linearSlop;
     };
-    DistanceJoint.TYPE = 'distance-joint';
+    DistanceJoint.TYPE = "distance-joint";
     return DistanceJoint;
 }(Joint));
 
@@ -10805,7 +10805,7 @@ var FrictionJoint = /** @class */ (function (_super) {
     FrictionJoint.prototype.solvePositionConstraints = function (step) {
         return true;
     };
-    FrictionJoint.TYPE = 'friction-joint';
+    FrictionJoint.TYPE = "friction-joint";
     return FrictionJoint;
 }(Joint));
 
@@ -10837,7 +10837,7 @@ var FrictionJoint = /** @class */ (function (_super) {
  */
 var Mat33 = /** @class */ (function () {
     function Mat33(a, b, c) {
-        if (typeof a === 'object' && a !== null) {
+        if (typeof a === "object" && a !== null) {
             this.ex = Vec3.clone(a);
             this.ey = Vec3.clone(b);
             this.ez = Vec3.clone(c);
@@ -10853,7 +10853,7 @@ var Mat33 = /** @class */ (function () {
         return JSON.stringify(this);
     };
     Mat33.isValid = function (obj) {
-        if (obj === null || typeof obj === 'undefined') {
+        if (obj === null || typeof obj === "undefined") {
             return false;
         }
         return Vec3.isValid(obj.ex) && Vec3.isValid(obj.ey) && Vec3.isValid(obj.ez);
@@ -10968,13 +10968,13 @@ var Mat33 = /** @class */ (function () {
         M.ez.z = det * (a11 * a22 - a12 * a12);
     };
     Mat33.mul = function (a, b) {
-        if (b && 'z' in b && 'y' in b && 'x' in b) {
+        if (b && "z" in b && "y" in b && "x" in b) {
             var x = a.ex.x * b.x + a.ey.x * b.y + a.ez.x * b.z;
             var y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
             var z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
             return new Vec3(x, y, z);
         }
-        else if (b && 'y' in b && 'x' in b) {
+        else if (b && "y" in b && "x" in b) {
             var x = a.ex.x * b.x + a.ey.x * b.y;
             var y = a.ex.y * b.x + a.ey.y * b.y;
             return Vec2.neo(x, y);
@@ -11567,7 +11567,7 @@ var RevoluteJoint = /** @class */ (function (_super) {
         this.m_bodyB.c_position.a = aB;
         return positionError <= SettingsInternal.linearSlop && angularError <= SettingsInternal.angularSlop;
     };
-    RevoluteJoint.TYPE = 'revolute-joint';
+    RevoluteJoint.TYPE = "revolute-joint";
     return RevoluteJoint;
 }(Joint));
 
@@ -11770,7 +11770,7 @@ var PrismaticJoint = /** @class */ (function (_super) {
         if (Number.isFinite(def.referenceAngle)) {
             this.m_referenceAngle = def.referenceAngle;
         }
-        if (typeof def.enableLimit !== 'undefined') {
+        if (typeof def.enableLimit !== "undefined") {
             this.m_enableLimit = !!def.enableLimit;
         }
         if (Number.isFinite(def.lowerTranslation)) {
@@ -11779,7 +11779,7 @@ var PrismaticJoint = /** @class */ (function (_super) {
         if (Number.isFinite(def.upperTranslation)) {
             this.m_upperTranslation = def.upperTranslation;
         }
-        if (typeof def.enableMotor !== 'undefined') {
+        if (typeof def.enableMotor !== "undefined") {
             this.m_enableMotor = !!def.enableMotor;
         }
         if (Number.isFinite(def.maxMotorForce)) {
@@ -12256,7 +12256,7 @@ var PrismaticJoint = /** @class */ (function (_super) {
         return linearError <= SettingsInternal.linearSlop
             && angularError <= SettingsInternal.angularSlop;
     };
-    PrismaticJoint.TYPE = 'prismatic-joint';
+    PrismaticJoint.TYPE = "prismatic-joint";
     return PrismaticJoint;
 }(Joint));
 
@@ -12676,7 +12676,7 @@ var GearJoint = /** @class */ (function (_super) {
         // TODO_ERIN not implemented
         return linearError < SettingsInternal.linearSlop;
     };
-    GearJoint.TYPE = 'gear-joint';
+    GearJoint.TYPE = "gear-joint";
     return GearJoint;
 }(Joint));
 
@@ -12988,7 +12988,7 @@ var MotorJoint = /** @class */ (function (_super) {
     MotorJoint.prototype.solvePositionConstraints = function (step) {
         return true;
     };
-    MotorJoint.TYPE = 'motor-joint';
+    MotorJoint.TYPE = "motor-joint";
     return MotorJoint;
 }(Joint));
 
@@ -13278,7 +13278,7 @@ var MouseJoint = /** @class */ (function (_super) {
     MouseJoint.prototype.solvePositionConstraints = function (step) {
         return true;
     };
-    MouseJoint.TYPE = 'mouse-joint';
+    MouseJoint.TYPE = "mouse-joint";
     return MouseJoint;
 }(Joint));
 
@@ -13627,7 +13627,7 @@ var PulleyJoint = /** @class */ (function (_super) {
         this.m_bodyB.c_position.a = aB;
         return linearError < SettingsInternal.linearSlop;
     };
-    PulleyJoint.TYPE = 'pulley-joint';
+    PulleyJoint.TYPE = "pulley-joint";
     return PulleyJoint;
 }(Joint));
 
@@ -13902,7 +13902,7 @@ var RopeJoint = /** @class */ (function (_super) {
         this.m_bodyB.c_position.a = aB;
         return length - this.m_maxLength < SettingsInternal.linearSlop;
     };
-    RopeJoint.TYPE = 'rope-joint';
+    RopeJoint.TYPE = "rope-joint";
     return RopeJoint;
 }(Joint));
 
@@ -14293,7 +14293,7 @@ var WeldJoint = /** @class */ (function (_super) {
         this.m_bodyB.c_position.a = aB;
         return positionError <= SettingsInternal.linearSlop && angularError <= SettingsInternal.angularSlop;
     };
-    WeldJoint.TYPE = 'weld-joint';
+    WeldJoint.TYPE = "weld-joint";
     return WeldJoint;
 }(Joint));
 
@@ -14781,7 +14781,7 @@ var WheelJoint = /** @class */ (function (_super) {
         this.m_bodyB.c_position.a = aB;
         return math_abs$1(C) <= SettingsInternal.linearSlop;
     };
-    WheelJoint.TYPE = 'wheel-joint';
+    WheelJoint.TYPE = "wheel-joint";
     return WheelJoint;
 }(Joint));
 
@@ -14789,21 +14789,21 @@ var _a;
 var SID = 0;
 // Classes to be serialized as reference objects
 var SERIALIZE_REF_TYPES = {
-    'World': World,
-    'Body': Body,
-    'Joint': Joint,
-    'Fixture': Fixture,
-    'Shape': Shape,
+    "World": World,
+    "Body": Body,
+    "Joint": Joint,
+    "Fixture": Fixture,
+    "Shape": Shape,
 };
 // For deserializing reference objects by reference type
 var DESERIALIZE_BY_REF_TYPE = {
-    'Vec2': Vec2,
-    'Vec3': Vec3,
-    'World': World,
-    'Body': Body,
-    'Joint': Joint,
-    'Fixture': Fixture,
-    'Shape': Shape,
+    "Vec2": Vec2,
+    "Vec3": Vec3,
+    "World": World,
+    "Body": Body,
+    "Joint": Joint,
+    "Fixture": Fixture,
+    "Shape": Shape,
 };
 // For deserializing data objects by type field
 var DESERIALIZE_BY_TYPE_FIELD = (_a = {},
@@ -14868,11 +14868,11 @@ var Serializer = /** @class */ (function () {
             // other objects are serialize in-place 
             function traverse(value, noRefType) {
                 if (noRefType === void 0) { noRefType = false; }
-                if (typeof value !== 'object' || value === null) {
+                if (typeof value !== "object" || value === null) {
                     return value;
                 }
                 // object with _serialize function
-                if (typeof value._serialize === 'function') {
+                if (typeof value._serialize === "function") {
                     if (!noRefType) {
                         for (var typeName in SERIALIZE_REF_TYPES) {
                             if (value instanceof SERIALIZE_REF_TYPES[typeName]) {
@@ -14981,7 +14981,7 @@ var Testbed = /** @class */ (function () {
         this.hz = 60;
         /** World simulation speed, default is 1 */
         this.speed = 1;
-        this.background = '#222222';
+        this.background = "#222222";
         this.activeKeys = {};
         /** callback, to be implemented by user */
         this.step = function (dt, t) {
@@ -15000,7 +15000,7 @@ var Testbed = /** @class */ (function () {
      * Mounts testbed. Call start with a world to start simulation and rendering.
      */
     Testbed.mount = function (options) {
-        throw new Error('Not implemented');
+        throw new Error("Not implemented");
     };
     /**
      * Mounts testbed if needed, then starts simulation and rendering.
@@ -15016,7 +15016,7 @@ var Testbed = /** @class */ (function () {
         r = r * 256 | 0;
         g = g * 256 | 0;
         b = b * 256 | 0;
-        return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+        return "rgb(" + r + ", " + g + ", " + b + ")";
     };
     return Testbed;
 }());
@@ -15024,11 +15024,11 @@ var Testbed = /** @class */ (function () {
 function testbed(a, b) {
     var callback;
     var options;
-    if (typeof a === 'function') {
+    if (typeof a === "function") {
         callback = a;
         options = b;
     }
-    else if (typeof b === 'function') {
+    else if (typeof b === "function") {
         callback = b;
         options = a;
     }
@@ -15092,7 +15092,7 @@ var BoxShape = /** @class */ (function (_super) {
         return _this;
     }
     // note that box is serialized/deserialized as polygon
-    BoxShape.TYPE = 'polygon';
+    BoxShape.TYPE = "polygon";
     return BoxShape;
 }(PolygonShape));
 var Box = BoxShape;
@@ -17184,8 +17184,6 @@ var Pin = (
   function() {
     function Pin2(owner) {
       this.uid = "pin:" + uid();
-      this._directionX = 1;
-      this._directionY = 1;
       this._owner = owner;
       this._parent = null;
       this._relativeMatrix = new Matrix();
@@ -17261,7 +17259,7 @@ var Pin = (
       if (this._pivoted) {
         rel.translate(-this._pivotX * this._width, -this._pivotY * this._height);
       }
-      rel.scale(this._scaleX * this._directionX, this._scaleY * this._directionY);
+      rel.scale(this._scaleX, this._scaleY);
       rel.skew(this._skewX, this._skewY);
       rel.rotate(this._rotation);
       if (this._pivoted) {
@@ -17306,8 +17304,8 @@ var Pin = (
       }
       this._x = this._offsetX;
       this._y = this._offsetY;
-      this._x -= this._boxX + this._handleX * this._boxWidth * this._directionX;
-      this._y -= this._boxY + this._handleY * this._boxHeight * this._directionY;
+      this._x -= this._boxX + this._handleX * this._boxWidth;
+      this._y -= this._boxY + this._handleY * this._boxHeight;
       if (this._aligned && this._parent) {
         this._parent.relativeMatrix();
         this._x += this._alignX * this._parent._width;
@@ -18067,12 +18065,8 @@ var Node = (
     Node2.prototype.toString = function() {
       return "[" + this._label + "]";
     };
-    Node2.prototype.id = function(label) {
-      if (typeof label === "undefined") {
-        return this._label;
-      }
-      this._label = label;
-      return this;
+    Node2.prototype.id = function(id) {
+      return this.label(id);
     };
     Node2.prototype.label = function(label) {
       if (typeof label === "undefined") {
@@ -19029,12 +19023,10 @@ function memoizeDraw(legacySpriteDrawer, legacySpriteMemoizer) {
   return sprite2;
 }
 var POINTER_CLICK = "click";
-var POINTER_DOWN = "touchstart mousedown";
-var POINTER_MOVE = "touchmove mousemove";
-var POINTER_UP = "touchend mouseup";
-var POINTER_CANCEL = "touchcancel mousecancel";
 var POINTER_START = "touchstart mousedown";
+var POINTER_MOVE = "touchmove mousemove";
 var POINTER_END = "touchend mouseup";
+var POINTER_CANCEL = "touchcancel mousecancel";
 var EventPoint = (
   /** @class */
   function() {
@@ -19158,11 +19150,11 @@ var Pointer = (
           payload.collected.push(node);
         }
         if (payload.event) {
-          var stop = false;
+          var cancel = false;
           for (var l = 0; l < listeners.length; l++) {
-            stop = listeners[l].call(node, syntheticEvent) ? true : stop;
+            cancel = listeners[l].call(node, syntheticEvent) ? true : cancel;
           }
-          return stop;
+          return cancel;
         }
       };
     }
@@ -19433,7 +19425,6 @@ var Root = (
           if (_this.drawingWidth > 0 && _this.drawingHeight > 0) {
             _this.context.setTransform(1, 0, 0, 1, 0, 0);
             _this.context.clearRect(0, 0, _this.drawingWidth, _this.drawingHeight);
-            _this.renderDebug(_this.context);
             _this.render(_this.context);
           }
         } else if (tickRequest) {
@@ -19443,35 +19434,9 @@ var Root = (
         }
         stats.fps = elapsed ? 1e3 / elapsed : 0;
       };
-      _this.debugDrawAxis = false;
       _this.label("Root");
       return _this;
     }
-    Root2.prototype.renderDebug = function(context) {
-      if (!this.debugDrawAxis) {
-        return;
-      }
-      var m = this.matrix();
-      context.setTransform(m.a, m.b, m.c, m.d, m.e, m.f);
-      context.beginPath();
-      context.moveTo(0, 0);
-      context.lineTo(0, 10);
-      context.lineTo(-2, 8);
-      context.lineTo(2, 8);
-      context.lineTo(0, 10);
-      context.strokeStyle = "rgba(0,0,255,0.5)";
-      context.lineWidth = 1;
-      context.stroke();
-      context.beginPath();
-      context.moveTo(0, 0);
-      context.lineTo(10, 0);
-      context.lineTo(8, -2);
-      context.lineTo(8, 2);
-      context.lineTo(10, 0);
-      context.strokeStyle = "rgba(255,0,0,0.5)";
-      context.lineWidth = 1;
-      context.stroke();
-    };
     Root2.prototype.resume = function() {
       if (this.sleep || this.paused) {
         this.requestFrame();
@@ -19572,33 +19537,24 @@ var Root = (
           width: viewboxWidth,
           height: viewboxHeight
         });
-        this.fit(viewportWidth, viewportHeight, viewboxMode);
+        this.scaleTo(viewportWidth, viewportHeight, viewboxMode);
         var viewboxX = viewbox.x || 0;
         var viewboxY = viewbox.y || 0;
-        var cameraZoomX = (camera === null || camera === void 0 ? void 0 : camera.a) || 1;
-        var cameraZoomY = (camera === null || camera === void 0 ? void 0 : camera.d) || 1;
+        var cameraZoom = (camera === null || camera === void 0 ? void 0 : camera.a) || 1;
         var cameraX = (camera === null || camera === void 0 ? void 0 : camera.e) || 0;
         var cameraY = (camera === null || camera === void 0 ? void 0 : camera.f) || 0;
         var scaleX = this.pin("scaleX");
         var scaleY = this.pin("scaleY");
-        this.pin("scaleX", scaleX * cameraZoomX);
-        this.pin("scaleY", scaleY * cameraZoomY);
-        this.pin("offsetX", cameraX - viewboxX * scaleX * cameraZoomX);
-        this.pin("offsetY", cameraY - viewboxY * scaleY * cameraZoomY);
+        this.pin("scaleX", scaleX * cameraZoom);
+        this.pin("scaleY", scaleY * cameraZoom);
+        this.pin("offsetX", cameraX - viewboxX * scaleX * cameraZoom);
+        this.pin("offsetY", cameraY - viewboxY * scaleY * cameraZoom);
       } else if (viewport) {
         this.pin({
           width: viewport.width,
           height: viewport.height
         });
       }
-      return this;
-    };
-    Root2.prototype.flipX = function(x) {
-      this._pin._directionX = x ? -1 : 1;
-      return this;
-    };
-    Root2.prototype.flipY = function(y) {
-      this._pin._directionY = y ? -1 : 1;
       return this;
     };
     return Root2;
@@ -19839,11 +19795,9 @@ const Stage = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePropert
   Node,
   POINTER_CANCEL,
   POINTER_CLICK,
-  POINTER_DOWN,
   POINTER_END,
   POINTER_MOVE,
   POINTER_START,
-  POINTER_UP,
   Pin,
   PipeTexture,
   Pointer,

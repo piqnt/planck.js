@@ -22,11 +22,11 @@
  * SOFTWARE.
  */
 
-import type { Vec2Value } from '../../common/Vec2';
-import { PolygonShape } from './PolygonShape';
+import type { Vec2Value } from "../../common/Vec2";
+import { PolygonShape } from "./PolygonShape";
 
 
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -34,7 +34,7 @@ import { PolygonShape } from './PolygonShape';
  */
 export class BoxShape extends PolygonShape {
   // note that box is serialized/deserialized as polygon
-  static TYPE = 'polygon' as const;
+  static TYPE = "polygon" as const;
 
   /**
    * 

@@ -22,16 +22,16 @@
  * SOFTWARE.
  */
 
-import { TransformValue } from '../../common/Transform';
-import * as matrix from '../../common/Matrix';
-import { SettingsInternal as Settings } from '../../Settings';
-import { Manifold, clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from '../Manifold';
-import { Contact } from '../../dynamics/Contact';
-import { PolygonShape } from './PolygonShape';
+import { TransformValue } from "../../common/Transform";
+import * as matrix from "../../common/Matrix";
+import { SettingsInternal as Settings } from "../../Settings";
+import { Manifold, clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from "../Manifold";
+import { Contact } from "../../dynamics/Contact";
+import { PolygonShape } from "./PolygonShape";
 import { Fixture } from "../../dynamics/Fixture";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 /** @internal */ const incidentEdge = [ new ClipVertex(), new ClipVertex() ];
 /** @internal */ const clipPoints1 = [ new ClipVertex(), new ClipVertex() ];
@@ -294,4 +294,4 @@ export const CollidePolygons = function (
   }
 
   manifold.pointCount = pointCount;
-}
+};

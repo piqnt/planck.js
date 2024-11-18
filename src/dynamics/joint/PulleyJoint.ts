@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-import { options } from '../../util/options';
-import { SettingsInternal as Settings } from '../../Settings';
-import { EPSILON } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { options } from "../../util/options";
+import { SettingsInternal as Settings } from "../../Settings";
+import { EPSILON } from "../../common/Math";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 
 
@@ -99,10 +99,10 @@ export interface PulleyJointDef extends JointDef, PulleyJointOpt {
  * length.
  */
 export class PulleyJoint extends Joint {
-  static TYPE = 'pulley-joint' as const;
+  static TYPE = "pulley-joint" as const;
   // static MIN_PULLEY_LENGTH: number = 2.0; // TODO where this is used?
 
-  /** @internal */ m_type: 'pulley-joint';
+  /** @internal */ m_type: "pulley-joint";
   /** @internal */ m_groundAnchorA: Vec2;
   /** @internal */ m_groundAnchorB: Vec2;
   /** @internal */ m_localAnchorA: Vec2;

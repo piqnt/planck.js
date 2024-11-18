@@ -22,17 +22,17 @@
  * SOFTWARE.
  */
 
-import { options } from '../../util/options';
-import { SettingsInternal as Settings } from '../../Settings';
-import { clamp } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { options } from "../../util/options";
+import { SettingsInternal as Settings } from "../../Settings";
+import { clamp } from "../../common/Math";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_PI = Math.PI;
 
@@ -112,9 +112,9 @@ export interface WheelJointDef extends JointDef, WheelJointOpt {
  * This joint is designed for vehicle suspensions.
  */
 export class WheelJoint extends Joint {
-  static TYPE = 'wheel-joint' as const;
+  static TYPE = "wheel-joint" as const;
 
-  /** @internal */ m_type: 'wheel-joint';
+  /** @internal */ m_type: "wheel-joint";
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
   /** @internal */ m_localXAxisA: Vec2;

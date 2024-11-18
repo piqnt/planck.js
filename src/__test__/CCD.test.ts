@@ -1,14 +1,14 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from "vitest";
 
-import { Vec2 } from '../common/Vec2';
-import { Transform } from '../common/Transform';
-import { CircleShape } from '../collision/shape/CircleShape';
-import { TimeOfImpact, TOIInput, TOIOutput } from '../collision/TimeOfImpact';
-import { Distance, SimplexCache, DistanceOutput, DistanceInput } from '../collision/Distance';
+import { Vec2 } from "../common/Vec2";
+import { Transform } from "../common/Transform";
+import { CircleShape } from "../collision/shape/CircleShape";
+import { TimeOfImpact, TOIInput, TOIOutput } from "../collision/TimeOfImpact";
+import { Distance, SimplexCache, DistanceOutput, DistanceInput } from "../collision/Distance";
 
-describe('CCD', function(): void {
+describe("CCD", function(): void {
 
-  it('Distance', function(): void {
+  it("Distance", function(): void {
     var c1 = new CircleShape(1);
 
     var input = new DistanceInput();
@@ -33,11 +33,11 @@ describe('CCD', function(): void {
     var output = new DistanceOutput();
     Distance(output, cache, input);
 
-    expect(output.distance).closeTo(0.1, 1e-12)
+    expect(output.distance).closeTo(0.1, 1e-12);
     console.log(output);
   });
 
-  it('TimeOfImpact', function(): void {
+  it("TimeOfImpact", function(): void {
     var c1 = new CircleShape(1);
 
     var input = new TOIInput();

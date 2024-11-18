@@ -22,17 +22,17 @@
  * SOFTWARE.
  */
 
-import * as matrix from '../common/Matrix';
-import { SettingsInternal as Settings } from '../Settings';
-import { stats } from '../util/stats';
-import { Shape } from './Shape';
-import { EPSILON } from '../common/Math';
-import { Vec2, Vec2Value } from '../common/Vec2';
-import { Rot } from '../common/Rot';
-import { Transform, TransformValue } from '../common/Transform';
+import * as matrix from "../common/Matrix";
+import { SettingsInternal as Settings } from "../Settings";
+import { stats } from "../util/stats";
+import { Shape } from "./Shape";
+import { EPSILON } from "../common/Math";
+import { Vec2, Vec2Value } from "../common/Vec2";
+import { Rot } from "../common/Rot";
+import { Transform, TransformValue } from "../common/Transform";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_max = Math.max;
 
 
@@ -83,8 +83,8 @@ export class DistanceOutput {
   /** iterations number of GJK iterations used */
   iterations = 0;
   recycle() {
-    matrix.zeroVec2(this.pointA)
-    matrix.zeroVec2(this.pointB)
+    matrix.zeroVec2(this.pointA);
+    matrix.zeroVec2(this.pointB);
     this.distance = 0;
     this.iterations = 0;
   }
@@ -234,7 +234,7 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
       output.distance = 0.0;
     }
   }
-}
+};
 
 /**
  * A distance proxy is used by the GJK algorithm. It encapsulates any shape.
@@ -295,7 +295,7 @@ export class DistanceProxy {
    */
   set(shape: Shape, index: number): void {
     // TODO remove, use shape instead
-    _ASSERT && console.assert(typeof shape.computeDistanceProxy === 'function');
+    _ASSERT && console.assert(typeof shape.computeDistanceProxy === "function");
     shape.computeDistanceProxy(this, index);
   }
 
@@ -329,9 +329,9 @@ class SimplexVertex {
   recycle() {
     this.indexA = 0;
     this.indexB = 0;
-    matrix.zeroVec2(this.wA)
-    matrix.zeroVec2(this.wB)
-    matrix.zeroVec2(this.w)
+    matrix.zeroVec2(this.wA);
+    matrix.zeroVec2(this.wB);
+    matrix.zeroVec2(this.w);
     this.a = 0;
   }
   set(v: SimplexVertex): void {
@@ -743,7 +743,7 @@ export const testOverlap = function (shapeA: Shape, indexA: number, shapeB: Shap
   Distance(output, cache, input);
 
   return output.distance < 10.0 * EPSILON;
-}
+};
 
 // legacy exports
 Distance.testOverlap = testOverlap;
@@ -925,4 +925,4 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
   output.lambda = lambda;
   output.iterations = iter;
   return true;
-}
+};

@@ -22,17 +22,17 @@
  * SOFTWARE.
  */
 
-import { TransformValue } from '../../common/Transform';
-import * as matrix from '../../common/Matrix';
-import { Contact } from '../../dynamics/Contact';
-import { EdgeShape } from './EdgeShape';
-import { ChainShape } from './ChainShape';
-import { CircleShape } from './CircleShape';
+import { TransformValue } from "../../common/Transform";
+import * as matrix from "../../common/Matrix";
+import { Contact } from "../../dynamics/Contact";
+import { EdgeShape } from "./EdgeShape";
+import { ChainShape } from "./ChainShape";
+import { CircleShape } from "./CircleShape";
 import { Manifold, ContactFeatureType, ManifoldType } from "../Manifold";
 import { Fixture } from "../../dynamics/Fixture";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 
 Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
@@ -110,7 +110,7 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
     }
 
     manifold.type = ManifoldType.e_circles;
-    matrix.zeroVec2(manifold.localNormal)
+    matrix.zeroVec2(manifold.localNormal);
     matrix.copyVec2(manifold.localPoint, P);
     manifold.pointCount = 1;
     matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
@@ -142,7 +142,7 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
     }
 
     manifold.type = ManifoldType.e_circles;
-    matrix.zeroVec2(manifold.localNormal)
+    matrix.zeroVec2(manifold.localNormal);
     matrix.copyVec2(manifold.localPoint, P);
     manifold.pointCount = 1;
     matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
@@ -176,4 +176,4 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
 
   // manifold.points[0].id.key = 0;
   manifold.points[0].id.setFeatures(0, ContactFeatureType.e_face, 0, ContactFeatureType.e_vertex);
-}
+};

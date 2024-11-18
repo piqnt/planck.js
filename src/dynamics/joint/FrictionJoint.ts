@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-import { options } from '../../util/options';
-import { clamp } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Mat22 } from '../../common/Mat22';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { options } from "../../util/options";
+import { clamp } from "../../common/Math";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Mat22 } from "../../common/Mat22";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -77,9 +77,9 @@ export interface FrictionJointDef extends JointDef, FrictionJointOpt {
  * translational friction and angular friction.
  */
 export class FrictionJoint extends Joint {
-  static TYPE = 'friction-joint' as const;
+  static TYPE = "friction-joint" as const;
 
-  /** @internal */ m_type: 'friction-joint';
+  /** @internal */ m_type: "friction-joint";
 
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;

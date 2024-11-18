@@ -1,14 +1,14 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from "vitest";
 
-import { Vec2 } from '../common/Vec2';
-import { CircleShape } from '../collision/shape/CircleShape';
-import { World } from '../dynamics/World';
+import { Vec2 } from "../common/Vec2";
+import { CircleShape } from "../collision/shape/CircleShape";
+import { World } from "../dynamics/World";
 
-import '../collision/shape/CollideCircle';
+import "../collision/shape/CollideCircle";
 
-describe('Basic', function(): void {
+describe("Basic", function(): void {
 
-  it('World', function(): void {
+  it("World", function(): void {
 
     var world = new World();
 
@@ -16,12 +16,12 @@ describe('Basic', function(): void {
 
     var b1 = world.createBody({
       position : new Vec2(0, 0),
-      type : 'dynamic'
+      type : "dynamic"
     });
 
     b1.createFixture(circle);
 
-    expect(b1.getFixtureList().getType()).equal('circle');
+    expect(b1.getFixtureList().getType()).equal("circle");
     expect(b1.getWorld()).equal(world);
     expect(world.getBodyList()).equal(b1);
 
@@ -29,7 +29,7 @@ describe('Basic', function(): void {
 
     var b2 = world.createBody({
       position : new Vec2(2, 0),
-      type : 'dynamic'
+      type : "dynamic"
     });
     b2.createFixture(circle);
     b2.applyForceToCenter(new Vec2(-1, 0), true);

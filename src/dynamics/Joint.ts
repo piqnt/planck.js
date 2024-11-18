@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-import type { Vec2, Vec2Value }  from '../common/Vec2';
-import type { Body }  from './Body';
+import type { Vec2, Vec2Value }  from "../common/Vec2";
+import type { Body }  from "./Body";
 import { TimeStep } from "./Solver";
-import { Style } from '../util/Testbed';
+import { Style } from "../util/Testbed";
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 /**
  * A joint edge is used to connect bodies and joints together in a joint graph
@@ -93,7 +93,7 @@ export interface JointDef extends JointOpt {
  */
 export abstract class Joint {
 
-  /** @internal */ m_type: string = 'unknown-joint';
+  /** @internal */ m_type: string = "unknown-joint";
 
   /** @internal */ m_bodyA: Body;
   /** @internal */ m_bodyB: Body;
@@ -118,8 +118,8 @@ export abstract class Joint {
   constructor(def: JointDef);
   constructor(def: JointOpt, bodyA: Body, bodyB: Body);
   constructor(def: JointDef | JointOpt, bodyA?: Body, bodyB?: Body) {
-    bodyA = 'bodyA' in def ? def.bodyA : bodyA;
-    bodyB = 'bodyB' in def ? def.bodyB : bodyB;
+    bodyA = "bodyA" in def ? def.bodyA : bodyA;
+    bodyB = "bodyB" in def ? def.bodyB : bodyB;
 
     _ASSERT && console.assert(!!bodyA);
     _ASSERT && console.assert(!!bodyB);

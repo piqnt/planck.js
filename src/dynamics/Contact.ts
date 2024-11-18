@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-import * as matrix from '../common/Matrix';
+import * as matrix from "../common/Matrix";
 import { ShapeType } from "../collision/Shape";
-import { clamp } from '../common/Math';
-import { TransformValue } from '../common/Transform';
-import { Mat22 } from '../common/Mat22';
-import { SettingsInternal as Settings } from '../Settings';
-import { Manifold, ManifoldType, WorldManifold } from '../collision/Manifold';
-import { testOverlap } from '../collision/Distance';
+import { clamp } from "../common/Math";
+import { TransformValue } from "../common/Transform";
+import { Mat22 } from "../common/Mat22";
+import { SettingsInternal as Settings } from "../Settings";
+import { Manifold, ManifoldType, WorldManifold } from "../collision/Manifold";
+import { testOverlap } from "../collision/Distance";
 import { Fixture } from "./Fixture";
 import { Body } from "./Body";
 import { ContactImpulse, TimeStep } from "./Solver";
@@ -37,7 +37,7 @@ import { Pool } from "../util/Pool";
 import { getTransform } from "./Position";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_sqrt = Math.sqrt;
 /** @internal */ const math_max = Math.max;
@@ -123,8 +123,8 @@ export class VelocityConstraintPoint {
   velocityBias = 0;
 
   recycle() {
-    matrix.zeroVec2(this.rA)
-    matrix.zeroVec2(this.rB)
+    matrix.zeroVec2(this.rA);
+    matrix.zeroVec2(this.rB);
     this.normalImpulse = 0;
     this.tangentImpulse = 0;
     this.normalMass = 0;
@@ -271,7 +271,7 @@ export class Contact {
     for(const point of this.v_points) {
       point.recycle();
     }
-    matrix.zeroVec2(this.v_normal)
+    matrix.zeroVec2(this.v_normal);
     this.v_normalMass.setZero();
     this.v_K.setZero();
     this.v_pointCount = 0;
@@ -287,10 +287,10 @@ export class Contact {
     for(const point of this.p_localPoints) {
       matrix.zeroVec2(point);
     }
-    matrix.zeroVec2(this.p_localNormal)
-    matrix.zeroVec2(this.p_localPoint)
-    matrix.zeroVec2(this.p_localCenterA)
-    matrix.zeroVec2(this.p_localCenterB)
+    matrix.zeroVec2(this.p_localNormal);
+    matrix.zeroVec2(this.p_localPoint);
+    matrix.zeroVec2(this.p_localCenterA);
+    matrix.zeroVec2(this.p_localCenterB);
     this.p_type = ManifoldType.e_unset;
     this.p_radiusA = 0;
     this.p_radiusB = 0;
@@ -608,7 +608,7 @@ export class Contact {
 
     this.m_touchingFlag = touching;
 
-    const hasListener = typeof listener === 'object' && listener !== null;
+    const hasListener = typeof listener === "object" && listener !== null;
 
     if (!wasTouching && touching && hasListener) {
       listener.beginContact(this);
@@ -825,9 +825,9 @@ export class Contact {
       // Setup a velocity bias for restitution.
       vcp.velocityBias = 0.0;
       let vRel = 0;
-      vRel += matrix.dotVec2(this.v_normal, vB)
-      vRel += matrix.dotVec2(this.v_normal, matrix.crossNumVec2(temp, wB, vcp.rB))
-      vRel -= matrix.dotVec2(this.v_normal, vA)
+      vRel += matrix.dotVec2(this.v_normal, vB);
+      vRel += matrix.dotVec2(this.v_normal, matrix.crossNumVec2(temp, wB, vcp.rB));
+      vRel -= matrix.dotVec2(this.v_normal, vA);
       vRel -= matrix.dotVec2(this.v_normal, matrix.crossNumVec2(temp, wA, vcp.rA));
       if (vRel < -Settings.velocityThreshold) {
         vcp.velocityBias = -this.v_restitution * vRel;
@@ -1122,7 +1122,7 @@ export class Contact {
 
         if (x.x >= 0.0 && x.y >= 0.0) {
           // Get the incremental impulse
-          matrix.subVec2(d, x, a)
+          matrix.subVec2(d, x, a);
 
           // Apply incremental impulse
           matrix.scaleVec2(P1, d.x, normal);

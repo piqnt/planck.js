@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-import { SettingsInternal as Settings } from '../../Settings';
-import * as matrix from '../../common/Matrix';
-import { Shape } from '../Shape';
-import { Transform, TransformValue } from '../../common/Transform';
-import { Rot } from '../../common/Rot';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { AABB, AABBValue, RayCastInput, RayCastOutput } from '../AABB';
-import { MassData } from '../../dynamics/Body';
-import { DistanceProxy } from '../Distance';
+import { SettingsInternal as Settings } from "../../Settings";
+import * as matrix from "../../common/Matrix";
+import { Shape } from "../Shape";
+import { Transform, TransformValue } from "../../common/Transform";
+import { Rot } from "../../common/Rot";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { AABB, AABBValue, RayCastInput, RayCastOutput } from "../AABB";
+import { MassData } from "../../dynamics/Body";
+import { DistanceProxy } from "../Distance";
 
 
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 
 /** @internal */ const v1 = matrix.vec2(0, 0);
@@ -45,8 +45,8 @@ import { DistanceProxy } from '../Distance';
  * contact normals.
  */
 export class EdgeShape extends Shape {
-  static TYPE = 'edge' as const;
-  /** @hidden */ m_type: 'edge';
+  static TYPE = "edge" as const;
+  /** @hidden */ m_type: "edge";
 
   /** @hidden */ m_radius: number;
 
@@ -117,7 +117,7 @@ export class EdgeShape extends Shape {
     return this.m_radius;
   }
 
-  getType(): 'edge' {
+  getType(): "edge" {
     return this.m_type;
   }
 

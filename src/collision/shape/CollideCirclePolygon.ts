@@ -22,17 +22,17 @@
  * SOFTWARE.
  */
 
-import * as matrix from '../../common/Matrix';
-import { EPSILON } from '../../common/Math';
-import { TransformValue } from '../../common/Transform';
-import { Contact } from '../../dynamics/Contact';
-import { CircleShape } from './CircleShape';
-import { PolygonShape } from './PolygonShape';
+import * as matrix from "../../common/Matrix";
+import { EPSILON } from "../../common/Math";
+import { TransformValue } from "../../common/Transform";
+import { Contact } from "../../dynamics/Contact";
+import { CircleShape } from "./CircleShape";
+import { PolygonShape } from "./PolygonShape";
 import { Manifold, ContactFeatureType, ManifoldType } from "../Manifold";
 import { Fixture } from "../../dynamics/Fixture";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
@@ -142,4 +142,4 @@ export const CollidePolygonCircle = function (manifold: Manifold, polygonA: Poly
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
   }
-}
+};

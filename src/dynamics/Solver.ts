@@ -22,19 +22,19 @@
  * SOFTWARE.
  */
 
-import * as matrix from '../common/Matrix';
-import { SettingsInternal as Settings } from '../Settings';
-import { EPSILON } from '../common/Math';
-import { Body } from './Body';
-import type { Contact } from './Contact';
-import { Joint } from './Joint';
-import { TimeOfImpact, TOIInput, TOIOutput, TOIOutputState } from '../collision/TimeOfImpact';
-import { Distance, DistanceInput, DistanceOutput, SimplexCache } from '../collision/Distance';
+import * as matrix from "../common/Matrix";
+import { SettingsInternal as Settings } from "../Settings";
+import { EPSILON } from "../common/Math";
+import { Body } from "./Body";
+import type { Contact } from "./Contact";
+import { Joint } from "./Joint";
+import { TimeOfImpact, TOIInput, TOIOutput, TOIOutputState } from "../collision/TimeOfImpact";
+import { Distance, DistanceInput, DistanceOutput, SimplexCache } from "../collision/Distance";
 import { World } from "./World";
-import { Sweep } from '../common/Sweep';
+import { Sweep } from "../common/Sweep";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_sqrt = Math.sqrt;
 /** @internal */ const math_min = Math.min;
@@ -146,7 +146,7 @@ export class Solver {
   }
 
   addBody(body: Body): void {
-    _ASSERT && console.assert(body instanceof Body, 'Not a Body!', body);
+    _ASSERT && console.assert(body instanceof Body, "Not a Body!", body);
     this.m_bodies.push(body);
     // why?
     // body.c_position.c.setZero();
@@ -161,7 +161,7 @@ export class Solver {
   }
 
   addJoint(joint: Joint): void {
-    _ASSERT && console.assert(joint instanceof Joint, 'Not a Joint!', joint);
+    _ASSERT && console.assert(joint instanceof Joint, "Not a Joint!", joint);
     this.m_joints.push(joint);
   }
 
@@ -333,7 +333,7 @@ export class Solver {
          * v2 = v1 * 1 / (1 + c * dt)
          * </pre>
          */
-        matrix.scaleVec2(v, 1.0 / (1.0 + h * body.m_linearDamping), v)
+        matrix.scaleVec2(v, 1.0 / (1.0 + h * body.m_linearDamping), v);
         w *= 1.0 / (1.0 + h * body.m_angularDamping);
       }
 

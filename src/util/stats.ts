@@ -12,12 +12,12 @@ export const stats = {
   toiMaxRootIters: 0,
 
   toString(newline?: string): string {
-    newline = typeof newline === 'string' ? newline : '\n';
+    newline = typeof newline === "string" ? newline : "\n";
     let string = "";
     // tslint:disable-next-line:no-for-in
     for (const name in this) {
-      if (typeof this[name] !== 'function' && typeof this[name] !== 'object') {
-        string += name + ': ' + this[name] + newline;
+      if (typeof this[name] !== "function" && typeof this[name] !== "object") {
+        string += name + ": " + this[name] + newline;
       }
     }
     return string;

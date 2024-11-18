@@ -23,15 +23,15 @@
  */
 
 
-import * as matrix from '../../common/Matrix';
-import { Transform } from '../../common/Transform';
-import { Contact } from '../../dynamics/Contact';
-import { CircleShape } from './CircleShape';
+import * as matrix from "../../common/Matrix";
+import { Transform } from "../../common/Transform";
+import { Contact } from "../../dynamics/Contact";
+import { CircleShape } from "./CircleShape";
 import { Manifold, ContactFeatureType, ManifoldType } from "../Manifold";
 import { Fixture } from "../../dynamics/Fixture";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 
 Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
@@ -61,10 +61,10 @@ export const CollideCircles = function (manifold: Manifold, circleA: CircleShape
 
   manifold.type = ManifoldType.e_circles;
   matrix.copyVec2(manifold.localPoint, circleA.m_p);
-  matrix.zeroVec2(manifold.localNormal)
+  matrix.zeroVec2(manifold.localNormal);
   manifold.pointCount = 1;
   matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
   // manifold.points[0].id.key = 0;
-  manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex)
-}
+  manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
+};

@@ -22,20 +22,20 @@
  * SOFTWARE.
  */
 
-import { SettingsInternal as Settings } from '../../Settings';
-import { clamp } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Vec3 } from '../../common/Vec3';
-import { Mat22 } from '../../common/Mat22';
-import { Mat33 } from '../../common/Mat33';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { SettingsInternal as Settings } from "../../Settings";
+import { clamp } from "../../common/Math";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Vec3 } from "../../common/Vec3";
+import { Mat22 } from "../../common/Mat22";
+import { Mat33 } from "../../common/Mat33";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 
 
@@ -135,9 +135,9 @@ export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
  * so that infinite forces are not generated.
  */
 export class RevoluteJoint extends Joint {
-  static TYPE = 'revolute-joint' as const;
+  static TYPE = "revolute-joint" as const;
 
-  /** @internal */ m_type: 'revolute-joint';
+  /** @internal */ m_type: "revolute-joint";
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
   /** @internal */ m_referenceAngle: number;
@@ -179,7 +179,7 @@ export class RevoluteJoint extends Joint {
     bodyB = this.m_bodyB;
 
     this.m_mass = new Mat33();
-    this.m_limitState = LimitState.inactiveLimit
+    this.m_limitState = LimitState.inactiveLimit;
 
     this.m_type = RevoluteJoint.TYPE;
 

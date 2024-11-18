@@ -22,17 +22,17 @@
  * SOFTWARE.
  */
 
-import { options } from '../../util/options';
-import { SettingsInternal as Settings } from '../../Settings';
-import { clamp } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { options } from "../../util/options";
+import { SettingsInternal as Settings } from "../../Settings";
+import { clamp } from "../../common/Math";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_PI = Math.PI;
 
@@ -89,7 +89,7 @@ export interface DistanceJointDef extends JointDef, DistanceJointOpt {
  * distance from each other. You can view this as a massless, rigid rod.
  */
 export class DistanceJoint extends Joint {
-  static TYPE = 'distance-joint' as const;
+  static TYPE = "distance-joint" as const;
 
   // Solver shared
   /** @internal */ m_localAnchorA: Vec2;
@@ -129,7 +129,7 @@ export class DistanceJoint extends Joint {
     }
 
     // order of constructor arguments is changed in v0.2
-    if (bodyB && anchorA && ('m_type' in anchorA) && ('x' in bodyB) && ('y' in bodyB)) {
+    if (bodyB && anchorA && ("m_type" in anchorA) && ("x" in bodyB) && ("y" in bodyB)) {
       const temp = bodyB;
       bodyB = anchorA as any as Body;
       anchorA = temp as any as Vec2;

@@ -1,10 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from "vitest";
 
-import { Vec2 } from '../common/Vec2';
-import { Vec3 } from '../common/Vec3';
+import { Vec2 } from "../common/Vec2";
+import { Vec3 } from "../common/Vec3";
 
-describe('Math', function(): void {
-  it('Vec2', function(): void {
+describe("Math", function(): void {
+  it("Vec2", function(): void {
     var r, v = new Vec2();
     expect(v.x).equal(0);
     expect(v.y).equal(0);
@@ -59,7 +59,7 @@ describe('Math', function(): void {
 
   });
 
-  it('Vec3', function(): void {
+  it("Vec3", function(): void {
     return;
 
     let r, v = new Vec3();

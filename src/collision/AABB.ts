@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-import { EPSILON } from '../common/Math';
-import { Vec2, Vec2Value } from '../common/Vec2';
+import { EPSILON } from "../common/Math";
+import { Vec2, Vec2Value } from "../common/Vec2";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
 
@@ -68,12 +68,12 @@ export class AABB {
     this.lowerBound = Vec2.zero();
     this.upperBound = Vec2.zero();
 
-    if (typeof lower === 'object') {
+    if (typeof lower === "object") {
       this.lowerBound.setVec2(lower);
     }
-    if (typeof upper === 'object') {
+    if (typeof upper === "object") {
       this.upperBound.setVec2(upper);
-    } else if (typeof lower === 'object') {
+    } else if (typeof lower === "object") {
       this.upperBound.setVec2(lower);
     }
   }
@@ -86,14 +86,14 @@ export class AABB {
   }
 
   static isValid(obj: any): boolean {
-    if (obj === null || typeof obj === 'undefined') {
+    if (obj === null || typeof obj === "undefined") {
       return false;
     }
     return Vec2.isValid(obj.lowerBound) && Vec2.isValid(obj.upperBound) && Vec2.sub(obj.upperBound, obj.lowerBound).lengthSquared() >= 0;
   }
 
   static assert(o: any): void {
-    _ASSERT && console.assert(!AABB.isValid(o), 'Invalid AABB!', o);
+    _ASSERT && console.assert(!AABB.isValid(o), "Invalid AABB!", o);
   }
 
   /**
@@ -211,7 +211,7 @@ export class AABB {
 
     const normal = Vec2.zero();
 
-    for (let f: 'x' | 'y' = 'x'; f !== null; f = (f === 'x' ? 'y' : null)) {
+    for (let f: "x" | "y" = "x"; f !== null; f = (f === "x" ? "y" : null)) {
       if (absD.x < EPSILON) {
         // Parallel.
         if (p[f] < this.lowerBound[f] || this.upperBound[f] < p[f]) {

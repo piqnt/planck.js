@@ -22,26 +22,26 @@
  * SOFTWARE.
  */
 
-import * as matrix from '../../common/Matrix';
-import { EPSILON } from '../../common/Math';
-import { Rot } from '../../common/Rot';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Shape } from '../Shape';
-import { AABBValue, RayCastInput, RayCastOutput } from '../AABB';
-import { Transform, TransformValue } from '../../common/Transform';
-import { MassData } from '../../dynamics/Body';
-import { DistanceProxy } from '../Distance';
+import * as matrix from "../../common/Matrix";
+import { EPSILON } from "../../common/Math";
+import { Rot } from "../../common/Rot";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Shape } from "../Shape";
+import { AABBValue, RayCastInput, RayCastOutput } from "../AABB";
+import { Transform, TransformValue } from "../../common/Transform";
+import { MassData } from "../../dynamics/Body";
+import { DistanceProxy } from "../Distance";
 
 
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_sqrt = Math.sqrt;
 /** @internal */ const math_PI = Math.PI;
 
 /** @internal */ const temp = matrix.vec2(0, 0);
 
 export class CircleShape extends Shape {
-  static TYPE = 'circle' as const;
-  /** @hidden */ m_type: 'circle';
+  static TYPE = "circle" as const;
+  /** @hidden */ m_type: "circle";
 
   /** @hidden */ m_p: Vec2;
   /** @hidden */ m_radius: number;
@@ -60,14 +60,14 @@ export class CircleShape extends Shape {
     this.m_p = Vec2.zero();
     this.m_radius = 1;
 
-    if (typeof a === 'object' && Vec2.isValid(a)) {
+    if (typeof a === "object" && Vec2.isValid(a)) {
       this.m_p.setVec2(a);
 
-      if (typeof b === 'number') {
+      if (typeof b === "number") {
         this.m_radius = b;
       }
 
-    } else if (typeof a === 'number') {
+    } else if (typeof a === "number") {
       this.m_radius = a;
     }
   }
@@ -92,7 +92,7 @@ export class CircleShape extends Shape {
     // noop
   }
 
-  getType(): 'circle' {
+  getType(): "circle" {
     return this.m_type;
   }
 

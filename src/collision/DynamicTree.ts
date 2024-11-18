@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-import { SettingsInternal as Settings } from '../Settings';
-import { Pool } from '../util/Pool';
-import { Vec2, Vec2Value } from '../common/Vec2';
-import { AABB, AABBValue, RayCastCallback, RayCastInput } from './AABB';
+import { SettingsInternal as Settings } from "../Settings";
+import { Pool } from "../util/Pool";
+import { Vec2, Vec2Value } from "../common/Vec2";
+import { AABB, AABBValue, RayCastCallback, RayCastInput } from "./AABB";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_max = Math.max;
 
@@ -531,7 +531,7 @@ export class DynamicTree<T> {
    */
   computeHeight(id?: number): number {
     let node;
-    if (typeof id !== 'undefined') {
+    if (typeof id !== "undefined") {
       node = this.m_nodes[id];
     } else {
       node = this.m_root;
@@ -734,7 +734,7 @@ export class DynamicTree<T> {
    * proxy that overlaps the supplied AABB.
    */
   query(aabb: AABBValue, queryCallback: DynamicTreeQueryCallback): void {
-    _ASSERT && console.assert(typeof queryCallback === 'function');
+    _ASSERT && console.assert(typeof queryCallback === "function");
     const stack = this.stackPool.allocate();
 
     stack.push(this.m_root);
@@ -772,7 +772,7 @@ export class DynamicTree<T> {
    */
   rayCast(input: RayCastInput, rayCastCallback: RayCastCallback): void {
     // TODO: GC
-    _ASSERT && console.assert(typeof rayCastCallback === 'function');
+    _ASSERT && console.assert(typeof rayCastCallback === "function");
     const p1 = input.p1;
     const p2 = input.p2;
     const r = Vec2.sub(p2, p1);

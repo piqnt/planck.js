@@ -1,9 +1,9 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from "vitest";
 
-import { Pool } from '../util/Pool';
+import { Pool } from "../util/Pool";
 
-describe('Pool', function(): void {
-  it('Pool', function(): void {
+describe("Pool", function(): void {
+  it("Pool", function(): void {
 
     interface Type {
       busy: boolean;

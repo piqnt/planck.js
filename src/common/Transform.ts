@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-import { Vec2, Vec2Value } from './Vec2';
-import { Rot, RotValue } from './Rot';
+import { Vec2, Vec2Value } from "./Vec2";
+import { Rot, RotValue } from "./Rot";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 
 export type TransformValue = {
@@ -53,10 +53,10 @@ export class Transform {
     }
     this.p = Vec2.zero();
     this.q = Rot.identity();
-    if (typeof position !== 'undefined') {
+    if (typeof position !== "undefined") {
       this.p.setVec2(position);
     }
-    if (typeof rotation !== 'undefined') {
+    if (typeof rotation !== "undefined") {
       this.q.setAngle(rotation);
     }
   }
@@ -94,7 +94,7 @@ export class Transform {
   /** Copy from another transform */
   set(xf: TransformValue): void;
   set(a: any, b?: any) {
-    if (typeof b === 'undefined') {
+    if (typeof b === "undefined") {
       this.p.set(a.p);
       this.q.set(a.q);
     } else {
@@ -115,14 +115,14 @@ export class Transform {
   }
 
   static isValid(obj: any): boolean {
-    if (obj === null || typeof obj === 'undefined') {
+    if (obj === null || typeof obj === "undefined") {
       return false;
     }
     return Vec2.isValid(obj.p) && Rot.isValid(obj.q);
   }
 
   static assert(o: any): void {
-    _ASSERT && console.assert(!Transform.isValid(o), 'Invalid Transform!', o);
+    _ASSERT && console.assert(!Transform.isValid(o), "Invalid Transform!", o);
   }
 
   static mul(a: TransformValue, b: Vec2Value): Vec2;
@@ -139,10 +139,10 @@ export class Transform {
       }
       return arr;
 
-    } else if ('x' in b && 'y' in b) {
+    } else if ("x" in b && "y" in b) {
       return Transform.mulVec2(a, b);
 
-    } else if ('p' in b && 'q' in b) {
+    } else if ("p" in b && "q" in b) {
       return Transform.mulXf(a, b);
     }
   }
@@ -189,10 +189,10 @@ export class Transform {
   static mulT(a: TransformValue, b: Vec2Value): Vec2;
   static mulT(a: TransformValue, b: TransformValue): Transform;
   static mulT(a, b) {
-    if ('x' in b && 'y' in b) {
+    if ("x" in b && "y" in b) {
       return Transform.mulTVec2(a, b);
 
-    } else if ('p' in b && 'q' in b) {
+    } else if ("p" in b && "q" in b) {
       return Transform.mulTXf(a, b);
     }
   }

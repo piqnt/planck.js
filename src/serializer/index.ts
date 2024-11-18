@@ -1,10 +1,10 @@
-import { World } from '../dynamics/World';
-import { Body } from '../dynamics/Body';
-import { Joint } from '../dynamics/Joint';
-import { Fixture } from '../dynamics/Fixture';
-import { Shape } from '../collision/Shape';
-import { Vec2 } from '../common/Vec2';
-import { Vec3 } from '../common/Vec3';
+import { World } from "../dynamics/World";
+import { Body } from "../dynamics/Body";
+import { Joint } from "../dynamics/Joint";
+import { Fixture } from "../dynamics/Fixture";
+import { Shape } from "../collision/Shape";
+import { Vec2 } from "../common/Vec2";
+import { Vec3 } from "../common/Vec3";
 import { ChainShape } from "../collision/shape/ChainShape";
 // import { BoxShape } from "../collision/shape/BoxShape";
 import { EdgeShape } from "../collision/shape/EdgeShape";
@@ -26,22 +26,22 @@ let SID = 0;
 
 // Classes to be serialized as reference objects
 const SERIALIZE_REF_TYPES = {
-  'World': World,
-  'Body': Body,
-  'Joint': Joint,
-  'Fixture': Fixture,
-  'Shape': Shape,
+  "World": World,
+  "Body": Body,
+  "Joint": Joint,
+  "Fixture": Fixture,
+  "Shape": Shape,
 };
 
 // For deserializing reference objects by reference type
 const DESERIALIZE_BY_REF_TYPE = {
-  'Vec2': Vec2,
-  'Vec3': Vec3,
-  'World': World,
-  'Body': Body,
-  'Joint': Joint,
-  'Fixture': Fixture,
-  'Shape': Shape,
+  "Vec2": Vec2,
+  "Vec3": Vec3,
+  "World": World,
+  "Body": Body,
+  "Joint": Joint,
+  "Fixture": Fixture,
+  "Shape": Shape,
 };
 
 // For deserializing data objects by type field
@@ -65,7 +65,7 @@ const DESERIALIZE_BY_TYPE_FIELD = {
   [RopeJoint.TYPE]: RopeJoint,
   [WeldJoint.TYPE]: WeldJoint,
   [WheelJoint.TYPE]: WheelJoint,
-}
+};
 
 // dummy types
 type DataType = any;
@@ -142,11 +142,11 @@ export class Serializer<T> {
     // ref objects are pushed into the queue
     // other objects are serialize in-place 
     function traverse(value: any, noRefType = false) {
-      if (typeof value !== 'object' || value === null) {
+      if (typeof value !== "object" || value === null) {
         return value;
       }
       // object with _serialize function
-      if (typeof value._serialize === 'function') {
+      if (typeof value._serialize === "function") {
         if (!noRefType) {
           for (const typeName in SERIALIZE_REF_TYPES) {
             if (value instanceof SERIALIZE_REF_TYPES[typeName]) {
@@ -184,7 +184,7 @@ export class Serializer<T> {
     }
 
     return json;
-  }
+  };
 
   fromJson = (json: SerializedType): T => {
     const preDeserialize = this.options.preDeserialize;
@@ -195,7 +195,7 @@ export class Serializer<T> {
 
     function deserializeWithHooks(classHint: ClassName, data: DataType, context: any): ObjectType {
       if (!classHint || !classHint._deserialize) {
-        classHint = DESERIALIZE_BY_TYPE_FIELD[data.type]
+        classHint = DESERIALIZE_BY_TYPE_FIELD[data.type];
       }
       const deserializer = classHint && classHint._deserialize;
       if (!deserializer) {

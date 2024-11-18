@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-import { Vec2Value } from '../common/Vec2';
-import { AABB, AABBValue, RayCastCallback, RayCastInput } from './AABB';
-import { DynamicTree, DynamicTreeQueryCallback } from './DynamicTree';
+import { Vec2Value } from "../common/Vec2";
+import { AABB, AABBValue, RayCastCallback, RayCastInput } from "./AABB";
+import { DynamicTree, DynamicTreeQueryCallback } from "./DynamicTree";
 import { FixtureProxy } from "../dynamics/Fixture";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
 
@@ -101,7 +101,7 @@ export class BroadPhase {
    */
   query = (aabb: AABBValue, queryCallback: DynamicTreeQueryCallback): void => {
     this.m_tree.query(aabb, queryCallback);
-  }
+  };
 
   /**
    * Ray-cast against the proxies in the tree. This relies on the callback to
@@ -182,7 +182,7 @@ export class BroadPhase {
    * Update the pairs. This results in pair callbacks. This can only add pairs.
    */
   updatePairs(addPairCallback: (userDataA: FixtureProxy, userDataB: FixtureProxy) => void): void {
-    _ASSERT && console.assert(typeof addPairCallback === 'function');
+    _ASSERT && console.assert(typeof addPairCallback === "function");
     this.m_callback = addPairCallback;
 
     // Perform tree queries for all moving proxies.
@@ -222,5 +222,5 @@ export class BroadPhase {
     this.m_callback(userDataA, userDataB);
 
     return true;
-  }
+  };
 }

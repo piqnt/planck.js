@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-import * as matrix from '../common/Matrix';
-import { options } from '../util/options';
-import { Vec2Value } from '../common/Vec2';
-import { AABB, RayCastInput, RayCastOutput } from '../collision/AABB';
-import { Shape, ShapeType } from '../collision/Shape';
+import * as matrix from "../common/Matrix";
+import { options } from "../util/options";
+import { Vec2Value } from "../common/Vec2";
+import { AABB, RayCastInput, RayCastOutput } from "../collision/AABB";
+import { Shape, ShapeType } from "../collision/Shape";
 import { Body, MassData } from "./Body";
 import { BroadPhase } from "../collision/BroadPhase";
 import { TransformValue } from "../common/Transform";
-import { Style } from '../util/Testbed';
+import { Style } from "../util/Testbed";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 /** @internal */ const synchronize_aabb1 = new AABB();
 /** @internal */ const synchronize_aabb2 = new AABB();
@@ -147,7 +147,7 @@ export class Fixture {
       def = shape;
       shape = shape.shape;
 
-    } else if (typeof def === 'number') {
+    } else if (typeof def === "number") {
       def = {density : def};
     }
 

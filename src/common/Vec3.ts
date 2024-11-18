@@ -23,8 +23,8 @@
  */
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 
 export interface Vec3Value {
@@ -45,11 +45,11 @@ export class Vec3 {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof Vec3)) {
       return new Vec3(x, y, z);
     }
-    if (typeof x === 'undefined') {
+    if (typeof x === "undefined") {
       this.x = 0;
       this.y = 0;
       this.z = 0;
-    } else if (typeof x === 'object') {
+    } else if (typeof x === "object") {
       this.x = x.x;
       this.y = x.y;
       this.z = x.z;
@@ -108,14 +108,14 @@ export class Vec3 {
 
   /** Does this vector contain finite coordinates? */
   static isValid(obj: any): boolean {
-    if (obj === null || typeof obj === 'undefined') {
+    if (obj === null || typeof obj === "undefined") {
       return false;
     }
     return Number.isFinite(obj.x) && Number.isFinite(obj.y) && Number.isFinite(obj.z);
   }
 
   static assert(o: any): void {
-    _ASSERT && console.assert(!Vec3.isValid(o), 'Invalid Vec3!', o);
+    _ASSERT && console.assert(!Vec3.isValid(o), "Invalid Vec3!", o);
   }
 
   setZero(): Vec3 {
@@ -157,8 +157,8 @@ export class Vec3 {
     _ASSERT && Vec3.assert(v);
     _ASSERT && Vec3.assert(w);
     return v === w ||
-      typeof v === 'object' && v !== null &&
-      typeof w === 'object' && w !== null &&
+      typeof v === "object" && v !== null &&
+      typeof w === "object" && w !== null &&
       v.x === w.x && v.y === w.y && v.z === w.z;
   }
 

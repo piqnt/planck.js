@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { Vec2 } from '../common/Vec2';
+import { Vec2 } from "../common/Vec2";
 
 export class Velocity {
   /** linear */

@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-import { options } from '../../util/options';
-import { SettingsInternal as Settings } from '../../Settings';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Vec3 } from '../../common/Vec3';
-import { Mat33 } from '../../common/Mat33';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { options } from "../../util/options";
+import { SettingsInternal as Settings } from "../../Settings";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Vec3 } from "../../common/Vec3";
+import { Mat33 } from "../../common/Mat33";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_PI = Math.PI;
 
@@ -88,9 +88,9 @@ export interface WeldJointDef extends JointDef, WeldJointOpt {
  * somewhat because the island constraint solver is approximate.
  */
 export class WeldJoint extends Joint {
-  static TYPE = 'weld-joint' as const
+  static TYPE = "weld-joint" as const;
 
-  /** @internal */ m_type: 'weld-joint';
+  /** @internal */ m_type: "weld-joint";
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
   /** @internal */ m_referenceAngle: number;

@@ -22,19 +22,19 @@
  * SOFTWARE.
  */
 
-import * as matrix from '../../common/Matrix';
-import type { MassData } from '../../dynamics/Body';
-import { AABBValue, RayCastOutput, RayCastInput, AABB } from '../AABB';
-import { DistanceProxy } from '../Distance';
-import { Transform, TransformValue } from '../../common/Transform';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { SettingsInternal as Settings } from '../../Settings';
-import { Shape } from '../Shape';
-import { EdgeShape } from './EdgeShape';
+import * as matrix from "../../common/Matrix";
+import type { MassData } from "../../dynamics/Body";
+import { AABBValue, RayCastOutput, RayCastInput, AABB } from "../AABB";
+import { DistanceProxy } from "../Distance";
+import { Transform, TransformValue } from "../../common/Transform";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { SettingsInternal as Settings } from "../../Settings";
+import { Shape } from "../Shape";
+import { EdgeShape } from "./EdgeShape";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 /** @internal */ const v1 = matrix.vec2(0, 0);
 /** @internal */ const v2 = matrix.vec2(0, 0);
@@ -49,8 +49,8 @@ import { EdgeShape } from './EdgeShape';
  * WARNING: The chain will not collide properly if there are self-intersections.
  */
 export class ChainShape extends Shape {
-  static TYPE = 'chain' as const;
-  /** @hidden */ m_type: 'chain';
+  static TYPE = "chain" as const;
+  /** @hidden */ m_type: "chain";
 
   /** @hidden */ m_radius: number;
 
@@ -134,7 +134,7 @@ export class ChainShape extends Shape {
   //   this.m_count = 0;
   // }
 
-  getType(): 'chain' {
+  getType(): "chain" {
     return this.m_type;
   }
 
@@ -362,7 +362,7 @@ export class ChainShape extends Shape {
    */
   computeMass(massData: MassData, density?: number): void {
     massData.mass = 0.0;
-    matrix.zeroVec2(massData.center)
+    matrix.zeroVec2(massData.center);
     massData.I = 0.0;
   }
 
