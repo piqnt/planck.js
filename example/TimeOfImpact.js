@@ -43,13 +43,10 @@ sweepA.localCenter.setZero();
 let shapeB = new Box(2.5, 2.5);
 let sweepB = new Sweep();
 sweepB.c0.set(20, 20);
-sweepB.a0 = 0.1; // - 162.0 * Math.PI;
+sweepB.a0 = 0.1;
 sweepB.c.set(-20, -20);
-sweepB.a = 3.1; // - 162.0 * Math.PI;
+sweepB.a = 3.1;
 sweepB.localCenter.setZero();
-
-// sweepB.a0 -= 300.0 * Math.PI;
-// sweepB.a -= 300.0 * Math.PI;
 
 let input = new TOIInput();
 input.proxyA.set(shapeA, 0);

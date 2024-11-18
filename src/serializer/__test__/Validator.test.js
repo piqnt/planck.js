@@ -43,8 +43,6 @@ describe('Serializer', function() {
 
     var json = Serializer.toJson(world);
 
-    // console.log(JSON.stringify(json, null, ' '));
-
     var valid = validate(json);
     console.log(valid || validate.errors);
     expect(valid).be.true;

@@ -362,11 +362,6 @@ export function getPointStates(
 ): void {
   // state1, state2: PointState[Settings.maxManifoldPoints]
 
-  // for (var i = 0; i < Settings.maxManifoldPoints; ++i) {
-  // state1[i] = PointState.nullState;
-  // state2[i] = PointState.nullState;
-  // }
-
   // Detect persists and removes.
   for (let i = 0; i < manifold1.pointCount; ++i) {
     const id = manifold1.points[i].id;

@@ -36,8 +36,6 @@ describe('Basic', function(): void {
 
     world.step(1 / 20);
 
-    // console.log(b2.getPosition());
-
     var p = b1.getPosition();
     expect(p.x).closeTo(0.0, 1e-12);
     expect(p.y).closeTo(0.0, 1e-12);

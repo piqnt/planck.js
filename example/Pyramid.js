@@ -53,8 +53,4 @@ for (let i = 0; i < COUNT; ++i) {
 }
 
 testbed.step = function() {
-  // let tree = world.m_broadPhase.m_tree;
-  // if (stepCount++ == 400) {
-  // tree.rebuildBottomUp();
-  // }
 };

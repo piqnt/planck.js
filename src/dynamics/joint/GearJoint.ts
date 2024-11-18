@@ -261,7 +261,6 @@ export class GearJoint extends Joint {
     data.joint1 = restore(Joint, data.joint1, world);
     data.joint2 = restore(Joint, data.joint2, world);
     const joint = new GearJoint(data);
-    // if (data._constant) joint.m_constant = data._constant;
     return joint;
   }
 

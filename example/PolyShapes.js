@@ -163,7 +163,7 @@ function drawFixture(fixture) {
   case 'polygon': {
     let poly = fixture.getShape();
     let vertexCount = poly.m_count;
-    // assert(vertexCount <= b2_maxPolygonVertices);
+
     let vertices = poly.m_vertices.map(v => Transform.mul(xf, v));
     testbed.drawPolygon(vertices, color);
   }

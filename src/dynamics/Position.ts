@@ -39,8 +39,6 @@ export class Position {
 
   // todo: cache sin/cos
   getTransform(xf: TransformValue, p: Vec2Value): TransformValue {
-    // xf.q = rotation(this.a);
-    // xf.p = this.c - xf.q * p
     xf.q.c = math_cos(this.a);
     xf.q.s = math_sin(this.a);
     xf.p.x = this.c.x - (xf.q.c * p.x - xf.q.s * p.y);
@@ -50,8 +48,6 @@ export class Position {
 }
 
 export function getTransform(xf: TransformValue, p: Vec2Value, c: Vec2Value, a: number): TransformValue {
-  // xf.q = rotation(a);
-  // xf.p = this.c - xf.q * p
   xf.q.c = math_cos(a);
   xf.q.s = math_sin(a);
   xf.p.x = c.x - (xf.q.c * p.x - xf.q.s * p.y);

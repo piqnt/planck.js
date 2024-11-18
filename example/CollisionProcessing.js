@@ -80,7 +80,6 @@ world.on('pre-solve', function(contact, oldManifold) {
     cp.fixtureB = fixtureB;
     cp.position = worldManifold.points[i];
     cp.normal = worldManifold.normal;
-    // cp.state = state2[i];
     cp.normalImpulse = manifold.points[i].normalImpulse;
     cp.tangentImpulse = manifold.points[i].tangentImpulse;
     cp.separation = worldManifold.separations[i];

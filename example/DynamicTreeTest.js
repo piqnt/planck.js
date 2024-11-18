@@ -19,7 +19,7 @@ let queryAABB = new AABB();
 let rayCastInput = {};
 let rayCastOutput = {};
 let rayActor;
-let actors = []; // Actor[e_actorCount];
+let actors = [];
 let automated = false;
 
 for (let i = 0; i < ACTOR_COUNT; ++i) {
@@ -34,8 +34,6 @@ queryAABB.upperBound.set(5.0, 6.0 + h);
 
 rayCastInput.p1 = new Vec2(-5.0, 5.0 + h);
 rayCastInput.p2 = new Vec2(7.0, -4.0 + h);
-// rayCastInput.p1 = new Vec2(0.0, 2.0 + h);
-// rayCastInput.p2 = new Vec2(0.0, -2.0 + h);
 rayCastInput.maxFraction = 1.0;
 
 testbed.step = function() {
@@ -138,8 +136,6 @@ function Actor() {
 
 function getRandomAABB(aabb) {
   let w = new Vec2(2.0 * proxyExtent, 2.0 * proxyExtent);
-  // aabb.lowerBound.x = -proxyExtent;
-  // aabb.lowerBound.y = -proxyExtent + worldExtent;
   aabb.lowerBound.x = Math.random(-worldExtent, worldExtent);
   aabb.lowerBound.y = Math.random(0.0, 2.0 * worldExtent);
   aabb.upperBound = Vec2.add(w, aabb.lowerBound);
@@ -147,8 +143,7 @@ function getRandomAABB(aabb) {
 
 function moveAABB(aabb) {
   let d = new Vec2(Math.random(-0.5, 0.5), Math.random(-0.5, 0.5));
-  // d.x = 2.0;
-  // d.y = 0.0;
+
   aabb.lowerBound.add(d);
   aabb.upperBound.add(d);
 
@@ -227,7 +222,6 @@ function runQuery() {
     }
 
     let overlap = AABB.testOverlap(queryAABB, actors[i].aabb);
-    // assert(overlap == actors[i].overlap);
   }
 }
 
@@ -254,9 +248,5 @@ function rayCast() {
       bruteOutput = output;
       input.maxFraction = output.fraction;
     }
-  }
-
-  if (bruteActor != null) {
-    // Assert(bruteOutput.fraction == rayCastOutput.fraction);
   }
 }

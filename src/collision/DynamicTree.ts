@@ -326,7 +326,6 @@ export class DynamicTree<T> {
       index = index.parent;
     }
 
-    // validate();
   }
 
   removeLeaf(leaf: TreeNode<T>): void {
@@ -372,8 +371,6 @@ export class DynamicTree<T> {
       sibling.parent = null;
       this.freeNode(parent);
     }
-
-    // validate();
   }
 
   /**
@@ -537,8 +534,6 @@ export class DynamicTree<T> {
       node = this.m_root;
     }
 
-    // _ASSERT && console.assert(0 <= id && id < this.m_nodeCapacity);
-
     if (node.isLeaf()) {
       return 0;
     }
@@ -567,8 +562,6 @@ export class DynamicTree<T> {
       return;
     }
 
-    // _ASSERT && console.assert(0 <= child1 && child1 < this.m_nodeCapacity);
-    // _ASSERT && console.assert(0 <= child2 && child2 < this.m_nodeCapacity);
 
     _ASSERT && console.assert(child1.parent === node);
     _ASSERT && console.assert(child2.parent === node);
@@ -592,8 +585,6 @@ export class DynamicTree<T> {
       return;
     }
 
-    // _ASSERT && console.assert(0 <= child1 && child1 < this.m_nodeCapacity);
-    // _ASSERT && console.assert(0 <= child2 && child2 < this.m_nodeCapacity);
 
     const height1 = child1.height;
     const height2 = child2.height;

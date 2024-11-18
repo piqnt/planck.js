@@ -171,13 +171,12 @@ function State() {
 
     !_bricks.length && createRow();
     _score += _combo;
-    // _combo++;
+
     updateStatus();
     createDrop(brick);
   };
 
   state.hitBall = function() {
-    // _combo = 1;
   };
 
   state.missBall = function(ball) {

@@ -156,7 +156,6 @@ export class Solver {
   }
 
   addContact(contact: Contact): void {
-    // _ASSERT && console.assert(contact instanceof Contact, 'Not a Contact!', contact);
     this.m_contacts.push(contact);
   }
 
@@ -251,7 +250,6 @@ export class Solver {
             continue;
           }
 
-          // _ASSERT && console.assert(stack.length < world.m_bodyCount);
           stack.push(other);
           other.m_islandFlag = true;
         }
@@ -276,7 +274,6 @@ export class Solver {
             continue;
           }
 
-          // _ASSERT && console.assert(stack.length < world.m_bodyCount);
           stack.push(other);
           other.m_islandFlag = true;
         }

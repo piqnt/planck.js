@@ -234,8 +234,6 @@ export class EdgeShape extends Shape {
     // p1 + t * d = v1 + s * e
     // s * e - t * d = p1 - v1
 
-    // NOT_USED(childIndex);
-
     // Put the ray into the edge's frame of reference.
     const p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
     const p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));

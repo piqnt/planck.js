@@ -87,7 +87,7 @@ Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
  */
 /** @internal */ class TempPolygon {
   vertices: Vec2Value[] = []; // [Settings.maxPolygonVertices]
-  normals: Vec2Value[] = []; // [Settings.maxPolygonVertices];
+  normals: Vec2Value[] = [];
   count: number = 0;
   constructor() {
     for (let i = 0; i < Settings.maxPolygonVertices; i++) {
@@ -156,8 +156,6 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
   // 7. Return if _any_ axis indicates separation
   // 8. Clip
 
-  // let m_type1: VertexType;
-  // let m_type2: VertexType;
 
   matrix.detransformTransform(xf, xfA, xfB);
   matrix.transformVec2(centroidB, xf, polygonB.m_centroid);
