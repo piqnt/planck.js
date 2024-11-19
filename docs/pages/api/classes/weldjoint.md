@@ -92,7 +92,7 @@ ___
 
 ### `Static` TYPE
 
-▪ **TYPE**: *"weld-joint"* = 'weld-joint' as const
+▪ **TYPE**: *"weld-joint"* = "weld-joint" as const
 
 ## Methods
 

@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.8
+ * Planck.js v1.0.9
  * @license The MIT license
  * @copyright Copyright (c) 2023 Erin Catto, Ali Shakiba
  *
@@ -4398,6 +4398,7 @@
         return Joint;
     }());
 
+    /** @hidden */
     var stats$1 = {
         gjkCalls: 0,
         gjkIters: 0,
@@ -16070,10 +16071,10 @@
         manifold.pointCount = pointCount;
     };
 
-    /** @deprecated Merged with main namespace */
+    /** @hidden @deprecated Merged with main namespace */
     var internal = {
         CollidePolygons: CollidePolygons,
-        Settings: SettingsInternal,
+        Settings: Settings,
         Sweep: Sweep,
         Manifold: Manifold,
         Distance: Distance,

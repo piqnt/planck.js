@@ -100,7 +100,7 @@ ___
 
 ### `Static` TYPE
 
-▪ **TYPE**: *"gear-joint"* = 'gear-joint' as const
+▪ **TYPE**: *"gear-joint"* = "gear-joint" as const
 
 ## Methods
 

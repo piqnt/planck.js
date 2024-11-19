@@ -1,3 +1,4 @@
+/** @hidden */
 export const stats = {
   gjkCalls: 0,
   gjkIters: 0,

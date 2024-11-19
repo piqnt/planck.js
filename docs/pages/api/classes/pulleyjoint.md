@@ -103,7 +103,7 @@ ___
 
 ### `Static` TYPE
 
-▪ **TYPE**: *"pulley-joint"* = 'pulley-joint' as const
+▪ **TYPE**: *"pulley-joint"* = "pulley-joint" as const
 
 ## Methods
 

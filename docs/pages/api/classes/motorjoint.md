@@ -95,7 +95,7 @@ ___
 
 ### `Static` TYPE
 
-▪ **TYPE**: *"motor-joint"* = 'motor-joint' as const
+▪ **TYPE**: *"motor-joint"* = "motor-joint" as const
 
 ## Methods
 

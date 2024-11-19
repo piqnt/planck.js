@@ -101,7 +101,7 @@ ___
 
 ### `Static` TYPE
 
-▪ **TYPE**: *"mouse-joint"* = 'mouse-joint' as const
+▪ **TYPE**: *"mouse-joint"* = "mouse-joint" as const
 
 ## Methods
 

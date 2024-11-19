@@ -66,7 +66,7 @@ ___
 
 ### `Static` TYPE
 
-▪ **TYPE**: *"polygon"* = 'polygon' as const
+▪ **TYPE**: *"polygon"* = "polygon" as const
 
 ## Methods
 

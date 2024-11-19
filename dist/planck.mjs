@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.0.8
+ * Planck.js v1.0.9
  * @license The MIT license
  * @copyright Copyright (c) 2023 Erin Catto, Ali Shakiba
  *
@@ -4392,6 +4392,7 @@ var Joint = /** @class */ (function () {
     return Joint;
 }());
 
+/** @hidden */
 var stats = {
     gjkCalls: 0,
     gjkIters: 0,
@@ -16064,10 +16065,10 @@ var CollideEdgePolygon = function (manifold, edgeA, xfA, polygonB, xfB) {
     manifold.pointCount = pointCount;
 };
 
-/** @deprecated Merged with main namespace */
+/** @hidden @deprecated Merged with main namespace */
 var internal = {
     CollidePolygons: CollidePolygons,
-    Settings: SettingsInternal,
+    Settings: Settings,
     Sweep: Sweep,
     Manifold: Manifold,
     Distance: Distance,

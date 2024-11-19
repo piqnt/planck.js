@@ -4288,6 +4288,7 @@ declare const TimeOfImpact: {
     Input: typeof TOIInput;
     Output: typeof TOIOutput;
 };
+/** @hidden */
 declare const stats: {
     gjkCalls: number;
     gjkIters: number;
@@ -4301,7 +4302,7 @@ declare const stats: {
     toiMaxRootIters: number;
     toString(newline?: string): string;
 };
-/** @deprecated Merged with main namespace */
+/** @hidden @deprecated Merged with main namespace */
 declare const internal: {
     CollidePolygons: (manifold: Manifold, polyA: PolygonShape, xfA: TransformValue, polyB: PolygonShape, xfB: TransformValue) => void;
     Settings: typeof Settings;
@@ -8434,6 +8435,7 @@ declare namespace planck {
         Input: typeof TOIInput;
         Output: typeof TOIOutput;
     };
+    /** @hidden */
     const stats: {
         gjkCalls: number;
         gjkIters: number;
@@ -8447,7 +8449,7 @@ declare namespace planck {
         toiMaxRootIters: number;
         toString(newline?: string): string;
     };
-    /** @deprecated Merged with main namespace */
+    /** @hidden @deprecated Merged with main namespace */
     const internal: {
         CollidePolygons: (manifold: Manifold, polyA: PolygonShape, xfA: TransformValue, polyB: PolygonShape, xfB: TransformValue) => void;
         Settings: typeof Settings;

@@ -70,7 +70,7 @@ ___
 
 ### `Static` TYPE
 
-▪ **TYPE**: *"circle"* = 'circle' as const
+▪ **TYPE**: *"circle"* = "circle" as const
 
 ## Methods
 

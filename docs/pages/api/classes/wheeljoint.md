@@ -104,7 +104,7 @@ ___
 
 ### `Static` TYPE
 
-▪ **TYPE**: *"wheel-joint"* = 'wheel-joint' as const
+▪ **TYPE**: *"wheel-joint"* = "wheel-joint" as const
 
 ## Methods
 

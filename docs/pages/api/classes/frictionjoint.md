@@ -91,7 +91,7 @@ ___
 
 ### `Static` TYPE
 
-▪ **TYPE**: *"friction-joint"* = 'friction-joint' as const
+▪ **TYPE**: *"friction-joint"* = "friction-joint" as const
 
 ## Methods
 

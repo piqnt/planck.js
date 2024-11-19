@@ -68,7 +68,7 @@ ___
 
 ### `Static` TYPE
 
-▪ **TYPE**: *"edge"* = 'edge' as const
+▪ **TYPE**: *"edge"* = "edge" as const
 
 ## Methods
 

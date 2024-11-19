@@ -73,7 +73,7 @@ ___
 
 ### `Static` TYPE
 
-▪ **TYPE**: *"chain"* = 'chain' as const
+▪ **TYPE**: *"chain"* = "chain" as const
 
 ## Methods
 

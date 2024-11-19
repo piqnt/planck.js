@@ -66,7 +66,7 @@ ___
 
 ### `Static` TYPE
 
-▪ **TYPE**: *"polygon"* = 'polygon' as const
+▪ **TYPE**: *"polygon"* = "polygon" as const
 
 *Overrides [PolygonShape](/api/classes/polygonshape).[TYPE](/api/classes/polygonshape#static-type)*
 

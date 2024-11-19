@@ -94,7 +94,7 @@ ___
 
 ### `Static` TYPE
 
-▪ **TYPE**: *"distance-joint"* = 'distance-joint' as const
+▪ **TYPE**: *"distance-joint"* = "distance-joint" as const
 
 ## Methods
 

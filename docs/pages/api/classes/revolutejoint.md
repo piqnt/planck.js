@@ -106,7 +106,7 @@ ___
 
 ### `Static` TYPE
 
-▪ **TYPE**: *"revolute-joint"* = 'revolute-joint' as const
+▪ **TYPE**: *"revolute-joint"* = "revolute-joint" as const
 
 ## Methods
 

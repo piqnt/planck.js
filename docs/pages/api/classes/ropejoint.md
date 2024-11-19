@@ -97,7 +97,7 @@ ___
 
 ### `Static` TYPE
 
-▪ **TYPE**: *"rope-joint"* = 'rope-joint' as const
+▪ **TYPE**: *"rope-joint"* = "rope-joint" as const
 
 ## Methods
 

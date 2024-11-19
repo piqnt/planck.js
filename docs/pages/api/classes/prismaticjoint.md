@@ -106,7 +106,7 @@ ___
 
 ### `Static` TYPE
 
-▪ **TYPE**: *"prismatic-joint"* = 'prismatic-joint' as const
+▪ **TYPE**: *"prismatic-joint"* = "prismatic-joint" as const
 
 ## Methods
 

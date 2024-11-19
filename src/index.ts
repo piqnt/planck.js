@@ -1,7 +1,7 @@
 export * from "./serializer/index";
 export * from "./util/Testbed";
 
-/** @deprecated */
+/** @hidden @deprecated */
 export { math as Math } from "./common/Math";
 
 export * from "./common/Vec2";
