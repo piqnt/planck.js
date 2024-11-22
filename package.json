@@ -85,7 +85,7 @@
     "vitest": "^0.34.1"
   },
   "scripts": {
-    "lint": "eslint './src/**/*.ts'",
+    "lint": "eslint './src/**/*.ts' './testbed/**/*.ts'",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:types": "tsd --typings=./dist/planck.d.ts && tsd --typings=./dist/planck-with-testbed.d.ts",

@@ -1,13 +1,13 @@
-import Stage from 'stage-js';
+import Stage from "stage-js";
 
-import type { Vec2Value } from '../src/common/Vec2';
+import type { Vec2Value } from "../src/common/Vec2";
 import type { World } from "../src/dynamics/World";
 import type { Joint } from "../src/dynamics/Joint";
 import type { Fixture } from "../src/dynamics/Fixture";
 import type { Body } from "../src/dynamics/Body";
 import type { AABBValue } from "../src/collision/AABB";
-import type { Style } from '../src/util/Testbed';
-import { Testbed } from '../src/util/Testbed';
+import type { Style } from "../src/util/Testbed";
+import { Testbed } from "../src/util/Testbed";
 import type { EdgeShape } from "../src/collision/shape/EdgeShape";
 import type { PolygonShape } from "../src/collision/shape/PolygonShape";
 import type { ChainShape } from "../src/collision/shape/ChainShape";
@@ -57,29 +57,29 @@ Testbed.mount = () => {
   // todo: merge rest of this into StageTestbed
 
   // todo: should we create these elements if not exists?
-  const playButton = document.getElementById('testbed-play');
-  const statusElement = document.getElementById('testbed-status');
-  const infoElement = document.getElementById('testbed-info');
+  const playButton = document.getElementById("testbed-play");
+  const statusElement = document.getElementById("testbed-status");
+  const infoElement = document.getElementById("testbed-info");
 
   if (playButton) {
-    playButton.addEventListener('click', () => {
+    playButton.addEventListener("click", () => {
       mounted.isPaused() ? mounted.resume() : mounted.pause();
     });
 
     mounted._pause = () => {
-      playButton.classList.add('pause');
-      playButton.classList.remove('play');
+      playButton.classList.add("pause");
+      playButton.classList.remove("play");
     };
 
     mounted._resume = () => {
-      playButton.classList.add('play');
-      playButton.classList.remove('pause');
+      playButton.classList.add("play");
+      playButton.classList.remove("pause");
     };
   } else {
     console.log("Please create a button with id='testbed-play'");
   }
 
-  let lastStatus = '';
+  let lastStatus = "";
   if (statusElement) {
     statusElement.innerText = lastStatus;
   }
@@ -93,7 +93,7 @@ Testbed.mount = () => {
     }
   };
 
-  let lastInfo = '';
+  let lastInfo = "";
   if (infoElement) {
     infoElement.innerText = lastInfo;
   }
@@ -111,7 +111,7 @@ Testbed.mount = () => {
 };
 
 const getStyle = function(obj: Body | Fixture | Joint): Style {
-  return obj['render'] ?? obj['style'] ?? {};
+  return obj["render"] ?? obj["style"] ?? {};
 };
 
 function findBody(world: World, point: Vec2Value) {
@@ -156,11 +156,11 @@ class StageTestbed extends Testbed {
 
     stage.MAX_ELAPSE = 1000 / 30;
 
-    stage.on('resume', () => {
+    stage.on("resume", () => {
       this.paused = false;
       this._resume();
     });
-    stage.on('pause', () => {
+    stage.on("pause", () => {
       this.paused = true;
       this._pause();
     });
@@ -171,7 +171,7 @@ class StageTestbed extends Testbed {
       ctx.save();
       ctx.transform(1, 0, 0, this.scaleY, -this.x, -this.y);
       ctx.lineWidth = 3 / pixelRatio;
-      ctx.lineCap = 'round';
+      ctx.lineCap = "round";
       for (let drawing = this.buffer.shift(); drawing; drawing = this.buffer.shift()) {
         drawing(ctx, pixelRatio);
       }
@@ -187,8 +187,8 @@ class StageTestbed extends Testbed {
 
     stage.background(this.background);
     stage.viewbox(this.width, this.height);
-    stage.pin('alignX', -0.5);
-    stage.pin('alignY', -0.5);
+    stage.pin("alignX", -0.5);
+    stage.pin("alignY", -0.5);
 
     const worldNode = new  WorldStageNode(world, this);
 
@@ -210,7 +210,7 @@ class StageTestbed extends Testbed {
       this.step(dt, t);
 
       if (targetBody) {
-        this.drawSegment(targetBody.getPosition(), mouseMove, 'rgba(255,255,255,0.2)');
+        this.drawSegment(targetBody.getPosition(), mouseMove, "rgba(255,255,255,0.2)");
       }
 
       if (this.lastDrawHash !== this.newDrawHash) {
@@ -227,7 +227,7 @@ class StageTestbed extends Testbed {
     let targetBody: Body | null = null;
     const mouseMove = {x: 0, y: 0};
 
-    worldNode.attr('spy', true);
+    worldNode.attr("spy", true);
 
     worldNode.on(Stage.POINTER_START, (point: Vec2Value) => {
       point = { x: point.x, y: testbed.scaleY * point.y };
@@ -294,10 +294,10 @@ class StageTestbed extends Testbed {
       if (/\w/.test(char)) {
         activeKeys[char] = down;
       }
-      activeKeys.right = downKeys[39] || activeKeys['D'];
-      activeKeys.left = downKeys[37] || activeKeys['A'];
-      activeKeys.up = downKeys[38] || activeKeys['W'];
-      activeKeys.down = downKeys[40] || activeKeys['S'];
+      activeKeys.right = downKeys[39] || activeKeys["D"];
+      activeKeys.left = downKeys[37] || activeKeys["A"];
+      activeKeys.up = downKeys[38] || activeKeys["W"];
+      activeKeys.down = downKeys[40] || activeKeys["S"];
       activeKeys.fire = downKeys[32] || downKeys[13] ;
     }
 
@@ -332,36 +332,36 @@ class StageTestbed extends Testbed {
   _resume() {
   }
 
-  private statusText = '';
+  private statusText = "";
   private statusMap: Record<string, any> = {};
 
   status(name: string, value: any): void;
   status(value: object | string): void;
   status(a: any, b?: any) {
-    if (typeof b !== 'undefined') {
+    if (typeof b !== "undefined") {
       const key = a;
       const value = b;
-      if (typeof value !== 'function' && typeof value !== 'object') {
+      if (typeof value !== "function" && typeof value !== "object") {
         this.statusMap[key] = value;
       }
-    } else if (a && typeof a === 'object') {
+    } else if (a && typeof a === "object") {
       // tslint:disable-next-line:no-for-in
       for (const key in a) {
         const value = a[key];
-        if (typeof value !== 'function' && typeof value !== 'object') {
+        if (typeof value !== "function" && typeof value !== "object") {
           this.statusMap[key] = value;
         }
       }
-    } else if (typeof a === 'string') {
+    } else if (typeof a === "string") {
       this.statusText = a;
     }
 
-    var newline = '\n';
-    var text = this.statusText || '';
+    var newline = "\n";
+    var text = this.statusText || "";
     for (var key in this.statusMap) {
       var value = this.statusMap[key];
-      if (typeof value === 'function') continue;
-      text += (text && newline) + key + ': ' + value;
+      if (typeof value === "function") continue;
+      text += (text && newline) + key + ": " + value;
     }
 
     this._status(text);
@@ -407,7 +407,7 @@ class StageTestbed extends Testbed {
       ctx.strokeStyle = color;
       ctx.stroke();
     });
-    this.newDrawHash += "point" + p.x + ',' + p.y + ',' + r + ',' + color;
+    this.newDrawHash += "point" + p.x + "," + p.y + "," + r + "," + color;
   }
 
   drawCircle(p: {x: number, y: number}, r: number, color: string): void {
@@ -417,7 +417,7 @@ class StageTestbed extends Testbed {
       ctx.strokeStyle = color;
       ctx.stroke();
     });
-    this.newDrawHash += "circle" + p.x + ',' + p.y + ',' + r + ',' + color;
+    this.newDrawHash += "circle" + p.x + "," + p.y + "," + r + "," + color;
   }
 
   drawEdge(a: {x: number, y: number}, b: {x: number, y: number}, color: string): void {
@@ -428,7 +428,7 @@ class StageTestbed extends Testbed {
       ctx.strokeStyle = color;
       ctx.stroke();
     });
-    this.newDrawHash += "segment" + a.x + ',' + a.y + ',' + b.x + ',' + b.y + ',' + color;
+    this.newDrawHash += "segment" + a.x + "," + a.y + "," + b.x + "," + b.y + "," + color;
   }
 
   drawSegment = this.drawEdge;
@@ -449,7 +449,7 @@ class StageTestbed extends Testbed {
     });
     this.newDrawHash += "segment";
     for (let i = 1; i < points.length; i++) {
-      this.newDrawHash += points[i].x + ',' + points[i].y + ',';
+      this.newDrawHash += points[i].x + "," + points[i].y + ",";
     }
     this.newDrawHash += color;
   }
@@ -466,8 +466,8 @@ class StageTestbed extends Testbed {
       ctx.stroke();
     });
     this.newDrawHash += "aabb";
-    this.newDrawHash += aabb.lowerBound.x + ',' + aabb.lowerBound.y + ',';
-    this.newDrawHash += aabb.upperBound.x + ',' + aabb.upperBound.y + ',';
+    this.newDrawHash += aabb.lowerBound.x + "," + aabb.lowerBound.y + ",";
+    this.newDrawHash += aabb.upperBound.x + "," + aabb.upperBound.y + ",";
     this.newDrawHash += color;
   }
 
@@ -506,7 +506,7 @@ class  WorldStageNode extends Stage.Node {
 
   constructor(world: World, opts: Partial<WorldStageOptions> = {}) {
     super();
-    this.label('Planck');
+    this.label("Planck");
 
     this.options = { ...this.options, ...opts };
 
@@ -540,11 +540,11 @@ class  WorldStageNode extends Stage.Node {
       }
     }, true);
 
-    world.on('remove-fixture', (obj: Fixture) => {
+    world.on("remove-fixture", (obj: Fixture) => {
       this.nodes.get(obj)?.remove();
     });
 
-    world.on('remove-joint', (obj: Joint) => {
+    world.on("remove-joint", (obj: Joint) => {
       this.nodes.get(obj)?.remove();
     });
   }
@@ -567,11 +567,11 @@ class  WorldStageNode extends Stage.Node {
           } else if (bstyle && bstyle.stroke) {
             options.stroke = bstyle.stroke;
           } else if (b.isDynamic()) {
-            options.stroke = 'rgba(255,255,255,0.9)';
+            options.stroke = "rgba(255,255,255,0.9)";
           } else if (b.isKinematic()) {
-            options.stroke = 'rgba(255,255,255,0.7)';
+            options.stroke = "rgba(255,255,255,0.7)";
           } else if (b.isStatic()) {
-            options.stroke = 'rgba(255,255,255,0.5)';
+            options.stroke = "rgba(255,255,255,0.5)";
           }
 
           if (fstyle && fstyle.fill) {
@@ -579,21 +579,21 @@ class  WorldStageNode extends Stage.Node {
           } else if (bstyle && bstyle.fill) {
             options.fill = bstyle.fill;
           } else {
-            options.fill = '';
+            options.fill = "";
           }
 
           const type = f.getType();
           const shape = f.getShape();
-          if (type == 'circle') {
+          if (type == "circle") {
             node = viewer.drawCircle(shape as CircleShape, options);
           }
-          if (type == 'edge') {
+          if (type == "edge") {
             node = viewer.drawEdge(shape as EdgeShape, options);
           }
-          if (type == 'polygon') {
+          if (type == "polygon") {
             node = viewer.drawPolygon(shape as PolygonShape, options);
           }
-          if (type == 'chain') {
+          if (type == "chain") {
             node = viewer.drawChain(shape as ChainShape, options);
           }
 
@@ -625,12 +625,12 @@ class  WorldStageNode extends Stage.Node {
 
     for (let j = world.getJointList(); j; j = j.getNext()) {
       const type = j.getType();
-      if (type == 'pulley-joint') {
-        this.testbed.drawSegment(j.getAnchorA(), (j as PulleyJoint).getGroundAnchorA(), 'rgba(255,255,255,0.5)');
-        this.testbed.drawSegment(j.getAnchorB(), (j as PulleyJoint).getGroundAnchorB(), 'rgba(255,255,255,0.5)');
-        this.testbed.drawSegment((j as PulleyJoint).getGroundAnchorB(), (j as PulleyJoint).getGroundAnchorA(), 'rgba(255,255,255,0.5)');
+      if (type == "pulley-joint") {
+        this.testbed.drawSegment(j.getAnchorA(), (j as PulleyJoint).getGroundAnchorA(), "rgba(255,255,255,0.5)");
+        this.testbed.drawSegment(j.getAnchorB(), (j as PulleyJoint).getGroundAnchorB(), "rgba(255,255,255,0.5)");
+        this.testbed.drawSegment((j as PulleyJoint).getGroundAnchorB(), (j as PulleyJoint).getGroundAnchorA(), "rgba(255,255,255,0.5)");
       } else {
-        this.testbed.drawSegment(j.getAnchorA(), j.getAnchorB(), 'rgba(255,255,255,0.5)');
+        this.testbed.drawSegment(j.getAnchorA(), j.getAnchorB(), "rgba(255,255,255,0.5)");
       }
     }
   }
@@ -653,7 +653,7 @@ class  WorldStageNode extends Stage.Node {
       const h = r * 2 + lw * 2;
 
       offsetX = shape.m_p.x - cx;
-      offsetY = options.scaleY * shape.m_p.y - cy
+      offsetY = options.scaleY * shape.m_p.y - cy;
 
       this.setSize(w, h, ratio);
 
@@ -665,7 +665,7 @@ class  WorldStageNode extends Stage.Node {
       }
       ctx.lineTo(cx, cy);
       ctx.lineWidth = options.lineWidth / ratio;
-      ctx.strokeStyle = options.stroke ?? '';
+      ctx.strokeStyle = options.stroke ?? "";
       ctx.stroke();
     });
 
@@ -683,7 +683,7 @@ class  WorldStageNode extends Stage.Node {
   drawEdge(edge: EdgeShape, options: WorldStageOptions) {
     let offsetX = 0;
     let offsetY = 0;
-    let offsetA = 0
+    let offsetA = 0;
     const offsetMemo = memo();
 
     const texture = Stage.canvas();
@@ -714,9 +714,9 @@ class  WorldStageNode extends Stage.Node {
       ctx.moveTo(lw, lw);
       ctx.lineTo(lw + length, lw);
 
-      ctx.lineCap = 'round';
+      ctx.lineCap = "round";
       ctx.lineWidth = options.lineWidth / ratio;
-      ctx.strokeStyle = options.stroke ?? '';
+      ctx.strokeStyle = options.stroke ?? "";
       ctx.stroke();
     });
 
@@ -791,9 +791,9 @@ class  WorldStageNode extends Stage.Node {
         ctx.closePath();
       }
 
-      ctx.lineCap = 'round';
+      ctx.lineCap = "round";
       ctx.lineWidth = options.lineWidth / ratio;
-      ctx.strokeStyle = options.stroke ?? '';
+      ctx.strokeStyle = options.stroke ?? "";
       ctx.stroke();
     });
 
@@ -869,9 +869,9 @@ class  WorldStageNode extends Stage.Node {
         ctx.closePath();
       }
 
-      ctx.lineCap = 'round';
+      ctx.lineCap = "round";
       ctx.lineWidth = options.lineWidth / ratio;
-      ctx.strokeStyle = options.stroke ?? '';
+      ctx.strokeStyle = options.stroke ?? "";
       ctx.stroke();
     });
 
