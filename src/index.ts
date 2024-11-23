@@ -12,13 +12,15 @@ export * from "./common/Transform";
 export * from "./common/Rot";
 
 export * from "./collision/AABB";
-
+export * from "./collision/BroadPhase";
 export * from "./collision/Shape";
+
 export * from "./dynamics/Fixture";
 export * from "./dynamics/Body";
 export * from "./dynamics/Contact";
 export * from "./dynamics/Joint";
 export * from "./dynamics/World";
+export * from "./dynamics/Solver";
 
 export * from "./collision/shape/CircleShape";
 export * from "./collision/shape/EdgeShape";

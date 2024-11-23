@@ -78,6 +78,15 @@ export interface MouseJointDef extends JointDef, MouseJointOpt {
   dampingRatio : 0.7
 };
 
+declare module "./MouseJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function MouseJoint(def: MouseJointDef): MouseJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function MouseJoint(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2Value): MouseJoint;
+}
+
 /**
  * A mouse joint is used to make a point on a body track a specified world
  * point. This a soft constraint with a maximum force. This allows the
@@ -90,6 +99,7 @@ export interface MouseJointDef extends JointDef, MouseJointOpt {
  * be used in the testbed. If you want to learn how to use the mouse joint, look
  * at the testbed.
  */
+// @ts-expect-error
 export class MouseJoint extends Joint {
   static TYPE = "mouse-joint" as const;
 

@@ -37,6 +37,20 @@ export interface RotValue {
   c: number;
 }
 
+declare module "./Rot" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function Rot(angle: number): Rot;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function Rot(obj: RotValue): Rot;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function Rot(): Rot;
+}
+
+/** Rotation */
+// @ts-expect-error
 export class Rot {
   /** sin(angle) */
   s: number;

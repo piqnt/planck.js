@@ -105,12 +105,22 @@ export interface WheelJointDef extends JointDef, WheelJointOpt {
   dampingRatio : 0.7,
 };
 
+declare module "./WheelJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function WheelJoint(def: WheelJointDef): WheelJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function WheelJoint(def: WheelJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value): WheelJoint;
+}
+
 /**
  * A wheel joint. This joint provides two degrees of freedom: translation along
  * an axis fixed in bodyA and rotation in the plane. In other words, it is a
  * point to line constraint with a rotational motor and a linear spring/damper.
  * This joint is designed for vehicle suspensions.
  */
+// @ts-expect-error
 export class WheelJoint extends Joint {
   static TYPE = "wheel-joint" as const;
 

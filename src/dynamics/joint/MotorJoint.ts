@@ -74,11 +74,21 @@ export interface MotorJointDef extends JointDef, MotorJointOpt {
   correctionFactor : 0.3
 };
 
+declare module "./MotorJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function MotorJoint(def: MotorJointDef): MotorJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function MotorJoint(def: MotorJointOpt, bodyA: Body, bodyB: Body): MotorJoint;
+}
+
 /**
  * A motor joint is used to control the relative motion between two bodies. A
  * typical usage is to control the movement of a dynamic body with respect to
  * the ground.
  */
+// @ts-expect-error
 export class MotorJoint extends Joint {
   static TYPE = "motor-joint" as const;
 

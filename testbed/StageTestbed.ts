@@ -1,4 +1,4 @@
-import Stage from "stage-js";
+import * as Stage from "stage-js";
 
 import type { Vec2Value } from "../src/common/Vec2";
 import type { World } from "../src/dynamics/World";
@@ -131,7 +131,7 @@ function findBody(world: World, point: Vec2Value) {
 }
 
 /** @internal */
-class StageTestbed extends Testbed {
+export class StageTestbed extends Testbed {
   private canvas: HTMLCanvasElement;
   private stage: Stage.Root;
   private paused: boolean = false;

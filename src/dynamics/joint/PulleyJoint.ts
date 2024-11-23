@@ -87,6 +87,15 @@ export interface PulleyJointDef extends JointDef, PulleyJointOpt {
   collideConnected : true
 };
 
+declare module "./PulleyJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function PulleyJoint(def: PulleyJointDef): PulleyJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function PulleyJoint(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2Value, groundB: Vec2Value, anchorA: Vec2Value, anchorB: Vec2Value, ratio: number): PulleyJoint;
+}
+
 /**
  * The pulley joint is connected to two bodies and two fixed ground points. The
  * pulley supports a ratio such that: length1 + ratio * length2 <= constant
@@ -98,6 +107,7 @@ export interface PulleyJointDef extends JointDef, PulleyJointOpt {
  * anchor points with static shapes to prevent one side from going to zero
  * length.
  */
+// @ts-expect-error
 export class PulleyJoint extends Joint {
   static TYPE = "pulley-joint" as const;
   // static MIN_PULLEY_LENGTH: number = 2.0; // TODO where this is used?

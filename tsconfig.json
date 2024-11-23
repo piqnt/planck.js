@@ -1,26 +1,25 @@
 {
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node",
-    "compilerOptions": {
-      "typeRoots" : ["./node_modules/@types", "./types"]
-    }
-  },
   "compilerOptions": {
     "module": "ES2015",
-    // "strictNullChecks": true,
-    // "noImplicitAny": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
     "lib": ["ES2015", "DOM"],
     "stripInternal": true,
     "target": "ES5",
     "esModuleInterop": true,
     "moduleResolution": "Node",
     "resolveJsonModule": true,
+    "allowJs": true,
+    "typeRoots": ["./types"],
+    "skipLibCheck": true,
   },
   "exclude": [
     "node_modules",
     "example",
     "benchmark",
+    "docs",
+    "vite.config.*",
+    "test-d/",
     "dist"
   ]
 }

@@ -72,10 +72,20 @@ export interface FrictionJointDef extends JointDef, FrictionJointOpt {
   maxTorque : 0.0,
 };
 
+declare module "./FrictionJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function FrictionJoint(def: FrictionJointDef): FrictionJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function FrictionJoint(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value): FrictionJoint;
+}
+
 /**
  * Friction joint. This is used for top-down friction. It provides 2D
  * translational friction and angular friction.
  */
+// @ts-expect-error
 export class FrictionJoint extends Joint {
   static TYPE = "friction-joint" as const;
 

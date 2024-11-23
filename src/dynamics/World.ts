@@ -101,6 +101,25 @@ export type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2,
  */
 export type WorldAABBQueryCallback = (fixture: Fixture) => boolean;
 
+declare module "./World" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function World(deg: WorldDef): World;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function World(gravity: Vec2): World;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function World(): World;
+}
+
+/**
+ * The `World` class contains the bodies and joints. It manages all aspects
+ * of the simulation and allows for asynchronous queries (like AABB queries
+ * and ray-casts). Much of your interactions with Planck.js will be with a
+ * World object.
+ */
+// @ts-expect-error
 export class World {
   /** @internal */ m_solver: Solver;
   /** @internal */ m_broadPhase: BroadPhase;
@@ -132,7 +151,7 @@ export class World {
   /**
    * @param def World definition or gravity vector.
    */
-  constructor(def?: WorldDef | Vec2 | null) {
+  constructor(def?: WorldDef | Vec2) {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof World)) {
       return new World(def);
     }

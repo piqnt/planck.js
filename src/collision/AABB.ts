@@ -51,11 +51,20 @@ export interface RayCastOutput {
   fraction: number;
 }
 
+/** Axis-aligned bounding box */
 export interface AABBValue {
   lowerBound: Vec2Value;
   upperBound: Vec2Value;
 }
 
+declare module "./AABB" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function AABB(lower?: Vec2Value, upper?: Vec2Value): AABB;
+}
+
+/** Axis-aligned bounding box */
+// @ts-expect-error
 export class AABB {
   lowerBound: Vec2;
   upperBound: Vec2;

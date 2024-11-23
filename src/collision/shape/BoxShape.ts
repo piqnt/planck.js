@@ -28,10 +28,16 @@ import { PolygonShape } from "./PolygonShape";
 
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
+declare module "./BoxShape" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function BoxShape(halfWidth: number, halfHeight: number, center?: Vec2Value, angle?: number): BoxShape;
+}
 
 /**
  * A rectangle polygon which extend PolygonShape.
  */
+// @ts-expect-error
 export class BoxShape extends PolygonShape {
   // note that box is serialized/deserialized as polygon
   static TYPE = "polygon" as const;
