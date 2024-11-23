@@ -1,11 +1,8 @@
 import { execSync } from "child_process";
 import path from "path";
-import ts from "typescript";
-import { defineConfig, normalizePath } from "vite";
-import type { ConfigEnv, PluginOption } from "vite";
-import type { ModuleFormat } from "rollup";
+import { defineConfig, normalizePath, type ConfigEnv, type Plugin } from "vite";
 import dtsBundleGenerator from "vite-plugin-dts-bundle-generator";
-import typescript from "@rollup/plugin-typescript";
+import typescript from "vite-plugin-typescript";
 import rollupLicensePlugin from "rollup-plugin-license";
 
 export default function viteConfig(configEnv: ConfigEnv) {
@@ -32,7 +29,7 @@ function buildConfig(configEnv: ConfigEnv, buildTestbed: boolean) {
       lib: {
         entry: entry,
         name: "planck",
-        fileName: (format: ModuleFormat) => {
+        fileName: function (format) {
           if (format === "umd") {
             return filename + ".js";
           } else if (format === "es") {
@@ -49,8 +46,8 @@ function buildConfig(configEnv: ConfigEnv, buildTestbed: boolean) {
     plugins: [
       rollupLicensePlugin({
         banner: getLicense(),
-      }),
-      typescript(),
+      }) as Plugin,
+      typescript({}),
       dtsBundleGenerator({
         fileName: filename + ".d.ts",
       })
@@ -84,13 +81,13 @@ function serveConfig(configEnv: ConfigEnv) {
 }
 
 /** A plugin to serve the testbed for /example/* request  */
-const TestbedPlugin: PluginOption = {
+const TestbedPlugin: Plugin = {
   name: "testbed-plugin",
   configureServer(server) {
     server.middlewares.use(function (req, res, next) {
       // console.log("middleware", req);
       // todo: check if the url + ".js" or ".ts" is a file
-      if (/^\/example\/(\w|-)+$/.test(req.originalUrl)) {
+      if (req.originalUrl && /^\/example\/(\w|-)+$/.test(req.originalUrl)) {
         req.url = "/testbed/";
       }
       next();

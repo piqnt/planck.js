@@ -54,7 +54,6 @@
     "stage-js": "^1.0.0-alpha.5"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^12.1.1",
     "@types/chai": "^4.3.5",
     "@typescript-eslint/eslint-plugin": "^5.2.0",
     "@typescript-eslint/parser": "^5.2.0",
@@ -71,6 +70,7 @@
     "typedoc-plugin-markdown": "^4.2.10",
     "vite": "^5.4.11",
     "vite-plugin-dts-bundle-generator": "^2.0.5",
+    "vite-plugin-typescript": "^1.0.4",
     "vite-plugin-typescript-transform": "^1.3.1",
     "vitest": "^2.1.5"
   },
@@ -89,8 +89,5 @@
     "preview": "vite preview",
     "benchmark": "git log -n 1 && vite-node ./benchmark/node",
     "typedoc": "typedoc --options typedoc.json && mv ./docs/pages/api/README.md ./docs/pages/api/index.md && ./node_modules/.bin/replace-in-files ./docs/pages/api/* --string '.md' --replacement ''"
-  },
-  "dependencies": {
-    "@babel/plugin-transform-typescript": "^7.25.9"
   }
 }

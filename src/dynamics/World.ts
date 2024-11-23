@@ -151,7 +151,7 @@ export class World {
   /**
    * @param def World definition or gravity vector.
    */
-  constructor(def?: WorldDef | Vec2) {
+  constructor(def?: WorldDef | Vec2Value) {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof World)) {
       return new World(def);
     }
