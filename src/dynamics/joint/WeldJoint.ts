@@ -83,10 +83,20 @@ export interface WeldJointDef extends JointDef, WeldJointOpt {
   dampingRatio : 0.0,
 };
 
+declare module "./WeldJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function WeldJoint(def: WeldJointDef): WeldJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function WeldJoint(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value): WeldJoint;
+}
+
 /**
  * A weld joint essentially glues two bodies together. A weld joint may distort
  * somewhat because the island constraint solver is approximate.
  */
+// @ts-expect-error
 export class WeldJoint extends Joint {
   static TYPE = "weld-joint" as const;
 

@@ -39,6 +39,17 @@ import { DistanceProxy } from "../Distance";
 
 /** @internal */ const temp = matrix.vec2(0, 0);
 
+declare module "./CircleShape" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function CircleShape(position: Vec2Value, radius?: number): CircleShape;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function CircleShape(radius?: number): CircleShape;
+}
+
+/** Circle shape. */
+// @ts-expect-error
 export class CircleShape extends Shape {
   static TYPE = "circle" as const;
   /** @hidden */ m_type: "circle";

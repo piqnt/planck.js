@@ -27,19 +27,34 @@
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 
+/** 3D vector */
 export interface Vec3Value {
   x: number;
   y: number;
   z: number;
 }
 
+declare module "./Vec3" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function Vec3(x: number, y: number, z: number): Vec3;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function Vec3(obj: Vec3Value): Vec3;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function Vec3(): Vec3;
+}
+
+/** 3D vector */
+// @ts-expect-error
 export class Vec3 {
   x: number;
   y: number;
   z: number;
 
   constructor(x: number, y: number, z: number);
-  constructor(obj: { x: number, y: number, z: number });
+  constructor(obj: Vec3Value);
   constructor();
   constructor(x?, y?, z?) {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof Vec3)) {

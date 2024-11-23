@@ -1,5 +1,9 @@
-## 1.0.0-alpha
-* Migrated the code to typescript
+## 1.1.0
+* Vite build migration
+
+## 1.0.0
+* Typescript migration
+* Performance improvements
 
 ## 0.2
 * TypeScript definitions added

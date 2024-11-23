@@ -126,6 +126,15 @@ export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
   enableMotor : false
 };
 
+declare module "./RevoluteJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function RevoluteJoint(def: RevoluteJointDef): RevoluteJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function RevoluteJoint(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value): RevoluteJoint;
+}
+
 /**
  * A revolute joint constrains two bodies to share a common point while they are
  * free to rotate about the point. The relative rotation about the shared point
@@ -134,6 +143,7 @@ export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
  * relative rotation about the shared point. A maximum motor torque is provided
  * so that infinite forces are not generated.
  */
+// @ts-expect-error
 export class RevoluteJoint extends Joint {
   static TYPE = "revolute-joint" as const;
 

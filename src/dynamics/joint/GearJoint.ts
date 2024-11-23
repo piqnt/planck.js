@@ -66,6 +66,15 @@ export interface GearJointDef extends JointDef, GearJointOpt {
   ratio : 1.0
 };
 
+declare module "./GearJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function GearJoint(def: GearJointDef): GearJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function GearJoint(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
+}
+
 /**
  * A gear joint is used to connect two joints together. Either joint can be a
  * revolute or prismatic joint. You specify a gear ratio to bind the motions
@@ -79,6 +88,7 @@ export interface GearJointDef extends JointDef, GearJointOpt {
  * This definition requires two existing revolute or prismatic joints (any
  * combination will work).
  */
+// @ts-expect-error
 export class GearJoint extends Joint {
   static TYPE = "gear-joint" as const;
 

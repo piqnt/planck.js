@@ -33,17 +33,32 @@ import { EPSILON } from "./Math";
 /** @internal */ const math_min = Math.min;
 
 
+/** 2D vector */
 export interface Vec2Value {
   x: number;
   y: number;
 }
 
+declare module "./Vec2" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function Vec2(x: number, y: number): Vec2;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function Vec2(obj: Vec2Value): Vec2;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function Vec2(): Vec2;
+}
+
+/** 2D vector */
+// @ts-expect-error
 export class Vec2 {
   x: number;
   y: number;
 
   constructor(x: number, y: number);
-  constructor(obj: { x: number, y: number });
+  constructor(obj: Vec2Value);
   constructor();
   // tslint:disable-next-line:typedef
   constructor(x?, y?) {

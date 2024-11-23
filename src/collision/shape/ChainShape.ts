@@ -39,6 +39,11 @@ import { EdgeShape } from "./EdgeShape";
 /** @internal */ const v1 = matrix.vec2(0, 0);
 /** @internal */ const v2 = matrix.vec2(0, 0);
 
+declare module "./ChainShape" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function ChainShape(vertices?: Vec2Value[], loop?: boolean): ChainShape;
+}
 
 /**
  * A chain shape is a free form sequence of line segments. The chain has
@@ -48,6 +53,7 @@ import { EdgeShape } from "./EdgeShape";
  *
  * WARNING: The chain will not collide properly if there are self-intersections.
  */
+// @ts-expect-error
 export class ChainShape extends Shape {
   static TYPE = "chain" as const;
   /** @hidden */ m_type: "chain";

@@ -75,6 +75,15 @@ export interface RopeJointDef extends JointDef, RopeJointOpt {
   maxLength : 0.0,
 };
 
+declare module "./RopeJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function RopeJoint(def: RopeJointDef): RopeJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function RopeJoint(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value): RopeJoint;
+}
+
 /**
  * A rope joint enforces a maximum distance between two points on two bodies. It
  * has no other effect.
@@ -86,6 +95,7 @@ export interface RopeJointDef extends JointDef, RopeJointOpt {
  * sponginess, so I chose not to implement it that way. See {@link DistanceJoint} if you
  * want to dynamically control length.
  */
+// @ts-expect-error
 export class RopeJoint extends Joint {
   static TYPE = "rope-joint" as const;
 

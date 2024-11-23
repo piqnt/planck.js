@@ -84,10 +84,20 @@ export interface DistanceJointDef extends JointDef, DistanceJointOpt {
   dampingRatio : 0.0
 };
 
+declare module "./DistanceJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function DistanceJoint(def: DistanceJointDef): DistanceJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function DistanceJoint(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2Value, anchorB: Vec2Value): DistanceJoint;
+}
+
 /**
  * A distance joint constrains two points on two bodies to remain at a fixed
  * distance from each other. You can view this as a massless, rigid rod.
  */
+// @ts-expect-error
 export class DistanceJoint extends Joint {
   static TYPE = "distance-joint" as const;
 

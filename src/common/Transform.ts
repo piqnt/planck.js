@@ -35,11 +35,18 @@ export type TransformValue = {
   q: RotValue;
 };
 
+declare module "./Transform" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function Transform(position?: Vec2Value, rotation?: number): Transform;
+}
+
 /**
  * A transform contains translation and rotation. It is used to represent the
  * position and orientation of rigid frames. Initialize using a position vector
  * and a rotation.
  */
+// @ts-expect-error
 export class Transform {
   /** position */
   p: Vec2;
