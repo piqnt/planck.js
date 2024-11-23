@@ -1,6 +1,5 @@
 /*
- * MIT License
- * Copyright (c) 2019 Erin Catto
+ * Copyright (c) Erin Catto
  */
 
 const { Vec2, World, Edge, Box, Polygon, Circle, RevoluteJoint, Testbed } = planck;

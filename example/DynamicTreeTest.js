@@ -1,6 +1,7 @@
 /*
- * MIT License
- * Copyright (c) 2019 Erin Catto
+ * Copyright (c) Erin Catto
+ *
+ * This source code is licensed under the MIT license.
  */
 
 const { World, Vec2, DynamicTree, AABB, Math, Testbed } = planck;
