@@ -35,6 +35,7 @@ import { Body } from "./Body";
 import { ContactImpulse, TimeStep } from "./Solver";
 import { Pool } from "../util/Pool";
 import { getTransform } from "./Position";
+import { Vec2Value } from '../main';
 
 
 /** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
@@ -361,7 +362,21 @@ export class Contact {
       matrix.copyVec2(this.p_localPoints[j], cp.localPoint);
     }
   }
-
+  computeRelativeVelocity(
+    dv: Vec2Value,
+    vA: Vec2Value,
+    wA: number,
+    rA: Vec2Value,
+    vB: Vec2Value,
+    wB: number,
+    rB: Vec2Value
+  ): void {
+    matrix.zeroVec2(dv);
+    matrix.plusVec2(dv, vB);
+    matrix.plusVec2(dv, matrix.crossNumVec2(temp, wB, rB));
+    matrix.minusVec2(dv, vA);
+    matrix.minusVec2(dv, matrix.crossNumVec2(temp, wA, rA));
+  }
   /**
    * Get the contact manifold. Do not modify the manifold unless you understand
    * the internals of the library.
@@ -623,15 +638,15 @@ export class Contact {
     }
   }
 
-  solvePositionConstraint(step: TimeStep): number {
-    return this._solvePositionConstraint(step, null, null);
+  solvePositionConstraint(): number {
+    return this._solvePositionConstraint(null, null);
   }
 
-  solvePositionConstraintTOI(step: TimeStep, toiA: Body, toiB: Body): number {
-    return this._solvePositionConstraint(step, toiA, toiB);
+  solvePositionConstraintTOI(toiA: Body, toiB: Body): number {
+    return this._solvePositionConstraint(toiA, toiB);
   }
 
-  private _solvePositionConstraint(step: TimeStep, toiA: Body | null, toiB: Body | null): number {
+  private _solvePositionConstraint(toiA: Body | null, toiB: Body | null): number {
     const toi = toiA !== null && toiB !== null ? true : false;
     let minSeparation = 0.0;
 
@@ -642,8 +657,6 @@ export class Contact {
     const bodyB = fixtureB.m_body;
     if (bodyA === null || bodyB === null) return minSeparation;
 
-    const velocityA = bodyA.c_velocity;
-    const velocityB = bodyB.c_velocity;
     const positionA = bodyA.c_position;
     const positionB = bodyB.c_position;
 
@@ -854,7 +867,7 @@ export class Contact {
         // K is safe to invert.
         this.v_K.ex.setNum(k11, k12);
         this.v_K.ey.setNum(k12, k22);
-        // this.v_normalMass.set(this.v_K.getInverse());
+
         const a = this.v_K.ex.x;
         const b = this.v_K.ey.x;
         const c = this.v_K.ex.y;
@@ -886,7 +899,7 @@ export class Contact {
     velocityB.w = wB;
   }
 
-  warmStartConstraint(step: TimeStep): void {
+  warmStartConstraint(): void {
     const fixtureA = this.m_fixtureA;
     const fixtureB = this.m_fixtureB;
     if (fixtureA === null || fixtureB === null) return;
@@ -896,8 +909,6 @@ export class Contact {
 
     const velocityA = bodyA.c_velocity;
     const velocityB = bodyB.c_velocity;
-    const positionA = bodyA.c_position;
-    const positionB = bodyB.c_position;
 
     const mA = this.v_invMassA;
     const iA = this.v_invIA;
@@ -929,7 +940,7 @@ export class Contact {
     velocityB.w = wB;
   }
 
-  storeConstraintImpulses(step: TimeStep): void {
+  storeConstraintImpulses(): void {
     const manifold = this.m_manifold;
     for (let j = 0; j < this.v_pointCount; ++j) {
       manifold.points[j].normalImpulse = this.v_points[j].normalImpulse;
@@ -946,10 +957,8 @@ export class Contact {
     if (bodyA === null || bodyB === null) return;
 
     const velocityA = bodyA.c_velocity;
-    const positionA = bodyA.c_position;
 
     const velocityB = bodyB.c_velocity;
-    const positionB = bodyB.c_position;
 
     const mA = this.v_invMassA;
     const iA = this.v_invIA;
@@ -1078,13 +1087,8 @@ export class Contact {
 
       // Relative velocity at contact
       // let dv1 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp1.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp1.rA));
-      matrix.zeroVec2(dv1);
-      matrix.plusVec2(dv1, vB);
-      matrix.plusVec2(dv1, matrix.crossNumVec2(temp, wB, vcp1.rB));
-      matrix.minusVec2(dv1, vA);
-      matrix.minusVec2(dv1, matrix.crossNumVec2(temp, wA, vcp1.rA));
+      this.computeRelativeVelocity(dv1, vA, wA, rA, vB, wB, rB)
 
-      // let dv2 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp2.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp2.rA));
       matrix.zeroVec2(dv2);
       matrix.plusVec2(dv2, vB);
       matrix.plusVec2(dv2, matrix.crossNumVec2(temp, wB, vcp2.rB));
@@ -1098,12 +1102,10 @@ export class Contact {
       matrix.setVec2(b, vn1 - vcp1.velocityBias, vn2 - vcp2.velocityBias);
 
       // Compute b'
-      // b.sub(Mat22.mulVec2(this.v_K, a));
       b.x -= this.v_K.ex.x * a.x + this.v_K.ey.x * a.y;
       b.y -= this.v_K.ex.y * a.x + this.v_K.ey.y * a.y;
 
       const k_errorTol = 1e-3;
-      // NOT_USED(k_errorTol);
 
       while (true) {
         //
@@ -1128,11 +1130,11 @@ export class Contact {
           matrix.scaleVec2(P1, d.x, normal);
           matrix.scaleVec2(P2, d.y, normal);
 
-          // vA.subCombine(mA, P1, mA, P2);
+
           matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
           wA -= iA * (matrix.crossVec2Vec2(vcp1.rA, P1) + matrix.crossVec2Vec2(vcp2.rA, P2));
 
-          // vB.addCombine(mB, P1, mB, P2);
+
           matrix.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
           wB += iB * (matrix.crossVec2Vec2(vcp1.rB, P1) + matrix.crossVec2Vec2(vcp2.rB, P2));
 
@@ -1142,11 +1144,7 @@ export class Contact {
 
           if (DEBUG_SOLVER) {
             // Postconditions
-            matrix.zeroVec2(dv1);
-            matrix.plusVec2(dv1, vB);
-            matrix.plusVec2(dv1, matrix.crossNumVec2(temp, wB, vcp1.rB));
-            matrix.minusVec2(dv1, vA);
-            matrix.minusVec2(dv1, matrix.crossNumVec2(temp, wA, vcp1.rA));
+            this.computeRelativeVelocity(dv1, vA, wA, rA, vB, wB, rB)
 
             matrix.zeroVec2(dv2);
             matrix.plusVec2(dv2, vB);
@@ -1183,11 +1181,11 @@ export class Contact {
           matrix.scaleVec2(P1, d.x, normal);
           matrix.scaleVec2(P2, d.y, normal);
 
-          // vA.subCombine(mA, P1, mA, P2);
+
           matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
           wA -= iA * (matrix.crossVec2Vec2(vcp1.rA, P1) + matrix.crossVec2Vec2(vcp2.rA, P2));
 
-          // vB.addCombine(mB, P1, mB, P2);
+
           matrix.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
           wB += iB * (matrix.crossVec2Vec2(vcp1.rB, P1) + matrix.crossVec2Vec2(vcp2.rB, P2));
 
@@ -1197,11 +1195,7 @@ export class Contact {
 
           if (DEBUG_SOLVER) {
             // Postconditions
-            matrix.zeroVec2(dv1);
-            matrix.plusVec2(dv1, vB);
-            matrix.plusVec2(dv1, matrix.crossNumVec2(temp, wB, vcp1.rB));
-            matrix.minusVec2(dv1, vA);
-            matrix.minusVec2(dv1, matrix.crossNumVec2(temp, wA, vcp1.rA));
+            this.computeRelativeVelocity(dv1, vA, wA, rA, vB, wB, rB)
 
             // Compute normal velocity
             vn1 = matrix.dotVec2(dv1, normal);
@@ -1230,11 +1224,11 @@ export class Contact {
           matrix.scaleVec2(P1, d.x, normal);
           matrix.scaleVec2(P2, d.y, normal);
 
-          // vA.subCombine(mA, P1, mA, P2);
+
           matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
           wA -= iA * (matrix.crossVec2Vec2(vcp1.rA, P1) + matrix.crossVec2Vec2(vcp2.rA, P2));
 
-          // vB.addCombine(mB, P1, mB, P2);
+
           matrix.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
           wB += iB * (matrix.crossVec2Vec2(vcp1.rB, P1) + matrix.crossVec2Vec2(vcp2.rB, P2));
 
@@ -1277,11 +1271,11 @@ export class Contact {
           matrix.scaleVec2(P1, d.x, normal);
           matrix.scaleVec2(P2, d.y, normal);
 
-          // vA.subCombine(mA, P1, mA, P2);
+
           matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
           wA -= iA * (matrix.crossVec2Vec2(vcp1.rA, P1) + matrix.crossVec2Vec2(vcp2.rA, P2));
 
-          // vB.addCombine(mB, P1, mB, P2);
+
           matrix.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
           wB += iB * (matrix.crossVec2Vec2(vcp1.rB, P1) + matrix.crossVec2Vec2(vcp2.rB, P2));
 
@@ -1408,14 +1402,6 @@ export class Contact {
       bodyA.setAwake(true);
       bodyB.setAwake(true);
     }
-
-    // const typeA = fixtureA.getType();
-    // const typeB = fixtureB.getType();
-
-    // const destroyFcn = s_registers[typeA][typeB].destroyFcn;
-    // if (typeof destroyFcn === 'function') {
-    //   destroyFcn(contact);
-    // }
 
     contactPool.release(contact);
   }
