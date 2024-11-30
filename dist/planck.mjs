@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.1.0
+ * Planck.js v1.1.1
  * @license The MIT license
  * @copyright Copyright (c) 2024 Erin Catto, Ali Shakiba
  *
@@ -6778,7 +6778,7 @@ var ChainShape = (
     ChainShape2.prototype._serialize = function() {
       var data = {
         type: this.m_type,
-        vertices: this.m_vertices,
+        vertices: this.m_isLoop ? this.m_vertices.slice(0, this.m_vertices.length - 1) : this.m_vertices,
         isLoop: this.m_isLoop,
         hasPrevVertex: this.m_hasPrevVertex,
         hasNextVertex: this.m_hasNextVertex,
@@ -6840,19 +6840,20 @@ var ChainShape = (
         vertices[i - 1];
         vertices[i];
       }
+      this.m_vertices = [];
       this.m_count = vertices.length;
       for (var i = 0; i < vertices.length; ++i) {
         this.m_vertices[i] = Vec2.clone(vertices[i]);
       }
-      this.m_hasPrevVertex = false;
-      this.m_hasNextVertex = false;
       this.m_prevVertex = null;
       this.m_nextVertex = null;
+      this.m_hasPrevVertex = false;
+      this.m_hasNextVertex = false;
       return this;
     };
     ChainShape2.prototype._reset = function() {
       if (this.m_isLoop) {
-        this._createLoop(this.m_vertices);
+        this._createLoop(this.m_vertices.slice(0, this.m_vertices.length - 1));
       } else {
         this._createChain(this.m_vertices);
       }

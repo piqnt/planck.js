@@ -86,7 +86,7 @@ export class ChainShape extends Shape {
   _serialize(): object {
     const data = {
       type: this.m_type,
-      vertices: this.m_vertices,
+      vertices: this.m_isLoop ? this.m_vertices.slice(0, this.m_vertices.length - 1) : this.m_vertices,
       isLoop: this.m_isLoop,
       hasPrevVertex: this.m_hasPrevVertex,
       hasNextVertex: this.m_hasNextVertex,
@@ -138,7 +138,6 @@ export class ChainShape extends Shape {
    * Create a loop. This automatically adjusts connectivity.
    *
    * @param vertices an array of vertices, these are copied
-   * @param count the vertex count
    */
   _createLoop(vertices: Vec2Value[]): ChainShape {
     _ASSERT && console.assert(this.m_vertices.length == 0 && this.m_count == 0);
@@ -178,28 +177,29 @@ export class ChainShape extends Shape {
     _ASSERT && console.assert(this.m_vertices.length == 0 && this.m_count == 0);
     _ASSERT && console.assert(vertices.length >= 2);
     for (let i = 1; i < vertices.length; ++i) {
-      // If the code crashes here, it means your vertices are too close together.
       const v1 = vertices[i - 1];
       const v2 = vertices[i];
+      // If the code crashes here, it means your vertices are too close together.
       _ASSERT && console.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
     }
 
+    this.m_vertices = [];
     this.m_count = vertices.length;
     for (let i = 0; i < vertices.length; ++i) {
       this.m_vertices[i] = Vec2.clone(vertices[i]);
     }
 
-    this.m_hasPrevVertex = false;
-    this.m_hasNextVertex = false;
     this.m_prevVertex = null;
     this.m_nextVertex = null;
+    this.m_hasPrevVertex = false;
+    this.m_hasNextVertex = false;
     return this;
   }
 
   /** @hidden */
   _reset(): void {
     if (this.m_isLoop) {
-      this._createLoop(this.m_vertices);
+      this._createLoop(this.m_vertices.slice(0, this.m_vertices.length - 1));
     } else {
       this._createChain(this.m_vertices);
     }
