@@ -916,13 +916,15 @@ This will alter the mass and velocity.
 
 ### setTransform()
 
+#### setTransform(position, angle)
+
 > **setTransform**(`position`, `angle`): `void`
 
 Set the position of the body's origin and rotation. Manipulating a body's
 transform may cause non-physical behavior. Note: contacts are updated on the
 next call to World.step.
 
-#### Parameters
+##### Parameters
 
 • **position**: [`Vec2Value`](../interfaces/Vec2Value)
 
@@ -932,7 +934,23 @@ The world position of the body's local origin.
 
 The world rotation in radians.
 
-#### Returns
+##### Returns
+
+`void`
+
+#### setTransform(xf)
+
+> **setTransform**(`xf`): `void`
+
+Set the position of the body's origin and rotation. Manipulating a body's
+transform may cause non-physical behavior. Note: contacts are updated on the
+next call to World.step.
+
+##### Parameters
+
+• **xf**: [`Transform`](Transform)
+
+##### Returns
 
 `void`
 

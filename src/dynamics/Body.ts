@@ -12,7 +12,7 @@ import { options } from "../util/options";
 import { Vec2, Vec2Value } from "../common/Vec2";
 import { Rot } from "../common/Rot";
 import { Sweep } from "../common/Sweep";
-import { Transform } from "../common/Transform";
+import { Transform, TransformValue } from "../common/Transform";
 import { Velocity } from "./Velocity";
 import { Position } from "./Position";
 import { Fixture, FixtureDef, FixtureOpt } from "./Fixture";
@@ -565,13 +565,24 @@ export class Body {
    * @param position The world position of the body's local origin.
    * @param angle The world rotation in radians.
    */
-  setTransform(position: Vec2Value, angle: number): void {
+  setTransform(position: Vec2Value, angle: number): void;
+  /**
+   * Set the position of the body's origin and rotation. Manipulating a body's
+   * transform may cause non-physical behavior. Note: contacts are updated on the
+   * next call to World.step.
+   */
+  setTransform(xf: Transform): void;
+  setTransform(a: Vec2Value | Transform, b?: number): void {
     _ASSERT && console.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
       return;
     }
+    if (typeof b === "number") {
+      this.m_xf.setNum(a as Vec2Value, b);
+    } else {
+      this.m_xf.setTransform(a as TransformValue);
+    }
 
-    this.m_xf.setNum(position, angle);
     this.m_sweep.setTransform(this.m_xf);
 
     const broadPhase = this.m_world.m_broadPhase;

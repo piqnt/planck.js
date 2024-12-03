@@ -13,7 +13,7 @@ World object.
 
 #### Parameters
 
-• **def?**: [`Vec2`](Vec2) \| [`WorldDef`](../interfaces/WorldDef)
+• **def?**: [`Vec2Value`](../interfaces/Vec2Value) \| [`WorldDef`](../interfaces/WorldDef)
 
 World definition or gravity vector.
 

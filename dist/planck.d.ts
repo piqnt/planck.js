@@ -1629,6 +1629,12 @@ declare class Body$1 {
 	 * @param angle The world rotation in radians.
 	 */
 	setTransform(position: Vec2Value, angle: number): void;
+	/**
+	 * Set the position of the body's origin and rotation. Manipulating a body's
+	 * transform may cause non-physical behavior. Note: contacts are updated on the
+	 * next call to World.step.
+	 */
+	setTransform(xf: Transform): void;
 	synchronizeTransform(): void;
 	/**
 	 * Update fixtures in broad-phase.

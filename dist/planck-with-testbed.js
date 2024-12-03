@@ -2,7 +2,7 @@
   typeof exports === "object" && typeof module !== "undefined" ? factory(exports) : typeof define === "function" && define.amd ? define(["exports"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.planck = {}));
 })(this, function(exports2) {
   "use strict";/**
- * Planck.js v1.1.1
+ * Planck.js v1.1.2
  * @license The MIT license
  * @copyright Copyright (c) 2024 Erin Catto, Ali Shakiba
  *
@@ -2641,11 +2641,15 @@
       Body2.prototype.getTransform = function() {
         return this.m_xf;
       };
-      Body2.prototype.setTransform = function(position, angle) {
+      Body2.prototype.setTransform = function(a2, b2) {
         if (this.isWorldLocked() == true) {
           return;
         }
-        this.m_xf.setNum(position, angle);
+        if (typeof b2 === "number") {
+          this.m_xf.setNum(a2, b2);
+        } else {
+          this.m_xf.setTransform(a2);
+        }
         this.m_sweep.setTransform(this.m_xf);
         var broadPhase = this.m_world.m_broadPhase;
         for (var f = this.m_fixtureList; f; f = f.m_next) {
