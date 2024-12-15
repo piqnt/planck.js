@@ -13,7 +13,7 @@
  * To run this example simply run `node HelloWorld.js` from command line.
  */
 
-import { Box, World } from "planck";
+import { Box, World } from "./src";
 
 // Define the gravity vector.
 var gravity = { x: 0.0, y: -10.0 };
