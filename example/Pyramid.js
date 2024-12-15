@@ -1,10 +1,9 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { Vec2, World, Edge, Box, Testbed } = planck;
+import { Vec2, World, Edge, Box, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -27,7 +26,6 @@ let deltaY = new Vec2(1.125, 0.0);
 for (let i = 0; i < COUNT; ++i) {
   y.set(x);
   for (let j = i; j < COUNT; ++j) {
-
     world.createDynamicBody(y).createFixture(box, 5.0);
 
     y.add(deltaY);
@@ -35,7 +33,7 @@ for (let i = 0; i < COUNT; ++i) {
   x.add(deltaX);
 }
 
-testbed.step = function() {
+testbed.step = function () {
   // let tree = world.m_broadPhase.m_tree;
   // if (stepCount++ == 400) {
   // tree.rebuildBottomUp();

@@ -1,10 +1,19 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { Vec2, World, Circle, Box, Edge, RevoluteJoint, PrismaticJoint, GearJoint, Testbed } = planck;
+import {
+  Vec2,
+  World,
+  Circle,
+  Box,
+  Edge,
+  RevoluteJoint,
+  PrismaticJoint,
+  GearJoint,
+  Testbed,
+} from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -44,26 +53,38 @@ let jointB2 = world.createJoint(new RevoluteJoint({}, ground, gearB2, gearB2.get
 let plankB1 = world.createDynamicBody(new Vec2(2.5, 12.0));
 plankB1.createFixture(new Box(0.5, 5.0), 5.0);
 
-let jointB3 = world.createJoint(new PrismaticJoint({
-  lowerTranslation: -5.0,
-  upperTranslation: 5.0,
-  enableLimit: true,
-}, ground, plankB1, plankB1.getPosition(), new Vec2(0.0, 1.0)));
+let jointB3 = world.createJoint(
+  new PrismaticJoint(
+    {
+      lowerTranslation: -5.0,
+      upperTranslation: 5.0,
+      enableLimit: true,
+    },
+    ground,
+    plankB1,
+    plankB1.getPosition(),
+    new Vec2(0.0, 1.0),
+  ),
+);
 
-let jointB4 = world.createJoint(new GearJoint({}, gearB1, gearB2, jointB1, jointB2, radius2 / radius1));
-let jointB5 = world.createJoint(new GearJoint({}, gearB2, plankB1, jointB2, jointB3, -1.0 / radius2));
+let jointB4 = world.createJoint(
+  new GearJoint({}, gearB1, gearB2, jointB1, jointB2, radius2 / radius1),
+);
+let jointB5 = world.createJoint(
+  new GearJoint({}, gearB2, plankB1, jointB2, jointB3, -1.0 / radius2),
+);
 
-testbed.step = function() {
+testbed.step = function () {
   let ratio, value;
 
   ratio = jointB4.getRatio();
   value = jointB1.getJointAngle() + ratio * jointB2.getJointAngle();
-  testbed.status('ratio1', ratio);
-  testbed.status('theta1 + ratio * delta', value);
+  testbed.status("ratio1", ratio);
+  testbed.status("theta1 + ratio * delta", value);
 
   ratio = jointB5.getRatio();
   value = jointB2.getJointAngle() + ratio * jointB3.getJointTranslation();
 
-  testbed.status('ratio2', ratio);
-  testbed.status('theta2 + ratio * delta', value);
+  testbed.status("ratio2", ratio);
+  testbed.status("theta2 + ratio * delta", value);
 };

@@ -1,17 +1,14 @@
 {
-  "extends": [
-    "plugin:@typescript-eslint/recommended"
-  ],
+  "extends": ["plugin:@typescript-eslint/recommended"],
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint"
-  ],
+  "plugins": ["@typescript-eslint"],
   "rules": {
     "no-var": "off",
     "prefer-rest-params": "off",
     "prefer-spread": "off",
     "quotes": ["warn", "double"],
     "semi": ["warn", "always"],
+    "one-var-declaration-per-line": "warn",
 
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/ban-types": "off",

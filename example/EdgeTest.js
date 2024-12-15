@@ -1,10 +1,9 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { Vec2, World, Circle, Box, Edge, Testbed } = planck;
+import { Vec2, World, Circle, Box, Edge, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -49,14 +48,18 @@ let shape6 = new Edge(v6, v7);
 shape6.setPrevVertex(v5);
 ground.createFixture(shape6, 0.0);
 
-world.createBody({
-  type : 'dynamic',
-  position : new Vec2(-0.5, 0.6),
-  allowSleep : false
-}).createFixture(new Circle(0.5), 1.0);
+world
+  .createBody({
+    type: "dynamic",
+    position: new Vec2(-0.5, 0.6),
+    allowSleep: false,
+  })
+  .createFixture(new Circle(0.5), 1.0);
 
-world.createBody({
-  type : 'dynamic',
-  position : new Vec2(1.0, 0.6),
-  allowSleep : false
-}).createFixture(new Box(0.5, 0.5), 1.0);
+world
+  .createBody({
+    type: "dynamic",
+    position: new Vec2(1.0, 0.6),
+    allowSleep: false,
+  })
+  .createFixture(new Box(0.5, 0.5), 1.0);

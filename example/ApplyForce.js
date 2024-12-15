@@ -1,10 +1,9 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { Vec2, Transform, Polygon, Box, FrictionJoint, World, Edge, Testbed } = planck;
+import { Vec2, Transform, Polygon, Box, FrictionJoint, World, Edge, Testbed } from "planck";
 
 let world = new World();
 
@@ -35,29 +34,25 @@ const xf1 = new Transform();
 xf1.q.set(0.3524 * Math.PI);
 xf1.p.set(xf1.q.getXAxis());
 
-let poly1 = new Polygon([
-  new Vec2(-1.0, 0.0),
-  new Vec2(1.0, 0.0),
-  new Vec2(0.0, 0.5)
-].map(v => Transform.mul(xf1, v)));
+let poly1 = new Polygon(
+  [new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 0.5)].map((v) => Transform.mul(xf1, v)),
+);
 
 const xf2 = new Transform();
 xf2.q.set(-0.3524 * Math.PI);
 xf2.p.set(Vec2.neg(xf2.q.getXAxis()));
 
-let poly2 = new Polygon([
-  new Vec2(-1.0, 0.0),
-  new Vec2(1.0, 0.0),
-  new Vec2(0.0, 0.5)
-].map(v => Transform.mul(xf2, v)));
+let poly2 = new Polygon(
+  [new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 0.5)].map((v) => Transform.mul(xf2, v)),
+);
 
 let jet = world.createBody({
-  type : 'dynamic',
-  angularDamping : 2.0,
-  linearDamping : 0.5,
-  position : new Vec2(0.0, 2.0),
-  angle : Math.PI,
-  allowSleep : false
+  type: "dynamic",
+  angularDamping: 2.0,
+  linearDamping: 0.5,
+  position: new Vec2(0.0, 2.0),
+  angle: Math.PI,
+  allowSleep: false,
 });
 
 jet.createFixture(poly1, 2.0);
@@ -78,19 +73,24 @@ for (let i = 0; i < 10; ++i) {
   let mass = box.getMass();
 
   // For a circle: I = 0.5 * m * r * r ==> r = sqrt(2 * I / m)
-  let radius = Math.sqrt(2.0 * I / mass);
+  let radius = Math.sqrt((2.0 * I) / mass);
 
-  world.createJoint(new FrictionJoint({
-    collideConnected : true,
-    maxForce : mass * gravity,
-    maxTorque : mass * radius * gravity
-  }, ground, box));
+  world.createJoint(
+    new FrictionJoint(
+      {
+        collideConnected: true,
+        maxForce: mass * gravity,
+        maxTorque: mass * radius * gravity,
+      },
+      ground,
+      box,
+    ),
+  );
 }
 
-testbed.step = function() {
+testbed.step = function () {
   if (testbed.activeKeys.right && !testbed.activeKeys.left) {
     jet.applyAngularImpulse(-0.2, true);
-
   } else if (testbed.activeKeys.left && !testbed.activeKeys.right) {
     jet.applyAngularImpulse(+0.2, true);
   }

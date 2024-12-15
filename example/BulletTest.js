@@ -1,13 +1,12 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { World, Vec2, Edge, Box, stats, Testbed } = planck;
+import { World, Vec2, Edge, Box, stats, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
-  
+
 const testbed = Testbed.mount();
 testbed.start(world);
 
@@ -22,7 +21,7 @@ body.createFixture(new Box(2.0, 0.1), 1.0);
 let x = 0.20352793;
 
 let bullet = world.createBody({
-  type: 'dynamic',
+  type: "dynamic",
   position: new Vec2(x, 10.0),
   bullet: true,
 });
@@ -52,7 +51,7 @@ function Launch() {
 }
 
 let stepCount = 0;
-testbed.step = function() {
+testbed.step = function () {
   testbed.status(stats);
 
   // if (stats.gjkCalls > 0) {

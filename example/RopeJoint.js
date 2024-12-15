@@ -1,7 +1,6 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
 // This test shows how a rope joint can be used to stabilize a chain of
@@ -13,12 +12,12 @@
 // This test also shows how to use contact filtering. Filtering is configured
 // so that the payload does not collide with the chain.
 
-const { Vec2, World, Edge, Box, RevoluteJoint, RopeJoint, Testbed } = planck;
+import { Vec2, World, Edge, Box, RevoluteJoint, RopeJoint, Testbed } from "planck";
 
-let world = new World({x: 0, y: -10});
+let world = new World({ x: 0, y: -10 });
 
 const testbed = Testbed.mount();
-testbed.info('X: Toggle the rope joint');
+testbed.info("X: Toggle the rope joint");
 testbed.start(world);
 
 let ground = world.createBody();
@@ -29,7 +28,7 @@ let segmentDef = {
   density: 20.0,
   friction: 0.2,
   filterCategoryBits: 0x0001,
-  filterMaskBits: 0xFFFF & ~0x0002,
+  filterMaskBits: 0xffff & ~0x0002,
 };
 
 let segmentJointDef = {
@@ -43,7 +42,7 @@ let prevBody = ground;
 for (let i = 0; i < N; ++i) {
   let shape = new Box(0.5, 0.125);
   let bd = {
-    type: 'dynamic',
+    type: "dynamic",
     position: new Vec2(0.5 + 1.0 * i, y),
   };
   if (i === N - 1) {
@@ -71,8 +70,8 @@ let ropeJointDef = {
 };
 let rope = world.createJoint(new RopeJoint(ropeJointDef, ground, prevBody));
 
-testbed.keydown = function(code, char) {
-  if (char === 'X') {
+testbed.keydown = function (code, char) {
+  if (char === "X") {
     if (rope) {
       world.destroyJoint(rope);
       rope = null;
@@ -85,7 +84,7 @@ testbed.keydown = function(code, char) {
 };
 
 function updateStatus() {
-  testbed.status('Rope', !!rope);
+  testbed.status("Rope", !!rope);
 }
 
 updateStatus();

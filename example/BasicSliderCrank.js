@@ -1,12 +1,11 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
 // A basic slider crank created for GDC tutorial: Understanding Constraints
 
-const { Vec2, World, Box, RevoluteJoint, PrismaticJoint, Testbed } = planck;
+import { Vec2, World, Box, RevoluteJoint, PrismaticJoint, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -28,8 +27,8 @@ world.createJoint(new RevoluteJoint({}, crank, rod, new Vec2(-4.0, 20.0)));
 
 // Define piston
 let piston = world.createDynamicBody({
-  fixedRotation : true,
-  position : new Vec2(12.0, 20.0)
+  fixedRotation: true,
+  position: new Vec2(12.0, 20.0),
 });
 piston.createFixture(new Box(3.0, 3.0), 2.0);
 world.createJoint(new RevoluteJoint({}, rod, piston, new Vec2(12.0, 20.0)));

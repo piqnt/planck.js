@@ -1,10 +1,9 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { Vec2, World, Edge, Polygon, Box, Circle, Math, Testbed } = planck;
+import { Vec2, World, Edge, Polygon, Box, Circle, Math, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -22,10 +21,10 @@ let shapes = [];
   let ground = world.createBody();
 
   let x1 = -20.0;
-  let y1 = 2.0 * Math.cos(x1 / 10.0 * Math.PI);
+  let y1 = 2.0 * Math.cos((x1 / 10.0) * Math.PI);
   for (let i = 0; i < 80; ++i) {
     let x2 = x1 + 0.5;
-    let y2 = 2.0 * Math.cos(x2 / 10.0 * Math.PI);
+    let y2 = 2.0 * Math.cos((x2 / 10.0) * Math.PI);
 
     ground.createFixture(new Edge(new Vec2(x1, y1), new Vec2(x2, y2)), 0.0);
 
@@ -68,12 +67,9 @@ function createItem(index) {
   }
 
   let bd = {
-    position: new Vec2(
-      Math.random(-10.0, 10.0),
-      Math.random(10.0, 20.0)
-    ),
+    position: new Vec2(Math.random(-10.0, 10.0), Math.random(10.0, 20.0)),
     angle: Math.random(-Math.PI, Math.PI),
-    type: 'dynamic',
+    type: "dynamic",
   };
 
   if (index === 4) {
@@ -84,7 +80,7 @@ function createItem(index) {
 
   body.createFixture(shapes[index], {
     density: 20.0,
-    friction: 0.3
+    friction: 0.3,
   });
 
   bodies.push(body);
@@ -94,33 +90,33 @@ function destroyBody() {
   world.destroyBody(bodies.shift());
 }
 
-testbed.keydown = function(code, char) {
+testbed.keydown = function (code, char) {
   switch (char) {
-  case '1':
-    createItem(0);
-    break;
-  case '2':
-    createItem(1);
-    break;
-  case '3':
-    createItem(2);
-    break;
-  case '4':
-    createItem(3);
-    break;
-  case '5':
-    createItem(4);
-    break;
-  case 'X':
-    destroyBody();
-    break;
-  case 'Z':
-    pause = !pause;
-    break;
+    case "1":
+      createItem(0);
+      break;
+    case "2":
+      createItem(1);
+      break;
+    case "3":
+      createItem(2);
+      break;
+    case "4":
+      createItem(3);
+      break;
+    case "5":
+      createItem(4);
+      break;
+    case "X":
+      destroyBody();
+      break;
+    case "Z":
+      pause = !pause;
+      break;
   }
 };
 
-testbed.info('1-5: Drop new object, X: Destroy an object');
+testbed.info("1-5: Drop new object, X: Destroy an object");
 
 const rayCastResult = {
   fixture: null,
@@ -128,20 +124,20 @@ const rayCastResult = {
   normal: null,
 };
 
-function rayCastCallback (fixture, point, normal, fraction) {
+function rayCastCallback(fixture, point, normal, fraction) {
   rayCastResult.fixture = fixture;
   rayCastResult.point = point;
   rayCastResult.normal = normal;
   return fraction;
 }
 
-function rayCastReset () {
+function rayCastReset() {
   rayCastResult.fixture = null;
   rayCastResult.point = null;
   rayCastResult.normal = null;
 }
 
-testbed.step = function() {
+testbed.step = function () {
   let advanceRay = !pause; // settings.pause == 0 || settings.singleStep;
 
   let L = 25.0;
@@ -164,6 +160,6 @@ testbed.step = function() {
   }
 
   if (advanceRay) {
-    angle += 0.25 * Math.PI / 180.0;
+    angle += (0.25 * Math.PI) / 180.0;
   }
 };

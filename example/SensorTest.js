@@ -1,12 +1,11 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
 // This is used to test sensor shapes.
 
-const { World, Vec2, Circle, Box, Edge, Testbed } = planck;
+import { World, Vec2, Circle, Box, Edge, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -27,7 +26,6 @@ if (0) {
     shape: new Box(10.0, 2.0, new Vec2(0.0, 20.0), 0.0),
     isSensor: true,
   });
-
 } else {
   sensor = ground.createFixture({
     shape: new Circle(new Vec2(0.0, 10.0), 5.0),
@@ -38,7 +36,7 @@ if (0) {
 let circle = new Circle(1.0);
 
 for (let i = 0; i < COUNT; ++i) {
-  touching[i] = { touching : false };
+  touching[i] = { touching: false };
 
   bodies[i] = world.createDynamicBody(new Vec2(-10.0 + 3.0 * i, 20.0));
   bodies[i].setUserData(touching[i]);
@@ -46,7 +44,7 @@ for (let i = 0; i < COUNT; ++i) {
 }
 
 // Implement contact listener.
-world.on('begin-contact', function(contact) {
+world.on("begin-contact", function (contact) {
   let fixtureA = contact.getFixtureA();
   let fixtureB = contact.getFixtureB();
 
@@ -66,7 +64,7 @@ world.on('begin-contact', function(contact) {
 });
 
 // Implement contact listener.
-world.on('end-contact', function(contact) {
+world.on("end-contact", function (contact) {
   let fixtureA = contact.getFixtureA();
   let fixtureB = contact.getFixtureB();
 
@@ -85,7 +83,7 @@ world.on('end-contact', function(contact) {
   }
 });
 
-testbed.step = function() {
+testbed.step = function () {
   // Traverse the contact results. Apply a force on shapes
   // that overlap the sensor.
   for (let i = 0; i < COUNT; ++i) {

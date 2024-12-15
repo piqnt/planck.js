@@ -1,8 +1,9 @@
 /*
  * Copyright (c) Erin Catto
+ * Licensed under the MIT license
  */
 
-const { Vec2, World, Edge, Box, Polygon, Circle, RevoluteJoint, Testbed } = planck;
+import { Vec2, World, Edge, Box, Polygon, Circle, RevoluteJoint, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -4));
 
@@ -20,7 +21,7 @@ let bridgeRect = new Box(0.5, 0.125);
 
 let bridgeFD = {
   density: 20.0,
-  friction: 0.2
+  friction: 0.2,
 };
 
 let prevBody = ground;

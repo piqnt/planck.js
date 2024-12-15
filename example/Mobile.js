@@ -1,10 +1,9 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { Vec2, World, Box, RevoluteJoint, Testbed } = planck;
+import { Vec2, World, Box, RevoluteJoint, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -1));
 
@@ -24,20 +23,25 @@ let h = new Vec2(0.0, a);
 
 let root = addNode(ground, new Vec2(), 0, 3.0, a);
 
-world.createJoint(new RevoluteJoint({
-  bodyA: ground,
-  bodyB: root,
-  localAnchorA: new Vec2(0, 0),
-  localAnchorB: h,
-}, ground, root));
+world.createJoint(
+  new RevoluteJoint(
+    {
+      bodyA: ground,
+      bodyB: root,
+      localAnchorA: new Vec2(0, 0),
+      localAnchorB: h,
+    },
+    ground,
+    root,
+  ),
+);
 
 function addNode(parent, localAnchor, depth, offset, a) {
-
   let h = new Vec2(0.0, a);
 
   let node = world.createBody({
-    type : 'dynamic',
-    position : new Vec2(parent.getPosition()).add(localAnchor).sub(h)
+    type: "dynamic",
+    position: new Vec2(parent.getPosition()).add(localAnchor).sub(h),
   });
 
   node.createFixture(new Box(0.25 * a, a), DENSITY);
@@ -51,19 +55,31 @@ function addNode(parent, localAnchor, depth, offset, a) {
   let leftChild = addNode(node, left, depth + 1, 0.5 * offset, a);
   let rightChild = addNode(node, right, depth + 1, 0.5 * offset, a);
 
-  world.createJoint(new RevoluteJoint({
-    bodyA: node,
-    bodyB: leftChild,
-    localAnchorA: left,
-    localAnchorB: h,
-  }, node, leftChild));
+  world.createJoint(
+    new RevoluteJoint(
+      {
+        bodyA: node,
+        bodyB: leftChild,
+        localAnchorA: left,
+        localAnchorB: h,
+      },
+      node,
+      leftChild,
+    ),
+  );
 
-  world.createJoint(new RevoluteJoint({
-    bodyA: node,
-    bodyB: rightChild,
-    localAnchorA: right,
-    localAnchorB: h,
-  }, node, rightChild));
+  world.createJoint(
+    new RevoluteJoint(
+      {
+        bodyA: node,
+        bodyB: rightChild,
+        localAnchorA: right,
+        localAnchorB: h,
+      },
+      node,
+      rightChild,
+    ),
+  );
 
   return node;
 }

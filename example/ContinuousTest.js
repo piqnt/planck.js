@@ -1,10 +1,9 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { Vec2, Math, World, stats, Circle, Edge, Box, Testbed } = planck;
+import { Vec2, Math, World, stats, Circle, Edge, Box, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -28,13 +27,10 @@ if (true) {
   // angularVelocity = 46.661274;
   bullet.setLinearVelocity(new Vec2(0.0, -100.0));
   bullet.setAngularVelocity(angularVelocity);
-
 } else {
   let shape = new Circle(0.5);
 
-  world
-    .createDynamicBody(new Vec2(0.0, 2.0))
-    .createFixture(shape, 1.0);
+  world.createDynamicBody(new Vec2(0.0, 2.0)).createFixture(shape, 1.0);
 
   let body = world.createDynamicBody({
     bullet: true,
@@ -65,7 +61,7 @@ function launch() {
 launch();
 
 let stepCount = 0;
-testbed.step = function() {
+testbed.step = function () {
   testbed.status(stats);
 
   if (stats.gjkCalls > 0) {

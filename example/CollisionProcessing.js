@@ -1,10 +1,9 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { World, Vec2, Edge, Polygon, Box, Circle, Math, Testbed } = planck;
+import { World, Vec2, Edge, Polygon, Box, Circle, Math, Testbed } from "planck";
 
 // This test shows collision processing and tests
 // deferred body destruction.
@@ -16,16 +15,24 @@ testbed.start(world);
 // Ground body
 world.createBody().createFixture(new Edge(new Vec2(-50.0, 0.0), new Vec2(50.0, 0.0)));
 
-let xLo = -5.0, xHi = 5.0;
-let yLo = 2.0, yHi = 35.0;
+let xLo = -5.0;
+let xHi = 5.0;
+let yLo = 2.0;
+let yHi = 35.0;
 
 // Small triangle
 let body1 = world.createDynamicBody(new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi)));
-body1.createFixture(new Polygon([new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 2.0)]), 1.0);
+body1.createFixture(
+  new Polygon([new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 2.0)]),
+  1.0,
+);
 
 // Large triangle (recycle definitions)
 let body2 = world.createDynamicBody(new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi)));
-body2.createFixture(new Polygon([new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 2.0)]), 1.0);
+body2.createFixture(
+  new Polygon([new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 2.0)]),
+  1.0,
+);
 
 // Small box
 let body3 = world.createDynamicBody(new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi)));
@@ -45,7 +52,7 @@ body6.createFixture(new Circle(2.0), 1.0);
 
 let points = [];
 
-world.on('pre-solve', function(contact, oldManifold) {
+world.on("pre-solve", function (contact, oldManifold) {
   let manifold = contact.getManifold();
 
   if (manifold.pointCount == 0) {
@@ -74,8 +81,7 @@ world.on('pre-solve', function(contact, oldManifold) {
 let bomb = null;
 let MAX_NUKE = 6;
 
-testbed.step = function() {
-
+testbed.step = function () {
   // We are going to destroy some bodies according to contact
   // points. We must buffer the bodies that should be destroyed
   // because they may belong to multiple contact points.

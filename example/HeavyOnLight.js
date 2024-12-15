@@ -1,10 +1,9 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { Vec2, World, Edge, Circle, Testbed } = planck;
+import { Vec2, World, Edge, Circle, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 

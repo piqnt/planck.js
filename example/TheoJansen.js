@@ -1,13 +1,22 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
 // Inspired by a contribution by roman_m
 // Dimensions scooped from APE (http://www.cove.org/ape/index.htm)
 
-const { World, Vec2, Edge, Circle, Box, Polygon, RevoluteJoint, DistanceJoint, Testbed } = planck;
+import {
+  World,
+  Vec2,
+  Edge,
+  Circle,
+  Box,
+  Polygon,
+  RevoluteJoint,
+  DistanceJoint,
+  Testbed,
+} from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -35,37 +44,43 @@ for (let i = 0; i < 40; ++i) {
 let chassis = world.createDynamicBody(Vec2.add(pivot, offset));
 chassis.createFixture(new Box(2.5, 1.0), {
   density: 1.0,
-  filterGroupIndex: -1
+  filterGroupIndex: -1,
 });
 
 let wheel = world.createDynamicBody(Vec2.add(pivot, offset));
 wheel.createFixture(new Circle(1.6), {
   density: 1.0,
-  filterGroupIndex: -1
+  filterGroupIndex: -1,
 });
 
-let motorjoint = world.createJoint(new RevoluteJoint({
-  collideConnected: false,
-  motorSpeed: motorSpeed,
-  maxMotorTorque: 400.0,
-  enableMotor: motorOn
-}, wheel, chassis, Vec2.add(pivot, offset)));
+let motorjoint = world.createJoint(
+  new RevoluteJoint(
+    {
+      collideConnected: false,
+      motorSpeed: motorSpeed,
+      maxMotorTorque: 400.0,
+      enableMotor: motorOn,
+    },
+    wheel,
+    chassis,
+    Vec2.add(pivot, offset),
+  ),
+);
 
 let wheelAnchor = new Vec2(0.0, -0.8).add(pivot);
 
 createLeg(-1.0, wheelAnchor);
 createLeg(1.0, wheelAnchor);
 
-wheel.setTransform(wheel.getPosition(), 120.0 * Math.PI / 180.0);
+wheel.setTransform(wheel.getPosition(), (120.0 * Math.PI) / 180.0);
 createLeg(-1.0, wheelAnchor);
 createLeg(1.0, wheelAnchor);
 
-wheel.setTransform(wheel.getPosition(), -120.0 * Math.PI / 180.0);
+wheel.setTransform(wheel.getPosition(), (-120.0 * Math.PI) / 180.0);
 createLeg(-1.0, wheelAnchor);
 createLeg(1.0, wheelAnchor);
 
 function createLeg(s, wheelAnchor) {
-
   let p1 = new Vec2(5.4 * s, -6.1);
   let p2 = new Vec2(7.2 * s, -1.2);
   let p3 = new Vec2(4.3 * s, -1.9);
@@ -77,7 +92,6 @@ function createLeg(s, wheelAnchor) {
   if (s > 0.0) {
     poly1 = new Polygon([p1, p2, p3]);
     poly2 = new Polygon([new Vec2(), Vec2.sub(p5, p4), Vec2.sub(p6, p4)]);
-
   } else {
     poly1 = new Polygon([p1, p3, p2]);
     poly2 = new Polygon([new Vec2(), Vec2.sub(p6, p4), Vec2.sub(p5, p4)]);
@@ -85,20 +99,20 @@ function createLeg(s, wheelAnchor) {
 
   let body1 = world.createDynamicBody({
     position: offset,
-    angularDamping: 10.0
+    angularDamping: 10.0,
   });
   body1.createFixture(poly1, {
     density: 1.0,
-    filterGroupIndex: -1
+    filterGroupIndex: -1,
   });
 
   let body2 = world.createDynamicBody({
     position: Vec2.add(p4, offset),
-    angularDamping: 10.0
+    angularDamping: 10.0,
   });
   body2.createFixture(poly2, {
     density: 1.0,
-    filterGroupIndex: -1
+    filterGroupIndex: -1,
   });
 
   // Using a soft distance constraint can reduce some jitter.
@@ -106,29 +120,34 @@ function createLeg(s, wheelAnchor) {
   // acting like a suspension system.
   let djd = {
     dampingRatio: 0.5,
-    frequencyHz: 10.0
+    frequencyHz: 10.0,
   };
-  world.createJoint(new DistanceJoint(djd, body1, body2, Vec2.add(p2, offset), Vec2.add(p5, offset)));
-  world.createJoint(new DistanceJoint(djd, body1, body2, Vec2.add(p3, offset), Vec2.add(p4, offset)));
-  world.createJoint(new DistanceJoint(djd, body1, wheel, Vec2.add(p3, offset), Vec2.add(wheelAnchor, offset)));
-  world.createJoint(new DistanceJoint(djd, body2, wheel, Vec2.add(p6, offset), Vec2.add(wheelAnchor, offset)));
+  world.createJoint(
+    new DistanceJoint(djd, body1, body2, Vec2.add(p2, offset), Vec2.add(p5, offset)),
+  );
+  world.createJoint(
+    new DistanceJoint(djd, body1, body2, Vec2.add(p3, offset), Vec2.add(p4, offset)),
+  );
+  world.createJoint(
+    new DistanceJoint(djd, body1, wheel, Vec2.add(p3, offset), Vec2.add(wheelAnchor, offset)),
+  );
+  world.createJoint(
+    new DistanceJoint(djd, body2, wheel, Vec2.add(p6, offset), Vec2.add(wheelAnchor, offset)),
+  );
 
   world.createJoint(new RevoluteJoint({}, body2, chassis, Vec2.add(p4, offset)));
 }
 
-testbed.step = function() {
+testbed.step = function () {
   if (testbed.activeKeys.right && testbed.activeKeys.left) {
     motorjoint.setMotorSpeed(0.0);
     motorjoint.enableMotor(false);
-
   } else if (testbed.activeKeys.right) {
     motorjoint.setMotorSpeed(motorSpeed);
     motorjoint.enableMotor(true);
-
   } else if (testbed.activeKeys.left) {
     motorjoint.setMotorSpeed(-motorSpeed);
     motorjoint.enableMotor(true);
-
   } else {
     motorjoint.setMotorSpeed(0.0);
     motorjoint.enableMotor(true);
@@ -136,7 +155,6 @@ testbed.step = function() {
 
   if (wheel.getPosition().x > testbed.x + 10) {
     testbed.x = wheel.getPosition().x - 10;
-
   } else if (wheel.getPosition().x < testbed.x - 10) {
     testbed.x = wheel.getPosition().x + 10;
   }

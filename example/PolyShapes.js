@@ -1,10 +1,20 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { Vec2, Transform, AABB, Circle, Polygon, Edge, Box, World, Distance, Testbed } = planck;
+import {
+  Vec2,
+  Transform,
+  AABB,
+  Circle,
+  Polygon,
+  Edge,
+  Box,
+  World,
+  Distance,
+  Testbed,
+} from "planck";
 
 let world = new World(new Vec2(0, -10));
 const testbed = Testbed.mount();
@@ -19,17 +29,9 @@ let shapes = [];
 let ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
-shapes[0] = new Polygon([
-  new Vec2(-0.5, 0.0),
-  new Vec2(0.5, 0.0),
-  new Vec2(0.0, 1.5)
-]);
+shapes[0] = new Polygon([new Vec2(-0.5, 0.0), new Vec2(0.5, 0.0), new Vec2(0.0, 1.5)]);
 
-shapes[1] = new Polygon([
-  new Vec2(-0.1, 0.0),
-  new Vec2(0.1, 0.0),
-  new Vec2(0.0, 1.5)
-]);
+shapes[1] = new Polygon([new Vec2(-0.1, 0.0), new Vec2(0.1, 0.0), new Vec2(0.0, 1.5)]);
 
 {
   let w = 1.0;
@@ -58,7 +60,7 @@ function createBody(index) {
   }
 
   let bd = {
-    type: 'dynamic',
+    type: "dynamic",
     position: new Vec2(Math.random() * 0.4 - 2.0, 10.0),
     angle: Math.random() * 2 * Math.PI - Math.PI,
   };
@@ -81,51 +83,55 @@ function destroyBody() {
   world.destroyBody(bodies.shift());
 }
 
-testbed.keydown = function(code, char) {
+testbed.keydown = function (code, char) {
   switch (char) {
-  case '1':
-    createBody(1);
-    break;
+    case "1":
+      createBody(1);
+      break;
 
-  case '2':
-    createBody(2);
-    break;
+    case "2":
+      createBody(2);
+      break;
 
-  case '3':
-    createBody(3);
-    break;
+    case "3":
+      createBody(3);
+      break;
 
-  case '4':
-    createBody(4);
-    break;
+    case "4":
+      createBody(4);
+      break;
 
-  case '5':
-    createBody(5);
-    break;
+    case "5":
+      createBody(5);
+      break;
 
-  case 'Z':
-    for (let i = 0; i < bodies.length; i += 2) {
-      let body = bodies[i];
-      body.setActive(!body.isActive());
-    }
-    break;
+    case "Z":
+      for (let i = 0; i < bodies.length; i += 2) {
+        let body = bodies[i];
+        body.setActive(!body.isActive());
+      }
+      break;
 
-  case 'X':
-    destroyBody();
-    break;
+    case "X":
+      destroyBody();
+      break;
   }
 };
 
-testbed.info('1-5: Drop new objects, Z: Activate/deactivate some bodies, X: Destroy an object');
+testbed.info("1-5: Drop new objects, Z: Activate/deactivate some bodies, X: Destroy an object");
 
-testbed.step = function() {
+testbed.step = function () {
   AABBQueryListener.reset();
   let aabb = new AABB();
   AABBQueryListener.circle.computeAABB(aabb, AABBQueryListener.transform, 0);
 
   world.queryAABB(aabb, AABBQueryListener.callback);
 
-  testbed.drawCircle(AABBQueryListener.circle.m_p, AABBQueryListener.circle.m_radius, testbed.color(0.4, 0.7, 0.8));
+  testbed.drawCircle(
+    AABBQueryListener.circle.m_p,
+    AABBQueryListener.circle.m_radius,
+    testbed.color(0.4, 0.7, 0.8),
+  );
 };
 
 function drawFixture(fixture) {
@@ -133,27 +139,29 @@ function drawFixture(fixture) {
   let xf = fixture.getBody().getTransform();
 
   switch (fixture.getType()) {
-  case 'circle': {
-    let circle = fixture.getShape();
+    case "circle":
+      {
+        let circle = fixture.getShape();
 
-    let center = Transform.mul(xf, circle.getCenter());
-    let radius = circle.getRadius();
+        let center = Transform.mul(xf, circle.getCenter());
+        let radius = circle.getRadius();
 
-    testbed.drawCircle(center, radius, color);
-  }
-    break;
+        testbed.drawCircle(center, radius, color);
+      }
+      break;
 
-  case 'polygon': {
-    let poly = fixture.getShape();
-    let vertexCount = poly.m_count;
-    // assert(vertexCount <= b2_maxPolygonVertices);
-    let vertices = poly.m_vertices.map(v => Transform.mul(xf, v));
-    testbed.drawPolygon(vertices, color);
-  }
-    break;
+    case "polygon":
+      {
+        let poly = fixture.getShape();
+        let vertexCount = poly.m_count;
+        // assert(vertexCount <= b2_maxPolygonVertices);
+        let vertices = poly.m_vertices.map((v) => Transform.mul(xf, v));
+        testbed.drawPolygon(vertices, color);
+      }
+      break;
 
-  default:
-    break;
+    default:
+      break;
   }
 }
 
@@ -162,7 +170,7 @@ function drawFixture(fixture) {
 // that overlap an AABB. Of those, we use TestOverlap to determine which fixtures
 // overlap a circle. Up to 4 overlapped fixtures will be highlighted with a
 // yellow border.
-let AABBQueryListener = (function() {
+let AABBQueryListener = (function () {
   let def = {};
 
   def.circle = new Circle(new Vec2(0.0, 1.1), 2.0);
@@ -171,12 +179,12 @@ let AABBQueryListener = (function() {
 
   let MAX_COUNT = 40;
 
-  def.reset = function() {
+  def.reset = function () {
     count = 0;
   };
   // Called for each fixture found in the query AABB.
   // return false to terminate the query.
-  def.callback = function(fixture) {
+  def.callback = function (fixture) {
     if (count === MAX_COUNT) {
       return false;
     }

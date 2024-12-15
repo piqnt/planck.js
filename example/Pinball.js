@@ -1,13 +1,12 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
 // This tests bullet collision and provides an example of a gameplay scenario.
 // This also uses a loop shape.
 
-const { World, Vec2, Circle, Box, Chain, RevoluteJoint, Testbed } = planck;
+import { World, Vec2, Circle, Box, Chain, RevoluteJoint, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -16,13 +15,19 @@ testbed.start(world);
 
 // Ground body
 let ground = world.createBody();
-ground.createFixture(new Chain([
-  new Vec2(0.0, -2.0),
-  new Vec2(8.0, 6.0),
-  new Vec2(8.0, 20.0),
-  new Vec2(-8.0, 20.0),
-  new Vec2(-8.0, 6.0)
-], true), 0.0);
+ground.createFixture(
+  new Chain(
+    [
+      new Vec2(0.0, -2.0),
+      new Vec2(8.0, 6.0),
+      new Vec2(8.0, 20.0),
+      new Vec2(-8.0, 20.0),
+      new Vec2(-8.0, 6.0),
+    ],
+    true,
+  ),
+  0.0,
+);
 
 // Flippers
 let pLeft = new Vec2(-2.0, 0.0);
@@ -41,29 +46,39 @@ let jd = {
   motorSpeed: 0.0,
 };
 
-let leftJoint = new RevoluteJoint({
-  ...jd,
-  lowerAngle: -30.0 * Math.PI / 180.0,
-  upperAngle: 5.0 * Math.PI / 180.0,
-}, ground, leftFlipper, leftFlipper.getPosition());
+let leftJoint = new RevoluteJoint(
+  {
+    ...jd,
+    lowerAngle: (-30.0 * Math.PI) / 180.0,
+    upperAngle: (5.0 * Math.PI) / 180.0,
+  },
+  ground,
+  leftFlipper,
+  leftFlipper.getPosition(),
+);
 world.createJoint(leftJoint);
 
-let rightJoint = new RevoluteJoint({
-  ...jd,
-  lowerAngle: -5.0 * Math.PI / 180.0,
-  upperAngle: 30.0 * Math.PI / 180.0,
-}, ground, rightFlipper, rightFlipper.getPosition());
+let rightJoint = new RevoluteJoint(
+  {
+    ...jd,
+    lowerAngle: (-5.0 * Math.PI) / 180.0,
+    upperAngle: (30.0 * Math.PI) / 180.0,
+  },
+  ground,
+  rightFlipper,
+  rightFlipper.getPosition(),
+);
 world.createJoint(rightJoint);
 
 // Circle character
 let ball = world.createBody({
-  position : new Vec2(1.0, 15.0),
-  type : 'dynamic',
-  bullet : true
+  position: new Vec2(1.0, 15.0),
+  type: "dynamic",
+  bullet: true,
 });
 ball.createFixture(new Circle(0.2), 1.0);
 
-testbed.step = function() {
+testbed.step = function () {
   if (testbed.activeKeys.right) {
     rightJoint.setMotorSpeed(-20.0);
   } else {

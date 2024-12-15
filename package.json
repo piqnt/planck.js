@@ -60,6 +60,8 @@
     "@vitest/coverage-v8": "^2.1.5",
     "ajv": "^6.10.2",
     "eslint": "^8.1.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.4.2",
     "replace-in-files-cli": "^3.0.0",
     "rimraf": "^6.0.1",
     "rollup-plugin-license": "^3.5.3",
@@ -76,6 +78,8 @@
   },
   "scripts": {
     "lint": "eslint './src/**/*.ts' './testbed/**/*.ts'",
+    "lint:example": "eslint --fix './example/**/*.ts' './example/**/*.js'",
+    "pretty:example": "prettier --write './example/**/*.ts' './example/*.js'",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:types": "tsd --typings=./dist/planck.d.ts && tsd --typings=./dist/planck-with-testbed.d.ts",

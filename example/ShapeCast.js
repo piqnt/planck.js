@@ -1,10 +1,22 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { Vec2, Transform, World, Settings, ShapeCastInput, ShapeCastOutput, ShapeCast, DistanceInput, DistanceOutput, Distance, SimplexCache, Testbed } = planck;
+import {
+  Vec2,
+  Transform,
+  World,
+  Settings,
+  ShapeCastInput,
+  ShapeCastOutput,
+  ShapeCast,
+  DistanceInput,
+  DistanceOutput,
+  Distance,
+  SimplexCache,
+  Testbed,
+} from "planck";
 
 let world = new World();
 
@@ -71,7 +83,7 @@ if (true) {
   translationB = new Vec2(0.0, 0.0399999991);
 }
 
-testbed.step = function() {
+testbed.step = function () {
   const transformB = Transform.identity();
 
   const input = new ShapeCastInput();
@@ -87,7 +99,7 @@ testbed.step = function() {
 
   const transformB2 = new Transform(
     Vec2.combine(1, transformB.p, output.lambda, input.translationB),
-    transformB.q.getAngle()
+    transformB.q.getAngle(),
   );
 
   const distanceInput = new DistanceInput();
@@ -99,7 +111,7 @@ testbed.step = function() {
   const simplexCache = new SimplexCache();
   simplexCache.count = 0;
   const distanceOutput = new DistanceOutput();
-  
+
   Distance(distanceOutput, simplexCache, distanceInput);
 
   testbed.status({

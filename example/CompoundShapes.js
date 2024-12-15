@@ -1,26 +1,27 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
 // TODO_ERIN test joints on compounds.
-const { World, Vec2, Transform, Math, Edge, Circle, Polygon, Box, Testbed } = planck;
+import { World, Vec2, Transform, Math, Edge, Circle, Polygon, Box, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
-world.createBody(new Vec2(0.0, 0.0)).createFixture(new Edge(new Vec2(50.0, 0.0), new Vec2(-50.0, 0.0)), 0.0);
+world
+  .createBody(new Vec2(0.0, 0.0))
+  .createFixture(new Edge(new Vec2(50.0, 0.0), new Vec2(-50.0, 0.0)), 0.0);
 
 let circle1 = new Circle(new Vec2(-0.5, 0.5), 0.5);
 let circle2 = new Circle(new Vec2(0.5, 0.5), 0.5);
 
 for (let i = 0; i < 10; ++i) {
   let body = world.createDynamicBody({
-    position : new Vec2(Math.random(-0.1, 0.1) + 5.0, 1.05 + 2.5 * i),
-    angle : Math.random(-Math.PI, Math.PI)
+    position: new Vec2(Math.random(-0.1, 0.1) + 5.0, 1.05 + 2.5 * i),
+    angle: Math.random(-Math.PI, Math.PI),
   });
   body.createFixture(circle1, 2.0);
   body.createFixture(circle2, 0.0);
@@ -31,8 +32,8 @@ let polygon2 = new Box(0.25, 0.5, new Vec2(0.0, -0.5), 0.5 * Math.PI);
 
 for (let i = 0; i < 10; ++i) {
   let body = world.createDynamicBody({
-    position : new Vec2(Math.random(-0.1, 0.1) - 5.0, 1.05 + 2.5 * i),
-    angle : Math.random(-Math.PI, Math.PI)
+    position: new Vec2(Math.random(-0.1, 0.1) - 5.0, 1.05 + 2.5 * i),
+    angle: Math.random(-Math.PI, Math.PI),
   });
   body.createFixture(polygon1, 2.0);
   body.createFixture(polygon2, 2.0);
@@ -42,26 +43,22 @@ const xf1 = new Transform();
 xf1.q.set(0.3524 * Math.PI);
 xf1.p.set(xf1.q.getXAxis());
 
-let triangle1 = new Polygon([
-  new Vec2(-1.0, 0.0),
-  new Vec2(1.0, 0.0),
-  new Vec2(0.0, 0.5)
-].map(v => Transform.mul(xf1, v)));
+let triangle1 = new Polygon(
+  [new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 0.5)].map((v) => Transform.mul(xf1, v)),
+);
 
 const xf2 = new Transform();
 xf2.q.set(-0.3524 * Math.PI);
 xf2.p.set(Vec2.neg(xf2.q.getXAxis()));
 
-let triangle2 = new Polygon([
-  new Vec2(-1.0, 0.0),
-  new Vec2(1.0, 0.0),
-  new Vec2(0.0, 0.5)
-].map(v => Transform.mul(xf2, v)));
+let triangle2 = new Polygon(
+  [new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 0.5)].map((v) => Transform.mul(xf2, v)),
+);
 
 for (let i = 0; i < 10; ++i) {
   let body = world.createDynamicBody({
-    position : new Vec2(Math.random(-0.1, 0.1), 2.05 + 2.5 * i),
-    angle : 0.0
+    position: new Vec2(Math.random(-0.1, 0.1), 2.05 + 2.5 * i),
+    angle: 0.0,
   });
   body.createFixture(triangle1, 2.0);
   body.createFixture(triangle2, 2.0);

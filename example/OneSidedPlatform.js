@@ -1,10 +1,9 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { Vec2, World, Edge, Box, Circle, Testbed } = planck;
+import { Vec2, World, Edge, Box, Circle, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -15,7 +14,9 @@ let radius = 0.5;
 let top = 10.0 + 0.5;
 let bottom = 10.0 - 0.5;
 
-let UNKNOWN = 0, ABOVE = +1, BELOW = -1;
+let UNKNOWN = 0;
+let ABOVE = +1;
+let BELOW = -1;
 
 let state = UNKNOWN;
 
@@ -32,13 +33,13 @@ let character = world.createDynamicBody(new Vec2(0.0, 12.0));
 let characterFix = character.createFixture(new Circle(radius), 20.0);
 character.setLinearVelocity(new Vec2(0.0, -50.0));
 
-world.on('pre-solve', function(contact, oldManifold) {
+world.on("pre-solve", function (contact, oldManifold) {
   let fixA = contact.getFixtureA();
   let fixB = contact.getFixtureB();
 
   let isCharPlatformContact =
-    fixA === platformFix && fixB === characterFix ||
-    fixB === platformFix && fixA === characterFix;
+    (fixA === platformFix && fixB === characterFix) ||
+    (fixB === platformFix && fixA === characterFix);
 
   if (!isCharPlatformContact) {
     return;
@@ -62,7 +63,7 @@ world.on('pre-solve', function(contact, oldManifold) {
   }
 });
 
-testbed.step = function() {
+testbed.step = function () {
   let v = character.getLinearVelocity();
-  testbed.status('Character Linear Velocity', v.y);
+  testbed.status("Character Linear Velocity", v.y);
 };

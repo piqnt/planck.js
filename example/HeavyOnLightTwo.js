@@ -1,15 +1,14 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-let { World, Vec2, Circle, Edge, Testbed } = planck;
+import { World, Vec2, Circle, Edge, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
 const testbed = Testbed.mount();
-testbed.info('X: Add/Remove heavy circle');
+testbed.info("X: Add/Remove heavy circle");
 testbed.start(world);
 
 world.createBody().createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
@@ -30,10 +29,10 @@ function toggleHeavy() {
   }
 }
 
-testbed.keydown = function(code, char) {
+testbed.keydown = function (code, char) {
   switch (char) {
-  case 'X':
-    toggleHeavy();
-    break;
+    case "X":
+      toggleHeavy();
+      break;
   }
 };

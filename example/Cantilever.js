@@ -1,7 +1,6 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
 // It is difficult to make a cantilever made of links completely rigid with weld joints.
@@ -9,7 +8,7 @@
 // So why not go ahead and use soft weld joints? They behave like a revolute
 // joint with a rotational spring.
 
-const { World, Vec2, Edge, Box, WeldJoint, Polygon, Circle, Testbed } = planck;
+import { World, Vec2, Edge, Box, WeldJoint, Polygon, Circle, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -39,10 +38,17 @@ ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
     body.createFixture(new Box(1.0, 0.125), 20.0);
 
     let anchor = new Vec2(-15.0 + 2.0 * i, 15.0);
-    world.createJoint(new WeldJoint({
-      frequencyHz: 5.0,
-      dampingRatio: 0.7,
-    }, prevBody, body, anchor));
+    world.createJoint(
+      new WeldJoint(
+        {
+          frequencyHz: 5.0,
+          dampingRatio: 0.7,
+        },
+        prevBody,
+        body,
+        anchor,
+      ),
+    );
 
     prevBody = body;
   }
@@ -69,10 +75,17 @@ ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
     if (i > 0) {
       let anchor = new Vec2(5.0 + 1.0 * i, 10.0);
-      world.createJoint(new WeldJoint({
-        frequencyHz: 8.0,
-        dampingRatio: 0.7,
-      }, prevBody, body, anchor));
+      world.createJoint(
+        new WeldJoint(
+          {
+            frequencyHz: 8.0,
+            dampingRatio: 0.7,
+          },
+          prevBody,
+          body,
+          anchor,
+        ),
+      );
     }
 
     prevBody = body;

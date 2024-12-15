@@ -1,10 +1,9 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { World, Vec2, Transform, Box, Distance, Testbed } = planck;
+import { World, Vec2, Transform, Box, Distance, Testbed } from "planck";
 
 let DistanceInput = Distance.Input;
 let DistanceOutput = Distance.Output;
@@ -13,7 +12,7 @@ let SimplexCache = Distance.Cache;
 let world = new World();
 
 const testbed = Testbed.mount();
-testbed.start(world);    
+testbed.start(world);
 
 let transformA = new Transform(new Vec2(0.0, -0.2));
 
@@ -31,7 +30,7 @@ let fixA = bodyA.createFixture(polygonA);
 let bodyB = world.createBody();
 let fixB = bodyB.createFixture(polygonB);
 
-testbed.step = function() {
+testbed.step = function () {
   let input = new DistanceInput();
   input.proxyA.set(polygonA, 0);
   input.proxyB.set(polygonB, 0);
@@ -45,8 +44,8 @@ testbed.step = function() {
 
   Distance(output, cache, input);
 
-  testbed.status('Distance', output.distance);
-  testbed.status('Iterations', output.iterations);
+  testbed.status("Distance", output.distance);
+  testbed.status("Iterations", output.iterations);
 
   bodyA.setTransform(transformA);
   bodyB.setTransform(transformB);
@@ -58,28 +57,28 @@ testbed.step = function() {
   testbed.drawPoint(x2, 4.0, testbed.color(1.0, 1.0, 0.0));
 };
 
-testbed.keydown = function() {
-  if (testbed.activeKeys['left']) {
+testbed.keydown = function () {
+  if (testbed.activeKeys["left"]) {
     positionB.x -= 0.1;
   }
 
-  if (testbed.activeKeys['right']) {
+  if (testbed.activeKeys["right"]) {
     positionB.x += 0.1;
   }
 
-  if (testbed.activeKeys['down']) {
+  if (testbed.activeKeys["down"]) {
     positionB.y -= 0.1;
   }
 
-  if (testbed.activeKeys['up']) {
+  if (testbed.activeKeys["up"]) {
     positionB.y += 0.1;
   }
 
-  if (testbed.activeKeys['Z']) {
+  if (testbed.activeKeys["Z"]) {
     angleB += 0.1;
   }
 
-  if (testbed.activeKeys['X']) {
+  if (testbed.activeKeys["X"]) {
     angleB -= 0.1;
   }
 

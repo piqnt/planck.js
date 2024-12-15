@@ -1,4 +1,4 @@
-const { World, Vec2, Circle, Polygon, Testbed } = planck;
+import { World, Vec2, Circle, Polygon, Testbed } from "planck";
 
 let SHIP = 2;
 let BULLET = 4;
@@ -7,7 +7,7 @@ let ASTEROID = 4;
 let SPACE_WIDTH = 16;
 let SPACE_HEIGHT = 9;
 
-let SHIP_SIZE = 0.30;
+let SHIP_SIZE = 0.3;
 let FIRE_RELOAD_TIME = 100;
 let BULLET_LIFE_TIME = 2000;
 
@@ -34,14 +34,14 @@ let asteroidBodies = [];
 let bulletBodies = [];
 let shipBody;
 
-testbed.keydown = function(code, char) {
+testbed.keydown = function (code, char) {
   if (testbed.activeKeys.fire) {
     gameover && start();
   }
 };
 
 // Todo: check if several bullets hit the same asteroid in the same time step
-world.on('pre-solve', function(contact) {
+world.on("pre-solve", function (contact) {
   let fixtureA = contact.getFixtureA();
   let fixtureB = contact.getFixtureB();
 
@@ -91,32 +91,34 @@ function end() {
 
 function setupShip() {
   shipBody = world.createBody({
-    type : 'dynamic',
-    angularDamping : 2.0,
-    linearDamping : 0.5,
-    position : new Vec2(),
+    type: "dynamic",
+    angularDamping: 2.0,
+    linearDamping: 0.5,
+    position: new Vec2(),
   });
 
-  shipBody.createFixture(new Polygon([
-    new Vec2(-0.15, -0.15),
-    new Vec2(0, -0.1),
-    new Vec2(0.15, -0.15),
-    new Vec2(0, 0.2)
-  ]), {
-    density : 1000,
-    filterCategoryBits : SHIP,
-    filterMaskBits : ASTEROID
-  });
+  shipBody.createFixture(
+    new Polygon([
+      new Vec2(-0.15, -0.15),
+      new Vec2(0, -0.1),
+      new Vec2(0.15, -0.15),
+      new Vec2(0, 0.2),
+    ]),
+    {
+      density: 1000,
+      filterCategoryBits: SHIP,
+      filterMaskBits: ASTEROID,
+    },
+  );
 
   allowCrashTime = globalTime + 2000;
 }
 
 let globalTime = 0;
-testbed.step = function(dt) {
+testbed.step = function (dt) {
   globalTime += dt;
 
   if (shipBody) {
-
     // Set velocities
     if (testbed.activeKeys.left && !testbed.activeKeys.right) {
       shipBody.applyAngularImpulse(0.1, true);
@@ -133,7 +135,6 @@ testbed.step = function(dt) {
 
     // Fire
     if (testbed.activeKeys.fire && globalTime > allowFireTime) {
-
       const magnitude = 2;
       const angle = shipBody.Getangle + Math.PI / 2;
 
@@ -142,11 +143,11 @@ testbed.step = function(dt) {
         // mass : 0.05,
         position: shipBody.getWorldPoint(new Vec2(0, SHIP_SIZE)),
         linearVelocity: shipBody.getWorldVector(new Vec2(0, magnitude)),
-        bullet: true
+        bullet: true,
       });
       bulletBody.createFixture(new Circle(0.05), {
         filterCategoryBits: BULLET,
-        filterMaskBits: ASTEROID
+        filterMaskBits: ASTEROID,
       });
       bulletBodies.push(bulletBody);
 
@@ -177,8 +178,7 @@ testbed.step = function(dt) {
     let asteroidBody = asteroidBodies[i];
     wrap(asteroidBody);
   }
-
-}
+};
 
 // Adds some asteroids to the scene.
 function addAsteroids() {
@@ -194,8 +194,10 @@ function addAsteroids() {
     let y = shipPosition.y;
 
     // Aviod the ship!
-    while (Math.abs(x - shipPosition.x) < asteroidRadius * 2
-        && Math.abs(y - shipPosition.y) < asteroidRadius * 2) {
+    while (
+      Math.abs(x - shipPosition.x) < asteroidRadius * 2 &&
+      Math.abs(y - shipPosition.y) < asteroidRadius * 2
+    ) {
       x = rand(SPACE_WIDTH);
       y = rand(SPACE_HEIGHT);
     }
@@ -211,31 +213,32 @@ function addAsteroids() {
 }
 
 function asteroidLevelRadius(level) {
-  return asteroidRadius * (asteroidLevels - level) / asteroidLevels;
+  return (asteroidRadius * (asteroidLevels - level)) / asteroidLevels;
 }
 
 function makeAsteroidBody(x, y, vx, vy, va, level) {
   let asteroidBody = world.createKinematicBody({
     // mass : 10,
-    position : new Vec2(x, y),
-    linearVelocity : new Vec2(vx, vy),
-    angularVelocity : va
+    position: new Vec2(x, y),
+    linearVelocity: new Vec2(vx, vy),
+    angularVelocity: va,
   });
   asteroidBodies.push(asteroidBody);
 
   let radius = asteroidLevelRadius(level);
 
-  let n = 8, path = [];
+  let n = 8;
+  let path = [];
   for (let i = 0; i < n; i++) {
-    let a = i * 2 * Math.PI / n;
+    let a = (i * 2 * Math.PI) / n;
     const x = radius * (Math.sin(a) + rand(0.3));
     const y = radius * (Math.cos(a) + rand(0.3));
     path.push(new Vec2(x, y));
   }
 
   asteroidBody.createFixture(new Polygon(path), {
-    filterCategoryBits : ASTEROID,
-    filterMaskBits : BULLET | SHIP
+    filterCategoryBits: ASTEROID,
+    filterMaskBits: BULLET | SHIP,
   });
 
   return asteroidBody;
@@ -255,7 +258,7 @@ function crash(ship, asteroid) {
     end();
     return;
   }
-  setTimeout(function() {
+  setTimeout(function () {
     // Add ship again
     setupShip();
   }, 1000);
@@ -265,7 +268,6 @@ function hit(asteroidBody, bulletBody) {
   let aidx = asteroidBodies.indexOf(asteroidBody);
   let bidx = bulletBodies.indexOf(bulletBody);
   if (aidx != -1 && bidx != -1) {
-
     // Remove asteroid
     world.destroyBody(asteroidBody);
     asteroidBodies.splice(aidx, 1);
@@ -289,9 +291,9 @@ function hit(asteroidBody, bulletBody) {
 
 function splitAsteroid(parent) {
   if (parent.level < 4) {
-    let angleDisturb = Math.PI / 2 * Math.random();
+    let angleDisturb = (Math.PI / 2) * Math.random();
     for (let i = 0; i < 4; i++) {
-      let angle = Math.PI / 2 * i + angleDisturb;
+      let angle = (Math.PI / 2) * i + angleDisturb;
 
       let r = asteroidLevelRadius(0) - asteroidLevelRadius(parent.level);
       let sp = parent.getWorldPoint(new Vec2(r * Math.cos(angle), r * Math.sin(angle)));
@@ -316,10 +318,10 @@ function wrap(body) {
 }
 
 function wrapNumber(num, min, max) {
-  if (typeof min === 'undefined') {
-    max = 1, min = 0;
-  } else if (typeof max === 'undefined') {
-    max = min, min = 0;
+  if (typeof min === "undefined") {
+    (max = 1), (min = 0);
+  } else if (typeof max === "undefined") {
+    (max = min), (min = 0);
   }
   if (max > min) {
     num = (num - min) % (max - min);
@@ -336,18 +338,18 @@ function rand(value) {
 }
 
 function uiStart() {
-  console.log('Game started');
+  console.log("Game started");
 }
 
 function uiEnd() {
-  console.log('Game over');
-  testbed.status('Game Over!');
+  console.log("Game over");
+  testbed.status("Game Over!");
 }
 
 function uiStatus() {
-  console.log('Level: ' + level + ' Lives: ' + lives);
-  testbed.status('Level', level);
-  testbed.status('Lives', lives);
+  console.log("Level: " + level + " Lives: " + lives);
+  testbed.status("Level", level);
+  testbed.status("Lives", lives);
 }
 
 start();

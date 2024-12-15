@@ -1,13 +1,12 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
 // This stress tests the dynamic tree broad-phase. This also shows that tile
 // based collision is _not_ smooth due to Box2D not knowing about adjacency.
 
-const { World, Vec2, Box, Testbed } = planck;
+import { World, Vec2, Box, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -36,7 +35,6 @@ let fixtureCount = 0;
       }
       position.y -= 2.0 * a;
     }
-
   } else {
     let N = 200;
     let M = 10;
@@ -65,7 +63,6 @@ let fixtureCount = 0;
     y.set(x);
 
     for (let j = i; j < COUNT; ++j) {
-
       // bd.allowSleep = !(i == 0 && j == 0)
 
       let body = world.createDynamicBody(y);
@@ -79,16 +76,16 @@ let fixtureCount = 0;
 }
 let createTime = Date.now();
 
-testbed.step = function() {
+testbed.step = function () {
   let height = world.getTreeHeight();
   let leafCount = world.getProxyCount();
   let minimumNodeCount = 2 * leafCount - 1;
   let minimumHeight = Math.ceil(Math.log(minimumNodeCount) / Math.log(2.0));
 
-  testbed.status('dynamic tree height', height);
-  testbed.status('min', minimumHeight);
-  testbed.status('create time', createTime + 'ms');
-  testbed.status('fixture count', fixtureCount);
+  testbed.status("dynamic tree height", height);
+  testbed.status("min", minimumHeight);
+  testbed.status("create time", createTime + "ms");
+  testbed.status("fixture count", fixtureCount);
 
   // let tree = world.m_broadPhase.m_tree;
   // if (stepCount++ == 400) {

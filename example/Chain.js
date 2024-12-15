@@ -1,10 +1,9 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { World, Vec2, Edge, Box, RevoluteJoint, Testbed } = planck;
+import { World, Vec2, Edge, Box, RevoluteJoint, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -26,9 +25,16 @@ for (let i = 0; i < 30; ++i) {
   });
 
   let anchor = new Vec2(i, y);
-  world.createJoint(new RevoluteJoint({
-    collideConnected: false,
-  }, prevBody, body, anchor));
+  world.createJoint(
+    new RevoluteJoint(
+      {
+        collideConnected: false,
+      },
+      prevBody,
+      body,
+      anchor,
+    ),
+  );
 
   prevBody = body;
 }

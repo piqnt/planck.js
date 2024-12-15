@@ -1,4 +1,4 @@
-const { Vec2, World, Edge, Box, Testbed } = planck;
+import { Vec2, World, Edge, Box, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -15,9 +15,9 @@ for (let i = -2; i <= 2; i++) {
     box.createFixture(new Box(0.5, 0.5));
     box.setPosition(new Vec2(i * 1, -j * 1 + 20));
     box.setMassData({
-      mass : 1,
-      center : new Vec2(),
-      I : 1
+      mass: 1,
+      center: new Vec2(),
+      I: 1,
     });
   }
 }

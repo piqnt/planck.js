@@ -1,10 +1,19 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { World, Transform, Box, TimeOfImpact, Sweep, TOIInput, TOIOutput, stats, Testbed } = planck;
+import {
+  World,
+  Transform,
+  Box,
+  TimeOfImpact,
+  Sweep,
+  TOIInput,
+  TOIOutput,
+  stats,
+  Testbed,
+} from "planck";
 
 let world = new World();
 
@@ -45,10 +54,10 @@ let output = new TOIOutput();
 
 TimeOfImpact(output, input);
 
-testbed.step = function() {
+testbed.step = function () {
   // "max toi iters = %d, max root iters = %d", b2_toiMaxIters, b2_toiMaxRootIters
 
-  testbed.status('toi', output.t);
+  testbed.status("toi", output.t);
   testbed.status(stats);
 
   let vertices = [];
@@ -57,24 +66,24 @@ testbed.step = function() {
 
   for (let t = 0.1; t < 1.0; t += 0.1) {
     sweepB.getTransform(transformB, t);
-    vertices = shapeB.m_vertices.map(v => Transform.mul(transformB, v));
+    vertices = shapeB.m_vertices.map((v) => Transform.mul(transformB, v));
     testbed.drawPolygon(vertices, testbed.color(0.2, 0.2, 0.2));
   }
 
   let transformA = new Transform();
   sweepA.getTransform(transformA, 0.0);
-  vertices = shapeA.m_vertices.map(v => Transform.mul(transformA, v));
+  vertices = shapeA.m_vertices.map((v) => Transform.mul(transformA, v));
   testbed.drawPolygon(vertices, testbed.color(0.7, 0.7, 0.7));
 
   sweepB.getTransform(transformB, 0.0);
-  vertices = shapeB.m_vertices.map(v => Transform.mul(transformB, v));
+  vertices = shapeB.m_vertices.map((v) => Transform.mul(transformB, v));
   testbed.drawPolygon(vertices, testbed.color(1, 1, 1));
 
   sweepB.getTransform(transformB, output.t);
-  vertices = shapeB.m_vertices.map(v => Transform.mul(transformB, v));
+  vertices = shapeB.m_vertices.map((v) => Transform.mul(transformB, v));
   testbed.drawPolygon(vertices, testbed.color(1, 0, 0));
 
   sweepB.getTransform(transformB, 1.0);
-  vertices = shapeB.m_vertices.map(v => Transform.mul(transformB, v));
+  vertices = shapeB.m_vertices.map((v) => Transform.mul(transformB, v));
   testbed.drawPolygon(vertices, testbed.color(1, 1, 1));
 };

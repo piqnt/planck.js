@@ -1,12 +1,11 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
 // This is used to test sensor shapes.
 
-const { World, Vec2, Edge, Box, Testbed } = planck;
+import { World, Vec2, Edge, Box, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -31,7 +30,7 @@ let piece1 = body1.createFixture(shape1, 1.0);
 let shape2 = new Box(0.5, 0.5, new Vec2(0.5, 0.0), 0.0);
 let piece2 = body1.createFixture(shape2, 1.0);
 
-world.on('post-solve', function (contact, impulse) {
+world.on("post-solve", function (contact, impulse) {
   if (broke) {
     // The body already broke.
     return;
@@ -46,7 +45,7 @@ world.on('post-solve', function (contact, impulse) {
   }
 
   if (maxImpulse > 40.0) {
-    setTimeout(function() {
+    setTimeout(function () {
       Break();
       broke = true;
     });
@@ -68,8 +67,14 @@ function Break() {
   let center1 = body1.getWorldCenter();
   let center2 = body2.getWorldCenter();
 
-  let velocity1 = Vec2.add(breakVelocity, Vec2.cross(breakAngularVelocity, Vec2.sub(center1, center)));
-  let velocity2 = Vec2.add(breakVelocity, Vec2.cross(breakAngularVelocity, Vec2.sub(center2, center)));
+  let velocity1 = Vec2.add(
+    breakVelocity,
+    Vec2.cross(breakAngularVelocity, Vec2.sub(center1, center)),
+  );
+  let velocity2 = Vec2.add(
+    breakVelocity,
+    Vec2.cross(breakAngularVelocity, Vec2.sub(center2, center)),
+  );
 
   body1.setAngularVelocity(breakAngularVelocity);
   body1.setLinearVelocity(velocity1);
@@ -78,7 +83,7 @@ function Break() {
   body2.setLinearVelocity(velocity2);
 }
 
-testbed.step = function() {
+testbed.step = function () {
   // Cache velocities to improve movement on breakage.
   if (!broke) {
     breakVelocity = body1.getLinearVelocity();

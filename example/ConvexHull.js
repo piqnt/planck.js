@@ -1,10 +1,9 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { World, Vec2, Polygon, Testbed } = planck;
+import { World, Vec2, Polygon, Testbed } from "planck";
 
 let world = new World();
 
@@ -13,7 +12,7 @@ const testbed = Testbed.mount();
 testbed.x = 0;
 testbed.y = 0;
 testbed.start(world);
-testbed.info('X: Generate a new random convex hull, Z: Auto-generate');
+testbed.info("X: Generate a new random convex hull, Z: Auto-generate");
 
 let COUNT = 8;
 
@@ -25,7 +24,6 @@ let shape;
 generate();
 
 function generate() {
-
   let lowerBound = new Vec2(-8.0, -8.0);
   let upperBound = new Vec2(8.0, 8.0);
 
@@ -43,19 +41,19 @@ function generate() {
   shape = new Polygon(points);
 }
 
-testbed.keydown = function(code, char) {
+testbed.keydown = function (code, char) {
   switch (char) {
-  case 'Z':
-    auto = !auto;
-    break;
+    case "Z":
+      auto = !auto;
+      break;
 
-  case 'X':
-    generate();
-    break;
+    case "X":
+      generate();
+      break;
   }
 };
 
-testbed.step = function() {
+testbed.step = function () {
   testbed.drawPolygon(shape.m_vertices, testbed.color(0.9, 0.9, 0.9));
 
   for (let i = 0; i < points.length; ++i) {

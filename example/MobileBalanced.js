@@ -1,11 +1,9 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { World, Vec2, Box, RevoluteJoint, Testbed } = planck;
-
+import { World, Vec2, Box, RevoluteJoint, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -25,15 +23,16 @@ let h = new Vec2(0.0, a);
 
 let root = addNode(ground, new Vec2(), 0, 3.0, a);
 
-world.createJoint(new RevoluteJoint({
-  bodyA: ground,
-  bodyB: root,
-  localAnchorA : new Vec2(),
-  localAnchorB : h
-}));
+world.createJoint(
+  new RevoluteJoint({
+    bodyA: ground,
+    bodyB: root,
+    localAnchorA: new Vec2(),
+    localAnchorB: h,
+  }),
+);
 
 function addNode(parent, localAnchor, depth, offset, a) {
-
   let h = new Vec2(0.0, a);
 
   let p = new Vec2(parent.getPosition()).add(localAnchor).sub(h);
@@ -53,19 +52,23 @@ function addNode(parent, localAnchor, depth, offset, a) {
   let rightChild = addNode(node, right, depth + 1, 0.5 * offset, a);
   let leftChild = addNode(node, left, depth + 1, 0.5 * offset, a);
 
-  world.createJoint(new RevoluteJoint({
-    bodyA: node,
-    bodyB: rightChild,
-    localAnchorA: right,
-    localAnchorB: h,
-  }));
+  world.createJoint(
+    new RevoluteJoint({
+      bodyA: node,
+      bodyB: rightChild,
+      localAnchorA: right,
+      localAnchorB: h,
+    }),
+  );
 
-  world.createJoint(new RevoluteJoint({
-    bodyA: node,
-    bodyB: leftChild,
-    localAnchorA: left,
-    localAnchorB: h,
-  }));
+  world.createJoint(
+    new RevoluteJoint({
+      bodyA: node,
+      bodyB: leftChild,
+      localAnchorA: left,
+      localAnchorB: h,
+    }),
+  );
 
   return node;
 }

@@ -68,6 +68,11 @@ function serveConfig(configEnv: ConfigEnv) {
   process.env.VITE_GIT_LAST_COMMIT_MESSAGE = lastCommitMessage;
 
   return defineConfig({
+    resolve: {
+      alias: {
+        "planck": path.resolve(__dirname, "testbed", "main.ts"),
+      },
+    },
     define: {
       ASSERT: "false",
       _ASSERT: "false",

@@ -1,10 +1,9 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { Vec2, World, Circle, Box, PulleyJoint, Testbed } = planck;
+import { Vec2, World, Circle, Box, PulleyJoint, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
@@ -37,11 +36,13 @@ let anchor2 = new Vec2(10.0, y + b);
 let groundAnchor1 = new Vec2(-10.0, y + b + L);
 let groundAnchor2 = new Vec2(10.0, y + b + L);
 
-let joint1 = world.createJoint(new PulleyJoint({}, box1, box2, groundAnchor1, groundAnchor2, anchor1, anchor2, 1.5));
+let joint1 = world.createJoint(
+  new PulleyJoint({}, box1, box2, groundAnchor1, groundAnchor2, anchor1, anchor2, 1.5),
+);
 
-testbed.step = function() {
+testbed.step = function () {
   let ratio = joint1.getRatio();
   let L = joint1.getCurrentLengthA() + ratio * joint1.getCurrentLengthB();
-  testbed.status('ratio', ratio);
-  testbed.status('L (L1 * ratio + L2)', L);
+  testbed.status("ratio", ratio);
+  testbed.status("L (L1 * ratio + L2)", L);
 };

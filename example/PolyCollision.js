@@ -1,15 +1,14 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { World, Vec2, Transform, Manifold, CollidePolygons, Box, Testbed } = planck;
+import { World, Vec2, Transform, Manifold, CollidePolygons, Box, Testbed } from "planck";
 
 let world = new World(new Vec2(0, -10));
 
 const testbed = Testbed.mount();
-testbed.info('Use arrow keys to move and Z or X to rotate.');
+testbed.info("Use arrow keys to move and Z or X to rotate.");
 testbed.start(world);
 
 let polygonA = new Box(2, 4);
@@ -20,18 +19,24 @@ let positionB = new Vec2(5, 4);
 let angleB = 1.9160721;
 let transformB = new Transform(positionB, angleB);
 
-testbed.step = function() {
+testbed.step = function () {
   let manifold = new Manifold();
   new CollidePolygons(manifold, polygonA, transformA, polygonB, transformB);
 
-  let worldManifold = manifold.getWorldManifold(null, transformA, polygonA.getRadius(), transformB, polygonB.getRadius());
+  let worldManifold = manifold.getWorldManifold(
+    null,
+    transformA,
+    polygonA.getRadius(),
+    transformB,
+    polygonB.getRadius(),
+  );
 
-  testbed.status('point count', manifold.pointCount);
+  testbed.status("point count", manifold.pointCount);
 
-  let vA = polygonA.m_vertices.map(v => Transform.mul(transformA, v));
+  let vA = polygonA.m_vertices.map((v) => Transform.mul(transformA, v));
   testbed.drawPolygon(vA, testbed.color(0.9, 0.9, 0.9));
 
-  let vB = polygonB.m_vertices.map(v => Transform.mul(transformB, v));
+  let vB = polygonB.m_vertices.map((v) => Transform.mul(transformB, v));
   testbed.drawPolygon(vB, testbed.color(0.9, 0.9, 0.9));
 
   for (let i = 0; i < manifold.pointCount; ++i) {
@@ -39,28 +44,28 @@ testbed.step = function() {
   }
 };
 
-testbed.keydown = function() {
-  if (testbed.activeKeys['left']) {
+testbed.keydown = function () {
+  if (testbed.activeKeys["left"]) {
     positionB.x -= 0.2;
   }
 
-  if (testbed.activeKeys['right']) {
+  if (testbed.activeKeys["right"]) {
     positionB.x += 0.2;
   }
 
-  if (testbed.activeKeys['down']) {
+  if (testbed.activeKeys["down"]) {
     positionB.y -= 0.2;
   }
 
-  if (testbed.activeKeys['up']) {
+  if (testbed.activeKeys["up"]) {
     positionB.y += 0.2;
   }
 
-  if (testbed.activeKeys['Z']) {
+  if (testbed.activeKeys["Z"]) {
     angleB += 0.2;
   }
 
-  if (testbed.activeKeys['X']) {
+  if (testbed.activeKeys["X"]) {
     angleB -= 0.2;
   }
 

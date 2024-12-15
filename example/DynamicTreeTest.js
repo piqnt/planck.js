@@ -1,10 +1,9 @@
 /*
  * Copyright (c) Erin Catto
- *
- * This source code is licensed under the MIT license.
+ * Licensed under the MIT license
  */
 
-const { World, Vec2, DynamicTree, AABB, Math, Testbed } = planck;
+import { World, Vec2, DynamicTree, AABB, Math, Testbed } from "planck";
 
 let world = new World();
 
@@ -24,7 +23,7 @@ let actors = []; // Actor[e_actorCount];
 let automated = false;
 
 for (let i = 0; i < ACTOR_COUNT; ++i) {
-  let actor = actors[i] = new Actor();
+  let actor = (actors[i] = new Actor());
   getRandomAABB(actor.aabb);
   actor.proxyId = tree.createProxy(actor.aabb, actor);
 }
@@ -39,7 +38,7 @@ rayCastInput.p2 = new Vec2(7.0, -4.0 + h);
 // rayCastInput.p2 = new Vec2(0.0, -2.0 + h);
 rayCastInput.maxFraction = 1.0;
 
-testbed.step = function() {
+testbed.step = function () {
   rayActor = null;
   for (let i = 0; i < ACTOR_COUNT; ++i) {
     actors[i].fraction = 1.0;
@@ -59,8 +58,7 @@ testbed.step = function() {
 
   for (let i = 0; i < ACTOR_COUNT; ++i) {
     let actor = actors[i];
-    if (actor.proxyId == null)
-      continue;
+    if (actor.proxyId == null) continue;
 
     let c = testbed.color(0.9, 0.9, 0.9);
     if (actor == rayActor && actor.overlap) {
@@ -80,31 +78,36 @@ testbed.step = function() {
   testbed.drawPoint(rayCastInput.p2, 6.0, testbed.color(0.9, 0.2, 0.2));
 
   if (rayActor) {
-    let p = Vec2.combine(1 - rayActor.fraction, rayCastInput.p1, rayActor.fraction, rayCastInput.p2);
+    let p = Vec2.combine(
+      1 - rayActor.fraction,
+      rayCastInput.p1,
+      rayActor.fraction,
+      rayCastInput.p2,
+    );
     testbed.drawPoint(p, 6.0, testbed.color(0.2, 0.2, 0.9));
   }
 
   let height = tree.getHeight();
-  testbed.status('dynamic tree height', height);
+  testbed.status("dynamic tree height", height);
 };
 
-testbed.keydown = function(code, char) {
+testbed.keydown = function (code, char) {
   switch (char) {
-  case 'Z':
-    automated = !automated;
-    break;
+    case "Z":
+      automated = !automated;
+      break;
 
-  case 'C':
-    createProxy();
-    break;
+    case "C":
+      createProxy();
+      break;
 
-  case 'X':
-    destroyProxy();
-    break;
+    case "X":
+      destroyProxy();
+      break;
 
-  case 'M':
-    moveProxy();
-    break;
+    case "M":
+      moveProxy();
+      break;
   }
 };
 
@@ -164,7 +167,7 @@ function moveAABB(aabb) {
 
 function createProxy() {
   for (let i = 0; i < ACTOR_COUNT; ++i) {
-    let j = Math.random() * ACTOR_COUNT | 0;
+    let j = (Math.random() * ACTOR_COUNT) | 0;
     let actor = actors[j];
     if (actor.proxyId == null) {
       getRandomAABB(actor.aabb);
@@ -176,7 +179,7 @@ function createProxy() {
 
 function destroyProxy() {
   for (let i = 0; i < ACTOR_COUNT; ++i) {
-    let j = Math.random() * ACTOR_COUNT | 0;
+    let j = (Math.random() * ACTOR_COUNT) | 0;
     let actor = actors[j];
     if (actor.proxyId != null) {
       tree.destroyProxy(actor.proxyId);
@@ -188,7 +191,7 @@ function destroyProxy() {
 
 function moveProxy() {
   for (let i = 0; i < ACTOR_COUNT; ++i) {
-    let j = Math.random() * ACTOR_COUNT | 0;
+    let j = (Math.random() * ACTOR_COUNT) | 0;
     const actor = actors[j];
     if (actor.proxyId == null) {
       continue;
@@ -203,19 +206,19 @@ function moveProxy() {
 }
 
 function Action() {
-  let choice = Math.random() * 20 | 0;
+  let choice = (Math.random() * 20) | 0;
 
   switch (choice) {
-  case 0:
-    createProxy();
-    break;
+    case 0:
+      createProxy();
+      break;
 
-  case 1:
-    destroyProxy();
-    break;
+    case 1:
+      destroyProxy();
+      break;
 
-  default:
-    moveProxy();
+    default:
+      moveProxy();
   }
 }
 
