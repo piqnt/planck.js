@@ -7,7 +7,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { EPSILON } from "./Math";
+import { clamp, EPSILON } from "./Math";
 
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
@@ -600,6 +600,14 @@ export class Vec2 {
     const r = Vec2.neo(v.x, v.y);
     r.clamp(max);
     return r;
+  }
+
+  /** @hidden */
+  static clampVec2(v: Vec2Value, min?: Vec2, max?: Vec2): Vec2Value {
+    return {
+      x: clamp(v.x, min?.x, max?.x),
+      y: clamp(v.y, min?.y, max?.y)
+    };
   }
 
   /**  @hidden @deprecated */
