@@ -101,7 +101,7 @@ export class FrictionJoint extends Joint {
   /**
    * @param anchor Anchor in global coordination.
    */
-  constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+  constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor?: Vec2Value);
   constructor(def: FrictionJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof FrictionJoint)) {

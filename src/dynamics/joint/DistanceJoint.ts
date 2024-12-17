@@ -116,7 +116,7 @@ export class DistanceJoint extends Joint {
    * @param anchorA Anchor A in global coordination.
    * @param anchorB Anchor B in global coordination.
    */
-  constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2Value, anchorB: Vec2Value);
+  constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA?: Vec2Value, anchorB?: Vec2Value);
   constructor(def: DistanceJointDef, bodyA?: Body, bodyB?: Body, anchorA?: Vec2Value, anchorB?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof DistanceJoint)) {

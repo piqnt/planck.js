@@ -96,7 +96,7 @@ export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
   /**
    * The bodyB angle minus bodyA angle in the reference state (radians).
    */
-  referenceAngle: number;
+  referenceAngle?: number;
 
   /** @internal */ anchorA?: Vec2Value;
   /** @internal */ anchorB?: Vec2Value;
@@ -161,7 +161,7 @@ export class RevoluteJoint extends Joint {
   /** @internal */ m_limitState: number;
 
   constructor(def: RevoluteJointDef);
-  constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+  constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor?: Vec2Value);
   constructor(def: RevoluteJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof RevoluteJoint)) {

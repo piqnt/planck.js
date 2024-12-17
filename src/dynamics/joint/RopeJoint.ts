@@ -107,7 +107,7 @@ export class RopeJoint extends Joint {
   /** @internal */ m_invIB: number;
 
   constructor(def: RopeJointDef);
-  constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+  constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor?: Vec2Value);
   constructor(def: RopeJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof RopeJoint)) {

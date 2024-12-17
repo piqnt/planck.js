@@ -94,7 +94,7 @@ export interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
    * referenceAngle The constrained angle between the bodies:
    * bodyB_angle - bodyA_angle.
    */
-  referenceAngle: number;
+  referenceAngle?: number;
 
   /** @internal */ anchorA?: Vec2Value;
   /** @internal */ anchorB?: Vec2Value;
@@ -160,7 +160,7 @@ export class PrismaticJoint extends Joint {
   /** @internal */ m_K: Mat33;
 
   constructor(def: PrismaticJointDef);
-  constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
+  constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor?: Vec2Value, axis?: Vec2Value);
   constructor(def: PrismaticJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value, axis?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof PrismaticJoint)) {
@@ -174,9 +174,9 @@ export class PrismaticJoint extends Joint {
 
     this.m_type = PrismaticJoint.TYPE;
 
-    this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
-    this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
-    this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0));
+    this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA ?? Vec2.zero());
+    this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB ?? Vec2.zero());
+    this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA ?? Vec2.neo(1.0, 0.0));
     this.m_localXAxisA.normalize();
     this.m_localYAxisA = Vec2.crossNumVec2(1.0, this.m_localXAxisA);
     this.m_referenceAngle = Number.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();

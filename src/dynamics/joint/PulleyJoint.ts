@@ -122,7 +122,7 @@ export class PulleyJoint extends Joint {
   /** @internal */ m_mass: number;
 
   constructor(def: PulleyJointDef);
-  constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2Value, groundB: Vec2Value, anchorA: Vec2Value, anchorB: Vec2Value, ratio: number);
+  constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA?: Vec2Value, groundB?: Vec2Value, anchorA?: Vec2Value, anchorB?: Vec2Value, ratio?: number);
   constructor(def: PulleyJointDef, bodyA?: Body, bodyB?: Body, groundA?: Vec2Value, groundB?: Vec2Value, anchorA?: Vec2Value, anchorB?: Vec2Value, ratio?: number) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof PulleyJoint)) {
