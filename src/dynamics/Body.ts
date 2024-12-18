@@ -117,6 +117,9 @@ export interface BodyDef {
    */
   active?: boolean;
   userData?: any;
+
+  /** @hidden Styling for dev-tools. */
+  style?: Style;
 }
 
 /** @internal */ const BodyDefDefault: BodyDef = {
@@ -279,6 +282,10 @@ export class Body {
     this.m_next = null;
 
     this.m_destroyed = false;
+
+    if (typeof def.style === "object" && def.style !== null) {
+      this.style = def.style;
+    }
   }
 
   /** @internal */

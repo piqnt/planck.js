@@ -60,6 +60,9 @@ export interface FixtureOpt {
    * Collision category bit or bits that this fixture accept for collision.
    */
   filterMaskBits?: number;
+
+  /** @hidden Styling for dev-tools. */
+  style?: Style;
 }
 
 export interface FixtureDef extends FixtureOpt {
@@ -165,6 +168,10 @@ export class Fixture {
     }
 
     this.m_userData = def.userData;
+
+    if (typeof def.style === "object" && def.style !== null) {
+      this.style = def.style;
+    }
   }
 
   /** @hidden Re-setup fixture. */

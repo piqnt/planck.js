@@ -52,7 +52,11 @@ export interface JointOpt {
    * should collide.
    */
   collideConnected?: boolean;
+
+  /** @hidden Styling for dev-tools. */
+  style?: Style;
 }
+
 /**
  * Joint definitions are used to construct joints.
  */
@@ -115,6 +119,10 @@ export abstract class Joint {
 
     this.m_collideConnected = !!def.collideConnected;
     this.m_userData = def.userData;
+
+    if (typeof def.style === "object" && def.style !== null) {
+      this.style = def.style;
+    }
   }
 
   /**
