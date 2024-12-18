@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.1.2
+ * Planck.js v1.1.3
  * @license The MIT license
  * @copyright Copyright (c) 2024 Erin Catto, Ali Shakiba
  *
@@ -440,6 +440,12 @@ var Vec2 = (
       var r = Vec22.neo(v3.x, v3.y);
       r.clamp(max);
       return r;
+    };
+    Vec22.clampVec2 = function(v3, min, max) {
+      return {
+        x: clamp$1(v3.x, min === null || min === void 0 ? void 0 : min.x, max === null || max === void 0 ? void 0 : max.x),
+        y: clamp$1(v3.y, min === null || min === void 0 ? void 0 : min.y, max === null || max === void 0 ? void 0 : max.y)
+      };
     };
     Vec22.scaleFn = function(x2, y) {
       return function(v3) {
@@ -2175,7 +2181,6 @@ var FixtureProxy = (
       this.aabb = new AABB();
       this.fixture = fixture;
       this.childIndex = childIndex;
-      this.proxyId;
     }
     return FixtureProxy2;
   }()
@@ -10039,14 +10044,6 @@ var WeldJoint = (
       _this.m_impulse = new Vec3();
       _this.m_bias = 0;
       _this.m_gamma = 0;
-      _this.m_rA;
-      _this.m_rB;
-      _this.m_localCenterA;
-      _this.m_localCenterB;
-      _this.m_invMassA;
-      _this.m_invMassB;
-      _this.m_invIA;
-      _this.m_invIB;
       _this.m_mass = new Mat33();
       return _this;
     }
@@ -11125,7 +11122,8 @@ var CollidePolygons = function(manifold, polyA, xfA2, polyB, xfB2) {
     manifold.type = ManifoldType.e_faceA;
     flip = false;
   }
-  incidentEdge[0].recycle(), incidentEdge[1].recycle();
+  incidentEdge[0].recycle();
+  incidentEdge[1].recycle();
   findIncidentEdge(incidentEdge, poly1, xf1, edge12, poly2, xf2);
   var count1 = poly1.m_count;
   var vertices1 = poly1.m_vertices;
@@ -11144,8 +11142,10 @@ var CollidePolygons = function(manifold, polyA, xfA2, polyB, xfB2) {
   var frontOffset = dotVec2(normal$1, v11);
   var sideOffset1 = -dotVec2(tangent, v11) + totalRadius;
   var sideOffset2 = dotVec2(tangent, v12) + totalRadius;
-  clipPoints1$1[0].recycle(), clipPoints1$1[1].recycle();
-  clipPoints2$1[0].recycle(), clipPoints2$1[1].recycle();
+  clipPoints1$1[0].recycle();
+  clipPoints1$1[1].recycle();
+  clipPoints2$1[0].recycle();
+  clipPoints2$1[1].recycle();
   setVec2(clipSegmentToLineNormal, -tangent.x, -tangent.y);
   var np1 = clipSegmentToLine(clipPoints1$1, incidentEdge, clipSegmentToLineNormal, sideOffset1, iv1);
   if (np1 < 2) {
@@ -11549,7 +11549,8 @@ var CollideEdgePolygon = function(manifold, edgeA, xfA2, polygonB, xfB2) {
   } else {
     primaryAxis = edgeAxis;
   }
-  ie[0].recycle(), ie[1].recycle();
+  ie[0].recycle();
+  ie[1].recycle();
   if (primaryAxis.type == EPAxisType.e_edgeA) {
     manifold.type = ManifoldType.e_faceA;
     var bestIndex = 0;
@@ -11596,8 +11597,10 @@ var CollideEdgePolygon = function(manifold, edgeA, xfA2, polygonB, xfB2) {
   setVec2(rf.sideNormal2, -rf.sideNormal1.x, -rf.sideNormal1.y);
   rf.sideOffset1 = dotVec2(rf.sideNormal1, rf.v1);
   rf.sideOffset2 = dotVec2(rf.sideNormal2, rf.v2);
-  clipPoints1[0].recycle(), clipPoints1[1].recycle();
-  clipPoints2[0].recycle(), clipPoints2[1].recycle();
+  clipPoints1[0].recycle();
+  clipPoints1[1].recycle();
+  clipPoints2[0].recycle();
+  clipPoints2[1].recycle();
   var np1 = clipSegmentToLine(clipPoints1, ie, rf.sideNormal1, rf.sideOffset1, rf.i1);
   if (np1 < SettingsInternal.maxManifoldPoints) {
     return;
@@ -15181,7 +15184,11 @@ Testbed.mount = function() {
   var infoElement = document.getElementById("testbed-info");
   if (playButton) {
     playButton.addEventListener("click", function() {
-      mounted.isPaused() ? mounted.resume() : mounted.pause();
+      if (mounted.isPaused()) {
+        mounted.resume();
+      } else {
+        mounted.pause();
+      }
     });
     mounted._pause = function() {
       playButton.classList.add("pause");
@@ -15390,16 +15397,18 @@ var StageTestbed = (
         activeKeys.fire = downKeys[32] || downKeys[13];
       }
       window.addEventListener("keydown", function(e3) {
+        var _a2;
         var keyCode = e3.keyCode;
         downKeys[keyCode] = true;
         updateActiveKeys(keyCode, true);
-        testbed2.keydown && testbed2.keydown(keyCode, String.fromCharCode(keyCode));
+        (_a2 = testbed2.keydown) === null || _a2 === void 0 ? void 0 : _a2.call(testbed2, keyCode, String.fromCharCode(keyCode));
       });
       window.addEventListener("keyup", function(e3) {
+        var _a2;
         var keyCode = e3.keyCode;
         downKeys[keyCode] = false;
         updateActiveKeys(keyCode, false);
-        testbed2.keyup && testbed2.keyup(keyCode, String.fromCharCode(keyCode));
+        (_a2 = testbed2.keyup) === null || _a2 === void 0 ? void 0 : _a2.call(testbed2, keyCode, String.fromCharCode(keyCode));
       });
       this.resume();
     };
@@ -15449,7 +15458,11 @@ var StageTestbed = (
       return this.paused;
     };
     StageTestbed2.prototype.togglePause = function() {
-      this.paused ? this.resume() : this.pause();
+      if (this.paused) {
+        this.resume();
+      } else {
+        this.pause();
+      }
     };
     StageTestbed2.prototype.pause = function() {
       this.stage.pause();

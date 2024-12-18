@@ -163,6 +163,8 @@ export declare class Vec2 {
 	static lower(v: Vec2Value, w: Vec2Value): Vec2;
 	clamp(max: number): Vec2;
 	static clamp(v: Vec2Value, max: number): Vec2;
+	/** @hidden */
+	static clampVec2(v: Vec2Value, min?: Vec2, max?: Vec2): Vec2Value;
 	/**  @hidden @deprecated */
 	static scaleFn(x: number, y: number): (v: Vec2Value) => Vec2;
 	/**  @hidden @deprecated */
@@ -579,7 +581,9 @@ export type KEY = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "A
 export type ActiveKeys = {
 	[key in KEY]?: boolean;
 };
-export type TestbedMountOptions = {};
+export type TestbedMountOptions = {
+	[key: string]: any;
+};
 export declare abstract class Testbed {
 	/**
 	 * Mounts testbed. Call start with a world to start simulation and rendering.
@@ -649,7 +653,7 @@ export declare abstract class Testbed {
 	abstract findOne(query: string): (Body$1 | Joint | Fixture | null);
 	abstract findAll(query: string): (Body$1 | Joint | Fixture)[];
 }
-export type TestbedFactoryOptions = string | {};
+export type TestbedFactoryOptions = string | TestbedMountOptions;
 /** @deprecated */
 export type TestbedCallback = (testbed: Testbed) => (World | undefined);
 /** @deprecated */
@@ -2717,7 +2721,7 @@ export declare class DistanceJoint extends Joint {
 	 * @param anchorA Anchor A in global coordination.
 	 * @param anchorB Anchor B in global coordination.
 	 */
-	constructor(def: DistanceJointOpt, bodyA: Body$1, bodyB: Body$1, anchorA: Vec2Value, anchorB: Vec2Value);
+	constructor(def: DistanceJointOpt, bodyA: Body$1, bodyB: Body$1, anchorA?: Vec2Value, anchorB?: Vec2Value);
 	/** @hidden */
 	_reset(def: Partial<DistanceJointDef>): void;
 	/**
@@ -2804,7 +2808,7 @@ export declare class FrictionJoint extends Joint {
 	/**
 	 * @param anchor Anchor in global coordination.
 	 */
-	constructor(def: FrictionJointOpt, bodyA: Body$1, bodyB: Body$1, anchor: Vec2Value);
+	constructor(def: FrictionJointOpt, bodyA: Body$1, bodyB: Body$1, anchor?: Vec2Value);
 	/** @hidden */
 	_reset(def: Partial<FrictionJointDef>): void;
 	/**
@@ -2917,7 +2921,7 @@ export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
 	/**
 	 * The bodyB angle minus bodyA angle in the reference state (radians).
 	 */
-	referenceAngle: number;
+	referenceAngle?: number;
 }
 /** @hidden @deprecated Use new keyword. */
 export function RevoluteJoint(def: RevoluteJointDef): RevoluteJoint;
@@ -2934,7 +2938,7 @@ export function RevoluteJoint(def: RevoluteJointOpt, bodyA: Body$1, bodyB: Body$
 export declare class RevoluteJoint extends Joint {
 	static TYPE: "revolute-joint";
 	constructor(def: RevoluteJointDef);
-	constructor(def: RevoluteJointOpt, bodyA: Body$1, bodyB: Body$1, anchor: Vec2Value);
+	constructor(def: RevoluteJointOpt, bodyA: Body$1, bodyB: Body$1, anchor?: Vec2Value);
 	/** @hidden */
 	_reset(def: Partial<RevoluteJointDef>): void;
 	/**
@@ -3085,7 +3089,7 @@ export interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
 	 * referenceAngle The constrained angle between the bodies:
 	 * bodyB_angle - bodyA_angle.
 	 */
-	referenceAngle: number;
+	referenceAngle?: number;
 }
 /** @hidden @deprecated Use new keyword. */
 export function PrismaticJoint(def: PrismaticJointDef): PrismaticJoint;
@@ -3100,7 +3104,7 @@ export function PrismaticJoint(def: PrismaticJointOpt, bodyA: Body$1, bodyB: Bod
 export declare class PrismaticJoint extends Joint {
 	static TYPE: "prismatic-joint";
 	constructor(def: PrismaticJointDef);
-	constructor(def: PrismaticJointOpt, bodyA: Body$1, bodyB: Body$1, anchor: Vec2Value, axis: Vec2Value);
+	constructor(def: PrismaticJointOpt, bodyA: Body$1, bodyB: Body$1, anchor?: Vec2Value, axis?: Vec2Value);
 	/** @hidden */
 	_reset(def: Partial<PrismaticJointDef>): void;
 	/**
@@ -3432,7 +3436,7 @@ export function MouseJoint(def: MouseJointOpt, bodyA: Body$1, bodyB: Body$1, tar
 export declare class MouseJoint extends Joint {
 	static TYPE: "mouse-joint";
 	constructor(def: MouseJointDef);
-	constructor(def: MouseJointOpt, bodyA: Body$1, bodyB: Body$1, target: Vec2Value);
+	constructor(def: MouseJointOpt, bodyA: Body$1, bodyB: Body$1, target?: Vec2Value);
 	/** @hidden */
 	_reset(def: Partial<MouseJointDef>): void;
 	/**
@@ -3551,7 +3555,7 @@ export function PulleyJoint(def: PulleyJointOpt, bodyA: Body$1, bodyB: Body$1, g
 export declare class PulleyJoint extends Joint {
 	static TYPE: "pulley-joint";
 	constructor(def: PulleyJointDef);
-	constructor(def: PulleyJointOpt, bodyA: Body$1, bodyB: Body$1, groundA: Vec2Value, groundB: Vec2Value, anchorA: Vec2Value, anchorB: Vec2Value, ratio: number);
+	constructor(def: PulleyJointOpt, bodyA: Body$1, bodyB: Body$1, groundA?: Vec2Value, groundB?: Vec2Value, anchorA?: Vec2Value, anchorB?: Vec2Value, ratio?: number);
 	/** @hidden */
 	_reset(def: Partial<PulleyJointDef>): void;
 	/**
@@ -3656,7 +3660,7 @@ export function RopeJoint(def: RopeJointOpt, bodyA: Body$1, bodyB: Body$1, ancho
 export declare class RopeJoint extends Joint {
 	static TYPE: "rope-joint";
 	constructor(def: RopeJointDef);
-	constructor(def: RopeJointOpt, bodyA: Body$1, bodyB: Body$1, anchor: Vec2Value);
+	constructor(def: RopeJointOpt, bodyA: Body$1, bodyB: Body$1, anchor?: Vec2Value);
 	/** @hidden */
 	_reset(def: Partial<RopeJointDef>): void;
 	/**
@@ -3745,7 +3749,7 @@ export function WeldJoint(def: WeldJointOpt, bodyA: Body$1, bodyB: Body$1, ancho
 export declare class WeldJoint extends Joint {
 	static TYPE: "weld-joint";
 	constructor(def: WeldJointDef);
-	constructor(def: WeldJointOpt, bodyA: Body$1, bodyB: Body$1, anchor: Vec2Value);
+	constructor(def: WeldJointOpt, bodyA: Body$1, bodyB: Body$1, anchor?: Vec2Value);
 	/** @hidden */
 	_reset(def: Partial<WeldJointDef>): void;
 	/**
@@ -3864,7 +3868,7 @@ export function WheelJoint(def: WheelJointOpt, bodyA: Body$1, bodyB: Body$1, anc
 export declare class WheelJoint extends Joint {
 	static TYPE: "wheel-joint";
 	constructor(def: WheelJointDef);
-	constructor(def: WheelJointOpt, bodyA: Body$1, bodyB: Body$1, anchor: Vec2Value, axis: Vec2Value);
+	constructor(def: WheelJointOpt, bodyA: Body$1, bodyB: Body$1, anchor?: Vec2Value, axis?: Vec2Value);
 	/** @hidden */
 	_reset(def: Partial<WheelJointDef>): void;
 	/**
