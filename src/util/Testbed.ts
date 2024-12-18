@@ -18,7 +18,7 @@ type KEY = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" |
 
 export type ActiveKeys = { [key in KEY]?: boolean };
 
-type TestbedMountOptions = {};
+type TestbedMountOptions = { [key: string]: any };
 
 export abstract class Testbed {
   /**
@@ -105,7 +105,7 @@ export abstract class Testbed {
   abstract findAll(query: string): (Body | Joint | Fixture)[];
 }
 
-type TestbedFactoryOptions = string | {};
+type TestbedFactoryOptions = string | TestbedMountOptions;
 
 /** @deprecated */
 type TestbedCallback = (testbed: Testbed) => (World | undefined);

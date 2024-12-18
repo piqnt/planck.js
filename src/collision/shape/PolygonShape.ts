@@ -147,7 +147,7 @@ export class PolygonShape extends Shape {
    * lead to poor stacking behavior.
    */
   _set(vertices: Vec2Value[]): void {
-    _ASSERT && console.assert(3 <= vertices.length && vertices.length <= Settings.maxPolygonVertices);
+    if (_ASSERT) console.assert(3 <= vertices.length && vertices.length <= Settings.maxPolygonVertices);
     if (vertices.length < 3) {
       this._setAsBox(1.0, 1.0);
       return;
@@ -176,7 +176,7 @@ export class PolygonShape extends Shape {
     n = ps.length;
     if (n < 3) {
       // Polygon is degenerate.
-      _ASSERT && console.assert(false);
+      if (_ASSERT) console.assert(false);
       this._setAsBox(1.0, 1.0);
       return;
     }
@@ -200,7 +200,7 @@ export class PolygonShape extends Shape {
     let ih = i0;
 
     while (true) {
-      _ASSERT && console.assert(m < Settings.maxPolygonVertices);
+      if (_ASSERT) console.assert(m < Settings.maxPolygonVertices);
       hull[m] = ih;
 
       let ie = 0;
@@ -234,7 +234,7 @@ export class PolygonShape extends Shape {
 
     if (m < 3) {
       // Polygon is degenerate.
-      _ASSERT && console.assert(false);
+      if (_ASSERT) console.assert(false);
       this._setAsBox(1.0, 1.0);
       return;
     }
@@ -252,7 +252,7 @@ export class PolygonShape extends Shape {
       const i1 = i;
       const i2 = i + 1 < m ? i + 1 : 0;
       const edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
-      _ASSERT && console.assert(edge.lengthSquared() > EPSILON * EPSILON);
+      if (_ASSERT) console.assert(edge.lengthSquared() > EPSILON * EPSILON);
       this.m_normals[i] = Vec2.crossVec2Num(edge, 1.0);
       this.m_normals[i].normalize();
     }
@@ -369,7 +369,7 @@ export class PolygonShape extends Shape {
       }
     }
 
-    _ASSERT && console.assert(0.0 <= lower && lower <= input.maxFraction);
+    if (_ASSERT) console.assert(0.0 <= lower && lower <= input.maxFraction);
 
     if (index >= 0) {
       output.fraction = lower;
@@ -437,7 +437,7 @@ export class PolygonShape extends Shape {
     //
     // The rest of the derivation is handled by computer algebra.
 
-    _ASSERT && console.assert(this.m_count >= 3);
+    if (_ASSERT) console.assert(this.m_count >= 3);
 
     matrix.zeroVec2(center);
     let area = 0.0;
@@ -488,7 +488,7 @@ export class PolygonShape extends Shape {
     massData.mass = density * area;
 
     // Center of mass
-    _ASSERT && console.assert(area > EPSILON);
+    if (_ASSERT) console.assert(area > EPSILON);
     matrix.scaleVec2(center, 1.0 / area, center);
     matrix.addVec2(massData.center, center, s);
 
@@ -536,7 +536,7 @@ export class PolygonShape extends Shape {
 }
 
 /** @internal */ function computeCentroid(vs: Vec2[], count: number): Vec2 {
-  _ASSERT && console.assert(count >= 3);
+  if (_ASSERT) console.assert(count >= 3);
 
   const c = Vec2.zero();
   let area = 0.0;
@@ -574,7 +574,7 @@ export class PolygonShape extends Shape {
   }
 
   // Centroid
-  _ASSERT && console.assert(area > EPSILON);
+  if (_ASSERT) console.assert(area > EPSILON);
   c.mul(1.0 / area);
   return c;
 }

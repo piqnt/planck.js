@@ -174,9 +174,9 @@ export class PrismaticJoint extends Joint {
 
     this.m_type = PrismaticJoint.TYPE;
 
-    this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA ?? Vec2.zero());
-    this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB ?? Vec2.zero());
-    this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA ?? Vec2.neo(1.0, 0.0));
+    this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
+    this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
+    this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0));
     this.m_localXAxisA.normalize();
     this.m_localYAxisA = Vec2.crossNumVec2(1.0, this.m_localXAxisA);
     this.m_referenceAngle = Number.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
@@ -444,7 +444,7 @@ export class PrismaticJoint extends Joint {
    * Set the joint limits, usually in meters.
    */
   setLimits(lower: number, upper: number): void {
-    _ASSERT && console.assert(lower <= upper);
+    if (_ASSERT) console.assert(lower <= upper);
     if (lower != this.m_lowerTranslation || upper != this.m_upperTranslation) {
       this.m_bodyA.setAwake(true);
       this.m_bodyB.setAwake(true);

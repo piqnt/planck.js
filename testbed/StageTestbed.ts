@@ -63,7 +63,11 @@ Testbed.mount = () => {
 
   if (playButton) {
     playButton.addEventListener("click", () => {
-      mounted.isPaused() ? mounted.resume() : mounted.pause();
+      if (mounted.isPaused() ) {
+        mounted.resume();
+      } else {
+        mounted.pause();
+      }
     });
 
     mounted._pause = () => {
@@ -305,13 +309,13 @@ export class StageTestbed extends Testbed {
       const keyCode = e.keyCode;
       downKeys[keyCode] = true;
       updateActiveKeys(keyCode, true);
-      testbed.keydown && testbed.keydown(keyCode, String.fromCharCode(keyCode));
+      testbed.keydown?.(keyCode, String.fromCharCode(keyCode));
     });
     window.addEventListener("keyup", function(e) {
       const keyCode = e.keyCode;
       downKeys[keyCode] = false;
       updateActiveKeys(keyCode, false);
-      testbed.keyup && testbed.keyup(keyCode, String.fromCharCode(keyCode));
+      testbed.keyup?.(keyCode, String.fromCharCode(keyCode));
     });
 
     this.resume();
@@ -320,6 +324,7 @@ export class StageTestbed extends Testbed {
   /** @private @internal */
   focus() {
     // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     document.activeElement && document.activeElement.blur();
     this.canvas.focus();
   }
@@ -386,7 +391,11 @@ export class StageTestbed extends Testbed {
 
   /** @internal */
   togglePause() {
-    this.paused ? this.resume() : this.pause();
+    if (this.paused) {
+      this.resume();
+    } else {
+      this.pause();
+    }
   }
 
   /** @internal */

@@ -49,7 +49,7 @@ export class Mat22 {
   }
 
   static assert(o: any): void {
-    _ASSERT && console.assert(!Mat22.isValid(o), "Invalid Mat22!", o);
+    if (_ASSERT) console.assert(!Mat22.isValid(o), "Invalid Mat22!", o);
   }
 
   set(a: Mat22): void;
@@ -66,12 +66,12 @@ export class Mat22 {
       this.ey.setVec2(b);
 
     } else if (typeof a === "object") {
-      _ASSERT && Mat22.assert(a);
+      if (_ASSERT) Mat22.assert(a);
       this.ex.setVec2(a.ex);
       this.ey.setVec2(a.ey);
 
     } else {
-      _ASSERT && console.assert(false);
+      if (_ASSERT) console.assert(false);
     }
   }
 
@@ -111,7 +111,7 @@ export class Mat22 {
    * computing the inverse in one-shot cases.
    */
   solve(v: Vec2Value): Vec2 {
-    _ASSERT && Vec2.assert(v);
+    if (_ASSERT) Vec2.assert(v);
     const a = this.ex.x;
     const b = this.ey.x;
     const c = this.ex.y;
@@ -134,13 +134,13 @@ export class Mat22 {
   static mul(mx: Mat22, v: Vec2Value): Vec2;
   static mul(mx, v) {
     if (v && "x" in v && "y" in v) {
-      _ASSERT && Vec2.assert(v);
+      if (_ASSERT) Vec2.assert(v);
       const x = mx.ex.x * v.x + mx.ey.x * v.y;
       const y = mx.ex.y * v.x + mx.ey.y * v.y;
       return Vec2.neo(x, y);
 
     } else if (v && "ex" in v && "ey" in v) { // Mat22
-      _ASSERT && Mat22.assert(v);
+      if (_ASSERT) Mat22.assert(v);
       // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
       const a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
       const b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
@@ -149,18 +149,18 @@ export class Mat22 {
       return new Mat22(a, b, c, d);
     }
 
-    _ASSERT && console.assert(false);
+    if (_ASSERT) console.assert(false);
   }
 
   static mulVec2(mx: Mat22, v: Vec2Value): Vec2 {
-    _ASSERT && Vec2.assert(v);
+    if (_ASSERT) Vec2.assert(v);
     const x = mx.ex.x * v.x + mx.ey.x * v.y;
     const y = mx.ex.y * v.x + mx.ey.y * v.y;
     return Vec2.neo(x, y);
   }
 
   static mulMat22(mx: Mat22, v: Mat22): Mat22 {
-    _ASSERT && Mat22.assert(v);
+    if (_ASSERT) Mat22.assert(v);
     // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
     const a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
     const b = mx.ex.x * v.ey.x + mx.ey.x * v.ey.y;
@@ -178,41 +178,41 @@ export class Mat22 {
   static mulT(mx: Mat22, v: Vec2Value): Vec2;
   static mulT(mx, v) {
     if (v && "x" in v && "y" in v) { // Vec2
-      _ASSERT && Vec2.assert(v);
+      if (_ASSERT) Vec2.assert(v);
       return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
 
     } else if (v && "ex" in v && "ey" in v) { // Mat22
-      _ASSERT && Mat22.assert(v);
+      if (_ASSERT) Mat22.assert(v);
       const c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
       const c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
       return new Mat22(c1, c2);
     }
 
-    _ASSERT && console.assert(false);
+    if (_ASSERT) console.assert(false);
   }
 
   static mulTVec2(mx: Mat22, v: Vec2Value): Vec2 {
-    _ASSERT && Mat22.assert(mx);
-    _ASSERT && Vec2.assert(v);
+    if (_ASSERT) Mat22.assert(mx);
+    if (_ASSERT) Vec2.assert(v);
     return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
   }
 
   static mulTMat22(mx: Mat22, v: Mat22): Mat22 {
-    _ASSERT && Mat22.assert(mx);
-    _ASSERT && Mat22.assert(v);
+    if (_ASSERT) Mat22.assert(mx);
+    if (_ASSERT) Mat22.assert(v);
     const c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
     const c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));
     return new Mat22(c1, c2);
   }
 
   static abs(mx: Mat22): Mat22 {
-    _ASSERT && Mat22.assert(mx);
+    if (_ASSERT) Mat22.assert(mx);
     return new Mat22(Vec2.abs(mx.ex), Vec2.abs(mx.ey));
   }
 
   static add(mx1: Mat22, mx2: Mat22): Mat22 {
-    _ASSERT && Mat22.assert(mx1);
-    _ASSERT && Mat22.assert(mx2);
+    if (_ASSERT) Mat22.assert(mx1);
+    if (_ASSERT) Mat22.assert(mx2);
     return new Mat22(Vec2.add(mx1.ex, mx2.ex), Vec2.add(mx1.ey, mx2.ey));
   }
 }

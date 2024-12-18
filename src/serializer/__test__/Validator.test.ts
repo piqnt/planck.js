@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import Ajv from "ajv";
 import { describe, it, expect } from "vitest";
 

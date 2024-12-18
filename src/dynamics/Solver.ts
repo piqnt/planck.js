@@ -131,7 +131,7 @@ export class Solver {
   }
 
   addBody(body: Body): void {
-    _ASSERT && console.assert(body instanceof Body, "Not a Body!", body);
+    if (_ASSERT) console.assert(body instanceof Body, "Not a Body!", body);
     this.m_bodies.push(body);
     // why?
     // body.c_position.c.setZero();
@@ -141,12 +141,12 @@ export class Solver {
   }
 
   addContact(contact: Contact): void {
-    // _ASSERT && console.assert(contact instanceof Contact, 'Not a Contact!', contact);
+    // if (_ASSERT) console.assert(contact instanceof Contact, 'Not a Contact!', contact);
     this.m_contacts.push(contact);
   }
 
   addJoint(joint: Joint): void {
-    _ASSERT && console.assert(joint instanceof Joint, "Not a Joint!", joint);
+    if (_ASSERT) console.assert(joint instanceof Joint, "Not a Joint!", joint);
     this.m_joints.push(joint);
   }
 
@@ -193,7 +193,7 @@ export class Solver {
       while (stack.length > 0) {
         // Grab the next body off the stack and add it to the island.
         const b = stack.pop();
-        _ASSERT && console.assert(b.isActive() == true);
+        if (_ASSERT) console.assert(b.isActive() == true);
         this.addBody(b);
 
         // Make sure the body is awake (without resetting sleep timer).
@@ -236,7 +236,7 @@ export class Solver {
             continue;
           }
 
-          // _ASSERT && console.assert(stack.length < world.m_bodyCount);
+          // if (_ASSERT) console.assert(stack.length < world.m_bodyCount);
           stack.push(other);
           other.m_islandFlag = true;
         }
@@ -261,7 +261,7 @@ export class Solver {
             continue;
           }
 
-          // _ASSERT && console.assert(stack.length < world.m_bodyCount);
+          // if (_ASSERT) console.assert(stack.length < world.m_bodyCount);
           stack.push(other);
           other.m_islandFlag = true;
         }
@@ -529,7 +529,7 @@ export class Solver {
           const bA = fA.getBody();
           const bB = fB.getBody();
 
-          _ASSERT && console.assert(bA.isDynamic() || bB.isDynamic());
+          if (_ASSERT) console.assert(bA.isDynamic() || bB.isDynamic());
 
           const activeA = bA.isAwake() && !bA.isStatic();
           const activeB = bB.isAwake() && !bB.isStatic();
@@ -559,7 +559,7 @@ export class Solver {
             bB.m_sweep.advance(alpha0);
           }
 
-          _ASSERT && console.assert(alpha0 < 1.0);
+          if (_ASSERT) console.assert(alpha0 < 1.0);
 
           const indexA = c.getChildIndexA();
           const indexB = c.getChildIndexB();

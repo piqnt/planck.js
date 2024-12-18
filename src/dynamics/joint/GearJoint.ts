@@ -132,8 +132,8 @@ export class GearJoint extends Joint {
 
     this.m_type = GearJoint.TYPE;
 
-    _ASSERT && console.assert(joint1.m_type === RevoluteJoint.TYPE || joint1.m_type === PrismaticJoint.TYPE);
-    _ASSERT && console.assert(joint2.m_type === RevoluteJoint.TYPE || joint2.m_type === PrismaticJoint.TYPE);
+    if (_ASSERT) console.assert(joint1.m_type === RevoluteJoint.TYPE || joint1.m_type === PrismaticJoint.TYPE);
+    if (_ASSERT) console.assert(joint2.m_type === RevoluteJoint.TYPE || joint2.m_type === PrismaticJoint.TYPE);
 
     this.m_joint1 = joint1 ? joint1 : def.joint1;
     this.m_joint2 = joint2 ? joint2 : def.joint2;
@@ -286,7 +286,7 @@ export class GearJoint extends Joint {
    * Set the gear ratio.
    */
   setRatio(ratio: number): void {
-    _ASSERT && console.assert(Number.isFinite(ratio));
+    if (_ASSERT) console.assert(Number.isFinite(ratio));
     this.m_ratio = ratio;
   }
 

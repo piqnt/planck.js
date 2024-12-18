@@ -58,7 +58,7 @@ export class Vec3 {
       this.y = y;
       this.z = z;
     }
-    _ASSERT && Vec3.assert(this);
+    if (_ASSERT) Vec3.assert(this);
   }
 
   /** @internal */
@@ -97,7 +97,7 @@ export class Vec3 {
   }
 
   static clone(v: Vec3Value): Vec3 {
-    _ASSERT && Vec3.assert(v);
+    if (_ASSERT) Vec3.assert(v);
     return Vec3.neo(v.x, v.y, v.z);
   }
 
@@ -115,7 +115,7 @@ export class Vec3 {
   }
 
   static assert(o: any): void {
-    _ASSERT && console.assert(!Vec3.isValid(o), "Invalid Vec3!", o);
+    if (_ASSERT) console.assert(!Vec3.isValid(o), "Invalid Vec3!", o);
   }
 
   setZero(): Vec3 {
@@ -154,8 +154,8 @@ export class Vec3 {
   }
 
   static areEqual(v: Vec3Value, w: Vec3Value): boolean {
-    _ASSERT && Vec3.assert(v);
-    _ASSERT && Vec3.assert(w);
+    if (_ASSERT) Vec3.assert(v);
+    if (_ASSERT) Vec3.assert(w);
     return v === w ||
       typeof v === "object" && v !== null &&
       typeof w === "object" && w !== null &&

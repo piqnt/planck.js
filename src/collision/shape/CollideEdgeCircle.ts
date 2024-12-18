@@ -24,8 +24,8 @@ Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
 
 /** @internal */ function EdgeCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: Fixture, indexA: number, xfB: TransformValue, fixtureB: Fixture, indexB: number): void {
-  _ASSERT && console.assert(fixtureA.getType() == EdgeShape.TYPE);
-  _ASSERT && console.assert(fixtureB.getType() == CircleShape.TYPE);
+  if (_ASSERT) console.assert(fixtureA.getType() == EdgeShape.TYPE);
+  if (_ASSERT) console.assert(fixtureB.getType() == CircleShape.TYPE);
 
   const shapeA = fixtureA.getShape() as EdgeShape;
   const shapeB = fixtureB.getShape() as CircleShape;
@@ -34,8 +34,8 @@ Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
 }
 
 function ChainCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: Fixture, indexA: number, xfB: TransformValue, fixtureB: Fixture, indexB: number): void {
-  _ASSERT && console.assert(fixtureA.getType() == ChainShape.TYPE);
-  _ASSERT && console.assert(fixtureB.getType() == CircleShape.TYPE);
+  if (_ASSERT) console.assert(fixtureA.getType() == ChainShape.TYPE);
+  if (_ASSERT) console.assert(fixtureB.getType() == CircleShape.TYPE);
 
   const chain = fixtureA.getShape() as ChainShape;
   const edge = new EdgeShape();
@@ -140,7 +140,7 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
 
   // Region AB
   const den = matrix.lengthSqrVec2(e);
-  _ASSERT && console.assert(den > 0.0);
+  if (_ASSERT) console.assert(den > 0.0);
   matrix.combine2Vec2(P, u / den, A, v / den, B);
   const dd = matrix.distSqrVec2(Q, P);
   if (dd > radius * radius) {

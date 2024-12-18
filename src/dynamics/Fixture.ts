@@ -90,7 +90,7 @@ export class FixtureProxy {
     this.aabb = new AABB();
     this.fixture = fixture;
     this.childIndex = childIndex;
-    this.proxyId;
+    // this.proxyId;
   }
 }
 
@@ -290,7 +290,7 @@ export class Fixture {
    * mass of the body. You must call Body.resetMassData to update the body's mass.
    */
   setDensity(density: number): void {
-    _ASSERT && console.assert(Number.isFinite(density) && density >= 0.0);
+    if (_ASSERT) console.assert(Number.isFinite(density) && density >= 0.0);
     this.m_density = density;
   }
 
@@ -352,7 +352,7 @@ export class Fixture {
    * more accurate AABB, compute it using the shape and the body transform.
    */
   getAABB(childIndex: number): AABB {
-    _ASSERT && console.assert(0 <= childIndex && childIndex < this.m_proxies.length);
+    if (_ASSERT) console.assert(0 <= childIndex && childIndex < this.m_proxies.length);
     return this.m_proxies[childIndex].aabb;
   }
 
@@ -360,7 +360,7 @@ export class Fixture {
    * These support body activation/deactivation.
    */
   createProxies(broadPhase: BroadPhase, xf: TransformValue): void {
-    _ASSERT && console.assert(this.m_proxyCount == 0);
+    if (_ASSERT) console.assert(this.m_proxyCount == 0);
 
     // Create proxies in the broad-phase.
     this.m_proxyCount = this.m_shape.getChildCount();

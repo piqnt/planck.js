@@ -26,7 +26,7 @@ import { TimeStep } from "../Solver";
  * Pulley joint definition. This requires two ground anchors, two dynamic body
  * anchor points, and a pulley ratio.
  */
-// tslint:disable-next-line:no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface PulleyJointOpt extends JointOpt {
 }
 
@@ -143,7 +143,7 @@ export class PulleyJoint extends Joint {
     this.m_lengthB = Number.isFinite(def.lengthB) ? def.lengthB : Vec2.distance(anchorB, groundB);
     this.m_ratio = Number.isFinite(ratio) ? ratio : def.ratio;
 
-    _ASSERT && console.assert(ratio > EPSILON);
+    if (_ASSERT) console.assert(ratio > EPSILON);
 
     this.m_constant = this.m_lengthA + this.m_ratio * this.m_lengthB;
 

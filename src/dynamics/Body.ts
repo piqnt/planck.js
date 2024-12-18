@@ -213,12 +213,12 @@ export class Body {
   constructor(world: World, def: BodyDef) {
     def = options(def, BodyDefDefault);
 
-    _ASSERT && console.assert(Vec2.isValid(def.position));
-    _ASSERT && console.assert(Vec2.isValid(def.linearVelocity));
-    _ASSERT && console.assert(Number.isFinite(def.angle));
-    _ASSERT && console.assert(Number.isFinite(def.angularVelocity));
-    _ASSERT && console.assert(Number.isFinite(def.angularDamping) && def.angularDamping >= 0.0);
-    _ASSERT && console.assert(Number.isFinite(def.linearDamping) && def.linearDamping >= 0.0);
+    if (_ASSERT) console.assert(Vec2.isValid(def.position));
+    if (_ASSERT) console.assert(Vec2.isValid(def.linearVelocity));
+    if (_ASSERT) console.assert(Number.isFinite(def.angle));
+    if (_ASSERT) console.assert(Number.isFinite(def.angularVelocity));
+    if (_ASSERT) console.assert(Number.isFinite(def.angularDamping) && def.angularDamping >= 0.0);
+    if (_ASSERT) console.assert(Number.isFinite(def.linearDamping) && def.linearDamping >= 0.0);
 
     this.m_world = world;
 
@@ -389,8 +389,8 @@ export class Body {
    * @param type The type of the body.
    */
   setType(type: BodyType): void {
-    _ASSERT && console.assert(type === STATIC || type === KINEMATIC || type === DYNAMIC);
-    _ASSERT && console.assert(this.isWorldLocked() == false);
+    if (_ASSERT) console.assert(type === STATIC || type === KINEMATIC || type === DYNAMIC);
+    if (_ASSERT) console.assert(this.isWorldLocked() == false);
 
     if (this.isWorldLocked() == true) {
       return;
@@ -497,7 +497,7 @@ export class Body {
    * and remains
    */
   setActive(flag: boolean): void {
-    _ASSERT && console.assert(this.isWorldLocked() == false);
+    if (_ASSERT) console.assert(this.isWorldLocked() == false);
 
     if (flag == this.m_activeFlag) {
       return;
@@ -573,7 +573,7 @@ export class Body {
    */
   setTransform(xf: Transform): void;
   setTransform(a: Vec2Value | Transform, b?: number): void {
-    _ASSERT && console.assert(this.isWorldLocked() == false);
+    if (_ASSERT) console.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
       return;
     }
@@ -799,7 +799,7 @@ export class Body {
       return;
     }
 
-    _ASSERT && console.assert(this.isDynamic());
+    if (_ASSERT) console.assert(this.isDynamic());
 
     // Accumulate mass over all fixtures.
     matrix.zeroVec2(localCenter);
@@ -833,7 +833,7 @@ export class Body {
     if (this.m_I > 0.0 && this.m_fixedRotationFlag == false) {
       // Center the inertia about the center of mass.
       this.m_I -= this.m_mass * matrix.dotVec2(localCenter, localCenter);
-      _ASSERT && console.assert(this.m_I > 0.0);
+      if (_ASSERT) console.assert(this.m_I > 0.0);
       this.m_invI = 1.0 / this.m_I;
 
     } else {
@@ -860,7 +860,7 @@ export class Body {
    * @param massData The mass properties.
    */
   setMassData(massData: MassData): void {
-    _ASSERT && console.assert(this.isWorldLocked() == false);
+    if (_ASSERT) console.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
       return;
     }
@@ -882,7 +882,7 @@ export class Body {
 
     if (massData.I > 0.0 && this.m_fixedRotationFlag == false) {
       this.m_I = massData.I - this.m_mass * matrix.dotVec2(massData.center, massData.center);
-      _ASSERT && console.assert(this.m_I > 0.0);
+      if (_ASSERT) console.assert(this.m_I > 0.0);
       this.m_invI = 1.0 / this.m_I;
     }
 
@@ -1027,7 +1027,7 @@ export class Body {
 
   /** @internal Used for deserialize. */
   _addFixture(fixture: Fixture): Fixture {
-    _ASSERT && console.assert(this.isWorldLocked() == false);
+    if (_ASSERT) console.assert(this.isWorldLocked() == false);
 
     if (this.isWorldLocked() == true) {
       return null;
@@ -1068,7 +1068,7 @@ export class Body {
   createFixture(shape: Shape, density?: number): Fixture;
   // tslint:disable-next-line:typedef
   createFixture(shape, fixdef?) {
-    _ASSERT && console.assert(this.isWorldLocked() == false);
+    if (_ASSERT) console.assert(this.isWorldLocked() == false);
 
     if (this.isWorldLocked() == true) {
       return null;
@@ -1091,13 +1091,13 @@ export class Body {
    * @param fixture The fixture to be removed.
    */
   destroyFixture(fixture: Fixture): void {
-    _ASSERT && console.assert(this.isWorldLocked() == false);
+    if (_ASSERT) console.assert(this.isWorldLocked() == false);
 
     if (this.isWorldLocked() == true) {
       return;
     }
 
-    _ASSERT && console.assert(fixture.m_body == this);
+    if (_ASSERT) console.assert(fixture.m_body == this);
 
     // Remove the fixture from this body's singly linked list.
     let found = false;
@@ -1118,7 +1118,7 @@ export class Body {
     }
 
     // You tried to remove a shape that is not attached to this body.
-    _ASSERT && console.assert(found);
+    if (_ASSERT) console.assert(found);
 
     // Destroy any contacts associated with the fixture.
     let edge = this.m_contactList;

@@ -394,7 +394,7 @@ export class World {
    * @param callback Called for each fixture found in the query AABB. It may return `false` to terminate the query.
    */
   queryAABB(aabb: AABBValue, callback: WorldAABBQueryCallback): void {
-    _ASSERT && console.assert(typeof callback === "function");
+    if (_ASSERT) console.assert(typeof callback === "function");
     const broadPhase = this.m_broadPhase;
     this.m_broadPhase.query(aabb, function(proxyId: number): boolean { // TODO GC
       const proxy = broadPhase.getUserData(proxyId);
@@ -412,7 +412,7 @@ export class World {
    * @param callback A function that is called for each fixture that is hit by the ray. You control how the ray cast proceeds by returning a numeric/float value.
    */
   rayCast(point1: Vec2Value, point2: Vec2Value, callback: WorldRayCastCallback): void {
-    _ASSERT && console.assert(typeof callback === "function");
+    if (_ASSERT) console.assert(typeof callback === "function");
     const broadPhase = this.m_broadPhase;
 
     this.m_broadPhase.rayCast({
@@ -471,7 +471,7 @@ export class World {
    * @param newOrigin The new origin with respect to the old origin
    */
   shiftOrigin(newOrigin: Vec2Value): void {
-    _ASSERT && console.assert(this.m_locked == false);
+    if (_ASSERT) console.assert(this.m_locked == false);
     if (this.m_locked) {
       return;
     }
@@ -491,7 +491,7 @@ export class World {
 
   /** @internal Used for deserialize. */
   _addBody(body: Body): void {
-    _ASSERT && console.assert(this.isLocked() === false);
+    if (_ASSERT) console.assert(this.isLocked() === false);
     if (this.isLocked()) {
       return;
     }
@@ -516,7 +516,7 @@ export class World {
   createBody(position: Vec2Value, angle?: number): Body;
   // tslint:disable-next-line:typedef
   createBody(arg1?, arg2?) {
-    _ASSERT && console.assert(this.isLocked() == false);
+    if (_ASSERT) console.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return null;
     }
@@ -573,8 +573,8 @@ export class World {
    * Warning: This function is locked during callbacks.
    */
   destroyBody(b: Body): boolean {
-    _ASSERT && console.assert(this.m_bodyCount > 0);
-    _ASSERT && console.assert(this.isLocked() == false);
+    if (_ASSERT) console.assert(this.m_bodyCount > 0);
+    if (_ASSERT) console.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return;
     }
@@ -650,9 +650,9 @@ export class World {
    * Warning: This function is locked during callbacks.
    */
   createJoint<T extends Joint>(joint: T): T | null {
-    _ASSERT && console.assert(!!joint.m_bodyA);
-    _ASSERT && console.assert(!!joint.m_bodyB);
-    _ASSERT && console.assert(this.isLocked() == false);
+    if (_ASSERT) console.assert(!!joint.m_bodyA);
+    if (_ASSERT) console.assert(!!joint.m_bodyB);
+    if (_ASSERT) console.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return null;
     }
@@ -704,7 +704,7 @@ export class World {
    * Warning: This function is locked during callbacks.
    */
   destroyJoint(joint: Joint): void {
-    _ASSERT && console.assert(this.isLocked() == false);
+    if (_ASSERT) console.assert(this.isLocked() == false);
     if (this.isLocked()) {
       return;
     }
@@ -762,7 +762,7 @@ export class World {
     joint.m_edgeB.prev = null;
     joint.m_edgeB.next = null;
 
-    _ASSERT && console.assert(this.m_jointCount > 0);
+    if (_ASSERT) console.assert(this.m_jointCount > 0);
     --this.m_jointCount;
 
     // If the joint prevents collisions, then flag any contacts for filtering.

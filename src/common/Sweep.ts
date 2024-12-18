@@ -88,7 +88,7 @@ export class Sweep {
    * @param alpha The new initial time
    */
   advance(alpha: number): void {
-    _ASSERT && console.assert(this.alpha0 < 1.0);
+    if (_ASSERT) console.assert(this.alpha0 < 1.0);
     const beta = (alpha - this.alpha0) / (1.0 - this.alpha0);
     matrix.combine2Vec2(this.c0, beta, this.c, 1 - beta, this.c0);
     this.a0 = beta * this.a + (1 - beta) * this.a0;

@@ -106,9 +106,9 @@ export abstract class Joint {
     bodyA = "bodyA" in def ? def.bodyA : bodyA;
     bodyB = "bodyB" in def ? def.bodyB : bodyB;
 
-    _ASSERT && console.assert(!!bodyA);
-    _ASSERT && console.assert(!!bodyB);
-    _ASSERT && console.assert(bodyA != bodyB);
+    if (_ASSERT) console.assert(!!bodyA);
+    if (_ASSERT) console.assert(!!bodyB);
+    if (_ASSERT) console.assert(bodyA != bodyB);
 
     this.m_bodyA = bodyA!;
     this.m_bodyB = bodyB!;

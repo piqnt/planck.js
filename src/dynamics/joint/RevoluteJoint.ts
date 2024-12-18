@@ -420,7 +420,7 @@ export class RevoluteJoint extends Joint {
    * Set the joint limits in radians.
    */
   setLimits(lower: number, upper: number): void {
-    _ASSERT && console.assert(lower <= upper);
+    if (_ASSERT) console.assert(lower <= upper);
 
     if (lower != this.m_lowerAngle || upper != this.m_upperAngle) {
       this.m_bodyA.setAwake(true);

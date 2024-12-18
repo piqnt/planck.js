@@ -137,14 +137,15 @@ export class WeldJoint extends Joint {
     this.m_gamma = 0.0;
 
     // Solver temp
-    this.m_rA;
-    this.m_rB;
-    this.m_localCenterA;
-    this.m_localCenterB;
-    this.m_invMassA;
-    this.m_invMassB;
-    this.m_invIA;
-    this.m_invIB;
+    // todo: do we need to initialize?
+    // this.m_rA;
+    // this.m_rB;
+    // this.m_localCenterA;
+    // this.m_localCenterB;
+    // this.m_invMassA;
+    // this.m_invMassB;
+    // this.m_invIA;
+    // this.m_invIB;
     this.m_mass = new Mat33();
 
     // Point-to-point constraint

@@ -21,8 +21,8 @@ import { Fixture } from "../../dynamics/Fixture";
 Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
 
 /** @internal */ function CircleCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: Fixture, indexA: number, xfB: TransformValue, fixtureB: Fixture, indexB: number): void {
-  _ASSERT && console.assert(fixtureA.getType() == CircleShape.TYPE);
-  _ASSERT && console.assert(fixtureB.getType() == CircleShape.TYPE);
+  if (_ASSERT) console.assert(fixtureA.getType() == CircleShape.TYPE);
+  if (_ASSERT) console.assert(fixtureB.getType() == CircleShape.TYPE);
   CollideCircles(manifold, fixtureA.getShape() as CircleShape, xfA, fixtureB.getShape() as CircleShape, xfB);
 }
 

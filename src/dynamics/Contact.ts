@@ -300,7 +300,7 @@ export class Contact {
     const manifold = this.m_manifold;
 
     const pointCount = manifold.pointCount;
-    _ASSERT && console.assert(pointCount > 0);
+    if (_ASSERT) console.assert(pointCount > 0);
 
     this.v_invMassA = bodyA.m_invMass;
     this.v_invMassB = bodyB.m_invMass;
@@ -774,7 +774,7 @@ export class Contact {
     matrix.copyVec2(vB, velocityB.v);
     const wB = velocityB.w;
 
-    _ASSERT && console.assert(manifold.pointCount > 0);
+    if (_ASSERT) console.assert(manifold.pointCount > 0);
 
     getTransform(xfA, localCenterA, cA, aA);
     getTransform(xfB, localCenterB, cB, aB);
@@ -950,7 +950,7 @@ export class Contact {
     matrix.crossVec2Num(tangent, normal, 1.0);
     const friction = this.v_friction;
 
-    _ASSERT && console.assert(this.v_pointCount == 1 || this.v_pointCount == 2);
+    if (_ASSERT) console.assert(this.v_pointCount == 1 || this.v_pointCount == 2);
 
     // Solve tangent constraints first because non-penetration is more important
     // than friction.
@@ -1059,7 +1059,7 @@ export class Contact {
       const vcp2 = this.v_points[1]; // VelocityConstraintPoint
 
       matrix.setVec2(a, vcp1.normalImpulse, vcp2.normalImpulse);
-      _ASSERT && console.assert(a.x >= 0.0 && a.y >= 0.0);
+      if (_ASSERT) console.assert(a.x >= 0.0 && a.y >= 0.0);
 
       // Relative velocity at contact
       // let dv1 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp1.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp1.rA));
@@ -1143,8 +1143,8 @@ export class Contact {
             vn1 = matrix.dotVec2(dv1, normal);
             vn2 = matrix.dotVec2(dv2, normal);
 
-            _ASSERT && console.assert(math_abs(vn1 - vcp1.velocityBias) < k_errorTol);
-            _ASSERT && console.assert(math_abs(vn2 - vcp2.velocityBias) < k_errorTol);
+            if (_ASSERT) console.assert(math_abs(vn1 - vcp1.velocityBias) < k_errorTol);
+            if (_ASSERT) console.assert(math_abs(vn2 - vcp2.velocityBias) < k_errorTol);
           }
           break;
         }
@@ -1191,7 +1191,7 @@ export class Contact {
             // Compute normal velocity
             vn1 = matrix.dotVec2(dv1, normal);
 
-            _ASSERT && console.assert(math_abs(vn1 - vcp1.velocityBias) < k_errorTol);
+            if (_ASSERT) console.assert(math_abs(vn1 - vcp1.velocityBias) < k_errorTol);
           }
           break;
         }
@@ -1238,7 +1238,7 @@ export class Contact {
             // Compute normal velocity
             vn2 = matrix.dotVec2(dv2, normal);
 
-            _ASSERT && console.assert(math_abs(vn2 - vcp2.velocityBias) < k_errorTol);
+            if (_ASSERT) console.assert(math_abs(vn2 - vcp2.velocityBias) < k_errorTol);
           }
           break;
         }

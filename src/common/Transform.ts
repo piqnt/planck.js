@@ -114,7 +114,7 @@ export class Transform {
   }
 
   static assert(o: any): void {
-    _ASSERT && console.assert(!Transform.isValid(o), "Invalid Transform!", o);
+    if (_ASSERT) console.assert(!Transform.isValid(o), "Invalid Transform!", o);
   }
 
   static mul(a: TransformValue, b: Vec2Value): Vec2;
@@ -124,7 +124,7 @@ export class Transform {
   static mul(a, b) {
     if (Array.isArray(b)) {
         // todo: this was used in examples, remove in the future
-      _ASSERT && Transform.assert(a);
+      if (_ASSERT) Transform.assert(a);
       const arr = [];
       for (let i = 0; i < b.length; i++) {
         arr[i] = Transform.mul(a, b[i]);
@@ -142,7 +142,7 @@ export class Transform {
   static mulAll(a: Transform, b: Vec2Value[]): Vec2[];
   static mulAll(a: Transform, b: Transform[]): Transform[];
   static mulAll(a: TransformValue, b) {
-    _ASSERT && Transform.assert(a);
+    if (_ASSERT) Transform.assert(a);
     const arr = [];
     for (let i = 0; i < b.length; i++) {
       arr[i] = Transform.mul(a, b[i]);
@@ -153,23 +153,23 @@ export class Transform {
   /** @hidden @deprecated */
   static mulFn(a: TransformValue) {
     // todo: this was used in examples, remove in the future
-    _ASSERT && Transform.assert(a);
+    if (_ASSERT) Transform.assert(a);
     return function(b: Vec2Value): Vec2 {
       return Transform.mul(a, b);
     };
   }
 
   static mulVec2(a: TransformValue, b: Vec2Value): Vec2 {
-    _ASSERT && Transform.assert(a);
-    _ASSERT && Vec2.assert(b);
+    if (_ASSERT) Transform.assert(a);
+    if (_ASSERT) Vec2.assert(b);
     const x = (a.q.c * b.x - a.q.s * b.y) + a.p.x;
     const y = (a.q.s * b.x + a.q.c * b.y) + a.p.y;
     return Vec2.neo(x, y);
   }
 
   static mulXf(a: TransformValue, b: TransformValue): Transform {
-    _ASSERT && Transform.assert(a);
-    _ASSERT && Transform.assert(b);
+    if (_ASSERT) Transform.assert(a);
+    if (_ASSERT) Transform.assert(b);
     // v2 = A.q.Rot(B.q.Rot(v1) + B.p) + A.p
     // = (A.q * B.q).Rot(v1) + A.q.Rot(B.p) + A.p
     const xf = Transform.identity();
@@ -190,8 +190,8 @@ export class Transform {
   }
 
   static mulTVec2(a: TransformValue, b: Vec2Value): Vec2 {
-    _ASSERT && Transform.assert(a);
-    _ASSERT && Vec2.assert(b);
+    if (_ASSERT) Transform.assert(a);
+    if (_ASSERT) Vec2.assert(b);
     const px = b.x - a.p.x;
     const py = b.y - a.p.y;
     const x = (a.q.c * px + a.q.s * py);
@@ -200,8 +200,8 @@ export class Transform {
   }
 
   static mulTXf(a: TransformValue, b: TransformValue): Transform {
-    _ASSERT && Transform.assert(a);
-    _ASSERT && Transform.assert(b);
+    if (_ASSERT) Transform.assert(a);
+    if (_ASSERT) Transform.assert(b);
     // v2 = A.q' * (B.q * v1 + B.p - A.p)
     // = A.q' * B.q * v1 + A.q' * (B.p - A.p)
     const xf = Transform.identity();

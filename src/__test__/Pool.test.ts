@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { describe, it, expect } from "vitest";
 
 import { Pool } from "../util/Pool";
@@ -10,7 +11,7 @@ describe("Pool", function(): void {
       disposed: boolean;
       created: boolean;
     }
-    var pool = new Pool<Type>({
+    const pool = new Pool<Type>({
       create : function(): Type {
         return {
           created : true,
@@ -31,8 +32,8 @@ describe("Pool", function(): void {
       max : 1
     });
 
-    var a = pool.allocate();
-    var b = pool.allocate();
+    const a = pool.allocate();
+    const b = pool.allocate();
 
     expect(a.created).be.true;
     expect(a.busy).be.true;

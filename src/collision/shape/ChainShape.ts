@@ -140,8 +140,8 @@ export class ChainShape extends Shape {
    * @param vertices an array of vertices, these are copied
    */
   _createLoop(vertices: Vec2Value[]): ChainShape {
-    _ASSERT && console.assert(this.m_vertices.length == 0 && this.m_count == 0);
-    _ASSERT && console.assert(vertices.length >= 3);
+    if (_ASSERT) console.assert(this.m_vertices.length == 0 && this.m_count == 0);
+    if (_ASSERT) console.assert(vertices.length >= 3);
     if (vertices.length < 3) {
       return;
     }
@@ -150,7 +150,7 @@ export class ChainShape extends Shape {
       const v1 = vertices[i - 1];
       const v2 = vertices[i];
       // If the code crashes here, it means your vertices are too close together.
-      _ASSERT && console.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
+      if (_ASSERT) console.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
     }
 
     this.m_vertices = [];
@@ -174,13 +174,13 @@ export class ChainShape extends Shape {
    * @param vertices an array of vertices, these are copied
    */
   _createChain(vertices: Vec2Value[]): ChainShape {
-    _ASSERT && console.assert(this.m_vertices.length == 0 && this.m_count == 0);
-    _ASSERT && console.assert(vertices.length >= 2);
+    if (_ASSERT) console.assert(this.m_vertices.length == 0 && this.m_count == 0);
+    if (_ASSERT) console.assert(vertices.length >= 2);
     for (let i = 1; i < vertices.length; ++i) {
       const v1 = vertices[i - 1];
       const v2 = vertices[i];
       // If the code crashes here, it means your vertices are too close together.
-      _ASSERT && console.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
+      if (_ASSERT) console.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
     }
 
     this.m_vertices = [];
@@ -260,7 +260,7 @@ export class ChainShape extends Shape {
 
   // Get a child edge.
   getChildEdge(edge: EdgeShape, childIndex: number): void {
-    _ASSERT && console.assert(0 <= childIndex && childIndex < this.m_count - 1);
+    if (_ASSERT) console.assert(0 <= childIndex && childIndex < this.m_count - 1);
     edge.m_type = EdgeShape.TYPE;
     edge.m_radius = this.m_radius;
 
@@ -285,7 +285,7 @@ export class ChainShape extends Shape {
   }
 
   getVertex(index: number): Vec2 {
-    _ASSERT && console.assert(0 <= index && index <= this.m_count);
+    if (_ASSERT) console.assert(0 <= index && index <= this.m_count);
     if (index < this.m_count) {
       return this.m_vertices[index];
     } else {
@@ -319,7 +319,7 @@ export class ChainShape extends Shape {
    * @param childIndex The child shape index
    */
   rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean {
-    _ASSERT && console.assert(0 <= childIndex && childIndex < this.m_count);
+    if (_ASSERT) console.assert(0 <= childIndex && childIndex < this.m_count);
 
     const edgeShape = new EdgeShape(this.getVertex(childIndex), this.getVertex(childIndex + 1));
     return edgeShape.rayCast(output, input, xf, 0);
@@ -334,7 +334,7 @@ export class ChainShape extends Shape {
    * @param childIndex The child shape
    */
   computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void {
-    _ASSERT && console.assert(0 <= childIndex && childIndex < this.m_count);
+    if (_ASSERT) console.assert(0 <= childIndex && childIndex < this.m_count);
 
     matrix.transformVec2(v1, xf, this.getVertex(childIndex));
     matrix.transformVec2(v2, xf, this.getVertex(childIndex + 1));
@@ -358,7 +358,7 @@ export class ChainShape extends Shape {
   }
 
   computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void {
-    _ASSERT && console.assert(0 <= childIndex && childIndex < this.m_count);
+    if (_ASSERT) console.assert(0 <= childIndex && childIndex < this.m_count);
     proxy.m_vertices[0] = this.getVertex(childIndex);
     proxy.m_vertices[1] = this.getVertex(childIndex + 1);
     proxy.m_count = 2;

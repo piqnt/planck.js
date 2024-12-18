@@ -87,7 +87,7 @@ export class AABB {
   }
 
   static assert(o: any): void {
-    _ASSERT && console.assert(!AABB.isValid(o), "Invalid AABB!", o);
+    if (_ASSERT) console.assert(!AABB.isValid(o), "Invalid AABB!", o);
   }
 
   /**

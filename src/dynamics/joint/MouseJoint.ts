@@ -120,9 +120,9 @@ export class MouseJoint extends Joint {
 
     this.m_type = MouseJoint.TYPE;
 
-    _ASSERT && console.assert(Number.isFinite(def.maxForce) && def.maxForce >= 0.0);
-    _ASSERT && console.assert(Number.isFinite(def.frequencyHz) && def.frequencyHz >= 0.0);
-    _ASSERT && console.assert(Number.isFinite(def.dampingRatio) && def.dampingRatio >= 0.0);
+    if (_ASSERT) console.assert(Number.isFinite(def.maxForce) && def.maxForce >= 0.0);
+    if (_ASSERT) console.assert(Number.isFinite(def.frequencyHz) && def.frequencyHz >= 0.0);
+    if (_ASSERT) console.assert(Number.isFinite(def.dampingRatio) && def.dampingRatio >= 0.0);
 
     if (Vec2.isValid(target)) {
       this.m_targetA = Vec2.clone(target);
@@ -323,7 +323,7 @@ export class MouseJoint extends Joint {
     // gamma has units of inverse mass.
     // beta has units of inverse time.
     const h = step.dt;
-    _ASSERT && console.assert(d + h * k > EPSILON);
+    if (_ASSERT) console.assert(d + h * k > EPSILON);
     this.m_gamma = h * (d + h * k);
     if (this.m_gamma != 0.0) {
       this.m_gamma = 1.0 / this.m_gamma;

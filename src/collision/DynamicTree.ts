@@ -93,7 +93,7 @@ export class DynamicTree<T> {
    */
   getUserData(id: number): T {
     const node = this.m_nodes[id];
-    _ASSERT && console.assert(!!node);
+    if (_ASSERT) console.assert(!!node);
     return node.userData;
   }
 
@@ -104,7 +104,7 @@ export class DynamicTree<T> {
    */
   getFatAABB(id: number): AABB {
     const node = this.m_nodes[id];
-    _ASSERT && console.assert(!!node);
+    if (_ASSERT) console.assert(!!node);
     return node.aabb;
   }
 
@@ -128,7 +128,7 @@ export class DynamicTree<T> {
    * Create a proxy. Provide a tight fitting AABB and a userData pointer.
    */
   createProxy(aabb: AABBValue, userData: T): number {
-    _ASSERT && console.assert(AABB.isValid(aabb));
+    if (_ASSERT) console.assert(AABB.isValid(aabb));
 
     const node = this.allocateNode();
 
@@ -151,8 +151,8 @@ export class DynamicTree<T> {
   destroyProxy(id: number): void {
     const node = this.m_nodes[id];
 
-    _ASSERT && console.assert(!!node);
-    _ASSERT && console.assert(node.isLeaf());
+    if (_ASSERT) console.assert(!!node);
+    if (_ASSERT) console.assert(node.isLeaf());
 
     this.removeLeaf(node);
     this.freeNode(node);
@@ -168,13 +168,13 @@ export class DynamicTree<T> {
    * @return true if the proxy was re-inserted.
    */
   moveProxy(id: number, aabb: AABBValue, d: Vec2Value): boolean {
-    _ASSERT && console.assert(AABB.isValid(aabb));
-    _ASSERT && console.assert(!d || Vec2.isValid(d));
+    if (_ASSERT) console.assert(AABB.isValid(aabb));
+    if (_ASSERT) console.assert(!d || Vec2.isValid(d));
 
     const node = this.m_nodes[id];
 
-    _ASSERT && console.assert(!!node);
-    _ASSERT && console.assert(node.isLeaf());
+    if (_ASSERT) console.assert(!!node);
+    if (_ASSERT) console.assert(node.isLeaf());
 
     if (node.aabb.contains(aabb)) {
       return false;
@@ -209,7 +209,7 @@ export class DynamicTree<T> {
   }
 
   insertLeaf(leaf: TreeNode<T>): void {
-    _ASSERT && console.assert(AABB.isValid(leaf.aabb));
+    if (_ASSERT) console.assert(AABB.isValid(leaf.aabb));
 
     if (this.m_root == null) {
       this.m_root = leaf;
@@ -302,8 +302,8 @@ export class DynamicTree<T> {
       const child1 = index.child1;
       const child2 = index.child2;
 
-      _ASSERT && console.assert(child1 != null);
-      _ASSERT && console.assert(child2 != null);
+      if (_ASSERT) console.assert(child1 != null);
+      if (_ASSERT) console.assert(child2 != null);
 
       index.height = 1 + math_max(child1.height, child2.height);
       index.aabb.combine(child1.aabb, child2.aabb);
@@ -366,7 +366,7 @@ export class DynamicTree<T> {
    * root index.
    */
   balance(iA: TreeNode<T>): TreeNode<T> {
-    _ASSERT && console.assert(iA != null);
+    if (_ASSERT) console.assert(iA != null);
 
     const A = iA;
     if (A.isLeaf() || A.height < 2) {
@@ -522,7 +522,7 @@ export class DynamicTree<T> {
       node = this.m_root;
     }
 
-    // _ASSERT && console.assert(0 <= id && id < this.m_nodeCapacity);
+    // if (_ASSERT) console.assert(0 <= id && id < this.m_nodeCapacity);
 
     if (node.isLeaf()) {
       return 0;
@@ -539,24 +539,24 @@ export class DynamicTree<T> {
     }
 
     if (node === this.m_root) {
-      _ASSERT && console.assert(node.parent == null);
+      if (_ASSERT) console.assert(node.parent == null);
     }
 
     const child1 = node.child1;
     const child2 = node.child2;
 
     if (node.isLeaf()) {
-      _ASSERT && console.assert(child1 == null);
-      _ASSERT && console.assert(child2 == null);
-      _ASSERT && console.assert(node.height === 0);
+      if (_ASSERT) console.assert(child1 == null);
+      if (_ASSERT) console.assert(child2 == null);
+      if (_ASSERT) console.assert(node.height === 0);
       return;
     }
 
-    // _ASSERT && console.assert(0 <= child1 && child1 < this.m_nodeCapacity);
-    // _ASSERT && console.assert(0 <= child2 && child2 < this.m_nodeCapacity);
+    // if (_ASSERT) console.assert(0 <= child1 && child1 < this.m_nodeCapacity);
+    // if (_ASSERT) console.assert(0 <= child2 && child2 < this.m_nodeCapacity);
 
-    _ASSERT && console.assert(child1.parent === node);
-    _ASSERT && console.assert(child2.parent === node);
+    if (_ASSERT) console.assert(child1.parent === node);
+    if (_ASSERT) console.assert(child2.parent === node);
 
     this.validateStructure(child1);
     this.validateStructure(child2);
@@ -571,24 +571,24 @@ export class DynamicTree<T> {
     const child2 = node.child2;
 
     if (node.isLeaf()) {
-      _ASSERT && console.assert(child1 == null);
-      _ASSERT && console.assert(child2 == null);
-      _ASSERT && console.assert(node.height === 0);
+      if (_ASSERT) console.assert(child1 == null);
+      if (_ASSERT) console.assert(child2 == null);
+      if (_ASSERT) console.assert(node.height === 0);
       return;
     }
 
-    // _ASSERT && console.assert(0 <= child1 && child1 < this.m_nodeCapacity);
-    // _ASSERT && console.assert(0 <= child2 && child2 < this.m_nodeCapacity);
+    // if (_ASSERT) console.assert(0 <= child1 && child1 < this.m_nodeCapacity);
+    // if (_ASSERT) console.assert(0 <= child2 && child2 < this.m_nodeCapacity);
 
     const height1 = child1.height;
     const height2 = child2.height;
     const height = 1 + math_max(height1, height2);
-    _ASSERT && console.assert(node.height === height);
+    if (_ASSERT) console.assert(node.height === height);
 
     const aabb = new AABB();
     aabb.combine(child1.aabb, child2.aabb);
 
-    _ASSERT && console.assert(AABB.areEqual(aabb, node.aabb));
+    if (_ASSERT) console.assert(AABB.areEqual(aabb, node.aabb));
 
     this.validateMetrics(child1);
     this.validateMetrics(child2);
@@ -618,7 +618,7 @@ export class DynamicTree<T> {
         continue;
       }
 
-      _ASSERT && console.assert(!node.isLeaf());
+      if (_ASSERT) console.assert(!node.isLeaf());
 
       const balance = math_abs(node.child2.height - node.child1.height);
       maxBalance = math_max(maxBalance, balance);
@@ -691,7 +691,7 @@ export class DynamicTree<T> {
 
     this.m_root = nodes[0];
 
-    _ASSERT && this.validate();
+    if (_ASSERT) this.validate();
   }
 
   /**
@@ -719,7 +719,7 @@ export class DynamicTree<T> {
    * proxy that overlaps the supplied AABB.
    */
   query(aabb: AABBValue, queryCallback: DynamicTreeQueryCallback): void {
-    _ASSERT && console.assert(typeof queryCallback === "function");
+    if (_ASSERT) console.assert(typeof queryCallback === "function");
     const stack = this.stackPool.allocate();
 
     stack.push(this.m_root);
@@ -757,11 +757,11 @@ export class DynamicTree<T> {
    */
   rayCast(input: RayCastInput, rayCastCallback: RayCastCallback): void {
     // TODO: GC
-    _ASSERT && console.assert(typeof rayCastCallback === "function");
+    if (_ASSERT) console.assert(typeof rayCastCallback === "function");
     const p1 = input.p1;
     const p2 = input.p2;
     const r = Vec2.sub(p2, p1);
-    _ASSERT && console.assert(r.lengthSquared() > 0.0);
+    if (_ASSERT) console.assert(r.lengthSquared() > 0.0);
     r.normalize();
 
     // v is perpendicular to the segment.

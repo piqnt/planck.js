@@ -190,7 +190,7 @@ export class MotorJoint extends Joint {
    * Set the maximum friction force in N.
    */
   setMaxForce(force: number): void {
-    _ASSERT && console.assert(Number.isFinite(force) && force >= 0.0);
+    if (_ASSERT) console.assert(Number.isFinite(force) && force >= 0.0);
     this.m_maxForce = force;
   }
 
@@ -205,7 +205,7 @@ export class MotorJoint extends Joint {
    * Set the maximum friction torque in N*m.
    */
   setMaxTorque(torque: number): void {
-    _ASSERT && console.assert(Number.isFinite(torque) && torque >= 0.0);
+    if (_ASSERT) console.assert(Number.isFinite(torque) && torque >= 0.0);
     this.m_maxTorque = torque;
   }
 
@@ -220,7 +220,7 @@ export class MotorJoint extends Joint {
    * Set the position correction factor in the range [0,1].
    */
   setCorrectionFactor(factor: number): void {
-    _ASSERT && console.assert(Number.isFinite(factor) && 0.0 <= factor && factor <= 1.0);
+    if (_ASSERT) console.assert(Number.isFinite(factor) && 0.0 <= factor && factor <= 1.0);
     this.m_correctionFactor = factor;
   }
 

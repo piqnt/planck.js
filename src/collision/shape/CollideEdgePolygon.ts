@@ -26,8 +26,8 @@ Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
 
 /** @internal */ function EdgePolygonContact(manifold: Manifold, xfA: TransformValue, fA: Fixture, indexA: number, xfB: TransformValue, fB: Fixture, indexB: number): void {
-  _ASSERT && console.assert(fA.getType() == EdgeShape.TYPE);
-  _ASSERT && console.assert(fB.getType() == PolygonShape.TYPE);
+  if (_ASSERT) console.assert(fA.getType() == EdgeShape.TYPE);
+  if (_ASSERT) console.assert(fB.getType() == PolygonShape.TYPE);
 
   CollideEdgePolygon(manifold, fA.getShape() as EdgeShape, xfA, fB.getShape() as PolygonShape, xfB);
 }
@@ -36,8 +36,8 @@ Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
 /** @internal */ const edge_reuse = new EdgeShape();
 
 /** @internal */ function ChainPolygonContact(manifold: Manifold, xfA: TransformValue, fA: Fixture, indexA: number, xfB: TransformValue, fB: Fixture, indexB: number): void {
-  _ASSERT && console.assert(fA.getType() == ChainShape.TYPE);
-  _ASSERT && console.assert(fB.getType() == PolygonShape.TYPE);
+  if (_ASSERT) console.assert(fA.getType() == ChainShape.TYPE);
+  if (_ASSERT) console.assert(fB.getType() == PolygonShape.TYPE);
 
   const chain = fA.getShape() as ChainShape;
   chain.getChildEdge(edge_reuse, indexA);
@@ -391,7 +391,8 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
     primaryAxis = edgeAxis;
   }
 
-  ie[0].recycle(), ie[1].recycle();
+  ie[0].recycle();
+  ie[1].recycle();
 
   if (primaryAxis.type == EPAxisType.e_edgeA) {
     manifold.type = ManifoldType.e_faceA;
@@ -452,8 +453,10 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
   rf.sideOffset2 = matrix.dotVec2(rf.sideNormal2, rf.v2);
 
   // Clip incident edge against extruded edge1 side edges.
-  clipPoints1[0].recycle(), clipPoints1[1].recycle();
-  clipPoints2[0].recycle(), clipPoints2[1].recycle();
+  clipPoints1[0].recycle();
+  clipPoints1[1].recycle();
+  clipPoints2[0].recycle();
+  clipPoints2[1].recycle();
 
   // Clip to box side 1
   const np1 = clipSegmentToLine(clipPoints1, ie, rf.sideNormal1, rf.sideOffset1, rf.i1);

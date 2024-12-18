@@ -10,11 +10,11 @@ describe("Basic", function(): void {
 
   it("World", function(): void {
 
-    var world = new World();
+    const world = new World();
 
-    var circle = new CircleShape(1);
+    const circle = new CircleShape(1);
 
-    var b1 = world.createBody({
+    const b1 = world.createBody({
       position : new Vec2(0, 0),
       type : "dynamic"
     });
@@ -27,7 +27,7 @@ describe("Basic", function(): void {
 
     b1.applyForceToCenter(new Vec2(1, 0), true);
 
-    var b2 = world.createBody({
+    const b2 = world.createBody({
       position : new Vec2(2, 0),
       type : "dynamic"
     });
@@ -38,7 +38,7 @@ describe("Basic", function(): void {
 
     // console.log(b2.getPosition());
 
-    var p = b1.getPosition();
+    const p = b1.getPosition();
     expect(p.x).closeTo(0.0, 1e-12);
     expect(p.y).closeTo(0.0, 1e-12);
   });

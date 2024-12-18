@@ -117,7 +117,7 @@ export class BroadPhase {
    * is called.
    */
   createProxy(aabb: AABBValue, userData: FixtureProxy): number {
-    _ASSERT && console.assert(AABB.isValid(aabb));
+    if (_ASSERT) console.assert(AABB.isValid(aabb));
     const proxyId = this.m_tree.createProxy(aabb, userData);
     this.bufferMove(proxyId);
     return proxyId;
@@ -136,7 +136,7 @@ export class BroadPhase {
    * UpdatePairs to finalized the proxy pairs (for your time step).
    */
   moveProxy(proxyId: number, aabb: AABB, displacement: Vec2Value): void {
-    _ASSERT && console.assert(AABB.isValid(aabb));
+    if (_ASSERT) console.assert(AABB.isValid(aabb));
     const changed = this.m_tree.moveProxy(proxyId, aabb, displacement);
     if (changed) {
       this.bufferMove(proxyId);
@@ -167,7 +167,7 @@ export class BroadPhase {
    * Update the pairs. This results in pair callbacks. This can only add pairs.
    */
   updatePairs(addPairCallback: (userDataA: FixtureProxy, userDataB: FixtureProxy) => void): void {
-    _ASSERT && console.assert(typeof addPairCallback === "function");
+    if (_ASSERT) console.assert(typeof addPairCallback === "function");
     this.m_callback = addPairCallback;
 
     // Perform tree queries for all moving proxies.

@@ -47,8 +47,8 @@ Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
   fixtureB: Fixture,
   indexB: number,
 ): void {
-  _ASSERT && console.assert(fixtureA.getType() == PolygonShape.TYPE);
-  _ASSERT && console.assert(fixtureB.getType() == PolygonShape.TYPE);
+  if (_ASSERT) console.assert(fixtureA.getType() == PolygonShape.TYPE);
+  if (_ASSERT) console.assert(fixtureB.getType() == PolygonShape.TYPE);
   CollidePolygons(manifold, fixtureA.getShape() as PolygonShape, xfA, fixtureB.getShape() as PolygonShape, xfB);
 }
 
@@ -117,7 +117,7 @@ Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
   const vertices2 = poly2.m_vertices;
   const normals2 = poly2.m_normals;
 
-  _ASSERT && console.assert(0 <= edge1 && edge1 < poly1.m_count);
+  if (_ASSERT) console.assert(0 <= edge1 && edge1 < poly1.m_count);
 
   // Get the normal of the reference edge in poly2's frame.
   matrix.rerotVec2(normal1, xf2.q, xf1.q, normals1[edge1]);
@@ -207,7 +207,8 @@ export const CollidePolygons = function (
     flip = false;
   }
 
-  incidentEdge[0].recycle(), incidentEdge[1].recycle();
+  incidentEdge[0].recycle();
+  incidentEdge[1].recycle();
   findIncidentEdge(incidentEdge, poly1, xf1, edge1, poly2, xf2);
 
   const count1 = poly1.m_count;
@@ -239,8 +240,10 @@ export const CollidePolygons = function (
   const sideOffset2 = matrix.dotVec2(tangent, v12) + totalRadius;
 
   // Clip incident edge against extruded edge1 side edges.
-  clipPoints1[0].recycle(), clipPoints1[1].recycle();
-  clipPoints2[0].recycle(), clipPoints2[1].recycle();
+  clipPoints1[0].recycle();
+  clipPoints1[1].recycle();
+  clipPoints2[0].recycle();
+  clipPoints2[1].recycle();
 
   // Clip to box side 1
   matrix.setVec2(clipSegmentToLineNormal, -tangent.x, -tangent.y);

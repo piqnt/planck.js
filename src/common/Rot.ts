@@ -64,7 +64,7 @@ export class Rot {
   }
 
   static clone(rot: RotValue): Rot {
-    _ASSERT && Rot.assert(rot);
+    if (_ASSERT) Rot.assert(rot);
     const obj = Object.create(Rot.prototype);
     obj.s = rot.s;
     obj.c = rot.c;
@@ -86,7 +86,7 @@ export class Rot {
   }
 
   static assert(o: any): void {
-    _ASSERT && console.assert(!Rot.isValid(o), "Invalid Rot!", o);
+    if (_ASSERT) console.assert(!Rot.isValid(o), "Invalid Rot!", o);
   }
 
   /** Set to the identity rotation. */
@@ -97,12 +97,12 @@ export class Rot {
 
   set(angle: number | RotValue): void {
     if (typeof angle === "object") {
-      _ASSERT && Rot.assert(angle);
+      if (_ASSERT) Rot.assert(angle);
       this.s = angle.s;
       this.c = angle.c;
 
     } else {
-      _ASSERT && console.assert(Number.isFinite(angle));
+      if (_ASSERT) console.assert(Number.isFinite(angle));
       // TODO_ERIN optimize
       this.s = math_sin(angle);
       this.c = math_cos(angle);
@@ -110,14 +110,14 @@ export class Rot {
   }
 
   setRot(angle: RotValue): void {
-    _ASSERT && Rot.assert(angle);
+    if (_ASSERT) Rot.assert(angle);
     this.s = angle.s;
     this.c = angle.c;
   }
 
   /** Set using an angle in radians. */
   setAngle(angle: number): void {
-    _ASSERT && console.assert(Number.isFinite(angle));
+    if (_ASSERT) console.assert(Number.isFinite(angle));
     // TODO_ERIN optimize
     this.s = math_sin(angle);
     this.c = math_cos(angle);
@@ -143,9 +143,9 @@ export class Rot {
   /** Rotate a vector */
   static mul(rot: RotValue, m: Vec2Value): Vec2;
   static mul(rot, m) {
-    _ASSERT && Rot.assert(rot);
+    if (_ASSERT) Rot.assert(rot);
     if ("c" in m && "s" in m) {
-      _ASSERT && Rot.assert(m);
+      if (_ASSERT) Rot.assert(m);
       // [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
       // [qs qc] [rs rc] [qs*rc+qc*rs -qs*rs+qc*rc]
       // s = qs * rc + qc * rs
@@ -156,15 +156,15 @@ export class Rot {
       return qr;
 
     } else if ("x" in m && "y" in m) {
-      _ASSERT && Vec2.assert(m);
+      if (_ASSERT) Vec2.assert(m);
       return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
     }
   }
 
   /** Multiply two rotations: q * r */
   static mulRot(rot: RotValue, m: RotValue): Rot {
-    _ASSERT && Rot.assert(rot);
-    _ASSERT && Rot.assert(m);
+    if (_ASSERT) Rot.assert(rot);
+    if (_ASSERT) Rot.assert(m);
     // [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
     // [qs qc] [rs rc] [qs*rc+qc*rs -qs*rs+qc*rc]
     // s = qs * rc + qc * rs
@@ -177,8 +177,8 @@ export class Rot {
 
   /** Rotate a vector */
   static mulVec2(rot: RotValue, m: Vec2Value): Vec2 {
-    _ASSERT && Rot.assert(rot);
-    _ASSERT && Vec2.assert(m);
+    if (_ASSERT) Rot.assert(rot);
+    if (_ASSERT) Vec2.assert(m);
     return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
   }
 
@@ -194,7 +194,7 @@ export class Rot {
   static mulT(rot: RotValue, m: Vec2Value): Vec2;
   static mulT(rot, m) {
     if ("c" in m && "s" in m) {
-      _ASSERT && Rot.assert(m);
+      if (_ASSERT) Rot.assert(m);
       // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
       // [-qs qc] [rs rc] [-qs*rc+qc*rs qs*rs+qc*rc]
       // s = qc * rs - qs * rc
@@ -205,14 +205,14 @@ export class Rot {
       return qr;
 
     } else if ("x" in m && "y" in m) {
-      _ASSERT && Vec2.assert(m);
+      if (_ASSERT) Vec2.assert(m);
       return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
     }
   }
 
   /** Transpose multiply two rotations: qT * r */
   static mulTRot(rot: RotValue, m: RotValue): Rot {
-    _ASSERT && Rot.assert(m);
+    if (_ASSERT) Rot.assert(m);
     // [ qc qs] * [rc -rs] = [qc*rc+qs*rs -qc*rs+qs*rc]
     // [-qs qc] [rs rc] [-qs*rc+qc*rs qs*rs+qc*rc]
     // s = qc * rs - qs * rc
@@ -225,7 +225,7 @@ export class Rot {
 
   /** Inverse rotate a vector */
   static mulTVec2(rot: RotValue, m: Vec2Value): Vec2 {
-    _ASSERT && Vec2.assert(m);
+    if (_ASSERT) Vec2.assert(m);
     return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
   }
 }

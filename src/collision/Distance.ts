@@ -247,7 +247,7 @@ export class DistanceProxy {
    * Get a vertex by index. Used by Distance.
    */
   getVertex(index: number): Vec2Value {
-    _ASSERT && console.assert(0 <= index && index < this.m_count);
+    if (_ASSERT) console.assert(0 <= index && index < this.m_count);
     return this.m_vertices[index];
   }
 
@@ -280,7 +280,7 @@ export class DistanceProxy {
    */
   set(shape: Shape, index: number): void {
     // TODO remove, use shape instead
-    _ASSERT && console.assert(typeof shape.computeDistanceProxy === "function");
+    if (_ASSERT) console.assert(typeof shape.computeDistanceProxy === "function");
     shape.computeDistanceProxy(this, index);
   }
 
@@ -370,7 +370,7 @@ class Simplex {
   }
 
   readCache(cache: SimplexCache, proxyA: DistanceProxy, transformA: TransformValue, proxyB: DistanceProxy, transformB: TransformValue): void {
-    _ASSERT && console.assert(cache.count <= 3);
+    if (_ASSERT) console.assert(cache.count <= 3);
 
     // Copy data from cache.
     this.m_count = cache.count;
@@ -442,7 +442,7 @@ class Simplex {
       }
 
       default:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
         return matrix.zeroVec2(searchDirection_reuse);
     }
   }
@@ -453,7 +453,7 @@ class Simplex {
     const v3 = this.m_v3;
     switch (this.m_count) {
       case 0:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
         return matrix.zeroVec2(closestPoint_reuse);
 
       case 1:
@@ -466,7 +466,7 @@ class Simplex {
         return matrix.zeroVec2(closestPoint_reuse);
 
       default:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
         return matrix.zeroVec2(closestPoint_reuse);
     }
   }
@@ -477,7 +477,7 @@ class Simplex {
     const v3 = this.m_v3;
     switch (this.m_count) {
       case 0:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
         break;
 
       case 1:
@@ -496,7 +496,7 @@ class Simplex {
         break;
 
       default:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
         break;
     }
   }
@@ -504,7 +504,7 @@ class Simplex {
   getMetric(): number {
     switch (this.m_count) {
       case 0:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
         return 0.0;
 
       case 1:
@@ -520,7 +520,7 @@ class Simplex {
         );
 
       default:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
         return 0.0;
     }
   }
@@ -539,7 +539,7 @@ class Simplex {
         break;
 
       default:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
     }
   }
 
@@ -817,7 +817,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
   const k_maxIters = 20;
   let iter = 0;
   while (iter < k_maxIters && v.length() - sigma > tolerance) {
-    _ASSERT && console.assert(simplex.m_count < 3);
+    if (_ASSERT) console.assert(simplex.m_count < 3);
 
     output.iterations += 1;
 
@@ -874,7 +874,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
         break;
 
       default:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
     }
     
     // If we have 3 points, then the origin is in the corresponding triangle.

@@ -23,8 +23,8 @@ import { Fixture } from "../../dynamics/Fixture";
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
 
 /** @internal */ function PolygonCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: Fixture, indexA: number, xfB: TransformValue, fixtureB: Fixture, indexB: number): void {
-  _ASSERT && console.assert(fixtureA.getType() == PolygonShape.TYPE);
-  _ASSERT && console.assert(fixtureB.getType() == CircleShape.TYPE);
+  if (_ASSERT) console.assert(fixtureA.getType() == PolygonShape.TYPE);
+  if (_ASSERT) console.assert(fixtureB.getType() == CircleShape.TYPE);
   CollidePolygonCircle(manifold, fixtureA.getShape() as PolygonShape, xfA, fixtureB.getShape() as CircleShape, xfB);
 }
 

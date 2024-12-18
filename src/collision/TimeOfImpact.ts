@@ -122,7 +122,7 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
   const totalRadius = proxyA.m_radius + proxyB.m_radius;
   const target = math_max(Settings.linearSlop, totalRadius - 3.0 * Settings.linearSlop);
   const tolerance = 0.25 * Settings.linearSlop;
-  _ASSERT && console.assert(target > tolerance);
+  if (_ASSERT) console.assert(target > tolerance);
 
   let t1 = 0.0;
   const k_maxIterations = Settings.maxTOIIterations;
@@ -346,7 +346,7 @@ class SeparationFunction {
 
   initialize(cache: SimplexCache, proxyA: DistanceProxy, sweepA: Sweep, proxyB: DistanceProxy, sweepB: Sweep, t1: number): number {
     const count = cache.count;
-    _ASSERT && console.assert(0 < count && count < 3);
+    if (_ASSERT) console.assert(0 < count && count < 3);
 
     this.m_proxyA = proxyA;
     this.m_proxyB = proxyB;
@@ -476,7 +476,7 @@ class SeparationFunction {
       }
 
       default:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
         if (find) {
           this.indexA = -1;
           this.indexB = -1;
