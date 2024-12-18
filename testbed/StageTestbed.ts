@@ -6,6 +6,7 @@ import type { Joint } from "../src/dynamics/Joint";
 import type { Fixture } from "../src/dynamics/Fixture";
 import type { Body } from "../src/dynamics/Body";
 import type { AABBValue } from "../src/collision/AABB";
+import type { Shape } from "../src/collision/Shape";
 import type { Style } from "../src/util/Testbed";
 import { Testbed } from "../src/util/Testbed";
 import type { EdgeShape } from "../src/collision/shape/EdgeShape";
@@ -22,6 +23,12 @@ const math_PI = Math.PI;
 const math_max = Math.max;
 const math_min = Math.min;
 
+interface DrawOptions {
+  scaleY: number;
+  lineWidth: number;
+  stroke: string;
+  fill: string;
+}
 
 let mounted: StageTestbed | null = null;
 
@@ -114,9 +121,14 @@ Testbed.mount = () => {
   return mounted;
 };
 
-const getStyle = function(obj: Body | Fixture | Joint): Style {
-  return obj["render"] ?? obj["style"] ?? {};
-};
+function getStyle(obj: Body | Fixture | Joint | Shape): Style {
+  if (typeof obj["render"] === "object" && ("stroke" in obj["render"] || "fill" in obj["render"])) {
+    // this was used in planck before v1
+    return obj["render"];
+  } else if (typeof obj["style"] === "object") {
+    return obj["style"];
+  }
+}
 
 function findBody(world: World, point: Vec2Value) {
   let body: Body | null = null;
@@ -568,42 +580,38 @@ class  WorldStageNode extends Stage.Node {
       for (let f = b.getFixtureList(); f; f = f.getNext()) {
 
         let node = this.nodes.get(f);
-        const fstyle = getStyle(f);
-        const bstyle = getStyle(b);
         if (!node) {
-          if (fstyle && fstyle.stroke) {
-            options.stroke = fstyle.stroke;
-          } else if (bstyle && bstyle.stroke) {
-            options.stroke = bstyle.stroke;
-          } else if (b.isDynamic()) {
-            options.stroke = "rgba(255,255,255,0.9)";
-          } else if (b.isKinematic()) {
-            options.stroke = "rgba(255,255,255,0.7)";
-          } else if (b.isStatic()) {
-            options.stroke = "rgba(255,255,255,0.5)";
-          }
-
-          if (fstyle && fstyle.fill) {
-            options.fill = fstyle.fill;
-          } else if (bstyle && bstyle.fill) {
-            options.fill = bstyle.fill;
-          } else {
-            options.fill = "";
-          }
-
           const type = f.getType();
           const shape = f.getShape();
+
+          const opts: DrawOptions = Object.assign({
+            stroke: options.stroke,
+            fill: options.fill,
+            scaleY: options.scaleY,
+            lineWidth: options.lineWidth,
+          }, getStyle(b), getStyle(f), getStyle(shape));
+
+          if (opts.stroke) {
+            // good
+          } else if (b.isDynamic()) {
+            opts.stroke = "rgba(255,255,255,0.9)";
+          } else if (b.isKinematic()) {
+            opts.stroke = "rgba(255,255,255,0.7)";
+          } else if (b.isStatic()) {
+            opts.stroke = "rgba(255,255,255,0.5)";
+          }
+
           if (type == "circle") {
-            node = viewer.drawCircle(shape as CircleShape, options);
+            node = viewer.drawCircle(shape as CircleShape, opts);
           }
           if (type == "edge") {
-            node = viewer.drawEdge(shape as EdgeShape, options);
+            node = viewer.drawEdge(shape as EdgeShape, opts);
           }
           if (type == "polygon") {
-            node = viewer.drawPolygon(shape as PolygonShape, options);
+            node = viewer.drawPolygon(shape as PolygonShape, opts);
           }
           if (type == "chain") {
-            node = viewer.drawChain(shape as ChainShape, options);
+            node = viewer.drawChain(shape as ChainShape, opts);
           }
 
           if (node) {
@@ -644,7 +652,7 @@ class  WorldStageNode extends Stage.Node {
     }
   }
 
-  drawCircle(shape: CircleShape, options: WorldStageOptions) {
+  drawCircle(shape: CircleShape, options: DrawOptions) {
     let offsetX = 0;
     let offsetY = 0;
     const offsetMemo = memo();
@@ -689,7 +697,7 @@ class  WorldStageNode extends Stage.Node {
     return node;
   }
 
-  drawEdge(edge: EdgeShape, options: WorldStageOptions) {
+  drawEdge(edge: EdgeShape, options: DrawOptions) {
     let offsetX = 0;
     let offsetY = 0;
     let offsetA = 0;
@@ -740,7 +748,7 @@ class  WorldStageNode extends Stage.Node {
     return node;
   }
 
-  drawPolygon(shape: PolygonShape, options: WorldStageOptions) {
+  drawPolygon(shape: PolygonShape, options: DrawOptions) {
     let offsetX = 0;
     let offsetY = 0;
     const offsetMemo = memo();
@@ -817,7 +825,7 @@ class  WorldStageNode extends Stage.Node {
     return node;
   }
 
-  drawChain(shape: ChainShape, options: WorldStageOptions) {
+  drawChain(shape: ChainShape, options: DrawOptions) {
     let offsetX = 0;
     let offsetY = 0;
     const offsetMemo = memo();
