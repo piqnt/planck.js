@@ -56,17 +56,17 @@ interface BallData {
   color?: string;
 }
 
-interface BilliardPhysicsClient {
+interface BilliardPhysicsClientInterface {
   onBallInPocket(ball: Body, pocket: Body): void;
 }
 
 class BilliardPhysics {
-  client?: BilliardPhysicsClient;
+  client?: BilliardPhysicsClientInterface;
 
   world: World;
   balls: Body[] = [];
 
-  constructor(client?: BilliardPhysicsClient) {
+  constructor(client?: BilliardPhysicsClientInterface) {
     this.client = client;
   }
 
@@ -98,17 +98,16 @@ class BilliardPhysics {
       this.balls.push(ball);
       ball.setBullet(true);
       ball.setPosition(ballsData[i]);
+      const color = ballsData[i].color;
+      const style = color && STYLES[color];
       const shape = new Circle(BALL_RADIUS);
       ball.createFixture(shape, {
         friction: 0.1,
         restitution: 0.99,
         density: 1,
         userData: BALL,
+        style,
       });
-      const color = ballsData[i].color;
-      if (color) {
-        ball.style = STYLES[color];
-      }
     }
   }
 
@@ -205,10 +204,10 @@ class BilliardPhysics {
 }
 
 class EightBallGame {
-  terminal: TerminalInterface;
+  terminal: EightballTerminalInterface;
   physics: BilliardPhysics;
 
-  setup(terminal: TerminalInterface) {
+  setup(terminal: EightballTerminalInterface) {
     this.terminal = terminal;
     this.physics = new BilliardPhysics(this);
 
@@ -259,12 +258,12 @@ class EightBallGame {
   }
 }
 
-interface TerminalInterface {
+interface EightballTerminalInterface {
   setup(game: EightBallGame): void;
   start(game: EightBallGame): void;
 }
 
-class TestbedTerminal implements TerminalInterface {
+class TestbedTerminal implements EightballTerminalInterface {
   testbed: Testbed;
 
   setup(game: EightBallGame) {

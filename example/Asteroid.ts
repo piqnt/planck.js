@@ -19,20 +19,20 @@ interface UserData {
   bulletTime?: number;
 }
 
-interface AsteroidPhysicsClient {
+interface AsteroidPhysicsClientInterface {
   collideShipAsteroid(ship: Body, asteroid: Body): void;
   collideBulletAsteroid(asteroidBody: Body, bulletBody: Body): void;
 }
 
 class AsteroidPhysics {
-  client?: AsteroidPhysicsClient;
+  client?: AsteroidPhysicsClientInterface;
 
   world: World;
   asteroids: Body[] = [];
   bullets: Body[] = [];
   ship: Body | null;
 
-  constructor(client?: AsteroidPhysicsClient) {
+  constructor(client?: AsteroidPhysicsClientInterface) {
     this.client = client;
   }
 
@@ -275,7 +275,7 @@ class AsteroidPhysics {
 }
 
 class AsteroidGame {
-  terminal: TerminalInterface;
+  terminal: AsteroidTerminalInterface;
   physics: AsteroidPhysics;
 
   globalTime = 0;
@@ -287,7 +287,7 @@ class AsteroidGame {
   allowCrashTime = 0;
   allowFireTime = 0;
 
-  setup(terminal: TerminalInterface) {
+  setup(terminal: AsteroidTerminalInterface) {
     this.terminal = terminal;
     this.physics = new AsteroidPhysics(this);
 
@@ -382,7 +382,7 @@ class AsteroidGame {
   }
 }
 
-interface TerminalInterface {
+interface AsteroidTerminalInterface {
   activeKeys: { [key: string]: boolean };
   setup(game: AsteroidGame): void;
   start(game: AsteroidGame): void;
@@ -390,7 +390,7 @@ interface TerminalInterface {
   status(game: AsteroidGame): void;
 }
 
-class TestbedTerminal implements TerminalInterface {
+class TestbedTerminal implements AsteroidTerminalInterface {
   testbed: Testbed;
 
   get activeKeys() {

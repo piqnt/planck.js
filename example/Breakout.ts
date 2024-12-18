@@ -65,7 +65,7 @@ class WallData extends ObjectData {
   }
 }
 
-interface BreakoutPhysicsClient {
+interface BreakoutPhysicsClientInterface {
   collideBallBrick(ball: BallData, brick: BrickData): void;
   collideBallPaddle(ball: BallData): void;
   collideBallBottom(ball: BallData): void;
@@ -130,7 +130,7 @@ const fullPaddleShape = new PolygonShape([
   new Vec2(-1.2, -0.1),
 ]);
 class BreakoutPhysics {
-  client?: BreakoutPhysicsClient;
+  client?: BreakoutPhysicsClientInterface;
 
   world: World;
   bottomWall: Body;
@@ -139,7 +139,7 @@ class BreakoutPhysics {
   bricks: Body[] = [];
   drops: Body[] = [];
 
-  constructor(client?: BreakoutPhysicsClient) {
+  constructor(client?: BreakoutPhysicsClientInterface) {
     this.client = client;
   }
 
@@ -363,7 +363,7 @@ class BreakoutGame {
   COLUMNS = 7;
 
   physics: BreakoutPhysics;
-  terminal: TerminalInterface;
+  terminal: BreakoutTerminalInterface;
 
   state: string;
 
@@ -398,7 +398,7 @@ class BreakoutGame {
     return 7500;
   }
 
-  setup(terminal: TerminalInterface) {
+  setup(terminal: BreakoutTerminalInterface) {
     this.terminal = terminal;
 
     this.physics = new BreakoutPhysics(this);
@@ -588,13 +588,13 @@ class BreakoutGame {
   }
 }
 
-interface TerminalInterface {
+interface BreakoutTerminalInterface {
   setup(game: BreakoutGame): void;
   activeKeys: Record<string, boolean>;
   updateState(game: BreakoutGame): void;
 }
 
-class TestbedTerminal implements TerminalInterface {
+class TestbedTerminal implements BreakoutTerminalInterface {
   testbed: Testbed;
 
   get activeKeys() {
