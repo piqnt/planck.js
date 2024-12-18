@@ -487,6 +487,8 @@ export interface JointOpt {
 	 * should collide.
 	 */
 	collideConnected?: boolean;
+	/** @hidden Styling for dev-tools. */
+	style?: Style;
 }
 /**
  * Joint definitions are used to construct joints.
@@ -984,6 +986,8 @@ export interface FixtureOpt {
 	 * Collision category bit or bits that this fixture accept for collision.
 	 */
 	filterMaskBits?: number;
+	/** @hidden Styling for dev-tools. */
+	style?: Style;
 }
 export interface FixtureDef extends FixtureOpt {
 	shape: Shape;
@@ -1528,6 +1532,8 @@ export interface BodyDef {
 	 */
 	active?: boolean;
 	userData?: any;
+	/** @hidden Styling for dev-tools. */
+	style?: Style;
 }
 /**
  * MassData This holds the mass data computed for a shape.

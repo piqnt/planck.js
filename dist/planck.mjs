@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.1.3
+ * Planck.js v1.1.4
  * @license The MIT license
  * @copyright Copyright (c) 2024 Erin Catto, Ali Shakiba
  *
@@ -2215,6 +2215,9 @@ var Fixture = (
         this.m_proxies[i] = new FixtureProxy(this, i);
       }
       this.m_userData = def.userData;
+      if (typeof def.style === "object" && def.style !== null) {
+        this.style = def.style;
+      }
     }
     Fixture2.prototype._reset = function() {
       var body = this.getBody();
@@ -2463,6 +2466,9 @@ var Body = (
       this.m_prev = null;
       this.m_next = null;
       this.m_destroyed = false;
+      if (typeof def.style === "object" && def.style !== null) {
+        this.style = def.style;
+      }
     }
     Body2.prototype._serialize = function() {
       var fixtures = [];
@@ -3016,6 +3022,9 @@ var Joint = (
       this.m_bodyB = bodyB;
       this.m_collideConnected = !!def.collideConnected;
       this.m_userData = def.userData;
+      if (typeof def.style === "object" && def.style !== null) {
+        this.style = def.style;
+      }
     }
     Joint2.prototype.isActive = function() {
       return this.m_bodyA.isActive() && this.m_bodyB.isActive();

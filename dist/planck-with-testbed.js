@@ -2,7 +2,7 @@
   typeof exports === "object" && typeof module !== "undefined" ? factory(exports) : typeof define === "function" && define.amd ? define(["exports"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.planck = {}));
 })(this, function(exports2) {
   "use strict";/**
- * Planck.js v1.1.3
+ * Planck.js v1.1.4
  * @license The MIT license
  * @copyright Copyright (c) 2024 Erin Catto, Ali Shakiba
  *
@@ -2219,6 +2219,9 @@
           this.m_proxies[i] = new FixtureProxy(this, i);
         }
         this.m_userData = def.userData;
+        if (typeof def.style === "object" && def.style !== null) {
+          this.style = def.style;
+        }
       }
       Fixture2.prototype._reset = function() {
         var body = this.getBody();
@@ -2467,6 +2470,9 @@
         this.m_prev = null;
         this.m_next = null;
         this.m_destroyed = false;
+        if (typeof def.style === "object" && def.style !== null) {
+          this.style = def.style;
+        }
       }
       Body2.prototype._serialize = function() {
         var fixtures = [];
@@ -3020,6 +3026,9 @@
         this.m_bodyB = bodyB;
         this.m_collideConnected = !!def.collideConnected;
         this.m_userData = def.userData;
+        if (typeof def.style === "object" && def.style !== null) {
+          this.style = def.style;
+        }
       }
       Joint2.prototype.isActive = function() {
         return this.m_bodyA.isActive() && this.m_bodyB.isActive();
@@ -15233,10 +15242,13 @@
     };
     return mounted;
   };
-  var getStyle = function(obj) {
-    var _a2, _b;
-    return (_b = (_a2 = obj["render"]) !== null && _a2 !== void 0 ? _a2 : obj["style"]) !== null && _b !== void 0 ? _b : {};
-  };
+  function getStyle(obj) {
+    if (typeof obj["render"] === "object" && ("stroke" in obj["render"] || "fill" in obj["render"])) {
+      return obj["render"];
+    } else if (typeof obj["style"] === "object") {
+      return obj["style"];
+    }
+  }
   function findBody(world, point2) {
     var body = null;
     var aabb = {
@@ -15612,40 +15624,34 @@
         for (var b2 = world.getBodyList(); b2; b2 = b2.getNext()) {
           for (var f = b2.getFixtureList(); f; f = f.getNext()) {
             var node = this.nodes.get(f);
-            var fstyle = getStyle(f);
-            var bstyle = getStyle(b2);
             if (!node) {
-              if (fstyle && fstyle.stroke) {
-                options2.stroke = fstyle.stroke;
-              } else if (bstyle && bstyle.stroke) {
-                options2.stroke = bstyle.stroke;
-              } else if (b2.isDynamic()) {
-                options2.stroke = "rgba(255,255,255,0.9)";
-              } else if (b2.isKinematic()) {
-                options2.stroke = "rgba(255,255,255,0.7)";
-              } else if (b2.isStatic()) {
-                options2.stroke = "rgba(255,255,255,0.5)";
-              }
-              if (fstyle && fstyle.fill) {
-                options2.fill = fstyle.fill;
-              } else if (bstyle && bstyle.fill) {
-                options2.fill = bstyle.fill;
-              } else {
-                options2.fill = "";
-              }
               var type = f.getType();
               var shape = f.getShape();
+              var opts = Object.assign({
+                stroke: options2.stroke,
+                fill: options2.fill,
+                scaleY: options2.scaleY,
+                lineWidth: options2.lineWidth
+              }, getStyle(b2), getStyle(f), getStyle(shape));
+              if (opts.stroke) ;
+              else if (b2.isDynamic()) {
+                opts.stroke = "rgba(255,255,255,0.9)";
+              } else if (b2.isKinematic()) {
+                opts.stroke = "rgba(255,255,255,0.7)";
+              } else if (b2.isStatic()) {
+                opts.stroke = "rgba(255,255,255,0.5)";
+              }
               if (type == "circle") {
-                node = viewer.drawCircle(shape, options2);
+                node = viewer.drawCircle(shape, opts);
               }
               if (type == "edge") {
-                node = viewer.drawEdge(shape, options2);
+                node = viewer.drawEdge(shape, opts);
               }
               if (type == "polygon") {
-                node = viewer.drawPolygon(shape, options2);
+                node = viewer.drawPolygon(shape, opts);
               }
               if (type == "chain") {
-                node = viewer.drawChain(shape, options2);
+                node = viewer.drawChain(shape, opts);
               }
               if (node) {
                 node.appendTo(viewer);
