@@ -3,28 +3,41 @@
  * Licensed under the MIT license
  */
 
-import { Vec2, World, Edge, Polygon, Box, Circle, Math, Testbed } from "planck";
+import {
+  Vec2,
+  World,
+  Body,
+  BodyDef,
+  Fixture,
+  Shape,
+  Edge,
+  Polygon,
+  Box,
+  Circle,
+  Math,
+  Testbed,
+} from "planck";
 
-let world = new World(new Vec2(0, -10));
+const world = new World(new Vec2(0, -10));
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
 let pause = false;
 
-let MAX_BODIES = 256;
+const MAX_BODIES = 256;
 
-let bodies = [];
-let shapes = [];
+const bodies: Body[] = [];
+const shapes: Shape[] = [];
 
 {
-  let ground = world.createBody();
+  const ground = world.createBody();
 
   let x1 = -20.0;
   let y1 = 2.0 * Math.cos((x1 / 10.0) * Math.PI);
   for (let i = 0; i < 80; ++i) {
-    let x2 = x1 + 0.5;
-    let y2 = 2.0 * Math.cos((x2 / 10.0) * Math.PI);
+    const x2 = x1 + 0.5;
+    const y2 = 2.0 * Math.cos((x2 / 10.0) * Math.PI);
 
     ground.createFixture(new Edge(new Vec2(x1, y1), new Vec2(x2, y2)), 0.0);
 
@@ -38,19 +51,20 @@ shapes[0] = new Polygon([new Vec2(-0.5, 0.0), new Vec2(0.5, 0.0), new Vec2(0.0, 
 shapes[1] = new Polygon([new Vec2(-0.1, 0.0), new Vec2(0.1, 0.0), new Vec2(0.0, 1.5)]);
 
 {
-  let w = 1.0;
-  let b = w / (2.0 + Math.sqrt(2.0));
-  let s = Math.sqrt(2.0) * b;
+  const w = 1.0;
+  const b = w / (2.0 + Math.sqrt(2.0));
+  const s = Math.sqrt(2.0) * b;
 
-  let vertices = [];
-  vertices[0] = new Vec2(0.5 * s, 0.0);
-  vertices[1] = new Vec2(0.5 * w, b);
-  vertices[2] = new Vec2(0.5 * w, b + s);
-  vertices[3] = new Vec2(0.5 * s, w);
-  vertices[4] = new Vec2(-0.5 * s, w);
-  vertices[5] = new Vec2(-0.5 * w, b + s);
-  vertices[6] = new Vec2(-0.5 * w, b);
-  vertices[7] = new Vec2(-0.5 * s, 0.0);
+  const vertices = [
+    new Vec2(0.5 * s, 0.0),
+    new Vec2(0.5 * w, b),
+    new Vec2(0.5 * w, b + s),
+    new Vec2(0.5 * s, w),
+    new Vec2(-0.5 * s, w),
+    new Vec2(-0.5 * w, b + s),
+    new Vec2(-0.5 * w, b),
+    new Vec2(-0.5 * s, 0.0),
+  ];
 
   shapes[2] = new Polygon(vertices);
 }
@@ -61,12 +75,12 @@ shapes[4] = new Circle(0.5);
 
 let angle = 0.0;
 
-function createItem(index) {
+function createItem(index: number) {
   if (bodies.length > MAX_BODIES) {
-    world.destroyBody(bodies.shift());
+    world.destroyBody(bodies.shift()!);
   }
 
-  let bd = {
+  const bd: BodyDef = {
     position: new Vec2(Math.random(-10.0, 10.0), Math.random(10.0, 20.0)),
     angle: Math.random(-Math.PI, Math.PI),
     type: "dynamic",
@@ -76,7 +90,7 @@ function createItem(index) {
     bd.angularDamping = 0.02;
   }
 
-  let body = world.createBody(bd);
+  const body = world.createBody(bd);
 
   body.createFixture(shapes[index], {
     density: 20.0,
@@ -87,7 +101,7 @@ function createItem(index) {
 }
 
 function destroyBody() {
-  world.destroyBody(bodies.shift());
+  world.destroyBody(bodies.shift()!);
 }
 
 testbed.keydown = function (code, char) {
@@ -122,9 +136,13 @@ const rayCastResult = {
   fixture: null,
   point: null,
   normal: null,
+} as {
+  fixture: Fixture | null;
+  point: Vec2 | null;
+  normal: Vec2 | null;
 };
 
-function rayCastCallback(fixture, point, normal, fraction) {
+function rayCastCallback(fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) {
   rayCastResult.fixture = fixture;
   rayCastResult.point = point;
   rayCastResult.normal = normal;
@@ -138,22 +156,22 @@ function rayCastReset() {
 }
 
 testbed.step = function () {
-  let advanceRay = !pause; // settings.pause == 0 || settings.singleStep;
+  const advanceRay = !pause; // settings.pause == 0 || settings.singleStep;
 
-  let L = 25.0;
-  let point1 = new Vec2(0.0, 10.0);
-  let d = new Vec2(L * Math.cos(angle), -L * Math.abs(Math.sin(angle)));
-  let point2 = Vec2.add(point1, d);
+  const L = 25.0;
+  const point1 = new Vec2(0.0, 10.0);
+  const d = new Vec2(L * Math.cos(angle), -L * Math.abs(Math.sin(angle)));
+  const point2 = Vec2.add(point1, d);
 
   rayCastReset();
 
   world.rayCast(point1, point2, rayCastCallback);
 
-  if (rayCastResult.fixture) {
+  if (rayCastResult.point && rayCastResult.normal) {
     testbed.drawPoint(rayCastResult.point, 5.0, testbed.color(0.4, 0.9, 0.4));
     testbed.drawSegment(point1, rayCastResult.point, testbed.color(0.8, 0.8, 0.8));
 
-    let head = Vec2.combine(1, rayCastResult.point, 2, rayCastResult.normal);
+    const head = Vec2.combine(1, rayCastResult.point, 2, rayCastResult.normal);
     testbed.drawSegment(rayCastResult.point, head, testbed.color(0.9, 0.9, 0.4));
   } else {
     testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));

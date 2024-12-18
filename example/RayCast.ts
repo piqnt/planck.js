@@ -7,115 +7,137 @@
 // NOTE: we are intentionally filtering one of the polygons, therefore
 // the ray will always miss one type of polygon.
 
-import { World, Vec2, Transform, Edge, Circle, Polygon, Box, Testbed } from "planck";
+import {
+  World,
+  Body,
+  BodyDef,
+  Fixture,
+  Shape,
+  Vec2,
+  Transform,
+  Edge,
+  Circle,
+  Polygon,
+  Box,
+  Testbed,
+  RayCastOutput,
+  Vec2Value,
+} from "planck";
+
+const outputClosest = {
+  point: null as Vec2Value | null,
+  normal: null as Vec2Value | null,
+};
+
+function resetClosest() {
+  outputClosest.point = null;
+  outputClosest.normal = null;
+}
 
 // This callback finds the closest hit. Polygon 0 is filtered.
-let RayCastClosest = (function () {
-  let def = {};
-
-  def.reset = function () {
-    def.hit = false;
-    def.point = null;
-    def.normal = null;
-  };
-
-  def.callback = function (fixture, point, normal, fraction) {
-    let body = fixture.getBody();
-    let userData = body.getUserData();
-    if (userData !== undefined) {
-      if (userData === 0) {
-        // By returning -1, we instruct the calling code to ignore this fixture and
-        // continue the ray-cast to the next fixture.
-        return -1.0;
-      }
+function callbackClosest(
+  fixture: Fixture,
+  point: Vec2Value,
+  normal: Vec2Value,
+  fraction: number,
+): number {
+  const body = fixture.getBody();
+  const userData = body.getUserData();
+  if (userData !== undefined) {
+    if (userData === 0) {
+      // By returning -1, we instruct the calling code to ignore this fixture and
+      // continue the ray-cast to the next fixture.
+      return -1.0;
     }
+  }
 
-    def.hit = true;
-    def.point = point;
-    def.normal = normal;
+  outputClosest.point = point;
+  outputClosest.normal = normal;
 
-    // By returning the current fraction, we instruct the calling code to clip the ray and
-    // continue the ray-cast to the next fixture. WARNING: do not assume that fixtures
-    // are reported in order. However, by clipping, we can always get the closest fixture.
-    return fraction;
-  };
+  // By returning the current fraction, we instruct the calling code to clip the ray and
+  // continue the ray-cast to the next fixture. WARNING: do not assume that fixtures
+  // are reported in order. However, by clipping, we can always get the closest fixture.
+  return fraction;
+}
 
-  return def;
-})();
+const outputAny = {
+  point: null as Vec2Value | null,
+  normal: null as Vec2Value | null,
+};
+
+function resetAny() {
+  outputAny.point = null;
+  outputAny.normal = null;
+}
 
 // This callback finds any hit. Polygon 0 is filtered. For this type of query we are usually
 // just checking for obstruction, so the actual fixture and hit point are irrelevant.
-let RayCastAny = (function () {
-  let def = {};
-
-  def.reset = function () {
-    def.hit = false;
-    def.point = null;
-    def.normal = null;
-  };
-
-  def.callback = function (fixture, point, normal, fraction) {
-    let body = fixture.getBody();
-    let userData = body.getUserData();
-    if (userData !== undefined) {
-      if (userData === 0) {
-        // By returning -1, we instruct the calling code to ignore this fixture
-        // and continue the ray-cast to the next fixture.
-        return -1.0;
-      }
+function callbackAny(
+  fixture: Fixture,
+  point: Vec2Value,
+  normal: Vec2Value,
+  fraction: number,
+): number {
+  const body = fixture.getBody();
+  const userData = body.getUserData();
+  if (userData !== undefined) {
+    if (userData === 0) {
+      // By returning -1, we instruct the calling code to ignore this fixture
+      // and continue the ray-cast to the next fixture.
+      return -1.0;
     }
+  }
+  outputAny.point = point;
+  outputAny.normal = normal;
 
-    def.hit = true;
-    def.point = point;
-    def.normal = normal;
+  // At this point we have a hit, so we know the ray is obstructed.
+  // By returning 0, we instruct the calling code to terminate the ray-cast.
+  return 0.0;
+}
 
-    // At this point we have a hit, so we know the ray is obstructed.
-    // By returning 0, we instruct the calling code to terminate the ray-cast.
-    return 0.0;
-  };
+const outputMultiple = {
+  points: [] as Vec2Value[],
+  normals: [] as Vec2Value[],
+};
+// let MAX_COUNT = 3;
 
-  return def;
-})();
+function resetMultiple() {
+  outputMultiple.points.length = 0;
+  outputMultiple.normals.length = 0;
+}
 
 // This ray cast collects multiple hits along the ray. Polygon 0 is filtered.
 // The fixtures are not necessary reported in order, so we might not capture
 // the closest fixture.
-let RayCastMultiple = (function () {
-  let def = {};
-  // let MAX_COUNT = 3;
-
-  def.reset = function () {
-    def.points = [];
-    def.normals = [];
-  };
-
-  def.callback = function (fixture, point, normal, fraction) {
-    let body = fixture.getBody();
-    let userData = body.getUserData();
-    if (userData !== undefined) {
-      if (userData === 0) {
-        // By returning -1, we instruct the calling code to ignore this fixture
-        // and continue the ray-cast to the next fixture.
-        return -1.0;
-      }
+function callbackMultiple(
+  fixture: Fixture,
+  point: Vec2Value,
+  normal: Vec2Value,
+  fraction: number,
+): number {
+  const body = fixture.getBody();
+  const userData = body.getUserData();
+  if (userData !== undefined) {
+    if (userData === 0) {
+      // By returning -1, we instruct the calling code to ignore this fixture
+      // and continue the ray-cast to the next fixture.
+      return -1.0;
     }
+  }
 
-    def.points.push(point);
-    def.normals.push(normal);
+  outputMultiple.points.push(point);
+  outputMultiple.normals.push(normal);
 
-    // if (m_count == MAX_COUNT) {
-    //   // At this point the buffer is full.
-    //   // By returning 0, we instruct the calling code to terminate the ray-cast.
-    //   return 0.0;
-    // }
+  // if (m_count == MAX_COUNT) {
+  //   // At this point the buffer is full.
+  //   // By returning 0, we instruct the calling code to terminate the ray-cast.
+  //   return 0.0;
+  // }
 
-    // By returning 1, we instruct the caller to continue without clipping the
-    // ray.
-    return 1.0;
-  };
-
-  return def;
-})();
+  // By returning 1, we instruct the caller to continue without clipping the
+  // ray.
+  return 1.0;
+}
 
 const world = new World(new Vec2(0, -10));
 
@@ -125,15 +147,15 @@ testbed.height = 40;
 testbed.info("1-6: Drop new objects, Z: Change mode, X: Destroy an object");
 testbed.start(world);
 
-let MAX_BODIES = 256;
+const MAX_BODIES = 256;
 
 // mode
-let CLOSEST = 1;
-let ANY = 2;
-let MULTIPLE = 3;
+const CLOSEST = 1;
+const ANY = 2;
+const MULTIPLE = 3;
 
-let bodies = [];
-let shapes = [];
+const bodies: Body[] = [];
+const shapes: Shape[] = [];
 
 let angle = 0.0;
 let mode = CLOSEST;
@@ -141,9 +163,9 @@ let mode = CLOSEST;
 shapes[0] = new Polygon([new Vec2(-0.5, 0.0), new Vec2(0.5, 0.0), new Vec2(0.0, 1.5)]);
 shapes[1] = new Polygon([new Vec2(-0.1, 0.0), new Vec2(0.1, 0.0), new Vec2(0.0, 1.5)]);
 
-let w = 1.0;
-let b = w / (2.0 + Math.sqrt(2.0));
-let s = Math.sqrt(2.0) * b;
+const w = 1.0;
+const b = w / (2.0 + Math.sqrt(2.0));
+const s = Math.sqrt(2.0) * b;
 
 shapes[2] = new Polygon([
   new Vec2(0.5 * s, 0.0),
@@ -160,15 +182,15 @@ shapes[3] = new Box(0.5, 0.5);
 shapes[4] = new Circle(0.5);
 shapes[5] = new Edge(new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0));
 
-function createBody(index) {
+function createBody(index: number) {
   if (bodies.length > MAX_BODIES) {
-    world.destroyBody(bodies.shift());
+    world.destroyBody(bodies.shift()!);
   }
 
-  let x = Math.random() * 20 - 10;
-  let y = Math.random() * 20;
+  const x = Math.random() * 20 - 10;
+  const y = Math.random() * 20;
 
-  let bd = {};
+  const bd: BodyDef = {};
   bd.position = new Vec2(x, y);
   bd.angle = Math.random() * 2 * Math.PI - Math.PI;
   bd.userData = index;
@@ -177,9 +199,9 @@ function createBody(index) {
     bd.angularDamping = 0.02;
   }
 
-  let body = world.createBody(bd);
+  const body = world.createBody(bd);
 
-  let shape = shapes[index % shapes.length];
+  const shape = shapes[index % shapes.length];
 
   body.createFixture(shape, { friction: 0.3 });
 
@@ -188,7 +210,7 @@ function createBody(index) {
 
 function destroyBody() {
   const body = bodies.shift();
-  body && world.destroyBody(body);
+  if (body) world.destroyBody(body);
 }
 
 testbed.keydown = function (code, char) {
@@ -245,48 +267,51 @@ function updateStatus() {
 }
 
 testbed.step = function () {
-  let advanceRay = true;
+  const advanceRay = true;
 
-  let L = 11.0;
-  let point1 = new Vec2(0.0, 10.0);
-  let d = new Vec2(L * Math.cos(angle), L * Math.sin(angle));
-  let point2 = Vec2.add(point1, d);
+  const L = 11.0;
+  const point1 = new Vec2(0.0, 10.0);
+  const d = new Vec2(L * Math.cos(angle), L * Math.sin(angle));
+  const point2 = Vec2.add(point1, d);
 
   if (mode === CLOSEST) {
-    RayCastClosest.reset();
-    world.rayCast(point1, point2, RayCastClosest.callback);
+    resetClosest();
+    world.rayCast(point1, point2, callbackClosest);
+    const output = outputClosest;
 
-    if (RayCastClosest.hit) {
-      testbed.drawPoint(RayCastClosest.point, 5.0, testbed.color(0.4, 0.9, 0.4));
-      testbed.drawSegment(point1, RayCastClosest.point, testbed.color(0.8, 0.8, 0.8));
-      let head = Vec2.combine(1, RayCastClosest.point, 2, RayCastClosest.normal);
-      testbed.drawSegment(RayCastClosest.point, head, testbed.color(0.9, 0.9, 0.4));
+    if (output && output.point && output.normal) {
+      testbed.drawPoint(output.point, 5.0, testbed.color(0.4, 0.9, 0.4));
+      testbed.drawSegment(point1, output.point, testbed.color(0.8, 0.8, 0.8));
+      const head = Vec2.combine(1, output.point, 2, output.normal);
+      testbed.drawSegment(output.point, head, testbed.color(0.9, 0.9, 0.4));
     } else {
       testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));
     }
   } else if (mode === ANY) {
-    RayCastAny.reset();
-    world.rayCast(point1, point2, RayCastAny.callback);
+    resetAny();
+    world.rayCast(point1, point2, callbackAny);
+    const output = outputAny;
 
-    if (RayCastAny.hit) {
-      testbed.drawPoint(RayCastAny.point, 5.0, testbed.color(0.4, 0.9, 0.4));
-      testbed.drawSegment(point1, RayCastAny.point, testbed.color(0.8, 0.8, 0.8));
-      let head = Vec2.combine(1, RayCastAny.point, 2, RayCastAny.normal);
-      testbed.drawSegment(RayCastAny.point, head, testbed.color(0.9, 0.9, 0.4));
+    if (output && output.point && output.normal) {
+      testbed.drawPoint(output.point, 5.0, testbed.color(0.4, 0.9, 0.4));
+      testbed.drawSegment(point1, output.point, testbed.color(0.8, 0.8, 0.8));
+      const head = Vec2.combine(1, output.point, 2, output.normal);
+      testbed.drawSegment(output.point, head, testbed.color(0.9, 0.9, 0.4));
     } else {
       testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));
     }
   } else if (mode === MULTIPLE) {
-    RayCastMultiple.reset();
-    world.rayCast(point1, point2, RayCastMultiple.callback);
+    resetMultiple();
+    world.rayCast(point1, point2, callbackMultiple);
     testbed.drawSegment(point1, point2, testbed.color(0.8, 0.8, 0.8));
+    const output = outputMultiple;
 
-    for (let i = 0; i < RayCastMultiple.points.length; ++i) {
-      let p = RayCastMultiple.points[i];
-      let n = RayCastMultiple.normals[i];
+    for (let i = 0; i < output.points.length; ++i) {
+      const p = output.points[i];
+      const n = output.normals[i];
       testbed.drawPoint(p, 5.0, testbed.color(0.4, 0.9, 0.4));
       testbed.drawSegment(point1, p, testbed.color(0.8, 0.8, 0.8));
-      let head = Vec2.combine(1, p, 0.5, n);
+      const head = Vec2.combine(1, p, 0.5, n);
       testbed.drawSegment(p, head, testbed.color(0.9, 0.9, 0.4));
     }
   }
@@ -297,22 +322,22 @@ testbed.step = function () {
 
   if (false) {
     // This case was failing.
-    let shape = new Box(22.875, 3.0);
+    const shape = new Box(22.875, 3.0);
 
-    let input = {}; // RayCastInput
-    input.p1 = new Vec2(10.2725, 1.71372);
-    input.p2 = new Vec2(10.2353, 2.21807);
-    // input.maxFraction = 0.567623;
-    input.maxFraction = 0.56762173;
+    const input = {
+      p1: new Vec2(10.2725, 1.71372),
+      p2: new Vec2(10.2353, 2.21807),
+      maxFraction: 0.56762173,
+    };
 
-    let xf = new Transform(new Vec2(23.0, 5.0));
+    const xf = new Transform(new Vec2(23.0, 5.0));
 
-    let output = {}; // RayCastOutput
-    let hit = shape.rayCast(output, input, xf);
+    const output = {} as RayCastOutput;
+    let hit = shape.rayCast(output, input, xf, 0);
     hit = false;
 
-    let color = testbed.color(1.0, 1.0, 1.0);
-    let vs = shape.vertices.map((v) => Transform.mul(xf, v));
+    const color = testbed.color(1.0, 1.0, 1.0);
+    const vs = shape.m_vertices.map((v) => Transform.mul(xf, v));
 
     testbed.drawPolygon(vs, color);
     testbed.drawSegment(input.p1, input.p2, color);

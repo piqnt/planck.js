@@ -7,27 +7,27 @@
 
 import { World, Vec2, Edge, Box, Testbed } from "planck";
 
-let world = new World(new Vec2(0, -10));
+const world = new World(new Vec2(0, -10));
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
-let breakVelocity;
-let breakAngularVelocity;
+let breakVelocity: Vec2;
+let breakAngularVelocity: number;
 
 let broke = false;
 
 // Ground body
-let ground = world.createBody();
+const ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
 // Breakable dynamic body
-let body1 = world.createDynamicBody(new Vec2(0.0, 40.0), 0.25 * Math.PI);
+const body1 = world.createDynamicBody(new Vec2(0.0, 40.0), 0.25 * Math.PI);
 
-let shape1 = new Box(0.5, 0.5, new Vec2(-0.5, 0.0), 0.0);
-let piece1 = body1.createFixture(shape1, 1.0);
+const shape1 = new Box(0.5, 0.5, new Vec2(-0.5, 0.0), 0.0);
+const piece1 = body1.createFixture(shape1, 1.0);
 
-let shape2 = new Box(0.5, 0.5, new Vec2(0.5, 0.0), 0.0);
+const shape2 = new Box(0.5, 0.5, new Vec2(0.5, 0.0), 0.0);
 let piece2 = body1.createFixture(shape2, 1.0);
 
 world.on("post-solve", function (contact, impulse) {
@@ -37,7 +37,7 @@ world.on("post-solve", function (contact, impulse) {
   }
 
   // Should the body break?
-  let count = contact.getManifold().pointCount;
+  const count = contact.getManifold().pointCount;
 
   let maxImpulse = 0.0;
   for (let i = 0; i < count; ++i) {
@@ -54,24 +54,24 @@ world.on("post-solve", function (contact, impulse) {
 
 function Break() {
   // Create two bodies from one.
-  let center = body1.getWorldCenter();
+  const center = body1.getWorldCenter();
 
   body1.destroyFixture(piece2);
 
-  let body2 = world.createDynamicBody(body1.getPosition(), body1.getAngle());
+  const body2 = world.createDynamicBody(body1.getPosition(), body1.getAngle());
 
   piece2 = body2.createFixture(shape2, 1.0);
 
   // Compute consistent velocities for new bodies based on
   // cached velocity.
-  let center1 = body1.getWorldCenter();
-  let center2 = body2.getWorldCenter();
+  const center1 = body1.getWorldCenter();
+  const center2 = body2.getWorldCenter();
 
-  let velocity1 = Vec2.add(
+  const velocity1 = Vec2.add(
     breakVelocity,
     Vec2.cross(breakAngularVelocity, Vec2.sub(center1, center)),
   );
-  let velocity2 = Vec2.add(
+  const velocity2 = Vec2.add(
     breakVelocity,
     Vec2.cross(breakAngularVelocity, Vec2.sub(center2, center)),
   );

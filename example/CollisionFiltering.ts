@@ -12,25 +12,27 @@
 
 import { World, Vec2, Edge, Polygon, Box, Circle, PrismaticJoint, Testbed } from "planck";
 
-let SMALL_GROUP = 1;
-let LARGE_GROUP = -1;
+const SMALL_GROUP = 1;
+const LARGE_GROUP = -1;
 
-let TRIANGLE_CATEGORY = 0x0002;
-let BOX_Category = 0x0004;
-let CIRCLE_CATEGORY = 0x0008;
+const TRIANGLE_CATEGORY = 0x0002;
+const BOX_Category = 0x0004;
+const CIRCLE_CATEGORY = 0x0008;
 
-let TRIANGLE_MASK = 0xffff;
-let BOX_MASK = 0xffff ^ TRIANGLE_CATEGORY;
-let CIRCLE_MAX = 0xffff;
+const TRIANGLE_MASK = 0xffff;
+const BOX_MASK = 0xffff ^ TRIANGLE_CATEGORY;
+const CIRCLE_MAX = 0xffff;
 
-let world = new World(new Vec2(0, -10));
+const world = new World(new Vec2(0, -10));
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
 // Ground body
-let ground = world.createBody();
-ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), { friction: 0.3 });
+const ground = world.createBody();
+ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), {
+  friction: 0.3,
+});
 
 // Small triangle
 const smallTriangle = {
@@ -40,7 +42,7 @@ const smallTriangle = {
   filterGroupIndex: SMALL_GROUP,
 };
 
-let body1 = world.createBody({
+const body1 = world.createBody({
   type: "dynamic",
   position: new Vec2(-5.0, 2.0),
 });
@@ -57,7 +59,7 @@ const largeTriangle = {
   filterGroupIndex: LARGE_GROUP,
 };
 
-let body2 = world.createBody({
+const body2 = world.createBody({
   type: "dynamic",
   position: new Vec2(-5.0, 6.0),
   fixedRotation: true, // look at me!
@@ -67,22 +69,20 @@ body2.createFixture(
   largeTriangle,
 );
 
-let body = world.createDynamicBody(new Vec2(-5.0, 10.0));
+const body = world.createDynamicBody(new Vec2(-5.0, 10.0));
 body.createFixture(new Box(0.5, 1.0), 1.0);
 
 world.createJoint(
-  new PrismaticJoint(
-    {
-      enableLimit: true,
-      localAnchorA: new Vec2(0.0, 4.0),
-      localAnchorB: new Vec2(),
-      localAxisA: new Vec2(0.0, 1.0),
-      lowerTranslation: -1.0,
-      upperTranslation: 1.0,
-    },
-    body2,
-    body,
-  ),
+  new PrismaticJoint({
+    bodyA: body2,
+    bodyB: body,
+    enableLimit: true,
+    localAnchorA: new Vec2(0.0, 4.0),
+    localAnchorB: new Vec2(),
+    localAxisA: new Vec2(0.0, 1.0),
+    lowerTranslation: -1.0,
+    upperTranslation: 1.0,
+  }),
 );
 
 // Small box
@@ -94,7 +94,7 @@ const smallBox = {
   filterGroupIndex: SMALL_GROUP,
 };
 
-let body3 = world.createDynamicBody(new Vec2(0.0, 2.0));
+const body3 = world.createDynamicBody(new Vec2(0.0, 2.0));
 body3.createFixture(new Box(1.0, 0.5), smallBox);
 
 // Large box (recycle definitions)
@@ -106,7 +106,7 @@ const largeBox = {
   filterGroupIndex: LARGE_GROUP,
 };
 
-let body4 = world.createDynamicBody(new Vec2(0.0, 6.0));
+const body4 = world.createDynamicBody(new Vec2(0.0, 6.0));
 body4.createFixture(new Box(2.0, 1.0), largeBox);
 
 // Small circle
@@ -117,7 +117,7 @@ const smallCircle = {
   filterGroupIndex: SMALL_GROUP,
 };
 
-let body5 = world.createDynamicBody(new Vec2(5.0, 2.0));
+const body5 = world.createDynamicBody(new Vec2(5.0, 2.0));
 body5.createFixture(new Circle(1.0), smallCircle);
 
 // Large circle
@@ -128,5 +128,5 @@ const largeCircle = {
   filterGroupIndex: LARGE_GROUP,
 };
 
-let body6 = world.createDynamicBody(new Vec2(5.0, 6.0));
+const body6 = world.createDynamicBody(new Vec2(5.0, 6.0));
 body6.createFixture(new Circle(2.0), largeCircle);

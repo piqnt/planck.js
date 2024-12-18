@@ -12,25 +12,25 @@ import {
   Edge,
   Circle,
   Box,
-  Polygon,
+  PolygonShape,
   RevoluteJoint,
   DistanceJoint,
   Testbed,
 } from "planck";
 
-let world = new World(new Vec2(0, -10));
+const world = new World(new Vec2(0, -10));
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
-let motorSpeed = 2.0;
-let motorOn = true;
+const motorSpeed = 2.0;
+const motorOn = true;
 
-let offset = new Vec2(0.0, 8.0);
-let pivot = new Vec2(0.0, 0.8);
+const offset = new Vec2(0.0, 8.0);
+const pivot = new Vec2(0.0, 0.8);
 
 // Ground
-let ground = world.createBody();
+const ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-50.0, 0.0), new Vec2(50.0, 0.0)), 0.0);
 ground.createFixture(new Edge(new Vec2(-50.0, 0.0), new Vec2(-50.0, 10.0)), 0.0);
 ground.createFixture(new Edge(new Vec2(50.0, 0.0), new Vec2(50.0, 10.0)), 0.0);
@@ -41,19 +41,19 @@ for (let i = 0; i < 40; ++i) {
 }
 
 // Chassis
-let chassis = world.createDynamicBody(Vec2.add(pivot, offset));
+const chassis = world.createDynamicBody(Vec2.add(pivot, offset));
 chassis.createFixture(new Box(2.5, 1.0), {
   density: 1.0,
   filterGroupIndex: -1,
 });
 
-let wheel = world.createDynamicBody(Vec2.add(pivot, offset));
+const wheel = world.createDynamicBody(Vec2.add(pivot, offset));
 wheel.createFixture(new Circle(1.6), {
   density: 1.0,
   filterGroupIndex: -1,
 });
 
-let motorjoint = world.createJoint(
+const motorJoint = world.createJoint(
   new RevoluteJoint(
     {
       collideConnected: false,
@@ -67,7 +67,7 @@ let motorjoint = world.createJoint(
   ),
 );
 
-let wheelAnchor = new Vec2(0.0, -0.8).add(pivot);
+const wheelAnchor = new Vec2(0.0, -0.8).add(pivot);
 
 createLeg(-1.0, wheelAnchor);
 createLeg(1.0, wheelAnchor);
@@ -80,24 +80,25 @@ wheel.setTransform(wheel.getPosition(), (-120.0 * Math.PI) / 180.0);
 createLeg(-1.0, wheelAnchor);
 createLeg(1.0, wheelAnchor);
 
-function createLeg(s, wheelAnchor) {
-  let p1 = new Vec2(5.4 * s, -6.1);
-  let p2 = new Vec2(7.2 * s, -1.2);
-  let p3 = new Vec2(4.3 * s, -1.9);
-  let p4 = new Vec2(3.1 * s, 0.8);
-  let p5 = new Vec2(6.0 * s, 1.5);
-  let p6 = new Vec2(2.5 * s, 3.7);
+function createLeg(s: number, wheelAnchor: Vec2) {
+  const p1 = new Vec2(5.4 * s, -6.1);
+  const p2 = new Vec2(7.2 * s, -1.2);
+  const p3 = new Vec2(4.3 * s, -1.9);
+  const p4 = new Vec2(3.1 * s, 0.8);
+  const p5 = new Vec2(6.0 * s, 1.5);
+  const p6 = new Vec2(2.5 * s, 3.7);
 
-  let poly1, poly2;
+  let poly1: PolygonShape;
+  let poly2: PolygonShape;
   if (s > 0.0) {
-    poly1 = new Polygon([p1, p2, p3]);
-    poly2 = new Polygon([new Vec2(), Vec2.sub(p5, p4), Vec2.sub(p6, p4)]);
+    poly1 = new PolygonShape([p1, p2, p3]);
+    poly2 = new PolygonShape([new Vec2(), Vec2.sub(p5, p4), Vec2.sub(p6, p4)]);
   } else {
-    poly1 = new Polygon([p1, p3, p2]);
-    poly2 = new Polygon([new Vec2(), Vec2.sub(p6, p4), Vec2.sub(p5, p4)]);
+    poly1 = new PolygonShape([p1, p3, p2]);
+    poly2 = new PolygonShape([new Vec2(), Vec2.sub(p6, p4), Vec2.sub(p5, p4)]);
   }
 
-  let body1 = world.createDynamicBody({
+  const body1 = world.createDynamicBody({
     position: offset,
     angularDamping: 10.0,
   });
@@ -106,7 +107,7 @@ function createLeg(s, wheelAnchor) {
     filterGroupIndex: -1,
   });
 
-  let body2 = world.createDynamicBody({
+  const body2 = world.createDynamicBody({
     position: Vec2.add(p4, offset),
     angularDamping: 10.0,
   });
@@ -118,7 +119,7 @@ function createLeg(s, wheelAnchor) {
   // Using a soft distance constraint can reduce some jitter.
   // It also makes the structure seem a bit more fluid by
   // acting like a suspension system.
-  let djd = {
+  const djd = {
     dampingRatio: 0.5,
     frequencyHz: 10.0,
   };
@@ -139,18 +140,19 @@ function createLeg(s, wheelAnchor) {
 }
 
 testbed.step = function () {
+  if (!motorJoint) return;
   if (testbed.activeKeys.right && testbed.activeKeys.left) {
-    motorjoint.setMotorSpeed(0.0);
-    motorjoint.enableMotor(false);
+    motorJoint.setMotorSpeed(0.0);
+    motorJoint.enableMotor(false);
   } else if (testbed.activeKeys.right) {
-    motorjoint.setMotorSpeed(motorSpeed);
-    motorjoint.enableMotor(true);
+    motorJoint.setMotorSpeed(motorSpeed);
+    motorJoint.enableMotor(true);
   } else if (testbed.activeKeys.left) {
-    motorjoint.setMotorSpeed(-motorSpeed);
-    motorjoint.enableMotor(true);
+    motorJoint.setMotorSpeed(-motorSpeed);
+    motorJoint.enableMotor(true);
   } else {
-    motorjoint.setMotorSpeed(0.0);
-    motorjoint.enableMotor(true);
+    motorJoint.setMotorSpeed(0.0);
+    motorJoint.enableMotor(true);
   }
 
   if (wheel.getPosition().x > testbed.x + 10) {

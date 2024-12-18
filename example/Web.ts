@@ -5,17 +5,17 @@
 
 // This tests distance joints, body destruction, and joint destruction.
 
-import { World, Vec2, Box, DistanceJoint, Testbed } from "planck";
+import { World, Body, Joint, Vec2, Box, DistanceJoint, Testbed } from "planck";
 
 const world = new World();
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
-let ground = world.createBody();
+const ground = world.createBody();
 
-const bodies = [];
-let joints = [];
+const bodies: Body[] = [];
+let joints: Joint[] = [];
 
 const box = new Box(0.5, 0.5);
 
@@ -120,13 +120,13 @@ testbed.keydown = function (code, char) {
   switch (char) {
     case "X":
       if (bodies.length) {
-        world.destroyBody(bodies.pop());
+        world.destroyBody(bodies.pop()!);
       }
       break;
 
     case "Z":
       if (joints.length) {
-        world.destroyJoint(joints.pop());
+        world.destroyJoint(joints.pop()!);
       }
       break;
   }

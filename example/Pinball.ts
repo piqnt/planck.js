@@ -8,13 +8,13 @@
 
 import { World, Vec2, Circle, Box, Chain, RevoluteJoint, Testbed } from "planck";
 
-let world = new World(new Vec2(0, -10));
+const world = new World(new Vec2(0, -10));
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
 // Ground body
-let ground = world.createBody();
+const ground = world.createBody();
 ground.createFixture(
   new Chain(
     [
@@ -30,23 +30,23 @@ ground.createFixture(
 );
 
 // Flippers
-let pLeft = new Vec2(-2.0, 0.0);
-let pRight = new Vec2(2.0, 0.0);
+const pLeft = new Vec2(-2.0, 0.0);
+const pRight = new Vec2(2.0, 0.0);
 
-let leftFlipper = world.createDynamicBody(new Vec2(-2.0, 0.0));
-let rightFlipper = world.createDynamicBody(new Vec2(2.0, 0.0));
+const leftFlipper = world.createDynamicBody(new Vec2(-2.0, 0.0));
+const rightFlipper = world.createDynamicBody(new Vec2(2.0, 0.0));
 
 leftFlipper.createFixture(new Box(1.75, 0.1), 1.0);
 rightFlipper.createFixture(new Box(1.75, 0.1), 1.0);
 
-let jd = {
+const jd = {
   enableMotor: true,
   maxMotorTorque: 1000.0,
   enableLimit: true,
   motorSpeed: 0.0,
 };
 
-let leftJoint = new RevoluteJoint(
+const leftJoint = new RevoluteJoint(
   {
     ...jd,
     lowerAngle: (-30.0 * Math.PI) / 180.0,
@@ -58,7 +58,7 @@ let leftJoint = new RevoluteJoint(
 );
 world.createJoint(leftJoint);
 
-let rightJoint = new RevoluteJoint(
+const rightJoint = new RevoluteJoint(
   {
     ...jd,
     lowerAngle: (-5.0 * Math.PI) / 180.0,
@@ -71,7 +71,7 @@ let rightJoint = new RevoluteJoint(
 world.createJoint(rightJoint);
 
 // Circle character
-let ball = world.createBody({
+const ball = world.createBody({
   position: new Vec2(1.0, 15.0),
   type: "dynamic",
   bullet: true,

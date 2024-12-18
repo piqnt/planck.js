@@ -2,11 +2,11 @@ import { World, Vec2, Circle, Chain, Settings, Testbed } from "planck";
 
 const testbed = Testbed.mount();
 
-let width = 10.0;
-let height = 6.0;
+const width = 10.0;
+const height = 6.0;
 
-let PLAYER_R = 0.35;
-let BALL_R = 0.23;
+const PLAYER_R = 0.35;
+const BALL_R = 0.23;
 
 testbed.x = 0;
 testbed.y = 0;
@@ -16,41 +16,41 @@ testbed.mouseForce = -120;
 
 Settings.velocityThreshold = 0;
 
-let world = new World();
+const world = new World();
 testbed.start(world);
 
-let goal = [new Vec2(0, -height * 0.2), new Vec2(0, +height * 0.2)];
+const goal = [new Vec2(0, -height * 0.2), new Vec2(0, +height * 0.2)];
 
-let wallFixDef = {
+const wallFixDef = {
   friction: 0,
   restitution: 0,
   userData: "wall",
 };
-let goalFixDef = {
+const goalFixDef = {
   friction: 0,
   restitution: 1,
   userData: "goal",
 };
 
-let ballFixDef = {
+const ballFixDef = {
   friction: 0.2,
   restitution: 0.99,
   density: 0.5,
   userData: "ball",
 };
-let ballBodyDef = {
+const ballBodyDef = {
   bullet: true,
   linearDamping: 3.5,
   angularDamping: 1.6,
 };
 
-let playerFixDef = {
+const playerFixDef = {
   friction: 0.1,
   restitution: 0.99,
   density: 0.8,
   userData: "player",
 };
-let playerBodyDef = {
+const playerBodyDef = {
   bullet: true,
   linearDamping: 4,
   angularDamping: 1.6,
@@ -61,12 +61,12 @@ world.createBody().createFixture(new Chain(walls(), true), wallFixDef);
 world.createBody(new Vec2(-width * 0.5 - BALL_R, 0)).createFixture(new Chain(goal), goalFixDef);
 world.createBody(new Vec2(+width * 0.5 + BALL_R, 0)).createFixture(new Chain(goal), goalFixDef);
 
-let ball = world.createDynamicBody(ballBodyDef);
+const ball = world.createDynamicBody(ballBodyDef);
 ball.createFixture(new Circle(BALL_R), ballFixDef);
 ball.style = { fill: "white", stroke: "black" };
 
 team().forEach(function (p) {
-  let player = world.createDynamicBody(playerBodyDef);
+  const player = world.createDynamicBody(playerBodyDef);
   player.setPosition(p);
   player.createFixture(new Circle(PLAYER_R), playerFixDef);
   player.style = { fill: "#0077ff", stroke: "black" };
@@ -75,7 +75,7 @@ team().forEach(function (p) {
 team()
   .map((v) => new Vec2(-v.x, v.y))
   .forEach(function (p) {
-    let player = world.createDynamicBody(playerBodyDef);
+    const player = world.createDynamicBody(playerBodyDef);
     player.setPosition(p);
     player.setAngle(Math.PI);
     player.createFixture(new Circle(PLAYER_R), playerFixDef);
@@ -83,24 +83,24 @@ team()
   });
 
 world.on("post-solve", function (contact) {
-  let fA = contact.getFixtureA();
-  let bA = fA.getBody();
-  let fB = contact.getFixtureB();
-  let bB = fB.getBody();
+  const fA = contact.getFixtureA();
+  const bA = fA.getBody();
+  const fB = contact.getFixtureB();
+  const bB = fB.getBody();
 
-  let wall =
+  const wall =
     fA.getUserData() === wallFixDef.userData
       ? bA
       : fB.getUserData() === wallFixDef.userData
         ? bB
         : null;
-  let ball =
+  const ball =
     fA.getUserData() === ballFixDef.userData
       ? bA
       : fB.getUserData() === ballFixDef.userData
         ? bB
         : null;
-  let goal =
+  const goal =
     fA.getUserData() === goalFixDef.userData
       ? bA
       : fB.getUserData() === goalFixDef.userData
@@ -118,17 +118,18 @@ world.on("post-solve", function (contact) {
 });
 
 function team() {
-  let positions = [];
-  positions.push(new Vec2(-width * 0.45, 0));
-  positions.push(new Vec2(-width * 0.3, -height * 0.2));
-  positions.push(new Vec2(-width * 0.3, +height * 0.2));
-  positions.push(new Vec2(-width * 0.1, -height * 0.1));
-  positions.push(new Vec2(-width * 0.1, +height * 0.1));
+  const positions = [
+    new Vec2(-width * 0.45, 0),
+    new Vec2(-width * 0.3, -height * 0.2),
+    new Vec2(-width * 0.3, +height * 0.2),
+    new Vec2(-width * 0.1, -height * 0.1),
+    new Vec2(-width * 0.1, +height * 0.1),
+  ];
   return positions;
 }
 
 function walls() {
-  let chain = [
+  const chain = [
     new Vec2(-width * 0.5 + 0.2, -height * 0.5),
     new Vec2(-width * 0.5, -height * 0.5 + 0.2),
     new Vec2(-width * 0.5, -height * 0.2),

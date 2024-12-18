@@ -3,9 +3,9 @@
  * Licensed under the MIT license
  */
 
-import { World, Vec2, Edge, Circle, Box, Testbed } from "planck";
+import { World, Body, Vec2, Edge, Circle, Box, Testbed } from "planck";
 
-let world = new World({
+const world = new World({
   gravity: new Vec2(0, -10),
   blockSolve: true,
 });
@@ -17,27 +17,27 @@ testbed.start(world);
 const columnCount = 3;
 const rowCount = 20;
 
-let bullet;
-let bodies = [];
-let indices = [];
+let bullet: Body | null = null;
+const bodies: Body[] = [];
+const indices: number[] = [];
 
-let ground = world.createBody();
+const ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)));
 ground.createFixture(new Edge(new Vec2(20.0, 0.0), new Vec2(20.0, 20.0)));
 
-let xs = [0.0, -10.0, -5.0, 5.0, 10.0];
+const xs = [0.0, -10.0, -5.0, 5.0, 10.0];
 
-let shape = new Box(0.5, 0.5);
+const shape = new Box(0.5, 0.5);
 
 for (let j = 0; j < columnCount; ++j) {
   for (let i = 0; i < rowCount; ++i) {
-    let n = j * rowCount + i;
+    const n = j * rowCount + i;
     indices[n] = n;
-    let x = 0.0;
+    const x = 0.0;
     // let x = Math.random() * 0.04 - 0.02;
     // let x = i % 2 == 0 ? -0.01 : 0.01;
 
-    let body = world.createDynamicBody();
+    const body = world.createDynamicBody();
     body.setUserData(indices[n]);
     body.setPosition(new Vec2(xs[j] + x, 0.55 + 1.1 * i));
     body.createFixture(shape, {
@@ -73,6 +73,7 @@ testbed.keydown = function (code, char) {
       break;
 
     case "Z":
+      // @ts-expect-error
       world.m_blockSolve = !world.m_blockSolve;
       break;
   }
@@ -80,6 +81,7 @@ testbed.keydown = function (code, char) {
 
 let stepCount = 1;
 testbed.step = function () {
+  // @ts-expect-error
   testbed.status("Blocksolve", world.m_blockSolve);
 
   if (stepCount++ % 300 == 0) {

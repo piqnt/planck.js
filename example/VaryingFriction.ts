@@ -5,7 +5,7 @@
 
 import { World, Vec2, Edge, Box, Testbed } from "planck";
 
-let world = new World(new Vec2(0, -10));
+const world = new World(new Vec2(0, -10));
 
 const testbed = Testbed.mount();
 testbed.start(world);

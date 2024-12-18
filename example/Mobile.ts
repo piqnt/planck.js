@@ -5,7 +5,7 @@
 
 import { Vec2, World, Box, RevoluteJoint, Testbed } from "planck";
 
-let world = new World(new Vec2(0, -1));
+const world = new World(new Vec2(0, -1));
 
 const testbed = Testbed.mount();
 testbed.y = -15;
@@ -13,33 +13,29 @@ testbed.width = 20;
 testbed.height = 20;
 testbed.start(world);
 
-let DEPTH = 4;
-let DENSITY = 20.0;
+const DEPTH = 4;
+const DENSITY = 20.0;
 
-let ground = world.createBody(new Vec2(0.0, 20.0));
+const ground = world.createBody(new Vec2(0.0, 20.0));
 
-let a = 0.5;
-let h = new Vec2(0.0, a);
+const a = 0.5;
+const h = new Vec2(0.0, a);
 
-let root = addNode(ground, new Vec2(), 0, 3.0, a);
+const root = addNode(ground, new Vec2(), 0, 3.0, a);
 
 world.createJoint(
-  new RevoluteJoint(
-    {
-      bodyA: ground,
-      bodyB: root,
-      localAnchorA: new Vec2(0, 0),
-      localAnchorB: h,
-    },
-    ground,
-    root,
-  ),
+  new RevoluteJoint({
+    bodyA: ground,
+    bodyB: root,
+    localAnchorA: new Vec2(0, 0),
+    localAnchorB: h,
+  }),
 );
 
 function addNode(parent, localAnchor, depth, offset, a) {
-  let h = new Vec2(0.0, a);
+  const h = new Vec2(0.0, a);
 
-  let node = world.createBody({
+  const node = world.createBody({
     type: "dynamic",
     position: new Vec2(parent.getPosition()).add(localAnchor).sub(h),
   });
@@ -50,35 +46,27 @@ function addNode(parent, localAnchor, depth, offset, a) {
     return node;
   }
 
-  let left = new Vec2(offset, -a);
-  let right = new Vec2(-offset, -a);
-  let leftChild = addNode(node, left, depth + 1, 0.5 * offset, a);
-  let rightChild = addNode(node, right, depth + 1, 0.5 * offset, a);
+  const left = new Vec2(offset, -a);
+  const right = new Vec2(-offset, -a);
+  const leftChild = addNode(node, left, depth + 1, 0.5 * offset, a);
+  const rightChild = addNode(node, right, depth + 1, 0.5 * offset, a);
 
   world.createJoint(
-    new RevoluteJoint(
-      {
-        bodyA: node,
-        bodyB: leftChild,
-        localAnchorA: left,
-        localAnchorB: h,
-      },
-      node,
-      leftChild,
-    ),
+    new RevoluteJoint({
+      bodyA: node,
+      bodyB: leftChild,
+      localAnchorA: left,
+      localAnchorB: h,
+    }),
   );
 
   world.createJoint(
-    new RevoluteJoint(
-      {
-        bodyA: node,
-        bodyB: rightChild,
-        localAnchorA: right,
-        localAnchorB: h,
-      },
-      node,
-      rightChild,
-    ),
+    new RevoluteJoint({
+      bodyA: node,
+      bodyB: rightChild,
+      localAnchorA: right,
+      localAnchorB: h,
+    }),
   );
 
   return node;

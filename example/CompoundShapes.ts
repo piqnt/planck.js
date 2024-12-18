@@ -6,7 +6,7 @@
 // TODO_ERIN test joints on compounds.
 import { World, Vec2, Transform, Math, Edge, Circle, Polygon, Box, Testbed } from "planck";
 
-let world = new World(new Vec2(0, -10));
+const world = new World(new Vec2(0, -10));
 
 const testbed = Testbed.mount();
 testbed.start(world);
@@ -15,11 +15,11 @@ world
   .createBody(new Vec2(0.0, 0.0))
   .createFixture(new Edge(new Vec2(50.0, 0.0), new Vec2(-50.0, 0.0)), 0.0);
 
-let circle1 = new Circle(new Vec2(-0.5, 0.5), 0.5);
-let circle2 = new Circle(new Vec2(0.5, 0.5), 0.5);
+const circle1 = new Circle(new Vec2(-0.5, 0.5), 0.5);
+const circle2 = new Circle(new Vec2(0.5, 0.5), 0.5);
 
 for (let i = 0; i < 10; ++i) {
-  let body = world.createDynamicBody({
+  const body = world.createDynamicBody({
     position: new Vec2(Math.random(-0.1, 0.1) + 5.0, 1.05 + 2.5 * i),
     angle: Math.random(-Math.PI, Math.PI),
   });
@@ -27,11 +27,11 @@ for (let i = 0; i < 10; ++i) {
   body.createFixture(circle2, 0.0);
 }
 
-let polygon1 = new Box(0.25, 0.5);
-let polygon2 = new Box(0.25, 0.5, new Vec2(0.0, -0.5), 0.5 * Math.PI);
+const polygon1 = new Box(0.25, 0.5);
+const polygon2 = new Box(0.25, 0.5, new Vec2(0.0, -0.5), 0.5 * Math.PI);
 
 for (let i = 0; i < 10; ++i) {
-  let body = world.createDynamicBody({
+  const body = world.createDynamicBody({
     position: new Vec2(Math.random(-0.1, 0.1) - 5.0, 1.05 + 2.5 * i),
     angle: Math.random(-Math.PI, Math.PI),
   });
@@ -43,7 +43,7 @@ const xf1 = new Transform();
 xf1.q.set(0.3524 * Math.PI);
 xf1.p.set(xf1.q.getXAxis());
 
-let triangle1 = new Polygon(
+const triangle1 = new Polygon(
   [new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 0.5)].map((v) => Transform.mul(xf1, v)),
 );
 
@@ -51,12 +51,12 @@ const xf2 = new Transform();
 xf2.q.set(-0.3524 * Math.PI);
 xf2.p.set(Vec2.neg(xf2.q.getXAxis()));
 
-let triangle2 = new Polygon(
+const triangle2 = new Polygon(
   [new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 0.5)].map((v) => Transform.mul(xf2, v)),
 );
 
 for (let i = 0; i < 10; ++i) {
-  let body = world.createDynamicBody({
+  const body = world.createDynamicBody({
     position: new Vec2(Math.random(-0.1, 0.1), 2.05 + 2.5 * i),
     angle: 0.0,
   });
@@ -64,11 +64,11 @@ for (let i = 0; i < 10; ++i) {
   body.createFixture(triangle2, 2.0);
 }
 
-let bottom = new Box(1.5, 0.15);
-let left = new Box(0.15, 2.7, new Vec2(-1.45, 2.35), 0.2);
-let right = new Box(0.15, 2.7, new Vec2(1.45, 2.35), -0.2);
+const bottom = new Box(1.5, 0.15);
+const left = new Box(0.15, 2.7, new Vec2(-1.45, 2.35), 0.2);
+const right = new Box(0.15, 2.7, new Vec2(1.45, 2.35), -0.2);
 
-let container = world.createBody(new Vec2(0.0, 2.0));
+const container = world.createBody(new Vec2(0.0, 2.0));
 container.createFixture(bottom, 4.0);
 container.createFixture(left, 4.0);
 container.createFixture(right, 4.0);

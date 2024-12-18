@@ -3,9 +3,9 @@
  * Licensed under the MIT license
  */
 
-import { World, Vec2, Circle, Edge, Testbed } from "planck";
+import { World, Body, Vec2, Circle, Edge, Testbed } from "planck";
 
-let world = new World(new Vec2(0, -10));
+const world = new World(new Vec2(0, -10));
 
 const testbed = Testbed.mount();
 testbed.info("X: Add/Remove heavy circle");
@@ -17,7 +17,7 @@ world.createDynamicBody(new Vec2(0.0, 2.5)).createFixture(new Circle(0.5), 10.0)
 
 world.createDynamicBody(new Vec2(0.0, 3.5)).createFixture(new Circle(0.5), 10.0);
 
-let heavy = null;
+let heavy: Body | null = null;
 
 function toggleHeavy() {
   if (heavy) {

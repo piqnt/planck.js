@@ -1,14 +1,14 @@
 import { World, Vec2, Circle, Chain, Settings, Testbed } from "planck";
 
-let width = 10.0;
-let height = 10.0;
+const width = 10.0;
+const height = 10.0;
 
-let BALL_R = 0.3;
-let BALL_D = 1;
+const BALL_R = 0.3;
+const BALL_D = 1;
 
 Settings.velocityThreshold = 0;
 
-let world = new World();
+const world = new World();
 
 const testbed = Testbed.mount();
 testbed.x = 0;
@@ -18,23 +18,23 @@ testbed.height = height * 1.5;
 testbed.mouseForce = -100;
 testbed.start(world);
 
-let walls = [
+const walls = [
   new Vec2(-width * 0.5, -height * 0.5),
   new Vec2(-width * 0.5, +height * 0.5),
   new Vec2(+width * 0.5, +height * 0.5),
   new Vec2(+width * 0.5, -height * 0.5),
 ];
 
-let wallFixDef = {
+const wallFixDef = {
   userData: "wall",
 };
-let ballFixDef = {
+const ballFixDef = {
   friction: 0.1,
   restitution: 0.98,
   density: 0.8,
   userData: "ball",
 };
-let ballBodyDef = {
+const ballBodyDef = {
   bullet: true,
   linearDamping: 1.6,
   angularDamping: 1.6,
@@ -45,7 +45,7 @@ world.createBody().createFixture(new Chain(walls, true), wallFixDef);
 row(1, 8, BALL_R, BALL_D)
   .map((v) => Vec2.add(v, new Vec2(height * 0.4, 0)))
   .forEach(function (p) {
-    let ball = world.createDynamicBody(ballBodyDef);
+    const ball = world.createDynamicBody(ballBodyDef);
     ball.setPosition(p);
     ball.setAngle(Math.PI);
     ball.createFixture(new Circle(BALL_R), ballFixDef);
@@ -55,25 +55,25 @@ row(1, 8, BALL_R, BALL_D)
 row(1, 8, BALL_R, BALL_D)
   .map((v) => Vec2.add(v, new Vec2(-height * 0.4, 0)))
   .forEach(function (p) {
-    let ball = world.createDynamicBody(ballBodyDef);
+    const ball = world.createDynamicBody(ballBodyDef);
     ball.setPosition(p);
     ball.createFixture(new Circle(BALL_R), ballFixDef);
     ball.style = { fill: "#0077ff", stroke: "black" };
   });
 
 world.on("post-solve", function (contact) {
-  let fA = contact.getFixtureA();
-  let bA = fA.getBody();
-  let fB = contact.getFixtureB();
-  let bB = fB.getBody();
+  const fA = contact.getFixtureA();
+  const bA = fA.getBody();
+  const fB = contact.getFixtureB();
+  const bB = fB.getBody();
 
-  let wall =
+  const wall =
     fA.getUserData() === wallFixDef.userData
       ? bA
       : fB.getUserData() === wallFixDef.userData
         ? bB
         : null;
-  let ball =
+  const ball =
     fA.getUserData() === ballFixDef.userData
       ? bA
       : fB.getUserData() === ballFixDef.userData
@@ -88,9 +88,8 @@ world.on("post-solve", function (contact) {
   }, 1);
 });
 
-function row(n, m, r, l) {
-  let d = r * 2;
-  let balls = [];
+function row(n: number, m: number, r: number, l: number) {
+  const balls: Vec2[] = [];
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < m; j++) {
       balls.push(

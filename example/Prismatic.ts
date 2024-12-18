@@ -7,17 +7,17 @@
 
 import { World, Vec2, PrismaticJoint, Edge, Box, Testbed } from "planck";
 
-let world = new World(new Vec2(0, -10));
+const world = new World(new Vec2(0, -10));
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
-let MOTOR_SPEED = 10;
+const MOTOR_SPEED = 10;
 
-let ground = world.createBody();
+const ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
-let body = world.createBody({
+const body = world.createBody({
   type: "dynamic",
   position: new Vec2(-10.0, 10.0),
   angle: 0.5 * Math.PI,
@@ -26,9 +26,9 @@ let body = world.createBody({
 body.createFixture(new Box(2.0, 0.5), 5.0);
 
 // Bouncy limit
-let axis = new Vec2(2.0, 1.0);
+const axis = new Vec2(2.0, 1.0);
 axis.normalize();
-let joint = new PrismaticJoint(
+const joint = new PrismaticJoint(
   {
     motorSpeed: MOTOR_SPEED,
     maxMotorForce: 10000.0,
@@ -70,6 +70,6 @@ testbed.step = function () {
     joint.enableMotor(false);
   }
 
-  let force = joint.getMotorForce(1 / 60);
+  const force = joint.getMotorForce(1 / 60);
   testbed.status("Motor Force", force);
 };

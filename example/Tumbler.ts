@@ -5,16 +5,16 @@
 
 import { World, Vec2, Box, RevoluteJoint, Testbed } from "planck";
 
-let world = new World(new Vec2(0, -10));
+const world = new World(new Vec2(0, -10));
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
-let COUNT = 200;
+const COUNT = 200;
 
-let ground = world.createBody();
+const ground = world.createBody();
 
-let container = world.createDynamicBody({
+const container = world.createDynamicBody({
   allowSleep: false,
   position: new Vec2(0, 10),
 });
@@ -37,10 +37,10 @@ world.createJoint(
   ),
 );
 
-let shape = new Box(0.5, 0.5);
+const shape = new Box(0.5, 0.5);
 let count = 0;
 while (count < COUNT) {
-  let body = world.createDynamicBody();
+  const body = world.createDynamicBody();
   body.setPosition(new Vec2(Math.random() * 20 - 10, 10 + Math.random() * 20 - 10));
   body.createFixture(shape, 1);
   ++count;

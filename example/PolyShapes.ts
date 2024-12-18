@@ -7,26 +7,37 @@ import {
   Vec2,
   Transform,
   AABB,
-  Circle,
+  CircleShape,
   Polygon,
   Edge,
   Box,
   World,
   Distance,
   Testbed,
+  Body,
+  Shape,
+  BodyDef,
+  Fixture,
+  PolygonShape,
 } from "planck";
 
-let world = new World(new Vec2(0, -10));
+// This tests stacking. It also shows how to use World.query and TestOverlap.
+// This callback is called by World.queryAABB. We find all the fixtures
+// that overlap an AABB. Of those, we use TestOverlap to determine which fixtures
+// overlap a circle. Up to 4 overlapped fixtures will be highlighted with a
+// yellow border.
+
+const world = new World(new Vec2(0, -10));
 const testbed = Testbed.mount();
 testbed.start(world);
 
-let MAX_BODIES = 256;
+const MAX_BODIES = 256;
 
-let bodies = [];
+const bodies: Body[] = [];
 
-let shapes = [];
+const shapes: Shape[] = [];
 
-let ground = world.createBody();
+const ground = world.createBody();
 ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
 
 shapes[0] = new Polygon([new Vec2(-0.5, 0.0), new Vec2(0.5, 0.0), new Vec2(0.0, 1.5)]);
@@ -34,9 +45,9 @@ shapes[0] = new Polygon([new Vec2(-0.5, 0.0), new Vec2(0.5, 0.0), new Vec2(0.0, 
 shapes[1] = new Polygon([new Vec2(-0.1, 0.0), new Vec2(0.1, 0.0), new Vec2(0.0, 1.5)]);
 
 {
-  let w = 1.0;
-  let b = w / (2.0 + Math.sqrt(2.0));
-  let s = Math.sqrt(2.0) * b;
+  const w = 1.0;
+  const b = w / (2.0 + Math.sqrt(2.0));
+  const s = Math.sqrt(2.0) * b;
 
   shapes[2] = new Polygon([
     new Vec2(0.5 * s, 0.0),
@@ -52,14 +63,14 @@ shapes[1] = new Polygon([new Vec2(-0.1, 0.0), new Vec2(0.1, 0.0), new Vec2(0.0, 
 
 shapes[3] = new Box(0.5, 0.5);
 
-shapes[4] = new Circle(0.5);
+shapes[4] = new CircleShape(0.5);
 
-function createBody(index) {
+function createBody(index: number) {
   if (bodies.length > MAX_BODIES) {
-    world.destroyBody(bodies.shift());
+    world.destroyBody(bodies.shift()!);
   }
 
-  let bd = {
+  const bd: BodyDef = {
     type: "dynamic",
     position: new Vec2(Math.random() * 0.4 - 2.0, 10.0),
     angle: Math.random() * 2 * Math.PI - Math.PI,
@@ -69,7 +80,7 @@ function createBody(index) {
     bd.angularDamping = 0.02;
   }
 
-  let body = world.createBody(bd);
+  const body = world.createBody(bd);
 
   body.createFixture(shapes[index % shapes.length], {
     density: 1.0,
@@ -80,7 +91,7 @@ function createBody(index) {
 }
 
 function destroyBody() {
-  world.destroyBody(bodies.shift());
+  world.destroyBody(bodies.shift()!);
 }
 
 testbed.keydown = function (code, char) {
@@ -107,7 +118,7 @@ testbed.keydown = function (code, char) {
 
     case "Z":
       for (let i = 0; i < bodies.length; i += 2) {
-        let body = bodies[i];
+        const body = bodies[i];
         body.setActive(!body.isActive());
       }
       break;
@@ -120,31 +131,53 @@ testbed.keydown = function (code, char) {
 
 testbed.info("1-5: Drop new objects, Z: Activate/deactivate some bodies, X: Destroy an object");
 
+const aabb = new AABB();
+const circle = new CircleShape(new Vec2(0.0, 1.1), 2.0);
+const transform = new Transform();
+let count = 0;
+
+const MAX_COUNT = 40;
+
+// Called for each fixture found in the query AABB.
+// return false to terminate the query.
+function queryCallback(fixture: Fixture) {
+  if (count === MAX_COUNT) {
+    return false;
+  }
+
+  const body = fixture.getBody();
+  const shape = fixture.getShape();
+
+  const overlap = Distance.testOverlap(shape, 0, circle, 0, body.getTransform(), transform);
+
+  if (overlap) {
+    drawFixture(fixture);
+    ++count;
+  }
+
+  return true;
+}
+
 testbed.step = function () {
-  AABBQueryListener.reset();
-  let aabb = new AABB();
-  AABBQueryListener.circle.computeAABB(aabb, AABBQueryListener.transform, 0);
+  circle.computeAABB(aabb, transform, 0);
+  count = 0;
 
-  world.queryAABB(aabb, AABBQueryListener.callback);
+  world.queryAABB(aabb, queryCallback);
 
-  testbed.drawCircle(
-    AABBQueryListener.circle.m_p,
-    AABBQueryListener.circle.m_radius,
-    testbed.color(0.4, 0.7, 0.8),
-  );
+  testbed.drawCircle(circle.m_p, circle.m_radius, testbed.color(0.4, 0.7, 0.8));
 };
 
-function drawFixture(fixture) {
-  let color = testbed.color(0.95, 0.95, 0.6);
-  let xf = fixture.getBody().getTransform();
+function drawFixture(fixture: Fixture) {
+  const color = testbed.color(0.95, 0.95, 0.6);
+  const xf = fixture.getBody().getTransform();
 
   switch (fixture.getType()) {
     case "circle":
       {
-        let circle = fixture.getShape();
+        const circle = fixture.getShape() as CircleShape;
 
-        let center = Transform.mul(xf, circle.getCenter());
-        let radius = circle.getRadius();
+        const center = Transform.mul(xf, circle.getCenter());
+        const radius = circle.getRadius();
 
         testbed.drawCircle(center, radius, color);
       }
@@ -152,10 +185,8 @@ function drawFixture(fixture) {
 
     case "polygon":
       {
-        let poly = fixture.getShape();
-        let vertexCount = poly.m_count;
-        // assert(vertexCount <= b2_maxPolygonVertices);
-        let vertices = poly.m_vertices.map((v) => Transform.mul(xf, v));
+        const poly = fixture.getShape() as PolygonShape;
+        const vertices = poly.m_vertices.map((v) => Transform.mul(xf, v));
         testbed.drawPolygon(vertices, color);
       }
       break;
@@ -164,43 +195,3 @@ function drawFixture(fixture) {
       break;
   }
 }
-
-// This tests stacking. It also shows how to use World.query and TestOverlap.
-// This callback is called by World.queryAABB. We find all the fixtures
-// that overlap an AABB. Of those, we use TestOverlap to determine which fixtures
-// overlap a circle. Up to 4 overlapped fixtures will be highlighted with a
-// yellow border.
-let AABBQueryListener = (function () {
-  let def = {};
-
-  def.circle = new Circle(new Vec2(0.0, 1.1), 2.0);
-  def.transform = new Transform();
-  let count = 0;
-
-  let MAX_COUNT = 40;
-
-  def.reset = function () {
-    count = 0;
-  };
-  // Called for each fixture found in the query AABB.
-  // return false to terminate the query.
-  def.callback = function (fixture) {
-    if (count === MAX_COUNT) {
-      return false;
-    }
-
-    let body = fixture.getBody();
-    let shape = fixture.getShape();
-
-    let overlap = Distance.testOverlap(shape, 0, def.circle, 0, body.getTransform(), def.transform);
-
-    if (overlap) {
-      drawFixture(fixture);
-      ++count;
-    }
-
-    return true;
-  };
-
-  return def;
-})();
