@@ -12,6 +12,7 @@
     "allowJs": true,
     "typeRoots": ["./types"],
     "skipLibCheck": true,
+    "noEmit": true
   },
   "exclude": [
     "node_modules",
