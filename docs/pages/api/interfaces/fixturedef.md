@@ -101,6 +101,18 @@ The restitution (elasticity) usually in the range [0,1]
 
 ***
 
+### style?
+
+> `optional` **style**: [`Style`](Style)
+
+Styling for dev-tools.
+
+#### Inherited from
+
+[`FixtureOpt`](FixtureOpt).[`style`](FixtureOpt#style)
+
+***
+
 ### userData?
 
 > `optional` **userData**: `unknown`

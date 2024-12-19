@@ -105,6 +105,14 @@ origin since this can lead to many overlapping shapes.
 
 ***
 
+### style?
+
+> `optional` **style**: [`Style`](Style)
+
+Styling for dev-tools.
+
+***
+
 ### type?
 
 > `optional` **type**: [`BodyType`](../type-aliases/BodyType)

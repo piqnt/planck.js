@@ -487,7 +487,7 @@ export interface JointOpt {
 	 * should collide.
 	 */
 	collideConnected?: boolean;
-	/** @hidden Styling for dev-tools. */
+	/** Styling for dev-tools. */
 	style?: Style;
 }
 /**
@@ -986,7 +986,7 @@ export interface FixtureOpt {
 	 * Collision category bit or bits that this fixture accept for collision.
 	 */
 	filterMaskBits?: number;
-	/** @hidden Styling for dev-tools. */
+	/** Styling for dev-tools. */
 	style?: Style;
 }
 export interface FixtureDef extends FixtureOpt {
@@ -1532,7 +1532,7 @@ export interface BodyDef {
 	 */
 	active?: boolean;
 	userData?: any;
-	/** @hidden Styling for dev-tools. */
+	/** Styling for dev-tools. */
 	style?: Style;
 }
 /**
@@ -1558,7 +1558,7 @@ declare class Body$1 {
 	static readonly KINEMATIC: BodyType;
 	/** @hidden */
 	static readonly DYNAMIC: BodyType;
-	/** @hidden Styling for dev-tools. */
+	/** Styling for dev-tools. */
 	style: Style;
 	/** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
 	appData: Record<string, any>;

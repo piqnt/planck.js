@@ -75,6 +75,18 @@ The desired motor speed. Usually in radians per second.
 
 ***
 
+### style?
+
+> `optional` **style**: [`Style`](Style)
+
+Styling for dev-tools.
+
+#### Inherited from
+
+[`JointOpt`](JointOpt).[`style`](JointOpt#style)
+
+***
+
 ### upperAngle?
 
 > `optional` **upperAngle**: `number`

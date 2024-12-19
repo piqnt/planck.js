@@ -4,6 +4,14 @@ A rigid body composed of one or more fixtures.
 
 To create a new Body use [World.createBody](World#createbody).
 
+## Properties
+
+### style
+
+> **style**: [`Style`](../interfaces/Style) = `{}`
+
+Styling for dev-tools.
+
 ## Methods
 
 ### advance()

@@ -27,7 +27,7 @@ somewhat because the island constraint solver is approximate.
 
 ### new WeldJoint()
 
-> **new WeldJoint**(`def`, `bodyA`, `bodyB`, `anchor`): [`WeldJoint`](WeldJoint)
+> **new WeldJoint**(`def`, `bodyA`, `bodyB`, `anchor`?): [`WeldJoint`](WeldJoint)
 
 #### Parameters
 
@@ -37,7 +37,7 @@ somewhat because the island constraint solver is approximate.
 
 • **bodyB**: [`Body`](Body)
 
-• **anchor**: [`Vec2Value`](../interfaces/Vec2Value)
+• **anchor?**: [`Vec2Value`](../interfaces/Vec2Value)
 
 #### Returns
 

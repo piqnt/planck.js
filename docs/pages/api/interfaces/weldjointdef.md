@@ -100,6 +100,18 @@ The bodyB angle minus bodyA angle in the reference state (radians).
 
 ***
 
+### style?
+
+> `optional` **style**: [`Style`](Style)
+
+Styling for dev-tools.
+
+#### Inherited from
+
+[`WeldJointOpt`](WeldJointOpt).[`style`](WeldJointOpt#style)
+
+***
+
 ### userData?
 
 > `optional` **userData**: `any`

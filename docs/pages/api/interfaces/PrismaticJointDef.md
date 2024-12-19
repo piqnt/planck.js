@@ -134,12 +134,24 @@ The desired motor speed in radians per second.
 
 ***
 
-### referenceAngle
+### referenceAngle?
 
-> **referenceAngle**: `number`
+> `optional` **referenceAngle**: `number`
 
 referenceAngle The constrained angle between the bodies:
 bodyB_angle - bodyA_angle.
+
+***
+
+### style?
+
+> `optional` **style**: [`Style`](Style)
+
+Styling for dev-tools.
+
+#### Inherited from
+
+[`PrismaticJointOpt`](PrismaticJointOpt).[`style`](PrismaticJointOpt#style)
 
 ***
 

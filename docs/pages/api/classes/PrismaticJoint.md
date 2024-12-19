@@ -29,7 +29,7 @@ motion or to model joint friction.
 
 ### new PrismaticJoint()
 
-> **new PrismaticJoint**(`def`, `bodyA`, `bodyB`, `anchor`, `axis`): [`PrismaticJoint`](PrismaticJoint)
+> **new PrismaticJoint**(`def`, `bodyA`, `bodyB`, `anchor`?, `axis`?): [`PrismaticJoint`](PrismaticJoint)
 
 #### Parameters
 
@@ -39,9 +39,9 @@ motion or to model joint friction.
 
 • **bodyB**: [`Body`](Body)
 
-• **anchor**: [`Vec2Value`](../interfaces/Vec2Value)
+• **anchor?**: [`Vec2Value`](../interfaces/Vec2Value)
 
-• **axis**: [`Vec2Value`](../interfaces/Vec2Value)
+• **axis?**: [`Vec2Value`](../interfaces/Vec2Value)
 
 #### Returns
 

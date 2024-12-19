@@ -102,6 +102,18 @@ The pulley ratio, used to simulate a block-and-tackle.
 
 ***
 
+### style?
+
+> `optional` **style**: [`Style`](Style)
+
+Styling for dev-tools.
+
+#### Inherited from
+
+[`PulleyJointOpt`](PulleyJointOpt).[`style`](PulleyJointOpt#style)
+
+***
+
 ### userData?
 
 > `optional` **userData**: `any`

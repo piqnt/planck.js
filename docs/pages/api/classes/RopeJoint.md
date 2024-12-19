@@ -34,7 +34,7 @@ want to dynamically control length.
 
 ### new RopeJoint()
 
-> **new RopeJoint**(`def`, `bodyA`, `bodyB`, `anchor`): [`RopeJoint`](RopeJoint)
+> **new RopeJoint**(`def`, `bodyA`, `bodyB`, `anchor`?): [`RopeJoint`](RopeJoint)
 
 #### Parameters
 
@@ -44,7 +44,7 @@ want to dynamically control length.
 
 • **bodyB**: [`Body`](Body)
 
-• **anchor**: [`Vec2Value`](../interfaces/Vec2Value)
+• **anchor?**: [`Vec2Value`](../interfaces/Vec2Value)
 
 #### Returns
 

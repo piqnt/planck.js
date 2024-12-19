@@ -33,6 +33,18 @@ The gear ratio. See [GearJoint](../classes/GearJoint) for explanation.
 
 ***
 
+### style?
+
+> `optional` **style**: [`Style`](Style)
+
+Styling for dev-tools.
+
+#### Inherited from
+
+[`JointOpt`](JointOpt).[`style`](JointOpt#style)
+
+***
+
 ### userData?
 
 > `optional` **userData**: `any`

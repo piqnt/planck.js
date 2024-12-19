@@ -34,7 +34,7 @@ length.
 
 ### new PulleyJoint()
 
-> **new PulleyJoint**(`def`, `bodyA`, `bodyB`, `groundA`, `groundB`, `anchorA`, `anchorB`, `ratio`): [`PulleyJoint`](PulleyJoint)
+> **new PulleyJoint**(`def`, `bodyA`, `bodyB`, `groundA`?, `groundB`?, `anchorA`?, `anchorB`?, `ratio`?): [`PulleyJoint`](PulleyJoint)
 
 #### Parameters
 
@@ -44,15 +44,15 @@ length.
 
 • **bodyB**: [`Body`](Body)
 
-• **groundA**: [`Vec2Value`](../interfaces/Vec2Value)
+• **groundA?**: [`Vec2Value`](../interfaces/Vec2Value)
 
-• **groundB**: [`Vec2Value`](../interfaces/Vec2Value)
+• **groundB?**: [`Vec2Value`](../interfaces/Vec2Value)
 
-• **anchorA**: [`Vec2Value`](../interfaces/Vec2Value)
+• **anchorA?**: [`Vec2Value`](../interfaces/Vec2Value)
 
-• **anchorB**: [`Vec2Value`](../interfaces/Vec2Value)
+• **anchorB?**: [`Vec2Value`](../interfaces/Vec2Value)
 
-• **ratio**: `number`
+• **ratio?**: `number`
 
 #### Returns
 

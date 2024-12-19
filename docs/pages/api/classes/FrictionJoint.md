@@ -27,7 +27,7 @@ translational friction and angular friction.
 
 ### new FrictionJoint()
 
-> **new FrictionJoint**(`def`, `bodyA`, `bodyB`, `anchor`): [`FrictionJoint`](FrictionJoint)
+> **new FrictionJoint**(`def`, `bodyA`, `bodyB`, `anchor`?): [`FrictionJoint`](FrictionJoint)
 
 #### Parameters
 
@@ -37,7 +37,7 @@ translational friction and angular friction.
 
 • **bodyB**: [`Body`](Body)
 
-• **anchor**: [`Vec2Value`](../interfaces/Vec2Value)
+• **anchor?**: [`Vec2Value`](../interfaces/Vec2Value)
 
 Anchor in global coordination.
 

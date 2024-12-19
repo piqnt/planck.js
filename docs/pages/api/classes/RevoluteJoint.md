@@ -31,7 +31,7 @@ so that infinite forces are not generated.
 
 ### new RevoluteJoint()
 
-> **new RevoluteJoint**(`def`, `bodyA`, `bodyB`, `anchor`): [`RevoluteJoint`](RevoluteJoint)
+> **new RevoluteJoint**(`def`, `bodyA`, `bodyB`, `anchor`?): [`RevoluteJoint`](RevoluteJoint)
 
 #### Parameters
 
@@ -41,7 +41,7 @@ so that infinite forces are not generated.
 
 • **bodyB**: [`Body`](Body)
 
-• **anchor**: [`Vec2Value`](../interfaces/Vec2Value)
+• **anchor?**: [`Vec2Value`](../interfaces/Vec2Value)
 
 #### Returns
 

@@ -76,6 +76,18 @@ Warning: this must be larger than linearSlop or the joint will have no effect.
 
 ***
 
+### style?
+
+> `optional` **style**: [`Style`](Style)
+
+Styling for dev-tools.
+
+#### Inherited from
+
+[`RopeJointOpt`](RopeJointOpt).[`style`](RopeJointOpt#style)
+
+***
+
 ### userData?
 
 > `optional` **userData**: `any`

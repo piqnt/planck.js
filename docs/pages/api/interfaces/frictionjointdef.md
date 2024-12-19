@@ -85,6 +85,18 @@ The maximum friction torque in N-m.
 
 ***
 
+### style?
+
+> `optional` **style**: [`Style`](Style)
+
+Styling for dev-tools.
+
+#### Inherited from
+
+[`FrictionJointOpt`](FrictionJointOpt).[`style`](FrictionJointOpt#style)
+
+***
+
 ### userData?
 
 > `optional` **userData**: `any`

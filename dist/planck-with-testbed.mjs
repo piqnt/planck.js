@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.1.4
+ * Planck.js v1.1.5
  * @license The MIT license
  * @copyright Copyright (c) 2024 Erin Catto, Ali Shakiba
  *

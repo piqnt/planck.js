@@ -28,6 +28,14 @@ should collide.
 
 ***
 
+### style?
+
+> `optional` **style**: [`Style`](Style)
+
+Styling for dev-tools.
+
+***
+
 ### userData?
 
 > `optional` **userData**: `any`

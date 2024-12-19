@@ -35,7 +35,7 @@ at the testbed.
 
 ### new MouseJoint()
 
-> **new MouseJoint**(`def`, `bodyA`, `bodyB`, `target`): [`MouseJoint`](MouseJoint)
+> **new MouseJoint**(`def`, `bodyA`, `bodyB`, `target`?): [`MouseJoint`](MouseJoint)
 
 #### Parameters
 
@@ -45,7 +45,7 @@ at the testbed.
 
 • **bodyB**: [`Body`](Body)
 
-• **target**: [`Vec2Value`](../interfaces/Vec2Value)
+• **target?**: [`Vec2Value`](../interfaces/Vec2Value)
 
 #### Returns
 

@@ -29,7 +29,7 @@ DistanceJoint definition.
 
 ### new DistanceJoint()
 
-> **new DistanceJoint**(`def`, `bodyA`, `bodyB`, `anchorA`, `anchorB`): [`DistanceJoint`](DistanceJoint)
+> **new DistanceJoint**(`def`, `bodyA`, `bodyB`, `anchorA`?, `anchorB`?): [`DistanceJoint`](DistanceJoint)
 
 #### Parameters
 
@@ -39,11 +39,11 @@ DistanceJoint definition.
 
 • **bodyB**: [`Body`](Body)
 
-• **anchorA**: [`Vec2Value`](../interfaces/Vec2Value)
+• **anchorA?**: [`Vec2Value`](../interfaces/Vec2Value)
 
 Anchor A in global coordination.
 
-• **anchorB**: [`Vec2Value`](../interfaces/Vec2Value)
+• **anchorB?**: [`Vec2Value`](../interfaces/Vec2Value)
 
 Anchor B in global coordination.
 

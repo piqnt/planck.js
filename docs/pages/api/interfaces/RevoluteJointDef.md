@@ -131,11 +131,23 @@ The desired motor speed. Usually in radians per second.
 
 ***
 
-### referenceAngle
+### referenceAngle?
 
-> **referenceAngle**: `number`
+> `optional` **referenceAngle**: `number`
 
 The bodyB angle minus bodyA angle in the reference state (radians).
+
+***
+
+### style?
+
+> `optional` **style**: [`Style`](Style)
+
+Styling for dev-tools.
+
+#### Inherited from
+
+[`RevoluteJointOpt`](RevoluteJointOpt).[`style`](RevoluteJointOpt#style)
 
 ***
 

@@ -67,6 +67,14 @@ The restitution (elasticity) usually in the range [0,1]
 
 ***
 
+### style?
+
+> `optional` **style**: [`Style`](Style)
+
+Styling for dev-tools.
+
+***
+
 ### userData?
 
 > `optional` **userData**: `unknown`

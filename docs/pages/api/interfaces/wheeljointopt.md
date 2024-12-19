@@ -70,6 +70,18 @@ The desired motor speed in radians per second.
 
 ***
 
+### style?
+
+> `optional` **style**: [`Style`](Style)
+
+Styling for dev-tools.
+
+#### Inherited from
+
+[`JointOpt`](JointOpt).[`style`](JointOpt#style)
+
+***
+
 ### userData?
 
 > `optional` **userData**: `any`

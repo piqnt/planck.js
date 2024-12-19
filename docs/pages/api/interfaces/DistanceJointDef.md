@@ -101,6 +101,18 @@ The local anchor point relative to bodyB's origin.
 
 ***
 
+### style?
+
+> `optional` **style**: [`Style`](Style)
+
+Styling for dev-tools.
+
+#### Inherited from
+
+[`DistanceJointOpt`](DistanceJointOpt).[`style`](DistanceJointOpt#style)
+
+***
+
 ### userData?
 
 > `optional` **userData**: `any`

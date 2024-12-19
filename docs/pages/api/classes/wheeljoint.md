@@ -29,7 +29,7 @@ This joint is designed for vehicle suspensions.
 
 ### new WheelJoint()
 
-> **new WheelJoint**(`def`, `bodyA`, `bodyB`, `anchor`, `axis`): [`WheelJoint`](WheelJoint)
+> **new WheelJoint**(`def`, `bodyA`, `bodyB`, `anchor`?, `axis`?): [`WheelJoint`](WheelJoint)
 
 #### Parameters
 
@@ -39,9 +39,9 @@ This joint is designed for vehicle suspensions.
 
 • **bodyB**: [`Body`](Body)
 
-• **anchor**: [`Vec2Value`](../interfaces/Vec2Value)
+• **anchor?**: [`Vec2Value`](../interfaces/Vec2Value)
 
-• **axis**: [`Vec2Value`](../interfaces/Vec2Value)
+• **axis?**: [`Vec2Value`](../interfaces/Vec2Value)
 
 #### Returns
 

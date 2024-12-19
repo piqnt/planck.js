@@ -85,6 +85,18 @@ weight (multiplier * mass * gravity).
 
 ***
 
+### style?
+
+> `optional` **style**: [`Style`](Style)
+
+Styling for dev-tools.
+
+#### Inherited from
+
+[`MouseJointOpt`](MouseJointOpt).[`style`](MouseJointOpt#style)
+
+***
+
 ### target
 
 > **target**: [`Vec2Value`](Vec2Value)
