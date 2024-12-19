@@ -54,6 +54,7 @@
     "stage-js": "^1.0.0-alpha.5"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.11",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.17.0",
     "@types/chai": "^4.3.5",
@@ -95,6 +96,9 @@
     "watch": "vite build --watch",
     "preview": "vite preview",
     "benchmark": "git log -n 1 && vite-node ./benchmark/node",
+    "change": "changeset",
+    "version": "changeset version",
+    "publish": "changeset publish",
     "typedoc": "typedoc --options typedoc.json && mv ./docs/pages/api/README.md ./docs/pages/api/index.md && ./node_modules/.bin/replace-in-files ./docs/pages/api/* --string '.md' --replacement ''"
   }
 }
