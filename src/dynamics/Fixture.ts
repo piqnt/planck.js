@@ -61,7 +61,7 @@ export interface FixtureOpt {
    */
   filterMaskBits?: number;
 
-  /** @hidden Styling for dev-tools. */
+  /** Styling for dev-tools. */
   style?: Style;
 }
 

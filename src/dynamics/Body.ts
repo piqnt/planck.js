@@ -118,7 +118,7 @@ export interface BodyDef {
   active?: boolean;
   userData?: any;
 
-  /** @hidden Styling for dev-tools. */
+  /** Styling for dev-tools. */
   style?: Style;
 }
 
@@ -206,7 +206,7 @@ export class Body {
   /** @internal */ m_next: Body | null;
   /** @internal */ m_destroyed: boolean;
 
-  /** @hidden Styling for dev-tools. */
+  /** Styling for dev-tools. */
   style: Style = {};
 
   /** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */

@@ -53,7 +53,7 @@ export interface JointOpt {
    */
   collideConnected?: boolean;
 
-  /** @hidden Styling for dev-tools. */
+  /** Styling for dev-tools. */
   style?: Style;
 }
 
