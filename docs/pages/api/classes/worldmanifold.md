@@ -6,17 +6,17 @@ This is used to compute the current state of a contact manifold.
 
 ### new WorldManifold()
 
-> **new WorldManifold**(): [`WorldManifold`](WorldManifold)
+> **new WorldManifold**(): [`WorldManifold`](/api/classes/WorldManifold)
 
 #### Returns
 
-[`WorldManifold`](WorldManifold)
+[`WorldManifold`](/api/classes/WorldManifold)
 
 ## Properties
 
 ### normal
 
-> **normal**: [`Vec2Value`](../interfaces/Vec2Value)
+> **normal**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 World vector pointing from A to B
 
@@ -32,7 +32,7 @@ The number of manifold points
 
 ### points
 
-> **points**: [`Vec2Value`](../interfaces/Vec2Value)[]
+> **points**: [`Vec2Value`](/api/interfaces/Vec2Value)[]
 
 World contact point (point of intersection)
 

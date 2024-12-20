@@ -6,45 +6,45 @@ Finds and solves islands. An island is a connected subset of the world.
 
 ### new Solver()
 
-> **new Solver**(`world`): [`Solver`](Solver)
+> **new Solver**(`world`): [`Solver`](/api/classes/Solver)
 
 #### Parameters
 
-• **world**: [`World`](World)
+• **world**: [`World`](/api/classes/World)
 
 #### Returns
 
-[`Solver`](Solver)
+[`Solver`](/api/classes/Solver)
 
 ## Properties
 
 ### m\_bodies
 
-> **m\_bodies**: [`Body`](Body)[]
+> **m\_bodies**: [`Body`](/api/classes/Body)[]
 
 ***
 
 ### m\_contacts
 
-> **m\_contacts**: [`Contact`](Contact)[]
+> **m\_contacts**: [`Contact`](/api/classes/Contact)[]
 
 ***
 
 ### m\_joints
 
-> **m\_joints**: [`Joint`](Joint)[]
+> **m\_joints**: [`Joint`](/api/classes/Joint)[]
 
 ***
 
 ### m\_stack
 
-> **m\_stack**: [`Body`](Body)[]
+> **m\_stack**: [`Body`](/api/classes/Body)[]
 
 ***
 
 ### m\_world
 
-> **m\_world**: [`World`](World)
+> **m\_world**: [`World`](/api/classes/World)
 
 ## Methods
 
@@ -54,7 +54,7 @@ Finds and solves islands. An island is a connected subset of the world.
 
 #### Parameters
 
-• **body**: [`Body`](Body)
+• **body**: [`Body`](/api/classes/Body)
 
 #### Returns
 
@@ -68,7 +68,7 @@ Finds and solves islands. An island is a connected subset of the world.
 
 #### Parameters
 
-• **contact**: [`Contact`](Contact)
+• **contact**: [`Contact`](/api/classes/Contact)
 
 #### Returns
 
@@ -82,7 +82,7 @@ Finds and solves islands. An island is a connected subset of the world.
 
 #### Parameters
 
-• **joint**: [`Joint`](Joint)
+• **joint**: [`Joint`](/api/classes/Joint)
 
 #### Returns
 
@@ -106,7 +106,7 @@ Finds and solves islands. An island is a connected subset of the world.
 
 #### Parameters
 
-• **step**: [`TimeStep`](TimeStep)
+• **step**: [`TimeStep`](/api/classes/TimeStep)
 
 #### Returns
 
@@ -120,11 +120,11 @@ Finds and solves islands. An island is a connected subset of the world.
 
 #### Parameters
 
-• **subStep**: [`TimeStep`](TimeStep)
+• **subStep**: [`TimeStep`](/api/classes/TimeStep)
 
-• **toiA**: [`Body`](Body)
+• **toiA**: [`Body`](/api/classes/Body)
 
-• **toiB**: [`Body`](Body)
+• **toiB**: [`Body`](/api/classes/Body)
 
 #### Returns
 
@@ -138,7 +138,7 @@ Finds and solves islands. An island is a connected subset of the world.
 
 #### Parameters
 
-• **step**: [`TimeStep`](TimeStep)
+• **step**: [`TimeStep`](/api/classes/TimeStep)
 
 #### Returns
 
@@ -154,7 +154,7 @@ Find TOI contacts and solve them.
 
 #### Parameters
 
-• **step**: [`TimeStep`](TimeStep)
+• **step**: [`TimeStep`](/api/classes/TimeStep)
 
 #### Returns
 

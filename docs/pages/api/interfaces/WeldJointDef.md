@@ -6,31 +6,31 @@ important for computing the reaction torque.
 
 ## Extends
 
-- [`JointDef`](JointDef).[`WeldJointOpt`](WeldJointOpt)
+- [`JointDef`](/api/interfaces/JointDef).[`WeldJointOpt`](/api/interfaces/WeldJointOpt)
 
 ## Properties
 
 ### bodyA
 
-> **bodyA**: [`Body`](../classes/Body)
+> **bodyA**: [`Body`](/api/classes/Body)
 
 The first attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyA`](JointDef#bodya)
+[`JointDef`](/api/interfaces/JointDef).[`bodyA`](/api/interfaces/JointDef#bodya)
 
 ***
 
 ### bodyB
 
-> **bodyB**: [`Body`](../classes/Body)
+> **bodyB**: [`Body`](/api/classes/Body)
 
 The second attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyB`](JointDef#bodyb)
+[`JointDef`](/api/interfaces/JointDef).[`bodyB`](/api/interfaces/JointDef#bodyb)
 
 ***
 
@@ -43,7 +43,7 @@ should collide.
 
 #### Inherited from
 
-[`WeldJointOpt`](WeldJointOpt).[`collideConnected`](WeldJointOpt#collideconnected)
+[`WeldJointOpt`](/api/interfaces/WeldJointOpt).[`collideConnected`](/api/interfaces/WeldJointOpt#collideconnected)
 
 ***
 
@@ -55,7 +55,7 @@ The damping ratio. 0 = no damping, 1 = critical damping.
 
 #### Inherited from
 
-[`WeldJointOpt`](WeldJointOpt).[`dampingRatio`](WeldJointOpt#dampingratio)
+[`WeldJointOpt`](/api/interfaces/WeldJointOpt).[`dampingRatio`](/api/interfaces/WeldJointOpt#dampingratio)
 
 ***
 
@@ -68,13 +68,13 @@ with a value of 0.
 
 #### Inherited from
 
-[`WeldJointOpt`](WeldJointOpt).[`frequencyHz`](WeldJointOpt#frequencyhz)
+[`WeldJointOpt`](/api/interfaces/WeldJointOpt).[`frequencyHz`](/api/interfaces/WeldJointOpt#frequencyhz)
 
 ***
 
 ### localAnchorA
 
-> **localAnchorA**: [`Vec2Value`](Vec2Value)
+> **localAnchorA**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The local anchor point relative to bodyA's origin.
 
@@ -82,7 +82,7 @@ The local anchor point relative to bodyA's origin.
 
 ### localAnchorB
 
-> **localAnchorB**: [`Vec2Value`](Vec2Value)
+> **localAnchorB**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The local anchor point relative to bodyB's origin.
 
@@ -96,19 +96,19 @@ The bodyB angle minus bodyA angle in the reference state (radians).
 
 #### Inherited from
 
-[`WeldJointOpt`](WeldJointOpt).[`referenceAngle`](WeldJointOpt#referenceangle)
+[`WeldJointOpt`](/api/interfaces/WeldJointOpt).[`referenceAngle`](/api/interfaces/WeldJointOpt#referenceangle)
 
 ***
 
 ### style?
 
-> `optional` **style**: [`Style`](Style)
+> `optional` **style**: [`Style`](/api/interfaces/Style)
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`WeldJointOpt`](WeldJointOpt).[`style`](WeldJointOpt#style)
+[`WeldJointOpt`](/api/interfaces/WeldJointOpt).[`style`](/api/interfaces/WeldJointOpt#style)
 
 ***
 
@@ -120,4 +120,4 @@ Use this to attach application specific data to your joints.
 
 #### Inherited from
 
-[`WeldJointOpt`](WeldJointOpt).[`userData`](WeldJointOpt#userdata)
+[`WeldJointOpt`](/api/interfaces/WeldJointOpt).[`userData`](/api/interfaces/WeldJointOpt#userdata)

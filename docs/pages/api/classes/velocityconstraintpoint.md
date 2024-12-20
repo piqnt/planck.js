@@ -4,11 +4,11 @@
 
 ### new VelocityConstraintPoint()
 
-> **new VelocityConstraintPoint**(): [`VelocityConstraintPoint`](VelocityConstraintPoint)
+> **new VelocityConstraintPoint**(): [`VelocityConstraintPoint`](/api/classes/VelocityConstraintPoint)
 
 #### Returns
 
-[`VelocityConstraintPoint`](VelocityConstraintPoint)
+[`VelocityConstraintPoint`](/api/classes/VelocityConstraintPoint)
 
 ## Properties
 
@@ -26,13 +26,13 @@
 
 ### rA
 
-> **rA**: [`Vec2Value`](../interfaces/Vec2Value)
+> **rA**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ***
 
 ### rB
 
-> **rB**: [`Vec2Value`](../interfaces/Vec2Value)
+> **rB**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ***
 

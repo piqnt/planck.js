@@ -4,31 +4,31 @@ Circle shape.
 
 ## Extends
 
-- [`Shape`](Shape)
+- [`Shape`](/api/classes/Shape)
 
 ## Constructors
 
 ### new CircleShape()
 
-> **new CircleShape**(`position`, `radius`?): [`CircleShape`](CircleShape)
+> **new CircleShape**(`position`, `radius`?): [`CircleShape`](/api/classes/CircleShape)
 
 #### Parameters
 
-• **position**: [`Vec2Value`](../interfaces/Vec2Value)
+• **position**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **radius?**: `number`
 
 #### Returns
 
-[`CircleShape`](CircleShape)
+[`CircleShape`](/api/classes/CircleShape)
 
 #### Overrides
 
-[`Shape`](Shape).[`constructor`](Shape#constructors)
+[`Shape`](/api/classes/Shape).[`constructor`](/api/classes/Shape#constructors)
 
 ### new CircleShape()
 
-> **new CircleShape**(`radius`?): [`CircleShape`](CircleShape)
+> **new CircleShape**(`radius`?): [`CircleShape`](/api/classes/CircleShape)
 
 #### Parameters
 
@@ -36,7 +36,7 @@ Circle shape.
 
 #### Returns
 
-[`CircleShape`](CircleShape)
+[`CircleShape`](/api/classes/CircleShape)
 
 #### Overrides
 
@@ -46,13 +46,13 @@ Circle shape.
 
 ### style
 
-> **style**: [`Style`](../interfaces/Style) = `{}`
+> **style**: [`Style`](/api/interfaces/Style) = `{}`
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`Shape`](Shape).[`style`](Shape#style)
+[`Shape`](/api/classes/Shape).[`style`](/api/classes/Shape#style)
 
 ***
 
@@ -71,11 +71,11 @@ child shape.
 
 #### Parameters
 
-• **aabb**: [`AABBValue`](../interfaces/AABBValue)
+• **aabb**: [`AABBValue`](/api/interfaces/AABBValue)
 
 Returns the axis aligned box.
 
-• **xf**: [`TransformValue`](../type-aliases/TransformValue)
+• **xf**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 The world transform of the shape.
 
@@ -89,7 +89,7 @@ The child shape
 
 #### Overrides
 
-[`Shape`](Shape).[`computeAABB`](Shape#computeaabb)
+[`Shape`](/api/classes/Shape).[`computeAABB`](/api/classes/Shape#computeaabb)
 
 ***
 
@@ -99,7 +99,7 @@ The child shape
 
 #### Parameters
 
-• **proxy**: [`DistanceProxy`](DistanceProxy)
+• **proxy**: [`DistanceProxy`](/api/classes/DistanceProxy)
 
 #### Returns
 
@@ -107,7 +107,7 @@ The child shape
 
 #### Overrides
 
-[`Shape`](Shape).[`computeDistanceProxy`](Shape#computedistanceproxy)
+[`Shape`](/api/classes/Shape).[`computeDistanceProxy`](/api/classes/Shape#computedistanceproxy)
 
 ***
 
@@ -120,7 +120,7 @@ The inertia tensor is computed about the local origin.
 
 #### Parameters
 
-• **massData**: [`MassData`](../interfaces/MassData)
+• **massData**: [`MassData`](/api/interfaces/MassData)
 
 Returns the mass data for this shape.
 
@@ -134,17 +134,17 @@ The density in kilograms per meter squared.
 
 #### Overrides
 
-[`Shape`](Shape).[`computeMass`](Shape#computemass)
+[`Shape`](/api/classes/Shape).[`computeMass`](/api/classes/Shape#computemass)
 
 ***
 
 ### getCenter()
 
-> **getCenter**(): [`Vec2`](Vec2)
+> **getCenter**(): [`Vec2`](/api/classes/Vec2)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -160,7 +160,7 @@ Get the number of child primitives.
 
 #### Overrides
 
-[`Shape`](Shape).[`getChildCount`](Shape#getchildcount)
+[`Shape`](/api/classes/Shape).[`getChildCount`](/api/classes/Shape#getchildcount)
 
 ***
 
@@ -174,7 +174,7 @@ Get the number of child primitives.
 
 #### Overrides
 
-[`Shape`](Shape).[`getRadius`](Shape#getradius)
+[`Shape`](/api/classes/Shape).[`getRadius`](/api/classes/Shape#getradius)
 
 ***
 
@@ -193,7 +193,7 @@ the shape type.
 
 #### Overrides
 
-[`Shape`](Shape).[`getType`](Shape#gettype)
+[`Shape`](/api/classes/Shape).[`getType`](/api/classes/Shape#gettype)
 
 ***
 
@@ -205,15 +205,15 @@ Cast a ray against a child shape.
 
 #### Parameters
 
-• **output**: [`RayCastOutput`](../interfaces/RayCastOutput)
+• **output**: [`RayCastOutput`](/api/interfaces/RayCastOutput)
 
 The ray-cast results.
 
-• **input**: [`RayCastInput`](../interfaces/RayCastInput)
+• **input**: [`RayCastInput`](/api/interfaces/RayCastInput)
 
 The ray-cast input parameters.
 
-• **xf**: [`Transform`](Transform)
+• **xf**: [`Transform`](/api/classes/Transform)
 
 The transform to be applied to the shape.
 
@@ -227,7 +227,7 @@ The child shape index
 
 #### Overrides
 
-[`Shape`](Shape).[`rayCast`](Shape#raycast)
+[`Shape`](/api/classes/Shape).[`rayCast`](/api/classes/Shape#raycast)
 
 ***
 
@@ -240,11 +240,11 @@ shapes.
 
 #### Parameters
 
-• **xf**: [`TransformValue`](../type-aliases/TransformValue)
+• **xf**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 The shape world transform.
 
-• **p**: [`Vec2Value`](../interfaces/Vec2Value)
+• **p**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 A point in world coordinates.
 
@@ -254,7 +254,7 @@ A point in world coordinates.
 
 #### Overrides
 
-[`Shape`](Shape).[`testPoint`](Shape#testpoint)
+[`Shape`](/api/classes/Shape).[`testPoint`](/api/classes/Shape#testpoint)
 
 ***
 
@@ -272,4 +272,4 @@ A point in world coordinates.
 
 #### Inherited from
 
-[`Shape`](Shape).[`isValid`](Shape#isvalid)
+[`Shape`](/api/classes/Shape).[`isValid`](/api/classes/Shape#isvalid)

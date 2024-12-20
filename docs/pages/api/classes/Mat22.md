@@ -6,7 +6,7 @@ A 2-by-2 matrix. Stored in column-major order.
 
 ### new Mat22()
 
-> **new Mat22**(`a`, `b`, `c`, `d`): [`Mat22`](Mat22)
+> **new Mat22**(`a`, `b`, `c`, `d`): [`Mat22`](/api/classes/Mat22)
 
 #### Parameters
 
@@ -20,11 +20,11 @@ A 2-by-2 matrix. Stored in column-major order.
 
 #### Returns
 
-[`Mat22`](Mat22)
+[`Mat22`](/api/classes/Mat22)
 
 ### new Mat22()
 
-> **new Mat22**(`a`, `b`): [`Mat22`](Mat22)
+> **new Mat22**(`a`, `b`): [`Mat22`](/api/classes/Mat22)
 
 #### Parameters
 
@@ -42,37 +42,37 @@ A 2-by-2 matrix. Stored in column-major order.
 
 #### Returns
 
-[`Mat22`](Mat22)
+[`Mat22`](/api/classes/Mat22)
 
 ### new Mat22()
 
-> **new Mat22**(): [`Mat22`](Mat22)
+> **new Mat22**(): [`Mat22`](/api/classes/Mat22)
 
 #### Returns
 
-[`Mat22`](Mat22)
+[`Mat22`](/api/classes/Mat22)
 
 ## Properties
 
 ### ex
 
-> **ex**: [`Vec2`](Vec2)
+> **ex**: [`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### ey
 
-> **ey**: [`Vec2`](Vec2)
+> **ey**: [`Vec2`](/api/classes/Vec2)
 
 ## Methods
 
 ### getInverse()
 
-> **getInverse**(): [`Mat22`](Mat22)
+> **getInverse**(): [`Mat22`](/api/classes/Mat22)
 
 #### Returns
 
-[`Mat22`](Mat22)
+[`Mat22`](/api/classes/Mat22)
 
 ***
 
@@ -84,7 +84,7 @@ A 2-by-2 matrix. Stored in column-major order.
 
 ##### Parameters
 
-• **a**: [`Mat22`](Mat22)
+• **a**: [`Mat22`](/api/classes/Mat22)
 
 ##### Returns
 
@@ -96,9 +96,9 @@ A 2-by-2 matrix. Stored in column-major order.
 
 ##### Parameters
 
-• **a**: [`Vec2Value`](../interfaces/Vec2Value)
+• **a**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **b**: [`Vec2Value`](../interfaces/Vec2Value)
+• **b**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ##### Returns
 
@@ -146,48 +146,48 @@ A 2-by-2 matrix. Stored in column-major order.
 
 ### solve()
 
-> **solve**(`v`): [`Vec2`](Vec2)
+> **solve**(`v`): [`Vec2`](/api/classes/Vec2)
 
 Solve A * x = b, where b is a column vector. This is more efficient than
 computing the inverse in one-shot cases.
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### abs()
 
-> `static` **abs**(`mx`): [`Mat22`](Mat22)
+> `static` **abs**(`mx`): [`Mat22`](/api/classes/Mat22)
 
 #### Parameters
 
-• **mx**: [`Mat22`](Mat22)
+• **mx**: [`Mat22`](/api/classes/Mat22)
 
 #### Returns
 
-[`Mat22`](Mat22)
+[`Mat22`](/api/classes/Mat22)
 
 ***
 
 ### add()
 
-> `static` **add**(`mx1`, `mx2`): [`Mat22`](Mat22)
+> `static` **add**(`mx1`, `mx2`): [`Mat22`](/api/classes/Mat22)
 
 #### Parameters
 
-• **mx1**: [`Mat22`](Mat22)
+• **mx1**: [`Mat22`](/api/classes/Mat22)
 
-• **mx2**: [`Mat22`](Mat22)
+• **mx2**: [`Mat22`](/api/classes/Mat22)
 
 #### Returns
 
-[`Mat22`](Mat22)
+[`Mat22`](/api/classes/Mat22)
 
 ***
 
@@ -223,50 +223,50 @@ computing the inverse in one-shot cases.
 
 #### mul(mx, my)
 
-> `static` **mul**(`mx`, `my`): [`Mat22`](Mat22)
+> `static` **mul**(`mx`, `my`): [`Mat22`](/api/classes/Mat22)
 
 Multiply a matrix times a vector. If a rotation matrix is provided, then this
 transforms the vector from one frame to another.
 
 ##### Parameters
 
-• **mx**: [`Mat22`](Mat22)
+• **mx**: [`Mat22`](/api/classes/Mat22)
 
-• **my**: [`Mat22`](Mat22)
+• **my**: [`Mat22`](/api/classes/Mat22)
 
 ##### Returns
 
-[`Mat22`](Mat22)
+[`Mat22`](/api/classes/Mat22)
 
 #### mul(mx, v)
 
-> `static` **mul**(`mx`, `v`): [`Vec2`](Vec2)
+> `static` **mul**(`mx`, `v`): [`Vec2`](/api/classes/Vec2)
 
 ##### Parameters
 
-• **mx**: [`Mat22`](Mat22)
+• **mx**: [`Mat22`](/api/classes/Mat22)
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ##### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### mulMat22()
 
-> `static` **mulMat22**(`mx`, `v`): [`Mat22`](Mat22)
+> `static` **mulMat22**(`mx`, `v`): [`Mat22`](/api/classes/Mat22)
 
 #### Parameters
 
-• **mx**: [`Mat22`](Mat22)
+• **mx**: [`Mat22`](/api/classes/Mat22)
 
-• **v**: [`Mat22`](Mat22)
+• **v**: [`Mat22`](/api/classes/Mat22)
 
 #### Returns
 
-[`Mat22`](Mat22)
+[`Mat22`](/api/classes/Mat22)
 
 ***
 
@@ -274,7 +274,7 @@ transforms the vector from one frame to another.
 
 #### mulT(mx, my)
 
-> `static` **mulT**(`mx`, `my`): [`Mat22`](Mat22)
+> `static` **mulT**(`mx`, `my`): [`Mat22`](/api/classes/Mat22)
 
 Multiply a matrix transpose times a vector. If a rotation matrix is provided,
 then this transforms the vector from one frame to another (inverse
@@ -282,72 +282,72 @@ transform).
 
 ##### Parameters
 
-• **mx**: [`Mat22`](Mat22)
+• **mx**: [`Mat22`](/api/classes/Mat22)
 
-• **my**: [`Mat22`](Mat22)
+• **my**: [`Mat22`](/api/classes/Mat22)
 
 ##### Returns
 
-[`Mat22`](Mat22)
+[`Mat22`](/api/classes/Mat22)
 
 #### mulT(mx, v)
 
-> `static` **mulT**(`mx`, `v`): [`Vec2`](Vec2)
+> `static` **mulT**(`mx`, `v`): [`Vec2`](/api/classes/Vec2)
 
 ##### Parameters
 
-• **mx**: [`Mat22`](Mat22)
+• **mx**: [`Mat22`](/api/classes/Mat22)
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ##### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### mulTMat22()
 
-> `static` **mulTMat22**(`mx`, `v`): [`Mat22`](Mat22)
+> `static` **mulTMat22**(`mx`, `v`): [`Mat22`](/api/classes/Mat22)
 
 #### Parameters
 
-• **mx**: [`Mat22`](Mat22)
+• **mx**: [`Mat22`](/api/classes/Mat22)
 
-• **v**: [`Mat22`](Mat22)
+• **v**: [`Mat22`](/api/classes/Mat22)
 
 #### Returns
 
-[`Mat22`](Mat22)
+[`Mat22`](/api/classes/Mat22)
 
 ***
 
 ### mulTVec2()
 
-> `static` **mulTVec2**(`mx`, `v`): [`Vec2`](Vec2)
+> `static` **mulTVec2**(`mx`, `v`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **mx**: [`Mat22`](Mat22)
+• **mx**: [`Mat22`](/api/classes/Mat22)
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### mulVec2()
 
-> `static` **mulVec2**(`mx`, `v`): [`Vec2`](Vec2)
+> `static` **mulVec2**(`mx`, `v`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **mx**: [`Mat22`](Mat22)
+• **mx**: [`Mat22`](/api/classes/Mat22)
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)

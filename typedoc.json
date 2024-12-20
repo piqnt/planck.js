@@ -4,6 +4,7 @@
   "entryPoints": ["./src"],
   "out": "./docs/pages/api/",
   "basePath": "/api/",
+  "publicPath": "/api/",
   "exclude": [
     "**/*.test-d.ts",
     "**/*.test.ts",

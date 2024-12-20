@@ -6,11 +6,11 @@ Output for Distance.
 
 ### new DistanceOutput()
 
-> **new DistanceOutput**(): [`DistanceOutput`](DistanceOutput)
+> **new DistanceOutput**(): [`DistanceOutput`](/api/classes/DistanceOutput)
 
 #### Returns
 
-[`DistanceOutput`](DistanceOutput)
+[`DistanceOutput`](/api/classes/DistanceOutput)
 
 ## Properties
 
@@ -30,7 +30,7 @@ iterations number of GJK iterations used
 
 ### pointA
 
-> **pointA**: [`Vec2Value`](../interfaces/Vec2Value)
+> **pointA**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 closest point on shapeA
 
@@ -38,7 +38,7 @@ closest point on shapeA
 
 ### pointB
 
-> **pointB**: [`Vec2Value`](../interfaces/Vec2Value)
+> **pointB**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 closest point on shapeB
 

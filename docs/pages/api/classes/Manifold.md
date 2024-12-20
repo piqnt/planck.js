@@ -15,17 +15,17 @@ steps, so we keep it small.
 
 ### new Manifold()
 
-> **new Manifold**(): [`Manifold`](Manifold)
+> **new Manifold**(): [`Manifold`](/api/classes/Manifold)
 
 #### Returns
 
-[`Manifold`](Manifold)
+[`Manifold`](/api/classes/Manifold)
 
 ## Properties
 
 ### localNormal
 
-> **localNormal**: [`Vec2Value`](../interfaces/Vec2Value)
+> **localNormal**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 Usage depends on manifold type:
 - circles: not used
@@ -36,7 +36,7 @@ Usage depends on manifold type:
 
 ### localPoint
 
-> **localPoint**: [`Vec2Value`](../interfaces/Vec2Value)
+> **localPoint**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 Usage depends on manifold type:
 - circles: the local center of circleA
@@ -55,7 +55,7 @@ The number of manifold points
 
 ### points
 
-> **points**: [`ManifoldPoint`](ManifoldPoint)[]
+> **points**: [`ManifoldPoint`](/api/classes/ManifoldPoint)[]
 
 The points of contact
 
@@ -63,7 +63,7 @@ The points of contact
 
 ### type
 
-> **type**: [`ManifoldType`](../enumerations/ManifoldType)
+> **type**: [`ManifoldType`](/api/enumerations/ManifoldType)
 
 ***
 
@@ -75,11 +75,11 @@ Clipping for contact manifolds. Sutherland-Hodgman clipping.
 
 #### Parameters
 
-• **vOut**: [`ClipVertex`](ClipVertex)[]
+• **vOut**: [`ClipVertex`](/api/classes/ClipVertex)[]
 
-• **vIn**: [`ClipVertex`](ClipVertex)[]
+• **vIn**: [`ClipVertex`](/api/classes/ClipVertex)[]
 
-• **normal**: [`Vec2Value`](../interfaces/Vec2Value)
+• **normal**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **offset**: `number`
 
@@ -93,7 +93,7 @@ Clipping for contact manifolds. Sutherland-Hodgman clipping.
 
 ### ClipVertex
 
-> `static` **ClipVertex**: *typeof* [`ClipVertex`](ClipVertex)
+> `static` **ClipVertex**: *typeof* [`ClipVertex`](/api/classes/ClipVertex)
 
 ***
 
@@ -107,13 +107,13 @@ while state2 is either add or persist.
 
 #### Parameters
 
-• **state1**: [`PointState`](../enumerations/PointState)[]
+• **state1**: [`PointState`](/api/enumerations/PointState)[]
 
-• **state2**: [`PointState`](../enumerations/PointState)[]
+• **state2**: [`PointState`](/api/enumerations/PointState)[]
 
-• **manifold1**: [`Manifold`](Manifold)
+• **manifold1**: [`Manifold`](/api/classes/Manifold)
 
-• **manifold2**: [`Manifold`](Manifold)
+• **manifold2**: [`Manifold`](/api/classes/Manifold)
 
 #### Returns
 
@@ -123,13 +123,13 @@ while state2 is either add or persist.
 
 ### PointState
 
-> `static` **PointState**: *typeof* [`PointState`](../enumerations/PointState)
+> `static` **PointState**: *typeof* [`PointState`](/api/enumerations/PointState)
 
 ## Methods
 
 ### getWorldManifold()
 
-> **getWorldManifold**(`wm`, `xfA`, `radiusA`, `xfB`, `radiusB`): [`WorldManifold`](WorldManifold)
+> **getWorldManifold**(`wm`, `xfA`, `radiusA`, `xfB`, `radiusB`): [`WorldManifold`](/api/classes/WorldManifold)
 
 Evaluate the manifold with supplied transforms. This assumes modest motion
 from the original state. This does not change the point count, impulses, etc.
@@ -137,19 +137,19 @@ The radii must come from the shapes that generated the manifold.
 
 #### Parameters
 
-• **wm**: [`WorldManifold`](WorldManifold)
+• **wm**: [`WorldManifold`](/api/classes/WorldManifold)
 
-• **xfA**: [`TransformValue`](../type-aliases/TransformValue)
+• **xfA**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 • **radiusA**: `number`
 
-• **xfB**: [`TransformValue`](../type-aliases/TransformValue)
+• **xfB**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 • **radiusB**: `number`
 
 #### Returns
 
-[`WorldManifold`](WorldManifold)
+[`WorldManifold`](/api/classes/WorldManifold)
 
 ***
 
@@ -169,7 +169,7 @@ The radii must come from the shapes that generated the manifold.
 
 #### Parameters
 
-• **that**: [`Manifold`](Manifold)
+• **that**: [`Manifold`](/api/classes/Manifold)
 
 #### Returns
 

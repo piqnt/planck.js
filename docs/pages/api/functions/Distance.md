@@ -8,11 +8,11 @@ the first call set SimplexCache.count to zero.
 
 ## Parameters
 
-• **output**: [`DistanceOutput`](../classes/DistanceOutput)
+• **output**: [`DistanceOutput`](/api/classes/DistanceOutput)
 
-• **cache**: [`SimplexCache`](../classes/SimplexCache)
+• **cache**: [`SimplexCache`](/api/classes/SimplexCache)
 
-• **input**: [`DistanceInput`](../classes/DistanceInput)
+• **input**: [`DistanceInput`](/api/classes/DistanceInput)
 
 ## Returns
 

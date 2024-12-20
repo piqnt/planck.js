@@ -6,11 +6,11 @@ Output results for b2ShapeCast
 
 ### new ShapeCastOutput()
 
-> **new ShapeCastOutput**(): [`ShapeCastOutput`](ShapeCastOutput)
+> **new ShapeCastOutput**(): [`ShapeCastOutput`](/api/classes/ShapeCastOutput)
 
 #### Returns
 
-[`ShapeCastOutput`](ShapeCastOutput)
+[`ShapeCastOutput`](/api/classes/ShapeCastOutput)
 
 ## Properties
 
@@ -28,10 +28,10 @@ Output results for b2ShapeCast
 
 ### normal
 
-> **normal**: [`Vec2`](Vec2)
+> **normal**: [`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### point
 
-> **point**: [`Vec2`](Vec2)
+> **point**: [`Vec2`](/api/classes/Vec2)

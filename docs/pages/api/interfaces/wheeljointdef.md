@@ -9,31 +9,31 @@ game.
 
 ## Extends
 
-- [`JointDef`](JointDef).[`WheelJointOpt`](WheelJointOpt)
+- [`JointDef`](/api/interfaces/JointDef).[`WheelJointOpt`](/api/interfaces/WheelJointOpt)
 
 ## Properties
 
 ### bodyA
 
-> **bodyA**: [`Body`](../classes/Body)
+> **bodyA**: [`Body`](/api/classes/Body)
 
 The first attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyA`](JointDef#bodya)
+[`JointDef`](/api/interfaces/JointDef).[`bodyA`](/api/interfaces/JointDef#bodya)
 
 ***
 
 ### bodyB
 
-> **bodyB**: [`Body`](../classes/Body)
+> **bodyB**: [`Body`](/api/classes/Body)
 
 The second attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyB`](JointDef#bodyb)
+[`JointDef`](/api/interfaces/JointDef).[`bodyB`](/api/interfaces/JointDef#bodyb)
 
 ***
 
@@ -46,7 +46,7 @@ should collide.
 
 #### Inherited from
 
-[`WheelJointOpt`](WheelJointOpt).[`collideConnected`](WheelJointOpt#collideconnected)
+[`WheelJointOpt`](/api/interfaces/WheelJointOpt).[`collideConnected`](/api/interfaces/WheelJointOpt#collideconnected)
 
 ***
 
@@ -58,7 +58,7 @@ Suspension damping ratio, one indicates critical damping.
 
 #### Inherited from
 
-[`WheelJointOpt`](WheelJointOpt).[`dampingRatio`](WheelJointOpt#dampingratio)
+[`WheelJointOpt`](/api/interfaces/WheelJointOpt).[`dampingRatio`](/api/interfaces/WheelJointOpt#dampingratio)
 
 ***
 
@@ -70,7 +70,7 @@ Enable/disable the joint motor.
 
 #### Inherited from
 
-[`WheelJointOpt`](WheelJointOpt).[`enableMotor`](WheelJointOpt#enablemotor)
+[`WheelJointOpt`](/api/interfaces/WheelJointOpt).[`enableMotor`](/api/interfaces/WheelJointOpt#enablemotor)
 
 ***
 
@@ -82,13 +82,13 @@ Suspension frequency, zero indicates no suspension.
 
 #### Inherited from
 
-[`WheelJointOpt`](WheelJointOpt).[`frequencyHz`](WheelJointOpt#frequencyhz)
+[`WheelJointOpt`](/api/interfaces/WheelJointOpt).[`frequencyHz`](/api/interfaces/WheelJointOpt#frequencyhz)
 
 ***
 
 ### localAnchorA
 
-> **localAnchorA**: [`Vec2Value`](Vec2Value)
+> **localAnchorA**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The local anchor point relative to bodyA's origin.
 
@@ -96,7 +96,7 @@ The local anchor point relative to bodyA's origin.
 
 ### localAnchorB
 
-> **localAnchorB**: [`Vec2Value`](Vec2Value)
+> **localAnchorB**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The local anchor point relative to bodyB's origin.
 
@@ -104,7 +104,7 @@ The local anchor point relative to bodyB's origin.
 
 ### localAxisA
 
-> **localAxisA**: [`Vec2Value`](Vec2Value)
+> **localAxisA**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The local translation axis in bodyA.
 
@@ -118,7 +118,7 @@ The maximum motor torque, usually in N-m.
 
 #### Inherited from
 
-[`WheelJointOpt`](WheelJointOpt).[`maxMotorTorque`](WheelJointOpt#maxmotortorque)
+[`WheelJointOpt`](/api/interfaces/WheelJointOpt).[`maxMotorTorque`](/api/interfaces/WheelJointOpt#maxmotortorque)
 
 ***
 
@@ -130,19 +130,19 @@ The desired motor speed in radians per second.
 
 #### Inherited from
 
-[`WheelJointOpt`](WheelJointOpt).[`motorSpeed`](WheelJointOpt#motorspeed)
+[`WheelJointOpt`](/api/interfaces/WheelJointOpt).[`motorSpeed`](/api/interfaces/WheelJointOpt#motorspeed)
 
 ***
 
 ### style?
 
-> `optional` **style**: [`Style`](Style)
+> `optional` **style**: [`Style`](/api/interfaces/Style)
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`WheelJointOpt`](WheelJointOpt).[`style`](WheelJointOpt#style)
+[`WheelJointOpt`](/api/interfaces/WheelJointOpt).[`style`](/api/interfaces/WheelJointOpt#style)
 
 ***
 
@@ -154,4 +154,4 @@ Use this to attach application specific data to your joints.
 
 #### Inherited from
 
-[`WheelJointOpt`](WheelJointOpt).[`userData`](WheelJointOpt#userdata)
+[`WheelJointOpt`](/api/interfaces/WheelJointOpt).[`userData`](/api/interfaces/WheelJointOpt#userdata)

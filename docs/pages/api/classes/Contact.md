@@ -8,11 +8,11 @@ object may exist that has no contact points.
 
 ### new Contact()
 
-> **new Contact**(): [`Contact`](Contact)
+> **new Contact**(): [`Contact`](/api/classes/Contact)
 
 #### Returns
 
-[`Contact`](Contact)
+[`Contact`](/api/classes/Contact)
 
 ## Methods
 
@@ -24,11 +24,11 @@ Called by Update method, and implemented by subclasses.
 
 #### Parameters
 
-• **manifold**: [`Manifold`](Manifold)
+• **manifold**: [`Manifold`](/api/classes/Manifold)
 
-• **xfA**: [`TransformValue`](../type-aliases/TransformValue)
+• **xfA**: [`TransformValue`](/api/type-aliases/TransformValue)
 
-• **xfB**: [`TransformValue`](../type-aliases/TransformValue)
+• **xfB**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 #### Returns
 
@@ -74,25 +74,25 @@ Get the child primitive index for fixture B.
 
 ### getFixtureA()
 
-> **getFixtureA**(): [`Fixture`](Fixture)
+> **getFixtureA**(): [`Fixture`](/api/classes/Fixture)
 
 Get fixture A in this contact.
 
 #### Returns
 
-[`Fixture`](Fixture)
+[`Fixture`](/api/classes/Fixture)
 
 ***
 
 ### getFixtureB()
 
-> **getFixtureB**(): [`Fixture`](Fixture)
+> **getFixtureB**(): [`Fixture`](/api/classes/Fixture)
 
 Get fixture B in this contact.
 
 #### Returns
 
-[`Fixture`](Fixture)
+[`Fixture`](/api/classes/Fixture)
 
 ***
 
@@ -110,26 +110,26 @@ Get the friction.
 
 ### getManifold()
 
-> **getManifold**(): [`Manifold`](Manifold)
+> **getManifold**(): [`Manifold`](/api/classes/Manifold)
 
 Get the contact manifold. Do not modify the manifold unless you understand
 the internals of the library.
 
 #### Returns
 
-[`Manifold`](Manifold)
+[`Manifold`](/api/classes/Manifold)
 
 ***
 
 ### getNext()
 
-> **getNext**(): [`Contact`](Contact)
+> **getNext**(): [`Contact`](/api/classes/Contact)
 
 Get the next contact in the world's contact list.
 
 #### Returns
 
-[`Contact`](Contact)
+[`Contact`](/api/classes/Contact)
 
 ***
 
@@ -159,17 +159,17 @@ Get the desired tangent speed. In meters per second.
 
 ### getWorldManifold()
 
-> **getWorldManifold**(`worldManifold`): [`WorldManifold`](WorldManifold)
+> **getWorldManifold**(`worldManifold`): [`WorldManifold`](/api/classes/WorldManifold)
 
 Get the world manifold.
 
 #### Parameters
 
-• **worldManifold**: [`WorldManifold`](WorldManifold)
+• **worldManifold**: [`WorldManifold`](/api/classes/WorldManifold)
 
 #### Returns
 
-[`WorldManifold`](WorldManifold)
+[`WorldManifold`](/api/classes/WorldManifold)
 
 ***
 
@@ -179,7 +179,7 @@ Get the world manifold.
 
 #### Parameters
 
-• **step**: [`TimeStep`](TimeStep)
+• **step**: [`TimeStep`](/api/classes/TimeStep)
 
 #### Returns
 
@@ -193,7 +193,7 @@ Get the world manifold.
 
 #### Parameters
 
-• **step**: [`TimeStep`](TimeStep)
+• **step**: [`TimeStep`](/api/classes/TimeStep)
 
 #### Returns
 
@@ -324,7 +324,7 @@ second.
 
 #### Parameters
 
-• **step**: [`TimeStep`](TimeStep)
+• **step**: [`TimeStep`](/api/classes/TimeStep)
 
 #### Returns
 
@@ -338,11 +338,11 @@ second.
 
 #### Parameters
 
-• **step**: [`TimeStep`](TimeStep)
+• **step**: [`TimeStep`](/api/classes/TimeStep)
 
-• **toiA**: [`Body`](Body)
+• **toiA**: [`Body`](/api/classes/Body)
 
-• **toiB**: [`Body`](Body)
+• **toiB**: [`Body`](/api/classes/Body)
 
 #### Returns
 
@@ -356,7 +356,7 @@ second.
 
 #### Parameters
 
-• **step**: [`TimeStep`](TimeStep)
+• **step**: [`TimeStep`](/api/classes/TimeStep)
 
 #### Returns
 
@@ -370,7 +370,7 @@ second.
 
 #### Parameters
 
-• **step**: [`TimeStep`](TimeStep)
+• **step**: [`TimeStep`](/api/classes/TimeStep)
 
 #### Returns
 
@@ -408,7 +408,7 @@ Note: do not assume the fixture AABBs are overlapping or are valid.
 
 #### Parameters
 
-• **step**: [`TimeStep`](TimeStep)
+• **step**: [`TimeStep`](/api/classes/TimeStep)
 
 #### Returns
 

@@ -6,45 +6,45 @@ A 3-by-3 matrix. Stored in column-major order.
 
 ### new Mat33()
 
-> **new Mat33**(`a`, `b`, `c`): [`Mat33`](Mat33)
+> **new Mat33**(`a`, `b`, `c`): [`Mat33`](/api/classes/Mat33)
 
 #### Parameters
 
-• **a**: [`Vec3Value`](../interfaces/Vec3Value)
+• **a**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
-• **b**: [`Vec3Value`](../interfaces/Vec3Value)
+• **b**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
-• **c**: [`Vec3Value`](../interfaces/Vec3Value)
+• **c**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
 #### Returns
 
-[`Mat33`](Mat33)
+[`Mat33`](/api/classes/Mat33)
 
 ### new Mat33()
 
-> **new Mat33**(): [`Mat33`](Mat33)
+> **new Mat33**(): [`Mat33`](/api/classes/Mat33)
 
 #### Returns
 
-[`Mat33`](Mat33)
+[`Mat33`](/api/classes/Mat33)
 
 ## Properties
 
 ### ex
 
-> **ex**: [`Vec3`](Vec3)
+> **ex**: [`Vec3`](/api/classes/Vec3)
 
 ***
 
 ### ey
 
-> **ey**: [`Vec3`](Vec3)
+> **ey**: [`Vec3`](/api/classes/Vec3)
 
 ***
 
 ### ez
 
-> **ez**: [`Vec3`](Vec3)
+> **ez**: [`Vec3`](/api/classes/Vec3)
 
 ## Methods
 
@@ -57,7 +57,7 @@ singular.
 
 #### Parameters
 
-• **M**: [`Mat33`](Mat33)
+• **M**: [`Mat33`](/api/classes/Mat33)
 
 #### Returns
 
@@ -74,7 +74,7 @@ if singular.
 
 #### Parameters
 
-• **M**: [`Mat33`](Mat33)
+• **M**: [`Mat33`](/api/classes/Mat33)
 
 #### Returns
 
@@ -84,19 +84,19 @@ if singular.
 
 ### setZero()
 
-> **setZero**(): [`Mat33`](Mat33)
+> **setZero**(): [`Mat33`](/api/classes/Mat33)
 
 Set this matrix to all zeros.
 
 #### Returns
 
-[`Mat33`](Mat33)
+[`Mat33`](/api/classes/Mat33)
 
 ***
 
 ### solve22()
 
-> **solve22**(`v`): [`Vec2`](Vec2)
+> **solve22**(`v`): [`Vec2`](/api/classes/Vec2)
 
 Solve A * x = b, where b is a column vector. This is more efficient than
 computing the inverse in one-shot cases. Solve only the upper 2-by-2 matrix
@@ -104,44 +104,44 @@ equation.
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### solve33()
 
-> **solve33**(`v`): [`Vec3`](Vec3)
+> **solve33**(`v`): [`Vec3`](/api/classes/Vec3)
 
 Solve A * x = b, where b is a column vector. This is more efficient than
 computing the inverse in one-shot cases.
 
 #### Parameters
 
-• **v**: [`Vec3Value`](../interfaces/Vec3Value)
+• **v**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ***
 
 ### add()
 
-> `static` **add**(`a`, `b`): [`Mat33`](Mat33)
+> `static` **add**(`a`, `b`): [`Mat33`](/api/classes/Mat33)
 
 #### Parameters
 
-• **a**: [`Mat33`](Mat33)
+• **a**: [`Mat33`](/api/classes/Mat33)
 
-• **b**: [`Mat33`](Mat33)
+• **b**: [`Mat33`](/api/classes/Mat33)
 
 #### Returns
 
-[`Mat33`](Mat33)
+[`Mat33`](/api/classes/Mat33)
 
 ***
 
@@ -177,62 +177,62 @@ computing the inverse in one-shot cases.
 
 #### mul(a, b)
 
-> `static` **mul**(`a`, `b`): [`Vec2`](Vec2)
+> `static` **mul**(`a`, `b`): [`Vec2`](/api/classes/Vec2)
 
 Multiply a matrix times a vector.
 
 ##### Parameters
 
-• **a**: [`Mat33`](Mat33)
+• **a**: [`Mat33`](/api/classes/Mat33)
 
-• **b**: [`Vec2Value`](../interfaces/Vec2Value)
+• **b**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ##### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 #### mul(a, b)
 
-> `static` **mul**(`a`, `b`): [`Vec3`](Vec3)
+> `static` **mul**(`a`, `b`): [`Vec3`](/api/classes/Vec3)
 
 ##### Parameters
 
-• **a**: [`Mat33`](Mat33)
+• **a**: [`Mat33`](/api/classes/Mat33)
 
-• **b**: [`Vec3Value`](../interfaces/Vec3Value)
+• **b**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
 ##### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ***
 
 ### mulVec2()
 
-> `static` **mulVec2**(`a`, `b`): [`Vec2`](Vec2)
+> `static` **mulVec2**(`a`, `b`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **a**: [`Mat33`](Mat33)
+• **a**: [`Mat33`](/api/classes/Mat33)
 
-• **b**: [`Vec2Value`](../interfaces/Vec2Value)
+• **b**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### mulVec3()
 
-> `static` **mulVec3**(`a`, `b`): [`Vec3`](Vec3)
+> `static` **mulVec3**(`a`, `b`): [`Vec3`](/api/classes/Vec3)
 
 #### Parameters
 
-• **a**: [`Mat33`](Mat33)
+• **a**: [`Mat33`](/api/classes/Mat33)
 
-• **b**: [`Vec3Value`](../interfaces/Vec3Value)
+• **b**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)

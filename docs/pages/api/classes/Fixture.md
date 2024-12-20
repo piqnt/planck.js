@@ -4,13 +4,13 @@ A fixture is used to attach a shape to a body for collision detection. A
 fixture inherits its transform from its parent. Fixtures hold additional
 non-geometric data such as friction, collision filters, etc.
 
-To create a new Fixture use [Body.createFixture](Body#createfixture).
+To create a new Fixture use [Body.createFixture](/api/classes/Body#createfixture).
 
 ## Properties
 
 ### style
 
-> **style**: [`Style`](../interfaces/Style) = `{}`
+> **style**: [`Style`](/api/interfaces/Style) = `{}`
 
 Styling for dev-tools.
 
@@ -24,9 +24,9 @@ These support body activation/deactivation.
 
 #### Parameters
 
-• **broadPhase**: [`BroadPhase`](BroadPhase)
+• **broadPhase**: [`BroadPhase`](/api/classes/BroadPhase)
 
-• **xf**: [`TransformValue`](../type-aliases/TransformValue)
+• **xf**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 #### Returns
 
@@ -40,7 +40,7 @@ These support body activation/deactivation.
 
 #### Parameters
 
-• **broadPhase**: [`BroadPhase`](BroadPhase)
+• **broadPhase**: [`BroadPhase`](/api/classes/BroadPhase)
 
 #### Returns
 
@@ -50,7 +50,7 @@ These support body activation/deactivation.
 
 ### getAABB()
 
-> **getAABB**(`childIndex`): [`AABB`](AABB)
+> **getAABB**(`childIndex`): [`AABB`](/api/classes/AABB)
 
 Get the fixture's AABB. This AABB may be enlarge and/or stale. If you need a
 more accurate AABB, compute it using the shape and the body transform.
@@ -61,20 +61,20 @@ more accurate AABB, compute it using the shape and the body transform.
 
 #### Returns
 
-[`AABB`](AABB)
+[`AABB`](/api/classes/AABB)
 
 ***
 
 ### getBody()
 
-> **getBody**(): [`Body`](Body)
+> **getBody**(): [`Body`](/api/classes/Body)
 
 Get the parent body of this fixture. This is null if the fixture is not
 attached.
 
 #### Returns
 
-[`Body`](Body)
+[`Body`](/api/classes/Body)
 
 ***
 
@@ -142,7 +142,7 @@ may be expensive.
 
 #### Parameters
 
-• **massData**: [`MassData`](../interfaces/MassData)
+• **massData**: [`MassData`](/api/interfaces/MassData)
 
 #### Returns
 
@@ -152,13 +152,13 @@ may be expensive.
 
 ### getNext()
 
-> **getNext**(): [`Fixture`](Fixture)
+> **getNext**(): [`Fixture`](/api/classes/Fixture)
 
 Get the next fixture in the parent body's fixture list.
 
 #### Returns
 
-[`Fixture`](Fixture)
+[`Fixture`](/api/classes/Fixture)
 
 ***
 
@@ -176,7 +176,7 @@ Get the coefficient of restitution.
 
 ### getShape()
 
-> **getShape**(): [`Shape`](Shape)
+> **getShape**(): [`Shape`](/api/classes/Shape)
 
 Get the child shape. You can modify the child shape, however you should not
 change the number of vertices because this will crash some collision caching
@@ -184,20 +184,20 @@ mechanisms. Manipulating the shape may lead to non-physical behavior.
 
 #### Returns
 
-[`Shape`](Shape)
+[`Shape`](/api/classes/Shape)
 
 ***
 
 ### getType()
 
-> **getType**(): [`ShapeType`](../type-aliases/ShapeType)
+> **getType**(): [`ShapeType`](/api/type-aliases/ShapeType)
 
 Get the type of the child shape. You can use this to down cast to the
 concrete shape.
 
 #### Returns
 
-[`ShapeType`](../type-aliases/ShapeType)
+[`ShapeType`](/api/type-aliases/ShapeType)
 
 ***
 
@@ -235,9 +235,9 @@ Cast a ray against this shape.
 
 #### Parameters
 
-• **output**: [`RayCastOutput`](../interfaces/RayCastOutput)
+• **output**: [`RayCastOutput`](/api/interfaces/RayCastOutput)
 
-• **input**: [`RayCastInput`](../interfaces/RayCastInput)
+• **input**: [`RayCastInput`](/api/interfaces/RayCastInput)
 
 • **childIndex**: `number`
 
@@ -424,7 +424,7 @@ overlap.
 
 #### Parameters
 
-• **that**: [`Fixture`](Fixture)
+• **that**: [`Fixture`](/api/classes/Fixture)
 
 #### Returns
 
@@ -441,11 +441,11 @@ next transformation).
 
 #### Parameters
 
-• **broadPhase**: [`BroadPhase`](BroadPhase)
+• **broadPhase**: [`BroadPhase`](/api/classes/BroadPhase)
 
-• **xf1**: [`TransformValue`](../type-aliases/TransformValue)
+• **xf1**: [`TransformValue`](/api/type-aliases/TransformValue)
 
-• **xf2**: [`TransformValue`](../type-aliases/TransformValue)
+• **xf2**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 #### Returns
 
@@ -461,7 +461,7 @@ Test a point in world coordinates for containment in this fixture.
 
 #### Parameters
 
-• **p**: [`Vec2Value`](../interfaces/Vec2Value)
+• **p**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 

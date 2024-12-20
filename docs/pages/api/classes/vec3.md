@@ -6,7 +6,7 @@
 
 ### new Vec3()
 
-> **new Vec3**(`x`, `y`, `z`): [`Vec3`](Vec3)
+> **new Vec3**(`x`, `y`, `z`): [`Vec3`](/api/classes/Vec3)
 
 #### Parameters
 
@@ -18,27 +18,27 @@
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ### new Vec3()
 
-> **new Vec3**(`obj`): [`Vec3`](Vec3)
+> **new Vec3**(`obj`): [`Vec3`](/api/classes/Vec3)
 
 #### Parameters
 
-• **obj**: [`Vec3Value`](../interfaces/Vec3Value)
+• **obj**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ### new Vec3()
 
-> **new Vec3**(): [`Vec3`](Vec3)
+> **new Vec3**(): [`Vec3`](/api/classes/Vec3)
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ## Properties
 
@@ -62,21 +62,21 @@
 
 ### add()
 
-> **add**(`w`): [`Vec3`](Vec3)
+> **add**(`w`): [`Vec3`](/api/classes/Vec3)
 
 #### Parameters
 
-• **w**: [`Vec3Value`](../interfaces/Vec3Value)
+• **w**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ***
 
 ### mul()
 
-> **mul**(`m`): [`Vec3`](Vec3)
+> **mul**(`m`): [`Vec3`](/api/classes/Vec3)
 
 #### Parameters
 
@@ -84,23 +84,23 @@
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ***
 
 ### neg()
 
-> **neg**(): [`Vec3`](Vec3)
+> **neg**(): [`Vec3`](/api/classes/Vec3)
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ***
 
 ### set()
 
-> **set**(`x`, `y`, `z`): [`Vec3`](Vec3)
+> **set**(`x`, `y`, `z`): [`Vec3`](/api/classes/Vec3)
 
 #### Parameters
 
@@ -112,47 +112,47 @@
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ***
 
 ### setZero()
 
-> **setZero**(): [`Vec3`](Vec3)
+> **setZero**(): [`Vec3`](/api/classes/Vec3)
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ***
 
 ### sub()
 
-> **sub**(`w`): [`Vec3`](Vec3)
+> **sub**(`w`): [`Vec3`](/api/classes/Vec3)
 
 #### Parameters
 
-• **w**: [`Vec3Value`](../interfaces/Vec3Value)
+• **w**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ***
 
 ### add()
 
-> `static` **add**(`v`, `w`): [`Vec3`](Vec3)
+> `static` **add**(`v`, `w`): [`Vec3`](/api/classes/Vec3)
 
 #### Parameters
 
-• **v**: [`Vec3Value`](../interfaces/Vec3Value)
+• **v**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
-• **w**: [`Vec3Value`](../interfaces/Vec3Value)
+• **w**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ***
 
@@ -162,9 +162,9 @@
 
 #### Parameters
 
-• **v**: [`Vec3Value`](../interfaces/Vec3Value)
+• **v**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
-• **w**: [`Vec3Value`](../interfaces/Vec3Value)
+• **w**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
 #### Returns
 
@@ -188,33 +188,33 @@
 
 ### clone()
 
-> `static` **clone**(`v`): [`Vec3`](Vec3)
+> `static` **clone**(`v`): [`Vec3`](/api/classes/Vec3)
 
 #### Parameters
 
-• **v**: [`Vec3Value`](../interfaces/Vec3Value)
+• **v**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ***
 
 ### cross()
 
-> `static` **cross**(`v`, `w`): [`Vec3`](Vec3)
+> `static` **cross**(`v`, `w`): [`Vec3`](/api/classes/Vec3)
 
 Cross product on two vectors
 
 #### Parameters
 
-• **v**: [`Vec3Value`](../interfaces/Vec3Value)
+• **v**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
-• **w**: [`Vec3Value`](../interfaces/Vec3Value)
+• **w**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ***
 
@@ -226,9 +226,9 @@ Dot product on two vectors
 
 #### Parameters
 
-• **v**: [`Vec3Value`](../interfaces/Vec3Value)
+• **v**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
-• **w**: [`Vec3Value`](../interfaces/Vec3Value)
+• **w**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
 #### Returns
 
@@ -254,54 +254,54 @@ Does this vector contain finite coordinates?
 
 ### mul()
 
-> `static` **mul**(`v`, `m`): [`Vec3`](Vec3)
+> `static` **mul**(`v`, `m`): [`Vec3`](/api/classes/Vec3)
 
 #### Parameters
 
-• **v**: [`Vec3Value`](../interfaces/Vec3Value)
+• **v**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
 • **m**: `number`
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ***
 
 ### neg()
 
-> `static` **neg**(`v`): [`Vec3`](Vec3)
+> `static` **neg**(`v`): [`Vec3`](/api/classes/Vec3)
 
 #### Parameters
 
-• **v**: [`Vec3Value`](../interfaces/Vec3Value)
+• **v**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ***
 
 ### sub()
 
-> `static` **sub**(`v`, `w`): [`Vec3`](Vec3)
+> `static` **sub**(`v`, `w`): [`Vec3`](/api/classes/Vec3)
 
 #### Parameters
 
-• **v**: [`Vec3Value`](../interfaces/Vec3Value)
+• **v**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
-• **w**: [`Vec3Value`](../interfaces/Vec3Value)
+• **w**: [`Vec3Value`](/api/interfaces/Vec3Value)
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)
 
 ***
 
 ### zero()
 
-> `static` **zero**(): [`Vec3`](Vec3)
+> `static` **zero**(): [`Vec3`](/api/classes/Vec3)
 
 #### Returns
 
-[`Vec3`](Vec3)
+[`Vec3`](/api/classes/Vec3)

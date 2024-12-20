@@ -90,7 +90,7 @@ Units are 1/time
 
 ### linearVelocity?
 
-> `optional` **linearVelocity**: [`Vec2Value`](Vec2Value)
+> `optional` **linearVelocity**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The linear velocity of the body's origin in world co-ordinates.
 
@@ -98,7 +98,7 @@ The linear velocity of the body's origin in world co-ordinates.
 
 ### position?
 
-> `optional` **position**: [`Vec2Value`](Vec2Value)
+> `optional` **position**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The world position of the body. Avoid creating bodies at the
 origin since this can lead to many overlapping shapes.
@@ -107,7 +107,7 @@ origin since this can lead to many overlapping shapes.
 
 ### style?
 
-> `optional` **style**: [`Style`](Style)
+> `optional` **style**: [`Style`](/api/interfaces/Style)
 
 Styling for dev-tools.
 
@@ -115,7 +115,7 @@ Styling for dev-tools.
 
 ### type?
 
-> `optional` **type**: [`BodyType`](../type-aliases/BodyType)
+> `optional` **type**: [`BodyType`](/api/type-aliases/BodyType)
 
 Body types are static, kinematic, or dynamic. Note: if a dynamic
 body would have zero mass, the mass is set to one.

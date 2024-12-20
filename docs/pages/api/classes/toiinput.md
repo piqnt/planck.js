@@ -6,35 +6,35 @@ Input parameters for TimeOfImpact.
 
 ### new TOIInput()
 
-> **new TOIInput**(): [`TOIInput`](TOIInput)
+> **new TOIInput**(): [`TOIInput`](/api/classes/TOIInput)
 
 #### Returns
 
-[`TOIInput`](TOIInput)
+[`TOIInput`](/api/classes/TOIInput)
 
 ## Properties
 
 ### proxyA
 
-> **proxyA**: [`DistanceProxy`](DistanceProxy)
+> **proxyA**: [`DistanceProxy`](/api/classes/DistanceProxy)
 
 ***
 
 ### proxyB
 
-> **proxyB**: [`DistanceProxy`](DistanceProxy)
+> **proxyB**: [`DistanceProxy`](/api/classes/DistanceProxy)
 
 ***
 
 ### sweepA
 
-> **sweepA**: [`Sweep`](Sweep)
+> **sweepA**: [`Sweep`](/api/classes/Sweep)
 
 ***
 
 ### sweepB
 
-> **sweepB**: [`Sweep`](Sweep)
+> **sweepB**: [`Sweep`](/api/classes/Sweep)
 
 ***
 

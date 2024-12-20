@@ -5,31 +5,31 @@ parameters, and the time step.
 
 ## Extends
 
-- [`JointDef`](JointDef).[`MouseJointOpt`](MouseJointOpt)
+- [`JointDef`](/api/interfaces/JointDef).[`MouseJointOpt`](/api/interfaces/MouseJointOpt)
 
 ## Properties
 
 ### bodyA
 
-> **bodyA**: [`Body`](../classes/Body)
+> **bodyA**: [`Body`](/api/classes/Body)
 
 The first attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyA`](JointDef#bodya)
+[`JointDef`](/api/interfaces/JointDef).[`bodyA`](/api/interfaces/JointDef#bodya)
 
 ***
 
 ### bodyB
 
-> **bodyB**: [`Body`](../classes/Body)
+> **bodyB**: [`Body`](/api/classes/Body)
 
 The second attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyB`](JointDef#bodyb)
+[`JointDef`](/api/interfaces/JointDef).[`bodyB`](/api/interfaces/JointDef#bodyb)
 
 ***
 
@@ -42,7 +42,7 @@ should collide.
 
 #### Inherited from
 
-[`MouseJointOpt`](MouseJointOpt).[`collideConnected`](MouseJointOpt#collideconnected)
+[`MouseJointOpt`](/api/interfaces/MouseJointOpt).[`collideConnected`](/api/interfaces/MouseJointOpt#collideconnected)
 
 ***
 
@@ -55,7 +55,7 @@ damping.
 
 #### Inherited from
 
-[`MouseJointOpt`](MouseJointOpt).[`dampingRatio`](MouseJointOpt#dampingratio)
+[`MouseJointOpt`](/api/interfaces/MouseJointOpt).[`dampingRatio`](/api/interfaces/MouseJointOpt#dampingratio)
 
 ***
 
@@ -67,7 +67,7 @@ damping.
 
 #### Inherited from
 
-[`MouseJointOpt`](MouseJointOpt).[`frequencyHz`](MouseJointOpt#frequencyhz)
+[`MouseJointOpt`](/api/interfaces/MouseJointOpt).[`frequencyHz`](/api/interfaces/MouseJointOpt#frequencyhz)
 
 ***
 
@@ -81,25 +81,25 @@ weight (multiplier * mass * gravity).
 
 #### Inherited from
 
-[`MouseJointOpt`](MouseJointOpt).[`maxForce`](MouseJointOpt#maxforce)
+[`MouseJointOpt`](/api/interfaces/MouseJointOpt).[`maxForce`](/api/interfaces/MouseJointOpt#maxforce)
 
 ***
 
 ### style?
 
-> `optional` **style**: [`Style`](Style)
+> `optional` **style**: [`Style`](/api/interfaces/Style)
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`MouseJointOpt`](MouseJointOpt).[`style`](MouseJointOpt#style)
+[`MouseJointOpt`](/api/interfaces/MouseJointOpt).[`style`](/api/interfaces/MouseJointOpt#style)
 
 ***
 
 ### target
 
-> **target**: [`Vec2Value`](Vec2Value)
+> **target**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The initial world target point. This is assumed to coincide with the body
 anchor initially.
@@ -114,4 +114,4 @@ Use this to attach application specific data to your joints.
 
 #### Inherited from
 
-[`MouseJointOpt`](MouseJointOpt).[`userData`](MouseJointOpt#userdata)
+[`MouseJointOpt`](/api/interfaces/MouseJointOpt).[`userData`](/api/interfaces/MouseJointOpt#userdata)

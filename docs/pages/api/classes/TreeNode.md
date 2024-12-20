@@ -10,7 +10,7 @@ A node in the dynamic tree. The client does not interact with this directly.
 
 ### new TreeNode()
 
-> **new TreeNode**\<`T`\>(`id`?): [`TreeNode`](TreeNode)\<`T`\>
+> **new TreeNode**\<`T`\>(`id`?): [`TreeNode`](/api/classes/TreeNode)\<`T`\>
 
 #### Parameters
 
@@ -18,13 +18,13 @@ A node in the dynamic tree. The client does not interact with this directly.
 
 #### Returns
 
-[`TreeNode`](TreeNode)\<`T`\>
+[`TreeNode`](/api/classes/TreeNode)\<`T`\>
 
 ## Properties
 
 ### aabb
 
-> **aabb**: [`AABB`](AABB)
+> **aabb**: [`AABB`](/api/classes/AABB)
 
 Enlarged AABB
 
@@ -32,13 +32,13 @@ Enlarged AABB
 
 ### child1
 
-> **child1**: [`TreeNode`](TreeNode)\<`T`\> = `null`
+> **child1**: [`TreeNode`](/api/classes/TreeNode)\<`T`\> = `null`
 
 ***
 
 ### child2
 
-> **child2**: [`TreeNode`](TreeNode)\<`T`\> = `null`
+> **child2**: [`TreeNode`](/api/classes/TreeNode)\<`T`\> = `null`
 
 ***
 
@@ -58,7 +58,7 @@ Enlarged AABB
 
 ### parent
 
-> **parent**: [`TreeNode`](TreeNode)\<`T`\> = `null`
+> **parent**: [`TreeNode`](/api/classes/TreeNode)\<`T`\> = `null`
 
 ***
 

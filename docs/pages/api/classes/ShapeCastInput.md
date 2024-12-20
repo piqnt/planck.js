@@ -6,41 +6,41 @@ Input parameters for ShapeCast
 
 ### new ShapeCastInput()
 
-> **new ShapeCastInput**(): [`ShapeCastInput`](ShapeCastInput)
+> **new ShapeCastInput**(): [`ShapeCastInput`](/api/classes/ShapeCastInput)
 
 #### Returns
 
-[`ShapeCastInput`](ShapeCastInput)
+[`ShapeCastInput`](/api/classes/ShapeCastInput)
 
 ## Properties
 
 ### proxyA
 
-> `readonly` **proxyA**: [`DistanceProxy`](DistanceProxy)
+> `readonly` **proxyA**: [`DistanceProxy`](/api/classes/DistanceProxy)
 
 ***
 
 ### proxyB
 
-> `readonly` **proxyB**: [`DistanceProxy`](DistanceProxy)
+> `readonly` **proxyB**: [`DistanceProxy`](/api/classes/DistanceProxy)
 
 ***
 
 ### transformA
 
-> `readonly` **transformA**: [`Transform`](Transform)
+> `readonly` **transformA**: [`Transform`](/api/classes/Transform)
 
 ***
 
 ### transformB
 
-> `readonly` **transformB**: [`Transform`](Transform)
+> `readonly` **transformB**: [`Transform`](/api/classes/Transform)
 
 ***
 
 ### translationB
 
-> `readonly` **translationB**: [`Vec2`](Vec2)
+> `readonly` **translationB**: [`Vec2`](/api/classes/Vec2)
 
 ## Methods
 

@@ -8,13 +8,13 @@ while state2 is either add or persist.
 
 ## Parameters
 
-• **state1**: [`PointState`](../enumerations/PointState)[]
+• **state1**: [`PointState`](/api/enumerations/PointState)[]
 
-• **state2**: [`PointState`](../enumerations/PointState)[]
+• **state2**: [`PointState`](/api/enumerations/PointState)[]
 
-• **manifold1**: [`Manifold`](../classes/Manifold)
+• **manifold1**: [`Manifold`](/api/classes/Manifold)
 
-• **manifold2**: [`Manifold`](../classes/Manifold)
+• **manifold2**: [`Manifold`](/api/classes/Manifold)
 
 ## Returns
 

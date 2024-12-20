@@ -9,17 +9,17 @@ joint nodes, one for each attached body.
 
 ### new JointEdge()
 
-> **new JointEdge**(): [`JointEdge`](JointEdge)
+> **new JointEdge**(): [`JointEdge`](/api/classes/JointEdge)
 
 #### Returns
 
-[`JointEdge`](JointEdge)
+[`JointEdge`](/api/classes/JointEdge)
 
 ## Properties
 
 ### joint
 
-> **joint**: [`Joint`](Joint) = `null`
+> **joint**: [`Joint`](/api/classes/Joint) = `null`
 
 the joint
 
@@ -27,7 +27,7 @@ the joint
 
 ### next
 
-> **next**: [`JointEdge`](JointEdge) = `null`
+> **next**: [`JointEdge`](/api/classes/JointEdge) = `null`
 
 the next joint edge in the body's joint list
 
@@ -35,7 +35,7 @@ the next joint edge in the body's joint list
 
 ### other
 
-> **other**: [`Body`](Body) = `null`
+> **other**: [`Body`](/api/classes/Body) = `null`
 
 provides quick access to the other body attached.
 
@@ -43,6 +43,6 @@ provides quick access to the other body attached.
 
 ### prev
 
-> **prev**: [`JointEdge`](JointEdge) = `null`
+> **prev**: [`JointEdge`](/api/classes/JointEdge) = `null`
 
 prev the previous joint edge in the body's joint list

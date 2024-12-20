@@ -12,15 +12,15 @@ The normal points from 1 to 2
 
 ## Parameters
 
-• **manifold**: [`Manifold`](../classes/Manifold)
+• **manifold**: [`Manifold`](/api/classes/Manifold)
 
-• **polyA**: [`PolygonShape`](../classes/PolygonShape)
+• **polyA**: [`PolygonShape`](/api/classes/PolygonShape)
 
-• **xfA**: [`TransformValue`](../type-aliases/TransformValue)
+• **xfA**: [`TransformValue`](/api/type-aliases/TransformValue)
 
-• **polyB**: [`PolygonShape`](../classes/PolygonShape)
+• **polyB**: [`PolygonShape`](/api/classes/PolygonShape)
 
-• **xfB**: [`TransformValue`](../type-aliases/TransformValue)
+• **xfB**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 ## Returns
 

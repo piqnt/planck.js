@@ -4,11 +4,11 @@ Gear joint definition.
 
 ## Extends
 
-- [`JointOpt`](JointOpt)
+- [`JointOpt`](/api/interfaces/JointOpt)
 
 ## Extended by
 
-- [`GearJointDef`](GearJointDef)
+- [`GearJointDef`](/api/interfaces/GearJointDef)
 
 ## Properties
 
@@ -21,7 +21,7 @@ should collide.
 
 #### Inherited from
 
-[`JointOpt`](JointOpt).[`collideConnected`](JointOpt#collideconnected)
+[`JointOpt`](/api/interfaces/JointOpt).[`collideConnected`](/api/interfaces/JointOpt#collideconnected)
 
 ***
 
@@ -29,19 +29,19 @@ should collide.
 
 > `optional` **ratio**: `number`
 
-The gear ratio. See [GearJoint](../classes/GearJoint) for explanation.
+The gear ratio. See [GearJoint](/api/classes/GearJoint) for explanation.
 
 ***
 
 ### style?
 
-> `optional` **style**: [`Style`](Style)
+> `optional` **style**: [`Style`](/api/interfaces/Style)
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`JointOpt`](JointOpt).[`style`](JointOpt#style)
+[`JointOpt`](/api/interfaces/JointOpt).[`style`](/api/interfaces/JointOpt#style)
 
 ***
 
@@ -53,4 +53,4 @@ Use this to attach application specific data to your joints.
 
 #### Inherited from
 
-[`JointOpt`](JointOpt).[`userData`](JointOpt#userdata)
+[`JointOpt`](/api/interfaces/JointOpt).[`userData`](/api/interfaces/JointOpt#userdata)

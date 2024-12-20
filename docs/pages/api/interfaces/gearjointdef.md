@@ -4,31 +4,31 @@ Gear joint definition.
 
 ## Extends
 
-- [`JointDef`](JointDef).[`GearJointOpt`](GearJointOpt)
+- [`JointDef`](/api/interfaces/JointDef).[`GearJointOpt`](/api/interfaces/GearJointOpt)
 
 ## Properties
 
 ### bodyA
 
-> **bodyA**: [`Body`](../classes/Body)
+> **bodyA**: [`Body`](/api/classes/Body)
 
 The first attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyA`](JointDef#bodya)
+[`JointDef`](/api/interfaces/JointDef).[`bodyA`](/api/interfaces/JointDef#bodya)
 
 ***
 
 ### bodyB
 
-> **bodyB**: [`Body`](../classes/Body)
+> **bodyB**: [`Body`](/api/classes/Body)
 
 The second attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyB`](JointDef#bodyb)
+[`JointDef`](/api/interfaces/JointDef).[`bodyB`](/api/interfaces/JointDef#bodyb)
 
 ***
 
@@ -41,13 +41,13 @@ should collide.
 
 #### Inherited from
 
-[`GearJointOpt`](GearJointOpt).[`collideConnected`](GearJointOpt#collideconnected)
+[`GearJointOpt`](/api/interfaces/GearJointOpt).[`collideConnected`](/api/interfaces/GearJointOpt#collideconnected)
 
 ***
 
 ### joint1
 
-> **joint1**: [`RevoluteJoint`](../classes/RevoluteJoint) \| [`PrismaticJoint`](../classes/PrismaticJoint)
+> **joint1**: [`RevoluteJoint`](/api/classes/RevoluteJoint) \| [`PrismaticJoint`](/api/classes/PrismaticJoint)
 
 The first revolute/prismatic joint attached to the gear joint.
 
@@ -55,7 +55,7 @@ The first revolute/prismatic joint attached to the gear joint.
 
 ### joint2
 
-> **joint2**: [`RevoluteJoint`](../classes/RevoluteJoint) \| [`PrismaticJoint`](../classes/PrismaticJoint)
+> **joint2**: [`RevoluteJoint`](/api/classes/RevoluteJoint) \| [`PrismaticJoint`](/api/classes/PrismaticJoint)
 
 The second prismatic/revolute joint attached to the gear joint.
 
@@ -65,23 +65,23 @@ The second prismatic/revolute joint attached to the gear joint.
 
 > `optional` **ratio**: `number`
 
-The gear ratio. See [GearJoint](../classes/GearJoint) for explanation.
+The gear ratio. See [GearJoint](/api/classes/GearJoint) for explanation.
 
 #### Inherited from
 
-[`GearJointOpt`](GearJointOpt).[`ratio`](GearJointOpt#ratio)
+[`GearJointOpt`](/api/interfaces/GearJointOpt).[`ratio`](/api/interfaces/GearJointOpt#ratio)
 
 ***
 
 ### style?
 
-> `optional` **style**: [`Style`](Style)
+> `optional` **style**: [`Style`](/api/interfaces/Style)
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`GearJointOpt`](GearJointOpt).[`style`](GearJointOpt#style)
+[`GearJointOpt`](/api/interfaces/GearJointOpt).[`style`](/api/interfaces/GearJointOpt#style)
 
 ***
 
@@ -93,4 +93,4 @@ Use this to attach application specific data to your joints.
 
 #### Inherited from
 
-[`GearJointOpt`](GearJointOpt).[`userData`](GearJointOpt#userdata)
+[`GearJointOpt`](/api/interfaces/GearJointOpt).[`userData`](/api/interfaces/GearJointOpt#userdata)

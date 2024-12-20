@@ -9,11 +9,11 @@ of mass position.
 
 ### new Sweep()
 
-> **new Sweep**(): [`Sweep`](Sweep)
+> **new Sweep**(): [`Sweep`](/api/classes/Sweep)
 
 #### Returns
 
-[`Sweep`](Sweep)
+[`Sweep`](/api/classes/Sweep)
 
 ## Properties
 
@@ -41,7 +41,7 @@ Fraction of the current time step in the range [0,1], c0 and a0 are c and a at a
 
 ### c
 
-> **c**: [`Vec2`](Vec2)
+> **c**: [`Vec2`](/api/classes/Vec2)
 
 World center position
 
@@ -49,13 +49,13 @@ World center position
 
 ### c0
 
-> **c0**: [`Vec2`](Vec2)
+> **c0**: [`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### localCenter
 
-> **localCenter**: [`Vec2`](Vec2)
+> **localCenter**: [`Vec2`](/api/classes/Vec2)
 
 Local center of mass position
 
@@ -97,7 +97,7 @@ Get the interpolated transform at a specific time.
 
 #### Parameters
 
-• **xf**: [`TransformValue`](../type-aliases/TransformValue)
+• **xf**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 • **beta**: `number` = `0`
 
@@ -127,7 +127,7 @@ normalize the angles in radians to be between -pi and pi.
 
 #### Parameters
 
-• **that**: [`Sweep`](Sweep)
+• **that**: [`Sweep`](/api/classes/Sweep)
 
 #### Returns
 
@@ -141,9 +141,9 @@ normalize the angles in radians to be between -pi and pi.
 
 #### Parameters
 
-• **localCenter**: [`Vec2Value`](../interfaces/Vec2Value)
+• **localCenter**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **xf**: [`TransformValue`](../type-aliases/TransformValue)
+• **xf**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 #### Returns
 
@@ -157,7 +157,7 @@ normalize the angles in radians to be between -pi and pi.
 
 #### Parameters
 
-• **xf**: [`TransformValue`](../type-aliases/TransformValue)
+• **xf**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 #### Returns
 

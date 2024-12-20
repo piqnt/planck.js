@@ -6,11 +6,11 @@ A distance proxy is used by the GJK algorithm. It encapsulates any shape.
 
 ### new DistanceProxy()
 
-> **new DistanceProxy**(): [`DistanceProxy`](DistanceProxy)
+> **new DistanceProxy**(): [`DistanceProxy`](/api/classes/DistanceProxy)
 
 #### Returns
 
-[`DistanceProxy`](DistanceProxy)
+[`DistanceProxy`](/api/classes/DistanceProxy)
 
 ## Methods
 
@@ -22,7 +22,7 @@ Get the supporting vertex index in the given direction.
 
 #### Parameters
 
-• **d**: [`Vec2Value`](../interfaces/Vec2Value)
+• **d**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
@@ -32,23 +32,23 @@ Get the supporting vertex index in the given direction.
 
 ### getSupportVertex()
 
-> **getSupportVertex**(`d`): [`Vec2Value`](../interfaces/Vec2Value)
+> **getSupportVertex**(`d`): [`Vec2Value`](/api/interfaces/Vec2Value)
 
 Get the supporting vertex in the given direction.
 
 #### Parameters
 
-• **d**: [`Vec2Value`](../interfaces/Vec2Value)
+• **d**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2Value`](../interfaces/Vec2Value)
+[`Vec2Value`](/api/interfaces/Vec2Value)
 
 ***
 
 ### getVertex()
 
-> **getVertex**(`index`): [`Vec2Value`](../interfaces/Vec2Value)
+> **getVertex**(`index`): [`Vec2Value`](/api/interfaces/Vec2Value)
 
 Get a vertex by index. Used by Distance.
 
@@ -58,7 +58,7 @@ Get a vertex by index. Used by Distance.
 
 #### Returns
 
-[`Vec2Value`](../interfaces/Vec2Value)
+[`Vec2Value`](/api/interfaces/Vec2Value)
 
 ***
 
@@ -93,7 +93,7 @@ while the proxy is in use.
 
 #### Parameters
 
-• **shape**: [`Shape`](Shape)
+• **shape**: [`Shape`](/api/classes/Shape)
 
 • **index**: `number`
 
@@ -112,7 +112,7 @@ must remain in scope while the proxy is in use.
 
 #### Parameters
 
-• **vertices**: [`Vec2Value`](../interfaces/Vec2Value)[]
+• **vertices**: [`Vec2Value`](/api/interfaces/Vec2Value)[]
 
 • **count**: `number`
 

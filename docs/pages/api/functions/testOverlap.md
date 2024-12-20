@@ -6,17 +6,17 @@ Determine if two generic shapes overlap.
 
 ## Parameters
 
-• **shapeA**: [`Shape`](../classes/Shape)
+• **shapeA**: [`Shape`](/api/classes/Shape)
 
 • **indexA**: `number`
 
-• **shapeB**: [`Shape`](../classes/Shape)
+• **shapeB**: [`Shape`](/api/classes/Shape)
 
 • **indexB**: `number`
 
-• **xfA**: [`TransformValue`](../type-aliases/TransformValue)
+• **xfA**: [`TransformValue`](/api/type-aliases/TransformValue)
 
-• **xfB**: [`TransformValue`](../type-aliases/TransformValue)
+• **xfB**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 ## Returns
 

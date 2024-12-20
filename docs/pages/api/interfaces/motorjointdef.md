@@ -4,7 +4,7 @@ Motor joint definition.
 
 ## Extends
 
-- [`JointDef`](JointDef).[`MotorJointOpt`](MotorJointOpt)
+- [`JointDef`](/api/interfaces/JointDef).[`MotorJointOpt`](/api/interfaces/MotorJointOpt)
 
 ## Properties
 
@@ -16,31 +16,31 @@ The bodyB angle minus bodyA angle in radians.
 
 #### Inherited from
 
-[`MotorJointOpt`](MotorJointOpt).[`angularOffset`](MotorJointOpt#angularoffset)
+[`MotorJointOpt`](/api/interfaces/MotorJointOpt).[`angularOffset`](/api/interfaces/MotorJointOpt#angularoffset)
 
 ***
 
 ### bodyA
 
-> **bodyA**: [`Body`](../classes/Body)
+> **bodyA**: [`Body`](/api/classes/Body)
 
 The first attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyA`](JointDef#bodya)
+[`JointDef`](/api/interfaces/JointDef).[`bodyA`](/api/interfaces/JointDef#bodya)
 
 ***
 
 ### bodyB
 
-> **bodyB**: [`Body`](../classes/Body)
+> **bodyB**: [`Body`](/api/classes/Body)
 
 The second attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyB`](JointDef#bodyb)
+[`JointDef`](/api/interfaces/JointDef).[`bodyB`](/api/interfaces/JointDef#bodyb)
 
 ***
 
@@ -53,7 +53,7 @@ should collide.
 
 #### Inherited from
 
-[`MotorJointOpt`](MotorJointOpt).[`collideConnected`](MotorJointOpt#collideconnected)
+[`MotorJointOpt`](/api/interfaces/MotorJointOpt).[`collideConnected`](/api/interfaces/MotorJointOpt#collideconnected)
 
 ***
 
@@ -65,19 +65,19 @@ Position correction factor in the range [0,1].
 
 #### Inherited from
 
-[`MotorJointOpt`](MotorJointOpt).[`correctionFactor`](MotorJointOpt#correctionfactor)
+[`MotorJointOpt`](/api/interfaces/MotorJointOpt).[`correctionFactor`](/api/interfaces/MotorJointOpt#correctionfactor)
 
 ***
 
 ### linearOffset?
 
-> `optional` **linearOffset**: [`Vec2Value`](Vec2Value)
+> `optional` **linearOffset**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 Position of bodyB minus the position of bodyA, in bodyA's frame, in meters.
 
 #### Inherited from
 
-[`MotorJointOpt`](MotorJointOpt).[`linearOffset`](MotorJointOpt#linearoffset)
+[`MotorJointOpt`](/api/interfaces/MotorJointOpt).[`linearOffset`](/api/interfaces/MotorJointOpt#linearoffset)
 
 ***
 
@@ -89,7 +89,7 @@ The maximum motor force in N.
 
 #### Inherited from
 
-[`MotorJointOpt`](MotorJointOpt).[`maxForce`](MotorJointOpt#maxforce)
+[`MotorJointOpt`](/api/interfaces/MotorJointOpt).[`maxForce`](/api/interfaces/MotorJointOpt#maxforce)
 
 ***
 
@@ -101,19 +101,19 @@ The maximum motor torque in N-m.
 
 #### Inherited from
 
-[`MotorJointOpt`](MotorJointOpt).[`maxTorque`](MotorJointOpt#maxtorque)
+[`MotorJointOpt`](/api/interfaces/MotorJointOpt).[`maxTorque`](/api/interfaces/MotorJointOpt#maxtorque)
 
 ***
 
 ### style?
 
-> `optional` **style**: [`Style`](Style)
+> `optional` **style**: [`Style`](/api/interfaces/Style)
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`MotorJointOpt`](MotorJointOpt).[`style`](MotorJointOpt#style)
+[`MotorJointOpt`](/api/interfaces/MotorJointOpt).[`style`](/api/interfaces/MotorJointOpt#style)
 
 ***
 
@@ -125,4 +125,4 @@ Use this to attach application specific data to your joints.
 
 #### Inherited from
 
-[`MotorJointOpt`](MotorJointOpt).[`userData`](MotorJointOpt#userdata)
+[`MotorJointOpt`](/api/interfaces/MotorJointOpt).[`userData`](/api/interfaces/MotorJointOpt#userdata)

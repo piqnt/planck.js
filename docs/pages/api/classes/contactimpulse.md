@@ -8,15 +8,15 @@ up one-to-one with the contact points in Manifold.
 
 ### new ContactImpulse()
 
-> **new ContactImpulse**(`contact`): [`ContactImpulse`](ContactImpulse)
+> **new ContactImpulse**(`contact`): [`ContactImpulse`](/api/classes/ContactImpulse)
 
 #### Parameters
 
-• **contact**: [`Contact`](Contact)
+• **contact**: [`Contact`](/api/classes/Contact)
 
 #### Returns
 
-[`ContactImpulse`](ContactImpulse)
+[`ContactImpulse`](/api/classes/ContactImpulse)
 
 ## Accessors
 

@@ -6,10 +6,10 @@ Axis-aligned bounding box
 
 ### lowerBound
 
-> **lowerBound**: [`Vec2Value`](Vec2Value)
+> **lowerBound**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ***
 
 ### upperBound
 
-> **upperBound**: [`Vec2Value`](Vec2Value)
+> **upperBound**: [`Vec2Value`](/api/interfaces/Vec2Value)

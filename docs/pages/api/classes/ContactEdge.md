@@ -9,36 +9,36 @@ contact has two contact nodes, one for each attached body.
 
 ### new ContactEdge()
 
-> **new ContactEdge**(`contact`): [`ContactEdge`](ContactEdge)
+> **new ContactEdge**(`contact`): [`ContactEdge`](/api/classes/ContactEdge)
 
 #### Parameters
 
-• **contact**: [`Contact`](Contact)
+• **contact**: [`Contact`](/api/classes/Contact)
 
 #### Returns
 
-[`ContactEdge`](ContactEdge)
+[`ContactEdge`](/api/classes/ContactEdge)
 
 ## Properties
 
 ### contact
 
-> **contact**: [`Contact`](Contact)
+> **contact**: [`Contact`](/api/classes/Contact)
 
 ***
 
 ### next
 
-> **next**: [`ContactEdge`](ContactEdge) = `null`
+> **next**: [`ContactEdge`](/api/classes/ContactEdge) = `null`
 
 ***
 
 ### other
 
-> **other**: [`Body`](Body) = `null`
+> **other**: [`Body`](/api/classes/Body) = `null`
 
 ***
 
 ### prev
 
-> **prev**: [`ContactEdge`](ContactEdge) = `null`
+> **prev**: [`ContactEdge`](/api/classes/ContactEdge) = `null`

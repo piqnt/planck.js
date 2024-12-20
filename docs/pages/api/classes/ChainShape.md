@@ -9,39 +9,39 @@ WARNING: The chain will not collide properly if there are self-intersections.
 
 ## Extends
 
-- [`Shape`](Shape)
+- [`Shape`](/api/classes/Shape)
 
 ## Constructors
 
 ### new ChainShape()
 
-> **new ChainShape**(`vertices`?, `loop`?): [`ChainShape`](ChainShape)
+> **new ChainShape**(`vertices`?, `loop`?): [`ChainShape`](/api/classes/ChainShape)
 
 #### Parameters
 
-• **vertices?**: [`Vec2Value`](../interfaces/Vec2Value)[]
+• **vertices?**: [`Vec2Value`](/api/interfaces/Vec2Value)[]
 
 • **loop?**: `boolean`
 
 #### Returns
 
-[`ChainShape`](ChainShape)
+[`ChainShape`](/api/classes/ChainShape)
 
 #### Overrides
 
-[`Shape`](Shape).[`constructor`](Shape#constructors)
+[`Shape`](/api/classes/Shape).[`constructor`](/api/classes/Shape#constructors)
 
 ## Properties
 
 ### style
 
-> **style**: [`Style`](../interfaces/Style) = `{}`
+> **style**: [`Style`](/api/interfaces/Style) = `{}`
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`Shape`](Shape).[`style`](Shape#style)
+[`Shape`](/api/classes/Shape).[`style`](/api/classes/Shape#style)
 
 ***
 
@@ -60,11 +60,11 @@ child shape.
 
 #### Parameters
 
-• **aabb**: [`AABBValue`](../interfaces/AABBValue)
+• **aabb**: [`AABBValue`](/api/interfaces/AABBValue)
 
 Returns the axis aligned box.
 
-• **xf**: [`TransformValue`](../type-aliases/TransformValue)
+• **xf**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 The world transform of the shape.
 
@@ -78,7 +78,7 @@ The child shape
 
 #### Overrides
 
-[`Shape`](Shape).[`computeAABB`](Shape#computeaabb)
+[`Shape`](/api/classes/Shape).[`computeAABB`](/api/classes/Shape#computeaabb)
 
 ***
 
@@ -88,7 +88,7 @@ The child shape
 
 #### Parameters
 
-• **proxy**: [`DistanceProxy`](DistanceProxy)
+• **proxy**: [`DistanceProxy`](/api/classes/DistanceProxy)
 
 • **childIndex**: `number`
 
@@ -98,7 +98,7 @@ The child shape
 
 #### Overrides
 
-[`Shape`](Shape).[`computeDistanceProxy`](Shape#computedistanceproxy)
+[`Shape`](/api/classes/Shape).[`computeDistanceProxy`](/api/classes/Shape#computedistanceproxy)
 
 ***
 
@@ -113,7 +113,7 @@ Chains have zero mass.
 
 #### Parameters
 
-• **massData**: [`MassData`](../interfaces/MassData)
+• **massData**: [`MassData`](/api/interfaces/MassData)
 
 Returns the mass data for this shape.
 
@@ -127,7 +127,7 @@ The density in kilograms per meter squared.
 
 #### Overrides
 
-[`Shape`](Shape).[`computeMass`](Shape#computemass)
+[`Shape`](/api/classes/Shape).[`computeMass`](/api/classes/Shape#computemass)
 
 ***
 
@@ -143,7 +143,7 @@ Get the number of child primitives.
 
 #### Overrides
 
-[`Shape`](Shape).[`getChildCount`](Shape#getchildcount)
+[`Shape`](/api/classes/Shape).[`getChildCount`](/api/classes/Shape#getchildcount)
 
 ***
 
@@ -153,7 +153,7 @@ Get the number of child primitives.
 
 #### Parameters
 
-• **edge**: [`EdgeShape`](EdgeShape)
+• **edge**: [`EdgeShape`](/api/classes/EdgeShape)
 
 • **childIndex**: `number`
 
@@ -165,21 +165,21 @@ Get the number of child primitives.
 
 ### getNextVertex()
 
-> **getNextVertex**(): [`Vec2`](Vec2)
+> **getNextVertex**(): [`Vec2`](/api/classes/Vec2)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### getPrevVertex()
 
-> **getPrevVertex**(): [`Vec2`](Vec2)
+> **getPrevVertex**(): [`Vec2`](/api/classes/Vec2)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -193,7 +193,7 @@ Get the number of child primitives.
 
 #### Overrides
 
-[`Shape`](Shape).[`getRadius`](Shape#getradius)
+[`Shape`](/api/classes/Shape).[`getRadius`](/api/classes/Shape#getradius)
 
 ***
 
@@ -212,13 +212,13 @@ the shape type.
 
 #### Overrides
 
-[`Shape`](Shape).[`getType`](Shape#gettype)
+[`Shape`](/api/classes/Shape).[`getType`](/api/classes/Shape#gettype)
 
 ***
 
 ### getVertex()
 
-> **getVertex**(`index`): [`Vec2`](Vec2)
+> **getVertex**(`index`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
@@ -226,7 +226,7 @@ the shape type.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -248,15 +248,15 @@ Cast a ray against a child shape.
 
 #### Parameters
 
-• **output**: [`RayCastOutput`](../interfaces/RayCastOutput)
+• **output**: [`RayCastOutput`](/api/interfaces/RayCastOutput)
 
 The ray-cast results.
 
-• **input**: [`RayCastInput`](../interfaces/RayCastInput)
+• **input**: [`RayCastInput`](/api/interfaces/RayCastInput)
 
 The ray-cast input parameters.
 
-• **xf**: [`Transform`](Transform)
+• **xf**: [`Transform`](/api/classes/Transform)
 
 The transform to be applied to the shape.
 
@@ -270,7 +270,7 @@ The child shape index
 
 #### Overrides
 
-[`Shape`](Shape).[`rayCast`](Shape#raycast)
+[`Shape`](/api/classes/Shape).[`rayCast`](/api/classes/Shape#raycast)
 
 ***
 
@@ -283,7 +283,7 @@ this for loops.
 
 #### Parameters
 
-• **nextVertex**: [`Vec2`](Vec2)
+• **nextVertex**: [`Vec2`](/api/classes/Vec2)
 
 #### Returns
 
@@ -300,7 +300,7 @@ this for loops.
 
 #### Parameters
 
-• **prevVertex**: [`Vec2`](Vec2)
+• **prevVertex**: [`Vec2`](/api/classes/Vec2)
 
 #### Returns
 
@@ -319,11 +319,11 @@ This always return false.
 
 #### Parameters
 
-• **xf**: [`TransformValue`](../type-aliases/TransformValue)
+• **xf**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 The shape world transform.
 
-• **p**: [`Vec2Value`](../interfaces/Vec2Value)
+• **p**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 A point in world coordinates.
 
@@ -333,7 +333,7 @@ A point in world coordinates.
 
 #### Overrides
 
-[`Shape`](Shape).[`testPoint`](Shape#testpoint)
+[`Shape`](/api/classes/Shape).[`testPoint`](/api/classes/Shape#testpoint)
 
 ***
 
@@ -351,4 +351,4 @@ A point in world coordinates.
 
 #### Inherited from
 
-[`Shape`](Shape).[`isValid`](Shape#isvalid)
+[`Shape`](/api/classes/Shape).[`isValid`](/api/classes/Shape#isvalid)

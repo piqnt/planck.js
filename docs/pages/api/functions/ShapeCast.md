@@ -7,9 +7,9 @@ the hit point, normal, and translation fraction.
 
 ## Parameters
 
-• **output**: [`ShapeCastOutput`](../classes/ShapeCastOutput)
+• **output**: [`ShapeCastOutput`](/api/classes/ShapeCastOutput)
 
-• **input**: [`ShapeCastInput`](../classes/ShapeCastInput)
+• **input**: [`ShapeCastInput`](/api/classes/ShapeCastInput)
 
 ## Returns
 

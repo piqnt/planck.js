@@ -4,31 +4,31 @@ Friction joint definition.
 
 ## Extends
 
-- [`JointDef`](JointDef).[`FrictionJointOpt`](FrictionJointOpt)
+- [`JointDef`](/api/interfaces/JointDef).[`FrictionJointOpt`](/api/interfaces/FrictionJointOpt)
 
 ## Properties
 
 ### bodyA
 
-> **bodyA**: [`Body`](../classes/Body)
+> **bodyA**: [`Body`](/api/classes/Body)
 
 The first attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyA`](JointDef#bodya)
+[`JointDef`](/api/interfaces/JointDef).[`bodyA`](/api/interfaces/JointDef#bodya)
 
 ***
 
 ### bodyB
 
-> **bodyB**: [`Body`](../classes/Body)
+> **bodyB**: [`Body`](/api/classes/Body)
 
 The second attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyB`](JointDef#bodyb)
+[`JointDef`](/api/interfaces/JointDef).[`bodyB`](/api/interfaces/JointDef#bodyb)
 
 ***
 
@@ -41,13 +41,13 @@ should collide.
 
 #### Inherited from
 
-[`FrictionJointOpt`](FrictionJointOpt).[`collideConnected`](FrictionJointOpt#collideconnected)
+[`FrictionJointOpt`](/api/interfaces/FrictionJointOpt).[`collideConnected`](/api/interfaces/FrictionJointOpt#collideconnected)
 
 ***
 
 ### localAnchorA
 
-> **localAnchorA**: [`Vec2Value`](Vec2Value)
+> **localAnchorA**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The local anchor point relative to bodyA's origin.
 
@@ -55,7 +55,7 @@ The local anchor point relative to bodyA's origin.
 
 ### localAnchorB
 
-> **localAnchorB**: [`Vec2Value`](Vec2Value)
+> **localAnchorB**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The local anchor point relative to bodyB's origin.
 
@@ -69,7 +69,7 @@ The maximum friction force in N.
 
 #### Inherited from
 
-[`FrictionJointOpt`](FrictionJointOpt).[`maxForce`](FrictionJointOpt#maxforce)
+[`FrictionJointOpt`](/api/interfaces/FrictionJointOpt).[`maxForce`](/api/interfaces/FrictionJointOpt#maxforce)
 
 ***
 
@@ -81,19 +81,19 @@ The maximum friction torque in N-m.
 
 #### Inherited from
 
-[`FrictionJointOpt`](FrictionJointOpt).[`maxTorque`](FrictionJointOpt#maxtorque)
+[`FrictionJointOpt`](/api/interfaces/FrictionJointOpt).[`maxTorque`](/api/interfaces/FrictionJointOpt#maxtorque)
 
 ***
 
 ### style?
 
-> `optional` **style**: [`Style`](Style)
+> `optional` **style**: [`Style`](/api/interfaces/Style)
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`FrictionJointOpt`](FrictionJointOpt).[`style`](FrictionJointOpt#style)
+[`FrictionJointOpt`](/api/interfaces/FrictionJointOpt).[`style`](/api/interfaces/FrictionJointOpt#style)
 
 ***
 
@@ -105,4 +105,4 @@ Use this to attach application specific data to your joints.
 
 #### Inherited from
 
-[`FrictionJointOpt`](FrictionJointOpt).[`userData`](FrictionJointOpt#userdata)
+[`FrictionJointOpt`](/api/interfaces/FrictionJointOpt).[`userData`](/api/interfaces/FrictionJointOpt#userdata)

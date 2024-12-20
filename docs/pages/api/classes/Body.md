@@ -2,13 +2,13 @@
 
 A rigid body composed of one or more fixtures.
 
-To create a new Body use [World.createBody](World#createbody).
+To create a new Body use [World.createBody](/api/classes/World#createbody).
 
 ## Properties
 
 ### style
 
-> **style**: [`Style`](../interfaces/Style) = `{}`
+> **style**: [`Style`](/api/interfaces/Style) = `{}`
 
 Styling for dev-tools.
 
@@ -62,11 +62,11 @@ up the body.
 
 #### Parameters
 
-• **force**: [`Vec2Value`](../interfaces/Vec2Value)
+• **force**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The world force vector, usually in Newtons (N).
 
-• **point**: [`Vec2Value`](../interfaces/Vec2Value)
+• **point**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The world position of the point of application.
 
@@ -88,7 +88,7 @@ Apply a force to the center of mass. This wakes up the body.
 
 #### Parameters
 
-• **force**: [`Vec2Value`](../interfaces/Vec2Value)
+• **force**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The world force vector, usually in Newtons (N).
 
@@ -112,11 +112,11 @@ center of mass. This wakes up the body.
 
 #### Parameters
 
-• **impulse**: [`Vec2Value`](../interfaces/Vec2Value)
+• **impulse**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The world impulse vector, usually in N-seconds or kg-m/s.
 
-• **point**: [`Vec2Value`](../interfaces/Vec2Value)
+• **point**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The world position of the point of application.
 
@@ -157,7 +157,7 @@ Also wake up the body
 
 #### createFixture(def)
 
-> **createFixture**(`def`): [`Fixture`](Fixture)
+> **createFixture**(`def`): [`Fixture`](/api/classes/Fixture)
 
 Creates a fixture and attach it to this body.
 
@@ -170,39 +170,39 @@ Warning: This function is locked during callbacks.
 
 ##### Parameters
 
-• **def**: [`FixtureDef`](../interfaces/FixtureDef)
+• **def**: [`FixtureDef`](/api/interfaces/FixtureDef)
 
 ##### Returns
 
-[`Fixture`](Fixture)
+[`Fixture`](/api/classes/Fixture)
 
 #### createFixture(shape, opt)
 
-> **createFixture**(`shape`, `opt`?): [`Fixture`](Fixture)
+> **createFixture**(`shape`, `opt`?): [`Fixture`](/api/classes/Fixture)
 
 ##### Parameters
 
-• **shape**: [`Shape`](Shape)
+• **shape**: [`Shape`](/api/classes/Shape)
 
-• **opt?**: [`FixtureOpt`](../interfaces/FixtureOpt)
+• **opt?**: [`FixtureOpt`](/api/interfaces/FixtureOpt)
 
 ##### Returns
 
-[`Fixture`](Fixture)
+[`Fixture`](/api/classes/Fixture)
 
 #### createFixture(shape, density)
 
-> **createFixture**(`shape`, `density`?): [`Fixture`](Fixture)
+> **createFixture**(`shape`, `density`?): [`Fixture`](/api/classes/Fixture)
 
 ##### Parameters
 
-• **shape**: [`Shape`](Shape)
+• **shape**: [`Shape`](/api/classes/Shape)
 
 • **density?**: `number`
 
 ##### Returns
 
-[`Fixture`](Fixture)
+[`Fixture`](/api/classes/Fixture)
 
 ***
 
@@ -220,7 +220,7 @@ Warning: This function is locked during callbacks.
 
 #### Parameters
 
-• **fixture**: [`Fixture`](Fixture)
+• **fixture**: [`Fixture`](/api/classes/Fixture)
 
 The fixture to be removed.
 
@@ -268,24 +268,24 @@ the angular velocity in radians/second.
 
 ### getContactList()
 
-> **getContactList**(): [`ContactEdge`](ContactEdge)
+> **getContactList**(): [`ContactEdge`](/api/classes/ContactEdge)
 
 Warning: this list changes during the time step and you may miss some
 collisions if you don't use ContactListener.
 
 #### Returns
 
-[`ContactEdge`](ContactEdge)
+[`ContactEdge`](/api/classes/ContactEdge)
 
 ***
 
 ### getFixtureList()
 
-> **getFixtureList**(): [`Fixture`](Fixture)
+> **getFixtureList**(): [`Fixture`](/api/classes/Fixture)
 
 #### Returns
 
-[`Fixture`](Fixture)
+[`Fixture`](/api/classes/Fixture)
 
 ***
 
@@ -315,11 +315,11 @@ the rotational inertia, usually in kg-m^2.
 
 ### getJointList()
 
-> **getJointList**(): [`JointEdge`](JointEdge)
+> **getJointList**(): [`JointEdge`](/api/classes/JointEdge)
 
 #### Returns
 
-[`JointEdge`](JointEdge)
+[`JointEdge`](/api/classes/JointEdge)
 
 ***
 
@@ -335,13 +335,13 @@ the rotational inertia, usually in kg-m^2.
 
 ### getLinearVelocity()
 
-> **getLinearVelocity**(): [`Vec2`](Vec2)
+> **getLinearVelocity**(): [`Vec2`](/api/classes/Vec2)
 
 Get the linear velocity of the center of mass.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 the linear velocity of the center of mass.
 
@@ -349,81 +349,81 @@ the linear velocity of the center of mass.
 
 ### getLinearVelocityFromLocalPoint()
 
-> **getLinearVelocityFromLocalPoint**(`localPoint`): [`Vec2`](Vec2)
+> **getLinearVelocityFromLocalPoint**(`localPoint`): [`Vec2`](/api/classes/Vec2)
 
 Get the world velocity of a local point.
 
 #### Parameters
 
-• **localPoint**: [`Vec2Value`](../interfaces/Vec2Value)
+• **localPoint**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 A point in local coordinates.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### getLinearVelocityFromWorldPoint()
 
-> **getLinearVelocityFromWorldPoint**(`worldPoint`): [`Vec2`](Vec2)
+> **getLinearVelocityFromWorldPoint**(`worldPoint`): [`Vec2`](/api/classes/Vec2)
 
 Get the world linear velocity of a world point attached to this body.
 
 #### Parameters
 
-• **worldPoint**: [`Vec2Value`](../interfaces/Vec2Value)
+• **worldPoint**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 A point in world coordinates.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### getLocalCenter()
 
-> **getLocalCenter**(): [`Vec2`](Vec2)
+> **getLocalCenter**(): [`Vec2`](/api/classes/Vec2)
 
 Get the local position of the center of mass.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### getLocalPoint()
 
-> **getLocalPoint**(`worldPoint`): [`Vec2`](Vec2)
+> **getLocalPoint**(`worldPoint`): [`Vec2`](/api/classes/Vec2)
 
 Gets the corresponding local point of a world point.
 
 #### Parameters
 
-• **worldPoint**: [`Vec2Value`](../interfaces/Vec2Value)
+• **worldPoint**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### getLocalVector()
 
-> **getLocalVector**(`worldVector`): [`Vec2`](Vec2)
+> **getLocalVector**(`worldVector`): [`Vec2`](/api/classes/Vec2)
 
 Gets the corresponding local vector of a world vector.
 
 #### Parameters
 
-• **worldVector**: [`Vec2Value`](../interfaces/Vec2Value)
+• **worldVector**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -449,7 +449,7 @@ Copy the mass data of the body to data.
 
 #### Parameters
 
-• **data**: [`MassData`](../interfaces/MassData)
+• **data**: [`MassData`](/api/interfaces/MassData)
 
 #### Returns
 
@@ -459,47 +459,47 @@ Copy the mass data of the body to data.
 
 ### getNext()
 
-> **getNext**(): [`Body`](Body)
+> **getNext**(): [`Body`](/api/classes/Body)
 
 #### Returns
 
-[`Body`](Body)
+[`Body`](/api/classes/Body)
 
 ***
 
 ### getPosition()
 
-> **getPosition**(): [`Vec2`](Vec2)
+> **getPosition**(): [`Vec2`](/api/classes/Vec2)
 
 Get the world position for the body's origin.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### getTransform()
 
-> **getTransform**(): [`Transform`](Transform)
+> **getTransform**(): [`Transform`](/api/classes/Transform)
 
 Get the world transform for the body's origin.
 
 #### Returns
 
-[`Transform`](Transform)
+[`Transform`](/api/classes/Transform)
 
 ***
 
 ### getType()
 
-> **getType**(): [`BodyType`](../type-aliases/BodyType)
+> **getType**(): [`BodyType`](/api/type-aliases/BodyType)
 
 Get the type of the body.
 
 #### Returns
 
-[`BodyType`](../type-aliases/BodyType)
+[`BodyType`](/api/type-aliases/BodyType)
 
 ***
 
@@ -515,55 +515,55 @@ Get the type of the body.
 
 ### getWorld()
 
-> **getWorld**(): [`World`](World)
+> **getWorld**(): [`World`](/api/classes/World)
 
 #### Returns
 
-[`World`](World)
+[`World`](/api/classes/World)
 
 ***
 
 ### getWorldCenter()
 
-> **getWorldCenter**(): [`Vec2`](Vec2)
+> **getWorldCenter**(): [`Vec2`](/api/classes/Vec2)
 
 Get the world position of the center of mass.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### getWorldPoint()
 
-> **getWorldPoint**(`localPoint`): [`Vec2`](Vec2)
+> **getWorldPoint**(`localPoint`): [`Vec2`](/api/classes/Vec2)
 
 Get the corresponding world point of a local point.
 
 #### Parameters
 
-• **localPoint**: [`Vec2Value`](../interfaces/Vec2Value)
+• **localPoint**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### getWorldVector()
 
-> **getWorldVector**(`localVector`): [`Vec2`](Vec2)
+> **getWorldVector**(`localVector`): [`Vec2`](/api/classes/Vec2)
 
 Get the corresponding world vector of a local vector.
 
 #### Parameters
 
-• **localVector**: [`Vec2Value`](../interfaces/Vec2Value)
+• **localVector**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -779,11 +779,11 @@ Should this body be treated like a bullet for continuous collision detection?
 
 ### setDynamic()
 
-> **setDynamic**(): [`Body`](Body)
+> **setDynamic**(): [`Body`](/api/classes/Body)
 
 #### Returns
 
-[`Body`](Body)
+[`Body`](/api/classes/Body)
 
 ***
 
@@ -821,11 +821,11 @@ Scale the gravity applied to this body.
 
 ### setKinematic()
 
-> **setKinematic**(): [`Body`](Body)
+> **setKinematic**(): [`Body`](/api/classes/Body)
 
 #### Returns
 
-[`Body`](Body)
+[`Body`](/api/classes/Body)
 
 ***
 
@@ -851,7 +851,7 @@ Set the linear velocity of the center of mass.
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The new linear velocity of the center of mass.
 
@@ -872,7 +872,7 @@ the body isn't dynamic.
 
 #### Parameters
 
-• **massData**: [`MassData`](../interfaces/MassData)
+• **massData**: [`MassData`](/api/interfaces/MassData)
 
 The mass properties.
 
@@ -888,7 +888,7 @@ The mass properties.
 
 #### Parameters
 
-• **p**: [`Vec2Value`](../interfaces/Vec2Value)
+• **p**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
@@ -912,13 +912,13 @@ The mass properties.
 
 ### setStatic()
 
-> **setStatic**(): [`Body`](Body)
+> **setStatic**(): [`Body`](/api/classes/Body)
 
 This will alter the mass and velocity.
 
 #### Returns
 
-[`Body`](Body)
+[`Body`](/api/classes/Body)
 
 ***
 
@@ -934,7 +934,7 @@ next call to World.step.
 
 ##### Parameters
 
-• **position**: [`Vec2Value`](../interfaces/Vec2Value)
+• **position**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The world position of the body's local origin.
 
@@ -956,7 +956,7 @@ next call to World.step.
 
 ##### Parameters
 
-• **xf**: [`Transform`](Transform)
+• **xf**: [`Transform`](/api/classes/Transform)
 
 ##### Returns
 
@@ -972,7 +972,7 @@ Set the type of the body to "static", "kinematic" or "dynamic".
 
 #### Parameters
 
-• **type**: [`BodyType`](../type-aliases/BodyType)
+• **type**: [`BodyType`](/api/type-aliases/BodyType)
 
 The type of the body.
 
@@ -1008,7 +1008,7 @@ Bodies do not collide when:
 
 #### Parameters
 
-• **that**: [`Body`](Body)
+• **that**: [`Body`](/api/classes/Body)
 
 #### Returns
 

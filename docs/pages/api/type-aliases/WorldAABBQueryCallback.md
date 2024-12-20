@@ -6,7 +6,7 @@ Called for each fixture found in the query AABB. It may return `false` to termin
 
 ## Parameters
 
-• **fixture**: [`Fixture`](../classes/Fixture)
+• **fixture**: [`Fixture`](/api/classes/Fixture)
 
 ## Returns
 

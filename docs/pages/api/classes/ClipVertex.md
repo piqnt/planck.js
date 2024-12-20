@@ -6,23 +6,23 @@ Used for computing contact manifolds.
 
 ### new ClipVertex()
 
-> **new ClipVertex**(): [`ClipVertex`](ClipVertex)
+> **new ClipVertex**(): [`ClipVertex`](/api/classes/ClipVertex)
 
 #### Returns
 
-[`ClipVertex`](ClipVertex)
+[`ClipVertex`](/api/classes/ClipVertex)
 
 ## Properties
 
 ### id
 
-> **id**: [`ContactID`](ContactID)
+> **id**: [`ContactID`](/api/classes/ContactID)
 
 ***
 
 ### v
 
-> **v**: [`Vec2Value`](../interfaces/Vec2Value)
+> **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ## Methods
 
@@ -42,7 +42,7 @@ Used for computing contact manifolds.
 
 #### Parameters
 
-• **o**: [`ClipVertex`](ClipVertex)
+• **o**: [`ClipVertex`](/api/classes/ClipVertex)
 
 #### Returns
 

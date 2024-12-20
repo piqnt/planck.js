@@ -8,11 +8,11 @@ ContactFeature: The features that intersect to form the contact point.
 
 ### new ContactID()
 
-> **new ContactID**(): [`ContactID`](ContactID)
+> **new ContactID**(): [`ContactID`](/api/classes/ContactID)
 
 #### Returns
 
-[`ContactID`](ContactID)
+[`ContactID`](/api/classes/ContactID)
 
 ## Properties
 
@@ -42,7 +42,7 @@ Used to quickly compare contact ids.
 
 ### typeA
 
-> **typeA**: [`ContactFeatureType`](../enumerations/ContactFeatureType) = `ContactFeatureType.e_unset`
+> **typeA**: [`ContactFeatureType`](/api/enumerations/ContactFeatureType) = `ContactFeatureType.e_unset`
 
 ContactFeature type on shapeA
 
@@ -50,7 +50,7 @@ ContactFeature type on shapeA
 
 ### typeB
 
-> **typeB**: [`ContactFeatureType`](../enumerations/ContactFeatureType) = `ContactFeatureType.e_unset`
+> **typeB**: [`ContactFeatureType`](/api/enumerations/ContactFeatureType) = `ContactFeatureType.e_unset`
 
 ContactFeature type on shapeB
 
@@ -72,7 +72,7 @@ ContactFeature type on shapeB
 
 #### Parameters
 
-• **that**: [`ContactID`](ContactID)
+• **that**: [`ContactID`](/api/classes/ContactID)
 
 #### Returns
 
@@ -88,11 +88,11 @@ ContactFeature type on shapeB
 
 • **indexA**: `number`
 
-• **typeA**: [`ContactFeatureType`](../enumerations/ContactFeatureType)
+• **typeA**: [`ContactFeatureType`](/api/enumerations/ContactFeatureType)
 
 • **indexB**: `number`
 
-• **typeB**: [`ContactFeatureType`](../enumerations/ContactFeatureType)
+• **typeB**: [`ContactFeatureType`](/api/enumerations/ContactFeatureType)
 
 #### Returns
 

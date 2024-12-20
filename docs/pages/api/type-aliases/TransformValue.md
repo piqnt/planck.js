@@ -6,8 +6,8 @@
 
 ### p
 
-> **p**: [`Vec2Value`](../interfaces/Vec2Value)
+> **p**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ### q
 
-> **q**: [`RotValue`](../interfaces/RotValue)
+> **q**: [`RotValue`](/api/interfaces/RotValue)

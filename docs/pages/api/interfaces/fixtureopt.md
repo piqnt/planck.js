@@ -5,7 +5,7 @@ abstract fixture definition. You can reuse fixture definitions safely.
 
 ## Extended by
 
-- [`FixtureDef`](FixtureDef)
+- [`FixtureDef`](/api/interfaces/FixtureDef)
 
 ## Properties
 
@@ -69,7 +69,7 @@ The restitution (elasticity) usually in the range [0,1]
 
 ### style?
 
-> `optional` **style**: [`Style`](Style)
+> `optional` **style**: [`Style`](/api/interfaces/Style)
 
 Styling for dev-tools.
 

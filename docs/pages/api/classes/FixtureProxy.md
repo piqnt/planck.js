@@ -6,23 +6,23 @@ This proxy is used internally to connect shape children to the broad-phase.
 
 ### new FixtureProxy()
 
-> **new FixtureProxy**(`fixture`, `childIndex`): [`FixtureProxy`](FixtureProxy)
+> **new FixtureProxy**(`fixture`, `childIndex`): [`FixtureProxy`](/api/classes/FixtureProxy)
 
 #### Parameters
 
-• **fixture**: [`Fixture`](Fixture)
+• **fixture**: [`Fixture`](/api/classes/Fixture)
 
 • **childIndex**: `number`
 
 #### Returns
 
-[`FixtureProxy`](FixtureProxy)
+[`FixtureProxy`](/api/classes/FixtureProxy)
 
 ## Properties
 
 ### aabb
 
-> **aabb**: [`AABB`](AABB)
+> **aabb**: [`AABB`](/api/classes/AABB)
 
 ***
 
@@ -34,7 +34,7 @@ This proxy is used internally to connect shape children to the broad-phase.
 
 ### fixture
 
-> **fixture**: [`Fixture`](Fixture)
+> **fixture**: [`Fixture`](/api/classes/Fixture)
 
 ***
 

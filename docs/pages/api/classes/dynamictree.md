@@ -18,11 +18,11 @@ pointers.
 
 ### new DynamicTree()
 
-> **new DynamicTree**\<`T`\>(): [`DynamicTree`](DynamicTree)\<`T`\>
+> **new DynamicTree**\<`T`\>(): [`DynamicTree`](/api/classes/DynamicTree)\<`T`\>
 
 #### Returns
 
-[`DynamicTree`](DynamicTree)\<`T`\>
+[`DynamicTree`](/api/classes/DynamicTree)\<`T`\>
 
 ## Properties
 
@@ -38,40 +38,40 @@ pointers.
 
 #### Index Signature
 
- \[`id`: `number`\]: [`TreeNode`](TreeNode)\<`T`\>
+ \[`id`: `number`\]: [`TreeNode`](/api/classes/TreeNode)\<`T`\>
 
 ***
 
 ### m\_root
 
-> **m\_root**: [`TreeNode`](TreeNode)\<`T`\>
+> **m\_root**: [`TreeNode`](/api/classes/TreeNode)\<`T`\>
 
 ## Methods
 
 ### allocateNode()
 
-> **allocateNode**(): [`TreeNode`](TreeNode)\<`T`\>
+> **allocateNode**(): [`TreeNode`](/api/classes/TreeNode)\<`T`\>
 
 #### Returns
 
-[`TreeNode`](TreeNode)\<`T`\>
+[`TreeNode`](/api/classes/TreeNode)\<`T`\>
 
 ***
 
 ### balance()
 
-> **balance**(`iA`): [`TreeNode`](TreeNode)\<`T`\>
+> **balance**(`iA`): [`TreeNode`](/api/classes/TreeNode)\<`T`\>
 
 Perform a left or right rotation if node A is imbalanced. Returns the new
 root index.
 
 #### Parameters
 
-• **iA**: [`TreeNode`](TreeNode)\<`T`\>
+• **iA**: [`TreeNode`](/api/classes/TreeNode)\<`T`\>
 
 #### Returns
 
-[`TreeNode`](TreeNode)\<`T`\>
+[`TreeNode`](/api/classes/TreeNode)\<`T`\>
 
 ***
 
@@ -102,7 +102,7 @@ Create a proxy. Provide a tight fitting AABB and a userData pointer.
 
 #### Parameters
 
-• **aabb**: [`AABBValue`](../interfaces/AABBValue)
+• **aabb**: [`AABBValue`](/api/interfaces/AABBValue)
 
 • **userData**: `T`
 
@@ -134,7 +134,7 @@ Destroy a proxy. This asserts if the id is invalid.
 
 #### Parameters
 
-• **node**: [`TreeNode`](TreeNode)\<`T`\>
+• **node**: [`TreeNode`](/api/classes/TreeNode)\<`T`\>
 
 #### Returns
 
@@ -156,7 +156,7 @@ Get the ratio of the sum of the node areas to the root area.
 
 ### getFatAABB()
 
-> **getFatAABB**(`id`): [`AABB`](AABB)
+> **getFatAABB**(`id`): [`AABB`](/api/classes/AABB)
 
 Get the fat AABB for a node id.
 
@@ -166,7 +166,7 @@ Get the fat AABB for a node id.
 
 #### Returns
 
-[`AABB`](AABB)
+[`AABB`](/api/classes/AABB)
 
 the proxy user data or 0 if the id is invalid.
 
@@ -222,7 +222,7 @@ the proxy user data or 0 if the id is invalid.
 
 #### Parameters
 
-• **leaf**: [`TreeNode`](TreeNode)\<`T`\>
+• **leaf**: [`TreeNode`](/api/classes/TreeNode)\<`T`\>
 
 #### Returns
 
@@ -242,9 +242,9 @@ Otherwise the function returns immediately.
 
 • **id**: `number`
 
-• **aabb**: [`AABBValue`](../interfaces/AABBValue)
+• **aabb**: [`AABBValue`](/api/interfaces/AABBValue)
 
-• **d**: [`Vec2Value`](../interfaces/Vec2Value)
+• **d**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 Displacement
 
@@ -265,9 +265,9 @@ proxy that overlaps the supplied AABB.
 
 #### Parameters
 
-• **aabb**: [`AABBValue`](../interfaces/AABBValue)
+• **aabb**: [`AABBValue`](/api/interfaces/AABBValue)
 
-• **queryCallback**: [`DynamicTreeQueryCallback`](../type-aliases/DynamicTreeQueryCallback)
+• **queryCallback**: [`DynamicTreeQueryCallback`](/api/type-aliases/DynamicTreeQueryCallback)
 
 #### Returns
 
@@ -287,11 +287,11 @@ number of proxies in the tree.
 
 #### Parameters
 
-• **input**: [`RayCastInput`](../interfaces/RayCastInput)
+• **input**: [`RayCastInput`](/api/interfaces/RayCastInput)
 
 The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
 
-• **rayCastCallback**: [`RayCastCallback`](../type-aliases/RayCastCallback)
+• **rayCastCallback**: [`RayCastCallback`](/api/type-aliases/RayCastCallback)
 
 A function that is called for each proxy that is hit by the ray. If the return value is a positive number it will update the maxFraction of the ray cast input, and if it is zero it will terminate they ray cast.
 
@@ -319,7 +319,7 @@ Build an optimal tree. Very expensive. For testing.
 
 #### Parameters
 
-• **leaf**: [`TreeNode`](TreeNode)\<`T`\>
+• **leaf**: [`TreeNode`](/api/classes/TreeNode)\<`T`\>
 
 #### Returns
 
@@ -336,7 +336,7 @@ position -= newOrigin
 
 #### Parameters
 
-• **newOrigin**: [`Vec2Value`](../interfaces/Vec2Value)
+• **newOrigin**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The new origin with respect to the old origin
 
@@ -364,7 +364,7 @@ Validate this tree. For testing.
 
 #### Parameters
 
-• **node**: [`TreeNode`](TreeNode)\<`T`\>
+• **node**: [`TreeNode`](/api/classes/TreeNode)\<`T`\>
 
 #### Returns
 
@@ -378,7 +378,7 @@ Validate this tree. For testing.
 
 #### Parameters
 
-• **node**: [`TreeNode`](TreeNode)\<`T`\>
+• **node**: [`TreeNode`](/api/classes/TreeNode)\<`T`\>
 
 #### Returns
 

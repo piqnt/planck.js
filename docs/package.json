@@ -13,6 +13,6 @@
     "react": "latest",
     "react-dom": "latest",
     "typescript": "latest",
-    "vocs": "^1.0.0-alpha.50"
+    "vocs": "^1.0.0-alpha.62"
   }
 }

@@ -12,67 +12,67 @@ length.
 
 ## Extends
 
-- [`Joint`](Joint)
+- [`Joint`](/api/classes/Joint)
 
 ## Constructors
 
 ### new PulleyJoint()
 
-> **new PulleyJoint**(`def`): [`PulleyJoint`](PulleyJoint)
+> **new PulleyJoint**(`def`): [`PulleyJoint`](/api/classes/PulleyJoint)
 
 #### Parameters
 
-• **def**: [`PulleyJointDef`](../interfaces/PulleyJointDef)
+• **def**: [`PulleyJointDef`](/api/interfaces/PulleyJointDef)
 
 #### Returns
 
-[`PulleyJoint`](PulleyJoint)
+[`PulleyJoint`](/api/classes/PulleyJoint)
 
 #### Overrides
 
-[`Joint`](Joint).[`constructor`](Joint#constructors)
+[`Joint`](/api/classes/Joint).[`constructor`](/api/classes/Joint#constructors)
 
 ### new PulleyJoint()
 
-> **new PulleyJoint**(`def`, `bodyA`, `bodyB`, `groundA`?, `groundB`?, `anchorA`?, `anchorB`?, `ratio`?): [`PulleyJoint`](PulleyJoint)
+> **new PulleyJoint**(`def`, `bodyA`, `bodyB`, `groundA`?, `groundB`?, `anchorA`?, `anchorB`?, `ratio`?): [`PulleyJoint`](/api/classes/PulleyJoint)
 
 #### Parameters
 
-• **def**: [`PulleyJointOpt`](../interfaces/PulleyJointOpt)
+• **def**: [`PulleyJointOpt`](/api/interfaces/PulleyJointOpt)
 
-• **bodyA**: [`Body`](Body)
+• **bodyA**: [`Body`](/api/classes/Body)
 
-• **bodyB**: [`Body`](Body)
+• **bodyB**: [`Body`](/api/classes/Body)
 
-• **groundA?**: [`Vec2Value`](../interfaces/Vec2Value)
+• **groundA?**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **groundB?**: [`Vec2Value`](../interfaces/Vec2Value)
+• **groundB?**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **anchorA?**: [`Vec2Value`](../interfaces/Vec2Value)
+• **anchorA?**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **anchorB?**: [`Vec2Value`](../interfaces/Vec2Value)
+• **anchorB?**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **ratio?**: `number`
 
 #### Returns
 
-[`PulleyJoint`](PulleyJoint)
+[`PulleyJoint`](/api/classes/PulleyJoint)
 
 #### Overrides
 
-[`Joint`](Joint).[`constructor`](Joint#constructors)
+[`Joint`](/api/classes/Joint).[`constructor`](/api/classes/Joint#constructors)
 
 ## Properties
 
 ### style
 
-> **style**: [`Style`](../interfaces/Style) = `{}`
+> **style**: [`Style`](/api/interfaces/Style) = `{}`
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`Joint`](Joint).[`style`](Joint#style)
+[`Joint`](/api/classes/Joint).[`style`](/api/classes/Joint#style)
 
 ***
 
@@ -84,65 +84,65 @@ Styling for dev-tools.
 
 ### getAnchorA()
 
-> **getAnchorA**(): [`Vec2`](Vec2)
+> **getAnchorA**(): [`Vec2`](/api/classes/Vec2)
 
 Get the anchor point on bodyA in world coordinates.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 #### Overrides
 
-[`Joint`](Joint).[`getAnchorA`](Joint#getanchora)
+[`Joint`](/api/classes/Joint).[`getAnchorA`](/api/classes/Joint#getanchora)
 
 ***
 
 ### getAnchorB()
 
-> **getAnchorB**(): [`Vec2`](Vec2)
+> **getAnchorB**(): [`Vec2`](/api/classes/Vec2)
 
 Get the anchor point on bodyB in world coordinates.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 #### Overrides
 
-[`Joint`](Joint).[`getAnchorB`](Joint#getanchorb)
+[`Joint`](/api/classes/Joint).[`getAnchorB`](/api/classes/Joint#getanchorb)
 
 ***
 
 ### getBodyA()
 
-> **getBodyA**(): [`Body`](Body)
+> **getBodyA**(): [`Body`](/api/classes/Body)
 
 Get the first body attached to this joint.
 
 #### Returns
 
-[`Body`](Body)
+[`Body`](/api/classes/Body)
 
 #### Inherited from
 
-[`Joint`](Joint).[`getBodyA`](Joint#getbodya)
+[`Joint`](/api/classes/Joint).[`getBodyA`](/api/classes/Joint#getbodya)
 
 ***
 
 ### getBodyB()
 
-> **getBodyB**(): [`Body`](Body)
+> **getBodyB**(): [`Body`](/api/classes/Body)
 
 Get the second body attached to this joint.
 
 #### Returns
 
-[`Body`](Body)
+[`Body`](/api/classes/Body)
 
 #### Inherited from
 
-[`Joint`](Joint).[`getBodyB`](Joint#getbodyb)
+[`Joint`](/api/classes/Joint).[`getBodyB`](/api/classes/Joint#getbodyb)
 
 ***
 
@@ -160,7 +160,7 @@ overlap.
 
 #### Inherited from
 
-[`Joint`](Joint).[`getCollideConnected`](Joint#getcollideconnected)
+[`Joint`](/api/classes/Joint).[`getCollideConnected`](/api/classes/Joint#getcollideconnected)
 
 ***
 
@@ -190,25 +190,25 @@ Get the current length of the segment attached to bodyB.
 
 ### getGroundAnchorA()
 
-> **getGroundAnchorA**(): [`Vec2`](Vec2)
+> **getGroundAnchorA**(): [`Vec2`](/api/classes/Vec2)
 
 Get the first ground anchor.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### getGroundAnchorB()
 
-> **getGroundAnchorB**(): [`Vec2`](Vec2)
+> **getGroundAnchorB**(): [`Vec2`](/api/classes/Vec2)
 
 Get the second ground anchor.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -238,17 +238,17 @@ Get the current length of the segment attached to bodyB.
 
 ### getNext()
 
-> **getNext**(): [`Joint`](Joint)
+> **getNext**(): [`Joint`](/api/classes/Joint)
 
 Get the next joint the world joint list.
 
 #### Returns
 
-[`Joint`](Joint)
+[`Joint`](/api/classes/Joint)
 
 #### Inherited from
 
-[`Joint`](Joint).[`getNext`](Joint#getnext)
+[`Joint`](/api/classes/Joint).[`getNext`](/api/classes/Joint#getnext)
 
 ***
 
@@ -266,7 +266,7 @@ Get the pulley ratio.
 
 ### getReactionForce()
 
-> **getReactionForce**(`inv_dt`): [`Vec2`](Vec2)
+> **getReactionForce**(`inv_dt`): [`Vec2`](/api/classes/Vec2)
 
 Get the reaction force on bodyB at the joint anchor in Newtons.
 
@@ -276,11 +276,11 @@ Get the reaction force on bodyB at the joint anchor in Newtons.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 #### Overrides
 
-[`Joint`](Joint).[`getReactionForce`](Joint#getreactionforce)
+[`Joint`](/api/classes/Joint).[`getReactionForce`](/api/classes/Joint#getreactionforce)
 
 ***
 
@@ -300,7 +300,7 @@ Get the reaction torque on bodyB in N*m.
 
 #### Overrides
 
-[`Joint`](Joint).[`getReactionTorque`](Joint#getreactiontorque)
+[`Joint`](/api/classes/Joint).[`getReactionTorque`](/api/classes/Joint#getreactiontorque)
 
 ***
 
@@ -316,7 +316,7 @@ Get the type of the concrete joint.
 
 #### Inherited from
 
-[`Joint`](Joint).[`getType`](Joint#gettype)
+[`Joint`](/api/classes/Joint).[`getType`](/api/classes/Joint#gettype)
 
 ***
 
@@ -330,7 +330,7 @@ Get the type of the concrete joint.
 
 #### Inherited from
 
-[`Joint`](Joint).[`getUserData`](Joint#getuserdata)
+[`Joint`](/api/classes/Joint).[`getUserData`](/api/classes/Joint#getuserdata)
 
 ***
 
@@ -340,7 +340,7 @@ Get the type of the concrete joint.
 
 #### Parameters
 
-• **step**: [`TimeStep`](TimeStep)
+• **step**: [`TimeStep`](/api/classes/TimeStep)
 
 #### Returns
 
@@ -348,7 +348,7 @@ Get the type of the concrete joint.
 
 #### Overrides
 
-[`Joint`](Joint).[`initVelocityConstraints`](Joint#initvelocityconstraints)
+[`Joint`](/api/classes/Joint).[`initVelocityConstraints`](/api/classes/Joint#initvelocityconstraints)
 
 ***
 
@@ -364,7 +364,7 @@ Short-cut function to determine if either body is inactive.
 
 #### Inherited from
 
-[`Joint`](Joint).[`isActive`](Joint#isactive)
+[`Joint`](/api/classes/Joint).[`isActive`](/api/classes/Joint#isactive)
 
 ***
 
@@ -382,7 +382,7 @@ Short-cut function to determine if either body is inactive.
 
 #### Inherited from
 
-[`Joint`](Joint).[`setUserData`](Joint#setuserdata)
+[`Joint`](/api/classes/Joint).[`setUserData`](/api/classes/Joint#setuserdata)
 
 ***
 
@@ -394,7 +394,7 @@ Shift the origin for any points stored in world coordinates.
 
 #### Parameters
 
-• **newOrigin**: [`Vec2Value`](../interfaces/Vec2Value)
+• **newOrigin**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
@@ -402,7 +402,7 @@ Shift the origin for any points stored in world coordinates.
 
 #### Overrides
 
-[`Joint`](Joint).[`shiftOrigin`](Joint#shiftorigin)
+[`Joint`](/api/classes/Joint).[`shiftOrigin`](/api/classes/Joint#shiftorigin)
 
 ***
 
@@ -414,7 +414,7 @@ This returns true if the position errors are within tolerance.
 
 #### Parameters
 
-• **step**: [`TimeStep`](TimeStep)
+• **step**: [`TimeStep`](/api/classes/TimeStep)
 
 #### Returns
 
@@ -422,7 +422,7 @@ This returns true if the position errors are within tolerance.
 
 #### Overrides
 
-[`Joint`](Joint).[`solvePositionConstraints`](Joint#solvepositionconstraints)
+[`Joint`](/api/classes/Joint).[`solvePositionConstraints`](/api/classes/Joint#solvepositionconstraints)
 
 ***
 
@@ -432,7 +432,7 @@ This returns true if the position errors are within tolerance.
 
 #### Parameters
 
-• **step**: [`TimeStep`](TimeStep)
+• **step**: [`TimeStep`](/api/classes/TimeStep)
 
 #### Returns
 
@@ -440,4 +440,4 @@ This returns true if the position errors are within tolerance.
 
 #### Overrides
 
-[`Joint`](Joint).[`solveVelocityConstraints`](Joint#solvevelocityconstraints)
+[`Joint`](/api/classes/Joint).[`solveVelocityConstraints`](/api/classes/Joint#solvevelocityconstraints)

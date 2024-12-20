@@ -4,13 +4,13 @@ A rectangle polygon which extend PolygonShape.
 
 ## Extends
 
-- [`PolygonShape`](PolygonShape)
+- [`PolygonShape`](/api/classes/PolygonShape)
 
 ## Constructors
 
 ### new BoxShape()
 
-> **new BoxShape**(`halfWidth`, `halfHeight`, `center`?, `angle`?): [`BoxShape`](BoxShape)
+> **new BoxShape**(`halfWidth`, `halfHeight`, `center`?, `angle`?): [`BoxShape`](/api/classes/BoxShape)
 
 #### Parameters
 
@@ -18,7 +18,7 @@ A rectangle polygon which extend PolygonShape.
 
 • **halfHeight**: `number`
 
-• **center?**: [`Vec2Value`](../interfaces/Vec2Value)
+• **center?**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 coordinate of the center of the box relative to the body
 
@@ -28,23 +28,23 @@ angle of the box relative to the body
 
 #### Returns
 
-[`BoxShape`](BoxShape)
+[`BoxShape`](/api/classes/BoxShape)
 
 #### Overrides
 
-[`PolygonShape`](PolygonShape).[`constructor`](PolygonShape#constructors)
+[`PolygonShape`](/api/classes/PolygonShape).[`constructor`](/api/classes/PolygonShape#constructors)
 
 ## Properties
 
 ### style
 
-> **style**: [`Style`](../interfaces/Style) = `{}`
+> **style**: [`Style`](/api/interfaces/Style) = `{}`
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`PolygonShape`](PolygonShape).[`style`](PolygonShape#style)
+[`PolygonShape`](/api/classes/PolygonShape).[`style`](/api/classes/PolygonShape#style)
 
 ***
 
@@ -54,7 +54,7 @@ Styling for dev-tools.
 
 #### Overrides
 
-[`PolygonShape`](PolygonShape).[`TYPE`](PolygonShape#type)
+[`PolygonShape`](/api/classes/PolygonShape).[`TYPE`](/api/classes/PolygonShape#type)
 
 ## Methods
 
@@ -67,11 +67,11 @@ child shape.
 
 #### Parameters
 
-• **aabb**: [`AABBValue`](../interfaces/AABBValue)
+• **aabb**: [`AABBValue`](/api/interfaces/AABBValue)
 
 Returns the axis aligned box.
 
-• **xf**: [`TransformValue`](../type-aliases/TransformValue)
+• **xf**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 The world transform of the shape.
 
@@ -85,7 +85,7 @@ The child shape
 
 #### Inherited from
 
-[`PolygonShape`](PolygonShape).[`computeAABB`](PolygonShape#computeaabb)
+[`PolygonShape`](/api/classes/PolygonShape).[`computeAABB`](/api/classes/PolygonShape#computeaabb)
 
 ***
 
@@ -95,7 +95,7 @@ The child shape
 
 #### Parameters
 
-• **proxy**: [`DistanceProxy`](DistanceProxy)
+• **proxy**: [`DistanceProxy`](/api/classes/DistanceProxy)
 
 #### Returns
 
@@ -103,7 +103,7 @@ The child shape
 
 #### Inherited from
 
-[`PolygonShape`](PolygonShape).[`computeDistanceProxy`](PolygonShape#computedistanceproxy)
+[`PolygonShape`](/api/classes/PolygonShape).[`computeDistanceProxy`](/api/classes/PolygonShape#computedistanceproxy)
 
 ***
 
@@ -116,7 +116,7 @@ The inertia tensor is computed about the local origin.
 
 #### Parameters
 
-• **massData**: [`MassData`](../interfaces/MassData)
+• **massData**: [`MassData`](/api/interfaces/MassData)
 
 Returns the mass data for this shape.
 
@@ -130,7 +130,7 @@ The density in kilograms per meter squared.
 
 #### Inherited from
 
-[`PolygonShape`](PolygonShape).[`computeMass`](PolygonShape#computemass)
+[`PolygonShape`](/api/classes/PolygonShape).[`computeMass`](/api/classes/PolygonShape#computemass)
 
 ***
 
@@ -146,7 +146,7 @@ Get the number of child primitives.
 
 #### Inherited from
 
-[`PolygonShape`](PolygonShape).[`getChildCount`](PolygonShape#getchildcount)
+[`PolygonShape`](/api/classes/PolygonShape).[`getChildCount`](/api/classes/PolygonShape#getchildcount)
 
 ***
 
@@ -160,7 +160,7 @@ Get the number of child primitives.
 
 #### Inherited from
 
-[`PolygonShape`](PolygonShape).[`getRadius`](PolygonShape#getradius)
+[`PolygonShape`](/api/classes/PolygonShape).[`getRadius`](/api/classes/PolygonShape#getradius)
 
 ***
 
@@ -179,7 +179,7 @@ the shape type.
 
 #### Inherited from
 
-[`PolygonShape`](PolygonShape).[`getType`](PolygonShape#gettype)
+[`PolygonShape`](/api/classes/PolygonShape).[`getType`](/api/classes/PolygonShape#gettype)
 
 ***
 
@@ -191,15 +191,15 @@ Cast a ray against a child shape.
 
 #### Parameters
 
-• **output**: [`RayCastOutput`](../interfaces/RayCastOutput)
+• **output**: [`RayCastOutput`](/api/interfaces/RayCastOutput)
 
 The ray-cast results.
 
-• **input**: [`RayCastInput`](../interfaces/RayCastInput)
+• **input**: [`RayCastInput`](/api/interfaces/RayCastInput)
 
 The ray-cast input parameters.
 
-• **xf**: [`Transform`](Transform)
+• **xf**: [`Transform`](/api/classes/Transform)
 
 The transform to be applied to the shape.
 
@@ -213,7 +213,7 @@ The child shape index
 
 #### Inherited from
 
-[`PolygonShape`](PolygonShape).[`rayCast`](PolygonShape#raycast)
+[`PolygonShape`](/api/classes/PolygonShape).[`rayCast`](/api/classes/PolygonShape#raycast)
 
 ***
 
@@ -226,11 +226,11 @@ shapes.
 
 #### Parameters
 
-• **xf**: [`TransformValue`](../type-aliases/TransformValue)
+• **xf**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 The shape world transform.
 
-• **p**: [`Vec2Value`](../interfaces/Vec2Value)
+• **p**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 A point in world coordinates.
 
@@ -240,7 +240,7 @@ A point in world coordinates.
 
 #### Inherited from
 
-[`PolygonShape`](PolygonShape).[`testPoint`](PolygonShape#testpoint)
+[`PolygonShape`](/api/classes/PolygonShape).[`testPoint`](/api/classes/PolygonShape#testpoint)
 
 ***
 
@@ -258,7 +258,7 @@ true if valid
 
 #### Inherited from
 
-[`PolygonShape`](PolygonShape).[`validate`](PolygonShape#validate)
+[`PolygonShape`](/api/classes/PolygonShape).[`validate`](/api/classes/PolygonShape#validate)
 
 ***
 
@@ -276,4 +276,4 @@ true if valid
 
 #### Inherited from
 
-[`PolygonShape`](PolygonShape).[`isValid`](PolygonShape#isvalid)
+[`PolygonShape`](/api/classes/PolygonShape).[`isValid`](/api/classes/PolygonShape#isvalid)

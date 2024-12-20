@@ -6,17 +6,17 @@ Output parameters for TimeOfImpact.
 
 ### new TOIOutput()
 
-> **new TOIOutput**(): [`TOIOutput`](TOIOutput)
+> **new TOIOutput**(): [`TOIOutput`](/api/classes/TOIOutput)
 
 #### Returns
 
-[`TOIOutput`](TOIOutput)
+[`TOIOutput`](/api/classes/TOIOutput)
 
 ## Properties
 
 ### state
 
-> **state**: [`TOIOutputState`](../enumerations/TOIOutputState) = `TOIOutputState.e_unset`
+> **state**: [`TOIOutputState`](/api/enumerations/TOIOutputState) = `TOIOutputState.e_unset`
 
 ***
 

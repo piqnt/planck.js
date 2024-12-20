@@ -4,17 +4,17 @@
 
 ### new Testbed()
 
-> **new Testbed**(): [`Testbed`](Testbed)
+> **new Testbed**(): [`Testbed`](/api/classes/Testbed)
 
 #### Returns
 
-[`Testbed`](Testbed)
+[`Testbed`](/api/classes/Testbed)
 
 ## Properties
 
 ### activeKeys
 
-> **activeKeys**: [`ActiveKeys`](../type-aliases/ActiveKeys) = `{}`
+> **activeKeys**: [`ActiveKeys`](/api/type-aliases/ActiveKeys) = `{}`
 
 ***
 
@@ -102,7 +102,7 @@ World viewbox center horizontal offset.
 
 #### Parameters
 
-• **aabb**: [`AABBValue`](../interfaces/AABBValue)
+• **aabb**: [`AABBValue`](/api/interfaces/AABBValue)
 
 • **color**: `string`
 
@@ -226,7 +226,7 @@ World viewbox center horizontal offset.
 
 ### findAll()
 
-> `abstract` **findAll**(`query`): ([`Body`](Body) \| [`Fixture`](Fixture) \| [`Joint`](Joint))[]
+> `abstract` **findAll**(`query`): ([`Body`](/api/classes/Body) \| [`Fixture`](/api/classes/Fixture) \| [`Joint`](/api/classes/Joint))[]
 
 #### Parameters
 
@@ -234,13 +234,13 @@ World viewbox center horizontal offset.
 
 #### Returns
 
-([`Body`](Body) \| [`Fixture`](Fixture) \| [`Joint`](Joint))[]
+([`Body`](/api/classes/Body) \| [`Fixture`](/api/classes/Fixture) \| [`Joint`](/api/classes/Joint))[]
 
 ***
 
 ### findOne()
 
-> `abstract` **findOne**(`query`): [`Body`](Body) \| [`Fixture`](Fixture) \| [`Joint`](Joint)
+> `abstract` **findOne**(`query`): [`Body`](/api/classes/Body) \| [`Fixture`](/api/classes/Fixture) \| [`Joint`](/api/classes/Joint)
 
 #### Parameters
 
@@ -248,7 +248,7 @@ World viewbox center horizontal offset.
 
 #### Returns
 
-[`Body`](Body) \| [`Fixture`](Fixture) \| [`Joint`](Joint)
+[`Body`](/api/classes/Body) \| [`Fixture`](/api/classes/Fixture) \| [`Joint`](/api/classes/Joint)
 
 ***
 
@@ -308,7 +308,7 @@ callback, to be implemented by user
 
 #### Parameters
 
-• **world**: [`World`](World)
+• **world**: [`World`](/api/classes/World)
 
 #### Returns
 
@@ -366,7 +366,7 @@ callback, to be implemented by user
 
 ### mount()
 
-> `static` **mount**(`options`?): [`Testbed`](Testbed)
+> `static` **mount**(`options`?): [`Testbed`](/api/classes/Testbed)
 
 Mounts testbed. Call start with a world to start simulation and rendering.
 
@@ -376,13 +376,13 @@ Mounts testbed. Call start with a world to start simulation and rendering.
 
 #### Returns
 
-[`Testbed`](Testbed)
+[`Testbed`](/api/classes/Testbed)
 
 ***
 
 ### start()
 
-> `static` **start**(`world`): [`Testbed`](Testbed)
+> `static` **start**(`world`): [`Testbed`](/api/classes/Testbed)
 
 Mounts testbed if needed, then starts simulation and rendering.
 
@@ -390,8 +390,8 @@ If you need to customize testbed before starting, first run `const testbed = Tes
 
 #### Parameters
 
-• **world**: [`World`](World)
+• **world**: [`World`](/api/classes/World)
 
 #### Returns
 
-[`Testbed`](Testbed)
+[`Testbed`](/api/classes/Testbed)

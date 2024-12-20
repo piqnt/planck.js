@@ -5,7 +5,7 @@ abstract fixture definition. You can reuse fixture definitions safely.
 
 ## Extends
 
-- [`FixtureOpt`](FixtureOpt)
+- [`FixtureOpt`](/api/interfaces/FixtureOpt)
 
 ## Properties
 
@@ -17,7 +17,7 @@ The density, usually in kg/m^2
 
 #### Inherited from
 
-[`FixtureOpt`](FixtureOpt).[`density`](FixtureOpt#density)
+[`FixtureOpt`](/api/interfaces/FixtureOpt).[`density`](/api/interfaces/FixtureOpt#density)
 
 ***
 
@@ -30,7 +30,7 @@ If groupIndex is zero or not matching, then at least one bit in this fixture cat
 
 #### Inherited from
 
-[`FixtureOpt`](FixtureOpt).[`filterCategoryBits`](FixtureOpt#filtercategorybits)
+[`FixtureOpt`](/api/interfaces/FixtureOpt).[`filterCategoryBits`](/api/interfaces/FixtureOpt#filtercategorybits)
 
 ***
 
@@ -43,7 +43,7 @@ Fixtures with same positive groupIndex always collide and fixtures with same neg
 
 #### Inherited from
 
-[`FixtureOpt`](FixtureOpt).[`filterGroupIndex`](FixtureOpt#filtergroupindex)
+[`FixtureOpt`](/api/interfaces/FixtureOpt).[`filterGroupIndex`](/api/interfaces/FixtureOpt#filtergroupindex)
 
 ***
 
@@ -55,7 +55,7 @@ Collision category bit or bits that this fixture accept for collision.
 
 #### Inherited from
 
-[`FixtureOpt`](FixtureOpt).[`filterMaskBits`](FixtureOpt#filtermaskbits)
+[`FixtureOpt`](/api/interfaces/FixtureOpt).[`filterMaskBits`](/api/interfaces/FixtureOpt#filtermaskbits)
 
 ***
 
@@ -67,7 +67,7 @@ The friction coefficient, usually in the range [0,1]
 
 #### Inherited from
 
-[`FixtureOpt`](FixtureOpt).[`friction`](FixtureOpt#friction)
+[`FixtureOpt`](/api/interfaces/FixtureOpt).[`friction`](/api/interfaces/FixtureOpt#friction)
 
 ***
 
@@ -79,7 +79,7 @@ A sensor shape collects contact information but never generates a collision resp
 
 #### Inherited from
 
-[`FixtureOpt`](FixtureOpt).[`isSensor`](FixtureOpt#issensor)
+[`FixtureOpt`](/api/interfaces/FixtureOpt).[`isSensor`](/api/interfaces/FixtureOpt#issensor)
 
 ***
 
@@ -91,25 +91,25 @@ The restitution (elasticity) usually in the range [0,1]
 
 #### Inherited from
 
-[`FixtureOpt`](FixtureOpt).[`restitution`](FixtureOpt#restitution)
+[`FixtureOpt`](/api/interfaces/FixtureOpt).[`restitution`](/api/interfaces/FixtureOpt#restitution)
 
 ***
 
 ### shape
 
-> **shape**: [`Shape`](../classes/Shape)
+> **shape**: [`Shape`](/api/classes/Shape)
 
 ***
 
 ### style?
 
-> `optional` **style**: [`Style`](Style)
+> `optional` **style**: [`Style`](/api/interfaces/Style)
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`FixtureOpt`](FixtureOpt).[`style`](FixtureOpt#style)
+[`FixtureOpt`](/api/interfaces/FixtureOpt).[`style`](/api/interfaces/FixtureOpt#style)
 
 ***
 
@@ -119,4 +119,4 @@ Styling for dev-tools.
 
 #### Inherited from
 
-[`FixtureOpt`](FixtureOpt).[`userData`](FixtureOpt#userdata)
+[`FixtureOpt`](/api/interfaces/FixtureOpt).[`userData`](/api/interfaces/FixtureOpt#userdata)

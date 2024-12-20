@@ -4,11 +4,11 @@
 
 ### new TimeStep()
 
-> **new TimeStep**(): [`TimeStep`](TimeStep)
+> **new TimeStep**(): [`TimeStep`](/api/classes/TimeStep)
 
 #### Returns
 
-[`TimeStep`](TimeStep)
+[`TimeStep`](/api/classes/TimeStep)
 
 ## Properties
 

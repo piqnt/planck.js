@@ -7,11 +7,11 @@ objects and query them on update.
 
 ### new BroadPhase()
 
-> **new BroadPhase**(): [`BroadPhase`](BroadPhase)
+> **new BroadPhase**(): [`BroadPhase`](/api/classes/BroadPhase)
 
 #### Returns
 
-[`BroadPhase`](BroadPhase)
+[`BroadPhase`](/api/classes/BroadPhase)
 
 ## Properties
 
@@ -45,7 +45,7 @@ objects and query them on update.
 
 ### m\_tree
 
-> **m\_tree**: [`DynamicTree`](DynamicTree)\<[`FixtureProxy`](FixtureProxy)\>
+> **m\_tree**: [`DynamicTree`](/api/classes/DynamicTree)\<[`FixtureProxy`](/api/classes/FixtureProxy)\>
 
 ## Methods
 
@@ -72,9 +72,9 @@ is called.
 
 #### Parameters
 
-• **aabb**: [`AABBValue`](../interfaces/AABBValue)
+• **aabb**: [`AABBValue`](/api/interfaces/AABBValue)
 
-• **userData**: [`FixtureProxy`](FixtureProxy)
+• **userData**: [`FixtureProxy`](/api/classes/FixtureProxy)
 
 #### Returns
 
@@ -100,7 +100,7 @@ Destroy a proxy. It is up to the client to remove any pairs.
 
 ### getFatAABB()
 
-> **getFatAABB**(`proxyId`): [`AABB`](AABB)
+> **getFatAABB**(`proxyId`): [`AABB`](/api/classes/AABB)
 
 Get the fat AABB for a proxy.
 
@@ -110,7 +110,7 @@ Get the fat AABB for a proxy.
 
 #### Returns
 
-[`AABB`](AABB)
+[`AABB`](/api/classes/AABB)
 
 ***
 
@@ -164,7 +164,7 @@ Get the quality metric of the embedded tree.
 
 ### getUserData()
 
-> **getUserData**(`proxyId`): [`FixtureProxy`](FixtureProxy)
+> **getUserData**(`proxyId`): [`FixtureProxy`](/api/classes/FixtureProxy)
 
 Get user data from a proxy. Returns null if the id is invalid.
 
@@ -174,7 +174,7 @@ Get user data from a proxy. Returns null if the id is invalid.
 
 #### Returns
 
-[`FixtureProxy`](FixtureProxy)
+[`FixtureProxy`](/api/classes/FixtureProxy)
 
 ***
 
@@ -189,9 +189,9 @@ UpdatePairs to finalized the proxy pairs (for your time step).
 
 • **proxyId**: `number`
 
-• **aabb**: [`AABB`](AABB)
+• **aabb**: [`AABB`](/api/classes/AABB)
 
-• **displacement**: [`Vec2Value`](../interfaces/Vec2Value)
+• **displacement**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
@@ -208,9 +208,9 @@ proxy that overlaps the supplied AABB.
 
 #### Parameters
 
-• **aabb**: [`AABBValue`](../interfaces/AABBValue)
+• **aabb**: [`AABBValue`](/api/interfaces/AABBValue)
 
-• **queryCallback**: [`DynamicTreeQueryCallback`](../type-aliases/DynamicTreeQueryCallback)
+• **queryCallback**: [`DynamicTreeQueryCallback`](/api/type-aliases/DynamicTreeQueryCallback)
 
 #### Returns
 
@@ -244,11 +244,11 @@ number of proxies in the tree.
 
 #### Parameters
 
-• **input**: [`RayCastInput`](../interfaces/RayCastInput)
+• **input**: [`RayCastInput`](/api/interfaces/RayCastInput)
 
 The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
 
-• **rayCastCallback**: [`RayCastCallback`](../type-aliases/RayCastCallback)
+• **rayCastCallback**: [`RayCastCallback`](/api/type-aliases/RayCastCallback)
 
 A function that is called for each proxy that is hit by the ray. If the return value is a positive number it will update the maxFraction of the ray cast input, and if it is zero it will terminate they ray cast.
 
@@ -267,7 +267,7 @@ position -= newOrigin
 
 #### Parameters
 
-• **newOrigin**: [`Vec2Value`](../interfaces/Vec2Value)
+• **newOrigin**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The new origin with respect to the old origin
 

@@ -9,17 +9,17 @@ World object.
 
 ### new World()
 
-> **new World**(`def`?): [`World`](World)
+> **new World**(`def`?): [`World`](/api/classes/World)
 
 #### Parameters
 
-• **def?**: [`Vec2Value`](../interfaces/Vec2Value) \| [`WorldDef`](../interfaces/WorldDef)
+• **def?**: [`Vec2Value`](/api/interfaces/Vec2Value) \| [`WorldDef`](/api/interfaces/WorldDef)
 
 World definition or gravity vector.
 
 #### Returns
 
-[`World`](World)
+[`World`](/api/classes/World)
 
 ## Methods
 
@@ -35,7 +35,7 @@ under a variable frame-rate. When you perform sub-stepping you will disable
 auto clearing of forces and instead call clearForces after all sub-steps are
 complete in one pass of your game loop.
 
-See [World.setAutoClearForces](World#setautoclearforces)
+See [World.setAutoClearForces](/api/classes/World#setautoclearforces)
 
 #### Returns
 
@@ -47,7 +47,7 @@ See [World.setAutoClearForces](World#setautoclearforces)
 
 #### createBody(def)
 
-> **createBody**(`def`?): [`Body`](Body)
+> **createBody**(`def`?): [`Body`](/api/classes/Body)
 
 Create a rigid body given a definition. No reference to the definition is
 retained.
@@ -56,25 +56,25 @@ Warning: This function is locked during callbacks.
 
 ##### Parameters
 
-• **def?**: [`BodyDef`](../interfaces/BodyDef)
+• **def?**: [`BodyDef`](/api/interfaces/BodyDef)
 
 ##### Returns
 
-[`Body`](Body)
+[`Body`](/api/classes/Body)
 
 #### createBody(position, angle)
 
-> **createBody**(`position`, `angle`?): [`Body`](Body)
+> **createBody**(`position`, `angle`?): [`Body`](/api/classes/Body)
 
 ##### Parameters
 
-• **position**: [`Vec2Value`](../interfaces/Vec2Value)
+• **position**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **angle?**: `number`
 
 ##### Returns
 
-[`Body`](Body)
+[`Body`](/api/classes/Body)
 
 ***
 
@@ -82,29 +82,29 @@ Warning: This function is locked during callbacks.
 
 #### createDynamicBody(def)
 
-> **createDynamicBody**(`def`?): [`Body`](Body)
+> **createDynamicBody**(`def`?): [`Body`](/api/classes/Body)
 
 ##### Parameters
 
-• **def?**: [`BodyDef`](../interfaces/BodyDef)
+• **def?**: [`BodyDef`](/api/interfaces/BodyDef)
 
 ##### Returns
 
-[`Body`](Body)
+[`Body`](/api/classes/Body)
 
 #### createDynamicBody(position, angle)
 
-> **createDynamicBody**(`position`, `angle`?): [`Body`](Body)
+> **createDynamicBody**(`position`, `angle`?): [`Body`](/api/classes/Body)
 
 ##### Parameters
 
-• **position**: [`Vec2Value`](../interfaces/Vec2Value)
+• **position**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **angle?**: `number`
 
 ##### Returns
 
-[`Body`](Body)
+[`Body`](/api/classes/Body)
 
 ***
 
@@ -119,7 +119,7 @@ Warning: This function is locked during callbacks.
 
 #### Type Parameters
 
-• **T** *extends* [`Joint`](Joint)
+• **T** *extends* [`Joint`](/api/classes/Joint)
 
 #### Parameters
 
@@ -135,29 +135,29 @@ Warning: This function is locked during callbacks.
 
 #### createKinematicBody(def)
 
-> **createKinematicBody**(`def`?): [`Body`](Body)
+> **createKinematicBody**(`def`?): [`Body`](/api/classes/Body)
 
 ##### Parameters
 
-• **def?**: [`BodyDef`](../interfaces/BodyDef)
+• **def?**: [`BodyDef`](/api/interfaces/BodyDef)
 
 ##### Returns
 
-[`Body`](Body)
+[`Body`](/api/classes/Body)
 
 #### createKinematicBody(position, angle)
 
-> **createKinematicBody**(`position`, `angle`?): [`Body`](Body)
+> **createKinematicBody**(`position`, `angle`?): [`Body`](/api/classes/Body)
 
 ##### Parameters
 
-• **position**: [`Vec2Value`](../interfaces/Vec2Value)
+• **position**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **angle?**: `number`
 
 ##### Returns
 
-[`Body`](Body)
+[`Body`](/api/classes/Body)
 
 ***
 
@@ -174,7 +174,7 @@ Warning: This function is locked during callbacks.
 
 #### Parameters
 
-• **b**: [`Body`](Body)
+• **b**: [`Body`](/api/classes/Body)
 
 #### Returns
 
@@ -191,7 +191,7 @@ Warning: This function is locked during callbacks.
 
 #### Parameters
 
-• **joint**: [`Joint`](Joint)
+• **joint**: [`Joint`](/api/classes/Joint)
 
 #### Returns
 
@@ -233,14 +233,14 @@ Get the flag that controls automatic clearing of forces after each time step.
 
 ### getBodyList()
 
-> **getBodyList**(): [`Body`](Body)
+> **getBodyList**(): [`Body`](/api/classes/Body)
 
 Get the world body list. With the returned body, use Body.getNext to get the
 next body in the world list. A null body indicates the end of the list.
 
 #### Returns
 
-[`Body`](Body)
+[`Body`](/api/classes/Body)
 
 the head of the world body list.
 
@@ -260,7 +260,7 @@ Get the number of contacts (each may have 0 or more contact points).
 
 ### getContactList()
 
-> **getContactList**(): [`Contact`](Contact)
+> **getContactList**(): [`Contact`](/api/classes/Contact)
 
 Get the world contact list. With the returned contact, use Contact.getNext to
 get the next contact in the world list. A null contact indicates the end of
@@ -271,7 +271,7 @@ Use ContactListener to avoid missing contacts.
 
 #### Returns
 
-[`Contact`](Contact)
+[`Contact`](/api/classes/Contact)
 
 the head of the world contact list.
 
@@ -289,13 +289,13 @@ the head of the world contact list.
 
 ### getGravity()
 
-> **getGravity**(): [`Vec2`](Vec2)
+> **getGravity**(): [`Vec2`](/api/classes/Vec2)
 
 Get the global gravity vector.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -311,14 +311,14 @@ Get the global gravity vector.
 
 ### getJointList()
 
-> **getJointList**(): [`Joint`](Joint)
+> **getJointList**(): [`Joint`](/api/classes/Joint)
 
 Get the world joint list. With the returned joint, use Joint.getNext to get
 the next joint in the world list. A null joint indicates the end of the list.
 
 #### Returns
 
-[`Joint`](Joint)
+[`Joint`](/api/classes/Joint)
 
 the head of the world joint list.
 
@@ -411,7 +411,7 @@ Remove an event listener.
 
 #### off(name, listener)
 
-> **off**(`name`, `listener`): [`World`](World)
+> **off**(`name`, `listener`): [`World`](/api/classes/World)
 
 Remove an event listener.
 
@@ -423,11 +423,11 @@ Remove an event listener.
 
 ##### Returns
 
-[`World`](World)
+[`World`](/api/classes/World)
 
 #### off(name, listener)
 
-> **off**(`name`, `listener`): [`World`](World)
+> **off**(`name`, `listener`): [`World`](/api/classes/World)
 
 Remove an event listener.
 
@@ -439,11 +439,11 @@ Remove an event listener.
 
 ##### Returns
 
-[`World`](World)
+[`World`](/api/classes/World)
 
 #### off(name, listener)
 
-> **off**(`name`, `listener`): [`World`](World)
+> **off**(`name`, `listener`): [`World`](/api/classes/World)
 
 Remove an event listener.
 
@@ -455,11 +455,11 @@ Remove an event listener.
 
 ##### Returns
 
-[`World`](World)
+[`World`](/api/classes/World)
 
 #### off(name, listener)
 
-> **off**(`name`, `listener`): [`World`](World)
+> **off**(`name`, `listener`): [`World`](/api/classes/World)
 
 Remove an event listener.
 
@@ -471,11 +471,11 @@ Remove an event listener.
 
 ##### Returns
 
-[`World`](World)
+[`World`](/api/classes/World)
 
 #### off(name, listener)
 
-> **off**(`name`, `listener`): [`World`](World)
+> **off**(`name`, `listener`): [`World`](/api/classes/World)
 
 Remove an event listener.
 
@@ -487,11 +487,11 @@ Remove an event listener.
 
 ##### Returns
 
-[`World`](World)
+[`World`](/api/classes/World)
 
 #### off(name, listener)
 
-> **off**(`name`, `listener`): [`World`](World)
+> **off**(`name`, `listener`): [`World`](/api/classes/World)
 
 Remove an event listener.
 
@@ -503,11 +503,11 @@ Remove an event listener.
 
 ##### Returns
 
-[`World`](World)
+[`World`](/api/classes/World)
 
 #### off(name, listener)
 
-> **off**(`name`, `listener`): [`World`](World)
+> **off**(`name`, `listener`): [`World`](/api/classes/World)
 
 Remove an event listener.
 
@@ -519,7 +519,7 @@ Remove an event listener.
 
 ##### Returns
 
-[`World`](World)
+[`World`](/api/classes/World)
 
 ***
 
@@ -529,7 +529,7 @@ Register an event listener.
 
 #### on(name, listener)
 
-> **on**(`name`, `listener`): [`World`](World)
+> **on**(`name`, `listener`): [`World`](/api/classes/World)
 
 Called when two fixtures begin to touch.
 
@@ -551,11 +551,11 @@ Warning: You cannot create/destroy world entities inside these callbacks.
 
 ##### Returns
 
-[`World`](World)
+[`World`](/api/classes/World)
 
 #### on(name, listener)
 
-> **on**(`name`, `listener`): [`World`](World)
+> **on**(`name`, `listener`): [`World`](/api/classes/World)
 
 Called when two fixtures cease to touch.
 
@@ -577,11 +577,11 @@ Warning: You cannot create/destroy world entities inside these callbacks.
 
 ##### Returns
 
-[`World`](World)
+[`World`](/api/classes/World)
 
 #### on(name, listener)
 
-> **on**(`name`, `listener`): [`World`](World)
+> **on**(`name`, `listener`): [`World`](/api/classes/World)
 
 This is called after a contact is updated. This allows you to inspect a
 contact before it goes to the solver. If you are careful, you can modify the
@@ -602,11 +602,11 @@ Warning: You cannot create/destroy world entities inside these callbacks.
 
 ##### Returns
 
-[`World`](World)
+[`World`](/api/classes/World)
 
 #### on(name, listener)
 
-> **on**(`name`, `listener`): [`World`](World)
+> **on**(`name`, `listener`): [`World`](/api/classes/World)
 
 This lets you inspect a contact after the solver is finished. This is useful
 for inspecting impulses. Note: the contact manifold does not include time of
@@ -624,11 +624,11 @@ Warning: You cannot create/destroy world entities inside these callbacks.
 
 ##### Returns
 
-[`World`](World)
+[`World`](/api/classes/World)
 
 #### on(name, listener)
 
-> **on**(`name`, `listener`): [`World`](World)
+> **on**(`name`, `listener`): [`World`](/api/classes/World)
 
 Listener is called whenever a body is removed.
 
@@ -640,11 +640,11 @@ Listener is called whenever a body is removed.
 
 ##### Returns
 
-[`World`](World)
+[`World`](/api/classes/World)
 
 #### on(name, listener)
 
-> **on**(`name`, `listener`): [`World`](World)
+> **on**(`name`, `listener`): [`World`](/api/classes/World)
 
 Listener is called whenever a joint is removed implicitly or explicitly.
 
@@ -656,11 +656,11 @@ Listener is called whenever a joint is removed implicitly or explicitly.
 
 ##### Returns
 
-[`World`](World)
+[`World`](/api/classes/World)
 
 #### on(name, listener)
 
-> **on**(`name`, `listener`): [`World`](World)
+> **on**(`name`, `listener`): [`World`](/api/classes/World)
 
 Listener is called whenever a fixture is removed implicitly or explicitly.
 
@@ -672,7 +672,7 @@ Listener is called whenever a fixture is removed implicitly or explicitly.
 
 ##### Returns
 
-[`World`](World)
+[`World`](/api/classes/World)
 
 ***
 
@@ -704,11 +704,11 @@ Query the world for all fixtures that potentially overlap the provided AABB.
 
 #### Parameters
 
-• **aabb**: [`AABBValue`](../interfaces/AABBValue)
+• **aabb**: [`AABBValue`](/api/interfaces/AABBValue)
 
 The query box.
 
-• **callback**: [`WorldAABBQueryCallback`](../type-aliases/WorldAABBQueryCallback)
+• **callback**: [`WorldAABBQueryCallback`](/api/type-aliases/WorldAABBQueryCallback)
 
 Called for each fixture found in the query AABB. It may return `false` to terminate the query.
 
@@ -728,15 +728,15 @@ ray-cast ignores shapes that contain the starting point.
 
 #### Parameters
 
-• **point1**: [`Vec2Value`](../interfaces/Vec2Value)
+• **point1**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The ray starting point
 
-• **point2**: [`Vec2Value`](../interfaces/Vec2Value)
+• **point2**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The ray ending point
 
-• **callback**: [`WorldRayCastCallback`](../type-aliases/WorldRayCastCallback)
+• **callback**: [`WorldRayCastCallback`](/api/type-aliases/WorldRayCastCallback)
 
 A function that is called for each fixture that is hit by the ray. You control how the ray cast proceeds by returning a numeric/float value.
 
@@ -802,7 +802,7 @@ Change the global gravity vector.
 
 #### Parameters
 
-• **gravity**: [`Vec2Value`](../interfaces/Vec2Value)
+• **gravity**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
@@ -851,7 +851,7 @@ position -= newOrigin
 
 #### Parameters
 
-• **newOrigin**: [`Vec2Value`](../interfaces/Vec2Value)
+• **newOrigin**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The new origin with respect to the old origin
 

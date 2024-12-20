@@ -4,27 +4,27 @@ Joint definitions are used to construct joints.
 
 ## Extends
 
-- [`JointOpt`](JointOpt)
+- [`JointOpt`](/api/interfaces/JointOpt)
 
 ## Extended by
 
-- [`DistanceJointDef`](DistanceJointDef)
-- [`FrictionJointDef`](FrictionJointDef)
-- [`GearJointDef`](GearJointDef)
-- [`MotorJointDef`](MotorJointDef)
-- [`MouseJointDef`](MouseJointDef)
-- [`PrismaticJointDef`](PrismaticJointDef)
-- [`PulleyJointDef`](PulleyJointDef)
-- [`RevoluteJointDef`](RevoluteJointDef)
-- [`RopeJointDef`](RopeJointDef)
-- [`WeldJointDef`](WeldJointDef)
-- [`WheelJointDef`](WheelJointDef)
+- [`DistanceJointDef`](/api/interfaces/DistanceJointDef)
+- [`FrictionJointDef`](/api/interfaces/FrictionJointDef)
+- [`GearJointDef`](/api/interfaces/GearJointDef)
+- [`MotorJointDef`](/api/interfaces/MotorJointDef)
+- [`MouseJointDef`](/api/interfaces/MouseJointDef)
+- [`PrismaticJointDef`](/api/interfaces/PrismaticJointDef)
+- [`PulleyJointDef`](/api/interfaces/PulleyJointDef)
+- [`RevoluteJointDef`](/api/interfaces/RevoluteJointDef)
+- [`RopeJointDef`](/api/interfaces/RopeJointDef)
+- [`WeldJointDef`](/api/interfaces/WeldJointDef)
+- [`WheelJointDef`](/api/interfaces/WheelJointDef)
 
 ## Properties
 
 ### bodyA
 
-> **bodyA**: [`Body`](../classes/Body)
+> **bodyA**: [`Body`](/api/classes/Body)
 
 The first attached body.
 
@@ -32,7 +32,7 @@ The first attached body.
 
 ### bodyB
 
-> **bodyB**: [`Body`](../classes/Body)
+> **bodyB**: [`Body`](/api/classes/Body)
 
 The second attached body.
 
@@ -47,19 +47,19 @@ should collide.
 
 #### Inherited from
 
-[`JointOpt`](JointOpt).[`collideConnected`](JointOpt#collideconnected)
+[`JointOpt`](/api/interfaces/JointOpt).[`collideConnected`](/api/interfaces/JointOpt#collideconnected)
 
 ***
 
 ### style?
 
-> `optional` **style**: [`Style`](Style)
+> `optional` **style**: [`Style`](/api/interfaces/Style)
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`JointOpt`](JointOpt).[`style`](JointOpt#style)
+[`JointOpt`](/api/interfaces/JointOpt).[`style`](/api/interfaces/JointOpt#style)
 
 ***
 
@@ -71,4 +71,4 @@ Use this to attach application specific data to your joints.
 
 #### Inherited from
 
-[`JointOpt`](JointOpt).[`userData`](JointOpt#userdata)
+[`JointOpt`](/api/interfaces/JointOpt).[`userData`](/api/interfaces/JointOpt#userdata)

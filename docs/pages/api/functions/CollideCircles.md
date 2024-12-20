@@ -4,15 +4,15 @@
 
 ## Parameters
 
-• **manifold**: [`Manifold`](../classes/Manifold)
+• **manifold**: [`Manifold`](/api/classes/Manifold)
 
-• **circleA**: [`CircleShape`](../classes/CircleShape)
+• **circleA**: [`CircleShape`](/api/classes/CircleShape)
 
-• **xfA**: [`TransformValue`](../type-aliases/TransformValue)
+• **xfA**: [`TransformValue`](/api/type-aliases/TransformValue)
 
-• **circleB**: [`CircleShape`](../classes/CircleShape)
+• **circleB**: [`CircleShape`](/api/classes/CircleShape)
 
-• **xfB**: [`TransformValue`](../type-aliases/TransformValue)
+• **xfB**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 ## Returns
 

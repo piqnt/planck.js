@@ -8,11 +8,11 @@ Some tolerances are absolute and some are relative. Absolute tolerances use MKS 
 
 ### new Settings()
 
-> **new Settings**(): [`Settings`](Settings)
+> **new Settings**(): [`Settings`](/api/classes/Settings)
 
 #### Returns
 
-[`Settings`](Settings)
+[`Settings`](/api/classes/Settings)
 
 ## Properties
 

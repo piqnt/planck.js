@@ -6,7 +6,7 @@
 
 ### new Vec2()
 
-> **new Vec2**(`x`, `y`): [`Vec2`](Vec2)
+> **new Vec2**(`x`, `y`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
@@ -16,27 +16,27 @@
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ### new Vec2()
 
-> **new Vec2**(`obj`): [`Vec2`](Vec2)
+> **new Vec2**(`obj`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **obj**: [`Vec2Value`](../interfaces/Vec2Value)
+• **obj**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ### new Vec2()
 
-> **new Vec2**(): [`Vec2`](Vec2)
+> **new Vec2**(): [`Vec2`](/api/classes/Vec2)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ## Properties
 
@@ -54,17 +54,17 @@
 
 ### add()
 
-> **add**(`w`): [`Vec2`](Vec2)
+> **add**(`w`): [`Vec2`](/api/classes/Vec2)
 
 Add a vector to this vector.
 
 #### Parameters
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 this
 
@@ -72,7 +72,7 @@ this
 
 ### addCombine()
 
-> **addCombine**(`a`, `v`, `b`, `w`): [`Vec2`](Vec2)
+> **addCombine**(`a`, `v`, `b`, `w`): [`Vec2`](/api/classes/Vec2)
 
 Add linear combination of v and w: `a * v + b * w`
 
@@ -80,37 +80,37 @@ Add linear combination of v and w: `a * v + b * w`
 
 • **a**: `number`
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **b**: `number`
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### addMul()
 
-> **addMul**(`a`, `v`): [`Vec2`](Vec2)
+> **addMul**(`a`, `v`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
 • **a**: `number`
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### clamp()
 
-> **clamp**(`max`): [`Vec2`](Vec2)
+> **clamp**(`max`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
@@ -118,17 +118,17 @@ Add linear combination of v and w: `a * v + b * w`
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### clone()
 
-> **clone**(): [`Vec2`](Vec2)
+> **clone**(): [`Vec2`](/api/classes/Vec2)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -160,7 +160,7 @@ Get the length squared.
 
 ### mul()
 
-> **mul**(`m`): [`Vec2`](Vec2)
+> **mul**(`m`): [`Vec2`](/api/classes/Vec2)
 
 Multiply this vector by a scalar.
 
@@ -170,7 +170,7 @@ Multiply this vector by a scalar.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 this
 
@@ -178,11 +178,11 @@ this
 
 ### neg()
 
-> **neg**(): [`Vec2`](Vec2)
+> **neg**(): [`Vec2`](/api/classes/Vec2)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -206,7 +206,7 @@ Set this vector to some specified coordinates.
 
 #### set(x, y)
 
-> **set**(`x`, `y`): [`Vec2`](Vec2)
+> **set**(`x`, `y`): [`Vec2`](/api/classes/Vec2)
 
 Set this vector to some specified coordinates.
 
@@ -218,27 +218,27 @@ Set this vector to some specified coordinates.
 
 ##### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 #### set(value)
 
-> **set**(`value`): [`Vec2`](Vec2)
+> **set**(`value`): [`Vec2`](/api/classes/Vec2)
 
 Set this vector to some specified coordinates.
 
 ##### Parameters
 
-• **value**: [`Vec2Value`](../interfaces/Vec2Value)
+• **value**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ##### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### setCombine()
 
-> **setCombine**(`a`, `v`, `b`, `w`): [`Vec2`](Vec2)
+> **setCombine**(`a`, `v`, `b`, `w`): [`Vec2`](/api/classes/Vec2)
 
 Set linear combination of v and w: `a * v + b * w`
 
@@ -246,37 +246,37 @@ Set linear combination of v and w: `a * v + b * w`
 
 • **a**: `number`
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **b**: `number`
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### setMul()
 
-> **setMul**(`a`, `v`): [`Vec2`](Vec2)
+> **setMul**(`a`, `v`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
 • **a**: `number`
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### setNum()
 
-> **setNum**(`x`, `y`): [`Vec2`](Vec2)
+> **setNum**(`x`, `y`): [`Vec2`](/api/classes/Vec2)
 
 Set this vector to some specified coordinates.
 
@@ -288,7 +288,7 @@ Set this vector to some specified coordinates.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 this
 
@@ -296,17 +296,17 @@ this
 
 ### setVec2()
 
-> **setVec2**(`value`): [`Vec2`](Vec2)
+> **setVec2**(`value`): [`Vec2`](/api/classes/Vec2)
 
 Set this vector to some specified coordinates.
 
 #### Parameters
 
-• **value**: [`Vec2Value`](../interfaces/Vec2Value)
+• **value**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 this
 
@@ -314,13 +314,13 @@ this
 
 ### setZero()
 
-> **setZero**(): [`Vec2`](Vec2)
+> **setZero**(): [`Vec2`](/api/classes/Vec2)
 
 Set this vector to all zeros.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 this
 
@@ -328,17 +328,17 @@ this
 
 ### sub()
 
-> **sub**(`w`): [`Vec2`](Vec2)
+> **sub**(`w`): [`Vec2`](/api/classes/Vec2)
 
 Subtract a vector from this vector
 
 #### Parameters
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 this
 
@@ -346,7 +346,7 @@ this
 
 ### subCombine()
 
-> **subCombine**(`a`, `v`, `b`, `w`): [`Vec2`](Vec2)
+> **subCombine**(`a`, `v`, `b`, `w`): [`Vec2`](/api/classes/Vec2)
 
 Subtract linear combination of v and w: `a * v + b * w`
 
@@ -354,51 +354,51 @@ Subtract linear combination of v and w: `a * v + b * w`
 
 • **a**: `number`
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **b**: `number`
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### subMul()
 
-> **subMul**(`a`, `v`): [`Vec2`](Vec2)
+> **subMul**(`a`, `v`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
 • **a**: `number`
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### ~~wSub()~~
 
-> **wSub**(`a`, `v`, `b`?, `w`?): [`Vec2`](Vec2)
+> **wSub**(`a`, `v`, `b`?, `w`?): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
 • **a**: `number`
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **b?**: `number`
 
-• **w?**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w?**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 #### Deprecated
 
@@ -408,31 +408,31 @@ Use subCombine or subMul
 
 ### abs()
 
-> `static` **abs**(`v`): [`Vec2`](Vec2)
+> `static` **abs**(`v`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### add()
 
-> `static` **add**(`v`, `w`): [`Vec2`](Vec2)
+> `static` **add**(`v`, `w`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -440,79 +440,79 @@ Use subCombine or subMul
 
 #### addCross(a, v, w)
 
-> `static` **addCross**(`a`, `v`, `w`): [`Vec2`](Vec2)
+> `static` **addCross**(`a`, `v`, `w`): [`Vec2`](/api/classes/Vec2)
 
 Returns `a + (v x w)`
 
 ##### Parameters
 
-• **a**: [`Vec2Value`](../interfaces/Vec2Value)
+• **a**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **w**: `number`
 
 ##### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 #### addCross(a, v, w)
 
-> `static` **addCross**(`a`, `v`, `w`): [`Vec2`](Vec2)
+> `static` **addCross**(`a`, `v`, `w`): [`Vec2`](/api/classes/Vec2)
 
 Returns `a + (v x w)`
 
 ##### Parameters
 
-• **a**: [`Vec2Value`](../interfaces/Vec2Value)
+• **a**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **v**: `number`
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ##### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### addCrossNumVec2()
 
-> `static` **addCrossNumVec2**(`a`, `v`, `w`): [`Vec2`](Vec2)
+> `static` **addCrossNumVec2**(`a`, `v`, `w`): [`Vec2`](/api/classes/Vec2)
 
 Returns `a + (v x w)`
 
 #### Parameters
 
-• **a**: [`Vec2Value`](../interfaces/Vec2Value)
+• **a**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **v**: `number`
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### addCrossVec2Num()
 
-> `static` **addCrossVec2Num**(`a`, `v`, `w`): [`Vec2`](Vec2)
+> `static` **addCrossVec2Num**(`a`, `v`, `w`): [`Vec2`](/api/classes/Vec2)
 
 Returns `a + (v x w)`
 
 #### Parameters
 
-• **a**: [`Vec2Value`](../interfaces/Vec2Value)
+• **a**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **w**: `number`
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -522,9 +522,9 @@ Returns `a + (v x w)`
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
@@ -548,51 +548,51 @@ Returns `a + (v x w)`
 
 ### clamp()
 
-> `static` **clamp**(`v`, `max`): [`Vec2`](Vec2)
+> `static` **clamp**(`v`, `max`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **max**: `number`
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### clone()
 
-> `static` **clone**(`v`): [`Vec2`](Vec2)
+> `static` **clone**(`v`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### combine()
 
-> `static` **combine**(`a`, `v`, `b`, `w`): [`Vec2`](Vec2)
+> `static` **combine**(`a`, `v`, `b`, `w`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
 • **a**: `number`
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **b**: `number`
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -606,9 +606,9 @@ Cross product between two vectors
 
 ##### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ##### Returns
 
@@ -616,23 +616,23 @@ Cross product between two vectors
 
 #### cross(v, w)
 
-> `static` **cross**(`v`, `w`): [`Vec2`](Vec2)
+> `static` **cross**(`v`, `w`): [`Vec2`](/api/classes/Vec2)
 
 Cross product between a vector and a scalar
 
 ##### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **w**: `number`
 
 ##### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 #### cross(v, w)
 
-> `static` **cross**(`v`, `w`): [`Vec2`](Vec2)
+> `static` **cross**(`v`, `w`): [`Vec2`](/api/classes/Vec2)
 
 Cross product between a scalar and a vector
 
@@ -640,17 +640,17 @@ Cross product between a scalar and a vector
 
 • **v**: `number`
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ##### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### crossNumVec2()
 
-> `static` **crossNumVec2**(`v`, `w`): [`Vec2`](Vec2)
+> `static` **crossNumVec2**(`v`, `w`): [`Vec2`](/api/classes/Vec2)
 
 Cross product on a vector and a scalar
 
@@ -658,29 +658,29 @@ Cross product on a vector and a scalar
 
 • **v**: `number`
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### crossVec2Num()
 
-> `static` **crossVec2Num**(`v`, `w`): [`Vec2`](Vec2)
+> `static` **crossVec2Num**(`v`, `w`): [`Vec2`](/api/classes/Vec2)
 
 Cross product on a vector and a scalar
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **w**: `number`
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -692,9 +692,9 @@ Cross product on two vectors
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
@@ -708,9 +708,9 @@ Cross product on two vectors
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
@@ -724,9 +724,9 @@ Cross product on two vectors
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
@@ -742,9 +742,9 @@ Dot product on two vectors
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
@@ -778,7 +778,7 @@ For performance, use this instead of lengthSquared (if possible).
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
@@ -794,7 +794,7 @@ Get the length squared.
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
@@ -804,33 +804,33 @@ Get the length squared.
 
 ### lower()
 
-> `static` **lower**(`v`, `w`): [`Vec2`](Vec2)
+> `static` **lower**(`v`, `w`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### mid()
 
-> `static` **mid**(`v`, `w`): [`Vec2`](Vec2)
+> `static` **mid**(`v`, `w`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -838,132 +838,132 @@ Get the length squared.
 
 #### mul(a, b)
 
-> `static` **mul**(`a`, `b`): [`Vec2`](Vec2)
+> `static` **mul**(`a`, `b`): [`Vec2`](/api/classes/Vec2)
 
 ##### Parameters
 
-• **a**: [`Vec2Value`](../interfaces/Vec2Value)
+• **a**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **b**: `number`
 
 ##### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 #### mul(a, b)
 
-> `static` **mul**(`a`, `b`): [`Vec2`](Vec2)
+> `static` **mul**(`a`, `b`): [`Vec2`](/api/classes/Vec2)
 
 ##### Parameters
 
 • **a**: `number`
 
-• **b**: [`Vec2Value`](../interfaces/Vec2Value)
+• **b**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ##### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### mulNumVec2()
 
-> `static` **mulNumVec2**(`a`, `b`): [`Vec2`](Vec2)
+> `static` **mulNumVec2**(`a`, `b`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
 • **a**: `number`
 
-• **b**: [`Vec2Value`](../interfaces/Vec2Value)
+• **b**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### mulVec2Num()
 
-> `static` **mulVec2Num**(`a`, `b`): [`Vec2`](Vec2)
+> `static` **mulVec2Num**(`a`, `b`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **a**: [`Vec2Value`](../interfaces/Vec2Value)
+• **a**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **b**: `number`
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### neg()
 
-> `static` **neg**(`v`): [`Vec2`](Vec2)
+> `static` **neg**(`v`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### skew()
 
-> `static` **skew**(`v`): [`Vec2`](Vec2)
+> `static` **skew**(`v`): [`Vec2`](/api/classes/Vec2)
 
 Get the skew vector such that dot(skew_vec, other) == cross(vec, other)
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### sub()
 
-> `static` **sub**(`v`, `w`): [`Vec2`](Vec2)
+> `static` **sub**(`v`, `w`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### upper()
 
-> `static` **upper**(`v`, `w`): [`Vec2`](Vec2)
+> `static` **upper**(`v`, `w`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### zero()
 
-> `static` **zero**(): [`Vec2`](Vec2)
+> `static` **zero**(): [`Vec2`](/api/classes/Vec2)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)

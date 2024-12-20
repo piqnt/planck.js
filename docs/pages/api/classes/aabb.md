@@ -6,29 +6,29 @@ Axis-aligned bounding box
 
 ### new AABB()
 
-> **new AABB**(`lower`?, `upper`?): [`AABB`](AABB)
+> **new AABB**(`lower`?, `upper`?): [`AABB`](/api/classes/AABB)
 
 #### Parameters
 
-• **lower?**: [`Vec2Value`](../interfaces/Vec2Value)
+• **lower?**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **upper?**: [`Vec2Value`](../interfaces/Vec2Value)
+• **upper?**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`AABB`](AABB)
+[`AABB`](/api/classes/AABB)
 
 ## Properties
 
 ### lowerBound
 
-> **lowerBound**: [`Vec2`](Vec2)
+> **lowerBound**: [`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### upperBound
 
-> **upperBound**: [`Vec2`](Vec2)
+> **upperBound**: [`Vec2`](/api/classes/Vec2)
 
 ## Methods
 
@@ -40,9 +40,9 @@ Combine one or two AABB into this one.
 
 #### Parameters
 
-• **a**: [`AABBValue`](../interfaces/AABBValue)
+• **a**: [`AABBValue`](/api/interfaces/AABBValue)
 
-• **b?**: [`AABBValue`](../interfaces/AABBValue)
+• **b?**: [`AABBValue`](/api/interfaces/AABBValue)
 
 #### Returns
 
@@ -56,9 +56,9 @@ Combine one or two AABB into this one.
 
 #### Parameters
 
-• **a**: [`Vec2Value`](../interfaces/Vec2Value)
+• **a**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **b**: [`Vec2Value`](../interfaces/Vec2Value)
+• **b**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
@@ -72,7 +72,7 @@ Combine one or two AABB into this one.
 
 #### Parameters
 
-• **aabb**: [`AABBValue`](../interfaces/AABBValue)
+• **aabb**: [`AABBValue`](/api/interfaces/AABBValue)
 
 #### Returns
 
@@ -82,7 +82,7 @@ Combine one or two AABB into this one.
 
 ### extend()
 
-> **extend**(`value`): [`AABB`](AABB)
+> **extend**(`value`): [`AABB`](/api/classes/AABB)
 
 #### Parameters
 
@@ -90,31 +90,31 @@ Combine one or two AABB into this one.
 
 #### Returns
 
-[`AABB`](AABB)
+[`AABB`](/api/classes/AABB)
 
 ***
 
 ### getCenter()
 
-> **getCenter**(): [`Vec2`](Vec2)
+> **getCenter**(): [`Vec2`](/api/classes/Vec2)
 
 Get the center of the AABB.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### getExtents()
 
-> **getExtents**(): [`Vec2`](Vec2)
+> **getExtents**(): [`Vec2`](/api/classes/Vec2)
 
 Get the extents of the AABB (half-widths).
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -148,9 +148,9 @@ Verify that the bounds are sorted.
 
 #### Parameters
 
-• **output**: [`RayCastOutput`](../interfaces/RayCastOutput)
+• **output**: [`RayCastOutput`](/api/interfaces/RayCastOutput)
 
-• **input**: [`RayCastInput`](../interfaces/RayCastInput)
+• **input**: [`RayCastInput`](/api/interfaces/RayCastInput)
 
 #### Returns
 
@@ -164,7 +164,7 @@ Verify that the bounds are sorted.
 
 #### Parameters
 
-• **aabb**: [`AABBValue`](../interfaces/AABBValue)
+• **aabb**: [`AABBValue`](/api/interfaces/AABBValue)
 
 #### Returns
 
@@ -178,9 +178,9 @@ Verify that the bounds are sorted.
 
 #### Parameters
 
-• **a**: [`AABBValue`](../interfaces/AABBValue)
+• **a**: [`AABBValue`](/api/interfaces/AABBValue)
 
-• **b**: [`AABBValue`](../interfaces/AABBValue)
+• **b**: [`AABBValue`](/api/interfaces/AABBValue)
 
 #### Returns
 
@@ -208,9 +208,9 @@ Verify that the bounds are sorted.
 
 #### Parameters
 
-• **a**: [`AABBValue`](../interfaces/AABBValue)
+• **a**: [`AABBValue`](/api/interfaces/AABBValue)
 
-• **b**: [`AABBValue`](../interfaces/AABBValue)
+• **b**: [`AABBValue`](/api/interfaces/AABBValue)
 
 #### Returns
 
@@ -220,19 +220,19 @@ Verify that the bounds are sorted.
 
 ### combinePoints()
 
-> `static` **combinePoints**(`out`, `a`, `b`): [`AABBValue`](../interfaces/AABBValue)
+> `static` **combinePoints**(`out`, `a`, `b`): [`AABBValue`](/api/interfaces/AABBValue)
 
 #### Parameters
 
-• **out**: [`AABBValue`](../interfaces/AABBValue)
+• **out**: [`AABBValue`](/api/interfaces/AABBValue)
 
-• **a**: [`Vec2Value`](../interfaces/Vec2Value)
+• **a**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **b**: [`Vec2Value`](../interfaces/Vec2Value)
+• **b**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`AABBValue`](../interfaces/AABBValue)
+[`AABBValue`](/api/interfaces/AABBValue)
 
 ***
 
@@ -242,9 +242,9 @@ Verify that the bounds are sorted.
 
 #### Parameters
 
-• **a**: [`AABBValue`](../interfaces/AABBValue)
+• **a**: [`AABBValue`](/api/interfaces/AABBValue)
 
-• **b**: [`AABBValue`](../interfaces/AABBValue)
+• **b**: [`AABBValue`](/api/interfaces/AABBValue)
 
 #### Returns
 
@@ -254,17 +254,17 @@ Verify that the bounds are sorted.
 
 ### extend()
 
-> `static` **extend**(`out`, `value`): [`AABBValue`](../interfaces/AABBValue)
+> `static` **extend**(`out`, `value`): [`AABBValue`](/api/interfaces/AABBValue)
 
 #### Parameters
 
-• **out**: [`AABBValue`](../interfaces/AABBValue)
+• **out**: [`AABBValue`](/api/interfaces/AABBValue)
 
 • **value**: `number`
 
 #### Returns
 
-[`AABBValue`](../interfaces/AABBValue)
+[`AABBValue`](/api/interfaces/AABBValue)
 
 ***
 
@@ -288,9 +288,9 @@ Verify that the bounds are sorted.
 
 #### Parameters
 
-• **a**: [`AABBValue`](../interfaces/AABBValue)
+• **a**: [`AABBValue`](/api/interfaces/AABBValue)
 
-• **b**: [`AABBValue`](../interfaces/AABBValue)
+• **b**: [`AABBValue`](/api/interfaces/AABBValue)
 
 #### Returns
 

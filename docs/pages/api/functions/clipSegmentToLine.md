@@ -6,11 +6,11 @@ Clipping for contact manifolds. Sutherland-Hodgman clipping.
 
 ## Parameters
 
-• **vOut**: [`ClipVertex`](../classes/ClipVertex)[]
+• **vOut**: [`ClipVertex`](/api/classes/ClipVertex)[]
 
-• **vIn**: [`ClipVertex`](../classes/ClipVertex)[]
+• **vIn**: [`ClipVertex`](/api/classes/ClipVertex)[]
 
-• **normal**: [`Vec2Value`](../interfaces/Vec2Value)
+• **normal**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **offset**: `number`
 

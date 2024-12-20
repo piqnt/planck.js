@@ -4,17 +4,17 @@
 
 ## Parameters
 
-• **manifold**: [`Manifold`](../classes/Manifold)
+• **manifold**: [`Manifold`](/api/classes/Manifold)
 
-• **xfA**: [`TransformValue`](TransformValue)
+• **xfA**: [`TransformValue`](/api/type-aliases/TransformValue)
 
-• **fixtureA**: [`Fixture`](../classes/Fixture)
+• **fixtureA**: [`Fixture`](/api/classes/Fixture)
 
 • **indexA**: `number`
 
-• **xfB**: [`TransformValue`](TransformValue)
+• **xfB**: [`TransformValue`](/api/type-aliases/TransformValue)
 
-• **fixtureB**: [`Fixture`](../classes/Fixture)
+• **fixtureB**: [`Fixture`](/api/classes/Fixture)
 
 • **indexB**: `number`
 

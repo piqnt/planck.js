@@ -28,7 +28,7 @@
 
 ### gravity?
 
-> `optional` **gravity**: [`Vec2Value`](Vec2Value)
+> `optional` **gravity**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 [default: { x : 0, y : 0}]
 

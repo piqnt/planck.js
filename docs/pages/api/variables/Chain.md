@@ -1,3 +1,3 @@
 # Variable: Chain
 
-> `const` **Chain**: *typeof* [`ChainShape`](../classes/ChainShape) = `ChainShape`
+> `const` **Chain**: *typeof* [`ChainShape`](/api/classes/ChainShape) = `ChainShape`

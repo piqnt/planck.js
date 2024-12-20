@@ -15,9 +15,9 @@ the largest time at which separation is maintained.
 
 ## Parameters
 
-• **output**: [`TOIOutput`](../classes/TOIOutput)
+• **output**: [`TOIOutput`](/api/classes/TOIOutput)
 
-• **input**: [`TOIInput`](../classes/TOIInput)
+• **input**: [`TOIInput`](/api/classes/TOIInput)
 
 ## Returns
 

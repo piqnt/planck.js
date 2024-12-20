@@ -2,7 +2,7 @@
 
 > **WorldRayCastCallback**: (`fixture`, `point`, `normal`, `fraction`) => `number`
 
-Callback function for ray casts, see [World.rayCast](../classes/World#raycast).
+Callback function for ray casts, see [World.rayCast](/api/classes/World#raycast).
 
 Called for each fixture found in the query.
 The returned value replaces the ray-cast input maxFraction.
@@ -15,15 +15,15 @@ You control how the ray cast proceeds by returning a numeric/float value.
 
 ## Parameters
 
-• **fixture**: [`Fixture`](../classes/Fixture)
+• **fixture**: [`Fixture`](/api/classes/Fixture)
 
 The fixture hit by the ray
 
-• **point**: [`Vec2`](../classes/Vec2)
+• **point**: [`Vec2`](/api/classes/Vec2)
 
 The point of initial intersection
 
-• **normal**: [`Vec2`](../classes/Vec2)
+• **normal**: [`Vec2`](/api/classes/Vec2)
 
 The normal vector at the point of intersection
 

@@ -12,17 +12,17 @@ contact forces, especially for high speed collisions.
 
 ### new ManifoldPoint()
 
-> **new ManifoldPoint**(): [`ManifoldPoint`](ManifoldPoint)
+> **new ManifoldPoint**(): [`ManifoldPoint`](/api/classes/ManifoldPoint)
 
 #### Returns
 
-[`ManifoldPoint`](ManifoldPoint)
+[`ManifoldPoint`](/api/classes/ManifoldPoint)
 
 ## Properties
 
 ### id
 
-> `readonly` **id**: [`ContactID`](ContactID)
+> `readonly` **id**: [`ContactID`](/api/classes/ContactID)
 
 Uniquely identifies a contact point between two shapes to facilitate warm starting
 
@@ -30,7 +30,7 @@ Uniquely identifies a contact point between two shapes to facilitate warm starti
 
 ### localPoint
 
-> **localPoint**: [`Vec2Value`](../interfaces/Vec2Value)
+> **localPoint**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 Usage depends on manifold type:
 - circles: the local center of circleB
@@ -71,7 +71,7 @@ The friction impulse
 
 #### Parameters
 
-• **that**: [`ManifoldPoint`](ManifoldPoint)
+• **that**: [`ManifoldPoint`](/api/classes/ManifoldPoint)
 
 #### Returns
 

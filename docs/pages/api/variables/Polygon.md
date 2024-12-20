@@ -1,3 +1,3 @@
 # Variable: Polygon
 
-> `const` **Polygon**: *typeof* [`PolygonShape`](../classes/PolygonShape) = `PolygonShape`
+> `const` **Polygon**: *typeof* [`PolygonShape`](/api/classes/PolygonShape) = `PolygonShape`

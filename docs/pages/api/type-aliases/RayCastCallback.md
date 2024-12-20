@@ -4,7 +4,7 @@
 
 ## Parameters
 
-• **subInput**: [`RayCastInput`](../interfaces/RayCastInput)
+• **subInput**: [`RayCastInput`](/api/interfaces/RayCastInput)
 
 • **id**: `number`
 

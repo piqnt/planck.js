@@ -13,31 +13,31 @@ joints will be broken.
 
 ## Extends
 
-- [`JointDef`](JointDef).[`RevoluteJointOpt`](RevoluteJointOpt)
+- [`JointDef`](/api/interfaces/JointDef).[`RevoluteJointOpt`](/api/interfaces/RevoluteJointOpt)
 
 ## Properties
 
 ### bodyA
 
-> **bodyA**: [`Body`](../classes/Body)
+> **bodyA**: [`Body`](/api/classes/Body)
 
 The first attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyA`](JointDef#bodya)
+[`JointDef`](/api/interfaces/JointDef).[`bodyA`](/api/interfaces/JointDef#bodya)
 
 ***
 
 ### bodyB
 
-> **bodyB**: [`Body`](../classes/Body)
+> **bodyB**: [`Body`](/api/classes/Body)
 
 The second attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyB`](JointDef#bodyb)
+[`JointDef`](/api/interfaces/JointDef).[`bodyB`](/api/interfaces/JointDef#bodyb)
 
 ***
 
@@ -50,7 +50,7 @@ should collide.
 
 #### Inherited from
 
-[`RevoluteJointOpt`](RevoluteJointOpt).[`collideConnected`](RevoluteJointOpt#collideconnected)
+[`RevoluteJointOpt`](/api/interfaces/RevoluteJointOpt).[`collideConnected`](/api/interfaces/RevoluteJointOpt#collideconnected)
 
 ***
 
@@ -62,7 +62,7 @@ A flag to enable joint limits.
 
 #### Inherited from
 
-[`RevoluteJointOpt`](RevoluteJointOpt).[`enableLimit`](RevoluteJointOpt#enablelimit)
+[`RevoluteJointOpt`](/api/interfaces/RevoluteJointOpt).[`enableLimit`](/api/interfaces/RevoluteJointOpt#enablelimit)
 
 ***
 
@@ -74,13 +74,13 @@ A flag to enable the joint motor.
 
 #### Inherited from
 
-[`RevoluteJointOpt`](RevoluteJointOpt).[`enableMotor`](RevoluteJointOpt#enablemotor)
+[`RevoluteJointOpt`](/api/interfaces/RevoluteJointOpt).[`enableMotor`](/api/interfaces/RevoluteJointOpt#enablemotor)
 
 ***
 
 ### localAnchorA
 
-> **localAnchorA**: [`Vec2Value`](Vec2Value)
+> **localAnchorA**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The local anchor point relative to bodyA's origin.
 
@@ -88,7 +88,7 @@ The local anchor point relative to bodyA's origin.
 
 ### localAnchorB
 
-> **localAnchorB**: [`Vec2Value`](Vec2Value)
+> **localAnchorB**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The local anchor point relative to bodyB's origin.
 
@@ -102,7 +102,7 @@ The lower angle for the joint limit (radians).
 
 #### Inherited from
 
-[`RevoluteJointOpt`](RevoluteJointOpt).[`lowerAngle`](RevoluteJointOpt#lowerangle)
+[`RevoluteJointOpt`](/api/interfaces/RevoluteJointOpt).[`lowerAngle`](/api/interfaces/RevoluteJointOpt#lowerangle)
 
 ***
 
@@ -115,7 +115,7 @@ in N-m.
 
 #### Inherited from
 
-[`RevoluteJointOpt`](RevoluteJointOpt).[`maxMotorTorque`](RevoluteJointOpt#maxmotortorque)
+[`RevoluteJointOpt`](/api/interfaces/RevoluteJointOpt).[`maxMotorTorque`](/api/interfaces/RevoluteJointOpt#maxmotortorque)
 
 ***
 
@@ -127,7 +127,7 @@ The desired motor speed. Usually in radians per second.
 
 #### Inherited from
 
-[`RevoluteJointOpt`](RevoluteJointOpt).[`motorSpeed`](RevoluteJointOpt#motorspeed)
+[`RevoluteJointOpt`](/api/interfaces/RevoluteJointOpt).[`motorSpeed`](/api/interfaces/RevoluteJointOpt#motorspeed)
 
 ***
 
@@ -141,13 +141,13 @@ The bodyB angle minus bodyA angle in the reference state (radians).
 
 ### style?
 
-> `optional` **style**: [`Style`](Style)
+> `optional` **style**: [`Style`](/api/interfaces/Style)
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`RevoluteJointOpt`](RevoluteJointOpt).[`style`](RevoluteJointOpt#style)
+[`RevoluteJointOpt`](/api/interfaces/RevoluteJointOpt).[`style`](/api/interfaces/RevoluteJointOpt#style)
 
 ***
 
@@ -159,7 +159,7 @@ The upper angle for the joint limit (radians).
 
 #### Inherited from
 
-[`RevoluteJointOpt`](RevoluteJointOpt).[`upperAngle`](RevoluteJointOpt#upperangle)
+[`RevoluteJointOpt`](/api/interfaces/RevoluteJointOpt).[`upperAngle`](/api/interfaces/RevoluteJointOpt#upperangle)
 
 ***
 
@@ -171,4 +171,4 @@ Use this to attach application specific data to your joints.
 
 #### Inherited from
 
-[`RevoluteJointOpt`](RevoluteJointOpt).[`userData`](RevoluteJointOpt#userdata)
+[`RevoluteJointOpt`](/api/interfaces/RevoluteJointOpt).[`userData`](/api/interfaces/RevoluteJointOpt#userdata)

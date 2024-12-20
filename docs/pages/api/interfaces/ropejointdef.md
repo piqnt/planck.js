@@ -6,31 +6,31 @@ collideConnected in JointDef.
 
 ## Extends
 
-- [`JointDef`](JointDef).[`RopeJointOpt`](RopeJointOpt)
+- [`JointDef`](/api/interfaces/JointDef).[`RopeJointOpt`](/api/interfaces/RopeJointOpt)
 
 ## Properties
 
 ### bodyA
 
-> **bodyA**: [`Body`](../classes/Body)
+> **bodyA**: [`Body`](/api/classes/Body)
 
 The first attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyA`](JointDef#bodya)
+[`JointDef`](/api/interfaces/JointDef).[`bodyA`](/api/interfaces/JointDef#bodya)
 
 ***
 
 ### bodyB
 
-> **bodyB**: [`Body`](../classes/Body)
+> **bodyB**: [`Body`](/api/classes/Body)
 
 The second attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyB`](JointDef#bodyb)
+[`JointDef`](/api/interfaces/JointDef).[`bodyB`](/api/interfaces/JointDef#bodyb)
 
 ***
 
@@ -43,13 +43,13 @@ should collide.
 
 #### Inherited from
 
-[`RopeJointOpt`](RopeJointOpt).[`collideConnected`](RopeJointOpt#collideconnected)
+[`RopeJointOpt`](/api/interfaces/RopeJointOpt).[`collideConnected`](/api/interfaces/RopeJointOpt#collideconnected)
 
 ***
 
 ### localAnchorA
 
-> **localAnchorA**: [`Vec2Value`](Vec2Value)
+> **localAnchorA**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The local anchor point relative to bodyA's origin.
 
@@ -57,7 +57,7 @@ The local anchor point relative to bodyA's origin.
 
 ### localAnchorB
 
-> **localAnchorB**: [`Vec2Value`](Vec2Value)
+> **localAnchorB**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The local anchor point relative to bodyB's origin.
 
@@ -72,19 +72,19 @@ Warning: this must be larger than linearSlop or the joint will have no effect.
 
 #### Inherited from
 
-[`RopeJointOpt`](RopeJointOpt).[`maxLength`](RopeJointOpt#maxlength)
+[`RopeJointOpt`](/api/interfaces/RopeJointOpt).[`maxLength`](/api/interfaces/RopeJointOpt#maxlength)
 
 ***
 
 ### style?
 
-> `optional` **style**: [`Style`](Style)
+> `optional` **style**: [`Style`](/api/interfaces/Style)
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`RopeJointOpt`](RopeJointOpt).[`style`](RopeJointOpt#style)
+[`RopeJointOpt`](/api/interfaces/RopeJointOpt).[`style`](/api/interfaces/RopeJointOpt#style)
 
 ***
 
@@ -96,4 +96,4 @@ Use this to attach application specific data to your joints.
 
 #### Inherited from
 
-[`RopeJointOpt`](RopeJointOpt).[`userData`](RopeJointOpt#userdata)
+[`RopeJointOpt`](/api/interfaces/RopeJointOpt).[`userData`](/api/interfaces/RopeJointOpt#userdata)

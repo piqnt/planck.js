@@ -6,7 +6,7 @@ MassData This holds the mass data computed for a shape.
 
 ### center
 
-> **center**: [`Vec2Value`](Vec2Value)
+> **center**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The position of the shape's centroid relative to the shape's origin.
 

@@ -6,11 +6,11 @@ Used to warm start Distance. Set count to zero on first call.
 
 ### new SimplexCache()
 
-> **new SimplexCache**(): [`SimplexCache`](SimplexCache)
+> **new SimplexCache**(): [`SimplexCache`](/api/classes/SimplexCache)
 
 #### Returns
 
-[`SimplexCache`](SimplexCache)
+[`SimplexCache`](/api/classes/SimplexCache)
 
 ## Properties
 

@@ -1,3 +1,3 @@
 # Variable: Edge
 
-> `const` **Edge**: *typeof* [`EdgeShape`](../classes/EdgeShape) = `EdgeShape`
+> `const` **Edge**: *typeof* [`EdgeShape`](/api/classes/EdgeShape) = `EdgeShape`

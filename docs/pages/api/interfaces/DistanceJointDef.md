@@ -8,31 +8,31 @@ not use a zero or short length.
 
 ## Extends
 
-- [`JointDef`](JointDef).[`DistanceJointOpt`](DistanceJointOpt)
+- [`JointDef`](/api/interfaces/JointDef).[`DistanceJointOpt`](/api/interfaces/DistanceJointOpt)
 
 ## Properties
 
 ### bodyA
 
-> **bodyA**: [`Body`](../classes/Body)
+> **bodyA**: [`Body`](/api/classes/Body)
 
 The first attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyA`](JointDef#bodya)
+[`JointDef`](/api/interfaces/JointDef).[`bodyA`](/api/interfaces/JointDef#bodya)
 
 ***
 
 ### bodyB
 
-> **bodyB**: [`Body`](../classes/Body)
+> **bodyB**: [`Body`](/api/classes/Body)
 
 The second attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyB`](JointDef#bodyb)
+[`JointDef`](/api/interfaces/JointDef).[`bodyB`](/api/interfaces/JointDef#bodyb)
 
 ***
 
@@ -45,7 +45,7 @@ should collide.
 
 #### Inherited from
 
-[`DistanceJointOpt`](DistanceJointOpt).[`collideConnected`](DistanceJointOpt#collideconnected)
+[`DistanceJointOpt`](/api/interfaces/DistanceJointOpt).[`collideConnected`](/api/interfaces/DistanceJointOpt#collideconnected)
 
 ***
 
@@ -57,7 +57,7 @@ The damping ratio. 0 = no damping, 1 = critical damping.
 
 #### Inherited from
 
-[`DistanceJointOpt`](DistanceJointOpt).[`dampingRatio`](DistanceJointOpt#dampingratio)
+[`DistanceJointOpt`](/api/interfaces/DistanceJointOpt).[`dampingRatio`](/api/interfaces/DistanceJointOpt#dampingratio)
 
 ***
 
@@ -69,7 +69,7 @@ The mass-spring-damper frequency in Hertz. A value of 0 disables softness.
 
 #### Inherited from
 
-[`DistanceJointOpt`](DistanceJointOpt).[`frequencyHz`](DistanceJointOpt#frequencyhz)
+[`DistanceJointOpt`](/api/interfaces/DistanceJointOpt).[`frequencyHz`](/api/interfaces/DistanceJointOpt#frequencyhz)
 
 ***
 
@@ -81,13 +81,13 @@ Distance length.
 
 #### Inherited from
 
-[`DistanceJointOpt`](DistanceJointOpt).[`length`](DistanceJointOpt#length)
+[`DistanceJointOpt`](/api/interfaces/DistanceJointOpt).[`length`](/api/interfaces/DistanceJointOpt#length)
 
 ***
 
 ### localAnchorA
 
-> **localAnchorA**: [`Vec2Value`](Vec2Value)
+> **localAnchorA**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The local anchor point relative to bodyA's origin.
 
@@ -95,7 +95,7 @@ The local anchor point relative to bodyA's origin.
 
 ### localAnchorB
 
-> **localAnchorB**: [`Vec2Value`](Vec2Value)
+> **localAnchorB**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The local anchor point relative to bodyB's origin.
 
@@ -103,13 +103,13 @@ The local anchor point relative to bodyB's origin.
 
 ### style?
 
-> `optional` **style**: [`Style`](Style)
+> `optional` **style**: [`Style`](/api/interfaces/Style)
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`DistanceJointOpt`](DistanceJointOpt).[`style`](DistanceJointOpt#style)
+[`DistanceJointOpt`](/api/interfaces/DistanceJointOpt).[`style`](/api/interfaces/DistanceJointOpt#style)
 
 ***
 
@@ -121,4 +121,4 @@ Use this to attach application specific data to your joints.
 
 #### Inherited from
 
-[`DistanceJointOpt`](DistanceJointOpt).[`userData`](DistanceJointOpt#userdata)
+[`DistanceJointOpt`](/api/interfaces/DistanceJointOpt).[`userData`](/api/interfaces/DistanceJointOpt#userdata)

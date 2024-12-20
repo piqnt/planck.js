@@ -7,35 +7,35 @@ computation. Even
 
 ### new DistanceInput()
 
-> **new DistanceInput**(): [`DistanceInput`](DistanceInput)
+> **new DistanceInput**(): [`DistanceInput`](/api/classes/DistanceInput)
 
 #### Returns
 
-[`DistanceInput`](DistanceInput)
+[`DistanceInput`](/api/classes/DistanceInput)
 
 ## Properties
 
 ### proxyA
 
-> `readonly` **proxyA**: [`DistanceProxy`](DistanceProxy)
+> `readonly` **proxyA**: [`DistanceProxy`](/api/classes/DistanceProxy)
 
 ***
 
 ### proxyB
 
-> `readonly` **proxyB**: [`DistanceProxy`](DistanceProxy)
+> `readonly` **proxyB**: [`DistanceProxy`](/api/classes/DistanceProxy)
 
 ***
 
 ### transformA
 
-> `readonly` **transformA**: [`Transform`](Transform)
+> `readonly` **transformA**: [`Transform`](/api/classes/Transform)
 
 ***
 
 ### transformB
 
-> `readonly` **transformB**: [`Transform`](Transform)
+> `readonly` **transformB**: [`Transform`](/api/classes/Transform)
 
 ***
 

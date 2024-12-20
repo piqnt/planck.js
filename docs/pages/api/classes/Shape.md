@@ -6,26 +6,26 @@ Fixture is created. Shapes may encapsulate one or more child shapes.
 
 ## Extended by
 
-- [`CircleShape`](CircleShape)
-- [`EdgeShape`](EdgeShape)
-- [`PolygonShape`](PolygonShape)
-- [`ChainShape`](ChainShape)
+- [`CircleShape`](/api/classes/CircleShape)
+- [`EdgeShape`](/api/classes/EdgeShape)
+- [`PolygonShape`](/api/classes/PolygonShape)
+- [`ChainShape`](/api/classes/ChainShape)
 
 ## Constructors
 
 ### new Shape()
 
-> **new Shape**(): [`Shape`](Shape)
+> **new Shape**(): [`Shape`](/api/classes/Shape)
 
 #### Returns
 
-[`Shape`](Shape)
+[`Shape`](/api/classes/Shape)
 
 ## Properties
 
 ### style
 
-> **style**: [`Style`](../interfaces/Style) = `{}`
+> **style**: [`Style`](/api/interfaces/Style) = `{}`
 
 Styling for dev-tools.
 
@@ -40,11 +40,11 @@ child shape.
 
 #### Parameters
 
-• **aabb**: [`AABBValue`](../interfaces/AABBValue)
+• **aabb**: [`AABBValue`](/api/interfaces/AABBValue)
 
 Returns the axis aligned box.
 
-• **xf**: [`TransformValue`](../type-aliases/TransformValue)
+• **xf**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 The world transform of the shape.
 
@@ -64,7 +64,7 @@ The child shape
 
 #### Parameters
 
-• **proxy**: [`DistanceProxy`](DistanceProxy)
+• **proxy**: [`DistanceProxy`](/api/classes/DistanceProxy)
 
 • **childIndex**: `number`
 
@@ -83,7 +83,7 @@ The inertia tensor is computed about the local origin.
 
 #### Parameters
 
-• **massData**: [`MassData`](../interfaces/MassData)
+• **massData**: [`MassData`](/api/interfaces/MassData)
 
 Returns the mass data for this shape.
 
@@ -121,14 +121,14 @@ Get the number of child primitives.
 
 ### getType()
 
-> `abstract` **getType**(): [`ShapeType`](../type-aliases/ShapeType)
+> `abstract` **getType**(): [`ShapeType`](/api/type-aliases/ShapeType)
 
 Get the type of this shape. You can use this to down cast to the concrete
 shape.
 
 #### Returns
 
-[`ShapeType`](../type-aliases/ShapeType)
+[`ShapeType`](/api/type-aliases/ShapeType)
 
 the shape type.
 
@@ -142,15 +142,15 @@ Cast a ray against a child shape.
 
 #### Parameters
 
-• **output**: [`RayCastOutput`](../interfaces/RayCastOutput)
+• **output**: [`RayCastOutput`](/api/interfaces/RayCastOutput)
 
 The ray-cast results.
 
-• **input**: [`RayCastInput`](../interfaces/RayCastInput)
+• **input**: [`RayCastInput`](/api/interfaces/RayCastInput)
 
 The ray-cast input parameters.
 
-• **xf**: [`Transform`](Transform)
+• **xf**: [`Transform`](/api/classes/Transform)
 
 The transform to be applied to the shape.
 
@@ -173,11 +173,11 @@ shapes.
 
 #### Parameters
 
-• **xf**: [`TransformValue`](../type-aliases/TransformValue)
+• **xf**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 The shape world transform.
 
-• **p**: [`Vec2Value`](../interfaces/Vec2Value)
+• **p**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 A point in world coordinates.
 

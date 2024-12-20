@@ -9,31 +9,31 @@ game.
 
 ## Extends
 
-- [`JointDef`](JointDef).[`PrismaticJointOpt`](PrismaticJointOpt)
+- [`JointDef`](/api/interfaces/JointDef).[`PrismaticJointOpt`](/api/interfaces/PrismaticJointOpt)
 
 ## Properties
 
 ### bodyA
 
-> **bodyA**: [`Body`](../classes/Body)
+> **bodyA**: [`Body`](/api/classes/Body)
 
 The first attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyA`](JointDef#bodya)
+[`JointDef`](/api/interfaces/JointDef).[`bodyA`](/api/interfaces/JointDef#bodya)
 
 ***
 
 ### bodyB
 
-> **bodyB**: [`Body`](../classes/Body)
+> **bodyB**: [`Body`](/api/classes/Body)
 
 The second attached body.
 
 #### Inherited from
 
-[`JointDef`](JointDef).[`bodyB`](JointDef#bodyb)
+[`JointDef`](/api/interfaces/JointDef).[`bodyB`](/api/interfaces/JointDef#bodyb)
 
 ***
 
@@ -46,7 +46,7 @@ should collide.
 
 #### Inherited from
 
-[`PrismaticJointOpt`](PrismaticJointOpt).[`collideConnected`](PrismaticJointOpt#collideconnected)
+[`PrismaticJointOpt`](/api/interfaces/PrismaticJointOpt).[`collideConnected`](/api/interfaces/PrismaticJointOpt#collideconnected)
 
 ***
 
@@ -58,7 +58,7 @@ Enable/disable the joint limit.
 
 #### Inherited from
 
-[`PrismaticJointOpt`](PrismaticJointOpt).[`enableLimit`](PrismaticJointOpt#enablelimit)
+[`PrismaticJointOpt`](/api/interfaces/PrismaticJointOpt).[`enableLimit`](/api/interfaces/PrismaticJointOpt#enablelimit)
 
 ***
 
@@ -70,13 +70,13 @@ Enable/disable the joint motor.
 
 #### Inherited from
 
-[`PrismaticJointOpt`](PrismaticJointOpt).[`enableMotor`](PrismaticJointOpt#enablemotor)
+[`PrismaticJointOpt`](/api/interfaces/PrismaticJointOpt).[`enableMotor`](/api/interfaces/PrismaticJointOpt#enablemotor)
 
 ***
 
 ### localAnchorA
 
-> **localAnchorA**: [`Vec2Value`](Vec2Value)
+> **localAnchorA**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The local anchor point relative to bodyA's origin.
 
@@ -84,7 +84,7 @@ The local anchor point relative to bodyA's origin.
 
 ### localAnchorB
 
-> **localAnchorB**: [`Vec2Value`](Vec2Value)
+> **localAnchorB**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The local anchor point relative to bodyB's origin.
 
@@ -92,7 +92,7 @@ The local anchor point relative to bodyB's origin.
 
 ### localAxisA
 
-> **localAxisA**: [`Vec2Value`](Vec2Value)
+> **localAxisA**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The local translation unit axis in bodyA.
 
@@ -106,7 +106,7 @@ The lower translation limit, usually in meters.
 
 #### Inherited from
 
-[`PrismaticJointOpt`](PrismaticJointOpt).[`lowerTranslation`](PrismaticJointOpt#lowertranslation)
+[`PrismaticJointOpt`](/api/interfaces/PrismaticJointOpt).[`lowerTranslation`](/api/interfaces/PrismaticJointOpt#lowertranslation)
 
 ***
 
@@ -118,7 +118,7 @@ The maximum motor torque, usually in N-m.
 
 #### Inherited from
 
-[`PrismaticJointOpt`](PrismaticJointOpt).[`maxMotorForce`](PrismaticJointOpt#maxmotorforce)
+[`PrismaticJointOpt`](/api/interfaces/PrismaticJointOpt).[`maxMotorForce`](/api/interfaces/PrismaticJointOpt#maxmotorforce)
 
 ***
 
@@ -130,7 +130,7 @@ The desired motor speed in radians per second.
 
 #### Inherited from
 
-[`PrismaticJointOpt`](PrismaticJointOpt).[`motorSpeed`](PrismaticJointOpt#motorspeed)
+[`PrismaticJointOpt`](/api/interfaces/PrismaticJointOpt).[`motorSpeed`](/api/interfaces/PrismaticJointOpt#motorspeed)
 
 ***
 
@@ -145,13 +145,13 @@ bodyB_angle - bodyA_angle.
 
 ### style?
 
-> `optional` **style**: [`Style`](Style)
+> `optional` **style**: [`Style`](/api/interfaces/Style)
 
 Styling for dev-tools.
 
 #### Inherited from
 
-[`PrismaticJointOpt`](PrismaticJointOpt).[`style`](PrismaticJointOpt#style)
+[`PrismaticJointOpt`](/api/interfaces/PrismaticJointOpt).[`style`](/api/interfaces/PrismaticJointOpt#style)
 
 ***
 
@@ -163,7 +163,7 @@ The upper translation limit, usually in meters.
 
 #### Inherited from
 
-[`PrismaticJointOpt`](PrismaticJointOpt).[`upperTranslation`](PrismaticJointOpt#uppertranslation)
+[`PrismaticJointOpt`](/api/interfaces/PrismaticJointOpt).[`upperTranslation`](/api/interfaces/PrismaticJointOpt#uppertranslation)
 
 ***
 
@@ -175,4 +175,4 @@ Use this to attach application specific data to your joints.
 
 #### Inherited from
 
-[`PrismaticJointOpt`](PrismaticJointOpt).[`userData`](PrismaticJointOpt#userdata)
+[`PrismaticJointOpt`](/api/interfaces/PrismaticJointOpt).[`userData`](/api/interfaces/PrismaticJointOpt#userdata)

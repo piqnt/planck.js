@@ -6,17 +6,17 @@ Rotation
 
 ### new Rot()
 
-> **new Rot**(`angle`?): [`Rot`](Rot)
+> **new Rot**(`angle`?): [`Rot`](/api/classes/Rot)
 
 Initialize from an angle in radians.
 
 #### Parameters
 
-• **angle?**: `number` \| [`RotValue`](../interfaces/RotValue)
+• **angle?**: `number` \| [`RotValue`](/api/interfaces/RotValue)
 
 #### Returns
 
-[`Rot`](Rot)
+[`Rot`](/api/classes/Rot)
 
 ## Properties
 
@@ -50,25 +50,25 @@ Get the angle in radians.
 
 ### getXAxis()
 
-> **getXAxis**(): [`Vec2`](Vec2)
+> **getXAxis**(): [`Vec2`](/api/classes/Vec2)
 
 Get the x-axis.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### getYAxis()
 
-> **getYAxis**(): [`Vec2`](Vec2)
+> **getYAxis**(): [`Vec2`](/api/classes/Vec2)
 
 Get the y-axis.
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -78,7 +78,7 @@ Get the y-axis.
 
 #### Parameters
 
-• **angle**: `number` \| [`RotValue`](../interfaces/RotValue)
+• **angle**: `number` \| [`RotValue`](/api/interfaces/RotValue)
 
 #### Returns
 
@@ -120,7 +120,7 @@ Set to the identity rotation.
 
 #### Parameters
 
-• **angle**: [`RotValue`](../interfaces/RotValue)
+• **angle**: [`RotValue`](/api/interfaces/RotValue)
 
 #### Returns
 
@@ -144,25 +144,25 @@ Set to the identity rotation.
 
 ### clone()
 
-> `static` **clone**(`rot`): [`Rot`](Rot)
+> `static` **clone**(`rot`): [`Rot`](/api/classes/Rot)
 
 #### Parameters
 
-• **rot**: [`RotValue`](../interfaces/RotValue)
+• **rot**: [`RotValue`](/api/interfaces/RotValue)
 
 #### Returns
 
-[`Rot`](Rot)
+[`Rot`](/api/classes/Rot)
 
 ***
 
 ### identity()
 
-> `static` **identity**(): [`Rot`](Rot)
+> `static` **identity**(): [`Rot`](/api/classes/Rot)
 
 #### Returns
 
-[`Rot`](Rot)
+[`Rot`](/api/classes/Rot)
 
 ***
 
@@ -184,71 +184,71 @@ Set to the identity rotation.
 
 #### mul(rot, m)
 
-> `static` **mul**(`rot`, `m`): [`Rot`](Rot)
+> `static` **mul**(`rot`, `m`): [`Rot`](/api/classes/Rot)
 
 Multiply two rotations: q * r
 
 ##### Parameters
 
-• **rot**: [`RotValue`](../interfaces/RotValue)
+• **rot**: [`RotValue`](/api/interfaces/RotValue)
 
-• **m**: [`RotValue`](../interfaces/RotValue)
+• **m**: [`RotValue`](/api/interfaces/RotValue)
 
 ##### Returns
 
-[`Rot`](Rot)
+[`Rot`](/api/classes/Rot)
 
 #### mul(rot, m)
 
-> `static` **mul**(`rot`, `m`): [`Vec2`](Vec2)
+> `static` **mul**(`rot`, `m`): [`Vec2`](/api/classes/Vec2)
 
 Rotate a vector
 
 ##### Parameters
 
-• **rot**: [`RotValue`](../interfaces/RotValue)
+• **rot**: [`RotValue`](/api/interfaces/RotValue)
 
-• **m**: [`Vec2Value`](../interfaces/Vec2Value)
+• **m**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ##### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### mulRot()
 
-> `static` **mulRot**(`rot`, `m`): [`Rot`](Rot)
+> `static` **mulRot**(`rot`, `m`): [`Rot`](/api/classes/Rot)
 
 Multiply two rotations: q * r
 
 #### Parameters
 
-• **rot**: [`RotValue`](../interfaces/RotValue)
+• **rot**: [`RotValue`](/api/interfaces/RotValue)
 
-• **m**: [`RotValue`](../interfaces/RotValue)
+• **m**: [`RotValue`](/api/interfaces/RotValue)
 
 #### Returns
 
-[`Rot`](Rot)
+[`Rot`](/api/classes/Rot)
 
 ***
 
 ### mulSub()
 
-> `static` **mulSub**(`rot`, `v`, `w`): [`Vec2`](Vec2)
+> `static` **mulSub**(`rot`, `v`, `w`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **rot**: [`RotValue`](../interfaces/RotValue)
+• **rot**: [`RotValue`](/api/interfaces/RotValue)
 
-• **v**: [`Vec2Value`](../interfaces/Vec2Value)
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
-• **w**: [`Vec2Value`](../interfaces/Vec2Value)
+• **w**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
@@ -256,86 +256,86 @@ Multiply two rotations: q * r
 
 #### mulT(rot, m)
 
-> `static` **mulT**(`rot`, `m`): [`Rot`](Rot)
+> `static` **mulT**(`rot`, `m`): [`Rot`](/api/classes/Rot)
 
 Transpose multiply two rotations: qT * r
 
 ##### Parameters
 
-• **rot**: [`RotValue`](../interfaces/RotValue)
+• **rot**: [`RotValue`](/api/interfaces/RotValue)
 
-• **m**: [`RotValue`](../interfaces/RotValue)
+• **m**: [`RotValue`](/api/interfaces/RotValue)
 
 ##### Returns
 
-[`Rot`](Rot)
+[`Rot`](/api/classes/Rot)
 
 #### mulT(rot, m)
 
-> `static` **mulT**(`rot`, `m`): [`Vec2`](Vec2)
+> `static` **mulT**(`rot`, `m`): [`Vec2`](/api/classes/Vec2)
 
 Inverse rotate a vector
 
 ##### Parameters
 
-• **rot**: [`RotValue`](../interfaces/RotValue)
+• **rot**: [`RotValue`](/api/interfaces/RotValue)
 
-• **m**: [`Vec2Value`](../interfaces/Vec2Value)
+• **m**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ##### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### mulTRot()
 
-> `static` **mulTRot**(`rot`, `m`): [`Rot`](Rot)
+> `static` **mulTRot**(`rot`, `m`): [`Rot`](/api/classes/Rot)
 
 Transpose multiply two rotations: qT * r
 
 #### Parameters
 
-• **rot**: [`RotValue`](../interfaces/RotValue)
+• **rot**: [`RotValue`](/api/interfaces/RotValue)
 
-• **m**: [`RotValue`](../interfaces/RotValue)
+• **m**: [`RotValue`](/api/interfaces/RotValue)
 
 #### Returns
 
-[`Rot`](Rot)
+[`Rot`](/api/classes/Rot)
 
 ***
 
 ### mulTVec2()
 
-> `static` **mulTVec2**(`rot`, `m`): [`Vec2`](Vec2)
+> `static` **mulTVec2**(`rot`, `m`): [`Vec2`](/api/classes/Vec2)
 
 Inverse rotate a vector
 
 #### Parameters
 
-• **rot**: [`RotValue`](../interfaces/RotValue)
+• **rot**: [`RotValue`](/api/interfaces/RotValue)
 
-• **m**: [`Vec2Value`](../interfaces/Vec2Value)
+• **m**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### mulVec2()
 
-> `static` **mulVec2**(`rot`, `m`): [`Vec2`](Vec2)
+> `static` **mulVec2**(`rot`, `m`): [`Vec2`](/api/classes/Vec2)
 
 Rotate a vector
 
 #### Parameters
 
-• **rot**: [`RotValue`](../interfaces/RotValue)
+• **rot**: [`RotValue`](/api/interfaces/RotValue)
 
-• **m**: [`Vec2Value`](../interfaces/Vec2Value)
+• **m**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)

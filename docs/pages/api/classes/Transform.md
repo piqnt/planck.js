@@ -8,23 +8,23 @@ and a rotation.
 
 ### new Transform()
 
-> **new Transform**(`position`?, `rotation`?): [`Transform`](Transform)
+> **new Transform**(`position`?, `rotation`?): [`Transform`](/api/classes/Transform)
 
 #### Parameters
 
-• **position?**: [`Vec2Value`](../interfaces/Vec2Value)
+• **position?**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **rotation?**: `number`
 
 #### Returns
 
-[`Transform`](Transform)
+[`Transform`](/api/classes/Transform)
 
 ## Properties
 
 ### p
 
-> **p**: [`Vec2`](Vec2)
+> **p**: [`Vec2`](/api/classes/Vec2)
 
 position
 
@@ -32,7 +32,7 @@ position
 
 ### q
 
-> **q**: [`Rot`](Rot)
+> **q**: [`Rot`](/api/classes/Rot)
 
 rotation
 
@@ -48,7 +48,7 @@ Set position and angle
 
 ##### Parameters
 
-• **position**: [`Vec2Value`](../interfaces/Vec2Value)
+• **position**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **rotation**: `number`
 
@@ -64,7 +64,7 @@ Copy from another transform
 
 ##### Parameters
 
-• **xf**: [`TransformValue`](../type-aliases/TransformValue)
+• **xf**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 ##### Returns
 
@@ -92,7 +92,7 @@ Set position and angle
 
 #### Parameters
 
-• **position**: [`Vec2Value`](../interfaces/Vec2Value)
+• **position**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 • **rotation**: `number`
 
@@ -108,7 +108,7 @@ Set position and angle
 
 #### Parameters
 
-• **xf**: [`TransformValue`](../type-aliases/TransformValue)
+• **xf**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 #### Returns
 
@@ -132,25 +132,25 @@ Set position and angle
 
 ### clone()
 
-> `static` **clone**(`xf`): [`Transform`](Transform)
+> `static` **clone**(`xf`): [`Transform`](/api/classes/Transform)
 
 #### Parameters
 
-• **xf**: [`Transform`](Transform)
+• **xf**: [`Transform`](/api/classes/Transform)
 
 #### Returns
 
-[`Transform`](Transform)
+[`Transform`](/api/classes/Transform)
 
 ***
 
 ### identity()
 
-> `static` **identity**(): [`Transform`](Transform)
+> `static` **identity**(): [`Transform`](/api/classes/Transform)
 
 #### Returns
 
-[`Transform`](Transform)
+[`Transform`](/api/classes/Transform)
 
 ***
 
@@ -172,31 +172,31 @@ Set position and angle
 
 #### mul(a, b)
 
-> `static` **mul**(`a`, `b`): [`Vec2`](Vec2)
+> `static` **mul**(`a`, `b`): [`Vec2`](/api/classes/Vec2)
 
 ##### Parameters
 
-• **a**: [`TransformValue`](../type-aliases/TransformValue)
+• **a**: [`TransformValue`](/api/type-aliases/TransformValue)
 
-• **b**: [`Vec2Value`](../interfaces/Vec2Value)
+• **b**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ##### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 #### mul(a, b)
 
-> `static` **mul**(`a`, `b`): [`Transform`](Transform)
+> `static` **mul**(`a`, `b`): [`Transform`](/api/classes/Transform)
 
 ##### Parameters
 
-• **a**: [`TransformValue`](../type-aliases/TransformValue)
+• **a**: [`TransformValue`](/api/type-aliases/TransformValue)
 
-• **b**: [`TransformValue`](../type-aliases/TransformValue)
+• **b**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 ##### Returns
 
-[`Transform`](Transform)
+[`Transform`](/api/classes/Transform)
 
 ***
 
@@ -204,31 +204,31 @@ Set position and angle
 
 #### mulAll(a, b)
 
-> `static` **mulAll**(`a`, `b`): [`Vec2`](Vec2)[]
+> `static` **mulAll**(`a`, `b`): [`Vec2`](/api/classes/Vec2)[]
 
 ##### Parameters
 
-• **a**: [`Transform`](Transform)
+• **a**: [`Transform`](/api/classes/Transform)
 
-• **b**: [`Vec2Value`](../interfaces/Vec2Value)[]
+• **b**: [`Vec2Value`](/api/interfaces/Vec2Value)[]
 
 ##### Returns
 
-[`Vec2`](Vec2)[]
+[`Vec2`](/api/classes/Vec2)[]
 
 #### mulAll(a, b)
 
-> `static` **mulAll**(`a`, `b`): [`Transform`](Transform)[]
+> `static` **mulAll**(`a`, `b`): [`Transform`](/api/classes/Transform)[]
 
 ##### Parameters
 
-• **a**: [`Transform`](Transform)
+• **a**: [`Transform`](/api/classes/Transform)
 
-• **b**: [`Transform`](Transform)[]
+• **b**: [`Transform`](/api/classes/Transform)[]
 
 ##### Returns
 
-[`Transform`](Transform)[]
+[`Transform`](/api/classes/Transform)[]
 
 ***
 
@@ -236,92 +236,92 @@ Set position and angle
 
 #### mulT(a, b)
 
-> `static` **mulT**(`a`, `b`): [`Vec2`](Vec2)
+> `static` **mulT**(`a`, `b`): [`Vec2`](/api/classes/Vec2)
 
 ##### Parameters
 
-• **a**: [`TransformValue`](../type-aliases/TransformValue)
+• **a**: [`TransformValue`](/api/type-aliases/TransformValue)
 
-• **b**: [`Vec2Value`](../interfaces/Vec2Value)
+• **b**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 ##### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 #### mulT(a, b)
 
-> `static` **mulT**(`a`, `b`): [`Transform`](Transform)
+> `static` **mulT**(`a`, `b`): [`Transform`](/api/classes/Transform)
 
 ##### Parameters
 
-• **a**: [`TransformValue`](../type-aliases/TransformValue)
+• **a**: [`TransformValue`](/api/type-aliases/TransformValue)
 
-• **b**: [`TransformValue`](../type-aliases/TransformValue)
+• **b**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 ##### Returns
 
-[`Transform`](Transform)
+[`Transform`](/api/classes/Transform)
 
 ***
 
 ### mulTVec2()
 
-> `static` **mulTVec2**(`a`, `b`): [`Vec2`](Vec2)
+> `static` **mulTVec2**(`a`, `b`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **a**: [`TransformValue`](../type-aliases/TransformValue)
+• **a**: [`TransformValue`](/api/type-aliases/TransformValue)
 
-• **b**: [`Vec2Value`](../interfaces/Vec2Value)
+• **b**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### mulTXf()
 
-> `static` **mulTXf**(`a`, `b`): [`Transform`](Transform)
+> `static` **mulTXf**(`a`, `b`): [`Transform`](/api/classes/Transform)
 
 #### Parameters
 
-• **a**: [`TransformValue`](../type-aliases/TransformValue)
+• **a**: [`TransformValue`](/api/type-aliases/TransformValue)
 
-• **b**: [`TransformValue`](../type-aliases/TransformValue)
+• **b**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 #### Returns
 
-[`Transform`](Transform)
+[`Transform`](/api/classes/Transform)
 
 ***
 
 ### mulVec2()
 
-> `static` **mulVec2**(`a`, `b`): [`Vec2`](Vec2)
+> `static` **mulVec2**(`a`, `b`): [`Vec2`](/api/classes/Vec2)
 
 #### Parameters
 
-• **a**: [`TransformValue`](../type-aliases/TransformValue)
+• **a**: [`TransformValue`](/api/type-aliases/TransformValue)
 
-• **b**: [`Vec2Value`](../interfaces/Vec2Value)
+• **b**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 #### Returns
 
-[`Vec2`](Vec2)
+[`Vec2`](/api/classes/Vec2)
 
 ***
 
 ### mulXf()
 
-> `static` **mulXf**(`a`, `b`): [`Transform`](Transform)
+> `static` **mulXf**(`a`, `b`): [`Transform`](/api/classes/Transform)
 
 #### Parameters
 
-• **a**: [`TransformValue`](../type-aliases/TransformValue)
+• **a**: [`TransformValue`](/api/type-aliases/TransformValue)
 
-• **b**: [`TransformValue`](../type-aliases/TransformValue)
+• **b**: [`TransformValue`](/api/type-aliases/TransformValue)
 
 #### Returns
 
-[`Transform`](Transform)
+[`Transform`](/api/classes/Transform)

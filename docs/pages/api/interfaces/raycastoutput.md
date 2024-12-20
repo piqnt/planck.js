@@ -13,4 +13,4 @@ where `p1` and `p2` come from RayCastInput.
 
 ### normal
 
-> **normal**: [`Vec2`](../classes/Vec2)
+> **normal**: [`Vec2`](/api/classes/Vec2)
