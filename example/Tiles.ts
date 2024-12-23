@@ -6,9 +6,9 @@
 // This stress tests the dynamic tree broad-phase. This also shows that tile
 // based collision is _not_ smooth due to Box2D not knowing about adjacency.
 
-import { World, Vec2, Box, Testbed } from "planck";
+import { World, Box, Testbed } from "planck";
 
-const world = new World(new Vec2(0, -10));
+const world = new World({ x: 0, y: -10 });
 
 const testbed = Testbed.mount();
 testbed.start(world);
@@ -19,12 +19,12 @@ let fixtureCount = 0;
 
 {
   const a = 0.5;
-  const ground = world.createBody(new Vec2(0, -a));
+  const ground = world.createBody({ x: 0, y: -a });
 
   if (true) {
     const N = 200;
     const M = 10;
-    const position = new Vec2();
+    const position = { x: 0, y: 0 };
     position.y = 0.0;
     for (let j = 0; j < M; ++j) {
       position.x = -N * a;
@@ -38,7 +38,7 @@ let fixtureCount = 0;
   } else {
     const N = 200;
     const M = 10;
-    const position = new Vec2();
+    const position = { x: 0, y: 0 };
     position.x = -N * a;
     for (let i = 0; i < N; ++i) {
       position.y = 0.0;
@@ -54,13 +54,14 @@ let fixtureCount = 0;
   const a = 0.5;
   const shape = new Box(a, a);
 
-  const x = new Vec2(-7.0, 0.75);
-  const y = new Vec2();
-  const deltaX = new Vec2(0.5625, 1.25);
-  const deltaY = new Vec2(1.125, 0.0);
+  const x = { x: -7.0, y: 0.75 };
+  const y = { x: 0, y: 0 };
+  const deltaX = { x: 0.5625, y: 1.25 };
+  const deltaY = { x: 1.125, y: 0.0 };
 
   for (let i = 0; i < COUNT; ++i) {
-    y.set(x);
+    y.x = x.x;
+    y.y = x.y;
 
     for (let j = i; j < COUNT; ++j) {
       // bd.allowSleep = !(i == 0 && j == 0)
@@ -68,10 +69,12 @@ let fixtureCount = 0;
       const body = world.createDynamicBody(y);
       body.createFixture(shape, 5.0);
       ++fixtureCount;
-      y.add(deltaY);
+      y.x += deltaY.x;
+      y.y += deltaY.y;
     }
 
-    x.add(deltaX);
+    x.x += deltaX.x;
+    x.y += deltaX.y;
   }
 }
 const createTime = Date.now();

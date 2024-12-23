@@ -16,6 +16,7 @@ import {
   Distance,
   SimplexCache,
   Testbed,
+  Vec2Value,
 } from "planck";
 
 const world = new World();
@@ -25,62 +26,73 @@ testbed.width = 40;
 testbed.height = 40;
 testbed.start(world);
 
-const vAs = new Array(3).fill(null).map(() => Vec2.zero());
+const vAs = new Array(3).fill(null).map(() => ({ x: 0, y: 0 }));
 let countA: number;
 let radiusA: number;
 
-const vBs = new Array(Settings.maxPolygonVertices).fill(null).map(() => Vec2.zero());
+const vBs = new Array(Settings.maxPolygonVertices).fill(null).map(() => ({ x: 0, y: 0 }));
 let countB: number;
 let radiusB: number;
 
 let transformA: Transform;
 let transformB: Transform;
-let translationB: Vec2;
+let translationB: Vec2Value;
 
 if (true) {
-  vAs[0].set(-0.5, 1.0);
-  vAs[1].set(0.5, 1.0);
-  vAs[2].set(0.0, 0.0);
+  vAs[0].x = -0.5;
+  vAs[0].y = 1.0;
+  vAs[1].x = 0.5;
+  vAs[1].y = 1.0;
+  vAs[2].x = 0.0;
+  vAs[2].y = 0.0;
   countA = 3;
   radiusA = Settings.polygonRadius;
-
-  vBs[0].set(-0.5, -0.5);
-  vBs[1].set(0.5, -0.5);
-  vBs[2].set(0.5, 0.5);
-  vBs[3].set(-0.5, 0.5);
+  vBs[0].x = -0.5;
+  vBs[0].y = -0.5;
+  vBs[1].x = 0.5;
+  vBs[1].y = -0.5;
+  vBs[2].x = 0.5;
+  vBs[2].y = 0.5;
+  vBs[3].x = -0.5;
+  vBs[3].y = 0.5;
   countB = 4;
   radiusB = Settings.polygonRadius;
 
-  transformA = new Transform(new Vec2(4, 0.25));
-  transformB = new Transform(new Vec2(-4, 0));
-  translationB = new Vec2(8.0, 0.0);
+  transformA = new Transform({ x: 4, y: 0.25 });
+  transformB = new Transform({ x: -4, y: 0 });
+  translationB = { x: 8.0, y: 0.0 };
 } else if (true) {
-  vAs[0].set(0.0, 0.0);
+  vAs[0].x = 0.0;
+  vAs[0].y = 0.0;
   countA = 1;
   radiusA = 0.5;
 
-  vBs[0].set(0.0, 0.0);
+  vBs[0].x = 0.0;
+  vBs[0].y = 0.0;
   countB = 1;
   radiusB = 0.5;
 
-  transformA = new Transform(new Vec2(0, 0.25));
-  transformB = new Transform(new Vec2(-4, 0));
-  translationB = new Vec2(8.0, 0.0);
+  transformA = new Transform({ x: 0, y: 0.25 });
+  transformB = new Transform({ x: -4, y: 0 });
+  translationB = { x: 8.0, y: 0.0 };
 } else {
-  vAs[0].set(0.0, 0.0);
-  vAs[1].set(2.0, 0.0);
+  vAs[0].x = 0.0;
+  vAs[0].y = 0.0;
+  vAs[1].x = 2.0;
+  vAs[1].y = 0.0;
   countA = 2;
   radiusA = Settings.polygonRadius;
 
-  vBs[0].set(0.0, 0.0);
+  vBs[0].x = 0.0;
+  vBs[0].y = 0.0;
   countB = 1;
   radiusB = 0.25;
 
   // Initial overlap
-  transformA = new Transform(new Vec2(0, 0));
-  transformB = new Transform(new Vec2(-0.244360745, 0.05999358));
+  transformA = new Transform({ x: 0, y: 0 });
+  transformB = new Transform({ x: -0.244360745, y: 0.05999358 });
   transformB.q.setIdentity();
-  translationB = new Vec2(0.0, 0.0399999991);
+  translationB = { x: 0.0, y: 0.0399999991 };
 }
 
 testbed.step = function () {

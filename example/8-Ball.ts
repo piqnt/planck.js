@@ -1,4 +1,4 @@
-import { Vec2, World, Circle, Settings, Polygon, Testbed, Vec2Value, Contact, Body } from "planck";
+import { World, Circle, Settings, Polygon, Testbed, Vec2Value, Contact, Body } from "planck";
 
 const POCKET = "pocket";
 const BALL = "ball";
@@ -115,37 +115,52 @@ class BilliardPhysics {
     const SPI4 = Math.sin(Math.PI / 4);
 
     const topLeftRail = [
-      new Vec2(POCKET_RADIUS, TABLE_HEIGHT * 0.5),
-      new Vec2(POCKET_RADIUS, TABLE_HEIGHT * 0.5 + POCKET_RADIUS),
-      new Vec2(
-        TABLE_WIDTH * 0.5 - POCKET_RADIUS / SPI4 + POCKET_RADIUS,
-        TABLE_HEIGHT * 0.5 + POCKET_RADIUS,
-      ),
-      new Vec2(TABLE_WIDTH * 0.5 - POCKET_RADIUS / SPI4, TABLE_HEIGHT * 0.5),
+      {
+        x: POCKET_RADIUS,
+        y: TABLE_HEIGHT * 0.5,
+      },
+      {
+        x: POCKET_RADIUS,
+        y: TABLE_HEIGHT * 0.5 + POCKET_RADIUS,
+      },
+      {
+        x: TABLE_WIDTH * 0.5 - POCKET_RADIUS / SPI4 + POCKET_RADIUS,
+        y: TABLE_HEIGHT * 0.5 + POCKET_RADIUS,
+      },
+      {
+        x: TABLE_WIDTH * 0.5 - POCKET_RADIUS / SPI4,
+        y: TABLE_HEIGHT * 0.5,
+      },
     ];
 
     const leftRail = [
-      new Vec2(TABLE_WIDTH * 0.5, -(TABLE_HEIGHT * 0.5 - POCKET_RADIUS / SPI4)),
-      new Vec2(
-        TABLE_WIDTH * 0.5 + POCKET_RADIUS,
-        -(TABLE_HEIGHT * 0.5 - POCKET_RADIUS / SPI4 + POCKET_RADIUS),
-      ),
-      new Vec2(
-        TABLE_WIDTH * 0.5 + POCKET_RADIUS,
-        TABLE_HEIGHT * 0.5 - POCKET_RADIUS / SPI4 + POCKET_RADIUS,
-      ),
-      new Vec2(TABLE_WIDTH * 0.5, TABLE_HEIGHT * 0.5 - POCKET_RADIUS / SPI4),
+      {
+        x: TABLE_WIDTH * 0.5,
+        y: -(TABLE_HEIGHT * 0.5 - POCKET_RADIUS / SPI4),
+      },
+      {
+        x: TABLE_WIDTH * 0.5 + POCKET_RADIUS,
+        y: -(TABLE_HEIGHT * 0.5 - POCKET_RADIUS / SPI4 + POCKET_RADIUS),
+      },
+      {
+        x: TABLE_WIDTH * 0.5 + POCKET_RADIUS,
+        y: TABLE_HEIGHT * 0.5 - POCKET_RADIUS / SPI4 + POCKET_RADIUS,
+      },
+      {
+        x: TABLE_WIDTH * 0.5,
+        y: TABLE_HEIGHT * 0.5 - POCKET_RADIUS / SPI4,
+      },
     ];
 
     const rails: Vec2Value[][] = [];
 
     rails.push(leftRail);
-    rails.push(leftRail.map((v) => new Vec2(-v.x, +v.y)));
+    rails.push(leftRail.map((v) => ({ x: -v.x, y: +v.y })));
 
     rails.push(topLeftRail);
-    rails.push(topLeftRail.map((v) => new Vec2(-v.x, +v.y)));
-    rails.push(topLeftRail.map((v) => new Vec2(+v.x, -v.y)));
-    rails.push(topLeftRail.map((v) => new Vec2(-v.x, -v.y)));
+    rails.push(topLeftRail.map((v) => ({ x: -v.x, y: +v.y })));
+    rails.push(topLeftRail.map((v) => ({ x: +v.x, y: -v.y })));
+    rails.push(topLeftRail.map((v) => ({ x: -v.x, y: -v.y })));
 
     for (let i = 0; i < rails.length; i++) {
       const body = this.world.createBody();
@@ -158,20 +173,30 @@ class BilliardPhysics {
     }
 
     const pockets: Vec2Value[] = [];
-    pockets.push(new Vec2(0, -TABLE_HEIGHT * 0.5 - POCKET_RADIUS * 1.5));
-    pockets.push(new Vec2(0, +TABLE_HEIGHT * 0.5 + POCKET_RADIUS * 1.5));
-    pockets.push(
-      new Vec2(+TABLE_WIDTH * 0.5 + POCKET_RADIUS * 0.7, +TABLE_HEIGHT * 0.5 + POCKET_RADIUS * 0.7),
-    );
-    pockets.push(
-      new Vec2(-TABLE_WIDTH * 0.5 - POCKET_RADIUS * 0.7, +TABLE_HEIGHT * 0.5 + POCKET_RADIUS * 0.7),
-    );
-    pockets.push(
-      new Vec2(+TABLE_WIDTH * 0.5 + POCKET_RADIUS * 0.7, -TABLE_HEIGHT * 0.5 - POCKET_RADIUS * 0.7),
-    );
-    pockets.push(
-      new Vec2(-TABLE_WIDTH * 0.5 - POCKET_RADIUS * 0.7, -TABLE_HEIGHT * 0.5 - POCKET_RADIUS * 0.7),
-    );
+    pockets.push({
+      x: 0,
+      y: -TABLE_HEIGHT * 0.5 - POCKET_RADIUS * 1.5,
+    });
+    pockets.push({
+      x: 0,
+      y: +TABLE_HEIGHT * 0.5 + POCKET_RADIUS * 1.5,
+    });
+    pockets.push({
+      x: +TABLE_WIDTH * 0.5 + POCKET_RADIUS * 0.7,
+      y: +TABLE_HEIGHT * 0.5 + POCKET_RADIUS * 0.7,
+    });
+    pockets.push({
+      x: -TABLE_WIDTH * 0.5 - POCKET_RADIUS * 0.7,
+      y: +TABLE_HEIGHT * 0.5 + POCKET_RADIUS * 0.7,
+    });
+    pockets.push({
+      x: +TABLE_WIDTH * 0.5 + POCKET_RADIUS * 0.7,
+      y: -TABLE_HEIGHT * 0.5 - POCKET_RADIUS * 0.7,
+    });
+    pockets.push({
+      x: -TABLE_WIDTH * 0.5 - POCKET_RADIUS * 0.7,
+      y: -TABLE_HEIGHT * 0.5 - POCKET_RADIUS * 0.7,
+    });
 
     for (let i = 0; i < pockets.length; i++) {
       const body = this.world.createBody({

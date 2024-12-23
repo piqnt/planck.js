@@ -18,7 +18,7 @@ import {
   Testbed,
 } from "planck";
 
-const world = new World(new Vec2(0, -10));
+const world = new World({ x: 0, y: -10 });
 
 const testbed = Testbed.mount();
 testbed.start(world);
@@ -39,16 +39,24 @@ const shapes: Shape[] = [];
     const x2 = x1 + 0.5;
     const y2 = 2.0 * Math.cos((x2 / 10.0) * Math.PI);
 
-    ground.createFixture(new Edge(new Vec2(x1, y1), new Vec2(x2, y2)), 0.0);
+    ground.createFixture(new Edge({ x: x1, y: y1 }, { x: x2, y: y2 }), 0.0);
 
     x1 = x2;
     y1 = y2;
   }
 }
 
-shapes[0] = new Polygon([new Vec2(-0.5, 0.0), new Vec2(0.5, 0.0), new Vec2(0.0, 1.5)]);
+shapes[0] = new Polygon([
+  { x: -0.5, y: 0.0 },
+  { x: 0.5, y: 0.0 },
+  { x: 0.0, y: 1.5 },
+]);
 
-shapes[1] = new Polygon([new Vec2(-0.1, 0.0), new Vec2(0.1, 0.0), new Vec2(0.0, 1.5)]);
+shapes[1] = new Polygon([
+  { x: -0.1, y: 0.0 },
+  { x: 0.1, y: 0.0 },
+  { x: 0.0, y: 1.5 },
+]);
 
 {
   const w = 1.0;
@@ -56,14 +64,14 @@ shapes[1] = new Polygon([new Vec2(-0.1, 0.0), new Vec2(0.1, 0.0), new Vec2(0.0, 
   const s = Math.sqrt(2.0) * b;
 
   const vertices = [
-    new Vec2(0.5 * s, 0.0),
-    new Vec2(0.5 * w, b),
-    new Vec2(0.5 * w, b + s),
-    new Vec2(0.5 * s, w),
-    new Vec2(-0.5 * s, w),
-    new Vec2(-0.5 * w, b + s),
-    new Vec2(-0.5 * w, b),
-    new Vec2(-0.5 * s, 0.0),
+    { x: 0.5 * s, y: 0.0 },
+    { x: 0.5 * w, y: b },
+    { x: 0.5 * w, y: b + s },
+    { x: 0.5 * s, y: w },
+    { x: -0.5 * s, y: w },
+    { x: -0.5 * w, y: b + s },
+    { x: -0.5 * w, y: b },
+    { x: -0.5 * s, y: 0.0 },
   ];
 
   shapes[2] = new Polygon(vertices);
@@ -81,7 +89,10 @@ function createItem(index: number) {
   }
 
   const bd: BodyDef = {
-    position: new Vec2(Math.random(-10.0, 10.0), Math.random(10.0, 20.0)),
+    position: {
+      x: Math.random(-10.0, 10.0),
+      y: Math.random(10.0, 20.0),
+    },
     angle: Math.random(-Math.PI, Math.PI),
     type: "dynamic",
   };
@@ -159,8 +170,11 @@ testbed.step = function () {
   const advanceRay = !pause; // settings.pause == 0 || settings.singleStep;
 
   const L = 25.0;
-  const point1 = new Vec2(0.0, 10.0);
-  const d = new Vec2(L * Math.cos(angle), -L * Math.abs(Math.sin(angle)));
+  const point1 = { x: 0.0, y: 10.0 };
+  const d = {
+    x: L * Math.cos(angle),
+    y: -L * Math.abs(Math.sin(angle)),
+  };
   const point2 = Vec2.add(point1, d);
 
   rayCastReset();

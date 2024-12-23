@@ -106,28 +106,28 @@ const ballShape = new CircleShape(0.5);
 const normalBrickShape = new BoxShape(1.9 / 2, 1.9 / 2);
 const smallBrickShape = new BoxShape(0.9 / 2, 0.9 / 2);
 const miniPaddleShape = new PolygonShape([
-  new Vec2(1.7, -0.2),
-  new Vec2(1.8, -0.1),
-  new Vec2(1.8, 0.1),
-  new Vec2(1.7, 0.2),
-  new Vec2(1.2, 0.4),
-  new Vec2(0.4, 0.6),
-  new Vec2(-0.4, 0.6),
-  new Vec2(-1.2, 0.4),
-  new Vec2(-1.7, 0.2),
-  new Vec2(-1.8, 0.1),
-  new Vec2(-1.8, -0.1),
-  new Vec2(-1.7, -0.2),
+  { x: 1.7, y: -0.2 },
+  { x: 1.8, y: -0.1 },
+  { x: 1.8, y: 0.1 },
+  { x: 1.7, y: 0.2 },
+  { x: 1.2, y: 0.4 },
+  { x: 0.4, y: 0.6 },
+  { x: -0.4, y: 0.6 },
+  { x: -1.2, y: 0.4 },
+  { x: -1.7, y: 0.2 },
+  { x: -1.8, y: 0.1 },
+  { x: -1.8, y: -0.1 },
+  { x: -1.7, y: -0.2 },
 ]);
 const fullPaddleShape = new PolygonShape([
-  new Vec2(1.2, -0.1),
-  new Vec2(1.2, 0.1),
-  new Vec2(0.9, 0.4),
-  new Vec2(0.2, 0.6),
-  new Vec2(-0.2, 0.6),
-  new Vec2(-0.9, 0.4),
-  new Vec2(-1.2, 0.1),
-  new Vec2(-1.2, -0.1),
+  { x: 1.2, y: -0.1 },
+  { x: 1.2, y: 0.1 },
+  { x: 0.9, y: 0.4 },
+  { x: 0.2, y: 0.6 },
+  { x: -0.2, y: 0.6 },
+  { x: -0.9, y: 0.4 },
+  { x: -1.2, y: 0.1 },
+  { x: -1.2, y: -0.1 },
 ]);
 class BreakoutPhysics {
   client?: BreakoutPhysicsClientInterface;
@@ -172,7 +172,7 @@ class BreakoutPhysics {
     const ball = this.balls[0];
     const a = Math.PI * Math.random() * 0.4 - 0.2;
     const speed = 10;
-    ball.setLinearVelocity(new Vec2(speed * Math.sin(a), speed * Math.cos(a)));
+    ball.setLinearVelocity({ x: speed * Math.sin(a), y: speed * Math.cos(a) });
   }
 
   collidePhysics = (contact: Contact) => {
@@ -215,28 +215,28 @@ class BreakoutPhysics {
 
   createBoardPhysics() {
     {
-      const wall = this.world.createBody(new Vec2(+9, -0.5));
-      wall.createFixture(new EdgeShape(new Vec2(0, -12.5), new Vec2(0, +11.5)), wallFix);
+      const wall = this.world.createBody({ x: +9, y: -0.5 });
+      wall.createFixture(new EdgeShape({ x: 0, y: -12.5 }, { x: 0, y: +11.5 }), wallFix);
     }
     {
-      const wall = this.world.createBody(new Vec2(-9, -0.5));
-      wall.createFixture(new EdgeShape(new Vec2(0, -12.5), new Vec2(0, +11.5)), wallFix);
+      const wall = this.world.createBody({ x: -9, y: -0.5 });
+      wall.createFixture(new EdgeShape({ x: 0, y: -12.5 }, { x: 0, y: +11.5 }), wallFix);
     }
     {
-      const wall = this.world.createBody(new Vec2(0, +12));
-      wall.createFixture(new EdgeShape(new Vec2(-8, 0), new Vec2(+8, 0)), wallFix);
+      const wall = this.world.createBody({ x: 0, y: +12 });
+      wall.createFixture(new EdgeShape({ x: -8, y: 0 }, { x: +8, y: 0 }), wallFix);
     }
     {
-      const wall = this.world.createBody(new Vec2(9, 12));
-      wall.createFixture(new EdgeShape(new Vec2(-1, 0), new Vec2(0, -1)), wallFix);
+      const wall = this.world.createBody({ x: 9, y: 12 });
+      wall.createFixture(new EdgeShape({ x: -1, y: 0 }, { x: 0, y: -1 }), wallFix);
     }
     {
-      const wall = this.world.createBody(new Vec2(-9, 12));
-      wall.createFixture(new EdgeShape(new Vec2(1, 0), new Vec2(0, -1)), wallFix);
+      const wall = this.world.createBody({ x: -9, y: 12 });
+      wall.createFixture(new EdgeShape({ x: 1, y: 0 }, { x: 0, y: -1 }), wallFix);
     }
     {
-      const wall = this.world.createBody(new Vec2(0, -13));
-      wall.createFixture(new EdgeShape(new Vec2(-9, 0), new Vec2(+9, 0)), wallFix);
+      const wall = this.world.createBody({ x: 0, y: -13 });
+      wall.createFixture(new EdgeShape({ x: -9, y: 0 }, { x: +9, y: 0 }), wallFix);
 
       wall.setUserData(new WallData());
       this.bottomWall = wall;
@@ -254,7 +254,7 @@ class BreakoutPhysics {
 
     const body = this.world.createBody({
       type: "kinematic",
-      position: new Vec2(0, -10.5),
+      position: { x: 0, y: -10.5 },
     });
 
     body.createFixture(shape, paddleFix);
@@ -284,7 +284,7 @@ class BreakoutPhysics {
       body.setPosition(oldBall.getPosition());
       body.setLinearVelocity(Vec2.neg(oldBall.getLinearVelocity()));
     } else {
-      body.setPosition(new Vec2(0, -5));
+      body.setPosition({ x: 0, y: -5 });
     }
 
     body.setUserData(data);
@@ -300,7 +300,7 @@ class BreakoutPhysics {
 
   addBrickPhysics(data: BrickData) {
     const shape = data.subtype == "small" ? smallBrickShape : normalBrickShape;
-    const pos = new Vec2((data.i - 3) * 2, 9 - data.j * 2);
+    const pos = { x: (data.i - 3) * 2, y: 9 - data.j * 2 };
     const body = this.world.createBody(pos);
     body.createFixture(shape, brickFix);
 
@@ -311,7 +311,7 @@ class BreakoutPhysics {
 
   updateBrickPhysics(data: BrickData) {
     const body = data.body;
-    body.setPosition(new Vec2((data.i - 3) * 2, 9 - data.j * 2));
+    body.setPosition({ x: (data.i - 3) * 2, y: 9 - data.j * 2 });
   }
 
   removeBrickPhysics(data: BrickData) {
@@ -330,8 +330,8 @@ class BreakoutPhysics {
     } else {
       body.createFixture(new CircleShape(0.3), dropFix);
     }
-    body.setPosition(new Vec2((drop.i - 3) * 2, 9 - drop.j * 2));
-    body.setLinearVelocity(new Vec2(0, drop.speed));
+    body.setPosition({ x: (drop.i - 3) * 2, y: 9 - drop.j * 2 });
+    body.setLinearVelocity({ x: 0, y: drop.speed });
 
     body.setUserData(drop);
     drop.body = body;
@@ -345,13 +345,13 @@ class BreakoutPhysics {
   }
 
   movePaddlePhysics(dir: number) {
-    let p = this.paddle.getPosition();
-    p = new Vec2(dir, 0).add(p);
+    const from = this.paddle.getPosition();
+    const to = { x: dir + from.x, y: 0 + from.y };
     const data = this.paddle.getUserData() as PaddleData;
     const paddleWidth = data.subtype == "mini" ? 2.4 : 3.6;
     const maxX = 9 - paddleWidth / 2;
-    p.x = Math.min(maxX, Math.max(-maxX, p.x));
-    this.paddle.setPosition(p);
+    to.x = Math.min(maxX, Math.max(-maxX, to.x));
+    this.paddle.setPosition(to);
   }
 }
 

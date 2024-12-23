@@ -24,8 +24,8 @@ let shape: PolygonShape;
 generate();
 
 function generate() {
-  const lowerBound = new Vec2(-8.0, -8.0);
-  const upperBound = new Vec2(8.0, 8.0);
+  const lowerBound = { x: -8.0, y: -8.0 };
+  const upperBound = { x: 8.0, y: 8.0 };
 
   points.length = 0;
   for (let i = 0; i < COUNT; ++i) {
@@ -34,7 +34,7 @@ function generate() {
 
     // Clamp onto a square to help create collinearities.
     // This will stress the convex hull algorithm.
-    const v = Vec2.clampVec2(new Vec2(x, y), lowerBound, upperBound);
+    const v = Vec2.clampVec2({ x: x, y: y }, lowerBound, upperBound);
     points.push(v);
   }
 
@@ -58,7 +58,7 @@ testbed.step = function () {
 
   for (let i = 0; i < points.length; ++i) {
     testbed.drawPoint(points[i], 3.0, testbed.color(0.3, 0.9, 0.3));
-    // testbed.drawString(points[i] + new Vec2(0.05, 0.05), "%d", i);
+    // testbed.drawString(points[i] + ({ x: 0.05, y:  0.05 }), "%d", i);
   }
 
   // if (shape.validate() == false) {

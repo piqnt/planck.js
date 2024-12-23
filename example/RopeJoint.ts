@@ -12,7 +12,7 @@
 // This test also shows how to use contact filtering. Filtering is configured
 // so that the payload does not collide with the chain.
 
-import { Vec2, World, Edge, Box, RevoluteJoint, RopeJoint, Testbed, BodyDef } from "planck";
+import { World, Edge, Box, RevoluteJoint, RopeJoint, Testbed, BodyDef } from "planck";
 
 const world = new World({ x: 0, y: -10 });
 
@@ -22,7 +22,7 @@ testbed.start(world);
 
 const ground = world.createBody();
 
-ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
+ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
 
 const segmentDef = {
   density: 20.0,
@@ -43,13 +43,13 @@ for (let i = 0; i < N; ++i) {
   let shape = new Box(0.5, 0.125);
   const bd: BodyDef = {
     type: "dynamic",
-    position: new Vec2(0.5 + 1.0 * i, y),
+    position: { x: 0.5 + 1.0 * i, y: y },
   };
   if (i === N - 1) {
     shape = new Box(1.5, 1.5);
     segmentDef.density = 100.0;
     segmentDef.filterCategoryBits = 0x0002;
-    bd.position = new Vec2(1.0 * i, y);
+    bd.position = { x: 1.0 * i, y: y };
     bd.angularDamping = 0.4;
   }
 
@@ -57,7 +57,7 @@ for (let i = 0; i < N; ++i) {
 
   body.createFixture(shape, segmentDef);
 
-  const anchor = new Vec2(i, y);
+  const anchor = { x: i, y: y };
   world.createJoint(new RevoluteJoint(segmentJointDef, prevBody, body, anchor));
 
   prevBody = body;
@@ -65,8 +65,8 @@ for (let i = 0; i < N; ++i) {
 
 const ropeJointDef = {
   maxLength: N - 1.0 + 0.01,
-  localAnchorA: new Vec2(0.0, y),
-  localAnchorB: new Vec2(0, 0),
+  localAnchorA: { x: 0.0, y: y },
+  localAnchorB: { x: 0, y: 0 },
 };
 
 let rope = world.createJoint(new RopeJoint(ropeJointDef, ground, prevBody));

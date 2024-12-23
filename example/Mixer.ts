@@ -1,34 +1,45 @@
-import { Vec2, World, Edge, Circle, Box, Chain, Math, Testbed } from "planck";
+import { World, Edge, Circle, Box, Chain, Math, Testbed } from "planck";
 
-const world = new World(new Vec2(0, -10));
+const world = new World({ x: 0, y: -10 });
 
 const testbed = Testbed.mount();
 testbed.y = 0;
 testbed.start(world);
 
 const container = world.createKinematicBody();
-container.createFixture(new Edge(new Vec2(15, -5), new Vec2(25, 5)));
-container.createFixture(new Circle(new Vec2(-10, -10), 3));
-container.createFixture(new Circle(new Vec2(10, 10), 3));
-container.createFixture(new Box(3, 3, new Vec2(-10, 10)));
-container.createFixture(new Box(3, 3, new Vec2(10, -10)));
+container.createFixture(new Edge({ x: 15, y: -5 }, { x: 25, y: 5 }));
+container.createFixture(new Circle({ x: -10, y: -10 }, 3));
+container.createFixture(new Circle({ x: 10, y: 10 }, 3));
+container.createFixture(new Box(3, 3, { x: -10, y: 10 }));
+container.createFixture(new Box(3, 3, { x: 10, y: -10 }));
 
 container.createFixture(
-  new Chain([new Vec2(-20, -20), new Vec2(20, -20), new Vec2(20, 20), new Vec2(-20, 20)], true),
+  new Chain(
+    [
+      { x: -20, y: -20 },
+      { x: 20, y: -20 },
+      { x: 20, y: 20 },
+      { x: -20, y: 20 },
+    ],
+    true,
+  ),
 );
 
 const n = 15;
 
 for (let i = -n; i <= n; i++) {
   for (let j = -n; j <= n; j++) {
-    const particle = world.createDynamicBody(new Vec2(i * 1, j * 1));
+    const particle = world.createDynamicBody({ x: i * 1, y: j * 1 });
     particle.createFixture(Math.random() > 0.5 ? new Circle(0.4) : new Box(0.4, 0.4));
     particle.setMassData({
       mass: 2,
-      center: new Vec2(),
+      center: { x: 0, y: 0 },
       I: 0.4,
     });
-    particle.applyForceToCenter(new Vec2(Math.random(-100, 100), Math.random(-100, 100)));
+    particle.applyForceToCenter({
+      x: Math.random(-100, 100),
+      y: Math.random(-100, 100),
+    });
   }
 }
 

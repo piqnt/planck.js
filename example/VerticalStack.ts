@@ -3,10 +3,10 @@
  * Licensed under the MIT license
  */
 
-import { World, Body, Vec2, Edge, Circle, Box, Testbed } from "planck";
+import { World, Body, Edge, Circle, Box, Testbed } from "planck";
 
 const world = new World({
-  gravity: new Vec2(0, -10),
+  gravity: { x: 0, y: -10 },
   blockSolve: true,
 });
 
@@ -22,8 +22,8 @@ const bodies: Body[] = [];
 const indices: number[] = [];
 
 const ground = world.createBody();
-ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)));
-ground.createFixture(new Edge(new Vec2(20.0, 0.0), new Vec2(20.0, 20.0)));
+ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }));
+ground.createFixture(new Edge({ x: 20.0, y: 0.0 }, { x: 20.0, y: 20.0 }));
 
 const xs = [0.0, -10.0, -5.0, 5.0, 10.0];
 
@@ -39,7 +39,7 @@ for (let j = 0; j < columnCount; ++j) {
 
     const body = world.createDynamicBody();
     body.setUserData(indices[n]);
-    body.setPosition(new Vec2(xs[j] + x, 0.55 + 1.1 * i));
+    body.setPosition({ x: xs[j] + x, y: 0.55 + 1.1 * i });
     body.createFixture(shape, {
       density: 1.0,
       friction: 0.3,
@@ -60,7 +60,7 @@ testbed.keydown = function (code, char) {
       bullet = world.createBody({
         type: "dynamic",
         bullet: true,
-        position: new Vec2(-31.0, 5.0),
+        position: { x: -31.0, y: 5.0 },
       });
 
       bullet.createFixture({
@@ -69,7 +69,7 @@ testbed.keydown = function (code, char) {
         restitution: 0.05,
       });
 
-      bullet.setLinearVelocity(new Vec2(400.0, 0.0));
+      bullet.setLinearVelocity({ x: 400.0, y: 0.0 });
       break;
 
     case "Z":
@@ -93,7 +93,7 @@ testbed.step = function () {
     bullet = world.createBody({
       type: "dynamic",
       bullet: true,
-      position: new Vec2(-31.0, 5.0),
+      position: { x: -31.0, y: 5.0 },
     });
     bullet.createFixture({
       shape: new Circle(0.25),
@@ -101,6 +101,9 @@ testbed.step = function () {
       restitution: 0.05,
     });
 
-    bullet.setLinearVelocity(new Vec2(400.0, Math.random() * 100 - 50));
+    bullet.setLinearVelocity({
+      x: 400.0,
+      y: Math.random() * 100 - 50,
+    });
   }
 };

@@ -4,7 +4,6 @@
  */
 
 import {
-  Vec2,
   Transform,
   AABB,
   CircleShape,
@@ -27,7 +26,7 @@ import {
 // overlap a circle. Up to 4 overlapped fixtures will be highlighted with a
 // yellow border.
 
-const world = new World(new Vec2(0, -10));
+const world = new World({ x: 0, y: -10 });
 const testbed = Testbed.mount();
 testbed.start(world);
 
@@ -38,11 +37,19 @@ const bodies: Body[] = [];
 const shapes: Shape[] = [];
 
 const ground = world.createBody();
-ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
+ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
 
-shapes[0] = new Polygon([new Vec2(-0.5, 0.0), new Vec2(0.5, 0.0), new Vec2(0.0, 1.5)]);
+shapes[0] = new Polygon([
+  { x: -0.5, y: 0.0 },
+  { x: 0.5, y: 0.0 },
+  { x: 0.0, y: 1.5 },
+]);
 
-shapes[1] = new Polygon([new Vec2(-0.1, 0.0), new Vec2(0.1, 0.0), new Vec2(0.0, 1.5)]);
+shapes[1] = new Polygon([
+  { x: -0.1, y: 0.0 },
+  { x: 0.1, y: 0.0 },
+  { x: 0.0, y: 1.5 },
+]);
 
 {
   const w = 1.0;
@@ -50,14 +57,14 @@ shapes[1] = new Polygon([new Vec2(-0.1, 0.0), new Vec2(0.1, 0.0), new Vec2(0.0, 
   const s = Math.sqrt(2.0) * b;
 
   shapes[2] = new Polygon([
-    new Vec2(0.5 * s, 0.0),
-    new Vec2(0.5 * w, b),
-    new Vec2(0.5 * w, b + s),
-    new Vec2(0.5 * s, w),
-    new Vec2(-0.5 * s, w),
-    new Vec2(-0.5 * w, b + s),
-    new Vec2(-0.5 * w, b),
-    new Vec2(-0.5 * s, 0.0),
+    { x: 0.5 * s, y: 0.0 },
+    { x: 0.5 * w, y: b },
+    { x: 0.5 * w, y: b + s },
+    { x: 0.5 * s, y: w },
+    { x: -0.5 * s, y: w },
+    { x: -0.5 * w, y: b + s },
+    { x: -0.5 * w, y: b },
+    { x: -0.5 * s, y: 0.0 },
   ]);
 }
 
@@ -72,7 +79,7 @@ function createBody(index: number) {
 
   const bd: BodyDef = {
     type: "dynamic",
-    position: new Vec2(Math.random() * 0.4 - 2.0, 10.0),
+    position: { x: Math.random() * 0.4 - 2.0, y: 10.0 },
     angle: Math.random() * 2 * Math.PI - Math.PI,
   };
 
@@ -132,7 +139,7 @@ testbed.keydown = function (code, char) {
 testbed.info("1-5: Drop new objects, Z: Activate/deactivate some bodies, X: Destroy an object");
 
 const aabb = new AABB();
-const circle = new CircleShape(new Vec2(0.0, 1.1), 2.0);
+const circle = new CircleShape({ x: 0.0, y: 1.1 }, 2.0);
 const transform = new Transform();
 let count = 0;
 

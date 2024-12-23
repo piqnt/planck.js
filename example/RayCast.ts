@@ -139,7 +139,7 @@ function callbackMultiple(
   return 1.0;
 }
 
-const world = new World(new Vec2(0, -10));
+const world = new World({ x: 0, y: -10 });
 
 const testbed = Testbed.mount();
 testbed.width = 40;
@@ -160,27 +160,35 @@ const shapes: Shape[] = [];
 let angle = 0.0;
 let mode = CLOSEST;
 
-shapes[0] = new Polygon([new Vec2(-0.5, 0.0), new Vec2(0.5, 0.0), new Vec2(0.0, 1.5)]);
-shapes[1] = new Polygon([new Vec2(-0.1, 0.0), new Vec2(0.1, 0.0), new Vec2(0.0, 1.5)]);
+shapes[0] = new Polygon([
+  { x: -0.5, y: 0.0 },
+  { x: 0.5, y: 0.0 },
+  { x: 0.0, y: 1.5 },
+]);
+shapes[1] = new Polygon([
+  { x: -0.1, y: 0.0 },
+  { x: 0.1, y: 0.0 },
+  { x: 0.0, y: 1.5 },
+]);
 
 const w = 1.0;
 const b = w / (2.0 + Math.sqrt(2.0));
 const s = Math.sqrt(2.0) * b;
 
 shapes[2] = new Polygon([
-  new Vec2(0.5 * s, 0.0),
-  new Vec2(0.5 * w, b),
-  new Vec2(0.5 * w, b + s),
-  new Vec2(0.5 * s, w),
-  new Vec2(-0.5 * s, w),
-  new Vec2(-0.5 * w, b + s),
-  new Vec2(-0.5 * w, b),
-  new Vec2(-0.5 * s, 0.0),
+  { x: 0.5 * s, y: 0.0 },
+  { x: 0.5 * w, y: b },
+  { x: 0.5 * w, y: b + s },
+  { x: 0.5 * s, y: w },
+  { x: -0.5 * s, y: w },
+  { x: -0.5 * w, y: b + s },
+  { x: -0.5 * w, y: b },
+  { x: -0.5 * s, y: 0.0 },
 ]);
 shapes[3] = new Box(0.5, 0.5);
 
 shapes[4] = new Circle(0.5);
-shapes[5] = new Edge(new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0));
+shapes[5] = new Edge({ x: -1.0, y: 0.0 }, { x: 1.0, y: 0.0 });
 
 function createBody(index: number) {
   if (bodies.length > MAX_BODIES) {
@@ -191,7 +199,7 @@ function createBody(index: number) {
   const y = Math.random() * 20;
 
   const bd: BodyDef = {};
-  bd.position = new Vec2(x, y);
+  bd.position = { x: x, y: y };
   bd.angle = Math.random() * 2 * Math.PI - Math.PI;
   bd.userData = index;
 
@@ -270,8 +278,8 @@ testbed.step = function () {
   const advanceRay = true;
 
   const L = 11.0;
-  const point1 = new Vec2(0.0, 10.0);
-  const d = new Vec2(L * Math.cos(angle), L * Math.sin(angle));
+  const point1 = { x: 0.0, y: 10.0 };
+  const d = { x: L * Math.cos(angle), y: L * Math.sin(angle) };
   const point2 = Vec2.add(point1, d);
 
   if (mode === CLOSEST) {
@@ -325,12 +333,12 @@ testbed.step = function () {
     const shape = new Box(22.875, 3.0);
 
     const input = {
-      p1: new Vec2(10.2725, 1.71372),
-      p2: new Vec2(10.2353, 2.21807),
+      p1: { x: 10.2725, y: 1.71372 },
+      p2: { x: 10.2353, y: 2.21807 },
       maxFraction: 0.56762173,
     };
 
-    const xf = new Transform(new Vec2(23.0, 5.0));
+    const xf = new Transform({ x: 23.0, y: 5.0 });
 
     const output = {} as RayCastOutput;
     let hit = shape.rayCast(output, input, xf, 0);

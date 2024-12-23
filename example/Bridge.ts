@@ -3,9 +3,9 @@
  * Licensed under the MIT license
  */
 
-import { Vec2, World, Body, Edge, Box, Polygon, Circle, RevoluteJoint, Testbed } from "planck";
+import { World, Body, Edge, Box, Polygon, Circle, RevoluteJoint, Testbed } from "planck";
 
-const world = new World(new Vec2(0, -4));
+const world = new World({ x: 0, y: -4 });
 
 const testbed = Testbed.mount();
 testbed.start(world);
@@ -15,7 +15,7 @@ const COUNT = 30;
 let middle: Body;
 
 const ground = world.createBody();
-ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
+ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
 
 const bridgeRect = new Box(0.5, 0.125);
 
@@ -26,10 +26,10 @@ const bridgeFD = {
 
 let prevBody = ground;
 for (let i = 0; i < COUNT; ++i) {
-  const body = world.createDynamicBody(new Vec2(-14.5 + 1.0 * i, 5.0));
+  const body = world.createDynamicBody({ x: -14.5 + 1.0 * i, y: 5.0 });
   body.createFixture(bridgeRect, bridgeFD);
 
-  const anchor = new Vec2(-15.0 + 1.0 * i, 5.0);
+  const anchor = { x: -15.0 + 1.0 * i, y: 5.0 };
   world.createJoint(new RevoluteJoint({}, prevBody, body, anchor));
 
   if (i * 2 === COUNT) {
@@ -38,18 +38,22 @@ for (let i = 0; i < COUNT; ++i) {
   prevBody = body;
 }
 
-const anchor = new Vec2(-15.0 + 1.0 * COUNT, 5.0);
+const anchor = { x: -15.0 + 1.0 * COUNT, y: 5.0 };
 world.createJoint(new RevoluteJoint({}, prevBody, ground, anchor));
 
 for (let i = 0; i < 2; ++i) {
-  const body = world.createDynamicBody(new Vec2(-8.0 + 8.0 * i, 12.0));
+  const body = world.createDynamicBody({ x: -8.0 + 8.0 * i, y: 12.0 });
 
-  const vertices = [new Vec2(-0.5, 0.0), new Vec2(0.5, 0.0), new Vec2(0.0, 1.5)];
+  const vertices = [
+    { x: -0.5, y: 0.0 },
+    { x: 0.5, y: 0.0 },
+    { x: 0.0, y: 1.5 },
+  ];
   body.createFixture(new Polygon(vertices), 1.0);
 }
 
 const shape = new Circle(0.5);
 for (let i = 0; i < 3; ++i) {
-  const body = world.createDynamicBody(new Vec2(-6.0 + 6.0 * i, 10.0));
+  const body = world.createDynamicBody({ x: -6.0 + 6.0 * i, y: 10.0 });
   body.createFixture(shape, 1.0);
 }

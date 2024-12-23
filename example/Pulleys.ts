@@ -3,9 +3,9 @@
  * Licensed under the MIT license
  */
 
-import { Vec2, World, Circle, Box, PulleyJoint, Testbed } from "planck";
+import { World, Circle, Box, PulleyJoint, Testbed } from "planck";
 
-const world = new World(new Vec2(0, -10));
+const world = new World({ x: 0, y: -10 });
 
 const testbed = Testbed.mount();
 testbed.start(world);
@@ -17,24 +17,24 @@ const b = 2.0;
 
 const ground = world.createBody();
 
-// ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
+// ground.createFixture(new Edge(({ x: -40.0, y:  0.0 }), ({ x: 40.0, y:  0.0 })), 0.0);
 
-ground.createFixture(new Circle(new Vec2(-10.0, y + b + L), 2.0), 0.0);
-ground.createFixture(new Circle(new Vec2(10.0, y + b + L), 2.0), 0.0);
+ground.createFixture(new Circle({ x: -10.0, y: y + b + L }, 2.0), 0.0);
+ground.createFixture(new Circle({ x: 10.0, y: y + b + L }, 2.0), 0.0);
 
 const shape = new Box(a, b);
 
 // bd.fixedRotation = true;
-const box1 = world.createDynamicBody(new Vec2(-10.0, y));
+const box1 = world.createDynamicBody({ x: -10.0, y: y });
 box1.createFixture(shape, 5.0);
 
-const box2 = world.createDynamicBody(new Vec2(10.0, y));
+const box2 = world.createDynamicBody({ x: 10.0, y: y });
 box2.createFixture(shape, 5.0);
 
-const anchor1 = new Vec2(-10.0, y + b);
-const anchor2 = new Vec2(10.0, y + b);
-const groundAnchor1 = new Vec2(-10.0, y + b + L);
-const groundAnchor2 = new Vec2(10.0, y + b + L);
+const anchor1 = { x: -10.0, y: y + b };
+const anchor2 = { x: 10.0, y: y + b };
+const groundAnchor1 = { x: -10.0, y: y + b + L };
+const groundAnchor2 = { x: 10.0, y: y + b + L };
 
 const joint1 = world.createJoint(
   new PulleyJoint({}, box1, box2, groundAnchor1, groundAnchor2, anchor1, anchor2, 1.5),

@@ -10,7 +10,7 @@
 // The 3 large ones never collide.
 // The boxes don't collide with triangles (except if both are small).
 
-import { World, Vec2, Edge, Polygon, Box, Circle, PrismaticJoint, Testbed } from "planck";
+import { World, Edge, Polygon, Box, Circle, PrismaticJoint, Testbed } from "planck";
 
 const SMALL_GROUP = 1;
 const LARGE_GROUP = -1;
@@ -23,14 +23,14 @@ const TRIANGLE_MASK = 0xffff;
 const BOX_MASK = 0xffff ^ TRIANGLE_CATEGORY;
 const CIRCLE_MAX = 0xffff;
 
-const world = new World(new Vec2(0, -10));
+const world = new World({ x: 0, y: -10 });
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
 // Ground body
 const ground = world.createBody();
-ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), {
+ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), {
   friction: 0.3,
 });
 
@@ -44,10 +44,14 @@ const smallTriangle = {
 
 const body1 = world.createBody({
   type: "dynamic",
-  position: new Vec2(-5.0, 2.0),
+  position: { x: -5.0, y: 2.0 },
 });
 body1.createFixture(
-  new Polygon([new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 2.0)]),
+  new Polygon([
+    { x: -1.0, y: 0.0 },
+    { x: 1.0, y: 0.0 },
+    { x: 0.0, y: 2.0 },
+  ]),
   smallTriangle,
 );
 
@@ -61,15 +65,19 @@ const largeTriangle = {
 
 const body2 = world.createBody({
   type: "dynamic",
-  position: new Vec2(-5.0, 6.0),
+  position: { x: -5.0, y: 6.0 },
   fixedRotation: true, // look at me!
 });
 body2.createFixture(
-  new Polygon([new Vec2(-2.0, 0.0), new Vec2(2.0, 0.0), new Vec2(0.0, 4.0)]),
+  new Polygon([
+    { x: -2.0, y: 0.0 },
+    { x: 2.0, y: 0.0 },
+    { x: 0.0, y: 4.0 },
+  ]),
   largeTriangle,
 );
 
-const body = world.createDynamicBody(new Vec2(-5.0, 10.0));
+const body = world.createDynamicBody({ x: -5.0, y: 10.0 });
 body.createFixture(new Box(0.5, 1.0), 1.0);
 
 world.createJoint(
@@ -77,9 +85,9 @@ world.createJoint(
     bodyA: body2,
     bodyB: body,
     enableLimit: true,
-    localAnchorA: new Vec2(0.0, 4.0),
-    localAnchorB: new Vec2(),
-    localAxisA: new Vec2(0.0, 1.0),
+    localAnchorA: { x: 0.0, y: 4.0 },
+    localAnchorB: { x: 0, y: 0 },
+    localAxisA: { x: 0.0, y: 1.0 },
     lowerTranslation: -1.0,
     upperTranslation: 1.0,
   }),
@@ -94,7 +102,7 @@ const smallBox = {
   filterGroupIndex: SMALL_GROUP,
 };
 
-const body3 = world.createDynamicBody(new Vec2(0.0, 2.0));
+const body3 = world.createDynamicBody({ x: 0.0, y: 2.0 });
 body3.createFixture(new Box(1.0, 0.5), smallBox);
 
 // Large box (recycle definitions)
@@ -106,7 +114,7 @@ const largeBox = {
   filterGroupIndex: LARGE_GROUP,
 };
 
-const body4 = world.createDynamicBody(new Vec2(0.0, 6.0));
+const body4 = world.createDynamicBody({ x: 0.0, y: 6.0 });
 body4.createFixture(new Box(2.0, 1.0), largeBox);
 
 // Small circle
@@ -117,7 +125,7 @@ const smallCircle = {
   filterGroupIndex: SMALL_GROUP,
 };
 
-const body5 = world.createDynamicBody(new Vec2(5.0, 2.0));
+const body5 = world.createDynamicBody({ x: 5.0, y: 2.0 });
 body5.createFixture(new Circle(1.0), smallCircle);
 
 // Large circle
@@ -128,5 +136,5 @@ const largeCircle = {
   filterGroupIndex: LARGE_GROUP,
 };
 
-const body6 = world.createDynamicBody(new Vec2(5.0, 6.0));
+const body6 = world.createDynamicBody({ x: 5.0, y: 6.0 });
 body6.createFixture(new Circle(2.0), largeCircle);

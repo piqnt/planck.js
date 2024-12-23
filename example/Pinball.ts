@@ -6,9 +6,9 @@
 // This tests bullet collision and provides an example of a gameplay scenario.
 // This also uses a loop shape.
 
-import { World, Vec2, Circle, Box, Chain, RevoluteJoint, Testbed } from "planck";
+import { World, Circle, Box, Chain, RevoluteJoint, Testbed } from "planck";
 
-const world = new World(new Vec2(0, -10));
+const world = new World({ x: 0, y: -10 });
 
 const testbed = Testbed.mount();
 testbed.start(world);
@@ -18,11 +18,11 @@ const ground = world.createBody();
 ground.createFixture(
   new Chain(
     [
-      new Vec2(0.0, -2.0),
-      new Vec2(8.0, 6.0),
-      new Vec2(8.0, 20.0),
-      new Vec2(-8.0, 20.0),
-      new Vec2(-8.0, 6.0),
+      { x: 0.0, y: -2.0 },
+      { x: 8.0, y: 6.0 },
+      { x: 8.0, y: 20.0 },
+      { x: -8.0, y: 20.0 },
+      { x: -8.0, y: 6.0 },
     ],
     true,
   ),
@@ -30,11 +30,11 @@ ground.createFixture(
 );
 
 // Flippers
-const pLeft = new Vec2(-2.0, 0.0);
-const pRight = new Vec2(2.0, 0.0);
+const pLeft = { x: -2.0, y: 0.0 };
+const pRight = { x: 2.0, y: 0.0 };
 
-const leftFlipper = world.createDynamicBody(new Vec2(-2.0, 0.0));
-const rightFlipper = world.createDynamicBody(new Vec2(2.0, 0.0));
+const leftFlipper = world.createDynamicBody({ x: -2.0, y: 0.0 });
+const rightFlipper = world.createDynamicBody({ x: 2.0, y: 0.0 });
 
 leftFlipper.createFixture(new Box(1.75, 0.1), 1.0);
 rightFlipper.createFixture(new Box(1.75, 0.1), 1.0);
@@ -72,7 +72,7 @@ world.createJoint(rightJoint);
 
 // Circle character
 const ball = world.createBody({
-  position: new Vec2(1.0, 15.0),
+  position: { x: 1.0, y: 15.0 },
   type: "dynamic",
   bullet: true,
 });

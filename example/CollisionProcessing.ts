@@ -3,29 +3,17 @@
  * Licensed under the MIT license
  */
 
-import {
-  World,
-  Body,
-  Fixture,
-  Vec2,
-  Vec2Value,
-  Edge,
-  Polygon,
-  Box,
-  Circle,
-  Math,
-  Testbed,
-} from "planck";
+import { World, Body, Fixture, Vec2Value, Edge, Polygon, Box, Circle, Math, Testbed } from "planck";
 
 // This test shows collision processing and tests
 // deferred body destruction.
-const world = new World(new Vec2(0, -10));
+const world = new World({ x: 0, y: -10 });
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
 // Ground body
-world.createBody().createFixture(new Edge(new Vec2(-50.0, 0.0), new Vec2(50.0, 0.0)));
+world.createBody().createFixture(new Edge({ x: -50.0, y: 0.0 }, { x: 50.0, y: 0.0 }));
 
 const xLo = -5.0;
 const xHi = 5.0;
@@ -33,33 +21,59 @@ const yLo = 2.0;
 const yHi = 35.0;
 
 // Small triangle
-const body1 = world.createDynamicBody(new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi)));
+const body1 = world.createDynamicBody({
+  x: Math.random(xLo, xHi),
+  y: Math.random(yLo, yHi),
+});
 body1.createFixture(
-  new Polygon([new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 2.0)]),
+  new Polygon([
+    { x: -1.0, y: 0.0 },
+    { x: 1.0, y: 0.0 },
+    { x: 0.0, y: 2.0 },
+  ]),
   1.0,
 );
 
 // Large triangle (recycle definitions)
-const body2 = world.createDynamicBody(new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi)));
+const body2 = world.createDynamicBody({
+  x: Math.random(xLo, xHi),
+  y: Math.random(yLo, yHi),
+});
 body2.createFixture(
-  new Polygon([new Vec2(-1.0, 0.0), new Vec2(1.0, 0.0), new Vec2(0.0, 2.0)]),
+  new Polygon([
+    { x: -1.0, y: 0.0 },
+    { x: 1.0, y: 0.0 },
+    { x: 0.0, y: 2.0 },
+  ]),
   1.0,
 );
 
 // Small box
-const body3 = world.createDynamicBody(new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi)));
+const body3 = world.createDynamicBody({
+  x: Math.random(xLo, xHi),
+  y: Math.random(yLo, yHi),
+});
 body3.createFixture(new Box(1.0, 0.5), 1.0);
 
 // Large box (recycle definitions)
-const body4 = world.createDynamicBody(new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi)));
+const body4 = world.createDynamicBody({
+  x: Math.random(xLo, xHi),
+  y: Math.random(yLo, yHi),
+});
 body4.createFixture(new Box(2.0, 1.0), 1.0);
 
 // Small circle
-const body5 = world.createDynamicBody(new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi)));
+const body5 = world.createDynamicBody({
+  x: Math.random(xLo, xHi),
+  y: Math.random(yLo, yHi),
+});
 body5.createFixture(new Circle(1.0), 1.0);
 
 // Large circle
-const body6 = world.createDynamicBody(new Vec2(Math.random(xLo, xHi), Math.random(yLo, yHi)));
+const body6 = world.createDynamicBody({
+  x: Math.random(xLo, xHi),
+  y: Math.random(yLo, yHi),
+});
 body6.createFixture(new Circle(2.0), 1.0);
 
 interface ContactPoint {

@@ -1,4 +1,4 @@
-import { World, Vec2, Circle, Chain, Settings, Testbed } from "planck";
+import { World, Vec2Value, Circle, Chain, Settings, Testbed } from "planck";
 
 const width = 10.0;
 const height = 10.0;
@@ -19,10 +19,10 @@ testbed.mouseForce = -100;
 testbed.start(world);
 
 const walls = [
-  new Vec2(-width * 0.5, -height * 0.5),
-  new Vec2(-width * 0.5, +height * 0.5),
-  new Vec2(+width * 0.5, +height * 0.5),
-  new Vec2(+width * 0.5, -height * 0.5),
+  { x: -width * 0.5, y: -height * 0.5 },
+  { x: -width * 0.5, y: +height * 0.5 },
+  { x: +width * 0.5, y: +height * 0.5 },
+  { x: +width * 0.5, y: -height * 0.5 },
 ];
 
 const wallFixDef = {
@@ -43,7 +43,7 @@ const ballBodyDef = {
 world.createBody().createFixture(new Chain(walls, true), wallFixDef);
 
 row(1, 8, BALL_R, BALL_D)
-  .map((v) => Vec2.add(v, new Vec2(height * 0.4, 0)))
+  .map((v) => ({ x: v.x + height * 0.4, y: v.y + 0 }))
   .forEach(function (p) {
     const ball = world.createDynamicBody(ballBodyDef);
     ball.setPosition(p);
@@ -53,7 +53,7 @@ row(1, 8, BALL_R, BALL_D)
   });
 
 row(1, 8, BALL_R, BALL_D)
-  .map((v) => Vec2.add(v, new Vec2(-height * 0.4, 0)))
+  .map((v) => ({ x: v.x + -height * 0.4, y: v.y + 0 }))
   .forEach(function (p) {
     const ball = world.createDynamicBody(ballBodyDef);
     ball.setPosition(p);
@@ -89,15 +89,13 @@ world.on("post-solve", function (contact) {
 });
 
 function row(n: number, m: number, r: number, l: number) {
-  const balls: Vec2[] = [];
+  const balls: Vec2Value[] = [];
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < m; j++) {
-      balls.push(
-        new Vec2(
-          i * l - (n - 1) * 0.5 * l + Math.random() * r * 0.02,
-          j * l - (m - 1) * 0.5 * l + Math.random() * r * 0.02,
-        ),
-      );
+      balls.push({
+        x: i * l - (n - 1) * 0.5 * l + Math.random() * r * 0.02,
+        y: j * l - (m - 1) * 0.5 * l + Math.random() * r * 0.02,
+      });
     }
   }
   return balls;

@@ -32,7 +32,7 @@ for (let i = 0; i < ACTOR_COUNT; ++i) {
   actor.proxyId = tree.createProxy(actor.aabb, actor);
 }
 
-const queryAABB = new AABB(new Vec2(-3.0, -4.0 + WORLD_EXTENT), new Vec2(5.0, 6.0 + WORLD_EXTENT));
+const queryAABB = new AABB({ x: -3.0, y: -4.0 + WORLD_EXTENT }, { x: 5.0, y: 6.0 + WORLD_EXTENT });
 
 function queryCallback(proxyId: number) {
   const actor = tree.getUserData(proxyId);
@@ -54,10 +54,10 @@ function runQuery(tree: DynamicTree<Actor>) {
 }
 
 const rayCastInput: RayCastInput = {
-  // p1: new Vec2(0.0, 2.0 + worldExtent),
-  // p2: new Vec2(0.0, -2.0 + worldExtent),
-  p1: new Vec2(-5.0, 5.0 + WORLD_EXTENT),
-  p2: new Vec2(7.0, -4.0 + WORLD_EXTENT),
+  // p1: { x: 0.0, y:  2.0 + worldExtent },
+  // p2: { x: 0.0, y:  -2.0 + worldExtent },
+  p1: { x: -5.0, y: 5.0 + WORLD_EXTENT },
+  p2: { x: 7.0, y: -4.0 + WORLD_EXTENT },
   maxFraction: 1.0,
 };
 
@@ -205,15 +205,24 @@ function getRandomAABB(aabb: AABB) {
 }
 
 function moveAABB(aabb: AABB) {
-  const d = new Vec2(Math.random(-0.5, 0.5), Math.random(-0.5, 0.5));
+  const d = {
+    x: Math.random(-0.5, 0.5),
+    y: Math.random(-0.5, 0.5),
+  };
   // d.x = 2.0;
   // d.y = 0.0;
   aabb.lowerBound.add(d);
   aabb.upperBound.add(d);
 
   const c0 = Vec2.mid(aabb.lowerBound, aabb.upperBound);
-  const min = new Vec2(-WORLD_EXTENT, 0.0);
-  const max = new Vec2(WORLD_EXTENT, 2.0 * WORLD_EXTENT);
+  const min = {
+    x: -WORLD_EXTENT,
+    y: 0.0,
+  };
+  const max = {
+    x: WORLD_EXTENT,
+    y: 2.0 * WORLD_EXTENT,
+  };
   const c = Vec2.clampVec2(c0, min, max);
 
   aabb.lowerBound.add(c).sub(c0);

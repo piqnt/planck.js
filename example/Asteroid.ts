@@ -1,4 +1,4 @@
-import { World, Vec2, Circle, Polygon, Testbed, Body, Contact, Vec2Value } from "planck";
+import { World, Circle, Polygon, Testbed, Body, Contact, Vec2Value } from "planck";
 
 const SPACE_WIDTH = 16;
 const SPACE_HEIGHT = 9;
@@ -69,7 +69,7 @@ class AsteroidPhysics {
       type: "dynamic",
       angularDamping: 2.0,
       linearDamping: 0.5,
-      position: new Vec2(),
+      position: { x: 0, y: 0 },
       userData: {
         type: "ship",
       },
@@ -77,10 +77,10 @@ class AsteroidPhysics {
 
     this.ship.createFixture(
       new Polygon([
-        new Vec2(-0.15, -0.15),
-        new Vec2(0, -0.1),
-        new Vec2(0.15, -0.15),
-        new Vec2(0, 0.2),
+        { x: -0.15, y: -0.15 },
+        { x: 0, y: -0.1 },
+        { x: 0.15, y: -0.15 },
+        { x: 0, y: 0.2 },
       ]),
       {
         density: 1000,
@@ -104,8 +104,8 @@ class AsteroidPhysics {
 
   thrustForward() {
     if (!this.ship) return false;
-    const f = this.ship.getWorldVector(new Vec2(0.0, 1.0));
-    const p = this.ship.getWorldPoint(new Vec2(0.0, 2.0));
+    const f = this.ship.getWorldVector({ x: 0.0, y: 1.0 });
+    const p = this.ship.getWorldPoint({ x: 0.0, y: 2.0 });
     this.ship.applyLinearImpulse(f, p, true);
     return true;
   }
@@ -116,8 +116,8 @@ class AsteroidPhysics {
     const body = this.world.createBody({
       type: "dynamic",
       // mass : 0.05,
-      position: this.ship.getWorldPoint(new Vec2(0, 0)),
-      linearVelocity: this.ship.getWorldVector(new Vec2(0, speed)),
+      position: this.ship.getWorldPoint({ x: 0, y: 0 }),
+      linearVelocity: this.ship.getWorldVector({ x: 0, y: speed }),
       bullet: true,
       userData: {
         type: "bullet",
@@ -160,7 +160,7 @@ class AsteroidPhysics {
       const a = (i * 2 * Math.PI) / n;
       const x = radius * (Math.sin(a) + Calc.random(0.3));
       const y = radius * (Math.cos(a) + Calc.random(0.3));
-      path.push(new Vec2(x, y));
+      path.push({ x: x, y: y });
     }
 
     const shape = new Polygon(path);
@@ -168,8 +168,8 @@ class AsteroidPhysics {
     const asteroidBody = this.world.createBody({
       // mass : 10,
       type: "kinematic",
-      position: new Vec2(x, y),
-      linearVelocity: new Vec2(vx, vy),
+      position: { x: x, y: y },
+      linearVelocity: { x: vx, y: vy },
       angularVelocity: va,
       userData: {
         type: "asteroid",
@@ -199,7 +199,10 @@ class AsteroidPhysics {
     const angleDisturb = (Math.PI / 2) * Math.random();
     for (let i = 0; i < 4; i++) {
       const angle = (Math.PI / 2) * i + angleDisturb;
-      const d = new Vec2(radius * Math.cos(angle), radius * Math.sin(angle));
+      const d = {
+        x: radius * Math.cos(angle),
+        y: radius * Math.sin(angle),
+      };
       const sp = parent.getWorldPoint(d);
 
       const vx = Calc.random(ASTEROID_SPEED);

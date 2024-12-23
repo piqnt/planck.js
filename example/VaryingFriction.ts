@@ -3,31 +3,31 @@
  * Licensed under the MIT license
  */
 
-import { World, Vec2, Edge, Box, Testbed } from "planck";
+import { World, Edge, Box, Testbed } from "planck";
 
-const world = new World(new Vec2(0, -10));
+const world = new World({ x: 0, y: -10 });
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
-world.createBody().createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)));
+world.createBody().createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }));
 
-world.createBody(new Vec2(-4.0, 22.0), -0.25).createFixture(new Box(13.0, 0.25), 0.0);
+world.createBody({ x: -4.0, y: 22.0 }, -0.25).createFixture(new Box(13.0, 0.25), 0.0);
 
-world.createBody(new Vec2(10.5, 19.0)).createFixture(new Box(0.25, 1.0), 0.0);
+world.createBody({ x: 10.5, y: 19.0 }).createFixture(new Box(0.25, 1.0), 0.0);
 
-world.createBody(new Vec2(4.0, 14.0), 0.25).createFixture(new Box(13.0, 0.25), 0.0);
+world.createBody({ x: 4.0, y: 14.0 }, 0.25).createFixture(new Box(13.0, 0.25), 0.0);
 
-world.createBody(new Vec2(-10.5, 11.0)).createFixture(new Box(0.25, 1.0), 0.0);
+world.createBody({ x: -10.5, y: 11.0 }).createFixture(new Box(0.25, 1.0), 0.0);
 
-world.createBody(new Vec2(-4.0, 6.0), -0.25).createFixture(new Box(13.0, 0.25), 0.0);
+world.createBody({ x: -4.0, y: 6.0 }, -0.25).createFixture(new Box(13.0, 0.25), 0.0);
 
 const friction = [0.75, 0.5, 0.35, 0.1, 0.0];
 
 const circle = new Box(0.5, 0.5);
 
 for (let i = 0; i < friction.length; ++i) {
-  const ball = world.createDynamicBody(new Vec2(-15.0 + 4.0 * i, 28.0));
+  const ball = world.createDynamicBody({ x: -15.0 + 4.0 * i, y: 28.0 });
   ball.createFixture(circle, {
     density: 25.0,
     friction: friction[i],

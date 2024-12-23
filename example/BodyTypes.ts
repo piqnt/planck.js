@@ -3,9 +3,9 @@
  * Licensed under the MIT license
  */
 
-import { Vec2, World, Edge, Box, RevoluteJoint, PrismaticJoint, Testbed } from "planck";
+import { World, Edge, Box, RevoluteJoint, PrismaticJoint, Testbed } from "planck";
 
-const world = new World(new Vec2(0, -10));
+const world = new World({ x: 0, y: -10 });
 
 const testbed = Testbed.mount();
 testbed.info("Z: Dynamic, X: Static, C: Kinematic");
@@ -14,16 +14,16 @@ testbed.start(world);
 const SPEED = 3.0;
 
 const ground = world.createBody();
-ground.createFixture(new Edge(new Vec2(-20.0, 0.0), new Vec2(20.0, 0.0)));
+ground.createFixture(new Edge({ x: -20.0, y: 0.0 }, { x: 20.0, y: 0.0 }));
 
 // Define attachment
-const attachment = world.createDynamicBody(new Vec2(0.0, 3.0));
+const attachment = world.createDynamicBody({ x: 0.0, y: 3.0 });
 attachment.createFixture(new Box(0.5, 2.0), 2.0);
 
 // Define platform
-const platform = world.createDynamicBody(new Vec2(-4.0, 5.0));
+const platform = world.createDynamicBody({ x: -4.0, y: 5.0 });
 
-platform.createFixture(new Box(0.5, 4.0, new Vec2(4.0, 0.0), 0.5 * Math.PI), {
+platform.createFixture(new Box(0.5, 4.0, { x: 4.0, y: 0.0 }, 0.5 * Math.PI), {
   friction: 0.6,
   density: 2.0,
 });
@@ -36,7 +36,7 @@ world.createJoint(
     },
     attachment,
     platform,
-    new Vec2(0.0, 5.0),
+    { x: 0.0, y: 5.0 },
   ),
 );
 
@@ -51,13 +51,13 @@ world.createJoint(
     },
     ground,
     platform,
-    new Vec2(0.0, 5.0),
-    new Vec2(1.0, 0.0),
+    { x: 0.0, y: 5.0 },
+    { x: 1.0, y: 0.0 },
   ),
 );
 
 // Create a payload
-const payload = world.createDynamicBody(new Vec2(0.0, 8.0));
+const payload = world.createDynamicBody({ x: 0.0, y: 8.0 });
 payload.createFixture(new Box(0.75, 0.75), { friction: 0.6, density: 2.0 });
 
 testbed.keydown = function (code, char) {
@@ -67,7 +67,7 @@ testbed.keydown = function (code, char) {
     platform.setStatic();
   } else if (char === "C") {
     platform.setKinematic();
-    platform.setLinearVelocity(new Vec2(-SPEED, 0.0));
+    platform.setLinearVelocity({ x: -SPEED, y: 0.0 });
     platform.setAngularVelocity(0.0);
   }
 };

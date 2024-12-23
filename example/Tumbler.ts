@@ -3,9 +3,9 @@
  * Licensed under the MIT license
  */
 
-import { World, Vec2, Box, RevoluteJoint, Testbed } from "planck";
+import { World, Box, RevoluteJoint, Testbed } from "planck";
 
-const world = new World(new Vec2(0, -10));
+const world = new World({ x: 0, y: -10 });
 
 const testbed = Testbed.mount();
 testbed.start(world);
@@ -16,13 +16,13 @@ const ground = world.createBody();
 
 const container = world.createDynamicBody({
   allowSleep: false,
-  position: new Vec2(0, 10),
+  position: { x: 0, y: 10 },
 });
 
-container.createFixture(new Box(0.5, 20, new Vec2(20, 0), 0), 5);
-container.createFixture(new Box(0.5, 20, new Vec2(-20, 0), 0), 5);
-container.createFixture(new Box(20, 0.5, new Vec2(0, 20), 0), 5);
-container.createFixture(new Box(20, 0.5, new Vec2(0, -20), 0), 5);
+container.createFixture(new Box(0.5, 20, { x: 20, y: 0 }, 0), 5);
+container.createFixture(new Box(0.5, 20, { x: -20, y: 0 }, 0), 5);
+container.createFixture(new Box(20, 0.5, { x: 0, y: 20 }, 0), 5);
+container.createFixture(new Box(20, 0.5, { x: 0, y: -20 }, 0), 5);
 
 world.createJoint(
   new RevoluteJoint(
@@ -33,7 +33,7 @@ world.createJoint(
     },
     ground,
     container,
-    new Vec2(0, 10),
+    { x: 0, y: 10 },
   ),
 );
 
@@ -41,7 +41,10 @@ const shape = new Box(0.5, 0.5);
 let count = 0;
 while (count < COUNT) {
   const body = world.createDynamicBody();
-  body.setPosition(new Vec2(Math.random() * 20 - 10, 10 + Math.random() * 20 - 10));
+  body.setPosition({
+    x: Math.random() * 20 - 10,
+    y: 10 + Math.random() * 20 - 10,
+  });
   body.createFixture(shape, 1);
   ++count;
 }

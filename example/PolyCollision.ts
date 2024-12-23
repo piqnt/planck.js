@@ -3,19 +3,19 @@
  * Licensed under the MIT license
  */
 
-import { World, Vec2, Transform, Manifold, CollidePolygons, Box, Testbed } from "planck";
+import { World, Transform, Manifold, CollidePolygons, Box, Testbed } from "planck";
 
-const world = new World(new Vec2(0, -10));
+const world = new World({ x: 0, y: -10 });
 
 const testbed = Testbed.mount();
 testbed.info("Use arrow keys to move and Z or X to rotate.");
 testbed.start(world);
 
 const polygonA = new Box(2, 4);
-const transformA = new Transform(new Vec2(0.0, 0.0), 0.0);
+const transformA = new Transform({ x: 0.0, y: 0.0 }, 0.0);
 
 const polygonB = new Box(5, 5);
-const positionB = new Vec2(5, 4);
+const positionB = { x: 5, y: 4 };
 let angleB = 1.9160721;
 const transformB = new Transform(positionB, angleB);
 

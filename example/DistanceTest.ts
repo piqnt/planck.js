@@ -3,7 +3,7 @@
  * Licensed under the MIT license
  */
 
-import { World, Vec2, Transform, Box, Distance, Testbed } from "planck";
+import { World, Transform, Box, Distance, Testbed } from "planck";
 
 const DistanceInput = Distance.Input;
 const DistanceOutput = Distance.Output;
@@ -14,11 +14,11 @@ const world = new World();
 const testbed = Testbed.mount();
 testbed.start(world);
 
-const transformA = new Transform(new Vec2(0.0, -0.2));
+const transformA = new Transform({ x: 0.0, y: -0.2 });
 
 const polygonA = new Box(10.0, 0.2);
 
-const positionB = new Vec2(12.017401, 0.13678508);
+const positionB = { x: 12.017401, y: 0.13678508 };
 let angleB = -0.0109265;
 const transformB = new Transform(positionB, angleB);
 

@@ -7,7 +7,7 @@
 
 import { World, Body, Fixture, Vec2, CircleShape, Box, Edge, Testbed } from "planck";
 
-const world = new World(new Vec2(0, -10));
+const world = new World({ x: 0, y: -10 });
 
 const testbed = Testbed.mount();
 testbed.start(world);
@@ -23,16 +23,16 @@ const bodies: Body[] = [];
 const touching: UserDate[] = [];
 
 const ground = world.createBody();
-ground.createFixture(new Edge(new Vec2(-40.0, 0.0), new Vec2(40.0, 0.0)), 0.0);
+ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
 
 if (0) {
   sensor = ground.createFixture({
-    shape: new Box(10.0, 2.0, new Vec2(0.0, 20.0), 0.0),
+    shape: new Box(10.0, 2.0, { x: 0.0, y: 20.0 }, 0.0),
     isSensor: true,
   });
 } else {
   sensor = ground.createFixture({
-    shape: new CircleShape(new Vec2(0.0, 10.0), 5.0),
+    shape: new CircleShape({ x: 0.0, y: 10.0 }, 5.0),
     isSensor: true,
   });
 }
@@ -42,7 +42,7 @@ const circle = new CircleShape(1.0);
 for (let i = 0; i < COUNT; ++i) {
   touching[i] = { touching: false };
 
-  bodies[i] = world.createDynamicBody(new Vec2(-10.0 + 3.0 * i, 20.0));
+  bodies[i] = world.createDynamicBody({ x: -10.0 + 3.0 * i, y: 20.0 });
   bodies[i].setUserData(touching[i]);
   bodies[i].createFixture(circle, 1.0);
 }

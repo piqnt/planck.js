@@ -5,7 +5,7 @@
 
 // This tests distance joints, body destruction, and joint destruction.
 
-import { World, Body, Joint, Vec2, Box, DistanceJoint, Testbed } from "planck";
+import { World, Body, Joint, Box, DistanceJoint, Testbed } from "planck";
 
 const world = new World();
 
@@ -19,16 +19,16 @@ let joints: Joint[] = [];
 
 const box = new Box(0.5, 0.5);
 
-bodies[0] = world.createDynamicBody(new Vec2(-5.0, 5.0));
+bodies[0] = world.createDynamicBody({ x: -5.0, y: 5.0 });
 bodies[0].createFixture(box, 5.0);
 
-bodies[1] = world.createDynamicBody(new Vec2(5.0, 5.0));
+bodies[1] = world.createDynamicBody({ x: 5.0, y: 5.0 });
 bodies[1].createFixture(box, 5.0);
 
-bodies[2] = world.createDynamicBody(new Vec2(5.0, 15.0));
+bodies[2] = world.createDynamicBody({ x: 5.0, y: 15.0 });
 bodies[2].createFixture(box, 5.0);
 
-bodies[3] = world.createDynamicBody(new Vec2(-5.0, 15.0));
+bodies[3] = world.createDynamicBody({ x: -5.0, y: 15.0 });
 bodies[3].createFixture(box, 5.0);
 
 const jd = {
@@ -40,9 +40,9 @@ world.createJoint(
   (joints[0] = new DistanceJoint({
     ...jd,
     bodyA: ground,
-    localAnchorA: new Vec2(-10.0, 0.0),
+    localAnchorA: { x: -10.0, y: 0.0 },
     bodyB: bodies[0],
-    localAnchorB: new Vec2(-0.5, -0.5),
+    localAnchorB: { x: -0.5, y: -0.5 },
   })),
 );
 
@@ -50,9 +50,9 @@ world.createJoint(
   (joints[1] = new DistanceJoint({
     ...jd,
     bodyA: ground,
-    localAnchorA: new Vec2(10.0, 0.0),
+    localAnchorA: { x: 10.0, y: 0.0 },
     bodyB: bodies[1],
-    localAnchorB: new Vec2(0.5, -0.5),
+    localAnchorB: { x: 0.5, y: -0.5 },
   })),
 );
 
@@ -60,9 +60,9 @@ world.createJoint(
   (joints[2] = new DistanceJoint({
     ...jd,
     bodyA: ground,
-    localAnchorA: new Vec2(10.0, 20.0),
+    localAnchorA: { x: 10.0, y: 20.0 },
     bodyB: bodies[2],
-    localAnchorB: new Vec2(0.5, 0.5),
+    localAnchorB: { x: 0.5, y: 0.5 },
   })),
 );
 
@@ -70,9 +70,9 @@ world.createJoint(
   (joints[3] = new DistanceJoint({
     ...jd,
     bodyA: ground,
-    localAnchorA: new Vec2(-10.0, 20.0),
+    localAnchorA: { x: -10.0, y: 20.0 },
     bodyB: bodies[3],
-    localAnchorB: new Vec2(-0.5, 0.5),
+    localAnchorB: { x: -0.5, y: 0.5 },
   })),
 );
 
@@ -80,9 +80,9 @@ world.createJoint(
   (joints[4] = new DistanceJoint({
     ...jd,
     bodyA: bodies[0],
-    localAnchorA: new Vec2(0.5, 0.0),
+    localAnchorA: { x: 0.5, y: 0.0 },
     bodyB: bodies[1],
-    localAnchorB: new Vec2(-0.5, 0.0),
+    localAnchorB: { x: -0.5, y: 0.0 },
   })),
 );
 
@@ -90,9 +90,9 @@ world.createJoint(
   (joints[5] = new DistanceJoint({
     ...jd,
     bodyA: bodies[1],
-    localAnchorA: new Vec2(0.0, 0.5),
+    localAnchorA: { x: 0.0, y: 0.5 },
     bodyB: bodies[2],
-    localAnchorB: new Vec2(0.0, -0.5),
+    localAnchorB: { x: 0.0, y: -0.5 },
   })),
 );
 
@@ -100,9 +100,9 @@ world.createJoint(
   (joints[6] = new DistanceJoint({
     ...jd,
     bodyA: bodies[2],
-    localAnchorA: new Vec2(-0.5, 0.0),
+    localAnchorA: { x: -0.5, y: 0.0 },
     bodyB: bodies[3],
-    localAnchorB: new Vec2(0.5, 0.0),
+    localAnchorB: { x: 0.5, y: 0.0 },
   })),
 );
 
@@ -110,9 +110,9 @@ world.createJoint(
   (joints[7] = new DistanceJoint({
     ...jd,
     bodyA: bodies[3],
-    localAnchorA: new Vec2(0.0, -0.5),
+    localAnchorA: { x: 0.0, y: -0.5 },
     bodyB: bodies[0],
-    localAnchorB: new Vec2(0.0, 0.5),
+    localAnchorB: { x: 0.0, y: 0.5 },
   })),
 );
 
