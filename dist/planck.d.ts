@@ -104,6 +104,12 @@ export declare class Vec2 {
 	 */
 	normalize(): number;
 	/**
+	 * Returns a new unit vector from the provided vector.
+	 *
+	 * @returns new unit vector
+	 */
+	static normalize(v: Vec2Value): Vec2;
+	/**
 	 * Get the length of this vector (the norm).
 	 *
 	 * For performance, use this instead of lengthSquared (if possible).
@@ -164,7 +170,7 @@ export declare class Vec2 {
 	clamp(max: number): Vec2;
 	static clamp(v: Vec2Value, max: number): Vec2;
 	/** @hidden */
-	static clampVec2(v: Vec2Value, min?: Vec2, max?: Vec2): Vec2Value;
+	static clampVec2(v: Vec2Value, min?: Vec2Value, max?: Vec2Value): Vec2Value;
 	/**  @hidden @deprecated */
 	static scaleFn(x: number, y: number): (v: Vec2Value) => Vec2;
 	/**  @hidden @deprecated */

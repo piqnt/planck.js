@@ -2,7 +2,7 @@
   typeof exports === "object" && typeof module !== "undefined" ? factory(exports) : typeof define === "function" && define.amd ? define(["exports"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.planck = {}));
 })(this, function(exports2) {
   "use strict";/**
- * Planck.js v1.1.5
+ * Planck.js v1.1.6
  * @license The MIT license
  * @copyright Copyright (c) 2024 Erin Catto, Ali Shakiba
  *
@@ -325,6 +325,14 @@
         this.x *= invLength;
         this.y *= invLength;
         return length2;
+      };
+      Vec22.normalize = function(v3) {
+        var length2 = Vec22.lengthOf(v3);
+        if (length2 < EPSILON) {
+          return Vec22.zero();
+        }
+        var invLength = 1 / length2;
+        return Vec22.neo(v3.x * invLength, v3.y * invLength);
       };
       Vec22.lengthOf = function(v3) {
         return math_sqrt$7(v3.x * v3.x + v3.y * v3.y);

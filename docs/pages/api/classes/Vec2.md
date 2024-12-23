@@ -912,6 +912,24 @@ Get the length squared.
 
 ***
 
+### normalize()
+
+> `static` **normalize**(`v`): [`Vec2`](/api/classes/Vec2)
+
+Returns a new unit vector from the provided vector.
+
+#### Parameters
+
+• **v**: [`Vec2Value`](/api/interfaces/Vec2Value)
+
+#### Returns
+
+[`Vec2`](/api/classes/Vec2)
+
+new unit vector
+
+***
+
 ### skew()
 
 > `static` **skew**(`v`): [`Vec2`](/api/classes/Vec2)
