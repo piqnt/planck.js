@@ -364,6 +364,20 @@ export class Vec2 {
   }
 
   /**
+   * Returns a new unit vector from the provided vector.
+   *
+   * @returns new unit vector
+   */
+  static normalize(v: Vec2Value): Vec2 {
+    const length = Vec2.lengthOf(v);
+    if (length < EPSILON) {
+      return Vec2.zero();
+    }
+    const invLength = 1.0 / length;
+    return Vec2.neo(v.x * invLength, v.y * invLength);
+  }
+
+  /**
    * Get the length of this vector (the norm).
    *
    * For performance, use this instead of lengthSquared (if possible).
