@@ -603,7 +603,7 @@ export class Vec2 {
   }
 
   /** @hidden */
-  static clampVec2(v: Vec2Value, min?: Vec2, max?: Vec2): Vec2Value {
+  static clampVec2(v: Vec2Value, min?: Vec2Value, max?: Vec2Value): Vec2Value {
     return {
       x: clamp(v.x, min?.x, max?.x),
       y: clamp(v.y, min?.y, max?.y)
