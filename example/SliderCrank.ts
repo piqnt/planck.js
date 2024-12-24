@@ -7,17 +7,24 @@
 
 import { World, RevoluteJoint, PrismaticJoint, Edge, Box, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.start(world);
 testbed.info("Z: Toggle friction, X: Toggle motor");
 
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
 
 // Define crank.
-const crank = world.createDynamicBody({ x: 0.0, y: 7.0 });
+const crank = world.createBody({
+  type: "dynamic",
+  position: { x: 0.0, y: 7.0 },
+});
 crank.createFixture(new Box(0.5, 2.0), 2.0);
 
 const joint1 = world.createJoint(
@@ -34,7 +41,10 @@ const joint1 = world.createJoint(
 );
 
 // Define follower.
-const follower = world.createDynamicBody({ x: 0.0, y: 13.0 });
+const follower = world.createBody({
+  type: "dynamic",
+  position: { x: 0.0, y: 13.0 },
+});
 follower.createFixture(new Box(0.5, 4.0), 2.0);
 
 world.createJoint(new RevoluteJoint({ enableMotor: false }, crank, follower, { x: 0.0, y: 9.0 }));
@@ -63,7 +73,10 @@ const joint2 = world.createJoint(
 );
 
 // Create a payload
-const payload = world.createDynamicBody({ x: 0.0, y: 23.0 });
+const payload = world.createBody({
+  type: "dynamic",
+  position: { x: 0.0, y: 23.0 },
+});
 payload.createFixture(new Box(1.5, 1.5), 2.0);
 
 testbed.keydown = function (code, char) {

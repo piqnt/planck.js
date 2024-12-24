@@ -5,18 +5,23 @@
 
 import { World, Box, RevoluteJoint, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
 const COUNT = 200;
 
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 
-const container = world.createDynamicBody({
-  allowSleep: false,
+const container = world.createBody({
+  type: "dynamic",
   position: { x: 0, y: 10 },
+  allowSleep: false,
 });
 
 container.createFixture(new Box(0.5, 20, { x: 20, y: 0 }, 0), 5);
@@ -40,10 +45,12 @@ world.createJoint(
 const shape = new Box(0.5, 0.5);
 let count = 0;
 while (count < COUNT) {
-  const body = world.createDynamicBody();
-  body.setPosition({
-    x: Math.random() * 20 - 10,
-    y: 10 + Math.random() * 20 - 10,
+  const body = world.createBody({
+    type: "dynamic",
+    position: {
+      x: Math.random() * 20 - 10,
+      y: 10 + Math.random() * 20 - 10,
+    },
   });
   body.createFixture(shape, 1);
   ++count;

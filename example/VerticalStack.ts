@@ -21,7 +21,9 @@ let bullet: Body | null = null;
 const bodies: Body[] = [];
 const indices: number[] = [];
 
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }));
 ground.createFixture(new Edge({ x: 20.0, y: 0.0 }, { x: 20.0, y: 20.0 }));
 
@@ -37,9 +39,11 @@ for (let j = 0; j < columnCount; ++j) {
     // let x = Math.random() * 0.04 - 0.02;
     // let x = i % 2 == 0 ? -0.01 : 0.01;
 
-    const body = world.createDynamicBody();
-    body.setUserData(indices[n]);
-    body.setPosition({ x: xs[j] + x, y: 0.55 + 1.1 * i });
+    const body = world.createBody({
+      type: "dynamic",
+      userData: indices[n],
+      position: { x: xs[j] + x, y: 0.55 + 1.1 * i },
+    });
     body.createFixture(shape, {
       density: 1.0,
       friction: 0.3,
@@ -52,24 +56,7 @@ for (let j = 0; j < columnCount; ++j) {
 testbed.keydown = function (code, char) {
   switch (char) {
     case "X":
-      if (bullet != null) {
-        world.destroyBody(bullet);
-        bullet = null;
-      }
-
-      bullet = world.createBody({
-        type: "dynamic",
-        bullet: true,
-        position: { x: -31.0, y: 5.0 },
-      });
-
-      bullet.createFixture({
-        shape: new Circle(0.25),
-        density: 20.0,
-        restitution: 0.05,
-      });
-
-      bullet.setLinearVelocity({ x: 400.0, y: 0.0 });
+      fireBullet();
       break;
 
     case "Z":
@@ -85,25 +72,29 @@ testbed.step = function () {
   testbed.status("Blocksolve", world.m_blockSolve);
 
   if (stepCount++ % 300 == 0) {
-    if (bullet != null) {
-      world.destroyBody(bullet);
-      bullet = null;
-    }
-
-    bullet = world.createBody({
-      type: "dynamic",
-      bullet: true,
-      position: { x: -31.0, y: 5.0 },
-    });
-    bullet.createFixture({
-      shape: new Circle(0.25),
-      density: 20.0,
-      restitution: 0.05,
-    });
-
-    bullet.setLinearVelocity({
-      x: 400.0,
-      y: Math.random() * 100 - 50,
-    });
+    fireBullet();
   }
 };
+
+function fireBullet() {
+  if (bullet != null) {
+    world.destroyBody(bullet);
+    bullet = null;
+  }
+
+  bullet = world.createBody({
+    type: "dynamic",
+    bullet: true,
+    position: { x: -31.0, y: 5.0 },
+    linearVelocity: {
+      x: 400.0,
+      y: Math.random() * 100 - 50,
+    },
+  });
+
+  bullet.createFixture({
+    shape: new Circle(0.25),
+    density: 20.0,
+    restitution: 0.05,
+  });
+}

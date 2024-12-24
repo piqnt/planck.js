@@ -5,7 +5,9 @@
 
 import { World, Fixture, Edge, Circle, Box, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.info("C: Create a shape, X: Destroy a shape, Z: Sensor");
@@ -13,10 +15,15 @@ testbed.start(world);
 
 let sensor = true;
 
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
 
-const body = world.createDynamicBody({ x: 0.0, y: 10.0 });
+const body = world.createBody({
+  type: "dynamic",
+  position: { x: 0.0, y: 10.0 },
+});
 
 const fixture1 = body.createFixture(new Box(4.0, 4.0, { x: 0.0, y: 0.0 }, 0.0), 10.0);
 

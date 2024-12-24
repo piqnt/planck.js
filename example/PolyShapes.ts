@@ -15,7 +15,6 @@ import {
   Testbed,
   Body,
   Shape,
-  BodyDef,
   Fixture,
   PolygonShape,
 } from "planck";
@@ -26,7 +25,10 @@ import {
 // overlap a circle. Up to 4 overlapped fixtures will be highlighted with a
 // yellow border.
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
+
 const testbed = Testbed.mount();
 testbed.start(world);
 
@@ -36,7 +38,9 @@ const bodies: Body[] = [];
 
 const shapes: Shape[] = [];
 
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
 
 shapes[0] = new Polygon([
@@ -77,17 +81,12 @@ function createBody(index: number) {
     world.destroyBody(bodies.shift()!);
   }
 
-  const bd: BodyDef = {
+  const body = world.createBody({
     type: "dynamic",
     position: { x: Math.random() * 0.4 - 2.0, y: 10.0 },
     angle: Math.random() * 2 * Math.PI - Math.PI,
-  };
-
-  if (index === 4) {
-    bd.angularDamping = 0.02;
-  }
-
-  const body = world.createBody(bd);
+    angularDamping: index === 4 ? 0.02 : 0,
+  });
 
   body.createFixture(shapes[index % shapes.length], {
     density: 1.0,

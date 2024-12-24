@@ -3,22 +3,11 @@
  * Licensed under the MIT license
  */
 
-import {
-  Vec2,
-  World,
-  Body,
-  BodyDef,
-  Fixture,
-  Shape,
-  Edge,
-  Polygon,
-  Box,
-  Circle,
-  Math,
-  Testbed,
-} from "planck";
+import { Vec2, World, Body, Fixture, Shape, Edge, Polygon, Box, Circle, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.start(world);
@@ -31,7 +20,9 @@ const bodies: Body[] = [];
 const shapes: Shape[] = [];
 
 {
-  const ground = world.createBody();
+  const ground = world.createBody({
+    type: "static",
+  });
 
   let x1 = -20.0;
   let y1 = 2.0 * Math.cos((x1 / 10.0) * Math.PI);
@@ -88,20 +79,15 @@ function createItem(index: number) {
     world.destroyBody(bodies.shift()!);
   }
 
-  const bd: BodyDef = {
-    position: {
-      x: Math.random(-10.0, 10.0),
-      y: Math.random(10.0, 20.0),
-    },
-    angle: Math.random(-Math.PI, Math.PI),
+  const body = world.createBody({
     type: "dynamic",
-  };
-
-  if (index === 4) {
-    bd.angularDamping = 0.02;
-  }
-
-  const body = world.createBody(bd);
+    position: {
+      x: Math.random() * 20 - 10.0,
+      y: Math.random() * 10 + 10.0,
+    },
+    angle: Math.random() * 2 * Math.PI - Math.PI,
+    angularDamping: index === 4 ? 0.02 : 0,
+  });
 
   body.createFixture(shapes[index], {
     density: 20.0,

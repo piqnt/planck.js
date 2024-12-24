@@ -5,12 +5,16 @@
 
 import { World, Edge, Box, RevoluteJoint, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
 
 const shape = new Box(0.6, 0.125);
@@ -18,7 +22,8 @@ const shape = new Box(0.6, 0.125);
 const y = 25.0;
 let prevBody = ground;
 for (let i = 0; i < 30; ++i) {
-  const body = world.createDynamicBody({
+  const body = world.createBody({
+    type: "dynamic",
     position: { x: 0.5 + i, y: y },
   });
   body.createFixture(shape, {

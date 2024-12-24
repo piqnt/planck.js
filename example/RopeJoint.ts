@@ -14,26 +14,19 @@
 
 import { World, Edge, Box, RevoluteJoint, RopeJoint, Testbed, BodyDef } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.info("X: Toggle the rope joint");
 testbed.start(world);
 
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 
 ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
-
-const segmentDef = {
-  density: 20.0,
-  friction: 0.2,
-  filterCategoryBits: 0x0001,
-  filterMaskBits: 0xffff & ~0x0002,
-};
-
-const segmentJointDef = {
-  collideConnected: false,
-};
 
 const N = 10;
 const y = 15.0;
@@ -41,24 +34,38 @@ const y = 15.0;
 let prevBody = ground;
 for (let i = 0; i < N; ++i) {
   let shape = new Box(0.5, 0.125);
-  const bd: BodyDef = {
-    type: "dynamic",
-    position: { x: 0.5 + 1.0 * i, y: y },
+
+  const fixDef = {
+    density: 20.0,
+    friction: 0.2,
+    filterCategoryBits: 0x0001,
+    filterMaskBits: 0xffff & ~0x0002,
   };
+
+  const bodyDef = {
+    type: "dynamic" as const,
+    position: { x: 0.5 + 1.0 * i, y: y },
+    angularDamping: 0,
+  };
+
+  const jointDef = {
+    collideConnected: false,
+  };
+
   if (i === N - 1) {
     shape = new Box(1.5, 1.5);
-    segmentDef.density = 100.0;
-    segmentDef.filterCategoryBits = 0x0002;
-    bd.position = { x: 1.0 * i, y: y };
-    bd.angularDamping = 0.4;
+    fixDef.density = 100.0;
+    fixDef.filterCategoryBits = 0x0002;
+    bodyDef.position = { x: 1.0 * i, y: y };
+    bodyDef.angularDamping = 0.4;
   }
 
-  const body = world.createBody(bd);
+  const body = world.createBody(bodyDef);
 
-  body.createFixture(shape, segmentDef);
+  body.createFixture(shape, fixDef);
 
   const anchor = { x: i, y: y };
-  world.createJoint(new RevoluteJoint(segmentJointDef, prevBody, body, anchor));
+  world.createJoint(new RevoluteJoint(jointDef, prevBody, body, anchor));
 
   prevBody = body;
 }

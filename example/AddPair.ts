@@ -5,7 +5,7 @@
 
 import { World, Circle, Box, Testbed } from "planck";
 
-const world = new World({ x: 0, y: 0 });
+const world = new World();
 
 const testbed = Testbed.mount();
 testbed.y = 0;

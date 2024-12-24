@@ -11,7 +11,10 @@ const testbed = Testbed.mount();
 testbed.y = -20;
 testbed.start(world);
 
-const ground = world.createBody({ x: 0.0, y: 20.0 });
+const ground = world.createBody({
+  type: "static",
+  position: { x: 0.0, y: 20.0 },
+});
 
 const wallFD = {
   density: 0.0,
@@ -72,7 +75,10 @@ const boxFD = {
 };
 
 for (let i = 0; i < 10; ++i) {
-  const box = world.createDynamicBody({ x: 0.0, y: 5.0 + 1.54 * i });
+  const box = world.createBody({
+    type: "dynamic",
+    position: { x: 0.0, y: 5.0 + 1.54 * i },
+  });
 
   box.createFixture(new Box(0.5, 0.5), boxFD);
 

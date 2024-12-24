@@ -23,7 +23,9 @@ let HZ = 4.0;
 const ZETA = 0.7;
 const SPEED = 50.0;
 
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 
 const groundFD = {
   density: 0.0,
@@ -67,7 +69,10 @@ x += 40.0;
 ground.createFixture(new Edge({ x: x, y: 0.0 }, { x: x, y: 20.0 }), groundFD);
 
 // Teeter
-const teeter = world.createDynamicBody({ x: 140.0, y: 1.0 });
+const teeter = world.createBody({
+  type: "dynamic",
+  position: { x: 140.0, y: 1.0 },
+});
 teeter.createFixture(new Box(10.0, 0.25), 1.0);
 world.createJoint(
   new RevoluteJoint(
@@ -93,7 +98,10 @@ const bridgeFD = {
 let prevBody = ground;
 let i: number;
 for (i = 0; i < 20; ++i) {
-  const bridgeBlock = world.createDynamicBody({ x: 161.0 + 2.0 * i, y: -0.125 });
+  const bridgeBlock = world.createBody({
+    type: "dynamic",
+    position: { x: 161.0 + 2.0 * i, y: -0.125 },
+  });
   bridgeBlock.createFixture(new Box(1.0, 0.125), bridgeFD);
 
   world.createJoint(
@@ -108,18 +116,46 @@ world.createJoint(new RevoluteJoint({}, prevBody, ground, { x: 160.0 + 2.0 * i, 
 // Boxes
 const box = new Box(0.5, 0.5);
 
-world.createDynamicBody({ x: 230.0, y: 0.5 }).createFixture(box, 0.5);
+world
+  .createBody({
+    type: "dynamic",
+    position: { x: 230.0, y: 0.5 },
+  })
+  .createFixture(box, 0.5);
 
-world.createDynamicBody({ x: 230.0, y: 1.5 }).createFixture(box, 0.5);
+world
+  .createBody({
+    type: "dynamic",
+    position: { x: 230.0, y: 1.5 },
+  })
+  .createFixture(box, 0.5);
 
-world.createDynamicBody({ x: 230.0, y: 2.5 }).createFixture(box, 0.5);
+world
+  .createBody({
+    type: "dynamic",
+    position: { x: 230.0, y: 2.5 },
+  })
+  .createFixture(box, 0.5);
 
-world.createDynamicBody({ x: 230.0, y: 3.5 }).createFixture(box, 0.5);
+world
+  .createBody({
+    type: "dynamic",
+    position: { x: 230.0, y: 3.5 },
+  })
+  .createFixture(box, 0.5);
 
-world.createDynamicBody({ x: 230.0, y: 4.5 }).createFixture(box, 0.5);
+world
+  .createBody({
+    type: "dynamic",
+    position: { x: 230.0, y: 4.5 },
+  })
+  .createFixture(box, 0.5);
 
 // Car
-const car = world.createDynamicBody({ x: 0.0, y: 1.0 });
+const car = world.createBody({
+  type: "dynamic",
+  position: { x: 0.0, y: 1.0 },
+});
 car.createFixture(
   new Polygon([
     { x: -1.5, y: -0.5 },
@@ -137,10 +173,16 @@ const wheelFD = {
   friction: 0.9,
 };
 
-const wheelBack = world.createDynamicBody({ x: -1.0, y: 0.35 });
+const wheelBack = world.createBody({
+  type: "dynamic",
+  position: { x: -1.0, y: 0.35 },
+});
 wheelBack.createFixture(new Circle(0.4), wheelFD);
 
-const wheelFront = world.createDynamicBody({ x: 1.0, y: 0.4 });
+const wheelFront = world.createBody({
+  type: "dynamic",
+  position: { x: 1.0, y: 0.4 },
+});
 wheelFront.createFixture(new Circle(0.4), wheelFD);
 
 const springBack = world.createJoint(

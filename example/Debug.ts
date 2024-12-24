@@ -1,4 +1,4 @@
-import { Testbed, World, Vec2, Box } from "planck";
+import { Testbed, World } from "planck";
 
 const testbed = Testbed.mount();
 

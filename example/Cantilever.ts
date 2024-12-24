@@ -10,19 +10,26 @@
 
 import { World, Edge, Box, WeldJoint, Polygon, Circle, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
 const COUNT = 8;
 
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
 {
   let prevBody = ground;
   for (let i = 0; i < COUNT; ++i) {
-    const body = world.createDynamicBody({ x: -14.5 + 1.0 * i, y: 5.0 });
+    const body = world.createBody({
+      type: "dynamic",
+      position: { x: -14.5 + 1.0 * i, y: 5.0 },
+    });
     body.createFixture(new Box(0.5, 0.125), 20.0);
 
     const anchor = { x: -15.0 + 1.0 * i, y: 5.0 };
@@ -34,7 +41,10 @@ ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
 {
   let prevBody = ground;
   for (let i = 0; i < 3; ++i) {
-    const body = world.createDynamicBody({ x: -14.0 + 2.0 * i, y: 15.0 });
+    const body = world.createBody({
+      type: "dynamic",
+      position: { x: -14.0 + 2.0 * i, y: 15.0 },
+    });
     body.createFixture(new Box(1.0, 0.125), 20.0);
 
     const anchor = { x: -15.0 + 2.0 * i, y: 15.0 };
@@ -56,7 +66,10 @@ ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
 {
   let prevBody = ground;
   for (let i = 0; i < COUNT; ++i) {
-    const body = world.createDynamicBody({ x: -4.5 + 1.0 * i, y: 5.0 });
+    const body = world.createBody({
+      type: "dynamic",
+      position: { x: -4.5 + 1.0 * i, y: 5.0 },
+    });
     body.createFixture(new Box(0.5, 0.125), 20.0);
 
     if (i > 0) {
@@ -70,7 +83,10 @@ ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
 {
   let prevBody = ground;
   for (let i = 0; i < COUNT; ++i) {
-    const body = world.createDynamicBody({ x: 5.5 + 1.0 * i, y: 10.0 });
+    const body = world.createBody({
+      type: "dynamic",
+      position: { x: 5.5 + 1.0 * i, y: 10.0 },
+    });
     body.createFixture(new Box(0.5, 0.125), 20.0);
 
     if (i > 0) {
@@ -99,12 +115,18 @@ ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
       { x: 0.0, y: 1.5 },
     ];
 
-    const body = world.createDynamicBody({ x: -8.0 + 8.0 * i, y: 12.0 });
+    const body = world.createBody({
+      type: "dynamic",
+      position: { x: -8.0 + 8.0 * i, y: 12.0 },
+    });
     body.createFixture(new Polygon(vertices), 1.0);
   }
 
   for (let i = 0; i < 2; ++i) {
-    const body = world.createDynamicBody({ x: -6.0 + 6.0 * i, y: 10.0 });
+    const body = world.createBody({
+      type: "dynamic",
+      position: { x: -6.0 + 6.0 * i, y: 10.0 },
+    });
     body.createFixture(new Circle(0.5), 1.0);
   }
 }

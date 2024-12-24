@@ -215,27 +215,45 @@ class BreakoutPhysics {
 
   createBoardPhysics() {
     {
-      const wall = this.world.createBody({ x: +9, y: -0.5 });
+      const wall = this.world.createBody({
+        type: "static",
+        position: { x: +9, y: -0.5 },
+      });
       wall.createFixture(new EdgeShape({ x: 0, y: -12.5 }, { x: 0, y: +11.5 }), wallFix);
     }
     {
-      const wall = this.world.createBody({ x: -9, y: -0.5 });
+      const wall = this.world.createBody({
+        type: "static",
+        position: { x: -9, y: -0.5 },
+      });
       wall.createFixture(new EdgeShape({ x: 0, y: -12.5 }, { x: 0, y: +11.5 }), wallFix);
     }
     {
-      const wall = this.world.createBody({ x: 0, y: +12 });
+      const wall = this.world.createBody({
+        type: "static",
+        position: { x: 0, y: +12 },
+      });
       wall.createFixture(new EdgeShape({ x: -8, y: 0 }, { x: +8, y: 0 }), wallFix);
     }
     {
-      const wall = this.world.createBody({ x: 9, y: 12 });
+      const wall = this.world.createBody({
+        type: "static",
+        position: { x: 9, y: 12 },
+      });
       wall.createFixture(new EdgeShape({ x: -1, y: 0 }, { x: 0, y: -1 }), wallFix);
     }
     {
-      const wall = this.world.createBody({ x: -9, y: 12 });
+      const wall = this.world.createBody({
+        type: "static",
+        position: { x: -9, y: 12 },
+      });
       wall.createFixture(new EdgeShape({ x: 1, y: 0 }, { x: 0, y: -1 }), wallFix);
     }
     {
-      const wall = this.world.createBody({ x: 0, y: -13 });
+      const wall = this.world.createBody({
+        type: "static",
+        position: { x: 0, y: -13 },
+      });
       wall.createFixture(new EdgeShape({ x: -9, y: 0 }, { x: +9, y: 0 }), wallFix);
 
       wall.setUserData(new WallData());
@@ -273,7 +291,8 @@ class BreakoutPhysics {
   }
 
   addBallPhysics(data: BallData) {
-    const body = this.world.createDynamicBody({
+    const body = this.world.createBody({
+      type: "dynamic",
       bullet: true,
       angle: Math.random() * Math.PI * 2,
     });
@@ -301,7 +320,10 @@ class BreakoutPhysics {
   addBrickPhysics(data: BrickData) {
     const shape = data.subtype == "small" ? smallBrickShape : normalBrickShape;
     const pos = { x: (data.i - 3) * 2, y: 9 - data.j * 2 };
-    const body = this.world.createBody(pos);
+    const body = this.world.createBody({
+      type: "static",
+      position: pos,
+    });
     body.createFixture(shape, brickFix);
 
     body.setUserData(data);
@@ -321,7 +343,9 @@ class BreakoutPhysics {
   }
 
   addDropPhysics(drop: DropData) {
-    const body = this.world.createDynamicBody();
+    const body = this.world.createBody({
+      type: "dynamic",
+    });
     if (drop.subtype == "+") {
       body.createFixture(new BoxShape(0.08, 0.32), dropFix);
       body.createFixture(new BoxShape(0.32, 0.08), dropFix);

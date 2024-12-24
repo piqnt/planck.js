@@ -1,12 +1,17 @@
 import { World, Edge, Circle, Box, Chain, Math, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.y = 0;
 testbed.start(world);
 
-const container = world.createKinematicBody();
+const container = world.createBody({
+  type: "kinematic",
+});
+
 container.createFixture(new Edge({ x: 15, y: -5 }, { x: 25, y: 5 }));
 container.createFixture(new Circle({ x: -10, y: -10 }, 3));
 container.createFixture(new Circle({ x: 10, y: 10 }, 3));
@@ -29,7 +34,10 @@ const n = 15;
 
 for (let i = -n; i <= n; i++) {
   for (let j = -n; j <= n; j++) {
-    const particle = world.createDynamicBody({ x: i * 1, y: j * 1 });
+    const particle = world.createBody({
+      type: "dynamic",
+      position: { x: i * 1, y: j * 1 },
+    });
     particle.createFixture(Math.random() > 0.5 ? new Circle(0.4) : new Box(0.4, 0.4));
     particle.setMassData({
       mass: 2,

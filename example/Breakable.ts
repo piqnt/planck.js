@@ -7,7 +7,9 @@
 
 import { World, Vec2, Edge, Box, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.start(world);
@@ -18,11 +20,17 @@ let breakAngularVelocity: number;
 let broke = false;
 
 // Ground body
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
 
 // Breakable dynamic body
-const body1 = world.createDynamicBody({ x: 0.0, y: 40.0 }, 0.25 * Math.PI);
+const body1 = world.createBody({
+  type: "dynamic",
+  position: { x: 0.0, y: 40.0 },
+  angle: 0.25 * Math.PI,
+});
 
 const shape1 = new Box(0.5, 0.5, { x: -0.5, y: 0.0 }, 0.0);
 const piece1 = body1.createFixture(shape1, 1.0);
@@ -58,7 +66,11 @@ function Break() {
 
   body1.destroyFixture(piece2);
 
-  const body2 = world.createDynamicBody(body1.getPosition(), body1.getAngle());
+  const body2 = world.createBody({
+    type: "dynamic",
+    position: body1.getPosition(),
+    angle: body1.getAngle(),
+  });
 
   piece2 = body2.createFixture(shape2, 1.0);
 

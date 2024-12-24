@@ -8,13 +8,17 @@
 
 import { World, Circle, Box, Chain, RevoluteJoint, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
 // Ground body
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 ground.createFixture(
   new Chain(
     [
@@ -33,8 +37,14 @@ ground.createFixture(
 const pLeft = { x: -2.0, y: 0.0 };
 const pRight = { x: 2.0, y: 0.0 };
 
-const leftFlipper = world.createDynamicBody({ x: -2.0, y: 0.0 });
-const rightFlipper = world.createDynamicBody({ x: 2.0, y: 0.0 });
+const leftFlipper = world.createBody({
+  type: "dynamic",
+  position: { x: -2.0, y: 0.0 },
+});
+const rightFlipper = world.createBody({
+  type: "dynamic",
+  position: { x: 2.0, y: 0.0 },
+});
 
 leftFlipper.createFixture(new Box(1.75, 0.1), 1.0);
 rightFlipper.createFixture(new Box(1.75, 0.1), 1.0);
@@ -72,8 +82,8 @@ world.createJoint(rightJoint);
 
 // Circle character
 const ball = world.createBody({
-  position: { x: 1.0, y: 15.0 },
   type: "dynamic",
+  position: { x: 1.0, y: 15.0 },
   bullet: true,
 });
 ball.createFixture(new Circle(0.2), 1.0);

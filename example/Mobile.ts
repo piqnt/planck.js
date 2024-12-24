@@ -5,7 +5,9 @@
 
 import { Vec2, World, Box, RevoluteJoint, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -1 });
+const world = new World({
+  gravity: { x: 0, y: -1 },
+});
 
 const testbed = Testbed.mount();
 testbed.y = -15;
@@ -16,7 +18,10 @@ testbed.start(world);
 const DEPTH = 4;
 const DENSITY = 20.0;
 
-const ground = world.createBody({ x: 0.0, y: 20.0 });
+const ground = world.createBody({
+  type: "static",
+  position: { x: 0.0, y: 20.0 },
+});
 
 const a = 0.5;
 const h = { x: 0.0, y: a };

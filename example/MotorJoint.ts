@@ -9,18 +9,25 @@
 
 import { World, MotorJoint, Box, Edge, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
 let time = 0;
 
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 ground.createFixture(new Edge({ x: -20.0, y: 0.0 }, { x: 20.0, y: 0.0 }));
 
 // Define motorized body
-const body = world.createDynamicBody({ x: 0.0, y: 8.0 });
+const body = world.createBody({
+  type: "dynamic",
+  position: { x: 0.0, y: 8.0 },
+});
 body.createFixture(new Box(2.0, 0.5), {
   friction: 0.6,
   density: 2.0,

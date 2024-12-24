@@ -5,7 +5,9 @@
 
 import { World, Circle, Box, PulleyJoint, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.start(world);
@@ -15,7 +17,9 @@ const L = 12.0;
 const a = 1.0;
 const b = 2.0;
 
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 
 // ground.createFixture(new Edge(({ x: -40.0, y:  0.0 }), ({ x: 40.0, y:  0.0 })), 0.0);
 
@@ -25,10 +29,16 @@ ground.createFixture(new Circle({ x: 10.0, y: y + b + L }, 2.0), 0.0);
 const shape = new Box(a, b);
 
 // bd.fixedRotation = true;
-const box1 = world.createDynamicBody({ x: -10.0, y: y });
+const box1 = world.createBody({
+  type: "dynamic",
+  position: { x: -10.0, y: y },
+});
 box1.createFixture(shape, 5.0);
 
-const box2 = world.createDynamicBody({ x: 10.0, y: y });
+const box2 = world.createBody({
+  type: "dynamic",
+  position: { x: 10.0, y: y },
+});
 box2.createFixture(shape, 5.0);
 
 const anchor1 = { x: -10.0, y: y + b };

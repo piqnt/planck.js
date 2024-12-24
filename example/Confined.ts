@@ -12,7 +12,9 @@ testbed.start(world);
 
 const e_columnCount = 0;
 const e_rowCount = 0;
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 
 // Floor
 ground.createFixture(new Edge({ x: -10, y: 0 }, { x: 10, y: 0 }), 0);
@@ -36,7 +38,8 @@ const fd = {
 
 for (let j = 0; j < e_columnCount; ++j) {
   for (let i = 0; i < e_rowCount; ++i) {
-    const body = world.createDynamicBody({
+    const body = world.createBody({
+      type: "dynamic",
       position: {
         x: -10 + (2.1 * j + 1 + 0.01 * i) * radius,
         y: (2 * i + 1) * radius,
@@ -47,7 +50,8 @@ for (let j = 0; j < e_columnCount; ++j) {
 }
 
 function CreateCircle() {
-  const body = world.createDynamicBody({
+  const body = world.createBody({
+    type: "dynamic",
     position: {
       x: Math.random() * 10 - 5,
       y: Math.random() * 10 + 5,

@@ -42,6 +42,7 @@ const ballFixDef = {
   userData: "ball",
 };
 const ballBodyDef = {
+  type: "dynamic" as const,
   bullet: true,
   linearDamping: 3.5,
   angularDamping: 1.6,
@@ -54,16 +55,22 @@ const playerFixDef = {
   userData: "player",
 };
 const playerBodyDef = {
+  type: "dynamic" as const,
   bullet: true,
   linearDamping: 4,
   angularDamping: 1.6,
 };
 
-world.createBody().createFixture(new Chain(walls(), true), wallFixDef);
+world
+  .createBody({
+    type: "static",
+  })
+  .createFixture(new Chain(walls(), true), wallFixDef);
 
 {
   // goal left
   const body = world.createBody({
+    type: "static",
     position: { x: -width * 0.5 - BALL_R, y: 0 },
   });
   const fixture = body.createFixture(new Chain(goal), goalFixDef);
@@ -72,17 +79,18 @@ world.createBody().createFixture(new Chain(walls(), true), wallFixDef);
 {
   // goal right
   const body = world.createBody({
+    type: "static",
     position: { x: +width * 0.5 + BALL_R, y: 0 },
   });
   const fixture = body.createFixture(new Chain(goal), goalFixDef);
 }
 
-const ball = world.createDynamicBody(ballBodyDef);
+const ball = world.createBody(ballBodyDef);
 ball.createFixture(new Circle(BALL_R), ballFixDef);
 ball.style = { fill: "white", stroke: "black" };
 
 team().forEach(function (p) {
-  const player = world.createDynamicBody(playerBodyDef);
+  const player = world.createBody(playerBodyDef);
   player.setPosition(p);
   player.createFixture(new Circle(PLAYER_R), playerFixDef);
   player.style = { fill: "#0077ff", stroke: "black" };
@@ -91,7 +99,7 @@ team().forEach(function (p) {
 team()
   .map((v) => ({ x: -v.x, y: v.y }))
   .forEach(function (p) {
-    const player = world.createDynamicBody(playerBodyDef);
+    const player = world.createBody(playerBodyDef);
     player.setPosition(p);
     player.setAngle(Math.PI);
     player.createFixture(new Circle(PLAYER_R), playerFixDef);

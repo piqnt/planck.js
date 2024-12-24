@@ -5,16 +5,23 @@
 
 import { World, Edge, Box, stats, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 ground.createFixture(new Edge({ x: -10.0, y: 0.0 }, { x: 10.0, y: 0.0 }), 0.0);
 ground.createFixture(new Box(0.2, 1.0, { x: 0.5, y: 1.0 }, 0.0), 0.0);
 
-const body = world.createDynamicBody({ x: 0.0, y: 4.0 });
+const body = world.createBody({
+  type: "dynamic",
+  position: { x: 0.0, y: 4.0 },
+});
 body.createFixture(new Box(2.0, 0.1), 1.0);
 
 // x = Math.random(-1.0, 1.0);

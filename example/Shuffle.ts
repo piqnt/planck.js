@@ -28,24 +28,31 @@ const walls = [
 const wallFixDef = {
   userData: "wall",
 };
+
 const ballFixDef = {
   friction: 0.1,
   restitution: 0.98,
   density: 0.8,
   userData: "ball",
 };
+
 const ballBodyDef = {
+  type: "dynamic" as const,
   bullet: true,
   linearDamping: 1.6,
   angularDamping: 1.6,
 };
 
-world.createBody().createFixture(new Chain(walls, true), wallFixDef);
+world
+  .createBody({
+    type: "static",
+  })
+  .createFixture(new Chain(walls, true), wallFixDef);
 
 row(1, 8, BALL_R, BALL_D)
   .map((v) => ({ x: v.x + height * 0.4, y: v.y + 0 }))
   .forEach(function (p) {
-    const ball = world.createDynamicBody(ballBodyDef);
+    const ball = world.createBody(ballBodyDef);
     ball.setPosition(p);
     ball.setAngle(Math.PI);
     ball.createFixture(new Circle(BALL_R), ballFixDef);
@@ -55,7 +62,7 @@ row(1, 8, BALL_R, BALL_D)
 row(1, 8, BALL_R, BALL_D)
   .map((v) => ({ x: v.x + -height * 0.4, y: v.y + 0 }))
   .forEach(function (p) {
-    const ball = world.createDynamicBody(ballBodyDef);
+    const ball = world.createBody(ballBodyDef);
     ball.setPosition(p);
     ball.createFixture(new Circle(BALL_R), ballFixDef);
     ball.style = { fill: "#0077ff", stroke: "black" };

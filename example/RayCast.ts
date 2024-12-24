@@ -10,7 +10,6 @@
 import {
   World,
   Body,
-  BodyDef,
   Fixture,
   Shape,
   Vec2,
@@ -139,7 +138,9 @@ function callbackMultiple(
   return 1.0;
 }
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.width = 40;
@@ -195,19 +196,16 @@ function createBody(index: number) {
     world.destroyBody(bodies.shift()!);
   }
 
-  const x = Math.random() * 20 - 10;
-  const y = Math.random() * 20;
-
-  const bd: BodyDef = {};
-  bd.position = { x: x, y: y };
-  bd.angle = Math.random() * 2 * Math.PI - Math.PI;
-  bd.userData = index;
-
-  if (index === 4) {
-    bd.angularDamping = 0.02;
-  }
-
-  const body = world.createBody(bd);
+  const body = world.createBody({
+    type: "static",
+    position: {
+      x: Math.random() * 20 - 10,
+      y: Math.random() * 20,
+    },
+    angle: Math.random() * 2 * Math.PI - Math.PI,
+    userData: index,
+    angularDamping: index === 4 ? 0.02 : 0,
+  });
 
   const shape = shapes[index % shapes.length];
 

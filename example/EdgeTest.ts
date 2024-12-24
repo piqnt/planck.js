@@ -5,12 +5,16 @@
 
 import { World, Circle, Box, Edge, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 
 const v1 = { x: -10.0, y: 0.0 };
 const v2 = { x: -7.0, y: -2.0 };

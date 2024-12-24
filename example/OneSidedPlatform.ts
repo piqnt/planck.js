@@ -5,7 +5,9 @@
 
 import { World, Edge, Box, Circle, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.start(world);
@@ -21,15 +23,23 @@ const BELOW = -1;
 const state = UNKNOWN;
 
 // Ground
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 ground.createFixture(new Edge({ x: -20.0, y: 0.0 }, { x: 20.0, y: 0.0 }), 0.0);
 
 // Platform
-const platform = world.createBody({ x: 0.0, y: 10.0 });
+const platform = world.createBody({
+  type: "static",
+  position: { x: 0.0, y: 10.0 },
+});
 const platformFix = platform.createFixture(new Box(3.0, 0.5), 0.0);
 
 // Actor
-const character = world.createDynamicBody({ x: 0.0, y: 12.0 });
+const character = world.createBody({
+  type: "dynamic",
+  position: { x: 0.0, y: 12.0 },
+});
 const characterFix = character.createFixture(new Circle(radius), 20.0);
 character.setLinearVelocity({ x: 0.0, y: -50.0 });
 

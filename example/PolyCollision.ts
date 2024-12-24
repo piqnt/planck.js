@@ -5,7 +5,9 @@
 
 import { World, Transform, Manifold, CollidePolygons, Box, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.info("Use arrow keys to move and Z or X to rotate.");

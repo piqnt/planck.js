@@ -5,14 +5,18 @@
 
 import { World, Edge, Box, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
 const COUNT = 20;
 
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
 
 const a = 0.5;
@@ -27,7 +31,11 @@ for (let i = 0; i < COUNT; ++i) {
   y.x = x.x;
   y.y = x.y;
   for (let j = i; j < COUNT; ++j) {
-    world.createDynamicBody(y).createFixture(box, 5.0);
+    const body = world.createBody({
+      type: "dynamic",
+      position: y,
+    });
+    body.createFixture(box, 5.0);
 
     y.x += deltaY.x;
     y.y += deltaY.y;

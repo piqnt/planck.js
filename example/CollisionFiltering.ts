@@ -23,13 +23,17 @@ const TRIANGLE_MASK = 0xffff;
 const BOX_MASK = 0xffff ^ TRIANGLE_CATEGORY;
 const CIRCLE_MAX = 0xffff;
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.start(world);
 
 // Ground body
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), {
   friction: 0.3,
 });
@@ -55,7 +59,7 @@ body1.createFixture(
   smallTriangle,
 );
 
-// Large triangle (recycle definitions)
+// Large triangle
 const largeTriangle = {
   density: 1.0,
   filterCategoryBits: TRIANGLE_CATEGORY,
@@ -77,7 +81,10 @@ body2.createFixture(
   largeTriangle,
 );
 
-const body = world.createDynamicBody({ x: -5.0, y: 10.0 });
+const body = world.createBody({
+  type: "dynamic",
+  position: { x: -5.0, y: 10.0 },
+});
 body.createFixture(new Box(0.5, 1.0), 1.0);
 
 world.createJoint(
@@ -102,10 +109,13 @@ const smallBox = {
   filterGroupIndex: SMALL_GROUP,
 };
 
-const body3 = world.createDynamicBody({ x: 0.0, y: 2.0 });
+const body3 = world.createBody({
+  type: "dynamic",
+  position: { x: 0.0, y: 2.0 },
+});
 body3.createFixture(new Box(1.0, 0.5), smallBox);
 
-// Large box (recycle definitions)
+// Large box
 const largeBox = {
   density: 1.0,
   restitution: 0.1,
@@ -114,7 +124,10 @@ const largeBox = {
   filterGroupIndex: LARGE_GROUP,
 };
 
-const body4 = world.createDynamicBody({ x: 0.0, y: 6.0 });
+const body4 = world.createBody({
+  type: "dynamic",
+  position: { x: 0.0, y: 6.0 },
+});
 body4.createFixture(new Box(2.0, 1.0), largeBox);
 
 // Small circle
@@ -125,7 +138,10 @@ const smallCircle = {
   filterGroupIndex: SMALL_GROUP,
 };
 
-const body5 = world.createDynamicBody({ x: 5.0, y: 2.0 });
+const body5 = world.createBody({
+  type: "dynamic",
+  position: { x: 5.0, y: 2.0 },
+});
 body5.createFixture(new Circle(1.0), smallCircle);
 
 // Large circle
@@ -136,5 +152,8 @@ const largeCircle = {
   filterGroupIndex: LARGE_GROUP,
 };
 
-const body6 = world.createDynamicBody({ x: 5.0, y: 6.0 });
+const body6 = world.createBody({
+  type: "dynamic",
+  position: { x: 5.0, y: 6.0 },
+});
 body6.createFixture(new Circle(2.0), largeCircle);

@@ -24,10 +24,14 @@ const transformB = new Transform(positionB, angleB);
 
 const polygonB = new Box(2.0, 0.1);
 
-const bodyA = world.createBody();
+const bodyA = world.createBody({
+  type: "static",
+});
 const fixA = bodyA.createFixture(polygonA);
 
-const bodyB = world.createBody();
+const bodyB = world.createBody({
+  type: "static",
+});
 const fixB = bodyB.createFixture(polygonB);
 
 testbed.step = function () {

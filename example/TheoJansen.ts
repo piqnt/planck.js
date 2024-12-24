@@ -19,7 +19,9 @@ import {
   Vec2Value,
 } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.start(world);
@@ -31,24 +33,36 @@ const offset = { x: 0.0, y: 8.0 };
 const pivot = { x: 0.0, y: 0.8 };
 
 // Ground
-const ground = world.createBody();
+const ground = world.createBody({
+  type: "static",
+});
 ground.createFixture(new Edge({ x: -50.0, y: 0.0 }, { x: 50.0, y: 0.0 }), 0.0);
 ground.createFixture(new Edge({ x: -50.0, y: 0.0 }, { x: -50.0, y: 10.0 }), 0.0);
 ground.createFixture(new Edge({ x: 50.0, y: 0.0 }, { x: 50.0, y: 10.0 }), 0.0);
 
 // Balls
 for (let i = 0; i < 40; ++i) {
-  world.createDynamicBody({ x: -40.0 + 2.0 * i, y: 0.5 }).createFixture(new Circle(0.25), 1.0);
+  const ball = world.createBody({
+    type: "dynamic",
+    position: { x: -40.0 + 2.0 * i, y: 0.5 },
+  });
+  ball.createFixture(new Circle(0.25), 1.0);
 }
 
 // Chassis
-const chassis = world.createDynamicBody(Vec2.add(pivot, offset));
+const chassis = world.createBody({
+  type: "dynamic",
+  position: Vec2.add(pivot, offset),
+});
 chassis.createFixture(new Box(2.5, 1.0), {
   density: 1.0,
   filterGroupIndex: -1,
 });
 
-const wheel = world.createDynamicBody(Vec2.add(pivot, offset));
+const wheel = world.createBody({
+  type: "dynamic",
+  position: Vec2.add(pivot, offset),
+});
 wheel.createFixture(new Circle(1.6), {
   density: 1.0,
   filterGroupIndex: -1,
@@ -99,7 +113,8 @@ function createLeg(s: number, wheelAnchor: Vec2Value) {
     poly2 = new PolygonShape([{ x: 0, y: 0 }, Vec2.sub(p6, p4), Vec2.sub(p5, p4)]);
   }
 
-  const body1 = world.createDynamicBody({
+  const body1 = world.createBody({
+    type: "dynamic",
     position: offset,
     angularDamping: 10.0,
   });
@@ -108,7 +123,8 @@ function createLeg(s: number, wheelAnchor: Vec2Value) {
     filterGroupIndex: -1,
   });
 
-  const body2 = world.createDynamicBody({
+  const body2 = world.createBody({
+    type: "dynamic",
     position: Vec2.add(p4, offset),
     angularDamping: 10.0,
   });

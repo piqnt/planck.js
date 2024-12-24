@@ -8,7 +8,9 @@
 
 import { World, Box, Testbed } from "planck";
 
-const world = new World({ x: 0, y: -10 });
+const world = new World({
+  gravity: { x: 0, y: -10 },
+});
 
 const testbed = Testbed.mount();
 testbed.start(world);
@@ -19,7 +21,10 @@ let fixtureCount = 0;
 
 {
   const a = 0.5;
-  const ground = world.createBody({ x: 0, y: -a });
+  const ground = world.createBody({
+    type: "static",
+    position: { x: 0, y: -a },
+  });
 
   if (true) {
     const N = 200;
@@ -66,7 +71,10 @@ let fixtureCount = 0;
     for (let j = i; j < COUNT; ++j) {
       // bd.allowSleep = !(i == 0 && j == 0)
 
-      const body = world.createDynamicBody(y);
+      const body = world.createBody({
+        type: "dynamic",
+        position: y,
+      });
       body.createFixture(shape, 5.0);
       ++fixtureCount;
       y.x += deltaY.x;

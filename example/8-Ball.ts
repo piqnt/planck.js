@@ -163,7 +163,9 @@ class BilliardPhysics {
     rails.push(topLeftRail.map((v) => ({ x: -v.x, y: -v.y })));
 
     for (let i = 0; i < rails.length; i++) {
-      const body = this.world.createBody();
+      const body = this.world.createBody({
+        type: "static",
+      });
       const shape = new Polygon(rails[i]);
       const fixture = body.createFixture(shape, {
         friction: 0.1,
@@ -200,6 +202,7 @@ class BilliardPhysics {
 
     for (let i = 0; i < pockets.length; i++) {
       const body = this.world.createBody({
+        type: "static",
         position: pockets[i],
       });
       const shape = new Circle(POCKET_RADIUS);
