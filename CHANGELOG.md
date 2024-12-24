@@ -1,5 +1,15 @@
 # planck
 
+## 1.2.0
+
+### Minor Changes
+
+- f0127f4: Add world.queueUpdate() to queue and defer updates after current simulation step
+
+### Patch Changes
+
+- 97bb79e: Improve world.queueUpdate
+
 ## 1.1.6
 
 ### Patch Changes

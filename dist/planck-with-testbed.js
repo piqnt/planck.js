@@ -2,7 +2,7 @@
   typeof exports === "object" && typeof module !== "undefined" ? factory(exports) : typeof define === "function" && define.amd ? define(["exports"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.planck = {}));
 })(this, function(exports2) {
   "use strict";/**
- * Planck.js v1.1.6
+ * Planck.js v1.2.0
  * @license The MIT license
  * @copyright Copyright (c) 2024 Erin Catto, Ali Shakiba
  *
@@ -5953,6 +5953,7 @@
         this.m_velocityIterations = def.velocityIterations;
         this.m_positionIterations = def.positionIterations;
         this.m_t = 0;
+        this.m_step_callback = [];
       }
       World2.prototype._serialize = function() {
         var bodies = [];
@@ -6099,7 +6100,7 @@
         return this.m_broadPhase.getTreeQuality();
       };
       World2.prototype.shiftOrigin = function(newOrigin) {
-        if (this.m_locked) {
+        if (this.isLocked()) {
           return;
         }
         for (var b2 = this.m_bodyList; b2; b2 = b2.m_next) {
@@ -6331,7 +6332,18 @@
           this.clearForces();
         }
         this.m_locked = false;
+        var callback;
+        while (callback = this.m_step_callback.shift()) {
+          callback(this);
+        }
         this.publish("post-step", timeStep);
+      };
+      World2.prototype.queueUpdate = function(callback) {
+        if (!this.isLocked()) {
+          callback(this);
+        } else {
+          this.m_step_callback.push(callback);
+        }
       };
       World2.prototype.findNewContacts = function() {
         var _this = this;

@@ -1596,6 +1596,8 @@ declare class Body$1 {
 	/**
 	 * Set the type of the body to "static", "kinematic" or "dynamic".
 	 * @param type The type of the body.
+	 *
+	 * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 	 */
 	setType(type: BodyType): void;
 	isBullet(): boolean;
@@ -1625,6 +1627,8 @@ declare class Body$1 {
 	 * in collisions, ray-casts, or queries. Joints connected to an inactive body
 	 * are implicitly inactive. An inactive body is still owned by a World object
 	 * and remains
+	 *
+	 * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 	 */
 	setActive(flag: boolean): void;
 	isFixedRotation(): boolean;
@@ -1641,6 +1645,8 @@ declare class Body$1 {
 	 * transform may cause non-physical behavior. Note: contacts are updated on the
 	 * next call to World.step.
 	 *
+	 * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
+	 *
 	 * @param position The world position of the body's local origin.
 	 * @param angle The world rotation in radians.
 	 */
@@ -1649,6 +1655,8 @@ declare class Body$1 {
 	 * Set the position of the body's origin and rotation. Manipulating a body's
 	 * transform may cause non-physical behavior. Note: contacts are updated on the
 	 * next call to World.step.
+	 *
+	 * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 	 */
 	setTransform(xf: Transform): void;
 	synchronizeTransform(): void;
@@ -1751,6 +1759,8 @@ declare class Body$1 {
 	 * destroying fixtures can also alter the mass. This function has no effect if
 	 * the body isn't dynamic.
 	 *
+	 * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
+	 *
 	 * @param massData The mass properties.
 	 */
 	setMassData(massData: MassData): void;
@@ -1812,7 +1822,7 @@ declare class Body$1 {
 	 *
 	 * Contacts are not created until the next time step.
 	 *
-	 * Warning: This function is locked during callbacks.
+	 * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 	 */
 	createFixture(def: FixtureDef): Fixture;
 	createFixture(shape: Shape, opt?: FixtureOpt): Fixture;
@@ -1824,7 +1834,7 @@ declare class Body$1 {
 	 * All fixtures attached to a body are implicitly destroyed when the body is
 	 * destroyed.
 	 *
-	 * Warning: This function is locked during callbacks.
+	 * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 	 *
 	 * @param fixture The fixture to be removed.
 	 */
@@ -2074,13 +2084,15 @@ export declare class World {
 	 * position -= newOrigin
 	 *
 	 * @param newOrigin The new origin with respect to the old origin
+	 *
+	 * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 	 */
 	shiftOrigin(newOrigin: Vec2Value): void;
 	/**
 	 * Create a rigid body given a definition. No reference to the definition is
 	 * retained.
 	 *
-	 * Warning: This function is locked during callbacks.
+	 * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 	 */
 	createBody(def?: BodyDef): Body$1;
 	createBody(position: Vec2Value, angle?: number): Body$1;
@@ -2089,24 +2101,26 @@ export declare class World {
 	createKinematicBody(def?: BodyDef): Body$1;
 	createKinematicBody(position: Vec2Value, angle?: number): Body$1;
 	/**
-	 * Destroy a rigid body given a definition. No reference to the definition is
-	 * retained.
+	 * Destroy a body from the world.
 	 *
 	 * Warning: This automatically deletes all associated shapes and joints.
 	 *
-	 * Warning: This function is locked during callbacks.
+	 * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 	 */
 	destroyBody(b: Body$1): boolean;
 	/**
 	 * Create a joint to constrain bodies together. No reference to the definition
 	 * is retained. This may cause the connected bodies to cease colliding.
 	 *
-	 * Warning: This function is locked during callbacks.
+	 * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 	 */
 	createJoint<T extends Joint>(joint: T): T | null;
 	/**
-	 * Destroy a joint. This may cause the connected bodies to begin colliding.
-	 * Warning: This function is locked during callbacks.
+	 * Destroy a joint.
+	 *
+	 * Warning: This may cause the connected bodies to begin colliding.
+	 *
+	 * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 	 */
 	destroyJoint(joint: Joint): void;
 	/**
@@ -2118,6 +2132,10 @@ export declare class World {
 	 * @param timeStep Time step, this should not vary.
 	 */
 	step(timeStep: number, velocityIterations?: number, positionIterations?: number): void;
+	/**
+	 * Queue a function to be called after ongoing simulation step. If no simulation is in progress call it immediately.
+	 */
+	queueUpdate(callback: (world: World) => unknown): void;
 	/**
 	 * Called when two fixtures begin to touch.
 	 *
