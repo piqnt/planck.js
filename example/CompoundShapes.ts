@@ -18,7 +18,10 @@ testbed.start(world);
     type: "static",
     position: { x: 0.0, y: 0.0 },
   });
-  ground.createFixture(new Edge({ x: 50.0, y: 0.0 }, { x: -50.0, y: 0.0 }), 0.0);
+  ground.createFixture({
+    shape: new Edge({ x: 50.0, y: 0.0 }, { x: -50.0, y: 0.0 }),
+    density: 0.0,
+  });
 }
 
 const circle1 = new Circle({ x: -0.5, y: 0.5 }, 0.5);
@@ -33,8 +36,14 @@ for (let i = 0; i < 10; ++i) {
     },
     angle: Math.random(-Math.PI, Math.PI),
   });
-  body.createFixture(circle1, 2.0);
-  body.createFixture(circle2, 0.0);
+  body.createFixture({
+    shape: circle1,
+    density: 2.0,
+  });
+  body.createFixture({
+    shape: circle2,
+    density: 0.0,
+  });
 }
 
 const polygon1 = new Box(0.25, 0.5);
@@ -46,8 +55,14 @@ for (let i = 0; i < 10; ++i) {
     position: { x: Math.random(-0.1, 0.1) - 5.0, y: 1.05 + 2.5 * i },
     angle: Math.random(-Math.PI, Math.PI),
   });
-  body.createFixture(polygon1, 2.0);
-  body.createFixture(polygon2, 2.0);
+  body.createFixture({
+    shape: polygon1,
+    density: 2.0,
+  });
+  body.createFixture({
+    shape: polygon2,
+    density: 2.0,
+  });
 }
 
 const xf1 = new Transform();
@@ -83,8 +98,14 @@ for (let i = 0; i < 10; ++i) {
     },
     angle: 0.0,
   });
-  body.createFixture(triangle1, 2.0);
-  body.createFixture(triangle2, 2.0);
+  body.createFixture({
+    shape: triangle1,
+    density: 2.0,
+  });
+  body.createFixture({
+    shape: triangle2,
+    density: 2.0,
+  });
 }
 
 const bottom = new Box(1.5, 0.15);
@@ -95,6 +116,15 @@ const container = world.createBody({
   type: "static",
   position: { x: 0.0, y: 2.0 },
 });
-container.createFixture(bottom, 4.0);
-container.createFixture(left, 4.0);
-container.createFixture(right, 4.0);
+container.createFixture({
+  shape: bottom,
+  density: 4.0,
+});
+container.createFixture({
+  shape: left,
+  density: 4.0,
+});
+container.createFixture({
+  shape: right,
+  density: 4.0,
+});

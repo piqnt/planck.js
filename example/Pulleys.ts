@@ -21,10 +21,19 @@ const ground = world.createBody({
   type: "static",
 });
 
-// ground.createFixture(new Edge(({ x: -40.0, y:  0.0 }), ({ x: 40.0, y:  0.0 })), 0.0);
+// ground.createFixture({
+//   shape: new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }),
+//   density: 0.0,
+// });
 
-ground.createFixture(new Circle({ x: -10.0, y: y + b + L }, 2.0), 0.0);
-ground.createFixture(new Circle({ x: 10.0, y: y + b + L }, 2.0), 0.0);
+ground.createFixture({
+  shape: new Circle({ x: -10.0, y: y + b + L }, 2.0),
+  density: 0.0,
+});
+ground.createFixture({
+  shape: new Circle({ x: 10.0, y: y + b + L }, 2.0),
+  density: 0.0,
+});
 
 const shape = new Box(a, b);
 
@@ -33,13 +42,19 @@ const box1 = world.createBody({
   type: "dynamic",
   position: { x: -10.0, y: y },
 });
-box1.createFixture(shape, 5.0);
+box1.createFixture({
+  shape: shape,
+  density: 5.0,
+});
 
 const box2 = world.createBody({
   type: "dynamic",
   position: { x: 10.0, y: y },
 });
-box2.createFixture(shape, 5.0);
+box2.createFixture({
+  shape: shape,
+  density: 5.0,
+});
 
 const anchor1 = { x: -10.0, y: y + b };
 const anchor2 = { x: 10.0, y: y + b };

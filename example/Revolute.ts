@@ -17,22 +17,24 @@ const ground = world.createBody({
   type: "static",
 });
 
-const groundFD = {
+ground.createFixture({
+  shape: new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }),
   filterCategoryBits: 2,
   filterMaskBits: 0xffff,
   filterGroupIndex: 0,
-};
-ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), groundFD);
+});
 
+const w = 100.0;
 const rotator = world.createBody({
   type: "dynamic",
   position: { x: -10.0, y: 20.0 },
+  angularVelocity: w,
+  linearVelocity: { x: -8.0 * w, y: 0.0 },
 });
-rotator.createFixture(new Circle(0.5), 5.0);
-
-const w = 100.0;
-rotator.setAngularVelocity(w);
-rotator.setLinearVelocity({ x: -8.0 * w, y: 0.0 });
+rotator.createFixture({
+  shape: new Circle(0.5),
+  density: 5.0,
+});
 
 const joint = world.createJoint(
   new RevoluteJoint(
@@ -55,7 +57,8 @@ const ball = world.createBody({
   type: "dynamic",
   position: { x: 5.0, y: 30.0 },
 });
-ball.createFixture(new Circle(3.0), {
+ball.createFixture({
+  shape: new Circle(3.0),
   density: 5.0,
   // filterMaskBits: 1,
 });
@@ -65,7 +68,10 @@ const platform = world.createBody({
   position: { x: 20.0, y: 10.0 },
   bullet: true,
 });
-platform.createFixture(new Box(10.0, 0.2, { x: -10.0, y: 0.0 }, 0.0), 2.0);
+platform.createFixture({
+  shape: new Box(10.0, 0.2, { x: -10.0, y: 0.0 }, 0.0),
+  density: 2.0,
+});
 
 world.createJoint(
   new RevoluteJoint(

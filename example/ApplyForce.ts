@@ -22,16 +22,28 @@ const wallFD = {
 };
 
 // Left vertical
-ground.createFixture(new Edge({ x: -20.0, y: -20.0 }, { x: -20.0, y: 20.0 }), wallFD);
+ground.createFixture({
+  shape: new Edge({ x: -20.0, y: -20.0 }, { x: -20.0, y: 20.0 }),
+  ...wallFD,
+});
 
 // Right vertical
-ground.createFixture(new Edge({ x: 20.0, y: -20.0 }, { x: 20.0, y: 20.0 }), wallFD);
+ground.createFixture({
+  shape: new Edge({ x: 20.0, y: -20.0 }, { x: 20.0, y: 20.0 }),
+  ...wallFD,
+});
 
 // Top horizontal
-ground.createFixture(new Edge({ x: -20.0, y: 20.0 }, { x: 20.0, y: 20.0 }), wallFD);
+ground.createFixture({
+  shape: new Edge({ x: -20.0, y: 20.0 }, { x: 20.0, y: 20.0 }),
+  ...wallFD,
+});
 
 // Bottom horizontal
-ground.createFixture(new Edge({ x: -20.0, y: -20.0 }, { x: 20.0, y: -20.0 }), wallFD);
+ground.createFixture({
+  shape: new Edge({ x: -20.0, y: -20.0 }, { x: 20.0, y: -20.0 }),
+  ...wallFD,
+});
 
 const xf1 = new Transform();
 xf1.q.set(0.3524 * Math.PI);
@@ -66,8 +78,14 @@ const jet = world.createBody({
   allowSleep: false,
 });
 
-jet.createFixture(poly1, 2.0);
-jet.createFixture(poly2, 2.0);
+jet.createFixture({
+  shape: poly1,
+  density: 2.0,
+});
+jet.createFixture({
+  shape: poly2,
+  density: 2.0,
+});
 
 const boxFD = {
   density: 1.0,
@@ -80,7 +98,10 @@ for (let i = 0; i < 10; ++i) {
     position: { x: 0.0, y: 5.0 + 1.54 * i },
   });
 
-  box.createFixture(new Box(0.5, 0.5), boxFD);
+  box.createFixture({
+    shape: new Box(0.5, 0.5),
+    ...boxFD,
+  });
 
   const gravity = 10.0;
   const I = box.getInertia();

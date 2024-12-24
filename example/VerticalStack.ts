@@ -24,8 +24,12 @@ const indices: number[] = [];
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }));
-ground.createFixture(new Edge({ x: 20.0, y: 0.0 }, { x: 20.0, y: 20.0 }));
+ground.createFixture({
+  shape: new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }),
+});
+ground.createFixture({
+  shape: new Edge({ x: 20.0, y: 0.0 }, { x: 20.0, y: 20.0 }),
+});
 
 const xs = [0.0, -10.0, -5.0, 5.0, 10.0];
 
@@ -44,7 +48,8 @@ for (let j = 0; j < columnCount; ++j) {
       userData: indices[n],
       position: { x: xs[j] + x, y: 0.55 + 1.1 * i },
     });
-    body.createFixture(shape, {
+    body.createFixture({
+      shape: shape,
       density: 1.0,
       friction: 0.3,
     });

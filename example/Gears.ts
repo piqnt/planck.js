@@ -24,7 +24,9 @@ testbed.start(world);
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: 50.0, y: 0.0 }, { x: -50.0, y: 0.0 }));
+ground.createFixture({
+  shape: new Edge({ x: 50.0, y: 0.0 }, { x: -50.0, y: 0.0 }),
+});
 
 const radius1 = 1.0;
 const radius2 = 2.0;
@@ -33,19 +35,28 @@ const gearA1 = world.createBody({
   type: "static",
   position: { x: 10.0, y: 9.0 },
 });
-gearA1.createFixture(new Circle(radius1), 5.0);
+gearA1.createFixture({
+  shape: new Circle(radius1),
+  density: 5.0,
+});
 
 const plankA1 = world.createBody({
   type: "dynamic",
   position: { x: 10.0, y: 8.0 },
 });
-plankA1.createFixture(new Box(0.5, 5.0), 5.0);
+plankA1.createFixture({
+  shape: new Box(0.5, 5.0),
+  density: 5.0,
+});
 
 const gearA2 = world.createBody({
   type: "dynamic",
   position: { x: 10.0, y: 6.0 },
 });
-gearA2.createFixture(new Circle(radius2), 5.0);
+gearA2.createFixture({
+  shape: new Circle(radius2),
+  density: 5.0,
+});
 
 const jointA1 = world.createJoint(new RevoluteJoint({}, plankA1, gearA1, gearA1.getPosition()));
 const jointA2 = world.createJoint(new RevoluteJoint({}, plankA1, gearA2, gearA2.getPosition()));
@@ -56,7 +67,10 @@ const gearB1 = world.createBody({
   type: "dynamic",
   position: { x: -3.0, y: 12.0 },
 });
-gearB1.createFixture(new Circle(1.0), 5.0);
+gearB1.createFixture({
+  shape: new Circle(1.0),
+  density: 5.0,
+});
 
 const jointB1 = world.createJoint(new RevoluteJoint({}, ground, gearB1, gearB1.getPosition()));
 
@@ -64,7 +78,10 @@ const gearB2 = world.createBody({
   type: "dynamic",
   position: { x: 0.0, y: 12.0 },
 });
-gearB2.createFixture(new Circle(2.0), 5.0);
+gearB2.createFixture({
+  shape: new Circle(2.0),
+  density: 5.0,
+});
 
 const jointB2 = world.createJoint(new RevoluteJoint({}, ground, gearB2, gearB2.getPosition()));
 
@@ -72,7 +89,10 @@ const plankB1 = world.createBody({
   type: "dynamic",
   position: { x: 2.5, y: 12.0 },
 });
-plankB1.createFixture(new Box(0.5, 5.0), 5.0);
+plankB1.createFixture({
+  shape: new Box(0.5, 5.0),
+  density: 5.0,
+});
 
 const jointB3 = world.createJoint(
   new PrismaticJoint(

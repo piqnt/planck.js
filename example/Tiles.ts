@@ -34,7 +34,10 @@ let fixtureCount = 0;
     for (let j = 0; j < M; ++j) {
       position.x = -N * a;
       for (let i = 0; i < N; ++i) {
-        ground.createFixture(new Box(a, a, position, 0.0), 0.0);
+        ground.createFixture({
+          shape: new Box(a, a, position, 0.0),
+          density: 0.0,
+        });
         ++fixtureCount;
         position.x += 2.0 * a;
       }
@@ -48,7 +51,10 @@ let fixtureCount = 0;
     for (let i = 0; i < N; ++i) {
       position.y = 0.0;
       for (let j = 0; j < M; ++j) {
-        ground.createFixture(new Box(a, a, position, 0.0), 0.0);
+        ground.createFixture({
+          shape: new Box(a, a, position, 0.0),
+          density: 0.0,
+        });
         position.y -= 2.0 * a;
       }
       position.x += 2.0 * a;
@@ -75,7 +81,10 @@ let fixtureCount = 0;
         type: "dynamic",
         position: y,
       });
-      body.createFixture(shape, 5.0);
+      body.createFixture({
+        shape: shape,
+        density: 5.0,
+      });
       ++fixtureCount;
       y.x += deltaY.x;
       y.y += deltaY.y;

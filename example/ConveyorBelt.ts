@@ -16,15 +16,20 @@ testbed.start(world);
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -20.0, y: 0.0 }, { x: 20.0, y: 0.0 }), 0.0);
+ground.createFixture({
+  shape: new Edge({ x: -20.0, y: 0.0 }, { x: 20.0, y: 0.0 }),
+  density: 0.0,
+});
 
 // Platform
-const platform = world
-  .createBody({
-    type: "static",
-    position: { x: -5.0, y: 5.0 },
-  })
-  .createFixture(new Box(10.0, 0.5), { friction: 0.8 });
+const platform = world.createBody({
+  type: "static",
+  position: { x: -5.0, y: 5.0 },
+});
+platform.createFixture({
+  shape: new Box(10.0, 0.5),
+  friction: 0.8,
+});
 
 // Boxes
 for (let i = 0; i < 5; ++i) {
@@ -32,18 +37,21 @@ for (let i = 0; i < 5; ++i) {
     type: "dynamic",
     position: { x: -10.0 + 2.0 * i, y: 7.0 },
   });
-  body.createFixture(new Box(0.5, 0.5), 20.0);
+  body.createFixture({
+    shape: new Box(0.5, 0.5),
+    density: 20.0,
+  });
 }
 
 world.on("pre-solve", function (contact, oldManifold) {
   const fixtureA = contact.getFixtureA();
   const fixtureB = contact.getFixtureB();
 
-  if (fixtureA == platform) {
+  if (fixtureA.getBody() == platform) {
     contact.setTangentSpeed(5.0);
   }
 
-  if (fixtureB == platform) {
+  if (fixtureB.getBody() == platform) {
     contact.setTangentSpeed(-5.0);
   }
 });

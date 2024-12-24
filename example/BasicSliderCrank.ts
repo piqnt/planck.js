@@ -25,7 +25,10 @@ const crank = world.createBody({
   type: "dynamic",
   position: { x: -8.0, y: 20.0 },
 });
-crank.createFixture(new Box(4.0, 1.0), 2.0);
+crank.createFixture({
+  shape: new Box(4.0, 1.0),
+  density: 2.0,
+});
 world.createJoint(new RevoluteJoint({}, ground, crank, { x: -12.0, y: 20.0 }));
 
 // Define connecting rod
@@ -33,7 +36,10 @@ const rod = world.createBody({
   type: "dynamic",
   position: { x: 4.0, y: 20.0 },
 });
-rod.createFixture(new Box(8.0, 1.0), 2.0);
+rod.createFixture({
+  shape: new Box(8.0, 1.0),
+  density: 2.0,
+});
 world.createJoint(new RevoluteJoint({}, crank, rod, { x: -4.0, y: 20.0 }));
 
 // Define piston
@@ -42,6 +48,9 @@ const piston = world.createBody({
   position: { x: 12.0, y: 20.0 },
   fixedRotation: true,
 });
-piston.createFixture(new Box(3.0, 3.0), 2.0);
+piston.createFixture({
+  shape: new Box(3.0, 3.0),
+  density: 2.0,
+});
 world.createJoint(new RevoluteJoint({}, rod, piston, { x: 12.0, y: 20.0 }));
 world.createJoint(new PrismaticJoint({}, ground, piston, { x: 12.0, y: 17.0 }, { x: 1.0, y: 0.0 }));

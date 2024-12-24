@@ -65,7 +65,10 @@ world
   .createBody({
     type: "static",
   })
-  .createFixture(new Chain(walls(), true), wallFixDef);
+  .createFixture({
+    shape: new Chain(walls(), true),
+    ...wallFixDef,
+  });
 
 {
   // goal left
@@ -73,7 +76,10 @@ world
     type: "static",
     position: { x: -width * 0.5 - BALL_R, y: 0 },
   });
-  const fixture = body.createFixture(new Chain(goal), goalFixDef);
+  const fixture = body.createFixture({
+    shape: new Chain(goal),
+    ...goalFixDef,
+  });
 }
 
 {
@@ -82,17 +88,26 @@ world
     type: "static",
     position: { x: +width * 0.5 + BALL_R, y: 0 },
   });
-  const fixture = body.createFixture(new Chain(goal), goalFixDef);
+  const fixture = body.createFixture({
+    shape: new Chain(goal),
+    ...goalFixDef,
+  });
 }
 
 const ball = world.createBody(ballBodyDef);
-ball.createFixture(new Circle(BALL_R), ballFixDef);
+ball.createFixture({
+  shape: new Circle(BALL_R),
+  ...ballFixDef,
+});
 ball.style = { fill: "white", stroke: "black" };
 
 team().forEach(function (p) {
   const player = world.createBody(playerBodyDef);
   player.setPosition(p);
-  player.createFixture(new Circle(PLAYER_R), playerFixDef);
+  player.createFixture({
+    shape: new Circle(PLAYER_R),
+    ...playerFixDef,
+  });
   player.style = { fill: "#0077ff", stroke: "black" };
 });
 
@@ -102,7 +117,10 @@ team()
     const player = world.createBody(playerBodyDef);
     player.setPosition(p);
     player.setAngle(Math.PI);
-    player.createFixture(new Circle(PLAYER_R), playerFixDef);
+    player.createFixture({
+      shape: new Circle(PLAYER_R),
+      ...playerFixDef,
+    });
     player.style = { fill: "#ff411a", stroke: "black" };
   });
 

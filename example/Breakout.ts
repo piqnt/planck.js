@@ -129,6 +129,12 @@ const fullPaddleShape = new PolygonShape([
   { x: -1.2, y: 0.1 },
   { x: -1.2, y: -0.1 },
 ]);
+
+const paddleShapes = {
+  mini: miniPaddleShape,
+  full: fullPaddleShape,
+};
+
 class BreakoutPhysics {
   client?: BreakoutPhysicsClientInterface;
 
@@ -227,63 +233,79 @@ class BreakoutPhysics {
         type: "static",
         position: { x: +9, y: -0.5 },
       });
-      wall.createFixture(new EdgeShape({ x: 0, y: -12.5 }, { x: 0, y: +11.5 }), wallFix);
+      wall.createFixture({
+        shape: new EdgeShape({ x: 0, y: -12.5 }, { x: 0, y: +11.5 }),
+        ...wallFix,
+      });
     }
     {
       const wall = this.world.createBody({
         type: "static",
         position: { x: -9, y: -0.5 },
       });
-      wall.createFixture(new EdgeShape({ x: 0, y: -12.5 }, { x: 0, y: +11.5 }), wallFix);
+      wall.createFixture({
+        shape: new EdgeShape({ x: 0, y: -12.5 }, { x: 0, y: +11.5 }),
+        ...wallFix,
+      });
     }
     {
       const wall = this.world.createBody({
         type: "static",
         position: { x: 0, y: +12 },
       });
-      wall.createFixture(new EdgeShape({ x: -8, y: 0 }, { x: +8, y: 0 }), wallFix);
+      wall.createFixture({
+        shape: new EdgeShape({ x: -8, y: 0 }, { x: +8, y: 0 }),
+        ...wallFix,
+      });
     }
     {
       const wall = this.world.createBody({
         type: "static",
         position: { x: 9, y: 12 },
       });
-      wall.createFixture(new EdgeShape({ x: -1, y: 0 }, { x: 0, y: -1 }), wallFix);
+      wall.createFixture({
+        shape: new EdgeShape({ x: -1, y: 0 }, { x: 0, y: -1 }),
+        ...wallFix,
+      });
     }
     {
       const wall = this.world.createBody({
         type: "static",
         position: { x: -9, y: 12 },
       });
-      wall.createFixture(new EdgeShape({ x: 1, y: 0 }, { x: 0, y: -1 }), wallFix);
+      wall.createFixture({
+        shape: new EdgeShape({ x: 1, y: 0 }, { x: 0, y: -1 }),
+        ...wallFix,
+      });
     }
     {
       const wall = this.world.createBody({
         type: "static",
         position: { x: 0, y: -13 },
+        userData: new WallData(),
       });
-      wall.createFixture(new EdgeShape({ x: -9, y: 0 }, { x: +9, y: 0 }), wallFix);
+      wall.createFixture({
+        shape: new EdgeShape({ x: -9, y: 0 }, { x: +9, y: 0 }),
+        ...wallFix,
+      });
 
-      wall.setUserData(new WallData());
       this.bottomWall = wall;
     }
   }
 
   setPaddlePhysics(data: PaddleData) {
-    let shape: Shape;
-
-    if (data.subtype == "mini") {
-      shape = miniPaddleShape;
-    } else {
-      shape = fullPaddleShape;
-    }
-
     const body = this.world.createBody({
       type: "kinematic",
       position: { x: 0, y: -10.5 },
+      userData: data,
     });
 
-    body.createFixture(shape, paddleFix);
+    const shape = paddleShapes[data.subtype] || fullPaddleShape;
+
+    body.createFixture({
+      shape: shape,
+      ...paddleFix,
+    });
 
     if (this.paddle) {
       const pInit = this.paddle.getPosition();
@@ -293,7 +315,6 @@ class BreakoutPhysics {
       this.world.destroyBody(this.paddle);
     }
 
-    body.setUserData(data);
     data.body = body;
     this.paddle = body;
   }
@@ -304,7 +325,10 @@ class BreakoutPhysics {
       bullet: true,
       angle: Math.random() * Math.PI * 2,
     });
-    body.createFixture(ballShape, ballFix);
+    body.createFixture({
+      shape: ballShape,
+      ...ballFix,
+    });
 
     const oldBall = this.balls[0];
     if (oldBall) {
@@ -332,7 +356,10 @@ class BreakoutPhysics {
       type: "static",
       position: pos,
     });
-    body.createFixture(shape, brickFix);
+    body.createFixture({
+      shape: shape,
+      ...brickFix,
+    });
 
     body.setUserData(data);
     data.body = body;
@@ -353,19 +380,37 @@ class BreakoutPhysics {
   addDropPhysics(drop: DropData) {
     const body = this.world.createBody({
       type: "dynamic",
+      position: {
+        x: (drop.i - 3) * 2,
+        y: 9 - drop.j * 2,
+      },
+      linearVelocity: {
+        x: 0,
+        y: drop.speed,
+      },
+      userData: drop,
     });
     if (drop.subtype == "+") {
-      body.createFixture(new BoxShape(0.08, 0.32), dropFix);
-      body.createFixture(new BoxShape(0.32, 0.08), dropFix);
+      body.createFixture({
+        shape: new BoxShape(0.08, 0.32),
+        ...dropFix,
+      });
+      body.createFixture({
+        shape: new BoxShape(0.32, 0.08),
+        ...dropFix,
+      });
     } else if (drop.subtype == "-") {
-      body.createFixture(new BoxShape(0.3, 0.1), dropFix);
+      body.createFixture({
+        shape: new BoxShape(0.3, 0.1),
+        ...dropFix,
+      });
     } else {
-      body.createFixture(new CircleShape(0.3), dropFix);
+      body.createFixture({
+        shape: new CircleShape(0.3),
+        ...dropFix,
+      });
     }
-    body.setPosition({ x: (drop.i - 3) * 2, y: 9 - drop.j * 2 });
-    body.setLinearVelocity({ x: 0, y: drop.speed });
 
-    body.setUserData(drop);
     drop.body = body;
     this.drops.push(body);
   }

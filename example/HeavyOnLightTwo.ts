@@ -16,19 +16,28 @@ testbed.start(world);
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
+ground.createFixture({
+  shape: new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }),
+  density: 0.0,
+});
 
 const light1 = world.createBody({
   type: "dynamic",
   position: { x: 0.0, y: 2.5 },
 });
-light1.createFixture(new Circle(0.5), 10.0);
+light1.createFixture({
+  shape: new Circle(0.5),
+  density: 10.0,
+});
 
 const light2 = world.createBody({
   type: "dynamic",
   position: { x: 0.0, y: 3.5 },
 });
-light2.createFixture(new Circle(0.5), 10.0);
+light2.createFixture({
+  shape: new Circle(0.5),
+  density: 10.0,
+});
 
 let heavy: Body | null = null;
 
@@ -41,7 +50,10 @@ function toggleHeavy() {
       type: "dynamic",
       position: { x: 0.0, y: 9.0 },
     });
-    heavy.createFixture(new Circle(5.0), 10.0);
+    heavy.createFixture({
+      shape: new Circle(5.0),
+      density: 10.0,
+    });
   }
 }
 

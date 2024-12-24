@@ -19,7 +19,9 @@ testbed.start(world);
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -50.0, y: 0.0 }, { x: 50.0, y: 0.0 }));
+ground.createFixture({
+  shape: new Edge({ x: -50.0, y: 0.0 }, { x: 50.0, y: 0.0 }),
+});
 
 const xLo = -5.0;
 const xHi = 5.0;
@@ -68,7 +70,10 @@ const body3 = world.createBody({
     y: Math.random(yLo, yHi),
   },
 });
-body3.createFixture(new Box(1.0, 0.5), 1.0);
+body3.createFixture({
+  shape: new Box(1.0, 0.5),
+  density: 1.0,
+});
 
 // Large box
 const body4 = world.createBody({
@@ -78,7 +83,10 @@ const body4 = world.createBody({
     y: Math.random(yLo, yHi),
   },
 });
-body4.createFixture(new Box(2.0, 1.0), 1.0);
+body4.createFixture({
+  shape: new Box(2.0, 1.0),
+  density: 1.0,
+});
 
 // Small circle
 const body5 = world.createBody({
@@ -88,7 +96,10 @@ const body5 = world.createBody({
     y: Math.random(yLo, yHi),
   },
 });
-body5.createFixture(new Circle(1.0), 1.0);
+body5.createFixture({
+  shape: new Circle(1.0),
+  density: 1.0,
+});
 
 // Large circle
 const body6 = world.createBody({
@@ -98,7 +109,10 @@ const body6 = world.createBody({
     y: Math.random(yLo, yHi),
   },
 });
-body6.createFixture(new Circle(2.0), 1.0);
+body6.createFixture({
+  shape: new Circle(2.0),
+  density: 1.0,
+});
 
 interface ContactPoint {
   fixtureA: Fixture;

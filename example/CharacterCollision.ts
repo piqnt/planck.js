@@ -25,7 +25,10 @@ testbed.start(world);
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -20.0, y: 0.0 }, { x: 20.0, y: 0.0 }), 0.0);
+ground.createFixture({
+  shape: new Edge({ x: -20.0, y: 0.0 }, { x: 20.0, y: 0.0 }),
+  density: 0.0,
+});
 
 // Collinear edges with no adjacency information.
 // This shows the problematic case where a box shape can hit
@@ -33,9 +36,18 @@ ground.createFixture(new Edge({ x: -20.0, y: 0.0 }, { x: 20.0, y: 0.0 }), 0.0);
 const edge = world.createBody({
   type: "static",
 });
-edge.createFixture(new Edge({ x: -8.0, y: 1.0 }, { x: -6.0, y: 1.0 }), 0.0);
-edge.createFixture(new Edge({ x: -6.0, y: 1.0 }, { x: -4.0, y: 1.0 }), 0.0);
-edge.createFixture(new Edge({ x: -4.0, y: 1.0 }, { x: -2.0, y: 1.0 }), 0.0);
+edge.createFixture({
+  shape: new Edge({ x: -8.0, y: 1.0 }, { x: -6.0, y: 1.0 }),
+  density: 0.0,
+});
+edge.createFixture({
+  shape: new Edge({ x: -6.0, y: 1.0 }, { x: -4.0, y: 1.0 }),
+  density: 0.0,
+});
+edge.createFixture({
+  shape: new Edge({ x: -4.0, y: 1.0 }, { x: -2.0, y: 1.0 }),
+  density: 0.0,
+});
 
 // Chain shape
 const chain = world.createBody({
@@ -59,9 +71,18 @@ chain.createFixture(
 const tiles = world.createBody({
   type: "static",
 });
-tiles.createFixture(new Box(1.0, 1.0, { x: 4.0, y: 3.0 }, 0.0), 0.0);
-tiles.createFixture(new Box(1.0, 1.0, { x: 6.0, y: 3.0 }, 0.0), 0.0);
-tiles.createFixture(new Box(1.0, 1.0, { x: 8.0, y: 3.0 }, 0.0), 0.0);
+tiles.createFixture({
+  shape: new Box(1.0, 1.0, { x: 4.0, y: 3.0 }, 0.0),
+  density: 0.0,
+});
+tiles.createFixture({
+  shape: new Box(1.0, 1.0, { x: 6.0, y: 3.0 }, 0.0),
+  density: 0.0,
+});
+tiles.createFixture({
+  shape: new Box(1.0, 1.0, { x: 8.0, y: 3.0 }, 0.0),
+  density: 0.0,
+});
 
 // Square made from an edge loop. Collision should be smooth.
 const square = world.createBody({
@@ -111,7 +132,10 @@ const char1 = world.createBody({
   fixedRotation: true,
   allowSleep: false,
 });
-char1.createFixture(new Box(0.5, 0.5), 20.0);
+char1.createFixture({
+  shape: new Box(0.5, 0.5),
+  density: 20.0,
+});
 
 // Square character 2
 const char2 = world.createBody({
@@ -120,7 +144,10 @@ const char2 = world.createBody({
   fixedRotation: true,
   allowSleep: false,
 });
-char2.createFixture(new Box(0.25, 0.25), 20.0);
+char2.createFixture({
+  shape: new Box(0.25, 0.25),
+  density: 20.0,
+});
 
 // Hexagon character
 const hex = world.createBody({
@@ -138,7 +165,10 @@ for (let i = 0; i < 6; ++i) {
   angle += delta;
 }
 
-hex.createFixture(new Polygon(vertices), 20.0);
+hex.createFixture({
+  shape: new Polygon(vertices),
+  density: 20.0,
+});
 
 // Circle character
 const circle = world.createBody({
@@ -147,7 +177,10 @@ const circle = world.createBody({
   fixedRotation: true,
   allowSleep: false,
 });
-circle.createFixture(new Circle(0.5), 20.0);
+circle.createFixture({
+  shape: new Circle(0.5),
+  density: 20.0,
+});
 
 // Circle character
 const character = world.createBody({
@@ -155,7 +188,8 @@ const character = world.createBody({
   position: { x: -7.0, y: 6.0 },
   allowSleep: false,
 });
-character.createFixture(new Circle(0.25), {
+character.createFixture({
+  shape: new Circle(0.25),
   density: 20.0,
   friction: 1.0,
 });

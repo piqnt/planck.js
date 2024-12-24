@@ -27,7 +27,10 @@ const touching: UserDate[] = [];
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
+ground.createFixture({
+  shape: new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }),
+  density: 0.0,
+});
 
 if (0) {
   sensor = ground.createFixture({
@@ -49,9 +52,12 @@ for (let i = 0; i < COUNT; ++i) {
   bodies[i] = world.createBody({
     type: "dynamic",
     position: { x: -10.0 + 3.0 * i, y: 20.0 },
+    userData: touching[i],
   });
-  bodies[i].setUserData(touching[i]);
-  bodies[i].createFixture(circle, 1.0);
+  bodies[i].createFixture({
+    shape: circle,
+    density: 1.0,
+  });
 }
 
 // Implement contact listener.

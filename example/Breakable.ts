@@ -23,7 +23,10 @@ let broke = false;
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
+ground.createFixture({
+  shape: new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }),
+  density: 0.0,
+});
 
 // Breakable dynamic body
 const body1 = world.createBody({
@@ -33,10 +36,16 @@ const body1 = world.createBody({
 });
 
 const shape1 = new Box(0.5, 0.5, { x: -0.5, y: 0.0 }, 0.0);
-const piece1 = body1.createFixture(shape1, 1.0);
+const piece1 = body1.createFixture({
+  shape: shape1,
+  density: 1.0,
+});
 
 const shape2 = new Box(0.5, 0.5, { x: 0.5, y: 0.0 }, 0.0);
-let piece2 = body1.createFixture(shape2, 1.0);
+let piece2 = body1.createFixture({
+  shape: shape2,
+  density: 1.0,
+});
 
 world.on("post-solve", function (contact, impulse) {
   if (broke) {
@@ -70,7 +79,10 @@ function breakIt() {
     angle: body1.getAngle(),
   });
 
-  piece2 = body2.createFixture(shape2, 1.0);
+  piece2 = body2.createFixture({
+    shape: shape2,
+    density: 1.0,
+  });
 
   // Compute consistent velocities for new bodies based on
   // cached velocity.

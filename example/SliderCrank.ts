@@ -18,14 +18,20 @@ testbed.info("Z: Toggle friction, X: Toggle motor");
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
+ground.createFixture({
+  shape: new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }),
+  density: 0.0,
+});
 
 // Define crank.
 const crank = world.createBody({
   type: "dynamic",
   position: { x: 0.0, y: 7.0 },
 });
-crank.createFixture(new Box(0.5, 2.0), 2.0);
+crank.createFixture({
+  shape: new Box(0.5, 2.0),
+  density: 2.0,
+});
 
 const joint1 = world.createJoint(
   new RevoluteJoint(
@@ -45,7 +51,10 @@ const follower = world.createBody({
   type: "dynamic",
   position: { x: 0.0, y: 13.0 },
 });
-follower.createFixture(new Box(0.5, 4.0), 2.0);
+follower.createFixture({
+  shape: new Box(0.5, 4.0),
+  density: 2.0,
+});
 
 world.createJoint(new RevoluteJoint({ enableMotor: false }, crank, follower, { x: 0.0, y: 9.0 }));
 
@@ -55,7 +64,10 @@ const piston = world.createBody({
   fixedRotation: true,
   position: { x: 0.0, y: 17.0 },
 });
-piston.createFixture(new Box(1.5, 1.5), 2.0);
+piston.createFixture({
+  shape: new Box(1.5, 1.5),
+  density: 2.0,
+});
 
 world.createJoint(new RevoluteJoint({}, follower, piston, { x: 0.0, y: 17.0 }));
 
@@ -77,7 +89,10 @@ const payload = world.createBody({
   type: "dynamic",
   position: { x: 0.0, y: 23.0 },
 });
-payload.createFixture(new Box(1.5, 1.5), 2.0);
+payload.createFixture({
+  shape: new Box(1.5, 1.5),
+  density: 2.0,
+});
 
 testbed.keydown = function (code, char) {
   switch (char) {

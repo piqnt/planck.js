@@ -46,8 +46,14 @@ const rightFlipper = world.createBody({
   position: { x: 2.0, y: 0.0 },
 });
 
-leftFlipper.createFixture(new Box(1.75, 0.1), 1.0);
-rightFlipper.createFixture(new Box(1.75, 0.1), 1.0);
+leftFlipper.createFixture({
+  shape: new Box(1.75, 0.1),
+  density: 1.0,
+});
+rightFlipper.createFixture({
+  shape: new Box(1.75, 0.1),
+  density: 1.0,
+});
 
 const jd = {
   enableMotor: true,
@@ -86,7 +92,10 @@ const ball = world.createBody({
   position: { x: 1.0, y: 15.0 },
   bullet: true,
 });
-ball.createFixture(new Circle(0.2), 1.0);
+ball.createFixture({
+  shape: new Circle(0.2),
+  density: 1.0,
+});
 
 testbed.step = function () {
   if (testbed.activeKeys.right) {

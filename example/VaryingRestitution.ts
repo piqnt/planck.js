@@ -18,7 +18,9 @@ testbed.start(world);
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }));
+ground.createFixture({
+  shape: new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }),
+});
 
 const restitution = [0.0, 0.1, 0.3, 0.5, 0.75, 0.9, 1.0];
 
@@ -29,7 +31,8 @@ for (let i = 0; i < restitution.length; ++i) {
     type: "dynamic",
     position: { x: -10.0 + 3.0 * i, y: 20.0 },
   });
-  ball.createFixture(circle, {
+  ball.createFixture({
+    shape: circle,
     density: 1.0,
     restitution: restitution[i],
   });

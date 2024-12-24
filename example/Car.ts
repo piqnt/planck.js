@@ -32,7 +32,10 @@ const groundFD = {
   friction: 0.6,
 };
 
-ground.createFixture(new Edge({ x: -20.0, y: 0.0 }, { x: 20.0, y: 0.0 }), groundFD);
+ground.createFixture({
+  shape: new Edge({ x: -20.0, y: 0.0 }, { x: 20.0, y: 0.0 }),
+  ...groundFD,
+});
 
 const hs = [0.25, 1.0, 4.0, 0.0, 0.0, -1.0, -2.0, -2.0, -1.25, 0.0];
 
@@ -42,38 +45,62 @@ const dx = 5.0;
 
 for (let i = 0; i < 10; ++i) {
   const y2 = hs[i];
-  ground.createFixture(new Edge({ x: x, y: y1 }, { x: x + dx, y: y2 }), groundFD);
+  ground.createFixture({
+    shape: new Edge({ x: x, y: y1 }, { x: x + dx, y: y2 }),
+    ...groundFD,
+  });
   y1 = y2;
   x += dx;
 }
 
 for (let i = 0; i < 10; ++i) {
   const y2 = hs[i];
-  ground.createFixture(new Edge({ x: x, y: y1 }, { x: x + dx, y: y2 }), groundFD);
+  ground.createFixture({
+    shape: new Edge({ x: x, y: y1 }, { x: x + dx, y: y2 }),
+    ...groundFD,
+  });
   y1 = y2;
   x += dx;
 }
 
-ground.createFixture(new Edge({ x: x, y: 0.0 }, { x: x + 40.0, y: 0.0 }), groundFD);
+ground.createFixture({
+  shape: new Edge({ x: x, y: 0.0 }, { x: x + 40.0, y: 0.0 }),
+  ...groundFD,
+});
 
 x += 80.0;
-ground.createFixture(new Edge({ x: x, y: 0.0 }, { x: x + 40.0, y: 0.0 }), groundFD);
+ground.createFixture({
+  shape: new Edge({ x: x, y: 0.0 }, { x: x + 40.0, y: 0.0 }),
+  ...groundFD,
+});
 
 x += 40.0;
-ground.createFixture(new Edge({ x: x, y: 0.0 }, { x: x + 10.0, y: 5.0 }), groundFD);
+ground.createFixture({
+  shape: new Edge({ x: x, y: 0.0 }, { x: x + 10.0, y: 5.0 }),
+  ...groundFD,
+});
 
 x += 20.0;
-ground.createFixture(new Edge({ x: x, y: 0.0 }, { x: x + 40.0, y: 0.0 }), groundFD);
+ground.createFixture({
+  shape: new Edge({ x: x, y: 0.0 }, { x: x + 40.0, y: 0.0 }),
+  ...groundFD,
+});
 
 x += 40.0;
-ground.createFixture(new Edge({ x: x, y: 0.0 }, { x: x, y: 20.0 }), groundFD);
+ground.createFixture({
+  shape: new Edge({ x: x, y: 0.0 }, { x: x, y: 20.0 }),
+  ...groundFD,
+});
 
 // Teeter
 const teeter = world.createBody({
   type: "dynamic",
   position: { x: 140.0, y: 1.0 },
 });
-teeter.createFixture(new Box(10.0, 0.25), 1.0);
+teeter.createFixture({
+  shape: new Box(10.0, 0.25),
+  density: 1.0,
+});
 world.createJoint(
   new RevoluteJoint(
     {
@@ -102,7 +129,10 @@ for (i = 0; i < 20; ++i) {
     type: "dynamic",
     position: { x: 161.0 + 2.0 * i, y: -0.125 },
   });
-  bridgeBlock.createFixture(new Box(1.0, 0.125), bridgeFD);
+  bridgeBlock.createFixture({
+    shape: new Box(1.0, 0.125),
+    ...bridgeFD,
+  });
 
   world.createJoint(
     new RevoluteJoint({}, prevBody, bridgeBlock, { x: 160.0 + 2.0 * i, y: -0.125 }),
@@ -121,35 +151,50 @@ world
     type: "dynamic",
     position: { x: 230.0, y: 0.5 },
   })
-  .createFixture(box, 0.5);
+  .createFixture({
+    shape: box,
+    density: 0.5,
+  });
 
 world
   .createBody({
     type: "dynamic",
     position: { x: 230.0, y: 1.5 },
   })
-  .createFixture(box, 0.5);
+  .createFixture({
+    shape: box,
+    density: 0.5,
+  });
 
 world
   .createBody({
     type: "dynamic",
     position: { x: 230.0, y: 2.5 },
   })
-  .createFixture(box, 0.5);
+  .createFixture({
+    shape: box,
+    density: 0.5,
+  });
 
 world
   .createBody({
     type: "dynamic",
     position: { x: 230.0, y: 3.5 },
   })
-  .createFixture(box, 0.5);
+  .createFixture({
+    shape: box,
+    density: 0.5,
+  });
 
 world
   .createBody({
     type: "dynamic",
     position: { x: 230.0, y: 4.5 },
   })
-  .createFixture(box, 0.5);
+  .createFixture({
+    shape: box,
+    density: 0.5,
+  });
 
 // Car
 const car = world.createBody({
@@ -177,13 +222,19 @@ const wheelBack = world.createBody({
   type: "dynamic",
   position: { x: -1.0, y: 0.35 },
 });
-wheelBack.createFixture(new Circle(0.4), wheelFD);
+wheelBack.createFixture({
+  shape: new Circle(0.4),
+  ...wheelFD,
+});
 
 const wheelFront = world.createBody({
   type: "dynamic",
   position: { x: 1.0, y: 0.4 },
 });
-wheelFront.createFixture(new Circle(0.4), wheelFD);
+wheelFront.createFixture({
+  shape: new Circle(0.4),
+  ...wheelFD,
+});
 
 const springBack = world.createJoint(
   new WheelJoint(

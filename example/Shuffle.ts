@@ -47,7 +47,10 @@ world
   .createBody({
     type: "static",
   })
-  .createFixture(new Chain(walls, true), wallFixDef);
+  .createFixture({
+    shape: new Chain(walls, true),
+    ...wallFixDef,
+  });
 
 row(1, 8, BALL_R, BALL_D)
   .map((v) => ({ x: v.x + height * 0.4, y: v.y + 0 }))
@@ -55,7 +58,10 @@ row(1, 8, BALL_R, BALL_D)
     const ball = world.createBody(ballBodyDef);
     ball.setPosition(p);
     ball.setAngle(Math.PI);
-    ball.createFixture(new Circle(BALL_R), ballFixDef);
+    ball.createFixture({
+      shape: new Circle(BALL_R),
+      ...ballFixDef,
+    });
     ball.style = { fill: "#ff411a", stroke: "black" };
   });
 
@@ -64,7 +70,10 @@ row(1, 8, BALL_R, BALL_D)
   .forEach(function (p) {
     const ball = world.createBody(ballBodyDef);
     ball.setPosition(p);
-    ball.createFixture(new Circle(BALL_R), ballFixDef);
+    ball.createFixture({
+      shape: new Circle(BALL_R),
+      ...ballFixDef,
+    });
     ball.style = { fill: "#0077ff", stroke: "black" };
   });
 

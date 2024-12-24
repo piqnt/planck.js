@@ -41,7 +41,10 @@ const shapes: Shape[] = [];
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
+ground.createFixture({
+  shape: new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }),
+  density: 0.0,
+});
 
 shapes[0] = new Polygon([
   { x: -0.5, y: 0.0 },
@@ -88,7 +91,8 @@ function createBody(index: number) {
     angularDamping: index === 4 ? 0.02 : 0,
   });
 
-  body.createFixture(shapes[index % shapes.length], {
+  body.createFixture({
+    shape: shapes[index % shapes.length],
     density: 1.0,
     friction: 0.3,
   });

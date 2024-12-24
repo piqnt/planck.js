@@ -20,8 +20,14 @@ const ground = world.createBody({
   position: { x: 0.0, y: 0.0 },
 });
 
-ground.createFixture(new Edge({ x: -10.0, y: 0.0 }, { x: 10.0, y: 0.0 }), 0.0);
-ground.createFixture(new Box(0.2, 1.0, { x: 0.5, y: 1.0 }, 0.0), 0.0);
+ground.createFixture({
+  shape: new Edge({ x: -10.0, y: 0.0 }, { x: 10.0, y: 0.0 }),
+  density: 0.0,
+});
+ground.createFixture({
+  shape: new Box(0.2, 1.0, { x: 0.5, y: 1.0 }, 0.0),
+  density: 0.0,
+});
 
 if (true) {
   // angle = 0.1;
@@ -29,7 +35,10 @@ if (true) {
     type: "dynamic",
     position: { x: 0.0, y: 20.0 },
   });
-  bullet.createFixture(new Box(2.0, 0.1), 1.0);
+  bullet.createFixture({
+    shape: new Box(2.0, 0.1),
+    density: 1.0,
+  });
 
   angularVelocity = Math.random() * 100 - 50;
   // angularVelocity = 46.661274;
@@ -42,7 +51,10 @@ if (true) {
       type: "dynamic",
       position: { x: 0.0, y: 2.0 },
     });
-    body.createFixture(shape, 1.0);
+    body.createFixture({
+      shape: shape,
+      density: 1.0,
+    });
   }
   {
     const body = world.createBody({
@@ -50,7 +62,10 @@ if (true) {
       bullet: true,
       position: { x: 0.0, y: 2.0 },
     });
-    body.createFixture(shape, 1.0);
+    body.createFixture({
+      shape: shape,
+      density: 1.0,
+    });
     body.setLinearVelocity({ x: 0.0, y: -100.0 });
   }
 }

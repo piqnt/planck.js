@@ -15,14 +15,23 @@ testbed.start(world);
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -10.0, y: 0.0 }, { x: 10.0, y: 0.0 }), 0.0);
-ground.createFixture(new Box(0.2, 1.0, { x: 0.5, y: 1.0 }, 0.0), 0.0);
+ground.createFixture({
+  shape: new Edge({ x: -10.0, y: 0.0 }, { x: 10.0, y: 0.0 }),
+  density: 0.0,
+});
+ground.createFixture({
+  shape: new Box(0.2, 1.0, { x: 0.5, y: 1.0 }, 0.0),
+  density: 0.0,
+});
 
 const body = world.createBody({
   type: "dynamic",
   position: { x: 0.0, y: 4.0 },
 });
-body.createFixture(new Box(2.0, 0.1), 1.0);
+body.createFixture({
+  shape: new Box(2.0, 0.1),
+  density: 1.0,
+});
 
 // x = Math.random(-1.0, 1.0);
 let x = 0.20352793;
@@ -31,10 +40,12 @@ const bullet = world.createBody({
   type: "dynamic",
   position: { x: x, y: 10.0 },
   bullet: true,
+  linearVelocity: { x: 0.0, y: -50.0 },
 });
-bullet.createFixture(new Box(0.25, 0.25), 100.0);
-
-bullet.setLinearVelocity({ x: 0.0, y: -50.0 });
+bullet.createFixture({
+  shape: new Box(0.25, 0.25),
+  density: 100.0,
+});
 
 function Launch() {
   body.setTransform({ x: 0.0, y: 4.0 }, 0.0);

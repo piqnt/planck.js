@@ -9,9 +9,11 @@ testbed.start(world);
 
 const bar = world.createBody({
   type: "static",
+  angle: 0.2,
 });
-bar.createFixture(new Edge({ x: -20, y: 5 }, { x: 20, y: 5 }));
-bar.setAngle(0.2);
+bar.createFixture({
+  shape: new Edge({ x: -20, y: 5 }, { x: 20, y: 5 }),
+});
 
 for (let i = -2; i <= 2; i++) {
   for (let j = -2; j <= 2; j++) {
@@ -24,6 +26,8 @@ for (let i = -2; i <= 2; i++) {
       center: { x: 0, y: 0 },
       I: 1,
     });
-    box.createFixture(new Box(0.5, 0.5));
+    box.createFixture({
+      shape: new Box(0.5, 0.5),
+    });
   }
 }

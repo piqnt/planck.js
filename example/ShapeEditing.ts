@@ -18,14 +18,20 @@ let sensor = true;
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
+ground.createFixture({
+  shape: new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }),
+  density: 0.0,
+});
 
 const body = world.createBody({
   type: "dynamic",
   position: { x: 0.0, y: 10.0 },
 });
 
-const fixture1 = body.createFixture(new Box(4.0, 4.0, { x: 0.0, y: 0.0 }, 0.0), 10.0);
+const fixture1 = body.createFixture({
+  shape: new Box(4.0, 4.0, { x: 0.0, y: 0.0 }, 0.0),
+  density: 10.0,
+});
 
 let fixture2: Fixture | null = null;
 
@@ -33,8 +39,10 @@ testbed.keydown = function (code, char) {
   switch (char) {
     case "C":
       if (fixture2 == null) {
-        const shape = new Circle({ x: 0.5, y: -4.0 }, 3.0);
-        fixture2 = body.createFixture(shape, 10.0);
+        fixture2 = body.createFixture({
+          shape: new Circle({ x: 0.5, y: -4.0 }, 3.0),
+          density: 10.0,
+        });
         body.setAwake(true);
         fixture2.setSensor(sensor);
       }

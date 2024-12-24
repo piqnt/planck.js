@@ -30,7 +30,10 @@ const shapes: Shape[] = [];
     const x2 = x1 + 0.5;
     const y2 = 2.0 * Math.cos((x2 / 10.0) * Math.PI);
 
-    ground.createFixture(new Edge({ x: x1, y: y1 }, { x: x2, y: y2 }), 0.0);
+    ground.createFixture({
+      shape: new Edge({ x: x1, y: y1 }, { x: x2, y: y2 }),
+      density: 0.0,
+    });
 
     x1 = x2;
     y1 = y2;
@@ -89,7 +92,8 @@ function createItem(index: number) {
     angularDamping: index === 4 ? 0.02 : 0,
   });
 
-  body.createFixture(shapes[index], {
+  body.createFixture({
+    shape: shapes[index],
     density: 20.0,
     friction: 0.3,
   });

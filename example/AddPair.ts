@@ -23,14 +23,20 @@ for (let i = 0; i < 50; ++i) {
       y: Math.random() * 2 - 1,
     },
   });
-  b.createFixture(circle, 0.01);
+  b.createFixture({
+    shape: circle,
+    density: 0.01,
+  });
 }
 
 const box = world.createBody({
   type: "dynamic",
-  position: { x: -40.0, y: 0.0 },
   bullet: true,
+  position: { x: -40.0, y: 0.0 },
+  linearVelocity: { x: 100.0, y: 0.0 },
 });
 
-box.createFixture(new Box(1.5, 1.5), 1.0);
-box.setLinearVelocity({ x: 100.0, y: 0.0 });
+box.createFixture({
+  shape: new Box(1.5, 1.5),
+  density: 1.0,
+});

@@ -209,7 +209,10 @@ function createBody(index: number) {
 
   const shape = shapes[index % shapes.length];
 
-  body.createFixture(shape, { friction: 0.3 });
+  body.createFixture({
+    shape: shape,
+    friction: 0.3,
+  });
 
   bodies.push(body);
 }

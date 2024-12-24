@@ -18,14 +18,19 @@ const SPEED = 3.0;
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -20.0, y: 0.0 }, { x: 20.0, y: 0.0 }));
+ground.createFixture({
+  shape: new Edge({ x: -20.0, y: 0.0 }, { x: 20.0, y: 0.0 }),
+});
 
 // Define attachment
 const attachment = world.createBody({
   type: "dynamic",
   position: { x: 0.0, y: 3.0 },
 });
-attachment.createFixture(new Box(0.5, 2.0), 2.0);
+attachment.createFixture({
+  shape: new Box(0.5, 2.0),
+  density: 2.0,
+});
 
 // Define platform
 const platform = world.createBody({
@@ -33,7 +38,8 @@ const platform = world.createBody({
   position: { x: -4.0, y: 5.0 },
 });
 
-platform.createFixture(new Box(0.5, 4.0, { x: 4.0, y: 0.0 }, 0.5 * Math.PI), {
+platform.createFixture({
+  shape: new Box(0.5, 4.0, { x: 4.0, y: 0.0 }, 0.5 * Math.PI),
   friction: 0.6,
   density: 2.0,
 });
@@ -71,7 +77,11 @@ const payload = world.createBody({
   type: "dynamic",
   position: { x: 0.0, y: 8.0 },
 });
-payload.createFixture(new Box(0.75, 0.75), { friction: 0.6, density: 2.0 });
+payload.createFixture({
+  shape: new Box(0.75, 0.75),
+  friction: 0.6,
+  density: 2.0,
+});
 
 testbed.keydown = function (code, char) {
   if (char === "Z") {

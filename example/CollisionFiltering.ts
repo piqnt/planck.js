@@ -34,7 +34,8 @@ testbed.start(world);
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), {
+ground.createFixture({
+  shape: new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }),
   friction: 0.3,
 });
 
@@ -85,7 +86,10 @@ const body = world.createBody({
   type: "dynamic",
   position: { x: -5.0, y: 10.0 },
 });
-body.createFixture(new Box(0.5, 1.0), 1.0);
+body.createFixture({
+  shape: new Box(0.5, 1.0),
+  density: 1.0,
+});
 
 world.createJoint(
   new PrismaticJoint({
@@ -113,7 +117,10 @@ const body3 = world.createBody({
   type: "dynamic",
   position: { x: 0.0, y: 2.0 },
 });
-body3.createFixture(new Box(1.0, 0.5), smallBox);
+body3.createFixture({
+  shape: new Box(1.0, 0.5),
+  ...smallBox,
+});
 
 // Large box
 const largeBox = {
@@ -128,7 +135,10 @@ const body4 = world.createBody({
   type: "dynamic",
   position: { x: 0.0, y: 6.0 },
 });
-body4.createFixture(new Box(2.0, 1.0), largeBox);
+body4.createFixture({
+  shape: new Box(2.0, 1.0),
+  ...largeBox,
+});
 
 // Small circle
 const smallCircle = {
@@ -142,7 +152,10 @@ const body5 = world.createBody({
   type: "dynamic",
   position: { x: 5.0, y: 2.0 },
 });
-body5.createFixture(new Circle(1.0), smallCircle);
+body5.createFixture({
+  shape: new Circle(1.0),
+  ...smallCircle,
+});
 
 // Large circle
 const largeCircle = {
@@ -156,4 +169,7 @@ const body6 = world.createBody({
   type: "dynamic",
   position: { x: 5.0, y: 6.0 },
 });
-body6.createFixture(new Circle(2.0), largeCircle);
+body6.createFixture({
+  shape: new Circle(2.0),
+  ...largeCircle,
+});

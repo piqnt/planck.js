@@ -27,25 +27,37 @@ bodies[0] = world.createBody({
   type: "dynamic",
   position: { x: -5.0, y: 5.0 },
 });
-bodies[0].createFixture(box, 5.0);
+bodies[0].createFixture({
+  shape: box,
+  density: 5.0,
+});
 
 bodies[1] = world.createBody({
   type: "dynamic",
   position: { x: 5.0, y: 5.0 },
 });
-bodies[1].createFixture(box, 5.0);
+bodies[1].createFixture({
+  shape: box,
+  density: 5.0,
+});
 
 bodies[2] = world.createBody({
   type: "dynamic",
   position: { x: 5.0, y: 15.0 },
 });
-bodies[2].createFixture(box, 5.0);
+bodies[2].createFixture({
+  shape: box,
+  density: 5.0,
+});
 
 bodies[3] = world.createBody({
   type: "dynamic",
   position: { x: -5.0, y: 15.0 },
 });
-bodies[3].createFixture(box, 5.0);
+bodies[3].createFixture({
+  shape: box,
+  density: 5.0,
+});
 
 const jd = {
   frequencyHz: 2.0,

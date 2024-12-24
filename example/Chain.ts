@@ -15,7 +15,10 @@ testbed.start(world);
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
+ground.createFixture({
+  shape: new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }),
+  density: 0.0,
+});
 
 const shape = new Box(0.6, 0.125);
 
@@ -26,7 +29,8 @@ for (let i = 0; i < 30; ++i) {
     type: "dynamic",
     position: { x: 0.5 + i, y: y },
   });
-  body.createFixture(shape, {
+  body.createFixture({
+    shape,
     density: 20.0,
     friction: 0.2,
   });

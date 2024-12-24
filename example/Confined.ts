@@ -17,16 +17,28 @@ const ground = world.createBody({
 });
 
 // Floor
-ground.createFixture(new Edge({ x: -10, y: 0 }, { x: 10, y: 0 }), 0);
+ground.createFixture({
+  shape: new Edge({ x: -10, y: 0 }, { x: 10, y: 0 }),
+  density: 0,
+});
 
 // Left wall
-ground.createFixture(new Edge({ x: -10, y: 0 }, { x: -10, y: 20 }), 0);
+ground.createFixture({
+  shape: new Edge({ x: -10, y: 0 }, { x: -10, y: 20 }),
+  density: 0,
+});
 
 // Right wall
-ground.createFixture(new Edge({ x: 10, y: 0 }, { x: 10, y: 20 }), 0);
+ground.createFixture({
+  shape: new Edge({ x: 10, y: 0 }, { x: 10, y: 20 }),
+  density: 0,
+});
 
 // Roof
-ground.createFixture(new Edge({ x: -10, y: 20 }, { x: 10, y: 20 }), 0);
+ground.createFixture({
+  shape: new Edge({ x: -10, y: 20 }, { x: 10, y: 20 }),
+  density: 0,
+});
 
 const radius = 0.5;
 const shape = new Circle(radius);
@@ -45,7 +57,10 @@ for (let j = 0; j < e_columnCount; ++j) {
         y: (2 * i + 1) * radius,
       },
     });
-    body.createFixture(shape, fd);
+    body.createFixture({
+      shape: shape,
+      ...fd,
+    });
   }
 }
 
@@ -58,7 +73,8 @@ function CreateCircle() {
     },
   });
   // bd.allowSleep = false;
-  body.createFixture(new Circle(Math.random() * 2.5 + 0.5), {
+  body.createFixture({
+    shape: new Circle(Math.random() * 2.5 + 0.5),
     density: 1.0,
     friction: 0.0,
   });

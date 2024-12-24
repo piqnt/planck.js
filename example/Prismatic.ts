@@ -19,7 +19,10 @@ const MOTOR_SPEED = 10;
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
+ground.createFixture({
+  shape: new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }),
+  density: 0.0,
+});
 
 const body = world.createBody({
   type: "dynamic",
@@ -27,7 +30,10 @@ const body = world.createBody({
   angle: 0.5 * Math.PI,
   allowSleep: false,
 });
-body.createFixture(new Box(2.0, 0.5), 5.0);
+body.createFixture({
+  shape: new Box(2.0, 0.5),
+  density: 5.0,
+});
 
 // Bouncy limit
 const axis = Vec2.normalize({ x: 2.0, y: 1.0 });

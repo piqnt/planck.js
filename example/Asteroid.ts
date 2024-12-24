@@ -75,19 +75,17 @@ class AsteroidPhysics {
       },
     });
 
-    this.ship.createFixture(
-      new Polygon([
+    this.ship.createFixture({
+      shape: new Polygon([
         { x: -0.15, y: -0.15 },
         { x: 0, y: -0.1 },
         { x: 0.15, y: -0.15 },
         { x: 0, y: 0.2 },
       ]),
-      {
-        density: 1000,
-        filterCategoryBits: SHIP_BITS,
-        filterMaskBits: ASTEROID_BITS,
-      },
-    );
+      density: 1000,
+      filterCategoryBits: SHIP_BITS,
+      filterMaskBits: ASTEROID_BITS,
+    });
   }
 
   steerLeft() {
@@ -124,7 +122,8 @@ class AsteroidPhysics {
       },
     });
 
-    body.createFixture(new Circle(0.05), {
+    body.createFixture({
+      shape: new Circle(0.05),
       filterCategoryBits: BULLET_BITS,
       filterMaskBits: ASTEROID_BITS,
     });
@@ -163,8 +162,6 @@ class AsteroidPhysics {
       path.push({ x: x, y: y });
     }
 
-    const shape = new Polygon(path);
-
     const asteroidBody = this.world.createBody({
       // mass : 10,
       type: "kinematic",
@@ -178,7 +175,8 @@ class AsteroidPhysics {
     });
     this.asteroids.push(asteroidBody);
 
-    asteroidBody.createFixture(shape, {
+    asteroidBody.createFixture({
+      shape: new Polygon(path),
       filterCategoryBits: ASTEROID_BITS,
       filterMaskBits: BULLET_BITS | SHIP_BITS,
     });

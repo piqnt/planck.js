@@ -26,15 +26,18 @@ const ground = world.createBody({
   type: "static",
 });
 
-ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
+ground.createFixture({
+  shape: new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }),
+  density: 0.0,
+});
 
 const N = 10;
 const y = 15.0;
 
+let shape = new Box(0.5, 0.125);
+
 let prevBody = ground;
 for (let i = 0; i < N; ++i) {
-  let shape = new Box(0.5, 0.125);
-
   const fixDef = {
     density: 20.0,
     friction: 0.2,
@@ -62,7 +65,10 @@ for (let i = 0; i < N; ++i) {
 
   const body = world.createBody(bodyDef);
 
-  body.createFixture(shape, fixDef);
+  body.createFixture({
+    shape: shape,
+    ...fixDef,
+  });
 
   const anchor = { x: i, y: y };
   world.createJoint(new RevoluteJoint(jointDef, prevBody, body, anchor));

@@ -92,16 +92,16 @@ class BilliardPhysics {
     for (let i = 0; i < ballsData.length; i++) {
       const ball = this.world.createBody({
         type: "dynamic",
+        bullet: true,
+        position: ballsData[i],
         linearDamping: 1.5,
         angularDamping: 1,
       });
       this.balls.push(ball);
-      ball.setBullet(true);
-      ball.setPosition(ballsData[i]);
       const color = ballsData[i].color;
       const style = color && STYLES[color];
-      const shape = new Circle(BALL_RADIUS);
-      ball.createFixture(shape, {
+      ball.createFixture({
+        shape: new Circle(BALL_RADIUS),
         friction: 0.1,
         restitution: 0.99,
         density: 1,
@@ -166,8 +166,8 @@ class BilliardPhysics {
       const body = this.world.createBody({
         type: "static",
       });
-      const shape = new Polygon(rails[i]);
-      const fixture = body.createFixture(shape, {
+      const fixture = body.createFixture({
+        shape: new Polygon(rails[i]),
         friction: 0.1,
         restitution: 0.9,
         userData: RAIL,
@@ -205,8 +205,8 @@ class BilliardPhysics {
         type: "static",
         position: pockets[i],
       });
-      const shape = new Circle(POCKET_RADIUS);
-      const fixture = body.createFixture(shape, {
+      const fixture = body.createFixture({
+        shape: new Circle(POCKET_RADIUS),
         userData: POCKET,
       });
     }

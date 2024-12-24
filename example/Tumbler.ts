@@ -24,10 +24,22 @@ const container = world.createBody({
   allowSleep: false,
 });
 
-container.createFixture(new Box(0.5, 20, { x: 20, y: 0 }, 0), 5);
-container.createFixture(new Box(0.5, 20, { x: -20, y: 0 }, 0), 5);
-container.createFixture(new Box(20, 0.5, { x: 0, y: 20 }, 0), 5);
-container.createFixture(new Box(20, 0.5, { x: 0, y: -20 }, 0), 5);
+container.createFixture({
+  shape: new Box(0.5, 20, { x: 20, y: 0 }, 0),
+  density: 5,
+});
+container.createFixture({
+  shape: new Box(0.5, 20, { x: -20, y: 0 }, 0),
+  density: 5,
+});
+container.createFixture({
+  shape: new Box(20, 0.5, { x: 0, y: 20 }, 0),
+  density: 5,
+});
+container.createFixture({
+  shape: new Box(20, 0.5, { x: 0, y: -20 }, 0),
+  density: 5,
+});
 
 world.createJoint(
   new RevoluteJoint(
@@ -52,6 +64,9 @@ while (count < COUNT) {
       y: 10 + Math.random() * 20 - 10,
     },
   });
-  body.createFixture(shape, 1);
+  body.createFixture({
+    shape: shape,
+    density: 1,
+  });
   ++count;
 }

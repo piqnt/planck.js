@@ -3,7 +3,7 @@
  * Licensed under the MIT license
  */
 
-import { Vec2, World, Box, RevoluteJoint, Testbed } from "planck";
+import { Vec2, World, Box, RevoluteJoint, Testbed, Vec2Value, Body } from "planck";
 
 const world = new World({
   gravity: { x: 0, y: -1 },
@@ -37,7 +37,7 @@ world.createJoint(
   }),
 );
 
-function addNode(parent, localAnchor, depth, offset, a) {
+function addNode(parent: Body, localAnchor: Vec2Value, depth: number, offset: number, a: number) {
   const h = { x: 0.0, y: a };
 
   const node = world.createBody({
@@ -45,7 +45,10 @@ function addNode(parent, localAnchor, depth, offset, a) {
     position: new Vec2(parent.getPosition()).add(localAnchor).sub(h),
   });
 
-  node.createFixture(new Box(0.25 * a, a), DENSITY);
+  node.createFixture({
+    shape: new Box(0.25 * a, a),
+    density: DENSITY,
+  });
 
   if (depth === DEPTH) {
     return node;

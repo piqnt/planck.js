@@ -19,7 +19,10 @@ let middle: Body;
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }), 0.0);
+ground.createFixture({
+  shape: new Edge({ x: -40.0, y: 0.0 }, { x: 40.0, y: 0.0 }),
+  density: 0.0,
+});
 
 const bridgeRect = new Box(0.5, 0.125);
 
@@ -34,7 +37,10 @@ for (let i = 0; i < COUNT; ++i) {
     type: "dynamic",
     position: { x: -14.5 + 1.0 * i, y: 5.0 },
   });
-  body.createFixture(bridgeRect, bridgeFD);
+  body.createFixture({
+    shape: bridgeRect,
+    ...bridgeFD,
+  });
 
   const anchor = { x: -15.0 + 1.0 * i, y: 5.0 };
   world.createJoint(new RevoluteJoint({}, prevBody, body, anchor));
@@ -59,7 +65,10 @@ for (let i = 0; i < 2; ++i) {
     { x: 0.5, y: 0.0 },
     { x: 0.0, y: 1.5 },
   ];
-  body.createFixture(new Polygon(vertices), 1.0);
+  body.createFixture({
+    shape: new Polygon(vertices),
+    density: 1.0,
+  });
 }
 
 const shape = new Circle(0.5);
@@ -68,5 +77,8 @@ for (let i = 0; i < 3; ++i) {
     type: "dynamic",
     position: { x: -6.0 + 6.0 * i, y: 10.0 },
   });
-  body.createFixture(shape, 1.0);
+  body.createFixture({
+    shape: shape,
+    density: 1.0,
+  });
 }

@@ -26,21 +26,30 @@ const state = UNKNOWN;
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -20.0, y: 0.0 }, { x: 20.0, y: 0.0 }), 0.0);
+ground.createFixture({
+  shape: new Edge({ x: -20.0, y: 0.0 }, { x: 20.0, y: 0.0 }),
+  density: 0.0,
+});
 
 // Platform
 const platform = world.createBody({
   type: "static",
   position: { x: 0.0, y: 10.0 },
 });
-const platformFix = platform.createFixture(new Box(3.0, 0.5), 0.0);
+const platformFix = platform.createFixture({
+  shape: new Box(3.0, 0.5),
+  density: 0.0,
+});
 
 // Actor
 const character = world.createBody({
   type: "dynamic",
   position: { x: 0.0, y: 12.0 },
 });
-const characterFix = character.createFixture(new Circle(radius), 20.0);
+const characterFix = character.createFixture({
+  shape: new Circle(radius),
+  density: 20.0,
+});
 character.setLinearVelocity({ x: 0.0, y: -50.0 });
 
 world.on("pre-solve", function (contact, oldManifold) {

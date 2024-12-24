@@ -21,14 +21,17 @@ let time = 0;
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -20.0, y: 0.0 }, { x: 20.0, y: 0.0 }));
+ground.createFixture({
+  shape: new Edge({ x: -20.0, y: 0.0 }, { x: 20.0, y: 0.0 }),
+});
 
 // Define motorized body
 const body = world.createBody({
   type: "dynamic",
   position: { x: 0.0, y: 8.0 },
 });
-body.createFixture(new Box(2.0, 0.5), {
+body.createFixture({
+  shape: new Box(2.0, 0.5),
   friction: 0.6,
   density: 2.0,
 });

@@ -36,9 +36,18 @@ const pivot = { x: 0.0, y: 0.8 };
 const ground = world.createBody({
   type: "static",
 });
-ground.createFixture(new Edge({ x: -50.0, y: 0.0 }, { x: 50.0, y: 0.0 }), 0.0);
-ground.createFixture(new Edge({ x: -50.0, y: 0.0 }, { x: -50.0, y: 10.0 }), 0.0);
-ground.createFixture(new Edge({ x: 50.0, y: 0.0 }, { x: 50.0, y: 10.0 }), 0.0);
+ground.createFixture({
+  shape: new Edge({ x: -50.0, y: 0.0 }, { x: 50.0, y: 0.0 }),
+  density: 0.0,
+});
+ground.createFixture({
+  shape: new Edge({ x: -50.0, y: 0.0 }, { x: -50.0, y: 10.0 }),
+  density: 0.0,
+});
+ground.createFixture({
+  shape: new Edge({ x: 50.0, y: 0.0 }, { x: 50.0, y: 10.0 }),
+  density: 0.0,
+});
 
 // Balls
 for (let i = 0; i < 40; ++i) {
@@ -46,7 +55,10 @@ for (let i = 0; i < 40; ++i) {
     type: "dynamic",
     position: { x: -40.0 + 2.0 * i, y: 0.5 },
   });
-  ball.createFixture(new Circle(0.25), 1.0);
+  ball.createFixture({
+    shape: new Circle(0.25),
+    density: 1.0,
+  });
 }
 
 // Chassis
@@ -54,7 +66,8 @@ const chassis = world.createBody({
   type: "dynamic",
   position: Vec2.add(pivot, offset),
 });
-chassis.createFixture(new Box(2.5, 1.0), {
+chassis.createFixture({
+  shape: new Box(2.5, 1.0),
   density: 1.0,
   filterGroupIndex: -1,
 });
@@ -63,7 +76,8 @@ const wheel = world.createBody({
   type: "dynamic",
   position: Vec2.add(pivot, offset),
 });
-wheel.createFixture(new Circle(1.6), {
+wheel.createFixture({
+  shape: new Circle(1.6),
   density: 1.0,
   filterGroupIndex: -1,
 });
@@ -118,7 +132,8 @@ function createLeg(s: number, wheelAnchor: Vec2Value) {
     position: offset,
     angularDamping: 10.0,
   });
-  body1.createFixture(poly1, {
+  body1.createFixture({
+    shape: poly1,
     density: 1.0,
     filterGroupIndex: -1,
   });
@@ -128,7 +143,8 @@ function createLeg(s: number, wheelAnchor: Vec2Value) {
     position: Vec2.add(p4, offset),
     angularDamping: 10.0,
   });
-  body2.createFixture(poly2, {
+  body2.createFixture({
+    shape: poly2,
     density: 1.0,
     filterGroupIndex: -1,
   });
