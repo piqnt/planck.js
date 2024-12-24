@@ -128,7 +128,7 @@ export class World {
   /** @internal */ m_positionIterations: number;
   /** @internal */ m_t: number;
 
-  /** @internal */ m_step_callback: ((world: World) => unknown)[] = [];
+  /** @internal */ m_step_callback: ((world: World) => unknown)[];
 
   // TODO
   /** @internal */ _listeners: {
@@ -186,6 +186,8 @@ export class World {
     this.m_positionIterations = def.positionIterations;
 
     this.m_t = 0;
+
+    this.m_step_callback = [];
   }
 
   /** @internal */
@@ -861,7 +863,7 @@ export class World {
     this.m_locked = false;
 
     let callback: (world: World) => unknown;
-    while(callback = this.m_step_callback.pop()) {
+    while(callback = this.m_step_callback.shift()) {
       callback(this);
     }
 
