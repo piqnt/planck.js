@@ -87,12 +87,11 @@ world.on("post-solve", function (contact) {
         ? bB
         : null;
 
-  // do not change world immediately
-  setTimeout(function () {
-    if (ball && wall) {
+  if (ball && wall) {
+    world.queueUpdate(() => {
       world.destroyBody(ball);
-    }
-  }, 1);
+    });
+  }
 });
 
 function row(n: number, m: number, r: number, l: number) {

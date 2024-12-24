@@ -128,6 +128,8 @@ export class World {
   /** @internal */ m_positionIterations: number;
   /** @internal */ m_t: number;
 
+  /** @internal */ m_step_callback: ((world: World) => unknown)[] = [];
+
   // TODO
   /** @internal */ _listeners: {
     [key: string]: any[]
@@ -469,10 +471,12 @@ export class World {
    * position -= newOrigin
    *
    * @param newOrigin The new origin with respect to the old origin
+   * 
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   shiftOrigin(newOrigin: Vec2Value): void {
-    if (_ASSERT) console.assert(this.m_locked == false);
-    if (this.m_locked) {
+    if (_ASSERT) console.assert(this.isLocked() == false);
+    if (this.isLocked()) {
       return;
     }
 
@@ -510,7 +514,7 @@ export class World {
    * Create a rigid body given a definition. No reference to the definition is
    * retained.
    *
-   * Warning: This function is locked during callbacks.
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   createBody(def?: BodyDef): Body;
   createBody(position: Vec2Value, angle?: number): Body;
@@ -565,12 +569,11 @@ export class World {
   }
 
   /**
-   * Destroy a rigid body given a definition. No reference to the definition is
-   * retained.
+   * Destroy a body from the world.
    *
    * Warning: This automatically deletes all associated shapes and joints.
    *
-   * Warning: This function is locked during callbacks.
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   destroyBody(b: Body): boolean {
     if (_ASSERT) console.assert(this.m_bodyCount > 0);
@@ -647,7 +650,7 @@ export class World {
    * Create a joint to constrain bodies together. No reference to the definition
    * is retained. This may cause the connected bodies to cease colliding.
    *
-   * Warning: This function is locked during callbacks.
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   createJoint<T extends Joint>(joint: T): T | null {
     if (_ASSERT) console.assert(!!joint.m_bodyA);
@@ -700,8 +703,11 @@ export class World {
   }
 
   /**
-   * Destroy a joint. This may cause the connected bodies to begin colliding.
-   * Warning: This function is locked during callbacks.
+   * Destroy a joint.
+   * 
+   * Warning: This may cause the connected bodies to begin colliding.
+   * 
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   destroyJoint(joint: Joint): void {
     if (_ASSERT) console.assert(this.isLocked() == false);
@@ -854,7 +860,23 @@ export class World {
 
     this.m_locked = false;
 
+    let callback: (world: World) => unknown;
+    while(callback = this.m_step_callback.pop()) {
+      callback(this);
+    }
+
     this.publish("post-step", timeStep);
+  }
+
+  /**
+   * Queue a function to be called after ongoing simulation step. If no simulation is in progress call it immediately.
+   */
+  queueUpdate(callback: (world: World) => unknown): void {
+    if (!this.isLocked()) {
+      callback(this);
+    } else {
+      this.m_step_callback.push(callback);
+    }
   }
 
   /**

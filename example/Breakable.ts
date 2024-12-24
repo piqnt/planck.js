@@ -53,14 +53,12 @@ world.on("post-solve", function (contact, impulse) {
   }
 
   if (maxImpulse > 40.0) {
-    setTimeout(function () {
-      Break();
-      broke = true;
-    });
+    broke = true;
+    world.queueUpdate(breakIt);
   }
 });
 
-function Break() {
+function breakIt() {
   // Create two bodies from one.
   const center = body1.getWorldCenter();
 

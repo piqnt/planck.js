@@ -394,6 +394,8 @@ export class Body {
   /**
    * Set the type of the body to "static", "kinematic" or "dynamic".
    * @param type The type of the body.
+   * 
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   setType(type: BodyType): void {
     if (_ASSERT) console.assert(type === STATIC || type === KINEMATIC || type === DYNAMIC);
@@ -502,6 +504,8 @@ export class Body {
    * in collisions, ray-casts, or queries. Joints connected to an inactive body
    * are implicitly inactive. An inactive body is still owned by a World object
    * and remains
+   * 
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   setActive(flag: boolean): void {
     if (_ASSERT) console.assert(this.isWorldLocked() == false);
@@ -568,6 +572,8 @@ export class Body {
    * Set the position of the body's origin and rotation. Manipulating a body's
    * transform may cause non-physical behavior. Note: contacts are updated on the
    * next call to World.step.
+   * 
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    *
    * @param position The world position of the body's local origin.
    * @param angle The world rotation in radians.
@@ -577,6 +583,8 @@ export class Body {
    * Set the position of the body's origin and rotation. Manipulating a body's
    * transform may cause non-physical behavior. Note: contacts are updated on the
    * next call to World.step.
+   * 
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   setTransform(xf: Transform): void;
   setTransform(a: Vec2Value | Transform, b?: number): void {
@@ -863,6 +871,8 @@ export class Body {
    * that this changes the center of mass position. Note that creating or
    * destroying fixtures can also alter the mass. This function has no effect if
    * the body isn't dynamic.
+   * 
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    *
    * @param massData The mass properties.
    */
@@ -1068,7 +1078,7 @@ export class Body {
    *
    * Contacts are not created until the next time step.
    *
-   * Warning: This function is locked during callbacks.
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   createFixture(def: FixtureDef): Fixture;
   createFixture(shape: Shape, opt?: FixtureOpt): Fixture;
@@ -1092,8 +1102,8 @@ export class Body {
    * mass of the body if the body is dynamic and the fixture has positive density.
    * All fixtures attached to a body are implicitly destroyed when the body is
    * destroyed.
-   *
-   * Warning: This function is locked during callbacks.
+   * 
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    *
    * @param fixture The fixture to be removed.
    */

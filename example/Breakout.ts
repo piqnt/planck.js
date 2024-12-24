@@ -198,19 +198,27 @@ class BreakoutPhysics {
     const drop = typeA === "drop" ? dataA : typeB === "drop" ? dataB : null;
 
     // do not change world immediately
-    setTimeout(() => {
-      if (ball && brick) {
+    if (ball && brick) {
+      this.world.queueUpdate(() => {
         this.client?.collideBallBrick(ball as BallData, brick as BrickData);
-      } else if (ball && bottom) {
+      });
+    } else if (ball && bottom) {
+      this.world.queueUpdate(() => {
         this.client?.collideBallBottom(ball as BallData);
-      } else if (ball && paddle) {
+      });
+    } else if (ball && paddle) {
+      this.world.queueUpdate(() => {
         this.client?.collideBallPaddle(ball as BallData);
-      } else if (drop && paddle) {
+      });
+    } else if (drop && paddle) {
+      this.world.queueUpdate(() => {
         this.client?.collideDropPaddle(drop as DropData);
-      } else if (drop && bottom) {
+      });
+    } else if (drop && bottom) {
+      this.world.queueUpdate(() => {
         this.client?.collideDropBottom(drop as DropData);
-      }
-    }, 1);
+      });
+    }
   };
 
   createBoardPhysics() {
