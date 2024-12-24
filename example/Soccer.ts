@@ -131,14 +131,14 @@ world.on("post-solve", function (contact) {
         ? bB
         : null;
 
-  // do not change world immediately
-  setTimeout(function () {
-    if (ball && goal) {
+  if (ball && goal) {
+    // do not change world immediately
+    world.queueUpdate(function () {
       ball.setPosition({ x: 0, y: 0 });
       ball.setLinearVelocity({ x: 0, y: 0 });
       // world.destroyBody(ball);
-    }
-  }, 1);
+    });
+  }
 });
 
 function team() {

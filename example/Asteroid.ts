@@ -230,15 +230,19 @@ class AsteroidPhysics {
 
     const asteroid = dataA?.type == "asteroid" ? bodyA : dataB?.type == "asteroid" ? bodyB : null;
 
-    setTimeout(() => {
-      if (ship && asteroid) {
+    if (ship && asteroid) {
+      // do not change world immediately
+      this.world.queueUpdate(() => {
         this.client?.collideShipAsteroid(ship, asteroid);
-      }
+      });
+    }
 
-      if (bullet && asteroid) {
+    if (bullet && asteroid) {
+      // do not change world immediately
+      this.world.queueUpdate(() => {
         this.client?.collideBulletAsteroid(bullet, asteroid);
-      }
-    }, 1);
+      });
+    }
   }
 
   deleteShip(): boolean {

@@ -221,13 +221,13 @@ class BilliardPhysics {
     const ball = fA.getUserData() === BALL ? bA : fB.getUserData() === BALL ? bB : null;
     const pocket = fA.getUserData() === POCKET ? bA : fB.getUserData() === POCKET ? bB : null;
 
-    // do not change world immediately
-    setTimeout(() => {
-      if (ball && pocket) {
+    if (ball && pocket) {
+      // do not change world immediately
+      this.world.queueUpdate(() => {
         this.world.destroyBody(ball);
         this.client?.onBallInPocket(ball, pocket);
-      }
-    }, 1);
+      });
+    }
   };
 }
 
