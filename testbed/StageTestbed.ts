@@ -7,7 +7,7 @@ import type { Body } from "../src/dynamics/Body";
 import type { AABBValue } from "../src/collision/AABB";
 import { Testbed } from "../src/util/Testbed";
 import { MouseJoint } from "../src/dynamics/joint/MouseJoint";
-import { WorldComponent, WorldDragEnd, WorldDragMove, WorldDragStart, WorldPointerMove } from "./world-view";
+import { WorldComponent, WorldDragEnd, WorldDragMove, WorldDragStart } from "./world-view";
 
 const math_PI = Math.PI;
 
@@ -157,6 +157,7 @@ export class StageTestbed extends Testbed {
 
       if (this.mouseForce) {
         targetBody = body;
+      } else if (this.mouseForce === 0) {
       } else {
         mouseJoint = new MouseJoint({ maxForce: 1000 }, mouseGround, body, {
           x: point.x,
