@@ -1,19 +1,20 @@
-import { defineConfig } from 'vocs';
+import { defineConfig } from "vocs";
 
 export default defineConfig({
-  title: 'Planck.js',
-  rootDir: '.',
+  title: "Planck.js",
+  rootDir: ".",
   basePath: "/planck.js/docs/",
   baseUrl: "/planck.js/docs/",
   topNav: [ 
-    { text: 'API Reference', link: '/api/'},
-    { text: 'GitHub', link: 'https://github.com/piqnt/planck.js/'},
-    { text: 'Discord', link: 'https://discord.gg/znjh6J7'},
+    { text: "API Reference", link: "/api/"},
+    { text: "Playground", link: "https://piqnt.com/"},
+    { text: "GitHub", link: "https://github.com/piqnt/planck.js/"},
+    { text: "Discord", link: "https://discord.gg/znjh6J7"},
   ],
   sidebar: [
     { link: "/", text: "Introduction" },
     {
-      text: 'Get Started',
+      text: "Get Started",
       collapsed: true,
       items: [
         { link: "/run-your-code", text: "Run Your Code" },
@@ -24,7 +25,7 @@ export default defineConfig({
     },
 
     {
-      text: 'API Conventions',
+      text: "API Conventions",
       collapsed: true,
       items: [
         { link: "/api-conventions/units", text: "Units" },
@@ -39,7 +40,7 @@ export default defineConfig({
     { link: "/fixture", text: "Fixture" },
 
     {
-      text: 'Shape',
+      text: "Shape",
       collapsed: true,
       link: "/shape",
       items: [
@@ -52,7 +53,7 @@ export default defineConfig({
     },
 
     {
-      text: 'Joint',
+      text: "Joint",
       collapsed: true,
       link: "/joint",
       items: [
