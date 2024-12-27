@@ -4223,6 +4223,21 @@ export declare const internal: {
 		toString(newline?: string): string;
 	};
 };
+export interface DataDriverListener<D, R> {
+	enter: (d: D) => R | null;
+	exit: (d: D, ref: R) => void;
+	update: (d: D, ref: R) => void;
+}
+/**
+ * @experimental
+ *
+ * DataDriver is used it to create, update and destroy physics entities based on game objects.
+ */
+export declare class DataDriver<D extends object, R> {
+	constructor(key: (d: D) => string, listener: DataDriverListener<D, R>);
+	update(data: (D | null)[]): void;
+	ref(d: D): R;
+}
 
 export {
 	Body$1 as Body,

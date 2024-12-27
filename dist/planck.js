@@ -2,7 +2,7 @@
   typeof exports === "object" && typeof module !== "undefined" ? factory(exports) : typeof define === "function" && define.amd ? define(["exports"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.planck = {}));
 })(this, function(exports2) {
   "use strict";/**
- * Planck.js v1.2.0
+ * Planck.js v1.3.0
  * @license The MIT license
  * @copyright Copyright (c) 2024 Erin Catto, Ali Shakiba
  *
@@ -11677,6 +11677,78 @@
     DynamicTree,
     stats
   };
+  var DataDriver = (
+    /** @class */
+    function() {
+      function DataDriver2(key, listener) {
+        this._refMap = {};
+        this._map = {};
+        this._xmap = {};
+        this._data = [];
+        this._entered = [];
+        this._exited = [];
+        this._key = key;
+        this._listener = listener;
+      }
+      DataDriver2.prototype.update = function(data) {
+        if (!Array.isArray(data))
+          throw "Invalid data: " + data;
+        this._entered.length = 0;
+        this._exited.length = 0;
+        this._data.length = data.length;
+        for (var i = 0; i < data.length; i++) {
+          if (typeof data[i] !== "object" || data[i] === null)
+            continue;
+          var d2 = data[i];
+          var id = this._key(d2);
+          if (!this._map[id]) {
+            this._entered.push(d2);
+          } else {
+            delete this._map[id];
+          }
+          this._data[i] = d2;
+          this._xmap[id] = d2;
+        }
+        for (var id in this._map) {
+          this._exited.push(this._map[id]);
+          delete this._map[id];
+        }
+        var temp3 = this._map;
+        this._map = this._xmap;
+        this._xmap = temp3;
+        for (var i = 0; i < this._exited.length; i++) {
+          var d2 = this._exited[i];
+          var key = this._key(d2);
+          var ref = this._refMap[key];
+          this._listener.exit(d2, ref);
+          delete this._refMap[key];
+        }
+        for (var i = 0; i < this._entered.length; i++) {
+          var d2 = this._entered[i];
+          var key = this._key(d2);
+          var ref = this._listener.enter(d2);
+          if (ref) {
+            this._refMap[key] = ref;
+          }
+        }
+        for (var i = 0; i < this._data.length; i++) {
+          if (typeof data[i] !== "object" || data[i] === null)
+            continue;
+          var d2 = this._data[i];
+          var key = this._key(d2);
+          var ref = this._refMap[key];
+          this._listener.update(d2, ref);
+        }
+        this._entered.length = 0;
+        this._exited.length = 0;
+        this._data.length = 0;
+      };
+      DataDriver2.prototype.ref = function(d2) {
+        return this._refMap[this._key(d2)];
+      };
+      return DataDriver2;
+    }()
+  );
   const planck = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     AABB,
@@ -11701,6 +11773,7 @@
     },
     ContactID,
     ContactImpulse,
+    DataDriver,
     Distance,
     DistanceInput,
     DistanceJoint,
@@ -11790,6 +11863,7 @@
   exports2.ContactEdge = ContactEdge;
   exports2.ContactID = ContactID;
   exports2.ContactImpulse = ContactImpulse;
+  exports2.DataDriver = DataDriver;
   exports2.Distance = Distance;
   exports2.DistanceInput = DistanceInput;
   exports2.DistanceJoint = DistanceJoint;

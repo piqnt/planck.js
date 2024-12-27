@@ -1,5 +1,16 @@
 # planck
 
+## 1.3.0
+
+### Minor Changes
+
+- bb9bb87: Testbed rendering rewrite
+- 56193e7: Add DataDriver (experimental for demo use-case)
+
+### Patch Changes
+
+- ce1c486: No pointer interaction when mouseForce===0
+
 ## 1.2.0
 
 ### Minor Changes
