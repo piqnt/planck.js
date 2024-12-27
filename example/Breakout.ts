@@ -1,76 +1,379 @@
 import {
   World,
-  Vec2,
   CircleShape,
   BoxShape,
   EdgeShape,
   PolygonShape,
   Testbed,
-  Shape,
   Body,
   Contact,
+  DataDriver,
+  Vec2Value,
 } from "planck";
 
-class ObjectData {
-  type: "ball" | "brick" | "drop" | "paddle" | "bottom";
-  subtype: string;
+interface BallData {
+  key: string;
+  type: "ball";
+  speed: number;
+  position: { x: number; y: number };
+  velocity: { x: number; y: number };
+}
+
+interface BrickData {
+  key: string;
+  type: "brick";
+  size: "normal" | "small";
+  i: number;
+  j: number;
+}
+
+interface DropData {
+  key: string;
+  type: "drop";
+  value: "+" | "-";
   i: number;
   j: number;
   speed: number;
-  body: Body;
 }
 
-class BallData extends ObjectData {
-  type = "ball" as const;
-  constructor(speed: number) {
-    super();
-    this.speed = speed;
+interface PaddleData {
+  key: string;
+  type: "paddle";
+  size: "mini" | "full";
+  speed: number;
+  position: Vec2Value;
+}
+
+interface WallData {
+  key: string;
+  type: "wall";
+  floor?: boolean;
+}
+
+type UserData = BallData | BrickData | DropData | PaddleData | WallData;
+
+class BreakoutGame {
+  physics = new BreakoutPhysics();
+  terminal = new TestbedTerminal();
+
+  boardWidth = 20;
+  boardHeight = 26;
+
+  boardRows = 10;
+  boardColumns = 7;
+
+  state: string;
+  score = 0;
+  combo = 1;
+
+  globalTime = 0;
+  nextRowTime = 0;
+  resetPaddleTime = 0;
+
+  balls: BallData[] = [];
+  bricks: BrickData[] = [];
+  drops: DropData[] = [];
+  paddle: PaddleData | null = null;
+  board: WallData = { key: "board", type: "wall" };
+
+  getPaddleSpeed() {
+    return 18;
+  }
+
+  getDropSpeed() {
+    return -6;
+  }
+
+  getBallSpeed() {
+    return (13 + this.score * 0.05) * 0.7;
+  }
+
+  getNextRowTime() {
+    return Math.max(8000 - 20 * this.score, 1000);
+  }
+
+  getResetPaddleTime() {
+    return 7500;
+  }
+
+  setup() {
+    this.physics.setup(this);
+    this.terminal.setup(this);
+  }
+
+  update() {
+    this.physics.update(this);
+    this.terminal.update(this);
+  }
+
+  ready() {
+    if (this.state == "ready") return;
+    this.state = "ready";
+    this.score = 0;
+    this.combo = 1;
+    this.nextRowTime = 0;
+    this.resetPaddleTime = 0;
+
+    this.bricks.length = 0;
+    this.balls.length = 0;
+    this.drops.length = 0;
+
+    this.setPaddle("full");
+    this.addBall();
+    this.addRow();
+    this.addRow();
+    this.addRow();
+
+    this.update();
+  }
+
+  play() {
+    this.ready();
+
+    this.state = "playing";
+
+    this.update();
+  }
+
+  end() {
+    this.state = "gameover";
+    this.paddle = null;
+
+    this.update();
+  }
+
+  keydown(activeKeys: { left?: boolean; right?: boolean; fire?: boolean }) {
+    if (activeKeys.fire) {
+      if (this.state == "gameover") {
+        this.ready();
+      } else if (this.state == "ready") {
+        this.play();
+      }
+    }
+  }
+
+  step(dt: number) {
+    dt = Math.min(dt, 50);
+    const isPlaying = this.state === "playing";
+    if (isPlaying) {
+      this.globalTime += dt;
+      if (this.nextRowTime && this.globalTime > this.nextRowTime) {
+        this.nextRowTime = 0;
+        this.addRow();
+      }
+      if (this.resetPaddleTime && this.globalTime > this.resetPaddleTime) {
+        this.resetPaddleTime = 0;
+        this.setPaddle("full");
+      }
+    }
+    this.movePaddle();
+    this.update();
+  }
+
+  movePaddle() {
+    const isPlaying = this.state === "playing";
+    const isReady = this.state === "ready";
+    if (!isPlaying && !isReady) return;
+    if (!this.paddle) return;
+
+    const isLeftPressed = this.terminal.activeKeys.left;
+    const isRightPressed = this.terminal.activeKeys.right;
+    if (isLeftPressed && !isRightPressed) {
+      this.paddle.speed = -this.getPaddleSpeed();
+    } else if (isRightPressed && !isLeftPressed) {
+      this.paddle.speed = +this.getPaddleSpeed();
+    } else {
+      this.paddle.speed = 0;
+    }
+  }
+
+  setPaddle(size: "mini" | "full") {
+    const position = this.paddle?.position ?? { x: 0, y: -10.5 };
+    const speed = this.paddle?.speed ?? 0;
+
+    this.paddle = {
+      key: "paddle-" + performance.now(),
+      type: "paddle",
+      size: size,
+      speed: speed,
+      position: position,
+    };
+
+    if (size == "mini") {
+      this.resetPaddleTime = this.globalTime + this.getResetPaddleTime();
+    }
+
+    this.update();
+  }
+
+  addBall() {
+    const speed = this.getBallSpeed();
+
+    const ball = this.balls[this.balls.length - 1];
+    const position = ball?.position ?? { x: 0, y: -5 };
+    let velocity = ball?.velocity;
+
+    if (velocity) {
+      velocity = { x: -velocity.x, y: -velocity.y };
+    } else {
+      const a = Math.PI * Math.random() * 0.4 - 0.2;
+      velocity = { x: speed * Math.sin(a), y: speed * Math.cos(a) };
+    }
+    this.balls.push({
+      key: "ball-" + Math.random(),
+      type: "ball",
+      speed: this.getBallSpeed(),
+      position: position,
+      velocity: velocity,
+    });
+
+    this.update();
+  }
+
+  addDrop(i: number, j: number) {
+    const type = Math.random() < 0.6 ? "+" : "-";
+    this.drops.push({
+      key: "drop-" + Math.random(),
+      type: "drop",
+      value: type,
+      i,
+      j,
+      speed: this.getDropSpeed(),
+    });
+
+    this.update();
+  }
+
+  addBrick(type: "normal" | "small", i: number, j: number) {
+    this.bricks.push({
+      key: "brick-" + Math.random(),
+      type: "brick",
+      size: type,
+      i,
+      j,
+    });
+
+    this.update();
+  }
+
+  addRow() {
+    this.nextRowTime = this.globalTime + this.getNextRowTime();
+
+    for (let i = 0; i < this.bricks.length; i++) {
+      const brick = this.bricks[i];
+      brick.j++;
+    }
+
+    for (let i = 0; i < this.boardColumns; i++) {
+      if (Math.random() < 0.1) {
+        continue;
+      }
+      const oneChance = this.score + 1;
+      const fourChance = Math.max(0, this.score * 1.1 - 60);
+      if (Math.random() < oneChance / (fourChance + oneChance)) {
+        this.addBrick("normal", i, 0);
+      } else {
+        this.addBrick("small", i - 0.25, -0.25);
+        this.addBrick("small", i + 0.25, -0.25);
+        this.addBrick("small", i - 0.25, +0.25);
+        this.addBrick("small", i + 0.25, +0.25);
+      }
+    }
+
+    for (let i = 0; i < this.bricks.length; i++) {
+      const brick = this.bricks[i];
+      if (brick.j >= this.boardRows) {
+        this.end();
+        continue;
+      }
+    }
+  }
+
+  collideBallBrick(ball: BallData, brick: BrickData) {
+    if (!Util.removeFromArray(this.bricks, brick)) return;
+
+    if (!this.bricks.length) {
+      this.addRow();
+    }
+    this.addDrop(brick.i, brick.j);
+
+    this.score += this.combo;
+    this.combo++;
+
+    this.update();
+  }
+
+  collideBallPaddle(ball: BallData) {
+    this.combo = 1;
+  }
+
+  collideBallBottom(ball: BallData) {
+    if (!Util.removeFromArray(this.balls, ball)) return;
+
+    if (!this.balls.length) {
+      this.end();
+    }
+
+    this.update();
+  }
+
+  collideDropPaddle(drop: DropData) {
+    if (!Util.removeFromArray(this.drops, drop)) return;
+
+    if (drop.value == "+") {
+      this.addBall();
+    } else if (drop.value == "-") {
+      this.setPaddle("mini");
+    }
+
+    this.update();
+  }
+
+  collideDropBottom(drop: DropData) {
+    if (!Util.removeFromArray(this.drops, drop)) return;
+
+    this.update();
   }
 }
 
-class BrickData extends ObjectData {
-  type = "brick" as const;
-  constructor(type: string, i: number, j: number) {
-    super();
-    this.subtype = type;
-    this.i = i;
-    this.j = j;
-  }
-}
+class TestbedTerminal {
+  testbed: Testbed;
 
-class DropData extends ObjectData {
-  type = "drop" as const;
-  constructor(type: string, i: number, j: number, speed: number) {
-    super();
-    this.subtype = type;
-    this.i = i;
-    this.j = j;
-    this.speed = speed;
+  get activeKeys() {
+    return this.testbed.activeKeys;
   }
-}
 
-class PaddleData extends ObjectData {
-  type = "paddle" as const;
-  subtype: "mini" | "full";
-  constructor(type: "mini" | "full") {
-    super();
-    this.subtype = type;
+  setup(game: BreakoutGame) {
+    if (this.testbed) return;
+
+    this.testbed = Testbed.mount();
+    this.testbed.width = game.boardWidth;
+    this.testbed.height = game.boardHeight * 1.12;
+    this.testbed.y = 0;
+
+    this.testbed.keydown = () => {
+      game.keydown(this.testbed.activeKeys);
+    };
+
+    this.testbed.step = (dt) => {
+      game.step(dt);
+    };
+
+    this.testbed.start(game.physics.world);
   }
-}
 
-class WallData extends ObjectData {
-  type = "bottom" as const;
-  constructor() {
-    super();
+  update(game: BreakoutGame) {
+    if (game.state == "gameover") {
+      this.testbed.status("Gameover!");
+      this.testbed.status("Score", game.score);
+    } else if (game.state == "ready") {
+      this.testbed.status("Ready!");
+      this.testbed.status("Score", game.score);
+    } else {
+      this.testbed.status("");
+      this.testbed.status("Score", game.score);
+    }
   }
-}
-
-interface BreakoutPhysicsClientInterface {
-  collideBallBrick(ball: BallData, brick: BrickData): void;
-  collideBallPaddle(ball: BallData): void;
-  collideBallBottom(ball: BallData): void;
-  collideDropPaddle(drop: DropData): void;
-  collideDropBottom(drop: DropData): void;
 }
 
 const BALL_BITS = 1;
@@ -105,7 +408,7 @@ const dropFix = {
 const ballShape = new CircleShape(0.5);
 const normalBrickShape = new BoxShape(1.9 / 2, 1.9 / 2);
 const smallBrickShape = new BoxShape(0.9 / 2, 0.9 / 2);
-const miniPaddleShape = new PolygonShape([
+const fullPaddleShape = new PolygonShape([
   { x: 1.7, y: -0.2 },
   { x: 1.8, y: -0.1 },
   { x: 1.8, y: 0.1 },
@@ -119,7 +422,7 @@ const miniPaddleShape = new PolygonShape([
   { x: -1.8, y: -0.1 },
   { x: -1.7, y: -0.2 },
 ]);
-const fullPaddleShape = new PolygonShape([
+const miniPaddleShape = new PolygonShape([
   { x: 1.2, y: -0.1 },
   { x: 1.2, y: 0.1 },
   { x: 0.9, y: 0.4 },
@@ -135,103 +438,66 @@ const paddleShapes = {
   full: fullPaddleShape,
 };
 
+interface BreakoutPhysicsListener {
+  collideBallBrick(ball: BallData, brick: BrickData): void;
+  collideBallPaddle(ball: BallData): void;
+  collideBallBottom(ball: BallData): void;
+  collideDropPaddle(drop: DropData): void;
+  collideDropBottom(drop: DropData): void;
+}
+
 class BreakoutPhysics {
-  client?: BreakoutPhysicsClientInterface;
+  listener: BreakoutPhysicsListener;
 
   world: World;
-  bottomWall: Body;
-  paddle: Body;
-  balls: Body[] = [];
-  bricks: Body[] = [];
-  drops: Body[] = [];
 
-  constructor(client?: BreakoutPhysicsClientInterface) {
-    this.client = client;
-  }
+  driver = new DataDriver<UserData, Body>((data) => data.key, {
+    enter: (data) => {
+      if (data.type === "ball") {
+        return this.createBall(data);
+      } else if (data.type === "brick") {
+        return this.createBrick(data);
+      } else if (data.type === "drop") {
+        return this.createDrop(data);
+      } else if (data.type === "paddle") {
+        return this.createPaddle(data);
+      } else if (data.type === "wall") {
+        return this.createBoard(data);
+      }
+      return null;
+    },
+    update: (data, body) => {
+      if (data.type === "brick") {
+        this.updateBrick(data, body);
+      } else if (data.type === "ball") {
+        this.updateBall(data, body);
+      } else if (data.type === "paddle") {
+        this.updatePaddle(data, body);
+      }
+    },
+    exit: (data, body) => {
+      this.world.destroyBody(body);
+    },
+  });
 
-  setupPhysics() {
+  setup(listener: BreakoutPhysicsListener) {
+    this.listener = listener;
+
     if (this.world) return;
-
     this.world = new World();
     this.world.on("pre-solve", this.collidePhysics);
-
-    this.createBoardPhysics();
   }
 
-  resetPhysics() {
-    for (let i = 0; i < this.balls.length; i++) {
-      this.world.destroyBody(this.balls[i]);
-    }
-    for (let i = 0; i < this.bricks.length; i++) {
-      this.world.destroyBody(this.bricks[i]);
-    }
-    for (let i = 0; i < this.drops.length; i++) {
-      this.world.destroyBody(this.drops[i]);
-    }
+  update(game: BreakoutGame) {
+    this.driver.update([...game.balls, ...game.bricks, ...game.drops, game.paddle, game.board]);
   }
 
-  endPhysics() {
-    this.world.destroyBody(this.paddle);
-  }
-
-  startPhysics() {
-    const ball = this.balls[0];
-    const a = Math.PI * Math.random() * 0.4 - 0.2;
-    const speed = 10;
-    ball.setLinearVelocity({ x: speed * Math.sin(a), y: speed * Math.cos(a) });
-  }
-
-  collidePhysics = (contact: Contact) => {
-    const fixtureA = contact.getFixtureA();
-    const bodyA = fixtureA.getBody();
-    const fixtureB = contact.getFixtureB();
-    const bodyB = fixtureB.getBody();
-
-    const dataA = bodyA.getUserData() as ObjectData;
-    const dataB = bodyB.getUserData() as ObjectData;
-
-    if (!dataA || !dataB) {
-      return;
-    }
-
-    const typeA = dataA.type;
-    const typeB = dataB.type;
-
-    const ball = typeA === "ball" ? dataA : typeB === "ball" ? dataB : null;
-    const brick = typeA === "brick" ? dataA : typeB === "brick" ? dataB : null;
-    const bottom = typeA === "bottom" ? dataA : typeB === "bottom" ? dataB : null;
-    const paddle = typeA === "paddle" ? dataA : typeB === "paddle" ? dataB : null;
-    const drop = typeA === "drop" ? dataA : typeB === "drop" ? dataB : null;
-
-    // do not change world immediately
-    if (ball && brick) {
-      this.world.queueUpdate(() => {
-        this.client?.collideBallBrick(ball as BallData, brick as BrickData);
-      });
-    } else if (ball && bottom) {
-      this.world.queueUpdate(() => {
-        this.client?.collideBallBottom(ball as BallData);
-      });
-    } else if (ball && paddle) {
-      this.world.queueUpdate(() => {
-        this.client?.collideBallPaddle(ball as BallData);
-      });
-    } else if (drop && paddle) {
-      this.world.queueUpdate(() => {
-        this.client?.collideDropPaddle(drop as DropData);
-      });
-    } else if (drop && bottom) {
-      this.world.queueUpdate(() => {
-        this.client?.collideDropBottom(drop as DropData);
-      });
-    }
-  };
-
-  createBoardPhysics() {
+  createBoard(data: WallData) {
     {
       const wall = this.world.createBody({
         type: "static",
         position: { x: +9, y: -0.5 },
+        userData: data,
       });
       wall.createFixture({
         shape: new EdgeShape({ x: 0, y: -12.5 }, { x: 0, y: +11.5 }),
@@ -242,6 +508,7 @@ class BreakoutPhysics {
       const wall = this.world.createBody({
         type: "static",
         position: { x: -9, y: -0.5 },
+        userData: data,
       });
       wall.createFixture({
         shape: new EdgeShape({ x: 0, y: -12.5 }, { x: 0, y: +11.5 }),
@@ -252,6 +519,7 @@ class BreakoutPhysics {
       const wall = this.world.createBody({
         type: "static",
         position: { x: 0, y: +12 },
+        userData: data,
       });
       wall.createFixture({
         shape: new EdgeShape({ x: -8, y: 0 }, { x: +8, y: 0 }),
@@ -262,6 +530,7 @@ class BreakoutPhysics {
       const wall = this.world.createBody({
         type: "static",
         position: { x: 9, y: 12 },
+        userData: data,
       });
       wall.createFixture({
         shape: new EdgeShape({ x: -1, y: 0 }, { x: 0, y: -1 }),
@@ -272,6 +541,7 @@ class BreakoutPhysics {
       const wall = this.world.createBody({
         type: "static",
         position: { x: -9, y: 12 },
+        userData: data,
       });
       wall.createFixture({
         shape: new EdgeShape({ x: 1, y: 0 }, { x: 0, y: -1 }),
@@ -282,102 +552,97 @@ class BreakoutPhysics {
       const wall = this.world.createBody({
         type: "static",
         position: { x: 0, y: -13 },
-        userData: new WallData(),
+        userData: {
+          ...data,
+          floor: true,
+        },
       });
       wall.createFixture({
         shape: new EdgeShape({ x: -9, y: 0 }, { x: +9, y: 0 }),
         ...wallFix,
       });
-
-      this.bottomWall = wall;
     }
+
+    return null;
   }
 
-  setPaddlePhysics(data: PaddleData) {
+  createPaddle(data: PaddleData) {
     const body = this.world.createBody({
       type: "kinematic",
-      position: { x: 0, y: -10.5 },
+      position: data.position,
       userData: data,
     });
 
-    const shape = paddleShapes[data.subtype] || fullPaddleShape;
+    const shape = paddleShapes[data.size] || fullPaddleShape;
 
     body.createFixture({
       shape: shape,
       ...paddleFix,
     });
 
-    if (this.paddle) {
-      const pInit = this.paddle.getPosition();
-      const vInit = this.paddle.getLinearVelocity();
-      body.setPosition(pInit);
-      body.setLinearVelocity(vInit);
-      this.world.destroyBody(this.paddle);
-    }
-
-    data.body = body;
-    this.paddle = body;
+    return body;
   }
 
-  addBallPhysics(data: BallData) {
+  updatePaddle(data: PaddleData, body: Body) {
+    if (!body) return;
+
+    data.position = body.getPosition();
+
+    body.setLinearVelocity({
+      x: data.speed,
+      y: 0,
+    });
+  }
+
+  createBall(data: BallData) {
     const body = this.world.createBody({
       type: "dynamic",
       bullet: true,
+      position: data.position,
+      linearVelocity: data.velocity,
       angle: Math.random() * Math.PI * 2,
+      fixedRotation: true,
+      userData: data,
     });
     body.createFixture({
       shape: ballShape,
       ...ballFix,
     });
 
-    const oldBall = this.balls[0];
-    if (oldBall) {
-      body.setPosition(oldBall.getPosition());
-      body.setLinearVelocity(Vec2.neg(oldBall.getLinearVelocity()));
-    } else {
-      body.setPosition({ x: 0, y: -5 });
-    }
-
-    body.setUserData(data);
-    data.body = body;
-    this.balls.push(body);
+    return body;
   }
 
-  removeBallPhysics(ball: BallData) {
-    const body = ball.body;
-    if (!removeFromArray(this.balls, body)) return;
-    this.world.destroyBody(body);
+  updateBall(data: BallData, body: Body) {
+    if (!body) return;
+
+    data.position = body.getPosition();
+    data.velocity = body.getLinearVelocity();
   }
 
-  addBrickPhysics(data: BrickData) {
-    const shape = data.subtype == "small" ? smallBrickShape : normalBrickShape;
+  createBrick(data: BrickData) {
+    const shape = data.size == "small" ? smallBrickShape : normalBrickShape;
     const pos = { x: (data.i - 3) * 2, y: 9 - data.j * 2 };
     const body = this.world.createBody({
       type: "static",
       position: pos,
+      userData: data,
     });
     body.createFixture({
       shape: shape,
       ...brickFix,
     });
 
-    body.setUserData(data);
-    data.body = body;
-    this.bricks.push(body);
+    return body;
   }
 
-  updateBrickPhysics(data: BrickData) {
-    const body = data.body;
-    body.setPosition({ x: (data.i - 3) * 2, y: 9 - data.j * 2 });
+  updateBrick(data: BrickData, body: Body) {
+    body.setPosition({
+      x: (data.i - 3) * 2,
+      y: 9 - data.j * 2,
+    });
   }
 
-  removeBrickPhysics(data: BrickData) {
-    const body = data.body;
-    if (!removeFromArray(this.bricks, body)) return;
-    this.world.destroyBody(body);
-  }
-
-  addDropPhysics(drop: DropData) {
+  createDrop(drop: DropData) {
     const body = this.world.createBody({
       type: "dynamic",
       position: {
@@ -390,7 +655,8 @@ class BreakoutPhysics {
       },
       userData: drop,
     });
-    if (drop.subtype == "+") {
+
+    if (drop.value == "+") {
       body.createFixture({
         shape: new BoxShape(0.08, 0.32),
         ...dropFix,
@@ -399,7 +665,7 @@ class BreakoutPhysics {
         shape: new BoxShape(0.32, 0.08),
         ...dropFix,
       });
-    } else if (drop.subtype == "-") {
+    } else if (drop.value == "-") {
       body.createFixture({
         shape: new BoxShape(0.3, 0.1),
         ...dropFix,
@@ -411,324 +677,67 @@ class BreakoutPhysics {
       });
     }
 
-    drop.body = body;
-    this.drops.push(body);
+    return body;
   }
 
-  removeDropPhysics(drop: DropData) {
-    const body = drop.body;
-    if (!removeFromArray(this.drops, body)) return;
-    this.world.destroyBody(body);
-  }
+  collidePhysics = (contact: Contact) => {
+    const fixtureA = contact.getFixtureA();
+    const bodyA = fixtureA.getBody();
+    const fixtureB = contact.getFixtureB();
+    const bodyB = fixtureB.getBody();
 
-  movePaddlePhysics(dir: number) {
-    const from = this.paddle.getPosition();
-    const to = { x: dir + from.x, y: 0 + from.y };
-    const data = this.paddle.getUserData() as PaddleData;
-    const paddleWidth = data.subtype == "mini" ? 2.4 : 3.6;
-    const maxX = 9 - paddleWidth / 2;
-    to.x = Math.min(maxX, Math.max(-maxX, to.x));
-    this.paddle.setPosition(to);
-  }
-}
+    const dA = bodyA.getUserData() as UserData;
+    const dB = bodyB.getUserData() as UserData;
 
-class BreakoutGame {
-  WIDTH = 20;
-  HEIGHT = 26;
-
-  ROWS = 10;
-  COLUMNS = 7;
-
-  physics: BreakoutPhysics;
-  terminal: BreakoutTerminalInterface;
-
-  state: string;
-
-  score = 0;
-  combo = 1;
-
-  passedTime = 0;
-  nextRowTime = 0;
-  resetPaddleTime = 0;
-
-  balls: BallData[] = [];
-  bricks: BrickData[] = [];
-  drops: DropData[] = [];
-
-  getPaddleSpeed() {
-    return 18;
-  }
-
-  getDropSpeed() {
-    return -6;
-  }
-
-  getBallSpeed() {
-    return (13 + this.score * 0.05) * 0.7;
-  }
-
-  getNextRowTime() {
-    return Math.max(8000 - 20 * this.score, 1000);
-  }
-
-  getResetPaddleTime() {
-    return 7500;
-  }
-
-  setup(terminal: BreakoutTerminalInterface) {
-    this.terminal = terminal;
-
-    this.physics = new BreakoutPhysics(this);
-
-    this.physics.setupPhysics();
-    this.terminal.setup(this);
-
-    this.resetBoard();
-  }
-
-  resetBoard() {
-    if (this.state == "ready") return;
-    this.state = "ready";
-    this.score = 0;
-    this.combo = 1;
-    this.nextRowTime = 0;
-    this.resetPaddleTime = 0;
-    this.physics.resetPhysics();
-    this.setPaddle("full");
-    this.addBall();
-    this.addRow();
-    this.addRow();
-    this.addRow();
-    this.updateStatus();
-  }
-
-  startGame() {
-    this.resetBoard();
-    this.state = "playing";
-    this.physics.startPhysics();
-  }
-
-  endGame() {
-    this.state = "gameover";
-    this.updateStatus();
-    this.physics.endPhysics();
-  }
-
-  setPaddle(size: "mini" | "full") {
-    const paddle = new PaddleData(size);
-
-    this.physics.setPaddlePhysics(paddle);
-  }
-
-  addBall() {
-    const ball = new BallData(this.getBallSpeed());
-    this.balls.push(ball);
-
-    this.physics.addBallPhysics(ball);
-  }
-
-  addDrop(i: number, j: number) {
-    const type = Math.random() < 0.6 ? "+" : "-";
-    const drop = new DropData(type, i, j, this.getDropSpeed());
-    this.drops.push(drop);
-
-    this.physics.addDropPhysics(drop);
-  }
-
-  addBrick(type: string, i: number, j: number) {
-    const brick = new BrickData(type, i, j);
-    this.bricks.push(brick);
-
-    this.physics.addBrickPhysics(brick);
-  }
-
-  updateBrick(brick: BrickData) {
-    this.physics.updateBrickPhysics(brick);
-  }
-
-  addRow() {
-    this.nextRowTime = this.passedTime + this.getNextRowTime();
-
-    for (let i = 0; i < this.bricks.length; i++) {
-      const brick = this.bricks[i];
-      brick.j++;
-      this.updateBrick(brick);
-    }
-
-    for (let i = 0; i < this.COLUMNS; i++) {
-      if (Math.random() < 0.1) {
-        continue;
-      }
-      const oneChance = this.score + 1;
-      const fourChance = Math.max(0, this.score * 1.1 - 60);
-      if (Math.random() < oneChance / (fourChance + oneChance)) {
-        this.addBrick("normal", i, 0);
-      } else {
-        this.addBrick("small", i - 0.25, -0.25);
-        this.addBrick("small", i + 0.25, -0.25);
-        this.addBrick("small", i - 0.25, +0.25);
-        this.addBrick("small", i + 0.25, +0.25);
-      }
-    }
-
-    for (let i = 0; i < this.bricks.length; i++) {
-      const brick = this.bricks[i];
-      if (brick.j >= this.ROWS) {
-        this.endGame();
-        continue;
-      }
-    }
-  }
-
-  movePaddle(dir: number) {
-    this.physics.movePaddlePhysics(dir);
-  }
-
-  step(dt: number) {
-    dt = Math.min(dt, 50);
-    this.passedTime += dt;
-
-    const isPlaying = this.state === "playing";
-    const isReady = this.state === "ready";
-
-    if (isPlaying && isReady) {
+    if (!dA || !dB) {
       return;
     }
 
-    const isLeftPressed = this.terminal.activeKeys.left;
-    const isRightPressed = this.terminal.activeKeys.right;
-    if (isLeftPressed && !isRightPressed) {
-      this.movePaddle((-this.getPaddleSpeed() * dt) / 1000);
-    } else if (isRightPressed && !isLeftPressed) {
-      this.movePaddle((+this.getPaddleSpeed() * dt) / 1000);
+    const ball = dA.type === "ball" ? dA : dB.type === "ball" ? dB : null;
+    const brick = dA.type === "brick" ? dA : dB.type === "brick" ? dB : null;
+    const bottom = dA.type === "wall" && dA.floor ? dA : dB.type === "wall" && dB.floor ? dB : null;
+    const paddle = dA.type === "paddle" ? dA : dB.type === "paddle" ? dB : null;
+    const drop = dA.type === "drop" ? dA : dB.type === "drop" ? dB : null;
+
+    // do not change world immediately
+    if (ball && brick) {
+      this.world.queueUpdate(() => {
+        this.listener.collideBallBrick(ball as BallData, brick as BrickData);
+      });
+    } else if (ball && bottom) {
+      this.world.queueUpdate(() => {
+        this.listener.collideBallBottom(ball as BallData);
+      });
+    } else if (ball && paddle) {
+      this.world.queueUpdate(() => {
+        this.listener.collideBallPaddle(ball as BallData);
+      });
+    } else if (drop && paddle) {
+      this.world.queueUpdate(() => {
+        this.listener.collideDropPaddle(drop as DropData);
+      });
+    } else if (drop && bottom) {
+      this.world.queueUpdate(() => {
+        this.listener.collideDropBottom(drop as DropData);
+      });
     }
-
-    if (isPlaying) {
-      return;
-    }
-
-    if (this.nextRowTime && this.passedTime > this.nextRowTime) {
-      this.nextRowTime = 0;
-      this.addRow();
-    }
-
-    if (this.resetPaddleTime && this.passedTime > this.resetPaddleTime) {
-      this.resetPaddleTime = 0;
-      this.setPaddle("full");
-    }
-  }
-
-  collideBallBrick(ball: BallData, brick: BrickData) {
-    if (!removeFromArray(this.bricks, brick)) return;
-    this.physics.removeBrickPhysics(brick);
-
-    if (!this.bricks.length) {
-      this.addRow();
-    }
-    this.score += this.combo;
-    // this.combo++;
-    this.updateStatus();
-    this.addDrop(brick.i, brick.j);
-  }
-
-  collideBallPaddle(ball: BallData) {
-    // this.combo = 1;
-  }
-
-  collideBallBottom(ball: BallData) {
-    if (!removeFromArray(this.balls, ball)) return;
-    this.physics.removeBallPhysics(ball);
-
-    if (!this.balls.length) {
-      this.endGame();
-    }
-  }
-
-  collideDropPaddle(drop: DropData) {
-    if (!removeFromArray(this.drops, drop)) return;
-    this.physics.removeDropPhysics(drop);
-
-    if (drop.subtype == "+") {
-      this.addBall();
-    } else if (drop.subtype == "-") {
-      this.setPaddle("mini");
-    }
-  }
-
-  collideDropBottom(drop: DropData) {
-    if (!removeFromArray(this.drops, drop)) return;
-    this.physics.removeDropPhysics(drop);
-  }
-
-  updateStatus() {
-    this.terminal.updateState(this);
-  }
+  };
 }
 
-interface BreakoutTerminalInterface {
-  setup(game: BreakoutGame): void;
-  activeKeys: Record<string, boolean>;
-  updateState(game: BreakoutGame): void;
-}
-
-class TestbedTerminal implements BreakoutTerminalInterface {
-  testbed: Testbed;
-
-  get activeKeys() {
-    return this.testbed.activeKeys;
-  }
-
-  updateState(game: BreakoutGame) {
-    if (game.state == "gameover") {
-      this.testbed.status("Gameover!");
-      this.testbed.status("Score", game.score);
-    } else if (game.state == "ready") {
-      this.testbed.status("Ready!");
-      this.testbed.status("Score", game.score);
+class Util {
+  static removeFromArray<T>(array: T[], item: T) {
+    const i = array.indexOf(item);
+    if (i == -1) {
+      return false;
     } else {
-      this.testbed.status("");
-      this.testbed.status("Score", game.score);
+      array.splice(i, 1);
+      return true;
     }
-  }
-
-  setup(game: BreakoutGame) {
-    if (this.testbed) return;
-
-    this.testbed = Testbed.mount();
-    this.testbed.width = game.WIDTH;
-    this.testbed.height = game.HEIGHT * 1.12;
-    this.testbed.y = 0;
-
-    this.testbed.keydown = () => {
-      if (this.testbed.activeKeys.fire) {
-        if (game.state == "gameover") {
-          game.resetBoard();
-        } else if (game.state == "ready") {
-          game.startGame();
-        }
-      }
-    };
-
-    this.testbed.step = (dt) => {
-      game.step(dt);
-    };
-
-    this.testbed.start(game.physics.world);
   }
 }
 
 {
-  const terminal = new TestbedTerminal();
   const game = new BreakoutGame();
-  game.setup(terminal);
-}
-
-function removeFromArray<T>(array: T[], item: T) {
-  const i = array.indexOf(item);
-  if (i == -1) {
-    return false;
-  } else {
-    array.splice(i, 1);
-    return true;
-  }
+  game.setup();
+  game.play();
 }

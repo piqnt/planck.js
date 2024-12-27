@@ -1,6 +1,14 @@
-import { World, Circle, Chain, Settings, Testbed } from "planck";
-
-const testbed = Testbed.mount();
+import {
+  World,
+  Circle,
+  Chain,
+  Settings,
+  Testbed,
+  Contact,
+  Vec2Value,
+  DataDriver,
+  Body,
+} from "planck";
 
 const width = 10.0;
 const height = 6.0;
@@ -8,186 +16,298 @@ const height = 6.0;
 const PLAYER_R = 0.35;
 const BALL_R = 0.23;
 
-testbed.x = 0;
-testbed.y = 0;
-testbed.width = width * 1.6;
-testbed.height = height * 1.6;
-testbed.mouseForce = -120;
-
-Settings.velocityThreshold = 0;
-
-const world = new World();
-testbed.start(world);
-
-const goal = [
-  { x: 0, y: -height * 0.2 },
-  { x: 0, y: +height * 0.2 },
-];
-
-const wallFixDef = {
-  friction: 0,
-  restitution: 0,
-  userData: "wall",
-};
-const goalFixDef = {
-  friction: 0,
-  restitution: 1,
-  userData: "goal",
-};
-
-const ballFixDef = {
-  friction: 0.2,
-  restitution: 0.99,
-  density: 0.5,
-  userData: "ball",
-};
-const ballBodyDef = {
-  type: "dynamic" as const,
-  bullet: true,
-  linearDamping: 3.5,
-  angularDamping: 1.6,
-};
-
-const playerFixDef = {
-  friction: 0.1,
-  restitution: 0.99,
-  density: 0.8,
-  userData: "player",
-};
-const playerBodyDef = {
-  type: "dynamic" as const,
-  bullet: true,
-  linearDamping: 4,
-  angularDamping: 1.6,
-};
-
-world
-  .createBody({
-    type: "static",
-  })
-  .createFixture({
-    shape: new Chain(walls(), true),
-    ...wallFixDef,
-  });
-
-{
-  // goal left
-  const body = world.createBody({
-    type: "static",
-    position: { x: -width * 0.5 - BALL_R, y: 0 },
-  });
-  const fixture = body.createFixture({
-    shape: new Chain(goal),
-    ...goalFixDef,
-  });
+interface PlayerData {
+  type: "player";
+  key: string;
+  color: string;
+  position: Vec2Value;
 }
 
-{
-  // goal right
-  const body = world.createBody({
-    type: "static",
-    position: { x: +width * 0.5 + BALL_R, y: 0 },
-  });
-  const fixture = body.createFixture({
-    shape: new Chain(goal),
-    ...goalFixDef,
-  });
+interface BallData {
+  type: "ball";
+  key: string;
 }
 
-const ball = world.createBody(ballBodyDef);
-ball.createFixture({
-  shape: new Circle(BALL_R),
-  ...ballFixDef,
-});
-ball.style = { fill: "white", stroke: "black" };
+interface WallData {
+  type: "wall";
+  key: string;
+}
 
-team().forEach(function (p) {
-  const player = world.createBody(playerBodyDef);
-  player.setPosition(p);
-  player.createFixture({
-    shape: new Circle(PLAYER_R),
-    ...playerFixDef,
-  });
-  player.style = { fill: "#0077ff", stroke: "black" };
-});
+interface GoalData {
+  type: "goal";
+  key: string;
+}
 
-team()
-  .map((v) => ({ x: -v.x, y: v.y }))
-  .forEach(function (p) {
-    const player = world.createBody(playerBodyDef);
-    player.setPosition(p);
-    player.setAngle(Math.PI);
-    player.createFixture({
-      shape: new Circle(PLAYER_R),
-      ...playerFixDef,
-    });
-    player.style = { fill: "#ff411a", stroke: "black" };
-  });
+type UserData = PlayerData | BallData | WallData | GoalData;
 
-world.on("post-solve", function (contact) {
-  const fA = contact.getFixtureA();
-  const bA = fA.getBody();
-  const fB = contact.getFixtureB();
-  const bB = fB.getBody();
+class SoccerGame {
+  terminal = new TestbedTerminal();
+  physics = new SoccerPhysics();
 
-  const wall =
-    fA.getUserData() === wallFixDef.userData
-      ? bA
-      : fB.getUserData() === wallFixDef.userData
-        ? bB
-        : null;
-  const ball =
-    fA.getUserData() === ballFixDef.userData
-      ? bA
-      : fB.getUserData() === ballFixDef.userData
-        ? bB
-        : null;
-  const goal =
-    fA.getUserData() === goalFixDef.userData
-      ? bA
-      : fB.getUserData() === goalFixDef.userData
-        ? bB
-        : null;
+  wall: WallData;
+  rightGoal: GoalData;
+  leftGoal: GoalData;
+  ball: BallData | null = null;
 
-  if (ball && goal) {
-    // do not change world immediately
-    world.queueUpdate(function () {
-      ball.setPosition({ x: 0, y: 0 });
-      ball.setLinearVelocity({ x: 0, y: 0 });
-      // world.destroyBody(ball);
-    });
+  playersRed: PlayerData[] = [];
+  playersBlue: PlayerData[] = [];
+
+  setup() {
+    this.physics.setup(this);
+    this.terminal.setup(this);
   }
-});
 
-function team() {
-  const positions = [
-    { x: -width * 0.45, y: 0 },
-    { x: -width * 0.3, y: -height * 0.2 },
-    { x: -width * 0.3, y: +height * 0.2 },
-    { x: -width * 0.1, y: -height * 0.1 },
-    { x: -width * 0.1, y: +height * 0.1 },
-  ];
-  return positions;
+  update() {
+    this.physics.update(this);
+    this.terminal.update(this);
+  }
+
+  start() {
+    this.wall = {
+      key: "wall",
+      type: "wall",
+    };
+
+    this.ball = {
+      key: "ball-" + Math.random(),
+      type: "ball",
+    };
+
+    this.leftGoal = {
+      key: "left",
+      type: "goal",
+    };
+
+    this.rightGoal = {
+      key: "right",
+      type: "goal",
+    };
+
+    this.playersRed = this.team().map((v) => ({
+      type: "player",
+      key: "player-" + Math.random(),
+      position: v,
+      color: "red",
+    }));
+
+    this.playersBlue = this.team(true).map((v) => ({
+      type: "player",
+      key: "player-" + Math.random(),
+      position: v,
+      color: "blue",
+    }));
+
+    this.update();
+  }
+
+  onGoal() {
+    this.ball = null;
+    setTimeout(() => {
+      this.ball = {
+        key: "ball-" + Math.random(),
+        type: "ball",
+      };
+      this.update();
+    }, 500);
+
+    this.update();
+  }
+
+  team(reverse: boolean = false) {
+    const positions = [
+      { x: -width * 0.45, y: 0 },
+      { x: -width * 0.3, y: -height * 0.2 },
+      { x: -width * 0.3, y: +height * 0.2 },
+      { x: -width * 0.1, y: -height * 0.1 },
+      { x: -width * 0.1, y: +height * 0.1 },
+    ];
+    if (!reverse) {
+      return positions;
+    } else {
+      return positions.map((v) => ({ x: -v.x, y: v.y }));
+    }
+  }
 }
 
-function walls() {
-  const chain = [
-    { x: -width * 0.5 + 0.2, y: -height * 0.5 },
-    { x: -width * 0.5, y: -height * 0.5 + 0.2 },
-    { x: -width * 0.5, y: -height * 0.2 },
-    { x: -width * 0.6, y: -height * 0.2 },
-    { x: -width * 0.6, y: +height * 0.2 },
-    { x: -width * 0.5, y: +height * 0.2 },
-    { x: -width * 0.5, y: +height * 0.5 - 0.2 },
-    { x: -width * 0.5 + 0.2, y: +height * 0.5 },
-    { x: +width * 0.5 - 0.2, y: +height * 0.5 },
-    { x: +width * 0.5, y: +height * 0.5 - 0.2 },
-    { x: +width * 0.5, y: +height * 0.2 },
-    { x: +width * 0.6, y: +height * 0.2 },
-    { x: +width * 0.6, y: -height * 0.2 },
-    { x: +width * 0.5, y: -height * 0.2 },
-    { x: +width * 0.5, y: -height * 0.5 + 0.2 },
-    { x: +width * 0.5 - 0.2, y: -height * 0.5 },
-  ];
-  return chain;
+class TestbedTerminal {
+  setup(game: SoccerGame) {
+    const testbed = Testbed.mount();
+    testbed.x = 0;
+    testbed.y = 0;
+    testbed.width = width * 1.6;
+    testbed.height = height * 1.6;
+    testbed.mouseForce = -120;
+    testbed.start(game.physics.world);
+  }
+
+  update(game: SoccerGame) {}
+}
+
+interface SoccerPhysicsListener {
+  onGoal(): void;
+}
+
+class SoccerPhysics {
+  listener: SoccerPhysicsListener;
+
+  world: World;
+
+  driver = new DataDriver<UserData, Body>((data) => data.key, {
+    enter: (data: UserData) => {
+      if (data.type === "player") return this.createPlayer(data);
+      if (data.type === "ball") return this.createBall(data);
+      if (data.type === "wall") return this.createWall(data);
+      if (data.type === "goal") return this.createGoal(data);
+      return null;
+    },
+    update: (data, body) => {},
+    exit: (data, body) => {
+      this.world.destroyBody(body);
+    },
+  });
+
+  setup(listener: SoccerPhysicsListener) {
+    this.listener = listener;
+    this.world = new World();
+    this.world.on("post-solve", this.collide.bind(this));
+
+    Settings.velocityThreshold = 0;
+  }
+
+  update(game: SoccerGame) {
+    this.driver.update([
+      game.wall,
+      game.leftGoal,
+      game.rightGoal,
+      game.ball,
+      ...game.playersRed,
+      ...game.playersBlue,
+    ]);
+  }
+
+  createWall(data: WallData) {
+    const vertices = [
+      { x: -width * 0.5 + 0.2, y: -height * 0.5 },
+      { x: -width * 0.5, y: -height * 0.5 + 0.2 },
+      { x: -width * 0.5, y: -height * 0.2 },
+      { x: -width * 0.6, y: -height * 0.2 },
+      { x: -width * 0.6, y: +height * 0.2 },
+      { x: -width * 0.5, y: +height * 0.2 },
+      { x: -width * 0.5, y: +height * 0.5 - 0.2 },
+      { x: -width * 0.5 + 0.2, y: +height * 0.5 },
+      { x: +width * 0.5 - 0.2, y: +height * 0.5 },
+      { x: +width * 0.5, y: +height * 0.5 - 0.2 },
+      { x: +width * 0.5, y: +height * 0.2 },
+      { x: +width * 0.6, y: +height * 0.2 },
+      { x: +width * 0.6, y: -height * 0.2 },
+      { x: +width * 0.5, y: -height * 0.2 },
+      { x: +width * 0.5, y: -height * 0.5 + 0.2 },
+      { x: +width * 0.5 - 0.2, y: -height * 0.5 },
+    ];
+
+    const body = this.world.createBody({
+      type: "static",
+      userData: data,
+    });
+    body.createFixture({
+      shape: new Chain(vertices, true),
+      friction: 0,
+      restitution: 0,
+      userData: data,
+    });
+
+    return body;
+  }
+
+  createGoal(data: GoalData) {
+    const body = this.world.createBody({
+      type: "static",
+      position: {
+        x: data.key === "left" ? -width * 0.5 : +width * 0.5,
+        y: 0,
+      },
+      userData: data,
+    });
+    body.createFixture({
+      shape: new Chain([
+        { x: 0, y: -height * 0.2 },
+        { x: 0, y: +height * 0.2 },
+      ]),
+      friction: 0,
+      restitution: 1,
+      userData: data,
+    });
+    return body;
+  }
+
+  createBall(data: BallData) {
+    const body = this.world.createBody({
+      type: "dynamic",
+      bullet: true,
+      linearDamping: 3.5,
+      angularDamping: 1.6,
+      userData: data,
+    });
+    body.createFixture({
+      shape: new Circle(BALL_R),
+      friction: 0.2,
+      restitution: 0.99,
+      density: 0.5,
+      userData: data,
+    });
+    body.style = { fill: "white", stroke: "black" };
+    return body;
+  }
+
+  createPlayer(data: PlayerData) {
+    const body = this.world.createBody({
+      type: "dynamic",
+      bullet: true,
+      linearDamping: 4,
+      angularDamping: 1.6,
+      position: data.position,
+      userData: data,
+    });
+    body.createFixture({
+      shape: new Circle(PLAYER_R),
+      friction: 0.1,
+      restitution: 0.99,
+      density: 0.8,
+      userData: data,
+    });
+    if (data.color === "red") {
+      body.style = { fill: "#ff411a", stroke: "black" };
+    } else if (data.color === "blue") {
+      body.style = { fill: "#0077ff", stroke: "black" };
+    }
+    return body;
+  }
+
+  collide(contact: Contact) {
+    const fA = contact.getFixtureA();
+    const bA = fA.getBody();
+    const fB = contact.getFixtureB();
+    const bB = fB.getBody();
+
+    const dataA = bA.getUserData() as UserData;
+    const dataB = bB.getUserData() as UserData;
+
+    if (!dataA || !dataB) return;
+
+    const ball = dataA.type === "ball" ? bA : dataB.type === "ball" ? bB : null;
+    const goal = dataA.type === "goal" ? bA : dataB.type === "goal" ? bB : null;
+
+    if (ball && goal) {
+      // do not change world immediately
+      this.world.queueUpdate(() => {
+        this.listener.onGoal();
+      });
+    }
+  }
+}
+
+{
+  const game = new SoccerGame();
+  game.setup();
+  game.start();
 }
