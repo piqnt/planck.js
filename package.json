@@ -51,7 +51,7 @@
     "node": ">=14.0"
   },
   "peerDependencies": {
-    "stage-js": "^1.0.0-alpha.5"
+    "stage-js": "^1.0.0-alpha.12"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.11",

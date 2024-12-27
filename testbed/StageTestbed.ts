@@ -1,58 +1,17 @@
 import * as Stage from "stage-js";
 
-import type { Vec2Value } from "../src/common/Vec2";
 import type { World } from "../src/dynamics/World";
 import type { Joint } from "../src/dynamics/Joint";
 import type { Fixture } from "../src/dynamics/Fixture";
 import type { Body } from "../src/dynamics/Body";
 import type { AABBValue } from "../src/collision/AABB";
-import type { Shape } from "../src/collision/Shape";
-import type { Style } from "../src/util/Testbed";
 import { Testbed } from "../src/util/Testbed";
-import type { EdgeShape } from "../src/collision/shape/EdgeShape";
-import type { PolygonShape } from "../src/collision/shape/PolygonShape";
-import type { ChainShape } from "../src/collision/shape/ChainShape";
-import type { CircleShape } from "../src/collision/shape/CircleShape";
-import type { PulleyJoint } from "../src/dynamics/joint/PulleyJoint";
 import { MouseJoint } from "../src/dynamics/joint/MouseJoint";
+import { WorldComponent, WorldDragEnd, WorldDragMove, WorldDragStart, WorldPointerMove } from "./world-view";
 
-const math_atan2 = Math.atan2;
-const math_abs = Math.abs;
-const math_sqrt = Math.sqrt;
 const math_PI = Math.PI;
-const math_max = Math.max;
-const math_min = Math.min;
-
-interface DrawOptions {
-  scaleY: number;
-  lineWidth: number;
-  stroke: string;
-  fill: string;
-}
 
 let mounted: StageTestbed | null = null;
-
-/** @internal */
-function memo() {
-  const memory: any = [];
-  function recall(...rest: any[]) {
-    let equal = memory.length === rest.length;
-    for (let i = 0; equal && i < rest.length; i++) {
-      equal = equal && memory[i] === rest[i];
-      memory[i] = rest[i];
-    }
-    memory.length = rest.length;
-    return equal;
-  }
-  function reset() {
-    memory.length = 0;
-    // void 0;
-  }
-  return {
-    recall,
-    reset,
-  };
-}
 
 Testbed.mount = () => {
   if (mounted) {
@@ -61,16 +20,13 @@ Testbed.mount = () => {
 
   mounted = new StageTestbed();
 
-  // todo: merge rest of this into StageTestbed
-
-  // todo: should we create these elements if not exists?
   const playButton = document.getElementById("testbed-play");
   const statusElement = document.getElementById("testbed-status");
   const infoElement = document.getElementById("testbed-info");
 
   if (playButton) {
     playButton.addEventListener("click", () => {
-      if (mounted.isPaused() ) {
+      if (mounted.isPaused()) {
         mounted.resume();
       } else {
         mounted.pause();
@@ -121,49 +77,24 @@ Testbed.mount = () => {
   return mounted;
 };
 
-function getStyle(obj: Body | Fixture | Joint | Shape): Style {
-  if (typeof obj["render"] === "object" && ("stroke" in obj["render"] || "fill" in obj["render"])) {
-    // this was used in planck before v1
-    return obj["render"];
-  } else if (typeof obj["style"] === "object") {
-    return obj["style"];
-  }
-}
-
-function findBody(world: World, point: Vec2Value) {
-  let body: Body | null = null;
-  const aabb = {
-    lowerBound: point,
-    upperBound: point,
-  };
-  world.queryAABB(aabb, (fixture: Fixture) => {
-    if (!fixture.getBody().isDynamic() || !fixture.testPoint(point)) {
-      return true;
-    }
-    body = fixture.getBody();
-    return false;
-  });
-  return body;
-}
-
 /** @internal */
 export class StageTestbed extends Testbed {
   private canvas: HTMLCanvasElement;
   private stage: Stage.Root;
-  private paused: boolean = false;
+  paused: boolean = false;
   private lastDrawHash = "";
   private newDrawHash = "";
-  private buffer: ((context: CanvasRenderingContext2D, ratio: number)=> void)[] = [];
+  private buffer: ((context: CanvasRenderingContext2D, ratio: number) => void)[] = [];
 
   start(world: World) {
-    const stage = this.stage = Stage.mount();
-    const canvas = this.canvas = stage.dom as HTMLCanvasElement;
+    const stage = (this.stage = Stage.mount());
+    const canvas = (this.canvas = stage.dom as HTMLCanvasElement);
 
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const testbed = this;
     this.canvas = canvas;
 
-    stage.on(Stage.POINTER_START, () => {
+    stage.on(Stage.POINTER_DOWN, () => {
       window.focus();
       // @ts-ignore
       document.activeElement?.blur();
@@ -171,6 +102,8 @@ export class StageTestbed extends Testbed {
     });
 
     stage.MAX_ELAPSE = 1000 / 30;
+
+    stage.flipY(true);
 
     stage.on("resume", () => {
       this.paused = false;
@@ -183,9 +116,9 @@ export class StageTestbed extends Testbed {
 
     const drawingTexture = new Stage.CanvasTexture();
     drawingTexture.draw = (ctx: CanvasRenderingContext2D) => {
-      const pixelRatio = 2 * drawingTexture.getOptimalPixelRatio();
+      const pixelRatio = drawingTexture.getDevicePixelRatio();
       ctx.save();
-      ctx.transform(1, 0, 0, this.scaleY, -this.x, -this.y);
+      ctx.transform(1, 0, 0, 1, -this.x, -this.y);
       ctx.lineWidth = 3 / pixelRatio;
       ctx.lineCap = "round";
       for (let drawing = this.buffer.shift(); drawing; drawing = this.buffer.shift()) {
@@ -200,13 +133,89 @@ export class StageTestbed extends Testbed {
       this.buffer.length = 0;
     }, true);
 
-
     stage.background(this.background);
     stage.viewbox(this.width, this.height);
     stage.pin("alignX", -0.5);
     stage.pin("alignY", -0.5);
 
-    const worldNode = new  WorldStageNode(world, this);
+    const mouseGround = world.createBody();
+    let mouseJoint: MouseJoint | null = null;
+    let targetBody: Body | null = null;
+    const mouseMove = { x: 0, y: 0 };
+
+    const pointerStart = (event: WorldDragStart) => {
+      const point = event.point;
+      if (targetBody) {
+        return;
+      }
+
+      const fixture = worldNode.findFixture(point);
+      if (!fixture) {
+        return;
+      }
+      const body = fixture.getBody();
+
+      if (this.mouseForce) {
+        targetBody = body;
+      } else {
+        mouseJoint = new MouseJoint({ maxForce: 1000 }, mouseGround, body, {
+          x: point.x,
+          y: point.y,
+        });
+        world.createJoint(mouseJoint);
+      }
+    };
+
+    const pointerMove = (event: WorldDragMove) => {
+      const point = event.point;
+      if (mouseJoint) {
+        mouseJoint.setTarget(point);
+      }
+
+      mouseMove.x = point.x;
+      mouseMove.y = point.y;
+    };
+
+    const pointerEnd = (event: WorldDragEnd) => {
+      const point = event.point;
+      if (mouseJoint) {
+        world.destroyJoint(mouseJoint);
+        mouseJoint = null;
+      }
+      if (targetBody && this.mouseForce) {
+        const target = targetBody.getPosition();
+        const force = {
+          x: (point.x - target.x) * this.mouseForce,
+          y: (point.y - target.y) * this.mouseForce,
+        };
+        targetBody.applyForceToCenter(force, true);
+        targetBody = null;
+      }
+    };
+
+    const pointerCancel = () => {
+      if (mouseJoint) {
+        world.destroyJoint(mouseJoint);
+        mouseJoint = null;
+      }
+      if (targetBody) {
+        targetBody = null;
+      }
+    };
+
+    const worldNode = new WorldComponent(this, (name, event) => {
+      if (name === "world-drag-start") {
+        pointerStart(event as WorldDragStart);
+      } else if (name === "world-drag-move") {
+        pointerMove(event as WorldDragMove);
+      } else if (name === "world-drag-end") {
+        pointerEnd(event as WorldDragEnd);
+      } else if (name === "world-pointer-cancel") {
+        pointerCancel();
+      }
+    });
+
+    worldNode.setWorld(world);
 
     // stage.empty();
     stage.prepend(worldNode);
@@ -216,7 +225,7 @@ export class StageTestbed extends Testbed {
     stage.tick((dt: number, t: number) => {
       // update camera position
       if (lastX !== this.x || lastY !== this.y) {
-        worldNode.offset(-this.x, -this.y);
+        worldNode.offset(this.x, this.y);
         lastX = this.x;
         lastY = this.y;
       }
@@ -238,71 +247,6 @@ export class StageTestbed extends Testbed {
       return true;
     });
 
-    const mouseGround = world.createBody();
-    let mouseJoint: MouseJoint | null = null;
-    let targetBody: Body | null = null;
-    const mouseMove = {x: 0, y: 0};
-
-    worldNode.attr("spy", true);
-
-    worldNode.on(Stage.POINTER_START, (point: Vec2Value) => {
-      point = { x: point.x, y: testbed.scaleY * point.y };
-      if (targetBody) {
-        return;
-      }
-
-      const body = findBody(world, point);
-      if (!body) {
-        return;
-      }
-
-      if (this.mouseForce) {
-        targetBody = body;
-
-      } else {
-        mouseJoint = new MouseJoint({maxForce: 1000}, mouseGround, body, { x: point.x, y: point.y });
-        world.createJoint(mouseJoint);
-      }
-    });
-
-    worldNode.on(Stage.POINTER_MOVE, (point: Vec2Value) => {
-      point = { x: point.x, y: testbed.scaleY * point.y };
-      if (mouseJoint) {
-        mouseJoint.setTarget(point);
-      }
-
-      mouseMove.x = point.x;
-      mouseMove.y = point.y;
-    });
-
-    worldNode.on(Stage.POINTER_END, (point: Vec2Value) => {
-      point = { x: point.x, y: testbed.scaleY * point.y };
-      if (mouseJoint) {
-        world.destroyJoint(mouseJoint);
-        mouseJoint = null;
-      }
-      if (targetBody && this.mouseForce) {
-        const target = targetBody.getPosition();
-        const force = {
-          x: (point.x - target.x) * this.mouseForce,
-          y: (point.y - target.y) * this.mouseForce,
-        };
-        targetBody.applyForceToCenter(force, true);
-        targetBody = null;
-      }
-    });
-
-    worldNode.on(Stage.POINTER_CANCEL, (point: Vec2Value) => {
-      point = { x: point.x, y: testbed.scaleY * point.y };
-      if (mouseJoint) {
-        world.destroyJoint(mouseJoint);
-        mouseJoint = null;
-      }
-      if (targetBody) {
-        targetBody = null;
-      }
-    });
-
     const activeKeys = testbed.activeKeys;
     const downKeys: Record<number, boolean> = {};
     function updateActiveKeys(keyCode: number, down: boolean) {
@@ -314,16 +258,16 @@ export class StageTestbed extends Testbed {
       activeKeys.left = downKeys[37] || activeKeys["A"];
       activeKeys.up = downKeys[38] || activeKeys["W"];
       activeKeys.down = downKeys[40] || activeKeys["S"];
-      activeKeys.fire = downKeys[32] || downKeys[13] ;
+      activeKeys.fire = downKeys[32] || downKeys[13];
     }
 
-    window.addEventListener("keydown", function(e) {
+    window.addEventListener("keydown", function (e) {
       const keyCode = e.keyCode;
       downKeys[keyCode] = true;
       updateActiveKeys(keyCode, true);
       testbed.keydown?.(keyCode, String.fromCharCode(keyCode));
     });
-    window.addEventListener("keyup", function(e) {
+    window.addEventListener("keyup", function (e) {
       const keyCode = e.keyCode;
       downKeys[keyCode] = false;
       updateActiveKeys(keyCode, false);
@@ -342,12 +286,10 @@ export class StageTestbed extends Testbed {
   }
 
   /** @internal */
-  _pause() {
-  }
+  _pause() {}
 
   /** @internal */
-  _resume() {
-  }
+  _resume() {}
 
   private statusText = "";
   private statusMap: Record<string, any> = {};
@@ -389,12 +331,10 @@ export class StageTestbed extends Testbed {
   }
 
   /** @internal */
-  _status(string: string) {
-  }
+  _status(string: string) {}
 
-  /** @internal */  
-  _info(text: string) {
-  }
+  /** @internal */
+  _info(text: string) {}
 
   /** @internal */
   isPaused() {
@@ -421,18 +361,18 @@ export class StageTestbed extends Testbed {
     this.focus();
   }
 
-  drawPoint(p: {x: number, y: number}, r: number, color: string): void {
-    this.buffer.push(function(ctx, ratio) {
+  drawPoint(p: { x: number; y: number }, r: number, color: string): void {
+    this.buffer.push(function (ctx, ratio) {
       ctx.beginPath();
-      ctx.arc(p.x, p.y, 5  / ratio, 0, 2 * math_PI);
+      ctx.arc(p.x, p.y, 5 / ratio, 0, 2 * math_PI);
       ctx.strokeStyle = color;
       ctx.stroke();
     });
     this.newDrawHash += "point" + p.x + "," + p.y + "," + r + "," + color;
   }
 
-  drawCircle(p: {x: number, y: number}, r: number, color: string): void {
-    this.buffer.push(function(ctx) {
+  drawCircle(p: { x: number; y: number }, r: number, color: string): void {
+    this.buffer.push(function (ctx) {
       ctx.beginPath();
       ctx.arc(p.x, p.y, r, 0, 2 * math_PI);
       ctx.strokeStyle = color;
@@ -441,8 +381,8 @@ export class StageTestbed extends Testbed {
     this.newDrawHash += "circle" + p.x + "," + p.y + "," + r + "," + color;
   }
 
-  drawEdge(a: {x: number, y: number}, b: {x: number, y: number}, color: string): void {
-    this.buffer.push(function(ctx) {
+  drawEdge(a: { x: number; y: number }, b: { x: number; y: number }, color: string): void {
+    this.buffer.push(function (ctx) {
       ctx.beginPath();
       ctx.moveTo(a.x, a.y);
       ctx.lineTo(b.x, b.y);
@@ -454,11 +394,11 @@ export class StageTestbed extends Testbed {
 
   drawSegment = this.drawEdge;
 
-  drawPolygon(points: Array<{x: number, y: number}>, color: string): void {
+  drawPolygon(points: Array<{ x: number; y: number }>, color: string): void {
     if (!points || !points.length) {
       return;
     }
-    this.buffer.push(function(ctx) {
+    this.buffer.push(function (ctx) {
       ctx.beginPath();
       ctx.moveTo(points[0].x, points[0].y);
       for (let i = 1; i < points.length; i++) {
@@ -476,7 +416,7 @@ export class StageTestbed extends Testbed {
   }
 
   drawAABB(aabb: AABBValue, color: string): void {
-    this.buffer.push(function(ctx) {
+    this.buffer.push(function (ctx) {
       ctx.beginPath();
       ctx.moveTo(aabb.lowerBound.x, aabb.lowerBound.y);
       ctx.lineTo(aabb.upperBound.x, aabb.lowerBound.y);
@@ -492,414 +432,11 @@ export class StageTestbed extends Testbed {
     this.newDrawHash += color;
   }
 
-  findOne(query: string): (Body | Joint | Fixture | null) {
+  findOne(query: string): Body | Joint | Fixture | null {
     throw new Error("Not implemented");
   }
 
   findAll(query: string): (Body | Joint | Fixture)[] {
     throw new Error("Not implemented");
-  }
-}
-
-interface WorldStageOptions {
-  speed: number;
-  hz: number;
-  scaleY: number;
-  lineWidth: number;
-  stroke: string | undefined;
-  fill: string | undefined;
-}
-
-class  WorldStageNode extends Stage.Node {
-  private nodes = new WeakMap<Body | Fixture | Joint, Stage.Node>();
-
-  private options: WorldStageOptions = {
-    speed: 1,
-    hz: 60,
-    scaleY: -1,
-    lineWidth: 3,
-    stroke: undefined,
-    fill: undefined
-  };
-
-  private world: World;
-  private testbed: Testbed;
-
-  constructor(world: World, opts: Partial<WorldStageOptions> = {}) {
-    super();
-    this.label("Planck");
-
-    this.options = { ...this.options, ...opts };
-
-    if (math_abs(this.options.hz) < 1) {
-      this.options.hz = 1 / this.options.hz;
-    }
-
-    this.world = world;
-    this.testbed = opts as Testbed;
-
-    const timeStep = 1 / this.options.hz;
-    let elapsedTime = 0;
-    let errored = false;
-    this.tick((dt: number) => {
-      if (errored) {
-        return false;
-      }
-      try {
-        dt = dt * 0.001 * this.options.speed;
-        elapsedTime += dt;
-        while (elapsedTime > timeStep) {
-          world.step(timeStep);
-          elapsedTime -= timeStep;
-        }
-        this.renderWorld();
-        return true;          
-      } catch (error) {
-        errored = true;
-        console.error(error);
-        return false;
-      }
-    }, true);
-
-    world.on("remove-fixture", (obj: Fixture) => {
-      this.nodes.get(obj)?.remove();
-    });
-
-    world.on("remove-joint", (obj: Joint) => {
-      this.nodes.get(obj)?.remove();
-    });
-  }
-
-  renderWorld() {
-    const world = this.world;
-    const options = this.options;
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const viewer = this;
-
-    for (let b = world.getBodyList(); b; b = b.getNext()) {
-      for (let f = b.getFixtureList(); f; f = f.getNext()) {
-
-        let node = this.nodes.get(f);
-        if (!node) {
-          const type = f.getType();
-          const shape = f.getShape();
-
-          const opts: DrawOptions = Object.assign({
-            stroke: options.stroke,
-            fill: options.fill,
-            scaleY: options.scaleY,
-            lineWidth: options.lineWidth,
-          }, getStyle(b), getStyle(f), getStyle(shape));
-
-          if (opts.stroke) {
-            // good
-          } else if (b.isDynamic()) {
-            opts.stroke = "rgba(255,255,255,0.9)";
-          } else if (b.isKinematic()) {
-            opts.stroke = "rgba(255,255,255,0.7)";
-          } else if (b.isStatic()) {
-            opts.stroke = "rgba(255,255,255,0.5)";
-          }
-
-          if (type == "circle") {
-            node = viewer.drawCircle(shape as CircleShape, opts);
-          }
-          if (type == "edge") {
-            node = viewer.drawEdge(shape as EdgeShape, opts);
-          }
-          if (type == "polygon") {
-            node = viewer.drawPolygon(shape as PolygonShape, opts);
-          }
-          if (type == "chain") {
-            node = viewer.drawChain(shape as ChainShape, opts);
-          }
-
-          if (node) {
-            node.appendTo(viewer);
-            this.nodes.set(f, node);
-          }
-        }
-
-        if (node) {
-          const p = b.getPosition();
-          const r = b.getAngle();
-          // @ts-ignore
-          const isChanged = node.__lastX !== p.x || node.__lastY !== p.y || node.__lastR !== r;
-          if (isChanged) {
-            // @ts-ignore
-            node.__lastX = p.x;
-            // @ts-ignore
-            node.__lastY = p.y;
-            // @ts-ignore
-            node.__lastR = r;
-            node.offset(p.x, options.scaleY * p.y);
-            node.rotate(options.scaleY * r);
-          }
-        }
-
-      }
-    }
-
-    for (let j = world.getJointList(); j; j = j.getNext()) {
-      const type = j.getType();
-      if (type == "pulley-joint") {
-        this.testbed.drawSegment(j.getAnchorA(), (j as PulleyJoint).getGroundAnchorA(), "rgba(255,255,255,0.5)");
-        this.testbed.drawSegment(j.getAnchorB(), (j as PulleyJoint).getGroundAnchorB(), "rgba(255,255,255,0.5)");
-        this.testbed.drawSegment((j as PulleyJoint).getGroundAnchorB(), (j as PulleyJoint).getGroundAnchorA(), "rgba(255,255,255,0.5)");
-      } else {
-        this.testbed.drawSegment(j.getAnchorA(), j.getAnchorB(), "rgba(255,255,255,0.5)");
-      }
-    }
-  }
-
-  drawCircle(shape: CircleShape, options: DrawOptions) {
-    let offsetX = 0;
-    let offsetY = 0;
-    const offsetMemo = memo();
-
-    const texture = Stage.canvas();
-    texture.setDrawer(function () {
-      const ctx = this.getContext();
-      const ratio = 2 * this.getOptimalPixelRatio();
-      const lw = options.lineWidth / ratio;
-
-      const r = shape.m_radius;
-      const cx = r + lw;
-      const cy = r + lw;
-      const w = r * 2 + lw * 2;
-      const h = r * 2 + lw * 2;
-
-      offsetX = shape.m_p.x - cx;
-      offsetY = options.scaleY * shape.m_p.y - cy;
-
-      this.setSize(w, h, ratio);
-
-      ctx.scale(ratio, ratio);
-      ctx.arc(cx, cy, r, 0, 2 * math_PI);
-      if (options.fill) {
-        ctx.fillStyle = options.fill;
-        ctx.fill();
-      }
-      ctx.lineTo(cx, cy);
-      ctx.lineWidth = options.lineWidth / ratio;
-      ctx.strokeStyle = options.stroke ?? "";
-      ctx.stroke();
-    });
-
-    const sprite = Stage.sprite(texture);
-    sprite.tick(() => {
-      if (!offsetMemo.recall(offsetX, offsetY)) {
-        sprite.offset(offsetX, offsetY);
-      }
-    });
-
-    const node = Stage.layout().append(sprite);
-    return node;
-  }
-
-  drawEdge(edge: EdgeShape, options: DrawOptions) {
-    let offsetX = 0;
-    let offsetY = 0;
-    let offsetA = 0;
-    const offsetMemo = memo();
-
-    const texture = Stage.canvas();
-    texture.setDrawer(function () {
-      const ctx = this.getContext();
-      const ratio = 2 * this.getOptimalPixelRatio();
-      const lw = options.lineWidth / ratio;
-
-      const v1 = edge.m_vertex1;
-      const v2 = edge.m_vertex2;
-
-      const dx = v2.x - v1.x;
-      const dy = v2.y - v1.y;
-
-      const length = math_sqrt(dx * dx + dy * dy);
-
-      this.setSize(length + 2 * lw, 2 * lw, ratio);
-
-      const minX = math_min(v1.x, v2.x);
-      const minY = math_min(options.scaleY * v1.y, options.scaleY * v2.y);
-  
-      offsetX = minX - lw;
-      offsetY = minY - lw;
-      offsetA = options.scaleY * math_atan2(dy, dx);
-
-      ctx.scale(ratio, ratio);
-      ctx.beginPath();
-      ctx.moveTo(lw, lw);
-      ctx.lineTo(lw + length, lw);
-
-      ctx.lineCap = "round";
-      ctx.lineWidth = options.lineWidth / ratio;
-      ctx.strokeStyle = options.stroke ?? "";
-      ctx.stroke();
-    });
-
-    const sprite = Stage.sprite(texture);
-    sprite.tick(() => {
-      if(!offsetMemo.recall(offsetX, offsetY, offsetA)) {
-        sprite.offset(offsetX, offsetY);
-        sprite.rotate(offsetA);
-      }
-    });
-    const node = Stage.layout().append(sprite);
-    return node;
-  }
-
-  drawPolygon(shape: PolygonShape, options: DrawOptions) {
-    let offsetX = 0;
-    let offsetY = 0;
-    const offsetMemo = memo();
-
-    const texture = Stage.canvas();
-    texture.setDrawer(function () {
-      const ctx = this.getContext();
-      const ratio = 2 * this.getOptimalPixelRatio();
-      const lw = options.lineWidth / ratio;
-
-      const vertices = shape.m_vertices;
-
-      if (!vertices.length) {
-        return;
-      }
-  
-      let minX = Infinity;
-      let minY = Infinity;
-      let maxX = -Infinity;
-      let maxY = -Infinity;
-      for (let i = 0; i < vertices.length; ++i) {
-        const v = vertices[i];
-        minX = math_min(minX, v.x);
-        maxX = math_max(maxX, v.x);
-        minY = math_min(minY, options.scaleY * v.y);
-        maxY = math_max(maxY, options.scaleY * v.y);
-      }
-  
-      const width = maxX - minX;
-      const height = maxY - minY;
-
-      offsetX = minX;
-      offsetY = minY;
-
-      this.setSize(width + 2 * lw, height + 2 * lw, ratio);
-
-      ctx.scale(ratio, ratio);
-      ctx.beginPath();
-      for (let i = 0; i < vertices.length; ++i) {
-        const v = vertices[i];
-        const x = v.x - minX + lw;
-        const y = options.scaleY * v.y - minY + lw;
-        if (i == 0)
-          ctx.moveTo(x, y);
-
-        else
-          ctx.lineTo(x, y);
-      }
-
-      if (vertices.length > 2) {
-        ctx.closePath();
-      }
-
-      if (options.fill) {
-        ctx.fillStyle = options.fill;
-        ctx.fill();
-        ctx.closePath();
-      }
-
-      ctx.lineCap = "round";
-      ctx.lineWidth = options.lineWidth / ratio;
-      ctx.strokeStyle = options.stroke ?? "";
-      ctx.stroke();
-    });
-
-    const sprite = Stage.sprite(texture);
-    sprite.tick(() => {
-      if(!offsetMemo.recall(offsetX, offsetY)) {
-        sprite.offset(offsetX, offsetY);
-      }
-    });
-
-    const node = Stage.layout().append(sprite);
-    return node;
-  }
-
-  drawChain(shape: ChainShape, options: DrawOptions) {
-    let offsetX = 0;
-    let offsetY = 0;
-    const offsetMemo = memo();
-
-    const texture = Stage.canvas();
-    texture.setDrawer(function () {
-      const ctx = this.getContext();
-      const ratio = 2 * this.getOptimalPixelRatio();
-      const lw = options.lineWidth / ratio;
-
-      const vertices = shape.m_vertices;
-
-      if (!vertices.length) {
-        return;
-      }
-  
-      let minX = Infinity;
-      let minY = Infinity;
-      let maxX = -Infinity;
-      let maxY = -Infinity;
-      for (let i = 0; i < vertices.length; ++i) {
-        const v = vertices[i];
-        minX = math_min(minX, v.x);
-        maxX = math_max(maxX, v.x);
-        minY = math_min(minY, options.scaleY * v.y);
-        maxY = math_max(maxY, options.scaleY * v.y);
-      }
-  
-      const width = maxX - minX;
-      const height = maxY - minY;
-
-      offsetX = minX;
-      offsetY = minY;
-
-      this.setSize(width + 2 * lw, height + 2 * lw, ratio);
-
-      ctx.scale(ratio, ratio);
-      ctx.beginPath();
-      for (let i = 0; i < vertices.length; ++i) {
-        const v = vertices[i];
-        const x = v.x - minX + lw;
-        const y = options.scaleY * v.y - minY + lw;
-        if (i == 0)
-          ctx.moveTo(x, y);
-
-        else
-          ctx.lineTo(x, y);
-      }
-
-      // TODO: if loop
-      if (vertices.length > 2) {
-        // ctx.closePath();
-      }
-
-      if (options.fill) {
-        ctx.fillStyle = options.fill;
-        ctx.fill();
-        ctx.closePath();
-      }
-
-      ctx.lineCap = "round";
-      ctx.lineWidth = options.lineWidth / ratio;
-      ctx.strokeStyle = options.stroke ?? "";
-      ctx.stroke();
-    });
-
-    const sprite = Stage.sprite(texture);
-    sprite.tick(() => {
-      if(!offsetMemo.recall(offsetX, offsetY)) {
-        sprite.offset(offsetX, offsetY);
-      }
-    });
-
-    const node = Stage.layout().append(sprite);
-    return node;
   }
 }
