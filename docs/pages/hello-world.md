@@ -11,7 +11,7 @@ To create a world we simply create an object from the `World` class, and optiona
 
 ```js
 let world = new World({
-  gravity: new Vec2(0.0, -10.0),
+  gravity: {x: 0, y: -10},
 });
 ```
 
@@ -30,7 +30,7 @@ With the body properties we specify the type and initial position of the platfor
 ```js
 let platform = world.createBody({
   type: "static",
-  position: new Vec2(0.0, -10.0),
+  position: {x: 0, y: -10},
   angle: Math.PI * 0.1
 });
 ```
@@ -41,7 +41,7 @@ For step 2, we need to create a `Shape` and add it to body as `Fixture`.
 
 ```js
 platform.createFixture({
-  shape: new Edge(new Vec2(-50, 0), new Vec2(+50, 0)),
+  shape: new Edge({x: -50, y: 0}, {x: +50, y: 0}),
 });
 ```
 
@@ -69,7 +69,7 @@ First we create the body using `createBody`. By default bodies are static, so we
 ```js
 let body = world.createBody({
   type: "dynamic",
-  position: new Vec2(0.0, 4.0)
+  position: {x: 0, y: 4}
 });
 ```
 

@@ -109,7 +109,7 @@ shapes and joints do not move.
 
 ```js
 world.createBody({
-  position: Vec2(0, 2), // the body's origin position.
+  position: {x: 0, y: 2}, // the body's origin position.
   angle: 0.25 * Math.PI // the body's angle in radians.
 })
 ```

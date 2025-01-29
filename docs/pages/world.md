@@ -10,7 +10,7 @@ vector and a boolean indicating if bodies can sleep.
 
 ```js
 let myWorld = new World({
-  gravity: Vec2(0, -10),
+  gravity: {x: 0, y: -10},
   allowSleep: true,
 });
 ```
