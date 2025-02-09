@@ -33,7 +33,7 @@ Next, adding simultaneous collision makes the answer worse.
 
 ## Determinism
 
-For the same input, and same binary, Box2D/Planck.js will reproduce any simulation.
+For the same input, and same javascript runtime, Box2D/Planck.js will reproduce any simulation.
 Box2D/Planck.js does not use any random numbers nor base any computation on random events (such as timers, etc).
 
 However, people often want more stringent determinism.
