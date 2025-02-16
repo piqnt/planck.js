@@ -100,6 +100,7 @@ planck.testbed('ElasticParticles', function(testbed) {
   testbed.y = 0;
   testbed.width = 10;
   testbed.height = 10;
+  testbed.ratio = 64;
 
   return world;
 });
