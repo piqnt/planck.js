@@ -1,41 +1,26 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import { SettingsInternal as Settings } from '../../Settings';
-import { clamp } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Vec3 } from '../../common/Vec3';
-import { Mat22 } from '../../common/Mat22';
-import { Mat33 } from '../../common/Mat33';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { SettingsInternal as Settings } from "../../Settings";
+import { clamp } from "../../common/Math";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Vec3 } from "../../common/Vec3";
+import { Mat22 } from "../../common/Mat22";
+import { Mat33 } from "../../common/Mat33";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 
 
@@ -111,7 +96,7 @@ export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
   /**
    * The bodyB angle minus bodyA angle in the reference state (radians).
    */
-  referenceAngle: number;
+  referenceAngle?: number;
 
   /** @internal */ anchorA?: Vec2Value;
   /** @internal */ anchorB?: Vec2Value;
@@ -126,6 +111,15 @@ export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
   enableMotor : false
 };
 
+declare module "./RevoluteJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function RevoluteJoint(def: RevoluteJointDef): RevoluteJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function RevoluteJoint(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value): RevoluteJoint;
+}
+
 /**
  * A revolute joint constrains two bodies to share a common point while they are
  * free to rotate about the point. The relative rotation about the shared point
@@ -134,10 +128,11 @@ export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
  * relative rotation about the shared point. A maximum motor torque is provided
  * so that infinite forces are not generated.
  */
+// @ts-expect-error
 export class RevoluteJoint extends Joint {
-  static TYPE = 'revolute-joint' as const;
+  static TYPE = "revolute-joint" as const;
 
-  /** @internal */ m_type: 'revolute-joint';
+  /** @internal */ m_type: "revolute-joint";
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
   /** @internal */ m_referenceAngle: number;
@@ -166,7 +161,7 @@ export class RevoluteJoint extends Joint {
   /** @internal */ m_limitState: number;
 
   constructor(def: RevoluteJointDef);
-  constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+  constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor?: Vec2Value);
   constructor(def: RevoluteJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof RevoluteJoint)) {
@@ -179,7 +174,7 @@ export class RevoluteJoint extends Joint {
     bodyB = this.m_bodyB;
 
     this.m_mass = new Mat33();
-    this.m_limitState = LimitState.inactiveLimit
+    this.m_limitState = LimitState.inactiveLimit;
 
     this.m_type = RevoluteJoint.TYPE;
 
@@ -425,7 +420,7 @@ export class RevoluteJoint extends Joint {
    * Set the joint limits in radians.
    */
   setLimits(lower: number, upper: number): void {
-    _ASSERT && console.assert(lower <= upper);
+    if (_ASSERT) console.assert(lower <= upper);
 
     if (lower != this.m_lowerAngle || upper != this.m_upperAngle) {
       this.m_bodyA.setAwake(true);

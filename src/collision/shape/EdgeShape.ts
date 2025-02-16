@@ -1,66 +1,57 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
- * Copyright (c) 2013 Google, Inc.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba, Google, Inc.
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import { SettingsInternal as Settings } from '../../Settings';
-import * as matrix from '../../common/Matrix';
-import { Shape } from '../Shape';
-import { Transform, TransformValue } from '../../common/Transform';
-import { Rot } from '../../common/Rot';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { AABB, AABBValue, RayCastInput, RayCastOutput } from '../AABB';
-import { MassData } from '../../dynamics/Body';
-import { DistanceProxy } from '../Distance';
+import { SettingsInternal as Settings } from "../../Settings";
+import * as matrix from "../../common/Matrix";
+import { Shape } from "../Shape";
+import { Transform, TransformValue } from "../../common/Transform";
+import { Rot } from "../../common/Rot";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { AABB, AABBValue, RayCastInput, RayCastOutput } from "../AABB";
+import { MassData } from "../../dynamics/Body";
+import { DistanceProxy } from "../Distance";
 
 
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 
 /** @internal */ const v1 = matrix.vec2(0, 0);
 /** @internal */ const v2 = matrix.vec2(0, 0);
+
+declare module "./EdgeShape" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function EdgeShape(v1?: Vec2Value, v2?: Vec2Value): EdgeShape;
+}
 
 /**
  * A line segment (edge) shape. These can be connected in chains or loops to
  * other edge shapes. The connectivity information is used to ensure correct
  * contact normals.
  */
+// @ts-expect-error
 export class EdgeShape extends Shape {
-  static TYPE = 'edge' as const;
-  m_type: 'edge';
+  static TYPE = "edge" as const;
+  /** @hidden */ m_type: "edge";
 
-  m_radius: number;
+  /** @hidden */ m_radius: number;
 
   // These are the edge vertices
-  m_vertex1: Vec2;
-  m_vertex2: Vec2;
+  /** @hidden */ m_vertex1: Vec2;
+  /** @hidden */ m_vertex2: Vec2;
 
   // Optional adjacent vertices. These are used for smooth collision.
   // Used by chain shape.
-  m_vertex0: Vec2;
-  m_vertex3: Vec2;
-  m_hasVertex0: boolean;
-  m_hasVertex3: boolean;
+  /** @hidden */ m_vertex0: Vec2;
+  /** @hidden */ m_vertex3: Vec2;
+  /** @hidden */ m_hasVertex0: boolean;
+  /** @hidden */ m_hasVertex3: boolean;
 
   constructor(v1?: Vec2Value, v2?: Vec2Value) {
     // @ts-ignore
@@ -118,19 +109,19 @@ export class EdgeShape extends Shape {
     return this.m_radius;
   }
 
-  getType(): 'edge' {
+  getType(): "edge" {
     return this.m_type;
   }
 
   /** @internal @deprecated */
-  setNext(v?: Vec2): EdgeShape {
+  setNext(v?: Vec2Value): EdgeShape {
     return this.setNextVertex(v);
   }
 
   /**
    * Optional next vertex, used for smooth collision.
    */
-  setNextVertex(v?: Vec2): EdgeShape {
+  setNextVertex(v?: Vec2Value): EdgeShape {
     if (v) {
       this.m_vertex3.setVec2(v);
       this.m_hasVertex3 = true;
@@ -149,14 +140,14 @@ export class EdgeShape extends Shape {
   }
 
   /** @internal @deprecated */
-  setPrev(v?: Vec2): EdgeShape {
+  setPrev(v?: Vec2Value): EdgeShape {
     return this.setPrevVertex(v);
   }
 
   /**
    * Optional prev vertex, used for smooth collision.
    */
-  setPrevVertex(v?: Vec2): EdgeShape {
+  setPrevVertex(v?: Vec2Value): EdgeShape {
     if (v) {
       this.m_vertex0.setVec2(v);
       this.m_hasVertex0 = true;
@@ -177,7 +168,7 @@ export class EdgeShape extends Shape {
   /**
    * Set this as an isolated edge.
    */
-  _set(v1: Vec2, v2: Vec2): EdgeShape {
+  _set(v1: Vec2Value, v2: Vec2Value): EdgeShape {
     this.m_vertex1.setVec2(v1);
     this.m_vertex2.setVec2(v2);
     this.m_hasVertex0 = false;

@@ -1,31 +1,16 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from '../common/Matrix';
-import { Vec2Value } from '../common/Vec2';
-import { TransformValue } from '../common/Transform';
-import { EPSILON } from '../common/Math';
+import * as matrix from "../common/Matrix";
+import { Vec2Value } from "../common/Vec2";
+import { TransformValue } from "../common/Transform";
+import { EPSILON } from "../common/Math";
 
 
 /** @internal */ const math_sqrt = Math.sqrt;
@@ -78,7 +63,7 @@ export enum ContactFeatureType {
     this.id.set(o.id);
   }
   recycle() {
-    matrix.zeroVec2(this.v)
+    matrix.zeroVec2(this.v);
     this.id.recycle();
   }
 }
@@ -131,8 +116,8 @@ export class Manifold {
 
   recycle(): void {
     this.type = ManifoldType.e_unset;
-    matrix.zeroVec2(this.localNormal)
-    matrix.zeroVec2(this.localPoint)
+    matrix.zeroVec2(this.localNormal);
+    matrix.zeroVec2(this.localPoint);
     this.pointCount = 0;
     this.points[0].recycle();
     this.points[1].recycle();
@@ -255,7 +240,7 @@ export class ManifoldPoint {
   }
 
   recycle(): void {
-    matrix.zeroVec2(this.localPoint)
+    matrix.zeroVec2(this.localPoint);
     this.normalImpulse = 0;
     this.tangentImpulse = 0;
     this.id.recycle();
@@ -291,7 +276,7 @@ export class ContactID {
     this.indexB = indexB;
     this.typeA = typeA;
     this.typeB = typeB;
-    this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64
+    this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64;
   }
 
   set(that: ContactID): void {
@@ -299,7 +284,7 @@ export class ContactID {
     this.indexB = that.indexB;
     this.typeA = that.typeA;
     this.typeB = that.typeB;
-    this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64
+    this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64;
   }
 
   swapFeatures(): void {
@@ -311,7 +296,7 @@ export class ContactID {
     this.indexB = indexA;
     this.typeA = typeB;
     this.typeB = typeA;
-    this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64
+    this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64;
   }
 
   recycle(): void {
@@ -340,7 +325,7 @@ export class WorldManifold {
   pointCount = 0;
 
   recycle() {
-    matrix.zeroVec2(this.normal)
+    matrix.zeroVec2(this.normal);
     matrix.zeroVec2(this.points[0]);
     matrix.zeroVec2(this.points[1]);
     this.separations[0] = 0;

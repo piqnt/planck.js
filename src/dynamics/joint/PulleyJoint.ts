@@ -1,39 +1,24 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import { options } from '../../util/options';
-import { SettingsInternal as Settings } from '../../Settings';
-import { EPSILON } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { options } from "../../util/options";
+import { SettingsInternal as Settings } from "../../Settings";
+import { EPSILON } from "../../common/Math";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 
 
@@ -41,7 +26,7 @@ import { TimeStep } from "../Solver";
  * Pulley joint definition. This requires two ground anchors, two dynamic body
  * anchor points, and a pulley ratio.
  */
-// tslint:disable-next-line:no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface PulleyJointOpt extends JointOpt {
 }
 
@@ -87,6 +72,15 @@ export interface PulleyJointDef extends JointDef, PulleyJointOpt {
   collideConnected : true
 };
 
+declare module "./PulleyJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function PulleyJoint(def: PulleyJointDef): PulleyJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function PulleyJoint(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2Value, groundB: Vec2Value, anchorA: Vec2Value, anchorB: Vec2Value, ratio: number): PulleyJoint;
+}
+
 /**
  * The pulley joint is connected to two bodies and two fixed ground points. The
  * pulley supports a ratio such that: length1 + ratio * length2 <= constant
@@ -98,11 +92,12 @@ export interface PulleyJointDef extends JointDef, PulleyJointOpt {
  * anchor points with static shapes to prevent one side from going to zero
  * length.
  */
+// @ts-expect-error
 export class PulleyJoint extends Joint {
-  static TYPE = 'pulley-joint' as const;
+  static TYPE = "pulley-joint" as const;
   // static MIN_PULLEY_LENGTH: number = 2.0; // TODO where this is used?
 
-  /** @internal */ m_type: 'pulley-joint';
+  /** @internal */ m_type: "pulley-joint";
   /** @internal */ m_groundAnchorA: Vec2;
   /** @internal */ m_groundAnchorB: Vec2;
   /** @internal */ m_localAnchorA: Vec2;
@@ -127,7 +122,7 @@ export class PulleyJoint extends Joint {
   /** @internal */ m_mass: number;
 
   constructor(def: PulleyJointDef);
-  constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2Value, groundB: Vec2Value, anchorA: Vec2Value, anchorB: Vec2Value, ratio: number);
+  constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA?: Vec2Value, groundB?: Vec2Value, anchorA?: Vec2Value, anchorB?: Vec2Value, ratio?: number);
   constructor(def: PulleyJointDef, bodyA?: Body, bodyB?: Body, groundA?: Vec2Value, groundB?: Vec2Value, anchorA?: Vec2Value, anchorB?: Vec2Value, ratio?: number) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof PulleyJoint)) {
@@ -148,7 +143,7 @@ export class PulleyJoint extends Joint {
     this.m_lengthB = Number.isFinite(def.lengthB) ? def.lengthB : Vec2.distance(anchorB, groundB);
     this.m_ratio = Number.isFinite(ratio) ? ratio : def.ratio;
 
-    _ASSERT && console.assert(ratio > EPSILON);
+    if (_ASSERT) console.assert(ratio > EPSILON);
 
     this.m_constant = this.m_lengthA + this.m_ratio * this.m_lengthB;
 

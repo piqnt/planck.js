@@ -1,2 +1,2 @@
-export * from '../src/index';
-import './StageTestbed';
+export * from "../src/index";
+export * from "./StageTestbed";

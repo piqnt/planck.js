@@ -1,42 +1,27 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import { options } from '../../util/options';
-import { SettingsInternal as Settings } from '../../Settings';
-import { clamp } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Vec3 } from '../../common/Vec3';
-import { Mat22 } from '../../common/Mat22';
-import { Mat33 } from '../../common/Mat33';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { options } from "../../util/options";
+import { SettingsInternal as Settings } from "../../Settings";
+import { clamp } from "../../common/Math";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Vec3 } from "../../common/Vec3";
+import { Mat22 } from "../../common/Mat22";
+import { Mat33 } from "../../common/Mat33";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
@@ -109,7 +94,7 @@ export interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
    * referenceAngle The constrained angle between the bodies:
    * bodyB_angle - bodyA_angle.
    */
-  referenceAngle: number;
+  referenceAngle?: number;
 
   /** @internal */ anchorA?: Vec2Value;
   /** @internal */ anchorB?: Vec2Value;
@@ -124,16 +109,26 @@ export interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
   motorSpeed : 0.0
 };
 
+declare module "./PrismaticJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function PrismaticJoint(def: PrismaticJointDef): PrismaticJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function PrismaticJoint(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value): PrismaticJoint;
+}
+
 /**
  * A prismatic joint. This joint provides one degree of freedom: translation
  * along an axis fixed in bodyA. Relative rotation is prevented. You can use a
  * joint limit to restrict the range of motion and a joint motor to drive the
  * motion or to model joint friction.
  */
+// @ts-expect-error
 export class PrismaticJoint extends Joint {
-  static TYPE = 'prismatic-joint' as const;
+  static TYPE = "prismatic-joint" as const;
 
-  /** @internal */ m_type: 'prismatic-joint';
+  /** @internal */ m_type: "prismatic-joint";
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
   /** @internal */ m_localXAxisA: Vec2;
@@ -165,7 +160,7 @@ export class PrismaticJoint extends Joint {
   /** @internal */ m_K: Mat33;
 
   constructor(def: PrismaticJointDef);
-  constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value);
+  constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor?: Vec2Value, axis?: Vec2Value);
   constructor(def: PrismaticJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value, axis?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof PrismaticJoint)) {
@@ -328,7 +323,7 @@ export class PrismaticJoint extends Joint {
     if (Number.isFinite(def.referenceAngle)) {
       this.m_referenceAngle = def.referenceAngle;
     }
-    if (typeof def.enableLimit !== 'undefined') {
+    if (typeof def.enableLimit !== "undefined") {
       this.m_enableLimit = !!def.enableLimit;
     }
     if (Number.isFinite(def.lowerTranslation)) {
@@ -337,7 +332,7 @@ export class PrismaticJoint extends Joint {
     if (Number.isFinite(def.upperTranslation)) {
       this.m_upperTranslation = def.upperTranslation;
     }
-    if (typeof def.enableMotor !== 'undefined') {
+    if (typeof def.enableMotor !== "undefined") {
       this.m_enableMotor = !!def.enableMotor;
     }
     if (Number.isFinite(def.maxMotorForce)) {
@@ -449,7 +444,7 @@ export class PrismaticJoint extends Joint {
    * Set the joint limits, usually in meters.
    */
   setLimits(lower: number, upper: number): void {
-    _ASSERT && console.assert(lower <= upper);
+    if (_ASSERT) console.assert(lower <= upper);
     if (lower != this.m_lowerTranslation || upper != this.m_upperTranslation) {
       this.m_bodyA.setAwake(true);
       this.m_bodyB.setAwake(true);

@@ -1,37 +1,22 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import { TransformValue } from '../../common/Transform';
-import * as matrix from '../../common/Matrix';
-import { SettingsInternal as Settings } from '../../Settings';
-import { Manifold, clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from '../Manifold';
-import { Contact } from '../../dynamics/Contact';
-import { PolygonShape } from './PolygonShape';
+import { TransformValue } from "../../common/Transform";
+import * as matrix from "../../common/Matrix";
+import { SettingsInternal as Settings } from "../../Settings";
+import { Manifold, clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from "../Manifold";
+import { Contact } from "../../dynamics/Contact";
+import { PolygonShape } from "./PolygonShape";
 import { Fixture } from "../../dynamics/Fixture";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 /** @internal */ const incidentEdge = [ new ClipVertex(), new ClipVertex() ];
 /** @internal */ const clipPoints1 = [ new ClipVertex(), new ClipVertex() ];
@@ -62,8 +47,8 @@ Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
   fixtureB: Fixture,
   indexB: number,
 ): void {
-  _ASSERT && console.assert(fixtureA.getType() == PolygonShape.TYPE);
-  _ASSERT && console.assert(fixtureB.getType() == PolygonShape.TYPE);
+  if (_ASSERT) console.assert(fixtureA.getType() == PolygonShape.TYPE);
+  if (_ASSERT) console.assert(fixtureB.getType() == PolygonShape.TYPE);
   CollidePolygons(manifold, fixtureA.getShape() as PolygonShape, xfA, fixtureB.getShape() as PolygonShape, xfB);
 }
 
@@ -132,7 +117,7 @@ Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
   const vertices2 = poly2.m_vertices;
   const normals2 = poly2.m_normals;
 
-  _ASSERT && console.assert(0 <= edge1 && edge1 < poly1.m_count);
+  if (_ASSERT) console.assert(0 <= edge1 && edge1 < poly1.m_count);
 
   // Get the normal of the reference edge in poly2's frame.
   matrix.rerotVec2(normal1, xf2.q, xf1.q, normals1[edge1]);
@@ -222,7 +207,8 @@ export const CollidePolygons = function (
     flip = false;
   }
 
-  incidentEdge[0].recycle(), incidentEdge[1].recycle();
+  incidentEdge[0].recycle();
+  incidentEdge[1].recycle();
   findIncidentEdge(incidentEdge, poly1, xf1, edge1, poly2, xf2);
 
   const count1 = poly1.m_count;
@@ -254,8 +240,10 @@ export const CollidePolygons = function (
   const sideOffset2 = matrix.dotVec2(tangent, v12) + totalRadius;
 
   // Clip incident edge against extruded edge1 side edges.
-  clipPoints1[0].recycle(), clipPoints1[1].recycle();
-  clipPoints2[0].recycle(), clipPoints2[1].recycle();
+  clipPoints1[0].recycle();
+  clipPoints1[1].recycle();
+  clipPoints2[0].recycle();
+  clipPoints2[1].recycle();
 
   // Clip to box side 1
   matrix.setVec2(clipSegmentToLineNormal, -tangent.x, -tangent.y);
@@ -294,4 +282,4 @@ export const CollidePolygons = function (
   }
 
   manifold.pointCount = pointCount;
-}
+};

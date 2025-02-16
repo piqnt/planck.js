@@ -1,34 +1,19 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from './Matrix';
-import { mod } from './Math';
-import { Vec2, Vec2Value } from './Vec2';
-import { TransformValue } from './Transform';
+import * as matrix from "./Matrix";
+import { mod } from "./Math";
+import { Vec2, Vec2Value } from "./Vec2";
+import { TransformValue } from "./Transform";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_atan2 = Math.atan2;
 /** @internal */ const math_PI = Math.PI;
 
@@ -59,11 +44,11 @@ export class Sweep {
 
   /** @internal */
   recycle() {
-    matrix.zeroVec2(this.localCenter)
-    matrix.zeroVec2(this.c)
+    matrix.zeroVec2(this.localCenter);
+    matrix.zeroVec2(this.c);
     this.a = 0;
     this.alpha0 = 0;
-    matrix.zeroVec2(this.c0)
+    matrix.zeroVec2(this.c0);
     this.a0 = 0;
   }
 
@@ -103,7 +88,7 @@ export class Sweep {
    * @param alpha The new initial time
    */
   advance(alpha: number): void {
-    _ASSERT && console.assert(this.alpha0 < 1.0);
+    if (_ASSERT) console.assert(this.alpha0 < 1.0);
     const beta = (alpha - this.alpha0) / (1.0 - this.alpha0);
     matrix.combine2Vec2(this.c0, beta, this.c, 1 - beta, this.c0);
     this.a0 = beta * this.a + (1 - beta) * this.a0;

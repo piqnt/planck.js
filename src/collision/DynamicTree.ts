@@ -1,34 +1,19 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import { SettingsInternal as Settings } from '../Settings';
-import { Pool } from '../util/Pool';
-import { Vec2, Vec2Value } from '../common/Vec2';
-import { AABB, AABBValue, RayCastCallback, RayCastInput } from './AABB';
+import { SettingsInternal as Settings } from "../Settings";
+import { Pool } from "../util/Pool";
+import { Vec2, Vec2Value } from "../common/Vec2";
+import { AABB, AABBValue, RayCastCallback, RayCastInput } from "./AABB";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_max = Math.max;
 
@@ -108,7 +93,7 @@ export class DynamicTree<T> {
    */
   getUserData(id: number): T {
     const node = this.m_nodes[id];
-    _ASSERT && console.assert(!!node);
+    if (_ASSERT) console.assert(!!node);
     return node.userData;
   }
 
@@ -119,7 +104,7 @@ export class DynamicTree<T> {
    */
   getFatAABB(id: number): AABB {
     const node = this.m_nodes[id];
-    _ASSERT && console.assert(!!node);
+    if (_ASSERT) console.assert(!!node);
     return node.aabb;
   }
 
@@ -143,7 +128,7 @@ export class DynamicTree<T> {
    * Create a proxy. Provide a tight fitting AABB and a userData pointer.
    */
   createProxy(aabb: AABBValue, userData: T): number {
-    _ASSERT && console.assert(AABB.isValid(aabb));
+    if (_ASSERT) console.assert(AABB.isValid(aabb));
 
     const node = this.allocateNode();
 
@@ -166,8 +151,8 @@ export class DynamicTree<T> {
   destroyProxy(id: number): void {
     const node = this.m_nodes[id];
 
-    _ASSERT && console.assert(!!node);
-    _ASSERT && console.assert(node.isLeaf());
+    if (_ASSERT) console.assert(!!node);
+    if (_ASSERT) console.assert(node.isLeaf());
 
     this.removeLeaf(node);
     this.freeNode(node);
@@ -183,13 +168,13 @@ export class DynamicTree<T> {
    * @return true if the proxy was re-inserted.
    */
   moveProxy(id: number, aabb: AABBValue, d: Vec2Value): boolean {
-    _ASSERT && console.assert(AABB.isValid(aabb));
-    _ASSERT && console.assert(!d || Vec2.isValid(d));
+    if (_ASSERT) console.assert(AABB.isValid(aabb));
+    if (_ASSERT) console.assert(!d || Vec2.isValid(d));
 
     const node = this.m_nodes[id];
 
-    _ASSERT && console.assert(!!node);
-    _ASSERT && console.assert(node.isLeaf());
+    if (_ASSERT) console.assert(!!node);
+    if (_ASSERT) console.assert(node.isLeaf());
 
     if (node.aabb.contains(aabb)) {
       return false;
@@ -224,7 +209,7 @@ export class DynamicTree<T> {
   }
 
   insertLeaf(leaf: TreeNode<T>): void {
-    _ASSERT && console.assert(AABB.isValid(leaf.aabb));
+    if (_ASSERT) console.assert(AABB.isValid(leaf.aabb));
 
     if (this.m_root == null) {
       this.m_root = leaf;
@@ -317,8 +302,8 @@ export class DynamicTree<T> {
       const child1 = index.child1;
       const child2 = index.child2;
 
-      _ASSERT && console.assert(child1 != null);
-      _ASSERT && console.assert(child2 != null);
+      if (_ASSERT) console.assert(child1 != null);
+      if (_ASSERT) console.assert(child2 != null);
 
       index.height = 1 + math_max(child1.height, child2.height);
       index.aabb.combine(child1.aabb, child2.aabb);
@@ -381,7 +366,7 @@ export class DynamicTree<T> {
    * root index.
    */
   balance(iA: TreeNode<T>): TreeNode<T> {
-    _ASSERT && console.assert(iA != null);
+    if (_ASSERT) console.assert(iA != null);
 
     const A = iA;
     if (A.isLeaf() || A.height < 2) {
@@ -531,13 +516,13 @@ export class DynamicTree<T> {
    */
   computeHeight(id?: number): number {
     let node;
-    if (typeof id !== 'undefined') {
+    if (typeof id !== "undefined") {
       node = this.m_nodes[id];
     } else {
       node = this.m_root;
     }
 
-    // _ASSERT && console.assert(0 <= id && id < this.m_nodeCapacity);
+    // if (_ASSERT) console.assert(0 <= id && id < this.m_nodeCapacity);
 
     if (node.isLeaf()) {
       return 0;
@@ -554,24 +539,24 @@ export class DynamicTree<T> {
     }
 
     if (node === this.m_root) {
-      _ASSERT && console.assert(node.parent == null);
+      if (_ASSERT) console.assert(node.parent == null);
     }
 
     const child1 = node.child1;
     const child2 = node.child2;
 
     if (node.isLeaf()) {
-      _ASSERT && console.assert(child1 == null);
-      _ASSERT && console.assert(child2 == null);
-      _ASSERT && console.assert(node.height === 0);
+      if (_ASSERT) console.assert(child1 == null);
+      if (_ASSERT) console.assert(child2 == null);
+      if (_ASSERT) console.assert(node.height === 0);
       return;
     }
 
-    // _ASSERT && console.assert(0 <= child1 && child1 < this.m_nodeCapacity);
-    // _ASSERT && console.assert(0 <= child2 && child2 < this.m_nodeCapacity);
+    // if (_ASSERT) console.assert(0 <= child1 && child1 < this.m_nodeCapacity);
+    // if (_ASSERT) console.assert(0 <= child2 && child2 < this.m_nodeCapacity);
 
-    _ASSERT && console.assert(child1.parent === node);
-    _ASSERT && console.assert(child2.parent === node);
+    if (_ASSERT) console.assert(child1.parent === node);
+    if (_ASSERT) console.assert(child2.parent === node);
 
     this.validateStructure(child1);
     this.validateStructure(child2);
@@ -586,24 +571,24 @@ export class DynamicTree<T> {
     const child2 = node.child2;
 
     if (node.isLeaf()) {
-      _ASSERT && console.assert(child1 == null);
-      _ASSERT && console.assert(child2 == null);
-      _ASSERT && console.assert(node.height === 0);
+      if (_ASSERT) console.assert(child1 == null);
+      if (_ASSERT) console.assert(child2 == null);
+      if (_ASSERT) console.assert(node.height === 0);
       return;
     }
 
-    // _ASSERT && console.assert(0 <= child1 && child1 < this.m_nodeCapacity);
-    // _ASSERT && console.assert(0 <= child2 && child2 < this.m_nodeCapacity);
+    // if (_ASSERT) console.assert(0 <= child1 && child1 < this.m_nodeCapacity);
+    // if (_ASSERT) console.assert(0 <= child2 && child2 < this.m_nodeCapacity);
 
     const height1 = child1.height;
     const height2 = child2.height;
     const height = 1 + math_max(height1, height2);
-    _ASSERT && console.assert(node.height === height);
+    if (_ASSERT) console.assert(node.height === height);
 
     const aabb = new AABB();
     aabb.combine(child1.aabb, child2.aabb);
 
-    _ASSERT && console.assert(AABB.areEqual(aabb, node.aabb));
+    if (_ASSERT) console.assert(AABB.areEqual(aabb, node.aabb));
 
     this.validateMetrics(child1);
     this.validateMetrics(child2);
@@ -633,7 +618,7 @@ export class DynamicTree<T> {
         continue;
       }
 
-      _ASSERT && console.assert(!node.isLeaf());
+      if (_ASSERT) console.assert(!node.isLeaf());
 
       const balance = math_abs(node.child2.height - node.child1.height);
       maxBalance = math_max(maxBalance, balance);
@@ -706,7 +691,7 @@ export class DynamicTree<T> {
 
     this.m_root = nodes[0];
 
-    _ASSERT && this.validate();
+    if (_ASSERT) this.validate();
   }
 
   /**
@@ -734,7 +719,7 @@ export class DynamicTree<T> {
    * proxy that overlaps the supplied AABB.
    */
   query(aabb: AABBValue, queryCallback: DynamicTreeQueryCallback): void {
-    _ASSERT && console.assert(typeof queryCallback === 'function');
+    if (_ASSERT) console.assert(typeof queryCallback === "function");
     const stack = this.stackPool.allocate();
 
     stack.push(this.m_root);
@@ -768,15 +753,15 @@ export class DynamicTree<T> {
    * number of proxies in the tree.
    *
    * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
-   * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
+   * @param rayCastCallback A function that is called for each proxy that is hit by the ray. If the return value is a positive number it will update the maxFraction of the ray cast input, and if it is zero it will terminate they ray cast.
    */
   rayCast(input: RayCastInput, rayCastCallback: RayCastCallback): void {
     // TODO: GC
-    _ASSERT && console.assert(typeof rayCastCallback === 'function');
+    if (_ASSERT) console.assert(typeof rayCastCallback === "function");
     const p1 = input.p1;
     const p2 = input.p2;
     const r = Vec2.sub(p2, p1);
-    _ASSERT && console.assert(r.lengthSquared() > 0.0);
+    if (_ASSERT) console.assert(r.lengthSquared() > 0.0);
     r.normalize();
 
     // v is perpendicular to the segment.
@@ -825,10 +810,8 @@ export class DynamicTree<T> {
 
         if (value === 0.0) {
           // The client has terminated the ray cast.
-          return;
-        }
-
-        if (value > 0.0) {
+          break;
+        } else if (value > 0.0) {
           // update segment bounding box.
           maxFraction = value;
           t = Vec2.combine((1 - maxFraction), p1, maxFraction, p2);

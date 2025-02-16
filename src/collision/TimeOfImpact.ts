@@ -1,37 +1,22 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from '../common/Matrix';
-import { SettingsInternal as Settings } from '../Settings';
-import { stats } from '../util/stats';
-import Timer from '../util/Timer';
-import { Sweep } from '../common/Sweep';
-import { Transform } from '../common/Transform';
-import { Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from './Distance';
+import * as matrix from "../common/Matrix";
+import { SettingsInternal as Settings } from "../Settings";
+import { stats } from "../util/stats";
+import Timer from "../util/Timer";
+import { Sweep } from "../common/Sweep";
+import { Transform } from "../common/Transform";
+import { Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from "./Distance";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_max = Math.max;
 
@@ -137,7 +122,7 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
   const totalRadius = proxyA.m_radius + proxyB.m_radius;
   const target = math_max(Settings.linearSlop, totalRadius - 3.0 * Settings.linearSlop);
   const tolerance = 0.25 * Settings.linearSlop;
-  _ASSERT && console.assert(target > tolerance);
+  if (_ASSERT) console.assert(target > tolerance);
 
   let t1 = 0.0;
   const k_maxIterations = Settings.maxTOIIterations;
@@ -317,7 +302,7 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
   stats.toiTime += time;
 
   separationFunction.recycle();
-}
+};
 
 enum SeparationFunctionType {
   e_unset = -1,
@@ -350,8 +335,8 @@ class SeparationFunction {
     this.m_sweepB = null;
 
     this.m_type = SeparationFunctionType.e_unset;
-    matrix.zeroVec2(this.m_localPoint)
-    matrix.zeroVec2(this.m_axis)
+    matrix.zeroVec2(this.m_localPoint);
+    matrix.zeroVec2(this.m_axis);
 
     this.indexA = -1;
     this.indexB = -1;
@@ -361,7 +346,7 @@ class SeparationFunction {
 
   initialize(cache: SimplexCache, proxyA: DistanceProxy, sweepA: Sweep, proxyB: DistanceProxy, sweepB: Sweep, t1: number): number {
     const count = cache.count;
-    _ASSERT && console.assert(0 < count && count < 3);
+    if (_ASSERT) console.assert(0 < count && count < 3);
 
     this.m_proxyA = proxyA;
     this.m_proxyB = proxyB;
@@ -491,7 +476,7 @@ class SeparationFunction {
       }
 
       default:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
         if (find) {
           this.indexA = -1;
           this.indexB = -1;

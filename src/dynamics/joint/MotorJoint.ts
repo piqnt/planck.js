@@ -1,39 +1,24 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import { options } from '../../util/options';
-import { clamp } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Mat22 } from '../../common/Mat22';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { options } from "../../util/options";
+import { clamp } from "../../common/Math";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Mat22 } from "../../common/Mat22";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -74,15 +59,25 @@ export interface MotorJointDef extends JointDef, MotorJointOpt {
   correctionFactor : 0.3
 };
 
+declare module "./MotorJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function MotorJoint(def: MotorJointDef): MotorJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function MotorJoint(def: MotorJointOpt, bodyA: Body, bodyB: Body): MotorJoint;
+}
+
 /**
  * A motor joint is used to control the relative motion between two bodies. A
  * typical usage is to control the movement of a dynamic body with respect to
  * the ground.
  */
+// @ts-expect-error
 export class MotorJoint extends Joint {
-  static TYPE = 'motor-joint' as const;
+  static TYPE = "motor-joint" as const;
 
-  /** @internal */ m_type: 'motor-joint';
+  /** @internal */ m_type: "motor-joint";
   /** @internal */ m_linearOffset: Vec2;
   /** @internal */ m_angularOffset: number;
   /** @internal */ m_linearImpulse: Vec2;
@@ -195,7 +190,7 @@ export class MotorJoint extends Joint {
    * Set the maximum friction force in N.
    */
   setMaxForce(force: number): void {
-    _ASSERT && console.assert(Number.isFinite(force) && force >= 0.0);
+    if (_ASSERT) console.assert(Number.isFinite(force) && force >= 0.0);
     this.m_maxForce = force;
   }
 
@@ -210,7 +205,7 @@ export class MotorJoint extends Joint {
    * Set the maximum friction torque in N*m.
    */
   setMaxTorque(torque: number): void {
-    _ASSERT && console.assert(Number.isFinite(torque) && torque >= 0.0);
+    if (_ASSERT) console.assert(Number.isFinite(torque) && torque >= 0.0);
     this.m_maxTorque = torque;
   }
 
@@ -225,7 +220,7 @@ export class MotorJoint extends Joint {
    * Set the position correction factor in the range [0,1].
    */
   setCorrectionFactor(factor: number): void {
-    _ASSERT && console.assert(Number.isFinite(factor) && 0.0 <= factor && factor <= 1.0);
+    if (_ASSERT) console.assert(Number.isFinite(factor) && 0.0 <= factor && factor <= 1.0);
     this.m_correctionFactor = factor;
   }
 

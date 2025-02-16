@@ -23,7 +23,7 @@ import { b2ParticleSystem } from "./ParticleSystem";
 import { b2ParticleColor } from "./Particle";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 /** The particle group type.  Can be combined with the | operator. */
 export const enum b2ParticleGroupFlag {

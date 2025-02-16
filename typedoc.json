@@ -1,10 +1,10 @@
 {
-  "name": "Planck.js API Doc",
-  "readme": "./docs/API.md",
-  "inputFiles": ["./src", "./testbed"],
-  "out": "./docs/api/",
-  "mode": "file",
-  "includeDeclarations": false,
+  "name": "API Reference",
+  "readme": "none",
+  "entryPoints": ["./src"],
+  "out": "./docs/pages/api/",
+  "basePath": "/api/",
+  "publicPath": "/api/",
   "exclude": [
     "**/*.test-d.ts",
     "**/*.test.ts",
@@ -15,12 +15,17 @@
     "src/util/Pool*",
     "src/util/Timer*",
     "src/common/Matrix*",
+    "node_modules/*",
     "testbed/*",
+    "docs/*",
     "dist/*"
   ],
   "disableSources": true,
   "excludeExternals": true,
   "excludePrivate": true,
-  "stripInternal": true,
-  "excludeNotExported": true
+  "excludeInternal": true,
+  "hideBreadcrumbs": true,
+  "hidePageHeader": true,
+  "mergeReadme": true,
+  "plugin": ["typedoc-plugin-markdown"]
 }

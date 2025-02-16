@@ -1,7 +1,7 @@
 /*
 * Copyright (c) 2014 Google, Inc.
 *
-* This software is provided 'as-is', without any express or implied
+* This software is provided "as-is", without any express or implied
 * warranty.  In no event will the authors be held liable for any damages
 * arising from the use of this software.
 * Permission is granted to anyone to use this software for any purpose,
@@ -17,7 +17,7 @@
 */
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 /**
  * A simple array-like container, similar to std::vector.
@@ -35,7 +35,7 @@ export class b2GrowableBuffer<T> {
 //    this.capacity = 0;
 
     if(rhs) {
-      throw new Error('TODO'); // TODO
+      throw new Error("TODO"); // TODO
 // //      this.count = rhs.count;
 // //      this.capacity = rhs.capacity;
 //       if(rhs.data) {

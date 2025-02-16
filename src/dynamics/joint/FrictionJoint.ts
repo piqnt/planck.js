@@ -1,39 +1,24 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import { options } from '../../util/options';
-import { clamp } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Mat22 } from '../../common/Mat22';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { options } from "../../util/options";
+import { clamp } from "../../common/Math";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Mat22 } from "../../common/Mat22";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -72,14 +57,24 @@ export interface FrictionJointDef extends JointDef, FrictionJointOpt {
   maxTorque : 0.0,
 };
 
+declare module "./FrictionJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function FrictionJoint(def: FrictionJointDef): FrictionJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function FrictionJoint(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value): FrictionJoint;
+}
+
 /**
  * Friction joint. This is used for top-down friction. It provides 2D
  * translational friction and angular friction.
  */
+// @ts-expect-error
 export class FrictionJoint extends Joint {
-  static TYPE = 'friction-joint' as const;
+  static TYPE = "friction-joint" as const;
 
-  /** @internal */ m_type: 'friction-joint';
+  /** @internal */ m_type: "friction-joint";
 
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
@@ -106,7 +101,7 @@ export class FrictionJoint extends Joint {
   /**
    * @param anchor Anchor in global coordination.
    */
-  constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+  constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor?: Vec2Value);
   constructor(def: FrictionJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof FrictionJoint)) {
@@ -205,7 +200,7 @@ export class FrictionJoint extends Joint {
    * Set the maximum friction force in N.
    */
   setMaxForce(force: number): void {
-    _ASSERT && console.assert(Number.isFinite(force) && force >= 0.0);
+    if (_ASSERT) console.assert(Number.isFinite(force) && force >= 0.0);
     this.m_maxForce = force;
   }
 
@@ -220,7 +215,7 @@ export class FrictionJoint extends Joint {
    * Set the maximum friction torque in N*m.
    */
   setMaxTorque(torque: number): void {
-    _ASSERT && console.assert(Number.isFinite(torque) && torque >= 0.0);
+    if (_ASSERT) console.assert(Number.isFinite(torque) && torque >= 0.0);
     this.m_maxTorque = torque;
   }
 

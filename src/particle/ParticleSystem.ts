@@ -16,36 +16,36 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-import { Body } from '../dynamics/Body';
-import { Fixture } from '../dynamics/Fixture';
-import { Vec2 } from '../common/Vec2';
-import { Shape } from '../collision/Shape';
-import { Transform } from '../common/Transform';
-import { TimeStep } from '../dynamics/Solver';
-import { options } from '../util/options';
-import { b2ParticleColor, b2ParticleHandle, ParticleDef, ParticleDefDefault, ParticleFlag } from './Particle';
-import { AABB, AABBValue, RayCastInput, RayCastOutput } from '../collision/AABB';
-import { b2ParticleGroup, b2ParticleGroupDef, b2ParticleGroupFlag, ParticleGroupDefDefault } from './ParticleGroup';
-import { invSqrt, clamp } from '../common/Math';
-import { Rot } from '../common/Rot';
-import { SettingsInternal as Settings } from '../Settings';
-import { World } from '../dynamics/World';
-import { VoronoiDiagram } from './VoronoiDiagram';
-import { b2GrowableBuffer } from '../common/b2GrowableBuffer';
-import { b2SlabAllocator } from '../common/b2SlabAllocator';
-import { CircleShape } from '../collision/shape/CircleShape';
-import { ChainShape } from '../collision/shape/ChainShape';
-import { EdgeShape } from '../collision/shape/EdgeShape';
+import { Body } from "../dynamics/Body";
+import { Fixture } from "../dynamics/Fixture";
+import { Vec2 } from "../common/Vec2";
+import { Shape } from "../collision/Shape";
+import { Transform } from "../common/Transform";
+import { TimeStep } from "../dynamics/Solver";
+import { options } from "../util/options";
+import { b2ParticleColor, b2ParticleHandle, ParticleDef, ParticleDefDefault, ParticleFlag } from "./Particle";
+import { AABB, AABBValue, RayCastInput, RayCastOutput } from "../collision/AABB";
+import { b2ParticleGroup, b2ParticleGroupDef, b2ParticleGroupFlag, ParticleGroupDefDefault } from "./ParticleGroup";
+import { invSqrt, clamp } from "../common/Math";
+import { Rot } from "../common/Rot";
+import { SettingsInternal as Settings } from "../Settings";
+import { World } from "../dynamics/World";
+import { VoronoiDiagram } from "./VoronoiDiagram";
+import { b2GrowableBuffer } from "../common/b2GrowableBuffer";
+import { b2SlabAllocator } from "../common/b2SlabAllocator";
+import { CircleShape } from "../collision/shape/CircleShape";
+import { ChainShape } from "../collision/shape/ChainShape";
+import { EdgeShape } from "../collision/shape/EdgeShape";
 
 /**
  * TODO
  * For now we use assemblyscript just to ensure bitoperations are correct
  * Either use assemblyscript in the future or replace casts by faster methods
  */
-import 'assemblyscript/std/portable';
+import "assemblyscript/std/portable";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 const {
   linearSlop,
@@ -477,8 +477,8 @@ class Proxy {
   // static lessThan(a: number, b: Proxy);
   // static lessThan(a: Proxy, b: number);
   // static lessThan(a: Proxy | number, b: Proxy | number) { // TODO divide for better performance
-  //   if (typeof b === 'object') {
-  //     if (typeof a === 'object') {
+  //   if (typeof b === "object") {
+  //     if (typeof a === "object") {
   //       return a.tag < b.tag;
   //     }
   //     return a < b.tag;
@@ -2750,12 +2750,12 @@ private:
     shape: Shape,
     groupDef: b2ParticleGroupDef, xf: Transform) {
     switch (shape.getType()) {
-    case 'edge':
-    case 'chain':
+    case "edge":
+    case "chain":
       this.createParticlesStrokeShapeForGroup(shape, groupDef, xf);
       break;
-    case 'polygon':
-    case 'circle':
+    case "polygon":
+    case "circle":
       this.createParticlesFillShapeForGroup(shape, groupDef, xf);
       break;
     default:
@@ -2899,7 +2899,7 @@ private:
     _ASSERT && console.assert(this.m_groupCount > 0);
     _ASSERT && console.assert(!!group);
 
-    this.m_world.publish('remove-particle-group', group);
+    this.m_world.publish("remove-particle-group", group);
 
     this.setGroupFlags(group, 0);
     for (let i = group.m_firstIndex; i < group.m_lastIndex; i++) {
@@ -4854,7 +4854,7 @@ private:
       const flags = this.m_flagsBuffer.data[i];
       if (flags & ParticleFlag.b2_zombieParticle) {
         if (flags & ParticleFlag.b2_destructionListenerParticle) {
-          this.m_world.publish('remove-particle', this, i);
+          this.m_world.publish("remove-particle", this, i);
         }
         // Destroy particle handle.
         if (this.m_handleIndexBuffer.data) {

@@ -1,35 +1,20 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from '../common/Matrix';
+import * as matrix from "../common/Matrix";
 import { ShapeType } from "../collision/Shape";
-import { clamp } from '../common/Math';
-import { TransformValue } from '../common/Transform';
-import { Mat22 } from '../common/Mat22';
-import { SettingsInternal as Settings } from '../Settings';
-import { Manifold, ManifoldType, WorldManifold } from '../collision/Manifold';
-import { testOverlap } from '../collision/Distance';
+import { clamp } from "../common/Math";
+import { TransformValue } from "../common/Transform";
+import { Mat22 } from "../common/Mat22";
+import { SettingsInternal as Settings } from "../Settings";
+import { Manifold, ManifoldType, WorldManifold } from "../collision/Manifold";
+import { testOverlap } from "../collision/Distance";
 import { Fixture } from "./Fixture";
 import { Body } from "./Body";
 import { ContactImpulse, TimeStep } from "./Solver";
@@ -37,7 +22,7 @@ import { Pool } from "../util/Pool";
 import { getTransform } from "./Position";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_sqrt = Math.sqrt;
 /** @internal */ const math_max = Math.max;
@@ -123,8 +108,8 @@ export class VelocityConstraintPoint {
   velocityBias = 0;
 
   recycle() {
-    matrix.zeroVec2(this.rA)
-    matrix.zeroVec2(this.rB)
+    matrix.zeroVec2(this.rA);
+    matrix.zeroVec2(this.rB);
     this.normalImpulse = 0;
     this.tangentImpulse = 0;
     this.normalMass = 0;
@@ -167,38 +152,23 @@ export class VelocityConstraintPoint {
  */
 export class Contact {
   // Nodes for connecting bodies.
-  /** @internal */
-  m_nodeA = new ContactEdge(this);
-  /** @internal */
-  m_nodeB = new ContactEdge(this);
-  /** @internal */
-  m_fixtureA: Fixture | null = null;
-  /** @internal */
-  m_fixtureB: Fixture | null = null;
-  /** @internal */
-  m_indexA = -1;
-  /** @internal */
-  m_indexB = -1;
-  /** @internal */
-  m_evaluateFcn: EvaluateFunction | null = null;
-  /** @internal */
-  m_manifold: Manifold = new Manifold();
-  /** @internal */
-  m_prev: Contact | null = null;
-  /** @internal */
-  m_next: Contact | null = null;
-  /** @internal */
-  m_toi = 1.0;
-  /** @internal */
-  m_toiCount = 0;
-  /** @internal This contact has a valid TOI in m_toi */
-  m_toiFlag = false;
-  /** @internal */
-  m_friction = 0.0;
-  /** @internal */
-  m_restitution = 0.0;
-  /** @internal */
-  m_tangentSpeed = 0.0;
+  /** @internal */ m_nodeA = new ContactEdge(this);
+  /** @internal */ m_nodeB = new ContactEdge(this);
+  /** @internal */ m_fixtureA: Fixture | null = null;
+  /** @internal */ m_fixtureB: Fixture | null = null;
+  /** @internal */ m_indexA = -1;
+  /** @internal */ m_indexB = -1;
+  /** @internal */ m_evaluateFcn: EvaluateFunction | null = null;
+  /** @internal */ m_manifold: Manifold = new Manifold();
+  /** @internal */ m_prev: Contact | null = null;
+  /** @internal */ m_next: Contact | null = null;
+  /** @internal */ m_toi = 1.0;
+  /** @internal */ m_toiCount = 0;
+  // This contact has a valid TOI in m_toi
+  /** @internal */ m_toiFlag = false;
+  /** @internal */ m_friction = 0.0;
+  /** @internal */ m_restitution = 0.0;
+  /** @internal */ m_tangentSpeed = 0.0;
   /** @internal This contact can be disabled (by user) */
   m_enabledFlag = true;
   /** @internal Used when crawling contact graph when forming islands. */
@@ -214,10 +184,8 @@ export class Contact {
   m_impulse: ContactImpulse = new ContactImpulse(this);
 
   // VelocityConstraint
-  /** @internal */
-  v_points = [new VelocityConstraintPoint(), new VelocityConstraintPoint()]; // [maxManifoldPoints];
-  /** @internal */
-  v_normal = matrix.vec2(0, 0);
+  /** @internal */ v_points = [new VelocityConstraintPoint(), new VelocityConstraintPoint()]; // [maxManifoldPoints];
+  /** @internal */ v_normal = matrix.vec2(0, 0);
   /** @internal */ v_normalMass: Mat22 = new Mat22();
   /** @internal */ v_K: Mat22 = new Mat22();
   /** @internal */ v_pointCount = 0;
@@ -288,7 +256,7 @@ export class Contact {
     for(const point of this.v_points) {
       point.recycle();
     }
-    matrix.zeroVec2(this.v_normal)
+    matrix.zeroVec2(this.v_normal);
     this.v_normalMass.setZero();
     this.v_K.setZero();
     this.v_pointCount = 0;
@@ -304,10 +272,10 @@ export class Contact {
     for(const point of this.p_localPoints) {
       matrix.zeroVec2(point);
     }
-    matrix.zeroVec2(this.p_localNormal)
-    matrix.zeroVec2(this.p_localPoint)
-    matrix.zeroVec2(this.p_localCenterA)
-    matrix.zeroVec2(this.p_localCenterB)
+    matrix.zeroVec2(this.p_localNormal);
+    matrix.zeroVec2(this.p_localPoint);
+    matrix.zeroVec2(this.p_localCenterA);
+    matrix.zeroVec2(this.p_localCenterB);
     this.p_type = ManifoldType.e_unset;
     this.p_radiusA = 0;
     this.p_radiusB = 0;
@@ -332,7 +300,7 @@ export class Contact {
     const manifold = this.m_manifold;
 
     const pointCount = manifold.pointCount;
-    _ASSERT && console.assert(pointCount > 0);
+    if (_ASSERT) console.assert(pointCount > 0);
 
     this.v_invMassA = bodyA.m_invMass;
     this.v_invMassB = bodyB.m_invMass;
@@ -475,7 +443,7 @@ export class Contact {
 
   /**
    * Override the default friction mixture. You can call this in
-   * ContactListener.preSolve. This value persists until set or reset.
+   * "pre-solve" callback. This value persists until set or reset.
    */
   setFriction(friction: number): void {
     this.m_friction = friction;
@@ -500,7 +468,7 @@ export class Contact {
 
   /**
    * Override the default restitution mixture. You can call this in
-   * ContactListener.preSolve. The value persists until you set or reset.
+   * "pre-solve" callback. The value persists until you set or reset.
    */
   setRestitution(restitution: number): void {
     this.m_restitution = restitution;
@@ -625,7 +593,7 @@ export class Contact {
 
     this.m_touchingFlag = touching;
 
-    const hasListener = typeof listener === 'object' && listener !== null;
+    const hasListener = typeof listener === "object" && listener !== null;
 
     if (!wasTouching && touching && hasListener) {
       listener.beginContact(this);
@@ -806,7 +774,7 @@ export class Contact {
     matrix.copyVec2(vB, velocityB.v);
     const wB = velocityB.w;
 
-    _ASSERT && console.assert(manifold.pointCount > 0);
+    if (_ASSERT) console.assert(manifold.pointCount > 0);
 
     getTransform(xfA, localCenterA, cA, aA);
     getTransform(xfB, localCenterB, cB, aB);
@@ -842,9 +810,9 @@ export class Contact {
       // Setup a velocity bias for restitution.
       vcp.velocityBias = 0.0;
       let vRel = 0;
-      vRel += matrix.dotVec2(this.v_normal, vB)
-      vRel += matrix.dotVec2(this.v_normal, matrix.crossNumVec2(temp, wB, vcp.rB))
-      vRel -= matrix.dotVec2(this.v_normal, vA)
+      vRel += matrix.dotVec2(this.v_normal, vB);
+      vRel += matrix.dotVec2(this.v_normal, matrix.crossNumVec2(temp, wB, vcp.rB));
+      vRel -= matrix.dotVec2(this.v_normal, vA);
       vRel -= matrix.dotVec2(this.v_normal, matrix.crossNumVec2(temp, wA, vcp.rA));
       if (vRel < -Settings.velocityThreshold) {
         vcp.velocityBias = -this.v_restitution * vRel;
@@ -982,7 +950,7 @@ export class Contact {
     matrix.crossVec2Num(tangent, normal, 1.0);
     const friction = this.v_friction;
 
-    _ASSERT && console.assert(this.v_pointCount == 1 || this.v_pointCount == 2);
+    if (_ASSERT) console.assert(this.v_pointCount == 1 || this.v_pointCount == 2);
 
     // Solve tangent constraints first because non-penetration is more important
     // than friction.
@@ -1091,7 +1059,7 @@ export class Contact {
       const vcp2 = this.v_points[1]; // VelocityConstraintPoint
 
       matrix.setVec2(a, vcp1.normalImpulse, vcp2.normalImpulse);
-      _ASSERT && console.assert(a.x >= 0.0 && a.y >= 0.0);
+      if (_ASSERT) console.assert(a.x >= 0.0 && a.y >= 0.0);
 
       // Relative velocity at contact
       // let dv1 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp1.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp1.rA));
@@ -1139,7 +1107,7 @@ export class Contact {
 
         if (x.x >= 0.0 && x.y >= 0.0) {
           // Get the incremental impulse
-          matrix.subVec2(d, x, a)
+          matrix.subVec2(d, x, a);
 
           // Apply incremental impulse
           matrix.scaleVec2(P1, d.x, normal);
@@ -1175,8 +1143,8 @@ export class Contact {
             vn1 = matrix.dotVec2(dv1, normal);
             vn2 = matrix.dotVec2(dv2, normal);
 
-            _ASSERT && console.assert(math_abs(vn1 - vcp1.velocityBias) < k_errorTol);
-            _ASSERT && console.assert(math_abs(vn2 - vcp2.velocityBias) < k_errorTol);
+            if (_ASSERT) console.assert(math_abs(vn1 - vcp1.velocityBias) < k_errorTol);
+            if (_ASSERT) console.assert(math_abs(vn2 - vcp2.velocityBias) < k_errorTol);
           }
           break;
         }
@@ -1223,7 +1191,7 @@ export class Contact {
             // Compute normal velocity
             vn1 = matrix.dotVec2(dv1, normal);
 
-            _ASSERT && console.assert(math_abs(vn1 - vcp1.velocityBias) < k_errorTol);
+            if (_ASSERT) console.assert(math_abs(vn1 - vcp1.velocityBias) < k_errorTol);
           }
           break;
         }
@@ -1270,7 +1238,7 @@ export class Contact {
             // Compute normal velocity
             vn2 = matrix.dotVec2(dv2, normal);
 
-            _ASSERT && console.assert(math_abs(vn2 - vcp2.velocityBias) < k_errorTol);
+            if (_ASSERT) console.assert(math_abs(vn2 - vcp2.velocityBias) < k_errorTol);
           }
           break;
         }

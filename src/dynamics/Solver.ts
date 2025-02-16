@@ -1,42 +1,26 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
- * Copyright (c) 2014 Google, Inc.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba, Google, Inc.
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from '../common/Matrix';
-import { SettingsInternal as Settings } from '../Settings';
-import { EPSILON } from '../common/Math';
-import { Body } from './Body';
-import type { Contact } from './Contact';
-import { Joint } from './Joint';
-import { TimeOfImpact, TOIInput, TOIOutput, TOIOutputState } from '../collision/TimeOfImpact';
-import { Distance, DistanceInput, DistanceOutput, SimplexCache } from '../collision/Distance';
+import * as matrix from "../common/Matrix";
+import { SettingsInternal as Settings } from "../Settings";
+import { EPSILON } from "../common/Math";
+import { Body } from "./Body";
+import type { Contact } from "./Contact";
+import { Joint } from "./Joint";
+import { TimeOfImpact, TOIInput, TOIOutput, TOIOutputState } from "../collision/TimeOfImpact";
+import { Distance, DistanceInput, DistanceOutput, SimplexCache } from "../collision/Distance";
 import { World } from "./World";
-import { Transform } from '../common/Transform';
-import { Sweep } from '../common/Sweep';
+import { Transform } from "../common/Transform";
+import { Sweep } from "../common/Sweep";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_sqrt = Math.sqrt;
 /** @internal */ const math_min = Math.min;
@@ -150,7 +134,7 @@ export class Solver {
   }
 
   addBody(body: Body): void {
-    _ASSERT && console.assert(body instanceof Body, 'Not a Body!', body);
+    if (_ASSERT) console.assert(body instanceof Body, "Not a Body!", body);
     this.m_bodies.push(body);
     // why?
     // body.c_position.c.setZero();
@@ -160,12 +144,12 @@ export class Solver {
   }
 
   addContact(contact: Contact): void {
-    // _ASSERT && console.assert(contact instanceof Contact, 'Not a Contact!', contact);
+    // if (_ASSERT) console.assert(contact instanceof Contact, 'Not a Contact!', contact);
     this.m_contacts.push(contact);
   }
 
   addJoint(joint: Joint): void {
-    _ASSERT && console.assert(joint instanceof Joint, 'Not a Joint!', joint);
+    if (_ASSERT) console.assert(joint instanceof Joint, "Not a Joint!", joint);
     this.m_joints.push(joint);
   }
 
@@ -217,7 +201,7 @@ export class Solver {
       while (stack.length > 0) {
         // Grab the next body off the stack and add it to the island.
         const b = stack.pop();
-        _ASSERT && console.assert(b.isActive() == true);
+        if (_ASSERT) console.assert(b.isActive() == true);
         this.addBody(b);
 
         // Make sure the body is awake (without resetting sleep timer).
@@ -260,7 +244,7 @@ export class Solver {
             continue;
           }
 
-          // _ASSERT && console.assert(stack.length < world.m_bodyCount);
+          // if (_ASSERT) console.assert(stack.length < world.m_bodyCount);
           stack.push(other);
           other.m_islandFlag = true;
         }
@@ -285,7 +269,7 @@ export class Solver {
             continue;
           }
 
-          // _ASSERT && console.assert(stack.length < world.m_bodyCount);
+          // if (_ASSERT) console.assert(stack.length < world.m_bodyCount);
           stack.push(other);
           other.m_islandFlag = true;
         }
@@ -342,7 +326,7 @@ export class Solver {
          * v2 = v1 * 1 / (1 + c * dt)
          * </pre>
          */
-        matrix.scaleVec2(v, 1.0 / (1.0 + h * body.m_linearDamping), v)
+        matrix.scaleVec2(v, 1.0 / (1.0 + h * body.m_linearDamping), v);
         w *= 1.0 / (1.0 + h * body.m_angularDamping);
       }
 
@@ -553,7 +537,7 @@ export class Solver {
           const bA = fA.getBody();
           const bB = fB.getBody();
 
-          _ASSERT && console.assert(bA.isDynamic() || bB.isDynamic());
+          if (_ASSERT) console.assert(bA.isDynamic() || bB.isDynamic());
 
           const activeA = bA.isAwake() && !bA.isStatic();
           const activeB = bB.isAwake() && !bB.isStatic();
@@ -583,7 +567,7 @@ export class Solver {
             bB.m_sweep.advance(alpha0);
           }
 
-          _ASSERT && console.assert(alpha0 < 1.0);
+          if (_ASSERT) console.assert(alpha0 < 1.0);
 
           const indexA = c.getChildIndexA();
           const indexB = c.getChildIndexB();

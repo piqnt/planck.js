@@ -1,41 +1,26 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import { options } from '../../util/options';
-import { SettingsInternal as Settings } from '../../Settings';
-import { } from '../../common/Math';
-import { Vec2 } from '../../common/Vec2';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
-import { RevoluteJoint } from './RevoluteJoint';
-import { PrismaticJoint } from './PrismaticJoint';
+import { options } from "../../util/options";
+import { SettingsInternal as Settings } from "../../Settings";
+import { } from "../../common/Math";
+import { Vec2 } from "../../common/Vec2";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
+import { RevoluteJoint } from "./RevoluteJoint";
+import { PrismaticJoint } from "./PrismaticJoint";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 
 /**
@@ -66,6 +51,15 @@ export interface GearJointDef extends JointDef, GearJointOpt {
   ratio : 1.0
 };
 
+declare module "./GearJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function GearJoint(def: GearJointDef): GearJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function GearJoint(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
+}
+
 /**
  * A gear joint is used to connect two joints together. Either joint can be a
  * revolute or prismatic joint. You specify a gear ratio to bind the motions
@@ -79,14 +73,15 @@ export interface GearJointDef extends JointDef, GearJointOpt {
  * This definition requires two existing revolute or prismatic joints (any
  * combination will work).
  */
+// @ts-expect-error
 export class GearJoint extends Joint {
-  static TYPE = 'gear-joint' as const;
+  static TYPE = "gear-joint" as const;
 
-  /** @internal */ m_type: 'gear-joint';
+  /** @internal */ m_type: "gear-joint";
   /** @internal */ m_joint1: RevoluteJoint | PrismaticJoint;
   /** @internal */ m_joint2: RevoluteJoint | PrismaticJoint;
-  /** @internal */ m_type1: 'revolute-joint' | 'prismatic-joint';
-  /** @internal */ m_type2: 'revolute-joint' | 'prismatic-joint';
+  /** @internal */ m_type1: "revolute-joint" | "prismatic-joint";
+  /** @internal */ m_type2: "revolute-joint" | "prismatic-joint";
   /** @internal */ m_bodyC: Body;
   /** @internal */ m_localAnchorC: Vec2;
   /** @internal */ m_localAnchorA: Vec2;
@@ -137,15 +132,15 @@ export class GearJoint extends Joint {
 
     this.m_type = GearJoint.TYPE;
 
-    _ASSERT && console.assert(joint1.m_type === RevoluteJoint.TYPE || joint1.m_type === PrismaticJoint.TYPE);
-    _ASSERT && console.assert(joint2.m_type === RevoluteJoint.TYPE || joint2.m_type === PrismaticJoint.TYPE);
+    if (_ASSERT) console.assert(joint1.m_type === RevoluteJoint.TYPE || joint1.m_type === PrismaticJoint.TYPE);
+    if (_ASSERT) console.assert(joint2.m_type === RevoluteJoint.TYPE || joint2.m_type === PrismaticJoint.TYPE);
 
     this.m_joint1 = joint1 ? joint1 : def.joint1;
     this.m_joint2 = joint2 ? joint2 : def.joint2;
     this.m_ratio = Number.isFinite(ratio) ? ratio : def.ratio;
 
-    this.m_type1 = this.m_joint1.getType() as 'revolute-joint' | 'prismatic-joint';
-    this.m_type2 = this.m_joint2.getType() as 'revolute-joint' | 'prismatic-joint';
+    this.m_type1 = this.m_joint1.getType() as "revolute-joint" | "prismatic-joint";
+    this.m_type2 = this.m_joint2.getType() as "revolute-joint" | "prismatic-joint";
 
     // joint1 connects body A to body C
     // joint2 connects body B to body D
@@ -291,7 +286,7 @@ export class GearJoint extends Joint {
    * Set the gear ratio.
    */
   setRatio(ratio: number): void {
-    _ASSERT && console.assert(Number.isFinite(ratio));
+    if (_ASSERT) console.assert(Number.isFinite(ratio));
     this.m_ratio = ratio;
   }
 

@@ -16,10 +16,10 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-import { clamp } from '../common/Math'
-import { Vec2 } from '../common/Vec2';
-import { b2ParticleGroup } from './ParticleGroup';
-import { SettingsInternal as Settings } from '../Settings';
+import { clamp } from "../common/Math"
+import { Vec2 } from "../common/Vec2";
+import { b2ParticleGroup } from "./ParticleGroup";
+import { SettingsInternal as Settings } from "../Settings";
 
 const {
   b2_invalidParticleIndex,

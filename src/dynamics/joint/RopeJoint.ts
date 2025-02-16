@@ -1,38 +1,23 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import { options } from '../../util/options';
-import { SettingsInternal as Settings } from '../../Settings';
-import { clamp } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { options } from "../../util/options";
+import { SettingsInternal as Settings } from "../../Settings";
+import { clamp } from "../../common/Math";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_min = Math.min;
 
 /** @internal */ enum LimitState {
@@ -75,6 +60,15 @@ export interface RopeJointDef extends JointDef, RopeJointOpt {
   maxLength : 0.0,
 };
 
+declare module "./RopeJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function RopeJoint(def: RopeJointDef): RopeJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function RopeJoint(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value): RopeJoint;
+}
+
 /**
  * A rope joint enforces a maximum distance between two points on two bodies. It
  * has no other effect.
@@ -86,10 +80,11 @@ export interface RopeJointDef extends JointDef, RopeJointOpt {
  * sponginess, so I chose not to implement it that way. See {@link DistanceJoint} if you
  * want to dynamically control length.
  */
+// @ts-expect-error
 export class RopeJoint extends Joint {
-  static TYPE = 'rope-joint' as const;
+  static TYPE = "rope-joint" as const;
 
-  /** @internal */ m_type: 'rope-joint';
+  /** @internal */ m_type: "rope-joint";
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
 
@@ -112,7 +107,7 @@ export class RopeJoint extends Joint {
   /** @internal */ m_invIB: number;
 
   constructor(def: RopeJointDef);
-  constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+  constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor?: Vec2Value);
   constructor(def: RopeJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof RopeJoint)) {

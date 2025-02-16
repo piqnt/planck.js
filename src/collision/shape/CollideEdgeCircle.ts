@@ -1,46 +1,31 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import { TransformValue } from '../../common/Transform';
-import * as matrix from '../../common/Matrix';
-import { Contact } from '../../dynamics/Contact';
-import { EdgeShape } from './EdgeShape';
-import { ChainShape } from './ChainShape';
-import { CircleShape } from './CircleShape';
+import { TransformValue } from "../../common/Transform";
+import * as matrix from "../../common/Matrix";
+import { Contact } from "../../dynamics/Contact";
+import { EdgeShape } from "./EdgeShape";
+import { ChainShape } from "./ChainShape";
+import { CircleShape } from "./CircleShape";
 import { Manifold, ContactFeatureType, ManifoldType } from "../Manifold";
 import { Fixture } from "../../dynamics/Fixture";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 
 Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
 
 /** @internal */ function EdgeCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: Fixture, indexA: number, xfB: TransformValue, fixtureB: Fixture, indexB: number): void {
-  _ASSERT && console.assert(fixtureA.getType() == EdgeShape.TYPE);
-  _ASSERT && console.assert(fixtureB.getType() == CircleShape.TYPE);
+  if (_ASSERT) console.assert(fixtureA.getType() == EdgeShape.TYPE);
+  if (_ASSERT) console.assert(fixtureB.getType() == CircleShape.TYPE);
 
   const shapeA = fixtureA.getShape() as EdgeShape;
   const shapeB = fixtureB.getShape() as CircleShape;
@@ -49,8 +34,8 @@ Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
 }
 
 function ChainCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: Fixture, indexA: number, xfB: TransformValue, fixtureB: Fixture, indexB: number): void {
-  _ASSERT && console.assert(fixtureA.getType() == ChainShape.TYPE);
-  _ASSERT && console.assert(fixtureB.getType() == CircleShape.TYPE);
+  if (_ASSERT) console.assert(fixtureA.getType() == ChainShape.TYPE);
+  if (_ASSERT) console.assert(fixtureB.getType() == CircleShape.TYPE);
 
   const chain = fixtureA.getShape() as ChainShape;
   const edge = new EdgeShape();
@@ -110,7 +95,7 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
     }
 
     manifold.type = ManifoldType.e_circles;
-    matrix.zeroVec2(manifold.localNormal)
+    matrix.zeroVec2(manifold.localNormal);
     matrix.copyVec2(manifold.localPoint, P);
     manifold.pointCount = 1;
     matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
@@ -142,7 +127,7 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
     }
 
     manifold.type = ManifoldType.e_circles;
-    matrix.zeroVec2(manifold.localNormal)
+    matrix.zeroVec2(manifold.localNormal);
     matrix.copyVec2(manifold.localPoint, P);
     manifold.pointCount = 1;
     matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
@@ -155,7 +140,7 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
 
   // Region AB
   const den = matrix.lengthSqrVec2(e);
-  _ASSERT && console.assert(den > 0.0);
+  if (_ASSERT) console.assert(den > 0.0);
   matrix.combine2Vec2(P, u / den, A, v / den, B);
   const dd = matrix.distSqrVec2(Q, P);
   if (dd > radius * radius) {
@@ -176,4 +161,4 @@ export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape,
 
   // manifold.points[0].id.key = 0;
   manifold.points[0].id.setFeatures(0, ContactFeatureType.e_face, 0, ContactFeatureType.e_vertex);
-}
+};

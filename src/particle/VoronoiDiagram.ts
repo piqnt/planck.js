@@ -16,11 +16,11 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-import { Vec2 } from '../common/Vec2';
-import { StackQueue } from './StackQueue';
+import { Vec2 } from "../common/Vec2";
+import { StackQueue } from "./StackQueue";
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 interface Generator {
   center: Vec2;

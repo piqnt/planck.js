@@ -1,39 +1,24 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import { options } from '../../util/options';
-import { SettingsInternal as Settings } from '../../Settings';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Vec3 } from '../../common/Vec3';
-import { Mat33 } from '../../common/Mat33';
-import { Rot } from '../../common/Rot';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { options } from "../../util/options";
+import { SettingsInternal as Settings } from "../../Settings";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Vec3 } from "../../common/Vec3";
+import { Mat33 } from "../../common/Mat33";
+import { Rot } from "../../common/Rot";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_PI = Math.PI;
 
@@ -83,14 +68,24 @@ export interface WeldJointDef extends JointDef, WeldJointOpt {
   dampingRatio : 0.0,
 };
 
+declare module "./WeldJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function WeldJoint(def: WeldJointDef): WeldJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function WeldJoint(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value): WeldJoint;
+}
+
 /**
  * A weld joint essentially glues two bodies together. A weld joint may distort
  * somewhat because the island constraint solver is approximate.
  */
+// @ts-expect-error
 export class WeldJoint extends Joint {
-  static TYPE = 'weld-joint' as const
+  static TYPE = "weld-joint" as const;
 
-  /** @internal */ m_type: 'weld-joint';
+  /** @internal */ m_type: "weld-joint";
   /** @internal */ m_localAnchorA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
   /** @internal */ m_referenceAngle: number;
@@ -115,7 +110,7 @@ export class WeldJoint extends Joint {
   /** @internal */ m_mass: Mat33;
 
   constructor(def: WeldJointDef);
-  constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value);
+  constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor?: Vec2Value);
   constructor(def: WeldJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof WeldJoint)) {
@@ -142,14 +137,15 @@ export class WeldJoint extends Joint {
     this.m_gamma = 0.0;
 
     // Solver temp
-    this.m_rA;
-    this.m_rB;
-    this.m_localCenterA;
-    this.m_localCenterB;
-    this.m_invMassA;
-    this.m_invMassB;
-    this.m_invIA;
-    this.m_invIB;
+    // todo: do we need to initialize?
+    // this.m_rA;
+    // this.m_rB;
+    // this.m_localCenterA;
+    // this.m_localCenterB;
+    // this.m_invMassA;
+    // this.m_invMassB;
+    // this.m_invIA;
+    // this.m_invIB;
     this.m_mass = new Mat33();
 
     // Point-to-point constraint

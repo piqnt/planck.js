@@ -1,34 +1,19 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import { Vec2Value } from '../common/Vec2';
-import { AABB, AABBValue, RayCastCallback, RayCastInput } from './AABB';
-import { DynamicTree, DynamicTreeQueryCallback } from './DynamicTree';
+import { Vec2Value } from "../common/Vec2";
+import { AABB, AABBValue, RayCastCallback, RayCastInput } from "./AABB";
+import { DynamicTree, DynamicTreeQueryCallback } from "./DynamicTree";
 import { FixtureProxy } from "../dynamics/Fixture";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
 
@@ -101,7 +86,7 @@ export class BroadPhase {
    */
   query = (aabb: AABBValue, queryCallback: DynamicTreeQueryCallback): void => {
     this.m_tree.query(aabb, queryCallback);
-  }
+  };
 
   /**
    * Ray-cast against the proxies in the tree. This relies on the callback to
@@ -111,7 +96,7 @@ export class BroadPhase {
    * number of proxies in the tree.
    *
    * @param input The ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
-   * @param rayCastCallback A function that is called for each proxy that is hit by the ray.
+   * @param rayCastCallback A function that is called for each proxy that is hit by the ray. If the return value is a positive number it will update the maxFraction of the ray cast input, and if it is zero it will terminate they ray cast.
    */
   rayCast(input: RayCastInput, rayCastCallback: RayCastCallback): void {
     this.m_tree.rayCast(input, rayCastCallback);
@@ -132,7 +117,7 @@ export class BroadPhase {
    * is called.
    */
   createProxy(aabb: AABBValue, userData: FixtureProxy): number {
-    _ASSERT && console.assert(AABB.isValid(aabb));
+    if (_ASSERT) console.assert(AABB.isValid(aabb));
     const proxyId = this.m_tree.createProxy(aabb, userData);
     this.bufferMove(proxyId);
     return proxyId;
@@ -151,7 +136,7 @@ export class BroadPhase {
    * UpdatePairs to finalized the proxy pairs (for your time step).
    */
   moveProxy(proxyId: number, aabb: AABB, displacement: Vec2Value): void {
-    _ASSERT && console.assert(AABB.isValid(aabb));
+    if (_ASSERT) console.assert(AABB.isValid(aabb));
     const changed = this.m_tree.moveProxy(proxyId, aabb, displacement);
     if (changed) {
       this.bufferMove(proxyId);
@@ -182,7 +167,7 @@ export class BroadPhase {
    * Update the pairs. This results in pair callbacks. This can only add pairs.
    */
   updatePairs(addPairCallback: (userDataA: FixtureProxy, userDataB: FixtureProxy) => void): void {
-    _ASSERT && console.assert(typeof addPairCallback === 'function');
+    if (_ASSERT) console.assert(typeof addPairCallback === "function");
     this.m_callback = addPairCallback;
 
     // Perform tree queries for all moving proxies.
@@ -222,5 +207,5 @@ export class BroadPhase {
     this.m_callback(userDataA, userDataB);
 
     return true;
-  }
+  };
 }

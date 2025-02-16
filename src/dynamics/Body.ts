@@ -1,58 +1,61 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
- * Copyright (c) 2013 Google, Inc.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba, Google, Inc.
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from '../common/Matrix';
-import { options } from '../util/options';
-import { Vec2, Vec2Value } from '../common/Vec2';
-import { Rot } from '../common/Rot';
-import { Sweep } from '../common/Sweep';
-import { Transform } from '../common/Transform';
-import { Velocity } from './Velocity';
-import { Position } from './Position';
-import { Fixture, FixtureDef, FixtureOpt } from './Fixture';
-import { Shape } from '../collision/Shape';
+import * as matrix from "../common/Matrix";
+import { options } from "../util/options";
+import { Vec2, Vec2Value } from "../common/Vec2";
+import { Rot } from "../common/Rot";
+import { Sweep } from "../common/Sweep";
+import { Transform, TransformValue } from "../common/Transform";
+import { Velocity } from "./Velocity";
+import { Position } from "./Position";
+import { Fixture, FixtureDef, FixtureOpt } from "./Fixture";
+import { Shape } from "../collision/Shape";
 import { JointEdge } from "./Joint";
 import { World } from "./World";
 import { ContactEdge } from "./Contact";
-import { Style } from '../util/Testbed';
+import { Style } from "../util/Testbed";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 
-export type BodyType = 'static' | 'kinematic' | 'dynamic';
+/**
+ * A static body does not move under simulation and behaves as if it has infinite mass.
+ * Internally, zero is stored for the mass and the inverse mass.
+ * Static bodies can be moved manually by the user.
+ * A static body has zero velocity.
+ * Static bodies do not collide with other static or kinematic bodies.
+ * 
+ * A kinematic body moves under simulation according to its velocity.
+ * Kinematic bodies do not respond to forces.
+ * They can be moved manually by the user, but normally a kinematic body is moved by setting its velocity.
+ * A kinematic body behaves as if it has infinite mass, however, zero is stored for the mass and the inverse mass.
+ * Kinematic bodies do not collide with other kinematic or static bodies.
+ * 
+ * A dynamic body is fully simulated.
+ * They can be moved manually by the user, but normally they move according to forces.
+ * A dynamic body can collide with all body types.
+ * A dynamic body always has finite, non-zero mass.
+ * If you try to set the mass of a dynamic body to zero, it will automatically acquire a mass of one kilogram and it won't rotate.
+ */
+export type BodyType = "static" | "kinematic" | "dynamic";
 
-/** @internal */ const STATIC = 'static';
-/** @internal */ const KINEMATIC = 'kinematic';
-/** @internal */ const DYNAMIC = 'dynamic';
+/** @internal */ const STATIC = "static";
+/** @internal */ const KINEMATIC = "kinematic";
+/** @internal */ const DYNAMIC = "dynamic";
 
 /** @internal */ const oldCenter = matrix.vec2(0, 0);
 /** @internal */ const localCenter = matrix.vec2(0, 0);
 /** @internal */ const shift = matrix.vec2(0, 0);
 /** @internal */ const temp = matrix.vec2(0, 0);
-/** @internal */ const xf = matrix.transform(0, 0, 0)
+/** @internal */ const xf = matrix.transform(0, 0, 0);
 
 export interface BodyDef {
   /**
@@ -114,6 +117,9 @@ export interface BodyDef {
    */
   active?: boolean;
   userData?: any;
+
+  /** Styling for dev-tools. */
+  style?: Style;
 }
 
 /** @internal */ const BodyDefDefault: BodyDef = {
@@ -156,31 +162,12 @@ export interface MassData {
  * To create a new Body use {@link World.createBody}.
  */
 export class Body {
-  /**
-   * A static body does not move under simulation and behaves as if it has infinite mass.
-   * Internally, zero is stored for the mass and the inverse mass.
-   * Static bodies can be moved manually by the user.
-   * A static body has zero velocity.
-   * Static bodies do not collide with other static or kinematic bodies.
-   */
-  static readonly STATIC: BodyType = 'static';
-  /**
-   * A kinematic body moves under simulation according to its velocity.
-   * Kinematic bodies do not respond to forces.
-   * They can be moved manually by the user, but normally a kinematic body is moved by setting its velocity.
-   * A kinematic body behaves as if it has infinite mass, however, zero is stored for the mass and the inverse mass.
-   * Kinematic bodies do not collide with other kinematic or static bodies.
-   */
-  static readonly KINEMATIC: BodyType = 'kinematic';
-
-  /**
-   * A dynamic body is fully simulated.
-   * They can be moved manually by the user, but normally they move according to forces.
-   * A dynamic body can collide with all body types.
-   * A dynamic body always has finite, non-zero mass.
-   * If you try to set the mass of a dynamic body to zero, it will automatically acquire a mass of one kilogram and it won't rotate.
-   */
-  static readonly DYNAMIC: BodyType = 'dynamic';
+  /** @hidden */
+  static readonly STATIC: BodyType = "static";
+  /** @hidden */
+  static readonly KINEMATIC: BodyType = "kinematic";
+  /** @hidden */
+  static readonly DYNAMIC: BodyType = "dynamic";
 
   /** @internal */ m_world: World;
   /** @internal */ m_awakeFlag: boolean;
@@ -231,12 +218,12 @@ export class Body {
   constructor(world: World, def: BodyDef) {
     def = options(def, BodyDefDefault);
 
-    _ASSERT && console.assert(Vec2.isValid(def.position));
-    _ASSERT && console.assert(Vec2.isValid(def.linearVelocity));
-    _ASSERT && console.assert(Number.isFinite(def.angle));
-    _ASSERT && console.assert(Number.isFinite(def.angularVelocity));
-    _ASSERT && console.assert(Number.isFinite(def.angularDamping) && def.angularDamping >= 0.0);
-    _ASSERT && console.assert(Number.isFinite(def.linearDamping) && def.linearDamping >= 0.0);
+    if (_ASSERT) console.assert(Vec2.isValid(def.position));
+    if (_ASSERT) console.assert(Vec2.isValid(def.linearVelocity));
+    if (_ASSERT) console.assert(Number.isFinite(def.angle));
+    if (_ASSERT) console.assert(Number.isFinite(def.angularVelocity));
+    if (_ASSERT) console.assert(Number.isFinite(def.angularDamping) && def.angularDamping >= 0.0);
+    if (_ASSERT) console.assert(Number.isFinite(def.linearDamping) && def.linearDamping >= 0.0);
 
     this.m_world = world;
 
@@ -299,6 +286,10 @@ export class Body {
     this.m_next = null;
 
     this.m_destroyed = false;
+
+    if (typeof def.style === "object" && def.style !== null) {
+      this.style = def.style;
+    }
   }
 
   /** @internal */
@@ -407,10 +398,12 @@ export class Body {
   /**
    * Set the type of the body to "static", "kinematic" or "dynamic".
    * @param type The type of the body.
+   * 
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   setType(type: BodyType): void {
-    _ASSERT && console.assert(type === STATIC || type === KINEMATIC || type === DYNAMIC);
-    _ASSERT && console.assert(this.isWorldLocked() == false);
+    if (_ASSERT) console.assert(type === STATIC || type === KINEMATIC || type === DYNAMIC);
+    if (_ASSERT) console.assert(this.isWorldLocked() == false);
 
     if (this.isWorldLocked() == true) {
       return;
@@ -515,9 +508,11 @@ export class Body {
    * in collisions, ray-casts, or queries. Joints connected to an inactive body
    * are implicitly inactive. An inactive body is still owned by a World object
    * and remains
+   * 
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   setActive(flag: boolean): void {
-    _ASSERT && console.assert(this.isWorldLocked() == false);
+    if (_ASSERT) console.assert(this.isWorldLocked() == false);
 
     if (flag == this.m_activeFlag) {
       return;
@@ -581,17 +576,32 @@ export class Body {
    * Set the position of the body's origin and rotation. Manipulating a body's
    * transform may cause non-physical behavior. Note: contacts are updated on the
    * next call to World.step.
+   * 
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    *
    * @param position The world position of the body's local origin.
    * @param angle The world rotation in radians.
    */
-  setTransform(position: Vec2Value, angle: number): void {
-    _ASSERT && console.assert(this.isWorldLocked() == false);
+  setTransform(position: Vec2Value, angle: number): void;
+  /**
+   * Set the position of the body's origin and rotation. Manipulating a body's
+   * transform may cause non-physical behavior. Note: contacts are updated on the
+   * next call to World.step.
+   * 
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
+   */
+  setTransform(xf: Transform): void;
+  setTransform(a: Vec2Value | Transform, b?: number): void {
+    if (_ASSERT) console.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
       return;
     }
+    if (typeof b === "number") {
+      this.m_xf.setNum(a as Vec2Value, b);
+    } else {
+      this.m_xf.setTransform(a as TransformValue);
+    }
 
-    this.m_xf.setNum(position, angle);
     // LIQUID_FUN:
     this.m_xf0 = Transform.clone(this.m_xf); // TODO clone necessary?
     this.m_sweep.setTransform(this.m_xf);
@@ -722,7 +732,7 @@ export class Body {
   /**
    * Set the angular velocity.
    *
-   * @param omega The new angular velocity in radians/second.
+   * @param w The new angular velocity in radians/second.
    */
   setAngularVelocity(w: number): void {
     if (this.m_type == STATIC) {
@@ -810,7 +820,7 @@ export class Body {
       return;
     }
 
-    _ASSERT && console.assert(this.isDynamic());
+    if (_ASSERT) console.assert(this.isDynamic());
 
     // Accumulate mass over all fixtures.
     matrix.zeroVec2(localCenter);
@@ -826,14 +836,14 @@ export class Body {
       };
       f.getMassData(massData);
       this.m_mass += massData.mass;
-      matrix.plusScaleVec2(localCenter, massData.mass, massData.center)
+      matrix.plusScaleVec2(localCenter, massData.mass, massData.center);
       this.m_I += massData.I;
     }
 
     // Compute center of mass.
     if (this.m_mass > 0.0) {
       this.m_invMass = 1.0 / this.m_mass;
-      matrix.scaleVec2(localCenter, this.m_invMass, localCenter)
+      matrix.scaleVec2(localCenter, this.m_invMass, localCenter);
 
     } else {
       // Force all dynamic bodies to have a positive mass.
@@ -844,7 +854,7 @@ export class Body {
     if (this.m_I > 0.0 && this.m_fixedRotationFlag == false) {
       // Center the inertia about the center of mass.
       this.m_I -= this.m_mass * matrix.dotVec2(localCenter, localCenter);
-      _ASSERT && console.assert(this.m_I > 0.0);
+      if (_ASSERT) console.assert(this.m_I > 0.0);
       this.m_invI = 1.0 / this.m_I;
 
     } else {
@@ -867,11 +877,13 @@ export class Body {
    * that this changes the center of mass position. Note that creating or
    * destroying fixtures can also alter the mass. This function has no effect if
    * the body isn't dynamic.
+   * 
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    *
    * @param massData The mass properties.
    */
   setMassData(massData: MassData): void {
-    _ASSERT && console.assert(this.isWorldLocked() == false);
+    if (_ASSERT) console.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
       return;
     }
@@ -893,7 +905,7 @@ export class Body {
 
     if (massData.I > 0.0 && this.m_fixedRotationFlag == false) {
       this.m_I = massData.I - this.m_mass * matrix.dotVec2(massData.center, massData.center);
-      _ASSERT && console.assert(this.m_I > 0.0);
+      if (_ASSERT) console.assert(this.m_I > 0.0);
       this.m_invI = 1.0 / this.m_I;
     }
 
@@ -1038,7 +1050,7 @@ export class Body {
 
   /** @internal Used for deserialize. */
   _addFixture(fixture: Fixture): Fixture {
-    _ASSERT && console.assert(this.isWorldLocked() == false);
+    if (_ASSERT) console.assert(this.isWorldLocked() == false);
 
     if (this.isWorldLocked() == true) {
       return null;
@@ -1072,14 +1084,14 @@ export class Body {
    *
    * Contacts are not created until the next time step.
    *
-   * Warning: This function is locked during callbacks.
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   createFixture(def: FixtureDef): Fixture;
   createFixture(shape: Shape, opt?: FixtureOpt): Fixture;
   createFixture(shape: Shape, density?: number): Fixture;
   // tslint:disable-next-line:typedef
   createFixture(shape, fixdef?) {
-    _ASSERT && console.assert(this.isWorldLocked() == false);
+    if (_ASSERT) console.assert(this.isWorldLocked() == false);
 
     if (this.isWorldLocked() == true) {
       return null;
@@ -1096,19 +1108,19 @@ export class Body {
    * mass of the body if the body is dynamic and the fixture has positive density.
    * All fixtures attached to a body are implicitly destroyed when the body is
    * destroyed.
-   *
-   * Warning: This function is locked during callbacks.
+   * 
+   * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    *
    * @param fixture The fixture to be removed.
    */
   destroyFixture(fixture: Fixture): void {
-    _ASSERT && console.assert(this.isWorldLocked() == false);
+    if (_ASSERT) console.assert(this.isWorldLocked() == false);
 
     if (this.isWorldLocked() == true) {
       return;
     }
 
-    _ASSERT && console.assert(fixture.m_body == this);
+    if (_ASSERT) console.assert(fixture.m_body == this);
 
     // Remove the fixture from this body's singly linked list.
     let found = false;
@@ -1129,7 +1141,7 @@ export class Body {
     }
 
     // You tried to remove a shape that is not attached to this body.
-    _ASSERT && console.assert(found);
+    if (_ASSERT) console.assert(found);
 
     // Destroy any contacts associated with the fixture.
     let edge = this.m_contactList;
@@ -1155,7 +1167,7 @@ export class Body {
     fixture.m_body = null;
     fixture.m_next = null;
 
-    this.m_world.publish('remove-fixture', fixture);
+    this.m_world.publish("remove-fixture", fixture);
 
     // Reset the mass data.
     this.resetMassData();

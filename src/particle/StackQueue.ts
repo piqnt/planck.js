@@ -17,7 +17,7 @@
 */
 
 
-const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 // TODO proper implementation
 

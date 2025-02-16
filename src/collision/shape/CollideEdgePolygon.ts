@@ -1,48 +1,33 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from '../../common/Matrix';
-import { TransformValue } from '../../common/Transform';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { SettingsInternal as Settings } from '../../Settings';
-import { Contact } from '../../dynamics/Contact';
-import { Manifold, clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from '../Manifold';
-import { EdgeShape } from './EdgeShape';
-import { ChainShape } from './ChainShape';
-import { PolygonShape } from './PolygonShape';
+import * as matrix from "../../common/Matrix";
+import { TransformValue } from "../../common/Transform";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { SettingsInternal as Settings } from "../../Settings";
+import { Contact } from "../../dynamics/Contact";
+import { Manifold, clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from "../Manifold";
+import { EdgeShape } from "./EdgeShape";
+import { ChainShape } from "./ChainShape";
+import { PolygonShape } from "./PolygonShape";
 import { Fixture } from "../../dynamics/Fixture";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_min = Math.min;
 
 Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
 
 /** @internal */ function EdgePolygonContact(manifold: Manifold, xfA: TransformValue, fA: Fixture, indexA: number, xfB: TransformValue, fB: Fixture, indexB: number): void {
-  _ASSERT && console.assert(fA.getType() == EdgeShape.TYPE);
-  _ASSERT && console.assert(fB.getType() == PolygonShape.TYPE);
+  if (_ASSERT) console.assert(fA.getType() == EdgeShape.TYPE);
+  if (_ASSERT) console.assert(fB.getType() == PolygonShape.TYPE);
 
   CollideEdgePolygon(manifold, fA.getShape() as EdgeShape, xfA, fB.getShape() as PolygonShape, xfB);
 }
@@ -51,8 +36,8 @@ Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
 /** @internal */ const edge_reuse = new EdgeShape();
 
 /** @internal */ function ChainPolygonContact(manifold: Manifold, xfA: TransformValue, fA: Fixture, indexA: number, xfB: TransformValue, fB: Fixture, indexB: number): void {
-  _ASSERT && console.assert(fA.getType() == ChainShape.TYPE);
-  _ASSERT && console.assert(fB.getType() == PolygonShape.TYPE);
+  if (_ASSERT) console.assert(fA.getType() == ChainShape.TYPE);
+  if (_ASSERT) console.assert(fB.getType() == PolygonShape.TYPE);
 
   const chain = fA.getShape() as ChainShape;
   chain.getChildEdge(edge_reuse, indexA);
@@ -111,11 +96,11 @@ Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
   readonly sideNormal2 = matrix.vec2(0 ,0);
   sideOffset2: number;
   recycle() {
-    matrix.zeroVec2(this.v1)
-    matrix.zeroVec2(this.v2)
-    matrix.zeroVec2(this.normal)
-    matrix.zeroVec2(this.sideNormal1)
-    matrix.zeroVec2(this.sideNormal2)
+    matrix.zeroVec2(this.v1);
+    matrix.zeroVec2(this.v2);
+    matrix.zeroVec2(this.normal);
+    matrix.zeroVec2(this.sideNormal1);
+    matrix.zeroVec2(this.sideNormal2);
   }
 }
 
@@ -172,7 +157,7 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
 
   matrix.subVec2(edge1, v2, v1);
   matrix.normalizeVec2(edge1);
-  matrix.setVec2(normal1, edge1.y, -edge1.x)
+  matrix.setVec2(normal1, edge1.y, -edge1.x);
   const offset1 = matrix.dotVec2(normal1, centroidB) - matrix.dotVec2(normal1, v1);
   let offset0 = 0.0;
   let offset2 = 0.0;
@@ -406,7 +391,8 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
     primaryAxis = edgeAxis;
   }
 
-  ie[0].recycle(), ie[1].recycle();
+  ie[0].recycle();
+  ie[1].recycle();
 
   if (primaryAxis.type == EPAxisType.e_edgeA) {
     manifold.type = ManifoldType.e_faceA;
@@ -467,8 +453,10 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
   rf.sideOffset2 = matrix.dotVec2(rf.sideNormal2, rf.v2);
 
   // Clip incident edge against extruded edge1 side edges.
-  clipPoints1[0].recycle(), clipPoints1[1].recycle();
-  clipPoints2[0].recycle(), clipPoints2[1].recycle();
+  clipPoints1[0].recycle();
+  clipPoints1[1].recycle();
+  clipPoints2[0].recycle();
+  clipPoints2[1].recycle();
 
   // Clip to box side 1
   const np1 = clipSegmentToLine(clipPoints1, ie, rf.sideNormal1, rf.sideOffset1, rf.i1);
@@ -514,4 +502,4 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
   }
 
   manifold.pointCount = pointCount;
-}
+};

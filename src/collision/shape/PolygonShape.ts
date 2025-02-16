@@ -1,42 +1,26 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
- * Copyright (c) 2013 Google, Inc.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba, Google, Inc.
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from '../../common/Matrix';
-import type { MassData } from '../../dynamics/Body';
-import { RayCastOutput, RayCastInput, AABBValue } from '../AABB';
-import { DistanceProxy } from '../Distance';
-import { EPSILON } from '../../common/Math';
-import { Transform, TransformValue } from '../../common/Transform';
-import { Rot } from '../../common/Rot';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { SettingsInternal as Settings } from '../../Settings';
-import { Shape } from '../Shape';
+import * as matrix from "../../common/Matrix";
+import type { MassData } from "../../dynamics/Body";
+import { RayCastOutput, RayCastInput, AABBValue } from "../AABB";
+import { DistanceProxy } from "../Distance";
+import { EPSILON } from "../../common/Math";
+import { Transform, TransformValue } from "../../common/Transform";
+import { Rot } from "../../common/Rot";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { SettingsInternal as Settings } from "../../Settings";
+import { Shape } from "../Shape";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
 
@@ -47,21 +31,28 @@ import { Shape } from '../Shape';
 /** @internal */ const center = matrix.vec2(0, 0);
 /** @internal */ const s = matrix.vec2(0, 0);
 
+declare module "./PolygonShape" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function PolygonShape(vertices?: Vec2Value[]): PolygonShape;
+}
+
 /**
  * A convex polygon. It is assumed that the interior of the polygon is to the
  * left of each edge. Polygons have a maximum number of vertices equal to
  * Settings.maxPolygonVertices. In most cases you should not need many vertices
  * for a convex polygon. extends Shape
  */
+// @ts-expect-error
 export class PolygonShape extends Shape {
-  static TYPE = 'polygon' as const;
-  m_type: 'polygon';
+  static TYPE = "polygon" as const;
+  /** @hidden */ m_type: "polygon";
 
-  m_centroid: Vec2;
-  m_vertices: Vec2[]; // [Settings.maxPolygonVertices]
-  m_normals: Vec2[]; // [Settings.maxPolygonVertices]
-  m_count: number;
-  m_radius: number;
+  /** @hidden */ m_centroid: Vec2;
+  /** @hidden */ m_vertices: Vec2[]; // [Settings.maxPolygonVertices]
+  /** @hidden */ m_normals: Vec2[]; // [Settings.maxPolygonVertices]
+  /** @hidden */ m_count: number;
+  /** @hidden */ m_radius: number;
 
   constructor(vertices?: Vec2Value[]) {
     // @ts-ignore
@@ -105,7 +96,7 @@ export class PolygonShape extends Shape {
     return shape;
   }
 
-  getType(): 'polygon' {
+  getType(): "polygon" {
     return this.m_type;
   }
 
@@ -156,7 +147,7 @@ export class PolygonShape extends Shape {
    * lead to poor stacking behavior.
    */
   _set(vertices: Vec2Value[]): void {
-    _ASSERT && console.assert(3 <= vertices.length && vertices.length <= Settings.maxPolygonVertices);
+    if (_ASSERT) console.assert(3 <= vertices.length && vertices.length <= Settings.maxPolygonVertices);
     if (vertices.length < 3) {
       this._setAsBox(1.0, 1.0);
       return;
@@ -185,7 +176,7 @@ export class PolygonShape extends Shape {
     n = ps.length;
     if (n < 3) {
       // Polygon is degenerate.
-      _ASSERT && console.assert(false);
+      if (_ASSERT) console.assert(false);
       this._setAsBox(1.0, 1.0);
       return;
     }
@@ -209,7 +200,7 @@ export class PolygonShape extends Shape {
     let ih = i0;
 
     while (true) {
-      _ASSERT && console.assert(m < Settings.maxPolygonVertices);
+      if (_ASSERT) console.assert(m < Settings.maxPolygonVertices);
       hull[m] = ih;
 
       let ie = 0;
@@ -243,7 +234,7 @@ export class PolygonShape extends Shape {
 
     if (m < 3) {
       // Polygon is degenerate.
-      _ASSERT && console.assert(false);
+      if (_ASSERT) console.assert(false);
       this._setAsBox(1.0, 1.0);
       return;
     }
@@ -261,7 +252,7 @@ export class PolygonShape extends Shape {
       const i1 = i;
       const i2 = i + 1 < m ? i + 1 : 0;
       const edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
-      _ASSERT && console.assert(edge.lengthSquared() > EPSILON * EPSILON);
+      if (_ASSERT) console.assert(edge.lengthSquared() > EPSILON * EPSILON);
       this.m_normals[i] = Vec2.crossVec2Num(edge, 1.0);
       this.m_normals[i].normalize();
     }
@@ -308,7 +299,7 @@ export class PolygonShape extends Shape {
    * @param xf The shape world transform.
    * @param p A point in world coordinates.
    */
-  testPoint(xf: TransformValue, p: Vec2): boolean {
+  testPoint(xf: TransformValue, p: Vec2Value): boolean {
     const pLocal = matrix.detransformVec2(temp, xf, p);
 
     for (let i = 0; i < this.m_count; ++i) {
@@ -422,7 +413,7 @@ export class PolygonShape extends Shape {
       }
     }
 
-    _ASSERT && console.assert(0.0 <= lower && lower <= input.maxFraction);
+    if (_ASSERT) console.assert(0.0 <= lower && lower <= input.maxFraction);
 
     if (index >= 0) {
       output.fraction = lower;
@@ -490,7 +481,7 @@ export class PolygonShape extends Shape {
     //
     // The rest of the derivation is handled by computer algebra.
 
-    _ASSERT && console.assert(this.m_count >= 3);
+    if (_ASSERT) console.assert(this.m_count >= 3);
 
     matrix.zeroVec2(center);
     let area = 0.0;
@@ -541,7 +532,7 @@ export class PolygonShape extends Shape {
     massData.mass = density * area;
 
     // Center of mass
-    _ASSERT && console.assert(area > EPSILON);
+    if (_ASSERT) console.assert(area > EPSILON);
     matrix.scaleVec2(center, 1.0 / area, center);
     matrix.addVec2(massData.center, center, s);
 
@@ -589,7 +580,7 @@ export class PolygonShape extends Shape {
 }
 
 /** @internal */ function computeCentroid(vs: Vec2[], count: number): Vec2 {
-  _ASSERT && console.assert(count >= 3);
+  if (_ASSERT) console.assert(count >= 3);
 
   const c = Vec2.zero();
   let area = 0.0;
@@ -627,7 +618,7 @@ export class PolygonShape extends Shape {
   }
 
   // Centroid
-  _ASSERT && console.assert(area > EPSILON);
+  if (_ASSERT) console.assert(area > EPSILON);
   c.mul(1.0 / area);
   return c;
 }

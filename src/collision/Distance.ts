@@ -1,38 +1,23 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from '../common/Matrix';
-import { SettingsInternal as Settings } from '../Settings';
-import { stats } from '../util/stats';
-import { Shape } from './Shape';
-import { EPSILON } from '../common/Math';
-import { Vec2, Vec2Value } from '../common/Vec2';
-import { Rot } from '../common/Rot';
-import { Transform, TransformValue } from '../common/Transform';
+import * as matrix from "../common/Matrix";
+import { SettingsInternal as Settings } from "../Settings";
+import { stats } from "../util/stats";
+import { Shape } from "./Shape";
+import { EPSILON } from "../common/Math";
+import { Vec2, Vec2Value } from "../common/Vec2";
+import { Rot } from "../common/Rot";
+import { Transform, TransformValue } from "../common/Transform";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_max = Math.max;
 
 
@@ -83,8 +68,8 @@ export class DistanceOutput {
   /** iterations number of GJK iterations used */
   iterations = 0;
   recycle() {
-    matrix.zeroVec2(this.pointA)
-    matrix.zeroVec2(this.pointB)
+    matrix.zeroVec2(this.pointA);
+    matrix.zeroVec2(this.pointB);
     this.distance = 0;
     this.iterations = 0;
   }
@@ -234,7 +219,7 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
       output.distance = 0.0;
     }
   }
-}
+};
 
 /**
  * A distance proxy is used by the GJK algorithm. It encapsulates any shape.
@@ -262,7 +247,7 @@ export class DistanceProxy {
    * Get a vertex by index. Used by Distance.
    */
   getVertex(index: number): Vec2Value {
-    _ASSERT && console.assert(0 <= index && index < this.m_count);
+    if (_ASSERT) console.assert(0 <= index && index < this.m_count);
     return this.m_vertices[index];
   }
 
@@ -295,7 +280,7 @@ export class DistanceProxy {
    */
   set(shape: Shape, index: number): void {
     // TODO remove, use shape instead
-    _ASSERT && console.assert(typeof shape.computeDistanceProxy === 'function');
+    if (_ASSERT) console.assert(typeof shape.computeDistanceProxy === "function");
     shape.computeDistanceProxy(this, index);
   }
 
@@ -329,9 +314,9 @@ class SimplexVertex {
   recycle() {
     this.indexA = 0;
     this.indexB = 0;
-    matrix.zeroVec2(this.wA)
-    matrix.zeroVec2(this.wB)
-    matrix.zeroVec2(this.w)
+    matrix.zeroVec2(this.wA);
+    matrix.zeroVec2(this.wB);
+    matrix.zeroVec2(this.w);
     this.a = 0;
   }
   set(v: SimplexVertex): void {
@@ -385,7 +370,7 @@ class Simplex {
   }
 
   readCache(cache: SimplexCache, proxyA: DistanceProxy, transformA: TransformValue, proxyB: DistanceProxy, transformB: TransformValue): void {
-    _ASSERT && console.assert(cache.count <= 3);
+    if (_ASSERT) console.assert(cache.count <= 3);
 
     // Copy data from cache.
     this.m_count = cache.count;
@@ -457,7 +442,7 @@ class Simplex {
       }
 
       default:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
         return matrix.zeroVec2(searchDirection_reuse);
     }
   }
@@ -468,7 +453,7 @@ class Simplex {
     const v3 = this.m_v3;
     switch (this.m_count) {
       case 0:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
         return matrix.zeroVec2(closestPoint_reuse);
 
       case 1:
@@ -481,7 +466,7 @@ class Simplex {
         return matrix.zeroVec2(closestPoint_reuse);
 
       default:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
         return matrix.zeroVec2(closestPoint_reuse);
     }
   }
@@ -492,7 +477,7 @@ class Simplex {
     const v3 = this.m_v3;
     switch (this.m_count) {
       case 0:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
         break;
 
       case 1:
@@ -511,7 +496,7 @@ class Simplex {
         break;
 
       default:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
         break;
     }
   }
@@ -519,7 +504,7 @@ class Simplex {
   getMetric(): number {
     switch (this.m_count) {
       case 0:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
         return 0.0;
 
       case 1:
@@ -535,7 +520,7 @@ class Simplex {
         );
 
       default:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
         return 0.0;
     }
   }
@@ -554,7 +539,7 @@ class Simplex {
         break;
 
       default:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
     }
   }
 
@@ -743,7 +728,7 @@ export const testOverlap = function (shapeA: Shape, indexA: number, shapeB: Shap
   Distance(output, cache, input);
 
   return output.distance < 10.0 * EPSILON;
-}
+};
 
 // legacy exports
 Distance.testOverlap = testOverlap;
@@ -832,7 +817,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
   const k_maxIters = 20;
   let iter = 0;
   while (iter < k_maxIters && v.length() - sigma > tolerance) {
-    _ASSERT && console.assert(simplex.m_count < 3);
+    if (_ASSERT) console.assert(simplex.m_count < 3);
 
     output.iterations += 1;
 
@@ -889,7 +874,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
         break;
 
       default:
-        _ASSERT && console.assert(false);
+        if (_ASSERT) console.assert(false);
     }
     
     // If we have 3 points, then the origin is in the corresponding triangle.
@@ -925,4 +910,4 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
   output.lambda = lambda;
   output.iterations = iter;
   return true;
-}
+};

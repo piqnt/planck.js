@@ -1,7 +1,40 @@
-node_modules/
-.idea
+# misc
+.DS_Store
+*.pem
 
-**/ignore
-**/ignore.*
+# dependencies
+node_modules
+.pnp
+.pnp.js
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+.env
+
+# testing
 /coverage
 /.nyc_output
+
+# production
+build
+/docs/dist
+
+# next.js
+.next/
+# out/
+
+# vercel
+.vercel
+
+# ide
+.idea/
+.vscode*/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts

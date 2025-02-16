@@ -1,51 +1,46 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
- * Copyright (c) 2013 Google, Inc.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba, Google, Inc.
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from '../../common/Matrix';
-import { EPSILON } from '../../common/Math';
-import { Rot } from '../../common/Rot';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Shape } from '../Shape';
-import { AABBValue, RayCastInput, RayCastOutput } from '../AABB';
-import { Transform, TransformValue } from '../../common/Transform';
-import { MassData } from '../../dynamics/Body';
-import { DistanceProxy } from '../Distance';
+import * as matrix from "../../common/Matrix";
+import { EPSILON } from "../../common/Math";
+import { Rot } from "../../common/Rot";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Shape } from "../Shape";
+import { AABBValue, RayCastInput, RayCastOutput } from "../AABB";
+import { Transform, TransformValue } from "../../common/Transform";
+import { MassData } from "../../dynamics/Body";
+import { DistanceProxy } from "../Distance";
 
 
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_sqrt = Math.sqrt;
 /** @internal */ const math_PI = Math.PI;
 
 /** @internal */ const temp = matrix.vec2(0, 0);
 
-export class CircleShape extends Shape {
-  static TYPE = 'circle' as const;
-  m_type: 'circle';
+declare module "./CircleShape" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function CircleShape(position: Vec2Value, radius?: number): CircleShape;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function CircleShape(radius?: number): CircleShape;
+}
 
-  m_p: Vec2;
-  m_radius: number;
+/** Circle shape. */
+// @ts-expect-error
+export class CircleShape extends Shape {
+  static TYPE = "circle" as const;
+  /** @hidden */ m_type: "circle";
+
+  /** @hidden */ m_p: Vec2;
+  /** @hidden */ m_radius: number;
 
   constructor(position: Vec2Value, radius?: number);
   constructor(radius?: number);
@@ -61,14 +56,14 @@ export class CircleShape extends Shape {
     this.m_p = Vec2.zero();
     this.m_radius = 1;
 
-    if (typeof a === 'object' && Vec2.isValid(a)) {
+    if (typeof a === "object" && Vec2.isValid(a)) {
       this.m_p.setVec2(a);
 
-      if (typeof b === 'number') {
+      if (typeof b === "number") {
         this.m_radius = b;
       }
 
-    } else if (typeof a === 'number') {
+    } else if (typeof a === "number") {
       this.m_radius = a;
     }
   }
@@ -93,7 +88,7 @@ export class CircleShape extends Shape {
     // noop
   }
 
-  getType(): 'circle' {
+  getType(): "circle" {
     return this.m_type;
   }
 
@@ -133,7 +128,7 @@ export class CircleShape extends Shape {
    * @param p A point in world coordinates.
    */
   testPoint(xf: TransformValue, p: Vec2Value): boolean {
-    const center = matrix.transformVec2(temp, xf, this.m_p)
+    const center = matrix.transformVec2(temp, xf, this.m_p);
     return matrix.distSqrVec2(p, center) <= this.m_radius * this.m_radius;
   }
 

@@ -1,33 +1,18 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import { EPSILON } from '../common/Math';
-import { Vec2, Vec2Value } from '../common/Vec2';
+import { EPSILON } from "../common/Math";
+import { Vec2, Vec2Value } from "../common/Vec2";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
 
@@ -35,8 +20,8 @@ import { Vec2, Vec2Value } from '../common/Vec2';
  * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
  */
 export interface RayCastInput {
-  p1: Vec2;
-  p2: Vec2;
+  p1: Vec2Value;
+  p2: Vec2Value;
   maxFraction: number;
 }
 
@@ -51,11 +36,20 @@ export interface RayCastOutput {
   fraction: number;
 }
 
+/** Axis-aligned bounding box */
 export interface AABBValue {
   lowerBound: Vec2Value;
   upperBound: Vec2Value;
 }
 
+declare module "./AABB" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function AABB(lower?: Vec2Value, upper?: Vec2Value): AABB;
+}
+
+/** Axis-aligned bounding box */
+// @ts-expect-error
 export class AABB {
   lowerBound: Vec2;
   upperBound: Vec2;
@@ -68,12 +62,12 @@ export class AABB {
     this.lowerBound = Vec2.zero();
     this.upperBound = Vec2.zero();
 
-    if (typeof lower === 'object') {
+    if (typeof lower === "object") {
       this.lowerBound.setVec2(lower);
     }
-    if (typeof upper === 'object') {
+    if (typeof upper === "object") {
       this.upperBound.setVec2(upper);
-    } else if (typeof lower === 'object') {
+    } else if (typeof lower === "object") {
       this.upperBound.setVec2(lower);
     }
   }
@@ -86,14 +80,14 @@ export class AABB {
   }
 
   static isValid(obj: any): boolean {
-    if (obj === null || typeof obj === 'undefined') {
+    if (obj === null || typeof obj === "undefined") {
       return false;
     }
     return Vec2.isValid(obj.lowerBound) && Vec2.isValid(obj.upperBound) && Vec2.sub(obj.upperBound, obj.lowerBound).lengthSquared() >= 0;
   }
 
   static assert(o: any): void {
-    _ASSERT && console.assert(!AABB.isValid(o), 'Invalid AABB!', o);
+    if (_ASSERT) console.assert(!AABB.isValid(o), "Invalid AABB!", o);
   }
 
   /**
@@ -211,7 +205,7 @@ export class AABB {
 
     const normal = Vec2.zero();
 
-    for (let f: 'x' | 'y' = 'x'; f !== null; f = (f === 'x' ? 'y' : null)) {
+    for (let f: "x" | "y" = "x"; f !== null; f = (f === "x" ? "y" : null)) {
       if (absD.x < EPSILON) {
         // Parallel.
         if (p[f] < this.lowerBound[f] || this.upperBound[f] < p[f]) {

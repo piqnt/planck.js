@@ -1,40 +1,25 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import { options } from '../../util/options';
-import { EPSILON } from '../../common/Math';
-import { Vec2, Vec2Value } from '../../common/Vec2';
-import { Mat22 } from '../../common/Mat22';
-import { Rot } from '../../common/Rot';
-import { Transform } from '../../common/Transform';
-import { Joint, JointOpt, JointDef } from '../Joint';
-import { Body } from '../Body';
+import { options } from "../../util/options";
+import { EPSILON } from "../../common/Math";
+import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Mat22 } from "../../common/Mat22";
+import { Rot } from "../../common/Rot";
+import { Transform } from "../../common/Transform";
+import { Joint, JointOpt, JointDef } from "../Joint";
+import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === 'undefined' ? false : CONSTRUCTOR_FACTORY;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_PI = Math.PI;
 
 
@@ -78,6 +63,15 @@ export interface MouseJointDef extends JointDef, MouseJointOpt {
   dampingRatio : 0.7
 };
 
+declare module "./MouseJoint" {
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function MouseJoint(def: MouseJointDef): MouseJoint;
+  /** @hidden @deprecated Use new keyword. */
+  // @ts-expect-error
+  function MouseJoint(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2Value): MouseJoint;
+}
+
 /**
  * A mouse joint is used to make a point on a body track a specified world
  * point. This a soft constraint with a maximum force. This allows the
@@ -90,10 +84,11 @@ export interface MouseJointDef extends JointDef, MouseJointOpt {
  * be used in the testbed. If you want to learn how to use the mouse joint, look
  * at the testbed.
  */
+// @ts-expect-error
 export class MouseJoint extends Joint {
-  static TYPE = 'mouse-joint' as const;
+  static TYPE = "mouse-joint" as const;
 
-  /** @internal */ m_type: 'mouse-joint';
+  /** @internal */ m_type: "mouse-joint";
   /** @internal */ m_targetA: Vec2;
   /** @internal */ m_localAnchorB: Vec2;
   /** @internal */ m_maxForce: number;
@@ -111,7 +106,7 @@ export class MouseJoint extends Joint {
   /** @internal */ m_C: Vec2;
 
   constructor(def: MouseJointDef);
-  constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2Value);
+  constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target?: Vec2Value);
   constructor(def: MouseJointDef, bodyA?: Body, bodyB?: Body, target?: Vec2Value) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof MouseJoint)) {
@@ -125,9 +120,9 @@ export class MouseJoint extends Joint {
 
     this.m_type = MouseJoint.TYPE;
 
-    _ASSERT && console.assert(Number.isFinite(def.maxForce) && def.maxForce >= 0.0);
-    _ASSERT && console.assert(Number.isFinite(def.frequencyHz) && def.frequencyHz >= 0.0);
-    _ASSERT && console.assert(Number.isFinite(def.dampingRatio) && def.dampingRatio >= 0.0);
+    if (_ASSERT) console.assert(Number.isFinite(def.maxForce) && def.maxForce >= 0.0);
+    if (_ASSERT) console.assert(Number.isFinite(def.frequencyHz) && def.frequencyHz >= 0.0);
+    if (_ASSERT) console.assert(Number.isFinite(def.dampingRatio) && def.dampingRatio >= 0.0);
 
     if (Vec2.isValid(target)) {
       this.m_targetA = Vec2.clone(target);
@@ -328,7 +323,7 @@ export class MouseJoint extends Joint {
     // gamma has units of inverse mass.
     // beta has units of inverse time.
     const h = step.dt;
-    _ASSERT && console.assert(d + h * k > EPSILON);
+    if (_ASSERT) console.assert(d + h * k > EPSILON);
     this.m_gamma = h * (d + h * k);
     if (this.m_gamma != 0.0) {
       this.m_gamma = 1.0 / this.m_gamma;

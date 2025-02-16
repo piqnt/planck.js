@@ -1,40 +1,24 @@
 /*
  * Planck.js
- * The MIT License
- * Copyright (c) 2021 Erin Catto, Ali Shakiba
- * Copyright (c) 2013 Google, Inc.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * Copyright (c) Erin Catto, Ali Shakiba, Google, Inc.
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from '../common/Matrix';
-import { options } from '../util/options';
-import { Vec2, Vec2Value } from '../common/Vec2';
-import { AABB, RayCastInput, RayCastOutput } from '../collision/AABB';
-import { Shape, ShapeType } from '../collision/Shape';
+import * as matrix from "../common/Matrix";
+import { options } from "../util/options";
+import { Vec2, Vec2Value } from "../common/Vec2";
+import { AABB, RayCastInput, RayCastOutput } from "../collision/AABB";
+import { Shape, ShapeType } from "../collision/Shape";
 import { Body, MassData } from "./Body";
 import { BroadPhase } from "../collision/BroadPhase";
 import { TransformValue } from "../common/Transform";
-import { Style } from '../util/Testbed';
+import { Style } from "../util/Testbed";
 
 
-/** @internal */ const _ASSERT = typeof ASSERT === 'undefined' ? false : ASSERT;
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 /** @internal */ const synchronize_aabb1 = new AABB();
 /** @internal */ const synchronize_aabb2 = new AABB();
@@ -76,6 +60,9 @@ export interface FixtureOpt {
    * Collision category bit or bits that this fixture accept for collision.
    */
   filterMaskBits?: number;
+
+  /** Styling for dev-tools. */
+  style?: Style;
 }
 
 export interface FixtureDef extends FixtureOpt {
@@ -106,7 +93,7 @@ export class FixtureProxy {
     this.aabb = new AABB();
     this.fixture = fixture;
     this.childIndex = childIndex;
-    this.proxyId;
+    // this.proxyId;
   }
 }
 
@@ -148,7 +135,7 @@ export class Fixture {
       def = shape;
       shape = shape.shape;
 
-    } else if (typeof def === 'number') {
+    } else if (typeof def === "number") {
       def = {density : def};
     }
 
@@ -181,6 +168,10 @@ export class Fixture {
     }
 
     this.m_userData = def.userData;
+
+    if (typeof def.style === "object" && def.style !== null) {
+      this.style = def.style;
+    }
   }
 
   /** @hidden Re-setup fixture. */
@@ -306,7 +297,7 @@ export class Fixture {
    * mass of the body. You must call Body.resetMassData to update the body's mass.
    */
   setDensity(density: number): void {
-    _ASSERT && console.assert(Number.isFinite(density) && density >= 0.0);
+    if (_ASSERT) console.assert(Number.isFinite(density) && density >= 0.0);
     this.m_density = density;
   }
 
@@ -381,7 +372,7 @@ export class Fixture {
    * more accurate AABB, compute it using the shape and the body transform.
    */
   getAABB(childIndex: number): AABB {
-    _ASSERT && console.assert(0 <= childIndex && childIndex < this.m_proxies.length);
+    if (_ASSERT) console.assert(0 <= childIndex && childIndex < this.m_proxies.length);
     return this.m_proxies[childIndex].aabb;
   }
 
@@ -389,7 +380,7 @@ export class Fixture {
    * These support body activation/deactivation.
    */
   createProxies(broadPhase: BroadPhase, xf: TransformValue): void {
-    _ASSERT && console.assert(this.m_proxyCount == 0);
+    if (_ASSERT) console.assert(this.m_proxyCount == 0);
 
     // Create proxies in the broad-phase.
     this.m_proxyCount = this.m_shape.getChildCount();
