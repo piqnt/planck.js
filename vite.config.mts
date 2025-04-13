@@ -79,26 +79,8 @@ function serveConfig(configEnv: ConfigEnv) {
       CONSTRUCTOR_FACTORY: "false",
       _CONSTRUCTOR_FACTORY: "false",
     },
-    plugins: [
-      TestbedPlugin,
-    ]
   });
 }
-
-/** A plugin to serve the testbed for /example/* request  */
-const TestbedPlugin: Plugin = {
-  name: "testbed-plugin",
-  configureServer(server) {
-    server.middlewares.use(function (req, res, next) {
-      // console.log("middleware", req);
-      // todo: check if the url + ".js" or ".ts" is a file
-      if (req.originalUrl && /^\/example\/(\w|-)+$/.test(req.originalUrl)) {
-        req.url = "/testbed/";
-      }
-      next();
-    });
-  }
-};
 
 function getLicense() {
   const version = process.env.npm_package_version;
