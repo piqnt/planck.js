@@ -166,7 +166,7 @@ the body.
 
 Contacts are not created until the next time step.
 
-Warning: This function is locked during callbacks.
+Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 
 ##### Parameters
 
@@ -216,7 +216,7 @@ mass of the body if the body is dynamic and the fixture has positive density.
 All fixtures attached to a body are implicitly destroyed when the body is
 destroyed.
 
-Warning: This function is locked during callbacks.
+Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 
 #### Parameters
 
@@ -687,6 +687,8 @@ in collisions, ray-casts, or queries. Joints connected to an inactive body
 are implicitly inactive. An inactive body is still owned by a World object
 and remains
 
+Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
+
 #### Parameters
 
 • **flag**: `boolean`
@@ -870,6 +872,8 @@ that this changes the center of mass position. Note that creating or
 destroying fixtures can also alter the mass. This function has no effect if
 the body isn't dynamic.
 
+Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
+
 #### Parameters
 
 • **massData**: [`MassData`](/api/interfaces/MassData)
@@ -932,6 +936,8 @@ Set the position of the body's origin and rotation. Manipulating a body's
 transform may cause non-physical behavior. Note: contacts are updated on the
 next call to World.step.
 
+Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
+
 ##### Parameters
 
 • **position**: [`Vec2Value`](/api/interfaces/Vec2Value)
@@ -954,6 +960,8 @@ Set the position of the body's origin and rotation. Manipulating a body's
 transform may cause non-physical behavior. Note: contacts are updated on the
 next call to World.step.
 
+Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
+
 ##### Parameters
 
 • **xf**: [`Transform`](/api/classes/Transform)
@@ -975,6 +983,8 @@ Set the type of the body to "static", "kinematic" or "dynamic".
 • **type**: [`BodyType`](/api/type-aliases/BodyType)
 
 The type of the body.
+
+Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 
 #### Returns
 

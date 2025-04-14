@@ -7,6 +7,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+/** @hidden */
 export interface DataDriverListener<D, R> {
   enter: (d: D) => R | null;
   exit: (d: D, ref: R) => void;
@@ -14,7 +15,7 @@ export interface DataDriverListener<D, R> {
 }
 
 /**
- * @experimental
+ * @experimental @hidden
  *
  * DataDriver is used it to create, update and destroy physics entities based on game objects.
  */

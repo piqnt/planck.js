@@ -99,6 +99,6 @@
     "change": "changeset",
     "version": "changeset version",
     "publish": "changeset publish",
-    "typedoc": "typedoc --options typedoc.json && mv ./docs/pages/api/README.md ./docs/pages/api/index.md && ./node_modules/.bin/replace-in-files ./docs/pages/api/* --string '.md' --replacement ''"
+    "typedoc": "typedoc --options typedoc.json && mv ./docs/pages/api/README.md ./docs/pages/api/index.md && replace-in-files ./docs/pages/api/* --string '.md' --replacement ''"
   }
 }

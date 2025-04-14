@@ -52,7 +52,7 @@ See [World.setAutoClearForces](/api/classes/World#setautoclearforces)
 Create a rigid body given a definition. No reference to the definition is
 retained.
 
-Warning: This function is locked during callbacks.
+Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 
 ##### Parameters
 
@@ -115,7 +115,7 @@ Warning: This function is locked during callbacks.
 Create a joint to constrain bodies together. No reference to the definition
 is retained. This may cause the connected bodies to cease colliding.
 
-Warning: This function is locked during callbacks.
+Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 
 #### Type Parameters
 
@@ -165,12 +165,11 @@ Warning: This function is locked during callbacks.
 
 > **destroyBody**(`b`): `boolean`
 
-Destroy a rigid body given a definition. No reference to the definition is
-retained.
+Destroy a body from the world.
 
 Warning: This automatically deletes all associated shapes and joints.
 
-Warning: This function is locked during callbacks.
+Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 
 #### Parameters
 
@@ -186,8 +185,11 @@ Warning: This function is locked during callbacks.
 
 > **destroyJoint**(`joint`): `void`
 
-Destroy a joint. This may cause the connected bodies to begin colliding.
-Warning: This function is locked during callbacks.
+Destroy a joint.
+
+Warning: This may cause the connected bodies to begin colliding.
+
+Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 
 #### Parameters
 
@@ -718,6 +720,22 @@ Called for each fixture found in the query AABB. It may return `false` to termin
 
 ***
 
+### queueUpdate()
+
+> **queueUpdate**(`callback`): `void`
+
+Queue a function to be called after ongoing simulation step. If no simulation is in progress call it immediately.
+
+#### Parameters
+
+• **callback**
+
+#### Returns
+
+`void`
+
+***
+
 ### rayCast()
 
 > **rayCast**(`point1`, `point2`, `callback`): `void`
@@ -854,6 +872,8 @@ position -= newOrigin
 • **newOrigin**: [`Vec2Value`](/api/interfaces/Vec2Value)
 
 The new origin with respect to the old origin
+
+Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
 
 #### Returns
 
