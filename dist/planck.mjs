@@ -1,7 +1,7 @@
 /**
  * Planck.js v1.3.0
  * @license The MIT license
- * @copyright Copyright (c) 2024 Erin Catto, Ali Shakiba
+ * @copyright Copyright (c) 2025 Erin Catto, Ali Shakiba
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -10850,24 +10850,6 @@ var Testbed = (
   /** @class */
   function() {
     function Testbed2() {
-      this.width = 80;
-      this.height = 60;
-      this.x = 0;
-      this.y = -10;
-      this.scaleY = -1;
-      this.hz = 60;
-      this.speed = 1;
-      this.background = "#222222";
-      this.activeKeys = {};
-      this.step = function(dt, t) {
-        return;
-      };
-      this.keydown = function(keyCode, label) {
-        return;
-      };
-      this.keyup = function(keyCode, label) {
-        return;
-      };
     }
     Testbed2.mount = function(options2) {
       throw new Error("Not implemented");
@@ -10876,12 +10858,6 @@ var Testbed = (
       var testbed2 = Testbed2.mount();
       testbed2.start(world);
       return testbed2;
-    };
-    Testbed2.prototype.color = function(r, g, b2) {
-      r = r * 256 | 0;
-      g = g * 256 | 0;
-      b2 = b2 * 256 | 0;
-      return "rgb(" + r + ", " + g + ", " + b2 + ")";
     };
     return Testbed2;
   }()

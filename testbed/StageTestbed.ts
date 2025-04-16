@@ -5,7 +5,7 @@ import type { Joint } from "../src/dynamics/Joint";
 import type { Fixture } from "../src/dynamics/Fixture";
 import type { Body } from "../src/dynamics/Body";
 import type { AABBValue } from "../src/collision/AABB";
-import { Testbed } from "../src/util/Testbed";
+import { ActiveKeys, Testbed, TestbedInterface } from "../src/util/Testbed";
 import { MouseJoint } from "../src/dynamics/joint/MouseJoint";
 import { WorldComponent, WorldDragEnd, WorldDragMove, WorldDragStart } from "./world-view";
 
@@ -78,7 +78,56 @@ Testbed.mount = () => {
 };
 
 /** @internal */
-export class StageTestbed extends Testbed {
+export class StageTestbed implements TestbedInterface {
+
+  /** World viewbox width. */
+  width: number = 80;
+
+  /** World viewbox height. */
+  height: number = 60;
+
+  /** World viewbox center vertical offset. */
+  x: number = 0;
+
+  /** World viewbox center horizontal offset. */
+  y: number = -10;
+
+  /** @hidden */
+  scaleY: number = -1;
+
+  /** World simulation step frequency */
+  hz: number = 60;
+
+  /** World simulation speed, default is 1 */
+  speed: number = 1;
+
+  background: string = "#222222";
+
+  mouseForce?: number;
+  activeKeys: ActiveKeys = {};
+
+  /** callback, to be implemented by user */
+  step = (dt: number, t: number): void => {
+    return;
+  };
+
+  /** callback, to be implemented by user */
+  keydown = (keyCode: number, label: string): void => {
+    return;
+  };
+
+  /** callback, to be implemented by user */
+  keyup = (keyCode: number, label: string): void => {
+    return;
+  };
+
+  color(r: number, g: number, b: number): string {
+    r = r * 256 | 0;
+    g = g * 256 | 0;
+    b = b * 256 | 0;
+    return "rgb(" + r + ", " + g + ", " + b + ")";
+  }
+
   private canvas: HTMLCanvasElement;
   private stage: Stage.Root;
   paused: boolean = false;
@@ -409,7 +458,28 @@ export class StageTestbed extends Testbed {
       ctx.closePath();
       ctx.stroke();
     });
-    this.newDrawHash += "segment";
+    this.newDrawHash += "polygon";
+    for (let i = 1; i < points.length; i++) {
+      this.newDrawHash += points[i].x + "," + points[i].y + ",";
+    }
+    this.newDrawHash += color;
+  }
+
+  drawChain(points: Array<{ x: number; y: number }>, color: string): void {
+    if (!points || !points.length) {
+      return;
+    }
+    this.buffer.push(function (ctx) {
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+      ctx.strokeStyle = color;
+      // ctx.closePath();
+      ctx.stroke();
+    });
+    this.newDrawHash += "chain";
     for (let i = 1; i < points.length; i++) {
       this.newDrawHash += points[i].x + "," + points[i].y + ",";
     }

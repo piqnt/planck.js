@@ -592,17 +592,19 @@ export type ActiveKeys = {
 export type TestbedMountOptions = {
 	[key: string]: any;
 };
-export declare abstract class Testbed {
+export declare class Testbed {
 	/**
 	 * Mounts testbed. Call start with a world to start simulation and rendering.
 	 */
-	static mount(options?: TestbedMountOptions): Testbed;
+	static mount(options?: TestbedMountOptions): TestbedInterface;
 	/**
 	 * Mounts testbed if needed, then starts simulation and rendering.
 	 *
 	 * If you need to customize testbed before starting, first run `const testbed = Testbed.mount()` and then `testbed.start()`.
 	 */
-	static start(world: World): Testbed;
+	static start(world: World): TestbedInterface;
+}
+export interface TestbedInterface {
 	/** World viewbox width. */
 	width: number;
 	/** World viewbox height. */
@@ -621,45 +623,25 @@ export declare abstract class Testbed {
 	mouseForce?: number;
 	activeKeys: ActiveKeys;
 	/** callback, to be implemented by user */
-	step: (dt: number, t: number) => void;
+	step?: (dt: number, t: number) => void;
 	/** callback, to be implemented by user */
-	keydown: (keyCode: number, label: string) => void;
+	keydown?: (keyCode: number, label: string) => void;
 	/** callback, to be implemented by user */
-	keyup: (keyCode: number, label: string) => void;
-	abstract status(name: string, value: any): void;
-	abstract status(value: object | string): void;
-	abstract info(text: string): void;
+	keyup?: (keyCode: number, label: string) => void;
+	status(name: string, value: any): void;
+	status(value: object | string): void;
+	info(text: string): void;
 	color(r: number, g: number, b: number): string;
-	abstract drawPoint(p: {
-		x: number;
-		y: number;
-	}, r: any, color: string): void;
-	abstract drawCircle(p: {
-		x: number;
-		y: number;
-	}, r: number, color: string): void;
-	abstract drawEdge(a: {
-		x: number;
-		y: number;
-	}, b: {
-		x: number;
-		y: number;
-	}, color: string): void;
-	abstract drawSegment(a: {
-		x: number;
-		y: number;
-	}, b: {
-		x: number;
-		y: number;
-	}, color: string): void;
-	abstract drawPolygon(points: Array<{
-		x: number;
-		y: number;
-	}>, color: string): void;
-	abstract drawAABB(aabb: AABBValue, color: string): void;
-	abstract start(world: World): void;
-	abstract findOne(query: string): (Body$1 | Joint | Fixture | null);
-	abstract findAll(query: string): (Body$1 | Joint | Fixture)[];
+	drawPoint(p: Vec2Value, r: any, color: string): void;
+	drawCircle(p: Vec2Value, r: number, color: string): void;
+	drawEdge(a: Vec2Value, b: Vec2Value, color: string): void;
+	drawSegment(a: Vec2Value, b: Vec2Value, color: string): void;
+	drawPolygon(points: Array<Vec2Value>, color: string): void;
+	drawChain(points: Array<Vec2Value>, color: string): void;
+	drawAABB(aabb: AABBValue, color: string): void;
+	start(world: World): void;
+	findOne(query: string): Body$1 | Joint | Fixture | null;
+	findAll(query: string): (Body$1 | Joint | Fixture)[];
 }
 export type TestbedFactoryOptions = string | TestbedMountOptions;
 /** @deprecated */
@@ -2680,10 +2662,10 @@ export declare const CollideCircles: (manifold: Manifold, circleA: CircleShape, 
 export declare const CollideEdgeCircle: (manifold: Manifold, edgeA: EdgeShape, xfA: TransformValue, circleB: CircleShape, xfB: TransformValue) => void;
 /**
  *
- * Find edge normal of max separation on A - return if separating axis is found<br>
- * Find edge normal of max separation on B - return if separation axis is found<br>
- * Choose reference edge as min(minA, minB)<br>
- * Find incident edge<br>
+ * Find edge normal of max separation on A - return if separating axis is found
+ * Find edge normal of max separation on B - return if separation axis is found
+ * Choose reference edge as min(minA, minB)
+ * Find incident edge
  * Clip
  *
  * The normal points from 1 to 2
@@ -4223,13 +4205,14 @@ export declare const internal: {
 		toString(newline?: string): string;
 	};
 };
+/** @hidden */
 export interface DataDriverListener<D, R> {
 	enter: (d: D) => R | null;
 	exit: (d: D, ref: R) => void;
 	update: (d: D, ref: R) => void;
 }
 /**
- * @experimental
+ * @experimental @hidden
  *
  * DataDriver is used it to create, update and destroy physics entities based on game objects.
  */
