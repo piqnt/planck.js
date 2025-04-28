@@ -146,7 +146,7 @@ world.on('end-contact', function(contact) {
 world.on('pre-solve', function(contact, oldManifold) {
   /* handle pre-solve event */
 });
-world.on('pre-solve', function(contact, contactImpulse) {
+world.on('post-solve', function(contact, contactImpulse) {
   /* handle post-solve event */
 });
 ```
