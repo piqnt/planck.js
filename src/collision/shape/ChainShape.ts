@@ -17,7 +17,6 @@ import { SettingsInternal as Settings } from "../../Settings";
 import { Shape } from "../Shape";
 import { EdgeShape } from "./EdgeShape";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 

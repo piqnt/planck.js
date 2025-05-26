@@ -9,14 +9,12 @@
 
 import { clamp, EPSILON } from "./Math";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_sqrt = Math.sqrt;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
-
 
 /** 2D vector */
 export interface Vec2Value {
@@ -67,7 +65,7 @@ export class Vec2 {
   _serialize(): object {
     return {
       x: this.x,
-      y: this.y
+      y: this.y,
     };
   }
 
@@ -160,7 +158,7 @@ export class Vec2 {
    *
    * @returns this
    */
-   setNum(x: number, y: number) {
+  setNum(x: number, y: number) {
     if (_ASSERT) console.assert(Number.isFinite(x));
     if (_ASSERT) console.assert(Number.isFinite(y));
     this.x = x;
@@ -277,7 +275,8 @@ export class Vec2 {
       return this.subCombine(a, v, b, w);
     } else {
       return this.subMul(a, v);
-    }}
+    }
+  }
 
   /**
    * Subtract linear combination of v and w: `a * v + b * w`
@@ -414,7 +413,7 @@ export class Vec2 {
   static areEqual(v: Vec2Value, w: Vec2Value): boolean {
     if (_ASSERT) Vec2.assert(v);
     if (_ASSERT) Vec2.assert(w);
-    return v === w || typeof w === "object" && w !== null && v.x === w.x && v.y === w.y;
+    return v === w || (typeof w === "object" && w !== null && v.x === w.x && v.y === w.y);
   }
 
   /**
@@ -443,12 +442,10 @@ export class Vec2 {
       if (_ASSERT) Vec2.assert(v);
       if (_ASSERT) console.assert(Number.isFinite(w));
       return Vec2.neo(w * v.y, -w * v.x);
-
     } else if (typeof v === "number") {
       if (_ASSERT) console.assert(Number.isFinite(v));
       if (_ASSERT) Vec2.assert(w);
       return Vec2.neo(-v * w.y, v * w.x);
-
     } else {
       if (_ASSERT) Vec2.assert(v);
       if (_ASSERT) Vec2.assert(w);
@@ -486,7 +483,6 @@ export class Vec2 {
       if (_ASSERT) Vec2.assert(v);
       if (_ASSERT) console.assert(Number.isFinite(w));
       return Vec2.neo(w * v.y + a.x, -w * v.x + a.y);
-
     } else if (typeof v === "number") {
       if (_ASSERT) console.assert(Number.isFinite(v));
       if (_ASSERT) Vec2.assert(w);
@@ -546,7 +542,6 @@ export class Vec2 {
       if (_ASSERT) Vec2.assert(a);
       if (_ASSERT) console.assert(Number.isFinite(b));
       return Vec2.neo(a.x * b, a.y * b);
-
     } else if (typeof b === "object") {
       if (_ASSERT) console.assert(Number.isFinite(a));
       if (_ASSERT) Vec2.assert(b);
@@ -620,14 +615,14 @@ export class Vec2 {
   static clampVec2(v: Vec2Value, min?: Vec2Value, max?: Vec2Value): Vec2Value {
     return {
       x: clamp(v.x, min?.x, max?.x),
-      y: clamp(v.y, min?.y, max?.y)
+      y: clamp(v.y, min?.y, max?.y),
     };
   }
 
   /**  @hidden @deprecated */
   static scaleFn(x: number, y: number) {
     // todo: this was used in examples, remove in the future
-    return function(v: Vec2Value): Vec2 {
+    return function (v: Vec2Value): Vec2 {
       return Vec2.neo(v.x * x, v.y * y);
     };
   }
@@ -635,7 +630,7 @@ export class Vec2 {
   /**  @hidden @deprecated */
   static translateFn(x: number, y: number) {
     // todo: this was used in examples, remove in the future
-    return function(v: Vec2Value): Vec2 {
+    return function (v: Vec2Value): Vec2 {
       return Vec2.neo(v.x + x, v.y + y);
     };
   }

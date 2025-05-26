@@ -1,10 +1,10 @@
 /** @internal */
-export const now = function(): number {
+export const now = function (): number {
   return Date.now();
 };
 
 /** @internal */
-export const diff = function(time: number): number {
+export const diff = function (time: number): number {
   return Date.now() - time;
 };
 

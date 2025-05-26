@@ -18,12 +18,10 @@ import { Distance, DistanceInput, DistanceOutput, SimplexCache } from "../collis
 import { World } from "./World";
 import { Sweep } from "../common/Sweep";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_sqrt = Math.sqrt;
 /** @internal */ const math_min = Math.min;
-
 
 export class TimeStep {
   /** time step */
@@ -455,9 +453,11 @@ export class Solver {
           continue;
         }
 
-        if ((body.m_autoSleepFlag == false)
-          || (body.m_angularVelocity * body.m_angularVelocity > angTolSqr)
-          || (matrix.lengthSqrVec2(body.m_linearVelocity) > linTolSqr)) {
+        if (
+          body.m_autoSleepFlag == false ||
+          body.m_angularVelocity * body.m_angularVelocity > angTolSqr ||
+          matrix.lengthSqrVec2(body.m_linearVelocity) > linTolSqr
+        ) {
           body.m_sleepTime = 0.0;
           minSleepTime = 0.0;
         } else {
@@ -643,7 +643,7 @@ export class Solver {
       minContact.m_islandFlag = true;
 
       // Get contacts on bodyA and bodyB.
-      const bodies = [ bA, bB ];
+      const bodies = [bA, bB];
       for (let i = 0; i < bodies.length; ++i) {
         const body = bodies[i];
         if (body.isDynamic()) {
@@ -748,7 +748,6 @@ export class Solver {
   }
 
   solveIslandTOI(subStep: TimeStep, toiA: Body, toiB: Body): void {
-
     // Initialize the body state.
     for (let i = 0; i < this.m_bodies.length; ++i) {
       const body = this.m_bodies[i];

@@ -6,9 +6,8 @@ import { CircleShape } from "../collision/shape/CircleShape";
 import { TimeOfImpact, TOIInput, TOIOutput } from "../collision/TimeOfImpact";
 import { Distance, SimplexCache, DistanceOutput, DistanceInput } from "../collision/Distance";
 
-describe("CCD", function(): void {
-
-  it("Distance", function(): void {
+describe("CCD", function (): void {
+  it("Distance", function (): void {
     const c1 = new CircleShape(1);
     {
       const input = new DistanceInput();
@@ -19,9 +18,9 @@ describe("CCD", function(): void {
       const cache = new SimplexCache();
       const output = new DistanceOutput();
       Distance(output, cache, input);
-  
+
       expect(output.distance).equal(0);
-      console.log(output);  
+      console.log(output);
     }
 
     {
@@ -29,18 +28,18 @@ describe("CCD", function(): void {
       input.proxyA.set(c1, 0);
       input.proxyB.set(c1, 0);
       input.transformB.p.setNum(2.1, 0);
-  
+
       input.useRadii = true;
       const cache = new SimplexCache();
       const output = new DistanceOutput();
       Distance(output, cache, input);
-  
+
       expect(output.distance).closeTo(0.1, 1e-12);
-      console.log(output);  
+      console.log(output);
     }
   });
 
-  it("TimeOfImpact", function(): void {
+  it("TimeOfImpact", function (): void {
     const c1 = new CircleShape(1);
 
     const input = new TOIInput();

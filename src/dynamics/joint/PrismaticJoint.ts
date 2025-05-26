@@ -19,19 +19,17 @@ import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
 
-
 /** @internal */ enum LimitState {
   inactiveLimit = 0,
   atLowerLimit = 1,
   atUpperLimit = 2,
-  equalLimits = 3,   
+  equalLimits = 3,
 }
 
 /**
@@ -101,12 +99,12 @@ export interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
 }
 
 /** @internal */ const DEFAULTS = {
-  enableLimit : false,
-  lowerTranslation : 0.0,
-  upperTranslation : 0.0,
-  enableMotor : false,
-  maxMotorForce : 0.0,
-  motorSpeed : 0.0
+  enableLimit: false,
+  lowerTranslation: 0.0,
+  upperTranslation: 0.0,
+  enableMotor: false,
+  maxMotorForce: 0.0,
+  motorSpeed: 0.0,
 };
 
 declare module "./PrismaticJoint" {
@@ -115,7 +113,13 @@ declare module "./PrismaticJoint" {
   function PrismaticJoint(def: PrismaticJointDef): PrismaticJoint;
   /** @hidden @deprecated Use new keyword. */
   // @ts-expect-error
-  function PrismaticJoint(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value, axis: Vec2Value): PrismaticJoint;
+  function PrismaticJoint(
+    def: PrismaticJointOpt,
+    bodyA: Body,
+    bodyB: Body,
+    anchor: Vec2Value,
+    axis: Vec2Value,
+  ): PrismaticJoint;
 }
 
 /**
@@ -179,7 +183,9 @@ export class PrismaticJoint extends Joint {
     this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0));
     this.m_localXAxisA.normalize();
     this.m_localYAxisA = Vec2.crossNumVec2(1.0, this.m_localXAxisA);
-    this.m_referenceAngle = Number.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
+    this.m_referenceAngle = Number.isFinite(def.referenceAngle)
+      ? def.referenceAngle
+      : bodyB.getAngle() - bodyA.getAngle();
 
     this.m_impulse = new Vec3();
     this.m_motorMass = 0.0;
@@ -296,7 +302,7 @@ export class PrismaticJoint extends Joint {
 
   /** @hidden */
   static _deserialize(data: any, world: any, restore: any): PrismaticJoint {
-    data = {...data};
+    data = { ...data };
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
     data.localAxisA = Vec2.clone(data.localAxisA);
@@ -403,7 +409,9 @@ export class PrismaticJoint extends Joint {
     const wA = bA.m_angularVelocity;
     const wB = bB.m_angularVelocity;
 
-    const speed = Vec2.dot(d, Vec2.crossNumVec2(wA, axis)) + Vec2.dot(axis, Vec2.sub(Vec2.addCrossNumVec2(vB, wB, rB), Vec2.addCrossNumVec2(vA, wA, rA)));
+    const speed =
+      Vec2.dot(d, Vec2.crossNumVec2(wA, axis)) +
+      Vec2.dot(axis, Vec2.sub(Vec2.addCrossNumVec2(vB, wB, rB), Vec2.addCrossNumVec2(vA, wA, rA)));
     return speed;
   }
 
@@ -576,8 +584,7 @@ export class PrismaticJoint extends Joint {
       this.m_a1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_axis);
       this.m_a2 = Vec2.crossVec2Vec2(rB, this.m_axis);
 
-      this.m_motorMass = mA + mB + iA * this.m_a1 * this.m_a1 + iB * this.m_a2
-          * this.m_a2;
+      this.m_motorMass = mA + mB + iA * this.m_a1 * this.m_a1 + iB * this.m_a2 * this.m_a2;
       if (this.m_motorMass > 0.0) {
         this.m_motorMass = 1.0 / this.m_motorMass;
       }
@@ -610,28 +617,23 @@ export class PrismaticJoint extends Joint {
 
     // Compute motor and limit terms.
     if (this.m_enableLimit) {
-
       const jointTranslation = Vec2.dot(this.m_axis, d);
       if (math_abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * Settings.linearSlop) {
         this.m_limitState = LimitState.equalLimits;
-
       } else if (jointTranslation <= this.m_lowerTranslation) {
         if (this.m_limitState != LimitState.atLowerLimit) {
           this.m_limitState = LimitState.atLowerLimit;
           this.m_impulse.z = 0.0;
         }
-
       } else if (jointTranslation >= this.m_upperTranslation) {
         if (this.m_limitState != LimitState.atUpperLimit) {
           this.m_limitState = LimitState.atUpperLimit;
           this.m_impulse.z = 0.0;
         }
-
       } else {
         this.m_limitState = LimitState.inactiveLimit;
         this.m_impulse.z = 0.0;
       }
-
     } else {
       this.m_limitState = LimitState.inactiveLimit;
       this.m_impulse.z = 0.0;
@@ -646,12 +648,9 @@ export class PrismaticJoint extends Joint {
       this.m_impulse.mul(step.dtRatio);
       this.m_motorImpulse *= step.dtRatio;
 
-      const P = Vec2.combine(this.m_impulse.x, this.m_perp, this.m_motorImpulse
-          + this.m_impulse.z, this.m_axis);
-      const LA = this.m_impulse.x * this.m_s1 + this.m_impulse.y
-          + (this.m_motorImpulse + this.m_impulse.z) * this.m_a1;
-      const LB = this.m_impulse.x * this.m_s2 + this.m_impulse.y
-          + (this.m_motorImpulse + this.m_impulse.z) * this.m_a2;
+      const P = Vec2.combine(this.m_impulse.x, this.m_perp, this.m_motorImpulse + this.m_impulse.z, this.m_axis);
+      const LA = this.m_impulse.x * this.m_s1 + this.m_impulse.y + (this.m_motorImpulse + this.m_impulse.z) * this.m_a1;
+      const LB = this.m_impulse.x * this.m_s2 + this.m_impulse.y + (this.m_motorImpulse + this.m_impulse.z) * this.m_a2;
 
       vA.subMul(mA, P);
       wA -= iA * LA;
@@ -682,13 +681,11 @@ export class PrismaticJoint extends Joint {
 
     // Solve linear motor constraint.
     if (this.m_enableMotor && this.m_limitState != LimitState.equalLimits) {
-      const Cdot = Vec2.dot(this.m_axis, Vec2.sub(vB, vA)) + this.m_a2 * wB
-          - this.m_a1 * wA;
+      const Cdot = Vec2.dot(this.m_axis, Vec2.sub(vB, vA)) + this.m_a2 * wB - this.m_a1 * wA;
       let impulse = this.m_motorMass * (this.m_motorSpeed - Cdot);
       const oldImpulse = this.m_motorImpulse;
       const maxImpulse = step.dt * this.m_maxMotorForce;
-      this.m_motorImpulse = clamp(this.m_motorImpulse + impulse,
-          -maxImpulse, maxImpulse);
+      this.m_motorImpulse = clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
       impulse = this.m_motorImpulse - oldImpulse;
 
       const P = Vec2.mulNumVec2(impulse, this.m_axis);
@@ -810,28 +807,21 @@ export class PrismaticJoint extends Joint {
     let active = false; // bool
     let C2 = 0.0;
     if (this.m_enableLimit) {
-
       const translation = Vec2.dot(axis, d);
       if (math_abs(this.m_upperTranslation - this.m_lowerTranslation) < 2.0 * linearSlop) {
         // Prevent large angular corrections
         C2 = clamp(translation, -maxLinearCorrection, maxLinearCorrection);
         linearError = math_max(linearError, math_abs(translation));
         active = true;
-
       } else if (translation <= this.m_lowerTranslation) {
         // Prevent large linear corrections and allow some slop.
-        C2 = clamp(translation - this.m_lowerTranslation + linearSlop,
-            -maxLinearCorrection, 0.0);
-        linearError = Math
-            .max(linearError, this.m_lowerTranslation - translation);
+        C2 = clamp(translation - this.m_lowerTranslation + linearSlop, -maxLinearCorrection, 0.0);
+        linearError = Math.max(linearError, this.m_lowerTranslation - translation);
         active = true;
-
       } else if (translation >= this.m_upperTranslation) {
         // Prevent large linear corrections and allow some slop.
-        C2 = clamp(translation - this.m_upperTranslation - linearSlop, 0.0,
-            maxLinearCorrection);
-        linearError = Math
-            .max(linearError, translation - this.m_upperTranslation);
+        C2 = clamp(translation - this.m_upperTranslation - linearSlop, 0.0, maxLinearCorrection);
+        linearError = Math.max(linearError, translation - this.m_upperTranslation);
         active = true;
       }
     }
@@ -891,8 +881,6 @@ export class PrismaticJoint extends Joint {
     this.m_bodyB.c_position.c = cB;
     this.m_bodyB.c_position.a = aB;
 
-    return linearError <= Settings.linearSlop
-        && angularError <= Settings.angularSlop;
+    return linearError <= Settings.linearSlop && angularError <= Settings.angularSlop;
   }
-
 }

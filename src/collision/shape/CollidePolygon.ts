@@ -15,12 +15,11 @@ import { Contact } from "../../dynamics/Contact";
 import { PolygonShape } from "./PolygonShape";
 import { Fixture } from "../../dynamics/Fixture";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
-/** @internal */ const incidentEdge = [ new ClipVertex(), new ClipVertex() ];
-/** @internal */ const clipPoints1 = [ new ClipVertex(), new ClipVertex() ];
-/** @internal */ const clipPoints2 = [ new ClipVertex(), new ClipVertex() ];
+/** @internal */ const incidentEdge = [new ClipVertex(), new ClipVertex()];
+/** @internal */ const clipPoints1 = [new ClipVertex(), new ClipVertex()];
+/** @internal */ const clipPoints2 = [new ClipVertex(), new ClipVertex()];
 /** @internal */ const clipSegmentToLineNormal = matrix.vec2(0, 0);
 /** @internal */ const v1 = matrix.vec2(0, 0);
 /** @internal */ const n = matrix.vec2(0, 0);
@@ -34,7 +33,6 @@ import { Fixture } from "../../dynamics/Fixture";
 /** @internal */ const tangent = matrix.vec2(0, 0);
 /** @internal */ const normal = matrix.vec2(0, 0);
 /** @internal */ const normal1 = matrix.vec2(0, 0);
-
 
 Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
 
@@ -151,10 +149,10 @@ Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
 
 /**
  *
- * Find edge normal of max separation on A - return if separating axis is found  
- * Find edge normal of max separation on B - return if separation axis is found  
- * Choose reference edge as min(minA, minB)  
- * Find incident edge  
+ * Find edge normal of max separation on A - return if separating axis is found
+ * Find edge normal of max separation on B - return if separation axis is found
+ * Choose reference edge as min(minA, minB)
+ * Find incident edge
  * Clip
  *
  * The normal points from 1 to 2
@@ -172,14 +170,12 @@ export const CollidePolygons = function (
   findMaxSeparation(polyA, xfA, polyB, xfB, maxSeparation);
   const edgeA = maxSeparation.bestIndex;
   const separationA = maxSeparation.maxSeparation;
-  if (separationA > totalRadius)
-    return;
+  if (separationA > totalRadius) return;
 
   findMaxSeparation(polyB, xfB, polyA, xfA, maxSeparation);
   const edgeB = maxSeparation.bestIndex;
   const separationB = maxSeparation.maxSeparation;
-  if (separationB > totalRadius)
-    return;
+  if (separationB > totalRadius) return;
 
   let poly1: PolygonShape; // reference polygon
   let poly2: PolygonShape; // incident polygon
@@ -266,7 +262,7 @@ export const CollidePolygons = function (
   matrix.copyVec2(manifold.localPoint, planePoint);
 
   let pointCount = 0;
-  for (let i = 0; i < clipPoints2.length/* maxManifoldPoints */; ++i) {
+  for (let i = 0; i < clipPoints2.length /* maxManifoldPoints */; ++i) {
     const separation = matrix.dotVec2(normal, clipPoints2[i].v) - frontOffset;
 
     if (separation <= totalRadius) {

@@ -10,9 +10,7 @@
 import { Vec2, Vec2Value } from "./Vec2";
 import { Vec3, Vec3Value } from "./Vec3";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-
 
 /**
  * A 3-by-3 matrix. Stored in column-major order.
@@ -182,7 +180,6 @@ export class Mat33 {
       const y = a.ex.y * b.x + a.ey.y * b.y + a.ez.y * b.z;
       const z = a.ex.z * b.x + a.ey.z * b.y + a.ez.z * b.z;
       return new Vec3(x, y, z);
-
     } else if (b && "y" in b && "x" in b) {
       if (_ASSERT) Vec2.assert(b);
       const x = a.ex.x * b.x + a.ey.x * b.y;
@@ -213,10 +210,6 @@ export class Mat33 {
   static add(a: Mat33, b: Mat33): Mat33 {
     if (_ASSERT) Mat33.assert(a);
     if (_ASSERT) Mat33.assert(b);
-    return new Mat33(
-      Vec3.add(a.ex, b.ex),
-      Vec3.add(a.ey, b.ey),
-      Vec3.add(a.ez, b.ez)
-    );
+    return new Mat33(Vec3.add(a.ex, b.ex), Vec3.add(a.ey, b.ey), Vec3.add(a.ez, b.ez));
   }
 }

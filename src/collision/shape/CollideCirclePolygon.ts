@@ -16,13 +16,19 @@ import { PolygonShape } from "./PolygonShape";
 import { Manifold, ContactFeatureType, ManifoldType } from "../Manifold";
 import { Fixture } from "../../dynamics/Fixture";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-
 
 Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
 
-/** @internal */ function PolygonCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: Fixture, indexA: number, xfB: TransformValue, fixtureB: Fixture, indexB: number): void {
+/** @internal */ function PolygonCircleContact(
+  manifold: Manifold,
+  xfA: TransformValue,
+  fixtureA: Fixture,
+  indexA: number,
+  xfB: TransformValue,
+  fixtureB: Fixture,
+  indexB: number,
+): void {
   if (_ASSERT) console.assert(fixtureA.getType() == PolygonShape.TYPE);
   if (_ASSERT) console.assert(fixtureB.getType() == CircleShape.TYPE);
   CollidePolygonCircle(manifold, fixtureA.getShape() as PolygonShape, xfA, fixtureB.getShape() as CircleShape, xfB);
@@ -31,7 +37,13 @@ Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
 /** @internal */ const cLocal = matrix.vec2(0, 0);
 /** @internal */ const faceCenter = matrix.vec2(0, 0);
 
-export const CollidePolygonCircle = function (manifold: Manifold, polygonA: PolygonShape, xfA: TransformValue, circleB: CircleShape, xfB: TransformValue): void {
+export const CollidePolygonCircle = function (
+  manifold: Manifold,
+  polygonA: PolygonShape,
+  xfA: TransformValue,
+  circleB: CircleShape,
+  xfB: TransformValue,
+): void {
   manifold.pointCount = 0;
 
   // Compute circle position in the frame of the polygon.

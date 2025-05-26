@@ -9,33 +9,34 @@ import { World } from "../../dynamics/World";
 
 import { Serializer } from "../../serializer/index";
 
-describe("Serializer", function(): void {
-  it("saves and loads to JSON", function(): void {
-
+describe("Serializer", function (): void {
+  it("saves and loads to JSON", function (): void {
     const world = new World();
 
     const circle = new CircleShape(1);
     const box = new BoxShape(1, 1);
 
     const b1 = world.createBody({
-      position : new Vec2(0, 0),
-      type : "dynamic"
+      position: new Vec2(0, 0),
+      type: "dynamic",
     });
 
     b1.createFixture(circle);
 
     const b2 = world.createBody({
-      position : new Vec2(2, 0),
-      type : "dynamic"
+      position: new Vec2(2, 0),
+      type: "dynamic",
     });
     b2.createFixture(box);
 
-    world.createJoint(new DistanceJoint({
-      bodyA: b1,
-      localAnchorA: new Vec2(6, 0),
-      bodyB: b2,
-      localAnchorB: new Vec2(0, -1)
-    }));
+    world.createJoint(
+      new DistanceJoint({
+        bodyA: b1,
+        localAnchorA: new Vec2(6, 0),
+        bodyB: b2,
+        localAnchorB: new Vec2(0, -1),
+      }),
+    );
 
     const json1 = Serializer.toJson(world);
     const text1 = JSON.stringify(json1, null, " ");

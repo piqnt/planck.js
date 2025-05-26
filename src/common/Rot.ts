@@ -100,7 +100,6 @@ export class Rot {
       if (_ASSERT) Rot.assert(angle);
       this.s = angle.s;
       this.c = angle.c;
-
     } else {
       if (_ASSERT) console.assert(Number.isFinite(angle));
       // TODO_ERIN optimize
@@ -154,7 +153,6 @@ export class Rot {
       qr.s = rot.s * m.c + rot.c * m.s;
       qr.c = rot.c * m.c - rot.s * m.s;
       return qr;
-
     } else if ("x" in m && "y" in m) {
       if (_ASSERT) Vec2.assert(m);
       return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
@@ -203,7 +201,6 @@ export class Rot {
       qr.s = rot.c * m.s - rot.s * m.c;
       qr.c = rot.c * m.c + rot.s * m.s;
       return qr;
-
     } else if ("x" in m && "y" in m) {
       if (_ASSERT) Vec2.assert(m);
       return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);

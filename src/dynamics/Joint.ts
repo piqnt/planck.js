@@ -7,8 +7,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import type { Vec2, Vec2Value }  from "../common/Vec2";
-import type { Body }  from "./Body";
+import type { Vec2, Vec2Value } from "../common/Vec2";
+import type { Body } from "./Body";
 import { TimeStep } from "./Solver";
 import { Style } from "../util/Testbed";
 
@@ -72,8 +72,8 @@ export interface JointDef extends JointOpt {
 }
 
 /** @internal */ const DEFAULTS = {
-  userData : null,
-  collideConnected : false
+  userData: null,
+  collideConnected: false,
 };
 
 /**
@@ -81,7 +81,6 @@ export interface JointDef extends JointOpt {
  * various fashions. Some joints also feature limits and motors.
  */
 export abstract class Joint {
-
   /** @internal */ m_type: string = "unknown-joint";
 
   /** @internal */ m_bodyA: Body;

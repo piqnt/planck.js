@@ -9,9 +9,7 @@
 
 import { Vec2, Vec2Value } from "./Vec2";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-
 
 /**
  * A 2-by-2 matrix. Stored in column-major order.
@@ -56,20 +54,16 @@ export class Mat22 {
   set(a: Vec2Value, b: Vec2Value): void;
   set(a: number, b: number, c: number, d: number): void;
   set(a, b?, c?, d?): void {
-    if (typeof a === "number" && typeof b === "number" && typeof c === "number"
-      && typeof d === "number") {
+    if (typeof a === "number" && typeof b === "number" && typeof c === "number" && typeof d === "number") {
       this.ex.setNum(a, c);
       this.ey.setNum(b, d);
-
     } else if (typeof a === "object" && typeof b === "object") {
       this.ex.setVec2(a);
       this.ey.setVec2(b);
-
     } else if (typeof a === "object") {
       if (_ASSERT) Mat22.assert(a);
       this.ex.setVec2(a.ex);
       this.ey.setVec2(a.ey);
-
     } else {
       if (_ASSERT) console.assert(false);
     }
@@ -138,8 +132,8 @@ export class Mat22 {
       const x = mx.ex.x * v.x + mx.ey.x * v.y;
       const y = mx.ex.y * v.x + mx.ey.y * v.y;
       return Vec2.neo(x, y);
-
-    } else if (v && "ex" in v && "ey" in v) { // Mat22
+    } else if (v && "ex" in v && "ey" in v) {
+      // Mat22
       if (_ASSERT) Mat22.assert(v);
       // return new Mat22(Vec2.mul(mx, v.ex), Vec2.mul(mx, v.ey));
       const a = mx.ex.x * v.ex.x + mx.ey.x * v.ex.y;
@@ -177,11 +171,12 @@ export class Mat22 {
   static mulT(mx: Mat22, my: Mat22): Mat22;
   static mulT(mx: Mat22, v: Vec2Value): Vec2;
   static mulT(mx, v) {
-    if (v && "x" in v && "y" in v) { // Vec2
+    if (v && "x" in v && "y" in v) {
+      // Vec2
       if (_ASSERT) Vec2.assert(v);
       return Vec2.neo(Vec2.dot(v, mx.ex), Vec2.dot(v, mx.ey));
-
-    } else if (v && "ex" in v && "ey" in v) { // Mat22
+    } else if (v && "ex" in v && "ey" in v) {
+      // Mat22
       if (_ASSERT) Mat22.assert(v);
       const c1 = Vec2.neo(Vec2.dot(mx.ex, v.ex), Vec2.dot(mx.ey, v.ex));
       const c2 = Vec2.neo(Vec2.dot(mx.ex, v.ey), Vec2.dot(mx.ey, v.ey));

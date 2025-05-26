@@ -79,7 +79,6 @@ Testbed.mount = () => {
 
 /** @internal */
 export class StageTestbed implements TestbedInterface {
-
   /** World viewbox width. */
   width: number = 80;
 
@@ -122,9 +121,9 @@ export class StageTestbed implements TestbedInterface {
   };
 
   color(r: number, g: number, b: number): string {
-    r = r * 256 | 0;
-    g = g * 256 | 0;
-    b = b * 256 | 0;
+    r = (r * 256) | 0;
+    g = (g * 256) | 0;
+    b = (b * 256) | 0;
     return "rgb(" + r + ", " + g + ", " + b + ")";
   }
 

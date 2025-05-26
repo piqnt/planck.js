@@ -18,11 +18,9 @@ import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
-
 
 // todo: use string?
 /** @internal */ enum LimitState {
@@ -30,7 +28,7 @@ import { TimeStep } from "../Solver";
   atLowerLimit = 1,
   atUpperLimit = 2,
   equalLimits = 3,
-}  
+}
 
 /**
  * Revolute joint definition. This requires defining an anchor point where the
@@ -103,12 +101,12 @@ export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
 }
 
 /** @internal */ const DEFAULTS = {
-  lowerAngle : 0.0,
-  upperAngle : 0.0,
-  maxMotorTorque : 0.0,
-  motorSpeed : 0.0,
-  enableLimit : false,
-  enableMotor : false
+  lowerAngle: 0.0,
+  upperAngle: 0.0,
+  maxMotorTorque: 0.0,
+  motorSpeed: 0.0,
+  enableLimit: false,
+  enableMotor: false,
 };
 
 declare module "./RevoluteJoint" {
@@ -168,7 +166,7 @@ export class RevoluteJoint extends Joint {
       return new RevoluteJoint(def, bodyA, bodyB, anchor);
     }
 
-    def = def ?? {} as RevoluteJointDef;
+    def = def ?? ({} as RevoluteJointDef);
     super(def, bodyA, bodyB);
     bodyA = this.m_bodyA;
     bodyB = this.m_bodyB;
@@ -246,8 +244,8 @@ export class RevoluteJoint extends Joint {
   }
 
   /** @hidden */
-  static _deserialize(data: any, world: any, restore: any):RevoluteJoint {
-    data = {...data};
+  static _deserialize(data: any, world: any, restore: any): RevoluteJoint {
+    data = { ...data };
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
     const joint = new RevoluteJoint(data);
@@ -496,10 +494,10 @@ export class RevoluteJoint extends Joint {
     const iA = this.m_invIA;
     const iB = this.m_invIB;
 
-    const fixedRotation = (iA + iB === 0.0);
+    const fixedRotation = iA + iB === 0.0;
 
     this.m_mass.ex.x = mA + mB + this.m_rA.y * this.m_rA.y * iA + this.m_rB.y * this.m_rB.y * iB;
-    this.m_mass.ey.x = -this.m_rA.y * this.m_rA.x * iA - this.m_rB.y  * this.m_rB.x * iB;
+    this.m_mass.ey.x = -this.m_rA.y * this.m_rA.x * iA - this.m_rB.y * this.m_rB.x * iB;
     this.m_mass.ez.x = -this.m_rA.y * iA - this.m_rB.y * iB;
     this.m_mass.ex.y = this.m_mass.ey.x;
     this.m_mass.ey.y = mA + mB + this.m_rA.x * this.m_rA.x * iA + this.m_rB.x * this.m_rB.x * iB;
@@ -522,24 +520,20 @@ export class RevoluteJoint extends Joint {
 
       if (math_abs(this.m_upperAngle - this.m_lowerAngle) < 2.0 * Settings.angularSlop) {
         this.m_limitState = LimitState.equalLimits;
-
       } else if (jointAngle <= this.m_lowerAngle) {
         if (this.m_limitState != LimitState.atLowerLimit) {
           this.m_impulse.z = 0.0;
         }
         this.m_limitState = LimitState.atLowerLimit;
-
       } else if (jointAngle >= this.m_upperAngle) {
         if (this.m_limitState != LimitState.atUpperLimit) {
           this.m_impulse.z = 0.0;
         }
         this.m_limitState = LimitState.atUpperLimit;
-
       } else {
         this.m_limitState = LimitState.inactiveLimit;
         this.m_impulse.z = 0.0;
       }
-
     } else {
       this.m_limitState = LimitState.inactiveLimit;
     }
@@ -556,7 +550,6 @@ export class RevoluteJoint extends Joint {
 
       vB.addMul(mB, P);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_motorImpulse + this.m_impulse.z);
-
     } else {
       this.m_impulse.setZero();
       this.m_motorImpulse = 0.0;
@@ -579,7 +572,7 @@ export class RevoluteJoint extends Joint {
     const iA = this.m_invIA;
     const iB = this.m_invIB;
 
-    const fixedRotation = (iA + iB === 0.0);
+    const fixedRotation = iA + iB === 0.0;
 
     // Solve motor constraint.
     if (this.m_enableMotor && this.m_limitState != LimitState.equalLimits && fixedRotation == false) {
@@ -606,7 +599,6 @@ export class RevoluteJoint extends Joint {
 
       if (this.m_limitState == LimitState.equalLimits) {
         this.m_impulse.add(impulse);
-
       } else if (this.m_limitState == LimitState.atLowerLimit) {
         const newImpulse = this.m_impulse.z + impulse.z;
 
@@ -619,11 +611,9 @@ export class RevoluteJoint extends Joint {
           this.m_impulse.x += reduced.x;
           this.m_impulse.y += reduced.y;
           this.m_impulse.z = 0.0;
-
         } else {
           this.m_impulse.add(impulse);
         }
-
       } else if (this.m_limitState == LimitState.atUpperLimit) {
         const newImpulse = this.m_impulse.z + impulse.z;
 
@@ -636,7 +626,6 @@ export class RevoluteJoint extends Joint {
           this.m_impulse.x += reduced.x;
           this.m_impulse.y += reduced.y;
           this.m_impulse.z = 0.0;
-
         } else {
           this.m_impulse.add(impulse);
         }
@@ -649,7 +638,6 @@ export class RevoluteJoint extends Joint {
 
       vB.addMul(mB, P);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + impulse.z);
-
     } else {
       // Solve point-to-point constraint
       const Cdot = Vec2.zero();
@@ -688,7 +676,7 @@ export class RevoluteJoint extends Joint {
     let angularError = 0.0;
     let positionError = 0.0;
 
-    const fixedRotation = (this.m_invIA + this.m_invIB == 0.0);
+    const fixedRotation = this.m_invIA + this.m_invIB == 0.0;
 
     // Solve angular limit constraint.
     if (this.m_enableLimit && this.m_limitState != LimitState.inactiveLimit && fixedRotation == false) {
@@ -700,7 +688,6 @@ export class RevoluteJoint extends Joint {
         const C = clamp(angle - this.m_lowerAngle, -Settings.maxAngularCorrection, Settings.maxAngularCorrection);
         limitImpulse = -this.m_motorMass * C;
         angularError = math_abs(C);
-
       } else if (this.m_limitState == LimitState.atLowerLimit) {
         let C = angle - this.m_lowerAngle;
         angularError = -C;
@@ -708,7 +695,6 @@ export class RevoluteJoint extends Joint {
         // Prevent large angular corrections and allow some slop.
         C = clamp(C + Settings.angularSlop, -Settings.maxAngularCorrection, 0.0);
         limitImpulse = -this.m_motorMass * C;
-
       } else if (this.m_limitState == LimitState.atUpperLimit) {
         let C = angle - this.m_upperAngle;
         angularError = C;
@@ -761,5 +747,4 @@ export class RevoluteJoint extends Joint {
 
     return positionError <= Settings.linearSlop && angularError <= Settings.angularSlop;
   }
-
 }

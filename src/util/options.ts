@@ -1,11 +1,11 @@
 /** @internal */
-export const options = function<T>(input: T, defaults: object): T {
+export const options = function <T>(input: T, defaults: object): T {
   if (input === null || typeof input === "undefined") {
     // tslint:disable-next-line:no-object-literal-type-assertion
     input = {} as T;
   }
 
-  const output = {...input};
+  const output = { ...input };
 
   // tslint:disable-next-line:no-for-in
   for (const key in defaults) {

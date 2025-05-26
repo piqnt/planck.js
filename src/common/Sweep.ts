@@ -12,11 +12,9 @@ import { mod } from "./Math";
 import { Vec2, Vec2Value } from "./Vec2";
 import { TransformValue } from "./Transform";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_atan2 = Math.atan2;
 /** @internal */ const math_PI = Math.PI;
-
 
 /** @internal */ const temp = matrix.vec2(0, 0);
 
@@ -76,7 +74,7 @@ export class Sweep {
    */
   getTransform(xf: TransformValue, beta: number = 0): void {
     matrix.setRotAngle(xf.q, (1.0 - beta) * this.a0 + beta * this.a);
-    matrix.combine2Vec2(xf.p, (1.0 - beta), this.c0, beta, this.c);
+    matrix.combine2Vec2(xf.p, 1.0 - beta, this.c0, beta, this.c);
 
     // shift to origin
     matrix.minusVec2(xf.p, matrix.rotVec2(temp, xf.q, this.localCenter));

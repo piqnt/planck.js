@@ -3,8 +3,8 @@ import { describe, it, expect } from "vitest";
 import { Vec2 } from "../common/Vec2";
 import { Vec3 } from "../common/Vec3";
 
-describe("Math", function(): void {
-  it("Vec2", function(): void {
+describe("Math", function (): void {
+  it("Vec2", function (): void {
     const v = new Vec2();
     expect(v.x).equal(0);
     expect(v.y).equal(0);
@@ -56,10 +56,9 @@ describe("Math", function(): void {
     const c = Vec2.clamp(new Vec2(6, 8), 5);
     expect(c.x).closeTo(3, 1e-12);
     expect(c.y).closeTo(4, 1e-12);
-
   });
 
-  it("Vec3", function(): void {
+  it("Vec3", function (): void {
     const v0 = new Vec3();
     expect(v0.x).equal(0);
     expect(v0.y).equal(0);

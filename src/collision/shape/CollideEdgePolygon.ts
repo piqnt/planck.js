@@ -18,14 +18,21 @@ import { ChainShape } from "./ChainShape";
 import { PolygonShape } from "./PolygonShape";
 import { Fixture } from "../../dynamics/Fixture";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_min = Math.min;
 
 Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
 Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
 
-/** @internal */ function EdgePolygonContact(manifold: Manifold, xfA: TransformValue, fA: Fixture, indexA: number, xfB: TransformValue, fB: Fixture, indexB: number): void {
+/** @internal */ function EdgePolygonContact(
+  manifold: Manifold,
+  xfA: TransformValue,
+  fA: Fixture,
+  indexA: number,
+  xfB: TransformValue,
+  fB: Fixture,
+  indexB: number,
+): void {
   if (_ASSERT) console.assert(fA.getType() == EdgeShape.TYPE);
   if (_ASSERT) console.assert(fB.getType() == PolygonShape.TYPE);
 
@@ -35,7 +42,15 @@ Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
 // reused
 /** @internal */ const edge_reuse = new EdgeShape();
 
-/** @internal */ function ChainPolygonContact(manifold: Manifold, xfA: TransformValue, fA: Fixture, indexA: number, xfB: TransformValue, fB: Fixture, indexB: number): void {
+/** @internal */ function ChainPolygonContact(
+  manifold: Manifold,
+  xfA: TransformValue,
+  fA: Fixture,
+  indexA: number,
+  xfB: TransformValue,
+  fB: Fixture,
+  indexB: number,
+): void {
   if (_ASSERT) console.assert(fA.getType() == ChainShape.TYPE);
   if (_ASSERT) console.assert(fB.getType() == PolygonShape.TYPE);
 
@@ -53,9 +68,9 @@ Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
 
 // unused?
 /** @internal */ enum VertexType {
- e_isolated = 0,
- e_concave = 1,
- e_convex = 2,
+  e_isolated = 0,
+  e_concave = 1,
+  e_convex = 2,
 }
 
 /**
@@ -88,12 +103,12 @@ Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
 /** @internal */ class ReferenceFace {
   i1: number;
   i2: number;
-  readonly v1 = matrix.vec2(0 ,0);
-  readonly v2 = matrix.vec2(0 ,0);
-  readonly normal = matrix.vec2(0 ,0);
-  readonly sideNormal1 = matrix.vec2(0 ,0);
+  readonly v1 = matrix.vec2(0, 0);
+  readonly v2 = matrix.vec2(0, 0);
+  readonly normal = matrix.vec2(0, 0);
+  readonly sideNormal1 = matrix.vec2(0, 0);
   sideOffset1: number;
-  readonly sideNormal2 = matrix.vec2(0 ,0);
+  readonly sideNormal2 = matrix.vec2(0, 0);
   sideOffset2: number;
   recycle() {
     matrix.zeroVec2(this.v1);
@@ -105,9 +120,9 @@ Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
 }
 
 // reused
-/** @internal */ const clipPoints1 = [ new ClipVertex(), new ClipVertex() ];
-/** @internal */ const clipPoints2 = [ new ClipVertex(), new ClipVertex() ];
-/** @internal */ const ie = [ new ClipVertex(), new ClipVertex() ];
+/** @internal */ const clipPoints1 = [new ClipVertex(), new ClipVertex()];
+/** @internal */ const clipPoints2 = [new ClipVertex(), new ClipVertex()];
+/** @internal */ const ie = [new ClipVertex(), new ClipVertex()];
 /** @internal */ const edgeAxis = new EPAxis();
 /** @internal */ const polygonAxis = new EPAxis();
 /** @internal */ const polygonBA = new TempPolygon();
@@ -130,7 +145,13 @@ Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
  * This function collides and edge and a polygon, taking into account edge
  * adjacency.
  */
-export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape, xfA: TransformValue, polygonB: PolygonShape, xfB: TransformValue): void {
+export const CollideEdgePolygon = function (
+  manifold: Manifold,
+  edgeA: EdgeShape,
+  xfA: TransformValue,
+  polygonB: PolygonShape,
+  xfB: TransformValue,
+): void {
   // Algorithm:
   // 1. Classify v1 and v2
   // 2. Classify polygon centroid as front or back
@@ -309,7 +330,8 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
 
   manifold.pointCount = 0;
 
-  { // ComputeEdgeSeparation
+  {
+    // ComputeEdgeSeparation
     edgeAxis.type = EPAxisType.e_edgeA;
     edgeAxis.index = front ? 0 : 1;
     edgeAxis.separation = Infinity;
@@ -333,7 +355,8 @@ export const CollideEdgePolygon = function (manifold: Manifold, edgeA: EdgeShape
     return;
   }
 
-  { // ComputePolygonSeparation
+  {
+    // ComputePolygonSeparation
     polygonAxis.type = EPAxisType.e_unknown;
     polygonAxis.index = -1;
     polygonAxis.separation = -Infinity;

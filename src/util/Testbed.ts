@@ -11,12 +11,6 @@ export interface Style {
   lineWidth?: number;
 }
 
-type KEY = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" |
-  "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F" | "G" |
-  "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" |
-  "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" |
-  "Z" | "right" | "left" | "up" | "down" | "fire";
-
 export type ActiveKeys = { [key in KEY]?: boolean };
 
 type TestbedMountOptions = { [key: string]: any };
@@ -31,7 +25,7 @@ export class Testbed {
 
   /**
    * Mounts testbed if needed, then starts simulation and rendering.
-   * 
+   *
    * If you need to customize testbed before starting, first run `const testbed = Testbed.mount()` and then `testbed.start()`.
    */
   static start(world: World): TestbedInterface {
@@ -90,7 +84,7 @@ export interface TestbedInterface {
 type TestbedFactoryOptions = string | TestbedMountOptions;
 
 /** @deprecated */
-type TestbedCallback = (testbed: TestbedInterface) => (World | undefined);
+type TestbedCallback = (testbed: TestbedInterface) => World | undefined;
 
 /** @deprecated */
 export function testbed(callback: TestbedCallback): void;
@@ -118,3 +112,46 @@ export function testbed(a?: any, b?: any) {
     return testbed;
   }
 }
+
+type KEY =
+  | "0"
+  | "1"
+  | "2"
+  | "3"
+  | "4"
+  | "5"
+  | "6"
+  | "7"
+  | "8"
+  | "9"
+  | "A"
+  | "B"
+  | "C"
+  | "D"
+  | "E"
+  | "F"
+  | "G"
+  | "H"
+  | "I"
+  | "J"
+  | "K"
+  | "L"
+  | "M"
+  | "N"
+  | "O"
+  | "P"
+  | "Q"
+  | "R"
+  | "S"
+  | "T"
+  | "U"
+  | "V"
+  | "W"
+  | "X"
+  | "Y"
+  | "Z"
+  | "right"
+  | "left"
+  | "up"
+  | "down"
+  | "fire";

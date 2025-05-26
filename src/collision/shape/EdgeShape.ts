@@ -17,9 +17,7 @@ import { AABB, AABBValue, RayCastInput, RayCastOutput } from "../AABB";
 import { MassData } from "../../dynamics/Body";
 import { DistanceProxy } from "../Distance";
 
-
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
-
 
 /** @internal */ const v1 = matrix.vec2(0, 0);
 /** @internal */ const v2 = matrix.vec2(0, 0);

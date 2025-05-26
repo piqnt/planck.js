@@ -9,14 +9,14 @@
 
 /** @internal */
 export interface PoolOptions<T> {
-  max?: number,
-  create?: () => T,
+  max?: number;
+  create?: () => T;
   /** Called when an object is being re-allocated. */
-  allocate?: (item: T) => void,
+  allocate?: (item: T) => void;
   /** Called when an object is returned to pool. */
-  release?: (item: T) => void,
+  release?: (item: T) => void;
   /** Called when an object is returned to the pool but will be disposed from pool. */
-  dispose?: (item: T) => T,
+  dispose?: (item: T) => T;
 }
 
 /** @internal */
@@ -102,7 +102,19 @@ export class Pool<T> {
   }
 
   toString(): string {
-    return " +" + this._createCount + " >" + this._allocateCount + " <" + this._releaseCount + " -"
-      + this._disposeCount + " =" + this._list.length + "/" + this._max;
+    return (
+      " +" +
+      this._createCount +
+      " >" +
+      this._allocateCount +
+      " <" +
+      this._releaseCount +
+      " -" +
+      this._disposeCount +
+      " =" +
+      this._list.length +
+      "/" +
+      this._max
+    );
   }
 }

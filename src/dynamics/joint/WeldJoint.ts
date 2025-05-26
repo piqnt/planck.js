@@ -17,11 +17,9 @@ import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
-
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_PI = Math.PI;
-
 
 /**
  * Weld joint definition. You need to specify local anchor points where they are
@@ -64,8 +62,8 @@ export interface WeldJointDef extends JointDef, WeldJointOpt {
 }
 
 /** @internal */ const DEFAULTS = {
-  frequencyHz : 0.0,
-  dampingRatio : 0.0,
+  frequencyHz: 0.0,
+  dampingRatio: 0.0,
 };
 
 declare module "./WeldJoint" {
@@ -126,7 +124,9 @@ export class WeldJoint extends Joint {
 
     this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
     this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
-    this.m_referenceAngle = Number.isFinite(def.referenceAngle) ? def.referenceAngle : bodyB.getAngle() - bodyA.getAngle();
+    this.m_referenceAngle = Number.isFinite(def.referenceAngle)
+      ? def.referenceAngle
+      : bodyB.getAngle() - bodyA.getAngle();
 
     this.m_frequencyHz = def.frequencyHz;
     this.m_dampingRatio = def.dampingRatio;
@@ -182,7 +182,7 @@ export class WeldJoint extends Joint {
 
   /** @hidden */
   static _deserialize(data: any, world: any, restore: any): WeldJoint {
-    data = {...data};
+    data = { ...data };
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
     const joint = new WeldJoint(data);
@@ -323,13 +323,11 @@ export class WeldJoint extends Joint {
     const iB = this.m_invIB;
 
     const K = new Mat33();
-    K.ex.x = mA + mB + this.m_rA.y * this.m_rA.y * iA + this.m_rB.y * this.m_rB.y
-        * iB;
+    K.ex.x = mA + mB + this.m_rA.y * this.m_rA.y * iA + this.m_rB.y * this.m_rB.y * iB;
     K.ey.x = -this.m_rA.y * this.m_rA.x * iA - this.m_rB.y * this.m_rB.x * iB;
     K.ez.x = -this.m_rA.y * iA - this.m_rB.y * iB;
     K.ex.y = K.ey.x;
-    K.ey.y = mA + mB + this.m_rA.x * this.m_rA.x * iA + this.m_rB.x * this.m_rB.x
-        * iB;
+    K.ey.y = mA + mB + this.m_rA.x * this.m_rA.x * iA + this.m_rB.x * this.m_rB.x * iB;
     K.ez.y = this.m_rA.x * iA + this.m_rB.x * iB;
     K.ex.z = K.ez.x;
     K.ey.z = K.ez.y;
@@ -381,7 +379,6 @@ export class WeldJoint extends Joint {
 
       vB.addMul(mB, P);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_impulse.z);
-
     } else {
       this.m_impulse.setZero();
     }
@@ -537,5 +534,4 @@ export class WeldJoint extends Joint {
 
     return positionError <= Settings.linearSlop && angularError <= Settings.angularSlop;
   }
-
 }

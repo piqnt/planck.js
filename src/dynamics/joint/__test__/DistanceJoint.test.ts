@@ -7,23 +7,22 @@ import { World } from "../../World";
 
 import { DistanceJoint } from "../DistanceJoint";
 
-describe("DistanceJoint", function(): void {
-
-  it("calculates local anchors from global", function(): void {
+describe("DistanceJoint", function (): void {
+  it("calculates local anchors from global", function (): void {
     var world = new World();
 
     var circle = new CircleShape(1);
     var box = new BoxShape(1, 1);
 
     var b1 = world.createBody({
-      position : new Vec2(0, 0),
-      type : "dynamic"
+      position: new Vec2(0, 0),
+      type: "dynamic",
     });
     b1.createFixture(circle);
 
     var b2 = world.createBody({
-      position : new Vec2(10, 0),
-      type : "dynamic"
+      position: new Vec2(10, 0),
+      type: "dynamic",
     });
     b2.createFixture(box);
 
@@ -35,24 +34,23 @@ describe("DistanceJoint", function(): void {
 
     expect(joint.getAnchorA()).deep.equal(new Vec2(1, 0));
     expect(joint.getAnchorB()).deep.equal(new Vec2(9, -1));
-
   });
 
-  it("moves attached body", function(): void {
+  it("moves attached body", function (): void {
     var world = new World();
 
     var circle = new CircleShape(1);
     var box = new BoxShape(1, 1);
 
     var b1 = world.createBody({
-      position : new Vec2(0, 0),
-      type : "dynamic"
+      position: new Vec2(0, 0),
+      type: "dynamic",
     });
     b1.createFixture(circle);
 
     var b2 = world.createBody({
-      position : new Vec2(10, 0),
-      type : "dynamic"
+      position: new Vec2(10, 0),
+      type: "dynamic",
     });
     b2.createFixture(box);
 
@@ -65,5 +63,4 @@ describe("DistanceJoint", function(): void {
     expect(b1.getPosition().x).closeTo(2, 1e-1);
     expect(b2.getPosition().x).closeTo(12, 1e-1);
   });
-
 });

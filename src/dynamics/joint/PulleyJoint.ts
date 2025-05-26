@@ -16,19 +16,16 @@ import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
-
 
 /**
  * Pulley joint definition. This requires two ground anchors, two dynamic body
  * anchor points, and a pulley ratio.
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface PulleyJointOpt extends JointOpt {
-}
+export interface PulleyJointOpt extends JointOpt {}
 
 /**
  * Pulley joint definition. This requires two ground anchors, two dynamic body
@@ -69,7 +66,7 @@ export interface PulleyJointDef extends JointDef, PulleyJointOpt {
 }
 
 /** @internal */ const DEFAULTS = {
-  collideConnected : true
+  collideConnected: true,
 };
 
 declare module "./PulleyJoint" {
@@ -78,7 +75,16 @@ declare module "./PulleyJoint" {
   function PulleyJoint(def: PulleyJointDef): PulleyJoint;
   /** @hidden @deprecated Use new keyword. */
   // @ts-expect-error
-  function PulleyJoint(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA: Vec2Value, groundB: Vec2Value, anchorA: Vec2Value, anchorB: Vec2Value, ratio: number): PulleyJoint;
+  function PulleyJoint(
+    def: PulleyJointOpt,
+    bodyA: Body,
+    bodyB: Body,
+    groundA: Vec2Value,
+    groundB: Vec2Value,
+    anchorA: Vec2Value,
+    anchorB: Vec2Value,
+    ratio: number,
+  ): PulleyJoint;
 }
 
 /**
@@ -122,8 +128,26 @@ export class PulleyJoint extends Joint {
   /** @internal */ m_mass: number;
 
   constructor(def: PulleyJointDef);
-  constructor(def: PulleyJointOpt, bodyA: Body, bodyB: Body, groundA?: Vec2Value, groundB?: Vec2Value, anchorA?: Vec2Value, anchorB?: Vec2Value, ratio?: number);
-  constructor(def: PulleyJointDef, bodyA?: Body, bodyB?: Body, groundA?: Vec2Value, groundB?: Vec2Value, anchorA?: Vec2Value, anchorB?: Vec2Value, ratio?: number) {
+  constructor(
+    def: PulleyJointOpt,
+    bodyA: Body,
+    bodyB: Body,
+    groundA?: Vec2Value,
+    groundB?: Vec2Value,
+    anchorA?: Vec2Value,
+    anchorB?: Vec2Value,
+    ratio?: number,
+  );
+  constructor(
+    def: PulleyJointDef,
+    bodyA?: Body,
+    bodyB?: Body,
+    groundA?: Vec2Value,
+    groundB?: Vec2Value,
+    anchorA?: Vec2Value,
+    anchorB?: Vec2Value,
+    ratio?: number,
+  ) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof PulleyJoint)) {
       return new PulleyJoint(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, ratio);
@@ -183,7 +207,7 @@ export class PulleyJoint extends Joint {
 
   /** @hidden */
   static _deserialize(data: any, world: any, restore: any): PulleyJoint {
-    data = {...data};
+    data = { ...data };
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
     const joint = new PulleyJoint(data);
@@ -379,7 +403,6 @@ export class PulleyJoint extends Joint {
 
       vB.addMul(this.m_invMassB, PB);
       wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, PB);
-
     } else {
       this.m_impulse = 0.0;
     }
@@ -483,5 +506,4 @@ export class PulleyJoint extends Joint {
 
     return linearError < Settings.linearSlop;
   }
-
 }

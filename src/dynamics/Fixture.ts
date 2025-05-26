@@ -17,7 +17,6 @@ import { BroadPhase } from "../collision/BroadPhase";
 import { TransformValue } from "../common/Transform";
 import { Style } from "../util/Testbed";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
 /** @internal */ const synchronize_aabb1 = new AABB();
@@ -70,15 +69,15 @@ export interface FixtureDef extends FixtureOpt {
 }
 
 /** @internal */ const FixtureDefDefault: FixtureOpt = {
-  userData : null,
-  friction : 0.2,
-  restitution : 0.0,
-  density : 0.0,
-  isSensor : false,
+  userData: null,
+  friction: 0.2,
+  restitution: 0.0,
+  density: 0.0,
+  isSensor: false,
 
-  filterGroupIndex : 0,
-  filterCategoryBits : 0x0001,
-  filterMaskBits : 0xFFFF
+  filterGroupIndex: 0,
+  filterCategoryBits: 0x0001,
+  filterMaskBits: 0xffff,
 };
 
 /**
@@ -134,9 +133,8 @@ export class Fixture {
     if (shape.shape) {
       def = shape;
       shape = shape.shape;
-
     } else if (typeof def === "number") {
-      def = {density : def};
+      def = { density: def };
     }
 
     def = options(def, FixtureDefDefault);
@@ -415,7 +413,7 @@ export class Fixture {
    * time step when either parent body is active and awake. This automatically
    * calls refilter.
    */
-  setFilterData(filter: { groupIndex: number, categoryBits: number, maskBits: number }): void {
+  setFilterData(filter: { groupIndex: number; categoryBits: number; maskBits: number }): void {
     this.m_filterGroupIndex = filter.groupIndex;
     this.m_filterCategoryBits = filter.categoryBits;
     this.m_filterMaskBits = filter.maskBits;
@@ -495,7 +493,6 @@ export class Fixture {
    * overlap.
    */
   shouldCollide(that: Fixture): boolean {
-
     if (that.m_filterGroupIndex === this.m_filterGroupIndex && that.m_filterGroupIndex !== 0) {
       return that.m_filterGroupIndex > 0;
     }

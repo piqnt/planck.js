@@ -16,7 +16,6 @@ import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
-
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_min = Math.min;
 
@@ -57,7 +56,7 @@ export interface RopeJointDef extends JointDef, RopeJointOpt {
 }
 
 /** @internal */ const DEFAULTS = {
-  maxLength : 0.0,
+  maxLength: 0.0,
 };
 
 declare module "./RopeJoint" {
@@ -155,7 +154,7 @@ export class RopeJoint extends Joint {
 
   /** @hidden */
   static _deserialize(data: any, world: any, restore: any): RopeJoint {
-    data = {...data};
+    data = { ...data };
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
     const joint = new RopeJoint(data);
@@ -293,7 +292,6 @@ export class RopeJoint extends Joint {
 
       vB.addMul(this.m_invMassB, P);
       wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
-
     } else {
       this.m_impulse = 0.0;
     }
@@ -376,5 +374,4 @@ export class RopeJoint extends Joint {
 
     return length - this.m_maxLength < Settings.linearSlop;
   }
-
 }

@@ -18,10 +18,8 @@ import { AABBValue, RayCastInput, RayCastOutput } from "../collision/AABB";
 import { Fixture, FixtureProxy } from "./Fixture";
 import { Manifold } from "../collision/Manifold";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
-
 
 export interface WorldDef {
   /** [default: { x : 0, y : 0}] */
@@ -50,14 +48,14 @@ export interface WorldDef {
 }
 
 /** @internal */ const DEFAULTS: WorldDef = {
-  gravity : Vec2.zero(),
-  allowSleep : true,
-  warmStarting : true,
-  continuousPhysics : true,
-  subStepping : false,
-  blockSolve : true,
-  velocityIterations : 8,
-  positionIterations : 3
+  gravity: Vec2.zero(),
+  allowSleep: true,
+  warmStarting: true,
+  continuousPhysics: true,
+  subStepping: false,
+  blockSolve: true,
+  velocityIterations: 8,
+  positionIterations: 3,
 };
 
 /**
@@ -66,7 +64,7 @@ export interface WorldDef {
  * Called for each fixture found in the query.
  * The returned value replaces the ray-cast input maxFraction.
  * You control how the ray cast proceeds by returning a numeric/float value.
- * 
+ *
  * - `0` to terminate the ray cast
  * - `fraction` to clip the ray cast at current point
  * - `1` don't clip the ray and continue
@@ -132,7 +130,7 @@ export class World {
 
   // TODO
   /** @internal */ _listeners: {
-    [key: string]: any[]
+    [key: string]: any[];
   };
 
   /**
@@ -144,7 +142,6 @@ export class World {
     }
 
     this.s_step = new TimeStep();
-
 
     if (!def) {
       def = {};
@@ -400,7 +397,8 @@ export class World {
   queryAABB(aabb: AABBValue, callback: WorldAABBQueryCallback): void {
     if (_ASSERT) console.assert(typeof callback === "function");
     const broadPhase = this.m_broadPhase;
-    this.m_broadPhase.query(aabb, function(proxyId: number): boolean { // TODO GC
+    this.m_broadPhase.query(aabb, function (proxyId: number): boolean {
+      // TODO GC
       const proxy = broadPhase.getUserData(proxyId);
       return callback(proxy.fixture);
     });
@@ -419,24 +417,28 @@ export class World {
     if (_ASSERT) console.assert(typeof callback === "function");
     const broadPhase = this.m_broadPhase;
 
-    this.m_broadPhase.rayCast({
-      maxFraction : 1.0,
-      p1 : point1,
-      p2 : point2
-    }, function(input: RayCastInput, proxyId: number): number { // TODO GC
-      const proxy = broadPhase.getUserData(proxyId);
-      const fixture = proxy.fixture;
-      const index = proxy.childIndex;
-      // @ts-ignore
-      const output: RayCastOutput = {}; // TODO GC
-      const hit = fixture.rayCast(output, input, index);
-      if (hit) {
-        const fraction = output.fraction;
-        const point = Vec2.add(Vec2.mulNumVec2((1.0 - fraction), input.p1), Vec2.mulNumVec2(fraction, input.p2));
-        return callback(fixture, point, output.normal, fraction);
-      }
-      return input.maxFraction;
-    });
+    this.m_broadPhase.rayCast(
+      {
+        maxFraction: 1.0,
+        p1: point1,
+        p2: point2,
+      },
+      function (input: RayCastInput, proxyId: number): number {
+        // TODO GC
+        const proxy = broadPhase.getUserData(proxyId);
+        const fixture = proxy.fixture;
+        const index = proxy.childIndex;
+        // @ts-ignore
+        const output: RayCastOutput = {}; // TODO GC
+        const hit = fixture.rayCast(output, input, index);
+        if (hit) {
+          const fraction = output.fraction;
+          const point = Vec2.add(Vec2.mulNumVec2(1.0 - fraction, input.p1), Vec2.mulNumVec2(fraction, input.p2));
+          return callback(fixture, point, output.normal, fraction);
+        }
+        return input.maxFraction;
+      },
+    );
   }
 
   /**
@@ -473,7 +475,7 @@ export class World {
    * position -= newOrigin
    *
    * @param newOrigin The new origin with respect to the old origin
-   * 
+   *
    * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   shiftOrigin(newOrigin: Vec2Value): void {
@@ -530,7 +532,7 @@ export class World {
     let def: BodyDef = {};
     if (!arg1) {
     } else if (Vec2.isValid(arg1)) {
-      def = { position : arg1, angle: arg2 };
+      def = { position: arg1, angle: arg2 };
     } else if (typeof arg1 === "object") {
       def = arg1;
     }
@@ -547,7 +549,7 @@ export class World {
     let def: BodyDef = {};
     if (!arg1) {
     } else if (Vec2.isValid(arg1)) {
-      def = { position : arg1, angle: arg2 };
+      def = { position: arg1, angle: arg2 };
     } else if (typeof arg1 === "object") {
       def = arg1;
     }
@@ -562,7 +564,7 @@ export class World {
     let def: BodyDef = {};
     if (!arg1) {
     } else if (Vec2.isValid(arg1)) {
-      def = { position : arg1, angle: arg2 };
+      def = { position: arg1, angle: arg2 };
     } else if (typeof arg1 === "object") {
       def = arg1;
     }
@@ -676,16 +678,14 @@ export class World {
     joint.m_edgeA.other = joint.m_bodyB;
     joint.m_edgeA.prev = null;
     joint.m_edgeA.next = joint.m_bodyA.m_jointList;
-    if (joint.m_bodyA.m_jointList)
-      joint.m_bodyA.m_jointList.prev = joint.m_edgeA;
+    if (joint.m_bodyA.m_jointList) joint.m_bodyA.m_jointList.prev = joint.m_edgeA;
     joint.m_bodyA.m_jointList = joint.m_edgeA;
 
     joint.m_edgeB.joint = joint;
     joint.m_edgeB.other = joint.m_bodyA;
     joint.m_edgeB.prev = null;
     joint.m_edgeB.next = joint.m_bodyB.m_jointList;
-    if (joint.m_bodyB.m_jointList)
-      joint.m_bodyB.m_jointList.prev = joint.m_edgeB;
+    if (joint.m_bodyB.m_jointList) joint.m_bodyB.m_jointList.prev = joint.m_edgeB;
     joint.m_bodyB.m_jointList = joint.m_edgeB;
 
     // If the joint prevents collisions, then flag any contacts for filtering.
@@ -706,9 +706,9 @@ export class World {
 
   /**
    * Destroy a joint.
-   * 
+   *
    * Warning: This may cause the connected bodies to begin colliding.
-   * 
+   *
    * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   destroyJoint(joint: Joint): void {
@@ -863,7 +863,7 @@ export class World {
     this.m_locked = false;
 
     let callback: (world: World) => unknown;
-    while(callback = this.m_step_callback.shift()) {
+    while ((callback = this.m_step_callback.shift())) {
       callback(this);
     }
 
@@ -886,9 +886,7 @@ export class World {
    * Call this method to find new contacts.
    */
   findNewContacts(): void {
-    this.m_broadPhase.updatePairs(
-      (proxyA: FixtureProxy, proxyB: FixtureProxy) => this.createContact(proxyA, proxyB)
-    );
+    this.m_broadPhase.updatePairs((proxyA: FixtureProxy, proxyB: FixtureProxy) => this.createContact(proxyA, proxyB));
   }
 
   /**
@@ -967,7 +965,7 @@ export class World {
     // Update awake contacts.
     let c: Contact;
     let next_c = this.m_contactList;
-    while (c = next_c) {
+    while ((c = next_c)) {
       next_c = c.getNext();
       const fixtureA = c.getFixtureA();
       const fixtureB = c.getFixtureB();
@@ -1032,7 +1030,6 @@ export class World {
 
     --this.m_contactCount;
   }
-
 
   /**
    * Called when two fixtures begin to touch.

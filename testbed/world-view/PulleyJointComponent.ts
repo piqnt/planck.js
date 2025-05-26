@@ -31,22 +31,7 @@ export class PulleyJointComponent extends Stage.Node {
       const v2 = joint.getGroundAnchorA();
       const v3 = joint.getGroundAnchorB();
       const v4 = joint.getAnchorB();
-      const token =
-        v1.x +
-        "." +
-        v1.y +
-        "." +
-        v2.x +
-        "." +
-        v2.y +
-        "." +
-        v3.x +
-        "." +
-        v3.y +
-        "." +
-        v4.x +
-        "." +
-        v4.y;
+      const token = v1.x + "." + v1.y + "." + v2.x + "." + v2.y + "." + v3.x + "." + v3.y + "." + v4.x + "." + v4.y;
       return token;
     });
     texture.setDrawer(function () {

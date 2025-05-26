@@ -10,7 +10,6 @@
 import type { Vec2Value } from "../../common/Vec2";
 import { PolygonShape } from "./PolygonShape";
 
-
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 declare module "./BoxShape" {
@@ -28,9 +27,9 @@ export class BoxShape extends PolygonShape {
   static TYPE = "polygon" as const;
 
   /**
-   * 
-   * @param halfWidth 
-   * @param halfHeight 
+   *
+   * @param halfWidth
+   * @param halfHeight
    * @param center coordinate of the center of the box relative to the body
    * @param angle angle of the box relative to the body
    */

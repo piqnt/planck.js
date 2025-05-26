@@ -9,7 +9,7 @@
 
 import { options } from "../../util/options";
 import { SettingsInternal as Settings } from "../../Settings";
-import { } from "../../common/Math";
+import {} from "../../common/Math";
 import { Vec2 } from "../../common/Vec2";
 import { Rot } from "../../common/Rot";
 import { Joint, JointOpt, JointDef } from "../Joint";
@@ -18,10 +18,8 @@ import { RevoluteJoint } from "./RevoluteJoint";
 import { PrismaticJoint } from "./PrismaticJoint";
 import { TimeStep } from "../Solver";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
-
 
 /**
  * Gear joint definition.
@@ -48,7 +46,7 @@ export interface GearJointDef extends JointDef, GearJointOpt {
 }
 
 /** @internal */ const DEFAULTS = {
-  ratio : 1.0
+  ratio: 1.0,
 };
 
 declare module "./GearJoint" {
@@ -57,7 +55,14 @@ declare module "./GearJoint" {
   function GearJoint(def: GearJointDef): GearJoint;
   /** @hidden @deprecated Use new keyword. */
   // @ts-expect-error
-  function GearJoint(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number): GearJoint;
+  function GearJoint(
+    def: GearJointOpt,
+    bodyA: Body,
+    bodyB: Body,
+    joint1: RevoluteJoint | PrismaticJoint,
+    joint2: RevoluteJoint | PrismaticJoint,
+    ratio?: number,
+  ): GearJoint;
 }
 
 /**
@@ -118,8 +123,22 @@ export class GearJoint extends Joint {
   /** @internal */ m_mass: number;
 
   constructor(def: GearJointDef);
-  constructor(def: GearJointOpt, bodyA: Body, bodyB: Body, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number);
-  constructor(def: GearJointDef, bodyA?: Body, bodyB?: Body, joint1?: RevoluteJoint | PrismaticJoint, joint2?: RevoluteJoint | PrismaticJoint, ratio?: number) {
+  constructor(
+    def: GearJointOpt,
+    bodyA: Body,
+    bodyB: Body,
+    joint1: RevoluteJoint | PrismaticJoint,
+    joint2: RevoluteJoint | PrismaticJoint,
+    ratio?: number,
+  );
+  constructor(
+    def: GearJointDef,
+    bodyA?: Body,
+    bodyB?: Body,
+    joint1?: RevoluteJoint | PrismaticJoint,
+    joint2?: RevoluteJoint | PrismaticJoint,
+    ratio?: number,
+  ) {
     // @ts-ignore
     if (_CONSTRUCTOR_FACTORY && !(this instanceof GearJoint)) {
       return new GearJoint(def, bodyA, bodyB, joint1, joint2, ratio);
@@ -250,7 +269,7 @@ export class GearJoint extends Joint {
 
   /** @hidden */
   static _deserialize(data: any, world: any, restore: any): GearJoint {
-    data = {...data};
+    data = { ...data };
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
     data.joint1 = restore(Joint, data.joint1, world);
@@ -390,7 +409,10 @@ export class GearJoint extends Joint {
       this.m_JvBD = Vec2.mulNumVec2(this.m_ratio, u);
       this.m_JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u);
       this.m_JwB = this.m_ratio * Vec2.crossVec2Vec2(rB, u);
-      this.m_mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD * this.m_JwD * this.m_JwD + this.m_iB * this.m_JwB * this.m_JwB;
+      this.m_mass +=
+        this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) +
+        this.m_iD * this.m_JwD * this.m_JwD +
+        this.m_iB * this.m_JwB * this.m_JwB;
     }
 
     // Compute effective mass.
@@ -408,7 +430,6 @@ export class GearJoint extends Joint {
 
       vD.subMul(this.m_mD * this.m_impulse, this.m_JvBD);
       wD -= this.m_iD * this.m_impulse * this.m_JwD;
-
     } else {
       this.m_impulse = 0.0;
     }
@@ -433,8 +454,9 @@ export class GearJoint extends Joint {
     const vD = this.m_bodyD.c_velocity.v;
     let wD = this.m_bodyD.c_velocity.w;
 
-    let Cdot = Vec2.dot(this.m_JvAC, vA) - Vec2.dot(this.m_JvAC, vC) + Vec2.dot(this.m_JvBD, vB) - Vec2.dot(this.m_JvBD, vD);
-    Cdot += (this.m_JwA * wA - this.m_JwC * wC) + (this.m_JwB * wB - this.m_JwD * wD);
+    let Cdot =
+      Vec2.dot(this.m_JvAC, vA) - Vec2.dot(this.m_JvAC, vC) + Vec2.dot(this.m_JvBD, vB) - Vec2.dot(this.m_JvBD, vD);
+    Cdot += this.m_JwA * wA - this.m_JwC * wC + (this.m_JwB * wB - this.m_JwD * wD);
 
     const impulse = -this.m_mass * Cdot;
     this.m_impulse += impulse;
@@ -531,7 +553,7 @@ export class GearJoint extends Joint {
       coordinateB = Vec2.dot(pB, this.m_localAxisD) - Vec2.dot(pD, this.m_localAxisD);
     }
 
-    const C = (coordinateA + this.m_ratio * coordinateB) - this.m_constant;
+    const C = coordinateA + this.m_ratio * coordinateB - this.m_constant;
 
     let impulse = 0.0;
     if (mass > 0.0) {
@@ -559,5 +581,4 @@ export class GearJoint extends Joint {
     // TODO_ERIN not implemented
     return linearError < Settings.linearSlop;
   }
-
 }

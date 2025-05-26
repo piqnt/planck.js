@@ -12,11 +12,9 @@ import { AABB, AABBValue, RayCastCallback, RayCastInput } from "./AABB";
 import { DynamicTree, DynamicTreeQueryCallback } from "./DynamicTree";
 import { FixtureProxy } from "../dynamics/Fixture";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
-
 
 /**
  * The broad-phase wraps and extends a dynamic-tree to keep track of moved

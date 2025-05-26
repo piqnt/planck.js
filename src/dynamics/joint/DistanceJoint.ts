@@ -16,11 +16,9 @@ import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
-
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_PI = Math.PI;
-
 
 /**
  * Distance joint definition. This requires defining an anchor point on both
@@ -65,8 +63,8 @@ export interface DistanceJointDef extends JointDef, DistanceJointOpt {
 }
 
 /** @internal */ const DEFAULTS = {
-  frequencyHz : 0.0,
-  dampingRatio : 0.0
+  frequencyHz: 0.0,
+  dampingRatio: 0.0,
 };
 
 declare module "./DistanceJoint" {
@@ -75,7 +73,13 @@ declare module "./DistanceJoint" {
   function DistanceJoint(def: DistanceJointDef): DistanceJoint;
   /** @hidden @deprecated Use new keyword. */
   // @ts-expect-error
-  function DistanceJoint(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA: Vec2Value, anchorB: Vec2Value): DistanceJoint;
+  function DistanceJoint(
+    def: DistanceJointOpt,
+    bodyA: Body,
+    bodyB: Body,
+    anchorA: Vec2Value,
+    anchorB: Vec2Value,
+  ): DistanceJoint;
 }
 
 /**
@@ -124,7 +128,7 @@ export class DistanceJoint extends Joint {
     }
 
     // order of constructor arguments is changed in v0.2
-    if (bodyB && anchorA && ("m_type" in anchorA) && ("x" in bodyB) && ("y" in bodyB)) {
+    if (bodyB && anchorA && "m_type" in anchorA && "x" in bodyB && "y" in bodyB) {
       const temp = bodyB;
       bodyB = anchorA as any as Body;
       anchorA = temp as any as Vec2;
@@ -140,8 +144,9 @@ export class DistanceJoint extends Joint {
     // Solver shared
     this.m_localAnchorA = Vec2.clone(anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.zero());
     this.m_localAnchorB = Vec2.clone(anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.zero());
-    this.m_length = Number.isFinite(def.length) ? def.length :
-      Vec2.distance(bodyA.getWorldPoint(this.m_localAnchorA), bodyB.getWorldPoint(this.m_localAnchorB));
+    this.m_length = Number.isFinite(def.length)
+      ? def.length
+      : Vec2.distance(bodyA.getWorldPoint(this.m_localAnchorA), bodyB.getWorldPoint(this.m_localAnchorB));
     this.m_frequencyHz = def.frequencyHz;
     this.m_dampingRatio = def.dampingRatio;
     this.m_impulse = 0.0;
@@ -187,7 +192,7 @@ export class DistanceJoint extends Joint {
 
   /** @hidden */
   static _deserialize(data: any, world: any, restore: any): DistanceJoint {
-    data = {...data};
+    data = { ...data };
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
     const joint = new DistanceJoint(data);
@@ -210,11 +215,12 @@ export class DistanceJoint extends Joint {
 
     if (def.length > 0) {
       this.m_length = +def.length;
-    } else if (def.length < 0) { // don't change length
+    } else if (def.length < 0) {
+      // don't change length
     } else if (def.anchorA || def.anchorA || def.anchorA || def.anchorA) {
       this.m_length = Vec2.distance(
-          this.m_bodyA.getWorldPoint(this.m_localAnchorA),
-          this.m_bodyB.getWorldPoint(this.m_localAnchorB)
+        this.m_bodyA.getWorldPoint(this.m_localAnchorA),
+        this.m_bodyB.getWorldPoint(this.m_localAnchorB),
       );
     }
     if (Number.isFinite(def.frequencyHz)) {
@@ -374,7 +380,6 @@ export class DistanceJoint extends Joint {
 
       vB.addMul(this.m_invMassB, P);
       wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
-
     } else {
       this.m_impulse = 0.0;
     }
@@ -450,5 +455,4 @@ export class DistanceJoint extends Joint {
 
     return math_abs(C) < Settings.linearSlop;
   }
-
 }

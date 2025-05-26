@@ -10,8 +10,8 @@
 import type { MassData } from "../dynamics/Body";
 import { RayCastOutput, RayCastInput, AABBValue } from "./AABB";
 import { DistanceProxy } from "./Distance";
-import type { Transform, TransformValue }  from "../common/Transform";
-import type { Vec2Value }  from "../common/Vec2";
+import type { Transform, TransformValue } from "../common/Transform";
+import type { Vec2Value } from "../common/Vec2";
 import { Style } from "../util/Testbed";
 
 // todo make shape an interface
@@ -108,7 +108,6 @@ export abstract class Shape {
   abstract computeMass(massData: MassData, density?: number): void;
 
   abstract computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
-
 }
 
 export type ShapeType = "circle" | "edge" | "polygon" | "chain";

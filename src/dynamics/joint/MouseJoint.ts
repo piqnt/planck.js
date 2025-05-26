@@ -17,11 +17,9 @@ import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_PI = Math.PI;
-
 
 /**
  * Mouse joint definition. This requires a world target point, tuning
@@ -58,9 +56,9 @@ export interface MouseJointDef extends JointDef, MouseJointOpt {
 }
 
 /** @internal */ const DEFAULTS = {
-  maxForce : 0.0,
-  frequencyHz : 5.0,
-  dampingRatio : 0.7
+  maxForce: 0.0,
+  frequencyHz: 5.0,
+  dampingRatio: 0.7,
 };
 
 declare module "./MouseJoint" {
@@ -77,7 +75,7 @@ declare module "./MouseJoint" {
  * point. This a soft constraint with a maximum force. This allows the
  * constraint to stretch and without applying huge forces.
  *
- * You need to call setTarget(target) every time that mouse is 
+ * You need to call setTarget(target) every time that mouse is
  * moved, to track the new location of the mouse.
  *
  * NOTE: this joint is not documented in the manual because it was developed to
@@ -179,7 +177,7 @@ export class MouseJoint extends Joint {
 
   /** @hidden */
   static _deserialize(data: any, world: any, restore: any): MouseJoint {
-    data = {...data};
+    data = { ...data };
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
     data.target = Vec2.clone(data.target);
@@ -339,12 +337,10 @@ export class MouseJoint extends Joint {
     // -r1.x*r1.y]
     // [ 0 1/m1+1/m2] [-r1.x*r1.y r1.x*r1.x] [-r1.x*r1.y r1.x*r1.x]
     const K = new Mat22();
-    K.ex.x = this.m_invMassB + this.m_invIB * this.m_rB.y * this.m_rB.y
-        + this.m_gamma;
+    K.ex.x = this.m_invMassB + this.m_invIB * this.m_rB.y * this.m_rB.y + this.m_gamma;
     K.ex.y = -this.m_invIB * this.m_rB.x * this.m_rB.y;
     K.ey.x = K.ex.y;
-    K.ey.y = this.m_invMassB + this.m_invIB * this.m_rB.x * this.m_rB.x
-        + this.m_gamma;
+    K.ey.y = this.m_invMassB + this.m_invIB * this.m_rB.x * this.m_rB.x + this.m_gamma;
 
     this.m_mass = K.getInverse();
 
@@ -359,7 +355,6 @@ export class MouseJoint extends Joint {
       this.m_impulse.mul(step.dtRatio);
       vB.addMul(this.m_invMassB, this.m_impulse);
       wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, this.m_impulse);
-
     } else {
       this.m_impulse.setZero();
     }
@@ -402,5 +397,4 @@ export class MouseJoint extends Joint {
   solvePositionConstraints(step: TimeStep): boolean {
     return true;
   }
-
 }

@@ -16,10 +16,8 @@ import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
-
 
 /**
  * Motor joint definition.
@@ -50,13 +48,12 @@ export interface MotorJointOpt extends JointOpt {
 /**
  * Motor joint definition.
  */
-export interface MotorJointDef extends JointDef, MotorJointOpt {
-}
+export interface MotorJointDef extends JointDef, MotorJointOpt {}
 
 /** @internal */ const DEFAULTS = {
-  maxForce : 1.0,
-  maxTorque : 1.0,
-  correctionFactor : 0.3
+  maxForce: 1.0,
+  maxTorque: 1.0,
+  correctionFactor: 0.3,
 };
 
 declare module "./MotorJoint" {
@@ -115,7 +112,9 @@ export class MotorJoint extends Joint {
 
     this.m_type = MotorJoint.TYPE;
 
-    this.m_linearOffset = Vec2.isValid(def.linearOffset) ? Vec2.clone(def.linearOffset) : bodyA.getLocalPoint(bodyB.getPosition());
+    this.m_linearOffset = Vec2.isValid(def.linearOffset)
+      ? Vec2.clone(def.linearOffset)
+      : bodyA.getLocalPoint(bodyB.getPosition());
     this.m_angularOffset = Number.isFinite(def.angularOffset) ? def.angularOffset : bodyB.getAngle() - bodyA.getAngle();
 
     this.m_linearImpulse = Vec2.zero();
@@ -160,7 +159,7 @@ export class MotorJoint extends Joint {
 
   /** @hidden */
   static _deserialize(data: any, world: any, restore: any): MotorJoint {
-    data = {...data};
+    data = { ...data };
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
     const joint = new MotorJoint(data);
@@ -182,7 +181,7 @@ export class MotorJoint extends Joint {
       this.m_correctionFactor = def.correctionFactor;
     }
     if (Vec2.isValid(def.linearOffset)) {
-      this.m_linearOffset.set(def.linearOffset);      
+      this.m_linearOffset.set(def.linearOffset);
     }
   }
 
@@ -359,7 +358,6 @@ export class MotorJoint extends Joint {
 
       vB.addMul(mB, P);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_angularImpulse);
-
     } else {
       this.m_linearImpulse.setZero();
       this.m_angularImpulse = 0.0;
@@ -435,5 +433,4 @@ export class MotorJoint extends Joint {
   solvePositionConstraints(step: TimeStep): boolean {
     return true;
   }
-
 }

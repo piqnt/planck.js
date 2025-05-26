@@ -11,7 +11,6 @@
 /** @internal */ const math_cos = Math.cos;
 /** @internal */ const math_sqrt = Math.sqrt;
 
-
 import { RotValue } from "./Rot";
 import { TransformValue } from "./Transform";
 import { Vec2Value } from "./Vec2";
@@ -107,7 +106,15 @@ export function combine2Vec2(out: Vec2Value, am: number, a: Vec2Value, bm: numbe
   return out;
 }
 
-export function combine3Vec2(out: Vec2Value, am: number, a: Vec2Value, bm: number, b: Vec2Value, cm: number, c: Vec2Value): Vec2Value {
+export function combine3Vec2(
+  out: Vec2Value,
+  am: number,
+  a: Vec2Value,
+  bm: number,
+  b: Vec2Value,
+  cm: number,
+  c: Vec2Value,
+): Vec2Value {
   out.x = am * a.x + bm * b.x + cm * c.x;
   out.y = am * a.y + bm * b.y + cm * c.y;
   return out;
@@ -234,8 +241,8 @@ export function transformVec2(out: Vec2Value, xf: TransformValue, v: Vec2Value):
 export function detransformVec2(out: Vec2Value, xf: TransformValue, v: Vec2Value): Vec2Value {
   const px = v.x - xf.p.x;
   const py = v.y - xf.p.y;
-  const x = (xf.q.c * px + xf.q.s * py);
-  const y = (-xf.q.s * px + xf.q.c * py);
+  const x = xf.q.c * px + xf.q.s * py;
+  const y = -xf.q.s * px + xf.q.c * py;
   out.x = x;
   out.y = y;
   return out;

@@ -16,10 +16,8 @@ import { Vec2, Vec2Value } from "../common/Vec2";
 import { Rot } from "../common/Rot";
 import { Transform, TransformValue } from "../common/Transform";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_max = Math.max;
-
 
 /** @internal */ const temp = matrix.vec2(0, 0);
 /** @internal */ const normal = matrix.vec2(0, 0);
@@ -330,7 +328,7 @@ class SimplexVertex {
 }
 
 /** @internal */ const searchDirection_reuse = matrix.vec2(0, 0);
-/** @internal */ const closestPoint_reuse = matrix.vec2(0, 0);  
+/** @internal */ const closestPoint_reuse = matrix.vec2(0, 0);
 
 class Simplex {
   m_v1 = new SimplexVertex();
@@ -347,29 +345,59 @@ class Simplex {
 
   /** @internal */ toString(): string {
     if (this.m_count === 3) {
-      return ["+" + this.m_count,
-        this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y,
-        this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y,
-        this.m_v3.a, this.m_v3.wA.x, this.m_v3.wA.y, this.m_v3.wB.x, this.m_v3.wB.y
+      return [
+        "+" + this.m_count,
+        this.m_v1.a,
+        this.m_v1.wA.x,
+        this.m_v1.wA.y,
+        this.m_v1.wB.x,
+        this.m_v1.wB.y,
+        this.m_v2.a,
+        this.m_v2.wA.x,
+        this.m_v2.wA.y,
+        this.m_v2.wB.x,
+        this.m_v2.wB.y,
+        this.m_v3.a,
+        this.m_v3.wA.x,
+        this.m_v3.wA.y,
+        this.m_v3.wB.x,
+        this.m_v3.wB.y,
       ].toString();
-
     } else if (this.m_count === 2) {
-      return ["+" + this.m_count,
-        this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y,
-        this.m_v2.a, this.m_v2.wA.x, this.m_v2.wA.y, this.m_v2.wB.x, this.m_v2.wB.y
+      return [
+        "+" + this.m_count,
+        this.m_v1.a,
+        this.m_v1.wA.x,
+        this.m_v1.wA.y,
+        this.m_v1.wB.x,
+        this.m_v1.wB.y,
+        this.m_v2.a,
+        this.m_v2.wA.x,
+        this.m_v2.wA.y,
+        this.m_v2.wB.x,
+        this.m_v2.wB.y,
       ].toString();
-
     } else if (this.m_count === 1) {
-      return ["+" + this.m_count,
-        this.m_v1.a, this.m_v1.wA.x, this.m_v1.wA.y, this.m_v1.wB.x, this.m_v1.wB.y
+      return [
+        "+" + this.m_count,
+        this.m_v1.a,
+        this.m_v1.wA.x,
+        this.m_v1.wA.y,
+        this.m_v1.wB.x,
+        this.m_v1.wB.y,
       ].toString();
-
     } else {
       return "+" + this.m_count;
     }
   }
 
-  readCache(cache: SimplexCache, proxyA: DistanceProxy, transformA: TransformValue, proxyB: DistanceProxy, transformB: TransformValue): void {
+  readCache(
+    cache: SimplexCache,
+    proxyA: DistanceProxy,
+    transformA: TransformValue,
+    proxyB: DistanceProxy,
+    transformB: TransformValue,
+  ): void {
     if (_ASSERT) console.assert(cache.count <= 3);
 
     // Copy data from cache.
@@ -382,7 +410,7 @@ class Simplex {
       const wBLocal = proxyB.getVertex(v.indexB);
       matrix.transformVec2(v.wA, transformA, wALocal);
       matrix.transformVec2(v.wB, transformB, wBLocal);
-      matrix.subVec2(v.w,v.wB, v.wA);
+      matrix.subVec2(v.w, v.wB, v.wA);
       v.a = 0.0;
     }
 
@@ -406,7 +434,7 @@ class Simplex {
       const wBLocal = proxyB.getVertex(0);
       matrix.transformVec2(v.wA, transformA, wALocal);
       matrix.transformVec2(v.wB, transformB, wBLocal);
-      matrix.subVec2(v.w,v.wB, v.wA);
+      matrix.subVec2(v.w, v.wB, v.wA);
       v.a = 1.0;
       this.m_count = 1;
     }
@@ -460,7 +488,7 @@ class Simplex {
         return matrix.copyVec2(closestPoint_reuse, v1.w);
 
       case 2:
-        return  matrix.combine2Vec2(closestPoint_reuse, v1.a, v1.w, v2.a, v2.w);
+        return matrix.combine2Vec2(closestPoint_reuse, v1.a, v1.w, v2.a, v2.w);
 
       case 3:
         return matrix.zeroVec2(closestPoint_reuse);
@@ -543,29 +571,29 @@ class Simplex {
     }
   }
 
-// Solve a line segment using barycentric coordinates.
-//
-// p = a1 * w1 + a2 * w2
-// a1 + a2 = 1
-//
-// The vector from the origin to the closest point on the line is
-// perpendicular to the line.
-// e12 = w2 - w1
-// dot(p, e) = 0
-// a1 * dot(w1, e) + a2 * dot(w2, e) = 0
-//
-// 2-by-2 linear system
-// [1 1 ][a1] = [1]
-// [w1.e12 w2.e12][a2] = [0]
-//
-// Define
-// d12_1 = dot(w2, e12)
-// d12_2 = -dot(w1, e12)
-// d12 = d12_1 + d12_2
-//
-// Solution
-// a1 = d12_1 / d12
-// a2 = d12_2 / d12
+  // Solve a line segment using barycentric coordinates.
+  //
+  // p = a1 * w1 + a2 * w2
+  // a1 + a2 = 1
+  //
+  // The vector from the origin to the closest point on the line is
+  // perpendicular to the line.
+  // e12 = w2 - w1
+  // dot(p, e) = 0
+  // a1 * dot(w1, e) + a2 * dot(w2, e) = 0
+  //
+  // 2-by-2 linear system
+  // [1 1 ][a1] = [1]
+  // [w1.e12 w2.e12][a2] = [0]
+  //
+  // Define
+  // d12_1 = dot(w2, e12)
+  // d12_2 = -dot(w1, e12)
+  // d12 = d12_1 + d12_2
+  //
+  // Solution
+  // a1 = d12_1 / d12
+  // a2 = d12_2 / d12
   solve2(): void {
     const w1 = this.m_v1.w;
     const w2 = this.m_v2.w;
@@ -597,11 +625,11 @@ class Simplex {
     this.m_count = 2;
   }
 
-// Possible regions:
-// - points[2]
-// - edge points[0]-points[2]
-// - edge points[1]-points[2]
-// - inside the triangle
+  // Possible regions:
+  // - points[2]
+  // - edge points[0]-points[2]
+  // - edge points[1]-points[2]
+  // - inside the triangle
   solve3(): void {
     const w1 = this.m_v1.w;
     const w2 = this.m_v2.w;
@@ -714,7 +742,14 @@ class Simplex {
 /**
  * Determine if two generic shapes overlap.
  */
-export const testOverlap = function (shapeA: Shape, indexA: number, shapeB: Shape, indexB: number, xfA: TransformValue, xfB: TransformValue): boolean {
+export const testOverlap = function (
+  shapeA: Shape,
+  indexA: number,
+  shapeB: Shape,
+  indexB: number,
+  xfA: TransformValue,
+  xfB: TransformValue,
+): boolean {
   input.recycle();
   input.proxyA.set(shapeA, indexA);
   input.proxyB.set(shapeB, indexB);
@@ -768,14 +803,14 @@ export class ShapeCastOutput {
 /**
  * Perform a linear shape cast of shape B moving and shape A fixed. Determines
  * the hit point, normal, and translation fraction.
- * 
+ *
  * @returns true if hit, false if there is no hit or an initial overlap
  */
 //
 // GJK-raycast
 // Algorithm by Gino van den Bergen.
 // "Smooth Mesh Contacts with GJK" in Game Physics Pearls. 2010
-export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput): boolean {
+export const ShapeCast = function (output: ShapeCastOutput, input: ShapeCastInput): boolean {
   output.iterations = 0;
   output.lambda = 1.0;
   output.normal.setZero();
@@ -876,7 +911,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
       default:
         if (_ASSERT) console.assert(false);
     }
-    
+
     // If we have 3 points, then the origin is in the corresponding triangle.
     if (simplex.m_count == 3) {
       // Overlap
@@ -893,7 +928,7 @@ export const ShapeCast = function(output: ShapeCastOutput, input: ShapeCastInput
   if (iter == 0) {
     // Initial overlap
     return false;
-	}
+  }
 
   // Prepare output.
   const pointA = Vec2.zero();

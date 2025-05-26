@@ -7,10 +7,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
-
 
 /** 3D vector */
 export interface Vec3Value {
@@ -66,7 +64,7 @@ export class Vec3 {
     return {
       x: this.x,
       y: this.y,
-      z: this.z
+      z: this.z,
     };
   }
 
@@ -156,10 +154,16 @@ export class Vec3 {
   static areEqual(v: Vec3Value, w: Vec3Value): boolean {
     if (_ASSERT) Vec3.assert(v);
     if (_ASSERT) Vec3.assert(w);
-    return v === w ||
-      typeof v === "object" && v !== null &&
-      typeof w === "object" && w !== null &&
-      v.x === w.x && v.y === w.y && v.z === w.z;
+    return (
+      v === w ||
+      (typeof v === "object" &&
+        v !== null &&
+        typeof w === "object" &&
+        w !== null &&
+        v.x === w.x &&
+        v.y === w.y &&
+        v.z === w.z)
+    );
   }
 
   /** Dot product on two vectors */
@@ -169,11 +173,7 @@ export class Vec3 {
 
   /** Cross product on two vectors */
   static cross(v: Vec3Value, w: Vec3Value): Vec3 {
-    return new Vec3(
-      v.y * w.z - v.z * w.y,
-      v.z * w.x - v.x * w.z,
-      v.x * w.y - v.y * w.x
-    );
+    return new Vec3(v.y * w.z - v.z * w.y, v.z * w.x - v.x * w.z, v.x * w.y - v.y * w.x);
   }
 
   static add(v: Vec3Value, w: Vec3Value): Vec3 {

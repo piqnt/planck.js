@@ -9,20 +9,19 @@
 
 /** @internal */ const math_PI = Math.PI;
 
-
 /**
  * Tuning constants based on meters-kilograms-seconds (MKS) units.
- * 
+ *
  * Some tolerances are absolute and some are relative. Absolute tolerances use MKS units.
  */
 export class Settings {
   /**
    * You can use this to change the length scale used by your game.
-   * 
+   *
    * For example for inches you could use 39.4.
    */
   static lengthUnitsPerMeter = 1.0;
-  
+
   // Collision
   /**
    * The maximum number of contact points between two convex shapes. Do not change
@@ -59,7 +58,7 @@ export class Settings {
    * A small angle used as a collision and constraint tolerance. Usually it is
    * chosen to be numerically significant, but visually insignificant.
    */
-  static angularSlop: number = (2.0 / 180.0 * math_PI);
+  static angularSlop: number = (2.0 / 180.0) * math_PI;
 
   /**
    * The radius of the polygon/edge shape skin. This should not be modified.
@@ -67,7 +66,9 @@ export class Settings {
    * continuous collision. Making it larger may create artifacts for vertex
    * collision.
    */
-  static get polygonRadius(): number { return 2.0 * Settings.linearSlop; }
+  static get polygonRadius(): number {
+    return 2.0 * Settings.linearSlop;
+  }
 
   /**
    * Maximum number of sub-steps per contact in continuous physics simulation.
@@ -107,7 +108,7 @@ export class Settings {
    * The maximum angular position correction used when solving constraints. This
    * helps to prevent overshoot.
    */
-  static maxAngularCorrection: number = (8.0 / 180.0 * math_PI);
+  static maxAngularCorrection: number = (8.0 / 180.0) * math_PI;
 
   /**
    * The maximum linear velocity of a body. This limit is very large and is used
@@ -119,7 +120,7 @@ export class Settings {
    * The maximum angular velocity of a body. This limit is very large and is used
    * to prevent numerical problems. You shouldn't need to adjust Settings.
    */
-  static maxRotation: number = (0.5 * math_PI);
+  static maxRotation: number = 0.5 * math_PI;
 
   /**
    * This scale factor controls how fast overlap is resolved. Ideally this would
@@ -144,7 +145,7 @@ export class Settings {
   /**
    * A body cannot sleep if its angular velocity is above this tolerance.
    */
-  static angularSleepTolerance: number = (2.0 / 180.0 * math_PI);
+  static angularSleepTolerance: number = (2.0 / 180.0) * math_PI;
 }
 
 /** @internal */
@@ -198,7 +199,9 @@ export class SettingsInternal {
     return Settings.maxTranslation * Settings.lengthUnitsPerMeter;
   }
   static get maxTranslationSquared() {
-    return Settings.maxTranslation * Settings.lengthUnitsPerMeter * Settings.maxTranslation * Settings.lengthUnitsPerMeter;
+    return (
+      Settings.maxTranslation * Settings.lengthUnitsPerMeter * Settings.maxTranslation * Settings.lengthUnitsPerMeter
+    );
   }
   static get maxRotation() {
     return Settings.maxRotation;
@@ -219,7 +222,12 @@ export class SettingsInternal {
     return Settings.linearSleepTolerance * Settings.lengthUnitsPerMeter;
   }
   static get linearSleepToleranceSqr() {
-    return Settings.linearSleepTolerance * Settings.lengthUnitsPerMeter * Settings.linearSleepTolerance * Settings.lengthUnitsPerMeter;
+    return (
+      Settings.linearSleepTolerance *
+      Settings.lengthUnitsPerMeter *
+      Settings.linearSleepTolerance *
+      Settings.lengthUnitsPerMeter
+    );
   }
   static get angularSleepTolerance() {
     return Settings.angularSleepTolerance;

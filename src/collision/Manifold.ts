@@ -12,7 +12,6 @@ import { Vec2Value } from "../common/Vec2";
 import { TransformValue } from "../common/Transform";
 import { EPSILON } from "../common/Math";
 
-
 /** @internal */ const math_sqrt = Math.sqrt;
 
 /** @internal */ const pointA = matrix.vec2(0, 0);
@@ -28,19 +27,19 @@ export enum ManifoldType {
   e_unset = -1,
   e_circles = 0,
   e_faceA = 1,
-  e_faceB = 2
+  e_faceB = 2,
 }
 
 export enum ContactFeatureType {
   e_unset = -1,
   e_vertex = 0,
-  e_face = 1
+  e_face = 1,
 }
 
 /**
  * This is used for determining the state of contact points.
  */
- export enum PointState {
+export enum PointState {
   /** Point does not exist */
   nullState = 0,
   /** Point was added in the update */
@@ -48,13 +47,13 @@ export enum ContactFeatureType {
   /** Point persisted across the update */
   persistState = 2,
   /** Point was removed in the update */
-  removeState = 3
+  removeState = 3,
 }
 
 /**
  * Used for computing contact manifolds.
  */
- export class ClipVertex {
+export class ClipVertex {
   v = matrix.vec2(0, 0);
   id: ContactID = new ContactID();
 
@@ -100,7 +99,7 @@ export class Manifold {
   localPoint = matrix.vec2(0, 0);
 
   /** The points of contact */
-  points: ManifoldPoint[] = [ new ManifoldPoint(), new ManifoldPoint() ];
+  points: ManifoldPoint[] = [new ManifoldPoint(), new ManifoldPoint()];
 
   /** The number of manifold points */
   pointCount: number = 0;
@@ -128,7 +127,13 @@ export class Manifold {
    * from the original state. This does not change the point count, impulses, etc.
    * The radii must come from the shapes that generated the manifold.
    */
-  getWorldManifold(wm: WorldManifold | null, xfA: TransformValue, radiusA: number, xfB: TransformValue, radiusB: number): WorldManifold {
+  getWorldManifold(
+    wm: WorldManifold | null,
+    xfA: TransformValue,
+    radiusA: number,
+    xfB: TransformValue,
+    radiusB: number,
+  ): WorldManifold {
     if (this.pointCount == 0) {
       return wm;
     }
@@ -149,7 +154,7 @@ export class Manifold {
         matrix.transformVec2(pointB, xfB, manifoldPoint.localPoint);
         matrix.subVec2(dist, pointB, pointA);
         const lengthSqr = matrix.lengthSqrVec2(dist);
-          if (lengthSqr > EPSILON * EPSILON) {
+        if (lengthSqr > EPSILON * EPSILON) {
           const length = math_sqrt(lengthSqr);
           matrix.scaleVec2(normal, 1 / length, dist);
         }
@@ -167,7 +172,13 @@ export class Manifold {
         for (let i = 0; i < this.pointCount; ++i) {
           const manifoldPoint = this.points[i];
           matrix.transformVec2(clipPoint, xfB, manifoldPoint.localPoint);
-          matrix.combine2Vec2(cA, 1, clipPoint, radiusA - matrix.dotVec2(matrix.subVec2(temp, clipPoint, planePoint), normal), normal);
+          matrix.combine2Vec2(
+            cA,
+            1,
+            clipPoint,
+            radiusA - matrix.dotVec2(matrix.subVec2(temp, clipPoint, planePoint), normal),
+            normal,
+          );
           matrix.combine2Vec2(cB, 1, clipPoint, -radiusB, normal);
           matrix.combine2Vec2(points[i], 0.5, cA, 0.5, cB);
           separations[i] = matrix.dotVec2(matrix.subVec2(temp, cB, cA), normal);
@@ -182,7 +193,13 @@ export class Manifold {
         for (let i = 0; i < this.pointCount; ++i) {
           const manifoldPoint = this.points[i];
           matrix.transformVec2(clipPoint, xfA, manifoldPoint.localPoint);
-          matrix.combine2Vec2(cB, 1, clipPoint, radiusB - matrix.dotVec2(matrix.subVec2(temp, clipPoint, planePoint), normal), normal);
+          matrix.combine2Vec2(
+            cB,
+            1,
+            clipPoint,
+            radiusB - matrix.dotVec2(matrix.subVec2(temp, clipPoint, planePoint), normal),
+            normal,
+          );
           matrix.combine2Vec2(cA, 1, clipPoint, -radiusA, normal);
           matrix.combine2Vec2(points[i], 0.5, cA, 0.5, cB);
           separations[i] = matrix.dotVec2(matrix.subVec2(temp, cA, cB), normal);
@@ -249,11 +266,10 @@ export class ManifoldPoint {
 
 /**
  * Contact ids to facilitate warm starting.
- * 
+ *
  * ContactFeature: The features that intersect to form the contact point.
  */
 export class ContactID {
-
   /**
    * Used to quickly compare contact ids.
    */
@@ -343,7 +359,7 @@ export function getPointStates(
   state1: PointState[],
   state2: PointState[],
   manifold1: Manifold,
-  manifold2: Manifold
+  manifold2: Manifold,
 ): void {
   // state1, state2: PointState[Settings.maxManifoldPoints]
 
@@ -389,7 +405,7 @@ export function clipSegmentToLine(
   vIn: ClipVertex[],
   normal: Vec2Value,
   offset: number,
-  vertexIndexA: number
+  vertexIndexA: number,
 ): number {
   // Start with no output points
   let numOut = 0;
@@ -399,10 +415,8 @@ export function clipSegmentToLine(
   const distance1 = matrix.dotVec2(normal, vIn[1].v) - offset;
 
   // If the points are behind the plane
-  if (distance0 <= 0.0)
-    vOut[numOut++].set(vIn[0]);
-  if (distance1 <= 0.0)
-    vOut[numOut++].set(vIn[1]);
+  if (distance0 <= 0.0) vOut[numOut++].set(vIn[0]);
+  if (distance1 <= 0.0) vOut[numOut++].set(vIn[1]);
 
   // If the points are on different sides of the plane
   if (distance0 * distance1 < 0.0) {

@@ -17,7 +17,6 @@ import { Transform, TransformValue } from "../../common/Transform";
 import { MassData } from "../../dynamics/Body";
 import { DistanceProxy } from "../Distance";
 
-
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_sqrt = Math.sqrt;
 /** @internal */ const math_PI = Math.PI;
@@ -62,7 +61,6 @@ export class CircleShape extends Shape {
       if (typeof b === "number") {
         this.m_radius = b;
       }
-
     } else if (typeof a === "number") {
       this.m_radius = a;
     }

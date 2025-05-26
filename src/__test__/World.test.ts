@@ -7,10 +7,9 @@ import { BoxShape } from "../collision/shape/BoxShape";
 // registers Box-Box collision
 import "../collision/shape/CollidePolygon";
 
-describe("World", function(): void {
-
+describe("World", function (): void {
   // This is the Box2D HelloWorld unit test translated to planck.js
-  it("simulates gravity", function(): void {
+  it("simulates gravity", function (): void {
     // Define the gravity vector.
     const gravity = new Vec2(0.0, -10.0);
 
@@ -20,7 +19,7 @@ describe("World", function(): void {
     // Call the body factory.
     // The body is also added to the world.
     const groundBody = world.createBody({
-      position: new Vec2(0.0, -10.0)
+      position: new Vec2(0.0, -10.0),
     });
 
     // The extents are the half-widths of the box.
@@ -31,7 +30,7 @@ describe("World", function(): void {
     // Define the dynamic body. We set its position and call the body factory.
     const body = world.createBody({
       position: new Vec2(0.0, 4.0),
-      type: "dynamic"
+      type: "dynamic",
     });
 
     // Define another box shape for our dynamic body.
@@ -41,7 +40,7 @@ describe("World", function(): void {
       // Set the box density to be non-zero, so it will be dynamic.
       density: 1.0,
       // Override the default friction.
-      friction: 0.3
+      friction: 0.3,
     });
 
     // Prepare for simulation. Typically we use a time step of 1/60 of a
@@ -71,5 +70,4 @@ describe("World", function(): void {
     expect(position.y).closeTo(1.015, 5e-5);
     expect(angle).closeTo(0.0, 1e-5);
   });
-
 });

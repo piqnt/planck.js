@@ -22,9 +22,7 @@ import { World } from "./World";
 import { ContactEdge } from "./Contact";
 import { Style } from "../util/Testbed";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-
 
 /**
  * A static body does not move under simulation and behaves as if it has infinite mass.
@@ -32,13 +30,13 @@ import { Style } from "../util/Testbed";
  * Static bodies can be moved manually by the user.
  * A static body has zero velocity.
  * Static bodies do not collide with other static or kinematic bodies.
- * 
+ *
  * A kinematic body moves under simulation according to its velocity.
  * Kinematic bodies do not respond to forces.
  * They can be moved manually by the user, but normally a kinematic body is moved by setting its velocity.
  * A kinematic body behaves as if it has infinite mass, however, zero is stored for the mass and the inverse mass.
  * Kinematic bodies do not collide with other kinematic or static bodies.
- * 
+ *
  * A dynamic body is fully simulated.
  * They can be moved manually by the user, but normally they move according to forces.
  * A dynamic body can collide with all body types.
@@ -123,25 +121,25 @@ export interface BodyDef {
 }
 
 /** @internal */ const BodyDefDefault: BodyDef = {
-  type : STATIC,
-  position : Vec2.zero(),
-  angle : 0.0,
+  type: STATIC,
+  position: Vec2.zero(),
+  angle: 0.0,
 
-  linearVelocity : Vec2.zero(),
-  angularVelocity : 0.0,
+  linearVelocity: Vec2.zero(),
+  angularVelocity: 0.0,
 
-  linearDamping : 0.0,
-  angularDamping : 0.0,
+  linearDamping: 0.0,
+  angularDamping: 0.0,
 
-  fixedRotation : false,
-  bullet : false,
-  gravityScale : 1.0,
+  fixedRotation: false,
+  bullet: false,
+  gravityScale: 1.0,
 
-  allowSleep : true,
-  awake : true,
-  active : true,
+  allowSleep: true,
+  awake: true,
+  active: true,
 
-  userData : null
+  userData: null,
 };
 
 /**
@@ -394,7 +392,7 @@ export class Body {
   /**
    * Set the type of the body to "static", "kinematic" or "dynamic".
    * @param type The type of the body.
-   * 
+   *
    * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   setType(type: BodyType): void {
@@ -504,7 +502,7 @@ export class Body {
    * in collisions, ray-casts, or queries. Joints connected to an inactive body
    * are implicitly inactive. An inactive body is still owned by a World object
    * and remains
-   * 
+   *
    * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   setActive(flag: boolean): void {
@@ -522,8 +520,8 @@ export class Body {
       for (let f = this.m_fixtureList; f; f = f.m_next) {
         f.createProxies(broadPhase, this.m_xf);
       }
-		  // Contacts are created at the beginning of the next
-		  this.m_world.m_newFixture = true;
+      // Contacts are created at the beginning of the next
+      this.m_world.m_newFixture = true;
     } else {
       // Destroy all proxies.
       const broadPhase = this.m_world.m_broadPhase;
@@ -572,7 +570,7 @@ export class Body {
    * Set the position of the body's origin and rotation. Manipulating a body's
    * transform may cause non-physical behavior. Note: contacts are updated on the
    * next call to World.step.
-   * 
+   *
    * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    *
    * @param position The world position of the body's local origin.
@@ -583,7 +581,7 @@ export class Body {
    * Set the position of the body's origin and rotation. Manipulating a body's
    * transform may cause non-physical behavior. Note: contacts are updated on the
    * next call to World.step.
-   * 
+   *
    * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
   setTransform(xf: Transform): void;
@@ -686,8 +684,7 @@ export class Body {
    */
   getLinearVelocityFromWorldPoint(worldPoint: Vec2Value): Vec2 {
     const localCenter = Vec2.sub(worldPoint, this.m_sweep.c);
-    return Vec2.add(this.m_linearVelocity, Vec2.crossNumVec2(this.m_angularVelocity,
-      localCenter));
+    return Vec2.add(this.m_linearVelocity, Vec2.crossNumVec2(this.m_angularVelocity, localCenter));
   }
 
   /**
@@ -780,8 +777,7 @@ export class Body {
    * @return the rotational inertia, usually in kg-m^2.
    */
   getInertia(): number {
-    return this.m_I + this.m_mass
-      * Vec2.dot(this.m_sweep.localCenter, this.m_sweep.localCenter);
+    return this.m_I + this.m_mass * Vec2.dot(this.m_sweep.localCenter, this.m_sweep.localCenter);
   }
 
   /**
@@ -826,7 +822,7 @@ export class Body {
       const massData: MassData = {
         mass: 0,
         center: matrix.vec2(0, 0),
-        I: 0
+        I: 0,
       };
       f.getMassData(massData);
       this.m_mass += massData.mass;
@@ -838,7 +834,6 @@ export class Body {
     if (this.m_mass > 0.0) {
       this.m_invMass = 1.0 / this.m_mass;
       matrix.scaleVec2(localCenter, this.m_invMass, localCenter);
-
     } else {
       // Force all dynamic bodies to have a positive mass.
       this.m_mass = 1.0;
@@ -850,7 +845,6 @@ export class Body {
       this.m_I -= this.m_mass * matrix.dotVec2(localCenter, localCenter);
       if (_ASSERT) console.assert(this.m_I > 0.0);
       this.m_invI = 1.0 / this.m_I;
-
     } else {
       this.m_I = 0.0;
       this.m_invI = 0.0;
@@ -871,7 +865,7 @@ export class Body {
    * that this changes the center of mass position. Note that creating or
    * destroying fixtures can also alter the mass. This function has no effect if
    * the body isn't dynamic.
-   * 
+   *
    * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    *
    * @param massData The mass properties.
@@ -1021,7 +1015,7 @@ export class Body {
 
   /**
    * This is used to test if two bodies should collide.
-   * 
+   *
    * Bodies do not collide when:
    * - Neither of them is dynamic
    * - They are connected by a joint with collideConnected == false
@@ -1102,7 +1096,7 @@ export class Body {
    * mass of the body if the body is dynamic and the fixture has positive density.
    * All fixtures attached to a body are implicitly destroyed when the body is
    * destroyed.
-   * 
+   *
    * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    *
    * @param fixture The fixture to be removed.
@@ -1121,7 +1115,6 @@ export class Body {
     if (this.m_fixtureList === fixture) {
       this.m_fixtureList = fixture.m_next;
       found = true;
-
     } else {
       let node = this.m_fixtureList;
       while (node != null) {

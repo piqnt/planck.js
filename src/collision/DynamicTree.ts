@@ -12,11 +12,9 @@ import { Pool } from "../util/Pool";
 import { Vec2, Vec2Value } from "../common/Vec2";
 import { AABB, AABBValue, RayCastCallback, RayCastInput } from "./AABB";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_max = Math.max;
-
 
 export type DynamicTreeQueryCallback = (nodeId: number) => boolean;
 
@@ -59,7 +57,7 @@ export class TreeNode<T> {
     node.child2 = null;
     node.height = -1;
     node.id = undefined;
-  }
+  },
 });
 
 /**
@@ -77,7 +75,7 @@ export class DynamicTree<T> {
   m_root: TreeNode<T>;
   m_lastProxyId: number;
   m_nodes: {
-    [id: number]: TreeNode<T>
+    [id: number]: TreeNode<T>;
   };
 
   constructor() {
@@ -497,7 +495,7 @@ export class DynamicTree<T> {
     let totalArea = 0.0;
     let node;
     const it = this.iteratorPool.allocate().preorder(this.m_root);
-    while (node = it.next()) {
+    while ((node = it.next())) {
       if (node.height < 0) {
         // Free node in pool
         continue;
@@ -613,7 +611,7 @@ export class DynamicTree<T> {
     let maxBalance = 0;
     let node;
     const it = this.iteratorPool.allocate().preorder(this.m_root);
-    while (node = it.next()) {
+    while ((node = it.next())) {
       if (node.height <= 1) {
         continue;
       }
@@ -638,7 +636,7 @@ export class DynamicTree<T> {
     // Build array of leaves. Free the rest.
     let node;
     const it = this.iteratorPool.allocate().preorder(this.m_root);
-    while (node = it.next()) {
+    while ((node = it.next())) {
       if (node.height < 0) {
         // free node in pool
         continue;
@@ -704,7 +702,7 @@ export class DynamicTree<T> {
     // Build array of leaves. Free the rest.
     let node;
     const it = this.iteratorPool.allocate().preorder(this.m_root);
-    while (node = it.next()) {
+    while ((node = it.next())) {
       const aabb = node.aabb;
       aabb.lowerBound.x -= newOrigin.x;
       aabb.lowerBound.y -= newOrigin.y;
@@ -775,7 +773,7 @@ export class DynamicTree<T> {
 
     // Build a bounding box for the segment.
     const segmentAABB = new AABB();
-    let t = Vec2.combine((1 - maxFraction), p1, maxFraction, p2);
+    let t = Vec2.combine(1 - maxFraction, p1, maxFraction, p2);
     segmentAABB.combinePoints(p1, t);
 
     const stack = this.stackPool.allocate();
@@ -814,7 +812,7 @@ export class DynamicTree<T> {
         } else if (value > 0.0) {
           // update segment bounding box.
           maxFraction = value;
-          t = Vec2.combine((1 - maxFraction), p1, maxFraction, p2);
+          t = Vec2.combine(1 - maxFraction, p1, maxFraction, p2);
           segmentAABB.combinePoints(p1, t);
         }
       } else {
@@ -831,8 +829,7 @@ export class DynamicTree<T> {
       // tslint:disable-next-line:no-object-literal-type-assertion
       return {} as RayCastInput;
     },
-    release(stack: RayCastInput): void {
-    }
+    release(stack: RayCastInput): void {},
   });
 
   private stackPool: Pool<Array<TreeNode<T>>> = new Pool<Array<TreeNode<T>>>({
@@ -841,7 +838,7 @@ export class DynamicTree<T> {
     },
     release(stack: Array<TreeNode<T>>): void {
       stack.length = 0;
-    }
+    },
   });
 
   private iteratorPool: Pool<Iterator<T>> = new Pool<Iterator<T>>({
@@ -850,9 +847,8 @@ export class DynamicTree<T> {
     },
     release(iterator: Iterator<T>): void {
       iterator.close();
-    }
+    },
   });
-
 }
 
 /** @internal */

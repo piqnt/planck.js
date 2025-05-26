@@ -10,7 +10,6 @@
 import { EPSILON } from "../common/Math";
 import { Vec2, Vec2Value } from "../common/Vec2";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_max = Math.max;
@@ -83,7 +82,11 @@ export class AABB {
     if (obj === null || typeof obj === "undefined") {
       return false;
     }
-    return Vec2.isValid(obj.lowerBound) && Vec2.isValid(obj.upperBound) && Vec2.sub(obj.upperBound, obj.lowerBound).lengthSquared() >= 0;
+    return (
+      Vec2.isValid(obj.lowerBound) &&
+      Vec2.isValid(obj.upperBound) &&
+      Vec2.sub(obj.upperBound, obj.lowerBound).lengthSquared() >= 0
+    );
   }
 
   static assert(o: any): void {

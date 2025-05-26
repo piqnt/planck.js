@@ -15,11 +15,9 @@ import { Sweep } from "../common/Sweep";
 import { Transform } from "../common/Transform";
 import { Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from "./Distance";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_max = Math.max;
-
 
 /**
  * Input parameters for TimeOfImpact.
@@ -84,7 +82,6 @@ stats.toiMaxRootIters = 0;
 /** @internal */ const axisB = matrix.vec2(0, 0);
 /** @internal */ const localPointA = matrix.vec2(0, 0);
 /** @internal */ const localPointB = matrix.vec2(0, 0);
-
 
 /**
  * Compute the upper bound on time before two shapes penetrate. Time is
@@ -240,7 +237,7 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
         let t;
         if (rootIterCount & 1) {
           // Secant rule to improve convergence.
-          t = a1 + (target - s1) * (a2 - a1) / (s2 - s1);
+          t = a1 + ((target - s1) * (a2 - a1)) / (s2 - s1);
         } else {
           // Bisection to guarantee progress.
           t = 0.5 * (a1 + a2);
@@ -344,7 +341,14 @@ class SeparationFunction {
 
   // TODO_ERIN might not need to return the separation
 
-  initialize(cache: SimplexCache, proxyA: DistanceProxy, sweepA: Sweep, proxyB: DistanceProxy, sweepB: Sweep, t1: number): number {
+  initialize(
+    cache: SimplexCache,
+    proxyA: DistanceProxy,
+    sweepA: Sweep,
+    proxyB: DistanceProxy,
+    sweepB: Sweep,
+    t1: number,
+  ): number {
     const count = cache.count;
     if (_ASSERT) console.assert(0 < count && count < 3);
 
@@ -365,7 +369,6 @@ class SeparationFunction {
       matrix.subVec2(this.m_axis, pointB, pointA);
       const s = matrix.normalizeVec2Length(this.m_axis);
       return s;
-
     } else if (cache.indexA[0] === cache.indexA[1]) {
       // Two points on B and one on A.
       this.m_type = SeparationFunctionType.e_faceB;
@@ -388,7 +391,6 @@ class SeparationFunction {
         s = -s;
       }
       return s;
-
     } else {
       // Two points on A and one or two points on B.
       this.m_type = SeparationFunctionType.e_faceA;

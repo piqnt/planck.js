@@ -16,11 +16,9 @@ import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
-
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_PI = Math.PI;
-
 
 /**
  * Wheel joint definition. This requires defining a line of motion using an axis
@@ -83,11 +81,11 @@ export interface WheelJointDef extends JointDef, WheelJointOpt {
 }
 
 /** @internal */ const DEFAULTS = {
-  enableMotor : false,
-  maxMotorTorque : 0.0,
-  motorSpeed : 0.0,
-  frequencyHz : 2.0,
-  dampingRatio : 0.7,
+  enableMotor: false,
+  maxMotorTorque: 0.0,
+  motorSpeed: 0.0,
+  frequencyHz: 2.0,
+  dampingRatio: 0.7,
 };
 
 declare module "./WheelJoint" {
@@ -240,7 +238,7 @@ export class WheelJoint extends Joint {
 
   /** @hidden */
   static _deserialize(data: any, world: any, restore: any): WheelJoint {
-    data = {...data};
+    data = { ...data };
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
     const joint = new WheelJoint(data);
@@ -471,8 +469,7 @@ export class WheelJoint extends Joint {
       this.m_sAy = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_ay);
       this.m_sBy = Vec2.crossVec2Vec2(rB, this.m_ay);
 
-      this.m_mass = mA + mB + iA * this.m_sAy * this.m_sAy + iB * this.m_sBy
-          * this.m_sBy;
+      this.m_mass = mA + mB + iA * this.m_sAy * this.m_sAy + iB * this.m_sBy * this.m_sBy;
 
       if (this.m_mass > 0.0) {
         this.m_mass = 1.0 / this.m_mass;
@@ -488,8 +485,7 @@ export class WheelJoint extends Joint {
       this.m_sAx = Vec2.crossVec2Vec2(Vec2.add(d, rA), this.m_ax);
       this.m_sBx = Vec2.crossVec2Vec2(rB, this.m_ax);
 
-      const invMass = mA + mB + iA * this.m_sAx * this.m_sAx + iB * this.m_sBx
-          * this.m_sBx;
+      const invMass = mA + mB + iA * this.m_sAx * this.m_sAx + iB * this.m_sBx * this.m_sBx;
 
       if (invMass > 0.0) {
         this.m_springMass = 1.0 / invMass;
@@ -549,7 +545,6 @@ export class WheelJoint extends Joint {
 
       vB.addMul(this.m_invMassB, P);
       wB += this.m_invIB * LB;
-
     } else {
       this.m_impulse = 0.0;
       this.m_springImpulse = 0.0;
@@ -652,7 +647,11 @@ export class WheelJoint extends Joint {
 
     const C = Vec2.dot(d, ay);
 
-    const k = this.m_invMassA + this.m_invMassB + this.m_invIA * this.m_sAy * this.m_sAy + this.m_invIB * this.m_sBy * this.m_sBy;
+    const k =
+      this.m_invMassA +
+      this.m_invMassB +
+      this.m_invIA * this.m_sAy * this.m_sAy +
+      this.m_invIB * this.m_sBy * this.m_sBy;
 
     const impulse = k != 0.0 ? -C / k : 0.0;
 
@@ -672,5 +671,4 @@ export class WheelJoint extends Joint {
 
     return math_abs(C) <= Settings.linearSlop;
   }
-
 }

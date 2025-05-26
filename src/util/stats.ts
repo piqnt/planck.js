@@ -22,5 +22,5 @@ export const stats = {
       }
     }
     return string;
-  }
+  },
 };

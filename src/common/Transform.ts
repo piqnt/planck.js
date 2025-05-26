@@ -10,10 +10,8 @@
 import { Vec2, Vec2Value } from "./Vec2";
 import { Rot, RotValue } from "./Rot";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
-
 
 export type TransformValue = {
   p: Vec2Value;
@@ -123,17 +121,15 @@ export class Transform {
   // static mul(a: Transform, b: Transform[]): Transform[];
   static mul(a, b) {
     if (Array.isArray(b)) {
-        // todo: this was used in examples, remove in the future
+      // todo: this was used in examples, remove in the future
       if (_ASSERT) Transform.assert(a);
       const arr = [];
       for (let i = 0; i < b.length; i++) {
         arr[i] = Transform.mul(a, b[i]);
       }
       return arr;
-
     } else if ("x" in b && "y" in b) {
       return Transform.mulVec2(a, b);
-
     } else if ("p" in b && "q" in b) {
       return Transform.mulXf(a, b);
     }
@@ -154,7 +150,7 @@ export class Transform {
   static mulFn(a: TransformValue) {
     // todo: this was used in examples, remove in the future
     if (_ASSERT) Transform.assert(a);
-    return function(b: Vec2Value): Vec2 {
+    return function (b: Vec2Value): Vec2 {
       return Transform.mul(a, b);
     };
   }
@@ -162,8 +158,8 @@ export class Transform {
   static mulVec2(a: TransformValue, b: Vec2Value): Vec2 {
     if (_ASSERT) Transform.assert(a);
     if (_ASSERT) Vec2.assert(b);
-    const x = (a.q.c * b.x - a.q.s * b.y) + a.p.x;
-    const y = (a.q.s * b.x + a.q.c * b.y) + a.p.y;
+    const x = a.q.c * b.x - a.q.s * b.y + a.p.x;
+    const y = a.q.s * b.x + a.q.c * b.y + a.p.y;
     return Vec2.neo(x, y);
   }
 
@@ -183,7 +179,6 @@ export class Transform {
   static mulT(a, b) {
     if ("x" in b && "y" in b) {
       return Transform.mulTVec2(a, b);
-
     } else if ("p" in b && "q" in b) {
       return Transform.mulTXf(a, b);
     }
@@ -194,8 +189,8 @@ export class Transform {
     if (_ASSERT) Vec2.assert(b);
     const px = b.x - a.p.x;
     const py = b.y - a.p.y;
-    const x = (a.q.c * px + a.q.s * py);
-    const y = (-a.q.s * px + a.q.c * py);
+    const x = a.q.c * px + a.q.s * py;
+    const y = -a.q.s * px + a.q.c * py;
     return Vec2.neo(x, y);
   }
 

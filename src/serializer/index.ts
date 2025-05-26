@@ -75,24 +75,32 @@ type ClassName = any;
 type SerializedType = object[];
 
 type RefType = {
-  refIndex: number,
-  refType: string,
+  refIndex: number;
+  refType: string;
 };
 
 type SerializerOptions = {
-  rootClass: ClassName,
-  preSerialize?: (obj: ObjectType) => DataType,
-  postSerialize?: (data: DataType, obj: any) => DataType,
-  preDeserialize?: (data: DataType) => DataType,
-  postDeserialize?: (obj: ObjectType, data: DataType) => ObjectType,
+  rootClass: ClassName;
+  preSerialize?: (obj: ObjectType) => DataType;
+  postSerialize?: (data: DataType, obj: any) => DataType;
+  preDeserialize?: (data: DataType) => DataType;
+  postDeserialize?: (obj: ObjectType, data: DataType) => ObjectType;
 };
 
 const DEFAULT_OPTIONS: SerializerOptions = {
   rootClass: World,
-  preSerialize: function(obj) { return obj; },
-  postSerialize: function(data, obj) { return data; },
-  preDeserialize: function(data: DataType) { return data; },
-  postDeserialize: function(obj, data) { return obj; },
+  preSerialize: function (obj) {
+    return obj;
+  },
+  postSerialize: function (data, obj) {
+    return data;
+  },
+  preDeserialize: function (data: DataType) {
+    return data;
+  },
+  postDeserialize: function (obj, data) {
+    return obj;
+  },
 };
 
 type DeserializeChildCallback = (classHint: any, obj: any, context: any) => any;
@@ -107,7 +115,7 @@ export class Serializer<T> {
     };
   }
 
-  toJson = (root: T): SerializedType  => {
+  toJson = (root: T): SerializedType => {
     const preSerialize = this.options.preSerialize;
     const postSerialize = this.options.postSerialize;
     const json = [];
@@ -124,7 +132,7 @@ export class Serializer<T> {
         const index = json.length + refQueue.length;
         const ref = {
           refIndex: index,
-          refType: typeName
+          refType: typeName,
         };
         refMemoById[value.__sid] = ref;
       }
@@ -140,7 +148,7 @@ export class Serializer<T> {
 
     // traverse the object graph
     // ref objects are pushed into the queue
-    // other objects are serialize in-place 
+    // other objects are serialize in-place
     function traverse(value: any, noRefType = false) {
       if (typeof value !== "object" || value === null) {
         return value;
@@ -164,7 +172,6 @@ export class Serializer<T> {
           newValue[key] = traverse(value[key]);
         }
         value = newValue;
-
       } else {
         const newValue = {};
         for (const key in value) {
@@ -210,7 +217,7 @@ export class Serializer<T> {
 
     /**
      * Recursive callback function to  deserialize a child data object or reference object.
-     * 
+     *
      * @param classHint suggested class to deserialize obj to
      * @param dataOrRef data or reference object
      * @param context for example world when deserializing bodies and joints
@@ -218,7 +225,7 @@ export class Serializer<T> {
     function deserializeChild(classHint: ClassName, dataOrRef: DataType | RefType, context: any) {
       const isRefObject = dataOrRef.refIndex && dataOrRef.refType;
       if (!isRefObject) {
-        return deserializeWithHooks(classHint, dataOrRef, context);  
+        return deserializeWithHooks(classHint, dataOrRef, context);
       }
       const ref = dataOrRef as RefType;
       if (DESERIALIZE_BY_REF_TYPE[ref.refType]) {

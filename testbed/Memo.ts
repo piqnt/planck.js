@@ -16,7 +16,6 @@ export class Memo {
     return !equal;
   }
 
-
   clear() {
     this.memory.length = 0;
   }

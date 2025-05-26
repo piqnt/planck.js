@@ -18,7 +18,6 @@ import { Vec2, Vec2Value } from "../../common/Vec2";
 import { SettingsInternal as Settings } from "../../Settings";
 import { Shape } from "../Shape";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_max = Math.max;
@@ -321,7 +320,6 @@ export class PolygonShape extends Shape {
    * @param childIndex The child shape index
    */
   rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean {
-
     // Put the ray into the polygon's frame of reference.
     const p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
     const p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
@@ -458,7 +456,7 @@ export class PolygonShape extends Shape {
     for (let i = 0; i < this.m_count; ++i) {
       // Triangle vertices.
       matrix.subVec2(e1, this.m_vertices[i], s);
-      if ( i + 1 < this.m_count) {
+      if (i + 1 < this.m_count) {
         matrix.subVec2(e2, this.m_vertices[i + 1], s);
       } else {
         matrix.subVec2(e2, this.m_vertices[0], s);
@@ -481,7 +479,7 @@ export class PolygonShape extends Shape {
       const intx2 = ex1 * ex1 + ex2 * ex1 + ex2 * ex2;
       const inty2 = ey1 * ey1 + ey2 * ey1 + ey2 * ey2;
 
-      I += (0.25 * k_inv3 * D) * (intx2 + inty2);
+      I += 0.25 * k_inv3 * D * (intx2 + inty2);
     }
 
     // Total mass

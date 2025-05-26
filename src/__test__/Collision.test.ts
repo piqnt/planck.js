@@ -6,10 +6,8 @@ import { AABB } from "../collision/AABB";
 import { DynamicTree } from "../collision/DynamicTree";
 import { BroadPhase } from "../collision/BroadPhase";
 
-
-describe("Collision", function(): void {
-
-  it("AABB", function(): void {
+describe("Collision", function (): void {
+  it("AABB", function (): void {
     const o = new AABB();
     expect(o.isValid()).equal(true);
 
@@ -48,7 +46,7 @@ describe("Collision", function(): void {
     // rayCast
   });
 
-  it("DynamicTree", function(): void {
+  it("DynamicTree", function (): void {
     const tree = new DynamicTree();
 
     const foo = tree.createProxy(new AABB(new Vec2(0, 0), new Vec2(1, 1)), "foo");
@@ -74,7 +72,7 @@ describe("Collision", function(): void {
     expect(QueryCallback.calledWith(bar)).equal(true);
     expect(QueryCallback.calledWith(baz)).equal(true);
 
-    tree.query(new AABB(new Vec2(0.3, 0.3), new Vec2(0.7, 0.7)),callback);
+    tree.query(new AABB(new Vec2(0.3, 0.3), new Vec2(0.7, 0.7)), callback);
     expect(QueryCallback.lastCall.calledWith(foo)).equal(true);
 
     tree.query(new AABB(new Vec2(1.3, 1.3), new Vec2(1.7, 1.7)), callback);
@@ -98,10 +96,9 @@ describe("Collision", function(): void {
 
     tree.destroyProxy(baz);
     expect(tree.getHeight()).equal(0);
-
   });
 
-  it("BroadPhase", function(): void {
+  it("BroadPhase", function (): void {
     const bp = new BroadPhase();
 
     const AddPair = sinon.spy();
@@ -130,7 +127,5 @@ describe("Collision", function(): void {
     bp.updatePairs(callback);
     expect(AddPair.callCount).equal(1);
     expect(AddPair.calledWith("foo", "baz")).equal(true);
-
   });
-
 });

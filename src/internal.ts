@@ -16,5 +16,5 @@ export const internal = {
   Distance,
   TimeOfImpact,
   DynamicTree,
-  stats
+  stats,
 };

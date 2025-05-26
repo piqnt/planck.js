@@ -16,14 +16,20 @@ import { CircleShape } from "./CircleShape";
 import { Manifold, ContactFeatureType, ManifoldType } from "../Manifold";
 import { Fixture } from "../../dynamics/Fixture";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-
 
 Contact.addType(EdgeShape.TYPE, CircleShape.TYPE, EdgeCircleContact);
 Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
 
-/** @internal */ function EdgeCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: Fixture, indexA: number, xfB: TransformValue, fixtureB: Fixture, indexB: number): void {
+/** @internal */ function EdgeCircleContact(
+  manifold: Manifold,
+  xfA: TransformValue,
+  fixtureA: Fixture,
+  indexA: number,
+  xfB: TransformValue,
+  fixtureB: Fixture,
+  indexB: number,
+): void {
   if (_ASSERT) console.assert(fixtureA.getType() == EdgeShape.TYPE);
   if (_ASSERT) console.assert(fixtureB.getType() == CircleShape.TYPE);
 
@@ -33,7 +39,15 @@ Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
   CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
 }
 
-function ChainCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: Fixture, indexA: number, xfB: TransformValue, fixtureB: Fixture, indexB: number): void {
+function ChainCircleContact(
+  manifold: Manifold,
+  xfA: TransformValue,
+  fixtureA: Fixture,
+  indexA: number,
+  xfB: TransformValue,
+  fixtureB: Fixture,
+  indexB: number,
+): void {
   if (_ASSERT) console.assert(fixtureA.getType() == ChainShape.TYPE);
   if (_ASSERT) console.assert(fixtureB.getType() == CircleShape.TYPE);
 
@@ -57,7 +71,13 @@ function ChainCircleContact(manifold: Manifold, xfA: TransformValue, fixtureA: F
 
 // Compute contact points for edge versus circle.
 // This accounts for edge connectivity.
-export const CollideEdgeCircle = function (manifold: Manifold, edgeA: EdgeShape, xfA: TransformValue, circleB: CircleShape, xfB: TransformValue): void {
+export const CollideEdgeCircle = function (
+  manifold: Manifold,
+  edgeA: EdgeShape,
+  xfA: TransformValue,
+  circleB: CircleShape,
+  xfB: TransformValue,
+): void {
   manifold.pointCount = 0;
 
   // Compute circle in frame of edge

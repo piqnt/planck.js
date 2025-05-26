@@ -21,13 +21,11 @@ import { ContactImpulse, TimeStep } from "./Solver";
 import { Pool } from "../util/Pool";
 import { getTransform } from "./Position";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_sqrt = Math.sqrt;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
-
 
 // Solver debugging is normally disabled because the block solver sometimes has to deal with a poorly conditioned effective mass matrix.
 /** @internal */ const DEBUG_SOLVER = false;
@@ -38,7 +36,7 @@ import { getTransform } from "./Position";
   },
   release(contact: Contact) {
     contact.recycle();
-  }
+  },
 });
 
 /** @internal */ const oldManifold = new Manifold();
@@ -75,7 +73,7 @@ export type EvaluateFunction = (
   indexA: number,
   xfB: TransformValue,
   fixtureB: Fixture,
-  indexB: number
+  indexB: number,
 ) => void;
 
 /**
@@ -212,7 +210,7 @@ export class Contact {
   /** @internal */ p_invIA = 0;
   /** @internal */ p_invIB = 0;
 
-  /** @internal */ 
+  /** @internal */
   initialize(fA: Fixture, indexA: number, fB: Fixture, indexB: number, evaluateFcn: EvaluateFunction) {
     this.m_fixtureA = fA;
     this.m_fixtureB = fB;
@@ -226,7 +224,7 @@ export class Contact {
     this.m_restitution = mixRestitution(this.m_fixtureA.m_restitution, this.m_fixtureB.m_restitution);
   }
 
-  /** @internal */ 
+  /** @internal */
   recycle() {
     this.m_nodeA.recycle();
     this.m_nodeB.recycle();
@@ -253,7 +251,7 @@ export class Contact {
     this.m_impulse.recycle();
 
     // VelocityConstraint
-    for(const point of this.v_points) {
+    for (const point of this.v_points) {
       point.recycle();
     }
     matrix.zeroVec2(this.v_normal);
@@ -269,7 +267,7 @@ export class Contact {
     this.v_invIB = 0;
 
     // PositionConstraint
-    for(const point of this.p_localPoints) {
+    for (const point of this.p_localPoints) {
       matrix.zeroVec2(point);
     }
     matrix.zeroVec2(this.p_localNormal);
@@ -371,8 +369,10 @@ export class Contact {
 
     return this.m_manifold.getWorldManifold(
       worldManifold,
-      bodyA.getTransform(), shapeA.m_radius,
-      bodyB.getTransform(), shapeB.m_radius
+      bodyA.getTransform(),
+      shapeA.m_radius,
+      bodyB.getTransform(),
+      shapeB.m_radius,
     );
   }
 
@@ -526,9 +526,9 @@ export class Contact {
    * @param listener.preSolve
    */
   update(listener?: {
-    beginContact(contact: Contact): void,
-    endContact(contact: Contact): void,
-    preSolve(contact: Contact, oldManifold: Manifold): void
+    beginContact(contact: Contact): void;
+    endContact(contact: Contact): void;
+    preSolve(contact: Contact, oldManifold: Manifold): void;
   }): void {
     const fixtureA = this.m_fixtureA;
     const fixtureB = this.m_fixtureB;
@@ -560,7 +560,6 @@ export class Contact {
       // Sensors don't generate manifolds.
       this.m_manifold.pointCount = 0;
     } else {
-
       oldManifold.recycle();
       oldManifold.set(this.m_manifold);
       this.m_manifold.recycle();
@@ -637,14 +636,14 @@ export class Contact {
 
     let mA = 0.0;
     let iA = 0.0;
-    if (!toi || (bodyA === toiA || bodyA === toiB)) {
+    if (!toi || bodyA === toiA || bodyA === toiB) {
       mA = this.p_invMassA;
       iA = this.p_invIA;
     }
 
     let mB = 0.0;
     let iB = 0.0;
-    if (!toi || (bodyB === toiA || bodyB === toiB)) {
+    if (!toi || bodyB === toiA || bodyB === toiB) {
       mB = this.p_invMassB;
       iB = this.p_invIB;
     }
@@ -670,7 +669,8 @@ export class Contact {
           matrix.normalizeVec2(normal);
 
           matrix.combine2Vec2(point, 0.5, pointA, 0.5, pointB);
-          separation = matrix.dotVec2(pointB, normal) - matrix.dotVec2(pointA, normal) - this.p_radiusA - this.p_radiusB;
+          separation =
+            matrix.dotVec2(pointB, normal) - matrix.dotVec2(pointA, normal) - this.p_radiusA - this.p_radiusB;
           break;
         }
 
@@ -678,7 +678,8 @@ export class Contact {
           matrix.rotVec2(normal, xfA.q, this.p_localNormal);
           matrix.transformVec2(planePoint, xfA, this.p_localPoint);
           matrix.transformVec2(clipPoint, xfB, this.p_localPoints[j]);
-          separation = matrix.dotVec2(clipPoint, normal) - matrix.dotVec2(planePoint, normal) - this.p_radiusA - this.p_radiusB;
+          separation =
+            matrix.dotVec2(clipPoint, normal) - matrix.dotVec2(planePoint, normal) - this.p_radiusA - this.p_radiusB;
           matrix.copyVec2(point, clipPoint);
           break;
         }
@@ -687,7 +688,8 @@ export class Contact {
           matrix.rotVec2(normal, xfB.q, this.p_localNormal);
           matrix.transformVec2(planePoint, xfB, this.p_localPoint);
           matrix.transformVec2(clipPoint, xfA, this.p_localPoints[j]);
-          separation = matrix.dotVec2(clipPoint, normal) - matrix.dotVec2(planePoint, normal) - this.p_radiusA - this.p_radiusB;
+          separation =
+            matrix.dotVec2(clipPoint, normal) - matrix.dotVec2(planePoint, normal) - this.p_radiusA - this.p_radiusB;
           matrix.copyVec2(point, clipPoint);
 
           // Ensure normal points from A to B
@@ -852,7 +854,6 @@ export class Contact {
         this.v_normalMass.ey.x = -det * b;
         this.v_normalMass.ex.y = -det * c;
         this.v_normalMass.ey.y = det * a;
-
       } else {
         // The constraints are redundant, just use one.
         // TODO_ERIN use deepest?
@@ -966,7 +967,7 @@ export class Contact {
 
       // Compute tangent force
       const vt = matrix.dotVec2(dv, tangent) - this.v_tangentSpeed;
-      let lambda = vcp.tangentMass * (-vt);
+      let lambda = vcp.tangentMass * -vt;
 
       // Clamp the accumulated force
       const maxFriction = friction * vcp.normalImpulse;
@@ -1303,9 +1304,9 @@ export class Contact {
 
     const contact = contactPool.allocate();
     let evaluateFcn;
-    if (evaluateFcn = s_registers[typeA] && s_registers[typeA][typeB]) {
+    if ((evaluateFcn = s_registers[typeA] && s_registers[typeA][typeB])) {
       contact.initialize(fixtureA, indexA, fixtureB, indexB, evaluateFcn);
-    } else if (evaluateFcn = s_registers[typeB] && s_registers[typeB][typeA]) {
+    } else if ((evaluateFcn = s_registers[typeB] && s_registers[typeB][typeA])) {
       contact.initialize(fixtureB, indexB, fixtureA, indexA, evaluateFcn);
     } else {
       return null;

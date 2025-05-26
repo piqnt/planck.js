@@ -16,10 +16,8 @@ import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
-
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
-
 
 /**
  * Friction joint definition.
@@ -53,8 +51,8 @@ export interface FrictionJointDef extends JointDef, FrictionJointOpt {
 }
 
 /** @internal */ const DEFAULTS = {
-  maxForce : 0.0,
-  maxTorque : 0.0,
+  maxForce: 0.0,
+  maxTorque: 0.0,
 };
 
 declare module "./FrictionJoint" {
@@ -155,7 +153,7 @@ export class FrictionJoint extends Joint {
 
   /** @hidden */
   static _deserialize(data: any, world: any, restore: any): FrictionJoint {
-    data = {...data};
+    data = { ...data };
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
     const joint = new FrictionJoint(data);
@@ -292,12 +290,10 @@ export class FrictionJoint extends Joint {
     const iB = this.m_invIB;
 
     const K = new Mat22();
-    K.ex.x = mA + mB + iA * this.m_rA.y * this.m_rA.y + iB * this.m_rB.y
-        * this.m_rB.y;
+    K.ex.x = mA + mB + iA * this.m_rA.y * this.m_rA.y + iB * this.m_rB.y * this.m_rB.y;
     K.ex.y = -iA * this.m_rA.x * this.m_rA.y - iB * this.m_rB.x * this.m_rB.y;
     K.ey.x = K.ex.y;
-    K.ey.y = mA + mB + iA * this.m_rA.x * this.m_rA.x + iB * this.m_rB.x
-        * this.m_rB.x;
+    K.ey.y = mA + mB + iA * this.m_rA.x * this.m_rA.x + iB * this.m_rB.x * this.m_rB.x;
 
     this.m_linearMass = K.getInverse();
 
@@ -318,7 +314,6 @@ export class FrictionJoint extends Joint {
 
       vB.addMul(mB, P);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_angularImpulse);
-
     } else {
       this.m_linearImpulse.setZero();
       this.m_angularImpulse = 0.0;
@@ -361,7 +356,7 @@ export class FrictionJoint extends Joint {
     {
       const Cdot = Vec2.sub(
         Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB)),
-        Vec2.add(vA, Vec2.crossNumVec2(wA, this.m_rA))
+        Vec2.add(vA, Vec2.crossNumVec2(wA, this.m_rA)),
       );
 
       let impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
@@ -396,5 +391,4 @@ export class FrictionJoint extends Joint {
   solvePositionConstraints(step: TimeStep): boolean {
     return true;
   }
-
 }
