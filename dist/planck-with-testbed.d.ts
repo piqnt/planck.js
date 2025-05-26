@@ -18,6 +18,10 @@ export declare class Vec2 {
 	constructor(x: number, y: number);
 	constructor(obj: Vec2Value);
 	constructor();
+	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any): Vec2;
 	static zero(): Vec2;
 	/** @hidden */
 	static neo(x: number, y: number): Vec2;
@@ -585,24 +589,25 @@ export interface Style {
 	fill?: string;
 	lineWidth?: number;
 }
-export type KEY = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "right" | "left" | "up" | "down" | "fire";
 export type ActiveKeys = {
 	[key in KEY]?: boolean;
 };
 export type TestbedMountOptions = {
 	[key: string]: any;
 };
-export declare abstract class Testbed {
+export declare class Testbed {
 	/**
 	 * Mounts testbed. Call start with a world to start simulation and rendering.
 	 */
-	static mount(options?: TestbedMountOptions): Testbed;
+	static mount(options?: TestbedMountOptions): TestbedInterface;
 	/**
 	 * Mounts testbed if needed, then starts simulation and rendering.
 	 *
 	 * If you need to customize testbed before starting, first run `const testbed = Testbed.mount()` and then `testbed.start()`.
 	 */
-	static start(world: World): Testbed;
+	static start(world: World): TestbedInterface;
+}
+export interface TestbedInterface {
 	/** World viewbox width. */
 	width: number;
 	/** World viewbox height. */
@@ -621,53 +626,34 @@ export declare abstract class Testbed {
 	mouseForce?: number;
 	activeKeys: ActiveKeys;
 	/** callback, to be implemented by user */
-	step: (dt: number, t: number) => void;
+	step?: (dt: number, t: number) => void;
 	/** callback, to be implemented by user */
-	keydown: (keyCode: number, label: string) => void;
+	keydown?: (keyCode: number, label: string) => void;
 	/** callback, to be implemented by user */
-	keyup: (keyCode: number, label: string) => void;
-	abstract status(name: string, value: any): void;
-	abstract status(value: object | string): void;
-	abstract info(text: string): void;
+	keyup?: (keyCode: number, label: string) => void;
+	status(name: string, value: any): void;
+	status(value: object | string): void;
+	info(text: string): void;
 	color(r: number, g: number, b: number): string;
-	abstract drawPoint(p: {
-		x: number;
-		y: number;
-	}, r: any, color: string): void;
-	abstract drawCircle(p: {
-		x: number;
-		y: number;
-	}, r: number, color: string): void;
-	abstract drawEdge(a: {
-		x: number;
-		y: number;
-	}, b: {
-		x: number;
-		y: number;
-	}, color: string): void;
-	abstract drawSegment(a: {
-		x: number;
-		y: number;
-	}, b: {
-		x: number;
-		y: number;
-	}, color: string): void;
-	abstract drawPolygon(points: Array<{
-		x: number;
-		y: number;
-	}>, color: string): void;
-	abstract drawAABB(aabb: AABBValue, color: string): void;
-	abstract start(world: World): void;
-	abstract findOne(query: string): (Body$1 | Joint | Fixture | null);
-	abstract findAll(query: string): (Body$1 | Joint | Fixture)[];
+	drawPoint(p: Vec2Value, r: any, color: string): void;
+	drawCircle(p: Vec2Value, r: number, color: string): void;
+	drawEdge(a: Vec2Value, b: Vec2Value, color: string): void;
+	drawSegment(a: Vec2Value, b: Vec2Value, color: string): void;
+	drawPolygon(points: Array<Vec2Value>, color: string): void;
+	drawChain(points: Array<Vec2Value>, color: string): void;
+	drawAABB(aabb: AABBValue, color: string): void;
+	start(world: World): void;
+	findOne(query: string): Body$1 | Joint | Fixture | null;
+	findAll(query: string): (Body$1 | Joint | Fixture)[];
 }
 export type TestbedFactoryOptions = string | TestbedMountOptions;
 /** @deprecated */
-export type TestbedCallback = (testbed: Testbed) => (World | undefined);
+export type TestbedCallback = (testbed: TestbedInterface) => World | undefined;
 /** @deprecated */
 export declare function testbed(callback: TestbedCallback): void;
 /** @deprecated */
 export declare function testbed(options: TestbedFactoryOptions, callback: TestbedCallback): void;
+export type KEY = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "right" | "left" | "up" | "down" | "fire";
 /**
  * A shape is used for collision detection. You can create a shape however you
  * like. Shapes used for simulation in World are created automatically when a
@@ -1025,6 +1011,10 @@ export declare class Fixture {
 	constructor(body: Body$1, shape: Shape, density?: number);
 	/** @hidden Re-setup fixture. */
 	_reset(): void;
+	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any, body: any, restore: any): Fixture;
 	/**
 	 * Get the type of the child shape. You can use this to down cast to the
 	 * concrete shape.
@@ -1568,6 +1558,10 @@ declare class Body$1 {
 	style: Style;
 	/** @hidden @experimental Similar to userData, but used by dev-tools or runtime environment. */
 	appData: Record<string, any>;
+	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any, world: any, restore: any): Body$1;
 	isWorldLocked(): boolean;
 	getWorld(): World;
 	getNext(): Body$1 | null;
@@ -1962,6 +1956,10 @@ export declare class World {
 	 * @param def World definition or gravity vector.
 	 */
 	constructor(def?: WorldDef | Vec2Value);
+	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any, context: any, restore: any): World;
 	/**
 	 * Get the world body list. With the returned body, use Body.getNext to get the
 	 * next body in the world list. A null body indicates the end of the list.
@@ -2244,6 +2242,10 @@ export declare class Vec3 {
 	constructor(obj: Vec3Value);
 	constructor();
 	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any): Vec3;
+	/** @hidden */
 	static neo(x: number, y: number, z: number): Vec3;
 	static zero(): Vec3;
 	static clone(v: Vec3Value): Vec3;
@@ -2378,6 +2380,10 @@ export declare class CircleShape extends Shape {
 	constructor(position: Vec2Value, radius?: number);
 	constructor(radius?: number);
 	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any): CircleShape;
+	/** @hidden */
 	_reset(): void;
 	getType(): "circle";
 	getRadius(): number;
@@ -2441,6 +2447,10 @@ export declare class EdgeShape extends Shape {
 	/** @hidden */ m_hasVertex0: boolean;
 	/** @hidden */ m_hasVertex3: boolean;
 	constructor(v1?: Vec2Value, v2?: Vec2Value);
+	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any): EdgeShape;
 	/** @hidden */
 	_reset(): void;
 	getRadius(): number;
@@ -2523,6 +2533,10 @@ export declare class PolygonShape extends Shape {
 	/** @hidden */ m_count: number;
 	/** @hidden */ m_radius: number;
 	constructor(vertices?: Vec2Value[]);
+	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any, fixture: any, restore: any): PolygonShape;
 	getType(): "polygon";
 	getRadius(): number;
 	/**
@@ -2595,6 +2609,10 @@ export declare class ChainShape extends Shape {
 	/** @hidden */ m_hasNextVertex: boolean;
 	/** @hidden */ m_isLoop: boolean;
 	constructor(vertices?: Vec2Value[], loop?: boolean);
+	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any, fixture: any, restore: any): ChainShape;
 	getType(): "chain";
 	getRadius(): number;
 	/** @hidden */
@@ -2680,10 +2698,10 @@ export declare const CollideCircles: (manifold: Manifold, circleA: CircleShape, 
 export declare const CollideEdgeCircle: (manifold: Manifold, edgeA: EdgeShape, xfA: TransformValue, circleB: CircleShape, xfB: TransformValue) => void;
 /**
  *
- * Find edge normal of max separation on A - return if separating axis is found<br>
- * Find edge normal of max separation on B - return if separation axis is found<br>
- * Choose reference edge as min(minA, minB)<br>
- * Find incident edge<br>
+ * Find edge normal of max separation on A - return if separating axis is found
+ * Find edge normal of max separation on B - return if separation axis is found
+ * Choose reference edge as min(minA, minB)
+ * Find incident edge
  * Clip
  *
  * The normal points from 1 to 2
@@ -2752,6 +2770,10 @@ export declare class DistanceJoint extends Joint {
 	 * @param anchorB Anchor B in global coordination.
 	 */
 	constructor(def: DistanceJointOpt, bodyA: Body$1, bodyB: Body$1, anchorA?: Vec2Value, anchorB?: Vec2Value);
+	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any, world: any, restore: any): DistanceJoint;
 	/** @hidden */
 	_reset(def: Partial<DistanceJointDef>): void;
 	/**
@@ -2839,6 +2861,10 @@ export declare class FrictionJoint extends Joint {
 	 * @param anchor Anchor in global coordination.
 	 */
 	constructor(def: FrictionJointOpt, bodyA: Body$1, bodyB: Body$1, anchor?: Vec2Value);
+	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any, world: any, restore: any): FrictionJoint;
 	/** @hidden */
 	_reset(def: Partial<FrictionJointDef>): void;
 	/**
@@ -2969,6 +2995,10 @@ export declare class RevoluteJoint extends Joint {
 	static TYPE: "revolute-joint";
 	constructor(def: RevoluteJointDef);
 	constructor(def: RevoluteJointOpt, bodyA: Body$1, bodyB: Body$1, anchor?: Vec2Value);
+	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any, world: any, restore: any): RevoluteJoint;
 	/** @hidden */
 	_reset(def: Partial<RevoluteJointDef>): void;
 	/**
@@ -3136,6 +3166,10 @@ export declare class PrismaticJoint extends Joint {
 	constructor(def: PrismaticJointDef);
 	constructor(def: PrismaticJointOpt, bodyA: Body$1, bodyB: Body$1, anchor?: Vec2Value, axis?: Vec2Value);
 	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any, world: any, restore: any): PrismaticJoint;
+	/** @hidden */
 	_reset(def: Partial<PrismaticJointDef>): void;
 	/**
 	 * The local anchor point relative to bodyA's origin.
@@ -3273,6 +3307,10 @@ export declare class GearJoint extends Joint {
 	constructor(def: GearJointDef);
 	constructor(def: GearJointOpt, bodyA: Body$1, bodyB: Body$1, joint1: RevoluteJoint | PrismaticJoint, joint2: RevoluteJoint | PrismaticJoint, ratio?: number);
 	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any, world: any, restore: any): GearJoint;
+	/** @hidden */
 	_reset(def: Partial<GearJointDef>): void;
 	/**
 	 * Get the first joint.
@@ -3356,6 +3394,10 @@ export declare class MotorJoint extends Joint {
 	static TYPE: "motor-joint";
 	constructor(def: MotorJointDef);
 	constructor(def: MotorJointOpt, bodyA: Body$1, bodyB: Body$1);
+	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any, world: any, restore: any): MotorJoint;
 	/** @hidden */
 	_reset(def: Partial<MotorJointDef>): void;
 	/**
@@ -3467,6 +3509,10 @@ export declare class MouseJoint extends Joint {
 	static TYPE: "mouse-joint";
 	constructor(def: MouseJointDef);
 	constructor(def: MouseJointOpt, bodyA: Body$1, bodyB: Body$1, target?: Vec2Value);
+	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any, world: any, restore: any): MouseJoint;
 	/** @hidden */
 	_reset(def: Partial<MouseJointDef>): void;
 	/**
@@ -3587,6 +3633,10 @@ export declare class PulleyJoint extends Joint {
 	constructor(def: PulleyJointDef);
 	constructor(def: PulleyJointOpt, bodyA: Body$1, bodyB: Body$1, groundA?: Vec2Value, groundB?: Vec2Value, anchorA?: Vec2Value, anchorB?: Vec2Value, ratio?: number);
 	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any, world: any, restore: any): PulleyJoint;
+	/** @hidden */
 	_reset(def: Partial<PulleyJointDef>): void;
 	/**
 	 * Get the first ground anchor.
@@ -3692,6 +3742,10 @@ export declare class RopeJoint extends Joint {
 	constructor(def: RopeJointDef);
 	constructor(def: RopeJointOpt, bodyA: Body$1, bodyB: Body$1, anchor?: Vec2Value);
 	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any, world: any, restore: any): RopeJoint;
+	/** @hidden */
 	_reset(def: Partial<RopeJointDef>): void;
 	/**
 	 * The local anchor point relative to bodyA's origin.
@@ -3780,6 +3834,10 @@ export declare class WeldJoint extends Joint {
 	static TYPE: "weld-joint";
 	constructor(def: WeldJointDef);
 	constructor(def: WeldJointOpt, bodyA: Body$1, bodyB: Body$1, anchor?: Vec2Value);
+	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any, world: any, restore: any): WeldJoint;
 	/** @hidden */
 	_reset(def: Partial<WeldJointDef>): void;
 	/**
@@ -3899,6 +3957,10 @@ export declare class WheelJoint extends Joint {
 	static TYPE: "wheel-joint";
 	constructor(def: WheelJointDef);
 	constructor(def: WheelJointOpt, bodyA: Body$1, bodyB: Body$1, anchor?: Vec2Value, axis?: Vec2Value);
+	/** @hidden */
+	_serialize(): object;
+	/** @hidden */
+	static _deserialize(data: any, world: any, restore: any): WheelJoint;
 	/** @hidden */
 	_reset(def: Partial<WheelJointDef>): void;
 	/**
@@ -4223,13 +4285,14 @@ export declare const internal: {
 		toString(newline?: string): string;
 	};
 };
+/** @hidden */
 export interface DataDriverListener<D, R> {
 	enter: (d: D) => R | null;
 	exit: (d: D, ref: R) => void;
 	update: (d: D, ref: R) => void;
 }
 /**
- * @experimental
+ * @experimental @hidden
  *
  * DataDriver is used it to create, update and destroy physics entities based on game objects.
  */

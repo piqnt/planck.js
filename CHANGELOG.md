@@ -1,5 +1,16 @@
 # planck
 
+## 1.4.0
+
+### Minor Changes
+
+- 0dcc98b: Split TestbedInterface and Testbed class
+
+### Patch Changes
+
+- e1a2717: Mark serialize and deserialize functions as @hidden instead of @internal
+- 3446820: Fix AABB.rayCast
+
 ## 1.3.0
 
 ### Minor Changes

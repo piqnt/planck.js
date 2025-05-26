@@ -1,7 +1,7 @@
 /**
- * Planck.js v1.3.0
+ * Planck.js v1.4.0
  * @license The MIT license
- * @copyright Copyright (c) 2024 Erin Catto, Ali Shakiba
+ * @copyright Copyright (c) 2025 Erin Catto, Ali Shakiba
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -577,15 +577,15 @@ var AABB = (
       var d2 = Vec2.sub(input2.p2, input2.p1);
       var absD = Vec2.abs(d2);
       var normal3 = Vec2.zero();
-      for (var f = "x"; f !== null; f = f === "x" ? "y" : null) {
+      {
         if (absD.x < EPSILON) {
-          if (p[f] < this.lowerBound[f] || this.upperBound[f] < p[f]) {
+          if (p.x < this.lowerBound.x || this.upperBound.x < p.x) {
             return false;
           }
         } else {
-          var inv_d = 1 / d2[f];
-          var t1 = (this.lowerBound[f] - p[f]) * inv_d;
-          var t2 = (this.upperBound[f] - p[f]) * inv_d;
+          var inv_d = 1 / d2.x;
+          var t1 = (this.lowerBound.x - p.x) * inv_d;
+          var t2 = (this.upperBound.x - p.x) * inv_d;
           var s2 = -1;
           if (t1 > t2) {
             var temp3 = t1;
@@ -595,7 +595,34 @@ var AABB = (
           }
           if (t1 > tmin) {
             normal3.setZero();
-            normal3[f] = s2;
+            normal3.x = s2;
+            tmin = t1;
+          }
+          tmax = math_min$7(tmax, t2);
+          if (tmin > tmax) {
+            return false;
+          }
+        }
+      }
+      {
+        if (absD.y < EPSILON) {
+          if (p.y < this.lowerBound.y || this.upperBound.y < p.y) {
+            return false;
+          }
+        } else {
+          var inv_d = 1 / d2.y;
+          var t1 = (this.lowerBound.y - p.y) * inv_d;
+          var t2 = (this.upperBound.y - p.y) * inv_d;
+          var s2 = -1;
+          if (t1 > t2) {
+            var temp3 = t1;
+            t1 = t2;
+            t2 = temp3;
+            s2 = 1;
+          }
+          if (t1 > tmin) {
+            normal3.setZero();
+            normal3.y = s2;
             tmin = t1;
           }
           tmax = math_min$7(tmax, t2);
@@ -5455,13 +5482,13 @@ var Contact = (
       var localCenterB = this.p_localCenterB;
       var mA = 0;
       var iA = 0;
-      if (!toi || (bodyA === toiA || bodyA === toiB)) {
+      if (!toi || bodyA === toiA || bodyA === toiB) {
         mA = this.p_invMassA;
         iA = this.p_invIA;
       }
       var mB = 0;
       var iB = 0;
-      if (!toi || (bodyB === toiA || bodyB === toiB)) {
+      if (!toi || bodyB === toiA || bodyB === toiB) {
         mB = this.p_invMassB;
         iB = this.p_invIB;
       }
@@ -10850,24 +10877,6 @@ var Testbed = (
   /** @class */
   function() {
     function Testbed2() {
-      this.width = 80;
-      this.height = 60;
-      this.x = 0;
-      this.y = -10;
-      this.scaleY = -1;
-      this.hz = 60;
-      this.speed = 1;
-      this.background = "#222222";
-      this.activeKeys = {};
-      this.step = function(dt, t) {
-        return;
-      };
-      this.keydown = function(keyCode, label) {
-        return;
-      };
-      this.keyup = function(keyCode, label) {
-        return;
-      };
     }
     Testbed2.mount = function(options2) {
       throw new Error("Not implemented");
@@ -10876,12 +10885,6 @@ var Testbed = (
       var testbed2 = Testbed2.mount();
       testbed2.start(world);
       return testbed2;
-    };
-    Testbed2.prototype.color = function(r, g, b2) {
-      r = r * 256 | 0;
-      g = g * 256 | 0;
-      b2 = b2 * 256 | 0;
-      return "rgb(" + r + ", " + g + ", " + b2 + ")";
     };
     return Testbed2;
   }()
