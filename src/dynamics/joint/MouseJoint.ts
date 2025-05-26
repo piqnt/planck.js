@@ -160,7 +160,7 @@ export class MouseJoint extends Joint {
     // w k % (rx i + ry j) = w * (-ry i + rx j)
   }
 
-  /** @internal */
+  /** @hidden */
   _serialize(): object {
     return {
       type: this.m_type,
@@ -177,7 +177,7 @@ export class MouseJoint extends Joint {
     };
   }
 
-  /** @internal */
+  /** @hidden */
   static _deserialize(data: any, world: any, restore: any): MouseJoint {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);

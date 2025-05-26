@@ -164,7 +164,7 @@ export class DistanceJoint extends Joint {
     // = invMass1 + invI1 * cross(r1, u)^2 + invMass2 + invI2 * cross(r2, u)^2
   }
 
-  /** @internal */
+  /** @hidden */
   _serialize(): object {
     return {
       type: this.m_type,
@@ -185,7 +185,7 @@ export class DistanceJoint extends Joint {
     };
   }
 
-  /** @internal */
+  /** @hidden */
   static _deserialize(data: any, world: any, restore: any): DistanceJoint {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);

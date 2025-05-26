@@ -190,7 +190,7 @@ export class World {
     this.m_step_callback = [];
   }
 
-  /** @internal */
+  /** @hidden */
   _serialize(): object {
     const bodies = [];
     const joints = [];
@@ -213,7 +213,7 @@ export class World {
     };
   }
 
-  /** @internal */
+  /** @hidden */
   static _deserialize(data: any, context: any, restore: any): World {
     if (!data) {
       return new World();

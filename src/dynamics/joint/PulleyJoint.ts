@@ -163,7 +163,7 @@ export class PulleyJoint extends Joint {
     // cross(r2, u2)^2)
   }
 
-  /** @internal */
+  /** @hidden */
   _serialize(): object {
     return {
       type: this.m_type,
@@ -181,7 +181,7 @@ export class PulleyJoint extends Joint {
     };
   }
 
-  /** @internal */
+  /** @hidden */
   static _deserialize(data: any, world: any, restore: any): PulleyJoint {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);

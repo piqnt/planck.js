@@ -218,7 +218,7 @@ export class WheelJoint extends Joint {
     // J = [0 0 -1 0 0 1]
   }
 
-  /** @internal */
+  /** @hidden */
   _serialize(): object {
     return {
       type: this.m_type,
@@ -238,7 +238,7 @@ export class WheelJoint extends Joint {
     };
   }
 
-  /** @internal */
+  /** @hidden */
   static _deserialize(data: any, world: any, restore: any): WheelJoint {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);

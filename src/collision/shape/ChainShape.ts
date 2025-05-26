@@ -82,7 +82,7 @@ export class ChainShape extends Shape {
     }
   }
 
-  /** @internal */
+  /** @hidden */
   _serialize(): object {
     const data = {
       type: this.m_type,
@@ -102,7 +102,7 @@ export class ChainShape extends Shape {
     return data;
   }
 
-  /** @internal */
+  /** @hidden */
   static _deserialize(data: any, fixture: any, restore: any): ChainShape {
     const vertices: Vec2[] = [];
     if (data.vertices) {

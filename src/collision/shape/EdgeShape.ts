@@ -73,7 +73,7 @@ export class EdgeShape extends Shape {
     this.m_hasVertex3 = false;
   }
 
-  /** @internal */
+  /** @hidden */
   _serialize(): object {
     return {
       type: this.m_type,
@@ -88,7 +88,7 @@ export class EdgeShape extends Shape {
     };
   }
 
-  /** @internal */
+  /** @hidden */
   static _deserialize(data: any): EdgeShape {
     const shape = new EdgeShape(data.vertex1, data.vertex2);
     if (shape.m_hasVertex0) {

@@ -288,7 +288,7 @@ export class Body {
     }
   }
 
-  /** @internal */
+  /** @hidden */
   _serialize(): object {
     const fixtures = [];
     for (let f = this.m_fixtureList; f; f = f.m_next) {
@@ -305,7 +305,7 @@ export class Body {
     };
   }
 
-  /** @internal */
+  /** @hidden */
   static _deserialize(data: any, world: any, restore: any): Body {
     const body = new Body(world, data);
 

@@ -272,7 +272,7 @@ export class PrismaticJoint extends Joint {
     // df = f2 - f1
   }
 
-  /** @internal */
+  /** @hidden */
   _serialize(): object {
     return {
       type: this.m_type,
@@ -294,7 +294,7 @@ export class PrismaticJoint extends Joint {
     };
   }
 
-  /** @internal */
+  /** @hidden */
   static _deserialize(data: any, world: any, restore: any): PrismaticJoint {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);

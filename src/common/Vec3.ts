@@ -61,7 +61,7 @@ export class Vec3 {
     if (_ASSERT) Vec3.assert(this);
   }
 
-  /** @internal */
+  /** @hidden */
   _serialize(): object {
     return {
       x: this.x,
@@ -70,7 +70,7 @@ export class Vec3 {
     };
   }
 
-  /** @internal */
+  /** @hidden */
   static _deserialize(data: any): Vec3 {
     const obj = Object.create(Vec3.prototype);
     obj.x = data.x;

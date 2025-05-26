@@ -224,7 +224,7 @@ export class RevoluteJoint extends Joint {
     // K = invI1 + invI2
   }
 
-  /** @internal */
+  /** @hidden */
   _serialize(): object {
     return {
       type: this.m_type,
@@ -245,7 +245,7 @@ export class RevoluteJoint extends Joint {
     };
   }
 
-  /** @internal */
+  /** @hidden */
   static _deserialize(data: any, world: any, restore: any):RevoluteJoint {
     data = {...data};
     data.bodyA = restore(Body, data.bodyA, world);
