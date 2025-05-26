@@ -1,3 +1,4 @@
+import type { Vec2Value } from "../common/Vec2";
 import type { AABBValue } from "../collision/AABB";
 import type { World } from "../dynamics/World";
 import type { Joint } from "../dynamics/Joint";
@@ -20,11 +21,11 @@ export type ActiveKeys = { [key in KEY]?: boolean };
 
 type TestbedMountOptions = { [key: string]: any };
 
-export abstract class Testbed {
+export class Testbed {
   /**
    * Mounts testbed. Call start with a world to start simulation and rendering.
    */
-  static mount(options?: TestbedMountOptions): Testbed {
+  static mount(options?: TestbedMountOptions): TestbedInterface {
     throw new Error("Not implemented");
   }
 
@@ -33,82 +34,63 @@ export abstract class Testbed {
    * 
    * If you need to customize testbed before starting, first run `const testbed = Testbed.mount()` and then `testbed.start()`.
    */
-  static start(world: World): Testbed {
+  static start(world: World): TestbedInterface {
     const testbed = Testbed.mount();
     testbed.start(world);
     return testbed;
   }
+}
 
+export interface TestbedInterface {
   /** World viewbox width. */
-  width: number = 80;
-
+  width: number;
   /** World viewbox height. */
-  height: number = 60;
-
+  height: number;
   /** World viewbox center vertical offset. */
-  x: number = 0;
-
+  x: number;
   /** World viewbox center horizontal offset. */
-  y: number = -10;
-
+  y: number;
   /** @hidden */
-  scaleY: number = -1;
-
+  scaleY: number;
   /** World simulation step frequency */
-  hz: number = 60;
-
+  hz: number;
   /** World simulation speed, default is 1 */
-  speed: number = 1;
-
-  background: string = "#222222";
-
+  speed: number;
+  background: string;
   mouseForce?: number;
-  activeKeys: ActiveKeys = {};
+  activeKeys: ActiveKeys;
 
   /** callback, to be implemented by user */
-  step = (dt: number, t: number): void => {
-    return;
-  };
-
+  step?: (dt: number, t: number) => void;
   /** callback, to be implemented by user */
-  keydown = (keyCode: number, label: string): void => {
-    return;
-  };
-
+  keydown?: (keyCode: number, label: string) => void;
   /** callback, to be implemented by user */
-  keyup = (keyCode: number, label: string): void => {
-    return;
-  };
+  keyup?: (keyCode: number, label: string) => void;
 
-  abstract status(name: string, value: any): void;
-  abstract status(value: object | string): void;
+  status(name: string, value: any): void;
+  status(value: object | string): void;
+  info(text: string): void;
 
-  abstract info(text: string): void;
+  color(r: number, g: number, b: number): string;
 
-  color(r: number, g: number, b: number): string {
-    r = r * 256 | 0;
-    g = g * 256 | 0;
-    b = b * 256 | 0;
-    return "rgb(" + r + ", " + g + ", " + b + ")";
-  }
+  drawPoint(p: Vec2Value, r: any, color: string): void;
+  drawCircle(p: Vec2Value, r: number, color: string): void;
+  drawEdge(a: Vec2Value, b: Vec2Value, color: string): void;
+  drawSegment(a: Vec2Value, b: Vec2Value, color: string): void;
+  drawPolygon(points: Array<Vec2Value>, color: string): void;
+  drawChain(points: Array<Vec2Value>, color: string): void;
+  drawAABB(aabb: AABBValue, color: string): void;
 
-  abstract drawPoint(p: {x: number, y: number}, r: any, color: string): void;
-  abstract drawCircle(p: {x: number, y: number}, r: number, color: string): void;
-  abstract drawEdge(a: {x: number, y: number}, b: {x: number, y: number}, color: string): void;
-  abstract drawSegment(a: {x: number, y: number}, b: {x: number, y: number}, color: string): void;
-  abstract drawPolygon(points: Array<{x: number, y: number}>, color: string): void;
-  abstract drawAABB(aabb: AABBValue, color: string): void;
+  start(world: World): void;
 
-  abstract start(world: World): void;
-
-  abstract findOne(query: string): (Body | Joint | Fixture | null);
-  abstract findAll(query: string): (Body | Joint | Fixture)[];
+  findOne(query: string): Body | Joint | Fixture | null;
+  findAll(query: string): (Body | Joint | Fixture)[];
 }
 
 type TestbedFactoryOptions = string | TestbedMountOptions;
 
 /** @deprecated */
-type TestbedCallback = (testbed: Testbed) => (World | undefined);
+type TestbedCallback = (testbed: TestbedInterface) => (World | undefined);
 
 /** @deprecated */
 export function testbed(callback: TestbedCallback): void;

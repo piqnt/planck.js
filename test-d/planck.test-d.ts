@@ -9,11 +9,11 @@ body.createFixture({
   shape,
 });
 
-planck.testbed(function(testbed: Testbed) {
+planck.testbed(function(testbed) {
   testbed.info("Info text");
   return world;
 });
 
-const testbed: Testbed = Testbed.mount();
+const testbed = Testbed.mount();
 testbed.info("Info text");
 testbed.start(world);
