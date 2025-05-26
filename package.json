@@ -96,9 +96,9 @@
     "watch": "vite build --watch",
     "preview": "vite preview",
     "benchmark": "git log -n 1 && vite-node ./benchmark/node",
-    "change": "changeset",
-    "version": "changeset version",
-    "publish": "changeset publish",
+    "changeset": "changeset",
+    "bump": "changeset version",
+    "release": "changeset publish",
     "typedoc": "typedoc --options typedoc.json && mv ./docs/pages/api/README.md ./docs/pages/api/index.md && replace-in-files ./docs/pages/api/* --string '.md' --replacement ''"
   }
 }
