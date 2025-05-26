@@ -205,16 +205,16 @@ export class AABB {
 
     const normal = Vec2.zero();
 
-    for (let f: "x" | "y" = "x"; f !== null; f = (f === "x" ? "y" : null)) {
+    {
       if (absD.x < EPSILON) {
         // Parallel.
-        if (p[f] < this.lowerBound[f] || this.upperBound[f] < p[f]) {
+        if (p.x < this.lowerBound.x || this.upperBound.x < p.x) {
           return false;
         }
       } else {
-        const inv_d = 1.0 / d[f];
-        let t1 = (this.lowerBound[f] - p[f]) * inv_d;
-        let t2 = (this.upperBound[f] - p[f]) * inv_d;
+        const inv_d = 1.0 / d.x;
+        let t1 = (this.lowerBound.x - p.x) * inv_d;
+        let t2 = (this.upperBound.x - p.x) * inv_d;
 
         // Sign of the normal vector.
         let s = -1.0;
@@ -229,7 +229,44 @@ export class AABB {
         // Push the min up
         if (t1 > tmin) {
           normal.setZero();
-          normal[f] = s;
+          normal.x = s;
+          tmin = t1;
+        }
+
+        // Pull the max down
+        tmax = math_min(tmax, t2);
+
+        if (tmin > tmax) {
+          return false;
+        }
+      }
+    }
+
+    {
+      if (absD.y < EPSILON) {
+        // Parallel.
+        if (p.y < this.lowerBound.y || this.upperBound.y < p.y) {
+          return false;
+        }
+      } else {
+        const inv_d = 1.0 / d.y;
+        let t1 = (this.lowerBound.y - p.y) * inv_d;
+        let t2 = (this.upperBound.y - p.y) * inv_d;
+
+        // Sign of the normal vector.
+        let s = -1.0;
+
+        if (t1 > t2) {
+          const temp = t1;
+          t1 = t2;
+          t2 = temp;
+          s = 1.0;
+        }
+
+        // Push the min up
+        if (t1 > tmin) {
+          normal.setZero();
+          normal.y = s;
           tmin = t1;
         }
 
@@ -272,6 +309,6 @@ export class AABB {
     const ly = math_min(a.lowerBound.y, b.lowerBound.y);
     const ux = math_max(a.upperBound.x, b.upperBound.x);
     const uy = math_max(a.upperBound.y, b.upperBound.y);
-    return 2.0 * (ux - lx + uy - ly);  
+    return 2.0 * (ux - lx + uy - ly);
   }
 }
