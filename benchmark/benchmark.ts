@@ -3,6 +3,8 @@ export interface TestInterface {
     createBoxShape: (hx: number, hy: number) => any;
     createBoxBody: (shape: any, x: number, y: number, density: number) => any;
     step: (timeStep: number, velocityIterations: number, positionIterations: number) => void;
+    setup: () => void;
+    teardown: () => void;
 }
 
 export interface XY {

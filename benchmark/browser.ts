@@ -59,6 +59,7 @@ const testRows = prepareTests(tests).map((test: TestInterface) => {
         row,
         test,
         begin() {
+            test.setup();
             ratio.appendChild(progress);
             progress.value = 0;
         },
@@ -67,6 +68,7 @@ const testRows = prepareTests(tests).map((test: TestInterface) => {
             progress.max = max;
         },
         end(result: TestResult) {
+            test.teardown();
             avg.textContent = result.avg.toFixed(2);
             p5.textContent = result.p5.toString();
             p95.textContent = result.p95.toString();
