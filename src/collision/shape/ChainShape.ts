@@ -365,4 +365,4 @@ export class ChainShape extends Shape {
   }
 }
 
-export const Chain = ChainShape;
+export { ChainShape as Chain };

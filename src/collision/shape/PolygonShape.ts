@@ -577,4 +577,4 @@ export class PolygonShape extends Shape {
   return c;
 }
 
-export const Polygon = PolygonShape;
+export { PolygonShape as Polygon };

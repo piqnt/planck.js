@@ -45,4 +45,4 @@ export class BoxShape extends PolygonShape {
   }
 }
 
-export const Box = BoxShape;
+export { BoxShape as Box };

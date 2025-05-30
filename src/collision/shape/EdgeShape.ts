@@ -314,4 +314,4 @@ export class EdgeShape extends Shape {
   }
 }
 
-export const Edge = EdgeShape;
+export { EdgeShape as Edge };
