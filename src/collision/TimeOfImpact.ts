@@ -74,7 +74,6 @@ stats.toiMaxRootIters = 0;
 
 /** @internal */ const xfA = matrix.transform(0, 0, 0);
 /** @internal */ const xfB = matrix.transform(0, 0, 0);
-/** @internal */ const temp = matrix.vec2(0, 0);
 /** @internal */ const pointA = matrix.vec2(0, 0);
 /** @internal */ const pointB = matrix.vec2(0, 0);
 /** @internal */ const normal = matrix.vec2(0, 0);
@@ -375,7 +374,7 @@ class SeparationFunction {
       const localPointB1 = proxyB.getVertex(cache.indexB[0]);
       const localPointB2 = proxyB.getVertex(cache.indexB[1]);
 
-      matrix.crossVec2Num(this.m_axis, matrix.subVec2(temp, localPointB2, localPointB1), 1.0);
+      matrix.crossSubVec2Num(this.m_axis, localPointB2, localPointB1, 1.0);
       matrix.normalizeVec2(this.m_axis);
       matrix.rotVec2(normal, xfB.q, this.m_axis);
 
@@ -397,7 +396,7 @@ class SeparationFunction {
       const localPointA1 = this.m_proxyA.getVertex(cache.indexA[0]);
       const localPointA2 = this.m_proxyA.getVertex(cache.indexA[1]);
 
-      matrix.crossVec2Num(this.m_axis, matrix.subVec2(temp, localPointA2, localPointA1), 1.0);
+      matrix.crossSubVec2Num(this.m_axis, localPointA2, localPointA1, 1.0);
       matrix.normalizeVec2(this.m_axis);
       matrix.rotVec2(normal, xfA.q, this.m_axis);
 
@@ -425,7 +424,7 @@ class SeparationFunction {
       case SeparationFunctionType.e_points: {
         if (find) {
           matrix.derotVec2(axisA, xfA.q, this.m_axis);
-          matrix.derotVec2(axisB, xfB.q, matrix.scaleVec2(temp, -1, this.m_axis));
+          matrix.derotNegVec2(axisB, xfB.q, this.m_axis);
 
           this.indexA = this.m_proxyA.getSupport(axisA);
           this.indexB = this.m_proxyB.getSupport(axisB);
@@ -446,7 +445,7 @@ class SeparationFunction {
         matrix.transformVec2(pointA, xfA, this.m_localPoint);
 
         if (find) {
-          matrix.derotVec2(axisB, xfB.q, matrix.scaleVec2(temp, -1, normal));
+          matrix.derotNegVec2(axisB, xfB.q, normal);
 
           this.indexA = -1;
           this.indexB = this.m_proxyB.getSupport(axisB);
@@ -464,7 +463,7 @@ class SeparationFunction {
         matrix.transformVec2(pointB, xfB, this.m_localPoint);
 
         if (find) {
-          matrix.derotVec2(axisA, xfA.q, matrix.scaleVec2(temp, -1, normal));
+          matrix.derotNegVec2(axisA, xfA.q, normal);
 
           this.indexB = -1;
           this.indexA = this.m_proxyA.getSupport(axisA);

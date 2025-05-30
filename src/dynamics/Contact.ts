@@ -141,7 +141,6 @@ export class VelocityConstraintPoint {
 /** @internal */ const d = matrix.vec2(0, 0);
 /** @internal */ const P1 = matrix.vec2(0, 0);
 /** @internal */ const P2 = matrix.vec2(0, 0);
-/** @internal */ const temp = matrix.vec2(0, 0);
 
 /**
  * The class manages contact between two shapes. A contact exists for each
@@ -813,9 +812,9 @@ export class Contact {
       vcp.velocityBias = 0.0;
       let vRel = 0;
       vRel += matrix.dotVec2(this.v_normal, vB);
-      vRel += matrix.dotVec2(this.v_normal, matrix.crossNumVec2(temp, wB, vcp.rB));
+      vRel += matrix.dotCrossNumVec2(this.v_normal, wB, vcp.rB);
       vRel -= matrix.dotVec2(this.v_normal, vA);
-      vRel -= matrix.dotVec2(this.v_normal, matrix.crossNumVec2(temp, wA, vcp.rA));
+      vRel -= matrix.dotCrossNumVec2(this.v_normal, wA, vcp.rA);
       if (vRel < -Settings.velocityThreshold) {
         vcp.velocityBias = -this.v_restitution * vRel;
       }
@@ -961,9 +960,9 @@ export class Contact {
       // Relative velocity at contact
       matrix.zeroVec2(dv);
       matrix.plusVec2(dv, vB);
-      matrix.plusVec2(dv, matrix.crossNumVec2(temp, wB, vcp.rB));
+      matrix.plusCrossNumVec2(dv, wB, vcp.rB);
       matrix.minusVec2(dv, vA);
-      matrix.minusVec2(dv, matrix.crossNumVec2(temp, wA, vcp.rA));
+      matrix.minusCrossNumVec2(dv, wA, vcp.rA);
 
       // Compute tangent force
       const vt = matrix.dotVec2(dv, tangent) - this.v_tangentSpeed;
@@ -993,9 +992,9 @@ export class Contact {
         // Relative velocity at contact
         matrix.zeroVec2(dv);
         matrix.plusVec2(dv, vB);
-        matrix.plusVec2(dv, matrix.crossNumVec2(temp, wB, vcp.rB));
+        matrix.plusCrossNumVec2(dv, wB, vcp.rB);
         matrix.minusVec2(dv, vA);
-        matrix.minusVec2(dv, matrix.crossNumVec2(temp, wA, vcp.rA));
+        matrix.minusCrossNumVec2(dv, wA, vcp.rA);
 
         // Compute normal impulse
         const vn = matrix.dotVec2(dv, normal);
@@ -1066,16 +1065,16 @@ export class Contact {
       // let dv1 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp1.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp1.rA));
       matrix.zeroVec2(dv1);
       matrix.plusVec2(dv1, vB);
-      matrix.plusVec2(dv1, matrix.crossNumVec2(temp, wB, vcp1.rB));
+      matrix.plusCrossNumVec2(dv1, wB, vcp1.rB);
       matrix.minusVec2(dv1, vA);
-      matrix.minusVec2(dv1, matrix.crossNumVec2(temp, wA, vcp1.rA));
+      matrix.minusCrossNumVec2(dv1, wA, vcp1.rA);
 
       // let dv2 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp2.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp2.rA));
       matrix.zeroVec2(dv2);
       matrix.plusVec2(dv2, vB);
-      matrix.plusVec2(dv2, matrix.crossNumVec2(temp, wB, vcp2.rB));
+      matrix.plusCrossNumVec2(dv2, wB, vcp2.rB);
       matrix.minusVec2(dv2, vA);
-      matrix.minusVec2(dv2, matrix.crossNumVec2(temp, wA, vcp2.rA));
+      matrix.minusCrossNumVec2(dv2, wA, vcp2.rA);
 
       // Compute normal velocity
       let vn1 = matrix.dotVec2(dv1, normal);
@@ -1130,15 +1129,15 @@ export class Contact {
             // Postconditions
             matrix.zeroVec2(dv1);
             matrix.plusVec2(dv1, vB);
-            matrix.plusVec2(dv1, matrix.crossNumVec2(temp, wB, vcp1.rB));
+            matrix.plusCrossNumVec2(dv1, wB, vcp1.rB);
             matrix.minusVec2(dv1, vA);
-            matrix.minusVec2(dv1, matrix.crossNumVec2(temp, wA, vcp1.rA));
+            matrix.minusCrossNumVec2(dv1, wA, vcp1.rA);
 
             matrix.zeroVec2(dv2);
             matrix.plusVec2(dv2, vB);
-            matrix.plusVec2(dv2, matrix.crossNumVec2(temp, wB, vcp2.rB));
+            matrix.plusCrossNumVec2(dv2, wB, vcp2.rB);
             matrix.minusVec2(dv2, vA);
-            matrix.minusVec2(dv2, matrix.crossNumVec2(temp, wA, vcp2.rA));
+            matrix.minusCrossNumVec2(dv2, wA, vcp2.rA);
 
             // Compute normal velocity
             vn1 = matrix.dotVec2(dv1, normal);
@@ -1185,9 +1184,9 @@ export class Contact {
             // Postconditions
             matrix.zeroVec2(dv1);
             matrix.plusVec2(dv1, vB);
-            matrix.plusVec2(dv1, matrix.crossNumVec2(temp, wB, vcp1.rB));
+            matrix.plusCrossNumVec2(dv1, wB, vcp1.rB);
             matrix.minusVec2(dv1, vA);
-            matrix.minusVec2(dv1, matrix.crossNumVec2(temp, wA, vcp1.rA));
+            matrix.minusCrossNumVec2(dv1, wA, vcp1.rA);
 
             // Compute normal velocity
             vn1 = matrix.dotVec2(dv1, normal);
@@ -1232,9 +1231,9 @@ export class Contact {
             // Postconditions
             matrix.zeroVec2(dv2);
             matrix.plusVec2(dv2, vB);
-            matrix.plusVec2(dv2, matrix.crossNumVec2(temp, wB, vcp2.rB));
+            matrix.plusCrossNumVec2(dv2, wB, vcp2.rB);
             matrix.minusVec2(dv2, vA);
-            matrix.minusVec2(dv2, matrix.crossNumVec2(temp, wA, vcp2.rA));
+            matrix.minusCrossNumVec2(dv2, wA, vcp2.rA);
 
             // Compute normal velocity
             vn2 = matrix.dotVec2(dv2, normal);

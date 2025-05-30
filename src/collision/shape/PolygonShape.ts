@@ -299,10 +299,10 @@ export class PolygonShape extends Shape {
    * @param p A point in world coordinates.
    */
   testPoint(xf: TransformValue, p: Vec2Value): boolean {
-    const pLocal = matrix.detransformVec2(temp, xf, p);
+    matrix.detransformVec2(temp, xf, p);
 
     for (let i = 0; i < this.m_count; ++i) {
-      const dot = matrix.dotVec2(this.m_normals[i], pLocal) - matrix.dotVec2(this.m_normals[i], this.m_vertices[i]);
+      const dot = matrix.dotVec2(this.m_normals[i], temp) - matrix.dotVec2(this.m_normals[i], this.m_vertices[i]);
       if (dot > 0.0) {
         return false;
       }
@@ -392,11 +392,11 @@ export class PolygonShape extends Shape {
     let maxX = -Infinity;
     let maxY = -Infinity;
     for (let i = 0; i < this.m_count; ++i) {
-      const v = matrix.transformVec2(temp, xf, this.m_vertices[i]);
-      minX = math_min(minX, v.x);
-      maxX = math_max(maxX, v.x);
-      minY = math_min(minY, v.y);
-      maxY = math_max(maxY, v.y);
+      matrix.transformVec2(temp, xf, this.m_vertices[i]);
+      minX = math_min(minX, temp.x);
+      maxX = math_max(maxX, temp.x);
+      minY = math_min(minY, temp.y);
+      maxY = math_max(maxY, temp.y);
     }
 
     matrix.setVec2(aabb.lowerBound, minX - this.m_radius, minY - this.m_radius);
@@ -513,7 +513,8 @@ export class PolygonShape extends Shape {
           continue;
         }
 
-        const c = matrix.crossVec2Vec2(e, matrix.subVec2(temp, this.m_vertices[j], p));
+        matrix.subVec2(temp, this.m_vertices[j], p);
+        const c = matrix.crossVec2Vec2(e, temp);
         if (c < 0.0) {
           return false;
         }

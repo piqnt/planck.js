@@ -154,10 +154,12 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
     // Compute a tentative new simplex vertex using support points.
     const vertex = vertices[simplex.m_count]; // SimplexVertex
 
-    vertex.indexA = proxyA.getSupport(matrix.derotVec2(temp, xfA.q, matrix.scaleVec2(temp, -1, d)));
+    matrix.derotNegVec2(temp, xfA.q, d);
+    vertex.indexA = proxyA.getSupport(temp);
     matrix.transformVec2(vertex.wA, xfA, proxyA.getVertex(vertex.indexA));
 
-    vertex.indexB = proxyB.getSupport(matrix.derotVec2(temp, xfB.q, d));
+    matrix.derotVec2(temp, xfB.q, d);
+    vertex.indexB = proxyB.getSupport(temp);
     matrix.transformVec2(vertex.wB, xfB, proxyB.getVertex(vertex.indexB));
 
     matrix.subVec2(vertex.w, vertex.wB, vertex.wA);
@@ -211,9 +213,9 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
     } else {
       // Shapes are overlapped when radii are considered.
       // Move the witness points to the middle.
-      const p = matrix.subVec2(temp, output.pointA, output.pointB);
-      matrix.copyVec2(output.pointA, p);
-      matrix.copyVec2(output.pointB, p);
+      matrix.subVec2(temp, output.pointA, output.pointB);
+      matrix.copyVec2(output.pointA, temp);
+      matrix.copyVec2(output.pointB, temp);
       output.distance = 0.0;
     }
   }
@@ -455,23 +457,27 @@ class Simplex {
     const v3 = this.m_v3;
     switch (this.m_count) {
       case 1:
-        return matrix.setVec2(searchDirection_reuse, -v1.w.x, -v1.w.y);
+        matrix.setVec2(searchDirection_reuse, -v1.w.x, -v1.w.y);
+        return searchDirection_reuse;
 
       case 2: {
         matrix.subVec2(e12, v2.w, v1.w);
         const sgn = -matrix.crossVec2Vec2(e12, v1.w);
         if (sgn > 0.0) {
           // Origin is left of e12.
-          return matrix.setVec2(searchDirection_reuse, -e12.y, e12.x);
+          matrix.setVec2(searchDirection_reuse, -e12.y, e12.x);
+          return searchDirection_reuse;
         } else {
           // Origin is right of e12.
-          return matrix.setVec2(searchDirection_reuse, e12.y, -e12.x);
+          matrix.setVec2(searchDirection_reuse, e12.y, -e12.x);
+          return searchDirection_reuse;
         }
       }
 
       default:
         if (_ASSERT) console.assert(false);
-        return matrix.zeroVec2(searchDirection_reuse);
+        matrix.zeroVec2(searchDirection_reuse);
+        return searchDirection_reuse;
     }
   }
 
@@ -482,20 +488,25 @@ class Simplex {
     switch (this.m_count) {
       case 0:
         if (_ASSERT) console.assert(false);
-        return matrix.zeroVec2(closestPoint_reuse);
+        matrix.zeroVec2(closestPoint_reuse);
+        return closestPoint_reuse;
 
       case 1:
-        return matrix.copyVec2(closestPoint_reuse, v1.w);
+        matrix.copyVec2(closestPoint_reuse, v1.w);
+        return closestPoint_reuse;
 
       case 2:
-        return matrix.combine2Vec2(closestPoint_reuse, v1.a, v1.w, v2.a, v2.w);
+        matrix.combine2Vec2(closestPoint_reuse, v1.a, v1.w, v2.a, v2.w);
+        return closestPoint_reuse;
 
       case 3:
-        return matrix.zeroVec2(closestPoint_reuse);
+        matrix.zeroVec2(closestPoint_reuse);
+        return closestPoint_reuse;
 
       default:
         if (_ASSERT) console.assert(false);
-        return matrix.zeroVec2(closestPoint_reuse);
+        matrix.zeroVec2(closestPoint_reuse);
+        return closestPoint_reuse;
     }
   }
 
@@ -542,10 +553,9 @@ class Simplex {
         return matrix.distVec2(this.m_v1.w, this.m_v2.w);
 
       case 3:
-        return matrix.crossVec2Vec2(
-          matrix.subVec2(temp1, this.m_v2.w, this.m_v1.w),
-          matrix.subVec2(temp2, this.m_v3.w, this.m_v1.w),
-        );
+        matrix.subVec2(temp1, this.m_v2.w, this.m_v1.w);
+        matrix.subVec2(temp2, this.m_v3.w, this.m_v1.w);
+        return matrix.crossVec2Vec2(temp1, temp2);
 
       default:
         if (_ASSERT) console.assert(false);

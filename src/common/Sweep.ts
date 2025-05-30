@@ -77,7 +77,8 @@ export class Sweep {
     matrix.combine2Vec2(xf.p, 1.0 - beta, this.c0, beta, this.c);
 
     // shift to origin
-    matrix.minusVec2(xf.p, matrix.rotVec2(temp, xf.q, this.localCenter));
+    matrix.rotVec2(temp, xf.q, this.localCenter);
+    matrix.minusVec2(xf.p, temp);
   }
 
   /**

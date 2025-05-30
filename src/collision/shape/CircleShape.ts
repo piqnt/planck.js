@@ -126,8 +126,8 @@ export class CircleShape extends Shape {
    * @param p A point in world coordinates.
    */
   testPoint(xf: TransformValue, p: Vec2Value): boolean {
-    const center = matrix.transformVec2(temp, xf, this.m_p);
-    return matrix.distSqrVec2(p, center) <= this.m_radius * this.m_radius;
+    matrix.transformVec2(temp, xf, this.m_p);
+    return matrix.distSqrVec2(p, temp) <= this.m_radius * this.m_radius;
   }
 
   /**
@@ -183,10 +183,10 @@ export class CircleShape extends Shape {
    * @param childIndex The child shape
    */
   computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void {
-    const p = matrix.transformVec2(temp, xf, this.m_p);
+    matrix.transformVec2(temp, xf, this.m_p);
 
-    matrix.setVec2(aabb.lowerBound, p.x - this.m_radius, p.y - this.m_radius);
-    matrix.setVec2(aabb.upperBound, p.x + this.m_radius, p.y + this.m_radius);
+    matrix.setVec2(aabb.lowerBound, temp.x - this.m_radius, temp.y - this.m_radius);
+    matrix.setVec2(aabb.upperBound, temp.x + this.m_radius, temp.y + this.m_radius);
   }
 
   /**

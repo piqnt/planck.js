@@ -52,7 +52,6 @@ export type BodyType = "static" | "kinematic" | "dynamic";
 /** @internal */ const oldCenter = matrix.vec2(0, 0);
 /** @internal */ const localCenter = matrix.vec2(0, 0);
 /** @internal */ const shift = matrix.vec2(0, 0);
-/** @internal */ const temp = matrix.vec2(0, 0);
 /** @internal */ const xf = matrix.transform(0, 0, 0);
 
 export interface BodyDef {
@@ -856,8 +855,7 @@ export class Body {
 
     // Update center of mass velocity.
     matrix.subVec2(shift, this.m_sweep.c, oldCenter);
-    matrix.crossNumVec2(temp, this.m_angularVelocity, shift);
-    matrix.plusVec2(this.m_linearVelocity, temp);
+    matrix.plusCrossNumVec2(this.m_linearVelocity, this.m_angularVelocity, shift);
   }
 
   /**
@@ -903,8 +901,7 @@ export class Body {
 
     // Update center of mass velocity.
     matrix.subVec2(shift, this.m_sweep.c, oldCenter);
-    matrix.crossNumVec2(temp, this.m_angularVelocity, shift);
-    matrix.plusVec2(this.m_linearVelocity, temp);
+    matrix.plusCrossNumVec2(this.m_linearVelocity, this.m_angularVelocity, shift);
   }
 
   /**

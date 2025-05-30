@@ -16,7 +16,6 @@ import { EPSILON } from "../common/Math";
 
 /** @internal */ const pointA = matrix.vec2(0, 0);
 /** @internal */ const pointB = matrix.vec2(0, 0);
-/** @internal */ const temp = matrix.vec2(0, 0);
 /** @internal */ const cA = matrix.vec2(0, 0);
 /** @internal */ const cB = matrix.vec2(0, 0);
 /** @internal */ const dist = matrix.vec2(0, 0);
@@ -161,7 +160,7 @@ export class Manifold {
         matrix.combine2Vec2(cA, 1, pointA, radiusA, normal);
         matrix.combine2Vec2(cB, 1, pointB, -radiusB, normal);
         matrix.combine2Vec2(points[0], 0.5, cA, 0.5, cB);
-        separations[0] = matrix.dotVec2(matrix.subVec2(temp, cB, cA), normal);
+        separations[0] = matrix.dotSubVec2(cB, cA, normal);
         break;
       }
 
@@ -172,16 +171,10 @@ export class Manifold {
         for (let i = 0; i < this.pointCount; ++i) {
           const manifoldPoint = this.points[i];
           matrix.transformVec2(clipPoint, xfB, manifoldPoint.localPoint);
-          matrix.combine2Vec2(
-            cA,
-            1,
-            clipPoint,
-            radiusA - matrix.dotVec2(matrix.subVec2(temp, clipPoint, planePoint), normal),
-            normal,
-          );
+          matrix.combine2Vec2(cA, 1, clipPoint, radiusA - matrix.dotSubVec2(clipPoint, planePoint, normal), normal);
           matrix.combine2Vec2(cB, 1, clipPoint, -radiusB, normal);
           matrix.combine2Vec2(points[i], 0.5, cA, 0.5, cB);
-          separations[i] = matrix.dotVec2(matrix.subVec2(temp, cB, cA), normal);
+          separations[i] = matrix.dotSubVec2(cB, cA, normal);
         }
         break;
       }
@@ -193,16 +186,10 @@ export class Manifold {
         for (let i = 0; i < this.pointCount; ++i) {
           const manifoldPoint = this.points[i];
           matrix.transformVec2(clipPoint, xfA, manifoldPoint.localPoint);
-          matrix.combine2Vec2(
-            cB,
-            1,
-            clipPoint,
-            radiusB - matrix.dotVec2(matrix.subVec2(temp, clipPoint, planePoint), normal),
-            normal,
-          );
+          matrix.combine2Vec2(cB, 1, clipPoint, radiusB - matrix.dotSubVec2(clipPoint, planePoint, normal), normal);
           matrix.combine2Vec2(cA, 1, clipPoint, -radiusA, normal);
           matrix.combine2Vec2(points[i], 0.5, cA, 0.5, cB);
-          separations[i] = matrix.dotVec2(matrix.subVec2(temp, cA, cB), normal);
+          separations[i] = matrix.dotSubVec2(cA, cB, normal);
         }
         // Ensure normal points from A to B.
         matrix.negVec2(normal);
