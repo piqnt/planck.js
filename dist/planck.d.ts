@@ -2428,7 +2428,6 @@ export declare class CircleShape extends Shape {
 	computeMass(massData: MassData, density: number): void;
 	computeDistanceProxy(proxy: DistanceProxy): void;
 }
-export declare const Circle: typeof CircleShape;
 /** @hidden @deprecated Use new keyword. */
 export function EdgeShape(v1?: Vec2Value, v2?: Vec2Value): EdgeShape;
 /**
@@ -2515,7 +2514,6 @@ export declare class EdgeShape extends Shape {
 	computeMass(massData: MassData, density?: number): void;
 	computeDistanceProxy(proxy: DistanceProxy): void;
 }
-export declare const Edge: typeof EdgeShape;
 /** @hidden @deprecated Use new keyword. */
 export function PolygonShape(vertices?: Vec2Value[]): PolygonShape;
 /**
@@ -2586,7 +2584,6 @@ export declare class PolygonShape extends Shape {
 	validate(): boolean;
 	computeDistanceProxy(proxy: DistanceProxy): void;
 }
-export declare const Polygon: typeof PolygonShape;
 /** @hidden @deprecated Use new keyword. */
 export function ChainShape(vertices?: Vec2Value[], loop?: boolean): ChainShape;
 /**
@@ -2676,7 +2673,6 @@ export declare class ChainShape extends Shape {
 	computeMass(massData: MassData, density?: number): void;
 	computeDistanceProxy(proxy: DistanceProxy, childIndex: number): void;
 }
-export declare const Chain: typeof ChainShape;
 /** @hidden @deprecated Use new keyword. */
 export function BoxShape(halfWidth: number, halfHeight: number, center?: Vec2Value, angle?: number): BoxShape;
 /**
@@ -2693,7 +2689,6 @@ export declare class BoxShape extends PolygonShape {
 	 */
 	constructor(halfWidth: number, halfHeight: number, center?: Vec2Value, angle?: number);
 }
-export declare const Box: typeof BoxShape;
 export declare const CollideCircles: (manifold: Manifold, circleA: CircleShape, xfA: TransformValue, circleB: CircleShape, xfB: TransformValue) => void;
 export declare const CollideEdgeCircle: (manifold: Manifold, edgeA: EdgeShape, xfA: TransformValue, circleB: CircleShape, xfB: TransformValue) => void;
 /**
@@ -4304,6 +4299,11 @@ export declare class DataDriver<D extends object, R> {
 
 export {
 	Body$1 as Body,
+	BoxShape as Box,
+	ChainShape as Chain,
+	CircleShape as Circle,
+	EdgeShape as Edge,
+	PolygonShape as Polygon,
 	math as Math,
 };
 

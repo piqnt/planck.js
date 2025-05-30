@@ -6809,7 +6809,6 @@ var EdgeShape = (
     return EdgeShape2;
   }(Shape)
 );
-var Edge = EdgeShape;
 var v1$1 = vec2(0, 0);
 var v2 = vec2(0, 0);
 var ChainShape = (
@@ -7008,7 +7007,6 @@ var ChainShape = (
     return ChainShape2;
   }(Shape)
 );
-var Chain = ChainShape;
 var math_max$4 = Math.max;
 var math_min$8 = Math.min;
 var temp$1 = vec2(0, 0);
@@ -7326,7 +7324,6 @@ function computeCentroid(vs, count) {
   c2.mul(1 / area);
   return c2;
 }
-var Polygon = PolygonShape;
 var math_sqrt$3 = Math.sqrt;
 var math_PI$6 = Math.PI;
 var temp = vec2(0, 0);
@@ -7429,7 +7426,6 @@ var CircleShape = (
     return CircleShape2;
   }(Shape)
 );
-var Circle = CircleShape;
 var math_abs$6 = Math.abs;
 var math_PI$5 = Math.PI;
 var DEFAULTS$b = {
@@ -10926,7 +10922,6 @@ var BoxShape = (
     return BoxShape2;
   }(PolygonShape)
 );
-var Box = BoxShape;
 Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
 function CircleCircleContact(manifold, xfA2, fixtureA, indexA, xfB2, fixtureB, indexB) {
   CollideCircles(manifold, fixtureA.getShape(), xfA2, fixtureB.getShape(), xfB2);
@@ -16539,12 +16534,12 @@ const planck = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   __proto__: null,
   AABB,
   Body,
-  Box,
+  Box: BoxShape,
   BoxShape,
   BroadPhase,
-  Chain,
+  Chain: ChainShape,
   ChainShape,
-  Circle,
+  Circle: CircleShape,
   CircleShape,
   ClipVertex,
   CollideCircles,
@@ -16566,7 +16561,7 @@ const planck = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   DistanceOutput,
   DistanceProxy,
   DynamicTree,
-  Edge,
+  Edge: EdgeShape,
   EdgeShape,
   Fixture,
   FixtureProxy,
@@ -16587,7 +16582,7 @@ const planck = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   get PointState() {
     return PointState;
   },
-  Polygon,
+  Polygon: PolygonShape,
   PolygonShape,
   PrismaticJoint,
   PulleyJoint,
@@ -16634,12 +16629,12 @@ const planck = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
 export {
   AABB,
   Body,
-  Box,
+  BoxShape as Box,
   BoxShape,
   BroadPhase,
-  Chain,
+  ChainShape as Chain,
   ChainShape,
-  Circle,
+  CircleShape as Circle,
   CircleShape,
   ClipVertex,
   CollideCircles,
@@ -16659,7 +16654,7 @@ export {
   DistanceOutput,
   DistanceProxy,
   DynamicTree,
-  Edge,
+  EdgeShape as Edge,
   EdgeShape,
   Fixture,
   FixtureProxy,
@@ -16676,7 +16671,7 @@ export {
   MotorJoint,
   MouseJoint,
   PointState,
-  Polygon,
+  PolygonShape as Polygon,
   PolygonShape,
   PrismaticJoint,
   PulleyJoint,

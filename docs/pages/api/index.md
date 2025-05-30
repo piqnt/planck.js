@@ -1,5 +1,35 @@
 # API Reference
 
+## References
+
+### Box
+
+Renames and re-exports [BoxShape](/api/classes/BoxShape)
+
+***
+
+### Chain
+
+Renames and re-exports [ChainShape](/api/classes/ChainShape)
+
+***
+
+### Circle
+
+Renames and re-exports [CircleShape](/api/classes/CircleShape)
+
+***
+
+### Edge
+
+Renames and re-exports [EdgeShape](/api/classes/EdgeShape)
+
+***
+
+### Polygon
+
+Renames and re-exports [PolygonShape](/api/classes/PolygonShape)
+
 ## Enumerations
 
 - [ContactFeatureType](/api/enumerations/ContactFeatureType)
@@ -96,6 +126,7 @@
 - [RopeJointOpt](/api/interfaces/RopeJointOpt)
 - [RotValue](/api/interfaces/RotValue)
 - [Style](/api/interfaces/Style)
+- [TestbedInterface](/api/interfaces/TestbedInterface)
 - [Vec2Value](/api/interfaces/Vec2Value)
 - [Vec3Value](/api/interfaces/Vec3Value)
 - [WeldJointDef](/api/interfaces/WeldJointDef)
@@ -115,14 +146,6 @@
 - [TransformValue](/api/type-aliases/TransformValue)
 - [WorldAABBQueryCallback](/api/type-aliases/WorldAABBQueryCallback)
 - [WorldRayCastCallback](/api/type-aliases/WorldRayCastCallback)
-
-## Variables
-
-- [Box](/api/variables/Box)
-- [Chain](/api/variables/Chain)
-- [Circle](/api/variables/Circle)
-- [Edge](/api/variables/Edge)
-- [Polygon](/api/variables/Polygon)
 
 ## Functions
 

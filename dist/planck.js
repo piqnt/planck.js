@@ -6813,7 +6813,6 @@
       return EdgeShape2;
     }(Shape)
   );
-  var Edge = EdgeShape;
   var v1$1 = vec2(0, 0);
   var v2 = vec2(0, 0);
   var ChainShape = (
@@ -7012,7 +7011,6 @@
       return ChainShape2;
     }(Shape)
   );
-  var Chain = ChainShape;
   var math_max$1 = Math.max;
   var math_min$3 = Math.min;
   var temp$1 = vec2(0, 0);
@@ -7330,7 +7328,6 @@
     c2.mul(1 / area);
     return c2;
   }
-  var Polygon = PolygonShape;
   var math_sqrt = Math.sqrt;
   var math_PI$4 = Math.PI;
   var temp = vec2(0, 0);
@@ -7433,7 +7430,6 @@
       return CircleShape2;
     }(Shape)
   );
-  var Circle = CircleShape;
   var math_abs$5 = Math.abs;
   var math_PI$3 = Math.PI;
   var DEFAULTS$a = {
@@ -10930,7 +10926,6 @@
       return BoxShape2;
     }(PolygonShape)
   );
-  var Box = BoxShape;
   Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
   function CircleCircleContact(manifold, xfA2, fixtureA, indexA, xfB2, fixtureB, indexB) {
     CollideCircles(manifold, fixtureA.getShape(), xfA2, fixtureB.getShape(), xfB2);
@@ -11756,12 +11751,12 @@
     __proto__: null,
     AABB,
     Body,
-    Box,
+    Box: BoxShape,
     BoxShape,
     BroadPhase,
-    Chain,
+    Chain: ChainShape,
     ChainShape,
-    Circle,
+    Circle: CircleShape,
     CircleShape,
     ClipVertex,
     CollideCircles,
@@ -11783,7 +11778,7 @@
     DistanceOutput,
     DistanceProxy,
     DynamicTree,
-    Edge,
+    Edge: EdgeShape,
     EdgeShape,
     Fixture,
     FixtureProxy,
@@ -11804,7 +11799,7 @@
     get PointState() {
       return exports2.PointState;
     },
-    Polygon,
+    Polygon: PolygonShape,
     PolygonShape,
     PrismaticJoint,
     PulleyJoint,
@@ -11849,12 +11844,12 @@
   }, Symbol.toStringTag, { value: "Module" }));
   exports2.AABB = AABB;
   exports2.Body = Body;
-  exports2.Box = Box;
+  exports2.Box = BoxShape;
   exports2.BoxShape = BoxShape;
   exports2.BroadPhase = BroadPhase;
-  exports2.Chain = Chain;
+  exports2.Chain = ChainShape;
   exports2.ChainShape = ChainShape;
-  exports2.Circle = Circle;
+  exports2.Circle = CircleShape;
   exports2.CircleShape = CircleShape;
   exports2.ClipVertex = ClipVertex;
   exports2.CollideCircles = CollideCircles;
@@ -11873,7 +11868,7 @@
   exports2.DistanceOutput = DistanceOutput;
   exports2.DistanceProxy = DistanceProxy;
   exports2.DynamicTree = DynamicTree;
-  exports2.Edge = Edge;
+  exports2.Edge = EdgeShape;
   exports2.EdgeShape = EdgeShape;
   exports2.Fixture = Fixture;
   exports2.FixtureProxy = FixtureProxy;
@@ -11888,7 +11883,7 @@
   exports2.Math = math;
   exports2.MotorJoint = MotorJoint;
   exports2.MouseJoint = MouseJoint;
-  exports2.Polygon = Polygon;
+  exports2.Polygon = PolygonShape;
   exports2.PolygonShape = PolygonShape;
   exports2.PrismaticJoint = PrismaticJoint;
   exports2.PulleyJoint = PulleyJoint;

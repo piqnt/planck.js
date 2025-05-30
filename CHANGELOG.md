@@ -1,5 +1,11 @@
 # planck
 
+## 1.4.1
+
+### Patch Changes
+
+- d12d0cc: Fix shape name alias export
+
 ## 1.4.0
 
 ### Minor Changes
